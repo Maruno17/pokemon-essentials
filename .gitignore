@@ -12,3 +12,7 @@ Game.exe
 Game.ini
 Game.rxproj
 RGSS*.dll
+
+# Temp files
+
+~*
