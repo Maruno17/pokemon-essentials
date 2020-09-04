@@ -672,6 +672,20 @@ MultipleForms.register(:NECROZMA,{
   }
 })
 
+MultipleForms.register(:ZAMAZENTA,{
+  "getForm" => proc { |pkmn|
+    next 1 if isConst?(pkmn.item,PBItems,:RUSTEDSHIELD)
+    next 0
+  }
+})
+
+MultipleForms.register(:ZACIAN,{
+  "getForm" => proc { |pkmn|
+    next 1 if isConst?(pkmn.item,PBItems,:RUSTEDSWORD)
+    next 0
+  }
+})    
+  
 #===============================================================================
 # Alolan forms
 #===============================================================================
