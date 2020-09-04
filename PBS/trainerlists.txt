@@ -1,0 +1,25 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[DefaultTrainerList]
+Trainers = bttrainers.txt
+Pokemon = btpokemon.txt
+#-------------------------------
+[TrainerList]
+Trainers = pokecuptr.txt
+Pokemon = pokecuppm.txt
+Challenges = pokecupsingle,pokecupdouble
+#-------------------------------
+[TrainerList]
+Trainers = littlecuptr.txt
+Pokemon = littlecuppm.txt
+Challenges = littlecupsingle,littlecupdouble
+#-------------------------------
+[TrainerList]
+Trainers = pikacuptr.txt
+Pokemon = pikacuppm.txt
+Challenges = pikacupsingle,pikacupdouble
+#-------------------------------
+[TrainerList]
+Trainers = fancycupsingletr.txt
+Pokemon = fancycupsinglepm.txt
+Challenges = fancycupsingle,fancycupdouble

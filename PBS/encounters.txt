@@ -1,0 +1,471 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+002 # Lappet Town
+25,10,10
+Water
+    TENTACOOL,14,19
+    MANTYKE,15,16
+    REMORAID,14,16
+    REMORAID,14,16
+    REMORAID,14,16
+OldRod
+    MAGIKARP,16,19
+    MAGIKARP,16,19
+GoodRod
+    BARBOACH,17,18
+    SHELLDER,16,19
+    KRABBY,15,16
+SuperRod
+    CHINCHOU,17,19
+    QWILFISH,16,19
+    CORSOLA,15,18
+    STARYU,15,17
+    STARYU,15,17
+#-------------------------------
+005 # Route 1
+25,10,10
+Land
+    RATTATA,11,14
+    PIDGEY,11,14
+    RATTATA,11,14
+    PIDGEY,11,14
+    RATTATA,11,14
+    PIDGEY,11,14
+    RATTATA,11,13
+    PIDGEY,11,13
+    RATTATA,11,13
+    PIDGEY,11,13
+    RATTATA,14
+    PIDGEY,14
+LandNight
+    RATTATA,10,14
+    HOOTHOOT,10,13
+    RATTATA,10,14
+    HOOTHOOT,10,13
+    SPINARAK,8,12
+    SPINARAK,8,12
+    RATTATA,10,14
+    HOOTHOOT,10,14
+    RATTATA,10,14
+    HOOTHOOT,10,14
+    RATTATA,15
+    HOOTHOOT,14
+#-------------------------------
+021 # Route 2
+25,10,10
+Land
+    RATTATA,12,15
+    RATTATA,12,15
+    RATTATA,12,15
+    POOCHYENA,11,15
+    POOCHYENA,11,15
+    POOCHYENA,11,15
+    SHINX,10,12
+    SHINX,10,12
+    SHINX,10,11
+    SHINX,10,11
+    SHINX,10,11
+    SHINX,10,11
+Water
+    MAGIKARP,7,10
+    GOLDEEN,11,14
+    STARYU,12,15
+    STARYU,12,15
+    STARYU,12,15
+OldRod
+    MAGIKARP,7,10
+    MAGIKARP,9,15
+GoodRod
+    GOLDEEN,12,14
+    FINNEON,12,15
+    MAGIKARP,12,17
+SuperRod
+    GOLDEEN,12,14
+    FINNEON,12,15
+    STARYU,12,15
+    STARYU,14,17
+    STARYU,14,17
+HeadbuttLow
+    PINECO,11,13
+    LEDYBA,6,8
+    PINECO,11,13
+    SPINARAK,9,12
+    LEDYBA,6,8
+    SPINARAK,9,12
+    SPINARAK,9,12
+    MUNCHLAX,11,14
+HeadbuttHigh
+    PINECO,11,13
+    WURMPLE,6,8
+    PINECO,11,13
+    SPINARAK,9,12
+    WURMPLE,6,8
+    SPINARAK,9,12
+    SPINARAK,9,12
+    SPINARAK,9,12
+#-------------------------------
+028 # Natural Park
+25,10,10
+Land
+    CATERPIE,10
+    WEEDLE,10
+    PIDGEY,10,14
+    PIDGEY,12,14
+    SUNKERN,12
+    SUNKERN,12
+    METAPOD,10
+    KAKUNA,10
+    PIDGEY,10,14
+    PIDGEY,12,14
+    PIDGEY,10,14
+    PIDGEY,12,14
+LandMorning
+    CATERPIE,10,12
+    WEEDLE,10,12
+    PIDGEY,10,14
+    PIDGEY,10,14
+    METAPOD,10
+    KAKUNA,10
+    METAPOD,10
+    KAKUNA,10
+    CATERPIE,10,12
+    WEEDLE,10,12
+    CATERPIE,10,12
+    WEEDLE,10,12
+LandNight
+    HOOTHOOT,10,14
+    SPINARAK,10,15
+    HOOTHOOT,10,14
+    SPINARAK,10,15
+    PINECO,9,13
+    PINECO,9,13
+    NATU,12,14
+    NATU,12,14
+    DROWZEE,9,15
+    DROWZEE,9,15
+    DROWZEE,9,15
+    DROWZEE,9,15
+BugContest
+    CATERPIE,7,18
+    WEEDLE,7,18
+    METAPOD,9,18
+    KAKUNA,9,18
+    PARAS,10,17
+    VENONAT,10,16
+    BUTTERFREE,12,15
+    BEEDRILL,12,15
+    SCYTHER,13,14
+    PINSIR,13,14
+    SCYTHER,13,14
+    PINSIR,13,14
+#-------------------------------
+031 # Route 3
+25,10,10
+Land
+    NIDORANfE,12,15
+    NIDORANmA,12,15
+    NIDORANfE,12,15
+    NIDORANmA,12,15
+    PIKACHU,14,17
+    PIKACHU,14,17
+    PONYTA,13,15
+    PONYTA,13,15
+    EEVEE,15
+    EEVEE,15
+    EEVEE,15
+    EEVEE,15
+Water
+    SURSKIT,13,14
+    LOTAD,14
+    LOTAD,14
+    LOTAD,15
+    LOTAD,15
+RockSmash
+    NOSEPASS,13,14
+    GEODUDE,12,15
+    GEODUDE,12,15
+    GEODUDE,12,15
+    GEODUDE,12,15
+OldRod
+    MAGIKARP,6,11
+    MAGIKARP,10,17
+GoodRod
+    POLIWAG,12,15
+    PSYDUCK,11,14
+    WOOPER,13,17
+SuperRod
+    CHINCHOU,11,12
+    REMORAID,12,14
+    LUVDISC,10,16
+    LUVDISC,10,16
+    LUVDISC,10,16
+HeadbuttLow
+    PINECO,14,17
+    COMBEE,15,17
+    PINECO,14,16
+    HERACROSS,16,18
+    COMBEE,15,16
+    HERACROSS,16,17
+    HERACROSS,16,17
+    MUNCHLAX,13,18
+HeadbuttHigh
+    SEEDOT,14,17
+    SHROOMISH,14,17
+    SEEDOT,14,17
+    BURMY,12,15
+    SHROOMISH,14,17
+    BURMY,12,15
+    BURMY,12,15
+    BURMY,12,15
+#-------------------------------
+034 # Ice Cave
+25,10,10
+Cave
+    SWINUB,16,18
+    SWINUB,16,18
+    SNEASEL,14,16
+    SNEASEL,14,16
+    SNORUNT,12,15
+    SNORUNT,12,15
+    SNOVER,14
+    SNOVER,14
+    SMOOCHUM,11,14
+    SMOOCHUM,11,14
+    SMOOCHUM,11,14
+    SMOOCHUM,11,14
+#-------------------------------
+039 # Route 4
+25,10,10
+Land
+    SHELLOS_1,12,15
+    SHELLOS_1,12,15
+    SHELLOS_1,12,15
+    GRIMER,13,15
+    GRIMER,13,15
+    GRIMER,13,15
+    GRIMER,13,15
+    GRIMER,13,15
+    MURKROW,12,14
+    MURKROW,12,14
+    MURKROW,12,14
+    MURKROW,12,14
+#-------------------------------
+041 # Route 5
+25,10,10
+Land
+    GRIMER,13,15
+    GRIMER,13,15
+    GRIMER,13,15
+    SPEAROW,13,16
+    SPEAROW,13,16
+    SPEAROW,13,16
+    SPEAROW,13,16
+    SPEAROW,13,16
+    SLUGMA,13,14
+    SLUGMA,13,14
+    SLUGMA,13,14
+    SLUGMA,13,14
+#-------------------------------
+044 # Route 6
+25,10,10
+Land
+    SHELLOS_1,12,15
+    SHELLOS_1,12,15
+    SHELLOS_1,12,15
+    GRIMER,13,15
+    GRIMER,13,15
+    GRIMER,13,15
+    GRIMER,13,15
+    GRIMER,13,15
+    MURKROW,12,14
+    MURKROW,12,14
+    MURKROW,12,14
+    MURKROW,12,14
+#-------------------------------
+047 # Route 7
+25,10,10
+Land
+    SHELLOS,12,15
+    SHELLOS,12,15
+    SHELLOS,12,15
+    BIDOOF,14,17
+    BIDOOF,14,17
+    BIDOOF,14,17
+    MURKROW,12,14
+    MURKROW,12,14
+    WURMPLE,9,12
+    WURMPLE,9,12
+    WURMPLE,9,12
+    WURMPLE,9,12
+RockSmash
+    NOSEPASS,13,14
+    NOSEPASS,13,14
+    GEODUDE,12,15
+    GEODUDE,12,15
+    GEODUDE,12,15
+#-------------------------------
+049 # Rock Cave
+25,10,10
+Cave
+    NOSEPASS,14,15
+    NOSEPASS,13,14
+    MAGNETON,14,17
+    MAGNETON,14,17
+    MAGNETON,14,16
+    MAGNETON,14,16
+    GEODUDE,13,15
+    GEODUDE,13,15
+    MAWILE,14,16
+    MAWILE,14,16
+    MAWILE,14,16
+    MAWILE,14,16
+#-------------------------------
+050 # Rock Cave
+25,10,10
+Cave
+    NOSEPASS,14,15
+    NOSEPASS,13,14
+    MAGNETON,14,17
+    MAGNETON,14,17
+    MAGNETON,14,16
+    MAGNETON,14,16
+    GEODUDE,13,15
+    GEODUDE,13,15
+    BURMY,14,16
+    BURMY,14,16
+    BURMY,14,16
+    BURMY,14,16
+#-------------------------------
+051 # Dungeon
+25,10,10
+Cave
+    PICHU,1
+    CLEFFA,1
+    IGGLYBUFF,1
+    IGGLYBUFF,1
+    CHINGLING,1
+    CHINGLING,1
+    RIOLU,1
+    RIOLU,1
+    TYROGUE,1
+    TYROGUE,1
+    TYROGUE,1
+    TYROGUE,1
+#-------------------------------
+066 # Safari Zone
+25,10,10
+Land
+    NIDORANfE,15,16
+    NIDORANmA,15,16
+    DODUO,13,15
+    DODUO,13,15
+    ABRA,12,15
+    ABRA,12,15
+    TANGELA,14,16
+    TANGELA,14,16
+    HOPPIP,13,17
+    HOPPIP,13,17
+    HOPPIP,13,17
+    HOPPIP,13,17
+#-------------------------------
+068 # Safari Zone
+25,10,10
+Land
+    RHYHORN,16,18
+    EXEGGCUTE,15,18
+    VENONAT,15,17
+    VENONAT,15,18
+    AIPOM,14,17
+    GIRAFARIG,16,17
+    TAUROS,15,16
+    HERACROSS,15,17
+    SCYTHER,16
+    PINSIR,16
+    KANGASKHAN,19
+    CHANSEY,17
+Water
+    PSYDUCK,16,18
+    MARILL,15,18
+    SLOWPOKE,14,16
+    BUIZEL,15,17
+    BUIZEL,15,17
+OldRod
+    MAGIKARP,17,21
+    MAGIKARP,17,20
+GoodRod
+    MAGIKARP,16,20
+    FEEBAS,16,20
+    POLIWAG,17,18
+SuperRod
+    GOLDEEN,16,18
+    REMORAID,17,19
+    CARVANHA,16,17
+    FINNEON,15,18
+    DRATINI,17
+#-------------------------------
+069 # Route 8
+25,10,10
+Land
+    ODDISH,15,17
+    MAREEP,16,18
+    LOTAD,15,17
+    LOTAD,15,18
+    DITTO,15,17
+    DITTO,16,18
+    BONSLY,14,17
+    BONSLY,14,16
+    BONSLY,14,16
+    BONSLY,14,16
+    BONSLY,15,16
+    BONSLY,15
+Water
+    TENTACOOL,14,19
+    MANTYKE,15,16
+    REMORAID,14,16
+    REMORAID,14,16
+    REMORAID,14,16
+OldRod
+    MAGIKARP,16,19
+    MAGIKARP,16,19
+GoodRod
+    BARBOACH,17,18
+    SHELLDER,16,19
+    KRABBY,15,16
+SuperRod
+    CHINCHOU,17,19
+    QWILFISH,16,19
+    CORSOLA,15,18
+    STARYU,15,17
+    STARYU,15,17
+#-------------------------------
+070 # Underwater
+25,10,10
+Land
+    CLAMPERL,18,20
+    SHELLDER,18,20
+    CLAMPERL,18,19
+    SHELLDER,18,19
+    CHINCHOU,17,21
+    CHINCHOU,17,21
+    CORSOLA,17,20
+    CORSOLA,17,20
+    RELICANTH,16,19
+    RELICANTH,16,19
+    RELICANTH,16,19
+    RELICANTH,16,19
+#-------------------------------
+075 # Tiall Region
+25,10,10
+Land
+    RATTATA_1,11,14
+    GEODUDE_1,11,14
+    SANDSHREW_1,11,14
+    VULPIX_1,11,14
+    DIGLETT_1,11,14
+    MEOWTH_1,11,14
+    PIKACHU,11,14
+    PIKACHU,11,14
+    CUBONE,11,14
+    CUBONE,11,14
+    CUBONE,11,14
+    CUBONE,11,14

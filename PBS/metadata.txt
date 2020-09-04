@@ -1,0 +1,392 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[000]
+PlayerA = POKEMONTRAINER_Red,trchar000,boy_bike,boy_surf,boy_run,boy_surf,boy_fish_offset,boy_fish_offset
+PlayerB = POKEMONTRAINER_Leaf,trchar001,girl_bike,girl_surf,girl_run,girl_surf,girl_fish_offset,girl_fish_offset
+TrainerVictoryME = Battle victory trainer.ogg
+WildVictoryME = Battle victory wild.ogg
+TrainerBattleBGM = Battle trainer.mid
+SurfBGM = Surfing.mid
+BicycleBGM = Bicycle.mid
+Home = 3,7,5,8
+WildBattleBGM = Battle wild.mid
+#-------------------------------
+[001]
+# Intro
+#-------------------------------
+[002]
+# Lappet Town
+BattleBack = field
+MapPosition = 0,13,12
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[003]
+# \PN's house
+MapPosition = 0,13,12
+HealingSpot = 2,8,8
+#-------------------------------
+[004]
+# Pokémon Lab
+MapPosition = 0,13,12
+ShowArea = false
+#-------------------------------
+[005]
+# Route 1
+BattleBack = field
+MapPosition = 0,13,11
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[006]
+# Kurt's house
+MapPosition = 0,13,11
+#-------------------------------
+[007]
+# Cedolan City
+MapSize = 2,11
+MapPosition = 0,13,10
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[008]
+# Daisy's house
+MapPosition = 0,13,12
+#-------------------------------
+[009]
+# Cedolan City Poké Center
+MapPosition = 0,14,10
+HealingSpot = 8,17,11
+#-------------------------------
+[010]
+# Cedolan Gym
+BattleBack = indoor3
+MapPosition = 0,13,10
+Environment = Rock
+#-------------------------------
+[011]
+# Pokémon Institute
+MapPosition = 0,14,10
+#-------------------------------
+[012]
+# Cedolan City Condo
+MapPosition = 0,14,10
+#-------------------------------
+[013]
+# Game Corner
+MapPosition = 0,14,10
+#-------------------------------
+[014]
+# Cedolan Dept. 1F
+MapPosition = 0,13,10
+#-------------------------------
+[015]
+# Cedolan Dept. 2F
+MapPosition = 0,13,10
+#-------------------------------
+[016]
+# Cedolan Dept. 3F
+MapPosition = 0,13,10
+#-------------------------------
+[017]
+# Cedolan Dept. 4F
+MapPosition = 0,13,10
+#-------------------------------
+[018]
+# Cedolan Dept. 5F
+MapPosition = 0,13,10
+#-------------------------------
+[019]
+# Cedolan Dept. Rooftop
+MapPosition = 0,13,10
+#-------------------------------
+[020]
+# Cedolan Dept. Elevator
+MapPosition = 0,13,10
+#-------------------------------
+[021]
+# Route 2
+MapSize = 1,11
+BattleBack = field
+Weather = Rain,100
+MapPosition = 0,14,8
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[023]
+# Lerucean Town
+MapPosition = 0,15,8
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[024]
+# Lerucean Town Poké Center
+MapPosition = 0,15,8
+HealingSpot = 23,11,15
+#-------------------------------
+[025]
+# Lerucean Town Mart
+MapPosition = 0,15,8
+#-------------------------------
+[026]
+# Pokémon Fan Club
+MapPosition = 0,15,8
+#-------------------------------
+[027]
+# Pokémon Day Care
+MapPosition = 0,15,8
+#-------------------------------
+[028]
+# Natural Park
+BattleBack = field
+MapPosition = 0,16,8
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[029]
+# Natural Park Entrance
+Bicycle = true
+MapPosition = 0,16,8
+#-------------------------------
+[030]
+# Natural Park Pavillion
+MapPosition = 0,16,8
+#-------------------------------
+[031]
+# Route 3
+MapSize = 2,1101
+BattleBack = field
+MapPosition = 0,14,6
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[034]
+# Ice Cave
+BattleBack = cave1
+Bicycle = true
+MapPosition = 0,15,6
+Environment = Cave
+#-------------------------------
+[035]
+# Ingido Plateau
+MapPosition = 0,13,6
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[036]
+# Pokémon League
+MapPosition = 0,13,6
+HealingSpot = 35,17,7
+#-------------------------------
+[037]
+# Pokémon League
+BattleBack = elite1
+MapPosition = 0,13,6
+#-------------------------------
+[038]
+# Hall of Fame
+MapPosition = 0,13,6
+#-------------------------------
+[039]
+# Route 4
+MapSize = 2,11
+BattleBack = field
+MapPosition = 0,11,6
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[040]
+# Route 4
+MapPosition = 0,11,6
+Outdoor = true
+BicycleAlways = true
+ShowArea = true
+#-------------------------------
+[041]
+# Route 5
+MapSize = 1,111
+MapPosition = 0,11,7
+Outdoor = true
+BicycleAlways = true
+ShowArea = true
+#-------------------------------
+[044]
+# Route 6
+MapSize = 2,11
+BattleBack = field
+MapPosition = 0,11,10
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[045]
+# Route 6
+MapPosition = 0,11,10
+Outdoor = true
+BicycleAlways = true
+ShowArea = true
+#-------------------------------
+[046]
+# Cycling Road gate
+Bicycle = true
+MapPosition = 0,12,6
+#-------------------------------
+[047]
+# Route 7
+MapSize = 2,11
+BattleBack = rocky
+Weather = Rain,0
+MapPosition = 0,15,10
+Outdoor = true
+Environment = Rock
+ShowArea = true
+#-------------------------------
+[049]
+# Rock Cave
+BattleBack = cave1
+Bicycle = true
+MapPosition = 0,16,10
+Environment = Cave
+#-------------------------------
+[050]
+# Rock Cave
+BattleBack = cave3
+Bicycle = true
+MapPosition = 0,16,10
+DarkMap = true
+Environment = Cave
+#-------------------------------
+[051]
+# Dungeon
+BattleBack = cave2
+Bicycle = true
+Dungeon = true
+MapPosition = 0,16,10
+Environment = Cave
+#-------------------------------
+[052]
+# Battle Frontier
+MapPosition = 0,17,10
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[053]
+# Battle Frontier Poké Center
+MapPosition = 0,17,10
+HealingSpot = 52,17,14
+#-------------------------------
+[054]
+# Battle Frontier Mart
+MapPosition = 0,17,10
+#-------------------------------
+[055]
+# Battle Tower
+MapPosition = 0,17,10
+HealingSpot = 52,30,10
+#-------------------------------
+[056]
+# Battle Tower arena
+BattleBack = indoor1
+MapPosition = 0,17,10
+#-------------------------------
+[057]
+# Stadium Cup lobby
+MapPosition = 0,17,10
+#-------------------------------
+[058]
+# Battle Palace
+MapPosition = 0,17,10
+#-------------------------------
+[059]
+# Battle Palace arena
+BattleBack = indoor1
+MapPosition = 0,17,10
+#-------------------------------
+[060]
+# Battle Arena
+MapPosition = 0,17,10
+#-------------------------------
+[061]
+# Battle Arena arena
+BattleBack = indoor1
+MapPosition = 0,17,10
+#-------------------------------
+[062]
+# Battle Factory
+MapPosition = 0,17,10
+#-------------------------------
+[063]
+# Battle Factory intro corridor
+MapPosition = 0,17,10
+#-------------------------------
+[064]
+# Battle Factory arena
+BattleBack = indoor1
+MapPosition = 0,17,10
+#-------------------------------
+[065]
+# Battle Factory corridor
+MapPosition = 0,17,10
+#-------------------------------
+[066]
+# Safari Zone
+BattleBack = field
+MapPosition = 0,12,12
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[067]
+# Safari Zone gate
+MapPosition = 0,12,12
+#-------------------------------
+[068]
+# Safari Zone
+BattleBack = forest
+MapPosition = 0,12,12
+SafariMap = true
+Outdoor = true
+Environment = Forest
+ShowArea = true
+#-------------------------------
+[069]
+# Route 8
+DiveMap = 70
+BattleBack = field
+MapPosition = 0,13,13
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[070]
+# Underwater
+BattleBack = underwater
+MapPosition = 0,13,13
+Environment = Underwater
+#-------------------------------
+[071]
+# Harbour
+MapPosition = 0,13,13
+#-------------------------------
+[072]
+# Berth Island
+BattleBack = field
+Weather = Storm,50
+MapPosition = 0,18,17
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[073]
+# Faraday Island
+BattleBack = field
+MapPosition = 0,22,16
+Outdoor = true
+ShowArea = true
+#-------------------------------
+[074]
+# Cycling Road gate
+Bicycle = true
+MapPosition = 0,12,10
+#-------------------------------
+[075]
+# Tiall Region
+BattleBack = city
+MapPosition = 1,13,16
+Outdoor = true

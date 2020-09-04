@@ -1,0 +1,121 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+#-------------------------------
+[0]
+Name = Normal
+InternalName = NORMAL
+Weaknesses = FIGHTING
+Immunities = GHOST
+#-------------------------------
+[1]
+Name = Fighting
+InternalName = FIGHTING
+Weaknesses = FLYING,PSYCHIC
+Resistances = BUG,DARK,ROCK
+#-------------------------------
+[2]
+Name = Flying
+InternalName = FLYING
+Weaknesses = ELECTRIC,ICE,ROCK
+Resistances = BUG,FIGHTING,GRASS
+Immunities = GROUND
+#-------------------------------
+[3]
+Name = Poison
+InternalName = POISON
+Weaknesses = GROUND,PSYCHIC
+Resistances = BUG,FIGHTING,GRASS,POISON
+#-------------------------------
+[4]
+Name = Ground
+InternalName = GROUND
+Weaknesses = GRASS,ICE,WATER
+Resistances = POISON,ROCK
+Immunities = ELECTRIC
+#-------------------------------
+[5]
+Name = Rock
+InternalName = ROCK
+Weaknesses = FIGHTING,GRASS,GROUND,STEEL,WATER
+Resistances = FIRE,FLYING,NORMAL,POISON
+#-------------------------------
+[6]
+Name = Bug
+InternalName = BUG
+Weaknesses = FIRE,FLYING,ROCK
+Resistances = FIGHTING,GRASS,GROUND
+#-------------------------------
+[7]
+Name = Ghost
+InternalName = GHOST
+Weaknesses = DARK,GHOST
+Resistances = BUG,POISON
+Immunities = FIGHTING,NORMAL
+#-------------------------------
+[8]
+Name = Steel
+InternalName = STEEL
+Weaknesses = FIGHTING,FIRE,GROUND
+Resistances = BUG,DARK,DRAGON,FLYING,GHOST,GRASS,ICE,NORMAL,PSYCHIC,ROCK,STEEL
+Immunities = POISON
+#-------------------------------
+[9]
+Name = ???
+InternalName = QMARKS
+IsPseudoType = true
+#-------------------------------
+[10]
+Name = Fire
+InternalName = FIRE
+IsSpecialType = true
+Weaknesses = GROUND,ROCK,WATER
+Resistances = BUG,FIRE,GRASS,ICE,STEEL
+#-------------------------------
+[11]
+Name = Water
+InternalName = WATER
+IsSpecialType = true
+Weaknesses = ELECTRIC,GRASS
+Resistances = FIRE,ICE,STEEL,WATER
+#-------------------------------
+[12]
+Name = Grass
+InternalName = GRASS
+IsSpecialType = true
+Weaknesses = BUG,FIRE,FLYING,ICE,POISON
+Resistances = ELECTRIC,GRASS,GROUND,WATER
+#-------------------------------
+[13]
+Name = Electric
+InternalName = ELECTRIC
+IsSpecialType = true
+Weaknesses = GROUND
+Resistances = ELECTRIC,FLYING,STEEL
+#-------------------------------
+[14]
+Name = Psychic
+InternalName = PSYCHIC
+IsSpecialType = true
+Weaknesses = BUG,DARK,GHOST
+Resistances = FIGHTING,PSYCHIC
+#-------------------------------
+[15]
+Name = Ice
+InternalName = ICE
+IsSpecialType = true
+Weaknesses = FIGHTING,FIRE,ROCK,STEEL
+Resistances = ICE
+#-------------------------------
+[16]
+Name = Dragon
+InternalName = DRAGON
+IsSpecialType = true
+Weaknesses = DRAGON,ICE
+Resistances = ELECTRIC,FIRE,GRASS,WATER
+#-------------------------------
+[17]
+Name = Dark
+InternalName = DARK
+IsSpecialType = true
+Weaknesses = BUG,FIGHTING
+Resistances = DARK,GHOST
+Immunities = PSYCHIC
