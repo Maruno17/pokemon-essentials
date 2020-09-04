@@ -2508,7 +2508,7 @@ BattleHandlers::RunFromBattleAbility.add(:RUNAWAY,
   
 #===============================================================================
 # AbilityOnBattleStart handlers
-#===============================================================================  
+#===============================================================================
   
 BattleHandlers::AbilityOnSwitchIn.add(:INTREPIDSWORD,
   proc { |ability,battler,battle|
