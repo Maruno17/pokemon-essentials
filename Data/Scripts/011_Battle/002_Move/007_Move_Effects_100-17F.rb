@@ -2620,6 +2620,18 @@ end
 
 
 
+#===============================================================================
+# Hits 3 times and always critical. (Surging Strikes)
+#===============================================================================
+class PokeBattle_Move_176 < PokeBattle_Move
+  def pbCritialOverride(user,target); return 1; end
+  def multiHitMove?;           return true; end
+  def pbNumHits(user,targets); return 3;    end
+  def successCheckPerHit?
+    return @accCheckPerHit
+  end
+end  
+
 # NOTE: If you're inventing new move effects, use function code 176 and onwards.
 #       Actually, you might as well use high numbers like 500+ (up to FFFF),
 #       just to make sure later additions to Essentials don't clash with your
