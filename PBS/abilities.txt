@@ -233,3 +233,4 @@
 231,SHADOWSHIELD,Shadow Shield,"Resists damage while its HP is full."
 232,PRISMARMOR,Prism Armor,"Reduces damage from super-effective attacks."
 233,NEUROFORCE,Neuroforce,"Powers up moves that are super-effective."
+234,SANDSPIT,Sand Spit,"Summons a sandstorm when hit."
