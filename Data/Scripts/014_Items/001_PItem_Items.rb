@@ -207,7 +207,9 @@ def pbIsUnlosableItem?(item,species,ability)
      :GIRATINA => [:GRISEOUSORB],
      :GENESECT => [:BURNDRIVE,:CHILLDRIVE,:DOUSEDRIVE,:SHOCKDRIVE],
      :KYOGRE   => [:BLUEORB],
-     :GROUDON  => [:REDORB]
+     :GROUDON  => [:REDORB],
+     :ZACIAN   => [:RUSTEDSWORD],   
+     :ZAMAZENTA=> [:RUSTEDSHIELD]
   }
   ret = false
   combos.each do |comboSpecies, items|
