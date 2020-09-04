@@ -1608,6 +1608,12 @@ BattleHandlers::TargetAbilityOnHit.add(:STAMINA,
     target.pbRaiseStatStageByAbility(PBStats::DEFENSE,1,target)
   }
 )
+  
+BattleHandlers::TargetAbilityOnHit.add(:SANDSPIT,
+  proc { |ability,target,battler,move,battle|
+    pbBattleWeatherAbility(PBWeather::Sandstorm,battler,battle)
+  }
+)  
 
 BattleHandlers::TargetAbilityOnHit.add(:STATIC,
   proc { |ability,user,target,move,battle|
