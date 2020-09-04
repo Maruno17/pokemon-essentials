@@ -2505,3 +2505,21 @@ BattleHandlers::RunFromBattleAbility.add(:RUNAWAY,
     next true
   }
 )
+  
+#===============================================================================
+# AbilityOnBattleStart handlers
+#===============================================================================  
+  
+BattleHandlers::AbilityOnSwitchIn.add(:INTREPIDSWORD,
+  proc { |ability,battler,battle|
+    stat = PBStats::ATTACK
+    battler.pbRaiseStatStageByAbility(stat,1,battler)
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:DAUNTLESSSHIELD,
+  proc { |ability,battler,battle|
+    stat = PBStats::DEFENSE
+    battler.pbRaiseStatStageByAbility(stat,1,battler)
+  }
+)  
