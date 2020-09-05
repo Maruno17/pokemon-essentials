@@ -99,11 +99,14 @@ class HandlerHash
     @addIfs.push([condProc,handler])
   end
 
-  def add(sym,handler)   # 'sym' can be an ID or symbol
+  def add(sym,handler=nil,&handler_block)   # 'sym' can be an ID or symbol
+    if ![Proc,Hash].include?(handler.class) && !block_given?
+      raise ArgumentError, "#{self.class.name} for #{sym.inspect} has no valid handler"
+    end
     id = fromSymbol(sym)
-    @hash[id] = handler if id
+    @hash[id] = handler || handler_block if id
     symbol = toSymbol(sym)
-    @hash[symbol] = handler if symbol
+    @hash[symbol] = handler || handler_block if symbol
   end
 
   def copy(src,*dests)
