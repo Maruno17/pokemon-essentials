@@ -1,6 +1,6 @@
 class PokemonLoadPanel < SpriteWrapper
   attr_reader :selected
-  
+
   TEXTCOLOR             = Color.new(232,232,232)
   TEXTSHADOWCOLOR       = Color.new(136,136,136)
   MALETEXTCOLOR         = Color.new(56,160,248)
@@ -19,7 +19,7 @@ class PokemonLoadPanel < SpriteWrapper
     @selected = (index==0)
     @bgbitmap = AnimatedBitmap.new("Graphics/Pictures/loadPanels")
     @refreshBitmap = true
-    @refreshing = false 
+    @refreshing = false
     refresh
   end
 
@@ -356,6 +356,7 @@ class PokemonLoadScreen
           metadata             = Marshal.load(f)
           $PokemonBag          = Marshal.load(f)
           $PokemonStorage      = Marshal.load(f)
+          $SaveVersion         = Marshal.load(f) unless f.eof?
           pbRefreshResizeFactor   # To fix Game_Screen pictures
           magicNumberMatches = false
           if $data_system.respond_to?("magic_number")
@@ -456,12 +457,12 @@ class PokemonLoadScreen
         savedata = []
         if safeExists?(savefile)
           File.open(savefile,"rb") { |f|
-            15.times { savedata.push(Marshal.load(f)) }
+            16.times { savedata.push(Marshal.load(f)) }
           }
           savedata[3]=$PokemonSystem
           begin
             File.open(RTP.getSaveFileName("Game.rxdata"),"wb") { |f|
-              15.times { |i| Marshal.dump(savedata[i],f) }
+              16.times { |i| Marshal.dump(savedata[i],f) }
             }
           rescue
           end
@@ -495,7 +496,7 @@ module FontInstaller
      'pkmnrs.ttf',
      'pkmndp.ttf',
      'pkmnfl.ttf'
-  ]    
+  ]
   # names (not filenames) of fonts to be installed
   Names = [
     'Power Green',
@@ -520,7 +521,7 @@ module FontInstaller
       return ENV['windir'] + '\\Fonts\\'
     else
       return '\\Windows\\Fonts\\'
-    end   
+    end
   end
 
   AFR = Win32API.new('gdi32', 'AddFontResource', ['P'], 'L')
