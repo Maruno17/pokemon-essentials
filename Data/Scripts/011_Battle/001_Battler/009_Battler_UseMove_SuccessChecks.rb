@@ -288,6 +288,7 @@ class PokeBattle_Battler
   # Includes move-specific failure conditions, protections and type immunities.
   #=============================================================================
   def pbSuccessCheckAgainstTarget(move,user,target)
+    unseenfist=isConst?(user.ability,PBAbilities,:UNSEENFIST) && move.contactMove?
     typeMod = move.pbCalcTypeMod(move.calcType,user,target)
     target.damageState.typeMod = typeMod
     # Two-turn attacks can't fail here in the charging turn
@@ -303,7 +304,7 @@ class PokeBattle_Battler
     end
     # Crafty Shield
     if target.pbOwnSide.effects[PBEffects::CraftyShield] && user.index!=target.index &&
-       move.statusMove? && move.pbTarget(user)!=PBTargets::AllBattlers
+       move.statusMove? && move.pbTarget(user)!=PBTargets::AllBattlers && !unseenfist
       @battle.pbCommonAnimation("CraftyShield",target)
       @battle.pbDisplay(_INTL("Crafty Shield protected {1}!",target.pbThis(true)))
       target.damageState.protected = true
@@ -313,7 +314,7 @@ class PokeBattle_Battler
     # Wide Guard
     if target.pbOwnSide.effects[PBEffects::WideGuard] && user.index!=target.index &&
        PBTargets.multipleTargets?(move.pbTarget(user)) &&
-       (NEWEST_BATTLE_MECHANICS || move.damagingMove?)
+       (NEWEST_BATTLE_MECHANICS || move.damagingMove?) && !unseenfist
       @battle.pbCommonAnimation("WideGuard",target)
       @battle.pbDisplay(_INTL("Wide Guard protected {1}!",target.pbThis(true)))
       target.damageState.protected = true
@@ -323,7 +324,7 @@ class PokeBattle_Battler
     if move.canProtectAgainst?
       # Quick Guard
       if target.pbOwnSide.effects[PBEffects::QuickGuard] &&
-         @battle.choices[user.index][4]>0   # Move priority saved from pbCalculatePriority
+         @battle.choices[user.index][4]>0 && !unseenfist   # Move priority saved from pbCalculatePriority
         @battle.pbCommonAnimation("QuickGuard",target)
         @battle.pbDisplay(_INTL("Quick Guard protected {1}!",target.pbThis(true)))
         target.damageState.protected = true
@@ -331,7 +332,7 @@ class PokeBattle_Battler
         return false
       end
       # Protect
-      if target.effects[PBEffects::Protect]
+      if target.effects[PBEffects::Protect] && !unseenfist
         @battle.pbCommonAnimation("Protect",target)
         @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
         target.damageState.protected = true
@@ -339,7 +340,7 @@ class PokeBattle_Battler
         return false
       end
       # King's Shield
-      if target.effects[PBEffects::KingsShield] && move.damagingMove?
+      if target.effects[PBEffects::KingsShield] && move.damagingMove? && !unseenfist
         @battle.pbCommonAnimation("KingsShield",target)
         @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
         target.damageState.protected = true
@@ -352,7 +353,7 @@ class PokeBattle_Battler
         return false
       end
       # Spiky Shield
-      if target.effects[PBEffects::SpikyShield]
+      if target.effects[PBEffects::SpikyShield] && !unseenfist
         @battle.pbCommonAnimation("SpikyShield",target)
         @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
         target.damageState.protected = true
@@ -366,7 +367,7 @@ class PokeBattle_Battler
         return false
       end
       # Baneful Bunker
-      if target.effects[PBEffects::BanefulBunker]
+      if target.effects[PBEffects::BanefulBunker] && !unseenfist
         @battle.pbCommonAnimation("BanefulBunker",target)
         @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
         target.damageState.protected = true
@@ -377,7 +378,7 @@ class PokeBattle_Battler
         return false
       end
       # Mat Block
-      if target.pbOwnSide.effects[PBEffects::MatBlock] && move.damagingMove?
+      if target.pbOwnSide.effects[PBEffects::MatBlock] && move.damagingMove? && !unseenfist
         # NOTE: Confirmed no common animation for this effect.
         @battle.pbDisplay(_INTL("{1} was blocked by the kicked-up mat!",move.name))
         target.damageState.protected = true
@@ -472,6 +473,7 @@ class PokeBattle_Battler
     end
     return true
   end
+end
 
   #=============================================================================
   # Per-hit success check against the target.
