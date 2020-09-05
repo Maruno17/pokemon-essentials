@@ -358,8 +358,8 @@ class PokeBattle_Battler
         end
       end
     end
-    # Protean
-    if user.hasActiveAbility?(:PROTEAN) && !move.callsAnotherMove? && !move.snatched
+    # Protean / Libero
+    if user.hasActiveAbility?(:PROTEAN) || user.hasActiveAbility?(:LIBERO) && !move.callsAnotherMove? && !move.snatched
       if user.pbHasOtherType?(moveType) && !PBTypes.isPseudoType?(move.calcType)
         @battle.pbShowAbilitySplash(user)
         user.pbChangeTypes(move.calcType)
@@ -367,9 +367,9 @@ class PokeBattle_Battler
         @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))
         @battle.pbHideAbilitySplash(user)
         # NOTE: The GF games say that if Curse is used by a non-Ghost-type
-        #       Pokémon which becomes Ghost-type because of Protean, it should
-        #       target and curse itself. I think this is silly, so I'm making it
-        #       choose a random opponent to curse instead.
+        #       Pokémon which becomes Ghost-type because of Protean || Libero,
+        #       it should target and curse itself. I think this is silly, so
+        #       I'm making it choose a random opponent to curse instead.
         if move.function=="10D" && targets.length==0   # Curse
           choice[3] = -1
           targets = pbFindTargets(choice,move,user)
