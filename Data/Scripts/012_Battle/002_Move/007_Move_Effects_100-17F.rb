@@ -2630,7 +2630,22 @@ class PokeBattle_Move_176 < PokeBattle_Move
   def successCheckPerHit?
     return @accCheckPerHit
   end
-end  
+end
+
+
+
+#===============================================================================
+# If the user attacks before the target, or if the target switches in during the 
+# turn that Fishious Rend is used, its base power doubles. (Fishious Rend, Bolt Beak)
+#===============================================================================
+class PokeBattle_Move_177 < PokeBattle_Move
+  def pbBaseDamage(baseDmg,user,target)
+    baseDmg*=2 if !target.movedThisRound?
+    return baseDmg
+  end
+end
+
+
 
 # NOTE: If you're inventing new move effects, use function code 176 and onwards.
 #       Actually, you might as well use high numbers like 500+ (up to FFFF),
