@@ -233,4 +233,7 @@
 231,SHADOWSHIELD,Shadow Shield,"Resists damage while its HP is full."
 232,PRISMARMOR,Prism Armor,"Reduces damage from super-effective attacks."
 233,NEUROFORCE,Neuroforce,"Powers up moves that are super-effective."
-234,SANDSPIT,Sand Spit,"Summons a sandstorm when hit."
+234,SANDSPIT,Sand Spit,"The Pokémon creates a sandstorm when it's hit by an attack."
+235,UNSEENFIST,Unseen Fist,"If the Pokémon uses moves that make direct contact, it can attack the target even if the target protects itself."
+236,DAUNTLESSSHIELD,Dauntless Shield,"Boosts the Pokémon's Defense stat when the Pokémon enters a battle."
+237,INTREPIDSWORD,Interpid Sword,"Boosts the Pokémon's Attack stat when the Pokémon enters a battle."
