@@ -1121,6 +1121,18 @@ BattleHandlers::DamageCalcUserAbility.add(:WATERBUBBLE,
   }
 )
 
+BattleHandlers::DamageCalcUserAbility.add(:GORILLATACTICS,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round  
+  }
+)	
+
+BattleHandlers::DamageCalcUserAbility.add(:PUNKROCK,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[ATK_MULT] = (mults[ATK_MULT]*1.3).round if move.soundMove?
+  }
+)
+
 #===============================================================================
 # DamageCalcUserAllyAbility handlers
 #===============================================================================
@@ -1146,6 +1158,12 @@ BattleHandlers::DamageCalcUserAllyAbility.add(:STEELYSPIRIT,
       if isConst?(type,PBTypes,:STEEL)
          mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
       end		 
+  }
+)
+
+BattleHandlers::DamageCalcUserAllyAbility.add(:POWERSPOT,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[FINAL_DMG_MULT] = (mults[FINAL_DMG_MULT]*1.3).round
   }
 )
   
@@ -1242,6 +1260,12 @@ BattleHandlers::DamageCalcTargetAbility.add(:WATERBUBBLE,
     if isConst?(type,PBTypes,:FIRE)
       mults[FINAL_DMG_MULT] = (mults[FINAL_DMG_MULT]*0.5).round
     end
+  }
+)
+
+BattleHandlers::DamageCalcTargetAbility.add(:PUNKROCK,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[DEF_MULT] *= 2 if move.soundMove?
   }
 )
 
@@ -2446,19 +2470,6 @@ BattleHandlers::AbilityOnSwitchIn.add(:UNNERVE,
   }
 )
 
-BattleHandlers::AbilityOnSwitchIn.add(:INTREPIDSWORD,
-  proc { |ability,battler,battle|
-    stat = PBStats::ATTACK
-    battler.pbRaiseStatStageByAbility(stat,1,battler)
-  }
-)
-
-BattleHandlers::AbilityOnSwitchIn.add(:DAUNTLESSSHIELD,
-  proc { |ability,battler,battle|
-    stat = PBStats::DEFENSE
-    battler.pbRaiseStatStageByAbility(stat,1,battler)
-  }
-)  
 #===============================================================================
 # AbilityOnSwitchOut handlers
 #===============================================================================
@@ -2546,3 +2557,21 @@ BattleHandlers::RunFromBattleAbility.add(:RUNAWAY,
     next true
   }
 )
+  
+#===============================================================================
+# AbilityOnBattleStart handlers
+#===============================================================================
+  
+BattleHandlers::AbilityOnSwitchIn.add(:INTREPIDSWORD,
+  proc { |ability,battler,battle|
+    stat = PBStats::ATTACK
+    battler.pbRaiseStatStageByAbility(stat,1,battler)
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:DAUNTLESSSHIELD,
+  proc { |ability,battler,battle|
+    stat = PBStats::DEFENSE
+    battler.pbRaiseStatStageByAbility(stat,1,battler)
+  }
+)  
