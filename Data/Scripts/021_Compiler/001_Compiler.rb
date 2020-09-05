@@ -365,19 +365,6 @@ def csvfield!(str)
   return ret
 end
 
-def csvQuote(str,always=false)
-  return "" if !str || str==""
-  if always || str[/[,\"]/]   # || str[/^\s/] || str[/\s$/] || str[/^#/]
-    str = str.gsub(/[\"]/,"\\\"")
-    str = "\"#{str}\""
-  end
-  return str
-end
-
-def csvQuoteAlways(str)
-  return csvQuote(str,true)
-end
-
 def csvBoolean!(str,line=-1)
   field = csvfield!(str)
   if field[/^1|[Tt][Rr][Uu][Ee]|[Yy][Ee][Ss]|[Yy]$/]
@@ -477,7 +464,7 @@ def checkEnumFieldOrNil(ret,enumer)
 end
 
 #===============================================================================
-# Csv record reading/writing
+# Csv record readin
 #===============================================================================
 def pbGetCsvRecord(rec,lineno,schema)
   record = []
@@ -601,7 +588,8 @@ def pbGetCsvRecord(rec,lineno,schema)
         field = csvfield!(rec)
         record.push(checkEnumFieldOrNil(field,schema[2+i-start]))
       when "y"   # Enumerable or integer
-        record.push(csvEnumFieldOrInt!(rec,schema[2+i-start],"",FileLineData.linereport))
+        field = csvfield!(rec)
+        record.push(csvEnumFieldOrInt!(field,schema[2+i-start],"",FileLineData.linereport))
       when "Y"   # Optional enumerable or integer
         field = csvfield!(rec)
         if field==""
@@ -609,13 +597,29 @@ def pbGetCsvRecord(rec,lineno,schema)
         elsif field[/^\-?\d+$/]
           record.push(field.to_i)
         else
-          record.push(checkEnumFieldOrNil(rec,schema[2+i-start]))
+          record.push(checkEnumFieldOrNil(field,schema[2+i-start]))
         end
       end
     end
     break if repeat && rec==""
   end while repeat
   return (schema[1].length==1) ? record[0] : record
+end
+
+#===============================================================================
+# Csv record writing
+#===============================================================================
+def csvQuote(str,always=false)
+  return "" if !str || str==""
+  if always || str[/[,\"]/]   # || str[/^\s/] || str[/\s$/] || str[/^#/]
+    str = str.gsub(/[\"]/,"\\\"")
+    str = "\"#{str}\""
+  end
+  return str
+end
+
+def csvQuoteAlways(str)
+  return csvQuote(str,true)
 end
 
 def pbWriteCsvRecord(record,file,schema)
