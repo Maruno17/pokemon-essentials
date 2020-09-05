@@ -56,6 +56,20 @@ class PokeBattle_Battler
         @effects[PBEffects::ChoiceBand] = -1
       end
     end
+	# Gorilla Tactics
+    if @effects[PBEffects::GorillaTactics]>=0
+      if hasActiveAbility?(:GORILLATACTICS)
+        if move.id!=@effects[PBEffects::GorillaTactics]
+          if showMessages
+            msg = _INTL("{1} allows the use of only {2} !",abilityName,PBMoves.getName(@effects[PBEffects::GorillaTactics]))
+            (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
+          end
+          return false
+        end
+      else
+        @effects[PBEffects::GorillaTactics] = -1        
+      end
+    end
     # Taunt
     if @effects[PBEffects::Taunt]>0 && move.statusMove?
       if showMessages
