@@ -15,8 +15,8 @@ module HiddenMoveHandlers
   UseMove        = MoveHandlerHash.new
 
   def self.addCanUseMove(item,proc);     CanUseMove.add(item,proc);     end
-  def self.addConfirmUseMove(item,proc); ConfirmUseMove.add(item,proc); end 
-  def self.addUseMove(item,proc);        UseMove.add(item,proc);        end 
+  def self.addConfirmUseMove(item,proc); ConfirmUseMove.add(item,proc); end
+  def self.addUseMove(item,proc);        UseMove.add(item,proc);        end
 
   def self.hasHandler(item)
     return CanUseMove[item]!=nil && UseMove[item]!=nil
@@ -156,7 +156,7 @@ def pbHiddenMoveAnimation(pokemon)
       interp.update
       interp.set(viewport.rect)
       bg.oy=(bg.bitmap.height-viewport.rect.height)/2
-      phase=6 if interp.done?    
+      phase=6 if interp.done?
     end
     # Constantly stream the strobes across the screen
     for strobe in strobes
@@ -823,7 +823,7 @@ def pbSweetScent
   viewport.color.red   = 255
   viewport.color.green = 0
   viewport.color.blue  = 0
-  viewport.color.alpha -= 10 
+  viewport.color.alpha -= 10
   alphaDiff = 12 * 20 / Graphics.frame_rate
   begin
     if count==0 && viewport.color.alpha<128

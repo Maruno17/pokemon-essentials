@@ -164,11 +164,11 @@ def pbCheckPokemonIconFiles(params,egg=false)
   if egg
     bitmapFileName = sprintf("Graphics/Icons/icon%segg_%d",getConstantName(PBSpecies,species),params[3]) rescue nil
     if !pbResolveBitmap(bitmapFileName)
-      bitmapFileName = sprintf("Graphics/Icons/icon%03degg_%d",species,params[3]) 
+      bitmapFileName = sprintf("Graphics/Icons/icon%03degg_%d",species,params[3])
       if !pbResolveBitmap(bitmapFileName)
         bitmapFileName = sprintf("Graphics/Icons/icon%segg",getConstantName(PBSpecies,species)) rescue nil
         if !pbResolveBitmap(bitmapFileName)
-          bitmapFileName = sprintf("Graphics/Icons/icon%03degg",species) 
+          bitmapFileName = sprintf("Graphics/Icons/icon%03degg",species)
           if !pbResolveBitmap(bitmapFileName)
             bitmapFileName = sprintf("Graphics/Icons/iconEgg")
           end
@@ -443,7 +443,7 @@ def pbCryFrameLength(pokemon,form=0,pitch=nil)
     else
       pkmnwav = pbResolveAudioSE(pbCryFile(pokemon))
       playtime = getPlayTime(pkmnwav) if pkmnwav
-    end 
+    end
   end
   playtime /= pitch   # sound is lengthened the lower the pitch
   # 4 is added to provide a buffer between sounds

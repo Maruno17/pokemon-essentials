@@ -1293,7 +1293,7 @@ BattleHandlers::EndOfMoveItem.add(:LEPPABERRY,
     choice = found[battle.pbRandom(found.length)]
     pkmnMove = battler.pokemon.moves[choice]
     pkmnMove.pp += 10
-    pkmnMove.pp = pkmnMove.totalpp if pkmnMove.pp>pkmnMove.totalpp 
+    pkmnMove.pp = pkmnMove.totalpp if pkmnMove.pp>pkmnMove.totalpp
     battler.moves[choice].pp = pkmnMove.pp
     moveName = PBMoves.getName(pkmnMove.id)
     if forced

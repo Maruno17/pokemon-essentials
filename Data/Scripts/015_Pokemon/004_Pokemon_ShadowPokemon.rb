@@ -6,7 +6,7 @@ or Resistances, while in XD the Shadow-type is Super-Effective against all other
 types.
 2/5 - display nature
 
-XD - Shadow Rush -- 55, 100 - Deals damage. 
+XD - Shadow Rush -- 55, 100 - Deals damage.
 Colosseum - Shadow Rush -- 90, 100
 If this attack is successful, user loses half of HP lost by opponent due to this
 attack (recoil). If user is in Hyper Mode, this attack has a good chance for a
@@ -189,7 +189,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 def pbIsPurifiable?(pkmn)
   return false if !pkmn
@@ -660,7 +660,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class PokemonTemp
   attr_accessor :heartgauges

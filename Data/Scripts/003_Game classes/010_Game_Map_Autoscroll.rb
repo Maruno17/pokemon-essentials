@@ -12,61 +12,61 @@
   normal event command requires a direction and number of tiles to scroll,
   Map Autoscroll scrolls the map to center on the tile whose x and y
   coordinates are given.
-  
+
   FEATURES
   - automatic map scrolling to given x,y coordinate (or player)
   - destination is fixed, so it's possible to scroll to same place even if
     origin is variable (e.g. moving NPC)
   - variable speed (just like "Scroll Map" event command)
-  - diagonal scrolling supported  
-  
+  - diagonal scrolling supported
+
   SETUP
   Instead of a "Scroll Map" event command, use the "Call Script" command
   and enter on the following on the first line:
-  
+
   autoscroll(x,y)
-  
+
   (replacing "x" and "y" with the x and y coordinates of the tile to scroll to)
-  
+
   To specify a scroll speed other than the default (4), use:
-  
+
   autoscroll(x,y,speed)
-  
+
   (now also replacing "speed" with the scroll speed from 1-6)
-  
+
   Diagonal scrolling happens automatically when the destination is diagonal
   relative to the starting point (i.e., not directly up, down, left or right).
 
   To scroll to the player, instead use the following:
-  
-  autoscroll_player(speed)  
-  
+
+  autoscroll_player(speed)
+
   Note: because of how the interpreter and the "Call Script" event command
   are setup, the call to autoscroll(...) can only be on the first line of
   the "Call Script" event command (and not flowing down to subsequent lines).
-  
+
   For example, the following call may not work as expected:
-  
+
   autoscroll($game_variables[1],
   $game_variables[2])
-  
+
   (since the long argument names require dropping down to a second line)
   A work-around is to setup new variables with shorter names in a preceding
   (separate) "Call Script" event command:
-  
+
   @x = $game_variables[1]
   @y = $game_variables[2]
-  
+
   and then use those as arguments:
-  
+
   autoscroll(@x,@y)
-  
+
   The renaming must be in a separate "Call Script" because otherwise
   the call to autoscroll(...) isn't on the first line.
-  
+
   Originally requested by militantmilo80:
-  http://www.rmxp.net/forums/index.php?showtopic=29519  
-  
+  http://www.rmxp.net/forums/index.php?showtopic=29519
+
 =end
 
 class Interpreter
@@ -154,9 +154,9 @@ class Game_Map
   end
 
   def scroll_downleft(distance)
-    @display_x = [@display_x - distance, 0].max    
+    @display_x = [@display_x - distance, 0].max
     @display_y = [@display_y + distance,
-       (self.height - Graphics.height*1.0/TILE_HEIGHT) * REAL_RES_Y].min    
+       (self.height - Graphics.height*1.0/TILE_HEIGHT) * REAL_RES_Y].min
   end
 
   def scroll_upright(distance)
@@ -185,10 +185,10 @@ class Game_Map
       when 6; scroll_right(distance)
       when 7; scroll_upleft(distance)
       when 8; scroll_up(distance)
-      when 9; scroll_upright(distance)                
+      when 9; scroll_upright(distance)
       end
       # Subtract distance scrolled
       @scroll_rest -= distance
     end
-  end  
+  end
 end

@@ -178,7 +178,7 @@ class EnumOption
   attr_reader :values
   attr_reader :name
 
-  def initialize(name,options,getProc,setProc)            
+  def initialize(name,options,getProc,setProc)
     @name    = name
     @values  = options
     @getProc = getProc
@@ -205,7 +205,7 @@ class EnumOption2
   attr_reader :values
   attr_reader :name
 
-  def initialize(name,options,getProc,setProc)             
+  def initialize(name,options,getProc,setProc)
     @name    = name
     @values  = options
     @getProc = getProc
@@ -465,8 +465,8 @@ class PokemonOption_Scene
        EnumOption.new(_INTL("Text Speed"),[_INTL("Slow"),_INTL("Normal"),_INTL("Fast")],
          proc { $PokemonSystem.textspeed },
          proc { |value|
-           $PokemonSystem.textspeed = value 
-           MessageConfig.pbSetTextSpeed(pbSettingToTextSpeed(value)) 
+           $PokemonSystem.textspeed = value
+           MessageConfig.pbSetTextSpeed(pbSettingToTextSpeed(value))
          }
        ),
        EnumOption.new(_INTL("Battle Effects"),[_INTL("On"),_INTL("Off")],
@@ -488,7 +488,7 @@ class PokemonOption_Scene
        ),
        NumberOption.new(_INTL("Speech Frame"),1,$SpeechFrames.length,
          proc { $PokemonSystem.textskin },
-         proc { |value| 
+         proc { |value|
            $PokemonSystem.textskin = value
            MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/"+$SpeechFrames[value])
          }
@@ -497,7 +497,7 @@ class PokemonOption_Scene
          proc { $PokemonSystem.frame },
          proc { |value|
            $PokemonSystem.frame = value
-           MessageConfig.pbSetSystemFrame($TextFrames[value]) 
+           MessageConfig.pbSetSystemFrame($TextFrames[value])
          }
        ),
        EnumOption.new(_INTL("Font Style"),[_INTL("Em"),_INTL("R/S"),_INTL("FRLG"),_INTL("DP")],

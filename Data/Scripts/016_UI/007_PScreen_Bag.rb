@@ -317,7 +317,7 @@ class PokemonBag_Scene
     # Set the selected item's icon
     @sprites["itemicon"].item = itemlist.item
     # Set the selected item's description
-    @sprites["itemtext"].text = (itemlist.item==0) ? _INTL("Close bag.") : 
+    @sprites["itemtext"].text = (itemlist.item==0) ? _INTL("Close bag.") :
        pbGetMessage(MessageTypes::ItemDescriptions,itemlist.item)
   end
 
@@ -520,7 +520,7 @@ class PokemonBagScreen
             qty.times { @bag.pbDeleteItem(item) }
             @scene.pbRefresh
           end
-        end   
+        end
       elsif cmdRegister>=0 && command==cmdRegister   # Register item
         if @bag.pbIsRegistered?(item)
           @bag.pbUnregisterItem(item)

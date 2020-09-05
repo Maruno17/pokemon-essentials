@@ -665,7 +665,7 @@ class Bitmap
   SwapRgb = Win32API.new('./rubyscreen.dll', 'SwapRgb', 'pi', '') rescue nil
 
   def setData(x)
-    RtlMoveMemory_ip.call(self.address, x, x.length)    
+    RtlMoveMemory_ip.call(self.address, x, x.length)
   end
 
   def getData
@@ -677,7 +677,7 @@ class Bitmap
   def swap32(x)
     return ((x>>24)&0x000000FF)|
            ((x>>8)&0x0000FF00)|
-           ((x<<8)&0x00FF0000)|        
+           ((x<<8)&0x00FF0000)|
            ((x<<24)&0xFF000000)
   end
 
@@ -716,7 +716,7 @@ class Bitmap
       b=0;c=2;while b!=len
         data2[b]=data[c]
         data2[c]=data[b]
-        b+=4;c+=4; 
+        b+=4;c+=4;
       end
     end
     #$times.push(Time.now-ttt)

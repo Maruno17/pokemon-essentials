@@ -3,7 +3,7 @@ def getCubicPoint2(src,t)
   cx0 = src[2]; cy0 = src[3]
   cx1 = src[4]; cy1 = src[5]
   x1  = src[6];  y1 = src[7]
-  
+
   x1 = cx1+(x1-cx1)*t
   x0 = x0+(cx0-x0)*t
   cx0 = cx0+(cx1-cx0)*t
@@ -613,7 +613,7 @@ class EventScene
     return @disposed
   end
 
-  def addBitmap(x, y, bitmap) 
+  def addBitmap(x, y, bitmap)
     # _bitmap_ can be a Bitmap or an AnimatedBitmap
     # (update method isn't called if it's animated)
     # EventScene doesn't take ownership of the passed-in bitmap
@@ -628,7 +628,7 @@ class EventScene
   end
 
   def addLabel(x, y, width, text)
-    addBitmap(x,y,pbTextBitmap(text,width))    
+    addBitmap(x,y,pbTextBitmap(text,width))
   end
 
   def addImage(x, y, name)

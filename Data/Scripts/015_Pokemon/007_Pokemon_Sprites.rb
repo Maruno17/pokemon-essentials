@@ -96,7 +96,7 @@ class PokemonIconSprite < SpriteWrapper
     @counter      = 0
     self.pokemon  = pokemon
     @logical_x    = 0   # Actual x coordinate
-    @logical_y    = 0   # Actual y coordinate 
+    @logical_y    = 0   # Actual y coordinate
     @adjusted_x   = 0   # Offset due to "jumping" animation in party screen
     @adjusted_y   = 0   # Offset due to "jumping" animation in party screen
   end
@@ -184,7 +184,7 @@ class PokemonIconSprite < SpriteWrapper
     return if !@animBitmap
     super
     @animBitmap.update
-    self.bitmap = @animBitmap.bitmap 
+    self.bitmap = @animBitmap.bitmap
     # Update animation
     cl = self.counterLimit
     if cl==0
@@ -321,7 +321,7 @@ class PokemonSpeciesIconSprite < SpriteWrapper
     return if !@animBitmap
     super
     @animBitmap.update
-    self.bitmap = @animBitmap.bitmap 
+    self.bitmap = @animBitmap.bitmap
     # Update animation
     @counter += 1
     if @counter>=self.counterLimit

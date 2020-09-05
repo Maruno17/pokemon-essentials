@@ -8,7 +8,7 @@ SHADOW_WARN = true
 
 class Sprite_Shadow < RPG::Sprite
   attr_accessor :character
- 
+
   def initialize(viewport, character = nil,params=[])
     super(viewport)
     @source       = params[0]
@@ -104,7 +104,7 @@ class Sprite_Shadow < RPG::Sprite
       if (@angle_trigo < @anglemin and @angle_trigo > @anglemax) and @anglemin > @anglemax
         self.opacity = 0
         return
-      end     
+      end
     end
   end
 
@@ -179,7 +179,7 @@ end
 #===================================================
 class Spriteset_Map
   attr_accessor :shadows
-  
+
   alias shadow_initialize initialize
   def initialize(map=nil)
     @shadows = []
@@ -201,7 +201,7 @@ class Spriteset_Map
       sprite.setShadows(map, @shadows)
     end
     $scene.spritesetGlobal.playersprite.setShadows(map, @shadows)
-  end  
+  end
 end
 
 

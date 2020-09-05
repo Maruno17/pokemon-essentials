@@ -303,7 +303,7 @@ class PokeBattle_Scene
   end
 
   #=============================================================================
-  # 
+  #
   #=============================================================================
   def pbSelectBattler(idxBattler,selectMode=1)
     numWindows = @battle.sideSizes.max*2
@@ -333,7 +333,7 @@ class PokeBattle_Scene
   end
 
   #=============================================================================
-  # 
+  #
   #=============================================================================
   # This method is called when the player wins a wild Pokémon battle.
   # This method can change the battle's music for example.

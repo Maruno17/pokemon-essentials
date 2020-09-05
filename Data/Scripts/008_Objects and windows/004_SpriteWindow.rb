@@ -208,7 +208,7 @@ def pbRepositionMessageWindow(msgwindow, linecount=2)
     case $game_message.background
     when 1; msgwindow.opacity=0  # dim
     when 2; msgwindow.opacity=0  # transparent
-    end 
+    end
   end
 end
 
@@ -218,7 +218,7 @@ def pbUpdateMsgWindowPos(msgwindow,event,eventChanged=false)
     if eventChanged
       msgwindow.resizeToFit2(msgwindow.text,Graphics.width*2/3,msgwindow.height)
     end
-    msgwindow.y=event.screen_y-48-msgwindow.height  
+    msgwindow.y=event.screen_y-48-msgwindow.height
     if msgwindow.y<0
       msgwindow.y=event.screen_y+24
     end
@@ -231,7 +231,7 @@ def pbUpdateMsgWindowPos(msgwindow,event,eventChanged=false)
     curwidth=msgwindow.width
     if curwidth!=Graphics.width
       msgwindow.width=Graphics.width
-      msgwindow.width=Graphics.width     
+      msgwindow.width=Graphics.width
     end
   end
 end
@@ -467,7 +467,7 @@ end
 def pbUpdateSpriteHash(windows)
   for i in windows
     window=i[1]
-    if window 
+    if window
       if window.is_a?(Sprite) || window.is_a?(Window)
         window.update if !pbDisposed?(window)
       elsif window.is_a?(Plane)
@@ -636,7 +636,7 @@ def pbFadeInAndShow(sprites,visiblesprites=nil)
     for j in 0..numFrames
       pbSetSpritesToColor(sprites,Color.new(0,0,0,((numFrames-j)*alphaDiff)))
       (block_given?) ? yield : pbUpdateSpriteHash(sprites)
-    end 
+    end
   }
 end
 
@@ -754,7 +754,7 @@ if !defined?(_INTL)
     for i in 1...args.length
       string.gsub!(/\{#{i}\}/,"#{args[i]}")
     end
-    return string    
+    return string
   end
 end
 
@@ -776,6 +776,6 @@ if !defined?(_MAPINTL)
     for i in 2...args.length
       string.gsub!(/\{#{i}\}/,"#{args[i+1]}")
     end
-    return string  
+    return string
   end
 end

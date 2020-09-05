@@ -32,7 +32,7 @@ class Scene_Movie
     end
     status = " " * 255
     x=movie.call("play FILE",0,0,0)
-    loop do  
+    loop do
       sleep(0.1)
       @message.call(@temp.to_i,11,0,0)
       Graphics.update
@@ -43,7 +43,7 @@ class Scene_Movie
       break if true_status.to_s != "play"
       if Input.trigger?(Input::B)
         movie.call("close FILE",0,0,0)
-        $scene = Scene_Map.new  
+        $scene = Scene_Map.new
         break
       end
     end

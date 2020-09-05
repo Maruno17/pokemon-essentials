@@ -22,7 +22,7 @@ def canonicalize(c)
     if x=="."
     elsif x==".."
       if pos>=0
-        ret.delete_at(pos) 
+        ret.delete_at(pos)
         pos -= 1
       end
     else
@@ -141,7 +141,7 @@ class WeakHashtable
   def [](key)
     o=@hash[key]
     return o if !o
-    if o.weakref_alive? 
+    if o.weakref_alive?
       o=o.__getobj__
     else
       @hash.delete(key)

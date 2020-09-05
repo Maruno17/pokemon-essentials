@@ -153,7 +153,7 @@ end
 ################################################################################
 EncounterModifier.register(proc { |encounter|
   next encounter if EncounterTypes::EnctypeCompileDens[$PokemonTemp.encounterType]!=1
-  if !$PokemonEncounters.isRegularGrass? || 
+  if !$PokemonEncounters.isRegularGrass? ||
      !$PokemonEncounters.isEncounterPossibleHere? ||
      $PokemonGlobal.partner
     pbPokeRadarCancel

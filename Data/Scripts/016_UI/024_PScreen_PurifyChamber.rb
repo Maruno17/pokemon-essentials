@@ -11,12 +11,12 @@ class PurifyChamberSet
   end
 
   def initialize
-    @list=[] 
+    @list=[]
     @facing=0
   end
 
   def facing=(value)
-	  if value>=0 && value<@list.length  
+	  if value>=0 && value<@list.length
 	    @facing=value
 	  end
   end
@@ -46,7 +46,7 @@ Boosted based on number of best circles
 
   def shadowAffinity
     return 0 if @facing<0 || @facing>=@list.length || !@shadow
-    return (PurifyChamberSet.isSuperEffective(@shadow,@list[@facing])) ? 2 : 1       
+    return (PurifyChamberSet.isSuperEffective(@shadow,@list[@facing])) ? 2 : 1
   end
 
   def affinity(i)
@@ -89,7 +89,7 @@ Boosted based on number of best circles
       @list[index]=value
       @list.compact!
       @facing=[[@facing,@list.length-1].min,0].max
-    end 
+    end
   end
 
   # Purify Chamber treats Normal/Normal matchup as super effective
@@ -112,7 +112,7 @@ class PurifyChamber # German: der Kryptorbis
 
   def self.maximumTempo() # Calculates the maximum possible tempo
     x=SETSIZE+1
-    return ((x*x+x)/2)-1 
+    return ((x*x+x)/2)-1
   end
 
   def initialize
@@ -352,7 +352,7 @@ module PurifyChamberHelper
         chamber.insertAfter(chamber.currentSet,position/2,value)
       end
     end
-  end	
+  end
 end
 
 
@@ -375,7 +375,7 @@ class PurifyChamberScreen
     if pkmn.egg?
       @scene.pbDisplay(_INTL("Can't place an egg there."))
       return false
-    end  
+    end
     if (position==0)
       if pkmn.shadowPokemon?
         # Remove from storage and place in set
@@ -596,11 +596,11 @@ class PurifyChamberScreen
       pbStorePokemon(@chamber[set].shadow)
       @chamber.setShadow(set,nil) # Remove shadow Pokemon from set
       if (i+1)!=purifiables.length
-        @scene.pbDisplay(_INTL("There is another Pokémon that is ready to open its heart!"))  
+        @scene.pbDisplay(_INTL("There is another Pokémon that is ready to open its heart!"))
         if !@scene.pbConfirm("Would you like to switch sets?")
           @scene.pbCloseSet()
           break
-        end  
+        end
       end
       @scene.pbCloseSet()
     end
@@ -725,7 +725,7 @@ class DirectFlowDiagram
       @points[j]=BitmapSprite.new(8,8,@viewport)
       @points[j].bitmap.fill_rect(0,0,8,8,Color.new(0,0,0))
     end
-    @points[j].tone=(@strength==2) ? Tone.new(232,232,248) : 
+    @points[j].tone=(@strength==2) ? Tone.new(232,232,248) :
        Tone.new(16,16,232)
     @points[j].visible=(@strength!=0)
   end
@@ -798,7 +798,7 @@ class FlowDiagram
       @points[j]=BitmapSprite.new(8,8,@viewport)
       @points[j].bitmap.fill_rect(0,0,8,8,Color.new(0,0,0))
     end
-    @points[j].tone=(@strength==2) ? Tone.new(232,232,248) : 
+    @points[j].tone=(@strength==2) ? Tone.new(232,232,248) :
        Tone.new(16,16,232)
     @points[j].visible=(@strength!=0)
   end
@@ -909,7 +909,7 @@ class PurifyChamberSetView < SpriteWrapper
       if @chamber.setCount(@set)==PurifyChamber::SETSIZE
         points=[points/2,1].max
         pos/=2
-      end	 
+      end
       seg=pos*8/points
       if seg==7 || seg==0
         pos-=1 if button==Input::LEFT

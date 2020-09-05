@@ -23,7 +23,7 @@ class PokeBattle_Move
   def pbMissMessage(user,target); return false; end
 
   #=============================================================================
-  # 
+  #
   #=============================================================================
   # Whether the move is currently in the "charging" turn of a two turn attack.
   # Is false if Power Herb or another effect lets a two turn move charge and

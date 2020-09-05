@@ -144,7 +144,7 @@ module AudioState
   def self.pitch; @pitch; end
   def self.volume; @volume; end
 
-  def self.waitingBGM=(value); 
+  def self.waitingBGM=(value);
     Thread.exclusive { @waitingBGM=value; }
   end
 
@@ -245,7 +245,7 @@ def Audio_me_fade(ms)
 end
 
 def Audio_me_stop()
-  AudioState::AudioContextStop.call(AudioState.meContext) 
+  AudioState::AudioContextStop.call(AudioState.meContext)
 end
 
 def Audio_bgs_play(name, volume, pitch, position = 0)
@@ -264,7 +264,7 @@ def Audio_bgs_fade(ms)
 end
 
 def Audio_bgs_stop()
-  AudioState::AudioContextStop.call(AudioState.bgsContext) 
+  AudioState::AudioContextStop.call(AudioState.bgsContext)
 end
 
 def Audio_se_play(name, volume, pitch, position = 0)
@@ -279,7 +279,7 @@ def Audio_se_play(name, volume, pitch, position = 0)
 end
 
 def Audio_se_stop()
-  AudioState::AudioContextStop.call(AudioState.seContext) 
+  AudioState::AudioContextStop.call(AudioState.seContext)
 end
 
 

@@ -79,7 +79,7 @@ class PokeBattle_Battle
         b.pbFaint if b.fainted?
       end
       # Weather damage
-      # NOTE: 
+      # NOTE:
       case curWeather
       when PBWeather::Sandstorm
         next if !b.takesSandstormDamage?
@@ -442,7 +442,7 @@ class PokeBattle_Battle
         if b.effects[PBEffects::Encore]==0 || b.moves[idxEncoreMove].pp==0
           b.effects[PBEffects::Encore] = 0
           pbDisplay(_INTL("{1}'s encore ended!",b.pbThis))
-        end 
+        end
       else
         PBDebug.log("[End of effect] #{b.pbThis}'s encore ended (encored move no longer known)")
         b.effects[PBEffects::Encore]     = 0
@@ -573,7 +573,7 @@ class PokeBattle_Battle
         if b.effects[PBEffects::Uproar]==0
           pbDisplay(_INTL("{1} calmed down.",b.pbThis))
         else
-          pbDisplay(_INTL("{1} is making an uproar!",b.pbThis)) 
+          pbDisplay(_INTL("{1} is making an uproar!",b.pbThis))
         end
       end
       # Slow Start's end message

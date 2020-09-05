@@ -172,7 +172,7 @@ class PokemonPauseMenu
         end
       elsif cmdPokemon>=0 && command==cmdPokemon
         hiddenmove = nil
-        pbFadeOutIn { 
+        pbFadeOutIn {
           sscene = PokemonParty_Scene.new
           sscreen = PokemonPartyScreen.new(sscene,$Trainer.party)
           hiddenmove = sscreen.pbPokemonScreen
@@ -185,10 +185,10 @@ class PokemonPauseMenu
         end
       elsif cmdBag>=0 && command==cmdBag
         item = 0
-        pbFadeOutIn { 
+        pbFadeOutIn {
           scene = PokemonBag_Scene.new
           screen = PokemonBagScreen.new(scene,$PokemonBag)
-          item = screen.pbStartScreen 
+          item = screen.pbStartScreen
           (item>0) ? @scene.pbEndScene : @scene.pbRefresh
         }
         if item>0
@@ -204,7 +204,7 @@ class PokemonPauseMenu
           @scene.pbRefresh
         }
       elsif cmdTrainer>=0 && command==cmdTrainer
-        pbFadeOutIn { 
+        pbFadeOutIn {
           scene = PokemonTrainerCard_Scene.new
           screen = PokemonTrainerCardScreen.new(scene)
           screen.pbStartScreen

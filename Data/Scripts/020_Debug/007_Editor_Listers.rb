@@ -509,7 +509,7 @@ class TrainerTypeLister
         wh = (Graphics.height-64).to_f()
       else
         wh = sx*wh
-        ww = (Graphics.width-256).to_f()   
+        ww = (Graphics.width-256).to_f()
       end
     end
     @sprite.x      = (Graphics.width-((Graphics.width-256)/2))-(ww/2)

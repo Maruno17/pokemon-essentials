@@ -98,7 +98,7 @@ module PBExperience
   # Erratic (600000):
   #   For levels 0-50:   n**3([100-n]/50)
   #   For levels 51-68:  n**3([150-n]/100)
-  #   For levels 69-98:  n**3(1.274-[1/50][n/3]-p(n mod 3)) 
+  #   For levels 69-98:  n**3(1.274-[1/50][n/3]-p(n mod 3))
   #                      where p(x) = array(0.000,0.008,0.014)[x]
   #   For levels 99-100: n**3([160-n]/100)
   # Fluctuating (1640000):
@@ -114,7 +114,7 @@ module PBExperience
     # Level 101+, use formulae
     case growth
     when PBGrowthRates::Medium   # 1000000
-      return level ** 3 
+      return level ** 3
     when PBGrowthRates::Erratic   # 600000
       # Different formula that causes 600000 EXP at level 100
       return ((level ** 4) * 0.6 / 100).floor

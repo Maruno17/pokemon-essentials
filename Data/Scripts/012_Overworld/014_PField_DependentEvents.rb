@@ -69,7 +69,7 @@ def moveThrough(follower,direction)
   when 4; follower.move_left # left
   when 6; follower.move_right # right
   when 8; follower.move_up # up
-  end 
+  end
   follower.through=oldThrough
 end
 
@@ -91,7 +91,7 @@ def moveFancy(follower,direction)
     when 4; follower.move_left # left
     when 6; follower.move_right # right
     when 8; follower.move_up # up
-    end 
+    end
     follower.through=oldThrough
   end
 end
@@ -178,7 +178,7 @@ class DependentEvents
     events=$PokemonGlobal.dependentEvents
     found=-1
     for i in 0...events.length
-      # Check original map ID and original event ID 
+      # Check original map ID and original event ID
       if events[i][0]==event.map_id && events[i][1]==event.id
         # Change current map ID
         events[i][2]=newMapID
@@ -224,7 +224,7 @@ class DependentEvents
         facing=facings[i]
         tile=$MapFactory.getFacingTile(facing,leader)
         passable=tile && $MapFactory.isPassableStrict?(tile[0],tile[1],tile[2],follower)
-        if i==0 && !passable && tile && 
+        if i==0 && !passable && tile &&
            PBTerrain.isLedge?($MapFactory.getTerrainTag(tile[0],tile[1],tile[2]))
           # If the tile isn't passable and the tile is a ledge,
           # get tile from further behind
@@ -370,7 +370,7 @@ class DependentEvents
     events=$PokemonGlobal.dependentEvents
     for i in 0...events.length
       yield @realEvents[i],events[i]
-    end   
+    end
   end
 
   def updateDependentEvents

@@ -41,7 +41,7 @@ class PokeBattle_Trainer
       fid|=rand(256)<<24
       break if fid!=@id
     end
-    return fid 
+    return fid
   end
 
   def setForeignID(other)

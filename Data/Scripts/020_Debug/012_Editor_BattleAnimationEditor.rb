@@ -26,7 +26,7 @@ class Window_Menu < Window_CommandPokemon
 
   def hittest
     mousepos=Mouse::getMousePos
-    return -1 if !mousepos  
+    return -1 if !mousepos
     toprow=self.top_row
     for i in toprow...toprow+@item_max
       rc=Rect.new(0,32*(i-toprow),self.contents.width,32)
@@ -36,7 +36,7 @@ class Window_Menu < Window_CommandPokemon
         return i
       end
     end
-    return -1 
+    return -1
   end
 end
 
@@ -169,7 +169,7 @@ class Button < UIControl
     return if !mousepos
     rect=Rect.new(self.x+1,self.y+1,self.width-2,self.height-2)
     rect=toAbsoluteRect(rect)
-    if Input.triggerex?(Input::LeftMouseKey) && 
+    if Input.triggerex?(Input::LeftMouseKey) &&
        rect.contains(mousepos[0],mousepos[1]) && !@captured
       @captured=true
       self.invalidate
@@ -406,7 +406,7 @@ class TextField < UIControl
     for i in startpos...scanlength
       c=textscan[i]
       textwidth=bitmap.text_size(c).width
-      next if c=="\n"  
+      next if c=="\n"
       # Draw text
       shadowtext(bitmap,x,y, textwidth+4, 32, c)
       # Draw cursor if necessary
@@ -885,7 +885,7 @@ class OptionalTextSlider < TextSlider
     @slider.width=self.width-checkboxwidth
     @slider.height=self.height
     @slider.disabled=!@checkbox.checked
-  end  
+  end
 end
 
 
@@ -1109,7 +1109,7 @@ def pbTrackPopupMenu(commands)
     if Input.trigger?(Input::C)
       hit=menuwindow.index
       menuwindow.dispose
-      return hit   
+      return hit
     end
     if Input.trigger?(Input::B) # Escape
       break
@@ -1235,7 +1235,7 @@ class AnimationWindow < SpriteWrapper
         return
       end
     end
-    # Left arrow 
+    # Left arrow
     if left.contains(mousepos[0],mousepos[1])
       if Input.repeatcount(Input::LeftMouseKey)>30
         @start-=3
@@ -1268,7 +1268,7 @@ class CanvasAnimationWindow < AnimationWindow
   def initialize(canvas,x,y,width,height,viewport=nil)
     @canvas=canvas
     super(x,y,width,height,viewport)
-  end    
+  end
 end
 
 
@@ -1571,7 +1571,7 @@ class AnimationCanvas < Sprite
   def invalidate
     for i in 0...PBAnimation::MAX_SPRITES
       invalidateCel(i)
-    end   
+    end
   end
 
   def invalidateCel(i)
@@ -1628,7 +1628,7 @@ class AnimationCanvas < Sprite
           @animation[frame][i][AnimFrame::X]+=ox
           @animation[frame][i][AnimFrame::Y]+=oy
         end
-        @dirty[i]=true if frame==@currentframe 
+        @dirty[i]=true if frame==@currentframe
       end
     end
   end
@@ -1642,7 +1642,7 @@ class AnimationCanvas < Sprite
         else
           pbResetCel(@animation[frame][i])
         end
-        @dirty[i]=true if frame==@currentframe 
+        @dirty[i]=true if frame==@currentframe
       end
     end
   end
@@ -1790,7 +1790,7 @@ class AnimationCanvas < Sprite
     if mousepos && pbSpriteHitTest(self,mousepos[0],mousepos[1],false,true)
       if Input.triggerex?(Input::LeftMouseKey)   # Left mouse button
         selectedcel=-1
-        usealpha=(Input.press?(Input::ALT)) ? true : false 
+        usealpha=(Input.press?(Input::ALT)) ? true : false
         for j in 0...PBAnimation::MAX_SPRITES
           if pbSpriteHitTest(@celsprites[j],mousepos[0],mousepos[1],usealpha,false)
             selectedcel=j
@@ -1846,7 +1846,7 @@ class AnimationCanvas < Sprite
       if Input.repeatex?(0x4C)   # "L" for lock
         cel[AnimFrame::LOCKED]=(cel[AnimFrame::LOCKED]==0) ? 1 : 0
         @dirty[@currentcel]=true
-      end  
+      end
       if Input.repeatex?(0x52)   # "R" for rotate right
         cel[AnimFrame::ANGLE]+=10
         cel[AnimFrame::ANGLE]%=360
@@ -1931,7 +1931,7 @@ class AnimationCanvas < Sprite
         @celsprites[i].y+=BORDERSIZE
         setPreviousFrame(i)
         setFrame(i)
-        @dirty[i]=false   
+        @dirty[i]=false
       end
     end
   end
@@ -2819,8 +2819,8 @@ end
 def pbAnimList(animations,canvas,animwin)
   commands=[]
   for i in 0...animations.length
-    animations[i]=PBAnimation.new if !animations[i]  
-    commands[commands.length]=_INTL("{1} {2}",i,animations[i].name) 
+    animations[i]=PBAnimation.new if !animations[i]
+    commands[commands.length]=_INTL("{1} {2}",i,animations[i].name)
   end
   cmdwin=pbListWindow(commands,320)
   cmdwin.height=416
@@ -2869,7 +2869,7 @@ def pbAnimList(animations,canvas,animwin)
       elsif cmd2==2 # Delete
         if pbConfirmMessage(_INTL("Are you sure you want to delete this animation?"))
           animations[cmdwin.index]=PBAnimation.new
-          cmdwin.commands[cmdwin.index]=_INTL("{1} {2}",cmdwin.index,animations[cmdwin.index].name) 
+          cmdwin.commands[cmdwin.index]=_INTL("{1} {2}",cmdwin.index,animations[cmdwin.index].name)
           cmdwin.refresh
         end
       end
@@ -3155,7 +3155,7 @@ end
 
 
 
-def catmullRom(p1,p2,p3,p4,t) 
+def catmullRom(p1,p2,p3,p4,t)
   # p1=prevPoint, p2=startPoint, p3=endPoint, p4=nextPoint, t is from 0 through 1
   t2=t*t
   t3=t2*t
@@ -3422,7 +3422,7 @@ end
 # Window classes
 ################################################################################
 class BitmapDisplayWindow < SpriteWindow_Base
-  attr_reader :bitmapname 
+  attr_reader :bitmapname
   attr_reader :hue
 
   def initialize(x,y,width,height)
@@ -3459,7 +3459,7 @@ class BitmapDisplayWindow < SpriteWindow_Base
       wh=self.contents.height
     else
       wh=sx*wh
-      ww=self.contents.width   
+      ww=self.contents.width
     end
     dest=Rect.new(
        (self.contents.width-ww)/2,

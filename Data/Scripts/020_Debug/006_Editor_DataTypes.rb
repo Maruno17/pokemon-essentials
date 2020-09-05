@@ -112,7 +112,7 @@ class NonzeroLimitProperty
     params.setDefaultValue(oldsetting)
     return pbMessageChooseNumber(_INTL("Set the value for {1}.",settingname),params)
   end
-  
+
   def defaultValue
     return 1
   end
@@ -191,7 +191,7 @@ class EnumProperty
   def set(settingname,oldsetting)
     commands = []
     for value in @values
-      commands.push(value)   
+      commands.push(value)
     end
     cmd = pbMessage(_INTL("Choose a value for {1}.",settingname),commands,-1)
     return oldsetting if cmd<0
@@ -204,7 +204,7 @@ class EnumProperty
 
   def format(value)
     return (value) ? @values[value] : value.inspect
-  end 
+  end
 end
 
 
@@ -740,7 +740,7 @@ module PocketProperty
        _INTL("TMs & HMs"),_INTL("Berries"),_INTL("Mail"),
        _INTL("Battle Items"),_INTL("Key Items")]
   end
-   
+
   def self.set(settingname,oldsetting)
     cmd = pbMessage(_INTL("Choose a pocket for this item."),pocketnames(),-1)
     return (cmd>=0) ? cmd+1 : oldsetting

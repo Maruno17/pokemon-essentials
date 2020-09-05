@@ -39,7 +39,7 @@ class PokeBattle_AI
       deviation = c[1].to_f-mean
       varianceTimesN += deviation*deviation
     end
-    # Using population standard deviation 
+    # Using population standard deviation
     # [(n-1) makes it a sample std dev, would be 0 with only 1 sample]
     return Math.sqrt(varianceTimesN/n)
   end

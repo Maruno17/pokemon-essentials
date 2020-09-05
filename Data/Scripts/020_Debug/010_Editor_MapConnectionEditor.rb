@@ -39,7 +39,7 @@ end
 class SelectionSprite < Sprite
   def initialize(viewport=nil)
     @sprite=Sprite.new(viewport)
-    @sprite.bitmap=nil  
+    @sprite.bitmap=nil
     @sprite.z=2
     @othersprite=nil
   end
@@ -416,10 +416,10 @@ class MapScreenScene
       otherdims=MapFactoryHelper.getMapDims(i)
       x1=(thissprite.x-othersprite.x)/4
       y1=(thissprite.y-othersprite.y)/4
-      if (x1==otherdims[0] || x1==-thisdims[0] || 
+      if (x1==otherdims[0] || x1==-thisdims[0] ||
           y1==otherdims[1] || y1==-thisdims[1])
         ret.push(i)
-      end  
+      end
     end
     # If no direct connections, add an indirect connection
     if ret.length==0
@@ -705,7 +705,7 @@ class MapScreenScene
     if mousepos
       hitmap=hittest(mousepos[0],mousepos[1])
       if Input.triggerex?(Input::LeftMouseKey)
-        onClick(hitmap,mousepos[0],mousepos[1])   
+        onClick(hitmap,mousepos[0],mousepos[1])
       elsif Input.triggerex?(Input::RightMouseKey)
         onRightClick(hitmap,mousepos[0],mousepos[1])
       elsif Input.releaseex?(Input::LeftMouseKey)

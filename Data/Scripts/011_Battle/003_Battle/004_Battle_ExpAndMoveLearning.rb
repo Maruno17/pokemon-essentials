@@ -188,7 +188,7 @@ class PokeBattle_Battle
       curLevel += 1
       if curLevel>newLevel
         # Gained all the Exp now, end the animation
-        pkmn.calcStats 
+        pkmn.calcStats
         battler.pbUpdate(false) if battler
         @scene.pbRefreshOne(battler.index) if battler
         break

@@ -11,7 +11,7 @@ class PokeBattle_Pokemon
   attr_reader   :speed       # Current Speed stat
   attr_reader   :spatk       # Current Special Attack stat
   attr_reader   :spdef       # Current Special Defense stat
-  attr_accessor :status      # Status problem (PBStatuses) 
+  attr_accessor :status      # Status problem (PBStatuses)
   attr_accessor :statusCount # Sleep count/Toxic flag
   attr_accessor :abilityflag # Forces the first/second/hidden (0/1/2) ability
   attr_accessor :genderflag  # Forces male (0) or female (1)
@@ -44,7 +44,7 @@ class PokeBattle_Pokemon
   attr_accessor :obtainLevel # Level obtained
   attr_accessor :hatchedMap  # Map where an egg was hatched
   attr_accessor :language    # Language
-  attr_accessor :ot          # Original Trainer's name 
+  attr_accessor :ot          # Original Trainer's name
   attr_accessor :otgender    # Original Trainer's gender:
                              #    0 - male, 1 - female, 2 - mixed, 3 - unknown
                              #    For information only, not used to verify

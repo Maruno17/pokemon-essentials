@@ -40,7 +40,7 @@ class Sprite_Reflection
     return if disposed?
     shouldShow = @rsprite.visible
     if !shouldShow
-      # Just-in-time disposal of sprite 
+      # Just-in-time disposal of sprite
       if @sprite
         @sprite.dispose
         @sprite = nil

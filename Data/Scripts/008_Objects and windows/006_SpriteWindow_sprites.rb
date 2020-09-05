@@ -58,7 +58,7 @@ end
 
 
 class PngAnimatedBitmap
-  # Creates an animated bitmap from a PNG file.  
+  # Creates an animated bitmap from a PNG file.
   def initialize(file,hue=0)
     @frames=[]
     @currentFrame=0
@@ -91,9 +91,9 @@ class PngAnimatedBitmap
   end
 
   def width; self.bitmap.width; end
-  
+
   def height; self.bitmap.height; end
-  
+
   def deanimate
     for i in 1...@frames.length
       @frames[i].dispose
@@ -207,7 +207,7 @@ class GifBitmap
       #File.open("debug.txt","ab") { |f| f.puts("rejecting bitmap") }
       bitmap.dispose
       bitmap=nil
-    end 
+    end
     if bitmap
       #File.open("debug.txt","ab") { |f| f.puts("reusing bitmap") }
       # Have a regular non-animated bitmap
@@ -348,7 +348,7 @@ end
 
 
 def pbGetTileBitmap(filename, tile_id, hue)
-  return BitmapCache.tileEx(filename, tile_id, hue) { |f| 
+  return BitmapCache.tileEx(filename, tile_id, hue) { |f|
     AnimatedBitmap.new("Graphics/Tilesets/"+filename).deanimate;
   }
 end
@@ -482,7 +482,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class AnimatedSprite < SpriteWrapper
   attr_reader :frame
@@ -597,7 +597,7 @@ class AnimatedSprite < SpriteWrapper
     if @playing
       @realframes+=1
       if @realframes==@frameskip
-        @realframes=0 
+        @realframes=0
         self.frame+=1
         self.frame%=self.framecount
       end
@@ -838,7 +838,7 @@ class PictureWindow < SpriteWindow_Base
       else
         @_iconbitmap=AnimatedBitmap.new(pathOrBitmap,hue)
         self.contents=@_iconbitmap ? @_iconbitmap.bitmap : nil
-        self.width=@_iconbitmap ? @_iconbitmap.bitmap.width+self.borderX : 
+        self.width=@_iconbitmap ? @_iconbitmap.bitmap.width+self.borderX :
            32+self.borderX
         self.height=@_iconbitmap ? @_iconbitmap.bitmap.height+self.borderY :
            32+self.borderY
@@ -854,7 +854,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class Plane
   def update; end
@@ -900,14 +900,14 @@ class LargePlane < Plane
 
   def ox; @__ox; end
   def oy; @__oy; end
-  
-  def ox=(value); 
+
+  def ox=(value);
     return if @__ox==value
     @__ox = value
     refresh
   end
 
-  def oy=(value); 
+  def oy=(value);
     return if @__oy==value
     @__oy = value
     refresh
@@ -944,13 +944,13 @@ class LargePlane < Plane
   def color; @__sprite.color; end
   def tone; @__sprite.tone; end
 
-  def zoom_x=(v); 
+  def zoom_x=(v);
     return if @__sprite.zoom_x==v
     @__sprite.zoom_x = v
     refresh
   end
 
-  def zoom_y=(v); 
+  def zoom_y=(v);
     return if @__sprite.zoom_y==v
     @__sprite.zoom_y = v
     refresh

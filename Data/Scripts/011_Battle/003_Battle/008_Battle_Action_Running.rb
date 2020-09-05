@@ -35,7 +35,7 @@ class PokeBattle_Battle
     if battler.opposes?
       return 0 if trainerBattle?
       @choices[idxBattler][0] = :Run
-      @choices[idxBattler][1] = 0 
+      @choices[idxBattler][1] = 0
       @choices[idxBattler][2] = nil
       return -1
     end

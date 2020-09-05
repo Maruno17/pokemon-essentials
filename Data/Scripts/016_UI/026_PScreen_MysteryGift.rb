@@ -153,7 +153,7 @@ def pbManageMysteryGifts
   # Download all gifts from online
   msgwindow=pbCreateMessageWindow
   pbMessageDisplay(msgwindow,_INTL("Searching for online gifts...\\wtnp[0]"))
-  online=pbDownloadToString(MYSTERY_GIFT_URL)  
+  online=pbDownloadToString(MYSTERY_GIFT_URL)
   pbDisposeMessageWindow(msgwindow)
   if online==""
     pbMessage(_INTL("No online Mystery Gifts found.\\wtnp[20]"))

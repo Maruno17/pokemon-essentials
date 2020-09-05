@@ -3,7 +3,7 @@ module Console
   GENERIC_READ                  = 0x80000000
   GENERIC_WRITE                 = 0x40000000
   FILE_SHARE_READ               = 0x00000001
-  FILE_SHARE_WRITE              = 0x00000002    
+  FILE_SHARE_WRITE              = 0x00000002
   CONSOLE_TEXTMODE_BUFFER       = 0x00000001
 
   def Console::AllocConsole
@@ -76,7 +76,7 @@ module Console
     echo "Debug Output:\n"
     echo "-------------------------------\n\n"
     SetConsoleActiveScreenBuffer(@bufferHandle)
-  end  
+  end
 
   def self.readInput
     length=20
@@ -113,7 +113,7 @@ module Console
   def self.readInput2
     buffer=0.chr
     done=false
-    input=""   
+    input=""
     eventsread=0.chr*4
     while !done
       if ReadConsole(buffer)==0

@@ -127,13 +127,13 @@ class PokeBattle_Battler
     @effects[PBEffects::Rage] = false
     # Do nothing if using Snore/Sleep Talk
     if @status==PBStatuses::SLEEP && move.usableWhenAsleep?
-      @battle.pbDisplay(_INTL("{1} ignored orders and kept sleeping!",pbThis)) 
+      @battle.pbDisplay(_INTL("{1} ignored orders and kept sleeping!",pbThis))
       return false
     end
     b = ((@level+badgeLevel)*@battle.pbRandom(256)/256).floor
     # Use another move
     if b<badgeLevel
-      @battle.pbDisplay(_INTL("{1} ignored orders!",pbThis)) 
+      @battle.pbDisplay(_INTL("{1} ignored orders!",pbThis))
       return false if !@battle.pbCanShowFightMenu?(@index)
       otherMoves = []
       eachMoveWithIndex do |m,i|
@@ -275,7 +275,7 @@ class PokeBattle_Battler
       @battle.pbDisplay(_INTL("{1} is in love with {2}!",pbThis,
          @battle.battlers[@effects[PBEffects::Attract]].pbThis(true)))
       if @battle.pbRandom(100)<50
-        @battle.pbDisplay(_INTL("{1} is immobilized by love!",pbThis)) 
+        @battle.pbDisplay(_INTL("{1} is immobilized by love!",pbThis))
         @lastMoveFailed = true
         return false
       end
@@ -405,7 +405,7 @@ class PokeBattle_Battler
     if move.pbDamagingMove? && PBTypes.ineffective?(typeMod)
       PBDebug.log("[Target immune] #{target.pbThis}'s type immunity")
       @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
-      return false 
+      return false
     end
     # Dark-type immunity to moves made faster by Prankster
     if NEWEST_BATTLE_MECHANICS && user.effects[PBEffects::Prankster] &&

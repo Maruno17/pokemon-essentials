@@ -41,7 +41,7 @@ def pbImportNewMaps
     if $RPGVX
       save_data(mapinfos,"Data/MapInfos.rvdata")
     else
-      save_data(mapinfos,"Data/MapInfos.rxdata") 
+      save_data(mapinfos,"Data/MapInfos.rxdata")
     end
     pbMessage(_INTL("{1} new map(s) copied to the Data folder were successfully imported.",count))
   end
@@ -202,7 +202,7 @@ def pbAddPassageList(event,mapData)
 end
 
 #===============================================================================
-# 
+#
 #===============================================================================
 def safequote(x)
   x = x.gsub(/\"\#\'\\/) { |a| "\\"+a }
@@ -236,13 +236,13 @@ def pbEachPage(e)
     yield e
   else
     e.pages.each { |page| yield page }
-  end 
+  end
 end
 
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class MapData
   attr_reader :mapinfos
@@ -400,7 +400,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class TrainerChecker
   def initialize
@@ -411,15 +411,15 @@ class TrainerChecker
 
   def pbTrainerTypeCheck(symbol)
     ret = true
-    if $DEBUG  
+    if $DEBUG
       return if @dontaskagain
       if !hasConst?(PBTrainers,symbol)
         ret = false
       else
         trtype = PBTrainers.const_get(symbol)
         @trainertypes = load_data("Data/trainer_types.dat") if !@trainertypes
-        ret = false  if !@trainertypes || !@trainertypes[trtype]     
-      end  
+        ret = false  if !@trainertypes || !@trainertypes[trtype]
+      end
       if !ret
         if pbConfirmMessage(_INTL("Add new trainer named {1}?",symbol))
           pbTrainerTypeEditorNew(symbol.to_s)
@@ -430,7 +430,7 @@ class TrainerChecker
 #          pbMapInterpreter.command_end rescue nil
 #        end
       end
-    end 
+    end
     return ret
   end
 
@@ -490,7 +490,7 @@ def pbConvertToTrainerEvent(event,trainerChecker)
   firstpage.trigger = 2   # On event touch
   firstpage.list    = []   # Clear page's commands
   # Rename the event if there's nothing above the trainer comments
-  if isFirstCommand 
+  if isFirstCommand
     if !event.name[/trainer/i]
       ret.name = "Trainer(3)"
     elsif event.name[/^\s*trainer\s+\((\d+)\)\s*$/i]
@@ -1002,7 +1002,7 @@ def pbFixEventUse(event,mapID,mapData)
             # repurposed, which is highly unlikely. It changes the Switch used
             # in the found event's condition to whichever is named
             # 's:tsOff?("A")'.
-            if e && e.pages.length>=2 && 
+            if e && e.pages.length>=2 &&
                e.pages[e.pages.length-1].condition.switch1_valid &&
                e.pages[e.pages.length-1].condition.switch1_id==22 &&
                mapData.switchName(e.pages[e.pages.length-1].condition.switch1_id)!='s:tsOff?("A")' &&
@@ -1024,7 +1024,7 @@ def pbFixEventUse(event,mapID,mapData)
             # named 's:tsOff?("A")', it really does look like a door. Make this
             # command transfer the player on top of it rather than in front of
             # it.
-            if e && e.pages.length>=2 && 
+            if e && e.pages.length>=2 &&
                e.pages[e.pages.length-1].condition.switch1_valid &&
                mapData.switchName(e.pages[e.pages.length-1].condition.switch1_id)=='s:tsOff?("A")'
               # If this is really a door, move transfer target to it
@@ -1039,7 +1039,7 @@ def pbFixEventUse(event,mapID,mapData)
                 arr.push(list[_i]); list.delete_at(_i)
                 while _i<list.length
                   break if !list[_i] || list[_i].code!=509   # Set Move Route (continuation line)
-                  arr.push(list[_i]); list.delete_at(_i)     
+                  arr.push(list[_i]); list.delete_at(_i)
                 end
               end
               next arr
@@ -1106,7 +1106,7 @@ def pbFixEventUse(event,mapID,mapData)
             # player's direction instead; make it do so and delete that Move
             # Route.
             elsif params[4]==0 &&   # Retain direction
-               i+2<list.length && 
+               i+2<list.length &&
                list[i+1].code==223 &&   # Change Screen Color Tone
                list[i+2].code==209 &&   # Set Move Route
                list[i+2].parameters[0]==-1
@@ -1273,7 +1273,7 @@ def pbFixEventUse(event,mapID,mapData)
               if list[j].code!=0 && list[j].code!=411   # Else
                 isempty = false
                 break
-              end 
+              end
               j += 1
             end
             if isempty

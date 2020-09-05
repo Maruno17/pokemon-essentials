@@ -7,12 +7,12 @@
 #
 #===============================================================================
 #
-# To this scripts works, put it above main, put a 512x384 picture in 
+# To this scripts works, put it above main, put a 512x384 picture in
 # hallfamebars and a 8x24 background picture in hallfamebg. To call this script,
 # use 'pbHallOfFameEntry'. After you recorder the first entry, you can access
 # the hall teams using a PC. You can also check the player Hall of Fame last
 # number using '$PokemonGlobal.hallOfFameLastNumber'.
-# 
+#
 #===============================================================================
 class HallOfFame_Scene
   # When true, all pokémon will be in one line
@@ -24,7 +24,7 @@ class HallOfFame_Scene
   ANIMATIONSPEED = 32
   # Entry wait time (in 1/20 seconds) between showing each Pokémon (and trainer)
   ENTRYWAITTIME = 64
-  # Maximum number limit of simultaneous hall entries saved. 
+  # Maximum number limit of simultaneous hall entries saved.
   # 0 = Doesn't save any hall. -1 = no limit
   # Prefer to use larger numbers (like 500 and 1000) than don't put a limit
   # If a player exceed this limit, the first one will be removed
@@ -90,7 +90,7 @@ class HallOfFame_Scene
 
   def slowFadeOut(sprites,exponent)   # 2 exponent
     # To handle values above 8
-    extraWaitExponent=exponent-9 
+    extraWaitExponent=exponent-9
     exponent=8 if 8<exponent
     max=2**exponent
     speed=(2**8)/max
@@ -110,15 +110,15 @@ class HallOfFame_Scene
   # Dispose the sprite if the sprite exists and make it null
   def restartSpritePosition(sprites,spritename)
     sprites[spritename].dispose if sprites.include?(spritename) && sprites[spritename]
-    sprites[spritename]=nil  
+    sprites[spritename]=nil
   end
 
   # Change the pokémon sprites opacity except the index one
   def setPokemonSpritesOpacity(index,opacity=255)
     for n in 0...@hallEntry.size
       @sprites["pokemon#{n}"].opacity=(n==index) ? 255 : opacity if @sprites["pokemon#{n}"]
-    end  
-  end  
+    end
+  end
 
   def saveHallEntry
     for i in 0...$Trainer.party.length
@@ -128,7 +128,7 @@ class HallOfFame_Scene
     # Update the global variables
     $PokemonGlobal.hallOfFame.push(@hallEntry)
     $PokemonGlobal.hallOfFameLastNumber+=1
-    $PokemonGlobal.hallOfFame.delete_at(0) if HALLLIMIT>-1 && 
+    $PokemonGlobal.hallOfFame.delete_at(0) if HALLLIMIT>-1 &&
                                         $PokemonGlobal.hallOfFame.size>HALLLIMIT
   end
 
@@ -141,7 +141,7 @@ class HallOfFame_Scene
     else
       ret=(60*(battlernumber/2)+48)*(xpositionformula(battlernumber)-1)
       ret+=Graphics.width/2-56
-    end  
+    end
     return ret
   end
 
@@ -151,7 +151,7 @@ class HallOfFame_Scene
       ret=32+128*ypositionformula(battlernumber)/2
     else
       ret=96-8*(battlernumber/2)
-    end  
+    end
     return ret
   end
 
@@ -162,7 +162,7 @@ class HallOfFame_Scene
       ret=(battlernumber/3%2==0) ? (19-battlernumber)%3 : (19+battlernumber)%3
     else
       ret=battlernumber%2*2
-    end  
+    end
     return ret
   end
 
@@ -172,9 +172,9 @@ class HallOfFame_Scene
       ret=(battlernumber/3)%2*2
     else
       ret=1
-    end  
+    end
     return ret
-  end 
+  end
 
   def moveSprite(i)
     spritename=(i>-1) ? "pokemon#{i}" : "trainer"
@@ -202,7 +202,7 @@ class HallOfFame_Scene
     for i in 0...6
       # Clear all 6 pokémon sprites and dispose the ones that exists every time
       # that this method is call
-      restartSpritePosition(@sprites,"pokemon#{i}") 
+      restartSpritePosition(@sprites,"pokemon#{i}")
       next if i>=@hallEntry.size
       xpoint=xpointformula(i)
       ypoint=ypointformula(i)
@@ -288,11 +288,11 @@ class HallOfFame_Scene
     @sprites["msgwindow"]=pbCreateMessageWindow(@viewport)
     pbMessageDisplay(@sprites["msgwindow"],
         _INTL("League champion!\nCongratulations!\\^"))
-  end  
+  end
 
   def writePokemonData(pokemon,hallNumber=-1)
     overlay=@sprites["overlay"].bitmap
-    overlay.clear 
+    overlay.clear
     pokename=pokemon.name
     speciesname=PBSpecies.getName(pokemon.species)
     if pokemon.male?
@@ -315,7 +315,7 @@ class HallOfFame_Scene
     if (hallNumber>-1)
       textPositions.push([_INTL("Hall of Fame No."),Graphics.width/2-104,0,0,BASECOLOR,SHADOWCOLOR])
       textPositions.push([hallNumber.to_s,Graphics.width/2+104,0,1,BASECOLOR,SHADOWCOLOR])
-    end       
+    end
     pbDrawTextPositions(overlay,textPositions)
   end
 
@@ -371,7 +371,7 @@ class HallOfFame_Scene
       else
         @battlerIndex+=1
         if @battlerIndex<=@hallEntry.size
-          # If it is a pokémon, write the pokémon text, wait the 
+          # If it is a pokémon, write the pokémon text, wait the
           # ENTRYWAITTIME and goes to the next battler
           pbPlayCry(@hallEntry[@battlerIndex-1])
           writePokemonData(@hallEntry[@battlerIndex-1])
@@ -395,7 +395,7 @@ class HallOfFame_Scene
             createTrainerBattler
           end
         end
-      end  
+      end
     elsif @battlerIndex>@hallEntry.size
       # Write the trainer data and fade
       writeTrainerData
@@ -406,7 +406,7 @@ class HallOfFame_Scene
       end
       fadeSpeed=((Math.log(2**12)-Math.log(FINALFADESPEED))/Math.log(2)).floor
       pbBGMFade((2**fadeSpeed).to_f/20) if @useMusic
-      slowFadeOut(@sprites,fadeSpeed) { pbUpdate } 
+      slowFadeOut(@sprites,fadeSpeed) { pbUpdate }
       @alreadyFadedInEnd=true
       @battlerIndex+=1
     end

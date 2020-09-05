@@ -50,7 +50,7 @@ end
 
 def pbGetCDID()
   sendString = proc { |x|
-    mciSendString = Win32API.new('winmm','mciSendString','%w(p,p,l,l)','l') 
+    mciSendString = Win32API.new('winmm','mciSendString','%w(p,p,l,l)','l')
     next "" if !mciSendString
     buffer = "\0"*2000
     x = mciSendString.call(x,buffer,2000,0)
@@ -193,7 +193,7 @@ def beginRecordUI
     buffer = "\0"*256
     MciErrorString.call(code,buffer,256)
     pbMessage(_INTL("Recording failed: {1}",buffer.gsub(/\x00/,"")))
-    return false    
+    return false
   end
 end
 
@@ -266,10 +266,10 @@ class LinearCongRandom
   end
 
   def getNext16 # calculates @seed * @s1 + @s2
-    @seed = ((((@seed&0x0000ffff)*(@s1&0x0000ffff))&0x0000ffff) | 
-       (((((((@seed&0x0000ffff)*(@s1&0x0000ffff))&0xffff0000)>>16) + 
-       ((((@seed&0xffff0000)>>16)*(@s1&0x0000ffff))&0x0000ffff) + 
-       (((@seed&0x0000ffff)*((@s1&0xffff0000)>>16))&0x0000ffff)) & 
+    @seed = ((((@seed&0x0000ffff)*(@s1&0x0000ffff))&0x0000ffff) |
+       (((((((@seed&0x0000ffff)*(@s1&0x0000ffff))&0xffff0000)>>16) +
+       ((((@seed&0xffff0000)>>16)*(@s1&0x0000ffff))&0x0000ffff) +
+       (((@seed&0x0000ffff)*((@s1&0xffff0000)>>16))&0x0000ffff)) &
        0x0000ffff)<<16)) + @s2
     r = (@seed>>16)
     r = (r+0xFFFFFFFF)+1 if r<0
@@ -297,7 +297,7 @@ def pbIsJsonString(str)
   stringLiterals = /"[^"\\\n\r\x00-\x1f\x7f-\x9f]*"/ #"
   whiteSpace     = /[\s]+/
   str = str.gsub(charEscapes,"@").gsub(stringLiterals,"true").gsub(whiteSpace," ")
-  # prevent cases like "truetrue" or "true true" or "true[true]" or "5-2" or "5true" 
+  # prevent cases like "truetrue" or "true true" or "true[true]" or "5-2" or "5true"
   otherLiterals = /(true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)(?! ?[0-9a-z\-\[\{\"])/ #"
   str = str.gsub(otherLiterals,"]").gsub(d,"") #"
   return str[/^[\],:{} ]*$/] ? true : false
@@ -708,7 +708,7 @@ def pbTrainerName(name=nil,outfit=0)
   if trname==nil
     trname = pbEnterPlayerName(_INTL("Your name?"),0,MAX_PLAYER_NAME_SIZE)
     if trname==""
-      gender = pbGetTrainerTypeGender(trainertype) 
+      gender = pbGetTrainerTypeGender(trainertype)
       trname = pbSuggestTrainerName(gender)
     end
   end
@@ -1045,7 +1045,7 @@ def pbMoveTutorChoose(move,movelist=nil,bymachine=false)
         end
       else
         break
-      end  
+      end
     end
     screen.pbEndScene
   }

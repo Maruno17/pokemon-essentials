@@ -12,7 +12,7 @@ def pbLoadRxData(file) # :nodoc:
   if $RPGVX
     return load_data(file+".rvdata")
   else
-    return load_data(file+".rxdata") 
+    return load_data(file+".rxdata")
   end
 end
 
