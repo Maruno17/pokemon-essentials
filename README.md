@@ -17,3 +17,7 @@ Unseen Fists adapted (WolfPP ),
 Ice Scales by (The Toxic),
 Steely Spirit fixed (Aioross),
 Steam Engine fixed (Aioross),
+
+IMPORTANT!!!!!!!!!!!!!
+NEEDS PBS FILES FROM MOST OF MOVES AND FORMS, DON'T HAVE PBS FILES ABOUT POKEMONS!!!!!!!!!!!
+THIS INCLUDES ONLY SCRIPTS AND PBS FILES, DOES NOT INCLUDE GRAPHICS!!!!!!!!!!
