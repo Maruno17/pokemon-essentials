@@ -10,13 +10,13 @@ You can build your fangame on top of a fork of this repository. Doing so will le
 2. Get a copy of Essentials v18 (a download link cannot be provided here).
 3. Clone your forked repo into the Essentials v18 folder, replacing the existing files with the ones from the repo.
 
-From here, you can edit this project to turn it into your fangame/develop mods. When this repo is updated, you can make a pull request to update your fork and get the updated into your fangame/modding environment.
+From here, you can edit this project to turn it into your fangame/develop mods. When this repo is updated, you can pull the changes to update your fork and get the updates into your fangame/modding environment.
 
 ## Scripts
 
 The scripts no longer live in the Scripts.rxdata file. They have been extracted into separate files and placed in the Data/Scripts/ folder (and subfolders within).
 
-The scripts are loaded into the game alphabetically, starting from the top folder (Data/Scripts/) and going depth-first. All scripts in a given folder are loaded, and then each subfolder is checked in turn (again in alphabetical order) for files/folders to load/check.
+The scripts are loaded into the game alphanumerically, starting from the top folder (Data/Scripts/) and going depth-first. All scripts in a given folder are loaded, and then each subfolder is checked in turn (again in alphabetical order) for files/folders to load/check.
 
 ### Reintegrating scripts for an encrypted release
 
