@@ -1669,7 +1669,8 @@ BattleHandlers::TargetAbilityOnHit.add(:WEAKARMOR,
 
 BattleHandlers::TargetAbilityOnHit.add(:STEAMENGINE,
   proc { |ability,user,target,move,battle|
-    next if !isConst?(move.calcType,PBTypes,:FIRE) || isConst?(move.calcType,PBTypes,:WATER)
+    next if !isConst?(move.calcType,PBTypes,:FIRE) && 
+	          !isConst?(move.calcType,PBTypes,:WATER)
     target.pbRaiseStatStageByAbility(PBStats::SPEED,6,target)
   }
 )
