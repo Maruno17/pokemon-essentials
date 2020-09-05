@@ -3546,7 +3546,7 @@ class PokeBattle_Move_0F7 < PokeBattle_Move
     }
   end
 
-  def pbCheckFlingSuccess
+  def pbCheckFlingSuccess(user)
     @willFail = false
     @willFail = true if user.item==0 || !user.itemActive? || user.unlosableItem?(user.item)
     if pbIsBerry?(user.item)
@@ -3576,7 +3576,7 @@ class PokeBattle_Move_0F7 < PokeBattle_Move
 
   def pbDisplayUseMessage(user)
     super
-    pbCheckFlingSuccess
+    pbCheckFlingSuccess(user)
     if !@willFail
       @battle.pbDisplay(_INTL("{1} flung its {2}!",user.pbThis,user.itemName))
     end
