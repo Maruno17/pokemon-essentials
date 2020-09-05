@@ -29,7 +29,7 @@ class Game_Message
   def visible
     return @visible || false
   end
-  
+
   def background
     return @background || 0
   end
@@ -48,7 +48,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class Scene_Map
   def updatemini
@@ -96,7 +96,7 @@ class Scene_Battle
         $game_screen.update
       else
         $game_map.screen.update
-      end    
+      end
       # If timer has reached 0
       if $game_system.timer_working and $game_system.timer == 0
         # Abort battle
@@ -158,7 +158,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 def pbEventCommentInput(*args)
   parameters = []
@@ -284,7 +284,7 @@ module InterpreterMixin
         i = (newI>i) ? newI : i+1
       else
         return i
-      end     
+      end
     end
   end
 
@@ -635,7 +635,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class ChooseNumberParams
   def initialize
@@ -795,15 +795,15 @@ def pbChooseNumber(msgwindow,params)
   end
   cmdwindow.dispose
   Input.update
-  return ret 
+  return ret
 end
 
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
-class FaceWindowVX < SpriteWindow_Base 
+class FaceWindowVX < SpriteWindow_Base
   def initialize(face)
     super(0,0,128,128)
     faceinfo=face.split(",")
@@ -841,7 +841,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 def pbGetBasicMapNameFromId(id)
   begin
@@ -877,7 +877,7 @@ def pbCsvField!(str)
       end
     end
     str[0,fieldbytes]=""
-    if !str[/\A\s*,/] && !str[/\A\s*$/] 
+    if !str[/\A\s*,/] && !str[/\A\s*$/]
       raise _INTL("Invalid quoted field (in: {1})",ret)
     end
     str[0,str.length]=$~.post_match
@@ -915,7 +915,7 @@ def pbGetGoldString
     if $data_system.respond_to?("words")
       moneyString=_INTL("{1} {2}",$game_party.gold,$data_system.words.gold)
     else
-      moneyString=_INTL("{1} {2}",$game_party.gold,Vocab.gold)         
+      moneyString=_INTL("{1} {2}",$game_party.gold,Vocab.gold)
     end
   end
   return moneyString
@@ -956,7 +956,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 def pbCreateStatusWindow(viewport=nil)
   msgwindow=Window_AdvancedTextPokemon.new("")
@@ -1026,7 +1026,7 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
   text.gsub!(/\\\\/,"\5")
   text.gsub!(/\\1/,"\1")
   if $game_actors
-    text.gsub!(/\\n\[([1-8])\]/i) { 
+    text.gsub!(/\\n\[([1-8])\]/i) {
       m = $1.to_i
       next $game_actors[m].name
     }
@@ -1044,7 +1044,7 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
   text.gsub!(/\\b/i,"<c3=3050C8,D0D0C8>")
   text.gsub!(/\\r/i,"<c3=E00808,D0D0C8>")
   isDarkSkin = isDarkWindowskin(msgwindow.windowskin)
-  text.gsub!(/\\[Cc]\[([0-9]+)\]/) { 
+  text.gsub!(/\\[Cc]\[([0-9]+)\]/) {
     m = $1.to_i
     next getSkinColor(msgwindow.windowskin,m,isDarkSkin)
   }
@@ -1054,9 +1054,9 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
   end until text == last_text
   begin
     last_text = text.clone
-    text.gsub!(/\\l\[([0-9]+)\]/i) { 
+    text.gsub!(/\\l\[([0-9]+)\]/i) {
       linecount = [1,$1.to_i].max
-      next "" 
+      next ""
     }
   end until text == last_text
   colortag = ""

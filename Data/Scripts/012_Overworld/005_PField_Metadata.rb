@@ -142,7 +142,7 @@ end
 #===============================================================================
 class PokemonMapMetadata
   attr_reader :erasedEvents
-  attr_reader :movedEvents    
+  attr_reader :movedEvents
   attr_accessor :strengthUsed
   attr_accessor :blackFluteUsed
   attr_accessor :whiteFluteUsed

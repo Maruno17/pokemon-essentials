@@ -13,7 +13,7 @@ def pbStringToAudioFile(str)
   end
 end
 
-# Converts an object to an audio file. 
+# Converts an object to an audio file.
 # str -- Either a string showing the filename or an RPG::AudioFile object.
 # Possible formats for _str_:
 # filename                        volume and pitch 100
@@ -41,7 +41,7 @@ end
 ################################################################################
 
 # Plays a BGM file.
-# param -- Either a string showing the filename 
+# param -- Either a string showing the filename
 # (relative to Audio/BGM/) or an RPG::AudioFile object.
 # Possible formats for _param_:
 # filename                        volume and pitch 100
@@ -91,7 +91,7 @@ end
 ################################################################################
 
 # Plays an ME file.
-# param -- Either a string showing the filename 
+# param -- Either a string showing the filename
 # (relative to Audio/ME/) or an RPG::AudioFile object.
 # Possible formats for _param_:
 # filename                        volume and pitch 100
@@ -140,7 +140,7 @@ end
 ################################################################################
 
 # Plays a BGS file.
-# param -- Either a string showing the filename 
+# param -- Either a string showing the filename
 # (relative to Audio/BGS/) or an RPG::AudioFile object.
 # Possible formats for _param_:
 # filename                        volume and pitch 100
@@ -189,7 +189,7 @@ end
 ################################################################################
 
 # Plays an SE file.
-# param -- Either a string showing the filename 
+# param -- Either a string showing the filename
 # (relative to Audio/SE/) or an RPG::AudioFile object.
 # Possible formats for _param_:
 # filename                  volume and pitch 100

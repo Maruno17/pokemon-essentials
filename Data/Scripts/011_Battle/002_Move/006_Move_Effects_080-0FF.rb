@@ -376,13 +376,13 @@ class PokeBattle_Move_094 < PokeBattle_Move
   end
 
   def pbBaseDamage(baseDmg,user,target)
-    return @presentDmg 
+    return @presentDmg
   end
 
   def pbEffectAgainstTarget(user,target)
     return if @presentDmg>0
     target.pbRecoverHP(target.totalhp/4)
-    @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))   
+    @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))
   end
 
   def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
@@ -622,7 +622,7 @@ class PokeBattle_Move_09B < PokeBattle_Move
     if n>=5;    ret = 120
     elsif n>=4; ret = 100
     elsif n>=3; ret = 80
-    elsif n>=2; ret = 60 
+    elsif n>=2; ret = 60
     end
     return ret
   end
@@ -638,7 +638,7 @@ class PokeBattle_Move_09C < PokeBattle_Move
 
   def pbFailsAgainstTarget?(user,target)
     if target.fainted? || target.effects[PBEffects::HelpingHand]
-      @battle.pbDisplay(_INTL("But it failed!"))  
+      @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     return true if pbMoveFailedTargetAlreadyMoved?(target)
@@ -2729,7 +2729,7 @@ class PokeBattle_Move_0DF < PokeBattle_Move
       hpGain = (target.totalhp*3/4.0).round
     end
     target.pbRecoverHP(hpGain)
-    @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))  
+    @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))
   end
 end
 
@@ -2996,15 +2996,15 @@ class PokeBattle_Move_0EB < PokeBattle_Move
     if target.hasActiveAbility?(:SUCTIONCUPS) && !@battle.moldBreaker
       @battle.pbShowAbilitySplash(target)
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-        @battle.pbDisplay(_INTL("{1} anchors itself!",target.pbThis))  
+        @battle.pbDisplay(_INTL("{1} anchors itself!",target.pbThis))
       else
-        @battle.pbDisplay(_INTL("{1} anchors itself with {2}!",target.pbThis,target.abilityName))  
+        @battle.pbDisplay(_INTL("{1} anchors itself with {2}!",target.pbThis,target.abilityName))
       end
       @battle.pbHideAbilitySplash(target)
       return true
     end
     if target.effects[PBEffects::Ingrain]
-      @battle.pbDisplay(_INTL("{1} anchored itself with its roots!",target.pbThis))  
+      @battle.pbDisplay(_INTL("{1} anchored itself with its roots!",target.pbThis))
       return true
     end
     if @battle.wildBattle? && target.level>user.level

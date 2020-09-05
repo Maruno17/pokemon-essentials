@@ -127,9 +127,9 @@ class LightEffect_Lamp < LightEffect
     lamp = AnimatedBitmap.new("Graphics/Pictures/LE")
     @light = Sprite.new(viewport)
     @light.bitmap  = Bitmap.new(128,64)
-    src_rect = Rect.new(0, 0, 64, 64) 
-    @light.bitmap.blt(0, 0, lamp.bitmap, src_rect) 
-    @light.bitmap.blt(20, 0, lamp.bitmap, src_rect) 
+    src_rect = Rect.new(0, 0, 64, 64)
+    @light.bitmap.blt(0, 0, lamp.bitmap, src_rect)
+    @light.bitmap.blt(20, 0, lamp.bitmap, src_rect)
     @light.visible = true
     @light.z       = 1000
     lamp.dispose
@@ -195,7 +195,7 @@ class LightEffect_DayNight < LightEffect
                       $game_screen.tone.blue,
                       $game_screen.tone.gray)
     end
-  end  
+  end
 end
 
 
@@ -594,7 +594,7 @@ def pbCaveEntranceEx(exiting)
     if exiting
       sprite.color = Color.new(255,255,255,j*increment)
     else
-      sprite.color = Color.new(0,0,0,j*increment) 
+      sprite.color = Color.new(0,0,0,j*increment)
     end
     Graphics.update
     Input.update
@@ -723,7 +723,7 @@ def pbScrollMap(direction,distance,speed)
       pbUpdateSceneMap
       break if $game_map.display_x==oldx && $game_map.display_y==oldy
       oldx = $game_map.display_x
-      oldy = $game_map.display_y 
+      oldy = $game_map.display_y
     end
   end
 end

@@ -16,7 +16,7 @@ class TileDrawingHelper
      [ [37, 38, 43, 44], [37,  6, 43, 44], [13, 18, 19, 24], [13, 14, 43, 44],
        [37, 42, 43, 48], [17, 18, 47, 48], [13, 18, 43, 48], [ 1,  2,  7,  8] ]
   ]
-  
+
   # converts neighbors returned from tableNeighbors to tile indexes
   NeighborsToTiles = [
      46, 44, 46, 44, 43, 41, 43, 40, 46, 44, 46, 44, 43, 41, 43, 40,
@@ -98,7 +98,7 @@ class TileDrawingHelper
       for i in 0...4
         tile_position = tiles[i] - 1
         src.set(tile_position % 6 * 16 + anim, tile_position / 6 * 16, 16, 16)
-        bitmap.stretch_blt(Rect.new(i % 2 * cxTile + x, i / 2 * cyTile + y, cxTile, cyTile), 
+        bitmap.stretch_blt(Rect.new(i % 2 * cxTile + x, i / 2 * cyTile + y, cxTile, cyTile),
            autotile, src)
       end
     end
@@ -115,7 +115,7 @@ class TileDrawingHelper
       bltSmallRegularTile(bitmap, x, y, cxTile, cyTile, id)
     elsif id > 0
       bltSmallAutotile(bitmap, x, y, cxTile, cyTile, id, frame)
-    end  
+    end
   end
 
   def bltAutotile(bitmap,x,y,id,frame)
@@ -131,6 +131,6 @@ class TileDrawingHelper
       bltRegularTile(bitmap, x, y, id)
     elsif id > 0
       bltAutotile(bitmap, x, y, id, frame)
-    end  
+    end
   end
 end

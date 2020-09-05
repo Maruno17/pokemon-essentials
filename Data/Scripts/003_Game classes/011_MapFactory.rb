@@ -169,7 +169,7 @@ class PokemonMapFactory
     return false if !map.valid?(x,y)
     return true if thisEvent.through
     if thisEvent==$game_player
-      return false unless ($DEBUG && Input.press?(Input::CTRL)) || 
+      return false unless ($DEBUG && Input.press?(Input::CTRL)) ||
          map.passable?(x,y,0,thisEvent)
     else
       return false unless map.passable?(x,y,0,thisEvent)
@@ -269,7 +269,7 @@ class PokemonMapFactory
   def getThisAndOtherPosRelativePos(thisEvent,otherMapID,otherX,otherY)
     return [0,0] if !thisEvent
     return getRelativePos(
-       thisEvent.map.map_id,thisEvent.x,thisEvent.y,otherMapID,otherX,otherY)  
+       thisEvent.map.map_id,thisEvent.x,thisEvent.y,otherMapID,otherX,otherY)
   end
 
   def getOffsetEventPos(event,xOffset,yOffset)
@@ -363,7 +363,7 @@ class PokemonMapFactory
     for i in 0...@maps.length
       next if MapFactoryHelper.mapInRange?(@maps[i])
       @maps[i] = nil
-      deleted = true 
+      deleted = true
     end
     if deleted
       @maps.compact!

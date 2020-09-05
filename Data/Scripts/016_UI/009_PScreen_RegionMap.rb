@@ -357,7 +357,7 @@ end
 
 
 def pbShowMap(region=-1,wallmap=true)
-  pbFadeOutIn {         
+  pbFadeOutIn {
     scene = PokemonRegionMap_Scene.new(region,wallmap)
     screen = PokemonRegionMapScreen.new(scene)
     screen.pbStartScreen

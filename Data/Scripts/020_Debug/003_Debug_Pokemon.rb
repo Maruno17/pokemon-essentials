@@ -7,7 +7,7 @@ module PokemonDebugMixin
       commands.add("hpstatusmenu","fullheal",_INTL("Fully heal"))
       commands.add("hpstatusmenu","makefainted",_INTL("Make fainted"))
       commands.add("hpstatusmenu","setpokerus",_INTL("Set Pokérus"))
-    
+
     commands.add("main","levelstats",_INTL("Level/stats..."))
       commands.add("levelstats","setlevel",_INTL("Set level"))
       commands.add("levelstats","setexp",_INTL("Set Exp"))
@@ -20,26 +20,26 @@ module PokemonDebugMixin
         commands.add("conteststats","setsmart",_INTL("Set Smart"))
         commands.add("conteststats","settough",_INTL("Set Tough"))
         commands.add("conteststats","setsheen",_INTL("Set Sheen"))
-    
+
     commands.add("main","moves",_INTL("Moves..."))
       commands.add("moves","teachmove",_INTL("Teach move"))
       commands.add("moves","forgetmove",_INTL("Forget move"))
       commands.add("moves","resetmoves",_INTL("Reset moves"))
       commands.add("moves","setmovepp",_INTL("Set move PP"))
       commands.add("moves","setinitialmoves",_INTL("Reset initial moves"))
-    
+
     commands.add("main","setability",_INTL("Set ability"))
     commands.add("main","setnature",_INTL("Set nature"))
     commands.add("main","setgender",_INTL("Set gender"))
     commands.add("main","speciesform",_INTL("Species/form..."))
-    
+
     commands.add("main","cosmetic",_INTL("Cosmetic info..."))
       commands.add("cosmetic","setshininess",_INTL("Set shininess"))
       commands.add("cosmetic","setpokeball",_INTL("Set Poké Ball"))
       commands.add("cosmetic","setribbons",_INTL("Set ribbons"))
       commands.add("cosmetic","setnickname",_INTL("Set nickname"))
       commands.add("cosmetic","ownership",_INTL("Ownership..."))
-    
+
     commands.add("main","setegg",_INTL("Set egg"))
     commands.add("main","shadowpkmn",_INTL("Shadow Pkmn..."))
     if !settingUpBattle

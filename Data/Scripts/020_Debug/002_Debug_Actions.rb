@@ -1,5 +1,5 @@
 #===============================================================================
-# 
+#
 #===============================================================================
 def pbDefaultMap
   return $game_map.map_id if $game_map
@@ -555,7 +555,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class PokemonDataCopy
   attr_accessor :dataOldHash
@@ -841,7 +841,7 @@ class PokemonDebugPartyScreen
     @helpWindow.visible = true
   end
 
-  def pbConfirm(text) 
+  def pbConfirm(text)
     ret = -1
     @messageBox.text    = text
     @messageBox.visible = true

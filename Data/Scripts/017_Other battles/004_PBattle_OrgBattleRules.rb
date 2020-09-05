@@ -152,14 +152,14 @@ class CombinedLevelAdjustment < LevelAdjustment
     @my=my
     @their=their
   end
-  
+
   def getMyAdjustment(myTeam,theirTeam)
-    return @my ? @my.getAdjustment(myTeam,theirTeam) : 
-       LevelAdjustment.getNullAdjustment(myTeam,theirTeam)               
+    return @my ? @my.getAdjustment(myTeam,theirTeam) :
+       LevelAdjustment.getNullAdjustment(myTeam,theirTeam)
   end
 
   def getTheirAdjustment(theirTeam,myTeam)
-    return @their ? @their.getAdjustment(theirTeam,myTeam) : 
+    return @their ? @their.getAdjustment(theirTeam,myTeam) :
        LevelAdjustment.getNullAdjustment(theirTeam,myTeam)
   end
 end
@@ -290,7 +290,7 @@ class SpeciesRestriction
     for s in specieslist
       return true if isConst?(species,PBSpecies,s)
     end
-    return false  
+    return false
   end
 
   def isValid?(pokemon)
@@ -313,7 +313,7 @@ class BannedSpeciesRestriction
     for s in specieslist
       return true if isConst?(species,PBSpecies,s)
     end
-    return false  
+    return false
   end
 
   def isValid?(pokemon)
@@ -336,7 +336,7 @@ class BannedItemRestriction
     for s in specieslist
       return true if isConst?(species,PBItems,s)
     end
-    return false  
+    return false
   end
 
   def isValid?(pokemon)
@@ -360,7 +360,7 @@ class RestrictedSpeciesRestriction
     for s in specieslist
       return true if isConst?(species,PBSpecies,s)
     end
-    return false  
+    return false
   end
 
   def isValid?(team)
@@ -426,8 +426,8 @@ end
 
 module LevelRestriction; end
 
-  
-  
+
+
 class MinimumLevelRestriction
   attr_reader :level
 
@@ -650,7 +650,7 @@ module NicknameChecker
   def check(name,species)
     name=name.upcase
     return true if name==getName(species)
-    if @@names.values.include?(name) 
+    if @@names.values.include?(name)
       return false
     end
     for i in @@namesMaxValue..PBSpecies.maxValue
@@ -774,7 +774,7 @@ class PokemonRuleSet
   end
 
   # This rule checks
-  # - the entire team to determine whether a subset of the team meets the rule, or 
+  # - the entire team to determine whether a subset of the team meets the rule, or
   # - a list of Pokemon whose length is equal to the suggested number. For an
   #   entire team, the condition must hold for at least one possible subset of
   #   the team, but not necessarily for the entire team.
@@ -788,7 +788,7 @@ class PokemonRuleSet
   end
 
   # This rule checks either
-  # - the entire team to determine whether a subset of the team meets the rule, or 
+  # - the entire team to determine whether a subset of the team meets the rule, or
   # - whether the entire team meets the rule. If the condition holds for the
   #   entire team, the condition must also hold for any possible subset of the
   #   team with the suggested number.
@@ -897,7 +897,7 @@ class PokemonRuleSet
       error.push(_INTL("{1} Pokémon are needed.",self.minLength)) if error && self.minLength>1
       return false
     elsif team.length>self.maxLength
-      error.push(_INTL("No more than {1} Pokémon may enter.",self.maxLength)) if error  
+      error.push(_INTL("No more than {1} Pokémon may enter.",self.maxLength)) if error
       return false
     end
     for pokemon in team
@@ -985,33 +985,33 @@ end
 class SoulDewBattleClause < BattleRule
   def setRule(battle); battle.rules["souldewclause"] = true; end
 end
-  
-  
-  
+
+
+
 class SleepClause < BattleRule
   def setRule(battle); battle.rules["sleepclause"] = true; end
 end
-  
-  
-  
+
+
+
 class FreezeClause < BattleRule
   def setRule(battle); battle.rules["freezeclause"] = true; end
 end
-  
-  
-  
+
+
+
 class EvasionClause < BattleRule
   def setRule(battle); battle.rules["evasionclause"] = true; end
 end
-  
-  
-  
+
+
+
 class OHKOClause < BattleRule
   def setRule(battle); battle.rules["ohkoclause"] = true; end
 end
-  
-  
-  
+
+
+
 class PerishSongClause < BattleRule
   def setRule(battle); battle.rules["perishsong"] = true; end
 end
@@ -1464,8 +1464,8 @@ PokemonChallengeRules.new
    :LAPRAS,:DITTO,:VAPOREON,:JOLTEON,:SNORLAX,
    :ARTICUNO,:ZAPDOS,:DRAGONITE,:MEWTWO,:MEW))
 
-   
-   
+
+
 # 2005 Tournament Rules
 PokemonChallengeRules.new
 .addPokemonRule(BannedSpeciesRestriction.new(
@@ -1550,7 +1550,7 @@ PokemonChallengeRules.new
 
 
 # Battle Time (includes animations)
-If the time runs out, the team with the most Pok�mon left wins. If both teams have
+If the time runs out, the team with the most Pok�mon left wins. If both teams have
 the same number of Pokémon left, total HP remaining breaks the tie. If both HP
 totals are identical, the battle is a draw.
 

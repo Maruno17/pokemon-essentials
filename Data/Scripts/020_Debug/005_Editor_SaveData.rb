@@ -354,7 +354,7 @@ end
 def pbSaveEncounterData
   encdata = pbLoadEncountersData
   return if !encdata
-  mapinfos = pbLoadRxData("Data/MapInfos")  
+  mapinfos = pbLoadRxData("Data/MapInfos")
   File.open("PBS/encounters.txt","wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
@@ -789,7 +789,7 @@ def pbSavePokemonData
       regionallist.push(regionaldata[region][i])
     end
     numb = regionallist.length-1
-    while (numb>=0)   # remove every 0 at end of array 
+    while (numb>=0)   # remove every 0 at end of array
       (!regionallist[numb] || regionallist[numb]==0) ? regionallist.pop : break
       numb -= 1
     end

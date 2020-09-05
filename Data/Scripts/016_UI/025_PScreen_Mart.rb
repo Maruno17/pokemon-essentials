@@ -387,7 +387,7 @@ class PokemonMart_Scene
   def pbStartBuyScene(stock,adapter)
     pbStartBuyOrSellScene(true,stock,adapter)
   end
-  
+
   def pbStartSellScene(bag,adapter)
     if $PokemonBag
       pbStartSellScene2(bag,adapter)
@@ -622,7 +622,7 @@ class PokemonMart_Scene
             pbPlayCancelSE()
             ret=0
             break
-          end     
+          end
         end
       }
     }
@@ -740,7 +740,7 @@ class PokemonMartScreen
             raise _INTL("Failed to delete stored items")
           end
         end
-        pbDisplayPaused(_INTL("You have no more room in the Bag."))  
+        pbDisplayPaused(_INTL("You have no more room in the Bag."))
       else
         @adapter.setMoney(@adapter.getMoney-price)
         for i in 0...@stock.length
@@ -753,7 +753,7 @@ class PokemonMartScreen
         if $PokemonBag
           if quantity>=10 && pbIsPokeBall?(item) && hasConst?(PBItems,:PREMIERBALL)
             if @adapter.addItem(getConst(PBItems,:PREMIERBALL))
-              pbDisplayPaused(_INTL("I'll throw in a Premier Ball, too.")) 
+              pbDisplayPaused(_INTL("I'll throw in a Premier Ball, too."))
             end
           end
         end

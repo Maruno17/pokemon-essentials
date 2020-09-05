@@ -42,7 +42,7 @@ module Graphics
     end
 =end
     @@transition.update if @@transition && !@@transition.disposed?
-    @@transition = nil if @@transition && @@transition.disposed? 
+    @@transition = nil if @@transition && @@transition.disposed?
   end
 
   def self.judge_special_transition(duration,filename)
@@ -97,7 +97,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class BreakingGlass
   def initialize(numframes)
@@ -161,7 +161,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class ShrinkingPieces
   def initialize(numframes,rotation)
@@ -228,7 +228,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class SplashTransition
   SPLASH_SIZE = 32
@@ -327,7 +327,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class RandomStripeTransition
   RAND_STRIPE_SIZE = 2
@@ -349,7 +349,7 @@ class RandomStripeTransition
     @viewport.z = 99999
     @sprite = Sprite.new(@viewport)
     @sprite.bitmap = Bitmap.new(Graphics.width,Graphics.height)
-    ########## 
+    ##########
     @direction = direction
     size = RAND_STRIPE_SIZE
     bands = ((@direction==0) ? Graphics.width : Graphics.height)/size
@@ -412,7 +412,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class ZoomInTransition
   def initialize(numframes)
@@ -467,7 +467,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class ScrollScreen
   def initialize(numframes,direction)
@@ -538,7 +538,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class MosaicTransition
   def initialize(numframes)
@@ -594,7 +594,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class FadeTransition
   def initialize(numframes)

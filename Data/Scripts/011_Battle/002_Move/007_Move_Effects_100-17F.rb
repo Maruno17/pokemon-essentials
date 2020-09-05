@@ -278,7 +278,7 @@ class PokeBattle_Move_10D < PokeBattle_Move
 
   def pbFailsAgainstTarget?(user,target)
     if user.pbHasType?(:GHOST) && target.effects[PBEffects::Curse]
-      @battle.pbDisplay(_INTL("But it failed!"))  
+      @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     return false
@@ -1401,7 +1401,7 @@ end
 class PokeBattle_Move_142 < PokeBattle_Move
   def pbFailsAgainstTarget?(user,target)
     if !hasConst?(PBTypes,:GHOST) || target.pbHasType?(:GHOST) || !target.canChangeType?
-      @battle.pbDisplay(_INTL("But it failed!"))  
+      @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     return false
@@ -1423,7 +1423,7 @@ end
 class PokeBattle_Move_143 < PokeBattle_Move
   def pbFailsAgainstTarget?(user,target)
     if !hasConst?(PBTypes,:GRASS) || target.pbHasType?(:GRASS) || !target.canChangeType?
-      @battle.pbDisplay(_INTL("But it failed!"))  
+      @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     return false
@@ -1547,7 +1547,7 @@ class PokeBattle_Move_148 < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     target.effects[PBEffects::Powder] = true
     @battle.pbDisplay(_INTL("{1} is covered in powder!",user.pbThis))
-  end  
+  end
 end
 
 
@@ -2208,7 +2208,7 @@ class PokeBattle_Move_165 < PokeBattle_Move
               @battle.choices[target.index][0]==:Shift) && target.movedThisRound?)
     target.effects[PBEffects::GastroAcid] = true
     target.effects[PBEffects::Truant]     = false
-    @battle.pbDisplay(_INTL("{1}'s Ability was suppressed!",target.pbThis)) 
+    @battle.pbDisplay(_INTL("{1}'s Ability was suppressed!",target.pbThis))
     target.pbOnAbilityChanged(target.ability)
   end
 end
@@ -2434,7 +2434,7 @@ class PokeBattle_Move_16E < PokeBattle_Move
     hpGain = (target.totalhp/2.0).round
     hpGain = (target.totalhp*2/3.0).round if @battle.field.terrain==PBBattleTerrains::Grassy
     target.pbRecoverHP(hpGain)
-    @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))  
+    @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))
   end
 end
 
@@ -2476,7 +2476,7 @@ class PokeBattle_Move_16F < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     return if !@healing
     target.pbRecoverHP(target.totalhp/2)
-    @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))   
+    @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))
   end
 
   def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)

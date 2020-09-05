@@ -206,7 +206,7 @@ class BugContestState
     for poke in @otherparty
       $Trainer.party.push(poke)
     end
-    if !interrupted 
+    if !interrupted
       if @lastPokemon
         pbNicknameAndStore(@lastPokemon)
       end
@@ -374,7 +374,7 @@ def pbBugContestBattle(species,level)
   pbPrepareBattle(battle)
   # Perform the battle itself
   decision = 0
-  pbBattleAnimation(pbGetWildBattleBGM(foeParty),0,foeParty) { 
+  pbBattleAnimation(pbGetWildBattleBGM(foeParty),0,foeParty) {
     decision = battle.pbStartBattle
     pbAfterBattle(decision,true)
     if decision==2 || decision==5   # Lost or drew

@@ -602,7 +602,7 @@ class PokemonParty_Scene
       self.update
     end
   end
-  
+
   def pbSwitchEnd(oldid,newid)
     pbSEPlay("GUI party switch")
     oldsprite = @sprites["pokemon#{oldid}"]
@@ -719,7 +719,7 @@ class PokemonParty_Scene
   end
 
   def pbChangeSelection(key,currentsel)
-    numsprites = (@multiselect) ? 8 : 7 
+    numsprites = (@multiselect) ? 8 : 7
     case key
     when Input::LEFT
       begin
@@ -792,7 +792,7 @@ class PokemonParty_Scene
   def pbRefresh
     for i in 0...6
       sprite = @sprites["pokemon#{i}"]
-      if sprite 
+      if sprite
         if sprite.is_a?(PokemonPartyPanel)
           sprite.pokemon = sprite.pokemon
         else
@@ -804,7 +804,7 @@ class PokemonParty_Scene
 
   def pbRefreshSingle(i)
     sprite = @sprites["pokemon#{i}"]
-    if sprite 
+    if sprite
       if sprite.is_a?(PokemonPartyPanel)
         sprite.pokemon = sprite.pokemon
       else
@@ -1323,7 +1323,7 @@ class PokemonPartyScreen
     end
     @scene.pbEndScene
     return nil
-  end  
+  end
 end
 
 

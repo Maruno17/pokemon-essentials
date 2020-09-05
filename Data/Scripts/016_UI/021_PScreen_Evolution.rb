@@ -365,7 +365,7 @@ class PokemonEvolutionScene
     alphaDiff = 10*20/Graphics.frame_rate
     loop do
       sprite.color.red   = 255
-      sprite.color.green = 255 
+      sprite.color.green = 255
       sprite.color.blue  = 255
       sprite.color.alpha = alpha
       sprite.color  = sprite.color
@@ -383,7 +383,7 @@ class PokemonEvolutionScene
       for j in 0...currenttempo
         if alpha<255
           sprite.color.red   = 255
-          sprite.color.green = 255 
+          sprite.color.green = 255
           sprite.color.blue  = 255
           sprite.color.alpha = alpha
           sprite.color = sprite.color
@@ -485,7 +485,7 @@ class PokemonEvolutionScene
       break if tone<=0
     end
   end
-  
+
   def pbStartScreen(pokemon,newspecies)
     @pokemon = pokemon
     @newspecies = newspecies

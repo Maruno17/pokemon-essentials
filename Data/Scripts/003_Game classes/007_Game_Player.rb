@@ -55,7 +55,7 @@ class Game_Player < Game_Character
   end
 
   def pbHasDependentEvents?
-    return $PokemonGlobal.dependentEvents.length>0   
+    return $PokemonGlobal.dependentEvents.length>0
   end
 
   def bump_into_object
@@ -486,7 +486,7 @@ def pbCanUseBike?(mapid)
   return true if pbGetMetadata(mapid,MetadataBicycleAlways)
   val = pbGetMetadata(mapid,MetadataBicycle)
   val = pbGetMetadata(mapid,MetadataOutdoor) if val==nil
-  return (val) ? true : false 
+  return (val) ? true : false
 end
 
 def pbMountBike

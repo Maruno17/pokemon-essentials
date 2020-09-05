@@ -52,7 +52,7 @@ def pbSetTextMessages
               lastitem.gsub!(/([^\.\!\?])\s\s+/) { |m| $1+" " }
               items.push(lastitem)
               lastitem=""
-            end         
+            end
             neednewline=false
           end
           if list.code == 101
@@ -84,7 +84,7 @@ def pbSetTextMessages
           if lastitem!=""
             items.push(lastitem)
             lastitem=""
-          end         
+          end
         end
       end
     end
@@ -128,7 +128,7 @@ def pbSetTextMessages
                   lastitem.gsub!(/([^\.\!\?])\s\s+/) { |m| $1+" " }
                   items.push(lastitem)
                   lastitem=""
-                end         
+                end
                 neednewline=false
               end
               if list.code == 101
@@ -160,7 +160,7 @@ def pbSetTextMessages
               if lastitem!=""
                 items.push(lastitem)
                 lastitem=""
-              end         
+              end
             end
           end
         end
@@ -196,7 +196,7 @@ def pbEachIntlSection(file)
     if !line[/^\#/] && !line[/^\s*$/]
       if line[re]
         if havesection
-          yield lastsection,sectionname 
+          yield lastsection,sectionname
         end
         lastsection.clear
         sectionname=$~[1]
@@ -214,13 +214,13 @@ def pbEachIntlSection(file)
     end
   }
   if havesection
-    yield lastsection,sectionname 
+    yield lastsection,sectionname
   end
 end
 
 def pbGetText(infile)
   begin
-    file=File.open(infile,"rb") 
+    file=File.open(infile,"rb")
   rescue
     raise _INTL("Can't find {1}",infile)
   end

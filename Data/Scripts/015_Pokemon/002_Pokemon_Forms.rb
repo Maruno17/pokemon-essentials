@@ -36,7 +36,7 @@ class PokeBattle_Pokemon
   def fSpecies
     return pbGetFSpeciesFromForm(@species,formSimple)
   end
-  
+
   alias __mf_compatibleWithMove? compatibleWithMove?   # Deprecated
   def compatibleWithMove?(move)
     v = MultipleForms.call("getMoveCompatibility",self)
@@ -134,7 +134,7 @@ def drawSpot(bitmap,spotpattern,x,y,red,green,blue)
         bitmap.set_pixel(xOrg+1,yOrg,color)
         bitmap.set_pixel(xOrg,yOrg+1,color)
         bitmap.set_pixel(xOrg+1,yOrg+1,color)
-      end   
+      end
     end
   end
 end

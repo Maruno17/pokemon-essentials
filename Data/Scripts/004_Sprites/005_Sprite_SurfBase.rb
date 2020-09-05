@@ -38,7 +38,7 @@ class Sprite_SurfBase
   def update
     return if disposed?
     if !$PokemonGlobal.surfing && !$PokemonGlobal.diving
-      # Just-in-time disposal of sprite 
+      # Just-in-time disposal of sprite
       if @sprite
         @sprite.dispose
         @sprite = nil

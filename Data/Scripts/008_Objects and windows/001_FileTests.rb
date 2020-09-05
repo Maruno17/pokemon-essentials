@@ -179,12 +179,12 @@ module RTP
  # Gets the absolute RGSS paths for the given file name
   def self.eachPathFor(filename)
     return if !filename
-    if filename[/^[A-Za-z]\:[\/\\]/] || filename[/^[\/\\]/] 
+    if filename[/^[A-Za-z]\:[\/\\]/] || filename[/^[\/\\]/]
       # filename is already absolute
       yield filename
     else
       # relative path
-      RTP.eachPath { |path| 
+      RTP.eachPath { |path|
         if path=="./"
           yield filename
         else
@@ -423,7 +423,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 module MiniRegistry
   HKEY_CLASSES_ROOT  = 0x80000000
@@ -455,7 +455,7 @@ module MiniRegistry
   def self.close(hkey); check(RegCloseKey.call(hkey)) if hkey; end
 
   def self.get(hkey,subkey,name,defaultValue=nil,bit64=false)
-    self.open(hkey,subkey,bit64) { |key| 
+    self.open(hkey,subkey,bit64) { |key|
       return self.read(key,name) rescue defaultValue
     }
     return defaultValue

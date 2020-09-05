@@ -17,7 +17,7 @@ class PokeBattle_AI
     # super-effective and powerful
     if !shouldSwitch && battler.turnCount>0 && skill>=PBTrainerAI.highSkill
       target = battler.pbDirectOpposing(true)
-      if !target.fainted? && target.lastMoveUsed>0 && 
+      if !target.fainted? && target.lastMoveUsed>0 &&
          (target.level-battler.level).abs<=6
         moveData = pbGetMoveData(target.lastMoveUsed)
         moveType = moveData[MOVE_TYPE]
@@ -135,7 +135,7 @@ class PokeBattle_AI
         if @battle.pbRegisterSwitch(idxBattler,list[0])
           PBDebug.log("[AI] #{battler.pbThis} (#{idxBattler}) will switch with " +
                       "#{@battle.pbParty(idxBattler)[list[0]].name}")
-          return 
+          return
         end
       end
     end

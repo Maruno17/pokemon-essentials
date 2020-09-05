@@ -24,7 +24,7 @@ class PokeBattle_FakeBattler
   def displayGender;  return @pokemon.gender;  end
   def shiny?;         return @pokemon.shiny?;  end
   alias isShiny? shiny?
-  
+
   def fainted?;       return false; end
   alias isFainted? fainted?
   def shadowPokemon?; return false; end
@@ -468,17 +468,17 @@ class PokeBattle_SafariZone
         # End of round
         if @decision==0
           if @ballCount<=0
-            pbDisplay(_INTL("PA: You have no Safari Balls left! Game over!")) 
+            pbDisplay(_INTL("PA: You have no Safari Balls left! Game over!"))
             @decision = 2
           elsif pbRandom(100)<5*escapeFactor
             pbDisplay(_INTL("{1} fled!",wildpoke.name)) { pbSEPlay("Battle flee") }
             @decision = 3
           elsif cmd==1   # Bait
-            pbDisplay(_INTL("{1} is eating!",wildpoke.name)) 
+            pbDisplay(_INTL("{1} is eating!",wildpoke.name))
           elsif cmd==2   # Rock
-            pbDisplay(_INTL("{1} is angry!",wildpoke.name)) 
+            pbDisplay(_INTL("{1} is angry!",wildpoke.name))
           else
-            pbDisplay(_INTL("{1} is watching carefully!",wildpoke.name)) 
+            pbDisplay(_INTL("{1} is watching carefully!",wildpoke.name))
           end
           # Weather continues
           @scene.pbCommonAnimation(PBWeather.animationName(@weather))

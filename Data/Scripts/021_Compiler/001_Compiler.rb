@@ -61,10 +61,11 @@ def pbPrintException(e)
     errorlog = RTP.getSaveFileName("errorlog.txt")
   end
   File.open(errorlog,"ab") { |f| f.write(premessage); f.write(message) }
-  errorlogline = errorlog.sub(Dir.pwd+"\\","")
-  errorlogline = errorlogline.sub(Dir.pwd+"/","")
-  errorlogline = errorlogline.gsub("/","\\")
-  errorlogline = "\r\n"+errorlogline if errorlogline.length>20
+  errorlogline = errorlog.sub("/", "\\")
+  errorlogline.sub!(Dir.pwd + "\\", "")
+  errorlogline.sub!(pbGetUserName, "USERNAME")
+  errorlogline = "\r\n" + errorlogline if errorlogline.length > 20
+  errorlogline.gsub!("/", "\\")
   print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nPress Ctrl+C to copy this message to the clipboard.")
 end
 
@@ -98,7 +99,7 @@ module FileLineData
   @linedata = ""
   @lineno   = 0
   @section  = nil
-  @key      = nil 
+  @key      = nil
   @value    = nil
 
   def self.file; return @file; end
@@ -347,7 +348,7 @@ def csvfield!(str)
       end
     end
     str[0,fieldbytes] = ""
-    if !str[/^\s*,/] && !str[/^\s*$/] 
+    if !str[/^\s*,/] && !str[/^\s*$/]
       raise _INTL("Invalid quoted field (in: {1})\r\n{2}",str,FileLineData.linereport)
     end
     str[0,str.length] = $~.post_match
@@ -528,7 +529,7 @@ def pbGetCsvRecord(rec,lineno,schema)
           record.push(field.to_i)
         end
       when "x"   # Hexadecimal number
-        field = csvfield!(rec)     
+        field = csvfield!(rec)
         if !field[/^[A-Fa-f0-9]+$/]
           raise _INTL("Field '{1}' is not a hexadecimal number\r\n{2}",field,FileLineData.linereport)
         end
@@ -621,7 +622,7 @@ def pbWriteCsvRecord(record,file,schema)
   rec = (record.is_a?(Array)) ? record.clone : [record]
   for i in 0...schema[1].length
     chr = schema[1][i,1]
-    file.write(",") if i>0 
+    file.write(",") if i>0
     if rec[i].nil?
       # do nothing
     elsif rec[i].is_a?(String)
@@ -866,7 +867,7 @@ end
 # Scripted constants
 #===============================================================================
 def pbFindScript(a,name)
-  a.each { |i| 
+  a.each { |i|
     next if !i
     return i if i[1]==name
   }
@@ -1121,7 +1122,7 @@ def pbCompileAllData(mustCompile)
     # No dependencies
     yield(_INTL("Compiling map connection data"))
     pbCompileConnections
-    # No dependencies  
+    # No dependencies
     yield(_INTL("Compiling ability data"))
     pbCompileAbilities
     # Depends on PBTypes
@@ -1142,7 +1143,7 @@ def pbCompileAllData(mustCompile)
     # Depends on PBSpecies, PBMoves
     yield(_INTL("Compiling machine data"))
     pbCompileMachines
-    # No dependencies  
+    # No dependencies
     yield(_INTL("Compiling Trainer type data"))
     pbCompileTrainerTypes
     # Depends on PBSpecies, PBItems, PBMoves

@@ -156,7 +156,7 @@ class PokemonEggHatch_Scene
       Input.update
       self.update
     end
-  end  
+  end
 
   def update
     pbUpdateSpriteHash(@sprites)

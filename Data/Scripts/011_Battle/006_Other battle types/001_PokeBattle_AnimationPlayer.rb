@@ -1,12 +1,12 @@
 #===============================================================================
-# 
+#
 #===============================================================================
 class AnimFrame
   X          = 0
   Y          = 1
   ZOOMX      = 2
   ANGLE      = 3
-  MIRROR     = 4 
+  MIRROR     = 4
   BLENDTYPE  = 5
   VISIBLE    = 6
   PATTERN    = 7
@@ -32,7 +32,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 def yaxisIntersect(x1,y1,x2,y2,px,py)
   dx = x2-x1
@@ -110,7 +110,7 @@ def pbResetCel(frame)
 end
 
 #===============================================================================
-# 
+#
 #===============================================================================
 def pbConvertRPGAnimation(animation)
   pbAnim = PBAnimation.new
@@ -170,7 +170,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class RPG::Animation
   def self.fromOther(otherAnim,id)
@@ -236,7 +236,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class PBAnimTiming
   attr_accessor :frame
@@ -353,7 +353,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class PBAnimations < Array
   include Enumerable
@@ -416,7 +416,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class PBAnimation < Array
   include Enumerable
@@ -621,7 +621,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 def pbSpriteSetAnimFrame(sprite,frame,user=nil,target=nil,inEditor=false)
   return if !sprite
@@ -662,7 +662,7 @@ def pbSpriteSetAnimFrame(sprite,frame,user=nil,target=nil,inEditor=false)
      frame[AnimFrame::TONERED],
      frame[AnimFrame::TONEGREEN],
      frame[AnimFrame::TONEBLUE],
-     frame[AnimFrame::TONEGRAY] 
+     frame[AnimFrame::TONEGRAY]
   )
   sprite.ox = sprite.src_rect.width/2
   sprite.oy = sprite.src_rect.height/2
@@ -799,7 +799,7 @@ class PBAnimationPlayerX
   def update
     return if @frame<0
     animFrame = @frame/@framesPerTick
-    
+
     # Loop or end the animation if the animation has reached the end
     if animFrame >= @animation.length
       @frame = (@looping) ? 0 : -1
@@ -822,7 +822,7 @@ class PBAnimationPlayerX
     @bgColor.update
     @foGraphic.update
     @foColor.update
-    
+
     # Update all the sprites to depict the animation's next frame
     if @framesPerTick==1 || (@frame%@framesPerTick)==0
       thisframe = @animation[animFrame]

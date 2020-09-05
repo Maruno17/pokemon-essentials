@@ -11,7 +11,7 @@ end
 
 
 class PokemonTemp
-  attr_accessor :encounterType 
+  attr_accessor :encounterType
   attr_accessor :evolutionLevels
 
   def battleRules
@@ -448,7 +448,7 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
   # then trigger and cause the battle to happen against this first trainer and
   # themselves.
   if !$PokemonTemp.waitingTrainer && pbMapInterpreterRunning? &&
-     ($Trainer.ablePokemonCount>1 || 
+     ($Trainer.ablePokemonCount>1 ||
      ($Trainer.ablePokemonCount>0 && $PokemonGlobal.partner))
     thisEvent = pbMapInterpreter.get_character(0)
     # Find all other triggered trainer events
@@ -496,7 +496,7 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
 end
 
 def pbDoubleTrainerBattle(trainerID1, trainerName1, trainerPartyID1, endSpeech1,
-                          trainerID2, trainerName2, trainerPartyID2=0, endSpeech2=nil, 
+                          trainerID2, trainerName2, trainerPartyID2=0, endSpeech2=nil,
                           canLose=false, outcomeVar=1)
   # Set some battle rules
   setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1
@@ -512,8 +512,8 @@ def pbDoubleTrainerBattle(trainerID1, trainerName1, trainerPartyID1, endSpeech1,
 end
 
 def pbTripleTrainerBattle(trainerID1, trainerName1, trainerPartyID1, endSpeech1,
-                          trainerID2, trainerName2, trainerPartyID2, endSpeech2, 
-                          trainerID3, trainerName3, trainerPartyID3=0, endSpeech3=nil, 
+                          trainerID2, trainerName2, trainerPartyID2, endSpeech2,
+                          trainerID3, trainerName3, trainerPartyID3=0, endSpeech3=nil,
                           canLose=false, outcomeVar=1)
   # Set some battle rules
   setBattleRule("outcomeVar",outcomeVar) if outcomeVar!=1

@@ -157,7 +157,7 @@ ItemHandlers::UseInField.add(:WHITEFLUTE,proc { |item|
   next 1
 })
 
-ItemHandlers::UseInField.add(:HONEY,proc { |item|  
+ItemHandlers::UseInField.add(:HONEY,proc { |item|
   pbUseItemMessage(item)
   pbSweetScent
   next 3
@@ -228,7 +228,7 @@ ItemHandlers::UseInField.add(:BICYCLE,proc { |item|
     if $PokemonGlobal.bicycle
       pbDismountBike
     else
-      pbMountBike 
+      pbMountBike
     end
     next 1
   end
@@ -296,7 +296,7 @@ ItemHandlers::UseInField.add(:ITEMFINDER,proc { |item|
     else   # Item is nearby, face towards it
       direction = $game_player.direction
       if offsetX.abs>offsetY.abs
-        direction = (offsetX<0) ? 4 : 6         
+        direction = (offsetX<0) ? 4 : 6
       else
         direction = (offsetY<0) ? 8 : 2
       end

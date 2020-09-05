@@ -113,9 +113,9 @@ def pbGetLegalMoves2(species,maxlevel)
         deleteAll.call(moves,move2[0])
       elsif md.function=="006" && move2[1].function=="005"
 		    deleteAll.call(moves,move2[0])
-      elsif md.function==move2[1].function && md.basedamage!=0 && 
+      elsif md.function==move2[1].function && md.basedamage!=0 &&
 		     md.type==move2[1].type &&
-		     (md.totalpp==15 || md.totalpp==10 || md.totalpp==move2[1].totalpp) && 
+		     (md.totalpp==15 || md.totalpp==10 || md.totalpp==move2[1].totalpp) &&
 		     (md.basedamage>move2[1].basedamage ||
 		     (md.basedamage==move2[1].basedamage && md.accuracy>move2[1].accuracy))
 		    # Surf, Flamethrower, Thunderbolt, etc.
@@ -130,28 +130,28 @@ def baseStatTotal(move)
   if !$baseStatTotal[move]
     $baseStatTotal[move]=pbBaseStatTotal(move)
   end
-  return $baseStatTotal[move] 
+  return $baseStatTotal[move]
 end
 
 def babySpecies(move)
   if !$babySpecies[move]
     $babySpecies[move]=pbGetBabySpecies(move)
   end
-  return $babySpecies[move] 
+  return $babySpecies[move]
 end
 
 def minimumLevel(move)
   if !$minimumLevel[move]
     $minimumLevel[move]=pbGetMinimumLevel(move)
   end
-  return $minimumLevel[move] 
+  return $minimumLevel[move]
 end
 
 def evolutions(move)
   if !$evolutions[move]
     $evolutions[move]=pbGetEvolvedFormData(move,true)
   end
-  return $evolutions[move] 
+  return $evolutions[move]
 end
 
 def moveData(move)
@@ -173,14 +173,14 @@ end
 660-755 - 400-555 (nonlegendary)
 756-799 - 580-600 [legendary] (compat1==15 or compat2==15, genderbyte=255)
 800-849 - 500-
-850-881 - 580- 
+850-881 - 580-
 =end
 
 
 
 class BaseStatRestriction
   def initialize(mn,mx)
-    @mn=mn;@mx=mx  
+    @mn=mn;@mx=mx
   end
 
   def isValid?(pkmn)
@@ -218,7 +218,7 @@ end
 def withRestr(rule,minbs,maxbs,legendary)
   ret=PokemonChallengeRules.new.addPokemonRule(BaseStatRestriction.new(minbs,maxbs))
   if legendary==0
-    ret.addPokemonRule(NonlegendaryRestriction.new)  
+    ret.addPokemonRule(NonlegendaryRestriction.new)
   elsif legendary==1
     ret.addPokemonRule(InverseRestriction.new(NonlegendaryRestriction.new))
   end
@@ -280,7 +280,7 @@ def hasMorePowerfulMove(moves,thismove)
     next if move==0
     if moveData(move).type==thisdata.type &&
        moveData(move).basedamage>thisdata.basedamage
-      return true 
+      return true
     end
   end
   return false
@@ -368,7 +368,7 @@ def pbRandomPokemonFromRule(rule,trainer)
         next if !isConst?(species,PBSpecies,:DIALGA)
       when :PASSHOBERRY
         next if !isConst?(species,PBSpecies,:STEELIX)
-      when :BABIRIBERRY 
+      when :BABIRIBERRY
         next if !isConst?(species,PBSpecies,:TYRANITAR)
       when :HABANBERRY
         next if !isConst?(species,PBSpecies,:GARCHOMP)
@@ -385,7 +385,7 @@ def pbRandomPokemonFromRule(rule,trainer)
       when :DEEPSEATOOTH
         next if !isConst?(species,PBSpecies,:CLAMPERL)
       when :THICKCLUB
-        next if !isConst?(species,PBSpecies,:CUBONE) && 
+        next if !isConst?(species,PBSpecies,:CUBONE) &&
                 !isConst?(species,PBSpecies,:MAROWAK)
       end
       if itemsym==:LIECHIBERRY && (ev&0x02)==0
@@ -403,11 +403,11 @@ def pbRandomPokemonFromRule(rule,trainer)
       break
     end
     if level<10
-      item=(getConst(PBItems,:ORANBERRY) || item) if rand(40)==0 || 
+      item=(getConst(PBItems,:ORANBERRY) || item) if rand(40)==0 ||
             isConst?(item,PBItems,:SITRUSBERRY)
     end
     if level>20
-      item=(getConst(PBItems,:SITRUSBERRY) || item) if rand(40)==0 ||   
+      item=(getConst(PBItems,:SITRUSBERRY) || item) if rand(40)==0 ||
             isConst?(item,PBItems,:ORANBERRY)
     end
     moves=$legalMoves[species]
@@ -417,7 +417,7 @@ def pbRandomPokemonFromRule(rule,trainer)
       moves[0]=pbRandomMove
       moves[1]=pbRandomMove
       moves[2]=pbRandomMove
-      moves[3]=pbRandomMove  
+      moves[3]=pbRandomMove
     end
     next if moves.length==0
     if (moves|[]).length<4
@@ -465,7 +465,7 @@ def pbRandomPokemonFromRule(rule,trainer)
             hasSpecial=true if d.category==1
           end
         end
-        if !hasPhysical && (ev&0x02)!=0 
+        if !hasPhysical && (ev&0x02)!=0
           # No physical attack, but emphasizes Attack
           next if rand(10)<8
         end
@@ -495,7 +495,7 @@ def pbRandomPokemonFromRule(rule,trainer)
       end
     end
     for i in 0...4
-      moves[i]=0 if !moves[i]  
+      moves[i]=0 if !moves[i]
     end
     if isConst?(item,PBItems,:LIGHTCLAY) &&
        !moves.include?((getConst(PBMoves,:LIGHTSCREEN) || -1)) &&
@@ -585,7 +585,7 @@ class PlayerRatingElo
   K_VALUE = 16
 
   def initialize
-    @rating=1600.0 
+    @rating=1600.0
     @deviation=0
     @volatility=0
     @estimatedRating=nil
@@ -884,7 +884,7 @@ def pbDecideWinnerScore(party0,party1,rating)
 end
 
 def pbDecideWinner(party0,party1,rating0,rating1)
-	rating0=(rating0*15.0/100).round 
+	rating0=(rating0*15.0/100).round
 	rating1=(rating1*15.0/100).round
 	score0=pbDecideWinnerScore(party0,party1,rating0)
 	score1=pbDecideWinnerScore(party1,party0,rating1)
@@ -1025,7 +1025,7 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
     end
     species|=[] # remove duplicates
     count=0
-    (PBTypes.maxValue+1).times { |typ| 
+    (PBTypes.maxValue+1).times { |typ|
       if types[typ]>=5
         types[typ]/=4
         types[typ]=10 if types[typ]>10
@@ -1066,7 +1066,7 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
         end
       end
       numbers|=[]
-      if (numbers.length<6 || 
+      if (numbers.length<6 ||
          !rulesetTeam.hasValidTeam?(numbersPokemon))
         for index in 0...pokemonlist.length
           pkmn=pokemonlist[index]
@@ -1100,7 +1100,7 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
       numbers.sort!
     end
     newbttrainers.push([trainerdata[0],trainerdata[1],trainerdata[2],
-                        trainerdata[3],trainerdata[4],numbers])  
+                        trainerdata[3],trainerdata[4],numbers])
   end
   yield(nil) if block_given?
   pbpokemonlist=[]
@@ -1156,7 +1156,7 @@ def isBattlePokemonDuplicate(pk,pk2)
   if pk.species==pk2.species
     moves1=[]
     moves2=[]
-    4.times{ 
+    4.times{
        moves1.push(pk.moves[0].id)
        moves2.push(pk.moves[1].id)
     }
@@ -1178,7 +1178,7 @@ def isBattlePokemonDuplicate(pk,pk2)
                    pk.ev[4]==pk2.ev[4] &&
                    pk.ev[5]==pk2.ev[5]
     return false
-  end      
+  end
 end
 
 def pbRemoveDuplicates(party)
@@ -1356,7 +1356,7 @@ def pbWriteCup(id,rules)
       cmd=2
     elsif cmd==1
       cmd=0
-    end 
+    end
   end
   return if cmd==0   # No
   if cmd==1   # Yes, use existing

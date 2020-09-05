@@ -89,7 +89,7 @@ class PokeBattle_Move
 
   def damagingMove?; return @category!=2; end
   def statusMove?;   return @category==2; end
-  
+
   def usableWhenAsleep?;       return false; end
   def unusableInGravity?;      return false; end
   def healingMove?;            return false; end

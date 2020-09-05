@@ -52,7 +52,7 @@ class Event
       end
     end
   end
- 
+
   # Triggers the event and calls all its event handlers. Normally called only
   # by the code where the event occurred. The first argument is the sender of
   # the event, the other arguments are the event's parameters.

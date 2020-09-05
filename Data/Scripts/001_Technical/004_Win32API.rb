@@ -22,7 +22,7 @@ class Win32API
         wndthreadid = @@GetWindowThreadProcessId.call(nextwindow,processid)
         if wndthreadid==threadid
           @@RGSSWINDOW = nextwindow
-          return @@RGSSWINDOW 
+          return @@RGSSWINDOW
         end
       end
     end until nextwindow==0
@@ -62,7 +62,7 @@ class Win32API
     hWnd = pbFindRgssWindow
     window.call(hWnd,9)
   end
- 
+
   def Win32API.fillScreen
     setWindowLong = Win32API.new('user32','SetWindowLong','LLL','L')
     setWindowPos  = Win32API.new('user32','SetWindowPos','LLIIIII','I')
@@ -75,8 +75,8 @@ class Win32API
     Win32API.focusWindow
     return [width,height]
   end
- 
-  def Win32API.restoreScreen   
+
+  def Win32API.restoreScreen
     setWindowLong = Win32API.new('user32','SetWindowLong','LLL','L')
     setWindowPos  = Win32API.new('user32','SetWindowPos','LLIIIII','I')
     metrics = Win32API.new('user32','GetSystemMetrics','I','I')
