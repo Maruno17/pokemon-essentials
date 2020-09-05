@@ -1123,7 +1123,7 @@ BattleHandlers::DamageCalcUserAbility.add(:WATERBUBBLE,
 
 BattleHandlers::DamageCalcUserAbility.add(:GORILLATACTICS,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round  
+    mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if move.physicalMove?
   }
 )	
 
@@ -1132,6 +1132,14 @@ BattleHandlers::DamageCalcUserAbility.add(:PUNKROCK,
     mults[ATK_MULT] = (mults[ATK_MULT]*1.3).round if move.soundMove?
   }
 )
+
+BattleHandlers::DamageCalcUserAbility.add(:STEELYSPIRIT,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+      if isConst?(type,PBTypes,:STEEL)
+         mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
+      end		 
+  }
+)	
 
 #===============================================================================
 # DamageCalcUserAllyAbility handlers
