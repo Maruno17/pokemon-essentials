@@ -255,7 +255,7 @@ class PokeBattle_Move
     target.damageState.calcDamage = damage
   end
 
-  def pbCalcDamageMultipliers(user,target,numTargets,baseDmg,type,multipliers)
+  def pbCalcDamageMultipliers(user,target,numTargets,type,baseDmg,multipliers)
     # Global abilities
     if (@battle.pbCheckGlobalAbility(:DARKAURA) && isConst?(type,PBTypes,:DARK)) ||
        (@battle.pbCheckGlobalAbility(:FAIRYAURA) && isConst?(type,PBTypes,:FAIRY))

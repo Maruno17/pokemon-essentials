@@ -656,7 +656,7 @@ BattleHandlers::MoveImmunityTargetAbility.add(:SOUNDPROOF,
     end
     battle.pbHideAbilitySplash(target)
     next true
-    
+
   }
 )
 
@@ -1125,7 +1125,7 @@ BattleHandlers::DamageCalcUserAbility.add(:GORILLATACTICS,
   proc { |ability,user,target,move,mults,baseDmg,type|
     mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if move.physicalMove?
   }
-)	
+)
 
 BattleHandlers::DamageCalcUserAbility.add(:PUNKROCK,
   proc { |ability,user,target,move,mults,baseDmg,type|
@@ -1161,7 +1161,7 @@ BattleHandlers::DamageCalcUserAllyAbility.add(:POWERSPOT,
 
 BattleHandlers::DamageCalcUserAllyAbility.add(:STEELYSPIRIT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)	 
+    mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)
   }
 )
 
@@ -1214,7 +1214,7 @@ BattleHandlers::DamageCalcTargetAbility.add(:FURCOAT,
     mults[DEF_MULT] *= 2 if move.specialMove? || move.function=="122"   # Psyshock
   }
 )
-    
+
 BattleHandlers::DamageCalcTargetAbility.add(:GRASSPELT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if user.battle.field.terrain==PBBattleTerrains::Grassy
@@ -1644,12 +1644,12 @@ BattleHandlers::TargetAbilityOnHit.add(:STAMINA,
     target.pbRaiseStatStageByAbility(PBStats::DEFENSE,1,target)
   }
 )
-  
+
 BattleHandlers::TargetAbilityOnHit.add(:SANDSPIT,
   proc { |ability,target,battler,move,battle|
     pbBattleWeatherAbility(PBWeather::Sandstorm,battler,battle)
   }
-)  
+)
 
 BattleHandlers::TargetAbilityOnHit.add(:STATIC,
   proc { |ability,user,target,move,battle|
@@ -1691,12 +1691,12 @@ BattleHandlers::TargetAbilityOnHit.add(:WEAKARMOR,
 
 BattleHandlers::TargetAbilityOnHit.add(:STEAMENGINE,
   proc { |ability,user,target,move,battle|
-    next if !isConst?(move.calcType,PBTypes,:FIRE) && 
+    next if !isConst?(move.calcType,PBTypes,:FIRE) &&
 	          !isConst?(move.calcType,PBTypes,:WATER)
     target.pbRaiseStatStageByAbility(PBStats::SPEED,6,target)
   }
 )
-  
+
 #===============================================================================
 # UserAbilityOnHit handlers
 #===============================================================================
@@ -2289,7 +2289,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:FOREWARN,
         # Counter, Mirror Coat, Metal Burst
         power = 120 if ["071","072","073"].include?(moveData[MOVE_FUNCTION_CODE])
         # Sonic Boom, Dragon Rage, Night Shade, Endeavor, Psywave,
-        # Return, Frustration, Crush Grip, Gyro Ball, Hidden Power, 
+        # Return, Frustration, Crush Grip, Gyro Ball, Hidden Power,
         # Natural Gift, Trump Card, Flail, Grass Knot
         power = 80 if ["06A","06B","06D","06E","06F",
                        "089","08A","08C","08D","090",
@@ -2555,11 +2555,11 @@ BattleHandlers::RunFromBattleAbility.add(:RUNAWAY,
     next true
   }
 )
-  
+
 #===============================================================================
 # AbilityOnBattleStart handlers
 #===============================================================================
-  
+
 BattleHandlers::AbilityOnSwitchIn.add(:INTREPIDSWORD,
   proc { |ability,battler,battle|
     stat = PBStats::ATTACK
@@ -2572,4 +2572,4 @@ BattleHandlers::AbilityOnSwitchIn.add(:DAUNTLESSSHIELD,
     stat = PBStats::DEFENSE
     battler.pbRaiseStatStageByAbility(stat,1,battler)
   }
-)  
+)

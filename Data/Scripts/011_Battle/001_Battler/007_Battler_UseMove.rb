@@ -65,7 +65,7 @@ class PokeBattle_Battler
   end
 
   #=============================================================================
-  # 
+  #
   #=============================================================================
   def pbBeginTurn(choice)
     # Cancel some lingering effects which only apply until the user next moves
@@ -258,7 +258,7 @@ class PokeBattle_Battler
     end
     @battle.lastMoveUsed = move.id   # For Copycat
     @battle.lastMoveUser = @index   # For "self KO" battle clause to avoid draws
-    @battle.successStates[@index].useState = 1   # Battle Arena - assume failure 
+    @battle.successStates[@index].useState = 1   # Battle Arena - assume failure
     # Find the default user (self or Snatcher) and target(s)
     user = pbFindUser(choice,move)
     user = pbChangeUser(choice,move,user)
@@ -537,7 +537,8 @@ class PokeBattle_Battler
     end
     # Dancer
     if !@effects[PBEffects::Dancer] && !user.lastMoveFailed && realNumHits>0 &&
-       !move.snatched && magicCoater<0 && @battle.pbCheckGlobalAbility(:DANCER)
+       !move.snatched && magicCoater<0 && @battle.pbCheckGlobalAbility(:DANCER) &&
+       move.danceMove?
       dancers = []
       @battle.pbPriority(true).each do |b|
         dancers.push(b) if b.index!=user.index && b.hasActiveAbility?(:DANCER)
