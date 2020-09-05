@@ -33,10 +33,10 @@ class BushBitmap
     for i in 0...4
       y = i*charheight
       if cy>=0
-        ret.blt(0,y,bitmap,Rect.new(0,y,ret.width,cy)) 
+        ret.blt(0,y,bitmap,Rect.new(0,y,ret.width,cy))
         ret.blt(0,y+cy,bitmap,Rect.new(0,y+cy,ret.width,2),170)
       end
-      ret.blt(0,y+cy+2,bitmap,Rect.new(0,y+cy+2,ret.width,2),85) if cy+2>=0    
+      ret.blt(0,y+cy+2,bitmap,Rect.new(0,y+cy+2,ret.width,2),85) if cy+2>=0
     end
     return ret
   end
@@ -47,10 +47,10 @@ class BushBitmap
     cy = charheight-depth-2
     y = charheight
     if cy>=0
-      ret.blt(0,y,bitmap,Rect.new(0,y,ret.width,cy)) 
+      ret.blt(0,y,bitmap,Rect.new(0,y,ret.width,cy))
       ret.blt(0,y+cy,bitmap,Rect.new(0,y+cy,ret.width,2),170)
     end
-    ret.blt(0,y+cy+2,bitmap,Rect.new(0,y+cy+2,ret.width,2),85) if cy+2>=0    
+    ret.blt(0,y+cy+2,bitmap,Rect.new(0,y+cy+2,ret.width,2),85) if cy+2>=0
     return ret
   end
 end

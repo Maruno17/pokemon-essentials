@@ -61,8 +61,8 @@ class PokeBattle_Battler
 
   def pbCanSleep?(user,showMessages,move=nil,ignoreStatus=false)
     selfsleep = (user && user.index==@index)
-    if ((@battle.rules["modifiedsleepclause"]) || (!selfsleep && @battle.rules["sleepclause"])) && 
-       pbHasStatusPokemon?(PBStatuses::SLEEP) 
+    if ((@battle.rules["modifiedsleepclause"]) || (!selfsleep && @battle.rules["sleepclause"])) &&
+       pbHasStatusPokemon?(PBStatuses::SLEEP)
       if showMessages
         @battle.pbDisplay(_INTL("But {1} couldn't sleep!",pbThis(true)))
       end
@@ -72,7 +72,7 @@ class PokeBattle_Battler
   end
 
   def pbCanSleepYawn?
-    if (@battle.rules["sleepclause"] || @battle.rules["modifiedsleepclause"]) && 
+    if (@battle.rules["sleepclause"] || @battle.rules["modifiedsleepclause"]) &&
        pbHasStatusPokemon?(PBStatuses::SLEEP)
       return false
     end
@@ -205,7 +205,7 @@ class PokeBattle_Move_0E0   # Self-Destruct
       count += @battle.pbAbleNonActiveCount(user.idxOpposingSide)
       if count==0
         @battle.pbDisplay(_INTL("{1}'s team was disqualified!",user.pbThis))
-        @battle.decision = (user.opposes?) ? 1 : 2 
+        @battle.decision = (user.opposes?) ? 1 : 2
         return false
       end
     end

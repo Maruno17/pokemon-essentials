@@ -20,7 +20,7 @@ module PBDebug
     if $DEBUG && $INTERNAL && @@log.length>0
       File.open("Data/debuglog.txt", "a+b") { |f| f.write("#{@@log}") }
     end
-    @@log.clear 
+    @@log.clear
   end
 
   def self.log(msg)

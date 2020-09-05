@@ -110,7 +110,7 @@ class DungeonMaze
       tiles[i]=[]
       for j in 0...TILE_WIDTH*TILE_HEIGHT
         tiles[i][j]=0
-      end   
+      end
     end
     paintRect(tiles[0],5,0,3,10) # N
     paintRect(tiles[1],5,0,3,8)  # N E
@@ -136,7 +136,7 @@ class DungeonMaze
        [tiles[1],TurnLeft],      # N W
        [tiles[0],TurnLeft],      # W
        [tiles[0],None],          # N
-       [nil,None] 
+       [nil,None]
     ]
     return realtiles
   end
@@ -203,7 +203,7 @@ class Maze
     list=[]
     for x in 0...nodeWidth
       for y in 0...nodeHeight
-        list.push(NodeListElement.new(x,y))    
+        list.push(NodeListElement.new(x,y))
       end
     end
     list.shuffle!
@@ -379,10 +379,10 @@ class Dungeon
     def initialize(dungeon)
 	    @dungeon=dungeon
     end
-  
+
     def xsize; @dungeon.width; end
     def ysize; @dungeon.height; end
-    
+
     def [](x,y)
       [1,2,3,2][@dungeon[x,y]]
     end
@@ -526,13 +526,13 @@ class Dungeon
   end
 
   def intersects?(r1,r2)
-  	return !((( r2[0] + r2[2]  <= r1[0] ) || 
+  	return !((( r2[0] + r2[2]  <= r1[0] ) ||
 	   	 ( r2[0] >= r1[0] + r1[2] ) ||
-		   ( r2[1] + r2[3] <= r1[1] ) || 
+		   ( r2[1] + r2[3] <= r1[1] ) ||
 		   ( r2[1] >= r1[1] + r1[3] ) ) &&
 		   (( r1[0] <= r2[0] + r2[2] )||
 		   ( r1[0] >= r2[0] + r2[2] ) ||
-		   ( r1[1] + r1[3] <= r2[1] ) || 
+		   ( r1[1] + r1[3] <= r2[1] ) ||
 	   	 ( r1[1] >= r2[1] + r2[3] ))
 		);
   end

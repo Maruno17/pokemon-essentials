@@ -837,13 +837,13 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
   for i in 0...characters.length
     c=characters[i]
     if i>0 && (charactersInternal[i][0]!=lastalign ||
-       charactersInternal[i][1]!=lasty) 
+       charactersInternal[i][1]!=lasty)
       # Found end of run
       widthblocks.push([runstart,i,lastalign,totalwidth,lasty])
       runstart=i
       totalwidth=0
     end
-    lastalign=charactersInternal[i][0] 
+    lastalign=charactersInternal[i][0]
     lasty=charactersInternal[i][1]
     extraspace=(charactersInternal[i][4]) ? charactersInternal[i][4] : 0
     totalwidth+=c[3]-extraspace

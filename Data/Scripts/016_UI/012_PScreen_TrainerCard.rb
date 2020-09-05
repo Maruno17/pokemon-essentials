@@ -85,7 +85,7 @@ class PokemonTrainerCard_Scene
         pbPlayCloseMenuSE
         break
       end
-    end 
+    end
   end
 
   def pbEndScene

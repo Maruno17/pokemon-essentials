@@ -25,7 +25,7 @@ class PBPokemon
     @move2=move2 ? move2 : 0
     @move3=move3 ? move3 : 0
     @move4=move4 ? move4 : 0
-    @ev=ev 
+    @ev=ev
   end
 
 =begin
@@ -378,7 +378,7 @@ class BattleChallengeData
     $game_map.need_refresh=true
     if save
       pbSave(true)
-    end 
+    end
   end
 
   def pbGoOn
@@ -445,7 +445,7 @@ class BattleChallenge
          self.data.numPokemon,
          self.data.battletype,self.data.mode)
     end
-    return @rules  
+    return @rules
   end
 
   def modeToRules(doublebattle,numPokemon,battletype,mode)
@@ -466,7 +466,7 @@ class BattleChallenge
       rules.setLevelAdjustment(OpenLevelAdjustment.new(60))
     else
       rules.setRuleset(StandardRules(numPokemon,50))
-      rules.setLevelAdjustment(OpenLevelAdjustment.new(50)) 
+      rules.setLevelAdjustment(OpenLevelAdjustment.new(50))
     end
     if doublebattle
       rules.addBattleRule(DoubleBattle.new)
@@ -547,7 +547,7 @@ class BattleChallenge
   def pbBattle
     return @bc.extraData.pbBattle(self) if @bc.extraData
     opponent=pbGenerateBattleTrainer(self.nextTrainer,self.rules)
-    bttrainers=pbGetBTTrainers(@id) 
+    bttrainers=pbGetBTTrainers(@id)
     trainerdata=bttrainers[self.nextTrainer]
     ret=pbOrganizedBattleEx(opponent,self.rules,
        pbGetMessageFromHash(MessageTypes::EndSpeechLose,trainerdata[4]),
@@ -620,7 +620,7 @@ def pbPlayBattle(battledata)
     battleplayer = PokeBattle_BattleArenaPlayer.new(scene,lastbattle)
   end
   bgm = BattlePlayerHelper.pbGetBattleBGM(lastbattle)
-  pbBattleAnimation(bgm) { 
+  pbBattleAnimation(bgm) {
     pbSceneStandby {
       decision = battleplayer.pbStartBattle
     }
@@ -950,7 +950,7 @@ def pbOrganizedBattleEx(opponent,challengedata,endspeech,endspeechwin)
   pbPrepareBattle(battle)
   # Perform the battle itself
   decision = 0
-  pbBattleAnimation(pbGetTrainerBattleBGM(opponent)) { 
+  pbBattleAnimation(pbGetTrainerBattleBGM(opponent)) {
     pbSceneStandby{
       decision = battle.pbStartBattle
     }

@@ -287,7 +287,7 @@ class TrainerWalkingCharSprite < SpriteWrapper
     super
     if @animbitmap
       @animbitmap.update
-      self.bitmap = @animbitmap.bitmap 
+      self.bitmap = @animbitmap.bitmap
     end
     @frame += 1
     if @frame>=@frameskip

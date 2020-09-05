@@ -29,7 +29,7 @@ module PhoneMsgType
   Generic       = 0
   Greeting      = 1
   Body          = 2
-  BattleRequest = 3 
+  BattleRequest = 3
 end
 
 
@@ -190,7 +190,7 @@ module PokemonSpeciesData
     end
     return ret
   end
-  
+
   def self.optionalValues(compilingForms=false)
     ret = {
       "Type2"               => [SpeciesType2,            "e",:PBTypes],

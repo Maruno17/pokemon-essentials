@@ -17,7 +17,7 @@ Parameters:
   freq - the frequency of the sound in Hz. The higher the frequency,
      the higher the pitch. If 0, no sound will be generated.
      The module Audio::Note contains useful frequencies for tones.
-     freq can also be a SoundEnvelope or an array of two element arrays, 
+     freq can also be a SoundEnvelope or an array of two element arrays,
      as follows:
         freq[0] - time in ms to apply the specified frequency
         freq[1] - frequency to apply. In between, values will be interpolated
@@ -26,7 +26,7 @@ Parameters:
   async - specifies whether the function will return immediately
      without waiting for the sound to finish (stands for asynchronous)
   timbre - specifies the timbre of the tone; from 0.0 through 1.0
-     timbre can also be a SoundEnvelope or an array of two element arrays, 
+     timbre can also be a SoundEnvelope or an array of two element arrays,
      as follows:
         volume[0] - time in ms to apply the specified timbre
         volume[1] - timbre to apply. In between, values will be interpolated
@@ -206,7 +206,7 @@ class NoteEnvelope
   def sweeping(duration,sweepDuration)
     return self if duration<=0
     return steady(duration) if sweepDuration<=0
-    @envelope.changeDiscrete(0,@maxPoint)  
+    @envelope.changeDiscrete(0,@maxPoint)
     falling=true
     while duration>0
       dur=duration>sweepDuration ? sweepDuration : duration
@@ -368,13 +368,13 @@ class SoundEnvelope; include Enumerable
  #   duration - duration of the sound
  #   attack - attack time (in ms), or time between the start of the sound
  #     and the time where the sound reaches its maximum volume.
- #     If this value is less than 0, the sound will decay from silence to 
+ #     If this value is less than 0, the sound will decay from silence to
  #     the sustain volume instead (see below).
  #   decay - decay time (in ms), or time after the attack phase until
  #     the time where the sound reaches its sustain volume
  #   sustain - sustain volume, or normal volume of sound (0-100)
- #   release - release time (in ms), or amount of time to fade out the 
- #     sound when it reaches its end. The sound's duration includes its 
+ #   release - release time (in ms), or amount of time to fade out the
+ #     sound when it reaches its end. The sound's duration includes its
  #     release time.
   def self.attackDecayRelease(duration,attack,decay,sustain,release)
     env=self.new
@@ -396,7 +396,7 @@ class SoundEnvelope; include Enumerable
     return self.new.addValueChanges(
        value,onDuration,0,offDuration).repeat(totalDuration)
   end
-    
+
   def change(delta,volume)
     return self if delta<0
     velength=@e.length
@@ -528,7 +528,7 @@ class SoundEnvelopeIterator# :nodoc:
   def getValue(frame)
     value=0
     if @envIndex==@env.length
-      value=@env[@envIndex-1][1] 
+      value=@env[@envIndex-1][1]
     elsif @envIndex==0
       value=@env[@envIndex][1]
     else
@@ -539,7 +539,7 @@ class SoundEnvelopeIterator# :nodoc:
         thisVolume=@env[@envIndex][1]
         value=(thisVolume-lastVolume)*(frame-lastPos)/(thisPos-lastPos)+lastVolume
      else
-        value=@env[@envIndex][1] 
+        value=@env[@envIndex][1]
       end
     end
     while @envIndex+1<=@env.length && @env[@envIndex][0]==frame.to_i
@@ -652,7 +652,7 @@ class WaveForm# :nodoc:
     @exactCounter+=@step
     while @exactCounter>1.0; @exactCounter-=1.0; end
   end
-  
+
   def mixSamples(other)
     for i in 0...other.sampleCount
       newSamp=((@samples[i]-0x80)+(other.samples[i]-0x80))/2+0x80
@@ -806,7 +806,7 @@ module Audio
        timbre1,timbre2,@@sineProc2,@@sineProc2,async)
   end
 
-  @@noiseProc2 = proc { |i,timbre| 
+  @@noiseProc2 = proc { |i,timbre|
     n = (rand(256)/255.0)*0.1
     next (rand(2)==0) ? 1-n : -1+n
   }
@@ -1293,7 +1293,7 @@ end
 ###############################
 
 begin
-  MciSendString  = Win32API.new('winmm','mciSendString','%w(p,p,l,l)','l') 
+  MciSendString  = Win32API.new('winmm','mciSendString','%w(p,p,l,l)','l')
   MciErrorString = Win32API.new('winmm','mciGetErrorString','%w(l,p,l)','l')
 rescue
   MciSendString  = nil

@@ -538,7 +538,7 @@ class PokemonBoxPartySprite < SpriteWrapper
     pbDrawTextPositions(self.bitmap,[
        [_INTL("Back"),86,242,2,Color.new(248,248,248),Color.new(80,80,80),1]
     ])
-    
+
     xvalues = [18,90,18,90,18,90]
     yvalues = [2,18,66,82,130,146]
     for j in 0...6
@@ -632,7 +632,7 @@ class PokemonStorageScene
   end
 
   def pbCloseBox
-    pbFadeOutAndHide(@sprites)  
+    pbFadeOutAndHide(@sprites)
     pbDisposeSpriteHash(@sprites)
     @markingbitmap.dispose if @markingbitmap
     @boxviewport.dispose
@@ -868,11 +868,11 @@ class PokemonStorageScene
         @selection = selection
         if selection>=0
           return [@storage.currentBox,selection]
-        elsif selection==-1   # Box name 
+        elsif selection==-1   # Box name
           return [-4,-1]
-        elsif selection==-2   # Party Pokémon 
+        elsif selection==-2   # Party Pokémon
           return [-2,-1]
-        elsif selection==-3   # Close Box 
+        elsif selection==-3   # Close Box
           return [-3,-1]
         end
       end
@@ -947,7 +947,7 @@ class PokemonStorageScene
         if selection>=0 && selection<6
           @selection = selection
           return selection
-        elsif selection==6   # Close Box 
+        elsif selection==6   # Close Box
           @selection = selection
           return (depositing) ? -3 : -1
         end
@@ -1365,7 +1365,7 @@ class PokemonStorageScene
     @sprites["boxparty"] = PokemonBoxPartySprite.new(@storage.party,@boxsidesviewport)
     @sprites["boxparty"].y = oldPartyY
   end
-  
+
   def drawMarkings(bitmap,x,y,width,height,markings)
     markrect = Rect.new(0,0,16,16)
     for i in 0...8
@@ -1692,7 +1692,7 @@ class PokemonStorageScreen
     index = selected[1]
     if box!=-1
       raise _INTL("Can't deposit from box...")
-    end   
+    end
     if pbAbleCount<=1 && pbAble?(@storage[box,index]) && !heldpoke
       pbPlayBuzzerSE
       pbDisplay(_INTL("That's your last Pokémon!"))
@@ -1740,7 +1740,7 @@ class PokemonStorageScreen
     end
     @scene.pbHold(selected)
     @heldpkmn = @storage[box,index]
-    @storage.pbDelete(box,index) 
+    @storage.pbDelete(box,index)
     @scene.pbRefresh
   end
 

@@ -114,7 +114,7 @@ def pbCompileConnections
     record.push(csvInt!(thisline,lineno))
     record.push(csvInt!(thisline,lineno))
     record.push(csvEnumFieldOrInt!(thisline,hashenum,"",sprintf("(line %d)",lineno)))
-    record.push(csvInt!(thisline,lineno))          
+    record.push(csvInt!(thisline,lineno))
     if !pbRgssExists?(sprintf("Data/Map%03d.rxdata",record[0])) &&
        !pbRgssExists?(sprintf("Data/Map%03d.rvdata",record[0]))
       print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\r\n{2}",record[0],FileLineData.linereport)
@@ -173,22 +173,22 @@ def pbCompilePhoneData
         database.generics=section
         sections.concat(section)
       when "<BattleRequests>"
-        database.battleRequests=section 
+        database.battleRequests=section
         sections.concat(section)
       when "<GreetingsMorning>"
-        database.greetingsMorning=section 
+        database.greetingsMorning=section
         sections.concat(section)
       when "<GreetingsEvening>"
-        database.greetingsEvening=section 
+        database.greetingsEvening=section
         sections.concat(section)
       when "<Greetings>"
         database.greetings=section
         sections.concat(section)
       when "<Bodies1>"
-        database.bodies1=section 
+        database.bodies1=section
         sections.concat(section)
       when "<Bodies2>"
-        database.bodies2=section 
+        database.bodies2=section
         sections.concat(section)
       end
     }
@@ -496,7 +496,7 @@ class ItemList
   def initialize; @list = []; end
   def length; @list.length; end
   def []=(x,v); @list[x] = v; end
- 
+
   def [](x)
     if !@list[x]
       defrecord = SerialRecord.new
@@ -1462,7 +1462,7 @@ def pbCompileTrainers
       case settingname
       when "Pokemon"
         if record[1]>mLevel
-          raise _INTL("Bad level: {1} (must be 1-{2})\r\n{3}",record[1],mLevel,FileLineData.linereport) 
+          raise _INTL("Bad level: {1} (must be 1-{2})\r\n{3}",record[1],mLevel,FileLineData.linereport)
         end
       when "Moves"
         record = [record] if record.is_a?(Integer)
@@ -1566,7 +1566,7 @@ def pbCompileTrainers
           case i
           when TPLEVEL
             if record[i]>mLevel
-              raise _INTL("Bad level: {1} (must be 1-{2})\r\n{3}",record[i],mLevel,FileLineData.linereport) 
+              raise _INTL("Bad level: {1} (must be 1-{2})\r\n{3}",record[i],mLevel,FileLineData.linereport)
             end
           when TPABILITY+3
             if record[i]>5
@@ -1641,9 +1641,9 @@ def pbCompileBTTrainers(filename)
           schema = requiredtypes[key]
           next if !schema
           record = pbGetCsvRecord(section[key],0,schema)
-          rsection[schema[0]] = record  
+          rsection[schema[0]] = record
         end
-        trainernames.push(rsection[1]) 
+        trainernames.push(rsection[1])
         beginspeech.push(rsection[2])
         endspeechwin.push(rsection[3])
         endspeechlose.push(rsection[4])
@@ -1690,7 +1690,7 @@ def pbCompileTrainerLists
         next if key=="Challenges" && name=="DefaultTrainerList"
         next if !schema
         record = pbGetCsvRecord(section[key],0,schema)
-        rsection[schema[0]] = record  
+        rsection[schema[0]] = record
       end
       if !rsection[0]
         raise _INTL("No trainer data file given in section {1}\r\n{2}",name,FileLineData.linereport)

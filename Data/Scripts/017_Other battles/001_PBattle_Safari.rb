@@ -78,7 +78,7 @@ Events.onStepTakenTransferPossible += proc { |sender,e|
   if pbInSafari? && pbSafariState.decision==0 && SAFARI_STEPS>0
     pbSafariState.steps -= 1
     if pbSafariState.steps<=0
-      pbMessage(_INTL("PA:  Ding-dong!\1")) 
+      pbMessage(_INTL("PA:  Ding-dong!\1"))
       pbMessage(_INTL("PA:  Your safari game is over!"))
       pbSafariState.decision = 1
       pbSafariState.pbGoToStart
@@ -110,7 +110,7 @@ def pbSafariBattle(species,level)
   pbPrepareBattle(battle)
   # Perform the battle itself
   decision = 0
-  pbBattleAnimation(pbGetWildBattleBGM(foeParty),0,foeParty) { 
+  pbBattleAnimation(pbGetWildBattleBGM(foeParty),0,foeParty) {
     pbSceneStandby {
       decision = battle.pbStartBattle
     }
@@ -120,7 +120,7 @@ def pbSafariBattle(species,level)
   pbSafariState.ballcount = battle.ballCount
   if pbSafariState.ballcount<=0
     if decision!=2   # Last Safari Ball was used to catch the wild Pokémon
-      pbMessage(_INTL("Announcer: You're out of Safari Balls! Game over!")) 
+      pbMessage(_INTL("Announcer: You're out of Safari Balls! Game over!"))
     end
     pbSafariState.decision = 1
     pbSafariState.pbGoToStart

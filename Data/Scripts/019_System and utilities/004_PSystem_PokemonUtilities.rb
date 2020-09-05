@@ -253,7 +253,7 @@ def pbChoosePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneligible=fa
     scene = PokemonParty_Scene.new
     screen = PokemonPartyScreen.new(scene,$Trainer.party)
     if ableProc
-      chosen=screen.pbChooseAblePokemon(ableProc,allowIneligible)      
+      chosen=screen.pbChooseAblePokemon(ableProc,allowIneligible)
     else
       screen.pbStartScene(_INTL("Choose a Pokémon."),false)
       chosen = screen.pbChoosePokemon
@@ -283,7 +283,7 @@ def pbChooseTradablePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneli
     scene = PokemonParty_Scene.new
     screen = PokemonPartyScreen.new(scene,$Trainer.party)
     if ableProc
-      chosen=screen.pbChooseTradablePokemon(ableProc,allowIneligible)      
+      chosen=screen.pbChooseTradablePokemon(ableProc,allowIneligible)
     else
       screen.pbStartScene(_INTL("Choose a Pokémon."),false)
       chosen = screen.pbChoosePokemon

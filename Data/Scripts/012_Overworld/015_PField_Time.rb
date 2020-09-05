@@ -27,7 +27,7 @@ module PBDayNight
     Tone.new(  0,   0,   0,  0),   # Day/afternoon
     Tone.new(  0,   0,   0,  0),   # Day/afternoon
     Tone.new(  0,   0,   0,  0),   # Day/afternoon
-    Tone.new( -5, -30, -20,  0),   # Day/evening     # 6PM 
+    Tone.new( -5, -30, -20,  0),   # Day/evening     # 6PM
     Tone.new(-15, -60, -10, 20),   # Day/evening
     Tone.new(-15, -60, -10, 20),   # Day/evening
     Tone.new(-40, -75,   5, 40),   # Night
@@ -121,8 +121,8 @@ def pbDayNightTint(object)
     tone = PBDayNight.getTone
     object.tone.set(tone.red,tone.green,tone.blue,tone.gray)
   else
-    object.tone.set(0,0,0,0)  
-  end  
+    object.tone.set(0,0,0,0)
+  end
 end
 
 
@@ -172,7 +172,7 @@ def zodiac(month,day)
      5,21,6,20,   # Gemini
      6,21,7,20,   # Cancer
      7,23,8,22,   # Leo
-     8,23,9,22,   # Virgo 
+     8,23,9,22,   # Virgo
      9,23,10,22,  # Libra
      10,23,11,21, # Scorpio
      11,22,12,21, # Sagittarius
@@ -186,7 +186,7 @@ def zodiac(month,day)
   end
   return 0
 end
- 
+
 # Returns the opposite of the given zodiac sign.
 # 0 is Aries, 11 is Pisces.
 def zodiacOpposite(sign)
@@ -214,14 +214,14 @@ def pbIsWeekday(wdayVariable,*arg)
     ret = true if wd==wday
   end
   if wdayVariable>0
-    $game_variables[wdayVariable] = [ 
+    $game_variables[wdayVariable] = [
        _INTL("Sunday"),
        _INTL("Monday"),
        _INTL("Tuesday"),
        _INTL("Wednesday"),
        _INTL("Thursday"),
        _INTL("Friday"),
-       _INTL("Saturday")][wday] 
+       _INTL("Saturday")][wday]
     $game_map.need_refresh = true if $game_map
   end
   return ret
@@ -289,11 +289,11 @@ def pbIsSeason(seasonVariable,*arg)
     ret = true if wd==thisseason
   end
   if seasonVariable>0
-    $game_variables[seasonVariable] = [ 
+    $game_variables[seasonVariable] = [
        _INTL("Spring"),
        _INTL("Summer"),
        _INTL("Autumn"),
-       _INTL("Winter")][thisseason] 
+       _INTL("Winter")][thisseason]
     $game_map.need_refresh = true if $game_map
   end
   return ret

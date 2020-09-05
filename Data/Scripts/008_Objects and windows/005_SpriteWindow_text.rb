@@ -1,5 +1,5 @@
 #===============================================================================
-# 
+#
 #===============================================================================
 class SpriteWindowCursorRect < Rect
   def initialize(window)
@@ -95,7 +95,7 @@ class SpriteWindow < Window
 
   # Flags used to preserve compatibility
   # with RGSS/RGSS2's version of Window
-  module CompatBits 
+  module CompatBits
     CorrectZ         = 1
     ExpandBack       = 2
     ShowScrollArrows = 4
@@ -437,7 +437,7 @@ class SpriteWindow < Window
 
   def skinformat=(value)
     if @skinformat!=value
-      @skinformat=value  
+      @skinformat=value
       privRefresh(true)
     end
   end
@@ -573,9 +573,9 @@ class SpriteWindow < Window
       hascontents=(@contents && !@contents.disposed?)
       @sprites["back"].visible=@visible
       @sprites["contents"].visible=@visible && @openness==255
-      @sprites["pause"].visible=supported && @visible && @pause && 
+      @sprites["pause"].visible=supported && @visible && @pause &&
          (@combat & CompatBits::ShowPause)
-      @sprites["cursor"].visible=supported && @visible && @openness==255 && 
+      @sprites["cursor"].visible=supported && @visible && @openness==255 &&
          (@combat & CompatBits::ShowCursor)
       @sprites["scroll0"].visible = false
       @sprites["scroll1"].visible = false
@@ -698,7 +698,7 @@ class SpriteWindow < Window
     @sprites["contents"].y=@y+trimStartY
     if (@compat & CompatBits::ShowScrollArrows)>0 && @skinformat==0
       # Compatibility mode: Make scroll arrows visible
-      if @skinformat==0 && @_windowskin && !@_windowskin.disposed? && 
+      if @skinformat==0 && @_windowskin && !@_windowskin.disposed? &&
          @contents && !@contents.disposed?
         @sprites["scroll0"].visible = @visible && hascontents && @oy > 0
         @sprites["scroll1"].visible = @visible && hascontents && @ox > 0
@@ -887,7 +887,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class SpriteWindow_Base < SpriteWindow
   TEXTPADDING=4   # In pixels
@@ -970,7 +970,7 @@ class SpriteWindow_Base < SpriteWindow
         @sysframe=AnimatedBitmap.new(@curframe)
         @resolvedFrame=nil
         __setWindowskin(@sysframe.bitmap)
-        __resolveSystemFrame()   
+        __resolveSystemFrame()
       end
       begin
         refresh
@@ -1000,7 +1000,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 # Represents a window with no formatting capabilities.  Its text color can be set,
 # though, and line breaks are supported, but the text is generally unformatted.
@@ -1110,7 +1110,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class Window_AdvancedTextPokemon < SpriteWindow_Base
   attr_reader   :text
@@ -1386,7 +1386,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     return 0 if @lastDrawnChar<0
     return @numtextchars if @lastDrawnChar>=@fmtchars.length
     # index after the last character's index
-    return @fmtchars[@lastDrawnChar][14]+1 
+    return @fmtchars[@lastDrawnChar][14]+1
   end
 
   def maxPosition
@@ -1590,7 +1590,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
       refresh if !@frameskipChanged
       updateInternal
       # following line needed to allow "textspeed=-999" to work seamlessly
-      refresh if @frameskipChanged 
+      refresh if @frameskipChanged
     end
     @frameskipChanged = false
   end
@@ -1611,7 +1611,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class Window_InputNumberPokemon < SpriteWindow_Base
   attr_reader :number
@@ -1724,7 +1724,7 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     self.contents.font.color=@shadowColor
     pbDrawShadow(self.contents,x+(12-textwidth/2),y, textwidth+4, 32, text)
     self.contents.font.color=@baseColor
-    self.contents.draw_text(x+(12-textwidth/2),y, textwidth+4, 32, text)    
+    self.contents.draw_text(x+(12-textwidth/2),y, textwidth+4, 32, text)
     if @index==i && @active && @frame/15==0
       colors=getDefaultTextColors(self.windowskin)
       self.contents.fill_rect(x+(12-textwidth/2),y+30,textwidth,2,colors[0])
@@ -1735,7 +1735,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class SpriteWindow_Selectable < SpriteWindow_Base
   attr_reader :index
@@ -1942,7 +1942,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
 #      self.top_row = row - (self.page_row_max - 1)
 #      dorefresh=true
 #    end
-#    if oldindex-self.top_item>=((self.page_item_max - 1)/2) 
+#    if oldindex-self.top_item>=((self.page_item_max - 1)/2)
 #      self.top_row+=1
 #    end
 #    self.top_row = [self.top_row, self.row_max - self.page_row_max].min
@@ -1966,7 +1966,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 module UpDownArrowMixin
   def initUpDownArrow
@@ -1997,7 +1997,7 @@ module UpDownArrowMixin
     @uparrow.color   = value
     @downarrow.color = value
   end
-  
+
   def adjustForZoom(sprite)
     sprite.zoom_x = self.zoom_x
     sprite.zoom_y = self.zoom_y
@@ -2029,7 +2029,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class SpriteWindow_SelectableEx < SpriteWindow_Selectable
   include UpDownArrowMixin
@@ -2043,7 +2043,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class Window_DrawableCommand < SpriteWindow_SelectableEx
   attr_reader :baseColor
@@ -2149,7 +2149,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class Window_CommandPokemon < Window_DrawableCommand
   attr_reader :commands
@@ -2198,7 +2198,7 @@ class Window_CommandPokemon < Window_DrawableCommand
 
   def commands=(value)
     @commands=value
-    @item_max=commands.length  
+    @item_max=commands.length
     self.update_cursor_rect
     self.refresh
   end
@@ -2241,14 +2241,14 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class Window_CommandPokemonEx < Window_CommandPokemon
 end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class Window_AdvancedCommandPokemon < Window_DrawableCommand
   attr_reader :commands
@@ -2363,7 +2363,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class Window_AdvancedCommandPokemonEx < Window_AdvancedCommandPokemon
 end

@@ -476,7 +476,7 @@ class VoltorbFlip
     end
   end
 
-  def pbUpdateCoins    
+  def pbUpdateCoins
     # Update coins display
     @sprites["totalCoins"].bitmap.clear
     pbCreateCoins($PokemonGlobal.coins,44)

@@ -75,10 +75,10 @@ def pbNewEncounterType(enc)
       if i==0
         dogen = true unless enc[1][EncounterTypes::Cave]
       elsif i==1
-        dogen = true unless enc[1][EncounterTypes::Land] || 
-                            enc[1][EncounterTypes::LandMorning] || 
-                            enc[1][EncounterTypes::LandDay] || 
-                            enc[1][EncounterTypes::LandNight] || 
+        dogen = true unless enc[1][EncounterTypes::Land] ||
+                            enc[1][EncounterTypes::LandMorning] ||
+                            enc[1][EncounterTypes::LandDay] ||
+                            enc[1][EncounterTypes::LandNight] ||
                             enc[1][EncounterTypes::BugContest]
       else
         dogen = true
@@ -140,7 +140,7 @@ def pbEditEncounterType(enc,etype)
     params.setRange(minlevel,mLevel)
     params.setDefaultValue(minlevel)
     maxlevel = pbMessageChooseNumber(_INTL("Set the maximum level."),params)
-    enctype[ret][1] = minlevel  
+    enctype[ret][1] = minlevel
     enctype[ret][2] = maxlevel
   end
   cmdwin.dispose
@@ -435,14 +435,14 @@ def pbTrainerBattleEditor
           trainertype = pbTrainerTypeEditorNew(nil)
           next if trainertype<0
         else
-          next 
+          next
         end
         trainername = pbMessageFreeText(_INTL("Now enter the trainer's name."),"",false,32)
         next if trainername==""
         trainerparty = pbGetFreeTrainerParty(trainertype,trainername)
         if trainerparty<0
           pbMessage(_INTL("There is no room to create a trainer of that type and name."))
-          next 
+          next
         end
         t = pbNewTrainer(trainertype,trainername,trainerparty,false)
         trainers.push(t) if t
@@ -565,7 +565,7 @@ def pbMetadataScreen(defaultMapId=nil)
     map = pbListScreen(_INTL("SET METADATA"),MapLister.new(map,true))
     break if map<0
     mapname = (map==0) ? _INTL("Global Metadata") : mapinfos[map].name
-    data = [] 
+    data = []
     properties = (map==0) ? MapScreenScene::GLOBALMETADATA : MapScreenScene::LOCALMAPS
     for i in 0...properties.length
       data.push((metadata[map]) ? metadata[map][i+1] : nil)
@@ -908,7 +908,7 @@ def pbPokemonEditor
             regionallist.push(regionalDexes[i][selection])
           end
           numb = regionallist.size-1
-          while numb>=0   # Remove every 0 at end of array 
+          while numb>=0   # Remove every 0 at end of array
             (regionallist[numb]==0) ? regionallist.pop : break
             numb -= 1
           end

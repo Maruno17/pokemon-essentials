@@ -347,7 +347,7 @@ PLANT_SPARKLE_ANIMATION_ID   = 7
 #      message file in the Data folder. Edit only if you have 2 or more
 #      languages to choose from.
 #===============================================================================
-LANGUAGES = [  
+LANGUAGES = [
 #  ["English","english.dat"],
 #  ["Deutsch","deutsch.dat"]
 ]

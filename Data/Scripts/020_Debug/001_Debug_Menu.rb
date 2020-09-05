@@ -93,7 +93,7 @@ def pbDebugMenuCommands(showall=true)
        _INTL("Shadow Pokémon. Choose a Pokémon to show to the Relic Stone for purification."))
     commands.add("fieldmenu","purifychamber",_INTL("Use Purify Chamber"),
        _INTL("Shadow Pokémon. Open the Purify Chamber for purification."))
-  
+
     commands.add("main","battlemenu",_INTL("Battle options..."),
        _INTL("Start battles, reset this map's trainers, ready rematches, edit roamers, etc."))
     commands.add("battlemenu","testwildbattle",_INTL("Test Wild Battle"),
@@ -112,7 +112,7 @@ def pbDebugMenuCommands(showall=true)
        _INTL("Make all trainers in the phone ready for rematches."))
     commands.add("battlemenu","roamers",_INTL("Roaming Pokémon"),
        _INTL("Toggle and edit all roaming Pokémon."))
-  
+
     commands.add("main","itemsmenu",_INTL("Item options..."),
        _INTL("Give and take items."))
     commands.add("itemsmenu","additem",_INTL("Add Item"),
@@ -121,7 +121,7 @@ def pbDebugMenuCommands(showall=true)
        _INTL("Add a certain number of every item to the Bag."))
     commands.add("itemsmenu","emptybag",_INTL("Empty Bag"),
        _INTL("Remove all items from the Bag."))
-  
+
     commands.add("main","pokemonmenu",_INTL("Pokémon options..."),
        _INTL("Give Pokémon, heal party, fill/empty PC storage, etc."))
     commands.add("pokemonmenu","addpokemon",_INTL("Add Pokémon"),
@@ -138,7 +138,7 @@ def pbDebugMenuCommands(showall=true)
        _INTL("Remove all Pokémon in storage."))
     commands.add("pokemonmenu","openstorage",_INTL("Access Pokémon Storage"),
        _INTL("Opens the Pokémon storage boxes in Organize Boxes mode."))
-  
+
     commands.add("main","playermenu",_INTL("Player options..."),
        _INTL("Set money, badges, Pokédexes, player's appearance and name, etc."))
     commands.add("playermenu","setbadges",_INTL("Set Badges"),
@@ -195,7 +195,7 @@ def pbDebugMenuCommands(showall=true)
      _INTL("Import all battle animations from the \"Animations\" folder."))
   commands.add("editorsmenu","exportanims",_INTL("Export All Battle Animations"),
      _INTL("Export all battle animations individually to the \"Animations\" folder."))
-  
+
   commands.add("main","othermenu",_INTL("Other options..."),
      _INTL("Mystery Gifts, translations, compile data, etc."))
   commands.add("othermenu","mysterygift",_INTL("Manage Mystery Gifts"),
@@ -711,7 +711,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
     trname = pbEnterPlayerName("Your name?",0,MAX_PLAYER_NAME_SIZE,$Trainer.name)
     if trname=="" && pbConfirmMessage(_INTL("Give yourself a default name?"))
       trainertype = pbGetPlayerTrainerType
-      gender      = pbGetTrainerTypeGender(trainertype) 
+      gender      = pbGetTrainerTypeGender(trainertype)
       trname      = pbSuggestTrainerName(gender)
     end
     if trname==""

@@ -907,7 +907,7 @@ end
 #===============================================================================
 def pbChooseItem(var=0,*args)
   ret = 0
-  pbFadeOutIn { 
+  pbFadeOutIn {
     scene = PokemonBag_Scene.new
     screen = PokemonBagScreen.new(scene,$PokemonBag)
     ret = screen.pbChooseItemScreen

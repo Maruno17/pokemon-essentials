@@ -59,7 +59,7 @@ def pbDayCareDeposit(index)
     $PokemonGlobal.daycareEggSteps = 0
     return
   end
-  raise _INTL("No room to deposit a Pokémon") 
+  raise _INTL("No room to deposit a Pokémon")
 end
 
 def pbDayCareWithdraw(index)
@@ -72,7 +72,7 @@ def pbDayCareWithdraw(index)
     $PokemonGlobal.daycare[index][0] = nil
     $PokemonGlobal.daycare[index][1] = 0
     $PokemonGlobal.daycareEgg = 0
-  end  
+  end
 end
 
 def pbDayCareChoose(text,variable)
@@ -239,7 +239,7 @@ def pbDayCareGenerateEgg
   end
   # Inheriting Moves
   moves = []
-  othermoves = [] 
+  othermoves = []
   movefather = father; movemother = mother
   if pbIsDitto?(movefather) && !mother.female?
     movefather = mother; movemother = father
@@ -280,13 +280,13 @@ def pbDayCareGenerateEgg
   end
   # Volt Tackle
   lightball = false
-  if (isConst?(father.species,PBSpecies,:PIKACHU) || 
-      isConst?(father.species,PBSpecies,:RAICHU)) && 
+  if (isConst?(father.species,PBSpecies,:PIKACHU) ||
+      isConst?(father.species,PBSpecies,:RAICHU)) &&
       isConst?(father.item,PBItems,:LIGHTBALL)
     lightball = true
   end
-  if (isConst?(mother.species,PBSpecies,:PIKACHU) || 
-      isConst?(mother.species,PBSpecies,:RAICHU)) && 
+  if (isConst?(mother.species,PBSpecies,:PIKACHU) ||
+      isConst?(mother.species,PBSpecies,:RAICHU)) &&
       isConst?(mother.item,PBItems,:LIGHTBALL)
     lightball = true
   end
@@ -304,7 +304,7 @@ def pbDayCareGenerateEgg
   for i in listend...listend+4
     moveid = (i>=moves.length) ? 0 : moves[i]
     finalmoves[finalmoves.length] = PBMove.new(moveid)
-  end 
+  end
   # Inheriting Individual Values
   ivs = []
   for i in 0...6

@@ -2,7 +2,7 @@
 # ** Game_System
 #------------------------------------------------------------------------------
 #  This class handles data surrounding the system. Backround music, etc.
-#  is managed here as well. Refer to "$game_system" for the instance of 
+#  is managed here as well. Refer to "$game_system" for the instance of
 #  this class.
 #==============================================================================
 
@@ -47,7 +47,7 @@ class Game_System
 
 ################################################################################
 
-  def bgm_play(bgm) 
+  def bgm_play(bgm)
     bgm_play_internal(bgm,0)
   end
 
@@ -226,7 +226,7 @@ class Game_System
   end
 
   def getPlayingBGS
-    return (@playing_bgs) ? @playing_bgs.clone : nil 
+    return (@playing_bgs) ? @playing_bgs.clone : nil
   end
 
 ################################################################################

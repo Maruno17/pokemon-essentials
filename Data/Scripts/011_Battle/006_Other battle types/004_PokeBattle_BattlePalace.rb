@@ -1,5 +1,5 @@
 #===============================================================================
-# 
+#
 #===============================================================================
 class PokeBattle_BattlePalace < PokeBattle_Battle
   @@BattlePalaceUsualTable = [
@@ -17,15 +17,15 @@ class PokeBattle_BattlePalace < PokeBattle_Battle
     58, 37,  5,
     34, 11, 55,
     35,  5, 60,
-    56, 22, 22, 
-    35, 45, 20,  
-    44, 50,  6, 
-    56, 22, 22,  
-    30, 58, 12,   
-    30, 13, 57, 
-    40, 50, 10,  
-    18, 70, 12,  
-    88,  6,  6, 
+    56, 22, 22,
+    35, 45, 20,
+    44, 50,  6,
+    56, 22, 22,
+    30, 58, 12,
+    30, 13, 57,
+    40, 50, 10,
+    18, 70, 12,
+    88,  6,  6,
     42, 50,  8,
     56, 22, 22
   ]
@@ -34,24 +34,24 @@ class PokeBattle_BattlePalace < PokeBattle_Battle
     84,  8,  8,
     32, 60,  8,
     70, 15, 15,
-    70, 22,  8,  
+    70, 22,  8,
     32, 58, 10,
     56, 22, 22,
     75, 15, 10,
     28, 55, 17,
-    29,  6, 65, 
-    30, 20, 50,  
-    88,  6,  6,  
-    29, 11, 60,  
-    35, 60,  5,  
-    56, 22, 22, 
-    34, 60,  6, 
+    29,  6, 65,
+    30, 20, 50,
+    88,  6,  6,
+    29, 11, 60,
+    35, 60,  5,
+    56, 22, 22,
+    34, 60,  6,
     34,  6, 60,
-    56, 22, 22,  
+    56, 22, 22,
     30, 58, 12,
     27,  6, 67,
     25, 62, 13,
-    90,  5,  5,  
+    90,  5,  5,
     22, 20, 58,
     42,  5, 53,
     56, 22, 22
@@ -80,7 +80,7 @@ class PokeBattle_BattlePalace < PokeBattle_Battle
     thismove = thispkmn.moves[idxMove]
     return false if !thismove || thismove.id==0
     return false if thismove.pp<=0
-    if thispkmn.effects[PBEffects::ChoiceBand]>=0 && 
+    if thispkmn.effects[PBEffects::ChoiceBand]>=0 &&
        thismove.id!=thispkmn.effects[PBEffects::ChoiceBand] &&
        thispkmn.hasActiveItem?(:CHOICEBAND)
       return false
@@ -94,11 +94,11 @@ class PokeBattle_BattlePalace < PokeBattle_Battle
 
   def pbPinchChange(idxPokemon)
     thispkmn = @battlers[idxPokemon]
-    if !thispkmn.effects[PBEffects::Pinch] && thispkmn.status!=PBStatuses::SLEEP && 
+    if !thispkmn.effects[PBEffects::Pinch] && thispkmn.status!=PBStatuses::SLEEP &&
        thispkmn.hp<=thispkmn.totalhp/2
       nature = thispkmn.nature
       thispkmn.effects[PBEffects::Pinch] = true
-      if nature==PBNatures::QUIET || 
+      if nature==PBNatures::QUIET ||
          nature==PBNatures::BASHFUL ||
          nature==PBNatures::NAIVE ||
          nature==PBNatures::QUIRKY ||
@@ -198,7 +198,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class PokeBattle_AI
   attr_accessor :battlePalace
@@ -242,7 +242,7 @@ class PokeBattle_AI
         factor = (maxpercent<hppercent) ? 20 : 40
       end
       if hppercent<25
-        factor = (maxpercent<hppercent) ? 30 : 50   
+        factor = (maxpercent<hppercent) ? 30 : 50
       end
       case thispkmn.status
       when PBStatuses::SLEEP, PBStatuses::FROZEN

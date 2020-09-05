@@ -320,7 +320,7 @@ def pbUseKeyItem
     $game_temp.in_menu = true
     $game_map.update
     sscene = PokemonReadyMenu_Scene.new
-    sscreen = PokemonReadyMenu.new(sscene) 
+    sscreen = PokemonReadyMenu.new(sscene)
     sscreen.pbStartReadyMenu(realmoves,realitems)
     $game_temp.in_menu = false
   end

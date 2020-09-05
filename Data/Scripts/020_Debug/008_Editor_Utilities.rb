@@ -313,7 +313,7 @@ def pbChooseMoveListForSpecies(species,defaultMoveID=0)
   for command in commands
     realcommands.push("#{command[1]}")
   end
-  ret = pbCommands2(cmdwin,realcommands,-1,moveDefault,true) 
+  ret = pbCommands2(cmdwin,realcommands,-1,moveDefault,true)
   cmdwin.dispose
   return (ret>=0) ? commands[ret][0] : 0
 end
@@ -374,7 +374,7 @@ def pbChooseBallList(defaultMoveID=-1)
   for i in commands
     realcommands.push(i[2])
   end
-  ret = pbCommands2(cmdwin,realcommands,-1,moveDefault,true) 
+  ret = pbCommands2(cmdwin,realcommands,-1,moveDefault,true)
   cmdwin.dispose
   return (ret>=0) ? commands[ret][0] : defaultMoveID
 end

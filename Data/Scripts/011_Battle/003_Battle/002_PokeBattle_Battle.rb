@@ -599,7 +599,7 @@ class PokeBattle_Battle
   end
 
   #=============================================================================
-  # 
+  #
   #=============================================================================
   # Returns the battler representing the Pokémon at index idxParty in its party,
   # on the same side as a battler with battler index of idxBattlerOther.
@@ -650,7 +650,7 @@ class PokeBattle_Battle
     return if @field.weather==newWeather
     @field.weather = newWeather
     duration = (fixedDuration) ? 5 : -1
-    if duration>0 && user && user.itemActive?    
+    if duration>0 && user && user.itemActive?
       duration = BattleHandlers.triggerWeatherExtenderItem(user.item,
          @field.weather,duration,user,self)
     end
@@ -708,7 +708,7 @@ class PokeBattle_Battle
     return if @field.terrain==newTerrain
     @field.terrain = newTerrain
     duration = (fixedDuration) ? 5 : -1
-    if duration>0 && user && user.itemActive?    
+    if duration>0 && user && user.itemActive?
       duration = BattleHandlers.triggerTerrainExtenderItem(user.item,
          newTerrain,duration,user,self)
     end

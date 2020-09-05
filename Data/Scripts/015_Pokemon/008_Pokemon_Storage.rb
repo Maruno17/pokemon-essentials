@@ -342,7 +342,7 @@ class RegionalStorage
   end
 
   def pbMoveCaughtToParty(pkmn)
-    getCurrentStorage.pbMoveCaughtToParty(pkmn) 
+    getCurrentStorage.pbMoveCaughtToParty(pkmn)
   end
 
   def pbMoveCaughtToBox(pkmn,box)
@@ -350,7 +350,7 @@ class RegionalStorage
   end
 
   def pbStoreCaught(pkmn)
-    getCurrentStorage.pbStoreCaught(pkmn) 
+    getCurrentStorage.pbStoreCaught(pkmn)
   end
 
   def pbDelete(box,index)
@@ -361,7 +361,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 def pbUnlockWallpaper(index)
   $PokemonStorage.unlockedWallpapers[index] = true

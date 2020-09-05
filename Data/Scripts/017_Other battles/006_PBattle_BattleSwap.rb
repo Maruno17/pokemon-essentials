@@ -54,7 +54,7 @@ class BattleSwapScene
     @sprites["help"].text=_INTL("Select Pokémon to swap.")
     @sprites["list"].commands=commands
     @sprites["list"].index=0
-    @mode=1  
+    @mode=1
   end
 
   # End the scene here

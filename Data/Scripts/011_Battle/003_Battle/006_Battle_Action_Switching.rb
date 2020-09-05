@@ -189,7 +189,7 @@ class PokeBattle_Battle
           switched.push(idxBattler)
         else   # Player's Pokémon has fainted in a wild battle
           switch = false
-          if !pbDisplayConfirm(_INTL("Use next Pokémon?")) 
+          if !pbDisplayConfirm(_INTL("Use next Pokémon?"))
             switch = (pbRun(idxBattler,true)<=0)
           else
             switch = true

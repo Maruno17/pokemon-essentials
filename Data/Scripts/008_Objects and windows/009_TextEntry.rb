@@ -1,5 +1,5 @@
 #===============================================================================
-# 
+#
 #===============================================================================
 class Window_CharacterEntry < Window_DrawableCommand
   XSIZE=13
@@ -67,12 +67,12 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class CharacterEntryHelper
   attr_reader :text
   attr_reader :maxlength
-  attr_reader :passwordChar 
+  attr_reader :passwordChar
   attr_accessor :cursor
 
   def initialize(text)
@@ -163,7 +163,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class Window_TextEntry < SpriteWindow_Base
   def initialize(text,x,y,width,height,heading=nil,usedarkercolor=false)
@@ -205,7 +205,7 @@ class Window_TextEntry < SpriteWindow_Base
   end
 
   def maxlength=(value)
-    @helper.maxlength=value 
+    @helper.maxlength=value
     self.refresh
   end
 
@@ -281,7 +281,7 @@ class Window_TextEntry < SpriteWindow_Base
     for i in startpos...scanlength
       c=(@helper.passwordChar!="") ? @helper.passwordChar : textscan[i]
       textwidth=bitmap.text_size(c).width
-      next if c=="\n"  
+      next if c=="\n"
       # Draw text
       pbDrawShadowText(bitmap,x,y, textwidth+4, 32, c,@baseColor,@shadowColor)
       # Draw cursor if necessary
@@ -300,7 +300,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 def getLineBrokenText(bitmap,value,width,dims)
   x=0
@@ -367,7 +367,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class Window_MultilineTextEntry < SpriteWindow_Base
   def initialize(text,x,y,width,height)
@@ -412,7 +412,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
   end
 
   def maxlength=(value)
-    @helper.maxlength=value 
+    @helper.maxlength=value
     @textchars=nil
     self.refresh
   end
@@ -728,7 +728,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
         thispos=textchars[i][6]
         thiscolumn=textchars[i][7]
         thislength=textchars[i][8]
-        if thisline==@cursorLine && @cursorColumn>=thiscolumn && 
+        if thisline==@cursorLine && @cursorColumn>=thiscolumn &&
            @cursorColumn<=thiscolumn+thislength
           cursorY=textchars[i][2]-startY
           cursorX=textchars[i][1]
@@ -751,7 +751,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class Window_TextEntry_Keyboard < Window_TextEntry
   def update
@@ -1021,14 +1021,14 @@ class PokemonEntryScene
           @sprites["entry2"].setOtherCharset(@@Characters[@symtype][1])
         else # Insert given character
           if @sprites["entry"].insert(@sprites["entry2"].character)
-            pbPlayDecisionSE() 
+            pbPlayDecisionSE()
           else
             pbPlayBuzzerSE()
           end
         end
         next
       end
-    end 
+    end
     Input.update
     return ret
   end
@@ -1141,7 +1141,7 @@ class PokemonEntryScene2
     end
 
     def update
-      updateInternal    
+      updateInternal
     end
 
     def dispose
@@ -1599,7 +1599,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 def pbEnterText(helptext,minlength,maxlength,initialText="",mode=0,pokemon=nil,nofadeout=false)
   ret=""

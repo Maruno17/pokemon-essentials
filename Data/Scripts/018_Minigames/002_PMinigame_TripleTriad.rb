@@ -501,7 +501,7 @@ class TriadScene
         end
       end
     end
-    return [boardX,boardY] 
+    return [boardX,boardY]
   end
 
   def pbEndPlaceCard(position, cardIndex)
@@ -752,7 +752,7 @@ class TriadScreen
       self.maxCards.times do
         randCard = @triadCards[rand(@triadCards.length)]
         pbSubtract(@triadCards,randCard[0])
-        cards.push(randCard[0]) 
+        cards.push(randCard[0])
       end
       @scene.pbShowPlayerCards(cards)
     else
@@ -825,7 +825,7 @@ class TriadScreen
         end
       else
         # Opponent's turn
-        @scene.pbDisplay(_INTL("{1} is making a move...",@opponentName))    
+        @scene.pbDisplay(_INTL("{1} is making a move...",@opponentName))
         scores = []
         for cardIndex in 0...opponentCards.length
           square = TriadSquare.new
@@ -1075,7 +1075,7 @@ def pbBuyTriads
     commands.push([price,speciesname,_INTL("{1} - ${2}",speciesname,visprice),i])
   end
   if commands.length==0
-    pbMessage(_INTL("There are no cards that you can buy.")) 
+    pbMessage(_INTL("There are no cards that you can buy."))
     return
   end
   commands.sort! { |a,b| a[1]<=>b[1] }   # name
