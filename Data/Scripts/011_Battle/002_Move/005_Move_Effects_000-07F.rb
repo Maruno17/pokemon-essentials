@@ -394,11 +394,11 @@ class PokeBattle_Move_018 < PokeBattle_Move
     user.pbCureStatus(false)
     case t
     when PBStatuses::BURN
-      @battle.pbDisplay(_INTL("{1} healed its burn!",user.pbThis))  
+      @battle.pbDisplay(_INTL("{1} healed its burn!",user.pbThis))
     when PBStatuses::POISON
-      @battle.pbDisplay(_INTL("{1} cured its poisoning!",user.pbThis))  
+      @battle.pbDisplay(_INTL("{1} cured its poisoning!",user.pbThis))
     when PBStatuses::PARALYSIS
-      @battle.pbDisplay(_INTL("{1} cured its paralysis!",user.pbThis))  
+      @battle.pbDisplay(_INTL("{1} cured its paralysis!",user.pbThis))
     end
   end
 end
@@ -1422,7 +1422,7 @@ class PokeBattle_Move_04E < PokeBattle_TargetStatDownMove
     super
     @statDown = [PBStats::SPATK,2]
   end
-  
+
   def pbFailsAgainstTarget?(user,target)
     return true if super
     return false if damagingMove?
@@ -1442,7 +1442,7 @@ class PokeBattle_Move_04E < PokeBattle_TargetStatDownMove
     end
     return false
   end
-  
+
   def pbAdditionalEffect(user,target)
     return if user.gender==2 || target.gender==2 || user.gender==target.gender
     return if target.hasActiveAbility?(:OBLIVIOUS) && !@battle.moldBreaker
@@ -1926,7 +1926,7 @@ class PokeBattle_Move_060 < PokeBattle_Move
   def pbEffectGeneral(user)
     user.pbChangeTypes(@newType)
     typeName = PBTypes.getName(@newType)
-    @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))  
+    @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))
   end
 end
 
@@ -2001,7 +2001,7 @@ class PokeBattle_Move_063 < PokeBattle_Move
     @abilityBlacklist = [
        :TRUANT,
        # This ability
-       :SIMPLEBEAM,
+       :SIMPLE,
        # Form-changing abilities
        :BATTLEBOND,
        :DISGUISE,
@@ -2430,7 +2430,7 @@ class PokeBattle_Move_068 < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     target.effects[PBEffects::GastroAcid] = true
     target.effects[PBEffects::Truant]     = false
-    @battle.pbDisplay(_INTL("{1}'s Ability was suppressed!",target.pbThis)) 
+    @battle.pbDisplay(_INTL("{1}'s Ability was suppressed!",target.pbThis))
     target.pbOnAbilityChanged(target.ability)
   end
 end
@@ -2570,7 +2570,7 @@ class PokeBattle_Move_070 < PokeBattle_FixedDamageMove
       @battle.pbHideAbilitySplash(target)
       return true
     end
-    if NEWEST_BATTLE_MECHANICS && 
+    if NEWEST_BATTLE_MECHANICS &&
        isConst?(target.damageState.typeMod,PBTypes,:ICE) && target.pbHasType?(:ICE)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
