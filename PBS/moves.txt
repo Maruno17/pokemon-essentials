@@ -693,3 +693,6 @@
 674,SOAK,Soak,061,0,WATER,Status,100,20,0,NearOther,0,bce,"The user shoots a torrent of water at the target and changes the target's type to Water."
 675,WATERSPORT,Water Sport,09E,0,WATER,Status,0,15,0,BothSides,0,,"The user soaks itself with water. The move weakens Fire-type moves while the user is in the battle."
 676,WITHDRAW,Withdraw,01D,0,WATER,Status,0,40,0,User,0,d,"The user withdraws its body into its hard shell, raising its Defense stat."
+677,APPLEACID,Apple Acid,046,80,GRASS,Special,100,10,0,00,0,bef,"The user attacks the target with an acidic liquid created from tart apples. This also lowers the target's Sp. Def stat."
+678,WICKEDBLOW,Wicked Blow,0A0,80,DARK,Physical,100,5,0,00,0,abef,"The user, having mastered the Dark style, strikes the target with a fierce blow. This attack always results in a critical hit."
+679,SURGINGSTRIKES,Surging Strikes,176,25,WATER,Physical,100,5,0,00,0,abef,"The user, having mastered the Water style, strikes the target with a flowing motion three times in a row. This attack always results in a critical hit."
