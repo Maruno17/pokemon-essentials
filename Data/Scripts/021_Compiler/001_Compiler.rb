@@ -61,9 +61,9 @@ def pbPrintException(e)
     errorlog = RTP.getSaveFileName("errorlog.txt")
   end
   File.open(errorlog,"ab") { |f| f.write(premessage); f.write(message) }
-  errorlogline = errorlog.sub(Dir.pwd + "\\", "")
-  errorlogline.sub!(Dir.pwd + "/", "")
-  errorlogline.sub!(pbGetUserName, "...")
+  errorlogline = errorlog.sub("/", "\\")
+  errorlogline.sub!(Dir.pwd + "\\", "")
+  errorlogline.sub!(pbGetUserName, "USERNAME")
   errorlogline = "\r\n" + errorlogline if errorlogline.length > 20
   errorlogline.gsub!("/", "\\")
   print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nPress Ctrl+C to copy this message to the clipboard.")
