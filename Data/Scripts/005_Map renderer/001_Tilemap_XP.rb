@@ -371,7 +371,7 @@ class CustomTilemap
 
   def addTile(tiles,count,xpos,ypos,id)
     terrain  = @terrain_tags[id]
-    priority = @priorities[id] || 0
+    priority = @priorities[id]
     if id>=384
       if count>=tiles.length
         sprite = CustomTilemapSprite.new(@viewport)
