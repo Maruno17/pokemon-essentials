@@ -2468,6 +2468,20 @@ BattleHandlers::AbilityOnSwitchIn.add(:UNNERVE,
   }
 )
 
+BattleHandlers::AbilityOnSwitchIn.add(:INTREPIDSWORD,
+  proc { |ability,battler,battle|
+    stat = PBStats::ATTACK
+    battler.pbRaiseStatStageByAbility(stat,1,battler)
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:DAUNTLESSSHIELD,
+  proc { |ability,battler,battle|
+    stat = PBStats::DEFENSE
+    battler.pbRaiseStatStageByAbility(stat,1,battler)
+  }
+)	
+	
 #===============================================================================
 # AbilityOnSwitchOut handlers
 #===============================================================================
@@ -2553,23 +2567,5 @@ BattleHandlers::AbilityOnBattlerFainting.add(:SOULHEART,
 BattleHandlers::RunFromBattleAbility.add(:RUNAWAY,
   proc { |ability,battler|
     next true
-  }
-)
-
-#===============================================================================
-# AbilityOnBattleStart handlers
-#===============================================================================
-
-BattleHandlers::AbilityOnSwitchIn.add(:INTREPIDSWORD,
-  proc { |ability,battler,battle|
-    stat = PBStats::ATTACK
-    battler.pbRaiseStatStageByAbility(stat,1,battler)
-  }
-)
-
-BattleHandlers::AbilityOnSwitchIn.add(:DAUNTLESSSHIELD,
-  proc { |ability,battler,battle|
-    stat = PBStats::DEFENSE
-    battler.pbRaiseStatStageByAbility(stat,1,battler)
   }
 )
