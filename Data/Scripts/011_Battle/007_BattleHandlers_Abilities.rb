@@ -656,7 +656,7 @@ BattleHandlers::MoveImmunityTargetAbility.add(:SOUNDPROOF,
     end
     battle.pbHideAbilitySplash(target)
     next true
-    
+
   }
 )
 
@@ -2239,7 +2239,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:FOREWARN,
         # Counter, Mirror Coat, Metal Burst
         power = 120 if ["071","072","073"].include?(moveData[MOVE_FUNCTION_CODE])
         # Sonic Boom, Dragon Rage, Night Shade, Endeavor, Psywave,
-        # Return, Frustration, Crush Grip, Gyro Ball, Hidden Power, 
+        # Return, Frustration, Crush Grip, Gyro Ball, Hidden Power,
         # Natural Gift, Trump Card, Flail, Grass Knot
         power = 80 if ["06A","06B","06D","06E","06F",
                        "089","08A","08C","08D","090",
