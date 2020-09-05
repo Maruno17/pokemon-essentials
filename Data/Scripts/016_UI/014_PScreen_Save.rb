@@ -24,6 +24,7 @@ def pbSave(safesave=false)
        Marshal.dump($PokemonMap,f)
        Marshal.dump($PokemonBag,f)
        Marshal.dump($PokemonStorage,f)
+       Marshal.dump(ESSENTIALS_VERSION,f)
     }
     Graphics.frame_reset
   rescue
