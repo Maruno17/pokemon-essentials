@@ -1,5 +1,5 @@
 #===============================================================================
-# 
+#
 #===============================================================================
 class CustomTilemapAutotiles
   attr_accessor :changed
@@ -28,7 +28,7 @@ end
 
 
 #===============================================================================
-# 
+#
 #===============================================================================
 class CustomTilemap
   attr_reader   :tileset
@@ -62,7 +62,7 @@ class CustomTilemap
   ]
   Animated_Autotiles_Frames = 5*Graphics.frame_rate/20   # Frequency of updating animated autotiles
   FlashOpacity = [100,90,80,70,80,90]
-  
+
   def initialize(viewport)
     @tileset             = nil    # Refers to Map Tileset Name
     @autotiles           = CustomTilemapAutotiles.new
@@ -371,7 +371,7 @@ class CustomTilemap
 
   def addTile(tiles,count,xpos,ypos,id)
     terrain  = @terrain_tags[id]
-    priority = @priorities[id]
+    priority = @priorities[id] || 0
     if id>=384
       if count>=tiles.length
         sprite = CustomTilemapSprite.new(@viewport)
@@ -567,7 +567,7 @@ class CustomTilemap
         @fullyrefreshedautos = true
       end
     else
-      @fullyrefreshedautos = true 
+      @fullyrefreshedautos = true
     end
   end
 
@@ -823,7 +823,7 @@ class CustomTilemap
         @layer0.visible = false if usesprites
       end
       if @fullyrefreshed
-        if !@priotilesrect || !@priotilesfast || 
+        if !@priotilesrect || !@priotilesfast ||
            @priotilesrect[0]!=minX ||
            @priotilesrect[1]!=minY ||
            @priotilesrect[2]!=maxX ||
@@ -843,7 +843,7 @@ class CustomTilemap
           count = addTile(@tiles,count,xpos,ypos,prio[3])
         end
       else
-        if !@priotilesrect || !@priotilesfast || 
+        if !@priotilesrect || !@priotilesfast ||
            @priotilesrect[0]!=minX ||
            @priotilesrect[1]!=minY ||
            @priotilesrect[2]!=maxX ||
