@@ -646,3 +646,10 @@
 631,NSOLARIZER,N-Solarizer,N-Solarizers,8,0,"A machine to fuse Necrozma, which needs light, and Solgaleo.",5,0,6,
 632,NLUNARIZER,N-Lunarizer,N-Lunarizers,8,0,"A machine to fuse Necrozma, which needs light, and Lunala.",5,0,6,
 633,MEGARING,Mega Ring,Mega Rings,8,0,"This ring contains an untold power that somehow enables Pokémon carrying Mega Stones to Mega Evolve.",0,0,6,
+634,SWEETAPPLE,Sweet Apple,Sweet Apples,1,2200,"A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally sweet.",1,0,0,
+635,TARTAPPLE,Sweet Apple,Sweet Apples,1,2200,"A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally tart.",1,0,0,
+636,CRACKEDPOT,Cracked Pot,Cracked Pot,1,1600,"A peculiar teapot that can make a certain species of Pokémon evolve. It may be cracked, but tea poured from it is delicious.",1,0,0,
+637,RUSTEDSWORD,Rusted Sword,Rusted Swords,1,0,"It is said that a hero used this sword to halt a terrible disaster in ancient times. But it's grown rusty and worn.",0,0,0,
+638,RUSTEDSHIELD,Rusted Shield,Rusted Shields,1,0,"It is said that a hero used this shield to halt a terrible disaster in ancient times. But it's grown rusty and worn.",0,0,0,
+
+
