@@ -22,7 +22,7 @@ Stalwart (Aioross),
 Propeller Tail (Aioross),
 Punk Rock (Aioross) adapted (WolfPP),
 Power Spot (Aioross),
-Gorilla Tactics (KyureJL) # half, needs this "but limits the Pokémon to using only one move"
+Gorilla Tactics (Aioross),
 
 IMPORTANT!!!!!!!!!!!!!
 NEEDS GEN 8 PBS FILES FROM MOST OF MOVES AND FORMS, DON'T HAVE PBS FILES ABOUT POKEMONS!!!!!!!!!!!
