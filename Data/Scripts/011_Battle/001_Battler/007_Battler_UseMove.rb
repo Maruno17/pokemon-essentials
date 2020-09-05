@@ -534,7 +534,8 @@ class PokeBattle_Battler
     end
     # Dancer
     if !@effects[PBEffects::Dancer] && !user.lastMoveFailed && realNumHits>0 &&
-       !move.snatched && magicCoater<0 && @battle.pbCheckGlobalAbility(:DANCER)
+       !move.snatched && magicCoater<0 && @battle.pbCheckGlobalAbility(:DANCER) &&
+       move.danceMove?
       dancers = []
       @battle.pbPriority(true).each do |b|
         dancers.push(b) if b.index!=user.index && b.hasActiveAbility?(:DANCER)
