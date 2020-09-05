@@ -62,10 +62,12 @@ end
 #####################################
 # Works around a problem with FileTest.exist
 # if directory contains accent marks
-def safeExists?(f)
-  ret=false
-  File.open(f,"rb") { ret=true } rescue nil
-  return ret
+if !defined?(safeExists?)
+  def safeExists?(f)
+    ret=false
+    File.open(f,"rb") { ret=true } rescue nil
+    return ret
+  end
 end
 
 
