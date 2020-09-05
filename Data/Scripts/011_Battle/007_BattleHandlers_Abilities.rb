@@ -1133,14 +1133,6 @@ BattleHandlers::DamageCalcUserAbility.add(:PUNKROCK,
   }
 )
 
-BattleHandlers::DamageCalcUserAbility.add(:STEELYSPIRIT,
-  proc { |ability,user,target,move,mults,baseDmg,type|
-      if isConst?(type,PBTypes,:STEEL)
-         mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
-      end		 
-  }
-)	
-
 #===============================================================================
 # DamageCalcUserAllyAbility handlers
 #===============================================================================
@@ -1161,20 +1153,18 @@ BattleHandlers::DamageCalcUserAllyAbility.add(:FLOWERGIFT,
   }
 )
 
-BattleHandlers::DamageCalcUserAllyAbility.add(:STEELYSPIRIT,
-  proc { |ability,user,target,move,mults,baseDmg,type|
-      if isConst?(type,PBTypes,:STEEL)
-         mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
-      end		 
-  }
-)
-
 BattleHandlers::DamageCalcUserAllyAbility.add(:POWERSPOT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     mults[FINAL_DMG_MULT] = (mults[FINAL_DMG_MULT]*1.3).round
   }
 )
-  
+
+BattleHandlers::DamageCalcUserAllyAbility.add(:STEELYSPIRIT,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)	 
+  }
+)
+
 #===============================================================================
 # DamageCalcTargetAbility handlers
 #===============================================================================
