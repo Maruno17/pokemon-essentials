@@ -1141,6 +1141,14 @@ BattleHandlers::DamageCalcUserAllyAbility.add(:FLOWERGIFT,
   }
 )
 
+BattleHandlers::DamageCalcUserAllyAbility.add(:STEELYSPIRIT,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+      if isConst?(type,PBTypes,:STEEL)
+         mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
+      end		 
+  }
+)
+  
 #===============================================================================
 # DamageCalcTargetAbility handlers
 #===============================================================================
