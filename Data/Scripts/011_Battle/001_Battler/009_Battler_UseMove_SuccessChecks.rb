@@ -473,7 +473,6 @@ class PokeBattle_Battler
     end
     return true
   end
-end
 
   #=============================================================================
   # Per-hit success check against the target.
