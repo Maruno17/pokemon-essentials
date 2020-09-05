@@ -1185,6 +1185,12 @@ BattleHandlers::DamageCalcTargetAbility.add(:FURCOAT,
   }
 )
 
+  BattleHandlers::DamageCalcTargetAbility.add(:ICESCALES,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[DEF_MULT] *= 2 if move.specialMove? || move.function=="122"   # Psyshock
+  }
+)
+    
 BattleHandlers::DamageCalcTargetAbility.add(:GRASSPELT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if user.battle.field.terrain==PBBattleTerrains::Grassy
