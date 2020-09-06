@@ -1,4 +1,4 @@
-# Pok�mon Essentials
+# Pokémon Essentials
 
 Based on Essentials v18.
 
