@@ -140,6 +140,8 @@ BattleHandlers::StatusImmunityAbility.add(:IMMUNITY,
   }
 )
 
+BattleHandlers::StatusImmunityAbility.copy(:IMMUNITY,:PASTELVEIL)
+
 BattleHandlers::StatusImmunityAbility.add(:INSOMNIA,
   proc { |ability,battler,status|
     next true if status==PBStatuses::SLEEP
@@ -201,9 +203,15 @@ BattleHandlers::StatusImmunityAllyAbility.add(:FLOWERVEIL,
   }
 )
 
-BattleHandlers::StatusImmunityAbility.add(:SWEETVEIL,
+BattleHandlers::StatusImmunityAllyAbility.add(:SWEETVEIL,
   proc { |ability,battler,status|
     next true if status==PBStatuses::SLEEP
+  }
+)
+
+BattleHandlers::StatusImmunityAllyAbility.add(:PASTELVEIL,
+  proc { |ability,battler,status|
+    next true if status==PBStatuses::POISON
   }
 )
 
@@ -1759,6 +1767,32 @@ BattleHandlers::TargetAbilityOnHit.add(:WANDERINGSPIRIT,
   }
 )
 
+BattleHandlers::TargetAbilityOnHit.add(:PERISHBODY,
+  proc { |ability,user,target,move,battle|
+    next if !move.pbContactMove?(user)
+    next if user.effects[PBEffects::PerishSong]>0
+    next if !user.affectedByContactEffect?
+    battle.pbShowAbilitySplash(target)
+    user.effects[PBEffects::PerishSong]     = 4
+    user.effects[PBEffects::PerishSongUser] = target.index
+    battle.pbDisplay(_INTL("Both Pokémon will faint in three turns!"))
+    battle.pbHideAbilitySplash(target)
+  }
+)
+
+BattleHandlers::TargetAbilityOnHit.add(:COTTONDOWN,
+  proc { |ability,user,target,move,battle|
+    next if !move.pbDamagingMove?(user)
+    battle.pbShowAbilitySplash(user)
+    target.eachOpposing{|b|
+      b.pbLowerStatStage(PBStats::SPEED,1,target)
+    }
+    target.eachAlly{|b|
+      b.pbLowerStatStage(PBStats::SPEED,1,target)
+    }
+    battle.pbHideAbilitySplash(user)
+  }
+)
 #===============================================================================
 # UserAbilityOnHit handlers
 #===============================================================================
@@ -2564,7 +2598,20 @@ BattleHandlers::AbilityOnSwitchIn.add(:SCREENCLEANER,
     battle.pbHideAbilitySplash(battler)
   }
 )
-	
+
+BattleHandlers::AbilityOnSwitchIn.add(:PASTELVEIL,
+  proc { |ability,battler,battle|
+    battler.eachAlly do |b|
+      next if b.status != PBStatuses::POISON
+      battle.pbShowAbilitySplash(battler)
+      b.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
+      if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1}'s {2} cured its {3}'s poison!",battler.pbThis,battler.abilityName,b.pbThis(true)))
+      end
+      battle.pbHideAbilitySplash(battler)
+    end
+  }
+)
 #===============================================================================
 # AbilityOnSwitchOut handlers
 #===============================================================================
