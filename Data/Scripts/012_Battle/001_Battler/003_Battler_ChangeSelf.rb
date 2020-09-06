@@ -149,7 +149,7 @@ class PokeBattle_Battler
   def pbCheckFormOnStatusChange
     return if fainted? || @effects[PBEffects::Transform]
     # Shaymin - reverts if frozen
-    if isConst?(@species,PBSpecies,:SHAYMIN) && frozen?
+    if isSpecies?(:SHAYMIN) && frozen?
       pbChangeForm(0,_INTL("{1} transformed!",pbThis))
     end
   end
@@ -157,7 +157,7 @@ class PokeBattle_Battler
   def pbCheckFormOnMovesetChange
     return if fainted? || @effects[PBEffects::Transform]
     # Keldeo - knowing Secret Sword
-    if isConst?(@species,PBSpecies,:KELDEO)
+    if isSpecies?(:KELDEO)
       newForm = 0
       newForm = 1 if pbHasMove?(:SECRETSWORD)
       pbChangeForm(newForm,_INTL("{1} transformed!",pbThis))
@@ -167,7 +167,7 @@ class PokeBattle_Battler
   def pbCheckFormOnWeatherChange
     return if fainted? || @effects[PBEffects::Transform]
     # Castform - Forecast
-    if isConst?(@species,PBSpecies,:CASTFORM)
+    if isSpecies?(:CASTFORM)
       if hasActiveAbility?(:FORECAST)
         newForm = 0
         case @battle.pbWeather
@@ -185,7 +185,7 @@ class PokeBattle_Battler
       end
     end
     # Cherrim - Flower Gift
-    if isConst?(@species,PBSpecies,:CHERRIM)
+    if isSpecies?(:CHERRIM)
       if hasActiveAbility?(:FLOWERGIFT)
         newForm = 0
         case @battle.pbWeather
@@ -210,7 +210,7 @@ class PokeBattle_Battler
     # Form changes upon entering battle and when the weather changes
     pbCheckFormOnWeatherChange if !endOfRound
     # Darmanitan - Zen Mode
-    if isConst?(@species,PBSpecies,:DARMANITAN) && isConst?(@ability,PBAbilities,:ZENMODE)
+    if isSpecies?(:DARMANITAN) && isConst?(@ability,PBAbilities,:ZENMODE)
       if @hp<=@totalhp/2
         if @form!=1
           @battle.pbShowAbilitySplash(self,true)
@@ -224,7 +224,7 @@ class PokeBattle_Battler
       end
     end
     # Minior - Shields Down
-    if isConst?(@species,PBSpecies,:MINIOR) && isConst?(@ability,PBAbilities,:SHIELDSDOWN)
+    if isSpecies?(:MINIOR) && isConst?(@ability,PBAbilities,:SHIELDSDOWN)
       if @hp>@totalhp/2   # Turn into Meteor form
         newForm = (@form>=7) ? @form-7 : @form
         if @form!=newForm
@@ -241,7 +241,7 @@ class PokeBattle_Battler
       end
     end
     # Wishiwashi - Schooling
-    if isConst?(@species,PBSpecies,:WISHIWASHI) && isConst?(@ability,PBAbilities,:SCHOOLING)
+    if isSpecies?(:WISHIWASHI) && isConst?(@ability,PBAbilities,:SCHOOLING)
       if @level>=20 && @hp>@totalhp/4
         if @form!=1
           @battle.pbShowAbilitySplash(self,true)
@@ -255,7 +255,7 @@ class PokeBattle_Battler
       end
     end
     # Zygarde - Power Construct
-    if isConst?(@species,PBSpecies,:ZYGARDE) && isConst?(@ability,PBAbilities,:POWERCONSTRUCT) &&
+    if isSpecies?(:ZYGARDE) && isConst?(@ability,PBAbilities,:POWERCONSTRUCT) &&
        endOfRound
       if @hp<=@totalhp/2 && @form<2   # Turn into Complete Forme
         newForm = @form+2
