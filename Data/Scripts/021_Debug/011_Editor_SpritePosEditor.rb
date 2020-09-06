@@ -220,7 +220,6 @@ class SpritePositioner
       pbAutoPosition
       return false
     end
-    oldvalues = []
     case param
     when 0
       sprite = @sprites["pokemon_0"]

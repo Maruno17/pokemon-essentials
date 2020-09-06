@@ -3,7 +3,6 @@
 #===============================================================================
 class PokemonBag
   attr_accessor :lastpocket
-  attr_reader :pockets
 
   def self.pocketNames
     return pbPocketNames
@@ -92,7 +91,6 @@ class PokemonBag
     item = getID(PBItems,item)
     if !item || item<1
       raise ArgumentError.new(_INTL("Item number {1} is invalid.",item))
-      return 0
     end
     pocket = pbGetPocket(item)
     maxsize = maxPocketSize(pocket)
@@ -108,7 +106,6 @@ class PokemonBag
     item = getID(PBItems,item)
     if !item || item<1
       raise ArgumentError.new(_INTL("Item number {1} is invalid.",item))
-      return false
     end
     pocket = pbGetPocket(item)
     maxsize = maxPocketSize(pocket)
@@ -121,7 +118,6 @@ class PokemonBag
     item = getID(PBItems,item)
     if !item || item<1
       raise ArgumentError.new(_INTL("Item number {1} is invalid.",item))
-      return false
     end
     pocket = pbGetPocket(item)
     maxsize = maxPocketSize(pocket)
@@ -134,7 +130,6 @@ class PokemonBag
     item = getID(PBItems,item)
     if !item || item<1
       raise ArgumentError.new(_INTL("Item number {1} is invalid.",item))
-      return false
     end
     pocket = pbGetPocket(item)
     maxsize = maxPocketSize(pocket)
@@ -148,10 +143,8 @@ class PokemonBag
     newitem = getID(PBItems,newitem)
     if !olditem || olditem<1
       raise ArgumentError.new(_INTL("Item number {1} is invalid.",olditem))
-      return false
     elsif !newitem || newitem<1
       raise ArgumentError.new(_INTL("Item number {1} is invalid.",newitem))
-      return false
     end
     pocket = pbGetPocket(olditem)
     maxsize = maxPocketSize(pocket)
@@ -179,7 +172,6 @@ class PokemonBag
     item = getID(PBItems,item)
     if !item || item<1
       raise ArgumentError.new(_INTL("Item number {1} is invalid.",item))
-      return false
     end
     pocket = pbGetPocket(item)
     maxsize = maxPocketSize(pocket)
@@ -209,7 +201,6 @@ class PokemonBag
     item = getID(PBItems,item)
     if !item || item<1
       raise ArgumentError.new(_INTL("Item number {1} is invalid.",item))
-      return
     end
     registeredlist = self.registeredItems
     registeredlist.push(item) if !registeredlist.include?(item)
@@ -220,7 +211,6 @@ class PokemonBag
     item = getID(PBItems,item)
     if !item || item<1
       raise ArgumentError.new(_INTL("Item number {1} is invalid.",item))
-      return
     end
     registeredlist = self.registeredItems
     if registeredlist.include?(item)

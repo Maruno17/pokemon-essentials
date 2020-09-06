@@ -104,7 +104,7 @@ def pbHiddenMoveAnimation(pokemon)
   phase=1
   frames=0
   strobeSpeed = 64*20/Graphics.frame_rate
-  begin
+  loop do
     Graphics.update
     Input.update
     sprite.update
@@ -176,7 +176,8 @@ def pbHiddenMoveAnimation(pokemon)
       end
     end
     pbUpdateSceneMap
-  end while phase!=6
+    break if phase==6
+  end
   sprite.dispose
   for strobe in strobes
     strobe.dispose
@@ -380,7 +381,7 @@ def pbTransferUnderwater(mapid,x,y,direction=$game_player.direction)
   }
 end
 
-Events.onAction += proc { |sender,e|
+Events.onAction += proc { |_sender,_e|
   if $PokemonGlobal.diving
     if DIVING_SURFACE_ANYWHERE
       pbSurfacing
@@ -673,7 +674,7 @@ def pbStrength
   return false
 end
 
-Events.onAction += proc { |sender,e|
+Events.onAction += proc { |_sender,_e|
   facingEvent = $game_player.pbFacingEvent
   pbStrength if facingEvent && facingEvent.name.downcase=="boulder"
 }
@@ -733,7 +734,7 @@ def pbStartSurfing
   $game_player.check_event_trigger_here([1,2])
 end
 
-def pbEndSurf(xOffset,yOffset)
+def pbEndSurf(_xOffset,_yOffset)
   return false if !$PokemonGlobal.surfing
   x = $game_player.x
   y = $game_player.y
@@ -765,7 +766,7 @@ def pbTransferSurfing(mapid,xcoord,ycoord,direction=$game_player.direction)
   }
 end
 
-Events.onAction += proc { |sender,e|
+Events.onAction += proc { |_sender,_e|
   next if $PokemonGlobal.surfing
   next if pbGetMetadata($game_map.map_id,MetadataBicycleAlways)
   next if !PBTerrain.isSurfable?(pbFacingTerrainTag)
@@ -825,7 +826,7 @@ def pbSweetScent
   viewport.color.blue  = 0
   viewport.color.alpha -= 10
   alphaDiff = 12 * 20 / Graphics.frame_rate
-  begin
+  loop do
     if count==0 && viewport.color.alpha<128
       viewport.color.alpha += alphaDiff
     elsif count>Graphics.frame_rate/4
@@ -836,9 +837,9 @@ def pbSweetScent
     Graphics.update
     Input.update
     pbUpdateSceneMap
-  end until viewport.color.alpha<=0
+    break if viewport.color.alpha<=0
+  end
   viewport.dispose
-  encounter = nil
   enctype = $PokemonEncounters.pbEncounterType
   if enctype<0 || !$PokemonEncounters.isEncounterPossibleHere? ||
      !pbEncounter(enctype)
@@ -969,7 +970,7 @@ def pbWaterfall
   return false
 end
 
-Events.onAction += proc { |sender,e|
+Events.onAction += proc { |_sender,_e|
   terrain = pbFacingTerrainTag
   if terrain==PBTerrain::Waterfall
     pbWaterfall

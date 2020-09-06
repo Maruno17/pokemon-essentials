@@ -25,7 +25,7 @@ class Window_PokemonItemStorage < Window_DrawableCommand
     return @bag.length+1
   end
 
-  def drawItem(index,count,rect)
+  def drawItem(index,_count,rect)
     rect = drawCursor(index,rect)
     ypos = rect.y
     textpos = []

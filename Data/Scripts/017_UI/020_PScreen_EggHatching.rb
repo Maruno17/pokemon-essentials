@@ -190,7 +190,7 @@ def pbHatchAnimation(pokemon)
 end
 
 def pbHatch(pokemon)
-  speciesname = PBSpecies.getName(pokemon.species)
+  speciesname = pokemon.speciesName
   pokemon.name           = speciesname
   pokemon.trainerID      = $Trainer.id
   pokemon.ot             = $Trainer.name
@@ -208,7 +208,6 @@ def pbHatch(pokemon)
     pbMessage(_INTL("... .... .....\1"))
     pbMessage(_INTL("{1} hatched from the Egg!",speciesname))
     if pbConfirmMessage(_INTL("Would you like to nickname the newly hatched {1}?",speciesname))
-      species = PBSpecies.getName(pokemon.species)
       nickname = pbEnterPokemonName(_INTL("{1}'s nickname?",speciesname),
          0,PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE,"",pokemon)
       pokemon.name = nickname if nickname!=""
@@ -216,7 +215,7 @@ def pbHatch(pokemon)
   end
 end
 
-Events.onStepTaken += proc { |sender,e|
+Events.onStepTaken += proc { |_sender,_e|
   for egg in $Trainer.party
     next if egg.eggsteps<=0
     egg.eggsteps -= 1

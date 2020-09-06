@@ -1,5 +1,5 @@
 class PokemonTemp
-  attr_accessor :dependentEvents
+  attr_writer :dependentEvents
 
   def dependentEvents
     @dependentEvents=DependentEvents.new if !@dependentEvents
@@ -38,11 +38,10 @@ end
 
 
 class PokemonGlobalMetadata
-  attr_accessor :dependentEvents
+  attr_writer :dependentEvents
 
   def dependentEvents
-    @dependentEvents=[] if !@dependentEvents
-    return @dependentEvents
+    return @dependentEvents || []
   end
 end
 
@@ -56,7 +55,7 @@ end
 
 
 
-def pbTestPass(follower,x,y,direction=nil)
+def pbTestPass(follower,x,y,_direction=nil)
   return $MapFactory.isPassableStrict?(follower.map.map_id,x,y,follower)
 end
 
@@ -176,7 +175,6 @@ class DependentEvents
 
   def pbEnsureEvent(event, newMapID)
     events=$PokemonGlobal.dependentEvents
-    found=-1
     for i in 0...events.length
       # Check original map ID and original event ID
       if events[i][0]==event.map_id && events[i][1]==event.id
@@ -552,15 +550,14 @@ end
 
 
 
-Events.onSpritesetCreate += proc { |sender,e|
+Events.onSpritesetCreate += proc { |_sender,e|
   spriteset = e[0]   # Spriteset being created
   viewport  = e[1]   # Viewport used for tilemap and characters
   map = spriteset.map   # Map associated with the spriteset (not necessarily the current map)
   spriteset.addUserSprite(DependentEventSprites.new(viewport,map))
 }
 
-Events.onMapSceneChange += proc { |sender,e|
-  scene      = e[0]
+Events.onMapSceneChange += proc { |_sender,e|
   mapChanged = e[1]
   if mapChanged
     $PokemonTemp.dependentEvents.pbMapChangeMoveDependentEvents

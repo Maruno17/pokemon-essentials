@@ -13,7 +13,7 @@ class Window_PhoneList < Window_CommandPokemon
   def drawItem(index,count,rect)
     return if index>=self.top_row+self.page_item_max
     super
-    overlapCursor = drawCursor(index-1,itemRect(index-1))
+    drawCursor(index-1,itemRect(index-1))
   end
 end
 

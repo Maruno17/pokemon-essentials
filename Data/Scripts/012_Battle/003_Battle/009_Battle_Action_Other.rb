@@ -157,7 +157,7 @@ class PokeBattle_Battle
     side  = battler.idxOwnSide
     owner = pbGetOwnerIndexFromBattlerIndex(idxBattler)
     @megaEvolution[side][owner] = -2
-    if isConst?(battler.species,PBSpecies,:GENGAR) && battler.mega?
+    if battler.isSpecies?(:GENGAR) && battler.mega?
       battler.effects[PBEffects::Telekinesis] = 0
     end
     pbCalculatePriority(false,[idxBattler]) if NEWEST_BATTLE_MECHANICS
@@ -172,9 +172,9 @@ class PokeBattle_Battle
     battler = @battlers[idxBattler]
     return if !battler || !battler.pokemon
     return if !battler.hasPrimal? || battler.primal?
-    if isConst?(battler.pokemon.species,PBSpecies,:KYOGRE)
+    if battler.isSpecies?(:KYOGRE)
       pbCommonAnimation("PrimalKyogre",battler)
-    elsif isConst?(battler.pokemon.species,PBSpecies,:GROUDON)
+    elsif battler.isSpecies?(:GROUDON)
       pbCommonAnimation("PrimalGroudon",battler)
     end
     battler.pokemon.makePrimal
@@ -182,9 +182,9 @@ class PokeBattle_Battle
     battler.pbUpdate(true)
     @scene.pbChangePokemon(battler,battler.pokemon)
     @scene.pbRefreshOne(idxBattler)
-    if isConst?(battler.pokemon.species,PBSpecies,:KYOGRE)
+    if battler.isSpecies?(:KYOGRE)
       pbCommonAnimation("PrimalKyogre2",battler)
-    elsif isConst?(battler.pokemon.species,PBSpecies,:GROUDON)
+    elsif battler.isSpecies?(:GROUDON)
       pbCommonAnimation("PrimalGroudon2",battler)
     end
     pbDisplay(_INTL("{1}'s Primal Reversion!\nIt reverted to its primal form!",battler.pbThis))

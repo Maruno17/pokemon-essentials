@@ -56,7 +56,8 @@ def pbGenerateMoveRoute(commands)
   route.repeat    = false
   route.skippable = true
   route.list.clear
-  i = 0; while i<commands.length
+  i = 0
+  while i<commands.length
     case commands[i]
     when PBMoveRoute::Wait, PBMoveRoute::SwitchOn, PBMoveRoute::SwitchOff,
          PBMoveRoute::ChangeSpeed, PBMoveRoute::ChangeFreq, PBMoveRoute::Opacity,
@@ -224,7 +225,8 @@ def pbEventId(event)
   list = event.pages[0].list
   return nil if list.length==0
   codes = []
-  i = 0; while i<list.length
+  i = 0
+  while i<list.length
     codes.push(list[i].code)
     i += 1
   end
@@ -726,19 +728,16 @@ def pbConvertToItemEvent(event)
   ret.name  = event.name
   ret.id    = event.id
   ret.pages = []
-  itemid   = nil
   itemName = ""
   hidden = false
   if name[/^HiddenItem\:\s*(\w+)\s*$/]
     itemName = $1
     return nil if !hasConst?(PBItems,itemName)
-    itemid = PBItems.const_get(itemName)
     ret.name = "HiddenItem"
     hidden = true
   elsif name[/^Item\:\s*(\w+)\s*$/]
     itemName = $1
     return nil if !hasConst?(PBItems,itemName)
-    itemid = PBItems.const_get(itemName)
     ret.name = "Item"
   else
     return nil
@@ -885,7 +884,7 @@ def pbChangeScripts(script)
   return changed
 end
 
-def pbFixEventUse(event,mapID,mapData)
+def pbFixEventUse(event,_mapID,mapData)
   return nil if pbEventIsEmpty?(event)
   changed = false
   trainerMoneyRE = /^\s*\$Trainer\.money\s*(<|<=|>|>=)\s*(\d+)\s*$/
@@ -1033,22 +1032,22 @@ def pbFixEventUse(event,mapID,mapData)
               changed = true
             end
             deletedRoute = nil
-            deleteMoveRouteAt = proc { |list,_i|
+            deleteMoveRouteAt = proc { |list,i|
               arr = []
-              if list[_i] && list[_i].code==209   # Set Move Route
-                arr.push(list[_i]); list.delete_at(_i)
-                while _i<list.length
-                  break if !list[_i] || list[_i].code!=509   # Set Move Route (continuation line)
-                  arr.push(list[_i]); list.delete_at(_i)
+              if list[i] && list[i].code==209   # Set Move Route
+                arr.push(list[i]); list.delete_at(i)
+                while i<list.length
+                  break if !list[i] || list[i].code!=509   # Set Move Route (continuation line)
+                  arr.push(list[i]); list.delete_at(i)
                 end
               end
               next arr
             }
-            insertMoveRouteAt = proc { |list,_i,route|
-              _j = route.length-1
-              while _j>=0
-                list.insert(_i,route[_j])
-                _j -= 1
+            insertMoveRouteAt = proc { |list,i,route|
+              j = route.length-1
+              while j>=0
+                list.insert(i,route[j])
+                j -= 1
               end
             }
             # If the next event command is a Move Route that moves the player,
@@ -1163,7 +1162,8 @@ def pbFixEventUse(event,mapID,mapData)
         # Split Show Text commands with 5+ lines into multiple Show Text
         # commands each with a maximum of 4 lines
         lines = 1
-        j = i+1; while j<list.length
+        j = i+1
+        while j<list.length
           break if list[j].code!=401   # Show Text (continuation line)
           if lines%4==0
             list[j].code = 101   # Show Text
@@ -1189,7 +1189,8 @@ def pbFixEventUse(event,mapID,mapData)
           lastLine = list[i+lines-1].parameters[0].sub(/\s+$/,"")
           if lastLine.length>0 && !lastLine[/[\\<]/] && lastLine[/[^\.,\!\?\;\-\"]$/]
             message = list[i].parameters[0]
-            j = i+1; while j<list.length
+            j = i+1
+            while j<list.length
               break if list[j].code!=401   # Show Text (continuation line)
               message += "\n"+list[j].parameters[0]
               j += 1
@@ -1207,11 +1208,13 @@ def pbFixEventUse(event,mapID,mapData)
               nextMessage = message[punct+1,message.length].sub(/^\s+/,"").split("\n")
               list[i+lines].code = 401
               lines.times { list.delete_at(i) }
-              j = nextMessage.length-1; while j>=0
+              j = nextMessage.length-1
+              while j>=0
                 list.insert(i,RPG::EventCommand.new((j==0) ? 101 : 401,indent,[nextMessage[j]]))
                 j-=1
               end
-              j = newMessage.length-1; while j>=0
+              j = newMessage.length-1
+              while j>=0
                 list.insert(i,RPG::EventCommand.new((j==0) ? 101 : 401,indent,[newMessage[j]]))
                 j -= 1
               end
@@ -1404,7 +1407,7 @@ end
 #===============================================================================
 # Main compiler method for events
 #===============================================================================
-def pbCompileTrainerEvents(mustcompile)
+def pbCompileTrainerEvents(_mustcompile)
   mapData = MapData.new
   t = Time.now.to_i
   Graphics.update
@@ -1443,10 +1446,7 @@ def pbCompileTrainerEvents(mustcompile)
     end
   end
   changed = false
-  if Time.now.to_i-t>=5
-    Graphics.update
-    t = Time.now.to_i
-  end
+  Graphics.update
   commonEvents = pbLoadRxData("Data/CommonEvents")
   Win32API.SetWindowText(_INTL("Processing common events"))
   for key in 0...commonEvents.length

@@ -108,7 +108,7 @@ class PokeBattle_Battler
       end
       # These effects are passed on if Baton Pass is used, but they need to be
       # cancelled in certain circumstances anyway
-      @effects[PBEffects::Telekinesis] = 0 if isConst?(@species,PBSpecies,:GENGAR) && mega?
+      @effects[PBEffects::Telekinesis] = 0 if isSpecies?(:GENGAR) && mega?
       @effects[PBEffects::GastroAcid]  = false if nonNegatableAbility?
     else
       # These effects are passed on if Baton Pass is used

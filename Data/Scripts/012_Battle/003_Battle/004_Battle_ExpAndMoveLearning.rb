@@ -25,7 +25,7 @@ class PokeBattle_Battle
       if !expAll
         eachInTeam(0,0) do |pkmn,i|
           next if !pkmn.able?
-          next if !isConst?(pkmn.item,PBItems,:EXPSHARE) &&
+          next if !pkmn.hasItem?(:EXPSHARE) &&
                   !isConst?(@initialItems[0][i],PBItems,:EXPSHARE)
           expShare.push(i)
         end
@@ -168,7 +168,6 @@ class PokeBattle_Battle
       raise RuntimeError.new(
          _INTL("{1}'s new level is less than its\r\ncurrent level, which shouldn't happen.\r\n[Debug: {2}]",
          pkmn.name,debugInfo))
-      return
     end
     # Give Exp
     if pkmn.shadowPokemon?

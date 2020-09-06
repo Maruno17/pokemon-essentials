@@ -211,7 +211,6 @@ def pbIsUnlosableItem?(item,species,ability)
      :ZACIAN   => [:RUSTEDSWORD],   
      :ZAMAZENTA=> [:RUSTEDSHIELD]
   }
-  ret = false
   combos.each do |comboSpecies, items|
     next if !isConst?(species,PBSpecies,comboSpecies)
     items.each { |i| return true if isConst?(item,PBItems,i) }
@@ -365,7 +364,6 @@ def pbChangeLevel(pkmn,newlevel,scene)
     spatkdiff   = pkmn.spatk
     spdefdiff   = pkmn.spdef
     totalhpdiff = pkmn.totalhp
-    oldlevel = pkmn.level
     pkmn.level = newlevel
     pkmn.changeHappiness("vitamin")
     pkmn.calcStats
@@ -679,7 +677,6 @@ end
 # Use an item from the Bag and/or on a Pokémon
 #===============================================================================
 def pbUseItem(bag,item,bagscene=nil)
-  found = false
   useType = pbGetItemData(item,ITEM_FIELD_USE)
   if pbIsMachine?(item)    # TM or HM
     if $Trainer.pokemonCount==0
@@ -810,7 +807,7 @@ def pbUseItemMessage(item)
   end
 end
 
-def pbCheckUseOnPokemon(item,pkmn,screen)
+def pbCheckUseOnPokemon(_item,pkmn,_screen)
   return pkmn && !pkmn.egg?
 end
 
@@ -828,7 +825,7 @@ def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
   end
   if pkmn.hasItem?
     olditemname = PBItems.getName(pkmn.item)
-    if isConst?(pkmn.item,PBItems,:LEFTOVERS)
+    if pkmn.hasItem?(:LEFTOVERS)
       scene.pbDisplay(_INTL("{1} is already holding some {2}.\1",pkmn.name,olditemname))
     elsif newitemname.starts_with_vowel?
       scene.pbDisplay(_INTL("{1} is already holding an {2}.\1",pkmn.name,olditemname))

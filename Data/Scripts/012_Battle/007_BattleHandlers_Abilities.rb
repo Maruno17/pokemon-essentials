@@ -119,7 +119,7 @@ BattleHandlers::AbilityOnHPDroppedBelowHalf.copy(:EMERGENCYEXIT,:WIMPOUT)
 
 BattleHandlers::StatusCheckAbilityNonIgnorable.add(:COMATOSE,
   proc { |ability,battler,status|
-    next false if !isConst?(battler.species,PBSpecies,:KOMALA)
+    next false if !battler.isSpecies?(:KOMALA)
     next true if status.nil? || status==PBStatuses::SLEEP
   }
 )
@@ -183,13 +183,13 @@ BattleHandlers::StatusImmunityAbility.copy(:WATERVEIL,:WATERBUBBLE)
 
 BattleHandlers::StatusImmunityAbilityNonIgnorable.add(:COMATOSE,
   proc { |ability,battler,status|
-    next true if isConst?(battler.species,PBSpecies,:KOMALA)
+    next true if battler.isSpecies?(:KOMALA)
   }
 )
 
 BattleHandlers::StatusImmunityAbilityNonIgnorable.add(:SHIELDSDOWN,
   proc { |ability,battler,status|
-    next true if isConst?(battler.species,PBSpecies,:MINIOR) && battler.form<7
+    next true if battler.isSpecies?(:MINIOR) && battler.form<7
   }
 )
 
@@ -2299,7 +2299,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
           if NEWEST_BATTLE_MECHANICS && isConst?(m.id,PBMoves,:HIDDENPOWER)
             moveType = pbHiddenPower(b.pokemon)[0]
           end
-          eff = PBTypes.getCombinedEffectiveness(moveData[MOVE_TYPE],type1,type2,type3)
+          eff = PBTypes.getCombinedEffectiveness(moveType,type1,type2,type3)
           next if PBTypes.ineffective?(eff)
           next if !PBTypes.superEffective?(eff) && moveData[MOVE_FUNCTION_CODE]!="070"   # OHKO
         else

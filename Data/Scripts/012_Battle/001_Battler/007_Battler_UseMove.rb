@@ -67,7 +67,7 @@ class PokeBattle_Battler
   #=============================================================================
   #
   #=============================================================================
-  def pbBeginTurn(choice)
+  def pbBeginTurn(_choice)
     # Cancel some lingering effects which only apply until the user next moves
     @effects[PBEffects::BeakBlast]           = false
     @effects[PBEffects::DestinyBondPrevious] = @effects[PBEffects::DestinyBond]
@@ -105,7 +105,7 @@ class PokeBattle_Battler
     @effects[PBEffects::FuryCutter]    = 0
   end
 
-  def pbEndTurn(choice)
+  def pbEndTurn(_choice)
     @lastRoundMoved = @battle.turnCount   # Done something this round
     if @effects[PBEffects::GorillaTactics]<0 && @lastMoveUsed>=0 && hasActiveAbility?(:GORILLATACTICS)
       @effects[PBEffects::GorillaTactics]=@lastMoveUsed
@@ -219,7 +219,7 @@ class PokeBattle_Battler
       end
     end
     # Stance Change
-    if isConst?(@species,PBSpecies,:AEGISLASH) && isConst?(@ability,PBAbilities,:STANCECHANGE)
+    if isSpecies?(:AEGISLASH) && isConst?(@ability,PBAbilities,:STANCECHANGE)
       if move.damagingMove?
         pbChangeForm(1,_INTL("{1} changed to Blade Forme!",pbThis))
       elsif isConst?(move.id,PBMoves,:KINGSSHIELD)
@@ -441,7 +441,6 @@ class PokeBattle_Battler
         # NOTE: If a multi-hit move becomes disabled partway through doing those
         #       hits (e.g. by Cursed Body), the rest of the hits continue as
         #       normal.
-        notFainted = false
         break if !targets.any? { |t| !t.fainted? }   # All targets are fainted
       end
       # Battle Arena only - attack is successful
@@ -482,7 +481,7 @@ class PokeBattle_Battler
         newTargets = pbChangeTargets(move,b,newTargets)
         success = pbProcessMoveHit(move,b,newTargets,0,false)
         b.lastMoveFailed = true if !success
-        targets.each { |b| b.pbFaint if b && b.fainted? }
+        targets.each { |otherB| otherB.pbFaint if otherB && otherB.fainted? }
         user.pbFaint if user.fainted?
       end
       # Magic Coat's bouncing back (move has no targets)

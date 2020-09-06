@@ -12,17 +12,15 @@ MYSTERY_GIFT_URL = "http://images1.wikia.nocookie.net/pokemonessentials/images/e
 
 
 class PokeBattle_Trainer
-  attr_accessor(:mysterygiftaccess)   # Whether MG can be used from load screen
-  attr_accessor(:mysterygift)         # Variable that stores downloaded MG data
+  attr_writer :mysterygiftaccess   # Whether MG can be used from load screen
+  attr_writer :mysterygift         # Variable that stores downloaded MG data
 
   def mysterygiftaccess
-    @mysterygiftaccess = false if !@mysterygiftaccess
-    return @mysterygiftaccess
+    return @mysterygiftaccess || false
   end
 
   def mysterygift
-    @mysterygift = [] if !@mysterygift
-    return @mysterygift
+    return @mysterygift || []
   end
 end
 
@@ -288,7 +286,6 @@ def pbDownloadMysteryGift(trainer)
         else
           gift=pending[command]
           sprites["msgwindow"].visible=false
-          isitem=false
           if gift[1]==0
             sprite=PokemonSprite.new(viewport)
             sprite.setOffset(PictureOrigin::Center)
@@ -299,15 +296,15 @@ def pbDownloadMysteryGift(trainer)
             sprite=ItemIconSprite.new(0,0,gift[2],viewport)
             sprite.x=Graphics.width/2
             sprite.y=-sprite.height/2
-            isitem=true
           end
           distanceDiff = 8*20/Graphics.frame_rate
-          begin
+          loop do
             Graphics.update
             Input.update
             sprite.update
             sprite.y+=distanceDiff
-          end while sprite.y<Graphics.height/2
+            break if sprite.y>=Graphics.height/2
+          end
           pbMEPlay("Battle capture success")
           (Graphics.frame_rate*3).times do
             Graphics.update
@@ -321,12 +318,13 @@ def pbDownloadMysteryGift(trainer)
           trainer.mysterygift.push(gift)
           pending[command]=nil; pending.compact!
           opacityDiff = 16*20/Graphics.frame_rate
-          begin
+          loop do
             Graphics.update
             Input.update
             sprite.update
             sprite.opacity-=opacityDiff
-          end while sprite.opacity>0
+            break if sprite.opacity<=0
+          end
           sprite.dispose
         end
         if pending.length==0

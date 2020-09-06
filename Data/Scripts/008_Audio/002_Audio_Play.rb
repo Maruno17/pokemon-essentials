@@ -220,7 +220,7 @@ end
 def pbSEFade(x=0.0); pbSEStop(x);end
 
 # Stops SE playback.
-def pbSEStop(timeInSeconds=0.0)
+def pbSEStop(_timeInSeconds=0.0)
   if $game_system
     $game_system.se_stop
   elsif (RPG.const_defined?(:SE) rescue false)

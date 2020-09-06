@@ -299,13 +299,12 @@ def pbBugContestDecided?
   return pbBugContestState.decided?
 end
 
-Events.onMapChange += proc { |sender,e|
+Events.onMapChange += proc { |_sender,_e|
   pbBugContestState.pbClearIfEnded
 }
 
-Events.onMapSceneChange += proc { |sender,e|
+Events.onMapSceneChange += proc { |_sender,e|
   scene=e[0]
-  mapChanged=e[1]
   if pbInBugContest? && pbBugContestState.decision==0 && BugContestState::TimerSeconds>0
     scene.spriteset.addUserSprite(TimerDisplay.new(
        pbBugContestState.timer,
@@ -313,7 +312,7 @@ Events.onMapSceneChange += proc { |sender,e|
   end
 }
 
-Events.onMapUpdate += proc { |sender,e|
+Events.onMapUpdate += proc { |_sender,_e|
   if !$game_player.move_route_forcing && !pbMapInterpreterRunning? &&
      !$game_temp.message_window_showing
     if pbBugContestState.expired?
@@ -324,9 +323,8 @@ Events.onMapUpdate += proc { |sender,e|
   end
 }
 
-Events.onMapChanging += proc { |sender,e|
+Events.onMapChanging += proc { |_sender,e|
   newmapID=e[0]
-  newmap=e[1]
   if pbInBugContest?
     if pbBugContestState.pbOffLimits?(newmapID)
       # Clear bug contest if player flies/warps/teleports out of the contest
@@ -344,7 +342,7 @@ def pbBugContestStartOver
   pbBugContestState.pbStartJudging
 end
 
-Events.onWildBattleOverride += proc { |sender,e|
+Events.onWildBattleOverride += proc { |_sender,e|
   species = e[0]
   level   = e[1]
   handled = e[2]

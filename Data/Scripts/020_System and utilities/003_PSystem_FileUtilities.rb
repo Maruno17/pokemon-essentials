@@ -525,7 +525,7 @@ end
 #===============================================================================
 # Load various wild battle music
 #===============================================================================
-def pbGetWildBattleBGM(wildParty)   # wildParty is an array of Pokémon objects
+def pbGetWildBattleBGM(_wildParty)   # wildParty is an array of Pokémon objects
   if $PokemonGlobal.nextBattleBGM
     return $PokemonGlobal.nextBattleBGM.clone
   end

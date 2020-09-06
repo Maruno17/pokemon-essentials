@@ -1,11 +1,11 @@
 class Thread
   def Thread.exclusive
-    _old = Thread.critical
+    old_critical = Thread.critical
     begin
       Thread.critical = true
       return yield
     ensure
-      Thread.critical = _old
+      Thread.critical = old_critical
     end
   end
 end

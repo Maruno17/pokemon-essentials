@@ -551,15 +551,9 @@ module FontInstaller
     success = []
     # Check if all fonts already exist
     filesExist = true
-    fontsExist = true
     dest = self.getFontFolder
     for i in 0...Names.size
-      if !safeExists?(dest + Filenames[i])
-        filesExist = false
-      end
-      if !Font.exist?(Names[i])
-        fontsExist = false
-      end
+      filesExist = false if !safeExists?(dest + Filenames[i])
     end
     return if filesExist
     # Check if all source fonts exist

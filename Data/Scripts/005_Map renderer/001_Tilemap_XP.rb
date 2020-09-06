@@ -41,24 +41,24 @@ class CustomTilemap
   attr_reader   :viewport
   attr_reader   :graphicsWidth
   attr_reader   :graphicsHeight
-  attr_accessor :ox
-  attr_accessor :oy
+  attr_reader   :ox
+  attr_reader   :oy
   attr_accessor :tone
   attr_accessor :color
 
   Autotiles = [
-     [ [27, 28, 33, 34], [ 5, 28, 33, 34], [27,  6, 33, 34], [ 5,  6, 33, 34],
-       [27, 28, 33, 12], [ 5, 28, 33, 12], [27,  6, 33, 12], [ 5,  6, 33, 12] ],
-     [ [27, 28, 11, 34], [ 5, 28, 11, 34], [27,  6, 11, 34], [ 5,  6, 11, 34],
-       [27, 28, 11, 12], [ 5, 28, 11, 12], [27,  6, 11, 12], [ 5,  6, 11, 12] ],
-     [ [25, 26, 31, 32], [25,  6, 31, 32], [25, 26, 31, 12], [25,  6, 31, 12],
-       [15, 16, 21, 22], [15, 16, 21, 12], [15, 16, 11, 22], [15, 16, 11, 12] ],
-     [ [29, 30, 35, 36], [29, 30, 11, 36], [ 5, 30, 35, 36], [ 5, 30, 11, 36],
-       [39, 40, 45, 46], [ 5, 40, 45, 46], [39,  6, 45, 46], [ 5,  6, 45, 46] ],
-     [ [25, 30, 31, 36], [15, 16, 45, 46], [13, 14, 19, 20], [13, 14, 19, 12],
-       [17, 18, 23, 24], [17, 18, 11, 24], [41, 42, 47, 48], [ 5, 42, 47, 48] ],
-     [ [37, 38, 43, 44], [37,  6, 43, 44], [13, 18, 19, 24], [13, 14, 43, 44],
-       [37, 42, 43, 48], [17, 18, 47, 48], [13, 18, 43, 48], [ 1,  2,  7,  8] ]
+    [ [27, 28, 33, 34], [ 5, 28, 33, 34], [27,  6, 33, 34], [ 5,  6, 33, 34],
+      [27, 28, 33, 12], [ 5, 28, 33, 12], [27,  6, 33, 12], [ 5,  6, 33, 12] ],
+    [ [27, 28, 11, 34], [ 5, 28, 11, 34], [27,  6, 11, 34], [ 5,  6, 11, 34],
+      [27, 28, 11, 12], [ 5, 28, 11, 12], [27,  6, 11, 12], [ 5,  6, 11, 12] ],
+    [ [25, 26, 31, 32], [25,  6, 31, 32], [25, 26, 31, 12], [25,  6, 31, 12],
+      [15, 16, 21, 22], [15, 16, 21, 12], [15, 16, 11, 22], [15, 16, 11, 12] ],
+    [ [29, 30, 35, 36], [29, 30, 11, 36], [ 5, 30, 35, 36], [ 5, 30, 11, 36],
+      [39, 40, 45, 46], [ 5, 40, 45, 46], [39,  6, 45, 46], [ 5,  6, 45, 46] ],
+    [ [25, 30, 31, 36], [15, 16, 45, 46], [13, 14, 19, 20], [13, 14, 19, 12],
+      [17, 18, 23, 24], [17, 18, 11, 24], [41, 42, 47, 48], [ 5, 42, 47, 48] ],
+    [ [37, 38, 43, 44], [37,  6, 43, 44], [13, 18, 19, 24], [13, 14, 43, 44],
+      [37, 42, 43, 48], [17, 18, 47, 48], [13, 18, 43, 48], [ 1,  2,  7,  8] ]
   ]
   Animated_Autotiles_Frames = 5*Graphics.frame_rate/20   # Frequency of updating animated autotiles
   FlashOpacity = [100,90,80,70,80,90]
@@ -132,26 +132,30 @@ class CustomTilemap
     return if disposed?
     @help.dispose if @help
     @help = nil
-    i = 0; len = @autotileInfo.length; while i<len
+    i = 0; len = @autotileInfo.length
+    while i<len
       if @autotileInfo[i]
         @autotileInfo[i].dispose
         @autotileInfo[i] = nil
       end
       i += 1
     end
-    i = 0; len = @regularTileInfo.length; while i<len
+    i = 0; len = @regularTileInfo.length
+    while i<len
       if @regularTileInfo[i]
         @regularTileInfo[i].dispose
         @regularTileInfo[i] = nil
       end
       i += 1
     end
-    i = 0; len = @tiles.length; while i<len
+    i = 0; len = @tiles.length
+    while i<len
       @tiles[i].dispose
       @tiles[i] = nil
       i += 2
     end
-    i = 0; len = @autosprites.length; while i<len
+    i = 0; len = @autosprites.length
+    while i<len
       @autosprites[i].dispose
       @autosprites[i] = nil
       i += 2
@@ -449,7 +453,6 @@ class CustomTilemap
     bitmap = @flash.bitmap
     ysize = @map_data.ysize
     xsize = @map_data.xsize
-    zsize = @map_data.zsize
     @firsttimeflash = false
     @oxFlash = @ox-(width>>2)
     @oyFlash = @oy-(height>>2)
@@ -488,7 +491,8 @@ class CustomTilemap
   end
 
   def refresh_tileset
-    i = 0; len = @regularTileInfo.length; while i<len
+    i = 0; len = @regularTileInfo.length
+    while i<len
       if @regularTileInfo[i]
         @regularTileInfo[i].dispose
         @regularTileInfo[i] = nil
@@ -518,14 +522,16 @@ class CustomTilemap
   end
 
   def refresh_autotiles
-    i = 0; len = @autotileInfo.length; while i<len
+    i = 0; len = @autotileInfo.length
+    while i<len
       if @autotileInfo[i]
         @autotileInfo[i].dispose
         @autotileInfo[i] = nil
       end
       i += 1
     end
-    i = 0; len = @autosprites.length; while i<len
+    i = 0; len = @autosprites.length
+    while i<len
       if @autosprites[i]
         @autosprites[i].dispose
         @autosprites[i] = nil
@@ -798,10 +804,6 @@ class CustomTilemap
       usesprites = true
     end
     refreshFlashSprite
-    vpx = @viewport.rect.x
-    vpy = @viewport.rect.y
-    vpr = @viewport.rect.width+vpx
-    vpb = @viewport.rect.height+vpy
     xsize = @map_data.xsize
     ysize = @map_data.ysize
     minX = (@ox/@tileWidth)-1
@@ -870,7 +872,8 @@ class CustomTilemap
     end
     if count<@tiles.length
       bigchange = (count<=(@tiles.length*2/3)) && (@tiles.length*2/3)>25
-      j = count; len = @tiles.length; while j<len
+      j = count; len = @tiles.length
+      while j<len
         sprite = @tiles[j]
         @tiles[j+1] = -1
         if bigchange

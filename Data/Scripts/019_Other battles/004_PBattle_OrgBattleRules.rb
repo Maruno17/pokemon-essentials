@@ -16,7 +16,7 @@ def pbTooTall?(pkmn,maxHeightInMeters)
   return height>(maxHeightInMeters*10).round
 end
 
-def pbTooHeavy?(pokemon,maxWeightInKg)
+def pbTooHeavy?(pkmn,maxWeightInKg)
   species = (pkmn.is_a?(PokeBattle_Pokemon)) ? pkmn.species : pkmn
   form    = (pkmn.is_a?(PokeBattle_Pokemon)) ? pkmn.form : 0
   weight = pbGetSpeciesData(species,form,SpeciesWeight)
@@ -39,7 +39,7 @@ class LevelAdjustment
     @adjustment=adjustment
   end
 
-  def self.getNullAdjustment(thisTeam,otherTeam)
+  def self.getNullAdjustment(thisTeam,_otherTeam)
     ret=[]
     for i in 0...thisTeam.length
       ret[i]=thisTeam[i].level
@@ -51,7 +51,7 @@ class LevelAdjustment
     return self.getNullAdjustment(thisTeam,otherTeam)
   end
 
-  def getOldExp(team1,team2)
+  def getOldExp(team1,_team2)
     ret=[]
     for i in 0...team1.length
       ret.push(team1[i].exp)
@@ -118,7 +118,7 @@ class LevelBalanceAdjustment < LevelAdjustment
     @minLevel=minLevel
   end
 
-  def getAdjustment(thisTeam,otherTeam)
+  def getAdjustment(thisTeam,_otherTeam)
     ret=[]
     for i in 0...thisTeam.length
       ret[i]=pbBalancedLevelFromBST(thisTeam[i].species)
@@ -135,7 +135,7 @@ class EnemyLevelAdjustment < LevelAdjustment
     @level=[[1,level].max,PBExperience.maxLevel].min
   end
 
-  def getAdjustment(thisTeam,otherTeam)
+  def getAdjustment(thisTeam,_otherTeam)
     ret=[]
     for i in 0...thisTeam.length
       ret[i]=@level
@@ -180,7 +180,7 @@ class CappedLevelAdjustment < LevelAdjustment
     @level=[[1,level].max,PBExperience.maxLevel].min
   end
 
-  def getAdjustment(thisTeam,otherTeam)
+  def getAdjustment(thisTeam,_otherTeam)
     ret=[]
     for i in 0...thisTeam.length
       ret[i]=[thisTeam[i].level,@level].min
@@ -197,7 +197,7 @@ class FixedLevelAdjustment < LevelAdjustment
     @level=[[1,level].max,PBExperience.maxLevel].min
   end
 
-  def getAdjustment(thisTeam,otherTeam)
+  def getAdjustment(thisTeam,_otherTeam)
     ret=[]
     for i in 0...thisTeam.length
       ret[i]=@level
@@ -217,7 +217,7 @@ class TotalLevelAdjustment < LevelAdjustment
     @totalLevel=totalLevel
   end
 
-  def getAdjustment(thisTeam,otherTeam)
+  def getAdjustment(thisTeam,_otherTeam)
     ret=[]
     total=0
     for i in 0...thisTeam.length
@@ -405,12 +405,12 @@ class StandardRestriction
     # Certain named species are not banned
     speciesWhitelist = [:DRAGONITE,:SALAMENCE,:TYRANITAR]
     for i in speciesWhitelist
-      return true if isConst?(pokemon.species,PBSpecies,i)
+      return true if pokemon.isSpecies?(i)
     end
     # Certain named species are banned
     speciesBlacklist = [:WYNAUT,:WOBBUFFET]
     for i in speciesBlacklist
-      return false if isConst?(pokemon.species,PBSpecies,i)
+      return false if pokemon.isSpecies?(i)
     end
     # Species with total base stat 600 or more are banned
     baseStats = pbGetSpeciesData(pokemon.species,pokemon.form,SpeciesBaseStats)
@@ -482,7 +482,7 @@ end
 
 class SoulDewClause
   def isValid?(pokemon)
-    return !isConst?(pokemon.item,PBItems,:SOULDEW)
+    return !pokemon.hasItem?(:SOULDEW)
   end
 end
 
@@ -498,11 +498,11 @@ end
 
 class NegativeExtendedGameClause
   def isValid?(pokemon)
-    return false if isConst?(pokemon.species,PBSpecies,:ARCEUS)
-    return false if isConst?(pokemon.item,PBItems,:MICLEBERRY)
-    return false if isConst?(pokemon.item,PBItems,:CUSTAPBERRY)
-    return false if isConst?(pokemon.item,PBItems,:JABOCABERRY)
-    return false if isConst?(pokemon.item,PBItems,:ROWAPBERRY)
+    return false if pokemon.isSpecies?(:ARCEUS)
+    return false if pokemon.hasItem?(:MICLEBERRY)
+    return false if pokemon.hasItem?(:CUSTAPBERRY)
+    return false if pokemon.hasItem?(:JABOCABERRY)
+    return false if pokemon.hasItem?(:ROWAPBERRY)
   end
 end
 
@@ -601,16 +601,16 @@ end
 
 class LittleCupRestriction
   def isValid?(pokemon)
-    return false if isConst?(pokemon.item,PBItems,:BERRYJUICE)
-    return false if isConst?(pokemon.item,PBItems,:DEEPSEATOOTH)
+    return false if pokemon.hasItem?(:BERRYJUICE)
+    return false if pokemon.hasItem?(:DEEPSEATOOTH)
     return false if pokemon.hasMove?(:SONICBOOM)
     return false if pokemon.hasMove?(:DRAGONRAGE)
-    return false if isConst?(pokemon.species,PBSpecies,:SCYTHER)
-    return false if isConst?(pokemon.species,PBSpecies,:SNEASEL)
-    return false if isConst?(pokemon.species,PBSpecies,:MEDITITE)
-    return false if isConst?(pokemon.species,PBSpecies,:YANMA)
-    return false if isConst?(pokemon.species,PBSpecies,:TANGELA)
-    return false if isConst?(pokemon.species,PBSpecies,:MURKROW)
+    return false if pokemon.isSpecies?(:SCYTHER)
+    return false if pokemon.isSpecies?(:SNEASEL)
+    return false if pokemon.isSpecies?(:MEDITITE)
+    return false if pokemon.isSpecies?(:YANMA)
+    return false if pokemon.isSpecies?(:TANGELA)
+    return false if pokemon.isSpecies?(:MURKROW)
     return true
   end
 end

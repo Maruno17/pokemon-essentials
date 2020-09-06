@@ -228,7 +228,6 @@ def pbGetText(infile)
   begin
     pbEachIntlSection(file) { |section,name|
       next if section.length==0
-      index=name
       if !name[/^([Mm][Aa][Pp])?(\d+)$/]
         raise _INTL("Invalid section name {1}",name)
       end
@@ -335,7 +334,7 @@ class OrderedHash < Hash
     return ret
   end
 
-  def _dump(depth=100)
+  def _dump(_depth=100)
     values=[]
     for key in @keys
       values.push(self[key])
@@ -476,7 +475,7 @@ class Messages
     @messages[type]=arr
   end
 
-  def self.createHash(type,array)
+  def self.createHash(_type,array)
     arr=OrderedHash.new
     for i in 0...array.length
       if array[i]
@@ -487,10 +486,8 @@ class Messages
     return arr
   end
 
-  def self.addToHash(type,array,hash)
-    if !hash
-      hash=OrderedHash.new
-    end
+  def self.addToHash(_type,array,hash)
+    hash=OrderedHash.new if !hash
     for i in 0...array.length
       if array[i]
         key=Messages.stringToKey(array[i])

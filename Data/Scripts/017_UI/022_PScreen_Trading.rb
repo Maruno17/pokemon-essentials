@@ -238,7 +238,7 @@ def pbTradeCheckEvolution(pokemon,pokemon2)
         next poke
       end
     when PBEvolution::TradeSpecies
-      if !isConst?(pokemon2.item,PBItems,:EVERSTONE)
+      if !pokemon2.hasItem?(:EVERSTONE)
         next poke if pokemon2.species==level
       end
     end

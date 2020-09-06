@@ -272,7 +272,7 @@ class PokeBattle_Scene
   #=============================================================================
   # Shows stats windows upon a Pokémon levelling up
   #=============================================================================
-  def pbLevelUp(pkmn,battler,oldTotalHP,oldAttack,oldDefense,oldSpAtk,oldSpDef,oldSpeed)
+  def pbLevelUp(pkmn,_battler,oldTotalHP,oldAttack,oldDefense,oldSpAtk,oldSpDef,oldSpeed)
     pbTopRightWindow(
        _INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
        pkmn.totalhp-oldTotalHP,pkmn.attack-oldAttack,pkmn.defense-oldDefense,
@@ -482,7 +482,7 @@ class PokeBattle_Scene
   end
 
   # Plays a common animation.
-  def pbCommonAnimation(animName,user=nil,target=nil,hitNum=0)
+  def pbCommonAnimation(animName,user=nil,target=nil)
     return if !animName || animName==""
     target = target[0] if target && target.is_a?(Array)
     animations = pbLoadBattleAnimations

@@ -36,7 +36,6 @@ def pbEncounterEditorTypes(enc,enccmd)
   enccmd.active   = true
   enccmd.index    = 0
   enccmd.visible  = true
-  ret = 0
   command = 0
   loop do
     Graphics.update
@@ -94,7 +93,7 @@ def pbNewEncounterType(enc)
   if ret>=0
     chances = EncounterTypes::EnctypeChances[ret]
     enc[1][ret] = []
-    for i in 0...chances.length
+    chances.length.times do
       enc[1][ret].push([1,5,5])
     end
   end
@@ -129,8 +128,6 @@ def pbEditEncounterType(enc,etype)
     species = pbChooseSpeciesList(enctype[ret][0])
     next if species<=0
     enctype[ret][0] = species if species>0
-    minlevel = 0
-    maxlevel = 0
     mLevel = PBExperience.maxLevel
     params = ChooseNumberParams.new
     params.setRange(1,mLevel)
@@ -185,7 +182,6 @@ def pbEncounterEditorMap(encdata,map)
   enchelp.z      = 99999
   mapinfos = load_data("Data/MapInfos.rxdata")
   mapname = mapinfos[map].name
-  lastchoice = 0
   loop do
     enc = encdata[map]
     enchelp.text = mapname
@@ -421,7 +417,6 @@ def pbTrainerBattleEditor
       if selection<0
         # New trainer
         trainertype = -1
-        trainername = ""
         ret = pbMessage(_INTL("First, define the type of trainer."),[
            _INTL("Use existing type"),
            _INTL("Use new type"),

@@ -1,20 +1,20 @@
 class PokeBattle_Trainer
-  attr_accessor(:name)
-  attr_accessor(:id)
-  attr_accessor(:metaID)
-  attr_accessor(:trainertype)
-  attr_accessor(:outfit)
-  attr_accessor(:badges)
-  attr_accessor(:money)
-  attr_accessor(:seen)
-  attr_accessor(:owned)
-  attr_accessor(:formseen)
-  attr_accessor(:formlastseen)
-  attr_accessor(:shadowcaught)
-  attr_accessor(:party)
-  attr_accessor(:pokedex)    # Whether the Pokédex was obtained
-  attr_accessor(:pokegear)   # Whether the Pokégear was obtained
-  attr_accessor(:language)
+  attr_accessor :name
+  attr_accessor :id
+  attr_writer   :metaID
+  attr_accessor :trainertype
+  attr_writer   :outfit
+  attr_accessor :badges
+  attr_reader   :money
+  attr_accessor :seen
+  attr_accessor :owned
+  attr_accessor :formseen
+  attr_accessor :formlastseen
+  attr_accessor :shadowcaught
+  attr_accessor :party
+  attr_accessor :pokedex    # Whether the Pokédex was obtained
+  attr_accessor :pokegear   # Whether the Pokégear was obtained
+  attr_writer   :language
 
   def trainerTypeName   # Name of this trainer type (localized)
     return PBTrainers.getName(@trainertype) rescue _INTL("PkMn Trainer")
@@ -55,13 +55,11 @@ class PokeBattle_Trainer
   end
 
   def outfit
-    @outfit=0 if !@outfit
-    return @outfit
+    return @outfit || 0
   end
 
   def language
-    @language=pbGetLanguage() if !@language
-    return @language
+    return @language || pbGetLanguage
   end
 
   def money=(value)

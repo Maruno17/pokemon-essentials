@@ -4,8 +4,9 @@ $scene              = nil
 Font.default_shadow = false if Font.respond_to?(:default_shadow)
 Graphics.frame_rate = 40
 
-
-
+#===============================================================================
+#
+#===============================================================================
 =begin
 class Win32API
   class << self
@@ -14,9 +15,9 @@ class Win32API
     end
 
     def new(*args)
-      File.open("winapi.txt","ab") { |f| f.write("new(#{args[0]},#{args[1]})\r\n") }
-      b=debug_new(*args)
-      b.setDllName(args[0],args[1])
+      File.open("winapi.txt", "ab") { |f| f.write("new(#{args[0]},#{args[1]})\r\n") }
+      b = debug_new(*args)
+      b.setDllName(args[0], args[1])
       return b
     end
   end
@@ -26,13 +27,13 @@ class Win32API
   end
 
   def setDllName(a,b)
-    @w32dll=a
-    @w32name=b
+    @w32dll = a
+    @w32name = b
   end
 
   def call(*args)
-    if @w32name!="GetAsyncKeyState"
-      File.open("winapi.txt","ab") { |f|
+    if @w32name != "GetAsyncKeyState"
+      File.open("winapi.txt", "ab") { |f|
         f.write("call(#{@w32dll},#{@w32name},#{args.inspect})\r\n")
       }
     end
@@ -47,8 +48,8 @@ class Bitmap
     end
 
     def new(*args)
-      if args.length==1
-        File.open("winapib.txt","ab") { |f| f.write("new(#{args[0]})\r\n") }
+      if args.length == 1
+        File.open("winapib.txt", "ab") { |f| f.write("new(#{args[0]})\r\n") }
       end
       debug_new(*args)
     end
@@ -58,31 +59,28 @@ end
 alias debug_load_data load_data
 
 def load_data(*args)
-  File.open("winapif.txt","ab") { |f| f.write("load(#{args[0]})\r\n") }
+  File.open("winapif.txt", "ab") { |f| f.write("load(#{args[0]})\r\n") }
   debug_load_data(*args)
 end
 =end
 
-
-
 class Hangup < Exception; end
 
-
-
 if false
-  p (Tilemap.instance_methods-Kernel.instance_methods-Object.instance_methods).sort
-# no changes
-  p (Plane.instance_methods-Kernel.instance_methods-Object.instance_methods).sort
-# no changes
-  p (Viewport.instance_methods-Kernel.instance_methods-Object.instance_methods).sort
-  p (Bitmap.instance_methods-Kernel.instance_methods-Object.instance_methods).sort
-# openness(=)
-  p (Window.instance_methods-Kernel.instance_methods-Object.instance_methods).sort
-  p (Sprite.instance_methods-Kernel.instance_methods-Object.instance_methods).sort
+  p (Tilemap.instance_methods - Kernel.instance_methods - Object.instance_methods).sort
+  # no changes
+  p (Plane.instance_methods - Kernel.instance_methods - Object.instance_methods).sort
+  # no changes
+  p (Viewport.instance_methods - Kernel.instance_methods - Object.instance_methods).sort
+  p (Bitmap.instance_methods - Kernel.instance_methods - Object.instance_methods).sort
+  # openness(=)
+  p (Window.instance_methods - Kernel.instance_methods - Object.instance_methods).sort
+  p (Sprite.instance_methods - Kernel.instance_methods - Object.instance_methods).sort
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 module RPG
   class Animation
     attr_accessor :id
@@ -107,8 +105,6 @@ module RPG
   end
 end
 
-
-
 module RPG
   class Animation
     class Frame
@@ -122,8 +118,6 @@ module RPG
     end
   end
 end
-
-
 
 module RPG
   class Animation
@@ -139,15 +133,13 @@ module RPG
         @frame = 0
         @se = RPG::AudioFile.new("", 80)
         @flash_scope = 0
-        @flash_color = Color.new(255,255,255,255)
+        @flash_color = Color.new(255, 255, 255, 255)
         @flash_duration = 5
         @condition = 0
       end
     end
   end
 end
-
-
 
 module RPG
   class System
@@ -227,8 +219,6 @@ module RPG
   end
 end
 
-
-
 module RPG
   class Tileset
     attr_accessor :id
@@ -253,7 +243,7 @@ module RPG
       @id = 0
       @name = ""
       @tileset_name = ""
-      @autotile_names = [""]*7
+      @autotile_names = [""] * 7
       @panorama_name = ""
       @panorama_hue = 0
       @fog_name = ""
@@ -272,8 +262,6 @@ module RPG
   end
 end
 
-
-
 module RPG
   class CommonEvent
     attr_accessor :id
@@ -291,8 +279,6 @@ module RPG
     end
   end
 end
-
-
 
 module RPG
   class Map
@@ -324,8 +310,6 @@ module RPG
   end
 end
 
-
-
 module RPG
   class MapInfo
     attr_accessor :name
@@ -346,8 +330,6 @@ module RPG
   end
 end
 
-
-
 module RPG
   class Event
     attr_accessor :id
@@ -365,8 +347,6 @@ module RPG
     end
   end
 end
-
-
 
 module RPG
   class Event
@@ -404,8 +384,6 @@ module RPG
   end
 end
 
-
-
 module RPG
   class Event
     class Page
@@ -436,8 +414,6 @@ module RPG
   end
 end
 
-
-
 module RPG
   class Event
     class Page
@@ -464,8 +440,6 @@ module RPG
   end
 end
 
-
-
 module RPG
   class EventCommand
     attr_accessor :code
@@ -479,8 +453,6 @@ module RPG
     end
   end
 end
-
-
 
 module RPG
   class MoveRoute
@@ -496,8 +468,6 @@ module RPG
   end
 end
 
-
-
 module RPG
   class MoveCommand
     attr_accessor :code
@@ -509,8 +479,6 @@ module RPG
     end
   end
 end
-
-
 
 module RPG
   class System
@@ -562,8 +530,6 @@ module RPG
   end
 end
 
-
-
 module RPG
   class System
     class TestBattler
@@ -587,8 +553,6 @@ module RPG
     end
   end
 end
-
-
 
 module RPG
   class AudioFile

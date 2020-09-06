@@ -119,7 +119,7 @@ def pbConvertRPGAnimation(animation)
   pbAnim.graphic  = animation.animation_name
   pbAnim.hue      = animation.animation_hue
   pbAnim.array.clear
-  yoffset = 0
+  yOffset = 0
   pbAnim.position = animation.position
   yOffset = -64 if animation.position==0
   yOffset = 64 if animation.position==2
@@ -240,7 +240,7 @@ end
 #===============================================================================
 class PBAnimTiming
   attr_accessor :frame
-  attr_accessor :timingType   # 0=play SE, 1=set bg, 2=bg mod
+  attr_writer   :timingType   # 0=play SE, 1=set bg, 2=bg mod
   attr_accessor :name         # Name of SE file or BG file
   attr_accessor :volume
   attr_accessor :pitch
@@ -251,7 +251,7 @@ class PBAnimTiming
   attr_accessor :colorGreen   # Color of bg (or to change bg to)
   attr_accessor :colorBlue    # Color of bg (or to change bg to)
   attr_accessor :colorAlpha   # Color of bg (or to change bg to)
-  attr_accessor :duration     # How long to spend changing to the new bg coords/color
+  attr_writer   :duration     # How long to spend changing to the new bg coords/color
   attr_accessor :flashScope
   attr_accessor :flashColor
   attr_accessor :flashDuration
@@ -276,13 +276,11 @@ class PBAnimTiming
   end
 
   def timingType
-    @timingType = 0 if !@timingType
-    return @timingType
+    return @timingType || 0
   end
 
   def duration
-    @duration = 5 if !@duration
-    return @duration
+    return @duration || 5
   end
 
   def to_s

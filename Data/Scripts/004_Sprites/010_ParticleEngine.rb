@@ -117,7 +117,8 @@ end
 
 
 class ParticleSprite
-  attr_accessor :x, :y, :z, :ox, :oy, :opacity, :bitmap, :blend_type
+  attr_accessor :x, :y, :z, :ox, :oy, :opacity, :blend_type
+  attr_reader :bitmap
 
   def initialize(viewport)
     @viewport   = viewport

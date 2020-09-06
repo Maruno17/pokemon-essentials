@@ -45,7 +45,7 @@ class PokeBattle_Battle
     return false if battler.effects[PBEffects::Encore]>0
     # No moves that can be chosen (will Struggle instead)
     usable = false
-    battler.eachMoveWithIndex do |m,i|
+    battler.eachMoveWithIndex do |_m,i|
       next if !pbCanChooseMove?(idxBattler,i,false)
       usable = true
       break

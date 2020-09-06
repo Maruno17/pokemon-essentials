@@ -58,7 +58,7 @@ class Window_PokemonBag < Window_DrawableCommand
     end
   end
 
-  def drawItem(index,count,rect)
+  def drawItem(index,_count,rect)
     textpos = []
     rect = Rect.new(rect.x+16,rect.y+16,rect.width-16,rect.height)
     ypos = rect.y+4
@@ -307,7 +307,8 @@ class PokemonBag_Scene
       y = 54
       y += ((sliderheight-boxheight)*itemlist.top_row/(itemlist.row_max-itemlist.page_row_max)).floor
       overlay.blt(470,y,@sliderbitmap.bitmap,Rect.new(36,0,36,4))
-      i = 0; while i*16<boxheight-4-18
+      i = 0
+      while i*16<boxheight-4-18
         height = [boxheight-4-18-i*16,16].min
         overlay.blt(470,y+4+i*16,@sliderbitmap.bitmap,Rect.new(36,4,36,height))
         i += 1
@@ -365,7 +366,6 @@ class PokemonBag_Scene
             pbPlayDecisionSE
             pbRefresh
           elsif Input.trigger?(Input::B)
-            curindex = itemwindow.index
             thispocket.insert(swapinitialpos,thispocket.delete_at(itemwindow.index))
             itemwindow.index = swapinitialpos
             itemwindow.sorting = false

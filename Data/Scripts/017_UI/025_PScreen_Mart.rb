@@ -40,7 +40,7 @@ class PokemonMartAdapter
     return pbItemIconFile(item)
   end
 
-  def getItemIconRect(item)
+  def getItemIconRect(_item)
     return Rect.new(0,0,48,48)
   end
 
@@ -101,7 +101,7 @@ class RpgxpMartAdapter
     $game_party.gain_gold(value)
   end
 
-  def getPrice(item,selling=false)
+  def getPrice(item,_selling=false)
     return item.price
   end
 
@@ -129,19 +129,13 @@ class RpgxpMartAdapter
   def getInventory()
     data = []
     for i in 1...$data_items.size
-      if getQuantity($data_items[i]) > 0
-        data.push($data_items[i])
-      end
+      data.push($data_items[i]) if getQuantity($data_items[i]) > 0
     end
     for i in 1...$data_weapons.size
-      if getQuantity($data_weapons[i]) > 0
-        data.push($data_weapons[i])
-     end
+      data.push($data_weapons[i]) if getQuantity($data_weapons[i]) > 0
     end
     for i in 1...$data_armors.size
-      if getQuantity($data_armors[i]) > 0
-        data.push($data_armors[i])
-      end
+      data.push($data_armors[i]) if getQuantity($data_armors[i]) > 0
     end
     return data
   end
@@ -158,7 +152,7 @@ class RpgxpMartAdapter
     return item ? item.name : ""
   end
 
-  def getDisplayPrice(item,selling=false)
+  def getDisplayPrice(item,_selling=false)
     price=item.price
     return price.to_s
   end
@@ -201,7 +195,7 @@ class RpgxpMartAdapter
     return ret
   end
 
-  def showQuantity?(item)
+  def showQuantity?(_item)
     return true
   end
 
@@ -788,7 +782,7 @@ class PokemonMartScreen
       price*=qty
       if pbConfirm(_INTL("I can pay ${1}. Would that be OK?",price.to_s_formatted))
         @adapter.setMoney(@adapter.getMoney+price)
-        for i in 0...qty
+        qty.times do
           @adapter.removeItem(item)
         end
         pbDisplayPaused(_INTL("Turned over the {1} and received ${2}.",itemname,price.to_s_formatted)) { pbSEPlay("Mart buy item") }

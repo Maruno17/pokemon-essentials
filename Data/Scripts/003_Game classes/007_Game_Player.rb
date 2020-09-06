@@ -225,8 +225,6 @@ class Game_Player < Game_Character
   def center(x, y)
     center_x = (Graphics.width/2 - Game_Map::TILE_WIDTH/2) * Game_Map::X_SUBPIXELS
     center_y = (Graphics.height/2 - Game_Map::TILE_HEIGHT/2) * Game_Map::Y_SUBPIXELS
-    max_x = (self.map.width - Graphics.width*1.0/Game_Map::TILE_WIDTH) * Game_Map::REAL_RES_X
-    max_y = (self.map.height - Graphics.height*1.0/Game_Map::TILE_HEIGHT) * Game_Map::REAL_RES_Y
     dispx = x * Game_Map::REAL_RES_X - center_x
     dispy = y * Game_Map::REAL_RES_Y - center_y
     self.map.display_x = dispx
@@ -464,7 +462,6 @@ end
 def pbUpdateVehicle
   meta = pbGetMetadata(0,MetadataPlayerA+$PokemonGlobal.playerID)
   if meta
-    newCharName = nil
     charset = 1                                 # Regular graphic
     if $PokemonGlobal.diving;     charset = 5   # Diving graphic
     elsif $PokemonGlobal.surfing; charset = 3   # Surfing graphic
