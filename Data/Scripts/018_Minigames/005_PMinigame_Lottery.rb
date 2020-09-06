@@ -32,7 +32,7 @@ def pbLottery(winnum,nameVar=2,positionVar=3,matchedVar=4)
       winmatched=thismatched
     end
   end
-  pbEachPokemon { |poke,box|
+  pbEachPokemon { |poke,_box|
     thismatched=0
     id=poke.publicID
     for j in 0...5

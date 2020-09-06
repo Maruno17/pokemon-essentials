@@ -339,8 +339,6 @@ class MiningGameScene
       prepattern=ITEMS[i[0]][6]
       next if provx+provwidth<=prex || provx>=prex+prewidth ||
               provy+provheight<=prey || provy>=prey+preheight
-      dx=prex-provx
-      dy=prey-provy
       for j in 0...prepattern.length
         next if prepattern[j]==0
         xco=prex+(j%prewidth)
@@ -359,8 +357,6 @@ class MiningGameScene
         prepattern=IRON[i[0]][4]
         next if provx+provwidth<=prex || provx>=prex+prewidth ||
                 provy+provheight<=prey || provy>=prey+preheight
-        dx=prex-provx
-        dy=prey-provy
         for j in 0...prepattern.length
           next if prepattern[j]==0
           xco=prex+(j%prewidth)
