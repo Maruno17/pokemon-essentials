@@ -32,8 +32,8 @@ class Win32API
 
   def call(*args)
     if @w32name!="GetAsyncKeyState"
-      File.open("winapi.txt","ab") { |f| 
-        f.write("call(#{@w32dll},#{@w32name},#{args.inspect})\r\n") 
+      File.open("winapi.txt","ab") { |f|
+        f.write("call(#{@w32dll},#{@w32name},#{args.inspect})\r\n")
       }
     end
     debug_call(*args)

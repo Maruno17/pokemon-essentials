@@ -3,7 +3,7 @@ module Win32
     buf = "\0" * len
     Win32API.new("kernel32", "RtlMoveMemory", "ppl", "").call(buf, self, len)
     buf
-  end  
+  end
 end
 
 
@@ -41,13 +41,13 @@ module Winsock
   #-----------------------------------------------------------------------------
   def self.closesocket(*args)
     Win32API.new(DLL, "closesocket", "p", "l").call(*args)
-  end  
+  end
   #-----------------------------------------------------------------------------
   # * Connect
   #-----------------------------------------------------------------------------
   def self.connect(*args)
     Win32API.new(DLL, "connect", "ppl", "l").call(*args)
-  end    
+  end
   #-----------------------------------------------------------------------------
   # * Get host (Using Adress)
   #-----------------------------------------------------------------------------
@@ -95,7 +95,7 @@ module Winsock
   #-----------------------------------------------------------------------------
   def self.inet_ntoa(*args)
     Win32API.new(DLL, "inet_ntoa", "l", "p").call(*args)
-  end  
+  end
   #-----------------------------------------------------------------------------
   # * Listen
   #-----------------------------------------------------------------------------
@@ -125,7 +125,7 @@ module Winsock
   #-----------------------------------------------------------------------------
   def self.setsockopt(*args)
     Win32API.new(DLL, "setsockopt", "pllpl", "l").call(*args)
-  end  
+  end
   #-----------------------------------------------------------------------------
   # * Shutdown
   #-----------------------------------------------------------------------------
@@ -136,7 +136,7 @@ module Winsock
   # * Socket
   #-----------------------------------------------------------------------------
   def self.socket(*args)
-    Win32API.new(DLL, "socket", "lll", "l").call(*args)  
+    Win32API.new(DLL, "socket", "lll", "l").call(*args)
   end
   #-----------------------------------------------------------------------------
   # * Get Last Error
@@ -162,12 +162,12 @@ class Socket
   #-----------------------------------------------------------------------------
   # * Constants
   #-----------------------------------------------------------------------------
-  AF_UNSPEC                 = 0  
+  AF_UNSPEC                 = 0
   AF_UNIX                   = 1
   AF_INET                   = 2
   AF_IPX                    = 6
   AF_APPLETALK              = 16
-  PF_UNSPEC                 = 0  
+  PF_UNSPEC                 = 0
   PF_UNIX                   = 1
   PF_INET                   = 2
   PF_IPX                    = 6
@@ -244,13 +244,13 @@ class Socket
   AI_V4MAPPED               = 2048
   #--------------------------------------------------------------------------
   # * Returns the associated IP address for the given hostname.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def self.getaddress(host)
     gethostbyname(host)[3].unpack("C4").join(".")
   end
   #--------------------------------------------------------------------------
   # * Returns the associated IP address for the given hostname.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def self.getservice(serv)
     case serv
     when Numeric
@@ -271,7 +271,7 @@ class Socket
   end
   #--------------------------------------------------------------------------
   # * Returns the user's hostname.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def self.gethostname
     buf = "\0" * 256
     Winsock.gethostname(buf, 256)
@@ -305,7 +305,7 @@ class Socket
   end
   #--------------------------------------------------------------------------
   # * Creates an INET-sockaddr struct.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def self.sockaddr_in(port, host)
     begin
       [AF_INET, getservice(port)].pack("sn") + gethostbyname(host)[3] + [].pack("x8")
@@ -319,7 +319,7 @@ class Socket
   end
   #--------------------------------------------------------------------------
   # * Creates a new socket and connects it to the given host and port.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def self.open(*args)
     socket = new(*args)
     if block_given?
@@ -333,14 +333,14 @@ class Socket
   end
   #--------------------------------------------------------------------------
   # * Creates a new socket.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def initialize(domain, type, protocol)
     SocketError.check if (@fd = Winsock.socket(domain, type, protocol)) == -1
     @fd
   end
   #--------------------------------------------------------------------------
   # * Accepts incoming connections.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def accept(flags = 0)
     buf = "\0" * 16
     SocketError.check if Winsock.accept(@fd, buf, flags) == -1
@@ -348,21 +348,21 @@ class Socket
   end
   #--------------------------------------------------------------------------
   # * Binds a socket to the given sockaddr.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def bind(sockaddr)
     SocketError.check if (ret = Winsock.bind(@fd, sockaddr, sockaddr.size)) == -1
     ret
   end
   #--------------------------------------------------------------------------
   # * Closes a socket.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def close
     SocketError.check if (ret = Winsock.closesocket(@fd)) == -1
     ret
   end
   #--------------------------------------------------------------------------
   # * Connects a socket to the given sockaddr.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def connect(sockaddr)
     #return if Network.testing? == 2
     SocketError.check if (ret = Winsock.connect(@fd, sockaddr, sockaddr.size)) == -1
@@ -370,28 +370,28 @@ class Socket
   end
   #--------------------------------------------------------------------------
   # * Listens for incoming connections.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def listen(backlog)
     SocketError.check if (ret = Winsock.listen(@fd, backlog)) == -1
     ret
   end
   #--------------------------------------------------------------------------
   # * Checks waiting data's status.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def select(timeout) # timeout in seconds
-    SocketError.check if (ret = Winsock.select(1, [1, @fd].pack("ll"), 0, 0, [timeout.to_i, 
+    SocketError.check if (ret = Winsock.select(1, [1, @fd].pack("ll"), 0, 0, [timeout.to_i,
          (timeout * 1000000).to_i].pack("ll"))) == -1
     ret
   end
   #--------------------------------------------------------------------------
   # * Checks if data is waiting.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def ready?
     not select(0) == 0
-  end  
+  end
   #--------------------------------------------------------------------------
   # * Reads data from socket.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def read(len)
     buf = "\0" * len
     Win32API.new("msvcrt", "_read", "lpl", "l").call(@fd, buf, len)
@@ -399,7 +399,7 @@ class Socket
   end
   #--------------------------------------------------------------------------
   # * Returns received data.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def recv(len, flags = 0)
     retString=""
     remainLen=len
@@ -415,7 +415,7 @@ class Socket
   end
   #--------------------------------------------------------------------------
   # * Sends data to a host.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def send(data, flags = 0)
     SocketError.check if (ret = Winsock.send(@fd, data, data.size, flags)) == -1
     ret
@@ -423,7 +423,7 @@ class Socket
   #--------------------------------------------------------------------------
   # * Recieves file from a socket
   #     size  : file size
-  #     scene : update scene boolean 
+  #     scene : update scene boolean
   #--------------------------------------------------------------------------
   def recv_file(size,scene=false,file="")
     data = []
@@ -464,12 +464,12 @@ class Socket
       break if ch == "\n"
       message += ch
     end
-    # Return recieved data 
+    # Return recieved data
     return message
   end
   #--------------------------------------------------------------------------
   # * Writes data to socket.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def write(data)
     Win32API.new("msvcrt", "_write", "lpl", "l").call(@fd, data, 1)
   end
@@ -490,7 +490,7 @@ end
 class TCPSocket < Socket
   #--------------------------------------------------------------------------
   # * Creates a new socket and connects it to the given host and port.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def self.open(*args)
     socket = new(*args)
     if block_given?
@@ -504,7 +504,7 @@ class TCPSocket < Socket
   end
   #--------------------------------------------------------------------------
   # * Creates a new socket and connects it to the given host and port.
-  #--------------------------------------------------------------------------  
+  #--------------------------------------------------------------------------
   def initialize(host, port)
     super(AF_INET, SOCK_STREAM, IPPROTO_TCP)
     connect(Socket.sockaddr_in(port, host))
@@ -526,7 +526,7 @@ class SocketError < StandardError
     #if not Network.testing? == 1
       raise Errno.const_get(Errno.constants.detect { |c| Errno.const_get(c).new.errno == errno })
     #else
-    #  errno != 0 ? (Network.testresult(true)) : (Network.testresult(false)) 
+    #  errno != 0 ? (Network.testresult(true)) : (Network.testresult(false))
     #end
   end
 end
@@ -669,7 +669,7 @@ def pbDownloadToString(url)
     return data
   rescue
     return ""
-  end 
+  end
 end
 
 def pbDownloadToFile(url, file)
@@ -685,7 +685,7 @@ def pbPostToString(url, postdata)
     return data
   rescue
     return ""
-  end 
+  end
 end
 
 def pbPostToFile(url, postdata, file)

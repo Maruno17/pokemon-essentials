@@ -87,8 +87,8 @@ NO_SIGNPOSTS = []
 # * The maximum length, in characters, that the player's name can be.
 #===============================================================================
 INITIAL_MONEY        = 3000
-MAX_MONEY            = 999999
-MAX_COINS            = 99999
+MAX_MONEY            = 999_999
+MAX_COINS            = 99_999
 MAX_PLAYER_NAME_SIZE = 10
 
 #===============================================================================
@@ -97,9 +97,9 @@ MAX_PLAYER_NAME_SIZE = 10
 #      associated trainer type will be named as whatever is in that variable.
 #===============================================================================
 RIVAL_NAMES = [
-   [:RIVAL1,12],
-   [:RIVAL2,12],
-   [:CHAMPION,12]
+  [:RIVAL1, 12],
+  [:RIVAL2, 12],
+  [:CHAMPION, 12]
 ]
 
 #===============================================================================
@@ -155,7 +155,7 @@ SCALED_EXP_FORMULA        = true
 SPLIT_EXP_BETWEEN_GAINERS = false
 ENABLE_CRITICAL_CAPTURES  = false
 GAIN_EXP_FOR_CAPTURE      = true
-MEGA_RINGS                = [:MEGARING,:MEGABRACELET,:MEGACUFF,:MEGACHARM]
+MEGA_RINGS                = [:MEGARING, :MEGABRACELET, :MEGACUFF, :MEGACHARM]
 
 #===============================================================================
 # * The names of each pocket of the Bag. Leave the first entry blank.
@@ -166,18 +166,18 @@ MEGA_RINGS                = [:MEGARING,:MEGABRACELET,:MEGACUFF,:MEGACHARM]
 #      first entry (the 0).
 #===============================================================================
 def pbPocketNames; return ["",
-   _INTL("Items"),
-   _INTL("Medicine"),
-   _INTL("Poké Balls"),
-   _INTL("TMs & HMs"),
-   _INTL("Berries"),
-   _INTL("Mail"),
-   _INTL("Battle Items"),
-   _INTL("Key Items")
+  _INTL("Items"),
+  _INTL("Medicine"),
+  _INTL("Poké Balls"),
+  _INTL("TMs & HMs"),
+  _INTL("Berries"),
+  _INTL("Mail"),
+  _INTL("Battle Items"),
+  _INTL("Key Items")
 ]; end
-BAG_MAX_POCKET_SIZE  = [0,-1,-1,-1,-1,-1,-1,-1,-1]
+BAG_MAX_POCKET_SIZE  = [0, -1, -1, -1, -1, -1, -1, -1, -1]
 BAG_MAX_PER_SLOT     = 999
-BAG_POCKET_AUTO_SORT = [0,false,false,false,true,true,false,false,false]
+BAG_POCKET_AUTO_SORT = [0, false, false, false, true, true, false, false, false]
 
 #===============================================================================
 # * A set of arrays each containing details of a graphic to be shown on the
@@ -190,8 +190,8 @@ BAG_POCKET_AUTO_SORT = [0,false,false,false,true,true,false,false,false]
 #      - The graphic will always (true) or never (false) be shown on a wall map.
 #===============================================================================
 REGION_MAP_EXTRAS = [
-   [0,51,16,15,"mapHiddenBerth",false],
-   [0,52,20,14,"mapHiddenFaraday",false]
+  [0, 51, 16, 15, "mapHiddenBerth", false],
+  [0, 52, 20, 14, "mapHiddenFaraday", false]
 ]
 
 #===============================================================================
@@ -229,9 +229,9 @@ NUM_STORAGE_BOXES = 30
 #===============================================================================
 USE_CURRENT_REGION_DEX = false
 def pbDexNames; return [
-   [_INTL("Kanto Pokédex"),0],
-   [_INTL("Johto Pokédex"),1],
-   _INTL("National Pokédex")
+  [_INTL("Kanto Pokédex"), 0],
+  [_INTL("Johto Pokédex"), 1],
+  _INTL("National Pokédex")
 ]; end
 DEX_SHOWS_ALL_FORMS = false
 DEXES_WITH_OFFSETS  = []
@@ -250,27 +250,27 @@ DEXES_WITH_OFFSETS  = []
 #      - Roaming areas specifically for this Pokémon (optional).
 #===============================================================================
 RoamingAreas = {
-   5  => [21,28,31,39,41,44,47,66,69],
-   21 => [5,28,31,39,41,44,47,66,69],
-   28 => [5,21,31,39,41,44,47,66,69],
-   31 => [5,21,28,39,41,44,47,66,69],
-   39 => [5,21,28,31,41,44,47,66,69],
-   41 => [5,21,28,31,39,44,47,66,69],
-   44 => [5,21,28,31,39,41,47,66,69],
-   47 => [5,21,28,31,39,41,44,66,69],
-   66 => [5,21,28,31,39,41,44,47,69],
-   69 => [5,21,28,31,39,41,44,47,66]
+  5  => [   21, 28, 31, 39, 41, 44, 47, 66, 69],
+  21 => [5,     28, 31, 39, 41, 44, 47, 66, 69],
+  28 => [5, 21,     31, 39, 41, 44, 47, 66, 69],
+  31 => [5, 21, 28,     39, 41, 44, 47, 66, 69],
+  39 => [5, 21, 28, 31,     41, 44, 47, 66, 69],
+  41 => [5, 21, 28, 31, 39,     44, 47, 66, 69],
+  44 => [5, 21, 28, 31, 39, 41,     47, 66, 69],
+  47 => [5, 21, 28, 31, 39, 41, 44,     66, 69],
+  66 => [5, 21, 28, 31, 39, 41, 44, 47,     69],
+  69 => [5, 21, 28, 31, 39, 41, 44, 47, 66    ]
 }
 RoamingSpecies = [
-   [:LATIAS, 30, 53, 0, "Battle roaming"],
-   [:LATIOS, 30, 53, 0, "Battle roaming"],
-   [:KYOGRE, 40, 54, 2, nil, {
-       2  => [21,31],
-       21 => [2,31,69],
-       31 => [2,21,69],
-       69 => [21,31]
-       }],
-   [:ENTEI, 40, 55, 1, nil]
+  [:LATIAS, 30, 53, 0, "Battle roaming"],
+  [:LATIOS, 30, 53, 0, "Battle roaming"],
+  [:KYOGRE, 40, 54, 2, nil, {
+    2  => [   21, 31    ],
+    21 => [2,     31, 69],
+    31 => [2, 21,     69],
+    69 => [   21, 31    ]
+  }],
+  [:ENTEI, 40, 55, 1, nil]
 ]
 
 #===============================================================================
@@ -283,10 +283,10 @@ RoamingSpecies = [
 #      - Maximum possible level (optional).
 #===============================================================================
 POKE_RADAR_ENCOUNTERS = [
-   [5,  20, :STARLY,     12, 15],
-   [21, 10, :STANTLER,   14],
-   [28, 20, :BUTTERFREE, 15, 18],
-   [28, 20, :BEEDRILL,   15, 18]
+  [5,  20, :STARLY,     12, 15],
+  [21, 10, :STANTLER,   14],
+  [28, 20, :BUTTERFREE, 15, 18],
+  [28, 20, :BEEDRILL,   15, 18]
 ]
 
 #===============================================================================
@@ -347,7 +347,7 @@ PLANT_SPARKLE_ANIMATION_ID   = 7
 #      message file in the Data folder. Edit only if you have 2 or more
 #      languages to choose from.
 #===============================================================================
-LANGUAGES = [  
-#  ["English","english.dat"],
-#  ["Deutsch","deutsch.dat"]
+LANGUAGES = [
+#  ["English", "english.dat"],
+#  ["Deutsch", "deutsch.dat"]
 ]

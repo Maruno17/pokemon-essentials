@@ -340,7 +340,7 @@ module PluginManager
     return if !installed?(plugin_name)
     return @@Plugins[plugin_name][:link]
   end
-  
+
   # Returns the credits of the specified plugin.
   def self.credits(plugin_name)
     return if !installed?(plugin_name)

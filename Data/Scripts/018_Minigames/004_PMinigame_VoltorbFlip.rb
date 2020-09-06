@@ -431,7 +431,7 @@ class VoltorbFlip
     # Create and split a string for the number, with padded 0s
     zeroes=2-num.to_s.length
     numText=""
-    for j in 0...zeroes
+    zeroes.times do
       numText+="0"
     end
     numText+=num.to_s
@@ -449,7 +449,7 @@ class VoltorbFlip
     # Create and split a string for the number, with padded 0s
     zeroes=2-num.to_s.length
     numText=""
-    for j in 0...zeroes
+    zeroes.times do
       numText+="0"
     end
     numText+=num.to_s
@@ -466,7 +466,7 @@ class VoltorbFlip
   def pbCreateCoins(source,y)
     zeroes=5-source.to_s.length
     coinText=""
-    for i in 0...zeroes
+    zeroes.times do
       coinText+="0"
     end
     coinText+=source.to_s
@@ -476,7 +476,7 @@ class VoltorbFlip
     end
   end
 
-  def pbUpdateCoins    
+  def pbUpdateCoins
     # Update coins display
     @sprites["totalCoins"].bitmap.clear
     pbCreateCoins($PokemonGlobal.coins,44)

@@ -17,7 +17,7 @@ end
 def passable?(passages,tile_id)
   return false if tile_id == nil
   passage = passages[tile_id]
-  return (passage && passage<15) 
+  return (passage && passage<15)
 end
 
 def getPassabilityMinimap(mapid)
@@ -222,7 +222,7 @@ class Draw_Tilemap          # This class controls a set of sprites, with
     end
     if @flash_data
       @sprites.push([])
-      @contentstrips.push([])      
+      @contentstrips.push([])
     end
   end
 

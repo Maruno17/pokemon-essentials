@@ -33,12 +33,12 @@ class Particle_Engine
     return if disposed?
     for particle in @effect
       next if particle.nil?
-      particle.dispose 
+      particle.dispose
     end
     @effect.clear
     @map = nil
     @disposed = true
-  end  
+  end
 
   def disposed?
     return @disposed
@@ -64,7 +64,7 @@ class Particle_Engine
     cls = @effects[type]
     if cls.nil?
       particle.dispose if particle
-      return nil      
+      return nil
     end
     if !particle || !particle.is_a?(cls)
       particle.dispose if particle
@@ -94,7 +94,7 @@ class Particle_Engine
         particle = realloc_effect(event,particle)
         @effect[i] = particle
       end
-      particle.update if particle 
+      particle.update if particle
     end
   end
 end
@@ -208,7 +208,7 @@ class ParticleEffect_Event < ParticleEffect
     @opacity   = []
     @startingx = self.x + @xoffset
     @startingy = self.y + @yoffset
-    @screen_x  = self.x 
+    @screen_x  = self.x
     @screen_y  = self.y
     @real_x    = @event.real_x
     @real_y    = @event.real_y
@@ -299,7 +299,7 @@ class ParticleEffect_Event < ParticleEffect
         @particles[i].x = @startingx + @xoffset
         @particlex[i] = 0.0
         @particley[i] = 0.0
-      end           
+      end
       if @fade == 0
         if @opacity[i] <= 0
           @opacity[i] = @originalopacity
@@ -307,7 +307,7 @@ class ParticleEffect_Event < ParticleEffect
           @particles[i].x = @startingx + @xoffset
           @particlex[i] = 0.0
           @particley[i] = 0.0
-        end  
+        end
       else
         if @opacity[i] <= 0
           @opacity[i] = 250
@@ -315,7 +315,7 @@ class ParticleEffect_Event < ParticleEffect
           @particles[i].x = @startingx + @xoffset
           @particlex[i] = 0.0
           @particley[i] = 0.0
-        end  
+        end
       end
       calcParticlePos(i)
       if @randomhue == 1
@@ -349,7 +349,7 @@ class ParticleEffect_Event < ParticleEffect
 
   def dispose
     for particle in @particles
-      particle.dispose 
+      particle.dispose
     end
     for bitmap in @bitmaps.values
       bitmap.dispose
@@ -558,7 +558,7 @@ class Particle_Engine::Splash < ParticleEffect_Event
     super
     for i in 0...@maxparticless
       @particles[i].opacity = 50
-      @particles[i].update   
+      @particles[i].update
     end
   end
 end
@@ -574,7 +574,7 @@ class Game_Event < Game_Character
     begin
       nf_particles_game_map_initialize(map_id, event, map)
     rescue ArgumentError
-      nf_particles_game_map_initialize(map_id, event)        
+      nf_particles_game_map_initialize(map_id, event)
     end
   end
 
