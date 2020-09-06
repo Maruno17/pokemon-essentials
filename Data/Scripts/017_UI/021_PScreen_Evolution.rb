@@ -587,7 +587,7 @@ class PokemonEvolutionScene
     # Modify Pokémon to make it evolved
     @pokemon.species = @newspecies
     @pokemon.name    = newspeciesname if @pokemon.name==oldspeciesname
-    @pokemon.form    = 0 if isConst?(@pokemon.species,PBSpecies,:MOTHIM)
+    @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
     @pokemon.calcStats
     # See and own evolved species
     $Trainer.seen[@newspecies]  = true

@@ -852,7 +852,7 @@ BattleHandlers::DamageCalcTargetItem.add(:COLBURBERRY,
 
 BattleHandlers::DamageCalcTargetItem.add(:DEEPSEASCALE,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if isConst?(target.species,PBSpecies,:CLAMPERL) && move.specialMove?
+    if target.isSpecies?(:CLAMPERL) && move.specialMove?
       mults[DEF_MULT] *= 2
     end
   }
@@ -889,8 +889,7 @@ BattleHandlers::DamageCalcTargetItem.add(:KEBIABERRY,
 
 BattleHandlers::DamageCalcTargetItem.add(:METALPOWDER,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if isConst?(target.species,PBSpecies,:DITTO) &&
-       !target.effects[PBEffects::Transform]
+    if target.isSpecies?(:DITTO) && !target.effects[PBEffects::Transform]
       mults[DEF_MULT] = (mults[DEF_MULT]*1.5).round
     end
   }
@@ -935,8 +934,7 @@ BattleHandlers::DamageCalcTargetItem.add(:SHUCABERRY,
 BattleHandlers::DamageCalcTargetItem.add(:SOULDEW,
   proc { |item,user,target,move,mults,baseDmg,type|
     next if NEWEST_BATTLE_MECHANICS
-    next if !isConst?(target.species,PBSpecies,:LATIAS) &&
-            !isConst?(target.species,PBSpecies,:LATIOS)
+    next if !target.isSpecies?(:LATIAS) && !target.isSpecies?(:LATIOS)
     if move.specialMove? && !user.battle.rules["souldewclause"]
       mults[DEF_MULT] = (mults[DEF_MULT]*1.5).round
     end

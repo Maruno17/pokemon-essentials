@@ -796,7 +796,7 @@ class PokeBattle_Pokemon
     if gain>0
       gain += 1 if @obtainMap==$game_map.map_id
       gain += 1 if self.ballused==pbGetBallType(:LUXURYBALL)
-      gain = (gain*1.5).floor if isConst?(self.item,PBItems,:SOOTHEBELL)
+      gain = (gain*1.5).floor if self.hasItem?(:SOOTHEBELL)
     end
     @happiness += gain
     @happiness = [[255,@happiness].min,0].max
