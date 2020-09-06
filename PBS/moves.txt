@@ -714,7 +714,7 @@
 691,AURAWHEEL,Aura Wheel,177,110,ELECTRIC,Physical,100,10,0,00,0,bef,"Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form."
 692,BEHEMOTHBASH,Behemoth Bash,000,100,STEEL,Physical,100,5,0,00,0,abef,"The user becomes a gigantic shield and slams into the target. This move deals twice the damage is the target is Dynamaxed."
 693,BEHEMOTHBLADE,Behemoth Blade,000,100,STEEL,Physical,100,5,0,00,0,abef,"The user becomes a gigantic sword and cuts the target. This move deals twice the damage is the target is Dynamaxed."
-694,BODYPRESS,Body Press,269,80,FIGHTING,Physical,100,10,0,00,0,abef,"The user attacks by slamming its body into the target. The higher the user's Defense, the more damage it can inflict on the target."
+694,BODYPRESS,Body Press,178,80,FIGHTING,Physical,100,10,0,00,0,abef,"The user attacks by slamming its body into the target. The higher the user's Defense, the more damage it can inflict on the target."
 695,BOLTBEAK,Bolt Beak,177,85,ELECTRIC,Physical,100,10,0,00,0,abef,"The user stabs the target with its electrified beak. If the user attacks before the target, the power of this move is doubled."
 696,BRANCHPOKE,Branch Poke,000,40,GRASS,Physical,100,40,0,00,0,abef,"The user attacks the target by poking it with a sharply pointed branch."
 697,BREAKINGSWIPE,Breaking Swipe,042,60,DRAGON,Physical,100,15,100,04,0,abef,"The user swings its tough tail wildly and attacks opposing Pokémon. This also lowers their Attack stats."

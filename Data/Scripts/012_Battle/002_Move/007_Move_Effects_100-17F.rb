@@ -2647,6 +2647,18 @@ end
 
 
 
+#===============================================================================
+# The user attacks by slamming its body into the target. The higher the user's 
+# Defense, the more damage it can inflict on the target. (Body Press)
+#===============================================================================
+class PokeBattle_Move_178 < PokeBattle_Move
+  def pbGetAttackStats(user,target)
+    atk=user.defense
+    return user.defense, user.stages[PBStats::DEFENSE]+6
+  end
+end
+
+
 # NOTE: If you're inventing new move effects, use function code 176 and onwards.
 #       Actually, you might as well use high numbers like 500+ (up to FFFF),
 #       just to make sure later additions to Essentials don't clash with your
