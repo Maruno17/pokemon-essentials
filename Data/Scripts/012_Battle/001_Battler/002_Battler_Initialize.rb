@@ -278,7 +278,7 @@ class PokeBattle_Battler
     @effects[PBEffects::WeightChange]        = 0
     @effects[PBEffects::Yawn]                = 0
     @effects[PBEffects::GorillaTactics]      = -1
-	@effects[PBEffects::BallFetch]           = 0
+	  @effects[PBEffects::BallFetch]           = 0
   end
 
   #=============================================================================
