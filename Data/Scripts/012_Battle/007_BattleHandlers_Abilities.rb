@@ -1792,15 +1792,14 @@ BattleHandlers::TargetAbilityOnHit.add(:PERISHBODY,
 
 BattleHandlers::TargetAbilityOnHit.add(:COTTONDOWN,
   proc { |ability,user,target,move,battle|
-    next if !move.pbDamagingMove?(user)
-    battle.pbShowAbilitySplash(user)
+    battle.pbShowAbilitySplash(target)
     target.eachOpposing{|b|
       b.pbLowerStatStage(PBStats::SPEED,1,target)
     }
     target.eachAlly{|b|
       b.pbLowerStatStage(PBStats::SPEED,1,target)
     }
-    battle.pbHideAbilitySplash(user)
+    battle.pbHideAbilitySplash(target)
   }
 )
 #===============================================================================
