@@ -204,7 +204,25 @@ class PokeBattle_Battler
   
   def pbCheckFormOnTerrainChange
     return if fainted? || @effects[PBEffects::Transform]
-    # MIMICRY goes here
+    # Galarian Stunfisk - Mimicry
+    if isConst?(@species,PBSpecies,:STUNFISK) && @form>=1
+      if hasActiveAbility?(:MIMICRY)
+        newForm = 1
+        case @battle.field.terrain
+        when PBBattleTerrains::Electric;   newForm = 2
+        when PBBattleTerrains::Grassy;     newForm = 3
+        when PBBattleTerrains::Misty;      newForm = 4
+        when PBBattleTerrains::Psychic;    newForm = 5
+        end
+        if @form!=newForm
+          @battle.pbShowAbilitySplash(self,true)
+          @battle.pbHideAbilitySplash(self)
+          pbChangeForm(newForm,_INTL("{1} transformed!",pbThis))
+        end
+      else
+        pbChangeForm(1,_INTL("{1} transformed!",pbThis))
+      end
+    end
   end
 
   # Checks the Pokémon's form and updates it if necessary. Used for when a
