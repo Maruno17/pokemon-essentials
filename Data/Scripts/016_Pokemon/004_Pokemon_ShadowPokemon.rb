@@ -193,7 +193,7 @@ end
 #===============================================================================
 def pbIsPurifiable?(pkmn)
   return false if !pkmn
-  return false if isConst?(pkmn.species,PBSpecies,:LUGIA)
+  return false if pkmn.isSpecies?(:LUGIA)
   return false if !pkmn.shadowPokemon? || pkmn.heartgauge>0
   return true
 end

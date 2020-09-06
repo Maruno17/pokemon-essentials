@@ -119,7 +119,7 @@ BattleHandlers::AbilityOnHPDroppedBelowHalf.copy(:EMERGENCYEXIT,:WIMPOUT)
 
 BattleHandlers::StatusCheckAbilityNonIgnorable.add(:COMATOSE,
   proc { |ability,battler,status|
-    next false if !isConst?(battler.species,PBSpecies,:KOMALA)
+    next false if !battler.isSpecies?(:KOMALA)
     next true if status.nil? || status==PBStatuses::SLEEP
   }
 )
@@ -181,13 +181,13 @@ BattleHandlers::StatusImmunityAbility.copy(:WATERVEIL,:WATERBUBBLE)
 
 BattleHandlers::StatusImmunityAbilityNonIgnorable.add(:COMATOSE,
   proc { |ability,battler,status|
-    next true if isConst?(battler.species,PBSpecies,:KOMALA)
+    next true if battler.isSpecies?(:KOMALA)
   }
 )
 
 BattleHandlers::StatusImmunityAbilityNonIgnorable.add(:SHIELDSDOWN,
   proc { |ability,battler,status|
-    next true if isConst?(battler.species,PBSpecies,:MINIOR) && battler.form<7
+    next true if battler.isSpecies?(:MINIOR) && battler.form<7
   }
 )
 

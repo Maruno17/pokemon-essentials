@@ -405,12 +405,12 @@ class StandardRestriction
     # Certain named species are not banned
     speciesWhitelist = [:DRAGONITE,:SALAMENCE,:TYRANITAR]
     for i in speciesWhitelist
-      return true if isConst?(pokemon.species,PBSpecies,i)
+      return true if pokemon.isSpecies?(i)
     end
     # Certain named species are banned
     speciesBlacklist = [:WYNAUT,:WOBBUFFET]
     for i in speciesBlacklist
-      return false if isConst?(pokemon.species,PBSpecies,i)
+      return false if pokemon.isSpecies?(i)
     end
     # Species with total base stat 600 or more are banned
     baseStats = pbGetSpeciesData(pokemon.species,pokemon.form,SpeciesBaseStats)
@@ -498,7 +498,7 @@ end
 
 class NegativeExtendedGameClause
   def isValid?(pokemon)
-    return false if isConst?(pokemon.species,PBSpecies,:ARCEUS)
+    return false if pokemon.isSpecies?(:ARCEUS)
     return false if isConst?(pokemon.item,PBItems,:MICLEBERRY)
     return false if isConst?(pokemon.item,PBItems,:CUSTAPBERRY)
     return false if isConst?(pokemon.item,PBItems,:JABOCABERRY)
@@ -605,12 +605,12 @@ class LittleCupRestriction
     return false if isConst?(pokemon.item,PBItems,:DEEPSEATOOTH)
     return false if pokemon.hasMove?(:SONICBOOM)
     return false if pokemon.hasMove?(:DRAGONRAGE)
-    return false if isConst?(pokemon.species,PBSpecies,:SCYTHER)
-    return false if isConst?(pokemon.species,PBSpecies,:SNEASEL)
-    return false if isConst?(pokemon.species,PBSpecies,:MEDITITE)
-    return false if isConst?(pokemon.species,PBSpecies,:YANMA)
-    return false if isConst?(pokemon.species,PBSpecies,:TANGELA)
-    return false if isConst?(pokemon.species,PBSpecies,:MURKROW)
+    return false if pokemon.isSpecies?(:SCYTHER)
+    return false if pokemon.isSpecies?(:SNEASEL)
+    return false if pokemon.isSpecies?(:MEDITITE)
+    return false if pokemon.isSpecies?(:YANMA)
+    return false if pokemon.isSpecies?(:TANGELA)
+    return false if pokemon.isSpecies?(:MURKROW)
     return true
   end
 end

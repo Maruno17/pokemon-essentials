@@ -271,6 +271,10 @@ class PokeBattle_Battler
     return ret
   end
 
+  def isSpecies?(species)
+    return @pokemon && @pokemon.isSpecies?(species)
+  end
+
   # Returns the active types of this Pokémon. The array should not include the
   # same type more than once, and should not include any invalid type numbers
   # (e.g. -1).

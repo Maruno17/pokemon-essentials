@@ -33,7 +33,7 @@ end
 class PokeBattle_Move_003 < PokeBattle_SleepMove
   def pbMoveFailed?(user,targets)
     if NEWEST_BATTLE_MECHANICS && isConst?(@id,PBMoves,:DARKVOID)
-      if !isConst?(user.species,PBSpecies,:DARKRAI) &&
+      if !user.isSpecies?(:DARKRAI) &&
          !isConst?(user.effects[PBEffects::TransformSpecies],PBSpecies,:DARKRAI)
         @battle.pbDisplay(_INTL("But {1} can't use the move!",user.pbThis))
         return true
@@ -46,7 +46,7 @@ class PokeBattle_Move_003 < PokeBattle_SleepMove
     return if numHits==0
     return if user.fainted? || user.effects[PBEffects::Transform]
     return if !isConst?(@id,PBMoves,:RELICSONG)
-    return if !isConst?(user.species,PBSpecies,:MELOETTA)
+    return if !user.isSpecies?(:MELOETTA)
     return if user.hasActiveAbility?(:SHEERFORCE) && @addlEffect>0
     newForm = (oldForm+1)%2
     user.pbChangeForm(newForm,_INTL("{1} transformed!",user.pbThis))

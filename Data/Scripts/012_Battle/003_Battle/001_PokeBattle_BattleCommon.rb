@@ -170,17 +170,17 @@ module PokeBattle_BattleCommon
       rareness = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesRareness)
     end
     # Modify rareness depending on the Poké Ball's effect
-    ultraBeast = (isConst?(battler.species,PBSpecies,:NIHILEGO) ||
-       isConst?(battler.species,PBSpecies,:BUZZWOLE) ||
-       isConst?(battler.species,PBSpecies,:PHEROMOSA) ||
-       isConst?(battler.species,PBSpecies,:XURKITREE) ||
-       isConst?(battler.species,PBSpecies,:CELESTEELA) ||
-       isConst?(battler.species,PBSpecies,:KARTANA) ||
-       isConst?(battler.species,PBSpecies,:GUZZLORD) ||
-       isConst?(battler.species,PBSpecies,:POIPOLE) ||
-       isConst?(battler.species,PBSpecies,:NAGANADEL) ||
-       isConst?(battler.species,PBSpecies,:STAKATAKA) ||
-       isConst?(battler.species,PBSpecies,:BLACEPHALON))
+    ultraBeast = (battler.isSpecies?(:NIHILEGO) ||
+       battler.isSpecies?(:BUZZWOLE) ||
+       battler.isSpecies?(:PHEROMOSA) ||
+       battler.isSpecies?(:XURKITREE) ||
+       battler.isSpecies?(:CELESTEELA) ||
+       battler.isSpecies?(:KARTANA) ||
+       battler.isSpecies?(:GUZZLORD) ||
+       battler.isSpecies?(:POIPOLE) ||
+       battler.isSpecies?(:NAGANADEL) ||
+       battler.isSpecies?(:STAKATAKA) ||
+       battler.isSpecies?(:BLACEPHALON))
     if !ultraBeast || isConst?(ball,PBItems,:BEASTBALL)
       rareness = BallHandlers.modifyCatchRate(ball,rareness,self,battler,ultraBeast)
     else

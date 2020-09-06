@@ -1762,7 +1762,7 @@ class PokemonStorageScreen
     end
     if box>=0
       @heldpkmn.formTime = nil if @heldpkmn.respond_to?("formTime")
-      @heldpkmn.form     = 0 if isConst?(@heldpkmn.species,PBSpecies,:SHAYMIN)
+      @heldpkmn.form     = 0 if @heldpkmn.isSpecies?(:SHAYMIN)
       @heldpkmn.heal
     end
     @scene.pbPlace(selected,@heldpkmn)
@@ -1791,7 +1791,7 @@ class PokemonStorageScreen
     end
     if box>=0
       @heldpkmn.formTime = nil if @heldpkmn.respond_to?("formTime")
-      @heldpkmn.form     = 0 if isConst?(@heldpkmn.species,PBSpecies,:SHAYMIN)
+      @heldpkmn.form     = 0 if @heldpkmn.isSpecies?(:SHAYMIN)
       @heldpkmn.heal
     end
     @scene.pbSwap(selected,@heldpkmn)
