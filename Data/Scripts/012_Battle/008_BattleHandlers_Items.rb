@@ -20,7 +20,7 @@ BattleHandlers::SpeedCalcItem.copy(:MACHOBRACE,:POWERANKLET,:POWERBAND,
 
 BattleHandlers::SpeedCalcItem.add(:QUICKPOWDER,
   proc { |item,battler,mult|
-    next mult*2 if isConst?(battler.species,PBSpecies,:DITTO) &&
+    next mult*2 if battler.isSpecies?(:DITTO) &&
                    !battler.effects[PBEffects::Transform]
   }
 )
@@ -442,7 +442,7 @@ BattleHandlers::AccuracyCalcTargetItem.copy(:BRIGHTPOWDER,:LAXINCENSE)
 
 BattleHandlers::DamageCalcUserItem.add(:ADAMANTORB,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if isConst?(user.species,PBSpecies,:DIALGA) &&
+    if user.isSpecies?(:DIALGA) &&
        (isConst?(type,PBTypes,:DRAGON) || isConst?(type,PBTypes,:STEEL))
       mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.2).round
     end
@@ -499,7 +499,7 @@ BattleHandlers::DamageCalcUserItem.add(:DARKGEM,
 
 BattleHandlers::DamageCalcUserItem.add(:DEEPSEATOOTH,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if isConst?(user.species,PBSpecies,:CLAMPERL) && move.specialMove?
+    if user.isSpecies?(:CLAMPERL) && move.specialMove?
       mults[ATK_MULT] *= 2
     end
   }
@@ -571,7 +571,7 @@ BattleHandlers::DamageCalcUserItem.add(:GRASSGEM,
 
 BattleHandlers::DamageCalcUserItem.add(:GRISEOUSORB,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if isConst?(user.species,PBSpecies,:GIRATINA) &&
+    if user.isSpecies?(:GIRATINA) &&
        (isConst?(type,PBTypes,:DRAGON) || isConst?(type,PBTypes,:GHOST))
       mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.2).round
     end
@@ -608,7 +608,7 @@ BattleHandlers::DamageCalcUserItem.add(:LIFEORB,
 
 BattleHandlers::DamageCalcUserItem.add(:LIGHTBALL,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if isConst?(user.species,PBSpecies,:PIKACHU)
+    if user.isSpecies?(:PIKACHU)
       mults[ATK_MULT] *= 2
     end
   }
@@ -616,7 +616,7 @@ BattleHandlers::DamageCalcUserItem.add(:LIGHTBALL,
 
 BattleHandlers::DamageCalcUserItem.add(:LUSTROUSORB,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if isConst?(user.species,PBSpecies,:PALKIA) &&
+    if user.isSpecies?(:PALKIA) &&
        (isConst?(type,PBTypes,:DRAGON) || isConst?(type,PBTypes,:WATER))
       mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.2).round
     end
@@ -746,8 +746,7 @@ BattleHandlers::DamageCalcUserItem.copy(:SOFTSAND,:EARTHPLATE)
 
 BattleHandlers::DamageCalcUserItem.add(:SOULDEW,
   proc { |item,user,target,move,mults,baseDmg,type|
-    next if !isConst?(user.species,PBSpecies,:LATIAS) &&
-            !isConst?(user.species,PBSpecies,:LATIOS)
+    next if !user.isSpecies?(:LATIAS) && !user.isSpecies?(:LATIOS)
     if NEWEST_BATTLE_MECHANICS
       if isConst?(type,PBTypes,:PSYCHIC) || isConst?(type,PBTypes,:DRAGON)
         mults[FINAL_DMG_MULT] = (mults[FINAL_DMG_MULT]*1.2).round
@@ -776,8 +775,7 @@ BattleHandlers::DamageCalcUserItem.add(:STEELGEM,
 
 BattleHandlers::DamageCalcUserItem.add(:THICKCLUB,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if (isConst?(user.species,PBSpecies,:CUBONE) ||
-       isConst?(user.species,PBSpecies,:MAROWAK)) && move.physicalMove?
+    if (user.isSpecies?(:CUBONE) || user.isSpecies?(:MAROWAK)) && move.physicalMove?
       mults[ATK_MULT] *= 2
     end
   }
@@ -969,7 +967,7 @@ BattleHandlers::DamageCalcTargetItem.add(:YACHEBERRY,
 
 BattleHandlers::CriticalCalcUserItem.add(:LUCKYPUNCH,
   proc { |item,user,target,c|
-    next c+2 if isConst?(user.species,PBSpecies,:CHANSEY)
+    next c+2 if user.isSpecies?(:CHANSEY)
   }
 )
 
@@ -983,7 +981,7 @@ BattleHandlers::CriticalCalcUserItem.copy(:RAZORCLAW,:SCOPELENS)
 
 BattleHandlers::CriticalCalcUserItem.add(:STICK,
   proc { |item,user,target,c|
-    next c+2 if isConst?(user.species,PBSpecies,:FARFETCHD)
+    next c+2 if user.isSpecies?(:FARFETCHD)
   }
 )
 

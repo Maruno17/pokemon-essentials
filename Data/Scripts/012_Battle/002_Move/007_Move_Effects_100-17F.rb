@@ -730,11 +730,11 @@ class PokeBattle_Move_11A < PokeBattle_Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    if isConst?(target.species,PBSpecies,:DIGLETT) ||
-       isConst?(target.species,PBSpecies,:DUGTRIO) ||
-       isConst?(target.species,PBSpecies,:SANDYGAST) ||
-       isConst?(target.species,PBSpecies,:PALOSSAND) ||
-       (isConst?(target.species,PBSpecies,:GENGAR) && target.mega?)
+    if target.isSpecies?(:DIGLETT) ||
+       target.isSpecies?(:DUGTRIO) ||
+       target.isSpecies?(:SANDYGAST) ||
+       target.isSpecies?(:PALOSSAND) ||
+       (target.isSpecies?(:GENGAR) && target.mega?)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1202,7 +1202,7 @@ class PokeBattle_Move_13B < PokeBattle_StatDownMove
   end
 
   def pbMoveFailed?(user,targets)
-    if !isConst?(user.species,PBSpecies,:HOOPA)
+    if !user.isSpecies?(:HOOPA)
       @battle.pbDisplay(_INTL("But {1} can't use the move!",user.pbThis(true)))
       return true
     elsif user.form!=1

@@ -216,7 +216,7 @@ class PokeBattle_Battler
       end
     end
     # Stance Change
-    if isConst?(@species,PBSpecies,:AEGISLASH) && isConst?(@ability,PBAbilities,:STANCECHANGE)
+    if isSpecies?(:AEGISLASH) && isConst?(@ability,PBAbilities,:STANCECHANGE)
       if move.damagingMove?
         pbChangeForm(1,_INTL("{1} changed to Blade Forme!",pbThis))
       elsif isConst?(move.id,PBMoves,:KINGSSHIELD)

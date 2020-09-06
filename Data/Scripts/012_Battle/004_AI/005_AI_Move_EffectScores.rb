@@ -2627,7 +2627,7 @@ class PokeBattle_AI
       score += avg/2
     #---------------------------------------------------------------------------
     when "13B"
-      if !isConst?(user.species,PBSpecies,:HOOPA) || user.form!=1
+      if !user.isSpecies?(:HOOPA) || user.form!=1
         score -= 100
       else
         score += 20 if target.stages[PBStats::DEFENSE]>0
