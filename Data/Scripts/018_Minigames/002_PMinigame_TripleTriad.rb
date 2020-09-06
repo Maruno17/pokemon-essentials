@@ -261,7 +261,6 @@ class TriadScene
     preview.y = 60
     preview.z = 4
     index = -1
-    chosenSprites = []
     for i in 0...@battle.maxCards
       @sprites["player#{i}"] = Sprite.new(@viewport)
       @sprites["player#{i}"].x = Graphics.width-92
@@ -443,9 +442,8 @@ class TriadScene
     return choice
   end
 
-  def pbPlayerPlaceCard(card,cardIndex)
+  def pbPlayerPlaceCard(cardIndex)
     @sprites["helpwindow"].text = _INTL("Place the card.")
-    choice = 0
     boardX = 0
     boardY = 0
     doRefresh = true
@@ -733,9 +731,10 @@ class TriadScreen
     for i in 0...@width*@height
       square = TriadSquare.new
       if @elements
-        begin
+        loop do
           square.type = rand(PBTypes.maxValue+1)
-        end until !PBTypes.isPseudoType?(square.type)
+          break if !PBTypes.isPseudoType?(square.type)
+        end
       end
       @board.push(square)
     end
@@ -793,7 +792,7 @@ class TriadScreen
       minIndex = minLevel*20
       maxIndex = maxLevel*20+20
       opponentCards = []
-      for i in 0...self.maxCards
+      self.maxCards.times do
         # generate random card based on level
         index = minIndex+rand(maxIndex-minIndex)
         opponentCards.push(candidates[index][0])
@@ -821,7 +820,7 @@ class TriadScreen
         while !position
           cardIndex = @scene.pbPlayerChooseCard(cards.length)
           triadCard = TriadCard.new(cards[cardIndex])
-          position = @scene.pbPlayerPlaceCard(triadCard,cardIndex)
+          position = @scene.pbPlayerPlaceCard(cardIndex)
         end
       else
         # Opponent's turn
@@ -990,7 +989,7 @@ end
 # Card storage
 #===============================================================================
 class PokemonGlobalMetadata
-  attr_accessor :triads
+  attr_writer :triads
 
   def triads
     @triads = TriadStorage.new if !@triads
