@@ -134,7 +134,7 @@ class PokeBattle_BattlePalace < PokeBattle_Battle
     end
   end
 
-  def pbRegisterMove(idxBattler,idxMove,showMessages=true)
+  def pbRegisterMove(idxBattler,idxMove,_showMessages=true)
     thispkmn = @battlers[idxBattler]
     if idxMove==-2
       @choices[idxPokemon][0] = :UseMove   # Move
@@ -264,7 +264,7 @@ class PokeBattle_AI
     end
     @justswitched[idxBattler] = shouldswitch
     if shouldswitch
-      @battle.pbParty(idxBattler).each_with_index do |pkmn,i|
+      @battle.pbParty(idxBattler).each_with_index do |_pkmn,i|
         next if !@battle.pbCanSwitch?(idxBattler,i)
         @battle.pbRegisterSwitch(idxBattler,i)
         return true

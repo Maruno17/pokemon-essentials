@@ -149,7 +149,7 @@ class PokeBattle_Battler
   #=============================================================================
   # Held item consuming/removing
   #=============================================================================
-  def pbCanConsumeBerry?(item,alwaysCheckGluttony=true)
+  def pbCanConsumeBerry?(_item,alwaysCheckGluttony=true)
     return false if @battle.pbCheckOpposingAbility(:UNNERVE,@index)
     return true if @hp<=@totalhp/4
     if alwaysCheckGluttony || NEWEST_BATTLE_MECHANICS

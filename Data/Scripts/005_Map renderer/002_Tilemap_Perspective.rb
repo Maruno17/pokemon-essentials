@@ -197,11 +197,11 @@ class Draw_Tilemap          # This class controls a set of sprites, with
   end
 
   def redrawmap
-  # Provide blank data in proper object form
+    # Provide blank data in proper object form
     self.clear
     xsize=@map_data.xsize
     ysize=@map_data.ysize
-  # Bitmaps used for each priority's drawing.  Priorities 2-5 are combined.
+    # Bitmaps used for each priority's drawing. Priorities 2-5 are combined.
     @bitmaps = [Bitmap.new(xsize*32, ysize*32+StripSize),
                 Bitmap.new(xsize*32, ysize*32+StripSize),
                 Bitmap.new(xsize*32, ysize*32+StripSize)]
@@ -213,10 +213,10 @@ class Draw_Tilemap          # This class controls a set of sprites, with
     end
     @drawnstrips.clear
     @contentstrips.clear
-  # Generate blank sprites
+    # Generate blank sprites
     @sprites.clear
     @numsprites=ysize * (32 / StripSize)
-    for i in 0...@map_data.zsize # For each layer
+    @map_data.zsize.times do   # For each layer
       @sprites.push([])
       @contentstrips.push([])
     end
@@ -227,7 +227,6 @@ class Draw_Tilemap          # This class controls a set of sprites, with
   end
 
   def update
-    oyunchanged=false
     if !@flash_data.nil? && @sprites.length>0
       flashindex=@sprites.length-1
       for j in 0...@numsprites
@@ -249,8 +248,6 @@ class Draw_Tilemap          # This class controls a set of sprites, with
       @doredraw=false
     elsif @oldOx==@ox && @oldOy==@oy
       return
-    elsif @oldOy==@oy
-      oyunchanged=true
     end
     @oldOx=@ox
     @oldOy=@oy
@@ -274,7 +271,6 @@ class Draw_Tilemap          # This class controls a set of sprites, with
     end
     vpy=@viewport.rect.y
     vpr=@viewport.rect.x+@viewport.rect.width
-    vpb=@viewport.rect.y+@viewport.rect.height
     numsprites=0
     for i in @sprites
       numsprites+=i.compact.length

@@ -28,7 +28,7 @@ def pbStoreMail(pkmn,item,message,poke1=nil,poke2=nil,poke3=nil)
   pkmn.mail = PokemonMail.new(item,message,$Trainer.name,poke1,poke2,poke3)
 end
 
-def pbDisplayMail(mail,bearer=nil)
+def pbDisplayMail(mail,_bearer=nil)
   sprites = {}
   viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z = 99999
@@ -95,7 +95,7 @@ def pbWriteMail(item,pkmn,pkmnid,scene)
        "",false,256,Graphics.width) { scene.pbUpdate }
     if message!=""
       # Store mail if a message was written
-      poke1 = poke2 = poke3 = nil
+      poke1 = poke2 = nil
       if $Trainer.party[pkmnid+2]
         p = $Trainer.party[pkmnid+2]
         poke1 = [p.species,p.gender,p.shiny?,(p.form rescue 0),p.shadowPokemon?]
@@ -110,8 +110,7 @@ def pbWriteMail(item,pkmn,pkmnid,scene)
       poke3.push(true) if pkmn.egg?
       pbStoreMail(pkmn,item,message,poke1,poke2,poke3)
       return true
-    else
-      return false if scene.pbConfirm(_INTL("Stop giving the Pokémon Mail?"))
     end
+    return false if scene.pbConfirm(_INTL("Stop giving the Pokémon Mail?"))
   end
 end

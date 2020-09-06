@@ -351,7 +351,6 @@ class PokeBattle_Battler
        :COMATOSE,
        :RKSSYSTEM
     ]
-    failed = false
     abilityBlacklist.each do |abil|
       return true if isConst?(@ability,PBAbilities,abil)
     end

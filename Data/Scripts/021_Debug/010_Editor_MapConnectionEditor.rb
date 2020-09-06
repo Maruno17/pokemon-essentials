@@ -450,7 +450,8 @@ class MapScreenScene
         c1=(refsprite.x-othersprite.x)/4
         c2=(refsprite.y-othersprite.y)/4
         conn=[refmap,0,0,i,c1,c2]
-        j=0;while j<ret.length && !connectionsSymmetric?(ret[j],conn)
+        j=0
+        while j<ret.length && !connectionsSymmetric?(ret[j],conn)
           j+=1
         end
         if j==ret.length

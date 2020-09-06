@@ -99,7 +99,7 @@ def pbPlaySoundData(samples,volume,async=false,sampleFreq=11025)
   saveToTemp = proc { |samples,freq|
     chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     ret = nil
-    for i in 1...1000
+    999.times do
       name=""
       8.times { name += chars[rand(chars.length),1] }
       name = ENV["TEMP"]+"\\"+name+"_tmp.wav"
@@ -110,14 +110,14 @@ def pbPlaySoundData(samples,volume,async=false,sampleFreq=11025)
     end
     return ret
   }
-  playThenDelete = proc { |path,volume,length,async|
+  playThenDelete = proc { |path,volume,length,_async|
     next if !path || !safeExists?(path)
     thread=Thread.new{
       Thread.stop
-      _path=Thread.current[:path]
-      _length=Thread.current[:length]
-      sleep(_length)
-      File.delete(_path) rescue nil
+      cur_path=Thread.current[:path]
+      cur_length=Thread.current[:length]
+      sleep(cur_length)
+      File.delete(cur_path) rescue nil
     }
     thread[:path]=path
     thread[:length]=length
@@ -132,14 +132,14 @@ def pbPlaySoundData(samples,volume,async=false,sampleFreq=11025)
   waveOutHandle=" "*4
   code=waveOutOpen.call(waveOutHandle,-1,waveFormat,0,0,0)
   if code!=0
-    timeLength=samples.length.to_f/sampleFreq
+    timeLength=duration.to_f/sampleFreq
     path=saveToTemp.call(samples,sampleFreq)
     playThenDelete.call(path,volume,timeLength,async)
     return
   end
   waveOutHandle=waveOutHandle.unpack("L")[0]
   volume=(volume*65535/100)
-  volume=(volume<<16)|volume
+  volume=(volume << 16)|volume
   waveOutSetVolume.call(waveOutHandle,volume)
   code=waveOutPrepareHeader.call(waveOutHandle,waveHdr,waveHdr.length)
   if code!=0
@@ -150,7 +150,6 @@ def pbPlaySoundData(samples,volume,async=false,sampleFreq=11025)
     Thread.stop
     waveOut=Thread.current[:waveOut]
     waveHdr=Thread.current[:waveHeader]
-    waveData=Thread.current[:waveData]
     waveOutUnprepareHeader=Win32API.new("winmm.dll","waveOutUnprepareHeader","lpl","l")
     waveOutClose=Win32API.new("winmm.dll","waveOutClose","l","l")
     loop do
@@ -272,7 +271,7 @@ class WaveData
     return ret
   end
 
-  def _dump(depth=100)
+  def _dump(_depth=100)
     return Marshal.dump([@freq,Zlib::Deflate.deflate(@samples)])
   end
 
@@ -594,11 +593,17 @@ class WaveForm# :nodoc:
   def lcm(x,y)
     return y if x==0; return x if y==0
     return x if x==y
-    if x>y; incr=x
-      while x%y!=0; x+=incr; end
+    if x>y
+      incr=x
+      while x%y!=0
+        x+=incr
+      end
       return x
-    else; incr=y
-      while y%x!=0; y+=incr; end
+    else
+      incr=y
+      while y%x!=0
+        y+=incr
+      end
       return y
     end
   end
@@ -626,7 +631,6 @@ class WaveForm# :nodoc:
       vol=@volumeIterator.getValue(fframe)
     end
     if @proc
-      updateBuffer=false
       if @freqEnvelope.length>0 # Update frequency
         freq=@freqIterator.getValue(fframe)
         if freq!=@freq # update sample buffer
@@ -843,8 +847,6 @@ module Audio
     t2=852 if "7pqrs8tuv9wxyzC".include?(tone)
     t2=941 if "*0#D".include?(tone)
     return if t1==0 || t2==0
-    f1=Math::PI*2.0*t1/WaveForm::SAMPLEFREQ
-    f2=Math::PI*2.0*t2/WaveForm::SAMPLEFREQ
     doubleSine(durationInMs,t1,t2,volume,volume,0.5,0.5,async)
   end
 
@@ -908,7 +910,7 @@ def callheld(duration,volume=95)
      volume,volume)
 end
 
-def loudFastBusy(duration,volume=95)
+def loudFastBusy(duration,_volume=95)
   Audio.doubleSine(duration,
      SoundEnvelope.blink(480,250,250,duration),
      SoundEnvelope.blink(620,250,250,duration)
@@ -1009,7 +1011,6 @@ end
 
 # internal function
 def getOggPage(file)
-  pos=file.pos
   fgetdw=proc { |file|
     (file.eof? ? 0 : (file.read(4).unpack("V")[0] || 0))
   }
@@ -1035,13 +1036,15 @@ def oggfiletime(file)
   }
   pages=[]
   page=nil
-  begin
+  loop do
     page=getOggPage(file)
     if page
       pages.push(page)
       file.pos=page[3]
+    else
+      break
     end
-  end while page
+  end
   if pages.length==0
     return -1
   end
@@ -1054,30 +1057,23 @@ def oggfiletime(file)
     serial=header[10,4].unpack("V")
     frame=header[2,8].unpack("C*")
     frameno=frame[7]
-    frameno=(frameno<<8)|frame[6]
-    frameno=(frameno<<8)|frame[5]
-    frameno=(frameno<<8)|frame[4]
-    frameno=(frameno<<8)|frame[3]
-    frameno=(frameno<<8)|frame[2]
-    frameno=(frameno<<8)|frame[1]
-    frameno=(frameno<<8)|frame[0]
+    frameno=(frameno << 8)|frame[6]
+    frameno=(frameno << 8)|frame[5]
+    frameno=(frameno << 8)|frame[4]
+    frameno=(frameno << 8)|frame[3]
+    frameno=(frameno << 8)|frame[2]
+    frameno=(frameno << 8)|frame[1]
+    frameno=(frameno << 8)|frame[0]
     if serial!=curserial
       curserial=serial
       file.pos=page[1]
       packtype=(file.read(1)[0] rescue 0)
       string=file.read(6)
-      if string!="vorbis"
-        return -1
-      end
-      if packtype!=1
-        return -1
-      end
+      return -1 if string!="vorbis"
+      return -1 if packtype!=1
       i+=1
       version=fgetdw.call(file)
-      if version!=0
-        return -1
-      end
-      channels=(file.read(1)[0] rescue 0)
+      return -1 if version!=0
       rates[i]=fgetdw.call(file)
     end
     pcmlengths[i]=frameno
@@ -1180,7 +1176,6 @@ end
 
 # Creates wave data from the given WAV file path
 def getWaveData(filename)
-  time=-1
   fgetdw=proc { |file|
     (file.eof? ? 0 : (file.read(4).unpack("V")[0] || 0))
   }

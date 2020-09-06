@@ -2129,7 +2129,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
           if NEWEST_BATTLE_MECHANICS && isConst?(m.id,PBMoves,:HIDDENPOWER)
             moveType = pbHiddenPower(b.pokemon)[0]
           end
-          eff = PBTypes.getCombinedEffectiveness(moveData[MOVE_TYPE],type1,type2,type3)
+          eff = PBTypes.getCombinedEffectiveness(moveType,type1,type2,type3)
           next if PBTypes.ineffective?(eff)
           next if !PBTypes.superEffective?(eff) && moveData[MOVE_FUNCTION_CODE]!="070"   # OHKO
         else

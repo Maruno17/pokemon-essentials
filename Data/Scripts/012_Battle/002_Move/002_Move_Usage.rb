@@ -30,8 +30,8 @@ class PokeBattle_Move
   # attack in the same turn.
   # user.effects[PBEffects::TwoTurnAttack] is set to the move's ID during the
   # charging turn, and is 0 during the attack turn.
-  def pbIsChargingTurn?(user); return false;         end
-  def pbDamagingMove?;         return damagingMove?; end
+  def pbIsChargingTurn?(user); return false; end
+  def pbDamagingMove?; return damagingMove?; end
 
   def pbContactMove?(user)
     return false if user.hasActiveAbility?(:LONGREACH)
@@ -92,7 +92,7 @@ class PokeBattle_Move
   # Move failure checks
   #=============================================================================
   # Check whether the move fails completely due to move-specific requirements.
-  def pbMoveFailed?(user,targets);        return false; end
+  def pbMoveFailed?(user,targets); return false; end
   # Checks whether the move will be ineffective against the target.
   def pbFailsAgainstTarget?(user,target); return false; end
 

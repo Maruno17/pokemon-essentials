@@ -25,14 +25,14 @@ def pbPCItemStorage
         pbFadeOutIn {
           scene = WithdrawItemScene.new
           screen = PokemonBagScreen.new(scene,$PokemonBag)
-          ret = screen.pbWithdrawItemScreen
+          screen.pbWithdrawItemScreen
         }
       end
     when 1   # Deposit Item
       pbFadeOutIn {
         scene = PokemonBag_Scene.new
         screen = PokemonBagScreen.new(scene,$PokemonBag)
-        ret = screen.pbDepositItemScreen
+        screen.pbDepositItemScreen
       }
     when 2   # Toss Item
       if !$PokemonGlobal.pcItemStorage
@@ -44,7 +44,7 @@ def pbPCItemStorage
         pbFadeOutIn {
           scene = TossItemScene.new
           screen = PokemonBagScreen.new(scene,$PokemonBag)
-          ret = screen.pbTossItemScreen
+          screen.pbTossItemScreen
         }
       end
     else

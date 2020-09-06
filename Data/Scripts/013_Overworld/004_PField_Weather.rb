@@ -134,7 +134,7 @@ module RPG
       @blizzardBitmap2.fill_rect(0,4,10,2,snowColor)
       @blizzardBitmap2.fill_rect(2,6,6,2,snowColor)
       @blizzardBitmap2.fill_rect(4,8,2,2,snowColor)
-      for i in 0...540
+      540.times do
         @blizzardBitmap3.fill_rect(rand(bmWidth/2)*2,rand(bmHeight/2)*2,2,2,snowColor)
         @blizzardBitmap4.fill_rect(rand(bmWidth/2)*2,rand(bmHeight/2)*2,2,2,snowColor)
       end
@@ -163,7 +163,7 @@ module RPG
       bmHeight = 200
       @sandstormBitmap1 = Bitmap.new(bmWidth,bmHeight)
       @sandstormBitmap2 = Bitmap.new(bmWidth,bmHeight)
-      for i in 0...540
+      540.times do
         @sandstormBitmap1.fill_rect(rand(bmWidth/2)*2,rand(bmHeight/2)*2,2,2,
            sandstormColors[rand(sandstormColors.length)])
         @sandstormBitmap2.fill_rect(rand(bmWidth/2)*2,rand(bmHeight/2)*2,2,2,

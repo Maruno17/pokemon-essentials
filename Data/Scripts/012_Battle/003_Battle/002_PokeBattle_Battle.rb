@@ -307,7 +307,7 @@ class PokeBattle_Battle
   # screen.
   def pbPlayerDisplayParty(idxBattler=0)
     partyOrders = pbPartyOrder(idxBattler)
-    idxStart, idxEnd = pbTeamIndexRangeFromBattlerIndex(idxBattler)
+    idxStart, _idxEnd = pbTeamIndexRangeFromBattlerIndex(idxBattler)
     ret = []
     eachInTeamFromBattlerIndex(idxBattler) { |pkmn,i| ret[partyOrders[i]-idxStart] = pkmn }
     return ret
@@ -408,7 +408,7 @@ class PokeBattle_Battle
   # Used to calculate money gained/lost after winning/losing a battle.
   def pbMaxLevelInTeam(side,idxTrainer)
     ret = 1
-    eachInTeam(side,idxTrainer) do |pkmn,i|
+    eachInTeam(side,idxTrainer) do |pkmn,_i|
       ret = pkmn.level if pkmn.level>ret
     end
     return ret
@@ -433,13 +433,13 @@ class PokeBattle_Battle
 
   def pbSideBattlerCount(idxBattler=0)
     ret = 0
-    eachSameSideBattler(idxBattler) { |b| ret += 1 }
+    eachSameSideBattler(idxBattler) { |_b| ret += 1 }
     return ret
   end
 
   def pbOpposingBattlerCount(idxBattler=0)
     ret = 0
-    eachOtherSideBattler(idxBattler) { |b| ret += 1 }
+    eachOtherSideBattler(idxBattler) { |_b| ret += 1 }
     return ret
   end
 
@@ -558,7 +558,7 @@ class PokeBattle_Battle
     idxPartyEnd   = (idxTrainer<partyStarts.length-1) ? partyStarts[idxTrainer+1] : party.length
     origPartyPos = partyOrders[idxParty]   # Position of erased Pokémon initially
     partyOrders[idxParty] = idxPartyEnd   # Put erased Pokémon last in the team
-    party.each_with_index do |pkmn,i|
+    party.each_with_index do |_pkmn,i|
       next if i<idxPartyStart || i>=idxPartyEnd   # Only check the team
       next if partyOrders[i]<origPartyPos   # Appeared before erased Pokémon
       partyOrders[i] -= 1   # Appeared after erased Pokémon; bump it up by 1
@@ -756,8 +756,8 @@ class PokeBattle_Battle
     @scene.pbAnimation(move,user,targets,hitNum) if @showAnims
   end
 
-  def pbCommonAnimation(name,user=nil,targets=nil,hitNum=0)
-    @scene.pbCommonAnimation(name,user,targets,hitNum) if @showAnims
+  def pbCommonAnimation(name,user=nil,targets=nil)
+    @scene.pbCommonAnimation(name,user,targets) if @showAnims
   end
 
   def pbShowAbilitySplash(battler,delay=false,logTrigger=true)

@@ -738,7 +738,6 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
     pbFadeOutIn { pbTilesetScreen }
   when "setencounters"
     encdata = pbLoadEncountersData
-    oldencdata = Marshal.dump(encdata)
     map = pbDefaultMap
     loop do
       map = pbListScreen(_INTL("SET ENCOUNTERS"),MapLister.new(map))

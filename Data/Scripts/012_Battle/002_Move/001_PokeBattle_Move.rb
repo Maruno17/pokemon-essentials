@@ -61,7 +61,7 @@ class PokeBattle_Move
   #=============================================================================
   # About the move
   #=============================================================================
-  def pbTarget(user); return @target; end
+  def pbTarget(_user); return @target; end
 
   def totalpp
     return @totalpp if @totalpp && @totalpp>0   # Usually undefined
@@ -127,8 +127,8 @@ class PokeBattle_Move
   def danceMove?;         return @flags[/o/]; end
 
   # Causes perfect accuracy (param=1) and double damage (param=2).
-  def tramplesMinimize?(param=1); return false; end
-  def nonLethal?(user,target);    return false; end   # For False Swipe
+  def tramplesMinimize?(_param=1); return false; end
+  def nonLethal?(_user,_target); return false; end   # For False Swipe
 
   def ignoresSubstitute?(user)   # user is the Pokémon using this move
     if NEWEST_BATTLE_MECHANICS

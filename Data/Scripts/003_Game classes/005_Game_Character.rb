@@ -22,7 +22,7 @@ class Game_Character
   attr_accessor :transparent
   attr_reader   :move_speed
   attr_accessor :walk_anime
-  attr_accessor :bob_height
+  attr_writer   :bob_height
 
   def initialize(map=nil)
     @map                       = map
@@ -415,7 +415,7 @@ class Game_Character
         when 42; @opacity = command.parameters[0]
         when 43; @blend_type = command.parameters[0]
         when 44; pbSEPlay(command.parameters[0])
-        when 45; result = eval(command.parameters[0])
+        when 45; eval(command.parameters[0])
         end
         @move_route_index += 1
       end

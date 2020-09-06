@@ -31,7 +31,6 @@ class PokeBattle_Battler
 
   def pbRecoverHPFromDrain(amt,target,msg=nil)
     if target.hasActiveAbility?(:LIQUIDOOZE)
-      oldHP = @hp
       @battle.pbShowAbilitySplash(target)
       pbReduceHP(amt)
       @battle.pbDisplay(_INTL("{1} sucked up the liquid ooze!",pbThis))

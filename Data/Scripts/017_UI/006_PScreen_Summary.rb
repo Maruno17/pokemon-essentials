@@ -316,7 +316,6 @@ class PokemonSummary_Scene
     end
     # Draw all images
     pbDrawImagePositions(overlay,imagepos)
-    textpos = []
     # Write various bits of text
     pagename = [_INTL("INFO"),
                 _INTL("TRAINER MEMO"),
@@ -516,8 +515,6 @@ class PokemonSummary_Scene
 
   def drawPageTwo
     overlay = @sprites["overlay"].bitmap
-    base   = Color.new(248,248,248)
-    shadow = Color.new(104,104,104)
     memo = ""
     # Write nature
     showNature = !@pokemon.shadowPokemon? || @pokemon.heartStage>3
@@ -718,10 +715,8 @@ class PokemonSummary_Scene
     # Get data for selected move
     moveData = pbGetMoveData(moveid)
     basedamage = moveData[MOVE_BASE_DAMAGE]
-    type       = moveData[MOVE_TYPE]
     category   = moveData[MOVE_CATEGORY]
     accuracy   = moveData[MOVE_ACCURACY]
-    move = moveid
     textpos = []
     # Write power and accuracy values for selected move
     if basedamage==0   # Status move
@@ -818,8 +813,6 @@ class PokemonSummary_Scene
 
   def drawPageFive
     overlay = @sprites["overlay"].bitmap
-    base   = Color.new(248,248,248)
-    shadow = Color.new(104,104,104)
     @sprites["uparrow"].visible   = false
     @sprites["downarrow"].visible = false
     # Write various bits of text
@@ -1178,7 +1171,7 @@ class PokemonSummary_Scene
       pbFadeOutIn {
         scene = PokemonBag_Scene.new
         screen = PokemonBagScreen.new(scene,$PokemonBag)
-        item = screen.pbChooseItemScreen(Proc.new { |item| pbCanHoldItem?(item) })
+        item = screen.pbChooseItemScreen(Proc.new { |itm| pbCanHoldItem?(itm) })
       }
       if item>0
         dorefresh = pbGiveItemToPokemon(item,@pokemon,self,@partyindex)

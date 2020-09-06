@@ -54,8 +54,8 @@ class PBMoveData
   attr_reader :function,:basedamage,:type,:accuracy,:category
   attr_reader :totalpp,:addlEffect,:target,:priority,:flags
 
-  def initialize(moveid)
-    moveData = pbGetMoveData(moveID)
+  def initialize(move_id)
+    moveData = pbGetMoveData(move_id)
     @function   = moveData[MOVE_FUNCTION_CODE]
     @basedamage = moveData[MOVE_BASE_DAMAGE]
     @type       = moveData[MOVE_TYPE]

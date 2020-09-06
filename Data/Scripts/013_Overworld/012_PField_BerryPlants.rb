@@ -28,7 +28,7 @@ def pbClearData
   __berryPlant__pbClearData
 end
 
-Events.onSpritesetCreate += proc { |sender,e|
+Events.onSpritesetCreate += proc { |_sender,e|
   spriteset = e[0]
   viewport  = e[1]
   map = spriteset.map
@@ -105,7 +105,7 @@ end
 class BerryPlantSprite
   REPLANTS = 9
 
-  def initialize(event,map,viewport)
+  def initialize(event,map,_viewport)
     @event=event
     @map=map
     @oldstage=0

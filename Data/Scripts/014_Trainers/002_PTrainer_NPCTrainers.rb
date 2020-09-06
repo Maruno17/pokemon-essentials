@@ -126,7 +126,6 @@ def pbNewTrainer(trainerid,trainername,trainerparty,savechanges=true)
         params.setDefaultValue(10)
         level = pbMessageChooseNumber(_INTL("Set the level for {1} (max. #{PBExperience.maxLevel}).",
            PBSpecies.getName(species)),params)
-        tempPoke = pbNewPkmn(species,level)
         pokemon.push([species,level])
         break
       end
@@ -136,7 +135,7 @@ def pbNewTrainer(trainerid,trainername,trainerparty,savechanges=true)
   if savechanges
     data = pbLoadTrainersData
     data.push(trainer)
-    data = save_data(data,"Data/trainers.dat")
+    save_data(data,"Data/trainers.dat")
     $PokemonTemp.trainersData = nil
     pbConvertTrainerData
     pbMessage(_INTL("The Trainer's data was added to the list of battles and in PBS/trainers.txt."))
@@ -168,7 +167,6 @@ def pbGetFreeTrainerParty(trainerid,trainername)
     end
     trainerid = getID(PBTrainers,trainerid)
   end
-  ret = -1
   trainers = pbLoadTrainersData
   usedparties = []
   for trainer in trainers
@@ -213,8 +211,7 @@ def pbMissingTrainer(trainerid, trainername, trainerparty)
     end
     trainerid = getID(PBTrainers,trainerid)
   end
-  traineridstring = "#{trainerid}"
-  traineridstring = getConstantName(PBTrainers,trainerid) rescue "-"
+  traineridstring = getConstantName(PBTrainers,trainerid) rescue "#{trainerid}"
   if !$DEBUG
     raise _INTL("Can't find trainer ({1}, {2}, ID {3})",traineridstring,trainername,trainerparty)
   end

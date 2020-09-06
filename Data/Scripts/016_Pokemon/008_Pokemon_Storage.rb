@@ -111,7 +111,7 @@ class PokemonStorage
     $Trainer.party
   end
 
-  def party=(value)
+  def party=(_value)
     raise ArgumentError.new("Not supported")
   end
 

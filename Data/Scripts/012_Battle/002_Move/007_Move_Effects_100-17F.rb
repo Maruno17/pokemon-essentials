@@ -1029,7 +1029,7 @@ class PokeBattle_Move_133 < PokeBattle_Move
 
   def pbMoveFailed?(user,targets)
     hasAlly = false
-    user.eachAlly do |b|
+    user.eachAlly do |_b|
       hasAlly = true
       break
     end

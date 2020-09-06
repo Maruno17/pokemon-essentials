@@ -3,11 +3,10 @@ class PokemonGlobalMetadata
   attr_accessor :roamedAlready   # Whether a roamer has been encountered on current map
   attr_accessor :roamEncounter
   attr_accessor :roamPokemon
-  attr_accessor :roamPokemonCaught
+  attr_writer   :roamPokemonCaught
 
   def roamPokemonCaught
-    @roamPokemonCaught = [] if !@roamPokemonCaught
-    return @roamPokemonCaught
+    return @roamPokemonCaught || []
   end
 end
 
@@ -97,7 +96,7 @@ end
 
 # When the player moves to a new map (with a different name), make all roaming
 # Pokémon roam.
-Events.onMapChange += proc { |sender,e|
+Events.onMapChange += proc { |_sender,e|
   oldMapID = e[0]
   # Get and compare map names
   mapInfos = $RPGVX ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
@@ -206,7 +205,7 @@ EncounterModifier.register(proc { |encounter|
   next [chosenRoamer[1],chosenRoamer[2]]   # Species, level
 })
 
-Events.onWildBattleOverride += proc { |sender,e|
+Events.onWildBattleOverride += proc { |_sender,e|
   species = e[0]
   level   = e[1]
   handled = e[2]

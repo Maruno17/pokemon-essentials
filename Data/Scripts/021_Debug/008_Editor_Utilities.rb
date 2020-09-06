@@ -292,7 +292,7 @@ def pbChooseMoveListForSpecies(species,defaultMoveID=0)
   end
   commands.sort! { |a,b| a[1]<=>b[1] }
   if defaultMoveID>0
-    commands.each_with_index do |item,i|
+    commands.each_with_index do |_item,i|
       moveDefault = i if moveDefault==0 && i[0]==defaultMoveID
     end
   end
@@ -304,7 +304,7 @@ def pbChooseMoveListForSpecies(species,defaultMoveID=0)
   end
   commands2.sort! { |a,b| a[1]<=>b[1] }
   if defaultMoveID>0
-    commands2.each_with_index do |item,i|
+    commands2.each_with_index do |_item,i|
       moveDefault = i if moveDefault==0 && i[0]==defaultMoveID
     end
   end
@@ -398,7 +398,6 @@ def pbCommands2(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
   cmdwindow.z        = 99999
   cmdwindow.visible  = true
   cmdwindow.active   = true
-  ret = 0
   command = 0
   loop do
     Graphics.update
@@ -436,7 +435,6 @@ def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
   cmdwindow.z        = 99999
   cmdwindow.visible  = true
   cmdwindow.active   = true
-  ret = []
   command = 0
   loop do
     Graphics.update
@@ -526,7 +524,6 @@ def pbCommandsSortable(cmdwindow,commands,cmdIfCancel,defaultindex=-1,sortable=f
   cmdwindow.height   = Graphics.height
   cmdwindow.z        = 99999
   cmdwindow.active   = true
-  ret = nil
   command = 0
   loop do
     Graphics.update

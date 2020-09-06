@@ -2,7 +2,7 @@ class PokeBattle_Battler
   #=============================================================================
   # Get move's user
   #=============================================================================
-  def pbFindUser(choice,move)
+  def pbFindUser(_choice,_move)
     return self
   end
 
@@ -169,7 +169,7 @@ class PokeBattle_Battler
     return true
   end
 
-  def pbAddTargetRandomAlly(targets,user,move,nearOnly=true)
+  def pbAddTargetRandomAlly(targets,user,_move,nearOnly=true)
     choices = []
     user.eachAlly do |b|
       next if nearOnly && !user.near?(b)
@@ -180,7 +180,7 @@ class PokeBattle_Battler
     end
   end
 
-  def pbAddTargetRandomFoe(targets,user,move,nearOnly=true)
+  def pbAddTargetRandomFoe(targets,user,_move,nearOnly=true)
     choices = []
     user.eachOpposing do |b|
       next if nearOnly && !user.near?(b)

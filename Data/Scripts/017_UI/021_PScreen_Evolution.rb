@@ -48,8 +48,7 @@ class SpriteMetafile
     return false
   end
 
-  def dispose
-  end
+  def dispose; end
 
   def flash(color,duration)
     if duration>0
@@ -95,8 +94,8 @@ class SpriteMetafile
 
   def src_rect=(value)
     @values[SRC_RECT]=value
-   @metafile.push([SRC_RECT,value])
- end
+    @metafile.push([SRC_RECT,value])
+  end
 
   def visible
     return @values[VISIBLE]
@@ -610,7 +609,7 @@ class PokemonEvolutionScene
 
   def pbRemoveItemAfterEvolution
     removeItem = false
-    createSpecies = pbCheckEvolutionEx(@pokemon) { |pokemon,evonib,level,pkmn|
+    createSpecies = pbCheckEvolutionEx(@pokemon) { |_pokemon,evonib,_level,pkmn|
       case evonib
       when PBEvolution::Shedinja
         next pkmn if $PokemonBag.pbHasItem?(getConst(PBItems,:POKEBALL))

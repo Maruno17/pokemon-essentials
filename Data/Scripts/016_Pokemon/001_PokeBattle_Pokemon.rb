@@ -21,16 +21,16 @@ class PokeBattle_Pokemon
   attr_accessor :moves       # Moves (PBMove)
   attr_accessor :firstmoves  # The moves known when this Pokémon was obtained
   attr_accessor :item        # Held item
-  attr_accessor :mail        # Mail
+  attr_writer   :mail        # Mail
   attr_accessor :fused       # The Pokémon fused into this one
   attr_accessor :iv          # Array of 6 Individual Values for HP, Atk, Def,
                              #    Speed, Sp Atk, and Sp Def
-  attr_accessor :ivMaxed     # Array of booleans that max each IV value
+  attr_writer   :ivMaxed     # Array of booleans that max each IV value
   attr_accessor :ev          # Effort Values
   attr_accessor :happiness   # Current happiness
   attr_accessor :ballused    # Ball used
   attr_accessor :eggsteps    # Steps to hatch egg, 0 if Pokémon is not an egg
-  attr_accessor :markings    # Markings
+  attr_writer   :markings    # Markings
   attr_accessor :ribbons     # Array of ribbons
   attr_accessor :pokerus     # Pokérus strain and infection time
   attr_accessor :personalID  # Personal ID
@@ -41,15 +41,15 @@ class PokeBattle_Pokemon
                              #    4 - fateful encounter
   attr_accessor :obtainMap   # Map where obtained
   attr_accessor :obtainText  # Replaces the obtain map's name if not nil
-  attr_accessor :obtainLevel # Level obtained
+  attr_writer   :obtainLevel # Level obtained
   attr_accessor :hatchedMap  # Map where an egg was hatched
-  attr_accessor :language    # Language
+  attr_writer   :language    # Language
   attr_accessor :ot          # Original Trainer's name
-  attr_accessor :otgender    # Original Trainer's gender:
+  attr_writer   :otgender    # Original Trainer's gender:
                              #    0 - male, 1 - female, 2 - mixed, 3 - unknown
                              #    For information only, not used to verify
                              #    ownership of the Pokémon
-  attr_accessor :cool,:beauty,:cute,:smart,:tough,:sheen   # Contest stats
+  attr_writer   :cool,:beauty,:cute,:smart,:tough,:sheen   # Contest stats
 
   IV_STAT_LIMIT         = 31    # Max total IVs
   EV_LIMIT              = 510   # Max total EVs
@@ -348,7 +348,7 @@ class PokeBattle_Pokemon
     strain = 1+rand(15) if strain<=0 || strain>=16
     time = 1+(strain%4)
     @pokerus = time
-    @pokerus |= strain<<4
+    @pokerus |= strain << 4
   end
 
   # Resets the infection time for this Pokémon's Pokérus (even if cured).
@@ -357,7 +357,7 @@ class PokeBattle_Pokemon
     strain = @pokerus%16
     time = 1+(strain%4)
     @pokerus = time
-    @pokerus |= strain<<4
+    @pokerus |= strain << 4
   end
 
   # Reduces the time remaining for this Pokémon's Pokérus (if infected).
@@ -447,7 +447,8 @@ class PokeBattle_Pokemon
     return if move<=0
     for i in 0...4   # Already knows move, relocate it to the end of the list
       next if @moves[i].id!=move
-      j = i+1; while j<4
+      j = i+1
+      while j<4
         break if @moves[j].id==0
         tmp = @moves[j]
         @moves[j] = @moves[j-1]
@@ -524,12 +525,12 @@ class PokeBattle_Pokemon
   #=============================================================================
   # Contest attributes, ribbons
   #=============================================================================
-  def cool;   return @cool ? @cool : 0;     end
-  def beauty; return @beauty ? @beauty : 0; end
-  def cute;   return @cute ? @cute : 0;     end
-  def smart;  return @smart ? @smart : 0;   end
-  def tough;  return @tough ? @tough : 0;   end
-  def sheen;  return @sheen ? @sheen : 0;   end
+  def cool;   return @cool || 0;   end
+  def beauty; return @beauty || 0; end
+  def cute;   return @cute || 0;   end
+  def smart;  return @smart || 0;  end
+  def tough;  return @tough || 0;  end
+  def sheen;  return @sheen || 0;  end
 
   # Returns the number of ribbons this Pokémon has.
   def ribbonCount
@@ -672,8 +673,7 @@ class PokeBattle_Pokemon
   # Returns an array of booleans indicating whether a stat is made to have
   # maximum IVs (for Hyper Training). Set like @ivMaxed[PBStats::ATTACK] = true
   def ivMaxed
-    @ivMaxed = [] if !@ivMaxed
-    return @ivMaxed
+    return @ivMaxed || []
   end
 
   # Returns this Pokémon's effective IVs, taking into account Hyper Training.
@@ -870,7 +870,6 @@ class PokeBattle_Pokemon
     realSpecies = pbGetSpeciesFromFSpecies(species)[0] if species && species>0
     if !species || species<=0 || realSpecies>PBSpecies.maxValue || !cname
       raise ArgumentError.new(_INTL("The species given ({1}) is invalid.",ospecies))
-      return nil
     end
     @species      = realSpecies
     @name         = PBSpecies.getName(@species)

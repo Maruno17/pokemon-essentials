@@ -39,7 +39,7 @@ HiddenMoveHandlers::UseMove.add(:CHATTER,proc { |move,pokemon|
 
 
 class PokeBattle_Scene
-  def pbChatter(user,target)
+  def pbChatter(user,_target)
     pbPlayCry(user.pokemon,90,100) if user.pokemon
     Graphics.frame_rate.times do
       Graphics.update

@@ -805,7 +805,7 @@ class PokemonStorageScene
     return selection
   end
 
-  def pbSelectBoxInternal(party)
+  def pbSelectBoxInternal(_party)
     selection = @selection
     pbSetArrow(@sprites["arrow"],selection)
     pbUpdateOverlay(selection)
@@ -995,13 +995,14 @@ class PokemonStorageScene
     newbox.x = 520
     Graphics.frame_reset
     distancePerFrame = 64*20/Graphics.frame_rate
-    begin
+    loop do
       Graphics.update
       Input.update
       @sprites["box"].x -= distancePerFrame
       newbox.x -= distancePerFrame
       self.update
-    end until newbox.x<=184
+      break if newbox.x<=184
+    end
     diff = newbox.x-184
     newbox.x = 184
     @sprites["box"].x -= diff
@@ -1014,13 +1015,14 @@ class PokemonStorageScene
     newbox.x = -152
     Graphics.frame_reset
     distancePerFrame = 64*20/Graphics.frame_rate
-    begin
+    loop do
       Graphics.update
       Input.update
       @sprites["box"].x += distancePerFrame
       newbox.x += distancePerFrame
       self.update
-    end until newbox.x>=184
+      break if newbox.x>=184
+    end
     diff = newbox.x-184
     newbox.x = 184
     @sprites["box"].x -= diff
@@ -1057,24 +1059,26 @@ class PokemonStorageScene
   def pbShowPartyTab
     pbSEPlay("GUI storage show party panel")
     distancePerFrame = 48*20/Graphics.frame_rate
-    begin
+    loop do
       Graphics.update
       Input.update
       @sprites["boxparty"].y -= distancePerFrame
       self.update
-    end until @sprites["boxparty"].y<=Graphics.height-352
+      break if @sprites["boxparty"].y<=Graphics.height-352
+    end
     @sprites["boxparty"].y = Graphics.height-352
   end
 
   def pbHidePartyTab
     pbSEPlay("GUI storage hide party panel")
     distancePerFrame = 48*20/Graphics.frame_rate
-    begin
+    loop do
       Graphics.update
       Input.update
       @sprites["boxparty"].y += distancePerFrame
       self.update
-    end until @sprites["boxparty"].y>=Graphics.height
+      break if @sprites["boxparty"].y>=Graphics.height
+    end
     @sprites["boxparty"].y = Graphics.height
   end
 
@@ -1092,7 +1096,7 @@ class PokemonStorageScene
     end
   end
 
-  def pbSwap(selected,heldpoke)
+  def pbSwap(selected,_heldpoke)
     pbSEPlay("GUI storage pick up")
     heldpokesprite = @sprites["arrow"].heldPokemon
     boxpokesprite = nil
@@ -1112,7 +1116,7 @@ class PokemonStorageScene
     @selectionForMosaic = selected[1]
   end
 
-  def pbPlace(selected,heldpoke)
+  def pbPlace(selected,_heldpoke)
     pbSEPlay("GUI storage put down")
     heldpokesprite = @sprites["arrow"].heldPokemon
     @sprites["arrow"].place
@@ -1270,7 +1274,6 @@ class PokemonStorageScene
   end
 
   def pbMark(selected,heldpoke)
-    ret = 0
     @sprites["markingbg"].visible      = true
     @sprites["markingoverlay"].visible = true
     msg = _INTL("Mark your Pokémon.")
@@ -1366,7 +1369,7 @@ class PokemonStorageScene
     @sprites["boxparty"].y = oldPartyY
   end
 
-  def drawMarkings(bitmap,x,y,width,height,markings)
+  def drawMarkings(bitmap,x,y,_width,_height,markings)
     markrect = Rect.new(0,0,16,16)
     for i in 0...8
       markrect.x = i*16
@@ -1704,7 +1707,6 @@ class PokemonStorageScreen
       loop do
         destbox = @scene.pbChooseBox(_INTL("Deposit in which Box?"))
         if destbox>=0
-          success = false
           firstfree = @storage.pbFirstFreePos(destbox)
           if firstfree<0
             pbDisplay(_INTL("The Box is full."))
@@ -1921,7 +1923,7 @@ class PokemonStorageScreen
     end
   end
 
-  def pbChoosePokemon(party=nil)
+  def pbChoosePokemon(_party=nil)
     @heldpkmn = nil
     @scene.pbStartBox(self,1)
     retval = nil

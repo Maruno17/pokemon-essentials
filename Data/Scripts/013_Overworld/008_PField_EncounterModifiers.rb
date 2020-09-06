@@ -6,7 +6,7 @@
 ################################################################################
 
 # Make all wild Pokémon shiny while a certain Switch is ON (see Settings).
-Events.onWildPokemonCreate += proc { |sender,e|
+Events.onWildPokemonCreate += proc { |_sender, e|
   pokemon = e[0]
   if $game_switches[SHINY_WILD_POKEMON_SWITCH]
     pokemon.makeShiny
@@ -17,14 +17,14 @@ Events.onWildPokemonCreate += proc { |sender,e|
 # map depend on the levels of Pokémon in the player's party.
 # This is a simple method, and can/should be modified to account for evolutions
 # and other such details.  Of course, you don't HAVE to use this code.
-Events.onWildPokemonCreate += proc { |sender,e|
+Events.onWildPokemonCreate += proc { |_sender, e|
   pokemon = e[0]
-  if $game_map.map_id==51
-    mLevel = PBExperience.maxLevel
-    newlevel = pbBalancedLevel($Trainer.party) - 4 + rand(5)   # For variety
-    newlevel = 1 if newlevel<1
-    newlevel = mLevel if newlevel>mLevel
-    pokemon.level = newlevel
+  if $game_map.map_id == 51
+    max_level = PBExperience.maxLevel
+    new_level = pbBalancedLevel($Trainer.party) - 4 + rand(5)   # For variety
+    new_level = 1 if new_level < 1
+    new_level = max_level if new_level > max_level
+    pokemon.level = new_level
     pokemon.calcStats
     pokemon.resetMoves
   end
@@ -35,7 +35,7 @@ Events.onWildPokemonCreate += proc { |sender,e|
 # Note that you can only modify a partner trainer's Pokémon, and not the trainer
 # themselves nor their items this way, as those are generated from scratch
 # before each battle.
-#Events.onTrainerPartyLoad += proc { |sender,e|
+#Events.onTrainerPartyLoad += proc { |_sender, e|
 #  if e[0] # Trainer data should exist to be loaded, but may not exist somehow
 #    trainer = e[0][0] # A PokeBattle_Trainer object of the loaded trainer
 #    items = e[0][1]   # An array of the trainer's items they can use

@@ -519,10 +519,10 @@ end
 # Fades and window activations for sprite hashes
 #===============================================================================
 class Game_Temp
-  attr_accessor :fadestate
+  attr_writer :fadestate
 
   def fadestate
-    return (@fadestate) ? @fadestate : 0
+    return @fadestate || 0
   end
 end
 

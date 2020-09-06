@@ -147,7 +147,7 @@ class PokeBattle_AI
   #=============================================================================
   def pbDefaultChooseNewEnemy(idxBattler,party)
     enemies = []
-    party.each_with_index do |p,i|
+    party.each_with_index do |_p,i|
       enemies.push(i) if @battle.pbCanSwitchLax?(idxBattler,i)
     end
     return -1 if enemies.length==0

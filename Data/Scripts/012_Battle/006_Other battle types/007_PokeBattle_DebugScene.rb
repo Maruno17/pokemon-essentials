@@ -24,7 +24,7 @@ class PokeBattle_DebugSceneNoLogging
   def pbBeginAttackPhase; end
   def pbShowOpponent(idxTrainer); end
   def pbDamageAnimation(battler,effectiveness=0); end
-  def pbCommonAnimation(animName,user=nil,target=nil,hitNum=0); end
+  def pbCommonAnimation(animName,user=nil,target=nil); end
   def pbAnimation(moveID,user,targets,hitNum=0); end
   def pbEndBattle(result); end
   def pbWildBattleSuccess; end
@@ -74,7 +74,7 @@ class PokeBattle_DebugSceneNoLogging
 
   def pbPartyScreen(idxBattler,canCancel=false)
     replacements = []
-    @battle.eachInTeamFromBattlerIndex(idxBattler) do |b,idxParty|
+    @battle.eachInTeamFromBattlerIndex(idxBattler) do |_b,idxParty|
       replacements.push(idxParty) if !@battle.pbFindBattler(idxParty,idxBattler)
     end
     return if replacements.length==0

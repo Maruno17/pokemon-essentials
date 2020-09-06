@@ -16,16 +16,16 @@ module PBHabitats
   def self.getName(id)
     id = getID(PBHabitats,id)
     names = [
-       _INTL("None"),
-       _INTL("Grassland"),
-       _INTL("Forest"),
-       _INTL("Water's Edge"),
-       _INTL("Sea"),
-       _INTL("Cave"),
-       _INTL("Mountain"),
-       _INTL("Rough Terrain"),
-       _INTL("Urban"),
-       _INTL("Rare")
+      _INTL("None"),
+      _INTL("Grassland"),
+      _INTL("Forest"),
+      _INTL("Water's Edge"),
+      _INTL("Sea"),
+      _INTL("Cave"),
+      _INTL("Mountain"),
+      _INTL("Rough Terrain"),
+      _INTL("Urban"),
+      _INTL("Rare")
     ]
     return names[id]
   end

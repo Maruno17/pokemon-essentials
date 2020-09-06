@@ -293,7 +293,7 @@ class PokeBattle_Scene
   def pbBeginEndOfRoundPhase
   end
 
-  def pbEndBattle(result)
+  def pbEndBattle(_result)
     @abortable = false
     pbShowWindow(BLANK)
     # Fade out all sprites

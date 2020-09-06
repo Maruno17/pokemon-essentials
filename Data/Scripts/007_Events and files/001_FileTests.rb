@@ -133,7 +133,7 @@ def getKnownFolder(guid)
   coTaskMemFree        = Win32API.new("ole32.dll","CoTaskMemFree","i","") rescue nil
   return "" if !(shGetKnownFolderPath && coTaskMemFree)
   path = "\0"*4
-  ret = shGetKnownFolderPath.call(packedGuid,0,0,path)
+  path = shGetKnownFolderPath.call(packedGuid,0,0,path)
   path = path.unpack("V")[0]
   ret = getUnicodeString(path)
   coTaskMemFree.call(path)
@@ -245,7 +245,7 @@ module RTP
     return false if !dir || dir==""
     loop do
       name = dir.gsub(/[\/\\]$/,"")+"/writetest"
-      for i in 0...12
+      12.times do
         name += sprintf("%02X",rand(256))
       end
       name += ".tmp"
@@ -471,12 +471,12 @@ module MiniRegistry
     type = type.unpack("V")[0]
     data = data[0,size.unpack("V")[0]]
     case type
-    when 1; return data.chop                                      # REG_SZ
-    when 2; return data.gsub(/%([^%]+)%/) { ENV[$1] || $& }       # REG_EXPAND_SZ
-    when 3; return data                                           # REG_BINARY
-    when 4; return data.unpack("V")[0]                            # REG_DWORD
-    when 5; return data.unpack("V")[0]                            # REG_DWORD_BIG_ENDIAN
-    when 11; qw = data.unpack("VV"); return (data[1]<<32|data[0]) # REG_QWORD
+    when 1; return data.chop                                   # REG_SZ
+    when 2; return data.gsub(/%([^%]+)%/) { ENV[$1] || $& }    # REG_EXPAND_SZ
+    when 3; return data                                        # REG_BINARY
+    when 4; return data.unpack("V")[0]                         # REG_DWORD
+    when 5; return data.unpack("V")[0]                         # REG_DWORD_BIG_ENDIAN
+    when 11; data.unpack("VV"); return (data[1]<<32|data[0])   # REG_QWORD
     else; raise "Type #{type} not supported."
     end
   end

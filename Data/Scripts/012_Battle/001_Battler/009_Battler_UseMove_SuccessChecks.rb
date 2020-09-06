@@ -136,7 +136,7 @@ class PokeBattle_Battler
       @battle.pbDisplay(_INTL("{1} ignored orders!",pbThis))
       return false if !@battle.pbCanShowFightMenu?(@index)
       otherMoves = []
-      eachMoveWithIndex do |m,i|
+      eachMoveWithIndex do |_m,i|
         next if i==choice[1]
         otherMoves[otherMoves.length] = i if @battle.pbCanChooseMove?(@index,i,false)
       end

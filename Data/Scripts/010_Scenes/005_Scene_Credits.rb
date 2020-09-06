@@ -135,7 +135,6 @@ _END_
       line = line.split("<s>")
       # LINE ADDED: If you use in your own game, you should remove this line
       pbSetSystemFont(credit_bitmap) # <--- This line was added
-      x = 0
       xpos = 0
       align = 1 # Centre align
       linewidth = Graphics.width

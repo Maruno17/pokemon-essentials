@@ -321,7 +321,7 @@ def pbDayCareGenerateEgg
     ivinherit[i] = PBStats::SPEED if isConst?(parent.item,PBItems,:POWERANKLET)
   end
   num = 0; r = rand(2)
-  for i in 0...2
+  2.times do
     if ivinherit[r]!=nil
       parent = [mother,father][r]
       ivs[ivinherit[r]] = parent.iv[ivinherit[r]]
@@ -355,7 +355,7 @@ def pbDayCareGenerateEgg
   shinyretries += 5 if father.language!=mother.language
   shinyretries += 2 if hasConst?(PBItems,:SHINYCHARM) && $PokemonBag.pbHasItem?(:SHINYCHARM)
   if shinyretries>0
-    for i in 0...shinyretries
+    shinyretries.times do
       break if egg.shiny?
       egg.personalID = rand(65536)|(rand(65536)<<16)
     end
@@ -410,7 +410,7 @@ end
 #===============================================================================
 # Code that happens every step the player takes.
 #===============================================================================
-Events.onStepTaken += proc { |sender,e|
+Events.onStepTaken += proc { |_sender,_e|
   # Make an egg available at the Day Care
   deposited = pbDayCareDeposited
   if deposited==2 && $PokemonGlobal.daycareEgg==0

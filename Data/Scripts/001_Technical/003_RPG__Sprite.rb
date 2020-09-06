@@ -8,7 +8,7 @@ class SpriteAnimation
 
   %w[
      x y ox oy viewport flash src_rect opacity tone
-  ].each_with_index do |s, i|
+  ].each_with_index do |s, _i|
   eval <<-__END__
 
   def #{s}(*arg)
@@ -49,7 +49,7 @@ class SpriteAnimation
     end
     @_animation_sprites = []
     if @_animation.position != 3 or not @@_animations.include?(animation)
-      for i in 0..15
+      16.times do
         sprite = ::Sprite.new(self.viewport)
         sprite.bitmap = bitmap
         sprite.visible = false
@@ -82,7 +82,7 @@ class SpriteAnimation
       @@_reference_count[bitmap] = 1
     end
     @_loop_animation_sprites = []
-    for i in 0..15
+    16.times do
       sprite = ::Sprite.new(self.viewport)
       sprite.bitmap = bitmap
       sprite.visible = false

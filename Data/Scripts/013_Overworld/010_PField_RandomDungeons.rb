@@ -19,20 +19,17 @@ class AntiRandom
       # Get old value
       value=rand(@old.length)
       return @old[value]
-    else
-      if @new.length>0
-        # Get new value
-        value=rand(@new.length)
-        ret=@new.delete_at(value)
-        @old.push(ret)
-        return ret
-      else
-        # Get old value
-        value=rand(@old.length)
-        return @old[value]
-      end
     end
-    return 0
+    if @new.length>0
+      # Get new value
+      value=rand(@new.length)
+      ret=@new.delete_at(value)
+      @old.push(ret)
+      return ret
+    end
+    # Get old value
+    value=rand(@old.length)
+    return @old[value]
   end
 end
 
@@ -310,7 +307,7 @@ class Maze
   def buildMazeWall(x,y,dir,len)
     wx=x;wy=y
     return if isBlockedNode?(x,y)
-    for c in 0...len
+    len.times do
       ox=wx;oy=wy
       wy-=1 if dir==EdgeMasks::North
       wx-=1 if dir==EdgeMasks::West
@@ -341,7 +338,6 @@ class Maze
   def recurseDepthFirst(x,y,depth)
     setVisited(x,y)
     dirs=@@dirs.shuffle!
-    success=0
     for c in 0...4
       d=dirs[c]
       cx=0;cy=0
@@ -543,7 +539,7 @@ end
 def pbRandomRoomTile(dungeon,tiles)
   ar1=AntiRandom.new(dungeon.width)
   ar2=AntiRandom.new(dungeon.height)
-  for i in 0...(tiles.length+1)*1000
+  ((tiles.length+1)*1000).times do
     x=ar1.get()
     y=ar2.get()
     if dungeon.isRoom?(x,y) &&
@@ -556,10 +552,9 @@ def pbRandomRoomTile(dungeon,tiles)
   return nil
 end
 
-Events.onMapCreate += proc { |sender, e|
+Events.onMapCreate += proc { |_sender, e|
   mapID=e[0]
   map=e[1]
-  tileset=e[2]
   if pbGetMetadata(mapID,MetadataDungeon)
     # this map is a randomly generated dungeon
     dungeon=Dungeon.new(map.width,map.height)

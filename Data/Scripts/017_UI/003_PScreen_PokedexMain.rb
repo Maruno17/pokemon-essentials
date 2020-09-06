@@ -29,7 +29,7 @@ class Window_Pokedex < Window_DrawableCommand
     return @commands.length
   end
 
-  def drawItem(index,count,rect)
+  def drawItem(index,_count,rect)
     return if index>=self.top_row+self.page_item_max
     rect = Rect.new(rect.x+16,rect.y,rect.width-16,rect.height)
     species     = @commands[index][0]
@@ -431,7 +431,8 @@ class PokemonPokedex_Scene
       y = 78
       y += ((sliderheight-boxheight)*itemlist.top_row/(itemlist.row_max-itemlist.page_row_max)).floor
       overlay.blt(468,y,@sliderbitmap.bitmap,Rect.new(40,0,40,8))
-      i = 0; while i*16<boxheight-8-16
+      i = 0
+      while i*16<boxheight-8-16
         height = [boxheight-8-16-i*16,16].min
         overlay.blt(468,y+8+i*16,@sliderbitmap.bitmap,Rect.new(40,8,40,height))
         i += 1
@@ -440,7 +441,7 @@ class PokemonPokedex_Scene
     end
   end
 
-  def pbRefreshDexSearch(params,index)
+  def pbRefreshDexSearch(params,_index)
     overlay = @sprites["overlay"].bitmap
     overlay.clear
     base   = Color.new(248,248,248)
@@ -509,7 +510,7 @@ class PokemonPokedex_Scene
     pbDrawTextPositions(overlay,textpos)
   end
 
-  def pbRefreshDexSearchParam(mode,cmds,sel,index)
+  def pbRefreshDexSearchParam(mode,cmds,sel,_index)
     overlay = @sprites["overlay"].bitmap
     overlay.clear
     base   = Color.new(248,248,248)
@@ -795,7 +796,6 @@ class PokemonPokedex_Scene
         region = dexnames[pbGetSavePositionIndex][1]
       end
     end
-    ret = -1
     scene = PokemonPokedexInfo_Scene.new
     screen = PokemonPokedexInfoScreen.new(scene)
     ret = screen.pbStartScreen(@dexlist,index,region)
@@ -985,7 +985,6 @@ class PokemonPokedex_Scene
 
   def pbDexSearch
     oldsprites = pbFadeOutAndHide(@sprites)
-    oldparams = @searchParams
     params = @searchParams.clone
     @orderCommands = []
     @orderCommands[MODENUMERICAL] = _INTL("Numerical")

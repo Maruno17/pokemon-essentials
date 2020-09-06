@@ -231,9 +231,9 @@ end
 # Pokémon class.
 #===============================================================================
 class PokeBattle_Pokemon
-  attr_accessor :heartgauge
+  attr_writer   :heartgauge
   attr_accessor :shadow
-  attr_accessor :hypermode
+  attr_writer   :hypermode
   attr_accessor :savedev
   attr_accessor :savedexp
   attr_accessor :shadowmoves
@@ -260,8 +260,7 @@ class PokeBattle_Pokemon
   end
 
   def heartgauge
-    @heartgauge = 0 if !@heartgauge
-    return @heartgauge
+    return @heartgauge || 0
   end
 
   def heartStage
@@ -668,7 +667,7 @@ end
 
 
 
-Events.onStartBattle += proc { |sender|
+Events.onStartBattle += proc { |_sender|
   # Record current heart gauges of Pokémon in party, to see if they drop to zero
   # during battle and need to say they're ready to be purified afterwards
   $PokemonTemp.heartgauges = []
@@ -677,9 +676,7 @@ Events.onStartBattle += proc { |sender|
   end
 }
 
-Events.onEndBattle += proc { |sender,e|
-  decision = e[0]
-  canLose  = e[1]
+Events.onEndBattle += proc { |_sender,_e|
   for i in 0...$PokemonTemp.heartgauges.length
     pokemon = $Trainer.party[i]
     if pokemon && $PokemonTemp.heartgauges[i] &&

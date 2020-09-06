@@ -189,7 +189,7 @@ def pbGetEnvironment
   return ret
 end
 
-Events.onStartBattle += proc { |sender|
+Events.onStartBattle += proc { |_sender|
   # Record current levels of Pokémon in party, to see if they gain a level
   # during battle and may need to evolve afterwards
   $PokemonTemp.evolutionLevels = []
@@ -555,7 +555,7 @@ def pbAfterBattle(decision,canLose)
   Events.onEndBattle.trigger(nil,decision,canLose)
 end
 
-Events.onEndBattle += proc { |sender,e|
+Events.onEndBattle += proc { |_sender,e|
   decision = e[0]
   canLose  = e[1]
   if NEWEST_BATTLE_MECHANICS || (decision!=2 && decision!=5)   # not a loss or a draw

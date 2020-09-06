@@ -63,7 +63,7 @@ end
 
 
 class PokeBattle_RealBattlePeer
-  def pbOnEnteringBattle(battle,pkmn,wild=false)
+  def pbOnEnteringBattle(_battle,pkmn,wild=false)
     f = MultipleForms.call("getFormOnEnteringBattle",pkmn,wild)
     pkmn.form = f if f
   end
@@ -248,7 +248,6 @@ MultipleForms.register(:BURMY,{
   },
   "getFormOnLeavingBattle" => proc { |pkmn,battle,usedInBattle,endBattle|
     next if !endBattle || !usedInBattle
-    env = battle.environment
     case battle.environment
     when PBEnvironment::Rock, PBEnvironment::Sand, PBEnvironment::Cave
       next 1   # Sandy Cloak

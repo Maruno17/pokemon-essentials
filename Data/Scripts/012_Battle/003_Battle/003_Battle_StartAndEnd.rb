@@ -58,7 +58,7 @@ class PokeBattle_Battle
           raise _INTL("Error: def pbGetOwnerIndexFromBattlerIndex gives invalid owner index ({1} for battle type {2}v{3}, trainers {4}v{5})",
              requireds.length-1,@sideSizes[0],@sideSizes[1],side1counts.length,side2counts.length)
         end
-        sideCounts.each_with_index do |count,i|
+        sideCounts.each_with_index do |_count,i|
           if !requireds[i] || requireds[i]==0
             raise _INTL("Player-side trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
                i+1,@sideSizes[0],@sideSizes[1]) if side==0
@@ -139,7 +139,7 @@ class PokeBattle_Battle
       # For each trainer in turn, find the needed number of Pokémon for them to
       # send out, and initialize them
       battlerNumber = 0
-      trainer.each_with_index do |t,idxTrainer|
+      trainer.each_with_index do |_t,idxTrainer|
         ret[side][idxTrainer] = []
         eachInTeam(side,idxTrainer) do |pkmn,idxPkmn|
           next if !pkmn.able?
@@ -403,7 +403,7 @@ class PokeBattle_Battle
           pbDisplayPaused(_INTL("You defeated {1}, {2} and {3}!",@opponent[0].fullname,
              @opponent[1].fullname,@opponent[2].fullname))
         end
-        @opponent.each_with_index do |t,i|
+        @opponent.each_with_index do |_t,i|
           @scene.pbShowOpponent(i)
           msg = (@endSpeeches[i] && @endSpeeches[i]!="") ? @endSpeeches[i] : "..."
           pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/,pbPlayer.name))
@@ -437,7 +437,7 @@ class PokeBattle_Battle
         pbDisplayPaused(_INTL("You blacked out!")) if !@canLose
       elsif @decision==2
         if @opponent
-          @opponent.each_with_index do |t,i|
+          @opponent.each_with_index do |_t,i|
             @scene.pbShowOpponent(i)
             msg = (@endSpeechesWin[i] && @endSpeechesWin[i]!="") ? @endSpeechesWin[i] : "..."
             pbDisplayPaused(msg.gsub(/\\[Pp][Nn]/,pbPlayer.name))

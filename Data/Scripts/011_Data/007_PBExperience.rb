@@ -185,12 +185,10 @@ module PBExperience
     mLevel = maxLevel
     maxexp = pbGetExpInternal(mLevel,growth)
     exp = maxexp if exp>maxexp
-    i = 0
-    for j in 0..mLevel
-      currentExp = pbGetExpInternal(i,growth)
-      return i if exp==currentExp
-      return i-1 if exp<currentExp
-      i += 1
+    for lvl in 0..mLevel
+      currentExp = pbGetExpInternal(lvl,growth)
+      return lvl if exp==currentExp
+      return lvl-1 if exp<currentExp
     end
     return mLevel
   end

@@ -200,7 +200,7 @@ end
 
 
 
-Events.onSpritesetCreate += proc { |sender,e|
+Events.onSpritesetCreate += proc { |_sender,e|
   spriteset = e[0]      # Spriteset being created
   viewport  = e[1]      # Viewport used for tilemap and characters
   map = spriteset.map   # Map associated with the spriteset (not necessarily the current map)
@@ -241,7 +241,6 @@ end
 
 def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
   $game_temp.in_battle = true
-  handled = false
   viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z = 99999
   # Set up audio

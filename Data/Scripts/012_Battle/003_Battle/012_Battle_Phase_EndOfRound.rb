@@ -297,7 +297,7 @@ class PokeBattle_Battle
       next if !b.canHeal?
       hpGain = b.totalhp/16
       hpGain = (hpGain*1.3).floor if b.hasActiveItem?(:BIGROOT)
-      hpGain = b.pbRecoverHP(hpGain)
+      b.pbRecoverHP(hpGain)
       pbDisplay(_INTL("Aqua Ring restored {1}'s HP!",b.pbThis(true)))
     end
     # Ingrain
@@ -306,7 +306,7 @@ class PokeBattle_Battle
       next if !b.canHeal?
       hpGain = b.totalhp/16
       hpGain = (hpGain*1.3).floor if b.hasActiveItem?(:BIGROOT)
-      hpGain = b.pbRecoverHP(hpGain)
+      b.pbRecoverHP(hpGain)
       pbDisplay(_INTL("{1} absorbed nutrients with its roots!",b.pbThis))
     end
     # Leech Seed

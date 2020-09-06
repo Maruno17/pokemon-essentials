@@ -209,13 +209,13 @@ module PokeBattle_BattlePlayerModule
     super
   end
 
-  def pbSwitchInBetween(idxBattler,checkLaxOnly=false,canCancel=false)
+  def pbSwitchInBetween(_idxBattler,_checkLaxOnly=false,_canCancel=false)
     ret = @switches[@switchindex]
     @switchindex += 1
     return ret
   end
 
-  def pbRandom(num)
+  def pbRandom(_num)
     ret = @randomnums[@randomindex]
     @randomindex += 1
     return ret

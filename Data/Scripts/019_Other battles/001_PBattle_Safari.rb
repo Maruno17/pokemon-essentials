@@ -52,7 +52,7 @@ end
 
 
 
-Events.onMapChange += proc { |sender,args|
+Events.onMapChange += proc { |_sender,_args|
   pbSafariState.pbEnd if !pbInSafari?
 }
 
@@ -72,7 +72,7 @@ def pbSafariState
   return $PokemonGlobal.safariState
 end
 
-Events.onStepTakenTransferPossible += proc { |sender,e|
+Events.onStepTakenTransferPossible += proc { |_sender,e|
   handled = e[0]
   next if handled[0]
   if pbInSafari? && pbSafariState.decision==0 && SAFARI_STEPS>0
@@ -87,7 +87,7 @@ Events.onStepTakenTransferPossible += proc { |sender,e|
   end
 }
 
-Events.onWildBattleOverride += proc { |sender,e|
+Events.onWildBattleOverride += proc { |_sender,e|
   species = e[0]
   level   = e[1]
   handled = e[2]

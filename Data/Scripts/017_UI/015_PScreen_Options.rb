@@ -3,15 +3,15 @@ class PokemonSystem
   attr_accessor :battlescene
   attr_accessor :battlestyle
   attr_accessor :frame
-  attr_accessor :textskin
+  attr_writer   :textskin
   attr_accessor :font
   attr_accessor :screensize
-  attr_accessor :border
-  attr_accessor :language
-  attr_accessor :runstyle
-  attr_accessor :bgmvolume
-  attr_accessor :sevolume
-  attr_accessor :textinput
+  attr_writer   :border
+  attr_writer   :language
+  attr_writer   :runstyle
+  attr_writer   :bgmvolume
+  attr_writer   :sevolume
+  attr_writer   :textinput
 
   def initialize
     @textspeed   = 1     # Text speed (0=slow, 1=normal, 2=fast)
@@ -327,7 +327,7 @@ class Window_PokemonOption < Window_DrawableCommand
     return @options.length+1
   end
 
-  def drawItem(index,count,rect)
+  def drawItem(index,_count,rect)
     rect = drawCursor(index,rect)
     optionname = (index==@options.length) ? _INTL("Cancel") : @options[index].name
     optionwidth = rect.width*9/20
@@ -389,7 +389,6 @@ class Window_PokemonOption < Window_DrawableCommand
   end
 
   def update
-    dorefresh = false
     oldindex = self.index
     @mustUpdateOptions = false
     super
@@ -419,7 +418,7 @@ class PokemonOption_Scene
     pbUpdateSpriteHash(@sprites)
   end
 
- def pbStartScene(inloadscreen=false)
+  def pbStartScene(inloadscreen=false)
     @sprites = {}
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999

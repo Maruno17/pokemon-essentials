@@ -1,13 +1,13 @@
 class PurifyChamberSet
-  attr_accessor :facing
-  attr_accessor :shadow
+  attr_reader :facing
+  attr_reader :shadow
 
   def partialSum(x)
     return (x*x+x)/2   # pattern: 1, 3, 6, 10, 15, 21, 28, ...
   end
 
   def length
-	  return @list.length
+    return @list.length
   end
 
   def initialize
@@ -16,15 +16,15 @@ class PurifyChamberSet
   end
 
   def facing=(value)
-	  if value>=0 && value<@list.length
-	    @facing=value
-	  end
+    if value>=0 && value<@list.length
+      @facing=value
+    end
   end
 
   def shadow=(value)
-	  if value==nil || value.shadowPokemon?
-		  @shadow=value
-	  end
+    if value==nil || value.shadowPokemon?
+      @shadow=value
+    end
   end
 
 =begin
@@ -33,15 +33,15 @@ Boosted if center has advantage over facing Pokemon
 Boosted based on number of best circles
 =end
   def flow
-	  ret=0
-	  return 0 if !@shadow
-	  for i in 0...@list.length
-	    ret+=(PurifyChamberSet.isSuperEffective(@list[i],@list[(i+1)%@list.length])) ? 1 : 0
-	  end
-	  if @list[@facing]
-		  ret+=PurifyChamberSet.isSuperEffective(@shadow,@list[@facing]) ? 1 : 0
-	  end
-	  return [ret+(@list.length/2),4].min
+    ret=0
+    return 0 if !@shadow
+    for i in 0...@list.length
+      ret+=(PurifyChamberSet.isSuperEffective(@list[i],@list[(i+1)%@list.length])) ? 1 : 0
+    end
+    if @list[@facing]
+      ret+=PurifyChamberSet.isSuperEffective(@shadow,@list[@facing]) ? 1 : 0
+    end
+    return [ret+(@list.length/2),4].min
   end
 
   def shadowAffinity
@@ -57,19 +57,19 @@ Boosted based on number of best circles
 # Tempo refers to the type advantages of each Pokemon in a certain set in a
 # clockwise direction. Tempo also depends on the number of Pokemon in the set
   def tempo
-	  ret=0
-	  for i in 0...@list.length
-		  ret+=(PurifyChamberSet.isSuperEffective(@list[i],@list[(i+1)%@list.length])) ? 1 : 0
-	  end
-	  return partialSum(@list.length)+ret
+    ret=0
+    for i in 0...@list.length
+      ret+=(PurifyChamberSet.isSuperEffective(@list[i],@list[(i+1)%@list.length])) ? 1 : 0
+    end
+    return partialSum(@list.length)+ret
   end
 
   def list
-	  return @list.clone
+    return @list.clone
   end
 
   def [](index)
-	  return @list[index]
+    return @list[index]
   end
 
   def insertAfter(index,value)
@@ -108,7 +108,7 @@ end
 class PurifyChamber # German: der Kryptorbis
   NUMSETS=9
   SETSIZE=4
-  attr_accessor :currentSet # German: das Forum
+  attr_reader :currentSet # German: das Forum
 
   def self.maximumTempo() # Calculates the maximum possible tempo
     x=SETSIZE+1
@@ -198,7 +198,6 @@ class PurifyChamber # German: der Kryptorbis
   def update # called each step
     for set in 0...NUMSETS
       # If a shadow Pokemon and a regular Pokemon are on the same set
-      count=setCount(set)
       if @sets[set].shadow
         if @sets[set].shadow.heartgauge>0
           flow=self.chamberFlow(set)
@@ -225,12 +224,11 @@ class PurifyChamber # German: der Kryptorbis
   end
 
   def debugAdd(set,shadow,type1,type2=nil)
-    species=getID(PBSpecies,species)
     pkmn=PseudoPokemon.new(shadow,type1,type2||type1)
     if pkmn.shadowPokemon?
- 	    self.setShadow(set,pkmn)
+       self.setShadow(set,pkmn)
     else
- 	    self.insertAfter(set,setCount(set),pkmn)
+       self.insertAfter(set,setCount(set),pkmn)
     end
   end
 end
@@ -238,14 +236,12 @@ end
 
 
 class PokemonGlobalMetadata
-  attr_accessor :purifyChamber
+  attr_writer   :purifyChamber
   attr_accessor :seenPurifyChamber
 
   def purifyChamber
-    if !@purifyChamber
-      @purifyChamber=PurifyChamber.new()
-    end
-	  return @purifyChamber
+    @purifyChamber = PurifyChamber.new() if !@purifyChamber
+    return @purifyChamber
   end
 end
 
@@ -330,13 +326,13 @@ module PurifyChamberHelper
 
   def self.adjustOnInsert(position)
     if position>0
- 	    position-=1
- 	    oldpos=position/2
- 	    if position%2==0
+      position-=1
+      oldpos=position/2
+      if position%2==0
         return position+1
- 	    else
-	      return ((oldpos+1)*2)+1
-	    end
+      else
+        return ((oldpos+1)*2)+1
+      end
     end
     return position
   end
@@ -384,8 +380,8 @@ class PurifyChamberScreen
           @scene.pbShift(position,pkmn)
         else
           @scene.pbPlace(position,pkmn)
-	      end
-	      PurifyChamberHelper.pbSetPokemon(@chamber,position,pkmn)
+        end
+        PurifyChamberHelper.pbSetPokemon(@chamber,position,pkmn)
         @scene.pbRefresh
       else
         @scene.pbDisplay(_INTL("Only a Shadow Pokémon can go there."))
@@ -401,8 +397,8 @@ class PurifyChamberScreen
           @scene.pbShift(position,pkmn)
         else
           @scene.pbPlace(position,pkmn)
-	      end
-	      PurifyChamberHelper.pbSetPokemon(@chamber,position,pkmn)
+        end
+        PurifyChamberHelper.pbSetPokemon(@chamber,position,pkmn)
         @scene.pbRefresh
       end
     end
@@ -431,7 +427,6 @@ class PurifyChamberScreen
   def pbOpenSetDetail
     chamber=@chamber
     @scene.pbOpenSetDetail(chamber.currentSet)
-    selected=nil
     heldpkmn=nil
     loop do
       # Commands
@@ -459,7 +454,7 @@ class PurifyChamberScreen
           if !heldpkmn && curpkmn
             commands[cmdReplace=commands.length]=_INTL("REPLACE")
           end
-	        commands.push(_INTL("CANCEL"))
+          commands.push(_INTL("CANCEL"))
           choice=@scene.pbShowCommands(
              _INTL("What shall I do with this {1}?",
              heldpkmn ? heldpkmn.name : curpkmn.name),commands)
@@ -468,7 +463,7 @@ class PurifyChamberScreen
               if pbPlace(heldpkmn,cmd[1]) # calls place or shift as appropriate
                 if !curpkmn
                   pbOnPlace(heldpkmn)
-			            @scene.pbPositionHint(PurifyChamberHelper.adjustOnInsert(cmd[1]))
+                  @scene.pbPositionHint(PurifyChamberHelper.adjustOnInsert(cmd[1]))
                   heldpkmn=nil # Pokemon was placed
                 else
                   heldpkmn=curpkmn # Pokemon was shifted
@@ -490,7 +485,7 @@ class PurifyChamberScreen
               $PokemonStorage.pbStoreCaught(heldpkmn)
               heldpkmn=nil
               @scene.pbRefresh
-		        else
+            else
               # Store and delete Pokemon.
               @scene.pbWithdraw(cmd[1],heldpkmn)
               $PokemonStorage.pbStoreCaught(curpkmn)
@@ -516,7 +511,7 @@ class PurifyChamberScreen
                   @scene.pbReplace(cmd,pos)
                   PurifyChamberHelper.pbSetPokemon(@chamber,cmd[1],newpkmn)
                   $PokemonStorage[pos[0],pos[1]]=curpkmn
-    		          @scene.pbRefresh
+                  @scene.pbRefresh
                   pbOnPlace(curpkmn)
                 end
               end
@@ -527,7 +522,7 @@ class PurifyChamberScreen
           if pbPlacePokemon(pos,cmd[1])
             curpkmn=PurifyChamberHelper.pbGetPokemon(@chamber,cmd[1])
             pbOnPlace(curpkmn)
-		        @scene.pbPositionHint(PurifyChamberHelper.adjustOnInsert(cmd[1]))
+            @scene.pbPositionHint(PurifyChamberHelper.adjustOnInsert(cmd[1]))
           end
         end
       elsif cmd[0]==1 # Change the active set
@@ -614,7 +609,6 @@ class PurifyChamberScreen
       @scene.pbEnd()
       return
     end
-    alreadyopen=false
     @scene.pbOpenSet(chamber.currentSet)
     loop do
       set=@scene.pbChooseSet
@@ -650,7 +644,7 @@ end
 
 
 class Window_PurifyChamberSets < Window_DrawableCommand
-  attr_accessor :switching
+  attr_reader :switching
 
   def initialize(chamber,x,y,width,height,viewport=nil)
     @chamber=chamber
@@ -663,10 +657,11 @@ class Window_PurifyChamberSets < Window_DrawableCommand
   end
 
   def switching=(value)
-    @switching=value; refresh
+    @switching = value
+    refresh
   end
 
-  def drawItem(index,count,rect)
+  def drawItem(index,_count,rect)
     textpos=[]
     rect=drawCursor(index,rect)
     if index==@switching
@@ -736,7 +731,8 @@ class DirectFlowDiagram
       point.visible=false
     end
     j=0
-    i=0; while i<@distance
+    i=0
+    while i<@distance
       o=(i+@offset)%@distance
       if o>=0 && o<@distance
         ensurePoint(j)
@@ -818,7 +814,8 @@ class FlowDiagram
       point.visible=false
     end
     j=0
-    i=0; while i<360
+    i=0
+    while i<360
       angle=(i+@offset)%360
       if withinRange(angle,@startAngle,@endAngle)
         ensurePoint(j)
@@ -956,30 +953,30 @@ class PurifyChamberSetView < SpriteWrapper
     pbSetSmallFont(@info.bitmap)
     textpos=[]
     if pkmn
-	    if pkmn.type1==pkmn.type2
+      if pkmn.type1==pkmn.type2
         textpos.push([_INTL("{1}  Lv.{2}  {3}",pkmn.name,pkmn.level,PBTypes.getName(pkmn.type1)),2,0,0,
-	         Color.new(248,248,248),Color.new(128,128,128)])
+           Color.new(248,248,248),Color.new(128,128,128)])
       else
         textpos.push([_INTL("{1}  Lv.{2}  {3}/{4}",pkmn.name,pkmn.level,PBTypes.getName(pkmn.type1),
-	         PBTypes.getName(pkmn.type2)),2,0,0,
-	         Color.new(248,248,248),Color.new(128,128,128)])
+           PBTypes.getName(pkmn.type2)),2,0,0,
+           Color.new(248,248,248),Color.new(128,128,128)])
       end
       textpos.push([_INTL("FLOW"),2+@info.bitmap.width/2,24,0,
-	       Color.new(248,248,248),Color.new(128,128,128)])
-		  # draw heart gauge
-	    pbDrawGauge(@info.bitmap,Rect.new(@info.bitmap.width*3/4,8,@info.bitmap.width*1/4,8),
-	       Color.new(192,0,256),pkmn.heartgauge,
+         Color.new(248,248,248),Color.new(128,128,128)])
+      # draw heart gauge
+      pbDrawGauge(@info.bitmap,Rect.new(@info.bitmap.width*3/4,8,@info.bitmap.width*1/4,8),
+         Color.new(192,0,256),pkmn.heartgauge,
          PokeBattle_Pokemon::HEARTGAUGESIZE)
-	    # draw flow gauge
+      # draw flow gauge
       pbDrawGauge(@info.bitmap,Rect.new(@info.bitmap.width*3/4,24+8,@info.bitmap.width*1/4,8),
-	       Color.new(0,0,248),@chamber.chamberFlow(@set),6)
+         Color.new(0,0,248),@chamber.chamberFlow(@set),6)
     end
     if @chamber.setCount(@set)>0
       textpos.push([_INTL("TEMPO"),2,24,0,
-	       Color.new(248,248,248),Color.new(128,128,128)])
+         Color.new(248,248,248),Color.new(128,128,128)])
       # draw tempo gauge
       pbDrawGauge(@info.bitmap,Rect.new(@info.bitmap.width*1/4,24+8,@info.bitmap.width*1/4,8),
-	       Color.new(0,0,248),@chamber[@set].tempo,
+         Color.new(0,0,248),@chamber[@set].tempo,
          PurifyChamber.maximumTempo())
     end
     pbDrawTextPositions(@info.bitmap,textpos)
@@ -1161,30 +1158,29 @@ class PurifyChamberScene
     pbRefresh
   end
 
-  def pbMove(pos)
+  def pbMove(_pos)
     @sprites["setview"].heldpkmn=@sprites["setview"].getCurrent()
     pbRefresh
   end
 
-  def pbShift(pos,heldpoke)
+  def pbShift(_pos,_heldpoke)
     @sprites["setview"].heldpkmn=@sprites["setview"].getCurrent()
     pbRefresh
   end
 
-  def pbPlace(pos,heldpoke)
+  def pbPlace(_pos,_heldpoke)
     @sprites["setview"].heldpkmn=nil
     pbRefresh
   end
 
-  def pbReplace(pos,storagePos)
+  def pbReplace(_pos,_storagePos)
     @sprites["setview"].heldpkmn=nil
     pbRefresh
   end
 
-  def pbRotate(facing)
-  end
+  def pbRotate(facing); end
 
-  def pbWithdraw(pos,heldpoke)
+  def pbWithdraw(_pos,_heldpoke)
     @sprites["setview"].heldpkmn=nil
     pbRefresh
   end

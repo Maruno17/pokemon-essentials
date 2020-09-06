@@ -1,11 +1,7 @@
 def pbRandomMove
   loop do
-    if false
-      move=rand(0xA6)+1
-    else
-      move=rand(PBMoves.maxValue)+1
-      next if move>384 || isConst?(move,PBMoves,:SKETCH) || isConst?(move,PBMoves,:STRUGGLE)
-    end
+    move=rand(PBMoves.maxValue)+1
+    next if move>384 || isConst?(move,PBMoves,:SKETCH) || isConst?(move,PBMoves,:STRUGGLE)
     return move if PBMoves.getName(move)!=""
   end
 end
@@ -97,31 +93,31 @@ def pbGetLegalMoves2(species,maxlevel)
   end
   # Delete less powerful moves
   deleteAll=proc { |a,item|
-   	while a.include?(item)
-		  a.delete(item)
-  	end
+    while a.include?(item)
+      a.delete(item)
+    end
   }
   for move in moves
     md=moveData(move)
     for move2 in movedatas
       if md.function=="0A5" && move2[1].function=="000" && md.type==move2[1].type &&
          md.basedamage>=move2[1].basedamage
-		    deleteAll.call(moves,move2[0])
+        deleteAll.call(moves,move2[0])
       elsif md.function==move2[1].function && md.basedamage==0 &&
          md.accuracy>move2[1].accuracy
         # Supersonic vs. Confuse Ray, etc.
         deleteAll.call(moves,move2[0])
       elsif md.function=="006" && move2[1].function=="005"
-		    deleteAll.call(moves,move2[0])
+        deleteAll.call(moves,move2[0])
       elsif md.function==move2[1].function && md.basedamage!=0 &&
-		     md.type==move2[1].type &&
-		     (md.totalpp==15 || md.totalpp==10 || md.totalpp==move2[1].totalpp) &&
-		     (md.basedamage>move2[1].basedamage ||
-		     (md.basedamage==move2[1].basedamage && md.accuracy>move2[1].accuracy))
-		    # Surf, Flamethrower, Thunderbolt, etc.
-		    deleteAll.call(moves,move2[0])
-		  end
-	  end
+         md.type==move2[1].type &&
+         (md.totalpp==15 || md.totalpp==10 || md.totalpp==move2[1].totalpp) &&
+         (md.basedamage>move2[1].basedamage ||
+         (md.basedamage==move2[1].basedamage && md.accuracy>move2[1].accuracy))
+        # Surf, Flamethrower, Thunderbolt, etc.
+        deleteAll.call(moves,move2[0])
+      end
+    end
   end
   return moves
 end
@@ -215,7 +211,7 @@ end
 
 
 
-def withRestr(rule,minbs,maxbs,legendary)
+def withRestr(_rule,minbs,maxbs,legendary)
   ret=PokemonChallengeRules.new.addPokemonRule(BaseStatRestriction.new(minbs,maxbs))
   if legendary==0
     ret.addPokemonRule(NonlegendaryRestriction.new)
@@ -239,7 +235,7 @@ def pbArrangeByTier(pokemonlist,rule)
          withRestr(rule,580,680,2)
   ]
   tierPokemon=[]
-  for i in 0...tiers.length
+  tiers.length.times do
     tierPokemon.push([])
   end
   for i in 0...pokemonlist.length
@@ -290,7 +286,7 @@ def pbRandomPokemonFromRule(rule,trainer)
   pkmn=nil
   i=0
   iteration=-1
-  begin
+  loop do
     iteration+=1
     species=0
     level=rule.ruleset.suggestedLevel
@@ -524,7 +520,8 @@ def pbRandomPokemonFromRule(rule,trainer)
     pk=PBPokemon.new(species,item,nature,moves[0],moves[1],moves[2],moves[3],ev)
     pkmn=pk.createPokemon(level,31,trainer)
     i+=1
-  end while !rule.ruleset.isPokemonValid?(pkmn)
+    break if rule.ruleset.isPokemonValid?(pkmn)
+  end
   return pkmn
 end
 
@@ -603,7 +600,7 @@ class PlayerRatingElo
       return
     end
     stake=0
-    for i in 0...matches.length
+    matches.length.times do
       score=(match.score==-1) ? 0.5 : match.score
       e=(1+10.0**((@rating-match.opponentRating)/400.0))
       stake+=match.kValue*(score-e)
@@ -884,16 +881,16 @@ def pbDecideWinnerScore(party0,party1,rating)
 end
 
 def pbDecideWinner(party0,party1,rating0,rating1)
-	rating0=(rating0*15.0/100).round
-	rating1=(rating1*15.0/100).round
-	score0=pbDecideWinnerScore(party0,party1,rating0)
-	score1=pbDecideWinnerScore(party1,party0,rating1)
-	if score0==score1
-		return 5 if rating0==rating1
-		return (rating0>rating1) ? 1 : 2
-	else
-		return (score0>score1) ? 1 : 2
-	end
+  rating0=(rating0*15.0/100).round
+  rating1=(rating1*15.0/100).round
+  score0=pbDecideWinnerScore(party0,party1,rating0)
+  score1=pbDecideWinnerScore(party1,party0,rating1)
+  if score0==score1
+    return 5 if rating0==rating1
+    return (rating0>rating1) ? 1 : 2
+  else
+    return (score0>score1) ? 1 : 2
+  end
 end
 
 def pbRuledBattle(team1,team2,rule)
@@ -985,7 +982,7 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
       gender=(!trainertypes[trainerid] ||
               !trainertypes[trainerid][7]) ? 2 : trainertypes[trainerid][7]
       randomName=getRandomNameEx(gender,nil,0,12)
-	    tr=[trainerid,randomName,_INTL("Here I come!"),
+      tr=[trainerid,randomName,_INTL("Here I come!"),
           _INTL("Yes, I won!"),_INTL("Man, I lost!"),[]]
       bttrainers.push(tr)
     end
@@ -1002,7 +999,6 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
   rulesetTeam=rules.ruleset.copy.clearPokemonRules
   pkmntypes=[]
   validities=[]
-  t=Time.new
   for pkmn in pokemonlist
     pkmn.level=suggestedLevel if pkmn.level!=suggestedLevel
     pkmntypes.push(getTypes(pkmn.species))
@@ -1046,7 +1042,6 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
         pkmn=pokemonlist[index]
         next if !validities[index]
         absDiff=((index*8/pokemonlist.length)-(btt*8/bttrainers.length)).abs
-        sameDiff=(absDiff==0)
         if species.include?(pkmn.species)
           weight=[32,12,5,2,1,0,0,0][[absDiff,7].min]
           if rand(40)<weight
@@ -1086,11 +1081,11 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
           end
           break if numbers.length>=6 && rules.ruleset.hasValidTeam?(numbersPokemon)
         end
-	      if numbers.length<6 || !rules.ruleset.hasValidTeam?(numbersPokemon)
+        if numbers.length<6 || !rules.ruleset.hasValidTeam?(numbersPokemon)
           while numbers.length<pokemonlist.length &&
              (numbers.length<6 || !rules.ruleset.hasValidTeam?(numbersPokemon))
             index=rand(pokemonlist.length)
-	          if !numbers.include?(index)
+            if !numbers.include?(index)
               numbers.push(index)
               numbersPokemon.push(pokemonlist[index])
             end
@@ -1137,7 +1132,7 @@ end
 
 
 if $FAKERGSS
-  def pbMessageDisplay(mw,txt,lbl)
+  def pbMessageDisplay(_mw,txt,_lbl)
     puts txt
   end
 
@@ -1248,7 +1243,8 @@ def pbGenerateChallenge(rule,tag)
   iterations.times do |iter|
     save_data(party,tag+".rxdata")
     yield(_INTL("Generating teams ({1} of {2})",iter+1,iterations))
-    i=0;while i<teams.length
+    i=0
+    while i<teams.length
       yield(nil) if i%10==0
       pbReplenishBattlePokemon(party,rule)
       if teams[i].rating<cutoffrating && teams[i].totalGames>=80
@@ -1334,7 +1330,6 @@ end
 
 def pbWriteCup(id,rules)
   return if !$DEBUG
-  bttrainers=[]
   trlists=(load_data("Data/trainer_lists.dat") rescue [])
   list=[]
   for i in 0...trlists.length

@@ -48,7 +48,6 @@ module Console
     @apiSetConsoleTitle              = Win32API.new("kernel32","SetConsoleTitle","p","s")
     access = (GENERIC_READ | GENERIC_WRITE)
     sharemode = (FILE_SHARE_READ | FILE_SHARE_WRITE)
-    returnCode = AllocConsole()
     @bufferHandle = CreateConsoleScreenBuffer(access,sharemode,CONSOLE_TEXTMODE_BUFFER)
     f = File.open("Game.ini")
     lines = f.readlines()
@@ -94,7 +93,7 @@ module Console
       offset=0
       events=eventsread.unpack("V")
       echo("got input [eventsread #{events}")
-      for i in 0...events[0]
+      events[0].length.times do
         keyevent=buffer[offset,20]
         keyevent=keyevent.unpack("vCvvvvV")
         if keyevent[0]==1 && keyevent[1]>0
@@ -121,7 +120,6 @@ module Console
         echo(sprintf("failed (%d)\r\n",getlast.call()))
         break
       end
-      offset=0
       events=eventsread.unpack("V")
       if events[0]>0
         echo("got input [eventsread #{events}][buffer #{buffer}]\r\n")

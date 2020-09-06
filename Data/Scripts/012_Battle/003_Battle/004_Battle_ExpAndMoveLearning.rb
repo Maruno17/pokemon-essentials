@@ -168,7 +168,6 @@ class PokeBattle_Battle
       raise RuntimeError.new(
          _INTL("{1}'s new level is less than its\r\ncurrent level, which shouldn't happen.\r\n[Debug: {2}]",
          pkmn.name,debugInfo))
-      return
     end
     # Give Exp
     if pkmn.shadowPokemon?

@@ -516,7 +516,6 @@ class Slider < UIControl
     width=self.width
     height=self.height
     color=Color.new(120,120,120)
-    colordisabled=Color.new(120,120,120,80)
     bitmap.fill_rect(x,y,width,height,Color.new(0,0,0,0))
     size=bitmap.text_size(self.label).width
     leftarrows=bitmap.text_size(_INTL(" << "))
@@ -537,7 +536,6 @@ class Slider < UIControl
     shadowtext(bitmap,x,y,rightarrows.width,height,_INTL(" >> "),
        self.disabled || self.curvalue==self.maxvalue)
     @rightarrow=Rect.new(x,y,rightarrows.width,height)
-    x+=rightarrows.width
   end
 end
 
@@ -614,10 +612,6 @@ class OptionalSlider < Slider
   private
 
   def updatedefs
-    x=self.x
-    y=self.y
-    width=self.width
-    height=self.height
     checkboxwidth=32
     @slider.bitmap=self.bitmap
     @slider.parent=self.parent
@@ -770,7 +764,6 @@ class TextSlider < UIControl
     width=self.width
     height=self.height
     color=Color.new(120,120,120)
-    colordisabled=Color.new(120,120,120,80)
     bitmap.fill_rect(x,y,width,height,Color.new(0,0,0,0))
     size=bitmap.text_size(self.label).width
     leftarrows=bitmap.text_size(_INTL(" << "))
@@ -790,7 +783,6 @@ class TextSlider < UIControl
     shadowtext(bitmap,x,y,rightarrows.width,height,_INTL(" >> "),
        self.disabled || self.curvalue==self.maxvalue)
     @rightarrow=Rect.new(x,y,rightarrows.width,height)
-    x+=rightarrows.width
   end
 end
 
@@ -867,10 +859,6 @@ class OptionalTextSlider < TextSlider
   private
 
   def updatedefs
-    x=self.x
-    y=self.y
-    width=self.width
-    height=self.height
     checkboxwidth=32
     @slider.bitmap=self.bitmap
     @slider.parent=self.parent
@@ -1529,10 +1517,6 @@ class AnimationCanvas < Sprite
       oldtargety=targetsprite ? targetsprite.y : 0
       @player=PBAnimationPlayerX.new(@animation,
          @battle.battlers[oppmove ? 1 : 0],@battle.battlers[oppmove ? 0 : 1],self,oppmove,true)
-      userwidth=(!usersprite || !usersprite.bitmap || usersprite.bitmap.disposed?) ? 128 : usersprite.bitmap.width
-      userheight=(!usersprite || !usersprite.bitmap || usersprite.bitmap.disposed?) ? 128 : usersprite.bitmap.height
-      targetwidth=(!targetsprite.bitmap || targetsprite.bitmap.disposed?) ? 128 : targetsprite.bitmap.width
-      targetheight=(!targetsprite.bitmap || targetsprite.bitmap.disposed?) ? 128 : targetsprite.bitmap.height
       @player.setLineTransform(
          PokeBattle_SceneConstants::FOCUSUSER_X,PokeBattle_SceneConstants::FOCUSUSER_Y,
          PokeBattle_SceneConstants::FOCUSTARGET_X,PokeBattle_SceneConstants::FOCUSTARGET_Y,
@@ -1544,7 +1528,6 @@ class AnimationCanvas < Sprite
       @sprites["pokemon_0"].y+=BORDERSIZE
       @sprites["pokemon_1"].x+=BORDERSIZE
       @sprites["pokemon_1"].y+=BORDERSIZE
-      prevoldstate=[]
       oldstate=[]
       for i in 0...PBAnimation::MAX_SPRITES
         oldstate.push([@celsprites[i].visible,@framesprites[i].visible,@lastframesprites[i].visible])
@@ -1552,10 +1535,11 @@ class AnimationCanvas < Sprite
         @framesprites[i].visible=false
         @lastframesprites[i].visible=false
       end
-      begin
+      loop do
         Graphics.update
         self.update
-      end while @playing
+        break if !@playing
+      end
       for i in 0...PBAnimation::MAX_SPRITES
         @celsprites[i].visible=oldstate[i][0]
         @framesprites[i].visible=oldstate[i][1]
@@ -2447,7 +2431,7 @@ def pbEditBG(canvas,timing)
     if maxsizewindow.changed?(9) # Cancel
       break
     end
-   if Input.trigger?(Input::B)
+    if Input.trigger?(Input::B)
       break
     end
   end
@@ -3193,7 +3177,7 @@ def curveToPointPath(curve,numpoints)
   path=PointPath.new
   step=1.0/(numpoints-1)
   t=0.0
-  for i in 0...numpoints
+  numpoints.times do
     point=getCurvePoint(curve,t)
     path.addPoint(point[0],point[1])
     t+=step
@@ -3264,7 +3248,6 @@ def pbDefinePath(canvas)
       loop do
         Graphics.update
         Input.update
-        redrawline=false
         if Input.trigger?(Input::B)
           break
         end
@@ -3401,7 +3384,6 @@ def pbDefinePath(canvas)
         cel[AnimFrame::X]=path[i-canvas.currentframe][0]
         cel[AnimFrame::Y]=path[i-canvas.currentframe][1]
       end
-      startframe=sliderwin2.value(0)
       break
     elsif sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::B)
       break

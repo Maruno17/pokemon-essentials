@@ -2,7 +2,7 @@
 # Data type properties
 #===============================================================================
 module UndefinedProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     pbMessage(_INTL("This property can't be edited here at this time."))
     return oldsetting
   end
@@ -15,7 +15,7 @@ end
 
 
 module ReadOnlyProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     pbMessage(_INTL("This property cannot be edited."))
     return oldsetting
   end
@@ -125,7 +125,7 @@ end
 
 
 module BooleanProperty
-  def self.set(settingname,oldsetting)
+  def self.set(settingname,_oldsetting)
     return pbConfirmMessage(_INTL("Enable the setting {1}?",settingname)) ? true : false
   end
 
@@ -137,7 +137,7 @@ end
 
 
 module BooleanProperty2
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,_oldsetting)
     ret = pbShowCommands(nil,[_INTL("True"),_INTL("False")],-1)
     return (ret>=0) ? (ret==0) : nil
   end
@@ -262,7 +262,7 @@ end
 
 
 module SpeciesProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     ret = pbChooseSpeciesList((oldsetting) ? oldsetting : 1)
     return (ret<=0) ? (oldsetting) ? oldsetting : 0 : ret
   end
@@ -279,7 +279,7 @@ end
 
 
 module TypeProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     ret = pbChooseTypeList((oldsetting) ? oldsetting : 0)
     return (ret<0) ? (oldsetting) ? oldsetting : 0 : ret
   end
@@ -296,7 +296,7 @@ end
 
 
 module MoveProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     ret = pbChooseMoveList((oldsetting) ? oldsetting : 1)
     return (ret<=0) ? (oldsetting) ? oldsetting : 0 : ret
   end
@@ -317,7 +317,7 @@ class MoveProperty2
     @pokemondata = pokemondata
   end
 
-  def set(settingname,oldsetting)
+  def set(_settingname,oldsetting)
     ret = pbChooseMoveListForSpecies(@pokemondata[0],(oldsetting) ? oldsetting : 1)
     return (ret>0) ? ret : (oldsetting) ? oldsetting : nil
   end
@@ -334,7 +334,7 @@ end
 
 
 class GenderProperty
-  def set(settingname,oldsetting)
+  def set(_settingname,_oldsetting)
     ret = pbShowCommands(nil,[_INTL("Male"),_INTL("Female")],-1)
     return (ret>=0) ? ret : nil
   end
@@ -352,7 +352,7 @@ end
 
 
 module ItemProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     ret = pbChooseItemList((oldsetting) ? oldsetting : 1)
     return (ret>0) ? ret : (oldsetting) ? oldsetting : nil
   end
@@ -369,7 +369,7 @@ end
 
 
 module NatureProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,_oldsetting)
     commands = []
     (PBNatures.getCount).times do |i|
       commands.push(PBNatures.getName(i))
@@ -512,7 +512,7 @@ class BallProperty
     @pokemondata = pokemondata
   end
 
-  def set(settingname,oldsetting)
+  def set(_settingname,oldsetting)
     ret = pbChooseBallList((oldsetting) ? oldsetting : -1)
     return (ret>=0) ? ret : (oldsetting) ? oldsetting : nil
   end
@@ -627,7 +627,7 @@ end
 
 
 module RegionMapCoordsProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     regions = getMapNameList
     selregion = -1
     if regions.length==0
@@ -659,7 +659,7 @@ end
 
 
 module WeatherEffectProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     options = []
     for i in 0..PBFieldWeather.maxValue
       options.push(getConstantName(PBFieldWeather,i) || "ERROR")
@@ -684,7 +684,7 @@ end
 
 
 module EnvironmentProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,_oldsetting)
     options = []
     for i in 0..PBEnvironment.maxValue
       options.push(getConstantName(PBEnvironment,i) || "ERROR")
@@ -741,7 +741,7 @@ module PocketProperty
        _INTL("Battle Items"),_INTL("Key Items")]
   end
 
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     cmd = pbMessage(_INTL("Choose a pocket for this item."),pocketnames(),-1)
     return (cmd>=0) ? cmd+1 : oldsetting
   end
@@ -817,7 +817,7 @@ end
 
 
 module AbilityProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     ret = pbChooseAbilityList((oldsetting) ? oldsetting : 1)
     return (ret<=0) ? (oldsetting) ? oldsetting : 0 : ret
   end
@@ -834,7 +834,7 @@ end
 
 
 module MovePoolProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     ret = oldsetting
     cmdwin = pbListWindow([],200)
     commands = []
@@ -981,7 +981,7 @@ end
 
 
 module EggMovesProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     ret = oldsetting
     cmdwin = pbListWindow([],200)
     commands = []
@@ -1083,7 +1083,7 @@ end
 
 
 module FormNamesProperty
-  def self.set(settingname,oldsetting)
+  def self.set(_settingname,oldsetting)
     ret = oldsetting
     cmdwin = pbListWindow([],200)
     commands = []
@@ -1099,7 +1099,7 @@ module FormNamesProperty
         realcmds.sort! { |a,b| a[1]<=>b[1] }
         commands = []
         for i in 0...realcmds.length
-          text = (realcmds[i][1]>=0) ? sprintf("#{realcmds[i][1].to_s} - #{realcmds[i][0]}") : realcmds[i][0]
+          text = (realcmds[i][1]>=0) ? sprintf("#{realcmds[i][1]} - #{realcmds[i][0]}") : realcmds[i][0]
           commands.push(text)
           cmd[1] = i if oldsel>=0 && realcmds[i][1]==oldsel
         end
@@ -1187,7 +1187,7 @@ class EvolutionsProperty
     @evoparams = PBEvolution::EVOPARAM
   end
 
-  def set(settingname,oldsetting)
+  def set(_settingname,oldsetting)
     ret = oldsetting
     cmdwin = pbListWindow([])
     commands = []
@@ -1449,7 +1449,6 @@ def pbPropertyList(title,data,properties,saveprompt=false)
   desc.viewport = viewport
   desc.z        = 2
   selectedmap = -1
-  index = 0
   retval = nil
   commands = []
   for i in 0...properties.length

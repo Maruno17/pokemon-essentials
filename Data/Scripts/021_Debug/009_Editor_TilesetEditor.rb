@@ -112,7 +112,7 @@ class PokemonTilesetScene
         pbUpdateTileset
       elsif Input.repeat?(Input::DOWN)
         @y += 32
-        @y = @sprites["tileset"].bitmap.height-32 if @y>=@sprites["tileset"].bitmap.height-32
+        @y = height-32 if @y>=height-32
         @topy = @y-(Graphics.height-64)+32 if @y-@topy>=Graphics.height-64
         pbUpdateTileset
       elsif Input.repeat?(Input::LEFT)
@@ -133,10 +133,10 @@ class PokemonTilesetScene
       elsif Input.repeat?(Input::R)
         @y += ((Graphics.height-64)/32)*32
         @topy += ((Graphics.height-64)/32)*32
-        @y = @sprites["tileset"].bitmap.height-32 if @y>=@sprites["tileset"].bitmap.height-32
+        @y = height-32 if @y>=height-32
         @topy = @y-(Graphics.height-64)+32 if @y-@topy>=Graphics.height-64
-        if @topy>=@sprites["tileset"].bitmap.height-(Graphics.height-64)
-          @topy = @sprites["tileset"].bitmap.height-(Graphics.height-64)
+        if @topy>=height-(Graphics.height-64)
+          @topy = height-(Graphics.height-64)
         end
         pbUpdateTileset
       elsif Input.trigger?(Input::A)
@@ -149,7 +149,7 @@ class PokemonTilesetScene
         ret = pbShowCommands(nil,commands,-1)
         case ret
         when 0
-          @y = @sprites["tileset"].bitmap.height-32
+          @y = height-32
           @topy = @y-(Graphics.height-64)+32 if @y-@topy>=Graphics.height-64
           pbUpdateTileset
         when 1

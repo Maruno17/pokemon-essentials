@@ -44,7 +44,7 @@ class WeakRef
   @@id_map =  {}
   @@id_rev_map =  {}
   @@final = lambda { |id|
-    __old_status = Thread.critical
+    old_thread_status = Thread.critical
     Thread.critical = true
     begin
       rids = @@id_map[id]
@@ -61,7 +61,7 @@ class WeakRef
 	      @@id_map.delete(rid) if @@id_map[rid].empty?
       end
     ensure
-      Thread.critical = __old_status
+      Thread.critical = old_thread_status
     end
   }
 
@@ -83,7 +83,7 @@ class WeakRef
 
   def __setobj__(obj)
     @__id = obj.__id__
-    __old_status = Thread.critical
+    old_thread_status = Thread.critical
     begin
       Thread.critical = true
       unless @@id_rev_map.key?(self)
@@ -92,7 +92,7 @@ class WeakRef
       end
       @@id_map[@__id] = [] unless @@id_map[@__id]
     ensure
-      Thread.critical = __old_status
+      Thread.critical = old_thread_status
     end
     @@id_map[@__id].push self.__id__
     @@id_rev_map[self.__id__] = @__id
@@ -111,7 +111,7 @@ class WeakHashtable
   include Enumerable
 
   def initialize
-    @hash={}
+    @hash = {}
   end
 
   def clear
@@ -277,12 +277,12 @@ end
 # bitmap is freed when the reference count reaches 0.
 class Thread
   def Thread.exclusive
-    _old = Thread.critical
+    old_thread_status = Thread.critical
     begin
       Thread.critical = true
       return yield
     ensure
-      Thread.critical = _old
+      Thread.critical = old_thread_status
     end
   end
 end

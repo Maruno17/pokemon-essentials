@@ -16,7 +16,7 @@ def pbTooTall?(pkmn,maxHeightInMeters)
   return height>(maxHeightInMeters*10).round
 end
 
-def pbTooHeavy?(pokemon,maxWeightInKg)
+def pbTooHeavy?(pkmn,maxWeightInKg)
   species = (pkmn.is_a?(PokeBattle_Pokemon)) ? pkmn.species : pkmn
   form    = (pkmn.is_a?(PokeBattle_Pokemon)) ? pkmn.form : 0
   weight = pbGetSpeciesData(species,form,SpeciesWeight)
@@ -39,7 +39,7 @@ class LevelAdjustment
     @adjustment=adjustment
   end
 
-  def self.getNullAdjustment(thisTeam,otherTeam)
+  def self.getNullAdjustment(thisTeam,_otherTeam)
     ret=[]
     for i in 0...thisTeam.length
       ret[i]=thisTeam[i].level
@@ -51,7 +51,7 @@ class LevelAdjustment
     return self.getNullAdjustment(thisTeam,otherTeam)
   end
 
-  def getOldExp(team1,team2)
+  def getOldExp(team1,_team2)
     ret=[]
     for i in 0...team1.length
       ret.push(team1[i].exp)
@@ -118,7 +118,7 @@ class LevelBalanceAdjustment < LevelAdjustment
     @minLevel=minLevel
   end
 
-  def getAdjustment(thisTeam,otherTeam)
+  def getAdjustment(thisTeam,_otherTeam)
     ret=[]
     for i in 0...thisTeam.length
       ret[i]=pbBalancedLevelFromBST(thisTeam[i].species)
@@ -135,7 +135,7 @@ class EnemyLevelAdjustment < LevelAdjustment
     @level=[[1,level].max,PBExperience.maxLevel].min
   end
 
-  def getAdjustment(thisTeam,otherTeam)
+  def getAdjustment(thisTeam,_otherTeam)
     ret=[]
     for i in 0...thisTeam.length
       ret[i]=@level
@@ -180,7 +180,7 @@ class CappedLevelAdjustment < LevelAdjustment
     @level=[[1,level].max,PBExperience.maxLevel].min
   end
 
-  def getAdjustment(thisTeam,otherTeam)
+  def getAdjustment(thisTeam,_otherTeam)
     ret=[]
     for i in 0...thisTeam.length
       ret[i]=[thisTeam[i].level,@level].min
@@ -197,7 +197,7 @@ class FixedLevelAdjustment < LevelAdjustment
     @level=[[1,level].max,PBExperience.maxLevel].min
   end
 
-  def getAdjustment(thisTeam,otherTeam)
+  def getAdjustment(thisTeam,_otherTeam)
     ret=[]
     for i in 0...thisTeam.length
       ret[i]=@level
@@ -217,7 +217,7 @@ class TotalLevelAdjustment < LevelAdjustment
     @totalLevel=totalLevel
   end
 
-  def getAdjustment(thisTeam,otherTeam)
+  def getAdjustment(thisTeam,_otherTeam)
     ret=[]
     total=0
     for i in 0...thisTeam.length

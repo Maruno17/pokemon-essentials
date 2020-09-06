@@ -543,8 +543,7 @@ class PokeBattle_Move_097 < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
     dmgs = [200,80,60,50,40]
     ppLeft = [@pp,dmgs.length-1].min   # PP is reduced before the move is used
-    baseDmg = dmgs[ppLeft]
-    return baseDmg
+    return dmgs[ppLeft]
   end
 end
 
@@ -897,7 +896,7 @@ class PokeBattle_Move_0A4 < PokeBattle_Move
            PBEnvironment::Forest, PBEnvironment::ForestGrass
         @secretPower = 2    # (Same as Grassy Terrain)
       when PBEnvironment::MovingWater, PBEnvironment::StillWater,
-           PBEnvironment::Puddle, PBEnvironment::Underwater
+           PBEnvironment::Underwater
         @secretPower = 5    # Water Pulse, lower Attack by 1
       when PBEnvironment::Puddle
         @secretPower = 6    # Mud Shot, lower Speed by 1
@@ -1052,7 +1051,7 @@ class PokeBattle_Move_0A9 < PokeBattle_Move
   end
 
   def pbGetDefenseStats(user,target)
-    ret1, ret2 = super
+    ret1, _ret2 = super
     return ret1, 6   # Def/SpDef stat stage
   end
 end
@@ -1321,7 +1320,6 @@ class PokeBattle_Move_0B3 < PokeBattle_Move
     #       turn into, but what self-respecting game wouldn't at least have Tri
     #       Attack in it?
     @npMove = getID(PBMoves,:TRIATTACK)
-    m = nil
     case @battle.field.terrain
     when PBBattleTerrains::Electric
       @npMove = getConst(PBMoves,:THUNDERBOLT) || @npMove
@@ -2409,7 +2407,7 @@ class PokeBattle_Move_0D3 < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
     shift = (4-user.effects[PBEffects::Rollout])   # 0-4, where 0 is most powerful
     shift += 1 if user.effects[PBEffects::DefenseCurl]
-    baseDmg = baseDmg<<shift
+    baseDmg = baseDmg << shift
     return baseDmg
   end
 
@@ -3013,7 +3011,7 @@ class PokeBattle_Move_0EB < PokeBattle_Move
     end
     if @battle.trainerBattle?
       canSwitch = false
-      @battle.eachInTeamFromBattlerIndex(target.index) do |pkmn,i|
+      @battle.eachInTeamFromBattlerIndex(target.index) do |_pkmn,i|
         next if !@battle.pbCanSwitchLax?(target.index,i)
         canSwitch = true
         break
@@ -3555,7 +3553,7 @@ class PokeBattle_Move_0F7 < PokeBattle_Move
     end
     return if pbIsMegaStone?(user.item)
     flingableItem = false
-    @flingPowers.each do |power,items|
+    @flingPowers.each do |_power,items|
       items.each do |i|
         next if !isConst?(user.item,PBItems,i)
         flingableItem = true

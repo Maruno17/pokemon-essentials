@@ -94,7 +94,7 @@ class PokeBattle_Battle
   end
 
   def pbCanChooseNonActive?(idxBattler)
-    pbParty(idxBattler).each_with_index do |pkmn,i|
+    pbParty(idxBattler).each_with_index do |_pkmn,i|
       return true if pbCanSwitchLax?(idxBattler,i)
     end
     return false
@@ -212,7 +212,7 @@ class PokeBattle_Battle
     if random
       return -1 if !pbCanSwitch?(idxBattler)   # Can battler switch out?
       choices = []   # Find all Pokémon that can switch in
-      eachInTeamFromBattlerIndex(idxBattler) do |pkmn,i|
+      eachInTeamFromBattlerIndex(idxBattler) do |_pkmn,i|
         choices.push(i) if pbCanSwitchLax?(idxBattler,i)
       end
       return -1 if choices.length==0
