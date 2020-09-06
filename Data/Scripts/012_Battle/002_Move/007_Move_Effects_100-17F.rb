@@ -2667,14 +2667,10 @@ end
 # The user sharply raises the target's Attack and Sp. Atk stats by decorating 
 # the target. (Decorate)
 #===============================================================================
-class PokeBattle_Move_179 < PokeBattle_Move
-  def pbEffectAgainstTarget(user,target)
-    if target.pbCanRaiseStatStage?(PBStats::ATTACK,user,self)
-      target.pbRaiseStatStage(PBStats::ATTACK,2,user)
-    end
-    if target.pbCanRaiseStatStage?(PBStats::SPATK,user,self)
-      target.pbRaiseStatStage(PBStats::SPATK,2,user)
-    end
+class PokeBattle_Move_179 < PokeBattle_TargetMultiStatUpMove
+  def initialize(battle,move)
+    super
+    @statUp = [PBStats::ATTACK,2,PBStats::SPATK,2]
   end
 end
 
