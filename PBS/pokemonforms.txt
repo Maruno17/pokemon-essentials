@@ -1,32 +1,5 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
-[ZACIAN-1]
-FormName=Crowned Sword
-Type1=FAIRY
-Type2=STEEL
-Height = 2.8
-Weight=355.0
-BaseStats=92,170,115,148,80,115
-Pokedex=Now armed with a weapon it used in ancient times, this Pokémon needs only a single strike to fell even Gigantamax Pokémon.
-#-------------------------------
-[ZAMAZENTA-1]
-FormName=Crowned Shield
-Type1=FIGHTING
-Type2=STEEL
-Height = 2.9
-Weight=785.0
-BaseStats=92,130,145,128,80,145
-Pokedex=Now that it's equipped with its shield, it can shrug off impressive blows, including the attacks of Dynamax Pokémon.
-#-------------------------------
-[URSHIFU-1]
-FormName=Rapid Strike Style
-Type1=FIGHTING
-Type2=WATER
-Height = 1.9
-Weight = 105.0
-Moves=1,SURGINGSTRIKES,1,AQUAJET,1,ROCKSMASH,1,LEER,1,ENDURE,1,FOCUSENERGY,12,AERIALACE,16,SCARYFACE,20,HEADBUTT,24,BRICKBREAK,28,DETECT,32,BULKUP,36,IRONHEAD,40,DYNAMICPUNCH,44,COUNTER,48,CLOSECOMBAT,52,FOCUSPUNCH
-Pokedex=This form of Urshifu is a strong believer in defeating foes by raining many blows down on them. Its strikes are nonstop, flowing like a river.
-#-------------------------------
 [VENUSAUR,1]
 FormName = Mega Venusaur
 MegaStone = VENUSAURITE
