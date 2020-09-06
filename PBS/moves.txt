@@ -754,4 +754,4 @@
 731,COACHING,Coaching,000,0,FIGHTING,Status,0,10,0,100,0,,"The user properly coaches its ally Pokémon, boosting their Attack and Defense stats."
 732,TRIPLEAXEL,Triple Axel,0BF,20,ICE,Physical,90,10,0,00,0,abef,"A consecutive three-kick attack that becomes more powerful with each successful hit."
 733,DUALWINGBEAT,Dual Wingbeat,0BD,40,FLYING,Physical,90,10,0,00,0,abef,"The user slams the target with its wings. The target is hit twice in a row."
-734,JUNGLEHEALING,Jungle Healing,00A,0,GRASS,Status,0,10,0,10,0,,"The user becomes one with the jungle, restoring HP and healing any status conditions of itself and its ally Pokémon in battle."
+734,JUNGLEHEALING,Jungle Healing,000,0,GRASS,Status,0,10,0,10,0,,"The user becomes one with the jungle, restoring HP and healing any status conditions of itself and its ally Pokémon in battle."
