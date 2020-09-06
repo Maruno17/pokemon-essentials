@@ -595,11 +595,12 @@ class PokeBattle_Pokemon
   #=============================================================================
   # Items
   #=============================================================================
-  # Returns whether this Pokémon has a hold item.
-  def hasItem?(value=0)
-    itm = self.item
-    return itm>0 if value==0
-    return itm==getID(PBItems,value)
+  # Returns whether this Pokémon is holding an item. If an item id is passed,
+  # returns whether the Pokémon is holding that item.
+  def hasItem?(item_id = 0)
+    held_item = self.item
+    return held_item > 0 if item_id == 0
+    return held_item == getID(PBItems,item_id)
   end
 
   # Sets this Pokémon's item. Accepts symbols.

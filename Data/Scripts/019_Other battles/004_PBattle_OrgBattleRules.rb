@@ -482,7 +482,7 @@ end
 
 class SoulDewClause
   def isValid?(pokemon)
-    return !isConst?(pokemon.item,PBItems,:SOULDEW)
+    return !pokemon.hasItem?(:SOULDEW)
   end
 end
 
@@ -499,10 +499,10 @@ end
 class NegativeExtendedGameClause
   def isValid?(pokemon)
     return false if pokemon.isSpecies?(:ARCEUS)
-    return false if isConst?(pokemon.item,PBItems,:MICLEBERRY)
-    return false if isConst?(pokemon.item,PBItems,:CUSTAPBERRY)
-    return false if isConst?(pokemon.item,PBItems,:JABOCABERRY)
-    return false if isConst?(pokemon.item,PBItems,:ROWAPBERRY)
+    return false if pokemon.hasItem?(:MICLEBERRY)
+    return false if pokemon.hasItem?(:CUSTAPBERRY)
+    return false if pokemon.hasItem?(:JABOCABERRY)
+    return false if pokemon.hasItem?(:ROWAPBERRY)
   end
 end
 
@@ -601,8 +601,8 @@ end
 
 class LittleCupRestriction
   def isValid?(pokemon)
-    return false if isConst?(pokemon.item,PBItems,:BERRYJUICE)
-    return false if isConst?(pokemon.item,PBItems,:DEEPSEATOOTH)
+    return false if pokemon.hasItem?(:BERRYJUICE)
+    return false if pokemon.hasItem?(:DEEPSEATOOTH)
     return false if pokemon.hasMove?(:SONICBOOM)
     return false if pokemon.hasMove?(:DRAGONRAGE)
     return false if pokemon.isSpecies?(:SCYTHER)

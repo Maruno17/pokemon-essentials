@@ -309,7 +309,7 @@ end
 #   Pokemon to check; evolution type; level or other parameter; ID of the new species
 def pbCheckEvolutionEx(pokemon)
   return -1 if pokemon.species<=0 || pokemon.egg? || pokemon.shadowPokemon?
-  return -1 if isConst?(pokemon.item,PBItems,:EVERSTONE)
+  return -1 if pokemon.hasItem?(:EVERSTONE)
   return -1 if isConst?(pokemon.ability,PBAbilities,:BATTLEBOND)
   ret = -1
   for form in pbGetEvolvedFormData(pbGetFSpeciesFromForm(pokemon.species,pokemon.form),true)

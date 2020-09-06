@@ -823,7 +823,7 @@ def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
   end
   if pkmn.hasItem?
     olditemname = PBItems.getName(pkmn.item)
-    if isConst?(pkmn.item,PBItems,:LEFTOVERS)
+    if pkmn.hasItem?(:LEFTOVERS)
       scene.pbDisplay(_INTL("{1} is already holding some {2}.\1",pkmn.name,olditemname))
     elsif newitemname.starts_with_vowel?
       scene.pbDisplay(_INTL("{1} is already holding an {2}.\1",pkmn.name,olditemname))

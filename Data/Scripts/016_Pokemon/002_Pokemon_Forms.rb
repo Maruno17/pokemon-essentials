@@ -329,8 +329,7 @@ MultipleForms.register(:ROTOM,{
 MultipleForms.register(:GIRATINA,{
   "getForm" => proc { |pkmn|
     maps = [49,50,51,72,73]   # Map IDs for Origin Forme
-    if isConst?(pkmn.item,PBItems,:GRISEOUSORB) ||
-       maps.include?($game_map.map_id)
+    if pkmn.hasItem?(:GRISEOUSORB) || maps.include?($game_map.map_id)
       next 1
     end
     next 0
@@ -368,8 +367,8 @@ MultipleForms.register(:ARCEUS,{
     }
     ret = 0
     typeArray.each do |f, items|
-      for i in items
-        next if !isConst?(pkmn.item,PBItems,i)
+      for item in items
+        next if !pkmn.hasItem?(item)
         ret = f
         break
       end
@@ -459,10 +458,10 @@ MultipleForms.register(:MELOETTA,{
 
 MultipleForms.register(:GENESECT,{
   "getForm" => proc { |pkmn|
-    next 1 if isConst?(pkmn.item,PBItems,:SHOCKDRIVE)
-    next 2 if isConst?(pkmn.item,PBItems,:BURNDRIVE)
-    next 3 if isConst?(pkmn.item,PBItems,:CHILLDRIVE)
-    next 4 if isConst?(pkmn.item,PBItems,:DOUSEDRIVE)
+    next 1 if pkmn.hasItem?(:SHOCKDRIVE)
+    next 2 if pkmn.hasItem?(:BURNDRIVE)
+    next 3 if pkmn.hasItem?(:CHILLDRIVE)
+    next 4 if pkmn.hasItem?(:DOUSEDRIVE)
     next 0
   }
 })
@@ -605,8 +604,8 @@ MultipleForms.register(:SILVALLY,{
     }
     ret = 0
     typeArray.each do |f, items|
-      for i in items
-        next if !isConst?(pkmn.item,PBItems,i)
+      for item in items
+        next if !pkmn.hasItem?(item)
         ret = f
         break
       end
