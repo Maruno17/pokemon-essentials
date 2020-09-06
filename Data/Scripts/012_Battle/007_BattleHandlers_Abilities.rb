@@ -555,11 +555,21 @@ BattleHandlers::PriorityBracketChangeAbility.add(:STALL,
   }
 )
 
+BattleHandlers::PriorityBracketChangeAbility.add(:QUICKDRAW,
+  proc { |ability,battler,subPri,battle|
+    next 1 if subPri<1 && battle.pbRandom(10)<3
+  }
+)
+
 #===============================================================================
 # PriorityBracketUseAbility handlers
 #===============================================================================
 
-# There aren't any!
+BattleHandlers::PriorityBracketUseAbility.add(:QUICKDRAW,
+  proc { |ability,battler,battle|
+    battle.pbDisplay(_INTL("{1}'s {2} let it move first!",battler.pbThis,battler.abilityName))
+  }
+)
 
 #===============================================================================
 # AbilityOnFlinch handlers
@@ -1746,7 +1756,7 @@ BattleHandlers::TargetAbilityOnHit.add(:WANDERINGSPIRIT,
       user.ability = getConst(PBAbilities,:WANDERINGSPIRIT)
       target.ability = oldAbil
       if user.opposes?(target)
-        battle.pbReplaceAbilitySplash(user) 
+        battle.pbReplaceAbilitySplash(user)
         battle.pbReplaceAbilitySplash(target)
       end
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
@@ -1763,7 +1773,7 @@ BattleHandlers::TargetAbilityOnHit.add(:WANDERINGSPIRIT,
       user.pbOnAbilityChanged(oldAbil)
       target.pbOnAbilityChanged(getConst(PBAbilities,:WANDERINGSPIRIT))
     end
-    
+
   }
 )
 
@@ -2174,7 +2184,7 @@ BattleHandlers::EOREffectAbility.add(:BALLFETCH,
       $BallRetrieved = 0
       battler.battle.pbDisplay(_INTL("{1}'s {2} fetched the {3}!",battler.pbThis,battler.abilityName,battler.itemName))
       battle.pbHideAbilitySplash(battler)
-    end    
+    end
   }
 )
 

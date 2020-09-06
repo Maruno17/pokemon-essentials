@@ -169,6 +169,12 @@ class PokeBattle_Move
       target.damageState.disguise = true
       return
     end
+    # Ice Face will take the damage
+    if !@battle.moldBreaker && isConst?(target.species,PBSpecies,:EISCUE) &&
+       target.form==0 && isConst?(target.ability,PBAbilities,:ICEFACE) && physicalMove?
+      target.damageState.iceface = true
+      return
+    end
   end
 
   def pbReduceDamage(user,target)
@@ -182,6 +188,8 @@ class PokeBattle_Move
     end
     # Disguise takes the damage
     return if target.damageState.disguise
+    # Ice Face takes the damage
+    return if target.damageState.iceface
     # Target takes the damage
     if damage>=target.hp
       damage = target.hp
@@ -251,6 +259,7 @@ class PokeBattle_Move
   #=============================================================================
   def pbEffectivenessMessage(user,target,numTargets=1)
     return if target.damageState.disguise
+    return if target.damageState.iceface
     if PBTypes.superEffective?(target.damageState.typeMod)
       if numTargets>1
         @battle.pbDisplay(_INTL("It's super effective on {1}!",target.pbThis(true)))
@@ -268,6 +277,7 @@ class PokeBattle_Move
 
   def pbHitEffectivenessMessages(user,target,numTargets=1)
     return if target.damageState.disguise
+    return if target.damageState.iceface
     if target.damageState.substitute
       @battle.pbDisplay(_INTL("The substitute took damage for {1}!",target.pbThis(true)))
     end
@@ -290,6 +300,10 @@ class PokeBattle_Move
 
   def pbEndureKOMessage(target)
     if target.damageState.disguise
+    elsif target.damageState.iceface
+      @battle.pbShowAbilitySplash(target)
+      target.pbChangeForm(1,_INTL("{1} transformed!",target.pbThis))
+      @battle.pbHideAbilitySplash(target)
       @battle.pbShowAbilitySplash(target)
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("Its disguise served it as a decoy!"))

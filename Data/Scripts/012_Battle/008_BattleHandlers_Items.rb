@@ -1026,7 +1026,7 @@ BattleHandlers::TargetItemOnHit.add(:CELLBATTERY,
 
 BattleHandlers::TargetItemOnHit.add(:ENIGMABERRY,
   proc { |item,user,target,move,battle|
-    next if target.damageState.substitute || target.damageState.disguise
+    next if target.damageState.substitute || target.damageState.disguise || target.damageState.iceface
     next if !PBTypes.superEffective?(target.damageState.typeMod)
     BattleHandlers.triggerTargetItemOnHitPositiveBerry(item,target,battle,false)
   }
@@ -1134,7 +1134,7 @@ BattleHandlers::TargetItemOnHit.add(:STICKYBARB,
 
 BattleHandlers::TargetItemOnHit.add(:WEAKNESSPOLICY,
   proc { |item,user,target,move,battle|
-    next if target.damageState.disguise
+    next if target.damageState.disguise || target.damageState.iceface
     next if !PBTypes.superEffective?(target.damageState.typeMod)
     next if !target.pbCanRaiseStatStage?(PBStats::ATTACK,target) &&
             !target.pbCanRaiseStatStage?(PBStats::SPATK,target)

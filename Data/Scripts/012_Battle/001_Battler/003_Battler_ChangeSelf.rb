@@ -200,8 +200,22 @@ class PokeBattle_Battler
         pbChangeForm(0,_INTL("{1} transformed!",pbThis))
       end
     end
+    # Eiscue - Ice Face
+    if isConst?(@species,PBSpecies,:EISCUE)
+      if hasActiveAbility?(:ICEFACE)
+        case @battle.pbWeather
+        when PBWeather::Hail
+          if @form!=0
+            @battle.pbShowAbilitySplash(self,true)
+            @battle.pbHideAbilitySplash(self)
+            pbChangeForm(0,_INTL("{1} transformed!",pbThis))
+            self.damageState.iceface = false
+          end
+        end
+      end
+    end
   end
-  
+
   def pbCheckFormOnTerrainChange
     return if fainted? || @effects[PBEffects::Transform]
     # Galarian Stunfisk - Mimicry
