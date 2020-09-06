@@ -37,7 +37,7 @@ class ButtonEventScene < EventScene
     onCTrigger.set(method(:pbOnScreen1))
   end
 
-  def pbOnScreen1(scene,_args)
+  def pbOnScreen1(scene,*args)
     # End scene
     Graphics.freeze
     scene.dispose

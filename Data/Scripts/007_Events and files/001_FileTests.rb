@@ -131,9 +131,9 @@ def getKnownFolder(guid)
   packedGuid = guid.pack("VvvC*")
   shGetKnownFolderPath = Win32API.new("shell32.dll","SHGetKnownFolderPath","pllp","i") rescue nil
   coTaskMemFree        = Win32API.new("ole32.dll","CoTaskMemFree","i","") rescue nil
-  return "" if !(shGetKnownFolderPath && coTaskMemFree)
+  return "" if !shGetKnownFolderPath || !coTaskMemFree
   path = "\0"*4
-  path = shGetKnownFolderPath.call(packedGuid,0,0,path)
+  ret = shGetKnownFolderPath.call(packedGuid,0,0,path)
   path = path.unpack("V")[0]
   ret = getUnicodeString(path)
   coTaskMemFree.call(path)

@@ -17,7 +17,7 @@ class IntroEventScene < EventScene
     openPic(self,nil)
   end
 
-  def openPic(_scene,_args)
+  def openPic(_scene,*args)
     onCTrigger.clear
     @pic.name = "Graphics/Titles/"+@pics[@index]
     # fade to opacity 255 in FADE_TICKS ticks after waiting 0 frames
@@ -49,7 +49,7 @@ class IntroEventScene < EventScene
     end
   end
 
-  def openSplash(_scene,_args)
+  def openSplash(_scene,*args)
     onUpdate.clear
     onCTrigger.clear
     @pic.name = "Graphics/Titles/"+@splash
@@ -63,7 +63,7 @@ class IntroEventScene < EventScene
     onCTrigger.set(method(:closeSplash))   # call closeSplash when C key is pressed
   end
 
-  def closeSplash(scene,_args)
+  def closeSplash(scene,*args)
     onUpdate.clear
     onCTrigger.clear
     # Play random cry
@@ -83,7 +83,7 @@ class IntroEventScene < EventScene
     sscreen.pbStartLoadScreen
   end
 
-  def closeSplashDelete(scene,_args)
+  def closeSplashDelete(scene,*args)
     onUpdate.clear
     onCTrigger.clear
     # Play random cry

@@ -52,7 +52,7 @@ end
 
 
 
-Events.onMapChange += proc { |_sender,_args|
+Events.onMapChange += proc { |_sender,*args|
   pbSafariState.pbEnd if !pbInSafari?
 }
 

@@ -1,7 +1,7 @@
 #===============================================================================
 # Pokémon Organized Battle
 #===============================================================================
-def pbHasEligible?(_arg)
+def pbHasEligible?(*arg)
   return pbBattleChallenge.rules.ruleset.hasValidTeam?($Trainer.party)
 end
 
@@ -483,7 +483,7 @@ class BattleChallenge
     pbWriteCup(id,rules)
   end
 
-  def start(_args)
+  def start(*args)
     ensureType(@id)
     @currentChallenge=@id   # must appear before pbStart
     @bc.pbStart(t,@numRounds)
@@ -716,7 +716,7 @@ def pbBattleChallengeBeginSpeech
   end
 end
 
-def pbEntryScreen(_arg)
+def pbEntryScreen(*arg)
   retval = false
   pbFadeOutIn {
     scene = PokemonParty_Scene.new

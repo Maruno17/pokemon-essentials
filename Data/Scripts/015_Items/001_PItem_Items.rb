@@ -902,7 +902,7 @@ end
 #===============================================================================
 # Choose an item from the Bag
 #===============================================================================
-def pbChooseItem(var=0,_args)
+def pbChooseItem(var=0,*args)
   ret = 0
   pbFadeOutIn {
     scene = PokemonBag_Scene.new

@@ -97,7 +97,7 @@ module PBDayNight
 
 # Internal function
 
-  def getToneInternal
+  def self.getToneInternal
     # Calculates the tone for the current frame, used for day/night effects
     realMinutes = pbGetDayNightMinutes
     hour   = realMinutes/60
