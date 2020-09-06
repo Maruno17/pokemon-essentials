@@ -118,6 +118,7 @@ begin
     WeightChange        = 112
     Yawn                = 113
     GorillaTactics      = 114
+    BallFetch           = 115
 
     #===========================================================================
     # These effects apply to a battler position

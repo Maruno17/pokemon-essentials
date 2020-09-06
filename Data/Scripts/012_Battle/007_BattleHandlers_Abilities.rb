@@ -2164,6 +2164,20 @@ BattleHandlers::EOREffectAbility.add(:SPEEDBOOST,
   }
 )
 
+BattleHandlers::EOREffectAbility.add(:BALLFETCH,
+  proc { |ability,battler,battle|
+    if battler.item == 0 && battler.effects[PBEffects::BallFetch]==0 && $BallRetrieved != 0
+      battle.pbShowAbilitySplash(battler)
+      battler.effects[PBEffects::BallFetch]=1
+      battler.item = $BallRetrieved
+      battler.setInitialItem($BallRetrieved)
+      $BallRetrieved = 0
+      battler.battle.pbDisplay(_INTL("{1}'s {2} fetched the {3}!",battler.pbThis,battler.abilityName,battler.itemName))
+      battle.pbHideAbilitySplash(battler)
+    end    
+  }
+)
+
 #===============================================================================
 # EORGainItemAbility handlers
 #===============================================================================
