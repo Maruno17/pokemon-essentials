@@ -61,11 +61,11 @@ module PokeBattle_BattleCommon
     end
     @caughtPokemon.clear
   end
-  
+
   def pbBallFetch(ball)
-    if $BallRetrieved == 0 
+    if $BallRetrieved == 0
       $BallRetrieved=ball if ball != 268
-    end    
+    end
   end
   #=============================================================================
   # Throw a Poké Ball
@@ -159,6 +159,10 @@ module PokeBattle_BattleCommon
       pkmn.makeUnprimal
       pkmn.pbUpdateShadowMoves if pkmn.shadowPokemon?
       pkmn.pbRecordFirstMoves
+      # Morpeko
+      if pkmn.species == isConst?(pkmn.species,PBSpecies,:MORPEKO) || pkmn.form!=0
+        pkmn.form = 0
+      end
       # Reset form
       pkmn.forcedForm = nil if MultipleForms.hasFunction?(pkmn.species,"getForm")
       @peer.pbOnLeavingBattle(self,pkmn,true,true)

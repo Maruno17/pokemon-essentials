@@ -2188,6 +2188,19 @@ BattleHandlers::EOREffectAbility.add(:BALLFETCH,
   }
 )
 
+BattleHandlers::EOREffectAbility.add(:HUNGERSWITCH,
+  proc { |ability,battler,battle|
+    if isConst?(battler.species,PBSpecies,:MORPEKO)
+      battle.pbShowAbilitySplash(battler)
+      battler.form=(battler.form==0) ? 1 : 0
+      battler.pbUpdate(true)
+      battle.scene.pbChangePokemon(battler,battler.pokemon)
+      battle.pbDisplay(_INTL("{1} transformed!",battler.pbThis))
+      battle.pbHideAbilitySplash(battler)
+    end
+  }
+)
+
 #===============================================================================
 # EORGainItemAbility handlers
 #===============================================================================
