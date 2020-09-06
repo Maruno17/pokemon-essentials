@@ -12,13 +12,13 @@ class PokeBattle_AI
       @battle.eachBattler { |b| numTargets += 1 if b.near?(user) }
       return numTargets>1
     when PBTargets::UserAndAllies
-      @battle.eachSameSideBattler(user) { |b| numTargets += 1 }
+      @battle.eachSameSideBattler(user) { |_b| numTargets += 1 }
       return numTargets>1
     when PBTargets::AllFoes
-      @battle.eachOtherSideBattler(user) { |b| numTargets += 1 }
+      @battle.eachOtherSideBattler(user) { |_b| numTargets += 1 }
       return numTargets>1
     when PBTargets::AllBattlers
-      @battle.eachBattler { |b| numTargets += 1 }
+      @battle.eachBattler { |_b| numTargets += 1 }
       return numTargets>1
     end
     return false
@@ -75,7 +75,7 @@ class PokeBattle_AI
 
   # For switching. Determines the effectiveness of a potential switch-in against
   # an opposing battler.
-  def pbCalcTypeModPokemon(battlerThis,battlerOther)
+  def pbCalcTypeModPokemon(battlerThis,_battlerOther)
     mod1 = PBTypes.getCombinedEffectiveness(battlerThis.type1,target.type1,target.type2)
     mod2 = PBTypeEffectiveness::NORMAL_EFFECTIVE
     if battlerThis.type1!=battlerThis.type2
@@ -214,7 +214,7 @@ class PokeBattle_AI
       end
     when "0C1"   # Beat Up
       mult = 0
-      @battle.eachInTeamFromBattlerIndex(user.index) do |pkmn,i|
+      @battle.eachInTeamFromBattlerIndex(user.index) do |pkmn,_i|
         mult += 1 if pkmn && pkmn.able? && pkmn.status==PBStatuses::NONE
       end
       baseDmg *= mult

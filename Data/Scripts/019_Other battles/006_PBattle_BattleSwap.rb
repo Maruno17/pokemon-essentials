@@ -126,7 +126,7 @@ class BattleSwapScene
     @sprites["list"].commands=commands
   end
 
-  def pbSwapChosen(pkmnindex)
+  def pbSwapChosen(_pkmnindex)
     commands=pbGetCommands(@newPokemon,[])
     commands.push(_INTL("PKMN FOR SWAP"))
     commands.push(_INTL("CANCEL"))

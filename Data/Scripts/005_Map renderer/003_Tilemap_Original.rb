@@ -57,7 +57,6 @@ class SynchronizedTilemapAutotilesInternal
   end
 
   def sync
-    frameused = []
     for i in 0...7
       frames = [1,@atframes[i].length].max
       frame = (Graphics.frame_count/15)%frames

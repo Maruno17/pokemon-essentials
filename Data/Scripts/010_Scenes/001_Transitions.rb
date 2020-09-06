@@ -385,7 +385,6 @@ class RandomStripeTransition
       rect = Rect.new(0,0,(dir==0) ? size : Graphics.width,(dir==0) ? Graphics.height : size)
       buffer = @buffer
       sprite = @sprite
-      phase = @numframes-@duration
       count = (bands-bands*@duration/@numframes)-@rand_stripe_deleted_count
       while count > 0
         @rand_stripe_deleted[@rand_stripe_index_array.pop] = true

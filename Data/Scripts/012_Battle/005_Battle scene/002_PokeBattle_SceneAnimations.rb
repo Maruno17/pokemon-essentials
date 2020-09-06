@@ -18,16 +18,16 @@ class BattleIntroAnimation < PokeBattle_Animation
     makeSlideSprite("base_0",1,appearTime,PictureOrigin::Bottom)
     makeSlideSprite("base_1",-1,appearTime,PictureOrigin::Center)
     # Player sprite, partner trainer sprite
-    @battle.player.each_with_index do |p,i|
+    @battle.player.each_with_index do |_p,i|
       makeSlideSprite("player_#{i+1}",1,appearTime,PictureOrigin::Bottom)
     end
     # Opposing trainer sprite(s) or wild Pokémon sprite(s)
     if @battle.trainerBattle?
-      @battle.opponent.each_with_index do |p,i|
+      @battle.opponent.each_with_index do |_p,i|
         makeSlideSprite("trainer_#{i+1}",-1,appearTime,PictureOrigin::Bottom)
       end
     else   # Wild battle
-      @battle.pbParty(1).each_with_index do |pkmn,i|
+      @battle.pbParty(1).each_with_index do |_pkmn,i|
         idxBattler = 2*i+1
         makeSlideSprite("pokemon_#{idxBattler}",-1,appearTime,PictureOrigin::Bottom)
       end
@@ -574,9 +574,7 @@ class BattlerRecallAnimation < PokeBattle_Animation
     # Calculate the color to turn the battler sprite
     col = getBattlerColorFromBallType(ballType)
     col.alpha = 0
-    # Calculate start and end coordinates for battler sprite movement
-    battlerStartX = batSprite.x
-    battlerStartY = batSprite.y
+    # Calculate end coordinates for battler sprite movement
     ballPos = PokeBattle_SceneConstants.pbBattlerPosition(@idxBattler,batSprite.sideSize)
     battlerEndX = ballPos[0]
     battlerEndY = ballPos[1]
@@ -867,8 +865,6 @@ class PokeballThrowDeflectAnimation < PokeBattle_Animation
     # Set up Poké Ball sprite
     ball = addBallSprite(ballStartX,ballStartY,@ballType)
     ball.setZ(0,90)
-    # Set up battler sprite
-    battler = addSprite(batSprite,PictureOrigin::Bottom)
     # Poké Ball arc animation
     ball.setSE(0,"Battle throw")
     createBallTrajectory(ball,0,16,

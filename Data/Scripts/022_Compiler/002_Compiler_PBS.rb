@@ -98,8 +98,6 @@ end
 #===============================================================================
 def pbCompileConnections
   records   = []
-  constants = ""
-  itemnames = []
   pbCompilerEachPreppedLine("PBS/connections.txt") { |line,lineno|
     hashenum = {
       "N" => "N","North" => "N",
@@ -141,7 +139,7 @@ end
 def pbCompileBerryPlants
   sections = []
   if File.exists?("PBS/berryplants.txt")
-    pbCompilerEachCommentedLine("PBS/berryplants.txt") { |line,lineno|
+    pbCompilerEachCommentedLine("PBS/berryplants.txt") { |line,_lineno|
       if line[ /^\s*(\w+)\s*=\s*(.*)$/ ]
         key   = $1
         value = $2
@@ -335,10 +333,8 @@ end
 
 def pbCompileTypes
   pbWriteDefaultTypes
-  sections   = []
   typechart  = []
   types      = []
-  nameToType = {}
   requiredtypes = {
     "Name"          => [1, "s"],
     "InternalName"  => [2, "s"],
@@ -428,7 +424,8 @@ def pbCompileTypes
   count = maxValue+1
   for i in 0...count
     type = typehash[i]
-    j = 0; k = i; while j<count
+    j = 0; k = i
+    while j<count
       typechart[k] = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE
       atype = typehash[j]
       if type && atype
@@ -526,7 +523,7 @@ def readItemList(filename)
   pbRgssOpen(filename,"rb") { |file|
     numrec = file.fgetdw>>3
     curpos = 0
-    for i in 0...numrec
+    numrec.times do
       file.pos = curpos
       offset = file.fgetdw
       length = file.fgetdw
@@ -601,7 +598,6 @@ def pbCompileMoves
   maxValue = 0
   count = 0
   pbCompilerEachPreppedLine("PBS/moves.txt") { |line,lineno|
-    thisline = line.clone
     record = []
     lineRecord = pbGetCsvRecord(line,lineno,[0,"vnssueeuuuyiss",
        nil,nil,nil,nil,nil,PBTypes,["Physical","Special","Status"],
@@ -939,11 +935,9 @@ def pbCompilePokemonForms
       # Ensure this is a valid form and not a duplicate.
       if form==0
         raise _INTL("Form {1} is invalid (PBS/pokemonforms.txt). Form 0 data should be defined in \"PBS/pokemon.txt\".",sectionName)
-        next
       end
       if formToSpecies[baseSpeciesID] && formToSpecies[baseSpeciesID][form]
         raise _INTL("Form {1} is defined at least twice (PBS/pokemonforms.txt). It should only be defined once.",sectionName)
-        next
       end
       # Record new species number in formToSpecies.
       speciesID = baseSpeciesID
@@ -1160,7 +1154,7 @@ def pbTMRS   # Backup Gen 3 TM list
         :CUT,:FLY,:SURF,:STRENGTH,:FLASH,:ROCKSMASH,:WATERFALL,:DIVE
   ]
   ret = []
-  for i in 0...rstm.length
+  rstm.length.times do
     ret.push((parseMove(rstm.to_s) rescue 0))
   end
   return ret
@@ -1231,7 +1225,7 @@ end
 def pbCompileShadowMoves
   sections = []
   if File.exists?("PBS/shadowmoves.txt")
-    pbCompilerEachCommentedLine("PBS/shadowmoves.txt") { |line,lineno|
+    pbCompilerEachCommentedLine("PBS/shadowmoves.txt") { |line,_lineno|
       if line[ /^\s*(\w+)\s*=\s*(.*)$/ ]
         key   = $1
         value = $2
@@ -1272,11 +1266,10 @@ def pbCompileEncounters
   }
   encounters  = {}
   thisenc     = nil
-  lastenc     = -1
-  lastenclen  = 0
   needdensity = false
   lastmapid   = -1
-  i = 0; while i<lines.length
+  i = 0
+  while i<lines.length
     line = lines[i]
     FileLineData.setLine(line,linenos[i])
     mapid = line[/^\d+$/]
@@ -1301,7 +1294,8 @@ def pbCompileEncounters
       needdensity = false
       enclines = EncounterTypes::EnctypeChances[enc].length
       encarray = []
-      j = i+1; k = 0; while j<lines.length && k<enclines
+      j = i+1; k = 0
+      while j<lines.length && k<enclines
         line = lines[j]
         FileLineData.setLine(lines[j],linenos[j])
         splitarr = strsplit(line,/\s*,\s*/)
@@ -1360,7 +1354,6 @@ def pbCompileTrainerTypes
   # Trainer types
   records = []
   trainernames = []
-  count = 0
   maxValue = 0
   pbCompilerEachPreppedLine("PBS/trainertypes.txt") { |line,lineno|
     record=pbGetCsvRecord(line,lineno,[0,"unsUSSSeUS",   # ID can be 0
@@ -1674,7 +1667,6 @@ def pbCompileTrainerLists
       f.write("Pokemon = btpokemon.txt\r\n")
     }
   end
-  database = []
   sections = []
   MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech,[])
   MessageTypes.setMessagesAsHash(MessageTypes::EndSpeechWin,[])
@@ -1709,7 +1701,7 @@ def pbCompileTrainerLists
       if safeExists?("PBS/"+rsection[1])
         filename = "PBS/"+rsection[1]
         rsection[1] = []
-        pbCompilerEachCommentedLine(filename) { |line,lineno|
+        pbCompilerEachCommentedLine(filename) { |line,_lineno|
           rsection[1].push(PBPokemon.fromInspected(line))
         }
       else

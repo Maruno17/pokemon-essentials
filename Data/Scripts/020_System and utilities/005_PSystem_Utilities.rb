@@ -248,7 +248,7 @@ class LinearCongRandom
 
   def self.dsSeed
     t = Time.now
-    seed = (((t.mon*t.mday+t.min+t.sec)&0xFF)<<24) | (t.hour<<16) | (t.year-2000)
+    seed = (((t.mon*t.mday+t.min+t.sec)&0xFF)<<24) | (t.hour << 16) | (t.year-2000)
     seed = (seed+0xFFFFFFFF)+1 if seed<0
     return seed
   end
@@ -416,9 +416,8 @@ class MiniXmlReader
     raise ArgumentError.new("Illegal character") if codepoint<9 ||
        codepoint==11 || codepoint==12 || (codepoint>=14 && codepoint<32) ||
        codepoint==0xFFFE || codepoint==0xFFFF || (codepoint>=0xD800 && codepoint<0xE000)
-    if codepoint<=0x7F
-      return codepoint.chr
-    elsif codepoint<=0x7FF
+    return codepoint.chr if codepoint<=0x7F
+    if codepoint<=0x7FF
       str = (0xC0|((codepoint>>6)&0x1F)).chr
       str += (0x80|(codepoint   &0x3F)).chr
       return str
@@ -436,7 +435,6 @@ class MiniXmlReader
     else
       raise ArgumentError.new("Illegal character")
     end
-    return str
   end
 
   def unescape(attr) #:nodoc:

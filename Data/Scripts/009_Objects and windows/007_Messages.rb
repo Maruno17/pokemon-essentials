@@ -315,12 +315,13 @@ module InterpreterMixin
       if common_event != nil
         interp = Interpreter.new
         interp.setup(common_event.list,0)
-        begin
+        loop do
           Graphics.update
           Input.update
           interp.update
           pbUpdateSceneMap
-        end while interp.running?
+          break if !interp.running?
+        end
       end
     else
       $game_system.battle_interpreter.setup(common_event.list, 0)
@@ -705,7 +706,7 @@ class ChooseNumberParams
     ret=0
     if @maxDigits>0
       ret=-((10**@maxDigits)-1)
-    elsif
+    else
       ret=@minNumber
     end
     ret=0 if !@negativeAllowed && ret<0
@@ -716,7 +717,7 @@ class ChooseNumberParams
     ret=0
     if @maxDigits>0
       ret=((10**@maxDigits)-1)
-    elsif
+    else
       ret=@maxNumber
     end
     ret=0 if !@negativeAllowed && ret<0
@@ -767,9 +768,7 @@ def pbChooseNumber(msgwindow,params)
   cmdwindow.setSkin(params.skin) if params.skin
   cmdwindow.sign=params.negativesAllowed # must be set before number
   cmdwindow.number=defaultNumber
-  curnumber=defaultNumber
   pbPositionNearMsgWindow(cmdwindow,msgwindow,:right)
-  command=0
   loop do
     Graphics.update
     Input.update
@@ -1007,7 +1006,6 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
   oldletterbyletter=msgwindow.letterbyletter
   msgwindow.letterbyletter=(letterbyletter) ? true : false
   ret=nil
-  count=0
   commands=nil
   facewindow=nil
   goldwindow=nil
@@ -1048,17 +1046,19 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
     m = $1.to_i
     next getSkinColor(msgwindow.windowskin,m,isDarkSkin)
   }
-  begin
+  loop do
     last_text = text.clone
     text.gsub!(/\\v\[([0-9]+)\]/i) { $game_variables[$1.to_i] }
-  end until text == last_text
-  begin
+    break if text == last_text
+  end
+  loop do
     last_text = text.clone
     text.gsub!(/\\l\[([0-9]+)\]/i) {
       linecount = [1,$1.to_i].max
       next ""
     }
-  end until text == last_text
+    break if text == last_text
+  end
   colortag = ""
   if ($game_message && $game_message.background>0) ||
      ($game_system && $game_system.respond_to?("message_frame") &&
@@ -1156,7 +1156,7 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
   ########## Show text #############################
   msgwindow.text = text
   Graphics.frame_reset if Graphics.frame_rate>40
-  begin
+  loop do
     if signWaitCount>0
       signWaitCount -= 1
       if atTop
@@ -1256,7 +1256,8 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
     pbUpdateSceneMap
     msgwindow.update
     yield if block_given?
-  end until (!letterbyletter || commandProc || commands) && !msgwindow.busy?
+    break if (!letterbyletter || commandProc || commands) && !msgwindow.busy?
+  end
   Input.update   # Must call Input.update again to avoid extra triggers
   msgwindow.letterbyletter=oldletterbyletter
   if commands

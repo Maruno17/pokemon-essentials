@@ -110,7 +110,6 @@ class ThrowBaitAnimation < PokeBattle_Animation
   def createProcesses
     # Calculate start and end coordinates for battler sprite movement
     batSprite = @sprites["pokemon_#{@battler.index}"]
-    shaSprite = @sprites["shadow_#{@battler.index}"]
     traSprite = @sprites["player_1"]
     ballPos = PokeBattle_SceneConstants.pbBattlerPosition(@battler.index,batSprite.sideSize)
     ballStartX = traSprite.x
@@ -177,7 +176,6 @@ class ThrowRockAnimation < PokeBattle_Animation
   def createProcesses
     # Calculate start and end coordinates for battler sprite movement
     batSprite = @sprites["pokemon_#{@battler.index}"]
-    shaSprite = @sprites["shadow_#{@battler.index}"]
     traSprite = @sprites["player_1"]
     ballStartX = traSprite.x
     ballStartY = traSprite.y-traSprite.bitmap.height/2
@@ -431,7 +429,7 @@ class PokeBattle_SafariZone
       catchFactor  = [[catchFactor,3].max,20].min
       escapeFactor = (pbEscapeRate(rareness)*100)/1275
       escapeFactor = [[escapeFactor,2].max,20].min
-      begin
+      loop do
         cmd = @scene.pbSafariCommandMenu(0)
         case cmd
         when 0   # Ball
@@ -483,7 +481,8 @@ class PokeBattle_SafariZone
           # Weather continues
           @scene.pbCommonAnimation(PBWeather.animationName(@weather))
         end
-      end while @decision==0
+        break if @decision > 0
+      end
       @scene.pbEndBattle(@decision)
     rescue BattleAbortedException
       @decision = 0

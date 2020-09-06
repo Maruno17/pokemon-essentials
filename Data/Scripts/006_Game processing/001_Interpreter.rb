@@ -192,10 +192,6 @@ class Interpreter
     $game_temp.choice_proc = Proc.new { |n| @branch[current_indent] = n }
   end
 
-  def command_dummy
-    return true
-  end
-
   def pbExecuteScript(script)
     begin
       result = eval(script)
@@ -234,7 +230,6 @@ class Interpreter
         if e.is_a?(Hangup)
           $EVENTHANGUPMSG = err; raise
         end
-        raise err
       elsif $game_map
         mapname = ($game_map.name rescue nil) || "???"
         err  = "Script error within map #{$game_map.map_id} "
@@ -242,15 +237,13 @@ class Interpreter
         if e.is_a?(Hangup)
           $EVENTHANGUPMSG = err; raise
         end
-        raise err
       else
         err = "Script error in interpreter:\r\n#{message}\r\n#{s}"
         if e.is_a?(Hangup)
           $EVENTHANGUPMSG = err; raise
         end
-        raise err
       end
-      return false
+      raise err
     end
   end
   #-----------------------------------------------------------------------------
@@ -844,7 +837,7 @@ class Interpreter
       value = $game_variables[@parameters[4]]
     when 2   # random number
       value = @parameters[4] + rand(@parameters[5] - @parameters[4] + 1)
-    when 3, 4, 5   # item, actor, enemy
+#    when 3, 4, 5   # item, actor, enemy
     when 6   # character
       character = get_character(@parameters[4])
       if character != nil
@@ -860,14 +853,13 @@ class Interpreter
     when 7   # other
       case @parameters[4]
       when 0; value = $game_map.map_id                             # map ID
-      when 1, 3   # number of party members, steps
+#      when 1, 3   # number of party members, steps
       when 2; value = $Trainer.money                               # gold
       when 4; value = Graphics.frame_count / Graphics.frame_rate   # play time
       when 5; value = $game_system.timer / Graphics.frame_rate     # timer
       when 6; value = $game_system.save_count                      # save count
       end
     end
-    shouldRefresh = false
     # Loop for group control
     for i in @parameters[0] .. @parameters[1]
       # Branch with control
@@ -1463,7 +1455,7 @@ class Interpreter
       end
       @index += 1
     end
-    result = pbExecuteScript(script)
+    pbExecuteScript(script)
     return true
   end
 end

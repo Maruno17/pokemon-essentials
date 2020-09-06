@@ -13,7 +13,7 @@ class PokeBattle_BattleArena < PokeBattle_Battle
     @battleAI.battleArena = true
   end
 
-  def pbCanSwitchLax?(idxBattler,idxParty,partyScene=nil)
+  def pbCanSwitchLax?(idxBattler,_idxParty,partyScene=nil)
     if partyScene
       partyScene.pbDisplay(_INTL("{1} can't be switched out!",@battlers[idxBattler].pbThis))
     end
@@ -101,7 +101,6 @@ class PokeBattle_BattleArena < PokeBattle_Battle
     end
 #    PBDebug.log("[Mind: #{@mind.inspect}, Skill: #{@skill.inspect}]")
     if @count==3
-      points = [0,0]
       @battlers[0].pbCancelMoves
       @battlers[1].pbCancelMoves
       ratings1 = [0,0,0]

@@ -157,7 +157,7 @@ module Graphics
 
   def self.wait(frames)
     return if frames<=0
-    frames.times do |i|
+    frames.times do
       self.update
     end
   end
@@ -675,16 +675,16 @@ class Bitmap
   end
 
   def swap32(x)
-    return ((x>>24)&0x000000FF)|
-           ((x>>8)&0x0000FF00)|
-           ((x<<8)&0x00FF0000)|
-           ((x<<24)&0xFF000000)
+    return ((x >> 24) & 0x000000FF) |
+           ((x >> 8) & 0x0000FF00) |
+           ((x << 8) & 0x00FF0000) |
+           ((x << 24) & 0xFF000000)
   end
 
   def asOpaque
     data=getData
     j=3
-    for i in 0...width*height
+    (width*height).times do
       data[j]=0xFF
       j+=4
     end
@@ -705,7 +705,6 @@ class Bitmap
     row=(self.height-1)*bytesPerScan
     data=self.getData
     data2=data.clone
-    width=self.width
     x=""
     len=bytesPerScan*self.height
     ttt=Time.now
@@ -713,13 +712,14 @@ class Bitmap
       SwapRgb.call(data2,data2.length)
     else
       # the following is considerably slower
-      b=0;c=2;while b!=len
+      b=0; c=2
+      while b!=len
         data2[b]=data[c]
         data2[c]=data[b]
-        b+=4;c+=4;
+        b+=4; c+=4;
       end
     end
-    #$times.push(Time.now-ttt)
+#    $times.push(Time.now-ttt)
     filter="\0"
     while row>=0
       thisRow=data2[row,bytesPerScan]

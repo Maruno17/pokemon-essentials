@@ -484,13 +484,13 @@ class BattleChallenge
   end
 
   def start(*args)
-    t=ensureType(@id)
+    ensureType(@id)
     @currentChallenge=@id   # must appear before pbStart
     @bc.pbStart(t,@numRounds)
   end
 
   def register(id,doublebattle,numrounds,numPokemon,battletype,mode=1)
-    t=ensureType(id)
+    ensureType(id)
     if battletype==BattleFactoryID
       @bc.setExtraData(BattleFactoryData.new(@bc))
       numPokemon=3
@@ -622,7 +622,7 @@ def pbPlayBattle(battledata)
   bgm = BattlePlayerHelper.pbGetBattleBGM(lastbattle)
   pbBattleAnimation(bgm) {
     pbSceneStandby {
-      decision = battleplayer.pbStartBattle
+      battleplayer.pbStartBattle
     }
   }
 end
@@ -802,7 +802,7 @@ end
 
 
 
-def pbBattleFactoryPokemon(rule,numwins,numswaps,rentals)
+def pbBattleFactoryPokemon(rule,numwins,numswaps,_rentals)
   table=nil
   btpokemon=pbGetBTPokemon(pbBattleChallenge.currentChallenge)
   ivtable=[
@@ -873,7 +873,7 @@ def pbBattleFactoryPokemon(rule,numwins,numswaps,rentals)
     end
   end
   party=[]
-  begin
+  loop do
     party.clear
     while party.length<6
       rnd=pokemonNumbers[0]+rand(pokemonNumbers[1]-pokemonNumbers[0]+1)
@@ -881,7 +881,8 @@ def pbBattleFactoryPokemon(rule,numwins,numswaps,rentals)
       indvalue=(party.length<ivgroups[0]) ? ivs[0] : ivs[1]
       party.push(rndpoke.createPokemon(rule.ruleset.suggestedLevel,indvalue,nil))
     end
-  end until rule.ruleset.isValid?(party)
+    break if rule.ruleset.isValid?(party)
+  end
   return party
 end
 
@@ -911,7 +912,7 @@ def pbGenerateBattleTrainer(trainerid,rule)
     end
     return opponent
   end
-  begin
+  loop do
     opponent.party.clear
     while opponent.party.length<rule.ruleset.suggestedNumber
       rnd=pokemonnumbers[rand(pokemonnumbers.length)]
@@ -920,7 +921,8 @@ def pbGenerateBattleTrainer(trainerid,rule)
          rule.ruleset.suggestedLevel,indvalues,opponent)
       opponent.party.push(pkmn)
     end
-  end until rule.ruleset.isValid?(opponent.party)
+    break if rule.ruleset.isValid?(opponent.party)
+  end
   return opponent
 end
 

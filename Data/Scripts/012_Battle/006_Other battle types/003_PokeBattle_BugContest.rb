@@ -40,11 +40,11 @@ class PokeBattle_BugContestBattle < PokeBattle_Battle
     super(*arg)
   end
 
-  def pbItemMenu(idxBattler,firstAction)
+  def pbItemMenu(idxBattler,_firstAction)
     return pbRegisterItem(idxBattler,@ballConst,1)
   end
 
-  def pbCommandMenu(idxBattler,firstAction)
+  def pbCommandMenu(idxBattler,_firstAction)
     return @scene.pbCommandMenuEx(idxBattler,[
        _INTL("Sport Balls: {1}",@ballCount),
        _INTL("Fight"),
@@ -54,7 +54,7 @@ class PokeBattle_BugContestBattle < PokeBattle_Battle
     ],4)
   end
 
-  def pbConsumeItemInBag(item,idxBattler)
+  def pbConsumeItemInBag(_item,_idxBattler)
     @ballCount -= 1 if @ballCount>0
   end
 

@@ -173,7 +173,7 @@ end
 # Constant checks
 #===============================================================================
 # Pokérus check
-Events.onMapUpdate += proc { |sender,e|
+Events.onMapUpdate += proc { |_sender,_e|
   next if !$Trainer
   last = $PokemonGlobal.pokerusTime
   now = pbGetTimeNow
@@ -226,7 +226,7 @@ def pbBatteryLow?
   return false
 end
 
-Events.onMapUpdate += proc { |sender,e|
+Events.onMapUpdate += proc { |_sender,_e|
   if !$PokemonTemp.batterywarning && pbBatteryLow?
     if !$game_temp.in_menu && !$game_temp.in_battle &&
        !$game_player.move_route_forcing && !$game_temp.message_window_showing &&
@@ -266,7 +266,7 @@ Events.onStepTaken += proc{
 }
 
 # Poison party Pokémon
-Events.onStepTakenTransferPossible += proc { |sender,e|
+Events.onStepTakenTransferPossible += proc { |_sender,e|
   handled = e[0]
   next if handled[0]
   if $PokemonGlobal.stepcount%4==0 && POISON_IN_FIELD
@@ -307,7 +307,7 @@ def pbCheckAllFainted
 end
 
 # Gather soot from soot grass
-Events.onStepTakenFieldMovement += proc { |sender,e|
+Events.onStepTakenFieldMovement += proc { |_sender,e|
   event = e[0] # Get the event affected by field movement
   thistile = $MapFactory.getRealTilePos(event.map.map_id,event.x,event.y)
   map = $MapFactory.getMap(thistile[0])
@@ -331,7 +331,7 @@ Events.onStepTakenFieldMovement += proc { |sender,e|
 }
 
 # Show grass rustle animation, and auto-move the player over waterfalls and ice
-Events.onStepTakenFieldMovement += proc { |sender,e|
+Events.onStepTakenFieldMovement += proc { |_sender,e|
   event = e[0] # Get the event affected by field movement
   if $scene.is_a?(Scene_Map)
     currentTag = pbGetTerrainTag(event)
@@ -395,9 +395,8 @@ end
 #===============================================================================
 # Clears the weather of the old map, if the old and new maps have different
 # names or defined weather
-Events.onMapChanging += proc { |sender,e|
+Events.onMapChanging += proc { |_sender,e|
   newMapID = e[0]
-  newMap   = e[1]
   if newMapID>0
     mapinfos = ($RPGVX) ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
     oldWeather = pbGetMetadata($game_map.map_id,MetadataWeather)
@@ -411,7 +410,7 @@ Events.onMapChanging += proc { |sender,e|
 }
 
 # Set up various data related to the new map
-Events.onMapChange += proc { |sender,e|
+Events.onMapChange += proc { |_sender,e|
   oldid = e[0] # previous map ID, 0 if no map ID
   healing = pbGetMetadata($game_map.map_id,MetadataHealingSpot)
   $PokemonGlobal.healingSpot = healing if healing
@@ -430,18 +429,12 @@ Events.onMapChange += proc { |sender,e|
   end
 }
 
-Events.onMapSceneChange += proc { |sender,e|
+Events.onMapSceneChange += proc { |_sender,e|
   scene      = e[0]
   mapChanged = e[1]
   next if !scene || !scene.spriteset
   # Update map trail
   if $game_map
-    lastmapdetails = $PokemonGlobal.mapTrail[0] ?
-       pbGetMetadata($PokemonGlobal.mapTrail[0],MetadataMapPosition) : [-1,0,0]
-    lastmapdetails = [-1,0,0] if !lastmapdetails
-    newmapdetails = $game_map.map_id ?
-       pbGetMetadata($game_map.map_id,MetadataMapPosition) : [-1,0,0]
-    newmapdetails = [-1,0,0] if !newmapdetails
     $PokemonGlobal.mapTrail = [] if !$PokemonGlobal.mapTrail
     if $PokemonGlobal.mapTrail[0]!=$game_map.map_id
       $PokemonGlobal.mapTrail[3] = $PokemonGlobal.mapTrail[2] if $PokemonGlobal.mapTrail[2]
@@ -556,7 +549,8 @@ def pbMoveRoute(event,commands,waitComplete=false)
   route.skippable = true
   route.list.clear
   route.list.push(RPG::MoveCommand.new(PBMoveRoute::ThroughOn))
-  i=0; while i<commands.length
+  i=0
+  while i<commands.length
     case commands[i]
     when PBMoveRoute::Wait, PBMoveRoute::SwitchOn, PBMoveRoute::SwitchOff,
        PBMoveRoute::ChangeSpeed, PBMoveRoute::ChangeFreq, PBMoveRoute::Opacity,
@@ -600,7 +594,7 @@ end
 #===============================================================================
 # Player/event movement in the field
 #===============================================================================
-def pbLedge(xOffset,yOffset)
+def pbLedge(_xOffset,_yOffset)
   if PBTerrain.isLedge?(pbFacingTerrainTag)
     if pbJumpToward(2,true)
       $scene.spriteset.addUserAnimation(DUST_ANIMATION_ID,$game_player.x,$game_player.y,true,1)
@@ -914,7 +908,7 @@ def pbEventFacesPlayer?(event,player,distance)
   curx = event.x
   cury = event.y
   found = false
-  for i in 0...distance
+  distance.times do
     curx += deltaX
     cury += deltaY
     if player.x==curx && player.y==cury
@@ -936,7 +930,7 @@ def pbEventCanReachPlayer?(event,player,distance)
   cury = event.y
   found = false
   realdist = 0
-  for i in 0...distance
+  distance.times do
     curx += deltaX
     cury += deltaY
     if player.x==curx && player.y==cury
@@ -949,7 +943,7 @@ def pbEventCanReachPlayer?(event,player,distance)
   # Check passibility
   curx = event.x
   cury = event.y
-  for i in 0...realdist
+  realdist.times do
     return false if !event.passable?(curx,cury,event.direction)
     curx += deltaX
     cury += deltaY
@@ -1059,11 +1053,12 @@ module InterpreterFieldMixin
     $PokemonMap.addMovedEvent(@event_id) if $PokemonMap
     if oldx!=event.x || oldy!=event.y
       $game_player.lock
-      begin
+      loop do
         Graphics.update
         Input.update
         pbUpdateSceneMap
-      end until !event.moving?
+        break if !event.moving?
+      end
       $game_player.unlock
     end
   end

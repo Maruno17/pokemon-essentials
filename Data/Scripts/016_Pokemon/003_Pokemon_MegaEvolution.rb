@@ -97,14 +97,14 @@ end
 
 MultipleForms.register(:GROUDON,{
   "getPrimalForm" => proc { |pkmn|
-    next 1 if isConst?(pkmn.item,PBItems,:REDORB)
+    next 1 if pkmn.hasItem?(:REDORB)
     next
   }
 })
 
 MultipleForms.register(:KYOGRE,{
   "getPrimalForm" => proc { |pkmn|
-    next 1 if isConst?(pkmn.item,PBItems,:BLUEORB)
+    next 1 if pkmn.hasItem?(:BLUEORB)
     next
   }
 })

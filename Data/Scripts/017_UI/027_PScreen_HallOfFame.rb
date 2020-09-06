@@ -481,18 +481,16 @@ PokemonPCList.registerPC(HallOfFamePC.new)
 
 
 class PokemonGlobalMetadata
-  attr_accessor :hallOfFame
+  attr_writer :hallOfFame
   # Number necessary if hallOfFame array reach in its size limit
-  attr_accessor :hallOfFameLastNumber
+  attr_writer :hallOfFameLastNumber
 
   def hallOfFame
-    @hallOfFame=[] if !@hallOfFame
-    return @hallOfFame
+    return @hallOfFame || []
   end
 
   def hallOfFameLastNumber
-    @hallOfFameLastNumber=0 if !@hallOfFameLastNumber
-    return @hallOfFameLastNumber
+    return @hallOfFameLastNumber || 0
   end
 end
 

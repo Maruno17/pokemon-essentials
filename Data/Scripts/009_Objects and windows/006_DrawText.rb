@@ -2,9 +2,9 @@
 # Text colours
 #===============================================================================
 def ctag(color)
-  ret=(color.red.to_i<<24)
-  ret|=((color.green.to_i)<<16)
-  ret|=((color.blue.to_i)<<8)
+  ret=(color.red.to_i << 24)
+  ret|=((color.green.to_i) << 16)
+  ret|=((color.blue.to_i) << 8)
   ret|=((color.alpha.to_i))
   return sprintf("<c=%08X>",ret)
 end
@@ -168,13 +168,9 @@ end
 
 def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
                          newlineBreaks=true,explicitBreaksOnly=false)
-  numchars=0
   x=y=0
   characters=[]
-  charactersInternal=[]
   textchunks=[]
-  controls=[]
-  charsonline=0
   textchunks.push(text)
   text=textchunks.join("")
   textchars=text.scan(/./m)
@@ -192,19 +188,18 @@ def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
   end
   defaultfontname=defaultfontname.clone
   havenl=false
-  position=0;while position<textchars.length
+  position=0
+  while position<textchars.length
     yStart=0
     xStart=0
     width=isWaitChar(textchars[position]) ? 0 : bitmap.text_size(textchars[position]).width
     if textchars[position]=="\n"
       if newlineBreaks   # treat newline as break
-        if true
-          havenl=true
-          characters.push(["\n",x,y*lineheight+yDst,0,lineheight,false,false,
-             false,colorclone,nil,false,false,"",8,position,nil,0])
-          y+=1
-          x=0
-        end
+        havenl=true
+        characters.push(["\n",x,y*lineheight+yDst,0,lineheight,false,false,
+           false,colorclone,nil,false,false,"",8,position,nil,0])
+        y+=1
+        x=0
         hadspace=true
         hadnonspace=false
         position+=1
@@ -223,10 +218,8 @@ def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
     elsif isspace
       hadspace=true
     end
-    textx=x+xStart   # independent of xDst
     texty=(lineheight*y)+yDst+yStart
-    oldx=x
-    # Push character, textx will be calculated later
+    # Push character
     if heightDst<0 || yStart<yDst+heightDst
       havenl=true if isWaitChar(textchars[position])
       characters.push([
@@ -455,11 +448,9 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
     dummybitmap.dispose if dummybitmap
     return ret
   end
-  numchars=0
   x=y=0
   characters=[]
   charactersInternal=[]
-  charsonline=0
   realtext=nil
   realtextStart=""
   if !explicitBreaksOnly && textchunks.join("").length==0
@@ -511,7 +502,8 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
   hadspace=false
   hadnonspace=false
   havenl=false
-  position=0; while position<textchars.length
+  position=0
+  while position<textchars.length
     nextline=0
     graphic=nil
     graphicX=0
@@ -712,11 +704,9 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
     elsif isspace
       hadspace=true
     end
-    textx=x+xStart # independent of xDst
     texty=(lineheight*y)+yDst+yStart
     colors=getLastColors(colorstack,opacitystack,defaultcolors)
-    oldx=x
-    # Push character, textx will be calculated later
+    # Push character
     if heightDst<0 || texty<yDst+heightDst
       havenl=true if !graphic && isWaitChar(textchars[position])
       extraspace=(!graphic && italiccount>0) ? 2+(width/2) : 2
@@ -909,7 +899,6 @@ def getLineBrokenChunks(bitmap,value,width,dims,plain=false)
   reNoMatch=/<c=[^>]+>/
   return ret if !bitmap || bitmap.disposed? || width<=0
   textmsg=value.clone
-  lines=0
   color=Font.default_color
   while (c = textmsg.slice!(/\n|[^ \r\t\f\n\-]*\-+|(\S*([ \r\t\f]?))/)) != nil
     break if c==""
@@ -1111,7 +1100,7 @@ def coloredToFormattedText(text,baseColor=nil,shadowColor=nil)
 end
 
 # Deprecated -- not to be used in new code
-def drawColoredTextEx(bitmap,x,y,width,text,baseColor=nil,shadowColor=nil)
+def drawColoredTextEx(bitmap,x,y,width,text,_baseColor=nil,_shadowColor=nil)
   chars=getFormattedText(bitmap,x,y,width,-1,coloredToFormattedText(text),32)
   drawFormattedChars(bitmap,chars)
 end

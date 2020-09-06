@@ -75,7 +75,7 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
     pbDrawShadowText(self.contents,x,y,[width,w].max,h,t,base,Color.new(26*8,26*8,25*8))
   end
 
-  def drawItem(index,count,rect)
+  def drawItem(index,_count,rect)
     pbSetNarrowFont(self.contents)
     colors = 0; codeswitch = false
     if @mode==0
@@ -83,8 +83,8 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
       codeswitch = (name[/^s\:/])
       val = (codeswitch) ? (eval($~.post_match) rescue nil) : $game_switches[index+1]
       if val==nil; status = "[-]"; colors = 0; codeswitch = true
-      elsif val; status = "[ON]"; colors = 2
-      else; status = "[OFF]"; colors = 1
+      elsif val;   status = "[ON]"; colors = 2
+      else;        status = "[OFF]"; colors = 1
       end
     else
       name = $data_system.variables[index+1]
@@ -93,7 +93,6 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
     end
     name = '' if name==nil
     id_text = sprintf("%04d:",index+1)
-    width = self.contents.text_size(id_text).width
     rect = drawCursor(index,rect)
     totalWidth = rect.width
     idWidth     = totalWidth*15/100
@@ -275,7 +274,6 @@ def pbDebugDayCare
     if Input.trigger?(Input::B)
       break
     elsif Input.trigger?(Input::C)
-      ret = cmdwindow.index
       case cmdwindow.index
       when 0   # Withdraw Pokémon 1
         if !$PokemonGlobal.daycare[0][0]
@@ -382,7 +380,7 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
     pbDrawShadowText(self.contents,x,y,[width,w].max,h,t,base,Color.new(26*8,26*8,25*8))
   end
 
-  def drawItem(index,count,rect)
+  def drawItem(index,_count,rect)
     pbSetNarrowFont(self.contents)
     rect = drawCursor(index,rect)
     nameWidth   = rect.width*50/100

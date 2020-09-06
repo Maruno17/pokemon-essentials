@@ -837,7 +837,7 @@ ItemHandlers::UseOnPokemon.add(:TAMATOBERRY,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:GRACIDEA,proc { |item,pkmn,scene|
-  if !isConst?(pkmn.species,PBSpecies,:SHAYMIN) || pkmn.form!=0 ||
+  if !pkmn.isSpecies?(:SHAYMIN) || pkmn.form!=0 ||
      pkmn.status==PBStatuses::FROZEN || PBDayNight.isNight?
     scene.pbDisplay(_INTL("It had no effect."))
     next false
@@ -854,7 +854,7 @@ ItemHandlers::UseOnPokemon.add(:GRACIDEA,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:REDNECTAR,proc { |item,pkmn,scene|
-  if !isConst?(pkmn.species,PBSpecies,:ORICORIO) || pkmn.form==0
+  if !pkmn.isSpecies?(:ORICORIO) || pkmn.form==0
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -869,7 +869,7 @@ ItemHandlers::UseOnPokemon.add(:REDNECTAR,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:YELLOWNECTAR,proc { |item,pkmn,scene|
-  if !isConst?(pkmn.species,PBSpecies,:ORICORIO) || pkmn.form==1
+  if !pkmn.isSpecies?(:ORICORIO) || pkmn.form==1
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -884,7 +884,7 @@ ItemHandlers::UseOnPokemon.add(:YELLOWNECTAR,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:PINKNECTAR,proc { |item,pkmn,scene|
-  if !isConst?(pkmn.species,PBSpecies,:ORICORIO) || pkmn.form==2
+  if !pkmn.isSpecies?(:ORICORIO) || pkmn.form==2
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -899,7 +899,7 @@ ItemHandlers::UseOnPokemon.add(:PINKNECTAR,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:PURPLENECTAR,proc { |item,pkmn,scene|
-  if !isConst?(pkmn.species,PBSpecies,:ORICORIO) || pkmn.form==3
+  if !pkmn.isSpecies?(:ORICORIO) || pkmn.form==3
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -914,9 +914,9 @@ ItemHandlers::UseOnPokemon.add(:PURPLENECTAR,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:REVEALGLASS,proc { |item,pkmn,scene|
-  if !isConst?(pkmn.species,PBSpecies,:TORNADUS) &&
-     !isConst?(pkmn.species,PBSpecies,:THUNDURUS) &&
-     !isConst?(pkmn.species,PBSpecies,:LANDORUS)
+  if !pkmn.isSpecies?(:TORNADUS) &&
+     !pkmn.isSpecies?(:THUNDURUS) &&
+     !pkmn.isSpecies?(:LANDORUS)
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -933,7 +933,7 @@ ItemHandlers::UseOnPokemon.add(:REVEALGLASS,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:PRISONBOTTLE,proc { |item,pkmn,scene|
-  if !isConst?(pkmn.species,PBSpecies,:HOOPA)
+  if !pkmn.isSpecies?(:HOOPA)
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -949,7 +949,7 @@ ItemHandlers::UseOnPokemon.add(:PRISONBOTTLE,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
-  if !isConst?(pkmn.species,PBSpecies,:KYUREM)
+  if !pkmn.isSpecies?(:KYUREM)
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -967,13 +967,13 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
       scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
     elsif poke2.fainted?
       scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
-    elsif !isConst?(poke2.species,PBSpecies,:RESHIRAM) &&
-          !isConst?(poke2.species,PBSpecies,:ZEKROM)
+    elsif !poke2.isSpecies?(:RESHIRAM) &&
+          !poke2.isSpecies?(:ZEKROM)
       scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
     end
     newForm = 0
-    newForm = 1 if isConst?(poke2.species,PBSpecies,:RESHIRAM)
-    newForm = 2 if isConst?(poke2.species,PBSpecies,:ZEKROM)
+    newForm = 1 if poke2.isSpecies?(:RESHIRAM)
+    newForm = 2 if poke2.isSpecies?(:ZEKROM)
     pkmn.setForm(newForm) {
       pkmn.fused = poke2
       pbRemovePokemonAt(chosen)
@@ -997,7 +997,7 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
-  if !isConst?(pkmn.species,PBSpecies,:NECROZMA) || pkmn.form==0
+  if !pkmn.isSpecies?(:NECROZMA) || pkmn.form==0
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -1015,7 +1015,7 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
       scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
     elsif poke2.fainted?
       scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
-    elsif !isConst?(poke2.species,PBSpecies,:SOLGALEO)
+    elsif !poke2.isSpecies?(:SOLGALEO)
       scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
     end
     pkmn.setForm(1) {
@@ -1041,7 +1041,7 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
-  if !isConst?(pkmn.species,PBSpecies,:NECROZMA) || pkmn.form==1
+  if !pkmn.isSpecies?(:NECROZMA) || pkmn.form==1
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -1059,7 +1059,7 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
       scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
     elsif poke2.fainted?
       scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
-    elsif !isConst?(poke2.species,PBSpecies,:LUNALA)
+    elsif !poke2.isSpecies?(:LUNALA)
       scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
     end
     pkmn.setForm(2) {
@@ -1091,8 +1091,7 @@ ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE,proc { |item,pkmn,scene|
     abil1 = i[0] if i[1]==0
     abil2 = i[0] if i[1]==1
   end
-  if abil1<=0 || abil2<=0 || pkmn.hasHiddenAbility? ||
-     isConst?(pkmn.species,PBSpecies,:ZYGARDE)
+  if abil1<=0 || abil2<=0 || pkmn.hasHiddenAbility? || pkmn.isSpecies?(:ZYGARDE)
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end

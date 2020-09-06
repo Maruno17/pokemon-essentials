@@ -144,9 +144,8 @@ class PokeBattle_Scene
     # Fade out and hide all sprites
     visibleSprites = pbFadeOutAndHide(@sprites)
     # Get player's party
-    party    = @battle.pbParty(idxBattler)
     partyPos = @battle.pbPartyOrder(idxBattler)
-    partyStart, partyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
+    partyStart, _partyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
     modParty = @battle.pbPlayerDisplayParty(idxBattler)
     # Start party screen
     scene = PokemonParty_Scene.new
@@ -190,7 +189,7 @@ class PokeBattle_Scene
   #=============================================================================
   # Opens the Bag screen and chooses an item to use
   #=============================================================================
-  def pbItemMenu(idxBattler,firstAction)
+  def pbItemMenu(idxBattler,_firstAction)
     # Fade out and hide all sprites
     visibleSprites = pbFadeOutAndHide(@sprites)
     # Set Bag starting positions
@@ -250,7 +249,7 @@ class PokeBattle_Scene
         # Get player's party
         party    = @battle.pbParty(idxBattler)
         partyPos = @battle.pbPartyOrder(idxBattler)
-        partyStart, partyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
+        partyStart, _partyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
         modParty = @battle.pbPlayerDisplayParty(idxBattler)
         # Start party screen
         pkmnScene = PokemonParty_Scene.new

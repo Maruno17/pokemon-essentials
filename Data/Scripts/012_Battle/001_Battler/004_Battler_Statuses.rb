@@ -566,7 +566,7 @@ class PokeBattle_Battler
   #=============================================================================
   # Flinching
   #=============================================================================
-  def pbFlinch(user=nil)
+  def pbFlinch(_user=nil)
     return if hasActiveAbility?(:INNERFOCUS) && !@battle.moldBreaker
     @effects[PBEffects::Flinch] = true
   end

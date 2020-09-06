@@ -428,7 +428,7 @@ def pbBalancedLevel(party)
     weights.push(weight)
   end
   weightSum = 0
-  weights.each { |weight| weightSum += weight }
+  weights.each { |w| weightSum += w }
   # Calculate the weighted mean, assigning each weight to each level's
   # contribution to the sum
   for i in 0...party.length

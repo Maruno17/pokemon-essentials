@@ -84,8 +84,6 @@ class MoveRelearner_Scene
     movesData = pbLoadMovesData
     overlay=@sprites["overlay"].bitmap
     overlay.clear
-    textpos=[]
-    imagepos=[]
     type1rect=Rect.new(0,@pokemon.type1*28,64,28)
     type2rect=Rect.new(0,@pokemon.type2*28,64,28)
     if @pokemon.type1==@pokemon.type2
@@ -97,6 +95,7 @@ class MoveRelearner_Scene
     textpos=[
        [_INTL("Teach which move?"),16,8,0,Color.new(88,88,80),Color.new(168,184,184)]
     ]
+    imagepos=[]
     yPos=82
     for i in 0...VISIBLEMOVES
       moveobject=@moves[@sprites["commands"].top_item+i]

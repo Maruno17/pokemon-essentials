@@ -72,7 +72,7 @@ module PBDayNight
   def self.getShade
     time = pbGetDayNightMinutes
     time = (24*60)-time if time>(12*60)
-    shade=255*time/(12*60)
+    return 255*time/(12*60)
   end
 
 # Gets a Tone object representing a suggested shading

@@ -15,7 +15,7 @@ class Scene_Movie
   def main
     @temp = Win32API.pbFindRgssWindow.to_s
     movie = Win32API.new('winmm','mciSendString','%w(p,p,l,l)','V')
-    x=movie.call("open \""+@movie_name+
+    movie.call("open \""+@movie_name+
        "\" alias FILE style 1073741824 parent " + @temp.to_s,0,0,0)
     @message = Win32API.new('user32','SendMessage','%w(l,l,l,l)','V')
     @detector = Win32API.new('user32','GetSystemMetrics','%w(l)','L')
@@ -31,7 +31,7 @@ class Scene_Movie
       #fullscreen
     end
     status = " " * 255
-    x=movie.call("play FILE",0,0,0)
+    movie.call("play FILE",0,0,0)
     loop do
       sleep(0.1)
       @message.call(@temp.to_i,11,0,0)

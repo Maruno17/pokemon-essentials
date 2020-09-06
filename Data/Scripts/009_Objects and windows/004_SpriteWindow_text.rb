@@ -390,7 +390,7 @@ class SpriteWindow < Window
   attr_reader :skinformat
   attr_reader :skinrect
 
-  def loadSkinFile(file)
+  def loadSkinFile(_file)
     if (self.windowskin.width==80 || self.windowskin.width==96) &&
        self.windowskin.height==48
       # Body = X, Y, width, height of body rectangle within windowskin
@@ -519,9 +519,9 @@ class SpriteWindow < Window
         dstbitmap.blt(x+left,y+top,srcbitmap,srcrect)
         x+=srcrect.width
       end
-     y+=srcrect.height
-   end
- end
+      y+=srcrect.height
+    end
+  end
 
   def privRefreshCursor
     contopac=self.contents_opacity
@@ -666,8 +666,6 @@ class SpriteWindow < Window
         startX=@skinrect.x
         # width of top end of window
         startY=@skinrect.y
-        backWidth=@skinrect.width
-        backHeight=@skinrect.height
         cx=@skinrect.x+@skinrect.width # right side of BODY rect
         cy=@skinrect.y+@skinrect.height # bottom side of BODY rect
         # width of right end of window
@@ -707,8 +705,6 @@ class SpriteWindow < Window
       end
     end
     if @_windowskin && !@_windowskin.disposed?
-      backTrimX=startX+endX
-      backTrimY=startX+endX
       borderX=startX+endX
       borderY=startY+endY
       @sprites["corner0"].x=@x
@@ -857,8 +853,6 @@ class SpriteWindow < Window
         sprite.zoom_x=1.0
         sprite.oy=0
         sprite.y=(@y+(@height/2.0)+(@height*ratio*opn)-(@height/2*opn)).floor
-        oldbitmap=sprite.bitmap
-        oldsrcrect=sprite.src_rect.clone
       end
     else
       for k in @spritekeys
@@ -1117,7 +1111,6 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
   attr_reader   :baseColor
   attr_reader   :shadowColor
   attr_accessor :letterbyletter
-  attr_reader   :lineHeight
   attr_reader   :waitcount
 
   def initialize(text="")
@@ -1291,7 +1284,6 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     @curchar       = 0
     @drawncurchar  = -1
     @lastDrawnChar = -1
-    oldtext        = @text
     @text          = value
     @textlength    = unformattedTextLength(value)
     @scrollstate   = 0
@@ -1466,7 +1458,6 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     self.oy       = @scrollY
     numchars = @numtextchars
     numchars = [@curchar,@numtextchars].min if self.letterbyletter
-    startchar = 0
     return if busy? && @drawncurchar==@curchar && @scrollstate==0
     if !self.letterbyletter || !oldcontents.equal?(self.contents)
       @drawncurchar = -1
@@ -1614,7 +1605,6 @@ end
 #
 #===============================================================================
 class Window_InputNumberPokemon < SpriteWindow_Base
-  attr_reader :number
   attr_reader :sign
 
   def initialize(digits_max)
@@ -1643,13 +1633,6 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     @number*(@sign && @negative ? -1 : 1)
   end
 
-  def sign=(value)
-    @sign=value
-    self.width=@digits_max*24+8+self.borderX+(@sign ? 24 : 0)
-    @index=(@digits_max-1)+(@sign ? 1 : 0)
-    refresh
-  end
-
   def number=(value)
     value=0 if !value.is_a?(Numeric)
     if @sign
@@ -1661,13 +1644,19 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     refresh
   end
 
+  def sign=(value)
+    @sign=value
+    self.width=@digits_max*24+8+self.borderX+(@sign ? 24 : 0)
+    @index=(@digits_max-1)+(@sign ? 1 : 0)
+    refresh
+  end
+
   def refresh
     self.contents=pbDoEnsureBitmap(self.contents,
        self.width-self.borderX,self.height-self.borderY)
     pbSetSystemFont(self.contents)
     self.contents.clear
     s=sprintf("%0*d",@digits_max,@number.abs)
-    x=0
     if @sign
       textHelper(0,0,@negative ? "-" : "+",0)
     end
@@ -2080,7 +2069,7 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
   end
 
   def textWidth(bitmap,text)
-    return tmpbitmap.text_size(i).width
+    return bitmap.text_size(text).width
   end
 
   def getAutoDims(commands,dims,width=nil)
@@ -2230,7 +2219,7 @@ class Window_CommandPokemon < Window_DrawableCommand
     return @commands ? @commands.length : 0
   end
 
-  def drawItem(index,count,rect)
+  def drawItem(index,_count,rect)
     pbSetSystemFont(self.contents) if @starting
     rect=drawCursor(index,rect)
     pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,
@@ -2344,7 +2333,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
     return @commands ? @commands.length : 0
   end
 
-  def drawItem(index,count,rect)
+  def drawItem(index,_count,rect)
     pbSetSystemFont(self.contents)
     rect=drawCursor(index,rect)
     if toUnformattedText(@commands[index]).gsub(/\n/,"")==@commands[index]

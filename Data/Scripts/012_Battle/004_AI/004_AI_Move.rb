@@ -14,7 +14,7 @@ class PokeBattle_AI
     # NOTE: A move is only added to the choices array if it has a non-zero
     #       score.
     choices     = []
-    user.eachMoveWithIndex do |m,i|
+    user.eachMoveWithIndex do |_m,i|
       next if !@battle.pbCanChooseMove?(idxBattler,i,false)
       if wildBattler
         pbRegisterMoveWild(user,i,choices)
@@ -106,7 +106,7 @@ class PokeBattle_AI
   # Get scores for the given move against each possible target
   #=============================================================================
   # Wild Pokémon choose their moves randomly.
-  def pbRegisterMoveWild(user,idxMove,choices)
+  def pbRegisterMoveWild(_user,idxMove,choices)
     choices.push([idxMove,100,-1])   # Move index, score, target
   end
 
@@ -195,7 +195,6 @@ class PokeBattle_AI
       end
       # If user is asleep, prefer moves that are usable while asleep
       if user.status==PBStatuses::SLEEP && !move.usableWhenAsleep?
-        hasSleepMove = false
         user.eachMove do |m|
           next unless m.usableWhenAsleep?
           score -= 60

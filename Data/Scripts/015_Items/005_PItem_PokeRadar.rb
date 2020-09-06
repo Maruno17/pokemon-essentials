@@ -190,7 +190,7 @@ EncounterModifier.register(proc { |encounter|
   next encounter
 })
 
-Events.onWildPokemonCreate += proc { |sender,e|
+Events.onWildPokemonCreate += proc { |_sender,e|
   pokemon = e[0]
   next if !$PokemonTemp.pokeradar
   grasses = $PokemonTemp.pokeradar[3]
@@ -202,7 +202,7 @@ Events.onWildPokemonCreate += proc { |sender,e|
   end
 }
 
-Events.onWildBattleEnd += proc { |sender,e|
+Events.onWildBattleEnd += proc { |_sender,e|
   species  = e[0]
   level    = e[1]
   decision = e[2]
@@ -221,7 +221,7 @@ Events.onWildBattleEnd += proc { |sender,e|
   end
 }
 
-Events.onStepTaken += proc { |sender,e|
+Events.onStepTaken += proc { |_sender,_e|
   if $PokemonGlobal.pokeradarBattery && $PokemonGlobal.pokeradarBattery>0 &&
      !$PokemonTemp.pokeradar
     $PokemonGlobal.pokeradarBattery -= 1
@@ -232,11 +232,11 @@ Events.onStepTaken += proc { |sender,e|
   end
 }
 
-Events.onMapUpdate += proc { |sender,e|
+Events.onMapUpdate += proc { |_sender,_e|
   pbPokeRadarCancel if $PokemonGlobal.bicycle
 }
 
-Events.onMapChange += proc { |sender,e|
+Events.onMapChange += proc { |_sender,_e|
   pbPokeRadarCancel
 }
 

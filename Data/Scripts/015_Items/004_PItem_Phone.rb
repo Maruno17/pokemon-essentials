@@ -90,7 +90,7 @@ def pbFindPhoneTrainer(trtype,trname)           # Ignores whether visible or not
 end
 
 def pbHasPhoneTrainer?(trtype,trname)
-  return pbFindPhoneTrainer!=nil
+  return pbFindPhoneTrainer(trtype,trname)!=nil
 end
 
 def pbPhoneBattleCount(trtype,trname)
@@ -133,7 +133,7 @@ end
 #===============================================================================
 # Phone-related counters
 #===============================================================================
-Events.onMapUpdate += proc { |sender,e|
+Events.onMapUpdate += proc { |_sender,_e|
   next if !$Trainer || !$Trainer.pokegear
   # Reset time to next phone call if necessary
   if !$PokemonGlobal.phoneTime || $PokemonGlobal.phoneTime<=0
@@ -207,7 +207,6 @@ end
 # Generate phone message
 #===============================================================================
 def pbPhoneGenerateCall(phonenum)
-  call = ""
   phoneData = pbLoadPhoneData
   # Choose random greeting depending on time of day
   call = pbRandomPhoneItem(phoneData.greetings)

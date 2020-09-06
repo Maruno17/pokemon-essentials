@@ -6,7 +6,7 @@ end
 
 
 
-def pbGetExceptionMessage(e,script="")
+def pbGetExceptionMessage(e,_script="")
   emessage = e.message
   if e.is_a?(Hangup)
     emessage = "The script is taking too long. The game will restart."
@@ -37,7 +37,7 @@ def pbGetExceptionMessage(e,script="")
 end
 
 def pbPrintException(e)
-  premessage = "\r\n=================\r\n\r\n[#{Time.now.to_s}]\r\n"
+  premessage = "\r\n=================\r\n\r\n[#{Time.now}]\r\n"
   emessage = ""
   if $EVENTHANGUPMSG && $EVENTHANGUPMSG!=""
     emessage = $EVENTHANGUPMSG   # Message with map/event ID generated elsewhere
@@ -365,19 +365,17 @@ def csvfield!(str)
   return ret
 end
 
-def csvBoolean!(str,line=-1)
+def csvBoolean!(str,_line=-1)
   field = csvfield!(str)
   if field[/^1|[Tt][Rr][Uu][Ee]|[Yy][Ee][Ss]|[Yy]$/]
     return true
   elsif field[/^0|[Ff][Aa][Ll][Ss][Ee]|[Nn][Oo]|[Nn]$/]
     return false
-  else
-    raise _INTL("Field {1} is not a Boolean value (true, false, 1, 0)\r\n{2}",field,FileLineData.linereport)
-    return false
   end
+  raise _INTL("Field {1} is not a Boolean value (true, false, 1, 0)\r\n{2}",field,FileLineData.linereport)
 end
 
-def csvInt!(str,line=-1)
+def csvInt!(str,_line=-1)
   ret = csvfield!(str)
   if !ret[/^\-?\d+$/]
     raise _INTL("Field {1} is not an integer\r\n{2}",ret,FileLineData.linereport)
@@ -385,7 +383,7 @@ def csvInt!(str,line=-1)
   return ret.to_i
 end
 
-def csvPosInt!(str,line=-1)
+def csvPosInt!(str,_line=-1)
   ret = csvfield!(str)
   if !ret[/^\d+$/]
     raise _INTL("Field {1} is not a positive integer\r\n{2}",ret,FileLineData.linereport)
@@ -393,17 +391,17 @@ def csvPosInt!(str,line=-1)
   return ret.to_i
 end
 
-def csvFloat!(str,line=-1)
+def csvFloat!(str,_line=-1)
   ret = csvfield!(str)
   return Float(ret) rescue raise _INTL("Field {1} is not a number\r\n{2}",ret,FileLineData.linereport)
 end
 
-def csvEnumField!(value,enumer,key,section)
+def csvEnumField!(value,enumer,_key,_section)
   ret = csvfield!(value)
   return checkEnumField(ret,enumer)
 end
 
-def csvEnumFieldOrInt!(value,enumer,key,section)
+def csvEnumFieldOrInt!(value,enumer,_key,_section)
   ret = csvfield!(value)
   return ret.to_i if ret[/\-?\d+/]
   return checkEnumField(ret,enumer)
@@ -885,8 +883,8 @@ def pbAddScript(script,sectionname)
   rescue
     scripts = []
   end
-  s = pbFindScript(scripts,sectionname)
-  if false#s
+  if false   # s
+    s = pbFindScript(scripts,sectionname)
     s[2]+=Zlib::Deflate.deflate("#{script}\r\n")
   else
     scripts.push([rand(100000000),sectionname,Zlib::Deflate.deflate("#{script}\r\n")])
@@ -967,7 +965,7 @@ def readSerialRecords(filename)
   pbRgssOpen(filename,"rb") { |file|
     numrec = file.fgetdw>>3
     curpos = 0
-    for i in 0...numrec
+    numrec.times do
       file.pos = curpos
       offset = file.fgetdw
       length = file.fgetdw
@@ -1026,7 +1024,7 @@ class ByteArray
     return self.new(str)
   end
 
-  def _dump(depth=100)
+  def _dump(_depth=100)
     return @a.pack("C*")
   end
 end
@@ -1060,7 +1058,7 @@ class WordArray
     return self.new(str)
   end
 
-  def _dump(depth=100)
+  def _dump(_depth=100)
     return @a.pack("v*")
   end
 end
@@ -1101,7 +1099,7 @@ class SignedWordArray
     return self.new(str)
   end
 
-  def _dump(depth=100)
+  def _dump(_depth=100)
     return @a.pack("v*")
   end
 end

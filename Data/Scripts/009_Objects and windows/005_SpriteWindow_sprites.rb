@@ -111,7 +111,7 @@ class PngAnimatedBitmap
     @currentFrame
   end
 
-  def frameDelay(index)
+  def frameDelay(_index)
     return @frameDelay
   end
 
@@ -259,10 +259,6 @@ class GifBitmap
     return @gifbitmaps[index]
   end
 
-  def width; self.bitmap.width; end
-
-  def height; self.bitmap.height; end
-
   def deanimate
     for i in 1...@gifbitmaps.length
       @gifbitmaps[i].dispose
@@ -349,7 +345,7 @@ end
 
 def pbGetTileBitmap(filename, tile_id, hue)
   return BitmapCache.tileEx(filename, tile_id, hue) { |f|
-    AnimatedBitmap.new("Graphics/Tilesets/"+filename).deanimate;
+    AnimatedBitmap.new("Graphics/Tilesets/"+filename).deanimate
   }
 end
 
@@ -1000,8 +996,10 @@ class LargePlane < Plane
     top  = (dstrect.y-@__oy/@__sprite.zoom_y).to_i
     while left>0; left -= srcbitmap.width; end
     while top>0; top -= srcbitmap.height; end
-    y = top; while y<dstrect.height
-      x = left; while x<dstrect.width
+    y = top
+    while y<dstrect.height
+      x = left
+      while x<dstrect.width
         dstbitmap.blt(x+@borderX,y+@borderY,srcbitmap,srcrect)
         x += srcrect.width
       end

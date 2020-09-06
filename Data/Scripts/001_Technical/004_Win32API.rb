@@ -1,8 +1,8 @@
 class Win32API
   @@RGSSWINDOW = nil
-  @@GetCurrentThreadId       = Win32API.new('kernel32','GetCurrentThreadId', '%w()','l')
-  @@GetWindowThreadProcessId = Win32API.new('user32','GetWindowThreadProcessId', '%w(l p)','l')
-  @@FindWindowEx             = Win32API.new('user32','FindWindowEx', '%w(l l p p)','l')
+  @@GetCurrentThreadId       = Win32API.new('kernel32', 'GetCurrentThreadId', '%w()', 'l')
+  @@GetWindowThreadProcessId = Win32API.new('user32', 'GetWindowThreadProcessId', '%w(l p)', 'l')
+  @@FindWindowEx             = Win32API.new('user32', 'FindWindowEx', '%w(l l p p)', 'l')
 
   def Win32API.SetWindowText(text)
     hWnd = pbFindRgssWindow
@@ -16,7 +16,7 @@ class Win32API
     processid = [0].pack('l')
     threadid = @@GetCurrentThreadId.call
     nextwindow = 0
-    begin
+    loop do
       nextwindow = @@FindWindowEx.call(0,nextwindow,"RGSS Player",0)
       if nextwindow!=0
         wndthreadid = @@GetWindowThreadProcessId.call(nextwindow,processid)
@@ -25,9 +25,9 @@ class Win32API
           return @@RGSSWINDOW
         end
       end
-    end until nextwindow==0
+      break if nextwindow==0
+    end
     raise "Can't find RGSS player window"
-    return 0
   end
 
   def Win32API.SetWindowPos(w, h)
