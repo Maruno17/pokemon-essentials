@@ -282,12 +282,12 @@ def pbDayCareGenerateEgg
   lightball = false
   if (isConst?(father.species,PBSpecies,:PIKACHU) ||
       isConst?(father.species,PBSpecies,:RAICHU)) &&
-      isConst?(father.item,PBItems,:LIGHTBALL)
+      father.hasItem?(:LIGHTBALL)
     lightball = true
   end
   if (isConst?(mother.species,PBSpecies,:PIKACHU) ||
       isConst?(mother.species,PBSpecies,:RAICHU)) &&
-      isConst?(mother.item,PBItems,:LIGHTBALL)
+      mother.hasItem?(:LIGHTBALL)
     lightball = true
   end
   if lightball && isConst?(babyspecies,PBSpecies,:PICHU) &&
@@ -313,12 +313,12 @@ def pbDayCareGenerateEgg
   ivinherit = []
   for i in 0...2
     parent = [mother,father][i]
-    ivinherit[i] = PBStats::HP if isConst?(parent.item,PBItems,:POWERWEIGHT)
-    ivinherit[i] = PBStats::ATTACK if isConst?(parent.item,PBItems,:POWERBRACER)
-    ivinherit[i] = PBStats::DEFENSE if isConst?(parent.item,PBItems,:POWERBELT)
-    ivinherit[i] = PBStats::SPATK if isConst?(parent.item,PBItems,:POWERLENS)
-    ivinherit[i] = PBStats::SPDEF if isConst?(parent.item,PBItems,:POWERBAND)
-    ivinherit[i] = PBStats::SPEED if isConst?(parent.item,PBItems,:POWERANKLET)
+    ivinherit[i] = PBStats::HP if parent.hasItem?(:POWERWEIGHT)
+    ivinherit[i] = PBStats::ATTACK if parent.hasItem?(:POWERBRACER)
+    ivinherit[i] = PBStats::DEFENSE if parent.hasItem?(:POWERBELT)
+    ivinherit[i] = PBStats::SPATK if parent.hasItem?(:POWERLENS)
+    ivinherit[i] = PBStats::SPDEF if parent.hasItem?(:POWERBAND)
+    ivinherit[i] = PBStats::SPEED if parent.hasItem?(:POWERANKLET)
   end
   num = 0; r = rand(2)
   for i in 0...2
@@ -330,8 +330,8 @@ def pbDayCareGenerateEgg
     end
     r = (r+1)%2
   end
-  limit = (NEWEST_BATTLE_MECHANICS && (isConst?(mother.item,PBItems,:DESTINYKNOT) ||
-           isConst?(father.item,PBItems,:DESTINYKNOT))) ? 5 : 3
+  limit = (NEWEST_BATTLE_MECHANICS && (mother.hasItem?(:DESTINYKNOT) ||
+           father.hasItem?(:DESTINYKNOT))) ? 5 : 3
   loop do
     freestats = []
     PBStats.eachStat { |s| freestats.push(s) if !ivinherit.include?(s) }
@@ -345,8 +345,8 @@ def pbDayCareGenerateEgg
   end
   # Inheriting nature
   newnatures = []
-  newnatures.push(mother.nature) if isConst?(mother.item,PBItems,:EVERSTONE)
-  newnatures.push(father.nature) if isConst?(father.item,PBItems,:EVERSTONE)
+  newnatures.push(mother.nature) if mother.hasItem?(:EVERSTONE)
+  newnatures.push(father.nature) if father.hasItem?(:EVERSTONE)
   if newnatures.length>0
     egg.setNature(newnatures[rand(newnatures.length)])
   end

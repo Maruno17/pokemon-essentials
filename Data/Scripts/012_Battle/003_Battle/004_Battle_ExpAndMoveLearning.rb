@@ -25,7 +25,7 @@ class PokeBattle_Battle
       if !expAll
         eachInTeam(0,0) do |pkmn,i|
           next if !pkmn.able?
-          next if !isConst?(pkmn.item,PBItems,:EXPSHARE) &&
+          next if !pkmn.hasItem?(:EXPSHARE) &&
                   !isConst?(@initialItems[0][i],PBItems,:EXPSHARE)
           expShare.push(i)
         end
