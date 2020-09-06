@@ -651,5 +651,8 @@
 636,CRACKEDPOT,Cracked Pot,Cracked Pot,1,1600,"A peculiar teapot that can make a certain species of Pokémon evolve. It may be cracked, but tea poured from it is delicious.",1,0,0,
 637,RUSTEDSWORD,Rusted Sword,Rusted Swords,1,0,"It is said that a hero used this sword to halt a terrible disaster in ancient times. But it's grown rusty and worn.",0,0,0,
 638,RUSTEDSHIELD,Rusted Shield,Rusted Shields,1,0,"It is said that a hero used this shield to halt a terrible disaster in ancient times. But it's grown rusty and worn.",0,0,0,
-
+639,KEYSTONE,Key Stone,Key Stone,8,0,"A stone filled with an unexplained power. It reacts to Mega Stones and makes Pokémon Mega Evolve.",0,0,6,
+640,MEGACHARM,Mega Charm,Mega Charms,8,0,"This charm contains an untold power that somehow enables Pokémon carrying Mega Stones to Mega Evolve.",0,0,6,
+641,MEGACUFF,Mega Cuff,Mega Cuffs,8,0,"This cuff contains an untold power that somehow enables Pokémon carrying Mega Stones to Mega Evolve.",0,0,6,
+642,MEGABRACELET,Mega Bracelet,Mega Bracelet,8,0,"This bracelet contains an untold power that somehow enables Pokémon carrying Mega Stones to Mega Evolve.",0,0,6,
 
