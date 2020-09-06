@@ -201,6 +201,11 @@ class PokeBattle_Battler
       end
     end
   end
+  
+  def pbCheckFormOnTerrainChange
+    return if fainted? || @effects[PBEffects::Transform]
+    # MIMICRY goes here
+  end
 
   # Checks the Pokémon's form and updates it if necessary. Used for when a
   # Pokémon enters battle (endOfRound=false) and at the end of each round
@@ -208,7 +213,10 @@ class PokeBattle_Battler
   def pbCheckForm(endOfRound=false)
     return if fainted? || @effects[PBEffects::Transform]
     # Form changes upon entering battle and when the weather changes
-    pbCheckFormOnWeatherChange if !endOfRound
+    if !endOfRound
+      pbCheckFormOnWeatherChange
+      pbCheckFormOnTerrainChange
+    end
     # Darmanitan - Zen Mode
     if isConst?(@species,PBSpecies,:DARMANITAN) && isConst?(@ability,PBAbilities,:ZENMODE)
       if @hp<=@totalhp/2
