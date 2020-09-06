@@ -2663,6 +2663,23 @@ end
 
 
 
+#===============================================================================
+# The user sharply raises the target's Attack and Sp. Atk stats by decorating 
+# the target. (Decorate)
+#===============================================================================
+class PokeBattle_Move_179 < PokeBattle_Move
+  def pbEffectAgainstTarget(user,target)
+    if target.pbCanRaiseStatStage?(PBStats::ATTACK,user,self)
+      target.pbRaiseStatStage(PBStats::ATTACK,2,user)
+    end
+    if target.pbCanRaiseStatStage?(PBStats::SPATK,user,self)
+      target.pbRaiseStatStage(PBStats::SPATK,2,user)
+    end
+  end
+end
+
+
+
 # NOTE: If you're inventing new move effects, use function code 176 and onwards.
 #       Actually, you might as well use high numbers like 500+ (up to FFFF),
 #       just to make sure later additions to Essentials don't clash with your

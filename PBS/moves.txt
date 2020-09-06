@@ -714,9 +714,9 @@
 693,FISHIOUSREND,Fishious Rend,177,85,WATER,Physical,100,10,0,00,0,abef,"The user rends the target with its hard gills. If the user attacks before the target, the power of this move is doubled."
 694,BRANCHPOKE,Branch Poke,000,40,GRASS,Physical,100,40,0,00,0,abef,"The user attacks the target by poking it with a sharply pointed branch."
 695,BREAKINGSWIPE,Breaking Swipe,042,60,DRAGON,Physical,100,15,100,04,0,abef,"The user swings its tough tail wildly and attacks opposing Pokémon. This also lowers their Attack stats."
+696,DECORATE,Decorate,179,0,FAIRY,Status,0,15,0,00,0,,"The user sharply raises the target's Attack and Sp. Atk stats by decorating the target."
 
 #---------------Needs Code----------------
-696,DECORATE,Decorate,179,0,FAIRY,Status,0,15,0,00,0,,"The user sharply raises the target's Attack and Sp. Atk stats by decorating the target."
 697,AURAWHEEL,Aura Wheel,000,110,ELECTRIC,Physical,100,10,0,00,0,bef,"Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form."
 698,BEHEMOTHBASH,Behemoth Bash,000,100,STEEL,Physical,100,5,0,00,0,abef,"The user becomes a gigantic shield and slams into the target. This move deals twice the damage is the target is Dynamaxed."
 699,BEHEMOTHBLADE,Behemoth Blade,000,100,STEEL,Physical,100,5,0,00,0,abef,"The user becomes a gigantic sword and cuts the target. This move deals twice the damage is the target is Dynamaxed."
