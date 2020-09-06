@@ -2,8 +2,8 @@
 #-------------------------------
 0,POKEMONTRAINER_Red,Pokémon Trainer,60,,,,Male,,
 1,POKEMONTRAINER_Leaf,Pokémon Trainer,60,,,,Female,,
-2,POKEMONTRAINER_Brendan,Pokémon Trainer,60,,,,Male,,
-3,POKEMONTRAINER_May,Pokémon Trainer,60,,,,Female,,
+2,POKEMONTRAINER_Baheil,Pokémon Trainer,60,,,,Male,,
+3,POKEMONTRAINER_Nidrad,Pokémon Trainer,60,,,,Female,,
 4,RIVAL1,Rival,16,,,,Male,,
 5,RIVAL2,Rival,36,,,,Male,,
 6,AROMALADY,Aroma Lady,32,,,,Female,,
