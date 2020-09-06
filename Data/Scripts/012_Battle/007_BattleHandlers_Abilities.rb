@@ -1582,9 +1582,11 @@ BattleHandlers::TargetAbilityOnHit.add(:MUMMY,
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
        :RKSSYSTEM,
+       :GULPMISSILE
     ]
     failed = false
     abilityBlacklist.each do |abil|
@@ -1694,6 +1696,66 @@ BattleHandlers::TargetAbilityOnHit.add(:STEAMENGINE,
     next if !isConst?(move.calcType,PBTypes,:FIRE) &&
 	          !isConst?(move.calcType,PBTypes,:WATER)
     target.pbRaiseStatStageByAbility(PBStats::SPEED,6,target)
+  }
+)
+
+BattleHandlers::TargetAbilityOnHit.add(:WANDERINGSPIRIT,
+  proc { |ability,user,target,move,battle|
+    next if !move.pbContactMove?(user)
+    next if user.fainted?
+    abilityBlacklist = [
+       # This ability
+       :WANDERINGSPIRIT,
+       # Form-changing abilities
+       :BATTLEBOND,
+       :DISGUISE,
+#       :FLOWERGIFT,                                      # This can be replaced
+#       :FORECAST,                                        # This can be replaced
+       :MULTITYPE,
+       :POWERCONSTRUCT,
+       :SCHOOLING,
+       :SHIELDSDOWN,
+       :STANCECHANGE,
+       :ZENMODE,
+       :ICEFACE,
+       # Abilities intended to be inherent properties of a certain species
+       :COMATOSE,
+       :RKSSYSTEM,
+       :GULPMISSILE
+    ]
+    failed = false
+    abilityBlacklist.each do |abil|
+      next if !isConst?(user.ability,PBAbilities,abil)
+      failed = true
+      break
+    end
+    next if failed
+    oldAbil = -1
+    battle.pbShowAbilitySplash(target) if user.opposes?(target)
+    if user.affectedByContactEffect?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
+      oldAbil = user.ability
+      battle.pbShowAbilitySplash(user,true,false) if user.opposes?(target)
+      user.ability = getConst(PBAbilities,:WANDERINGSPIRIT)
+      target.ability = oldAbil
+      if user.opposes?(target)
+        battle.pbReplaceAbilitySplash(user) 
+        battle.pbReplaceAbilitySplash(target)
+      end
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1}'s Ability became {2}!",user.pbThis,user.abilityName))
+      else
+        battle.pbDisplay(_INTL("{1}'s Ability became {2} because of {3}!",
+           user.pbThis,user.abilityName,target.pbThis(true)))
+      end
+
+      battle.pbHideAbilitySplash(user)
+    end
+    battle.pbHideAbilitySplash(target) if user.opposes?(target)
+    if oldAbil>=0
+      user.pbOnAbilityChanged(oldAbil)
+      target.pbOnAbilityChanged(getConst(PBAbilities,:WANDERINGSPIRIT))
+    end
+    
   }
 )
 
@@ -2480,7 +2542,28 @@ BattleHandlers::AbilityOnSwitchIn.add(:DAUNTLESSSHIELD,
     stat = PBStats::DEFENSE
     battler.pbRaiseStatStageByAbility(stat,1,battler)
   }
-)	
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:SCREENCLEANER,
+  proc { |ability,battler,battle|
+    battle.pbShowAbilitySplash(battler)
+    for side in 0...2
+      if battle.sides[side].effects[PBEffects::LightScreen]>0
+        battle.sides[side].effects[PBEffects::LightScreen] = 0
+        battle.pbDisplay(_INTL("{1}'s Light Screen wore off!",@battlers[side].pbTeam))
+      end
+      if battle.sides[side].effects[PBEffects::Reflect]>0
+        battle.sides[side].effects[PBEffects::Reflect] = 0
+        battle.pbDisplay(_INTL("{1}'s Reflect wore off!",@battlers[side].pbOpposingTeam))
+      end
+      if battle.sides[side].effects[PBEffects::AuroraVeil]>0
+        battle.sides[side].effects[PBEffects::AuroraVeil] = 0
+        battle.pbDisplay(_INTL("{1}'s Aurora Veil wore off!",@battlers[side].pbOpposingTeam))
+      end
+    end
+    battle.pbHideAbilitySplash(battler)
+  }
+)
 	
 #===============================================================================
 # AbilityOnSwitchOut handlers
@@ -2524,12 +2607,14 @@ BattleHandlers::AbilityChangeOnBattlerFainting.add(:POWEROFALCHEMY,
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Appearance-changing abilities
        :ILLUSION,
        :IMPOSTER,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
        :RKSSYSTEM,
+       :GULPMISSILE,
        # Abilities that would be overpowered if allowed to be transferred
        :WONDERGUARD
     ]

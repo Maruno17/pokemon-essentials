@@ -347,9 +347,11 @@ class PokeBattle_Battler
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
-       :RKSSYSTEM
+       :RKSSYSTEM,
+       :GULPMISSILE
     ]
     failed = false
     abilityBlacklist.each do |abil|

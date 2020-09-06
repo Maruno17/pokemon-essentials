@@ -2192,9 +2192,12 @@ class PokeBattle_Move_165 < PokeBattle_Move
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
-       :RKSSYSTEM
+       :RKSSYSTEM,
+       :GULPMISSILE
+       
     ]
   end
 

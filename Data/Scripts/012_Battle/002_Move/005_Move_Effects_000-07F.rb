@@ -2013,9 +2013,11 @@ class PokeBattle_Move_063 < PokeBattle_Move
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
-       :RKSSYSTEM
+       :RKSSYSTEM,
+       :GULPMISSILE
     ]
   end
 
@@ -2070,9 +2072,11 @@ class PokeBattle_Move_064 < PokeBattle_Move
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
-       :RKSSYSTEM
+       :RKSSYSTEM,
+       :GULPMISSILE
     ]
   end
 
@@ -2126,9 +2130,11 @@ class PokeBattle_Move_065 < PokeBattle_Move
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
-       :RKSSYSTEM
+       :RKSSYSTEM,
+       :GULPMISSILE
     ]
     @abilityBlacklistUngainable = [
        # Replaces self with another ability
@@ -2146,12 +2152,14 @@ class PokeBattle_Move_065 < PokeBattle_Move
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Appearance-changing abilities
        :ILLUSION,
        :IMPOSTER,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
        :RKSSYSTEM,
+       :GULPMISSILE,
        # Abilities that would be overpowered if allowed to be transferred
        :WONDERGUARD
     ]
@@ -2213,9 +2221,11 @@ class PokeBattle_Move_066 < PokeBattle_Move
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
-       :RKSSYSTEM
+       :RKSSYSTEM,
+       :GULPMISSILE
     ]
     @abilityBlacklistUngainable = [
        # Replaces self with another ability
@@ -2233,12 +2243,14 @@ class PokeBattle_Move_066 < PokeBattle_Move
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Appearance-changing abilities
        :ILLUSION,
        :IMPOSTER,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
-       :RKSSYSTEM
+       :RKSSYSTEM,
+       :GULPMISSILE
     ]
   end
 
@@ -2298,9 +2310,11 @@ class PokeBattle_Move_067 < PokeBattle_Move
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
-       :RKSSYSTEM
+       :RKSSYSTEM,
+       :GULPMISSILE
     ]
     @abilityBlacklistUngainable = [
        # Form-changing abilities
@@ -2314,12 +2328,14 @@ class PokeBattle_Move_067 < PokeBattle_Move
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Appearance-changing abilities
        :ILLUSION,
        :IMPOSTER,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
        :RKSSYSTEM,
+       :GULPMISSILE,
        # Abilities that would be overpowered if allowed to be transferred
        :WONDERGUARD
     ]
@@ -2412,9 +2428,11 @@ class PokeBattle_Move_068 < PokeBattle_Move
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
-       :RKSSYSTEM
+       :RKSSYSTEM,
+       :GULPMISSILE
     ]
   end
 

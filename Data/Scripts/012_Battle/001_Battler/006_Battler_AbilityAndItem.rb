@@ -88,12 +88,14 @@ class PokeBattle_Battler
          :SHIELDSDOWN,
          :STANCECHANGE,
          :ZENMODE,
+         :ICEFACE,
          # Appearance-changing abilities
          :ILLUSION,
          :IMPOSTER,
          # Abilities intended to be inherent properties of a certain species
          :COMATOSE,
-         :RKSSYSTEM
+         :RKSSYSTEM,
+         :GULPMISSILE
       ]
       choices = []
       @battle.eachOtherSideBattler(@index) do |b|
