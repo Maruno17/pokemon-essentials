@@ -338,9 +338,9 @@ class PokemonEncounters
     end
     firstPkmn = $Trainer.firstPokemon
     if firstPkmn
-      if isConst?(firstPkmn.item,PBItems,:CLEANSETAG)
+      if firstPkmn.hasItem?(:CLEANSETAG)
         encount = encount*2/3
-      elsif isConst?(firstPkmn.item,PBItems,:PUREINCENSE)
+      elsif firstPkmn.hasItem?(:PUREINCENSE)
         encount = encount*2/3
       else   # Ignore ability effects if an item effect applies
         if isConst?(firstPkmn.ability,PBAbilities,:STENCH)

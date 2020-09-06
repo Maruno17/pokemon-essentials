@@ -220,7 +220,7 @@ def pbDayCareGenerateEgg
      isConst?(babyspecies,PBSpecies,:ROCKRUFF) ||
      isConst?(babyspecies,PBSpecies,:MINIOR)
     newForm = mother.form
-    newForm = 0 if isConst?(mother.species,PBSpecies,:MOTHIM)
+    newForm = 0 if mother.isSpecies?(:MOTHIM)
     egg.form = newForm
   end
   # Inheriting Alolan form
@@ -280,13 +280,11 @@ def pbDayCareGenerateEgg
   end
   # Volt Tackle
   lightball = false
-  if (isConst?(father.species,PBSpecies,:PIKACHU) ||
-      isConst?(father.species,PBSpecies,:RAICHU)) &&
+  if (father.isSpecies?(:PIKACHU) || father.isSpecies?(:RAICHU)) &&
       father.hasItem?(:LIGHTBALL)
     lightball = true
   end
-  if (isConst?(mother.species,PBSpecies,:PIKACHU) ||
-      isConst?(mother.species,PBSpecies,:RAICHU)) &&
+  if (mother.isSpecies?(:PIKACHU) || mother.isSpecies?(:RAICHU)) &&
       mother.hasItem?(:LIGHTBALL)
     lightball = true
   end

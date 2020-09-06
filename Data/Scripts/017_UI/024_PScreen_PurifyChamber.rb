@@ -182,7 +182,7 @@ class PurifyChamber # German: der Kryptorbis
     return false if !shadow
     return false if shadow.heartgauge!=0
     # Define an exception for Lugia
-    if isConst?(shadow.species,PBSpecies,:LUGIA)
+    if shadow.isSpecies?(:LUGIA)
       maxtempo=PurifyChamber.maximumTempo()
       for i in 0...NUMSETS
         return false if @sets[i].tempo!=maxtempo
