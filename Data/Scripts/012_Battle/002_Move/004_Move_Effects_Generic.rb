@@ -307,7 +307,7 @@ end
 #===============================================================================
 # Generic target's stat increase/decrease classes.
 #===============================================================================
-class PokeBattle_TargetStatUPMove < PokeBattle_Move
+class PokeBattle_TargetStatUpMove < PokeBattle_Move
   def pbFailsAgainstTarget?(user,target)
     return false if damagingMove?
     return !target.pbCanRaiseStatStage?(@statUp[0],user,self,true)
