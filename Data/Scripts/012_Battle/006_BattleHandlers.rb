@@ -494,6 +494,9 @@ def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
   itemName = PBItems.getName(item)
   battle.pbCommonAnimation("EatBerry",battler) if !forced
   amt = (NEWEST_BATTLE_MECHANICS) ? battler.pbRecoverHP(battler.totalhp/2) : battler.pbRecoverHP(battler.totalhp/8)
+  if battler.hasActiveAbility?(:RIPEN)
+    amt *= 2
+  end
   if amt>0
     if forced
       PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}")
@@ -515,6 +518,9 @@ def pbBattleStatIncreasingBerry(battler,battle,item,forced,stat,increment=1)
   return false if !forced && !battler.pbCanConsumeBerry?(item)
   return false if !battler.pbCanRaiseStatStage?(stat,battler)
   itemName = PBItems.getName(item)
+  if battler.hasActiveAbility?(:RIPEN)
+    increment *=2
+  end
   if !forced
     battle.pbCommonAnimation("EatBerry",battler)
     return battler.pbRaiseStatStageByCause(stat,increment,battler,itemName)
@@ -586,7 +592,11 @@ end
 def pbBattleTypeWeakingBerry(type,moveType,target,mults)
   return if !isConst?(moveType,PBTypes,type)
   return if PBTypes.resistant?(target.damageState.typeMod) && !isConst?(moveType,PBTypes,:NORMAL)
-  mults[FINAL_DMG_MULT] = (mults[FINAL_DMG_MULT]/2).round
+  if target.hasActiveAbility?(:RIPEN)
+    mults[FINAL_DMG_MULT] = (mults[FINAL_DMG_MULT]/4).round
+  else
+    mults[FINAL_DMG_MULT] = (mults[FINAL_DMG_MULT]/2).round
+  end
   target.damageState.berryWeakened = true
   target.battle.pbCommonAnimation("EatBerry",target)
 end
