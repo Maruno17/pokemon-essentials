@@ -951,7 +951,7 @@ def renderLineBrokenChunks(bitmap,xDst,yDst,normtext,maxheight=0)
   for i in 0...normtext.length
     width=normtext[i][3]
     textx=normtext[i][1]+xDst
-    texty=normtext[i][2]+yDst
+    texty=normtext[i][2]+yDst + (mkxp? ? 4 : 0)
     if maxheight==0 || normtext[i][2]<maxheight
       bitmap.font.color=normtext[i][5]
       bitmap.draw_text(textx,texty,width+2,normtext[i][4],normtext[i][0])
@@ -963,7 +963,7 @@ def renderLineBrokenChunksWithShadow(bitmap,xDst,yDst,normtext,maxheight,baseCol
   for i in 0...normtext.length
     width=normtext[i][3]
     textx=normtext[i][1]+xDst
-    texty=normtext[i][2]+yDst
+    texty=normtext[i][2]+yDst + (mkxp? ? 4 : 0)
     if maxheight==0 || normtext[i][2]<maxheight
       height=normtext[i][4]
       text=normtext[i][0]
@@ -1161,7 +1161,7 @@ def pbDrawTextPositions(bitmap,textpos)
   for i in textpos
     textsize = bitmap.text_size(i[0])
     x = i[1]
-    y = i[2]
+    y = i[2] + (mkxp? ? 4 : 0)
     if i[3]==true || i[3]==1   # right align
       x -= textsize.width
     elsif i[3]==2 # centered

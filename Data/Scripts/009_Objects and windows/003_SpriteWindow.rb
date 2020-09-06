@@ -391,18 +391,21 @@ def pbSetSystemFont(bitmap)
   elsif fontname=="Pokemon Emerald Small" || fontname=="Power Green Small"
     bitmap.font.size=25
   else
-    bitmap.font.size=31
+    bitmap.font.name=pbNarrowFontName
+    bitmap.font.size = mkxp? ? 29 : 31
+    #bitmap.font.size = mkxp? ? 29 : 31
   end
 end
 
 # Sets a bitmap's font to the system small font.
 def pbSetSmallFont(bitmap)
-  bitmap.font.name=pbSmallFontName
-  bitmap.font.size=25
+  bitmap.font.name = pbSmallFontName
+  bitmap.font.size = 25
 end
 
 # Sets a bitmap's font to the system narrow font.
 def pbSetNarrowFont(bitmap)
+  p "narrow"
   bitmap.font.name=pbNarrowFontName
   bitmap.font.size=31
 end

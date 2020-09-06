@@ -1310,6 +1310,11 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
         for ch in fmt
           chx = ch[1]+ch[3]
           chy = ch[2]+ch[4]
+          offset = CHARACTER_OFFSETS[ch[0]]
+          if offset
+            ch[1] += offset[0] if offset[0]
+            ch[2] += offset[1] if offset[1]
+          end
           width  = chx if width<chx
           height = chy if height<chy
           if !ch[5] && ch[0]=="\n"
@@ -1337,6 +1342,11 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
         for ch in @fmtchars
           chx = ch[1]+ch[3]
           chy = ch[2]+ch[4]
+          offset = CHARACTER_OFFSETS[ch[0]]
+          if offset
+            ch[1] += offset[0] if offset[0]
+            ch[2] += offset[1] if offset[1]
+          end
           width  = chx if width<chx
           height = chy if height<chy
           @textchars.push(ch[5] ? "" : ch[0])
