@@ -725,8 +725,6 @@ class PokeBattle_Battle
     when PBBattleTerrains::Psychic
       pbDisplay(_INTL("The battlefield got weird!"))
     end
-    # Check for form changes caused by the terrain changing
-    eachBattler { |b| b.pbCheckFormOnTerrainChange }
     # Check for terrain seeds that boost stats in a terrain
     eachBattler { |b| b.pbItemTerrainStatBoostCheck }
   end
