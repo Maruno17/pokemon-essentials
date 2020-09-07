@@ -2183,6 +2183,12 @@ end
 class PokeBattle_Move_0CB < PokeBattle_TwoTurnMove
   def pbChargingTurnMessage(user,targets)
     @battle.pbDisplay(_INTL("{1} hid underwater!",user.pbThis))
+    if isConst?(user.species,PBSpecies,:CRAMORANT) &&
+      user.hasActiveAbility?(:GULPMISSILE) && user.form==0
+      user.form=2
+      user.form=1 if user.hp>(user.totalhp/2)
+      @battle.scene.pbChangePokemon(user,user.pokemon)
+    end    
   end
 end
 

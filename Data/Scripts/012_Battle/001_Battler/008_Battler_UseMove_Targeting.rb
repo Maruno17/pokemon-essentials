@@ -93,6 +93,9 @@ class PokeBattle_Battler
     return targets if @battle.switching   # For Pursuit interrupting a switch
     return targets if move.cannotRedirect?
     return targets if !PBTargets.canChooseOneFoeTarget?(targetType) || targets.length!=1
+    # Stalwart / Propeller Tail
+    return targets if user.hasActiveAbility?(:STALWART) || user.hasActiveAbility?(:PROPELLERTAIL)
+	return targets if isConst?(move.id,PBMoves,:SNIPESHOT)
     priority = @battle.pbPriority(true)
     nearOnly = !PBTargets.canChooseDistantTarget?(move.target)
     # Spotlight (takes priority over Follow Me/Rage Powder/Lightning Rod/Storm Drain)

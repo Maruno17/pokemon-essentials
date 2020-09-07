@@ -1644,3 +1644,476 @@ Color = Yellow
 FormName = Original Color
 Color = Red
 Pokedex = This gorgeous Magearna looks as it did at the time of its invention. Its luxurious decoration pleased the king's daughter.
+#-------------------------------
+[PONYTA-1]
+FormName = Galar Form
+Type1 = PSYCHIC
+Abilities = RUNAWAY,PASTELVEIL
+HiddenAbility = ANTICIPATION
+Moves = 1,TACKLE,1,GROWL,5,TAILWHIP,10,CONFUSION,15,FAIRYWIND,20,AGILITY,25,PSYBEAM,30,STOMP,35,HEALPULSE,41,TAKEDOWN,45,DAZZLINGGLEAM,50,PSYCHIC,55,HEALINGWISH
+EggMoves = THRASH,DOUBLEKICK,HYPNOSIS,DOUBLEEDGE,HORNDRILL,MORNINGSUN
+Height = 0.8
+Weight = 24.0
+Color = White
+BattlerPlayerY = 21
+#-------------------------------
+[RAPIDASH-1]
+FormName = Galar Form
+Type1 = PSYCHIC
+Type2 = FAIRY
+Abilities = RUNAWAY,PASTELVEIL
+HiddenAbility = ANTICIPATION
+Moves = 0,PSYCHOCUT,1,PSYCHOCUT,1,MEGAHORN,1,TACKLE,1,QUICKATTACK,1,GROWL,1,TAILWHIP,1,CONFUSION,15,FAIRYWIND,20,AGILITY,25,PSYBEAM,30,STOMP,35,HEALPULSE,43,TAKEDOWN,49,DAZZLINGGLEAM,56,PSYCHIC,63,HEALINGWISH
+Weight = 80.0
+Color = White
+BattlerPlayerY = 12
+BattlerEnemyY = 13
+#-------------------------------
+[SLOWPOKE-2]
+FormName = Galar Form
+Type1 = PSYCHIC
+Abilities = GLUTTONY,OWNTEMPO
+HiddenAbility = REGENERATOR
+Moves = 1,TACKLE,1,CURSE,3,GROWL,6,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERPULSE,21,HEADBUTT,24,ZENHEADBUTT,27,AMNESIA,30,SURF,33,SLACKOFF,36,PSYCHIC,39,PSYCHUP,42,RAINDANCE,45,HEALPULSE
+BattlerEnemyY = 30
+#-------------------------------
+[FARFETCHD-1]
+FormName = Galar Form
+Type1 = FIGHTING
+BaseStats = 52,95,55,55,58,62
+Abilities = STEADFAST
+HiddenAbility = SCRAPPY
+Moves = 1,PECK,1,SANDATTACK,5,LEER,10,FURYCUTTER,15,ROCKSMASH,20,BRUTALSWING,25,DETECT,30,KNOCKOFF,35,DEFOG,40,BRICKBREAK,45,SWORDSDANCE,50,SLAM,55,LEAFBLADE,60,FINALGAMBIT,65,BRAVEBIRD
+EggMoves = COUNTER,QUICKATTACK,FLAIL,QUICKGUARD,CURSE,COVET,NIGHTSLASH,SIMPLEBEAM,DOUBLEEDGE,FEINT,SKYATTACK
+Weight = 42.0
+WildItemCommon = LEEK
+BattlerPlayerY = 24
+BattlerEnemyY = 28
+Evolutions = 
+#-------------------------------
+[WEEZING-1]
+FormName = Galar Form
+Type1 = POISON
+Type2 = FAIRY
+Abilities = LEVITATE,NEUTRALIZINGGAS
+HiddenAbility = MISTYSURGE
+Moves = 0,DOUBLEHIT,1,DOUBLEHIT,1,STRANGESTEAM,1,DEFOG,1,HEATWAVE,1,SMOG,1,SMOKESCREEN,1,HAZE,1,POISONGAS,1,TACKLE,1,FAIRYWIND,1,AROMATICMIST,12,CLEARSMOG,16,ASSURANCE,20,SLUDGE,24,AROMATHERAPY,28,SELFDESTRUCT,32,SLUDGEBOMB,38,TOXIC,44,BELCH,50,EXPLOSION,56,MEMENTO,62,DESTINYBOND,68,MISTYTERRAIN
+Height = 3.0
+Weight = 16.0
+Color = Gray
+WildItemUncommon = MISTYSEED
+BattlerPlayerY = 2
+BattlerEnemyY = 6
+#-------------------------------
+[MRMIME-1]
+FormName = Galar Form
+Type1 = ICE
+Type2 = PSYCHIC
+BaseStats = 50,65,65,100,90,90
+EffortPoints = 0,0,0,2,0,0
+Abilities = VITALSPIRIT,SCREENCLEANER
+HiddenAbility = ICEBODY
+Moves = 1,COPYCAT,1,ENCORE,1,ROLEPLAY,1,PROTECT,1,RECYCLE,1,MIMIC,1,LIGHTSCREEN,1,REFLECT,1,SAFEGUARD,1,DAZZLINGGLEAM,1,MISTYTERRAIN,1,POUND,1,RAPIDSPIN,1,BATONPASS,1,ICESHARD,12,CONFUSION,16,ALLYSWITCH,20,ICYWIND,24,DOUBLEKICK,28,PSYBEAM,32,HYPNOSIS,36,MIRRORCOAT,40,SUCKERPUNCH,44,FREEZEDRY,48,PSYCHIC,52,TEETERDANCE
+Height = 1.4
+Weight = 56.8
+Color = White
+BattlerEnemyY = 25
+Evolutions = MRRIME,Level,42
+#-------------------------------
+[CORSOLA-1]
+FormName = Galar Form
+Type1 = GHOST
+BaseStats = 60,55,100,30,65,100
+EffortPoints = 0,0,0,0,0,1
+Abilities = WEAKARMOR
+HiddenAbility = CURSEDBODY
+Moves = 1,TACKLE,1,HARDEN,5,ASTONISH,10,DISABLE,15,SPITE,20,ANCIENTPOWER,25,HEX,30,CURSE,35,STRENGTHSAP,40,POWERGEM,45,NIGHTSHADE,50,GRUDGE,55,MIRRORCOAT
+EggMoves = HAZE,CONFUSERAY,NATUREPOWER,DESTINYBOND,WATERPULSE,HEADSMASH
+Weight = 0.5
+Color = White
+Evolutions = CURSOLA,Level,38
+#-------------------------------
+[ZIGZAGOON-1]
+FormName = Galar Form
+Type1 = DARK
+Type2 = NORMAL
+Moves = 1,TACKLE,1,LEER,3,SANDATTACK,6,LICK,9,SNARL,12,HEADBUTT,15,BABYDOLLEYES,18,PINMISSILE,21,REST,24,TAKEDOWN,27,SCARYFACE,30,COUNTER,33,TAUNT,36,DOUBLEEDGE
+EggMoves = PARTINGSHOT,QUICKGUARD,KNOCKOFF
+Color = White
+#-------------------------------
+[LINOONE-1]
+FormName = Galar Form
+Type1 = DARK
+Type2 = NORMAL
+Moves = 1,NIGHTSLASH,1,SWITCHEROO,1,PINMISSILE,1,BABYDOLLEYES,1,TACKLE,1,LEER,1,SANDATTACK,1,LICK,9,SNARL,12,HEADBUTT,15,HONECLAWS,18,FURYSWIPES,23,REST,28,TAKEDOWN,33,SCARYFACE,38,COUNTER,43,TAUNT,48,DOUBLEEDGE
+Evolutions = OBSTAGOON,LevelNight,35
+#-------------------------------
+[DARUMAKA-1]
+FormName = Galar Form
+Type1 = ICE
+Moves = 1,POWDERSNOW,1,TACKLE,4,TAUNT,8,BITE,12,AVALANCHE,16,WORKUP,20,ICEFANG,24,HEADBUTT,28,ICEPUNCH,32,UPROAR,36,BELLYDRUM,40,BLIZZARD,44,THRASH,48,SUPERPOWER
+EggMoves = FOCUSPUNCH,HAMMERARM,TAKEDOWN,FLAMEWHEEL,YAWN,FREEZEDRY,INCINERATE,POWERUPPUNCH
+Height = 0.7
+Weight = 40.0
+Color = White
+#-------------------------------
+[DARMANITAN-2]
+FormName = Galar Form
+Type1 = ICE
+Abilities = GORILLATACTICS
+HiddenAbility = ZENMODE
+Moves = 0,ICICLECRASH,1,ICICLECRASH,1,POWDERSNOW,1,TACKLE,1,TAUNT,1,BITE,12,AVALANCHE,16,WORKUP,20,ICEFANG,24,HEADBUTT,28,ICEPUNCH,32,UPROAR,38,BELLYDRUM,44,BLIZZARD,50,THRASH,56,SUPERPOWER
+Height = 1.7
+Weight = 120.0
+Color = White
+#-------------------------------
+[DARMANITAN-3]
+FormName = Galar Form Zen Mode
+Type1 = ICE
+Type2 = FIRE
+BaseStats = 105,160,55,135,30,55
+BaseEXP = 189
+EffortPoints = 0,0,0,0,2,0
+Abilities = GORILLATACTICS
+HiddenAbility = ZENMODE
+Moves = 0,ICICLECRASH,1,ICICLECRASH,1,POWDERSNOW,1,TACKLE,1,TAUNT,1,BITE,12,AVALANCHE,16,WORKUP,20,ICEFANG,24,HEADBUTT,28,ICEPUNCH,32,UPROAR,38,BELLYDRUM,44,BLIZZARD,50,THRASH,56,SUPERPOWER
+Height = 1.7
+Weight = 120.0
+Color = White
+BattlerPlayerY = 27
+BattlerEnemyY = 30
+#-------------------------------
+[YAMASK-1]
+FormName = Galar Form
+Type1 = GROUND
+Type2 = GHOST
+BaseStats = 38,55,85,30,30,65
+Abilities = WANDERINGSPIRIT
+Moves = 1,ASTONISH,1,PROTECT,4,HAZE,8,NIGHTSHADE,12,DISABLE,16,BRUTALSWING,20,CRAFTYSHIELD,24,HEX,28,MEANLOOK,32,SLAM,36,CURSE,40,SHADOWBALL,44,EARTHQUAKE,48,POWERSPLIT,48,GUARDSPLIT,52,DESTINYBOND
+Evolutions = 
+#-------------------------------
+[STUNFISK-1]
+FormName = Galar Form
+Type1 = GROUND
+Type2 = STEEL
+BaseStats = 109,81,99,32,66,84
+Happiness = 50
+Abilities = MIMICRY
+Moves = 1,MUDSLAP,1,TACKLE,1,WATERGUN,1,METALCLAW,5,ENDURE,10,MUDSHOT,15,REVENGE,20,METALSOUND,25,SUCKERPUNCH,30,IRONDEFENSE,35,BOUNCE,40,MUDDYWATER,45,SNAPTRAP,50,FLAIL,55,FISSURE
+EggMoves = BIND,YAWN,ASTONISH,CURSE,SPITE,COUNTER,PAINSPLIT,REFLECTTYPE
+Weight = 20.5
+Color = Green
+#-------------------------------
+[CRAMORANT-1]
+FormName = Gulping Form
+#-------------------------------
+[CRAMORANT-2]
+FormName = Gorging Form
+#-------------------------------
+[TOXTRICITY-1]
+FormName = Low Key Form
+Abilities = PUNKROCK,MINUS
+Moves = 0,SPARK,1,SPARK,1,EERIEIMPULSE,1,BELCH,1,TEARFULLOOK,1,NUZZLE,1,GROWL,1,FLAIL,1,ACID,1,THUNDERSHOCK,1,ACIDSPRAY,1,LEER,1,NOBLEROAR,4,CHARGE,8,SHOCKWAVE,12,SCARYFACE,16,TAUNT,20,VENOMDRENCH,24,SCREECH,28,SWAGGER,32,TOXIC,36,DISCHARGE,40,POISONJAB,44,OVERDRIVE,48,BOOMBURST,52,MAGNETICFLUX
+#-------------------------------
+[SINISTEA-1]
+FormName = Antique Form
+Evolutions = POLTEAGEIST,Item,CHIPPEDPOT
+#-------------------------------
+[POLTEAGEIST-1]
+FormName = Antique Form
+#-------------------------------
+[EISCUE-1]
+FormName = Noice Face
+BaseStats = 75,80,70,130,65,50
+#-------------------------------
+[INDEEDEE-1]
+FormName = Female
+BaseStats = 70,55,65,85,95,105
+EffortPoints = 0,0,0,0,0,2
+Abilities = OWNTEMPO,SYNCHRONIZE
+HiddenAbility = PSYCHICSURGE
+Moves = 1,STOREDPOWER,1,PLAYNICE,5,BATONPASS,10,DISARMINGVOICE,15,PSYBEAM,20,HELPINGHAND,25,FOLLOWME,30,AROMATHERAPY,35,PSYCHIC,40,CALMMIND,45,GUARDSPLIT,50,PSYCHICTERRAIN,55,HEALINGWISH
+EggMoves = PSYCHUP,FAKEOUT,PSYCHOSHIFT,HEALPULSE
+#-------------------------------
+[MORPEKO-1]
+FormName = Hangry Mode
+#-------------------------------
+[ZACIAN-1]
+FormName = Crowned Sword
+Type1 = FAIRY
+Type2 = STEEL
+BaseStats = 92,170,115,148,80,115
+BaseEXP = 360
+Weight = 355.0
+#-------------------------------
+[ZAMAZENTA-1]
+FormName = Crowned Shield
+Type1 = FIGHTING
+Type2 = STEEL
+BaseStats = 92,130,145,128,80,145
+BaseEXP = 360
+Weight = 785.0
+#-------------------------------
+[ETERNATUS-1]
+FormName = Eternamax Form
+BaseStats = 255,115,250,130,125,250
+BaseEXP = 563
+Height = 100.0
+Weight = 0.1
+Shape = 2
+#-------------------------------
+[URSHIFU-1]
+FormName = Rapid Strike Style
+Type1 = FIGHTING
+Type2 = WATER
+Moves = 0,SURGINGSTRIKES,1,SURGINGSTRIKES,1,AQUAJET,1,LEER,1,ROCKSMASH,1,ENDURE,1,FOCUSENERGY,12,AERIALACE,16,SCARYFACE,20,HEADBUTT,24,BRICKBREAK,28,DETECT,32,BULKUP,36,IRONHEAD,40,DYNAMICPUNCH,44,COUNTER,48,CLOSECOMBAT,52,FOCUSPUNCH
+Pokedex = It's believed that this Pokémon modeled its fighting style on the flow of a river - sometimes rapid, sometimes calm.
+BattlerPlayerY = 33
+BattlerEnemyY = 37
+#-------------------------------
+[ZARUDE-1]
+FormName = Dada Form
+Pokedex = This Zarude's special strength stems from its love and care for an orphaned human child that the Pokémon has raised since the child's infancy.
+#-------------------------------
+[ALCREMIE-1]
+FormName = Strawberry Ruby Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-2]
+FormName = Strawberry Matcha Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-3]
+FormName = Strawberry Mint Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-4]
+FormName = Strawberry Lemon Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-5]
+FormName = Strawberry Salted Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-6]
+FormName = Strawberry Ruby Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-7]
+FormName = Strawberry Caramel Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-8]
+FormName = Strawberry Rainbown Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-9]
+FormName = Berry Vanilla Cream
+#-------------------------------
+[ALCREMIE-10]
+FormName = Berry Ruby Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-11]
+FormName = Berry Matcha Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-12]
+FormName = Berry Mint Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-13]
+FormName = Berry Lemon Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-14]
+FormName = Berry Salted Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-15]
+FormName = Berry Ruby Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-16]
+FormName = Berry Caramel Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-17]
+FormName = Berry Rainbown Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-18]
+FormName = Love Vanilla Cream
+#-------------------------------
+[ALCREMIE-19]
+FormName = Love Ruby Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-20]
+FormName = Love Matcha Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-21]
+FormName = Love Mint Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-22]
+FormName = Love Lemon Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-23]
+FormName = Love Salted Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-24]
+FormName = Love Ruby Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-25]
+FormName = Love Caramel Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-26]
+FormName = Love Rainbown Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-27]
+FormName = Star Vanilla Cream
+#-------------------------------
+[ALCREMIE-28]
+FormName = Star Ruby Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-29]
+FormName = Star Matcha Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-30]
+FormName = Star Mint Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-31]
+FormName = Star Lemon Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-32]
+FormName = Star Salted Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-33]
+FormName = Star Ruby Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-34]
+FormName = Star Caramel Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-35]
+FormName = Star Rainbown Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-36]
+FormName = Clover Vanilla Cream
+#-------------------------------
+[ALCREMIE-37]
+FormName = Clover Ruby Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-38]
+FormName = Clover Matcha Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-39]
+FormName = Clover Mint Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-40]
+FormName = Clover Lemon Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-41]
+FormName = Clover Salted Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-42]
+FormName = Clover Ruby Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-43]
+FormName = Clover Caramel Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-44]
+FormName = Clover Rainbown Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-45]
+FormName = Flower Vanilla Cream
+#-------------------------------
+[ALCREMIE-46]
+FormName = Flower Ruby Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-47]
+FormName = Flower Matcha Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-48]
+FormName = Flower Mint Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-49]
+FormName = Flower Lemon Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-50]
+FormName = Flower Salted Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-51]
+FormName = Flower Ruby Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-52]
+FormName = Flower Caramel Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-53]
+FormName = Flower Rainbown Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-54]
+FormName = Ribbon Vanilla Cream
+#-------------------------------
+[ALCREMIE-55]
+FormName = Ribbon Ruby Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-56]
+FormName = Ribbon Matcha Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-57]
+FormName = Ribbon Mint Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-58]
+FormName = Ribbon Lemon Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-59]
+FormName = Ribbon Salted Cream
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-60]
+FormName = Ribbon Ruby Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-61]
+FormName = Ribbon Caramel Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------
+[ALCREMIE-62]
+FormName = Ribbon Rainbown Swirl
+Pokedex = The moment it evolved, it took a mixed flavor. This is because of the way its cells spntaneously shifted during evolution.
+#-------------------------------

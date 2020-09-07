@@ -193,6 +193,7 @@ class PokeBattle_Battler
     @effects[PBEffects::HelpingHand]         = false
     @effects[PBEffects::HyperBeam]           = 0
     @effects[PBEffects::Illusion]            = nil
+	@effects[PBEffects::BurningJelousy]      = false
     if hasActiveAbility?(:ILLUSION)
       idxLastParty = @battle.pbLastInTeam(@index)
       if idxLastParty!=@pokemonIndex
@@ -277,6 +278,8 @@ class PokeBattle_Battler
     @effects[PBEffects::WaterSport]          = false
     @effects[PBEffects::WeightChange]        = 0
     @effects[PBEffects::Yawn]                = 0
+    @effects[PBEffects::GorillaTactics]      = -1
+    @effects[PBEffects::BallFetch]           = 0
   end
 
   #=============================================================================

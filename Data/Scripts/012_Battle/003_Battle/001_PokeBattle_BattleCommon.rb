@@ -62,6 +62,13 @@ module PokeBattle_BattleCommon
     @caughtPokemon.clear
   end
 
+  # Ball Fetch	
+  def pbBallFetch(ball)
+    if $BallRetrieved == 0
+      $BallRetrieved=ball if ball != 268
+    end
+  end
+	
   #=============================================================================
   # Throw a Poké Ball
   #=============================================================================
@@ -114,15 +121,19 @@ module PokeBattle_BattleCommon
     when 0
       pbDisplay(_INTL("Oh no! The Pokémon broke free!"))
       BallHandlers.onFailCatch(ball,self,battler)
+	  pbBallFetch(ball)
     when 1
       pbDisplay(_INTL("Aww! It appeared to be caught!"))
       BallHandlers.onFailCatch(ball,self,battler)
+	  pbBallFetch(ball)
     when 2
       pbDisplay(_INTL("Aargh! Almost had it!"))
       BallHandlers.onFailCatch(ball,self,battler)
+	  pbBallFetch(ball)
     when 3
       pbDisplay(_INTL("Gah! It was so close, too!"))
       BallHandlers.onFailCatch(ball,self,battler)
+	  pbBallFetch(ball)
     when 4
       pbDisplayBrief(_INTL("Gotcha! {1} was caught!",pkmn.name))
       @scene.pbThrowSuccess   # Play capture success jingle
@@ -150,6 +161,10 @@ module PokeBattle_BattleCommon
       pkmn.makeUnprimal
       pkmn.pbUpdateShadowMoves if pkmn.shadowPokemon?
       pkmn.pbRecordFirstMoves
+      # Morpeko
+      if pkmn.species == isConst?(pkmn.species,PBSpecies,:MORPEKO) || pkmn.form!=0
+        pkmn.form = 0
+      end
       # Reset form
       pkmn.forcedForm = nil if MultipleForms.hasFunction?(pkmn.species,"getForm")
       @peer.pbOnLeavingBattle(self,pkmn,true,true)

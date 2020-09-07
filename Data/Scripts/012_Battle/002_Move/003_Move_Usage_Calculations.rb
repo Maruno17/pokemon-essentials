@@ -219,7 +219,7 @@ class PokeBattle_Move
 
   def pbCalcDamage(user,target,numTargets=1)
     return if statusMove?
-    if target.damageState.disguise
+    if target.damageState.disguise || target.damageState.iceface
       target.damageState.calcDamage = 1
       return
     end

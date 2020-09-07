@@ -2192,9 +2192,12 @@ class PokeBattle_Move_165 < PokeBattle_Move
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
-       :RKSSYSTEM
+       :RKSSYSTEM,
+       :GULPMISSILE
+       
     ]
   end
 
@@ -2620,6 +2623,263 @@ end
 
 
 
+#===============================================================================
+# Hits 3 times and always critical. (Surging Strikes)
+#===============================================================================
+class PokeBattle_Move_176 < PokeBattle_Move
+  def pbCritialOverride(user,target); return 1; end
+  def multiHitMove?;           return true; end
+  def pbNumHits(user,targets); return 3;    end
+  def successCheckPerHit?
+    return @accCheckPerHit
+  end
+end
+
+
+
+#===============================================================================
+# If the user attacks before the target, or if the target switches in during the 
+# turn that Fishious Rend is used, its base power doubles. (Fishious Rend, Bolt Beak)
+#===============================================================================
+class PokeBattle_Move_177 < PokeBattle_Move
+  def pbBaseDamage(baseDmg,user,target)
+    baseDmg*=2 if !target.movedThisRound?
+    return baseDmg
+  end
+end
+
+
+
+#===============================================================================
+# The user attacks by slamming its body into the target. The higher the user's 
+# Defense, the more damage it can inflict on the target. (Body Press)
+#===============================================================================
+class PokeBattle_Move_178 < PokeBattle_Move
+  def pbGetAttackStats(user,target)
+    atk=user.defense
+    return user.defense, user.stages[PBStats::DEFENSE]+6
+  end
+end
+
+
+
+#===============================================================================
+# The user sharply raises the target's Attack and Sp. Atk stats by decorating 
+# the target. (Decorate)
+#===============================================================================
+class PokeBattle_Move_179 < PokeBattle_TargetMultiStatUpMove
+  def initialize(battle,move)
+    super
+    @statUp = [PBStats::ATTACK,2,PBStats::SPATK,2]
+  end
+end
+
+
+
+#===============================================================================
+# Raise speed by one stage. Fails if user is not a Morpeko. Base Type is dark
+# if Morpeko's Form is Hangry Form (Aura Wheel)
+#===============================================================================
+class PokeBattle_Move_180 < PokeBattle_StatUpMove
+  def initialize(battle,move)
+    super
+    @statUp = [PBStats::SPEED,1]
+  end
+
+  def pbMoveFailed?(user,targets)
+    if NEWEST_BATTLE_MECHANICS && isConst?(@id,PBMoves,:AURAWHEEL)
+      if !isConst?(user.species,PBSpecies,:MORPEKO) &&
+         !isConst?(user.effects[PBEffects::TransformSpecies],PBSpecies,:MORPEKO)
+        @battle.pbDisplay(_INTL("But {1} can't use the move!",user.pbThis))
+        return true
+      end
+    end
+    return false
+  end
+
+  def pbBaseType(user)
+    ret = getID(PBTypes,:NORMAL)
+    case user.form
+    when 0
+      ret = getConst(PBTypes,:ELECTRIC) || ret
+	  pbWait(1)
+    when 1
+      ret = getConst(PBTypes,:DARK) || ret
+	  pbWait(1)
+    end
+    return ret
+  end  
+end
+
+
+
+#===============================================================================
+# Raises all user's stats by 1 stage in exchange for the user losing 1/3 of its 
+# maximum HP, rounded down. Fails if the user would faint. (Clangorous Soul) 
+#===============================================================================
+class PokeBattle_Move_181 < PokeBattle_Move
+  def pbMoveFailed?(user,targets)
+    if user.hp<=(user.totalhp/3) ||
+      !user.pbCanRaiseStatStage?(PBStats::ATTACK,user,self) ||
+      !user.pbCanRaiseStatStage?(PBStats::DEFENSE,user,self) ||
+      !user.pbCanRaiseStatStage?(PBStats::SPEED,user,self) ||
+      !user.pbCanRaiseStatStage?(PBStats::SPATK,user,self) ||
+      !user.pbCanRaiseStatStage?(PBStats::SPDEF,user,self)      
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return false
+  end
+  
+  def pbEffectGeneral(user)
+    if user.pbCanRaiseStatStage?(PBStats::ATTACK,user,self)
+      user.pbRaiseStatStage(PBStats::ATTACK,1,user)
+    end
+    if user.pbCanRaiseStatStage?(PBStats::DEFENSE,user,self)
+      user.pbRaiseStatStage(PBStats::DEFENSE,1,user)
+    end
+    if user.pbCanRaiseStatStage?(PBStats::SPEED,user,self)
+      user.pbRaiseStatStage(PBStats::SPEED,1,user)
+    end
+    if user.pbCanRaiseStatStage?(PBStats::SPATK,user,self)
+      user.pbRaiseStatStage(PBStats::SPATK,1,user)
+    end
+    if user.pbCanRaiseStatStage?(PBStats::SPDEF,user,self)
+      user.pbRaiseStatStage(PBStats::SPDEF,1,user)
+    end
+    user.pbReduceHP(user.totalhp/3,false)
+  end   
+end
+
+
+
+#===============================================================================
+# Swaps barriers, veils and other effects between each side of the battlefield.
+# (Court Change)
+#===============================================================================
+class PokeBattle_Move_182 < PokeBattle_Move
+    def pbEffectAgainstTarget(user,target)
+    fail=false
+    neffectsuser=[]
+    beffectsuser=[]
+    neffectsopp=[]
+    beffectsopp=[]
+    for i in 0...2
+      i==0 ? a=user : a=target
+      i==0 ? b=neffectsuser : b=neffectsopp
+      i==0 ? c=beffectsuser : c=beffectsopp
+      fail=true if a.pbOwnSide.effects[PBEffects::Reflect] > 0
+      b.push(a.pbOwnSide.effects[PBEffects::Reflect])
+      fail=true if a.pbOwnSide.effects[PBEffects::LightScreen] > 0
+      b.push(a.pbOwnSide.effects[PBEffects::LightScreen])
+      fail=true if a.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
+      b.push(a.pbOwnSide.effects[PBEffects::AuroraVeil])
+      fail=true if a.pbOwnSide.effects[PBEffects::SeaOfFire] > 0
+      b.push(a.pbOwnSide.effects[PBEffects::SeaOfFire])
+      fail=true if a.pbOwnSide.effects[PBEffects::Swamp] > 0
+      b.push(a.pbOwnSide.effects[PBEffects::Swamp])
+      fail=true if a.pbOwnSide.effects[PBEffects::Rainbow] > 0
+      b.push(a.pbOwnSide.effects[PBEffects::Rainbow])
+      fail=true if a.pbOwnSide.effects[PBEffects::Mist] > 0
+      b.push(a.pbOwnSide.effects[PBEffects::Mist])      
+      fail=true if a.pbOwnSide.effects[PBEffects::Safeguard] > 0
+      b.push(a.pbOwnSide.effects[PBEffects::Safeguard])
+      fail=true if a.pbOwnSide.effects[PBEffects::Spikes] > 0
+      b.push(a.pbOwnSide.effects[PBEffects::Spikes])
+      fail=true if a.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
+      b.push(a.pbOwnSide.effects[PBEffects::ToxicSpikes])      
+      fail=true if a.pbOwnSide.effects[PBEffects::Tailwind] > 0
+      b.push(a.pbOwnSide.effects[PBEffects::Tailwind])
+      fail=true if a.pbOwnSide.effects[PBEffects::StealthRock]
+      c.push(a.pbOwnSide.effects[PBEffects::StealthRock])
+      fail=true if a.pbOwnSide.effects[PBEffects::StickyWeb]
+      c.push(a.pbOwnSide.effects[PBEffects::StickyWeb])      
+    end
+    if !fail
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return -1
+    else
+      user.pbOwnSide.effects[PBEffects::Reflect] = neffectsopp[0]
+      target.pbOwnSide.effects[PBEffects::Reflect] = neffectsuser[0]
+      user.pbOwnSide.effects[PBEffects::LightScreen] = neffectsopp[1]
+      target.pbOwnSide.effects[PBEffects::LightScreen] = neffectsuser[1]
+      user.pbOwnSide.effects[PBEffects::AuroraVeil] = neffectsopp[2]
+      target.pbOwnSide.effects[PBEffects::AuroraVeil] = neffectsuser[2]
+      user.pbOwnSide.effects[PBEffects::SeaOfFire] = neffectsopp[3]
+      target.pbOwnSide.effects[PBEffects::SeaOfFire] = neffectsuser[3]
+      user.pbOwnSide.effects[PBEffects::Swamp] = neffectsopp[4]
+      target.pbOwnSide.effects[PBEffects::Swamp] = neffectsuser[4]
+      user.pbOwnSide.effects[PBEffects::Rainbow] = neffectsopp[5]
+      target.pbOwnSide.effects[PBEffects::Rainbow] = neffectsuser[5]
+      user.pbOwnSide.effects[PBEffects::Mist] = neffectsopp[6]
+      target.pbOwnSide.effects[PBEffects::Mist] = neffectsuser[6]
+      user.pbOwnSide.effects[PBEffects::Safeguard] = neffectsopp[7]
+      target.pbOwnSide.effects[PBEffects::Safeguard] = neffectsuser[7]
+      user.pbOwnSide.effects[PBEffects::Spikes] = neffectsopp[8]
+      target.pbOwnSide.effects[PBEffects::Spikes] = neffectsuser[8]
+      user.pbOwnSide.effects[PBEffects::ToxicSpikes] = neffectsopp[9]
+      target.pbOwnSide.effects[PBEffects::ToxicSpikes] = neffectsuser[9]
+      user.pbOwnSide.effects[PBEffects::Tailwind] = neffectsopp[10]
+      target.pbOwnSide.effects[PBEffects::Tailwind] = neffectsuser[10]
+      user.pbOwnSide.effects[PBEffects::StealthRock] = beffectsopp[0]
+      target.pbOwnSide.effects[PBEffects::StealthRock] = beffectsuser[0]
+      user.pbOwnSide.effects[PBEffects::StickyWeb] = beffectsopp[1]
+      target.pbOwnSide.effects[PBEffects::StickyWeb] = beffectsuser[1]
+      @battle.pbDisplay(_INTL("{1} swapped the battle effects affecting each side of the field!",user.pbThis))
+      return 0
+    end
+  end
+end
+
+
+
+#===============================================================================
+# Ignores move redirection from abilities and moves. (Snipe Shot)
+#===============================================================================
+class PokeBattle_Move_183 < PokeBattle_Move
+end
+
+
+
+#===============================================================================
+# Target becomes Psychic type. (Magic Powder)
+#===============================================================================
+class PokeBattle_Move_184 < PokeBattle_Move
+  def pbFailsAgainstTarget?(user,target)
+    if !target.canChangeType? ||
+       !target.pbHasOtherType?(getConst(PBTypes,:PSYCHIC))
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return false
+  end
+
+  def pbEffectAgainstTarget(user,target)
+    newType = getConst(PBTypes,:PSYCHIC)
+    target.pbChangeTypes(newType)
+    typeName = PBTypes.getName(newType)
+    @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",target.pbThis,typeName))
+  end
+end
+
+
+
+#===============================================================================
+# Burns opposing Pokemon that have increased their stats in that turn before the
+# execution of this move (Burning Jealousy)
+#===============================================================================
+ class PokeBattle_Move_185 < PokeBattle_Move
+   def pbAdditionalEffect(user,target)
+     return if target.damageState.substitute
+     if target.pbCanBurn?(user,false,self) && 
+        target.effects[PBEffects::BurningJelousy]
+       target.pbBurn(user)
+     end
+   end
+ end
+ 
+ 
+ 
 # NOTE: If you're inventing new move effects, use function code 176 and onwards.
 #       Actually, you might as well use high numbers like 500+ (up to FFFF),
 #       just to make sure later additions to Essentials don't clash with your

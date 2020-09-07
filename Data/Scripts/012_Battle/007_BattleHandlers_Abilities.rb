@@ -140,6 +140,8 @@ BattleHandlers::StatusImmunityAbility.add(:IMMUNITY,
   }
 )
 
+BattleHandlers::StatusImmunityAbility.copy(:IMMUNITY,:PASTELVEIL)
+
 BattleHandlers::StatusImmunityAbility.add(:INSOMNIA,
   proc { |ability,battler,status|
     next true if status==PBStatuses::SLEEP
@@ -201,9 +203,15 @@ BattleHandlers::StatusImmunityAllyAbility.add(:FLOWERVEIL,
   }
 )
 
-BattleHandlers::StatusImmunityAbility.add(:SWEETVEIL,
+BattleHandlers::StatusImmunityAllyAbility.add(:SWEETVEIL,
   proc { |ability,battler,status|
     next true if status==PBStatuses::SLEEP
+  }
+)
+
+BattleHandlers::StatusImmunityAllyAbility.add(:PASTELVEIL,
+  proc { |ability,battler,status|
+    next true if status==PBStatuses::POISON
   }
 )
 
@@ -547,11 +555,21 @@ BattleHandlers::PriorityBracketChangeAbility.add(:STALL,
   }
 )
 
+BattleHandlers::PriorityBracketChangeAbility.add(:QUICKDRAW,
+  proc { |ability,battler,subPri,battle|
+    next 1 if subPri<1 && battle.pbRandom(10)<3
+  }
+)
+
 #===============================================================================
 # PriorityBracketUseAbility handlers
 #===============================================================================
 
-# There aren't any!
+BattleHandlers::PriorityBracketUseAbility.add(:QUICKDRAW,
+  proc { |ability,battler,battle|
+    battle.pbDisplay(_INTL("{1}'s {2} let it move first!",battler.pbThis,battler.abilityName))
+  }
+)
 
 #===============================================================================
 # AbilityOnFlinch handlers
@@ -1121,6 +1139,24 @@ BattleHandlers::DamageCalcUserAbility.add(:WATERBUBBLE,
   }
 )
 
+BattleHandlers::DamageCalcUserAbility.add(:GORILLATACTICS,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if move.physicalMove?
+  }
+)
+
+BattleHandlers::DamageCalcUserAbility.add(:PUNKROCK,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[ATK_MULT] = (mults[ATK_MULT]*1.3).round if move.soundMove?
+  }
+)
+
+BattleHandlers::DamageCalcUserAbility.add(:STEELYSPIRIT,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+      mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)
+  }
+)
+
 #===============================================================================
 # DamageCalcUserAllyAbility handlers
 #===============================================================================
@@ -1138,6 +1174,18 @@ BattleHandlers::DamageCalcUserAllyAbility.add(:FLOWERGIFT,
     if move.physicalMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun)
       mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
     end
+  }
+)
+
+BattleHandlers::DamageCalcUserAllyAbility.add(:POWERSPOT,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[FINAL_DMG_MULT] = (mults[FINAL_DMG_MULT]*1.3).round
+  }
+)
+
+BattleHandlers::DamageCalcUserAllyAbility.add(:STEELYSPIRIT,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)
   }
 )
 
@@ -1185,6 +1233,12 @@ BattleHandlers::DamageCalcTargetAbility.add(:FURCOAT,
   }
 )
 
+  BattleHandlers::DamageCalcTargetAbility.add(:ICESCALES,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[DEF_MULT] *= 2 if move.specialMove? || move.function=="122"   # Psyshock
+  }
+)
+
 BattleHandlers::DamageCalcTargetAbility.add(:GRASSPELT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if user.battle.field.terrain==PBBattleTerrains::Grassy
@@ -1228,6 +1282,12 @@ BattleHandlers::DamageCalcTargetAbility.add(:WATERBUBBLE,
     if isConst?(type,PBTypes,:FIRE)
       mults[FINAL_DMG_MULT] = (mults[FINAL_DMG_MULT]*0.5).round
     end
+  }
+)
+
+BattleHandlers::DamageCalcTargetAbility.add(:PUNKROCK,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[DEF_MULT] *= 2 if move.soundMove?
   }
 )
 
@@ -1546,9 +1606,11 @@ BattleHandlers::TargetAbilityOnHit.add(:MUMMY,
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
        :RKSSYSTEM,
+       :GULPMISSILE
     ]
     failed = false
     abilityBlacklist.each do |abil|
@@ -1609,6 +1671,12 @@ BattleHandlers::TargetAbilityOnHit.add(:STAMINA,
   }
 )
 
+BattleHandlers::TargetAbilityOnHit.add(:SANDSPIT,
+  proc { |ability,target,battler,move,battle|
+    pbBattleWeatherAbility(PBWeather::Sandstorm,battler,battle)
+  }
+)
+
 BattleHandlers::TargetAbilityOnHit.add(:STATIC,
   proc { |ability,user,target,move,battle|
     next if !move.pbContactMove?(user)
@@ -1647,6 +1715,115 @@ BattleHandlers::TargetAbilityOnHit.add(:WEAKARMOR,
   }
 )
 
+BattleHandlers::TargetAbilityOnHit.add(:STEAMENGINE,
+  proc { |ability,user,target,move,battle|
+    next if !isConst?(move.calcType,PBTypes,:FIRE) &&
+	    !isConst?(move.calcType,PBTypes,:WATER)
+    target.pbRaiseStatStageByAbility(PBStats::SPEED,6,target)
+  }
+)
+
+BattleHandlers::TargetAbilityOnHit.add(:WANDERINGSPIRIT,
+  proc { |ability,user,target,move,battle|
+    next if !move.pbContactMove?(user)
+    next if user.fainted?
+    abilityBlacklist = [
+       :DISGUISE,
+       :FLOWERGIFT,
+       :GULPMISSILE,
+       :ICEFACE,
+       :IMPOSTER,
+       :RECEIVER,
+       :RKSSYSTEM,
+       :SCHOOLING,
+       :STANCECHANGE,
+       :WONDERGUARD,
+       :ZENMODE
+    ]
+    failed = false
+    abilityBlacklist.each do |abil|
+      next if !isConst?(user.ability,PBAbilities,abil)
+      failed = true
+      break
+    end
+    next if failed
+    oldAbil = -1
+    battle.pbShowAbilitySplash(target) if user.opposes?(target)
+    if user.affectedByContactEffect?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
+      oldAbil = user.ability
+      battle.pbShowAbilitySplash(user,true,false) if user.opposes?(target)
+      user.ability = getConst(PBAbilities,:WANDERINGSPIRIT)
+      target.ability = oldAbil
+      if user.opposes?(target)
+        battle.pbReplaceAbilitySplash(user)
+        battle.pbReplaceAbilitySplash(target)
+      end
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1}'s Ability became {2}!",user.pbThis,user.abilityName))
+      else
+        battle.pbDisplay(_INTL("{1}'s Ability became {2} because of {3}!",
+           user.pbThis,user.abilityName,target.pbThis(true)))
+      end
+
+      battle.pbHideAbilitySplash(user)
+    end
+    battle.pbHideAbilitySplash(target) if user.opposes?(target)
+    if oldAbil>=0
+      user.pbOnAbilityChanged(oldAbil)
+      target.pbOnAbilityChanged(getConst(PBAbilities,:WANDERINGSPIRIT))
+    end
+
+  }
+)
+
+BattleHandlers::TargetAbilityOnHit.add(:PERISHBODY,
+  proc { |ability,user,target,move,battle|
+    next if !move.pbContactMove?(user)
+    next if !user.affectedByContactEffect?
+    next if user.effects[PBEffects::PerishSong]>0
+    battle.pbShowAbilitySplash(target)
+    battle.pbDisplay(_INTL("Both Pokémon will faint in three turns!"))
+    user.effects[PBEffects::PerishSong] = 3
+    target.effects[PBEffects::PerishSong] = 3 if target.effects[PBEffects::PerishSong] == 0
+    battle.pbHideAbilitySplash(target)
+  }
+)
+
+BattleHandlers::TargetAbilityOnHit.add(:COTTONDOWN,
+  proc { |ability,user,target,move,battle|
+    battle.pbShowAbilitySplash(target)
+    target.eachOpposing{|b|
+      b.pbLowerStatStage(PBStats::SPEED,1,target)
+    }
+    target.eachAlly{|b|
+      b.pbLowerStatStage(PBStats::SPEED,1,target)
+    }
+    battle.pbHideAbilitySplash(target)
+  }
+)
+
+BattleHandlers::TargetAbilityOnHit.add(:GULPMISSILE,
+  proc { |ability,user,target,move,battle|
+    next if target.form==0
+    if isConst?(target.species,PBSpecies,:CRAMORANT)
+      battle.pbShowAbilitySplash(target)
+      gulpform=target.form
+      target.form = 0
+      battle.scene.pbChangePokemon(target,target.pokemon)
+      if user.takesIndirectDamage?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
+        battle.scene.pbDamageAnimation(user)
+        user.pbReduceHP(user.totalhp/4,false)
+        if gulpform==1
+          user.pbLowerStatStageByAbility(PBStats::DEFENSE,1,target,false)
+        elsif gulpform==2
+          msg = nil
+          user.pbParalyze(target,msg)
+        end
+      end
+      battle.pbHideAbilitySplash(target)
+    end
+  }
+)
 #===============================================================================
 # UserAbilityOnHit handlers
 #===============================================================================
@@ -2014,6 +2191,33 @@ BattleHandlers::EOREffectAbility.add(:SPEEDBOOST,
     # round
     if battler.turnCount>0 && battler.pbCanRaiseStatStage?(PBStats::SPEED,battler)
       battler.pbRaiseStatStageByAbility(PBStats::SPEED,1,battler)
+    end
+  }
+)
+
+BattleHandlers::EOREffectAbility.add(:BALLFETCH,
+  proc { |ability,battler,battle|
+    if battler.item == 0 && battler.effects[PBEffects::BallFetch]==0 && $BallRetrieved != 0
+      battle.pbShowAbilitySplash(battler)
+      battler.effects[PBEffects::BallFetch]=1
+      battler.item = $BallRetrieved
+      battler.setInitialItem($BallRetrieved)
+      $BallRetrieved = 0
+      battler.battle.pbDisplay(_INTL("{1}'s {2} fetched the {3}!",battler.pbThis,battler.abilityName,battler.itemName))
+      battle.pbHideAbilitySplash(battler)
+    end
+  }
+)
+
+BattleHandlers::EOREffectAbility.add(:HUNGERSWITCH,
+  proc { |ability,battler,battle|
+    if isConst?(battler.species,PBSpecies,:MORPEKO)
+      battle.pbShowAbilitySplash(battler)
+      battler.form=(battler.form==0) ? 1 : 0
+      battler.pbUpdate(true)
+      battle.scene.pbChangePokemon(battler,battler.pokemon)
+      battle.pbDisplay(_INTL("{1} transformed!",battler.pbThis))
+      battle.pbHideAbilitySplash(battler)
     end
   }
 )
@@ -2418,6 +2622,54 @@ BattleHandlers::AbilityOnSwitchIn.add(:UNNERVE,
   }
 )
 
+BattleHandlers::AbilityOnSwitchIn.add(:INTREPIDSWORD,
+  proc { |ability,battler,battle|
+    stat = PBStats::ATTACK
+    battler.pbRaiseStatStageByAbility(stat,1,battler)
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:DAUNTLESSSHIELD,
+  proc { |ability,battler,battle|
+    stat = PBStats::DEFENSE
+    battler.pbRaiseStatStageByAbility(stat,1,battler)
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:SCREENCLEANER,
+  proc { |ability,battler,battle|
+    battle.pbShowAbilitySplash(battler)
+    for side in 0...2
+      if battle.sides[side].effects[PBEffects::LightScreen]>0
+        battle.sides[side].effects[PBEffects::LightScreen] = 0
+        battle.pbDisplay(_INTL("{1}'s Light Screen wore off!",@battlers[side].pbTeam))
+      end
+      if battle.sides[side].effects[PBEffects::Reflect]>0
+        battle.sides[side].effects[PBEffects::Reflect] = 0
+        battle.pbDisplay(_INTL("{1}'s Reflect wore off!",@battlers[side].pbOpposingTeam))
+      end
+      if battle.sides[side].effects[PBEffects::AuroraVeil]>0
+        battle.sides[side].effects[PBEffects::AuroraVeil] = 0
+        battle.pbDisplay(_INTL("{1}'s Aurora Veil wore off!",@battlers[side].pbOpposingTeam))
+      end
+    end
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:PASTELVEIL,
+  proc { |ability,battler,battle|
+    battler.eachAlly do |b|
+      next if b.status != PBStatuses::POISON
+      battle.pbShowAbilitySplash(battler)
+      b.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
+      if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1}'s {2} cured its {3}'s poison!",battler.pbThis,battler.abilityName,b.pbThis(true)))
+      end
+      battle.pbHideAbilitySplash(battler)
+    end
+  }
+)
 #===============================================================================
 # AbilityOnSwitchOut handlers
 #===============================================================================
@@ -2460,12 +2712,14 @@ BattleHandlers::AbilityChangeOnBattlerFainting.add(:POWEROFALCHEMY,
        :SHIELDSDOWN,
        :STANCECHANGE,
        :ZENMODE,
+       :ICEFACE,
        # Appearance-changing abilities
        :ILLUSION,
        :IMPOSTER,
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
        :RKSSYSTEM,
+       :GULPMISSILE,
        # Abilities that would be overpowered if allowed to be transferred
        :WONDERGUARD
     ]

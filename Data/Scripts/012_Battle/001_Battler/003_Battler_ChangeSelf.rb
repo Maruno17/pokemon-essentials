@@ -71,6 +71,10 @@ class PokeBattle_Battler
     @battle.peer.pbOnLeavingBattle(@battle,@pokemon,@battle.usedInBattle[idxOwnSide][@index/2])
     @pokemon.makeUnmega if mega?
     @pokemon.makeUnprimal if primal?
+    # Morpeko
+    if @pokemon.species == isConst?(@pokemon.species,PBSpecies,:MORPEKO) || @pokemon.form!=0
+      @pokemon.form = 0
+    end
     # Do other things
     @battle.pbClearChoice(@index)   # Reset choice
     pbOwnSide.effects[PBEffects::LastRoundFainted] = @battle.turnCount
@@ -197,6 +201,85 @@ class PokeBattle_Battler
         end
       else
         pbChangeForm(0,_INTL("{1} transformed!",pbThis))
+      end
+    end
+    # Eiscue - Ice Face
+    if isConst?(@species,PBSpecies,:EISCUE)
+      if hasActiveAbility?(:ICEFACE)
+        case @battle.pbWeather
+        when PBWeather::Hail
+          if @form!=0
+            @battle.pbShowAbilitySplash(self,true)
+            @battle.pbHideAbilitySplash(self)
+            pbChangeForm(0,_INTL("{1} transformed!",pbThis))
+            self.damageState.iceface = false
+          end
+        end
+      end
+    end
+  end
+
+  #=============================================================================
+  # Change type of Galarian Stunfisk - Mimicry
+  #=============================================================================
+  def pbChangeTypes(newType)
+    if newType.is_a?(PokeBattle_Battler)
+      newTypes = newType.pbTypes
+      newTypes.push(getConst(PBTypes,:NORMAL) || 0) if newTypes.length==0
+      newType3 = newType.effects[PBEffects::Type3]
+      newType3 = -1 if newTypes.include?(newType3)
+      @type1 = newTypes[0]
+      @type2 = (newTypes.length==1) ? newTypes[0] : newTypes[1]
+      @effects[PBEffects::Type3] = newType3
+    elsif newType.is_a?(Array)
+      newType = newType.map {|t| 
+        if t.is_a?(Symbol) || t.is_a?(String)
+          getConst(PBTypes,t)
+        else
+          t
+        end
+      }
+      newType3 = newType[2] || -1
+      @type1 = newType[0]
+      @type2 = newType[1] || newType[0]
+      @effects[PBEffects::Type3] = newType3
+    else
+      newType = getConst(PBTypes,newType) if newType.is_a?(Symbol) || newType.is_a?(String)
+      @type1 = newType
+      @type2 = newType
+      @effects[PBEffects::Type3] = -1
+    end
+    @effects[PBEffects::BurnUp] = false
+    @effects[PBEffects::Roost]  = false
+  end
+  
+   def pbCheckFormOnTerrainChange
+    return if fainted? || @effects[PBEffects::Transform]
+    if hasActiveAbility?(:MIMICRY)
+      newTypes = self.pbTypes
+      originalTypes=[@pokemon.type1,@pokemon.type2] | []
+      case @battle.field.terrain
+      when PBBattleTerrains::Electric;   newTypes = [getID(PBTypes,:ELECTRIC)]
+      when PBBattleTerrains::Grassy;     newTypes = [getID(PBTypes,:GRASS)]
+      when PBBattleTerrains::Misty;      newTypes = [getID(PBTypes,:FAIRY)]
+      when PBBattleTerrains::Psychic;    newTypes = [getID(PBTypes,:PSYCHIC)]
+      else;                              newTypes = originalTypes.dup
+      end
+      if self.pbTypes!=newTypes
+        pbChangeTypes(newTypes)
+        @battle.pbShowAbilitySplash(self,true)
+        @battle.pbHideAbilitySplash(self)
+        if newTypes!=originalTypes
+          if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+            @battle.pbDisplay(_INTL("{1}'s type changed to {3}!",pbThis,
+             self.abilityName,PBTypes.getName(newTypes[0])))
+          else
+            @battle.pbDisplay(_INTL("{1}'s {2} made it the {3} type!",pbThis,
+             self.abilityName,PBTypes.getName(newTypes[0])))
+          end
+        else
+          @battle.pbDisplay(_INTL("{1} returned back to normal!",pbThis))
+        end
       end
     end
   end

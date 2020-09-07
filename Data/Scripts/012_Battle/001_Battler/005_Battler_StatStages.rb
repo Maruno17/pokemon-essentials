@@ -18,6 +18,7 @@ class PokeBattle_Battler
          pbThis,PBStats.getName(stat))) if showFailMsg
       return false
     end
+    @effects[PBEffects::BurningJelousy] = true
     return true
   end
 
@@ -37,6 +38,7 @@ class PokeBattle_Battler
       PBDebug.log("[Stat change] #{pbThis}'s #{s}: #{@stages[stat]} -> #{new} (+#{increment})")
       @stages[stat] += increment
     end
+    @effects[PBEffects::BurningJelousy] = true
     return increment
   end
 
@@ -60,6 +62,7 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatGain(@ability,self,stat,user)
     end
+    @effects[PBEffects::BurningJelousy] = true
     return true
   end
 
@@ -68,6 +71,16 @@ class PokeBattle_Battler
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
       return pbLowerStatStageByCause(stat,increment,user,cause,showAnim,true)
+    end
+    # Mirror Armor
+    if hasActiveAbility?(:MIRRORARMOR) && (!user || user.index!=@index) && !@battle.moldBreaker
+      battle.pbShowAbilitySplash(self)
+      @battle.pbDisplay(_INTL("{1}'s Mirror Armor activated!",pbThis))
+      if user.pbCanLowerStatStage?(stat) && !user.hasActiveAbility?(:MIRRORARMOR)
+        user.pbLowerStatStageByAbility(stat,increment,user,splashAnim=false,checkContact=false)
+      end
+      battle.pbHideAbilitySplash(self)
+      return false
     end
     # Perform the stat stage change
     increment = pbRaiseStatStageBasic(stat,increment,ignoreContrary)
@@ -90,6 +103,7 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatGain(@ability,self,stat,user)
     end
+    @effects[PBEffects::BurningJelousy] = true
     return true
   end
 
@@ -105,6 +119,7 @@ class PokeBattle_Battler
       end
     end
     @battle.pbHideAbilitySplash(user) if splashAnim
+    @effects[PBEffects::BurningJelousy] = true
     return ret
   end
 

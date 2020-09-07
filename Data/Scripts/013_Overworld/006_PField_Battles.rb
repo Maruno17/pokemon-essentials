@@ -537,6 +537,10 @@ def pbAfterBattle(decision,canLose)
     pkmn.statusCount = 0 if pkmn.status==PBStatuses::POISON   # Bad poison becomes regular
     pkmn.makeUnmega
     pkmn.makeUnprimal
+    # Morpeko
+    if pkmn.species == isConst?(pkmn.species,PBSpecies,:MORPEKO) || pkmn.form!=0
+      pkmn.form = 0
+    end
   end
   if $PokemonGlobal.partner
     pbHealAll
