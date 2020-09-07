@@ -16,9 +16,26 @@ if true   # Disables using Alt+Enter to go fullscreen
   regHotKey.call(0, 1, 1, 0x0D)
 end
 
-def pbSetResizeFactor(factor=1,norecalc=false)
-  factor = [0.5,1.0,2.0,-1][factor] if !norecalc
-  (factor<0) ? pbConfigureFullScreen : pbConfigureWindowedScreen(factor)
+if mkxp?
+  # This kinda puts most of SpriteResizer out of business
+  def pbSetResizeFactor(factor)
+    if !$ResizeInitialized
+      Graphics.resize_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+      $ResizeInitialized = true
+    end
+    if factor < 0 || factor == 3
+      Graphics.fullscreen = true if !Graphics.fullscreen
+    else
+      Graphics.fullscreen = false if Graphics.fullscreen
+      Graphics.scale = factor
+      Graphics.center
+    end
+  end
+else
+  def pbSetResizeFactor(factor=1,norecalc=false)
+    factor = [0.5,1.0,2.0,-1][factor] if !norecalc
+    (factor<0) ? pbConfigureFullScreen : pbConfigureWindowedScreen(factor)
+  end
 end
 
 def pbSetResizeFactor2(factor,force=false)
@@ -172,31 +189,35 @@ module Graphics
     end
   end
 
-  class << self
-    begin
-      x = @@haveresizescreen
-    rescue NameError                         # If exception is caught, the class
-      if !method_defined?(:oldresizescreen)  # variable wasn't defined yet
-        begin
-          alias oldresizescreen resize_screen
-          @@haveresizescreen = true
-        rescue
+  if mkxp?
+    @@haveresizescreen = true
+  else
+    class << self
+      begin
+        x = @@haveresizescreen
+      rescue NameError                         # If exception is caught, the class
+        if !method_defined?(:oldresizescreen)  # variable wasn't defined yet
+          begin
+            alias oldresizescreen resize_screen
+            @@haveresizescreen = true
+          rescue
+            @@haveresizescreen = false
+          end
+        else
           @@haveresizescreen = false
         end
-      else
-        @@haveresizescreen = false
+      end
+
+      def haveresizescreen
+        @@haveresizescreen
       end
     end
 
-    def haveresizescreen
-      @@haveresizescreen
+    def self.resize_screen(w,h)
+      @@width  = w
+      @@height = h
+      pbSetResizeFactor($ResizeFactor,true)
     end
-  end
-
-  def self.resize_screen(w,h)
-    @@width  = w
-    @@height = h
-    pbSetResizeFactor($ResizeFactor,true)
   end
 
   @@deletefailed = false
