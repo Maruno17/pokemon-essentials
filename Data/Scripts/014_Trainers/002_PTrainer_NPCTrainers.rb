@@ -20,17 +20,17 @@ TPLOSETEXT  = 15
 
 module TrainersMetadata
   InfoTypes = {
-    "Items"     => [0,           "eEEEEEEE", PBItems, PBItems, PBItems, PBItems,
-                                             PBItems, PBItems, PBItems, PBItems],
-    "Pokemon"   => [TPSPECIES,   "ev", PBSpecies,nil],   # Species, level
-    "Item"      => [TPITEM,      "e", PBItems],
-    "Moves"     => [TPMOVES,     "eEEE", PBMoves, PBMoves, PBMoves, PBMoves],
+    "Items"     => [0,           "eEEEEEEE", :PBItems, :PBItems, :PBItems, :PBItems,
+                                             :PBItems, :PBItems, :PBItems, :PBItems],
+    "Pokemon"   => [TPSPECIES,   "ev", :PBSpecies,nil],   # Species, level
+    "Item"      => [TPITEM,      "e", :PBItems],
+    "Moves"     => [TPMOVES,     "eEEE", :PBMoves, :PBMoves, :PBMoves, :PBMoves],
     "Ability"   => [TPABILITY,   "u"],
     "Gender"    => [TPGENDER,    "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
                                         "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
     "Form"      => [TPFORM,      "u"],
     "Shiny"     => [TPSHINY,     "b"],
-    "Nature"    => [TPNATURE,    "e", PBNatures],
+    "Nature"    => [TPNATURE,    "e", :PBNatures],
     "IV"        => [TPIV,        "uUUUUU"],
     "Happiness" => [TPHAPPINESS, "u"],
     "Name"      => [TPNAME,      "s"],

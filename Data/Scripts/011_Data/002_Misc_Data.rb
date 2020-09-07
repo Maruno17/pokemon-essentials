@@ -81,14 +81,14 @@ module PokemonMetadata
      "WildCaptureME"    => [MetadataWildCaptureME,    "s"],
      "SurfBGM"          => [MetadataSurfBGM,          "s"],
      "BicycleBGM"       => [MetadataBicycleBGM,       "s"],
-     "PlayerA"          => [MetadataPlayerA,          "esssssss",:PBTrainers],
-     "PlayerB"          => [MetadataPlayerB,          "esssssss",:PBTrainers],
-     "PlayerC"          => [MetadataPlayerC,          "esssssss",:PBTrainers],
-     "PlayerD"          => [MetadataPlayerD,          "esssssss",:PBTrainers],
-     "PlayerE"          => [MetadataPlayerE,          "esssssss",:PBTrainers],
-     "PlayerF"          => [MetadataPlayerF,          "esssssss",:PBTrainers],
-     "PlayerG"          => [MetadataPlayerG,          "esssssss",:PBTrainers],
-     "PlayerH"          => [MetadataPlayerH,          "esssssss",:PBTrainers]
+     "PlayerA"          => [MetadataPlayerA,          "esssssss", :PBTrainers],
+     "PlayerB"          => [MetadataPlayerB,          "esssssss", :PBTrainers],
+     "PlayerC"          => [MetadataPlayerC,          "esssssss", :PBTrainers],
+     "PlayerD"          => [MetadataPlayerD,          "esssssss", :PBTrainers],
+     "PlayerE"          => [MetadataPlayerE,          "esssssss", :PBTrainers],
+     "PlayerF"          => [MetadataPlayerF,          "esssssss", :PBTrainers],
+     "PlayerG"          => [MetadataPlayerG,          "esssssss", :PBTrainers],
+     "PlayerH"          => [MetadataPlayerH,          "esssssss", :PBTrainers]
   }
   NonGlobalTypes = {
      "Outdoor"          => [MetadataOutdoor,             "b"],
@@ -96,7 +96,7 @@ module PokemonMetadata
      "Bicycle"          => [MetadataBicycle,             "b"],
      "BicycleAlways"    => [MetadataBicycleAlways,       "b"],
      "HealingSpot"      => [MetadataHealingSpot,         "uuu"],
-     "Weather"          => [MetadataWeather,             "eu",:PBFieldWeather],
+     "Weather"          => [MetadataWeather,             "eu", :PBFieldWeather],
      "MapPosition"      => [MetadataMapPosition,         "uuu"],
      "DiveMap"          => [MetadataDiveMap,             "u"],
      "DarkMap"          => [MetadataDarkMap,             "b"],
@@ -110,7 +110,7 @@ module PokemonMetadata
      "TrainerVictoryME" => [MetadataMapTrainerVictoryME, "s"],
      "WildCaptureME"    => [MetadataMapWildCaptureME,    "s"],
      "MapSize"          => [MetadataMapSize,             "us"],
-     "Environment"      => [MetadataEnvironment,         "e",:PBEnvironment]
+     "Environment"      => [MetadataEnvironment,         "e", :PBEnvironment]
   }
 end
 
@@ -156,41 +156,41 @@ MetricBattlerShadowSize = 6
 module PokemonSpeciesData
   def self.requiredValues(compilingForms=false)
     ret = {
-      "Type1"            => [SpeciesType1,         "e",:PBTypes],
+      "Type1"            => [SpeciesType1,         "e", :PBTypes],
       "BaseStats"        => [SpeciesBaseStats,     "vvvvvv"],
       "BaseEXP"          => [SpeciesBaseExp,       "v"],
       "EffortPoints"     => [SpeciesEffortPoints,  "uuuuuu"],
       "Rareness"         => [SpeciesRareness,      "u"],
       "Happiness"        => [SpeciesHappiness,     "u"],
-      "Compatibility"    => [SpeciesCompatibility, "eE",:PBEggGroups,:PBEggGroups],
+      "Compatibility"    => [SpeciesCompatibility, "eE", :PBEggGroups, :PBEggGroups],
       "StepsToHatch"     => [SpeciesStepsToHatch,  "v"],
       "Height"           => [SpeciesHeight,        "f"],
       "Weight"           => [SpeciesWeight,        "f"],
-      "Color"            => [SpeciesColor,         "e",:PBColors],
+      "Color"            => [SpeciesColor,         "e", :PBColors],
       "Shape"            => [SpeciesShape,         "u"],
-      "Moves"            => [0,                    "*ue",nil,:PBMoves],
+      "Moves"            => [0,                    "*ue", nil, :PBMoves],
       "Kind"             => [0,                    "s"],
       "Pokedex"          => [0,                    "q"]
     }
     if !compilingForms
-      ret["GenderRate"]   = [SpeciesGenderRate,    "e",:PBGenderRates]
-      ret["GrowthRate"]   = [SpeciesGrowthRate,    "e",:PBGrowthRates]
+      ret["GenderRate"]   = [SpeciesGenderRate,    "e", :PBGenderRates]
+      ret["GrowthRate"]   = [SpeciesGrowthRate,    "e", :PBGrowthRates]
       ret["Name"]         = [0,                    "s"]
       ret["InternalName"] = [0,                    "n"]
     end
     return ret
   end
 
-  def self.optionalValues(compilingForms=false)
+  def self.optionalValues(compilingForms = false)
     ret = {
-      "Type2"               => [SpeciesType2,            "e",:PBTypes],
-      "Abilities"           => [SpeciesAbilities,        "eE",:PBAbilities,:PBAbilities],
-      "HiddenAbility"       => [SpeciesHiddenAbility,    "eEEE",:PBAbilities,:PBAbilities,
-                                                              :PBAbilities,:PBAbilities],
-      "Habitat"             => [SpeciesHabitat,          "e",:PBHabitats],
-      "WildItemCommon"      => [SpeciesWildItemCommon,   "e",:PBItems],
-      "WildItemUncommon"    => [SpeciesWildItemUncommon, "e",:PBItems],
-      "WildItemRare"        => [SpeciesWildItemRare,     "e",:PBItems],
+      "Type2"               => [SpeciesType2,            "e", :PBTypes],
+      "Abilities"           => [SpeciesAbilities,        "eE", :PBAbilities, :PBAbilities],
+      "HiddenAbility"       => [SpeciesHiddenAbility,    "eEEE", :PBAbilities, :PBAbilities,
+                                                                 :PBAbilities, :PBAbilities],
+      "Habitat"             => [SpeciesHabitat,          "e", :PBHabitats],
+      "WildItemCommon"      => [SpeciesWildItemCommon,   "e", :PBItems],
+      "WildItemUncommon"    => [SpeciesWildItemUncommon, "e", :PBItems],
+      "WildItemRare"        => [SpeciesWildItemRare,     "e", :PBItems],
       "BattlerPlayerX"      => [MetricBattlerPlayerX,    "i"],
       "BattlerPlayerY"      => [MetricBattlerPlayerY,    "i"],
       "BattlerEnemyX"       => [MetricBattlerEnemyX,     "i"],
@@ -198,18 +198,18 @@ module PokemonSpeciesData
       "BattlerAltitude"     => [MetricBattlerAltitude,   "i"],
       "BattlerShadowX"      => [MetricBattlerShadowX,    "i"],
       "BattlerShadowSize"   => [MetricBattlerShadowSize, "u"],
-      "EggMoves"            => [0,                       "*e",:PBMoves],
+      "EggMoves"            => [0,                       "*e", :PBMoves],
       "FormName"            => [0,                       "q"],
-      "Evolutions"          => [0,                       "*ses",nil,:PBEvolution,nil]
+      "Evolutions"          => [0,                       "*ses", nil, :PBEvolution, nil]
     }
     if compilingForms
       ret["PokedexForm"]     = [SpeciesPokedexForm,      "u"]
-      ret["MegaStone"]       = [SpeciesMegaStone,        "e",:PBItems]
-      ret["MegaMove"]        = [SpeciesMegaMove,         "e",:PBMoves]
+      ret["MegaStone"]       = [SpeciesMegaStone,        "e", :PBItems]
+      ret["MegaMove"]        = [SpeciesMegaMove,         "e", :PBMoves]
       ret["UnmegaForm"]      = [SpeciesUnmegaForm,       "u"]
       ret["MegaMessage"]     = [SpeciesMegaMessage,      "u"]
     else
-      ret["Incense"]         = [SpeciesIncense,          "e",:PBItems]
+      ret["Incense"]         = [SpeciesIncense,          "e", :PBItems]
       ret["RegionalNumbers"] = [0,                       "*u"]
     end
     return ret
