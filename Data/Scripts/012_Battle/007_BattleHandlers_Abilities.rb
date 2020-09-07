@@ -1780,12 +1780,12 @@ BattleHandlers::TargetAbilityOnHit.add(:WANDERINGSPIRIT,
 BattleHandlers::TargetAbilityOnHit.add(:PERISHBODY,
   proc { |ability,user,target,move,battle|
     next if !move.pbContactMove?(user)
-    next if user.effects[PBEffects::PerishSong]>0
     next if !user.affectedByContactEffect?
+    next if user.effects[PBEffects::PerishSong]>0
     battle.pbShowAbilitySplash(target)
-    user.effects[PBEffects::PerishSong]     = 4
-    user.effects[PBEffects::PerishSongUser] = target.index
     battle.pbDisplay(_INTL("Both Pokémon will faint in three turns!"))
+    user.effects[PBEffects::PerishSong] = 3
+    target.effects[PBEffects::PerishSong] = 3 if target.effects[PBEffects::PerishSong] == 0
     battle.pbHideAbilitySplash(target)
   }
 )
