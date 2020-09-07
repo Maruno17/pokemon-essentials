@@ -302,6 +302,7 @@ class PokeBattle_Battler
   # Includes move-specific failure conditions, protections and type immunities.
   #=============================================================================
   def pbSuccessCheckAgainstTarget(move,user,target)
+    # Unseen Fist
     unseenfist=isConst?(user.ability,PBAbilities,:UNSEENFIST) && move.contactMove?
     typeMod = move.pbCalcTypeMod(move.calcType,user,target)
     target.damageState.typeMod = typeMod
