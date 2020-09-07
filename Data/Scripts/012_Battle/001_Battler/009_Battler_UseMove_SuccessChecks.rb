@@ -56,7 +56,7 @@ class PokeBattle_Battler
         @effects[PBEffects::ChoiceBand] = -1
       end
     end
-	# Gorilla Tactics
+    # Gorilla Tactics
     if @effects[PBEffects::GorillaTactics]>=0
       if hasActiveAbility?(:GORILLATACTICS)
         if move.id!=@effects[PBEffects::GorillaTactics]
