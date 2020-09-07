@@ -2674,6 +2674,39 @@ class PokeBattle_Move_179 < PokeBattle_TargetMultiStatUpMove
   end
 end
 
+#===============================================================================
+# Raise speed by one stage. Fails if user is not a Morpeko. Base Type is dark
+# if Morpeko's Form is Hangry Form (Aura Wheel)
+#===============================================================================
+class PokeBattle_Move_17A < PokeBattle_StatUpMove
+  def initialize(battle,move)
+    super
+    @statUp = [PBStats::SPEED,1]
+  end
+
+  def pbMoveFailed?(user,targets)
+    if NEWEST_BATTLE_MECHANICS && isConst?(@id,PBMoves,:AURAWHEEL)
+      if !isConst?(user.species,PBSpecies,:MORPEKO) &&
+         !isConst?(user.effects[PBEffects::TransformSpecies],PBSpecies,:MORPEKO)
+        @battle.pbDisplay(_INTL("But {1} can't use the move!",user.pbThis))
+        return true
+      end
+    end
+    return false
+  end
+  
+  def pbBaseType(user)
+    ret = getID(PBTypes,:NORMAL)
+    case user.form
+    when 0
+      ret = getConst(PBTypes,:ELECTRIC) || ret
+    when 1
+      ret = getConst(PBTypes,:DARK) || ret
+    end
+    return ret
+  end  
+end
+
 
 
 # NOTE: If you're inventing new move effects, use function code 176 and onwards.
