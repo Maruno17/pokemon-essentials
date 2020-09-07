@@ -62,11 +62,13 @@ module PokeBattle_BattleCommon
     @caughtPokemon.clear
   end
 
+  # Ball Fetch	
   def pbBallFetch(ball)
     if $BallRetrieved == 0
       $BallRetrieved=ball if ball != 268
     end
   end
+	
   #=============================================================================
   # Throw a Poké Ball
   #=============================================================================
