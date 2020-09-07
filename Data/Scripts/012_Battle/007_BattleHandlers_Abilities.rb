@@ -1153,7 +1153,7 @@ BattleHandlers::DamageCalcUserAbility.add(:PUNKROCK,
 
 BattleHandlers::DamageCalcUserAbility.add(:STEELYSPIRIT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-      mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)	  
+      mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)
   }
 )
 
@@ -1799,6 +1799,29 @@ BattleHandlers::TargetAbilityOnHit.add(:COTTONDOWN,
       b.pbLowerStatStage(PBStats::SPEED,1,target)
     }
     battle.pbHideAbilitySplash(target)
+  }
+)
+
+BattleHandlers::TargetAbilityOnHit.add(:GULPMISSILE,
+  proc { |ability,user,target,move,battle|
+    next if target.form==0
+    if isConst?(target.species,PBSpecies,:CRAMORANT)
+      battle.pbShowAbilitySplash(target)
+      gulpform=target.form
+      target.form = 0
+      battle.scene.pbChangePokemon(target,target.pokemon)
+      if user.takesIndirectDamage?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
+        battle.scene.pbDamageAnimation(user)
+        user.pbReduceHP(user.totalhp/4,false)
+        if gulpform==1
+          user.pbLowerStatStageByAbility(PBStats::DEFENSE,1,target,false)
+        elsif gulpform==2
+          msg = nil
+          user.pbParalyze(target,msg)
+        end
+      end
+      battle.pbHideAbilitySplash(target)
+    end
   }
 )
 #===============================================================================

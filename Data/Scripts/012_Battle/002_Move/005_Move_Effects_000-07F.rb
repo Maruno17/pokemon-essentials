@@ -2747,6 +2747,15 @@ class PokeBattle_Move_075 < PokeBattle_Move
     damageMult *= 2 if target.inTwoTurnAttack?("0CB")   # Dive
     return damageMult
   end
+
+  def pbEffectAfterAllHits(user,target)
+    if isConst?(user.species,PBSpecies,:CRAMORANT) &&
+      user.hasActiveAbility?(:GULPMISSILE) && user.form==0
+      user.form=2
+      user.form=1 if user.hp>(user.totalhp/2)
+      @battle.scene.pbChangePokemon(user,user.pokemon)
+    end
+  end
 end
 
 
