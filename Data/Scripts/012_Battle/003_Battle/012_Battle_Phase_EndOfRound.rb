@@ -125,8 +125,6 @@ class PokeBattle_Battle
         pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
       end
       @field.terrain = PBBattleTerrains::None
-      # Check for form changes caused by the terrain changing
-      eachBattler { |b| b.pbCheckFormOnTerrainChange }
       # Start up the default terrain
       pbStartTerrain(nil,@field.defaultTerrain,false) if @field.defaultTerrain!=PBBattleTerrains::None
       return if @field.terrain==PBBattleTerrains::None
