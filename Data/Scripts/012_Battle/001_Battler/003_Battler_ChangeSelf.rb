@@ -253,7 +253,7 @@ class PokeBattle_Battler
     @effects[PBEffects::Roost]  = false
   end
   
-    # Galarian Stunfisk - Mimicry
+   # Galarian Stunfisk - Mimicry
    def pbCheckFormOnTerrainChange
     return if fainted? || @effects[PBEffects::Transform]
     if hasActiveAbility?(:MIMICRY)
@@ -264,7 +264,6 @@ class PokeBattle_Battler
       when PBBattleTerrains::Grassy;     newTypes = [getID(PBTypes,:GRASS)]
       when PBBattleTerrains::Misty;      newTypes = [getID(PBTypes,:FAIRY)]
       when PBBattleTerrains::Psychic;    newTypes = [getID(PBTypes,:PSYCHIC)]
-      when PBBattleTerrains::Blazing;    newTypes = [getID(PBTypes,:FIRE)]
       else;                              newTypes = originalTypes.dup
       end
       if self.pbTypes!=newTypes
