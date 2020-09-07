@@ -1153,7 +1153,7 @@ BattleHandlers::DamageCalcUserAbility.add(:PUNKROCK,
 
 BattleHandlers::DamageCalcUserAbility.add(:STEELYSPIRIT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-      mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if baseDmg == 8
+      mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)	  
   }
 )
 
