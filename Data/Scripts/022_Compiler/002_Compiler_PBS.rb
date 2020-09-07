@@ -1394,26 +1394,7 @@ end
 # Compile individual trainers
 #===============================================================================
 def pbCompileTrainers
-  nonglobaltypes = {
-    "Items"     => [0,           "eEEEEEEE",PBItems,PBItems,PBItems,PBItems,
-                                            PBItems,PBItems,PBItems,PBItems],
-    "Pokemon"   => [TPSPECIES,   "ev",PBSpecies],   # Species, level
-    "Item"      => [TPITEM,      "e",PBItems],
-    "Moves"     => [TPMOVES,     "eEEE",PBMoves,PBMoves,PBMoves,PBMoves],
-    "Ability"   => [TPABILITY,   "u"],
-    "Gender"    => [TPGENDER,    "e",{"M"=>0,"m"=>0,"Male"=>0,"male"=>0,"0"=>0,
-                                      "F"=>1,"f"=>1,"Female"=>1,"female"=>1,"1"=>1}],
-    "Form"      => [TPFORM,      "u"],
-    "Shiny"     => [TPSHINY,     "b"],
-    "Nature"    => [TPNATURE,    "e",PBNatures],
-    "IV"        => [TPIV,        "uUUUUU"],
-    "Happiness" => [TPHAPPINESS, "u"],
-    "Name"      => [TPNAME,      "s"],
-    "Shadow"    => [TPSHADOW,    "b"],
-    "Ball"      => [TPBALL,      "u"],
-    "EV"        => [TPEV,        "uUUUUU"],
-    "LoseText"  => [TPLOSETEXT,  "s"]
-  }
+  trainer_info_types = TrainersMetadata::InfoTypes
   mLevel = PBExperience.maxLevel
   trainerindex    = -1
   trainers        = []
@@ -1448,7 +1429,7 @@ def pbCompileTrainers
         raise _INTL("Previous trainer not defined with as many Pokémon as expected\r\n{1}",FileLineData.linereport)
       end
       settingname = $~[1]
-      schema = nonglobaltypes[settingname]
+      schema = trainer_info_types[settingname]
       next if !schema
       record = pbGetCsvRecord($~[2],lineno,schema)
       # Error checking in XXX=YYY lines

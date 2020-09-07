@@ -23,16 +23,12 @@ class PhoneDatabase
   end
 end
 
-
-
 module PhoneMsgType
   Generic       = 0
   Greeting      = 1
   Body          = 2
   BattleRequest = 3
 end
-
-
 
 #===============================================================================
 # Global and map metadata
@@ -74,8 +70,6 @@ MetadataMapTrainerVictoryME = 17
 MetadataMapWildCaptureME    = 18
 MetadataMapSize             = 19
 MetadataEnvironment         = 20
-
-
 
 module PokemonMetadata
   GlobalTypes = {
@@ -120,8 +114,6 @@ module PokemonMetadata
   }
 end
 
-
-
 #===============================================================================
 # Pokémon data
 #===============================================================================
@@ -160,8 +152,6 @@ MetricBattlerEnemyY     = 3
 MetricBattlerAltitude   = 4
 MetricBattlerShadowX    = 5
 MetricBattlerShadowSize = 6
-
-
 
 module PokemonSpeciesData
   def self.requiredValues(compilingForms=false)
@@ -223,250 +213,5 @@ module PokemonSpeciesData
       ret["RegionalNumbers"] = [0,                       "*u"]
     end
     return ret
-  end
-end
-
-
-
-#===============================================================================
-# Manipulation methods for metadata, phone data and Pokémon species data
-#===============================================================================
-class PokemonTemp
-  attr_accessor :metadata
-  attr_accessor :townMapData
-  attr_accessor :encountersData
-  attr_accessor :phoneData
-  attr_accessor :regionalDexes
-  attr_accessor :speciesData
-  attr_accessor :speciesEggMoves
-  attr_accessor :speciesMetrics
-  attr_accessor :speciesMovesets
-  attr_accessor :speciesTMData
-  attr_accessor :speciesShadowMovesets
-  attr_accessor :pokemonFormToSpecies
-  attr_accessor :trainerTypesData
-  attr_accessor :trainersData
-  attr_accessor :moveToAnim
-  attr_accessor :battleAnims
-end
-
-
-
-def pbLoadMetadata
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.metadata
-    $PokemonTemp.metadata = load_data("Data/metadata.dat") || []
-  end
-  return $PokemonTemp.metadata
-end
-
-def pbGetMetadata(mapid,metadataType)
-  meta = pbLoadMetadata
-  return meta[mapid][metadataType] if meta[mapid]
-  return nil
-end
-
-def pbLoadTownMapData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.townMapData
-    $PokemonTemp.townMapData = load_data("Data/town_map.dat")
-  end
-  return $PokemonTemp.townMapData
-end
-
-def pbLoadEncountersData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.encountersData
-    if pbRgssExists?("Data/encounters.dat")
-      $PokemonTemp.encountersData = load_data("Data/encounters.dat")
-    end
-  end
-  return $PokemonTemp.encountersData
-end
-
-def pbLoadPhoneData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.phoneData
-    if pbRgssExists?("Data/phone.dat")
-      $PokemonTemp.phoneData = load_data("Data/phone.dat")
-    end
-  end
-  return $PokemonTemp.phoneData
-end
-
-def pbLoadRegionalDexes
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.regionalDexes
-    $PokemonTemp.regionalDexes = load_data("Data/regional_dexes.dat")
-  end
-  return $PokemonTemp.regionalDexes
-end
-
-def pbLoadSpeciesData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.speciesData
-    $PokemonTemp.speciesData = load_data("Data/species.dat") || []
-  end
-  return $PokemonTemp.speciesData
-end
-
-def pbGetSpeciesData(species,form=0,speciesDataType=-1)
-  species = getID(PBSpecies,species)
-  s = pbGetFSpeciesFromForm(species,form)
-  speciesData = pbLoadSpeciesData
-  if speciesDataType<0
-    return speciesData[s] || []
-  end
-  return speciesData[s][speciesDataType] if speciesData[s] && speciesData[s][speciesDataType]
-  case speciesDataType
-  when SpeciesType2;                                      return nil
-  when SpeciesBaseStats;                                  return [1,1,1,1,1,1]
-  when SpeciesEffortPoints;                               return [0,0,0,0,0,0]
-  when SpeciesStepsToHatch, SpeciesHeight, SpeciesWeight; return 1
-  end
-  return 0
-end
-
-def pbLoadEggMovesData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.speciesEggMoves
-    $PokemonTemp.speciesEggMoves = load_data("Data/species_eggmoves.dat") || []
-  end
-  return $PokemonTemp.speciesEggMoves
-end
-
-def pbGetSpeciesEggMoves(species,form=0)
-  species = getID(PBSpecies,species)
-  s = pbGetFSpeciesFromForm(species,form)
-  eggMovesData = pbLoadEggMovesData
-  return eggMovesData[s] if eggMovesData[s]
-  return []
-end
-
-def pbLoadSpeciesMetrics
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.speciesMetrics
-    $PokemonTemp.speciesMetrics = load_data("Data/species_metrics.dat") || []
-  end
-  return $PokemonTemp.speciesMetrics
-end
-
-def pbLoadMovesetsData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.speciesMovesets
-    $PokemonTemp.speciesMovesets = load_data("Data/species_movesets.dat") || []
-  end
-  return $PokemonTemp.speciesMovesets
-end
-
-def pbGetSpeciesMoveset(species,form=0)
-  species = getID(PBSpecies,species)
-  s = pbGetFSpeciesFromForm(species,form)
-  movesetsData = pbLoadMovesetsData
-  return movesetsData[s] if movesetsData[s]
-  return []
-end
-
-def pbLoadSpeciesTMData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.speciesTMData
-    $PokemonTemp.speciesTMData = load_data("Data/tm.dat") || []
-  end
-  return $PokemonTemp.speciesTMData
-end
-
-def pbLoadShadowMovesets
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.speciesShadowMovesets
-    $PokemonTemp.speciesShadowMovesets = load_data("Data/shadow_movesets.dat") || []
-  end
-  return $PokemonTemp.speciesShadowMovesets
-end
-
-def pbLoadFormToSpecies
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.pokemonFormToSpecies
-    $PokemonTemp.pokemonFormToSpecies = load_data("Data/form2species.dat")
-  end
-  return $PokemonTemp.pokemonFormToSpecies
-end
-
-def pbLoadTrainerTypesData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.trainerTypesData
-    $PokemonTemp.trainerTypesData = load_data("Data/trainer_types.dat") || []
-  end
-  return $PokemonTemp.trainerTypesData
-end
-
-def pbGetTrainerTypeData(type)
-  data = pbLoadTrainerTypesData
-  return data[type] if data
-  return nil
-end
-
-def pbLoadTrainersData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.trainersData
-    $PokemonTemp.trainersData = load_data("Data/trainers.dat") || []
-  end
-  return $PokemonTemp.trainersData
-end
-
-def pbGetTrainerData(trainerID,trainerName,partyID=0)
-  trainersData = pbLoadTrainersData
-  ret = nil
-  for t in trainersData
-    next if t[0]!=trainerID || t[1]!=trainerName || t[4]!=partyID
-    ret = t
-    break
-  end
-  return ret
-end
-
-def pbLoadMoveToAnim
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.moveToAnim
-    $PokemonTemp.moveToAnim = load_data("Data/move2anim.dat") || []
-  end
-  return $PokemonTemp.moveToAnim
-end
-
-def pbLoadBattleAnimations
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.battleAnims
-    if pbRgssExists?("Data/PkmnAnimations.rxdata")
-      $PokemonTemp.battleAnims = load_data("Data/PkmnAnimations.rxdata")
-    end
-  end
-  return $PokemonTemp.battleAnims
-end
-
-def pbClearData
-  if $PokemonTemp
-    $PokemonTemp.metadata              = nil
-    $PokemonTemp.townMapData           = nil
-    $PokemonTemp.encountersData        = nil
-    $PokemonTemp.phoneData             = nil
-    $PokemonTemp.regionalDexes         = nil
-    $PokemonTemp.speciesData           = nil
-    $PokemonTemp.speciesEggMoves       = nil
-    $PokemonTemp.speciesMetrics        = nil
-    $PokemonTemp.speciesMovesets       = nil
-    $PokemonTemp.speciesTMData         = nil
-    $PokemonTemp.speciesShadowMovesets = nil
-    $PokemonTemp.pokemonFormToSpecies  = nil
-    $PokemonTemp.trainerTypesData      = nil
-    $PokemonTemp.trainersData          = nil
-    $PokemonTemp.moveToAnim            = nil
-    $PokemonTemp.battleAnims           = nil
-  end
-  MapFactoryHelper.clear
-  $PokemonEncounters.setup($game_map.map_id) if $game_map && $PokemonEncounters
-  if pbRgssExists?("Data/Tilesets.rxdata")
-    $data_tilesets = load_data("Data/Tilesets.rxdata")
-  end
-  if pbRgssExists?("Data/Tilesets.rvdata")
-    $data_tilesets = load_data("Data/Tilesets.rvdata")
   end
 end
