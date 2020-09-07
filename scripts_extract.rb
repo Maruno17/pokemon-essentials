@@ -110,7 +110,7 @@ module Scripts
     files.sort!
     files.each do |f|
       section_name = filename_to_title(f)
-      content = File.open(path + "/" + f, "rb") { |f2| f2.read }.gsub(/\n/, "\r\n")
+      content = File.open(path + "/" + f, "rb") { |f2| f2.read }#.gsub(/\n/, "\r\n")
       scripts << [rand(999_999), section_name, Zlib::Deflate.deflate(content)]
     end
     # Check each subfolder for scripts to aggregate
