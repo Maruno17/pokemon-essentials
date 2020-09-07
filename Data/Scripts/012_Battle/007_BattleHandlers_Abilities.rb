@@ -1718,7 +1718,7 @@ BattleHandlers::TargetAbilityOnHit.add(:WEAKARMOR,
 BattleHandlers::TargetAbilityOnHit.add(:STEAMENGINE,
   proc { |ability,user,target,move,battle|
     next if !isConst?(move.calcType,PBTypes,:FIRE) &&
-	          !isConst?(move.calcType,PBTypes,:WATER)
+	    !isConst?(move.calcType,PBTypes,:WATER)
     target.pbRaiseStatStageByAbility(PBStats::SPEED,6,target)
   }
 )
@@ -1728,24 +1728,17 @@ BattleHandlers::TargetAbilityOnHit.add(:WANDERINGSPIRIT,
     next if !move.pbContactMove?(user)
     next if user.fainted?
     abilityBlacklist = [
-       # This ability
-       :WANDERINGSPIRIT,
-       # Form-changing abilities
-       :BATTLEBOND,
        :DISGUISE,
-#       :FLOWERGIFT,                                      # This can be replaced
-#       :FORECAST,                                        # This can be replaced
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
+       :FLOWERGIFT,
+       :GULPMISSILE,
        :ICEFACE,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
+       :IMPOSTER,
+       :RECEIVER,
        :RKSSYSTEM,
-       :GULPMISSILE
+       :SCHOOLING,
+       :STANCECHANGE,
+       :WONDERGUARD,
+       :ZENMODE
     ]
     failed = false
     abilityBlacklist.each do |abil|
