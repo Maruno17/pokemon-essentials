@@ -628,9 +628,9 @@ class PokeBattle_Pokemon
   # Other
   #=============================================================================
   def species=(value)
-    resetName = nicknamed?
+    hasNickname = nicknamed?
     @species    = value
-    @name       = PBSpecies.getName(@species) if !resetName
+    @name       = PBSpecies.getName(@species) unless hasNickname
     @level      = nil   # In case growth rate is different for the new species
     @forcedForm = nil
     self.form   = 0   # Also recalculates stats
@@ -647,7 +647,7 @@ class PokeBattle_Pokemon
   end
 
   def nicknamed?
-    return @name==self.speciesName
+    return @name!=self.speciesName
   end
 
   # Returns this Pokémon's language.
