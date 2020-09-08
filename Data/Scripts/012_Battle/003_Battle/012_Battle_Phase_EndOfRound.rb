@@ -675,6 +675,19 @@ class PokeBattle_Battle
     @field.effects[PBEffects::FairyLock]   -= 1 if @field.effects[PBEffects::FairyLock]>0
     @field.effects[PBEffects::FusionBolt]  = false
     @field.effects[PBEffects::FusionFlare] = false
+    hasabil=false
+    neutralactive=field.effects[PBEffects::NeutralizingGas]
+    eachBattler {|b|
+      next if !b || b.fainted?
+      # neutralizing gas can be blocked with gastro acid, ending the effect.
+      if isConst?(b.ability,PBAbilities,:NEUTRALIZINGGAS) && !b.effects[PBEffects::GastroAcid]
+        hasabil=true; break
+      end
+    }
+    if !hasabil && neutralactive
+      @field.effects[PBEffects::NeutralizingGas] = false
+      priority.each { |b| b.pbEffectsOnSwitchIn }
+    end
     @endOfRound = false
   end
 end

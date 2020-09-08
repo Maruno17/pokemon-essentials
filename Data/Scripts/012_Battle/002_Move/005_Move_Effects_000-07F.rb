@@ -2161,7 +2161,9 @@ class PokeBattle_Move_065 < PokeBattle_Move
        :RKSSYSTEM,
        :GULPMISSILE,
        # Abilities that would be overpowered if allowed to be transferred
-       :WONDERGUARD
+       :WONDERGUARD,
+       # Abilities that are plain old blocked.
+       :NEUTRALIZINGGAS
     ]
   end
 
@@ -2250,7 +2252,9 @@ class PokeBattle_Move_066 < PokeBattle_Move
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
        :RKSSYSTEM,
-       :GULPMISSILE
+       :GULPMISSILE,
+       # Abilities that are plain old blocked.
+       :NEUTRALIZINGGAS
     ]
   end
 
@@ -2314,7 +2318,9 @@ class PokeBattle_Move_067 < PokeBattle_Move
        # Abilities intended to be inherent properties of a certain species
        :COMATOSE,
        :RKSSYSTEM,
-       :GULPMISSILE
+       :GULPMISSILE,
+       # Abilities that are plain old blocked.
+       :NEUTRALIZINGGAS
     ]
     @abilityBlacklistUngainable = [
        # Form-changing abilities
@@ -2337,7 +2343,9 @@ class PokeBattle_Move_067 < PokeBattle_Move
        :RKSSYSTEM,
        :GULPMISSILE,
        # Abilities that would be overpowered if allowed to be transferred
-       :WONDERGUARD
+       :WONDERGUARD,
+       # Abilities that are plain old blocked.
+       :NEUTRALIZINGGAS
     ]
   end
 

@@ -1738,7 +1738,9 @@ BattleHandlers::TargetAbilityOnHit.add(:WANDERINGSPIRIT,
        :SCHOOLING,
        :STANCECHANGE,
        :WONDERGUARD,
-       :ZENMODE
+       :ZENMODE,
+       # Abilities that are plain old blocked.
+       :NEUTRALIZINGGAS
     ]
     failed = false
     abilityBlacklist.each do |abil|
@@ -2670,6 +2672,16 @@ BattleHandlers::AbilityOnSwitchIn.add(:PASTELVEIL,
     end
   }
 )
+
+BattleHandlers::AbilityOnSwitchIn.add(:NEUTRALIZINGGAS,
+  proc { |ability,battler,battle|
+    next if battle.field.effects[PBEffects::NeutralizingGas]
+    battle.pbShowAbilitySplash(battler)
+    battle.pbDisplay(_INTL("{1}'s gas nullified all abilities!",pbThis))
+    battle.field.effects[PBEffects::NeutralizingGas] = true
+    battle.pbHideAbilitySplash(battler)
+  }
+)
 #===============================================================================
 # AbilityOnSwitchOut handlers
 #===============================================================================
@@ -2721,7 +2733,9 @@ BattleHandlers::AbilityChangeOnBattlerFainting.add(:POWEROFALCHEMY,
        :RKSSYSTEM,
        :GULPMISSILE,
        # Abilities that would be overpowered if allowed to be transferred
-       :WONDERGUARD
+       :WONDERGUARD,
+       # Abilities that are plain old blocked.
+       :NEUTRALIZINGGAS
     ]
     failed = false
     abilityBlacklist.each do |abil|

@@ -1428,7 +1428,8 @@ class PokeBattle_AI
            isConst?(target.ability,PBAbilities,:WONDERGUARD) ||
            isConst?(target.ability,PBAbilities,:ZENMODE) ||
            isConst?(target.ability,PBAbilities,:ICEFACE) ||
-           isConst?(target.ability,PBAbilities,:GULPMISSILE) 
+           isConst?(target.ability,PBAbilities,:GULPMISSILE) ||
+           isConst?(target.ability,PBAbilities,:NEUTRALIZINGGAS)
           score -= 90
         end
       end
@@ -1459,8 +1460,9 @@ class PokeBattle_AI
            isConst?(user.ability,PBAbilities,:RKSSYSTEM) ||
            isConst?(user.ability,PBAbilities,:TRACE) ||
            isConst?(user.ability,PBAbilities,:ZENMODE) ||
-           isConst?(target.ability,PBAbilities,:ICEFACE) ||
-           isConst?(target.ability,PBAbilities,:GULPMISSILE) 
+           isConst?(user.ability,PBAbilities,:ICEFACE) ||
+           isConst?(user.ability,PBAbilities,:GULPMISSILE) ||
+           isConst?(user.ability,PBAbilities,:NEUTRALIZINGGAS)
           score -= 90
         end
         if skill>=PBTrainerAI.highSkill
@@ -1488,7 +1490,8 @@ class PokeBattle_AI
            isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
            isConst?(target.ability,PBAbilities,:WONDERGUARD) ||
            isConst?(target.ability,PBAbilities,:ICEFACE) ||
-           isConst?(target.ability,PBAbilities,:GULPMISSILE) 
+           isConst?(target.ability,PBAbilities,:GULPMISSILE) ||
+           isConst?(target.ability,PBAbilities,:NEUTRALIZINGGAS)
           score -= 90
         end
       end
