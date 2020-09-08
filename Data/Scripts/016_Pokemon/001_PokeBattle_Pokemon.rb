@@ -21,19 +21,35 @@ class PokeBattle_Pokemon
   attr_reader   :spatk
   # @return [Integer] current Special Defense stat
   attr_reader   :spdef
-  # @return [Integer] status problem (from PBStatus)
+  # @return [Integer] current status (from PBStatuses)
   attr_accessor :status
+  # Is 0, except if the Pokémon is:
+  #
+  # - Asleep: Is the number of rounds the Pokémon will remain asleep.
+  # This number is set when the Pokémon is made to fall asleep.
+  #
+  # - Badly poisoned: If the Pokémon is Poisoned and this is "1", the
+  # Pokémon is badly poisoned instead (which affects how much poison
+  # damage it takes in battle). When the Pokémon leaves battle while
+  # badly poisoned, this value is set to 0 and it becomes regular Poisoned
+  # (even in later battles).
   # @return [Integer] sleep count / toxic flag
   attr_accessor :statusCount
-  # @return [0, 1, 2] forces the first / second / hidden ability
+  # If defined, forces the Pokémon's ability to be the first natural (0),
+  #   second natural (1) or hidden (2) ability available to its species.
+  #   It is not possible to give the Pokémon any ability other than those
+  #   defined in the PBS file "pokemon.txt" for its species
+  #   (or "pokemonforms.txt" for its species and form). 
+  # @return [0, 1, 2, nil] forced ability index (nil if none is set)
   attr_accessor :abilityflag
-  # @return [0, 1] forces male (0) or female (1)
+  # @return [0, 1, nil] if defined, forces male (0) or female (1)
   attr_accessor :genderflag
   # @return [Integer] forces a particular nature (nature ID)
   attr_accessor :natureflag
   # @return [Integer] overrides nature's stat-changing effects
   attr_accessor :natureOverride
-  # @return [Boolean] whether shininess should be forced
+  # If defined, forces the Pokémon to be shiny (true) or not (false).
+  # @return [Boolean, nil] whether shininess should be forced (nil if undefined)
   attr_accessor :shinyflag
   # @return [Array<PBMove>] moves known by this Pokémon
   attr_accessor :moves
@@ -41,10 +57,13 @@ class PokeBattle_Pokemon
   attr_accessor :firstmoves
   # @return [Integer] id of the item held by this Pokémon (0 = no held item)
   attr_accessor :item
+  # Another Pokémon which has been fused with this Pokémon (or ´nil´ if there is none).
+  #   Currently only used by Kyurem, to record a fused Reshiram or Zekrom.  
   # @return [PokeBattle_Pokemon, nil] the Pokémon fused into this one (nil if there is none)
   attr_accessor :fused
   # @return [Array<Integer>] array of IV values for HP, Atk, Def, Speed, Sp. Atk and Sp. Def
   attr_accessor :iv
+  # @return [Array<Boolean>] 
   attr_writer   :ivMaxed     # Array of booleans that max each IV value
   attr_accessor :ev          # Effort Values
   attr_accessor :happiness   # Current happiness
@@ -420,18 +439,19 @@ class PokeBattle_Pokemon
   # Types
   #=============================================================================
 
-  # Returns this Pokémon's first type.
+  # @return [Integer] this Pokémon's first type
   def type1
     return pbGetSpeciesData(@species,formSimple,SpeciesType1)
   end
 
-  # Returns this Pokémon's second type.
+  # @return [Integer] this Pokémon's second type, or the first type if none is defined
   def type2
     ret = pbGetSpeciesData(@species,formSimple,SpeciesType2)
     ret = pbGetSpeciesData(@species,formSimple,SpeciesType1) if !ret
     return ret
   end
 
+  # @return [Array<Integer>] an array of this Pokémon's types
   def types
     ret1 = pbGetSpeciesData(@species,formSimple,SpeciesType1)
     ret2 = pbGetSpeciesData(@species,formSimple,SpeciesType2)
@@ -440,35 +460,39 @@ class PokeBattle_Pokemon
     return ret
   end
 
-  # Returns whether this Pokémon has the specified type.
+  # @param type [Integer, Symbol, String] type to check (from PBTypes)
+  # @return [Boolean] whether this Pokémon has the specified type
   def hasType?(type)
     t = self.types
     if !type.is_a?(Integer)
       return t.any? { |tp| isConst?(tp,PBTypes,type) }
     end
-    return t.any? { |tp| tp==type }
+    return t.any? { |tp| tp == type }
   end
 
   #=============================================================================
   # Moves
   #=============================================================================
-  # Returns the number of moves known by the Pokémon.
+
+  # @return [Integer] the number of moves known by the Pokémon
   def numMoves
     ret = 0
-    @moves.each { |m| ret += 1 if m && m.id!=0 }
+    @moves.each { |m| ret += 1 if m && m.id != 0 }
     return ret
   end
 
-  # Returns true if the Pokémon knows the given move.
+  # @param move [Integer, Symbol, String] id of the move to check
+  # @return [Boolean] whether the Pokémon knows the given move
   def hasMove?(move)
     move = getID(PBMoves,move)
-    return false if !move || move<=0
-    @moves.each { |m| return true if m && m.id==move }
+    return false if !move || move <= 0
+    @moves.each { |m| return true if m && m.id == move }
     return false
   end
   alias knowsMove? hasMove?
 
   # Returns the list of moves this Pokémon can learn by levelling up.
+  # @return [Array<Array<Integer>>] move list, where every element is [level, move id]
   def getMoveList
     return pbGetSpeciesMoveset(@species,formSimple)
   end
@@ -478,38 +502,39 @@ class PokeBattle_Pokemon
     lvl = self.level
     fullMoveList = self.getMoveList
     moveList = []
-    fullMoveList.each { |m| moveList.push(m[1]) if m[0]<=lvl }
+    fullMoveList.each { |m| moveList.push(m[1]) if m[0] <= lvl }
     moveList = moveList.reverse
     moveList |= []   # Remove duplicates
     moveList = moveList.reverse
-    listend = moveList.length-4
-    listend = 0 if listend<0
+    listend = moveList.length - 4
+    listend = 0 if listend < 0
     j = 0
     for i in listend...listend+4
-      moveid = (i>=moveList.length) ? 0 : moveList[i]
+      moveid = (i >= moveList.length) ? 0 : moveList[i]
       @moves[j] = PBMove.new(moveid)
       j += 1
     end
   end
 
   # Silently learns the given move. Will erase the first known move if it has to.
+  # @param move [Integer, Symbol, String] id of the move to learn
   def pbLearnMove(move)
     move = getID(PBMoves,move)
-    return if move<=0
+    return if move <= 0
     for i in 0...4   # Already knows move, relocate it to the end of the list
-      next if @moves[i].id!=move
-      j = i+1
-      while j<4
-        break if @moves[j].id==0
+      next if @moves[i].id != move
+      j = i + 1
+      while j < 4
+        break if @moves[j].id == 0
         tmp = @moves[j]
-        @moves[j] = @moves[j-1]
-        @moves[j-1] = tmp
+        @moves[j] = @moves[j - 1]
+        @moves[j - 1] = tmp
         j += 1
       end
       return
     end
     for i in 0...4   # Has empty move slot, put move in there
-      next if @moves[i].id!=0
+      next if @moves[i].id != 0
       @moves[i] = PBMove.new(move)
       return
     end
@@ -521,11 +546,12 @@ class PokeBattle_Pokemon
   end
 
   # Deletes the given move from the Pokémon.
+  # @param move [Integer, Symbol, String] id of the move to delete
   def pbDeleteMove(move)
     move = getID(PBMoves,move)
     return if !move || move<=0
     newMoves = []
-    @moves.each { |m| newMoves.push(m) if m && m.id!=move }
+    @moves.each { |m| newMoves.push(m) if m && m.id != move }
     newMoves.push(PBMove.new(0))
     for i in 0...4
       @moves[i] = newMoves[i]
@@ -533,9 +559,10 @@ class PokeBattle_Pokemon
   end
 
   # Deletes the move at the given index from the Pokémon.
+  # @param index [Integer] index of the move to be deleted
   def pbDeleteMoveAtIndex(index)
     newMoves = []
-    @moves.each_with_index { |m,i| newMoves.push(m) if m && i!=index }
+    @moves.each_with_index { |m,i| newMoves.push(m) if m && i != index }
     newMoves.push(PBMove.new(0))
     for i in 0...4
       @moves[i] = newMoves[i]
@@ -552,23 +579,28 @@ class PokeBattle_Pokemon
   # Copies currently known moves into a separate array, for Move Relearner.
   def pbRecordFirstMoves
     @firstmoves = []
-    @moves.each { |m| @firstmoves.push(m.id) if m && m.id>0 }
+    @moves.each { |m| @firstmoves.push(m.id) if m && m.id > 0 }
   end
 
+  # TODO Figure out better documentation for these first move methods
+  # @param move [Integer, Symbol, String] id of the move to add
   def pbAddFirstMove(move)
     move = getID(PBMoves,move)
-    @firstmoves.push(move) if move>0 && !@firstmoves.include?(move)
+    @firstmoves.push(move) if move > 0 && !@firstmoves.include?(move)
   end
 
+  # @param move [Integer, Symbol, String] id of the move to remove
   def pbRemoveFirstMove(move)
     move = getID(PBMoves,move)
-    @firstmoves.delete(move) if move>0
+    @firstmoves.delete(move) if move > 0
   end
 
   def pbClearFirstMoves
     @firstmoves = []
   end
 
+  # @param move [Integer, Symbol, String] id of the move to check
+  # @return [Boolean] whether the Pokémon is compatible with the move
   def compatibleWithMove?(move)
     return pbSpeciesCompatible?(self.fSpecies,move)
   end
