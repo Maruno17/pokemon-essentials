@@ -274,7 +274,7 @@ class PokeBattle_Pokemon
 
   # Returns whether this Pokémon has a particular ability. If no value
   # is given, returns whether this Pokémon has an ability set.
-  # @param ability [Integer] ability ID to check  
+  # @param ability [Integer] ability ID to check
   # @return [Boolean] whether this Pokémon has a particular ability or
   #   an ability at all
   def hasAbility?(ability = 0)
@@ -332,7 +332,7 @@ class PokeBattle_Pokemon
 
   # Returns whether this Pokémon has a particular nature. If no value
   # is given, returns whether this Pokémon has a nature set.
-  # @param nature [Integer] nature ID to check  
+  # @param nature [Integer] nature ID to check
   # @return [Boolean] whether this Pokémon has a particular nature or
   #   a nature at all
   def hasNature?(nature = -1)
@@ -396,7 +396,7 @@ class PokeBattle_Pokemon
   def givePokerus(strain = 0)
     return if self.pokerusStage == 2   # Can't re-infect a cured Pokémon
     strain = 1 + rand(15) if strain <= 0 || strain >= 16
-    time = 1 + (strain %4 )
+    time = 1 + (strain % 4)
     @pokerus = time
     @pokerus |= strain << 4
   end
