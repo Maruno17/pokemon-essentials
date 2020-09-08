@@ -66,9 +66,22 @@ class PokeBattle_Battle
     # Other certain switching effects
     return true if NEWEST_BATTLE_MECHANICS && battler.pbHasType?(:GHOST)
     # Other certain trapping effects
+    if battler.effects[PBEffects::OctolockUser]>=0
+      partyScene.pbDisplay(_INTL("{1} can't be switched out!",battler.pbThis)) if partyScene
+      return false
+    end
+    if battler.effects[PBEffects::JawLock]
+      @battlers.each do |b|
+        if (battler.effects[PBEffects::JawLockUser] == b.index) && !b.fainted?
+          partyScene.pbDisplay(_INTL("{1} can't be switched out!",battler.pbThis)) if partyScene
+          return false
+        end
+      end
+    end   
     if battler.effects[PBEffects::Trapping]>0 ||
        battler.effects[PBEffects::MeanLook]>=0 ||
        battler.effects[PBEffects::Ingrain] ||
+       battler.effects[PBEffects::NoRetreat] ||
        @field.effects[PBEffects::FairyLock]>0
       partyScene.pbDisplay(_INTL("{1} can't be switched out!",battler.pbThis)) if partyScene
       return false

@@ -374,7 +374,7 @@ class FightMenuDisplay < BattleMenuBase
         end
         @visibility["button_#{i}"] = true
         button.src_rect.x = (i==@index) ? @buttonBitmap.width/2 : 0
-        button.src_rect.y = moves[i].type*BUTTON_HEIGHT
+        button.src_rect.y = moves[i].pbCalcType(@battler)*BUTTON_HEIGHT
         button.z          = self.z + ((i==@index) ? 4 : 3)
       end
     end
@@ -400,7 +400,7 @@ class FightMenuDisplay < BattleMenuBase
     end
     @visibility["typeIcon"] = true
     # Type icon
-    @typeIcon.src_rect.y = move.type*TYPE_ICON_HEIGHT
+    @typeIcon.src_rect.y = move.pbCalcType(@battler)*TYPE_ICON_HEIGHT
     # PP text
     if move.totalpp>0
       ppFraction = [(4.0*move.pp/move.totalpp).ceil,3].min

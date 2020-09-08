@@ -35,6 +35,7 @@ class PokeBattle_Move
 
   def pbContactMove?(user)
     return false if user.hasActiveAbility?(:LONGREACH)
+    return true if physicalMove? && @function=="196" # Shell Side Arm
     return contactMove?
   end
 

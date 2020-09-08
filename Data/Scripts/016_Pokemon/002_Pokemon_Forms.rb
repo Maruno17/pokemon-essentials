@@ -675,8 +675,8 @@ MultipleForms.register(:ZAMAZENTA,{
     next 1 if isConst?(pkmn.item,PBItems,:RUSTEDSHIELD)
     next 0
   }
-})
-
+})  
+  
 MultipleForms.register(:ZACIAN,{
   "getForm" => proc { |pkmn|
     next 1 if isConst?(pkmn.item,PBItems,:RUSTEDSWORD)

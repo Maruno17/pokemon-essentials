@@ -16,6 +16,14 @@ class PokeBattle_Battler
       end
       return false
     end
+    # Stuff Cheeks
+    if move.function=="204" && (self.item==0 || !pbIsBerry?(self.item))
+      if showMessages
+        msg = _INTL("{1} can't use that move because it doesn't have any berry!",pbThis,move.name)
+        (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)      
+      end
+      return false 
+    end
     # Heal Block
     if @effects[PBEffects::HealBlock]>0 && move.healingMove?
       if showMessages
@@ -352,6 +360,18 @@ class PokeBattle_Battler
         @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
         target.damageState.protected = true
         @battle.successStates[user.index].protected = true
+        return false
+      end
+      if target.effects[PBEffects::Obstruct] && !unseenfist
+        @battle.pbCommonAnimation("Obstruct",target)
+        @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
+        target.damageState.protected = true
+        @battle.successStates[user.index].protected = true
+        if move.pbContactMove?(user) && user.affectedByContactEffect?
+          if user.pbCanLowerStatStage?(PBStats::DEFENSE)
+            user.pbLowerStatStage(PBStats::DEFENSE,2,nil)
+          end
+        end
         return false
       end
       # King's Shield

@@ -18,7 +18,6 @@ class PokeBattle_Battler
          pbThis,PBStats.getName(stat))) if showFailMsg
       return false
     end
-    @effects[PBEffects::BurningJelousy] = true
     return true
   end
 
@@ -38,7 +37,6 @@ class PokeBattle_Battler
       PBDebug.log("[Stat change] #{pbThis}'s #{s}: #{@stages[stat]} -> #{new} (+#{increment})")
       @stages[stat] += increment
     end
-    @effects[PBEffects::BurningJelousy] = true
     return increment
   end
 
@@ -62,7 +60,7 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatGain(@ability,self,stat,user)
     end
-    @effects[PBEffects::BurningJelousy] = true
+    effects[PBEffects::BurningJealousy] = true
     return true
   end
 
@@ -103,7 +101,6 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatGain(@ability,self,stat,user)
     end
-    @effects[PBEffects::BurningJelousy] = true
     return true
   end
 
@@ -119,7 +116,6 @@ class PokeBattle_Battler
       end
     end
     @battle.pbHideAbilitySplash(user) if splashAnim
-    @effects[PBEffects::BurningJelousy] = true
     return ret
   end
 
@@ -131,6 +127,7 @@ class PokeBattle_Battler
   end
 
   def pbCanLowerStatStage?(stat,user=nil,move=nil,showFailMsg=false,ignoreContrary=false)
+    effects[PBEffects::LashOut] = true
     return false if fainted?
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker

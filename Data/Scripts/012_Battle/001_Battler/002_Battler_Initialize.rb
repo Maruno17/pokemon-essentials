@@ -137,6 +137,9 @@ class PokeBattle_Battler
       @effects[PBEffects::PowerTrick]        = false
       @effects[PBEffects::Substitute]        = 0
       @effects[PBEffects::Telekinesis]       = 0
+      @effects[PBEffects::JawLock]           = false
+      @effects[PBEffects::JawLockUser]       = -1 
+	  @effects[PBEffects::NoRetreat]         = false
     end
     @damageState.reset
     @fainted               = (@hp==0)
@@ -193,7 +196,6 @@ class PokeBattle_Battler
     @effects[PBEffects::HelpingHand]         = false
     @effects[PBEffects::HyperBeam]           = 0
     @effects[PBEffects::Illusion]            = nil
-	@effects[PBEffects::BurningJelousy]      = false
     if hasActiveAbility?(:ILLUSION)
       idxLastParty = @battle.pbLastInTeam(@index)
       if idxLastParty!=@pokemonIndex
@@ -210,6 +212,18 @@ class PokeBattle_Battler
       b.effects[PBEffects::LockOn]    = 0
       b.effects[PBEffects::LockOnPos] = -1
     end
+    @battle.eachBattler do |b|   # Other battlers lose their lock-on against self - Octolock
+      next if !b.effects[PBEffects::Octolock]
+      next if b.effects[PBEffects::OctolockUser]!=@index
+      b.effects[PBEffects::Octolock]     = false
+      b.effects[PBEffects::OctolockUser] = -1
+    end   
+    @battle.eachBattler do |b|   # Other battlers lose their lock-on against self - Jawlock
+      next if !b.effects[PBEffects::JawLock]
+      next if b.effects[PBEffects::JawLockUser]!=@index
+      b.effects[PBEffects::Jawlock]     = false
+      b.effects[PBEffects::JawLockUser] = -1
+    end 
     @effects[PBEffects::MagicBounce]         = false
     @effects[PBEffects::MagicCoat]           = false
     @effects[PBEffects::MeanLook]            = -1
@@ -280,6 +294,10 @@ class PokeBattle_Battler
     @effects[PBEffects::Yawn]                = 0
     @effects[PBEffects::GorillaTactics]      = -1
     @effects[PBEffects::BallFetch]           = 0
+    @effects[PBEffects::LashOut]             = false
+    @effects[PBEffects::BurningJealousy]     = false 
+	@effects[PBEffects::Obstruct]            = false
+	@effects[PBEffects::TarShot]          = false
   end
 
   #=============================================================================

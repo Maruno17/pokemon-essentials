@@ -325,6 +325,10 @@ class PokeBattle_Move
         multipliers[BASE_DMG_MULT] /= 3
       end
     end
+    # Tar Shot
+    if target.effects[PBEffects::TarShot] && isConst?(type,PBTypes,:FIRE)
+      multipliers[BASE_DMG_MULT] *= 2
+    end
     # Water Sport
     if isConst?(type,PBTypes,:FIRE)
       @battle.eachBattler do |b|
