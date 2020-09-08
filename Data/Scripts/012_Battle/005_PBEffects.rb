@@ -176,6 +176,7 @@ begin
     TrickRoom       = 10
     WaterSportField = 11
     WonderRoom      = 12
+    NeutralizingGas = 13
   end
 
 rescue Exception

@@ -95,7 +95,9 @@ class PokeBattle_Battler
          # Abilities intended to be inherent properties of a certain species
          :COMATOSE,
          :RKSSYSTEM,
-         :GULPMISSILE
+         :GULPMISSILE,
+         # Abilities that are plain old blocked.
+         :NEUTRALIZINGGAS
       ]
       choices = []
       @battle.eachOtherSideBattler(@index) do |b|
