@@ -1,21 +1,36 @@
 # This class stores data on each Pokémon. Refer to $Trainer.party for an array
 # of each Pokémon in the Trainer's current party.
 class PokeBattle_Pokemon
-  attr_accessor :name        # Nickname
-  attr_reader   :species     # Species (National Pokedex number)
-  attr_reader   :exp         # Current experience points
-  attr_reader   :hp          # Current HP
-  attr_reader   :totalhp     # Current Total HP
-  attr_reader   :attack      # Current Attack stat
-  attr_reader   :defense     # Current Defense stat
-  attr_reader   :speed       # Current Speed stat
-  attr_reader   :spatk       # Current Special Attack stat
-  attr_reader   :spdef       # Current Special Defense stat
-  attr_accessor :status      # Status problem (PBStatuses)
-  attr_accessor :statusCount # Sleep count/Toxic flag
-  attr_accessor :abilityflag # Forces the first/second/hidden (0/1/2) ability
-  attr_accessor :genderflag  # Forces male (0) or female (1)
-  attr_accessor :natureflag  # Forces a particular nature
+  # @return [String] nickname
+  attr_accessor :name
+  # @return [Integer] national Pokédex number
+  attr_reader   :species
+  # @return [Integer] current experience points
+  attr_reader   :exp
+  # @return [Integer] current HP
+  attr_reader   :hp
+  # @return [Integer] current Total HP
+  attr_reader   :totalhp
+  # @return [Integer] current Attack stat
+  attr_reader   :attack
+  # @return [Integer] current Defense stat
+  attr_reader   :defense
+  # @return [Integer] current Speed stat
+  attr_reader   :speed
+  # @return [Integer] current Special Attack stat
+  attr_reader   :spatk
+  # @return [Integer] current Special Defense stat
+  attr_reader   :spdef
+  # @return [Integer] status problem (from PBStatus)
+  attr_accessor :status
+  # @return [Integer] sleep count / toxic flag
+  attr_accessor :statusCount
+  # @return [0, 1, 2] forces the first / second / hidden ability
+  attr_accessor :abilityflag
+  # @return [0, 1] forces male (0) or female (1)
+  attr_accessor :genderflag
+  # @return [Integer] forces a particular nature (nature ID)
+  attr_accessor :natureflag
   attr_accessor :natureOverride   # Overrides nature's stat-changing effects
   attr_accessor :shinyflag   # Forces the shininess (true/false)
   attr_accessor :moves       # Moves (PBMove)
@@ -59,38 +74,41 @@ class PokeBattle_Pokemon
   #=============================================================================
   # Ownership, obtained information
   #=============================================================================
-  # Returns the public portion of the original trainer's ID.
+
+  # @return [Integer] public portion of the original trainer's ID
   def publicID
-    return @trainerID&0xFFFF
+    return @trainerID & 0xFFFF
   end
 
-  # Returns whether the specified Trainer is NOT this Pokémon's original trainer.
+  # @param trainer [PokeBattle_Trainer] the trainer to compare to the OT
+  # @return [Boolean] whether the trainer and OT don't match
   def foreign?(trainer)
-    return @trainerID!=trainer.id || @ot!=trainer.name
+    return @trainerID != trainer.id || @ot != trainer.name
   end
   alias isForeign? foreign?
 
-  # Returns the gender of this Pokémon's original trainer (2=unknown).
+  # @return [0, 1, 2] gender of this Pokémon original trainer (0 = male, 1 = female, 2 = unknown)
   def otgender
     return @otgender || 2
   end
 
-  # Returns this Pokémon's level when this Pokémon was obtained.
+  # @return [Integer] this Pokémon's level when it was obtained
   def obtainLevel
     return @obtainLevel || 0
   end
 
-  # Returns the time when this Pokémon was obtained.
+  # @return [Time] time when this Pokémon was obtained
   def timeReceived
     return @timeReceived ? Time.at(@timeReceived) : Time.gm(2000)
   end
 
-  # Sets the time when this Pokémon was obtained (in seconds since Unix epoch).
+  # Sets the time when this Pokémon was obtained.
+  # @param value [Integer, Time, #to_i] time in seconds since Unix epoch
   def timeReceived=(value)
     @timeReceived = value.to_i
   end
 
-  # Returns the time when this Pokémon hatched.
+  # @return [Time] time when this Pokémon hatched
   def timeEggHatched
     if obtainMode==1
       return @timeEggHatched ? Time.at(@timeEggHatched) : Time.gm(2000)
@@ -99,7 +117,8 @@ class PokeBattle_Pokemon
     end
   end
 
-  # Sets the time when this Pokémon hatched (in seconds since Unix epoch).
+  # Sets the time when this Pokémon hatched.
+  # @param value [Integer, Time, #to_i] time in seconds since Unix epoch
   def timeEggHatched=(value)
     @timeEggHatched = value.to_i
   end
@@ -107,13 +126,15 @@ class PokeBattle_Pokemon
   #=============================================================================
   # Level
   #=============================================================================
-  # Returns this Pokémon's level.
+
+  # @return [Integer] this Pokémon's level
   def level
     @level = PBExperience.pbGetLevelFromExperience(@exp,self.growthrate) if !@level
     return @level
   end
 
   # Sets this Pokémon's level.
+  # @param value [Integer] new level (between 1 and the maximum level)
   def level=(value)
     if value<1 || value>PBExperience.maxLevel
       raise ArgumentError.new(_INTL("The level number ({1}) is invalid.",value))
@@ -123,42 +144,44 @@ class PokeBattle_Pokemon
   end
 
   # Sets this Pokémon's Exp. Points.
+  # @param value [Integer] new experience points
   def exp=(value)
     @exp = value
     @level = nil
   end
 
-  # Returns whether this Pokémon is an egg.
+  # @return [Boolean] whether this Pokémon is an egg
   def egg?
-    return @eggsteps>0
+    return @eggsteps > 0
   end
   alias isEgg? egg?
 
-  # Returns this Pokémon's growth rate.
+  # @return [Integer] this Pokémon's growth rate (from PBGrowthRates)
   def growthrate
     return pbGetSpeciesData(@species,formSimple,SpeciesGrowthRate)
   end
 
-  # Returns this Pokémon's base Experience value.
+  # @return [Integer] this Pokémon's base Experience value
   def baseExp
     return pbGetSpeciesData(@species,formSimple,SpeciesBaseExp)
   end
 
-  # Returns a number between 0 and 1 indicating how much of the current level's
-  # Exp this Pokémon has.
+  # @return [Float] number between 0 and 1 indicating how much of the current level's
+  #   Exp this Pokémon has
   def expFraction
     l = self.level
-    return 0.0 if l>=PBExperience.maxLevel
+    return 0.0 if l >= PBExperience.maxLevel
     gr = self.growthrate
-    startexp = PBExperience.pbGetStartExperience(l,gr)
-    endexp   = PBExperience.pbGetStartExperience(l+1,gr)
-    return 1.0*(@exp-startexp)/(endexp-startexp)
+    startexp = PBExperience.pbGetStartExperience(l, gr)
+    endexp   = PBExperience.pbGetStartExperience(l + 1, gr)
+    return 1.0 * (@exp - startexp) / (endexp - startexp)
   end
 
   #=============================================================================
   # Gender
   #=============================================================================
-  # Returns this Pokémon's gender. 0=male, 1=female, 2=genderless
+
+  # @return [0, 1, 2] this Pokémon's gender (0 = male, 1 = female, 2 = genderless)
   def gender
     # Return sole gender option for all male/all female/genderless species
     genderRate = pbGetSpeciesData(@species,formSimple,SpeciesGenderRate)
@@ -168,96 +191,106 @@ class PokeBattle_Pokemon
     when PBGenderRates::Genderless;   return 2
     end
     # Return gender for species that can be male or female
-    return @genderflag if @genderflag && (@genderflag==0 || @genderflag==1)
-    return ((@personalID&0xFF)<PBGenderRates.genderByte(genderRate)) ? 1 : 0
+    return @genderflag if @genderflag && (@genderflag == 0 || @genderflag == 1)
+    return ((@personalID & 0xFF) < PBGenderRates.genderByte(genderRate)) ? 1 : 0
   end
 
-  # Returns whether this Pokémon species is restricted to only ever being one
-  # gender (or genderless).
+  # @return [Boolean] whether this Pokémon species is restricted to only ever being one
+  #   gender (or genderless)
   def singleGendered?
     genderRate = pbGetSpeciesData(@species,formSimple,SpeciesGenderRate)
-    return genderRate==PBGenderRates::AlwaysMale ||
-           genderRate==PBGenderRates::AlwaysFemale ||
-           genderRate==PBGenderRates::Genderless
+    return genderRate == PBGenderRates::AlwaysMale ||
+           genderRate == PBGenderRates::AlwaysFemale ||
+           genderRate == PBGenderRates::Genderless
   end
   alias isSingleGendered? singleGendered?
 
-  # Returns whether this Pokémon is male.
+  # @return [Boolean] whether this Pokémon is male
   def male?
-    return self.gender==0
+    return self.gender == 0
   end
   alias isMale? male?
 
-  # Returns whether this Pokémon is female.
+  # @return [Boolean] whether this Pokémon is female
   def female?
-    return self.gender==1
+    return self.gender == 1
   end
   alias isFemale? female?
 
-  # Returns whether this Pokémon is genderless.
+  # @return [Boolean] whether this Pokémon is genderless
   def genderless?
-    return self.gender==2
+    return self.gender == 2
   end
   alias isGenderless? genderless?
 
   # Sets this Pokémon's gender to a particular gender (if possible).
+  # @param value [0, 1, 2] new gender (0 = male, 1 = female, 2 = genderless)
   def setGender(value)
     @genderflag = value if !singleGendered?
   end
 
+  # Makes this Pokémon male.
   def makeMale;   setGender(0); end
+  # Makes this Pokémon female.
   def makeFemale; setGender(1); end
 
   #=============================================================================
   # Ability
   #=============================================================================
-  # Returns the index of this Pokémon's ability.
+
+  # @return [Integer] the index of this Pokémon's ability
   def abilityIndex
-    return @abilityflag || (@personalID&1)
+    return @abilityflag || (@personalID & 1)
   end
 
-  # Returns the ID of this Pokémon's ability.
+  # @return [Integer] the ID of this Pokémon's ability
   def ability
     abilIndex = abilityIndex
     # Hidden ability
-    if abilIndex>=2
+    if abilIndex >= 2
       hiddenAbil = pbGetSpeciesData(@species,formSimple,SpeciesHiddenAbility)
       if hiddenAbil.is_a?(Array)
-        ret = hiddenAbil[abilIndex-2]
-        return ret if ret && ret>0
+        ret = hiddenAbil[abilIndex - 2]
+        return ret if ret && ret > 0
       else
-        return hiddenAbil if abilIndex==2 && hiddenAbil>0
+        return hiddenAbil if abilIndex == 2 && hiddenAbil > 0
       end
-      abilIndex = (@personalID&1)
+      abilIndex = (@personalID & 1)
     end
     # Natural ability
     abilities = pbGetSpeciesData(@species,formSimple,SpeciesAbilities)
     if abilities.is_a?(Array)
       ret = abilities[abilIndex]
-      ret = abilities[(abilIndex+1)%2] if !ret || ret==0
+      ret = abilities[(abilIndex + 1) % 2] if !ret || ret == 0
       return ret || 0
     end
     return abilities || 0
   end
 
-  # Returns whether this Pokémon has a particular ability.
-  def hasAbility?(value=0)
-    abil = self.ability
-    return abil>0 if value==0
-    return abil==getID(PBAbilities,value)
+  # Returns whether this Pokémon has a particular ability. If no value
+  # is given, returns whether this Pokémon has an ability set.
+  # @param ability [Integer] ability ID to check  
+  # @return [Boolean] whether this Pokémon has a particular ability or
+  #   an ability at all
+  def hasAbility?(ability = 0)
+    current_ability = self.ability
+    return current_ability > 0 if ability == 0
+    return current_ability == getID(PBAbilities,ability)
   end
 
-  # Sets this Pokémon's ability to a particular ability (if possible).
+  # Sets this Pokémon's ability index.
+  # @param value [Integer] new ability index
   def setAbility(value)
     @abilityflag = value
   end
 
+  # @return [Boolean] whether this Pokémon has a hidden ability
   def hasHiddenAbility?
     abil = abilityIndex
     return abil!=nil && abil>=2
   end
 
-  # Returns the list of abilities this Pokémon can have.
+  # @return [Array<Array<Integer>>] the list of abilities this Pokémon can have
   def getAbilityList
     ret = []
     abilities = pbGetSpeciesData(@species,formSimple,SpeciesAbilities)
@@ -278,26 +311,33 @@ class PokeBattle_Pokemon
   #=============================================================================
   # Nature
   #=============================================================================
-  # Returns the ID of this Pokémon's nature.
+
+  # @return [Integer] the ID of this Pokémon's nature
   def nature
     return @natureflag || (@personalID%25)
   end
 
   # Returns the calculated nature, taking into account things that change its
   # stat-altering effect (i.e. Gen 8 mints). Only used for calculating stats.
+  # @return [Integer] calculated nature
   def calcNature
     return @natureOverride if @natureOverride
     return self.nature
   end
 
-  # Returns whether this Pokémon has a particular nature.
-  def hasNature?(value=-1)
-    nat = self.nature
-    return nat>=0 if value<0
-    return nat==getID(PBNatures,value)
+  # Returns whether this Pokémon has a particular nature. If no value
+  # is given, returns whether this Pokémon has a nature set.
+  # @param nature [Integer] nature ID to check  
+  # @return [Boolean] whether this Pokémon has a particular nature or
+  #   a nature at all
+  def hasNature?(nature = -1)
+    current_nature = self.nature
+    return current_nature >= 0 if nature < 0
+    return current_nature == getID(PBNatures,nature)
   end
 
   # Sets this Pokémon's nature to a particular nature.
+  # @param value [Integer] nature to change to
   def setNature(value)
     @natureflag = getID(PBNatures,value)
     calcStats
@@ -306,14 +346,15 @@ class PokeBattle_Pokemon
   #=============================================================================
   # Shininess
   #=============================================================================
-  # Returns whether this Pokémon is shiny (differently colored).
+
+  # @return [Boolean] whether this Pokémon is shiny (differently colored)
   def shiny?
-    return @shinyflag if @shinyflag!=nil
-    a = @personalID^@trainerID
-    b = a&0xFFFF
-    c = (a>>16)&0xFFFF
-    d = b^c
-    return d<SHINY_POKEMON_CHANCE
+    return @shinyflag if @shinyflag != nil
+    a = @personalID ^ @trainerID
+    b = a & 0xFFFF
+    c = (a >> 16) & 0xFFFF
+    d = b ^ c
+    return d < SHINY_POKEMON_CHANCE
   end
   alias isShiny? shiny?
 
@@ -330,12 +371,15 @@ class PokeBattle_Pokemon
   #=============================================================================
   # Pokérus
   #=============================================================================
-  # Returns the Pokérus infection stage for this Pokémon.
+
+  # @return [Integer] the Pokérus infection stage for this Pokémon
   def pokerusStrain
     return @pokerus/16
   end
 
   # Returns the Pokérus infection stage for this Pokémon.
+  # @return [0, 1, 2] Pokérus infection stage
+  #   (0 = not infected, 1 = cured, 2 = infected)
   def pokerusStage
     return 0 if !@pokerus || @pokerus==0        # Not infected
     return 2 if @pokerus>0 && (@pokerus%16)==0  # Cured
@@ -343,32 +387,34 @@ class PokeBattle_Pokemon
   end
 
   # Gives this Pokémon Pokérus (either the specified strain or a random one).
-  def givePokerus(strain=0)
-    return if self.pokerusStage==2   # Can't re-infect a cured Pokémon
-    strain = 1+rand(15) if strain<=0 || strain>=16
-    time = 1+(strain%4)
+  # @param strain [Integer] Pokérus strain to give
+  def givePokerus(strain = 0)
+    return if self.pokerusStage == 2   # Can't re-infect a cured Pokémon
+    strain = 1 + rand(15) if strain <= 0 || strain >= 16
+    time = 1 + (strain %4 )
     @pokerus = time
     @pokerus |= strain << 4
   end
 
   # Resets the infection time for this Pokémon's Pokérus (even if cured).
   def resetPokerusTime
-    return if @pokerus==0
-    strain = @pokerus%16
-    time = 1+(strain%4)
+    return if @pokerus == 0
+    strain = @pokerus % 16
+    time = 1 + (strain % 4)
     @pokerus = time
     @pokerus |= strain << 4
   end
 
   # Reduces the time remaining for this Pokémon's Pokérus (if infected).
   def lowerPokerusCount
-    return if self.pokerusStage!=1
+    return if self.pokerusStage != 1
     @pokerus -= 1
   end
 
   #=============================================================================
   # Types
   #=============================================================================
+
   # Returns this Pokémon's first type.
   def type1
     return pbGetSpeciesData(@species,formSimple,SpeciesType1)
