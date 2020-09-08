@@ -14,15 +14,20 @@ From here, you can edit this project to turn it into your fangame/develop mods. 
 
 ## Scripts
 
-The scripts no longer live in the Scripts.rxdata file. They have been extracted into separate files and placed in the Data/Scripts/ folder (and subfolders within).
+The scripts no longer live in the Scripts.rxdata file. They have been extracted into separate files and placed in the Data/Scripts/ folder (and subfolders within). This makes them easier to work on concurrently with other people.
 
-The scripts are loaded into the game alphanumerically, starting from the top folder (Data/Scripts/) and going depth-first. All scripts in a given folder are loaded, and then each subfolder is checked in turn (again in alphabetical order) for files/folders to load/check.
+The scripts are loaded into the game alphanumerically, starting from the top folder (Data/Scripts/) and going depth-first. That is, all scripts in a given folder are loaded, and then each of its subfolder is checked in turn (again in alphanumerical order) for files/folders to load/check.
 
-### Reintegrating scripts for an encrypted release
+### Extracting and reintegrating scripts
 
-This repo contains script_dumper.rb (in the main folder) which can be run to integrate the individual script files back into Scripts.rxdata, and to extract them. At the bottom of script_dumper.rb are two lines, one for each action.
+This repo contains two script files in the main folder:
 
-This will not be described in detail, as the intention is to replace it with something more user-friendly.
+* scripts_extract.rb - Run this to extract all scripts from Scripts.rxdata into individual .rb files (any existing individual .rb files are deleted).
+** Scripts.rxdata is backed up to ScriptsBackup.rxdata, and is then replaced with a version that reads the individual .rb files and does nothing else.
+* scripts_combine.rb - Run this to reintegrate all the individual .rb files back into Scripts.rxdata.
+** The individual .rb files are left where they are, but they no longer do anything.
+
+The intention is to replace these with something more user-friendly.
 
 ## Files not in the repo
 
@@ -32,5 +37,5 @@ The .gitignore file lists the files that will not be included in this repo. Thes
 * Everything in the Data/ folder, except for:
   * The Data/Scripts/ folder and everything in there.
   * Scripts.rxdata (a special version that just loads the individual script files).
-* A few files in the main project folder (the three Game.xxx files, and the RGSS dll file).
+* A few files in the main project folder (two of the Game.xxx files, and the RGSS dll file).
 * Temporary files.
