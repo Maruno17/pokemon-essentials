@@ -31,15 +31,20 @@ class PokeBattle_Pokemon
   attr_accessor :genderflag
   # @return [Integer] forces a particular nature (nature ID)
   attr_accessor :natureflag
-  attr_accessor :natureOverride   # Overrides nature's stat-changing effects
-  attr_accessor :shinyflag   # Forces the shininess (true/false)
-  attr_accessor :moves       # Moves (PBMove)
-  attr_accessor :firstmoves  # The moves known when this Pokémon was obtained
-  attr_accessor :item        # Held item
-  attr_writer   :mail        # Mail
-  attr_accessor :fused       # The Pokémon fused into this one
-  attr_accessor :iv          # Array of 6 Individual Values for HP, Atk, Def,
-                             #    Speed, Sp Atk, and Sp Def
+  # @return [Integer] overrides nature's stat-changing effects
+  attr_accessor :natureOverride
+  # @return [Boolean] whether shininess should be forced
+  attr_accessor :shinyflag
+  # @return [Array<PBMove>] moves known by this Pokémon
+  attr_accessor :moves
+  # @return [Array<Integer>] IDs of moves known by this Pokémon when it was obtained
+  attr_accessor :firstmoves
+  # @return [Integer] id of the item held by this Pokémon (0 = no held item)
+  attr_accessor :item
+  # @return [PokeBattle_Pokemon, nil] the Pokémon fused into this one (nil if there is none)
+  attr_accessor :fused
+  # @return [Array<Integer>] array of IV values for HP, Atk, Def, Speed, Sp. Atk and Sp. Def
+  attr_accessor :iv
   attr_writer   :ivMaxed     # Array of booleans that max each IV value
   attr_accessor :ev          # Effort Values
   attr_accessor :happiness   # Current happiness
@@ -663,11 +668,19 @@ class PokeBattle_Pokemon
     return ret
   end
 
-  # Returns this Pokémon's mail.
+  # @return [PokemonMail, nil] mail held by this Pokémon (nil if there is none)
   def mail
     return nil if !@mail
     @mail = nil if @mail.item==0 || !hasItem?(@mail.item)
     return @mail
+  end
+
+  # @param mail [PokemonMail, nil] mail to be held by this Pokémon (nil if mail is to be removed)
+  def mail=(mail)
+    if !mail.nil? && !mail.is_a?(PokemonMail)
+      raise ArgumentError, _INTL('Invalid value {1} given',mail.inspect)
+    end
+    @mail = mail
   end
 
   #=============================================================================
