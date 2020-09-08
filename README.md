@@ -23,9 +23,9 @@ The scripts are loaded into the game alphanumerically, starting from the top fol
 This repo contains two script files in the main folder:
 
 * scripts_extract.rb - Run this to extract all scripts from Scripts.rxdata into individual .rb files (any existing individual .rb files are deleted).
-** Scripts.rxdata is backed up to ScriptsBackup.rxdata, and is then replaced with a version that reads the individual .rb files and does nothing else.
+  * Scripts.rxdata is backed up to ScriptsBackup.rxdata, and is then replaced with a version that reads the individual .rb files and does nothing else.
 * scripts_combine.rb - Run this to reintegrate all the individual .rb files back into Scripts.rxdata.
-** The individual .rb files are left where they are, but they no longer do anything.
+  * The individual .rb files are left where they are, but they no longer do anything.
 
 The intention is to replace these with something more user-friendly.
 
