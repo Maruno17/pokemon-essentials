@@ -146,7 +146,7 @@ module PokemonDebugMixin
         when 1   # Make not infectious
           if pokerus>0
             strain = pokerus/16
-            p = strain<<4
+            p = strain << 4
             pkmn.pokerus = p
             pbRefreshSingle(pkmnid)
           end
@@ -526,6 +526,7 @@ module PokemonDebugMixin
           species = pbChooseSpeciesList(pkmn.species)
           if species!=0 && species!=pkmn.species
             pkmn.species = species
+            pkmn.calcStats
             pbSeenForm(pkmn) if !settingUpBattle
             pbRefreshSingle(pkmnid)
           end
@@ -697,7 +698,7 @@ module PokemonDebugMixin
           val = pbMessageChooseNumber(
              _INTL("Set the new ID (max. 65535)."),params) { pbUpdate }
           pkmn.trainerID = val
-          pkmn.trainerID |= val<<16
+          pkmn.trainerID |= val << 16
         end
       end
     #===========================================================================

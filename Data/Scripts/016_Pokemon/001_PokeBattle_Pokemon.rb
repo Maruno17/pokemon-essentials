@@ -300,7 +300,7 @@ class PokeBattle_Pokemon
   # Sets this Pokémon's nature to a particular nature.
   def setNature(value)
     @natureflag = getID(PBNatures,value)
-    self.calcStats
+    calcStats
   end
 
   #=============================================================================
@@ -633,7 +633,7 @@ class PokeBattle_Pokemon
     @name       = PBSpecies.getName(@species) unless hasNickname
     @level      = nil   # In case growth rate is different for the new species
     @forcedForm = nil
-    self.form   = 0   # Also recalculates stats
+    calcStats
   end
 
   def isSpecies?(s)
