@@ -197,7 +197,7 @@ def pbEachFileSectionEx(f)
     end
     lineno += 1
     Graphics.update if lineno%500==0
-    Win32API.SetWindowText(_INTL("Processing line {1}",lineno)) if lineno%50==0
+    pbSetWindowText(_INTL("Processing line {1}",lineno)) if lineno%50==0
   }
   yield lastsection,sectionname  if havesection
 end
@@ -1167,18 +1167,19 @@ def pbCompileAllData(mustCompile)
     yield(_INTL("Compiling shadow move data"))
     pbCompileShadowMoves
     yield(_INTL("Compiling messages"))
+    pbCompileAnimations
+    pbCompileTrainerEvents(mustCompile)
+    pbSetTextMessages
+    MessageTypes.saveMessages
   else
     if (!$INEDITOR || LANGUAGES.length<2) && safeExists?("Data/messages.dat")
       MessageTypes.loadMessageFile("Data/messages.dat")
     end
   end
-  pbCompileAnimations
-  pbCompileTrainerEvents(mustCompile)
-  pbSetTextMessages
-  MessageTypes.saveMessages
   if !$INEDITOR && LANGUAGES.length>=2
     pbLoadMessages("Data/"+LANGUAGES[$PokemonSystem.language][1])
   end
+  pbSetWindowText(nil) if mkxp?
 end
 
 def pbCompiler
@@ -1242,24 +1243,26 @@ def pbCompiler
     end
     # Check data files and PBS files, and recompile if any PBS file was edited
     # more recently than the data files were last created
-    for i in 0...dataFiles.length
-      begin
-        File.open("Data/#{dataFiles[i]}") { |file|
-          latestDataTime = [latestDataTime,file.mtime.to_i].max
-        }
-      rescue SystemCallError
-        mustCompile = true
+    if !mkxp?
+      for i in 0...dataFiles.length
+        begin
+          File.open("Data/#{dataFiles[i]}") { |file|
+            latestDataTime = [latestDataTime,file.mtime.to_i].max
+          }
+        rescue SystemCallError
+          mustCompile = true
+        end
       end
-    end
-    for i in 0...textFiles.length
-      begin
-        File.open("PBS/#{textFiles[i]}") { |file|
-          latestTextTime = [latestTextTime,file.mtime.to_i].max
-        }
-      rescue SystemCallError
+      for i in 0...textFiles.length
+        begin
+          File.open("PBS/#{textFiles[i]}") { |file|
+            latestTextTime = [latestTextTime,file.mtime.to_i].max
+          }
+        rescue SystemCallError
+        end
       end
+      mustCompile |= (latestTextTime>=latestDataTime)
     end
-    mustCompile |= (latestTextTime>=latestDataTime)
     # Should recompile if holding Ctrl
     Input.update
     mustCompile = true if Input.press?(Input::CTRL)
@@ -1273,7 +1276,7 @@ def pbCompiler
       end
     end
     # Recompile all data
-    pbCompileAllData(mustCompile) { |msg| Win32API.SetWindowText(msg) }
+    pbCompileAllData(mustCompile) { |msg| pbSetWindowText(msg) }
   rescue Exception
     e = $!
     raise e if "#{e.class}"=="Reset" || e.is_a?(Reset) || e.is_a?(SystemExit)
