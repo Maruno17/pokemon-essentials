@@ -413,14 +413,16 @@ class FightMenuDisplay < BattleMenuBase
 
   def refreshMegaEvolutionButton
     return if !USE_GRAPHICS
-    @megaButton.src_rect.y = (@mode-1)*@megaEvoBitmap.height/2
-    @megaButton.z          = self.z - 1
+    @megaButton.src_rect.y    = (@mode - 1) * @megaEvoBitmap.height / 2
+    @megaButton.z             = self.z - 1
+    @visibility["megaButton"] = (@mode > 0)
   end
 
   def refreshShiftButton
     return if !USE_GRAPHICS
-    @shiftButton.src_rect.y = (@shiftMode-1)*@shiftBitmap.height
-    @shiftButton.z          = self.z - 1
+    @shiftButton.src_rect.y    = (@shiftMode - 1) * @shiftBitmap.height
+    @shiftButton.z             = self.z - 1
+    @visibility["shiftButton"] = (@shiftMode > 0)
   end
 
   def refresh

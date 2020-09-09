@@ -127,7 +127,7 @@ _END_
       end
       plugin_credits << "\n"
     end
-    CREDIT.gsub!(/{INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE}/, plugin_credits)
+    CREDIT.gsub!(/\{INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE\}/, plugin_credits)
     credit_lines = CREDIT.split(/\n/)
     credit_bitmap = Bitmap.new(Graphics.width,32 * credit_lines.size)
     credit_lines.each_index do |i|
