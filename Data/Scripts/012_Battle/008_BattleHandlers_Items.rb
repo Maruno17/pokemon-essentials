@@ -60,16 +60,16 @@ BattleHandlers::HPHealItem.add(:APICOTBERRY,
 
 BattleHandlers::HPHealItem.add(:BERRYJUICE,
   proc { |item,battler,battle,forced|
+    next false if !battler.canHeal?
     next false if !forced && battler.hp>battler.totalhp/2
     itemName = PBItems.getName(item)
-    PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
+    PBDebug.log("[Item triggered] Forced consuming of #{itemName}") if forced
     battle.pbCommonAnimation("UseItem",battler) if !forced
     battler.pbRecoverHP(20)
     if forced
       battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
     else
-      battle.pbDisplay(_INTL("{1} restored its health using its {2}!",battler.pbThis,
-         itemName))
+      battle.pbDisplay(_INTL("{1} restored its health using its {2}!",battler.pbThis,itemName))
     end
     next true
   }
@@ -102,7 +102,11 @@ BattleHandlers::HPHealItem.add(:LANSATBERRY,
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.effects[PBEffects::FocusEnergy] = 2
     itemName = PBItems.getName(item)
-    battle.pbDisplay(_INTL("{1} used its {2} to get pumped!",battler.pbThis,itemName))
+    if forced
+      battle.pbDisplay(_INTL("{1} got pumped from the {2}!",battler.pbThis,itemName))
+    else
+      battle.pbDisplay(_INTL("{1} used its {2} to get pumped!",battler.pbThis,itemName))
+    end
     next true
   }
 )
@@ -128,7 +132,7 @@ BattleHandlers::HPHealItem.add(:MICLEBERRY,
     battler.effects[PBEffects::MicleBerry] = true
     itemName = PBItems.getName(item)
     if forced
-      PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}")
+      PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
       battle.pbDisplay(_INTL("{1} boosted the accuracy of its next move!",battler.pbThis))
     else
       battle.pbDisplay(_INTL("{1} boosted the accuracy of its next move using its {2}!",
@@ -140,17 +144,17 @@ BattleHandlers::HPHealItem.add(:MICLEBERRY,
 
 BattleHandlers::HPHealItem.add(:ORANBERRY,
   proc { |item,battler,battle,forced|
+    next false if !battler.canHeal?
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
     next false if !forced && battler.hp>battler.totalhp/2
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbRecoverHP(10)
     itemName = PBItems.getName(item)
     if forced
-      PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}")
+      PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
       battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
     else
-      battle.pbDisplay(_INTL("{1} restored a little HP using its {2}!",battler.pbThis,
-         itemName))
+      battle.pbDisplay(_INTL("{1} restored a little HP using its {2}!",battler.pbThis,itemName))
     end
     next true
   }
@@ -170,17 +174,17 @@ BattleHandlers::HPHealItem.add(:SALACBERRY,
 
 BattleHandlers::HPHealItem.add(:SITRUSBERRY,
   proc { |item,battler,battle,forced|
+    next false if !battler.canHeal?
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
     next false if !forced && battler.hp>battler.totalhp/2
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbRecoverHP(battler.totalhp/4)
     itemName = PBItems.getName(item)
     if forced
-      PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}")
+      PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
       battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
     else
-      battle.pbDisplay(_INTL("{1} restored its health using its {2}!",battler.pbThis,
-         itemName))
+      battle.pbDisplay(_INTL("{1} restored its health using its {2}!",battler.pbThis,itemName))
     end
     next true
   }

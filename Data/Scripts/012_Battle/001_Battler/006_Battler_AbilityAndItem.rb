@@ -245,10 +245,9 @@ class PokeBattle_Battler
     end
   end
 
-  # forcedItem is an item ID for Pluck/Fling, and 0 otherwise. fling is for
-  # Fling only.
+  # forcedItem is an item ID for Bug Bite/Pluck/Fling, and 0 otherwise.
+  # fling is for Fling only.
   def pbItemHPHealCheck(forcedItem=0,fling=false)
-    return if !canHeal?
     return if forcedItem==0 && !itemActive?
     thisItem = (forcedItem>0) ? forcedItem : @item
     if BattleHandlers.triggerHPHealItem(thisItem,self,@battle,(forcedItem!=0))
