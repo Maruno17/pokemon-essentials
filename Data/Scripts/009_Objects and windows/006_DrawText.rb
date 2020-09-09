@@ -1112,8 +1112,9 @@ end
 
 def pbDrawShadowText(bitmap,x,y,width,height,string,baseColor,shadowColor=nil,align=0)
   return if !bitmap || !string
-  width=(width<0) ? bitmap.text_size(string).width+4 : width
-  height=(height<0) ? bitmap.text_size(string).height+4 : height
+  width=(width<0) ? bitmap.text_size(string).width+1 : width
+  height=(height<0) ? bitmap.text_size(string).height+1 : height
+  y = y + (mkxp? ? -2 : 0)
   if shadowColor && shadowColor.alpha>0
     bitmap.font.color=shadowColor
     bitmap.draw_text(x+2,y,width,height,string,align)
@@ -1130,6 +1131,7 @@ def pbDrawOutlineText(bitmap,x,y,width,height,string,baseColor,shadowColor=nil,a
   return if !bitmap || !string
   width=(width<0) ? bitmap.text_size(string).width+4 : width
   height=(height<0) ? bitmap.text_size(string).height+4 : height
+  y = y + (mkxp? ? 4 : 0)
   if shadowColor && shadowColor.alpha>0
     bitmap.font.color=shadowColor
     bitmap.draw_text(x-2,y-2,width,height,string,align)
