@@ -727,7 +727,7 @@
 706,DYNAMAXCANNON,Dynamax Cannon,000,100,DRAGON,Special,100,5,0,00,0,b,"The user unleashes a strong beam from its core."
 707,BEHEMOTHBASH,Behemoth Bash,000,100,STEEL,Physical,100,5,0,00,0,abef,"The user becomes a gigantic shield and slams into the target. This move deals twice the damage is the target is Dynamaxed."
 708,BEHEMOTHBLADE,Behemoth Blade,000,100,STEEL,Physical,100,5,0,00,0,abef,"The user becomes a gigantic sword and cuts the target. This move deals twice the damage is the target is Dynamaxed."
-709,DRAGONDARTS,Dragon Darts,000,50,DRAGON,Physical,100,10,0,10,0,bef,"The user attacks twice using Dreepy. If there are two targets, this move hits each target once."
+709,DRAGONDARTS,Dragon Darts,0BD,50,DRAGON,Physical,100,10,0,NearOther,0,bef,"The user attacks twice using Dreepy. If there are two targets, this move hits each target once."
 710,JAWLOCK,Jaw Lock,205,80,DARK,Physical,100,10,100,00,0,bef,"This move prevents the user and the target from switching out until either of them faints. The effect goes away if either of the Pokémon leaves the field."
 711,LIFEDEW,Life Dew,188,0,WATER,Status,0,10,0,5,0,d,"The user scatters mysterious water around and restores the HP of itself and its ally Pokémon in the battle."
 712,NORETREAT,No Retreat,194,0,FIGHTING,Status,0,5,0,00,0,d,"This move raises all the user's stats but prevents the user from switching out or fleeing."

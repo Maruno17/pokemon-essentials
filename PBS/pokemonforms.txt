@@ -1818,9 +1818,11 @@ Moves = 0,SPARK,1,SPARK,1,EERIEIMPULSE,1,BELCH,1,TEARFULLOOK,1,NUZZLE,1,GROWL,1,
 [SINISTEA-1]
 FormName = Antique Form
 Evolutions = POLTEAGEIST,Item,CHIPPEDPOT
+Pokedex=It absorbs the life-force of those who drink it. It waits patiently, but opportunities are fleeting—it tastes so bad that it gets spat out immediately.
 #-------------------------------
 [POLTEAGEIST-1]
 FormName = Antique Form
+Pokedex=Trainers Polteageist trusts will be allowed to experience its distinctive flavor and aroma firsthand by sampling just a tiny bit of its tea.
 #-------------------------------
 [EISCUE-1]
 FormName = Noice Face

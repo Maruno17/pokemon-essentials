@@ -2677,7 +2677,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:NEUTRALIZINGGAS,
   proc { |ability,battler,battle|
     next if battle.field.effects[PBEffects::NeutralizingGas]
     battle.pbShowAbilitySplash(battler)
-    battle.pbDisplay(_INTL("{1}'s gas nullified all abilities!",pbThis))
+    battle.pbDisplay(_INTL("{1}'s gas nullified all abilities!",battler.pbThis))
     battle.field.effects[PBEffects::NeutralizingGas] = true
     battle.pbHideAbilitySplash(battler)
   }
