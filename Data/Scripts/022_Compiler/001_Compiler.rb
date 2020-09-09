@@ -1167,15 +1167,15 @@ def pbCompileAllData(mustCompile)
     yield(_INTL("Compiling shadow move data"))
     pbCompileShadowMoves
     yield(_INTL("Compiling messages"))
+    pbCompileAnimations
+    pbCompileTrainerEvents(mustCompile)
+    pbSetTextMessages
+    MessageTypes.saveMessages
   else
     if (!$INEDITOR || LANGUAGES.length<2) && safeExists?("Data/messages.dat")
       MessageTypes.loadMessageFile("Data/messages.dat")
     end
   end
-  pbCompileAnimations
-  pbCompileTrainerEvents(mustCompile)
-  pbSetTextMessages
-  MessageTypes.saveMessages
   if !$INEDITOR && LANGUAGES.length>=2
     pbLoadMessages("Data/"+LANGUAGES[$PokemonSystem.language][1])
   end

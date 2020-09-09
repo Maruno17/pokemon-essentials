@@ -490,6 +490,7 @@ DEF_MULT       = 2
 FINAL_DMG_MULT = 3
 
 def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
+  return false if !forced && !battler.canHeal?
   return false if !forced && !battler.pbCanConsumeBerry?(item,false)
   itemName = PBItems.getName(item)
   battle.pbCommonAnimation("EatBerry",battler) if !forced
@@ -499,7 +500,7 @@ def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
   end
   if amt>0
     if forced
-      PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}")
+      PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
       battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
     else
       battle.pbDisplay(_INTL("{1} restored its health using its {2}!",battler.pbThis,itemName))
@@ -521,12 +522,12 @@ def pbBattleStatIncreasingBerry(battler,battle,item,forced,stat,increment=1)
   if battler.hasActiveAbility?(:RIPEN)
     increment *=2
   end
-  if !forced
-    battle.pbCommonAnimation("EatBerry",battler)
-    return battler.pbRaiseStatStageByCause(stat,increment,battler,itemName)
+  if forced
+    PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
+    return battler.pbRaiseStatStage(stat,increment,battler)
   end
-  PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}")
-  return battler.pbRaiseStatStage(stat,increment,battler)
+  battle.pbCommonAnimation("EatBerry",battler)
+  return battler.pbRaiseStatStageByCause(stat,increment,battler,itemName)
 end
 
 # For abilities that grant immunity to moves of a particular type, and raises

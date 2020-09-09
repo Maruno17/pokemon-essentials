@@ -384,27 +384,27 @@ end
 
 # Sets a bitmap's font to the system font.
 def pbSetSystemFont(bitmap)
-  fontname=MessageConfig.pbGetSystemFontName
-  bitmap.font.name=fontname
-  if fontname=="Pokemon FireLeaf" || fontname=="Power Red and Green"
-    bitmap.font.size=29
-  elsif fontname=="Pokemon Emerald Small" || fontname=="Power Green Small"
-    bitmap.font.size=25
+  fontname = MessageConfig.pbGetSystemFontName
+  bitmap.font.name = fontname
+  if fontname == "Pokemon FireLeaf" || fontname == "Power Red and Green"
+    bitmap.font.size = 29
+  elsif fontname == "Pokemon Emerald Small" || fontname == "Power Green Small"
+    bitmap.font.size = 25
   else
-    bitmap.font.size=31
+    bitmap.font.size = 31
   end
 end
 
 # Sets a bitmap's font to the system small font.
 def pbSetSmallFont(bitmap)
-  bitmap.font.name=pbSmallFontName
-  bitmap.font.size=25
+  bitmap.font.name = pbSmallFontName
+  bitmap.font.size = 25
 end
 
 # Sets a bitmap's font to the system narrow font.
 def pbSetNarrowFont(bitmap)
-  bitmap.font.name=pbNarrowFontName
-  bitmap.font.size=31
+  bitmap.font.name = pbNarrowFontName
+  bitmap.font.size = 31
 end
 
 #===============================================================================

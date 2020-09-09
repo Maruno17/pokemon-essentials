@@ -337,6 +337,7 @@ class Game_Map
   def scroll_up(distance)
     self.display_y -= distance
   end
+
   def scroll_down(distance)
     self.display_y += distance
   end
