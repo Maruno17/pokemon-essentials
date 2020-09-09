@@ -597,49 +597,24 @@ class PokemonBagScreen
     loop do
       item = @scene.pbChooseItem
       break if item==0
-      commands = [_INTL("Withdraw"),_INTL("Give"),_INTL("Cancel")]
-      itemname = PBItems.getName(item)
-      command = @scene.pbShowCommands(_INTL("{1} is selected.",itemname),commands)
-      if command==0   # Withdraw
-        qty = storage.pbQuantity(item)
-        if qty>1 && !pbIsImportantItem?(item)
-          qty = @scene.pbChooseNumber(_INTL("How many do you want to withdraw?"),qty)
+      qty = storage.pbQuantity(item)
+      if qty>1 && !pbIsImportantItem?(item)
+        qty = @scene.pbChooseNumber(_INTL("How many do you want to withdraw?"),qty)
+      end
+      next if qty<=0
+      if @bag.pbCanStore?(item,qty)
+        if !storage.pbDeleteItem(item,qty)
+          raise "Can't delete items from storage"
         end
-        if qty>0
-          if !@bag.pbCanStore?(item,qty)
-            pbDisplay(_INTL("There's no more room in the Bag."))
-          else
-            if !storage.pbDeleteItem(item,qty)
-              raise "Can't delete items from storage"
-            end
-            if !@bag.pbStoreItem(item,qty)
-              raise "Can't withdraw items from storage"
-            end
-            @scene.pbRefresh
-            dispqty = (pbIsImportantItem?(item)) ? 1 : qty
-            itemname = PBItems.getNamePlural(item) if dispqty>1
-            pbDisplay(_INTL("Withdrew {1} {2}.",dispqty,itemname))
-          end
+        if !@bag.pbStoreItem(item,qty)
+          raise "Can't withdraw items from storage"
         end
-      elsif command==1   # Give
-        if $Trainer.pokemonCount==0
-          @scene.pbDisplay(_INTL("There is no Pokémon."))
-          return 0
-        elsif pbIsImportantItem?(item)
-          @scene.pbDisplay(_INTL("The {1} can't be held.",itemname))
-        else
-          pbFadeOutIn {
-            sscene  = PokemonParty_Scene.new
-            sscreen = PokemonPartyScreen.new(sscene,$Trainer.party)
-            if sscreen.pbPokemonGiveScreen(item)
-              # If the item was held, delete the item from storage
-              if !storage.pbDeleteItem(item,1)
-                raise "Can't delete item from storage"
-              end
-            end
-            @scene.pbRefresh
-          }
-        end
+        @scene.pbRefresh
+        dispqty = (pbIsImportantItem?(item)) ? 1 : qty
+        itemname = (dispqty>1) ? PBItems.getNamePlural(item) : PBItems.getName(item)
+        pbDisplay(_INTL("Withdrew {1} {2}.",dispqty,itemname))
+      else
+        pbDisplay(_INTL("There's no more room in the Bag."))
       end
     end
     @scene.pbEndScene
