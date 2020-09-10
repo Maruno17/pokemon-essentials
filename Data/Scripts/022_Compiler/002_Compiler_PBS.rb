@@ -852,14 +852,11 @@ def pbCompilePokemonData
     evolutions[e].each_with_index do |evo,i|
       FileLineData.setSection(i,"Evolutions","")
       evo[0] = csvEnumField!(evo[0],PBSpecies,"Evolutions",i)   # Species
-      case PBEvolution::EVOPARAM[evo[1]]   # Evolution method
-      when 1; evo[2] = csvPosInt!(evo[2])
-      when 2; evo[2] = csvEnumField!(evo[2],PBItems,"Evolutions",i)
-      when 3; evo[2] = csvEnumField!(evo[2],PBMoves,"Evolutions",i)
-      when 4; evo[2] = csvEnumField!(evo[2],PBSpecies,"Evolutions",i)
-      when 5; evo[2] = csvEnumField!(evo[2],PBTypes,"Evolutions",i)
-      when 6; evo[2] = csvEnumField!(evo[2],PBAbilities,"Evolutions",i)
-      else;   evo[2] = 0
+      param_type = PBEvolution.getFunction(evo[1], "parameterType")
+      if param_type
+        evo[2] = csvEnumField!(evo[2], param_type, "Evolutions", i)
+      else
+        evo[2] = csvInt!(evo[2]) if evo[2] && evo[2] != ""
       end
     end
   end
@@ -1065,14 +1062,11 @@ def pbCompilePokemonForms
     evolutions[e].each_with_index do |evo,i|
       FileLineData.setSection(i,"Evolutions","")
       evo[0] = csvEnumField!(evo[0],PBSpecies,"Evolutions",i)   # Species
-      case PBEvolution::EVOPARAM[evo[1]]   # Evolution method
-      when 1; evo[2] = csvPosInt!(evo[2])
-      when 2; evo[2] = csvEnumField!(evo[2],PBItems,"Evolutions",i)
-      when 3; evo[2] = csvEnumField!(evo[2],PBMoves,"Evolutions",i)
-      when 4; evo[2] = csvEnumField!(evo[2],PBSpecies,"Evolutions",i)
-      when 5; evo[2] = csvEnumField!(evo[2],PBTypes,"Evolutions",i)
-      when 6; evo[2] = csvEnumField!(evo[2],PBAbilities,"Evolutions",i)
-      else;   evo[2] = 0
+      param_type = PBEvolution.getFunction(evo[1], "parameterType")
+      if param_type
+        evo[2] = csvEnumField!(evo[2], param_type, "Evolutions", i)
+      else
+        evo[2] = csvPosInt!(evo[2]) if evo[2] && evo[2] != ""
       end
     end
   end

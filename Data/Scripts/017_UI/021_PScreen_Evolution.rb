@@ -583,7 +583,7 @@ class PokemonEvolutionScene
        @pokemon.name,newspeciesname)) { pbUpdate }
     @sprites["msgwindow"].text = ""
     # Check for consumed item and check if Pokémon should be duplicated
-    createSpecies = pbRemoveItemAfterEvolution
+    pbEvolutionMethodAfterEvolution
     # Modify Pokémon to make it evolved
     @pokemon.species = @newspecies
     @pokemon.name    = newspeciesname if @pokemon.name==oldspeciesname
@@ -599,46 +599,30 @@ class PokemonEvolutionScene
       next if i[0]!=0 && i[0]!=@pokemon.level   # 0 is "learn upon evolution"
       pbLearnMove(@pokemon,i[1],true) { pbUpdate }
     end
-    # Duplicate Pokémon (i.e. Shedinja)
-    if createSpecies>0 && $Trainer.party.length<6
-      pbDuplicatePokemon(createSpecies)
-      # Consume Poké Ball
-      $PokemonBag.pbDeleteItem(getConst(PBItems,:POKEBALL))
-    end
   end
 
-  def pbRemoveItemAfterEvolution
-    removeItem = false
-    createSpecies = pbCheckEvolutionEx(@pokemon) { |_pokemon,evonib,_level,pkmn|
-      case evonib
-      when PBEvolution::Shedinja
-        next pkmn if $PokemonBag.pbHasItem?(getConst(PBItems,:POKEBALL))
-      when PBEvolution::TradeItem,PBEvolution::DayHoldItem,PBEvolution::NightHoldItem
-        removeItem = true if pkmn==@newspecies   # Item is now consumed
-      end
-      next -1
+  def pbEvolutionMethodAfterEvolution
+    pbCheckEvolutionEx(@pokemon) { |pkmn, method, parameter, new_species|
+      success = PBEvolution.call("afterEvolution", method, pkmn, new_species, parameter, @newspecies)
+      next (success) ? 1 : -1
     }
-    @pokemon.setItem(0) if removeItem
-    return createSpecies
   end
 
-  def pbDuplicatePokemon(createSpecies)
-    newpokemon = @pokemon.clone
-    newpokemon.species = createSpecies
-    newpokemon.name    = PBSpecies.getName(createSpecies)
-    newpokemon.iv      = @pokemon.iv.clone
-    newpokemon.ev      = @pokemon.ev.clone
-    newpokemon.markings = 0
-    newpokemon.ballused = 0
-    newpokemon.setItem(0)
-    newpokemon.clearAllRibbons
-    newpokemon.calcStats
-    newpokemon.heal
+  def self.pbDuplicatePokemon(pkmn, new_species)
+    new_pkmn = pkmn.clone
+    new_pkmn.species  = new_species
+    new_pkmn.name     = PBSpecies.getName(new_species)
+    new_pkmn.markings = 0
+    new_pkmn.ballused = 0
+    new_pkmn.setItem(0)
+    new_pkmn.clearAllRibbons
+    new_pkmn.calcStats
+    new_pkmn.heal
     # Add duplicate Pokémon to party
-    $Trainer.party.push(newpokemon)
+    $Trainer.party.push(new_pkmn)
     # See and own duplicate Pokémon
-    $Trainer.seen[createSpecies]  = true
-    $Trainer.owned[createSpecies] = true
-    pbSeenForm(newpokemon)
+    $Trainer.seen[new_species]  = true
+    $Trainer.owned[new_species] = true
+    pbSeenForm(new_pkmn)
   end
 end

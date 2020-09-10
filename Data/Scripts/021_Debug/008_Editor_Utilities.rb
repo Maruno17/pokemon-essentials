@@ -232,6 +232,17 @@ def pbGetGenderConst(i)
   return ret
 end
 
+def pbGetHabitatConst(i)
+  ret = MakeshiftConsts.get(53,i,PBHabitats)
+  if !ret
+    ret = ["","Grassland","Forest","WatersEdge","Sea","Cave","Mountain",
+           "RoughTerrain","Urban","Rare"]
+    i = 0 if i>=ret.length || i<0
+    ret = ret[i]
+  end
+  return ret
+end
+
 def pbGetAbilityConst(i)
   return MakeshiftConsts.get(MessageTypes::Abilities,i,PBAbilities)
 end
@@ -267,11 +278,11 @@ def pbChooseSpeciesList(default=0)
     cname = getConstantName(PBSpecies,i) rescue nil
     commands.push([i,PBSpecies.getName(i)]) if cname
   end
-  return pbChooseList(commands,default,-1)
+  return pbChooseList(commands,default,0,-1)
 end
 
 # Displays an alphabetically sorted list of all moves, and returns the ID of the
-# move selected (or 0 if the selection was canceled). "default", if specified,
+# move selected (or -1 if the selection was canceled). "default", if specified,
 # is the ID of the move to initially select.
 def pbChooseMoveList(default=0)
   commands = []
@@ -279,7 +290,7 @@ def pbChooseMoveList(default=0)
     cname = getConstantName(PBMoves,i) rescue nil
     commands.push([i,PBMoves.getName(i)]) if cname
   end
-  return pbChooseList(commands,default)
+  return pbChooseList(commands,default,0)
 end
 
 def pbChooseMoveListForSpecies(species,defaultMoveID=0)
@@ -319,9 +330,9 @@ def pbChooseMoveListForSpecies(species,defaultMoveID=0)
 end
 
 # Displays an alphabetically sorted list of all types, and returns the ID of the
-# type selected (or 0 if the selection was canceled). "default", if specified,
+# type selected (or -1 if the selection was canceled). "default", if specified,
 # is the ID of the type to initially select.
-def pbChooseTypeList(default=0)
+def pbChooseTypeList(default=-1)
   commands = []
   for i in 0..PBTypes.maxValue
     cname = getConstantName(PBTypes,i) rescue nil
@@ -330,9 +341,9 @@ def pbChooseTypeList(default=0)
   return pbChooseList(commands,default)
 end
 
-# Displays a list of all items, and returns the ID of the item selected (or 0 if
-# the selection was canceled). "default", if specified, is the ID of the item to
-# initially select. Pressing Input::A will toggle the list sorting between
+# Displays a list of all items, and returns the ID of the item selected (or -1
+# if the selection was canceled). "default", if specified, is the ID of the item
+# to initially select. Pressing Input::A will toggle the list sorting between
 # numerical and alphabetical.
 def pbChooseItemList(default=0)
   commands = []
@@ -340,11 +351,11 @@ def pbChooseItemList(default=0)
     cname = getConstantName(PBItems,i) rescue nil
     commands.push([i,PBItems.getName(i)]) if cname
   end
-  return pbChooseList(commands,default,-1)
+  return pbChooseList(commands,default,0,-1)
 end
 
 # Displays a list of all abilities, and returns the ID of the ability selected
-# (or 0 if the selection was canceled). "default", if specified, is the ID of
+# (or -1 if the selection was canceled). "default", if specified, is the ID of
 # the ability to initially select. Pressing Input::A will toggle the list
 # sorting between numerical and alphabetical.
 def pbChooseAbilityList(default=0)
@@ -353,7 +364,7 @@ def pbChooseAbilityList(default=0)
     cname = getConstantName(PBAbilities,i) rescue nil
     commands.push([i,PBAbilities.getName(i)]) if cname
   end
-  return pbChooseList(commands,default,-1)
+  return pbChooseList(commands,default,0,-1)
 end
 
 def pbChooseBallList(defaultMoveID=-1)
@@ -475,7 +486,7 @@ def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
   return ret
 end
 
-def pbChooseList(commands,default=0,sortType=1)
+def pbChooseList(commands,default=0,cancelValue=-1,sortType=1)
   cmdwin = pbListWindow([])
   itemID = default
   itemIndex = 0
@@ -493,7 +504,7 @@ def pbChooseList(commands,default=0,sortType=1)
       end
       realcommands = []
       for command in commands
-        if sortType<0 || sortType==0
+        if sortType<=0
           realcommands.push(sprintf("%03d: %s",command[0],command[1]))
         else
           realcommands.push(command[1])
@@ -503,7 +514,7 @@ def pbChooseList(commands,default=0,sortType=1)
     end
     cmd = pbCommandsSortable(cmdwin,realcommands,-1,itemIndex,(sortType<0))
     if cmd[0]==0   # Chose an option or cancelled
-      itemID = (cmd[1]<0) ? 0 : commands[cmd[1]][0]
+      itemID = (cmd[1]<0) ? cancelValue : commands[cmd[1]][0]
       break
     elsif cmd[0]==1   # Toggle sorting
       itemID = commands[cmd[1]][0]
@@ -512,7 +523,7 @@ def pbChooseList(commands,default=0,sortType=1)
     end
   end
   cmdwin.dispose
-  return (itemID>0) ? itemID : 0
+  return itemID
 end
 
 def pbCommandsSortable(cmdwindow,commands,cmdIfCancel,defaultindex=-1,sortable=false)
