@@ -1182,8 +1182,11 @@ end
 
 
 class EvolutionsProperty
-  def initialize(methods)
-    @methods = methods
+  def initialize
+    @methods = []
+    (PBEvolution.maxValue + 1).times do |i|
+      @methods[i] = getConstantName(PBEvolution, i)
+    end
   end
 
   def set(_settingname,oldsetting)
@@ -1207,12 +1210,18 @@ class EvolutionsProperty
           else
             level = realcmds[i][1]
             param_type = PBEvolution.getFunction(realcmds[i][0], "parameterType")
-            if param_type
-              level = (Object.const_get(param_type).getName(level) rescue getConstantName(param_type, level) rescue level)
+            has_param = !PBEvolution.hasFunction?(realcmds[i][0], "parameterType") || param_type != nil
+            if has_param
+              if param_type
+                level = (Object.const_get(param_type).getName(level) rescue getConstantName(param_type, level) rescue level)
+              end
+              level = "???" if !level
+              commands.push(_INTL("{1}: {2}, {3}",
+                 PBSpecies.getName(realcmds[i][2]),@methods[realcmds[i][0]],level.to_s))
+            else
+              commands.push(_INTL("{1}: {2}",
+                 PBSpecies.getName(realcmds[i][2]),@methods[realcmds[i][0]]))
             end
-            level = "" if !level
-            commands.push(_INTL("{1}: {2}, {3}",
-               PBSpecies.getName(realcmds[i][2]),@methods[realcmds[i][0]],level.to_s))
           end
           cmd[1] = i if oldsel>=0 && realcmds[i][3]==oldsel
         end
@@ -1239,28 +1248,31 @@ class EvolutionsProperty
               newmethod = pbMessage(_INTL("Choose an evolution method."),@methods,-1)
               if newmethod>0
                 newparam = -1
-                allow_zero = false
                 param_type = PBEvolution.getFunction(newmethod, "parameterType")
-                case param_type
-                when :PBItems
-                  newparam = pbChooseItemList
-                when :PBMoves
-                  newparam = pbChooseMoveList
-                when :PBSpecies
-                  newparam = pbChooseSpeciesList
-                when :PBTypes
-                  allow_zero = true
-                  newparam = pbChooseTypeList
-                when :PBAbilities
-                  newparam = pbChooseAbilityList
-                else
-                  allow_zero = true
-                  params = ChooseNumberParams.new
-                  params.setRange(0,65535)
-                  params.setCancelValue(-1)
-                  newparam = pbMessageChooseNumber(_INTL("Choose a parameter."),params)
+                has_param = !PBEvolution.hasFunction?(newmethod, "parameterType") || param_type != nil
+                if has_param
+                  allow_zero = false
+                  case param_type
+                  when :PBItems
+                    newparam = pbChooseItemList
+                  when :PBMoves
+                    newparam = pbChooseMoveList
+                  when :PBSpecies
+                    newparam = pbChooseSpeciesList
+                  when :PBTypes
+                    allow_zero = true
+                    newparam = pbChooseTypeList
+                  when :PBAbilities
+                    newparam = pbChooseAbilityList
+                  else
+                    allow_zero = true
+                    params = ChooseNumberParams.new
+                    params.setRange(0,65535)
+                    params.setCancelValue(-1)
+                    newparam = pbMessageChooseNumber(_INTL("Choose a parameter."),params)
+                  end
                 end
-                if newparam && (newparam>0 || (allow_zero && newparam == 0))
+                if !has_param || newparam > 0 || (allow_zero && newparam == 0)
                   havemove = -1
                   for i in 0...realcmds.length
                     havemove = realcmds[i][3] if realcmds[i][0]==newmethod &&
@@ -1324,44 +1336,49 @@ class EvolutionsProperty
               end
             elsif cmd2==2   # Change parameter
               newparam = -1
-              allow_zero = false
               param_type = PBEvolution.getFunction(entry[0], "parameterType")
-              case param_type
-              when :PBItems
-                newparam = pbChooseItemList(entry[1])
-              when :PBMoves
-                newparam = pbChooseMoveList(entry[1])
-              when :PBSpecies
-                newparam = pbChooseSpeciesList(entry[1])
-              when :PBTypes
-                allow_zero = true
-                newparam = pbChooseTypeList(entry[1])
-              when :PBAbilities
-                newparam = pbChooseAbilityList(entry[1])
-              else
-                allow_zero = true
-                params = ChooseNumberParams.new
-                params.setRange(0,65535)
-                params.setDefaultValue(entry[1])
-                params.setCancelValue(-1)
-                newparam = pbMessageChooseNumber(_INTL("Choose a parameter."),params)
-              end
-              if newparam && (newparam>0 || (allow_zero && newparam == 0))
-                havemove = -1
-                for i in 0...realcmds.length
-                  havemove = realcmds[i][3] if realcmds[i][0]==entry[0] &&
-                                               realcmds[i][1]==newparam &&
-                                               realcmds[i][2]==entry[2]
-                end
-                if havemove>=0
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
-                  oldsel = havemove
+              has_param = !PBEvolution.hasFunction?(entry[0], "parameterType") || param_type != nil
+              if has_param
+                allow_zero = false
+                case param_type
+                when :PBItems
+                  newparam = pbChooseItemList(entry[1])
+                when :PBMoves
+                  newparam = pbChooseMoveList(entry[1])
+                when :PBSpecies
+                  newparam = pbChooseSpeciesList(entry[1])
+                when :PBTypes
+                  allow_zero = true
+                  newparam = pbChooseTypeList(entry[1])
+                when :PBAbilities
+                  newparam = pbChooseAbilityList(entry[1])
                 else
-                  entry[1] = newparam
-                  oldsel = entry[3]
+                  allow_zero = true
+                  params = ChooseNumberParams.new
+                  params.setRange(0,65535)
+                  params.setDefaultValue(entry[1])
+                  params.setCancelValue(-1)
+                  newparam = pbMessageChooseNumber(_INTL("Choose a parameter."),params)
                 end
-                refreshlist = true
+                if newparam>0 || (allow_zero && newparam == 0)
+                  havemove = -1
+                  for i in 0...realcmds.length
+                    havemove = realcmds[i][3] if realcmds[i][0]==entry[0] &&
+                                                 realcmds[i][1]==newparam &&
+                                                 realcmds[i][2]==entry[2]
+                  end
+                  if havemove>=0
+                    realcmds[cmd[1]] = nil
+                    realcmds.compact!
+                    oldsel = havemove
+                  else
+                    entry[1] = newparam
+                    oldsel = entry[3]
+                  end
+                  refreshlist = true
+                end
+              else
+                pbMessage(_INTL("This evolution method doesn't use a parameter."))
               end
             elsif cmd2==3   # Delete
               realcmds[cmd[1]] = nil

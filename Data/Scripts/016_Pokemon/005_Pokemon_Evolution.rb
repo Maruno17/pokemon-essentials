@@ -1,46 +1,68 @@
 module PBEvolution
+  # NOTE: If you're adding new evolution methods, don't skip any numbers.
+  #       Remember to update def self.maxValue just below the constants list.
   None              = 0
-  Happiness         = 1
-  HappinessDay      = 2
-  HappinessNight    = 3
-  Level             = 4
-  Trade             = 5
-  TradeItem         = 6
-  Item              = 7
-  AttackGreater     = 8
-  AtkDefEqual       = 9
-  DefenseGreater    = 10
-  Silcoon           = 11
-  Cascoon           = 12
-  Ninjask           = 13
-  Shedinja          = 14
-  Beauty            = 15
-  ItemMale          = 16
-  ItemFemale        = 17
-  DayHoldItem       = 18
-  NightHoldItem     = 19
-  HasMove           = 20
-  HasInParty        = 21
-  LevelMale         = 22
-  LevelFemale       = 23
-  Location          = 24
-  TradeSpecies      = 25
-  LevelDay          = 26
-  LevelNight        = 27
-  LevelDarkInParty  = 28
-  LevelRain         = 29
-  HappinessMoveType = 30
-  LevelEvening      = 31
+  Level             = 1
+  LevelMale         = 2
+  LevelFemale       = 3
+  LevelDay          = 4
+  LevelNight        = 5
+  LevelMorning      = 6
+  LevelAfternoon    = 7
+  LevelEvening      = 8
+  LevelNoWeather    = 9
+  LevelSun          = 10
+  LevelRain         = 11
+  LevelSnow         = 12
+  LevelSandstorm    = 13
+  LevelCycling      = 14
+  LevelSurfing      = 15
+  LevelDiving       = 16
+  LevelDarkness     = 17
+  LevelDarkInParty  = 18
+  AttackGreater     = 19
+  AtkDefEqual       = 20
+  DefenseGreater    = 21
+  Silcoon           = 22
+  Cascoon           = 23
+  Ninjask           = 24
+  Shedinja          = 25
+  Happiness         = 26
+  HappinessMale     = 27
+  HappinessFemale   = 28
+  HappinessDay      = 29
+  HappinessNight    = 30
+  HappinessMove     = 31
+  HappinessMoveType = 32
+  HappinessHoldItem = 33
+  MaxHappiness      = 34
+  Beauty            = 35
+  HoldItem          = 36
+  HoldItemMale      = 37
+  HoldItemFemale    = 38
+  DayHoldItem       = 39
+  NightHoldItem     = 40
+  HoldItemHappiness = 41
+  HasMove           = 42
+  HasMoveType       = 43
+  HasInParty        = 44
+  Location          = 45
+  Region            = 46
+  Item              = 47
+  ItemMale          = 48
+  ItemFemale        = 49
+  ItemDay           = 50
+  ItemNight         = 51
+  ItemHappiness     = 52
+  Trade             = 53
+  TradeMale         = 54
+  TradeFemale       = 55
+  TradeDay          = 56
+  TradeNight        = 57
+  TradeItem         = 58
+  TradeSpecies      = 59
 
-  EVONAMES = ["None",
-     "Happiness",    "HappinessDay", "HappinessNight",   "Level",         "Trade",
-     "TradeItem",    "Item",         "AttackGreater",    "AtkDefEqual",   "DefenseGreater",
-     "Silcoon",      "Cascoon",      "Ninjask",          "Shedinja",      "Beauty",
-     "ItemMale",     "ItemFemale",   "DayHoldItem",      "NightHoldItem", "HasMove",
-     "HasInParty",   "LevelMale",    "LevelFemale",      "Location",      "TradeSpecies",
-     "LevelDay",     "LevelNight",   "LevelDarkInParty", "LevelRain",     "HappinessMoveType",
-     "LevelEvening"
-  ]
+  def self.maxValue; return 59; end
 
   @@evolution_methods = HandlerHash.new(:PBEvolution)
 
@@ -59,7 +81,7 @@ module PBEvolution
   def self.hasFunction?(method, function)
     method = (method.is_a?(Numeric)) ? method : getConst(PBEvolution, method)
     method_hash = @@evolution_methods[method]
-    return method_hash && method_hash[function]
+    return method_hash && method_hash.keys.include?(function)
   end
 
   def self.getFunction(method, function)
@@ -293,16 +315,36 @@ PBEvolution.register(:LevelNight, {
   }
 })
 
+PBEvolution.register(:LevelMorning, {
+  "levelUpCheck" => proc { |pkmn, parameter|
+    next pkmn.level >= parameter && PBDayNight.isMorning?
+  }
+})
+
+PBEvolution.register(:LevelAfternoon, {
+  "levelUpCheck" => proc { |pkmn, parameter|
+    next pkmn.level >= parameter && PBDayNight.isAfternoon?
+  }
+})
+
 PBEvolution.register(:LevelEvening, {
   "levelUpCheck" => proc { |pkmn, parameter|
     next pkmn.level >= parameter && PBDayNight.isEvening?
   }
 })
 
-PBEvolution.register(:LevelDarkInParty, {
+PBEvolution.register(:LevelNoWeather, {
   "levelUpCheck" => proc { |pkmn, parameter|
-    if pkmn.level >= parameter
-      next $Trainer.pokemonParty.any? { |p| p && p.hasType(:DARK) }
+    if pkmn.level >= parameter && $game_screen
+      next $game_screen.weather_type == PBFieldWeather::None
+    end
+  }
+})
+
+PBEvolution.register(:LevelSun, {
+  "levelUpCheck" => proc { |pkmn, parameter|
+    if pkmn.level >= parameter && $game_screen
+      next $game_screen.weather_type == PBFieldWeather::Sun
     end
   }
 })
@@ -312,6 +354,54 @@ PBEvolution.register(:LevelRain, {
     if pkmn.level >= parameter && $game_screen
       next [PBFieldWeather::Rain, PBFieldWeather::HeavyRain,
             PBFieldWeather::Storm].include?($game_screen.weather_type)
+    end
+  }
+})
+
+PBEvolution.register(:LevelSnow, {
+  "levelUpCheck" => proc { |pkmn, parameter|
+    if pkmn.level >= parameter && $game_screen
+      next [PBFieldWeather::Snow, PBFieldWeather::Blizzard].include?($game_screen.weather_type)
+    end
+  }
+})
+
+PBEvolution.register(:LevelSandstorm, {
+  "levelUpCheck" => proc { |pkmn, parameter|
+    if pkmn.level >= parameter && $game_screen
+      next $game_screen.weather_type == PBFieldWeather::Sandstorm
+    end
+  }
+})
+
+PBEvolution.register(:LevelCycling, {
+  "levelUpCheck" => proc { |pkmn, parameter|
+    next pkmn.level >= parameter && $PokemonGlobal && $PokemonGlobal.bicycle
+  }
+})
+
+PBEvolution.register(:LevelSurfing, {
+  "levelUpCheck" => proc { |pkmn, parameter|
+    next pkmn.level >= parameter && $PokemonGlobal && $PokemonGlobal.surfing
+  }
+})
+
+PBEvolution.register(:LevelDiving, {
+  "levelUpCheck" => proc { |pkmn, parameter|
+    next pkmn.level >= parameter && $PokemonGlobal && $PokemonGlobal.diving
+  }
+})
+
+PBEvolution.register(:LevelDarkness, {
+  "levelUpCheck" => proc { |pkmn, parameter|
+    next pkmn.level >= parameter && pbGetMetadata($game_map.map_id, MetadataDarkMap)
+  }
+})
+
+PBEvolution.register(:LevelDarkInParty, {
+  "levelUpCheck" => proc { |pkmn, parameter|
+    if pkmn.level >= parameter
+      next $Trainer.pokemonParty.any? { |p| p && p.hasType(:DARK) }
     end
   }
 })
@@ -353,6 +443,7 @@ PBEvolution.register(:Ninjask, {
 })
 
 PBEvolution.register(:Shedinja, {
+  "parameterType"  => nil,
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if $Trainer.party.length>=6
     next false if !$PokemonBag.pbHasItem?(getConst(PBItems,:POKEBALL))
@@ -363,23 +454,52 @@ PBEvolution.register(:Shedinja, {
 })
 
 PBEvolution.register(:Happiness, {
-  "minimumLevel" => 1,   # Needs any level up
-  "levelUpCheck" => proc { |pkmn, parameter|
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => nil,
+  "levelUpCheck"  => proc { |pkmn, parameter|
     next pkmn.happiness >= 220
   }
 })
 
+PBEvolution.register(:HappinessMale, {
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => nil,
+  "levelUpCheck"  => proc { |pkmn, parameter|
+    next pkmn.happiness >= 220 && pkmn.male?
+  }
+})
+
+PBEvolution.register(:HappinessFemale, {
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => nil,
+  "levelUpCheck"  => proc { |pkmn, parameter|
+    next pkmn.happiness >= 220 && pkmn.female?
+  }
+})
+
 PBEvolution.register(:HappinessDay, {
-  "minimumLevel" => 1,   # Needs any level up
-  "levelUpCheck" => proc { |pkmn, parameter|
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => nil,
+  "levelUpCheck"  => proc { |pkmn, parameter|
     next pkmn.happiness >= 220 && PBDayNight.isDay?
   }
 })
 
 PBEvolution.register(:HappinessNight, {
-  "minimumLevel" => 1,   # Needs any level up
-  "levelUpCheck" => proc { |pkmn, parameter|
-    next pkmn.happiness >= 220 && PBDayNight.isDay?
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => nil,
+  "levelUpCheck"  => proc { |pkmn, parameter|
+    next pkmn.happiness >= 220 && PBDayNight.isNight?
+  }
+})
+
+PBEvolution.register(:HappinessMove, {
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => :PBMoves,
+  "levelUpCheck"  => proc { |pkmn, parameter|
+    if pkmn.happiness >= 220
+      next pkmn.moves.any? { |m| m && m.id == parameter }
+    end
   }
 })
 
@@ -393,10 +513,70 @@ PBEvolution.register(:HappinessMoveType, {
   }
 })
 
+PBEvolution.register(:HappinessHoldItem, {
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => :PBItems,
+  "levelUpCheck"  => proc { |pkmn, parameter|
+    next pkmn.item == parameter && pkmn.happiness >= 220
+  },
+  "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
+    next false if evo_species != new_species || !pkmn.hasItem?(parameter)
+    pkmn.setItem(0)   # Item is now consumed
+    next true
+  }
+})
+
+PBEvolution.register(:MaxHappiness, {
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => nil,
+  "levelUpCheck"  => proc { |pkmn, parameter|
+    next pkmn.happiness == 255
+  }
+})
+
 PBEvolution.register(:Beauty, {   # Feebas
   "minimumLevel" => 1,   # Needs any level up
   "levelUpCheck" => proc { |pkmn, parameter|
     next pkmn.beauty >= parameter
+  }
+})
+
+PBEvolution.register(:HoldItem, {
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => :PBItems,
+  "levelUpCheck"  => proc { |pkmn, parameter|
+    next pkmn.item == parameter
+  },
+  "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
+    next false if evo_species != new_species || !pkmn.hasItem?(parameter)
+    pkmn.setItem(0)   # Item is now consumed
+    next true
+  }
+})
+
+PBEvolution.register(:HoldItemMale, {
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => :PBItems,
+  "levelUpCheck"  => proc { |pkmn, parameter|
+    next pkmn.item == parameter && pkmn.male?
+  },
+  "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
+    next false if evo_species != new_species || !pkmn.hasItem?(parameter)
+    pkmn.setItem(0)   # Item is now consumed
+    next true
+  }
+})
+
+PBEvolution.register(:HoldItemFemale, {
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => :PBItems,
+  "levelUpCheck"  => proc { |pkmn, parameter|
+    next pkmn.item == parameter && pkmn.female?
+  },
+  "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
+    next false if evo_species != new_species || !pkmn.hasItem?(parameter)
+    pkmn.setItem(0)   # Item is now consumed
+    next true
   }
 })
 
@@ -426,11 +606,32 @@ PBEvolution.register(:NightHoldItem, {
   }
 })
 
+PBEvolution.register(:HoldItemHappiness, {
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => :PBItems,
+  "levelUpCheck"  => proc { |pkmn, parameter|
+    next pkmn.item == parameter && pkmn.happiness >= 220
+  },
+  "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
+    next false if evo_species != new_species || !pkmn.hasItem?(parameter)
+    pkmn.setItem(0)   # Item is now consumed
+    next true
+  }
+})
+
 PBEvolution.register(:HasMove, {
   "minimumLevel"  => 1,   # Needs any level up
   "parameterType" => :PBMoves,
   "levelUpCheck"  => proc { |pkmn, parameter|
     next pkmn.moves.any? { |m| m && m.id == parameter }
+  }
+})
+
+PBEvolution.register(:HasMoveType, {
+  "minimumLevel"  => 1,   # Needs any level up
+  "parameterType" => :PBTypes,
+  "levelUpCheck"  => proc { |pkmn, parameter|
+    next pkmn.moves.any? { |m| m && m.type == parameter }
   }
 })
 
@@ -443,9 +644,17 @@ PBEvolution.register(:HasInParty, {
 })
 
 PBEvolution.register(:Location, {
-  "minimumLevel"  => 1,   # Needs any level up
-  "levelUpCheck"  => proc { |pkmn, parameter|
+  "minimumLevel" => 1,   # Needs any level up
+  "levelUpCheck" => proc { |pkmn, parameter|
     next $game_map.map_id == parameter
+  }
+})
+
+PBEvolution.register(:Region, {
+  "minimumLevel" => 1,   # Needs any level up
+  "levelUpCheck" => proc { |pkmn, parameter|
+    mapPos = pbGetMetadata($game_map.map_id, MetadataMapPosition)
+    next mapPos && mapPos[0] == parameter
   }
 })
 
@@ -473,12 +682,62 @@ PBEvolution.register(:ItemFemale, {
   }
 })
 
+PBEvolution.register(:ItemDay, {
+  "parameterType" => :PBItems,
+  "itemCheck"     => proc { |pkmn, parameter, item|
+    next item == parameter && PBDayNight.isDay?
+  }
+})
+
+PBEvolution.register(:ItemNight, {
+  "parameterType" => :PBItems,
+  "itemCheck"     => proc { |pkmn, parameter, item|
+    next item == parameter && PBDayNight.isNight?
+  }
+})
+
+PBEvolution.register(:ItemHappiness, {
+  "parameterType" => :PBItems,
+  "levelUpCheck"  => proc { |pkmn, parameter, item|
+    next item == parameter && pkmn.happiness >= 220
+  }
+})
+
 #===============================================================================
 # Evolution methods that trigger when the Pokémon is obtained in a trade
 #===============================================================================
 PBEvolution.register(:Trade, {
-  "tradeCheck" => proc { |pkmn, parameter, other_pkmn|
+  "parameterType" => nil,
+  "tradeCheck"    => proc { |pkmn, parameter, other_pkmn|
     next true
+  }
+})
+
+PBEvolution.register(:TradeMale, {
+  "parameterType" => nil,
+  "tradeCheck"    => proc { |pkmn, parameter, other_pkmn|
+    next pkmn.male?
+  }
+})
+
+PBEvolution.register(:TradeFemale, {
+  "parameterType" => nil,
+  "tradeCheck"    => proc { |pkmn, parameter, other_pkmn|
+    next pkmn.female?
+  }
+})
+
+PBEvolution.register(:TradeDay, {
+  "parameterType" => nil,
+  "tradeCheck"    => proc { |pkmn, parameter, other_pkmn|
+    next PBDayNight.isDay?
+  }
+})
+
+PBEvolution.register(:TradeNight, {
+  "parameterType" => nil,
+  "tradeCheck"    => proc { |pkmn, parameter, other_pkmn|
+    next PBDayNight.isNight?
   }
 })
 

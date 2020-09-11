@@ -811,7 +811,7 @@ def pbPokemonEditor
      [_INTL("BattlerAltitude"),ReadOnlyProperty,_INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
      [_INTL("BattlerShadowX"),ReadOnlyProperty,_INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
      [_INTL("BattlerShadowSize"),ReadOnlyProperty,_INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("Evolutions"),EvolutionsProperty.new(PBEvolution::EVONAMES),_INTL("Evolution paths of this species.")],
+     [_INTL("Evolutions"),EvolutionsProperty.new,_INTL("Evolution paths of this species.")],
      [_INTL("Incense"),ItemProperty,_INTL("Item needed to be held by a parent to produce an egg of this species.")],
   ]
   pbListScreenBlock(_INTL("Pokémon species"),SpeciesLister.new(selection,false)) { |button,index|
