@@ -333,7 +333,6 @@ class Window_PokemonOption < Window_DrawableCommand
     optionwidth = rect.width*9/20
     pbDrawShadowText(self.contents,rect.x,rect.y,optionwidth,rect.height,optionname,
        @nameBaseColor,@nameShadowColor)
-    self.contents.draw_text(rect.x,rect.y,optionwidth,rect.height,optionname)
     return if index==@options.length
     if @options[index].is_a?(EnumOption)
       if @options[index].values.length>1
@@ -350,7 +349,6 @@ class Window_PokemonOption < Window_DrawableCommand
              (ivalue==self[index]) ? @selBaseColor : self.baseColor,
              (ivalue==self[index]) ? @selShadowColor : self.shadowColor
           )
-          self.contents.draw_text(xpos,rect.y,optionwidth,rect.height,value)
           xpos += self.contents.text_size(value).width
           xpos += spacing
           ivalue += 1
