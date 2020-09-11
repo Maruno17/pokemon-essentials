@@ -852,14 +852,11 @@ def pbCompilePokemonData
     evolutions[e].each_with_index do |evo,i|
       FileLineData.setSection(i,"Evolutions","")
       evo[0] = csvEnumField!(evo[0],PBSpecies,"Evolutions",i)   # Species
-      case PBEvolution::EVOPARAM[evo[1]]   # Evolution method
-      when 1; evo[2] = csvPosInt!(evo[2])
-      when 2; evo[2] = csvEnumField!(evo[2],PBItems,"Evolutions",i)
-      when 3; evo[2] = csvEnumField!(evo[2],PBMoves,"Evolutions",i)
-      when 4; evo[2] = csvEnumField!(evo[2],PBSpecies,"Evolutions",i)
-      when 5; evo[2] = csvEnumField!(evo[2],PBTypes,"Evolutions",i)
-      when 6; evo[2] = csvEnumField!(evo[2],PBAbilities,"Evolutions",i)
-      else;   evo[2] = 0
+      param_type = PBEvolution.getFunction(evo[1], "parameterType")
+      if param_type
+        evo[2] = csvEnumField!(evo[2], param_type, "Evolutions", i)
+      else
+        evo[2] = csvInt!(evo[2]) if evo[2] && evo[2] != ""
       end
     end
   end
@@ -1065,14 +1062,11 @@ def pbCompilePokemonForms
     evolutions[e].each_with_index do |evo,i|
       FileLineData.setSection(i,"Evolutions","")
       evo[0] = csvEnumField!(evo[0],PBSpecies,"Evolutions",i)   # Species
-      case PBEvolution::EVOPARAM[evo[1]]   # Evolution method
-      when 1; evo[2] = csvPosInt!(evo[2])
-      when 2; evo[2] = csvEnumField!(evo[2],PBItems,"Evolutions",i)
-      when 3; evo[2] = csvEnumField!(evo[2],PBMoves,"Evolutions",i)
-      when 4; evo[2] = csvEnumField!(evo[2],PBSpecies,"Evolutions",i)
-      when 5; evo[2] = csvEnumField!(evo[2],PBTypes,"Evolutions",i)
-      when 6; evo[2] = csvEnumField!(evo[2],PBAbilities,"Evolutions",i)
-      else;   evo[2] = 0
+      param_type = PBEvolution.getFunction(evo[1], "parameterType")
+      if param_type
+        evo[2] = csvEnumField!(evo[2], param_type, "Evolutions", i)
+      else
+        evo[2] = csvPosInt!(evo[2]) if evo[2] && evo[2] != ""
       end
     end
   end
@@ -1394,26 +1388,7 @@ end
 # Compile individual trainers
 #===============================================================================
 def pbCompileTrainers
-  nonglobaltypes = {
-    "Items"     => [0,           "eEEEEEEE",PBItems,PBItems,PBItems,PBItems,
-                                            PBItems,PBItems,PBItems,PBItems],
-    "Pokemon"   => [TPSPECIES,   "ev",PBSpecies],   # Species, level
-    "Item"      => [TPITEM,      "e",PBItems],
-    "Moves"     => [TPMOVES,     "eEEE",PBMoves,PBMoves,PBMoves,PBMoves],
-    "Ability"   => [TPABILITY,   "u"],
-    "Gender"    => [TPGENDER,    "e",{"M"=>0,"m"=>0,"Male"=>0,"male"=>0,"0"=>0,
-                                      "F"=>1,"f"=>1,"Female"=>1,"female"=>1,"1"=>1}],
-    "Form"      => [TPFORM,      "u"],
-    "Shiny"     => [TPSHINY,     "b"],
-    "Nature"    => [TPNATURE,    "e",PBNatures],
-    "IV"        => [TPIV,        "uUUUUU"],
-    "Happiness" => [TPHAPPINESS, "u"],
-    "Name"      => [TPNAME,      "s"],
-    "Shadow"    => [TPSHADOW,    "b"],
-    "Ball"      => [TPBALL,      "u"],
-    "EV"        => [TPEV,        "uUUUUU"],
-    "LoseText"  => [TPLOSETEXT,  "s"]
-  }
+  trainer_info_types = TrainersMetadata::InfoTypes
   mLevel = PBExperience.maxLevel
   trainerindex    = -1
   trainers        = []
@@ -1448,7 +1423,7 @@ def pbCompileTrainers
         raise _INTL("Previous trainer not defined with as many Pokémon as expected\r\n{1}",FileLineData.linereport)
       end
       settingname = $~[1]
-      schema = nonglobaltypes[settingname]
+      schema = trainer_info_types[settingname]
       next if !schema
       record = pbGetCsvRecord($~[2],lineno,schema)
       # Error checking in XXX=YYY lines

@@ -384,47 +384,47 @@ class PokeBattle_Battler
   alias hasWorkingItem hasActiveItem?
 
   # Returns whether the specified item will be unlosable for this Pokémon.
-  def unlosableItem?(item)
-    return false if item<=0
-    return true if pbIsMail?(item)
+  def unlosableItem?(check_item)
+    return false if check_item <= 0
+    return true if pbIsMail?(check_item)
     return false if @effects[PBEffects::Transform]
     # Items that change a Pokémon's form
-    return true if @pokemon && @pokemon.getMegaForm(true)>0   # Mega Stone
-    return pbIsUnlosableItem?(item,@species,@ability)
+    return true if @pokemon && @pokemon.getMegaForm(true) > 0   # Mega Stone
+    return pbIsUnlosableItem?(check_item, @species, @ability)
   end
 
   def eachMove
-    @moves.each { |m| yield m if m && m.id!=0 }
+    @moves.each { |m| yield m if m && m.id != 0 }
   end
 
   def eachMoveWithIndex
-    @moves.each_with_index { |m,i| yield m,i if m && m.id!=0 }
+    @moves.each_with_index { |m, i| yield m, i if m && m.id != 0 }
   end
 
-  def pbHasMove?(id)
-    id = getID(PBMoves,id)
-    return false if !id || id<=0
-    eachMove { |m| return true if m.id==id }
+  def pbHasMove?(move_id)
+    move_id = getID(PBMoves, move_id)
+    return false if !move_id || move_id <= 0
+    eachMove { |m| return true if m.id == move_id }
     return false
   end
 
-  def pbHasMoveType?(type)
-    type = getConst(PBTypes,type)
-    return false if !type || type<0
-    eachMove { |m| return true if m.type==type }
+  def pbHasMoveType?(check_type)
+    check_type = getConst(PBTypes, check_type)
+    return false if !check_type || check_type < 0
+    eachMove { |m| return true if m.type == check_type }
     return false
   end
 
   def pbHasMoveFunction?(*arg)
-    return false if !code
+    return false if !arg
     eachMove do |m|
-      arg.each { |code| return true if m.function==code }
+      arg.each { |code| return true if m.function == code }
     end
     return false
   end
 
   def hasMoldBreaker?
-    return hasActiveAbility?([:MOLDBREAKER,:TERAVOLT,:TURBOBLAZE])
+    return hasActiveAbility?([:MOLDBREAKER, :TERAVOLT, :TURBOBLAZE])
   end
 
   def canChangeType?
@@ -437,12 +437,12 @@ class PokeBattle_Battler
     return false if hasActiveItem?(:IRONBALL)
     return false if @effects[PBEffects::Ingrain]
     return false if @effects[PBEffects::SmackDown]
-    return false if @battle.field.effects[PBEffects::Gravity]>0
+    return false if @battle.field.effects[PBEffects::Gravity] > 0
     return true if pbHasType?(:FLYING)
     return true if hasActiveAbility?(:LEVITATE) && !@battle.moldBreaker
     return true if hasActiveItem?(:AIRBALLOON)
-    return true if @effects[PBEffects::MagnetRise]>0
-    return true if @effects[PBEffects::Telekinesis]>0
+    return true if @effects[PBEffects::MagnetRise] > 0
+    return true if @effects[PBEffects::Telekinesis] > 0
     return false
   end
 

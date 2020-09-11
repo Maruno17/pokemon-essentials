@@ -1184,7 +1184,6 @@ end
 class EvolutionsProperty
   def initialize(methods)
     @methods = methods
-    @evoparams = PBEvolution::EVOPARAM
   end
 
   def set(_settingname,oldsetting)
@@ -1207,14 +1206,11 @@ class EvolutionsProperty
             commands.push(_INTL("[ADD EVOLUTION]"))
           else
             level = realcmds[i][1]
-            case @evoparams[realcmds[i][0]]
-            when 0; level = ""
-            when 2; level = sprintf("#{PBItems.getName(level)}")
-            when 3; level = sprintf("#{PBMoves.getName(level)}")
-            when 4; level = sprintf("#{PBSpecies.getName(level)}")
-            when 5; level = sprintf("#{PBTypes.getName(level)}")
-            when 6; level = sprintf("#{PBAbilities.getName(level)}")
+            param_type = PBEvolution.getFunction(realcmds[i][0], "parameterType")
+            if param_type
+              level = (Object.const_get(param_type).getName(level) rescue getConstantName(param_type, level) rescue level)
             end
+            level = "" if !level
             commands.push(_INTL("{1}: {2}, {3}",
                PBSpecies.getName(realcmds[i][2]),@methods[realcmds[i][0]],level.to_s))
           end
@@ -1242,30 +1238,29 @@ class EvolutionsProperty
             if newspecies>0
               newmethod = pbMessage(_INTL("Choose an evolution method."),@methods,-1)
               if newmethod>0
-                newparam = 0
-                if @evoparams[newmethod]==2      # Items
+                newparam = -1
+                allow_zero = false
+                param_type = PBEvolution.getFunction(newmethod, "parameterType")
+                case param_type
+                when :PBItems
                   newparam = pbChooseItemList
-                elsif @evoparams[newmethod]==3   # Moves
+                when :PBMoves
                   newparam = pbChooseMoveList
-                elsif @evoparams[newmethod]==4   # Species
+                when :PBSpecies
                   newparam = pbChooseSpeciesList
-                elsif @evoparams[newmethod]==5   # Types
+                when :PBTypes
+                  allow_zero = true
                   newparam = pbChooseTypeList
-                elsif @evoparams[newmethod]==6   # Abilities
+                when :PBAbilities
                   newparam = pbChooseAbilityList
-                elsif @evoparams[newmethod]!=0
+                else
+                  allow_zero = true
                   params = ChooseNumberParams.new
                   params.setRange(0,65535)
-                  params.setDefaultValue(-1)
+                  params.setCancelValue(-1)
                   newparam = pbMessageChooseNumber(_INTL("Choose a parameter."),params)
                 end
-                if @evoparams[newmethod]==0 ||
-                   (@evoparams[newmethod]==1 && newparam && newparam>=0) ||
-                   (@evoparams[newmethod]==2 && newparam && newparam>0) ||
-                   (@evoparams[newmethod]==3 && newparam && newparam>0) ||
-                   (@evoparams[newmethod]==4 && newparam && newparam>0) ||
-                   (@evoparams[newmethod]==5 && newparam && newparam>=0) ||
-                   (@evoparams[newmethod]==6 && newparam && newparam>0)
+                if newparam && (newparam>0 || (allow_zero && newparam == 0))
                   havemove = -1
                   for i in 0...realcmds.length
                     havemove = realcmds[i][3] if realcmds[i][0]==newmethod &&
@@ -1320,57 +1315,53 @@ class EvolutionsProperty
                   realcmds[cmd[1]] = nil
                   realcmds.compact!
                   oldsel = havemove
-                else
+                elsif newmethod != entry[0]
                   entry[0] = newmethod
-                  entry[1] = 0 if @evoparams[entry[0]]==0
+                  entry[1] = 0
                   oldsel = entry[3]
                 end
                 refreshlist = true
               end
             elsif cmd2==2   # Change parameter
-              if @evoparams[entry[0]]==0
-                pbMessage(_INTL("This evolution method doesn't use a parameter."))
+              newparam = -1
+              allow_zero = false
+              param_type = PBEvolution.getFunction(entry[0], "parameterType")
+              case param_type
+              when :PBItems
+                newparam = pbChooseItemList(entry[1])
+              when :PBMoves
+                newparam = pbChooseMoveList(entry[1])
+              when :PBSpecies
+                newparam = pbChooseSpeciesList(entry[1])
+              when :PBTypes
+                allow_zero = true
+                newparam = pbChooseTypeList(entry[1])
+              when :PBAbilities
+                newparam = pbChooseAbilityList(entry[1])
               else
-                newparam = -1
-                if @evoparams[entry[0]]==2      # Items
-                  newparam = pbChooseItemList(entry[1])
-                elsif @evoparams[entry[0]]==3   # Moves
-                  newparam = pbChooseMoveList(entry[1])
-                elsif @evoparams[entry[0]]==4   # Species
-                  newparam = pbChooseSpeciesList(entry[1])
-                elsif @evoparams[entry[0]]==5   # Types
-                  newparam = pbChooseTypeList(entry[1])
-                elsif @evoparams[entry[0]]==6   # Abilities
-                  newparam = pbChooseAbilityList(entry[1])
+                allow_zero = true
+                params = ChooseNumberParams.new
+                params.setRange(0,65535)
+                params.setDefaultValue(entry[1])
+                params.setCancelValue(-1)
+                newparam = pbMessageChooseNumber(_INTL("Choose a parameter."),params)
+              end
+              if newparam && (newparam>0 || (allow_zero && newparam == 0))
+                havemove = -1
+                for i in 0...realcmds.length
+                  havemove = realcmds[i][3] if realcmds[i][0]==entry[0] &&
+                                               realcmds[i][1]==newparam &&
+                                               realcmds[i][2]==entry[2]
+                end
+                if havemove>=0
+                  realcmds[cmd[1]] = nil
+                  realcmds.compact!
+                  oldsel = havemove
                 else
-                  params = ChooseNumberParams.new
-                  params.setRange(0,65535)
-                  params.setDefaultValue(entry[1])
-                  params.setCancelValue(-1)
-                  newparam = pbMessageChooseNumber(_INTL("Choose a parameter."),params)
+                  entry[1] = newparam
+                  oldsel = entry[3]
                 end
-                if (@evoparams[entry[0]]==1 && newparam && newparam>=0) ||
-                   (@evoparams[entry[0]]==2 && newparam && newparam>0) ||
-                   (@evoparams[entry[0]]==3 && newparam && newparam>0) ||
-                   (@evoparams[entry[0]]==4 && newparam && newparam>0) ||
-                   (@evoparams[entry[0]]==5 && newparam && newparam>=0) ||
-                   (@evoparams[entry[0]]==6 && newparam && newparam>0)
-                  havemove = -1
-                  for i in 0...realcmds.length
-                    havemove = realcmds[i][3] if realcmds[i][0]==entry[0] &&
-                                                 realcmds[i][1]==newparam &&
-                                                 realcmds[i][2]==entry[2]
-                  end
-                  if havemove>=0
-                    realcmds[cmd[1]] = nil
-                    realcmds.compact!
-                    oldsel = havemove
-                  else
-                    entry[1] = newparam
-                    oldsel = entry[3]
-                  end
-                  refreshlist = true
-                end
+                refreshlist = true
               end
             elsif cmd2==3   # Delete
               realcmds[cmd[1]] = nil
@@ -1409,14 +1400,11 @@ class EvolutionsProperty
     for i in 0...value.length
       ret << "," if i>0
       param = value[i][1]
-      case @evoparams[value[i][0]]
-      when 0; param = ""
-      when 2; param = sprintf("#{PBItems.getName(param)}")
-      when 3; param = sprintf("#{PBMoves.getName(param)}")
-      when 4; param = sprintf("#{PBSpecies.getName(param)}")
-      when 5; param = sprintf("#{PBTypes.getName(param)}")
-      when 6; param = sprintf("#{PBAbilities.getName(param)}")
+      param_type = PBEvolution.getFunction(value[i][0], "parameterType")
+      if param_type
+        param = (Object.const_get(param_type).getName(param) rescue getConstantName(param_type, param) rescue param)
       end
+      param = "" if !param
       ret << sprintf("#{PBSpecies.getName(value[i][2])},#{@methods[value[i][0]]},#{param}")
     end
     return ret

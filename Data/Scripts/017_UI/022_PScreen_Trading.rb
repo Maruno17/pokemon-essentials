@@ -227,22 +227,10 @@ end
 #===============================================================================
 # Evolution methods
 #===============================================================================
-def pbTradeCheckEvolution(pokemon,pokemon2)
-  ret = pbCheckEvolutionEx(pokemon) { |pokemon,evonib,level,poke|
-    case evonib
-    when PBEvolution::Trade
-      next poke
-    when PBEvolution::TradeItem
-      if pokemon.item==level
-        pokemon.setItem(0)
-        next poke
-      end
-    when PBEvolution::TradeSpecies
-      if !pokemon2.hasItem?(:EVERSTONE)
-        next poke if pokemon2.species==level
-      end
-    end
-    next -1
+def pbTradeCheckEvolution(pkmn, other_pkmn)
+  ret = pbCheckEvolutionEx(pkmn) { |pkmn, method, parameter, new_species|
+    success = PBEvolution.call("tradeCheck", method, pkmn, parameter, other_pkmn)
+    next (success) ? new_species : -1
   }
   return ret
 end

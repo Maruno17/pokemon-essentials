@@ -829,33 +829,21 @@ def pbSavePokemonData
     pokedata.write("Evolutions = ")
     count = 0
     for form in pbGetEvolvedFormData(i)
-      evonib = form[0]
-      level  = form[1]
-      poke   = form[2]
-      next if poke==0
-      cpoke   = getConstantName(PBSpecies,poke) rescue pbGetSpeciesConst(poke)
-      evoname = getConstantName(PBEvolution,evonib) rescue pbGetEvolutionConst(evonib)
-      next if !cpoke || cpoke==""
+      method      = form[0]
+      parameter   = form[1]
+      new_species = form[2]
+      next if new_species==0
+      cnew_species = getConstantName(PBSpecies,new_species) rescue pbGetSpeciesConst(new_species)
+      evoname = getConstantName(PBEvolution,method) rescue pbGetEvolutionConst(method)
+      next if !cnew_species || cnew_species==""
       pokedata.write(",") if count>0
-      pokedata.write(sprintf("%s,%s,",cpoke,evoname))
-      case PBEvolution::EVOPARAM[evonib]
-      when 1
-        pokedata.write("#{level}")
-      when 2
-        clevel = getConstantName(PBItems,level) rescue pbGetItemConst(level)
-        pokedata.write("#{clevel}")
-      when 3
-        clevel = getConstantName(PBMoves,level) rescue pbGetMoveConst(level)
-        pokedata.write("#{clevel}")
-      when 4
-        clevel = getConstantName(PBSpecies,level) rescue pbGetSpeciesConst(level)
-        pokedata.write("#{clevel}")
-      when 5
-        clevel = getConstantName(PBTypes,level) rescue pbGetTypeConst(level)
-        pokedata.write("#{clevel}")
-      when 6
-        clevel = getConstantName(PBAbilities,level) rescue pbGetAbilityConst(level)
-        pokedata.write("#{clevel}")
+      pokedata.write(sprintf("%s,%s,",cnew_species,evoname))
+      param_type = PBEvolution.getFunction(method, "parameterType")
+      if param_type
+        cparameter = getConstantName(param_type,parameter) rescue ""
+        pokedata.write("#{cparameter}")
+      else
+        pokedata.write("#{parameter}")
       end
       count += 1
     end
@@ -1230,8 +1218,9 @@ def pbSavePokemonFormsData
     if shape!=nil
       pokedata.write("Shape = #{shape}\r\n")
     end
-    if habitat!=nil
-      pokedata.write("Habitat = "+["","Grassland","Forest","WatersEdge","Sea","Cave","Mountain","RoughTerrain","Urban","Rare"][habitat]+"\r\n") if habitat>0
+    if habitat!=nil && habitat>0
+      habitat_name = getConstantName(PBHabitats,habitat) rescue pbGetHabitatConst(habitat)
+      pokedata.write("Habitat = #{habitat_name}\r\n")
     end
     if kind!=nil
       pokedata.write("Kind = #{kind}\r\n")
@@ -1267,25 +1256,25 @@ def pbSavePokemonFormsData
     end
     origevos = []
     for form in pbGetEvolvedFormData(species)
-      evonib = form[0]
-      level  = form[1]
-      poke   = form[2]
-      next if poke==0
-      cpoke   = getConstantName(PBSpecies,poke) rescue pbGetSpeciesConst(poke)
-      evoname = getConstantName(PBEvolution,evonib) rescue pbGetEvolutionConst(evonib)
-      next if !cpoke || cpoke==""
-      origevos.push([evonib,level,poke])
+      method      = form[0]
+      parameter   = form[1]
+      new_species = form[2]
+      next if new_species==0
+      cnew_species = getConstantName(PBSpecies,new_species) rescue pbGetSpeciesConst(new_species)
+      evoname = getConstantName(PBEvolution,method) rescue pbGetEvolutionConst(method)
+      next if !cnew_species || cnew_species==""
+      origevos.push([method,parameter,new_species])
     end
     evos = []
     for form in pbGetEvolvedFormData(i)
-      evonib = form[0]
-      level  = form[1]
-      poke   = form[2]
-      next if poke==0
-      cpoke   = getConstantName(PBSpecies,poke) rescue pbGetSpeciesConst(poke)
-      evoname = getConstantName(PBEvolution,evonib) rescue pbGetEvolutionConst(evonib)
-      next if !cpoke || cpoke==""
-      evos.push([evonib,level,poke])
+      method      = form[0]
+      parameter   = form[1]
+      new_species = form[2]
+      next if new_species==0
+      cnew_species = getConstantName(PBSpecies,new_species) rescue pbGetSpeciesConst(new_species)
+      evoname = getConstantName(PBEvolution,method) rescue pbGetEvolutionConst(method)
+      next if !cnew_species || cnew_species==""
+      evos.push([method,parameter,new_species])
     end
     diff = false
     if evos.length!=origevos.length
@@ -1302,28 +1291,19 @@ def pbSavePokemonFormsData
     if diff
       pokedata.write("Evolutions = ")
       for k in 0...evos.length
-        cpoke   = getConstantName(PBSpecies,poke) rescue pbGetSpeciesConst(poke)
-        evoname = getConstantName(PBEvolution,evonib) rescue pbGetEvolutionConst(evonib)
-        next if !cpoke || cpoke==""
-        pokedata.write(sprintf("%s,%s,",cpoke,evoname))
-        case PBEvolution::EVOPARAM[evonib]
-        when 1
-          pokedata.write("#{level}")
-        when 2
-          clevel = getConstantName(PBItems,level) rescue pbGetItemConst(level)
-          pokedata.write("#{clevel}")
-        when 3
-          clevel = getConstantName(PBMoves,level) rescue pbGetMoveConst(level)
-          pokedata.write("#{clevel}")
-        when 4
-          clevel = getConstantName(PBSpecies,level) rescue pbGetSpeciesConst(level)
-          pokedata.write("#{clevel}")
-        when 5
-          clevel = getConstantName(PBTypes,level) rescue pbGetTypeConst(level)
-          pokedata.write("#{clevel}")
-        when 6
-          clevel = getConstantName(PBAbilities,level) rescue pbGetAbilityConst(level)
-          pokedata.write("#{clevel}")
+        method      = form[0]
+        parameter   = form[1]
+        new_species = form[2]
+        cnew_species = getConstantName(PBSpecies,new_species) rescue pbGetSpeciesConst(new_species)
+        evoname = getConstantName(PBEvolution,method) rescue pbGetEvolutionConst(method)
+        next if !cnew_species || cnew_species==""
+        pokedata.write(sprintf("%s,%s,",cnew_species,evoname))
+        param_type = PBEvolution.getFunction(method, "parameterType")
+        if param_type
+          cparameter = getConstantName(param_type,parameter) rescue ""
+          pokedata.write("#{cparameter}")
+        else
+          pokedata.write("#{parameter}")
         end
         pokedata.write(",") if k<evos.length-1
       end

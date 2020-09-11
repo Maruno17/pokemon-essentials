@@ -155,32 +155,35 @@ class PokemonMapFactory
   end
 
   # Similar to Game_Player#passable?, but supports map connections
-  def isPassableFromEdge?(x,y)
-    return true if $game_map.valid?(x,y)
-    newmap = getNewMap(x,y)
+  def isPassableFromEdge?(x, y)
+    return true if $game_map.valid?(x, y)
+    newmap = getNewMap(x, y)
     return false if !newmap
-    return isPassable?(newmap[0].map_id,newmap[1],newmap[2])
+    return isPassable?(newmap[0].map_id, newmap[1], newmap[2])
   end
 
-  def isPassable?(mapID,x,y,thisEvent=nil)
+  def isPassable?(mapID, x, y, thisEvent = nil)
     thisEvent = $game_player if !thisEvent
     map = getMapNoAdd(mapID)
     return false if !map
-    return false if !map.valid?(x,y)
+    return false if !map.valid?(x, y)
     return true if thisEvent.through
-    if thisEvent==$game_player
-      return false unless ($DEBUG && Input.press?(Input::CTRL)) ||
-         map.passable?(x,y,0,thisEvent)
-    else
-      return false unless map.passable?(x,y,0,thisEvent)
-    end
-    for event in map.events.values
-      next if event.x != x || event.y != y
-      return false if !event.through && event.character_name!=""
-    end
+    # Check passability of tile
     if thisEvent.is_a?(Game_Player)
-      if thisEvent.x == x and thisEvent.y == y
-        return false if !thisEvent.through && thisEvent.character_name!=""
+      return false unless ($DEBUG && Input.press?(Input::CTRL)) ||
+         map.passable?(x, y, 0, thisEvent)
+    else
+      return false unless map.passable?(x, y, 0, thisEvent)
+    end
+    # Check passability of event(s) in that spot
+    for event in map.events.values
+      next if event.x != x || event.y != y || event == thisEvent
+      return false if !event.through && event.character_name != ""
+    end
+    # Check passability of player
+    if !thisEvent.is_a?(Game_Player)
+      if $game_map.map_id == mapID && $game_player.x == x && $game_player.y == y
+        return false if !$game_player.through && $game_player.character_name != ""
       end
     end
     return true

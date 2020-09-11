@@ -382,7 +382,6 @@ class Window_PokemonOption < Window_DrawableCommand
       xpos = optionwidth+rect.x
       pbDrawShadowText(self.contents,xpos,rect.y,optionwidth,rect.height,value,
          @selBaseColor,@selShadowColor)
-      self.contents.draw_text(xpos,rect.y,optionwidth,rect.height,value)
     end
   end
 

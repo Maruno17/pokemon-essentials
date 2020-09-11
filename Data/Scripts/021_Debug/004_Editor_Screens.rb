@@ -798,7 +798,7 @@ def pbPokemonEditor
         _INTL("Urban"),_INTL("Rare")]),
         _INTL("The habitat of this species.")],
      [_INTL("RegionalNumbers"),ReadOnlyProperty,_INTL("Regional Dex numbers for the Pokémon. These are edited elsewhere.")],
-     [_INTL("Kind"),StringProperty._INTL("Kind of Pokémon species.")],
+     [_INTL("Kind"),StringProperty,_INTL("Kind of Pokémon species.")],
      [_INTL("Pokédex"),StringProperty,_INTL("Description of the Pokémon as displayed in the Pokédex.")],
      [_INTL("FormName"),StringProperty,_INTL("Name of this form of the Pokémon.")],
      [_INTL("WildItemCommon"),ItemProperty,_INTL("Item commonly held by wild Pokémon of this species.")],

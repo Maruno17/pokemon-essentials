@@ -207,9 +207,7 @@ BallHandlers::ModifyCatchRate.add(:MOONBALL,proc { |ball,catchRate,battle,battle
   #       family can evolve with the Moon Stone, not whether the target itself
   #       can immediately evolve with the Moon Stone.
   if hasConst?(PBItems,:MOONSTONE) &&
-     pbCheckEvolutionFamilyForMethod(battler.species,
-        [PBEvolution::Item,PBEvolution::ItemMale,PBEvolution::ItemFemale],
-        getConst(PBItems,:MOONSTONE))
+     pbCheckEvolutionFamilyForItemMethodItem(battler.species,getConst(PBItems,:MOONSTONE))
     catchRate *= 4
   end
   next [catchRate,255].min

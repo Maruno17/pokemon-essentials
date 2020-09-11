@@ -8,7 +8,7 @@ class PokeBattle_Battler
     amt = 1 if amt<1 && !fainted?
     oldHP = @hp
     self.hp -= amt
-    PBDebug.log("[HP change] #{pbThis} lost #{amt} HP (#{oldHP}=>#{@hp})")
+    PBDebug.log("[HP change] #{pbThis} lost #{amt} HP (#{oldHP}=>#{@hp})") if amt>0
     raise _INTL("HP less than 0") if @hp<0
     raise _INTL("HP greater than total HP") if @hp>@totalhp
     @battle.scene.pbHPChanged(self,oldHP,anim) if anyAnim && amt>0
@@ -22,7 +22,7 @@ class PokeBattle_Battler
     amt = 1 if amt<1 && @hp<@totalhp
     oldHP = @hp
     self.hp += amt
-    PBDebug.log("[HP change] #{pbThis} gained #{amt} HP (#{oldHP}=>#{@hp})")
+    PBDebug.log("[HP change] #{pbThis} gained #{amt} HP (#{oldHP}=>#{@hp})") if amt>0
     raise _INTL("HP less than 0") if @hp<0
     raise _INTL("HP greater than total HP") if @hp>@totalhp
     @battle.scene.pbHPChanged(self,oldHP,anim) if anyAnim && amt>0
