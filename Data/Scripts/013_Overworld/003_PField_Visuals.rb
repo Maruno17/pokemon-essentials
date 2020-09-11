@@ -7,6 +7,7 @@ class LocationWindow
     @window.resizeToFit(name,Graphics.width)
     @window.x        = 0
     @window.y        = -@window.height
+    @window.height   = 64
     @window.viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @window.viewport.z = 99999
     @currentmap = $game_map.map_id

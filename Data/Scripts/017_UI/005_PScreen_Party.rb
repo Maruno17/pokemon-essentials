@@ -398,7 +398,7 @@ class PokemonPartyPanel < SpriteWrapper
            "Graphics/Pictures/Party/overlay_lv",20,70,0,0,22,14]])
         pbSetSmallFont(@overlaysprite.bitmap)
         pbDrawTextPositions(@overlaysprite.bitmap,[
-           [@pokemon.level.to_s,42,62,0,basecolor,shadowcolor]
+           [@pokemon.level.to_s,42,63,0,basecolor,shadowcolor]
         ])
       end
       # Draw annotation text
