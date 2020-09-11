@@ -1310,8 +1310,9 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
         for ch in fmt
           chx = ch[1]+ch[3]
           chy = ch[2]+ch[4]
-          offset = CHARACTER_OFFSETS[ch[0]]
-          if offset && mkxp?
+          if mkxp?
+            offset = (CHARACTER_OFFSETS[ch[0]] || [0, 0])
+            offset[1] -= 2 if offset[1]
             ch[1] += offset[0] if offset[0]
             ch[2] += offset[1] if offset[1]
           end
@@ -1342,8 +1343,9 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
         for ch in @fmtchars
           chx = ch[1]+ch[3]
           chy = ch[2]+ch[4]
-          offset = CHARACTER_OFFSETS[ch[0]]
-          if offset && mkxp?
+          if mkxp?
+            offset = (CHARACTER_OFFSETS[ch[0]] || [0, 0])
+            offset[1] -= 2 if offset[1]
             ch[1] += offset[0] if offset[0]
             ch[2] += offset[1] if offset[1]
           end
