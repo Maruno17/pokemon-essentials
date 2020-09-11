@@ -1163,7 +1163,7 @@ def pbDrawTextPositions(bitmap,textpos)
   for i in textpos
     textsize = bitmap.text_size(i[0])
     x = i[1]
-    y = i[2] + (mkxp? ? 4 : 0)
+    y = i[2] + (mkxp? ? 6 : 0)
     if i[3]==true || i[3]==1   # right align
       x -= textsize.width
     elsif i[3]==2 # centered
