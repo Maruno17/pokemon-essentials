@@ -168,6 +168,7 @@ end
 
 def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
                          newlineBreaks=true,explicitBreaksOnly=false)
+  yDst += 4 if mkxp?
   x=y=0
   characters=[]
   textchunks=[]
@@ -421,6 +422,7 @@ _drawFormattedChars_ function.
 def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
                      newlineBreaks=true,explicitBreaksOnly=false,
                      collapseAlignments=false)
+  yDst += 4 if mkxp?
   dummybitmap=nil
   if !bitmap || bitmap.disposed?   # allows function to be called with nil bitmap
     dummybitmap=Bitmap.new(1,1)
@@ -888,8 +890,7 @@ end
 #===============================================================================
 def getLineBrokenChunks(bitmap,value,width,dims,plain=false)
   x=0
-  y=0
-  textheight=0
+  y=mkxp? ? 4: 0
   ret=[]
   if dims
     dims[0]=0
@@ -905,9 +906,7 @@ def getLineBrokenChunks(bitmap,value,width,dims,plain=false)
     ccheck=c
     if ccheck=="\n"
       x=0
-#      y+=(textheight==0) ? bitmap.text_size("X").height : textheight
-      y+=(textheight==0) ? bitmap.text_size("X").height+1 : textheight
-      textheight=0
+      y+=32
       next
     end
     if ccheck[/</] && !plain
@@ -927,14 +926,10 @@ def getLineBrokenChunks(bitmap,value,width,dims,plain=false)
           minTextSize=bitmap.text_size(word.gsub(/\s*/,""))
           if x>0 && x+minTextSize.width>width
             x=0
-#            y+=32 # (textheight==0) ? bitmap.text_size("X").height : textheight
-            y+=(textheight==0) ? bitmap.text_size("X").height+1 : textheight
-            textheight=0
+            y+=32
           end
         end
-#        textheight=32 # [textheight,textSize.height].max
-        textheight=[textheight,textSize.height+1].max
-        ret.push([word,x,y,textwidth,textheight,color])
+        ret.push([word,x,y,textwidth,32,color])
         x+=textwidth
         dims[0]=x if dims && dims[0]<x
       end
@@ -943,7 +938,7 @@ def getLineBrokenChunks(bitmap,value,width,dims,plain=false)
       end
     end
   end
-  dims[1]=y+textheight if dims
+  dims[1]=y+32 if dims
   return ret
 end
 
@@ -1112,8 +1107,9 @@ end
 
 def pbDrawShadowText(bitmap,x,y,width,height,string,baseColor,shadowColor=nil,align=0)
   return if !bitmap || !string
-  width=(width<0) ? bitmap.text_size(string).width+4 : width
-  height=(height<0) ? bitmap.text_size(string).height+4 : height
+  width=(width<0) ? bitmap.text_size(string).width+1 : width
+  height=(height<0) ? bitmap.text_size(string).height+1 : height
+  y += -2 if mkxp?
   if shadowColor && shadowColor.alpha>0
     bitmap.font.color=shadowColor
     bitmap.draw_text(x+2,y,width,height,string,align)
@@ -1161,7 +1157,7 @@ def pbDrawTextPositions(bitmap,textpos)
   for i in textpos
     textsize = bitmap.text_size(i[0])
     x = i[1]
-    y = i[2]
+    y = i[2] + (mkxp? ? 6 : 0)
     if i[3]==true || i[3]==1   # right align
       x -= textsize.width
     elsif i[3]==2 # centered

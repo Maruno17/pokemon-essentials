@@ -1416,7 +1416,7 @@ def pbCompileTrainerEvents(_mustcompile)
     changed = false
     map = mapData.getMap(id)
     next if !map || !mapData.mapinfos[id]
-    Win32API.SetWindowText(_INTL("Processing map {1} ({2})",id,mapData.mapinfos[id].name))
+    pbSetWindowText(_INTL("Processing map {1} ({2})",id,mapData.mapinfos[id].name))
     for key in map.events.keys
       if Time.now.to_i-t>=5
         Graphics.update
@@ -1448,7 +1448,7 @@ def pbCompileTrainerEvents(_mustcompile)
   changed = false
   Graphics.update
   commonEvents = pbLoadRxData("Data/CommonEvents")
-  Win32API.SetWindowText(_INTL("Processing common events"))
+  pbSetWindowText(_INTL("Processing common events"))
   for key in 0...commonEvents.length
     newevent = pbFixEventUse(commonEvents[key],0,mapData)
     if newevent
