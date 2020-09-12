@@ -400,10 +400,10 @@ def pbCommands2(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
   cmdwindow.index    = defaultindex if defaultindex>=0
   cmdwindow.x        = 0
   cmdwindow.y        = 0
-  if !noresize
-    cmdwindow.width  = 256
-  else
+  if noresize
     cmdwindow.height = Graphics.height
+  else
+    cmdwindow.width  = Graphics.width/2
   end
   cmdwindow.height   = Graphics.height if cmdwindow.height>Graphics.height
   cmdwindow.z        = 99999
@@ -437,10 +437,10 @@ def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
   cmdwindow.index    = defaultindex if defaultindex>=0
   cmdwindow.x        = 0
   cmdwindow.y        = 0
-  if !noresize
-    cmdwindow.width  = 256
-  else
+  if noresize
     cmdwindow.height = Graphics.height
+  else
+    cmdwindow.width  = Graphics.width/2
   end
   cmdwindow.height   = Graphics.height if cmdwindow.height>Graphics.height
   cmdwindow.z        = 99999
@@ -528,10 +528,10 @@ end
 
 def pbCommandsSortable(cmdwindow,commands,cmdIfCancel,defaultindex=-1,sortable=false)
   cmdwindow.commands = commands
-  cmdwindow.index    = defaultindex if defaultindex>=0
+  cmdwindow.index    = defaultindex if defaultindex >= 0
   cmdwindow.x        = 0
   cmdwindow.y        = 0
-  cmdwindow.width    = 256 if cmdwindow.width<256
+  cmdwindow.width    = Graphics.width / 2 if cmdwindow.width < Graphics.width / 2
   cmdwindow.height   = Graphics.height
   cmdwindow.z        = 99999
   cmdwindow.active   = true

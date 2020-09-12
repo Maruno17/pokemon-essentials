@@ -47,7 +47,7 @@ def pbEditMysteryGift(type,item,id=0,giftname="")
           item.obtainText=commands[command]
           break
         elsif command==commands.length-1
-          obtainname=pbMessageFreeText(_INTL("Enter a phrase."),"",false,32)
+          obtainname=pbMessageFreeText(_INTL("Enter a phrase."),"",false,30)
           if obtainname!=""
             item.obtainText=obtainname
             break
@@ -96,7 +96,7 @@ def pbEditMysteryGift(type,item,id=0,giftname="")
       end
     end
     loop do
-      newgiftname=pbMessageFreeText(_INTL("Enter a name for the gift."),giftname,false,32)
+      newgiftname=pbMessageFreeText(_INTL("Enter a name for the gift."),giftname,false,250)
       if newgiftname!=""
         giftname=newgiftname
         break

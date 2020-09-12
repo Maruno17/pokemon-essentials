@@ -212,7 +212,7 @@ class PokemonRegionMap_Scene
         break
       end
     end
-    currentname = pbMessageFreeText(_INTL("Set the name for this point."),currentname,false,256) { pbUpdate }
+    currentname = pbMessageFreeText(_INTL("Set the name for this point."),currentname,false,250) { pbUpdate }
     if currentname
       if currentobj
         currentobj[2] = currentname

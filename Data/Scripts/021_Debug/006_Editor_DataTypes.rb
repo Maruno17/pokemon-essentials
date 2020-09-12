@@ -156,7 +156,7 @@ end
 module StringProperty
   def self.set(settingname,oldsetting)
     return pbMessageFreeText(_INTL("Set the value for {1}.",settingname),
-       (oldsetting) ? oldsetting : "",false,256,Graphics.width)
+       (oldsetting) ? oldsetting : "",false,250,Graphics.width)
   end
 
   def self.format(value)
@@ -720,7 +720,7 @@ end
 module ItemNameProperty
   def self.set(settingname,oldsetting)
     return pbMessageFreeText(_INTL("Set the value for {1}.",settingname),
-       (oldsetting) ? oldsetting : "",false,12)
+       (oldsetting) ? oldsetting : "",false,30)
   end
 
   def self.defaultValue
@@ -1120,7 +1120,7 @@ module FormNamesProperty
         if cmd[1]>=0
           entry = realcmds[cmd[1]]
           if entry[1]<0   # Add new form
-            newname = pbMessageFreeText(_INTL("Choose a form name (no commas)."),"",false,255)
+            newname = pbMessageFreeText(_INTL("Choose a form name (no commas)."),"",false,250)
             if newname!=""
               realcmds.push([newname,realcmds.length-1])
               refreshlist = true
@@ -1129,7 +1129,7 @@ module FormNamesProperty
             cmd2 = pbMessage(_INTL("\\ts[]Do what with this form name?"),
                [_INTL("Rename"),_INTL("Delete"),_INTL("Cancel")],3)
             if cmd2==0
-              newname = pbMessageFreeText(_INTL("Choose a form name (no commas)."),entry[0],false,255)
+              newname = pbMessageFreeText(_INTL("Choose a form name (no commas)."),entry[0],false,250)
               if newname!=""
                 realcmds[cmd[1]][0] = newname
                 refreshlist = true

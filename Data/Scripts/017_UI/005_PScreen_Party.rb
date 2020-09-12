@@ -136,8 +136,8 @@ class PokemonPartyBlankPanel < SpriteWrapper
 
   def initialize(_pokemon,index,viewport=nil)
     super(viewport)
-    self.x = [0,256,0,256,0,256][index]
-    self.y = [0,16,96,112,192,208][index]
+    self.x = [0, Graphics.width/2][index%2]
+    self.y = [0, 16, 96, 112, 192, 208][index]
     @panelbgsprite = AnimatedBitmap.new("Graphics/Pictures/Party/panel_blank")
     self.bitmap = @panelbgsprite.bitmap
     @text = nil
@@ -172,8 +172,8 @@ class PokemonPartyPanel < SpriteWrapper
     @pokemon = pokemon
     @active = (index==0)   # true = rounded panel, false = rectangular panel
     @refreshing = true
-    self.x = [0,256,0,256,0,256][index]
-    self.y = [0,16,96,112,192,208][index]
+    self.x = [0, Graphics.width/2][index%2]
+    self.y = [0, 16, 96, 112, 192, 208][index]
     @panelbgsprite = ChangelingSprite.new(0,0,viewport)
     @panelbgsprite.z = self.z
     if @active   # Rounded panel

@@ -127,7 +127,7 @@ def pbDebugVariableScreen(id)
     $game_variables[id] = [$game_variables[id],-99999999].max
   elsif $game_variables[id].is_a?(String)
     value = pbMessageFreeText(_INTL("Set variable {1}.",id),
-       $game_variables[id],false,256,Graphics.width)
+       $game_variables[id],false,250,Graphics.width)
     $game_variables[id] = value
   end
 end

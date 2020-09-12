@@ -171,12 +171,12 @@ class VoltorbFlip
     @sprites["curtain"].opacity=0
     @sprites["curtainL"]=BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
     @sprites["curtainL"].z=99999
-    @sprites["curtainL"].x=256
+    @sprites["curtainL"].x=Graphics.width/2
     @sprites["curtainL"].angle=-90
     @sprites["curtainL"].bitmap.fill_rect(0,0,Graphics.width,Graphics.height,Color.new(0,0,0))
     @sprites["curtainR"]=BitmapSprite.new(Graphics.width,Graphics.height*2,@viewport)
     @sprites["curtainR"].z=99999
-    @sprites["curtainR"].x=256
+    @sprites["curtainR"].x=Graphics.width/2
     @sprites["curtainR"].bitmap.fill_rect(0,0,Graphics.width,Graphics.height*2,Color.new(0,0,0))
     @sprites["cursor"]=BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
     @sprites["cursor"].z=99998
