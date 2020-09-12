@@ -340,7 +340,8 @@ class PokeBattle_Battler
 
   # Applies to both losing self's ability (i.e. being replaced by another) and
   # having self's ability be negated.
-  def unstoppableAbility?
+  def unstoppableAbility?(abil = nil)
+    abil = @ability if !abil
     abilityBlacklist = [
       # Form-changing abilities
       :BATTLEBOND,
@@ -358,13 +359,14 @@ class PokeBattle_Battler
       :RKSSYSTEM
     ]
     abilityBlacklist.each do |a|
-      return true if isConst?(@ability, PBAbilities, a)
+      return true if isConst?(abil, PBAbilities, a)
     end
     return false
   end
 
   # Applies to gaining the ability.
-  def ungainableAbility?(abil)
+  def ungainableAbility?(abil = nil)
+    abil = @ability if !abil
     abilityBlacklist = [
       # Form-changing abilities
       :BATTLEBOND,
