@@ -301,9 +301,9 @@ class PictureEx
     @processes.push([Processes::BlendType,delay,0,0,cb,blend])
   end
 
-  def setSE(delay, seFile, volume=nil, cb=nil)
+  def setSE(delay, seFile, volume=nil, pitch=nil, cb=nil)
     delay = ensureDelay(delay)
-    @processes.push([Processes::SE,delay,0,0,cb,seFile,volume])
+    @processes.push([Processes::SE,delay,0,0,cb,seFile,volume,pitch])
   end
 
   def setName(delay, name, cb=nil)
@@ -411,7 +411,7 @@ class PictureEx
       when Processes::BlendType
         @blend_type = process[5]
       when Processes::SE
-        pbSEPlay(process[5],process[6])
+        pbSEPlay(process[5],process[6],process[7])
       when Processes::Name
         @name = process[5]
       when Processes::Origin

@@ -670,7 +670,7 @@ class BattlerFaintAnimation < PokeBattle_Animation
     delay = 10
     cry = pbCryFile(batSprite.pkmn)
     if cry
-      battler.setSE(0,pbCryFile(batSprite.pkmn))
+      battler.setSE(0,pbCryFile(batSprite.pkmn),nil,75)   # 75 is pitch
       delay = pbCryFrameLength(batSprite.pkmn)*20/Graphics.frame_rate
     end
     # Sprite drops down
