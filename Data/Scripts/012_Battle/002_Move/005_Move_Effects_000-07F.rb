@@ -1996,29 +1996,6 @@ end
 # Target's ability becomes Simple. (Simple Beam)
 #===============================================================================
 class PokeBattle_Move_063 < PokeBattle_Move
-  def initialize(battle,move)
-    super
-    @abilityBlacklist = [
-       :TRUANT,
-       # This ability
-       :SIMPLE,
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-#       :FLOWERGIFT,                                      # This can be replaced
-#       :FORECAST,                                        # This can be replaced
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM
-    ]
-  end
-
   def pbMoveFailed?(user,targets)
     if !hasConst?(PBAbilities,:SIMPLE)   # Ability isn't defined
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -2028,8 +2005,9 @@ class PokeBattle_Move_063 < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    @abilityBlacklist.each do |abil|
-      next if !isConst?(target.ability,PBAbilities,abil)
+    if target.unstoppableAbility? ||
+       isConst?(target.ability, PBAbilities, :TRUANT) ||   # For some reason
+       isConst?(target.ability, PBAbilities, :SIMPLE)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2053,29 +2031,6 @@ end
 # Target's ability becomes Insomnia. (Worry Seed)
 #===============================================================================
 class PokeBattle_Move_064 < PokeBattle_Move
-  def initialize(battle,move)
-    super
-    @abilityBlacklist = [
-       :TRUANT,
-       # This ability
-       :INSOMNIA,
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-#       :FLOWERGIFT,                                      # This can be replaced
-#       :FORECAST,                                        # This can be replaced
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM
-    ]
-  end
-
   def pbMoveFailed?(user,targets)
     if !hasConst?(PBAbilities,:INSOMNIA)   # Ability isn't defined
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -2085,8 +2040,9 @@ class PokeBattle_Move_064 < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    @abilityBlacklist.each do |abil|
-      next if !isConst?(target.ability,PBAbilities,abil)
+    if target.unstoppableAbility? ||
+       isConst?(target.ability, PBAbilities, :TRUANT) ||   # For some reason
+       isConst?(target.ability, PBAbilities, :INSOMNIA)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2112,54 +2068,8 @@ end
 class PokeBattle_Move_065 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
-  def initialize(battle,move)
-    super
-    @abilityBlacklistUnlosable = [
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-#       :FLOWERGIFT,                                          # This can be lost
-#       :FORECAST,                                            # This can be lost
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM
-    ]
-    @abilityBlacklistUngainable = [
-       # Replaces self with another ability
-       :POWEROFALCHEMY,
-       :RECEIVER,
-       :TRACE,
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-       :FLOWERGIFT,
-       :FORECAST,
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Appearance-changing abilities
-       :ILLUSION,
-       :IMPOSTER,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM,
-       # Abilities that would be overpowered if allowed to be transferred
-       :WONDERGUARD
-    ]
-  end
-
   def pbMoveFailed?(user,targets)
-    @abilityBlacklistUnlosable.each do |abil|
-      next if !isConst?(user.ability,PBAbilities,abil)
+    if user.unstoppableAbility?
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2171,8 +2081,11 @@ class PokeBattle_Move_065 < PokeBattle_Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    @abilityBlacklistUngainable.each do |abil|
-      next if !isConst?(target.ability,PBAbilities,abil)
+    if target.ungainableAbility? ||
+       isConst?(target.ability, PBAbilities, :POWEROFALCHEMY) ||
+       isConst?(target.ability, PBAbilities, :RECEIVER) ||
+       isConst?(target.ability, PBAbilities, :TRACE) ||
+       isConst?(target.ability, PBAbilities, :WONDERGUARD)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2198,57 +2111,15 @@ end
 # Target copies user's ability. (Entrainment)
 #===============================================================================
 class PokeBattle_Move_066 < PokeBattle_Move
-  def initialize(battle,move)
-    super
-    @abilityBlacklistUnlosable = [
-       :TRUANT,
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-#       :FLOWERGIFT,                                          # This can be lost
-#       :FORECAST,                                            # This can be lost
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM
-    ]
-    @abilityBlacklistUngainable = [
-       # Replaces self with another ability
-       :POWEROFALCHEMY,
-       :RECEIVER,
-       :TRACE,
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-       :FLOWERGIFT,
-       :FORECAST,
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Appearance-changing abilities
-       :ILLUSION,
-       :IMPOSTER,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM
-    ]
-  end
-
   def pbMoveFailed?(user,targets)
     if user.ability==0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    @abilityBlacklistUngainable.each do |abil|
-      next if !isConst?(user.ability,PBAbilities,abil)
+    if user.ungainableAbility? ||
+       isConst?(user.ability, PBAbilities, :POWEROFALCHEMY) ||
+       isConst?(user.ability, PBAbilities, :RECEIVER) ||
+       isConst?(user.ability, PBAbilities, :TRACE)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2256,8 +2127,7 @@ class PokeBattle_Move_066 < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    @abilityBlacklistUnlosable.each do |abil|
-      next if !isConst?(target.ability,PBAbilities,abil)
+    if target.unstoppableAbility? || isConst?(target.ability, PBAbilities, :TRUANT)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2284,59 +2154,16 @@ end
 class PokeBattle_Move_067 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
-  def initialize(battle,move)
-    super
-    @abilityBlacklistUnlosable = [
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-#       :FLOWERGIFT,                                          # This can be lost
-#       :FORECAST,                                            # This can be lost
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM
-    ]
-    @abilityBlacklistUngainable = [
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-       :FLOWERGIFT,
-       :FORECAST,
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Appearance-changing abilities
-       :ILLUSION,
-       :IMPOSTER,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM,
-       # Abilities that would be overpowered if allowed to be transferred
-       :WONDERGUARD
-    ]
-  end
-
   def pbMoveFailed?(user,targets)
     if user.ability==0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    @abilityBlacklistUnlosable.each do |abil|
-      next if !isConst?(user.ability,PBAbilities,abil)
+    if user.unstoppableAbility?
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    @abilityBlacklistUngainable.each do |abil|
-      next if !isConst?(user.ability,PBAbilities,abil)
+    if user.ungainableAbility? || isConst?(user.ability, PBAbilities, :WONDERGUARD)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2349,13 +2176,11 @@ class PokeBattle_Move_067 < PokeBattle_Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    @abilityBlacklistUnlosable.each do |abil|
-      next if !isConst?(target.ability,PBAbilities,abil)
+    if target.unstoppableAbility?
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    @abilityBlacklistUngainable.each do |abil|
-      next if !isConst?(target.ability,PBAbilities,abil)
+    if target.ungainableAbility? || isConst?(target.ability, PBAbilities, :WONDERGUARD)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2398,29 +2223,8 @@ end
 # Target's ability is negated. (Gastro Acid)
 #===============================================================================
 class PokeBattle_Move_068 < PokeBattle_Move
-  def initialize(battle,move)
-    super
-    @abilityBlacklist = [
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-#       :FLOWERGIFT,                                       # This can be negated
-#       :FORECAST,                                         # This can be negated
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM
-    ]
-  end
-
   def pbFailsAgainstTarget?(user,target)
-    @abilityBlacklist.each do |abil|
-      next if !isConst?(target.ability,PBAbilities,abil)
+    if target.unstoppableAbility?
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end

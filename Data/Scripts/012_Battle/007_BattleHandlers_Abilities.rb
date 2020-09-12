@@ -1532,37 +1532,13 @@ BattleHandlers::TargetAbilityOnHit.add(:MUMMY,
   proc { |ability,user,target,move,battle|
     next if !move.pbContactMove?(user)
     next if user.fainted?
-    abilityBlacklist = [
-       # This ability
-       :MUMMY,
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-#       :FLOWERGIFT,                                      # This can be replaced
-#       :FORECAST,                                        # This can be replaced
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM,
-    ]
-    failed = false
-    abilityBlacklist.each do |abil|
-      next if !isConst?(user.ability,PBAbilities,abil)
-      failed = true
-      break
-    end
-    next if failed
+    next if user.unstoppableAbility? || user.ability == ability
     oldAbil = -1
     battle.pbShowAbilitySplash(target) if user.opposes?(target)
     if user.affectedByContactEffect?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
       oldAbil = user.ability
       battle.pbShowAbilitySplash(user,true,false) if user.opposes?(target)
-      user.ability = getConst(PBAbilities,:MUMMY)
+      user.ability = ability
       battle.pbReplaceAbilitySplash(user) if user.opposes?(target)
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         battle.pbDisplay(_INTL("{1}'s Ability became {2}!",user.pbThis,user.abilityName))
@@ -2444,38 +2420,11 @@ BattleHandlers::AbilityOnSwitchOut.add(:REGENERATOR,
 BattleHandlers::AbilityChangeOnBattlerFainting.add(:POWEROFALCHEMY,
   proc { |ability,battler,fainted,battle|
     next if battler.opposes?(fainted)
-    abilityBlacklist = [
-       # Replaces self with another ability
-       :POWEROFALCHEMY,
-       :RECEIVER,
-       :TRACE,
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-       :FLOWERGIFT,
-       :FORECAST,
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Appearance-changing abilities
-       :ILLUSION,
-       :IMPOSTER,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM,
-       # Abilities that would be overpowered if allowed to be transferred
-       :WONDERGUARD
-    ]
-    failed = false
-    abilityBlacklist.each do |abil|
-      next if !isConst?(fainted.ability,PBAbilities,abil)
-      failed = true
-      break
-    end
-    next if failed
+    next if fainted.ungainableAbility? ||
+       isConst?(fainted.ability, PBAbilities, :POWEROFALCHEMY) ||
+       isConst?(fainted.ability, PBAbilities, :RECEIVER) ||
+       isConst?(fainted.ability, PBAbilities, :TRACE) ||
+       isConst?(fainted.ability, PBAbilities, :WONDERGUARD)
     battle.pbShowAbilitySplash(battler,true)
     battler.ability = fainted.ability
     battle.pbReplaceAbilitySplash(battler)

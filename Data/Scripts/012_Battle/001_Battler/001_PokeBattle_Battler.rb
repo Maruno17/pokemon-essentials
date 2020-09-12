@@ -338,25 +338,54 @@ class PokeBattle_Battler
   end
   alias hasWorkingAbility hasActiveAbility?
 
-  def nonNegatableAbility?
+  # Applies to both losing self's ability (i.e. being replaced by another) and
+  # having self's ability be negated.
+  def unstoppableAbility?
     abilityBlacklist = [
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-#       :FLOWERGIFT,                                       # This can be negated
-#       :FORECAST,                                         # This can be negated
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM
+      # Form-changing abilities
+      :BATTLEBOND,
+      :DISGUISE,
+#      :FLOWERGIFT,                                        # This can be stopped
+#      :FORECAST,                                          # This can be stopped
+      :MULTITYPE,
+      :POWERCONSTRUCT,
+      :SCHOOLING,
+      :SHIELDSDOWN,
+      :STANCECHANGE,
+      :ZENMODE,
+      # Abilities intended to be inherent properties of a certain species
+      :COMATOSE,
+      :RKSSYSTEM
     ]
-    abilityBlacklist.each do |abil|
-      return true if isConst?(@ability,PBAbilities,abil)
+    abilityBlacklist.each do |a|
+      return true if isConst?(@ability, PBAbilities, a)
+    end
+    return false
+  end
+
+  # Applies to gaining the ability.
+  def ungainableAbility?(abil)
+    abilityBlacklist = [
+      # Form-changing abilities
+      :BATTLEBOND,
+      :DISGUISE,
+      :FLOWERGIFT,
+      :FORECAST,
+      :MULTITYPE,
+      :POWERCONSTRUCT,
+      :SCHOOLING,
+      :SHIELDSDOWN,
+      :STANCECHANGE,
+      :ZENMODE,
+      # Appearance-changing abilities
+      :ILLUSION,
+      :IMPOSTER,
+      # Abilities intended to be inherent properties of a certain species
+      :COMATOSE,
+      :RKSSYSTEM
+    ]
+    abilityBlacklist.each do |a|
+      return true if isConst?(abil, PBAbilities, a)
     end
     return false
   end

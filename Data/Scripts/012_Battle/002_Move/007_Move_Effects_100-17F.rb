@@ -2178,31 +2178,9 @@ end
 # performed its action this round. (Core Enforcer)
 #===============================================================================
 class PokeBattle_Move_165 < PokeBattle_Move
-  def initialize(battle,move)
-    super
-    @abilityBlacklist = [
-       # Form-changing abilities
-       :BATTLEBOND,
-       :DISGUISE,
-#       :FLOWERGIFT,                                       # This can be negated
-#       :FORECAST,                                         # This can be negated
-       :MULTITYPE,
-       :POWERCONSTRUCT,
-       :SCHOOLING,
-       :SHIELDSDOWN,
-       :STANCECHANGE,
-       :ZENMODE,
-       # Abilities intended to be inherent properties of a certain species
-       :COMATOSE,
-       :RKSSYSTEM
-    ]
-  end
-
   def pbEffectAgainstTarget(user,target)
     return if target.damageState.substitute || target.effects[PBEffects::GastroAcid]
-    @abilityBlacklist.each do |abil|
-      return if isConst?(target.ability,PBAbilities,abil)
-    end
+    return if target.unstoppableAbility?
     return if @battle.choices[target.index][0]!=:UseItem &&
               !((@battle.choices[target.index][0]==:UseMove ||
               @battle.choices[target.index][0]==:Shift) && target.movedThisRound?)

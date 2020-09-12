@@ -10,7 +10,7 @@ class PokeBattle_Battler
     # Ending primordial weather, checking Trace
     pbContinualAbilityChecks(true)
     # Abilities that trigger upon switching in
-    if (!fainted? && nonNegatableAbility?) || abilityActive?
+    if (!fainted? && unstoppableAbility?) || abilityActive?
       BattleHandlers.triggerAbilityOnSwitchIn(@ability,self,@battle)
     end
     # Check for end of primordial weather
@@ -72,36 +72,13 @@ class PokeBattle_Battler
       #       in and not at any later times, even if a traceable ability turns
       #       up later. Essentials ignores this, and allows Trace to trigger
       #       whenever it can even in the old battle mechanics.
-      abilityBlacklist = [
-         # Replaces self with another ability
-         :POWEROFALCHEMY,
-         :RECEIVER,
-         :TRACE,
-         # Form-changing abilities
-         :BATTLEBOND,
-         :DISGUISE,
-         :FLOWERGIFT,
-         :FORECAST,
-         :MULTITYPE,
-         :POWERCONSTRUCT,
-         :SCHOOLING,
-         :SHIELDSDOWN,
-         :STANCECHANGE,
-         :ZENMODE,
-         # Appearance-changing abilities
-         :ILLUSION,
-         :IMPOSTER,
-         # Abilities intended to be inherent properties of a certain species
-         :COMATOSE,
-         :RKSSYSTEM
-      ]
       choices = []
       @battle.eachOtherSideBattler(@index) do |b|
-        abilityBlacklist.each do |abil|
-          next if !isConst?(b.ability,PBAbilities,abil)
-          choices.push(b)
-          break
-        end
+        next if b.ungainableAbility? ||
+                isConst?(b.ability, PBAbilities, :POWEROFALCHEMY) ||
+                isConst?(b.ability, PBAbilities, :RECEIVER) ||
+                isConst?(b.ability, PBAbilities, :TRACE)
+        choices.push(b)
       end
       if choices.length>0
         choice = choices[@battle.pbRandom(choices.length)]
@@ -109,7 +86,7 @@ class PokeBattle_Battler
         @ability = choice.ability
         @battle.pbDisplay(_INTL("{1} traced {2}'s {3}!",pbThis,choice.pbThis(true),choice.abilityName))
         @battle.pbHideAbilitySplash(self)
-        if !onSwitchIn && (nonNegatableAbility? || abilityActive?)
+        if !onSwitchIn && (unstoppableAbility? || abilityActive?)
           BattleHandlers.triggerAbilityOnSwitchIn(@ability,self,@battle)
         end
       end
@@ -138,7 +115,7 @@ class PokeBattle_Battler
         @battle.pbSetSeen(self)
       end
     end
-    @effects[PBEffects::GastroAcid] = false if nonNegatableAbility?
+    @effects[PBEffects::GastroAcid] = false if unstoppableAbility?
     @effects[PBEffects::SlowStart]  = 0 if !isConst?(@ability,PBAbilities,:SLOWSTART)
     # Revert form if Flower Gift/Forecast was lost
     pbCheckFormOnWeatherChange
