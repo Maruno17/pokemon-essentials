@@ -468,7 +468,7 @@ MultipleForms.register(:GENESECT,{
 
 MultipleForms.register(:GRENINJA,{
   "getFormOnLeavingBattle" => proc { |pkmn,battle,usedInBattle,endBattle|
-    next 0 if pkmn.fainted? || endBattle
+    next 1 if pkmn.form == 2 && (pkmn.fainted? || endBattle)
   }
 })
 

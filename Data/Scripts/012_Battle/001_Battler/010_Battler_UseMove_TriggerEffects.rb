@@ -102,12 +102,12 @@ class PokeBattle_Battler
          !@battle.battleBond[user.index&1][user.pokemonIndex]
         numFainted = 0
         targets.each { |b| numFainted += 1 if b.damageState.fainted }
-        if numFainted>0 && user.form!=1
+        if numFainted>0 && user.form==1
           @battle.battleBond[user.index&1][user.pokemonIndex] = true
           @battle.pbDisplay(_INTL("{1} became fully charged due to its bond with its Trainer!",user.pbThis))
           @battle.pbShowAbilitySplash(user,true)
           @battle.pbHideAbilitySplash(user)
-          user.pbChangeForm(1,_INTL("{1} became Ash-Greninja!",user.pbThis))
+          user.pbChangeForm(2,_INTL("{1} became Ash-Greninja!",user.pbThis))
         end
       end
     end

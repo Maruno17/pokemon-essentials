@@ -1170,6 +1170,11 @@ FormName = Chill Drive
 FormName = Douse Drive
 #-------------------------------
 [GRENINJA,1]
+Abilities = BATTLEBOND
+HiddenAbility = BATTLEBOND
+Compatibility = Undiscovered
+#-------------------------------
+[GRENINJA,2]
 FormName = Ash-Greninja
 BaseStats = 72,145,67,132,153,71
 Abilities = BATTLEBOND
