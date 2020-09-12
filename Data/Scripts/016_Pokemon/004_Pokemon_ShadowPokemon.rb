@@ -163,8 +163,9 @@ class RelicStoneScreen
     @scene.pbConfirm(x)
   end
 
-  def pbRefresh
-  end
+  def pbUpdate; end
+
+  def pbRefresh; end
 
   def pbStartScreen(pokemon)
     @scene.pbStartScene(pokemon)
