@@ -729,7 +729,7 @@ def pbUseItem(bag,item,bagscene=nil)
           if ret && useType==1   # Usable on Pokémon, consumed
             bag.pbDeleteItem(item)
             if !bag.pbHasItem?(item)
-              pbMessage(_INTL("You used your last {1}.",PBItems.getName(item)))
+              pbMessage(_INTL("You used your last {1}.",PBItems.getName(item))) { screen.pbUpdate }
               break
             end
           end
@@ -764,13 +764,13 @@ def pbUseItemOnPokemon(item,pkmn,scene)
     return false if machine==nil
     movename = PBMoves.getName(machine)
     if pkmn.shadowPokemon?
-      pbMessage(_INTL("Shadow Pokémon can't be taught any moves."))
+      pbMessage(_INTL("Shadow Pokémon can't be taught any moves.")) { scene.pbUpdate }
     elsif !pkmn.compatibleWithMove?(machine)
-      pbMessage(_INTL("{1} can't learn {2}.",pkmn.name,movename))
+      pbMessage(_INTL("{1} can't learn {2}.",pkmn.name,movename)) { scene.pbUpdate }
     else
-      pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",PBItems.getName(item)))
-      if pbConfirmMessage(_INTL("Do you want to teach {1} to {2}?",movename,pkmn.name))
-        if pbLearnMove(pkmn,machine,false,true)
+      pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",PBItems.getName(item))) { scene.pbUpdate }
+      if pbConfirmMessage(_INTL("Do you want to teach {1} to {2}?",movename,pkmn.name)) { scene.pbUpdate }
+        if pbLearnMove(pkmn,machine,false,true) { scene.pbUpdate }
           $PokemonBag.pbDeleteItem(item) if pbIsTechnicalMachine?(item) && !INFINITE_TMS
           return true
         end
@@ -786,7 +786,7 @@ def pbUseItemOnPokemon(item,pkmn,scene)
   if ret && useType && useType==1   # Usable on Pokémon, consumed
     $PokemonBag.pbDeleteItem(item)
     if !$PokemonBag.pbHasItem?(item)
-      pbMessage(_INTL("You used your last {1}.",PBItems.getName(item)))
+      pbMessage(_INTL("You used your last {1}.",PBItems.getName(item))) { scene.pbUpdate }
     end
   end
   return ret

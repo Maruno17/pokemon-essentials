@@ -1025,24 +1025,21 @@ def pbMoveTutorChoose(move,movelist=nil,bymachine=false)
     screen.pbStartScene(_INTL("Teach which Pokémon?"),false,annot)
     loop do
       chosen = screen.pbChoosePokemon
-      if chosen>=0
-        pokemon = $Trainer.party[chosen]
-        if pokemon.egg?
-          pbMessage(_INTL("Eggs can't be taught any moves."))
-        elsif pokemon.shadowPokemon?
-          pbMessage(_INTL("Shadow Pokémon can't be taught any moves."))
-        elsif movelist && !movelist.any? { |j| j==pokemon.species }
-          pbMessage(_INTL("{1} can't learn {2}.",pokemon.name,movename))
-        elsif !pokemon.compatibleWithMove?(move)
-          pbMessage(_INTL("{1} can't learn {2}.",pokemon.name,movename))
-        else
-          if pbLearnMove(pokemon,move,false,bymachine)
-            ret = true
-            break
-          end
-        end
+      break if chosen<0
+      pokemon = $Trainer.party[chosen]
+      if pokemon.egg?
+        pbMessage(_INTL("Eggs can't be taught any moves.")) { screen.pbUpdate }
+      elsif pokemon.shadowPokemon?
+        pbMessage(_INTL("Shadow Pokémon can't be taught any moves.")) { screen.pbUpdate }
+      elsif movelist && !movelist.any? { |j| j==pokemon.species }
+        pbMessage(_INTL("{1} can't learn {2}.",pokemon.name,movename)) { screen.pbUpdate }
+      elsif !pokemon.compatibleWithMove?(move)
+        pbMessage(_INTL("{1} can't learn {2}.",pokemon.name,movename)) { screen.pbUpdate }
       else
-        break
+        if pbLearnMove(pokemon,move,false,bymachine) { screen.pbUpdate }
+          ret = true
+          break
+        end
       end
     end
     screen.pbEndScene
