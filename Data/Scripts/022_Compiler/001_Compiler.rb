@@ -197,7 +197,7 @@ def pbEachFileSectionEx(f)
     end
     lineno += 1
     Graphics.update if lineno%500==0
-    Win32API.SetWindowText(_INTL("Processing line {1}",lineno)) if lineno%50==0
+    Win32API.SetWindowText(_INTL("Processing {1} line {2}",FileLineData.file,lineno)) if lineno%50==0
   }
   yield lastsection,sectionname  if havesection
 end
