@@ -403,11 +403,11 @@ class PokeBattle_Pokemon
 
   # Returns the Pokérus infection stage for this Pokémon.
   # @return [0, 1, 2] Pokérus infection stage
-  #   (0 = not infected, 1 = cured, 2 = infected)
+  #   (0 = not infected, 1 = infected, 2 = cured)
   def pokerusStage
-    return 0 if !@pokerus || @pokerus==0        # Not infected
-    return 2 if @pokerus>0 && (@pokerus%16)==0  # Cured
-    return 1                                    # Infected
+    return 0 if !@pokerus || @pokerus==0
+    return 2 if @pokerus > 0 && (@pokerus % 16) == 0
+    return 1
   end
 
   # Gives this Pokémon Pokérus (either the specified strain or a random one).
@@ -595,6 +595,7 @@ class PokeBattle_Pokemon
     @firstmoves.delete(move) if move > 0
   end
 
+  # Clears this Pokémon's first moves.
   def pbClearFirstMoves
     @firstmoves = []
   end
@@ -608,34 +609,48 @@ class PokeBattle_Pokemon
   #=============================================================================
   # Contest attributes, ribbons
   #=============================================================================
-  def cool;   return @cool || 0;   end
-  def beauty; return @beauty || 0; end
-  def cute;   return @cute || 0;   end
-  def smart;  return @smart || 0;  end
-  def tough;  return @tough || 0;  end
-  def sheen;  return @sheen || 0;  end
 
-  # Returns the number of ribbons this Pokémon has.
+  # @return [Integer] this Pokémon's cool contest attribute
+  def cool; return @cool || 0; end
+
+  # @return [Integer] this Pokémon's beauty contest attribute
+  def beauty; return @beauty || 0; end
+
+  # @return [Integer] this Pokémon's cute contest attribute
+  def cute; return @cute || 0; end
+
+  # @return [Integer] this Pokémon's smart contest attribute
+  def smart; return @smart || 0; end
+
+  # @return [Integer] this Pokémon's tough contest attribute
+  def tough; return @tough || 0; end
+
+  # @return [Integer] this Pokémon's sheen contest attribute
+  def sheen; return @sheen || 0; end
+  
+  # @return [Integer] the number of ribbons this Pokémon has
   def ribbonCount
     return (@ribbons) ? @ribbons.length : 0
   end
 
-  # Returns whether this Pokémon has the specified ribbon.
+  # @param ribbon [Integer, Symbol, String] ribbon id to check
+  # @return [Boolean] whether this Pokémon has the specified ribbon
   def hasRibbon?(ribbon)
     return false if !@ribbons
     ribbon = getID(PBRibbons,ribbon)
-    return false if ribbon==0
+    return false if ribbon == 0
     return @ribbons.include?(ribbon)
   end
 
-  # Gives this Pokémon the specified ribbon.
+  # @param ribbon [Integer, Symbol, String] id of the ribbon to give
   def giveRibbon(ribbon)
     @ribbons = [] if !@ribbons
     ribbon = getID(PBRibbons,ribbon)
-    return if ribbon==0
+    return if ribbon == 0
     @ribbons.push(ribbon) if !@ribbons.include?(ribbon)
   end
 
+  # TODO Figure out a good way to document this
   # Replaces one ribbon with the next one along, if possible.
   def upgradeRibbon(*arg)
     @ribbons = [] if !@ribbons
@@ -657,7 +672,7 @@ class PokeBattle_Pokemon
     return 0
   end
 
-  # Removes the specified ribbon from this Pokémon.
+  # @param ribbon [Integer, Symbol, String] id of the ribbon to remove
   def takeRibbon(ribbon)
     return if !@ribbons
     ribbon = getID(PBRibbons,ribbon)
@@ -678,20 +693,24 @@ class PokeBattle_Pokemon
   #=============================================================================
   # Items
   #=============================================================================
+
   # Returns whether this Pokémon is holding an item. If an item id is passed,
   # returns whether the Pokémon is holding that item.
+  # @param item_id [Integer, Symbol, String] id of the item to check
+  # @return [Boolean] whether the Pokémon is holding the specified item or
+  #   an item at all
   def hasItem?(item_id = 0)
     held_item = self.item
     return held_item > 0 if item_id == 0
     return held_item == getID(PBItems,item_id)
   end
 
-  # Sets this Pokémon's item. Accepts symbols.
-  def setItem(value)
-    self.item = getID(PBItems,value)
+  # @param item_id [Integer, Symbol, String] id of the item to give to this Pokémon
+  def setItem(item_id)
+    self.item = getID(PBItems,item_id)
   end
 
-  # Returns the items this species can be found holding in the wild.
+  # @return [Array<Integer>] the items this species can be found holding in the wild
   def wildHoldItems
     ret = []
     ret.push(pbGetSpeciesData(@species,formSimple,SpeciesWildItemCommon))
@@ -703,7 +722,7 @@ class PokeBattle_Pokemon
   # @return [PokemonMail, nil] mail held by this Pokémon (nil if there is none)
   def mail
     return nil if !@mail
-    @mail = nil if @mail.item==0 || !hasItem?(@mail.item)
+    @mail = nil if @mail.item == 0 || !hasItem?(@mail.item)
     return @mail
   end
 
@@ -718,40 +737,47 @@ class PokeBattle_Pokemon
   #=============================================================================
   # Other
   #=============================================================================
-  def species=(value)
+
+  # Changes the Pokémon's species and re-calculates its statistics.
+  # @param species_id [Integer] id of the species to change this Pokémon to
+  def species=(species_id)
     hasNickname = nicknamed?
-    @species    = value
+    @species    = species_id
     @name       = PBSpecies.getName(@species) unless hasNickname
     @level      = nil   # In case growth rate is different for the new species
     @forcedForm = nil
     calcStats
   end
 
-  def isSpecies?(s)
-    s = getID(PBSpecies,s)
-    return s && @species==s
+  # @param species [Integer, Symbol, String] id of the species to check for
+  # @return [Boolean] whether this Pokémon is of the specified species
+  def isSpecies?(species)
+    species = getID(PBSpecies,species)
+    return species && @species == species
   end
 
-  # Returns the species name of this Pokémon.
+  # @return [String] the species name of this Pokémon
   def speciesName
     return PBSpecies.getName(@species)
   end
 
+  # @return [Boolean] whether this Pokémon has been nicknamed
   def nicknamed?
-    return @name!=self.speciesName
+    return @name != self.speciesName
   end
 
-  # Returns this Pokémon's language.
+  # @return [Integer] this Pokémon's language
   def language; return @language || 0; end
 
-  # Returns the markings this Pokémon has.
+  # @return [Integer] the markings this Pokémon has
   def markings; return @markings || 0; end
 
-  # Returns a string stating the Unown form of this Pokémon.
+  # @return [String] a string stating the Unown form of this Pokémon
   def unownShape
     return "ABCDEFGHIJKLMNOPQRSTUVWXYZ?!"[@form,1]
   end
 
+  # TODO Check whether #height and #weight always return an integer
   # Returns the height of this Pokémon.
   def height
     return pbGetSpeciesData(@species,formSimple,SpeciesHeight)
@@ -786,19 +812,21 @@ class PokeBattle_Pokemon
 
   # Sets this Pokémon's HP.
   def hp=(value)
-    value = 0 if value<0
+    value = 0 if value < 0
     @hp = value
-    if @hp==0
+    if @hp == 0
       @status      = PBStatuses::NONE
       @statusCount = 0
     end
   end
 
+  # @return [Boolean] whether the Pokémon is not fainted and not an egg
   def able?
     return !egg? && @hp>0
   end
   alias isAble? able?
 
+  # @return [Boolean] whether the Pokémon is fainted
   def fainted?
     return !egg? && @hp<=0
   end
@@ -817,11 +845,14 @@ class PokeBattle_Pokemon
     @statusCount = 0
   end
 
-  # Heals all PP of this Pokémon.
-  def healPP(index=-1)
+  # Heals all PP of this Pokémon. If a move index is given, heals the PP
+  # of the move in that index.
+  # @param move_index [Integer] index of the move to heal (-1 if all moves
+  #   should be healed)
+  def healPP(move_index = -1)
     return if egg?
-    if index>=0
-      @moves[index].pp = @moves[index].totalpp
+    if move_index >= 0
+      @moves[move_index].pp = @moves[move_index].totalpp
     else
       @moves.each { |m| m.pp = m.totalpp }
     end
@@ -836,6 +867,7 @@ class PokeBattle_Pokemon
   end
 
   # Changes the happiness of this Pokémon depending on what happened to change it.
+  # @param method [String] the happiness changing method (e.g. 'walking')
   def changeHappiness(method)
     gain = 0
     case method
@@ -896,19 +928,20 @@ class PokeBattle_Pokemon
   #=============================================================================
   # Stat calculations, Pokémon creation
   #=============================================================================
-  # Returns this Pokémon's base stats. An array of six values.
+
+  # @return [Array<Integer>] this Pokémon's base stats, an array of six values
   def baseStats
     ret = pbGetSpeciesData(@species,formSimple,SpeciesBaseStats)
     return ret.clone
   end
 
-  # Returns the maximum HP of this Pokémon.
+  # @return [Integer] the maximum HP of this Pokémon
   def calcHP(base,level,iv,ev)
-    return 1 if base==1   # For Shedinja
-    return ((base*2+iv+(ev>>2))*level/100).floor+level+10
+    return 1 if base == 1   # For Shedinja
+    return ((base * 2 + iv + (ev >> 2)) * level / 100).floor + level + 10
   end
 
-  # Returns the specified stat of this Pokémon (not used for total HP).
+  # @return [Integer] the specified stat of this Pokémon (not used for total HP)
   def calcStat(base,level,iv,ev,pv)
     return ((((base*2+iv+(ev>>2))*level/100).floor+5)*pv/100).floor
   end
@@ -939,6 +972,7 @@ class PokeBattle_Pokemon
     @speed   = stats[PBStats::SPEED]
   end
 
+  # @return [PokeBattle_Pokemon] a copy of this Pokémon
   def clone
     ret = super
     ret.iv      = @iv.clone
@@ -951,16 +985,16 @@ class PokeBattle_Pokemon
   end
 
   # Creates a new Pokémon object.
-  #    species   - Pokémon species.
-  #    level     - Pokémon level.
-  #    player    - PokeBattle_Trainer object for the original trainer.
-  #    withMoves - If false, this Pokémon has no moves.
+  # @param species [Integer, Symbol, String] Pokémon species
+  # @param level [Integer] Pokémon level
+  # @param player [PokeBattle_Trainer] object for the original trainer
+  # @param withMoves [Boolean] whether the Pokémon should have moves
   def initialize(species,level,player=nil,withMoves=true)
     ospecies = species.to_s
     species = getID(PBSpecies,species)
     cname = getConstantName(PBSpecies,species) rescue nil
-    realSpecies = pbGetSpeciesFromFSpecies(species)[0] if species && species>0
-    if !species || species<=0 || realSpecies>PBSpecies.maxValue || !cname
+    realSpecies = pbGetSpeciesFromFSpecies(species)[0] if species && species > 0
+    if !species || species<=0 || realSpecies > PBSpecies.maxValue || !cname
       raise ArgumentError.new(_INTL("The species given ({1}) is invalid.",ospecies))
     end
     @species      = realSpecies
@@ -1018,8 +1052,7 @@ class PokeBattle_Pokemon
   end
 end
 
-
-
+# (see PokeBattle_Pokemon#initialize)
 def pbNewPkmn(species,level,owner=nil,withMoves=true)
   owner = $Trainer if !owner
   return PokeBattle_Pokemon.new(species,level,owner,withMoves)
