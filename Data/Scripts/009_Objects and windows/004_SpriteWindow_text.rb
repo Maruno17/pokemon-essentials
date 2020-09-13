@@ -2222,7 +2222,7 @@ class Window_CommandPokemon < Window_DrawableCommand
   def drawItem(index,_count,rect)
     pbSetSystemFont(self.contents) if @starting
     rect=drawCursor(index,rect)
-    pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,
+    pbDrawShadowText(self.contents,rect.x,rect.y + (mkxp? ? 6 : 0),rect.width,rect.height,
        @commands[index],self.baseColor,self.shadowColor)
   end
 end
