@@ -3084,7 +3084,7 @@ class PokeBattle_Move_0EC < PokeBattle_Move
       switchedBattlers.push(b.index)
       roarSwitched.push(b.index)
     end
-    if roarSwitched>0
+    if roarSwitched.length>0
       @battle.moldBreaker = false if roarSwitched.include?(user.index)
       @battle.pbPriority(true).each do |b|
         b.pbEffectsOnSwitchIn(true) if roarSwitched.include?(b.index)
