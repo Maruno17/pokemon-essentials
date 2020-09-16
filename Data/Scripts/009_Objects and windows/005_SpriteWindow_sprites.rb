@@ -67,7 +67,8 @@ class PngAnimatedBitmap
     if file.split(/[\\\/]/)[-1][/^\[(\d+)(?:,(\d+))?]/]   # Starts with 1 or more digits in brackets
       # File has a frame count
       numFrames = $1.to_i
-      delay = $2.to_i || 10
+      delay = $2.to_i
+      delay = 10 if delay == 0
       raise "Invalid frame count in #{file}" if numFrames<=0
       raise "Invalid frame delay in #{file}" if delay<=0
       if panorama.width % numFrames != 0
