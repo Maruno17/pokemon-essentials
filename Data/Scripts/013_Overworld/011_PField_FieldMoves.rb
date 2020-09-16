@@ -393,7 +393,7 @@ Events.onAction += proc { |_sender,_e|
           divemap = i; break
         end
       end
-      if PBTerrain.isDeepWater?($MapFactory.getTerrainTag(divemap,$game_player.x,$game_player.y))
+      if divemap && PBTerrain.isDeepWater?($MapFactory.getTerrainTag(divemap,$game_player.x,$game_player.y))
         pbSurfacing
       end
     end
