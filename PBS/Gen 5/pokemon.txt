@@ -815,7 +815,7 @@ Habitat = Forest
 RegionalNumbers = 25,22
 Kind = Mouse
 Pokedex = It stores electricity in the electric sacs on its cheeks. When it releases pent-up energy in a burst, the electric power is equal to a lightning bolt.
-WildItemuNCOMMON = LIGHTBALL
+WildItemUncommon = LIGHTBALL
 BattlerPlayerX = -5
 BattlerPlayerY = 0
 BattlerEnemyX = 4
@@ -9618,7 +9618,7 @@ BattlerEnemyX = -1
 BattlerEnemyY = 29
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions = NINJASK,Ninjask,20,SHEDINJA,Shedinja,20
+Evolutions = NINJASK,Ninjask,20,SHEDINJA,Shedinja,
 #-------------------------------
 [291]
 Name = Ninjask

@@ -839,11 +839,14 @@ def pbSavePokemonData
       pokedata.write(",") if count>0
       pokedata.write(sprintf("%s,%s,",cnew_species,evoname))
       param_type = PBEvolution.getFunction(method, "parameterType")
-      if param_type
-        cparameter = getConstantName(param_type,parameter) rescue ""
-        pokedata.write("#{cparameter}")
-      else
-        pokedata.write("#{parameter}")
+      has_param = !PBEvolution.hasFunction?(method, "parameterType") || param_type != nil
+      if has_param
+        if param_type
+          cparameter = (getConstantName(param_type, parameter) rescue parameter)
+          pokedata.write("#{cparameter}")
+        else
+          pokedata.write("#{parameter}")
+        end
       end
       count += 1
     end
@@ -1299,11 +1302,14 @@ def pbSavePokemonFormsData
         next if !cnew_species || cnew_species==""
         pokedata.write(sprintf("%s,%s,",cnew_species,evoname))
         param_type = PBEvolution.getFunction(method, "parameterType")
-        if param_type
-          cparameter = getConstantName(param_type,parameter) rescue ""
-          pokedata.write("#{cparameter}")
-        else
-          pokedata.write("#{parameter}")
+        has_param = !PBEvolution.hasFunction?(method, "parameterType") || param_type != nil
+        if has_param
+          if param_type
+            cparameter = (getConstantName(param_type, parameter) rescue parameter)
+            pokedata.write("#{cparameter}")
+          else
+            pokedata.write("#{parameter}")
+          end
         end
         pokedata.write(",") if k<evos.length-1
       end
