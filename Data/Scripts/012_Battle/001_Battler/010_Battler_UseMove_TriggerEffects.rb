@@ -147,6 +147,14 @@ class PokeBattle_Battler
       next if !b.itemActive?
       BattleHandlers.triggerTargetItemAfterMoveUse(b.item,b,user,move,switchByItem,@battle)
     end
+    # Eject Pack
+    @battle.pbPriority(true).each do |b|
+      next if !targets.any? { |targetB| targetB.index==b.index }
+      next if b.effects[PBEffects::LashOut] == false ||
+         switchedBattlers.include?(b.index)
+      next if !b.itemActive?
+      BattleHandlers.triggerItemOnStatLoss(b.item,b,user,move,switchByItem,@battle)
+    end
     @battle.moldBreaker = false if switchByItem.include?(user.index)
     @battle.pbPriority(true).each do |b|
       b.pbEffectsOnSwitchIn(true) if switchByItem.include?(b.index)

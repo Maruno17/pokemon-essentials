@@ -105,21 +105,30 @@ end
 #===============================================================================
 class PokeBattle_Move_087 < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
-    baseDmg *= 2 if @battle.pbWeather!=PBWeather::None
+    if @battle.pbWeather!=PBWeather::None
+      if @battle.pbWeather == PBWeather::Sandstorm || @battle.pbWeather == PBWeather::Hail
+        baseDmg *= 2
+      else 
+        baseDmg *= 2 if !user.hasActiveItem?(:UTILITYUMBRELLA)
+      end
+    end
     return baseDmg
   end
-
+  
   def pbBaseType(user)
     ret = getID(PBTypes,:NORMAL)
     case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
-      ret = getConst(PBTypes,:FIRE) || ret
+    when PBWeather::Sun, PBWeather::HarshSun 
+      ret = getConst(PBTypes,:FIRE) || ret 
     when PBWeather::Rain, PBWeather::HeavyRain
       ret = getConst(PBTypes,:WATER) || ret
     when PBWeather::Sandstorm
       ret = getConst(PBTypes,:ROCK) || ret
     when PBWeather::Hail
       ret = getConst(PBTypes,:ICE) || ret
+    end
+    if user.hasActiveItem?(:UTILITYUMBRELLA) && (ret == getConst(PBTypes,:FIRE) || ret == getConst(PBTypes,:WATER))
+      ret = getID(PBTypes,:NORMAL)
     end
     return ret
   end
@@ -1177,6 +1186,7 @@ class PokeBattle_Move_0AF < PokeBattle_Move
        "14B",   # King's Shield
        "14C",   # Spiky Shield
        "168",   # Baneful Bunker
+	   "203",   # Obstruct
        # Moves that call other moves
        "0AE",   # Mirror Move
        "0AF",   # Copycat (this move)
@@ -1495,6 +1505,7 @@ class PokeBattle_Move_0B5 < PokeBattle_Move
        "14B",   # King's Shield
        "14C",   # Spiky Shield
        "168",   # Baneful Bunker
+	   "203",   # Obstruct
        # Moves that call other moves
        "0AE",   # Mirror Move
        "0AF",   # Copycat
@@ -1618,6 +1629,7 @@ class PokeBattle_Move_0B6 < PokeBattle_Move
        "14B",   # King's Shield
        "14C",   # Spiky Shield
        "168",   # Baneful Bunker
+	   "203",   # Obstruct
        # Moves that call other moves
        "0AE",   # Mirror Move
        "0AF",   # Copycat
@@ -2054,11 +2066,10 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
     ret = super
     if user.effects[PBEffects::TwoTurnAttack]==0
       w = @battle.pbWeather
-      if w==PBWeather::Sun || w==PBWeather::HarshSun
+      if (w==PBWeather::Sun || w==PBWeather::HarshSun) && !user.hasActiveItem?(:UTILITYUMBRELLA)
         @powerHerb = false
         @chargingTurn = true
         @damagingTurn = true
-        return false
       end
     end
     return ret
@@ -2071,7 +2082,11 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
   def pbBaseDamageMultiplier(damageMult,user,target)
     w = @battle.pbWeather
     if w>0 && w!=PBWeather::Sun && w!=PBWeather::HarshSun
-      damageMult = (damageMult/2.0).round
+      if w!=PBWeather::Hail && w!=PBWeather::Sandstorm
+        damageMult = (damageMult/2.0).round if !user.hasActiveItem?(:UTILITYUMBRELLA)
+      else
+         damageMult = (damageMult/2.0).round
+      end
     end
     return damageMult
   end
@@ -2183,6 +2198,12 @@ end
 class PokeBattle_Move_0CB < PokeBattle_TwoTurnMove
   def pbChargingTurnMessage(user,targets)
     @battle.pbDisplay(_INTL("{1} hid underwater!",user.pbThis))
+    if isConst?(user.species,PBSpecies,:CRAMORANT) &&
+      user.hasActiveAbility?(:GULPMISSILE) && user.form==0
+      user.form=2
+      user.form=1 if user.hp>(user.totalhp/2)
+      @battle.scene.pbChangePokemon(user,user.pokemon)
+    end    
   end
 end
 
@@ -2552,7 +2573,11 @@ class PokeBattle_Move_0D8 < PokeBattle_HealingMove
   def pbOnStartUse(user,targets)
     case @battle.pbWeather
     when PBWeather::Sun, PBWeather::HarshSun
-      @healAmount = (user.totalhp*2/3.0).round
+      if !user.hasActiveItem?(:UTILITYUMBRELLA)
+        @healAmount = (user.totalhp*2/3.0).round
+      else
+        @healAmount = (user.totalhp/2.0).round
+      end
     when PBWeather::None, PBWeather::StrongWinds
       @healAmount = (user.totalhp/2.0).round
     else

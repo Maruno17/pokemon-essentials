@@ -110,8 +110,10 @@ class PokeBattle_Move
     accuracy = (accuracy * modifiers[ACC_MULT] / 0x1000).round
     evasion  = (evasion  * modifiers[EVA_MULT] / 0x1000).round
     evasion = 1 if evasion<1
-    # Calculation
-    return @battle.pbRandom(100) < modifiers[BASE_ACC] * accuracy / evasion
+    # Calculation/Blunder Policy
+    ret = @battle.pbRandom(100) < modifiers[BASE_ACC] * accuracy / evasion
+    user.effects[PBEffects::BlunderPolicy]=true if !ret
+    return ret
   end
 
   def pbCalcAccuracyModifiers(user,target,modifiers)
@@ -219,7 +221,7 @@ class PokeBattle_Move
 
   def pbCalcDamage(user,target,numTargets=1)
     return if statusMove?
-    if target.damageState.disguise
+    if target.damageState.disguise || target.damageState.iceface
       target.damageState.calcDamage = 1
       return
     end
@@ -325,6 +327,10 @@ class PokeBattle_Move
         multipliers[BASE_DMG_MULT] /= 3
       end
     end
+    # Tar Shot
+    if target.effects[PBEffects::TarShot] && isConst?(type,PBTypes,:FIRE)
+      multipliers[BASE_DMG_MULT] *= 2
+    end
     # Water Sport
     if isConst?(type,PBTypes,:FIRE)
       @battle.eachBattler do |b|
@@ -382,15 +388,17 @@ class PokeBattle_Move
     case @battle.pbWeather
     when PBWeather::Sun, PBWeather::HarshSun
       if isConst?(type,PBTypes,:FIRE)
-        multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+        multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round if
+        !user.hasActiveItem?(:UTILITYUMBRELLA)
       elsif isConst?(type,PBTypes,:WATER)
-        multipliers[FINAL_DMG_MULT] /= 2
+        multipliers[FINAL_DMG_MULT] /= 2 if !user.hasActiveItem?(:UTILITYUMBRELLA)
       end
     when PBWeather::Rain, PBWeather::HeavyRain
       if isConst?(type,PBTypes,:FIRE)
-        multipliers[FINAL_DMG_MULT] /= 2
+        multipliers[FINAL_DMG_MULT] /= 2 if !user.hasActiveItem?(:UTILITYUMBRELLA)
       elsif isConst?(type,PBTypes,:WATER)
-        multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+        multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round if
+        !user.hasActiveItem?(:UTILITYUMBRELLA)
       end
     when PBWeather::Sandstorm
       if target.pbHasType?(:ROCK) && specialMove? && @function!="122"   # Psyshock
@@ -417,6 +425,12 @@ class PokeBattle_Move
       else
         multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
       end
+    end
+    # Recalculate the type modifier for Dragon Darts else it does 1 damage on its
+    # second hit on a different target
+    if self.function=="209" && @battle.pbSideSize(target.index)>1
+      typeMod = self.pbCalcTypeMod(self.calcType,user,target)
+      target.damageState.typeMod = typeMod
     end
     # Type effectiveness
     multipliers[FINAL_DMG_MULT] *= target.damageState.typeMod.to_f/PBTypeEffectiveness::NORMAL_EFFECTIVE

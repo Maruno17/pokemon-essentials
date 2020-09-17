@@ -397,6 +397,16 @@ class PokeBattle_Battle
       b.pbAbilitiesOnDamageTaken(oldHP)
       b.pbFaint if b.fainted?
     end
+    # Octolock
+    priority.each do |b|
+      next if !b.effects[PBEffects::Octolock]
+      if b.pbCanLowerStatStage?(PBStats::DEFENSE,b,self)
+        b.pbLowerStatStage(PBStats::DEFENSE,1,b)
+      end
+      if b.pbCanLowerStatStage?(PBStats::SPDEF,b,self)
+        b.pbLowerStatStage(PBStats::SPDEF,1,b)
+      end
+    end  
     # Trapping attacks (Bind/Clamp/Fire Spin/Magma Storm/Sand Tomb/Whirlpool/Wrap)
     priority.each do |b|
       next if b.fainted? || b.effects[PBEffects::Trapping]==0
@@ -637,6 +647,8 @@ class PokeBattle_Battle
       b.effects[PBEffects::SpikyShield]      = false
       b.effects[PBEffects::Spotlight]        = 0
       b.effects[PBEffects::ThroatChop]       -= 1 if b.effects[PBEffects::ThroatChop]>0
+      b.effects[PBEffects::LashOut]          = false
+      b.effects[PBEffects::Obstruct]         = false
       b.lastHPLost                           = 0
       b.lastHPLostFromFoe                    = 0
       b.tookDamage                           = false
@@ -662,6 +674,19 @@ class PokeBattle_Battle
     @field.effects[PBEffects::FairyLock]   -= 1 if @field.effects[PBEffects::FairyLock]>0
     @field.effects[PBEffects::FusionBolt]  = false
     @field.effects[PBEffects::FusionFlare] = false
+    hasabil=false
+    neutralactive=field.effects[PBEffects::NeutralizingGas]
+    eachBattler {|b|
+      next if !b || b.fainted?
+      # neutralizing gas can be blocked with gastro acid, ending the effect.
+      if isConst?(b.ability,PBAbilities,:NEUTRALIZINGGAS) && !b.effects[PBEffects::GastroAcid]
+        hasabil=true; break
+      end
+    }
+    if !hasabil && neutralactive
+      @field.effects[PBEffects::NeutralizingGas] = false
+      priority.each { |b| b.pbEffectsOnSwitchIn }
+    end
     @endOfRound = false
   end
 end

@@ -1107,3 +1107,74 @@ ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE,proc { |item,pkmn,scene|
   end
   next false
 })
+
+ItemHandlers::UseOnPokemon.add(:EXPCANDYXS,proc { |item,pkmn,scene|
+   if pkmn.level>=PBExperience::maxLevel || (pokemon.isShadow? rescue false)
+     scene.pbDisplay(_INTL("It won't have any effect."))
+     next false
+   else
+     experience=100   if isConst?(item,PBItems,:EXPCANDYXS)
+     experience=800   if isConst?(item,PBItems,:EXPCANDYS)
+     experience=3000  if isConst?(item,PBItems,:EXPCANDYM)
+     experience=10000 if isConst?(item,PBItems,:EXPCANDYL)
+     experience=30000 if isConst?(item,PBItems,:EXPCANDYXL)
+     newexp=PBExperience.pbAddExperience(pkmn.exp,experience,pkmn.growthrate)
+     newlevel=PBExperience.pbGetLevelFromExperience(newexp,pkmn.growthrate)
+     curlevel=pkmn.level
+     leveldif = newlevel - curlevel
+     scene.pbDisplay(_INTL("Your Pokémon gained {1} Exp. Points!",experience))
+     if newlevel==curlevel
+       pkmn.exp=newexp
+       pkmn.calcStats
+       scene.pbRefresh
+     else
+       leveldif.times do
+         pbChangeLevel(pkmn,pkmn.level+1,scene)
+         scene.pbHardRefresh
+       end
+       next true
+     end
+   end
+})
+
+ItemHandlers::UseOnPokemon.copy(:EXPCANDYXS,:EXPCANDYS,:EXPCANDYM,:EXPCANDYL,:EXPCANDYXL)
+
+ItemHandlers::UseOnPokemon.add(:LONELYMINT,proc { |item,pkmn,scene|
+   a = PBNatures::LONELY     if isConst?(item,PBItems,:LONELYMINT)
+   a = PBNatures::ADAMANT    if isConst?(item,PBItems,:ADAMANTMINT)
+   a = PBNatures::NAUGHTY    if isConst?(item,PBItems,:NAUGHTYMINT)
+   a = PBNatures::BRAVE      if isConst?(item,PBItems,:BRAVEMINT)
+   a = PBNatures::BOLD       if isConst?(item,PBItems,:BOLDMINT)
+   a = PBNatures::IMPISH     if isConst?(item,PBItems,:IMPISHMINT)
+   a = PBNatures::LAX        if isConst?(item,PBItems,:LAXMINT)
+   a = PBNatures::RELAXED    if isConst?(item,PBItems,:RELAXEDMINT)
+   a = PBNatures::MODEST     if isConst?(item,PBItems,:MODESTMINT)
+   a = PBNatures::MILD       if isConst?(item,PBItems,:MILDMINT)
+   a = PBNatures::RASH       if isConst?(item,PBItems,:RASHMINT)
+   a = PBNatures::QUIET      if isConst?(item,PBItems,:QUIETMINT)
+   a = PBNatures::CALM       if isConst?(item,PBItems,:CALMMINT)
+   a = PBNatures::GENTLE     if isConst?(item,PBItems,:GENTLEMINT)
+   a = PBNatures::CAREFUL    if isConst?(item,PBItems,:CAREFULMINT)
+   a = PBNatures::SASSY      if isConst?(item,PBItems,:SASSYMINT)
+   a = PBNatures::TIMID      if isConst?(item,PBItems,:TIMIDMINT)
+   a = PBNatures::HASTY      if isConst?(item,PBItems,:HASTYMINT)
+   a = PBNatures::JOLLY      if isConst?(item,PBItems,:JOLLYMINT)
+   a = PBNatures::NAIVE      if isConst?(item,PBItems,:NAIVEMINT)
+   a = PBNatures::SERIOUS    if isConst?(item,PBItems,:SERIOUSMINT)
+ b = pkmn.nature
+ b = 12 if pkmn.nature == 0 || pkmn.nature == 6 || pkmn.nature == 18 || pkmn.nature == 24
+ if pkmn.natureOverride == a || b == a
+   scene.pbDisplay(_INTL("It won't have any effect."))
+   next false
+ else
+   if scene.pbConfirm(_INTL("It might affect {1}'s stats.\nAre you sure you want to use it?",pkmn.name))
+     scene.pbDisplay(_INTL("{1}'s stats may have changed due to the effects of the {2}!",pkmn.name,PBItems.getName(item)))
+     pkmn.natureOverride = a
+     pkmn.calcStats
+     next true
+   end
+ end
+ next false
+})
+
+ItemHandlers::UseOnPokemon.copy(:LONELYMINT,:ADAMANTMINT,:NAUGHTYMINT,:BRAVEMINT,:BOLDMINT,:IMPISHMINT,:LAXMINT,:RELAXEDMINT,:MODESTMIND,:MILDMINT,:RASHMINT,:QUIETMINT,:CALMMINT,:GENTLEMINT,:CAREFULMINT,:SASSYMINT,:TIMIDMINT,:HASTYMINT,:JOLLYMINT,:NAIVEMINT,:SERIOUSMINT)

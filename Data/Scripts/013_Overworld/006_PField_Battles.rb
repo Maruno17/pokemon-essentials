@@ -537,6 +537,17 @@ def pbAfterBattle(decision,canLose)
     pkmn.statusCount = 0 if pkmn.status==PBStatuses::POISON   # Bad poison becomes regular
     pkmn.makeUnmega
     pkmn.makeUnprimal
+	# Galarian Farfetch'd Evolution Method
+    ret = pbCheckEvolutionEx(pkmn) { |pkmn, method, parameter, new_species|
+      success = PBEvolution.call("afterBattleCheck", method, pkmn, parameter)
+      next (success) ? new_species : -1
+    }
+    if ret>0
+      evo = PokemonEvolutionScene.new
+      evo.pbStartScreen(pkmn,ret)
+      evo.pbEvolution(true)
+      evo.pbEndScreen
+    end   
   end
   if $PokemonGlobal.partner
     pbHealAll

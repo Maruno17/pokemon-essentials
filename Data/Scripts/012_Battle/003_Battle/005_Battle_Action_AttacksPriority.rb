@@ -158,6 +158,13 @@ class PokeBattle_Battle
               pri = BattleHandlers.triggerPriorityChangeAbility(b.ability,b,move,pri)
             end
             bArray[3] = pri
+            # Grassy Glide
+            if move.function == "191" &&
+               @field.terrain == PBBattleTerrains::Grassy &&
+               !b.airborne?
+              pri+=1
+            end
+            bArray[3] = pri
             @choices[b.index][4] = pri
           end
           # Calculate sub-priority (first/last within priority bracket)

@@ -155,7 +155,7 @@ SCALED_EXP_FORMULA        = true
 SPLIT_EXP_BETWEEN_GAINERS = false
 ENABLE_CRITICAL_CAPTURES  = false
 GAIN_EXP_FOR_CAPTURE      = true
-MEGA_RINGS                = [:MEGARING, :MEGABRACELET, :MEGACUFF, :MEGACHARM]
+MEGA_RINGS                = [:MEGARING, :MEGABRACELET, :MEGACUFF, :MEGACHARM, :KEYSTONE]
 
 #===============================================================================
 # * The names of each pocket of the Bag. Leave the first entry blank.

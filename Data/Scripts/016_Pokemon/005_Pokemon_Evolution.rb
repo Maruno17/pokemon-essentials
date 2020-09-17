@@ -61,6 +61,12 @@ module PBEvolution
   TradeNight        = 57
   TradeItem         = 58
   TradeSpecies      = 59
+  CriticalHits      = 60
+  Lossofhp          = 61
+
+  def self.maxValue; return 61; end
+
+  def self.maxValue; return 60; end
 
   def self.maxValue; return 59; end
 
@@ -757,5 +763,19 @@ PBEvolution.register(:TradeSpecies, {
   "parameterType" => :PBSpecies,
   "tradeCheck"    => proc { |pkmn, parameter, other_pkmn|
     next pkmn.species == parameter && !other_pkmn.hasItem?(:EVERSTONE)
+  }
+})
+
+PBEvolution.register(:CriticalHits, {
+  "afterBattleCheck"  => proc { |pkmn, parameter|
+     next true if pkmn.criticalHits > parameter
+  }
+})
+
+PBEvolution.register(:Lossofhp, {
+  "afterBattleCheck"  => proc { |pkmn, parameter|
+     next true if pkmn.yamaskhp >= 49 && parameter == 0
+     next true if pkmn.yamaskhp >= 49 && $game_map.map_id==parameter &&
+     (($game_player.x==25 && $game_player.y==5) || ($game_player.x==25 && $game_player.y==6))
   }
 })

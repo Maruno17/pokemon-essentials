@@ -133,9 +133,9 @@ class PokeBattle_Move_008 < PokeBattle_ParalysisMove
   def pbBaseAccuracy(user,target)
     case @battle.pbWeather
     when PBWeather::Sun, PBWeather::HarshSun
-      return 50
+      return 50 if !user.hasActiveItem?(:UTILITYUMBRELLA)
     when PBWeather::Rain, PBWeather::HeavyRain
-      return 0
+      return 0 if !user.hasActiveItem?(:UTILITYUMBRELLA)
     end
     return super
   end
@@ -323,9 +323,9 @@ class PokeBattle_Move_015 < PokeBattle_ConfuseMove
   def pbBaseAccuracy(user,target)
     case @battle.pbWeather
     when PBWeather::Sun, PBWeather::HarshSun
-      return 50
+      return 50 if !user.hasActiveItem?(:UTILITYUMBRELLA)
     when PBWeather::Rain, PBWeather::HeavyRain
-      return 0
+      return 0 if !user.hasActiveItem?(:UTILITYUMBRELLA)
     end
     return super
   end
@@ -749,7 +749,7 @@ class PokeBattle_Move_028 < PokeBattle_MultiStatUpMove
     increment = 1
     if @battle.pbWeather==PBWeather::Sun ||
        @battle.pbWeather==PBWeather::HarshSun
-      increment = 2
+      increment = 2 if !user.hasActiveItem?(:UTILITYUMBRELLA)
     end
     @statUp[1] = @statUp[3] = increment
   end
@@ -2532,6 +2532,15 @@ class PokeBattle_Move_075 < PokeBattle_Move
   def pbModifyDamage(damageMult,user,target)
     damageMult *= 2 if target.inTwoTurnAttack?("0CB")   # Dive
     return damageMult
+  end
+
+  def pbEffectAfterAllHits(user,target)
+    if isConst?(user.species,PBSpecies,:CRAMORANT) &&
+      user.hasActiveAbility?(:GULPMISSILE) && user.form==0
+      user.form=2
+      user.form=1 if user.hp>(user.totalhp/2)
+      @battle.scene.pbChangePokemon(user,user.pokemon)
+    end
   end
 end
 
