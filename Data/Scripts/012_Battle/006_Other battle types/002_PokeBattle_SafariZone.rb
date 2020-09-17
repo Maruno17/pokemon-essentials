@@ -25,6 +25,10 @@ class PokeBattle_FakeBattler
   def shiny?;         return @pokemon.shiny?;  end
   alias isShiny? shiny?
 
+  def isSpecies?(checK_species)
+    return @pokemon && @pokemon.isSpecies?(checK_species)
+  end
+
   def fainted?;       return false; end
   alias isFainted? fainted?
   def shadowPokemon?; return false; end

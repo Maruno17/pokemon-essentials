@@ -100,5 +100,5 @@ end
 
 # Well done for finding this place.
 # DO NOT EDIT THESE
-ESSENTIALS_VERSION = "18"
+ESSENTIALS_VERSION = "18.dev"
 ERROR_TEXT = ""
