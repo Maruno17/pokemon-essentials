@@ -1516,7 +1516,7 @@ BattleHandlers::EORHealingItem.add(:LEFTOVERS,
 
 BattleHandlers::EOREffectItem.add(:FLAMEORB,
   proc { |item,battler,battle|
-    next if !battler.pbCanBurn?(battler,false)
+    next if !battler.pbCanBurn?(nil,false)
     battler.pbBurn(nil,_INTL("{1} was burned by the {2}!",battler.pbThis,battler.itemName))
   }
 )
@@ -1536,7 +1536,7 @@ BattleHandlers::EOREffectItem.add(:STICKYBARB,
 
 BattleHandlers::EOREffectItem.add(:TOXICORB,
   proc { |item,battler,battle|
-    next if !battler.pbCanPoison?(battler,false)
+    next if !battler.pbCanPoison?(nil,false)
     battler.pbPoison(nil,_INTL("{1} was badly poisoned by the {2}!",
        battler.pbThis,battler.itemName),true)
   }
