@@ -669,13 +669,6 @@ def pbItemEditorNew(defaultname)
   itemdata = pbLoadItemsData
   # Get the first blank ID for the new item to use.
   maxid = PBItems.maxValue+1
-  for i in 1..PBItems.maxValue
-    name = itemdata[i][1]
-    if !name || name=="" || itemdata[i][ITEM_POCKET]==0
-      maxid = i
-      break
-    end
-  end
   index = maxid
   itemname = pbMessageFreeText(_INTL("Please enter the item's name."),
      (defaultname) ? defaultname.gsub(/_+/," ") : "",false,30)
