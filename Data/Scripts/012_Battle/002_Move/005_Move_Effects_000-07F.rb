@@ -1947,7 +1947,7 @@ class PokeBattle_Move_061 < PokeBattle_Move
 
   def pbEffectAgainstTarget(user,target)
     newType = getConst(PBTypes,:WATER)
-    user.pbChangeTypes(newType)
+    target.pbChangeTypes(newType)
     typeName = PBTypes.getName(newType)
     @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",target.pbThis,typeName))
   end
