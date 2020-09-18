@@ -1,9 +1,9 @@
 # This class stores data on each Pokémon. Refer to $Trainer.party for an array
 # of each Pokémon in the Trainer's current party.
 class PokeBattle_Pokemon
-  # @return [String] the nickname
+  # @return [String] the nickname of this Pokémon
   attr_accessor :name
-  # @return [Integer] the national Pokédex number
+  # @return [Integer] this Pokémon's national Pokédex number
   attr_reader   :species
   # @return [Integer] the current experience points
   attr_reader   :exp
@@ -724,9 +724,10 @@ class PokeBattle_Pokemon
     return held_item == getID(PBItems,item_id)
   end
 
-  # @param item_id [Integer, Symbol, String] id of the item to give to this Pokémon
+  # Gives an item to this Pokémon. Passing 0 as the argument removes the held item.
+  # @param item_id [Integer, Symbol, String] id of the item to give to this Pokémon (0 removes held item)
   def setItem(item_id)
-    self.item = getID(PBItems,item_id)
+    self.item = item_id.is_a?(Integer) ? item_id : getID(PBItems,item_id)
   end
 
   # @return [Array<Integer>] the items this species can be found holding in the wild
@@ -745,6 +746,8 @@ class PokeBattle_Pokemon
     return @mail
   end
 
+  # If mail is a PokemonMail object, gives that mail to this Pokémon. If nil is given,
+  # removes the held mail.
   # @param mail [PokemonMail, nil] mail to be held by this Pokémon (nil if mail is to be removed)
   def mail=(mail)
     if !mail.nil? && !mail.is_a?(PokemonMail)
@@ -1038,6 +1041,7 @@ class PokeBattle_Pokemon
     @speed   = stats[PBStats::SPEED]
   end
 
+  # Creates a copy of this Pokémon and returns it.
   # @return [PokeBattle_Pokemon] a copy of this Pokémon
   def clone
     ret = super
