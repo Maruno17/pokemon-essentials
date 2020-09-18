@@ -862,7 +862,6 @@ def pbCompilePokemonData
   end
   # Add prevolution data to all species as the first "evolution method".
   for sp in 1..maxValue
-    next if !evolutions[sp]
     preSpecies = -1
     evoData = nil
     # Check for another species that evolves into sp.
@@ -878,6 +877,7 @@ def pbCompilePokemonData
     end
     next if !evoData   # evoData[1]=method, evoData[2]=level - both are unused
     # Found a species that evolves into e, record it as a prevolution.
+    evolutions[sp] = [] if !evolutions[sp]
     evolutions[sp] = [[preSpecies,evoData[1],evoData[2],true]].concat(evolutions[sp])
   end
   # Save evolutions data.
