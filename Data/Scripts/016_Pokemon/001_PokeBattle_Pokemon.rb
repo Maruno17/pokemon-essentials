@@ -21,20 +21,6 @@ class PokeBattle_Pokemon
   attr_reader   :spatk
   # @return [Integer] current Special Defense stat
   attr_reader   :spdef
-  # @return [Integer] current status (from PBStatuses)
-  attr_accessor :status
-  # Is 0, except if the Pokémon is:
-  #
-  # - Asleep: Is the number of rounds the Pokémon will remain asleep.
-  # This number is set when the Pokémon is made to fall asleep.
-  #
-  # - Badly poisoned: If the Pokémon is Poisoned and this is "1", the
-  # Pokémon is badly poisoned instead (which affects how much poison
-  # damage it takes in battle). When the Pokémon leaves battle while
-  # badly poisoned, this value is set to 0 and it becomes regular Poisoned
-  # (even in later battles).
-  # @return [Integer] sleep count / toxic flag
-  attr_accessor :statusCount
   # If defined, forces the Pokémon's ability to be the first natural (0),
   #   second natural (1) or hidden (2) ability available to its species.
   #   It is not possible to give the Pokémon any ability other than those
@@ -160,7 +146,7 @@ class PokeBattle_Pokemon
   # Sets this Pokémon's level.
   # @param value [Integer] new level (between 1 and the maximum level)
   def level=(value)
-    if value<1 || value>PBExperience.maxLevel
+    if value < 1 || value > PBExperience.maxLevel
       raise ArgumentError.new(_INTL("The level number ({1}) is invalid.",value))
     end
     @level = value
@@ -735,6 +721,94 @@ class PokeBattle_Pokemon
   end
 
   #=============================================================================
+  # Status
+  #=============================================================================
+
+  # @return [Integer] current status (from PBStatuses)
+  def status
+    return @status
+  end
+
+  # @param new_status [Integer, Symbol, String] status to set (from PBStatuses)
+  def status=(new_status)
+    if new_status.is_a?(Integer)
+      @status = new_status
+    else
+      if !new_status.is_a?(Symbol) && !new_status.is_a?(String)
+        raise ArgumentError, _INTL('Attempted to set a {1} as Pokémon status',new_status.class.name)
+      end
+      @status = getID(PBStatuses,new_status)
+    end
+  end
+
+  # Is 0, except if the Pokémon is:
+  #
+  # - Asleep: Is the number of rounds the Pokémon will remain asleep.
+  # This number is set when the Pokémon is made to fall asleep.
+  #
+  # - Badly poisoned: If the Pokémon is Poisoned and this is "1", the
+  # Pokémon is badly poisoned instead (which affects how much poison
+  # damage it takes in battle). When the Pokémon leaves battle while
+  # badly poisoned, this value is set to 0 and it becomes regular Poisoned
+  # (even in later battles).
+  # @return [Integer] sleep count / toxic flag
+  def statusCount
+    return @statusCount
+  end
+
+  # (see #statusCount)
+  # @param new_status_count [Integer] new sleep count / toxic flag
+  def statusCount=(new_status_count)
+    @statusCount = new_status_count
+  end
+
+  # @return [Boolean] whether the Pokémon is not fainted and not an egg
+  def able?
+    return !egg? && @hp > 0
+  end
+  alias isAble? able?
+  
+  # @return [Boolean] whether the Pokémon is fainted
+  def fainted?
+    return !egg? && @hp <= 0
+  end
+  alias isFainted? fainted?
+  
+  # Heals all HP of this Pokémon.
+  def healHP
+    return if egg?
+    @hp = @totalhp
+  end
+  
+  # Heals the status problem of this Pokémon.
+  def healStatus
+    return if egg?
+    @status      = PBStatuses::NONE
+    @statusCount = 0
+  end
+  
+  # Heals all PP of this Pokémon. If a move index is given, heals the PP
+  # of the move in that index.
+  # @param move_index [Integer] index of the move to heal (-1 if all moves
+  #   should be healed)
+  def healPP(move_index = -1)
+    return if egg?
+    if move_index >= 0
+      @moves[move_index].pp = @moves[move_index].totalpp
+    else
+      @moves.each { |m| m.pp = m.totalpp }
+    end
+  end
+  
+  # Heals all HP, PP, and status problems of this Pokémon.
+  def heal
+    return if egg?
+    healHP
+    healStatus
+    healPP
+  end
+
+  #=============================================================================
   # Other
   #=============================================================================
 
@@ -790,12 +864,14 @@ class PokeBattle_Pokemon
 
   # Returns an array of booleans indicating whether a stat is made to have
   # maximum IVs (for Hyper Training). Set like @ivMaxed[PBStats::ATTACK] = true
+  # @return [Array<Boolean>] array indicating whether a stat has maximum IVs
   def ivMaxed
     return @ivMaxed || []
   end
 
   # Returns this Pokémon's effective IVs, taking into account Hyper Training.
   # Only used for calculating stats.
+  # @return [Array<Boolean>] array containing this Pokémon's effective IVs
   def calcIV
     ret = self.iv.clone
     if @ivMaxed
@@ -804,13 +880,14 @@ class PokeBattle_Pokemon
     return ret
   end
 
-  # Returns the EV yield of this Pokémon.
+  # @return [Array<Integer>] the EV yield of this Pokémon (an array of six values)
   def evYield
     ret = pbGetSpeciesData(@species,formSimple,SpeciesEffortPoints)
     return ret.clone
   end
 
-  # Sets this Pokémon's HP.
+  # Sets the Pokémon's health.
+  # @param value [Integer] new hp value
   def hp=(value)
     value = 0 if value < 0
     @hp = value
@@ -818,52 +895,6 @@ class PokeBattle_Pokemon
       @status      = PBStatuses::NONE
       @statusCount = 0
     end
-  end
-
-  # @return [Boolean] whether the Pokémon is not fainted and not an egg
-  def able?
-    return !egg? && @hp>0
-  end
-  alias isAble? able?
-
-  # @return [Boolean] whether the Pokémon is fainted
-  def fainted?
-    return !egg? && @hp<=0
-  end
-  alias isFainted? fainted?
-
-  # Heals all HP of this Pokémon.
-  def healHP
-    return if egg?
-    @hp = @totalhp
-  end
-
-  # Heals the status problem of this Pokémon.
-  def healStatus
-    return if egg?
-    @status      = PBStatuses::NONE
-    @statusCount = 0
-  end
-
-  # Heals all PP of this Pokémon. If a move index is given, heals the PP
-  # of the move in that index.
-  # @param move_index [Integer] index of the move to heal (-1 if all moves
-  #   should be healed)
-  def healPP(move_index = -1)
-    return if egg?
-    if move_index >= 0
-      @moves[move_index].pp = @moves[move_index].totalpp
-    else
-      @moves.each { |m| m.pp = m.totalpp }
-    end
-  end
-
-  # Heals all HP, PP, and status problems of this Pokémon.
-  def heal
-    return if egg?
-    healHP
-    healStatus
-    healPP
   end
 
   # Changes the happiness of this Pokémon depending on what happened to change it.
@@ -1052,7 +1083,11 @@ class PokeBattle_Pokemon
   end
 end
 
-# (see PokeBattle_Pokemon#initialize)
+# Creates a new Pokémon object.
+# @param species [Integer, Symbol, String] Pokémon species
+# @param level [Integer] Pokémon level
+# @param owner [PokeBattle_Trainer] object for the original trainer
+# @param withMoves [Boolean] whether the Pokémon should have moves
 def pbNewPkmn(species,level,owner=nil,withMoves=true)
   owner = $Trainer if !owner
   return PokeBattle_Pokemon.new(species,level,owner,withMoves)
