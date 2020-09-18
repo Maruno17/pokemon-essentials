@@ -22,10 +22,10 @@ class PokeBattle_Pokemon
   # @return [Integer] current Special Defense stat
   attr_reader   :spdef
   # If defined, forces the Pokémon's ability to be the first natural (0),
-  #   second natural (1) or hidden (2) ability available to its species.
-  #   It is not possible to give the Pokémon any ability other than those
-  #   defined in the PBS file "pokemon.txt" for its species
-  #   (or "pokemonforms.txt" for its species and form). 
+  # second natural (1) or hidden (2) ability available to its species.
+  # It is not possible to give the Pokémon any ability other than those
+  # defined in the PBS file "pokemon.txt" for its species
+  # (or "pokemonforms.txt" for its species and form). 
   # @return [0, 1, 2, nil] forced ability index (nil if none is set)
   attr_accessor :abilityflag
   # @return [0, 1, nil] if defined, forces male (0) or female (1)
@@ -43,17 +43,20 @@ class PokeBattle_Pokemon
   attr_accessor :firstmoves
   # @return [Integer] id of the item held by this Pokémon (0 = no held item)
   attr_accessor :item
-  # Another Pokémon which has been fused with this Pokémon (or ´nil´ if there is none).
-  #   Currently only used by Kyurem, to record a fused Reshiram or Zekrom.  
+  # Another Pokémon which has been fused with this Pokémon (or nil if there is none).
+  # Currently only used by Kyurem, to record a fused Reshiram or Zekrom.  
   # @return [PokeBattle_Pokemon, nil] the Pokémon fused into this one (nil if there is none)
   attr_accessor :fused
   # @return [Array<Integer>] array of IV values for HP, Atk, Def, Speed, Sp. Atk and Sp. Def
   attr_accessor :iv
-  # @return [Array<Boolean>] 
-  attr_writer   :ivMaxed     # Array of booleans that max each IV value
-  attr_accessor :ev          # Effort Values
+  # @param value [Array<Boolean>] array of booleans that max each IV value
+  attr_writer   :ivMaxed
+  # @return [Array<Integer>] this Pokémon's effort values
+  attr_accessor :ev
+  # @return [Integer] this Pokémon's current happiness (an integer between 0 and 255)
   attr_accessor :happiness   # Current happiness
-  attr_accessor :ballused    # Ball used
+  # @return [Integer] the type of ball used (refer to {$BallTypes} for valid types)
+  attr_accessor :ballused
   attr_accessor :eggsteps    # Steps to hatch egg, 0 if Pokémon is not an egg
   attr_writer   :markings    # Markings
   attr_accessor :ribbons     # Array of ribbons
@@ -724,11 +727,14 @@ class PokeBattle_Pokemon
   # Status
   #=============================================================================
 
+  # Returns the current status of this Pokémon. See {PBStatuses} for all possible
+  # status effects.
   # @return [Integer] current status (from PBStatuses)
   def status
     return @status
   end
 
+  # Sets this Pokémon's status. See {PBStatuses} for all possible status effects.
   # @param new_status [Integer, Symbol, String] status to set (from PBStatuses)
   def status=(new_status)
     if new_status.is_a?(Integer)
@@ -756,7 +762,7 @@ class PokeBattle_Pokemon
     return @statusCount
   end
 
-  # (see #statusCount)
+  # Sets a new status count. See {#statusCount} for more information.
   # @param new_status_count [Integer] new sleep count / toxic flag
   def statusCount=(new_status_count)
     @statusCount = new_status_count
