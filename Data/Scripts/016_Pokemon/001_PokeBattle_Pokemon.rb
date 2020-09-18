@@ -1,25 +1,25 @@
 # This class stores data on each Pokémon. Refer to $Trainer.party for an array
 # of each Pokémon in the Trainer's current party.
 class PokeBattle_Pokemon
-  # @return [String] nickname
+  # @return [String] the nickname
   attr_accessor :name
-  # @return [Integer] national Pokédex number
+  # @return [Integer] the national Pokédex number
   attr_reader   :species
-  # @return [Integer] current experience points
+  # @return [Integer] the current experience points
   attr_reader   :exp
-  # @return [Integer] current HP
+  # @return [Integer] the current HP
   attr_reader   :hp
-  # @return [Integer] current Total HP
+  # @return [Integer] the current Total HP
   attr_reader   :totalhp
-  # @return [Integer] current Attack stat
+  # @return [Integer] the current Attack stat
   attr_reader   :attack
-  # @return [Integer] current Defense stat
+  # @return [Integer] the current Defense stat
   attr_reader   :defense
-  # @return [Integer] current Speed stat
+  # @return [Integer] the current Speed stat
   attr_reader   :speed
-  # @return [Integer] current Special Attack stat
+  # @return [Integer] the current Special Attack stat
   attr_reader   :spatk
-  # @return [Integer] current Special Defense stat
+  # @return [Integer] the current Special Defense stat
   attr_reader   :spdef
   # If defined, forces the Pokémon's ability to be the first natural (0),
   # second natural (1) or hidden (2) ability available to its species.
@@ -28,79 +28,105 @@ class PokeBattle_Pokemon
   # (or "pokemonforms.txt" for its species and form). 
   # @return [0, 1, 2, nil] forced ability index (nil if none is set)
   attr_accessor :abilityflag
-  # @return [0, 1, nil] if defined, forces male (0) or female (1)
+  # If defined, forces this Pokémon to be male (0) or female (1).
+  # @return [0, 1, nil] gender to force: male (0) or female (1) (nil if undefined)
   attr_accessor :genderflag
-  # @return [Integer] forces a particular nature (nature ID)
+  # If defined, forces this Pokémon to have a particular nature.
+  # @return [Integer, nil] ID of the nature to force (nil if undefined)
   attr_accessor :natureflag
-  # @return [Integer] overrides nature's stat-changing effects
+  # If defined, overrides this Pokémon's nature's stat-changing effects.
+  # @return [Integer, nil] overridden nature stat-changing effects (nil if undefined)
   attr_accessor :natureOverride
   # If defined, forces the Pokémon to be shiny (true) or not (false).
   # @return [Boolean, nil] whether shininess should be forced (nil if undefined)
   attr_accessor :shinyflag
-  # @return [Array<PBMove>] moves known by this Pokémon
+  # @return [Array<PBMove>] the moves known by this Pokémon
   attr_accessor :moves
-  # @return [Array<Integer>] IDs of moves known by this Pokémon when it was obtained
+  # @return [Array<Integer>] the IDs of moves known by this Pokémon when it was obtained
   attr_accessor :firstmoves
-  # @return [Integer] id of the item held by this Pokémon (0 = no held item)
+  # @return [Integer] the ID of the item held by this Pokémon (0 = no held item)
   attr_accessor :item
   # Another Pokémon which has been fused with this Pokémon (or nil if there is none).
   # Currently only used by Kyurem, to record a fused Reshiram or Zekrom.  
   # @return [PokeBattle_Pokemon, nil] the Pokémon fused into this one (nil if there is none)
   attr_accessor :fused
-  # @return [Array<Integer>] array of IV values for HP, Atk, Def, Speed, Sp. Atk and Sp. Def
+  # @return [Array<Integer>] an array of IV values for HP, Atk, Def, Speed, Sp. Atk and Sp. Def
   attr_accessor :iv
-  # @param value [Array<Boolean>] array of booleans that max each IV value
+  # @param value [Array<Boolean>] an array of booleans that max each IV value
   attr_writer   :ivMaxed
   # @return [Array<Integer>] this Pokémon's effort values
   attr_accessor :ev
   # @return [Integer] this Pokémon's current happiness (an integer between 0 and 255)
-  attr_accessor :happiness   # Current happiness
+  attr_accessor :happiness
   # @return [Integer] the type of ball used (refer to {$BallTypes} for valid types)
   attr_accessor :ballused
-  attr_accessor :eggsteps    # Steps to hatch egg, 0 if Pokémon is not an egg
-  attr_writer   :markings    # Markings
-  attr_accessor :ribbons     # Array of ribbons
-  attr_accessor :pokerus     # Pokérus strain and infection time
-  attr_accessor :personalID  # Personal ID
-  attr_accessor :trainerID   # 32-bit Trainer ID (the secret ID is in the upper
-                             #    16 bits)
-  attr_accessor :obtainMode  # Manner obtained:
-                             #    0 - met, 1 - as egg, 2 - traded,
-                             #    4 - fateful encounter
-  attr_accessor :obtainMap   # Map where obtained
-  attr_accessor :obtainText  # Replaces the obtain map's name if not nil
-  attr_writer   :obtainLevel # Level obtained
-  attr_accessor :hatchedMap  # Map where an egg was hatched
-  attr_writer   :language    # Language
-  attr_accessor :ot          # Original Trainer's name
-  attr_writer   :otgender    # Original Trainer's gender:
-                             #    0 - male, 1 - female, 2 - mixed, 3 - unknown
-                             #    For information only, not used to verify
-                             #    ownership of the Pokémon
-  attr_writer   :cool,:beauty,:cute,:smart,:tough,:sheen   # Contest stats
+  # @return [Integer] the number of steps until the egg hatches, 0 if Pokémon is not an egg
+  attr_accessor :eggsteps
+  # @param value [Integer] new markings for this Pokémon
+  attr_writer   :markings
+  # @return [Array<Integer>] an array of ribbons owned by this Pokémon
+  attr_accessor :ribbons
+  # @return [Integer] the Pokérus strain and infection time
+  attr_accessor :pokerus
+  # @return [Integer] this Pokémon's personal ID
+  attr_accessor :personalID
+  # The 32-bit ID of this Pokémon's trainer. The secret ID is in the
+  # upper 16 bits.
+  # @return [Integer] the ID of this Pokémon's trainer
+  attr_accessor :trainerID
+  # @return [Integer] the manner this Pokémon was obtained:
+  #   0 (met), 1 (as egg), 2 (traded), 4 (fateful encounter)
+  attr_accessor :obtainMode
+  # @return [Integer] the ID of the map this Pokémon was obtained in
+  attr_accessor :obtainMap
+  # Describes the manner this Pokémon was obtained. If left undefined,
+  # the obtain map's name is used.
+  # @return [String] the obtain text
+  attr_accessor :obtainText
+  # @param value [Integer] new obtain level
+  attr_writer   :obtainLevel
+  # If this Pokémon hatched from an egg, returns the map ID where the hatching happened.
+  # Otherwise returns 0.
+  # @return [Integer] the map ID where egg was hatched (0 by default)
+  attr_accessor :hatchedMap
+  # @param value [Integer] new language 
+  attr_writer   :language
+  # @return [String] the name of the original trainer
+  attr_accessor :ot
+  # Changes the gender of the original trainer. This is for information only,
+  # and is not used to verify ownership of the Pokémon.
+  # @param value [Integer] new value for the original trainer's gender:
+  #   0 - male, 1 - female, 2 - mixed, 3 - unknown
+  attr_writer   :otgender
+  # @param value [Integer] new contest stat
+  attr_writer   :cool,:beauty,:cute,:smart,:tough,:sheen
 
-  IV_STAT_LIMIT         = 31    # Max total IVs
-  EV_LIMIT              = 510   # Max total EVs
-  EV_STAT_LIMIT         = 252   # Max EVs that a single stat can have
-  MAX_POKEMON_NAME_SIZE = 10    # Maximum length a Pokémon's nickname can be
+  # Max total IVs
+  IV_STAT_LIMIT         = 31
+  # Max total EVs
+  EV_LIMIT              = 510
+  # Max EVs that a single stat can have
+  EV_STAT_LIMIT         = 252
+  # Maximum length a Pokémon's nickname can be
+  MAX_POKEMON_NAME_SIZE = 10
 
   #=============================================================================
   # Ownership, obtained information
   #=============================================================================
 
-  # @return [Integer] public portion of the original trainer's ID
+  # @return [Integer] the public portion of the original trainer's ID
   def publicID
     return @trainerID & 0xFFFF
   end
 
   # @param trainer [PokeBattle_Trainer] the trainer to compare to the OT
-  # @return [Boolean] whether the trainer and OT don't match
+  # @return [Boolean] whether the given trainer and this Pokémon's original trainer don't match
   def foreign?(trainer)
     return @trainerID != trainer.id || @ot != trainer.name
   end
   alias isForeign? foreign?
 
-  # @return [0, 1, 2] gender of this Pokémon original trainer (0 = male, 1 = female, 2 = unknown)
+  # @return [0, 1, 2] the gender of this Pokémon original trainer (0 = male, 1 = female, 2 = unknown)
   def otgender
     return @otgender || 2
   end
@@ -110,7 +136,7 @@ class PokeBattle_Pokemon
     return @obtainLevel || 0
   end
 
-  # @return [Time] time when this Pokémon was obtained
+  # @return [Time] the time when this Pokémon was obtained
   def timeReceived
     return @timeReceived ? Time.at(@timeReceived) : Time.gm(2000)
   end
@@ -121,7 +147,7 @@ class PokeBattle_Pokemon
     @timeReceived = value.to_i
   end
 
-  # @return [Time] time when this Pokémon hatched
+  # @return [Time] the time when this Pokémon hatched
   def timeEggHatched
     if obtainMode==1
       return @timeEggHatched ? Time.at(@timeEggHatched) : Time.gm(2000)
@@ -146,7 +172,8 @@ class PokeBattle_Pokemon
     return @level
   end
 
-  # Sets this Pokémon's level.
+  # Sets this Pokémon's level. The given level must be between 1 and the
+  # maximum level (defined in {PBExperience}).
   # @param value [Integer] new level (between 1 and the maximum level)
   def level=(value)
     if value < 1 || value > PBExperience.maxLevel
@@ -179,7 +206,7 @@ class PokeBattle_Pokemon
     return pbGetSpeciesData(@species,formSimple,SpeciesBaseExp)
   end
 
-  # @return [Float] number between 0 and 1 indicating how much of the current level's
+  # @return [Float] a number between 0 and 1 indicating how much of the current level's
   #   Exp this Pokémon has
   def expFraction
     l = self.level
@@ -303,18 +330,19 @@ class PokeBattle_Pokemon
     return abil!=nil && abil>=2
   end
 
-  # @return [Array<Array<Integer>>] the list of abilities this Pokémon can have
+  # @return [Array<Array<Integer>>] the list of abilities this Pokémon can have,
+  #   where every element is [ability ID,ability index]
   def getAbilityList
     ret = []
     abilities = pbGetSpeciesData(@species,formSimple,SpeciesAbilities)
     if abilities.is_a?(Array)
-      abilities.each_with_index { |a,i| ret.push([a,i]) if a && a>0 }
+      abilities.each_with_index { |a,i| ret.push([a,i]) if a && a > 0 }
     else
       ret.push([abilities,0]) if abilities>0
     end
     hiddenAbil = pbGetSpeciesData(@species,formSimple,SpeciesHiddenAbility)
     if hiddenAbil.is_a?(Array)
-      hiddenAbil.each_with_index { |a,i| ret.push([a,i+2]) if a && a>0 }
+      hiddenAbil.each_with_index { |a,i| ret.push([a,i+2]) if a && a > 0 }
     else
       ret.push([hiddenAbil,2]) if hiddenAbil>0
     end
@@ -327,12 +355,12 @@ class PokeBattle_Pokemon
 
   # @return [Integer] the ID of this Pokémon's nature
   def nature
-    return @natureflag || (@personalID%25)
+    return @natureflag || (@personalID % 25)
   end
 
   # Returns the calculated nature, taking into account things that change its
   # stat-altering effect (i.e. Gen 8 mints). Only used for calculating stats.
-  # @return [Integer] calculated nature
+  # @return [Integer] this Pokémon's calculated nature
   def calcNature
     return @natureOverride if @natureOverride
     return self.nature
@@ -350,7 +378,7 @@ class PokeBattle_Pokemon
   end
 
   # Sets this Pokémon's nature to a particular nature.
-  # @param value [Integer] nature to change to
+  # @param value [Integer, String, Symbol] nature to change to
   def setNature(value)
     @natureflag = getID(PBNatures,value)
     calcStats
@@ -387,14 +415,14 @@ class PokeBattle_Pokemon
 
   # @return [Integer] the Pokérus infection stage for this Pokémon
   def pokerusStrain
-    return @pokerus/16
+    return @pokerus / 16
   end
 
-  # Returns the Pokérus infection stage for this Pokémon.
-  # @return [0, 1, 2] Pokérus infection stage
-  #   (0 = not infected, 1 = infected, 2 = cured)
+  # Returns the Pokérus infection stage for this Pokémon. The possible stages are
+  # 0 (not infected), 1 (infected) and 2 (cured)
+  # @return [0, 1, 2] current Pokérus infection stage
   def pokerusStage
-    return 0 if !@pokerus || @pokerus==0
+    return 0 if !@pokerus || @pokerus == 0
     return 2 if @pokerus > 0 && (@pokerus % 16) == 0
     return 1
   end
@@ -470,7 +498,7 @@ class PokeBattle_Pokemon
     return ret
   end
 
-  # @param move [Integer, Symbol, String] id of the move to check
+  # @param move [Integer, Symbol, String] ID of the move to check
   # @return [Boolean] whether the Pokémon knows the given move
   def hasMove?(move)
     move = getID(PBMoves,move)
@@ -481,7 +509,7 @@ class PokeBattle_Pokemon
   alias knowsMove? hasMove?
 
   # Returns the list of moves this Pokémon can learn by levelling up.
-  # @return [Array<Array<Integer>>] move list, where every element is [level, move id]
+  # @return [Array<Array<Integer>>] this Pokémon's move list, where every element is [level, move ID]
   def getMoveList
     return pbGetSpeciesMoveset(@species,formSimple)
   end
@@ -506,7 +534,7 @@ class PokeBattle_Pokemon
   end
 
   # Silently learns the given move. Will erase the first known move if it has to.
-  # @param move [Integer, Symbol, String] id of the move to learn
+  # @param move [Integer, Symbol, String] ID of the move to learn
   def pbLearnMove(move)
     move = getID(PBMoves,move)
     return if move <= 0
@@ -535,7 +563,7 @@ class PokeBattle_Pokemon
   end
 
   # Deletes the given move from the Pokémon.
-  # @param move [Integer, Symbol, String] id of the move to delete
+  # @param move [Integer, Symbol, String] ID of the move to delete
   def pbDeleteMove(move)
     move = getID(PBMoves,move)
     return if !move || move<=0
@@ -571,14 +599,15 @@ class PokeBattle_Pokemon
     @moves.each { |m| @firstmoves.push(m.id) if m && m.id > 0 }
   end
 
-  # TODO Figure out better documentation for these first move methods
-  # @param move [Integer, Symbol, String] id of the move to add
+  # Adds a move to this Pokémon's first moves.
+  # @param move [Integer, Symbol, String] ID of the move to add
   def pbAddFirstMove(move)
     move = getID(PBMoves,move)
     @firstmoves.push(move) if move > 0 && !@firstmoves.include?(move)
   end
 
-  # @param move [Integer, Symbol, String] id of the move to remove
+  # Removes a move from this Pokémon's first moves.
+  # @param move [Integer, Symbol, String] ID of the move to remove
   def pbRemoveFirstMove(move)
     move = getID(PBMoves,move)
     @firstmoves.delete(move) if move > 0
@@ -589,8 +618,8 @@ class PokeBattle_Pokemon
     @firstmoves = []
   end
 
-  # @param move [Integer, Symbol, String] id of the move to check
-  # @return [Boolean] whether the Pokémon is compatible with the move
+  # @param move [Integer, Symbol, String] ID of the move to check
+  # @return [Boolean] whether the Pokémon is compatible with the given move
   def compatibleWithMove?(move)
     return pbSpeciesCompatible?(self.fSpecies,move)
   end
@@ -622,7 +651,7 @@ class PokeBattle_Pokemon
     return (@ribbons) ? @ribbons.length : 0
   end
 
-  # @param ribbon [Integer, Symbol, String] ribbon id to check
+  # @param ribbon [Integer, Symbol, String] ribbon ID to check
   # @return [Boolean] whether this Pokémon has the specified ribbon
   def hasRibbon?(ribbon)
     return false if !@ribbons
@@ -631,7 +660,8 @@ class PokeBattle_Pokemon
     return @ribbons.include?(ribbon)
   end
 
-  # @param ribbon [Integer, Symbol, String] id of the ribbon to give
+  # Gives a ribbon to this Pokémon.
+  # @param ribbon [Integer, Symbol, String] ID of the ribbon to give
   def giveRibbon(ribbon)
     @ribbons = [] if !@ribbons
     ribbon = getID(PBRibbons,ribbon)
@@ -639,7 +669,6 @@ class PokeBattle_Pokemon
     @ribbons.push(ribbon) if !@ribbons.include?(ribbon)
   end
 
-  # TODO Figure out a good way to document this
   # Replaces one ribbon with the next one along, if possible.
   def upgradeRibbon(*arg)
     @ribbons = [] if !@ribbons
@@ -661,6 +690,7 @@ class PokeBattle_Pokemon
     return 0
   end
 
+  # Removes the specified ribbon from this Pokémon.
   # @param ribbon [Integer, Symbol, String] id of the ribbon to remove
   def takeRibbon(ribbon)
     return if !@ribbons
@@ -750,13 +780,13 @@ class PokeBattle_Pokemon
   # Is 0, except if the Pokémon is:
   #
   # - Asleep: Is the number of rounds the Pokémon will remain asleep.
-  # This number is set when the Pokémon is made to fall asleep.
+  #   This number is set when the Pokémon is made to fall asleep.
   #
   # - Badly poisoned: If the Pokémon is Poisoned and this is "1", the
-  # Pokémon is badly poisoned instead (which affects how much poison
-  # damage it takes in battle). When the Pokémon leaves battle while
-  # badly poisoned, this value is set to 0 and it becomes regular Poisoned
-  # (even in later battles).
+  #   Pokémon is badly poisoned instead (which affects how much poison
+  #   damage it takes in battle). When the Pokémon leaves battle while
+  #   badly poisoned, this value is set to 0 and it becomes regular Poisoned
+  #   (even in later battles).
   # @return [Integer] sleep count / toxic flag
   def statusCount
     return @statusCount
@@ -857,13 +887,12 @@ class PokeBattle_Pokemon
     return "ABCDEFGHIJKLMNOPQRSTUVWXYZ?!"[@form,1]
   end
 
-  # TODO Check whether #height and #weight always return an integer
-  # Returns the height of this Pokémon.
+  # @return [Integer] the height of this Pokémon in decimetres (0.1 metres)
   def height
     return pbGetSpeciesData(@species,formSimple,SpeciesHeight)
   end
 
-  # Returns the weight of this Pokémon.
+  # @return [Integer] the weight of this Pokémon in hectograms (0.1 grams)
   def weight
     return pbGetSpeciesData(@species,formSimple,SpeciesWeight)
   end
