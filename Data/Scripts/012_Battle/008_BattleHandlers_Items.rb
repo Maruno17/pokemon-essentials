@@ -1003,7 +1003,7 @@ BattleHandlers::TargetItemOnHit.add(:ABSORBBULB,
     next if !target.pbCanRaiseStatStage?(PBStats::SPATK,target)
     battle.pbCommonAnimation("UseItem",target)
     target.pbRaiseStatStageByCause(PBStats::SPATK,1,target,target.itemName)
-    target.pbConsumeItem
+    target.pbHeldItemTriggered(item)
   }
 )
 
@@ -1011,6 +1011,7 @@ BattleHandlers::TargetItemOnHit.add(:AIRBALLOON,
   proc { |item,user,target,move,battle|
     battle.pbDisplay(_INTL("{1}'s {2} popped!",target.pbThis,target.itemName))
     target.pbConsumeItem(false,true)
+    target.pbSymbiosis
   }
 )
 
@@ -1020,7 +1021,7 @@ BattleHandlers::TargetItemOnHit.add(:CELLBATTERY,
     next if !target.pbCanRaiseStatStage?(PBStats::ATTACK,target)
     battle.pbCommonAnimation("UseItem",target)
     target.pbRaiseStatStageByCause(PBStats::ATTACK,1,target,target.itemName)
-    target.pbConsumeItem
+    target.pbHeldItemTriggered(item)
   }
 )
 
@@ -1028,7 +1029,9 @@ BattleHandlers::TargetItemOnHit.add(:ENIGMABERRY,
   proc { |item,user,target,move,battle|
     next if target.damageState.substitute || target.damageState.disguise
     next if !PBTypes.superEffective?(target.damageState.typeMod)
-    BattleHandlers.triggerTargetItemOnHitPositiveBerry(item,target,battle,false)
+    if BattleHandlers.triggerTargetItemOnHitPositiveBerry(item,target,battle,false)
+      target.pbHeldItemTriggered(item)
+    end
   }
 )
 
@@ -1042,7 +1045,7 @@ BattleHandlers::TargetItemOnHit.add(:JABOCABERRY,
     user.pbReduceHP(user.totalhp/8,false)
     battle.pbDisplay(_INTL("{1} consumed its {2} and hurt {3}!",target.pbThis,
        target.itemName,user.pbThis(true)))
-    target.pbConsumeItem
+    target.pbHeldItemTriggered(item)
   }
 )
 
@@ -1054,7 +1057,9 @@ BattleHandlers::TargetItemOnHit.add(:JABOCABERRY,
 BattleHandlers::TargetItemOnHit.add(:KEEBERRY,
   proc { |item,user,target,move,battle|
     next if !move.physicalMove?
-    BattleHandlers.triggerTargetItemOnHitPositiveBerry(item,target,battle,false)
+    if BattleHandlers.triggerTargetItemOnHitPositiveBerry(item,target,battle,false)
+      target.pbHeldItemTriggered(item)
+    end
   }
 )
 
@@ -1064,7 +1069,7 @@ BattleHandlers::TargetItemOnHit.add(:LUMINOUSMOSS,
     next if !target.pbCanRaiseStatStage?(PBStats::SPDEF,target)
     battle.pbCommonAnimation("UseItem",target)
     target.pbRaiseStatStageByCause(PBStats::SPDEF,1,target,target.itemName)
-    target.pbConsumeItem
+    target.pbHeldItemTriggered(item)
   }
 )
 
@@ -1076,7 +1081,9 @@ BattleHandlers::TargetItemOnHit.add(:LUMINOUSMOSS,
 BattleHandlers::TargetItemOnHit.add(:MARANGABERRY,
   proc { |item,user,target,move,battle|
     next if !move.specialMove?
-    BattleHandlers.triggerTargetItemOnHitPositiveBerry(item,target,battle,false)
+    if BattleHandlers.triggerTargetItemOnHitPositiveBerry(item,target,battle,false)
+      target.pbHeldItemTriggered(item)
+    end
   }
 )
 
@@ -1100,7 +1107,7 @@ BattleHandlers::TargetItemOnHit.add(:ROWAPBERRY,
     user.pbReduceHP(user.totalhp/8,false)
     battle.pbDisplay(_INTL("{1} consumed its {2} and hurt {3}!",target.pbThis,
        target.itemName,user.pbThis(true)))
-    target.pbConsumeItem
+    target.pbHeldItemTriggered(item)
   }
 )
 
@@ -1110,7 +1117,7 @@ BattleHandlers::TargetItemOnHit.add(:SNOWBALL,
     next if !target.pbCanRaiseStatStage?(PBStats::ATTACK,target)
     battle.pbCommonAnimation("UseItem",target)
     target.pbRaiseStatStageByCause(PBStats::ATTACK,1,target,target.itemName)
-    target.pbConsumeItem
+    target.pbHeldItemTriggered(item)
   }
 )
 
@@ -1147,7 +1154,7 @@ BattleHandlers::TargetItemOnHit.add(:WEAKNESSPOLICY,
     if target.pbCanRaiseStatStage?(PBStats::SPATK,target)
       target.pbRaiseStatStageByCause(PBStats::SPATK,2,target,target.itemName,showAnim)
     end
-    target.pbConsumeItem
+    target.pbHeldItemTriggered(item)
   }
 )
 
