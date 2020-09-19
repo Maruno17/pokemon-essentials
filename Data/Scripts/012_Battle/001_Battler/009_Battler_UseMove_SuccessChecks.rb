@@ -20,9 +20,9 @@ class PokeBattle_Battler
     if move.function=="204" && (self.item==0 || !pbIsBerry?(self.item))
       if showMessages
         msg = _INTL("{1} can't use that move because it doesn't have any berry!",pbThis,move.name)
-        (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)      
+        (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
       end
-      return false 
+      return false
     end
     # Heal Block
     if @effects[PBEffects::HealBlock]>0 && move.healingMove?
@@ -75,7 +75,7 @@ class PokeBattle_Battler
           return false
         end
       else
-        @effects[PBEffects::GorillaTactics] = -1        
+        @effects[PBEffects::GorillaTactics] = -1
       end
     end
     # Taunt
@@ -382,7 +382,7 @@ class PokeBattle_Battler
         @battle.successStates[user.index].protected = true
         if move.pbContactMove?(user) && user.affectedByContactEffect?
           if user.pbCanLowerStatStage?(PBStats::ATTACK)
-            user.pbLowerStatStage(PBStats::ATTACK,2,nil)
+            user.pbLowerStatStage(PBStats::ATTACK,1,nil)
           end
         end
         return false

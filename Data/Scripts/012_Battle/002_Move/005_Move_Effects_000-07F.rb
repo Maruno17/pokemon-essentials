@@ -1358,6 +1358,17 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
       target.pbOpposingSide.effects[PBEffects::StickyWeb] = false if NEWEST_BATTLE_MECHANICS
       @battle.pbDisplay(_INTL("{1} blew away sticky webs!",user.pbThis))
     end
+    case @battle.field.terrain
+      when PBBattleTerrains::Electric
+        @battle.pbDisplay(_INTL("The electric current disappeared from the battlefield!"))
+      when PBBattleTerrains::Grassy
+        @battle.pbDisplay(_INTL("The grass disappeared from the battlefield!"))
+      when PBBattleTerrains::Misty
+        @battle.pbDisplay(_INTL("The mist disappeared from the battlefield!"))
+      when PBBattleTerrains::Psychic
+        @battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
+    end
+    @battle.field.terrain = PBBattleTerrains::None
   end
 end
 

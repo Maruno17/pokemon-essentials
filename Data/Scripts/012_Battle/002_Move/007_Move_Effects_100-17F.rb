@@ -406,6 +406,7 @@ class PokeBattle_Move_110 < PokeBattle_Move
       user.pbOwnSide.effects[PBEffects::StickyWeb] = false
       @battle.pbDisplay(_INTL("{1} blew away sticky webs!",user.pbThis))
     end
+    user.pbRaiseStatStage(:SPEED,1,user)
   end
 end
 

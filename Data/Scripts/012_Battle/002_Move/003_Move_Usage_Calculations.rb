@@ -347,15 +347,15 @@ class PokeBattle_Move
       case @battle.field.terrain
       when PBBattleTerrains::Electric
         if isConst?(type,PBTypes,:ELECTRIC)
-          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.5).round
+          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.3).round
         end
       when PBBattleTerrains::Grassy
         if isConst?(type,PBTypes,:GRASS)
-          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.5).round
+          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.3).round
         end
       when PBBattleTerrains::Psychic
         if isConst?(type,PBTypes,:PSYCHIC)
-          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.5).round
+          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.3).round
         end
       end
     end

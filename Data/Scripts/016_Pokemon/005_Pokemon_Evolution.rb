@@ -767,15 +767,15 @@ PBEvolution.register(:TradeSpecies, {
 })
 
 PBEvolution.register(:CriticalHits, {
+  "parameterType" => :PBItems,
   "afterBattleCheck"  => proc { |pkmn, parameter|
-     next true if pkmn.criticalHits > parameter
+     next true if pkmn.criticalHits > 3 && pkmn.item == parameter
   }
 })
 
-PBEvolution.register(:Lossofhp, {
-  "afterBattleCheck"  => proc { |pkmn, parameter|
-     next true if pkmn.yamaskhp >= 49 && parameter == 0
-     next true if pkmn.yamaskhp >= 49 && $game_map.map_id==parameter &&
-     (($game_player.x==25 && $game_player.y==5) || ($game_player.x==25 && $game_player.y==6))
+PBEvolution.register(:DamageDone, {
+  "onFieldCheck"  => proc { |pkmn, parameter|
+     next false if !parameter.is_a?(Array)
+     next true if pkmn.yamaskhp >= parameter[0] && $game_map.map_id== parameter[1] && $game_player.x== parameter[2] && $game_player.y== parameter[3]
   }
 })

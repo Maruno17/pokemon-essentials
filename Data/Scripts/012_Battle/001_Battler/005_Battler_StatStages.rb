@@ -76,14 +76,14 @@ class PokeBattle_Battler
       @battle.pbDisplay(_INTL("{1}'s Mirror Armor activated!",pbThis))
       if !user
         battle.pbHideAbilitySplash(self)
-        return false 
+        return false
       end
       if user.pbCanLowerStatStage?(stat) && !user.hasActiveAbility?(:MIRRORARMOR)
         user.pbLowerStatStageByAbility(stat,increment,user,splashAnim=false,checkContact=false)
       end
       battle.pbHideAbilitySplash(self)
       return false
-    end   
+    end
     # Perform the stat stage change
     increment = pbRaiseStatStageBasic(stat,increment,ignoreContrary)
     return false if increment<=0
@@ -283,7 +283,8 @@ class PokeBattle_Battler
       end
       if abilityActive?
         if BattleHandlers.triggerStatLossImmunityAbility(@ability,self,PBStats::ATTACK,@battle,false) ||
-           BattleHandlers.triggerStatLossImmunityAbilityNonIgnorable(@ability,self,PBStats::ATTACK,@battle,false)
+           BattleHandlers.triggerStatLossImmunityAbilityNonIgnorable(@ability,self,PBStats::ATTACK,@battle,false) ||
+            hasActiveAbility?(:INNERFOCUS) || hasActiveAbility?(:OWNTEMPO) || hasActiveAbility?(:OBLIVIOUS) || hasActiveAbility?(:SCRAPPY)
           @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!",
              pbThis,abilityName,user.pbThis(true),user.abilityName))
           return false

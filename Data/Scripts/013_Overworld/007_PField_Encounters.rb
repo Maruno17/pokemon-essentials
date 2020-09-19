@@ -247,6 +247,14 @@ class PokemonEncounters
         favoredType = getConst(PBTypes,:ELECTRIC)
       elsif isConst?(firstPkmn.ability,PBAbilities,:MAGNETPULL) && hasConst?(PBTypes,:STEEL)
         favoredType = getConst(PBTypes,:STEEL)
+      elsif isConst?(firstPkmn.ability,PBAbilities,:FLASHFIRE) && hasConst?(PBTypes,:FIRE)
+        favoredType = getConst(PBTypes,:FIRE)
+      elsif isConst?(firstPkmn.ability,PBAbilities,:HARVEST) && hasConst?(PBTypes,:GRASS)
+        favoredType = getConst(PBTypes,:GRASS)
+      elsif isConst?(firstPkmn.ability,PBAbilities,:LIGHTNINGROD) && hasConst?(PBTypes,:ELECTRIC)
+        favoredType = getConst(PBTypes,:ELECTRIC)
+      elsif isConst?(firstPkmn.ability,PBAbilities,:STORMDRAIN) && hasConst?(PBTypes,:WATER)
+        favoredType = getConst(PBTypes,:WATER)
       end
       if favoredType>=0
         newEncList = []
@@ -410,6 +418,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   firstPkmn = $Trainer.firstPokemon
   chances = [50,5,1]
   chances = [60,20,5] if firstPkmn && isConst?(firstPkmn.ability,PBAbilities,:COMPOUNDEYES)
+  chances = [50,50,50] if firstPkmn && isConst?(firstPkmn.ability,PBAbilities,:SUPERLUCK)
   itemrnd = rand(100)
   if (items[0]==items[1] && items[1]==items[2]) || itemrnd<chances[0]
     genwildpoke.setItem(items[0])
@@ -439,7 +448,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
         (rand(3)<2) ? genwildpoke.makeMale : genwildpoke.makeFemale
       end
     elsif isConst?(firstPkmn.ability,PBAbilities,:SYNCHRONIZE)
-      genwildpoke.setNature(firstPkmn.nature) if !isRoamer && rand(100)<50
+      genwildpoke.setNature(firstPkmn.nature) if !isRoamer
     end
   end
   # Trigger events that may alter the generated Pokémon further
