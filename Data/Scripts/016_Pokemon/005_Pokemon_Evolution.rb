@@ -62,13 +62,9 @@ module PBEvolution
   TradeItem         = 58
   TradeSpecies      = 59
   CriticalHits      = 60
-  Lossofhp          = 61
+  DamageDone        = 61
 
   def self.maxValue; return 61; end
-
-  def self.maxValue; return 60; end
-
-  def self.maxValue; return 59; end
 
   @@evolution_methods = HandlerHash.new(:PBEvolution)
 
@@ -766,16 +762,22 @@ PBEvolution.register(:TradeSpecies, {
   }
 })
 
+#===============================================================================
+# Evolution methods that trigger after a battle
+#===============================================================================
 PBEvolution.register(:CriticalHits, {
-  "parameterType" => :PBItems,
-  "afterBattleCheck"  => proc { |pkmn, parameter|
+  "parameterType"    => :PBItems,
+  "afterBattleCheck" => proc { |pkmn, parameter|
      next true if pkmn.criticalHits > 3 && pkmn.item == parameter
   }
 })
 
+#===============================================================================
+# Evolution methods that trigger upon taking a step in the overworld
+#===============================================================================
 PBEvolution.register(:DamageDone, {
-  "onFieldCheck"  => proc { |pkmn, parameter|
+  "onFieldCheck" => proc { |pkmn, parameter|
      next false if !parameter.is_a?(Array)
-     next true if pkmn.yamaskhp >= parameter[0] && $game_map.map_id== parameter[1] && $game_player.x== parameter[2] && $game_player.y== parameter[3]
+     next true if pkmn.yamaskhp >= parameter[0] && $game_map.map_id == parameter[1] && $game_player.x == parameter[2] && $game_player.y == parameter[3]
   }
 })
