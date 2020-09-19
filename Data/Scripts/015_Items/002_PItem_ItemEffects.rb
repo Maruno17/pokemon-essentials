@@ -780,8 +780,18 @@ ItemHandlers::UseOnPokemon.add(:SWIFTWING,proc { |item,pkmn,scene|
 
 ItemHandlers::UseOnPokemon.add(:RARECANDY,proc { |item,pkmn,scene|
   if pkmn.level>=PBExperience.maxLevel || pkmn.shadowPokemon?
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
+    ret = pbCheckEvolution(pkmn,0)
+    if ret>0
+      pbFadeOutIn(99999){
+      evo = PokemonEvolutionScene.new
+      evo.pbStartScreen(pkmn,ret)
+      evo.pbEvolution(true)
+      evo.pbEndScreen
+    }
+    else
+      scene.pbDisplay(_INTL("It won't have any effect."))
+      next false
+    end
   end
   pbChangeLevel(pkmn,pkmn.level+1,scene)
   scene.pbHardRefresh

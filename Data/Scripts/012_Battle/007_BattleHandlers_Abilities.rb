@@ -2155,7 +2155,7 @@ BattleHandlers::EOREffectAbility.add(:BADDREAMS,
 BattleHandlers::EOREffectAbility.add(:MOODY,
   proc { |ability,battler,battle|
     randomUp = []; randomDown = []
-    PBStats.eachBattleStat do |s|
+    PBStats.eachMainBattleStat do |s|
       randomUp.push(s) if battler.pbCanRaiseStatStage?(s,battler)
       randomDown.push(s) if battler.pbCanLowerStatStage?(s,battler)
     end

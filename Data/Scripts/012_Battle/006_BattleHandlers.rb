@@ -501,7 +501,7 @@ def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
   return false if !forced && !battler.pbCanConsumeBerry?(item,false)
   itemName = PBItems.getName(item)
   battle.pbCommonAnimation("EatBerry",battler) if !forced
-  amt = (NEWEST_BATTLE_MECHANICS) ? battler.pbRecoverHP(battler.totalhp/2) : battler.pbRecoverHP(battler.totalhp/8)
+  amt = (NEWEST_BATTLE_MECHANICS) ? battler.pbRecoverHP(battler.totalhp/3) : battler.pbRecoverHP(battler.totalhp/8)
   if battler.hasActiveAbility?(:RIPEN)
     amt *= 2
   end
