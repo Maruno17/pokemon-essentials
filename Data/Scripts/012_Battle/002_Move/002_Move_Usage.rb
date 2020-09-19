@@ -314,6 +314,7 @@ class PokeBattle_Move
       end
       @battle.pbHideAbilitySplash(target)
       target.pbChangeForm(1,_INTL("{1}'s disguise was busted!",target.pbThis))
+      target.pbReduceHP(target.totalhp/8)
     elsif target.damageState.endured
       @battle.pbDisplay(_INTL("{1} endured the hit!",target.pbThis))
     elsif target.damageState.sturdy
