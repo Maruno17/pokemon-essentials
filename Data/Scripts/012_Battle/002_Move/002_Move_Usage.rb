@@ -302,10 +302,6 @@ class PokeBattle_Move
 
   def pbEndureKOMessage(target)
     if target.damageState.disguise
-    elsif target.damageState.iceface
-      @battle.pbShowAbilitySplash(target)
-      target.pbChangeForm(1,_INTL("{1} transformed!",target.pbThis))
-      @battle.pbHideAbilitySplash(target)
       @battle.pbShowAbilitySplash(target)
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         @battle.pbDisplay(_INTL("Its disguise served it as a decoy!"))
@@ -315,6 +311,10 @@ class PokeBattle_Move
       @battle.pbHideAbilitySplash(target)
       target.pbChangeForm(1,_INTL("{1}'s disguise was busted!",target.pbThis))
       target.pbReduceHP(target.totalhp/8)
+    elsif target.damageState.iceface
+      @battle.pbShowAbilitySplash(target)
+      target.pbChangeForm(1,_INTL("{1} transformed!",target.pbThis))
+      @battle.pbHideAbilitySplash(target)
     elsif target.damageState.endured
       @battle.pbDisplay(_INTL("{1} endured the hit!",target.pbThis))
     elsif target.damageState.sturdy

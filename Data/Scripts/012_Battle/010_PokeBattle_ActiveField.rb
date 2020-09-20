@@ -23,7 +23,6 @@ begin
       @effects[PBEffects::TrickRoom]       = 0
       @effects[PBEffects::WaterSportField] = 0
       @effects[PBEffects::WonderRoom]      = 0
-      @effects[PBEffects::Noiceface]        = []
       @defaultWeather  = PBWeather::None
       @weather         = PBWeather::None
       @weatherDuration = 0

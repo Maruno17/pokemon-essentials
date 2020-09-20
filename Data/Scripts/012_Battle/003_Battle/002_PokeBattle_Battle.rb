@@ -659,7 +659,6 @@ class PokeBattle_Battle
   def pbStartWeather(user,newWeather,fixedDuration=false,showAnim=true)
     return if @field.weather==newWeather
     @field.weather = newWeather
-    field.effects[PBEffects::Noiceface].clear
     duration = (fixedDuration) ? 5 : -1
     if duration>0 && user && user.itemActive?
       duration = BattleHandlers.triggerWeatherExtenderItem(user.item,
