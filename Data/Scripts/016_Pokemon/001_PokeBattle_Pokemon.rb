@@ -60,7 +60,7 @@ class PokeBattle_Pokemon
   attr_accessor :happiness
   # @return [Integer] the type of ball used (refer to {$BallTypes} for valid types)
   attr_accessor :ballused
-  # @return [Integer] the number of steps until the egg hatches, 0 if Pokémon is not an egg
+  # @return [Integer] the number of steps until this Pokémon hatches, 0 if this Pokémon is not an egg
   attr_accessor :eggsteps
   # @param value [Integer] new markings for this Pokémon
   attr_writer   :markings
