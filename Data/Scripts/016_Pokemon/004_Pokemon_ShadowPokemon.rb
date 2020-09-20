@@ -54,7 +54,7 @@ def pbPurify(pokemon,scene)
   speciesname = PBSpecies.getName(pokemon.species)
   if scene.pbConfirm(_INTL("Would you like to give a nickname to {1}?",speciesname))
     newname = pbEnterPokemonName(_INTL("{1}'s nickname?",speciesname),
-                                 0, Pokemon::MAX_POKEMON_NAME_SIZE, "", pokemon)
+                                 0, Pokemon::MAX_NAME_SIZE, "", pokemon)
     pokemon.name = newname if newname!=""
   end
 end

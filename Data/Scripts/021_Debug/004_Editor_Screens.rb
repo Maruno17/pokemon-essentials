@@ -741,7 +741,7 @@ def pbPokemonEditor
   metrics       = pbLoadSpeciesMetrics
   selection = 0
   species = [
-     [_INTL("Name"), LimitStringProperty.new(Pokemon::MAX_POKEMON_NAME_SIZE), _INTL("Name of the Pokémon.")],
+     [_INTL("Name"), LimitStringProperty.new(Pokemon::MAX_NAME_SIZE), _INTL("Name of the Pokémon.")],
      [_INTL("InternalName"),ReadOnlyProperty,_INTL("Internal name of the Pokémon.")],
      [_INTL("Type1"),TypeProperty,_INTL("Pokémon's type. If same as Type2, this Pokémon has a single type.")],
      [_INTL("Type2"),TypeProperty,_INTL("Pokémon's type. If same as Type1, this Pokémon has a single type.")],

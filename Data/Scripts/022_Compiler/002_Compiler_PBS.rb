@@ -1465,8 +1465,8 @@ def pbCompileTrainers
           raise _INTL("Bad happiness: {1} (must be 0-255)\r\n{2}",record,FileLineData.linereport)
         end
       when "Name"
-        if record.length>Pokemon::MAX_POKEMON_NAME_SIZE
-          raise _INTL("Bad nickname: {1} (must be 1-{2} characters)\r\n{3}", record, Pokemon::MAX_POKEMON_NAME_SIZE, FileLineData.linereport)
+        if record.length>Pokemon::MAX_NAME_SIZE
+          raise _INTL("Bad nickname: {1} (must be 1-{2} characters)\r\n{3}", record, Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
         end
       end
       # Record XXX=YYY setting
@@ -1555,8 +1555,8 @@ def pbCompileTrainers
               raise _INTL("Bad happiness: {1} (must be 0-255)\r\n{2}",record[i],FileLineData.linereport)
             end
           when TPNAME+3
-            if record[i].length>Pokemon::MAX_POKEMON_NAME_SIZE
-              raise _INTL("Bad nickname: {1} (must be 1-{2} characters)\r\n{3}", record[i], Pokemon::MAX_POKEMON_NAME_SIZE, FileLineData.linereport)
+            if record[i].length>Pokemon::MAX_NAME_SIZE
+              raise _INTL("Bad nickname: {1} (must be 1-{2} characters)\r\n{3}", record[i], Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
             end
           end
         end

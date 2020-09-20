@@ -601,7 +601,7 @@ module PokemonDebugMixin
         when 0   # Rename
           oldname = (pkmn.name && pkmn.name!=speciesname) ? pkmn.name : ""
           newname = pbEnterPokemonName(_INTL("{1}'s nickname?",speciesname),
-                                       0, Pokemon::MAX_POKEMON_NAME_SIZE, oldname, pkmn)
+                                       0, Pokemon::MAX_NAME_SIZE, oldname, pkmn)
           if newname && newname!=""
             pkmn.name = newname
             pbRefreshSingle(pkmnid)

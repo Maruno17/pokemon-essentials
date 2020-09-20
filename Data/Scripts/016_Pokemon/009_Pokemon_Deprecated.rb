@@ -8,6 +8,11 @@ class PokeBattle_Pokemon; end
 
 PokeBattle_Pokemon = Pokemon
 
+class Pokemon
+  # @deprecated Use {MAX_NAME_SIZE} instead. This alias is slated to be removed in vXX.
+  MAX_POKEMON_NAME_SIZE = MAX_NAME_SIZE
+end
+
 # (see Pokemon#initialize)
 # @deprecated Use +Pokemon.new+ instead. This method and its aliases are
 #   slated to be removed in vXX.

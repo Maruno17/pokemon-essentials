@@ -9,7 +9,7 @@ def pbNickname(pokemon)
   speciesname = PBSpecies.getName(pokemon.species)
   if pbConfirmMessage(_INTL("Would you like to give a nickname to {1}?",speciesname))
     helptext = _INTL("{1}'s nickname?",speciesname)
-    newname = pbEnterPokemonName(helptext, 0, Pokemon::MAX_POKEMON_NAME_SIZE, "", pokemon)
+    newname = pbEnterPokemonName(helptext, 0, Pokemon::MAX_NAME_SIZE, "", pokemon)
     pokemon.name = newname if newname!=""
   end
 end
@@ -146,7 +146,7 @@ def pbAddForeignPokemon(pokemon,level=nil,ownerName=nil,nickname=nil,ownerGender
     pokemon.otgender  = ownerGender
   end
   # Set nickname
-  pokemon.name = nickname[0, Pokemon::MAX_POKEMON_NAME_SIZE] if nickname && nickname!=""
+  pokemon.name = nickname[0, Pokemon::MAX_NAME_SIZE] if nickname && nickname!=""
   # Recalculate stats
   pokemon.calcStats
   if ownerName
