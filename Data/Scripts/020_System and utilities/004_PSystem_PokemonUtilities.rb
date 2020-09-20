@@ -74,7 +74,7 @@ def pbAddPokemon(pokemon,level=nil,seeform=true)
   end
   pokemon = getID(PBSpecies,pokemon)
   if pokemon.is_a?(Integer) && level.is_a?(Integer)
-    pokemon = pbNewPkmn(pokemon,level)
+    pokemon = Pokemon.new(pokemon,level)
   end
   speciesname = PBSpecies.getName(pokemon.species)
   pbMessage(_INTL("\\me[Pkmn get]{1} obtained {2}!\1",$Trainer.name,speciesname))
@@ -87,7 +87,7 @@ def pbAddPokemonSilent(pokemon,level=nil,seeform=true)
   return false if !pokemon || pbBoxesFull?
   pokemon = getID(PBSpecies,pokemon)
   if pokemon.is_a?(Integer) && level.is_a?(Integer)
-    pokemon = pbNewPkmn(pokemon,level)
+    pokemon = Pokemon.new(pokemon,level)
   end
   $Trainer.seen[pokemon.species]  = true
   $Trainer.owned[pokemon.species] = true
@@ -110,7 +110,7 @@ def pbAddToParty(pokemon,level=nil,seeform=true)
   return false if !pokemon || $Trainer.party.length>=6
   pokemon = getID(PBSpecies,pokemon)
   if pokemon.is_a?(Integer) && level.is_a?(Integer)
-    pokemon = pbNewPkmn(pokemon,level)
+    pokemon = Pokemon.new(pokemon,level)
   end
   speciesname = PBSpecies.getName(pokemon.species)
   pbMessage(_INTL("\\me[Pkmn get]{1} obtained {2}!\1",$Trainer.name,speciesname))
@@ -123,7 +123,7 @@ def pbAddToPartySilent(pokemon,level=nil,seeform=true)
   return false if !pokemon || $Trainer.party.length>=6
   pokemon = getID(PBSpecies,pokemon)
   if pokemon.is_a?(Integer) && level.is_a?(Integer)
-    pokemon = pbNewPkmn(pokemon,level)
+    pokemon = Pokemon.new(pokemon,level)
   end
   $Trainer.seen[pokemon.species]  = true
   $Trainer.owned[pokemon.species] = true
@@ -137,7 +137,7 @@ def pbAddForeignPokemon(pokemon,level=nil,ownerName=nil,nickname=nil,ownerGender
   return false if !pokemon || $Trainer.party.length>=6
   pokemon = getID(PBSpecies,pokemon)
   if pokemon.is_a?(Integer) && level.is_a?(Integer)
-    pokemon = pbNewPkmn(pokemon,level)
+    pokemon = Pokemon.new(pokemon,level)
   end
   # Set original trainer to a foreign one (if ID isn't already foreign)
   if pokemon.trainerID==$Trainer.id
@@ -165,7 +165,7 @@ def pbGenerateEgg(pokemon,text="")
   return false if !pokemon || $Trainer.party.length>=6
   pokemon = getID(PBSpecies,pokemon)
   if pokemon.is_a?(Integer)
-    pokemon = pbNewPkmn(pokemon,EGG_LEVEL)
+    pokemon = Pokemon.new(pokemon,EGG_LEVEL)
   end
   # Get egg steps
   eggSteps = pbGetSpeciesData(pokemon.species,pokemon.form,SpeciesStepsToHatch)

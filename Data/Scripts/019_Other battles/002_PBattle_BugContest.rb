@@ -114,7 +114,7 @@ class BugContestState
       if !enc
         raise _INTL("No encounters for map {1}, so can't judge contest",@contestMap)
       end
-      pokemon=pbNewPkmn(enc[0],enc[1])
+      pokemon=Pokemon.new(enc[0],enc[1])
       pokemon.hp=1+rand(pokemon.totalhp-1)
       score=pbBugContestScore(pokemon)
       judgearray.push([cont,pokemon.species,score])

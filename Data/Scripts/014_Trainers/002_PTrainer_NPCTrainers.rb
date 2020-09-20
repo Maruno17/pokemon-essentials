@@ -76,7 +76,7 @@ def pbLoadTrainer(trainerid,trainername,partyid=0)
     for poke in trainer[3]
       species = pbGetSpeciesFromFSpecies(poke[TPSPECIES])[0]
       level = poke[TPLEVEL]
-      pokemon = pbNewPkmn(species,level,opponent,false)
+      pokemon = Pokemon.new(species,level,opponent,false)
       if poke[TPFORM]
         pokemon.forcedForm = poke[TPFORM] if MultipleForms.hasFunction?(pokemon.species,"getForm")
         pokemon.formSimple = poke[TPFORM]

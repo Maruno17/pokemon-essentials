@@ -527,7 +527,7 @@ def pbCreatePokemon
   for i in 0...party.length
     species = party[i]
     # Generate Pokémon with species and level 20
-    $Trainer.party[i] = pbNewPkmn(species,20)
+    $Trainer.party[i] = Pokemon.new(species,20)
     $Trainer.seen[species]  = true # Set this species to seen and owned
     $Trainer.owned[species] = true
     pbSeenForm($Trainer.party[i])

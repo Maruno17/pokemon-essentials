@@ -159,7 +159,7 @@ class PBPokemon
   end
 
   def createPokemon(level,iv,trainer)
-    pokemon=pbNewPkmn(@species,level,trainer,false)
+    pokemon=Pokemon.new(@species,level,trainer,false)
     pokemon.setItem(@item)
     pokemon.personalID=rand(65536)
     pokemon.personalID|=rand(65536)<<8

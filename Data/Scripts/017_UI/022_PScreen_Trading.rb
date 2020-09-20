@@ -206,7 +206,7 @@ def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
       raise _INTL("Species does not exist ({1}).",newpoke) if !hasConst?(PBSpecies,newpoke)
       newpoke = getID(PBSpecies,newpoke)
     end
-    yourPokemon = pbNewPkmn(newpoke,myPokemon.level,opponent)
+    yourPokemon = Pokemon.new(newpoke,myPokemon.level,opponent)
   end
   yourPokemon.name       = nickname
   yourPokemon.obtainMode = 2   # traded

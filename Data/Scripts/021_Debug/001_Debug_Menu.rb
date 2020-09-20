@@ -348,7 +348,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
           params.setCancelValue(0)
           level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",PBSpecies.getName(species)),params)
           if level>0
-            pkmn.push(pbNewPkmn(species,level))
+            pkmn.push(Pokemon.new(species,level))
           end
         end
       else                                     # Edit a Pokémon
@@ -563,7 +563,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
       end
       cname = getConstantName(PBSpecies,i) rescue nil
       next if !cname
-      pkmn = pbNewPkmn(i,50)
+      pkmn = Pokemon.new(i,50)
       $PokemonStorage[(i-1)/$PokemonStorage.maxPokemon(0),
                       (i-1)%$PokemonStorage.maxPokemon(0)] = pkmn
       # Record all forms of this Pokémon as seen and owned
