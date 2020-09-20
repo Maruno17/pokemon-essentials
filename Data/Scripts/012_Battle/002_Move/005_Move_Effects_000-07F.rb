@@ -1369,6 +1369,11 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
         @battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
     end
     @battle.field.terrain = PBBattleTerrains::None
+    case @battle.pbWeather
+    when PBWeather::Fog
+      @battle.pbDisplay(_INTL("{1} blew away the deep fog with Defog!",user.pbThis))
+      @battle.pbWeather = PBWeather::None
+    end
   end
 end
 
