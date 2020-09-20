@@ -1,5 +1,7 @@
-# This class stores data on each Pokémon. Refer to $Trainer.party for an array
-# of each Pokémon in the Trainer's current party.
+#===============================================================================
+# Instances of this class are individual Pokémon.
+# The player's party Pokémon are stored in the array $Trainer.party.
+#===============================================================================
 class PokeBattle_Pokemon
   # @return [String] the nickname of this Pokémon
   attr_accessor :name
@@ -15,18 +17,18 @@ class PokeBattle_Pokemon
   attr_reader   :attack
   # @return [Integer] the current Defense stat
   attr_reader   :defense
-  # @return [Integer] the current Speed stat
-  attr_reader   :speed
   # @return [Integer] the current Special Attack stat
   attr_reader   :spatk
   # @return [Integer] the current Special Defense stat
   attr_reader   :spdef
+  # @return [Integer] the current Speed stat
+  attr_reader   :speed
   # If defined, forces the Pokémon's ability to be the first natural (0),
-  # second natural (1) or hidden (2) ability available to its species.
+  # second natural (1) or a hidden (2-5) ability available to its species.
   # It is not possible to give the Pokémon any ability other than those
   # defined in the PBS file "pokemon.txt" for its species
   # (or "pokemonforms.txt" for its species and form). 
-  # @return [0, 1, 2, nil] forced ability index (nil if none is set)
+  # @return [0, 1, 2, 3, 4, 5, nil] forced ability index (nil if none is set)
   attr_accessor :abilityflag
   # If defined, forces this Pokémon to be male (0) or female (1).
   # @return [0, 1, nil] gender to force: male (0) or female (1) (nil if undefined)
@@ -46,6 +48,11 @@ class PokeBattle_Pokemon
   attr_accessor :firstmoves
   # @return [Integer] the ID of the item held by this Pokémon (0 = no held item)
   attr_accessor :item
+  # @return [Integer] this Pokémon's current status (from PBStatuses)
+  attr_reader   :status
+  # @return [Integer] sleep count / toxic flag / 0:
+  #   sleep (number of rounds before waking up), toxic (0 = regular poison, 1 = toxic)
+  attr_reader   :statusCount
   # Another Pokémon which has been fused with this Pokémon (or nil if there is none).
   # Currently only used by Kyurem, to record a fused Reshiram or Zekrom.  
   # @return [PokeBattle_Pokemon, nil] the Pokémon fused into this one (nil if there is none)
@@ -149,7 +156,7 @@ class PokeBattle_Pokemon
 
   # @return [Time] the time when this Pokémon hatched
   def timeEggHatched
-    if obtainMode==1
+    if obtainMode == 1
       return @timeEggHatched ? Time.at(@timeEggHatched) : Time.gm(2000)
     else
       return Time.gm(2000)
@@ -168,7 +175,7 @@ class PokeBattle_Pokemon
 
   # @return [Integer] this Pokémon's level
   def level
-    @level = PBExperience.pbGetLevelFromExperience(@exp,self.growthrate) if !@level
+    @level = PBExperience.pbGetLevelFromExperience(@exp, self.growthrate) if !@level
     return @level
   end
 
@@ -177,10 +184,10 @@ class PokeBattle_Pokemon
   # @param value [Integer] new level (between 1 and the maximum level)
   def level=(value)
     if value < 1 || value > PBExperience.maxLevel
-      raise ArgumentError.new(_INTL("The level number ({1}) is invalid.",value))
+      raise ArgumentError.new(_INTL("The level number ({1}) is invalid.", value))
     end
     @level = value
-    self.exp = PBExperience.pbGetStartExperience(value,self.growthrate)
+    self.exp = PBExperience.pbGetStartExperience(value, self.growthrate)
   end
 
   # Sets this Pokémon's Exp. Points.
@@ -198,23 +205,23 @@ class PokeBattle_Pokemon
 
   # @return [Integer] this Pokémon's growth rate (from PBGrowthRates)
   def growthrate
-    return pbGetSpeciesData(@species,formSimple,SpeciesGrowthRate)
+    return pbGetSpeciesData(@species, formSimple, SpeciesGrowthRate)
   end
 
   # @return [Integer] this Pokémon's base Experience value
   def baseExp
-    return pbGetSpeciesData(@species,formSimple,SpeciesBaseExp)
+    return pbGetSpeciesData(@species, formSimple, SpeciesBaseExp)
   end
 
   # @return [Float] a number between 0 and 1 indicating how much of the current level's
   #   Exp this Pokémon has
   def expFraction
-    l = self.level
-    return 0.0 if l >= PBExperience.maxLevel
-    gr = self.growthrate
-    startexp = PBExperience.pbGetStartExperience(l, gr)
-    endexp   = PBExperience.pbGetStartExperience(l + 1, gr)
-    return 1.0 * (@exp - startexp) / (endexp - startexp)
+    lvl = self.level
+    return 0.0 if lvl >= PBExperience.maxLevel
+    growth_rate = self.growthrate
+    start_exp = PBExperience.pbGetStartExperience(lvl, growth_rate)
+    end_exp   = PBExperience.pbGetStartExperience(lvl + 1, growth_rate)
+    return 1.0 * (@exp - start_exp) / (end_exp - start_exp)
   end
 
   #=============================================================================
@@ -224,24 +231,24 @@ class PokeBattle_Pokemon
   # @return [0, 1, 2] this Pokémon's gender (0 = male, 1 = female, 2 = genderless)
   def gender
     # Return sole gender option for all male/all female/genderless species
-    genderRate = pbGetSpeciesData(@species,formSimple,SpeciesGenderRate)
-    case genderRate
+    gender_rate = pbGetSpeciesData(@species, formSimple, SpeciesGenderRate)
+    case gender_rate
     when PBGenderRates::AlwaysMale;   return 0
     when PBGenderRates::AlwaysFemale; return 1
     when PBGenderRates::Genderless;   return 2
     end
     # Return gender for species that can be male or female
     return @genderflag if @genderflag && (@genderflag == 0 || @genderflag == 1)
-    return ((@personalID & 0xFF) < PBGenderRates.genderByte(genderRate)) ? 1 : 0
+    return ((@personalID & 0xFF) < PBGenderRates.genderByte(gender_rate)) ? 1 : 0
   end
 
   # @return [Boolean] whether this Pokémon species is restricted to only ever being one
   #   gender (or genderless)
   def singleGendered?
-    genderRate = pbGetSpeciesData(@species,formSimple,SpeciesGenderRate)
-    return genderRate == PBGenderRates::AlwaysMale ||
-           genderRate == PBGenderRates::AlwaysFemale ||
-           genderRate == PBGenderRates::Genderless
+    gender_rate = pbGetSpeciesData(@species, formSimple, SpeciesGenderRate)
+    return gender_rate == PBGenderRates::AlwaysMale ||
+           gender_rate == PBGenderRates::AlwaysFemale ||
+           gender_rate == PBGenderRates::Genderless
   end
   alias isSingleGendered? singleGendered?
 
@@ -270,7 +277,7 @@ class PokeBattle_Pokemon
   end
 
   # Makes this Pokémon male.
-  def makeMale;   setGender(0); end
+  def makeMale; setGender(0); end
   # Makes this Pokémon female.
   def makeFemale; setGender(1); end
 
@@ -288,7 +295,7 @@ class PokeBattle_Pokemon
     abilIndex = abilityIndex
     # Hidden ability
     if abilIndex >= 2
-      hiddenAbil = pbGetSpeciesData(@species,formSimple,SpeciesHiddenAbility)
+      hiddenAbil = pbGetSpeciesData(@species, formSimple, SpeciesHiddenAbility)
       if hiddenAbil.is_a?(Array)
         ret = hiddenAbil[abilIndex - 2]
         return ret if ret && ret > 0
@@ -298,7 +305,7 @@ class PokeBattle_Pokemon
       abilIndex = (@personalID & 1)
     end
     # Natural ability
-    abilities = pbGetSpeciesData(@species,formSimple,SpeciesAbilities)
+    abilities = pbGetSpeciesData(@species, formSimple, SpeciesAbilities)
     if abilities.is_a?(Array)
       ret = abilities[abilIndex]
       ret = abilities[(abilIndex + 1) % 2] if !ret || ret == 0
@@ -315,7 +322,7 @@ class PokeBattle_Pokemon
   def hasAbility?(ability = 0)
     current_ability = self.ability
     return current_ability > 0 if ability == 0
-    return current_ability == getID(PBAbilities,ability)
+    return current_ability == getID(PBAbilities, ability)
   end
 
   # Sets this Pokémon's ability index.
@@ -327,24 +334,24 @@ class PokeBattle_Pokemon
   # @return [Boolean] whether this Pokémon has a hidden ability
   def hasHiddenAbility?
     abil = abilityIndex
-    return abil!=nil && abil>=2
+    return abil != nil && abil >= 2
   end
 
   # @return [Array<Array<Integer>>] the list of abilities this Pokémon can have,
-  #   where every element is [ability ID,ability index]
+  #   where every element is [ability ID, ability index]
   def getAbilityList
     ret = []
-    abilities = pbGetSpeciesData(@species,formSimple,SpeciesAbilities)
+    abilities = pbGetSpeciesData(@species, formSimple, SpeciesAbilities)
     if abilities.is_a?(Array)
-      abilities.each_with_index { |a,i| ret.push([a,i]) if a && a > 0 }
+      abilities.each_with_index { |a, i| ret.push([a, i]) if a && a > 0 }
     else
-      ret.push([abilities,0]) if abilities>0
+      ret.push([abilities, 0]) if abilities > 0
     end
-    hiddenAbil = pbGetSpeciesData(@species,formSimple,SpeciesHiddenAbility)
+    hiddenAbil = pbGetSpeciesData(@species, formSimple, SpeciesHiddenAbility)
     if hiddenAbil.is_a?(Array)
-      hiddenAbil.each_with_index { |a,i| ret.push([a,i+2]) if a && a > 0 }
+      hiddenAbil.each_with_index { |a, i| ret.push([a, i + 2]) if a && a > 0 }
     else
-      ret.push([hiddenAbil,2]) if hiddenAbil>0
+      ret.push([hiddenAbil, 2]) if hiddenAbil > 0
     end
     return ret
   end
@@ -374,13 +381,13 @@ class PokeBattle_Pokemon
   def hasNature?(nature = -1)
     current_nature = self.nature
     return current_nature >= 0 if nature < 0
-    return current_nature == getID(PBNatures,nature)
+    return current_nature == getID(PBNatures, nature)
   end
 
   # Sets this Pokémon's nature to a particular nature.
   # @param value [Integer, String, Symbol] nature to change to
   def setNature(value)
-    @natureflag = getID(PBNatures,value)
+    @natureflag = getID(PBNatures, value)
     calcStats
   end
 
@@ -458,22 +465,22 @@ class PokeBattle_Pokemon
 
   # @return [Integer] this Pokémon's first type
   def type1
-    return pbGetSpeciesData(@species,formSimple,SpeciesType1)
+    return pbGetSpeciesData(@species, formSimple, SpeciesType1)
   end
 
   # @return [Integer] this Pokémon's second type, or the first type if none is defined
   def type2
-    ret = pbGetSpeciesData(@species,formSimple,SpeciesType2)
-    ret = pbGetSpeciesData(@species,formSimple,SpeciesType1) if !ret
+    ret = pbGetSpeciesData(@species, formSimple, SpeciesType2)
+    ret = pbGetSpeciesData(@species, formSimple, SpeciesType1) if !ret
     return ret
   end
 
   # @return [Array<Integer>] an array of this Pokémon's types
   def types
-    ret1 = pbGetSpeciesData(@species,formSimple,SpeciesType1)
-    ret2 = pbGetSpeciesData(@species,formSimple,SpeciesType2)
+    ret1 = pbGetSpeciesData(@species, formSimple, SpeciesType1)
+    ret2 = pbGetSpeciesData(@species, formSimple, SpeciesType2)
     ret = [ret1]
-    ret.push(ret2) if ret2 && ret2!=ret1
+    ret.push(ret2) if ret2 && ret2 != ret1
     return ret
   end
 
@@ -482,7 +489,7 @@ class PokeBattle_Pokemon
   def hasType?(type)
     t = self.types
     if !type.is_a?(Integer)
-      return t.any? { |tp| isConst?(tp,PBTypes,type) }
+      return t.any? { |tp| isConst?(tp, PBTypes, type) }
     end
     return t.any? { |tp| tp == type }
   end
@@ -501,7 +508,7 @@ class PokeBattle_Pokemon
   # @param move [Integer, Symbol, String] ID of the move to check
   # @return [Boolean] whether the Pokémon knows the given move
   def hasMove?(move)
-    move = getID(PBMoves,move)
+    move = getID(PBMoves, move)
     return false if !move || move <= 0
     @moves.each { |m| return true if m && m.id == move }
     return false
@@ -511,7 +518,7 @@ class PokeBattle_Pokemon
   # Returns the list of moves this Pokémon can learn by levelling up.
   # @return [Array<Array<Integer>>] this Pokémon's move list, where every element is [level, move ID]
   def getMoveList
-    return pbGetSpeciesMoveset(@species,formSimple)
+    return pbGetSpeciesMoveset(@species, formSimple)
   end
 
   # Sets this Pokémon's movelist to the default movelist it originally had.
@@ -536,7 +543,7 @@ class PokeBattle_Pokemon
   # Silently learns the given move. Will erase the first known move if it has to.
   # @param move [Integer, Symbol, String] ID of the move to learn
   def pbLearnMove(move)
-    move = getID(PBMoves,move)
+    move = getID(PBMoves, move)
     return if move <= 0
     for i in 0...4   # Already knows move, relocate it to the end of the list
       next if @moves[i].id != move
@@ -566,7 +573,7 @@ class PokeBattle_Pokemon
   # @param move [Integer, Symbol, String] ID of the move to delete
   def pbDeleteMove(move)
     move = getID(PBMoves,move)
-    return if !move || move<=0
+    return if !move || move <= 0
     newMoves = []
     @moves.each { |m| newMoves.push(m) if m && m.id != move }
     newMoves.push(PBMove.new(0))
@@ -579,7 +586,7 @@ class PokeBattle_Pokemon
   # @param index [Integer] index of the move to be deleted
   def pbDeleteMoveAtIndex(index)
     newMoves = []
-    @moves.each_with_index { |m,i| newMoves.push(m) if m && i != index }
+    @moves.each_with_index { |m, i| newMoves.push(m) if m && i != index }
     newMoves.push(PBMove.new(0))
     for i in 0...4
       @moves[i] = newMoves[i]
@@ -602,14 +609,14 @@ class PokeBattle_Pokemon
   # Adds a move to this Pokémon's first moves.
   # @param move [Integer, Symbol, String] ID of the move to add
   def pbAddFirstMove(move)
-    move = getID(PBMoves,move)
+    move = getID(PBMoves, move)
     @firstmoves.push(move) if move > 0 && !@firstmoves.include?(move)
   end
 
   # Removes a move from this Pokémon's first moves.
   # @param move [Integer, Symbol, String] ID of the move to remove
   def pbRemoveFirstMove(move)
-    move = getID(PBMoves,move)
+    move = getID(PBMoves, move)
     @firstmoves.delete(move) if move > 0
   end
 
@@ -621,7 +628,7 @@ class PokeBattle_Pokemon
   # @param move [Integer, Symbol, String] ID of the move to check
   # @return [Boolean] whether the Pokémon is compatible with the given move
   def compatibleWithMove?(move)
-    return pbSpeciesCompatible?(self.fSpecies,move)
+    return pbSpeciesCompatible?(self.fSpecies, move)
   end
 
   #=============================================================================
@@ -629,22 +636,34 @@ class PokeBattle_Pokemon
   #=============================================================================
 
   # @return [Integer] this Pokémon's cool contest attribute
-  def cool; return @cool || 0; end
+  def cool
+    return @cool || 0
+  end
 
   # @return [Integer] this Pokémon's beauty contest attribute
-  def beauty; return @beauty || 0; end
+  def beauty
+    return @beauty || 0
+  end
 
   # @return [Integer] this Pokémon's cute contest attribute
-  def cute; return @cute || 0; end
+  def cute
+    return @cute || 0
+  end
 
   # @return [Integer] this Pokémon's smart contest attribute
-  def smart; return @smart || 0; end
+  def smart
+    return @smart || 0
+  end
 
   # @return [Integer] this Pokémon's tough contest attribute
-  def tough; return @tough || 0; end
+  def tough;
+    return @tough || 0
+  end
 
   # @return [Integer] this Pokémon's sheen contest attribute
-  def sheen; return @sheen || 0; end
+  def sheen
+    return @sheen || 0
+  end
   
   # @return [Integer] the number of ribbons this Pokémon has
   def ribbonCount
@@ -655,7 +674,7 @@ class PokeBattle_Pokemon
   # @return [Boolean] whether this Pokémon has the specified ribbon
   def hasRibbon?(ribbon)
     return false if !@ribbons
-    ribbon = getID(PBRibbons,ribbon)
+    ribbon = getID(PBRibbons, ribbon)
     return false if ribbon == 0
     return @ribbons.include?(ribbon)
   end
@@ -664,7 +683,7 @@ class PokeBattle_Pokemon
   # @param ribbon [Integer, Symbol, String] ID of the ribbon to give
   def giveRibbon(ribbon)
     @ribbons = [] if !@ribbons
-    ribbon = getID(PBRibbons,ribbon)
+    ribbon = getID(PBRibbons, ribbon)
     return if ribbon == 0
     @ribbons.push(ribbon) if !@ribbons.include?(ribbon)
   end
@@ -672,18 +691,18 @@ class PokeBattle_Pokemon
   # Replaces one ribbon with the next one along, if possible.
   def upgradeRibbon(*arg)
     @ribbons = [] if !@ribbons
-    for i in 0...arg.length-1
+    for i in 0...arg.length - 1
       for j in 0...@ribbons.length
-        thisribbon = (arg[i].is_a?(Integer)) ? arg[i] : getID(PBRibbons,arg[i])
-        if @ribbons[j]==thisribbon
-          nextribbon = (arg[i+1].is_a?(Integer)) ? arg[i+1] : getID(PBRibbons,arg[i+1])
+        thisribbon = (arg[i].is_a?(Integer)) ? arg[i] : getID(PBRibbons, arg[i])
+        if @ribbons[j] == thisribbon
+          nextribbon = (arg[i+1].is_a?(Integer)) ? arg[i+1] : getID(PBRibbons, arg[i+1])
           @ribbons[j] = nextribbon
           return nextribbon
         end
       end
     end
-    if !hasRibbon?(arg[arg.length-1])
-      firstribbon = (arg[0].is_a?(Integer)) ? arg[0] : getID(PBRibbons,arg[0])
+    if !hasRibbon?(arg[arg.length - 1])
+      firstribbon = (arg[0].is_a?(Integer)) ? arg[0] : getID(PBRibbons, arg[0])
       giveRibbon(firstribbon)
       return firstribbon
     end
@@ -694,10 +713,10 @@ class PokeBattle_Pokemon
   # @param ribbon [Integer, Symbol, String] id of the ribbon to remove
   def takeRibbon(ribbon)
     return if !@ribbons
-    ribbon = getID(PBRibbons,ribbon)
-    return if ribbon==0
+    ribbon = getID(PBRibbons, ribbon)
+    return if ribbon == 0
     for i in 0...@ribbons.length
-      next if @ribbons[i]!=ribbon
+      next if @ribbons[i] != ribbon
       @ribbons[i] = nil
       break
     end
@@ -721,21 +740,21 @@ class PokeBattle_Pokemon
   def hasItem?(item_id = 0)
     held_item = self.item
     return held_item > 0 if item_id == 0
-    return held_item == getID(PBItems,item_id)
+    return held_item == getID(PBItems, item_id)
   end
 
   # Gives an item to this Pokémon. Passing 0 as the argument removes the held item.
   # @param item_id [Integer, Symbol, String] id of the item to give to this Pokémon (0 removes held item)
   def setItem(item_id)
-    self.item = item_id.is_a?(Integer) ? item_id : getID(PBItems,item_id)
+    self.item = getID(PBItems, item_id) || 0
   end
 
   # @return [Array<Integer>] the items this species can be found holding in the wild
   def wildHoldItems
     ret = []
-    ret.push(pbGetSpeciesData(@species,formSimple,SpeciesWildItemCommon))
-    ret.push(pbGetSpeciesData(@species,formSimple,SpeciesWildItemUncommon))
-    ret.push(pbGetSpeciesData(@species,formSimple,SpeciesWildItemRare))
+    ret.push(pbGetSpeciesData(@species, formSimple, SpeciesWildItemCommon))
+    ret.push(pbGetSpeciesData(@species, formSimple, SpeciesWildItemUncommon))
+    ret.push(pbGetSpeciesData(@species, formSimple, SpeciesWildItemRare))
     return ret
   end
 
@@ -751,7 +770,7 @@ class PokeBattle_Pokemon
   # @param mail [PokemonMail, nil] mail to be held by this Pokémon (nil if mail is to be removed)
   def mail=(mail)
     if !mail.nil? && !mail.is_a?(PokemonMail)
-      raise ArgumentError, _INTL('Invalid value {1} given',mail.inspect)
+      raise ArgumentError, _INTL('Invalid value {1} given', mail.inspect)
     end
     @mail = mail
   end
@@ -760,39 +779,14 @@ class PokeBattle_Pokemon
   # Status
   #=============================================================================
 
-  # Returns the current status of this Pokémon. See {PBStatuses} for all possible
-  # status effects.
-  # @return [Integer] current status (from PBStatuses)
-  def status
-    return @status
-  end
-
   # Sets this Pokémon's status. See {PBStatuses} for all possible status effects.
   # @param new_status [Integer, Symbol, String] status to set (from PBStatuses)
-  def status=(new_status)
-    if new_status.is_a?(Integer)
-      @status = new_status
-    else
-      if !new_status.is_a?(Symbol) && !new_status.is_a?(String)
-        raise ArgumentError, _INTL('Attempted to set a {1} as Pokémon status',new_status.class.name)
-      end
-      @status = getID(PBStatuses,new_status)
+  def status=(value)
+    new_status = getID(PBStatuses, value)
+    if !new_status
+      raise ArgumentError, _INTL('Attempted to set {1} as Pokémon status', value.class.name)
     end
-  end
-
-  # Is 0, except if the Pokémon is:
-  #
-  # - Asleep: Is the number of rounds the Pokémon will remain asleep.
-  #   This number is set when the Pokémon is made to fall asleep.
-  #
-  # - Badly poisoned: If the Pokémon is Poisoned and this is "1", the
-  #   Pokémon is badly poisoned instead (which affects how much poison
-  #   damage it takes in battle). When the Pokémon leaves battle while
-  #   badly poisoned, this value is set to 0 and it becomes regular Poisoned
-  #   (even in later battles).
-  # @return [Integer] sleep count / toxic flag
-  def statusCount
-    return @statusCount
+    @status = new_status
   end
 
   # Sets a new status count. See {#statusCount} for more information.
@@ -826,7 +820,7 @@ class PokeBattle_Pokemon
     @statusCount = 0
   end
   
-  # Heals all PP of this Pokémon. If a move index is given, heals the PP
+  # Restores all PP of this Pokémon. If a move index is given, restores the PP
   # of the move in that index.
   # @param move_index [Integer] index of the move to heal (-1 if all moves
   #   should be healed)
@@ -854,9 +848,9 @@ class PokeBattle_Pokemon
   # Changes the Pokémon's species and re-calculates its statistics.
   # @param species_id [Integer] id of the species to change this Pokémon to
   def species=(species_id)
-    hasNickname = nicknamed?
+    has_nickname = nicknamed?
     @species    = species_id
-    @name       = PBSpecies.getName(@species) unless hasNickname
+    @name       = PBSpecies.getName(@species) unless has_nickname
     @level      = nil   # In case growth rate is different for the new species
     @forcedForm = nil
     calcStats
@@ -865,7 +859,7 @@ class PokeBattle_Pokemon
   # @param species [Integer, Symbol, String] id of the species to check for
   # @return [Boolean] whether this Pokémon is of the specified species
   def isSpecies?(species)
-    species = getID(PBSpecies,species)
+    species = getID(PBSpecies, species)
     return species && @species == species
   end
 
@@ -880,29 +874,33 @@ class PokeBattle_Pokemon
   end
 
   # @return [Integer] this Pokémon's language
-  def language; return @language || 0; end
+  def language
+    return @language || 0
+  end
 
   # @return [Integer] the markings this Pokémon has
-  def markings; return @markings || 0; end
+  def markings
+    return @markings || 0
+  end
 
   # @return [String] a string stating the Unown form of this Pokémon
   def unownShape
-    return "ABCDEFGHIJKLMNOPQRSTUVWXYZ?!"[@form,1]
+    return "ABCDEFGHIJKLMNOPQRSTUVWXYZ?!"[@form, 1]
   end
 
   # @return [Integer] the height of this Pokémon in decimetres (0.1 metres)
   def height
-    return pbGetSpeciesData(@species,formSimple,SpeciesHeight)
+    return pbGetSpeciesData(@species, formSimple, SpeciesHeight)
   end
 
-  # @return [Integer] the weight of this Pokémon in hectograms (0.1 grams)
+  # @return [Integer] the weight of this Pokémon in hectograms (0.1 kilograms)
   def weight
-    return pbGetSpeciesData(@species,formSimple,SpeciesWeight)
+    return pbGetSpeciesData(@species, formSimple, SpeciesWeight)
   end
 
   # Returns an array of booleans indicating whether a stat is made to have
   # maximum IVs (for Hyper Training). Set like @ivMaxed[PBStats::ATTACK] = true
-  # @return [Array<Boolean>] array indicating whether a stat has maximum IVs
+  # @return [Array<Boolean>] array indicating whether each stat has maximum IVs
   def ivMaxed
     return @ivMaxed || []
   end
@@ -920,7 +918,7 @@ class PokeBattle_Pokemon
 
   # @return [Array<Integer>] the EV yield of this Pokémon (an array of six values)
   def evYield
-    ret = pbGetSpeciesData(@species,formSimple,SpeciesEffortPoints)
+    ret = pbGetSpeciesData(@species, formSimple, SpeciesEffortPoints)
     return ret.clone
   end
 
@@ -942,77 +940,77 @@ class PokeBattle_Pokemon
     case method
     when "walking"
       gain = 1
-      gain = 2 if @happiness<200
+      gain = 2 if @happiness < 200
     when "levelup"
       gain = 3
-      gain = 4 if @happiness<200
-      gain = 5 if @happiness<100
+      gain = 4 if @happiness < 200
+      gain = 5 if @happiness < 100
     when "groom"
       gain = 4
-      gain = 10 if @happiness<200
+      gain = 10 if @happiness < 200
     when "evberry"
       gain = 2
-      gain = 5 if @happiness<200
-      gain = 10 if @happiness<100
+      gain = 5 if @happiness < 200
+      gain = 10 if @happiness < 100
     when "vitamin"
       gain = 2
-      gain = 3 if @happiness<200
-      gain = 5 if @happiness<100
+      gain = 3 if @happiness < 200
+      gain = 5 if @happiness < 100
     when "wing"
       gain = 1
-      gain = 2 if @happiness<200
-      gain = 3 if @happiness<100
+      gain = 2 if @happiness < 200
+      gain = 3 if @happiness < 100
     when "machine"
       gain = 0
-      gain = 1 if @happiness<200
+      gain = 1 if @happiness < 200
     when "battleitem"
       gain = 0
-      gain = 1 if @happiness<200
+      gain = 1 if @happiness < 200
     when "faint"
       gain = -1
     when "faintbad"   # Fainted against an opponent that is 30+ levels higher
       gain = -10
-      gain = -5 if @happiness<200
+      gain = -5 if @happiness < 200
     when "powder"
       gain = -10
-      gain = -5 if @happiness<200
+      gain = -5 if @happiness < 200
     when "energyroot"
       gain = -15
-      gain = -10 if @happiness<200
+      gain = -10 if @happiness < 200
     when "revivalherb"
       gain = -20
-      gain = -15 if @happiness<200
+      gain = -15 if @happiness < 200
     else
-      raise _INTL("Unknown happiness-changing method: {1}",method.to_s)
+      raise _INTL("Unknown happiness-changing method: {1}", method.to_s)
     end
-    if gain>0
-      gain += 1 if @obtainMap==$game_map.map_id
-      gain += 1 if self.ballused==pbGetBallType(:LUXURYBALL)
-      gain = (gain*1.5).floor if self.hasItem?(:SOOTHEBELL)
+    if gain > 0
+      gain += 1 if @obtainMap == $game_map.map_id
+      gain += 1 if self.ballused == pbGetBallType(:LUXURYBALL)
+      gain = (gain * 1.5).floor if self.hasItem?(:SOOTHEBELL)
     end
     @happiness += gain
-    @happiness = [[255,@happiness].min,0].max
+    @happiness = [[255, @happiness].min, 0].max
   end
 
   #=============================================================================
-  # Stat calculations, Pokémon creation
+  # Stat calculations
   #=============================================================================
 
   # @return [Array<Integer>] this Pokémon's base stats, an array of six values
   def baseStats
-    ret = pbGetSpeciesData(@species,formSimple,SpeciesBaseStats)
+    ret = pbGetSpeciesData(@species, formSimple, SpeciesBaseStats)
     return ret.clone
   end
 
   # @return [Integer] the maximum HP of this Pokémon
-  def calcHP(base,level,iv,ev)
+  def calcHP(base, level, iv, ev)
     return 1 if base == 1   # For Shedinja
-    return ((base * 2 + iv + (ev >> 2)) * level / 100).floor + level + 10
+    return ((base * 2 + iv + (ev / 4)) * level / 100).floor + level + 10
   end
 
   # @return [Integer] the specified stat of this Pokémon (not used for total HP)
-  def calcStat(base,level,iv,ev,pv)
-    return ((((base*2+iv+(ev>>2))*level/100).floor+5)*pv/100).floor
+  def calcStat(base, level, iv, ev, pv)
+    return ((((base * 2 + iv + (ev / 4)) * level / 100).floor + 5) * pv / 100).floor
   end
 
   # Recalculates this Pokémon's stats.
@@ -1023,23 +1021,27 @@ class PokeBattle_Pokemon
     pValues   = PBNatures.getStatChanges(self.calcNature)
     stats = []
     PBStats.eachStat do |s|
-      if s==PBStats::HP
-        stats[s] = calcHP(bs[s],usedLevel,usedIV[s],@ev[s])
+      if s == PBStats::HP
+        stats[s] = calcHP(bs[s], usedLevel, usedIV[s], @ev[s])
       else
-        stats[s] = calcStat(bs[s],usedLevel,usedIV[s],@ev[s],pValues[s])
+        stats[s] = calcStat(bs[s], usedLevel, usedIV[s], @ev[s], pValues[s])
       end
     end
-    hpDiff = @totalhp-@hp
+    hpDiff = @totalhp - @hp
     @totalhp = stats[PBStats::HP]
-    @hp      = @totalhp-hpDiff
-    @hp      = 0 if @hp<0
-    @hp      = @totalhp if @hp>@totalhp
+    @hp      = @totalhp - hpDiff
+    @hp      = 0 if @hp < 0
+    @hp      = @totalhp if @hp > @totalhp
     @attack  = stats[PBStats::ATTACK]
     @defense = stats[PBStats::DEFENSE]
     @spatk   = stats[PBStats::SPATK]
     @spdef   = stats[PBStats::SPDEF]
     @speed   = stats[PBStats::SPEED]
   end
+
+  #=============================================================================
+  # Pokémon creation
+  #=============================================================================
 
   # Creates a copy of this Pokémon and returns it.
   # @return [PokeBattle_Pokemon] a copy of this Pokémon
@@ -1049,7 +1051,7 @@ class PokeBattle_Pokemon
     ret.ivMaxed = @ivMaxed.clone
     ret.ev      = @ev.clone
     ret.moves   = []
-    @moves.each_with_index { |m,i| ret.moves[i] = m.clone }
+    @moves.each_with_index { |m, i| ret.moves[i] = m.clone }
     ret.ribbons = @ribbons.clone if @ribbons
     return ret
   end
@@ -1059,27 +1061,24 @@ class PokeBattle_Pokemon
   # @param level [Integer] Pokémon level
   # @param player [PokeBattle_Trainer] object for the original trainer
   # @param withMoves [Boolean] whether the Pokémon should have moves
-  def initialize(species,level,player=nil,withMoves=true)
+  def initialize(species, level, player = nil, withMoves = true)
     ospecies = species.to_s
-    species = getID(PBSpecies,species)
-    cname = getConstantName(PBSpecies,species) rescue nil
+    species = getID(PBSpecies, species)
+    cname = getConstantName(PBSpecies, species) rescue nil
     realSpecies = pbGetSpeciesFromFSpecies(species)[0] if species && species > 0
-    if !species || species<=0 || realSpecies > PBSpecies.maxValue || !cname
-      raise ArgumentError.new(_INTL("The species given ({1}) is invalid.",ospecies))
+    if !species || species <= 0 || realSpecies > PBSpecies.maxValue || !cname
+      raise ArgumentError.new(_INTL("The species given ({1}) is invalid.", ospecies))
     end
     @species      = realSpecies
     @name         = PBSpecies.getName(@species)
-    @personalID   = rand(256)
-    @personalID   |= rand(256)<<8
-    @personalID   |= rand(256)<<16
-    @personalID   |= rand(256)<<24
+    @personalID   = rand(2**32)
     @hp           = 1
     @totalhp      = 1
     @iv           = []
     @ivMaxed      = []
     @ev           = []
     PBStats.eachStat do |s|
-      @iv[s]      = rand(IV_STAT_LIMIT+1)
+      @iv[s]      = rand(IV_STAT_LIMIT + 1)
       @ev[s]      = 0
     end
     @moves        = []
@@ -1111,7 +1110,7 @@ class PokeBattle_Pokemon
     self.level    = level
     calcStats
     @hp           = @totalhp
-    @happiness    = pbGetSpeciesData(@species,formSimple,SpeciesHappiness)
+    @happiness    = pbGetSpeciesData(@species, formSimple, SpeciesHappiness)
     if withMoves
       self.resetMoves
     else
@@ -1122,14 +1121,17 @@ class PokeBattle_Pokemon
   end
 end
 
+#===============================================================================
+#
+#===============================================================================
+
 # Creates a new Pokémon object.
 # @param species [Integer, Symbol, String] Pokémon species
 # @param level [Integer] Pokémon level
 # @param owner [PokeBattle_Trainer] object for the original trainer
 # @param withMoves [Boolean] whether the Pokémon should have moves
-def pbNewPkmn(species,level,owner=nil,withMoves=true)
-  owner = $Trainer if !owner
-  return PokeBattle_Pokemon.new(species,level,owner,withMoves)
+def pbNewPkmn(species, level, owner = $Trainer, withMoves = true)
+  return PokeBattle_Pokemon.new(species, level, owner, withMoves)
 end
 alias pbGenPkmn pbNewPkmn
 alias pbGenPoke pbNewPkmn
