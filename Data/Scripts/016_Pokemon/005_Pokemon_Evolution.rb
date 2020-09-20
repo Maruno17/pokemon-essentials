@@ -766,9 +766,8 @@ PBEvolution.register(:TradeSpecies, {
 # Evolution methods that trigger after a battle
 #===============================================================================
 PBEvolution.register(:CriticalHits, {
-  "parameterType"    => nil,
   "afterBattleCheck" => proc { |pkmn, parameter|
-     next true if pkmn.criticalHits > 3
+     next true if pkmn.criticalHits >= parameter
   }
 })
 
