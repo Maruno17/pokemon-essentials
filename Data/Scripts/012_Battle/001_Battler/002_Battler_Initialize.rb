@@ -65,6 +65,7 @@ class PokeBattle_Battler
   def pbInitialize(pkmn,idxParty,batonPass=false)
     pbInitPokemon(pkmn,idxParty)
     pbInitEffects(batonPass)
+    @damageState.reset
   end
 
   def pbInitPokemon(pkmn,idxParty)
@@ -143,7 +144,6 @@ class PokeBattle_Battler
       @effects[PBEffects::JawLockUser]       = -1 
 	  @effects[PBEffects::NoRetreat]         = false
     end
-    @damageState.reset
     @fainted               = (@hp==0)
     @initialHP             = 0
     @lastAttacker          = []
@@ -328,7 +328,7 @@ class PokeBattle_Battler
     end
   end
 
-  # Used only to erase the battler of a Shadow Pokémon that has been snagged.
+  # Used to erase the battler of a Pokémon that has been caught.
   def pbReset
     @pokemon      = nil
     @pokemonIndex = -1

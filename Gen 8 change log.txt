@@ -3,8 +3,9 @@ CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lo
 THE PROJECT CURRENTLY HAS NO MORE PBS FILES ANYMORE IF YOU HAVE THEM STILL GIVE CREDIT TO: Zerokid too.
 AND IF YOU HAVE AN OLD VERSION OF IT GIVE CREDITS TO: Marin and Jonas930 too.
  
-##### Need some things from here, possibly more from Misc and Changes to Old Mechanics #####
+##### Need some things from here #####
 https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
+Everything in "Changes to old Mechanics" except Dynamic Turn Order by Golisopod User
 
 ##### Need PBS #####
 
@@ -14,7 +15,7 @@ Milcery
 ##### Evolution methods Coded #####
 Toxel                    by WolfPP adapted by Aioross
 Galarian Farfetch'd      by Vendily adapted by Golisopod User tweaks by Aioross
-Yamask                   by WolfPP adapted by Aioross
+Yamask                   by WolfPP adapted by Aioross improved by Golisopod User
 
 ##### Forms Coded #####
 Eiscue                   by Aioross
@@ -76,7 +77,7 @@ Jungle Healing           by lolface improved by Vendily
 Dragon Darts             by Turn20Negate
  
 ##### Abilities Coded #####
-Ball Fetch               by WolfPP adapted by Aioross
+Ball Fetch               by WolfPP adapted by Aioross improved by Golisopod User
 Intrepid Sword           by KyureJL
 Dauntless Shield         by KyureJL
 Sand Spit                by TheToxic
