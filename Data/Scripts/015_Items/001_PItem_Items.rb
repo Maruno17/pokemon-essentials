@@ -484,11 +484,11 @@ def pbJustRaiseEffortValues(pkmn,ev,evgain)
   for i in 0...6
     totalev += pkmn.ev[i]
   end
-  if totalev+evgain>PokeBattle_Pokemon::EV_LIMIT
-    evgain = PokeBattle_Pokemon::EV_LIMIT-totalev
+  if totalev+evgain>Pokemon::EV_LIMIT
+    evgain = Pokemon::EV_LIMIT-totalev
   end
-  if pkmn.ev[ev]+evgain>PokeBattle_Pokemon::EV_STAT_LIMIT
-    evgain = PokeBattle_Pokemon::EV_STAT_LIMIT-pkmn.ev[ev]
+  if pkmn.ev[ev]+evgain>Pokemon::EV_STAT_LIMIT
+    evgain = Pokemon::EV_STAT_LIMIT-pkmn.ev[ev]
   end
   if evgain>0
     pkmn.ev[ev] += evgain
@@ -503,11 +503,11 @@ def pbRaiseEffortValues(pkmn,ev,evgain=10,evlimit=true)
   for i in 0...6
     totalev += pkmn.ev[i]
   end
-  if totalev+evgain>PokeBattle_Pokemon::EV_LIMIT
-    evgain = PokeBattle_Pokemon::EV_LIMIT-totalev
+  if totalev+evgain>Pokemon::EV_LIMIT
+    evgain = Pokemon::EV_LIMIT-totalev
   end
-  if pkmn.ev[ev]+evgain>PokeBattle_Pokemon::EV_STAT_LIMIT
-    evgain = PokeBattle_Pokemon::EV_STAT_LIMIT-pkmn.ev[ev]
+  if pkmn.ev[ev]+evgain>Pokemon::EV_STAT_LIMIT
+    evgain = Pokemon::EV_STAT_LIMIT-pkmn.ev[ev]
   end
   if evlimit && pkmn.ev[ev]+evgain>100
     evgain = 100-pkmn.ev[ev]

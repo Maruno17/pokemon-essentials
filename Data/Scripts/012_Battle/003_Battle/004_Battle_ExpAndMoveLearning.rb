@@ -75,12 +75,12 @@ class PokeBattle_Battle
     PBStats.eachStat do |s|
       evGain = evYield[s]
       # Can't exceed overall limit
-      if evTotal+evGain>PokeBattle_Pokemon::EV_LIMIT
-        evGain = PokeBattle_Pokemon::EV_LIMIT-evTotal
+      if evTotal+evGain>Pokemon::EV_LIMIT
+        evGain = Pokemon::EV_LIMIT-evTotal
       end
       # Can't exceed individual stat limit
-      if pkmn.ev[s]+evGain>PokeBattle_Pokemon::EV_STAT_LIMIT
-        evGain = PokeBattle_Pokemon::EV_STAT_LIMIT-pkmn.ev[s]
+      if pkmn.ev[s]+evGain>Pokemon::EV_STAT_LIMIT
+        evGain = Pokemon::EV_STAT_LIMIT-pkmn.ev[s]
       end
       # Add EV gain
       pkmn.ev[s] += evGain

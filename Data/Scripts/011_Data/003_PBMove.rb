@@ -45,7 +45,7 @@ def pbClearData
 end
 
 #===============================================================================
-# Move objects known by PokeBattle_Pokemon.
+# Move objects known by Pokémon.
 #===============================================================================
 class PBMove
   attr_reader(:id)       # This move's ID

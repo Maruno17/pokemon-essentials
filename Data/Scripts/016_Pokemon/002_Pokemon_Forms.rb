@@ -1,4 +1,4 @@
-class PokeBattle_Pokemon
+class Pokemon
   attr_accessor :formTime     # Time when Furfrou's/Hoopa's form was set
   attr_accessor :forcedForm
 

@@ -218,8 +218,8 @@ module PokemonDebugMixin
             evcommands.push(_INTL("Randomise all"))
             evcommands.push(_INTL("Max randomise all"))
             cmd2 = pbShowCommands(_INTL("Change which EV?\nTotal: {1}/{2} ({3}%)",
-               totalev,PokeBattle_Pokemon::EV_LIMIT,
-               100*totalev/PokeBattle_Pokemon::EV_LIMIT),evcommands,cmd2)
+                                        totalev, Pokemon::EV_LIMIT,
+                                        100*totalev/Pokemon::EV_LIMIT), evcommands, cmd2)
             break if cmd2<0
             if cmd2<numstats
               params = ChooseNumberParams.new
@@ -227,8 +227,8 @@ module PokemonDebugMixin
               for i in 0...numstats
                 upperLimit += pkmn.ev[i] if i!=cmd2
               end
-              upperLimit = PokeBattle_Pokemon::EV_LIMIT-upperLimit
-              upperLimit = [upperLimit,PokeBattle_Pokemon::EV_STAT_LIMIT].min
+              upperLimit = Pokemon::EV_LIMIT-upperLimit
+              upperLimit = [upperLimit, Pokemon::EV_STAT_LIMIT].min
               thisValue = [pkmn.ev[cmd2],upperLimit].min
               params.setRange(0,upperLimit)
               params.setDefaultValue(thisValue)
@@ -241,19 +241,19 @@ module PokemonDebugMixin
                 pbRefreshSingle(pkmnid)
               end
             elsif cmd2<evcommands.length   # Randomise
-              evTotalTarget = PokeBattle_Pokemon::EV_LIMIT
+              evTotalTarget = Pokemon::EV_LIMIT
               if cmd2==evcommands.length-2
-                evTotalTarget = rand(PokeBattle_Pokemon::EV_LIMIT)
+                evTotalTarget = rand(Pokemon::EV_LIMIT)
               end
               for i in 0...numstats
                 pkmn.ev[i] = 0
               end
               while evTotalTarget>0
                 r = rand(numstats)
-                next if pkmn.ev[r]>=PokeBattle_Pokemon::EV_STAT_LIMIT
-                addVal = 1+rand(PokeBattle_Pokemon::EV_STAT_LIMIT/4)
+                next if pkmn.ev[r]>=Pokemon::EV_STAT_LIMIT
+                addVal = 1+rand(Pokemon::EV_STAT_LIMIT/4)
                 addVal = evTotalTarget if addVal>evTotalTarget
-                addVal = [addVal,PokeBattle_Pokemon::EV_STAT_LIMIT-pkmn.ev[r]].min
+                addVal = [addVal, Pokemon::EV_STAT_LIMIT-pkmn.ev[r]].min
                 next if addVal==0
                 pkmn.ev[r] += addVal
                 evTotalTarget -= addVal
@@ -292,7 +292,7 @@ module PokemonDebugMixin
               end
             elsif cmd2==ivcommands.length-1   # Randomise
               for i in 0...numstats
-                pkmn.iv[i] = rand(PokeBattle_Pokemon::IV_STAT_LIMIT+1)
+                pkmn.iv[i] = rand(Pokemon::IV_STAT_LIMIT+1)
               end
               pkmn.calcStats
               pbRefreshSingle(pkmnid)
@@ -601,7 +601,7 @@ module PokemonDebugMixin
         when 0   # Rename
           oldname = (pkmn.name && pkmn.name!=speciesname) ? pkmn.name : ""
           newname = pbEnterPokemonName(_INTL("{1}'s nickname?",speciesname),
-             0,PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE,oldname,pkmn)
+                                       0, Pokemon::MAX_POKEMON_NAME_SIZE, oldname, pkmn)
           if newname && newname!=""
             pkmn.name = newname
             pbRefreshSingle(pkmnid)
@@ -759,10 +759,10 @@ module PokemonDebugMixin
           if pkmn.shadowPokemon?
             oldheart = pkmn.heartgauge
             params = ChooseNumberParams.new
-            params.setRange(0,PokeBattle_Pokemon::HEARTGAUGESIZE)
+            params.setRange(0, Pokemon::HEARTGAUGESIZE)
             params.setDefaultValue(pkmn.heartgauge)
             val = pbMessageChooseNumber(
-               _INTL("Set the heart gauge (max. {1}).",PokeBattle_Pokemon::HEARTGAUGESIZE),
+               _INTL("Set the heart gauge (max. {1}).", Pokemon::HEARTGAUGESIZE),
                params) { pbUpdate }
             if val!=oldheart
               pkmn.adjustHeart(val-oldheart)

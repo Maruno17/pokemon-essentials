@@ -2,7 +2,7 @@
 # Mega Evolution
 # NOTE: These are treated as form changes in Essentials.
 #===============================================================================
-class PokeBattle_Pokemon
+class Pokemon
   def getMegaForm(checkItemOnly=false)
     formData = pbLoadFormToSpecies
     return 0 if !formData[@species] || formData[@species].length==0
@@ -68,7 +68,7 @@ end
 # Primal Reversion
 # NOTE: These are treated as form changes in Essentials.
 #===============================================================================
-class PokeBattle_Pokemon
+class Pokemon
   def hasPrimalForm?
     v = MultipleForms.call("getPrimalForm",self)
     return v!=nil

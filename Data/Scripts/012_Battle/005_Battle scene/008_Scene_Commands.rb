@@ -450,7 +450,7 @@ class PokeBattle_Scene
   # Opens the nicknaming screen for a newly caught Pokémon
   #=============================================================================
   def pbNameEntry(helpText,pkmn)
-    return pbEnterPokemonName(helpText,0,PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE,"",pkmn)
+    return pbEnterPokemonName(helpText, 0, Pokemon::MAX_POKEMON_NAME_SIZE, "", pkmn)
   end
 
   #=============================================================================

@@ -9,7 +9,7 @@ def pbNickname(pokemon)
   speciesname = PBSpecies.getName(pokemon.species)
   if pbConfirmMessage(_INTL("Would you like to give a nickname to {1}?",speciesname))
     helptext = _INTL("{1}'s nickname?",speciesname)
-    newname = pbEnterPokemonName(helptext,0,PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE,"",pokemon)
+    newname = pbEnterPokemonName(helptext, 0, Pokemon::MAX_POKEMON_NAME_SIZE, "", pokemon)
     pokemon.name = newname if newname!=""
   end
 end
@@ -146,7 +146,7 @@ def pbAddForeignPokemon(pokemon,level=nil,ownerName=nil,nickname=nil,ownerGender
     pokemon.otgender  = ownerGender
   end
   # Set nickname
-  pokemon.name = nickname[0,PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE] if nickname && nickname!=""
+  pokemon.name = nickname[0, Pokemon::MAX_POKEMON_NAME_SIZE] if nickname && nickname!=""
   # Recalculate stats
   pokemon.calcStats
   if ownerName
@@ -206,7 +206,7 @@ end
 def pbSeenForm(pkmn,gender=0,form=0)
   $Trainer.formseen     = [] if !$Trainer.formseen
   $Trainer.formlastseen = [] if !$Trainer.formlastseen
-  if pkmn.is_a?(PokeBattle_Pokemon)
+  if pkmn.is_a?(Pokemon)
     gender  = pkmn.gender
     form    = (pkmn.form rescue 0)
     species = pkmn.species

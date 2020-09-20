@@ -2,7 +2,7 @@
 # Instances of this class are individual Pokémon.
 # The player's party Pokémon are stored in the array $Trainer.party.
 #===============================================================================
-class PokeBattle_Pokemon
+class Pokemon
   # @return [String] the nickname of this Pokémon
   attr_accessor :name
   # @return [Integer] this Pokémon's national Pokédex number
@@ -55,7 +55,7 @@ class PokeBattle_Pokemon
   attr_reader   :statusCount
   # Another Pokémon which has been fused with this Pokémon (or nil if there is none).
   # Currently only used by Kyurem, to record a fused Reshiram or Zekrom.  
-  # @return [PokeBattle_Pokemon, nil] the Pokémon fused into this one (nil if there is none)
+  # @return [Pokemon, nil] the Pokémon fused into this one (nil if there is none)
   attr_accessor :fused
   # @return [Array<Integer>] an array of IV values for HP, Atk, Def, Speed, Sp. Atk and Sp. Def
   attr_accessor :iv
@@ -780,7 +780,7 @@ class PokeBattle_Pokemon
   #=============================================================================
 
   # Sets this Pokémon's status. See {PBStatuses} for all possible status effects.
-  # @param new_status [Integer, Symbol, String] status to set (from PBStatuses)
+  # @param value [Integer, Symbol, String] status to set (from {PBStatuses})
   def status=(value)
     new_status = getID(PBStatuses, value)
     if !new_status
@@ -1044,7 +1044,7 @@ class PokeBattle_Pokemon
   #=============================================================================
 
   # Creates a copy of this Pokémon and returns it.
-  # @return [PokeBattle_Pokemon] a copy of this Pokémon
+  # @return [Pokemon] a copy of this Pokémon
   def clone
     ret = super
     ret.iv      = @iv.clone
@@ -1059,9 +1059,9 @@ class PokeBattle_Pokemon
   # Creates a new Pokémon object.
   # @param species [Integer, Symbol, String] Pokémon species
   # @param level [Integer] Pokémon level
-  # @param player [PokeBattle_Trainer] object for the original trainer
+  # @param owner [PokeBattle_Trainer] object for the original trainer
   # @param withMoves [Boolean] whether the Pokémon should have moves
-  def initialize(species, level, player = nil, withMoves = true)
+  def initialize(species, level, owner = nil, withMoves = true)
     ospecies = species.to_s
     species = getID(PBSpecies, species)
     cname = getConstantName(PBSpecies, species) rescue nil
@@ -1090,11 +1090,11 @@ class PokeBattle_Pokemon
     @ribbons      = []
     @ballused     = 0
     @eggsteps     = 0
-    if player
-      @trainerID  = player.id
-      @ot         = player.name
-      @otgender   = player.gender
-      @language   = player.language
+    if owner
+      @trainerID  = owner.id
+      @ot         = owner.name
+      @otgender   = owner.gender
+      @language   = owner.language
     else
       @trainerID  = 0
       @ot         = ""
@@ -1122,16 +1122,21 @@ class PokeBattle_Pokemon
 end
 
 #===============================================================================
-#
+# Deprecated classes & methods
 #===============================================================================
 
-# Creates a new Pokémon object.
-# @param species [Integer, Symbol, String] Pokémon species
-# @param level [Integer] Pokémon level
-# @param owner [PokeBattle_Trainer] object for the original trainer
-# @param withMoves [Boolean] whether the Pokémon should have moves
+# @deprecated Use {Pokemon} instead. PokeBattle_Pokemon has been turned into an alias
+#   and is slated to be removed in vXX.
+class PokeBattle_Pokemon; end
+
+PokeBattle_Pokemon = Pokemon
+
+# (see Pokemon#initialize)
+# @deprecated Use +Pokemon.new+ instead. This method and its aliases are
+#   slated to be removed in vXX.
 def pbNewPkmn(species, level, owner = $Trainer, withMoves = true)
-  return PokeBattle_Pokemon.new(species, level, owner, withMoves)
+  Kernel.echoln("WARN: pbNewPkmn and its aliases are deprecated and slated to be removed in Essentials vXX")
+  return Pokemon.new(species, level, owner, withMoves)
 end
 alias pbGenPkmn pbNewPkmn
 alias pbGenPoke pbNewPkmn

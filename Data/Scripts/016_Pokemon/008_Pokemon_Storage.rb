@@ -148,7 +148,7 @@ class PokemonStorage
       return (x==-1) ? self.party : @boxes[x]
     else
       for i in @boxes
-        raise "Box is a Pokémon, not a box" if i.is_a?(PokeBattle_Pokemon)
+        raise "Box is a Pokémon, not a box" if i.is_a?(Pokemon)
       end
       return (x==-1) ? self.party[y] : @boxes[x][y]
     end

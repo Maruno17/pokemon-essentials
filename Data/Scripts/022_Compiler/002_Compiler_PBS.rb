@@ -1443,30 +1443,30 @@ def pbCompileTrainers
         record = [record] if record.is_a?(Integer)
         record.compact!
         for i in record
-          next if i<=PokeBattle_Pokemon::IV_STAT_LIMIT
-          raise _INTL("Bad IV: {1} (must be 0-{2})\r\n{3}",i,PokeBattle_Pokemon::IV_STAT_LIMIT,FileLineData.linereport)
+          next if i<=Pokemon::IV_STAT_LIMIT
+          raise _INTL("Bad IV: {1} (must be 0-{2})\r\n{3}", i, Pokemon::IV_STAT_LIMIT, FileLineData.linereport)
         end
       when "EV"
         record = [record] if record.is_a?(Integer)
         record.compact!
         for i in record
-          next if i<=PokeBattle_Pokemon::EV_STAT_LIMIT
-          raise _INTL("Bad EV: {1} (must be 0-{2})\r\n{3}",i,PokeBattle_Pokemon::EV_STAT_LIMIT,FileLineData.linereport)
+          next if i<=Pokemon::EV_STAT_LIMIT
+          raise _INTL("Bad EV: {1} (must be 0-{2})\r\n{3}", i, Pokemon::EV_STAT_LIMIT, FileLineData.linereport)
         end
         evtotal = 0
         for i in 0...6
           evtotal += (i<record.length) ? record[i] : record[0]
         end
-        if evtotal>PokeBattle_Pokemon::EV_LIMIT
-          raise _INTL("Total EVs are greater than allowed ({1})\r\n{2}",PokeBattle_Pokemon::EV_LIMIT,FileLineData.linereport)
+        if evtotal>Pokemon::EV_LIMIT
+          raise _INTL("Total EVs are greater than allowed ({1})\r\n{2}", Pokemon::EV_LIMIT, FileLineData.linereport)
         end
       when "Happiness"
         if record>255
           raise _INTL("Bad happiness: {1} (must be 0-255)\r\n{2}",record,FileLineData.linereport)
         end
       when "Name"
-        if record.length>PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE
-          raise _INTL("Bad nickname: {1} (must be 1-{2} characters)\r\n{3}",record,PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE,FileLineData.linereport)
+        if record.length>Pokemon::MAX_POKEMON_NAME_SIZE
+          raise _INTL("Bad nickname: {1} (must be 1-{2} characters)\r\n{3}", record, Pokemon::MAX_POKEMON_NAME_SIZE, FileLineData.linereport)
         end
       end
       # Record XXX=YYY setting
@@ -1546,8 +1546,8 @@ def pbCompileTrainers
             end
             record[i] = [record[i]]
           when TPEV+3
-            if record[i]>PokeBattle_Pokemon::EV_STAT_LIMIT
-              raise _INTL("Bad EV: {1} (must be 0-{2})\r\n{3}",record[i],PokeBattle_Pokemon::EV_STAT_LIMIT,FileLineData.linereport)
+            if record[i]>Pokemon::EV_STAT_LIMIT
+              raise _INTL("Bad EV: {1} (must be 0-{2})\r\n{3}", record[i], Pokemon::EV_STAT_LIMIT, FileLineData.linereport)
             end
             record[i] = [record[i]]
           when TPHAPPINESS+3
@@ -1555,8 +1555,8 @@ def pbCompileTrainers
               raise _INTL("Bad happiness: {1} (must be 0-255)\r\n{2}",record[i],FileLineData.linereport)
             end
           when TPNAME+3
-            if record[i].length>PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE
-              raise _INTL("Bad nickname: {1} (must be 1-{2} characters)\r\n{3}",record[i],PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE,FileLineData.linereport)
+            if record[i].length>Pokemon::MAX_POKEMON_NAME_SIZE
+              raise _INTL("Bad nickname: {1} (must be 1-{2} characters)\r\n{3}", record[i], Pokemon::MAX_POKEMON_NAME_SIZE, FileLineData.linereport)
             end
           end
         end

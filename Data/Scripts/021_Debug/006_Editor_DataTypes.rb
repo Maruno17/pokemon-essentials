@@ -466,9 +466,9 @@ class EVsProperty
       for i in 0...6
         evtotal += oldsetting[i] if oldsetting[i]
       end
-      if evtotal>PokeBattle_Pokemon::EV_LIMIT
+      if evtotal>Pokemon::EV_LIMIT
         pbMessage(_INTL("Total EVs ({1}) are greater than allowed ({2}). Please reduce them.",
-           evtotal,PokeBattle_Pokemon::EV_LIMIT))
+                        evtotal, Pokemon::EV_LIMIT))
       else
         break
       end

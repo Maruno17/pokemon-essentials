@@ -175,7 +175,7 @@ class PBPokemon
     for i in 0...6
       evcount+=1 if ((@ev&(1<<i))!=0)
     end
-    evperstat=(evcount==0) ? 0 : PokeBattle_Pokemon::EV_LIMIT/evcount
+    evperstat=(evcount==0) ? 0 : Pokemon::EV_LIMIT/evcount
     for i in 0...6
       pokemon.iv[i]=iv
       pokemon.ev[i]=((@ev&(1<<i))!=0) ? evperstat : 0
