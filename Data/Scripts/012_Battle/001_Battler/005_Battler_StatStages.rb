@@ -269,9 +269,6 @@ class PokeBattle_Battler
       end
       return false
     end
-    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-      return pbLowerStatStageByAbility(PBStats::ATTACK,1,user,false)
-    end
     # NOTE: These checks exist to ensure appropriate messages are shown if
     #       Intimidate is blocked somehow (i.e. the messages should mention the
     #       Intimidate ability by name).
@@ -285,22 +282,40 @@ class PokeBattle_Battler
         if BattleHandlers.triggerStatLossImmunityAbility(@ability,self,PBStats::ATTACK,@battle,false) ||
            BattleHandlers.triggerStatLossImmunityAbilityNonIgnorable(@ability,self,PBStats::ATTACK,@battle,false) ||
             hasActiveAbility?(:INNERFOCUS) || hasActiveAbility?(:OWNTEMPO) || hasActiveAbility?(:OBLIVIOUS) || hasActiveAbility?(:SCRAPPY)
+          @battle.pbShowAbilitySplash(self) if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!",
              pbThis,abilityName,user.pbThis(true),user.abilityName))
+          @battle.pbHideAbilitySplash(self) if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
           return false
         end
       end
       eachAlly do |b|
         next if !b.abilityActive?
         if BattleHandlers.triggerStatLossImmunityAllyAbility(b.ability,b,self,PBStats::ATTACK,@battle,false)
+          @battle.pbShowAbilitySplash(b) if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} is protected from {2}'s {3} by {4}'s {5}!",
              pbThis,user.pbThis(true),user.abilityName,b.pbThis(true),b.abilityName))
+          @battle.pbHideAbilitySplash(b) if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
           return false
         end
       end
     end
     return false if !pbCanLowerStatStage?(PBStats::ATTACK,user)
-    return pbLowerStatStageByCause(PBStats::ATTACK,1,user,user.abilityName)
+    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+      if pbLowerStatStageByAbility(PBStats::ATTACK,1,user,false)
+        pbRaiseStatStageByAbility(PBStats::SPEED,1,self) if hasActiveAbility?(:RATTLED)
+        return true
+      else
+        return false
+      end
+    else
+      if pbLowerStatStageByCause(PBStats::ATTACK,1,user,user.abilityName)
+        pbLowerStatStageByCause(PBStats::SPEED,1,self,self.abilityName) if hasActiveAbility?(:RATTLED)
+        return true
+      else
+        return false
+      end
+    end
   end
 
   #=============================================================================

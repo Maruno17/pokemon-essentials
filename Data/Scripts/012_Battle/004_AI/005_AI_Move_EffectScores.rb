@@ -2219,6 +2219,14 @@ class PokeBattle_AI
       elsif @battle.pbWeather==PBWeather::Sandstorm
         score -= 90
       end
+      if skill>=PBTrainerAI.highSkill
+        user.eachOpposing do |b|
+          score -= 40 if b.hasActiveAbility?(:ICEFACE) && b.form==0
+        end
+        user.eachAlly do |b|
+          score += 40 if b.hasActiveAbility?(:ICEFACE) && b.form==0
+        end
+      end
     #---------------------------------------------------------------------------
     when "102"
       if @battle.pbCheckGlobalAbility(:AIRLOCK) ||

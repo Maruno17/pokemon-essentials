@@ -24,7 +24,6 @@ begin
       @effects[PBEffects::WaterSportField] = 0
       @effects[PBEffects::WonderRoom]      = 0
       @effects[PBEffects::Noiceface]        = []
-      $BallRetrieved                       = 0
       @defaultWeather  = PBWeather::None
       @weather         = PBWeather::None
       @weatherDuration = 0
