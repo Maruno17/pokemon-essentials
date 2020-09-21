@@ -347,7 +347,6 @@ class PokeBattle_Move
       case @battle.field.terrain
       when PBBattleTerrains::Electric
         if isConst?(type,PBTypes,:ELECTRIC)
-<<<<<<< HEAD
           multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.3).round
         end
       when PBBattleTerrains::Grassy
@@ -357,17 +356,6 @@ class PokeBattle_Move
       when PBBattleTerrains::Psychic
         if isConst?(type,PBTypes,:PSYCHIC)
           multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.3).round
-=======
-          multipliers[BASE_DMG_MULT] *= 1.5
-        end
-      when PBBattleTerrains::Grassy
-        if isConst?(type,PBTypes,:GRASS)
-          multipliers[BASE_DMG_MULT] *= 1.5
-        end
-      when PBBattleTerrains::Psychic
-        if isConst?(type,PBTypes,:PSYCHIC)
-          multipliers[BASE_DMG_MULT] *= 1.5
->>>>>>> master
         end
       end
     end
@@ -400,12 +388,8 @@ class PokeBattle_Move
     case @battle.pbWeather
     when PBWeather::Sun, PBWeather::HarshSun
       if isConst?(type,PBTypes,:FIRE)
-<<<<<<< HEAD
         multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round if
         !user.hasActiveItem?(:UTILITYUMBRELLA)
-=======
-        multipliers[FINAL_DMG_MULT] *= 1.5
->>>>>>> master
       elsif isConst?(type,PBTypes,:WATER)
         multipliers[FINAL_DMG_MULT] /= 2 if !user.hasActiveItem?(:UTILITYUMBRELLA)
       end
@@ -413,12 +397,8 @@ class PokeBattle_Move
       if isConst?(type,PBTypes,:FIRE)
         multipliers[FINAL_DMG_MULT] /= 2 if !user.hasActiveItem?(:UTILITYUMBRELLA)
       elsif isConst?(type,PBTypes,:WATER)
-<<<<<<< HEAD
         multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round if
         !user.hasActiveItem?(:UTILITYUMBRELLA)
-=======
-        multipliers[FINAL_DMG_MULT] *= 1.5
->>>>>>> master
       end
     when PBWeather::Sandstorm
       if target.pbHasType?(:ROCK) && specialMove? && @function!="122"   # Psyshock

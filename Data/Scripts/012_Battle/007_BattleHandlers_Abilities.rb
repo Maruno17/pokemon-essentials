@@ -943,14 +943,9 @@ BattleHandlers::DamageCalcUserAbility.add(:FLASHFIRE,
 BattleHandlers::DamageCalcUserAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
-<<<<<<< HEAD
     if move.physicalMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun) &&
       !user.hasActiveItem?(:UTILITYUMBRELLA)
       mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
-=======
-    if move.physicalMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun)
-      mults[ATK_MULT] *= 1.5
->>>>>>> master
     end
   }
 )
@@ -1062,14 +1057,9 @@ BattleHandlers::DamageCalcUserAbility.add(:SLOWSTART,
 BattleHandlers::DamageCalcUserAbility.add(:SOLARPOWER,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
-<<<<<<< HEAD
     if move.specialMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun) &&
       !user.hasActiveItem?(:UTILITYUMBRELLA)
       mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
-=======
-    if move.specialMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun)
-      mults[ATK_MULT] *= 1.5
->>>>>>> master
     end
   }
 )
@@ -1182,14 +1172,9 @@ BattleHandlers::DamageCalcUserAllyAbility.add(:BATTERY,
 BattleHandlers::DamageCalcUserAllyAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
-<<<<<<< HEAD
     if move.physicalMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun) &&
       !target.hasActiveItem?(:UTILITYUMBRELLA)
       mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
-=======
-    if move.physicalMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun)
-      mults[ATK_MULT] *= 1.5
->>>>>>> master
     end
   }
 )
@@ -1231,14 +1216,9 @@ BattleHandlers::DamageCalcTargetAbility.copy(:FILTER,:SOLIDROCK)
 BattleHandlers::DamageCalcTargetAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
-<<<<<<< HEAD
     if move.specialMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun) &&
       !target.hasActiveItem?(:UTILITYUMBRELLA)
       mults[DEF_MULT] = (mults[DEF_MULT]*1.5).round
-=======
-    if move.specialMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun)
-      mults[DEF_MULT] *= 1.5
->>>>>>> master
     end
   }
 )
@@ -1341,14 +1321,9 @@ BattleHandlers::DamageCalcTargetAbilityNonIgnorable.add(:SHADOWSHIELD,
 BattleHandlers::DamageCalcTargetAllyAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
-<<<<<<< HEAD
     if move.specialMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun) &&
       !target.hasActiveItem?(:UTILITYUMBRELLA)
       mults[DEF_MULT] = (mults[DEF_MULT]*1.5).round
-=======
-    if move.specialMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun)
-      mults[DEF_MULT] *= 1.5
->>>>>>> master
     end
   }
 )

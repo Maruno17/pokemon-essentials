@@ -1,4 +1,3 @@
-#===============================================================================
 # Power is doubled if the target's HP is down to 1/2 or less. (Brine)
 #===============================================================================
 class PokeBattle_Move_080 < PokeBattle_Move
@@ -108,18 +107,18 @@ class PokeBattle_Move_087 < PokeBattle_Move
     if @battle.pbWeather!=PBWeather::None
       if @battle.pbWeather == PBWeather::Sandstorm || @battle.pbWeather == PBWeather::Hail
         baseDmg *= 2
-      else 
+      else
         baseDmg *= 2 if !user.hasActiveItem?(:UTILITYUMBRELLA)
       end
     end
     return baseDmg
   end
-  
+
   def pbBaseType(user)
     ret = getID(PBTypes,:NORMAL)
     case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun 
-      ret = getConst(PBTypes,:FIRE) || ret 
+    when PBWeather::Sun, PBWeather::HarshSun
+      ret = getConst(PBTypes,:FIRE) || ret
     when PBWeather::Rain, PBWeather::HeavyRain
       ret = getConst(PBTypes,:WATER) || ret
     when PBWeather::Sandstorm
@@ -2081,7 +2080,6 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
 
   def pbBaseDamageMultiplier(damageMult,user,target)
     w = @battle.pbWeather
-<<<<<<< HEAD
     if w>0 && w!=PBWeather::Sun && w!=PBWeather::HarshSun
       if w!=PBWeather::Hail && w!=PBWeather::Sandstorm
         damageMult = (damageMult/2.0).round if !user.hasActiveItem?(:UTILITYUMBRELLA)
@@ -2089,9 +2087,6 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
          damageMult = (damageMult/2.0).round
       end
     end
-=======
-    damageMult /= 2 if w>0 && w!=PBWeather::Sun && w!=PBWeather::HarshSun
->>>>>>> master
     return damageMult
   end
 end
@@ -2207,7 +2202,7 @@ class PokeBattle_Move_0CB < PokeBattle_TwoTurnMove
       user.form=2
       user.form=1 if user.hp>(user.totalhp/2)
       @battle.scene.pbChangePokemon(user,user.pokemon)
-    end    
+    end
   end
 end
 
