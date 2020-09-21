@@ -20,7 +20,6 @@ BattleBack = field
 MapPosition = 0,13,12
 Outdoor = true
 ShowArea = true
-Weather = Fog,100
 #-------------------------------
 [003]
 # \PN's house
