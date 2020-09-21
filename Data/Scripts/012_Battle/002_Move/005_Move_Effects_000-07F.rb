@@ -1371,8 +1371,8 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
     @battle.field.terrain = PBBattleTerrains::None
     case @battle.pbWeather
     when PBWeather::Fog
-      @battle.pbDisplay(_INTL("{1} blew away the deep fog with Defog!",user.pbThis))
-      @battle.pbWeather = PBWeather::None
+      @battle.pbDisplay(_INTL("{1} blew away the deep fog!",user.pbThis))
+      @weatherType = PBWeather::None
     end
   end
 end
