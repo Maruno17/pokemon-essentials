@@ -431,7 +431,7 @@ class PokeBattle_Move_095 < PokeBattle_Move
 
   def pbModifyDamage(damageMult,user,target)
     damageMult *= 2 if target.inTwoTurnAttack?("0CA")   # Dig
-    damageMult = (damageMult/2.0).round if @battle.field.terrain==PBBattleTerrains::Grassy
+    damageMult /= 2 if @battle.field.terrain==PBBattleTerrains::Grassy
     return damageMult
   end
 end
@@ -786,7 +786,7 @@ class PokeBattle_Move_09F < PokeBattle_Move
     if user.itemActive?
       @itemTypes.each do |item, itemType|
         next if !isConst?(user.item,PBItems,item)
-        t = hasConst?(PBTypes,itemType)
+        t = getConst(PBTypes,itemType)
         ret = t || ret
         break
       end
@@ -2081,6 +2081,7 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
 
   def pbBaseDamageMultiplier(damageMult,user,target)
     w = @battle.pbWeather
+<<<<<<< HEAD
     if w>0 && w!=PBWeather::Sun && w!=PBWeather::HarshSun
       if w!=PBWeather::Hail && w!=PBWeather::Sandstorm
         damageMult = (damageMult/2.0).round if !user.hasActiveItem?(:UTILITYUMBRELLA)
@@ -2088,6 +2089,9 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
          damageMult = (damageMult/2.0).round
       end
     end
+=======
+    damageMult /= 2 if w>0 && w!=PBWeather::Sun && w!=PBWeather::HarshSun
+>>>>>>> master
     return damageMult
   end
 end
