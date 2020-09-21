@@ -777,7 +777,7 @@ class PokeBattle_Move_09F < PokeBattle_Move
     if user.itemActive?
       @itemTypes.each do |item, itemType|
         next if !isConst?(user.item,PBItems,item)
-        t = hasConst?(PBTypes,itemType)
+        t = getConst(PBTypes,itemType)
         ret = t || ret
         break
       end
