@@ -220,7 +220,7 @@ class PokeBattle_Battler
     stageDiv = [8,7,6,5,4,3, 2, 2,2,2,2,2,2]
     stage = @stages[PBStats::SPEED] + 6
     speed = @speed*stageMul[stage]/stageDiv[stage]
-    speedMult = 0x1000
+    speedMult = 1.0
     # Ability effects that alter calculated Speed
     if abilityActive?
       speedMult = BattleHandlers.triggerSpeedCalcAbility(@ability,self,speedMult)
@@ -242,7 +242,7 @@ class PokeBattle_Battler
       speedMult *= 1.1
     end
     # Calculation
-    return [(speed.to_f*speedMult/0x1000).round,1].max
+    return [(speed*speedMult).round,1].max
   end
 
   def pbWeight

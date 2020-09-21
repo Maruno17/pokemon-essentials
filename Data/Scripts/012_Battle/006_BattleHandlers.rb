@@ -578,16 +578,16 @@ def pbBattleGem(user,type,move,mults,moveType)
   return if !isConst?(moveType,PBTypes,type)
   user.effects[PBEffects::GemConsumed] = user.item
   if NEWEST_BATTLE_MECHANICS
-    mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.3).round
+    mults[BASE_DMG_MULT] *= 1.3
   else
-    mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.5).round
+    mults[BASE_DMG_MULT] *= 1.5
   end
 end
 
 def pbBattleTypeWeakingBerry(type,moveType,target,mults)
   return if !isConst?(moveType,PBTypes,type)
   return if PBTypes.resistant?(target.damageState.typeMod) && !isConst?(moveType,PBTypes,:NORMAL)
-  mults[FINAL_DMG_MULT] = (mults[FINAL_DMG_MULT]/2).round
+  mults[FINAL_DMG_MULT] /= 2
   target.damageState.berryWeakened = true
   target.battle.pbCommonAnimation("EatBerry",target)
 end

@@ -275,7 +275,7 @@ class PokeBattle_AI
       defense = pbRoughStat(target,PBStats::SPDEF,skill)
     end
     ##### Calculate all multiplier effects #####
-    multipliers = [0x1000,0x1000,0x1000,0x1000]
+    multipliers = [1.0, 1.0, 1.0, 1.0]
     # Ability effects that alter damage
     moldBreaker = false
     if skill>=PBTrainerAI.highSkill && target.hasMoldBreaker?
@@ -364,7 +364,7 @@ class PokeBattle_AI
     end
     # Parental Bond
     if skill>=PBTrainerAI.mediumSkill && user.hasActiveAbility?(:PARENTALBOND)
-      multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.25).floor
+      multipliers[BASE_DMG_MULT] *= 1.25
     end
     # Me First
     # TODO
@@ -403,15 +403,15 @@ class PokeBattle_AI
       case @battle.field.terrain
       when PBBattleTerrains::Electric
         if isConst?(type,PBTypes,:ELECTRIC)
-          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.5).round
+          multipliers[BASE_DMG_MULT] *= 1.5
         end
       when PBBattleTerrains::Grassy
         if isConst?(type,PBTypes,:GRASS)
-          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.5).round
+          multipliers[BASE_DMG_MULT] *= 1.5
         end
       when PBBattleTerrains::Psychic
         if isConst?(type,PBTypes,:PSYCHIC)
-          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.5).round
+          multipliers[BASE_DMG_MULT] *= 1.5
         end
       end
     end
@@ -427,9 +427,9 @@ class PokeBattle_AI
         # won't control the player's Pokémon.
         if target.pbOwnedByPlayer?
           if move.physicalMove?(type) && @battle.pbPlayer.numbadges>=NUM_BADGES_BOOST_DEFENSE
-            multipliers[DEF_MULT] = (multipliers[DEF_MULT]*1.1).round
+            multipliers[DEF_MULT] *= 1.1
           elsif move.specialMove?(type) && @battle.pbPlayer.numbadges>=NUM_BADGES_BOOST_SPDEF
-            multipliers[DEF_MULT] = (multipliers[DEF_MULT]*1.1).round
+            multipliers[DEF_MULT] *= 1.1
           end
         end
       end
@@ -437,7 +437,7 @@ class PokeBattle_AI
     # Multi-targeting attacks
     if skill>=PBTrainerAI.highSkill
       if pbTargetsMultiple?(move,user)
-        multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*0.75).round
+        multipliers[FINAL_DMG_MULT] *= 0.75
       end
     end
     # Weather
@@ -445,7 +445,7 @@ class PokeBattle_AI
       case @battle.pbWeather
       when PBWeather::Sun, PBWeather::HarshSun
         if isConst?(type,PBTypes,:FIRE)
-          multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+          multipliers[FINAL_DMG_MULT] *= 1.5
         elsif isConst?(type,PBTypes,:WATER)
           multipliers[FINAL_DMG_MULT] /= 2
         end
@@ -453,11 +453,11 @@ class PokeBattle_AI
         if isConst?(type,PBTypes,:FIRE)
           multipliers[FINAL_DMG_MULT] /= 2
         elsif isConst?(type,PBTypes,:WATER)
-          multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+          multipliers[FINAL_DMG_MULT] *= 1.5
         end
       when PBWeather::Sandstorm
         if target.pbHasType?(:ROCK) && move.specialMove?(type) && move.function!="122"   # Psyshock
-          multipliers[DEF_MULT] = (multipliers[DEF_MULT]*1.5).round
+          multipliers[DEF_MULT] *= 1.5
         end
       end
     end
@@ -469,7 +469,7 @@ class PokeBattle_AI
         if user.hasActiveAbility?(:ADAPTABILITY)
           multipliers[FINAL_DMG_MULT] *= 2
         else
-          multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+          multipliers[FINAL_DMG_MULT] *= 1.5
         end
       end
     end
@@ -477,7 +477,6 @@ class PokeBattle_AI
     if skill>=PBTrainerAI.mediumSkill
       typemod = pbCalcTypeMod(type,user,target)
       multipliers[FINAL_DMG_MULT] *= typemod.to_f/PBTypeEffectiveness::NORMAL_EFFECTIVE
-      multipliers[FINAL_DMG_MULT] = multipliers[FINAL_DMG_MULT].round
     end
     # Burn
     if skill>=PBTrainerAI.highSkill
@@ -492,19 +491,19 @@ class PokeBattle_AI
       if !move.ignoresReflect? && !user.hasActiveAbility?(:INFILTRATOR)
         if target.pbOwnSide.effects[PBEffects::AuroraVeil]>0
           if @battle.pbSideBattlerCount(target)>1
-            multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*2/3).round
+            multipliers[FINAL_DMG_MULT] *= 2/3.0
           else
             multipliers[FINAL_DMG_MULT] /= 2
           end
         elsif target.pbOwnSide.effects[PBEffects::Reflect]>0 && move.physicalMove?(type)
           if @battle.pbSideBattlerCount(target)>1
-            multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*2/3).round
+            multipliers[FINAL_DMG_MULT] *= 2/3.0
           else
             multipliers[FINAL_DMG_MULT] /= 2
           end
         elsif target.pbOwnSide.effects[PBEffects::LightScreen]>0 && move.specialMove?(type)
           if @battle.pbSideBattlerCount(target)>1
-            multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*2/3).round
+            multipliers[FINAL_DMG_MULT] *= 2/3.0
           else
             multipliers[FINAL_DMG_MULT] /= 2
           end
@@ -522,11 +521,11 @@ class PokeBattle_AI
     # Move-specific final damage modifiers
     # TODO
     ##### Main damage calculation #####
-    baseDmg = [(baseDmg * multipliers[BASE_DMG_MULT]  / 0x1000).round,1].max
-    atk     = [(atk     * multipliers[ATK_MULT]       / 0x1000).round,1].max
-    defense = [(defense * multipliers[DEF_MULT]       / 0x1000).round,1].max
-    damage  = (((2.0*user.level/5+2).floor*baseDmg*atk/defense).floor/50).floor+2
-    damage  = [(damage  * multipliers[FINAL_DMG_MULT] / 0x1000).round,1].max
+    baseDmg = [(baseDmg * multipliers[BASE_DMG_MULT]).round, 1].max
+    atk     = [(atk     * multipliers[ATK_MULT]).round, 1].max
+    defense = [(defense * multipliers[DEF_MULT]).round, 1].max
+    damage  = (((2.0 * user.level / 5 + 2).floor * baseDmg * atk / defense).floor / 50).floor + 2
+    damage  = [(damage  * multipliers[FINAL_DMG_MULT]).round, 1].max
     # "AI-specific calculations below"
     # Increased critical hit rates
     if skill>=PBTrainerAI.mediumSkill
@@ -585,8 +584,8 @@ class PokeBattle_AI
     modifiers[BASE_ACC]  = baseAcc
     modifiers[ACC_STAGE] = user.stages[PBStats::ACCURACY]
     modifiers[EVA_STAGE] = target.stages[PBStats::EVASION]
-    modifiers[ACC_MULT]  = 0x1000
-    modifiers[EVA_MULT]  = 0x1000
+    modifiers[ACC_MULT]  = 1.0
+    modifiers[EVA_MULT]  = 1.0
     pbCalcAccuracyModifiers(user,target,modifiers,move,type,skill)
     # Check if move can't miss
     return 125 if modifiers[BASE_ACC]==0
@@ -597,8 +596,8 @@ class PokeBattle_AI
     stageDiv = [9,8,7,6,5,4, 3, 3,3,3,3,3,3]
     accuracy = 100.0 * stageMul[accStage] / stageDiv[accStage]
     evasion  = 100.0 * stageMul[evaStage] / stageDiv[evaStage]
-    accuracy = (accuracy * modifiers[ACC_MULT] / 0x1000).round
-    evasion  = (evasion  * modifiers[EVA_MULT] / 0x1000).round
+    accuracy = (accuracy * modifiers[ACC_MULT]).round
+    evasion  = (evasion  * modifiers[EVA_MULT]).round
     evasion = 1 if evasion<1
     return modifiers[BASE_ACC] * accuracy / evasion
   end
@@ -642,10 +641,10 @@ class PokeBattle_AI
     # Other effects, inc. ones that set ACC_MULT or EVA_STAGE to specific values
     if skill>=PBTrainerAI.mediumSkill
       if @battle.field.effects[PBEffects::Gravity]>0
-        modifiers[ACC_MULT] = (modifiers[ACC_MULT]*5/3).round
+        modifiers[ACC_MULT] *= 5/3.0
       end
       if user.effects[PBEffects::MicleBerry]
-        modifiers[ACC_MULT] = (modifiers[ACC_MULT]*1.2).round
+        modifiers[ACC_MULT] *= 1.2
       end
       modifiers[EVA_STAGE] = 0 if target.effects[PBEffects::Foresight] && modifiers[EVA_STAGE]>0
       modifiers[EVA_STAGE] = 0 if target.effects[PBEffects::MiracleEye] && modifiers[EVA_STAGE]>0

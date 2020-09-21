@@ -2465,7 +2465,7 @@ end
 class PokeBattle_Move_073 < PokeBattle_FixedDamageMove
   def pbAddTarget(targets,user)
     return if user.lastFoeAttacker.length==0
-    lastAttacker = user.lastFoeAttacker[user.lastFoeAttacker.last]
+    lastAttacker = user.lastFoeAttacker.last
     return if lastAttacker<0 || !user.opposes?(lastAttacker)
     user.pbAddTarget(targets,user,@battle.battlers[lastAttacker],self,false)
   end
@@ -2546,7 +2546,7 @@ class PokeBattle_Move_076 < PokeBattle_Move
 
   def pbModifyDamage(damageMult,user,target)
     damageMult *= 2 if target.inTwoTurnAttack?("0CA")   # Dig
-    damageMult = (damageMult/2.0).round if @battle.field.terrain==PBBattleTerrains::Grassy
+    damageMult /= 2 if @battle.field.terrain==PBBattleTerrains::Grassy
     return damageMult
   end
 end
