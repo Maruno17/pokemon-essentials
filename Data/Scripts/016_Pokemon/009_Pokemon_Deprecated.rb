@@ -1,5 +1,6 @@
 #===============================================================================
-# Deprecated classes & methods for Pokémon
+# Deprecated classes, methods and constants for Pokémon.
+# These will be removed in a future Essentials version.
 #===============================================================================
 
 # @deprecated Use {Pokemon} instead. PokeBattle_Pokemon has been turned into an alias
