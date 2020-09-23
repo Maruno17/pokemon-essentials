@@ -591,9 +591,9 @@ def pbBattleGem(user,type,move,mults,moveType)
   return if !isConst?(moveType,PBTypes,type)
   user.effects[PBEffects::GemConsumed] = user.item
   if NEWEST_BATTLE_MECHANICS
-    mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.3).round
+    mults[BASE_DMG_MULT] *= 1.3
   else
-    mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.5).round
+    mults[BASE_DMG_MULT] *= 1.5
   end
 end
 

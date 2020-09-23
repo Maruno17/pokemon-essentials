@@ -205,21 +205,11 @@ class PokeBattle_Battler
       end
     end
     # Eiscue - Ice Face
-    if isConst?(@species,PBSpecies,:EISCUE)
-      if hasActiveAbility?(:ICEFACE)
-        case @battle.pbWeather
-        when PBWeather::Hail
-          for i in @battle.field.effects[PBEffects::Noiceface]
-            return if self == i
-          end
-          if @form!=0
-            @battle.pbShowAbilitySplash(self,true)
-            @battle.pbHideAbilitySplash(self)
-            pbChangeForm(0,_INTL("{1} transformed!",pbThis))
-            self.damageState.iceface = false
-            @battle.field.effects[PBEffects::Noiceface].push(self)
-          end
-        end
+    if isConst?(@species,PBSpecies,:EISCUE) && hasActiveAbility?(:ICEFACE) && @battle.pbWeather == PBWeather::Hail
+      if @form==1
+        @battle.pbShowAbilitySplash(self,true)
+        @battle.pbHideAbilitySplash(self)
+        pbChangeForm(0,_INTL("{1} transformed!",pbThis))
       end
     end
   end
