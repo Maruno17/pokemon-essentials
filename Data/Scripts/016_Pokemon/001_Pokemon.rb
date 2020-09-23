@@ -96,7 +96,7 @@ class Pokemon
   # Otherwise returns 0.
   # @return [Integer] the map ID where egg was hatched (0 by default)
   attr_accessor :hatchedMap
-  # @param value [Integer] new language 
+  # @param value [Integer] new language
   attr_writer   :language
   # @return [String] the name of the original trainer
   attr_accessor :ot
@@ -122,7 +122,7 @@ class Pokemon
   #=============================================================================
 
   # @return [Integer] the public portion of the original trainer's ID
-  def publicID
+  def public_id
     return @trainerID & 0xFFFF
   end
 
@@ -131,7 +131,6 @@ class Pokemon
   def foreign?(trainer)
     return @trainerID != trainer.id || @ot != trainer.name
   end
-  alias isForeign? foreign?
 
   # @return [0, 1, 2] the gender of this Pokémon original trainer (0 = male, 1 = female, 2 = unknown)
   def otgender
@@ -139,7 +138,7 @@ class Pokemon
   end
 
   # @return [Integer] this Pokémon's level when it was obtained
-  def obtainLevel
+  def obtain_level
     return @obtainLevel || 0
   end
 
