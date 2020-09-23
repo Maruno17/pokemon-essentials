@@ -995,3 +995,24 @@ HiddenMoveHandlers::UseMove.add(:WATERFALL,proc { |move,pokemon|
   pbAscendWaterfall
   next true
 })
+
+#===============================================================================
+# Defog
+#===============================================================================
+def pbDefog
+  $game_screen.weather(0,0,0)
+end
+
+HiddenMoveHandlers::CanUseMove.add(:DEFOG,proc { |move,pkmn,showmsg|
+  next false if $game_screen.weather_type!=PBFieldWeather::Fog
+  next true
+})
+
+HiddenMoveHandlers::UseMove.add(:DEFOG,proc { |move,pokemon|
+  if !pbHiddenMoveAnimation(pokemon)
+    pbMessage(_INTL("{1} used {2}!",pokemon.name,PBMoves.getName(move)))
+  end
+  pbDefog
+  next true
+})
+

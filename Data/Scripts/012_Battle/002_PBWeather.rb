@@ -9,6 +9,7 @@ begin
     HeavyRain   = 6
     StrongWinds = 7
     ShadowSky   = 8
+    Fog         = 9
 
     def self.animationName(weather)
       case weather
@@ -20,6 +21,7 @@ begin
       when HeavyRain;   return "HeavyRain"
       when StrongWinds; return "StrongWinds"
       when ShadowSky;   return "ShadowSky"
+      when Fog;         return "Fog"
       end
       return nil
     end
