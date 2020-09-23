@@ -692,9 +692,11 @@ class PokeBattle_Battle
         pbDisplay("The mysterious air current has dissipated!")
       end
     end
-    # Check for form changes caused by the weather changing
     if @field.weather!=oldWeather
+      # Check for form changes caused by the weather changing
       eachBattler { |b| b.pbCheckFormOnWeatherChange }
+      # Start up the default weather
+      pbStartWeather(nil,@field.defaultWeather) if @field.defaultWeather!=PBWeather::None
     end
   end
 
