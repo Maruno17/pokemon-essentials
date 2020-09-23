@@ -2405,7 +2405,7 @@ BattleHandlers::AbilityOnSwitchOut.add(:NATURALCURE,
 
 BattleHandlers::AbilityOnSwitchOut.add(:REGENERATOR,
   proc { |ability,battler,endOfBattle|
-    next if !endOfBattle
+    next if endOfBattle
     PBDebug.log("[Ability triggered] #{battler.pbThis}'s #{battler.abilityName}")
     battler.pbRecoverHP(battler.totalhp/3,false,false)
   }
