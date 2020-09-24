@@ -33,7 +33,7 @@ class Game_Character
     @y                         = 0
     @real_x                    = 0
     @real_y                    = 0
-    @sprite_size               = [Game_Map::TILE_WIDTH,Game_Map::TILE_HEIGHT]
+    @sprite_size               = [Game_Map::TILE_WIDTH, Game_Map::TILE_HEIGHT]
     @tile_id                   = 0
     @character_name            = ""
     @character_hue             = 0
@@ -62,8 +62,9 @@ class Game_Character
     @always_on_top             = false
     @anime_count               = 0
     @stop_count                = 0
-    @jump_count                = 0
-    @jump_peak                 = 0
+    @jump_peak                 = 0   # Max height while jumping
+    @jump_distance             = 0   # Total distance of jump
+    @jump_distance_left        = 0   # Distance left to travel
     @bob_height                = 0
     @wait_count                = 0
     @moved_this_frame          = false
@@ -93,6 +94,10 @@ class Game_Character
 
   def move_speed_real=(val)
     @move_speed_real = val * 40.0 / Graphics.frame_rate
+  end
+
+  def jump_speed_real
+    return (1 << 4) * 0.8 * 40.0 / Graphics.frame_rate
   end
 
   def move_frequency=(val)
@@ -160,7 +165,7 @@ class Game_Character
   end
 
   def bush_depth
-    return 0 if @tile_id > 0 or @always_on_top or @jump_count > 0
+    return 0 if @tile_id > 0 || @always_on_top or jumping?
     xbehind = @x + (@direction==4 ? 1 : @direction==6 ? -1 : 0)
     ybehind = @y + (@direction==8 ? 1 : @direction==2 ? -1 : 0)
     return Game_Map::TILE_HEIGHT if self.map.deepBush?(@x, @y) and self.map.deepBush?(xbehind, ybehind)
@@ -219,8 +224,8 @@ class Game_Character
   def screen_y
     ret = screen_y_ground
     if jumping?
-      n = ((2 * @jump_count * 20 / Graphics.frame_rate) - @jump_peak).abs
-      return ret - (@jump_peak * @jump_peak - n * n) / 2
+      jump_fraction = ((@jump_distance_left / @jump_distance) - 0.5).abs   # 0.5 to 0 to 0.5
+      ret += @jump_peak * (4 * jump_fraction**2 - 1)
     end
     return ret
   end
@@ -248,7 +253,7 @@ class Game_Character
   end
 
   def jumping?
-    return @jump_count > 0
+    return @jump_distance_left > 0
   end
 
   def straighten
@@ -652,8 +657,9 @@ class Game_Character
       @x = new_x
       @y = new_y
       distance = [4, x_plus * x_plus + y_plus * y_plus].max
-      @jump_peak = (6 + distance - move_speed).floor
-      @jump_count = @jump_peak * Graphics.frame_rate / 20
+      @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 16   # 3/4 of tile for ledge jumping
+      @jump_distance = [x_plus.abs * Game_Map::REAL_RES_X, y_plus.abs * Game_Map::REAL_RES_Y].max
+      @jump_distance_left = 1   # Just needs to be non-zero
       @stop_count = 0
       if self.is_a?(Game_Player)
         $PokemonTemp.dependentEvents.pbMoveDependentEvents
@@ -764,10 +770,7 @@ class Game_Character
       # Update command
       update_command
       # Update movement
-      if jumping?;   update_jump
-      elsif moving?; update_move
-      else;          update_stop
-      end
+      (moving?) ? update_move : update_stop
     end
     # Update animation
     update_pattern
@@ -801,18 +804,9 @@ class Game_Character
     end
   end
 
-  def update_jump
-    @jump_count -= 1
-    @real_x = (@real_x * @jump_count + @x * Game_Map::REAL_RES_X) / (@jump_count + 1)
-    @real_y = (@real_y * @jump_count + @y * Game_Map::REAL_RES_Y) / (@jump_count + 1)
-    @moved_this_frame = true
-    # End of a jump, so perform events that happen at this time
-    Events.onStepTakenFieldMovement.trigger(self,self) if !jumping? && !moving?
-  end
-
   def update_move
     # Move the character (the 0.1 catches rounding errors)
-    distance = move_speed_real
+    distance = (jumping?) : jump_speed_real : move_speed_real
     dest_x = @x * Game_Map::REAL_RES_X
     dest_y = @y * Game_Map::REAL_RES_Y
     if @real_x < dest_x
@@ -829,8 +823,12 @@ class Game_Character
       @real_y -= distance
       @real_y = dest_y if @real_y < dest_y + 0.1
     end
+    # Refresh how far is left to travel in a jump
+    if jumping?
+      @jump_distance_left = [(dest_x - @real_x).abs, (dest_y - @real_y).abs].max
+    end
     # End of a step, so perform events that happen at this time
-    Events.onStepTakenFieldMovement.trigger(self,self) if !jumping? && !moving?
+    Events.onStepTakenFieldMovement.trigger(self, self) if !jumping? && !moving?
     # Increment animation counter
     @anime_count += 1 if @walk_anime || @step_anime
     @moved_this_frame = true
@@ -851,7 +849,7 @@ class Game_Character
       return
     end
     # Character has started to move, change pattern immediately
-    if !@moved_last_frame && @moved_this_frame && !jumping? && !@step_anime
+    if !@moved_last_frame && @moved_this_frame && !@step_anime
       @pattern = (@pattern + 1) % 4 if @walk_anime
       @anime_count = 0
       return
@@ -859,7 +857,8 @@ class Game_Character
     # Calculate how many frames each pattern should display for, i.e. the time
     # it takes to move half a tile (or a whole tile if cycling). We assume the
     # game uses square tiles.
-    frames_per_pattern = Game_Map::REAL_RES_X / (move_speed_real * 2.0)
+    real_speed = (jumping?) ? jump_speed_real : move_speed_real
+    frames_per_pattern = Game_Map::REAL_RES_X / (real_speed * 2.0)
     frames_per_pattern *= 2 if move_speed == 6   # Cycling/fastest speed
     return if @anime_count < frames_per_pattern
     # Advance to the next animation frame
