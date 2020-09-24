@@ -2621,20 +2621,31 @@ BattleHandlers::AbilityOnSwitchIn.add(:DAUNTLESSSHIELD,
 
 BattleHandlers::AbilityOnSwitchIn.add(:SCREENCLEANER,
   proc { |ability,battler,battle|
+    target=battler
     battle.pbShowAbilitySplash(battler)
-    for side in 0...2
-      if battle.sides[side].effects[PBEffects::LightScreen]>0
-        battle.sides[side].effects[PBEffects::LightScreen] = 0
-        battle.pbDisplay(_INTL("{1}'s Light Screen wore off!",@battlers[side].pbTeam))
-      end
-      if battle.sides[side].effects[PBEffects::Reflect]>0
-        battle.sides[side].effects[PBEffects::Reflect] = 0
-        battle.pbDisplay(_INTL("{1}'s Reflect wore off!",@battlers[side].pbOpposingTeam))
-      end
-      if battle.sides[side].effects[PBEffects::AuroraVeil]>0
-        battle.sides[side].effects[PBEffects::AuroraVeil] = 0
-        battle.pbDisplay(_INTL("{1}'s Aurora Veil wore off!",@battlers[side].pbOpposingTeam))
-      end
+    if target.pbOwnSide.effects[PBEffects::AuroraVeil]>0
+      target.pbOwnSide.effects[PBEffects::AuroraVeil] = 0
+      battle.pbDisplay(_INTL("{1}'s Aurora Veil wore off!",target.pbTeam))
+    end
+    if target.pbOwnSide.effects[PBEffects::LightScreen]>0
+      target.pbOwnSide.effects[PBEffects::LightScreen] = 0
+      battle.pbDisplay(_INTL("{1}'s Light Screen wore off!",target.pbTeam))
+    end
+    if target.pbOwnSide.effects[PBEffects::Reflect]>0
+      target.pbOwnSide.effects[PBEffects::Reflect] = 0
+      battle.pbDisplay(_INTL("{1}'s Reflect wore off!",target.pbTeam))
+    end
+    if target.pbOpposingSide.effects[PBEffects::AuroraVeil]>0
+      target.pbOpposingSide.effects[PBEffects::AuroraVeil] = 0
+      battle.pbDisplay(_INTL("{1}'s Aurora Veil wore off!",target.pbOpposingTeam))
+    end
+    if target.pbOpposingSide.effects[PBEffects::LightScreen]>0
+      target.pbOpposingSide.effects[PBEffects::LightScreen] = 0
+      battle.pbDisplay(_INTL("{1}'s Light Screen wore off!",target.pbOpposingTeam))
+    end
+    if target.pbOwnSide.effects[PBEffects::Reflect]>0
+      target.pbOpposingSide.effects[PBEffects::Reflect] = 0
+      battle.pbDisplay(_INTL("{1}'s Reflect wore off!",target.pbOpposingTeam))
     end
     battle.pbHideAbilitySplash(battler)
   }

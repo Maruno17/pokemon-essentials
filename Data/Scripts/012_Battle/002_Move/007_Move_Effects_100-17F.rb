@@ -2732,79 +2732,71 @@ end
 # (Court Change)
 #===============================================================================
 class PokeBattle_Move_182 < PokeBattle_Move
-  def pbEffectAgainstTarget(user,target)
-    fail=false
-    neffectsuser=[]
-    beffectsuser=[]
-    neffectsopp=[]
-    beffectsopp=[]
+  def pbEffectGeneral(user)
+    changeside=false
+    sides=[user.pbOwnSide,user.pbOpposingSide]
     for i in 0...2
-      i==0 ? a=user : a=target
-      i==0 ? b=neffectsuser : b=neffectsopp
-      i==0 ? c=beffectsuser : c=beffectsopp
-      fail=true if a.pbOwnSide.effects[PBEffects::Reflect] > 0
-      b.push(a.pbOwnSide.effects[PBEffects::Reflect])
-      fail=true if a.pbOwnSide.effects[PBEffects::LightScreen] > 0
-      b.push(a.pbOwnSide.effects[PBEffects::LightScreen])
-      fail=true if a.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
-      b.push(a.pbOwnSide.effects[PBEffects::AuroraVeil])
-      fail=true if a.pbOwnSide.effects[PBEffects::SeaOfFire] > 0
-      b.push(a.pbOwnSide.effects[PBEffects::SeaOfFire])
-      fail=true if a.pbOwnSide.effects[PBEffects::Swamp] > 0
-      b.push(a.pbOwnSide.effects[PBEffects::Swamp])
-      fail=true if a.pbOwnSide.effects[PBEffects::Rainbow] > 0
-      b.push(a.pbOwnSide.effects[PBEffects::Rainbow])
-      fail=true if a.pbOwnSide.effects[PBEffects::Mist] > 0
-      b.push(a.pbOwnSide.effects[PBEffects::Mist])
-      fail=true if a.pbOwnSide.effects[PBEffects::Safeguard] > 0
-      b.push(a.pbOwnSide.effects[PBEffects::Safeguard])
-      fail=true if a.pbOwnSide.effects[PBEffects::Spikes] > 0
-      b.push(a.pbOwnSide.effects[PBEffects::Spikes])
-      fail=true if a.pbOwnSide.effects[PBEffects::ToxicSpikes] > 0
-      b.push(a.pbOwnSide.effects[PBEffects::ToxicSpikes])
-      fail=true if a.pbOwnSide.effects[PBEffects::Tailwind] > 0
-      b.push(a.pbOwnSide.effects[PBEffects::Tailwind])
-      fail=true if a.pbOwnSide.effects[PBEffects::StealthRock]
-      c.push(a.pbOwnSide.effects[PBEffects::StealthRock])
-      fail=true if a.pbOwnSide.effects[PBEffects::StickyWeb]
-      c.push(a.pbOwnSide.effects[PBEffects::StickyWeb])
+      next if sides[i].effects[PBEffects::Reflect]==0 &&
+              sides[i].effects[PBEffects::LightScreen]==0 &&
+              sides[i].effects[PBEffects::AuroraVeil]==0 &&
+              sides[i].effects[PBEffects::SeaOfFire]==0 && # Fire Pledge
+              sides[i].effects[PBEffects::Swamp]==0 &&     # Grass Pledge
+              sides[i].effects[PBEffects::Rainbow]==0 &&   # Water Pledge
+              sides[i].effects[PBEffects::Mist]==0 &&
+              sides[i].effects[PBEffects::Safeguard]==0 &&
+             !sides[i].effects[PBEffects::StealthRock] &&
+              sides[i].effects[PBEffects::Spikes]==0 &&
+             !sides[i].effects[PBEffects::StickyWeb] &&
+              sides[i].effects[PBEffects::ToxicSpikes]==0 &&
+              sides[i].effects[PBEffects::Tailwind]==0
+      changeside=true
     end
-    if !fail
+    if !changeside
       @battle.pbDisplay(_INTL("But it failed!"))
       return -1
     else
-      user.pbOwnSide.effects[PBEffects::Reflect] = neffectsopp[0]
-      target.pbOwnSide.effects[PBEffects::Reflect] = neffectsuser[0]
-      user.pbOwnSide.effects[PBEffects::LightScreen] = neffectsopp[1]
-      target.pbOwnSide.effects[PBEffects::LightScreen] = neffectsuser[1]
-      user.pbOwnSide.effects[PBEffects::AuroraVeil] = neffectsopp[2]
-      target.pbOwnSide.effects[PBEffects::AuroraVeil] = neffectsuser[2]
-      user.pbOwnSide.effects[PBEffects::SeaOfFire] = neffectsopp[3]
-      target.pbOwnSide.effects[PBEffects::SeaOfFire] = neffectsuser[3]
-      user.pbOwnSide.effects[PBEffects::Swamp] = neffectsopp[4]
-      target.pbOwnSide.effects[PBEffects::Swamp] = neffectsuser[4]
-      user.pbOwnSide.effects[PBEffects::Rainbow] = neffectsopp[5]
-      target.pbOwnSide.effects[PBEffects::Rainbow] = neffectsuser[5]
-      user.pbOwnSide.effects[PBEffects::Mist] = neffectsopp[6]
-      target.pbOwnSide.effects[PBEffects::Mist] = neffectsuser[6]
-      user.pbOwnSide.effects[PBEffects::Safeguard] = neffectsopp[7]
-      target.pbOwnSide.effects[PBEffects::Safeguard] = neffectsuser[7]
-      user.pbOwnSide.effects[PBEffects::Spikes] = neffectsopp[8]
-      target.pbOwnSide.effects[PBEffects::Spikes] = neffectsuser[8]
-      user.pbOwnSide.effects[PBEffects::ToxicSpikes] = neffectsopp[9]
-      target.pbOwnSide.effects[PBEffects::ToxicSpikes] = neffectsuser[9]
-      user.pbOwnSide.effects[PBEffects::Tailwind] = neffectsopp[10]
-      target.pbOwnSide.effects[PBEffects::Tailwind] = neffectsuser[10]
-      user.pbOwnSide.effects[PBEffects::StealthRock] = beffectsopp[0]
-      target.pbOwnSide.effects[PBEffects::StealthRock] = beffectsuser[0]
-      user.pbOwnSide.effects[PBEffects::StickyWeb] = beffectsopp[1]
-      target.pbOwnSide.effects[PBEffects::StickyWeb] = beffectsuser[1]
+      ownside=sides[0]; oppside=sides[1]
+      reflect=ownside.effects[PBEffects::Reflect]
+      ownside.effects[PBEffects::Reflect]=oppside.effects[PBEffects::Reflect]
+      oppside.effects[PBEffects::Reflect]=reflect
+      lightscreen=ownside.effects[PBEffects::LightScreen]
+      ownside.effects[PBEffects::LightScreen]=oppside.effects[PBEffects::LightScreen]
+      oppside.effects[PBEffects::LightScreen]=lightscreen
+      auroraveil=ownside.effects[PBEffects::AuroraVeil]
+      ownside.effects[PBEffects::AuroraVeil]=oppside.effects[PBEffects::AuroraVeil]
+      oppside.effects[PBEffects::AuroraVeil]=auroraveil
+      firepledge=ownside.effects[PBEffects::SeaOfFire]
+      ownside.effects[PBEffects::SeaOfFire]=oppside.effects[PBEffects::SeaOfFire]
+      oppside.effects[PBEffects::SeaOfFire]=firepledge
+      grasspledge=ownside.effects[PBEffects::Swamp]
+      ownside.effects[PBEffects::Swamp]=oppside.effects[PBEffects::Swamp]
+      oppside.effects[PBEffects::Swamp]=grasspledge
+      waterpledge=ownside.effects[PBEffects::Rainbow]
+      ownside.effects[PBEffects::Rainbow]=oppside.effects[PBEffects::Rainbow]
+      oppside.effects[PBEffects::Rainbow]=waterpledge
+      mist=ownside.effects[PBEffects::Mist]
+      ownside.effects[PBEffects::Mist]=oppside.effects[PBEffects::Mist]
+      oppside.effects[PBEffects::Mist]=mist
+      spikes=ownside.effects[PBEffects::Spikes]
+      ownside.effects[PBEffects::Spikes]=oppside.effects[PBEffects::Spikes]
+      oppside.effects[PBEffects::Spikes]=spikes
+      toxicspikes=ownside.effects[PBEffects::ToxicSpikes]
+      ownside.effects[PBEffects::ToxicSpikes]=oppside.effects[PBEffects::ToxicSpikes]
+      oppside.effects[PBEffects::ToxicSpikes]=toxicspikes
+      stealthrock=ownside.effects[PBEffects::StealthRock]
+      ownside.effects[PBEffects::StealthRock]=oppside.effects[PBEffects::StealthRock]
+      oppside.effects[PBEffects::StealthRock]=stealthrock
+      stickyweb=ownside.effects[PBEffects::StickyWeb]
+      ownside.effects[PBEffects::StickyWeb]=oppside.effects[PBEffects::StickyWeb]
+      oppside.effects[PBEffects::StickyWeb]=stickyweb
+      tailwind=ownside.effects[PBEffects::Tailwind]
+      ownside.effects[PBEffects::Tailwind]=oppside.effects[PBEffects::Tailwind]
+      oppside.effects[PBEffects::Tailwind]=tailwind
       @battle.pbDisplay(_INTL("{1} swapped the battle effects affecting each side of the field!",user.pbThis))
       return 0
     end
   end
 end
-
 
 
 #===============================================================================
@@ -3257,7 +3249,6 @@ class PokeBattle_Move_204 < PokeBattle_Move
     end
     user.pbHeldItemTriggerCheck(user.item,false)
     user.pbConsumeItem(true,true,false) if user.item>0
-    user.pbRemoveItem if pbIsBerry?(target.item)      ##added this line to fix a bug
   end
 end
 

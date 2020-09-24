@@ -98,12 +98,9 @@ class PokeBattle_Battler
       @moves[i] = PokeBattle_Move.pbFromPBMove(@battle,m)
     end
     if isSpecies?(:ZACIAN) || isSpecies?(:ZAMAZENTA) && @form == 1
-      p "Pokemon"
       for i in 0...@moves.length
-        p "move of Pokemon"
         if isConst?(@moves[i].id,PBMoves,:IRONHEAD)
           @moves[i] = isSpecies?(:ZACIAN) ? PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(getConst(PBMoves,:BEHEMOTHBLADE))) : PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(getConst(PBMoves,:BEHEMOTHBASH)))
-          p "Pokemon Go"
         end
       end
     end
