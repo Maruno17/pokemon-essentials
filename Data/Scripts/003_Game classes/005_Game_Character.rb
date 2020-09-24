@@ -806,7 +806,7 @@ class Game_Character
 
   def update_move
     # Move the character (the 0.1 catches rounding errors)
-    distance = (jumping?) : jump_speed_real : move_speed_real
+    distance = (jumping?) ? jump_speed_real : move_speed_real
     dest_x = @x * Game_Map::REAL_RES_X
     dest_y = @y * Game_Map::REAL_RES_Y
     if @real_x < dest_x
