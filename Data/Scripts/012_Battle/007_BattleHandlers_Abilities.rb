@@ -1970,26 +1970,24 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:PICKPOCKET,
 
 BattleHandlers::EORWeatherAbility.add(:DRYSKIN,
   proc { |ability,weather,battler,battle|
-  if !battler.hasActiveItem?(:UTILITYUMBRELLA)
-    case weather
-    when PBWeather::Sun, PBWeather::HarshSun
-      battle.pbShowAbilitySplash(battler)
-      battle.scene.pbDamageAnimation(battler)
-      battler.pbReduceHP(battler.totalhp/8,false)
-      battle.pbDisplay(_INTL("{1} was hurt by the sunlight!",battler.pbThis))
-      battle.pbHideAbilitySplash(battler)
-      battler.pbItemHPHealCheck
-    when PBWeather::Rain, PBWeather::HeavyRain
-      next if !battler.canHeal?
-      battle.pbShowAbilitySplash(battler)
-      battler.pbRecoverHP(battler.totalhp/8)
-      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-        battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
-      else
-        battle.pbDisplay(_INTL("{1}'s {2} restored its HP.",battler.pbThis,battler.abilityName))
-      end
-      battle.pbHideAbilitySplash(battler)
+  case weather
+  when PBWeather::Sun, PBWeather::HarshSun
+    battle.pbShowAbilitySplash(battler)
+    battle.scene.pbDamageAnimation(battler)
+    battler.pbReduceHP(battler.totalhp/8,false)
+    battle.pbDisplay(_INTL("{1} was hurt by the sunlight!",battler.pbThis))
+    battle.pbHideAbilitySplash(battler)
+    battler.pbItemHPHealCheck
+  when PBWeather::Rain, PBWeather::HeavyRain
+    next if !battler.canHeal?
+    battle.pbShowAbilitySplash(battler)
+    battler.pbRecoverHP(battler.totalhp/8)
+    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+      battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
+    else
+      battle.pbDisplay(_INTL("{1}'s {2} restored its HP.",battler.pbThis,battler.abilityName))
     end
+    battle.pbHideAbilitySplash(battler)
   end
   }
 )
@@ -2011,32 +2009,28 @@ BattleHandlers::EORWeatherAbility.add(:ICEBODY,
 
 BattleHandlers::EORWeatherAbility.add(:RAINDISH,
   proc { |ability,weather,battler,battle|
-  if !battler.hasActiveItem?(:UTILITYUMBRELLA)
-    next unless weather==PBWeather::Rain || weather==PBWeather::HeavyRain
-    next if !battler.canHeal?
-    battle.pbShowAbilitySplash(battler)
-    battler.pbRecoverHP(battler.totalhp/16)
-    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-      battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
-    else
-      battle.pbDisplay(_INTL("{1}'s {2} restored its HP.",battler.pbThis,battler.abilityName))
-    end
-    battle.pbHideAbilitySplash(battler)
+  next unless weather==PBWeather::Rain || weather==PBWeather::HeavyRain
+  next if !battler.canHeal?
+  battle.pbShowAbilitySplash(battler)
+  battler.pbRecoverHP(battler.totalhp/16)
+  if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+    battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
+  else
+    battle.pbDisplay(_INTL("{1}'s {2} restored its HP.",battler.pbThis,battler.abilityName))
   end
+  battle.pbHideAbilitySplash(battler)
   }
 )
 
 BattleHandlers::EORWeatherAbility.add(:SOLARPOWER,
   proc { |ability,weather,battler,battle|
-  if !battler.hasActiveItem?(:UTILITYUMBRELLA)
-    next unless weather==PBWeather::Sun || weather==PBWeather::HarshSun
-    battle.pbShowAbilitySplash(battler)
-    battle.scene.pbDamageAnimation(battler)
-    battler.pbReduceHP(battler.totalhp/8,false)
-    battle.pbDisplay(_INTL("{1} was hurt by the sunlight!",battler.pbThis))
-    battle.pbHideAbilitySplash(battler)
-    battler.pbItemHPHealCheck
-  end
+  next unless weather==PBWeather::Sun || weather==PBWeather::HarshSun
+  battle.pbShowAbilitySplash(battler)
+  battle.scene.pbDamageAnimation(battler)
+  battler.pbReduceHP(battler.totalhp/8,false)
+  battle.pbDisplay(_INTL("{1} was hurt by the sunlight!",battler.pbThis))
+  battle.pbHideAbilitySplash(battler)
+  battler.pbItemHPHealCheck
   }
 )
 

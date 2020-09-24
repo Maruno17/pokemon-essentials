@@ -233,3 +233,30 @@
 231,SHADOWSHIELD,Shadow Shield,"Resists damage while its HP is full."
 232,PRISMARMOR,Prism Armor,"Reduces damage from super-effective attacks."
 233,NEUROFORCE,Neuroforce,"Powers up moves that are super-effective."
+234,BALLFETCH,Ball Fetch,"Fetches the Poké Ball from the first failed throw.",
+235,COTTONDOWN,Cotton Down,"Lowers everyone else's Speed when hit by an attack.",
+236,DAUNTLESSSHIELD,Dauntless Shield,"Boosts Defense stat when the Pokémon enters a battle.",
+237,GORILLATACTICS,Gorilla Tactics,"Boosts Attack but only allows the use of one move.",
+238,GULPMISSILE,Gulp Missile,"Attacks with prey caught when using Surf or Dive.",
+239,HUNGERSWITCH,Hunger Switch,"It alternates between Full Belly Mode and Hangry Mode.",
+240,ICEFACE,Ice Face,"Prevents a physical attack. Can be restored with hail.",
+241,ICESCALES,Ice Scales,"Halves the damage from special moves.",
+242,INTREPIDSWORD,Intrepid Sword,"Boosts Attack stat when the Pokémon enters a battle.",
+243,LIBERO,Libero,"Changes type to the type of the move it's about to use.",
+244,MIMICRY,Mimicry,"Changes the Pokémon's type depending on the terrain.",
+245,MIRRORARMOR,Mirror Armor,"Bounces back stat-lowering effects.",
+246,NEUTRALIZINGGAS,Neutralizing Gas,"Abilities will be nullified or will not be triggered.",
+247,PASTELVEIL,Pastel Veil,"Protects it and ally Pokémon from being poisoned.",
+248,PERISHBODY,Perish Body,"When it takes a hit, both Pokémon faint after 3 turns.",
+249,POWERSPOT,Power Spot,"Just being next to the Pokémon powers up moves.",
+250,PROPELLERTAIL,Propeller Tail,"Ignores effects changing the target of a move.",
+251,PUNKROCK,Punk Rock,"Boosts power and resistance of sound-based moves.",
+252,RIPEN,Ripen,"Ripens Berries and doubles their effect.",
+253,SANDSPIT,Sand Spit,"Creates a sandstorm when it's hit by an attack.",
+254,SCREENCLEANER,Screen Cleaner,"Screens are nullified when entering battle.",
+255,STALWART,Stalwart,"Ignores effects changing the target of a move.",
+256,STEAMENGINE,Steam Engine,"Boosts Speed when hit by a Fire- or Water-type move.",
+257,STEELYSPIRIT,Steely Spirit,"Powers up ally Pokémon's Steel-type moves.",
+258,WANDERINGSPIRIT,Wandering Spirit,"Taking a direct contact hit exchanges Abilities."
+259,UNSEENFIST,Unseen Fist,"Contact moves negate all protection effects."
+260,QUICKDRAW,Quick Draw,"Enables the Pokémon to move first occasionally."

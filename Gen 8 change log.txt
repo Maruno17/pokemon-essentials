@@ -8,6 +8,8 @@ https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.365
 Everything in "Changes to old Mechanics" except Dynamic Turn Order by Golisopod User
 
 ##### Need PBS #####
+Moves.txt - TheToxic
+Pokemon.txt (for Gen 8) - TheToxic
 
 ##### Evolution methods that need code yet #####
 Milcery
@@ -19,8 +21,8 @@ Yamask                   by WolfPP adapted by Aioross improved by Golisopod User
 
 ##### Forms Coded #####
 Eiscue                   by Aioross
-Indeedee                 by KyureJL improved by Vendily
-Zamazenta / Zacian       by KyureJL completed by Aioross
+Indeedee                 by KyureJL improved by Vendily Fixed by Golisopod User
+Zamazenta / Zacian       by KyureJL completed by Aioross 
 Galarian Darmanitan      by Aioross
 Cramorant                by Aioross
 Morpeko                  by Aioross
@@ -33,7 +35,7 @@ Key Stone                by KyureJL
 Blunder Policy           by Wolfpp adapted by Aioross
 Heavy-Duty Boots         by DarrylBD99
 Throat Spray             by Aioross
-Utility Umbrella         by KyureJL && Aioross
+Utility Umbrella         by KyureJL && Aioross, Fixed by Golisopod User
 Exp. Candy XS/S/M/L/XL   by Aioross
 Room Service             by Aioross
 Eject Pack               by Aioross

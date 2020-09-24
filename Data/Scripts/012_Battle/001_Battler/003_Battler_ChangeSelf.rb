@@ -167,15 +167,16 @@ class PokeBattle_Battler
 
   def pbCheckFormOnWeatherChange
     return if fainted? || @effects[PBEffects::Transform]
+    return if hasActiveItem?(:UTILITYUMBRELLA)
     # Castform - Forecast
     if isSpecies?(:CASTFORM)
-      if hasActiveAbility?(:FORECAST) && !self.hasActiveItem?(:UTILITYUMBRELLA)
+      if hasActiveAbility?(:FORECAST)
         newForm = 0
         case @battle.pbWeather
         when PBWeather::Sun, PBWeather::HarshSun
-          newForm = 1 if !self.hasActiveItem?(:UTILITYUMBRELLA)
+          newForm = 1
         when PBWeather::Rain, PBWeather::HeavyRain
-          newForm = 2 if !self.hasActiveItem?(:UTILITYUMBRELLA)
+          newForm = 2
         when PBWeather::Hail
           newForm = 3
         end
@@ -193,7 +194,7 @@ class PokeBattle_Battler
       if hasActiveAbility?(:FLOWERGIFT)
         newForm = 0
         case @battle.pbWeather
-        when PBWeather::Sun, PBWeather::HarshSun; newForm = 1 if !self.hasActiveItem?(:UTILITYUMBRELLA)
+        when PBWeather::Sun, PBWeather::HarshSun; newForm = 1
         end
         if @form!=newForm
           @battle.pbShowAbilitySplash(self,true)
