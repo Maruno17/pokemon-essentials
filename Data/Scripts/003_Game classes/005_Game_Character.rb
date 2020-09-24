@@ -50,7 +50,7 @@ class Game_Character
     @original_direction        = 2
     @original_pattern          = 0
     @move_type                 = 0
-    self.move_speed            = 4
+    self.move_speed            = 3
     self.move_frequency        = 6
     @move_route                = nil
     @move_route_index          = 0
@@ -78,13 +78,13 @@ class Game_Character
     # @move_speed_real is the number of quarter-pixels to move each frame. There
     # are 128 quarter-pixels per tile. By default, it is calculated from
     # @move_speed and has these values (assuming 40 fps):
-    # 1 => 1.6    # 80 frames per tile
-    # 2 => 3.2    # 40 frames per tile
-    # 3 => 6.4    # 20 frames per tile
-    # 4 => 12.8   # 10 frames per tile - walking speed
-    # 5 => 25.6   # 5 frames per tile - running speed (2x walking speed)
-    # 6 => 32     # 4 frames per tile - cycling speed (1.25x running speed)
-    self.move_speed_real = (val == 6) ? 32 : (1 << val) * 0.8
+    # 1 => 3.2    # 40 frames per tile
+    # 2 => 6.4    # 20 frames per tile
+    # 3 => 12.8   # 10 frames per tile - walking speed
+    # 4 => 25.6   # 5 frames per tile - running speed (2x walking speed)
+    # 5 => 32     # 4 frames per tile - cycling speed (1.25x running speed)
+    # 6 => 64     # 2 frames per tile
+    self.move_speed_real = (val == 6) ? 64 : (val == 5) ? 32: (2 ** (val + 1)) * 0.8
   end
 
   def move_speed_real
@@ -97,7 +97,7 @@ class Game_Character
   end
 
   def jump_speed_real
-    return (1 << 4) * 0.8 * 40.0 / Graphics.frame_rate
+    return (2 ** (3 + 1)) * 0.8 * 40.0 / Graphics.frame_rate   # Walking speed
   end
 
   def move_frequency=(val)
