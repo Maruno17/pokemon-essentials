@@ -109,20 +109,20 @@ class Pokemon
   attr_writer   :cool,:beauty,:cute,:smart,:tough,:sheen
 
   # Max total IVs
-  IV_STAT_LIMIT         = 31
+  IV_STAT_LIMIT = 31
   # Max total EVs
-  EV_LIMIT              = 510
+  EV_LIMIT      = 510
   # Max EVs that a single stat can have
-  EV_STAT_LIMIT         = 252
+  EV_STAT_LIMIT = 252
   # Maximum length a Pokémon's nickname can be
-  MAX_NAME_SIZE         = 10
+  MAX_NAME_SIZE = 10
 
   #=============================================================================
   # Ownership, obtained information
   #=============================================================================
 
   # @return [Integer] the public portion of the original trainer's ID
-  def public_id
+  def publicID
     return @trainerID & 0xFFFF
   end
 
@@ -131,6 +131,7 @@ class Pokemon
   def foreign?(trainer)
     return @trainerID != trainer.id || @ot != trainer.name
   end
+  alias isForeign? foreign?
 
   # @return [0, 1, 2] the gender of this Pokémon original trainer (0 = male, 1 = female, 2 = unknown)
   def otgender
@@ -138,7 +139,7 @@ class Pokemon
   end
 
   # @return [Integer] this Pokémon's level when it was obtained
-  def obtain_level
+  def obtainLevel
     return @obtainLevel || 0
   end
 

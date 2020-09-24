@@ -12,9 +12,6 @@ PokeBattle_Pokemon = Pokemon
 class Pokemon
   # @deprecated Use {MAX_NAME_SIZE} instead. This alias is slated to be removed in vXX.
   MAX_POKEMON_NAME_SIZE = MAX_NAME_SIZE
-
-  deprecated_instance_method_alias :publicID, :public_id, 'vXX'
-  deprecated_instance_method_alias :isForeign?, :foreign?, 'vXX'
 end
 
 # (see Pokemon#initialize)
