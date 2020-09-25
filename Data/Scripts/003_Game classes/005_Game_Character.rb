@@ -65,6 +65,7 @@ class Game_Character
     @jump_peak                 = 0   # Max height while jumping
     @jump_distance             = 0   # Total distance of jump
     @jump_distance_left        = 0   # Distance left to travel
+    @jump_count                = 0   # Frames left in a stationary jump
     @bob_height                = 0
     @wait_count                = 0
     @moved_this_frame          = false
@@ -84,7 +85,7 @@ class Game_Character
     # 4 => 25.6   # 5 frames per tile - running speed (2x walking speed)
     # 5 => 32     # 4 frames per tile - cycling speed (1.25x running speed)
     # 6 => 64     # 2 frames per tile
-    self.move_speed_real = (val == 6) ? 64 : (val == 5) ? 32: (2 ** (val + 1)) * 0.8
+    self.move_speed_real = (val == 6) ? 64 : (val == 5) ? 32 : (2 ** (val + 1)) * 0.8
   end
 
   def move_speed_real
@@ -224,7 +225,11 @@ class Game_Character
   def screen_y
     ret = screen_y_ground
     if jumping?
-      jump_fraction = ((@jump_distance_left / @jump_distance) - 0.5).abs   # 0.5 to 0 to 0.5
+      if @jump_count > 0
+        jump_fraction = ((@jump_count * jump_speed_real / Game_Map::REAL_RES_X) - 0.5).abs   # 0.5 to 0 to 0.5
+      else
+        jump_fraction = ((@jump_distance_left / @jump_distance) - 0.5).abs   # 0.5 to 0 to 0.5
+      end
       ret += @jump_peak * (4 * jump_fraction**2 - 1)
     end
     return ret
@@ -253,7 +258,7 @@ class Game_Character
   end
 
   def jumping?
-    return @jump_distance_left > 0
+    return (@jump_distance_left || 0) > 0 || @jump_count > 0
   end
 
   def straighten
@@ -653,13 +658,18 @@ class Game_Character
     new_x = @x + x_plus
     new_y = @y + y_plus
     if (x_plus == 0 and y_plus == 0) || passable?(new_x, new_y, 0)
-      straighten
       @x = new_x
       @y = new_y
-      distance = [4, x_plus * x_plus + y_plus * y_plus].max
-      @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 16   # 3/4 of tile for ledge jumping
+      real_distance = Math::sqrt(x_plus * x_plus + y_plus * y_plus)
+      distance = [1, real_distance].max
+      @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 8   # 3/4 of tile for ledge jumping
       @jump_distance = [x_plus.abs * Game_Map::REAL_RES_X, y_plus.abs * Game_Map::REAL_RES_Y].max
       @jump_distance_left = 1   # Just needs to be non-zero
+      if real_distance > 0   # Jumping to somewhere else
+        @jump_count = 0
+      else   # Jumping on the spot
+        @jump_count = Game_Map::REAL_RES_X / jump_speed_real   # Number of frames to jump one tile
+      end
       @stop_count = 0
       if self.is_a?(Game_Player)
         $PokemonTemp.dependentEvents.pbMoveDependentEvents
@@ -770,7 +780,7 @@ class Game_Character
       # Update command
       update_command
       # Update movement
-      (moving?) ? update_move : update_stop
+      (moving? || jumping?) ? update_move : update_stop
     end
     # Update animation
     update_pattern
@@ -825,6 +835,7 @@ class Game_Character
     end
     # Refresh how far is left to travel in a jump
     if jumping?
+      @jump_count -= 1 if @jump_count > 0   # For stationary jumps only
       @jump_distance_left = [(dest_x - @real_x).abs, (dest_y - @real_y).abs].max
     end
     # End of a step, so perform events that happen at this time
@@ -842,6 +853,7 @@ class Game_Character
 
   def update_pattern
     return if @lock_pattern
+#    return if @jump_count > 0   # Don't animate if jumping on the spot
     # Character has stopped moving, return to original pattern
     if @moved_last_frame && !@moved_this_frame && !@step_anime
       @pattern = @original_pattern
