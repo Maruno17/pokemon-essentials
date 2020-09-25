@@ -253,6 +253,7 @@ class Game_Character
   end
 
   def jumping?
+    @jump_distance_left ||= 0 # COMPATIBILITY: For save files created before v18.1
     return @jump_distance_left > 0
   end
 
