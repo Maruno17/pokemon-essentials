@@ -76,7 +76,7 @@ def pbLoadTrainer(trainerid,trainername,partyid=0)
     for poke in trainer[3]
       species = pbGetSpeciesFromFSpecies(poke[TPSPECIES])[0]
       level = poke[TPLEVEL]
-      pokemon = pbNewPkmn(species,level,opponent,false)
+      pokemon = Pokemon.new(species,level,opponent,false)
       if poke[TPFORM]
         pokemon.forcedForm = poke[TPFORM] if MultipleForms.hasFunction?(pokemon.species,"getForm")
         pokemon.formSimple = poke[TPFORM]
@@ -99,12 +99,12 @@ def pbLoadTrainer(trainerid,trainername,partyid=0)
         if poke[TPIV] && poke[TPIV].length>0
           pokemon.iv[i] = (i<poke[TPIV].length) ? poke[TPIV][i] : poke[TPIV][0]
         else
-          pokemon.iv[i] = [level/2,PokeBattle_Pokemon::IV_STAT_LIMIT].min
+          pokemon.iv[i] = [level/2, Pokemon::IV_STAT_LIMIT].min
         end
         if poke[TPEV] && poke[TPEV].length>0
           pokemon.ev[i] = (i<poke[TPEV].length) ? poke[TPEV][i] : poke[TPEV][0]
         else
-          pokemon.ev[i] = [level*3/2,PokeBattle_Pokemon::EV_LIMIT/6].min
+          pokemon.ev[i] = [level*3/2, Pokemon::EV_LIMIT/6].min
         end
       end
       pokemon.happiness = poke[TPHAPPINESS] if poke[TPHAPPINESS]

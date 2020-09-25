@@ -54,7 +54,7 @@ def pbPurify(pokemon,scene)
   speciesname = PBSpecies.getName(pokemon.species)
   if scene.pbConfirm(_INTL("Would you like to give a nickname to {1}?",speciesname))
     newname = pbEnterPokemonName(_INTL("{1}'s nickname?",speciesname),
-       0,PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE,"",pokemon)
+                                 0, Pokemon::MAX_NAME_SIZE, "", pokemon)
     pokemon.name = newname if newname!=""
   end
 end
@@ -64,11 +64,11 @@ def pbApplyEVGain(pokemon,ev,evgain)
   for i in 0...6
     totalev += pokemon.ev[i]
   end
-  if totalev+evgain>PokeBattle_Pokemon::EV_LIMIT   # Can't exceed overall limit
-    evgain -= totalev+evgain-PokeBattle_Pokemon::EV_LIMIT
+  if totalev+evgain>Pokemon::EV_LIMIT   # Can't exceed overall limit
+    evgain -= totalev+evgain-Pokemon::EV_LIMIT
   end
-  if pokemon.ev[ev]+evgain>PokeBattle_Pokemon::EV_STAT_LIMIT
-    evgain -= totalev+evgain-PokeBattle_Pokemon::EV_STAT_LIMIT
+  if pokemon.ev[ev]+evgain>Pokemon::EV_STAT_LIMIT
+    evgain -= totalev+evgain-Pokemon::EV_STAT_LIMIT
   end
   if evgain>0
     pokemon.ev[ev] += evgain
@@ -231,7 +231,7 @@ end
 #===============================================================================
 # Pokémon class.
 #===============================================================================
-class PokeBattle_Pokemon
+class Pokemon
   attr_writer   :heartgauge
   attr_accessor :shadow
   attr_writer   :hypermode
@@ -398,7 +398,7 @@ class PokeBattle_Battler
   def pbHyperMode
     return if fainted? || !shadowPokemon? || inHyperMode?
     p = self.pokemon
-    if @battle.pbRandom(p.heartgauge)<=PokeBattle_Pokemon::HEARTGAUGESIZE/4
+    if @battle.pbRandom(p.heartgauge)<=Pokemon::HEARTGAUGESIZE/4
       p.hypermode = true
       @battle.pbDisplay(_INTL("{1}'s emotions rose to a fever pitch!\nIt entered Hyper Mode!",self.pbThis))
     end

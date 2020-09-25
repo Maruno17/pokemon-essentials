@@ -10,15 +10,15 @@ def pbBalancedLevelFromBST(species)
 end
 
 def pbTooTall?(pkmn,maxHeightInMeters)
-  species = (pkmn.is_a?(PokeBattle_Pokemon)) ? pkmn.species : pkmn
-  form    = (pkmn.is_a?(PokeBattle_Pokemon)) ? pkmn.form : 0
+  species = (pkmn.is_a?(Pokemon)) ? pkmn.species : pkmn
+  form    = (pkmn.is_a?(Pokemon)) ? pkmn.form : 0
   height = pbGetSpeciesData(species,form,SpeciesHeight)
   return height>(maxHeightInMeters*10).round
 end
 
 def pbTooHeavy?(pkmn,maxWeightInKg)
-  species = (pkmn.is_a?(PokeBattle_Pokemon)) ? pkmn.species : pkmn
-  form    = (pkmn.is_a?(PokeBattle_Pokemon)) ? pkmn.form : 0
+  species = (pkmn.is_a?(Pokemon)) ? pkmn.species : pkmn
+  form    = (pkmn.is_a?(Pokemon)) ? pkmn.form : 0
   weight = pbGetSpeciesData(species,form,SpeciesWeight)
   return weight>(maxWeightInKg*10).round
 end

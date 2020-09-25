@@ -9,7 +9,7 @@ def pbNickname(pokemon)
   speciesname = PBSpecies.getName(pokemon.species)
   if pbConfirmMessage(_INTL("Would you like to give a nickname to {1}?",speciesname))
     helptext = _INTL("{1}'s nickname?",speciesname)
-    newname = pbEnterPokemonName(helptext,0,PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE,"",pokemon)
+    newname = pbEnterPokemonName(helptext, 0, Pokemon::MAX_NAME_SIZE, "", pokemon)
     pokemon.name = newname if newname!=""
   end
 end
@@ -74,7 +74,7 @@ def pbAddPokemon(pokemon,level=nil,seeform=true)
   end
   pokemon = getID(PBSpecies,pokemon)
   if pokemon.is_a?(Integer) && level.is_a?(Integer)
-    pokemon = pbNewPkmn(pokemon,level)
+    pokemon = Pokemon.new(pokemon,level)
   end
   speciesname = PBSpecies.getName(pokemon.species)
   pbMessage(_INTL("\\me[Pkmn get]{1} obtained {2}!\1",$Trainer.name,speciesname))
@@ -87,7 +87,7 @@ def pbAddPokemonSilent(pokemon,level=nil,seeform=true)
   return false if !pokemon || pbBoxesFull?
   pokemon = getID(PBSpecies,pokemon)
   if pokemon.is_a?(Integer) && level.is_a?(Integer)
-    pokemon = pbNewPkmn(pokemon,level)
+    pokemon = Pokemon.new(pokemon,level)
   end
   $Trainer.seen[pokemon.species]  = true
   $Trainer.owned[pokemon.species] = true
@@ -110,7 +110,7 @@ def pbAddToParty(pokemon,level=nil,seeform=true)
   return false if !pokemon || $Trainer.party.length>=6
   pokemon = getID(PBSpecies,pokemon)
   if pokemon.is_a?(Integer) && level.is_a?(Integer)
-    pokemon = pbNewPkmn(pokemon,level)
+    pokemon = Pokemon.new(pokemon,level)
   end
   speciesname = PBSpecies.getName(pokemon.species)
   pbMessage(_INTL("\\me[Pkmn get]{1} obtained {2}!\1",$Trainer.name,speciesname))
@@ -123,7 +123,7 @@ def pbAddToPartySilent(pokemon,level=nil,seeform=true)
   return false if !pokemon || $Trainer.party.length>=6
   pokemon = getID(PBSpecies,pokemon)
   if pokemon.is_a?(Integer) && level.is_a?(Integer)
-    pokemon = pbNewPkmn(pokemon,level)
+    pokemon = Pokemon.new(pokemon,level)
   end
   $Trainer.seen[pokemon.species]  = true
   $Trainer.owned[pokemon.species] = true
@@ -137,7 +137,7 @@ def pbAddForeignPokemon(pokemon,level=nil,ownerName=nil,nickname=nil,ownerGender
   return false if !pokemon || $Trainer.party.length>=6
   pokemon = getID(PBSpecies,pokemon)
   if pokemon.is_a?(Integer) && level.is_a?(Integer)
-    pokemon = pbNewPkmn(pokemon,level)
+    pokemon = Pokemon.new(pokemon,level)
   end
   # Set original trainer to a foreign one (if ID isn't already foreign)
   if pokemon.trainerID==$Trainer.id
@@ -146,7 +146,7 @@ def pbAddForeignPokemon(pokemon,level=nil,ownerName=nil,nickname=nil,ownerGender
     pokemon.otgender  = ownerGender
   end
   # Set nickname
-  pokemon.name = nickname[0,PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE] if nickname && nickname!=""
+  pokemon.name = nickname[0, Pokemon::MAX_NAME_SIZE] if nickname && nickname!=""
   # Recalculate stats
   pokemon.calcStats
   if ownerName
@@ -165,7 +165,7 @@ def pbGenerateEgg(pokemon,text="")
   return false if !pokemon || $Trainer.party.length>=6
   pokemon = getID(PBSpecies,pokemon)
   if pokemon.is_a?(Integer)
-    pokemon = pbNewPkmn(pokemon,EGG_LEVEL)
+    pokemon = Pokemon.new(pokemon,EGG_LEVEL)
   end
   # Get egg steps
   eggSteps = pbGetSpeciesData(pokemon.species,pokemon.form,SpeciesStepsToHatch)
@@ -206,7 +206,7 @@ end
 def pbSeenForm(pkmn,gender=0,form=0)
   $Trainer.formseen     = [] if !$Trainer.formseen
   $Trainer.formlastseen = [] if !$Trainer.formlastseen
-  if pkmn.is_a?(PokeBattle_Pokemon)
+  if pkmn.is_a?(Pokemon)
     gender  = pkmn.gender
     form    = (pkmn.form rescue 0)
     species = pkmn.species

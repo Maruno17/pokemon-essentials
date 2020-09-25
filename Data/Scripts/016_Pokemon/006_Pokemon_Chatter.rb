@@ -1,4 +1,4 @@
-class PokeBattle_Pokemon
+class Pokemon
   attr_accessor :chatter
 end
 

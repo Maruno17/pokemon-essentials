@@ -194,7 +194,7 @@ def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
   opponent = PokeBattle_Trainer.new(trainerName,trainerGender)
   opponent.setForeignID($Trainer)
   yourPokemon = nil; resetmoves = true
-  if newpoke.is_a?(PokeBattle_Pokemon)
+  if newpoke.is_a?(Pokemon)
     newpoke.trainerID = opponent.id
     newpoke.ot        = opponent.name
     newpoke.otgender  = opponent.gender
@@ -206,7 +206,7 @@ def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
       raise _INTL("Species does not exist ({1}).",newpoke) if !hasConst?(PBSpecies,newpoke)
       newpoke = getID(PBSpecies,newpoke)
     end
-    yourPokemon = pbNewPkmn(newpoke,myPokemon.level,opponent)
+    yourPokemon = Pokemon.new(newpoke,myPokemon.level,opponent)
   end
   yourPokemon.name       = nickname
   yourPokemon.obtainMode = 2   # traded

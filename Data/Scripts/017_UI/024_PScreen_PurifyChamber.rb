@@ -212,14 +212,14 @@ class PurifyChamber # German: der Kryptorbis
 
   def debugAddShadow(set,species)
     species=getID(PBSpecies,species)
-    pkmn=pbNewPkmn(species,1)
+    pkmn=Pokemon.new(species,1)
     pkmn.makeShadow
     setShadow(set,pkmn)
   end
 
   def debugAddNormal(set,species)
     species=getID(PBSpecies,species)
-    pkmn=pbNewPkmn(species,1)
+    pkmn=Pokemon.new(species,1)
     insertAfter(set,setCount(set),pkmn)
   end
 
@@ -676,9 +676,9 @@ class Window_PurifyChamberSets < Window_DrawableCommand
          Color.new(0,0,256),@chamber[index].tempo,PurifyChamber.maximumTempo())
     end
     if @chamber.getShadow(index)
-      pbDrawGauge(self.contents,Rect.new(rect.x+16,rect.y+18,48,8),
-         Color.new(192,0,256),@chamber.getShadow(index).heartgauge,
-         PokeBattle_Pokemon::HEARTGAUGESIZE)
+      pbDrawGauge(self.contents, Rect.new(rect.x+16,rect.y+18,48,8),
+                  Color.new(192,0,256), @chamber.getShadow(index).heartgauge,
+                  Pokemon::HEARTGAUGESIZE)
     end
     pbDrawTextPositions(self.contents,textpos)
   end
@@ -964,9 +964,9 @@ class PurifyChamberSetView < SpriteWrapper
       textpos.push([_INTL("FLOW"),2+@info.bitmap.width/2,24,0,
          Color.new(248,248,248),Color.new(128,128,128)])
       # draw heart gauge
-      pbDrawGauge(@info.bitmap,Rect.new(@info.bitmap.width*3/4,8,@info.bitmap.width*1/4,8),
-         Color.new(192,0,256),pkmn.heartgauge,
-         PokeBattle_Pokemon::HEARTGAUGESIZE)
+      pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width*3/4,8,@info.bitmap.width*1/4,8),
+                  Color.new(192,0,256), pkmn.heartgauge,
+                  Pokemon::HEARTGAUGESIZE)
       # draw flow gauge
       pbDrawGauge(@info.bitmap,Rect.new(@info.bitmap.width*3/4,24+8,@info.bitmap.width*1/4,8),
          Color.new(0,0,248),@chamber.chamberFlow(@set),6)

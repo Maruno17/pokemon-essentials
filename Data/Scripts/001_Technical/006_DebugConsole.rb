@@ -48,6 +48,7 @@ module Console
     @apiSetConsoleTitle              = Win32API.new("kernel32","SetConsoleTitle","p","s")
     access = (GENERIC_READ | GENERIC_WRITE)
     sharemode = (FILE_SHARE_READ | FILE_SHARE_WRITE)
+    AllocConsole()
     @bufferHandle = CreateConsoleScreenBuffer(access,sharemode,CONSOLE_TEXTMODE_BUFFER)
     f = File.open("Game.ini")
     lines = f.readlines()

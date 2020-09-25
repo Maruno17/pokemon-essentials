@@ -514,12 +514,12 @@ module TrainerPokemonProperty
        [_INTL("Form"),LimitProperty2.new(999),_INTL("Form of the Pokémon.")],
        [_INTL("Shiny"),BooleanProperty2,_INTL("If set to true, the Pokémon is a different-colored Pokémon.")],
        [_INTL("Nature"),NatureProperty,_INTL("Nature of the Pokémon.")],
-       [_INTL("IVs"),IVsProperty.new(PokeBattle_Pokemon::IV_STAT_LIMIT),_INTL("Individual values for each of the Pokémon's stats.")],
+       [_INTL("IVs"), IVsProperty.new(Pokemon::IV_STAT_LIMIT), _INTL("Individual values for each of the Pokémon's stats.")],
        [_INTL("Happiness"),LimitProperty2.new(255),_INTL("Happiness of the Pokémon (0-255).")],
        [_INTL("Nickname"),StringProperty,_INTL("Name of the Pokémon.")],
        [_INTL("Shadow"),BooleanProperty2,_INTL("If set to true, the Pokémon is a Shadow Pokémon.")],
        [_INTL("Ball"),BallProperty.new(oldsetting),_INTL("The kind of Poké Ball the Pokémon is kept in.")],
-       [_INTL("EVs"),EVsProperty.new(PokeBattle_Pokemon::EV_STAT_LIMIT),_INTL("Effort values for each of the Pokémon's stats.")]
+       [_INTL("EVs"), EVsProperty.new(Pokemon::EV_STAT_LIMIT), _INTL("Effort values for each of the Pokémon's stats.")]
     ]
     pbPropertyList(settingname,oldsetting,properties,false)
     return nil if !oldsetting[TPSPECIES] || oldsetting[TPSPECIES]==0
@@ -741,7 +741,7 @@ def pbPokemonEditor
   metrics       = pbLoadSpeciesMetrics
   selection = 0
   species = [
-     [_INTL("Name"),LimitStringProperty.new(PokeBattle_Pokemon::MAX_POKEMON_NAME_SIZE),_INTL("Name of the Pokémon.")],
+     [_INTL("Name"), LimitStringProperty.new(Pokemon::MAX_NAME_SIZE), _INTL("Name of the Pokémon.")],
      [_INTL("InternalName"),ReadOnlyProperty,_INTL("Internal name of the Pokémon.")],
      [_INTL("Type1"),TypeProperty,_INTL("Pokémon's type. If same as Type2, this Pokémon has a single type.")],
      [_INTL("Type2"),TypeProperty,_INTL("Pokémon's type. If same as Type1, this Pokémon has a single type.")],

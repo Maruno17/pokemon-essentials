@@ -220,7 +220,7 @@ def pbRoamingPokemonBattle(species, level)
   # level if it doesn't already exist
   idxRoamer = $PokemonTemp.roamerIndex
   if !$PokemonGlobal.roamPokemon[idxRoamer] ||
-     !$PokemonGlobal.roamPokemon[idxRoamer].is_a?(PokeBattle_Pokemon)
+     !$PokemonGlobal.roamPokemon[idxRoamer].is_a?(Pokemon)
     $PokemonGlobal.roamPokemon[idxRoamer] = pbGenerateWildPokemon(species,level,true)
   end
   # Set some battle rules

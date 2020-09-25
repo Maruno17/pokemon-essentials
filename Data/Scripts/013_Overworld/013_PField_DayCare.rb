@@ -205,7 +205,7 @@ def pbDayCareGenerateEgg
                    getConst(PBSpecies,:ILLUMISE)][rand(2)]
   end
   # Generate egg
-  egg = pbNewPkmn(babyspecies,EGG_LEVEL)
+  egg = Pokemon.new(babyspecies,EGG_LEVEL)
   # Randomise personal ID
   pid = rand(65536)
   pid |= (rand(65536)<<16)

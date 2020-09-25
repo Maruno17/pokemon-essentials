@@ -2,7 +2,7 @@
 # Instances of this class are individual Pokémon.
 # The player's party Pokémon are stored in the array $Trainer.party.
 #===============================================================================
-class PokeBattle_Pokemon
+class Pokemon
   # @return [String] the nickname of this Pokémon
   attr_accessor :name
   # @return [Integer] this Pokémon's national Pokédex number
@@ -55,7 +55,7 @@ class PokeBattle_Pokemon
   attr_reader   :statusCount
   # Another Pokémon which has been fused with this Pokémon (or nil if there is none).
   # Currently only used by Kyurem, to record a fused Reshiram or Zekrom.  
-  # @return [PokeBattle_Pokemon, nil] the Pokémon fused into this one (nil if there is none)
+  # @return [Pokemon, nil] the Pokémon fused into this one (nil if there is none)
   attr_accessor :fused
   # @return [Array<Integer>] an array of IV values for HP, Atk, Def, Speed, Sp. Atk and Sp. Def
   attr_accessor :iv
@@ -96,7 +96,7 @@ class PokeBattle_Pokemon
   # Otherwise returns 0.
   # @return [Integer] the map ID where egg was hatched (0 by default)
   attr_accessor :hatchedMap
-  # @param value [Integer] new language 
+  # @param value [Integer] new language
   attr_writer   :language
   # @return [String] the name of the original trainer
   attr_accessor :ot
@@ -109,13 +109,13 @@ class PokeBattle_Pokemon
   attr_writer   :cool,:beauty,:cute,:smart,:tough,:sheen
 
   # Max total IVs
-  IV_STAT_LIMIT         = 31
+  IV_STAT_LIMIT = 31
   # Max total EVs
-  EV_LIMIT              = 510
+  EV_LIMIT      = 510
   # Max EVs that a single stat can have
-  EV_STAT_LIMIT         = 252
+  EV_STAT_LIMIT = 252
   # Maximum length a Pokémon's nickname can be
-  MAX_POKEMON_NAME_SIZE = 10
+  MAX_NAME_SIZE = 10
 
   #=============================================================================
   # Ownership, obtained information
@@ -780,7 +780,7 @@ class PokeBattle_Pokemon
   #=============================================================================
 
   # Sets this Pokémon's status. See {PBStatuses} for all possible status effects.
-  # @param new_status [Integer, Symbol, String] status to set (from PBStatuses)
+  # @param value [Integer, Symbol, String] status to set (from {PBStatuses})
   def status=(value)
     new_status = getID(PBStatuses, value)
     if !new_status
@@ -1044,7 +1044,7 @@ class PokeBattle_Pokemon
   #=============================================================================
 
   # Creates a copy of this Pokémon and returns it.
-  # @return [PokeBattle_Pokemon] a copy of this Pokémon
+  # @return [Pokemon] a copy of this Pokémon
   def clone
     ret = super
     ret.iv      = @iv.clone
@@ -1059,9 +1059,9 @@ class PokeBattle_Pokemon
   # Creates a new Pokémon object.
   # @param species [Integer, Symbol, String] Pokémon species
   # @param level [Integer] Pokémon level
-  # @param player [PokeBattle_Trainer] object for the original trainer
+  # @param owner [PokeBattle_Trainer] object for the original trainer
   # @param withMoves [Boolean] whether the Pokémon should have moves
-  def initialize(species, level, player = nil, withMoves = true)
+  def initialize(species, level, owner = nil, withMoves = true)
     ospecies = species.to_s
     species = getID(PBSpecies, species)
     cname = getConstantName(PBSpecies, species) rescue nil
@@ -1090,11 +1090,11 @@ class PokeBattle_Pokemon
     @ribbons      = []
     @ballused     = 0
     @eggsteps     = 0
-    if player
-      @trainerID  = player.id
-      @ot         = player.name
-      @otgender   = player.gender
-      @language   = player.language
+    if owner
+      @trainerID  = owner.id
+      @ot         = owner.name
+      @otgender   = owner.gender
+      @language   = owner.language
     else
       @trainerID  = 0
       @ot         = ""
@@ -1120,18 +1120,3 @@ class PokeBattle_Pokemon
     end
   end
 end
-
-#===============================================================================
-#
-#===============================================================================
-
-# Creates a new Pokémon object.
-# @param species [Integer, Symbol, String] Pokémon species
-# @param level [Integer] Pokémon level
-# @param owner [PokeBattle_Trainer] object for the original trainer
-# @param withMoves [Boolean] whether the Pokémon should have moves
-def pbNewPkmn(species, level, owner = $Trainer, withMoves = true)
-  return PokeBattle_Pokemon.new(species, level, owner, withMoves)
-end
-alias pbGenPkmn pbNewPkmn
-alias pbGenPoke pbNewPkmn

@@ -231,7 +231,7 @@ def pbWildBattleCore(*args)
   foeParty = []
   sp = nil
   for arg in args
-    if arg.is_a?(PokeBattle_Pokemon)
+    if arg.is_a?(Pokemon)
       foeParty.push(arg)
     elsif arg.is_a?(Array)
       species = getID(PBSpecies,arg[0])

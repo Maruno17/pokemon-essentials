@@ -159,7 +159,7 @@ class PBPokemon
   end
 
   def createPokemon(level,iv,trainer)
-    pokemon=pbNewPkmn(@species,level,trainer,false)
+    pokemon=Pokemon.new(@species,level,trainer,false)
     pokemon.setItem(@item)
     pokemon.personalID=rand(65536)
     pokemon.personalID|=rand(65536)<<8
@@ -175,7 +175,7 @@ class PBPokemon
     for i in 0...6
       evcount+=1 if ((@ev&(1<<i))!=0)
     end
-    evperstat=(evcount==0) ? 0 : PokeBattle_Pokemon::EV_LIMIT/evcount
+    evperstat=(evcount==0) ? 0 : Pokemon::EV_LIMIT/evcount
     for i in 0...6
       pokemon.iv[i]=iv
       pokemon.ev[i]=((@ev&(1<<i))!=0) ? evperstat : 0

@@ -323,7 +323,7 @@ class PokeBattle_Battler
       @battle.pbDisplay(_INTL("When the flame touched the powder on the Pokémon, it exploded!"))
       user.lastMoveFailed = true
       w = @battle.pbWeather
-      if w!=PBWeather.RAINDANCE && w!=PBWeather.HEAVYRAIN && user.takesIndirectDamage?
+      if w!=PBWeather::Rain && w!=PBWeather::HeavyRain && user.takesIndirectDamage?
         oldHP = user.hp
         user.pbReduceHP((user.totalhp/4.0).round,false)
         user.pbFaint if user.fainted?

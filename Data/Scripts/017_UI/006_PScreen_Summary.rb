@@ -362,7 +362,7 @@ class PokemonSummary_Scene
     dexNumShadow = (@pokemon.shiny?) ? Color.new(224,152,144) : Color.new(176,176,176)
     # If a Shadow Pokémon, draw the heart gauge area and bar
     if @pokemon.shadowPokemon?
-      shadowfract = @pokemon.heartgauge*1.0/PokeBattle_Pokemon::HEARTGAUGESIZE
+      shadowfract = @pokemon.heartgauge*1.0/Pokemon::HEARTGAUGESIZE
       imagepos = [
          ["Graphics/Pictures/Summary/overlay_shadow",224,240],
          ["Graphics/Pictures/Summary/overlay_shadowbar",242,280,0,0,(shadowfract*248).floor,-1]

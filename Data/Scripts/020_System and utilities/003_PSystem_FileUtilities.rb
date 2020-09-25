@@ -459,7 +459,7 @@ def pbPlayCry(pokemon,volume=90,pitch=nil)
   return if !pokemon
   if pokemon.is_a?(Numeric) || pokemon.is_a?(String) || pokemon.is_a?(Symbol)
     pbPlayCrySpecies(pokemon,0,volume,pitch)
-  elsif pokemon.is_a?(PokeBattle_Pokemon)
+  elsif pokemon.is_a?(Pokemon)
     pbPlayCryPokemon(pokemon,volume,pitch)
   end
 end
