@@ -121,6 +121,44 @@ class Pokemon
   # Ownership, obtained information
   #=============================================================================
 
+  # Stores information on a Pokémon's owner.
+  class Owner
+    # @return [Integer] the ID of the owner
+    attr_reader :id
+    # @return [String] the name of the owner
+    attr_reader :name
+    # @return [0, 1, 2] the gender of the owner (0 = male, 1 = female, 2 = unknown)
+    attr_reader :gender
+    # @return [Integer] the language of the owner (see {pbGetLanguage} for language IDs)
+    attr_reader :language
+
+    # @param id [Integer] the ID of the owner
+    # @param name [String] the name of the owner
+    # @param gender [0, 1, 2] the gender of the owner (0 = male, 1 = female, 2 = unknown)
+    # @param language [Integer] the language of the owner (see {pbGetLanguage} for language IDs)
+    def initialize(id, name, gender, language)
+      @id = id
+      @name = name
+      @gender = gender
+      @language = language
+    end
+
+    # Returns a new Owner object populated with values taken from +trainer+.
+    # @param trainer [PokeBattle_Trainer] trainer object to read data from
+    # @return [Owner] new owner object
+    def self.new_from_trainer(trainer)
+      return new(trainer.id, trainer.name, trainer.gender, trainer.language)
+    end
+
+    # @return [Integer] the public portion of the owner's ID
+    def public_id
+      return @id & 0xFFFF
+    end
+  end
+
+  # @return [Owner] this Pokémon's owner
+  attr_reader :owner
+
   # @return [Integer] the public portion of the original trainer's ID
   def publicID
     return @trainerID & 0xFFFF
@@ -1090,15 +1128,10 @@ class Pokemon
     @ribbons      = []
     @ballused     = 0
     @eggsteps     = 0
-    if owner
-      @trainerID  = owner.id
-      @ot         = owner.name
-      @otgender   = owner.gender
-      @language   = owner.language
+    if owner.is_a?(PokeBattle_Trainer)
+      @owner = Owner.new_from_trainer(owner)
     else
-      @trainerID  = 0
-      @ot         = ""
-      @otgender   = 2
+      @owner = Owner.new(0, '', 2, 2)
     end
     @obtainMap    = ($game_map) ? $game_map.map_id : 0
     @obtainText   = nil
