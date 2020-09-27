@@ -131,7 +131,7 @@ class Game_Player < Game_Character
   def turnGeneric(dir)
     old_direction = @direction
     super
-    if @direction != oldDirection && !@move_route_forcing && !pbMapInterpreterRunning?
+    if @direction != old_direction && !@move_route_forcing && !pbMapInterpreterRunning?
       Events.onChangeDirection.trigger(self, self)
     end
   end
