@@ -197,6 +197,16 @@ class Game_Player < Game_Character
     return nil
   end
 
+  def turnGeneric(dir)
+    return if @direction_fix
+    oldDirection = @direction
+    @direction = dir
+    @stop_count = 0
+    pbCheckEventTriggerAfterTurning if dir != oldDirection
+    return if $game_player.move_route_forcing || pbMapInterpreterRunning?
+    Events.onChangeDirection.trigger(self,self) if @direction != oldDirection
+  end
+
   #-----------------------------------------------------------------------------
   # * Passable Determinants
   #     x : x-coordinate
