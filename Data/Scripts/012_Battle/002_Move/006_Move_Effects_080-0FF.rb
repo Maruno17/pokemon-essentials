@@ -1140,7 +1140,7 @@ class PokeBattle_Move_0AE < PokeBattle_Move
     return false
   end
 
-  def pbEffectGeneral(user)
+  def pbEffectAgainstTarget(user,target)
     user.pbUseMoveSimple(target.lastRegularMoveUsed,target.index)
   end
 
