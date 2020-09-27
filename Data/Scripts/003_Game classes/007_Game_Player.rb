@@ -23,7 +23,7 @@ class Game_Player < Game_Character
   end
 
   def bush_depth
-    return 0 if @tile_id > 0 or @always_on_top
+    return 0 if @tile_id > 0 || @always_on_top
     xbehind = (@direction==4) ? @x+1 : (@direction==6) ? @x-1 : @x
     ybehind = (@direction==8) ? @y+1 : (@direction==2) ? @y-1 : @y
     # Both current tile and previous tile are on the same map; just return super
@@ -47,7 +47,7 @@ class Game_Player < Game_Character
       behindmap = newbehind[0]; behindx = newbehind[1]; behindy = newbehind[2]
     end
     # Return bush depth
-    if @jump_count <= 0
+    if !jumping?
       return 32 if heremap.deepBush?(herex, herey) && behindmap.deepBush?(behindx, behindy)
       return 12 if heremap.bush?(herex, herey) && !moving?
     end
