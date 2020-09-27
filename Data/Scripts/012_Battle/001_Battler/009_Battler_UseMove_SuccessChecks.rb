@@ -17,7 +17,7 @@ class PokeBattle_Battler
       return false
     end
     # Stuff Cheeks
-    if move.function=="204" && (self.item==0 || !pbIsBerry?(self.item))
+    if move.function=="204" && (self.item && !pbIsBerry?(self.item))
       if showMessages
         msg = _INTL("{1} can't use that move because it doesn't have any berry!",pbThis,move.name)
         (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)

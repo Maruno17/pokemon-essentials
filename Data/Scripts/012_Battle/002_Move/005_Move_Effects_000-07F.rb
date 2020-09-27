@@ -131,11 +131,13 @@ class PokeBattle_Move_008 < PokeBattle_ParalysisMove
   def hitsFlyingTargets?; return true; end
 
   def pbBaseAccuracy(user,target)
-    case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
-      return 50 if !user.hasActiveItem?(:UTILITYUMBRELLA)
-    when PBWeather::Rain, PBWeather::HeavyRain
-      return 0 if !user.hasActiveItem?(:UTILITYUMBRELLA)
+    if !user.hasActiveItem?(:UTILITYUMBRELLA)
+      case @battle.pbWeather
+      when PBWeather::Sun, PBWeather::HarshSun
+        return 50
+      when PBWeather::Rain, PBWeather::HeavyRain
+        return 0
+      end
     end
     return super
   end
@@ -321,11 +323,13 @@ class PokeBattle_Move_015 < PokeBattle_ConfuseMove
   def hitsFlyingTargets?; return true; end
 
   def pbBaseAccuracy(user,target)
-    case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
-      return 50 if !user.hasActiveItem?(:UTILITYUMBRELLA)
-    when PBWeather::Rain, PBWeather::HeavyRain
-      return 0 if !user.hasActiveItem?(:UTILITYUMBRELLA)
+    if !user.hasActiveItem?(:UTILITYUMBRELLA)
+      case @battle.pbWeather
+      when PBWeather::Sun, PBWeather::HarshSun
+        return 50
+      when PBWeather::Rain, PBWeather::HeavyRain
+        return 0
+      end
     end
     return super
   end

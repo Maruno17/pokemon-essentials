@@ -8,6 +8,8 @@ https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.365
 Everything in "Changes to old Mechanics" except Dynamic Turn Order by Golisopod User
 
 ##### Need PBS #####
+Moves.txt - TheToxic
+Pokemon.txt (for Gen 8) - TheToxic
 
 ##### Evolution methods that need code yet #####
 Milcery
@@ -20,7 +22,7 @@ Yamask                   by WolfPP adapted by Aioross improved by Golisopod User
 ##### Forms Coded #####
 Eiscue                   by Aioross
 Indeedee                 by KyureJL improved by Vendily
-Zamazenta / Zacian       by KyureJL completed by Aioross
+Zamazenta / Zacian       by KyureJL completed by Aioross  Fixed by Golisopod User 
 Galarian Darmanitan      by Aioross
 Cramorant                by Aioross
 Morpeko                  by Aioross
@@ -33,7 +35,7 @@ Key Stone                by KyureJL
 Blunder Policy           by Wolfpp adapted by Aioross
 Heavy-Duty Boots         by DarrylBD99
 Throat Spray             by Aioross
-Utility Umbrella         by KyureJL && Aioross
+Utility Umbrella         by KyureJL && Aioross, Fixes by Golisopod User
 Exp. Candy XS/S/M/L/XL   by Aioross
 Room Service             by Aioross
 Eject Pack               by Aioross
@@ -48,7 +50,7 @@ Decorate                 by KyureJL improved by Vendily
 Aura Wheel               by Golisopod User
 Snipe Shot               by Aioross
 Clagorous Soul           by WolfPP adapted by Aioross
-Court Change             by WolfPP adapted by Aioross
+Court Change             by WolfPP adapted by Golisopod User
 Magic Powder             by Aioross
 Burning Jealousy         by HM100 adapted by KyureJL improved by lolface
 Jaw Lock                 by Aioross
@@ -57,7 +59,7 @@ No Retreat               by lolface improved by Aioross
 Obstruct                 by WolfPP adapted by Aioross
 Octolock                 by lolface improved by Aioross fixed by Vendily
 Snap Trap                by lolface
-Stuff Cheeks             by WolfPP adapted by Aioross
+Stuff Cheeks             by WolfPP adapted by Aioross, Fixed by Golisopod User
 Tar Shot                 by Aioross
 Teatime                  by Aioross
 Expanding Force          by lolface fixed by Aioross
@@ -102,7 +104,7 @@ Wandering Spirit         by Vendily
 Perish Body              by Vendily improved by WolfPP and Aioross
 Mimicry                  by Vendily
 Gulp Missile             by WolfPP adapted by Aioross
-Mirror Armor             by Aioross and Golisopod User fixed by Aioross
+Mirror Armor             by Aioross and Golisopod User
 Neutralizing Gas         by Vendily fixed by Aioross
 
 ##### Others Coded #####

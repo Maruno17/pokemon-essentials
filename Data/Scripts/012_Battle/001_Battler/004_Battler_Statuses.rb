@@ -52,7 +52,6 @@ class PokeBattle_Battler
       return false
     end
     # Weather immunity
-    # Weather immunity
     if newStatus==PBStatuses::FROZEN &&
        (@battle.pbWeather==PBWeather::Sun || @battle.pbWeather==PBWeather::HarshSun) &&
        !hasActiveItem?(:UTILITYUMBRELLA)

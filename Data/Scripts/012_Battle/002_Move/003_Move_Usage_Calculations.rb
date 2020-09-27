@@ -389,24 +389,24 @@ class PokeBattle_Move
       multipliers[FINAL_DMG_MULT] *= 0.75
     end
     # Weather
-    case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
-      if isConst?(type,PBTypes,:FIRE)
-        multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round if
-        !user.hasActiveItem?(:UTILITYUMBRELLA)
-      elsif isConst?(type,PBTypes,:WATER)
-        multipliers[FINAL_DMG_MULT] /= 2 if !user.hasActiveItem?(:UTILITYUMBRELLA)
-      end
-    when PBWeather::Rain, PBWeather::HeavyRain
-      if isConst?(type,PBTypes,:FIRE)
-        multipliers[FINAL_DMG_MULT] /= 2 if !user.hasActiveItem?(:UTILITYUMBRELLA)
-      elsif isConst?(type,PBTypes,:WATER)
-        multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round if
-        !user.hasActiveItem?(:UTILITYUMBRELLA)
-      end
-    when PBWeather::Sandstorm
-      if target.pbHasType?(:ROCK) && specialMove? && @function!="122"   # Psyshock
-        multipliers[DEF_MULT] *= 1.5
+    if !user.hasActiveItem?(:UTILITYUMBRELLA)
+      case @battle.pbWeather
+      when PBWeather::Sun, PBWeather::HarshSun
+        if isConst?(type,PBTypes,:FIRE)
+          multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+        elsif isConst?(type,PBTypes,:WATER)
+          multipliers[FINAL_DMG_MULT] /= 2
+        end
+      when PBWeather::Rain, PBWeather::HeavyRain
+        if isConst?(type,PBTypes,:FIRE)
+          multipliers[FINAL_DMG_MULT] /= 2
+        elsif isConst?(type,PBTypes,:WATER)
+          multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+        end
+      when PBWeather::Sandstorm
+        if target.pbHasType?(:ROCK) && specialMove? && @function!="122"   # Psyshock
+          multipliers[DEF_MULT] *= 1.5
+        end
       end
     end
     # Critical hits

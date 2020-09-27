@@ -89,13 +89,20 @@ class PokeBattle_Battler
     @status       = pkmn.status
     @statusCount  = pkmn.statusCount
     @pokemon      = pkmn
-	self.yamaskhp = 0
-	self.criticalHits = 0
+	  self.yamaskhp = 0
+	  self.criticalHits = 0
     @pokemonIndex = idxParty
     @participants = []   # Participants earn Exp. if this battler is defeated
     @moves        = []
     pkmn.moves.each_with_index do |m,i|
       @moves[i] = PokeBattle_Move.pbFromPBMove(@battle,m)
+    end
+    if isSpecies?(:ZACIAN) || isSpecies?(:ZAMAZENTA) && @form == 1
+      for i in 0...@moves.length
+        if isConst?(@moves[i].id,PBMoves,:IRONHEAD)
+          @moves[i] = isSpecies?(:ZACIAN) ? PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(getConst(PBMoves,:BEHEMOTHBLADE))) : PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(getConst(PBMoves,:BEHEMOTHBASH)))
+        end
+      end
     end
     @iv           = pkmn.iv.clone
   end
@@ -141,7 +148,7 @@ class PokeBattle_Battler
       @effects[PBEffects::Substitute]        = 0
       @effects[PBEffects::Telekinesis]       = 0
       @effects[PBEffects::JawLock]           = false
-      @effects[PBEffects::JawLockUser]       = -1 
+      @effects[PBEffects::JawLockUser]       = -1
 	  @effects[PBEffects::NoRetreat]         = false
     end
     @fainted               = (@hp==0)
@@ -221,13 +228,13 @@ class PokeBattle_Battler
       next if b.effects[PBEffects::OctolockUser]!=@index
       b.effects[PBEffects::Octolock]     = false
       b.effects[PBEffects::OctolockUser] = -1
-    end   
+    end
     @battle.eachBattler do |b|   # Other battlers lose their lock-on against self - Jawlock
       next if !b.effects[PBEffects::JawLock]
       next if b.effects[PBEffects::JawLockUser]!=@index
       b.effects[PBEffects::Jawlock]     = false
       b.effects[PBEffects::JawLockUser] = -1
-    end 
+    end
     @effects[PBEffects::MagicBounce]         = false
     @effects[PBEffects::MagicCoat]           = false
     @effects[PBEffects::MeanLook]            = -1
@@ -299,7 +306,7 @@ class PokeBattle_Battler
     @effects[PBEffects::GorillaTactics]      = -1
     @effects[PBEffects::BallFetch]           = 0
     @effects[PBEffects::LashOut]             = false
-    @effects[PBEffects::BurningJealousy]     = false 
+    @effects[PBEffects::BurningJealousy]     = false
 	@effects[PBEffects::Obstruct]            = false
 	@effects[PBEffects::TarShot]             = false
 	@effects[PBEffects::BlunderPolicy]       = false

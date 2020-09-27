@@ -1970,26 +1970,24 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:PICKPOCKET,
 
 BattleHandlers::EORWeatherAbility.add(:DRYSKIN,
   proc { |ability,weather,battler,battle|
-  if !battler.hasActiveItem?(:UTILITYUMBRELLA)
-    case weather
-    when PBWeather::Sun, PBWeather::HarshSun
-      battle.pbShowAbilitySplash(battler)
-      battle.scene.pbDamageAnimation(battler)
-      battler.pbReduceHP(battler.totalhp/8,false)
-      battle.pbDisplay(_INTL("{1} was hurt by the sunlight!",battler.pbThis))
-      battle.pbHideAbilitySplash(battler)
-      battler.pbItemHPHealCheck
-    when PBWeather::Rain, PBWeather::HeavyRain
-      next if !battler.canHeal?
-      battle.pbShowAbilitySplash(battler)
-      battler.pbRecoverHP(battler.totalhp/8)
-      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-        battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
-      else
-        battle.pbDisplay(_INTL("{1}'s {2} restored its HP.",battler.pbThis,battler.abilityName))
-      end
-      battle.pbHideAbilitySplash(battler)
+  case weather
+  when PBWeather::Sun, PBWeather::HarshSun
+    battle.pbShowAbilitySplash(battler)
+    battle.scene.pbDamageAnimation(battler)
+    battler.pbReduceHP(battler.totalhp/8,false)
+    battle.pbDisplay(_INTL("{1} was hurt by the sunlight!",battler.pbThis))
+    battle.pbHideAbilitySplash(battler)
+    battler.pbItemHPHealCheck
+  when PBWeather::Rain, PBWeather::HeavyRain
+    next if !battler.canHeal?
+    battle.pbShowAbilitySplash(battler)
+    battler.pbRecoverHP(battler.totalhp/8)
+    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+      battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
+    else
+      battle.pbDisplay(_INTL("{1}'s {2} restored its HP.",battler.pbThis,battler.abilityName))
     end
+    battle.pbHideAbilitySplash(battler)
   end
   }
 )
@@ -2011,32 +2009,28 @@ BattleHandlers::EORWeatherAbility.add(:ICEBODY,
 
 BattleHandlers::EORWeatherAbility.add(:RAINDISH,
   proc { |ability,weather,battler,battle|
-  if !battler.hasActiveItem?(:UTILITYUMBRELLA)
-    next unless weather==PBWeather::Rain || weather==PBWeather::HeavyRain
-    next if !battler.canHeal?
-    battle.pbShowAbilitySplash(battler)
-    battler.pbRecoverHP(battler.totalhp/16)
-    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-      battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
-    else
-      battle.pbDisplay(_INTL("{1}'s {2} restored its HP.",battler.pbThis,battler.abilityName))
-    end
-    battle.pbHideAbilitySplash(battler)
+  next unless weather==PBWeather::Rain || weather==PBWeather::HeavyRain
+  next if !battler.canHeal?
+  battle.pbShowAbilitySplash(battler)
+  battler.pbRecoverHP(battler.totalhp/16)
+  if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+    battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
+  else
+    battle.pbDisplay(_INTL("{1}'s {2} restored its HP.",battler.pbThis,battler.abilityName))
   end
+  battle.pbHideAbilitySplash(battler)
   }
 )
 
 BattleHandlers::EORWeatherAbility.add(:SOLARPOWER,
   proc { |ability,weather,battler,battle|
-  if !battler.hasActiveItem?(:UTILITYUMBRELLA)
-    next unless weather==PBWeather::Sun || weather==PBWeather::HarshSun
-    battle.pbShowAbilitySplash(battler)
-    battle.scene.pbDamageAnimation(battler)
-    battler.pbReduceHP(battler.totalhp/8,false)
-    battle.pbDisplay(_INTL("{1} was hurt by the sunlight!",battler.pbThis))
-    battle.pbHideAbilitySplash(battler)
-    battler.pbItemHPHealCheck
-  end
+  next unless weather==PBWeather::Sun || weather==PBWeather::HarshSun
+  battle.pbShowAbilitySplash(battler)
+  battle.scene.pbDamageAnimation(battler)
+  battler.pbReduceHP(battler.totalhp/8,false)
+  battle.pbDisplay(_INTL("{1} was hurt by the sunlight!",battler.pbThis))
+  battle.pbHideAbilitySplash(battler)
+  battler.pbItemHPHealCheck
   }
 )
 
@@ -2627,20 +2621,31 @@ BattleHandlers::AbilityOnSwitchIn.add(:DAUNTLESSSHIELD,
 
 BattleHandlers::AbilityOnSwitchIn.add(:SCREENCLEANER,
   proc { |ability,battler,battle|
+    target=battler
     battle.pbShowAbilitySplash(battler)
-    for side in 0...2
-      if battle.sides[side].effects[PBEffects::LightScreen]>0
-        battle.sides[side].effects[PBEffects::LightScreen] = 0
-        battle.pbDisplay(_INTL("{1}'s Light Screen wore off!",@battlers[side].pbTeam))
-      end
-      if battle.sides[side].effects[PBEffects::Reflect]>0
-        battle.sides[side].effects[PBEffects::Reflect] = 0
-        battle.pbDisplay(_INTL("{1}'s Reflect wore off!",@battlers[side].pbOpposingTeam))
-      end
-      if battle.sides[side].effects[PBEffects::AuroraVeil]>0
-        battle.sides[side].effects[PBEffects::AuroraVeil] = 0
-        battle.pbDisplay(_INTL("{1}'s Aurora Veil wore off!",@battlers[side].pbOpposingTeam))
-      end
+    if target.pbOwnSide.effects[PBEffects::AuroraVeil]>0
+      target.pbOwnSide.effects[PBEffects::AuroraVeil] = 0
+      battle.pbDisplay(_INTL("{1}'s Aurora Veil wore off!",target.pbTeam))
+    end
+    if target.pbOwnSide.effects[PBEffects::LightScreen]>0
+      target.pbOwnSide.effects[PBEffects::LightScreen] = 0
+      battle.pbDisplay(_INTL("{1}'s Light Screen wore off!",target.pbTeam))
+    end
+    if target.pbOwnSide.effects[PBEffects::Reflect]>0
+      target.pbOwnSide.effects[PBEffects::Reflect] = 0
+      battle.pbDisplay(_INTL("{1}'s Reflect wore off!",target.pbTeam))
+    end
+    if target.pbOpposingSide.effects[PBEffects::AuroraVeil]>0
+      target.pbOpposingSide.effects[PBEffects::AuroraVeil] = 0
+      battle.pbDisplay(_INTL("{1}'s Aurora Veil wore off!",target.pbOpposingTeam))
+    end
+    if target.pbOpposingSide.effects[PBEffects::LightScreen]>0
+      target.pbOpposingSide.effects[PBEffects::LightScreen] = 0
+      battle.pbDisplay(_INTL("{1}'s Light Screen wore off!",target.pbOpposingTeam))
+    end
+    if target.pbOwnSide.effects[PBEffects::Reflect]>0
+      target.pbOpposingSide.effects[PBEffects::Reflect] = 0
+      battle.pbDisplay(_INTL("{1}'s Reflect wore off!",target.pbOpposingTeam))
     end
     battle.pbHideAbilitySplash(battler)
   }
@@ -2664,7 +2669,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:NEUTRALIZINGGAS,
   proc { |ability,battler,battle|
     next if battle.field.effects[PBEffects::NeutralizingGas]
     battle.pbShowAbilitySplash(battler)
-    battle.pbDisplay(_INTL("{1}'s gas nullified all abilities!",pbThis))
+    battle.pbDisplay(_INTL("{1}'s gas nullified all abilities!",battler.pbThis))
     battle.field.effects[PBEffects::NeutralizingGas] = true
     battle.pbHideAbilitySplash(battler)
   }
@@ -2682,7 +2687,7 @@ BattleHandlers::AbilityOnSwitchOut.add(:NATURALCURE,
 
 BattleHandlers::AbilityOnSwitchOut.add(:REGENERATOR,
   proc { |ability,battler,endOfBattle|
-    next if !endOfBattle
+    next if endOfBattle
     PBDebug.log("[Ability triggered] #{battler.pbThis}'s #{battler.abilityName}")
     battler.pbRecoverHP(battler.totalhp/3,false,false)
   }

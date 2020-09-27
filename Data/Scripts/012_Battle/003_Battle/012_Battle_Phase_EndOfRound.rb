@@ -75,6 +75,7 @@ class PokeBattle_Battle
     priority.each do |b|
       # Weather-related abilities
       if b.abilityActive?
+        next if b.hasActiveItem?(:UTILITYUMBRELLA) && !b.hasActiveAbility(:ICEBODY)
         BattleHandlers.triggerEORWeatherAbility(b.ability,curWeather,b,self)
         b.pbFaint if b.fainted?
       end
@@ -406,7 +407,7 @@ class PokeBattle_Battle
       if b.pbCanLowerStatStage?(PBStats::SPDEF,b,self)
         b.pbLowerStatStage(PBStats::SPDEF,1,b)
       end
-    end  
+    end
     # Trapping attacks (Bind/Clamp/Fire Spin/Magma Storm/Sand Tomb/Whirlpool/Wrap)
     priority.each do |b|
       next if b.fainted? || b.effects[PBEffects::Trapping]==0

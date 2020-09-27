@@ -165,16 +165,6 @@ class PokeBattle_Battle
     else
       @struggle = PokeBattle_Struggle.new(self,nil)
     end
-    # Zacian/Zamazenta
-    for i in @party1
-      if (i.species == 888 || i.species == 889) && i.form == 1
-        for j in i.moves
-          if j.id == 628
-            i.species == 888 ? j.id = 708 : j.id = 707
-          end
-        end
-      end
-    end
   end
 
   #=============================================================================
@@ -703,9 +693,11 @@ class PokeBattle_Battle
         pbDisplay("The mysterious air current has dissipated!")
       end
     end
-    # Check for form changes caused by the weather changing
     if @field.weather!=oldWeather
+      # Check for form changes caused by the weather changing
       eachBattler { |b| b.pbCheckFormOnWeatherChange }
+      # Start up the default weather
+      pbStartWeather(nil,@field.defaultWeather) if @field.defaultWeather!=PBWeather::None
     end
   end
 

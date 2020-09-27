@@ -381,9 +381,9 @@ class PokeBattle_Battler
       end
     end
     # Redirect Dragon Darts first hit if necessary
-        if move.function=="209" && @battle.pbSideSize(@index)>1
-          targets=pbChangeTargets(move,user,targets,0)
-        end
+    if move.function=="209" && @battle.pbSideSize(@index)>1
+      targets=pbChangeTargets(move,user,targets,0)
+    end
     #---------------------------------------------------------------------------
     magicCoater  = -1
     magicBouncer = -1
