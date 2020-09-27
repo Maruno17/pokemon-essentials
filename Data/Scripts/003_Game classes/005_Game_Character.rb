@@ -702,6 +702,7 @@ class Game_Character
     @direction = dir
     @stop_count = 0
     pbCheckEventTriggerAfterTurning if dir != oldDirection
+    Events.onChangeDirection.trigger(self,self) if @direction != oldDirection
   end
 
   def turn_up;    turnGeneric(8); end

@@ -54,6 +54,7 @@ module Events
   @@OnWildBattleOverride        = Event.new
   @@OnWildBattleEnd             = Event.new
   @@OnTrainerPartyLoad          = Event.new
+  @@OnChangeDirection           = Event.new
 
   # Fires whenever a map is created. Event handler receives two parameters: the
   # map (RPG::Map) and the tileset (RPG::Tileset)
@@ -159,6 +160,10 @@ module Events
   # e[2] - Party
   def self.onTrainerPartyLoad;     @@OnTrainerPartyLoad;     end
   def self.onTrainerPartyLoad=(v); @@OnTrainerPartyLoad = v; end
+  
+  # Fires whenever the player changes direction.
+  def self.onChangeDirection;     @@OnChangeDirection;     end
+  def self.onChangeDirection=(v); @@OnChangeDirection = v; end
 end
 
 
@@ -364,6 +369,12 @@ def pbOnStepTaken(eventTriggered)
   return if handled[0]
   pbBattleOnStepTaken(repel) if !eventTriggered && !$game_temp.in_menu
 end
+
+# Start wild encounters while turning on the spot
+Events.onChangeDirection += proc{
+  repel = ($PokemonGlobal.repel>0)
+  pbBattleOnStepTaken(repel) if !$game_temp.in_menu
+}
 
 def pbBattleOnStepTaken(repel=false)
   return if $Trainer.ablePokemonCount==0
