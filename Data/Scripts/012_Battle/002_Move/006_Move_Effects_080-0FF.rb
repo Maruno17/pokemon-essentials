@@ -105,7 +105,7 @@ end
 class PokeBattle_Move_087 < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
     if @battle.pbWeather!=PBWeather::None
-      if @battle.pbWeather == PBWeather::Sandstorm || @battle.pbWeather == PBWeather::Hail
+      if @battle.pbWeather == PBWeather::Sandstorm || @battle.pbWeather == PBWeather::Hail || @battle.pbWeather == PBWeather::Fog
         baseDmg *= 2
       elsif !user.hasActiveItem?(:UTILITYUMBRELLA)
         baseDmg *= 2
@@ -2080,8 +2080,8 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
 
   def pbBaseDamageMultiplier(damageMult,user,target)
     w = @battle.pbWeather
-    if w>0 && w!=PBWeather::Sun && w!=PBWeather::HarshSun
-      if (w!=PBWeather::Rain && w!=PBWeather::HeavyRain) || ((w==PBWeather::Rain || w==PBWeather::HeavyRain) && !user.hasActiveItem?(:UTILITYUMBRELLA))
+    if w!=PBWeather::None && w!=PBWeather::Sun && w!=PBWeather::HarshSun
+      if !((w==PBWeather::Rain || w==PBWeather::HeavyRain) && user.hasActiveItem?(:UTILITYUMBRELLA))
         damageMult = (damageMult/2.0).round
       end
     end

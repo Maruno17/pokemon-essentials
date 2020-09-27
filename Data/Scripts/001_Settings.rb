@@ -351,3 +351,12 @@ LANGUAGES = [
 #  ["English", "english.dat"],
 #  ["Deutsch", "deutsch.dat"]
 ]
+
+#===============================================================================
+# * Should fog act as a weather effect in battle like in Generation IV?
+#      Reduces accuracy and affects weather based moves.
+# * Should fog/thunderstorms cause Misty/Electric Terrain to be set like it
+#      does in Generation VIII?
+#===============================================================================
+FOG_IN_BATTLES = false
+WEATHER_SETS_TERRAIN = false

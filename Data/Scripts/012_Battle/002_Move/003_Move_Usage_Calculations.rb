@@ -150,6 +150,10 @@ class PokeBattle_Move
     end
     modifiers[EVA_STAGE] = 0 if target.effects[PBEffects::Foresight] && modifiers[EVA_STAGE]>0
     modifiers[EVA_STAGE] = 0 if target.effects[PBEffects::MiracleEye] && modifiers[EVA_STAGE]>0
+    case @battle.pbWeather
+    when PBWeather::Fog
+      modifiers[ACC_MULT] = (modifiers[ACC_MULT]*3/5).round
+    end
   end
 
   #=============================================================================

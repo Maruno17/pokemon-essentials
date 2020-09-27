@@ -281,6 +281,7 @@ class PokeBattle_Battle
     when PBWeather::HeavyRain;   pbDisplay(_INTL("It is raining heavily."))
     when PBWeather::StrongWinds; pbDisplay(_INTL("The wind is strong."))
     when PBWeather::ShadowSky;   pbDisplay(_INTL("The sky is shadowy."))
+    when PBWeather::Fog;         pbDisplay(_INTL("The fog is deep..."))
     end
     # Terrain announcement
     pbCommonAnimation(PBBattleTerrains.animationName(@field.terrain))

@@ -100,7 +100,18 @@ def pbPrepareBattle(battle)
   battle.showAnims = ($PokemonSystem.battlescene==0)
   battle.showAnims = battleRules["battleAnims"] if !battleRules["battleAnims"].nil?
   # Terrain
-  battle.defaultTerrain = battleRules["defaultTerrain"] if !battleRules["defaultTerrain"].nil?
+  if battleRules["defaultTerrain"].nil?
+    if WEATHER_SETS_TERRAIN 
+      case $game_screen.weather_type
+      when PBFieldWeather::Storm
+        battle.defaultTerrain = PBBattleTerrains::Electric
+      when PBFieldWeather::Fog
+        battle.defaultTerrain = PBBattleTerrains::Misty
+      end
+    else
+      battle.defaultTerrain = battleRules["defaultTerrain"]
+    end
+  end
   # Weather
   if battleRules["defaultWeather"].nil?
     case $game_screen.weather_type
@@ -112,6 +123,8 @@ def pbPrepareBattle(battle)
       battle.defaultWeather = PBWeather::Sandstorm
     when PBFieldWeather::Sun
       battle.defaultWeather = PBWeather::Sun
+    when PBFieldWeather::Fog
+      battle.defaultWeather = PBWeather::Fog if FOG_IN_BATTLES
     end
   else
     battle.defaultWeather = battleRules["defaultWeather"]
