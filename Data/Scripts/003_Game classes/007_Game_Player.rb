@@ -128,6 +128,14 @@ class Game_Player < Game_Character
     end
   end
 
+  def turnGeneric(dir)
+    old_direction = @direction
+    super
+    if @direction != oldDirection && !@move_route_forcing && !pbMapInterpreterRunning?
+      Events.onChangeDirection.trigger(self, self)
+    end
+  end
+
   def pbTriggeredTrainerEvents(triggers,checkIfRunning=true)
     result = []
     # If event is running
@@ -195,14 +203,6 @@ class Game_Player < Game_Character
       end
     end
     return nil
-  end
-
-  def turnGeneric(dir)
-    old_direction = @direction
-    super
-    if @direction != oldDirection && !$game_player.move_route_forcing && !pbMapInterpreterRunning?
-      Events.onChangeDirection.trigger(self, self)
-    end
   end
 
   #-----------------------------------------------------------------------------
