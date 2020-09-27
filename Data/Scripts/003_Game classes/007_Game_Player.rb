@@ -198,13 +198,11 @@ class Game_Player < Game_Character
   end
 
   def turnGeneric(dir)
-    return if @direction_fix
-    oldDirection = @direction
-    @direction = dir
-    @stop_count = 0
-    pbCheckEventTriggerAfterTurning if dir != oldDirection
-    return if $game_player.move_route_forcing || pbMapInterpreterRunning?
-    Events.onChangeDirection.trigger(self,self) if @direction != oldDirection
+    old_direction = @direction
+    super
+    if @direction != oldDirection && !$game_player.move_route_forcing && !pbMapInterpreterRunning?
+      Events.onChangeDirection.trigger(self, self)
+    end
   end
 
   #-----------------------------------------------------------------------------
