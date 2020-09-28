@@ -286,7 +286,7 @@ end
 
 
 #===============================================================================
-# JavaScript-related utilities
+# Json-related utilities
 #===============================================================================
 # Returns true if the given string represents a valid object in JavaScript
 # Object Notation, and false otherwise.

@@ -160,7 +160,7 @@ module Events
   # e[2] - Party
   def self.onTrainerPartyLoad;     @@OnTrainerPartyLoad;     end
   def self.onTrainerPartyLoad=(v); @@OnTrainerPartyLoad = v; end
-  
+
   # Fires whenever the player changes direction.
   def self.onChangeDirection;     @@OnChangeDirection;     end
   def self.onChangeDirection=(v); @@OnChangeDirection = v; end
@@ -259,7 +259,7 @@ Events.onMapUpdate += proc { |_sender,_e|
 # Checks per step
 #===============================================================================
 # Party Pokémon gain happiness from walking
-Events.onStepTaken += proc{
+Events.onStepTaken += proc {
   $PokemonGlobal.happinessSteps = 0 if !$PokemonGlobal.happinessSteps
   $PokemonGlobal.happinessSteps += 1
   if $PokemonGlobal.happinessSteps>=128
@@ -371,7 +371,7 @@ def pbOnStepTaken(eventTriggered)
 end
 
 # Start wild encounters while turning on the spot
-Events.onChangeDirection += proc{
+Events.onChangeDirection += proc {
   repel = ($PokemonGlobal.repel>0)
   pbBattleOnStepTaken(repel) if !$game_temp.in_menu
 }
@@ -497,412 +497,6 @@ Events.onMapSceneChange += proc { |_sender,e|
     pbDismountBike
   end
 }
-
-
-
-#===============================================================================
-# Event movement
-#===============================================================================
-module PBMoveRoute
-  Down               = 1
-  Left               = 2
-  Right              = 3
-  Up                 = 4
-  LowerLeft          = 5
-  LowerRight         = 6
-  UpperLeft          = 7
-  UpperRight         = 8
-  Random             = 9
-  TowardPlayer       = 10
-  AwayFromPlayer     = 11
-  Forward            = 12
-  Backward           = 13
-  Jump               = 14 # xoffset, yoffset
-  Wait               = 15 # frames
-  TurnDown           = 16
-  TurnLeft           = 17
-  TurnRight          = 18
-  TurnUp             = 19
-  TurnRight90        = 20
-  TurnLeft90         = 21
-  Turn180            = 22
-  TurnRightOrLeft90  = 23
-  TurnRandom         = 24
-  TurnTowardPlayer   = 25
-  TurnAwayFromPlayer = 26
-  SwitchOn           = 27 # 1 param
-  SwitchOff          = 28 # 1 param
-  ChangeSpeed        = 29 # 1 param
-  ChangeFreq         = 30 # 1 param
-  WalkAnimeOn        = 31
-  WalkAnimeOff       = 32
-  StepAnimeOn        = 33
-  StepAnimeOff       = 34
-  DirectionFixOn     = 35
-  DirectionFixOff    = 36
-  ThroughOn          = 37
-  ThroughOff         = 38
-  AlwaysOnTopOn      = 39
-  AlwaysOnTopOff     = 40
-  Graphic            = 41 # Name, hue, direction, pattern
-  Opacity            = 42 # 1 param
-  Blending           = 43 # 1 param
-  PlaySE             = 44 # 1 param
-  Script             = 45 # 1 param
-  ScriptAsync        = 101 # 1 param
-end
-
-
-
-def pbMoveRoute(event,commands,waitComplete=false)
-  route = RPG::MoveRoute.new
-  route.repeat    = false
-  route.skippable = true
-  route.list.clear
-  route.list.push(RPG::MoveCommand.new(PBMoveRoute::ThroughOn))
-  i=0
-  while i<commands.length
-    case commands[i]
-    when PBMoveRoute::Wait, PBMoveRoute::SwitchOn, PBMoveRoute::SwitchOff,
-       PBMoveRoute::ChangeSpeed, PBMoveRoute::ChangeFreq, PBMoveRoute::Opacity,
-       PBMoveRoute::Blending, PBMoveRoute::PlaySE, PBMoveRoute::Script
-      route.list.push(RPG::MoveCommand.new(commands[i],[commands[i+1]]))
-      i += 1
-    when PBMoveRoute::ScriptAsync
-      route.list.push(RPG::MoveCommand.new(PBMoveRoute::Script,[commands[i+1]]))
-      route.list.push(RPG::MoveCommand.new(PBMoveRoute::Wait,[0]))
-      i += 1
-    when PBMoveRoute::Jump
-      route.list.push(RPG::MoveCommand.new(commands[i],[commands[i+1],commands[i+2]]))
-      i += 2
-    when PBMoveRoute::Graphic
-      route.list.push(RPG::MoveCommand.new(commands[i],
-         [commands[i+1],commands[i+2],commands[i+3],commands[i+4]]))
-      i += 4
-    else
-      route.list.push(RPG::MoveCommand.new(commands[i]))
-    end
-    i += 1
-  end
-  route.list.push(RPG::MoveCommand.new(PBMoveRoute::ThroughOff))
-  route.list.push(RPG::MoveCommand.new(0))
-  if event
-    event.force_move_route(route)
-  end
-  return route
-end
-
-def pbWait(numFrames)
-  numFrames.times do
-    Graphics.update
-    Input.update
-    pbUpdateSceneMap
-  end
-end
-
-
-
-#===============================================================================
-# Player/event movement in the field
-#===============================================================================
-def pbLedge(_xOffset,_yOffset)
-  if PBTerrain.isLedge?(pbFacingTerrainTag)
-    if pbJumpToward(2,true)
-      $scene.spriteset.addUserAnimation(DUST_ANIMATION_ID,$game_player.x,$game_player.y,true,1)
-      $game_player.increase_steps
-      $game_player.check_event_trigger_here([1,2])
-    end
-    return true
-  end
-  return false
-end
-
-def pbSlideOnIce(event=nil)
-  event = $game_player if !event
-  return if !event
-  return if !PBTerrain.isIce?(pbGetTerrainTag(event))
-  $PokemonGlobal.sliding = true
-  direction    = event.direction
-  oldwalkanime = event.walk_anime
-  event.straighten
-  event.walk_anime = false
-  loop do
-    break if !event.passable?(event.x,event.y,direction)
-    break if !PBTerrain.isIce?(pbGetTerrainTag(event))
-    event.move_forward
-    while event.moving?
-      Graphics.update
-      Input.update
-      pbUpdateSceneMap
-    end
-  end
-  event.center(event.x,event.y)
-  event.straighten
-  event.walk_anime = oldwalkanime
-  $PokemonGlobal.sliding = false
-end
-
-def pbTurnTowardEvent(event,otherEvent)
-  sx = 0; sy = 0
-  if $MapFactory
-    relativePos = $MapFactory.getThisAndOtherEventRelativePos(otherEvent,event)
-    sx = relativePos[0]
-    sy = relativePos[1]
-  else
-    sx = event.x - otherEvent.x
-    sy = event.y - otherEvent.y
-  end
-  return if sx == 0 and sy == 0
-  if sx.abs > sy.abs
-    (sx > 0) ? event.turn_left : event.turn_right
-  else
-    (sy > 0) ? event.turn_up : event.turn_down
-  end
-end
-
-def pbMoveTowardPlayer(event)
-  maxsize = [$game_map.width,$game_map.height].max
-  return if !pbEventCanReachPlayer?(event,$game_player,maxsize)
-  loop do
-    x = event.x
-    y = event.y
-    event.move_toward_player
-    break if event.x==x && event.y==y
-    while event.moving?
-      Graphics.update
-      Input.update
-      pbUpdateSceneMap
-    end
-  end
-  $PokemonMap.addMovedEvent(event.id) if $PokemonMap
-end
-
-def pbJumpToward(dist=1,playSound=false,cancelSurf=false)
-  x = $game_player.x
-  y = $game_player.y
-  case $game_player.direction
-  when 2; $game_player.jump(0,dist)    # down
-  when 4; $game_player.jump(-dist,0)   # left
-  when 6; $game_player.jump(dist,0)    # right
-  when 8; $game_player.jump(0,-dist)   # up
-  end
-  if $game_player.x!=x || $game_player.y!=y
-    pbSEPlay("Player jump") if playSound
-    $PokemonEncounters.clearStepCount if cancelSurf
-    $PokemonTemp.endSurf = true if cancelSurf
-    while $game_player.jumping?
-      Graphics.update
-      Input.update
-      pbUpdateSceneMap
-    end
-    return true
-  end
-  return false
-end
-
-
-
-#===============================================================================
-# Fishing
-#===============================================================================
-def pbFishingBegin
-  $PokemonGlobal.fishing = true
-  if !pbCommonEvent(FISHING_BEGIN_COMMON_EVENT)
-    patternb = 2*$game_player.direction - 1
-    meta = pbGetMetadata(0,MetadataPlayerA+$PokemonGlobal.playerID)
-    num = ($PokemonGlobal.surfing) ? 7 : 6
-    if meta && meta[num] && meta[num]!=""
-      charset = pbGetPlayerCharset(meta,num)
-      4.times do |pattern|
-        $game_player.setDefaultCharName(charset,patternb-pattern,true)
-        (Graphics.frame_rate/20).times do
-          Graphics.update
-          Input.update
-          pbUpdateSceneMap
-        end
-      end
-    end
-  end
-end
-
-def pbFishingEnd
-  if !pbCommonEvent(FISHING_END_COMMON_EVENT)
-    patternb = 2*($game_player.direction - 2)
-    meta = pbGetMetadata(0,MetadataPlayerA+$PokemonGlobal.playerID)
-    num = ($PokemonGlobal.surfing) ? 7 : 6
-    if meta && meta[num] && meta[num]!=""
-      charset = pbGetPlayerCharset(meta,num)
-      4.times do |pattern|
-        $game_player.setDefaultCharName(charset,patternb+pattern,true)
-        (Graphics.frame_rate/20).times do
-          Graphics.update
-          Input.update
-          pbUpdateSceneMap
-        end
-      end
-    end
-  end
-  $PokemonGlobal.fishing = false
-end
-
-def pbFishing(hasEncounter,rodType=1)
-  speedup = ($Trainer.firstPokemon &&
-            (isConst?($Trainer.firstPokemon.ability,PBAbilities,:STICKYHOLD) ||
-            isConst?($Trainer.firstPokemon.ability,PBAbilities,:SUCTIONCUPS)))
-  biteChance = 20+(25*rodType)   # 45, 70, 95
-  biteChance *= 1.5 if speedup   # 67.5, 100, 100
-  hookChance = 100
-  oldpattern = $game_player.fullPattern
-  pbFishingBegin
-  msgWindow = pbCreateMessageWindow
-  ret = false
-  loop do
-    time = 5+rand(6)
-    time = [time,5+rand(6)].min if speedup
-    message = ""
-    time.times { message += ".   " }
-    if pbWaitMessage(msgWindow,time)
-      pbFishingEnd
-      $game_player.setDefaultCharName(nil,oldpattern)
-      pbMessageDisplay(msgWindow,_INTL("Not even a nibble..."))
-      break
-    end
-    if hasEncounter && rand(100)<biteChance
-      $scene.spriteset.addUserAnimation(EXCLAMATION_ANIMATION_ID,$game_player.x,$game_player.y,true,3)
-      frames = Graphics.frame_rate - rand(Graphics.frame_rate/2)   # 0.5-1 second
-      if !pbWaitForInput(msgWindow,message+_INTL("\r\nOh! A bite!"),frames)
-        pbFishingEnd
-        $game_player.setDefaultCharName(nil,oldpattern)
-        pbMessageDisplay(msgWindow,_INTL("The Pokémon got away..."))
-        break
-      end
-      if FISHING_AUTO_HOOK || rand(100)<hookChance
-        pbFishingEnd
-        pbMessageDisplay(msgWindow,_INTL("Landed a Pokémon!")) if !FISHING_AUTO_HOOK
-        $game_player.setDefaultCharName(nil,oldpattern)
-        ret = true
-        break
-      end
-#      biteChance += 15
-#      hookChance += 15
-    else
-      pbFishingEnd
-      $game_player.setDefaultCharName(nil,oldpattern)
-      pbMessageDisplay(msgWindow,_INTL("Not even a nibble..."))
-      break
-    end
-  end
-  pbDisposeMessageWindow(msgWindow)
-  return ret
-end
-
-# Show waiting dots before a Pokémon bites
-def pbWaitMessage(msgWindow,time)
-  message = ""
-  periodTime = Graphics.frame_rate*4/10   # 0.4 seconds, 16 frames per dot
-  (time+1).times do |i|
-    message += ".   " if i>0
-    pbMessageDisplay(msgWindow,message,false)
-    periodTime.times do
-      Graphics.update
-      Input.update
-      pbUpdateSceneMap
-      if Input.trigger?(Input::C) || Input.trigger?(Input::B)
-        return true
-      end
-    end
-  end
-  return false
-end
-
-# A Pokémon is biting, reflex test to reel it in
-def pbWaitForInput(msgWindow,message,frames)
-  pbMessageDisplay(msgWindow,message,false)
-  numFrame = 0
-  twitchFrame = 0
-  twitchFrameTime = Graphics.frame_rate/10   # 0.1 seconds, 4 frames
-  loop do
-    Graphics.update
-    Input.update
-    pbUpdateSceneMap
-    # Twitch cycle: 1,0,1,0,0,0,0,0
-    twitchFrame = (twitchFrame+1)%(twitchFrameTime*8)
-    case twitchFrame%twitchFrameTime
-    when 0, 2
-      $game_player.pattern = 1
-    else
-      $game_player.pattern = 0
-    end
-    if Input.trigger?(Input::C) || Input.trigger?(Input::B)
-      $game_player.pattern = 0
-      return true
-    end
-    break if !FISHING_AUTO_HOOK && numFrame>frames
-    numFrame += 1
-  end
-  return false
-end
-
-
-
-#===============================================================================
-# Bridges, cave escape points, and setting the heal point
-#===============================================================================
-def pbBridgeOn(height=2)
-  $PokemonGlobal.bridge = height
-end
-
-def pbBridgeOff
-  $PokemonGlobal.bridge = 0
-end
-
-def pbSetEscapePoint
-  $PokemonGlobal.escapePoint = [] if !$PokemonGlobal.escapePoint
-  xco = $game_player.x
-  yco = $game_player.y
-  case $game_player.direction
-  when 2; yco -= 1; dir = 8   # Down
-  when 4; xco += 1; dir = 6   # Left
-  when 6; xco -= 1; dir = 4   # Right
-  when 8; yco += 1; dir = 2   # Up
-  end
-  $PokemonGlobal.escapePoint = [$game_map.map_id,xco,yco,dir]
-end
-
-def pbEraseEscapePoint
-  $PokemonGlobal.escapePoint = []
-end
-
-def pbSetPokemonCenter
-  $PokemonGlobal.pokecenterMapId     = $game_map.map_id
-  $PokemonGlobal.pokecenterX         = $game_player.x
-  $PokemonGlobal.pokecenterY         = $game_player.y
-  $PokemonGlobal.pokecenterDirection = $game_player.direction
-end
-
-
-
-#===============================================================================
-# Partner trainer
-#===============================================================================
-def pbRegisterPartner(trainerid,trainername,partyid=0)
-  trainerid = getID(PBTrainers,trainerid)
-  pbCancelVehicles
-  trainer = pbLoadTrainer(trainerid,trainername,partyid)
-  Events.onTrainerPartyLoad.trigger(nil,trainer)
-  trainerobject = PokeBattle_Trainer.new(_INTL(trainer[0].name),trainerid)
-  trainerobject.setForeignID($Trainer)
-  for i in trainer[2]
-    i.trainerID = trainerobject.id
-    i.ot        = trainerobject.name
-    i.calcStats
-  end
-  $PokemonGlobal.partner = [trainerid,trainerobject.name,trainerobject.id,trainer[2]]
-end
-
-def pbDeregisterPartner
-  $PokemonGlobal.partner = nil
-end
 
 
 
@@ -1317,6 +911,412 @@ def pbRecord(text,maxtime=30.0)
   pbDisposeMessageWindow(msgwindow)
   textwindow.dispose
   return wave
+end
+
+
+
+#===============================================================================
+# Event movement
+#===============================================================================
+module PBMoveRoute
+  Down               = 1
+  Left               = 2
+  Right              = 3
+  Up                 = 4
+  LowerLeft          = 5
+  LowerRight         = 6
+  UpperLeft          = 7
+  UpperRight         = 8
+  Random             = 9
+  TowardPlayer       = 10
+  AwayFromPlayer     = 11
+  Forward            = 12
+  Backward           = 13
+  Jump               = 14 # xoffset, yoffset
+  Wait               = 15 # frames
+  TurnDown           = 16
+  TurnLeft           = 17
+  TurnRight          = 18
+  TurnUp             = 19
+  TurnRight90        = 20
+  TurnLeft90         = 21
+  Turn180            = 22
+  TurnRightOrLeft90  = 23
+  TurnRandom         = 24
+  TurnTowardPlayer   = 25
+  TurnAwayFromPlayer = 26
+  SwitchOn           = 27 # 1 param
+  SwitchOff          = 28 # 1 param
+  ChangeSpeed        = 29 # 1 param
+  ChangeFreq         = 30 # 1 param
+  WalkAnimeOn        = 31
+  WalkAnimeOff       = 32
+  StepAnimeOn        = 33
+  StepAnimeOff       = 34
+  DirectionFixOn     = 35
+  DirectionFixOff    = 36
+  ThroughOn          = 37
+  ThroughOff         = 38
+  AlwaysOnTopOn      = 39
+  AlwaysOnTopOff     = 40
+  Graphic            = 41 # Name, hue, direction, pattern
+  Opacity            = 42 # 1 param
+  Blending           = 43 # 1 param
+  PlaySE             = 44 # 1 param
+  Script             = 45 # 1 param
+  ScriptAsync        = 101 # 1 param
+end
+
+
+
+def pbMoveRoute(event,commands,waitComplete=false)
+  route = RPG::MoveRoute.new
+  route.repeat    = false
+  route.skippable = true
+  route.list.clear
+  route.list.push(RPG::MoveCommand.new(PBMoveRoute::ThroughOn))
+  i=0
+  while i<commands.length
+    case commands[i]
+    when PBMoveRoute::Wait, PBMoveRoute::SwitchOn, PBMoveRoute::SwitchOff,
+       PBMoveRoute::ChangeSpeed, PBMoveRoute::ChangeFreq, PBMoveRoute::Opacity,
+       PBMoveRoute::Blending, PBMoveRoute::PlaySE, PBMoveRoute::Script
+      route.list.push(RPG::MoveCommand.new(commands[i],[commands[i+1]]))
+      i += 1
+    when PBMoveRoute::ScriptAsync
+      route.list.push(RPG::MoveCommand.new(PBMoveRoute::Script,[commands[i+1]]))
+      route.list.push(RPG::MoveCommand.new(PBMoveRoute::Wait,[0]))
+      i += 1
+    when PBMoveRoute::Jump
+      route.list.push(RPG::MoveCommand.new(commands[i],[commands[i+1],commands[i+2]]))
+      i += 2
+    when PBMoveRoute::Graphic
+      route.list.push(RPG::MoveCommand.new(commands[i],
+         [commands[i+1],commands[i+2],commands[i+3],commands[i+4]]))
+      i += 4
+    else
+      route.list.push(RPG::MoveCommand.new(commands[i]))
+    end
+    i += 1
+  end
+  route.list.push(RPG::MoveCommand.new(PBMoveRoute::ThroughOff))
+  route.list.push(RPG::MoveCommand.new(0))
+  if event
+    event.force_move_route(route)
+  end
+  return route
+end
+
+def pbWait(numFrames)
+  numFrames.times do
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+  end
+end
+
+
+
+#===============================================================================
+# Player/event movement in the field
+#===============================================================================
+def pbLedge(_xOffset,_yOffset)
+  if PBTerrain.isLedge?(pbFacingTerrainTag)
+    if pbJumpToward(2,true)
+      $scene.spriteset.addUserAnimation(DUST_ANIMATION_ID,$game_player.x,$game_player.y,true,1)
+      $game_player.increase_steps
+      $game_player.check_event_trigger_here([1,2])
+    end
+    return true
+  end
+  return false
+end
+
+def pbSlideOnIce(event=nil)
+  event = $game_player if !event
+  return if !event
+  return if !PBTerrain.isIce?(pbGetTerrainTag(event))
+  $PokemonGlobal.sliding = true
+  direction    = event.direction
+  oldwalkanime = event.walk_anime
+  event.straighten
+  event.walk_anime = false
+  loop do
+    break if !event.passable?(event.x,event.y,direction)
+    break if !PBTerrain.isIce?(pbGetTerrainTag(event))
+    event.move_forward
+    while event.moving?
+      Graphics.update
+      Input.update
+      pbUpdateSceneMap
+    end
+  end
+  event.center(event.x,event.y)
+  event.straighten
+  event.walk_anime = oldwalkanime
+  $PokemonGlobal.sliding = false
+end
+
+def pbTurnTowardEvent(event,otherEvent)
+  sx = 0; sy = 0
+  if $MapFactory
+    relativePos = $MapFactory.getThisAndOtherEventRelativePos(otherEvent,event)
+    sx = relativePos[0]
+    sy = relativePos[1]
+  else
+    sx = event.x - otherEvent.x
+    sy = event.y - otherEvent.y
+  end
+  return if sx == 0 and sy == 0
+  if sx.abs > sy.abs
+    (sx > 0) ? event.turn_left : event.turn_right
+  else
+    (sy > 0) ? event.turn_up : event.turn_down
+  end
+end
+
+def pbMoveTowardPlayer(event)
+  maxsize = [$game_map.width,$game_map.height].max
+  return if !pbEventCanReachPlayer?(event,$game_player,maxsize)
+  loop do
+    x = event.x
+    y = event.y
+    event.move_toward_player
+    break if event.x==x && event.y==y
+    while event.moving?
+      Graphics.update
+      Input.update
+      pbUpdateSceneMap
+    end
+  end
+  $PokemonMap.addMovedEvent(event.id) if $PokemonMap
+end
+
+def pbJumpToward(dist=1,playSound=false,cancelSurf=false)
+  x = $game_player.x
+  y = $game_player.y
+  case $game_player.direction
+  when 2; $game_player.jump(0,dist)    # down
+  when 4; $game_player.jump(-dist,0)   # left
+  when 6; $game_player.jump(dist,0)    # right
+  when 8; $game_player.jump(0,-dist)   # up
+  end
+  if $game_player.x!=x || $game_player.y!=y
+    pbSEPlay("Player jump") if playSound
+    $PokemonEncounters.clearStepCount if cancelSurf
+    $PokemonTemp.endSurf = true if cancelSurf
+    while $game_player.jumping?
+      Graphics.update
+      Input.update
+      pbUpdateSceneMap
+    end
+    return true
+  end
+  return false
+end
+
+
+
+#===============================================================================
+# Fishing
+#===============================================================================
+def pbFishingBegin
+  $PokemonGlobal.fishing = true
+  if !pbCommonEvent(FISHING_BEGIN_COMMON_EVENT)
+    patternb = 2*$game_player.direction - 1
+    meta = pbGetMetadata(0,MetadataPlayerA+$PokemonGlobal.playerID)
+    num = ($PokemonGlobal.surfing) ? 7 : 6
+    if meta && meta[num] && meta[num]!=""
+      charset = pbGetPlayerCharset(meta,num)
+      4.times do |pattern|
+        $game_player.setDefaultCharName(charset,patternb-pattern,true)
+        (Graphics.frame_rate/20).times do
+          Graphics.update
+          Input.update
+          pbUpdateSceneMap
+        end
+      end
+    end
+  end
+end
+
+def pbFishingEnd
+  if !pbCommonEvent(FISHING_END_COMMON_EVENT)
+    patternb = 2*($game_player.direction - 2)
+    meta = pbGetMetadata(0,MetadataPlayerA+$PokemonGlobal.playerID)
+    num = ($PokemonGlobal.surfing) ? 7 : 6
+    if meta && meta[num] && meta[num]!=""
+      charset = pbGetPlayerCharset(meta,num)
+      4.times do |pattern|
+        $game_player.setDefaultCharName(charset,patternb+pattern,true)
+        (Graphics.frame_rate/20).times do
+          Graphics.update
+          Input.update
+          pbUpdateSceneMap
+        end
+      end
+    end
+  end
+  $PokemonGlobal.fishing = false
+end
+
+def pbFishing(hasEncounter,rodType=1)
+  speedup = ($Trainer.firstPokemon &&
+            (isConst?($Trainer.firstPokemon.ability,PBAbilities,:STICKYHOLD) ||
+            isConst?($Trainer.firstPokemon.ability,PBAbilities,:SUCTIONCUPS)))
+  biteChance = 20+(25*rodType)   # 45, 70, 95
+  biteChance *= 1.5 if speedup   # 67.5, 100, 100
+  hookChance = 100
+  oldpattern = $game_player.fullPattern
+  pbFishingBegin
+  msgWindow = pbCreateMessageWindow
+  ret = false
+  loop do
+    time = 5+rand(6)
+    time = [time,5+rand(6)].min if speedup
+    message = ""
+    time.times { message += ".   " }
+    if pbWaitMessage(msgWindow,time)
+      pbFishingEnd
+      $game_player.setDefaultCharName(nil,oldpattern)
+      pbMessageDisplay(msgWindow,_INTL("Not even a nibble..."))
+      break
+    end
+    if hasEncounter && rand(100)<biteChance
+      $scene.spriteset.addUserAnimation(EXCLAMATION_ANIMATION_ID,$game_player.x,$game_player.y,true,3)
+      frames = Graphics.frame_rate - rand(Graphics.frame_rate/2)   # 0.5-1 second
+      if !pbWaitForInput(msgWindow,message+_INTL("\r\nOh! A bite!"),frames)
+        pbFishingEnd
+        $game_player.setDefaultCharName(nil,oldpattern)
+        pbMessageDisplay(msgWindow,_INTL("The Pokémon got away..."))
+        break
+      end
+      if FISHING_AUTO_HOOK || rand(100)<hookChance
+        pbFishingEnd
+        pbMessageDisplay(msgWindow,_INTL("Landed a Pokémon!")) if !FISHING_AUTO_HOOK
+        $game_player.setDefaultCharName(nil,oldpattern)
+        ret = true
+        break
+      end
+#      biteChance += 15
+#      hookChance += 15
+    else
+      pbFishingEnd
+      $game_player.setDefaultCharName(nil,oldpattern)
+      pbMessageDisplay(msgWindow,_INTL("Not even a nibble..."))
+      break
+    end
+  end
+  pbDisposeMessageWindow(msgWindow)
+  return ret
+end
+
+# Show waiting dots before a Pokémon bites
+def pbWaitMessage(msgWindow,time)
+  message = ""
+  periodTime = Graphics.frame_rate*4/10   # 0.4 seconds, 16 frames per dot
+  (time+1).times do |i|
+    message += ".   " if i>0
+    pbMessageDisplay(msgWindow,message,false)
+    periodTime.times do
+      Graphics.update
+      Input.update
+      pbUpdateSceneMap
+      if Input.trigger?(Input::C) || Input.trigger?(Input::B)
+        return true
+      end
+    end
+  end
+  return false
+end
+
+# A Pokémon is biting, reflex test to reel it in
+def pbWaitForInput(msgWindow,message,frames)
+  pbMessageDisplay(msgWindow,message,false)
+  numFrame = 0
+  twitchFrame = 0
+  twitchFrameTime = Graphics.frame_rate/10   # 0.1 seconds, 4 frames
+  loop do
+    Graphics.update
+    Input.update
+    pbUpdateSceneMap
+    # Twitch cycle: 1,0,1,0,0,0,0,0
+    twitchFrame = (twitchFrame+1)%(twitchFrameTime*8)
+    case twitchFrame%twitchFrameTime
+    when 0, 2
+      $game_player.pattern = 1
+    else
+      $game_player.pattern = 0
+    end
+    if Input.trigger?(Input::C) || Input.trigger?(Input::B)
+      $game_player.pattern = 0
+      return true
+    end
+    break if !FISHING_AUTO_HOOK && numFrame>frames
+    numFrame += 1
+  end
+  return false
+end
+
+
+
+#===============================================================================
+# Bridges, cave escape points, and setting the heal point
+#===============================================================================
+def pbBridgeOn(height=2)
+  $PokemonGlobal.bridge = height
+end
+
+def pbBridgeOff
+  $PokemonGlobal.bridge = 0
+end
+
+def pbSetEscapePoint
+  $PokemonGlobal.escapePoint = [] if !$PokemonGlobal.escapePoint
+  xco = $game_player.x
+  yco = $game_player.y
+  case $game_player.direction
+  when 2; yco -= 1; dir = 8   # Down
+  when 4; xco += 1; dir = 6   # Left
+  when 6; xco -= 1; dir = 4   # Right
+  when 8; yco += 1; dir = 2   # Up
+  end
+  $PokemonGlobal.escapePoint = [$game_map.map_id,xco,yco,dir]
+end
+
+def pbEraseEscapePoint
+  $PokemonGlobal.escapePoint = []
+end
+
+def pbSetPokemonCenter
+  $PokemonGlobal.pokecenterMapId     = $game_map.map_id
+  $PokemonGlobal.pokecenterX         = $game_player.x
+  $PokemonGlobal.pokecenterY         = $game_player.y
+  $PokemonGlobal.pokecenterDirection = $game_player.direction
+end
+
+
+
+#===============================================================================
+# Partner trainer
+#===============================================================================
+def pbRegisterPartner(trainerid,trainername,partyid=0)
+  trainerid = getID(PBTrainers,trainerid)
+  pbCancelVehicles
+  trainer = pbLoadTrainer(trainerid,trainername,partyid)
+  Events.onTrainerPartyLoad.trigger(nil,trainer)
+  trainerobject = PokeBattle_Trainer.new(_INTL(trainer[0].name),trainerid)
+  trainerobject.setForeignID($Trainer)
+  for i in trainer[2]
+    i.trainerID = trainerobject.id
+    i.ot        = trainerobject.name
+    i.calcStats
+  end
+  $PokemonGlobal.partner = [trainerid,trainerobject.name,trainerobject.id,trainer[2]]
+end
+
+def pbDeregisterPartner
+  $PokemonGlobal.partner = nil
 end
 
 
