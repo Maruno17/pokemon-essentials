@@ -101,7 +101,7 @@ def pbPrepareBattle(battle)
   battle.showAnims = battleRules["battleAnims"] if !battleRules["battleAnims"].nil?
   # Terrain
   if battleRules["defaultTerrain"].nil?
-    if WEATHER_SETS_TERRAIN 
+    if WEATHER_SETS_TERRAIN
       case $game_screen.weather_type
       when PBFieldWeather::Storm
         battle.defaultTerrain = PBBattleTerrains::Electric
@@ -550,6 +550,13 @@ def pbAfterBattle(decision,canLose)
     pkmn.statusCount = 0 if pkmn.status==PBStatuses::POISON   # Bad poison becomes regular
     pkmn.makeUnmega
     pkmn.makeUnprimal
+    if pkmn.isSpecies?(:ZACIAN) || pkmn.isSpecies?(:ZAMAZENTA) && @form == 1
+      for i in 0...pkmn.moves.length
+        if isConst?(pkmn.moves[i].id,PBMoves,:IRONHEAD) && pkmn.moves[i].pp < 5
+          pkmn.moves[i].pp *= 3#isSpecies?(:ZACIAN) ? PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(getConst(PBMoves,:BEHEMOTHBLADE))) : PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(getConst(PBMoves,:BEHEMOTHBASH)))
+        end
+      end
+    end
 	# Galarian Farfetch'd Evolution Method
     ret = pbCheckEvolutionEx(pkmn) { |pkmn, method, parameter, new_species|
       success = PBEvolution.call("afterBattleCheck", method, pkmn, parameter)
@@ -560,7 +567,7 @@ def pbAfterBattle(decision,canLose)
       evo.pbStartScreen(pkmn,ret)
       evo.pbEvolution(true)
       evo.pbEndScreen
-    end   
+    end
   end
   if $PokemonGlobal.partner
     pbHealAll
@@ -577,6 +584,29 @@ def pbAfterBattle(decision,canLose)
     end
   end
   Events.onEndBattle.trigger(nil,decision,canLose)
+end
+
+def pbEvolveOnField(x1,x2,y1,y2)
+  for i in x1..x2
+    for j in y1..y2
+      if $game_player.x==i && $game_player.y==j#  $game_player.x,$game_player.y  player.x==curx && player.y==cury
+      #  Kernel.pbMessage("ABC")
+        $Trainer.party.each do |pkmn|
+          ret = pbCheckEvolutionEx(pkmn) { |pkmn, method, parameter, new_species|
+          success = PBEvolution.call("onFieldCheck", method, pkmn, parameter)
+          next (success) ? new_species : -1
+          }
+          if ret>0
+            evo = PokemonEvolutionScene.new
+            evo.pbStartScreen(pkmn,ret)
+            evo.pbEvolution(true)
+            evo.pbEndScreen
+            return true
+          end
+        end
+      end
+    end
+  end
 end
 
 Events.onEndBattle += proc { |_sender,e|

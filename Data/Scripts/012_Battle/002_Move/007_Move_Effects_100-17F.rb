@@ -3360,8 +3360,6 @@ end
 class PokeBattle_Move_209 < PokeBattle_Move_0BD
 end
 
-
-
 # NOTE: If you're inventing new move effects, use function code 209 and onwards.
 #       Actually, you might as well use high numbers like 500+ (up to FFFF),
 #       just to make sure later additions to Essentials don't clash with your

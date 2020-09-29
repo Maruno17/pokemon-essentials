@@ -776,7 +776,6 @@ PBEvolution.register(:CriticalHits, {
 #===============================================================================
 PBEvolution.register(:DamageDone, {
   "onFieldCheck" => proc { |pkmn, parameter|
-     next false if !parameter.is_a?(Array)
-     next true if pkmn.yamaskhp >= parameter[0] && $game_map.map_id == parameter[1] && $game_player.x == parameter[2] && $game_player.y == parameter[3]
+     next true if pkmn.yamaskhp >= parameter
   }
 })
