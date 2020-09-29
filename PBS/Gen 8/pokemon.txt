@@ -1,4 +1,4 @@
-﻿# See the documentation on the wiki to learn how to edit this file.
+# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
 [1]
 Name = Bulbasaur
@@ -2759,7 +2759,7 @@ Habitat = Grassland
 RegionalNumbers = 83,160
 Kind = Wild Duck
 Pokedex = It is always seen with a stick from a plant. Apparently, there are good sticks and bad sticks. This Pokémon occasionally fights with others over choice sticks.
-WildItemUncommon = STICK
+WildItemUncommon = LEEK
 BattlerPlayerX = 4
 BattlerPlayerY = 0
 BattlerEnemyX = 0
@@ -25917,6 +25917,12 @@ Color = Green
 Shape = 6
 Kind = Chimp
 Pokedex = It attacks with rapid beats of its stick. As it strikes with amazing speed, it gets more and more pumped.
+BattlerPlayerX = 0
+BattlerPlayerY = 5
+BattlerEnemyX = 0
+BattlerEnemyY = 9
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = THWACKEY,Level,16
 #-------------------------------
 [811]
@@ -25941,6 +25947,12 @@ Color = Green
 Shape = 6
 Kind = Beat
 Pokedex = When it's drumming out rapid beats in battle, it gets so caugh tup in the rhythm that it won't even notice that it's already knocked out its opponent.
+BattlerPlayerX = 0
+BattlerPlayerY = 5
+BattlerEnemyX = 0
+BattlerEnemyY = 12
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = RILLABOOM,Level,35
 #-------------------------------
 [812]
@@ -25965,6 +25977,12 @@ Color = Green
 Shape = 12
 Kind = Drummer
 Pokedex = By drumming, it taps into the power of its special tree stump. The roots of the stump follow its direction in battle.
+BattlerPlayerX = 0
+BattlerPlayerY = 2
+BattlerEnemyX = 0
+BattlerEnemyY = 4
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [813]
@@ -25990,6 +26008,12 @@ Color = White
 Shape = 6
 Kind = Rabbit
 Pokedex = It has special pads on the backs of its feet, and one on its nose. Once it's raring to fight, these pads radiate tremendous heat.
+BattlerPlayerX = 0
+BattlerPlayerY = 5
+BattlerEnemyX = 0
+BattlerEnemyY = 10
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = RABOOT,Level,16
 #-------------------------------
 [814]
@@ -26014,6 +26038,12 @@ Color = Gray
 Shape = 6
 Kind = Rabbit
 Pokedex = It kicks berries right off the branches of trees and then juggles them with its feet, practicing its footwork.
+BattlerPlayerX = 0
+BattlerPlayerY = 5
+BattlerEnemyX = 0
+BattlerEnemyY = 9
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = CINDERACE,Level,35
 #-------------------------------
 [815]
@@ -26029,7 +26059,7 @@ Rareness = 45
 Happiness = 50
 Abilities = BLAZE
 HiddenAbility = LIBERO
-Moves = 0,PYROBALL,1,PYROBALL,1,FEINT,1,TACKLE,1,GROWL,1,EMBER,1,QUICKATTACK,12,DOUBLEKICK,19,FLAMECHARGE,24,AGILITY,30,HEADBUTT,38,COUNTER,46,BOUNCE,54,DOUBLEEDGE,62,COURTCHANGE 
+Moves = 0,PYROBALL,1,PYROBALL,1,FEINT,1,TACKLE,1,GROWL,1,EMBER,1,QUICKATTACK,12,DOUBLEKICK,19,FLAMECHARGE,24,AGILITY,30,HEADBUTT,38,COUNTER,46,BOUNCE,54,DOUBLEEDGE,62,COURTCHANGE
 Compatibility = Field,Humanlike
 StepsToHatch = 5396
 Height = 1.4
@@ -26038,6 +26068,12 @@ Color = White
 Shape = 6
 Kind = Striker
 Pokedex = It's skilled at both offense and defense, and it gets pumped up when cheered on. But if it starts showboating, it could put itself in a tough spot.
+BattlerPlayerX = 0
+BattlerPlayerY = 0
+BattlerEnemyX = 0
+BattlerEnemyY = 4
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [816]
@@ -26063,6 +26099,12 @@ Color = Blue
 Shape = 8
 Kind = Water Lizard
 Pokedex = When it gets wet, its skin changes color, and this Pokemon becomes invisible as if it were camouflaged.
+BattlerPlayerX = 0
+BattlerPlayerY = 22
+BattlerEnemyX = 0
+BattlerEnemyY = 25
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = DRIZZILE,Level,16
 #-------------------------------
 [817]
@@ -26087,6 +26129,12 @@ Color = Blue
 Shape = 6
 Kind = Water Lizard
 Pokedex = Highly intelligent but also very lazy, it keeps enemies out of its territory by laying traps everywhere.
+BattlerPlayerX = 0
+BattlerPlayerY = 15
+BattlerEnemyX = 0
+BattlerEnemyY = 20
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = INTELEON,Level,35
 #-------------------------------
 [818]
@@ -26111,6 +26159,12 @@ Color = Blue
 Shape = 6
 Kind = Secret Agent
 Pokedex = Its nictitating membranes let it pick out foes' weak points so it can precisely blast them with water that shoots from its fingertips at Mach 3.
+BattlerPlayerX = 0
+BattlerPlayerY = 0
+BattlerEnemyX = 0
+BattlerEnemyY = 4
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [819]
@@ -26137,6 +26191,12 @@ Shape = 6
 Kind = Cheeky
 Pokedex = It eats berries nonstop, a habit that has made it more resilient than it looks. It'll show up on farms, searching for yet more berries.
 WildItemUncommon = ORANBERRY
+BattlerPlayerX = 0
+BattlerPlayerY = 24
+BattlerEnemyX = 0
+BattlerEnemyY = 28
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = GREEDENT,Level,24
 #-------------------------------
 [820]
@@ -26162,6 +26222,12 @@ Shape = 6
 Kind = Greedy
 Pokedex = Common throughout the Galar region, this Pokémon has strong teeth and can chew through the toughest of berry shells.
 WildItemUncommon = SITRUSBERRY
+BattlerPlayerX = 0
+BattlerPlayerY = 13
+BattlerEnemyX = 0
+BattlerEnemyY = 15
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [821]
@@ -26187,6 +26253,12 @@ Color = Blue
 Shape = 9
 Kind = Tiny Bird
 Pokedex = Jumping nimbly about, this small-bodied Pokémon takes advantage of even the slightest opportunity to disorient larger opponents.
+BattlerPlayerX = 0
+BattlerPlayerY = 31
+BattlerEnemyX = 0
+BattlerEnemyY = 34
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = CORVISQUIRE,Level,18
 #-------------------------------
 [822]
@@ -26211,6 +26283,12 @@ Color = Blue
 Shape = 9
 Kind = Raven
 Pokedex = The lessons of many harsh battles have taught it how to accurately judge an opponent's strength.
+BattlerPlayerX = 0
+BattlerPlayerY = 15
+BattlerEnemyX = 0
+BattlerEnemyY = 19
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = CORVIKNIGHT,Level,38
 #-------------------------------
 [823]
@@ -26236,6 +26314,12 @@ Color = Purple
 Shape = 9
 Kind = Raven
 Pokedex = With their great intellect and flying skills, these Pokémon very successfully act as the Galar region's airborne taxi service.
+BattlerPlayerX = 0
+BattlerPlayerY = 16
+BattlerEnemyX = 0
+BattlerEnemyY = 18
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [824]
@@ -26261,6 +26345,12 @@ Color = Blue
 Shape = 14
 Kind = Larva
 Pokedex = Often found in gardens, this Pokémon has hairs on its body that it uses to assess its surroundings.
+BattlerPlayerX = 0
+BattlerPlayerY = 27
+BattlerEnemyX = 0
+BattlerEnemyY = 30
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = DOTTLER,Level,10
 #-------------------------------
 [825]
@@ -26287,6 +26377,12 @@ Shape = 14
 Kind = Radome
 Pokedex = As it grows inside its shell, it uses its psychic abilities to monitor the outside world and prepare for evolution.
 WildItemUncommon = PSYCHICSEED
+BattlerPlayerX = 0
+BattlerPlayerY = 28
+BattlerEnemyX = 0
+BattlerEnemyY = 31
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = ORBEETLE,Level,30
 #-------------------------------
 [826]
@@ -26312,6 +26408,12 @@ Color = Red
 Shape = 9
 Kind = Seven Spot
 Pokedex = It emits psychic energy to observe and study what's around it, and what's around it can include things over six miles away.
+BattlerPlayerX = 0
+BattlerPlayerY = 14
+BattlerEnemyX = 0
+BattlerEnemyY = 18
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [827]
@@ -26337,6 +26439,12 @@ Color = Brown
 Shape = 8
 Kind = Fox
 Pokedex = Cunning and cautious, this Pokémon survives by stealing food from others. It erases its tracks with swipes of its tail as it makes off with its plunder.
+BattlerPlayerX = 0
+BattlerPlayerY = 19
+BattlerEnemyX = 0
+BattlerEnemyY = 28
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = THIEVUL,Level,18
 #-------------------------------
 [828]
@@ -26361,6 +26469,12 @@ Color = Brown
 Shape = 8
 Kind = Fox
 Pokedex = With a lithe body and sharp claws, it goes around stealing food and eggs. Boltund is its natural enemy.
+BattlerPlayerX = 0
+BattlerPlayerY = 17
+BattlerEnemyX = 0
+BattlerEnemyY = 22
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [829]
@@ -26386,6 +26500,12 @@ Color = Green
 Shape = 5
 Kind = Flowering
 Pokedex = It whirls around in the wind while singing a joyous song. This delightful display has charmed many into raising this Pokémon.
+BattlerPlayerX = 0
+BattlerPlayerY = 25
+BattlerEnemyX = 0
+BattlerEnemyY = 31
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = ELDEGOSS,Level,20
 #-------------------------------
 [830]
@@ -26410,6 +26530,12 @@ Color = Green
 Shape = 5
 Kind = Cotton Bloom
 Pokedex = The cotton on the head of this Pokémon can be spun into a glossy, gorgeous yarn, a Galar regional specialty.
+BattlerPlayerX = 0
+BattlerPlayerY = 19
+BattlerEnemyX = 0
+BattlerEnemyY = 23
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [831]
@@ -26435,6 +26561,12 @@ Color = White
 Shape = 8
 Kind = Sheep
 Pokedex = If its fleece grows too long, Wooloo won't be able to move. Cloth made with the wool of this Pokémon is surprisingly strong.
+BattlerPlayerX = 0
+BattlerPlayerY = 26
+BattlerEnemyX = 0
+BattlerEnemyY = 30
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = DUBWOOL,Level,24
 #-------------------------------
 [832]
@@ -26459,6 +26591,12 @@ Color = White
 Shape = 8
 Kind = Sheep
 Pokedex = Its majestic horns are meant only to impress the opposite gender. They never see use in battle.
+BattlerPlayerX = 0
+BattlerPlayerY = 12
+BattlerEnemyX = 0
+BattlerEnemyY = 15
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [833]
@@ -26484,6 +26622,12 @@ Color = Green
 Shape = 8
 Kind = Snapping
 Pokedex = It starts off battles by attacking with its rock-hard horn, but as soon as the opponent flinches, this Pokémon bites down and never lets go.
+BattlerPlayerX = 0
+BattlerPlayerY = 24
+BattlerEnemyX = 0
+BattlerEnemyY = 29
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = DREDNAW,Level,22
 #-------------------------------
 [834]
@@ -26509,6 +26653,12 @@ Color = Green
 Shape = 8
 Kind = Bite
 Pokedex = This Pokémon rapidly extends its retractable neck to sink its sharp fangs into distant enemies and take them down.
+BattlerPlayerX = 0
+BattlerPlayerY = 22
+BattlerEnemyX = 0
+BattlerEnemyY = 28
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [835]
@@ -26534,6 +26684,12 @@ Color = Yellow
 Shape = 8
 Kind = Puppy
 Pokedex = This gluttonous Pokémon only assists people with their work because it wants treats. As it runs, it crackles with electricity.
+BattlerPlayerX = 0
+BattlerPlayerY = 27
+BattlerEnemyX = 0
+BattlerEnemyY = 31
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = BOLTUND,Level,25
 #-------------------------------
 [836]
@@ -26558,6 +26714,12 @@ Color = Yellow
 Shape = 8
 Kind = Dog
 Pokedex = It sends electricity through its legs to boost their strength. Running at top speed, it easily breaks 50 mph.
+BattlerPlayerX = 0
+BattlerPlayerY = 15
+BattlerEnemyX = 0
+BattlerEnemyY = 16
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [837]
@@ -26583,6 +26745,12 @@ Color = Black
 Shape = 1
 Kind = Coal
 Pokedex = It can race around like a unicycle, even on rough, rocky terrain. Burning coal sustains it.
+BattlerPlayerX = 0
+BattlerPlayerY = 28
+BattlerEnemyX = 0
+BattlerEnemyY = 32
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = CARKOL,Level,18
 #-------------------------------
 [838]
@@ -26608,6 +26776,12 @@ Color = Black
 Shape = 7
 Kind = Coal
 Pokedex = By rapidly rolling its legs, it can travel at over 18 mph. The temperature of the flames it breathes exceeds 1,800 degrees Fahrenheit.
+BattlerPlayerX = 0
+BattlerPlayerY = 19
+BattlerEnemyX = 0
+BattlerEnemyY = 23
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = COALOSSAL,Level,34
 #-------------------------------
 [839]
@@ -26633,6 +26807,12 @@ Color = Black
 Shape = 12
 Kind = Coal
 Pokedex = While it's engaged in battle, its mountain of coal will burn bright red, sending off sparks that scorch the surrounding area.
+BattlerPlayerX = 0
+BattlerPlayerY = 10
+BattlerEnemyX = 0
+BattlerEnemyY = 11
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [840]
@@ -26659,6 +26839,12 @@ Color = Green
 Shape = 2
 Kind = Apple Core
 Pokedex = As soon as it's born, it burrows into an apple. Not only does the apple serve as its food source, but the flavor of the fruit determines its evolution.
+BattlerPlayerX = 0
+BattlerPlayerY = 28
+BattlerEnemyX = 0
+BattlerEnemyY = 33
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = FLAPPLE,Item,TARTAPPLE,APPLETUN,Item,SWEETAPPLE
 #-------------------------------
 [841]
@@ -26684,6 +26870,12 @@ Color = Green
 Shape = 9
 Kind = Apple Wing
 Pokedex = It flies on wings of apple skin and spits a powerful acid. It can also change its shape into that of an apple.
+BattlerPlayerX = 0
+BattlerPlayerY = 23
+BattlerEnemyX = 0
+BattlerEnemyY = 27
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [842]
@@ -26709,10 +26901,16 @@ Color = Green
 Shape = 8
 Kind = Apple Nectar
 Pokedex = Its body is covered in sweet nectar, and the skin on its back is especially yummy. Children used to have it as a snack.
+BattlerPlayerX = 0
+BattlerPlayerY = 15
+BattlerEnemyX = 0
+BattlerEnemyY = 17
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [843]
-Name = Silicobro
+Name = Silicobra
 InternalName = SILICOBRA
 Type1 = GROUND
 BaseStats = 52,57,75,46,35,50
@@ -26734,6 +26932,12 @@ Color = Green
 Shape = 2
 Kind = Sand Snake
 Pokedex = It spews sand from its nostrils. While the enemy is blinded, it burrows into the ground to hide.
+BattlerPlayerX = 0
+BattlerPlayerY = 28
+BattlerEnemyX = 0
+BattlerEnemyY = 32
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = SANDACONDA,Level,36
 #-------------------------------
 [844]
@@ -26758,6 +26962,12 @@ Color = Green
 Shape = 2
 Kind = Sand Snake
 Pokedex = Its unique style of coiling allows it to blast sand out of its sand sac more efficiently.
+BattlerPlayerX = 0
+BattlerPlayerY = 17
+BattlerEnemyX = 0
+BattlerEnemyY = 25
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [845]
@@ -26773,7 +26983,6 @@ EffortPoints = 0,0,0,0,0,2
 Rareness = 45
 Happiness = 50
 Abilities = GULPMISSILE
-HiddenAbility = 
 Moves = 1,BELCH,1,PECK,1,STOCKPILE,1,SWALLOW,1,SPITUP,7,WATERGUN,14,FURYATTACK,21,PLUCK,28,DIVE,35,DRILLPECK,42,AMNESIA,49,THRASH,56,HYDROPUMP
 EggMoves = AERIALACE,AQUARING,DEFOG,FEATHERDANCE,ROOST
 Compatibility = Water1,Flying
@@ -26784,6 +26993,12 @@ Color = Blue
 Shape = 9
 Kind = Gulp
 Pokedex = This hungry Pokémon swallows Arrokuda whole. Occasionally, it makes a mistake and tries to swallow a Pokémon other than its preferred prey.
+BattlerPlayerX = 0
+BattlerPlayerY = 12
+BattlerEnemyX = 0
+BattlerEnemyY = 16
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [846]
@@ -26809,6 +27024,12 @@ Color = Brown
 Shape = 3
 Kind = Rush
 Pokedex = After it's eaten its fill, its movements become extremely sluggish. That's when Cramorant swallows it up.
+BattlerPlayerX = 0
+BattlerPlayerY = 33
+BattlerEnemyX = 0
+BattlerEnemyY = 35
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = BARRASKEWDA,Level,26
 #-------------------------------
 [847]
@@ -26833,6 +27054,12 @@ Color = Brown
 Shape = 3
 Kind = Skewer
 Pokedex = It spins its tail fins to propel itself, surging forward at speeds of over 100 knots before ramming prey and spearing into them.
+BattlerPlayerX = 0
+BattlerPlayerY = 23
+BattlerEnemyX = 0
+BattlerEnemyY = 34
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [848]
@@ -26859,6 +27086,12 @@ Color = Purple
 Shape = 6
 Kind = Baby
 Pokedex = It manipulates the chemical makeup of its poison to produce electricity. The voltage is weak, but it can cause a tingling paralysis.
+BattlerPlayerX = 0
+BattlerPlayerY = 23
+BattlerEnemyX = 0
+BattlerEnemyY = 27
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = TOXTRICITY,Level,30
 #-------------------------------
 [849]
@@ -26885,6 +27118,12 @@ Shape = 6
 Kind = Punk
 Pokedex = This short-tempered and aggressive Pokémon chugs stagnant water to absorb any toxins it might contain.
 FormName = Amped Form
+BattlerPlayerX = 0
+BattlerPlayerY = 6
+BattlerEnemyX = 0
+BattlerEnemyY = 8
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [850]
@@ -26911,6 +27150,12 @@ Color = Red
 Shape = 10
 Kind = Radiator
 Pokedex = It wraps prey up with its heated body, cooking them in its coils. Once they're well-done, it will voraciously nibble them down to the last morsel.
+BattlerPlayerX = 0
+BattlerPlayerY = 29
+BattlerEnemyX = 0
+BattlerEnemyY = 33
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = CENTISKORCH,Level,28
 #-------------------------------
 [851]
@@ -26936,6 +27181,12 @@ Color = Red
 Shape = 10
 Kind = Radiator
 Pokedex = While its burning body is already dangerous on its own, this excessively hostile Pokémon also has large and very sharp fangs.
+BattlerPlayerX = 0
+BattlerPlayerY = 12
+BattlerEnemyX = 0
+BattlerEnemyY = 16
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [852]
@@ -26961,6 +27212,12 @@ Color = Brown
 Shape = 10
 Kind = Tantrum
 Pokedex = Its tentacles tear off easily, but it isn't alarmed when that happens, it knows they'll grow back. It's about as smart as a three-year-old.
+BattlerPlayerX = 0
+BattlerPlayerY = 31
+BattlerEnemyX = 0
+BattlerEnemyY = 32
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = GRAPPLOCT,HasMove,TAUNT
 #-------------------------------
 [853]
@@ -26985,13 +27242,19 @@ Color = Blue
 Shape = 10
 Kind = Jujitsu
 Pokedex = Searching for an opponent to test its skills against, it emerges onto land. Once the battle is over, it returns to the sea.
+BattlerPlayerX = 0
+BattlerPlayerY = 9
+BattlerEnemyX = 0
+BattlerEnemyY = 15
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [854]
 Name = Sinistea
 InternalName = SINISTEA
 Type1 = GHOST
-BaseStats = 40,45,45,74,54,50
+BaseStats = 40,45,45,50,74,54
 GenderRate = Genderless
 GrowthRate = Medium
 BaseEXP = 62
@@ -27001,7 +27264,6 @@ Happiness = 50
 Abilities = WEAKARMOR
 HiddenAbility = CURSEDBODY
 Moves = 1,ASTONISH,1,WITHDRAW,6,AROMATICMIST,12,MEGADRAIN,18,PROTECT,24,SUCKERPUNCH,30,AROMATHERAPY,36,GIGADRAIN,42,NASTYPLOT,48,SHADOWBALL,54,MEMENTO,60,SHELLSMASH
-EggMoves = 
 Compatibility = Mineral,Amorphous
 StepsToHatch = 5396
 Height = 0.1
@@ -27011,6 +27273,12 @@ Shape = 1
 Kind = Black Tea
 Pokedex = The teacup in which this Pokémon makes its home is a famous piece of antique tableware. Many forgeries are in circulation.
 FormName = Phony Form
+BattlerPlayerX = 0
+BattlerPlayerY = 34
+BattlerEnemyX = 0
+BattlerEnemyY = 38
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = POLTEAGEIST,Item,CRACKEDPOT
 #-------------------------------
 [855]
@@ -27035,6 +27303,12 @@ Color = Purple
 Shape = 1
 Kind = Black Tea
 Pokedex = Leaving leftover black tea unattended is asking for this Pokémon to come along and pour itself into it, turning the tea into a new Polteageist.
+BattlerPlayerX = 0
+BattlerPlayerY = 15
+BattlerEnemyX = 0
+BattlerEnemyY = 19
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [856]
@@ -27050,7 +27324,7 @@ Rareness = 235
 Happiness = 50
 Abilities = HEALER,ANTICIPATION
 HiddenAbility = MAGICBOUNCE
-Moves = 1,CONFUSION,1,PLAYNICE,5,LIFEDEW,10,DISARMINGVOICE,15,AROMATHERAPY,20,PSYBEAM,25,HEALPULSE,30,DAZZLINGGLEAM,25,CALMMIND,40,PSYCHIC,45,HEALINGWISH
+Moves = 1,CONFUSION,1,PLAYNICE,5,LIFEDEW,10,DISARMINGVOICE,15,AROMATHERAPY,20,PSYBEAM,25,HEALPULSE,25,CALMMIND,30,DAZZLINGGLEAM,40,PSYCHIC,45,HEALINGWISH
 EggMoves = AFTERYOU,AROMATICMIST,NUZZLE,QUASH
 Compatibility = Fairy
 StepsToHatch = 5396
@@ -27060,6 +27334,12 @@ Color = Pink
 Shape = 7
 Kind = Calm
 Pokedex = If this Pokémon senses a strong emotion, it will run away as fast as it can. It prefers areas without people.
+BattlerPlayerX = 0
+BattlerPlayerY = 26
+BattlerEnemyX = 0
+BattlerEnemyY = 30
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = HATTREM,Level,32
 #-------------------------------
 [857]
@@ -27084,6 +27364,12 @@ Color = Pink
 Shape = 12
 Kind = Serene
 Pokedex = Using the braids on its head, it pummels foes to get them to quiet down. One blow from those braids would knock out a professional boxer.
+BattlerPlayerX = 0
+BattlerPlayerY = 22
+BattlerEnemyX = 0
+BattlerEnemyY = 25
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = HATTERENE,Level,42
 #-------------------------------
 [858]
@@ -27109,6 +27395,12 @@ Color = Pink
 Shape = 5
 Kind = Silent
 Pokedex = If you're too loud around it, you risk being torn apart by the claws on its tentacle. This Pokémon is also known as the Forest Witch.
+BattlerPlayerX = 0
+BattlerPlayerY = 1
+BattlerEnemyX = 0
+BattlerEnemyY = 5
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [859]
@@ -27124,7 +27416,7 @@ EffortPoints = 0,0,0,0,1,0
 Rareness = 255
 Happiness = 50
 Abilities = PRANKSTER,PICKPOCKET
-HiddenAbility = PICKPOCKET
+HiddenAbility = FRISK
 Moves = 1,FAKEOUT,1,CONFIDE,4,BITE,8,FLATTER,12,FAKETEARS,16,ASSURANCE,20,SWAGGER,24,SUCKERPUNCH,28,TORMENT,33,DARKPULSE,36,NASTYPLOT,40,PLAYROUGH,44,FOULPLAY
 Compatibility = Fairy,Humanlike
 StepsToHatch = 5396
@@ -27134,6 +27426,12 @@ Color = Pink
 Shape = 12
 Kind = Wily
 Pokedex = It sneaks into people's homes, stealing things and feasting on the negative energy of the frustrated occupants.
+BattlerPlayerX = 0
+BattlerPlayerY = 24
+BattlerEnemyX = 0
+BattlerEnemyY = 28
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = MORGREM,Level,32
 #-------------------------------
 [860]
@@ -27159,6 +27457,12 @@ Color = Pink
 Shape = 12
 Kind = Devious
 Pokedex = With sly cunning, it tries to lure people into the woods. Some believe it to have the power to make crops grow.
+BattlerPlayerX = 0
+BattlerPlayerY = 12
+BattlerEnemyX = 0
+BattlerEnemyY = 15
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = GRIMMSNARL,Level,42
 #-------------------------------
 [861]
@@ -27184,6 +27488,12 @@ Color = Purple
 Shape = 12
 Kind = Bulk Up
 Pokedex = Its hairs work like muscle fibers. When its hairs unfurl, they latch on to opponents, ensnaring them as tentacles would.
+BattlerPlayerX = 0
+BattlerPlayerY = 9
+BattlerEnemyX = 0
+BattlerEnemyY = 13
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [862]
@@ -27209,6 +27519,12 @@ Color = Gray
 Shape = 6
 Kind = Blocking
 Pokedex = It evolved after experiencing numerous fights. While crossing its arms, it lets out a shout that would make any opponent flinch.
+BattlerPlayerX = 0
+BattlerPlayerY = 11
+BattlerEnemyX = 0
+BattlerEnemyY = 12
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [863]
@@ -27233,6 +27549,12 @@ Color = Brown
 Shape = 6
 Kind = Viking
 Pokedex = After many battles, it evolved dangerous claws that come together to form daggers when extended.
+BattlerPlayerX = 0
+BattlerPlayerY = 21
+BattlerEnemyX = 0
+BattlerEnemyY = 22
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [864]
@@ -27257,6 +27579,12 @@ Color = White
 Shape = 4
 Kind = Coral
 Pokedex = Be cautious of the ectoplasmic body surrounding its soul. You'll become stiff as stone if you touch it.
+BattlerPlayerX = 0
+BattlerPlayerY = 5
+BattlerEnemyX = 0
+BattlerEnemyY = 9
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [865]
@@ -27281,7 +27609,13 @@ Color = White
 Shape = 9
 Kind = Wild Duck
 Pokedex = After deflecting attacks with its hard leaf shield, it strikes back with its sharp leek stalk. The leek stalk is both weapon and food.
-WildItemUncommon = STICK
+WildItemUncommon = LEEK
+BattlerPlayerX = 0
+BattlerPlayerY = 1
+BattlerEnemyX = 0
+BattlerEnemyY = 5
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [866]
@@ -27307,6 +27641,12 @@ Color = Purple
 Shape = 12
 Kind = Comedian
 Pokedex = Its amusing movements make it very popular. It releases its psychic power from the pattern on its belly.
+BattlerPlayerX = 0
+BattlerPlayerY = 8
+BattlerEnemyX = 0
+BattlerEnemyY = 14
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [867]
@@ -27322,7 +27662,6 @@ EffortPoints = 0,0,2,0,0,0
 Rareness = 90
 Happiness = 50
 Abilities = WANDERINGSPIRIT
-HiddenAbility = 
 Moves = 0,SHADOWCLAW,1,SHADOWCLAW,1,SCARYFACE,1,ASTONISH,1,PROTECT,1,HAZE,1,NIGHTSHADE,12,DISABLE,16,BRUTALSWING,20,CRAFTYSHIELD,24,HEX,28,MEANLOOK,32,SLAM,38,CURSE,44,SHADOWBALL,50,EARTHQUAKE,56,POWERSPLIT,56,GUARDSPLIT,62,DESTINYBOND
 Compatibility = Mineral,Amorphous
 StepsToHatch = 6681
@@ -27332,6 +27671,12 @@ Color = Gray
 Shape = 5
 Kind = Grudge
 Pokedex = Never touch its shadowlike body, or you'll be shown the horrific memories behind the picture carved into it.
+BattlerPlayerX = 0
+BattlerPlayerY = 12
+BattlerEnemyX = 0
+BattlerEnemyY = 13
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [868]
@@ -27357,6 +27702,12 @@ Color = White
 Shape = 1
 Kind = Cream
 Pokedex = They say that any patisserie visited by Milcery is guaranteed success and good fortune.
+BattlerPlayerX = 0
+BattlerPlayerY = 31
+BattlerEnemyX = 0
+BattlerEnemyY = 35
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = ALCREMIE,Item,STRAWBERRYSWEET
 #-------------------------------
 [869]
@@ -27381,6 +27732,12 @@ Color = White
 Shape = 5
 Kind = Cream
 Pokedex = When Alcremie is content, the cream it secretes from its hands becomes sweeter and richer.
+BattlerPlayerX = 0
+BattlerPlayerY = 20
+BattlerEnemyX = 0
+BattlerEnemyY = 22
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [870]
@@ -27405,6 +27762,12 @@ Color = Yellow
 Shape = 11
 Kind = Formation
 Pokedex = The six of them work together as one Pokémon. Teamwork is also their battle strategy, and they constantly change their formation as they fight.
+BattlerPlayerX = 0
+BattlerPlayerY = 23
+BattlerEnemyX = 0
+BattlerEnemyY = 26
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [871]
@@ -27430,6 +27793,12 @@ Color = Purple
 Shape = 10
 Kind = Sea Urchin
 Pokedex = It stores electricity in each spine. Even if one gets broken off, it still continues to emit electricity for at least three hours.
+BattlerPlayerX = 0
+BattlerPlayerY = 30
+BattlerEnemyX = 0
+BattlerEnemyY = 32
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [872]
@@ -27457,7 +27826,13 @@ Shape = 2
 Kind = Worm
 Pokedex = It eats snow that piles up on the ground. The more snow it eats, the bigger and more impressive the spikes on its back grow.
 WildItemUncommon = SNOWBALL
-Evolutions = FROSMOTH,HappinessNight
+BattlerPlayerX = 0
+BattlerPlayerY = 36
+BattlerEnemyX = 0
+BattlerEnemyY = 38
+BattlerShadowX = 0
+BattlerShadowSize = 2
+Evolutions = FROSMOTH,HappinessNight,
 #-------------------------------
 [873]
 Name = Frosmoth
@@ -27482,6 +27857,12 @@ Color = White
 Shape = 13
 Kind = Frost Moth
 Pokedex = It shows no mercy to any who desecrate fields and mountains. It will fly around on its icy wings, causing a blizzard to chase offenders away.
+BattlerPlayerX = 0
+BattlerPlayerY = 15
+BattlerEnemyX = 0
+BattlerEnemyY = 19
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [874]
@@ -27496,7 +27877,6 @@ EffortPoints = 0,0,2,0,0,0
 Rareness = 60
 Happiness = 50
 Abilities = POWERSPOT
-HiddenAbility = 
 Moves = 1,ROCKTHROW,1,BLOCK,6,ROCKPOLISH,12,ROCKTOMB,18,GRAVITY,24,STOMP,30,STEALTHROCK,36,ROCKSLIDE,42,BODYSLAM,48,WIDEGUARD,54,HEAVYSLAM,60,STONEEDGE,66,MEGAKICK
 EggMoves = ANCIENTPOWER,CURSE
 Compatibility = Mineral
@@ -27507,6 +27887,12 @@ Color = Gray
 Shape = 7
 Kind = Big Rock
 Pokedex = Once a year, on a specific date and at a specific time, they gather out of nowhere and form up in a circle.
+BattlerPlayerX = 0
+BattlerPlayerY = 10
+BattlerEnemyX = 0
+BattlerEnemyY = 14
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [875]
@@ -27521,7 +27907,6 @@ EffortPoints = 0,0,2,0,0,0
 Rareness = 60
 Happiness = 70
 Abilities = ICEFACE
-HiddenAbility = 
 Moves = 1,POWDERSNOW,1,TACKLE,6,MIST,12,WEATHERBALL,18,ICYWIND,24,HEADBUTT,30,AMNESIA,36,FREEZEDRY,42,HAIL,48,AURORAVEIL,54,SURF,60,BLIZZARD
 EggMoves = AQUARING,BELLYDRUM,DOUBLEEDGE,HEADSMASH,ICICLECRASH,SOAK
 Compatibility = Water1,Field
@@ -27533,6 +27918,12 @@ Shape = 6
 Kind = Penguin
 Pokedex = This Pokémon keeps its heat-sensitive head cool with ice. It fishes for its food, dangling its single hair into the sea to lure in prey.
 FormName = Ice Face
+BattlerPlayerX = 0
+BattlerPlayerY = 9
+BattlerEnemyX = 0
+BattlerEnemyY = 11
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [876]
@@ -27560,6 +27951,12 @@ Shape = 6
 Kind = Emotion
 Pokedex = Through its horns, it can pick up on the emotions of creatures around it. Positive emotions are the source of its strength.
 FormName = Male
+BattlerPlayerX = 0
+BattlerPlayerY = 21
+BattlerEnemyX = 0
+BattlerEnemyY = 26
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [877]
@@ -27575,7 +27972,6 @@ EffortPoints = 0,0,0,2,0,0
 Rareness = 180
 Happiness = 50
 Abilities = HUNGERSWITCH
-HiddenAbility = 
 Moves = 1,THUNDERSHOCK,1,TAILWHIP,5,LEER,10,POWERTRIP,15,QUICKATTACK,20,FLATTER,25,BITE,30,SPARK,35,TORMENT,40,AGILITY,45,BULLETSEED,50,CRUNCH,55,AURAWHEEL,60,THRASH
 EggMoves = CHARGE,FAKEOUT,PARTINGSHOT,QUASH,RAPIDSPIN,SUPERFANG,SWAGGER,TICKLE
 Compatibility = Field,Fairy
@@ -27587,6 +27983,12 @@ Shape = 12
 Kind = Two-Sided
 Pokedex = It carries electrically roasted seeds with it as if they're precious treasures. No matter how much it eats, it always gets hungry again in short order.
 FormName = Full Belly Mode
+BattlerPlayerX = 0
+BattlerPlayerY = 27
+BattlerEnemyX = 0
+BattlerEnemyY = 27
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [878]
@@ -27603,7 +28005,7 @@ Happiness = 50
 Abilities = SHEERFORCE
 HiddenAbility = HEAVYMETAL
 Moves = 1,TACKLE,1,GROWL,5,ROLLOUT,10,ROCKSMASH,15,BULLDOZE,20,STOMP,25,IRONDEFENSE,30,DIG,35,STRENGTH,40,IRONHEAD,45,PLAYROUGH,50,HIGHHORSEPOWER,55,SUPERPOWER
-EggMoves = BELCH,CURSE,DOUBLEEDGE,FISSURE,SLAM,SWAGGER,WHIRLWIND
+EggMoves = BELCH,CURSE,DEFENSECURL,DOUBLEEDGE,FISSURE,SLAM,SWAGGER,WHIRLWIND
 Compatibility = Field,Mineral
 StepsToHatch = 6681
 Height = 1.2
@@ -27613,6 +28015,12 @@ Shape = 8
 Kind = Copperderm
 Pokedex = If a job requires serious strength, this Pokémon will excel at it. Its copper body tarnishes in the rain, turning a vibrant green color.
 WildItemUncommon = LAGGINGTAIL
+BattlerPlayerX = 0
+BattlerPlayerY = 22
+BattlerEnemyX = 0
+BattlerEnemyY = 26
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = COPPERAJAH,Level,34
 #-------------------------------
 [879]
@@ -27637,6 +28045,13 @@ Color = Green
 Shape = 8
 Kind = Copperderm
 Pokedex = These Pokémon live in herds. Their trunks have incredible grip strength, strong enough to crush giant rocks into powder.
+WildItemUncommon = LAGGINGTAIL
+BattlerPlayerX = 0
+BattlerPlayerY = 13
+BattlerEnemyX = 0
+BattlerEnemyY = 17
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [880]
@@ -27662,6 +28077,12 @@ Color = Green
 Shape = 6
 Kind = Fossil
 Pokedex = The powerful muscles in its tail generate its electricity. Compared to its lower body, its upper half is entirely too small.
+BattlerPlayerX = 0
+BattlerPlayerY = 12
+BattlerEnemyX = 0
+BattlerEnemyY = 16
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [881]
@@ -27687,6 +28108,12 @@ Color = Blue
 Shape = 6
 Kind = Fossil
 Pokedex = This Pokémon lived on prehistoric seashores and was able to preserve food with the ice on its body. It went extinct because it moved so slowly.
+BattlerPlayerX = 0
+BattlerPlayerY = 10
+BattlerEnemyX = 0
+BattlerEnemyY = 12
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [882]
@@ -27712,6 +28139,12 @@ Color = Green
 Shape = 7
 Kind = Fossil
 Pokedex = Its mighty legs are capable of running at speeds exceeding 40 mph, but this Pokémon can't breathe unless it's underwater.
+BattlerPlayerX = 0
+BattlerPlayerY = 7
+BattlerEnemyX = 0
+BattlerEnemyY = 11
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [883]
@@ -27737,6 +28170,12 @@ Color = Blue
 Shape = 3
 Kind = Fossil
 Pokedex = The skin on its face is impervious to attack, but breathing difficulties made this Pokémon go extinct anyway.
+BattlerPlayerX = 0
+BattlerPlayerY = 11
+BattlerEnemyX = 0
+BattlerEnemyY = 20
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [884]
@@ -27763,6 +28202,12 @@ Color = White
 Shape = 6
 Kind = Alloy
 Pokedex = The special metal that composes its body is very light, so this Pokémon has considerable agility. It lives in caves because it dislikes the rain.
+BattlerPlayerX = 0
+BattlerPlayerY = 13
+BattlerEnemyX = 0
+BattlerEnemyY = 15
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [885]
@@ -27789,6 +28234,12 @@ Color = Green
 Shape = 2
 Kind = Lingering
 Pokedex = If this weak Pokémon is by itself, a mere child could defeat it. But if Dreepy has friends to help it train, it can evolve and become much stronger.
+BattlerPlayerX = 0
+BattlerPlayerY = 29
+BattlerEnemyX = 0
+BattlerEnemyY = 32
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = DRAKLOAK,Level,50
 #-------------------------------
 [886]
@@ -27814,6 +28265,12 @@ Color = Green
 Shape = 7
 Kind = Caretaker
 Pokedex = Without a Dreepy to place on its head and care for, it gets so uneasy it'll try to substitute any Pokémon it finds for the missing Dreepy.
+BattlerPlayerX = 0
+BattlerPlayerY = 19
+BattlerEnemyX = 0
+BattlerEnemyY = 21
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = DRAGAPULT,Level,60
 #-------------------------------
 [887]
@@ -27839,6 +28296,12 @@ Color = Green
 Shape = 6
 Kind = Stealth
 Pokedex = Apparently the Dreepy inside Dragapult's horns eagerly look forward to being launched out at Mach speeds.
+BattlerPlayerX = 0
+BattlerPlayerY = 9
+BattlerEnemyX = 0
+BattlerEnemyY = 13
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [888]
@@ -27853,7 +28316,6 @@ EffortPoints = 0,0,0,3,0,0
 Rareness = 10
 Happiness = 0
 Abilities = INTREPIDSWORD
-HiddenAbility = 
 Moves = 1,SACREDSWORD,1,QUICKGUARD,1,METALCLAW,1,HOWL,1,QUICKATTACK,1,BITE,11,SLASH,22,SWORDSDANCE,33,IRONHEAD,44,LASERFOCUS,55,CRUNCH,66,MOONBLAST,77,CLOSECOMBAT,88,GIGAIMPACT
 Compatibility = Undiscovered
 StepsToHatch = 31096
@@ -27863,17 +28325,23 @@ Color = Blue
 Shape = 8
 Kind = Warrior
 Pokedex = This Pokémon has slumbered for many years. Some say it's Zamazenta's elder sister, others say the two Pokémon are rivals.
+FormName = Hero of Many Battles
 WildItemCommon = RUSTEDSWORD
 WildItemUncommon = RUSTEDSWORD
 WildItemRare = RUSTEDSWORD
-FormName = Hero of Many Battles
+BattlerPlayerX = 0
+BattlerPlayerY = 12
+BattlerEnemyX = 0
+BattlerEnemyY = 14
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [889]
 Name = Zamazenta
 InternalName = ZAMAZENTA
 Type1 = FIGHTING
-BaseStats = 92,130,115,80,115,138
+BaseStats = 92,130,115,138,80,115
 GenderRate = Genderless
 GrowthRate = Slow
 BaseEXP = 335
@@ -27881,7 +28349,6 @@ EffortPoints = 0,0,0,3,0,0
 Rareness = 10
 Happiness = 0
 Abilities = DAUNTLESSSHIELD
-HiddenAbility = 
 Moves = 1,METALBURST,1,WIDEGUARD,1,METALCLAW,1,HOWL,1,QUICKATTACK,1,BITE,11,SLASH,22,IRONDEFENSE,33,IRONHEAD,44,LASERFOCUS,55,CRUNCH,66,MOONBLAST,77,CLOSECOMBAT,88,GIGAIMPACT
 Compatibility = Undiscovered
 StepsToHatch = 31096
@@ -27891,11 +28358,17 @@ Color = Red
 Shape = 8
 Kind = Warrior
 Pokedex = This Pokémon slept for aeons while in the form of a statue. It was asleep for so long, people forgot that it ever existed.
+FormName = Hero of Many Battles
 WildItemCommon = RUSTEDSHIELD
 WildItemUncommon = RUSTEDSHIELD
 WildItemRare = RUSTEDSHIELD
-FormName = Hero of Many Battles
-Evolutions =
+BattlerPlayerX = 0
+BattlerPlayerY = 5
+BattlerEnemyX = 0
+BattlerEnemyY = 7
+BattlerShadowX = 0
+BattlerShadowSize = 2
+Evolutions = 
 #-------------------------------
 [890]
 Name = Eternatus
@@ -27910,7 +28383,6 @@ EffortPoints = 3,0,0,0,0,0
 Rareness = 255
 Happiness = 0
 Abilities = PRESSURE
-HiddenAbility = 
 Moves = 1,POISONTAIL,1,CONFUSERAY,1,DRAGONTAIL,1,AGILITY,8,TOXIC,16,VENOSHOCK,24,DRAGONDANCE,32,CROSSPOISON,40,DRAGONPULSE,48,FLAMETHROWER,56,DYNAMAXCANNON,64,COSMICPOWER,72,RECOVER,80,HYPERBEAM,88,ETERNABEAM
 Compatibility = Undiscovered
 StepsToHatch = 31096
@@ -27920,7 +28392,13 @@ Color = Purple
 Shape = 9
 Kind = Gigantic
 Pokedex = It was inside a meteorite that fell 20,000 years ago. There seems to be a connection between this Pokémon and the Dynamax phenomenon.
-Evolutions =  
+BattlerPlayerX = 0
+BattlerPlayerY = 1
+BattlerEnemyX = 0
+BattlerEnemyY = 6
+BattlerShadowX = 0
+BattlerShadowSize = 2
+Evolutions = 
 #-------------------------------
 [891]
 Name = Kubfu
@@ -27934,7 +28412,6 @@ EffortPoints = 0,1,0,0,0,0
 Rareness = 3
 Happiness = 50
 Abilities = INNERFOCUS
-HiddenAbility = 
 Moves = 1,ROCKSMASH,1,LEER,4,ENDURE,8,FOCUSENERGY,12,AERIALACE,16,SCARYFACE,20,HEADBUTT,24,BRICKBREAK,28,DETECT,32,BULKUP,36,IRONHEAD,40,DYNAMICPUNCH,44,COUNTER,48,CLOSECOMBAT,52,FOCUSPUNCH
 Compatibility = Undiscovered
 StepsToHatch = 31096
@@ -27944,6 +28421,12 @@ Color = Gray
 Shape = 6
 Kind = Wushu
 Pokedex = If Kubfu pulls the long white hair on its head, its fighting spirit heightens and power wells up from the depths of its belly.
+BattlerPlayerX = 0
+BattlerPlayerY = 21
+BattlerEnemyX = 0
+BattlerEnemyY = 25
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = URSHIFU,None,
 #-------------------------------
 [892]
@@ -27959,7 +28442,6 @@ EffortPoints = 0,3,0,0,0,0
 Rareness = 3
 Happiness = 50
 Abilities = UNSEENFIST
-HiddenAbility = 
 Moves = 0,WICKEDBLOW,1,WICKEDBLOW,1,SUCKERPUNCH,1,ROCKSMASH,1,LEER,1,ENDURE,1,FOCUSENERGY,12,AERIALACE,16,SCARYFACE,20,HEADBUTT,24,BRICKBREAK,28,DETECT,32,BULKUP,36,IRONHEAD,40,DYNAMICPUNCH,44,COUNTER,48,CLOSECOMBAT,52,FOCUSPUNCH
 Compatibility = Undiscovered
 StepsToHatch = 31096
@@ -27968,8 +28450,14 @@ Weight = 105.0
 Color = Gray
 Shape = 6
 Kind = Wushu
-Pokedex = Inhabiting the mountains of a distant region, this Pokémon races across sheer cliffs, training its legs and refining its moves. 
+Pokedex = Inhabiting the mountains of a distant region, this Pokémon races across sheer cliffs, training its legs and refining its moves.
 FormName = Single Strike Style
+BattlerPlayerX = 0
+BattlerPlayerY = 7
+BattlerEnemyX = 0
+BattlerEnemyY = 13
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
 [893]
@@ -27985,7 +28473,6 @@ EffortPoints = 0,3,0,0,0,0
 Rareness = 3
 Happiness = 0
 Abilities = LEAFGUARD
-HiddenAbility = 
 Moves = 1,BIND,1,SCRATCH,6,LEER,12,VINEWHIP,18,GROWTH,24,FURYSWIPES,30,SCARYFACE,36,GRASSKNOT,42,BITE,48,UTURN,54,SWAGGER,60,ENERGYBALL,66,SYNTHESIS,72,HAMMERARM,78,THRASH,84,POWERWHIP,90,JUNGLEHEALING
 Compatibility = Undiscovered
 StepsToHatch = 31096
@@ -27995,4 +28482,10 @@ Color = Green
 Shape = 6
 Kind = Rogue Monkey
 Pokedex = Once the vines on Zarude's body tear off, they become nutrients in the soil. This helps the plants of the forest grow.
+BattlerPlayerX = 0
+BattlerPlayerY = 14
+BattlerEnemyX = 0
+BattlerEnemyY = 18
+BattlerShadowX = 0
+BattlerShadowSize = 2
 Evolutions = 

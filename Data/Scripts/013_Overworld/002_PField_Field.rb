@@ -160,7 +160,7 @@ module Events
   # e[2] - Party
   def self.onTrainerPartyLoad;     @@OnTrainerPartyLoad;     end
   def self.onTrainerPartyLoad=(v); @@OnTrainerPartyLoad = v; end
-  
+
   # Fires whenever the player changes direction.
   def self.onChangeDirection;     @@OnChangeDirection;     end
   def self.onChangeDirection=(v); @@OnChangeDirection = v; end
@@ -348,19 +348,6 @@ Events.onStepTakenFieldMovement += proc { |_sender,e|
         pbDescendWaterfall(event)
       elsif PBTerrain.isIce?(currentTag) && !$PokemonGlobal.sliding
         pbSlideOnIce(event)
-      end
-    end
-    # Yamask Evolution Method
-    $Trainer.party.each do |pkmn|
-      ret = pbCheckEvolutionEx(pkmn) { |pkmn, method, parameter, new_species|
-        success = PBEvolution.call("onFieldCheck", method, pkmn, parameter)
-        next (success) ? new_species : -1
-      }
-      if ret>0
-        evo = PokemonEvolutionScene.new
-        evo.pbStartScreen(pkmn,ret)
-        evo.pbEvolution(true)
-        evo.pbEndScreen
       end
     end
   end
