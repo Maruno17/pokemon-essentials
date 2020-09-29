@@ -260,3 +260,4 @@
 258,WANDERINGSPIRIT,Wandering Spirit,"Taking a direct contact hit exchanges Abilities."
 259,UNSEENFIST,Unseen Fist,"Contact moves negate all protection effects."
 260,QUICKDRAW,Quick Draw,"Enables the Pokémon to move first occasionally."
+261,CURIOUSMEDICINE,Curious Medicine,"Stat changes are cleared when entering battle."

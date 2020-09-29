@@ -435,7 +435,7 @@
 383,HIDDENPOWER,Hidden Power,090,60,NORMAL,Special,100,15,0,NearOther,0,bef,"A unique attack that varies in type and intensity depending on the Pokémon using it."
 384,ROUND,Round,083,60,NORMAL,Special,100,15,0,NearOther,0,befk,"The user attacks with a song. Others can join in the Round and make the attack do greater damage."
 385,SWIFT,Swift,0A5,60,NORMAL,Special,0,20,0,AllNearFoes,0,bef,"Star-shaped rays are shot at the opposing team. This attack never misses."
-386,VICEGRIP,Vice Grip,000,55,NORMAL,Physical,100,30,0,NearOther,0,abef,"The target is gripped and squeezed from both sides to inflict damage."
+386,VISEGRIP,Vise Grip,000,55,NORMAL,Physical,100,30,0,NearOther,0,abef,"The target is gripped and squeezed from both sides to inflict damage."
 387,CUT,Cut,000,50,NORMAL,Physical,95,30,0,NearOther,0,abef,"The target is cut with a scythe or a claw. It can also be used to cut down thin trees."
 388,SNORE,Snore,011,50,NORMAL,Special,100,15,30,NearOther,0,bek,"An attack that can be used only if the user is asleep. The harsh noise may also make the target flinch."
 389,STRUGGLE,Struggle,002,50,NORMAL,Physical,0,1,0,RandomNearFoe,0,abf,"An attack that is used in desperation only if the user has no PP. It also hurts the user slightly."
@@ -664,6 +664,7 @@
 604,WONDERROOM,Wonder Room,124,0,PSYCHIC,Status,0,10,0,BothSides,-7,e,"The user creates a bizarre area in which Pokémon's Defense and Sp. Def stats are swapped for 5 turns."
 690,MAGICPOWDER,Magic Powder,184,0,PSYCHIC,Status,100,20,0,NearOther,0,bce,"The user scatters a cloud of magic powder that changes the target to Psychic type."
 721,EXPANDINGFORCE,Expanding Force,192,80,PSYCHIC,Special,100,20,0,00,0,bef,"The user attacks the target with its psychic power. This move's power goes up and damages all opposing Pokémon on Psychic Terrain."
+734,EERIESPELL,Eerie Spell,210,90,PSYCHIC,Special,100,10,0,NearOther,0,bef,"The user casts a horrible spell on the opponent. This removes 3 PP from their last used move."
 #-------------------------------
 605,HEADSMASH,Head Smash,0FC,150,ROCK,Physical,80,5,0,NearOther,0,abef,"The user attacks the foe with a hazardous, full-power headbutt. The user also takes terrible damage."
 606,ROCKWRECKER,Rock Wrecker,0C2,150,ROCK,Physical,90,5,0,NearOther,0,befn,"The user launches a huge boulder at the target to attack. It must rest on the next turn, however."
