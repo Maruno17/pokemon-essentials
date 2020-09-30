@@ -77,7 +77,7 @@ class PokeBattle_Battle
           return false
         end
       end
-    end   
+    end
     if battler.effects[PBEffects::Trapping]>0 ||
        battler.effects[PBEffects::MeanLook]>=0 ||
        battler.effects[PBEffects::Ingrain] ||
@@ -299,7 +299,7 @@ class PokeBattle_Battle
     partyOrder[idxParty],partyOrder[idxPartyOld] = partyOrder[idxPartyOld],partyOrder[idxParty]
     # Send out the new Pokémon
     pbSendOut([[idxBattler,party[idxParty]]])
-#    pbCalculatePriority(false,[idxBattler]) if NEWEST_BATTLE_MECHANICS
+    pbCalculatePriority(false,[idxBattler]) if NEWEST_BATTLE_MECHANICS
   end
 
   # Called from def pbReplace above and at the start of battle.

@@ -1185,7 +1185,7 @@ class PokeBattle_Move_0AF < PokeBattle_Move
        "14B",   # King's Shield
        "14C",   # Spiky Shield
        "168",   # Baneful Bunker
-	   "203",   # Obstruct
+	     "180",   # Obstruct
        # Moves that call other moves
        "0AE",   # Mirror Move
        "0AF",   # Copycat (this move)
@@ -1504,7 +1504,7 @@ class PokeBattle_Move_0B5 < PokeBattle_Move
        "14B",   # King's Shield
        "14C",   # Spiky Shield
        "168",   # Baneful Bunker
-	   "203",   # Obstruct
+	     "180",   # Obstruct
        # Moves that call other moves
        "0AE",   # Mirror Move
        "0AF",   # Copycat
@@ -1628,7 +1628,7 @@ class PokeBattle_Move_0B6 < PokeBattle_Move
        "14B",   # King's Shield
        "14C",   # Spiky Shield
        "168",   # Baneful Bunker
-	   "203",   # Obstruct
+	     "180",   # Obstruct
        # Moves that call other moves
        "0AE",   # Mirror Move
        "0AF",   # Copycat

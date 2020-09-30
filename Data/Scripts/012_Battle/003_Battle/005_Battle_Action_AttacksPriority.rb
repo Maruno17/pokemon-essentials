@@ -159,7 +159,7 @@ class PokeBattle_Battle
             end
             bArray[3] = pri
             # Grassy Glide
-            if move.function == "191" &&
+            if move.function == "18C" &&
                @field.terrain == PBBattleTerrains::Grassy &&
                !b.airborne?
               pri+=1

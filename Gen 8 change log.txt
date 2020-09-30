@@ -2,18 +2,16 @@
 CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lolface, Golisopod User, KyureJL, DarrylBD99, Turn20Negate, Zerokid, TheKandinavian
 
 # To Do
-Renumber Items
+Milcery's Evolution
+Fix TRs
 Renumber Moves
-Change move Function Codes
-Add Dynamic Turn Order Calculation
 Add TM Compatibility
-Change what Moves TMs Teach
- 
-##### Need some things from here #####
-https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
-Everything in "Changes to old Mechanics" except Dynamic Turn Order by Golisopod User
+Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
 
-##### Need PBS #####
+
+
+Updating Old Mechanics to Gen 8 Standard by Golisopod User
+
 Moves.txt - TheToxic
 Pokemon.txt (for Gen 8) - TheToxic
 Pokemonforms.txt (for Gen 8) - TheToxic
@@ -24,8 +22,6 @@ Pokemon.txt (for Gen 1-7) - Zerokid
 Pokemonforms.txt (for Gen 1-7) - Zerokid
 Abilities.txt (for Gen 8) - Zerokid
 
-##### Evolution methods that need code yet #####
-Milcery
 
 ##### Evolution methods Coded #####
 Toxel                    by WolfPP adapted by Aioross

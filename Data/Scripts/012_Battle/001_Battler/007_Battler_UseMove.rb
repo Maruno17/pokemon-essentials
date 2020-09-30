@@ -60,7 +60,7 @@ class PokeBattle_Battler
     }
     @battle.pbJudge
     # Update priority order
-#    @battle.pbCalculatePriority if NEWEST_BATTLE_MECHANICS
+    @battle.pbCalculatePriority if NEWEST_BATTLE_MECHANICS
     return true
   end
 
@@ -381,7 +381,7 @@ class PokeBattle_Battler
       end
     end
     # Redirect Dragon Darts first hit if necessary
-    if move.function=="209" && @battle.pbSideSize(@index)>1
+    if move.function=="17C" && @battle.pbSideSize(@index)>1
       targets=pbChangeTargets(move,user,targets,0)
     end
     #---------------------------------------------------------------------------
@@ -448,7 +448,7 @@ class PokeBattle_Battler
         #       normal.
         # All targets are fainted
         # Don't stop using the move if Dragon Darts could still hit something
-        break if !targets.any? { |t| !t.fainted? } unless move.function=="209" && realNumHits<numHits && !@battle.pbAllFainted?(user.idxOpposingSide)
+        break if !targets.any? { |t| !t.fainted? } unless move.function=="17C" && realNumHits<numHits && !@battle.pbAllFainted?(user.idxOpposingSide)
       end
       # Battle Arena only - attack is successful
       @battle.successStates[user.index].useState = 2
@@ -599,7 +599,7 @@ class PokeBattle_Battler
     # Count a hit for Parental Bond (if it applies)
     user.effects[PBEffects::ParentalBond] -= 1 if user.effects[PBEffects::ParentalBond]>0
     # Redirect Dragon Darts other hits
-        if move.function=="209" && @battle.pbSideSize(targets[0].index)>1 && hitNum>0
+        if move.function=="17C" && @battle.pbSideSize(targets[0].index)>1 && hitNum>0
           targets=pbChangeTargets(move,user,targets,1)
         end
     # Accuracy check (accuracy/evasion calc)

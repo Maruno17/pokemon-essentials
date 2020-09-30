@@ -708,6 +708,7 @@ def pbUseItem(bag,item,bagscene=nil)
         $Trainer.party[mon].trmoves.push(machine)
       end
       return 1
+  end
     end
     return 0
   elsif useType && (useType==1 || useType==5) # Item is usable on a Pokémon
