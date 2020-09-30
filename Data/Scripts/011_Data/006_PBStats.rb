@@ -28,6 +28,7 @@ begin
       names[EVASION]  = _INTL("evasiveness")
       return names[id]
     end
+
     def self.getNameBrief(id)
       id = getID(PBStats,id)
       names = []
@@ -41,6 +42,7 @@ begin
       names[EVASION]  = _INTL("eva")
       return names[id]
     end
+
     def self.eachStat
       [HP,ATTACK,DEFENSE,SPATK,SPDEF,SPEED].each { |s| yield s }
     end

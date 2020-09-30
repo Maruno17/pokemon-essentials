@@ -112,9 +112,9 @@ ItemHandlers::UseInField.add(:MAXREPEL,proc { |item|
   next pbRepel(item,250)
 })
 
-Events.onStepTaken += proc{
-  if !PBTerrain.isIce?($game_player.terrain_tag) # Shouldn't count down if on ice
-    if $PokemonGlobal.repel>0
+Events.onStepTaken += proc {
+  if $PokemonGlobal.repel>0
+    if !PBTerrain.isIce?($game_player.terrain_tag)   # Shouldn't count down if on ice
       $PokemonGlobal.repel -= 1
       if $PokemonGlobal.repel<=0
         if $PokemonBag.pbHasItem?(:REPEL) ||
