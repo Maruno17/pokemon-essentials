@@ -4,6 +4,7 @@ CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lo
 # To Do
 Milcery's Evolution
 Fix TRs
+Update Item prices and Descriptions
 Renumber Moves
 Add TM Compatibility
 Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
