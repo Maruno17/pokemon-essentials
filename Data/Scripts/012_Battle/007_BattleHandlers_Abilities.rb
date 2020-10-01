@@ -24,7 +24,7 @@ BattleHandlers::SpeedCalcAbility.add(:SANDRUSH,
 
 BattleHandlers::SpeedCalcAbility.add(:SLOWSTART,
   proc { |ability,battler,mult|
-    next mult/2 if battler.turnCount<=5
+    next mult/2 if battler.effects[PBEffects::SlowStart]>0
   }
 )
 
@@ -1030,7 +1030,7 @@ BattleHandlers::DamageCalcUserAbility.add(:SHEERFORCE,
 
 BattleHandlers::DamageCalcUserAbility.add(:SLOWSTART,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] /= 2 if user.turnCount<=5 && move.physicalMove?
+    mults[ATK_MULT] /= 2 if user.effects[PBEffects::SlowStart]>0 && move.physicalMove?
   }
 )
 

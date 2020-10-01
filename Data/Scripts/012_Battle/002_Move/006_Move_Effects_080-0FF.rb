@@ -752,7 +752,7 @@ class PokeBattle_Move_09F < PokeBattle_Move
     elsif isConst?(@id,PBMoves,:MULTIATTACK)
       @itemTypes = {
          :FIGHTINGMEMORY => :FIGHTING,
-         :SLYINGMEMORY   => :FLYING,
+         :FLYINGMEMORY   => :FLYING,
          :POISONMEMORY   => :POISON,
          :GROUNDMEMORY   => :GROUND,
          :ROCKMEMORY     => :ROCK,
