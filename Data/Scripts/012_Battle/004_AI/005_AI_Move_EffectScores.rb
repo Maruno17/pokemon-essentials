@@ -2806,7 +2806,7 @@ class PokeBattle_AI
     when "152"
     #---------------------------------------------------------------------------
     when "153"
-      score -= 95 if target.pbOwnSide.effects[PBEffects::StickyWeb]
+      score -= 95 if user.pbOpposingSide.effects[PBEffects::StickyWeb]
     #---------------------------------------------------------------------------
     when "154"
     #---------------------------------------------------------------------------
