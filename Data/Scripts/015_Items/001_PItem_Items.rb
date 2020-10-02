@@ -705,7 +705,7 @@ def pbUseItem(bag,item,bagscene=nil)
       bag.pbDeleteItem(item) if pbIsTechnicalMachine?(item) && !INFINITE_TMS
       if pbIsTechnicalRecord?(item)
         bag.pbDeleteItem(item)
-        $Trainer.party[mon].trmoves.push(machine)
+        $Trainer.party[mon].trmoves.push(machine) if mon.is_a?(Numeric)
       end
       return 1
     end

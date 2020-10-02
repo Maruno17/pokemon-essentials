@@ -1044,7 +1044,7 @@ def pbMoveTutorChoose(move,movelist=nil,bymachine=false)
     end
     screen.pbEndScene
   }
-  return ret   # Returns whether the move was learned by a Pokemon
+  return ret if ret
 end
 
 def pbChooseMove(pokemon,variableNumber,nameVarNumber)
