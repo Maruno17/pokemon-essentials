@@ -2600,63 +2600,10 @@ end
 
 
 #===============================================================================
-# Hits 3 times and always critical. (Surging Strikes)
+# Increases the user's Speed by 1 stage. Fail if the user is not a Morpeko.
+# If the user is a Morpeko-Hangry, this move will be Dark type. (Aura Wheel)
 #===============================================================================
-class PokeBattle_Move_176 < PokeBattle_Move_0A0
-  def multiHitMove?;           return true; end
-  def pbNumHits(user,targets); return 3;    end
-end
-
-
-
-#===============================================================================
-# If the user attacks before the target, or if the target switches in during the
-# turn that Fishious Rend is used, its base power doubles. (Fishious Rend, Bolt Beak)
-#===============================================================================
-class PokeBattle_Move_177 < PokeBattle_Move
-  def pbBaseDamage(baseDmg,user,target)
-    if @battle.choices[target.index][0]!=:None &&
-       ((@battle.choices[target.index][0]!=:UseMove &&
-       @battle.choices[target.index][0]==:Shift) || target.movedThisRound?)
-    else
-      baseDmg *= 2
-    end
-    return baseDmg
-  end
-end
-
-
-
-#===============================================================================
-# The user attacks by slamming its body into the target. The higher the user's
-# Defense, the more damage it can inflict on the target. (Body Press)
-#===============================================================================
-class PokeBattle_Move_178 < PokeBattle_Move
-  def pbGetAttackStats(user,target)
-    return user.defense, user.stages[PBStats::DEFENSE]+6
-  end
-end
-
-
-
-#===============================================================================
-# The user sharply raises the target's Attack and Sp. Atk stats by decorating
-# the target. (Decorate)
-#===============================================================================
-class PokeBattle_Move_179 < PokeBattle_TargetMultiStatUpMove
-  def initialize(battle,move)
-    super
-    @statUp = [PBStats::ATTACK,2,PBStats::SPATK,2]
-  end
-end
-
-
-
-#===============================================================================
-# Raise speed by one stage. Fails if user is not a Morpeko. Base Type is dark
-# if Morpeko's Form is Hangry Form (Aura Wheel)
-#===============================================================================
-class PokeBattle_Move_180 < PokeBattle_StatUpMove
+class PokeBattle_Move_176 < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
     @statUp = [PBStats::SPEED,1]
@@ -2688,10 +2635,40 @@ end
 
 
 #===============================================================================
+# User's Defense is used instead of user's Attack for this move's calculations.
+# (Body Press)
+#===============================================================================
+class PokeBattle_Move_177 < PokeBattle_Move
+  def pbGetAttackStats(user,target)
+    return user.defense, user.stages[PBStats::DEFENSE]+6
+  end
+end
+
+
+
+#===============================================================================
+# If the user attacks before the target, or if the target switches in during the
+# turn that Fishious Rend is used, its base power doubles. (Fishious Rend, Bolt Beak)
+#===============================================================================
+class PokeBattle_Move_178 < PokeBattle_Move
+  def pbBaseDamage(baseDmg,user,target)
+    if @battle.choices[target.index][0]!=:None &&
+       ((@battle.choices[target.index][0]!=:UseMove &&
+       @battle.choices[target.index][0]==:Shift) || target.movedThisRound?)
+    else
+      baseDmg *= 2
+    end
+    return baseDmg
+  end
+end
+
+
+
+#===============================================================================
 # Raises all user's stats by 1 stage in exchange for the user losing 1/3 of its
 # maximum HP, rounded down. Fails if the user would faint. (Clangorous Soul)
 #===============================================================================
-class PokeBattle_Move_181 < PokeBattle_Move
+class PokeBattle_Move_179 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
     if user.hp<=(user.totalhp/3) ||
       !user.pbCanRaiseStatStage?(PBStats::ATTACK,user,self) ||
@@ -2731,7 +2708,7 @@ end
 # Swaps barriers, veils and other effects between each side of the battlefield.
 # (Court Change)
 #===============================================================================
-class PokeBattle_Move_182 < PokeBattle_Move
+class PokeBattle_Move_17A < PokeBattle_Move
   def pbEffectGeneral(user)
     changeside=false
     sides=[user.pbOwnSide,user.pbOpposingSide]
@@ -2799,95 +2776,43 @@ class PokeBattle_Move_182 < PokeBattle_Move
 end
 
 
-#===============================================================================
-# Ignores move redirection from abilities and moves. (Snipe Shot)
-#===============================================================================
-class PokeBattle_Move_183 < PokeBattle_Move
-end
-
-
 
 #===============================================================================
-# Target becomes Psychic type. (Magic Powder)
+# The user sharply raises the target's Attack and Sp. Atk stats by decorating
+# the target. (Decorate)
 #===============================================================================
-class PokeBattle_Move_184 < PokeBattle_Move
-  def pbFailsAgainstTarget?(user,target)
-    if !target.canChangeType? ||
-       !target.pbHasOtherType?(getConst(PBTypes,:PSYCHIC))
-      @battle.pbDisplay(_INTL("But it failed!"))
-      return true
-    end
-    return false
-  end
-
-  def pbEffectAgainstTarget(user,target)
-    newType = getConst(PBTypes,:PSYCHIC)
-    target.pbChangeTypes(newType)
-    typeName = PBTypes.getName(newType)
-    @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",target.pbThis,typeName))
-  end
-end
-
-
-
-#===============================================================================
-# Burns opposing Pokemon that have increased their stats in that turn before the
-# execution of this move (Burning Jealousy)
-#===============================================================================
-class PokeBattle_Move_185 < PokeBattle_Move
-  def pbAdditionalEffect(user,target)
-    return if target.damageState.substitute
-    if target.pbCanBurn?(user,false,self) &&
-       target.effects[PBEffects::BurningJealousy]
-      target.pbBurn(user)
-    end
-  end
-end
-
-
-
-#===============================================================================
-# Jungle Healing
-#===============================================================================
-class PokeBattle_Move_186 < PokeBattle_Move
-  def healingMove?; return true; end
-
-  def pbMoveFailed?(user,targets)
-    jglheal = 0
-    for i in 0...targets.length
-      jglheal += 1 if (targets[i].hp == targets[i].totalhp || !targets[i].canHeal?) && targets[i].status ==PBStatuses::NONE
-    end
-    if jglheal == targets.length
-      @battle.pbDisplay(_INTL("But it failed!"))
-      return true
-    end
-    return false
-  end
-
-  def pbEffectAgainstTarget(user,target)
-      target.pbCureStatus
-    if target.hp != target.totalhp && target.canHeal?
-      hpGain = (target.totalhp/4.0).round
-      target.pbRecoverHP(hpGain)
-      @battle.pbDisplay(_INTL("{1}'s health was restored.",target.pbThis))
-    end
+class PokeBattle_Move_17B < PokeBattle_TargetMultiStatUpMove
+  def initialize(battle,move)
     super
+    @statUp = [PBStats::ATTACK,2,PBStats::SPATK,2]
   end
 end
 
 
 
 #===============================================================================
-# Meteor Beam
+# In singles, this move hits the target twice. In doubles, this move hits each
+# target once. If one of the two opponents protects or while semi-invulnerable
+# or is a Fairy-type Pokémon, it hits the opponent that doesn't protect twice.
+# (Dragon Darts)
 #===============================================================================
-class PokeBattle_Move_187 < PokeBattle_TwoTurnMove
-  def pbChargingTurnMessage(user,targets)
-    @battle.pbDisplay(_INTL("{1} is overflowing with space power!",user.pbThis))
-  end
+class PokeBattle_Move_17C < PokeBattle_Move_0BD
+end
 
-  def pbChargingTurnEffect(user,target)
-    if user.pbCanRaiseStatStage?(PBStats::SPATK,user,self)
-      user.pbRaiseStatStage(PBStats::SPATK,1,user)
+
+
+#===============================================================================
+# Prevents both the user and the target from escaping. (Jaw Lock)
+#===============================================================================
+class PokeBattle_Move_17D < PokeBattle_Move
+  def pbEffectAgainstTarget(user,target)
+    if target.effects[PBEffects::JawLockUser]<0 && !target.effects[PBEffects::JawLock] &&
+      user.effects[PBEffects::JawLockUser]<0 && !user.effects[PBEffects::JawLock]
+      user.effects[PBEffects::JawLock] = true
+      target.effects[PBEffects::JawLock] = true
+      user.effects[PBEffects::JawLockUser] = user.index
+      target.effects[PBEffects::JawLockUser] = user.index
+      @battle.pbDisplay(_INTL("Neither Pokémon can run away!"))
     end
   end
 end
@@ -2895,9 +2820,11 @@ end
 
 
 #===============================================================================
-# Life Dew
+# The user restores 1/4 of its maximum HP, rounded half up. If there is and
+# adjacent ally, the user restores 1/4 of both its and its ally's maximum HP,
+# rounded up. (Life Dew)
 #===============================================================================
-class PokeBattle_Move_188 < PokeBattle_Move
+class PokeBattle_Move_17E < PokeBattle_Move
   def healingMove?; return true; end
   def worksWithNoTargets?; return true; end
 
@@ -2939,97 +2866,10 @@ end
 
 
 
-
 #===============================================================================
-# Coaching
+# Increases each stat by 1 stage. Prevents user from fleeing. (No Retreat)
 #===============================================================================
-class PokeBattle_Move_189 < PokeBattle_TargetMultiStatUpMove
-  def initialize(battle,move)
-    super
-    @statUp = [PBStats::ATTACK,1,PBStats::DEFENSE,1]
-  end
-end
-
-
-
-#===============================================================================
-# Terrain Pulse
-#===============================================================================
-class PokeBattle_Move_190 < PokeBattle_Move
-  def pbBaseDamage(baseDmg,user,target)
-    baseDmg *= 2 if @battle.field.terrain != PBBattleTerrains::None && !user.airborne?
-    return baseDmg
-  end
-
-  def pbBaseType(user)
-    ret = getID(PBTypes,:NORMAL)
-    if !user.airborne?
-      case @battle.field.terrain
-      when PBBattleTerrains::Electric
-        ret = getConst(PBTypes,:ELECTRIC) || ret
-      when PBBattleTerrains::Grassy
-        ret = getConst(PBTypes,:GRASS) || ret
-      when PBBattleTerrains::Misty
-        ret = getConst(PBTypes,:FAIRY) || ret
-      when PBBattleTerrains::Psychic
-        ret = getConst(PBTypes,:PSYCHIC) || ret
-      end
-    end
-    return ret
-  end
-
-  def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
-    t = pbBaseType(user)
-    hitNum = 1 if isConst?(t,PBTypes,:ELECTRIC)
-    hitNum = 2 if isConst?(t,PBTypes,:GRASS)
-    hitNum = 3 if isConst?(t,PBTypes,:FAIRY)
-    hitNum = 4 if isConst?(t,PBTypes,:PSYCHIC)
-    super
-  end
-end
-
-
-
-#===============================================================================
-# Grassy Glide
-#===============================================================================
-class PokeBattle_Move_191 < PokeBattle_Move
-end
-
-
-
-#===============================================================================
-# Expanding Force
-#===============================================================================
-class PokeBattle_Move_192 < PokeBattle_Move
-  def pbBaseDamage(baseDmg,user,target)
-    baseDmg *= 1.5 if @battle.field.terrain==PBBattleTerrains::Psychic
-    return baseDmg
-  end
-end
-
-
-
-#===============================================================================
-# Poltergeist
-#===============================================================================
-class PokeBattle_Move_193 < PokeBattle_Move
-  def pbFailsAgainstTarget?(user,target)
-    if target.item!=0
-      @battle.pbDisplay(_INTL("{1} is about to be attacked by its {2}!",target.pbThis,target.itemName))
-      return false
-    end
-    @battle.pbDisplay(_INTL("But it failed!"))
-    return true
-  end
-end
-
-
-
-#===============================================================================
-# No Retreat
-#===============================================================================
-class PokeBattle_Move_194 < PokeBattle_MultiStatUpMove
+class PokeBattle_Move_17F < PokeBattle_MultiStatUpMove
   def pbMoveFailed?(user,targets)
     if user.effects[PBEffects::NoRetreat]
       @battle.pbDisplay(_INTL("But it failed!"))

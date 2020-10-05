@@ -2,18 +2,17 @@
 CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lolface, Golisopod User, KyureJL, DarrylBD99, Turn20Negate, Zerokid, TheKandinavian
 
 # To Do
-Renumber Items
+Milcery's Evolution
+Fix TRs
+Update Item prices and Descriptions
 Renumber Moves
-Change move Function Codes
-Add Dynamic Turn Order Calculation
 Add TM Compatibility
-Change what Moves TMs Teach
- 
-##### Need some things from here #####
-https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
-Everything in "Changes to old Mechanics" except Dynamic Turn Order by Golisopod User
+Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
 
-##### Need PBS #####
+
+
+Updating Old Mechanics to Gen 8 Standard by Golisopod User
+
 Moves.txt - TheToxic
 Pokemon.txt (for Gen 8) - TheToxic
 Pokemonforms.txt (for Gen 8) - TheToxic
@@ -24,8 +23,6 @@ Pokemon.txt (for Gen 1-7) - Zerokid
 Pokemonforms.txt (for Gen 1-7) - Zerokid
 Abilities.txt (for Gen 8) - Zerokid
 
-##### Evolution methods that need code yet #####
-Milcery
 
 ##### Evolution methods Coded #####
 Toxel                    by WolfPP adapted by Aioross
@@ -35,11 +32,11 @@ Yamask                   by WolfPP adapted by Aioross improved by Golisopod User
 ##### Forms Coded #####
 Eiscue                   by Aioross
 Indeedee                 by KyureJL improved by Vendily
-Zamazenta / Zacian       by KyureJL completed by Aioross Fixed by Golisopod User 
+Zamazenta / Zacian       by KyureJL completed by Aioross Fixed by Golisopod User
 Galarian Darmanitan      by Aioross
 Cramorant                by Aioross
 Morpeko                  by Aioross
- 
+
 ##### Items Coded #####
 Technical Records        by Vendily
 Rusted Shield            by KyureJL
@@ -53,7 +50,7 @@ Exp. Candy XS/S/M/L/XL   by Aioross
 Room Service             by Aioross
 Eject Pack               by Aioross
 Mints                    by KyureJL improved by Aioross
- 
+
 ##### Moves Coded #####
 Surging Strikes          by KyureJL improved by lolface fixed by KyureJL
 Bolt Beak                by lolface
@@ -90,7 +87,7 @@ Corrosive Gas            by lolface
 Coaching                 by lolface improved by Vendily
 Jungle Healing           by lolface improved by Vendily
 Dragon Darts             by Turn20Negate
- 
+
 ##### Abilities Coded #####
 Ball Fetch               by WolfPP adapted by Aioross improved by Golisopod User
 Intrepid Sword           by KyureJL
@@ -124,4 +121,3 @@ Neutralizing Gas         by Vendily fixed by Aioross
 Galarian in Daycare      by KyureJL
 Stick now is Leek and affects Sirfetch'd by KyureJL
 Fog Weather              by TheKandinavian
- 

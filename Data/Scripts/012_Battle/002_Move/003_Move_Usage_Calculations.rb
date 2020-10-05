@@ -432,7 +432,7 @@ class PokeBattle_Move
     end
     # Recalculate the type modifier for Dragon Darts else it does 1 damage on its
     # second hit on a different target
-    if self.function=="209" && @battle.pbSideSize(target.index)>1
+    if self.function=="17C" && @battle.pbSideSize(target.index)>1
       typeMod = self.pbCalcTypeMod(self.calcType,user,target)
       target.damageState.typeMod = typeMod
     end

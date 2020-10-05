@@ -286,7 +286,7 @@ end
 
 
 #===============================================================================
-# JavaScript-related utilities
+# Json-related utilities
 #===============================================================================
 # Returns true if the given string represents a valid object in JavaScript
 # Object Notation, and false otherwise.
@@ -1037,14 +1037,14 @@ def pbMoveTutorChoose(move,movelist=nil,bymachine=false)
         pbMessage(_INTL("{1} can't learn {2}.",pokemon.name,movename)) { screen.pbUpdate }
       else
         if pbLearnMove(pokemon,move,false,bymachine) { screen.pbUpdate }
-          ret = true
+          ret = chosen
           break
         end
       end
     end
     screen.pbEndScene
   }
-  return ret   # Returns whether the move was learned by a Pokemon
+  return ret if ret
 end
 
 def pbChooseMove(pokemon,variableNumber,nameVarNumber)

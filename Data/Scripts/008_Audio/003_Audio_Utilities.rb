@@ -108,7 +108,7 @@ def pbPlaySoundData(samples,volume,async=false,sampleFreq=11025)
       ret = name
       break
     end
-    return ret
+    next ret
   }
   playThenDelete = proc { |path,volume,length,_async|
     next if !path || !safeExists?(path)

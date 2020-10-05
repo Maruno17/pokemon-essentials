@@ -39,8 +39,8 @@ class Event
   # The first argument is the sender of the event, the second argument contains
   # the event's parameters. If three or more arguments are given, this method
   # supports the following callbacks:
-  # proc{ |sender,params| } where params is an array of the other parameters, and
-  # proc{ |sender,arg0,arg1,...| }
+  # proc { |sender,params| } where params is an array of the other parameters, and
+  # proc { |sender,arg0,arg1,...| }
   def trigger(*arg)
     arglist = arg[1,arg.length]
     for callback in @callbacks

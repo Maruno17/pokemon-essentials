@@ -77,7 +77,7 @@ class PokeBattle_Battle
           return false
         end
       end
-    end   
+    end
     if battler.effects[PBEffects::Trapping]>0 ||
        battler.effects[PBEffects::MeanLook]>=0 ||
        battler.effects[PBEffects::Ingrain] ||
@@ -182,7 +182,7 @@ class PokeBattle_Battle
             idxPartyForName = idxPartyNew
             enemyParty = pbParty(idxBattler)
             if isConst?(enemyParty[idxPartyNew].ability,PBAbilities,:ILLUSION)
-              idxPartyForName = pbGetLastPokeInTeam(idxBattler)
+              idxPartyForName = pbLastInTeam(idxBattler)
             end
             if pbDisplayConfirm(_INTL("{1} is about to send in {2}. Will you switch your Pokémon?",
                opponent.fullname,enemyParty[idxPartyForName].name))
@@ -299,7 +299,7 @@ class PokeBattle_Battle
     partyOrder[idxParty],partyOrder[idxPartyOld] = partyOrder[idxPartyOld],partyOrder[idxParty]
     # Send out the new Pokémon
     pbSendOut([[idxBattler,party[idxParty]]])
-#    pbCalculatePriority(false,[idxBattler]) if NEWEST_BATTLE_MECHANICS
+    pbCalculatePriority(false,[idxBattler]) if NEWEST_BATTLE_MECHANICS
   end
 
   # Called from def pbReplace above and at the start of battle.
