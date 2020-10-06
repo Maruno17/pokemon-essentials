@@ -34,8 +34,8 @@ class PokemonTemp
     when "canrun";                 rules["canRun"]         = true
     when "cannotrun";              rules["canRun"]         = false
     when "roamerflees";            rules["roamerFlees"]    = true
-    when "noExp";                  rules["expGain"]        = false
-    when "noMoney";                rules["moneyGain"]      = false
+    when "noexp";                  rules["expGain"]        = false
+    when "nomoney";                rules["moneyGain"]      = false
     when "switchstyle";            rules["switchStyle"]    = true
     when "setstyle";               rules["switchStyle"]    = false
     when "anims";                  rules["battleAnims"]    = true
@@ -45,7 +45,7 @@ class PokemonTemp
     when "environment", "environ"; rules["environment"]    = getID(PBEnvironment,var)
     when "backdrop", "battleback"; rules["backdrop"]       = var
     when "base";                   rules["base"]           = var
-    when "outcomevar", "outcome";  rules["outcomeVar"]     = var
+    when "outcome", "outcomevar";  rules["outcomeVar"]     = var
     when "nopartner";              rules["noPartner"]      = true
     else
       raise _INTL("Battle rule \"{1}\" does not exist.",rule)
@@ -64,7 +64,7 @@ def setBattleRule(*args)
     else
       case arg.downcase
       when "terrain", "weather", "environment", "environ", "backdrop",
-           "battleback", "base", "outcomevar", "outcome"
+           "battleback", "base", "outcome", "outcomevar"
         r = arg
         next
       end
