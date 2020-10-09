@@ -245,7 +245,7 @@ class PokeBattle_Battle
         pbDisplayBrief(_INTL("{1}, switch out! Come back!",battler.name))
       end
     else
-      owner = pbGetOwnerName(b.index)
+      owner = pbGetOwnerName(battler.index)
       pbDisplayBrief(_INTL("{1} withdrew {2}!",owner,battler.name))
     end
   end
