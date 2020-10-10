@@ -744,3 +744,5 @@ MultipleForms.register(:KOFFING,{
     next 0
   }
 })
+
+MultipleForms.copy(:KOFFING,:MIMEJR)
