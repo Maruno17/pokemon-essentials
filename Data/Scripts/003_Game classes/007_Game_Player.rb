@@ -388,7 +388,7 @@ class Game_Player < Game_Character
     unless pbMapInterpreterRunning? or $game_temp.message_window_showing or
            $PokemonTemp.miniupdate or $game_temp.in_menu
       # Move player in the direction the directional button is being pressed
-      if dir==@lastdir && Graphics.frame_count-@lastdirframe>Graphics.frame_rate/20
+      if @moved_last_frame || (dir==@lastdir && Graphics.frame_count-@lastdirframe>Graphics.frame_rate/20)
         case dir
         when 2; move_down
         when 4; move_left

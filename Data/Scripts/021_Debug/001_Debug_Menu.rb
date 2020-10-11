@@ -348,7 +348,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
           params.setCancelValue(0)
           level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",PBSpecies.getName(species)),params)
           if level>0
-            pkmn.push(pbNewPkmn(species,level))
+            pkmn.push(pbGenerateWildPokemon(species,level))
           end
         end
       else                                     # Edit a Pokémon

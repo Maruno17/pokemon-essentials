@@ -3,9 +3,7 @@ CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lo
 
 # To Do
 Milcery's Evolution
-Fix TRs
 Update Item prices and Descriptions
-Renumber Moves
 Add TM Compatibility
 Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
 
@@ -50,6 +48,9 @@ Exp. Candy XS/S/M/L/XL   by Aioross
 Room Service             by Aioross
 Eject Pack               by Aioross
 Mints                    by KyureJL improved by Aioross
+Exp Charm		 by Golisopod User
+Catching Charm		 by Golisopod User
+ 
 
 ##### Moves Coded #####
 Surging Strikes          by KyureJL improved by lolface fixed by KyureJL

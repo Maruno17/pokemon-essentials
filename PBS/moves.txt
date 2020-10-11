@@ -161,7 +161,7 @@
 154,STORMTHROW,Storm Throw,0A0,60,FIGHTING,Physical,100,10,0,NearOther,0,abef,"The user strikes the target with a fierce blow. This attack always results in a critical hit."
 155,KARATECHOP,Karate Chop,000,50,FIGHTING,Physical,100,25,0,NearOther,0,abefh,"The target is attacked with a sharp chop. Critical hits land more easily."
 156,MACHPUNCH,Mach Punch,000,40,FIGHTING,Physical,100,30,0,NearOther,1,abefj,"The user throws a punch at blinding speed. It is certain to strike first."
-157,POWERUPPUNCH,Power-Up Punch,01C,40,FIGHTING,Physical,100,20,0,NearOther,0,abefj,"Striking opponents repeatedly makes the user's fists harder, raising the user's Attack stat."
+157,POWERUPPUNCH,Power-Up Punch,01C,40,FIGHTING,Physical,100,20,100,NearOther,0,abefj,"Striking opponents repeatedly makes the user's fists harder, raising the user's Attack stat."
 158,ROCKSMASH,Rock Smash,043,40,FIGHTING,Physical,100,15,50,NearOther,0,abef,"The user attacks with a punch that can shatter a rock. It may also lower the foe's Defense stat."
 159,VACUUMWAVE,Vacuum Wave,000,40,FIGHTING,Special,100,30,0,NearOther,1,bef,"The user whirls its fists to send a wave of pure vacuum at the target. This move always goes first."
 160,DOUBLEKICK,Double Kick,0BD,30,FIGHTING,Physical,100,30,0,NearOther,0,abef,"The target is quickly kicked twice in succession using both feet."
