@@ -30,11 +30,11 @@ Yamask                   by WolfPP adapted by Aioross improved by Golisopod User
 ##### Forms Coded #####
 Eiscue                   by Aioross
 Indeedee                 by KyureJL improved by Vendily
-Zamazenta / Zacian       by KyureJL completed by Aioross Fixed by Golisopod User 
+Zamazenta / Zacian       by KyureJL completed by Aioross Fixed by Golisopod User
 Galarian Darmanitan      by Aioross
 Cramorant                by Aioross
 Morpeko                  by Aioross
- 
+
 ##### Items Coded #####
 Technical Records        by Vendily
 Rusted Shield            by KyureJL
@@ -51,6 +51,7 @@ Mints                    by KyureJL improved by Aioross
 Exp Charm		 by Golisopod User
 Catching Charm		 by Golisopod User
  
+
 ##### Moves Coded #####
 Surging Strikes          by KyureJL improved by lolface fixed by KyureJL
 Bolt Beak                by lolface
@@ -87,7 +88,7 @@ Corrosive Gas            by lolface
 Coaching                 by lolface improved by Vendily
 Jungle Healing           by lolface improved by Vendily
 Dragon Darts             by Turn20Negate
- 
+
 ##### Abilities Coded #####
 Ball Fetch               by WolfPP adapted by Aioross improved by Golisopod User
 Intrepid Sword           by KyureJL
@@ -121,4 +122,3 @@ Neutralizing Gas         by Vendily fixed by Aioross
 Galarian in Daycare      by KyureJL
 Stick now is Leek and affects Sirfetch'd by KyureJL
 Fog Weather              by TheKandinavian
- 
