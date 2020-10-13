@@ -134,7 +134,7 @@ class Pokemon
 
     # @param id [Integer] the ID of the owner
     # @param name [String] the name of the owner
-    # @param gender [0, 1, 2] the gender of the owner (0 = male, 1 = female, 2 = unknown)
+    # @param gender [Integer] the gender of the owner (0 = male, 1 = female, 2 = unknown)
     # @param language [Integer] the language of the owner (see {pbGetLanguage} for language IDs)
     def initialize(id, name, gender, language)
       @id = id
@@ -150,6 +150,34 @@ class Pokemon
       return new(trainer.id, trainer.name, trainer.gender, trainer.language)
     end
 
+    def id=(new_id)
+      unless new_id.is_a?(Integer)
+        raise ArgumentError, _INTL('A {1} was given as Pokémon owner id', new_id.class.name)
+      end
+      @id = new_id
+    end
+
+    def name=(new_name)
+      unless new_name.is_a?(String)
+        raise ArgumentError, _INTL('A {1} was given as Pokémon owner id', new_name.class.name)
+      end
+      @name = new_name
+    end
+
+    def gender=(new_gender)
+      unless new_gender.is_a?(Integer)
+        raise ArgumentError, _INTL('A {1} was given as Pokémon owner id', new_gender.class.name)
+      end
+      @gender = new_gender
+    end
+
+    def language=(new_language)
+      unless new_language.is_a?(Integer)
+        raise ArgumentError, _INTL('A {1} was given as Pokémon owner id', new_language.class.name)
+      end
+      @language = new_language
+    end
+
     # @return [Integer] the public portion of the owner's ID
     def public_id
       return @id & 0xFFFF
@@ -157,7 +185,18 @@ class Pokemon
   end
 
   # @return [Owner] this Pokémon's owner
-  attr_reader :owner
+  def owner
+    return @owner
+  end
+
+  # Changes this Pokémon's owner.
+  # @param new_owner [Owner] the owner to change to
+  def owner=(new_owner)
+    unless new_owner.is_a?(Owner)
+      raise ArgumentError, _INTL("A {1} was given as a Pokémon owner", new_owner.class.name)
+    end
+    @owner = new_owner
+  end
 
   # @return [Integer] the public portion of the original trainer's ID
   def publicID
