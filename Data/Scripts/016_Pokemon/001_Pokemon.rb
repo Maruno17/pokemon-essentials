@@ -77,10 +77,6 @@ class Pokemon
   attr_accessor :pokerus
   # @return [Integer] this Pokémon's personal ID
   attr_accessor :personalID
-  # The 32-bit ID of this Pokémon's trainer. The secret ID is in the
-  # upper 16 bits.
-  # @return [Integer] the ID of this Pokémon's trainer
-  attr_accessor :trainerID
   # @return [Integer] the manner this Pokémon was obtained:
   #   0 (met), 1 (as egg), 2 (traded), 4 (fateful encounter)
   attr_accessor :obtainMode
@@ -196,11 +192,6 @@ class Pokemon
       raise ArgumentError, _INTL("A {1} was given as a Pokémon owner", new_owner.class.name)
     end
     @owner = new_owner
-  end
-
-  # @return [Integer] the public portion of the original trainer's ID
-  def publicID
-    return @trainerID & 0xFFFF
   end
 
   # @param trainer [PokeBattle_Trainer] the trainer to compare to the OT

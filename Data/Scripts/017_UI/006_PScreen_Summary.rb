@@ -412,7 +412,7 @@ class PokemonSummary_Scene
       when 1; ownerbase = Color.new(248,56,32);  ownershadow = Color.new(224,152,144)
       end
       textpos.push([@pokemon.ot,435,176,2,ownerbase,ownershadow])
-      textpos.push([sprintf("%05d",@pokemon.publicID),435,208,2,Color.new(64,64,64),Color.new(176,176,176)])
+      textpos.push([sprintf("%05d",@pokemon.owner.public_id),435,208,2,Color.new(64,64,64),Color.new(176,176,176)])
     end
     # Write Exp text OR heart gauge message (if a Shadow Pokémon)
     if @pokemon.shadowPokemon?

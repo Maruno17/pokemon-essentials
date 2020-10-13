@@ -170,7 +170,7 @@ class PokemonTrade_Scene
     speciesname2=PBSpecies.getName(@pokemon2.species)
     pbMessageDisplay(@sprites["msgwindow"],
        _ISPRINTF("{1:s}\r\nID: {2:05d}   OT: {3:s}\\wtnp[0]",
-       @pokemon.name,@pokemon.publicID,@pokemon.ot)) { pbUpdate }
+       @pokemon.name,@pokemon.owner.public_id,@pokemon.ot)) { pbUpdate }
     pbMessageWaitForInput(@sprites["msgwindow"],50,true) { pbUpdate }
     pbPlayDecisionSE
     pbScene1
@@ -181,7 +181,7 @@ class PokemonTrade_Scene
     pbScene2
     pbMessageDisplay(@sprites["msgwindow"],
        _ISPRINTF("{1:s}\r\nID: {2:05d}   OT: {3:s}\1",
-       @pokemon2.name,@pokemon2.publicID,@pokemon2.ot)) { pbUpdate }
+       @pokemon2.name,@pokemon2.owner.public_id,@pokemon2.ot)) { pbUpdate }
     pbMessageDisplay(@sprites["msgwindow"],
        _INTL("Take good care of {1}.",speciesname2)) { pbUpdate }
   end
@@ -195,10 +195,7 @@ def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
   opponent.setForeignID($Trainer)
   yourPokemon = nil; resetmoves = true
   if newpoke.is_a?(Pokemon)
-    newpoke.trainerID = opponent.id
-    newpoke.ot        = opponent.name
-    newpoke.otgender  = opponent.gender
-    newpoke.language  = opponent.language
+    newpoke.owner = Pokemon::Owner.new_from_trainer(opponent)
     yourPokemon = newpoke
     resetmoves = false
   else

@@ -302,7 +302,7 @@ class HallOfFame_Scene
     end
     pokename+="/"+speciesname
     pokename=_INTL("Egg")+"/"+_INTL("Egg") if pokemon.egg?
-    idno=(pokemon.ot=="" || pokemon.egg?) ? "?????" : sprintf("%05d",pokemon.publicID)
+    idno=(pokemon.ot=="" || pokemon.egg?) ? "?????" : sprintf("%05d",pokemon.owner.public_id)
     dexnumber=pokemon.egg? ? _INTL("No. ???") : _ISPRINTF("No. {1:03d}",pokemon.species)
     textPositions=[
        [dexnumber,32,Graphics.height-80,0,BASECOLOR,SHADOWCOLOR],

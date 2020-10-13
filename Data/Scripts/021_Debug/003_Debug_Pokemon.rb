@@ -668,8 +668,8 @@ module PokemonDebugMixin
       cmd = 0
       loop do
         gender = [_INTL("Male"),_INTL("Female"),_INTL("Unknown")][pkmn.otgender]
-        msg = [_INTL("Player's Pokémon\n{1}\n{2}\n{3} ({4})",pkmn.ot,gender,pkmn.publicID,pkmn.trainerID),
-               _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})",pkmn.ot,gender,pkmn.publicID,pkmn.trainerID)
+        msg = [_INTL("Player's Pokémon\n{1}\n{2}\n{3} ({4})",pkmn.ot,gender,pkmn.owner.public_id,pkmn.trainerID),
+               _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})",pkmn.ot,gender,pkmn.owner.public_id,pkmn.trainerID)
               ][pkmn.foreign?($Trainer) ? 1 : 0]
         cmd = pbShowCommands(msg,[
              _INTL("Make player's"),
@@ -680,9 +680,7 @@ module PokemonDebugMixin
         break if cmd<0
         case cmd
         when 0   # Make player's
-          pkmn.trainerID = $Trainer.id
-          pkmn.ot        = $Trainer.name
-          pkmn.otgender  = $Trainer.gender
+          pkmn.owner = Pokemon::Owner.new_from_trainer($Trainer)
         when 1   # Set OT's name
           pkmn.ot = pbEnterPlayerName(_INTL("{1}'s OT's name?",pkmn.name),1,MAX_PLAYER_NAME_SIZE)
         when 2   # Set OT's gender
@@ -694,7 +692,7 @@ module PokemonDebugMixin
         when 4   # Set foreign ID
           params = ChooseNumberParams.new
           params.setRange(0,65535)
-          params.setDefaultValue(pkmn.publicID)
+          params.setDefaultValue(pkmn.owner.public_id)
           val = pbMessageChooseNumber(
              _INTL("Set the new ID (max. 65535)."),params) { pbUpdate }
           pkmn.trainerID = val

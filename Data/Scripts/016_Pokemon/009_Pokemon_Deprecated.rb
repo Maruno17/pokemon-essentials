@@ -12,6 +12,24 @@ PokeBattle_Pokemon = Pokemon
 class Pokemon
   # @deprecated Use {MAX_NAME_SIZE} instead. This alias is slated to be removed in vXX.
   MAX_POKEMON_NAME_SIZE = MAX_NAME_SIZE
+
+  # @deprecated Use {Owner#public_id} instead. This alias is slated to be removed in vXX.
+  def publicID
+    Deprecation.warn_method('Pokemon#publicID', 'vXX', 'Pokemon::Owner#public_id')
+    return @owner.public_id
+  end
+
+  # @deprecated Use {Owner#id} instead. This alias is slated to be removed in vXX.
+  def trainerID
+    Deprecation.warn_method('Pokemon#trainerID', 'vXX', 'Pokemon::Owner#id')
+    return @owner.id
+  end
+
+  # @deprecated Use {Owner#id=} instead. This alias is slated to be removed in vXX.
+  def trainerID=(value)
+    Deprecation.warn_method('Pokemon#trainerID=', 'vXX', 'Pokemon::Owner#id=')
+    @owner.id = value
+  end
 end
 
 # (see Pokemon#initialize)
