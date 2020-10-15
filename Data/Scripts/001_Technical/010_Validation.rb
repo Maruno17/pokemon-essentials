@@ -1,22 +1,31 @@
 # The Kernel module is extended to include the validate method.
 module Kernel
-  # Validates the given values. Takes a hash as its argument, e.g.:
-  # +value1 => Integer, value2 => String, value3 => [Rect,Viewport]+
-  # @param value_pairs [Hash] value pairs to validate
-  # @raise [TypeError] raised if validation fails
+  private
+  
+  # Used to check whether values are of a given class or respond to a method.
+  # @param value_pairs [Hash{Object => Class, Array<Class>, Symbol}] value pairs to validate
+  # @example Validate a class or method
+  #   validate foo => Integer, baz => :to_s # raises an error if foo is not an Integer or if baz doesn't implement .to_s
+  # @example Validate a class from an array
+  #   validate foo => [Sprite, Bitmap, Viewport] # raises an error if foo isn't a Sprite, Bitmap or Viewport
+  # @raise [ArgumentError] raised if validation fails
   def validate(value_pairs)
-    unless value_pairs.instance_of?(Hash)
-      raise TypeError, _INTL("Non-hash argument #{value_pairs.inspect} passed into validate")
+    unless value_pairs.is_a?(Hash)
+      raise ArgumentError, "Non-hash argument #{value_pairs.inspect} passed into validate"
     end
-    value_pairs.each do |value, type|
-      if type.is_a?(Array)
-        match = false
-        type.each { |c| match = true if value.is_a?(c) }
-        next if match
-      elsif value.is_a?(type)
-        next
+    errors = value_pairs.map do |value, condition|
+      if condition.is_a?(Array)
+        unless condition.any? { |klass| value.is_a?(klass) }
+          next "Expected #{value.inspect} to be one of #{condition.inspect}, but got #{value.class.name}."
+        end
+      elsif condition.is_a?(Symbol)
+        next "Expected #{value.inspect} to respond to .#{condition}." unless value.respond_to?(condition)
+      elsif !value.is_a?(condition)
+        next "Expected #{value.inspect} to be a #{condition.name}, but got #{value.class.name}."
       end
-      raise TypeError, _INTL("#{value.class} value does not implement #{type.inspect}")
     end
+    errors.compact!
+    return if errors.empty?
+    raise ArgumentError, "Invalid argument passed to method.\n\n" + errors.join("\n")
   end
 end
