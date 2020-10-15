@@ -1044,10 +1044,11 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
   text.gsub!(/\\[Ww]\[([^\]]*)\]/) {
     w = $1.to_s
     if w==""
-      next msgwindow.windowskin = nil
+      msgwindow.windowskin = nil
     else
-      next msgwindow.setSkin("Graphics/Windowskins/#{w}",false)
+      msgwindow.setSkin("Graphics/Windowskins/#{w}",false)
     end
+    next ""
   }
   isDarkSkin = isDarkWindowskin(msgwindow.windowskin)
   text.gsub!(/\\[Cc]\[([0-9]+)\]/) {
