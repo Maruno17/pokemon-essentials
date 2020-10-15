@@ -11,7 +11,7 @@ module Kernel
   # @raise [ArgumentError] raised if validation fails
   def validate(value_pairs)
     unless value_pairs.is_a?(Hash)
-      raise ArgumentError, "Non-hash argument #{value_pairs.inspect} passed into validate"
+      raise ArgumentError, "Non-hash argument #{value_pairs.inspect} passed into validate."
     end
     errors = value_pairs.map do |value, condition|
       if condition.is_a?(Array)
@@ -19,13 +19,13 @@ module Kernel
           next "Expected #{value.inspect} to be one of #{condition.inspect}, but got #{value.class.name}."
         end
       elsif condition.is_a?(Symbol)
-        next "Expected #{value.inspect} to respond to .#{condition}." unless value.respond_to?(condition)
+        next "Expected #{value.inspect} to respond to #{condition}." unless value.respond_to?(condition)
       elsif !value.is_a?(condition)
         next "Expected #{value.inspect} to be a #{condition.name}, but got #{value.class.name}."
       end
     end
     errors.compact!
     return if errors.empty?
-    raise ArgumentError, "Invalid argument passed to method.\n\n" + errors.join("\n")
+    raise ArgumentError, "Invalid argument passed to method.\r\n" + errors.join("\r\n")
   end
 end
