@@ -94,11 +94,6 @@ class Pokemon
   attr_accessor :hatchedMap
   # @param value [Integer] new language
   attr_writer   :language
-  # Changes the gender of the original trainer. This is for information only,
-  # and is not used to verify ownership of the Pokémon.
-  # @param value [Integer] new value for the original trainer's gender:
-  #   0 - male, 1 - female, 2 - mixed, 3 - unknown
-  attr_writer   :otgender
   # @param value [Integer] new contest stat
   attr_writer   :cool,:beauty,:cute,:smart,:tough,:sheen
 
@@ -203,11 +198,6 @@ class Pokemon
     return @owner.id != trainer.id || @owner.name != trainer.name
   end
   alias isForeign? foreign?
-
-  # @return [0, 1, 2] the gender of this Pokémon original trainer (0 = male, 1 = female, 2 = unknown)
-  def otgender
-    return @otgender || 2
-  end
 
   # @return [Integer] this Pokémon's level when it was obtained
   def obtainLevel
