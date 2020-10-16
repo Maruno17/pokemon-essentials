@@ -140,10 +140,19 @@ class Pokemon
 
     # Returns a new Owner object populated with values taken from +trainer+.
     # @param trainer [PokeBattle_Trainer] trainer object to read data from
-    # @return [Owner] new owner object
+    # @return [Owner] new Owner object
     def self.new_from_trainer(trainer)
       validate trainer => PokeBattle_Trainer
       return new(trainer.id, trainer.name, trainer.gender, trainer.language)
+    end
+
+    # Returns an Owner object with a foreign ID.
+    # @param name [String] owner name
+    # @param gender [Integer] owner gender
+    # @param language [Integer] owner language
+    # @return [Owner] foreign Owner object
+    def self.new_foreign(name = '', gender = 2, language = 2)
+      return new($Trainer.getForeignID, name, gender, language)
     end
 
     # @param new_id [Integer] new owner ID
