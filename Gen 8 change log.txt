@@ -15,8 +15,7 @@ Moves.txt - TheToxic
 Pokemon.txt (for Gen 8) - TheToxic
 Pokemonforms.txt (for Gen 8) - TheToxic
 
-Items.txt - Zerokid
-Tms.txt - Zerokid
+Items.txt - Zerokid, HM100
 Pokemon.txt (for Gen 1-7) - Zerokid
 Pokemonforms.txt (for Gen 1-7) - Zerokid
 Abilities.txt (for Gen 8) - Zerokid
@@ -94,7 +93,7 @@ Ball Fetch               by WolfPP adapted by Aioross improved by Golisopod User
 Intrepid Sword           by KyureJL
 Dauntless Shield         by KyureJL
 Sand Spit                by TheToxic
-Unseen Fists             by WolfPP adapted by KyureJL
+Unseen Fist              by WolfPP adapted by KyureJL
 Ice Scales               by TheToxic
 Steely Spirit            by Aioross
 Steam Engine             by Aioross improved by KyureJL

@@ -148,7 +148,7 @@ class PokeBattle_Battle
     if i<0
       i = BattleHandlers.triggerExpGainModifierItem(@initialItems[0][idxParty],pkmn,exp)
     end
-    exp = (exp*1.5).floor if $PokemonBag.pbHasItem?(:EXPCHARM) # EXP Charm Code
+    exp = (exp*1.5).floor if hasConst?(PBItems,:EXPCHARM) && $PokemonBag.pbHasItem?(:EXPCHARM) # EXP Charm Code
     exp = i if i>=0
     # Make sure Exp doesn't exceed the maximum
     expFinal = PBExperience.pbAddExperience(pkmn.exp,exp,growthRate)
