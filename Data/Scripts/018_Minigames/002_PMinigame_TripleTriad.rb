@@ -13,16 +13,16 @@ class TriadCard
   def initialize(species,form=0)
     @species = species
     @form    = form
-    baseStats = pbGetSpeciesData(species,form,SpeciesBaseStats)
+    baseStats = pbGetSpeciesData(species,form,SpeciesData::BASE_STATS)
     hp      = baseStats[PBStats::HP]
     attack  = baseStats[PBStats::ATTACK]
     defense = baseStats[PBStats::DEFENSE]
     spAtk   = baseStats[PBStats::SPATK]
     spDef   = baseStats[PBStats::SPDEF]
     speed   = baseStats[PBStats::SPEED]
-    @type = pbGetSpeciesData(species,form,SpeciesType1)
+    @type = pbGetSpeciesData(species,form,SpeciesData::TYPE1)
     if isConst?(@type,PBTypes,:NORMAL)
-      type2 = pbGetSpeciesData(species,form,SpeciesType2)
+      type2 = pbGetSpeciesData(species,form,SpeciesData::TYPE2)
       @type = type2 if type2
     end
     @west  = baseStatToValue(attack+speed/3)

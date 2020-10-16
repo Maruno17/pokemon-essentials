@@ -18,18 +18,18 @@ def pbAutoPositionAll
     Graphics.update if i%50==0
     bitmap1 = pbLoadSpeciesBitmap(s[0],false,s[1],false,false,true)
     bitmap2 = pbLoadSpeciesBitmap(s[0],false,s[1])
-    metrics[MetricBattlerPlayerX][i]    = 0   # Player's x
+    metrics[SpeciesData::METRIC_PLAYER_X][i]    = 0   # Player's x
     if bitmap1 && bitmap1.bitmap   # Player's y
-      metrics[MetricBattlerPlayerY][i]  = (bitmap1.height-(findBottom(bitmap1.bitmap)+1))/2
+      metrics[SpeciesData::METRIC_PLAYER_Y][i]  = (bitmap1.height-(findBottom(bitmap1.bitmap)+1))/2
     end
-    metrics[MetricBattlerEnemyX][i]     = 0   # Foe's x
+    metrics[SpeciesData::METRIC_ENEMY_X][i]     = 0   # Foe's x
     if bitmap2 && bitmap2.bitmap   # Foe's y
-      metrics[MetricBattlerEnemyY][i]   = (bitmap2.height-(findBottom(bitmap2.bitmap)+1))/2
-      metrics[MetricBattlerEnemyY][i]   += 4   # Just because
+      metrics[SpeciesData::METRIC_ENEMY_Y][i]   = (bitmap2.height-(findBottom(bitmap2.bitmap)+1))/2
+      metrics[SpeciesData::METRIC_ENEMY_Y][i]   += 4   # Just because
     end
-    metrics[MetricBattlerAltitude][i]   = 0   # Foe's altitude, not used now
-    metrics[MetricBattlerShadowX][i]    = 0   # Shadow's x
-    metrics[MetricBattlerShadowSize][i] = 2   # Shadow size
+    metrics[SpeciesData::METRIC_ALTITUDE][i]    = 0   # Foe's altitude, not used now
+    metrics[SpeciesData::METRIC_SHADOW_X][i]    = 0   # Shadow's x
+    metrics[SpeciesData::METRIC_SHADOW_SIZE][i] = 2   # Shadow size
     bitmap1.dispose if bitmap1
     bitmap2.dispose if bitmap2
   end
@@ -139,18 +139,18 @@ class SpritePositioner
   end
 
   def pbAutoPosition
-    oldmetric1 = (@metrics[MetricBattlerPlayerY][@species] || 0)
-    oldmetric3 = (@metrics[MetricBattlerEnemyY][@species] || 0)
-    oldmetric4 = (@metrics[MetricBattlerAltitude][@species] || 0)
+    oldmetric1 = (@metrics[SpeciesData::METRIC_PLAYER_Y][@species] || 0)
+    oldmetric3 = (@metrics[SpeciesData::METRIC_ENEMY_Y][@species] || 0)
+    oldmetric4 = (@metrics[SpeciesData::METRIC_ALTITUDE][@species] || 0)
     bitmap1 = @sprites["pokemon_0"].bitmap
     bitmap2 = @sprites["pokemon_1"].bitmap
     newmetric1 = (bitmap1.height-(findBottom(bitmap1)+1))/2
     newmetric3 = (bitmap2.height-(findBottom(bitmap2)+1))/2
     newmetric3 += 4   # Just because
     if newmetric1!=oldmetric1 || newmetric3!=oldmetric3 || oldmetric4!=0
-      @metrics[MetricBattlerPlayerY][@species]  = newmetric1
-      @metrics[MetricBattlerEnemyY][@species]   = newmetric3
-      @metrics[MetricBattlerAltitude][@species] = 0
+      @metrics[SpeciesData::METRIC_PLAYER_Y][@species] = newmetric1
+      @metrics[SpeciesData::METRIC_ENEMY_Y][@species]  = newmetric3
+      @metrics[SpeciesData::METRIC_ALTITUDE][@species] = 0
       @metricsChanged = true
       refresh
     end
@@ -167,7 +167,7 @@ class SpritePositioner
   def pbShadowSize
     pbChangeSpecies(@species)
     refresh
-    oldval = (@metrics[MetricBattlerShadowSize][@species] || 2)
+    oldval = (@metrics[SpeciesData::METRIC_SHADOW_SIZE][@species] || 2)
     cmdvals = [0]; commands = [_INTL("None")]
     defindex = 0
     i = 0
@@ -190,17 +190,17 @@ class SpritePositioner
       self.update
       if cw.index!=oldindex
         oldindex = cw.index
-        @metrics[MetricBattlerShadowSize][@species] = cmdvals[cw.index]
+        @metrics[SpeciesData::METRIC_SHADOW_SIZE][@species] = cmdvals[cw.index]
         pbChangeSpecies(@species)
         refresh
       end
       if Input.trigger?(Input::A)   # Cycle to next option
         pbPlayDecisionSE
-        @metricsChanged = true if @metrics[MetricBattlerShadowSize][@species]!=oldval
+        @metricsChanged = true if @metrics[SpeciesData::METRIC_SHADOW_SIZE][@species]!=oldval
         ret = true
         break
       elsif Input.trigger?(Input::B)
-        @metrics[MetricBattlerShadowSize][@species] = oldval
+        @metrics[SpeciesData::METRIC_SHADOW_SIZE][@species] = oldval
         pbPlayCancelSE
         break
       elsif Input.trigger?(Input::C)
@@ -223,15 +223,15 @@ class SpritePositioner
     case param
     when 0
       sprite = @sprites["pokemon_0"]
-      xpos = (@metrics[MetricBattlerPlayerX][@species] || 0)
-      ypos = (@metrics[MetricBattlerPlayerY][@species] || 0)
+      xpos = (@metrics[SpeciesData::METRIC_PLAYER_X][@species] || 0)
+      ypos = (@metrics[SpeciesData::METRIC_PLAYER_Y][@species] || 0)
     when 1
       sprite = @sprites["pokemon_1"]
-      xpos = (@metrics[MetricBattlerEnemyX][@species] || 0)
-      ypos = (@metrics[MetricBattlerEnemyY][@species] || 0)
+      xpos = (@metrics[SpeciesData::METRIC_ENEMY_X][@species] || 0)
+      ypos = (@metrics[SpeciesData::METRIC_ENEMY_Y][@species] || 0)
     when 3
       sprite = @sprites["shadow_1"]
-      xpos = (@metrics[MetricBattlerShadowX][@species] || 0)
+      xpos = (@metrics[SpeciesData::METRIC_SHADOW_X][@species] || 0)
       ypos = 0
     end
     oldxpos = xpos
@@ -251,32 +251,32 @@ class SpritePositioner
       if Input.repeat?(Input::UP) && param!=3
         ypos -= 1
         case param
-        when 0; @metrics[MetricBattlerPlayerY][@species] = ypos
-        when 1; @metrics[MetricBattlerEnemyY][@species]  = ypos
+        when 0; @metrics[SpeciesData::METRIC_PLAYER_Y][@species] = ypos
+        when 1; @metrics[SpeciesData::METRIC_ENEMY_Y][@species]  = ypos
         end
         refresh
       elsif Input.repeat?(Input::DOWN) && param!=3
         ypos += 1
         case param
-        when 0; @metrics[MetricBattlerPlayerY][@species] = ypos
-        when 1; @metrics[MetricBattlerEnemyY][@species]  = ypos
+        when 0; @metrics[SpeciesData::METRIC_PLAYER_Y][@species] = ypos
+        when 1; @metrics[SpeciesData::METRIC_ENEMY_Y][@species]  = ypos
         end
         refresh
       end
       if Input.repeat?(Input::LEFT)
         xpos -= 1
         case param
-        when 0; @metrics[MetricBattlerPlayerX][@species] = xpos
-        when 1; @metrics[MetricBattlerEnemyX][@species]  = xpos
-        when 3; @metrics[MetricBattlerShadowX][@species] = xpos
+        when 0; @metrics[SpeciesData::METRIC_PLAYER_X][@species] = xpos
+        when 1; @metrics[SpeciesData::METRIC_ENEMY_X][@species]  = xpos
+        when 3; @metrics[SpeciesData::METRIC_SHADOW_X][@species] = xpos
         end
         refresh
       elsif Input.repeat?(Input::RIGHT)
         xpos += 1
         case param
-        when 0; @metrics[MetricBattlerPlayerX][@species] = xpos
-        when 1; @metrics[MetricBattlerEnemyX][@species]  = xpos
-        when 3; @metrics[MetricBattlerShadowX][@species] = xpos
+        when 0; @metrics[SpeciesData::METRIC_PLAYER_X][@species] = xpos
+        when 1; @metrics[SpeciesData::METRIC_ENEMY_X][@species]  = xpos
+        when 3; @metrics[SpeciesData::METRIC_SHADOW_X][@species] = xpos
         end
         refresh
       end
@@ -288,13 +288,13 @@ class SpritePositioner
       elsif Input.repeat?(Input::B)
         case param
         when 0
-          @metrics[MetricBattlerPlayerX][@species] = oldxpos
-          @metrics[MetricBattlerPlayerY][@species] = oldypos
+          @metrics[SpeciesData::METRIC_PLAYER_X][@species] = oldxpos
+          @metrics[SpeciesData::METRIC_PLAYER_Y][@species] = oldypos
         when 1
-          @metrics[MetricBattlerEnemyX][@species] = oldxpos
-          @metrics[MetricBattlerEnemyY][@species] = oldypos
+          @metrics[SpeciesData::METRIC_ENEMY_X][@species] = oldxpos
+          @metrics[SpeciesData::METRIC_ENEMY_Y][@species] = oldypos
         when 3
-          @metrics[MetricBattlerShadowX][@species] = oldxpos
+          @metrics[SpeciesData::METRIC_SHADOW_X][@species] = oldxpos
         end
         pbPlayCancelSE
         refresh

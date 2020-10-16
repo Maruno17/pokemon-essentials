@@ -11,12 +11,12 @@ class Pokemon
     for i in 0...formData[@species].length
       fSpec = formData[@species][i]
       next if !fSpec || fSpec<=0
-      megaStone = speciesData[fSpec][SpeciesMegaStone] || 0
+      megaStone = speciesData[fSpec][SpeciesData::MEGA_STONE] || 0
       if megaStone>0 && self.hasItem?(megaStone)
         ret = i; break
       end
       if !checkItemOnly
-        megaMove = speciesData[fSpec][SpeciesMegaMove] || 0
+        megaMove = speciesData[fSpec][SpeciesData::MEGA_MOVE] || 0
         if megaMove>0 && self.hasMove?(megaMove)
           ret = i; break
         end
@@ -27,7 +27,7 @@ class Pokemon
 
   def getUnmegaForm
     return -1 if !mega?
-    unmegaForm = pbGetSpeciesData(@species,formSimple,SpeciesUnmegaForm)
+    unmegaForm = pbGetSpeciesData(@species,formSimple,SpeciesData::UNMEGA_FORM)
     return unmegaForm   # form number
   end
 
@@ -58,7 +58,7 @@ class Pokemon
   end
 
   def megaMessage   # 0=default message, 1=Rayquaza message
-    return pbGetSpeciesData(@species,getMegaForm,SpeciesMegaMessage)
+    return pbGetSpeciesData(@species,getMegaForm,SpeciesData::MEGA_MESSAGE)
   end
 end
 

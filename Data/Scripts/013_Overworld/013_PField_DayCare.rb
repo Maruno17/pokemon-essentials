@@ -105,7 +105,7 @@ end
 # Check compatibility of Pokémon in the Day Care.
 #===============================================================================
 def pbIsDitto?(pkmn)
-  compat = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesCompatibility)
+  compat = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesData::COMPATIBILITY)
   if compat.is_a?(Array)
     return compat.include?(getConst(PBEggGroups,:Ditto))
   end
@@ -129,14 +129,14 @@ def pbDayCareGetCompat
   return 0 if pkmn1.shadowPokemon?
   return 0 if pkmn2.shadowPokemon?
   # Insert code here if certain forms of certain species cannot breed
-  compat1 = pbGetSpeciesData(pkmn1.species,pkmn1.form,SpeciesCompatibility)
+  compat1 = pbGetSpeciesData(pkmn1.species,pkmn1.form,SpeciesData::COMPATIBILITY)
   if compat1.is_a?(Array)
     compat10 = compat1[0] || 0
     compat11 = compat1[1] || compat10
   else
     compat10 = compat11 = compat || 0
   end
-  compat2 = pbGetSpeciesData(pkmn2.species,pkmn2.form,SpeciesCompatibility)
+  compat2 = pbGetSpeciesData(pkmn2.species,pkmn2.form,SpeciesData::COMPATIBILITY)
   if compat2.is_a?(Array)
     compat20 = compat2[0] || 0
     compat21 = compat2[1] || compat20
@@ -396,7 +396,7 @@ def pbDayCareGenerateEgg
   egg.calcStats
   egg.obtainText = _INTL("Day-Care Couple")
   egg.name = _INTL("Egg")
-  eggSteps = pbGetSpeciesData(babyspecies,egg.form,SpeciesStepsToHatch)
+  eggSteps = pbGetSpeciesData(babyspecies,egg.form,SpeciesData::STEPS_TO_HATCH)
   egg.eggsteps = eggSteps
   egg.givePokerus if rand(65536)<POKERUS_CHANCE
   # Add egg to party

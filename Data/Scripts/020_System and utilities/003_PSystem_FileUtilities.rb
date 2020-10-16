@@ -138,7 +138,7 @@ def pbCheckPokemonShadowBitmapFiles(species,form,fullmetrics=nil)
   return bitmapFileName if ret
   # Load metrics and use that graphic
   fullmetrics = pbLoadSpeciesMetrics if !fullmetrics
-  size = (fullmetrics[MetricBattlerShadowSize][pbGetFSpeciesFromForm(species,form)] || 2)
+  size = (fullmetrics[SpeciesData::METRIC_SHADOW_SIZE][pbGetFSpeciesFromForm(species,form)] || 2)
   bitmapFileName = sprintf("Graphics/Pictures/Battle/battler_shadow_%d",size)
   return bitmapFileName if pbResolveBitmap(bitmapFileName)
   return nil

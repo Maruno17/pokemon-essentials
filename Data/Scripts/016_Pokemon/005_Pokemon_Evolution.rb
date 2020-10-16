@@ -156,7 +156,7 @@ def pbGetBabySpecies(species,item1=-1,item2=-1)
   evoData.each do |evo|
     next if !evo[3]
     if item1>=0 && item2>=0
-      incense = pbGetSpeciesData(evo[0],0,SpeciesIncense)
+      incense = pbGetSpeciesData(evo[0],0,SpeciesData::INCENSE)
       ret = evo[0] if item1==incense || item2==incense
     else
       ret = evo[0]   # Species of prevolution

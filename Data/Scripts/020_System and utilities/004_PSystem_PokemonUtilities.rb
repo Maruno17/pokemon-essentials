@@ -168,7 +168,7 @@ def pbGenerateEgg(pokemon,text="")
     pokemon = Pokemon.new(pokemon,EGG_LEVEL)
   end
   # Get egg steps
-  eggSteps = pbGetSpeciesData(pokemon.species,pokemon.form,SpeciesStepsToHatch)
+  eggSteps = pbGetSpeciesData(pokemon.species,pokemon.form,SpeciesData::STEPS_TO_HATCH)
   # Set egg's details
   pokemon.name       = _INTL("Egg")
   pokemon.eggsteps   = eggSteps
@@ -217,7 +217,7 @@ def pbSeenForm(pkmn,gender=0,form=0)
   fSpecies = pbGetFSpeciesFromForm(species,form)
   species, form = pbGetSpeciesFromFSpecies(fSpecies)
   gender = 0 if gender>1
-  dexForm = pbGetSpeciesData(species,form,SpeciesPokedexForm)
+  dexForm = pbGetSpeciesData(species,form,SpeciesData::POKEDEX_FORM)
   form = dexForm if dexForm>0
   fSpecies = pbGetFSpeciesFromForm(species,form)
   formName = pbGetMessage(MessageTypes::FormNames,fSpecies)
@@ -231,7 +231,7 @@ end
 def pbUpdateLastSeenForm(pkmn)
   $Trainer.formlastseen = [] if !$Trainer.formlastseen
   form = (pkmn.form rescue 0)
-  dexForm = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesPokedexForm)
+  dexForm = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesData::POKEDEX_FORM)
   form = dexForm if dexForm>0
   formName = pbGetMessage(MessageTypes::FormNames,pkmn.fSpecies)
   form = 0 if !formName || formName==""
@@ -452,7 +452,7 @@ end
 # Calculates a Pokémon's size (in millimeters)
 #===============================================================================
 def pbSize(pkmn)
-  baseheight = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesHeight)
+  baseheight = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesData::HEIGHT)
   hpiv = pkmn.iv[0]&15
   ativ = pkmn.iv[1]&15
   dfiv = pkmn.iv[2]&15
@@ -493,7 +493,7 @@ def pbHasEgg?(species)
   # species may be unbreedable, so check its evolution's compatibilities
   evoSpecies = pbGetEvolvedFormData(species,true)
   compatSpecies = (evoSpecies && evoSpecies[0]) ? evoSpecies[0][2] : species
-  compat = pbGetSpeciesData(compatSpecies,0,SpeciesCompatibility)
+  compat = pbGetSpeciesData(compatSpecies,0,SpeciesData::COMPATIBILITY)
   compat = [compat] if !compat.is_a?(Array)
   return false if compat.include?(getConst(PBEggGroups,:Undiscovered))
   return false if compat.include?(getConst(PBEggGroups,:Ditto))

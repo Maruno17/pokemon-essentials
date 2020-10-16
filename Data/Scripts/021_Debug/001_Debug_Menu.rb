@@ -575,7 +575,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
         next if !formdata[i][form] || formdata[i][form]==0
         fSpecies = pbGetFSpeciesFromForm(i,form)
         formname = pbGetMessage(MessageTypes::FormNames,fSpecies)
-        genderRate = speciesData[i][SpeciesGenderRate] || 0
+        genderRate = speciesData[i][SpeciesData::GENDER_RATE] || 0
         gender = (genderRate==PBGenderRates::AlwaysFemale) ? 1 : 0
         if form==0
           case genderRate

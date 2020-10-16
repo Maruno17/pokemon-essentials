@@ -327,12 +327,12 @@ class PokemonPokedex_Scene
       if pbCanAddForModeList?($PokemonGlobal.pokedexMode,nationalSpecies)
         form = $Trainer.formlastseen[nationalSpecies][1] || 0
         fspecies = pbGetFSpeciesFromForm(nationalSpecies,form)
-        color  = speciesData[fspecies][SpeciesColor] || 0
-        type1  = speciesData[fspecies][SpeciesType1] || 0
-        type2  = speciesData[fspecies][SpeciesType2] || type1
-        shape  = speciesData[fspecies][SpeciesShape] || 0
-        height = speciesData[fspecies][SpeciesHeight] || 1
-        weight = speciesData[fspecies][SpeciesWeight] || 1
+        color  = speciesData[fspecies][SpeciesData::COLOR] || 0
+        type1  = speciesData[fspecies][SpeciesData::TYPE1] || 0
+        type2  = speciesData[fspecies][SpeciesData::TYPE2] || type1
+        shape  = speciesData[fspecies][SpeciesData::SHAPE] || 0
+        height = speciesData[fspecies][SpeciesData::HEIGHT] || 1
+        weight = speciesData[fspecies][SpeciesData::WEIGHT] || 1
         shift = DEXES_WITH_OFFSETS.include?(region)
         dexlist.push([nationalSpecies,PBSpecies.getName(nationalSpecies),
            height,weight,i,shift,type1,type2,color,shape])

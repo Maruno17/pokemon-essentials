@@ -190,7 +190,7 @@ end
 class NonlegendaryRestriction
   def isValid?(pkmn)
     return true if !pkmn.genderless?
-    compatibility = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesCompatibility)
+    compatibility = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesData::COMPATIBILITY)
     compatibility = [compatibility] if !compatibility.is_a?(Array)
     compatibility.each { |c| return false if isConst?(c,PBEggGroups,:Undiscovered) }
     return true
@@ -499,8 +499,8 @@ def pbRandomPokemonFromRule(rule,trainer)
       item=getID(PBItems,:LEFTOVERS)
     end
     if isConst?(item,PBItems,:BLACKSLUDGE)
-      type1 = pbGetSpeciesData(species,0,SpeciesType1)
-      type2 = pbGetSpeciesData(species,0,SpeciesType2) || type1
+      type1 = pbGetSpeciesData(species,0,SpeciesData::TYPE1)
+      type2 = pbGetSpeciesData(species,0,SpeciesData::TYPE2) || type1
       if !isConst?(type1,PBTypes,:POISON) && !isConst?(type2,PBTypes,:POISON)
         item=getID(PBItems,:LEFTOVERS)
       end
@@ -956,8 +956,8 @@ def pbRuledBattle(team1,team2,rule)
 end
 
 def getTypes(species)
-  type1 = pbGetSpeciesData(species,0,SpeciesType1)
-  type2 = pbGetSpeciesData(species,0,SpeciesType2) || type1
+  type1 = pbGetSpeciesData(species,0,SpeciesData::TYPE1)
+  type2 = pbGetSpeciesData(species,0,SpeciesData::TYPE2) || type1
   return type1==type2 ? [type1] : [type1,type2]
 end
 

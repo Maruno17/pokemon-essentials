@@ -27,7 +27,7 @@ class Pokemon
   # second natural (1) or a hidden (2-5) ability available to its species.
   # It is not possible to give the Pokémon any ability other than those
   # defined in the PBS file "pokemon.txt" for its species
-  # (or "pokemonforms.txt" for its species and form). 
+  # (or "pokemonforms.txt" for its species and form).
   # @return [0, 1, 2, 3, 4, 5, nil] forced ability index (nil if none is set)
   attr_accessor :abilityflag
   # If defined, forces this Pokémon to be male (0) or female (1).
@@ -54,7 +54,7 @@ class Pokemon
   #   sleep (number of rounds before waking up), toxic (0 = regular poison, 1 = toxic)
   attr_reader   :statusCount
   # Another Pokémon which has been fused with this Pokémon (or nil if there is none).
-  # Currently only used by Kyurem, to record a fused Reshiram or Zekrom.  
+  # Currently only used by Kyurem, to record a fused Reshiram or Zekrom.
   # @return [Pokemon, nil] the Pokémon fused into this one (nil if there is none)
   attr_accessor :fused
   # @return [Array<Integer>] an array of IV values for HP, Atk, Def, Speed, Sp. Atk and Sp. Def
@@ -205,12 +205,12 @@ class Pokemon
 
   # @return [Integer] this Pokémon's growth rate (from PBGrowthRates)
   def growthrate
-    return pbGetSpeciesData(@species, formSimple, SpeciesGrowthRate)
+    return pbGetSpeciesData(@species, formSimple, SpeciesData::GROWTH_RATE)
   end
 
   # @return [Integer] this Pokémon's base Experience value
   def baseExp
-    return pbGetSpeciesData(@species, formSimple, SpeciesBaseExp)
+    return pbGetSpeciesData(@species, formSimple, SpeciesData::BASE_EXP)
   end
 
   # @return [Float] a number between 0 and 1 indicating how much of the current level's
@@ -231,7 +231,7 @@ class Pokemon
   # @return [0, 1, 2] this Pokémon's gender (0 = male, 1 = female, 2 = genderless)
   def gender
     # Return sole gender option for all male/all female/genderless species
-    gender_rate = pbGetSpeciesData(@species, formSimple, SpeciesGenderRate)
+    gender_rate = pbGetSpeciesData(@species, formSimple, SpeciesData::GENDER_RATE)
     case gender_rate
     when PBGenderRates::AlwaysMale;   return 0
     when PBGenderRates::AlwaysFemale; return 1
@@ -245,7 +245,7 @@ class Pokemon
   # @return [Boolean] whether this Pokémon species is restricted to only ever being one
   #   gender (or genderless)
   def singleGendered?
-    gender_rate = pbGetSpeciesData(@species, formSimple, SpeciesGenderRate)
+    gender_rate = pbGetSpeciesData(@species, formSimple, SpeciesData::GENDER_RATE)
     return gender_rate == PBGenderRates::AlwaysMale ||
            gender_rate == PBGenderRates::AlwaysFemale ||
            gender_rate == PBGenderRates::Genderless
@@ -295,7 +295,7 @@ class Pokemon
     abilIndex = abilityIndex
     # Hidden ability
     if abilIndex >= 2
-      hiddenAbil = pbGetSpeciesData(@species, formSimple, SpeciesHiddenAbility)
+      hiddenAbil = pbGetSpeciesData(@species, formSimple, SpeciesData::HIDDEN_ABILITY)
       if hiddenAbil.is_a?(Array)
         ret = hiddenAbil[abilIndex - 2]
         return ret if ret && ret > 0
@@ -305,7 +305,7 @@ class Pokemon
       abilIndex = (@personalID & 1)
     end
     # Natural ability
-    abilities = pbGetSpeciesData(@species, formSimple, SpeciesAbilities)
+    abilities = pbGetSpeciesData(@species, formSimple, SpeciesData::ABILITIES)
     if abilities.is_a?(Array)
       ret = abilities[abilIndex]
       ret = abilities[(abilIndex + 1) % 2] if !ret || ret == 0
@@ -341,13 +341,13 @@ class Pokemon
   #   where every element is [ability ID, ability index]
   def getAbilityList
     ret = []
-    abilities = pbGetSpeciesData(@species, formSimple, SpeciesAbilities)
+    abilities = pbGetSpeciesData(@species, formSimple, SpeciesData::ABILITIES)
     if abilities.is_a?(Array)
       abilities.each_with_index { |a, i| ret.push([a, i]) if a && a > 0 }
     else
       ret.push([abilities, 0]) if abilities > 0
     end
-    hiddenAbil = pbGetSpeciesData(@species, formSimple, SpeciesHiddenAbility)
+    hiddenAbil = pbGetSpeciesData(@species, formSimple, SpeciesData::HIDDEN_ABILITY)
     if hiddenAbil.is_a?(Array)
       hiddenAbil.each_with_index { |a, i| ret.push([a, i + 2]) if a && a > 0 }
     else
@@ -465,20 +465,20 @@ class Pokemon
 
   # @return [Integer] this Pokémon's first type
   def type1
-    return pbGetSpeciesData(@species, formSimple, SpeciesType1)
+    return pbGetSpeciesData(@species, formSimple, SpeciesData::TYPE1)
   end
 
   # @return [Integer] this Pokémon's second type, or the first type if none is defined
   def type2
-    ret = pbGetSpeciesData(@species, formSimple, SpeciesType2)
-    ret = pbGetSpeciesData(@species, formSimple, SpeciesType1) if !ret
+    ret = pbGetSpeciesData(@species, formSimple, SpeciesData::TYPE2)
+    ret = pbGetSpeciesData(@species, formSimple, SpeciesData::TYPE1) if !ret
     return ret
   end
 
   # @return [Array<Integer>] an array of this Pokémon's types
   def types
-    ret1 = pbGetSpeciesData(@species, formSimple, SpeciesType1)
-    ret2 = pbGetSpeciesData(@species, formSimple, SpeciesType2)
+    ret1 = pbGetSpeciesData(@species, formSimple, SpeciesData::TYPE1)
+    ret2 = pbGetSpeciesData(@species, formSimple, SpeciesData::TYPE2)
     ret = [ret1]
     ret.push(ret2) if ret2 && ret2 != ret1
     return ret
@@ -664,7 +664,7 @@ class Pokemon
   def sheen
     return @sheen || 0
   end
-  
+
   # @return [Integer] the number of ribbons this Pokémon has
   def ribbonCount
     return (@ribbons) ? @ribbons.length : 0
@@ -752,9 +752,9 @@ class Pokemon
   # @return [Array<Integer>] the items this species can be found holding in the wild
   def wildHoldItems
     ret = []
-    ret.push(pbGetSpeciesData(@species, formSimple, SpeciesWildItemCommon))
-    ret.push(pbGetSpeciesData(@species, formSimple, SpeciesWildItemUncommon))
-    ret.push(pbGetSpeciesData(@species, formSimple, SpeciesWildItemRare))
+    ret.push(pbGetSpeciesData(@species, formSimple, SpeciesData::WILD_ITEM_COMMON))
+    ret.push(pbGetSpeciesData(@species, formSimple, SpeciesData::WILD_ITEM_UNCOMMON))
+    ret.push(pbGetSpeciesData(@species, formSimple, SpeciesData::WILD_ITEM_RARE))
     return ret
   end
 
@@ -800,26 +800,26 @@ class Pokemon
     return !egg? && @hp > 0
   end
   alias isAble? able?
-  
+
   # @return [Boolean] whether the Pokémon is fainted
   def fainted?
     return !egg? && @hp <= 0
   end
   alias isFainted? fainted?
-  
+
   # Heals all HP of this Pokémon.
   def healHP
     return if egg?
     @hp = @totalhp
   end
-  
+
   # Heals the status problem of this Pokémon.
   def healStatus
     return if egg?
     @status      = PBStatuses::NONE
     @statusCount = 0
   end
-  
+
   # Restores all PP of this Pokémon. If a move index is given, restores the PP
   # of the move in that index.
   # @param move_index [Integer] index of the move to heal (-1 if all moves
@@ -832,7 +832,7 @@ class Pokemon
       @moves.each { |m| m.pp = m.totalpp }
     end
   end
-  
+
   # Heals all HP, PP, and status problems of this Pokémon.
   def heal
     return if egg?
@@ -890,12 +890,12 @@ class Pokemon
 
   # @return [Integer] the height of this Pokémon in decimetres (0.1 metres)
   def height
-    return pbGetSpeciesData(@species, formSimple, SpeciesHeight)
+    return pbGetSpeciesData(@species, formSimple, SpeciesData::HEIGHT)
   end
 
   # @return [Integer] the weight of this Pokémon in hectograms (0.1 kilograms)
   def weight
-    return pbGetSpeciesData(@species, formSimple, SpeciesWeight)
+    return pbGetSpeciesData(@species, formSimple, SpeciesData::WEIGHT)
   end
 
   # Returns an array of booleans indicating whether a stat is made to have
@@ -918,7 +918,7 @@ class Pokemon
 
   # @return [Array<Integer>] the EV yield of this Pokémon (an array of six values)
   def evYield
-    ret = pbGetSpeciesData(@species, formSimple, SpeciesEffortPoints)
+    ret = pbGetSpeciesData(@species, formSimple, SpeciesData::EFFORT_POINTS)
     return ret.clone
   end
 
@@ -998,7 +998,7 @@ class Pokemon
 
   # @return [Array<Integer>] this Pokémon's base stats, an array of six values
   def baseStats
-    ret = pbGetSpeciesData(@species, formSimple, SpeciesBaseStats)
+    ret = pbGetSpeciesData(@species, formSimple, SpeciesData::BASE_STATS)
     return ret.clone
   end
 
@@ -1110,7 +1110,7 @@ class Pokemon
     self.level    = level
     calcStats
     @hp           = @totalhp
-    @happiness    = pbGetSpeciesData(@species, formSimple, SpeciesHappiness)
+    @happiness    = pbGetSpeciesData(@species, formSimple, SpeciesData::HAPPINESS)
     if withMoves
       self.resetMoves
     else

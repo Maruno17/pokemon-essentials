@@ -253,8 +253,8 @@ class PokemonEncounters
         newChances = []
         speciesData = pbLoadSpeciesData
         for i in 0...encList.length
-          t1 = speciesData[encList[i][0]][SpeciesType1]
-          t2 = speciesData[encList[i][0]][SpeciesType2]
+          t1 = speciesData[encList[i][0]][SpeciesData::TYPE1]
+          t2 = speciesData[encList[i][0]][SpeciesData::TYPE2]
           next if t1!=favoredType && (!t2 || t2!=favoredType)
           newEncList.push(encList[i])
           newChances.push(chances[i])

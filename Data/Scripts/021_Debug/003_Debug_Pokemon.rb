@@ -719,7 +719,7 @@ module PokemonDebugMixin
             pkmn.level = EGG_LEVEL
             pkmn.calcStats
             pkmn.name = _INTL("Egg")
-            pkmn.eggsteps = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesStepsToHatch)
+            pkmn.eggsteps = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesData::STEPS_TO_HATCH)
             pkmn.hatchedMap = 0
             pkmn.obtainMode = 1
             pbRefreshSingle(pkmnid)

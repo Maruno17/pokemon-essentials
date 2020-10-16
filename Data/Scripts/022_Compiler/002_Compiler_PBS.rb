@@ -702,8 +702,8 @@ end
 #===============================================================================
 def pbCompilePokemonData
   # Get schemas.
-  requiredValues = PokemonSpeciesData.requiredValues
-  optionalValues = PokemonSpeciesData.optionalValues
+  requiredValues = SpeciesData.requiredValues
+  optionalValues = SpeciesData.optionalValues
   # Prepare arrays for compiled data.
   speciesData    = []
   movesets       = []
@@ -839,7 +839,7 @@ def pbCompilePokemonData
   save_data(regionalDexes,"Data/regional_dexes.dat")
   # Save metrics data.
   for i in 0...7
-    defaultValue = (i==MetricBattlerShadowSize) ? 2 : 0   # Shadow size 2, other metrics 0
+    defaultValue = (i==SpeciesData::METRIC_SHADOW_SIZE) ? 2 : 0   # Shadow size 2, other metrics 0
     for j in 0..maxValue
       spriteMetrics[i] = [] if !spriteMetrics[i]
       spriteMetrics[i][j] ||= defaultValue
@@ -895,8 +895,8 @@ end
 #===============================================================================
 def pbCompilePokemonForms
   # Get schemas.
-  requiredValues = PokemonSpeciesData.requiredValues(true)
-  optionalValues = PokemonSpeciesData.optionalValues(true)
+  requiredValues = SpeciesData.requiredValues(true)
+  optionalValues = SpeciesData.optionalValues(true)
   # Prepare arrays for compiled data.
   speciesData    = pbLoadSpeciesData
   movesets       = []
@@ -966,9 +966,9 @@ def pbCompilePokemonForms
       if (contents["WildItemCommon"] && contents["WildItemCommon"]!="") ||
          (contents["WildItemUncommon"] && contents["WildItemUncommon"]!="") ||
          (contents["WildItemRare"] && contents["WildItemRare"]!="")
-        speciesData[speciesID][SpeciesWildItemCommon]   = nil
-        speciesData[speciesID][SpeciesWildItemUncommon] = nil
-        speciesData[speciesID][SpeciesWildItemRare]     = nil
+        speciesData[speciesID][SpeciesData::WILD_ITEM_COMMON]   = nil
+        speciesData[speciesID][SpeciesData::WILD_ITEM_UNCOMMON] = nil
+        speciesData[speciesID][SpeciesData::WILD_ITEM_RARE]     = nil
       end
       # Go through hashes of compilable data and compile this section.
       [requiredValues,optionalValues].each do |hash|
@@ -1051,7 +1051,7 @@ def pbCompilePokemonForms
   # Inherit base form metrics data.
   newSpriteMetrics = pbLoadSpeciesMetrics
   for i in 0...7
-    defaultValue = (i==MetricBattlerShadowSize) ? 2 : 0   # Shadow size 2, other metrics 0
+    defaultValue = (i==SpeciesData::METRIC_SHADOW_SIZE) ? 2 : 0   # Shadow size 2, other metrics 0
     pbAppendToBaseFormData(PBSpecies.maxValue+1,maxValue,newSpriteMetrics[i],
        spriteMetrics[i] || [],speciesToForm,false,defaultValue)
   end

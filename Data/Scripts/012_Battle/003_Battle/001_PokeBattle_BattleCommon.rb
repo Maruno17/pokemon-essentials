@@ -167,7 +167,7 @@ module PokeBattle_BattleCommon
     return 4 if $DEBUG && Input.press?(Input::CTRL)
     # Get a rareness if one wasn't provided
     if !rareness
-      rareness = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesRareness)
+      rareness = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesData::RARENESS)
     end
     # Modify rareness depending on the Poké Ball's effect
     ultraBeast = (battler.isSpecies?(:NIHILEGO) ||

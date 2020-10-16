@@ -341,16 +341,16 @@ def pbApplyBattlerMetricsToSprite(sprite,index,species,shadow=false,metrics=nil)
   metrics = pbLoadSpeciesMetrics if !metrics
   if shadow
     if (index&1)==1   # Foe Pokémon
-      sprite.x += (metrics[MetricBattlerShadowX][species] || 0)*2
+      sprite.x += (metrics[SpeciesData::METRIC_SHADOW_X][species] || 0)*2
     end
   else
     if (index&1)==0   # Player's Pokémon
-      sprite.x += (metrics[MetricBattlerPlayerX][species] || 0)*2
-      sprite.y += (metrics[MetricBattlerPlayerY][species] || 0)*2
+      sprite.x += (metrics[SpeciesData::METRIC_PLAYER_X][species] || 0)*2
+      sprite.y += (metrics[SpeciesData::METRIC_PLAYER_Y][species] || 0)*2
     else              # Foe Pokémon
-      sprite.x += (metrics[MetricBattlerEnemyX][species] || 0)*2
-      sprite.y += (metrics[MetricBattlerEnemyY][species] || 0)*2
-      sprite.y -= (metrics[MetricBattlerAltitude][species] || 0)*2
+      sprite.x += (metrics[SpeciesData::METRIC_ENEMY_X][species] || 0)*2
+      sprite.y += (metrics[SpeciesData::METRIC_ENEMY_Y][species] || 0)*2
+      sprite.y -= (metrics[SpeciesData::METRIC_ALTITUDE][species] || 0)*2
     end
   end
 end
@@ -360,5 +360,5 @@ end
 def showShadow?(species)
   return true
 #  metrics = pbLoadSpeciesMetrics
-#  return (metrics[MetricBattlerAltitude][species] || 0)>0
+#  return (metrics[SpeciesData::METRIC_ALTITUDE][species] || 0)>0
 end
