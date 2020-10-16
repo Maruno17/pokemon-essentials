@@ -408,8 +408,8 @@ class ItemLister
     cmds = []
     for i in 1..PBItems.maxValue
       next if !@itemdata[i]
-      name = @itemdata[i][ITEM_NAME]
-      if name && name!="" && @itemdata[i][ITEM_POCKET]!=0
+      name = @itemdata[i][ItemData::NAME]
+      if name && name!="" && @itemdata[i][ItemData::POCKET]!=0
         cmds.push([i,name])
       end
     end

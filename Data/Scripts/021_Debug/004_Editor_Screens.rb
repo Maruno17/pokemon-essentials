@@ -635,26 +635,26 @@ def pbItemEditor
         else
           data = [getConstantName(PBItems,selection)]
           itemdata = pbLoadItemsData
-          data.push(itemdata[selection][ITEM_NAME])
-          data.push(itemdata[selection][ITEM_PLURAL])
-          data.push(itemdata[selection][ITEM_POCKET])
-          data.push(itemdata[selection][ITEM_PRICE])
-          data.push(itemdata[selection][ITEM_DESCRIPTION])
-          data.push(itemdata[selection][ITEM_FIELD_USE])
-          data.push(itemdata[selection][ITEM_BATTLE_USE])
-          data.push(itemdata[selection][ITEM_TYPE])
-          data.push(itemdata[selection][ITEM_MACHINE])
-          save = pbPropertyList(data[ITEM_NAME],data,items,true)
+          data.push(itemdata[selection][ItemData::NAME])
+          data.push(itemdata[selection][ItemData::NAME_PLURAL])
+          data.push(itemdata[selection][ItemData::POCKET])
+          data.push(itemdata[selection][ItemData::PRICE])
+          data.push(itemdata[selection][ItemData::DESCRIPTION])
+          data.push(itemdata[selection][ItemData::FIELD_USE])
+          data.push(itemdata[selection][ItemData::BATTLE_USE])
+          data.push(itemdata[selection][ItemData::TYPE])
+          data.push(itemdata[selection][ItemData::MOVE])
+          save = pbPropertyList(data[ItemData::NAME],data,items,true)
           if save
-            itemdata[selection][ITEM_NAME]        = data[ITEM_NAME]
-            itemdata[selection][ITEM_PLURAL]      = data[ITEM_PLURAL]
-            itemdata[selection][ITEM_POCKET]      = data[ITEM_POCKET]
-            itemdata[selection][ITEM_PRICE]       = data[ITEM_PRICE]
-            itemdata[selection][ITEM_DESCRIPTION] = data[ITEM_DESCRIPTION]
-            itemdata[selection][ITEM_FIELD_USE]   = data[ITEM_FIELD_USE]
-            itemdata[selection][ITEM_BATTLE_USE]  = data[ITEM_BATTLE_USE]
-            itemdata[selection][ITEM_TYPE]        = data[ITEM_TYPE]
-            itemdata[selection][ITEM_MACHINE]     = data[ITEM_MACHINE]
+            itemdata[selection][ItemData::NAME]        = data[ItemData::NAME]
+            itemdata[selection][ItemData::NAME_PLURAL] = data[ItemData::NAME_PLURAL]
+            itemdata[selection][ItemData::POCKET]      = data[ItemData::POCKET]
+            itemdata[selection][ItemData::PRICE]       = data[ItemData::PRICE]
+            itemdata[selection][ItemData::DESCRIPTION] = data[ItemData::DESCRIPTION]
+            itemdata[selection][ItemData::FIELD_USE]   = data[ItemData::FIELD_USE]
+            itemdata[selection][ItemData::BATTLE_USE]  = data[ItemData::BATTLE_USE]
+            itemdata[selection][ItemData::TYPE]        = data[ItemData::TYPE]
+            itemdata[selection][ItemData::MOVE]        = data[ItemData::MOVE]
             save_data(itemdata,"Data/items.dat")
             $PokemonTemp.itemsData = nil
             pbSaveItems
@@ -711,15 +711,15 @@ def pbItemEditorNew(defaultname)
     return -1 if price==-1
     desc = StringProperty.set(_INTL("Description"),"")
     # Item list will create record automatically
-    itemdata[index][ITEM_ID]          = index
-    itemdata[index][ITEM_NAME]        = itemname
-    itemdata[index][ITEM_POCKET]      = pocket
-    itemdata[index][ITEM_PRICE]       = price
-    itemdata[index][ITEM_DESCRIPTION] = desc
-    itemdata[index][ITEM_FIELD_USE]   = 0
-    itemdata[index][ITEM_BATTLE_USE]  = 0
-    itemdata[index][ITEM_TYPE]        = 0
-    itemdata[index][ITEM_MACHINE]     = 0
+    itemdata[index][ItemData::ID]          = index
+    itemdata[index][ItemData::NAME]        = itemname
+    itemdata[index][ItemData::POCKET]      = pocket
+    itemdata[index][ItemData::PRICE]       = price
+    itemdata[index][ItemData::DESCRIPTION] = desc
+    itemdata[index][ItemData::FIELD_USE]   = 0
+    itemdata[index][ItemData::BATTLE_USE]  = 0
+    itemdata[index][ItemData::TYPE]        = 0
+    itemdata[index][ItemData::MOVE]        = 0
     PBItems.const_set(cname,index)
     save_data(itemdata,"Data/items.dat")
     $PokemonTemp.itemsData = nil

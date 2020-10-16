@@ -70,7 +70,7 @@ class PokeBattle_Battle
       b.lastMoveFailed = false   # Counts as a successful move for Stomping Tantrum
       item = @choices[b.index][1]
       next if !item || item<=0
-      useType = pbGetItemData(item,ITEM_BATTLE_USE)
+      useType = pbGetItemData(item,ItemData::BATTLE_USE)
       next if !useType
       case useType
       when 1, 2, 6, 7   # Use on Pokémon/Pokémon's move

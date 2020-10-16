@@ -242,19 +242,26 @@ def pbSaveItems
       data = itemData[i]
       cname = getConstantName(PBItems,i) rescue sprintf("ITEM%03d",i)
       next if !cname || cname=="" || data[0]==0
-      if curpocket!=data[ITEM_POCKET]
-        curpocket = data[ITEM_POCKET]
+      if curpocket!=data[ItemData::POCKET]
+        curpocket = data[ItemData::POCKET]
         f.write("\#-------------------------------\r\n")
       end
       machine = ""
-      if data[ITEM_MACHINE]>0
-        machine = getConstantName(PBMoves,data[ITEM_MACHINE]) rescue pbGetMoveConst(data[ITEM_MACHINE]) rescue ""
+      if data[ItemData::MOVE]>0
+        machine = getConstantName(PBMoves,data[ItemData::MOVE]) rescue pbGetMoveConst(data[ItemData::MOVE]) rescue ""
       end
       f.write(sprintf("%d,%s,%s,%s,%d,%d,%s,%d,%d,%d,%s",
-         data[ITEM_ID],csvQuote(cname),csvQuote(data[ITEM_NAME]),
-         csvQuote(data[ITEM_PLURAL]),data[ITEM_POCKET],data[ITEM_PRICE],
-         csvQuoteAlways(data[ITEM_DESCRIPTION]),data[ITEM_FIELD_USE],
-         data[ITEM_BATTLE_USE],data[ITEM_TYPE],csvQuote(machine)))
+         data[ItemData::ID],
+         csvQuote(cname),
+         csvQuote(data[ItemData::NAME]),
+         csvQuote(data[ItemData::NAME_PLURAL]),
+         data[ItemData::POCKET],
+         data[ItemData::PRICE],
+         csvQuoteAlways(data[ItemData::DESCRIPTION]),
+         data[ItemData::FIELD_USE],
+         data[ItemData::BATTLE_USE],
+         data[ItemData::TYPE],
+         csvQuote(machine)))
       f.write("\r\n")
     end
   }

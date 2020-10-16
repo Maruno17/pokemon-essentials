@@ -200,7 +200,7 @@ class PokeBattle_Scene
     # Start Bag screen
     itemScene = PokemonBag_Scene.new
     itemScene.pbStartScene($PokemonBag,true,Proc.new { |item|
-      useType = pbGetItemData(item,ITEM_BATTLE_USE)
+      useType = pbGetItemData(item,ItemData::BATTLE_USE)
       next useType && useType>0
       },false)
     # Loop while in Bag screen
@@ -211,7 +211,7 @@ class PokeBattle_Scene
       break if item==0
       # Choose a command for the selected item
       itemName = PBItems.getName(item)
-      useType = pbGetItemData(item,ITEM_BATTLE_USE)
+      useType = pbGetItemData(item,ItemData::BATTLE_USE)
       cmdUse = -1
       commands = []
       commands[cmdUse = commands.length] = _INTL("Use") if useType && useType!=0

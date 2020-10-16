@@ -41,7 +41,7 @@ class PokeBattle_Battle
   #=============================================================================
   def pbConsumeItemInBag(item,idxBattler)
     return if item==0
-    useType = pbGetItemData(item,ITEM_BATTLE_USE)
+    useType = pbGetItemData(item,ItemData::BATTLE_USE)
     return if !useType || useType==0 || (useType>=6 && useType<=10)   # Not consumed upon use
     if pbOwnedByPlayer?(idxBattler)
       if !$PokemonBag.pbDeleteItem(item)
@@ -60,7 +60,7 @@ class PokeBattle_Battle
 
   def pbReturnUnusedItemToBag(item,idxBattler)
     return if item==0
-    useType = pbGetItemData(item,ITEM_BATTLE_USE)
+    useType = pbGetItemData(item,ItemData::BATTLE_USE)
     return if !useType || useType==0 || (useType>=6 && useType<=10)   # Not consumed upon use
     if pbOwnedByPlayer?(idxBattler)
       if $PokemonBag && $PokemonBag.pbCanStore?(item)

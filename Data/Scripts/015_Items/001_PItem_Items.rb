@@ -1,16 +1,18 @@
 #===============================================================================
 # Item data
 #===============================================================================
-ITEM_ID          = 0
-ITEM_NAME        = 1
-ITEM_PLURAL      = 2
-ITEM_POCKET      = 3
-ITEM_PRICE       = 4
-ITEM_DESCRIPTION = 5
-ITEM_FIELD_USE   = 6
-ITEM_BATTLE_USE  = 7
-ITEM_TYPE        = 8
-ITEM_MACHINE     = 9
+module ItemData
+  ID          = 0
+  NAME        = 1
+  NAME_PLURAL = 2
+  POCKET      = 3
+  PRICE       = 4
+  DESCRIPTION = 5
+  FIELD_USE   = 6
+  BATTLE_USE  = 7
+  TYPE        = 8
+  MOVE        = 9
+end
 
 
 
@@ -42,92 +44,92 @@ def pbClearData
 end
 
 def pbGetPocket(item)
-  ret = pbGetItemData(item,ITEM_POCKET)
+  ret = pbGetItemData(item,ItemData::POCKET)
   return ret || 0
 end
 
 def pbGetPrice(item)
-  ret = pbGetItemData(item,ITEM_PRICE)
+  ret = pbGetItemData(item,ItemData::PRICE)
   return ret || 0
 end
 
 def pbGetMachine(item)
-  ret = pbGetItemData(item,ITEM_MACHINE)
+  ret = pbGetItemData(item,ItemData::MOVE)
   return ret || 0
 end
 
 def pbIsTechnicalMachine?(item)
-  ret = pbGetItemData(item,ITEM_FIELD_USE)
+  ret = pbGetItemData(item,ItemData::FIELD_USE)
   return ret && ret==3
 end
 
 def pbIsHiddenMachine?(item)
-  ret = pbGetItemData(item,ITEM_FIELD_USE)
+  ret = pbGetItemData(item,ItemData::FIELD_USE)
   return ret && ret==4
 end
 
 def pbIsMachine?(item)
-  ret = pbGetItemData(item,ITEM_FIELD_USE)
+  ret = pbGetItemData(item,ItemData::FIELD_USE)
   return ret && (ret==3 || ret==4)
 end
 
 def pbIsMail?(item)
-  ret = pbGetItemData(item,ITEM_TYPE)
+  ret = pbGetItemData(item,ItemData::TYPE)
   return ret && (ret==1 || ret==2)
 end
 
 def pbIsMailWithPokemonIcons?(item)
-  ret = pbGetItemData(item,ITEM_TYPE)
+  ret = pbGetItemData(item,ItemData::TYPE)
   return ret && ret==2
 end
 
 def pbIsPokeBall?(item)
-  ret = pbGetItemData(item,ITEM_TYPE)
+  ret = pbGetItemData(item,ItemData::TYPE)
   return ret && (ret==3 || ret==4)
 end
 
 def pbIsSnagBall?(item)
-  ret = pbGetItemData(item,ITEM_TYPE)
+  ret = pbGetItemData(item,ItemData::TYPE)
   return ret && (ret==3 || (ret==4 && $PokemonGlobal.snagMachine))
 end
 
 def pbIsBerry?(item)
-  ret = pbGetItemData(item,ITEM_TYPE)
+  ret = pbGetItemData(item,ItemData::TYPE)
   return ret && ret==5
 end
 
 def pbIsKeyItem?(item)
-  ret = pbGetItemData(item,ITEM_TYPE)
+  ret = pbGetItemData(item,ItemData::TYPE)
   return ret && ret==6
 end
 
 def pbIsEvolutionStone?(item)
-  ret = pbGetItemData(item,ITEM_TYPE)
+  ret = pbGetItemData(item,ItemData::TYPE)
   return ret && ret==7
 end
 
 def pbIsFossil?(item)
-  ret = pbGetItemData(item,ITEM_TYPE)
+  ret = pbGetItemData(item,ItemData::TYPE)
   return ret && ret==8
 end
 
 def pbIsApricorn?(item)
-  ret = pbGetItemData(item,ITEM_TYPE)
+  ret = pbGetItemData(item,ItemData::TYPE)
   return ret && ret==9
 end
 
 def pbIsGem?(item)
-  ret = pbGetItemData(item,ITEM_TYPE)
+  ret = pbGetItemData(item,ItemData::TYPE)
   return ret && ret==10
 end
 
 def pbIsMulch?(item)
-  ret = pbGetItemData(item,ITEM_TYPE)
+  ret = pbGetItemData(item,ItemData::TYPE)
   return ret && ret==11
 end
 
 def pbIsMegaStone?(item)   # Does NOT include Red Orb/Blue Orb
-  ret = pbGetItemData(item,ITEM_TYPE)
+  ret = pbGetItemData(item,ItemData::TYPE)
   return ret && ret==12
 end
 
@@ -135,9 +137,9 @@ end
 def pbIsImportantItem?(item)
   itemData = pbLoadItemsData[getID(PBItems,item)]
   return false if !itemData
-  return true if itemData[ITEM_TYPE] && itemData[ITEM_TYPE]==6   # Key item
-  return true if itemData[ITEM_FIELD_USE] && itemData[ITEM_FIELD_USE]==4   # HM
-  return true if itemData[ITEM_FIELD_USE] && itemData[ITEM_FIELD_USE]==3 && INFINITE_TMS   # TM
+  return true if itemData[ItemData::TYPE] && itemData[ItemData::TYPE]==6   # Key item
+  return true if itemData[ItemData::FIELD_USE] && itemData[ItemData::FIELD_USE]==4   # HM
+  return true if itemData[ItemData::FIELD_USE] && itemData[ItemData::FIELD_USE]==3 && INFINITE_TMS   # TM
   return false
 end
 
@@ -681,7 +683,7 @@ end
 # Use an item from the Bag and/or on a Pokémon
 #===============================================================================
 def pbUseItem(bag,item,bagscene=nil)
-  useType = pbGetItemData(item,ITEM_FIELD_USE)
+  useType = pbGetItemData(item,ItemData::FIELD_USE)
   if pbIsMachine?(item)    # TM or HM
     if $Trainer.pokemonCount==0
       pbMessage(_INTL("There is no Pokémon."))
@@ -782,7 +784,7 @@ def pbUseItemOnPokemon(item,pkmn,scene)
   ret = ItemHandlers.triggerUseOnPokemon(item,pkmn,scene)
   scene.pbClearAnnotations
   scene.pbHardRefresh
-  useType = pbGetItemData(item,ITEM_FIELD_USE)
+  useType = pbGetItemData(item,ItemData::FIELD_USE)
   if ret && useType && useType==1   # Usable on Pokémon, consumed
     $PokemonBag.pbDeleteItem(item)
     if !$PokemonBag.pbHasItem?(item)

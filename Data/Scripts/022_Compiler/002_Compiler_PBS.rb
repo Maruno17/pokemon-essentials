@@ -546,24 +546,24 @@ def pbCompileItems
     linerecord = pbGetCsvRecord(line,lineno,[0,"vnssuusuuUN"])
     id = linerecord[0]
     record = []
-    record[ITEM_ID]          = id
-    constant                 = linerecord[1]
-    constants                += "#{constant}=#{id}\r\n"
-    record[ITEM_NAME]        = linerecord[2]
-    itemnames[id]            = linerecord[2]
-    record[ITEM_PLURAL]      = linerecord[3]
-    itempluralnames[id]      = linerecord[3]
-    record[ITEM_POCKET]      = linerecord[4]
-    record[ITEM_PRICE]       = linerecord[5]
-    record[ITEM_DESCRIPTION] = linerecord[6]
-    itemdescs[id]            = linerecord[6]
-    record[ITEM_FIELD_USE]   = linerecord[7]
-    record[ITEM_BATTLE_USE]  = linerecord[8]
-    record[ITEM_TYPE]        = linerecord[9]
-    if record[ITEM_TYPE]!="" && linerecord[10]
-      record[ITEM_MACHINE]   = parseMove(linerecord[10])
+    record[ItemData::ID]          = id
+    constant                      = linerecord[1]
+    constants                     += "#{constant}=#{id}\r\n"
+    record[ItemData::NAME]        = linerecord[2]
+    itemnames[id]                 = linerecord[2]
+    record[ItemData::NAME_PLURAL] = linerecord[3]
+    itempluralnames[id]           = linerecord[3]
+    record[ItemData::POCKET]      = linerecord[4]
+    record[ItemData::PRICE]       = linerecord[5]
+    record[ItemData::DESCRIPTION] = linerecord[6]
+    itemdescs[id]                 = linerecord[6]
+    record[ItemData::FIELD_USE]   = linerecord[7]
+    record[ItemData::BATTLE_USE]  = linerecord[8]
+    record[ItemData::TYPE]        = linerecord[9]
+    if record[ItemData::TYPE]!="" && linerecord[10]
+      record[ItemData::MOVE]      = parseMove(linerecord[10])
     else
-      record[ITEM_MACHINE]   = 0
+      record[ItemData::MOVE]      = 0
     end
     maxValue = [maxValue,id].max
     records[id] = record

@@ -263,7 +263,7 @@ def pbDayCareGenerateEgg
     itemsData = pbLoadItemsData
     for i in 0...itemsData.length
       next if !itemsData[i]
-      atk = itemsData[i][ITEM_MACHINE]
+      atk = itemsData[i][ItemData::MOVE]
       next if !atk || atk==0
       next if !egg.compatibleWithMove?(atk)
       next if !movefather.hasMove?(atk)
