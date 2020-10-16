@@ -197,12 +197,12 @@ def pbSerializeMetadata(metadata,mapinfos)
       f.write("\#-------------------------------\r\n")
       f.write(sprintf("[%03d]\r\n",i))
       if i==0
-        types = PokemonMetadata::GlobalTypes
+        types = Metadata::SCHEMA
       else
         if mapinfos && mapinfos[i]
           f.write(sprintf("# %s\r\n",mapinfos[i].name))
         end
-        types = PokemonMetadata::NonGlobalTypes
+        types = MapMetadata::SCHEMA
       end
       for key in types.keys
         schema = types[key]

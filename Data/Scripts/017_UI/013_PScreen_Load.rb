@@ -159,7 +159,7 @@ class PokemonLoad_Scene
 
   def pbSetParty(trainer)
     return if !trainer || !trainer.party
-    meta = pbGetMetadata(0,MetadataPlayerA+trainer.metaID)
+    meta = pbGetMetadata(0,Metadata::PLAYER_A+trainer.metaID)
     if meta
       filename = pbGetPlayerCharset(meta,1,trainer,true)
       @sprites["player"] = TrainerWalkingCharSprite.new(filename,@viewport)

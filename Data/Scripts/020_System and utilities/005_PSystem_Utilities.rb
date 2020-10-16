@@ -666,7 +666,7 @@ end
 #===============================================================================
 def pbChangePlayer(id)
   return false if id<0 || id>=8
-  meta = pbGetMetadata(0,MetadataPlayerA+id)
+  meta = pbGetMetadata(0,Metadata::PLAYER_A+id)
   return false if !meta
   $Trainer.trainertype = meta[0] if $Trainer
   $game_player.character_name = meta[1]
@@ -678,7 +678,7 @@ end
 def pbGetPlayerGraphic
   id = $PokemonGlobal.playerID
   return "" if id<0 || id>=8
-  meta = pbGetMetadata(0,MetadataPlayerA+id)
+  meta = pbGetMetadata(0,Metadata::PLAYER_A+id)
   return "" if !meta
   return pbPlayerSpriteFile(meta[0])
 end
@@ -686,7 +686,7 @@ end
 def pbGetPlayerTrainerType
   id = $PokemonGlobal.playerID
   return 0 if id<0 || id>=8
-  meta = pbGetMetadata(0,MetadataPlayerA+id)
+  meta = pbGetMetadata(0,Metadata::PLAYER_A+id)
   return 0 if !meta
   return meta[0]
 end
@@ -868,7 +868,7 @@ end
 # no region was defined in the game's metadata. The ID numbers returned by
 # this function depend on the current map's position metadata.
 def pbGetCurrentRegion(defaultRegion=-1)
-  mappos = ($game_map) ? pbGetMetadata($game_map.map_id,MetadataMapPosition) : nil
+  mappos = ($game_map) ? pbGetMetadata($game_map.map_id,MapMetadata::MAP_POSITION) : nil
   return (mappos) ? mappos[0] : defaultRegion
 end
 

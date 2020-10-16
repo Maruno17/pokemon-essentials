@@ -62,7 +62,7 @@ def pbInSafari?
     # map can be outdoors, with its own grassy patches.
     reception = pbSafariState.pbReceptionMap
     return true if $game_map.map_id==reception
-    return true if pbGetMetadata($game_map.map_id,MetadataSafariMap)
+    return true if pbGetMetadata($game_map.map_id,MapMetadata::SAFARI_MAP)
   end
   return false
 end

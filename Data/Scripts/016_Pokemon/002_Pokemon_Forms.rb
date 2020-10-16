@@ -679,7 +679,7 @@ MultipleForms.register(:NECROZMA,{
 MultipleForms.register(:PIKACHU,{
   "getForm" => proc { |pkmn|
     next if pkmn.formSimple>=2
-    mapPos = pbGetMetadata($game_map.map_id,MetadataMapPosition)
+    mapPos = pbGetMetadata($game_map.map_id,MapMetadata::MAP_POSITION)
     next 1 if mapPos && mapPos[0]==1   # Tiall region
     next 0
   }

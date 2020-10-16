@@ -33,84 +33,90 @@ end
 #===============================================================================
 # Global and map metadata
 #===============================================================================
-MetadataHome             = 1
-MetadataWildBattleBGM    = 2
-MetadataTrainerBattleBGM = 3
-MetadataWildVictoryME    = 4
-MetadataTrainerVictoryME = 5
-MetadataWildCaptureME    = 6
-MetadataSurfBGM          = 7
-MetadataBicycleBGM       = 8
-MetadataPlayerA          = 9
-MetadataPlayerB          = 10
-MetadataPlayerC          = 11
-MetadataPlayerD          = 12
-MetadataPlayerE          = 13
-MetadataPlayerF          = 14
-MetadataPlayerG          = 15
-MetadataPlayerH          = 16
+module Metadata
+  HOME               = 1
+  WILD_BATTLE_BGM    = 2
+  TRAINER_BATTLE_BGM = 3
+  WILD_VICTORY_ME    = 4
+  TRAINER_VICTORY_ME = 5
+  WILD_CAPTURE_ME    = 6
+  SURF_BGM           = 7
+  BICYCLE_BGM        = 8
+  PLAYER_A           = 9
+  PLAYER_B           = 10
+  PLAYER_C           = 11
+  PLAYER_D           = 12
+  PLAYER_E           = 13
+  PLAYER_F           = 14
+  PLAYER_G           = 15
+  PLAYER_H           = 16
 
-MetadataOutdoor             = 1
-MetadataShowArea            = 2
-MetadataBicycle             = 3
-MetadataBicycleAlways       = 4
-MetadataHealingSpot         = 5
-MetadataWeather             = 6
-MetadataMapPosition         = 7
-MetadataDiveMap             = 8
-MetadataDarkMap             = 9
-MetadataSafariMap           = 10
-MetadataSnapEdges           = 11
-MetadataDungeon             = 12
-MetadataBattleBack          = 13
-MetadataMapWildBattleBGM    = 14
-MetadataMapTrainerBattleBGM = 15
-MetadataMapWildVictoryME    = 16
-MetadataMapTrainerVictoryME = 17
-MetadataMapWildCaptureME    = 18
-MetadataMapSize             = 19
-MetadataEnvironment         = 20
-
-module PokemonMetadata
-  GlobalTypes = {
-     "Home"             => [MetadataHome,             "uuuu"],
-     "WildBattleBGM"    => [MetadataWildBattleBGM,    "s"],
-     "TrainerBattleBGM" => [MetadataTrainerBattleBGM, "s"],
-     "WildVictoryME"    => [MetadataWildVictoryME,    "s"],
-     "TrainerVictoryME" => [MetadataTrainerVictoryME, "s"],
-     "WildCaptureME"    => [MetadataWildCaptureME,    "s"],
-     "SurfBGM"          => [MetadataSurfBGM,          "s"],
-     "BicycleBGM"       => [MetadataBicycleBGM,       "s"],
-     "PlayerA"          => [MetadataPlayerA,          "esssssss", :PBTrainers],
-     "PlayerB"          => [MetadataPlayerB,          "esssssss", :PBTrainers],
-     "PlayerC"          => [MetadataPlayerC,          "esssssss", :PBTrainers],
-     "PlayerD"          => [MetadataPlayerD,          "esssssss", :PBTrainers],
-     "PlayerE"          => [MetadataPlayerE,          "esssssss", :PBTrainers],
-     "PlayerF"          => [MetadataPlayerF,          "esssssss", :PBTrainers],
-     "PlayerG"          => [MetadataPlayerG,          "esssssss", :PBTrainers],
-     "PlayerH"          => [MetadataPlayerH,          "esssssss", :PBTrainers]
+  SCHEMA = {
+    "Home"             => [HOME,               "uuuu"],
+    "WildBattleBGM"    => [WILD_BATTLE_BGM,    "s"],
+    "TrainerBattleBGM" => [TRAINER_BATTLE_BGM, "s"],
+    "WildVictoryME"    => [WILD_VICTORY_ME,    "s"],
+    "TrainerVictoryME" => [TRAINER_VICTORY_ME, "s"],
+    "WildCaptureME"    => [WILD_CAPTURE_ME,    "s"],
+    "SurfBGM"          => [SURF_BGM,           "s"],
+    "BicycleBGM"       => [BICYCLE_BGM,        "s"],
+    "PlayerA"          => [PLAYER_A,           "esssssss", :PBTrainers],
+    "PlayerB"          => [PLAYER_B,           "esssssss", :PBTrainers],
+    "PlayerC"          => [PLAYER_C,           "esssssss", :PBTrainers],
+    "PlayerD"          => [PLAYER_D,           "esssssss", :PBTrainers],
+    "PlayerE"          => [PLAYER_E,           "esssssss", :PBTrainers],
+    "PlayerF"          => [PLAYER_F,           "esssssss", :PBTrainers],
+    "PlayerG"          => [PLAYER_G,           "esssssss", :PBTrainers],
+    "PlayerH"          => [PLAYER_H,           "esssssss", :PBTrainers]
   }
-  NonGlobalTypes = {
-     "Outdoor"          => [MetadataOutdoor,             "b"],
-     "ShowArea"         => [MetadataShowArea,            "b"],
-     "Bicycle"          => [MetadataBicycle,             "b"],
-     "BicycleAlways"    => [MetadataBicycleAlways,       "b"],
-     "HealingSpot"      => [MetadataHealingSpot,         "uuu"],
-     "Weather"          => [MetadataWeather,             "eu", :PBFieldWeather],
-     "MapPosition"      => [MetadataMapPosition,         "uuu"],
-     "DiveMap"          => [MetadataDiveMap,             "u"],
-     "DarkMap"          => [MetadataDarkMap,             "b"],
-     "SafariMap"        => [MetadataSafariMap,           "b"],
-     "SnapEdges"        => [MetadataSnapEdges,           "b"],
-     "Dungeon"          => [MetadataDungeon,             "b"],
-     "BattleBack"       => [MetadataBattleBack,          "s"],
-     "WildBattleBGM"    => [MetadataMapWildBattleBGM,    "s"],
-     "TrainerBattleBGM" => [MetadataMapTrainerBattleBGM, "s"],
-     "WildVictoryME"    => [MetadataMapWildVictoryME,    "s"],
-     "TrainerVictoryME" => [MetadataMapTrainerVictoryME, "s"],
-     "WildCaptureME"    => [MetadataMapWildCaptureME,    "s"],
-     "MapSize"          => [MetadataMapSize,             "us"],
-     "Environment"      => [MetadataEnvironment,         "e", :PBEnvironment]
+end
+
+#===============================================================================
+# Map-specific metadata
+#===============================================================================
+module MapMetadata
+  OUTDOOR            = 1
+  SHOW_AREA          = 2
+  BICYCLE            = 3
+  BICYCLE_ALWAYS     = 4
+  HEALING_SPOT       = 5
+  WEATHER            = 6
+  MAP_POSITION       = 7
+  DIVE_MAP           = 8
+  DARK_MAP           = 9
+  SAFARI_MAP         = 10
+  SNAP_EDGES         = 11
+  DUNGEON            = 12
+  BATTLE_BACK        = 13
+  WILD_BATTLE_BGM    = 14
+  TRAINER_BATTLE_BGM = 15
+  WILD_VICTORY_ME    = 16
+  TRAINER_VICTORY_ME = 17
+  WILD_CAPTURE_ME    = 18
+  MAP_SIZE           = 19
+  ENVIRONMENT        = 20
+
+  SCHEMA = {
+     "Outdoor"          => [OUTDOOR,            "b"],
+     "ShowArea"         => [SHOW_AREA,          "b"],
+     "Bicycle"          => [BICYCLE,            "b"],
+     "BicycleAlways"    => [BICYCLE_ALWAYS,     "b"],
+     "HealingSpot"      => [HEALING_SPOT,       "uuu"],
+     "Weather"          => [WEATHER,            "eu", :PBFieldWeather],
+     "MapPosition"      => [MAP_POSITION,       "uuu"],
+     "DiveMap"          => [DIVE_MAP,           "u"],
+     "DarkMap"          => [DARK_MAP,           "b"],
+     "SafariMap"        => [SAFARI_MAP,         "b"],
+     "SnapEdges"        => [SNAP_EDGES,         "b"],
+     "Dungeon"          => [DUNGEON,            "b"],
+     "BattleBack"       => [BATTLE_BACK,        "s"],
+     "WildBattleBGM"    => [WILD_BATTLE_BGM,    "s"],
+     "TrainerBattleBGM" => [TRAINER_BATTLE_BGM, "s"],
+     "WildVictoryME"    => [WILD_VICTORY_ME,    "s"],
+     "TrainerVictoryME" => [TRAINER_VICTORY_ME, "s"],
+     "WildCaptureME"    => [WILD_CAPTURE_ME,    "s"],
+     "MapSize"          => [MAP_SIZE,           "us"],
+     "Environment"      => [ENVIRONMENT,        "e", :PBEnvironment]
   }
 end
 

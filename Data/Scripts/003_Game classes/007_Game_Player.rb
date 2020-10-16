@@ -460,7 +460,7 @@ def pbGetPlayerCharset(meta,charset,trainer=nil,force=false)
 end
 
 def pbUpdateVehicle
-  meta = pbGetMetadata(0,MetadataPlayerA+$PokemonGlobal.playerID)
+  meta = pbGetMetadata(0,Metadata::PLAYER_A+$PokemonGlobal.playerID)
   if meta
     charset = 1                                 # Regular graphic
     if $PokemonGlobal.diving;     charset = 5   # Diving graphic
@@ -480,9 +480,9 @@ def pbCancelVehicles(destination=nil)
 end
 
 def pbCanUseBike?(mapid)
-  return true if pbGetMetadata(mapid,MetadataBicycleAlways)
-  val = pbGetMetadata(mapid,MetadataBicycle)
-  val = pbGetMetadata(mapid,MetadataOutdoor) if val==nil
+  return true if pbGetMetadata(mapid,MapMetadata::BICYCLE_ALWAYS)
+  val = pbGetMetadata(mapid,MapMetadata::BICYCLE)
+  val = pbGetMetadata(mapid,MapMetadata::OUTDOOR) if val==nil
   return (val) ? true : false
 end
 
@@ -490,7 +490,7 @@ def pbMountBike
   return if $PokemonGlobal.bicycle
   $PokemonGlobal.bicycle = true
   pbUpdateVehicle
-  bikebgm = pbGetMetadata(0,MetadataBicycleBGM)
+  bikebgm = pbGetMetadata(0,Metadata::BICYCLE_BGM)
   pbCueBGM(bikebgm,0.5) if bikebgm
 end
 

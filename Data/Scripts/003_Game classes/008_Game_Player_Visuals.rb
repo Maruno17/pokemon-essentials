@@ -38,7 +38,7 @@ class Game_Player < Game_Character
     @defaultCharacterName = "" if !@defaultCharacterName
     return @defaultCharacterName if @defaultCharacterName!=""
     if !@move_route_forcing && $PokemonGlobal.playerID>=0
-      meta = pbGetMetadata(0,MetadataPlayerA+$PokemonGlobal.playerID)
+      meta = pbGetMetadata(0,Metadata::PLAYER_A+$PokemonGlobal.playerID)
       if meta && !$PokemonGlobal.bicycle && !$PokemonGlobal.diving && !$PokemonGlobal.surfing
         charset = 1   # Display normal character sprite
         if pbCanRun? && (moving? || @wasmoving) && Input.dir4!=0 && meta[4] && meta[4]!=""

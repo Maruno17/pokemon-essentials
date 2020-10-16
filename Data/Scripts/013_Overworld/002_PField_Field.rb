@@ -399,11 +399,11 @@ Events.onMapChanging += proc { |_sender,e|
   newMapID = e[0]
   if newMapID>0
     mapinfos = ($RPGVX) ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
-    oldWeather = pbGetMetadata($game_map.map_id,MetadataWeather)
+    oldWeather = pbGetMetadata($game_map.map_id,MapMetadata::WEATHER)
     if $game_map.name!=mapinfos[newMapID].name
       $game_screen.weather(0,0,0) if oldWeather
     else
-      newWeather = pbGetMetadata(newMapID,MetadataWeather)
+      newWeather = pbGetMetadata(newMapID,MapMetadata::WEATHER)
       $game_screen.weather(0,0,0) if oldWeather && !newWeather
     end
   end
@@ -412,18 +412,18 @@ Events.onMapChanging += proc { |_sender,e|
 # Set up various data related to the new map
 Events.onMapChange += proc { |_sender,e|
   oldid = e[0] # previous map ID, 0 if no map ID
-  healing = pbGetMetadata($game_map.map_id,MetadataHealingSpot)
+  healing = pbGetMetadata($game_map.map_id,MapMetadata::HEALING_SPOT)
   $PokemonGlobal.healingSpot = healing if healing
   $PokemonMap.clear if $PokemonMap
   $PokemonEncounters.setup($game_map.map_id) if $PokemonEncounters
   $PokemonGlobal.visitedMaps[$game_map.map_id] = true
   if oldid!=0 && oldid!=$game_map.map_id
     mapinfos = ($RPGVX) ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
-    weather = pbGetMetadata($game_map.map_id,MetadataWeather)
+    weather = pbGetMetadata($game_map.map_id,MapMetadata::WEATHER)
     if $game_map.name!=mapinfos[oldid].name
       $game_screen.weather(weather[0],8,20) if weather && rand(100)<weather[1]
     else
-      oldweather = pbGetMetadata(oldid,MetadataWeather)
+      oldweather = pbGetMetadata(oldid,MapMetadata::WEATHER)
       $game_screen.weather(weather[0],8,20) if weather && !oldweather && rand(100)<weather[1]
     end
   end
@@ -444,7 +444,7 @@ Events.onMapSceneChange += proc { |_sender,e|
     $PokemonGlobal.mapTrail[0] = $game_map.map_id
   end
   # Display darkness circle on dark maps
-  darkmap = pbGetMetadata($game_map.map_id,MetadataDarkMap)
+  darkmap = pbGetMetadata($game_map.map_id,MapMetadata::DARK_MAP)
   if darkmap
     if $PokemonGlobal.flashUsed
       $PokemonTemp.darknessSprite = DarknessSprite.new
@@ -464,7 +464,7 @@ Events.onMapSceneChange += proc { |_sender,e|
   end
   # Show location signpost
   if mapChanged
-    if pbGetMetadata($game_map.map_id,MetadataShowArea)
+    if pbGetMetadata($game_map.map_id,MapMetadata::SHOW_AREA)
       nosignpost = false
       if $PokemonGlobal.mapTrail[1]
         for i in 0...NO_SIGNPOSTS.length/2
@@ -480,7 +480,7 @@ Events.onMapSceneChange += proc { |_sender,e|
     end
   end
   # Force cycling/walking
-  if pbGetMetadata($game_map.map_id,MetadataBicycleAlways)
+  if pbGetMetadata($game_map.map_id,MapMetadata::BICYCLE_ALWAYS)
     pbMountBike
   elsif !pbCanUseBike?($game_map.map_id)
     pbDismountBike
@@ -698,7 +698,7 @@ def pbFishingBegin
   $PokemonGlobal.fishing = true
   if !pbCommonEvent(FISHING_BEGIN_COMMON_EVENT)
     patternb = 2*$game_player.direction - 1
-    meta = pbGetMetadata(0,MetadataPlayerA+$PokemonGlobal.playerID)
+    meta = pbGetMetadata(0,Metadata::PLAYER_A+$PokemonGlobal.playerID)
     num = ($PokemonGlobal.surfing) ? 7 : 6
     if meta && meta[num] && meta[num]!=""
       charset = pbGetPlayerCharset(meta,num)
@@ -717,7 +717,7 @@ end
 def pbFishingEnd
   if !pbCommonEvent(FISHING_END_COMMON_EVENT)
     patternb = 2*($game_player.direction - 2)
-    meta = pbGetMetadata(0,MetadataPlayerA+$PokemonGlobal.playerID)
+    meta = pbGetMetadata(0,Metadata::PLAYER_A+$PokemonGlobal.playerID)
     num = ($PokemonGlobal.surfing) ? 7 : 6
     if meta && meta[num] && meta[num]!=""
       charset = pbGetPlayerCharset(meta,num)
@@ -1223,7 +1223,7 @@ def pbCueBGM(bgm,seconds,volume=nil,pitch=nil)
 end
 
 def pbAutoplayOnTransition
-  surfbgm = pbGetMetadata(0,MetadataSurfBGM)
+  surfbgm = pbGetMetadata(0,Metadata::SURF_BGM)
   if $PokemonGlobal.surfing && surfbgm
     pbBGMPlay(surfbgm)
   else
@@ -1232,7 +1232,7 @@ def pbAutoplayOnTransition
 end
 
 def pbAutoplayOnSave
-  surfbgm = pbGetMetadata(0,MetadataSurfBGM)
+  surfbgm = pbGetMetadata(0,Metadata::SURF_BGM)
   if $PokemonGlobal.surfing && surfbgm
     pbBGMPlay(surfbgm)
   else

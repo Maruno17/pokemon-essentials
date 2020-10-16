@@ -683,7 +683,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
   when "setplayer"
     limit = 0
     for i in 0...8
-      meta = pbGetMetadata(0,MetadataPlayerA+i)
+      meta = pbGetMetadata(0,Metadata::PLAYER_A+i)
       if !meta
         limit = i; break
       end

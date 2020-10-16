@@ -117,7 +117,7 @@ end
 
 def pbDayNightTint(object)
   return if !$scene.is_a?(Scene_Map)
-  if TIME_SHADING && pbGetMetadata($game_map.map_id,MetadataOutdoor)
+  if TIME_SHADING && pbGetMetadata($game_map.map_id,MapMetadata::OUTDOOR)
     tone = PBDayNight.getTone
     object.tone.set(tone.red,tone.green,tone.blue,tone.gray)
   else
