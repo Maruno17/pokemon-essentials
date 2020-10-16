@@ -686,7 +686,7 @@
 668,RUSTEDSWORD,Rusted Sword,Rusted Swords,1,0,"It is said that a hero used this sword to halt a terrible disaster in ancient times. But it's grown rusty and worn.",0,0,0,
 669,SWEETAPPLE,Sweet Apple,Sweet Apples,1,2200,"A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally sweet.",1,0,0,
 670,TARTAPPLE,Sweet Apple,Sweet Apples,1,2200,"A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally tart.",1,0,0,
-671,GALARICACUFF,Cracked Pot,Cracked Pot,1,1600,"A peculiar teapot that can make a certain species of Pokémon evolve. It may be cracked, but tea poured from it is delicious.",1,0,0,
+671,GALARICACUFF,Galarica Cuff,Galarica Cuffs,1,3000,"A cuff made from woven-together Galarica Twigs. Giving it to Galarian Slowpoke makes the Pokémon very happy.",1,0,0,
 672,CHIPPEDPOT,Chipped Pot,Chipped Pots,1,1600,"A peculiar teapot that can make a certain species of Pokémon evolve. It's chipped, but tea poured from it is delicious.",1,0,7,
 673,STRAWBERRYSWEET,Strawberry Sweet,Strawberry Sweets,1,500,"A strawberry-shaped sweet. When a Milcery holds this, it will spin around happily.",0,0,13,
 674,LOVESWEET,Love Sweet,Love Sweets,1,500,"A heart-shaped sweet. When a Milcery holds this, it spins around happily.",0,0,13,
