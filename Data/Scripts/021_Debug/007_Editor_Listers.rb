@@ -605,7 +605,7 @@ class TrainerBattleLister
     if !@includeNew || index>0
       @trainers[(@includeNew) ? index-1 : index][3].each_with_index do |p,i|
         text += "\r\n" if i>0
-        text += sprintf("%s Lv.%d",PBSpecies.getName(p[TPSPECIES]),p[TPLEVEL])
+        text += sprintf("%s Lv.%d",PBSpecies.getName(p[TrainerData::SPECIES]),p[TrainerData::LEVEL])
       end
     end
     @pkmnList.text = text

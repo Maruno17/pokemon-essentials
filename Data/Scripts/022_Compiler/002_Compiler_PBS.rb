@@ -1388,7 +1388,7 @@ end
 # Compile individual trainers
 #===============================================================================
 def pbCompileTrainers
-  trainer_info_types = TrainersMetadata::InfoTypes
+  trainer_info_types = TrainerData::SCHEMA
   mLevel = PBExperience.maxLevel
   trainerindex    = -1
   trainers        = []
@@ -1481,8 +1481,8 @@ def pbCompileTrainers
       when "Pokemon"
         pokemonindex += 1
         trainers[trainerindex][3][pokemonindex] = []
-        trainers[trainerindex][3][pokemonindex][TPSPECIES] = record[0]
-        trainers[trainerindex][3][pokemonindex][TPLEVEL]   = record[1]
+        trainers[trainerindex][3][pokemonindex][TrainerData::SPECIES] = record[0]
+        trainers[trainerindex][3][pokemonindex][TrainerData::LEVEL]   = record[1]
       else
         if pokemonindex<0
           raise _INTL("Pokémon hasn't been defined yet!\r\n{1}",FileLineData.linereport)
@@ -1532,29 +1532,29 @@ def pbCompileTrainers
         for i in 0...record.length
           next if record[i]==nil
           case i
-          when TPLEVEL
+          when TrainerData::LEVEL
             if record[i]>mLevel
               raise _INTL("Bad level: {1} (must be 1-{2})\r\n{3}",record[i],mLevel,FileLineData.linereport)
             end
-          when TPABILITY+3
+          when TrainerData::ABILITY+3
             if record[i]>5
               raise _INTL("Bad ability flag: {1} (must be 0 or 1 or 2-5)\r\n{2}",record[i],FileLineData.linereport)
             end
-          when TPIV+3
+          when TrainerData::IV+3
             if record[i]>31
               raise _INTL("Bad IV: {1} (must be 0-31)\r\n{2}",record[i],FileLineData.linereport)
             end
             record[i] = [record[i]]
-          when TPEV+3
+          when TrainerData::EV+3
             if record[i]>Pokemon::EV_STAT_LIMIT
               raise _INTL("Bad EV: {1} (must be 0-{2})\r\n{3}", record[i], Pokemon::EV_STAT_LIMIT, FileLineData.linereport)
             end
             record[i] = [record[i]]
-          when TPHAPPINESS+3
+          when TrainerData::HAPPINESS+3
             if record[i]>255
               raise _INTL("Bad happiness: {1} (must be 0-255)\r\n{2}",record[i],FileLineData.linereport)
             end
-          when TPNAME+3
+          when TrainerData::NAME+3
             if record[i].length>Pokemon::MAX_NAME_SIZE
               raise _INTL("Bad nickname: {1} (must be 1-{2} characters)\r\n{3}", record[i], Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
             end
@@ -1563,13 +1563,13 @@ def pbCompileTrainers
         # Write data to trainer array
         for i in 0...record.length
           next if record[i]==nil
-          if i>=TPMOVES && i<TPMOVES+4
-            if !trainers[trainerindex][3][pokemonindex][TPMOVES]
-              trainers[trainerindex][3][pokemonindex][TPMOVES] = []
+          if i>=TrainerData::MOVES && i<TrainerData::MOVES+4
+            if !trainers[trainerindex][3][pokemonindex][TrainerData::MOVES]
+              trainers[trainerindex][3][pokemonindex][TrainerData::MOVES] = []
             end
-            trainers[trainerindex][3][pokemonindex][TPMOVES].push(record[i])
+            trainers[trainerindex][3][pokemonindex][TrainerData::MOVES].push(record[i])
           else
-            d = (i>=TPMOVES+4) ? i-3 : i
+            d = (i>=TrainerData::MOVES+4) ? i-3 : i
             trainers[trainerindex][3][pokemonindex][d] = record[i]
           end
         end

@@ -458,7 +458,7 @@ def pbTrainerBattleEditor
              data[0],
              data[1],
              [data[10],data[11],data[12],data[13],data[14],data[15],data[16],data[17]].find_all { |i| i && i!=0 },   # Item list
-             [data[4],data[5],data[6],data[7],data[8],data[9]].find_all { |i| i && i[TPSPECIES]!=0 },   # Pokémon list
+             [data[4],data[5],data[6],data[7],data[8],data[9]].find_all { |i| i && i[TrainerData::SPECIES]!=0 },   # Pokémon list
              data[2],
              data[3]
           ]
@@ -491,10 +491,10 @@ module TrainerPokemonProperty
   def self.set(settingname,initsetting)
     initsetting = [0,10] if !initsetting
     oldsetting = []
-    for i in 0...TPEV
-      if i==TPMOVES
+    for i in 0...TrainerData::EV
+      if i==TrainerData::MOVES
         for j in 0...4
-          oldsetting.push((initsetting[TPMOVES]) ? initsetting[TPMOVES][j] : nil)
+          oldsetting.push((initsetting[TrainerData::MOVES]) ? initsetting[TrainerData::MOVES][j] : nil)
         end
       else
         oldsetting.push(initsetting[i])
@@ -522,27 +522,27 @@ module TrainerPokemonProperty
        [_INTL("EVs"), EVsProperty.new(Pokemon::EV_STAT_LIMIT), _INTL("Effort values for each of the Pokémon's stats.")]
     ]
     pbPropertyList(settingname,oldsetting,properties,false)
-    return nil if !oldsetting[TPSPECIES] || oldsetting[TPSPECIES]==0
+    return nil if !oldsetting[TrainerData::SPECIES] || oldsetting[TrainerData::SPECIES]==0
     ret = []
     moves = []
     for i in 0...oldsetting.length
-      if i>=TPMOVES && i<TPMOVES+4
-        ret.push(nil) if i==TPMOVES
+      if i>=TrainerData::MOVES && i<TrainerData::MOVES+4
+        ret.push(nil) if i==TrainerData::MOVES
         moves.push(oldsetting[i])
       else
         ret.push(oldsetting[i])
       end
     end
     moves.compact!
-    ret[TPMOVES] = moves if moves.length>0
+    ret[TrainerData::MOVES] = moves if moves.length>0
     # Remove unnecessarily nils from the end of ret
     ret.pop while ret.last.nil? && ret.size>0
     return ret
   end
 
   def self.format(value)
-    return "-" if !value || !value[TPSPECIES] || value[TPSPECIES]<=0
-    return sprintf("%s,%d",PBSpecies.getName(value[TPSPECIES]),value[TPLEVEL])
+    return "-" if !value || !value[TrainerData::SPECIES] || value[TrainerData::SPECIES]<=0
+    return sprintf("%s,%d",PBSpecies.getName(value[TrainerData::SPECIES]),value[TrainerData::LEVEL])
   end
 end
 

@@ -1,43 +1,43 @@
 #===============================================================================
-# Trainers data
+# Trainer data
 #===============================================================================
-TPSPECIES   = 0
-TPLEVEL     = 1
-TPITEM      = 2
-TPMOVES     = 3
-TPABILITY   = 4
-TPGENDER    = 5
-TPFORM      = 6
-TPSHINY     = 7
-TPNATURE    = 8
-TPIV        = 9
-TPHAPPINESS = 10
-TPNAME      = 11
-TPSHADOW    = 12
-TPBALL      = 13
-TPEV        = 14
-TPLOSETEXT  = 15
+module TrainerData
+  SPECIES   = 0
+  LEVEL     = 1
+  ITEM      = 2
+  MOVES     = 3
+  ABILITY   = 4
+  GENDER    = 5
+  FORM      = 6
+  SHINY     = 7
+  NATURE    = 8
+  IV        = 9
+  HAPPINESS = 10
+  NAME      = 11
+  SHADOW    = 12
+  BALL      = 13
+  EV        = 14
+  LOSETEXT  = 15
 
-module TrainersMetadata
-  InfoTypes = {
-    "Items"     => [0,           "eEEEEEEE", :PBItems, :PBItems, :PBItems, :PBItems,
-                                             :PBItems, :PBItems, :PBItems, :PBItems],
-    "Pokemon"   => [TPSPECIES,   "ev", :PBSpecies,nil],   # Species, level
-    "Item"      => [TPITEM,      "e", :PBItems],
-    "Moves"     => [TPMOVES,     "eEEE", :PBMoves, :PBMoves, :PBMoves, :PBMoves],
-    "Ability"   => [TPABILITY,   "u"],
-    "Gender"    => [TPGENDER,    "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
-                                        "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
-    "Form"      => [TPFORM,      "u"],
-    "Shiny"     => [TPSHINY,     "b"],
-    "Nature"    => [TPNATURE,    "e", :PBNatures],
-    "IV"        => [TPIV,        "uUUUUU"],
-    "Happiness" => [TPHAPPINESS, "u"],
-    "Name"      => [TPNAME,      "s"],
-    "Shadow"    => [TPSHADOW,    "b"],
-    "Ball"      => [TPBALL,      "u"],
-    "EV"        => [TPEV,        "uUUUUU"],
-    "LoseText"  => [TPLOSETEXT,  "s"]
+  SCHEMA = {
+    "Items"     => [0,         "eEEEEEEE", :PBItems, :PBItems, :PBItems, :PBItems,
+                                           :PBItems, :PBItems, :PBItems, :PBItems],
+    "Pokemon"   => [SPECIES,   "ev", :PBSpecies, nil],   # Species, level
+    "Item"      => [ITEM,      "e", :PBItems],
+    "Moves"     => [MOVES,     "eEEE", :PBMoves, :PBMoves, :PBMoves, :PBMoves],
+    "Ability"   => [ABILITY,   "u"],
+    "Gender"    => [GENDER,    "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
+                                      "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
+    "Form"      => [FORM,      "u"],
+    "Shiny"     => [SHINY,     "b"],
+    "Nature"    => [NATURE,    "e", :PBNatures],
+    "IV"        => [IV,        "uUUUUU"],
+    "Happiness" => [HAPPINESS, "u"],
+    "Name"      => [NAME,      "s"],
+    "Shadow"    => [SHADOW,    "b"],
+    "Ball"      => [BALL,      "u"],
+    "EV"        => [EV,        "uUUUUU"],
+    "LoseText"  => [LOSETEXT,  "s"]
   }
 end
 
@@ -74,47 +74,47 @@ def pbLoadTrainer(trainerid,trainername,partyid=0)
     opponent.setForeignID($Trainer)
     # Load up each Pokémon in the trainer's party
     for poke in trainer[3]
-      species = pbGetSpeciesFromFSpecies(poke[TPSPECIES])[0]
-      level = poke[TPLEVEL]
+      species = pbGetSpeciesFromFSpecies(poke[TrainerData::SPECIES])[0]
+      level = poke[TrainerData::LEVEL]
       pokemon = Pokemon.new(species,level,opponent,false)
-      if poke[TPFORM]
-        pokemon.forcedForm = poke[TPFORM] if MultipleForms.hasFunction?(pokemon.species,"getForm")
-        pokemon.formSimple = poke[TPFORM]
+      if poke[TrainerData::FORM]
+        pokemon.forcedForm = poke[TrainerData::FORM] if MultipleForms.hasFunction?(pokemon.species,"getForm")
+        pokemon.formSimple = poke[TrainerData::FORM]
       end
-      pokemon.setItem(poke[TPITEM]) if poke[TPITEM]
-      if poke[TPMOVES] && poke[TPMOVES].length>0
-        for move in poke[TPMOVES]
+      pokemon.setItem(poke[TrainerData::ITEM]) if poke[TrainerData::ITEM]
+      if poke[TrainerData::MOVES] && poke[TrainerData::MOVES].length>0
+        for move in poke[TrainerData::MOVES]
           pokemon.pbLearnMove(move)
         end
       else
         pokemon.resetMoves
       end
-      pokemon.setAbility(poke[TPABILITY] || 0)
-      g = (poke[TPGENDER]) ? poke[TPGENDER] : (opponent.female?) ? 1 : 0
+      pokemon.setAbility(poke[TrainerData::ABILITY] || 0)
+      g = (poke[TrainerData::GENDER]) ? poke[TrainerData::GENDER] : (opponent.female?) ? 1 : 0
       pokemon.setGender(g)
-      (poke[TPSHINY]) ? pokemon.makeShiny : pokemon.makeNotShiny
-      n = (poke[TPNATURE]) ? poke[TPNATURE] : (pokemon.species+opponent.trainertype)%(PBNatures.maxValue+1)
+      (poke[TrainerData::SHINY]) ? pokemon.makeShiny : pokemon.makeNotShiny
+      n = (poke[TrainerData::NATURE]) ? poke[TrainerData::NATURE] : (pokemon.species+opponent.trainertype)%(PBNatures.maxValue+1)
       pokemon.setNature(n)
       for i in 0...6
-        if poke[TPIV] && poke[TPIV].length>0
-          pokemon.iv[i] = (i<poke[TPIV].length) ? poke[TPIV][i] : poke[TPIV][0]
+        if poke[TrainerData::IV] && poke[TrainerData::IV].length>0
+          pokemon.iv[i] = (i<poke[TrainerData::IV].length) ? poke[TrainerData::IV][i] : poke[TrainerData::IV][0]
         else
           pokemon.iv[i] = [level/2, Pokemon::IV_STAT_LIMIT].min
         end
-        if poke[TPEV] && poke[TPEV].length>0
-          pokemon.ev[i] = (i<poke[TPEV].length) ? poke[TPEV][i] : poke[TPEV][0]
+        if poke[TrainerData::EV] && poke[TrainerData::EV].length>0
+          pokemon.ev[i] = (i<poke[TrainerData::EV].length) ? poke[TrainerData::EV][i] : poke[TrainerData::EV][0]
         else
           pokemon.ev[i] = [level*3/2, Pokemon::EV_LIMIT/6].min
         end
       end
-      pokemon.happiness = poke[TPHAPPINESS] if poke[TPHAPPINESS]
-      pokemon.name = poke[TPNAME] if poke[TPNAME] && poke[TPNAME]!=""
-      if poke[TPSHADOW]   # if this is a Shadow Pokémon
+      pokemon.happiness = poke[TrainerData::HAPPINESS] if poke[TrainerData::HAPPINESS]
+      pokemon.name = poke[TrainerData::NAME] if poke[TrainerData::NAME] && poke[TrainerData::NAME]!=""
+      if poke[TrainerData::SHADOW]   # if this is a Shadow Pokémon
         pokemon.makeShadow rescue nil
         pokemon.pbUpdateShadowMoves(true) rescue nil
         pokemon.makeNotShiny
       end
-      pokemon.ballused = poke[TPBALL] if poke[TPBALL]
+      pokemon.ballused = poke[TrainerData::BALL] if poke[TrainerData::BALL]
       pokemon.calcStats
       party.push(pokemon)
     end

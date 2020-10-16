@@ -467,67 +467,67 @@ def pbSaveTrainerBattles
       end
       # Pokémon
       for poke in trainer[3]
-        species = getConstantName(PBSpecies,poke[TPSPECIES]) rescue pbGetSpeciesConst(poke[TPSPECIES]) rescue ""
-        f.write(sprintf("Pokemon = %s,%d\r\n",species,poke[TPLEVEL]))
-        if poke[TPNAME] && poke[TPNAME]!=""
-          f.write(sprintf("    Name = %s\r\n",poke[TPNAME]))
+        species = getConstantName(PBSpecies,poke[TrainerData::SPECIES]) rescue pbGetSpeciesConst(poke[TrainerData::SPECIES]) rescue ""
+        f.write(sprintf("Pokemon = %s,%d\r\n",species,poke[TrainerData::LEVEL]))
+        if poke[TrainerData::NAME] && poke[TrainerData::NAME]!=""
+          f.write(sprintf("    Name = %s\r\n",poke[TrainerData::NAME]))
         end
-        if poke[TPFORM]
-          f.write(sprintf("    Form = %d\r\n",poke[TPFORM]))
+        if poke[TrainerData::FORM]
+          f.write(sprintf("    Form = %d\r\n",poke[TrainerData::FORM]))
         end
-        if poke[TPGENDER]
-          f.write(sprintf("    Gender = %s\r\n",(poke[TPGENDER]==1) ? "female" : "male"))
+        if poke[TrainerData::GENDER]
+          f.write(sprintf("    Gender = %s\r\n",(poke[TrainerData::GENDER]==1) ? "female" : "male"))
         end
-        if poke[TPSHINY]
+        if poke[TrainerData::SHINY]
           f.write("    Shiny = yes\r\n")
         end
-        if poke[TPSHADOW]
+        if poke[TrainerData::SHADOW]
           f.write("    Shadow = yes\r\n")
         end
-        if poke[TPMOVES] && poke[TPMOVES].length>0
+        if poke[TrainerData::MOVES] && poke[TrainerData::MOVES].length>0
           movestring = ""
-          for i in 0...poke[TPMOVES].length
-            movename = getConstantName(PBMoves,poke[TPMOVES][i]) rescue pbGetMoveConst(poke[TPMOVES][i]) rescue nil
+          for i in 0...poke[TrainerData::MOVES].length
+            movename = getConstantName(PBMoves,poke[TrainerData::MOVES][i]) rescue pbGetMoveConst(poke[TrainerData::MOVES][i]) rescue nil
             next if !movename
             movestring.concat(",") if i>0
             movestring.concat(movename)
           end
           f.write(sprintf("    Moves = %s\r\n",movestring)) if movestring!=""
         end
-        if poke[TPABILITY]
-          f.write(sprintf("    Ability = %d\r\n",poke[TPABILITY]))
+        if poke[TrainerData::ABILITY]
+          f.write(sprintf("    Ability = %d\r\n",poke[TrainerData::ABILITY]))
         end
-        if poke[TPITEM] && poke[TPITEM]>0
-          item = getConstantName(PBItems,poke[TPITEM]) rescue pbGetItemConst(poke[TPITEM]) rescue nil
+        if poke[TrainerData::ITEM] && poke[TrainerData::ITEM]>0
+          item = getConstantName(PBItems,poke[TrainerData::ITEM]) rescue pbGetItemConst(poke[TrainerData::ITEM]) rescue nil
           f.write(sprintf("    Item = %s\r\n",item)) if item
         end
-        if poke[TPNATURE]
-          nature = getConstantName(PBNatures,poke[TPNATURE]) rescue nil
+        if poke[TrainerData::NATURE]
+          nature = getConstantName(PBNatures,poke[TrainerData::NATURE]) rescue nil
           f.write(sprintf("    Nature = %s\r\n",nature)) if nature
         end
-        if poke[TPIV] && poke[TPIV].length>0
-          f.write(sprintf("    IV = %d",poke[TPIV][0]))
-          if poke[TPIV].length>1
+        if poke[TrainerData::IV] && poke[TrainerData::IV].length>0
+          f.write(sprintf("    IV = %d",poke[TrainerData::IV][0]))
+          if poke[TrainerData::IV].length>1
             for i in 1...6
-              f.write(sprintf(",%d",(i<poke[TPIV].length) ? poke[TPIV][i] : poke[TPIV][0]))
+              f.write(sprintf(",%d",(i<poke[TrainerData::IV].length) ? poke[TrainerData::IV][i] : poke[TrainerData::IV][0]))
             end
           end
           f.write("\r\n")
         end
-        if poke[TPEV] && poke[TPEV].length>0
-          f.write(sprintf("    EV = %d",poke[TPEV][0]))
-          if poke[TPEV].length>1
+        if poke[TrainerData::EV] && poke[TrainerData::EV].length>0
+          f.write(sprintf("    EV = %d",poke[TrainerData::EV][0]))
+          if poke[TrainerData::EV].length>1
             for i in 1...6
-              f.write(sprintf(",%d",(i<poke[TPEV].length) ? poke[TPEV][i] : poke[TPEV][0]))
+              f.write(sprintf(",%d",(i<poke[TrainerData::EV].length) ? poke[TrainerData::EV][i] : poke[TrainerData::EV][0]))
             end
           end
           f.write("\r\n")
         end
-        if poke[TPHAPPINESS]
-          f.write(sprintf("    Happiness = %d\r\n",poke[TPHAPPINESS]))
+        if poke[TrainerData::HAPPINESS]
+          f.write(sprintf("    Happiness = %d\r\n",poke[TrainerData::HAPPINESS]))
         end
-        if poke[TPBALL]
-          f.write(sprintf("    Ball = %d\r\n",poke[TPBALL]))
+        if poke[TrainerData::BALL]
+          f.write(sprintf("    Ball = %d\r\n",poke[TrainerData::BALL]))
         end
       end
     end
