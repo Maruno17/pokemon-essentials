@@ -1113,9 +1113,9 @@ class Pokemon
   # Creates a new Pokémon object.
   # @param species [Integer, Symbol, String] Pokémon species
   # @param level [Integer] Pokémon level
-  # @param owner [PokeBattle_Trainer] object for the original trainer
+  # @param owner [Owner, PokeBattle_Trainer] Pokémon owner (the player by default)
   # @param withMoves [Boolean] whether the Pokémon should have moves
-  def initialize(species, level, owner = nil, withMoves = true)
+  def initialize(species, level, owner = $Trainer, withMoves = true)
     ospecies = species.to_s
     species = getID(PBSpecies, species)
     cname = getConstantName(PBSpecies, species) rescue nil
@@ -1144,7 +1144,9 @@ class Pokemon
     @ribbons      = []
     @ballused     = 0
     @eggsteps     = 0
-    if owner.is_a?(PokeBattle_Trainer)
+    if owner.is_a?(Owner)
+      @owner = owner
+    elsif owner.is_a?(PokeBattle_Trainer)
       @owner = Owner.new_from_trainer(owner)
     else
       @owner = Owner.new(0, '', 2, 2)
