@@ -94,8 +94,6 @@ class Pokemon
   attr_accessor :hatchedMap
   # @param value [Integer] new language
   attr_writer   :language
-  # @return [String] the name of the original trainer
-  attr_accessor :ot
   # Changes the gender of the original trainer. This is for information only,
   # and is not used to verify ownership of the Pokémon.
   # @param value [Integer] new value for the original trainer's gender:
@@ -193,7 +191,7 @@ class Pokemon
   # @param trainer [PokeBattle_Trainer] the trainer to compare to the OT
   # @return [Boolean] whether the given trainer and this Pokémon's original trainer don't match
   def foreign?(trainer)
-    return @trainerID != trainer.id || @ot != trainer.name
+    return @owner.id != trainer.id || @owner.name != trainer.name
   end
   alias isForeign? foreign?
 
