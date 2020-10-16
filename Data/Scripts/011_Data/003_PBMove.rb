@@ -1,17 +1,19 @@
-MOVE_ID            = 0
-MOVE_INTERNAL_NAME = 1
-MOVE_NAME          = 2
-MOVE_FUNCTION_CODE = 3
-MOVE_BASE_DAMAGE   = 4
-MOVE_TYPE          = 5
-MOVE_CATEGORY      = 6
-MOVE_ACCURACY      = 7
-MOVE_TOTAL_PP      = 8
-MOVE_EFFECT_CHANCE = 9
-MOVE_TARGET        = 10
-MOVE_PRIORITY      = 11
-MOVE_FLAGS         = 12
-MOVE_DESCRIPTION   = 13
+module MoveData
+  ID            = 0
+  INTERNAL_NAME = 1
+  NAME          = 2
+  FUNCTION_CODE = 3
+  BASE_DAMAGE   = 4
+  TYPE          = 5
+  CATEGORY      = 6
+  ACCURACY      = 7
+  TOTAL_PP      = 8
+  EFFECT_CHANCE = 9
+  TARGET        = 10
+  PRIORITY      = 11
+  FLAGS         = 12
+  DESCRIPTION   = 13
+end
 
 class PokemonTemp
   attr_accessor :movesData
@@ -55,7 +57,7 @@ class PBMove
   # Initializes this object to the specified move ID.
   def initialize(move_id)
     @id   = move_id
-    @pp   = pbGetMoveData(move_id, MOVE_TOTAL_PP) || 0
+    @pp   = pbGetMoveData(move_id, MoveData::TOTAL_PP) || 0
     @ppup = 0
   end
 
@@ -69,12 +71,12 @@ class PBMove
 
   # Gets this move's type.
   def type
-    return pbGetMoveData(@id, MOVE_TYPE) || 0
+    return pbGetMoveData(@id, MoveData::TYPE) || 0
   end
 
   # Gets the maximum PP for this move.
   def totalpp
-    max_pp = pbGetMoveData(@id, MOVE_TOTAL_PP) || 0
+    max_pp = pbGetMoveData(@id, MoveData::TOTAL_PP) || 0
     return max_pp + max_pp * @ppup / 5
   end
 end
@@ -88,15 +90,15 @@ class PBMoveData
 
   def initialize(move_id)
     move_data = pbGetMoveData(move_id)
-    @function   = move_data[MOVE_FUNCTION_CODE]
-    @basedamage = move_data[MOVE_BASE_DAMAGE]
-    @type       = move_data[MOVE_TYPE]
-    @category   = move_data[MOVE_CATEGORY]
-    @accuracy   = move_data[MOVE_ACCURACY]
-    @totalpp    = move_data[MOVE_TOTAL_PP]
-    @addlEffect = move_data[MOVE_EFFECT_CHANCE]
-    @target     = move_data[MOVE_TARGET]
-    @priority   = move_data[MOVE_PRIORITY]
-    @flags      = move_data[MOVE_FLAGS]
+    @function   = move_data[MoveData::FUNCTION_CODE]
+    @basedamage = move_data[MoveData::BASE_DAMAGE]
+    @type       = move_data[MoveData::TYPE]
+    @category   = move_data[MoveData::CATEGORY]
+    @accuracy   = move_data[MoveData::ACCURACY]
+    @totalpp    = move_data[MoveData::TOTAL_PP]
+    @addlEffect = move_data[MoveData::EFFECT_CHANCE]
+    @target     = move_data[MoveData::TARGET]
+    @priority   = move_data[MoveData::PRIORITY]
+    @flags      = move_data[MoveData::FLAGS]
   end
 end

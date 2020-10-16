@@ -1708,8 +1708,8 @@ class PokeBattle_Move_05C < PokeBattle_Move
     lastMoveData = pbGetMoveData(target.lastRegularMoveUsed)
     if target.lastRegularMoveUsed<=0 ||
        user.pbHasMove?(target.lastRegularMoveUsed) ||
-       @moveBlacklist.include?(lastMoveData[MOVE_FUNCTION_CODE]) ||
-       isConst?(lastMoveData[MOVE_TYPE],PBTypes,:SHADOW)
+       @moveBlacklist.include?(lastMoveData[MoveData::FUNCTION_CODE]) ||
+       isConst?(lastMoveData[MoveData::TYPE],PBTypes,:SHADOW)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1759,8 +1759,8 @@ class PokeBattle_Move_05D < PokeBattle_Move
     lastMoveData = pbGetMoveData(target.lastRegularMoveUsed)
     if target.lastRegularMoveUsed<=0 ||
        user.pbHasMove?(target.lastRegularMoveUsed) ||
-       @moveBlacklist.include?(lastMoveData[MOVE_FUNCTION_CODE]) ||
-       isConst?(lastMoveData[MOVE_TYPE],PBTypes,:SHADOW)
+       @moveBlacklist.include?(lastMoveData[MoveData::FUNCTION_CODE]) ||
+       isConst?(lastMoveData[MoveData::TYPE],PBTypes,:SHADOW)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1837,7 +1837,7 @@ class PokeBattle_Move_05F < PokeBattle_Move
   def pbFailsAgainstTarget?(user,target)
     if target.lastMoveUsed<=0 ||
        target.lastMoveUsedType<0 ||
-       PBTypes.isPseudoType?(pbGetMoveData(target.lastMoveUsed,MOVE_TYPE))
+       PBTypes.isPseudoType?(pbGetMoveData(target.lastMoveUsed,MoveData::TYPE))
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end

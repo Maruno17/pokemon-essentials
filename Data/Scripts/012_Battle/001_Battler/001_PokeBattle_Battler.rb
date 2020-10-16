@@ -583,7 +583,7 @@ class PokeBattle_Battler
 
   def inTwoTurnAttack?(*arg)
     return false if @effects[PBEffects::TwoTurnAttack]==0
-    ttaFunction = pbGetMoveData(@effects[PBEffects::TwoTurnAttack],MOVE_FUNCTION_CODE)
+    ttaFunction = pbGetMoveData(@effects[PBEffects::TwoTurnAttack],MoveData::FUNCTION_CODE)
     arg.each { |a| return true if a==ttaFunction }
     return false
   end

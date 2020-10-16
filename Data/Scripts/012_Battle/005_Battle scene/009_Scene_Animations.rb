@@ -408,12 +408,12 @@ class PokeBattle_Scene
       return anim if anim
       # Actual animation not found, get the default animation for the move's type
       moveData = pbGetMoveData(moveID)
-      moveType = moveData[MOVE_TYPE]
-      moveKind = moveData[MOVE_CATEGORY]
-      moveKind += 3 if PBTargets.multipleTargets?(moveData[MOVE_TARGET]) ||
-                       PBTargets.targetsFoeSide?(moveData[MOVE_TARGET])
-      moveKind += 3 if moveKind==2 && moveData[MOVE_TARGET]!=PBTargets::User &&
-                       moveData[MOVE_TARGET]!=PBTargets::UserSide
+      moveType = moveData[MoveData::TYPE]
+      moveKind = moveData[MoveData::CATEGORY]
+      moveKind += 3 if PBTargets.multipleTargets?(moveData[MoveData::TARGET]) ||
+                       PBTargets.targetsFoeSide?(moveData[MoveData::TARGET])
+      moveKind += 3 if moveKind==2 && moveData[MoveData::TARGET]!=PBTargets::User &&
+                       moveData[MoveData::TARGET]!=PBTargets::UserSide
       # [one target physical, one target special, user status,
       #  multiple targets physical, multiple targets special, non-user status]
       typeDefaultAnim = {

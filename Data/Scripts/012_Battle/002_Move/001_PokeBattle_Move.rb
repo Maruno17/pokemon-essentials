@@ -30,16 +30,16 @@ class PokeBattle_Move
     @name       = PBMoves.getName(@id)   # Get the move's name
     # Get data on the move
     moveData = pbGetMoveData(@id)
-    @function   = moveData[MOVE_FUNCTION_CODE]
-    @baseDamage = moveData[MOVE_BASE_DAMAGE]
-    @type       = moveData[MOVE_TYPE]
-    @category   = moveData[MOVE_CATEGORY]
-    @accuracy   = moveData[MOVE_ACCURACY]
+    @function   = moveData[MoveData::FUNCTION_CODE]
+    @baseDamage = moveData[MoveData::BASE_DAMAGE]
+    @type       = moveData[MoveData::TYPE]
+    @category   = moveData[MoveData::CATEGORY]
+    @accuracy   = moveData[MoveData::ACCURACY]
     @pp         = move.pp   # Can be changed with Mimic/Transform
-    @addlEffect = moveData[MOVE_EFFECT_CHANCE]
-    @target     = moveData[MOVE_TARGET]
-    @priority   = moveData[MOVE_PRIORITY]
-    @flags      = moveData[MOVE_FLAGS]
+    @addlEffect = moveData[MoveData::EFFECT_CHANCE]
+    @target     = moveData[MoveData::TARGET]
+    @priority   = moveData[MoveData::PRIORITY]
+    @flags      = moveData[MoveData::FLAGS]
     @calcType   = -1
     @powerBoost = false   # For Aerilate, Pixilate, Refrigerate, Galvanize
     @snatched   = false
@@ -50,7 +50,7 @@ class PokeBattle_Move
   # function code (found in the script section PokeBattle_MoveEffect).
   def PokeBattle_Move.pbFromPBMove(battle,move)
     move = PBMove.new(0) if !move
-    moveFunction = pbGetMoveData(move.id,MOVE_FUNCTION_CODE) || "000"
+    moveFunction = pbGetMoveData(move.id,MoveData::FUNCTION_CODE) || "000"
     className = sprintf("PokeBattle_Move_%s",moveFunction)
     if Object.const_defined?(className)
       return Object.const_get(className).new(battle,move)

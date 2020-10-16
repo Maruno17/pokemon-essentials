@@ -2342,7 +2342,7 @@ class PokeBattle_Move_16B < PokeBattle_Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    if @moveBlacklist.include?(pbGetMoveData(target.lastRegularMoveUsed,MOVE_FUNCTION_CODE))
+    if @moveBlacklist.include?(pbGetMoveData(target.lastRegularMoveUsed,MoveData::FUNCTION_CODE))
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end

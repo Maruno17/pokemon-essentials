@@ -1278,8 +1278,8 @@ class PokeBattle_AI
       lastMoveData = pbGetMoveData(target.lastRegularMoveUsed)
       if user.effects[PBEffects::Transform] ||
          target.lastRegularMoveUsed<=0 ||
-         moveBlacklist.include?(lastMoveData[MOVE_FUNCTION_CODE]) ||
-         isConst?(lastMoveData[MOVE_TYPE],PBTypes,:SHADOW)
+         moveBlacklist.include?(lastMoveData[MoveData::FUNCTION_CODE]) ||
+         isConst?(lastMoveData[MoveData::TYPE],PBTypes,:SHADOW)
         score -= 90
       end
       user.eachMove do |m|
@@ -1297,8 +1297,8 @@ class PokeBattle_AI
       lastMoveData = pbGetMoveData(target.lastRegularMoveUsed)
       if user.effects[PBEffects::Transform] ||
          target.lastRegularMoveUsed<=0 ||
-         moveBlacklist.include?(lastMoveData[MOVE_FUNCTION_CODE]) ||
-         isConst?(lastMoveData[MOVE_TYPE],PBTypes,:SHADOW)
+         moveBlacklist.include?(lastMoveData[MoveData::FUNCTION_CODE]) ||
+         isConst?(lastMoveData[MoveData::TYPE],PBTypes,:SHADOW)
         score -= 90
       end
       user.eachMove do |m|
@@ -1327,7 +1327,7 @@ class PokeBattle_AI
          isConst?(user.ability,PBAbilities,:RKSSYSTEM)
         score -= 90
       elsif target.lastMoveUsed<=0 ||
-         PBTypes.isPseudoType?(pbGetMoveData(target.lastMoveUsed,MOVE_TYPE))
+         PBTypes.isPseudoType?(pbGetMoveData(target.lastMoveUsed,MoveData::TYPE))
         score -= 90
       else
         aType = -1
@@ -1551,9 +1551,9 @@ class PokeBattle_AI
           score -= 60
         elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed>0
           moveData = pbGetMoveData(target.lastMoveUsed)
-          if moveData[MOVE_BASE_DAMAGE]>0 &&
-             (MOVE_CATEGORY_PER_MOVE && moveData[MOVE_CATEGORY]==0) ||
-             (!MOVE_CATEGORY_PER_MOVE && PBTypes.isPhysicalType?(moveData[MOVE_TYPE]))
+          if moveData[MoveData::BASE_DAMAGE]>0 &&
+             (MOVE_CATEGORY_PER_MOVE && moveData[MoveData::CATEGORY]==0) ||
+             (!MOVE_CATEGORY_PER_MOVE && PBTypes.isPhysicalType?(moveData[MoveData::TYPE]))
             score -= 60
           end
         end
@@ -1569,9 +1569,9 @@ class PokeBattle_AI
           score -= 60
         elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed>0
           moveData = pbGetMoveData(target.lastMoveUsed)
-          if moveData[MOVE_BASE_DAMAGE]>0 &&
-             (MOVE_CATEGORY_PER_MOVE && moveData[MOVE_CATEGORY]==1) ||
-             (!MOVE_CATEGORY_PER_MOVE && !PBTypes.isSpecialType?(moveData[MOVE_TYPE]))
+          if moveData[MoveData::BASE_DAMAGE]>0 &&
+             (MOVE_CATEGORY_PER_MOVE && moveData[MoveData::CATEGORY]==1) ||
+             (!MOVE_CATEGORY_PER_MOVE && !PBTypes.isSpecialType?(moveData[MoveData::TYPE]))
             score -= 60
           end
         end
@@ -1764,7 +1764,7 @@ class PokeBattle_AI
       score -= 40
       if skill>=PBTrainerAI.highSkill
         score -= 100 if target.lastRegularMoveUsed<=0 ||
-           !pbGetMoveData(target.lastRegularMoveUsed,MOVE_FLAGS)[/e/]   # Not copyable by Mirror Move
+           !pbGetMoveData(target.lastRegularMoveUsed,MoveData::FLAGS)[/e/]   # Not copyable by Mirror Move
       end
     #---------------------------------------------------------------------------
     when "0AF"
@@ -1813,13 +1813,13 @@ class PokeBattle_AI
           score -= 90
         else
           moveData = pbGetMoveData(target.lastRegularMoveUsed)
-          if moveData[MOVE_CATEGORY]==2 &&   # Status move
-             (moveData[MOVE_TARGET]==PBTargets::User ||
-             moveData[MOVE_TARGET]==PBTargets::BothSides)
+          if moveData[MoveData::CATEGORY]==2 &&   # Status move
+             (moveData[MoveData::TARGET]==PBTargets::User ||
+             moveData[MoveData::TARGET]==PBTargets::BothSides)
             score += 60
-          elsif moveData[MOVE_CATEGORY]!=2 &&   # Damaging move
-             moveData[MOVE_TARGET]==PBTargets::NearOther &&
-             PBTypes.ineffective?(pbCalcTypeMod(moveData[MOVE_TYPE],target,user))
+          elsif moveData[MoveData::CATEGORY]!=2 &&   # Damaging move
+             moveData[MoveData::TARGET]==PBTargets::NearOther &&
+             PBTypes.ineffective?(pbCalcTypeMod(moveData[MoveData::TYPE],target,user))
             score += 60
           end
         end
@@ -2096,7 +2096,7 @@ class PokeBattle_AI
                                  :CHOICEBAND,:CHOICESCARF,:CHOICESPECS])
         score += 50
       elsif user.item==0 && target.item!=0
-        score -= 30 if pbGetMoveData(user.lastMoveUsed,MOVE_FUNCTION_CODE)=="0F2"   # Trick/Switcheroo
+        score -= 30 if pbGetMoveData(user.lastMoveUsed,MoveData::FUNCTION_CODE)=="0F2"   # Trick/Switcheroo
       end
     #---------------------------------------------------------------------------
     when "0F3"

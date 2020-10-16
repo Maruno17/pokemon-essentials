@@ -2099,15 +2099,15 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
         next if m.statusMove?
         moveData = pbGetMoveData(m.id)
         if type1
-          moveType = moveData[MOVE_TYPE]
+          moveType = moveData[MoveData::TYPE]
           if NEWEST_BATTLE_MECHANICS && isConst?(m.id,PBMoves,:HIDDENPOWER)
             moveType = pbHiddenPower(b.pokemon)[0]
           end
           eff = PBTypes.getCombinedEffectiveness(moveType,type1,type2,type3)
           next if PBTypes.ineffective?(eff)
-          next if !PBTypes.superEffective?(eff) && moveData[MOVE_FUNCTION_CODE]!="070"   # OHKO
+          next if !PBTypes.superEffective?(eff) && moveData[MoveData::FUNCTION_CODE]!="070"   # OHKO
         else
-          next if moveData[MOVE_FUNCTION_CODE]!="070"   # OHKO
+          next if moveData[MoveData::FUNCTION_CODE]!="070"   # OHKO
         end
         found = true
         break
@@ -2207,17 +2207,17 @@ BattleHandlers::AbilityOnSwitchIn.add(:FOREWARN,
     battle.eachOtherSideBattler(battler.index) do |b|
       b.eachMove do |m|
         moveData = pbGetMoveData(m.id)
-        power = moveData[MOVE_BASE_DAMAGE]
-        power = 160 if ["070"].include?(moveData[MOVE_FUNCTION_CODE])    # OHKO
-        power = 150 if ["08B"].include?(moveData[MOVE_FUNCTION_CODE])    # Eruption
+        power = moveData[MoveData::BASE_DAMAGE]
+        power = 160 if ["070"].include?(moveData[MoveData::FUNCTION_CODE])    # OHKO
+        power = 150 if ["08B"].include?(moveData[MoveData::FUNCTION_CODE])    # Eruption
         # Counter, Mirror Coat, Metal Burst
-        power = 120 if ["071","072","073"].include?(moveData[MOVE_FUNCTION_CODE])
+        power = 120 if ["071","072","073"].include?(moveData[MoveData::FUNCTION_CODE])
         # Sonic Boom, Dragon Rage, Night Shade, Endeavor, Psywave,
         # Return, Frustration, Crush Grip, Gyro Ball, Hidden Power,
         # Natural Gift, Trump Card, Flail, Grass Knot
         power = 80 if ["06A","06B","06D","06E","06F",
                        "089","08A","08C","08D","090",
-                       "096","097","098","09A"].include?(moveData[MOVE_FUNCTION_CODE])
+                       "096","097","098","09A"].include?(moveData[MoveData::FUNCTION_CODE])
         next if power<highestPower
         forewarnMoves = [] if power>highestPower
         forewarnMoves.push(m.id)

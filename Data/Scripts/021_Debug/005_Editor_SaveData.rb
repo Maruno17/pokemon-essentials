@@ -84,25 +84,25 @@ def pbSaveMoveData
     for i in 1..(PBMoves.maxValue rescue PBMoves.getCount-1 rescue pbGetMessageCount(MessageTypes::Moves)-1)
       moveData = movesData[i]
       next if !moveData   # No move with that ID defined
-      if currentType!=moveData[MOVE_TYPE]
-        currentType = moveData[MOVE_TYPE]
+      if currentType!=moveData[MoveData::TYPE]
+        currentType = moveData[MoveData::TYPE]
         f.write("\#-------------------------------\r\n")
       end
       f.write(sprintf("%d,%s,%s,%s,%d,%s,%s,%d,%d,%d,%s,%d,%s,%s",
-         moveData[MOVE_ID],
-         moveData[MOVE_INTERNAL_NAME],
-         csvQuote(moveData[MOVE_NAME]),
-         csvQuote(moveData[MOVE_FUNCTION_CODE]),
-         moveData[MOVE_BASE_DAMAGE],
-         (getConstantName(PBTypes,moveData[MOVE_TYPE]) rescue pbGetTypeConst(moveData[MOVE_TYPE]) rescue ""),
-         ["Physical","Special","Status"][moveData[MOVE_CATEGORY]],
-         moveData[MOVE_ACCURACY],
-         moveData[MOVE_TOTAL_PP],
-         moveData[MOVE_EFFECT_CHANCE],
-         (getConstantName(PBTargets,moveData[MOVE_TARGET]) rescue sprintf("%02X",moveData[MOVE_TARGET])),
-         moveData[MOVE_PRIORITY],
-         csvQuote(moveData[MOVE_FLAGS]),
-         csvQuoteAlways(moveData[MOVE_DESCRIPTION])
+         moveData[MoveData::ID],
+         moveData[MoveData::INTERNAL_NAME],
+         csvQuote(moveData[MoveData::NAME]),
+         csvQuote(moveData[MoveData::FUNCTION_CODE]),
+         moveData[MoveData::BASE_DAMAGE],
+         (getConstantName(PBTypes,moveData[MoveData::TYPE]) rescue pbGetTypeConst(moveData[MoveData::TYPE]) rescue ""),
+         ["Physical","Special","Status"][moveData[MoveData::CATEGORY]],
+         moveData[MoveData::ACCURACY],
+         moveData[MoveData::TOTAL_PP],
+         moveData[MoveData::EFFECT_CHANCE],
+         (getConstantName(PBTargets,moveData[MoveData::TARGET]) rescue sprintf("%02X",moveData[MoveData::TARGET])),
+         moveData[MoveData::PRIORITY],
+         csvQuote(moveData[MoveData::FLAGS]),
+         csvQuoteAlways(moveData[MoveData::DESCRIPTION])
       ))
       f.write("\r\n")
     end

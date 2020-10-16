@@ -103,14 +103,14 @@ class MoveRelearner_Scene
         moveData=movesData[moveobject]
         if moveData
           imagepos.push(["Graphics/Pictures/types",12,yPos+2,0,
-             moveData[MOVE_TYPE]*28,64,28])
+             moveData[MoveData::TYPE]*28,64,28])
           textpos.push([PBMoves.getName(moveobject),80,yPos,0,
              Color.new(248,248,248),Color.new(0,0,0)])
-          if moveData[MOVE_TOTAL_PP]>0
+          if moveData[MoveData::TOTAL_PP]>0
             textpos.push([_INTL("PP"),112,yPos+32,0,
                Color.new(64,64,64),Color.new(176,176,176)])
             textpos.push([_INTL("{1}/{2}",
-               moveData[MOVE_TOTAL_PP],moveData[MOVE_TOTAL_PP]),230,yPos+32,1,
+               moveData[MoveData::TOTAL_PP],moveData[MoveData::TOTAL_PP]),230,yPos+32,1,
                Color.new(64,64,64),Color.new(176,176,176)])
           end
         else
@@ -124,9 +124,9 @@ class MoveRelearner_Scene
        0,78+(@sprites["commands"].index-@sprites["commands"].top_item)*64,
        0,0,258,72])
     selMoveData=movesData[@moves[@sprites["commands"].index]]
-    basedamage=selMoveData[MOVE_BASE_DAMAGE]
-    category=selMoveData[MOVE_CATEGORY]
-    accuracy=selMoveData[MOVE_ACCURACY]
+    basedamage=selMoveData[MoveData::BASE_DAMAGE]
+    category=selMoveData[MoveData::CATEGORY]
+    accuracy=selMoveData[MoveData::ACCURACY]
     textpos.push([_INTL("CATEGORY"),272,114,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([_INTL("POWER"),272,146,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([basedamage<=1 ? basedamage==1 ? "???" : "---" : sprintf("%d",basedamage),

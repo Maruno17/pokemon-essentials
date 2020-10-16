@@ -20,10 +20,10 @@ class PokeBattle_AI
       if !target.fainted? && target.lastMoveUsed>0 &&
          (target.level-battler.level).abs<=6
         moveData = pbGetMoveData(target.lastMoveUsed)
-        moveType = moveData[MOVE_TYPE]
+        moveType = moveData[MoveData::TYPE]
         typeMod = pbCalcTypeMod(moveType,target,battler)
-        if PBTypes.superEffective?(typeMod) && moveData[MOVE_BASE_DAMAGE]>50
-          switchChance = (moveData[MOVE_BASE_DAMAGE]>70) ? 30 : 20
+        if PBTypes.superEffective?(typeMod) && moveData[MoveData::BASE_DAMAGE]>50
+          switchChance = (moveData[MoveData::BASE_DAMAGE]>70) ? 30 : 20
           shouldSwitch = (pbAIRandom(100)<switchChance)
         end
       end
@@ -165,10 +165,10 @@ class PokeBattle_AI
       pkmn.moves.each do |m|
         next if m.id==0
         moveData = movesData[m.id]
-        next if moveData[MOVE_BASE_DAMAGE]==0
+        next if moveData[MoveData::BASE_DAMAGE]==0
         @battle.battlers[idxBattler].eachOpposing do |b|
           bTypes = b.pbTypes(true)
-          sum += PBTypes.getCombinedEffectiveness(moveData[MOVE_TYPE],
+          sum += PBTypes.getCombinedEffectiveness(moveData[MoveData::TYPE],
              bTypes[0],bTypes[1],bTypes[2])
         end
       end

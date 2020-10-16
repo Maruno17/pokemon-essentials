@@ -714,9 +714,9 @@ class PokemonSummary_Scene
     @sprites["itemicon"].visible  = false if @sprites["itemicon"]
     # Get data for selected move
     moveData = pbGetMoveData(moveid)
-    basedamage = moveData[MOVE_BASE_DAMAGE]
-    category   = moveData[MOVE_CATEGORY]
-    accuracy   = moveData[MOVE_ACCURACY]
+    basedamage = moveData[MoveData::BASE_DAMAGE]
+    category   = moveData[MoveData::CATEGORY]
+    accuracy   = moveData[MoveData::ACCURACY]
     textpos = []
     # Write power and accuracy values for selected move
     if basedamage==0   # Status move

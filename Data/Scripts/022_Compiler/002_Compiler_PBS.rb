@@ -610,20 +610,20 @@ def pbCompileMoves
       print _INTL("Warning: Physical and special moves can't have a base damage of 0, changing to a Status move\r\n{1}",FileLineData.linereport)
       lineRecord[6] = 2
     end
-    record[MOVE_ID]            = lineRecord[0]
-    record[MOVE_INTERNAL_NAME] = lineRecord[1]
-    record[MOVE_NAME]          = lineRecord[2]
-    record[MOVE_FUNCTION_CODE] = lineRecord[3]
-    record[MOVE_BASE_DAMAGE]   = lineRecord[4]
-    record[MOVE_TYPE]          = lineRecord[5]
-    record[MOVE_CATEGORY]      = lineRecord[6]
-    record[MOVE_ACCURACY]      = lineRecord[7]
-    record[MOVE_TOTAL_PP]      = lineRecord[8]
-    record[MOVE_EFFECT_CHANCE] = lineRecord[9]
-    record[MOVE_TARGET]        = lineRecord[10]
-    record[MOVE_PRIORITY]      = lineRecord[11]
-    record[MOVE_FLAGS]         = lineRecord[12]
-    record[MOVE_DESCRIPTION]   = lineRecord[13]
+    record[MoveData::ID]            = lineRecord[0]
+    record[MoveData::INTERNAL_NAME] = lineRecord[1]
+    record[MoveData::NAME]          = lineRecord[2]
+    record[MoveData::FUNCTION_CODE] = lineRecord[3]
+    record[MoveData::BASE_DAMAGE]   = lineRecord[4]
+    record[MoveData::TYPE]          = lineRecord[5]
+    record[MoveData::CATEGORY]      = lineRecord[6]
+    record[MoveData::ACCURACY]      = lineRecord[7]
+    record[MoveData::TOTAL_PP]      = lineRecord[8]
+    record[MoveData::EFFECT_CHANCE] = lineRecord[9]
+    record[MoveData::TARGET]        = lineRecord[10]
+    record[MoveData::PRIORITY]      = lineRecord[11]
+    record[MoveData::FLAGS]         = lineRecord[12]
+    record[MoveData::DESCRIPTION]   = lineRecord[13]
     maxValue = [maxValue,lineRecord[0]].max
     count += 1
     moveNames[lineRecord[0]] = lineRecord[2]    # Name
@@ -635,7 +635,7 @@ def pbCompileMoves
   MessageTypes.setMessages(MessageTypes::MoveDescriptions,moveDescs)
   code = "class PBMoves\r\n"
   for rec in records
-    code += "#{rec[MOVE_INTERNAL_NAME]}=#{rec[MOVE_ID]}\r\n" if rec
+    code += "#{rec[MoveData::INTERNAL_NAME]}=#{rec[MoveData::ID]}\r\n" if rec
   end
   code += "def self.getName(id)\r\n"
   code += "id=getID(PBMoves,id)\r\n"
