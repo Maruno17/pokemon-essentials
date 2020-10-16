@@ -54,6 +54,18 @@ class Pokemon
     Deprecation.warn_method('Pokemon#otgender=', 'vXX', 'Pokemon::Owner#gender=')
     @owner.gender = value
   end
+
+  # @deprecated Use {Owner#language} instead. This alias is slated to be removed in vXX.
+  def language
+    Deprecation.warn_method('Pokemon#language', 'vXX', 'Pokemon::Owner#language')
+    return @owner.language
+  end
+
+  # @deprecated Use {Owner#language=} instead. This alias is slated to be removed in vXX.
+  def language=(value)
+    Deprecation.warn_method('Pokemon#language=', 'vXX', 'Pokemon::Owner#language=')
+    @owner.language = value
+  end
 end
 
 # (see Pokemon#initialize)

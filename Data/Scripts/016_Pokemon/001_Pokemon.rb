@@ -92,8 +92,6 @@ class Pokemon
   # Otherwise returns 0.
   # @return [Integer] the map ID where egg was hatched (0 by default)
   attr_accessor :hatchedMap
-  # @param value [Integer] new language
-  attr_writer   :language
   # @param value [Integer] new contest stat
   attr_writer   :cool,:beauty,:cute,:smart,:tough,:sheen
 
@@ -932,11 +930,6 @@ class Pokemon
   # @return [Boolean] whether this Pokémon has been nicknamed
   def nicknamed?
     return @name != self.speciesName
-  end
-
-  # @return [Integer] this Pokémon's language
-  def language
-    return @language || 0
   end
 
   # @return [Integer] the markings this Pokémon has
