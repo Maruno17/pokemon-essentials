@@ -401,7 +401,7 @@ class PokemonSummary_Scene
       textpos.push([sprintf("%03d",dexnum),435,80,2,dexNumBase,dexNumShadow])
     end
     # Write Original Trainer's name and ID number
-    if @pokemon.ot==""
+    if @pokemon.owner.name.empty?
       textpos.push([_INTL("RENTAL"),435,176,2,Color.new(64,64,64),Color.new(176,176,176)])
       textpos.push(["?????",435,208,2,Color.new(64,64,64),Color.new(176,176,176)])
     else
@@ -411,7 +411,7 @@ class PokemonSummary_Scene
       when 0; ownerbase = Color.new(24,112,216); ownershadow = Color.new(136,168,208)
       when 1; ownerbase = Color.new(248,56,32);  ownershadow = Color.new(224,152,144)
       end
-      textpos.push([@pokemon.ot,435,176,2,ownerbase,ownershadow])
+      textpos.push([@pokemon.owner.name,435,176,2,ownerbase,ownershadow])
       textpos.push([sprintf("%05d",@pokemon.owner.public_id),435,208,2,Color.new(64,64,64),Color.new(176,176,176)])
     end
     # Write Exp text OR heart gauge message (if a Shadow Pokémon)

@@ -668,8 +668,8 @@ module PokemonDebugMixin
       cmd = 0
       loop do
         gender = [_INTL("Male"),_INTL("Female"),_INTL("Unknown")][pkmn.otgender]
-        msg = [_INTL("Player's Pokémon\n{1}\n{2}\n{3} ({4})",pkmn.ot,gender,pkmn.owner.public_id,pkmn.trainerID),
-               _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})",pkmn.ot,gender,pkmn.owner.public_id,pkmn.trainerID)
+        msg = [_INTL("Player's Pokémon\n{1}\n{2}\n{3} ({4})",pkmn.owner.name,gender,pkmn.owner.public_id,pkmn.owner.id),
+               _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})",pkmn.owner.name,gender,pkmn.owner.public_id,pkmn.owner.id)
               ][pkmn.foreign?($Trainer) ? 1 : 0]
         cmd = pbShowCommands(msg,[
              _INTL("Make player's"),
@@ -682,7 +682,7 @@ module PokemonDebugMixin
         when 0   # Make player's
           pkmn.owner = Pokemon::Owner.new_from_trainer($Trainer)
         when 1   # Set OT's name
-          pkmn.ot = pbEnterPlayerName(_INTL("{1}'s OT's name?",pkmn.name),1,MAX_PLAYER_NAME_SIZE)
+          pkmn.owner.name = pbEnterPlayerName(_INTL("{1}'s OT's name?",pkmn.name),1,MAX_PLAYER_NAME_SIZE)
         when 2   # Set OT's gender
           cmd2 = pbShowCommands(_INTL("Set OT's gender."),
              [_INTL("Male"),_INTL("Female"),_INTL("Unknown")],pkmn.otgender)

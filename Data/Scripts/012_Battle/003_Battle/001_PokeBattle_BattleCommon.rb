@@ -141,8 +141,7 @@ module PokeBattle_BattleCommon
       end
       # Modify the Pokémon's properties because of the capture
       if pbIsSnagBall?(ball)
-        pkmn.ot        = pbPlayer.name
-        pkmn.trainerID = pbPlayer.id
+        pkmn.owner = Pokemon::Owner.new_from_trainer(pbPlayer)
       end
       BallHandlers.onCatch(ball,self,pkmn)
       pkmn.ballused = pbGetBallType(ball)

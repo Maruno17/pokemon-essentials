@@ -170,7 +170,7 @@ class PokemonTrade_Scene
     speciesname2=PBSpecies.getName(@pokemon2.species)
     pbMessageDisplay(@sprites["msgwindow"],
        _ISPRINTF("{1:s}\r\nID: {2:05d}   OT: {3:s}\\wtnp[0]",
-       @pokemon.name,@pokemon.owner.public_id,@pokemon.ot)) { pbUpdate }
+       @pokemon.name,@pokemon.owner.public_id,@pokemon.owner.name)) { pbUpdate }
     pbMessageWaitForInput(@sprites["msgwindow"],50,true) { pbUpdate }
     pbPlayDecisionSE
     pbScene1
@@ -181,7 +181,7 @@ class PokemonTrade_Scene
     pbScene2
     pbMessageDisplay(@sprites["msgwindow"],
        _ISPRINTF("{1:s}\r\nID: {2:05d}   OT: {3:s}\1",
-       @pokemon2.name,@pokemon2.owner.public_id,@pokemon2.ot)) { pbUpdate }
+       @pokemon2.name,@pokemon2.owner.public_id,@pokemon2.owner.name)) { pbUpdate }
     pbMessageDisplay(@sprites["msgwindow"],
        _INTL("Take good care of {1}.",speciesname2)) { pbUpdate }
   end
