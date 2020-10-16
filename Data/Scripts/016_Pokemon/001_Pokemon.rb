@@ -1035,6 +1035,7 @@ class Pokemon
     ret.ivMaxed = @ivMaxed.clone
     ret.ev      = @ev.clone
     ret.moves   = []
+    ret.owner   = @owner.clone
     @moves.each_with_index { |m, i| ret.moves[i] = m.clone }
     ret.ribbons = @ribbons.clone if @ribbons
     return ret
