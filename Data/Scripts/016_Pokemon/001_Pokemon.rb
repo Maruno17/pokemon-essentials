@@ -117,13 +117,13 @@ class Pokemon
   # Ownership, obtained information
   #=============================================================================
 
-  # Stores information on a Pokémon's owner.
+  # Stores information about a Pokémon's owner.
   class Owner
     # @return [Integer] the ID of the owner
     attr_reader :id
     # @return [String] the name of the owner
     attr_reader :name
-    # @return [0, 1, 2] the gender of the owner (0 = male, 1 = female, 2 = unknown)
+    # @return [Integer] the gender of the owner (0 = male, 1 = female, 2 = unknown)
     attr_reader :gender
     # @return [Integer] the language of the owner (see {pbGetLanguage} for language IDs)
     attr_reader :language
@@ -133,6 +133,7 @@ class Pokemon
     # @param gender [Integer] the gender of the owner (0 = male, 1 = female, 2 = unknown)
     # @param language [Integer] the language of the owner (see {pbGetLanguage} for language IDs)
     def initialize(id, name, gender, language)
+      validate id => Integer, name => String, gender => Integer, language => Integer
       @id = id
       @name = name
       @gender = gender
@@ -143,34 +144,31 @@ class Pokemon
     # @param trainer [PokeBattle_Trainer] trainer object to read data from
     # @return [Owner] new owner object
     def self.new_from_trainer(trainer)
+      validate trainer => PokeBattle_Trainer
       return new(trainer.id, trainer.name, trainer.gender, trainer.language)
     end
 
+    # @param new_id [Integer] new owner ID
     def id=(new_id)
-      unless new_id.is_a?(Integer)
-        raise ArgumentError, _INTL('A {1} was given as Pokémon owner id', new_id.class.name)
-      end
+      validate new_id => Integer
       @id = new_id
     end
 
+    # @param new_name [String] new owner name
     def name=(new_name)
-      unless new_name.is_a?(String)
-        raise ArgumentError, _INTL('A {1} was given as Pokémon owner id', new_name.class.name)
-      end
+      validate new_name => String
       @name = new_name
     end
 
+    # @param new_gender [Integer] new owner gender
     def gender=(new_gender)
-      unless new_gender.is_a?(Integer)
-        raise ArgumentError, _INTL('A {1} was given as Pokémon owner id', new_gender.class.name)
-      end
+      validate new_gender => Integer
       @gender = new_gender
     end
 
+    # @param new_language [Integer] new owner language
     def language=(new_language)
-      unless new_language.is_a?(Integer)
-        raise ArgumentError, _INTL('A {1} was given as Pokémon owner id', new_language.class.name)
-      end
+      validate new_language => Integer
       @language = new_language
     end
 
@@ -188,9 +186,7 @@ class Pokemon
   # Changes this Pokémon's owner.
   # @param new_owner [Owner] the owner to change to
   def owner=(new_owner)
-    unless new_owner.is_a?(Owner)
-      raise ArgumentError, _INTL("A {1} was given as a Pokémon owner", new_owner.class.name)
-    end
+    validate new_owner => Owner
     @owner = new_owner
   end
 
