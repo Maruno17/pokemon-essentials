@@ -155,8 +155,8 @@ def pbDayCareGetCompat
      isConst?(compat21,PBEggGroups,:Ditto)
     if pbDayCareCompatibleGender(pkmn1,pkmn2)
       ret = 1
-      ret += 1 if pkmn1.species==pkmn2.species
-      ret += 1 if pkmn1.trainerID!=pkmn2.trainerID
+      ret += 1 if pkmn1.species == pkmn2.species
+      ret += 1 if pkmn1.owner.id != pkmn2.owner.id
       return ret
     end
   end
@@ -350,7 +350,7 @@ def pbDayCareGenerateEgg
   end
   # Masuda method and Shiny Charm
   shinyretries = 0
-  shinyretries += 5 if father.language!=mother.language
+  shinyretries += 5 if father.owner.language != mother.owner.language
   shinyretries += 2 if hasConst?(PBItems,:SHINYCHARM) && $PokemonBag.pbHasItem?(:SHINYCHARM)
   if shinyretries>0
     shinyretries.times do

@@ -139,12 +139,8 @@ def pbAddForeignPokemon(pokemon,level=nil,ownerName=nil,nickname=nil,ownerGender
   if pokemon.is_a?(Integer) && level.is_a?(Integer)
     pokemon = Pokemon.new(pokemon,level)
   end
-  # Set original trainer to a foreign one (if ID isn't already foreign)
-  if pokemon.trainerID==$Trainer.id
-    pokemon.trainerID = $Trainer.getForeignID
-    pokemon.ot        = ownerName if ownerName && ownerName!=""
-    pokemon.otgender  = ownerGender
-  end
+  # Set original trainer to a foreign one
+  pokemon.owner = Pokemon::Owner.new_foreign(ownerName || "", ownerGender)
   # Set nickname
   pokemon.name = nickname[0, Pokemon::MAX_NAME_SIZE] if nickname && nickname!=""
   # Recalculate stats

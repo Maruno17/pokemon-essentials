@@ -134,10 +134,10 @@ class PokeBattle_Battle
       exp /= 7
     end
     # Foreign Pokémon gain more Exp
-    isOutsider = (pkmn.trainerID!=pbPlayer.id ||
-                 (pkmn.language!=0 && pkmn.language!=pbPlayer.language))
+    isOutsider = (pkmn.owner.id != pbPlayer.id ||
+                 (pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language))
     if isOutsider
-      if pkmn.language!=0 && pkmn.language!=pbPlayer.language
+      if pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language
         exp = (exp*1.7).floor
       else
         exp = (exp*1.5).floor

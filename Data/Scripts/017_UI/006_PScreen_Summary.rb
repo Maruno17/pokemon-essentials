@@ -407,7 +407,7 @@ class PokemonSummary_Scene
     else
       ownerbase   = Color.new(64,64,64)
       ownershadow = Color.new(176,176,176)
-      case @pokemon.otgender
+      case @pokemon.owner.gender
       when 0; ownerbase = Color.new(24,112,216); ownershadow = Color.new(136,168,208)
       when 1; ownerbase = Color.new(248,56,32);  ownershadow = Color.new(224,152,144)
       end
