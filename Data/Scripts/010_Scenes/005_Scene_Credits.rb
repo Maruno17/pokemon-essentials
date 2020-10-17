@@ -1,12 +1,3 @@
-# Backgrounds to show in credits. Found in Graphics/Titles/ folder
-CreditsBackgroundList = ["credits1","credits2","credits3","credits4","credits5"]
-CreditsMusic          = "Credits"
-CreditsScrollSpeed    = 2
-CreditsFrequency      = 9   # Number of seconds per credits slide
-CREDITS_OUTLINE       = Color.new(0,0,128, 255)
-CREDITS_SHADOW        = Color.new(0,0,0, 100)
-CREDITS_FILL          = Color.new(255,255,255, 255)
-
 #==============================================================================
 # * Scene_Credits
 #------------------------------------------------------------------------------
@@ -36,18 +27,25 @@ CREDITS_FILL          = Color.new(255,255,255, 255)
 #
 ## New Edit 25/3/2020 by Maruno.
 # Scroll speed is now independent of frame rate. Now supports non-integer values
-# for CreditsScrollSpeed.
+# for SCROLL_SPEED.
 #
 ## New Edit 21/8/2020 by Marin.
 # Now automatically inserts the credits from the plugins that have been
 # registered through the PluginManager module.
 #==============================================================================
-
 class Scene_Credits
+  # Backgrounds to show in credits. Found in Graphics/Titles/ folder
+  BACKGROUNDS_LIST       = ["credits1", "credits2", "credits3", "credits4", "credits5"]
+  BGM                    = "Credits"
+  SCROLL_SPEED           = 2
+  SECONDS_PER_BACKGROUND = 9
+  TEXT_OUTLINE_COLOR     = Color.new(0, 0, 128, 255)
+  TEXT_BASE_COLOR        = Color.new(255, 255, 255, 255)
+  TEXT_SHADOW_COLOR      = Color.new(0, 0, 0, 100)
 
-# This next piece of code is the credits.
-#Start Editing
-CREDIT=<<_END_
+  # This next piece of code is the credits.
+  # Start Editing
+  CREDIT = <<_END_
 
 Your credits go here.
 
@@ -94,21 +92,21 @@ No copyright infringements intended.
 Please support the official games!
 
 _END_
-#Stop Editing
+# Stop Editing
 
   def main
-#-------------------------------
-# Animated Background Setup
-#-------------------------------
+    #-------------------------------
+    # Animated Background Setup
+    #-------------------------------
     @sprite = IconSprite.new(0,0)
-    @backgroundList = CreditsBackgroundList
+    @backgroundList = BACKGROUNDS_LIST
     @frameCounter = 0
     # Number of game frames per background frame
-    @framesPerBackground = CreditsFrequency * Graphics.frame_rate
+    @framesPerBackground = SECONDS_PER_BACKGROUND * Graphics.frame_rate
     @sprite.setBitmap("Graphics/Titles/"+@backgroundList[0])
-#------------------
-# Credits text Setup
-#------------------
+    #------------------
+    # Credits text Setup
+    #------------------
     plugin_credits = ""
     PluginManager.plugins.each do |plugin|
       pcred = PluginManager.credits(plugin)
@@ -144,9 +142,9 @@ _END_
           align = (j==0) ? 2 : 0 # Right align : left align
           linewidth = Graphics.width/2 - 20
         end
-        credit_bitmap.font.color = CREDITS_SHADOW
+        credit_bitmap.font.color = TEXT_SHADOW_COLOR
         credit_bitmap.draw_text(xpos,i * 32 + 8,linewidth,32,line[j],align)
-        credit_bitmap.font.color = CREDITS_OUTLINE
+        credit_bitmap.font.color = TEXT_OUTLINE_COLOR
         credit_bitmap.draw_text(xpos + 2,i * 32 - 2,linewidth,32,line[j],align)
         credit_bitmap.draw_text(xpos,i * 32 - 2,linewidth,32,line[j],align)
         credit_bitmap.draw_text(xpos - 2,i * 32 - 2,linewidth,32,line[j],align)
@@ -155,13 +153,13 @@ _END_
         credit_bitmap.draw_text(xpos + 2,i * 32 + 2,linewidth,32,line[j],align)
         credit_bitmap.draw_text(xpos,i * 32 + 2,linewidth,32,line[j],align)
         credit_bitmap.draw_text(xpos - 2,i * 32 + 2,linewidth,32,line[j],align)
-        credit_bitmap.font.color = CREDITS_FILL
+        credit_bitmap.font.color = TEXT_BASE_COLOR
         credit_bitmap.draw_text(xpos,i * 32,linewidth,32,line[j],align)
       end
     end
     @trim = Graphics.height/10
     @realOY = -(Graphics.height-@trim)   # -430
-    @oyChangePerFrame = CreditsScrollSpeed*20.0/Graphics.frame_rate
+    @oyChangePerFrame = SCROLL_SPEED*20.0/Graphics.frame_rate
     @credit_sprite = Sprite.new(Viewport.new(0,@trim,Graphics.width,Graphics.height-(@trim*2)))
     @credit_sprite.bitmap = credit_bitmap
     @credit_sprite.z      = 9998
@@ -169,16 +167,16 @@ _END_
     @bg_index = 0
     @zoom_adjustment = 1.0/$ResizeFactor
     @last_flag = false
-#--------
-# Setup
-#--------
+    #--------
+    # Setup
+    #--------
     # Stops all audio but background music
     previousBGM = $game_system.getPlayingBGM
     pbMEStop
     pbBGSStop
     pbSEStop
     pbBGMFade(2.0)
-    pbBGMPlay(CreditsMusic)
+    pbBGMPlay(BGM)
     Graphics.transition(20)
     loop do
       Graphics.update
