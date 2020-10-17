@@ -361,7 +361,7 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
   end
 
   def roamerCount
-    return RoamingSpecies.length
+    return ROAMING_SPECIES.length
   end
 
   def itemCount
@@ -392,7 +392,7 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
       # Advance roaming
       self.shadowtext(_INTL("[Clear all current roamer locations]"),rect.x,rect.y,nameWidth,rect.height)
     else
-      pkmn = RoamingSpecies[index]
+      pkmn = ROAMING_SPECIES[index]
       name = PBSpecies.getName(getID(PBSpecies,pkmn[0]))+" (Lv. #{pkmn[1]})"
       status = ""
       statuscolor = 0
@@ -467,7 +467,7 @@ def pbDebugRoamers
       if cmdwindow.index<cmdwindow.roamerCount
         pbPlayDecisionSE
         # Toggle through roaming, not roaming, defeated
-        pkmn = RoamingSpecies[cmdwindow.index]
+        pkmn = ROAMING_SPECIES[cmdwindow.index]
         if pkmn[2]>0 && !$game_switches[pkmn[2]]
           # not roaming -> roaming
           $game_switches[pkmn[2]] = true
@@ -487,7 +487,7 @@ def pbDebugRoamers
         end
         cmdwindow.refresh
       elsif cmdwindow.index==cmdwindow.itemCount-2   # All roam
-        if RoamingSpecies.length==0
+        if ROAMING_SPECIES.length==0
           pbPlayBuzzerSE
         else
           pbPlayDecisionSE
@@ -496,11 +496,11 @@ def pbDebugRoamers
           cmdwindow.refresh
         end
       else   # Clear all roaming locations
-        if RoamingSpecies.length==0
+        if ROAMING_SPECIES.length==0
           pbPlayBuzzerSE
         else
           pbPlayDecisionSE
-          for i in 0...RoamingSpecies.length
+          for i in 0...ROAMING_SPECIES.length
             $PokemonGlobal.roamPosition[i] = nil
           end
           $PokemonGlobal.roamedAlready = false

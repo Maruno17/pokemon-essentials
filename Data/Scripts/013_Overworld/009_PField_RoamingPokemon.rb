@@ -27,9 +27,9 @@ end
 # Gets the roaming areas for a particular Pokémon.
 def pbRoamingAreas(idxRoamer)
   # [species symbol, level, Game Switch, encounter type, battle BGM, area maps hash]
-  roamData = RoamingSpecies[idxRoamer]
+  roamData = ROAMING_SPECIES[idxRoamer]
   return roamData[5] if roamData && roamData[5]
-  return RoamingAreas
+  return ROAMING_AREAS
 end
 
 # Puts a roamer in a completely random map available to it.
@@ -45,15 +45,15 @@ def pbRoamPokemon
   # Start all roamers off in random maps
   if !$PokemonGlobal.roamPosition
     $PokemonGlobal.roamPosition = {}
-    for i in 0...RoamingSpecies.length
-      species = getID(PBSpecies,RoamingSpecies[i][0])
+    for i in 0...ROAMING_SPECIES.length
+      species = getID(PBSpecies,ROAMING_SPECIES[i][0])
       next if !species || species<=0
       keys = pbRoamingAreas(i).keys
       $PokemonGlobal.roamPosition[i] = keys[rand(keys.length)]
     end
   end
   # Roam each Pokémon in turn
-  for i in 0...RoamingSpecies.length
+  for i in 0...ROAMING_SPECIES.length
     pbRoamPokemonOne(i)
   end
 end
@@ -62,7 +62,7 @@ end
 # currently possible to encounter it (i.e. its Game Switch is off).
 def pbRoamPokemonOne(idxRoamer)
   # [species symbol, level, Game Switch, encounter type, battle BGM, area maps hash]
-  roamData = RoamingSpecies[idxRoamer]
+  roamData = ROAMING_SPECIES[idxRoamer]
   return if roamData[2]>0 && !$game_switches[roamData[2]]   # Game Switch is off
   # Ensure species is a number rather than a string/symbol
   species = getID(PBSpecies,roamData[0])
@@ -162,9 +162,9 @@ EncounterModifier.register(proc { |encounter|
   # Look at each roaming Pokémon in turn and decide whether it's possible to
   # encounter it
   roamerChoices = []
-  for i in 0...RoamingSpecies.length
+  for i in 0...ROAMING_SPECIES.length
     # [species symbol, level, Game Switch, encounter type, battle BGM, area maps hash]
-    roamData = RoamingSpecies[i]
+    roamData = ROAMING_SPECIES[i]
     next if roamData[2]>0 && !$game_switches[roamData[2]]   # Game Switch is off
     next if $PokemonGlobal.roamPokemon[i]==true   # Roaming Pokémon has been caught
     # Ensure species is a number rather than a string/symbol

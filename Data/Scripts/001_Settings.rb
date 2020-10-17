@@ -249,7 +249,7 @@ DEXES_WITH_OFFSETS  = []
 #      - Name of BGM to play for that encounter (optional).
 #      - Roaming areas specifically for this Pokémon (optional).
 #===============================================================================
-RoamingAreas = {
+ROAMING_AREAS = {
   5  => [   21, 28, 31, 39, 41, 44, 47, 66, 69],
   21 => [5,     28, 31, 39, 41, 44, 47, 66, 69],
   28 => [5, 21,     31, 39, 41, 44, 47, 66, 69],
@@ -261,7 +261,7 @@ RoamingAreas = {
   66 => [5, 21, 28, 31, 39, 41, 44, 47,     69],
   69 => [5, 21, 28, 31, 39, 41, 44, 47, 66    ]
 }
-RoamingSpecies = [
+ROAMING_SPECIES = [
   [:LATIAS, 30, 53, 0, "Battle roaming"],
   [:LATIOS, 30, 53, 0, "Battle roaming"],
   [:KYOGRE, 40, 54, 2, nil, {
