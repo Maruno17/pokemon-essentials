@@ -192,8 +192,7 @@ end
 def pbHatch(pokemon)
   speciesname = pokemon.speciesName
   pokemon.name           = speciesname
-  pokemon.trainerID      = $Trainer.id
-  pokemon.ot             = $Trainer.name
+  pokemon.owner          = Pokemon::Owner.new_from_trainer($Trainer)
   pokemon.happiness      = 120
   pokemon.timeEggHatched = pbGetTimeNow
   pokemon.obtainMode     = 1   # hatched from egg

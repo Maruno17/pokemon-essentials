@@ -77,10 +77,6 @@ class Pokemon
   attr_accessor :pokerus
   # @return [Integer] this Pokémon's personal ID
   attr_accessor :personalID
-  # The 32-bit ID of this Pokémon's trainer. The secret ID is in the
-  # upper 16 bits.
-  # @return [Integer] the ID of this Pokémon's trainer
-  attr_accessor :trainerID
   # @return [Integer] the manner this Pokémon was obtained:
   #   0 (met), 1 (as egg), 2 (traded), 4 (fateful encounter)
   attr_accessor :obtainMode
@@ -96,15 +92,6 @@ class Pokemon
   # Otherwise returns 0.
   # @return [Integer] the map ID where egg was hatched (0 by default)
   attr_accessor :hatchedMap
-  # @param value [Integer] new language
-  attr_writer   :language
-  # @return [String] the name of the original trainer
-  attr_accessor :ot
-  # Changes the gender of the original trainer. This is for information only,
-  # and is not used to verify ownership of the Pokémon.
-  # @param value [Integer] new value for the original trainer's gender:
-  #   0 - male, 1 - female, 2 - mixed, 3 - unknown
-  attr_writer   :otgender
   # @param value [Integer] new contest stat
   attr_writer   :cool,:beauty,:cute,:smart,:tough,:sheen
 
@@ -121,22 +108,24 @@ class Pokemon
   # Ownership, obtained information
   #=============================================================================
 
-  # @return [Integer] the public portion of the original trainer's ID
-  def publicID
-    return @trainerID & 0xFFFF
+  # @return [Owner] this Pokémon's owner
+  def owner
+    return @owner
+  end
+
+  # Changes this Pokémon's owner.
+  # @param new_owner [Owner] the owner to change to
+  def owner=(new_owner)
+    validate new_owner => Owner
+    @owner = new_owner
   end
 
   # @param trainer [PokeBattle_Trainer] the trainer to compare to the OT
   # @return [Boolean] whether the given trainer and this Pokémon's original trainer don't match
   def foreign?(trainer)
-    return @trainerID != trainer.id || @ot != trainer.name
+    return @owner.id != trainer.id || @owner.name != trainer.name
   end
   alias isForeign? foreign?
-
-  # @return [0, 1, 2] the gender of this Pokémon original trainer (0 = male, 1 = female, 2 = unknown)
-  def otgender
-    return @otgender || 2
-  end
 
   # @return [Integer] this Pokémon's level when it was obtained
   def obtainLevel
@@ -873,11 +862,6 @@ class Pokemon
     return @name != self.speciesName
   end
 
-  # @return [Integer] this Pokémon's language
-  def language
-    return @language || 0
-  end
-
   # @return [Integer] the markings this Pokémon has
   def markings
     return @markings || 0
@@ -1051,6 +1035,7 @@ class Pokemon
     ret.ivMaxed = @ivMaxed.clone
     ret.ev      = @ev.clone
     ret.moves   = []
+    ret.owner   = @owner.clone
     @moves.each_with_index { |m, i| ret.moves[i] = m.clone }
     ret.ribbons = @ribbons.clone if @ribbons
     return ret
@@ -1059,9 +1044,9 @@ class Pokemon
   # Creates a new Pokémon object.
   # @param species [Integer, Symbol, String] Pokémon species
   # @param level [Integer] Pokémon level
-  # @param owner [PokeBattle_Trainer] object for the original trainer
+  # @param owner [Owner, PokeBattle_Trainer] Pokémon owner (the player by default)
   # @param withMoves [Boolean] whether the Pokémon should have moves
-  def initialize(species, level, owner = nil, withMoves = true)
+  def initialize(species, level, owner = $Trainer, withMoves = true)
     ospecies = species.to_s
     species = getID(PBSpecies, species)
     cname = getConstantName(PBSpecies, species) rescue nil
@@ -1090,15 +1075,12 @@ class Pokemon
     @ribbons      = []
     @ballused     = 0
     @eggsteps     = 0
-    if owner
-      @trainerID  = owner.id
-      @ot         = owner.name
-      @otgender   = owner.gender
-      @language   = owner.language
+    if owner.is_a?(Owner)
+      @owner = owner
+    elsif owner.is_a?(PokeBattle_Trainer)
+      @owner = Owner.new_from_trainer(owner)
     else
-      @trainerID  = 0
-      @ot         = ""
-      @otgender   = 2
+      @owner = Owner.new(0, '', 2, 2)
     end
     @obtainMap    = ($game_map) ? $game_map.map_id : 0
     @obtainText   = nil

@@ -882,8 +882,7 @@ def pbRegisterPartner(trainerid,trainername,partyid=0)
   trainerobject = PokeBattle_Trainer.new(_INTL(trainer[0].name),trainerid)
   trainerobject.setForeignID($Trainer)
   for i in trainer[2]
-    i.trainerID = trainerobject.id
-    i.ot        = trainerobject.name
+    i.owner = Pokemon::Owner.new_from_trainer(trainerobject)
     i.calcStats
   end
   $PokemonGlobal.partner = [trainerid,trainerobject.name,trainerobject.id,trainer[2]]
