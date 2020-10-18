@@ -21,10 +21,8 @@ def canonicalize(c)
   for x in csplit
     if x=="."
     elsif x==".."
-      if pos>=0
-        ret.delete_at(pos)
-        pos -= 1
-      end
+      ret.delete_at(pos) if pos>=0
+      pos -= 1
     else
       ret.push(x)
       pos += 1

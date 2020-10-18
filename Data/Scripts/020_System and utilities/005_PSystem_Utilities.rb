@@ -1180,7 +1180,6 @@ end
 
 
 
-
 class PokemonGlobalMetadata
   attr_accessor :trainerRecording
 end

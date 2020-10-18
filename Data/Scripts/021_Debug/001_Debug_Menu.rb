@@ -790,7 +790,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
     pbCompileTextUI
   when "compiledata"
     msgwindow = pbCreateMessageWindow
-    pbCompileAllData(true) { |msg| pbMessageDisplay(msgwindow,msg,false) }
+    Compiler.compile_all(true) { |msg| pbMessageDisplay(msgwindow,msg,false) }
     pbMessageDisplay(msgwindow,_INTL("All game data was compiled."))
     pbDisposeMessageWindow(msgwindow)
   when "debugconsole"
