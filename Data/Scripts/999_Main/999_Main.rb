@@ -1,8 +1,6 @@
 pbSetUpSystem
 Compiler.main
 
-
-
 class Scene_DebugIntro
   def main
     Graphics.transition(0)
@@ -12,8 +10,6 @@ class Scene_DebugIntro
     Graphics.freeze
   end
 end
-
-
 
 def pbCallTitle
   return Scene_DebugIntro.new if $DEBUG
@@ -35,9 +31,9 @@ end
 
 def mainFunctionDebug
   begin
-    getCurrentProcess = Win32API.new("kernel32.dll","GetCurrentProcess","","l")
-    setPriorityClass  = Win32API.new("kernel32.dll","SetPriorityClass",%w(l i),"")
-    setPriorityClass.call(getCurrentProcess.call(),32768)   # "Above normal" priority class
+    getCurrentProcess = Win32API.new("kernel32.dll", "GetCurrentProcess", "", "l")
+    setPriorityClass  = Win32API.new("kernel32.dll", "SetPriorityClass", %w(l i), "")
+    setPriorityClass.call(getCurrentProcess.call(), 32768)   # "Above normal" priority class
     $data_animations    = pbLoadRxData("Data/Animations")
     $data_tilesets      = pbLoadRxData("Data/Tilesets")
     $data_common_events = pbLoadRxData("Data/CommonEvents")
@@ -47,9 +43,7 @@ def mainFunctionDebug
     Graphics.update
     Graphics.freeze
     $scene = pbCallTitle
-    while $scene!=nil
-      $scene.main
-    end
+    $scene.main until $scene.nil?
     Graphics.transition(20)
   rescue Hangup
     pbPrintException($!) if !$DEBUG
@@ -60,11 +54,11 @@ end
 
 loop do
   retval = mainFunction
-  if retval==0   # failed
+  if retval == 0   # failed
     loop do
       Graphics.update
     end
-  elsif retval==1   # ended successfully
+  elsif retval == 1   # ended successfully
     break
   end
 end

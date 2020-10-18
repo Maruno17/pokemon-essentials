@@ -171,7 +171,7 @@ class PokeBattle_Battler
     return true
   end
 
-  def pbCanSynchronizeStatus?(status,target)
+  def pbCanSynchronizeStatus?(newStatus,target)
     return false if fainted?
     # Trying to replace a status problem with another one
     return false if self.status!=PBStatuses::NONE
@@ -179,7 +179,7 @@ class PokeBattle_Battler
     return false if @battle.field.terrain==PBBattleTerrains::Misty && affectedByTerrain?
     # Type immunities
     hasImmuneType = false
-    case self.status
+    case newStatus
     when PBStatuses::POISON
       # NOTE: target will have Synchronize, so it can't have Corrosion.
       if !(target && target.hasActiveAbility?(:CORROSION))
@@ -193,15 +193,15 @@ class PokeBattle_Battler
     end
     return false if hasImmuneType
     # Ability immunity
-    if BattleHandlers.triggerStatusImmunityAbilityNonIgnorable(@ability,self,status)
+    if BattleHandlers.triggerStatusImmunityAbilityNonIgnorable(@ability,self,newStatus)
       return false
     end
-    if abilityActive? && BattleHandlers.triggerStatusImmunityAbility(@ability,self,status)
+    if abilityActive? && BattleHandlers.triggerStatusImmunityAbility(@ability,self,newStatus)
       return false
     end
     eachAlly do |b|
       next if !b.abilityActive?
-      next if !BattleHandlers.triggerStatusImmunityAllyAbility(b.ability,self,status)
+      next if !BattleHandlers.triggerStatusImmunityAllyAbility(b.ability,self,newStatus)
       return false
     end
     # Safeguard immunity

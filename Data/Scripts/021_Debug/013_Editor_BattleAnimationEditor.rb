@@ -3093,8 +3093,8 @@ class PointPath
       return ret
     end
     step=1.0/frames
-    t=0.0;
-    for i in 0..frames+1
+    t=0.0
+    (frames+2).times do
       point=pointOnPath(t)
       if roundValues
         ret.addPoint(point[0].round,point[1].round)

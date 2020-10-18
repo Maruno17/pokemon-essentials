@@ -103,7 +103,7 @@ class Game_Map
   end
   #-----------------------------------------------------------------------------
   # * Autoplays background music
-  #   Plays music called "[normal BGM]n" if it's night time and it exists
+  #   Plays music called "[normal BGM]_n" if it's night time and it exists
   #-----------------------------------------------------------------------------
   def autoplayAsCue
     if @map.autoplay_bgm
@@ -119,12 +119,12 @@ class Game_Map
   end
   #-----------------------------------------------------------------------------
   # * Plays background music
-  #   Plays music called "[normal BGM]n" if it's night time and it exists
+  #   Plays music called "[normal BGM]_n" if it's night time and it exists
   #-----------------------------------------------------------------------------
   def autoplay
     if @map.autoplay_bgm
-      if PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/"+ @map.bgm.name+ "n")
-        pbBGMPlay(@map.bgm.name+"n",@map.bgm.volume,@map.bgm.pitch)
+      if PBDayNight.isNight? && FileTest.audio_exist?("Audio/BGM/"+ @map.bgm.name+ "_n")
+        pbBGMPlay(@map.bgm.name+"_n",@map.bgm.volume,@map.bgm.pitch)
       else
         pbBGMPlay(@map.bgm)
       end

@@ -37,15 +37,6 @@ class Pokemon
     return pbGetFSpeciesFromForm(@species,formSimple)
   end
 
-  alias __mf_compatibleWithMove? compatibleWithMove?   # Deprecated
-  def compatibleWithMove?(move)
-    v = MultipleForms.call("getMoveCompatibility",self)
-    if v!=nil
-      return v.any? { |j| j==move }
-    end
-    return __mf_compatibleWithMove?(move)
-  end
-
   alias __mf_initialize initialize
   def initialize(*args)
     @form = (pbGetSpeciesFromFSpecies(args[0])[1] rescue 0)

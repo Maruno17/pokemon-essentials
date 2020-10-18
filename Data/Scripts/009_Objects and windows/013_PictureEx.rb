@@ -117,7 +117,7 @@ class PictureEx
   end
 
   def callback(cb)
-    if cb.is_a?(Proc);      proc.call(self)
+    if cb.is_a?(Proc);      cb.call(self)
     elsif cb.is_a?(Array);  cb[0].method(cb[1]).call(self)
     elsif cb.is_a?(Method); cb.call(self)
     end

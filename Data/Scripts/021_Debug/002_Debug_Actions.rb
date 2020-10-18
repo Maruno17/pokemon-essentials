@@ -82,9 +82,16 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
       name = $data_system.switches[index+1]
       codeswitch = (name[/^s\:/])
       val = (codeswitch) ? (eval($~.post_match) rescue nil) : $game_switches[index+1]
-      if val==nil; status = "[-]"; colors = 0; codeswitch = true
-      elsif val;   status = "[ON]"; colors = 2
-      else;        status = "[OFF]"; colors = 1
+      if val==nil
+        status = "[-]"
+        colors = 0
+        codeswitch = true
+      elsif val
+        status = "[ON]"
+        colors = 2
+      else
+        status = "[OFF]"
+        colors = 1
       end
     else
       name = $data_system.variables[index+1]

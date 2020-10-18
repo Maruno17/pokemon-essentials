@@ -557,7 +557,7 @@ def pbSaveTownMap
     f.write("\r\n")
     for i in 0...mapdata.length
       map = mapdata[i]
-      return if !map
+      next if !map
       f.write("\#-------------------------------\r\n")
       f.write(sprintf("[%d]\r\n",i))
       rname = pbGetMessage(MessageTypes::RegionNames,i)

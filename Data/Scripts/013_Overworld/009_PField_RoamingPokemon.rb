@@ -241,6 +241,6 @@ def pbRoamingPokemonBattle(species, level)
   return (decision!=2 && decision!=5)
 end
 
-EncounterModifier.registerEncounterEnd(proc{
+EncounterModifier.registerEncounterEnd(proc {
   $PokemonTemp.roamerIndex = nil
 })

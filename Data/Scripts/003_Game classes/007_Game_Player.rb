@@ -23,7 +23,7 @@ class Game_Player < Game_Character
   end
 
   def bush_depth
-    return 0 if @tile_id > 0 or @always_on_top
+    return 0 if @tile_id > 0 || @always_on_top
     xbehind = (@direction==4) ? @x+1 : (@direction==6) ? @x-1 : @x
     ybehind = (@direction==8) ? @y+1 : (@direction==2) ? @y-1 : @y
     # Both current tile and previous tile are on the same map; just return super
@@ -47,7 +47,7 @@ class Game_Player < Game_Character
       behindmap = newbehind[0]; behindx = newbehind[1]; behindy = newbehind[2]
     end
     # Return bush depth
-    if @jump_count <= 0
+    if !jumping?
       return 32 if heremap.deepBush?(herex, herey) && behindmap.deepBush?(behindx, behindy)
       return 12 if heremap.bush?(herex, herey) && !moving?
     end
@@ -125,6 +125,14 @@ class Game_Player < Game_Character
       if !check_event_trigger_touch(@x, @y-1)
         bump_into_object
       end
+    end
+  end
+
+  def turnGeneric(dir)
+    old_direction = @direction
+    super
+    if @direction != old_direction && !@move_route_forcing && !pbMapInterpreterRunning?
+      Events.onChangeDirection.trigger(self, self)
     end
   end
 
@@ -380,7 +388,7 @@ class Game_Player < Game_Character
     unless pbMapInterpreterRunning? or $game_temp.message_window_showing or
            $PokemonTemp.miniupdate or $game_temp.in_menu
       # Move player in the direction the directional button is being pressed
-      if dir==@lastdir && Graphics.frame_count-@lastdirframe>Graphics.frame_rate/20
+      if @moved_last_frame || (dir==@lastdir && Graphics.frame_count-@lastdirframe>Graphics.frame_rate/20)
         case dir
         when 2; move_down
         when 4; move_left

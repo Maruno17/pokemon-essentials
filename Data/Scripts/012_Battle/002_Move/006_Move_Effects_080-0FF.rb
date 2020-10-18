@@ -752,7 +752,7 @@ class PokeBattle_Move_09F < PokeBattle_Move
     elsif isConst?(@id,PBMoves,:MULTIATTACK)
       @itemTypes = {
          :FIGHTINGMEMORY => :FIGHTING,
-         :SLYINGMEMORY   => :FLYING,
+         :FLYINGMEMORY   => :FLYING,
          :POISONMEMORY   => :POISON,
          :GROUNDMEMORY   => :GROUND,
          :ROCKMEMORY     => :ROCK,
@@ -1132,7 +1132,7 @@ class PokeBattle_Move_0AE < PokeBattle_Move
     return false
   end
 
-  def pbEffectGeneral(user)
+  def pbEffectAgainstTarget(user,target)
     user.pbUseMoveSimple(target.lastRegularMoveUsed,target.index)
   end
 
@@ -2403,18 +2403,19 @@ end
 #===============================================================================
 class PokeBattle_Move_0D3 < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
-    shift = (4-user.effects[PBEffects::Rollout])   # 0-4, where 0 is most powerful
+    shift = (5 - user.effects[PBEffects::Rollout])   # 0-4, where 0 is most powerful
+    shift = 0 if user.effects[PBEffects::Rollout] == 0   # For first turn
     shift += 1 if user.effects[PBEffects::DefenseCurl]
-    baseDmg = baseDmg << shift
+    baseDmg *= 2**shift
     return baseDmg
   end
 
   def pbEffectAfterAllHits(user,target)
-    if !target.damageState.unaffected && user.effects[PBEffects::Rollout]==0
+    if !target.damageState.unaffected && user.effects[PBEffects::Rollout] == 0
       user.effects[PBEffects::Rollout] = 5
       user.currentMove = @id
     end
-    user.effects[PBEffects::Rollout] -= 1 if user.effects[PBEffects::Rollout]>0
+    user.effects[PBEffects::Rollout] -= 1 if user.effects[PBEffects::Rollout] > 0
   end
 end
 
