@@ -54,7 +54,7 @@ end
 # Compiler
 #===============================================================================
 module Compiler
-  extend self
+  module_function
 
   def findIndex(a)
     index = -1

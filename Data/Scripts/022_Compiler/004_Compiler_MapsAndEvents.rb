@@ -1,4 +1,6 @@
 module Compiler
+  module_function
+
   #=============================================================================
   # Add new map files to the map tree.
   #=============================================================================
@@ -579,7 +581,7 @@ module Compiler
     end
     push_script(firstpage.list,"setBattleRule(\"double\")") if doublebattle
     push_script(firstpage.list,sprintf("setBattleRule(\"backdrop\",\"%s\")",safequote(backdrop))) if backdrop
-    push_script(firstpage.list,sprintf("setBattleRule(\"outcomeVar\",%d)",outcomeVar)) if outcome>1
+    push_script(firstpage.list,sprintf("setBattleRule(\"outcomeVar\",%d)",outcome)) if outcome>1
     push_script(firstpage.list,"setBattleRule(\"canLose\")") if continue
     espeech = (endspeeches[0]) ? sprintf("_I(\"%s\")",safequote2(endspeeches[0])) : "nil"
     if battleid>0
@@ -628,7 +630,7 @@ module Compiler
       push_text(rematchpage.list,battles[i],1)
       push_script(rematchpage.list,"setBattleRule(\"double\")",1) if doublebattle
       push_script(rematchpage.list,sprintf("setBattleRule(\"backdrop\",%s)",safequote(backdrop)),1) if backdrop
-      push_script(rematchpage.list,sprintf("setBattleRule(\"outcomeVar\",%d)",outcomeVar),1) if outcome>1
+      push_script(rematchpage.list,sprintf("setBattleRule(\"outcomeVar\",%d)",outcome),1) if outcome>1
       push_script(rematchpage.list,"setBattleRule(\"canLose\")",1) if continue
       espeech = nil
       if endspeeches.length>0

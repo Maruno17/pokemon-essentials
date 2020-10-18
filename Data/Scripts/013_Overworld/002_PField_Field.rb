@@ -828,7 +828,7 @@ def pbCueBGM(bgm,seconds,volume=nil,pitch=nil)
 end
 
 def pbAutoplayOnTransition
-  surfbgm = pbGetMetadata(0,MetadataSurfBGM)
+  surfbgm = pbGetMetadata(0,Metadata::SURF_BGM)
   if $PokemonGlobal.surfing && surfbgm
     pbBGMPlay(surfbgm)
   else
@@ -837,7 +837,7 @@ def pbAutoplayOnTransition
 end
 
 def pbAutoplayOnSave
-  surfbgm = pbGetMetadata(0,MetadataSurfBGM)
+  surfbgm = pbGetMetadata(0,Metadata::SURF_BGM)
   if $PokemonGlobal.surfing && surfbgm
     pbBGMPlay(surfbgm)
   else
@@ -1124,7 +1124,7 @@ def pbFishingBegin
   $PokemonGlobal.fishing = true
   if !pbCommonEvent(FISHING_BEGIN_COMMON_EVENT)
     patternb = 2*$game_player.direction - 1
-    meta = pbGetMetadata(0,MetadataPlayerA+$PokemonGlobal.playerID)
+    meta = pbGetMetadata(0,Metadata::PLAYER_A+$PokemonGlobal.playerID)
     num = ($PokemonGlobal.surfing) ? 7 : 6
     if meta && meta[num] && meta[num]!=""
       charset = pbGetPlayerCharset(meta,num)
@@ -1143,7 +1143,7 @@ end
 def pbFishingEnd
   if !pbCommonEvent(FISHING_END_COMMON_EVENT)
     patternb = 2*($game_player.direction - 2)
-    meta = pbGetMetadata(0,MetadataPlayerA+$PokemonGlobal.playerID)
+    meta = pbGetMetadata(0,Metadata::PLAYER_A+$PokemonGlobal.playerID)
     num = ($PokemonGlobal.surfing) ? 7 : 6
     if meta && meta[num] && meta[num]!=""
       charset = pbGetPlayerCharset(meta,num)
@@ -1308,8 +1308,7 @@ def pbRegisterPartner(trainerid,trainername,partyid=0)
   trainerobject = PokeBattle_Trainer.new(_INTL(trainer[0].name),trainerid)
   trainerobject.setForeignID($Trainer)
   for i in trainer[2]
-    i.trainerID = trainerobject.id
-    i.ot        = trainerobject.name
+    i.owner = Pokemon::Owner.new_from_trainer(trainerobject)
     i.calcStats
   end
   $PokemonGlobal.partner = [trainerid,trainerobject.name,trainerobject.id,trainer[2]]
