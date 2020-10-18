@@ -927,13 +927,13 @@ def getLineBrokenChunks(bitmap,value,width,dims,plain=false)
           minTextSize=bitmap.text_size(word.gsub(/\s*/,""))
           if x>0 && x+minTextSize.width>width
             x=0
-#            y+=32 # (textheight==0) ? bitmap.text_size("X").height : textheight
-            y+=(textheight==0) ? bitmap.text_size("X").height+1 : textheight
+            y+=32 # (textheight==0) ? bitmap.text_size("X").height : textheight
+#            y+=(textheight==0) ? bitmap.text_size("X").height+1 : textheight
             textheight=0
           end
         end
-#        textheight=32 # [textheight,textSize.height].max
-        textheight=[textheight,textSize.height+1].max
+        textheight=32 # [textheight,textSize.height].max
+#        textheight=[textheight,textSize.height+1].max
         ret.push([word,x,y,textwidth,textheight,color])
         x+=textwidth
         dims[0]=x if dims && dims[0]<x
