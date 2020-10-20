@@ -98,9 +98,10 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
     idWidth     = totalWidth*15/100
     nameWidth   = totalWidth*65/100
     statusWidth = totalWidth*20/100
-    self.shadowtext(rect.x,rect.y,idWidth,rect.height,id_text)
-    self.shadowtext(rect.x+idWidth,rect.y,nameWidth,rect.height,name,0,(codeswitch) ? 1 : 0)
-    self.shadowtext(rect.x+idWidth+nameWidth,rect.y,statusWidth,rect.height,status,1,colors)
+    text_y = rect.y + (mkxp? ? 6 : 0)
+    self.shadowtext(rect.x,text_y,idWidth,rect.height,id_text)
+    self.shadowtext(rect.x+idWidth,text_y,nameWidth,rect.height,name,0,(codeswitch) ? 1 : 0)
+    self.shadowtext(rect.x+idWidth+nameWidth,text_y,statusWidth,rect.height,status,1,colors)
   end
 end
 
@@ -419,8 +420,9 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
       else
         status = "[NOT ROAMING][Switch #{pkmn[2]} is off]"
       end
-      self.shadowtext(name,rect.x,rect.y,nameWidth,rect.height)
-      self.shadowtext(status,rect.x+nameWidth,rect.y,statusWidth,rect.height,1,statuscolor)
+      text_y = rect.y + (mkxp? ? 6 : 0)
+      self.shadowtext(name,rect.x,text_y,nameWidth,rect.height)
+      self.shadowtext(status,rect.x+nameWidth,text_y,statusWidth,rect.height,1,statuscolor)
     end
   end
 end
