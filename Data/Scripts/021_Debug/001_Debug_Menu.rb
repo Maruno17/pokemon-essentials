@@ -208,6 +208,8 @@ def pbDebugMenuCommands(showall=true)
     _INTL("Fully compile all data."))
   commands.add("othermenu","debugconsole",_INTL("Debug Console"),
     _INTL("Open the Debug Console."))
+  commands.add("othermenu","invalidtiles",_INTL("Fix Invalid Tiles"),
+    _INTL("Scans all maps and erases non-existent tiles."))
 
   return commands
 end
@@ -795,6 +797,8 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
     pbDisposeMessageWindow(msgwindow)
   when "debugconsole"
     Console::setup_console
+  when "invalidtiles"
+    pbDebugFixInvalidTiles
   end
   return false
 end
