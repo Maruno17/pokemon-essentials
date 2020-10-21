@@ -11,7 +11,7 @@ module SaveData
   # the given file.
   # @param file_path [String] path of the file to save into
   def save_to_file(file_path)
-    File.open(file, "wb") { |file| Marshal.dump(self.compile, file) }
+    File.open(file_path, "wb") { |file| Marshal.dump(self.compile, file) }
   end
 
   # Loads the save data from the given file and returns it.
