@@ -68,7 +68,12 @@ end
 
 def pbIsMachine?(item)
   ret = pbGetItemData(item,ITEM_FIELD_USE)
-  return ret && (ret==3 || ret==4)
+  return ret && (ret==3 || ret==4 || ret==6)
+end
+
+def pbIsTechnicalRecord?(item)
+  ret = pbGetItemData(item,ITEM_FIELD_USE)
+  return ret && ret==6
 end
 
 def pbIsMail?(item)
@@ -207,7 +212,9 @@ def pbIsUnlosableItem?(item,species,ability)
      :GIRATINA => [:GRISEOUSORB],
      :GENESECT => [:BURNDRIVE,:CHILLDRIVE,:DOUSEDRIVE,:SHOCKDRIVE],
      :KYOGRE   => [:BLUEORB],
-     :GROUDON  => [:REDORB]
+     :GROUDON  => [:REDORB],
+     :ZACIAN   => [:RUSTEDSWORD],
+     :ZAMAZENTA=> [:RUSTEDSHIELD]
   }
   combos.each do |comboSpecies, items|
     next if !isConst?(species,PBSpecies,comboSpecies)
@@ -681,8 +688,9 @@ end
 # Use an item from the Bag and/or on a Pokémon
 #===============================================================================
 def pbUseItem(bag,item,bagscene=nil)
+  found = false
   useType = pbGetItemData(item,ITEM_FIELD_USE)
-  if pbIsMachine?(item)    # TM or HM
+  if pbIsMachine?(item)    # TM or HM or TR
     if $Trainer.pokemonCount==0
       pbMessage(_INTL("There is no Pokémon."))
       return 0
@@ -693,8 +701,12 @@ def pbUseItem(bag,item,bagscene=nil)
     pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",PBItems.getName(item)))
     if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?",movename))
       return 0
-    elsif pbMoveTutorChoose(machine,nil,true)
+    elsif mon=pbMoveTutorChoose(machine,nil,true)
       bag.pbDeleteItem(item) if pbIsTechnicalMachine?(item) && !INFINITE_TMS
+      if pbIsTechnicalRecord?(item)
+        bag.pbDeleteItem(item)
+        $Trainer.party[mon].trmoves.push(machine) if mon.is_a?(Numeric)
+      end
       return 1
     end
     return 0
@@ -772,6 +784,10 @@ def pbUseItemOnPokemon(item,pkmn,scene)
       if pbConfirmMessage(_INTL("Do you want to teach {1} to {2}?",movename,pkmn.name)) { scene.pbUpdate }
         if pbLearnMove(pkmn,machine,false,true) { scene.pbUpdate }
           $PokemonBag.pbDeleteItem(item) if pbIsTechnicalMachine?(item) && !INFINITE_TMS
+          if pbIsTechnicalRecord?(item)
+            $PokemonBag.pbDeleteItem(item)
+            pkmn.trmoves.push(machine)
+          end
           return true
         end
       end

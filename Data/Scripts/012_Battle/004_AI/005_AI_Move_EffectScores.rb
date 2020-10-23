@@ -1426,7 +1426,10 @@ class PokeBattle_AI
            isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
            isConst?(target.ability,PBAbilities,:TRACE) ||
            isConst?(target.ability,PBAbilities,:WONDERGUARD) ||
-           isConst?(target.ability,PBAbilities,:ZENMODE)
+           isConst?(target.ability,PBAbilities,:ZENMODE) ||
+           isConst?(target.ability,PBAbilities,:ICEFACE) ||
+           isConst?(target.ability,PBAbilities,:GULPMISSILE) ||
+           isConst?(target.ability,PBAbilities,:NEUTRALIZINGGAS)
           score -= 90
         end
       end
@@ -1456,7 +1459,10 @@ class PokeBattle_AI
            isConst?(user.ability,PBAbilities,:MULTITYPE) ||
            isConst?(user.ability,PBAbilities,:RKSSYSTEM) ||
            isConst?(user.ability,PBAbilities,:TRACE) ||
-           isConst?(user.ability,PBAbilities,:ZENMODE)
+           isConst?(user.ability,PBAbilities,:ZENMODE) ||
+           isConst?(user.ability,PBAbilities,:ICEFACE) ||
+           isConst?(user.ability,PBAbilities,:GULPMISSILE) ||
+           isConst?(user.ability,PBAbilities,:NEUTRALIZINGGAS)
           score -= 90
         end
         if skill>=PBTrainerAI.highSkill
@@ -1482,7 +1488,10 @@ class PokeBattle_AI
            isConst?(target.ability,PBAbilities,:ILLUSION) ||
            isConst?(target.ability,PBAbilities,:MULTITYPE) ||
            isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:WONDERGUARD)
+           isConst?(target.ability,PBAbilities,:WONDERGUARD) ||
+           isConst?(target.ability,PBAbilities,:ICEFACE) ||
+           isConst?(target.ability,PBAbilities,:GULPMISSILE) ||
+           isConst?(target.ability,PBAbilities,:NEUTRALIZINGGAS)
           score -= 90
         end
       end
@@ -2209,6 +2218,14 @@ class PokeBattle_AI
         score -= 90
       elsif @battle.pbWeather==PBWeather::Sandstorm
         score -= 90
+      end
+      if skill>=PBTrainerAI.highSkill
+        user.eachOpposing do |b|
+          score -= 40 if b.hasActiveAbility?(:ICEFACE) && b.form==0
+        end
+        user.eachAlly do |b|
+          score += 40 if b.hasActiveAbility?(:ICEFACE) && b.form==0
+        end
       end
     #---------------------------------------------------------------------------
     when "102"

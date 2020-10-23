@@ -8,8 +8,9 @@ begin
     Sandstorm   = 5
     HeavyRain   = 6
     Sun = Sunny = 7
+    Fog         = 8
 
-    def PBFieldWeather.maxValue; return 7; end
+    def PBFieldWeather.maxValue; return 8; end
   end
 
 rescue Exception
@@ -47,6 +48,7 @@ module RPG
       @weatherTypes[PBFieldWeather::Blizzard]  = [[], -16, 16, -4]
       @weatherTypes[PBFieldWeather::Sandstorm] = [[], -12,  4, -2]
       @weatherTypes[PBFieldWeather::Sun]       = nil
+      @weatherTypes[PBFieldWeather::Fog]       = nil
       @sprites = []
     end
 
@@ -212,7 +214,7 @@ module RPG
       when PBFieldWeather::Blizzard;                         prepareBlizzardBitmaps
       when PBFieldWeather::Sandstorm;                        prepareSandstormBitmaps
       end
-      weatherBitmaps = (@type==PBFieldWeather::None || @type==PBFieldWeather::Sun) ? nil : @weatherTypes[@type][0]
+      weatherBitmaps = (@type==PBFieldWeather::None || @type==PBFieldWeather::Sun || @type==PBFieldWeather::Fog) ? nil : @weatherTypes[@type][0]
       ensureSprites
       @sprites.each_with_index do |s,i|
         next if !s
@@ -232,7 +234,7 @@ module RPG
       when PBFieldWeather::Storm;     @viewport.tone.set(-@max*6/4, -@max*6/4, -@max*6/4, 20)
       when PBFieldWeather::Snow;      @viewport.tone.set(   @max/2,    @max/2,    @max/2,  0)
       when PBFieldWeather::Blizzard;  @viewport.tone.set( @max*3/4,  @max*3/4,   max*3/4,  0)
-      when PBFieldWeather::Sandstorm; @viewport.tone.set(   @max/2,         0,   -@max/2,  0)
+      when PBFieldWeather::Sandstorm; @viewport.tone.set(   @max/2,         0,   -@max/2,  0)  
       when PBFieldWeather::Sun
         @sun = @max if @sun!=@max && @sun!=-@max
         @sun = -@sun if @sunValue>@max || @sunValue<0
@@ -245,7 +247,7 @@ module RPG
         @viewport.flash(Color.new(255,255,255,230),rnd*20) if rnd<4
       end
       @viewport.update
-      return if @type==PBFieldWeather::None || @type==PBFieldWeather::Sun
+      return if @type==PBFieldWeather::None || @type==PBFieldWeather::Sun || @type=PBFieldWeather::Fog
       # Update weather particles (raindrops, snowflakes, etc.)
       ensureSprites
       for i in 1..@max

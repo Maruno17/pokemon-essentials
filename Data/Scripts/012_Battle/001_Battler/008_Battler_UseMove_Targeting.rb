@@ -36,7 +36,13 @@ class PokeBattle_Battler
     preTarget = choice[3]   # A target that was already chosen
     targets = []
     # Get list of targets
-    case move.pbTarget(user)   # Curse can change its target type
+    targeting = move.pbTarget(user)
+    # Expanding Force
+    if move.function == "192" &&
+       @battle.field.terrain == PBBattleTerrains::Psychic && !user.airborne?
+       @battle.eachOtherSideBattler(user.index) { |b| pbAddTarget(targets,user,b,move,false) }
+    end
+    case targeting   # Curse can change its target type
     when PBTargets::NearAlly
       targetBattler = (preTarget>=0) ? @battle.battlers[preTarget] : nil
       if !pbAddTarget(targets,user,targetBattler,move)
@@ -88,11 +94,14 @@ class PokeBattle_Battler
   #=============================================================================
   # Redirect attack to another target
   #=============================================================================
-  def pbChangeTargets(move,user,targets)
+  def pbChangeTargets(move,user,targets,dragondarts=-1)
     targetType = move.pbTarget(user)
     return targets if @battle.switching   # For Pursuit interrupting a switch
     return targets if move.cannotRedirect?
     return targets if !PBTargets.canChooseOneFoeTarget?(targetType) || targets.length!=1
+    # Stalwart / Propeller Tail
+    return targets if user.hasActiveAbility?(:STALWART) || user.hasActiveAbility?(:PROPELLERTAIL)
+	  return targets if move.function == "182"
     priority = @battle.pbPriority(true)
     nearOnly = !PBTargets.canChooseDistantTarget?(move.target)
     # Spotlight (takes priority over Follow Me/Rage Powder/Lightning Rod/Storm Drain)
@@ -129,6 +138,49 @@ class PokeBattle_Battler
       targets = []
       pbAddTarget(targets,user,newTarget,move,nearOnly)
       return targets
+    end
+    # Dragon Darts redirection
+    if dragondarts>=0
+      newTargets=[]
+      neednewtarget=false
+      # Check if first use has to be redirected
+      if dragondarts==0
+        targets.each do |b|
+          next if !b.effects[PBEffects::Protect] &&
+          !(b.effects[PBEffects::QuickGuard] && @battle.choices[user.index][4]>0) &&
+          !b.effects[PBEffects::SpikyShield] &&
+          !b.effects[PBEffects::BanefulBunker] &&
+          !b.effects[PBEffects::Obstruct] &&
+          b.effects[PBEffects::TwoTurnAttack]<=0 &&
+          !move.pbImmunityByAbility(user,b) &&
+          !PBTypes.ineffective?(move.type,b.type1,b.type2) &&
+          move.pbAccuracyCheck(user,b)
+          next neednewtarget=true
+        end
+      end
+      # Redirect first use if necessary or get another target on each consecutive use
+      if neednewtarget || dragondarts==1
+        user.eachOpposing do |b|
+          next if targets.include?(b)
+          next if b.effects[PBEffects::Protect] ||
+          (b.effects[PBEffects::QuickGuard] && @battle.choices[user.index][4]>0) ||
+          b.effects[PBEffects::SpikyShield] ||
+          b.effects[PBEffects::BanefulBunker] ||
+          b.effects[PBEffects::Obstruct] ||
+          b.effects[PBEffects::TwoTurnAttack]>0||
+          move.pbImmunityByAbility(user,b) ||
+          PBTypes.ineffective?(move.type,b.type1,b.type2) ||
+          !move.pbAccuracyCheck(user,b)
+          newTargets.push(b)
+          break
+        end
+      end
+      # Final target
+      targets=newTargets if newTargets.length!=0
+      # Reduce PP if the new target has Pressure
+      if targets[0].hasActiveAbility?(:PRESSURE)
+        user.pbReducePP(move) # Reduce PP
+      end
     end
     # Lightning Rod
     targets = pbChangeTargetByAbility(:LIGHTNINGROD,:ELECTRIC,move,user,targets,priority,nearOnly)

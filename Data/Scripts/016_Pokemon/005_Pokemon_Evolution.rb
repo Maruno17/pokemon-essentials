@@ -61,8 +61,11 @@ module PBEvolution
   TradeNight        = 57
   TradeItem         = 58
   TradeSpecies      = 59
+  CriticalHits      = 60
+  DamageDone        = 61
+  ItemMilcery       = 62
 
-  def self.maxValue; return 59; end
+  def self.maxValue; return 62; end
 
   @@evolution_methods = HandlerHash.new(:PBEvolution)
 
@@ -353,7 +356,7 @@ PBEvolution.register(:LevelRain, {
   "levelUpCheck" => proc { |pkmn, parameter|
     if pkmn.level >= parameter && $game_screen
       next [PBFieldWeather::Rain, PBFieldWeather::HeavyRain,
-            PBFieldWeather::Storm].include?($game_screen.weather_type)
+            PBFieldWeather::Storm, PBFieldWeather::Fog].include?($game_screen.weather_type)
     end
   }
 })
@@ -757,5 +760,65 @@ PBEvolution.register(:TradeSpecies, {
   "parameterType" => :PBSpecies,
   "tradeCheck"    => proc { |pkmn, parameter, other_pkmn|
     next pkmn.species == parameter && !other_pkmn.hasItem?(:EVERSTONE)
+  }
+})
+
+#===============================================================================
+# Evolution methods that trigger after a battle
+#===============================================================================
+PBEvolution.register(:CriticalHits, {
+  "afterBattleCheck" => proc { |pkmn, parameter|
+     next true if pkmn.criticalHits >= parameter
+  }
+})
+
+#===============================================================================
+# Evolution methods that trigger upon taking a step in the overworld
+#===============================================================================
+PBEvolution.register(:DamageDone, {
+  "onFieldCheck" => proc { |pkmn, parameter|
+     next true if pkmn.yamaskhp >= parameter
+  }
+})
+
+
+
+#===============================================================================
+# Evolution of Milcery
+#===============================================================================
+
+PBEvolution.register(:ItemMilcery, {
+  "parameterType" => :PBItems,
+  "itemCheck"     => proc { |pkmn, parameter, item|
+		if item == parameter
+			cream = 0
+			cream = pkmn.level % 9  if !pkmn.isShiny? 
+			# Shiny only has one cream color per flavour.
+			# I didn't know how to handle the different cream flavours, so I decided 
+			# to link it to the level. 
+
+			case item
+			when PBItems::STRAWBERRYSWEET
+				sweet = 1
+			when PBItems::BERRYSWEET
+				sweet = 2
+			when PBItems::CLOVERSWEET
+				sweet = 3
+			when PBItems::FLOWERSWEET
+				sweet = 4
+			when PBItems::LOVESWEET
+				sweet = 5
+			when PBItems::RIBBONSWEET
+				sweet = 6
+			when PBItems::STARSWEET
+				sweet = 7
+			else 
+				sweet = 1
+			end 
+
+			pkmn.form= cream*7 + sweet 
+		end 
+	  
+    next item == parameter
   }
 })

@@ -60,6 +60,7 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatGain(@ability,self,stat,user)
     end
+    @effects[PBEffects::BurningJealousy] = true
     return true
   end
 
@@ -175,6 +176,20 @@ class PokeBattle_Battler
 
   def pbLowerStatStage(stat,increment,user,showAnim=true,ignoreContrary=false)
     return false if !PBStats.validBattleStat?(stat)
+    # Mirror Armor
+    if hasActiveAbility?(:MIRRORARMOR) && (!user || user.index!=@index) && !@battle.moldBreaker
+      battle.pbShowAbilitySplash(self)
+      @battle.pbDisplay(_INTL("{1}'s Mirror Armor activated!",pbThis))
+      if !user
+        battle.pbHideAbilitySplash(self)
+        return false
+      end
+      if user.pbCanLowerStatStage?(stat) && !user.hasActiveAbility?(:MIRRORARMOR)
+        user.pbLowerStatStageByAbility(stat,increment,user,splashAnim=false,checkContact=false)
+      end
+      battle.pbHideAbilitySplash(self)
+      return false
+    end
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
       return pbRaiseStatStage(stat,increment,user,showAnim,true)
@@ -193,11 +208,26 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatLoss(@ability,self,stat,user)
     end
+    effects[PBEffects::LashOut] = true
     return true
   end
 
   def pbLowerStatStageByCause(stat,increment,user,cause,showAnim=true,ignoreContrary=false)
     return false if !PBStats.validBattleStat?(stat)
+    # Mirror Armor
+    if hasActiveAbility?(:MIRRORARMOR) && (!user || user.index!=@index) && !@battle.moldBreaker
+      battle.pbShowAbilitySplash(self)
+      @battle.pbDisplay(_INTL("{1}'s Mirror Armor activated!",pbThis))
+      if !user
+        battle.pbHideAbilitySplash(self)
+        return false
+      end
+      if user.pbCanLowerStatStage?(stat) && !user.hasActiveAbility?(:MIRRORARMOR)
+        user.pbLowerStatStageByAbility(stat,increment,user,splashAnim=false,checkContact=false)
+      end
+      battle.pbHideAbilitySplash(self)
+      return false
+    end
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
       return pbRaiseStatStageByCause(stat,increment,user,cause,showAnim,true)
@@ -253,9 +283,6 @@ class PokeBattle_Battler
       end
       return false
     end
-    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-      return pbLowerStatStageByAbility(PBStats::ATTACK,1,user,false)
-    end
     # NOTE: These checks exist to ensure appropriate messages are shown if
     #       Intimidate is blocked somehow (i.e. the messages should mention the
     #       Intimidate ability by name).
@@ -267,23 +294,42 @@ class PokeBattle_Battler
       end
       if abilityActive?
         if BattleHandlers.triggerStatLossImmunityAbility(@ability,self,PBStats::ATTACK,@battle,false) ||
-           BattleHandlers.triggerStatLossImmunityAbilityNonIgnorable(@ability,self,PBStats::ATTACK,@battle,false)
+           BattleHandlers.triggerStatLossImmunityAbilityNonIgnorable(@ability,self,PBStats::ATTACK,@battle,false) ||
+            hasActiveAbility?(:INNERFOCUS) || hasActiveAbility?(:OWNTEMPO) || hasActiveAbility?(:OBLIVIOUS) || hasActiveAbility?(:SCRAPPY)
+          @battle.pbShowAbilitySplash(self) if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!",
              pbThis,abilityName,user.pbThis(true),user.abilityName))
+          @battle.pbHideAbilitySplash(self) if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
           return false
         end
       end
       eachAlly do |b|
         next if !b.abilityActive?
         if BattleHandlers.triggerStatLossImmunityAllyAbility(b.ability,b,self,PBStats::ATTACK,@battle,false)
+          @battle.pbShowAbilitySplash(b) if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
           @battle.pbDisplay(_INTL("{1} is protected from {2}'s {3} by {4}'s {5}!",
              pbThis,user.pbThis(true),user.abilityName,b.pbThis(true),b.abilityName))
+          @battle.pbHideAbilitySplash(b) if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
           return false
         end
       end
     end
     return false if !pbCanLowerStatStage?(PBStats::ATTACK,user)
-    return pbLowerStatStageByCause(PBStats::ATTACK,1,user,user.abilityName)
+    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+      if pbLowerStatStageByAbility(PBStats::ATTACK,1,user,false)
+        pbRaiseStatStageByAbility(PBStats::SPEED,1,self) if hasActiveAbility?(:RATTLED)
+        return true
+      else
+        return false
+      end
+    else
+      if pbLowerStatStageByCause(PBStats::ATTACK,1,user,user.abilityName)
+        pbLowerStatStageByCause(PBStats::SPEED,1,self,self.abilityName) if hasActiveAbility?(:RATTLED)
+        return true
+      else
+        return false
+      end
+    end
   end
 
   #=============================================================================

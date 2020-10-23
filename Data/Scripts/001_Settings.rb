@@ -155,7 +155,7 @@ SCALED_EXP_FORMULA        = true
 SPLIT_EXP_BETWEEN_GAINERS = false
 ENABLE_CRITICAL_CAPTURES  = false
 GAIN_EXP_FOR_CAPTURE      = true
-MEGA_RINGS                = [:MEGARING, :MEGABRACELET, :MEGACUFF, :MEGACHARM]
+MEGA_RINGS                = [:MEGARING, :MEGABRACELET, :MEGACUFF, :MEGACHARM, :KEYSTONE]
 
 #===============================================================================
 # * The names of each pocket of the Bag. Leave the first entry blank.
@@ -351,3 +351,12 @@ LANGUAGES = [
 #  ["English", "english.dat"],
 #  ["Deutsch", "deutsch.dat"]
 ]
+
+#===============================================================================
+# * Should fog act as a weather effect in battle like in Generation IV?
+#      Reduces accuracy and affects weather based moves.
+# * Should fog/thunderstorms cause Misty/Electric Terrain to be set like it
+#      does in Generation VIII?
+#===============================================================================
+FOG_IN_BATTLES = false
+WEATHER_SETS_TERRAIN = false

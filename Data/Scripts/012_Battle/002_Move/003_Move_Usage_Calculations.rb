@@ -57,6 +57,10 @@ class PokeBattle_Move
       ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if isConst?(defType,PBTypes,:FLYING) &&
                                                          isConst?(moveType,PBTypes,:GROUND)
     end
+    if target.effects[PBEffects::TarShot] && isConst?(moveType,PBTypes,:FIRE) 
+      ret = PBTypeEffectiveness::SUPER_EFFECTIVE_ONE if PBTypes.normalEffective?(moveType,target.type1,target.type2)
+      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if PBTypes.notVeryEffective?(moveType,target.type1,target.type2)
+    end
     return ret
   end
 
@@ -110,8 +114,10 @@ class PokeBattle_Move
     accuracy = (accuracy * modifiers[ACC_MULT]).round
     evasion  = (evasion  * modifiers[EVA_MULT]).round
     evasion = 1 if evasion<1
-    # Calculation
-    return @battle.pbRandom(100) < modifiers[BASE_ACC] * accuracy / evasion
+    # Calculation/Blunder Policy
+    ret = @battle.pbRandom(100) < modifiers[BASE_ACC] * accuracy / evasion
+    user.effects[PBEffects::BlunderPolicy]=true if !ret
+    return ret
   end
 
   def pbCalcAccuracyModifiers(user,target,modifiers)
@@ -148,6 +154,10 @@ class PokeBattle_Move
     end
     modifiers[EVA_STAGE] = 0 if target.effects[PBEffects::Foresight] && modifiers[EVA_STAGE]>0
     modifiers[EVA_STAGE] = 0 if target.effects[PBEffects::MiracleEye] && modifiers[EVA_STAGE]>0
+    case @battle.pbWeather
+    when PBWeather::Fog
+      modifiers[ACC_MULT] = (modifiers[ACC_MULT]*3/5).round
+    end
   end
 
   #=============================================================================
@@ -219,7 +229,7 @@ class PokeBattle_Move
 
   def pbCalcDamage(user,target,numTargets=1)
     return if statusMove?
-    if target.damageState.disguise
+    if target.damageState.disguise || target.damageState.iceface
       target.damageState.calcDamage = 1
       return
     end
@@ -325,6 +335,10 @@ class PokeBattle_Move
         multipliers[BASE_DMG_MULT] /= 3
       end
     end
+    # Tar Shot
+    if target.effects[PBEffects::TarShot] && isConst?(type,PBTypes,:FIRE)
+      multipliers[BASE_DMG_MULT] *= 2
+    end
     # Water Sport
     if isConst?(type,PBTypes,:FIRE)
       @battle.eachBattler do |b|
@@ -341,15 +355,15 @@ class PokeBattle_Move
       case @battle.field.terrain
       when PBBattleTerrains::Electric
         if isConst?(type,PBTypes,:ELECTRIC)
-          multipliers[BASE_DMG_MULT] *= 1.5
+          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.3).round
         end
       when PBBattleTerrains::Grassy
         if isConst?(type,PBTypes,:GRASS)
-          multipliers[BASE_DMG_MULT] *= 1.5
+          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.3).round
         end
       when PBBattleTerrains::Psychic
         if isConst?(type,PBTypes,:PSYCHIC)
-          multipliers[BASE_DMG_MULT] *= 1.5
+          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.3).round
         end
       end
     end
@@ -379,22 +393,24 @@ class PokeBattle_Move
       multipliers[FINAL_DMG_MULT] *= 0.75
     end
     # Weather
-    case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
-      if isConst?(type,PBTypes,:FIRE)
-        multipliers[FINAL_DMG_MULT] *= 1.5
-      elsif isConst?(type,PBTypes,:WATER)
-        multipliers[FINAL_DMG_MULT] /= 2
-      end
-    when PBWeather::Rain, PBWeather::HeavyRain
-      if isConst?(type,PBTypes,:FIRE)
-        multipliers[FINAL_DMG_MULT] /= 2
-      elsif isConst?(type,PBTypes,:WATER)
-        multipliers[FINAL_DMG_MULT] *= 1.5
-      end
-    when PBWeather::Sandstorm
-      if target.pbHasType?(:ROCK) && specialMove? && @function!="122"   # Psyshock
-        multipliers[DEF_MULT] *= 1.5
+    if !user.hasActiveItem?(:UTILITYUMBRELLA)
+      case @battle.pbWeather
+      when PBWeather::Sun, PBWeather::HarshSun
+        if isConst?(type,PBTypes,:FIRE)
+          multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+        elsif isConst?(type,PBTypes,:WATER)
+          multipliers[FINAL_DMG_MULT] /= 2
+        end
+      when PBWeather::Rain, PBWeather::HeavyRain
+        if isConst?(type,PBTypes,:FIRE)
+          multipliers[FINAL_DMG_MULT] /= 2
+        elsif isConst?(type,PBTypes,:WATER)
+          multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+        end
+      when PBWeather::Sandstorm
+        if target.pbHasType?(:ROCK) && specialMove? && @function!="122"   # Psyshock
+          multipliers[DEF_MULT] *= 1.5
+        end
       end
     end
     # Critical hits
@@ -417,6 +433,12 @@ class PokeBattle_Move
       else
         multipliers[FINAL_DMG_MULT] *= 1.5
       end
+    end
+    # Recalculate the type modifier for Dragon Darts else it does 1 damage on its
+    # second hit on a different target
+    if self.function=="17C" && @battle.pbSideSize(target.index)>1
+      typeMod = self.pbCalcTypeMod(self.calcType,user,target)
+      target.damageState.typeMod = typeMod
     end
     # Type effectiveness
     multipliers[FINAL_DMG_MULT] *= target.damageState.typeMod.to_f/PBTypeEffectiveness::NORMAL_EFFECTIVE

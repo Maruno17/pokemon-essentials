@@ -62,6 +62,16 @@ module PokeBattle_BattleCommon
     @caughtPokemon.clear
   end
 
+  def pbBallFetch(ball)
+    return if isConst?(ball,PBItems,:SAFARIBALL)
+    return if isConst?(ball,PBItems,:MASTERBALL)
+    eachBattler do |b|
+      if b.hasWorkingAbility(:BALLFETCH) && b.item==0
+        b.effects[PBEffects::BallFetch]=ball
+        break
+      end
+    end
+  end
   #=============================================================================
   # Throw a Poké Ball
   #=============================================================================
@@ -110,6 +120,9 @@ module PokeBattle_BattleCommon
     # Animation of Ball throw, absorb, shake and capture/burst out
     @scene.pbThrow(ball,numShakes,@criticalCapture,battler.index,showPlayer)
     # Outcome message
+    if numShakes != 4
+      pbBallFetch(ball)
+    end
     case numShakes
     when 0
       pbDisplay(_INTL("Oh no! The Pokémon broke free!"))
@@ -213,10 +226,13 @@ module PokeBattle_BattleCommon
       elsif numOwned>30;  c = x/12
       end
       # Calculate the number of shakes
-      if c>0 && pbRandom(256)<c
-        @criticalCapture = true
-        return 4 if pbRandom(65536)<y
-        return 0
+      rolls =($PokemonBag.pbHasItem?(:CATCHINGCHARM)) ? 3 : 1
+      for i in 0...rolls
+        if c>0 && pbRandom(256)<c
+          @criticalCapture = true
+          return 4 if pbRandom(65536)<y
+          return 0
+        end
       end
     end
     # Calculate the number of shakes

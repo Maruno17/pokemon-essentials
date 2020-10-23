@@ -269,6 +269,14 @@ def pbItemIconFile(item)
     bitmapFileName = sprintf("Graphics/Icons/item%s",getConstantName(PBItems,item)) rescue nil
     if !pbResolveBitmap(bitmapFileName)
       bitmapFileName = sprintf("Graphics/Icons/item%03d",item)
+      if !pbResolveBitmap(bitmapFileName) && pbIsTechnicalRecord?(item)
+        move = pbGetMachine(item)
+        type = pbGetMoveData(move,MOVE_TYPE)
+        bitmapFileName = sprintf("Graphics/Icons/itemRecord%s",getConstantName(PBTypes,type)) rescue nil
+        if !pbResolveBitmap(bitmapFileName)
+          bitmapFileName = sprintf("Graphics/Icons/itemRecord%03d",type)
+        end
+      end
       if !pbResolveBitmap(bitmapFileName) && pbIsMachine?(item)
         move = pbGetMachine(item)
         type = pbGetMoveData(move,MOVE_TYPE)
