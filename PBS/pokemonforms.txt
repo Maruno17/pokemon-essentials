@@ -2273,6 +2273,27 @@ FormName = Star - Vanilla Cream
 [ALCREMIE,55]
 FormName = Star - Ruby Cream
 #-------------------------------
+[ALCREMIE,56]
+FormName = Star - Matcha Cream
+#-------------------------------
+[ALCREMIE,57]
+FormName = Star - Mint Cream
+#-------------------------------
+[ALCREMIE,58]
+FormName = Star - Lemon Cream
+#-------------------------------
+[ALCREMIE,59]
+FormName = Star - Salted Cream
+#-------------------------------
+[ALCREMIE,60]
+FormName = Star - Ruby Swirl
+#-------------------------------
+[ALCREMIE,61]
+FormName = Star - Caramel Swirl
+#-------------------------------
+[ALCREMIE,62]
+FormName = Star - Rainbow Swirl
+#-------------------------------
 [MOLTRES,1]
 FormName = Galarian Moltres
 Type1 = DARK
