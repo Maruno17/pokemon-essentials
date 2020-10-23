@@ -261,3 +261,8 @@
 259,UNSEENFIST,Unseen Fist,"Contact moves negate all protection effects."
 260,QUICKDRAW,Quick Draw,"Enables the Pokémon to move first occasionally."
 261,CURIOUSMEDICINE,Curious Medicine,"Stat changes are cleared when entering battle."
+262,TRANSISTOR,Transistor,"Stat changes are cleared when entering battle."
+263,DRAGONSMAW,Dragon's Maw,"Stat changes are cleared when entering battle."
+264,GRIMNEIGH,Grim Neigh,"Stat changes are cleared when entering battle."
+265,ASONE,As One,"Stat changes are cleared when entering battle."
+266,CHILLINGNEIGH,Chilling Neigh,"When the Pokémon knocks out a target, it utters a chilling neigh, which boosts its Attack stat."
