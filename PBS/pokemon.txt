@@ -27452,7 +27452,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 35
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions = ALCREMIE,Item,STRAWBERRYSWEET
+Evolutions = ALCREMIE,ItemMilcery,BERRYSWEET,ALCREMIE,ItemMilcery,CLOVERSWEET,ALCREMIE,ItemMilcery,FLOWERSWEET,ALCREMIE,ItemMilcery,LOVESWEET,ALCREMIE,ItemMilcery,RIBBONSWEET,ALCREMIE,ItemMilcery,STARSWEET,ALCREMIE,ItemMilcery,STRAWBERRYSWEET
 #-------------------------------
 [869]
 Name = Alcremie
