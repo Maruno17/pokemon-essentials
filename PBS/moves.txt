@@ -395,7 +395,7 @@
 340,HAZE,Haze,051,0,ICE,Status,0,30,0,BothSides,0,,"The user creates a haze that eliminates every stat change among all the Pokémon engaged in battle."
 341,MIST,Mist,056,0,ICE,Status,0,30,0,UserSide,0,d,"The user cloaks its body with a white mist that prevents any of its stats from being cut for five turns."
 716,TRIPLEAXEL,Triple Axel,0BF,20,ICE,Physical,90,10,0,00,0,abef,"A consecutive three-kick attack that becomes more powerful with each successful hit."
-782,GLACIALLANCE,Glacial Lance,000,130,ICE,Physical,100,5,0,Foe,0,0,"The user attacks by hurling a blizzard-cloaked icicle lance at opposing Pokémon."
+782,GLACIALLANCE,Glacial Lance,000,130,ICE,Physical,100,5,0,Foe,0,bef,"The user attacks by hurling a blizzard-cloaked icicle lance at opposing Pokémon."
 #-------------------------------
 342,EXPLOSION,Explosion,0E0,250,NORMAL,Physical,100,5,0,AllNearOthers,0,bef,"The user explodes to inflict damage on those around it. The user faints upon using this move."
 343,SELFDESTRUCT,Self-Destruct,0E0,200,NORMAL,Physical,100,5,0,AllNearOthers,0,bef,"The user blows up to inflict damage on all Pokémon in battle. The user faints upon using this move."
