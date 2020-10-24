@@ -294,7 +294,7 @@
 251,SPITE,Spite,10E,0,GHOST,Status,100,10,0,NearOther,0,bce,"The user unleashes its grudge on the move last used by the target by cutting 4 PP from it."
 252,TRICKORTREAT,Trick-or-Treat,142,0,GHOST,Status,100,20,0,NearOther,0,bce,"The user takes the target trick-or-treating. This adds Ghost type to the target's type."
 724,POLTERGEIST,Poltergeist,192,110,GHOST,Physical,90,5,0,NearOther,0,abef,"The user attacks the target by controlling the target's item. The move fails if the target doesn't have an item."
-783,ASTRALBARRAGE,Astral Barrage,000,120,GHOST,Special,100,5,0,Foe,0,0,"The user attacks by sending a frightful amount of small ghosts at opposing Pokémon."
+783,ASTRALBARRAGE,Astral Barrage,000,120,GHOST,Special,100,5,0,AllFoes,0,bef,"The user attacks by sending a frightful amount of small ghosts at opposing Pokémon."
 #-------------------------------
 253,FRENZYPLANT,Frenzy Plant,0C2,150,GRASS,Special,90,5,0,NearOther,0,bef,"The user slams the target with an enormous tree. The user can't move on the next turn."
 254,LEAFSTORM,Leaf Storm,03F,130,GRASS,Special,90,5,0,NearOther,0,bef,"A storm of sharp is whipped up. The attack's recoil harshly reduces the user's Sp. Atk stat."
@@ -671,6 +671,7 @@
 690,MAGICPOWDER,Magic Powder,197,0,PSYCHIC,Status,100,20,0,NearOther,0,bce,"The user scatters a cloud of magic powder that changes the target to Psychic type."
 721,EXPANDINGFORCE,Expanding Force,190,80,PSYCHIC,Special,100,20,0,AllNearOthers,0,bef,"The user attacks the target with its psychic power. This move's power goes up and damages all opposing Pokémon on Psychic Terrain."
 734,EERIESPELL,Eerie Spell,210,90,PSYCHIC,Special,100,10,0,NearOther,0,bef,"The user casts a horrible spell on the opponent. This removes 3 PP from their last used move."
+785,FREEZINGGLARE,Freezing Glare,00C,90,PSYCHIC,Special,100,10,10,Foe,0,ef,"The user shoots its psychic power from its eyes to attack. This may also leave the target frozen."
 #-------------------------------
 605,HEADSMASH,Head Smash,0FC,150,ROCK,Physical,80,5,0,NearOther,0,abef,"The user attacks the foe with a hazardous, full-power headbutt. The user also takes terrible damage."
 606,ROCKWRECKER,Rock Wrecker,0C2,150,ROCK,Physical,90,5,0,NearOther,0,befn,"The user launches a huge boulder at the target to attack. It must rest on the next turn, however."
