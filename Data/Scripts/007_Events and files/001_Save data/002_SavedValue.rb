@@ -47,3 +47,4 @@ module SaveData
       @ensured_class = class_name
     end
   end
+end
