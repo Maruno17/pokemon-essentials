@@ -132,7 +132,7 @@
 701,BOLTBEAK,Bolt Beak,178,85,ELECTRIC,Physical,100,10,0,NearOther,0,abef,"The user stabs the target with its electrified beak. If the user attacks before the target, the power of this move is doubled."
 715,RISINGVOLTAGE,Rising Voltage,18D,70,ELECTRIC,Special,100,20,0,NearOther,0,bef,"The user attacks with electric voltage rising from the ground. This move's power doubles when the target is on Electric Terrain."
 787,THUNDEROUSKICK,Thunderous Kick,043,90,ELECTRIC,Physical,100,10,0,NearOther,0,abef,"The user overwhelms the target with lightning-like movement before delivering a kick. This also lowers the target's Defense stat."
-780,THUNDERCAGE,Thunder Cage,000,80,ELECTRIC,Special,90,15,0,AllNearOthers,0,bef,"The user traps the target in a cage of sparking electricity for four to five turns."
+780,THUNDERCAGE,Thunder Cage,000,80,ELECTRIC,Special,90,15,0,AllNearFoes,0,bef,"The user traps the target in a cage of sparking electricity for four to five turns."
 #-------------------------------
 110,LIGHTOFRUIN,Light of Ruin,0FC,140,FAIRY,Special,90,5,0,NearOther,0,bef,"Fires a powerful beam of light drawn from the Eternal Flower. It also damages the user a lot."
 111,FLEURCANNON,Fleur Cannon,03F,130,FAIRY,Special,90,5,0,NearOther,0,bef,"The user unleashes a strong beam. The attack's recoil harshly lowers the user's Sp. Atk stat."
@@ -294,7 +294,7 @@
 251,SPITE,Spite,10E,0,GHOST,Status,100,10,0,NearOther,0,bce,"The user unleashes its grudge on the move last used by the target by cutting 4 PP from it."
 252,TRICKORTREAT,Trick-or-Treat,142,0,GHOST,Status,100,20,0,NearOther,0,bce,"The user takes the target trick-or-treating. This adds Ghost type to the target's type."
 724,POLTERGEIST,Poltergeist,192,110,GHOST,Physical,90,5,0,NearOther,0,abef,"The user attacks the target by controlling the target's item. The move fails if the target doesn't have an item."
-783,ASTRALBARRAGE,Astral Barrage,000,120,GHOST,Special,100,5,0,AllNearOthers,0,bef,"The user attacks by sending a frightful amount of small ghosts at opposing Pokémon."
+783,ASTRALBARRAGE,Astral Barrage,000,120,GHOST,Special,100,5,0,AllNearFoes,0,bef,"The user attacks by sending a frightful amount of small ghosts at opposing Pokémon."
 #-------------------------------
 253,FRENZYPLANT,Frenzy Plant,0C2,150,GRASS,Special,90,5,0,NearOther,0,bef,"The user slams the target with an enormous tree. The user can't move on the next turn."
 254,LEAFSTORM,Leaf Storm,03F,130,GRASS,Special,90,5,0,NearOther,0,bef,"A storm of sharp is whipped up. The attack's recoil harshly reduces the user's Sp. Atk stat."
