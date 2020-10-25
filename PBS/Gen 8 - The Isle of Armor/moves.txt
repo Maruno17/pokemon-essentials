@@ -72,7 +72,6 @@
 68,OBSTRUCT,Obstruct,180,0,DARK,Status,0,10,0,NearOther,4,,"This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession. Direct contact harshly lowers the attacker's Defense stat."
 69,WICKEDBLOW,Wicked Blow,0A0,80,DARK,Physical,100,5,0,NearOther,0,abef,"The user, having mastered the Dark style, strikes the target with a fierce blow. This attack always results in a critical hit."
 70,LASHOUT,Lash Out,194,75,DARK,Physical,100,5,0,NearOther,0,abef,"The user lashes out to vent its frustration toward the target. If its stats were lowered during the turn, the power of this move is doubled."
-71,FIERYWRATH,Fiery Wrath,00F,90,DARK,Special,100,10,20,NearOther,0,ef,"The user transforms its wrath into a fire-like aura to attack. This may also make opposing Pokémon flinch."
 #-------------------------------
 72,ROAROFTIME,Roar of Time,0C2,150,DRAGON,Special,90,5,0,NearOther,0,bef,"The user blasts the target with power that distorts even time. The user must rest on the next turn."
 73,DRACOMETEOR,Draco Meteor,03F,130,DRAGON,Special,90,5,0,NearOther,0,bef,"Comets are summoned down from the sky. The attack's recoil harshly reduces the user's Sp. Atk stat."
@@ -96,7 +95,6 @@
 91,ETERNABEAM,Eternabeam,0C2,160,DRAGON,Special,90,5,0,NearOther,0,bef,"This is Eternatus's most powerful attack in its original form. The user can't move on the next turn."
 92,CLANGOROUSSOUL,Clangorous Soul,179,0,DRAGON,Status,100,5,0,User,0,dk,"The user raises all its stats by using some of its HP."
 93,SCALESHOT,Scale Shot,193,25,DRAGON,Physical,90,20,100,00,0,abef,"The user attacks by shooting scales two to five times in a row. This move boosts the user's Speed stat but lowers its Defense stat."
-94,DRAGONENERGY,Dragon Energy,08B,150,DRAGON,Special,100,5,0,NearOther,0,ef,"Converting its life-force into power, the user attacks opposing Pokémon. The lower the user's HP, the lower the move's power."
 #-------------------------------
 95,BOLTSTRIKE,Bolt Strike,007,130,ELECTRIC,Physical,85,5,20,NearOther,0,abef,"The user charges at its foe, surrounding itself with lightning. It may also leave the target paralyzed."
 96,VOLTTACKLE,Volt Tackle,0FD,120,ELECTRIC,Physical,100,15,10,NearOther,0,abef,"The user electrifies itself, then charges at the foe. It causes considerable damage to the user as well."
@@ -131,8 +129,6 @@
 125,AURAWHEEL,Aura Wheel,176,110,ELECTRIC,Physical,100,10,0,NearOther,0,bef,"Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form."
 126,BOLTBEAK,Bolt Beak,178,85,ELECTRIC,Physical,100,10,0,NearOther,0,abef,"The user stabs the target with its electrified beak. If the user attacks before the target, the power of this move is doubled."
 127,RISINGVOLTAGE,Rising Voltage,18D,70,ELECTRIC,Special,100,20,0,NearOther,0,bef,"The user attacks with electric voltage rising from the ground. This move's power doubles when the target is on Electric Terrain."
-128,THUNDEROUSKICK,Thunderous Kick,043,90,ELECTRIC,Physical,100,10,100,NearOther,0,abef,"The user overwhelms the target with lightning-like movement before delivering a kick. This also lowers the target's Defense stat."
-129,THUNDERCAGE,Thunder Cage,0CF,80,ELECTRIC,Special,90,15,0,AllNearFoes,0,bef,"The user traps the target in a cage of sparking electricity for four to five turns."
 #-------------------------------
 130,LIGHTOFRUIN,Light of Ruin,0FC,140,FAIRY,Special,90,5,0,NearOther,0,bef,"Fires a powerful beam of light drawn from the Eternal Flower. It also damages the user a lot."
 131,FLEURCANNON,Fleur Cannon,03F,130,FAIRY,Special,90,5,0,NearOther,0,bef,"The user unleashes a strong beam. The attack's recoil harshly lowers the user's Sp. Atk stat."
@@ -294,7 +290,6 @@
 283,SPITE,Spite,10E,0,GHOST,Status,100,10,0,NearOther,0,bce,"The user unleashes its grudge on the move last used by the target by cutting 4 PP from it."
 284,TRICKORTREAT,Trick-or-Treat,142,0,GHOST,Status,100,20,0,NearOther,0,bce,"The user takes the target trick-or-treating. This adds Ghost type to the target's type."
 285,POLTERGEIST,Poltergeist,192,110,GHOST,Physical,90,5,0,NearOther,0,abef,"The user attacks the target by controlling the target's item. The move fails if the target doesn't have an item."
-286,ASTRALBARRAGE,Astral Barrage,000,120,GHOST,Special,100,5,0,AllNearFoes,0,bef,"The user attacks by sending a frightful amount of small ghosts at opposing Pokémon."
 #-------------------------------
 287,FRENZYPLANT,Frenzy Plant,0C2,150,GRASS,Special,90,5,0,NearOther,0,bef,"The user slams the target with an enormous tree. The user can't move on the next turn."
 288,LEAFSTORM,Leaf Storm,03F,130,GRASS,Special,90,5,0,NearOther,0,bef,"A storm of sharp is whipped up. The attack's recoil harshly reduces the user's Sp. Atk stat."
@@ -395,7 +390,6 @@
 381,HAZE,Haze,051,0,ICE,Status,0,30,0,BothSides,0,,"The user creates a haze that eliminates every stat change among all the Pokémon engaged in battle."
 382,MIST,Mist,056,0,ICE,Status,0,30,0,UserSide,0,d,"The user cloaks its body with a white mist that prevents any of its stats from being cut for five turns."
 383,TRIPLEAXEL,Triple Axel,0BF,20,ICE,Physical,90,10,0,00,0,abef,"A consecutive three-kick attack that becomes more powerful with each successful hit."
-384,GLACIALLANCE,Glacial Lance,000,130,ICE,Physical,100,5,0,NearOther,0,bef,"The user attacks by hurling a blizzard-cloaked icicle lance at opposing Pokémon."
 #-------------------------------
 385,EXPLOSION,Explosion,0E0,250,NORMAL,Physical,100,5,0,AllNearOthers,0,bef,"The user explodes to inflict damage on those around it. The user faints upon using this move."
 386,SELFDESTRUCT,Self-Destruct,0E0,200,NORMAL,Physical,100,5,0,AllNearOthers,0,bef,"The user blows up to inflict damage on all Pokémon in battle. The user faints upon using this move."
@@ -671,7 +665,6 @@
 654,MAGICPOWDER,Magic Powder,197,0,PSYCHIC,Status,100,20,0,NearOther,0,bce,"The user scatters a cloud of magic powder that changes the target to Psychic type."
 655,EXPANDINGFORCE,Expanding Force,190,80,PSYCHIC,Special,100,20,0,AllNearOthers,0,bef,"The user attacks the target with its psychic power. This move's power goes up and damages all opposing Pokémon on Psychic Terrain."
 656,EERIESPELL,Eerie Spell,210,90,PSYCHIC,Special,100,10,0,NearOther,0,bef,"The user casts a horrible spell on the opponent. This removes 3 PP from their last used move."
-657,FREEZINGGLARE,Freezing Glare,00C,90,PSYCHIC,Special,100,10,10,NearOther,0,ef,"The user shoots its psychic power from its eyes to attack. This may also leave the target frozen."
 #-------------------------------
 658,HEADSMASH,Head Smash,0FC,150,ROCK,Physical,80,5,0,NearOther,0,abef,"The user attacks the foe with a hazardous, full-power headbutt. The user also takes terrible damage."
 659,ROCKWRECKER,Rock Wrecker,0C2,150,ROCK,Physical,90,5,0,NearOther,0,befn,"The user launches a huge boulder at the target to attack. It must rest on the next turn, however."
