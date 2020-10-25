@@ -671,7 +671,7 @@
 654,MAGICPOWDER,Magic Powder,197,0,PSYCHIC,Status,100,20,0,NearOther,0,bce,"The user scatters a cloud of magic powder that changes the target to Psychic type."
 655,EXPANDINGFORCE,Expanding Force,190,80,PSYCHIC,Special,100,20,0,AllNearOthers,0,bef,"The user attacks the target with its psychic power. This move's power goes up and damages all opposing Pokémon on Psychic Terrain."
 656,EERIESPELL,Eerie Spell,210,90,PSYCHIC,Special,100,10,0,NearOther,0,bef,"The user casts a horrible spell on the opponent. This removes 3 PP from their last used move."
-657,FREEZINGGLARE,Freezing Glare,00C,90,PSYCHIC,Special,100,10,10,Foe,0,ef,"The user shoots its psychic power from its eyes to attack. This may also leave the target frozen."
+657,FREEZINGGLARE,Freezing Glare,00C,90,PSYCHIC,Special,100,10,10,NearOther,0,ef,"The user shoots its psychic power from its eyes to attack. This may also leave the target frozen."
 #-------------------------------
 658,HEADSMASH,Head Smash,0FC,150,ROCK,Physical,80,5,0,NearOther,0,abef,"The user attacks the foe with a hazardous, full-power headbutt. The user also takes terrible damage."
 659,ROCKWRECKER,Rock Wrecker,0C2,150,ROCK,Physical,90,5,0,NearOther,0,befn,"The user launches a huge boulder at the target to attack. It must rest on the next turn, however."
