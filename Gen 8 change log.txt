@@ -1,5 +1,6 @@
 ﻿GEN 8 PROJECT CHANGE LOG
-CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lolface, Golisopod User, KyureJL, DarrylBD99, Turn20Negate, Zerokid, TheKandinavian
+CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lolface,
+ Golisopod User, KyureJL, DarrylBD99, Turn20Negate, Zerokid, TheKandinavian, ErwanBeurier, Mutant Yoshi, Maruno.
 
 # To Do
 Milcery's Evolution
