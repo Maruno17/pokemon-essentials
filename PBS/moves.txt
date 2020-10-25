@@ -96,7 +96,7 @@
 91,ETERNABEAM,Eternabeam,0C2,160,DRAGON,Special,90,5,0,NearOther,0,bef,"This is Eternatus's most powerful attack in its original form. The user can't move on the next turn."
 92,CLANGOROUSSOUL,Clangorous Soul,179,0,DRAGON,Status,100,5,0,User,0,dk,"The user raises all its stats by using some of its HP."
 93,SCALESHOT,Scale Shot,193,25,DRAGON,Physical,90,20,100,00,0,abef,"The user attacks by shooting scales two to five times in a row. This move boosts the user's Speed stat but lowers its Defense stat."
-94,DRAGONENERGY,Dragon Energy,000,150,DRAGON,Special,100,5,0,NearOther,0,ef,"Converting its life-force into power, the user attacks opposing Pokémon. The lower the user's HP, the lower the move's power."
+94,DRAGONENERGY,Dragon Energy,08B,150,DRAGON,Special,100,5,0,NearOther,0,ef,"Converting its life-force into power, the user attacks opposing Pokémon. The lower the user's HP, the lower the move's power."
 #-------------------------------
 95,BOLTSTRIKE,Bolt Strike,007,130,ELECTRIC,Physical,85,5,20,NearOther,0,abef,"The user charges at its foe, surrounding itself with lightning. It may also leave the target paralyzed."
 96,VOLTTACKLE,Volt Tackle,0FD,120,ELECTRIC,Physical,100,15,10,NearOther,0,abef,"The user electrifies itself, then charges at the foe. It causes considerable damage to the user as well."
