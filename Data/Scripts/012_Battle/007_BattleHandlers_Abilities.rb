@@ -1902,6 +1902,18 @@ BattleHandlers::UserAbilityEndOfMove.add(:MOXIE,
   }
 )
 
+BattleHandlers::UserAbilityEndOfMove.copy(:MOXIE,:CHILLINGNEIGH)
+
+BattleHandlers::UserAbilityEndOfMove.add(:GRIMNEIGH,
+  proc { |ability,user,targets,move,battle|
+    next if battle.pbAllFainted?(user.idxOpposingSide)
+    numFainted = 0
+    targets.each { |b| numFainted += 1 if b.damageState.fainted }
+    next if numFainted==0 || !user.pbCanRaiseStatStage?(PBStats::SPATK,user)
+    user.pbRaiseStatStageByAbility(PBStats::SPATK,numFainted,user)
+  }
+)
+
 #===============================================================================
 # TargetAbilityAfterMoveUse handlers
 #===============================================================================
