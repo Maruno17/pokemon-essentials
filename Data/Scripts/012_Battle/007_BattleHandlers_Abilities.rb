@@ -1084,6 +1084,18 @@ BattleHandlers::DamageCalcUserAbility.add(:STEELWORKER,
   }
 )
 
+BattleHandlers::DamageCalcUserAbility.add(:DRAGONSMAW,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[ATK_MULT] *= 1.5 if isConst?(type,PBTypes,:DRAGON)
+  }
+)
+
+BattleHandlers::DamageCalcUserAbility.add(:TRANSISTOR,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[ATK_MULT] *= 1.5 if isConst?(type,PBTypes,:ELECTRIC)
+  }
+)
+
 BattleHandlers::DamageCalcUserAbility.add(:STRONGJAW,
   proc { |ability,user,target,move,mults,baseDmg,type|
     mults[BASE_DMG_MULT] *= 1.5 if move.bitingMove?

@@ -15,8 +15,6 @@ Crown Tundra:
   THUNDERCAGE
 
   Abilities:
-  TRANSISTOR
-  DRAGONSMAW
   ASONE
 
   Forms:
@@ -102,6 +100,8 @@ Jungle Healing           by lolface improved by Vendily
 Dragon Darts             by Turn20Negate
 
 ##### Abilities Coded #####
+Dragon's Maw             by KyureJL
+Transistor               by KyureJL
 Grim Neigh               by Mutant Yoshi
 Chilling Neigh           by Mutant Yoshi
 Ball Fetch               by WolfPP adapted by Aioross improved by Golisopod User
