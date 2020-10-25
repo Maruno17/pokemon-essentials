@@ -28204,3 +28204,33 @@ BattlerShadowX = 0
 BattlerShadowSize = 2
 Evolutions = 
 #-------------------------------
+[893]
+Name = Zarude
+InternalName = ZARUDE
+Type1 = DARK
+Type2 = GRASS
+BaseStats = 105,120,105,105,70,95
+GenderRate = Genderless
+GrowthRate = Slow
+BaseEXP = 261
+EffortPoints = 0,3,0,0,0,0
+Rareness = 3
+Happiness = 0
+Abilities = LEAFGUARD
+Moves = 1,BIND,1,SCRATCH,6,LEER,12,VINEWHIP,18,GROWTH,24,FURYSWIPES,30,SCARYFACE,36,GRASSKNOT,42,BITE,48,UTURN,54,SWAGGER,60,ENERGYBALL,66,SYNTHESIS,72,HAMMERARM,78,THRASH,84,POWERWHIP,90,JUNGLEHEALING
+Compatibility = Undiscovered
+StepsToHatch = 31096
+Height = 1.8
+Weight = 70.0
+Color = Green
+Shape = 6
+Kind = Rogue Monkey
+Pokedex = Once the vines on Zarude's body tear off, they become nutrients in the soil. This helps the plants of the forest grow.
+BattlerPlayerX = 0
+BattlerPlayerY = 14
+BattlerEnemyX = 0
+BattlerEnemyY = 18
+BattlerShadowX = 0
+BattlerShadowSize = 2
+Evolutions = 
+#-------------------------------

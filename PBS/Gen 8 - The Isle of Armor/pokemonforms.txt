@@ -2294,3 +2294,29 @@ FormName = Star - Caramel Swirl
 [ALCREMIE,62]
 FormName = Star - Rainbow Swirl
 #-------------------------------
+[SLOWPOKE,1]
+FormName = Galarian Slowpoke
+Type1 = PSYCHIC
+BaseStats = 90,65,65,15,40,40
+Abilities = GLUTTONY,OWNTEMPO
+HiddenAbility = REGENERATOR
+Moves = 1,TACKLE,1,CURSE,3,GROWL,6,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERPULSE,21,HEADBUTT,24,ZENHEADBUTT,27,AMNESIA,30,SURF,33,SLACKOFF,36,PSYCHIC,39,PSYCHUP,42,RAINDANCE,45,HEALPULSE
+Pokedex = Because Galarian Slowpoke eat the seeds of a plant that grows only in Galar, their tails have developed a spicy flavor.
+BattlerPlayerY = 8
+BattlerEnemyY = 12
+Evolutions = SLOWBRO,Item,GALARICACUFF
+#-------------------------------
+[SLOWBRO,2]
+FormName = Galarian Slowbro
+Type1 = POISON
+Type2 = PSYCHIC
+BaseStats = 95,100,95,30,100,70
+Abilities = QUICKDRAW,OWNTEMPO
+HiddenAbility = REGENERATOR
+Moves = 0,SHELLSIDEARM,1,SHELLSIDEARM,1,WITHDRAW,1,TACKLE,1,CURSE,1,GROWL,1,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERPULSE,21,HEADBUTT,24,ZENHEADBUTT,27,AMNESIA,30,SURF,33,SLACKOFF,36,PSYCHIC,39,PSYCHUP,42,RAINDANCE,45,HEALPULSE
+Weight = 70.5
+Shape = 4
+Pokedex = If this Pokémon squeezes the tongue of the Shellder biting it, the Shellder will launch a toxic liquid from the tip of its shell.
+BattlerPlayerY = 8
+BattlerEnemyY = 12
+#-------------------------------
