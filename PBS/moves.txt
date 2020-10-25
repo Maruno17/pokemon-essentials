@@ -131,8 +131,8 @@
 125,AURAWHEEL,Aura Wheel,176,110,ELECTRIC,Physical,100,10,0,NearOther,0,bef,"Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form."
 126,BOLTBEAK,Bolt Beak,178,85,ELECTRIC,Physical,100,10,0,NearOther,0,abef,"The user stabs the target with its electrified beak. If the user attacks before the target, the power of this move is doubled."
 127,RISINGVOLTAGE,Rising Voltage,18D,70,ELECTRIC,Special,100,20,0,NearOther,0,bef,"The user attacks with electric voltage rising from the ground. This move's power doubles when the target is on Electric Terrain."
-128,THUNDEROUSKICK,Thunderous Kick,043,90,ELECTRIC,Physical,100,10,0,NearOther,0,abef,"The user overwhelms the target with lightning-like movement before delivering a kick. This also lowers the target's Defense stat."
-129,THUNDERCAGE,Thunder Cage,000,80,ELECTRIC,Special,90,15,0,AllNearFoes,0,bef,"The user traps the target in a cage of sparking electricity for four to five turns."
+128,THUNDEROUSKICK,Thunderous Kick,198,90,ELECTRIC,Physical,100,10,100,NearOther,0,abef,"The user overwhelms the target with lightning-like movement before delivering a kick. This also lowers the target's Defense stat."
+129,THUNDERCAGE,Thunder Cage,0CF,80,ELECTRIC,Special,90,15,0,AllNearFoes,0,bef,"The user traps the target in a cage of sparking electricity for four to five turns."
 #-------------------------------
 130,LIGHTOFRUIN,Light of Ruin,0FC,140,FAIRY,Special,90,5,0,NearOther,0,bef,"Fires a powerful beam of light drawn from the Eternal Flower. It also damages the user a lot."
 131,FLEURCANNON,Fleur Cannon,03F,130,FAIRY,Special,90,5,0,NearOther,0,bef,"The user unleashes a strong beam. The attack's recoil harshly lowers the user's Sp. Atk stat."
