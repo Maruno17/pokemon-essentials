@@ -89,6 +89,8 @@ Jungle Healing           by lolface improved by Vendily
 Dragon Darts             by Turn20Negate
 
 ##### Abilities Coded #####
+Grim Neigh               by Mutant Yoshi
+Chilling Neigh           by Mutant Yoshi
 Ball Fetch               by WolfPP adapted by Aioross improved by Golisopod User
 Intrepid Sword           by KyureJL
 Dauntless Shield         by KyureJL
