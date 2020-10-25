@@ -12,7 +12,7 @@ Crown Tundra:
 
   Moves:
   DRAGONENERGY
-  THUNDEROUSKICK (lowers defense by how many stages?)
+  THUNDEROUSKICK
   THUNDERCAGE
 
   Abilities:
