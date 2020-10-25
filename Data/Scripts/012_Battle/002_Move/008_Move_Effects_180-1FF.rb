@@ -460,18 +460,6 @@ end
 
 
 
-#===============================================================================
-# Decreases the target's Defense for the rest of the battle.
-#===============================================================================
-class PokeBattle_Move_198 < PokeBattle_TargetStatDownMove
-  def initialize(battle,move)
-    super
-    @statDown = [PBStats::DEFENSE]
-  end
-end
-
-
-
 # NOTE: If you're inventing new move effects, use function code 198 and onwards.
 #       Actually, you might as well use high numbers like 500+ (up to FFFF),
 #       just to make sure later additions to Essentials don't clash with your
