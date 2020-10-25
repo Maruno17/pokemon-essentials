@@ -746,3 +746,13 @@ MultipleForms.register(:KOFFING,{
 })
 
 MultipleForms.copy(:KOFFING,:MIMEJR)
+
+
+#===============================================================================
+# Alcremie
+#===============================================================================
+MultipleForms.register(:ALCREMIE,{
+  "getFormOnCreation" => proc { |pkmn|
+    next rand(63)
+  }
+})
