@@ -8,18 +8,20 @@ Update Item prices and Descriptions
 Add TM Compatibility
 Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
 
-Moves:
-DRAGONENERGY
-THUNDEROUSKICK (lowers defense by how many stages?)
-THUNDERCAGE
+Crown Tundra:
 
-Abilities:
-TRANSISTOR
-DRAGONSMAW
-ASONE
+  Moves:
+  DRAGONENERGY
+  THUNDEROUSKICK (lowers defense by how many stages?)
+  THUNDERCAGE
 
-Forms:
-Calyrex
+  Abilities:
+  TRANSISTOR
+  DRAGONSMAW
+  ASONE
+
+  Forms:
+  Calyrex
 
 Updating Old Mechanics to Gen 8 Standard by Golisopod User
 
