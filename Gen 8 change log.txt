@@ -10,10 +10,6 @@ Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechan
 
 Crown Tundra:
 
-  Moves:
-  THUNDEROUSKICK
-  THUNDERCAGE
-
   Abilities:
   ASONE
 
@@ -63,6 +59,7 @@ Catching Charm	 	     by Golisopod User
  
 
 ##### Moves Coded #####
+Thunderous Kick          by KyureJL
 Surging Strikes          by KyureJL improved by lolface fixed by KyureJL
 Bolt Beak                by lolface
 Fishious Rend            by lolface
