@@ -2162,3 +2162,189 @@ Moves = 0,SURGINGSTRIKES,1,SURGINGSTRIKES,1,AQUAJET,1,ROCKSMASH,1,LEER,1,ENDURE,
 Pokedex = This form of Urshifu is a strong believer in defeating foes by raining many blows down on them. Its strikes are nonstop, flowing like a river.
 BattlerPlayerY = 8
 BattlerEnemyY = 12
+#-------------------------------
+[ALCREMIE,1]
+FormName = Strawberry - Ruby Cream
+#-------------------------------
+[ALCREMIE,2]
+FormName = Strawberry - Matcha Cream
+#-------------------------------
+[ALCREMIE,3]
+FormName = Strawberry - Mint Cream
+#-------------------------------
+[ALCREMIE,4]
+FormName = Strawberry - Lemon Cream
+#-------------------------------
+[ALCREMIE,5]
+FormName = Strawberry - Salted Cream
+#-------------------------------
+[ALCREMIE,6]
+FormName = Strawberry - Ruby Swirl
+#-------------------------------
+[ALCREMIE,7]
+FormName = Strawberry - Caramel Swirl
+#-------------------------------
+[ALCREMIE,8]
+FormName = Strawberry - Rainbow Swirl
+#-------------------------------
+[ALCREMIE,9]
+FormName = Berry - Vanilla Cream
+#-------------------------------
+[ALCREMIE,10]
+FormName = Berry - Ruby Cream
+#-------------------------------
+[ALCREMIE,11]
+FormName = Berry - Matcha Cream
+#-------------------------------
+[ALCREMIE,12]
+FormName = Berry - Mint Cream
+#-------------------------------
+[ALCREMIE,13]
+FormName = Berry - Lemon Cream
+#-------------------------------
+[ALCREMIE,14]
+FormName = Berry - Salted Cream
+#-------------------------------
+[ALCREMIE,15]
+FormName = Berry - Ruby Swirl
+#-------------------------------
+[ALCREMIE,16]
+FormName = Berry - Caramel Swirl
+#-------------------------------
+[ALCREMIE,17]
+FormName = Berry - Rainbow Swirl
+#-------------------------------
+[ALCREMIE,18]
+FormName = Clover - Vanilla Cream
+#-------------------------------
+[ALCREMIE,19]
+FormName = Clover - Ruby Cream
+#-------------------------------
+[ALCREMIE,20]
+FormName = Clover - Matcha Cream
+#-------------------------------
+[ALCREMIE,21]
+FormName = Clover - Mint Cream
+#-------------------------------
+[ALCREMIE,22]
+FormName = Clover - Lemon Cream
+#-------------------------------
+[ALCREMIE,23]
+FormName = Clover - Salted Cream
+#-------------------------------
+[ALCREMIE,24]
+FormName = Clover - Ruby Swirl
+#-------------------------------
+[ALCREMIE,25]
+FormName = Clover - Caramel Swirl
+#-------------------------------
+[ALCREMIE,26]
+FormName = Clover - Rainbow Swirl
+#-------------------------------
+[ALCREMIE,27]
+FormName = Flower - Vanilla Cream
+#-------------------------------
+[ALCREMIE,28]
+FormName = Flower - Ruby Cream
+#-------------------------------
+[ALCREMIE,29]
+FormName = Flower - Matcha Cream
+#-------------------------------
+[ALCREMIE,30]
+FormName = Flower - Mint Cream
+#-------------------------------
+[ALCREMIE,31]
+FormName = Flower - Lemon Cream
+#-------------------------------
+[ALCREMIE,32]
+FormName = Flower - Salted Cream
+#-------------------------------
+[ALCREMIE,33]
+FormName = Flower - Ruby Swirl
+#-------------------------------
+[ALCREMIE,34]
+FormName = Flower - Caramel Swirl
+#-------------------------------
+[ALCREMIE,35]
+FormName = Flower - Rainbow Swirl
+#-------------------------------
+[ALCREMIE,36]
+FormName = Love - Vanilla Cream
+#-------------------------------
+[ALCREMIE,37]
+FormName = Love - Ruby Cream
+#-------------------------------
+[ALCREMIE,38]
+FormName = Love - Matcha Cream
+#-------------------------------
+[ALCREMIE,39]
+FormName = Love - Mint Cream
+#-------------------------------
+[ALCREMIE,40]
+FormName = Love - Lemon Cream
+#-------------------------------
+[ALCREMIE,41]
+FormName = Love - Salted Cream
+#-------------------------------
+[ALCREMIE,42]
+FormName = Love - Ruby Swirl
+#-------------------------------
+[ALCREMIE,43]
+FormName = Love - Caramel Swirl
+#-------------------------------
+[ALCREMIE,44]
+FormName = Love - Rainbow Swirl
+#-------------------------------
+[ALCREMIE,45]
+FormName = Ribbon - Vanilla Cream
+#-------------------------------
+[ALCREMIE,46]
+FormName = Ribbon - Ruby Cream
+#-------------------------------
+[ALCREMIE,47]
+FormName = Ribbon - Matcha Cream
+#-------------------------------
+[ALCREMIE,48]
+FormName = Ribbon - Mint Cream
+#-------------------------------
+[ALCREMIE,49]
+FormName = Ribbon - Lemon Cream
+#-------------------------------
+[ALCREMIE,50]
+FormName = Ribbon - Salted Cream
+#-------------------------------
+[ALCREMIE,51]
+FormName = Ribbon - Ruby Swirl
+#-------------------------------
+[ALCREMIE,52]
+FormName = Ribbon - Caramel Swirl
+#-------------------------------
+[ALCREMIE,53]
+FormName = Ribbon - Rainbow Swirl
+#-------------------------------
+[ALCREMIE,54]
+FormName = Star - Vanilla Cream
+#-------------------------------
+[ALCREMIE,55]
+FormName = Star - Ruby Cream
+#-------------------------------
+[ALCREMIE,56]
+FormName = Star - Matcha Cream
+#-------------------------------
+[ALCREMIE,57]
+FormName = Star - Mint Cream
+#-------------------------------
+[ALCREMIE,58]
+FormName = Star - Lemon Cream
+#-------------------------------
+[ALCREMIE,59]
+FormName = Star - Salted Cream
+#-------------------------------
+[ALCREMIE,60]
+FormName = Star - Ruby Swirl
+#-------------------------------
+[ALCREMIE,61]
+FormName = Star - Caramel Swirl
+#-------------------------------
+[ALCREMIE,62]
+FormName = Star - Rainbow Swirl
