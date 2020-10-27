@@ -27056,8 +27056,8 @@ BattlerShadowSize = 2
 Evolutions =
 #-------------------------------
 [856]
-Name = Hattena
-InternalName = HATTENA
+Name = Hatenna
+InternalName = HATENNA
 Type1 = PSYCHIC
 BaseStats = 42,30,45,39,56,53
 GenderRate = AlwaysFemale
