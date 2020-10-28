@@ -963,13 +963,17 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
     poke2 = $Trainer.party[chosen]
     if pkmn==poke2
       scene.pbDisplay(_INTL("It cannot be fused with itself."))
+      next false
     elsif poke2.egg?
       scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
+      next false
     elsif poke2.fainted?
       scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
+      next false
     elsif !poke2.isSpecies?(:RESHIRAM) &&
           !poke2.isSpecies?(:ZEKROM)
       scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
+      next false
     end
     newForm = 0
     newForm = 1 if poke2.isSpecies?(:RESHIRAM)
