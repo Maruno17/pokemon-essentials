@@ -8,7 +8,7 @@ class PokeBattle_Battler
     if tryFlee && @battle.wildBattle? && opposes? &&
        @battle.rules["alwaysflee"] && @battle.pbCanRun?(@index)
       pbBeginTurn(choice)
-	  pbSEPlay("Battle flee")
+      pbSEPlay("Battle flee")
       @battle.pbDisplay(_INTL("{1} fled from battle!",pbThis))
       @battle.decision = 3
       pbEndTurn(choice)
