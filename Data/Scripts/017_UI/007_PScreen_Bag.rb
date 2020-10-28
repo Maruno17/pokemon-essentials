@@ -319,7 +319,7 @@ class PokemonBag_Scene
     @sprites["itemicon"].item = itemlist.item
     # Set the selected item's description
     @sprites["itemtext"].text = (itemlist.item==0) ? _INTL("Close bag.") :
-       pbGetMessage(MessageTypes::ItemDescriptions,itemlist.item)
+     (ItemHandlers.hasDescriptionText?(itemlist.item)) ? ItemHandlers.getDescriptionText(itemlist.item) : pbGetMessage(MessageTypes::ItemDescriptions,itemlist.item)
   end
 
   def pbRefreshFilter

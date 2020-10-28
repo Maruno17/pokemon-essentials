@@ -996,8 +996,19 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
   next true
 })
 
+ItemHandlers::DescriptionText.add(:DNASPLICERS,proc { |item|
+  flag = false
+  $Trainer.party.each do |pkmn|
+    if pkmn.isSpecies?(:KYUREM) && pkmn.form!=0
+      flag = true
+    end
+  end
+  next "A splicer that separates Kyurem and a certain Pokémon when they have been fused." if flag
+  next "A splicer that fuses Kyurem and a certain Pokémon. They are said to have been one in the beginning."
+})
+
 ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
-  if !pkmn.isSpecies?(:NECROZMA) || pkmn.form==0
+  if !pkmn.isSpecies?(:NECROZMA) || ![0,1].include?(pkmn.form)
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -1011,12 +1022,16 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
     poke2 = $Trainer.party[chosen]
     if pkmn==poke2
       scene.pbDisplay(_INTL("It cannot be fused with itself."))
+      next false
     elsif poke2.egg?
       scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
+      next false
     elsif poke2.fainted?
       scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
+      next false
     elsif !poke2.isSpecies?(:SOLGALEO)
       scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
+      next false
     end
     pkmn.setForm(1) {
       pkmn.fused = poke2
@@ -1040,8 +1055,17 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
   next true
 })
 
+ItemHandlers::DescriptionText.add(:NSOLARIZER,proc { |item|
+  flag = false
+  $Trainer.party.each do |pkmn|
+    flag = true if pkmn.isSpecies?(:NECROZMA) && pkmn.form == 1
+  end
+  next "A machine to separate Necrozma, which needed light, from Solgaleo." if flag
+  next "A machine to fuse Necrozma, which needs light, and Solgaleo."
+})
+
 ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
-  if !pkmn.isSpecies?(:NECROZMA) || pkmn.form==1
+  if !pkmn.isSpecies?(:NECROZMA) || ![0,2].include?(pkmn.form)
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end
@@ -1055,12 +1079,16 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
     poke2 = $Trainer.party[chosen]
     if pkmn==poke2
       scene.pbDisplay(_INTL("It cannot be fused with itself."))
+      next false
     elsif poke2.egg?
       scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
+      next false
     elsif poke2.fainted?
       scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
+      next false
     elsif !poke2.isSpecies?(:LUNALA)
       scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
+      next false
     end
     pkmn.setForm(2) {
       pkmn.fused = poke2
@@ -1082,6 +1110,15 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
   }
   next true
+})
+
+ItemHandlers::DescriptionText.add(:NLUNARIZER,proc { |item|
+  flag = false
+  $Trainer.party.each do |pkmn|
+    flag = true if pkmn.isSpecies?(:NECROZMA) && pkmn.form == 2
+  end
+  next "A machine to separate Necrozma, which needed light, from Lunala." if flag
+  next "A machine to fuse Necrozma, which needs light, and Lunala."
 })
 
 ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE,proc { |item,pkmn,scene|

@@ -232,6 +232,7 @@ module ItemHandlers
   UseInBattle        = ItemHandlerHash.new
   BattleUseOnBattler = ItemHandlerHash.new
   BattleUseOnPokemon = ItemHandlerHash.new
+  DescriptionText    = ItemHandlerHash.new
 
   def self.hasUseText(item)
     return UseText[item]!=nil
@@ -264,6 +265,14 @@ module ItemHandlers
   # Returns text to display instead of "Use"
   def self.getUseText(item)
     return UseText.trigger(item)
+  end
+
+  def self.hasDescriptionText?(item)
+    return DescriptionText[item]!=nil
+  end
+
+  def self.getDescriptionText(item)
+    return DescriptionText.trigger(item)
   end
 
   # Return value:
