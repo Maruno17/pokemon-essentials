@@ -18,6 +18,9 @@ class PokemonTemp
   attr_accessor :trainersData
   attr_accessor :moveToAnim
   attr_accessor :battleAnims
+  attr_accessor :oldDir
+  attr_accessor :milceryInParty
+  attr_accessor :alcremieTurns
 end
 
 def pbClearData
