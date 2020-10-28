@@ -816,22 +816,21 @@ PBEvolution.register(:SweetItem, {
         cream = 3
       end
     end
-		case pkmn.item
-		when PBItems::STRAWBERRYSWEET
-			sweet = 0
-		when PBItems::BERRYSWEET
-			sweet = 1
-    when PBItems::LOVESWEET
+    if pkmn.hasItem?(:STRAWBERRYSWEET)
+      sweet = 0
+    elsif pkmn.hasItem?(:BERRYSWEET)
+      sweet = 1
+    elsif pkmn.hasItem?(:LOVESWEET)
       sweet = 2
-    when PBItems::STARSWEET
+    elsif pkmn.hasItem?(:STARSWEET)
       sweet = 3
-		when PBItems::CLOVERSWEET
-			sweet = 4
-		when PBItems::FLOWERSWEET
-			sweet = 5
-		when PBItems::RIBBONSWEET
-			sweet = 6
-		 end
+    elsif pkmn.hasItem?(:CLOVERSWEET)
+      sweet = 4
+    elsif pkmn.hasItem?(:FLOWERSWEET)
+      sweet = 5
+    elsif pkmn.hasItem?(:RIBBONSWEET)
+      sweet = 6
+		end
     pkmn.form= 7*cream + sweet
     next sweet>=0 && cream >= 0
   }
