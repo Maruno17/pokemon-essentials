@@ -791,7 +791,11 @@ PBEvolution.register(:SweetItem, {
     cream = -1
     sweet = -1
     flag = false
-    if PBDayNight.isDay?
+    if pbGetTimeNow.hour>=19 && pbGetTimeNow.hour<20
+      if $PokemonTemp.alcremieTurns>15 || $PokemonTemp.alcremieTurns<-15
+        cream = 8
+      end
+    elsif PBDayNight.isDay?
       if $PokemonTemp.alcremieTurns>10
         cream = 7
       elsif $PokemonTemp.alcremieTurns>5
@@ -810,10 +814,6 @@ PBEvolution.register(:SweetItem, {
         cream = 5
       elsif  $PokemonTemp.alcremieTurns<-10
         cream = 3
-      end
-    elsif PBDayNight.isEvening?
-      if $PokemonTemp.alcremieTurns>15 || $PokemonTemp.alcremieTurns<-15
-        cream = 8
       end
     end
 		case pkmn.item
