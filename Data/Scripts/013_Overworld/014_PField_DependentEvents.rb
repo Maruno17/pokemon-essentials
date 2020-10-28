@@ -2,7 +2,7 @@ class PokemonTemp
   attr_writer :dependentEvents
 
   def dependentEvents
-    @dependentEvents=DependentEvents.new if !@dependentEvents
+    @dependentEvents = DependentEvents.new if !@dependentEvents
     return @dependentEvents
   end
 end
@@ -41,7 +41,8 @@ class PokemonGlobalMetadata
   attr_writer :dependentEvents
 
   def dependentEvents
-    return @dependentEvents || []
+    @dependentEvents = [] if !@dependentEvents
+    return @dependentEvents
   end
 end
 
