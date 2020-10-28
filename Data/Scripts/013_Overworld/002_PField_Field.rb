@@ -376,6 +376,72 @@ Events.onChangeDirection += proc {
   pbBattleOnStepTaken(repel) if !$game_temp.in_menu
 }
 
+
+# Alcremie Evolution Related Stuff
+Events.onChangeDirection += proc {
+  if $PokemonTemp.milceryInParty
+    $PokemonTemp.alcremieTurns = 0 if !$PokemonTemp.alcremieTurns.is_a?(Numeric)
+    if ($PokemonTemp.oldDir == 2 && $game_player.direction==4) ||
+       ($PokemonTemp.oldDir == 4 && $game_player.direction==8) ||
+       ($PokemonTemp.oldDir == 8 && $game_player.direction==6) ||
+       ($PokemonTemp.oldDir == 6 && $game_player.direction==2)
+      $PokemonTemp.alcremieTurns+=1
+    elsif ($PokemonTemp.oldDir == 2 && $game_player.direction==6) ||
+      ($PokemonTemp.oldDir == 6 && $game_player.direction==8) ||
+      ($PokemonTemp.oldDir == 8 && $game_player.direction==4) ||
+      ($PokemonTemp.oldDir == 4 && $game_player.direction==2)
+      $PokemonTemp.alcremieTurns-=1
+    else
+      $Trainer.party.each do |pkmn|
+        ret = pbCheckEvolutionEx(pkmn) {|pkmn, method, parameter, new_species|
+          success = PBEvolution.call("onFieldCheck", method, pkmn, parameter)
+          next (success) ? new_species : -1
+        }
+        if ret>0
+          $PokemonTemp.milceryInParty = false
+          $scene.spriteset.addUserAnimation(EXCLAMATION_ANIMATION_ID,$game_player.x,$game_player.y,true,3)
+          pbWait(12)
+          pbFadeOutIn(99999){
+          evo = PokemonEvolutionScene.new
+          evo.pbStartScreen(pkmn,ret)
+          evo.pbEvolution(true)
+          evo.pbEndScreen
+          }
+        end
+      end
+      $PokemonTemp.alcremieTurns=0
+    end
+  end
+}
+
+Events.onStepTaken += proc { |_sender,_e|
+  for pkmn in $Trainer.party
+    if !$PokemonTemp.milceryInParty && pkmn.isSpecies?(:MILCERY) && pkmn.hasItem?
+      $PokemonTemp.milceryInParty = true
+      $PokemonTemp.alcremieTurns=0
+      break
+    end
+    $PokemonTemp.alcremieTurns = 0  if !$PokemonTemp.alcremieTurns.is_a?(Numeric)
+    ret = pbCheckEvolutionEx(pkmn) {|pkmn, method, parameter, new_species|
+      success = PBEvolution.call("onFieldCheck", method, pkmn, parameter)
+      next (success) ? new_species : -1
+    }
+    if ret>0
+      $PokemonTemp.milceryInParty = false
+      $scene.spriteset.addUserAnimation(EXCLAMATION_ANIMATION_ID,$game_player.x,$game_player.y,true,3)
+      pbWait(12)
+      pbFadeOutIn(99999){
+      evo = PokemonEvolutionScene.new
+      evo.pbStartScreen(pkmn,ret)
+      evo.pbEvolution(true)
+      evo.pbEndScreen
+      }
+    end
+  end
+  $PokemonTemp.alcremieTurns = 0
+}
+
+
 def pbBattleOnStepTaken(repel=false)
   return if $Trainer.ablePokemonCount==0
   encounterType = $PokemonEncounters.pbEncounterType

@@ -2,12 +2,9 @@
 CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lolface, Golisopod User, KyureJL, DarrylBD99, Turn20Negate, Zerokid, TheKandinavian
 
 # To Do
-Milcery's Evolution
 Update Item prices and Descriptions
 Add TM Compatibility
 Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
-
-
 
 Updating Old Mechanics to Gen 8 Standard by Golisopod User
 
@@ -25,6 +22,7 @@ Abilities.txt (for Gen 8) - Zerokid
 Toxel                    by WolfPP adapted by Aioross
 Galarian Farfetch'd      by Vendily adapted by Golisopod User tweaks by Aioross
 Yamask                   by WolfPP adapted by Aioross improved by Golisopod User
+Alcremie                 by Golisopod User
 
 ##### Forms Coded #####
 Eiscue                   by Aioross
