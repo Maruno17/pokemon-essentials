@@ -462,7 +462,7 @@ class PokeBattle_SafariZone
           catchFactor  *= 2                       # Easier to catch
           escapeFactor *= 2 if pbRandom(100)<90   # More likely to escape
         when 3   # Run
-		  pbSEPlay("Battle flee")
+          pbSEPlay("Battle flee")
           pbDisplayPaused(_INTL("You got away safely!"))
           @decision = 3
         end
@@ -474,7 +474,7 @@ class PokeBattle_SafariZone
             pbDisplay(_INTL("PA: You have no Safari Balls left! Game over!"))
             @decision = 2
           elsif pbRandom(100)<5*escapeFactor
-		    pbSEPlay("Battle flee")
+            pbSEPlay("Battle flee")
             pbDisplay(_INTL("{1} fled!",wildpoke.name))
             @decision = 3
           elsif cmd==1   # Bait
