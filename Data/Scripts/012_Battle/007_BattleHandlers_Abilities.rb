@@ -83,7 +83,8 @@ BattleHandlers::AbilityOnHPDroppedBelowHalf.add(:EMERGENCYEXIT,
       next false if !battle.pbCanRun?(battler.index)
       battle.pbShowAbilitySplash(battler,true)
       battle.pbHideAbilitySplash(battler)
-      battle.pbDisplay(_INTL("{1} fled from battle!",battler.pbThis)) { pbSEPlay("Battle flee") }
+      pbSEPlay("Battle flee")
+      battle.pbDisplay(_INTL("{1} fled from battle!",battler.pbThis))
       battle.decision = 3   # Escaped
       next true
     end

@@ -265,6 +265,8 @@ class Game_Character
     @pattern = 0 if @walk_anime or @step_anime
     @anime_count = 0
     @prelock_direction = 0
+    @moved_last_frame = false
+    @moved_this_frame = false
   end
 
   def force_move_route(move_route)

@@ -594,6 +594,7 @@ def pbAfterBattle(decision,canLose)
     end
   end
   Events.onEndBattle.trigger(nil,decision,canLose)
+  $game_player.straighten
 end
 
 def pbEvolveOnField(x1,x2,y1,y2)
