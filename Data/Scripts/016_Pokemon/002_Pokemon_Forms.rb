@@ -713,6 +713,31 @@ MultipleForms.register(:CRAMORANT,{
   }
 })
 
+MultipleForms.register(:CALYREX,{
+  "onSetForm" => proc { |pkmn,form,oldForm|
+    case form
+    when 0   # Normal
+      exclusiveMoves = [getID(PBMoves,:TACKLE),getID(PBMoves,:TAILWHIP),getID(PBMoves,:DOUBLEKICK),getID(PBMoves,:AVALANCHE),
+        getID(PBMoves,:HEX),getID(PBMoves,:STOMP),getID(PBMoves,:TORMENT),getID(PBMoves,:CONFUSERAY),getID(PBMoves,:MIST),
+        getID(PBMoves,:HAZE),getID(PBMoves,:ICICLECRASH),getID(PBMoves,:SHADOWBALL),getID(PBMoves,:TAKEDOWN),getID(PBMoves,:IRONDEFENSE),
+        getID(PBMoves,:AGILITY),getID(PBMoves,:THRASH),getID(PBMoves,:TAUNT),getID(PBMoves,:DISABLE),getID(PBMoves,:DOUBLEEDGE),
+        getID(PBMoves,:SWORDSDANCE),getID(PBMoves,:NASTYPLOT)]
+      pkmn.moves.each_with_index do |move,i|
+        next if !move || move.id==0
+        if exclusiveMoves.include?(move.id)
+          pbMessage(_INTL("{1} forgot {2}...",pkmn.name,PBMoves.getName(move.id)))
+          pkmn.pbDeleteMoveAtIndex(i)
+        end
+      end
+      pkmn.pbLearnMove(:CONFUSION) if pkmn.numMoves==0
+    when 1   # Ice Rider
+      pbLearnMove(pkmn,:GLACIALLANCE,true) if hasConst?(PBMoves,:GLACIALLANCE)
+    when 2   # Black
+      pbLearnMove(pkmn,:ASTRALBARRAGE,true) if hasConst?(PBMoves,:ASTRALBARRAGE)
+    end
+  }
+})
+
 #===============================================================================
 # Alolan forms
 #===============================================================================
@@ -746,13 +771,3 @@ MultipleForms.register(:KOFFING,{
 })
 
 MultipleForms.copy(:KOFFING,:MIMEJR)
-
-
-#===============================================================================
-# Alcremie
-#===============================================================================
-MultipleForms.register(:ALCREMIE,{
-  "getFormOnCreation" => proc { |pkmn|
-    next rand(63)
-  }
-})
