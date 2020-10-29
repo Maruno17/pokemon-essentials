@@ -265,8 +265,6 @@ class Game_Character
     @pattern = 0 if @walk_anime or @step_anime
     @anime_count = 0
     @prelock_direction = 0
-    @moved_last_frame = false
-    @moved_this_frame = false
   end
 
   def force_move_route(move_route)
@@ -434,48 +432,34 @@ class Game_Character
     end
   end
 
-  def move_up(turn_enabled = true)
-    turn_up if turn_enabled
-    if passable?(@x, @y, 8)
-      turn_up
-      @y -= 1
+  def move_generic(dir, turn_enabled = true)
+    turn_generic(dir) if turn_enabled
+    x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
+    y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
+    if passable?(@x, @y, dir)
+      turn_generic(dir)
+      @x += x_offset
+      @y += y_offset
       increase_steps
     else
-      check_event_trigger_touch(@x, @y-1)
+      check_event_trigger_touch(@x + x_offset, @y + y_offset)
     end
   end
 
   def move_down(turn_enabled = true)
-    turn_down if turn_enabled
-    if passable?(@x, @y, 2)
-      turn_down
-      @y += 1
-      increase_steps
-    else
-      check_event_trigger_touch(@x, @y+1)
-    end
+    move_generic(2, turn_enabled)
   end
 
   def move_left(turn_enabled = true)
-    turn_left if turn_enabled
-    if passable?(@x, @y, 4)
-      turn_left
-      @x -= 1
-      increase_steps
-    else
-      check_event_trigger_touch(@x-1, @y)
-    end
+    move_generic(4, turn_enabled)
   end
 
   def move_right(turn_enabled = true)
-    turn_right if turn_enabled
-    if passable?(@x, @y, 6)
-      turn_right
-      @x += 1
-      increase_steps
-    else
-      check_event_trigger_touch(@x+1, @y)
-    end
+    move_generic(6, turn_enabled)
+  end
+
+  def move_up(turn_enabled = true)
+    move_generic(8, turn_enabled)
   end
 
   def move_upper_left
@@ -698,7 +682,7 @@ class Game_Character
     end
   end
 
-  def turnGeneric(dir)
+  def turn_generic(dir)
     return if @direction_fix
     oldDirection = @direction
     @direction = dir
@@ -706,10 +690,10 @@ class Game_Character
     pbCheckEventTriggerAfterTurning if dir != oldDirection
   end
 
-  def turn_up;    turnGeneric(8); end
-  def turn_down;  turnGeneric(2); end
-  def turn_left;  turnGeneric(4); end
-  def turn_right; turnGeneric(6); end
+  def turn_down;  turn_generic(2); end
+  def turn_left;  turn_generic(4); end
+  def turn_right; turn_generic(6); end
+  def turn_up;    turn_generic(8); end
 
   def turn_right_90
     case @direction
