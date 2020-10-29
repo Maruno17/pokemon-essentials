@@ -63,7 +63,7 @@ module PBEvolution
   TradeSpecies      = 59
   CriticalHits      = 60
   DamageDone        = 61
-  SweetItem         = 62
+  SweetItem       = 62
 
   def self.maxValue; return 62; end
 
@@ -160,13 +160,13 @@ def pbGetBabySpecies(species,item1=-1,item2=-1)
     next if !evo[3]
     if item1>=0 && item2>=0
       incense = pbGetSpeciesData(evo[0],0,SpeciesIncense)
-      ret = evo[0] if incense==0 || incense==item1 || incense==item2
+      ret = evo[0] if item1==incense || item2==incense
     else
       ret = evo[0]   # Species of prevolution
     end
     break
   end
-  ret = pbGetBabySpecies(ret,item1,item2) if ret!=species
+  ret = pbGetBabySpecies(ret) if ret!=species
   return ret
 end
 
@@ -778,52 +778,5 @@ PBEvolution.register(:CriticalHits, {
 PBEvolution.register(:DamageDone, {
   "onFieldCheck" => proc { |pkmn, parameter|
      next true if pkmn.yamaskhp >= parameter
-  }
-})
-
-PBEvolution.register(:SweetItem, {
-  "parameterType" => nil,
-  "alcremieCheck" => proc { |pkmn, parameter|
-    sweet = -1
-    cream = -1
-    time = pbGetTimeNow
-    timeTaken = Graphics.frame_count - $PokemonTemp.startedSpinning
-    if (timeTaken > ((Graphics.frame_rate) * 10)) && PBDayNight.isRainbow?(time)
-      cream = 8
-    elsif timeTaken > ((Graphics.frame_rate) * 5)
-      if PBDayNight.isNight?(time)
-        cream = 4 if $PokemonTemp.clockwiseSpin
-        cream = 5 if $PokemonTemp.antiClockwiseSpin
-      else
-        cream = 6 if $PokemonTemp.antiClockwiseSpin
-        cream = 7 if $PokemonTemp.clockwiseSpin
-      end
-    elsif timeTaken > (Graphics.frame_rate)
-      if PBDayNight.isNight?(time)
-        cream = 2 if $PokemonTemp.clockwiseSpin
-        cream = 3 if $PokemonTemp.antiClockwiseSpin
-      else
-        cream = 0 if $PokemonTemp.clockwiseSpin
-        cream = 1 if $PokemonTemp.antiClockwiseSpin
-      end
-    end
-    if pkmn.hasItem?(:STRAWBERRYSWEET)
-      sweet = 0
-    elsif pkmn.hasItem?(:BERRYSWEET)
-      sweet = 1
-    elsif pkmn.hasItem?(:LOVESWEET)
-      sweet = 2
-    elsif pkmn.hasItem?(:STARSWEET)
-      sweet = 3
-    elsif pkmn.hasItem?(:CLOVERSWEET)
-      sweet = 4
-    elsif pkmn.hasItem?(:FLOWERSWEET)
-      sweet = 5
-    elsif pkmn.hasItem?(:RIBBONSWEET)
-      sweet = 6
-    end
-    pkmn.form = (cream*7) + sweet
-    next true if sweet != -1 && cream != -1
-    next false
   }
 })
