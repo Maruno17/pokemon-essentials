@@ -11,6 +11,7 @@ end
 
 
 class PokemonTemp
+  attr_accessor :encounterTriggered
   attr_accessor :encounterType
   attr_accessor :evolutionLevels
 
