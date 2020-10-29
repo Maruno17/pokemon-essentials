@@ -140,7 +140,7 @@ class PokeBattle_Battle
       rate += @runCommand*30
     end
     if rate>=256 || @battleAI.pbAIRandom(256)<rate
-	  pbSEPlay("Battle flee")
+      pbSEPlay("Battle flee")
       pbDisplayPaused(_INTL("You got away safely!"))
       @decision = 3
       return 1
