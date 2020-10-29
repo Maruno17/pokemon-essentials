@@ -106,7 +106,6 @@ class PokeBattle_Battler
   def statusCount=(value)
     @statusCount = value
     @pokemon.statusCount = value if @pokemon
-    @battle.scene.pbRefreshOne(@index)
   end
 
   attr_reader :criticalHits
@@ -374,9 +373,7 @@ class PokeBattle_Battler
       # Abilities intended to be inherent properties of a certain species
       :COMATOSE,
       :RKSSYSTEM,
-      :GULPMISSILE,
-      :ASONEICE,
-      :ASONEGHOST
+      :GULPMISSILE
     ]
     abilityBlacklist.each do |a|
       return true if isConst?(abil, PBAbilities, a)
@@ -404,11 +401,7 @@ class PokeBattle_Battler
       :IMPOSTER,
       # Abilities intended to be inherent properties of a certain species
       :COMATOSE,
-      :RKSSYSTEM,
-      :ASONEICE,
-      :ASONEGHOST,
-	  :NEUTRALIZINGGAS,
-	  :HUNGERSWITCH
+      :RKSSYSTEM
     ]
     abilityBlacklist.each do |a|
       return true if isConst?(abil, PBAbilities, a)
@@ -486,7 +479,6 @@ class PokeBattle_Battler
     return true if @battle.pbCheckOpposingAbility(:UNNERVE,@index)
     return true if @battle.pbCheckOpposingAbility(:ASONEICE,@index)
     return true if @battle.pbCheckOpposingAbility(:ASONEGHOST,@index)
-    return false
   end
 
   def canChangeType?
@@ -512,11 +504,6 @@ class PokeBattle_Battler
     return false if airborne?
     return false if semiInvulnerable?
     return true
-  end
-
-  def hasUtilityUmbrella?
-    return true if hasActiveItem?(:UTILITYUMBRELLA)
-    return false
   end
 
   def takesIndirectDamage?(showMsg=false)
@@ -592,11 +579,6 @@ class PokeBattle_Battler
     return false if fainted? || @hp>=@totalhp
     return false if @effects[PBEffects::HealBlock]>0
     return true
-  end
-
-  def canTakeHealingWish?
-    # Also works with Lunar Dance.
-    return canHeal? || pbHasAnyStatus?
   end
 
   def affectedByContactEffect?(showMsg=false)
