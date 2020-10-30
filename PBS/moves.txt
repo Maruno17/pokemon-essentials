@@ -759,3 +759,8 @@
 704,LIFEDEW,Life Dew,17E,0,WATER,Status,0,10,0,UserSide,0,d,"The user scatters mysterious water around and restores the HP of itself."
 709,SURGINGSTRIKES,Surging Strikes,188,25,WATER,Physical,100,5,0,NearOther,0,abef,"The user, having mastered the Water style, strikes the target with a flowing motion three times in a row. This attack always results in a critical hit."
 713,FLIPTURN,Flip Turn,0EE,60,WATER,Physical,100,20,0,NearOther,0,abef,"After making its attack, the user rushes back to switch places with a party Pokémon in waiting."
+
+
+
+
+
