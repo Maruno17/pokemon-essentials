@@ -328,11 +328,13 @@ BattlerEnemyY = 13
 [SLOWPOKE,1]
 FormName = Galarian
 Type1 = PSYCHIC
+BaseStats = 90,65,65,15,40,40
 Abilities = GLUTTONY,OWNTEMPO
+HiddenAbility = REGENERATOR
 Moves = 1,TACKLE,1,CURSE,3,GROWL,6,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERPULSE,21,HEADBUTT,24,ZENHEADBUTT,27,AMNESIA,30,SURF,33,SLACKOFF,36,PSYCHIC,39,PSYCHUP,42,RAINDANCE,45,HEALPULSE
 EggMoves = BELCH,BELLYDRUM,BLOCK,STOMP
 Pokedex = Because Galarian Slowpoke eat the seeds of a plant that grows only in Galar, their tails have developed a spicy flavor.
-Evolutions = SLOWBRO,Item,GALARICACUFF
+Evolutions = SLOWBRO,Item,GALARICACUFF,SLOWKING,Item,GALARICAWREATH
 #-------------------------------
 [SLOWBRO,1]
 FormName = Mega Slowbro
@@ -352,7 +354,8 @@ Type1 = POISON
 Type2 = PSYCHIC
 BaseStats = 95,100,95,30,100,70
 Abilities = QUICKDRAW,OWNTEMPO
-Moves = 0,SHELLSIDEARM,1,SHELLSIDEARM,1,WITHDRAW,1,TACKLE,1,CURSE,1,GROWL,1,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERPULSE,21,HEADBUTT,24,ZENHEADBUTT,27,AMNESIA,30,SURF,33,SLACKOFF,36,PSYCHIC,39,PSYCHUP,42,RAINDANCE,45,HEALPULSE
+HiddenAbility = REGENERATOR
+Moves = 1,SHELLSIDEARM,1,WITHDRAW,1,TACKLE,1,CURSE,1,GROWL,1,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERPULSE,21,HEADBUTT,24,ZENHEADBUTT,27,AMNESIA,30,SURF,33,SLACKOFF,36,PSYCHIC,39,PSYCHUP,42,RAINDANCE,45,HEALPULSE
 Weight = 70.5
 Shape = 4
 Pokedex = If this Pokémon squeezes the tongue of the Shellder biting it, the Shellder will launch a toxic liquid from the tip of its shell.
@@ -603,10 +606,14 @@ BattlerEnemyY = 19
 FormName = Galarian
 Type1 = POISON
 Type2 = PSYCHIC
-Abilities = CURIOUSMEDICINE
+BaseStats = 95,65,80,30,110,110
+Abilities = CURIOUSMEDICINE,OWNTEMPO
+HiddenAbility = REGENERATOR
+Moves = 1,SHELLSIDEARM,1,WITHDRAW,1,TACKLE,1,CURSE,1,GROWL,1,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERPULSE,21,HEADBUTT,24,ZENHEADBUTT,27,AMNESIA,30,SURF,33,SLACKOFF,36,PSYCHIC,39,PSYCHUP,42,RAINDANCE,45,HEALPULSE
 Height = 1.8
 Weight = 79.5
 Kind = Hexpert
+Pokedex = Slowking can solve any problem present to it, but no one can understand a thing Slowking says.
 #-------------------------------
 [UNOWN,1]
 FormName = B
@@ -2357,3 +2364,29 @@ FormName = Star - Caramel Swirl
 #-------------------------------
 [ALCREMIE,62]
 FormName = Star - Rainbow Swirl
+#-------------------------------
+[CALYREX,1]
+FormName = Ice Rider
+Type1 = PSYCHIC
+Type2 = ICE
+BaseStats = 100,165,150,50,85,130
+EffortPoints = 0,3,0,0,0,0
+Abilities = ASONE
+Moves = 1,GLACIALLANCE,1,TACKLE,1,TAILWHIP,1,DOUBLEKICK,1,AVALANCHE,1,STOMP,1,TORMENT,1,MIST,1,ICICLECRASH,1,TAKEDOWN,1,IRONDEFENSE,1,THRASH,1,TAUNT,1,DOUBLEEDGE,1,SWORDSDANCE,1,POUND,1,MEGADRAIN,1,CONFUSION,1,GROWTH,8,LIFEDEW,16,GIGADRAIN,24,PSYSHOCK,32,HELPINGHAND,40,AROMATHERAPY,48,ENERGYBALL,56,PSYCHIC,64,LEECHSEED,72,HEALPULSE,80,SOLARBEAM,88,FUTURESIGHT
+Kind = King Pokémon
+Pokedex = It's said that this Pokémon once moved a large forest—and all the Pokémon living there—to a new location overnight.
+Height = 2.4
+Weight = 809.1
+#-------------------------------
+[CALYREX,2]
+FormName = Shadow Rider Calyrex
+Type1 = PSYCHIC
+Type2 = GHOST
+BaseStats = 100,85,80,150,165,100
+EffortPoints = 0,0,0,0,3,0
+Abilities = ASONE
+Moves = 1,ASTRALBARRAGE,1,TACKLE,1,TAILWHIP,1,DOUBLEKICK,1,HEX,1,STOMP,1,CONFUSERAY,1,HAZE,1,SHADOWBALL,1,TAKEDOWN,1,AGILITY,1,THRASH,1,DISABLE,1,DOUBLEEDGE,1,NASTYPLOT,1,POUND,1,MEGADRAIN,1,CONFUSION,1,GROWTH,8,LIFEDEW,16,GIGADRAIN,24,PSYSHOCK,32,HELPINGHAND,40,AROMATHERAPY,48,ENERGYBALL,56,PSYCHIC,64,LEECHSEED,72,HEALPULSE,80,SOLARBEAM,88,FUTURESIGHT
+Kind = King Pokémon
+Pokedex = Legend says that by using its power to see all events from past to future, this Pokémon saved the creatures of a forest from a meteorite strike.
+Height = 2.4
+Weight = 53.6
