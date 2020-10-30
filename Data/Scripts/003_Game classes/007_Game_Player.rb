@@ -92,7 +92,6 @@ class Game_Player < Game_Character
 
   def turn_generic(dir, keep_enc_indicator = false)
     old_direction = @direction
-    $PokemonTemp.oldDir = old_direction
     super
     if @direction != old_direction && !@move_route_forcing && !pbMapInterpreterRunning?
       # To store old player Dir
