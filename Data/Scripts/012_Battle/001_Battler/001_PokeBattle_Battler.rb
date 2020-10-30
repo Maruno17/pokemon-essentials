@@ -373,7 +373,9 @@ class PokeBattle_Battler
       # Abilities intended to be inherent properties of a certain species
       :COMATOSE,
       :RKSSYSTEM,
-      :GULPMISSILE
+      :GULPMISSILE,
+      :ASONEICE,
+      :ASONEGHOST
     ]
     abilityBlacklist.each do |a|
       return true if isConst?(abil, PBAbilities, a)
@@ -401,7 +403,9 @@ class PokeBattle_Battler
       :IMPOSTER,
       # Abilities intended to be inherent properties of a certain species
       :COMATOSE,
-      :RKSSYSTEM
+      :RKSSYSTEM,
+      :ASONEICE,
+      :ASONEGHOST
     ]
     abilityBlacklist.each do |a|
       return true if isConst?(abil, PBAbilities, a)
