@@ -532,6 +532,7 @@
 523,REVEALGLASS,Reveal Glass,Reveal Glasses,8,0,"A glass that reveals the truth. It is a mysterious glass that returns a Pokémon back to its original shape.",5,0,6,
 524,OVALCHARM,Oval Charm,Oval Charms,8,0,"An oval charm said to increase the chance of Eggs being found at the Day Care.",0,0,6,
 525,SHINYCHARM,Shiny Charm,Shiny Charms,8,0,"A shiny charm said to increase the chance of finding a Shiny Pokémon.",0,0,6,
+786,REINSOFUNITY,Reins of Unity,Reins of Unity,8,0,"Reins that people presented to the king. They enhance Calyrex’s power over bountiful harvests and unite Calyrex with its beloved steed.",5,0,6,
 #-------------------------------
 526,ICESTONE,Ice Stone,Ice Stones,1,3000,"A peculiar stone that makes certain species of Pokémon evolve. It has a snowflake pattern.",1,0,7,
 527,JAWFOSSIL,Jaw Fossil,Jaw Fossils,1,7000,"A fossil from a prehistoric Pokémon that once lived on the land. It appears to be part of a large jaw.",0,0,8,

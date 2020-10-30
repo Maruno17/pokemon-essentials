@@ -1207,3 +1207,58 @@ ItemHandlers::UseOnPokemon.add(:LONELYMINT,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.copy(:LONELYMINT,:ADAMANTMINT,:NAUGHTYMINT,:BRAVEMINT,:BOLDMINT,:IMPISHMINT,:LAXMINT,:RELAXEDMINT,:MODESTMIND,:MILDMINT,:RASHMINT,:QUIETMINT,:CALMMINT,:GENTLEMINT,:CAREFULMINT,:SASSYMINT,:TIMIDMINT,:HASTYMINT,:JOLLYMINT,:NAIVEMINT,:SERIOUSMINT)
+
+
+
+ItemHandlers::UseOnPokemon.add(:REINSOFUNITY,proc { |item,pkmn,scene|
+  if !pkmn.isSpecies?(:CALYREX)
+    scene.pbDisplay(_INTL("It had no effect."))
+    next false
+  end
+  if pkmn.fainted?
+    scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
+  end
+  # Fusing
+  if pkmn.fused==nil
+    chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
+    next false if chosen<0
+    poke2 = $Trainer.party[chosen]
+    if pkmn==poke2
+      scene.pbDisplay(_INTL("It cannot be fused with itself."))
+      next false
+    elsif poke2.egg?
+      scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
+      next false
+    elsif poke2.fainted?
+      scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
+      next false
+    elsif !poke2.isSpecies?(:GLASTRIER) &&
+          !poke2.isSpecies?(:SPECTRIER)
+      scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
+      next false
+    end
+    newForm = 0
+    newForm = 1 if poke2.isSpecies?(:GLASTRIER)
+    newForm = 2 if poke2.isSpecies?(:SPECTRIER)
+    pkmn.setForm(newForm) {
+      pkmn.fused = poke2
+      pbRemovePokemonAt(chosen)
+      scene.pbHardRefresh
+      scene.pbDisplay(_INTL("{1} changed Form!",pkmn.name))
+    }
+    next true
+  end
+  # Unfusing
+  if $Trainer.party.length>=6
+    scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
+    next false
+  end
+  pkmn.setForm(0) {
+    $Trainer.party[$Trainer.party.length] = pkmn.fused
+    pkmn.fused = nil
+    scene.pbHardRefresh
+    scene.pbDisplay(_INTL("{1} changed Form!",pkmn.name))
+  }
+  next true
+})
