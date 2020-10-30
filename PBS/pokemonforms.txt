@@ -525,34 +525,28 @@ BattlerPlayerY = 21
 BattlerEnemyY = 19
 #-------------------------------
 [ARTICUNO,1]
-FormName = Galarian
 Type1 = PSYCHIC
 Type2 = FLYING
-BaseStats = 90,85,85,95,125,100
 Abilities = COMPETITIVE
-Moves = 1,GUST,1,PSYCHOSHIFT,5,CONFUSION,10,REFLECT,15,HYPNOSIS,20,AGILITY,25,ANCIENTPOWER,30,TAILWIND,35,PSYCHOCUT,40,RECOVER,45,FREEZINGGLARE,50,DREAMEATER,55,HURRICANE,60,MINDREADER,65,FUTURESIGHT,70,TRICKROOM
-BattlerPlayerY = 8
-BattlerEnemyY = 12
+HiddenAbility = COMPETITIVE
+BattlerPlayerY = 16
+BattlerEnemyY = 20
 #-------------------------------
 [ZAPDOS,1]
-FormName = Galarian
 Type1 = FIGHTING
 Type2 = FLYING
-BaseStats = 90,125,90,100,85,90
 Abilities = DEFIANT
-Moves = 1,PECK,1,FOCUSENERGY,5,ROCKSMASH,10,LIGHTSCREEN,15,PLUCK,20,AGILITY,25,ANCIENTPOWER,30,BRICKBREAK,35,DRILLPECK,40,QUICKGUARD,45,THUNDEROUSKICK,50,BULKUP,55,COUNTER,60,DETECT,65,CLOSECOMBAT,70,REVERSAL
-BattlerPlayerY = 8
-BattlerEnemyY = 12
+HiddenAbility = DEFIANT
+BattlerPlayerY = 14
+BattlerEnemyY = 18
 #-------------------------------
 [MOLTRES,1]
-FormName = Galarian
 Type1 = DARK
 Type2 = FLYING
-BaseStats = 90,85,90,90,100,125
 Abilities = BERSERK
-Moves = 1,GUST,1,LEER,5,PAYBACK,10,SAFEGUARD,15,WINGATTACK,20,AGILITY,25,ANCIENTPOWER,30,SUCKERPUNCH,35,AIRSLASH,40,AFTERYOU,45,FIERYWRATH,50,NASTYPLOT,55,HURRICANE,60,ENDURE,65,MEMENTO,70,SKYATTACK
-BattlerPlayerY = 8
-BattlerEnemyY = 12
+HiddenAbility = BERSERK
+BattlerPlayerY = 17
+BattlerEnemyY = 17
 #-------------------------------
 [MEWTWO,1]
 FormName = Mega Mewtwo X
@@ -600,14 +594,10 @@ BattlerEnemyY = 19
 FormName = Galarian
 Type1 = POISON
 Type2 = PSYCHIC
-BaseStats = 95,65,80,30,110,110
-Abilities = CURIOUSMEDICINE,OWNTEMPO
-HiddenAbility = REGENERATOR
-Moves = 0,SHELLSIDEARM,1,SHELLSIDEARM,1,WITHDRAW,1,TACKLE,1,CURSE,1,GROWL,1,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERPULSE,21,HEADBUTT,24,ZENHEADBUTT,27,AMNESIA,30,SURF,33,SLACKOFF,36,PSYCHIC,39,PSYCHUP,42,RAINDANCE,45,HEALPULSE
+Abilities = CURIOUSMEDICINE
 Height = 1.8
-Pokedex = Slowking can solve any problem present to it, but no one can understand a thing Slowking says.
-BattlerPlayerY = 8
-BattlerEnemyY = 12
+Weight = 79.5
+Kind = Hexpert
 #-------------------------------
 [UNOWN,1]
 FormName = B
@@ -2118,6 +2108,61 @@ Moves = 0,SPARK,1,SPARK,1,EERIEIMPULSE,1,BELCH,1,TEARFULLOOK,1,NUZZLE,1,GROWL,1,
 Pokedex = It has an electrical organ on its chest. While generating electricity, it fills its surroundings with what sounds like the strumming of a bass guitar.
 BattlerEnemyY = 11
 #-------------------------------
+[EISCUE,1]
+FormName = Noice Face
+BaseStats = 75,80,70,130,65,50
+Pokedex = The hair on its head connects to the surface of its brain. When this Pokémon has something on its mind, its hair chills the air around it.
+#-------------------------------
+[SINISTEA,1]
+FormName = Antique Form
+Pokedex = It absorbs the life-force of those who drink it. It waits patiently, but opportunities are fleeting—it tastes so bad that it gets spat out immediately.
+Evolutions = POLTEAGEIST,Item,CHIPPEDPOT
+#-------------------------------
+[POLTEAGEIST,1]
+FormName = Antique Form
+Pokedex = Trainers Polteageist trusts will be allowed to experience its distinctive flavor and aroma firsthand by sampling just a tiny bit of its tea.
+#-------------------------------
+[INDEEDEE,1]
+FormName = Female
+BaseStats = 70,55,65,85,95,105
+EffortPoints = 0,0,0,0,0,2
+Abilities = OWNTEMPO,SYNCHRONIZE
+Moves = 1,STOREDPOWER,1,PLAYNICE,5,BATONPASS,10,DISARMINGVOICE,15,PSYBEAM,20,HELPINGHAND,25,FOLLOWME,30,AROMATHERAPY,35,PSYCHIC,40,CALMMIND,45,GUARDSPLIT,50,PSYCHICTERRAIN,55,HEALINGWISH
+EggMoves = FAKEOUT,HEALPULSE,PSYCHUP,PSYCHOSHIFT
+Pokedex = They diligently serve people and Pokémon so they can gather feelings of gratitude. The females are particularly good at babysitting.
+#-------------------------------
+[MORPEKO,1]
+FormName = Hangry Mode
+Pokedex = Hunger hormones affect its temperament. Until its hunger is appeased, it gets up to all manner of evil deeds.
+#-------------------------------
+[ZACIAN,1]
+FormName = Crowned Sword
+Type1 = FAIRY
+Type2 = STEEL
+BaseStats = 92,170,115,148,80,115
+Weight = 355.0
+Pokedex = Able to cut down anything with a single strike, it became known as the Fairy King's Sword, and it inspired awe in friend and foe alike.
+BattlerPlayerY = 4
+BattlerEnemyY = 5
+#-------------------------------
+[ZAMAZENTA,1]
+FormName = Crowned Shield
+Type1 = FIGHTING
+Type2 = STEEL
+BaseStats = 92,130,145,80,145,128
+Weight = 785.0
+Pokedex = Now that it's equipped with its shield, it can shrug off impressive blows, including the attacks of Dynamax Pokémon.
+BattlerEnemyY = 7
+#-------------------------------
+[URSHIFU,1]
+FormName = Rapid Strike Style
+Type1 = FIGHTING
+Type2 = WATER
+Moves = 0,SURGINGSTRIKES,1,SURGINGSTRIKES,1,AQUAJET,1,ROCKSMASH,1,LEER,1,ENDURE,1,FOCUSENERGY,12,AERIALACE,16,SCARYFACE,20,HEADBUTT,24,BRICKBREAK,28,DETECT,32,BULKUP,36,IRONHEAD,40,DYNAMICPUNCH,44,COUNTER,48,CLOSECOMBAT,52,FOCUSPUNCH
+Pokedex = This form of Urshifu is a strong believer in defeating foes by raining many blows down on them. Its strikes are nonstop, flowing like a river.
+BattlerPlayerY = 8
+BattlerEnemyY = 12
+#-------------------------------
 [ALCREMIE,1]
 FormName = Berry - Vanilla Cream
 #-------------------------------
@@ -2303,84 +2348,3 @@ FormName = Flower - Rainbow Swirl
 #-------------------------------
 [ALCREMIE,62]
 FormName = Ribbon - Rainbow Swirl
-#-------------------------------
-[EISCUE,1]
-FormName = Noice Face
-BaseStats = 75,80,70,130,65,50
-Pokedex = The hair on its head connects to the surface of its brain. When this Pokémon has something on its mind, its hair chills the air around it.
-#-------------------------------
-[SINISTEA,1]
-FormName = Antique Form
-Pokedex = It absorbs the life-force of those who drink it. It waits patiently, but opportunities are fleeting—it tastes so bad that it gets spat out immediately.
-Evolutions = POLTEAGEIST,Item,CHIPPEDPOT
-#-------------------------------
-[POLTEAGEIST,1]
-FormName = Antique Form
-Pokedex = Trainers Polteageist trusts will be allowed to experience its distinctive flavor and aroma firsthand by sampling just a tiny bit of its tea.
-#-------------------------------
-[INDEEDEE,1]
-FormName = Female
-BaseStats = 70,55,65,85,95,105
-EffortPoints = 0,0,0,0,0,2
-Abilities = OWNTEMPO,SYNCHRONIZE
-Moves = 1,STOREDPOWER,1,PLAYNICE,5,BATONPASS,10,DISARMINGVOICE,15,PSYBEAM,20,HELPINGHAND,25,FOLLOWME,30,AROMATHERAPY,35,PSYCHIC,40,CALMMIND,45,GUARDSPLIT,50,PSYCHICTERRAIN,55,HEALINGWISH
-EggMoves = FAKEOUT,HEALPULSE,PSYCHUP,PSYCHOSHIFT
-Pokedex = They diligently serve people and Pokémon so they can gather feelings of gratitude. The females are particularly good at babysitting.
-#-------------------------------
-[MORPEKO,1]
-FormName = Hangry Mode
-Pokedex = Hunger hormones affect its temperament. Until its hunger is appeased, it gets up to all manner of evil deeds.
-#-------------------------------
-[ZACIAN,1]
-FormName = Crowned Sword
-Type1 = FAIRY
-Type2 = STEEL
-BaseStats = 92,170,115,148,80,115
-Weight = 355.0
-Pokedex = Able to cut down anything with a single strike, it became known as the Fairy King's Sword, and it inspired awe in friend and foe alike.
-BattlerPlayerY = 4
-BattlerEnemyY = 5
-#-------------------------------
-[ZAMAZENTA,1]
-FormName = Crowned Shield
-Type1 = FIGHTING
-Type2 = STEEL
-BaseStats = 92,130,145,128,80,145
-Weight = 785.0
-Pokedex = Now that it's equipped with its shield, it can shrug off impressive blows, including the attacks of Dynamax Pokémon.
-BattlerEnemyY = 7
-#-------------------------------
-[URSHIFU,1]
-FormName = Rapid Strike Style
-Type1 = FIGHTING
-Type2 = WATER
-Moves = 0,SURGINGSTRIKES,1,SURGINGSTRIKES,1,AQUAJET,1,ROCKSMASH,1,LEER,1,ENDURE,1,FOCUSENERGY,12,AERIALACE,16,SCARYFACE,20,HEADBUTT,24,BRICKBREAK,28,DETECT,32,BULKUP,36,IRONHEAD,40,DYNAMICPUNCH,44,COUNTER,48,CLOSECOMBAT,52,FOCUSPUNCH
-Pokedex = This form of Urshifu is a strong believer in defeating foes by raining many blows down on them. Its strikes are nonstop, flowing like a river.
-BattlerPlayerY = 8
-BattlerEnemyY = 12
-#-------------------------------
-[CALYREX,1]
-FormName = Ice Rider
-Type1 = PSYCHIC
-Type2 = ICE
-BaseStats = 100,165,150,50,85,130
-EffortPoints = 0,3,0,0,0,0
-Abilities = ASONEICE
-Moves = 1,GLACIALLANCE,1,TACKLE,1,TAILWHIP,1,DOUBLEKICK,1,AVALANCHE,1,STOMP,1,TORMENT,1,MIST,1,ICICLECRASH,1,TAKEDOWN,1,IRONDEFENSE,1,THRASH,1,TAUNT,1,DOUBLEEDGE,1,SWORDSDANCE,1,POUND,1,MEGADRAIN,1,CONFUSION,1,GROWTH,8,LIFEDEW,16,GIGADRAIN,24,PSYSHOCK,32,HELPINGHAND,40,AROMATHERAPY,48,ENERGYBALL,56,PSYCHIC,64,LEECHSEED,72,HEALPULSE,80,SOLARBEAM,88,FUTURESIGHT
-Kind = High King
-Pokedex = It's said that this Pokémon once moved a large forest—and all the Pokémon living there—to a new location overnight.
-BattlerPlayerY = 8
-BattlerEnemyY = 12
-#-------------------------------
-[CALYREX,2]
-FormName = Shadow Rider
-Type1 = PSYCHIC
-Type2 = GHOST
-BaseStats = 100,85,80,150,165,100
-EffortPoints = 0,0,0,0,3,0
-Abilities = ASONEGHOST
-Moves = 1,ASTRALBARRAGE,1,TACKLE,1,TAILWHIP,1,DOUBLEKICK,1,HEX,1,STOMP,1,CONFUSERAY,1,HAZE,1,SHADOWBALL,1,TAKEDOWN,1,AGILITY,1,THRASH,1,DISABLE,1,DOUBLEEDGE,1,NASTYPLOT,1,POUND,1,MEGADRAIN,1,CONFUSION,1,GROWTH,8,LIFEDEW,16,GIGADRAIN,24,PSYSHOCK,32,HELPINGHAND,40,AROMATHERAPY,48,ENERGYBALL,56,PSYCHIC,64,LEECHSEED,72,HEALPULSE,80,SOLARBEAM,88,FUTURESIGHT
-Kind = High King
-Pokedex = Legend says that by using its power to see all events from past to future, this Pokémon saved the creatures of a forest from a meteorite strike.
-BattlerPlayerY = 8
-BattlerEnemyY = 12
