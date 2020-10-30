@@ -261,8 +261,3 @@
 259,UNSEENFIST,Unseen Fist,"Contact moves negate all protection effects."
 260,QUICKDRAW,Quick Draw,"Enables the Pokémon to move first occasionally."
 261,CURIOUSMEDICINE,Curious Medicine,"Stat changes are cleared when entering battle."
-262,TRANSISTOR,Transistor,"Powers up Electric-type moves."
-263,DRAGONSMAW,Dragon's Maw,"Powers up Dragon-type moves."
-264,CHILLINGNEIGH,Chilling Neigh,"Boosts Attack after knocking out any Pokémon."
-265,GRIMNEIGH,Grim Neigh,"Boosts Sp. Atk after knocking out any Pokémon."
-266,ASONE,As One,"Combines Unnerve and Chilling Neigh/Grim Neigh abilities."
