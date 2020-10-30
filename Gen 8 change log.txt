@@ -3,7 +3,6 @@ CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lo
 
 # To Do
 Update Item prices and Descriptions
-Add TM Compatibility
 Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
 
 ##### PBS Files #####
@@ -14,12 +13,12 @@ Pokemon.txt              by Zerokid, TheToxic, KyureJL
 Pokemonforms.txt         by Zerokid, TheToxic, KyureJL
 tm.txt                   by ErwanBeurier
 
-##### Evolution methods Coded #####
+##### New Evolution Methods #####
 Toxel                    by WolfPP, Aioross
 Galarian Farfetch'd      by Vendily, Golisopod User, Aioross
 Yamask                   by WolfPP, Aioross, Golisopod User
 
-##### Forms Coded #####
+##### Alternate Forms #####
 Eiscue                   by Aioross
 Indeedee                 by KyureJL, Vendily
 Zamazenta / Zacian       by KyureJL, Aioross, Golisopod User
@@ -28,7 +27,7 @@ Cramorant                by Aioross
 Morpeko                  by Aioross
 Calyrex			 by Golisopod User
 
-##### Items Coded #####
+##### New Items #####
 Technical Records        by Vendily, Golispod User
 Rusted Shield            by KyureJL
 Rusted Sword             by KyureJL
@@ -46,7 +45,7 @@ Catching Charm		 by Golisopod User
 Ability Patch		 by Golisopod User
 Reins of Unity		 by Golisopod User 
 
-##### Moves Coded #####
+##### New Moves #####
 Surging Strikes          by KyureJL, lolface
 Bolt Beak                by lolface
 Fishious Rend            by lolface
@@ -85,7 +84,7 @@ Dragon Darts             by Turn20Negate
 Eerie Spell              by Golisopod User, TheToxic
 Thunder Cage             by Golisopod User
 
-##### Abilities Coded #####
+##### New Abilities #####
 Ball Fetch               by WolfPP, Aioross, Golisopod User
 Intrepid Sword           by KyureJL
 Dauntless Shield         by KyureJL
@@ -118,7 +117,7 @@ Grim Neigh               by Golisopod User
 Chilling Neigh           by Golisopod User
 As One                   by Golisopod User
 
-##### Others Coded #####
+##### Miscellaneous #####
 Galarian in Daycare      by KyureJL
 Fog Weather              by TheKandinavian
 Updating Old Mechanics   by Golisopod User 
