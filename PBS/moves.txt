@@ -97,6 +97,7 @@
 93,SCALESHOT,Scale Shot,193,25,DRAGON,Physical,90,20,100,00,0,abef,"The user attacks by shooting scales two to five times in a row. This move boosts the user's Speed stat but lowers its Defense stat."
 94,DRAGONENERGY,Dragon Energy,08B,150,DRAGON,Special,100,5,0,NearOther,0,ef,"Converting its life-force into power, the user attacks opposing Pokémon. The lower the user's HP, the lower the move's power."
 #-------------------------------
+95,BOLTSTRIKE,Bolt Strike,007,130,ELECTRIC,Physical,85,5,20,NearOther,0,abef,"The user charges at its foe, surrounding itself with lightning. It may also leave the target paralyzed."
 96,VOLTTACKLE,Volt Tackle,0FD,120,ELECTRIC,Physical,100,15,10,NearOther,0,abef,"The user electrifies itself, then charges at the foe. It causes considerable damage to the user as well."
 97,ZAPCANNON,Zap Cannon,007,120,ELECTRIC,Special,50,5,100,NearOther,0,befn,"The user fires an electric blast like a cannon to inflict damage and cause paralysis."
 98,THUNDER,Thunder,008,110,ELECTRIC,Special,70,10,30,NearOther,0,bef,"A wicked thunderbolt is dropped on the foe to inflict damage. It may also leave the target paralyzed."

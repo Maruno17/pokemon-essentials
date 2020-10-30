@@ -130,7 +130,6 @@ class Game_Player < Game_Character
 
   def turnGeneric(dir)
     old_direction = @direction
-    $PokemonTemp.oldDir = old_direction
     super
     if @direction != old_direction && !@move_route_forcing && !pbMapInterpreterRunning?
       Events.onChangeDirection.trigger(self, self)
