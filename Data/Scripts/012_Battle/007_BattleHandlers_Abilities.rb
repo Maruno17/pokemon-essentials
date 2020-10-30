@@ -1159,24 +1159,6 @@ BattleHandlers::DamageCalcUserAbility.add(:STEELYSPIRIT,
   }
 )
 
-BattleHandlers::DamageCalcUserAbility.add(:TRANSISTOR,
-  proc { |ability,user,target,move,mults,baseDmg,type|
-	# According to Bulbapedia, the power of electric moves increases by 50%
-	# According to Pokémon Showdown, the attack stat increases by 50%
-    mults[BASE_DMG_MULT] *= 1.5 if isConst?(type,PBTypes,:ELECTRIC)
-  }
-)
-
-BattleHandlers::DamageCalcUserAbility.add(:DRAGONSMAW,
-  proc { |ability,user,target,move,mults,baseDmg,type|
-	# According to Bulbapedia, the power of Dragon moves increases by 50%
-	# According to Pokémon Showdown, the attack stat increases by 50%
-    mults[BASE_DMG_MULT] *= 1.5 if isConst?(type,PBTypes,:DRAGON)
-  }
-)
-
-
-
 #===============================================================================
 # DamageCalcUserAllyAbility handlers
 #===============================================================================
@@ -1920,21 +1902,6 @@ BattleHandlers::UserAbilityEndOfMove.add(:MOXIE,
     user.pbRaiseStatStageByAbility(PBStats::ATTACK,numFainted,user)
   }
 )
-
-BattleHandlers::UserAbilityEndOfMove.copy(:MOXIE,:CHILLINGNEIGH)
-
-BattleHandlers::UserAbilityEndOfMove.add(:GRIMNEIGH,
-  proc { |ability,user,targets,move,battle|
-    next if battle.pbAllFainted?(user.idxOpposingSide)
-    numFainted = 0
-    targets.each { |b| numFainted += 1 if b.damageState.fainted }
-    next if numFainted==0 || !user.pbCanRaiseStatStage?(PBStats::SPATK,user)
-    user.pbRaiseStatStageByAbility(PBStats::SPATK,numFainted,user)
-  }
-)
-
-
-
 
 #===============================================================================
 # TargetAbilityAfterMoveUse handlers
