@@ -25,6 +25,10 @@ class PokeBattle_FakeBattler
   def shiny?;         return @pokemon.shiny?;  end
   alias isShiny? shiny?
 
+  def isSpecies?(check_species)
+    return @pokemon && @pokemon.isSpecies?(check_species)
+  end
+
   def fainted?;       return false; end
   alias isFainted? fainted?
   def shadowPokemon?; return false; end
@@ -458,7 +462,8 @@ class PokeBattle_SafariZone
           catchFactor  *= 2                       # Easier to catch
           escapeFactor *= 2 if pbRandom(100)<90   # More likely to escape
         when 3   # Run
-          pbDisplayPaused(_INTL("You got away safely!")) { pbSEPlay("Battle flee") }
+          pbSEPlay("Battle flee")
+          pbDisplayPaused(_INTL("You got away safely!"))
           @decision = 3
         end
         catchFactor  = [[catchFactor,3].max,20].min
@@ -469,7 +474,8 @@ class PokeBattle_SafariZone
             pbDisplay(_INTL("PA: You have no Safari Balls left! Game over!"))
             @decision = 2
           elsif pbRandom(100)<5*escapeFactor
-            pbDisplay(_INTL("{1} fled!",wildpoke.name)) { pbSEPlay("Battle flee") }
+            pbSEPlay("Battle flee")
+            pbDisplay(_INTL("{1} fled!",wildpoke.name))
             @decision = 3
           elsif cmd==1   # Bait
             pbDisplay(_INTL("{1} is eating!",wildpoke.name))

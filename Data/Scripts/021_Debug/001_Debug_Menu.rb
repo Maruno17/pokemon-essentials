@@ -368,7 +368,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
     battle = pbListScreen(_INTL("SINGLE TRAINER"),TrainerBattleLister.new(0,false))
     if battle
       trainerdata = battle[1]
-      pbTrainerBattle(trainerdata[0],trainerdata[1],"...",false,trainerdata[4],true)
+      pbTrainerBattle(trainerdata[0],trainerdata[1],nil,false,trainerdata[4],true)
     end
   when "testtrainerbattleadvanced"
     trainers = []
