@@ -1933,7 +1933,7 @@ BattleHandlers::UserAbilityEndOfMove.add(:ASONEICE,
     numFainted = 0
     targets.each { |b| numFainted += 1 if b.damageState.fainted }
     next if numFainted==0 || !user.pbCanRaiseStatStage?(PBStats::ATTACK,user) || user.fainted?
-    battle.pbShowAbilitySplash(battler,false,true,PBAbilities.getName(getID(PBAbilities,:CHILLINGNEIGH)))
+    battle.pbShowAbilitySplash(user,false,true,PBAbilities.getName(getID(PBAbilities,:CHILLINGNEIGH)))
     if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
       user.pbRaiseStatStage(PBStats::ATTACK,numFainted,user)
     else
@@ -1949,7 +1949,7 @@ BattleHandlers::UserAbilityEndOfMove.add(:ASONEGHOST,
     numFainted = 0
     targets.each { |b| numFainted += 1 if b.damageState.fainted }
     next if numFainted==0 || !user.pbCanRaiseStatStage?(PBStats::ATTACK,user) || user.fainted?
-    battle.pbShowAbilitySplash(battler,false,true,PBAbilities.getName(getID(PBAbilities,:GRIMNEIGH)))
+    battle.pbShowAbilitySplash(user,false,true,PBAbilities.getName(getID(PBAbilities,:GRIMNEIGH)))
     if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
       user.pbRaiseStatStage(PBStats::SPATK,numFainted,user)
     else
