@@ -168,7 +168,7 @@ class PokeBattle_Scene
     @sprites["abilityBar_#{side}"].ability = ability
     abilitySplashAnim = AbilitySplashAppearAnimation.new(@sprites,@viewport,side)
     loop do
-      @sprites["abilityBar_#{side}"].ability = ability
+    #  @sprites["abilityBar_#{side}"].ability = ability
       abilitySplashAnim.update
       pbUpdate
       break if abilitySplashAnim.animDone?

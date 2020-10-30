@@ -800,7 +800,7 @@ MultipleForms.register(:CALYREX,{
         getID(PBMoves,:HEX),getID(PBMoves,:STOMP),getID(PBMoves,:TORMENT),getID(PBMoves,:CONFUSERAY),getID(PBMoves,:MIST),
         getID(PBMoves,:HAZE),getID(PBMoves,:ICICLECRASH),getID(PBMoves,:SHADOWBALL),getID(PBMoves,:TAKEDOWN),getID(PBMoves,:IRONDEFENSE),
         getID(PBMoves,:AGILITY),getID(PBMoves,:THRASH),getID(PBMoves,:TAUNT),getID(PBMoves,:DISABLE),getID(PBMoves,:DOUBLEEDGE),
-        getID(PBMoves,:SWORDSDANCE),getID(PBMoves,:NASTYPLOT)]
+        getID(PBMoves,:SWORDSDANCE),getID(PBMoves,:NASTYPLOT),getID(PBMoves,:GLACIALLANCE),getID(PBMoves,:ASTRALBARRAGE)]
       pkmn.moves.each_with_index do |move,i|
         next if !move || move.id==0
         if exclusiveMoves.include?(move.id)
