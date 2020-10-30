@@ -731,9 +731,9 @@ MultipleForms.register(:CALYREX,{
       end
       pkmn.pbLearnMove(:CONFUSION) if pkmn.numMoves==0
     when 1   # Ice Rider
-      pbLearnMove(pkmn,:GLACIALLANCE,true) if hasConst?(PBMoves,:GLACIALLANCE)
+      pbLearnMove(pkmn,getID(PBMoves,:GLACIALLANCE),true) if hasConst?(PBMoves,:GLACIALLANCE)
     when 2   # Black
-      pbLearnMove(pkmn,:ASTRALBARRAGE,true) if hasConst?(PBMoves,:ASTRALBARRAGE)
+      pbLearnMove(pkmn,getID(PBMoves,:ASTRALBARRAGE),true) if hasConst?(PBMoves,:ASTRALBARRAGE)
     end
   }
 })
