@@ -1161,13 +1161,13 @@ BattleHandlers::DamageCalcUserAbility.add(:STEELYSPIRIT,
 
 BattleHandlers::DamageCalcUserAbility.add(:DRAGONSMAW,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] *= 1.5 if isConst?(type,PBTypes,:DRAGON)
+    mults[ATK_MULT] = (mults[ATK_MULT]*1.5) if isConst?(type,PBTypes,:DRAGON)
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:TRANSISTOR,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] *= 1.5 if isConst?(type,PBTypes,:ELECTRIC)
+    mults[ATK_MULT] = (mults[ATK_MULT]*1.5) if isConst?(type,PBTypes,:ELECTRIC)
   }
 )
 
