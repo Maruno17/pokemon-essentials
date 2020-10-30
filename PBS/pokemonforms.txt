@@ -2377,7 +2377,6 @@ Kind = King Pokémon
 Pokedex = It's said that this Pokémon once moved a large forest—and all the Pokémon living there—to a new location overnight.
 Height = 2.4
 Weight = 809.1
-BattlerShadowSize = 2
 #-------------------------------
 [CALYREX,2]
 FormName = Shadow Rider Calyrex
@@ -2391,4 +2390,3 @@ Kind = King Pokémon
 Pokedex = Legend says that by using its power to see all events from past to future, this Pokémon saved the creatures of a forest from a meteorite strike.
 Height = 2.4
 Weight = 53.6
-BattlerShadowSize = 2
