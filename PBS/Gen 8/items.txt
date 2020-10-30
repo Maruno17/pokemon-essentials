@@ -802,3 +802,7 @@
 783,TR97,TR97,TR97s,4,0,"The user bites the target with its psychic capabilities. This can also destroy Light Screen and Reflect.",6,0,0,PSYCHICFANGS,
 784,TR98,TR98,TR98s,4,0,"The user slams into the target using a full-force blast of water. This may also lower the target's Defense stat.",6,0,0,LIQUIDATION,
 785,TR99,TR99,TR99s,4,0,"The user attacks by slamming its body into the target. The higher the user's Defense, the more damage it inflicts.",6,0,0,BODYPRESS,
+#-------------------------------
+786,ABILITYPATCH,Ability Patch,Ability Patches,2,0,"A patch that allows a Pokémon with a regular Ability to have a rare Ability.",1,0,0,
+787,GALARICAWREATH,Galarica Wreath,Galarica Wreaths,1,3000,"A wreath made from woven- Galarica Twigs. Placing it on the head of a Galarian Slowpoke makes it very happy.",1,0,0,
+788,REINSOFUNITY,Reins of Unity,Reins of Unity,8,0,"Reins that people presented to the king. They enable Calyrex to connect and communicate with its beloved steed.",5,0,6,
