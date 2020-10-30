@@ -1172,10 +1172,10 @@ def pbLoadRpgxpScene(scene)
   end
   Graphics.transition(20)
   Graphics.freeze
-  oldscene.createSpritesets
+  $scene = oldscene
+  $scene.createSpritesets
   pbShowObjects(visibleObjects)
   Graphics.transition(20)
-  $scene = oldscene
 end
 
 
