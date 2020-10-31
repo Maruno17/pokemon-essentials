@@ -6,13 +6,9 @@ def pbImportNewMaps
   mapfiles = {}
   # Get IDs of all maps in the Data folder
   Dir.chdir("Data") {
-    mapData = sprintf("Map*.%s",$RPGVX ? "rvdata" : "rxdata")
+    mapData = sprintf("Map*.rxdata")
     for map in Dir.glob(mapData)
-      if $RPGVX
-        mapfiles[$1.to_i(10)] = true if map[/map(\d+)\.rvdata/i]
-      else
-        mapfiles[$1.to_i(10)] = true if map[/map(\d+)\.rxdata/i]
-      end
+      mapfiles[$1.to_i(10)] = true if map[/map(\d+)\.rxdata/i]
     end
   }
   mapinfos = pbLoadRxData("Data/MapInfos")
@@ -38,11 +34,7 @@ def pbImportNewMaps
     count += 1
   end
   if imported
-    if $RPGVX
-      save_data(mapinfos,"Data/MapInfos.rvdata")
-    else
-      save_data(mapinfos,"Data/MapInfos.rxdata")
-    end
+    save_data(mapinfos,"Data/MapInfos.rxdata")
     pbMessage(_INTL("{1} new map(s) copied to the Data folder were successfully imported.",count))
   end
   return imported
@@ -121,10 +113,6 @@ def pbPushText(list,text,indent=0)
   textsplit = text.split(/\\m/)
   for t in textsplit
     first = true
-    if $RPGVX
-      list.push(RPG::EventCommand.new(101,indent,["",0,0,2]))
-      first = false
-    end
     textsplit2 = t.split(/\n/)
     for i in 0...textsplit2.length
       textchunk = textsplit2[i].gsub(/\s+$/,"")
@@ -265,9 +253,7 @@ class MapData
   end
 
   def mapFilename(mapID)
-    filename = sprintf("Data/map%03d",mapID)
-    filename += ($RPGVX) ? ".rvdata" : ".rxdata"
-    return filename
+    return sprintf("Data/Map%03d.rxdata",mapID)
   end
 
   def getMap(mapID)
@@ -322,7 +308,6 @@ class MapData
   end
 
   def isPassable?(mapID,x,y)
-    return true if $RPGVX
     map = getMap(mapID)
     return false if !map
     return false if x<0 || x>=map.width || y<0 || y>=map.height
@@ -343,7 +328,6 @@ class MapData
   end
 
   def isCounterTile?(mapID,x,y)
-    return false if $RPGVX
     map = getMap(mapID)
     return false if !map
     passages = getTilesetPassages(map,mapID)
@@ -361,7 +345,6 @@ class MapData
   end
 
   def setCounterTile(mapID,x,y)
-    return if $RPGVX
     map = getMap(mapID)
     return if !map
     passages = getTilesetPassages(map,mapID)
@@ -390,11 +373,9 @@ class MapData
   end
 
   def saveTilesets
-    filename = "Data/Tilesets"
-    filename += ($RPGVX) ? ".rvdata" : ".rxdata"
+    filename = "Data/Tilesets.rxdata"
     save_data(@tilesets,filename)
-    filename = "Data/System"
-    filename += ($RPGVX) ? ".rvdata" : ".rxdata"
+    filename = "Data/System.rxdata"
     save_data(@system,filename)
   end
 end
@@ -1455,11 +1436,5 @@ def pbCompileTrainerEvents(_mustcompile)
       commonEvents[key] = newevent; changed = true
     end
   end
-  if changed
-    if $RPGVX
-      save_data(commonEvents,"Data/CommonEvents.rvdata")
-    else
-      save_data(commonEvents,"Data/CommonEvents.rxdata")
-    end
-  end
+  save_data(commonEvents,"Data/CommonEvents.rxdata") if changed
 end

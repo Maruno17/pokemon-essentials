@@ -1533,28 +1533,6 @@ end
 
 
 
-class Game_Interpreter
-  def command_303
-    if $Trainer
-       $Trainer.name=pbEnterPlayerName(_INTL("Your name?"),1,@params[1],$Trainer.name)
-      return true
-    end
-    if $game_actors && $data_actors && $data_actors[@params[0]] != nil
-      # Set battle abort flag
-      pbFadeOutIn {
-         sscene=PokemonEntryScene.new
-         sscreen=PokemonEntry.new(sscene)
-         $game_actors[@params[0]].name=sscreen.pbStartScreen(
-            _INTL("Enter {1}'s name.",$game_actors[@params[0]].name),
-            1,@params[1],$game_actors[@params[0]].name)
-      }
-    end
-    return true
-  end
-end
-
-
-
 #===============================================================================
 #
 #===============================================================================

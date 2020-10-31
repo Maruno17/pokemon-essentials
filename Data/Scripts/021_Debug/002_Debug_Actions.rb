@@ -410,7 +410,7 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
           # roaming
           curmap = $PokemonGlobal.roamPosition[index]
           if curmap
-            mapinfos = ($RPGVX) ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
+            mapinfos = load_data("Data/MapInfos.rxdata")
             status = "[ROAMING][#{curmap}: #{mapinfos[curmap].name}]"
           else
             status = "[ROAMING][map not set]"

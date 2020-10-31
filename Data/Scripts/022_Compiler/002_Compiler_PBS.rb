@@ -652,21 +652,13 @@ end
 #===============================================================================
 def pbCompileAnimations
   begin
-    if $RPGVX
-      pbanims = load_data("Data/PkmnAnimations.rvdata")
-    else
-      pbanims = load_data("Data/PkmnAnimations.rxdata")
-    end
+    pbanims = load_data("Data/PkmnAnimations.rxdata")
   rescue
     pbanims = PBAnimations.new
   end
   move2anim = [[],[]]
 =begin
-  if $RPGVX
-    anims = load_data("Data/Animations.rvdata")
-  else
-    anims = load_data("Data/Animations.rxdata")
-  end
+  anims = load_data("Data/Animations.rxdata")
   for anim in anims
     next if !anim || anim.frames.length==1
     found = false

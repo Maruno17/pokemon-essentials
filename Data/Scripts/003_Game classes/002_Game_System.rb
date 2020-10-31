@@ -23,13 +23,8 @@ class Game_System
   attr_accessor :bgm_position
 
   def initialize
-    if $RPGVX
-      @map_interpreter    = Game_Interpreter.new(0,true)
-      @battle_interpreter = Game_Interpreter.new(0,false)
-    else
-      @map_interpreter    = Interpreter.new(0,true)
-      @battle_interpreter = Interpreter.new(0,false)
-    end
+    @map_interpreter    = Interpreter.new(0, true)
+    @battle_interpreter = Interpreter.new(0, false)
     @timer              = 0
     @timer_working      = false
     @save_disabled      = false

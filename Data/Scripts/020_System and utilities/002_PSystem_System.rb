@@ -9,11 +9,7 @@ def pbSafeLoad(file)
 end
 
 def pbLoadRxData(file) # :nodoc:
-  if $RPGVX
-    return load_data(file+".rvdata")
-  else
-    return load_data(file+".rxdata")
-  end
+  return load_data(file+".rxdata")
 end
 
 def pbChooseLanguage

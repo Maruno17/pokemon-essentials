@@ -625,11 +625,7 @@ end
 # Blacking out animation
 #===============================================================================
 def pbRxdataExists?(file)
-  if $RPGVX
-    return pbRgssExists?(file+".rvdata")
-  else
-    return pbRgssExists?(file+".rxdata")
-  end
+  return pbRgssExists?(file+".rxdata")
 end
 
 def pbStartOver(gameover=false)
