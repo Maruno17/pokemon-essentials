@@ -717,11 +717,9 @@ MultipleForms.register(:CALYREX,{
   "onSetForm" => proc { |pkmn,form,oldForm|
     case form
     when 0   # Normal
-      exclusiveMoves = [getID(PBMoves,:TACKLE),getID(PBMoves,:TAILWHIP),getID(PBMoves,:DOUBLEKICK),getID(PBMoves,:AVALANCHE),
-        getID(PBMoves,:HEX),getID(PBMoves,:STOMP),getID(PBMoves,:TORMENT),getID(PBMoves,:CONFUSERAY),getID(PBMoves,:MIST),
-        getID(PBMoves,:HAZE),getID(PBMoves,:ICICLECRASH),getID(PBMoves,:SHADOWBALL),getID(PBMoves,:TAKEDOWN),getID(PBMoves,:IRONDEFENSE),
-        getID(PBMoves,:AGILITY),getID(PBMoves,:THRASH),getID(PBMoves,:TAUNT),getID(PBMoves,:DISABLE),getID(PBMoves,:DOUBLEEDGE),
-        getID(PBMoves,:SWORDSDANCE),getID(PBMoves,:NASTYPLOT),getID(PBMoves,:GLACIALLANCE),getID(PBMoves,:ASTRALBARRAGE)]
+      exclusiveMoves = [:TACKLE, :TAILWHIP, :DOUBLEKICK, :AVALANCHE, :HEX, :STOMP, :TORMENT, :CONFUSERAY,
+         :MIST, :HAZE, :ICICLECRASH, :SHADOWBALL, :TAKEDOWN, :IRONDEFENSE, :AGILITY, :THRASH, :TAUNT, :DISABLE,
+          :DOUBLEEDGE, :SWORDSDANCE, :NASTYPLOT, :GLACIALLANCE, :ASTRALBARRAGE].map! { |name| getID(PBMoves, name) }
       pkmn.moves.each_with_index do |move,i|
         next if !move || move.id==0
         if exclusiveMoves.include?(move.id)
