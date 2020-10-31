@@ -575,7 +575,7 @@
 561,YAWN,Yawn,004,0,NORMAL,Status,0,10,0,NearOther,0,bce,"The user lets loose a huge yawn that lulls the target into falling asleep on the next turn."
 562,COURTCHANGE,Court Change,17A,0,NORMAL,Status,100,10,0,BothSides,0,e,"With its mysterious power, the user swaps the effects on either side of the field."
 563,STUFFCHEEKS,Stuff Cheeks,183,0,NORMAL,Status,100,10,0,User,0,e,"The user eats its held Berry, then sharply raises its Defense stat."
-564,TEATIME,Teatime,184,0,NORMAL,Status,0,10,0,BothSides,0,,"The user has teatime with all the Pokémon in the battle. Each Pokémon eats its held Berry."
+564,TEATIME,Teatime,184,0,NORMAL,Status,0,10,0,AllBattlers,0,,"The user has teatime with all the Pokémon in the battle. Each Pokémon eats its held Berry."
 565,TERRAINPULSE,Terrain Pulse,18A,50,NORMAL,Special,100,10,0,NearOther,0,befm,"The user utilizes the power of the terrain to attack. This move's type and power changes depending on the terrain when it's used."
 #-------------------------------
 566,BELCH,Belch,158,120,POISON,Special,90,10,0,NearOther,0,bf,"The user lets out a damaging belch at the target. The user must eat a held Berry to use this move."

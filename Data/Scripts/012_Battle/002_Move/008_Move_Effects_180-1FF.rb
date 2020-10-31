@@ -89,9 +89,8 @@ class PokeBattle_Move_184 < PokeBattle_Move
   end
 
   def pbEffectAgainstTarget(user,target)
-    target.pbHeldItemTriggerCheck(user.item,false)
-    target.pbConsumeItem(true,true,false) if user.item>0
-    target.pbRemoveItem if pbIsBerry?(target.item)
+    target.pbHeldItemTriggerCheck(target.item,false)
+    target.pbConsumeItem(true,true,false) if pbIsBerry?(target.item)
   end
 end
 
