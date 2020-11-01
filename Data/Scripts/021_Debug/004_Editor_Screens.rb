@@ -838,11 +838,11 @@ def pbPokemonEditor
           formname    = messages.get(MessageTypes::FormNames,selection)
           abilities = speciesData[SpeciesData::ABILITIES]
           if abilities.is_a?(Array)
-            ability1       = abilities[0]
-            ability2       = abilities[1]
+            ability1       = (abilities[0]) ? Data::Ability.get(abilities[0]).id_number : 0
+            ability2       = (abilities[1]) ? Data::Ability.get(abilities[1]).id_number : 0
           else
-            ability1       = abilities
-            ability2       = nil
+            ability1       = (abilities) ? Data::Ability.get(abilities).id_number : 0
+            ability2       = 0
           end
           color            = speciesData[SpeciesData::COLOR]
           habitat          = speciesData[SpeciesData::HABITAT]
@@ -870,15 +870,15 @@ def pbPokemonEditor
           baseexp          = speciesData[SpeciesData::BASE_EXP]
           hiddenAbils = speciesData[SpeciesData::HIDDEN_ABILITY]
           if hiddenAbils.is_a?(Array)
-            hiddenability1 = hiddenAbils[0]
-            hiddenability2 = hiddenAbils[1]
-            hiddenability3 = hiddenAbils[2]
-            hiddenability4 = hiddenAbils[3]
+            hiddenability1 = (hiddenAbils[0]) ? Data::Ability.get(hiddenAbils[0]).id_number : 0
+            hiddenability2 = (hiddenAbils[1]) ? Data::Ability.get(hiddenAbils[1]).id_number : 0
+            hiddenability3 = (hiddenAbils[2]) ? Data::Ability.get(hiddenAbils[2]).id_number : 0
+            hiddenability4 = (hiddenAbils[3]) ? Data::Ability.get(hiddenAbils[3]).id_number : 0
           else
-            hiddenability1 = hiddenAbils
-            hiddenability2 = nil
-            hiddenability3 = nil
-            hiddenability4 = nil
+            hiddenability1 = (hiddenAbils) ? Data::Ability.get(hiddenAbils).id_number : 0
+            hiddenability2 = 0
+            hiddenability3 = 0
+            hiddenability4 = 0
           end
           item1            = speciesData[SpeciesData::WILD_ITEM_COMMON]
           item2            = speciesData[SpeciesData::WILD_ITEM_UNCOMMON]

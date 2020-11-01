@@ -73,7 +73,9 @@ class Data
     end
 
     def self.each
-      DATA.keys.sort.each do |key|
+      keys = DATA.keys
+      keys.sort! { |a, b| a.to_s <=> b.to_s }
+      keys.each do |key|
         yield DATA[key] if key.is_a?(Symbol)
       end
     end
