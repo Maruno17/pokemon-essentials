@@ -243,9 +243,10 @@ def pbGetHabitatConst(i)
   return ret
 end
 
-def pbGetAbilityConst(i)
-  return MakeshiftConsts.get(MessageTypes::Abilities,i,PBAbilities)
-end
+# Unused
+#def pbGetAbilityConst(i)
+#  return MakeshiftConsts.get(MessageTypes::Abilities,i,PBAbilities)
+#end
 
 def pbGetMoveConst(i)
   return MakeshiftConsts.get(MessageTypes::Moves,i,PBMoves)
@@ -360,9 +361,8 @@ end
 # sorting between numerical and alphabetical.
 def pbChooseAbilityList(default=0)
   commands = []
-  for i in 1..PBAbilities.maxValue
-    cname = getConstantName(PBAbilities,i) rescue nil
-    commands.push([i,PBAbilities.getName(i)]) if cname
+  Data::Ability.each do |a|
+    commands.push([a.id_number, a.name])
   end
   return pbChooseList(commands,default,0,-1)
 end

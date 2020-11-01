@@ -209,7 +209,7 @@ class PokeBattle_Battler
     # Form changes upon entering battle and when the weather changes
     pbCheckFormOnWeatherChange if !endOfRound
     # Darmanitan - Zen Mode
-    if isSpecies?(:DARMANITAN) && isConst?(@ability,PBAbilities,:ZENMODE)
+    if isSpecies?(:DARMANITAN) && @ability == :ZENMODE
       if @hp<=@totalhp/2
         if @form!=1
           @battle.pbShowAbilitySplash(self,true)
@@ -223,7 +223,7 @@ class PokeBattle_Battler
       end
     end
     # Minior - Shields Down
-    if isSpecies?(:MINIOR) && isConst?(@ability,PBAbilities,:SHIELDSDOWN)
+    if isSpecies?(:MINIOR) && @ability == :SHIELDSDOWN
       if @hp>@totalhp/2   # Turn into Meteor form
         newForm = (@form>=7) ? @form-7 : @form
         if @form!=newForm
@@ -240,7 +240,7 @@ class PokeBattle_Battler
       end
     end
     # Wishiwashi - Schooling
-    if isSpecies?(:WISHIWASHI) && isConst?(@ability,PBAbilities,:SCHOOLING)
+    if isSpecies?(:WISHIWASHI) && @ability == :SCHOOLING
       if @level>=20 && @hp>@totalhp/4
         if @form!=1
           @battle.pbShowAbilitySplash(self,true)
@@ -254,8 +254,7 @@ class PokeBattle_Battler
       end
     end
     # Zygarde - Power Construct
-    if isSpecies?(:ZYGARDE) && isConst?(@ability,PBAbilities,:POWERCONSTRUCT) &&
-       endOfRound
+    if isSpecies?(:ZYGARDE) && @ability == :POWERCONSTRUCT && endOfRound
       if @hp<=@totalhp/2 && @form<2   # Turn into Complete Forme
         newForm = @form+2
         @battle.pbDisplay(_INTL("You sense the presence of many!"))

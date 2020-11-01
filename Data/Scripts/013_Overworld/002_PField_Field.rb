@@ -277,7 +277,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
   if $PokemonGlobal.stepcount%4==0 && POISON_IN_FIELD
     flashed = false
     for i in $Trainer.ablePokemonParty
-      if i.status==PBStatuses::POISON && !isConst?(i.ability,PBAbilities,:IMMUNITY)
+      if i.status==PBStatuses::POISON && !i.hasAbility?(:IMMUNITY)
         if !flashed
           $game_screen.start_flash(Color.new(255,0,0,128), 4)
           flashed = true
@@ -1161,9 +1161,7 @@ def pbFishingEnd
 end
 
 def pbFishing(hasEncounter,rodType=1)
-  speedup = ($Trainer.firstPokemon &&
-            (isConst?($Trainer.firstPokemon.ability,PBAbilities,:STICKYHOLD) ||
-            isConst?($Trainer.firstPokemon.ability,PBAbilities,:SUCTIONCUPS)))
+  speedup = ($Trainer.firstPokemon && [:STICKYHOLD, :SUCTIONCUPS].include?($Trainer.firstPokemon.ability))
   biteChance = 20+(25*rodType)   # 45, 70, 95
   biteChance *= 1.5 if speedup   # 67.5, 100, 100
   hookChance = 100

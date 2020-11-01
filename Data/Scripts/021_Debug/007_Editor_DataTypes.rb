@@ -827,7 +827,7 @@ module AbilityProperty
   end
 
   def self.format(value)
-    return (value) ? PBAbilities.getName(value) : "-"
+    return (value && Data::Ability.exists?(value)) ? Data::Ability.get(value).name : "-"
   end
 end
 
@@ -1262,7 +1262,7 @@ class EvolutionsProperty
                   when :PBTypes
                     allow_zero = true
                     newparam = pbChooseTypeList
-                  when :PBAbilities
+                  when :Ability
                     newparam = pbChooseAbilityList
                   else
                     allow_zero = true
@@ -1350,7 +1350,7 @@ class EvolutionsProperty
                 when :PBTypes
                   allow_zero = true
                   newparam = pbChooseTypeList(entry[1])
-                when :PBAbilities
+                when :Ability
                   newparam = pbChooseAbilityList(entry[1])
                 else
                   allow_zero = true

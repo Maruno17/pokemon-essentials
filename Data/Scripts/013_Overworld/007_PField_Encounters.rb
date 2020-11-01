@@ -243,9 +243,9 @@ class PokemonEncounters
     firstPkmn = $Trainer.firstPokemon
     if firstPkmn && rand(100)<50   # 50% chance of happening
       favoredType = -1
-      if isConst?(firstPkmn.ability,PBAbilities,:STATIC) && hasConst?(PBTypes,:ELECTRIC)
+      if firstPkmn.hasAbility?(:STATIC) && hasConst?(PBTypes,:ELECTRIC)
         favoredType = getConst(PBTypes,:ELECTRIC)
-      elsif isConst?(firstPkmn.ability,PBAbilities,:MAGNETPULL) && hasConst?(PBTypes,:STEEL)
+      elsif firstPkmn.hasAbility?(:MAGNETPULL) && hasConst?(PBTypes,:STEEL)
         favoredType = getConst(PBTypes,:STEEL)
       end
       if favoredType>=0
@@ -289,9 +289,9 @@ class PokemonEncounters
     level = encounter[1]+rand(1+encounter[2]-encounter[1])
     # Some abilities alter the level of the wild Pokémon
     if firstPkmn && rand(100)<50   # 50% chance of happening
-      if isConst?(firstPkmn.ability,PBAbilities,:HUSTLE) ||
-         isConst?(firstPkmn.ability,PBAbilities,:VITALSPIRIT) ||
-         isConst?(firstPkmn.ability,PBAbilities,:PRESSURE)
+      if firstPkmn.hasAbility?(:HUSTLE) ||
+         firstPkmn.hasAbility?(:PRESSURE) ||
+         firstPkmn.hasAbility?(:VITALSPIRIT)
         level2 = encounter[1]+rand(1+encounter[2]-encounter[1])
         level = level2 if level2>level   # Higher level is more likely
       end
@@ -343,24 +343,24 @@ class PokemonEncounters
       elsif firstPkmn.hasItem?(:PUREINCENSE)
         encount = encount*2/3
       else   # Ignore ability effects if an item effect applies
-        if isConst?(firstPkmn.ability,PBAbilities,:STENCH)
+        if firstPkmn.hasAbility?(:STENCH)
           encount = encount/2
-        elsif isConst?(firstPkmn.ability,PBAbilities,:WHITESMOKE)
+        elsif firstPkmn.hasAbility?(:WHITESMOKE)
           encount = encount/2
-        elsif isConst?(firstPkmn.ability,PBAbilities,:QUICKFEET)
+        elsif firstPkmn.hasAbility?(:QUICKFEET)
           encount = encount/2
-        elsif isConst?(firstPkmn.ability,PBAbilities,:SNOWCLOAK)
+        elsif firstPkmn.hasAbility?(:SNOWCLOAK)
           encount = encount/2 if $game_screen.weather_type==PBFieldWeather::Snow ||
                                  $game_screen.weather_type==PBFieldWeather::Blizzard
-        elsif isConst?(firstPkmn.ability,PBAbilities,:SANDVEIL)
+        elsif firstPkmn.hasAbility?(:SANDVEIL)
           encount = encount/2 if $game_screen.weather_type==PBFieldWeather::Sandstorm
-        elsif isConst?(firstPkmn.ability,PBAbilities,:SWARM)
+        elsif firstPkmn.hasAbility?(:SWARM)
           encount = encount*1.5
-        elsif isConst?(firstPkmn.ability,PBAbilities,:ILLUMINATE)
+        elsif firstPkmn.hasAbility?(:ILLUMINATE)
           encount = encount*2
-        elsif isConst?(firstPkmn.ability,PBAbilities,:ARENATRAP)
+        elsif firstPkmn.hasAbility?(:ARENATRAP)
           encount = encount*2
-        elsif isConst?(firstPkmn.ability,PBAbilities,:NOGUARD)
+        elsif firstPkmn.hasAbility?(:NOGUARD)
           encount = encount*2
         end
       end
@@ -373,8 +373,7 @@ class PokemonEncounters
     # Some abilities make wild encounters less likely if the wild Pokémon is
     # sufficiently weaker than the Pokémon with the ability
     if firstPkmn && rand(100)<50   # 50% chance of happening
-      if isConst?(firstPkmn.ability,PBAbilities,:INTIMIDATE) ||
-         isConst?(firstPkmn.ability,PBAbilities,:KEENEYE)
+      if firstPkmn.hasAbility?(:INTIMIDATE) || firstPkmn.hasAbility?(:KEENEYE)
         return nil if encPkmn[1]<=firstPkmn.level-5   # 5 or more levels weaker
       end
     end
@@ -409,7 +408,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   items = genwildpoke.wildHoldItems
   firstPkmn = $Trainer.firstPokemon
   chances = [50,5,1]
-  chances = [60,20,5] if firstPkmn && isConst?(firstPkmn.ability,PBAbilities,:COMPOUNDEYES)
+  chances = [60,20,5] if firstPkmn && firstPkmn.hasAbility?(:COMPOUNDEYES)
   itemrnd = rand(100)
   if (items[0]==items[1] && items[1]==items[2]) || itemrnd<chances[0]
     genwildpoke.setItem(items[0])
@@ -432,13 +431,13 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   # Change wild Pokémon's gender/nature depending on the lead party Pokémon's
   # ability
   if firstPkmn
-    if isConst?(firstPkmn.ability,PBAbilities,:CUTECHARM) && !genwildpoke.singleGendered?
+    if firstPkmn.hasAbility?(:CUTECHARM) && !genwildpoke.singleGendered?
       if firstPkmn.male?
         (rand(3)<2) ? genwildpoke.makeFemale : genwildpoke.makeMale
       elsif firstPkmn.female?
         (rand(3)<2) ? genwildpoke.makeMale : genwildpoke.makeFemale
       end
-    elsif isConst?(firstPkmn.ability,PBAbilities,:SYNCHRONIZE)
+    elsif firstPkmn.hasAbility?(:SYNCHRONIZE)
       genwildpoke.setNature(firstPkmn.nature) if !isRoamer && rand(100)<50
     end
   end

@@ -190,9 +190,9 @@ module SpeciesData
   def self.optionalValues(compilingForms = false)
     ret = {
       "Type2"               => [TYPE2,              "e", :PBTypes],
-      "Abilities"           => [ABILITIES,          "eE", :PBAbilities, :PBAbilities],
-      "HiddenAbility"       => [HIDDEN_ABILITY,     "eEEE", :PBAbilities, :PBAbilities,
-                                                            :PBAbilities, :PBAbilities],
+      "Abilities"           => [ABILITIES,          "eE", :Ability, :Ability],
+      "HiddenAbility"       => [HIDDEN_ABILITY,     "eEEE", :Ability, :Ability,
+                                                            :Ability, :Ability],
       "Habitat"             => [HABITAT,            "e", :PBHabitats],
       "WildItemCommon"      => [WILD_ITEM_COMMON,   "e", :PBItems],
       "WildItemUncommon"    => [WILD_ITEM_UNCOMMON, "e", :PBItems],

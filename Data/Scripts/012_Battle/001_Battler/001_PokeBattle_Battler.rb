@@ -181,7 +181,7 @@ class PokeBattle_Battler
   end
   alias owned owned?
 
-  def abilityName; return PBAbilities.getName(@ability); end
+  def abilityName; return Data::Ability.get(@ability).name; end
   def itemName;    return PBItems.getName(@item);        end
 
   def pbThis(lowerCase=false)
@@ -324,17 +324,12 @@ class PokeBattle_Battler
     return true
   end
 
-  def hasActiveAbility?(ability,ignoreFainted=false)
+  def hasActiveAbility?(check_ability, ignoreFainted = false)
     return false if !abilityActive?(ignoreFainted)
-    if ability.is_a?(Array)
-      ability.each do |a|
-        a = getID(PBAbilities,a)
-        return true if a!=0 && a==@ability
-      end
-      return false
+    if check_ability.is_a?(Array)
+      return check_ability.any? { |a| a == @ability }
     end
-    ability = getID(PBAbilities,ability)
-    return ability!=0 && ability==@ability
+    return check_ability == @ability
   end
   alias hasWorkingAbility hasActiveAbility?
 
@@ -358,10 +353,7 @@ class PokeBattle_Battler
       :COMATOSE,
       :RKSSYSTEM
     ]
-    abilityBlacklist.each do |a|
-      return true if isConst?(abil, PBAbilities, a)
-    end
-    return false
+    return abilityBlacklist.any? { |a| a == abil }
   end
 
   # Applies to gaining the ability.
@@ -386,10 +378,7 @@ class PokeBattle_Battler
       :COMATOSE,
       :RKSSYSTEM
     ]
-    abilityBlacklist.each do |a|
-      return true if isConst?(abil, PBAbilities, a)
-    end
-    return false
+    return abilityBlacklist.any? { |a| a == abil }
   end
 
   def itemActive?(ignoreFainted=false)
@@ -459,9 +448,7 @@ class PokeBattle_Battler
   end
 
   def canChangeType?
-    return false if isConst?(@ability,PBAbilities,:MULTITYPE) ||
-                    isConst?(@ability,PBAbilities,:RKSSYSTEM)
-    return true
+    return ![:MULTITYPE, :RKSSYSTEM].include?(@ability)
   end
 
   def airborne?

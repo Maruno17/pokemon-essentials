@@ -326,34 +326,34 @@ module Compiler
   # Compile abilities
   #=============================================================================
   def compile_abilities
-    records   = []
-    movenames = []
-    movedescs = []
-    maxValue = 0
-    pbCompilerEachPreppedLine("PBS/abilities.txt") { |line,lineno|
-      record = pbGetCsvRecord(line,lineno,[0,"vnss"])
-      if movenames[record[0]]
-        raise _INTL("Ability ID number '{1}' is used twice.\r\n{2}",record[0],FileLineData.linereport)
+    ability_names        = []
+    ability_descriptions = []
+    pbCompilerEachPreppedLine("PBS/abilities.txt") { |line, line_no|
+      line = pbGetCsvRecord(line, line_no, [0, "vnss"])
+      ability_number = line[0]
+      ability_symbol = line[1].to_sym
+      if Data::Ability::DATA[ability_number]
+        raise _INTL("Ability ID number '{1}' is used twice.\r\n{2}", ability_number, FileLineData.linereport)
+      elsif Data::Ability::DATA[ability_symbol]
+        raise _INTL("Ability ID '{1}' is used twice.\r\n{2}", ability_symbol, FileLineData.linereport)
       end
-      movenames[record[0]] = record[2]
-      movedescs[record[0]] = record[3]
-      maxValue = [maxValue,record[0]].max
-      records.push(record)
+      # Construct ability hash
+      ability_hash = {
+        :id          => ability_symbol,
+        :id_number   => ability_number,
+        :name        => line[2],
+        :description => line[3]
+      }
+      # Add ability's data to records
+      Data::Ability::DATA[ability_number] = Data::Ability::DATA[ability_symbol] = Data::Ability.new(ability_hash)
+      ability_names[ability_number]        = ability_hash[:name]
+      ability_descriptions[ability_number] = ability_hash[:description]
     }
-    MessageTypes.setMessages(MessageTypes::Abilities,movenames)
-    MessageTypes.setMessages(MessageTypes::AbilityDescs,movedescs)
-    code = "class PBAbilities\r\n"
-    for rec in records
-      code += "#{rec[1]}=#{rec[0]}\r\n"
-    end
-    code += "def self.getName(id)\r\n"
-    code += "id=getID(PBAbilities,id)\r\n"
-    code += "return pbGetMessage(MessageTypes::Abilities,id); end\r\n"
-    code += "def self.getCount; return #{records.length}; end\r\n"
-    code += "def self.maxValue; return #{maxValue}; end\r\n"
-    code += "end\r\n"
-    eval(code, TOPLEVEL_BINDING)
-    pbAddScript(code,"PBAbilities")
+    # Save all data
+    Data::Ability.save
+    MessageTypes.setMessages(MessageTypes::Abilities, ability_names)
+    MessageTypes.setMessages(MessageTypes::AbilityDescs, ability_descriptions)
+    Graphics.update
   end
 
   #=============================================================================

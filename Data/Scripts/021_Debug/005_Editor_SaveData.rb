@@ -55,13 +55,13 @@ def pbSaveAbilities
     f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
     f.write("\r\n")
     f.write("\#-------------------------------\r\n")
-    for i in 1..(PBAbilities.maxValue rescue PBAbilities.getCount-1 rescue pbGetMessageCount(MessageTypes::Abilities)-1)
-      abilname = getConstantName(PBAbilities,i) rescue pbGetAbilityConst(i)
-      next if !abilname || abilname==""
-      name = pbGetMessage(MessageTypes::Abilities,i)
-      next if !name || name==""
-      f.write(sprintf("%d,%s,%s,%s\r\n",i,csvQuote(abilname),csvQuote(name),
-        csvQuoteAlways(pbGetMessage(MessageTypes::AbilityDescs,i))))
+    Data::Ability.each do |a|
+      f.write(sprintf("%d,%s,%s,%s\r\n",
+        a.id_number,
+        csvQuote(a.id.to_s),
+        csvQuote(a.name),
+        csvQuoteAlways(a.description)
+      ))
     end
   }
 end
@@ -639,11 +639,11 @@ def pbSavePokemonData
     formname    = messages.get(MessageTypes::FormNames,i)
     abilities = speciesData[i][SpeciesData::ABILITIES]
     if abilities.is_a?(Array)
-      ability1       = abilities[0] || 0
-      ability2       = abilities[1] || 0
+      ability1       = abilities[0]
+      ability2       = abilities[1]
     else
-      ability1       = abilities || 0
-      ability2       = 0
+      ability1       = abilities
+      ability2       = nil
     end
     color            = speciesData[i][SpeciesData::COLOR] || 0
     habitat          = speciesData[i][SpeciesData::HABITAT] || 0
@@ -678,15 +678,15 @@ def pbSavePokemonData
     baseexp          = speciesData[i][SpeciesData::BASE_EXP] || 0
     hiddenAbils = speciesData[i][SpeciesData::HIDDEN_ABILITY]
     if hiddenAbils.is_a?(Array)
-      hiddenability1 = hiddenAbils[0] || 0
-      hiddenability2 = hiddenAbils[1] || 0
-      hiddenability3 = hiddenAbils[2] || 0
-      hiddenability4 = hiddenAbils[3] || 0
+      hiddenability1 = hiddenAbils[0]
+      hiddenability2 = hiddenAbils[1]
+      hiddenability3 = hiddenAbils[2]
+      hiddenability4 = hiddenAbils[3]
     else
-      hiddenability1 = hiddenAbils || 0
-      hiddenability2 = 0
-      hiddenability3 = 0
-      hiddenability4 = 0
+      hiddenability1 = hiddenAbils
+      hiddenability2 = nil
+      hiddenability3 = nil
+      hiddenability4 = nil
     end
     item1            = speciesData[i][SpeciesData::WILD_ITEM_COMMON] || 0
     item2            = speciesData[i][SpeciesData::WILD_ITEM_UNCOMMON] || 0
@@ -710,36 +710,36 @@ def pbSavePokemonData
     pokedata.write("Rareness = #{rareness}\r\n")
     pokedata.write("Happiness = #{happiness}\r\n")
     pokedata.write("Abilities = ")
-    if ability1!=0
-      cability1 = getConstantName(PBAbilities,ability1) rescue pbGetAbilityConst(ability1)
+    if ability1
+      cability1 = Data::Ability.get(ability1).name
       pokedata.write("#{cability1}")
-      pokedata.write(",") if ability2!=0
+      pokedata.write(",") if ability2
     end
-    if ability2!=0
-      cability2 = getConstantName(PBAbilities,ability2) rescue pbGetAbilityConst(ability2)
+    if ability2
+      cability2 = Data::Ability.get(ability2).name
       pokedata.write("#{cability2}")
     end
     pokedata.write("\r\n")
-    if hiddenability1>0 || hiddenability2>0 || hiddenability3>0 || hiddenability4>0
+    if hiddenability1 || hiddenability2 || hiddenability3 || hiddenability4
       pokedata.write("HiddenAbility = ")
       needcomma = false
-      if hiddenability1>0
-        cabilityh = getConstantName(PBAbilities,hiddenability1) rescue pbGetAbilityConst(hiddenability1)
+      if hiddenability1
+        cabilityh = Data::Ability.get(hiddenability1).name
         pokedata.write("#{cabilityh}"); needcomma = true
       end
-      if hiddenability2>0
+      if hiddenability2
         pokedata.write(",") if needcomma
-        cabilityh = getConstantName(PBAbilities,hiddenability2) rescue pbGetAbilityConst(hiddenability2)
+        cabilityh = Data::Ability.get(hiddenability2).name
         pokedata.write("#{cabilityh}"); needcomma = true
       end
-      if hiddenability3>0
+      if hiddenability3
         pokedata.write(",") if needcomma
-        cabilityh = getConstantName(PBAbilities,hiddenability3) rescue pbGetAbilityConst(hiddenability3)
+        cabilityh = Data::Ability.get(hiddenability3).name
         pokedata.write("#{cabilityh}"); needcomma = true
       end
-      if hiddenability4>0
+      if hiddenability4
         pokedata.write(",") if needcomma
-        cabilityh = getConstantName(PBAbilities,hiddenability4) rescue pbGetAbilityConst(hiddenability4)
+        cabilityh = Data::Ability.get(hiddenability4).name
         pokedata.write("#{cabilityh}")
       end
       pokedata.write("\r\n")
@@ -905,11 +905,11 @@ def pbSavePokemonFormsData
     origdata = {}
     abilities = speciesData[species][SpeciesData::ABILITIES]
     if abilities.is_a?(Array)
-      origdata["ability1"]       = abilities[0] || 0
-      origdata["ability2"]       = abilities[1] || 0
+      origdata["ability1"]       = abilities[0]
+      origdata["ability2"]       = abilities[1]
     else
-      origdata["ability1"]       = abilities || 0
-      origdata["ability2"]       = 0
+      origdata["ability1"]       = abilities
+      origdata["ability2"]       = nil
     end
     origdata["color"]            = speciesData[species][SpeciesData::COLOR] || 0
     origdata["habitat"]          = speciesData[species][SpeciesData::HABITAT] || 0
@@ -944,15 +944,15 @@ def pbSavePokemonFormsData
     origdata["baseexp"]          = speciesData[species][SpeciesData::BASE_EXP] || 0
     hiddenAbils = speciesData[species][SpeciesData::HIDDEN_ABILITY]
     if hiddenAbils.is_a?(Array)
-      origdata["hiddenability1"] = hiddenAbils[0] || 0
-      origdata["hiddenability2"] = hiddenAbils[1] || 0
-      origdata["hiddenability3"] = hiddenAbils[2] || 0
-      origdata["hiddenability4"] = hiddenAbils[3] || 0
+      origdata["hiddenability1"] = hiddenAbils[0]
+      origdata["hiddenability2"] = hiddenAbils[1]
+      origdata["hiddenability3"] = hiddenAbils[2]
+      origdata["hiddenability4"] = hiddenAbils[3]
     else
-      origdata["hiddenability1"] = hiddenAbils || 0
-      origdata["hiddenability2"] = 0
-      origdata["hiddenability3"] = 0
-      origdata["hiddenability4"] = 0
+      origdata["hiddenability1"] = hiddenAbils
+      origdata["hiddenability2"] = nil
+      origdata["hiddenability3"] = nil
+      origdata["hiddenability4"] = nil
     end
     origdata["item1"]            = speciesData[species][SpeciesData::WILD_ITEM_COMMON] || 0
     origdata["item2"]            = speciesData[species][SpeciesData::WILD_ITEM_UNCOMMON] || 0
@@ -960,11 +960,11 @@ def pbSavePokemonFormsData
     origdata["incense"]          = speciesData[species][SpeciesData::INCENSE] || 0
     abilities = speciesData[i][SpeciesData::ABILITIES]
     if abilities.is_a?(Array)
-      ability1       = abilities[0] || 0
-      ability2       = abilities[1] || 0
+      ability1       = abilities[0]
+      ability2       = abilities[1]
     else
-      ability1       = abilities || 0
-      ability2       = 0
+      ability1       = abilities
+      ability2       = nil
     end
     if ability1==origdata["ability1"] && ability2==origdata["ability2"]
       ability1 = ability2 = nil
@@ -1031,15 +1031,15 @@ def pbSavePokemonFormsData
     baseexp          = nil if baseexp==origdata["baseexp"]
     hiddenAbils = speciesData[i][SpeciesData::HIDDEN_ABILITY]
     if hiddenAbils.is_a?(Array)
-      hiddenability1 = hiddenAbils[0] || 0
-      hiddenability2 = hiddenAbils[1] || 0
-      hiddenability3 = hiddenAbils[2] || 0
-      hiddenability4 = hiddenAbils[3] || 0
+      hiddenability1 = hiddenAbils[0]
+      hiddenability2 = hiddenAbils[1]
+      hiddenability3 = hiddenAbils[2]
+      hiddenability4 = hiddenAbils[3]
     else
-      hiddenability1 = hiddenAbils || 0
-      hiddenability2 = 0
-      hiddenability3 = 0
-      hiddenability4 = 0
+      hiddenability1 = hiddenAbils
+      hiddenability2 = nil
+      hiddenability3 = nil
+      hiddenability4 = nil
     end
     if hiddenability1==origdata["hiddenability1"] &&
        hiddenability2==origdata["hiddenability2"] &&
@@ -1104,40 +1104,40 @@ def pbSavePokemonFormsData
     if happiness!=nil
       pokedata.write("Happiness = #{happiness}\r\n")
     end
-    if ability1!=nil && ability2!=nil
+    if ability1 || ability2
       pokedata.write("Abilities = ")
-      if ability1!=0
-        cability1 = getConstantName(PBAbilities,ability1) rescue pbGetAbilityConst(ability1)
+      if ability1
+        cability1 = Data::Ability.get(ability1).name
         pokedata.write("#{cability1}")
-        pokedata.write(",") if ability2!=0
+        pokedata.write(",") if ability2
       end
-      if ability2!=0
-        cability2 = getConstantName(PBAbilities,ability2) rescue pbGetAbilityConst(ability2)
+      if ability2
+        cability2 = Data::Ability.get(ability2).name
         pokedata.write("#{cability2}")
       end
       pokedata.write("\r\n")
     end
     if hiddenability1!=nil
-      if hiddenability1>0 || hiddenability2>0 || hiddenability3>0 || hiddenability4>0
+      if hiddenability1 || hiddenability2 || hiddenability3 || hiddenability4
         pokedata.write("HiddenAbility = ")
         needcomma = false
-        if hiddenability1>0
-          cabilityh = getConstantName(PBAbilities,hiddenability1) rescue pbGetAbilityConst(hiddenability1)
+        if hiddenability1
+          cabilityh = Data::Ability.get(hiddenability1).name
           pokedata.write("#{cabilityh}"); needcomma=true
         end
-        if hiddenability2>0
+        if hiddenability2
           pokedata.write(",") if needcomma
-          cabilityh = getConstantName(PBAbilities,hiddenability2) rescue pbGetAbilityConst(hiddenability2)
+          cabilityh = Data::Ability.get(hiddenability2).name
           pokedata.write("#{cabilityh}"); needcomma=true
         end
-        if hiddenability3>0
+        if hiddenability3
           pokedata.write(",") if needcomma
-          cabilityh = getConstantName(PBAbilities,hiddenability3) rescue pbGetAbilityConst(hiddenability3)
+          cabilityh = Data::Ability.get(hiddenability3).name
           pokedata.write("#{cabilityh}"); needcomma=true
         end
-        if hiddenability4>0
+        if hiddenability4
           pokedata.write(",") if needcomma
-          cabilityh = getConstantName(PBAbilities,hiddenability4) rescue pbGetAbilityConst(hiddenability4)
+          cabilityh = Data::Ability.get(hiddenability4).name
           pokedata.write("#{cabilityh}")
         end
         pokedata.write("\r\n")

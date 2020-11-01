@@ -634,14 +634,16 @@ class PokemonSummary_Scene
        [sprintf("%d",@pokemon.spdef),456,216,1,Color.new(64,64,64),Color.new(176,176,176)],
        [_INTL("Speed"),248,248,0,base,statshadows[PBStats::SPEED]],
        [sprintf("%d",@pokemon.speed),456,248,1,Color.new(64,64,64),Color.new(176,176,176)],
-       [_INTL("Ability"),224,284,0,base,shadow],
-       [PBAbilities.getName(@pokemon.ability),362,284,0,Color.new(64,64,64),Color.new(176,176,176)],
+       [_INTL("Ability"),224,284,0,base,shadow]
     ]
+    # Draw ability name and description
+    ability = @pokemon.ability
+    if ability
+      textpos.push([ability.name,362,284,0,Color.new(64,64,64),Color.new(176,176,176)])
+      drawTextEx(overlay,224,316,282,2,ability.description,Color.new(64,64,64),Color.new(176,176,176))
+    end
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
-    # Draw ability description
-    abilitydesc = pbGetMessage(MessageTypes::AbilityDescs,@pokemon.ability)
-    drawTextEx(overlay,224,316,282,2,abilitydesc,Color.new(64,64,64),Color.new(176,176,176))
     # Draw HP bar
     if @pokemon.hp>0
       w = @pokemon.hp*96*1.0/@pokemon.totalhp

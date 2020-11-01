@@ -1308,8 +1308,7 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "05E"
-      if isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-         isConst?(user.ability,PBAbilities,:RKSSYSTEM)
+      if user.ability == :MULTITYPE || user.ability == :RKSSYSTEM
         score -= 90
       else
         types = []
@@ -1323,8 +1322,7 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "05F"
-      if isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-         isConst?(user.ability,PBAbilities,:RKSSYSTEM)
+      if user.ability == :MULTITYPE || user.ability == :RKSSYSTEM
         score -= 90
       elsif target.lastMoveUsed<=0 ||
          PBTypes.isPseudoType?(pbGetMoveData(target.lastMoveUsed,MoveData::TYPE))
@@ -1349,8 +1347,7 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "060"
-      if isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-         isConst?(user.ability,PBAbilities,:RKSSYSTEM)
+      if user.ability == :MULTITYPE || user.ability == :RKSSYSTEM
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
         envtypes = [
@@ -1370,16 +1367,14 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "061"
       if target.effects[PBEffects::Substitute]>0 ||
-         isConst?(target.ability,PBAbilities,:MULTITYPE) ||
-         isConst?(target.ability,PBAbilities,:RKSSYSTEM)
+         target.ability == :MULTITYPE || target.ability == :RKSSYSTEM
         score -= 90
       elsif target.pbHasType?(:WATER)
         score -= 90
       end
     #---------------------------------------------------------------------------
     when "062"
-      if isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-         isConst?(user.ability,PBAbilities,:RKSSYSTEM)
+      if user.ability == :MULTITYPE || user.ability == :RKSSYSTEM
         score -= 90
       elsif user.pbHasType?(target.type1) &&
          user.pbHasType?(target.type2) &&
@@ -1392,10 +1387,7 @@ class PokeBattle_AI
       if target.effects[PBEffects::Substitute]>0
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
-        if isConst?(target.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:SIMPLE) ||
-           isConst?(target.ability,PBAbilities,:TRUANT)
+        if [:MULTITYPE, :RKSSYSTEM, :SIMPLE, :TRUANT].include?(target.ability)
           score -= 90
         end
       end
@@ -1404,10 +1396,7 @@ class PokeBattle_AI
       if target.effects[PBEffects::Substitute]>0
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
-        if isConst?(target.ability,PBAbilities,:INSOMNIA) ||
-           isConst?(target.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:TRUANT)
+        if [:INSOMNIA, :MULTITYPE, :RKSSYSTEM, :TRUANT].include?(target.ability)
           score -= 90
         end
       end
@@ -1416,26 +1405,16 @@ class PokeBattle_AI
       score -= 40   # don't prefer this move
       if skill>=PBTrainerAI.mediumSkill
         if target.ability==0 || user.ability==target.ability ||
-           isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(user.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:FLOWERGIFT) ||
-           isConst?(target.ability,PBAbilities,:FORECAST) ||
-           isConst?(target.ability,PBAbilities,:ILLUSION) ||
-           isConst?(target.ability,PBAbilities,:IMPOSTER) ||
-           isConst?(target.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:TRACE) ||
-           isConst?(target.ability,PBAbilities,:WONDERGUARD) ||
-           isConst?(target.ability,PBAbilities,:ZENMODE)
+           [:MULTITYPE, :RKSSYSTEM].include?(user.ability) ||
+           [:FLOWERGIFT, :FORECAST, :ILLUSION, :IMPOSTER, :MULTITYPE, :RKSSYSTEM,
+            :TRACE, :WONDERGUARD, :ZENMODE].include?(target.ability)
           score -= 90
         end
       end
       if skill>=PBTrainerAI.highSkill
-        if isConst?(target.ability,PBAbilities,:TRUANT) &&
-           user.opposes?(target)
+        if target.ability == :TRUANT && user.opposes?(target)
           score -= 90
-        elsif isConst?(target.ability,PBAbilities,:SLOWSTART) &&
-           user.opposes?(target)
+        elsif target.ability == :SLOWSTART && user.opposes?(target)
           score -= 90
         end
       end
@@ -1446,25 +1425,15 @@ class PokeBattle_AI
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
         if user.ability==0 || user.ability==target.ability ||
-           isConst?(target.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:TRUANT) ||
-           isConst?(user.ability,PBAbilities,:FLOWERGIFT) ||
-           isConst?(user.ability,PBAbilities,:FORECAST) ||
-           isConst?(user.ability,PBAbilities,:ILLUSION) ||
-           isConst?(user.ability,PBAbilities,:IMPOSTER) ||
-           isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(user.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(user.ability,PBAbilities,:TRACE) ||
-           isConst?(user.ability,PBAbilities,:ZENMODE)
+          [:MULTITYPE, :RKSSYSTEM, :TRUANT].include?(target.ability) ||
+          [:FLOWERGIFT, :FORECAST, :ILLUSION, :IMPOSTER, :MULTITYPE, :RKSSYSTEM,
+           :TRACE, :ZENMODE].include?(user.ability)
           score -= 90
         end
         if skill>=PBTrainerAI.highSkill
-          if isConst?(user.ability,PBAbilities,:TRUANT) &&
-             user.opposes?(target)
+          if user.ability == :TRUANT && user.opposes?(target)
             score += 90
-          elsif isConst?(user.ability,PBAbilities,:SLOWSTART) &&
-             user.opposes?(target)
+          elsif user.ability == :SLOWSTART && user.opposes?(target)
             score += 90
           end
         end
@@ -1475,23 +1444,15 @@ class PokeBattle_AI
       if skill>=PBTrainerAI.mediumSkill
         if (user.ability==0 && target.ability==0) ||
            user.ability==target.ability ||
-           isConst?(user.ability,PBAbilities,:ILLUSION) ||
-           isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(user.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(user.ability,PBAbilities,:WONDERGUARD) ||
-           isConst?(target.ability,PBAbilities,:ILLUSION) ||
-           isConst?(target.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:WONDERGUARD)
+           [:ILLUSION, :MULTITYPE, :RKSSYSTEM, :WONDERGUARD].include?(user.ability) ||
+           [:ILLUSION, :MULTITYPE, :RKSSYSTEM, :WONDERGUARD].include?(target.ability)
           score -= 90
         end
       end
       if skill>=PBTrainerAI.highSkill
-        if isConst?(target.ability,PBAbilities,:TRUANT) &&
-           user.opposes?(target)
+        if target.ability == :TRUANT && user.opposes?(target)
           score -= 90
-        elsif isConst?(target.ability,PBAbilities,:SLOWSTART) &&
-          user.opposes?(target)
+        elsif target.ability == :SLOWSTART && user.opposes?(target)
           score -= 90
         end
       end
@@ -1501,10 +1462,7 @@ class PokeBattle_AI
          target.effects[PBEffects::GastroAcid]
         score -= 90
       elsif skill>=PBTrainerAI.highSkill
-        score -= 90 if isConst?(target.ability,PBAbilities,:MULTITYPE)
-        score -= 90 if isConst?(target.ability,PBAbilities,:RKSSYSTEM)
-        score -= 90 if isConst?(target.ability,PBAbilities,:SLOWSTART)
-        score -= 90 if isConst?(target.ability,PBAbilities,:TRUANT)
+        score -= 90 if [:MULTITYPE, :RKSSYSTEM, :SLOWSTART, :TRUANT].include?(target.ability)
       end
     #---------------------------------------------------------------------------
     when "069"

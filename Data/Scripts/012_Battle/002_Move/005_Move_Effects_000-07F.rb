@@ -1997,7 +1997,7 @@ end
 #===============================================================================
 class PokeBattle_Move_063 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if !hasConst?(PBAbilities,:SIMPLE)   # Ability isn't defined
+    if !Data::Ability.exists?(:SIMPLE)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2005,9 +2005,7 @@ class PokeBattle_Move_063 < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    if target.unstoppableAbility? ||
-       isConst?(target.ability, PBAbilities, :TRUANT) ||   # For some reason
-       isConst?(target.ability, PBAbilities, :SIMPLE)
+    if target.unstoppableAbility? || [:TRUANT, :SIMPLE].include?(target.ability)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2017,7 +2015,7 @@ class PokeBattle_Move_063 < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     @battle.pbShowAbilitySplash(target,true,false)
     oldAbil = target.ability
-    target.ability = getConst(PBAbilities,:SIMPLE)
+    target.ability = :SIMPLE
     @battle.pbReplaceAbilitySplash(target)
     @battle.pbDisplay(_INTL("{1} acquired {2}!",target.pbThis,target.abilityName))
     @battle.pbHideAbilitySplash(target)
@@ -2032,7 +2030,7 @@ end
 #===============================================================================
 class PokeBattle_Move_064 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if !hasConst?(PBAbilities,:INSOMNIA)   # Ability isn't defined
+    if !Data::Ability.exists?(:INSOMNIA)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2040,9 +2038,7 @@ class PokeBattle_Move_064 < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    if target.unstoppableAbility? ||
-       isConst?(target.ability, PBAbilities, :TRUANT) ||   # For some reason
-       isConst?(target.ability, PBAbilities, :INSOMNIA)
+    if target.unstoppableAbility? || [:TRUANT, :INSOMNIA].include?(target.ability)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2052,7 +2048,7 @@ class PokeBattle_Move_064 < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     @battle.pbShowAbilitySplash(target,true,false)
     oldAbil = target.ability
-    target.ability = getConst(PBAbilities,:INSOMNIA)
+    target.ability = :INSOMNIA
     @battle.pbReplaceAbilitySplash(target)
     @battle.pbDisplay(_INTL("{1} acquired {2}!",target.pbThis,target.abilityName))
     @battle.pbHideAbilitySplash(target)
@@ -2082,10 +2078,7 @@ class PokeBattle_Move_065 < PokeBattle_Move
       return true
     end
     if target.ungainableAbility? ||
-       isConst?(target.ability, PBAbilities, :POWEROFALCHEMY) ||
-       isConst?(target.ability, PBAbilities, :RECEIVER) ||
-       isConst?(target.ability, PBAbilities, :TRACE) ||
-       isConst?(target.ability, PBAbilities, :WONDERGUARD)
+       [:POWEROFALCHEMY, :RECEIVER, :TRACE, :WONDERGUARD].include?(target.ability)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2117,9 +2110,7 @@ class PokeBattle_Move_066 < PokeBattle_Move
       return true
     end
     if user.ungainableAbility? ||
-       isConst?(user.ability, PBAbilities, :POWEROFALCHEMY) ||
-       isConst?(user.ability, PBAbilities, :RECEIVER) ||
-       isConst?(user.ability, PBAbilities, :TRACE)
+       [:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(user.ability)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2127,7 +2118,7 @@ class PokeBattle_Move_066 < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    if target.unstoppableAbility? || isConst?(target.ability, PBAbilities, :TRUANT)
+    if target.unstoppableAbility? || target.ability == :TRUANT
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2163,7 +2154,7 @@ class PokeBattle_Move_067 < PokeBattle_Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    if user.ungainableAbility? || isConst?(user.ability, PBAbilities, :WONDERGUARD)
+    if user.ungainableAbility? || user.ability == :WONDERGUARD
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2180,7 +2171,7 @@ class PokeBattle_Move_067 < PokeBattle_Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    if target.ungainableAbility? || isConst?(target.ability, PBAbilities, :WONDERGUARD)
+    if target.ungainableAbility? || target.ability == :WONDERGUARD
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end

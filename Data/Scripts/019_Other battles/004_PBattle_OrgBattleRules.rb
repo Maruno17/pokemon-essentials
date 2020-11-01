@@ -399,8 +399,7 @@ class StandardRestriction
     abilities = pbGetSpeciesData(pokemon.species,pokemon.form,SpeciesData::ABILITIES)
     abilities = [abilities] if !abilities.is_a?(Array)
     abilities.each do |a|
-      return true if isConst?(a,PBAbilities,:TRUANT) ||
-                     isConst?(a,PBAbilities,:SLOWSTART)
+      return true if [:TRUANT, :SLOWSTART].include?(a)
     end
     # Certain named species are not banned
     speciesWhitelist = [:DRAGONITE,:SALAMENCE,:TYRANITAR]

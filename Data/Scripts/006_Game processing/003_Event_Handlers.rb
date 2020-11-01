@@ -147,6 +147,57 @@ end
 
 
 
+# A stripped-down version of class HandlerHash which only deals with symbols and
+# doesn't care about whether those symbols actually relate to a defined thing.
+class HandlerHash2
+  def initialize
+    @hash    = {}
+    @add_ifs = []
+  end
+
+  def [](sym)
+    return @hash[sym] if sym && @hash[sym]
+    for add_if in @add_ifs
+      return add_if[1] if add_if[0].call(sym)
+    end
+    return nil
+  end
+
+  def addIf(conditionProc, handler = nil, &handlerBlock)
+    if ![Proc, Hash].include?(handler.class) && !block_given?
+      raise ArgumentError, "addIf call for #{self.class.name} has no valid handler (#{handler.inspect} was given)"
+    end
+    @add_ifs.push([conditionProc, handler || handlerBlock])
+  end
+
+  def add(sym, handler = nil, &handlerBlock)
+    if ![Proc, Hash].include?(handler.class) && !block_given?
+      raise ArgumentError, "#{self.class.name} for #{sym.inspect} has no valid handler (#{handler.inspect} was given)"
+    end
+    @hash[sym] = handler || handlerBlock if sym
+  end
+
+  def copy(src, *dests)
+    handler = self[src]
+    return if !handler
+    for dest in dests
+      self.add(dest, handler)
+    end
+  end
+
+  def clear
+    @hash.clear
+  end
+
+  def trigger(sym, *args)
+    sym = sym.id if !sym.is_a?(Symbol) && sym.respond_to?("id")
+    handler = self[sym]
+    return (handler) ? handler.call(sym, *args) : nil
+  end
+end
+
+
+
 class SpeciesHandlerHash < HandlerHash
   def initialize
     super(:PBSpecies)
@@ -155,10 +206,7 @@ end
 
 
 
-class AbilityHandlerHash < HandlerHash
-  def initialize
-    super(:PBAbilities)
-  end
+class AbilityHandlerHash < HandlerHash2
 end
 
 

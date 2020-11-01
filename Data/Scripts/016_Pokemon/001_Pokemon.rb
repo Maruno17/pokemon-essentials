@@ -279,17 +279,23 @@ class Pokemon
     return @abilityflag || (@personalID & 1)
   end
 
-  # @return [Integer] the ID of this Pokémon's ability
+  # @return [Data::Ability] an Ability object corresponding to this Pokémon's ability
   def ability
+    ret = ability_id
+    return Data::Ability.try_get(ret)
+  end
+
+  # @return [Symbol] the ability symbol of this Pokémon's ability
+  def ability_id
     abilIndex = abilityIndex
     # Hidden ability
     if abilIndex >= 2
       hiddenAbil = pbGetSpeciesData(@species, formSimple, SpeciesData::HIDDEN_ABILITY)
       if hiddenAbil.is_a?(Array)
         ret = hiddenAbil[abilIndex - 2]
-        return ret if ret && ret > 0
-      else
-        return hiddenAbil if abilIndex == 2 && hiddenAbil > 0
+        return ret if Data::Ability.exists?(ret)
+      elsif abilIndex == 2
+        return hiddenAbil if Data::Ability.exists?(hiddenAbil)
       end
       abilIndex = (@personalID & 1)
     end
@@ -297,10 +303,10 @@ class Pokemon
     abilities = pbGetSpeciesData(@species, formSimple, SpeciesData::ABILITIES)
     if abilities.is_a?(Array)
       ret = abilities[abilIndex]
-      ret = abilities[(abilIndex + 1) % 2] if !ret || ret == 0
-      return ret || 0
+      ret = abilities[(abilIndex + 1) % 2] if !Data::Ability.exists?(ret)
+      return ret
     end
-    return abilities || 0
+    return abilities
   end
 
   # Returns whether this Pokémon has a particular ability. If no value
@@ -308,10 +314,10 @@ class Pokemon
   # @param ability [Integer] ability ID to check
   # @return [Boolean] whether this Pokémon has a particular ability or
   #   an ability at all
-  def hasAbility?(ability = 0)
+  def hasAbility?(check_ability = nil)
     current_ability = self.ability
-    return current_ability > 0 if ability == 0
-    return current_ability == getID(PBAbilities, ability)
+    return !current_ability.nil? if check_ability.nil?
+    return current_ability == check_ability
   end
 
   # Sets this Pokémon's ability index.
@@ -323,7 +329,7 @@ class Pokemon
   # @return [Boolean] whether this Pokémon has a hidden ability
   def hasHiddenAbility?
     abil = abilityIndex
-    return abil != nil && abil >= 2
+    return abil >= 2
   end
 
   # @return [Array<Array<Integer>>] the list of abilities this Pokémon can have,
@@ -332,13 +338,13 @@ class Pokemon
     ret = []
     abilities = pbGetSpeciesData(@species, formSimple, SpeciesData::ABILITIES)
     if abilities.is_a?(Array)
-      abilities.each_with_index { |a, i| ret.push([a, i]) if a && a > 0 }
+      abilities.each_with_index { |a, i| ret.push([a, i]) if a }
     else
       ret.push([abilities, 0]) if abilities > 0
     end
     hiddenAbil = pbGetSpeciesData(@species, formSimple, SpeciesData::HIDDEN_ABILITY)
     if hiddenAbil.is_a?(Array)
-      hiddenAbil.each_with_index { |a, i| ret.push([a, i + 2]) if a && a > 0 }
+      hiddenAbil.each_with_index { |a, i| ret.push([a, i + 2]) if a }
     else
       ret.push([hiddenAbil, 2]) if hiddenAbil > 0
     end
@@ -387,7 +393,7 @@ class Pokemon
   # @return [Boolean] whether this Pokémon is shiny (differently colored)
   def shiny?
     return @shinyflag if @shinyflag != nil
-    a = @personalID ^ @trainerID
+    a = @personalID ^ @owner.id
     b = a & 0xFFFF
     c = (a >> 16) & 0xFFFF
     d = b ^ c

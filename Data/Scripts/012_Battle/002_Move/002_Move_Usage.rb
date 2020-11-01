@@ -165,7 +165,7 @@ class PokeBattle_Move
     end
     # Disguise will take the damage
     if !@battle.moldBreaker && target.isSpecies?(:MIMIKYU) &&
-       target.form==0 && isConst?(target.ability,PBAbilities,:DISGUISE)
+       target.form==0 && target.ability == :DISGUISE
       target.damageState.disguise = true
       return
     end

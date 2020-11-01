@@ -311,6 +311,18 @@ module Compiler
       end
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
+      if enumer == :Ability
+        enumer = Data.const_get(enumer.to_sym)
+        begin
+          if ret == "" || !enumer.exists?(ret.to_sym)
+            raise _INTL("Undefined value {1} in {2}\r\n{3}", ret, enumer.name, FileLineData.linereport)
+          end
+        rescue NameError
+          raise _INTL("Incorrect value {1} in {2}\r\n{3}", ret, enumer.name, FileLineData.linereport)
+        end
+        return ret.to_sym
+      end
+
       enumer = Object.const_get(enumer.to_sym)
       begin
         if ret=="" || !enumer.const_defined?(ret)
@@ -341,6 +353,12 @@ module Compiler
       return nil if ret=="" || !(enumer.const_defined?(ret) rescue false)
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
+      if enumer == :Ability
+        enumer = Data.const_get(enumer.to_sym)
+        return nil if ret == "" || !enumer.exists?(ret.to_sym)
+        return ret.to_sym
+      end
+
       enumer = Object.const_get(enumer.to_sym)
       return nil if ret=="" || !(enumer.const_defined?(ret) rescue false)
       return enumer.const_get(ret.to_sym)
@@ -607,9 +625,9 @@ module Compiler
       yield(_INTL("Compiling berry plant data"))
       compile_berry_plants           # Depends on PBItems
       yield(_INTL("Compiling Pokémon data"))
-      compile_pokemon                # Depends on PBMoves, PBItems, PBTypes, PBAbilities
+      compile_pokemon                # Depends on PBMoves, PBItems, PBTypes, Ability
       yield(_INTL("Compiling Pokémon forms data"))
-      compile_pokemon_forms          # Depends on PBSpecies, PBMoves, PBItems, PBTypes, PBAbilities
+      compile_pokemon_forms          # Depends on PBSpecies, PBMoves, PBItems, PBTypes, Ability
       yield(_INTL("Compiling machine data"))
       compile_move_compatibilities   # Depends on PBSpecies, PBMoves
       yield(_INTL("Compiling Trainer type data"))

@@ -259,7 +259,7 @@ end
 def pbCheckEvolutionEx(pokemon)
   return -1 if pokemon.species<=0 || pokemon.egg? || pokemon.shadowPokemon?
   return -1 if pokemon.hasItem?(:EVERSTONE)
-  return -1 if isConst?(pokemon.ability,PBAbilities,:BATTLEBOND)
+  return -1 if pokemon.hasAbility?(:BATTLEBOND)
   ret = -1
   for form in pbGetEvolvedFormData(pbGetFSpeciesFromForm(pokemon.species,pokemon.form),true)
     ret = yield pokemon,form[0],form[1],form[2]

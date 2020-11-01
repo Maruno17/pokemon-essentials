@@ -836,10 +836,10 @@ def pbDecideWinnerEffectiveness(move,otype1,otype2,ability,scores)
   return 0 if data.basedamage==0
   atype=data.type
   typemod=PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE*PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE
-  if !isConst?(ability,PBAbilities,:LEVITATE) || !isConst?(data.type,PBTypes,:GROUND)
+  if ability != :LEVITATE || !isConst?(data.type,PBTypes,:GROUND)
     mod1=PBTypes.getEffectiveness(atype,otype1)
     mod2=(otype1==otype2) ? PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE : PBTypes.getEffectiveness(atype,otype2)
-    if isConst?(ability,PBAbilities,:WONDERGUARD)
+    if ability == :WONDERGUARD
       mod1=PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if !PBTypes.superEffective?(mod1)
       mod2=PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if !PBTypes.superEffective?(mod2)
     end
@@ -862,7 +862,7 @@ def pbDecideWinnerScore(party0,party1,rating)
   for j in 0...party1.length
     types1.push(party1[j].type1)
     types2.push(party1[j].type2)
-    abilities.push(party1[j].ability)
+    abilities.push(party1[j].ability_id)
   end
   for i in 0...party0.length
     for move in party0[i].moves

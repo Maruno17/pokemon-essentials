@@ -21,7 +21,7 @@ class PokeBattle_Battler
     @level          = 0
     @hp = @totalhp  = 0
     @type1 = @type2 = 0
-    @ability        = 0
+    @ability        = nil
     @item           = 0
     @gender         = 0
     @attack = @defense = @spatk = @spdef = @speed = 0
@@ -78,7 +78,7 @@ class PokeBattle_Battler
     @totalhp      = pkmn.totalhp
     @type1        = pkmn.type1
     @type2        = pkmn.type2
-    @ability      = pkmn.ability
+    @ability      = pkmn.ability_id
     @item         = pkmn.item
     @gender       = pkmn.gender
     @attack       = pkmn.attack
@@ -297,7 +297,7 @@ class PokeBattle_Battler
       if fullChange
         @type1   = @pokemon.type1
         @type2   = @pokemon.type2
-        @ability = @pokemon.ability
+        @ability = @pokemon.ability_id
       end
     end
   end

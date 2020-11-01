@@ -219,8 +219,7 @@ Events.onStepTaken += proc { |_sender,_e|
     next if egg.eggsteps<=0
     egg.eggsteps -= 1
     for i in $Trainer.pokemonParty
-      next if !isConst?(i.ability,PBAbilities,:FLAMEBODY) &&
-              !isConst?(i.ability,PBAbilities,:MAGMAARMOR)
+      next if !i.hasAbility?(:FLAMEBODY) && !i.hasAbility?(:MAGMAARMOR)
       egg.eggsteps -= 1
       break
     end

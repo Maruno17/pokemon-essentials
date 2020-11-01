@@ -75,9 +75,7 @@ class PokeBattle_Battler
       choices = []
       @battle.eachOtherSideBattler(@index) do |b|
         next if b.ungainableAbility? ||
-                isConst?(b.ability, PBAbilities, :POWEROFALCHEMY) ||
-                isConst?(b.ability, PBAbilities, :RECEIVER) ||
-                isConst?(b.ability, PBAbilities, :TRACE)
+                [:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(b.ability)
         choices.push(b)
       end
       if choices.length>0
@@ -107,16 +105,16 @@ class PokeBattle_Battler
   # Ability change
   #=============================================================================
   def pbOnAbilityChanged(oldAbil)
-    if @effects[PBEffects::Illusion] && isConst?(oldAbil,PBAbilities,:ILLUSION)
+    if @effects[PBEffects::Illusion] && oldAbil == :ILLUSION
       @effects[PBEffects::Illusion] = nil
       if !@effects[PBEffects::Transform]
-        @battle.scene.pbChangePokemon(self,@pokemon)
-        @battle.pbDisplay(_INTL("{1}'s {2} wore off!",pbThis,PBAbilities.getName(oldAbil)))
+        @battle.scene.pbChangePokemon(self, @pokemon)
+        @battle.pbDisplay(_INTL("{1}'s {2} wore off!", pbThis, Data::Ability.get(oldAbil).name))
         @battle.pbSetSeen(self)
       end
     end
     @effects[PBEffects::GastroAcid] = false if unstoppableAbility?
-    @effects[PBEffects::SlowStart]  = 0 if !isConst?(@ability,PBAbilities,:SLOWSTART)
+    @effects[PBEffects::SlowStart]  = 0 if @ability != :SLOWSTART
     # Revert form if Flower Gift/Forecast was lost
     pbCheckFormOnWeatherChange
     # Check for end of primordial weather

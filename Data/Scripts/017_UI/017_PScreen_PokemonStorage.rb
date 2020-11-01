@@ -1415,8 +1415,9 @@ class PokemonStorageScene
       end
       imagepos.push(["Graphics/Pictures/Storage/overlay_lv",6,246])
       textstrings.push([pokemon.level.to_s,28,234,false,base,shadow])
-      if pokemon.ability>0
-        textstrings.push([PBAbilities.getName(pokemon.ability),86,306,2,base,shadow])
+      ability = pokemon.ability
+      if ability
+        textstrings.push([ability.name,86,306,2,base,shadow])
       else
         textstrings.push([_INTL("No ability"),86,306,2,nonbase,nonshadow])
       end
