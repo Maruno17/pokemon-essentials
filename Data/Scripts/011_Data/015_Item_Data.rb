@@ -14,6 +14,10 @@ class Data
     attr_reader :move
 
     DATA = {}
+    DATA_FILENAME = "items.dat"
+
+    extend ClassMethods
+    include InstanceMethods
 
     def initialize(hash)
       validate hash => Hash, hash[:id] => Symbol
@@ -43,68 +47,6 @@ class Data
     # @return [String] the translated description of this item
     def description
       return pbGetMessage(MessageTypes::ItemDescriptions, @id_number)
-    end
-
-    # @param other [Symbol, Item, Integer]
-    # @return [Boolean] whether other is the same as this item
-    def ==(other)
-      return false if other.nil?
-      validate other => [Symbol, Item, Integer]
-      if other.is_a?(Symbol)
-        return @id == other
-      elsif other.is_a?(Item)
-        return @id == other.id
-      elsif other.is_a?(Integer)
-        return @id_number == other
-      end
-      return false
-    end
-
-    # @param item_id [Symbol, Item, Integer]
-    # @return [Boolean] whether the given item_id is defined as an Item
-    def self.exists?(item_id)
-      return false if item_id.nil?
-      validate item_id => [Symbol, Item, Integer]
-      item_id = item_id.id if item_id.is_a?(Item)
-      return !DATA[item_id].nil?
-    end
-
-    # @param item_id [Symbol, Item, Integer]
-    # @return [Item]
-    def self.get(item_id)
-      validate item_id => [Symbol, Item, Integer]
-      return item_id if item_id.is_a?(Item)
-#      if item_id.is_a?(Integer)
-#        p "Please switch to symbols, thanks."
-#      end
-      raise "Unknown item ID #{item_id}." unless DATA.has_key?(item_id)
-      return DATA[item_id]
-    end
-
-    def self.try_get(item_id)
-      return nil if item_id.nil?
-      validate item_id => [Symbol, Item, Integer]
-      return item_id if item_id.is_a?(Item)
-#      if item_id.is_a?(Integer)
-#        p "Please switch to symbols, thanks."
-#      end
-      return (DATA.has_key?(item_id)) ? DATA[item_id] : nil
-    end
-
-    def self.each
-      keys = DATA.keys
-      keys.sort! { |a, b| a.to_s <=> b.to_s }
-      keys.each do |key|
-        yield DATA[key] if key.is_a?(Symbol)
-      end
-    end
-
-    def self.load
-      const_set(:DATA, load_data("Data/items.dat"))
-    end
-
-    def self.save
-      save_data(DATA, "Data/items.dat")
     end
   end
 
