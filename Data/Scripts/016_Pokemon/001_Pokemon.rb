@@ -279,10 +279,10 @@ class Pokemon
     return @abilityflag || (@personalID & 1)
   end
 
-  # @return [Data::Ability] an Ability object corresponding to this Pokémon's ability
+  # @return [PokemonData::Ability] an Ability object corresponding to this Pokémon's ability
   def ability
     ret = ability_id
-    return Data::Ability.try_get(ret)
+    return PokemonData::Ability.try_get(ret)
   end
 
   # @return [Symbol] the ability symbol of this Pokémon's ability
@@ -293,9 +293,9 @@ class Pokemon
       hiddenAbil = pbGetSpeciesData(@species, formSimple, SpeciesData::HIDDEN_ABILITY)
       if hiddenAbil.is_a?(Array)
         ret = hiddenAbil[abilIndex - 2]
-        return ret if Data::Ability.exists?(ret)
+        return ret if PokemonData::Ability.exists?(ret)
       elsif abilIndex == 2
-        return hiddenAbil if Data::Ability.exists?(hiddenAbil)
+        return hiddenAbil if PokemonData::Ability.exists?(hiddenAbil)
       end
       abilIndex = (@personalID & 1)
     end
@@ -303,7 +303,7 @@ class Pokemon
     abilities = pbGetSpeciesData(@species, formSimple, SpeciesData::ABILITIES)
     if abilities.is_a?(Array)
       ret = abilities[abilIndex]
-      ret = abilities[(abilIndex + 1) % 2] if !Data::Ability.exists?(ret)
+      ret = abilities[(abilIndex + 1) % 2] if !PokemonData::Ability.exists?(ret)
       return ret
     end
     return abilities

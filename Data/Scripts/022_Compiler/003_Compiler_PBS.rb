@@ -332,9 +332,9 @@ module Compiler
       line = pbGetCsvRecord(line, line_no, [0, "vnss"])
       ability_number = line[0]
       ability_symbol = line[1].to_sym
-      if Data::Ability::DATA[ability_number]
+      if PokemonData::Ability::DATA[ability_number]
         raise _INTL("Ability ID number '{1}' is used twice.\r\n{2}", ability_number, FileLineData.linereport)
-      elsif Data::Ability::DATA[ability_symbol]
+      elsif PokemonData::Ability::DATA[ability_symbol]
         raise _INTL("Ability ID '{1}' is used twice.\r\n{2}", ability_symbol, FileLineData.linereport)
       end
       # Construct ability hash
@@ -345,12 +345,12 @@ module Compiler
         :description => line[3]
       }
       # Add ability's data to records
-      Data::Ability::DATA[ability_number] = Data::Ability::DATA[ability_symbol] = Data::Ability.new(ability_hash)
+      PokemonData::Ability::DATA[ability_number] = PokemonData::Ability::DATA[ability_symbol] = PokemonData::Ability.new(ability_hash)
       ability_names[ability_number]        = ability_hash[:name]
       ability_descriptions[ability_number] = ability_hash[:description]
     }
     # Save all data
-    Data::Ability.save
+    PokemonData::Ability.save
     MessageTypes.setMessages(MessageTypes::Abilities, ability_names)
     MessageTypes.setMessages(MessageTypes::AbilityDescs, ability_descriptions)
     Graphics.update

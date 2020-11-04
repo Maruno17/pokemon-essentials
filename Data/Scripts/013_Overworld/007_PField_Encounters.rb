@@ -328,40 +328,33 @@ class PokemonEncounters
     # modifiers applied, divided by 180 (numbers are multiplied by 16 below to
     # increase precision).
     encount = @density[enctype]*16
-    encount = encount*0.8 if $PokemonGlobal.bicycle
+    encount *= 0.8 if $PokemonGlobal.bicycle
     if !NEWEST_BATTLE_MECHANICS
       if $PokemonMap.blackFluteUsed
-        encount = encount/2
+        encount /= 2
       elsif $PokemonMap.whiteFluteUsed
-        encount = encount*1.5
+        encount *= 1.5
       end
     end
     firstPkmn = $Trainer.firstPokemon
     if firstPkmn
       if firstPkmn.hasItem?(:CLEANSETAG)
-        encount = encount*2/3
+        encount *= 2.0 / 3
       elsif firstPkmn.hasItem?(:PUREINCENSE)
-        encount = encount*2/3
+        encount *= 2.0 / 3
       else   # Ignore ability effects if an item effect applies
-        if firstPkmn.hasAbility?(:STENCH)
-          encount = encount/2
-        elsif firstPkmn.hasAbility?(:WHITESMOKE)
-          encount = encount/2
-        elsif firstPkmn.hasAbility?(:QUICKFEET)
-          encount = encount/2
-        elsif firstPkmn.hasAbility?(:SNOWCLOAK)
-          encount = encount/2 if $game_screen.weather_type==PBFieldWeather::Snow ||
-                                 $game_screen.weather_type==PBFieldWeather::Blizzard
-        elsif firstPkmn.hasAbility?(:SANDVEIL)
-          encount = encount/2 if $game_screen.weather_type==PBFieldWeather::Sandstorm
-        elsif firstPkmn.hasAbility?(:SWARM)
-          encount = encount*1.5
-        elsif firstPkmn.hasAbility?(:ILLUMINATE)
-          encount = encount*2
-        elsif firstPkmn.hasAbility?(:ARENATRAP)
-          encount = encount*2
-        elsif firstPkmn.hasAbility?(:NOGUARD)
-          encount = encount*2
+        case firstPkmn.ability_id
+        when :STENCH, :WHITESMOKE, :QUICKFEET
+          encount /= 2
+        when :SNOWCLOAK
+          encount /= 2 if $game_screen.weather_type==PBFieldWeather::Snow ||
+                          $game_screen.weather_type==PBFieldWeather::Blizzard
+        when :SANDVEIL
+          encount /= 2 if $game_screen.weather_type==PBFieldWeather::Sandstorm
+        when :SWARM
+          encount *= 1.5
+        when :ILLUMINATE, :ARENATRAP, :NOGUARD
+          encount *= 2
         end
       end
     end

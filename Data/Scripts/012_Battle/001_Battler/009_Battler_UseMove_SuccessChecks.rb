@@ -239,7 +239,7 @@ class PokeBattle_Battler
     if @effects[PBEffects::Flinch]
       @battle.pbDisplay(_INTL("{1} flinched and couldn't move!",pbThis))
       if abilityActive?
-        BattleHandlers.triggerAbilityOnFlinch(@ability,self,@battle)
+        BattleHandlers.triggerAbilityOnFlinch(self.ability,self,@battle)
       end
       @lastMoveFailed = true
       return false

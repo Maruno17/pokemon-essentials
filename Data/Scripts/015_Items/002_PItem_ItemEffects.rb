@@ -1096,7 +1096,7 @@ ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE,proc { |item,pkmn,scene|
     next false
   end
   newabil = (pkmn.abilityIndex+1)%2
-  newabilname = Data::Ability.get((newabil==0) ? abil1 : abil2).name
+  newabilname = PokemonData::Ability.get((newabil==0) ? abil1 : abil2).name
   if scene.pbConfirm(_INTL("Would you like to change {1}'s Ability to {2}?",
      pkmn.name,newabilname))
     pkmn.setAbility(newabil)

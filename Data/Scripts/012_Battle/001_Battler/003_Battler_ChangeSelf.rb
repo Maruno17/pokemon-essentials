@@ -209,7 +209,7 @@ class PokeBattle_Battler
     # Form changes upon entering battle and when the weather changes
     pbCheckFormOnWeatherChange if !endOfRound
     # Darmanitan - Zen Mode
-    if isSpecies?(:DARMANITAN) && @ability == :ZENMODE
+    if isSpecies?(:DARMANITAN) && self.ability == :ZENMODE
       if @hp<=@totalhp/2
         if @form!=1
           @battle.pbShowAbilitySplash(self,true)
@@ -223,7 +223,7 @@ class PokeBattle_Battler
       end
     end
     # Minior - Shields Down
-    if isSpecies?(:MINIOR) && @ability == :SHIELDSDOWN
+    if isSpecies?(:MINIOR) && self.ability == :SHIELDSDOWN
       if @hp>@totalhp/2   # Turn into Meteor form
         newForm = (@form>=7) ? @form-7 : @form
         if @form!=newForm
@@ -240,7 +240,7 @@ class PokeBattle_Battler
       end
     end
     # Wishiwashi - Schooling
-    if isSpecies?(:WISHIWASHI) && @ability == :SCHOOLING
+    if isSpecies?(:WISHIWASHI) && self.ability == :SCHOOLING
       if @level>=20 && @hp>@totalhp/4
         if @form!=1
           @battle.pbShowAbilitySplash(self,true)
@@ -254,7 +254,7 @@ class PokeBattle_Battler
       end
     end
     # Zygarde - Power Construct
-    if isSpecies?(:ZYGARDE) && @ability == :POWERCONSTRUCT && endOfRound
+    if isSpecies?(:ZYGARDE) && self.ability == :POWERCONSTRUCT && endOfRound
       if @hp<=@totalhp/2 && @form<2   # Turn into Complete Forme
         newForm = @form+2
         @battle.pbDisplay(_INTL("You sense the presence of many!"))
@@ -266,11 +266,11 @@ class PokeBattle_Battler
   end
 
   def pbTransform(target)
-    oldAbil = @ability
+    oldAbil = @ability_id
     @effects[PBEffects::Transform]        = true
     @effects[PBEffects::TransformSpecies] = target.species
     pbChangeTypes(target)
-    @ability = target.ability
+    self.ability = target.ability
     @attack  = target.attack
     @defense = target.defense
     @spatk   = target.spatk

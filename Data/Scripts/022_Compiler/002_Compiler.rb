@@ -312,7 +312,7 @@ module Compiler
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
       if enumer == :Ability
-        enumer = Data.const_get(enumer.to_sym)
+        enumer = PokemonData.const_get(enumer.to_sym)
         begin
           if ret == "" || !enumer.exists?(ret.to_sym)
             raise _INTL("Undefined value {1} in {2}\r\n{3}", ret, enumer.name, FileLineData.linereport)
@@ -354,7 +354,7 @@ module Compiler
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
       if enumer == :Ability
-        enumer = Data.const_get(enumer.to_sym)
+        enumer = PokemonData.const_get(enumer.to_sym)
         return nil if ret == "" || !enumer.exists?(ret.to_sym)
         return ret.to_sym
       end

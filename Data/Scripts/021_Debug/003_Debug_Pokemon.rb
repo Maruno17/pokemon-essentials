@@ -433,7 +433,7 @@ module PokemonDebugMixin
         oldabil = (pkmn.ability) ? pkmn.ability.name : "No ability"
         commands = []
         for i in abils
-          commands.push(((i[1]<2) ? "" : "(H) ") + Data::Ability.get(i[0]).name)
+          commands.push(((i[1]<2) ? "" : "(H) ") + PokemonData::Ability.get(i[0]).name)
         end
         commands.push(_INTL("Remove override"))
         msg = [_INTL("Ability {1} is natural.",oldabil),

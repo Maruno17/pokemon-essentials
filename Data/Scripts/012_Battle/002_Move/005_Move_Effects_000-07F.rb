@@ -1997,7 +1997,7 @@ end
 #===============================================================================
 class PokeBattle_Move_063 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if !Data::Ability.exists?(:SIMPLE)
+    if !PokemonData::Ability.exists?(:SIMPLE)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2030,7 +2030,7 @@ end
 #===============================================================================
 class PokeBattle_Move_064 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if !Data::Ability.exists?(:INSOMNIA)
+    if !PokemonData::Ability.exists?(:INSOMNIA)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2038,7 +2038,7 @@ class PokeBattle_Move_064 < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    if target.unstoppableAbility? || [:TRUANT, :INSOMNIA].include?(target.ability)
+    if target.unstoppableAbility? || [:TRUANT, :INSOMNIA].include?(target.ability_id)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2073,12 +2073,12 @@ class PokeBattle_Move_065 < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    if target.ability==0 || user.ability==target.ability
+    if !target.ability || user.ability==target.ability
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     if target.ungainableAbility? ||
-       [:POWEROFALCHEMY, :RECEIVER, :TRACE, :WONDERGUARD].include?(target.ability)
+       [:POWEROFALCHEMY, :RECEIVER, :TRACE, :WONDERGUARD].include?(target.ability_id)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2105,12 +2105,12 @@ end
 #===============================================================================
 class PokeBattle_Move_066 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if user.ability==0
+    if !user.ability
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     if user.ungainableAbility? ||
-       [:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(user.ability)
+       [:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(user.ability_id)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2146,7 +2146,7 @@ class PokeBattle_Move_067 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
   def pbMoveFailed?(user,targets)
-    if user.ability==0
+    if !user.ability
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2162,7 +2162,7 @@ class PokeBattle_Move_067 < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    if target.ability==0 ||
+    if !target.ability ||
        (user.ability==target.ability && !NEWEST_BATTLE_MECHANICS)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true

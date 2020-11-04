@@ -1387,7 +1387,7 @@ class PokeBattle_AI
       if target.effects[PBEffects::Substitute]>0
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
-        if [:MULTITYPE, :RKSSYSTEM, :SIMPLE, :TRUANT].include?(target.ability)
+        if [:MULTITYPE, :RKSSYSTEM, :SIMPLE, :TRUANT].include?(target.ability_id)
           score -= 90
         end
       end
@@ -1396,7 +1396,7 @@ class PokeBattle_AI
       if target.effects[PBEffects::Substitute]>0
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
-        if [:INSOMNIA, :MULTITYPE, :RKSSYSTEM, :TRUANT].include?(target.ability)
+        if [:INSOMNIA, :MULTITYPE, :RKSSYSTEM, :TRUANT].include?(target.ability_id)
           score -= 90
         end
       end
@@ -1404,10 +1404,10 @@ class PokeBattle_AI
     when "065"
       score -= 40   # don't prefer this move
       if skill>=PBTrainerAI.mediumSkill
-        if target.ability==0 || user.ability==target.ability ||
-           [:MULTITYPE, :RKSSYSTEM].include?(user.ability) ||
+        if !target.ability || user.ability==target.ability ||
+           [:MULTITYPE, :RKSSYSTEM].include?(user.ability_id) ||
            [:FLOWERGIFT, :FORECAST, :ILLUSION, :IMPOSTER, :MULTITYPE, :RKSSYSTEM,
-            :TRACE, :WONDERGUARD, :ZENMODE].include?(target.ability)
+            :TRACE, :WONDERGUARD, :ZENMODE].include?(target.ability_id)
           score -= 90
         end
       end
@@ -1424,10 +1424,10 @@ class PokeBattle_AI
       if target.effects[PBEffects::Substitute]>0
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
-        if user.ability==0 || user.ability==target.ability ||
-          [:MULTITYPE, :RKSSYSTEM, :TRUANT].include?(target.ability) ||
+        if !user.ability || user.ability==target.ability ||
+          [:MULTITYPE, :RKSSYSTEM, :TRUANT].include?(target.ability_id) ||
           [:FLOWERGIFT, :FORECAST, :ILLUSION, :IMPOSTER, :MULTITYPE, :RKSSYSTEM,
-           :TRACE, :ZENMODE].include?(user.ability)
+           :TRACE, :ZENMODE].include?(user.ability_id)
           score -= 90
         end
         if skill>=PBTrainerAI.highSkill
@@ -1442,10 +1442,10 @@ class PokeBattle_AI
     when "067"
       score -= 40   # don't prefer this move
       if skill>=PBTrainerAI.mediumSkill
-        if (user.ability==0 && target.ability==0) ||
+        if (!user.ability && !target.ability) ||
            user.ability==target.ability ||
-           [:ILLUSION, :MULTITYPE, :RKSSYSTEM, :WONDERGUARD].include?(user.ability) ||
-           [:ILLUSION, :MULTITYPE, :RKSSYSTEM, :WONDERGUARD].include?(target.ability)
+           [:ILLUSION, :MULTITYPE, :RKSSYSTEM, :WONDERGUARD].include?(user.ability_id) ||
+           [:ILLUSION, :MULTITYPE, :RKSSYSTEM, :WONDERGUARD].include?(target.ability_id)
           score -= 90
         end
       end
@@ -1462,7 +1462,7 @@ class PokeBattle_AI
          target.effects[PBEffects::GastroAcid]
         score -= 90
       elsif skill>=PBTrainerAI.highSkill
-        score -= 90 if [:MULTITYPE, :RKSSYSTEM, :SLOWSTART, :TRUANT].include?(target.ability)
+        score -= 90 if [:MULTITYPE, :RKSSYSTEM, :SLOWSTART, :TRUANT].include?(target.ability_id)
       end
     #---------------------------------------------------------------------------
     when "069"

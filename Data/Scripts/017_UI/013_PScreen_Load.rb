@@ -268,7 +268,7 @@ class PokemonLoadScreen
       $scene = nil
       return
     end
-    Data::Ability.load
+    PokemonData::Ability.load
     commands = []
     cmdContinue    = -1
     cmdNewGame     = -1

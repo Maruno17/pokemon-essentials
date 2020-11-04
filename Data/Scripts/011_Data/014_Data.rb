@@ -1,8 +1,7 @@
-class Data
-
+module PokemonData
   # A mixin module for data classes which provides common class methods (called
-  # by Data::Thing.method) that provide access to data held within. Assumes the
-  # data class's data is stored in a class constant hash called DATA.
+  # by PokemonData::Thing.method) that provide access to data held within.
+  # Assumes the data class's data is stored in a class constant hash called DATA.
   module ClassMethods
     # @param other [Symbol, self, Integer]
     # @return [Boolean] whether the given other is defined as a self
@@ -37,7 +36,7 @@ class Data
 
     def each
       keys = self::DATA.keys
-      keys.sort! { |a, b| a.to_s <=> b.to_s }
+      keys.sort! { |a, b| a.id_number <=> b.id_number }
       keys.each do |key|
         yield self::DATA[key] if key.is_a?(Symbol)
       end
@@ -71,5 +70,4 @@ class Data
       return false
     end
   end
-
 end

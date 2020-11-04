@@ -21,7 +21,7 @@ class PokeBattle_Battler
     @level          = 0
     @hp = @totalhp  = 0
     @type1 = @type2 = 0
-    @ability        = nil
+    @ability_id     = nil
     @item           = 0
     @gender         = 0
     @attack = @defense = @spatk = @spdef = @speed = 0
@@ -78,7 +78,7 @@ class PokeBattle_Battler
     @totalhp      = pkmn.totalhp
     @type1        = pkmn.type1
     @type2        = pkmn.type2
-    @ability      = pkmn.ability_id
+    @ability_id   = pkmn.ability_id
     @item         = pkmn.item
     @gender       = pkmn.gender
     @attack       = pkmn.attack
@@ -285,19 +285,19 @@ class PokeBattle_Battler
   def pbUpdate(fullChange=false)
     return if !@pokemon
     @pokemon.calcStats
-    @level       = @pokemon.level
-    @hp          = @pokemon.hp
-    @totalhp     = @pokemon.totalhp
+    @level          = @pokemon.level
+    @hp             = @pokemon.hp
+    @totalhp        = @pokemon.totalhp
     if !@effects[PBEffects::Transform]
-      @attack    = @pokemon.attack
-      @defense   = @pokemon.defense
-      @spatk     = @pokemon.spatk
-      @spdef     = @pokemon.spdef
-      @speed     = @pokemon.speed
+      @attack       = @pokemon.attack
+      @defense      = @pokemon.defense
+      @spatk        = @pokemon.spatk
+      @spdef        = @pokemon.spdef
+      @speed        = @pokemon.speed
       if fullChange
-        @type1   = @pokemon.type1
-        @type2   = @pokemon.type2
-        @ability = @pokemon.ability_id
+        @type1      = @pokemon.type1
+        @type2      = @pokemon.type2
+        @ability_id = @pokemon.ability_id
       end
     end
   end

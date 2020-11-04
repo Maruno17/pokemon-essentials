@@ -11,7 +11,7 @@ class PokeBattle_Battler
     pbContinualAbilityChecks(true)
     # Abilities that trigger upon switching in
     if (!fainted? && unstoppableAbility?) || abilityActive?
-      BattleHandlers.triggerAbilityOnSwitchIn(@ability,self,@battle)
+      BattleHandlers.triggerAbilityOnSwitchIn(self.ability,self,@battle)
     end
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
@@ -29,7 +29,7 @@ class PokeBattle_Battler
   #=============================================================================
   def pbAbilitiesOnSwitchOut
     if abilityActive?
-      BattleHandlers.triggerAbilityOnSwitchOut(@ability,self,false)
+      BattleHandlers.triggerAbilityOnSwitchOut(self.ability,self,false)
     end
     # Reset form
     @battle.peer.pbOnLeavingBattle(@battle,@pokemon,@battle.usedInBattle[idxOwnSide][@index/2])
@@ -57,7 +57,7 @@ class PokeBattle_Battler
     return false if !abilityActive?
     newHP = @hp if newHP<0
     return false if oldHP<@totalhp/2 || newHP>=@totalhp/2   # Didn't drop below half
-    ret = BattleHandlers.triggerAbilityOnHPDroppedBelowHalf(@ability,self,@battle)
+    ret = BattleHandlers.triggerAbilityOnHPDroppedBelowHalf(self.ability,self,@battle)
     return ret   # Whether self has switched out
   end
 
@@ -81,11 +81,11 @@ class PokeBattle_Battler
       if choices.length>0
         choice = choices[@battle.pbRandom(choices.length)]
         @battle.pbShowAbilitySplash(self)
-        @ability = choice.ability
+        self.ability = choice.ability
         @battle.pbDisplay(_INTL("{1} traced {2}'s {3}!",pbThis,choice.pbThis(true),choice.abilityName))
         @battle.pbHideAbilitySplash(self)
         if !onSwitchIn && (unstoppableAbility? || abilityActive?)
-          BattleHandlers.triggerAbilityOnSwitchIn(@ability,self,@battle)
+          BattleHandlers.triggerAbilityOnSwitchIn(self.ability,self,@battle)
         end
       end
     end
@@ -97,7 +97,7 @@ class PokeBattle_Battler
   # Cures status conditions, confusion and infatuation.
   def pbAbilityStatusCureCheck
     if abilityActive?
-      BattleHandlers.triggerStatusCureAbility(@ability,self)
+      BattleHandlers.triggerStatusCureAbility(self.ability,self)
     end
   end
 
@@ -109,12 +109,12 @@ class PokeBattle_Battler
       @effects[PBEffects::Illusion] = nil
       if !@effects[PBEffects::Transform]
         @battle.scene.pbChangePokemon(self, @pokemon)
-        @battle.pbDisplay(_INTL("{1}'s {2} wore off!", pbThis, Data::Ability.get(oldAbil).name))
+        @battle.pbDisplay(_INTL("{1}'s {2} wore off!", pbThis, PokemonData::Ability.get(oldAbil).name))
         @battle.pbSetSeen(self)
       end
     end
     @effects[PBEffects::GastroAcid] = false if unstoppableAbility?
-    @effects[PBEffects::SlowStart]  = 0 if @ability != :SLOWSTART
+    @effects[PBEffects::SlowStart]  = 0 if self.ability != :SLOWSTART
     # Revert form if Flower Gift/Forecast was lost
     pbCheckFormOnWeatherChange
     # Check for end of primordial weather

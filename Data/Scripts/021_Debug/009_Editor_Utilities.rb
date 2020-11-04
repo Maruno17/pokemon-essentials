@@ -361,7 +361,7 @@ end
 # sorting between numerical and alphabetical.
 def pbChooseAbilityList(default=0)
   commands = []
-  Data::Ability.each do |a|
+  PokemonData::Ability.each do |a|
     commands.push([a.id_number, a.name])
   end
   return pbChooseList(commands,default,0,-1)

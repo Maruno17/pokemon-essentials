@@ -827,7 +827,7 @@ module AbilityProperty
   end
 
   def self.format(value)
-    return (value && Data::Ability.exists?(value)) ? Data::Ability.get(value).name : "-"
+    return (value && PokemonData::Ability.exists?(value)) ? PokemonData::Ability.get(value).name : "-"
   end
 end
 

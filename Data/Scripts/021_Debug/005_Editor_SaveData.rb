@@ -55,7 +55,7 @@ def pbSaveAbilities
     f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
     f.write("\r\n")
     f.write("\#-------------------------------\r\n")
-    Data::Ability.each do |a|
+    PokemonData::Ability.each do |a|
       f.write(sprintf("%d,%s,%s,%s\r\n",
         a.id_number,
         csvQuote(a.id.to_s),
@@ -711,12 +711,12 @@ def pbSavePokemonData
     pokedata.write("Happiness = #{happiness}\r\n")
     pokedata.write("Abilities = ")
     if ability1
-      cability1 = Data::Ability.get(ability1).name
+      cability1 = PokemonData::Ability.get(ability1).name
       pokedata.write("#{cability1}")
       pokedata.write(",") if ability2
     end
     if ability2
-      cability2 = Data::Ability.get(ability2).name
+      cability2 = PokemonData::Ability.get(ability2).name
       pokedata.write("#{cability2}")
     end
     pokedata.write("\r\n")
@@ -724,22 +724,22 @@ def pbSavePokemonData
       pokedata.write("HiddenAbility = ")
       needcomma = false
       if hiddenability1
-        cabilityh = Data::Ability.get(hiddenability1).name
+        cabilityh = PokemonData::Ability.get(hiddenability1).name
         pokedata.write("#{cabilityh}"); needcomma = true
       end
       if hiddenability2
         pokedata.write(",") if needcomma
-        cabilityh = Data::Ability.get(hiddenability2).name
+        cabilityh = PokemonData::Ability.get(hiddenability2).name
         pokedata.write("#{cabilityh}"); needcomma = true
       end
       if hiddenability3
         pokedata.write(",") if needcomma
-        cabilityh = Data::Ability.get(hiddenability3).name
+        cabilityh = PokemonData::Ability.get(hiddenability3).name
         pokedata.write("#{cabilityh}"); needcomma = true
       end
       if hiddenability4
         pokedata.write(",") if needcomma
-        cabilityh = Data::Ability.get(hiddenability4).name
+        cabilityh = PokemonData::Ability.get(hiddenability4).name
         pokedata.write("#{cabilityh}")
       end
       pokedata.write("\r\n")
@@ -1107,12 +1107,12 @@ def pbSavePokemonFormsData
     if ability1 || ability2
       pokedata.write("Abilities = ")
       if ability1
-        cability1 = Data::Ability.get(ability1).name
+        cability1 = PokemonData::Ability.get(ability1).name
         pokedata.write("#{cability1}")
         pokedata.write(",") if ability2
       end
       if ability2
-        cability2 = Data::Ability.get(ability2).name
+        cability2 = PokemonData::Ability.get(ability2).name
         pokedata.write("#{cability2}")
       end
       pokedata.write("\r\n")
@@ -1122,22 +1122,22 @@ def pbSavePokemonFormsData
         pokedata.write("HiddenAbility = ")
         needcomma = false
         if hiddenability1
-          cabilityh = Data::Ability.get(hiddenability1).name
+          cabilityh = PokemonData::Ability.get(hiddenability1).name
           pokedata.write("#{cabilityh}"); needcomma=true
         end
         if hiddenability2
           pokedata.write(",") if needcomma
-          cabilityh = Data::Ability.get(hiddenability2).name
+          cabilityh = PokemonData::Ability.get(hiddenability2).name
           pokedata.write("#{cabilityh}"); needcomma=true
         end
         if hiddenability3
           pokedata.write(",") if needcomma
-          cabilityh = Data::Ability.get(hiddenability3).name
+          cabilityh = PokemonData::Ability.get(hiddenability3).name
           pokedata.write("#{cabilityh}"); needcomma=true
         end
         if hiddenability4
           pokedata.write(",") if needcomma
-          cabilityh = Data::Ability.get(hiddenability4).name
+          cabilityh = PokemonData::Ability.get(hiddenability4).name
           pokedata.write("#{cabilityh}")
         end
         pokedata.write("\r\n")

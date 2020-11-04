@@ -1,5 +1,4 @@
-class Data
-
+module PokemonData
   class Item
     attr_reader :id
     attr_reader :id_number
@@ -49,7 +48,6 @@ class Data
       return pbGetMessage(MessageTypes::ItemDescriptions, @id_number)
     end
   end
-
 end
 
 
@@ -66,9 +64,9 @@ module Compiler
       line = pbGetCsvRecord(line, line_no, [0, "vnssuusuuUN"])
       item_number = line[0]
       item_symbol = line[1].to_sym
-      if Data::Item::DATA[item_number]
+      if PokemonData::Item::DATA[item_number]
         raise _INTL("Item ID number '{1}' is used twice.\r\n{2}", item_number, FileLineData.linereport)
-      elsif Data::Item::DATA[item_symbol]
+      elsif PokemonData::Item::DATA[item_symbol]
         raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_symbol, FileLineData.linereport)
       end
       # Construct item hash
@@ -86,13 +84,13 @@ module Compiler
       }
       item_hash[:move] = parseMove(line[10]) if !nil_or_empty?(line[10])
       # Add item's data to records
-      Data::Item::DATA[item_number] = Data::Item::DATA[item_symbol] = Data::Item.new(item_hash)
+      PokemonData::Item::DATA[item_number] = PokemonData::Item::DATA[item_symbol] = PokemonData::Item.new(item_hash)
       item_names[item_number]        = item_hash[:name]
       item_names_plural[item_number] = item_hash[:name_plural]
       item_descriptions[item_number] = item_hash[:description]
     }
     # Save all data
-    Data::Item.save
+    PokemonData::Item.save
     MessageTypes.setMessages(MessageTypes::Items, item_names)
     MessageTypes.setMessages(MessageTypes::ItemPlurals, item_names_plural)
     MessageTypes.setMessages(MessageTypes::ItemDescriptions, item_descriptions)
