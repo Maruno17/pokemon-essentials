@@ -483,6 +483,7 @@ class PokeBattle_Battler
     return true if @battle.pbCheckOpposingAbility(:UNNERVE,@index)
     return true if @battle.pbCheckOpposingAbility(:ASONEICE,@index)
     return true if @battle.pbCheckOpposingAbility(:ASONEGHOST,@index)
+    return false
   end
 
   def canChangeType?
