@@ -2348,6 +2348,8 @@ class PokeBattle_Move_0CF < PokeBattle_Move
       msg = _INTL("{1} became trapped by Sand Tomb!",target.pbThis)
     elsif isConst?(@id,PBMoves,:WHIRLPOOL)
       msg = _INTL("{1} became trapped in the vortex!",target.pbThis)
+    elsif isConst?(@id,PBMoves,:THUNDERCAGE)
+      msg = _INTL("{1} trapped {2} in a Thunder Cage!",user.pbThis,target.pbThis(true))
     elsif isConst?(@id,PBMoves,:WRAP)
       msg = _INTL("{1} was wrapped by {2}!",target.pbThis,user.pbThis(true))
     end
