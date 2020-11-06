@@ -525,28 +525,34 @@ BattlerPlayerY = 21
 BattlerEnemyY = 19
 #-------------------------------
 [ARTICUNO,1]
+FormName = Galarian
 Type1 = PSYCHIC
 Type2 = FLYING
+BaseStats = 90,85,85,95,125,100
 Abilities = COMPETITIVE
-HiddenAbility = COMPETITIVE
-BattlerPlayerY = 16
-BattlerEnemyY = 20
+Moves = 1,GUST,1,PSYCHOSHIFT,5,CONFUSION,10,REFLECT,15,HYPNOSIS,20,AGILITY,25,ANCIENTPOWER,30,TAILWIND,35,PSYCHOCUT,40,RECOVER,45,FREEZINGGLARE,50,DREAMEATER,55,HURRICANE,60,MINDREADER,65,FUTURESIGHT,70,TRICKROOM
+BattlerPlayerY = 8
+BattlerEnemyY = 12
 #-------------------------------
 [ZAPDOS,1]
+FormName = Galarian
 Type1 = FIGHTING
 Type2 = FLYING
+BaseStats = 90,125,90,100,85,90
 Abilities = DEFIANT
-HiddenAbility = DEFIANT
-BattlerPlayerY = 14
-BattlerEnemyY = 18
+Moves = 1,PECK,1,FOCUSENERGY,5,ROCKSMASH,10,LIGHTSCREEN,15,PLUCK,20,AGILITY,25,ANCIENTPOWER,30,BRICKBREAK,35,DRILLPECK,40,QUICKGUARD,45,THUNDEROUSKICK,50,BULKUP,55,COUNTER,60,DETECT,65,CLOSECOMBAT,70,REVERSAL
+BattlerPlayerY = 8
+BattlerEnemyY = 12
 #-------------------------------
 [MOLTRES,1]
+FormName = Galarian
 Type1 = DARK
 Type2 = FLYING
+BaseStats = 90,85,90,90,100,125
 Abilities = BERSERK
-HiddenAbility = BERSERK
-BattlerPlayerY = 17
-BattlerEnemyY = 17
+Moves = 1,GUST,1,LEER,5,PAYBACK,10,SAFEGUARD,15,WINGATTACK,20,AGILITY,25,ANCIENTPOWER,30,SUCKERPUNCH,35,AIRSLASH,40,AFTERYOU,45,FIERYWRATH,50,NASTYPLOT,55,HURRICANE,60,ENDURE,65,MEMENTO,70,SKYATTACK
+BattlerPlayerY = 8
+BattlerEnemyY = 12
 #-------------------------------
 [MEWTWO,1]
 FormName = Mega Mewtwo X
@@ -594,10 +600,14 @@ BattlerEnemyY = 19
 FormName = Galarian
 Type1 = POISON
 Type2 = PSYCHIC
-Abilities = CURIOUSMEDICINE
+BaseStats = 95,65,80,30,110,110
+Abilities = CURIOUSMEDICINE,OWNTEMPO
+HiddenAbility = REGENERATOR
+Moves = 0,SHELLSIDEARM,1,SHELLSIDEARM,1,WITHDRAW,1,TACKLE,1,CURSE,1,GROWL,1,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERPULSE,21,HEADBUTT,24,ZENHEADBUTT,27,AMNESIA,30,SURF,33,SLACKOFF,36,PSYCHIC,39,PSYCHUP,42,RAINDANCE,45,HEALPULSE
 Height = 1.8
-Weight = 79.5
-Kind = Hexpert
+Pokedex = Slowking can solve any problem present to it, but no one can understand a thing Slowking says.
+BattlerPlayerY = 8
+BattlerEnemyY = 12
 #-------------------------------
 [UNOWN,1]
 FormName = B
@@ -2108,6 +2118,192 @@ Moves = 0,SPARK,1,SPARK,1,EERIEIMPULSE,1,BELCH,1,TEARFULLOOK,1,NUZZLE,1,GROWL,1,
 Pokedex = It has an electrical organ on its chest. While generating electricity, it fills its surroundings with what sounds like the strumming of a bass guitar.
 BattlerEnemyY = 11
 #-------------------------------
+[ALCREMIE,1]
+FormName = Berry - Vanilla Cream
+#-------------------------------
+[ALCREMIE,2]
+FormName = Love - Vanilla Cream
+#-------------------------------
+[ALCREMIE,3]
+FormName = Star - Vanilla Cream
+#-------------------------------
+[ALCREMIE,4]
+FormName = Clover - Vanilla Cream
+#-------------------------------
+[ALCREMIE,5]
+FormName = Flower - Vanilla Cream
+#-------------------------------
+[ALCREMIE,6]
+FormName = Ribbon - Vanilla Cream
+#-------------------------------
+[ALCREMIE,7]
+FormName = Strawberry - Ruby Cream
+#-------------------------------
+[ALCREMIE,8]
+FormName = Berry - Ruby Cream
+#-------------------------------
+[ALCREMIE,9]
+FormName = Love - Ruby Cream
+#-------------------------------
+[ALCREMIE,10]
+FormName = Star - Ruby Cream
+#-------------------------------
+[ALCREMIE,11]
+FormName = Clover - Ruby Cream
+#-------------------------------
+[ALCREMIE,12]
+FormName = Flower - Ruby Cream
+#-------------------------------
+[ALCREMIE,13]
+FormName = Ribbon - Ruby Cream
+#-------------------------------
+[ALCREMIE,14]
+FormName = Strawberry - Matcha Cream
+#-------------------------------
+[ALCREMIE,15]
+FormName = Berry - Matcha Cream
+#-------------------------------
+[ALCREMIE,16]
+FormName = Love - Matcha Cream
+#-------------------------------
+[ALCREMIE,17]
+FormName = Star - Matcha Cream
+#-------------------------------
+[ALCREMIE,18]
+FormName = Clover - Matcha Cream
+#-------------------------------
+[ALCREMIE,19]
+FormName = Flower - Matcha Cream
+#-------------------------------
+[ALCREMIE,20]
+FormName = Ribbon - Matcha Cream
+#-------------------------------
+[ALCREMIE,21]
+FormName = Strawberry - Mint Cream
+#-------------------------------
+[ALCREMIE,22]
+FormName = Berry - Mint Cream
+#-------------------------------
+[ALCREMIE,23]
+FormName = Love - Mint Cream
+#-------------------------------
+[ALCREMIE,24]
+FormName = Star - Mint Cream
+#-------------------------------
+[ALCREMIE,25]
+FormName = Clover - Mint Cream
+#-------------------------------
+[ALCREMIE,26]
+FormName = Flower - Mint Cream
+#-------------------------------
+[ALCREMIE,27]
+FormName = Ribbon - Mint Cream
+#-------------------------------
+[ALCREMIE,28]
+FormName = Strawberry - Lemon Cream
+#-------------------------------
+[ALCREMIE,29]
+FormName = Berry - Lemon Cream
+#-------------------------------
+[ALCREMIE,30]
+FormName = Love - Lemon Cream
+#-------------------------------
+[ALCREMIE,31]
+FormName = Star - Lemon Cream
+#-------------------------------
+[ALCREMIE,32]
+FormName = Clover - Lemon Cream
+#-------------------------------
+[ALCREMIE,33]
+FormName = Flower - Lemon Cream
+#-------------------------------
+[ALCREMIE,34]
+FormName = Ribbon - Lemon Cream
+#-------------------------------
+[ALCREMIE,35]
+FormName = Strawberry - Salted Cream
+#-------------------------------
+[ALCREMIE,36]
+FormName = Berry - Salted Cream
+#-------------------------------
+[ALCREMIE,37]
+FormName = Love - Salted Cream
+#-------------------------------
+[ALCREMIE,38]
+FormName = Star - Salted Cream
+#-------------------------------
+[ALCREMIE,39]
+FormName = Clover - Salted Cream
+#-------------------------------
+[ALCREMIE,40]
+FormName = Flower - Salted Cream
+#-------------------------------
+[ALCREMIE,41]
+FormName = Ribbon - Salted Cream
+#-------------------------------
+[ALCREMIE,42]
+FormName = Strawberry - Ruby Swirl
+#-------------------------------
+[ALCREMIE,43]
+FormName = Berry - Ruby Swirl
+#-------------------------------
+[ALCREMIE,44]
+FormName = Love - Ruby Swirl
+#-------------------------------
+[ALCREMIE,45]
+FormName = Star - Ruby Swirl
+#-------------------------------
+[ALCREMIE,46]
+FormName = Clover - Ruby Swirl
+#-------------------------------
+[ALCREMIE,47]
+FormName = Flower - Ruby Swirl
+#-------------------------------
+[ALCREMIE,48]
+FormName = Ribbon - Ruby Swirl
+#-------------------------------
+[ALCREMIE,49]
+FormName = Strawberry - Caramel Swirl
+#-------------------------------
+[ALCREMIE,50]
+FormName = Berry - Caramel Swirl
+#-------------------------------
+[ALCREMIE,51]
+FormName = Love - Caramel Swirl
+#-------------------------------
+[ALCREMIE,52]
+FormName = Star - Caramel Swirl
+#-------------------------------
+[ALCREMIE,53]
+FormName = Clover - Caramel Swirl
+#-------------------------------
+[ALCREMIE,54]
+FormName = Flower - Caramel Swirl
+#-------------------------------
+[ALCREMIE,55]
+FormName = Ribbon - Caramel Swirl
+#-------------------------------
+[ALCREMIE,56]
+FormName = Strawberry - Rainbow Swirl
+#-------------------------------
+[ALCREMIE,57]
+FormName = Berry - Rainbow Swirl
+#-------------------------------
+[ALCREMIE,58]
+FormName = Love - Rainbow Swirl
+#-------------------------------
+[ALCREMIE,59]
+FormName = Star - Rainbow Swirl
+#-------------------------------
+[ALCREMIE,60]
+FormName = Clover - Rainbow Swirl
+#-------------------------------
+[ALCREMIE,61]
+FormName = Flower - Rainbow Swirl
+#-------------------------------
+[ALCREMIE,62]
+FormName = Ribbon - Rainbow Swirl
+#-------------------------------
 [EISCUE,1]
 FormName = Noice Face
 BaseStats = 75,80,70,130,65,50
@@ -2149,7 +2345,7 @@ BattlerEnemyY = 5
 FormName = Crowned Shield
 Type1 = FIGHTING
 Type2 = STEEL
-BaseStats = 92,130,145,80,145,128
+BaseStats = 92,130,145,128,80,145
 Weight = 785.0
 Pokedex = Now that it's equipped with its shield, it can shrug off impressive blows, including the attacks of Dynamax Pokémon.
 BattlerEnemyY = 7
@@ -2160,5 +2356,31 @@ Type1 = FIGHTING
 Type2 = WATER
 Moves = 0,SURGINGSTRIKES,1,SURGINGSTRIKES,1,AQUAJET,1,ROCKSMASH,1,LEER,1,ENDURE,1,FOCUSENERGY,12,AERIALACE,16,SCARYFACE,20,HEADBUTT,24,BRICKBREAK,28,DETECT,32,BULKUP,36,IRONHEAD,40,DYNAMICPUNCH,44,COUNTER,48,CLOSECOMBAT,52,FOCUSPUNCH
 Pokedex = This form of Urshifu is a strong believer in defeating foes by raining many blows down on them. Its strikes are nonstop, flowing like a river.
+BattlerPlayerY = 8
+BattlerEnemyY = 12
+#-------------------------------
+[CALYREX,1]
+FormName = Ice Rider
+Type1 = PSYCHIC
+Type2 = ICE
+BaseStats = 100,165,150,50,85,130
+EffortPoints = 0,3,0,0,0,0
+Abilities = ASONEICE
+Moves = 1,GLACIALLANCE,1,TACKLE,1,TAILWHIP,1,DOUBLEKICK,1,AVALANCHE,1,STOMP,1,TORMENT,1,MIST,1,ICICLECRASH,1,TAKEDOWN,1,IRONDEFENSE,1,THRASH,1,TAUNT,1,DOUBLEEDGE,1,SWORDSDANCE,1,POUND,1,MEGADRAIN,1,CONFUSION,1,GROWTH,8,LIFEDEW,16,GIGADRAIN,24,PSYSHOCK,32,HELPINGHAND,40,AROMATHERAPY,48,ENERGYBALL,56,PSYCHIC,64,LEECHSEED,72,HEALPULSE,80,SOLARBEAM,88,FUTURESIGHT
+Kind = High King
+Pokedex = It's said that this Pokémon once moved a large forest—and all the Pokémon living there—to a new location overnight.
+BattlerPlayerY = 8
+BattlerEnemyY = 12
+#-------------------------------
+[CALYREX,2]
+FormName = Shadow Rider
+Type1 = PSYCHIC
+Type2 = GHOST
+BaseStats = 100,85,80,150,165,100
+EffortPoints = 0,0,0,0,3,0
+Abilities = ASONEGHOST
+Moves = 1,ASTRALBARRAGE,1,TACKLE,1,TAILWHIP,1,DOUBLEKICK,1,HEX,1,STOMP,1,CONFUSERAY,1,HAZE,1,SHADOWBALL,1,TAKEDOWN,1,AGILITY,1,THRASH,1,DISABLE,1,DOUBLEEDGE,1,NASTYPLOT,1,POUND,1,MEGADRAIN,1,CONFUSION,1,GROWTH,8,LIFEDEW,16,GIGADRAIN,24,PSYSHOCK,32,HELPINGHAND,40,AROMATHERAPY,48,ENERGYBALL,56,PSYCHIC,64,LEECHSEED,72,HEALPULSE,80,SOLARBEAM,88,FUTURESIGHT
+Kind = High King
+Pokedex = Legend says that by using its power to see all events from past to future, this Pokémon saved the creatures of a forest from a meteorite strike.
 BattlerPlayerY = 8
 BattlerEnemyY = 12

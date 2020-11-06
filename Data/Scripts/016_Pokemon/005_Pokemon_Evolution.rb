@@ -63,7 +63,7 @@ module PBEvolution
   TradeSpecies      = 59
   CriticalHits      = 60
   DamageDone        = 61
-  ItemMilcery       = 62
+  SweetItem       = 62
 
   def self.maxValue; return 62; end
 
@@ -778,47 +778,5 @@ PBEvolution.register(:CriticalHits, {
 PBEvolution.register(:DamageDone, {
   "onFieldCheck" => proc { |pkmn, parameter|
      next true if pkmn.yamaskhp >= parameter
-  }
-})
-
-
-
-#===============================================================================
-# Evolution of Milcery
-#===============================================================================
-
-PBEvolution.register(:ItemMilcery, {
-  "parameterType" => :PBItems,
-  "itemCheck"     => proc { |pkmn, parameter, item|
-		if item == parameter
-			cream = 0
-			cream = pkmn.level % 9  if !pkmn.isShiny? 
-			# Shiny only has one cream color per flavour.
-			# I didn't know how to handle the different cream flavours, so I decided 
-			# to link it to the level. 
-
-			case item
-			when PBItems::STRAWBERRYSWEET
-				sweet = 1
-			when PBItems::BERRYSWEET
-				sweet = 2
-			when PBItems::CLOVERSWEET
-				sweet = 3
-			when PBItems::FLOWERSWEET
-				sweet = 4
-			when PBItems::LOVESWEET
-				sweet = 5
-			when PBItems::RIBBONSWEET
-				sweet = 6
-			when PBItems::STARSWEET
-				sweet = 7
-			else 
-				sweet = 1
-			end 
-
-			pkmn.form= cream*7 + sweet 
-		end 
-	  
-    next item == parameter
   }
 })

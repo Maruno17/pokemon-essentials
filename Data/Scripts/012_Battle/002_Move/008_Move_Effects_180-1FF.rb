@@ -1,6 +1,3 @@
-
-
-
 #===============================================================================
 # User is protected against damaging moves this round. Decreases the Defense of
 # the user of a stopped contact move by 2 stages. (Obstruct)
@@ -92,9 +89,8 @@ class PokeBattle_Move_184 < PokeBattle_Move
   end
 
   def pbEffectAgainstTarget(user,target)
-    target.pbHeldItemTriggerCheck(user.item,false)
-    target.pbConsumeItem(true,true,false) if user.item>0
-    target.pbRemoveItem if pbIsBerry?(target.item)
+    target.pbHeldItemTriggerCheck(target.item,false)
+    target.pbConsumeItem(true,true,false) if pbIsBerry?(target.item)
   end
 end
 
@@ -151,7 +147,7 @@ class PokeBattle_Move_187 < PokeBattle_Move_005
 
   def pbEffectAgainstTarget(user,target)
     if rand(5)<1 && target.pbCanPoison?(user,true,self)
-    target.pbPoison(user)
+      target.pbPoison(user)
     end
   end
 
@@ -455,6 +451,35 @@ class PokeBattle_Move_197 < PokeBattle_Move
     target.pbChangeTypes(newType)
     typeName = PBTypes.getName(newType)
     @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",target.pbThis,typeName))
+  end
+end
+
+#===============================================================================
+# Target's last move used loses 3 PP. (Eerie Spell - Galarian Slowking)
+#===============================================================================
+class PokeBattle_Move_198 < PokeBattle_Move
+  def pbFailsAgainstTarget?(user,target)
+    failed = true
+    target.eachMove do |m|
+      next if m.id!=target.lastRegularMoveUsed || m.pp==0 || m.totalpp<=0
+      failed = false; break
+    end
+    if failed
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return false
+  end
+
+  def pbEffectAgainstTarget(user,target)
+    target.eachMove do |m|
+      next if m.id!=target.lastRegularMoveUsed
+      reduction = [3,m.pp].min
+      target.pbSetPP(m,m.pp-reduction)
+      @battle.pbDisplay(_INTL("It reduced the PP of {1}'s {2} by {3}!",
+         target.pbThis(true),m.name,reduction))
+      break
+    end
   end
 end
 
