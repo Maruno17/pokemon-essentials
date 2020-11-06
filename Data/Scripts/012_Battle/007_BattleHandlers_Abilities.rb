@@ -1159,6 +1159,18 @@ BattleHandlers::DamageCalcUserAbility.add(:STEELYSPIRIT,
   }
 )
 
+BattleHandlers::DamageCalcUserAbility.add(:DRAGONSMAW,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[ATK_MULT] = (mults[ATK_MULT]*1.5) if isConst?(type,PBTypes,:DRAGON)
+  }
+)
+
+BattleHandlers::DamageCalcUserAbility.add(:TRANSISTOR,
+  proc { |ability,user,target,move,mults,baseDmg,type|
+    mults[ATK_MULT] = (mults[ATK_MULT]*1.5) if isConst?(type,PBTypes,:ELECTRIC)
+  }
+)
+
 #===============================================================================
 # DamageCalcUserAllyAbility handlers
 #===============================================================================
@@ -1903,6 +1915,50 @@ BattleHandlers::UserAbilityEndOfMove.add(:MOXIE,
   }
 )
 
+BattleHandlers::UserAbilityEndOfMove.copy(:MOXIE,:CHILLINGNEIGH)
+
+BattleHandlers::UserAbilityEndOfMove.add(:GRIMNEIGH,
+  proc { |ability,user,targets,move,battle|
+    next if battle.pbAllFainted?(user.idxOpposingSide)
+    numFainted = 0
+    targets.each { |b| numFainted += 1 if b.damageState.fainted }
+    next if numFainted==0 || !user.pbCanRaiseStatStage?(PBStats::SPATK,user)
+    user.pbRaiseStatStageByAbility(PBStats::SPATK,numFainted,user)
+  }
+)
+
+BattleHandlers::UserAbilityEndOfMove.add(:ASONEICE,
+  proc { |ability,user,targets,move,battle|
+    next if battle.pbAllFainted?(user.idxOpposingSide)
+    numFainted = 0
+    targets.each { |b| numFainted += 1 if b.damageState.fainted }
+    next if numFainted==0 || !user.pbCanRaiseStatStage?(PBStats::ATTACK,user) || user.fainted?
+    battle.pbShowAbilitySplash(user,false,true,PBAbilities.getName(getID(PBAbilities,:CHILLINGNEIGH)))
+    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+      user.pbRaiseStatStage(PBStats::ATTACK,numFainted,user)
+    else
+      user.pbRaiseStatStageByCause(PBStats::ATTACK,numFainted,user,PBAbilities.getName(getID(PBAbilities,:CHILLINGNEIGH)))
+    end
+    battle.pbHideAbilitySplash(user)
+  }
+)
+
+BattleHandlers::UserAbilityEndOfMove.add(:ASONEGHOST,
+  proc { |ability,user,targets,move,battle|
+    next if battle.pbAllFainted?(user.idxOpposingSide)
+    numFainted = 0
+    targets.each { |b| numFainted += 1 if b.damageState.fainted }
+    next if numFainted==0 || !user.pbCanRaiseStatStage?(PBStats::ATTACK,user) || user.fainted?
+    battle.pbShowAbilitySplash(user,false,true,PBAbilities.getName(getID(PBAbilities,:GRIMNEIGH)))
+    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+      user.pbRaiseStatStage(PBStats::SPATK,numFainted,user)
+    else
+      user.pbRaiseStatStageByCause(PBStats::SPATK,numFainted,user,PBAbilities.getName(getID(PBAbilities,:GRIMNEIGH)))
+    end
+    battle.pbHideAbilitySplash(user)
+  }
+)
+
 #===============================================================================
 # TargetAbilityAfterMoveUse handlers
 #===============================================================================
@@ -2606,6 +2662,18 @@ BattleHandlers::AbilityOnSwitchIn.add(:UNNERVE,
   }
 )
 
+BattleHandlers::AbilityOnSwitchIn.add(:ASONEICE,
+  proc { |ability,battler,battle|
+    battle.pbShowAbilitySplash(battler)
+    battle.pbDisplay(_INTL("{1} has 2 Abilities!",battler.name))
+    battle.pbShowAbilitySplash(battler,false,true,PBAbilities.getName(getID(PBAbilities,:UNNERVE)))
+    battle.pbDisplay(_INTL("{1} is too nervous to eat Berries!",battler.pbOpposingTeam))
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.copy(:ASONEICE,:ASONEGHOST)
+
 BattleHandlers::AbilityOnSwitchIn.add(:INTREPIDSWORD,
   proc { |ability,battler,battle|
     stat = PBStats::ATTACK
@@ -2661,6 +2729,22 @@ BattleHandlers::AbilityOnSwitchIn.add(:PASTELVEIL,
       if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         battle.pbDisplay(_INTL("{1}'s {2} cured its {3}'s poison!",battler.pbThis,battler.abilityName,b.pbThis(true)))
       end
+      battle.pbHideAbilitySplash(battler)
+    end
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:CURIOUSMEDICINE,
+  proc { |ability,battler,battle|
+    done= false
+    battler.eachAlly do |b|
+      next if !b.hasAlteredStatStages?
+      b.pbResetStatStages
+      done = true
+    end
+    if done
+      battle.pbShowAbilitySplash(battler)
+      battle.pbDisplay(_INTL("All allies' stat changes were eliminated!"))
       battle.pbHideAbilitySplash(battler)
     end
   }
