@@ -1,123 +1,125 @@
 ﻿GEN 8 PROJECT CHANGE LOG
-CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lolface, Golisopod User, KyureJL, DarrylBD99, Turn20Negate, Zerokid, TheKandinavian
+CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lolface, Golisopod User, KyureJL, DarrylBD99, Turn20Negate, Zerokid, TheKandinavian, ErwanBeurier.
 
 # To Do
-Milcery's Evolution
 Update Item prices and Descriptions
-Add TM Compatibility
 Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
 
+##### PBS Files #####
+Abilities.txt            by Zerokid, Golisopod User
+Items.txt                by Zerokid, HM100, Golisopod User
+Moves.txt                by TheToxic, KyureJL
+Pokemon.txt              by Zerokid, TheToxic, KyureJL
+Pokemonforms.txt         by Zerokid, TheToxic, KyureJL
+tm.txt                   by ErwanBeurier
 
+##### New Evolution Methods #####
+Toxel                    by WolfPP, Aioross
+Galarian Farfetch'd      by Vendily, Golisopod User, Aioross
+Yamask                   by WolfPP, Aioross, Golisopod User
 
-Updating Old Mechanics to Gen 8 Standard by Golisopod User
-
-Moves.txt - TheToxic
-Pokemon.txt (for Gen 8) - TheToxic
-Pokemonforms.txt (for Gen 8) - TheToxic
-
-Items.txt - Zerokid, HM100
-Pokemon.txt (for Gen 1-7) - Zerokid
-Pokemonforms.txt (for Gen 1-7) - Zerokid
-Abilities.txt (for Gen 8) - Zerokid
-
-
-##### Evolution methods Coded #####
-Toxel                    by WolfPP adapted by Aioross
-Galarian Farfetch'd      by Vendily adapted by Golisopod User tweaks by Aioross
-Yamask                   by WolfPP adapted by Aioross improved by Golisopod User
-
-##### Forms Coded #####
+##### Alternate Forms #####
 Eiscue                   by Aioross
-Indeedee                 by KyureJL improved by Vendily
-Zamazenta / Zacian       by KyureJL completed by Aioross Fixed by Golisopod User
+Indeedee                 by KyureJL, Vendily
+Zamazenta / Zacian       by KyureJL, Aioross, Golisopod User
 Galarian Darmanitan      by Aioross
 Cramorant                by Aioross
 Morpeko                  by Aioross
+Calyrex			 by Golisopod User
 
-##### Items Coded #####
-Technical Records        by Vendily
+##### New Items #####
+Technical Records        by Vendily, Golispod User
 Rusted Shield            by KyureJL
 Rusted Sword             by KyureJL
 Key Stone                by KyureJL
-Blunder Policy           by Wolfpp adapted by Aioross
+Blunder Policy           by Wolfpp, Aioross
 Heavy-Duty Boots         by DarrylBD99
 Throat Spray             by Aioross
-Utility Umbrella         by KyureJL && Aioross, Fixes by Golisopod User
+Utility Umbrella         by KyureJL, Aioross, Golisopod User
 Exp. Candy XS/S/M/L/XL   by Aioross
 Room Service             by Aioross
 Eject Pack               by Aioross
-Mints                    by KyureJL improved by Aioross
+Mints                    by KyureJL, Aioross
 Exp Charm		 by Golisopod User
 Catching Charm		 by Golisopod User
- 
+Ability Patch		 by Golisopod User
+Reins of Unity		 by Golisopod User 
 
-##### Moves Coded #####
-Surging Strikes          by KyureJL improved by lolface fixed by KyureJL
+##### New Moves #####
+Surging Strikes          by KyureJL, lolface
 Bolt Beak                by lolface
 Fishious Rend            by lolface
 Body Press               by KyureJL
-Decorate                 by KyureJL improved by Vendily
+Decorate                 by KyureJL, Vendily
 Aura Wheel               by Golisopod User
 Snipe Shot               by Aioross
-Clagorous Soul           by WolfPP adapted by Aioross
-Court Change             by WolfPP adapted by Golisopod User
+Clagorous Soul           by WolfPP, Aioross
+Court Change             by WolfPP, Golisopod User
 Magic Powder             by Aioross
-Burning Jealousy         by HM100 adapted by KyureJL improved by lolface
+Burning Jealousy         by HM100, KyureJL, lolface
 Jaw Lock                 by Aioross
 Life Dew                 by lolface
-No Retreat               by lolface improved by Aioross
-Obstruct                 by WolfPP adapted by Aioross
-Octolock                 by lolface improved by Aioross fixed by Vendily
+No Retreat               by lolface, Aioross
+Obstruct                 by WolfPP, Aioross
+Octolock                 by lolface, Aioross, Vendily
 Snap Trap                by lolface
-Stuff Cheeks             by WolfPP adapted by Aioross, Fixed by Golisopod User
+Stuff Cheeks             by WolfPP, Aioross, Golisopod User
 Tar Shot                 by Aioross
 Teatime                  by Aioross
-Expanding Force          by lolface fixed by Aioross
-Steel Roller             by lolface fixed by KyureJL
-Scale Shot               by lolface fixed by KyureJL
+Expanding Force          by lolface, Aioross
+Steel Roller             by lolface, KyureJL
+Scale Shot               by lolface, KyureJL
 Meteor Beam              by lolface
 Shell Side Arm           by lolface
 Misty Explosion          by lolface
-Grassy Glide             by lolface fixed by Aioross
+Grassy Glide             by lolface, Aioross
 Rising Voltage           by lolface
 Terrain Pulse            by lolface
 Lash Out                 by lolface
-Poltergeist              by lolface fixed by Aioross
+Poltergeist              by lolface, Aioross
 Corrosive Gas            by lolface
-Coaching                 by lolface improved by Vendily
-Jungle Healing           by lolface improved by Vendily
+Coaching                 by lolface, Vendily
+Jungle Healing           by lolface, Vendily
 Dragon Darts             by Turn20Negate
+Eerie Spell              by Golisopod User, TheToxic
+Thunder Cage             by Golisopod User
 
-##### Abilities Coded #####
-Ball Fetch               by WolfPP adapted by Aioross improved by Golisopod User
+##### New Abilities #####
+Ball Fetch               by WolfPP, Aioross, Golisopod User
 Intrepid Sword           by KyureJL
 Dauntless Shield         by KyureJL
 Sand Spit                by TheToxic
-Unseen Fist              by WolfPP adapted by KyureJL
+Unseen Fist              by WolfPP, KyureJL
 Ice Scales               by TheToxic
 Steely Spirit            by Aioross
-Steam Engine             by Aioross improved by KyureJL
+Steam Engine             by Aioross, KyureJL
 Libero                   by KyureJL
 Stalwart                 by Aioross
 Propeller Tail           by Aioross
-Punk Rock                by WolfPP adapted by Aioross
+Punk Rock                by WolfPP, Aioross
 Power Spot               by Aioross
-Gorilla Tactics          by WolfPP adapted by Aioross
+Gorilla Tactics          by WolfPP, Aioross
 Screen Cleaner           by Vendily
-Cotton Down              by Vendily fixed by Aioross
+Cotton Down              by Vendily, Aioross
 Quick Draw               by MFilice
-Ice Face                 by MFilice improved by Golisopod User
+Ice Face                 by MFilice, Golisopod User
 Ripen                    by MFilice
 Pastel Veil              by Vendily
-Hunger Switch            by WolfPP adapted by Aioross
+Hunger Switch            by WolfPP, Aioross
 Wandering Spirit         by Vendily
-Perish Body              by Vendily improved by WolfPP and Aioross
+Perish Body              by Vendily, WolfPP, Aioross
 Mimicry                  by Vendily
-Gulp Missile             by WolfPP adapted by Aioross
-Mirror Armor             by Aioross and Golisopod User
-Neutralizing Gas         by Vendily fixed by Aioross
+Gulp Missile             by WolfPP, Aioross
+Mirror Armor             by Aioross, Golisopod User
+Neutralizing Gas         by Vendily, Aioross
+Curious Medicine         by Golisopod User
+Grim Neigh               by Golisopod User
+Chilling Neigh           by Golisopod User
+As One                   by Golisopod User
 
-##### Others Coded #####
+##### Miscellaneous #####
 Galarian in Daycare      by KyureJL
-Stick now is Leek and affects Sirfetch'd by KyureJL
 Fog Weather              by TheKandinavian
+Updating Old Mechanics   by Golisopod User 
+to Gen 8 Standard 
+
