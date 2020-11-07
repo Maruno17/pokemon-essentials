@@ -1,10 +1,14 @@
 animmaker.exe - Converts sprites to RPG Maker XP format animations
+
 (C) 2008 Peter O.
 
 Usage: animmaker xmlfile.xml
+
 ('xmlfile.xml' is the path to any XML file, see below)
 
+
 Example of XML file:
+
 
 <animations>
 <!--Animation file to create (in this case, animation.png)-->
