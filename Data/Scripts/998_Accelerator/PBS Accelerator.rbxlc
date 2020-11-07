@@ -1,23 +1,6 @@
-#Accelerate the script processing 105% percent faster
-#Don't Modify it and if modify it may break or may change to
-normal speed
-
-Bin.rec = "01010110 10101001 101100101"
-rgss.support.accelerate
-If Win32
-
-"Windows\System32"
-RRN\ruby.accelerate.bin
-
-Else
-
-If x64
-
-"Windows\SysWOW64"
-RRN\ruby.accelerate.bin
-
-Else
-
-Accelerate.bin = End
-Terminate Script
-
+urskSt 1ƒÓŒ²(°ÓzPQ        jDC20201307131448c0000000001 8 jDC     	           ıáÂĞ8¼¤ƒ5À÷úc.ÚËWó¯öÿ7kSt 1ƒÓŒ²(°ÓzPQ` 	   h‡ÿXrß /Go?ß/E7ï?/×??7_ 4Jï/ç@/D<?×<<?Gÿ<<_ JF;	;p8 jDC20201107131448d0000000001 385 jDC  şbş«¦±4€j•°ì/út$y»ü×9<	åº2h!_MĞÜ
+ š©ìÒ¨pæ„_Şİç’€Ì&µ½¸„DP­£½Ê<'úÉÀ¨# dx=Œ¯³¼M,×_»}­–
+H¶,R
+Û‡-å8I§#â®!`	'pqvf½D0êùòe…—ÆßÌPT ¸R ¨
+›­ºE€ f¶4˜	rÑZÊ¨%Ñœ8â»“02S¾kA:pÒÅ†n|2yÎ`!nIÜ”¼ éÚ¹ÿ‹Êo‚oô~±ónì½X–q¤K‰Ç-Ğ $£ËaæÓÁG FQ{Õ@ÀàE5mûIM{—$ÏB&n!7İŒúBk°ûJáMŠò(E<4p¸¸r¼õ¶ã!¶ÜÌ Š˜Ñíl+áD .H>v     ıQÀLJciÍ!•Ä}¥ExÃ!Ïÿ7kSt 1ƒÓŒ²(°ÓzPQ        jDC20201107131448h0000000001 28 jDC        ’Ğ›ô"£ÕÕ%>/iÆu      ıûx¼sIÖrµ)\û3Ç@k§×ÿ7kSt 1ƒÓŒ²(°ÓzPQ 	   h‡ÿXr8 jDC20201107131448i0000000001 155 jDC    ¯.ïÿ/77778Ë‚PGƒXß /3G7B¯ï /Ï7B×P¯7B×PCXG7?
+B×PG7ß/=Cï/8B¯ß/B×PB¯7B×P?B×PÏHB¯7B×PG7?½ß/9ë'4B7C7GÉXªƒXA‹PCï /E`	9?óA37ÑP‰X7ß/+Cï/&B¯ß/B×wdassdP¯7B×P?	B×PG7?Ïß/"Cï/B`9	A7B×PCX7ß /78 ü…ÍúíK `Hç¥j®Lnî…îm-M,ì…èíÎí-Œlîîm­¬íÍ­¥ln®Ì.-Œm®¥-l®L.•ª…Ñ…½LÉ¥ÁÑÍ½ääà|•±•É…Ñ½É½@	MÄ\q‘Ãc(   ¸             ıîü\ú¦4`éÊAMvŸ¬ÿ
