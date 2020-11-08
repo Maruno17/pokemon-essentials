@@ -55,12 +55,12 @@ def pbSaveAbilities
     f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
     f.write("\r\n")
     f.write("\#-------------------------------\r\n")
-    PokemonData::Ability.each do |a|
+    GameData::Ability.each do |a|
       f.write(sprintf("%d,%s,%s,%s\r\n",
         a.id_number,
         csvQuote(a.id.to_s),
-        csvQuote(a.name),
-        csvQuoteAlways(a.description)
+        csvQuote(a.real_name),
+        csvQuoteAlways(a.real_description)
       ))
     end
   }
@@ -228,41 +228,35 @@ end
 # Save item data to PBS file
 #===============================================================================
 def pbSaveItems
-  itemData = pbLoadItemsData rescue nil
-  return if !itemData || itemData.length==0
   File.open("PBS/items.txt","wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
     f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
     f.write("\r\n")
-    curpocket = 0
-    for i in 0...itemData.length
-      next if !itemData[i]
-      data = itemData[i]
-      cname = getConstantName(PBItems,i) rescue sprintf("ITEM%03d",i)
-      next if !cname || cname=="" || data[0]==0
-      if curpocket!=data[ItemData::POCKET]
-        curpocket = data[ItemData::POCKET]
+    current_pocket = 0
+    GameData::Item.each do |i|
+      if current_pocket != i.pocket
+        current_pocket = i.pocket
         f.write("\#-------------------------------\r\n")
       end
-      machine = ""
-      if data[ItemData::MOVE]>0
-        machine = getConstantName(PBMoves,data[ItemData::MOVE]) rescue pbGetMoveConst(data[ItemData::MOVE]) rescue ""
+      move_name = ""
+      if i.move
+        move_name = getConstantName(PBMoves, i.move) rescue pbGetMoveConst(i.move) rescue ""
       end
-      f.write(sprintf("%d,%s,%s,%s,%d,%d,%s,%d,%d,%d,%s",
-         data[ItemData::ID],
-         csvQuote(cname),
-         csvQuote(data[ItemData::NAME]),
-         csvQuote(data[ItemData::NAME_PLURAL]),
-         data[ItemData::POCKET],
-         data[ItemData::PRICE],
-         csvQuoteAlways(data[ItemData::DESCRIPTION]),
-         data[ItemData::FIELD_USE],
-         data[ItemData::BATTLE_USE],
-         data[ItemData::TYPE],
-         csvQuote(machine)))
-      f.write("\r\n")
+      f.write(sprintf("%d,%s,%s,%s,%d,%d,%s,%d,%d,%d,%s\r\n",
+        i.id_number,
+        csvQuote(i.id.to_s),
+        csvQuote(i.real_name),
+        csvQuote(i.real_name_plural),
+        i.pocket,
+        i.price,
+        csvQuoteAlways(i.real_description),
+        i.field_use,
+        i.battle_use,
+        i.type,
+        csvQuote(move_name)
+      ))
     end
   }
 end
@@ -282,13 +276,12 @@ def pbSaveBerryPlants
     f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
     f.write("\r\n")
     f.write("\#-------------------------------\r\n")
-    for i in 0...berryPlantData.length
-      next if !berryPlantData[i]
-      data = berryPlantData[i]
-      cname = getConstantName(PBItems,i) rescue sprintf("ITEM%03d",i)
-      next if !cname || cname=="" || i==0
+    keys = berryPlantData.keys.sort
+    keys.each do |key|
+      data = berryPlantData[key]
+      next if !data || !GameData::Item.exists?(key)
       f.write(sprintf("%s = %d,%d,%d,%d",
-         csvQuote(cname),data[0],data[1],data[2],data[3]))
+         csvQuote(GameData::Item.get(key).id.to_s), data[0], data[1], data[2], data[3]))
       f.write("\r\n")
     end
   }
@@ -368,7 +361,7 @@ def pbSaveEncounterData
     f.write(0xBF.chr)
     f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
     f.write("\r\n")
-    sortedkeys = encdata.keys.sort { |a,b| a<=>b }
+    sortedkeys = encdata.keys.sort
     for i in sortedkeys
       next if !encdata[i]
       e = encdata[i]
@@ -461,10 +454,8 @@ def pbSaveTrainerBattles
       if trainer[2] && trainer[2].length>0
         itemstring = ""
         for i in 0...trainer[2].length
-          itemname = getConstantName(PBItems,trainer[2][i]) rescue pbGetItemConst(trainer[2][i]) rescue nil
-          next if !itemname
-          itemstring.concat(",") if i>0
-          itemstring.concat(itemname)
+          itemstring.concat(",") if i > 0
+          itemstring.concat(trainer[2][i].to_s)
         end
         f.write(sprintf("Items = %s\r\n",itemstring)) if itemstring!=""
       end
@@ -502,11 +493,10 @@ def pbSaveTrainerBattles
           f.write(sprintf("    Moves = %s\r\n",movestring)) if movestring!=""
         end
         if poke[TrainerData::ABILITY]
-          f.write(sprintf("    Ability = %d\r\n",poke[TrainerData::ABILITY]))
+          f.write(sprintf("    Ability = %s\r\n",poke[TrainerData::ABILITY].to_s))
         end
-        if poke[TrainerData::ITEM] && poke[TrainerData::ITEM]>0
-          item = getConstantName(PBItems,poke[TrainerData::ITEM]) rescue pbGetItemConst(poke[TrainerData::ITEM]) rescue nil
-          f.write(sprintf("    Item = %s\r\n",item)) if item
+        if poke[TrainerData::ITEM]
+          f.write(sprintf("    Item = %s\r\n",poke[TrainerData::ITEM].to_s))
         end
         if poke[TrainerData::NATURE]
           nature = getConstantName(PBNatures,poke[TrainerData::NATURE]) rescue nil
@@ -688,10 +678,10 @@ def pbSavePokemonData
       hiddenability3 = nil
       hiddenability4 = nil
     end
-    item1            = speciesData[i][SpeciesData::WILD_ITEM_COMMON] || 0
-    item2            = speciesData[i][SpeciesData::WILD_ITEM_UNCOMMON] || 0
-    item3            = speciesData[i][SpeciesData::WILD_ITEM_RARE] || 0
-    incense          = speciesData[i][SpeciesData::INCENSE] || 0
+    item1            = speciesData[i][SpeciesData::WILD_ITEM_COMMON]
+    item2            = speciesData[i][SpeciesData::WILD_ITEM_UNCOMMON]
+    item3            = speciesData[i][SpeciesData::WILD_ITEM_RARE]
+    incense          = speciesData[i][SpeciesData::INCENSE]
     pokedata.write("\#-------------------------------\r\n")
     pokedata.write("[#{i}]\r\nName = #{speciesname}\r\n")
     pokedata.write("InternalName = #{cname}\r\n")
@@ -711,12 +701,12 @@ def pbSavePokemonData
     pokedata.write("Happiness = #{happiness}\r\n")
     pokedata.write("Abilities = ")
     if ability1
-      cability1 = PokemonData::Ability.get(ability1).name
+      cability1 = GameData::Ability.get(ability1).id.to_s
       pokedata.write("#{cability1}")
       pokedata.write(",") if ability2
     end
     if ability2
-      cability2 = PokemonData::Ability.get(ability2).name
+      cability2 = GameData::Ability.get(ability2).id.to_s
       pokedata.write("#{cability2}")
     end
     pokedata.write("\r\n")
@@ -724,22 +714,22 @@ def pbSavePokemonData
       pokedata.write("HiddenAbility = ")
       needcomma = false
       if hiddenability1
-        cabilityh = PokemonData::Ability.get(hiddenability1).name
+        cabilityh = GameData::Ability.get(hiddenability1).id.to_s
         pokedata.write("#{cabilityh}"); needcomma = true
       end
       if hiddenability2
         pokedata.write(",") if needcomma
-        cabilityh = PokemonData::Ability.get(hiddenability2).name
+        cabilityh = GameData::Ability.get(hiddenability2).id.to_s
         pokedata.write("#{cabilityh}"); needcomma = true
       end
       if hiddenability3
         pokedata.write(",") if needcomma
-        cabilityh = PokemonData::Ability.get(hiddenability3).name
+        cabilityh = GameData::Ability.get(hiddenability3).id.to_s
         pokedata.write("#{cabilityh}"); needcomma = true
       end
       if hiddenability4
         pokedata.write(",") if needcomma
-        cabilityh = PokemonData::Ability.get(hiddenability4).name
+        cabilityh = GameData::Ability.get(hiddenability4).id.to_s
         pokedata.write("#{cabilityh}")
       end
       pokedata.write("\r\n")
@@ -812,16 +802,16 @@ def pbSavePokemonData
     if formname && formname!=""
       pokedata.write("FormName = #{formname}\r\n")
     end
-    if item1>0
-      citem1 = getConstantName(PBItems,item1) rescue pbGetItemConst(item1)
+    if item1
+      citem1 = GameData::Item.get(item1).id.to_s
       pokedata.write("WildItemCommon = #{citem1}\r\n")
     end
-    if item2>0
-      citem2 = getConstantName(PBItems,item2) rescue pbGetItemConst(item2)
+    if item2
+      citem2 = GameData::Item.get(item2).id.to_s
       pokedata.write("WildItemUncommon = #{citem2}\r\n")
     end
-    if item3>0
-      citem3 = getConstantName(PBItems,item3) rescue pbGetItemConst(item3)
+    if item3
+      citem3 = GameData::Item.get(item3).id.to_s
       pokedata.write("WildItemRare = #{citem3}\r\n")
     end
     if metrics && metrics.length>0
@@ -849,8 +839,12 @@ def pbSavePokemonData
       has_param = !PBEvolution.hasFunction?(method, "parameterType") || param_type != nil
       if has_param
         if param_type
-          cparameter = (getConstantName(param_type, parameter) rescue parameter)
-          pokedata.write("#{cparameter}")
+          if [:Ability, :Item].include?(param_type)
+            pokedata.write("#{parameter.to_s}")
+          else
+            cparameter = (getConstantName(param_type, parameter) rescue parameter)
+            pokedata.write("#{cparameter}")
+          end
         else
           pokedata.write("#{parameter}")
         end
@@ -858,8 +852,8 @@ def pbSavePokemonData
       count += 1
     end
     pokedata.write("\r\n")
-    if incense>0
-      initem = getConstantName(PBItems,incense) rescue pbGetItemConst(incense)
+    if incense
+      initem = GameData::Item.get(incense).id.to_s
       pokedata.write("Incense = #{initem}\r\n")
     end
     if i%20==0
@@ -954,10 +948,10 @@ def pbSavePokemonFormsData
       origdata["hiddenability3"] = nil
       origdata["hiddenability4"] = nil
     end
-    origdata["item1"]            = speciesData[species][SpeciesData::WILD_ITEM_COMMON] || 0
-    origdata["item2"]            = speciesData[species][SpeciesData::WILD_ITEM_UNCOMMON] || 0
-    origdata["item3"]            = speciesData[species][SpeciesData::WILD_ITEM_RARE] || 0
-    origdata["incense"]          = speciesData[species][SpeciesData::INCENSE] || 0
+    origdata["item1"]            = speciesData[species][SpeciesData::WILD_ITEM_COMMON]
+    origdata["item2"]            = speciesData[species][SpeciesData::WILD_ITEM_UNCOMMON]
+    origdata["item3"]            = speciesData[species][SpeciesData::WILD_ITEM_RARE]
+    origdata["incense"]          = speciesData[species][SpeciesData::INCENSE]
     abilities = speciesData[i][SpeciesData::ABILITIES]
     if abilities.is_a?(Array)
       ability1       = abilities[0]
@@ -1047,16 +1041,16 @@ def pbSavePokemonFormsData
        hiddenability4==origdata["hiddenability4"]
       hiddenability1 = hiddenability2 = hiddenability3 = hiddenability4 = nil
     end
-    item1            = speciesData[i][SpeciesData::WILD_ITEM_COMMON] || 0
-    item2            = speciesData[i][SpeciesData::WILD_ITEM_UNCOMMON] || 0
-    item3            = speciesData[i][SpeciesData::WILD_ITEM_RARE] || 0
+    item1            = speciesData[i][SpeciesData::WILD_ITEM_COMMON]
+    item2            = speciesData[i][SpeciesData::WILD_ITEM_UNCOMMON]
+    item3            = speciesData[i][SpeciesData::WILD_ITEM_RARE]
     if item1==origdata["item1"] && item2==origdata["item2"] && item3==origdata["item3"]
       item1 = item2 = item3 = nil
     end
-    incense          = speciesData[i][SpeciesData::INCENSE] || 0
+    incense          = speciesData[i][SpeciesData::INCENSE]
     incense          = nil if incense==origdata["incense"]
     pokedexform      = speciesData[i][SpeciesData::POKEDEX_FORM] || 0   # No nil check
-    megastone        = speciesData[i][SpeciesData::MEGA_STONE] || 0     # No nil check
+    megastone        = speciesData[i][SpeciesData::MEGA_STONE]          # No nil check
     megamove         = speciesData[i][SpeciesData::MEGA_MOVE] || 0      # No nil check
     unmega           = speciesData[i][SpeciesData::UNMEGA_FORM] || 0    # No nil check
     megamessage      = speciesData[i][SpeciesData::MEGA_MESSAGE] || 0   # No nil check
@@ -1064,8 +1058,8 @@ def pbSavePokemonFormsData
     pokedata.write("[#{cname},#{form}]\r\n")
     pokedata.write("FormName = #{formname}\r\n") if formname && formname!=""
     pokedata.write("PokedexForm = #{pokedexform}\r\n") if pokedexform>0
-    if megastone>0
-      citem = getConstantName(PBItems,megastone) rescue pbGetItemConst(megastone)
+    if megastone
+      citem = GameData::Item.get(megastone).id.to_s
       pokedata.write("MegaStone = #{citem}\r\n")
     end
     if megamove>0
@@ -1107,12 +1101,12 @@ def pbSavePokemonFormsData
     if ability1 || ability2
       pokedata.write("Abilities = ")
       if ability1
-        cability1 = PokemonData::Ability.get(ability1).name
+        cability1 = GameData::Ability.get(ability1).id.to_s
         pokedata.write("#{cability1}")
         pokedata.write(",") if ability2
       end
       if ability2
-        cability2 = PokemonData::Ability.get(ability2).name
+        cability2 = GameData::Ability.get(ability2).id.to_s
         pokedata.write("#{cability2}")
       end
       pokedata.write("\r\n")
@@ -1122,22 +1116,22 @@ def pbSavePokemonFormsData
         pokedata.write("HiddenAbility = ")
         needcomma = false
         if hiddenability1
-          cabilityh = PokemonData::Ability.get(hiddenability1).name
+          cabilityh = GameData::Ability.get(hiddenability1).id.to_s
           pokedata.write("#{cabilityh}"); needcomma=true
         end
         if hiddenability2
           pokedata.write(",") if needcomma
-          cabilityh = PokemonData::Ability.get(hiddenability2).name
+          cabilityh = GameData::Ability.get(hiddenability2).id.to_s
           pokedata.write("#{cabilityh}"); needcomma=true
         end
         if hiddenability3
           pokedata.write(",") if needcomma
-          cabilityh = PokemonData::Ability.get(hiddenability3).name
+          cabilityh = GameData::Ability.get(hiddenability3).id.to_s
           pokedata.write("#{cabilityh}"); needcomma=true
         end
         if hiddenability4
           pokedata.write(",") if needcomma
-          cabilityh = PokemonData::Ability.get(hiddenability4).name
+          cabilityh = GameData::Ability.get(hiddenability4).id.to_s
           pokedata.write("#{cabilityh}")
         end
         pokedata.write("\r\n")
@@ -1238,19 +1232,17 @@ def pbSavePokemonFormsData
     if entry!=nil
       pokedata.write("Pokedex = #{entry}\r\n")
     end
-    if item1!=nil && item2!=nil && item3!=nil
-      if item1>0
-        citem1 = getConstantName(PBItems,item1) rescue pbGetItemConst(item1)
-        pokedata.write("WildItemCommon = #{citem1}\r\n")
-      end
-      if item2>0
-        citem2 = getConstantName(PBItems,item2) rescue pbGetItemConst(item2)
-        pokedata.write("WildItemUncommon = #{citem2}\r\n")
-      end
-      if item3>0
-        citem3 = getConstantName(PBItems,item3) rescue pbGetItemConst(item3)
-        pokedata.write("WildItemRare = #{citem3}\r\n")
-      end
+    if item1
+      citem1 = GameData::Item.get(item1).id.to_s
+      pokedata.write("WildItemCommon = #{citem1}\r\n")
+    end
+    if item2
+      citem1 = GameData::Item.get(item2).id.to_s
+      pokedata.write("WildItemUncommon = #{citem2}\r\n")
+    end
+    if item3
+      citem1 = GameData::Item.get(item3).id.to_s
+      pokedata.write("WildItemRare = #{citem3}\r\n")
     end
     if metrics && metrics.length>0
       for j in 0...6
@@ -1322,11 +1314,9 @@ def pbSavePokemonFormsData
       end
       pokedata.write("\r\n")
     end
-    if incense!=nil
-      if incense>0
-        initem = getConstantName(PBItems,incense) rescue pbGetItemConst(incense)
-        pokedata.write("Incense = #{initem}\r\n")
-      end
+    if incense
+      initem = GameData::Item.get(incense).id.to_s
+      pokedata.write("Incense = #{initem}\r\n")
     end
     if i%20==0
       Graphics.update
@@ -1439,8 +1429,7 @@ end
 def pbFastInspect(pkmn,moves,species,items,natures)
   c1 = (species[pkmn.species]) ? species[pkmn.species] :
      (species[pkmn.species] = (getConstantName(PBSpecies,pkmn.species) rescue pbGetSpeciesConst(pkmn.species)))
-  c2 = (items[pkmn.item]) ? items[pkmn.item] :
-     (items[pkmn.item] = (getConstantName(PBItems,pkmn.item) rescue pbGetItemConst(pkmn.item)))
+  c2 = (items[pkmn.item]) ? items[pkmn.item] : (items[pkmn.item] = GameData::Item.get(pkmn.item).id.to_s)
   c3 = (natures[pkmn.nature]) ? natures[pkmn.nature] :
      (natures[pkmn.nature] = getConstantName(PBNatures,pkmn.nature))
   evlist = ""

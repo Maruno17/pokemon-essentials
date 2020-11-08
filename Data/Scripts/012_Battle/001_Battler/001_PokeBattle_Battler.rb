@@ -9,6 +9,7 @@ class PokeBattle_Battler
   attr_accessor :type1
   attr_accessor :type2
   attr_accessor :ability_id
+  attr_accessor :item_id
   attr_accessor :moves
   attr_accessor :gender
   attr_accessor :iv
@@ -60,19 +61,22 @@ class PokeBattle_Battler
   end
 
   def ability
-    return PokemonData::Ability.try_get(@ability_id)
+    return GameData::Ability.try_get(@ability_id)
   end
 
   def ability=(value)
-    abil = PokemonData::Ability.try_get(value)
-    @ability_id = (abil) ? abil.id : nil
+    new_ability = GameData::Ability.try_get(value)
+    @ability_id = (new_ability) ? new_ability.id : nil
   end
 
-  attr_reader :item
+  def item
+    return GameData::Item.try_get(@item_id)
+  end
 
   def item=(value)
-    @item = value
-    @pokemon.setItem(value) if @pokemon
+    new_item = GameData::Item.try_get(value)
+    @item_id = (new_item) ? new_item.id : nil
+    @pokemon.setItem(@item_id) if @pokemon
   end
 
   def defense
@@ -195,7 +199,10 @@ class PokeBattle_Battler
     return (abil) ? abil.name : ""
   end
 
-  def itemName; return PBItems.getName(@item); end
+  def itemName
+    itm = self.item
+    return (itm) ? itm.name : ""
+  end
 
   def pbThis(lowerCase=false)
     if opposes?
@@ -240,7 +247,7 @@ class PokeBattle_Battler
     end
     # Item effects that alter calculated Speed
     if itemActive?
-      speedMult = BattleHandlers.triggerSpeedCalcItem(@item,self,speedMult)
+      speedMult = BattleHandlers.triggerSpeedCalcItem(self.item,self,speedMult)
     end
     # Other effects
     speedMult *= 2 if pbOwnSide.effects[PBEffects::Tailwind]>0
@@ -266,7 +273,7 @@ class PokeBattle_Battler
       ret = BattleHandlers.triggerWeightCalcAbility(self.ability,self,ret)
     end
     if itemActive?
-      ret = BattleHandlers.triggerWeightCalcItem(@item,self,ret)
+      ret = BattleHandlers.triggerWeightCalcItem(self.item,self,ret)
     end
     return [ret,1].max
   end
@@ -331,14 +338,14 @@ class PokeBattle_Battler
   #       active, and the code for the two combined would cause an infinite loop
   #       (regardless of whether any Pokémon actualy has either the ability or
   #       the item - the code existing is enough to cause the loop).
-  def abilityActive?(ignoreFainted=false)
-    return false if fainted? && !ignoreFainted
+  def abilityActive?(ignore_fainted = false)
+    return false if fainted? && !ignore_fainted
     return false if @effects[PBEffects::GastroAcid]
     return true
   end
 
-  def hasActiveAbility?(check_ability, ignoreFainted = false)
-    return false if !abilityActive?(ignoreFainted)
+  def hasActiveAbility?(check_ability, ignore_fainted = false)
+    return false if !abilityActive?(ignore_fainted)
     return check_ability.include?(@ability_id) if check_ability.is_a?(Array)
     return check_ability == self.ability
   end
@@ -348,7 +355,7 @@ class PokeBattle_Battler
   # having self's ability be negated.
   def unstoppableAbility?(abil = nil)
     abil = @ability_id if !abil
-    abil = PokemonData::Ability.try_get(abil)
+    abil = GameData::Ability.try_get(abil)
     return false if !abil
     ability_blacklist = [
       # Form-changing abilities
@@ -372,7 +379,7 @@ class PokeBattle_Battler
   # Applies to gaining the ability.
   def ungainableAbility?(abil = nil)
     abil = @ability_id if !abil
-    abil = PokemonData::Ability.try_get(abil)
+    abil = GameData::Ability.try_get(abil)
     return false if !abil
     ability_blacklist = [
       # Form-changing abilities
@@ -404,28 +411,21 @@ class PokeBattle_Battler
     return true
   end
 
-  def hasActiveItem?(item,ignoreFainted=false)
-    return false if !itemActive?(ignoreFainted)
-    if item.is_a?(Array)
-      item.each do |i|
-        i = getID(PBItems,i)
-        return true if i!=0 && i==@item
-      end
-      return false
-    end
-    item = getID(PBItems,item)
-    return item!=0 && item==@item
+  def hasActiveItem?(check_item, ignore_fainted = false)
+    return false if !itemActive?(ignore_fainted)
+    return check_item.include?(@item_id) if check_item.is_a?(Array)
+    return check_item == self.item
   end
   alias hasWorkingItem hasActiveItem?
 
   # Returns whether the specified item will be unlosable for this Pokémon.
   def unlosableItem?(check_item)
-    return false if check_item <= 0
-    return true if pbIsMail?(check_item)
+    return false if !check_item
+    return true if GameData::Item.get(check_item).is_mail?
     return false if @effects[PBEffects::Transform]
     # Items that change a Pokémon's form
     return true if @pokemon && @pokemon.getMegaForm(true) > 0   # Mega Stone
-    return pbIsUnlosableItem?(check_item, @species, self.ability)
+    return GameData::Item.get(check_item).unlosable?(@species, self.ability)
   end
 
   def eachMove

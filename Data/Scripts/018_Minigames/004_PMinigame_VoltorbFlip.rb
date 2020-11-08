@@ -614,7 +614,7 @@ end
 
 
 def pbVoltorbFlip
-  if hasConst?(PBItems,:COINCASE) && !$PokemonBag.pbHasItem?(:COINCASE)
+  if GameData::Item.exists?(:COINCASE) && !$PokemonBag.pbHasItem?(:COINCASE)
     pbMessage(_INTL("You can't play unless you have a Coin Case."))
   elsif $PokemonGlobal.coins==MAX_COINS
     pbMessage(_INTL("Your Coin Case is full!"))

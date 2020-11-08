@@ -140,7 +140,7 @@ module Compiler
   # Compile berry plants
   #=============================================================================
   def compile_berry_plants
-    sections = []
+    sections = {}
     if File.exists?("PBS/berryplants.txt")
       pbCompilerEachCommentedLine("PBS/berryplants.txt") { |line,_lineno|
         if line[ /^\s*(\w+)\s*=\s*(.*)$/ ]
@@ -157,7 +157,7 @@ module Compiler
         end
       }
     end
-    save_data(sections,"Data/berry_plants.dat")
+    save_data(sections, "Data/berry_plants.dat")
   end
 
   #=============================================================================
@@ -326,15 +326,16 @@ module Compiler
   # Compile abilities
   #=============================================================================
   def compile_abilities
+    GameData::Ability::DATA.clear
     ability_names        = []
     ability_descriptions = []
     pbCompilerEachPreppedLine("PBS/abilities.txt") { |line, line_no|
       line = pbGetCsvRecord(line, line_no, [0, "vnss"])
       ability_number = line[0]
       ability_symbol = line[1].to_sym
-      if PokemonData::Ability::DATA[ability_number]
+      if GameData::Ability::DATA[ability_number]
         raise _INTL("Ability ID number '{1}' is used twice.\r\n{2}", ability_number, FileLineData.linereport)
-      elsif PokemonData::Ability::DATA[ability_symbol]
+      elsif GameData::Ability::DATA[ability_symbol]
         raise _INTL("Ability ID '{1}' is used twice.\r\n{2}", ability_symbol, FileLineData.linereport)
       end
       # Construct ability hash
@@ -345,12 +346,12 @@ module Compiler
         :description => line[3]
       }
       # Add ability's data to records
-      PokemonData::Ability::DATA[ability_number] = PokemonData::Ability::DATA[ability_symbol] = PokemonData::Ability.new(ability_hash)
+      GameData::Ability::DATA[ability_number] = GameData::Ability::DATA[ability_symbol] = GameData::Ability.new(ability_hash)
       ability_names[ability_number]        = ability_hash[:name]
       ability_descriptions[ability_number] = ability_hash[:description]
     }
     # Save all data
-    PokemonData::Ability.save
+    GameData::Ability.save
     MessageTypes.setMessages(MessageTypes::Abilities, ability_names)
     MessageTypes.setMessages(MessageTypes::AbilityDescs, ability_descriptions)
     Graphics.update
@@ -408,58 +409,45 @@ module Compiler
 =end
 
   def compile_items
-    records         = []
-    constants       = ""
-    itemnames       = []
-    itempluralnames = []
-    itemdescs       = []
-    maxValue = 0
-    pbCompilerEachCommentedLine("PBS/items.txt") { |line,lineno|
-      linerecord = pbGetCsvRecord(line,lineno,[0,"vnssuusuuUN"])
-      id = linerecord[0]
-      if records[id]
-        raise _INTL("Item ID number '{1}' is used twice.\r\n{2}",id,FileLineData.linereport)
+    GameData::Item::DATA.clear
+    item_names        = []
+    item_names_plural = []
+    item_descriptions = []
+    # Read each line of items.txt at a time and compile it into an item
+    pbCompilerEachCommentedLine("PBS/items.txt") { |line, line_no|
+      line = pbGetCsvRecord(line, line_no, [0, "vnssuusuuUN"])
+      item_number = line[0]
+      item_symbol = line[1].to_sym
+      if GameData::Item::DATA[item_number]
+        raise _INTL("Item ID number '{1}' is used twice.\r\n{2}", item_number, FileLineData.linereport)
+      elsif GameData::Item::DATA[item_symbol]
+        raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_symbol, FileLineData.linereport)
       end
-      record = []
-      record[ItemData::ID]          = id
-      constant                      = linerecord[1]
-      constants                     += "#{constant}=#{id}\r\n"
-      record[ItemData::NAME]        = linerecord[2]
-      itemnames[id]                 = linerecord[2]
-      record[ItemData::NAME_PLURAL] = linerecord[3]
-      itempluralnames[id]           = linerecord[3]
-      record[ItemData::POCKET]      = linerecord[4]
-      record[ItemData::PRICE]       = linerecord[5]
-      record[ItemData::DESCRIPTION] = linerecord[6]
-      itemdescs[id]                 = linerecord[6]
-      record[ItemData::FIELD_USE]   = linerecord[7]
-      record[ItemData::BATTLE_USE]  = linerecord[8]
-      record[ItemData::TYPE]        = linerecord[9]
-      if record[ItemData::TYPE]!="" && linerecord[10]
-        record[ItemData::MOVE]      = parseMove(linerecord[10])
-      else
-        record[ItemData::MOVE]      = 0
-      end
-      maxValue = [maxValue,id].max
-      records[id] = record
+      # Construct item hash
+      item_hash = {
+        :id_number   => item_number,
+        :id          => item_symbol,
+        :name        => line[2],
+        :name_plural => line[3],
+        :pocket      => line[4],
+        :price       => line[5],
+        :description => line[6],
+        :field_use   => line[7],
+        :battle_use  => line[8],
+        :type        => line[9]
+      }
+      item_hash[:move] = parseMove(line[10]) if !nil_or_empty?(line[10])
+      # Add item's data to records
+      GameData::Item::DATA[item_number] = GameData::Item::DATA[item_symbol] = GameData::Item.new(item_hash)
+      item_names[item_number]        = item_hash[:name]
+      item_names_plural[item_number] = item_hash[:name_plural]
+      item_descriptions[item_number] = item_hash[:description]
     }
-    MessageTypes.setMessages(MessageTypes::Items,itemnames)
-    MessageTypes.setMessages(MessageTypes::ItemPlurals,itempluralnames)
-    MessageTypes.setMessages(MessageTypes::ItemDescriptions,itemdescs)
-    save_data(records,"Data/items.dat")
-    code = "class PBItems\r\n"
-    code += constants
-    code += "def self.getName(id)\r\n"
-    code += "id=getID(PBItems,id)\r\n"
-    code += "return pbGetMessage(MessageTypes::Items,id); end\r\n"
-    code += "def self.getNamePlural(id)\r\n"
-    code += "id=getID(PBItems,id)\r\n"
-    code += "return pbGetMessage(MessageTypes::ItemPlurals,id); end\r\n"
-    code += "def self.getCount; return #{records.length}; end\r\n"
-    code += "def self.maxValue; return #{maxValue}; end\r\n"
-    code += "end\r\n"
-    eval(code, TOPLEVEL_BINDING)
-    pbAddScript(code,"PBItems")
+    # Save all data
+    GameData::Item.save
+    MessageTypes.setMessages(MessageTypes::Items, item_names)
+    MessageTypes.setMessages(MessageTypes::ItemPlurals, item_names_plural)
+    MessageTypes.setMessages(MessageTypes::ItemDescriptions, item_descriptions)
     Graphics.update
   end
 
@@ -1358,8 +1346,8 @@ module Compiler
           trainernames[trainerindex] = record[0]
           trainers[trainerindex][4] = record[1] if record[1]
         when 3   # Number of Pokémon, items
-          record = pbGetCsvRecord(line,lineno,[0,"vEEEEEEEE",nil,PBItems,PBItems,
-                                  PBItems,PBItems,PBItems,PBItems,PBItems,PBItems])
+          record = pbGetCsvRecord(line,lineno,[0,"vEEEEEEEE",nil,
+                                  Item,Item,Item,Item,Item,Item,Item,Item])
           record = [record] if record.is_a?(Integer)
           record.compact!
           oldcompilerlength += record[0]
@@ -1369,7 +1357,7 @@ module Compiler
           pokemonindex += 1
           trainers[trainerindex][3][pokemonindex] = []
           record = pbGetCsvRecord(line,lineno,
-             [0,"evEEEEEUEUBEUUSBU",PBSpecies,nil, PBItems,PBMoves,PBMoves,PBMoves,
+             [0,"evEEEEEUEUBEUUSBU",PBSpecies,nil,Item,PBMoves,PBMoves,PBMoves,
                                     PBMoves,nil,{"M"=>0,"m"=>0,"Male"=>0,"male"=>0,
                                     "0"=>0,"F"=>1,"f"=>1,"Female"=>1,"female"=>1,
                                     "1"=>1},nil,nil,PBNatures,nil,nil,nil,nil,nil])

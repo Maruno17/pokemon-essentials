@@ -48,7 +48,7 @@ BattleHandlers::WeightCalcItem.add(:FLOATSTONE,
 BattleHandlers::HPHealItem.add(:AGUAVBERRY,
   proc { |item,battler,battle,forced|
     next pbBattleConfusionBerry(battler,battle,item,forced,4,
-       _INTL("For {1}, the {2} was too bitter!",battler.pbThis(true),PBItems.getName(item)))
+       _INTL("For {1}, the {2} was too bitter!",battler.pbThis(true),GameData::Item.get(item).name))
   }
 )
 
@@ -62,7 +62,7 @@ BattleHandlers::HPHealItem.add(:BERRYJUICE,
   proc { |item,battler,battle,forced|
     next false if !battler.canHeal?
     next false if !forced && battler.hp>battler.totalhp/2
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] Forced consuming of #{itemName}") if forced
     battle.pbCommonAnimation("UseItem",battler) if !forced
     battler.pbRecoverHP(20)
@@ -78,7 +78,7 @@ BattleHandlers::HPHealItem.add(:BERRYJUICE,
 BattleHandlers::HPHealItem.add(:FIGYBERRY,
   proc { |item,battler,battle,forced|
     next pbBattleConfusionBerry(battler,battle,item,forced,0,
-       _INTL("For {1}, the {2} was too spicy!",battler.pbThis(true),PBItems.getName(item)))
+       _INTL("For {1}, the {2} was too spicy!",battler.pbThis(true),GameData::Item.get(item).name))
   }
 )
 
@@ -91,7 +91,7 @@ BattleHandlers::HPHealItem.add(:GANLONBERRY,
 BattleHandlers::HPHealItem.add(:IAPAPABERRY,
   proc { |item,battler,battle,forced|
     next pbBattleConfusionBerry(battler,battle,item,forced,1,
-       _INTL("For {1}, the {2} was too sour!",battler.pbThis(true),PBItems.getName(item)))
+       _INTL("For {1}, the {2} was too sour!",battler.pbThis(true),GameData::Item.get(item).name))
   }
 )
 
@@ -101,7 +101,7 @@ BattleHandlers::HPHealItem.add(:LANSATBERRY,
     next false if battler.effects[PBEffects::FocusEnergy]>=2
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.effects[PBEffects::FocusEnergy] = 2
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     if forced
       battle.pbDisplay(_INTL("{1} got pumped from the {2}!",battler.pbThis,itemName))
     else
@@ -120,7 +120,7 @@ BattleHandlers::HPHealItem.add(:LIECHIBERRY,
 BattleHandlers::HPHealItem.add(:MAGOBERRY,
   proc { |item,battler,battle,forced|
     next pbBattleConfusionBerry(battler,battle,item,forced,2,
-       _INTL("For {1}, the {2} was too sweet!",battler.pbThis(true),PBItems.getName(item)))
+       _INTL("For {1}, the {2} was too sweet!",battler.pbThis(true),GameData::Item.get(item).name))
   }
 )
 
@@ -130,7 +130,7 @@ BattleHandlers::HPHealItem.add(:MICLEBERRY,
     next false if !battler.effects[PBEffects::MicleBerry]
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.effects[PBEffects::MicleBerry] = true
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     if forced
       PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
       battle.pbDisplay(_INTL("{1} boosted the accuracy of its next move!",battler.pbThis))
@@ -149,7 +149,7 @@ BattleHandlers::HPHealItem.add(:ORANBERRY,
     next false if !forced && battler.hp>battler.totalhp/2
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbRecoverHP(10)
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     if forced
       PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
       battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
@@ -179,7 +179,7 @@ BattleHandlers::HPHealItem.add(:SITRUSBERRY,
     next false if !forced && battler.hp>battler.totalhp/2
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbRecoverHP(battler.totalhp/4)
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     if forced
       PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
       battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
@@ -203,7 +203,7 @@ BattleHandlers::HPHealItem.add(:STARFBERRY,
 BattleHandlers::HPHealItem.add(:WIKIBERRY,
   proc { |item,battler,battle,forced|
     next pbBattleConfusionBerry(battler,battle,item,forced,3,
-       _INTL("For {1}, the {2} was too dry!",battler.pbThis(true),PBItems.getName(item)))
+       _INTL("For {1}, the {2} was too dry!",battler.pbThis(true),GameData::Item.get(item).name))
   }
 )
 
@@ -215,7 +215,7 @@ BattleHandlers::StatusCureItem.add(:ASPEARBERRY,
   proc { |item,battler,battle,forced|
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
     next false if battler.status!=PBStatuses::FROZEN
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbCureStatus(forced)
@@ -228,7 +228,7 @@ BattleHandlers::StatusCureItem.add(:CHERIBERRY,
   proc { |item,battler,battle,forced|
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
     next false if battler.status!=PBStatuses::PARALYSIS
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbCureStatus(forced)
@@ -241,7 +241,7 @@ BattleHandlers::StatusCureItem.add(:CHESTOBERRY,
   proc { |item,battler,battle,forced|
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
     next false if battler.status!=PBStatuses::SLEEP
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbCureStatus(forced)
@@ -255,7 +255,7 @@ BattleHandlers::StatusCureItem.add(:LUMBERRY,
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
     next false if battler.status==PBStatuses::NONE &&
                   battler.effects[PBEffects::Confusion]==0
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     oldStatus = battler.status
@@ -293,7 +293,7 @@ BattleHandlers::StatusCureItem.add(:MENTALHERB,
                   !battler.effects[PBEffects::Torment] &&
                   battler.effects[PBEffects::Disable]==0 &&
                   battler.effects[PBEffects::HealBlock]==0
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}")
     battle.pbCommonAnimation("UseItem",battler) if !forced
     if battler.effects[PBEffects::Attract]>=0
@@ -324,7 +324,7 @@ BattleHandlers::StatusCureItem.add(:PECHABERRY,
   proc { |item,battler,battle,forced|
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
     next false if battler.status!=PBStatuses::POISON
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbCureStatus(forced)
@@ -337,7 +337,7 @@ BattleHandlers::StatusCureItem.add(:PERSIMBERRY,
   proc { |item,battler,battle,forced|
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
     next false if battler.effects[PBEffects::Confusion]==0
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbCureConfusion
@@ -355,7 +355,7 @@ BattleHandlers::StatusCureItem.add(:RAWSTBERRY,
   proc { |item,battler,battle,forced|
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
     next false if battler.status!=PBStatuses::BURN
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbCureStatus(forced)
@@ -1124,14 +1124,14 @@ BattleHandlers::TargetItemOnHit.add(:SNOWBALL,
 BattleHandlers::TargetItemOnHit.add(:STICKYBARB,
   proc { |item,user,target,move,battle|
     next if !move.pbContactMove?(user) || !user.affectedByContactEffect?
-    next if user.fainted? || user.item>0
+    next if user.fainted? || user.item
     user.item = target.item
-    target.item = 0
+    target.item = nil
     target.effects[PBEffects::Unburden] = true
     if battle.wildBattle? && !user.opposes?
-      if user.initialItem==0 && target.initialItem==user.item
+      if !user.initialItem && target.initialItem==user.item
         user.setInitialItem(user.item)
-        target.setInitialItem(0)
+        target.setInitialItem(nil)
       end
     end
     battle.pbDisplay(_INTL("{1}'s {2} was transferred to {3}!",
@@ -1168,7 +1168,7 @@ BattleHandlers::TargetItemOnHitPositiveBerry.add(:ENIGMABERRY,
   proc { |item,battler,battle,forced|
     next false if !battler.canHeal?
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbRecoverHP(battler.totalhp/4)
@@ -1186,7 +1186,7 @@ BattleHandlers::TargetItemOnHitPositiveBerry.add(:KEEBERRY,
   proc { |item,battler,battle,forced|
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
     next false if !battler.pbCanRaiseStatStage?(PBStats::DEFENSE,battler)
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     if !forced
       battle.pbCommonAnimation("EatBerry",battler)
       next battler.pbRaiseStatStageByCause(PBStats::DEFENSE,1,battler,itemName)
@@ -1200,7 +1200,7 @@ BattleHandlers::TargetItemOnHitPositiveBerry.add(:MARANGABERRY,
   proc { |item,battler,battle,forced|
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
     next false if !battler.pbCanRaiseStatStage?(PBStats::SPDEF,battler)
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     if !forced
       battle.pbCommonAnimation("EatBerry",battler)
       next battler.pbRaiseStatStageByCause(PBStats::SPDEF,1,battler,itemName)
@@ -1294,7 +1294,7 @@ BattleHandlers::EndOfMoveItem.add(:LEPPABERRY,
       found.push(i)
     end
     next false if found.length==0
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     choice = found[battle.pbRandom(found.length)]
@@ -1325,7 +1325,7 @@ BattleHandlers::EndOfMoveStatRestoreItem.add(:WHITEHERB,
       reducedStats = true
     end
     next false if !reducedStats
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
     battle.pbCommonAnimation("UseItem",battler) if !forced
     if forced
@@ -1440,7 +1440,7 @@ BattleHandlers::TerrainStatBoostItem.add(:ELECTRICSEED,
   proc { |item,battler,battle|
     next false if battle.field.terrain!=PBBattleTerrains::Electric
     next false if !battler.pbCanRaiseStatStage?(PBStats::DEFENSE,battler)
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     battle.pbCommonAnimation("UseItem",battler)
     next battler.pbRaiseStatStageByCause(PBStats::DEFENSE,1,battler,itemName)
   }
@@ -1450,7 +1450,7 @@ BattleHandlers::TerrainStatBoostItem.add(:GRASSYSEED,
   proc { |item,battler,battle|
     next false if battle.field.terrain!=PBBattleTerrains::Grassy
     next false if !battler.pbCanRaiseStatStage?(PBStats::DEFENSE,battler)
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     battle.pbCommonAnimation("UseItem",battler)
     next battler.pbRaiseStatStageByCause(PBStats::DEFENSE,1,battler,itemName)
   }
@@ -1460,7 +1460,7 @@ BattleHandlers::TerrainStatBoostItem.add(:MISTYSEED,
   proc { |item,battler,battle|
     next false if battle.field.terrain!=PBBattleTerrains::Misty
     next false if !battler.pbCanRaiseStatStage?(PBStats::SPDEF,battler)
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     battle.pbCommonAnimation("UseItem",battler)
     next battler.pbRaiseStatStageByCause(PBStats::SPDEF,1,battler,itemName)
   }
@@ -1470,7 +1470,7 @@ BattleHandlers::TerrainStatBoostItem.add(:PSYCHICSEED,
   proc { |item,battler,battle|
     next false if battle.field.terrain!=PBBattleTerrains::Psychic
     next false if !battler.pbCanRaiseStatStage?(PBStats::SPDEF,battler)
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     battle.pbCommonAnimation("UseItem",battler)
     next battler.pbRaiseStatStageByCause(PBStats::SPDEF,1,battler,itemName)
   }
@@ -1577,7 +1577,7 @@ BattleHandlers::ItemOnSwitchIn.add(:AIRBALLOON,
 BattleHandlers::ItemOnIntimidated.add(:ADRENALINEORB,
   proc { |item,battler,battle|
     next false if !battler.pbCanRaiseStatStage?(PBStats::SPEED,battler)
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     battle.pbCommonAnimation("UseItem",battler)
     next battler.pbRaiseStatStageByCause(PBStats::SPEED,1,battler,itemName)
   }

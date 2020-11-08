@@ -123,7 +123,7 @@ class PokemonSummary_Scene
     @sprites["pokeicon"].x       = 46
     @sprites["pokeicon"].y       = 92
     @sprites["pokeicon"].visible = false
-    @sprites["itemicon"] = ItemIconSprite.new(30,320,@pokemon.item,@viewport)
+    @sprites["itemicon"] = ItemIconSprite.new(30,320,@pokemon.item_id,@viewport)
     @sprites["itemicon"].blankzero = true
     @sprites["overlay"] = BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
     pbSetSystemFont(@sprites["overlay"].bitmap)
@@ -287,7 +287,7 @@ class PokemonSummary_Scene
     if @pokemon.egg?
       drawPageOneEgg; return
     end
-    @sprites["itemicon"].item = @pokemon.item
+    @sprites["itemicon"].item = @pokemon.item_id
     overlay = @sprites["overlay"].bitmap
     overlay.clear
     base   = Color.new(248,248,248)
@@ -330,7 +330,7 @@ class PokemonSummary_Scene
     ]
     # Write the held item's name
     if @pokemon.hasItem?
-      textpos.push([PBItems.getName(@pokemon.item),16,352,0,Color.new(64,64,64),Color.new(176,176,176)])
+      textpos.push([@pokemon.item.name,16,352,0,Color.new(64,64,64),Color.new(176,176,176)])
     else
       textpos.push([_INTL("None"),16,352,0,Color.new(192,200,208),Color.new(208,216,224)])
     end
@@ -454,7 +454,7 @@ class PokemonSummary_Scene
   end
 
   def drawPageOneEgg
-    @sprites["itemicon"].item = @pokemon.item
+    @sprites["itemicon"].item = @pokemon.item_id
     overlay = @sprites["overlay"].bitmap
     overlay.clear
     base   = Color.new(248,248,248)
@@ -475,7 +475,7 @@ class PokemonSummary_Scene
     ]
     # Write the held item's name
     if @pokemon.hasItem?
-      textpos.push([PBItems.getName(@pokemon.item),16,352,0,Color.new(64,64,64),Color.new(176,176,176)])
+      textpos.push([@pokemon.item.name,16,352,0,Color.new(64,64,64),Color.new(176,176,176)])
     else
       textpos.push([_INTL("None"),16,352,0,Color.new(192,200,208),Color.new(208,216,224)])
     end
@@ -892,7 +892,7 @@ class PokemonSummary_Scene
   def pbChangePokemon
     @pokemon = @party[@partyindex]
     @sprites["pokemon"].setPokemonBitmap(@pokemon)
-    @sprites["itemicon"].item = @pokemon.item
+    @sprites["itemicon"].item = @pokemon.item_id
     pbSEStop
     pbPlayCry(@pokemon)
   end
@@ -1169,13 +1169,13 @@ class PokemonSummary_Scene
     commands[commands.length]                 = _INTL("Cancel")
     command = pbShowCommands(commands)
     if cmdGiveItem>=0 && command==cmdGiveItem
-      item = 0
+      item = nil
       pbFadeOutIn {
         scene = PokemonBag_Scene.new
         screen = PokemonBagScreen.new(scene,$PokemonBag)
-        item = screen.pbChooseItemScreen(Proc.new { |itm| pbCanHoldItem?(itm) })
+        item = screen.pbChooseItemScreen(Proc.new { |itm| GameData::Item.get(itm).can_hold? })
       }
-      if item>0
+      if item
         dorefresh = pbGiveItemToPokemon(item,@pokemon,self,@partyindex)
       end
     elsif cmdTakeItem>=0 && command==cmdTakeItem

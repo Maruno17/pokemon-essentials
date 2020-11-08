@@ -102,3 +102,10 @@ class PBMoveData
     @flags      = move_data[MoveData::FLAGS]
   end
 end
+
+def pbIsHiddenMove?(move)
+  GameData::Item.each do |i|
+    return true if i.is_HM? && move == i.move
+  end
+  return false
+end

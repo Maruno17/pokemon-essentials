@@ -427,7 +427,7 @@ class PokeBattle_SafariZone
       pbDisplayPaused(_INTL("Wild {1} appeared!",wildpoke.name))
       @scene.pbSafariStart
       @scene.pbCommonAnimation(PBWeather.animationName(@weather))
-      safariBall = getConst(PBItems,:SAFARIBALL)
+      safariBall = GameData::Item.get(:SAFARIBALL).id
       rareness = pbGetSpeciesData(wildpoke.species,wildpoke.form,SpeciesData::RARENESS)
       catchFactor  = (rareness*100)/1275
       catchFactor  = [[catchFactor,3].max,20].min

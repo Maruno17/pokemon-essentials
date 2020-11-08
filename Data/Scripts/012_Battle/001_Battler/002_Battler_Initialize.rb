@@ -22,7 +22,7 @@ class PokeBattle_Battler
     @hp = @totalhp  = 0
     @type1 = @type2 = 0
     @ability_id     = nil
-    @item           = 0
+    @item_id        = nil
     @gender         = 0
     @attack = @defense = @spatk = @spdef = @speed = 0
     @status         = PBStatuses::NONE
@@ -79,7 +79,7 @@ class PokeBattle_Battler
     @type1        = pkmn.type1
     @type2        = pkmn.type2
     @ability_id   = pkmn.ability_id
-    @item         = pkmn.item
+    @item_id      = pkmn.item_id
     @gender       = pkmn.gender
     @attack       = pkmn.attack
     @defense      = pkmn.defense
@@ -188,7 +188,7 @@ class PokeBattle_Battler
     @effects[PBEffects::FollowMe]            = 0
     @effects[PBEffects::Foresight]           = false
     @effects[PBEffects::FuryCutter]          = 0
-    @effects[PBEffects::GemConsumed]         = 0
+    @effects[PBEffects::GemConsumed]         = nil
     @effects[PBEffects::Grudge]              = false
     @effects[PBEffects::HelpingHand]         = false
     @effects[PBEffects::HyperBeam]           = 0
@@ -227,7 +227,7 @@ class PokeBattle_Battler
     @effects[PBEffects::Nightmare]           = false
     @effects[PBEffects::Outrage]             = 0
     @effects[PBEffects::ParentalBond]        = 0
-    @effects[PBEffects::PickupItem]          = 0
+    @effects[PBEffects::PickupItem]          = nil
     @effects[PBEffects::PickupUse]           = 0
     @effects[PBEffects::Pinch]               = false
     @effects[PBEffects::Powder]              = false

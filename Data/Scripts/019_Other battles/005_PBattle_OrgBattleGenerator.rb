@@ -72,13 +72,8 @@ def pbGetLegalMoves2(species,maxlevel)
   tmData=pbLoadSpeciesTMData
   if !$tmMoves
     $tmMoves=[]
-    itemData=pbLoadItemsData
-    for i in 0...itemData.length
-      next if !itemData[i]
-      atk=itemData[i][8]
-      next if !atk || atk==0
-      next if !tmData[atk]
-      $tmMoves.push(atk)
+    GameData::Item.each do |i|
+      $tmMoves.push(i.move) if i.move && tmData[i.move]
     end
   end
   for atk in $tmMoves
@@ -326,7 +321,7 @@ def pbRandomPokemonFromRule(rule,trainer)
       end
       break
     end
-    item=0
+    item = nil
     $legalMoves=[] if level!=$legalMovesLevel
     $legalMoves[species]=pbGetLegalMoves2(species,level) if !$legalMoves[species]
     itemlist=[
@@ -343,13 +338,12 @@ def pbRandomPokemonFromRule(rule,trainer)
     # Most used: Leftovers, Life Orb, Choice Band, Choice Scarf, Focus Sash
     loop do
       if rand(40)==0
-        item=getID(PBItems,:LEFTOVERS)
+        item = :LEFTOVERS
         break
       end
-      itemsym=itemlist[rand(itemlist.length)]
-      item=getID(PBItems,itemsym)
-      next if item==0
-      case itemsym
+      item = itemlist[rand(itemlist.length)]
+      next if !item
+      case item
       when :LIGHTBALL
         next if !isConst?(species,PBSpecies,:PIKACHU)
       when :SHEDSHELL
@@ -384,27 +378,24 @@ def pbRandomPokemonFromRule(rule,trainer)
         next if !isConst?(species,PBSpecies,:CUBONE) &&
                 !isConst?(species,PBSpecies,:MAROWAK)
       end
-      if itemsym==:LIECHIBERRY && (ev&0x02)==0
+      if item == :LIECHIBERRY && (ev&0x02)==0
         next if rand(2)==0
         ev|=0x02
       end
-      if itemsym==:SALACBERRY && (ev&0x08)==0
+      if item == :SALACBERRY && (ev&0x08)==0
         next if rand(2)==0
         ev|=0x08
       end
-      if itemsym==:PETAYABERRY && (ev&0x10)==0
+      if item == :PETAYABERRY && (ev&0x10)==0
         next if rand(2)==0
         ev|=0x10
       end
       break
     end
-    if level<10
-      item=(getConst(PBItems,:ORANBERRY) || item) if rand(40)==0 ||
-            isConst?(item,PBItems,:SITRUSBERRY)
-    end
-    if level>20
-      item=(getConst(PBItems,:SITRUSBERRY) || item) if rand(40)==0 ||
-            isConst?(item,PBItems,:ORANBERRY)
+    if level < 10 && GameData::Item.exists?(:ORANBERRY)
+      item = :ORANBERRY if rand(40) == 0 || item == :SITRUSBERRY
+    elsif level > 20 && GameData::Item.exists?(:SITRUSBERRY)
+      item = :SITRUSBERRY if rand(40) == 0 || item == :ORANBERRY
     end
     moves=$legalMoves[species]
     sketch=false
@@ -483,9 +474,7 @@ def pbRandomPokemonFromRule(rule,trainer)
           ev|=0x10 if rand(10)<8 # Emphasize Special Attack
           ev&=~0x02 if rand(10)<8 # Deemphasize Attack
         end
-        if !hasNormal && isConst?(item,PBItems,:SILKSCARF)
-          item=getID(PBItems,:LEFTOVERS)
-        end
+        item = :LEFTOVERS if !hasNormal && item == :SILKSCARF
         moves=newmoves
         break
       end
@@ -493,33 +482,31 @@ def pbRandomPokemonFromRule(rule,trainer)
     for i in 0...4
       moves[i]=0 if !moves[i]
     end
-    if isConst?(item,PBItems,:LIGHTCLAY) &&
+    if item == :LIGHTCLAY &&
        !moves.include?((getConst(PBMoves,:LIGHTSCREEN) || -1)) &&
        !moves.include?((getConst(PBMoves,:REFLECT) || -1))
-      item=getID(PBItems,:LEFTOVERS)
+      item = :LEFTOVERS
     end
-    if isConst?(item,PBItems,:BLACKSLUDGE)
+    if item == :BLACKSLUDGE
       type1 = pbGetSpeciesData(species,0,SpeciesData::TYPE1)
       type2 = pbGetSpeciesData(species,0,SpeciesData::TYPE2) || type1
       if !isConst?(type1,PBTypes,:POISON) && !isConst?(type2,PBTypes,:POISON)
-        item=getID(PBItems,:LEFTOVERS)
+        item = :LEFTOVERS
       end
     end
-    if isConst?(item,PBItems,:HEATROCK) &&
-       !moves.include?((getConst(PBMoves,:SUNNYDAY) || -1))
-      item=getID(PBItems,:LEFTOVERS)
+    if item == :HEATROCK && !moves.include?((getConst(PBMoves,:SUNNYDAY) || -1))
+      item = :LEFTOVERS
     end
-    if isConst?(item,PBItems,:DAMPROCK) &&
-       !moves.include?((getConst(PBMoves,:RAINDANCE) || -1))
-      item=getID(PBItems,:LEFTOVERS)
+    if item == :DAMPROCK && !moves.include?((getConst(PBMoves,:RAINDANCE) || -1))
+      item = :LEFTOVERS
     end
     if moves.include?((getConst(PBMoves,:REST) || -1))
-       item=getID(PBItems,:LUMBERRY) if rand(3)==0
-       item=getID(PBItems,:CHESTOBERRY) if rand(4)==0
+       item = :LUMBERRY if rand(3)==0
+       item = :CHESTOBERRY if rand(4)==0
     end
-    pk=PBPokemon.new(species,item,nature,moves[0],moves[1],moves[2],moves[3],ev)
-    pkmn=pk.createPokemon(level,31,trainer)
-    i+=1
+    pk = PBPokemon.new(species, item, nature, moves[0], moves[1], moves[2], moves[3], ev)
+    pkmn = pk.createPokemon(level, 31, trainer)
+    i += 1
     break if rule.ruleset.isPokemonValid?(pkmn)
   end
   return pkmn
@@ -874,7 +861,7 @@ def pbDecideWinnerScore(party0,party1,rating)
     end
     basestatsum=baseStatTotal(party0[i].species)
     score+=basestatsum/10
-    score+=10 if party0[i].item!=0 # Not in Battle Dome ranking
+    score+=10 if party0[i].item   # Not in Battle Dome ranking
   end
   score+=rating+rand(32)
   return score
@@ -913,7 +900,7 @@ def pbRuledBattle(team1,team2,rule)
         p.level=level
         p.calcStats
       end
-      items1[i]=p.item
+      items1[i]=p.item_id
       trainer1.party.push(p)
     end
     team2.each_with_index do |p,i|
@@ -922,7 +909,7 @@ def pbRuledBattle(team1,team2,rule)
         p.level=level
         p.calcStats
       end
-      items2[i]=p.item
+      items2[i]=p.item_id
       trainer2.party.push(p)
     end
     scene=PokeBattle_DebugSceneNoLogging.new

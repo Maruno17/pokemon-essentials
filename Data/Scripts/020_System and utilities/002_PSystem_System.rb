@@ -77,6 +77,8 @@ def pbSetUpSystem
   begin
     consts = pbSafeLoad("Data/Constants.rxdata")
     consts = [] if !consts
+    GameData::Ability.load
+    GameData::Item.load
   rescue
     consts = []
   end

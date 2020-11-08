@@ -121,17 +121,15 @@ Events.onStepTaken += proc {
            $PokemonBag.pbHasItem?(:SUPERREPEL) ||
            $PokemonBag.pbHasItem?(:MAXREPEL)
           if pbConfirmMessage(_INTL("The repellent's effect wore off! Would you like to use another one?"))
-            ret = 0
+            ret = nil
             pbFadeOutIn {
               scene = PokemonBag_Scene.new
               screen = PokemonBagScreen.new(scene,$PokemonBag)
               ret = screen.pbChooseItemScreen(Proc.new { |item|
-                isConst?(item,PBItems,:REPEL) ||
-                isConst?(item,PBItems,:SUPERREPEL) ||
-                isConst?(item,PBItems,:MAXREPEL)
+                [:REPEL, :SUPERREPEL, :MAXREPEL].include?(item)
               })
             }
-            pbUseItem($PokemonBag,ret) if ret>0
+            pbUseItem($PokemonBag,ret) if ret
           end
         else
           pbMessage(_INTL("The repellent's effect wore off!"))
@@ -292,7 +290,7 @@ ItemHandlers::UseInField.add(:ITEMFINDER,proc { |item|
         $game_player.turn_right_90
       end
       pbWait(Graphics.frame_rate*3/10)
-      pbMessage(_INTL("The {1}'s indicating something right underfoot!",PBItems.getName(item)))
+      pbMessage(_INTL("The {1}'s indicating something right underfoot!",GameData::Item.get(item).name))
     else   # Item is nearby, face towards it
       direction = $game_player.direction
       if offsetX.abs>offsetY.abs
@@ -307,7 +305,7 @@ ItemHandlers::UseInField.add(:ITEMFINDER,proc { |item|
       when 8; $game_player.turn_up
       end
       pbWait(Graphics.frame_rate*3/10)
-      pbMessage(_INTL("Huh? The {1}'s responding!\1",PBItems.getName(item)))
+      pbMessage(_INTL("Huh? The {1}'s responding!\1",GameData::Item.get(item).name))
       pbMessage(_INTL("There's an item buried around here!"))
     end
   end
@@ -344,7 +342,7 @@ ItemHandlers::UseInField.add(:EXPALLOFF,proc { |item|
 
 # Applies to all items defined as an evolution stone.
 # No need to add more code for new ones.
-ItemHandlers::UseOnPokemon.addIf(proc { |item| pbIsEvolutionStone?(item)},
+ItemHandlers::UseOnPokemon.addIf(proc { |item| GameData::Item.get(item).is_evolution_stone? },
   proc { |item,pkmn,scene|
     if pkmn.shadowPokemon?
       scene.pbDisplay(_INTL("It won't have any effect."))
@@ -1096,7 +1094,7 @@ ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE,proc { |item,pkmn,scene|
     next false
   end
   newabil = (pkmn.abilityIndex+1)%2
-  newabilname = PokemonData::Ability.get((newabil==0) ? abil1 : abil2).name
+  newabilname = GameData::Ability.get((newabil==0) ? abil1 : abil2).name
   if scene.pbConfirm(_INTL("Would you like to change {1}'s Ability to {2}?",
      pkmn.name,newabilname))
     pkmn.setAbility(newabil)

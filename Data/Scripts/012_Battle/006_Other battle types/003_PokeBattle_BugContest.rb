@@ -36,7 +36,7 @@ class PokeBattle_BugContestBattle < PokeBattle_Battle
 
   def initialize(*arg)
     @ballCount = 0
-    @ballConst = getConst(PBItems,:SPORTBALL) || -1
+    @ballConst = GameData::Item.get(:SPORTBALL).id
     super(*arg)
   end
 

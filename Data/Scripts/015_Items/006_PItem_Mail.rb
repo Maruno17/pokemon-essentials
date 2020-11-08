@@ -2,7 +2,8 @@
 class PokemonMail
   attr_accessor :item,:message,:sender,:poke1,:poke2,:poke3
 
-  def initialize(item,message,sender,poke1=nil,poke2=nil,poke3=nil)
+  def initialize(item, message, sender, poke1 = nil, poke2 = nil, poke3 = nil)
+    item = item.id if !item.is_a?(Symbol) && item.respond_to?("id")
     @item    = item      # Item represented by this mail
     @message = message   # Message text
     @sender  = sender    # Name of the message's sender
@@ -38,7 +39,7 @@ def pbDisplayMail(mail,_bearer=nil)
   sprites["overlay"] = BitmapSprite.new(Graphics.width,Graphics.height,viewport)
   overlay = sprites["overlay"].bitmap
   pbSetSystemFont(overlay)
-  if pbIsMailWithPokemonIcons?(mail.item)
+  if GameData::Item.get(mail.item).is_icon_mail?
     if mail.poke1
       sprites["bearer"] = IconSprite.new(64,288,viewport)
       bitmapFileName = pbCheckPokemonIconFiles(mail.poke1,mail.poke1[5])

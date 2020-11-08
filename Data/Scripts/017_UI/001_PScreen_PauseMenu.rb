@@ -184,14 +184,14 @@ class PokemonPauseMenu
           return
         end
       elsif cmdBag>=0 && command==cmdBag
-        item = 0
+        item = nil
         pbFadeOutIn {
           scene = PokemonBag_Scene.new
           screen = PokemonBagScreen.new(scene,$PokemonBag)
           item = screen.pbStartScreen
-          (item>0) ? @scene.pbEndScene : @scene.pbRefresh
+          (item) ? @scene.pbEndScene : @scene.pbRefresh
         }
-        if item>0
+        if item
           $game_temp.in_menu = false
           pbUseKeyItemInField(item)
           return

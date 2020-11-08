@@ -311,8 +311,8 @@ module Compiler
       end
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
-      if enumer == :Ability
-        enumer = PokemonData.const_get(enumer.to_sym)
+      if [:Ability, :Item].include?(enumer)
+        enumer = GameData.const_get(enumer.to_sym)
         begin
           if ret == "" || !enumer.exists?(ret.to_sym)
             raise _INTL("Undefined value {1} in {2}\r\n{3}", ret, enumer.name, FileLineData.linereport)
@@ -353,8 +353,8 @@ module Compiler
       return nil if ret=="" || !(enumer.const_defined?(ret) rescue false)
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
-      if enumer == :Ability
-        enumer = PokemonData.const_get(enumer.to_sym)
+      if [:Ability, :Item].include?(enumer)
+        enumer = GameData.const_get(enumer.to_sym)
         return nil if ret == "" || !enumer.exists?(ret.to_sym)
         return ret.to_sym
       end
@@ -566,7 +566,11 @@ module Compiler
     clonitem = item.upcase
     clonitem.sub!(/^\s*/,"")
     clonitem.sub!(/\s*$/,"")
-    return pbGetConst(PBItems,clonitem,_INTL("Undefined item constant name: %s\r\nName must consist only of letters, numbers, and\r\nunderscores and can't begin with a number.\r\nMake sure the item is defined in\r\nPBS/items.txt.\r\n{1}",FileLineData.linereport))
+    itm = GameData::Item.try_get(clonitem)
+    if !itm
+      raise _INTL("Undefined item constant name: %s\r\nName must consist only of letters, numbers and\r\nunderscores, and can't begin with a number.\r\nMake sure the item is defined in\r\nPBS/items.txt.\r\n{1}",FileLineData.linereport)
+    end
+    return itm.id.to_s
   end
 
   def parseSpecies(item)
@@ -623,17 +627,17 @@ module Compiler
       yield(_INTL("Compiling item data"))
       compile_items                  # Depends on PBMoves
       yield(_INTL("Compiling berry plant data"))
-      compile_berry_plants           # Depends on PBItems
+      compile_berry_plants           # Depends on Item
       yield(_INTL("Compiling Pokémon data"))
-      compile_pokemon                # Depends on PBMoves, PBItems, PBTypes, Ability
+      compile_pokemon                # Depends on PBMoves, Item, PBTypes, Ability
       yield(_INTL("Compiling Pokémon forms data"))
-      compile_pokemon_forms          # Depends on PBSpecies, PBMoves, PBItems, PBTypes, Ability
+      compile_pokemon_forms          # Depends on PBSpecies, PBMoves, Item, PBTypes, Ability
       yield(_INTL("Compiling machine data"))
       compile_move_compatibilities   # Depends on PBSpecies, PBMoves
       yield(_INTL("Compiling Trainer type data"))
       compile_trainer_types          # No dependencies
       yield(_INTL("Compiling Trainer data"))
-      compile_trainers               # Depends on PBSpecies, PBItems, PBMoves
+      compile_trainers               # Depends on PBSpecies, Item, PBMoves
       yield(_INTL("Compiling phone data"))
       compile_phone                  # Depends on PBTrainers
       yield(_INTL("Compiling metadata"))

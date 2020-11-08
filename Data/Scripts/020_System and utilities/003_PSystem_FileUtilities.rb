@@ -259,18 +259,17 @@ end
 
 #===============================================================================
 # Load item icons
+# TODO: Put these methods into GameData::Item.
 #===============================================================================
 def pbItemIconFile(item)
-  return nil if !item
   bitmapFileName = nil
-  if item==0
-    bitmapFileName = sprintf("Graphics/Icons/itemBack")
-  else
-    bitmapFileName = sprintf("Graphics/Icons/item%s",getConstantName(PBItems,item)) rescue nil
+  if item
+    itm = GameData::Item.get(item)
+    bitmapFileName = sprintf("Graphics/Icons/item%s",itm.id.to_s) rescue nil
     if !pbResolveBitmap(bitmapFileName)
-      bitmapFileName = sprintf("Graphics/Icons/item%03d",item)
-      if !pbResolveBitmap(bitmapFileName) && pbIsMachine?(item)
-        move = pbGetMachine(item)
+      bitmapFileName = sprintf("Graphics/Icons/item%03d",itm.id_number)
+      if !pbResolveBitmap(bitmapFileName) && itm.is_machine?
+        move = itm.move
         type = pbGetMoveData(move,MoveData::TYPE)
         bitmapFileName = sprintf("Graphics/Icons/itemMachine%s",getConstantName(PBTypes,type)) rescue nil
         if !pbResolveBitmap(bitmapFileName)
@@ -279,14 +278,16 @@ def pbItemIconFile(item)
       end
       bitmapFileName = "Graphics/Icons/item000" if !pbResolveBitmap(bitmapFileName)
     end
+  else
+    bitmapFileName = sprintf("Graphics/Icons/itemBack")
   end
   return bitmapFileName
 end
 
 def pbHeldItemIconFile(item)   # Used in the party screen
   return nil if !item || item==0
-  namebase = (pbIsMail?(item)) ? "mail" : "item"
-  bitmapFileName = sprintf("Graphics/Pictures/Party/icon_%s_%s",namebase,getConstantName(PBItems,item)) rescue nil
+  namebase = (GameData::Item.get(item).is_mail?) ? "mail" : "item"
+  bitmapFileName = sprintf("Graphics/Pictures/Party/icon_%s_%s",namebase,GameData::Item.get(item).id.to_s) rescue nil
   if !pbResolveBitmap(bitmapFileName)
     bitmapFileName = sprintf("Graphics/Pictures/Party/icon_%s_%03d",namebase,item)
     if !pbResolveBitmap(bitmapFileName)
@@ -303,7 +304,7 @@ end
 #===============================================================================
 def pbMailBackFile(item)
   return nil if !item
-  bitmapFileName = sprintf("Graphics/Pictures/Mail/mail_%s",getConstantName(PBItems,item)) rescue nil
+  bitmapFileName = sprintf("Graphics/Pictures/Mail/mail_%s",GameData::Item.get(item).id.to_s) rescue nil
   if !pbResolveBitmap(bitmapFileName)
     bitmapFileName = sprintf("Graphics/Pictures/Mail/mail_%03d",item)
   end

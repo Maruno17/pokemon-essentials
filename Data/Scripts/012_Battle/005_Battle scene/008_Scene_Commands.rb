@@ -200,7 +200,7 @@ class PokeBattle_Scene
     # Start Bag screen
     itemScene = PokemonBag_Scene.new
     itemScene.pbStartScene($PokemonBag,true,Proc.new { |item|
-      useType = pbGetItemData(item,ItemData::BATTLE_USE)
+      useType = GameData::Item.get(item).battle_use
       next useType && useType>0
       },false)
     # Loop while in Bag screen
@@ -208,10 +208,11 @@ class PokeBattle_Scene
     loop do
       # Select an item
       item = itemScene.pbChooseItem
-      break if item==0
+      break if !item
       # Choose a command for the selected item
-      itemName = PBItems.getName(item)
-      useType = pbGetItemData(item,ItemData::BATTLE_USE)
+      item = GameData::Item.get(item)
+      itemName = item.name
+      useType = item.battle_use
       cmdUse = -1
       commands = []
       commands[cmdUse = commands.length] = _INTL("Use") if useType && useType!=0
@@ -237,11 +238,11 @@ class PokeBattle_Scene
         case useType
         when 1, 6   # Use on Pokémon
           if @battle.pbTeamLengthFromBattlerIndex(idxBattler)==1
-            break if yield item, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
+            break if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
           end
         when 3, 8   # Use on battler
           if @battle.pbPlayerBattlerCount==1
-            break if yield item, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
+            break if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
           end
         end
         # Fade out and hide Bag screen
@@ -276,7 +277,7 @@ class PokeBattle_Scene
             idxMove = pkmnScreen.pbChooseMove(pkmn,_INTL("Restore which move?"))
             next if idxMove<0
           end
-          break if yield item, useType, idxPartyRet, idxMove, pkmnScene
+          break if yield item.id, useType, idxPartyRet, idxMove, pkmnScene
         end
         pkmnScene.pbEndScene
         break if idxParty>=0
@@ -286,7 +287,7 @@ class PokeBattle_Scene
         idxTarget = -1
         if @battle.pbOpposingBattlerCount(idxBattler)==1
           @battle.eachOtherSideBattler(idxBattler) { |b| idxTarget = b.index }
-          break if yield item, useType, idxTarget, -1, itemScene
+          break if yield item.id, useType, idxTarget, -1, itemScene
         else
           wasTargeting = true
           # Fade out and hide Bag screen
@@ -297,7 +298,7 @@ class PokeBattle_Scene
           tempVisibleSprites["targetWindow"]  = true
           idxTarget = pbChooseTarget(idxBattler,PBTargets::Foe,tempVisibleSprites)
           if idxTarget>=0
-            break if yield item, useType, idxTarget, -1, self
+            break if yield item.id, useType, idxTarget, -1, self
           end
           # Target invalid/cancelled choosing a target; show the Bag screen again
           wasTargeting = false
@@ -305,7 +306,7 @@ class PokeBattle_Scene
           itemScene.pbFadeInScene
         end
       when 5, 10   # Use with no target
-        break if yield item, useType, idxBattler, -1, itemScene
+        break if yield item.id, useType, idxBattler, -1, itemScene
       end
     end
     @bagLastPocket = $PokemonBag.lastpocket

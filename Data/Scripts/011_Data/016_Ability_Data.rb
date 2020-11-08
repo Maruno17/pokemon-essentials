@@ -1,4 +1,4 @@
-module PokemonData
+module GameData
   class Ability
     attr_reader :id
     attr_reader :id_number

@@ -46,8 +46,8 @@ class Pokemon
   attr_accessor :moves
   # @return [Array<Integer>] the IDs of moves known by this Pokémon when it was obtained
   attr_accessor :firstmoves
-  # @return [Integer] the ID of the item held by this Pokémon (0 = no held item)
-  attr_accessor :item
+  # @return [Symbol] the ID of the item held by this Pokémon (nil = no held item)
+  attr_accessor :item_id
   # @return [Integer] this Pokémon's current status (from PBStatuses)
   attr_reader   :status
   # @return [Integer] sleep count / toxic flag / 0:
@@ -279,13 +279,13 @@ class Pokemon
     return @abilityflag || (@personalID & 1)
   end
 
-  # @return [PokemonData::Ability] an Ability object corresponding to this Pokémon's ability
+  # @return [GameData::Ability, nil] an Ability object corresponding to this Pokémon's ability
   def ability
     ret = ability_id
-    return PokemonData::Ability.try_get(ret)
+    return GameData::Ability.try_get(ret)
   end
 
-  # @return [Symbol] the ability symbol of this Pokémon's ability
+  # @return [Symbol, nil] the ability symbol of this Pokémon's ability
   def ability_id
     abilIndex = abilityIndex
     # Hidden ability
@@ -293,9 +293,9 @@ class Pokemon
       hiddenAbil = pbGetSpeciesData(@species, formSimple, SpeciesData::HIDDEN_ABILITY)
       if hiddenAbil.is_a?(Array)
         ret = hiddenAbil[abilIndex - 2]
-        return ret if PokemonData::Ability.exists?(ret)
+        return ret if GameData::Ability.exists?(ret)
       elsif abilIndex == 2
-        return hiddenAbil if PokemonData::Ability.exists?(hiddenAbil)
+        return hiddenAbil if GameData::Ability.exists?(hiddenAbil)
       end
       abilIndex = (@personalID & 1)
     end
@@ -303,7 +303,7 @@ class Pokemon
     abilities = pbGetSpeciesData(@species, formSimple, SpeciesData::ABILITIES)
     if abilities.is_a?(Array)
       ret = abilities[abilIndex]
-      ret = abilities[(abilIndex + 1) % 2] if !PokemonData::Ability.exists?(ret)
+      ret = abilities[(abilIndex + 1) % 2] if !GameData::Ability.exists?(ret)
       return ret
     end
     return abilities
@@ -311,7 +311,7 @@ class Pokemon
 
   # Returns whether this Pokémon has a particular ability. If no value
   # is given, returns whether this Pokémon has an ability set.
-  # @param ability [Integer] ability ID to check
+  # @param check_ability [Symbol, GameData::Ability, Integer] ability ID to check
   # @return [Boolean] whether this Pokémon has a particular ability or
   #   an ability at all
   def hasAbility?(check_ability = nil)
@@ -727,21 +727,29 @@ class Pokemon
   # Items
   #=============================================================================
 
+  # @return [GameData::Item, nil] an Item object corresponding to this Pokémon's item
+  def item
+    ret = @item_id
+    return GameData::Item.try_get(ret)
+  end
+
   # Returns whether this Pokémon is holding an item. If an item id is passed,
   # returns whether the Pokémon is holding that item.
-  # @param item_id [Integer, Symbol, String] id of the item to check
+  # @param check_item [Symbol, GameData::Item, Integer] item ID to check
   # @return [Boolean] whether the Pokémon is holding the specified item or
   #   an item at all
-  def hasItem?(item_id = 0)
-    held_item = self.item
-    return held_item > 0 if item_id == 0
-    return held_item == getID(PBItems, item_id)
+  def hasItem?(check_item = nil)
+    current_item = self.item
+    return !current_item.nil? if check_item.nil?
+    return current_item == check_item
   end
 
   # Gives an item to this Pokémon. Passing 0 as the argument removes the held item.
-  # @param item_id [Integer, Symbol, String] id of the item to give to this Pokémon (0 removes held item)
-  def setItem(item_id)
-    self.item = getID(PBItems, item_id) || 0
+  # @param value [Symbol, GameData::Item, Integer] id of the item to give to this
+  #   Pokémon (a non-valid value sets it to nil)
+  def setItem(value)
+    new_item = GameData::Item.try_get(value)
+    @item_id = (new_item) ? new_item.id : nil
   end
 
   # @return [Array<Integer>] the items this species can be found holding in the wild
@@ -756,7 +764,7 @@ class Pokemon
   # @return [PokemonMail, nil] mail held by this Pokémon (nil if there is none)
   def mail
     return nil if !@mail
-    @mail = nil if @mail.item == 0 || !hasItem?(@mail.item)
+    @mail = nil if !@mail.item || !hasItem?(@mail.item)
     return @mail
   end
 
@@ -1075,7 +1083,7 @@ class Pokemon
     @moves        = []
     @status       = PBStatuses::NONE
     @statusCount  = 0
-    @item         = 0
+    @item_id      = nil
     @mail         = nil
     @fused        = nil
     @ribbons      = []

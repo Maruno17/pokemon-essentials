@@ -352,9 +352,9 @@ end
 
 
 module ItemProperty
-  def self.set(_settingname,oldsetting)
-    ret = pbChooseItemList((oldsetting) ? oldsetting : 1)
-    return (ret>0) ? ret : (oldsetting) ? oldsetting : nil
+  def self.set(_settingname, oldsetting)
+    ret = pbChooseItemList((oldsetting) ? oldsetting : nil)
+    return ret || oldsetting
   end
 
   def self.defaultValue
@@ -362,7 +362,7 @@ module ItemProperty
   end
 
   def self.format(value)
-    return (value) ? PBItems.getName(value) : "-"
+    return (value && GameData::Item.exists?(value)) ? GameData::Item.get(value).real_name : "-"
   end
 end
 
@@ -522,8 +522,7 @@ class BallProperty
   end
 
   def format(value)
-    return "-" if !value
-    return PBItems.getName(pbBallTypeToItem(value))
+    return (value) ? pbBallTypeToItem(value).name : "-"
   end
 end
 
@@ -817,17 +816,17 @@ end
 
 
 module AbilityProperty
-  def self.set(_settingname,oldsetting)
-    ret = pbChooseAbilityList((oldsetting) ? oldsetting : 1)
-    return (ret<=0) ? (oldsetting) ? oldsetting : 0 : ret
+  def self.set(_settingname, oldsetting)
+    ret = pbChooseAbilityList((oldsetting) ? oldsetting : nil)
+    return ret || oldsetting
   end
 
   def self.defaultValue
-    return 0
+    return nil
   end
 
   def self.format(value)
-    return (value && PokemonData::Ability.exists?(value)) ? PokemonData::Ability.get(value).name : "-"
+    return (value && GameData::Ability.exists?(value)) ? GameData::Ability.get(value).real_name : "-"
   end
 end
 
@@ -1253,7 +1252,7 @@ class EvolutionsProperty
                 if has_param
                   allow_zero = false
                   case param_type
-                  when :PBItems
+                  when :Item
                     newparam = pbChooseItemList
                   when :PBMoves
                     newparam = pbChooseMoveList
@@ -1272,7 +1271,8 @@ class EvolutionsProperty
                     newparam = pbMessageChooseNumber(_INTL("Choose a parameter."),params)
                   end
                 end
-                if !has_param || newparam > 0 || (allow_zero && newparam == 0)
+                if !has_param || newparam.is_a?(Symbol) ||
+                   (newparam.is_a?(Integer) && (newparam > 0 || (allow_zero && newparam == 0)))
                   havemove = -1
                   for i in 0...realcmds.length
                     havemove = realcmds[i][3] if realcmds[i][0]==newmethod &&
@@ -1341,7 +1341,7 @@ class EvolutionsProperty
               if has_param
                 allow_zero = false
                 case param_type
-                when :PBItems
+                when :Item
                   newparam = pbChooseItemList(entry[1])
                 when :PBMoves
                   newparam = pbChooseMoveList(entry[1])
@@ -1360,7 +1360,8 @@ class EvolutionsProperty
                   params.setCancelValue(-1)
                   newparam = pbMessageChooseNumber(_INTL("Choose a parameter."),params)
                 end
-                if newparam>0 || (allow_zero && newparam == 0)
+                if newparam.is_a?(Symbol) ||
+                   (newparam.is_a?(Integer) && (newparam > 0 || (allow_zero && newparam == 0)))
                   havemove = -1
                   for i in 0...realcmds.length
                     havemove = realcmds[i][3] if realcmds[i][0]==entry[0] &&

@@ -50,7 +50,7 @@ BattleHandlers::SpeedCalcAbility.add(:SWIFTSWIM,
 
 BattleHandlers::SpeedCalcAbility.add(:UNBURDEN,
   proc { |ability,battler,mult|
-    next mult*2 if battler.effects[PBEffects::Unburden] && battler.item==0
+    next mult*2 if battler.effects[PBEffects::Unburden] && !battler.item
   }
 )
 
@@ -1673,11 +1673,11 @@ BattleHandlers::UserAbilityEndOfMove.add(:MAGICIAN,
   proc { |ability,user,targets,move,battle|
     next if !battle.futureSight
     next if !move.pbDamagingMove?
-    next if user.item>0
+    next if user.item
     next if battle.wildBattle? && user.opposes?
     targets.each do |b|
       next if b.damageState.unaffected || b.damageState.substitute
-      next if b.item==0
+      next if !b.item
       next if b.unlosableItem?(b.item) || user.unlosableItem?(b.item)
       battle.pbShowAbilitySplash(user)
       if b.hasActiveAbility?(:STICKYHOLD)
@@ -1689,11 +1689,11 @@ BattleHandlers::UserAbilityEndOfMove.add(:MAGICIAN,
         next
       end
       user.item = b.item
-      b.item = 0
+      b.item = nil
       b.effects[PBEffects::Unburden] = true
-      if battle.wildBattle? && user.initialItem==0 && b.initialItem==user.item
+      if battle.wildBattle? && !user.initialItem && b.initialItem==user.item
         user.setInitialItem(user.item)
-        b.setInitialItem(0)
+        b.setInitialItem(nil)
       end
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         battle.pbDisplay(_INTL("{1} stole {2}'s {3}!",user.pbThis,
@@ -1755,7 +1755,7 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:PICKPOCKET,
     next if !move.contactMove?
     next if switched.include?(user.index)
     next if user.effects[PBEffects::Substitute]>0 || target.damageState.substitute
-    next if target.item>0 || user.item==0
+    next if target.item || !user.item
     next if user.unlosableItem?(user.item) || target.unlosableItem?(user.item)
     battle.pbShowAbilitySplash(target)
     if user.hasActiveAbility?(:STICKYHOLD)
@@ -1768,11 +1768,11 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:PICKPOCKET,
       next
     end
     target.item = user.item
-    user.item = 0
+    user.item = nil
     user.effects[PBEffects::Unburden] = true
-    if battle.wildBattle? && target.initialItem==0 && user.initialItem==target.item
+    if battle.wildBattle? && !target.initialItem && user.initialItem==target.item
       target.setInitialItem(target.item)
-      user.setInitialItem(0)
+      user.setInitialItem(nil)
     end
     battle.pbDisplay(_INTL("{1} pickpocketed {2}'s {3}!",target.pbThis,
        user.pbThis(true),target.itemName))
@@ -1998,16 +1998,16 @@ BattleHandlers::EOREffectAbility.add(:SPEEDBOOST,
 
 BattleHandlers::EORGainItemAbility.add(:HARVEST,
   proc { |ability,battler,battle|
-    next if battler.item>0
-    next if battler.recycleItem<=0 || !pbIsBerry?(battler.recycleItem)
+    next if battler.item
+    next if !battler.recycleItem || !GameData::Item.get(battler.recycleItem).is_berry?
     curWeather = battle.pbWeather
     if curWeather!=PBWeather::Sun && curWeather!=PBWeather::HarshSun
       next unless battle.pbRandom(100)<50
     end
     battle.pbShowAbilitySplash(battler)
     battler.item = battler.recycleItem
-    battler.setRecycleItem(0)
-    battler.setInitialItem(battler.item) if battler.initialItem==0
+    battler.setRecycleItem(nil)
+    battler.setInitialItem(battler.item) if !battler.initialItem
     battle.pbDisplay(_INTL("{1} harvested one {2}!",battler.pbThis,battler.itemName))
     battle.pbHideAbilitySplash(battler)
     battler.pbHeldItemTriggerCheck
@@ -2016,8 +2016,8 @@ BattleHandlers::EORGainItemAbility.add(:HARVEST,
 
 BattleHandlers::EORGainItemAbility.add(:PICKUP,
   proc { |ability,battler,battle|
-    next if battler.item>0
-    foundItem = 0; fromBattler = nil; use = 0
+    next if battler.item
+    foundItem = nil; fromBattler = nil; use = 0
     battle.eachBattler do |b|
       next if b.index==battler.index
       next if b.effects[PBEffects::PickupUse]<=use
@@ -2025,15 +2025,15 @@ BattleHandlers::EORGainItemAbility.add(:PICKUP,
       fromBattler = b
       use         = b.effects[PBEffects::PickupUse]
     end
-    next if foundItem<=0
+    next if !foundItem
     battle.pbShowAbilitySplash(battler)
     battler.item = foundItem
-    fromBattler.effects[PBEffects::PickupItem] = 0
+    fromBattler.effects[PBEffects::PickupItem] = nil
     fromBattler.effects[PBEffects::PickupUse]  = 0
-    fromBattler.setRecycleItem(0) if fromBattler.recycleItem==foundItem
-    if battle.wildBattle? && battler.initialItem==0 && fromBattler.initialItem==foundItem
+    fromBattler.setRecycleItem(nil) if fromBattler.recycleItem==foundItem
+    if battle.wildBattle? && !battler.initialItem && fromBattler.initialItem==foundItem
       battler.setInitialItem(foundItem)
-      fromBattler.setInitialItem(0)
+      fromBattler.setInitialItem(nil)
     end
     battle.pbDisplay(_INTL("{1} found one {2}!",battler.pbThis,battler.itemName))
     battle.pbHideAbilitySplash(battler)
@@ -2244,19 +2244,19 @@ BattleHandlers::AbilityOnSwitchIn.add(:FRISK,
     next if !battler.pbOwnedByPlayer?
     foes = []
     battle.eachOtherSideBattler(battler.index) do |b|
-      foes.push(b) if b.item>0
+      foes.push(b) if b.item
     end
     if foes.length>0
       battle.pbShowAbilitySplash(battler)
       if NEWEST_BATTLE_MECHANICS
         foes.each do |b|
           battle.pbDisplay(_INTL("{1} frisked {2} and found its {3}!",
-             battler.pbThis,b.pbThis(true),PBItems.getName(b.item)))
+             battler.pbThis,b.pbThis(true),b.itemName))
         end
       else
         foe = foes[battle.pbRandom(foes.length)]
         battle.pbDisplay(_INTL("{1} frisked the foe and found one {2}!",
-           battler.pbThis,PBItems.getName(foe.item)))
+           battler.pbThis,foe.itemName))
       end
       battle.pbHideAbilitySplash(battler)
     end

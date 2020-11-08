@@ -793,6 +793,7 @@ class MapScreenScene
           serializeConnectionData
           serializeMetadata
           save_data(@encdata,"Data/encounters.dat")
+          # TODO: Only need to reload connections, metadata, encounter data.
           pbClearData
           pbSaveEncounterData
         end

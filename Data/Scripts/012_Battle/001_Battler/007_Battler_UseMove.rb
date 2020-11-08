@@ -116,7 +116,7 @@ class PokeBattle_Battler
       end
     end
     @effects[PBEffects::Charge]      = 0 if @effects[PBEffects::Charge]==1
-    @effects[PBEffects::GemConsumed] = 0
+    @effects[PBEffects::GemConsumed] = nil
     @battle.eachBattler { |b| b.pbContinualAbilityChecks }   # Trace, end primordial weathers
   end
 
@@ -624,12 +624,12 @@ class PokeBattle_Battler
     # Show move animation (for this hit)
     move.pbShowAnimation(move.id,user,targets,hitNum)
     # Type-boosting Gem consume animation/message
-    if user.effects[PBEffects::GemConsumed]>0 && hitNum==0
+    if user.effects[PBEffects::GemConsumed] && hitNum==0
       # NOTE: The consume animation and message for Gems are shown now, but the
       #       actual removal of the item happens in def pbEffectsAfterMove.
       @battle.pbCommonAnimation("UseItem",user)
       @battle.pbDisplay(_INTL("The {1} strengthened {2}'s power!",
-         PBItems.getName(user.effects[PBEffects::GemConsumed]),move.name))
+         GameData::Item.get(user.effects[PBEffects::GemConsumed]).name,move.name))
     end
     # Messages about missed target(s) (relevant for multi-target moves only)
     targets.each do |b|

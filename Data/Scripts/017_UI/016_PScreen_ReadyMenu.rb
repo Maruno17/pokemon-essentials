@@ -66,12 +66,12 @@ class ReadyMenuButton < SpriteWrapper
     self.bitmap.clear
     rect = Rect.new(0,(sel) ? @button.height/2 : 0,@button.width,@button.height/2)
     self.bitmap.blt(0,0,@button.bitmap,rect)
-    textx = (@command[2]) ? 164 : (pbIsImportantItem?(@command[0])) ? 146 : 124
+    textx = (@command[2]) ? 164 : (GameData::Item.get(@command[0]).is_important?) ? 146 : 124
     textpos = [
        [@command[1],textx,18,2,Color.new(248,248,248),Color.new(40,40,40),1],
     ]
     if !@command[2]
-      if !pbIsImportantItem?(@command[0])
+      if !GameData::Item.get(@command[0]).is_important?
         qty = $PokemonBag.pbQuantity(@command[0])
         if qty>99
           textpos.push([_INTL(">99"),230,18,1,
@@ -236,11 +236,11 @@ class PokemonReadyMenu
   def pbStartReadyMenu(moves,items)
     commands = [[],[]]   # Moves, items
     for i in moves
-      commands[0].push([i[0],PBMoves.getName(i[0]),true,i[1]])
+      commands[0].push([i[0], PBMoves.getName(i[0]), true, i[1]])
     end
     commands[0].sort! { |a,b| a[1]<=>b[1] }
     for i in items
-      commands[1].push([i,PBItems.getName(i),false])
+      commands[1].push([i, GameData::Item.get(i).name, false])
     end
     commands[1].sort! { |a,b| a[1]<=>b[1] }
     @scene.pbStartScene(commands)
@@ -296,9 +296,9 @@ end
 # Using a registered item
 #===============================================================================
 def pbUseKeyItem
-  moves = [:CUT,:DEFOG,:DIG,:DIVE,:FLASH,:FLY,:HEADBUTT,:ROCKCLIMB,:ROCKSMASH,
-           :SECRETPOWER,:STRENGTH,:SURF,:SWEETSCENT,:TELEPORT,:WATERFALL,
-           :WHIRLPOOL]
+  moves = [:CUT, :DEFOG, :DIG, :DIVE, :FLASH, :FLY, :HEADBUTT, :ROCKCLIMB,
+           :ROCKSMASH, :SECRETPOWER, :STRENGTH, :SURF, :SWEETSCENT, :TELEPORT,
+           :WATERFALL, :WHIRLPOOL]
   realmoves = []
   for i in moves
     move = getID(PBMoves,i)
@@ -312,7 +312,8 @@ def pbUseKeyItem
   end
   realitems = []
   for i in $PokemonBag.registeredItems
-    realitems.push(i) if $PokemonBag.pbHasItem?(i)
+    itm = GameData::Item.get(i).id
+    realitems.push(itm) if $PokemonBag.pbHasItem?(itm)
   end
   if realitems.length==0 && realmoves.length==0
     pbMessage(_INTL("An item in the Bag can be registered to this key for instant use."))

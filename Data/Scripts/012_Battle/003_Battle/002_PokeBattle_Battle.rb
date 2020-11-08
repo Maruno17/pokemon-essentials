@@ -144,13 +144,13 @@ class PokeBattle_Battle
        [-1] * (@opponent ? @opponent.length : 1)
     ]
     @initialItems      = [
-       Array.new(@party1.length) { |i| (@party1[i]) ? @party1[i].item : 0 },
-       Array.new(@party2.length) { |i| (@party2[i]) ? @party2[i].item : 0 }
+       Array.new(@party1.length) { |i| (@party1[i]) ? @party1[i].item_id : nil },
+       Array.new(@party2.length) { |i| (@party2[i]) ? @party2[i].item_id : nil }
     ]
-    @recycleItems      = [Array.new(@party1.length,0),Array.new(@party2.length,0)]
-    @belch             = [Array.new(@party1.length,false),Array.new(@party2.length,false)]
-    @battleBond        = [Array.new(@party1.length,false),Array.new(@party2.length,false)]
-    @usedInBattle      = [Array.new(@party1.length,false),Array.new(@party2.length,false)]
+    @recycleItems      = [Array.new(@party1.length, nil),   Array.new(@party2.length, nil)]
+    @belch             = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
+    @battleBond        = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
+    @usedInBattle      = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
     @successStates     = []
     @lastMoveUsed      = -1
     @lastMoveUser      = -1

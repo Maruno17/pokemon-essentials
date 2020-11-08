@@ -156,6 +156,7 @@ class HandlerHash2
   end
 
   def [](sym)
+    sym = sym.id if !sym.is_a?(Symbol) && sym.respond_to?("id")
     return @hash[sym] if sym && @hash[sym]
     for add_if in @add_ifs
       return add_if[1] if add_if[0].call(sym)
@@ -211,10 +212,7 @@ end
 
 
 
-class ItemHandlerHash < HandlerHash
-  def initialize
-    super(:PBItems)
-  end
+class ItemHandlerHash < HandlerHash2
 end
 
 

@@ -492,7 +492,7 @@ FINAL_DMG_MULT = 3
 def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
   return false if !forced && !battler.canHeal?
   return false if !forced && !battler.pbCanConsumeBerry?(item,false)
-  itemName = PBItems.getName(item)
+  itemName = GameData::Item.get(item).name
   battle.pbCommonAnimation("EatBerry",battler) if !forced
   amt = (NEWEST_BATTLE_MECHANICS) ? battler.pbRecoverHP(battler.totalhp/2) : battler.pbRecoverHP(battler.totalhp/8)
   if amt>0
@@ -515,7 +515,7 @@ end
 def pbBattleStatIncreasingBerry(battler,battle,item,forced,stat,increment=1)
   return false if !forced && !battler.pbCanConsumeBerry?(item)
   return false if !battler.pbCanRaiseStatStage?(stat,battler)
-  itemName = PBItems.getName(item)
+  itemName = GameData::Item.get(item).name
   if forced
     PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
     return battler.pbRaiseStatStage(stat,increment,battler)
@@ -576,7 +576,7 @@ def pbBattleGem(user,type,move,mults,moveType)
   # Pledge moves never consume Gems
   return if move.is_a?(PokeBattle_PledgeMove)
   return if !isConst?(moveType,PBTypes,type)
-  user.effects[PBEffects::GemConsumed] = user.item
+  user.effects[PBEffects::GemConsumed] = user.item_id
   if NEWEST_BATTLE_MECHANICS
     mults[BASE_DMG_MULT] *= 1.3
   else

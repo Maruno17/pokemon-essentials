@@ -14,16 +14,11 @@ def pbGetLegalMoves(species)
   return moves if !species || species<=0
   moveset = pbGetSpeciesMoveset(species)
   moveset.each { |m| moves.push(m[1]) }
-  itemData = pbLoadItemsData
   tmdat = pbLoadSpeciesTMData
-  for i in 0...itemData.length
-    next if !itemData[i]
-    atk = itemData[i][8]
-    next if !atk || atk==0
-    next if !tmdat[atk]
-    if tmdat[atk].any? { |item| item==species }
-      moves.push(atk)
-    end
+  GameData::Item.each do |i|
+    next if !i.move
+    atk = getConst(PBMoves, i.move)
+    moves.push(atk) if tmdat[atk] && tmdat[atk].include?(species)
   end
   babyspecies = pbGetBabySpecies(species)
   eggMoves = pbGetSpeciesEggMoves(babyspecies)
@@ -252,9 +247,10 @@ def pbGetMoveConst(i)
   return MakeshiftConsts.get(MessageTypes::Moves,i,PBMoves)
 end
 
-def pbGetItemConst(i)
-  return MakeshiftConsts.get(MessageTypes::Items,i,PBItems)
-end
+# Unused
+#def pbGetItemConst(i)
+#  return MakeshiftConsts.get(MessageTypes::Items,i,PBItems)
+#end
 
 def pbGetSpeciesConst(i)
   return MakeshiftConsts.get(MessageTypes::Species,i,PBSpecies)
@@ -346,48 +342,43 @@ end
 # if the selection was canceled). "default", if specified, is the ID of the item
 # to initially select. Pressing Input::A will toggle the list sorting between
 # numerical and alphabetical.
-def pbChooseItemList(default=0)
+def pbChooseItemList(default = nil)
   commands = []
-  for i in 1..PBItems.maxValue
-    cname = getConstantName(PBItems,i) rescue nil
-    commands.push([i,PBItems.getName(i)]) if cname
-  end
-  return pbChooseList(commands,default,0,-1)
+  GameData::Item.each { |i| commands.push([i.id_number, i.name, i.id]) }
+  return pbChooseList(commands, default, nil, -1)
 end
 
 # Displays a list of all abilities, and returns the ID of the ability selected
 # (or -1 if the selection was canceled). "default", if specified, is the ID of
 # the ability to initially select. Pressing Input::A will toggle the list
 # sorting between numerical and alphabetical.
-def pbChooseAbilityList(default=0)
+def pbChooseAbilityList(default = 0)
   commands = []
-  PokemonData::Ability.each do |a|
-    commands.push([a.id_number, a.name])
-  end
-  return pbChooseList(commands,default,0,-1)
+  GameData::Ability.each { |a| commands.push([a.id_number, a.name, a.id]) }
+  return pbChooseList(commands, default, nil, -1)
 end
 
-def pbChooseBallList(defaultMoveID=-1)
-  cmdwin = pbListWindow([],200)
+def pbChooseBallList(defaultMoveID = -1)
+  cmdwin = pbListWindow([], 200)
   commands = []
   moveDefault = 0
   for key in $BallTypes.keys
-    item = getID(PBItems,$BallTypes[key])
-    commands.push([key,item,PBItems.getName(item)]) if item && item>0
+    item = GameData::Item.try_get($BallTypes[key])
+    balls.push([key.to_i, item.name]) if item
   end
-  commands.sort! { |a,b| a[2]<=>b[2] }
-  if defaultMoveID>=0
+  commands.sort! { |a, b| a[1] <=> b[1] }
+  if defaultMoveID >= 0
     for i in 0...commands.length
-      moveDefault = i if defaultMoveID==commands[i][0]
+      moveDefault = i if commands[i][0] == defaultMoveID
     end
   end
   realcommands = []
   for i in commands
-    realcommands.push(i[2])
+    realcommands.push(i[1])
   end
-  ret = pbCommands2(cmdwin,realcommands,-1,moveDefault,true)
+  ret = pbCommands2(cmdwin, realcommands, -1, moveDefault, true)
   cmdwin.dispose
-  return (ret>=0) ? commands[ret][0] : defaultMoveID
+  return (ret >= 0) ? commands[ret][0] : defaultMoveID
 end
 
 
@@ -486,39 +477,41 @@ def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
   return ret
 end
 
-def pbChooseList(commands,default=0,cancelValue=-1,sortType=1)
+def pbChooseList(commands, default = 0, cancelValue = -1, sortType = 1)
   cmdwin = pbListWindow([])
   itemID = default
   itemIndex = 0
-  sortMode = (sortType>=0) ? sortType : 0 # 0=ID, 1=alphabetical
+  sortMode = (sortType >= 0) ? sortType : 0   # 0=ID, 1=alphabetical
   sorting = true
   loop do
     if sorting
-      if sortMode==0
-        commands.sort! { |a,b| a[0]<=>b[0] }
-      elsif sortMode==1
-        commands.sort! { |a,b| a[1]<=>b[1] }
+      if sortMode == 0
+        commands.sort! { |a, b| a[0] <=> b[0] }
+      elsif sortMode == 1
+        commands.sort! { |a, b| a[1] <=> b[1] }
       end
-      if itemID>0
-        commands.each_with_index { |command,i| itemIndex = i if command[0]==itemID }
+      if itemID.is_a?(Symbol)
+        commands.each_with_index { |command, i| itemIndex = i if command[2] == itemID }
+      elsif itemID && itemID > 0
+        commands.each_with_index { |command, i| itemIndex = i if command[0] == itemID }
       end
       realcommands = []
       for command in commands
-        if sortType<=0
-          realcommands.push(sprintf("%03d: %s",command[0],command[1]))
+        if sortType <= 0
+          realcommands.push(sprintf("%03d: %s", command[0], command[1]))
         else
           realcommands.push(command[1])
         end
       end
       sorting = false
     end
-    cmd = pbCommandsSortable(cmdwin,realcommands,-1,itemIndex,(sortType<0))
-    if cmd[0]==0   # Chose an option or cancelled
-      itemID = (cmd[1]<0) ? cancelValue : commands[cmd[1]][0]
+    cmd = pbCommandsSortable(cmdwin, realcommands, -1, itemIndex, (sortType < 0))
+    if cmd[0] == 0   # Chose an option or cancelled
+      itemID = (cmd[1] < 0) ? cancelValue : (commands[cmd[1]][2] || commands[cmd[1]][0])
       break
-    elsif cmd[0]==1   # Toggle sorting
-      itemID = commands[cmd[1]][0]
-      sortMode = (sortMode+1)%2
+    elsif cmd[0] == 1   # Toggle sorting
+      itemID = commands[cmd[1]][2] || commands[cmd[1]][0]
+      sortMode = (sortMode + 1) % 2
       sorting = true
     end
   end

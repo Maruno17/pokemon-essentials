@@ -62,17 +62,14 @@ class PokeBattle_Battle
   #=============================================================================
   def pbHasMegaRing?(idxBattler)
     return true if !pbOwnedByPlayer?(idxBattler)   # Assume AI trainer have a ring
-    MEGA_RINGS.each do |item|
-      return true if hasConst?(PBItems,item) && $PokemonBag.pbHasItem?(item)
-    end
+    MEGA_RINGS.each { |item| return true if $PokemonBag.pbHasItem?(item) }
     return false
   end
 
   def pbGetMegaRingName(idxBattler)
     if pbOwnedByPlayer?(idxBattler)
-      MEGA_RINGS.each do |i|
-        next if !hasConst?(PBItems,i)
-        return PBItems.getName(getConst(PBItems,i)) if $PokemonBag.pbHasItem?(i)
+      MEGA_RINGS.each do |item|
+        return GameData::Item.get(item).name if $PokemonBag.pbHasItem?(item)
       end
     end
     # NOTE: Add your own Mega objects for particular NPC trainers here.

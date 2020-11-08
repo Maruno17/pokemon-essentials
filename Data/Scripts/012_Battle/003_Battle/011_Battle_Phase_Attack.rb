@@ -66,23 +66,23 @@ class PokeBattle_Battle
 
   def pbAttackPhaseItems
     pbPriority.each do |b|
-      next unless @choices[b.index][0]==:UseItem && !b.fainted?
+      next unless @choices[b.index][0] == :UseItem && !b.fainted?
       b.lastMoveFailed = false   # Counts as a successful move for Stomping Tantrum
       item = @choices[b.index][1]
-      next if !item || item<=0
-      useType = pbGetItemData(item,ItemData::BATTLE_USE)
-      next if !useType
-      case useType
+      next if !item
+      case GameData::Item.get(item).battle_use
       when 1, 2, 6, 7   # Use on Pokémon/Pokémon's move
-        pbUseItemOnPokemon(item,@choices[b.index][2],b) if @choices[b.index][2]>=0
+        pbUseItemOnPokemon(item, @choices[b.index][2], b) if @choices[b.index][2] >= 0
       when 3, 8         # Use on battler
-        pbUseItemOnBattler(item,@choices[b.index][2],b)
+        pbUseItemOnBattler(item, @choices[b.index][2], b)
       when 4, 9         # Use Poké Ball
-        pbUsePokeBallInBattle(item,@choices[b.index][2],b)
+        pbUsePokeBallInBattle(item, @choices[b.index][2], b)
       when 5, 10        # Use directly
-        pbUseItemInBattle(item,@choices[b.index][2],b)
+        pbUseItemInBattle(item, @choices[b.index][2], b)
+      else
+        next
       end
-      return if @decision>0
+      return if @decision > 0
     end
 #    pbCalculatePriority if NEWEST_BATTLE_MECHANICS
   end

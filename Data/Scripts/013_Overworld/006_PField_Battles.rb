@@ -596,8 +596,7 @@ end
 def pbDynamicItemList(*args)
   ret = []
   for i in 0...args.length
-    next if !hasConst?(PBItems,args[i])
-    ret.push(getConst(PBItems,args[i].to_sym))
+    ret.push(i) if GameData::Item.exists?(args[i])
   end
   return ret
 end
@@ -674,7 +673,7 @@ end
 def pbHoneyGather(pkmn)
   return if pkmn.egg? || !pkmn.hasAbility?(:HONEYGATHER)
   return if pkmn.hasItem?
-  return if !hasConst?(PBItems,:HONEY)
+  return if !GameData::Item.exists?(:HONEY)
   chance = 5+((pkmn.level-1)/10)*5
   return unless rand(100)<chance
   pkmn.setItem(:HONEY)

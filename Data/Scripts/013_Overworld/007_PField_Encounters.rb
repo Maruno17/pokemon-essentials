@@ -338,9 +338,10 @@ class PokemonEncounters
     end
     firstPkmn = $Trainer.firstPokemon
     if firstPkmn
-      if firstPkmn.hasItem?(:CLEANSETAG)
+      case firstPkmn.item_id
+      when :CLEANSETAG
         encount *= 2.0 / 3
-      elsif firstPkmn.hasItem?(:PUREINCENSE)
+      when :PUREINCENSE
         encount *= 2.0 / 3
       else   # Ignore ability effects if an item effect applies
         case firstPkmn.ability_id
@@ -411,7 +412,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
     genwildpoke.setItem(items[2])
   end
   # Shiny Charm makes shiny Pokémon more likely to generate
-  if hasConst?(PBItems,:SHINYCHARM) && $PokemonBag.pbHasItem?(:SHINYCHARM)
+  if GameData::Item.exists?(:SHINYCHARM) && $PokemonBag.pbHasItem?(:SHINYCHARM)
     2.times do   # 3 times as likely
       break if genwildpoke.shiny?
       genwildpoke.personalID = rand(65536)|(rand(65536)<<16)

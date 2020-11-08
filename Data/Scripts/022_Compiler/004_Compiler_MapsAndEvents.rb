@@ -729,12 +729,12 @@ module Compiler
     hidden = false
     if name[/^HiddenItem\:\s*(\w+)\s*$/]
       itemName = $1
-      return nil if !hasConst?(PBItems,itemName)
+      return nil if !GameData::Item.exists?(itemName)
       ret.name = "HiddenItem"
       hidden = true
     elsif name[/^Item\:\s*(\w+)\s*$/]
       itemName = $1
-      return nil if !hasConst?(PBItems,itemName)
+      return nil if !GameData::Item.exists?(itemName)
       ret.name = "Item"
     else
       return nil
@@ -953,7 +953,7 @@ module Compiler
           if params[0][/SellItem\s*\(\s*(\w+)\s*\,\s*(\d+)\s*\)/]
             itemname = $1
             cost     = $2.to_i
-            if hasConst?(PBItems,itemname)
+            if GameData::Item.exists?(itemname)
               oldIndent = list[i].indent
               list.delete_at(i)
               newEvents = []

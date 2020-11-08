@@ -325,7 +325,7 @@ Events.onStepTakenFieldMovement += proc { |_sender,e|
       break
     end
   end
-  if sootlevel>=0 && hasConst?(PBItems,:SOOTSACK)
+  if sootlevel>=0 && GameData::Item.exists?(:SOOTSACK)
     $PokemonGlobal.sootsack = 0 if !$PokemonGlobal.sootsack
 #    map.data[thistile[1],thistile[2],sootlevel]=0
     if event==$game_player && $PokemonBag.pbHasItem?(:SOOTSACK)
@@ -1322,16 +1322,17 @@ end
 # Picking up an item found on the ground
 #===============================================================================
 def pbItemBall(item,quantity=1)
-  item = getID(PBItems,item)
-  return false if !item || item<=0 || quantity<1
-  itemname = (quantity>1) ? PBItems.getNamePlural(item) : PBItems.getName(item)
-  pocket = pbGetPocket(item)
+  item = GameData::Item.get(item)
+  return false if !item || quantity<1
+  itemname = (quantity>1) ? item.name_plural : item.name
+  pocket = item.pocket
+  move = item.move
   if $PokemonBag.pbStoreItem(item,quantity)   # If item can be picked up
-    meName = (pbIsKeyItem?(item)) ? "Key item get" : "Item get"
-    if isConst?(item,PBItems,:LEFTOVERS)
+    meName = (item.is_key_item?) ? "Key item get" : "Item get"
+    if item == :LEFTOVERS
       pbMessage(_INTL("\\me[{1}]You found some \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
-    elsif pbIsMachine?(item)   # TM or HM
-      pbMessage(_INTL("\\me[{1}]You found \\c[1]{2} {3}\\c[0]!\\wtnp[30]",meName,itemname,PBMoves.getName(pbGetMachine(item))))
+    elsif item.is_machine?   # TM or HM
+      pbMessage(_INTL("\\me[{1}]You found \\c[1]{2} {3}\\c[0]!\\wtnp[30]",meName,itemname,PBMoves.getName(move)))
     elsif quantity>1
       pbMessage(_INTL("\\me[{1}]You found {2} \\c[1]{3}\\c[0]!\\wtnp[30]",meName,quantity,itemname))
     elsif itemname.starts_with_vowel?
@@ -1344,10 +1345,10 @@ def pbItemBall(item,quantity=1)
     return true
   end
   # Can't add the item
-  if isConst?(item,PBItems,:LEFTOVERS)
+  if item == :LEFTOVERS
     pbMessage(_INTL("You found some \\c[1]{1}\\c[0]!\\wtnp[30]",itemname))
-  elsif pbIsMachine?(item)   # TM or HM
-    pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!\\wtnp[30]",itemname,PBMoves.getName(pbGetMachine(item))))
+  elsif item.is_machine?   # TM or HM
+    pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!\\wtnp[30]",itemname,PBMoves.getName(move)))
   elsif quantity>1
     pbMessage(_INTL("You found {1} \\c[1]{2}\\c[0]!\\wtnp[30]",quantity,itemname))
   elsif itemname.starts_with_vowel?
@@ -1365,15 +1366,16 @@ end
 # Being given an item
 #===============================================================================
 def pbReceiveItem(item,quantity=1)
-  item = getID(PBItems,item)
-  return false if !item || item<=0 || quantity<1
-  itemname = (quantity>1) ? PBItems.getNamePlural(item) : PBItems.getName(item)
-  pocket = pbGetPocket(item)
-  meName = (pbIsKeyItem?(item)) ? "Key item get" : "Item get"
-  if isConst?(item,PBItems,:LEFTOVERS)
+  item = GameData::Item.get(item)
+  return false if !item || quantity<1
+  itemname = (quantity>1) ? item.name_plural : item.name
+  pocket = item.pocket
+  move = item.move
+  meName = (item.is_key_item?) ? "Key item get" : "Item get"
+  if item == :LEFTOVERS
     pbMessage(_INTL("\\me[{1}]You obtained some \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
-  elsif pbIsMachine?(item)   # TM or HM
-    pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2} {3}\\c[0]!\\wtnp[30]",meName,itemname,PBMoves.getName(pbGetMachine(item))))
+  elsif item.is_machine?   # TM or HM
+    pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2} {3}\\c[0]!\\wtnp[30]",meName,itemname,PBMoves.getName(move)))
   elsif quantity>1
     pbMessage(_INTL("\\me[{1}]You obtained {2} \\c[1]{3}\\c[0]!\\wtnp[30]",meName,quantity,itemname))
   elsif itemname.starts_with_vowel?

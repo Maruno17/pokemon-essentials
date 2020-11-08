@@ -333,15 +333,12 @@ class BannedItemRestriction
   end
 
   def isSpecies?(species,specieslist)
-    for s in specieslist
-      return true if isConst?(species,PBItems,s)
-    end
-    return false
+    return specieslist.any? { |s| species == s }
   end
 
   def isValid?(pokemon)
     count=0
-    if pokemon.item!=0 && isSpecies?(pokemon.item,@specieslist)
+    if pokemon.item && isSpecies?(pokemon.item,@specieslist)
       count+=1
     end
     return count==0

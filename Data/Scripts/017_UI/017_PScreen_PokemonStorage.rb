@@ -1205,11 +1205,11 @@ class PokemonStorageScene
   end
 
   def pbChooseItem(bag)
-    ret = 0
+    ret = nil
     pbFadeOutIn {
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene,bag)
-      ret = screen.pbChooseItemScreen(Proc.new { |item| pbCanHoldItem?(item) })
+      ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).can_hold? })
     }
     return ret
   end
@@ -1415,14 +1415,13 @@ class PokemonStorageScene
       end
       imagepos.push(["Graphics/Pictures/Storage/overlay_lv",6,246])
       textstrings.push([pokemon.level.to_s,28,234,false,base,shadow])
-      ability = pokemon.ability
-      if ability
-        textstrings.push([ability.name,86,306,2,base,shadow])
+      if pokemon.ability
+        textstrings.push([pokemon.ability.name,86,306,2,base,shadow])
       else
         textstrings.push([_INTL("No ability"),86,306,2,nonbase,nonshadow])
       end
-      if pokemon.item>0
-        textstrings.push([PBItems.getName(pokemon.item),86,342,2,base,shadow])
+      if pokemon.item
+        textstrings.push([pokemon.item.name,86,342,2,base,shadow])
       else
         textstrings.push([_INTL("No item"),86,342,2,nonbase,nonshadow])
       end
@@ -1869,21 +1868,21 @@ class PokemonStorageScreen
       pbDisplay(_INTL("Please remove the mail."))
       return
     end
-    if pokemon.item>0
-      itemname = PBItems.getName(pokemon.item)
+    if pokemon.item
+      itemname = pokemon.item.name
       if pbConfirm(_INTL("Take this {1}?",itemname))
         if !$PokemonBag.pbStoreItem(pokemon.item)
           pbDisplay(_INTL("Can't store the {1}.",itemname))
         else
           pbDisplay(_INTL("Took the {1}.",itemname))
-          pokemon.setItem(0)
+          pokemon.setItem(nil)
           @scene.pbHardRefresh
         end
       end
     else
       item = scene.pbChooseItem($PokemonBag)
-      if item>0
-        itemname = PBItems.getName(item)
+      if item
+        itemname = GameData::Item.get(item).name
         pokemon.setItem(item)
         $PokemonBag.pbDeleteItem(item)
         pbDisplay(_INTL("{1} is now being held.",itemname))

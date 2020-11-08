@@ -627,7 +627,7 @@ class TriadScreen
   end
 
   def pbQuantity(items,item)
-    return ItemStorageHelper.pbQuantity(items,$PokemonGlobal.triads.maxSize,item)
+    return ItemStorageHelper.pbQuantity(items, item)
   end
 
   def pbAdd(items,item)
@@ -635,8 +635,8 @@ class TriadScreen
        $PokemonGlobal.triads.maxPerSlot,item,1)
   end
 
-  def pbSubtract(items,item)
-    return ItemStorageHelper.pbDeleteItem(items,$PokemonGlobal.triads.maxSize,item,1)
+  def pbSubtract(items, item)
+    return ItemStorageHelper.pbDeleteItem(items, item, 1)
   end
 
   def flipBoard(x,y,attackerParam=nil,recurse=false)
@@ -1041,7 +1041,7 @@ class TriadStorage
   end
 
   def pbQuantity(item)
-    return ItemStorageHelper.pbQuantity(@items,self.maxSize,item)
+    return ItemStorageHelper.pbQuantity(@items, item)
   end
 
   def pbCanStore?(item,qty=1)
@@ -1052,8 +1052,8 @@ class TriadStorage
     return ItemStorageHelper.pbStoreItem(@items,self.maxSize,self.maxPerSlot,item,qty)
   end
 
-  def pbDeleteItem(item,qty=1)
-    return ItemStorageHelper.pbDeleteItem(@items,self.maxSize,item,qty)
+  def pbDeleteItem(item, qty = 1)
+    return ItemStorageHelper.pbDeleteItem(@items, item, qty)
   end
 end
 

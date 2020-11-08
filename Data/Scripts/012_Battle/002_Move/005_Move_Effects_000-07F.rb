@@ -1997,7 +1997,7 @@ end
 #===============================================================================
 class PokeBattle_Move_063 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if !PokemonData::Ability.exists?(:SIMPLE)
+    if !GameData::Ability.exists?(:SIMPLE)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2030,7 +2030,7 @@ end
 #===============================================================================
 class PokeBattle_Move_064 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if !PokemonData::Ability.exists?(:INSOMNIA)
+    if !GameData::Ability.exists?(:INSOMNIA)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end

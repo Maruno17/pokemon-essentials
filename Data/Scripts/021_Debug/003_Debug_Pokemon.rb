@@ -433,7 +433,7 @@ module PokemonDebugMixin
         oldabil = (pkmn.ability) ? pkmn.ability.name : "No ability"
         commands = []
         for i in abils
-          commands.push(((i[1]<2) ? "" : "(H) ") + PokemonData::Ability.get(i[0]).name)
+          commands.push(((i[1]<2) ? "" : "(H) ") + GameData::Ability.get(i[0]).name)
         end
         commands.push(_INTL("Remove override"))
         msg = [_INTL("Ability {1} is natural.",oldabil),
@@ -615,8 +615,8 @@ module PokemonDebugMixin
     when "setpokeball"
       commands = []; balls = []
       for key in $BallTypes.keys
-        item = getID(PBItems,$BallTypes[key])
-        balls.push([key.to_i,PBItems.getName(item)]) if item && item>0
+        item = GameData::Item.try_get($BallTypes[key])
+        balls.push([key.to_i, item.name]) if item
       end
       balls.sort! { |a,b| a[1]<=>b[1] }
       cmd = 0
@@ -629,7 +629,7 @@ module PokemonDebugMixin
         commands.push(i[1])
       end
       loop do
-        oldball = PBItems.getName(pbBallTypeToItem(pkmn.ballused))
+        oldball = pbBallTypeToItem(pkmn.ballused).name
         cmd = pbShowCommands(_INTL("{1} used.",oldball),commands,cmd)
         break if cmd<0
         pkmn.ballused = balls[cmd][0]

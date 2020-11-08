@@ -18,30 +18,16 @@ class PBPokemon
   attr_accessor :ev
 
   def initialize(species,item,nature,move1,move2,move3,move4,ev)
-    @species=species
-    @item=item ? item : 0
-    @nature=nature
-    @move1=move1 ? move1 : 0
-    @move2=move2 ? move2 : 0
-    @move3=move3 ? move3 : 0
-    @move4=move4 ? move4 : 0
-    @ev=ev
+    @species = species
+    itm = GameData::Item.try_get(item)
+    @item = itm ? itm.id : nil
+    @nature = nature
+    @move1 = move1 ? move1 : 0
+    @move2 = move2 ? move2 : 0
+    @move3 = move3 ? move3 : 0
+    @move4 = move4 ? move4 : 0
+    @ev = ev
   end
-
-=begin
-  def _dump(depth)
-    return [@species,@item,@nature,@move1,@move2,
-       @move3,@move4,@ev].pack("vvCvvvvC")
-  end
-
-  def self._load(str)
-    data=str.unpack("vvCvvvvC")
-    return self.new(
-       data[0],data[1],data[2],data[3],
-       data[4],data[5],data[6],data[7]
-    )
-  end
-=end
 
   def self.fromInspected(str)
     insp=str.gsub(/^\s+/,"").gsub(/\s+$/,"")
@@ -50,10 +36,7 @@ class PBPokemon
     if (PBSpecies.const_defined?(pieces[0]) rescue false)
       species=PBSpecies.const_get(pieces[0])
     end
-    item=0
-    if (PBItems.const_defined?(pieces[1]) rescue false)
-      item=PBItems.const_get(pieces[1])
-    end
+    item = (GameData::Item.exists?(pieces[1])) ? GameData::Item.get(pieces[1]).id : nil
     nature=PBNatures.const_get(pieces[2])
     ev=pieces[3].split(/\s*,\s*/)
     evvalue=0
@@ -87,31 +70,9 @@ class PBPokemon
     evvalue|=0x08 if pokemon.ev[3]>60
     evvalue|=0x10 if pokemon.ev[4]>60
     evvalue|=0x20 if pokemon.ev[5]>60
-    return self.new(pokemon.species,pokemon.item,pokemon.nature,
+    return self.new(pokemon.species,pokemon.item_id,pokemon.nature,
        pokemon.moves[0].id,pokemon.moves[1].id,pokemon.moves[2].id,
        pokemon.moves[3].id,evvalue)
-  end
-
-  def inspect
-    c1=getConstantName(PBSpecies,@species)
-    c2=(@item==0) ? "" : getConstantName(PBItems,@item)
-    c3=getConstantName(PBNatures,@nature)
-    evlist=""
-    for i in 0...@ev
-      if ((@ev&(1<<i))!=0)
-        evlist+="," if evlist.length>0
-        evlist+=["HP","ATK","DEF","SPD","SA","SD"][i]
-      end
-    end
-    c4=(@move1==0) ? "" : getConstantName(PBMoves,@move1)
-    c5=(@move2==0) ? "" : getConstantName(PBMoves,@move2)
-    c6=(@move3==0) ? "" : getConstantName(PBMoves,@move3)
-    c7=(@move4==0) ? "" : getConstantName(PBMoves,@move4)
-    return "#{c1};#{c2};#{c3};#{evlist};#{c4},#{c5},#{c6},#{c7}"
-  end
-
-  def tocompact
-    return "#{species},#{item},#{nature},#{move1},#{move2},#{move3},#{move4},#{ev}"
   end
 
   def self.constFromStr(mod,str)
@@ -134,7 +95,7 @@ class PBPokemon
   def self.fromstring(str)
     s=str.split(/\s*,\s*/)
     species=self.constFromStr(PBSpecies,s[1])
-    item=self.constFromStr(PBItems,s[2])
+    item=s[2].to_sym
     nature=self.constFromStr(PBNatures,s[3])
     move1=self.constFromStr(PBMoves,s[4])
     move2=(s.length>=12) ? self.constFromStr(PBMoves,s[5]) : 0
@@ -149,6 +110,43 @@ class PBPokemon
     ev|=0x10 if s[slen+4].to_i>0
     ev|=0x20 if s[slen+5].to_i>0
     return self.new(species,item,nature,move1,move2,move3,move4,ev)
+  end
+
+=begin
+  def _dump(depth)
+    return [@species,@item,@nature,@move1,@move2,
+       @move3,@move4,@ev].pack("vvCvvvvC")
+  end
+
+  def self._load(str)
+    data=str.unpack("vvCvvvvC")
+    return self.new(
+       data[0],data[1],data[2],data[3],
+       data[4],data[5],data[6],data[7]
+    )
+  end
+=end
+
+  def inspect
+    c1=getConstantName(PBSpecies,@species)
+    c2=(@item) ? GameData::Item.get(@item).name : ""
+    c3=getConstantName(PBNatures,@nature)
+    evlist=""
+    for i in 0...@ev
+      if ((@ev&(1<<i))!=0)
+        evlist+="," if evlist.length>0
+        evlist+=["HP","ATK","DEF","SPD","SA","SD"][i]
+      end
+    end
+    c4=(@move1==0) ? "" : getConstantName(PBMoves,@move1)
+    c5=(@move2==0) ? "" : getConstantName(PBMoves,@move2)
+    c6=(@move3==0) ? "" : getConstantName(PBMoves,@move3)
+    c7=(@move4==0) ? "" : getConstantName(PBMoves,@move4)
+    return "#{c1};#{c2};#{c3};#{evlist};#{c4},#{c5},#{c6},#{c7}"
+  end
+
+  def tocompact
+    return "#{species},#{item},#{nature},#{move1},#{move2},#{move3},#{move4},#{ev}"
   end
 
   def convertMove(move)
@@ -939,8 +937,8 @@ def pbOrganizedBattleEx(opponent,challengedata,endspeech,endspeechwin)
   # Remember original data, to be restored after battle
   challengedata = PokemonChallengeRules.new if !challengedata
   oldlevels = challengedata.adjustLevels($Trainer.party,opponent.party)
-  olditems  = $Trainer.party.transform { |p| p.item }
-  olditems2 = opponent.party.transform { |p| p.item }
+  olditems  = $Trainer.party.transform { |p| p.item_id }
+  olditems2 = opponent.party.transform { |p| p.item_id }
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)

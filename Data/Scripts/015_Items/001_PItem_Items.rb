@@ -1,225 +1,4 @@
 #===============================================================================
-# Item data
-#===============================================================================
-module ItemData
-  ID          = 0
-  NAME        = 1
-  NAME_PLURAL = 2
-  POCKET      = 3
-  PRICE       = 4
-  DESCRIPTION = 5
-  FIELD_USE   = 6
-  BATTLE_USE  = 7
-  TYPE        = 8
-  MOVE        = 9
-end
-
-
-
-class PokemonTemp
-  attr_accessor :itemsData
-end
-
-
-
-def pbLoadItemsData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.itemsData
-    $PokemonTemp.itemsData = load_data("Data/items.dat") || []
-  end
-  return $PokemonTemp.itemsData
-end
-
-def pbGetItemData(item,itemDataType)
-  item = getID(PBItems,item)
-  itemsData = pbLoadItemsData
-  return itemsData[item][itemDataType] if itemsData[item]
-  return nil
-end
-
-alias __itemsData__pbClearData pbClearData
-def pbClearData
-  $PokemonTemp.itemsData = nil if $PokemonTemp
-  __itemsData__pbClearData
-end
-
-def pbGetPocket(item)
-  ret = pbGetItemData(item,ItemData::POCKET)
-  return ret || 0
-end
-
-def pbGetPrice(item)
-  ret = pbGetItemData(item,ItemData::PRICE)
-  return ret || 0
-end
-
-def pbGetMachine(item)
-  ret = pbGetItemData(item,ItemData::MOVE)
-  return ret || 0
-end
-
-def pbIsTechnicalMachine?(item)
-  ret = pbGetItemData(item,ItemData::FIELD_USE)
-  return ret && ret==3
-end
-
-def pbIsHiddenMachine?(item)
-  ret = pbGetItemData(item,ItemData::FIELD_USE)
-  return ret && ret==4
-end
-
-def pbIsMachine?(item)
-  ret = pbGetItemData(item,ItemData::FIELD_USE)
-  return ret && (ret==3 || ret==4)
-end
-
-def pbIsMail?(item)
-  ret = pbGetItemData(item,ItemData::TYPE)
-  return ret && (ret==1 || ret==2)
-end
-
-def pbIsMailWithPokemonIcons?(item)
-  ret = pbGetItemData(item,ItemData::TYPE)
-  return ret && ret==2
-end
-
-def pbIsPokeBall?(item)
-  ret = pbGetItemData(item,ItemData::TYPE)
-  return ret && (ret==3 || ret==4)
-end
-
-def pbIsSnagBall?(item)
-  ret = pbGetItemData(item,ItemData::TYPE)
-  return ret && (ret==3 || (ret==4 && $PokemonGlobal.snagMachine))
-end
-
-def pbIsBerry?(item)
-  ret = pbGetItemData(item,ItemData::TYPE)
-  return ret && ret==5
-end
-
-def pbIsKeyItem?(item)
-  ret = pbGetItemData(item,ItemData::TYPE)
-  return ret && ret==6
-end
-
-def pbIsEvolutionStone?(item)
-  ret = pbGetItemData(item,ItemData::TYPE)
-  return ret && ret==7
-end
-
-def pbIsFossil?(item)
-  ret = pbGetItemData(item,ItemData::TYPE)
-  return ret && ret==8
-end
-
-def pbIsApricorn?(item)
-  ret = pbGetItemData(item,ItemData::TYPE)
-  return ret && ret==9
-end
-
-def pbIsGem?(item)
-  ret = pbGetItemData(item,ItemData::TYPE)
-  return ret && ret==10
-end
-
-def pbIsMulch?(item)
-  ret = pbGetItemData(item,ItemData::TYPE)
-  return ret && ret==11
-end
-
-def pbIsMegaStone?(item)   # Does NOT include Red Orb/Blue Orb
-  ret = pbGetItemData(item,ItemData::TYPE)
-  return ret && ret==12
-end
-
-# Important items can't be sold, given to hold, or tossed.
-def pbIsImportantItem?(item)
-  itemData = pbLoadItemsData[getID(PBItems,item)]
-  return false if !itemData
-  return true if itemData[ItemData::TYPE] && itemData[ItemData::TYPE]==6   # Key item
-  return true if itemData[ItemData::FIELD_USE] && itemData[ItemData::FIELD_USE]==4   # HM
-  return true if itemData[ItemData::FIELD_USE] && itemData[ItemData::FIELD_USE]==3 && INFINITE_TMS   # TM
-  return false
-end
-
-def pbCanHoldItem?(item)
-  return !pbIsImportantItem?(item)
-end
-
-def pbCanRegisterItem?(item)
-  return ItemHandlers.hasUseInFieldHandler(item)
-end
-
-def pbCanUseOnPokemon?(item)
-  return ItemHandlers.hasUseOnPokemon(item) || pbIsMachine?(item)
-end
-
-def pbIsHiddenMove?(move)
-  itemsData = pbLoadItemsData
-  return false if !itemsData
-  for i in 0...itemsData.length
-    next if !pbIsHiddenMachine?(i)
-    atk = pbGetMachine(i)
-    return true if move==atk
-  end
-  return false
-end
-
-def pbIsUnlosableItem?(item,species,ability)
-  return false if isConst?(species,PBSpecies,:ARCEUS) && ability != :MULTITYPE
-  return false if isConst?(species,PBSpecies,:SILVALLY) && ability != :RKSSYSTEM
-  combos = {
-     :ARCEUS   => [:FISTPLATE,   :FIGHTINIUMZ,
-                   :SKYPLATE,    :FLYINIUMZ,
-                   :TOXICPLATE,  :POISONIUMZ,
-                   :EARTHPLATE,  :GROUNDIUMZ,
-                   :STONEPLATE,  :ROCKIUMZ,
-                   :INSECTPLATE, :BUGINIUMZ,
-                   :SPOOKYPLATE, :GHOSTIUMZ,
-                   :IRONPLATE,   :STEELIUMZ,
-                   :FLAMEPLATE,  :FIRIUMZ,
-                   :SPLASHPLATE, :WATERIUMZ,
-                   :MEADOWPLATE, :GRASSIUMZ,
-                   :ZAPPLATE,    :ELECTRIUMZ,
-                   :MINDPLATE,   :PSYCHIUMZ,
-                   :ICICLEPLATE, :ICIUMZ,
-                   :DRACOPLATE,  :DRAGONIUMZ,
-                   :DREADPLATE,  :DARKINIUMZ,
-                   :PIXIEPLATE,  :FAIRIUMZ],
-     :SILVALLY => [:FIGHTINGMEMORY,
-                   :FLYINGMEMORY,
-                   :POISONMEMORY,
-                   :GROUNDMEMORY,
-                   :ROCKMEMORY,
-                   :BUGMEMORY,
-                   :GHOSTMEMORY,
-                   :STEELMEMORY,
-                   :FIREMEMORY,
-                   :WATERMEMORY,
-                   :GRASSMEMORY,
-                   :ELECTRICMEMORY,
-                   :PSYCHICMEMORY,
-                   :ICEMEMORY,
-                   :DRAGONMEMORY,
-                   :DARKMEMORY,
-                   :FAIRYMEMORY],
-     :GIRATINA => [:GRISEOUSORB],
-     :GENESECT => [:BURNDRIVE,:CHILLDRIVE,:DOUSEDRIVE,:SHOCKDRIVE],
-     :KYOGRE   => [:BLUEORB],
-     :GROUDON  => [:REDORB]
-  }
-  combos.each do |comboSpecies, items|
-    next if !isConst?(species,PBSpecies,comboSpecies)
-    items.each { |i| return true if isConst?(item,PBItems,i) }
-    break
-  end
-  return false
-end
-
-
-
-#===============================================================================
 # ItemHandlers
 #===============================================================================
 module ItemHandlers
@@ -321,6 +100,16 @@ module ItemHandlers
     return false if !BattleUseOnPokemon[item]
     return BattleUseOnPokemon.trigger(item,pkmn,battler,choices,scene)
   end
+end
+
+
+
+def pbCanRegisterItem?(item)
+  return ItemHandlers.hasUseInFieldHandler(item)
+end
+
+def pbCanUseOnPokemon?(item)
+  return ItemHandlers.hasUseOnPokemon(item) || GameData::Item.get(item).is_machine?
 end
 
 
@@ -680,32 +469,34 @@ end
 #===============================================================================
 # Use an item from the Bag and/or on a Pokémon
 #===============================================================================
+# @return [Integer] 0 = item wasn't used; 1 = item used; 2 = close Bag to use in field
 def pbUseItem(bag,item,bagscene=nil)
-  useType = pbGetItemData(item,ItemData::FIELD_USE)
-  if pbIsMachine?(item)    # TM or HM
+  itm = GameData::Item.get(item)
+  useType = itm.field_use
+  if itm.is_machine?    # TM or HM
     if $Trainer.pokemonCount==0
       pbMessage(_INTL("There is no Pokémon."))
       return 0
     end
-    machine = pbGetMachine(item)
-    return 0 if machine==nil
+    machine = itm.move
+    return 0 if !machine
     movename = PBMoves.getName(machine)
-    pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",PBItems.getName(item)))
+    pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",itm.name))
     if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?",movename))
       return 0
     elsif pbMoveTutorChoose(machine,nil,true)
-      bag.pbDeleteItem(item) if pbIsTechnicalMachine?(item) && !INFINITE_TMS
+      bag.pbDeleteItem(item) if itm.is_TM? && !INFINITE_TMS
       return 1
     end
     return 0
-  elsif useType && (useType==1 || useType==5) # Item is usable on a Pokémon
+  elsif useType==1 || useType==5   # Item is usable on a Pokémon
     if $Trainer.pokemonCount==0
       pbMessage(_INTL("There is no Pokémon."))
       return 0
     end
     ret = false
     annot = nil
-    if pbIsEvolutionStone?(item)
+    if itm.is_evolution_stone?
       annot = []
       for pkmn in $Trainer.party
         elig = pbCheckEvolution(pkmn,item)>0
@@ -729,7 +520,7 @@ def pbUseItem(bag,item,bagscene=nil)
           if ret && useType==1   # Usable on Pokémon, consumed
             bag.pbDeleteItem(item)
             if !bag.pbHasItem?(item)
-              pbMessage(_INTL("You used your last {1}.",PBItems.getName(item))) { screen.pbUpdate }
+              pbMessage(_INTL("You used your last {1}.",itm.name)) { screen.pbUpdate }
               break
             end
           end
@@ -739,7 +530,7 @@ def pbUseItem(bag,item,bagscene=nil)
       bagscene.pbRefresh if bagscene
     }
     return (ret) ? 1 : 0
-  elsif useType && useType==2   # Item is usable from bag
+  elsif useType==2   # Item is usable from bag
     intret = ItemHandlers.triggerUseFromBag(item)
     case intret
     when 0; return 0
@@ -758,20 +549,21 @@ end
 # Only called when in the party screen and having chosen an item to be used on
 # the selected Pokémon
 def pbUseItemOnPokemon(item,pkmn,scene)
+  itm = GameData::Item.get(item)
   # TM or HM
-  if pbIsMachine?(item)
-    machine = pbGetMachine(item)
-    return false if machine==nil
+  if itm.is_machine?
+    machine = itm.move
+    return false if !machine
     movename = PBMoves.getName(machine)
     if pkmn.shadowPokemon?
       pbMessage(_INTL("Shadow Pokémon can't be taught any moves.")) { scene.pbUpdate }
     elsif !pkmn.compatibleWithMove?(machine)
       pbMessage(_INTL("{1} can't learn {2}.",pkmn.name,movename)) { scene.pbUpdate }
     else
-      pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",PBItems.getName(item))) { scene.pbUpdate }
+      pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",itm.name)) { scene.pbUpdate }
       if pbConfirmMessage(_INTL("Do you want to teach {1} to {2}?",movename,pkmn.name)) { scene.pbUpdate }
         if pbLearnMove(pkmn,machine,false,true) { scene.pbUpdate }
-          $PokemonBag.pbDeleteItem(item) if pbIsTechnicalMachine?(item) && !INFINITE_TMS
+          $PokemonBag.pbDeleteItem(item) if itm.is_TM? && !INFINITE_TMS
           return true
         end
       end
@@ -782,11 +574,11 @@ def pbUseItemOnPokemon(item,pkmn,scene)
   ret = ItemHandlers.triggerUseOnPokemon(item,pkmn,scene)
   scene.pbClearAnnotations
   scene.pbHardRefresh
-  useType = pbGetItemData(item,ItemData::FIELD_USE)
-  if ret && useType && useType==1   # Usable on Pokémon, consumed
+  useType = itm.field_use
+  if ret && useType==1   # Usable on Pokémon, consumed
     $PokemonBag.pbDeleteItem(item)
     if !$PokemonBag.pbHasItem?(item)
-      pbMessage(_INTL("You used your last {1}.",PBItems.getName(item))) { scene.pbUpdate }
+      pbMessage(_INTL("You used your last {1}.",itm.name)) { scene.pbUpdate }
     end
   end
   return ret
@@ -803,7 +595,7 @@ def pbUseKeyItemInField(item)
 end
 
 def pbUseItemMessage(item)
-  itemname = PBItems.getName(item)
+  itemname = GameData::Item.get(item).name
   if itemname.starts_with_vowel?
     pbMessage(_INTL("You used an {1}.",itemname))
   else
@@ -819,7 +611,7 @@ end
 # Give an item to a Pokémon to hold, and take a held item from a Pokémon
 #===============================================================================
 def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
-  newitemname = PBItems.getName(item)
+  newitemname = GameData::Item.get(item).name
   if pkmn.egg?
     scene.pbDisplay(_INTL("Eggs can't hold items."))
     return false
@@ -828,7 +620,7 @@ def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
     return false if !pbTakeItemFromPokemon(pkmn,scene)
   end
   if pkmn.hasItem?
-    olditemname = PBItems.getName(pkmn.item)
+    olditemname = pkmn.item.name
     if pkmn.hasItem?(:LEFTOVERS)
       scene.pbDisplay(_INTL("{1} is already holding some {2}.\1",pkmn.name,olditemname))
     elsif newitemname.starts_with_vowel?
@@ -844,7 +636,7 @@ def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
         end
         scene.pbDisplay(_INTL("The Bag is full. The Pokémon's item could not be removed."))
       else
-        if pbIsMail?(item)
+        if GameData::Item.get(item).is_mail?
           if pbWriteMail(item,pkmn,pkmnid,scene)
             pkmn.setItem(item)
             scene.pbDisplay(_INTL("Took the {1} from {2} and gave it the {3}.",olditemname,pkmn.name,newitemname))
@@ -862,7 +654,7 @@ def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
       end
     end
   else
-    if !pbIsMail?(item) || pbWriteMail(item,pkmn,pkmnid,scene)
+    if !GameData::Item.get(item).is_mail? || pbWriteMail(item,pkmn,pkmnid,scene)
       $PokemonBag.pbDeleteItem(item)
       pkmn.setItem(item)
       scene.pbDisplay(_INTL("{1} is now holding the {2}.",pkmn.name,newitemname))
@@ -884,22 +676,20 @@ def pbTakeItemFromPokemon(pkmn,scene)
         scene.pbDisplay(_INTL("Your PC's Mailbox is full."))
       else
         scene.pbDisplay(_INTL("The mail was saved in your PC."))
-        pkmn.setItem(0)
+        pkmn.setItem(nil)
         ret = true
       end
     elsif scene.pbConfirm(_INTL("If the mail is removed, its message will be lost. OK?"))
       $PokemonBag.pbStoreItem(pkmn.item)
-      itemname = PBItems.getName(pkmn.item)
-      scene.pbDisplay(_INTL("Received the {1} from {2}.",itemname,pkmn.name))
-      pkmn.setItem(0)
+      scene.pbDisplay(_INTL("Received the {1} from {2}.",pkmn.item.name,pkmn.name))
+      pkmn.setItem(nil)
       pkmn.mail = nil
       ret = true
     end
   else
     $PokemonBag.pbStoreItem(pkmn.item)
-    itemname = PBItems.getName(pkmn.item)
-    scene.pbDisplay(_INTL("Received the {1} from {2}.",itemname,pkmn.name))
-    pkmn.setItem(0)
+    scene.pbDisplay(_INTL("Received the {1} from {2}.",pkmn.item.name,pkmn.name))
+    pkmn.setItem(nil)
     ret = true
   end
   return ret
@@ -908,61 +698,61 @@ end
 #===============================================================================
 # Choose an item from the Bag
 #===============================================================================
-def pbChooseItem(var=0,*args)
-  ret = 0
+def pbChooseItem(var = 0, *args)
+  ret = nil
   pbFadeOutIn {
     scene = PokemonBag_Scene.new
     screen = PokemonBagScreen.new(scene,$PokemonBag)
     ret = screen.pbChooseItemScreen
   }
-  $game_variables[var] = ret if var>0
+  $game_variables[var] = ret if var > 0
   return ret
 end
 
-def pbChooseApricorn(var=0)
-  ret = 0
+def pbChooseApricorn(var = 0)
+  ret = nil
   pbFadeOutIn {
     scene = PokemonBag_Scene.new
     screen = PokemonBagScreen.new(scene,$PokemonBag)
-    ret = screen.pbChooseItemScreen(Proc.new { |item| pbIsApricorn?(item) })
+    ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_apricorn? })
   }
-  $game_variables[var] = ret if var>0
+  $game_variables[var] = ret if var > 0
   return ret
 end
 
-def pbChooseFossil(var=0)
-  ret = 0
+def pbChooseFossil(var = 0)
+  ret = nil
   pbFadeOutIn {
     scene = PokemonBag_Scene.new
     screen = PokemonBagScreen.new(scene,$PokemonBag)
-    ret = screen.pbChooseItemScreen(Proc.new { |item| pbIsFossil?(item) })
+    ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_fossil? })
   }
-  $game_variables[var] = ret if var>0
+  $game_variables[var] = ret if var > 0
   return ret
 end
 
 # Shows a list of items to choose from, with the chosen item's ID being stored
 # in the given Global Variable. Only items which the player has are listed.
-def pbChooseItemFromList(message,variable,*args)
+def pbChooseItemFromList(message, variable, *args)
   commands = []
   itemid   = []
   for item in args
-    next if !hasConst?(PBItems,item)
-    id = getConst(PBItems,item)
-    next if !$PokemonBag.pbHasItem?(id)
-    commands.push(PBItems.getName(id))
-    itemid.push(id)
+    next if !GameData::Item.exists?(item)
+    itm = GameData::Item.get(item)
+    next if !$PokemonBag.pbHasItem?(itm)
+    commands.push(itm.name)
+    itemid.push(itm.id)
   end
-  if commands.length==0
+  if commands.length == 0
     $game_variables[variable] = 0
-    return 0
+    return nil
   end
   commands.push(_INTL("Cancel"))
-  itemid.push(0)
-  ret = pbMessage(message,commands,-1)
-  if ret<0 || ret>=commands.length-1
-    $game_variables[variable] = -1
-    return -1
+  itemid.push(nil)
+  ret = pbMessage(message, commands, -1)
+  if ret < 0 || ret >= commands.length-1
+    $game_variables[variable] = nil
+    return nil
   end
   $game_variables[variable] = itemid[ret]
   return itemid[ret]

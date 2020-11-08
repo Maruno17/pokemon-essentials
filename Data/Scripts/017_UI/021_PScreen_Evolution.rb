@@ -614,7 +614,7 @@ class PokemonEvolutionScene
     new_pkmn.name     = PBSpecies.getName(new_species)
     new_pkmn.markings = 0
     new_pkmn.ballused = 0
-    new_pkmn.setItem(0)
+    new_pkmn.setItem(nil)
     new_pkmn.clearAllRibbons
     new_pkmn.calcStats
     new_pkmn.heal

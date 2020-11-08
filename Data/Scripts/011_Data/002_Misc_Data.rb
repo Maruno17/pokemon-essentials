@@ -194,9 +194,9 @@ module SpeciesData
       "HiddenAbility"       => [HIDDEN_ABILITY,     "eEEE", :Ability, :Ability,
                                                             :Ability, :Ability],
       "Habitat"             => [HABITAT,            "e", :PBHabitats],
-      "WildItemCommon"      => [WILD_ITEM_COMMON,   "e", :PBItems],
-      "WildItemUncommon"    => [WILD_ITEM_UNCOMMON, "e", :PBItems],
-      "WildItemRare"        => [WILD_ITEM_RARE,     "e", :PBItems],
+      "WildItemCommon"      => [WILD_ITEM_COMMON,   "e", :Item],
+      "WildItemUncommon"    => [WILD_ITEM_UNCOMMON, "e", :Item],
+      "WildItemRare"        => [WILD_ITEM_RARE,     "e", :Item],
       "BattlerPlayerX"      => [METRIC_PLAYER_X,    "i"],
       "BattlerPlayerY"      => [METRIC_PLAYER_Y,    "i"],
       "BattlerEnemyX"       => [METRIC_ENEMY_X,     "i"],
@@ -210,12 +210,12 @@ module SpeciesData
     }
     if compilingForms
       ret["PokedexForm"]     = [POKEDEX_FORM,       "u"]
-      ret["MegaStone"]       = [MEGA_STONE,         "e", :PBItems]
+      ret["MegaStone"]       = [MEGA_STONE,         "e", :Item]
       ret["MegaMove"]        = [MEGA_MOVE,          "e", :PBMoves]
       ret["UnmegaForm"]      = [UNMEGA_FORM,        "u"]
       ret["MegaMessage"]     = [MEGA_MESSAGE,       "u"]
     else
-      ret["Incense"]         = [INCENSE,            "e", :PBItems]
+      ret["Incense"]         = [INCENSE,            "e", :Item]
       ret["RegionalNumbers"] = [0,                  "*u"]
     end
     return ret

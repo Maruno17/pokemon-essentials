@@ -111,7 +111,7 @@ class PokeBattle_Battler
       end
     end
     # Consume user's Gem
-    if user.effects[PBEffects::GemConsumed]>0
+    if user.effects[PBEffects::GemConsumed]
       # NOTE: The consume animation and message for Gems are shown immediately
       #       after the move's animation, but the item is only consumed now.
       user.pbConsumeItem

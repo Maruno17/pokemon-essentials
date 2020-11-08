@@ -149,21 +149,21 @@ def pbGetPreviousForm(species)   # Unused
   return species
 end
 
-def pbGetBabySpecies(species,item1=-1,item2=-1)
+def pbGetBabySpecies(species, check_items = false, item1 = nil, item2 = nil)
   ret = species
   evoData = pbGetEvolutionData(species)
-  return ret if !evoData || evoData.length==0
+  return ret if !evoData || evoData.length == 0
   evoData.each do |evo|
-    next if !evo[3]
-    if item1>=0 && item2>=0
-      incense = pbGetSpeciesData(evo[0],0,SpeciesData::INCENSE)
-      ret = evo[0] if item1==incense || item2==incense
+    next if !evo[3]   # Not the prevolution
+    if check_items
+      incense = pbGetSpeciesData(evo[0], 0, SpeciesData::INCENSE)
+      ret = evo[0] if !incense || item1 == incense || item2 == incense
     else
       ret = evo[0]   # Species of prevolution
     end
     break
   end
-  ret = pbGetBabySpecies(ret) if ret!=species
+  ret = pbGetBabySpecies(ret) if ret != species
   return ret
 end
 
@@ -194,8 +194,6 @@ def pbGetEvolutionFamilyData(species)
   return ret
 end
 
-# Used by the Moon Ball when checking if a Pokémon's evolution family includes
-# an evolution that uses the Moon Stone.
 def pbCheckEvolutionFamilyForMethod(species, method, param = -1)
   species = pbGetBabySpecies(species)
   evos = pbGetEvolutionFamilyData(species)
@@ -203,7 +201,7 @@ def pbCheckEvolutionFamilyForMethod(species, method, param = -1)
   for evo in evos
     if method.is_a?(Array)
       next if !method.include?(evo[1])
-    elsif method>=0
+    elsif method >= 0
       next if evo[1] != method
     end
     next if param >= 0 && evo[2] != param
@@ -214,13 +212,13 @@ end
 
 # Used by the Moon Ball when checking if a Pokémon's evolution family includes
 # an evolution that uses the Moon Stone.
-def pbCheckEvolutionFamilyForItemMethodItem(species, param = -1)
+def pbCheckEvolutionFamilyForItemMethodItem(species, param = nil)
   species = pbGetBabySpecies(species)
   evos = pbGetEvolutionFamilyData(species)
   return false if !evos || evos.length == 0
   for evo in evos
     next if !PBEvolution.hasFunction?(evo[1], "itemCheck")
-    next if param >= 0 && evo[2] != param
+    next if param && evo[2] != param
     return true
   end
   return false
@@ -270,14 +268,14 @@ end
 
 # Checks whether a Pokemon can evolve now. If an item is used on the Pokémon,
 # checks whether the Pokemon can evolve with the given item.
-def pbCheckEvolution(pokemon,item=0)
-  if item==0
+def pbCheckEvolution(pokemon,item=nil)
+  if item
     return pbCheckEvolutionEx(pokemon) { |pokemon,evonib,level,poke|
-      next pbMiniCheckEvolution(pokemon,evonib,level,poke)
+      next pbMiniCheckEvolutionItem(pokemon,evonib,level,poke,item)
     }
   else
     return pbCheckEvolutionEx(pokemon) { |pokemon,evonib,level,poke|
-      next pbMiniCheckEvolutionItem(pokemon,evonib,level,poke,item)
+      next pbMiniCheckEvolution(pokemon,evonib,level,poke)
     }
   end
 end
@@ -446,9 +444,9 @@ PBEvolution.register(:Shedinja, {
   "parameterType"  => nil,
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if $Trainer.party.length>=6
-    next false if !$PokemonBag.pbHasItem?(getConst(PBItems,:POKEBALL))
+    next false if !$PokemonBag.pbHasItem?(:POKEBALL)
     PokemonEvolutionScene.pbDuplicatePokemon(pkmn, new_species)
-    $PokemonBag.pbDeleteItem(getConst(PBItems,:POKEBALL))
+    $PokemonBag.pbDeleteItem(:POKEBALL)
     next true
   }
 })
@@ -515,13 +513,13 @@ PBEvolution.register(:HappinessMoveType, {
 
 PBEvolution.register(:HappinessHoldItem, {
   "minimumLevel"  => 1,   # Needs any level up
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "levelUpCheck"  => proc { |pkmn, parameter|
     next pkmn.item == parameter && pkmn.happiness >= 220
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(0)   # Item is now consumed
+    pkmn.setItem(nil)   # Item is now consumed
     next true
   }
 })
@@ -543,78 +541,78 @@ PBEvolution.register(:Beauty, {   # Feebas
 
 PBEvolution.register(:HoldItem, {
   "minimumLevel"  => 1,   # Needs any level up
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "levelUpCheck"  => proc { |pkmn, parameter|
     next pkmn.item == parameter
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(0)   # Item is now consumed
+    pkmn.setItem(nil)   # Item is now consumed
     next true
   }
 })
 
 PBEvolution.register(:HoldItemMale, {
   "minimumLevel"  => 1,   # Needs any level up
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "levelUpCheck"  => proc { |pkmn, parameter|
     next pkmn.item == parameter && pkmn.male?
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(0)   # Item is now consumed
+    pkmn.setItem(nil)   # Item is now consumed
     next true
   }
 })
 
 PBEvolution.register(:HoldItemFemale, {
   "minimumLevel"  => 1,   # Needs any level up
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "levelUpCheck"  => proc { |pkmn, parameter|
     next pkmn.item == parameter && pkmn.female?
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(0)   # Item is now consumed
+    pkmn.setItem(nil)   # Item is now consumed
     next true
   }
 })
 
 PBEvolution.register(:DayHoldItem, {
   "minimumLevel"  => 1,   # Needs any level up
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "levelUpCheck"  => proc { |pkmn, parameter|
     next pkmn.item == parameter && PBDayNight.isDay?
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(0)   # Item is now consumed
+    pkmn.setItem(nil)   # Item is now consumed
     next true
   }
 })
 
 PBEvolution.register(:NightHoldItem, {
   "minimumLevel"  => 1,   # Needs any level up
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "levelUpCheck"  => proc { |pkmn, parameter|
     next pkmn.item == parameter && PBDayNight.isNight?
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(0)   # Item is now consumed
+    pkmn.setItem(nil)   # Item is now consumed
     next true
   }
 })
 
 PBEvolution.register(:HoldItemHappiness, {
   "minimumLevel"  => 1,   # Needs any level up
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "levelUpCheck"  => proc { |pkmn, parameter|
     next pkmn.item == parameter && pkmn.happiness >= 220
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(0)   # Item is now consumed
+    pkmn.setItem(nil)   # Item is now consumed
     next true
   }
 })
@@ -662,42 +660,42 @@ PBEvolution.register(:Region, {
 # Evolution methods that trigger when using an item on the Pokémon
 #===============================================================================
 PBEvolution.register(:Item, {
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "itemCheck"     => proc { |pkmn, parameter, item|
     next item == parameter
   }
 })
 
 PBEvolution.register(:ItemMale, {
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "itemCheck"     => proc { |pkmn, parameter, item|
     next item == parameter && pkmn.male?
   }
 })
 
 PBEvolution.register(:ItemFemale, {
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "itemCheck"     => proc { |pkmn, parameter, item|
     next item == parameter && pkmn.female?
   }
 })
 
 PBEvolution.register(:ItemDay, {
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "itemCheck"     => proc { |pkmn, parameter, item|
     next item == parameter && PBDayNight.isDay?
   }
 })
 
 PBEvolution.register(:ItemNight, {
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "itemCheck"     => proc { |pkmn, parameter, item|
     next item == parameter && PBDayNight.isNight?
   }
 })
 
 PBEvolution.register(:ItemHappiness, {
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "levelUpCheck"  => proc { |pkmn, parameter, item|
     next item == parameter && pkmn.happiness >= 220
   }
@@ -742,13 +740,13 @@ PBEvolution.register(:TradeNight, {
 })
 
 PBEvolution.register(:TradeItem, {
-  "parameterType" => :PBItems,
+  "parameterType" => :Item,
   "tradeCheck"    => proc { |pkmn, parameter, other_pkmn|
     next pkmn.item == parameter
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(0)   # Item is now consumed
+    pkmn.setItem(nil)   # Item is now consumed
     next true
   }
 })

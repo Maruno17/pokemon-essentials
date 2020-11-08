@@ -1064,22 +1064,21 @@ def pbChooseMove(pokemon,variableNumber,nameVarNumber)
   $game_map.need_refresh = true if $game_map
 end
 
-def pbConvertItemToItem(variable,array)
-  item = pbGet(variable)
-  pbSet(variable,0)
+def pbConvertItemToItem(variable, array)
+  item = GameData::Item.get(pbGet(variable))
+  pbSet(variable, nil)
   for i in 0...(array.length/2)
-    if isConst?(item,PBItems,array[2*i])
-      pbSet(variable,getID(PBItems,array[2*i+1]))
-      return
-    end
+    next if item != array[2 * i]
+    pbSet(variable, array[2 * i + 1])
+    return
   end
 end
 
 def pbConvertItemToPokemon(variable,array)
-  item = pbGet(variable)
-  pbSet(variable,0)
+  item = GameData::Item.get(pbGet(variable))
+  pbSet(variable, 0)
   for i in 0...(array.length/2)
-    next if !isConst?(item,PBItems,array[2*i])
+    next if item != array[2 * i]
     pbSet(variable,getID(PBSpecies,array[2*i+1]))
     return
   end

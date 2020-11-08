@@ -350,10 +350,7 @@ class PokeBattle_Battle
 
   def pbCanUseItemOnPokemon?(item,pkmn,battler,scene,showMessages=true)
     ret = __shadow__pbCanUseItemOnPokemon?(item,pkmn,battler,scene,showMessages)
-    if ret && pkmn.hypermode &&
-       !isConst?(item,PBItems,:JOYSCENT) &&
-       !isConst?(item,PBItems,:EXCITESCENT) &&
-       !isConst?(item,PBItems,:VIVIDSCENT)
+    if ret && pkmn.hypermode && ![:JOYSCENT, :EXCITESCENT, :VIVIDSCENT].include?(item)
       scene.pbDisplay(_INTL("This item can't be used on that Pokémon."))
       return false
     end
@@ -477,21 +474,21 @@ ItemHandlers::CanUseInBattle.copy(:JOYSCENT,:EXCITESCENT,:VIVIDSCENT)
 ItemHandlers::BattleUseOnBattler.add(:JOYSCENT,proc { |item,battler,scene|
   battler.pokemon.hypermode = false
   battler.pokemon.adjustHeart(-500)
-  scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",battler.pbThis,PBItems.getName(item)))
+  scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",battler.pbThis,GameData::Item.get(item).name))
   next true
 })
 
 ItemHandlers::BattleUseOnBattler.add(:EXCITESCENT,proc { |item,battler,scene|
   battler.pokemon.hypermode = false
   battler.pokemon.adjustHeart(-1000)
-  scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",battler.pbThis,PBItems.getName(item)))
+  scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",battler.pbThis,GameData::Item.get(item).name))
   next true
 })
 
 ItemHandlers::BattleUseOnBattler.add(:VIVIDSCENT,proc { |item,battler,scene|
   battler.pokemon.hypermode = false
   battler.pokemon.adjustHeart(-2000)
-  scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",battler.pbThis,PBItems.getName(item)))
+  scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",battler.pbThis,GameData::Item.get(item).name))
   next true
 })
 

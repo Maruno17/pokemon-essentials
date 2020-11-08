@@ -495,7 +495,7 @@ def pbHasEgg?(species)
   return false if compat.include?(getConst(PBEggGroups,:Ditto))
   baby = pbGetBabySpecies(species)
   return true if species==baby   # Is a basic species
-  baby = pbGetBabySpecies(species,0,0)
+  baby = pbGetBabySpecies(species,true)
   return true if species==baby   # Is an egg species without incense
   return false
 end

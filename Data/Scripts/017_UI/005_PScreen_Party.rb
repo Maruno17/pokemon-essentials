@@ -642,25 +642,26 @@ class PokemonParty_Scene
   end
 
   def pbChooseItem(bag)
-    ret = 0
+    ret = nil
     pbFadeOutIn {
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene,bag)
-      ret = screen.pbChooseItemScreen(Proc.new { |item| pbCanHoldItem?(item) })
+      ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).can_hold? })
       yield if block_given?
     }
     return ret
   end
 
   def pbUseItem(bag,pokemon)
-    ret = 0
+    ret = nil
     pbFadeOutIn {
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene,bag)
       ret = screen.pbChooseItemScreen(Proc.new { |item|
-        next false if !pbCanUseOnPokemon?(item)
-        if pbIsMachine?(item)
-          move = pbGetMachine(item)
+        itm = GameData::Item.get(item)
+        next false if !pbCanUseOnPokemon?(itm)
+        if itm.is_machine?
+          move = itm.move
           next false if pokemon.hasMove?(move) || !pokemon.compatibleWithMove?(move)
         end
         next true
@@ -1250,14 +1251,15 @@ class PokemonPartyScreen
         itemcommands[cmdUseItem=itemcommands.length]  = _INTL("Use")
         itemcommands[cmdGiveItem=itemcommands.length] = _INTL("Give")
         itemcommands[cmdTakeItem=itemcommands.length] = _INTL("Take") if pkmn.hasItem?
-        itemcommands[cmdMoveItem=itemcommands.length] = _INTL("Move") if pkmn.hasItem? && !pbIsMail?(pkmn.item)
+        itemcommands[cmdMoveItem=itemcommands.length] = _INTL("Move") if pkmn.hasItem? &&
+                                                                         !GameData::Item.get(pkmn.item).is_mail?
         itemcommands[itemcommands.length]             = _INTL("Cancel")
         command = @scene.pbShowCommands(_INTL("Do what with an item?"),itemcommands)
         if cmdUseItem>=0 && command==cmdUseItem   # Use
           item = @scene.pbUseItem($PokemonBag,pkmn) {
             @scene.pbSetHelpText((@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
           }
-          if item>0
+          if item
             pbUseItemOnPokemon(item,pkmn,self)
             pbRefreshSingle(pkmnid)
           end
@@ -1265,7 +1267,7 @@ class PokemonPartyScreen
           item = @scene.pbChooseItem($PokemonBag) {
             @scene.pbSetHelpText((@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
           }
-          if item>0
+          if item
             if pbGiveItemToPokemon(item,pkmn,self,pkmnid)
               pbRefreshSingle(pkmnid)
             end
@@ -1276,7 +1278,7 @@ class PokemonPartyScreen
           end
         elsif cmdMoveItem>=0 && command==cmdMoveItem   # Move
           item = pkmn.item
-          itemname = PBItems.getName(item)
+          itemname = item.name
           @scene.pbSetHelpText(_INTL("Move {1} to where?",itemname))
           oldpkmnid = pkmnid
           loop do
@@ -1284,23 +1286,22 @@ class PokemonPartyScreen
             pkmnid = @scene.pbChoosePokemon(true,pkmnid)
             break if pkmnid<0
             newpkmn = @party[pkmnid]
-            if pkmnid==oldpkmnid
-              break
-            elsif newpkmn.egg?
+            break if pkmnid==oldpkmnid
+            if newpkmn.egg?
               pbDisplay(_INTL("Eggs can't hold items."))
             elsif !newpkmn.hasItem?
               newpkmn.setItem(item)
-              pkmn.setItem(0)
+              pkmn.setItem(nil)
               @scene.pbClearSwitching
               pbRefresh
               pbDisplay(_INTL("{1} was given the {2} to hold.",newpkmn.name,itemname))
               break
-            elsif pbIsMail?(newpkmn.item)
+            elsif GameData::Item.get(newpkmn.item).is_mail?
               pbDisplay(_INTL("{1}'s mail must be removed before giving it an item.",newpkmn.name))
             else
               newitem = newpkmn.item
-              newitemname = PBItems.getName(newitem)
-              if isConst?(newitem,PBItems,:LEFTOVERS)
+              newitemname = newitem.name
+              if newitem == :LEFTOVERS
                 pbDisplay(_INTL("{1} is already holding some {2}.\1",newpkmn.name,newitemname))
               elsif newitemname.starts_with_vowel?
                 pbDisplay(_INTL("{1} is already holding an {2}.\1",newpkmn.name,newitemname))

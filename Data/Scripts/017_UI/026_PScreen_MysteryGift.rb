@@ -61,7 +61,8 @@ def pbEditMysteryGift(type,item,id=0,giftname="")
       params.setDefaultValue(type)
       params.setCancelValue(0)
       loop do
-        newtype=pbMessageChooseNumber(_INTL("Choose a quantity."),params)
+        newtype=pbMessageChooseNumber(_INTL("Choose a quantity of {1}.",
+           GameData::Item.get(item).name),params)
         if newtype==0
           return nil if pbConfirmMessage(_INTL("Stop editing this gift?"))
         else
@@ -230,17 +231,17 @@ def pbManageMysteryGifts
   end
 end
 
-def pbRefreshMGCommands(master,online)
-  commands=[]
+def pbRefreshMGCommands(master, online)
+  commands = []
   for gift in master
-    itemname="BLANK"
-    if gift[1]==0
-      itemname=PBSpecies.getName(gift[2].species)
-    elsif gift[1]>0
-      itemname=PBItems.getName(gift[2])+sprintf(" x%d",gift[1])
+    itemname = "BLANK"
+    if gift[1] == 0
+      itemname = PBSpecies.getName(gift[2].species)
+    elsif gift[1] > 0
+      itemname = GameData::Item.get(gift[2]).name + sprintf(" x%d", gift[1])
     end
-    ontext=["[  ]","[X]"][(online.include?(gift[0])) ? 1 : 0]
-    commands.push(_INTL("{1} {2}: {3} ({4})",ontext,gift[0],gift[3],itemname))
+    ontext = ["[  ]", "[X]"][(online.include?(gift[0])) ? 1 : 0]
+    commands.push(_INTL("{1} {2}: {3} ({4})", ontext, gift[0], gift[3], itemname))
   end
   commands.push(_INTL("Export selected to file"))
   commands.push(_INTL("Cancel"))
@@ -378,7 +379,7 @@ def pbReceiveMysteryGift(id)
     return false
   end
   gift=$Trainer.mysterygift[index]
-  if gift[1]==0
+  if gift[1]==0   # Pokémon
     pID=rand(256)
     pID|=rand(256)<<8
     pID|=rand(256)<<16
@@ -401,15 +402,17 @@ def pbReceiveMysteryGift(id)
       $Trainer.mysterygift[index]=[id]
       return true
     end
-  elsif gift[1]>0
-    if $PokemonBag.pbCanStore?(gift[2],gift[1])
-      $PokemonBag.pbStoreItem(gift[2],gift[1])
-      item=gift[2]; qty=gift[1]
-      itemname=(qty>1) ? PBItems.getNamePlural(item) : PBItems.getName(item)
-      if isConst?(item,PBItems,:LEFTOVERS)
+  elsif gift[1]>0   # Item
+    item=gift[2]
+    qty=gift[1]
+    if $PokemonBag.pbCanStore?(item,qty)
+      $PokemonBag.pbStoreItem(item,qty)
+      itm = GameData::Item.get(item)
+      itemname=(qty>1) ? itm.name_plural : itm.name
+      if item == :LEFTOVERS
         pbMessage(_INTL("\\me[Item get]You obtained some \\c[1]{1}\\c[0]!\\wtnp[30]",itemname))
-      elsif pbIsMachine?(item)   # TM or HM
-        pbMessage(_INTL("\\me[Item get]You obtained \\c[1]{1} {2}\\c[0]!\\wtnp[30]",itemname,PBMoves.getName(pbGetMachine(item))))
+      elsif itm.is_machine?   # TM or HM
+        pbMessage(_INTL("\\me[Item get]You obtained \\c[1]{1} {2}\\c[0]!\\wtnp[30]",itemname,PBMoves.getName(itm.move)))
       elsif qty>1
         pbMessage(_INTL("\\me[Item get]You obtained {1} \\c[1]{2}\\c[0]!\\wtnp[30]",qty,itemname))
       elsif itemname.starts_with_vowel?

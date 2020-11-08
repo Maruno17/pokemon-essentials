@@ -186,7 +186,7 @@ class PokeBattle_AI
          "098", "099", "09A", "0F7", "113"
       baseDmg = move.pbBaseDamage(baseDmg,user,target)
     when "086"   # Acrobatics
-      baseDmg *= 2 if user.item==0 || user.hasActiveItem?(:FLYINGGEM)
+      baseDmg *= 2 if !user.item || user.hasActiveItem?(:FLYINGGEM)
     when "08D"   # Gyro Ball
       targetSpeed = pbRoughStat(target,PBStats::SPEED,skill)
       userSpeed = pbRoughStat(user,PBStats::SPEED,skill)
@@ -197,7 +197,7 @@ class PokeBattle_AI
       baseDmg = 71
       baseDmg *= 2 if target.inTwoTurnAttack?("0CA")   # Dig
     when "096"   # Natural Gift
-      baseDmg = move.pbNaturalGiftBaseDamage(user.item)
+      baseDmg = move.pbNaturalGiftBaseDamage(user.item_id)
     when "09B"   # Heavy Slam
       baseDmg = move.pbBaseDamage(baseDmg,user,target)
       baseDmg *= 2 if NEWEST_BATTLE_MECHANICS && skill>=PBTrainerAI.mediumSkill &&
@@ -332,13 +332,7 @@ class PokeBattle_AI
       # NOTE: These items aren't suitable for checking at the start of the
       #       round.
       itemBlacklist = [:EXPERTBELT,:LIFEORB]
-      canCheck = true
-      itemBlacklist.each do |i|
-        next if !isConst?(user.item,PBItems,i)
-        canCheck = false
-        break
-      end
-      if canCheck
+      if !itemBlacklist.include?(user.item_id)
         BattleHandlers.triggerDamageCalcUserItem(user.item,
            user,target,move,multipliers,baseDmg,type)
       end
@@ -346,7 +340,7 @@ class PokeBattle_AI
     if skill>=PBTrainerAI.bestSkill && target.itemActive?
       # NOTE: Type-weakening berries aren't suitable for checking at the start
       #       of the round.
-      if !pbIsBerry?(target.item)
+      if !target.item.is_berry?
         BattleHandlers.triggerDamageCalcTargetItem(target.item,
            user,target,move,multipliers,baseDmg,type)
       end

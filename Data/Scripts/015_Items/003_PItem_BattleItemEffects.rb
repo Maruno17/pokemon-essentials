@@ -21,7 +21,7 @@ ItemHandlers::CanUseInBattle.add(:POKEDOLL,proc { |item,pokemon,battler,move,fir
 
 ItemHandlers::CanUseInBattle.copy(:POKEDOLL,:FLUFFYTAIL,:POKETOY)
 
-ItemHandlers::CanUseInBattle.addIf(proc { |item| pbIsPokeBall?(item) },   # Poké Balls
+ItemHandlers::CanUseInBattle.addIf(proc { |item| GameData::Item.get(item).is_poke_ball? },   # Poké Balls
   proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
     if battle.pbPlayer.party.length>=6 && $PokemonStorage.full?
       scene.pbDisplay(_INTL("There is no room left in the PC!")) if showMessages
@@ -42,7 +42,7 @@ ItemHandlers::CanUseInBattle.addIf(proc { |item| pbIsPokeBall?(item) },   # Pok�
     #       than one unfainted opposing Pokémon. (Snag Balls can be thrown in
     #       this case, but only in trainer battles, and the trainer will deflect
     #       them if they are trying to catch a non-Shadow Pokémon.)
-    if battle.pbOpposingBattlerCount>1 && !(pbIsSnagBall?(item) && battle.trainerBattle?)
+    if battle.pbOpposingBattlerCount>1 && !(GameData::Item.get(item).is_snag_ball? && battle.trainerBattle?)
       if battle.pbOpposingBattlerCount==2
         scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are two Pokémon!")) if showMessages
       else
@@ -302,7 +302,7 @@ ItemHandlers::UseInBattle.add(:POKEFLUTE,proc { |item,battler,battle|
   scene.pbDisplay(_INTL("All Pokémon were roused by the tune!"))
 })
 
-ItemHandlers::UseInBattle.addIf(proc { |item| pbIsPokeBall?(item) },   # Poké Balls
+ItemHandlers::UseInBattle.addIf(proc { |item| GameData::Item.get(item).is_poke_ball? },   # Poké Balls
   proc { |item,battler,battle|
     battle.pbThrowPokeBall(battler.index,item)
   }
