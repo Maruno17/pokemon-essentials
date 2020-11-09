@@ -13,20 +13,22 @@ def pbCompileMetadata
       sectionname = $~[1]
       if currentmap==0
         if sections[currentmap][MetadataHome]==nil
-          raise _INTL("The entry Home is required in metadata.txt section [{1}]",sectionname)
-        end
-        if sections[currentmap][MetadataPlayerA]==nil
-          raise _INTL("The entry PlayerA is required in metadata.txt section [{1}]",sectionname)
+          raise _INTL("The entry Home is required in metadata.txt section [{1}].",sectionname)
+        elsif sections[currentmap][MetadataPlayerA]==nil
+          raise _INTL("The entry PlayerA is required in metadata.txt section [{1}].",sectionname)
         end
       end
       currentmap = sectionname.to_i
+      if sections[currentmap]
+        raise _INTL("Section [{1}] is defined twice in metadata.txt.\r\n{2}",currentmap,FileLineData.linereport)
+      end
       sections[currentmap] = []
     else
       if currentmap<0
-        raise _INTL("Expected a section at the beginning of the file\r\n{1}",FileLineData.linereport)
+        raise _INTL("Expected a section at the beginning of the file.\r\n{1}",FileLineData.linereport)
       end
       if !line[/^\s*(\w+)\s*=\s*(.*)$/]
-        raise _INTL("Bad line syntax (expected syntax like XXX=YYY)\r\n{1}",FileLineData.linereport)
+        raise _INTL("Bad line syntax (expected syntax like XXX=YYY).\r\n{1}",FileLineData.linereport)
       end
       matchData = $~
       schema = nil
@@ -354,7 +356,7 @@ def pbCompileTypes
       if currentmap>=0
         for reqtype in requiredtypes.keys
           if !foundtypes.include?(reqtype)
-            raise _INTL("Required value '{1}' not given in section '{2}'\r\n{3}",reqtype,currentmap,FileLineData.linereport)
+            raise _INTL("Required value '{1}' not given in section [{2}].\r\n{3}",reqtype,currentmap,FileLineData.linereport)
           end
         end
         foundtypes.clear
@@ -363,10 +365,10 @@ def pbCompileTypes
       types[currentmap] = [currentmap,nil,nil,false,false,[],[],[]]
     else
       if currentmap<0
-        raise _INTL("Expected a section at the beginning of the file\r\n{1}",FileLineData.linereport)
+        raise _INTL("Expected a section at the beginning of the file.\r\n{1}",FileLineData.linereport)
       end
       if !line[/^\s*(\w+)\s*=\s*(.*)$/]
-        raise _INTL("Bad line syntax (expected syntax like XXX=YYY)\r\n{1}",FileLineData.linereport)
+        raise _INTL("Bad line syntax (expected syntax like XXX=YYY).\r\n{1}",FileLineData.linereport)
       end
       matchData = $~
       schema = nil
@@ -401,17 +403,17 @@ def pbCompileTypes
     n = type[1]
     for w in type[5]
       if !typeinames.include?(w)
-        raise _INTL("'{1}' is not a defined type (PBS/types.txt, {2}, Weaknesses)",w,n)
+        raise _INTL("'{1}' is not a defined type (PBS/types.txt, {2}, Weaknesses).",w,n)
       end
     end
     for w in type[6]
       if !typeinames.include?(w)
-        raise _INTL("'{1}' is not a defined type (PBS/types.txt, {2}, Resistances)",w,n)
+        raise _INTL("'{1}' is not a defined type (PBS/types.txt, {2}, Resistances).",w,n)
       end
     end
     for w in type[7]
       if !typeinames.include?(w)
-        raise _INTL("'{1}' is not a defined type (PBS/types.txt, {2}, Immunities)",w,n)
+        raise _INTL("'{1}' is not a defined type (PBS/types.txt, {2}, Immunities).",w,n)
       end
     end
   end
@@ -463,6 +465,9 @@ def pbCompileAbilities
   maxValue = 0
   pbCompilerEachPreppedLine("PBS/abilities.txt") { |line,lineno|
     record = pbGetCsvRecord(line,lineno,[0,"vnss"])
+    if movenames[record[0]]
+      raise _INTL("Ability ID number '{1}' is used twice.\r\n{2}",record[0],FileLineData.linereport)
+    end
     movenames[record[0]] = record[2]
     movedescs[record[0]] = record[3]
     maxValue = [maxValue,record[0]].max
@@ -545,6 +550,9 @@ def pbCompileItems
   pbCompilerEachCommentedLine("PBS/items.txt") { |line,lineno|
     linerecord = pbGetCsvRecord(line,lineno,[0,"vnssuusuuUN"])
     id = linerecord[0]
+    if records[id]
+      raise _INTL("Item ID number '{1}' is used twice.\r\n{2}",id,FileLineData.linereport)
+    end
     record = []
     record[ITEM_ID]          = id
     constant                 = linerecord[1]
@@ -603,11 +611,14 @@ def pbCompileMoves
        nil,nil,nil,nil,nil,PBTypes,["Physical","Special","Status"],
        nil,nil,nil,PBTargets,nil,nil,nil
     ])
+    if records[lineRecord[0]]
+      raise _INTL("Move ID number '{1}' is used twice.\r\n{2}",lineRecord[0],FileLineData.linereport)
+    end
     if lineRecord[6]==2 && lineRecord[4]!=0
-      raise _INTL("Status moves must have a base damage of 0, use either Physical or Special\r\n{1}",FileLineData.linereport)
+      raise _INTL("Status moves must have a base damage of 0, use either Physical or Special.\r\n{1}",FileLineData.linereport)
     end
     if lineRecord[6]!=2 && lineRecord[4]==0
-      print _INTL("Warning: Physical and special moves can't have a base damage of 0, changing to a Status move\r\n{1}",FileLineData.linereport)
+      print _INTL("Warning: Physical and special moves can't have a base damage of 0, changing to a Status move.\r\n{1}",FileLineData.linereport)
       lineRecord[6] = 2
     end
     record[MOVE_ID]            = lineRecord[0]
@@ -717,6 +728,14 @@ def pbCompilePokemonData
     # contents is a hash containing all the XXX=YYY lines in that section, where
     # the keys are the XXX and the values are the YYY (as unprocessed strings).
     pbEachFileSection(f) { |contents,speciesID|
+      # Raise an error if the species ID is 0.
+      if speciesID==0
+        raise _INTL("A Pokémon species can't be numbered 0 (PBS/pokemon.txt)")
+      end
+      # Raise an error if the species ID has already been defined.
+      if speciesData[speciesID]
+        raise _INTL("Species ID number '{1}' is used twice.\r\n{2}",speciesID,FileLineData.linereport)
+      end
       # Create array to store compiled data in.
       speciesData[speciesID] = []
       # Copy Type1 into Type2 if Type2 is undefined. (All species must have two
@@ -733,10 +752,6 @@ def pbCompilePokemonData
           FileLineData.setSection(speciesID,key,contents[key])   # For error reporting
           maxValue = [maxValue,speciesID].max   # Set highest species ID
           next if hash[key][0]<0   # Property is not to be compiled; skip it
-          # Raise an error if the species ID is 0.
-          if speciesID==0
-            raise _INTL("A Pokémon species can't be numbered 0 (PBS/pokemon.txt)")
-          end
           # Skip empty optional properties, or raise an error if a required
           # property is empty.
           if !contents[key] || contents[key]==""
@@ -854,7 +869,6 @@ def pbCompilePokemonData
   end
   # Add prevolution data to all species as the first "evolution method".
   for sp in 1..maxValue
-    next if !evolutions[sp]
     preSpecies = -1
     evoData = nil
     # Check for another species that evolves into sp.
@@ -870,6 +884,7 @@ def pbCompilePokemonData
     end
     next if !evoData   # evoData[1]=method, evoData[2]=level - both are unused
     # Found a species that evolves into e, record it as a prevolution.
+    evolutions[sp] = [] if !evolutions[sp]
     evolutions[sp] = [[preSpecies,evoData[1],evoData[2],true]].concat(evolutions[sp])
   end
   # Save evolutions data.
@@ -1162,6 +1177,9 @@ def pbCompileMachines
       if !line[/^\#/] && !line[/^\s*$/]
         if line[/^\s*\[\s*(.*)\s*\]\s*$/]
           sectionname = parseMove($~[1])
+          if sections[sectionname]
+            raise _INTL("TM section [{1}] is defined twice.\r\n{2}",sectionname,FileLineData.linereport)
+          end
           sections[sectionname] = WordArray.new
           havesection = true
         else
@@ -1261,13 +1279,16 @@ def pbCompileEncounters
     mapid = line[/^\d+$/]
     if mapid
       lastmapid = mapid
+      if encounters[mapid.to_i]
+        raise _INTL("Encounters for map ID '{1}' are defined twice.\r\n{2}",mapid,FileLineData.linereport)
+      end
       if thisenc && (thisenc[1][EncounterTypes::Land] ||
                      thisenc[1][EncounterTypes::LandMorning] ||
                      thisenc[1][EncounterTypes::LandDay] ||
                      thisenc[1][EncounterTypes::LandNight] ||
                      thisenc[1][EncounterTypes::BugContest]) &&
                      thisenc[1][EncounterTypes::Cave]
-        raise _INTL("Can't define both Land and Cave encounters in the same area (map ID {1})",mapid)
+        raise _INTL("Can't define both Land and Cave encounters in the same area (map ID '{1}')",mapid)
       end
       thisenc = [EncounterTypes::EnctypeDensities.clone,[]]
       encounters[mapid.to_i] = thisenc
@@ -1393,10 +1414,10 @@ def pbCompileTrainers
     if line[/^\s*\[\s*(.+)\s*\]\s*$/]
       # Section [trainertype,trainername] or [trainertype,trainername,partyid]
       if oldcompilerline>0
-        raise _INTL("Previous trainer not defined with as many Pokémon as expected\r\n{1}",FileLineData.linereport)
+        raise _INTL("Previous trainer not defined with as many Pokémon as expected.\r\n{1}",FileLineData.linereport)
       end
       if pokemonindex==-1
-        raise _INTL("Started new trainer while previous trainer has no Pokémon\r\n{1}",FileLineData.linereport)
+        raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}",FileLineData.linereport)
       end
       section = pbGetCsvRecord($~[1],lineno,[0,"esU",PBTrainers])
       trainerindex += 1
@@ -1409,10 +1430,10 @@ def pbCompileTrainers
     elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
       # XXX=YYY lines
       if trainerindex<0
-        raise _INTL("Expected a section at the beginning of the file\r\n{1}",FileLineData.linereport)
+        raise _INTL("Expected a section at the beginning of the file.\r\n{1}",FileLineData.linereport)
       end
       if oldcompilerline>0
-        raise _INTL("Previous trainer not defined with as many Pokémon as expected\r\n{1}",FileLineData.linereport)
+        raise _INTL("Previous trainer not defined with as many Pokémon as expected.\r\n{1}",FileLineData.linereport)
       end
       settingname = $~[1]
       schema = trainer_info_types[settingname]
@@ -1429,7 +1450,7 @@ def pbCompileTrainers
         record.compact!
       when "Ability"
         if record>5
-          raise _INTL("Bad ability flag: {1} (must be 0 or 1 or 2-5)\r\n{2}",record,FileLineData.linereport)
+          raise _INTL("Bad ability flag: {1} (must be 0 or 1 or 2-5).\r\n{2}",record,FileLineData.linereport)
         end
       when "IV"
         record = [record] if record.is_a?(Integer)

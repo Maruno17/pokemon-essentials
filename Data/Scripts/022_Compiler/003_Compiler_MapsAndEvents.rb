@@ -565,7 +565,7 @@ def pbConvertToTrainerEvent(event,trainerChecker)
   end
   pbPushScript(firstpage.list,"setBattleRule(\"double\")") if doublebattle
   pbPushScript(firstpage.list,sprintf("setBattleRule(\"backdrop\",\"%s\")",safequote(backdrop))) if backdrop
-  pbPushScript(firstpage.list,sprintf("setBattleRule(\"outcomeVar\",%d)",outcomeVar)) if outcome>1
+  pbPushScript(firstpage.list,sprintf("setBattleRule(\"outcomeVar\",%d)",outcome)) if outcome>1
   pbPushScript(firstpage.list,"setBattleRule(\"canLose\")") if continue
   espeech = (endspeeches[0]) ? sprintf("_I(\"%s\")",safequote2(endspeeches[0])) : "nil"
   if battleid>0
@@ -614,7 +614,7 @@ def pbConvertToTrainerEvent(event,trainerChecker)
     pbPushText(rematchpage.list,battles[i],1)
     pbPushScript(rematchpage.list,"setBattleRule(\"double\")",1) if doublebattle
     pbPushScript(rematchpage.list,sprintf("setBattleRule(\"backdrop\",%s)",safequote(backdrop)),1) if backdrop
-    pbPushScript(rematchpage.list,sprintf("setBattleRule(\"outcomeVar\",%d)",outcomeVar),1) if outcome>1
+    pbPushScript(rematchpage.list,sprintf("setBattleRule(\"outcomeVar\",%d)",outcome),1) if outcome>1
     pbPushScript(rematchpage.list,"setBattleRule(\"canLose\")",1) if continue
     espeech = nil
     if endspeeches.length>0

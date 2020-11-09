@@ -286,7 +286,7 @@ end
 
 
 #===============================================================================
-# JavaScript-related utilities
+# Json-related utilities
 #===============================================================================
 # Returns true if the given string represents a valid object in JavaScript
 # Object Notation, and false otherwise.
@@ -1172,10 +1172,10 @@ def pbLoadRpgxpScene(scene)
   end
   Graphics.transition(20)
   Graphics.freeze
-  oldscene.createSpritesets
+  $scene = oldscene
+  $scene.createSpritesets
   pbShowObjects(visibleObjects)
   Graphics.transition(20)
-  $scene = oldscene
 end
 
 

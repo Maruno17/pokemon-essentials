@@ -8,7 +8,8 @@ class PokeBattle_Battler
     if tryFlee && @battle.wildBattle? && opposes? &&
        @battle.rules["alwaysflee"] && @battle.pbCanRun?(@index)
       pbBeginTurn(choice)
-      @battle.pbDisplay(_INTL("{1} fled from battle!",pbThis)) { pbSEPlay("Battle flee") }
+      pbSEPlay("Battle flee")
+      @battle.pbDisplay(_INTL("{1} fled from battle!",pbThis))
       @battle.decision = 3
       pbEndTurn(choice)
       return true
@@ -323,7 +324,7 @@ class PokeBattle_Battler
       @battle.pbDisplay(_INTL("When the flame touched the powder on the Pokémon, it exploded!"))
       user.lastMoveFailed = true
       w = @battle.pbWeather
-      if w!=PBWeather.RAINDANCE && w!=PBWeather.HEAVYRAIN && user.takesIndirectDamage?
+      if w!=PBWeather::Rain && w!=PBWeather::HeavyRain && user.takesIndirectDamage?
         oldHP = user.hp
         user.pbReduceHP((user.totalhp/4.0).round,false)
         user.pbFaint if user.fainted?

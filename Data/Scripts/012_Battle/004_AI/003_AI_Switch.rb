@@ -135,7 +135,7 @@ class PokeBattle_AI
         if @battle.pbRegisterSwitch(idxBattler,list[0])
           PBDebug.log("[AI] #{battler.pbThis} (#{idxBattler}) will switch with " +
                       "#{@battle.pbParty(idxBattler)[list[0]].name}")
-          return
+          return true
         end
       end
     end

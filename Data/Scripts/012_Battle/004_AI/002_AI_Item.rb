@@ -20,7 +20,7 @@ class PokeBattle_AI
   # NOTE: The AI will only consider using an item on the Pokémon it's currently
   #       choosing an action for.
   def pbEnemyItemToUse(idxBattler)
-    return 0 if !@internalBattle
+    return 0 if !@battle.internalBattle
     items = @battle.pbGetOwnerItems(idxBattler)
     return 0 if !items || items.length==0
     # Determine target of item (always the Pokémon choosing the action)

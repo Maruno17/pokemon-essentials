@@ -81,20 +81,27 @@ class PokeBattle_AI
         return
       end
     end
-    # Randomly choose a move to use
+    # If there are no calculated choices, pick one at random
     if choices.length==0
-      # If there are no calculated choices, use Struggle (or an Encored move)
-      @battle.pbAutoChooseMove(idxBattler)
-    else
-      # Randomly choose a move from the choices and register it
-      randNum = pbAIRandom(totalScore)
-      choices.each do |c|
-        randNum -= c[1]
-        next if randNum>=0
-        @battle.pbRegisterMove(idxBattler,c[0],false)
-        @battle.pbRegisterTarget(idxBattler,c[2]) if c[2]>=0
-        break
+      PBDebug.log("[AI] #{user.pbThis} (#{user.index}) doesn't want to use any moves; picking one at random")
+      user.eachMoveWithIndex do |_m,i|
+        next if !@battle.pbCanChooseMove?(idxBattler,i,false)
+        choices.push([i,100,-1])   # Move index, score, target
       end
+      if choices.length==0   # No moves are physically possible to use
+        user.eachMoveWithIndex do |_m,i|
+          choices.push([i,100,-1])   # Move index, score, target
+        end
+      end
+    end
+    # Randomly choose a move from the choices and register it
+    randNum = pbAIRandom(totalScore)
+    choices.each do |c|
+      randNum -= c[1]
+      next if randNum>=0
+      @battle.pbRegisterMove(idxBattler,c[0],false)
+      @battle.pbRegisterTarget(idxBattler,c[2]) if c[2]>=0
+      break
     end
     # Log the result
     if @battle.choices[idxBattler][2]

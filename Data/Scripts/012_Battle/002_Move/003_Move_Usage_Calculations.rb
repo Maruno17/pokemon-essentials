@@ -95,8 +95,8 @@ class PokeBattle_Move
     modifiers[BASE_ACC]  = baseAcc
     modifiers[ACC_STAGE] = user.stages[PBStats::ACCURACY]
     modifiers[EVA_STAGE] = target.stages[PBStats::EVASION]
-    modifiers[ACC_MULT]  = 0x1000
-    modifiers[EVA_MULT]  = 0x1000
+    modifiers[ACC_MULT]  = 1.0
+    modifiers[EVA_MULT]  = 1.0
     pbCalcAccuracyModifiers(user,target,modifiers)
     # Check if move can't miss
     return true if modifiers[BASE_ACC]==0
@@ -107,8 +107,8 @@ class PokeBattle_Move
     stageDiv = [9,8,7,6,5,4, 3, 3,3,3,3,3,3]
     accuracy = 100.0 * stageMul[accStage] / stageDiv[accStage]
     evasion  = 100.0 * stageMul[evaStage] / stageDiv[evaStage]
-    accuracy = (accuracy * modifiers[ACC_MULT] / 0x1000).round
-    evasion  = (evasion  * modifiers[EVA_MULT] / 0x1000).round
+    accuracy = (accuracy * modifiers[ACC_MULT]).round
+    evasion  = (evasion  * modifiers[EVA_MULT]).round
     evasion = 1 if evasion<1
     # Calculation
     return @battle.pbRandom(100) < modifiers[BASE_ACC] * accuracy / evasion
@@ -140,11 +140,11 @@ class PokeBattle_Move
     end
     # Other effects, inc. ones that set ACC_MULT or EVA_STAGE to specific values
     if @battle.field.effects[PBEffects::Gravity]>0
-      modifiers[ACC_MULT] = (modifiers[ACC_MULT]*5/3).round
+      modifiers[ACC_MULT] *= 5/3.0
     end
     if user.effects[PBEffects::MicleBerry]
       user.effects[PBEffects::MicleBerry] = false
-      modifiers[ACC_MULT] = (modifiers[ACC_MULT]*1.2).round
+      modifiers[ACC_MULT] *= 1.2
     end
     modifiers[EVA_STAGE] = 0 if target.effects[PBEffects::Foresight] && modifiers[EVA_STAGE]>0
     modifiers[EVA_STAGE] = 0 if target.effects[PBEffects::MiracleEye] && modifiers[EVA_STAGE]>0
@@ -244,14 +244,14 @@ class PokeBattle_Move
       defense = (defense.to_f*stageMul[defStage]/stageDiv[defStage]).floor
     end
     # Calculate all multiplier effects
-    multipliers = [0x1000,0x1000,0x1000,0x1000]
+    multipliers = [1.0, 1.0, 1.0, 1.0]
     pbCalcDamageMultipliers(user,target,numTargets,type,baseDmg,multipliers)
     # Main damage calculation
-    baseDmg = [(baseDmg * multipliers[BASE_DMG_MULT]  / 0x1000).round,1].max
-    atk     = [(atk     * multipliers[ATK_MULT]       / 0x1000).round,1].max
-    defense = [(defense * multipliers[DEF_MULT]       / 0x1000).round,1].max
-    damage  = (((2.0*user.level/5+2).floor*baseDmg*atk/defense).floor/50).floor+2
-    damage  = [(damage  * multipliers[FINAL_DMG_MULT] / 0x1000).round,1].max
+    baseDmg = [(baseDmg * multipliers[BASE_DMG_MULT]).round, 1].max
+    atk     = [(atk     * multipliers[ATK_MULT]).round, 1].max
+    defense = [(defense * multipliers[DEF_MULT]).round, 1].max
+    damage  = (((2.0 * user.level / 5 + 2).floor * baseDmg * atk / defense).floor / 50).floor + 2
+    damage  = [(damage  * multipliers[FINAL_DMG_MULT]).round, 1].max
     target.damageState.calcDamage = damage
   end
 
@@ -306,10 +306,10 @@ class PokeBattle_Move
     end
     # Other
     if user.effects[PBEffects::MeFirst]
-      multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.5).round
+      multipliers[BASE_DMG_MULT] *= 1.5
     end
     if user.effects[PBEffects::HelpingHand] && !self.is_a?(PokeBattle_Confusion)
-      multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.5).round
+      multipliers[BASE_DMG_MULT] *= 1.5
     end
     if user.effects[PBEffects::Charge]>0 && isConst?(type,PBTypes,:ELECTRIC)
       multipliers[BASE_DMG_MULT] *= 2
@@ -341,15 +341,15 @@ class PokeBattle_Move
       case @battle.field.terrain
       when PBBattleTerrains::Electric
         if isConst?(type,PBTypes,:ELECTRIC)
-          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.5).round
+          multipliers[BASE_DMG_MULT] *= 1.5
         end
       when PBBattleTerrains::Grassy
         if isConst?(type,PBTypes,:GRASS)
-          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.5).round
+          multipliers[BASE_DMG_MULT] *= 1.5
         end
       when PBBattleTerrains::Psychic
         if isConst?(type,PBTypes,:PSYCHIC)
-          multipliers[BASE_DMG_MULT] = (multipliers[BASE_DMG_MULT]*1.5).round
+          multipliers[BASE_DMG_MULT] *= 1.5
         end
       end
     end
@@ -361,28 +361,28 @@ class PokeBattle_Move
     if @battle.internalBattle
       if user.pbOwnedByPlayer?
         if physicalMove? && @battle.pbPlayer.numbadges>=NUM_BADGES_BOOST_ATTACK
-          multipliers[ATK_MULT] = (multipliers[ATK_MULT]*1.1).round
+          multipliers[ATK_MULT] *= 1.1
         elsif specialMove? && @battle.pbPlayer.numbadges>=NUM_BADGES_BOOST_SPATK
-          multipliers[ATK_MULT] = (multipliers[ATK_MULT]*1.1).round
+          multipliers[ATK_MULT] *= 1.1
         end
       end
       if target.pbOwnedByPlayer?
         if physicalMove? && @battle.pbPlayer.numbadges>=NUM_BADGES_BOOST_DEFENSE
-          multipliers[DEF_MULT] = (multipliers[DEF_MULT]*1.1).round
+          multipliers[DEF_MULT] *= 1.1
         elsif specialMove? && @battle.pbPlayer.numbadges>=NUM_BADGES_BOOST_SPDEF
-          multipliers[DEF_MULT] = (multipliers[DEF_MULT]*1.1).round
+          multipliers[DEF_MULT] *= 1.1
         end
       end
     end
     # Multi-targeting attacks
     if numTargets>1
-      multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*0.75).round
+      multipliers[FINAL_DMG_MULT] *= 0.75
     end
     # Weather
     case @battle.pbWeather
     when PBWeather::Sun, PBWeather::HarshSun
       if isConst?(type,PBTypes,:FIRE)
-        multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+        multipliers[FINAL_DMG_MULT] *= 1.5
       elsif isConst?(type,PBTypes,:WATER)
         multipliers[FINAL_DMG_MULT] /= 2
       end
@@ -390,17 +390,17 @@ class PokeBattle_Move
       if isConst?(type,PBTypes,:FIRE)
         multipliers[FINAL_DMG_MULT] /= 2
       elsif isConst?(type,PBTypes,:WATER)
-        multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+        multipliers[FINAL_DMG_MULT] *= 1.5
       end
     when PBWeather::Sandstorm
       if target.pbHasType?(:ROCK) && specialMove? && @function!="122"   # Psyshock
-        multipliers[DEF_MULT] = (multipliers[DEF_MULT]*1.5).round
+        multipliers[DEF_MULT] *= 1.5
       end
     end
     # Critical hits
     if target.damageState.critical
       if NEWEST_BATTLE_MECHANICS
-        multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+        multipliers[FINAL_DMG_MULT] *= 1.5
       else
         multipliers[FINAL_DMG_MULT] *= 2
       end
@@ -415,12 +415,11 @@ class PokeBattle_Move
       if user.hasActiveAbility?(:ADAPTABILITY)
         multipliers[FINAL_DMG_MULT] *= 2
       else
-        multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
+        multipliers[FINAL_DMG_MULT] *= 1.5
       end
     end
     # Type effectiveness
     multipliers[FINAL_DMG_MULT] *= target.damageState.typeMod.to_f/PBTypeEffectiveness::NORMAL_EFFECTIVE
-    multipliers[FINAL_DMG_MULT] = multipliers[FINAL_DMG_MULT].round
     # Burn
     if user.status==PBStatuses::BURN && physicalMove? && damageReducedByBurn? &&
        !user.hasActiveAbility?(:GUTS)
@@ -431,19 +430,19 @@ class PokeBattle_Move
        !user.hasActiveAbility?(:INFILTRATOR)
       if target.pbOwnSide.effects[PBEffects::AuroraVeil]>0
         if @battle.pbSideBattlerCount(target)>1
-          multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*2/3).round
+          multipliers[FINAL_DMG_MULT] *= 2/3.0
         else
           multipliers[FINAL_DMG_MULT] /= 2
         end
       elsif target.pbOwnSide.effects[PBEffects::Reflect]>0 && physicalMove?
         if @battle.pbSideBattlerCount(target)>1
-          multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*2/3).round
+          multipliers[FINAL_DMG_MULT] *= 2/3.0
         else
           multipliers[FINAL_DMG_MULT] /= 2
         end
       elsif target.pbOwnSide.effects[PBEffects::LightScreen]>0 && specialMove?
         if @battle.pbSideBattlerCount(target)>1
-          multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*2/3).round
+          multipliers[FINAL_DMG_MULT] *= 2/3.0
         else
           multipliers[FINAL_DMG_MULT] /= 2
         end

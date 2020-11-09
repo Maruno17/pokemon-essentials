@@ -23,7 +23,7 @@ class Game_Player < Game_Character
   end
 
   def bush_depth
-    return 0 if @tile_id > 0 or @always_on_top
+    return 0 if @tile_id > 0 || @always_on_top
     xbehind = (@direction==4) ? @x+1 : (@direction==6) ? @x-1 : @x
     ybehind = (@direction==8) ? @y+1 : (@direction==2) ? @y-1 : @y
     # Both current tile and previous tile are on the same map; just return super
@@ -47,7 +47,7 @@ class Game_Player < Game_Character
       behindmap = newbehind[0]; behindx = newbehind[1]; behindy = newbehind[2]
     end
     # Return bush depth
-    if @jump_count <= 0
+    if !jumping?
       return 32 if heremap.deepBush?(herex, herey) && behindmap.deepBush?(behindx, behindy)
       return 12 if heremap.bush?(herex, herey) && !moving?
     end
@@ -64,67 +64,36 @@ class Game_Player < Game_Character
     @bump_se = Graphics.frame_rate/4
   end
 
-  def move_down(turn_enabled = true)
-    turn_down if turn_enabled
-    if passable?(@x, @y, 2)
-      return if pbLedge(0,1)
-      return if pbEndSurf(0,1)
-      turn_down
-      @y += 1
-      $PokemonTemp.dependentEvents.pbMoveDependentEvents
-      increase_steps
-    else
-      if !check_event_trigger_touch(@x, @y+1)
-        bump_into_object
+  def move_generic(dir, turn_enabled = true)
+    turn_generic(dir, true) if turn_enabled
+    if !$PokemonTemp.encounterTriggered
+      x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
+      y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
+      if passable?(@x, @y, dir)
+        return if pbLedge(x_offset, y_offset)
+        return if pbEndSurf(x_offset, y_offset)
+        turn_generic(dir, true)
+        if !$PokemonTemp.encounterTriggered
+          @x += x_offset
+          @y += y_offset
+          $PokemonTemp.dependentEvents.pbMoveDependentEvents
+          increase_steps
+        end
+      else
+        if !check_event_trigger_touch(@x + x_offset, @y + y_offset)
+          bump_into_object
+        end
       end
     end
+    $PokemonTemp.encounterTriggered = false
   end
 
-  def move_left(turn_enabled = true)
-    turn_left if turn_enabled
-    if passable?(@x, @y, 4)
-      return if pbLedge(-1,0)
-      return if pbEndSurf(-1,0)
-      turn_left
-      @x -= 1
-      $PokemonTemp.dependentEvents.pbMoveDependentEvents
-      increase_steps
-    else
-      if !check_event_trigger_touch(@x-1, @y)
-        bump_into_object
-      end
-    end
-  end
-
-  def move_right(turn_enabled = true)
-    turn_right if turn_enabled
-    if passable?(@x, @y, 6)
-      return if pbLedge(1,0)
-      return if pbEndSurf(1,0)
-      turn_right
-      @x += 1
-      $PokemonTemp.dependentEvents.pbMoveDependentEvents
-      increase_steps
-    else
-      if !check_event_trigger_touch(@x+1, @y)
-        bump_into_object
-      end
-    end
-  end
-
-  def move_up(turn_enabled = true)
-    turn_up if turn_enabled
-    if passable?(@x, @y, 8)
-      return if pbLedge(0,-1)
-      return if pbEndSurf(0,-1)
-      turn_up
-      @y -= 1
-      $PokemonTemp.dependentEvents.pbMoveDependentEvents
-      increase_steps
-    else
-      if !check_event_trigger_touch(@x, @y-1)
-        bump_into_object
-      end
+  def turn_generic(dir, keep_enc_indicator = false)
+    old_direction = @direction
+    super(dir)
+    if @direction != old_direction && !@move_route_forcing && !pbMapInterpreterRunning?
+      Events.onChangeDirection.trigger(self, self)
+      $PokemonTemp.encounterTriggered = false if !keep_enc_indicator
     end
   end
 
@@ -162,8 +131,7 @@ class Game_Player < Game_Character
     return result
   end
 
-  def pbCheckEventTriggerAfterTurning
-  end
+  def pbCheckEventTriggerAfterTurning; end
 
   def pbCheckEventTriggerFromDistance(triggers)
     ret = pbTriggeredTrainerEvents(triggers)
@@ -377,17 +345,18 @@ class Game_Player < Game_Character
 
   def update_command_new
     dir = Input.dir4
-    unless pbMapInterpreterRunning? or $game_temp.message_window_showing or
-           $PokemonTemp.miniupdate or $game_temp.in_menu
+    unless pbMapInterpreterRunning? || $game_temp.message_window_showing ||
+           $PokemonTemp.miniupdate || $game_temp.in_menu
       # Move player in the direction the directional button is being pressed
-      if dir==@lastdir && Graphics.frame_count-@lastdirframe>Graphics.frame_rate/20
+      if @moved_last_frame ||
+         (dir > 0 && dir == @lastdir && Graphics.frame_count - @lastdirframe > Graphics.frame_rate / 20)
         case dir
         when 2; move_down
         when 4; move_left
         when 6; move_right
         when 8; move_up
         end
-      elsif dir!=@lastdir
+      elsif dir != @lastdir
         case dir
         when 2; turn_down
         when 4; turn_left
@@ -397,7 +366,7 @@ class Game_Player < Game_Character
       end
     end
     # Record last direction input
-    @lastdirframe = Graphics.frame_count if dir!=@lastdir
+    @lastdirframe = Graphics.frame_count if dir != @lastdir
     @lastdir      = dir
   end
 

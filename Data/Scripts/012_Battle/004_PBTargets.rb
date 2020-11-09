@@ -5,19 +5,19 @@ module PBTargets
   User           = 10
   NearAlly       = 100   # Aromatic Mist, Helping Hand, Hold Hands
   UserOrNearAlly = 200   # Acupressure
+  UserAndAllies  = 5     # Aromatherapy, Gear Up, Heal Bell, Life Dew, Magnetic Flux, Howl (in Gen 8+)
   NearFoe        = 400   # Me First
-  AllNearFoes    = 4
   RandomNearFoe  = 2     # Petal Dance, Outrage, Struggle, Thrash, Uproar
+  AllNearFoes    = 4
   Foe            = 9     # For throwing a Poké Ball
+  AllFoes        = 6     # Unused (for completeness)
   NearOther      = 0
   AllNearOthers  = 8
   Other          = 3     # Most Flying-type moves, pulse moves (hits non-near targets)
+  AllBattlers    = 7     # Flower Shield, Perish Song, Rototiller, Teatime
   UserSide       = 40
   FoeSide        = 80    # Entry hazards
   BothSides      = 20
-  UserAndAllies  = 5     # Aromatherapy, Gear Up, Heal Bell, Life Dew, Magnetic Flux, Howl (in Gen 8+)
-  AllFoes        = 6     # Unused (for completeness)
-  AllBattlers    = 7     # Flower Shield, Perish Song, Rototiller, Teatime
 
   def self.noTargets?(target)
     return target==None ||

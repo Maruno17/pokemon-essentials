@@ -422,7 +422,7 @@ class PokeBattle_Move_095 < PokeBattle_Move
 
   def pbModifyDamage(damageMult,user,target)
     damageMult *= 2 if target.inTwoTurnAttack?("0CA")   # Dig
-    damageMult = (damageMult/2.0).round if @battle.field.terrain==PBBattleTerrains::Grassy
+    damageMult /= 2 if @battle.field.terrain==PBBattleTerrains::Grassy
     return damageMult
   end
 end
@@ -752,7 +752,7 @@ class PokeBattle_Move_09F < PokeBattle_Move
     elsif isConst?(@id,PBMoves,:MULTIATTACK)
       @itemTypes = {
          :FIGHTINGMEMORY => :FIGHTING,
-         :SLYINGMEMORY   => :FLYING,
+         :FLYINGMEMORY   => :FLYING,
          :POISONMEMORY   => :POISON,
          :GROUNDMEMORY   => :GROUND,
          :ROCKMEMORY     => :ROCK,
@@ -777,7 +777,7 @@ class PokeBattle_Move_09F < PokeBattle_Move
     if user.itemActive?
       @itemTypes.each do |item, itemType|
         next if !isConst?(user.item,PBItems,item)
-        t = hasConst?(PBTypes,itemType)
+        t = getConst(PBTypes,itemType)
         ret = t || ret
         break
       end
@@ -1132,7 +1132,7 @@ class PokeBattle_Move_0AE < PokeBattle_Move
     return false
   end
 
-  def pbEffectGeneral(user)
+  def pbEffectAgainstTarget(user,target)
     user.pbUseMoveSimple(target.lastRegularMoveUsed,target.index)
   end
 
@@ -2070,9 +2070,7 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
 
   def pbBaseDamageMultiplier(damageMult,user,target)
     w = @battle.pbWeather
-    if w>0 && w!=PBWeather::Sun && w!=PBWeather::HarshSun
-      damageMult = (damageMult/2.0).round
-    end
+    damageMult /= 2 if w>0 && w!=PBWeather::Sun && w!=PBWeather::HarshSun
     return damageMult
   end
 end
@@ -2405,18 +2403,19 @@ end
 #===============================================================================
 class PokeBattle_Move_0D3 < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
-    shift = (4-user.effects[PBEffects::Rollout])   # 0-4, where 0 is most powerful
+    shift = (5 - user.effects[PBEffects::Rollout])   # 0-4, where 0 is most powerful
+    shift = 0 if user.effects[PBEffects::Rollout] == 0   # For first turn
     shift += 1 if user.effects[PBEffects::DefenseCurl]
-    baseDmg = baseDmg << shift
+    baseDmg *= 2**shift
     return baseDmg
   end
 
   def pbEffectAfterAllHits(user,target)
-    if !target.damageState.unaffected && user.effects[PBEffects::Rollout]==0
+    if !target.damageState.unaffected && user.effects[PBEffects::Rollout] == 0
       user.effects[PBEffects::Rollout] = 5
       user.currentMove = @id
     end
-    user.effects[PBEffects::Rollout] -= 1 if user.effects[PBEffects::Rollout]>0
+    user.effects[PBEffects::Rollout] -= 1 if user.effects[PBEffects::Rollout] > 0
   end
 end
 
@@ -3084,7 +3083,7 @@ class PokeBattle_Move_0EC < PokeBattle_Move
       switchedBattlers.push(b.index)
       roarSwitched.push(b.index)
     end
-    if roarSwitched>0
+    if roarSwitched.length>0
       @battle.moldBreaker = false if roarSwitched.include?(user.index)
       @battle.pbPriority(true).each do |b|
         b.pbEffectsOnSwitchIn(true) if roarSwitched.include?(b.index)

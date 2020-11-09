@@ -54,6 +54,7 @@ module Events
   @@OnWildBattleOverride        = Event.new
   @@OnWildBattleEnd             = Event.new
   @@OnTrainerPartyLoad          = Event.new
+  @@OnChangeDirection           = Event.new
 
   # Fires whenever a map is created. Event handler receives two parameters: the
   # map (RPG::Map) and the tileset (RPG::Tileset)
@@ -159,6 +160,10 @@ module Events
   # e[2] - Party
   def self.onTrainerPartyLoad;     @@OnTrainerPartyLoad;     end
   def self.onTrainerPartyLoad=(v); @@OnTrainerPartyLoad = v; end
+
+  # Fires whenever the player changes direction.
+  def self.onChangeDirection;     @@OnChangeDirection;     end
+  def self.onChangeDirection=(v); @@OnChangeDirection = v; end
 end
 
 
@@ -254,7 +259,7 @@ Events.onMapUpdate += proc { |_sender,_e|
 # Checks per step
 #===============================================================================
 # Party Pokémon gain happiness from walking
-Events.onStepTaken += proc{
+Events.onStepTaken += proc {
   $PokemonGlobal.happinessSteps = 0 if !$PokemonGlobal.happinessSteps
   $PokemonGlobal.happinessSteps += 1
   if $PokemonGlobal.happinessSteps>=128
@@ -363,26 +368,34 @@ def pbOnStepTaken(eventTriggered)
   Events.onStepTakenTransferPossible.trigger(nil,handled)
   return if handled[0]
   pbBattleOnStepTaken(repel) if !eventTriggered && !$game_temp.in_menu
+  $PokemonTemp.encounterTriggered = false   # This info isn't needed
 end
 
-def pbBattleOnStepTaken(repel=false)
-  return if $Trainer.ablePokemonCount==0
+# Start wild encounters while turning on the spot
+Events.onChangeDirection += proc {
+  repel = ($PokemonGlobal.repel > 0)
+  pbBattleOnStepTaken(repel) if !$game_temp.in_menu
+}
+
+def pbBattleOnStepTaken(repel = false)
+  return if $Trainer.ablePokemonCount == 0
   encounterType = $PokemonEncounters.pbEncounterType
-  return if encounterType<0
+  return if encounterType < 0
   return if !$PokemonEncounters.isEncounterPossibleHere?
   $PokemonTemp.encounterType = encounterType
   encounter = $PokemonEncounters.pbGenerateEncounter(encounterType)
   encounter = EncounterModifier.trigger(encounter)
-  if $PokemonEncounters.pbCanEncounter?(encounter,repel)
+  if $PokemonEncounters.pbCanEncounter?(encounter, repel)
     if !$PokemonTemp.forceSingleBattle && !pbInSafari? && ($PokemonGlobal.partner ||
-       ($Trainer.ablePokemonCount>1 && PBTerrain.isDoubleWildBattle?(pbGetTerrainTag) && rand(100)<30))
+       ($Trainer.ablePokemonCount > 1 && PBTerrain.isDoubleWildBattle?(pbGetTerrainTag) && rand(100) < 30))
       encounter2 = $PokemonEncounters.pbEncounteredPokemon(encounterType)
       encounter2 = EncounterModifier.trigger(encounter2)
-      pbDoubleWildBattle(encounter[0],encounter[1],encounter2[0],encounter2[1])
+      pbDoubleWildBattle(encounter[0], encounter[1], encounter2[0], encounter2[1])
     else
-      pbWildBattle(encounter[0],encounter[1])
+      pbWildBattle(encounter[0], encounter[1])
     end
     $PokemonTemp.encounterType = -1
+    $PokemonTemp.encounterTriggered = true
   end
   $PokemonTemp.forceSingleBattle = false
   EncounterModifier.triggerEncounterEnd
@@ -486,6 +499,421 @@ Events.onMapSceneChange += proc { |_sender,e|
     pbDismountBike
   end
 }
+
+
+
+#===============================================================================
+# Event locations, terrain tags
+#===============================================================================
+def pbEventFacesPlayer?(event,player,distance)
+  return false if distance<=0
+  # Event can't reach player if no coordinates coincide
+  return false if event.x!=player.x && event.y!=player.y
+  deltaX = (event.direction==6) ? 1 : (event.direction==4) ? -1 : 0
+  deltaY = (event.direction==2) ? 1 : (event.direction==8) ? -1 : 0
+  # Check for existence of player
+  curx = event.x
+  cury = event.y
+  found = false
+  distance.times do
+    curx += deltaX
+    cury += deltaY
+    if player.x==curx && player.y==cury
+      found = true
+      break
+    end
+  end
+  return found
+end
+
+def pbEventCanReachPlayer?(event,player,distance)
+  return false if distance<=0
+  # Event can't reach player if no coordinates coincide
+  return false if event.x!=player.x && event.y!=player.y
+  deltaX = (event.direction==6) ? 1 : (event.direction==4) ? -1 : 0
+  deltaY = (event.direction==2) ? 1 : (event.direction==8) ? -1 : 0
+  # Check for existence of player
+  curx = event.x
+  cury = event.y
+  found = false
+  realdist = 0
+  distance.times do
+    curx += deltaX
+    cury += deltaY
+    if player.x==curx && player.y==cury
+      found = true
+      break
+    end
+    realdist += 1
+  end
+  return false if !found
+  # Check passibility
+  curx = event.x
+  cury = event.y
+  realdist.times do
+    return false if !event.passable?(curx,cury,event.direction)
+    curx += deltaX
+    cury += deltaY
+  end
+  return true
+end
+
+def pbFacingTileRegular(direction=nil,event=nil)
+  event = $game_player if !event
+  return [0,0,0] if !event
+  x = event.x
+  y = event.y
+  direction = event.direction if !direction
+  case direction
+  when 1; y += 1; x -= 1
+  when 2; y += 1
+  when 3; y += 1; x += 1
+  when 4; x -= 1
+  when 6; x += 1
+  when 7; y -= 1; x -= 1
+  when 8; y -= 1
+  when 9; y -= 1; x += 1
+  end
+  return [$game_map.map_id,x,y]
+end
+
+def pbFacingTile(direction=nil,event=nil)
+  return $MapFactory.getFacingTile(direction,event) if $MapFactory
+  return pbFacingTileRegular(direction,event)
+end
+
+def pbFacingEachOther(event1,event2)
+  return false if !event1 || !event2
+  if $MapFactory
+    tile1 = $MapFactory.getFacingTile(nil,event1)
+    tile2 = $MapFactory.getFacingTile(nil,event2)
+    return false if !tile1 || !tile2
+    return tile1[0]==event2.map.map_id &&
+           tile1[1]==event2.x && tile1[2]==event2.y &&
+           tile2[0]==event1.map.map_id &&
+           tile2[1]==event1.x && tile2[2]==event1.y
+  else
+    tile1 = pbFacingTile(nil,event1)
+    tile2 = pbFacingTile(nil,event2)
+    return false if !tile1 || !tile2
+    return tile1[1]==event2.x && tile1[2]==event2.y &&
+           tile2[1]==event1.x && tile2[2]==event1.y
+  end
+end
+
+def pbGetTerrainTag(event=nil,countBridge=false)
+  event = $game_player if !event
+  return 0 if !event
+  if $MapFactory
+    return $MapFactory.getTerrainTag(event.map.map_id,event.x,event.y,countBridge)
+  end
+  $game_map.terrain_tag(event.x,event.y,countBridge)
+end
+
+def pbFacingTerrainTag(event=nil,dir=nil)
+  if $MapFactory
+    return $MapFactory.getFacingTerrainTag(dir,event)
+  end
+  event = $game_player if !event
+  return 0 if !event
+  facing = pbFacingTile(dir,event)
+  return $game_map.terrain_tag(facing[1],facing[2])
+end
+
+
+
+#===============================================================================
+# Events
+#===============================================================================
+class Game_Event
+  def cooledDown?(seconds)
+    return true if expired?(seconds) && tsOff?("A")
+    self.need_refresh = true
+    return false
+  end
+
+  def cooledDownDays?(days)
+    return true if expiredDays?(days) && tsOff?("A")
+    self.need_refresh = true
+    return false
+  end
+end
+
+
+
+module InterpreterFieldMixin
+  # Used in boulder events. Allows an event to be pushed. To be used in
+  # a script event command.
+  def pbPushThisEvent
+    event = get_character(0)
+    oldx  = event.x
+    oldy  = event.y
+    # Apply strict version of passable, which makes impassable
+    # tiles that are passable only from certain directions
+    return if !event.passableStrict?(event.x,event.y,$game_player.direction)
+    case $game_player.direction
+    when 2; event.move_down  # down
+    when 4; event.move_left  # left
+    when 6; event.move_right # right
+    when 8; event.move_up    # up
+    end
+    $PokemonMap.addMovedEvent(@event_id) if $PokemonMap
+    if oldx!=event.x || oldy!=event.y
+      $game_player.lock
+      loop do
+        Graphics.update
+        Input.update
+        pbUpdateSceneMap
+        break if !event.moving?
+      end
+      $game_player.unlock
+    end
+  end
+
+  def pbPushThisBoulder
+    pbPushThisEvent if $PokemonMap.strengthUsed
+    return true
+  end
+
+  def pbSmashThisEvent
+    event = get_character(0)
+    pbSmashEvent(event) if event
+    @index += 1
+    return true
+  end
+
+  def pbTrainerIntro(symbol)
+    return if $DEBUG && !pbTrainerTypeCheck(symbol)
+    trtype = PBTrainers.const_get(symbol)
+    pbGlobalLock
+    pbPlayTrainerIntroME(trtype)
+    return true
+  end
+
+  def pbTrainerEnd
+    pbGlobalUnlock
+    e = get_character(0)
+    e.erase_route if e
+  end
+
+  def pbParams
+    (@parameters) ? @parameters : @params
+  end
+
+  def pbGetPokemon(id)
+    return $Trainer.party[pbGet(id)]
+  end
+
+  def pbSetEventTime(*arg)
+    $PokemonGlobal.eventvars = {} if !$PokemonGlobal.eventvars
+    time = pbGetTimeNow
+    time = time.to_i
+    pbSetSelfSwitch(@event_id,"A",true)
+    $PokemonGlobal.eventvars[[@map_id,@event_id]]=time
+    for otherevt in arg
+      pbSetSelfSwitch(otherevt,"A",true)
+      $PokemonGlobal.eventvars[[@map_id,otherevt]]=time
+    end
+  end
+
+  def getVariable(*arg)
+    if arg.length==0
+      return nil if !$PokemonGlobal.eventvars
+      return $PokemonGlobal.eventvars[[@map_id,@event_id]]
+    else
+      return $game_variables[arg[0]]
+    end
+  end
+
+  def setVariable(*arg)
+    if arg.length==1
+      $PokemonGlobal.eventvars = {} if !$PokemonGlobal.eventvars
+      $PokemonGlobal.eventvars[[@map_id,@event_id]]=arg[0]
+    else
+      $game_variables[arg[0]] = arg[1]
+      $game_map.need_refresh = true
+    end
+  end
+
+  def tsOff?(c)
+    get_character(0).tsOff?(c)
+  end
+
+  def tsOn?(c)
+    get_character(0).tsOn?(c)
+  end
+
+  alias isTempSwitchOn? tsOn?
+  alias isTempSwitchOff? tsOff?
+
+  def setTempSwitchOn(c)
+    get_character(0).setTempSwitchOn(c)
+  end
+
+  def setTempSwitchOff(c)
+    get_character(0).setTempSwitchOff(c)
+  end
+
+  # Must use this approach to share the methods because the methods already
+  # defined in a class override those defined in an included module
+  CustomEventCommands=<<_END_
+
+  def command_352
+    scene = PokemonSave_Scene.new
+    screen = PokemonSaveScreen.new(scene)
+    screen.pbSaveScreen
+    return true
+  end
+
+  def command_125
+    value = operate_value(pbParams[0], pbParams[1], pbParams[2])
+    $Trainer.money += value
+    return true
+  end
+
+  def command_132
+    ($PokemonGlobal.nextBattleBGM = pbParams[0]) ? pbParams[0].clone : nil
+    return true
+  end
+
+  def command_133
+    ($PokemonGlobal.nextBattleME = pbParams[0]) ? pbParams[0].clone : nil
+    return true
+  end
+
+  def command_353
+    pbBGMFade(1.0)
+    pbBGSFade(1.0)
+    pbFadeOutIn { pbStartOver(true) }
+  end
+
+  def command_314
+    pbHealAll if pbParams[0]==0
+    return true
+  end
+
+_END_
+end
+
+
+
+class Interpreter
+  include InterpreterFieldMixin
+  eval(InterpreterFieldMixin::CustomEventCommands)
+end
+
+
+
+class Game_Interpreter
+  include InterpreterFieldMixin
+  eval(InterpreterFieldMixin::CustomEventCommands)
+end
+
+
+
+#===============================================================================
+# Audio playing
+#===============================================================================
+def pbCueBGM(bgm,seconds,volume=nil,pitch=nil)
+  return if !bgm
+  bgm        = pbResolveAudioFile(bgm,volume,pitch)
+  playingBGM = $game_system.playing_bgm
+  if !playingBGM || playingBGM.name!=bgm.name || playingBGM.pitch!=bgm.pitch
+    pbBGMFade(seconds)
+    if !$PokemonTemp.cueFrames
+      $PokemonTemp.cueFrames = (seconds*Graphics.frame_rate)*3/5
+    end
+    $PokemonTemp.cueBGM=bgm
+  elsif playingBGM
+    pbBGMPlay(bgm)
+  end
+end
+
+def pbAutoplayOnTransition
+  surfbgm = pbGetMetadata(0,MetadataSurfBGM)
+  if $PokemonGlobal.surfing && surfbgm
+    pbBGMPlay(surfbgm)
+  else
+    $game_map.autoplayAsCue
+  end
+end
+
+def pbAutoplayOnSave
+  surfbgm = pbGetMetadata(0,MetadataSurfBGM)
+  if $PokemonGlobal.surfing && surfbgm
+    pbBGMPlay(surfbgm)
+  else
+    $game_map.autoplay
+  end
+end
+
+
+
+#===============================================================================
+# Voice recorder
+#===============================================================================
+def pbRecord(text,maxtime=30.0)
+  text = "" if !text
+  textwindow = Window_UnformattedTextPokemon.newWithSize(text,0,0,Graphics.width,Graphics.height-96)
+  textwindow.z=99999
+  if text==""
+    textwindow.visible = false
+  end
+  wave = nil
+  msgwindow = pbCreateMessageWindow
+  oldvolume = Audio_bgm_get_volume()
+  Audio_bgm_set_volume(0)
+  delay = 2
+  delay.times do |i|
+    pbMessageDisplay(msgwindow,_INTL("Recording in {1} second(s)...\nPress ESC to cancel.",delay-i),false)
+    Graphics.frame_rate.times do
+      Graphics.update
+      Input.update
+      textwindow.update
+      msgwindow.update
+      if Input.trigger?(Input::B)
+        Audio_bgm_set_volume(oldvolume)
+        pbDisposeMessageWindow(msgwindow)
+        textwindow.dispose
+        return nil
+      end
+    end
+  end
+  pbMessageDisplay(msgwindow,_INTL("NOW RECORDING\nPress ESC to stop recording."),false)
+  if beginRecordUI
+    frames = (maxtime*Graphics.frame_rate).to_i
+    frames.times do
+      Graphics.update
+      Input.update
+      textwindow.update
+      msgwindow.update
+      if Input.trigger?(Input::B)
+        break
+      end
+    end
+    tmpFile = ENV["TEMP"]+"\\record.wav"
+    endRecord(tmpFile)
+    wave = getWaveDataUI(tmpFile,true)
+    if wave
+      pbMessageDisplay(msgwindow,_INTL("PLAYING BACK..."),false)
+      textwindow.update
+      msgwindow.update
+      Graphics.update
+      Input.update
+      wave.play
+      (Graphics.frame_rate*wave.time).to_i.times do
+        Graphics.update
+        Input.update
+        textwindow.update
+        msgwindow.update
+      end
+    end
+  end
+  Audio_bgm_set_volume(oldvolume)
+  pbDisposeMessageWindow(msgwindow)
+  textwindow.dispose
+  return wave
+end
 
 
 
@@ -891,414 +1319,6 @@ end
 
 def pbDeregisterPartner
   $PokemonGlobal.partner = nil
-end
-
-
-
-#===============================================================================
-# Event locations, terrain tags
-#===============================================================================
-def pbEventFacesPlayer?(event,player,distance)
-  return false if distance<=0
-  # Event can't reach player if no coordinates coincide
-  return false if event.x!=player.x && event.y!=player.y
-  deltaX = (event.direction==6) ? 1 : (event.direction==4) ? -1 : 0
-  deltaY = (event.direction==2) ? 1 : (event.direction==8) ? -1 : 0
-  # Check for existence of player
-  curx = event.x
-  cury = event.y
-  found = false
-  distance.times do
-    curx += deltaX
-    cury += deltaY
-    if player.x==curx && player.y==cury
-      found = true
-      break
-    end
-  end
-  return found
-end
-
-def pbEventCanReachPlayer?(event,player,distance)
-  return false if distance<=0
-  # Event can't reach player if no coordinates coincide
-  return false if event.x!=player.x && event.y!=player.y
-  deltaX = (event.direction==6) ? 1 : (event.direction==4) ? -1 : 0
-  deltaY = (event.direction==2) ? 1 : (event.direction==8) ? -1 : 0
-  # Check for existence of player
-  curx = event.x
-  cury = event.y
-  found = false
-  realdist = 0
-  distance.times do
-    curx += deltaX
-    cury += deltaY
-    if player.x==curx && player.y==cury
-      found = true
-      break
-    end
-    realdist += 1
-  end
-  return false if !found
-  # Check passibility
-  curx = event.x
-  cury = event.y
-  realdist.times do
-    return false if !event.passable?(curx,cury,event.direction)
-    curx += deltaX
-    cury += deltaY
-  end
-  return true
-end
-
-def pbFacingTileRegular(direction=nil,event=nil)
-  event = $game_player if !event
-  return [0,0,0] if !event
-  x = event.x
-  y = event.y
-  direction = event.direction if !direction
-  case direction
-  when 1; y += 1; x -= 1
-  when 2; y += 1
-  when 3; y += 1; x += 1
-  when 4; x -= 1
-  when 6; x += 1
-  when 7; y -= 1; x -= 1
-  when 8; y -= 1
-  when 9; y -= 1; x += 1
-  end
-  return [$game_map.map_id,x,y]
-end
-
-def pbFacingTile(direction=nil,event=nil)
-  return $MapFactory.getFacingTile(direction,event) if $MapFactory
-  return pbFacingTileRegular(direction,event)
-end
-
-def pbFacingEachOther(event1,event2)
-  return false if !event1 || !event2
-  if $MapFactory
-    tile1 = $MapFactory.getFacingTile(nil,event1)
-    tile2 = $MapFactory.getFacingTile(nil,event2)
-    return false if !tile1 || !tile2
-    return tile1[0]==event2.map.map_id &&
-           tile1[1]==event2.x && tile1[2]==event2.y &&
-           tile2[0]==event1.map.map_id &&
-           tile2[1]==event1.x && tile2[2]==event1.y
-  else
-    tile1 = pbFacingTile(nil,event1)
-    tile2 = pbFacingTile(nil,event2)
-    return false if !tile1 || !tile2
-    return tile1[1]==event2.x && tile1[2]==event2.y &&
-           tile2[1]==event1.x && tile2[2]==event1.y
-  end
-end
-
-def pbGetTerrainTag(event=nil,countBridge=false)
-  event = $game_player if !event
-  return 0 if !event
-  if $MapFactory
-    return $MapFactory.getTerrainTag(event.map.map_id,event.x,event.y,countBridge)
-  end
-  $game_map.terrain_tag(event.x,event.y,countBridge)
-end
-
-def pbFacingTerrainTag(event=nil,dir=nil)
-  if $MapFactory
-    return $MapFactory.getFacingTerrainTag(dir,event)
-  end
-  event = $game_player if !event
-  return 0 if !event
-  facing = pbFacingTile(dir,event)
-  return $game_map.terrain_tag(facing[1],facing[2])
-end
-
-
-
-#===============================================================================
-# Events
-#===============================================================================
-class Game_Event
-  def cooledDown?(seconds)
-    return true if expired?(seconds) && tsOff?("A")
-    self.need_refresh = true
-    return false
-  end
-
-  def cooledDownDays?(days)
-    return true if expiredDays?(days) && tsOff?("A")
-    self.need_refresh = true
-    return false
-  end
-end
-
-
-
-module InterpreterFieldMixin
-  # Used in boulder events. Allows an event to be pushed. To be used in
-  # a script event command.
-  def pbPushThisEvent
-    event = get_character(0)
-    oldx  = event.x
-    oldy  = event.y
-    # Apply strict version of passable, which makes impassable
-    # tiles that are passable only from certain directions
-    return if !event.passableStrict?(event.x,event.y,$game_player.direction)
-    case $game_player.direction
-    when 2; event.move_down  # down
-    when 4; event.move_left  # left
-    when 6; event.move_right # right
-    when 8; event.move_up    # up
-    end
-    $PokemonMap.addMovedEvent(@event_id) if $PokemonMap
-    if oldx!=event.x || oldy!=event.y
-      $game_player.lock
-      loop do
-        Graphics.update
-        Input.update
-        pbUpdateSceneMap
-        break if !event.moving?
-      end
-      $game_player.unlock
-    end
-  end
-
-  def pbPushThisBoulder
-    pbPushThisEvent if $PokemonMap.strengthUsed
-    return true
-  end
-
-  def pbSmashThisEvent
-    event = get_character(0)
-    pbSmashEvent(event) if event
-    @index += 1
-    return true
-  end
-
-  def pbTrainerIntro(symbol)
-    return if $DEBUG && !pbTrainerTypeCheck(symbol)
-    trtype = PBTrainers.const_get(symbol)
-    pbGlobalLock
-    pbPlayTrainerIntroME(trtype)
-    return true
-  end
-
-  def pbTrainerEnd
-    pbGlobalUnlock
-    e = get_character(0)
-    e.erase_route if e
-  end
-
-  def pbParams
-    (@parameters) ? @parameters : @params
-  end
-
-  def pbGetPokemon(id)
-    return $Trainer.party[pbGet(id)]
-  end
-
-  def pbSetEventTime(*arg)
-    $PokemonGlobal.eventvars = {} if !$PokemonGlobal.eventvars
-    time = pbGetTimeNow
-    time = time.to_i
-    pbSetSelfSwitch(@event_id,"A",true)
-    $PokemonGlobal.eventvars[[@map_id,@event_id]]=time
-    for otherevt in arg
-      pbSetSelfSwitch(otherevt,"A",true)
-      $PokemonGlobal.eventvars[[@map_id,otherevt]]=time
-    end
-  end
-
-  def getVariable(*arg)
-    if arg.length==0
-      return nil if !$PokemonGlobal.eventvars
-      return $PokemonGlobal.eventvars[[@map_id,@event_id]]
-    else
-      return $game_variables[arg[0]]
-    end
-  end
-
-  def setVariable(*arg)
-    if arg.length==1
-      $PokemonGlobal.eventvars = {} if !$PokemonGlobal.eventvars
-      $PokemonGlobal.eventvars[[@map_id,@event_id]]=arg[0]
-    else
-      $game_variables[arg[0]] = arg[1]
-      $game_map.need_refresh = true
-    end
-  end
-
-  def tsOff?(c)
-    get_character(0).tsOff?(c)
-  end
-
-  def tsOn?(c)
-    get_character(0).tsOn?(c)
-  end
-
-  alias isTempSwitchOn? tsOn?
-  alias isTempSwitchOff? tsOff?
-
-  def setTempSwitchOn(c)
-    get_character(0).setTempSwitchOn(c)
-  end
-
-  def setTempSwitchOff(c)
-    get_character(0).setTempSwitchOff(c)
-  end
-
-  # Must use this approach to share the methods because the methods already
-  # defined in a class override those defined in an included module
-  CustomEventCommands=<<_END_
-
-  def command_352
-    scene = PokemonSave_Scene.new
-    screen = PokemonSaveScreen.new(scene)
-    screen.pbSaveScreen
-    return true
-  end
-
-  def command_125
-    value = operate_value(pbParams[0], pbParams[1], pbParams[2])
-    $Trainer.money += value
-    return true
-  end
-
-  def command_132
-    ($PokemonGlobal.nextBattleBGM = pbParams[0]) ? pbParams[0].clone : nil
-    return true
-  end
-
-  def command_133
-    ($PokemonGlobal.nextBattleME = pbParams[0]) ? pbParams[0].clone : nil
-    return true
-  end
-
-  def command_353
-    pbBGMFade(1.0)
-    pbBGSFade(1.0)
-    pbFadeOutIn { pbStartOver(true) }
-  end
-
-  def command_314
-    pbHealAll if pbParams[0]==0
-    return true
-  end
-
-_END_
-end
-
-
-
-class Interpreter
-  include InterpreterFieldMixin
-  eval(InterpreterFieldMixin::CustomEventCommands)
-end
-
-
-
-#===============================================================================
-# Audio playing
-#===============================================================================
-def pbCueBGM(bgm,seconds,volume=nil,pitch=nil)
-  return if !bgm
-  bgm        = pbResolveAudioFile(bgm,volume,pitch)
-  playingBGM = $game_system.playing_bgm
-  if !playingBGM || playingBGM.name!=bgm.name || playingBGM.pitch!=bgm.pitch
-    pbBGMFade(seconds)
-    if !$PokemonTemp.cueFrames
-      $PokemonTemp.cueFrames = (seconds*Graphics.frame_rate)*3/5
-    end
-    $PokemonTemp.cueBGM=bgm
-  elsif playingBGM
-    pbBGMPlay(bgm)
-  end
-end
-
-def pbAutoplayOnTransition
-  surfbgm = pbGetMetadata(0,MetadataSurfBGM)
-  if $PokemonGlobal.surfing && surfbgm
-    pbBGMPlay(surfbgm)
-  else
-    $game_map.autoplayAsCue
-  end
-end
-
-def pbAutoplayOnSave
-  surfbgm = pbGetMetadata(0,MetadataSurfBGM)
-  if $PokemonGlobal.surfing && surfbgm
-    pbBGMPlay(surfbgm)
-  else
-    $game_map.autoplay
-  end
-end
-
-
-
-#===============================================================================
-# Voice recorder
-#===============================================================================
-def pbRecord(text,maxtime=30.0)
-  text = "" if !text
-  textwindow = Window_UnformattedTextPokemon.newWithSize(text,0,0,Graphics.width,Graphics.height-96)
-  textwindow.z=99999
-  if text==""
-    textwindow.visible = false
-  end
-  wave = nil
-  msgwindow = pbCreateMessageWindow
-  oldvolume = Audio_bgm_get_volume()
-  Audio_bgm_set_volume(0)
-  delay = 2
-  delay.times do |i|
-    pbMessageDisplay(msgwindow,_INTL("Recording in {1} second(s)...\nPress ESC to cancel.",delay-i),false)
-    Graphics.frame_rate.times do
-      Graphics.update
-      Input.update
-      textwindow.update
-      msgwindow.update
-      if Input.trigger?(Input::B)
-        Audio_bgm_set_volume(oldvolume)
-        pbDisposeMessageWindow(msgwindow)
-        textwindow.dispose
-        return nil
-      end
-    end
-  end
-  pbMessageDisplay(msgwindow,_INTL("NOW RECORDING\nPress ESC to stop recording."),false)
-  if beginRecordUI
-    frames = (maxtime*Graphics.frame_rate).to_i
-    frames.times do
-      Graphics.update
-      Input.update
-      textwindow.update
-      msgwindow.update
-      if Input.trigger?(Input::B)
-        break
-      end
-    end
-    tmpFile = ENV["TEMP"]+"\\record.wav"
-    endRecord(tmpFile)
-    wave = getWaveDataUI(tmpFile,true)
-    if wave
-      pbMessageDisplay(msgwindow,_INTL("PLAYING BACK..."),false)
-      textwindow.update
-      msgwindow.update
-      Graphics.update
-      Input.update
-      wave.play
-      (Graphics.frame_rate*wave.time).to_i.times do
-        Graphics.update
-        Input.update
-        textwindow.update
-        msgwindow.update
-      end
-    end
-  end
-  Audio_bgm_set_volume(oldvolume)
-  pbDisposeMessageWindow(msgwindow)
-  textwindow.dispose
-  return wave
 end
 
 
