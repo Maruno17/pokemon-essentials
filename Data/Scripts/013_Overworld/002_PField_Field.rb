@@ -368,32 +368,34 @@ def pbOnStepTaken(eventTriggered)
   Events.onStepTakenTransferPossible.trigger(nil,handled)
   return if handled[0]
   pbBattleOnStepTaken(repel) if !eventTriggered && !$game_temp.in_menu
+  $PokemonTemp.encounterTriggered = false   # This info isn't needed
 end
 
 # Start wild encounters while turning on the spot
 Events.onChangeDirection += proc {
-  repel = ($PokemonGlobal.repel>0)
+  repel = ($PokemonGlobal.repel > 0)
   pbBattleOnStepTaken(repel) if !$game_temp.in_menu
 }
 
-def pbBattleOnStepTaken(repel=false)
-  return if $Trainer.ablePokemonCount==0
+def pbBattleOnStepTaken(repel = false)
+  return if $Trainer.ablePokemonCount == 0
   encounterType = $PokemonEncounters.pbEncounterType
-  return if encounterType<0
+  return if encounterType < 0
   return if !$PokemonEncounters.isEncounterPossibleHere?
   $PokemonTemp.encounterType = encounterType
   encounter = $PokemonEncounters.pbGenerateEncounter(encounterType)
   encounter = EncounterModifier.trigger(encounter)
-  if $PokemonEncounters.pbCanEncounter?(encounter,repel)
+  if $PokemonEncounters.pbCanEncounter?(encounter, repel)
     if !$PokemonTemp.forceSingleBattle && !pbInSafari? && ($PokemonGlobal.partner ||
-       ($Trainer.ablePokemonCount>1 && PBTerrain.isDoubleWildBattle?(pbGetTerrainTag) && rand(100)<30))
+       ($Trainer.ablePokemonCount > 1 && PBTerrain.isDoubleWildBattle?(pbGetTerrainTag) && rand(100) < 30))
       encounter2 = $PokemonEncounters.pbEncounteredPokemon(encounterType)
       encounter2 = EncounterModifier.trigger(encounter2)
-      pbDoubleWildBattle(encounter[0],encounter[1],encounter2[0],encounter2[1])
+      pbDoubleWildBattle(encounter[0], encounter[1], encounter2[0], encounter2[1])
     else
-      pbWildBattle(encounter[0],encounter[1])
+      pbWildBattle(encounter[0], encounter[1])
     end
     $PokemonTemp.encounterType = -1
+    $PokemonTemp.encounterTriggered = true
   end
   $PokemonTemp.forceSingleBattle = false
   EncounterModifier.triggerEncounterEnd

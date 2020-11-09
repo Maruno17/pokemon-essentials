@@ -326,7 +326,7 @@ class PokemonDataBox < SpriteWrapper
       if @expFlash==0
         pbSEStop
         @expFlash = Graphics.frame_rate/5
-        pbSEPlay("Exp full")
+        pbSEPlay("Pkmn exp full")
         self.flash(Color.new(64,200,248,192),@expFlash)
         for i in @sprites
           i[1].flash(Color.new(64,200,248,192),@expFlash) if !i[1].disposed?

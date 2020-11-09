@@ -83,7 +83,7 @@ class PokeBattle_Battle
     end
   end
 
-  # Uses an item on a Pokémon in the player's party.
+  # Uses an item on a Pokémon in the trainer's party.
   def pbUseItemOnPokemon(item,idxParty,userBattler)
     trainerName = pbGetOwnerName(userBattler.index)
     pbUseItemMessage(item,trainerName)
@@ -100,14 +100,14 @@ class PokeBattle_Battle
     pbReturnUnusedItemToBag(item,userBattler.index)
   end
 
-  # Uses an item on a Pokémon in battle that belongs to the player.
-  def pbUseItemOnBattler(item,idxParty,userBattler)
+  # Uses an item on a Pokémon in battle that belongs to the trainer.
+  def pbUseItemOnBattler(item,idxBattler,userBattler)
     trainerName = pbGetOwnerName(userBattler.index)
     pbUseItemMessage(item,trainerName)
-    pkmn = pbParty(userBattler.index)[idxParty]
-    battler = pbFindBattler(idxParty,userBattler.index)
+    idxBattler = userBattler.index if idxBattler<0
+    battler = @battlers[idxBattler]
     ch = @choices[userBattler.index]
-    if ItemHandlers.triggerCanUseInBattle(item,pkmn,battler,ch[3],true,self,@scene,false)
+    if ItemHandlers.triggerCanUseInBattle(item,battler.pokemon,battler,ch[3],true,self,@scene,false)
       ItemHandlers.triggerBattleUseOnBattler(item,battler,@scene)
       ch[1] = nil   # Delete item from choice
       return
