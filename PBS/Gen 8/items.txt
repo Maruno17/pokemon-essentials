@@ -579,6 +579,7 @@
 569,PIDGEOTITE,Pidgeotite,Pidgeotites,1,0,"One of a variety of mysterious Mega Stones. Have Pidgeot hold it, and it will be able to Mega Evolve.",0,0,12,
 570,ALAKAZITE,Alakazite,Alakazites,1,0,"One of a variety of mysterious Mega Stones. Have Alakazam hold it, and it will be able to Mega Evolve.",0,0,12,
 571,SLOWBRONITE,Slowbronite,Slowbronites,1,0,"One of a variety of mysterious Mega Stones. Have Slowbro hold it, and it will be able to Mega Evolve.",0,0,12,
+
 572,GENGARITE,Gengarite,Gengarites,1,0,"One of a variety of mysterious Mega Stones. Have Gengar hold it, and it will be able to Mega Evolve.",0,0,12,
 573,KANGASKHANITE,Kangaskhanite,Kangaskhanites,1,0,"One of a variety of mysterious Mega Stones. Have Kangaskhan hold it, and it will be able to Mega Evolve.",0,0,12,
 574,PINSIRITE,Pinsirite,Pinsirites,1,0,"One of a variety of mysterious Mega Stones. Have Pinsir hold it, and it will be able to Mega Evolve.",0,0,12,
