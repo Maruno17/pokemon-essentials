@@ -64,7 +64,7 @@ class PokemonDuel
       @sprites["player"].x         += distance_per_frame
       @sprites["playerwindow"].x   += distance_per_frame
       @sprites["opponent"].x       -= distance_per_frame
-      @sprites["opponentwindow"].x -= distandistance_per_framecePerFrame
+      @sprites["opponentwindow"].x -= distance_per_frame
       Graphics.update
       Input.update
       pbUpdateSceneMap
