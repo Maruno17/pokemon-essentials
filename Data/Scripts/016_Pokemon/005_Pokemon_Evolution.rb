@@ -157,13 +157,13 @@ def pbGetBabySpecies(species,item1=-1,item2=-1)
     next if !evo[3]
     if item1>=0 && item2>=0
       incense = pbGetSpeciesData(evo[0],0,SpeciesIncense)
-      ret = evo[0] if item1==incense || item2==incense
+      ret = evo[0] if incense==0 || incense==item1 || incense==item2
     else
       ret = evo[0]   # Species of prevolution
     end
     break
   end
-  ret = pbGetBabySpecies(ret) if ret!=species
+  ret = pbGetBabySpecies(ret,item1,item2) if ret!=species
   return ret
 end
 
