@@ -140,6 +140,33 @@ module Compiler
   # Compile berry plants
   #=============================================================================
   def compile_berry_plants
+    GameData::BerryPlant::DATA.clear
+    pbCompilerEachCommentedLine("PBS/berryplants.txt") { |line, line_no|
+      if line[/^\s*(\w+)\s*=\s*(.*)$/]   # Of the format XXX = YYY
+        key   = $1
+        value = $2
+        item_symbol = parseItem(key).to_sym
+        item_number = GameData::Item.get(item_symbol).id_number
+        line = pbGetCsvRecord(value, line_no, [0, "vuuv"])
+        # Construct berry plant hash
+        berry_plant_hash = {
+          :id              => item_symbol,
+          :id_number       => item_number,
+          :hours_per_stage => line[0],
+          :drying_per_hour => line[1],
+          :minimum_yield   => line[2],
+          :maximum_yield   => line[3]
+        }
+        # Add berry plant's data to records
+        GameData::BerryPlant::DATA[item_number] = GameData::BerryPlant::DATA[item_symbol] = GameData::BerryPlant.new(berry_plant_hash)
+      end
+    }
+    # Save all data
+    GameData::BerryPlant.save
+    Graphics.update
+  end
+
+  def compile_berry_plants
     sections = {}
     if File.exists?("PBS/berryplants.txt")
       pbCompilerEachCommentedLine("PBS/berryplants.txt") { |line,_lineno|

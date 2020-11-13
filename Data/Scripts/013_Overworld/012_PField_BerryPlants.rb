@@ -1,33 +1,3 @@
-class PokemonTemp
-  attr_accessor :berryPlantData
-end
-
-
-
-def pbLoadBerryPlantData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.berryPlantData
-    if pbRgssExists?("Data/berry_plants.dat")
-      $PokemonTemp.berryPlantData = load_data("Data/berry_plants.dat")
-    else
-      $PokemonTemp.berryPlantData = {}
-    end
-  end
-  return $PokemonTemp.berryPlantData
-end
-
-def pbGetBerryPlantData(item)
-  data = pbLoadBerryPlantData
-  return data[item] if data[item]
-  return [3, 15, 2, 5]   # Hours/stage, drying/hour, min yield, max yield
-end
-
-alias __berryPlant__pbClearData pbClearData
-def pbClearData
-  $PokemonTemp.berryPlantData = nil if $PokemonTemp
-  __berryPlant__pbClearData
-end
-
 Events.onSpritesetCreate += proc { |_sender,e|
   spriteset = e[0]
   viewport  = e[1]
@@ -103,8 +73,6 @@ end
 
 
 class BerryPlantSprite
-  REPLANTS = 9
-
   def initialize(event,map,_viewport)
     @event=event
     @map=map
@@ -140,8 +108,8 @@ class BerryPlantSprite
 
   def updatePlantDetails(berryData)
     return berryData if berryData[0]==0
-    berryvalues=pbGetBerryPlantData(berryData[1])
-    timeperstage=berryvalues[0]*3600
+    berryvalues = GameData::BerryPlant.get(berryData[1])
+    timeperstage = berryvalues.hours_per_stage * 3600
     timenow=pbGetTimeNow
     if berryData.length>6
       # Gen 4 growth mechanisms
@@ -150,9 +118,9 @@ class BerryPlantSprite
       return berryData if timeDiff<=0
       berryData[3]=timenow.to_i   # last updated now
       # Mulch modifiers
-      dryingrate=berryvalues[1]
-      maxreplants=REPLANTS
-      ripestages=4
+      dryingrate = berryvalues.drying_per_hour
+      maxreplants = GameData::BerryPlant::NUMBER_OF_REPLANTS
+      ripestages = 4
       case berryData[7]
       when :GROWTHMULCH
         timeperstage = (timeperstage * 0.75).to_i
@@ -246,8 +214,8 @@ class BerryPlantSprite
             berryData[3]+=timeperstage*4        # add to time existed
             berryData[4]=0                      # reset total waterings count
             berryData[5]+=1                     # add to replanted count
-            if berryData[5]>REPLANTS   # Too many replants
-              berryData=[0,0,false,0,0,0]
+            if berryData[5] > GameData::BerryPlant::NUMBER_OF_REPLANTS   # Too many replants
+              berryData = [0,0,false,0,0,0]
               break
             end
           else
@@ -282,7 +250,7 @@ class BerryPlantSprite
       @event.character_name="berrytreeplanted"   # Common to all berries
       @event.turn_down
     else
-      filename=sprintf("berrytree%s",GameData::Item.get(berryData[1]).id.to_s) rescue nil
+      filename=sprintf("berrytree%s",GameData::Item.get(berryData[1]).id.to_s)
       if !pbResolveBitmap("Graphics/Characters/"+filename)
         filename=sprintf("berrytree%03d",GameData::Item.get(berryData[1]).id_number)
       end
@@ -427,7 +395,7 @@ def pbBerryPlant
         pbFadeOutIn {
           scene = PokemonBag_Scene.new
           screen = PokemonBagScreen.new(scene,$PokemonBag)
-          berry = screen.pbChooseItemScreen(Proc.new { |item|  GameData::Item.get(item).is_berry? })
+          berry = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_berry? })
         }
         if berry
           timenow=pbGetTimeNow
@@ -470,19 +438,20 @@ def pbBerryPlant
       end
     end
   when 5  # X berries
-    berryvalues=pbGetBerryPlantData(berryData[1])
+    berryvalues = GameData::BerryPlant.get(berryData[1])
     # Get berry yield (berrycount)
     berrycount=1
-    if berryData.length>6
+    if berryData.length > 6
       # Gen 4 berry yield calculation
-      berrycount=[berryvalues[3]-berryData[6],berryvalues[2]].max
+      berrycount = [berryvalues.maximum_yield - berryData[6], berryvalues.minimum_yield].max
     else
       # Gen 3 berry yield calculation
-      if berryData[4]>0
-        randomno=rand(1+berryvalues[3]-berryvalues[2])
-        berrycount=(((berryvalues[3]-berryvalues[2])*(berryData[4]-1)+randomno)/4).floor+berryvalues[2]
+      if berryData[4] > 0
+        berrycount = (berryvalues.maximum_yield - berryvalues.minimum_yield) * (berryData[4] - 1)
+        berrycount += rand(1 + berryvalues.maximum_yield - berryvalues.minimum_yield)
+        berrycount = (berrycount / 4) + berryvalues.minimum_yield
       else
-        berrycount=berryvalues[2]
+        berrycount = berryvalues.minimum_yield
       end
     end
     item = GameData::Item.get(berry)

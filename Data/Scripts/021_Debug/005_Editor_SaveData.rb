@@ -267,8 +267,6 @@ end
 # Save berry plant data to PBS file
 #===============================================================================
 def pbSaveBerryPlants
-  berryPlantData = load_data("Data/berry_plants.dat")
-  return if !berryPlantData || berryPlantData.length==0
   File.open("PBS/berryplants.txt","wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
@@ -276,13 +274,14 @@ def pbSaveBerryPlants
     f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
     f.write("\r\n")
     f.write("\#-------------------------------\r\n")
-    keys = berryPlantData.keys.sort
-    keys.each do |key|
-      data = berryPlantData[key]
-      next if !data || !GameData::Item.exists?(key)
-      f.write(sprintf("%s = %d,%d,%d,%d",
-         csvQuote(GameData::Item.get(key).id.to_s), data[0], data[1], data[2], data[3]))
-      f.write("\r\n")
+    GameData::BerryPlant.each do |bp|
+      f.write(sprintf("%s = %d,%d,%d,%d\r\n",
+        csvQuote(bp.id.to_s),
+        bp.hours_per_stage,
+        bp.drying_per_hour,
+        bp.minimum_yield,
+        bp.maximum_yield
+      ))
     end
   }
 end

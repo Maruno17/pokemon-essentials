@@ -79,6 +79,7 @@ def pbSetUpSystem
     consts = [] if !consts
     GameData::Ability.load
     GameData::Item.load
+    GameData::BerryPlant.load
   rescue
     consts = []
   end
