@@ -22,7 +22,7 @@ Height = 0.7
 Weight = 6.9
 Color = Green
 Shape = 8
-RegionalNumbers = 1
+RegionalNumbers = 1,1
 Kind = Seed
 Pokedex = For some time after its birth, it grows by gaining nourishment from the seed on its back.
 BattlerPlayerX = 0
@@ -54,7 +54,7 @@ Height = 1.0
 Weight = 13.0
 Color = Green
 Shape = 8
-RegionalNumbers = 2
+RegionalNumbers = 2,2
 Kind = Seed
 Pokedex = When the bud on its back starts swelling, a sweet aroma wafts to indicate the flower's coming bloom.
 BattlerPlayerX = 0
@@ -86,7 +86,7 @@ Height = 2.0
 Weight = 100.0
 Color = Green
 Shape = 8
-RegionalNumbers = 3
+RegionalNumbers = 3,3
 Kind = Seed
 Pokedex = After a rainy day, the flower on its back smells stronger. The scent attracts other Pokémon.
 BattlerPlayerX = 0
@@ -95,7 +95,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [4]
 Name = Charmander
@@ -118,7 +118,7 @@ Height = 0.6
 Weight = 8.5
 Color = Red
 Shape = 6
-RegionalNumbers = 4
+RegionalNumbers = 4,4
 Kind = Lizard
 Pokedex = From the time it is born, a flame burns at the tip of its tail. Its life would end if the flame were to go out.
 BattlerPlayerX = 0
@@ -149,7 +149,7 @@ Height = 1.1
 Weight = 19.0
 Color = Red
 Shape = 6
-RegionalNumbers = 5
+RegionalNumbers = 5,5
 Kind = Flame
 Pokedex = When it swings its burning tail, it elevates the air temperature to unbearably high levels.
 BattlerPlayerX = 0
@@ -181,7 +181,7 @@ Height = 1.7
 Weight = 90.5
 Color = Red
 Shape = 6
-RegionalNumbers = 6
+RegionalNumbers = 6,6
 Kind = Flame
 Pokedex = Its wings can carry this Pokémon close to an altitude of 4,600 feet. It blows out fire at very high temperatures.
 BattlerPlayerX = 0
@@ -190,7 +190,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 4
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [7]
 Name = Squirtle
@@ -213,7 +213,7 @@ Height = 0.5
 Weight = 9.0
 Color = Blue
 Shape = 6
-RegionalNumbers = 7
+RegionalNumbers = 7,7
 Kind = Tiny Turtle
 Pokedex = Shoots water at prey while in the water. Withdraws into its shell when in danger.
 BattlerPlayerX = 0
@@ -244,7 +244,7 @@ Height = 1.0
 Weight = 22.5
 Color = Blue
 Shape = 6
-RegionalNumbers = 8
+RegionalNumbers = 8,8
 Kind = Turtle
 Pokedex = It is said to live 10,000 years. Its furry tail is popular as a symbol of longevity.
 BattlerPlayerX = 0
@@ -275,7 +275,7 @@ Height = 1.6
 Weight = 85.5
 Color = Blue
 Shape = 6
-RegionalNumbers = 9
+RegionalNumbers = 9,9
 Kind = Shellfish
 Pokedex = The pressurized water jets on this brutal Pokémon's shell are used for high-speed tackles.
 BattlerPlayerX = 0
@@ -284,7 +284,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [10]
 Name = Caterpie
@@ -306,7 +306,7 @@ Height = 0.3
 Weight = 2.9
 Color = Green
 Shape = 14
-RegionalNumbers = 10
+RegionalNumbers = 10,10
 Kind = Worm
 Pokedex = Its feet have suction cups designed to stick to any surface. It tenaciously climbs trees to forage.
 BattlerPlayerX = 0
@@ -336,7 +336,7 @@ Height = 0.7
 Weight = 9.9
 Color = Green
 Shape = 2
-RegionalNumbers = 11
+RegionalNumbers = 11,11
 Kind = Cocoon
 Pokedex = This Pokémon is vulnerable to attack while its shell is soft, exposing its weak and tender body.
 BattlerPlayerX = 0
@@ -368,7 +368,7 @@ Height = 1.1
 Weight = 32.0
 Color = White
 Shape = 13
-RegionalNumbers = 12
+RegionalNumbers = 12,12
 Kind = Butterfly
 Pokedex = The wings are protected by rain-repellent dust. As a result, this Pokémon can fly about even in rain.
 WildItemUncommon = SILVERPOWDER
@@ -378,7 +378,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [13]
 Name = Weedle
@@ -401,7 +401,7 @@ Height = 0.3
 Weight = 3.2
 Color = Brown
 Shape = 14
-RegionalNumbers = 13
+RegionalNumbers = 13,13
 Kind = Hairy Bug
 Pokedex = Its poison stinger is very powerful. Its bright-colored body is intended to warn off its enemies.
 BattlerPlayerX = 0
@@ -432,7 +432,7 @@ Height = 0.6
 Weight = 10.0
 Color = Yellow
 Shape = 2
-RegionalNumbers = 14
+RegionalNumbers = 14,14
 Kind = Cocoon
 Pokedex = While awaiting evolution, it hides from predators under leaves and in nooks of branches.
 BattlerPlayerX = 0
@@ -464,7 +464,7 @@ Height = 1.0
 Weight = 29.5
 Color = Yellow
 Shape = 13
-RegionalNumbers = 15
+RegionalNumbers = 15,15
 Kind = Poison Bee
 Pokedex = May appear in a swarm. Flies at violent speeds, all the while stabbing with the toxic stinger on its rear.
 WildItemUncommon = POISONBARB
@@ -474,7 +474,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [16]
 Name = Pidgey
@@ -498,7 +498,7 @@ Height = 0.3
 Weight = 1.8
 Color = Brown
 Shape = 9
-RegionalNumbers = 27
+RegionalNumbers = 16,16
 Kind = Tiny Bird
 Pokedex = It is docile and prefers to avoid conflict. If disturbed, however, it can ferociously strike back.
 BattlerPlayerX = 0
@@ -530,7 +530,7 @@ Height = 1.1
 Weight = 30.0
 Color = Brown
 Shape = 9
-RegionalNumbers = 28
+RegionalNumbers = 17,17
 Kind = Bird
 Pokedex = Very protective of its sprawling territorial area, this Pokémon will fiercely peck at any intruder.
 BattlerPlayerX = 0
@@ -562,7 +562,7 @@ Height = 1.5
 Weight = 39.5
 Color = Brown
 Shape = 9
-RegionalNumbers = 29
+RegionalNumbers = 18,18
 Kind = Bird
 Pokedex = It spreads its gorgeous wings widely to intimidate enemies. It races through the skies at Mach-2 speed.
 BattlerPlayerX = 0
@@ -571,7 +571,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [19]
 Name = Rattata
@@ -594,7 +594,7 @@ Height = 0.3
 Weight = 3.5
 Color = Purple
 Shape = 8
-RegionalNumbers = 32
+RegionalNumbers = 19,19
 Kind = Mouse
 Pokedex = Its fangs are long and very sharp. They grow continuously, so it gnaws on hard things to whittle them down.
 BattlerPlayerX = 0
@@ -625,7 +625,7 @@ Height = 0.7
 Weight = 18.5
 Color = Brown
 Shape = 8
-RegionalNumbers = 33
+RegionalNumbers = 20,20
 Kind = Mouse
 Pokedex = The webs on its hind legs enable it to cross rivers. It searches wide areas for food.
 BattlerPlayerX = 0
@@ -634,7 +634,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [21]
 Name = Spearow
@@ -658,7 +658,7 @@ Height = 0.3
 Weight = 2.0
 Color = Brown
 Shape = 9
-RegionalNumbers = 43
+RegionalNumbers = 21,21
 Kind = Tiny Bird
 Pokedex = Eats bugs in grassy areas. It has to flap its short wings at high speed to stay airborne.
 WildItemUncommon = SHARPBEAK
@@ -691,7 +691,7 @@ Height = 1.2
 Weight = 38.0
 Color = Brown
 Shape = 9
-RegionalNumbers = 44
+RegionalNumbers = 22,22
 Kind = Beak
 Pokedex = It has the stamina to fly all day on its broad wings. It fights by using its sharp beak.
 WildItemUncommon = SHARPBEAK
@@ -701,7 +701,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 6
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [23]
 Name = Ekans
@@ -724,7 +724,7 @@ Height = 2.0
 Weight = 6.9
 Color = Purple
 Shape = 2
-RegionalNumbers = 59
+RegionalNumbers = 23,23
 Kind = Snake
 Pokedex = Moving silently and stealthily, it eats the eggs of birds, such as Pidgey and Spearow, whole.
 BattlerPlayerX = 0
@@ -755,7 +755,7 @@ Height = 3.5
 Weight = 65.0
 Color = Purple
 Shape = 2
-RegionalNumbers = 60
+RegionalNumbers = 24,24
 Kind = Cobra
 Pokedex = To intimidate foes, it spreads its chest wide and makes eerie sounds by expelling air from its mouth.
 BattlerPlayerX = 0
@@ -764,7 +764,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [25]
 Name = Pikachu
@@ -786,7 +786,7 @@ Height = 0.4
 Weight = 6.0
 Color = Yellow
 Shape = 8
-RegionalNumbers = 62
+RegionalNumbers = 25,25
 Kind = Mouse
 Pokedex = It has small electric sacs on both its cheeks. If threatened, it looses electric charges from the sacs.
 WildItemUncommon = LIGHTBALL
@@ -818,7 +818,7 @@ Height = 0.8
 Weight = 30.0
 Color = Yellow
 Shape = 6
-RegionalNumbers = 63
+RegionalNumbers = 26,26
 Kind = Mouse
 Pokedex = It can loose 100,000-volt bursts of electricity, instantly downing foes several times its size.
 BattlerPlayerX = 0
@@ -827,7 +827,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [27]
 Name = Sandshrew
@@ -850,7 +850,7 @@ Height = 0.6
 Weight = 12.0
 Color = Yellow
 Shape = 6
-RegionalNumbers = 64
+RegionalNumbers = 27,27
 Kind = Mouse
 Pokedex = Disliking water, it lives in deep burrows in arid areas. It can roll itself instantly into a ball.
 WildItemUncommon = QUICKCLAW
@@ -882,7 +882,7 @@ Height = 1.0
 Weight = 29.5
 Color = Yellow
 Shape = 6
-RegionalNumbers = 65
+RegionalNumbers = 28,28
 Kind = Mouse
 Pokedex = Curls up into a spiny ball when threatened. It can roll while curled up to attack or escape.
 WildItemUncommon = QUICKCLAW
@@ -892,7 +892,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [29]
 Name = Nidoran♀
@@ -915,7 +915,7 @@ Height = 0.4
 Weight = 7.0
 Color = Blue
 Shape = 8
-RegionalNumbers = 84
+RegionalNumbers = 29,29
 Kind = Poison Pin
 Pokedex = Small and very docile, it protects itself with its small, poisonous horn when attacked.
 BattlerPlayerX = 0
@@ -946,7 +946,7 @@ Height = 0.8
 Weight = 20.0
 Color = Blue
 Shape = 8
-RegionalNumbers = 85
+RegionalNumbers = 30,30
 Kind = Poison Pin
 Pokedex = When feeding its young, it first chews the food into a paste, then spits it out for the offspring.
 BattlerPlayerX = 0
@@ -978,7 +978,7 @@ Height = 1.3
 Weight = 60.0
 Color = Blue
 Shape = 6
-RegionalNumbers = 86
+RegionalNumbers = 31,31
 Kind = Drill
 Pokedex = The body is covered by stiff, needlelike scales. If it becomes excited, the needles bristle outwards.
 BattlerPlayerX = 0
@@ -987,7 +987,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [32]
 Name = Nidoran♂
@@ -1010,7 +1010,7 @@ Height = 0.5
 Weight = 9.0
 Color = Purple
 Shape = 8
-RegionalNumbers = 87
+RegionalNumbers = 32,32
 Kind = Poison Pin
 Pokedex = Its large ears are flapped like wings when it is listening to distant sounds. It extends toxic barbs when angered.
 BattlerPlayerX = 0
@@ -1041,7 +1041,7 @@ Height = 0.9
 Weight = 19.5
 Color = Purple
 Shape = 8
-RegionalNumbers = 88
+RegionalNumbers = 33,33
 Kind = Poison Pin
 Pokedex = An aggressive Pokémon that is quick to attack. The horn on its head secretes a powerful venom.
 BattlerPlayerX = 0
@@ -1073,7 +1073,7 @@ Height = 1.4
 Weight = 62.0
 Color = Purple
 Shape = 6
-RegionalNumbers = 89
+RegionalNumbers = 34,34
 Kind = Drill
 Pokedex = One swing of its mighty tail can snap a telephone pole as if it were a matchstick.
 BattlerPlayerX = 0
@@ -1082,7 +1082,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [35]
 Name = Clefairy
@@ -1104,7 +1104,7 @@ Height = 0.6
 Weight = 7.5
 Color = Pink
 Shape = 6
-RegionalNumbers = 91
+RegionalNumbers = 35,35
 Kind = Fairy
 Pokedex = The moonlight that it stores in the wings on its back apparently gives it the ability to float in midair.
 WildItemUncommon = MOONSTONE
@@ -1136,7 +1136,7 @@ Height = 1.3
 Weight = 40.0
 Color = Pink
 Shape = 6
-RegionalNumbers = 92
+RegionalNumbers = 36,36
 Kind = Fairy
 Pokedex = A timid fairy Pokémon that is rarely seen, it will run and hide the moment it senses people.
 WildItemUncommon = MOONSTONE
@@ -1146,7 +1146,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [37]
 Name = Vulpix
@@ -1169,7 +1169,7 @@ Height = 0.6
 Weight = 9.9
 Color = Brown
 Shape = 8
-RegionalNumbers = 93
+RegionalNumbers = 37,37
 Kind = Fox
 Pokedex = While young, it has six gorgeous tails. When it grows, several new tails are sprouted.
 WildItemUncommon = CHARCOAL
@@ -1201,7 +1201,7 @@ Height = 1.1
 Weight = 19.9
 Color = Yellow
 Shape = 8
-RegionalNumbers = 94
+RegionalNumbers = 38,38
 Kind = Fox
 Pokedex = Very smart and very vengeful. Grabbing one of its many tails could result in a 1,000-year curse.
 WildItemUncommon = CHARCOAL
@@ -1211,7 +1211,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [39]
 Name = Jigglypuff
@@ -1234,7 +1234,7 @@ Height = 0.5
 Weight = 5.5
 Color = Pink
 Shape = 12
-RegionalNumbers = 96
+RegionalNumbers = 39,39
 Kind = Balloon
 Pokedex = If it inflates to sing a lullaby, it can perform longer and cause sure drowsiness in its audience.
 WildItemUncommon = MOONSTONE
@@ -1267,7 +1267,7 @@ Height = 1.0
 Weight = 12.0
 Color = Pink
 Shape = 12
-RegionalNumbers = 97
+RegionalNumbers = 40,40
 Kind = Balloon
 Pokedex = The body is soft and rubbery. When angered, it will suck in air and inflate itself to an enormous size.
 WildItemUncommon = MOONSTONE
@@ -1277,7 +1277,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [41]
 Name = Zubat
@@ -1301,7 +1301,7 @@ Height = 0.8
 Weight = 7.5
 Color = Purple
 Shape = 9
-RegionalNumbers = 106
+RegionalNumbers = 41,41
 Kind = Bat
 Pokedex = It has no eyes. Instead, it relies on its ultrasonic cries for echolocation to flit about in darkness.
 BattlerPlayerX = 0
@@ -1333,7 +1333,7 @@ Height = 1.6
 Weight = 55.0
 Color = Purple
 Shape = 9
-RegionalNumbers = 107
+RegionalNumbers = 42,42
 Kind = Bat
 Pokedex = Once it starts sucking blood, it does not stop until it is full. It flies at night in search of prey.
 BattlerPlayerX = 0
@@ -1366,7 +1366,7 @@ Height = 0.5
 Weight = 5.4
 Color = Blue
 Shape = 7
-RegionalNumbers = 109
+RegionalNumbers = 43,43
 Kind = Weed
 Pokedex = Its scientific name is "Oddium Wanderus." At night, it is said to walk nearly 1,000 feet on its two roots.
 WildItemUncommon = ABSORBBULB
@@ -1399,7 +1399,7 @@ Height = 0.8
 Weight = 8.6
 Color = Blue
 Shape = 12
-RegionalNumbers = 110
+RegionalNumbers = 44,44
 Kind = Weed
 Pokedex = The honey it drools from its mouth smells so atrocious, it can curl noses more than a mile away.
 WildItemUncommon = ABSORBBULB
@@ -1432,7 +1432,7 @@ Height = 1.2
 Weight = 18.6
 Color = Red
 Shape = 12
-RegionalNumbers = 111
+RegionalNumbers = 45,45
 Kind = Flower
 Pokedex = It has the world's largest petals. With every step, the petals shake out heavy clouds of toxic pollen.
 WildItemUncommon = ABSORBBULB
@@ -1442,7 +1442,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [46]
 Name = Paras
@@ -1466,7 +1466,7 @@ Height = 0.3
 Weight = 5.4
 Color = Red
 Shape = 14
-RegionalNumbers = 116
+RegionalNumbers = 46,46
 Kind = Mushroom
 Pokedex = Burrows under the ground to gnaw on tree roots. The mushrooms on its back absorb most of the nutrition.
 WildItemCommon = TINYMUSHROOM
@@ -1500,7 +1500,7 @@ Height = 1.0
 Weight = 29.5
 Color = Red
 Shape = 14
-RegionalNumbers = 117
+RegionalNumbers = 47,47
 Kind = Mushroom
 Pokedex = The larger the mushroom on its back grows, the stronger the mushroom spores it scatters.
 WildItemCommon = TINYMUSHROOM
@@ -1511,7 +1511,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [48]
 Name = Venonat
@@ -1535,7 +1535,7 @@ Height = 1.0
 Weight = 30.0
 Color = Purple
 Shape = 12
-RegionalNumbers = 121
+RegionalNumbers = 48,48
 Kind = Insect
 Pokedex = Lives in the shadows of tall trees where it eats bugs. It is attracted by light at night.
 BattlerPlayerX = 0
@@ -1567,7 +1567,7 @@ Height = 1.5
 Weight = 12.5
 Color = Purple
 Shape = 13
-RegionalNumbers = 122
+RegionalNumbers = 49,49
 Kind = Poison Moth
 Pokedex = The wings are covered with dustlike scales. Every time it flaps its wings, it looses highly toxic dust.
 WildItemUncommon = SHEDSHELL
@@ -1577,7 +1577,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [50]
 Name = Diglett
@@ -1600,7 +1600,7 @@ Height = 0.2
 Weight = 0.8
 Color = Brown
 Shape = 5
-RegionalNumbers = 125
+RegionalNumbers = 50,50
 Kind = Mole
 Pokedex = Its skin is very thin. If it is exposed to light, its blood heats up, causing it to grow weak.
 WildItemUncommon = SOFTSAND
@@ -1632,7 +1632,7 @@ Height = 0.7
 Weight = 33.3
 Color = Brown
 Shape = 11
-RegionalNumbers = 126
+RegionalNumbers = 51,51
 Kind = Mole
 Pokedex = Extremely powerful, they can dig through even the hardest ground to a depth of over 60 miles.
 WildItemUncommon = SOFTSAND
@@ -1642,7 +1642,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [52]
 Name = Meowth
@@ -1665,7 +1665,7 @@ Height = 0.4
 Weight = 4.2
 Color = Yellow
 Shape = 8
-RegionalNumbers = 127
+RegionalNumbers = 52,52
 Kind = Scratch Cat
 Pokedex = Adores round objects. It wanders the streets on a nightly basis to look for dropped loose change.
 WildItemUncommon = QUICKCLAW
@@ -1697,7 +1697,7 @@ Height = 1.0
 Weight = 32.0
 Color = Yellow
 Shape = 8
-RegionalNumbers = 128
+RegionalNumbers = 53,53
 Kind = Classy Cat
 Pokedex = Its lithe muscles allow it to walk without making a sound. It attacks in an instant.
 WildItemUncommon = QUICKCLAW
@@ -1707,7 +1707,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [54]
 Name = Psyduck
@@ -1730,7 +1730,7 @@ Height = 0.8
 Weight = 19.6
 Color = Yellow
 Shape = 6
-RegionalNumbers = 130
+RegionalNumbers = 54,54
 Kind = Duck
 Pokedex = It has mystical powers but doesn't recall that it has used them. That is why it always looks puzzled.
 BattlerPlayerX = 0
@@ -1761,7 +1761,7 @@ Height = 1.7
 Weight = 76.6
 Color = Blue
 Shape = 6
-RegionalNumbers = 131
+RegionalNumbers = 55,55
 Kind = Duck
 Pokedex = The forelegs are webbed, helping to make it an adept swimmer. It can be seen swimming elegantly in lakes, etc.
 BattlerPlayerX = 0
@@ -1770,7 +1770,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [56]
 Name = Mankey
@@ -1793,7 +1793,7 @@ Height = 0.5
 Weight = 28.0
 Color = Brown
 Shape = 6
-RegionalNumbers = 134
+RegionalNumbers = 56,56
 Kind = Pig Monkey
 Pokedex = It lives in treetop colonies. If one becomes enraged, the whole colony rampages for no reason.
 BattlerPlayerX = 0
@@ -1824,7 +1824,7 @@ Height = 1.0
 Weight = 32.0
 Color = Brown
 Shape = 6
-RegionalNumbers = 135
+RegionalNumbers = 57,57
 Kind = Pig Monkey
 Pokedex = It is always outrageously furious. If it gives chase, it will tenaciously track the target no matter how far.
 BattlerPlayerX = 0
@@ -1833,7 +1833,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [58]
 Name = Growlithe
@@ -1856,7 +1856,7 @@ Height = 0.7
 Weight = 19.0
 Color = Brown
 Shape = 8
-RegionalNumbers = 142
+RegionalNumbers = 58,58
 Kind = Puppy
 Pokedex = It has a brave and trustworthy nature. It fearlessly stands up to bigger and stronger foes.
 BattlerPlayerX = 0
@@ -1887,7 +1887,7 @@ Height = 1.9
 Weight = 155.0
 Color = Brown
 Shape = 8
-RegionalNumbers = 143
+RegionalNumbers = 59,59
 Kind = Legendary
 Pokedex = Its magnificent bark conveys a sense of majesty. Anyone hearing it can't help but grovel before it.
 BattlerPlayerX = 0
@@ -1896,7 +1896,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [60]
 Name = Poliwag
@@ -1919,7 +1919,7 @@ Height = 0.6
 Weight = 12.4
 Color = Blue
 Shape = 7
-RegionalNumbers = 144
+RegionalNumbers = 60,60
 Kind = Tadpole
 Pokedex = The direction of the spiral on the belly differs by area. It is more adept at swimming than walking.
 BattlerPlayerX = 0
@@ -1950,7 +1950,7 @@ Height = 1.0
 Weight = 20.0
 Color = Blue
 Shape = 12
-RegionalNumbers = 145
+RegionalNumbers = 61,61
 Kind = Tadpole
 Pokedex = Its two legs are well developed. Even though it can live on the ground, it prefers living in water.
 WildItemUncommon = KINGSROCK
@@ -1983,7 +1983,7 @@ Height = 1.3
 Weight = 54.0
 Color = Blue
 Shape = 12
-RegionalNumbers = 146
+RegionalNumbers = 62,62
 Kind = Tadpole
 Pokedex = A swimmer adept at both the front crawl and breaststroke. Easily overtakes the best human swimmers.
 WildItemUncommon = KINGSROCK
@@ -1993,7 +1993,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [63]
 Name = Abra
@@ -2016,7 +2016,7 @@ Height = 0.9
 Weight = 19.5
 Color = Brown
 Shape = 6
-RegionalNumbers = 150
+RegionalNumbers = 63,63
 Kind = Psi
 Pokedex = It senses impending attacks and teleports away to safety before the actual attacks can strike.
 WildItemUncommon = TWISTEDSPOON
@@ -2048,7 +2048,7 @@ Height = 1.3
 Weight = 56.5
 Color = Brown
 Shape = 6
-RegionalNumbers = 151
+RegionalNumbers = 64,64
 Kind = Psi
 Pokedex = If it uses its abilities, it emits special alpha waves that cause machines to malfunction.
 WildItemUncommon = TWISTEDSPOON
@@ -2080,7 +2080,7 @@ Height = 1.5
 Weight = 48.0
 Color = Brown
 Shape = 12
-RegionalNumbers = 152
+RegionalNumbers = 65,65
 Kind = Psi
 Pokedex = Its brain can outperform a supercomputer. Its IQ (intelligence quotient) is said to be around 5,000.
 WildItemUncommon = TWISTEDSPOON
@@ -2090,7 +2090,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [66]
 Name = Machop
@@ -2113,7 +2113,7 @@ Height = 0.8
 Weight = 19.5
 Color = Gray
 Shape = 6
-RegionalNumbers = 153
+RegionalNumbers = 66,66
 Kind = Superpower
 Pokedex = Its whole body is composed of muscles. Even though it's the size of a human child, it can hurl 100 grown-ups.
 WildItemUncommon = FOCUSBAND
@@ -2145,7 +2145,7 @@ Height = 1.5
 Weight = 70.5
 Color = Gray
 Shape = 12
-RegionalNumbers = 154
+RegionalNumbers = 67,67
 Kind = Superpower
 Pokedex = It can lift a dump truck with one hand. Using that power, it helps people with heavy jobs.
 WildItemUncommon = FOCUSBAND
@@ -2177,7 +2177,7 @@ Height = 1.6
 Weight = 130.0
 Color = Gray
 Shape = 12
-RegionalNumbers = 155
+RegionalNumbers = 68,68
 Kind = Superpower
 Pokedex = It uses its four powerful arms to pin the limbs of its foe, then throws the victim over the horizon.
 WildItemUncommon = FOCUSBAND
@@ -2187,7 +2187,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 5
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [69]
 Name = Bellsprout
@@ -2211,7 +2211,7 @@ Height = 0.7
 Weight = 4.0
 Color = Green
 Shape = 12
-RegionalNumbers = 164
+RegionalNumbers = 69,69
 Kind = Flower
 Pokedex = Its bud looks like a human face. Because of the bud, it is rumored to be a type of legendary mandrake plant.
 BattlerPlayerX = 0
@@ -2243,7 +2243,7 @@ Height = 1.0
 Weight = 6.4
 Color = Green
 Shape = 5
-RegionalNumbers = 165
+RegionalNumbers = 70,70
 Kind = Flycatcher
 Pokedex = It spits out Poison Powder to immobilize the enemy and then finishes it with a spray of Acid.
 BattlerPlayerX = 0
@@ -2275,7 +2275,7 @@ Height = 1.7
 Weight = 15.5
 Color = Green
 Shape = 5
-RegionalNumbers = 166
+RegionalNumbers = 71,71
 Kind = Flycatcher
 Pokedex = Once ingested into this Pokémon's body, even the hardest object will melt into nothing.
 BattlerPlayerX = 0
@@ -2284,7 +2284,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [72]
 Name = Tentacool
@@ -2308,7 +2308,7 @@ Height = 0.9
 Weight = 45.5
 Color = Blue
 Shape = 10
-RegionalNumbers = 167
+RegionalNumbers = 72,72
 Kind = Jellyfish
 Pokedex = Drifts in shallow seas. Anglers who hook them by accident are often punished by their stingers.
 WildItemUncommon = POISONBARB
@@ -2341,7 +2341,7 @@ Height = 1.6
 Weight = 55.0
 Color = Blue
 Shape = 10
-RegionalNumbers = 168
+RegionalNumbers = 73,73
 Kind = Jellyfish
 Pokedex = It has 80 tentacles that move about freely. They can sting, causing poisoning and sharp, stabbing pain.
 WildItemUncommon = POISONBARB
@@ -2351,7 +2351,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [74]
 Name = Geodude
@@ -2375,7 +2375,7 @@ Height = 0.4
 Weight = 20.0
 Color = Brown
 Shape = 4
-RegionalNumbers = 178
+RegionalNumbers = 74,74
 Kind = Rock
 Pokedex = It is impossible to distinguish from rocks. It slams against others in contests of hardness.
 WildItemUncommon = EVERSTONE
@@ -2408,7 +2408,7 @@ Height = 1.0
 Weight = 105.0
 Color = Brown
 Shape = 12
-RegionalNumbers = 179
+RegionalNumbers = 75,75
 Kind = Rock
 Pokedex = Rolls down slopes to move. It rolls over any obstacle without slowing or changing its direction.
 WildItemUncommon = EVERSTONE
@@ -2441,7 +2441,7 @@ Height = 1.4
 Weight = 300.0
 Color = Brown
 Shape = 12
-RegionalNumbers = 180
+RegionalNumbers = 76,76
 Kind = Megaton
 Pokedex = Even dynamite can't harm its hard, boulder-like body. It sheds its hide just once a year.
 WildItemUncommon = EVERSTONE
@@ -2451,7 +2451,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [77]
 Name = Ponyta
@@ -2474,7 +2474,7 @@ Height = 1.0
 Weight = 30.0
 Color = Yellow
 Shape = 8
-RegionalNumbers = 185
+RegionalNumbers = 77,77
 Kind = Fire Horse
 Pokedex = Its legs grow strong while it chases after its parent. It runs in fields and mountains all day.
 BattlerPlayerX = 0
@@ -2505,7 +2505,7 @@ Height = 1.7
 Weight = 95.0
 Color = Yellow
 Shape = 8
-RegionalNumbers = 186
+RegionalNumbers = 78,78
 Kind = Fire Horse
 Pokedex = It gallops at nearly 150 mph. With its mane blazing ferociously, it races as if it were an arrow.
 BattlerPlayerX = 0
@@ -2514,7 +2514,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [79]
 Name = Slowpoke
@@ -2538,7 +2538,7 @@ Height = 1.2
 Weight = 36.0
 Color = Pink
 Shape = 8
-RegionalNumbers = 187
+RegionalNumbers = 79,79
 Kind = Dopey
 Pokedex = It lazes vacantly near water. If something bites its tail, it won't even notice for a whole day.
 WildItemUncommon = LAGGINGTAIL
@@ -2571,7 +2571,7 @@ Height = 1.6
 Weight = 78.5
 Color = Pink
 Shape = 6
-RegionalNumbers = 188
+RegionalNumbers = 80,80
 Kind = Hermit Crab
 Pokedex = When a Slowpoke went hunting in the sea, its tail was bitten by a Shellder. That made it evolve into Slowbro.
 WildItemUncommon = KINGSROCK
@@ -2581,7 +2581,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [81]
 Name = Magnemite
@@ -2604,7 +2604,7 @@ Height = 0.3
 Weight = 6.0
 Color = Gray
 Shape = 4
-RegionalNumbers = 200
+RegionalNumbers = 81,81
 Kind = Magnet
 Pokedex = It moves while constantly hovering. It discharges Thunder Wave and so on from the units at its sides.
 WildItemUncommon = METALCOAT
@@ -2637,7 +2637,7 @@ Height = 1.0
 Weight = 60.0
 Color = Gray
 Shape = 11
-RegionalNumbers = 201
+RegionalNumbers = 82,82
 Kind = Magnet
 Pokedex = Generates strange radio signals. It raises the temperature by 3.6 degrees Fahrenheit within 3,300 feet.
 WildItemUncommon = METALCOAT
@@ -2671,7 +2671,7 @@ Height = 0.8
 Weight = 15.0
 Color = Brown
 Shape = 9
-RegionalNumbers = 204
+RegionalNumbers = 83,83
 Kind = Wild Duck
 Pokedex = It always walks about with a plant stalk clamped in its beak. The stalk is used for building its nest.
 WildItemUncommon = LEEK
@@ -2681,7 +2681,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [84]
 Name = Doduo
@@ -2705,7 +2705,7 @@ Height = 1.4
 Weight = 39.2
 Color = Brown
 Shape = 7
-RegionalNumbers = 206
+RegionalNumbers = 84,84
 Kind = Twin Bird
 Pokedex = The brains in its two heads appear to communicate emotions to each other with a telepathic power.
 WildItemUncommon = SHARPBEAK
@@ -2738,7 +2738,7 @@ Height = 1.8
 Weight = 85.2
 Color = Brown
 Shape = 7
-RegionalNumbers = 207
+RegionalNumbers = 85,85
 Kind = Triple Bird
 Pokedex = An odd species that is rarely found. The three heads respectively represent joy, sadness, and anger.
 WildItemUncommon = SHARPBEAK
@@ -2748,7 +2748,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 5
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [86]
 Name = Seel
@@ -2771,7 +2771,7 @@ Height = 1.1
 Weight = 90.0
 Color = White
 Shape = 3
-RegionalNumbers = 212
+RegionalNumbers = 86,86
 Kind = Sea Lion
 Pokedex = Covered with light blue fur, its hide is thick and tough. It is active in bitter cold of -40 degrees Fahrenheit.
 BattlerPlayerX = 0
@@ -2803,7 +2803,7 @@ Height = 1.7
 Weight = 120.0
 Color = White
 Shape = 3
-RegionalNumbers = 213
+RegionalNumbers = 87,87
 Kind = Sea Lion
 Pokedex = Its streamlined body has little drag in water. The colder the temperature, the friskier it gets.
 BattlerPlayerX = 0
@@ -2812,7 +2812,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [88]
 Name = Grimer
@@ -2835,7 +2835,7 @@ Height = 0.9
 Weight = 30.0
 Color = Purple
 Shape = 4
-RegionalNumbers = 214
+RegionalNumbers = 88,88
 Kind = Sludge
 Pokedex = Appears in filthy areas. It thrives by sucking up polluted sludge that is pumped out of factories.
 WildItemUncommon = BLACKSLUDGE
@@ -2867,7 +2867,7 @@ Height = 1.2
 Weight = 30.0
 Color = Purple
 Shape = 4
-RegionalNumbers = 215
+RegionalNumbers = 89,89
 Kind = Sludge
 Pokedex = A toxic fluid seeps from its body. The fluid instantly kills plants and trees on contact.
 WildItemCommon = BLACKSLUDGE
@@ -2877,7 +2877,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [90]
 Name = Shellder
@@ -2900,7 +2900,7 @@ Height = 0.3
 Weight = 4.0
 Color = Purple
 Shape = 1
-RegionalNumbers = 221
+RegionalNumbers = 90,90
 Kind = Bivalve
 Pokedex = Clamping on to an opponent reveals its vulnerable parts, so it uses this move only as a last resort.
 WildItemCommon = PEARL
@@ -2934,7 +2934,7 @@ Height = 1.5
 Weight = 132.5
 Color = Purple
 Shape = 1
-RegionalNumbers = 222
+RegionalNumbers = 91,91
 Kind = Bivalve
 Pokedex = Its shell is extremely hard. It cannot be shattered, even with a bomb. The shell opens only when it is attacking.
 WildItemCommon = PEARL
@@ -2945,7 +2945,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [92]
 Name = Gastly
@@ -2968,7 +2968,7 @@ Height = 1.3
 Weight = 0.1
 Color = Purple
 Shape = 1
-RegionalNumbers = 224
+RegionalNumbers = 92,92
 Kind = Gas
 Pokedex = Born from gases, anyone would faint if engulfed by its gaseous body, which contains poison.
 BattlerPlayerX = 0
@@ -2999,7 +2999,7 @@ Height = 1.6
 Weight = 0.1
 Color = Purple
 Shape = 4
-RegionalNumbers = 225
+RegionalNumbers = 93,93
 Kind = Gas
 Pokedex = It licks with its gaseous tongue to steal the victim's life force. It lurks in darkness for prey.
 BattlerPlayerX = 0
@@ -3030,7 +3030,7 @@ Height = 1.5
 Weight = 40.5
 Color = Purple
 Shape = 6
-RegionalNumbers = 226
+RegionalNumbers = 94,94
 Kind = Shadow
 Pokedex = Hiding in people's shadows at night, it absorbs their heat. The chill it causes makes the victims shake.
 BattlerPlayerX = 0
@@ -3039,7 +3039,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [95]
 Name = Onix
@@ -3063,7 +3063,7 @@ Height = 8.8
 Weight = 210.0
 Color = Gray
 Shape = 2
-RegionalNumbers = 227
+RegionalNumbers = 95,95
 Kind = Rock Snake
 Pokedex = It usually lives underground. It searches for food while boring its way through the ground at 50 miles per hour.
 BattlerPlayerX = 0
@@ -3095,7 +3095,7 @@ Height = 1.0
 Weight = 32.4
 Color = Yellow
 Shape = 12
-RegionalNumbers = 229
+RegionalNumbers = 96,96
 Kind = Hypnosis
 Pokedex = If you think that you had a good dream but you can't remember it, a Drowzee has probably eaten it.
 BattlerPlayerX = 0
@@ -3126,7 +3126,7 @@ Height = 1.6
 Weight = 75.6
 Color = Yellow
 Shape = 12
-RegionalNumbers = 230
+RegionalNumbers = 97,97
 Kind = Hypnosis
 Pokedex = Seeing its swinging pendulum can induce sleep in three seconds, even in someone who just woke up.
 BattlerPlayerX = 0
@@ -3135,7 +3135,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [98]
 Name = Krabby
@@ -3158,7 +3158,7 @@ Height = 0.4
 Weight = 6.5
 Color = Red
 Shape = 14
-RegionalNumbers = 231
+RegionalNumbers = 98,98
 Kind = River Crab
 Pokedex = It can be found near the sea. The large pincers grow back if they are torn out of their sockets.
 BattlerPlayerX = 0
@@ -3189,7 +3189,7 @@ Height = 1.3
 Weight = 60.0
 Color = Red
 Shape = 14
-RegionalNumbers = 232
+RegionalNumbers = 99,99
 Kind = Pincer
 Pokedex = Its pincers grow peculiarly large. If it lifts the pincers too fast, it loses its balance and staggers.
 BattlerPlayerX = 0
@@ -3198,7 +3198,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [100]
 Name = Voltorb
@@ -3220,7 +3220,7 @@ Height = 0.5
 Weight = 10.4
 Color = Red
 Shape = 1
-RegionalNumbers = 243
+RegionalNumbers = 100,100
 Kind = Ball
 Pokedex = Usually found in power plants. Easily mistaken for a Poké Ball, it has zapped many people.
 BattlerPlayerX = 0
@@ -3251,7 +3251,7 @@ Height = 1.2
 Weight = 66.6
 Color = Red
 Shape = 1
-RegionalNumbers = 244
+RegionalNumbers = 101,101
 Kind = Ball
 Pokedex = It stores an overflowing amount of electric energy inside its body. Even a small shock makes it explode.
 BattlerPlayerX = 0
@@ -3260,7 +3260,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [102]
 Name = Exeggcute
@@ -3284,7 +3284,7 @@ Height = 0.4
 Weight = 2.5
 Color = Pink
 Shape = 11
-RegionalNumbers = 245
+RegionalNumbers = 102,102
 Kind = Egg
 Pokedex = Even though it appears to be eggs of some sort, it was discovered to be a life-form more like plant seeds.
 WildItemUncommon = PSYCHICSEED
@@ -3317,7 +3317,7 @@ Height = 2.0
 Weight = 120.0
 Color = Yellow
 Shape = 7
-RegionalNumbers = 246
+RegionalNumbers = 103,103
 Kind = Coconut
 Pokedex = It is called "The Walking Jungle." If a head grows too big, it falls off and becomes an Exeggcute.
 BattlerPlayerX = 0
@@ -3326,7 +3326,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 7
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [104]
 Name = Cubone
@@ -3349,7 +3349,7 @@ Height = 0.4
 Weight = 6.5
 Color = Brown
 Shape = 6
-RegionalNumbers = 247
+RegionalNumbers = 104,104
 Kind = Lonely
 Pokedex = It always wears the skull of its dead mother, so no one has any idea what its hidden face looks like.
 WildItemUncommon = THICKCLUB
@@ -3381,7 +3381,7 @@ Height = 1.0
 Weight = 45.0
 Color = Brown
 Shape = 6
-RegionalNumbers = 248
+RegionalNumbers = 105,105
 Kind = Bone Keeper
 Pokedex = The bone it holds is its key weapon. It throws the bone skillfully like a boomerang to KO targets.
 WildItemUncommon = THICKCLUB
@@ -3391,7 +3391,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [106]
 Name = Hitmonlee
@@ -3413,7 +3413,7 @@ Height = 1.5
 Weight = 49.8
 Color = Brown
 Shape = 12
-RegionalNumbers = 253
+RegionalNumbers = 106,106
 Kind = Kicking
 Pokedex = If it starts kicking repeatedly, both legs will stretch even longer to strike a fleeing foe.
 BattlerPlayerX = 0
@@ -3422,7 +3422,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [107]
 Name = Hitmonchan
@@ -3444,7 +3444,7 @@ Height = 1.4
 Weight = 50.2
 Color = Brown
 Shape = 12
-RegionalNumbers = 254
+RegionalNumbers = 107,107
 Kind = Punching
 Pokedex = The spirit of a pro boxer has infused this Pokémon. It throws punches that are faster than a bullet train.
 BattlerPlayerX = 0
@@ -3453,7 +3453,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [108]
 Name = Lickitung
@@ -3476,7 +3476,7 @@ Height = 1.2
 Weight = 65.5
 Color = Pink
 Shape = 6
-RegionalNumbers = 256
+RegionalNumbers = 108,108
 Kind = Licking
 Pokedex = Its tongue is twice the length of its body. It can be moved like an arm for grabbing food and attacking.
 WildItemUncommon = LAGGINGTAIL
@@ -3509,7 +3509,7 @@ Height = 0.6
 Weight = 1.0
 Color = Purple
 Shape = 1
-RegionalNumbers = 258
+RegionalNumbers = 109,109
 Kind = Poison Gas
 Pokedex = Lighter-than-air gases in its body keep it aloft. The gases not only smell, they are also explosive.
 WildItemUncommon = SMOKEBALL
@@ -3541,7 +3541,7 @@ Height = 1.2
 Weight = 9.5
 Color = Purple
 Shape = 11
-RegionalNumbers = 259
+RegionalNumbers = 110,110
 Kind = Poison Gas
 Pokedex = Very rarely, a sudden mutation can result in two small Koffing twins becoming conjoined as a Weezing.
 WildItemUncommon = SMOKEBALL
@@ -3551,7 +3551,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [111]
 Name = Rhyhorn
@@ -3575,7 +3575,7 @@ Height = 1.0
 Weight = 115.0
 Color = Gray
 Shape = 8
-RegionalNumbers = 260
+RegionalNumbers = 111,111
 Kind = Spikes
 Pokedex = It is inept at turning because of its four short legs. It can only charge and run in one direction.
 BattlerPlayerX = 0
@@ -3607,7 +3607,7 @@ Height = 1.9
 Weight = 120.0
 Color = Gray
 Shape = 6
-RegionalNumbers = 261
+RegionalNumbers = 112,112
 Kind = Drill
 Pokedex = It begins walking on its hind legs after evolution. It can punch holes through boulders with its horn.
 BattlerPlayerX = 0
@@ -3639,7 +3639,7 @@ Height = 1.1
 Weight = 34.6
 Color = Pink
 Shape = 6
-RegionalNumbers = 264
+RegionalNumbers = 113,113
 Kind = Egg
 Pokedex = It lays several eggs a day. The eggs are apparently rich in nutrients and extremely delicious.
 WildItemCommon = LUCKYPUNCH
@@ -3672,7 +3672,7 @@ Height = 1.0
 Weight = 35.0
 Color = Blue
 Shape = 7
-RegionalNumbers = 266
+RegionalNumbers = 114,114
 Kind = Vine
 Pokedex = It tangles any moving thing with its vines. Their subtle shaking is ticklish if you get ensnared.
 BattlerPlayerX = 0
@@ -3704,7 +3704,7 @@ Height = 2.2
 Weight = 80.0
 Color = Brown
 Shape = 6
-RegionalNumbers = 268
+RegionalNumbers = 115,115
 Kind = Parent
 Pokedex = If it is safe, the young gets out of the belly pouch to play. The adult keeps a close eye on the youngster.
 BattlerPlayerX = 0
@@ -3713,7 +3713,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [116]
 Name = Horsea
@@ -3736,7 +3736,7 @@ Height = 0.4
 Weight = 8.0
 Color = Blue
 Shape = 5
-RegionalNumbers = 269
+RegionalNumbers = 116,116
 Kind = Dragon
 Pokedex = It makes its nest in the shade of corals. If it senses danger, it spits murky ink and flees.
 WildItemUncommon = DRAGONSCALE
@@ -3768,7 +3768,7 @@ Height = 1.2
 Weight = 25.0
 Color = Blue
 Shape = 5
-RegionalNumbers = 270
+RegionalNumbers = 117,117
 Kind = Dragon
 Pokedex = It is capable of swimming backwards by rapidly flapping its winglike pectoral fins and stout tail.
 WildItemUncommon = DRAGONSCALE
@@ -3801,7 +3801,7 @@ Height = 0.6
 Weight = 15.0
 Color = Red
 Shape = 3
-RegionalNumbers = 272
+RegionalNumbers = 118,118
 Kind = Goldfish
 Pokedex = Its dorsal, pectoral, and tail fins wave elegantly in water. That is why it is known as the water dancer.
 WildItemUncommon = MYSTICWATER
@@ -3833,7 +3833,7 @@ Height = 1.3
 Weight = 39.0
 Color = Red
 Shape = 3
-RegionalNumbers = 273
+RegionalNumbers = 119,119
 Kind = Goldfish
 Pokedex = It makes its nest by hollowing out boulders in streams with its horn. It defends its eggs with its life.
 WildItemUncommon = MYSTICWATER
@@ -3843,7 +3843,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [120]
 Name = Staryu
@@ -3865,7 +3865,7 @@ Height = 0.8
 Weight = 34.5
 Color = Brown
 Shape = 5
-RegionalNumbers = 274
+RegionalNumbers = 120,120
 Kind = Star Shape
 Pokedex = It appears in large numbers by seashores. At night, its central core flashes with a red light.
 WildItemCommon = STARDUST
@@ -3899,7 +3899,7 @@ Height = 1.1
 Weight = 80.0
 Color = Purple
 Shape = 5
-RegionalNumbers = 275
+RegionalNumbers = 121,121
 Kind = Mysterious
 Pokedex = At the center of its body is a red core, which sends mysterious radio signals into the night sky.
 WildItemCommon = STARDUST
@@ -3910,7 +3910,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [122]
 Name = Mr. Mime
@@ -3934,7 +3934,7 @@ Height = 1.3
 Weight = 54.5
 Color = Pink
 Shape = 12
-RegionalNumbers = 296
+RegionalNumbers = 122,122
 Kind = Barrier
 Pokedex = It is adept at conning people. It is said to be able to create walls out of thin air by miming.
 BattlerPlayerX = 0
@@ -3943,7 +3943,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [123]
 Name = Scyther
@@ -3967,7 +3967,7 @@ Height = 1.5
 Weight = 56.0
 Color = Green
 Shape = 13
-RegionalNumbers = 302
+RegionalNumbers = 123,123
 Kind = Mantis
 Pokedex = It slashes through grass with its sharp scythes, moving too fast for the human eye to track.
 BattlerPlayerX = 0
@@ -3999,7 +3999,7 @@ Height = 1.4
 Weight = 40.6
 Color = Red
 Shape = 12
-RegionalNumbers = 305
+RegionalNumbers = 124,124
 Kind = Human Shape
 Pokedex = It speaks using a language that sounds human. Research is under way to determine what is being said.
 BattlerPlayerX = 0
@@ -4008,7 +4008,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [125]
 Name = Electabuzz
@@ -4030,7 +4030,7 @@ Height = 1.1
 Weight = 30.0
 Color = Yellow
 Shape = 6
-RegionalNumbers = 307
+RegionalNumbers = 125,125
 Kind = Electric
 Pokedex = It loves to feed on strong electricity. It occasionally appears around large power plants and so on.
 WildItemUncommon = ELECTIRIZER
@@ -4062,7 +4062,7 @@ Height = 1.3
 Weight = 44.5
 Color = Red
 Shape = 6
-RegionalNumbers = 310
+RegionalNumbers = 126,126
 Kind = Spitfire
 Pokedex = Born in the spout of a volcano, its body is covered by flames that shimmer like the sun.
 WildItemUncommon = MAGMARIZER
@@ -4095,7 +4095,7 @@ Height = 1.5
 Weight = 55.0
 Color = Brown
 Shape = 12
-RegionalNumbers = 312
+RegionalNumbers = 127,127
 Kind = Stag Beetle
 Pokedex = It swings its long pincer horns wildly to attack. During cold periods, it hides deep in forests.
 BattlerPlayerX = 0
@@ -4104,7 +4104,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [128]
 Name = Tauros
@@ -4126,7 +4126,7 @@ Height = 1.4
 Weight = 88.4
 Color = Brown
 Shape = 8
-RegionalNumbers = 315
+RegionalNumbers = 128,128
 Kind = Wild Bull
 Pokedex = When it is about to tackle, it whips its body repeatedly with its three long tails.
 BattlerPlayerX = 0
@@ -4135,7 +4135,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [129]
 Name = Magikarp
@@ -4157,7 +4157,7 @@ Height = 0.9
 Weight = 10.0
 Color = Red
 Shape = 3
-RegionalNumbers = 318
+RegionalNumbers = 129,129
 Kind = Fish
 Pokedex = In the distant past, it was somewhat stronger than the horribly weak descendants that exist today.
 BattlerPlayerX = 0
@@ -4189,7 +4189,7 @@ Height = 6.5
 Weight = 235.0
 Color = Blue
 Shape = 2
-RegionalNumbers = 319
+RegionalNumbers = 130,130
 Kind = Atrocious
 Pokedex = Rarely seen in the wild. Huge and vicious, it is capable of destroying entire cities in a rage.
 BattlerPlayerX = 0
@@ -4198,7 +4198,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 4
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [131]
 Name = Lapras
@@ -4222,7 +4222,7 @@ Height = 2.5
 Weight = 220.0
 Color = Blue
 Shape = 3
-RegionalNumbers = 320
+RegionalNumbers = 131,131
 Kind = Transport
 Pokedex = Its high intelligence enables it to understand human speech. It likes to ferry people on its back.
 WildItemCommon = MYSTICWATER
@@ -4234,7 +4234,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [132]
 Name = Ditto
@@ -4256,7 +4256,7 @@ Height = 0.3
 Weight = 4.0
 Color = Purple
 Shape = 1
-RegionalNumbers = 322
+RegionalNumbers = 132,132
 Kind = Transform
 Pokedex = It can freely recombine its own cellular structure to transform into other life-forms.
 WildItemCommon = QUICKPOWDER
@@ -4267,7 +4267,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 30
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [133]
 Name = Eevee
@@ -4290,7 +4290,7 @@ Height = 0.3
 Weight = 6.5
 Color = Brown
 Shape = 8
-RegionalNumbers = 323
+RegionalNumbers = 133,133
 Kind = Evolution
 Pokedex = Thanks to its unstable genetic makeup, this special Pokémon conceals many different possible evolutions.
 BattlerPlayerX = 0
@@ -4321,7 +4321,7 @@ Height = 1.0
 Weight = 29.0
 Color = Blue
 Shape = 8
-RegionalNumbers = 324
+RegionalNumbers = 134,134
 Kind = Bubble Jet
 Pokedex = It has evolved to be suitable for an aquatic life. It can invisibly melt away into water.
 BattlerPlayerX = 0
@@ -4330,7 +4330,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [135]
 Name = Jolteon
@@ -4352,7 +4352,7 @@ Height = 0.8
 Weight = 24.5
 Color = Yellow
 Shape = 8
-RegionalNumbers = 325
+RegionalNumbers = 135,135
 Kind = Lightning
 Pokedex = It accumulates negative ions in the atmosphere to blast out 10,000-volt lightning bolts.
 BattlerPlayerX = 0
@@ -4361,7 +4361,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [136]
 Name = Flareon
@@ -4383,7 +4383,7 @@ Height = 0.9
 Weight = 25.0
 Color = Red
 Shape = 8
-RegionalNumbers = 326
+RegionalNumbers = 136,136
 Kind = Flame
 Pokedex = It has a flame bag inside its body. After inhaling deeply, it blows out flames of nearly 3,000 degrees Fahrenheit.
 BattlerPlayerX = 0
@@ -4392,7 +4392,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [137]
 Name = Porygon
@@ -4414,7 +4414,7 @@ Height = 0.8
 Weight = 36.5
 Color = Pink
 Shape = 7
-RegionalNumbers = 332
+RegionalNumbers = 137,137
 Kind = Virtual
 Pokedex = A Pokémon that consists entirely of programming code. It is capable of moving freely in cyberspace.
 BattlerPlayerX = 0
@@ -4447,7 +4447,7 @@ Height = 0.4
 Weight = 7.5
 Color = Blue
 Shape = 10
-RegionalNumbers = 339
+RegionalNumbers = 138,138
 Kind = Spiral
 Pokedex = Revived from an ancient fossil, this Pokémon uses air stored in its shell to sink and rise in water.
 BattlerPlayerX = 0
@@ -4479,7 +4479,7 @@ Height = 1.0
 Weight = 35.0
 Color = Blue
 Shape = 10
-RegionalNumbers = 340
+RegionalNumbers = 139,139
 Kind = Spiral
 Pokedex = Once wrapped around its prey, it never lets go. It eats the prey by tearing at it with sharp fangs.
 BattlerPlayerX = 0
@@ -4488,7 +4488,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [140]
 Name = Kabuto
@@ -4512,7 +4512,7 @@ Height = 0.5
 Weight = 11.5
 Color = Brown
 Shape = 14
-RegionalNumbers = 341
+RegionalNumbers = 140,140
 Kind = Shellfish
 Pokedex = This Pokémon was regenerated from the fossil of an ancient creature. It protects itself with a hard shell.
 BattlerPlayerX = 0
@@ -4544,7 +4544,7 @@ Height = 1.3
 Weight = 40.5
 Color = Brown
 Shape = 6
-RegionalNumbers = 342
+RegionalNumbers = 141,141
 Kind = Shellfish
 Pokedex = A slim and fast swimmer. It slices its prey with its sharp sickles and drinks the body fluids.
 BattlerPlayerX = 0
@@ -4553,7 +4553,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [142]
 Name = Aerodactyl
@@ -4577,7 +4577,7 @@ Height = 1.8
 Weight = 59.0
 Color = Purple
 Shape = 9
-RegionalNumbers = 343
+RegionalNumbers = 142,142
 Kind = Fossil
 Pokedex = This vicious Pokémon is said to have flown in ancient skies while shrieking high-pitched cries.
 BattlerPlayerX = 0
@@ -4586,7 +4586,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [143]
 Name = Snorlax
@@ -4609,7 +4609,7 @@ Height = 2.1
 Weight = 460.0
 Color = Black
 Shape = 12
-RegionalNumbers = 349
+RegionalNumbers = 143,143
 Kind = Sleeping
 Pokedex = Its stomach can digest any kind of food, even if it happens to be moldy or rotten.
 WildItemCommon = LEFTOVERS
@@ -4621,7 +4621,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [144]
 Name = Articuno
@@ -4644,7 +4644,7 @@ Height = 1.7
 Weight = 55.4
 Color = Blue
 Shape = 9
-RegionalNumbers = 368
+RegionalNumbers = 144,144
 Kind = Freeze
 Pokedex = A legendary bird Pokémon that is said to appear to doomed people who are lost in icy mountains.
 BattlerPlayerX = 0
@@ -4653,7 +4653,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [145]
 Name = Zapdos
@@ -4676,7 +4676,7 @@ Height = 1.6
 Weight = 52.6
 Color = Yellow
 Shape = 9
-RegionalNumbers = 369
+RegionalNumbers = 145,145
 Kind = Electric
 Pokedex = A legendary Pokémon that is said to live in thunderclouds. It freely controls lightning bolts.
 BattlerPlayerX = 0
@@ -4685,7 +4685,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [146]
 Name = Moltres
@@ -4708,7 +4708,7 @@ Height = 2.0
 Weight = 60.0
 Color = Yellow
 Shape = 9
-RegionalNumbers = 370
+RegionalNumbers = 146,146
 Kind = Flame
 Pokedex = One of the legendary bird Pokémon. It is said that its appearance indicates the coming of spring.
 BattlerPlayerX = 0
@@ -4717,7 +4717,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [147]
 Name = Dratini
@@ -4740,7 +4740,7 @@ Height = 1.8
 Weight = 3.3
 Color = Blue
 Shape = 2
-RegionalNumbers = 374
+RegionalNumbers = 147,147
 Kind = Dragon
 Pokedex = This Pokémon is full of life energy. It continually sheds its skin and grows steadily larger.
 WildItemUncommon = DRAGONSCALE
@@ -4772,7 +4772,7 @@ Height = 4.0
 Weight = 16.5
 Color = Blue
 Shape = 2
-RegionalNumbers = 375
+RegionalNumbers = 148,148
 Kind = Dragon
 Pokedex = A mystical Pokémon that exudes a gentle aura. It is said to have the ability to change the weather.
 WildItemUncommon = DRAGONSCALE
@@ -4805,7 +4805,7 @@ Height = 2.2
 Weight = 210.0
 Color = Brown
 Shape = 6
-RegionalNumbers = 376
+RegionalNumbers = 149,149
 Kind = Dragon
 Pokedex = It is said to make its home somewhere in the sea. It guides crews of shipwrecks to shore.
 WildItemUncommon = DRAGONSCALE
@@ -4815,7 +4815,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 5
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [150]
 Name = Mewtwo
@@ -4837,7 +4837,7 @@ Height = 2.0
 Weight = 122.0
 Color = Purple
 Shape = 6
-RegionalNumbers = 386
+RegionalNumbers = 150,150
 Kind = Genetic
 Pokedex = A Pokémon created by recombining Mew's genes. It's said to have the most savage heart among Pokémon.
 BattlerPlayerX = 0
@@ -4846,7 +4846,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [151]
 Name = Mew
@@ -4867,7 +4867,7 @@ Height = 0.4
 Weight = 4.0
 Color = Pink
 Shape = 6
-RegionalNumbers = 387
+RegionalNumbers = 151,151
 Kind = New Species
 Pokedex = Its DNA is said to contain the genetic codes of all Pokémon, so it can use all kinds of techniques.
 WildItemCommon = LUMBERRY
@@ -4879,7 +4879,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [152]
 Name = Chikorita
@@ -4902,7 +4902,7 @@ Height = 0.9
 Weight = 6.4
 Color = Green
 Shape = 8
-RegionalNumbers = 350
+RegionalNumbers = 0,152
 Kind = Leaf
 Pokedex = It uses the leaf on its head to determine the temperature and humidity. It loves to sunbathe.
 BattlerPlayerX = 0
@@ -4933,7 +4933,7 @@ Height = 1.2
 Weight = 15.8
 Color = Green
 Shape = 8
-RegionalNumbers = 351
+RegionalNumbers = 0,153
 Kind = Leaf
 Pokedex = The buds that ring its neck give off a spicy aroma that perks people up.
 BattlerPlayerX = 0
@@ -4964,7 +4964,7 @@ Height = 1.8
 Weight = 100.5
 Color = Green
 Shape = 8
-RegionalNumbers = 352
+RegionalNumbers = 0,154
 Kind = Herb
 Pokedex = Meganium's breath has the power to revive dead grass and plants. It can make them healthy again.
 BattlerPlayerX = 0
@@ -4973,7 +4973,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 6
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [155]
 Name = Cyndaquil
@@ -4996,7 +4996,7 @@ Height = 0.5
 Weight = 7.9
 Color = Yellow
 Shape = 12
-RegionalNumbers = 353
+RegionalNumbers = 0,155
 Kind = Fire Mouse
 Pokedex = It has a timid nature. If it is startled, the flames on its back burn more vigorously.
 BattlerPlayerX = 0
@@ -5027,7 +5027,7 @@ Height = 0.9
 Weight = 19.0
 Color = Yellow
 Shape = 8
-RegionalNumbers = 354
+RegionalNumbers = 0,156
 Kind = Volcano
 Pokedex = Be careful if it turns its back during battle. It means that it will attack with the fire on its back.
 BattlerPlayerX = 0
@@ -5058,7 +5058,7 @@ Height = 1.7
 Weight = 79.5
 Color = Yellow
 Shape = 8
-RegionalNumbers = 355
+RegionalNumbers = 0,157
 Kind = Volcano
 Pokedex = It has a secret, devastating move. It rubs its blazing fur together to cause huge explosions.
 BattlerPlayerX = 0
@@ -5067,7 +5067,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 6
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [158]
 Name = Totodile
@@ -5090,7 +5090,7 @@ Height = 0.6
 Weight = 9.5
 Color = Blue
 Shape = 6
-RegionalNumbers = 356
+RegionalNumbers = 0,158
 Kind = Big Jaw
 Pokedex = Its powerful, well-developed jaws are capable of crushing anything. Even its Trainer must be careful.
 BattlerPlayerX = 0
@@ -5121,7 +5121,7 @@ Height = 1.1
 Weight = 25.0
 Color = Blue
 Shape = 6
-RegionalNumbers = 357
+RegionalNumbers = 0,159
 Kind = Big Jaw
 Pokedex = Once it bites down, it won't let go until it loses its fangs. New fangs quickly grow into place.
 BattlerPlayerX = 0
@@ -5152,7 +5152,7 @@ Height = 2.3
 Weight = 88.8
 Color = Blue
 Shape = 6
-RegionalNumbers = 358
+RegionalNumbers = 0,160
 Kind = Big Jaw
 Pokedex = When it bites with its massive and powerful jaws, it shakes its head and savagely tears its victim up.
 BattlerPlayerX = 0
@@ -5161,7 +5161,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [161]
 Name = Sentret
@@ -5184,7 +5184,7 @@ Height = 0.8
 Weight = 6.0
 Color = Brown
 Shape = 8
-RegionalNumbers = 34
+RegionalNumbers = 0,161
 Kind = Scout
 Pokedex = It stands on its tail so it can see a long way. If it spots an enemy, it cries loudly to warn its kind.
 BattlerPlayerX = 0
@@ -5215,7 +5215,7 @@ Height = 1.8
 Weight = 32.5
 Color = Brown
 Shape = 8
-RegionalNumbers = 35
+RegionalNumbers = 0,162
 Kind = Long Body
 Pokedex = It makes a nest to suit its long and skinny body. The nest is impossible for other Pokémon to enter.
 BattlerPlayerX = 0
@@ -5224,7 +5224,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [163]
 Name = Hoothoot
@@ -5248,7 +5248,7 @@ Height = 0.7
 Weight = 21.2
 Color = Brown
 Shape = 9
-RegionalNumbers = 30
+RegionalNumbers = 0,163
 Kind = Owl
 Pokedex = It always stands on one foot. It changes feet so fast, the movement can rarely be seen.
 BattlerPlayerX = 0
@@ -5280,7 +5280,7 @@ Height = 1.6
 Weight = 40.8
 Color = Brown
 Shape = 9
-RegionalNumbers = 31
+RegionalNumbers = 0,164
 Kind = Owl
 Pokedex = When it needs to think, it rotates its head 180 degrees to sharpen its intellectual power.
 BattlerPlayerX = 0
@@ -5289,7 +5289,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [165]
 Name = Ledyba
@@ -5313,7 +5313,7 @@ Height = 1.0
 Weight = 10.8
 Color = Red
 Shape = 9
-RegionalNumbers = 16
+RegionalNumbers = 0,165
 Kind = Five Star
 Pokedex = It is timid and clusters together with others. The fluid secreted by its feet indicates its location.
 BattlerPlayerX = 0
@@ -5345,7 +5345,7 @@ Height = 1.4
 Weight = 35.6
 Color = Red
 Shape = 9
-RegionalNumbers = 17
+RegionalNumbers = 0,166
 Kind = Five Star
 Pokedex = The spot patterns on its back grow larger or smaller depending on the number of stars in the night sky.
 BattlerPlayerX = 0
@@ -5354,7 +5354,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [167]
 Name = Spinarak
@@ -5378,7 +5378,7 @@ Height = 0.5
 Weight = 8.5
 Color = Green
 Shape = 14
-RegionalNumbers = 18
+RegionalNumbers = 0,167
 Kind = String Spit
 Pokedex = It lies still in the same pose for days in its web, waiting for its unsuspecting prey to wander close.
 BattlerPlayerX = 0
@@ -5410,7 +5410,7 @@ Height = 1.1
 Weight = 33.5
 Color = Red
 Shape = 14
-RegionalNumbers = 19
+RegionalNumbers = 0,168
 Kind = Long Leg
 Pokedex = It attaches silk to its prey and sets it free. Later, it tracks the silk to the prey and its friends.
 BattlerPlayerX = 0
@@ -5419,7 +5419,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [169]
 Name = Crobat
@@ -5442,7 +5442,7 @@ Height = 1.8
 Weight = 75.0
 Color = Purple
 Shape = 13
-RegionalNumbers = 108
+RegionalNumbers = 0,169
 Kind = Bat
 Pokedex = Having four wings allows it to fly more quickly and quietly so it can sneak up on prey without its noticing.
 BattlerPlayerX = 0
@@ -5451,7 +5451,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [170]
 Name = Chinchou
@@ -5475,7 +5475,7 @@ Height = 0.5
 Weight = 12.0
 Color = Blue
 Shape = 3
-RegionalNumbers = 238
+RegionalNumbers = 0,170
 Kind = Angler
 Pokedex = It shoots positive and negative electricity between the tips of its two antennae and zaps its enemies.
 WildItemUncommon = DEEPSEASCALE
@@ -5508,7 +5508,7 @@ Height = 1.2
 Weight = 22.5
 Color = Blue
 Shape = 3
-RegionalNumbers = 239
+RegionalNumbers = 0,171
 Kind = Light
 Pokedex = It blinds prey with an intense burst of light. With the prey incapacitated, the Pokémon swallows it in a single gulp.
 WildItemUncommon = DEEPSEASCALE
@@ -5518,7 +5518,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [172]
 Name = Pichu
@@ -5541,7 +5541,7 @@ Height = 0.3
 Weight = 2.0
 Color = Yellow
 Shape = 8
-RegionalNumbers = 61
+RegionalNumbers = 0,172
 Kind = Tiny Mouse
 Pokedex = It is not yet skilled at storing electricity. It may send out a jolt if amused or startled.
 BattlerPlayerX = 0
@@ -5573,7 +5573,7 @@ Height = 0.3
 Weight = 3.0
 Color = Pink
 Shape = 6
-RegionalNumbers = 90
+RegionalNumbers = 0,173
 Kind = Star Shape
 Pokedex = Many appear when the night skies are filled with shooting stars. They disappear with sunrise.
 WildItemUncommon = MOONSTONE
@@ -5607,7 +5607,7 @@ Height = 0.3
 Weight = 1.0
 Color = Pink
 Shape = 12
-RegionalNumbers = 95
+RegionalNumbers = 0,174
 Kind = Balloon
 Pokedex = It has a very soft body. If it starts to roll, it will bounce all over and be impossible to stop.
 BattlerPlayerX = 0
@@ -5639,7 +5639,7 @@ Height = 0.3
 Weight = 1.5
 Color = White
 Shape = 12
-RegionalNumbers = 98
+RegionalNumbers = 0,175
 Kind = Spike Ball
 Pokedex = A proverb claims that happiness will come to anyone who can make a sleeping Togepi stand up.
 BattlerPlayerX = 0
@@ -5671,7 +5671,7 @@ Height = 0.6
 Weight = 3.2
 Color = White
 Shape = 12
-RegionalNumbers = 99
+RegionalNumbers = 0,176
 Kind = Happiness
 Pokedex = They say that it will appear before kindhearted, caring people and shower them with happiness.
 BattlerPlayerX = 0
@@ -5704,7 +5704,7 @@ Height = 0.2
 Weight = 2.0
 Color = Green
 Shape = 9
-RegionalNumbers = 208
+RegionalNumbers = 0,177
 Kind = Tiny Bird
 Pokedex = It usually forages for food on the ground but may, on rare occasions, hop onto branches to peck at shoots.
 BattlerPlayerX = 0
@@ -5736,7 +5736,7 @@ Height = 1.5
 Weight = 15.0
 Color = Green
 Shape = 9
-RegionalNumbers = 209
+RegionalNumbers = 0,178
 Kind = Mystic
 Pokedex = They say that it stays still and quiet because it is seeing both the past and future at the same time.
 BattlerPlayerX = 0
@@ -5745,7 +5745,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [179]
 Name = Mareep
@@ -5768,7 +5768,7 @@ Height = 0.6
 Weight = 7.8
 Color = White
 Shape = 8
-RegionalNumbers = 67
+RegionalNumbers = 0,179
 Kind = Wool
 Pokedex = It stores lots of air in its soft fur, allowing it to stay cool in summer and warm in winter.
 BattlerPlayerX = 0
@@ -5799,7 +5799,7 @@ Height = 0.8
 Weight = 13.3
 Color = Pink
 Shape = 6
-RegionalNumbers = 68
+RegionalNumbers = 0,180
 Kind = Wool
 Pokedex = If its coat becomes fully charged with electricity, its tail lights up. It fires hair that zaps on impact.
 BattlerPlayerX = 0
@@ -5830,7 +5830,7 @@ Height = 1.4
 Weight = 61.5
 Color = Yellow
 Shape = 6
-RegionalNumbers = 69
+RegionalNumbers = 0,181
 Kind = Light
 Pokedex = The tail's tip shines brightly and can be seen from far away. It acts as a beacon for lost people.
 BattlerPlayerX = 0
@@ -5839,7 +5839,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [182]
 Name = Bellossom
@@ -5861,7 +5861,7 @@ Height = 0.4
 Weight = 5.8
 Color = Green
 Shape = 12
-RegionalNumbers = 112
+RegionalNumbers = 0,182
 Kind = Flower
 Pokedex = When the heavy rainfall season ends, it is drawn out by warm sunlight to dance in the open.
 WildItemUncommon = ABSORBBULB
@@ -5871,7 +5871,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 27
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [183]
 Name = Marill
@@ -5895,7 +5895,7 @@ Height = 0.4
 Weight = 8.5
 Color = Blue
 Shape = 6
-RegionalNumbers = 192
+RegionalNumbers = 0,183
 Kind = Aqua Mouse
 Pokedex = The tip of its tail is filled with oil that is lighter than water, so it acts as a float.
 BattlerPlayerX = 0
@@ -5927,7 +5927,7 @@ Height = 0.8
 Weight = 28.5
 Color = Blue
 Shape = 6
-RegionalNumbers = 193
+RegionalNumbers = 0,184
 Kind = Aqua Rabbit
 Pokedex = The bubble-like pattern on its stomach helps it camouflage itself when it's in the water.
 BattlerPlayerX = 0
@@ -5936,7 +5936,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [185]
 Name = Sudowoodo
@@ -5959,7 +5959,7 @@ Height = 1.2
 Weight = 38.0
 Color = Brown
 Shape = 12
-RegionalNumbers = 170
+RegionalNumbers = 0,185
 Kind = Imitation
 Pokedex = It disguises itself as a tree to avoid attack. It hates water, so it will disappear if it starts raining.
 BattlerPlayerX = 0
@@ -5968,7 +5968,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [186]
 Name = Politoed
@@ -5990,7 +5990,7 @@ Height = 1.1
 Weight = 33.9
 Color = Green
 Shape = 12
-RegionalNumbers = 147
+RegionalNumbers = 0,186
 Kind = Frog
 Pokedex = If Poliwag and Poliwhirl hear its echoing cry, they respond by gathering from far and wide.
 WildItemUncommon = KINGSROCK
@@ -6000,7 +6000,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [187]
 Name = Hoppip
@@ -6024,7 +6024,7 @@ Height = 0.4
 Weight = 0.5
 Color = Pink
 Shape = 6
-RegionalNumbers = 113
+RegionalNumbers = 0,187
 Kind = Cottonweed
 Pokedex = It drifts on winds. It is said that when Hoppip gather in fields and mountains, spring is on the way.
 BattlerPlayerX = 0
@@ -6056,7 +6056,7 @@ Height = 0.6
 Weight = 1.0
 Color = Green
 Shape = 6
-RegionalNumbers = 114
+RegionalNumbers = 0,188
 Kind = Cottonweed
 Pokedex = It spreads its petals to absorb sunlight. It also floats in the air to get closer to the sun.
 BattlerPlayerX = 0
@@ -6088,7 +6088,7 @@ Height = 0.8
 Weight = 3.0
 Color = Blue
 Shape = 6
-RegionalNumbers = 115
+RegionalNumbers = 0,189
 Kind = Cottonweed
 Pokedex = Even in the fiercest wind, it can control its fluff to make its way to any place in the world it wants.
 BattlerPlayerX = 0
@@ -6097,7 +6097,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [190]
 Name = Aipom
@@ -6120,7 +6120,7 @@ Height = 0.8
 Weight = 11.5
 Color = Purple
 Shape = 6
-RegionalNumbers = 181
+RegionalNumbers = 0,190
 Kind = Long Tail
 Pokedex = Its tail is so powerful that it can use it to grab a tree branch and hold itself up in the air.
 BattlerPlayerX = 0
@@ -6152,7 +6152,7 @@ Height = 0.3
 Weight = 1.8
 Color = Yellow
 Shape = 1
-RegionalNumbers = 162
+RegionalNumbers = 0,191
 Kind = Seed
 Pokedex = It lives by drinking only dewdrops from under the leaves of plants. It is said that it eats nothing else.
 BattlerPlayerX = 0
@@ -6183,7 +6183,7 @@ Height = 0.8
 Weight = 8.5
 Color = Yellow
 Shape = 12
-RegionalNumbers = 163
+RegionalNumbers = 0,192
 Kind = Sun
 Pokedex = It gets energy from warm sunlight and is known for its habit of moving in pursuit of it.
 BattlerPlayerX = 0
@@ -6192,7 +6192,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [193]
 Name = Yanma
@@ -6216,7 +6216,7 @@ Height = 1.2
 Weight = 38.0
 Color = Red
 Shape = 13
-RegionalNumbers = 158
+RegionalNumbers = 0,193
 Kind = Clear Wing
 Pokedex = If it flaps its wings really fast, it can generate shock waves that will shatter windows in the area.
 WildItemUncommon = WIDELENS
@@ -6250,7 +6250,7 @@ Height = 0.4
 Weight = 8.5
 Color = Blue
 Shape = 7
-RegionalNumbers = 70
+RegionalNumbers = 0,194
 Kind = Water Fish
 Pokedex = When the temperature cools in the evening, they emerge from water to seek food along the shore.
 BattlerPlayerX = 0
@@ -6282,7 +6282,7 @@ Height = 1.4
 Weight = 75.0
 Color = Blue
 Shape = 6
-RegionalNumbers = 71
+RegionalNumbers = 0,195
 Kind = Water Fish
 Pokedex = This carefree Pokémon has an easygoing nature. While swimming, it always bumps into boat hulls.
 BattlerPlayerX = 0
@@ -6291,7 +6291,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [196]
 Name = Espeon
@@ -6313,7 +6313,7 @@ Height = 0.9
 Weight = 26.5
 Color = Purple
 Shape = 8
-RegionalNumbers = 327
+RegionalNumbers = 0,196
 Kind = Sun
 Pokedex = Its fur is so sensitive, it can feel minute shifts in the air and predict the weather...and its foes' thoughts.
 BattlerPlayerX = 0
@@ -6322,7 +6322,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [197]
 Name = Umbreon
@@ -6344,7 +6344,7 @@ Height = 1.0
 Weight = 27.0
 Color = Black
 Shape = 8
-RegionalNumbers = 328
+RegionalNumbers = 0,197
 Kind = Moonlight
 Pokedex = When exposed to the moon's aura, the rings on its body glow faintly and it's filled with a mysterious power.
 BattlerPlayerX = 0
@@ -6353,7 +6353,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [198]
 Name = Murkrow
@@ -6377,7 +6377,7 @@ Height = 0.5
 Weight = 2.1
 Color = Black
 Shape = 9
-RegionalNumbers = 289
+RegionalNumbers = 0,198
 Kind = Darkness
 Pokedex = Feared and loathed by many, it is believed to bring misfortune to all those who see it at night.
 BattlerPlayerX = 0
@@ -6409,7 +6409,7 @@ Height = 2.0
 Weight = 79.5
 Color = Pink
 Shape = 6
-RegionalNumbers = 189
+RegionalNumbers = 0,199
 Kind = Royal
 Pokedex = When its head was bitten, toxins entered Slowpoke's head and unlocked an extraordinary power.
 WildItemUncommon = KINGSROCK
@@ -6419,7 +6419,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [200]
 Name = Misdreavus
@@ -6441,7 +6441,7 @@ Height = 0.7
 Weight = 1.0
 Color = Purple
 Shape = 1
-RegionalNumbers = 300
+RegionalNumbers = 0,200
 Kind = Screech
 Pokedex = It likes playing mischievous tricks, such as screaming and wailing to startle people at night.
 BattlerPlayerX = 0
@@ -6471,7 +6471,7 @@ Height = 0.5
 Weight = 5.0
 Color = Black
 Shape = 1
-RegionalNumbers = 77
+RegionalNumbers = 0,201
 Kind = Symbol
 Pokedex = Shaped like ancient writing, it is a huge mystery whether language or Unown came first.
 FormName = A
@@ -6481,7 +6481,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 27
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [202]
 Name = Wobbuffet
@@ -6503,7 +6503,7 @@ Height = 1.3
 Weight = 28.5
 Color = Blue
 Shape = 5
-RegionalNumbers = 172
+RegionalNumbers = 0,202
 Kind = Patient
 Pokedex = To keep its pitch-black tail hidden, it lives quietly in the darkness. It is never first to attack.
 BattlerPlayerX = 0
@@ -6512,7 +6512,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [203]
 Name = Girafarig
@@ -6536,7 +6536,7 @@ Height = 1.5
 Weight = 41.5
 Color = Yellow
 Shape = 8
-RegionalNumbers = 314
+RegionalNumbers = 0,203
 Kind = Long Neck
 Pokedex = Its tail has a small brain of its own. Beware! If you get close, it may react to your scent by biting.
 BattlerPlayerX = 0
@@ -6545,7 +6545,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [204]
 Name = Pineco
@@ -6568,7 +6568,7 @@ Height = 0.6
 Weight = 7.2
 Color = Gray
 Shape = 1
-RegionalNumbers = 148
+RegionalNumbers = 0,204
 Kind = Bagworm
 Pokedex = It looks just like a pinecone. Its shell protects it from bird Pokémon that peck it by mistake.
 BattlerPlayerX = 0
@@ -6600,7 +6600,7 @@ Height = 1.2
 Weight = 125.8
 Color = Purple
 Shape = 1
-RegionalNumbers = 149
+RegionalNumbers = 0,205
 Kind = Bagworm
 Pokedex = It remains immovably rooted to its tree. It scatters pieces of its hard shell to drive its enemies away.
 BattlerPlayerX = 0
@@ -6609,7 +6609,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [206]
 Name = Dunsparce
@@ -6632,7 +6632,7 @@ Height = 1.5
 Weight = 14.0
 Color = Yellow
 Shape = 2
-RegionalNumbers = 66
+RegionalNumbers = 0,206
 Kind = Land Snake
 Pokedex = It digs into the ground with its tail and makes a mazelike nest. It can fly just a little.
 BattlerPlayerX = 0
@@ -6641,7 +6641,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [207]
 Name = Gligar
@@ -6665,7 +6665,7 @@ Height = 1.1
 Weight = 64.8
 Color = Purple
 Shape = 9
-RegionalNumbers = 276
+RegionalNumbers = 0,207
 Kind = FlyScorpion
 Pokedex = It flies straight at its target's face, then clamps down on the startled victim to inject poison.
 BattlerPlayerX = 0
@@ -6697,7 +6697,7 @@ Height = 9.2
 Weight = 400.0
 Color = Gray
 Shape = 2
-RegionalNumbers = 228
+RegionalNumbers = 0,208
 Kind = Iron Snake
 Pokedex = It chews its way through boulders with its sturdy jaws. Its eyes can see in the darkness underground.
 WildItemUncommon = METALCOAT
@@ -6707,7 +6707,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 6
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [209]
 Name = Snubbull
@@ -6730,7 +6730,7 @@ Height = 0.6
 Weight = 7.8
 Color = Pink
 Shape = 12
-RegionalNumbers = 183
+RegionalNumbers = 0,209
 Kind = Fairy
 Pokedex = Small Pokémon flee from its scary face. It is, however, considered by women to be cute.
 BattlerPlayerX = 0
@@ -6761,7 +6761,7 @@ Height = 1.4
 Weight = 48.7
 Color = Purple
 Shape = 6
-RegionalNumbers = 184
+RegionalNumbers = 0,210
 Kind = Fairy
 Pokedex = It can make most any Pokémon run away simply by opening its mouth wide to reveal its big fangs.
 BattlerPlayerX = 0
@@ -6770,7 +6770,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [211]
 Name = Qwilfish
@@ -6794,7 +6794,7 @@ Height = 0.5
 Weight = 3.9
 Color = Gray
 Shape = 3
-RegionalNumbers = 223
+RegionalNumbers = 0,211
 Kind = Balloon
 Pokedex = The small spikes covering its body developed from scales. They inject a toxin that causes fainting.
 WildItemUncommon = POISONBARB
@@ -6804,7 +6804,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 28
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [212]
 Name = Scizor
@@ -6827,7 +6827,7 @@ Height = 1.8
 Weight = 118.0
 Color = Red
 Shape = 13
-RegionalNumbers = 303
+RegionalNumbers = 0,212
 Kind = Pincer
 Pokedex = It has a steel-hard body. It intimidates foes by upraising its eye-patterned pincers.
 BattlerPlayerX = 0
@@ -6836,7 +6836,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [213]
 Name = Shuckle
@@ -6860,7 +6860,7 @@ Height = 0.6
 Weight = 20.5
 Color = Yellow
 Shape = 14
-RegionalNumbers = 233
+RegionalNumbers = 0,213
 Kind = Mold
 Pokedex = It stores berries inside its shell. To avoid attacks, it hides beneath rocks and remains completely still.
 WildItemCommon = BERRYJUICE
@@ -6872,7 +6872,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [214]
 Name = Heracross
@@ -6896,7 +6896,7 @@ Height = 1.5
 Weight = 54.0
 Color = Blue
 Shape = 12
-RegionalNumbers = 313
+RegionalNumbers = 0,214
 Kind = Single Horn
 Pokedex = With its Herculean powers, it can easily throw around an object that is 100 times its own weight.
 BattlerPlayerX = 0
@@ -6905,7 +6905,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [215]
 Name = Sneasel
@@ -6929,7 +6929,7 @@ Height = 0.9
 Weight = 28.0
 Color = Black
 Shape = 6
-RegionalNumbers = 298
+RegionalNumbers = 0,215
 Kind = Sharp Claw
 Pokedex = Its paws conceal sharp claws. If attacked, it suddenly extends the claws and startles its enemy.
 WildItemUncommon = QUICKCLAW
@@ -6962,7 +6962,7 @@ Height = 0.6
 Weight = 8.8
 Color = Brown
 Shape = 6
-RegionalNumbers = 282
+RegionalNumbers = 0,216
 Kind = Little Bear
 Pokedex = Before food becomes scarce in wintertime, its habit is to hoard food in many hidden locations.
 BattlerPlayerX = 0
@@ -6993,7 +6993,7 @@ Height = 1.8
 Weight = 125.8
 Color = Brown
 Shape = 6
-RegionalNumbers = 283
+RegionalNumbers = 0,217
 Kind = Hibernator
 Pokedex = Although it has a large body, it is quite skilled at climbing trees. It eats and sleeps in the treetops.
 BattlerPlayerX = 0
@@ -7002,7 +7002,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [218]
 Name = Slugma
@@ -7025,7 +7025,7 @@ Height = 0.7
 Weight = 35.0
 Color = Red
 Shape = 2
-RegionalNumbers = 293
+RegionalNumbers = 0,218
 Kind = Lava
 Pokedex = Its body is made of magma. If it doesn't keep moving, its body will cool and harden.
 BattlerPlayerX = 0
@@ -7057,7 +7057,7 @@ Height = 0.8
 Weight = 55.0
 Color = Red
 Shape = 2
-RegionalNumbers = 294
+RegionalNumbers = 0,219
 Kind = Lava
 Pokedex = Its body is as hot as lava and is always billowing. Flames will occasionally burst from its shell.
 BattlerPlayerX = 0
@@ -7066,7 +7066,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [220]
 Name = Swinub
@@ -7090,7 +7090,7 @@ Height = 0.4
 Weight = 6.5
 Color = Brown
 Shape = 8
-RegionalNumbers = 279
+RegionalNumbers = 0,220
 Kind = Pig
 Pokedex = If it smells something enticing, it dashes off headlong to find the source of the aroma.
 BattlerPlayerX = 0
@@ -7122,7 +7122,7 @@ Height = 1.1
 Weight = 55.8
 Color = Brown
 Shape = 8
-RegionalNumbers = 280
+RegionalNumbers = 0,221
 Kind = Swine
 Pokedex = Because the long hair all over its body obscures its sight, it just keeps charging repeatedly.
 BattlerPlayerX = 0
@@ -7155,7 +7155,7 @@ Height = 0.6
 Weight = 5.0
 Color = Pink
 Shape = 14
-RegionalNumbers = 234
+RegionalNumbers = 0,222
 Kind = Coral
 Pokedex = They prefer unpolluted southern seas. Their coral branches lose their color and deteriorate in dirty water.
 WildItemUncommon = LUMINOUSMOSS
@@ -7165,7 +7165,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [223]
 Name = Remoraid
@@ -7188,7 +7188,7 @@ Height = 0.6
 Weight = 12.0
 Color = Gray
 Shape = 3
-RegionalNumbers = 236
+RegionalNumbers = 0,223
 Kind = Jet
 Pokedex = Using its dorsal fin as a suction pad, it clings to a Mantine's underside to scavenge for leftovers.
 BattlerPlayerX = 0
@@ -7219,7 +7219,7 @@ Height = 0.9
 Weight = 28.5
 Color = Red
 Shape = 10
-RegionalNumbers = 237
+RegionalNumbers = 0,224
 Kind = Jet
 Pokedex = It traps foes with the suction cups on its tentacles, then smashes them with its rock-hard head.
 BattlerPlayerX = 0
@@ -7228,7 +7228,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [225]
 Name = Delibird
@@ -7252,7 +7252,7 @@ Height = 0.9
 Weight = 16.0
 Color = Red
 Shape = 9
-RegionalNumbers = 278
+RegionalNumbers = 0,225
 Kind = Delivery
 Pokedex = It carries food all day long. When someone is lost in the mountains, it shares that food.
 BattlerPlayerX = 0
@@ -7261,7 +7261,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [226]
 Name = Mantine
@@ -7285,7 +7285,7 @@ Height = 2.1
 Weight = 220.0
 Color = Purple
 Shape = 9
-RegionalNumbers = 287
+RegionalNumbers = 0,226
 Kind = Kite
 Pokedex = While elegantly swimming in the sea, it ignores Remoraid that cling to its fins seeking food scraps.
 BattlerPlayerX = 0
@@ -7294,7 +7294,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [227]
 Name = Skarmory
@@ -7318,7 +7318,7 @@ Height = 1.7
 Weight = 50.5
 Color = Gray
 Shape = 9
-RegionalNumbers = 288
+RegionalNumbers = 0,227
 Kind = Armor Bird
 Pokedex = Despite being clad entirely in iron-hard armor, it flies at speeds over 180 mph.
 WildItemUncommon = METALCOAT
@@ -7328,7 +7328,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [228]
 Name = Houndour
@@ -7352,7 +7352,7 @@ Height = 0.6
 Weight = 10.8
 Color = Black
 Shape = 8
-RegionalNumbers = 291
+RegionalNumbers = 0,228
 Kind = Dark
 Pokedex = To corner prey, they check each other's location using barks that only they can understand.
 BattlerPlayerX = 0
@@ -7384,7 +7384,7 @@ Height = 1.4
 Weight = 35.0
 Color = Black
 Shape = 8
-RegionalNumbers = 292
+RegionalNumbers = 0,229
 Kind = Dark
 Pokedex = The flames it breathes when angry contain toxins. If they cause a burn, it will hurt forever.
 BattlerPlayerX = 0
@@ -7393,7 +7393,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [230]
 Name = Kingdra
@@ -7416,7 +7416,7 @@ Height = 1.8
 Weight = 152.0
 Color = Blue
 Shape = 5
-RegionalNumbers = 271
+RegionalNumbers = 0,230
 Kind = Dragon
 Pokedex = It stores energy by sleeping at underwater depths at which no other life-forms can survive.
 WildItemUncommon = DRAGONSCALE
@@ -7426,7 +7426,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [231]
 Name = Phanpy
@@ -7449,7 +7449,7 @@ Height = 0.5
 Weight = 33.5
 Color = Blue
 Shape = 8
-RegionalNumbers = 284
+RegionalNumbers = 0,231
 Kind = Long Nose
 Pokedex = It is strong despite its compact size. It can easily pick up and carry an adult human on its back.
 BattlerPlayerX = 0
@@ -7480,7 +7480,7 @@ Height = 1.1
 Weight = 120.0
 Color = Gray
 Shape = 8
-RegionalNumbers = 285
+RegionalNumbers = 0,232
 Kind = Armor
 Pokedex = The longer and bigger its tusks, the higher its rank in its herd. The tusks take long to grow.
 BattlerPlayerX = 0
@@ -7489,7 +7489,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [233]
 Name = Porygon2
@@ -7511,7 +7511,7 @@ Height = 0.6
 Weight = 32.5
 Color = Red
 Shape = 7
-RegionalNumbers = 333
+RegionalNumbers = 0,233
 Kind = Virtual
 Pokedex = With planetary development software installed, it became capable of working in space.
 BattlerPlayerX = 0
@@ -7543,7 +7543,7 @@ Height = 1.4
 Weight = 71.2
 Color = Brown
 Shape = 8
-RegionalNumbers = 190
+RegionalNumbers = 0,234
 Kind = Big Horn
 Pokedex = The curved antlers subtly change the flow of air to create a strange space where reality is distorted.
 BattlerPlayerX = 0
@@ -7552,7 +7552,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [235]
 Name = Smeargle
@@ -7574,7 +7574,7 @@ Height = 1.2
 Weight = 58.0
 Color = White
 Shape = 6
-RegionalNumbers = 203
+RegionalNumbers = 0,235
 Kind = Painter
 Pokedex = Once it becomes an adult, it has a tendency to let its comrades plant footprints on its back.
 BattlerPlayerX = 0
@@ -7583,7 +7583,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [236]
 Name = Tyrogue
@@ -7606,7 +7606,7 @@ Height = 0.7
 Weight = 21.0
 Color = Purple
 Shape = 12
-RegionalNumbers = 252
+RegionalNumbers = 0,236
 Kind = Scuffle
 Pokedex = To brush up on its fighting skills, it will challenge anyone. It has a very strong competitive spirit.
 BattlerPlayerX = 0
@@ -7637,7 +7637,7 @@ Height = 1.4
 Weight = 48.0
 Color = Brown
 Shape = 6
-RegionalNumbers = 255
+RegionalNumbers = 0,237
 Kind = Handstand
 Pokedex = If you are enchanted by its smooth, dance-like kicks, you may get a closer experience with one than you'd like.
 BattlerPlayerX = 0
@@ -7646,7 +7646,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [238]
 Name = Smoochum
@@ -7670,7 +7670,7 @@ Height = 0.4
 Weight = 6.0
 Color = Pink
 Shape = 12
-RegionalNumbers = 304
+RegionalNumbers = 0,238
 Kind = Kiss
 Pokedex = It tests everything by touching with its lips, which remember what it likes and dislikes.
 BattlerPlayerX = 0
@@ -7702,7 +7702,7 @@ Height = 0.6
 Weight = 23.5
 Color = Yellow
 Shape = 12
-RegionalNumbers = 306
+RegionalNumbers = 0,239
 Kind = Electric
 Pokedex = Spinning its arms around to generate electricity makes the area between its horns shine light blue.
 WildItemUncommon = ELECTIRIZER
@@ -7735,7 +7735,7 @@ Height = 0.7
 Weight = 21.4
 Color = Red
 Shape = 6
-RegionalNumbers = 309
+RegionalNumbers = 0,240
 Kind = Live Coal
 Pokedex = Its magma-like blood circulates throughout its body. Its body's heat can top 1,100 degrees Fahrenheit.
 WildItemUncommon = MAGMARIZER
@@ -7768,7 +7768,7 @@ Height = 1.2
 Weight = 75.5
 Color = Pink
 Shape = 6
-RegionalNumbers = 316
+RegionalNumbers = 0,241
 Kind = Milk Cow
 Pokedex = Its milk is packed with nutrition, making it the ultimate beverage for the sick or weary.
 WildItemCommon = MOOMOOMILK
@@ -7780,7 +7780,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [242]
 Name = Blissey
@@ -7802,7 +7802,7 @@ Height = 1.5
 Weight = 46.8
 Color = Pink
 Shape = 12
-RegionalNumbers = 265
+RegionalNumbers = 0,242
 Kind = Happiness
 Pokedex = This kindhearted Pokémon nurses sick Pokémon to health. It senses feelings of sadness.
 WildItemCommon = LUCKYEGG
@@ -7814,7 +7814,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [243]
 Name = Raikou
@@ -7836,7 +7836,7 @@ Height = 1.9
 Weight = 178.0
 Color = Yellow
 Shape = 8
-RegionalNumbers = 371
+RegionalNumbers = 0,243
 Kind = Thunder
 Pokedex = This rough Pokémon stores energy inside its body, then sweeps across the land, shooting off electricity.
 BattlerPlayerX = 0
@@ -7845,7 +7845,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [244]
 Name = Entei
@@ -7867,7 +7867,7 @@ Height = 2.1
 Weight = 198.0
 Color = Brown
 Shape = 8
-RegionalNumbers = 372
+RegionalNumbers = 0,244
 Kind = Volcano
 Pokedex = It is said that when it roars, a volcano erupts somewhere around the globe.
 BattlerPlayerX = 0
@@ -7876,7 +7876,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [245]
 Name = Suicune
@@ -7898,7 +7898,7 @@ Height = 2.0
 Weight = 187.0
 Color = Blue
 Shape = 8
-RegionalNumbers = 373
+RegionalNumbers = 0,245
 Kind = Aurora
 Pokedex = Said to be the embodiment of north winds, it can instantly purify filthy, murky water.
 BattlerPlayerX = 0
@@ -7907,7 +7907,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [246]
 Name = Larvitar
@@ -7931,7 +7931,7 @@ Height = 0.6
 Weight = 72.0
 Color = Green
 Shape = 6
-RegionalNumbers = 377
+RegionalNumbers = 0,246
 Kind = Rock Skin
 Pokedex = Born deep underground, it comes aboveground and becomes a pupa once it has finished eating the surrounding soil.
 BattlerPlayerX = 0
@@ -7962,7 +7962,7 @@ Height = 1.2
 Weight = 152.0
 Color = Gray
 Shape = 2
-RegionalNumbers = 378
+RegionalNumbers = 0,247
 Kind = Hard Shell
 Pokedex = Its shell is as hard as sheet rock, and it is also very strong. Its thrashing can topple a mountain.
 BattlerPlayerX = 0
@@ -7994,7 +7994,7 @@ Height = 2.0
 Weight = 202.0
 Color = Green
 Shape = 6
-RegionalNumbers = 379
+RegionalNumbers = 0,248
 Kind = Armor
 Pokedex = If it rampages, it knocks down mountains and buries rivers. Maps must be redrawn afterward.
 BattlerPlayerX = 0
@@ -8003,7 +8003,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [249]
 Name = Lugia
@@ -8026,7 +8026,7 @@ Height = 5.2
 Weight = 216.0
 Color = White
 Shape = 9
-RegionalNumbers = 383
+RegionalNumbers = 0,249
 Kind = Diving
 Pokedex = It is said to be the guardian of the seas. It is rumored to have been seen on the night of a storm.
 BattlerPlayerX = 0
@@ -8035,7 +8035,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 7
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [250]
 Name = Ho-Oh
@@ -8058,7 +8058,7 @@ Height = 3.8
 Weight = 199.0
 Color = Red
 Shape = 9
-RegionalNumbers = 384
+RegionalNumbers = 0,250
 Kind = Rainbow
 Pokedex = It will reveal itself before a pure-hearted Trainer by shining its bright, rainbow-colored wings.
 WildItemCommon = SACREDASH
@@ -8070,7 +8070,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 4
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [251]
 Name = Celebi
@@ -8092,7 +8092,7 @@ Height = 0.6
 Weight = 5.0
 Color = Green
 Shape = 12
-RegionalNumbers = 385
+RegionalNumbers = 0,251
 Kind = Time Travel
 Pokedex = It has the power to travel across time, but it is said to appear only in peaceful times.
 WildItemCommon = LUMBERRY
@@ -8104,7 +8104,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [252]
 Name = Treecko
@@ -8127,7 +8127,6 @@ Height = 0.5
 Weight = 5.0
 Color = Green
 Shape = 6
-RegionalNumbers = 359
 Kind = Wood Gecko
 Pokedex = Small hooks on the bottom of its feet catch on walls and ceilings. That is how it can hang from above.
 BattlerPlayerX = 0
@@ -8158,7 +8157,6 @@ Height = 0.9
 Weight = 21.6
 Color = Green
 Shape = 6
-RegionalNumbers = 360
 Kind = Wood Gecko
 Pokedex = It lives in dense jungles. While closing in on its prey, it leaps from branch to branch.
 BattlerPlayerX = 0
@@ -8189,7 +8187,6 @@ Height = 1.7
 Weight = 52.2
 Color = Green
 Shape = 6
-RegionalNumbers = 361
 Kind = Forest
 Pokedex = It agilely leaps about the jungle and uses the sharp leaves on its arms to strike its prey.
 BattlerPlayerX = 0
@@ -8198,7 +8195,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [255]
 Name = Torchic
@@ -8221,7 +8218,6 @@ Height = 0.4
 Weight = 2.5
 Color = Red
 Shape = 7
-RegionalNumbers = 362
 Kind = Chick
 Pokedex = A fire burns inside, so it feels very warm to hug. It launches fireballs of 1,800 degrees Fahrenheit.
 BattlerPlayerX = 0
@@ -8253,7 +8249,6 @@ Height = 0.9
 Weight = 19.5
 Color = Red
 Shape = 6
-RegionalNumbers = 363
 Kind = Young Fowl
 Pokedex = During a battle, the hot flame in its body increases. Its kicks have outstanding destructive power.
 BattlerPlayerX = 0
@@ -8285,7 +8280,6 @@ Height = 1.9
 Weight = 52.0
 Color = Red
 Shape = 6
-RegionalNumbers = 364
 Kind = Blaze
 Pokedex = When facing a tough foe, it looses flames from its wrists. Its powerful legs let it jump clear over buildings.
 BattlerPlayerX = 0
@@ -8294,7 +8288,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [258]
 Name = Mudkip
@@ -8317,7 +8311,6 @@ Height = 0.4
 Weight = 7.6
 Color = Blue
 Shape = 8
-RegionalNumbers = 365
 Kind = Mud Fish
 Pokedex = To alert it, the fin on its head senses the flow of water. It has the strength to heft boulders.
 BattlerPlayerX = 0
@@ -8349,7 +8342,6 @@ Height = 0.7
 Weight = 28.0
 Color = Blue
 Shape = 6
-RegionalNumbers = 366
 Kind = Mud Fish
 Pokedex = Living on muddy ground that provides poor footing has made its legs sturdy.
 BattlerPlayerX = 0
@@ -8381,7 +8373,6 @@ Height = 1.5
 Weight = 81.9
 Color = Blue
 Shape = 6
-RegionalNumbers = 367
 Kind = Mud Fish
 Pokedex = It can swim while towing a large ship. It bashes down foes with a swing of its thick arms.
 BattlerPlayerX = 0
@@ -8390,7 +8381,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [261]
 Name = Poochyena
@@ -8413,7 +8404,6 @@ Height = 0.5
 Weight = 13.6
 Color = Gray
 Shape = 8
-RegionalNumbers = 36
 Kind = Bite
 Pokedex = It has a very tenacious nature. Its acute sense of smell lets it chase a chosen prey without ever losing track.
 BattlerPlayerX = 0
@@ -8444,7 +8434,6 @@ Height = 1.0
 Weight = 37.0
 Color = Gray
 Shape = 8
-RegionalNumbers = 37
 Kind = Bite
 Pokedex = It chases down prey in a pack of around ten. They defeat foes with perfectly coordinated teamwork.
 BattlerPlayerX = 0
@@ -8453,7 +8442,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [263]
 Name = Zigzagoon
@@ -8476,7 +8465,6 @@ Height = 0.4
 Weight = 17.5
 Color = Brown
 Shape = 8
-RegionalNumbers = 38
 Kind = TinyRaccoon
 Pokedex = A Pokémon with abundant curiosity. It shows an interest in everything, so it always zigzags.
 WildItemCommon = POTION
@@ -8509,7 +8497,6 @@ Height = 0.5
 Weight = 32.5
 Color = White
 Shape = 8
-RegionalNumbers = 39
 Kind = Rushing
 Pokedex = It charges prey at speeds over 60 mph. However, because it can only run straight, it often fails.
 WildItemCommon = POTION
@@ -8520,7 +8507,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [265]
 Name = Wurmple
@@ -8542,7 +8529,6 @@ Height = 0.3
 Weight = 3.6
 Color = Red
 Shape = 14
-RegionalNumbers = 20
 Kind = Worm
 Pokedex = It lives among the tall grass and in forests. It repels attacks by raising up the spikes on its rear.
 WildItemCommon = PECHABERRY
@@ -8574,7 +8560,6 @@ Height = 0.6
 Weight = 10.0
 Color = White
 Shape = 1
-RegionalNumbers = 21
 Kind = Cocoon
 Pokedex = It drinks dew that collects on its silk and waits for evolution. Its hard cocoon repels attacks.
 BattlerPlayerX = 0
@@ -8606,7 +8591,6 @@ Height = 1.0
 Weight = 28.4
 Color = Yellow
 Shape = 13
-RegionalNumbers = 22
 Kind = Butterfly
 Pokedex = It has an aggressive nature. It stabs prey with its long, narrow mouth to drain the prey's fluids.
 WildItemUncommon = SHEDSHELL
@@ -8616,7 +8600,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [268]
 Name = Cascoon
@@ -8637,7 +8621,6 @@ Height = 0.7
 Weight = 11.5
 Color = Purple
 Shape = 1
-RegionalNumbers = 23
 Kind = Cocoon
 Pokedex = It never forgets any attack it endured while in the cocoon. After evolution, it seeks payback.
 BattlerPlayerX = 0
@@ -8669,7 +8652,6 @@ Height = 1.2
 Weight = 31.6
 Color = Green
 Shape = 13
-RegionalNumbers = 24
 Kind = Poison Moth
 Pokedex = It violently flutters its wings to scatter toxic dust when attacked. It becomes active after sunset.
 WildItemUncommon = SHEDSHELL
@@ -8679,7 +8661,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [270]
 Name = Lotad
@@ -8776,7 +8758,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [273]
 Name = Seedot
@@ -8799,7 +8781,6 @@ Height = 0.5
 Weight = 4.0
 Color = Brown
 Shape = 7
-RegionalNumbers = 48
 Kind = Acorn
 Pokedex = When it dangles from a tree branch, it looks just like an acorn. It enjoys scaring other Pokémon.
 WildItemUncommon = POWERHERB
@@ -8832,7 +8813,6 @@ Height = 1.0
 Weight = 28.0
 Color = Brown
 Shape = 12
-RegionalNumbers = 49
 Kind = Wily
 Pokedex = It lives deep in forests. With the leaf on its head, it makes a flute whose song makes listeners uneasy.
 WildItemUncommon = POWERHERB
@@ -8865,7 +8845,6 @@ Height = 1.3
 Weight = 59.6
 Color = Brown
 Shape = 12
-RegionalNumbers = 50
 Kind = Wicked
 Pokedex = By flapping its leafy fan, it can whip up gusts of 100 feet per second that can level houses.
 WildItemUncommon = POWERHERB
@@ -8875,7 +8854,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [276]
 Name = Taillow
@@ -8899,7 +8878,6 @@ Height = 0.3
 Weight = 2.3
 Color = Blue
 Shape = 9
-RegionalNumbers = 51
 Kind = TinySwallow
 Pokedex = It dislikes cold seasons. They migrate to other lands in search of warmth, flying over 180 miles a day.
 BattlerPlayerX = 0
@@ -8931,7 +8909,6 @@ Height = 0.7
 Weight = 19.8
 Color = Blue
 Shape = 9
-RegionalNumbers = 52
 Kind = Swallow
 Pokedex = It dives at a steep angle as soon as it spots its prey. It catches its prey with sharp claws.
 BattlerPlayerX = 0
@@ -8940,7 +8917,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [278]
 Name = Wingull
@@ -8964,7 +8941,6 @@ Height = 0.6
 Weight = 9.5
 Color = White
 Shape = 9
-RegionalNumbers = 53
 Kind = Seagull
 Pokedex = It makes its nest on steep sea cliffs. Riding updrafts, it soars to great heights.
 WildItemCommon = PRETTYWING
@@ -8997,7 +8973,6 @@ Height = 1.2
 Weight = 28.0
 Color = Yellow
 Shape = 9
-RegionalNumbers = 54
 Kind = Water Bird
 Pokedex = It is a messenger of the skies, carrying small Pokémon and eggs to safety in its bill.
 WildItemCommon = PRETTYWING
@@ -9007,7 +8982,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [280]
 Name = Ralts
@@ -9031,7 +9006,6 @@ Height = 0.4
 Weight = 6.6
 Color = White
 Shape = 12
-RegionalNumbers = 55
 Kind = Feeling
 Pokedex = It is highly attuned to the emotions of people and Pokémon. It hides if it senses hostility.
 BattlerPlayerX = 0
@@ -9063,7 +9037,6 @@ Height = 0.8
 Weight = 20.2
 Color = White
 Shape = 12
-RegionalNumbers = 56
 Kind = Emotion
 Pokedex = It has a psychic power that enables it to distort the space around it and see into the future.
 BattlerPlayerX = 0
@@ -9095,7 +9068,6 @@ Height = 1.6
 Weight = 48.4
 Color = White
 Shape = 12
-RegionalNumbers = 57
 Kind = Embrace
 Pokedex = It has the power to predict the future. Its power peaks when it is protecting its Trainer.
 BattlerPlayerX = 0
@@ -9104,7 +9076,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [283]
 Name = Surskit
@@ -9169,7 +9141,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [285]
 Name = Shroomish
@@ -9192,7 +9164,6 @@ Height = 0.4
 Weight = 4.5
 Color = Brown
 Shape = 7
-RegionalNumbers = 72
 Kind = Mushroom
 Pokedex = It spouts poison spores from the top of its head. These spores cause pain all over if inhaled.
 WildItemCommon = TINYMUSHROOM
@@ -9226,7 +9197,6 @@ Height = 1.2
 Weight = 39.2
 Color = Green
 Shape = 6
-RegionalNumbers = 73
 Kind = Mushroom
 Pokedex = It scatters poisonous spores and throws powerful punches while its foe is hampered by inhaled spores.
 WildItemCommon = TINYMUSHROOM
@@ -9237,7 +9207,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [287]
 Name = Slakoth
@@ -9259,7 +9229,6 @@ Height = 0.8
 Weight = 24.0
 Color = Brown
 Shape = 8
-RegionalNumbers = 74
 Kind = Slacker
 Pokedex = If it eats just three leaves in a day, it is satisfied. Other than that, it sleeps for 20 hours a day.
 BattlerPlayerX = 0
@@ -9289,7 +9258,6 @@ Height = 1.4
 Weight = 46.5
 Color = White
 Shape = 6
-RegionalNumbers = 75
 Kind = Wild Monkey
 Pokedex = Its stress level rises if it cannot keep moving constantly. Too much stress makes it feel sick.
 BattlerPlayerX = 0
@@ -9319,7 +9287,6 @@ Height = 2.0
 Weight = 130.5
 Color = Brown
 Shape = 12
-RegionalNumbers = 76
 Kind = Lazy
 Pokedex = It is the world's most slothful Pokémon. However, it can exert horrifying power by releasing pent-up energy all at once.
 BattlerPlayerX = 0
@@ -9328,7 +9295,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [290]
 Name = Nincada
@@ -9352,7 +9319,6 @@ Height = 0.5
 Weight = 5.5
 Color = Gray
 Shape = 14
-RegionalNumbers = 78
 Kind = Trainee
 Pokedex = It can sometimes live underground for more than 10 years. It absorbs nutrients from the roots of trees.
 WildItemUncommon = SOFTSAND
@@ -9385,7 +9351,6 @@ Height = 0.8
 Weight = 12.0
 Color = Yellow
 Shape = 13
-RegionalNumbers = 79
 Kind = Ninja
 Pokedex = Because it moves so quickly, it sometimes becomes unseeable. It congregates around tree sap.
 BattlerPlayerX = 0
@@ -9394,7 +9359,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [292]
 Name = Shedinja
@@ -9416,7 +9381,6 @@ Height = 0.8
 Weight = 1.2
 Color = Brown
 Shape = 5
-RegionalNumbers = 80
 Kind = Shed
 Pokedex = A most peculiar Pokémon that somehow appears in a Poké Ball when a Nincada evolves.
 BattlerPlayerX = 0
@@ -9425,7 +9389,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [293]
 Name = Whismur
@@ -9448,7 +9412,6 @@ Height = 0.6
 Weight = 16.3
 Color = Pink
 Shape = 6
-RegionalNumbers = 101
 Kind = Whisper
 Pokedex = If it senses danger, it scares the foe by crying out with the volume of a jet-plane engine.
 BattlerPlayerX = 0
@@ -9479,7 +9442,6 @@ Height = 1.0
 Weight = 40.5
 Color = Blue
 Shape = 6
-RegionalNumbers = 102
 Kind = Big Voice
 Pokedex = The shock waves from its cries can tip over trucks. It stamps its feet to power up.
 BattlerPlayerX = 0
@@ -9510,7 +9472,6 @@ Height = 1.5
 Weight = 84.0
 Color = Blue
 Shape = 6
-RegionalNumbers = 103
 Kind = Loud Noise
 Pokedex = Its roar in battle shakes the ground like a tremor--or like an earthquake has struck.
 BattlerPlayerX = 0
@@ -9519,7 +9480,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [296]
 Name = Makuhita
@@ -9542,7 +9503,6 @@ Height = 1.0
 Weight = 86.4
 Color = Yellow
 Shape = 12
-RegionalNumbers = 104
 Kind = Guts
 Pokedex = It grows stronger by enduring harsh training. It is a gutsy Pokémon that can withstand any attack.
 WildItemUncommon = BLACKBELT
@@ -9574,7 +9534,6 @@ Height = 2.3
 Weight = 253.8
 Color = Brown
 Shape = 12
-RegionalNumbers = 105
 Kind = Arm Thrust
 Pokedex = It loves to match power with big-bodied Pokémon. It can knock a truck flying with its arm thrusts.
 WildItemUncommon = KINGSROCK
@@ -9584,7 +9543,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [298]
 Name = Azurill
@@ -9608,7 +9567,6 @@ Height = 0.2
 Weight = 2.0
 Color = Blue
 Shape = 7
-RegionalNumbers = 191
 Kind = Polka Dot
 Pokedex = It swings its large, nutrient-filled tail around to fight opponents bigger than itself.
 BattlerPlayerX = 0
@@ -9711,7 +9669,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [302]
 Name = Sableye
@@ -9735,7 +9693,6 @@ Height = 0.5
 Weight = 11.0
 Color = Purple
 Shape = 12
-RegionalNumbers = 132
 Kind = Darkness
 Pokedex = It dwells in the darkness of caves. It uses its sharp claws to dig up gems to nourish itself.
 WildItemUncommon = WIDELENS
@@ -9745,7 +9702,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [303]
 Name = Mawile
@@ -9769,7 +9726,6 @@ Height = 0.6
 Weight = 11.5
 Color = Black
 Shape = 12
-RegionalNumbers = 133
 Kind = Deceiver
 Pokedex = Attached to its head is a huge set of jaws formed by horns. It can chew through iron beams.
 WildItemUncommon = IRONBALL
@@ -9779,7 +9735,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [304]
 Name = Aron
@@ -9876,7 +9832,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [307]
 Name = Meditite
@@ -9900,7 +9856,6 @@ Height = 0.6
 Weight = 11.2
 Color = Blue
 Shape = 12
-RegionalNumbers = 136
 Kind = Meditate
 Pokedex = It eats just one berry a day. By enduring hunger, its spirit is tempered and made sharper.
 BattlerPlayerX = 0
@@ -9932,7 +9887,6 @@ Height = 1.3
 Weight = 31.5
 Color = Red
 Shape = 12
-RegionalNumbers = 137
 Kind = Meditate
 Pokedex = Through yoga training, it gained the psychic power to predict its foe's next move.
 BattlerPlayerX = 0
@@ -9941,7 +9895,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [309]
 Name = Electrike
@@ -10002,7 +9956,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [311]
 Name = Plusle
@@ -10025,7 +9979,6 @@ Height = 0.4
 Weight = 4.2
 Color = Yellow
 Shape = 6
-RegionalNumbers = 210
 Kind = Cheering
 Pokedex = It absorbs electricity from telephone poles. It shorts out its body to create crackling noises.
 WildItemUncommon = CELLBATTERY
@@ -10035,7 +9988,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [312]
 Name = Minun
@@ -10058,7 +10011,6 @@ Height = 0.4
 Weight = 4.2
 Color = Yellow
 Shape = 6
-RegionalNumbers = 211
 Kind = Cheering
 Pokedex = It cheers on friends. If its friends are losing, its body lets off more and more sparks.
 WildItemUncommon = CELLBATTERY
@@ -10068,7 +10020,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [313]
 Name = Volbeat
@@ -10091,7 +10043,6 @@ Height = 0.7
 Weight = 17.7
 Color = Gray
 Shape = 6
-RegionalNumbers = 160
 Kind = Firefly
 Pokedex = It lives around clean ponds. At night, its rear lights up. It converses with others by flashing its light.
 WildItemUncommon = BRIGHTPOWDER
@@ -10101,7 +10052,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [314]
 Name = Illumise
@@ -10124,7 +10075,6 @@ Height = 0.6
 Weight = 17.7
 Color = Purple
 Shape = 12
-RegionalNumbers = 161
 Kind = Firefly
 Pokedex = With its sweet aroma, it guides Volbeat to draw signs with light in the night sky.
 WildItemUncommon = BRIGHTPOWDER
@@ -10134,7 +10084,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [315]
 Name = Roselia
@@ -10158,7 +10108,6 @@ Height = 0.3
 Weight = 2.0
 Color = Green
 Shape = 12
-RegionalNumbers = 174
 Kind = Thorn
 Pokedex = Roselia that drink nutritionally rich springwater are said to reveal rare coloration when they bloom.
 WildItemUncommon = POISONBARB
@@ -10191,7 +10140,6 @@ Height = 0.4
 Weight = 10.3
 Color = Green
 Shape = 4
-RegionalNumbers = 176
 Kind = Stomach
 Pokedex = There is nothing its stomach can't digest. While it is digesting, vile, overpowering gases are expelled.
 WildItemCommon = ORANBERRY
@@ -10224,7 +10172,6 @@ Height = 1.7
 Weight = 80.0
 Color = Purple
 Shape = 4
-RegionalNumbers = 177
 Kind = Poison Bag
 Pokedex = It gulps anything that fits in its mouth. Its special enzymes can dissolve anything.
 WildItemCommon = ORANBERRY
@@ -10235,7 +10182,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [318]
 Name = Carvanha
@@ -10300,7 +10247,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [320]
 Name = Wailmer
@@ -10361,7 +10308,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [322]
 Name = Numel
@@ -10385,7 +10332,6 @@ Height = 0.7
 Weight = 24.0
 Color = Yellow
 Shape = 8
-RegionalNumbers = 194
 Kind = Numb
 Pokedex = The magma in its body reaches 2,200 degrees Fahrenheit. Its hump gets smaller when it uses Fire-type moves.
 BattlerPlayerX = 0
@@ -10417,7 +10363,6 @@ Height = 1.9
 Weight = 220.0
 Color = Red
 Shape = 8
-RegionalNumbers = 195
 Kind = Eruption
 Pokedex = If angered, the humps on its back erupt in a shower of molten lava. It lives in the craters of volcanoes.
 BattlerPlayerX = 0
@@ -10426,7 +10371,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [324]
 Name = Torkoal
@@ -10458,7 +10403,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [325]
 Name = Spoink
@@ -10481,7 +10426,6 @@ Height = 0.7
 Weight = 30.6
 Color = Black
 Shape = 4
-RegionalNumbers = 218
 Kind = Bounce
 Pokedex = It bounces around on its tail to keep its heart pumping. It carries a pearl from Clamperl on its head.
 BattlerPlayerX = 0
@@ -10512,7 +10456,6 @@ Height = 0.9
 Weight = 71.5
 Color = Purple
 Shape = 6
-RegionalNumbers = 219
 Kind = Manipulate
 Pokedex = It uses black pearls to amplify its psychic power. It does an odd dance to gain control over foes.
 BattlerPlayerX = 0
@@ -10521,7 +10464,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [327]
 Name = Spinda
@@ -10544,7 +10487,6 @@ Height = 1.1
 Weight = 5.0
 Color = Brown
 Shape = 6
-RegionalNumbers = 220
 Kind = Spot Panda
 Pokedex = The chances of two Spinda having identical spot patterns is less than one in four billion.
 BattlerPlayerX = 0
@@ -10553,7 +10495,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [328]
 Name = Trapinch
@@ -10645,7 +10587,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [331]
 Name = Cacnea
@@ -10709,7 +10651,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [333]
 Name = Swablu
@@ -10733,7 +10675,6 @@ Height = 0.4
 Weight = 1.2
 Color = Blue
 Shape = 9
-RegionalNumbers = 196
 Kind = Cotton Bird
 Pokedex = It constantly grooms its cotton-like wings. It takes a shower to clean itself if it becomes dirty.
 BattlerPlayerX = 0
@@ -10765,7 +10706,6 @@ Height = 1.1
 Weight = 20.6
 Color = Blue
 Shape = 9
-RegionalNumbers = 197
 Kind = Humming
 Pokedex = On sunny days, it flies freely through the sky and blends into the clouds. It sings in a beautiful soprano.
 BattlerPlayerX = 0
@@ -10774,7 +10714,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [335]
 Name = Zangoose
@@ -10806,7 +10746,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [336]
 Name = Seviper
@@ -10838,7 +10778,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [337]
 Name = Lunatone
@@ -10870,7 +10810,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [338]
 Name = Solrock
@@ -10902,7 +10842,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [339]
 Name = Barboach
@@ -10926,7 +10866,6 @@ Height = 0.4
 Weight = 1.9
 Color = Gray
 Shape = 3
-RegionalNumbers = 198
 Kind = Whiskers
 Pokedex = Its whiskers make a superb radar. They are used to locate prey, even in the murkiest of water.
 BattlerPlayerX = 0
@@ -10958,7 +10897,6 @@ Height = 0.9
 Weight = 23.6
 Color = Blue
 Shape = 3
-RegionalNumbers = 199
 Kind = Whiskers
 Pokedex = It makes its nest at the bottom of swamps. It will eat anything--if it is alive, Whiscash will eat it.
 BattlerPlayerX = 0
@@ -10967,7 +10905,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [341]
 Name = Corphish
@@ -11029,7 +10967,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [343]
 Name = Baltoy
@@ -11051,7 +10989,6 @@ Height = 0.5
 Weight = 21.5
 Color = Brown
 Shape = 4
-RegionalNumbers = 240
 Kind = Clay Doll
 Pokedex = It moves by spinning on its foot. It is a rare Pokémon that was discovered in ancient ruins.
 WildItemCommon = LIGHTCLAY
@@ -11083,7 +11020,6 @@ Height = 1.5
 Weight = 108.0
 Color = Black
 Shape = 4
-RegionalNumbers = 241
 Kind = Clay Doll
 Pokedex = It is said that it originates from clay dolls made by an ancient civilization.
 WildItemCommon = LIGHTCLAY
@@ -11093,7 +11029,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [345]
 Name = Lileep
@@ -11117,7 +11053,6 @@ Height = 1.0
 Weight = 23.8
 Color = Purple
 Shape = 5
-RegionalNumbers = 344
 Kind = Sea Lily
 Pokedex = It lived on the seafloor 100 million years ago and was reanimated scientifically.
 WildItemUncommon = BIGROOT
@@ -11150,7 +11085,6 @@ Height = 1.5
 Weight = 60.4
 Color = Green
 Shape = 5
-RegionalNumbers = 345
 Kind = Barnacle
 Pokedex = It ensnares prey with its eight tentacles. It then melts the prey with a strong acid before feeding.
 WildItemUncommon = BIGROOT
@@ -11160,7 +11094,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 5
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [347]
 Name = Anorith
@@ -11184,7 +11118,6 @@ Height = 0.7
 Weight = 12.5
 Color = Gray
 Shape = 14
-RegionalNumbers = 346
 Kind = Old Shrimp
 Pokedex = A Pokémon ancestor that was reanimated from a fossil. It lived in the sea and hunted with claws.
 BattlerPlayerX = 0
@@ -11216,7 +11149,6 @@ Height = 1.5
 Weight = 68.2
 Color = Gray
 Shape = 6
-RegionalNumbers = 347
 Kind = Plate
 Pokedex = Protected by a hard shell, its body is very sturdy. It skewers prey with its claws to feed.
 BattlerPlayerX = 0
@@ -11225,7 +11157,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [349]
 Name = Feebas
@@ -11286,7 +11218,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [351]
 Name = Castform
@@ -11320,7 +11252,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 29
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [352]
 Name = Kecleon
@@ -11351,7 +11283,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [353]
 Name = Shuppet
@@ -11414,7 +11346,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [355]
 Name = Duskull
@@ -11509,7 +11441,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 4
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [358]
 Name = Chimecho
@@ -11531,7 +11463,6 @@ Height = 0.6
 Weight = 1.0
 Color = Blue
 Shape = 4
-RegionalNumbers = 250
 Kind = Wind Chime
 Pokedex = Emitting ultrasonic cries, it floats on winds to travel great distances.
 WildItemUncommon = CLEANSETAG
@@ -11541,7 +11472,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [359]
 Name = Absol
@@ -11564,7 +11495,6 @@ Height = 1.2
 Weight = 47.0
 Color = White
 Shape = 8
-RegionalNumbers = 251
 Kind = Disaster
 Pokedex = It appears when it senses an impending natural disaster. As a result, it was mistaken as a doom bringer.
 BattlerPlayerX = 0
@@ -11573,7 +11503,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [360]
 Name = Wynaut
@@ -11595,7 +11525,6 @@ Height = 0.6
 Weight = 14.0
 Color = Blue
 Shape = 6
-RegionalNumbers = 171
 Kind = Bright
 Pokedex = It grows strong by pushing up against others en masse. It loves eating sweet fruit.
 BattlerPlayerX = 0
@@ -11667,7 +11596,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [363]
 Name = Spheal
@@ -11761,7 +11690,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [366]
 Name = Clamperl
@@ -11784,7 +11713,6 @@ Height = 0.4
 Weight = 52.5
 Color = Blue
 Shape = 1
-RegionalNumbers = 335
 Kind = Bivalve
 Pokedex = It is protected by a sturdy shell. Once in a lifetime, it makes a magnificent pearl.
 WildItemCommon = PEARL
@@ -11817,7 +11745,6 @@ Height = 1.7
 Weight = 27.0
 Color = Blue
 Shape = 2
-RegionalNumbers = 336
 Kind = Deep Sea
 Pokedex = It lives deep in the sea. With a tail shaped like a small fish, it attracts unsuspecting prey.
 WildItemUncommon = DEEPSEATOOTH
@@ -11827,7 +11754,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [368]
 Name = Gorebyss
@@ -11849,7 +11776,6 @@ Height = 1.8
 Weight = 22.6
 Color = Pink
 Shape = 2
-RegionalNumbers = 337
 Kind = South Sea
 Pokedex = Its swimming form is exquisitely elegant. With its thin mouth, it feeds on seaweed that grows between rocks.
 WildItemUncommon = DEEPSEASCALE
@@ -11859,7 +11785,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [369]
 Name = Relicanth
@@ -11883,7 +11809,6 @@ Height = 1.0
 Weight = 23.4
 Color = Gray
 Shape = 3
-RegionalNumbers = 338
 Kind = Longevity
 Pokedex = A rare Pokémon discovered during a deep-sea exploration. It has not changed in over 100 million years.
 WildItemUncommon = DEEPSEASCALE
@@ -11893,7 +11818,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [370]
 Name = Luvdisc
@@ -11916,7 +11841,6 @@ Height = 0.6
 Weight = 8.7
 Color = Pink
 Shape = 3
-RegionalNumbers = 321
 Kind = Rendezvous
 Pokedex = During the spawning season, countless Luvdisc congregate at coral reefs, turning the waters pink.
 WildItemCommon = HEARTSCALE
@@ -11926,7 +11850,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 27
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [371]
 Name = Bagon
@@ -12021,7 +11945,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [374]
 Name = Beldum
@@ -12044,7 +11968,6 @@ Height = 0.6
 Weight = 95.2
 Color = Blue
 Shape = 5
-RegionalNumbers = 380
 Kind = Iron Ball
 Pokedex = It converses with others by using magnetic pulses. In a swarm, they move in perfect unison.
 WildItemUncommon = METALCOAT
@@ -12077,7 +12000,6 @@ Height = 1.2
 Weight = 202.5
 Color = Blue
 Shape = 4
-RegionalNumbers = 381
 Kind = Iron Claw
 Pokedex = It is formed by two Beldum joining together. Its two brains are linked, amplifying its psychic power.
 WildItemUncommon = METALCOAT
@@ -12110,7 +12032,6 @@ Height = 1.6
 Weight = 550.0
 Color = Blue
 Shape = 11
-RegionalNumbers = 382
 Kind = Iron Leg
 Pokedex = Metang combined to form it. With four brains, it has the intelligence of a supercomputer.
 WildItemUncommon = METALCOAT
@@ -12120,7 +12041,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [377]
 Name = Regirock
@@ -12150,7 +12071,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [378]
 Name = Regice
@@ -12180,7 +12101,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [379]
 Name = Registeel
@@ -12210,7 +12131,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [380]
 Name = Latias
@@ -12240,7 +12161,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [381]
 Name = Latios
@@ -12270,7 +12191,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [382]
 Name = Kyogre
@@ -12299,7 +12220,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 6
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [383]
 Name = Groudon
@@ -12328,7 +12249,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [384]
 Name = Rayquaza
@@ -12358,7 +12279,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 4
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [385]
 Name = Jirachi
@@ -12391,7 +12312,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [386]
 Name = Deoxys
@@ -12421,7 +12342,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 7
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [387]
 Name = Turtwig
@@ -12513,7 +12434,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 5
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [390]
 Name = Chimchar
@@ -12606,7 +12527,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [393]
 Name = Piplup
@@ -12698,7 +12619,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 6
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [396]
 Name = Starly
@@ -12722,7 +12643,6 @@ Height = 0.3
 Weight = 2.0
 Color = Brown
 Shape = 9
-RegionalNumbers = 45
 Kind = Starling
 Pokedex = They flock around mountains and fields, chasing after bug Pokémon. Their singing is noisy and annoying.
 BattlerPlayerX = 0
@@ -12754,7 +12674,6 @@ Height = 0.6
 Weight = 15.5
 Color = Brown
 Shape = 9
-RegionalNumbers = 46
 Kind = Starling
 Pokedex = It lives in forests and fields. Squabbles over territory occur when flocks collide.
 BattlerPlayerX = 0
@@ -12786,7 +12705,6 @@ Height = 1.2
 Weight = 24.9
 Color = Brown
 Shape = 9
-RegionalNumbers = 47
 Kind = Predator
 Pokedex = When Staravia evolve into Staraptor, they leave the flock to live alone. They have sturdy wings.
 BattlerPlayerX = 0
@@ -12795,7 +12713,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [399]
 Name = Bidoof
@@ -12818,7 +12736,6 @@ Height = 0.5
 Weight = 20.0
 Color = Brown
 Shape = 8
-RegionalNumbers = 41
 Kind = Plump Mouse
 Pokedex = It constantly gnaws on logs and rocks to whittle down its front teeth. It nests alongside water.
 BattlerPlayerX = 0
@@ -12850,7 +12767,6 @@ Height = 1.0
 Weight = 31.5
 Color = Brown
 Shape = 6
-RegionalNumbers = 42
 Kind = Beaver
 Pokedex = It makes its nest by damming streams with bark and mud. It is known as an industrious worker.
 BattlerPlayerX = 0
@@ -12859,7 +12775,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [401]
 Name = Kricketot
@@ -12881,7 +12797,6 @@ Height = 0.3
 Weight = 2.2
 Color = Red
 Shape = 12
-RegionalNumbers = 25
 Kind = Cricket
 Pokedex = When its antennae hit each other, it sounds like the music of a xylophone.
 WildItemUncommon = METRONOME
@@ -12913,7 +12828,6 @@ Height = 1.0
 Weight = 25.5
 Color = Red
 Shape = 13
-RegionalNumbers = 26
 Kind = Cricket
 Pokedex = It signals its emotions with its melodies. Scientists are studying these melodic patterns.
 WildItemUncommon = METRONOME
@@ -12923,7 +12837,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [403]
 Name = Shinx
@@ -12946,7 +12860,6 @@ Height = 0.5
 Weight = 9.5
 Color = Blue
 Shape = 8
-RegionalNumbers = 81
 Kind = Flash
 Pokedex = All of its fur dazzles if danger is sensed. It flees while the foe is momentarily blinded.
 BattlerPlayerX = 0
@@ -12977,7 +12890,6 @@ Height = 0.9
 Weight = 30.5
 Color = Blue
 Shape = 8
-RegionalNumbers = 82
 Kind = Spark
 Pokedex = Strong electricity courses through the tips of its sharp claws. A light scratch causes fainting in foes.
 BattlerPlayerX = 0
@@ -13008,7 +12920,6 @@ Height = 1.4
 Weight = 42.0
 Color = Blue
 Shape = 8
-RegionalNumbers = 83
 Kind = Gleam Eyes
 Pokedex = Luxray's ability to see through objects comes in handy when it's scouting for danger.
 BattlerPlayerX = 0
@@ -13017,7 +12928,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [406]
 Name = Budew
@@ -13041,7 +12952,6 @@ Height = 0.2
 Weight = 1.2
 Color = Green
 Shape = 12
-RegionalNumbers = 173
 Kind = Bud
 Pokedex = Over the winter, it closes its bud and endures the cold. In spring, the bud opens and releases pollen.
 WildItemUncommon = POISONBARB
@@ -13075,7 +12985,6 @@ Height = 0.9
 Weight = 14.5
 Color = Green
 Shape = 12
-RegionalNumbers = 175
 Kind = Bouquet
 Pokedex = With the movements of a dancer, it strikes with whips that are densely lined with poison thorns.
 WildItemUncommon = POISONBARB
@@ -13085,7 +12994,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [408]
 Name = Cranidos
@@ -13146,7 +13055,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 4
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [410]
 Name = Shieldon
@@ -13209,7 +13118,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [412]
 Name = Burmy
@@ -13231,7 +13140,6 @@ Height = 0.2
 Weight = 3.4
 Color = Green
 Shape = 5
-RegionalNumbers = 118
 Kind = Bagworm
 Pokedex = If its cloak is broken in battle, it quickly remakes the cloak with materials nearby.
 FormName = Plant Cloak
@@ -13264,7 +13172,6 @@ Height = 0.5
 Weight = 6.5
 Color = Green
 Shape = 5
-RegionalNumbers = 119
 Kind = Bagworm
 Pokedex = When Burmy evolved, its cloak became a part of this Pokémon's body. The cloak is never shed.
 FormName = Plant Cloak
@@ -13275,7 +13182,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [414]
 Name = Mothim
@@ -13298,7 +13205,6 @@ Height = 0.9
 Weight = 23.3
 Color = Yellow
 Shape = 13
-RegionalNumbers = 120
 Kind = Moth
 Pokedex = It flutters around at night and steals honey from the Combee hive.
 WildItemUncommon = SILVERPOWDER
@@ -13308,7 +13214,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [415]
 Name = Combee
@@ -13331,7 +13237,6 @@ Height = 0.3
 Weight = 5.5
 Color = Yellow
 Shape = 11
-RegionalNumbers = 123
 Kind = Tiny Bee
 Pokedex = It collects and delivers honey to its colony. At night, they cluster to form a beehive and sleep.
 WildItemUncommon = HONEY
@@ -13364,7 +13269,6 @@ Height = 1.2
 Weight = 38.5
 Color = Yellow
 Shape = 13
-RegionalNumbers = 124
 Kind = Beehive
 Pokedex = Its abdomen is a honeycomb for grubs. It raises its grubs on honey collected by Combee.
 WildItemUncommon = POISONBARB
@@ -13374,7 +13278,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [417]
 Name = Pachirisu
@@ -13405,7 +13309,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [418]
 Name = Buizel
@@ -13428,7 +13332,6 @@ Height = 0.7
 Weight = 29.5
 Color = Brown
 Shape = 8
-RegionalNumbers = 138
 Kind = Sea Weasel
 Pokedex = It inflates the flotation sac around its neck and pokes its head out of the water to see what is going on.
 BattlerPlayerX = 0
@@ -13459,7 +13362,6 @@ Height = 1.1
 Weight = 33.5
 Color = Brown
 Shape = 8
-RegionalNumbers = 139
 Kind = Sea Weasel
 Pokedex = Its flotation sac developed as a result of pursuing aquatic prey. It can double as a rubber raft.
 BattlerPlayerX = 0
@@ -13468,7 +13370,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 7
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [420]
 Name = Cherubi
@@ -13490,7 +13392,6 @@ Height = 0.4
 Weight = 3.3
 Color = Pink
 Shape = 11
-RegionalNumbers = 140
 Kind = Cherry
 Pokedex = It evolves by sucking the energy out of the small ball where it had been storing nutrients.
 WildItemUncommon = MIRACLESEED
@@ -13521,7 +13422,6 @@ Height = 0.5
 Weight = 9.3
 Color = Purple
 Shape = 7
-RegionalNumbers = 141
 Kind = Blossom
 Pokedex = If it senses strong sunlight, it opens its folded petals to absorb the sun's rays with its whole body.
 FormName = Overcast Form
@@ -13532,7 +13432,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [422]
 Name = Shellos
@@ -13596,7 +13496,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [424]
 Name = Ambipom
@@ -13618,7 +13518,6 @@ Height = 1.2
 Weight = 20.3
 Color = Purple
 Shape = 6
-RegionalNumbers = 182
 Kind = Long Tail
 Pokedex = To eat, it deftly shucks nuts with its two tails. It rarely uses its arms now.
 BattlerPlayerX = 0
@@ -13627,7 +13526,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [425]
 Name = Drifloon
@@ -13690,7 +13589,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [427]
 Name = Buneary
@@ -13713,7 +13612,6 @@ Height = 0.4
 Weight = 5.5
 Color = Brown
 Shape = 6
-RegionalNumbers = 156
 Kind = Rabbit
 Pokedex = When it senses danger, it perks up its ears. On cold nights, it sleeps with its head tucked into its fur.
 BattlerPlayerX = 0
@@ -13744,7 +13642,6 @@ Height = 1.2
 Weight = 33.3
 Color = Brown
 Shape = 6
-RegionalNumbers = 157
 Kind = Rabbit
 Pokedex = The ears appear to be delicate. If they are touched roughly, it kicks with its graceful legs.
 BattlerPlayerX = 0
@@ -13753,7 +13650,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [429]
 Name = Mismagius
@@ -13774,7 +13671,6 @@ Height = 0.9
 Weight = 4.4
 Color = Purple
 Shape = 1
-RegionalNumbers = 301
 Kind = Magical
 Pokedex = Its cries sound like incantations to torment the foe. It appears where you least expect it.
 BattlerPlayerX = 0
@@ -13783,7 +13679,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [430]
 Name = Honchkrow
@@ -13806,7 +13702,6 @@ Height = 0.9
 Weight = 27.3
 Color = Black
 Shape = 9
-RegionalNumbers = 290
 Kind = Big Boss
 Pokedex = Becoming active at night, it is known to swarm with numerous Murkrow in tow.
 BattlerPlayerX = 0
@@ -13815,7 +13710,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [431]
 Name = Glameow
@@ -13876,7 +13771,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [433]
 Name = Chingling
@@ -13898,7 +13793,6 @@ Height = 0.2
 Weight = 0.6
 Color = Yellow
 Shape = 12
-RegionalNumbers = 249
 Kind = Bell
 Pokedex = There is an orb inside its mouth. When it hops, the orb bounces all over and makes a ringing sound.
 WildItemUncommon = CLEANSETAG
@@ -13972,7 +13866,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [436]
 Name = Bronzor
@@ -13995,7 +13889,6 @@ Height = 0.5
 Weight = 60.5
 Color = Green
 Shape = 1
-RegionalNumbers = 216
 Kind = Bronze
 Pokedex = Implements shaped like it were discovered in ancient tombs. It is unknown if they are related.
 WildItemUncommon = METALCOAT
@@ -14028,7 +13921,6 @@ Height = 1.3
 Weight = 187.0
 Color = Green
 Shape = 4
-RegionalNumbers = 217
 Kind = Bronze Bell
 Pokedex = Ancient people believed that petitioning Bronzong for rain was the way to make crops grow.
 WildItemUncommon = METALCOAT
@@ -14038,7 +13930,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [438]
 Name = Bonsly
@@ -14061,7 +13953,6 @@ Height = 0.5
 Weight = 15.0
 Color = Brown
 Shape = 7
-RegionalNumbers = 169
 Kind = Bonsai
 Pokedex = It prefers an arid atmosphere. It leaks water that looks like tears when adjusting its moisture level.
 BattlerPlayerX = 0
@@ -14095,7 +13986,6 @@ Height = 0.6
 Weight = 13.0
 Color = Pink
 Shape = 12
-RegionalNumbers = 295
 Kind = Mime
 Pokedex = It habitually mimics foes. Once mimicked, the foe cannot take its eyes off this Pokémon.
 BattlerPlayerX = 0
@@ -14128,7 +14018,6 @@ Height = 0.6
 Weight = 24.4
 Color = Pink
 Shape = 12
-RegionalNumbers = 263
 Kind = Playhouse
 Pokedex = It carefully carries a round, white rock that it thinks is an egg. It's bothered by how curly its hair looks.
 WildItemCommon = OVALSTONE
@@ -14163,7 +14052,6 @@ Height = 0.5
 Weight = 1.9
 Color = Black
 Shape = 9
-RegionalNumbers = 242
 Kind = Music Note
 Pokedex = It can learn and speak human words. If they gather, they all learn the same saying.
 WildItemUncommon = METRONOME
@@ -14173,7 +14061,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [442]
 Name = Spiritomb
@@ -14205,7 +14093,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [443]
 Name = Gible
@@ -14299,7 +14187,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 6
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [446]
 Name = Munchlax
@@ -14322,7 +14210,6 @@ Height = 0.6
 Weight = 105.0
 Color = Black
 Shape = 12
-RegionalNumbers = 348
 Kind = Big Eater
 Pokedex = It conceals food under the long fur on its body. It carts around this food stash and swallows it without chewing.
 WildItemCommon = LEFTOVERS
@@ -14397,7 +14284,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [449]
 Name = Hippopotas
@@ -14458,7 +14345,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [451]
 Name = Skorupi
@@ -14523,7 +14410,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [453]
 Name = Croagunk
@@ -14588,7 +14475,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [455]
 Name = Carnivine
@@ -14610,7 +14497,6 @@ Height = 1.4
 Weight = 27.0
 Color = Green
 Shape = 10
-RegionalNumbers = 317
 Kind = Bug Catcher
 Pokedex = It binds itself to trees in marshes. It attracts prey with its sweet-smelling drool and gulps them down.
 BattlerPlayerX = 0
@@ -14619,7 +14505,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [456]
 Name = Finneon
@@ -14680,7 +14566,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [458]
 Name = Mantyke
@@ -14704,7 +14590,6 @@ Height = 1.0
 Weight = 65.0
 Color = Blue
 Shape = 9
-RegionalNumbers = 286
 Kind = Kite
 Pokedex = When it swims close to the surface of the ocean, people aboard ships are able to observe the pattern on its back.
 BattlerPlayerX = 0
@@ -14779,7 +14664,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [461]
 Name = Weavile
@@ -14802,7 +14687,6 @@ Height = 1.1
 Weight = 34.0
 Color = Black
 Shape = 6
-RegionalNumbers = 299
 Kind = Sharp Claw
 Pokedex = They live in cold regions, forming groups of four or five that hunt prey with impressive coordination.
 WildItemUncommon = QUICKCLAW
@@ -14812,7 +14696,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [462]
 Name = Magnezone
@@ -14835,7 +14719,6 @@ Height = 1.2
 Weight = 180.0
 Color = Gray
 Shape = 4
-RegionalNumbers = 202
 Kind = Magnet Area
 Pokedex = It evolved from exposure to a special magnetic field. Three units generate magnetism.
 WildItemUncommon = METALCOAT
@@ -14845,7 +14728,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [463]
 Name = Lickilicky
@@ -14867,7 +14750,6 @@ Height = 1.7
 Weight = 140.0
 Color = Pink
 Shape = 12
-RegionalNumbers = 257
 Kind = Licking
 Pokedex = Their saliva contains lots of components that can dissolve anything. The numbness caused by their lick does not dissipate.
 WildItemUncommon = LAGGINGTAIL
@@ -14877,7 +14759,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [464]
 Name = Rhyperior
@@ -14900,7 +14782,6 @@ Height = 2.4
 Weight = 282.8
 Color = Gray
 Shape = 6
-RegionalNumbers = 262
 Kind = Drill
 Pokedex = It puts rocks in holes in its palms and uses its muscles to shoot them. Geodude are shot at rare times.
 BattlerPlayerX = 0
@@ -14909,7 +14790,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [465]
 Name = Tangrowth
@@ -14931,7 +14812,6 @@ Height = 2.0
 Weight = 128.6
 Color = Blue
 Shape = 12
-RegionalNumbers = 267
 Kind = Vine
 Pokedex = Its vines grow so profusely that, in the warm season, you can't even see its eyes.
 BattlerPlayerX = 0
@@ -14940,7 +14820,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [466]
 Name = Electivire
@@ -14962,7 +14842,6 @@ Height = 1.8
 Weight = 138.6
 Color = Yellow
 Shape = 6
-RegionalNumbers = 308
 Kind = Thunderbolt
 Pokedex = It pushes the tips of its two tails against the foe, then lets loose with over 20,000 volts of power.
 WildItemUncommon = ELECTIRIZER
@@ -14972,7 +14851,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [467]
 Name = Magmortar
@@ -14994,7 +14873,6 @@ Height = 1.6
 Weight = 68.0
 Color = Red
 Shape = 6
-RegionalNumbers = 311
 Kind = Blast
 Pokedex = It blasts fireballs of over 3,600 degrees Fahrenheit out of its arms. Its breath also sears and sizzles.
 WildItemUncommon = MAGMARIZER
@@ -15004,7 +14882,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [468]
 Name = Togekiss
@@ -15027,7 +14905,6 @@ Height = 1.5
 Weight = 38.0
 Color = White
 Shape = 9
-RegionalNumbers = 100
 Kind = Jubilee
 Pokedex = It shares many blessings with people who respect one another's rights and avoid needless strife.
 BattlerPlayerX = 0
@@ -15036,7 +14913,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [469]
 Name = Yanmega
@@ -15059,7 +14936,6 @@ Height = 1.9
 Weight = 51.5
 Color = Green
 Shape = 13
-RegionalNumbers = 159
 Kind = Ogre Darner
 Pokedex = This six-legged Pokémon is easily capable of transporting an adult in flight. The wings on its tail help it stay balanced.
 WildItemUncommon = WIDELENS
@@ -15069,7 +14945,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [470]
 Name = Leafeon
@@ -15091,7 +14967,6 @@ Height = 1.0
 Weight = 25.5
 Color = Green
 Shape = 8
-RegionalNumbers = 329
 Kind = Verdant
 Pokedex = Just like a plant, it uses photosynthesis. As a result, it is always enveloped in clear air.
 BattlerPlayerX = 0
@@ -15100,7 +14975,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [471]
 Name = Glaceon
@@ -15122,7 +14997,6 @@ Height = 0.8
 Weight = 25.9
 Color = Blue
 Shape = 8
-RegionalNumbers = 330
 Kind = Fresh Snow
 Pokedex = It lowers its body heat to freeze its fur. The hairs then become like needles it can fire.
 BattlerPlayerX = 0
@@ -15131,7 +15005,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [472]
 Name = Gliscor
@@ -15154,7 +15028,6 @@ Height = 2.0
 Weight = 42.5
 Color = Purple
 Shape = 9
-RegionalNumbers = 277
 Kind = Fang Scorp
 Pokedex = Its flight is soundless. It uses its lengthy tail to carry off its prey... Then its elongated fangs do the rest.
 BattlerPlayerX = 0
@@ -15163,7 +15036,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [473]
 Name = Mamoswine
@@ -15186,7 +15059,6 @@ Height = 2.5
 Weight = 291.0
 Color = Brown
 Shape = 8
-RegionalNumbers = 281
 Kind = Twin Tusk
 Pokedex = Its impressive tusks are made of ice. The population thinned when it turned warm after the ice age.
 BattlerPlayerX = 0
@@ -15195,7 +15067,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [474]
 Name = Porygon-Z
@@ -15217,7 +15089,6 @@ Height = 0.9
 Weight = 34.0
 Color = Red
 Shape = 4
-RegionalNumbers = 334
 Kind = Virtual
 Pokedex = Its programming was modified to enable it to travel through alien dimensions. Seems there might have been an error...
 BattlerPlayerX = 0
@@ -15226,7 +15097,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [475]
 Name = Gallade
@@ -15249,7 +15120,6 @@ Height = 1.6
 Weight = 52.0
 Color = White
 Shape = 12
-RegionalNumbers = 58
 Kind = Blade
 Pokedex = A master of courtesy and swordsmanship, it fights using extending swords on its elbows.
 BattlerPlayerX = 0
@@ -15258,7 +15128,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [476]
 Name = Probopass
@@ -15290,7 +15160,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [477]
 Name = Dusknoir
@@ -15321,7 +15191,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [478]
 Name = Froslass
@@ -15352,7 +15222,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [479]
 Name = Rotom
@@ -15383,7 +15253,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [480]
 Name = Uxie
@@ -15412,7 +15282,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 25
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [481]
 Name = Mesprit
@@ -15441,7 +15311,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 26
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [482]
 Name = Azelf
@@ -15470,7 +15340,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 29
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [483]
 Name = Dialga
@@ -15501,7 +15371,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 4
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [484]
 Name = Palkia
@@ -15532,7 +15402,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 6
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [485]
 Name = Heatran
@@ -15563,7 +15433,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [486]
 Name = Regigigas
@@ -15592,7 +15462,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [487]
 Name = Giratina
@@ -15624,7 +15494,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 5
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [488]
 Name = Cresselia
@@ -15653,7 +15523,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [489]
 Name = Phione
@@ -15682,7 +15552,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 26
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [490]
 Name = Manaphy
@@ -15711,7 +15581,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 25
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [491]
 Name = Darkrai
@@ -15740,7 +15610,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [492]
 Name = Shaymin
@@ -15773,7 +15643,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 29
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [493]
 Name = Arceus
@@ -15803,7 +15673,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [494]
 Name = Victini
@@ -15833,7 +15703,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 25
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [495]
 Name = Snivy
@@ -15924,7 +15794,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [498]
 Name = Tepig
@@ -16017,7 +15887,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [501]
 Name = Oshawott
@@ -16108,7 +15978,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [504]
 Name = Patrat
@@ -16169,7 +16039,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [506]
 Name = Lillipup
@@ -16260,7 +16130,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [509]
 Name = Purrloin
@@ -16321,7 +16191,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [511]
 Name = Pansage
@@ -16382,7 +16252,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [513]
 Name = Pansear
@@ -16443,7 +16313,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [515]
 Name = Panpour
@@ -16504,7 +16374,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [517]
 Name = Munna
@@ -16565,7 +16435,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [519]
 Name = Pidove
@@ -16659,7 +16529,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [522]
 Name = Blitzle
@@ -16720,7 +16590,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [524]
 Name = Roggenrola
@@ -16817,7 +16687,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [527]
 Name = Woobat
@@ -16880,7 +16750,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 28
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [529]
 Name = Drilbur
@@ -16942,7 +16812,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [531]
 Name = Audino
@@ -16975,7 +16845,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 29
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [532]
 Name = Timburr
@@ -17066,7 +16936,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [535]
 Name = Tympole
@@ -17159,7 +17029,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [538]
 Name = Throh
@@ -17190,7 +17060,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 28
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [539]
 Name = Sawk
@@ -17221,7 +17091,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [540]
 Name = Sewaddle
@@ -17318,7 +17188,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [543]
 Name = Venipede
@@ -17415,7 +17285,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [546]
 Name = Cottonee
@@ -17480,7 +17350,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 27
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [548]
 Name = Petilil
@@ -17543,7 +17413,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [550]
 Name = Basculin
@@ -17576,7 +17446,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 34
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [551]
 Name = Sandile
@@ -17673,7 +17543,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [554]
 Name = Darumaka
@@ -17735,7 +17605,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [556]
 Name = Maractus
@@ -17767,7 +17637,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [557]
 Name = Dwebble
@@ -17832,7 +17702,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [559]
 Name = Scraggy
@@ -17897,7 +17767,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [561]
 Name = Sigilyph
@@ -17929,7 +17799,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 7
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [562]
 Name = Yamask
@@ -17990,7 +17860,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [564]
 Name = Tirtouga
@@ -18053,7 +17923,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [566]
 Name = Archen
@@ -18114,7 +17984,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [568]
 Name = Trubbish
@@ -18178,7 +18048,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [570]
 Name = Zorua
@@ -18237,7 +18107,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [572]
 Name = Minccino
@@ -18298,7 +18168,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [574]
 Name = Gothita
@@ -18389,7 +18259,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [577]
 Name = Solosis
@@ -18480,7 +18350,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 26
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [580]
 Name = Ducklett
@@ -18543,7 +18413,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [582]
 Name = Vanillite
@@ -18637,7 +18507,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [585]
 Name = Deerling
@@ -18702,7 +18572,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [587]
 Name = Emolga
@@ -18734,7 +18604,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 36
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [588]
 Name = Karrablast
@@ -18796,7 +18666,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [590]
 Name = Foongus
@@ -18863,7 +18733,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 28
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [592]
 Name = Frillish
@@ -18926,7 +18796,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [594]
 Name = Alomomola
@@ -18957,7 +18827,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [595]
 Name = Joltik
@@ -19020,7 +18890,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 29
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [597]
 Name = Ferroseed
@@ -19084,7 +18954,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 32
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [599]
 Name = Klink
@@ -19174,7 +19044,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [602]
 Name = Tynamo
@@ -19261,7 +19131,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [605]
 Name = Elgyem
@@ -19322,7 +19192,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [607]
 Name = Litwick
@@ -19416,7 +19286,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [610]
 Name = Axew
@@ -19507,7 +19377,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [613]
 Name = Cubchoo
@@ -19568,7 +19438,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [615]
 Name = Cryogonal
@@ -19598,7 +19468,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [616]
 Name = Shelmet
@@ -19659,7 +19529,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 27
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [618]
 Name = Stunfisk
@@ -19692,7 +19562,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 31
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [619]
 Name = Mienfoo
@@ -19753,7 +19623,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [621]
 Name = Druddigon
@@ -19785,7 +19655,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [622]
 Name = Golett
@@ -19849,7 +19719,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [624]
 Name = Pawniard
@@ -19912,7 +19782,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [626]
 Name = Bouffalant
@@ -19943,7 +19813,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [627]
 Name = Rufflet
@@ -20005,7 +19875,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [629]
 Name = Vullaby
@@ -20068,7 +19938,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [631]
 Name = Heatmor
@@ -20099,7 +19969,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [632]
 Name = Durant
@@ -20131,7 +20001,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 36
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [633]
 Name = Deino
@@ -20222,7 +20092,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [636]
 Name = Larvesta
@@ -20288,7 +20158,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [638]
 Name = Cobalion
@@ -20318,7 +20188,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [639]
 Name = Terrakion
@@ -20348,7 +20218,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [640]
 Name = Virizion
@@ -20378,7 +20248,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [641]
 Name = Tornadus
@@ -20409,7 +20279,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [642]
 Name = Thundurus
@@ -20441,7 +20311,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [643]
 Name = Reshiram
@@ -20471,7 +20341,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [644]
 Name = Zekrom
@@ -20501,7 +20371,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 6
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [645]
 Name = Landorus
@@ -20533,7 +20403,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [646]
 Name = Kyurem
@@ -20564,7 +20434,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [647]
 Name = Keldeo
@@ -20595,7 +20465,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [648]
 Name = Meloetta
@@ -20629,7 +20499,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 26
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [649]
 Name = Genesect
@@ -20660,7 +20530,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [650]
 Name = Chespin
@@ -20752,7 +20622,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [653]
 Name = Fennekin
@@ -20844,7 +20714,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [656]
 Name = Froakie
@@ -20935,7 +20805,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [659]
 Name = Bunnelby
@@ -20997,7 +20867,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [661]
 Name = Fletchling
@@ -21091,7 +20961,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [664]
 Name = Scatterbug
@@ -21184,7 +21054,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [667]
 Name = Litleo
@@ -21247,7 +21117,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [669]
 Name = Flabébé
@@ -21341,7 +21211,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [672]
 Name = Skiddo
@@ -21402,7 +21272,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [674]
 Name = Pancham
@@ -21466,7 +21336,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [676]
 Name = Furfrou
@@ -21497,7 +21367,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [677]
 Name = Espurr
@@ -21559,7 +21429,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 25
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [679]
 Name = Honedge
@@ -21651,7 +21521,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [682]
 Name = Spritzee
@@ -21712,7 +21582,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [684]
 Name = Swirlix
@@ -21773,7 +21643,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 27
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [686]
 Name = Inkay
@@ -21836,7 +21706,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [688]
 Name = Binacle
@@ -21899,7 +21769,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [690]
 Name = Skrelp
@@ -21962,7 +21832,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 5
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [692]
 Name = Clauncher
@@ -22021,7 +21891,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [694]
 Name = Helioptile
@@ -22084,7 +21954,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [696]
 Name = Tyrunt
@@ -22147,7 +22017,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [698]
 Name = Amaura
@@ -22210,7 +22080,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 7
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [700]
 Name = Sylveon
@@ -22232,7 +22102,6 @@ Height = 1.0
 Weight = 23.5
 Color = Pink
 Shape = 8
-RegionalNumbers = 331
 Kind = Intertwining
 Pokedex = It wraps its ribbonlike feelers around the arm of its beloved Trainer and walks with him or her.
 BattlerPlayerX = 0
@@ -22241,7 +22110,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [701]
 Name = Hawlucha
@@ -22274,7 +22143,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [702]
 Name = Dedenne
@@ -22306,7 +22175,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 34
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [703]
 Name = Carbink
@@ -22337,7 +22206,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 31
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [704]
 Name = Goomy
@@ -22430,7 +22299,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [707]
 Name = Klefki
@@ -22462,7 +22331,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [708]
 Name = Phantump
@@ -22525,7 +22394,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [710]
 Name = Pumpkaboo
@@ -22590,7 +22459,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [712]
 Name = Bergmite
@@ -22651,7 +22520,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [714]
 Name = Noibat
@@ -22714,7 +22583,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 6
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [716]
 Name = Xerneas
@@ -22744,7 +22613,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 4
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [717]
 Name = Yveltal
@@ -22774,7 +22643,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 4
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [718]
 Name = Zygarde
@@ -22805,7 +22674,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 7
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [719]
 Name = Diancie
@@ -22835,7 +22704,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [720]
 Name = Hoopa
@@ -22866,7 +22735,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 32
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [721]
 Name = Volcanion
@@ -22896,7 +22765,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [722]
 Name = Rowlet
@@ -22990,7 +22859,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [725]
 Name = Litten
@@ -23082,7 +22951,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [728]
 Name = Popplio
@@ -23174,7 +23043,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [731]
 Name = Pikipek
@@ -23271,7 +23140,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [734]
 Name = Yungoos
@@ -23334,7 +23203,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [736]
 Name = Grubbin
@@ -23425,7 +23294,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [739]
 Name = Crabrawler
@@ -23489,7 +23358,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [741]
 Name = Oricorio
@@ -23522,7 +23391,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [742]
 Name = Cutiefly
@@ -23587,7 +23456,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 27
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [744]
 Name = Rockruff
@@ -23649,7 +23518,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [746]
 Name = Wishiwashi
@@ -23680,7 +23549,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 34
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [747]
 Name = Mareanie
@@ -23745,7 +23614,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [749]
 Name = Mudbray
@@ -23808,7 +23677,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [751]
 Name = Dewpider
@@ -23873,7 +23742,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [753]
 Name = Fomantis
@@ -23936,7 +23805,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [755]
 Name = Morelull
@@ -24003,7 +23872,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [757]
 Name = Salandit
@@ -24068,7 +23937,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [759]
 Name = Stufful
@@ -24131,7 +24000,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [761]
 Name = Bounsweet
@@ -24225,7 +24094,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [764]
 Name = Comfey
@@ -24257,7 +24126,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [765]
 Name = Oranguru
@@ -24289,7 +24158,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [766]
 Name = Passimian
@@ -24320,7 +24189,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [767]
 Name = Wimpod
@@ -24381,7 +24250,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [769]
 Name = Sandygast
@@ -24446,7 +24315,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [771]
 Name = Pyukumuku
@@ -24477,7 +24346,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 39
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [772]
 Name = Type: Null
@@ -24536,7 +24405,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [774]
 Name = Minior
@@ -24568,7 +24437,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 34
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [775]
 Name = Komala
@@ -24598,7 +24467,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 30
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [776]
 Name = Turtonator
@@ -24630,7 +24499,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [777]
 Name = Togedemaru
@@ -24663,7 +24532,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 32
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [778]
 Name = Mimikyu
@@ -24696,7 +24565,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 28
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [779]
 Name = Bruxish
@@ -24729,7 +24598,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 34
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [780]
 Name = Drampa
@@ -24762,7 +24631,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [781]
 Name = Dhelmise
@@ -24792,7 +24661,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [782]
 Name = Jangmo-o
@@ -24888,7 +24757,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [785]
 Name = Tapu Koko
@@ -24919,7 +24788,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [786]
 Name = Tapu Lele
@@ -24950,7 +24819,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [787]
 Name = Tapu Bulu
@@ -24981,7 +24850,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [788]
 Name = Tapu Fini
@@ -25012,7 +24881,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [789]
 Name = Cosmog
@@ -25100,7 +24969,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [792]
 Name = Lunala
@@ -25130,7 +24999,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 5
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [793]
 Name = Nihilego
@@ -25160,7 +25029,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [794]
 Name = Buzzwole
@@ -25190,7 +25059,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 5
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [795]
 Name = Pheromosa
@@ -25220,7 +25089,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 5
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [796]
 Name = Xurkitree
@@ -25249,7 +25118,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 4
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [797]
 Name = Celesteela
@@ -25279,7 +25148,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 4
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [798]
 Name = Kartana
@@ -25309,7 +25178,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [799]
 Name = Guzzlord
@@ -25339,7 +25208,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [800]
 Name = Necrozma
@@ -25368,7 +25237,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 4
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [801]
 Name = Magearna
@@ -25398,7 +25267,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [802]
 Name = Marshadow
@@ -25428,7 +25297,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 27
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [803]
 Name = Poipole
@@ -25487,7 +25356,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [805]
 Name = Stakataka
@@ -25517,7 +25386,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 6
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [806]
 Name = Blacephalon
@@ -25547,7 +25416,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 7
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [807]
 Name = Zeraora
@@ -25576,7 +25445,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [808]
 Name = Meltan
@@ -25597,7 +25466,6 @@ Height = 0.2
 Weight = 8.0
 Color = Gray
 Shape = 1
-RegionalNumbers = 388
 Kind = Hex Nut
 Pokedex = It melts particles of iron and other metals found in the subsoil, so it can absorb them into its body of molten steel.
 BattlerPlayerX = 0
@@ -25606,7 +25474,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 21
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [809]
 Name = Melmetal
@@ -25627,7 +25495,6 @@ Height = 2.5
 Weight = 800.0
 Color = Gray
 Shape = 12
-RegionalNumbers = 389
 Kind = Hex Nut
 Pokedex = Revered long ago for its capacity to create iron from nothing, for some reason it has come back to life after 3,000 years.
 BattlerPlayerX = 0
@@ -25636,7 +25503,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [810]
 Name = Grookey
@@ -25727,7 +25594,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [813]
 Name = Scorbunny
@@ -25818,7 +25685,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [816]
 Name = Sobble
@@ -25909,7 +25776,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [819]
 Name = Skwovet
@@ -25972,7 +25839,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [821]
 Name = Rookidee
@@ -26064,7 +25931,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [824]
 Name = Blipbug
@@ -26158,7 +26025,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [827]
 Name = Nickit
@@ -26219,7 +26086,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [829]
 Name = Gossifleur
@@ -26280,7 +26147,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [831]
 Name = Wooloo
@@ -26341,7 +26208,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [833]
 Name = Chewtle
@@ -26403,7 +26270,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 28
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [835]
 Name = Yamper
@@ -26464,7 +26331,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [837]
 Name = Rolycoly
@@ -26557,7 +26424,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [840]
 Name = Applin
@@ -26620,7 +26487,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 23
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [842]
 Name = Appletun
@@ -26651,7 +26518,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [843]
 Name = Silicobra
@@ -26712,7 +26579,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 25
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [845]
 Name = Cramorant
@@ -26743,7 +26610,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [846]
 Name = Arrokuda
@@ -26804,7 +26671,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 34
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [848]
 Name = Toxel
@@ -26868,7 +26735,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 10
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [850]
 Name = Sizzlipede
@@ -26931,7 +26798,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [852]
 Name = Clobbopus
@@ -26992,7 +26859,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [854]
 Name = Sinistea
@@ -27053,7 +26920,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [856]
 Name = Hatenna
@@ -27145,7 +27012,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [859]
 Name = Impidimp
@@ -27238,7 +27105,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [862]
 Name = Obstagoon
@@ -27269,7 +27136,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [863]
 Name = Perrserker
@@ -27299,7 +27166,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 22
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [864]
 Name = Cursola
@@ -27329,7 +27196,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 9
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [865]
 Name = Sirfetch'd
@@ -27360,7 +27227,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 5
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [866]
 Name = Mr. Rime
@@ -27391,7 +27258,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [867]
 Name = Runerigus
@@ -27421,7 +27288,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 24
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [868]
 Name = Milcery
@@ -27452,6 +27319,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 35
 BattlerShadowX = 0
 BattlerShadowSize = 2
+Evolutions = 
 #-------------------------------
 [869]
 Name = Alcremie
@@ -27481,7 +27349,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 25
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [870]
 Name = Falinks
@@ -27511,7 +27379,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 26
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [871]
 Name = Pincurchin
@@ -27542,7 +27410,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 32
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [872]
 Name = Snom
@@ -27606,7 +27474,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 19
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [874]
 Name = Stonjourner
@@ -27636,7 +27504,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [875]
 Name = Eiscue
@@ -27667,7 +27535,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [876]
 Name = Indeedee
@@ -27700,7 +27568,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 26
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [877]
 Name = Morpeko
@@ -27732,7 +27600,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 27
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [878]
 Name = Cufant
@@ -27795,7 +27663,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [880]
 Name = Dracozolt
@@ -27826,7 +27694,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 16
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [881]
 Name = Arctozolt
@@ -27857,7 +27725,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 12
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [882]
 Name = Dracovish
@@ -27888,7 +27756,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 11
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [883]
 Name = Arctovish
@@ -27919,7 +27787,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [884]
 Name = Duraludon
@@ -27951,7 +27819,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 15
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [885]
 Name = Dreepy
@@ -28045,7 +27913,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [888]
 Name = Zacian
@@ -28078,7 +27946,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 14
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [889]
 Name = Zamazenta
@@ -28111,7 +27979,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 8
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [890]
 Name = Eternatus
@@ -28141,7 +28009,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 6
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [891]
 Name = Kubfu
@@ -28201,7 +28069,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 13
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [893]
 Name = Zarude
@@ -28231,7 +28099,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 18
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = 
 #-------------------------------
 [894]
 Name = Regieleki
