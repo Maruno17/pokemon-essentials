@@ -586,7 +586,12 @@ class PokeBattle_Battler
     return false if @effects[PBEffects::HealBlock]>0
     return true
   end
-
+  
+  def canTakeHealingWish?
+	# Also works with Lunar Dance. 
+	return canHeal? && pbHasAnyStatus?
+  end 
+  
   def affectedByContactEffect?(showMsg=false)
     return false if fainted?
     if hasActiveItem?(:PROTECTIVEPADS)
