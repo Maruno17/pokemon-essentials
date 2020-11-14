@@ -48,7 +48,7 @@ class PokeBattle_Move_003 < PokeBattle_SleepMove
     return if !isConst?(@id,PBMoves,:RELICSONG)
     return if !user.isSpecies?(:MELOETTA)
     return if user.hasActiveAbility?(:SHEERFORCE) && @addlEffect>0
-    newForm = (oldForm+1)%2
+    newForm = (user.Form+1)%2
     user.pbChangeForm(newForm,_INTL("{1} transformed!",user.pbThis))
   end
 end
