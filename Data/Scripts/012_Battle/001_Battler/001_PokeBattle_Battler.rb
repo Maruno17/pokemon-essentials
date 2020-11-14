@@ -405,7 +405,8 @@ class PokeBattle_Battler
       :COMATOSE,
       :RKSSYSTEM,
       :ASONEICE,
-      :ASONEGHOST
+      :ASONEGHOST,
+	  :NEUTRALIZINGGAS
     ]
     abilityBlacklist.each do |a|
       return true if isConst?(abil, PBAbilities, a)
