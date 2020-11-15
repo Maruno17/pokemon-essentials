@@ -158,7 +158,6 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
 #--------------------------------------
 #TODO:
  - Silvally forms without RKS System or a Memory now behave as the form's type instead of Normal (Anubis)
- - The guy in-game who says sun thaws frozen Pokemon is a liar (doipy hooves) 
  - Ally Switch can take the Healing Wish effect if it's used the turn after Healing Wish was used into a full HP target (Sejun Park) 
  - Fling can be used with Technical Records (TRs), and its power is determined by the contained move's power, or 10 for Status moves and moves with "---" power. (OZY)
  - Stalwart, Propeller Tail, and Snipe Shot have bizarre targeting in Doubles when moves are called through Instruct or Sleep Talk (DaWoblefet and Anubis)
@@ -167,6 +166,7 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Competitive/Defiant activate from opposing Mirror Armor reflecting the user's stat drops (TheMantyke) 
  
 #Done: 
+ - The guy in-game who says sun thaws frozen Pokemon is a liar (doipy hooves) 
  - Pokemon Transformed into Morpeko can use Aura Wheel; it always appears as Electric type, but is actually Dark type if the Transformed Pokemon copied Hangry Mode (Anubis)
  - Slush Rush still doesn't provide immunity to Hail damage (Skeli)
  - Anticipation and Forewarn can detect Hidden Power's type (Anubis)
