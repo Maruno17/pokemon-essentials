@@ -407,6 +407,7 @@ class PokeBattle_Move
         elsif isConst?(type,PBTypes,:WATER)
           multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
         end
+	  end
     end
 	if @battle.pbWeather == PBWeather::Sandstorm
 	  if target.pbHasType?(:ROCK) && specialMove? && @function!="122"   # Psyshock
