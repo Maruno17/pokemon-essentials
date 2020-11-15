@@ -154,8 +154,8 @@ BattleHandlers::StatusImmunityAbility.copy(:INSOMNIA,:SWEETVEIL,:VITALSPIRIT)
 BattleHandlers::StatusImmunityAbility.add(:LEAFGUARD,
   proc { |ability,battler,status|
     w = battler.battle.pbWeather
-    next true if w==PBWeather::Sun || w==PBWeather::HarshSun &&
-    !hasActiveItem?(:UTILITYUMBRELLA)
+    next true if (w==PBWeather::Sun || w==PBWeather::HarshSun) &&
+    !battler.hasActiveItem?(:UTILITYUMBRELLA)
   }
 )
 
@@ -945,7 +945,7 @@ BattleHandlers::DamageCalcUserAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
     if move.physicalMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun) &&
-      !user.hasActiveItem?(:UTILITYUMBRELLA)
+      !target.hasActiveItem?(:UTILITYUMBRELLA)
       mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
     end
   }
@@ -1059,7 +1059,7 @@ BattleHandlers::DamageCalcUserAbility.add(:SOLARPOWER,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
     if move.specialMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun) &&
-      !user.hasActiveItem?(:UTILITYUMBRELLA)
+      !target.hasActiveItem?(:UTILITYUMBRELLA)
       mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
     end
   }

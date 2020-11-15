@@ -75,7 +75,7 @@ class PokeBattle_Battle
     priority.each do |b|
       # Weather-related abilities
       if b.abilityActive?
-        next if b.hasActiveItem?(:UTILITYUMBRELLA) && !b.hasActiveAbility?(:ICEBODY)
+        next if !b.hasActiveAbility?(:ICEBODY)
         BattleHandlers.triggerEORWeatherAbility(b.ability,curWeather,b,self)
         b.pbFaint if b.fainted?
       end

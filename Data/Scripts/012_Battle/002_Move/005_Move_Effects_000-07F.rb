@@ -134,14 +134,12 @@ class PokeBattle_Move_008 < PokeBattle_ParalysisMove
 	if target.hasActiveItem?(:UTILITYUMBRELLA)
 		return super
 	end 
-    if !user.hasActiveItem?(:UTILITYUMBRELLA)
-      case @battle.pbWeather
-      when PBWeather::Sun, PBWeather::HarshSun
-        return 50
-      when PBWeather::Rain, PBWeather::HeavyRain
-        return 0
-      end
-    end
+	case @battle.pbWeather
+	when PBWeather::Sun, PBWeather::HarshSun
+	  return 50
+	when PBWeather::Rain, PBWeather::HeavyRain
+	  return 0
+	end
     return super
   end
 end
@@ -329,14 +327,12 @@ class PokeBattle_Move_015 < PokeBattle_ConfuseMove
     if target.hasActiveItem?(:UTILITYUMBRELLA)
 	  return super
 	end 
-    if !user.hasActiveItem?(:UTILITYUMBRELLA)
-      case @battle.pbWeather
-      when PBWeather::Sun, PBWeather::HarshSun
-        return 50
-      when PBWeather::Rain, PBWeather::HeavyRain
-        return 0
-      end
-    end
+	case @battle.pbWeather
+	when PBWeather::Sun, PBWeather::HarshSun
+	  return 50
+	when PBWeather::Rain, PBWeather::HeavyRain
+	  return 0
+	end
     return super
   end
 end
