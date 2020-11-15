@@ -147,9 +147,11 @@ class PokeBattle_Battler
 	  next if switchedBattlers.length > 0 # Only one switch per move (Gen 8)
 	  
       if targets.any? { |targetB| targetB.index==b.index } # Eject Button, Red Card
-        next if b.damageState.unaffected || b.damageState.calcDamage == 0
-		BattleHandlers.triggerTargetItemAfterMoveUse(b.item,b,user,move,switchByItem,@battle)
-	  elsif b.effects[PBEffects::LashOut] # Eject Pack 
+        if !b.damageState.unaffected && b.damageState.calcDamage != 0
+		  BattleHandlers.triggerTargetItemAfterMoveUse(b.item,b,user,move,switchByItem,@battle)
+		end 
+	  end
+	  if b.effects[PBEffects::LashOut] # Eject Pack 
         BattleHandlers.triggerItemOnStatLoss(b.item,b,user,move,switchByItem,@battle)
 	  end 
     end

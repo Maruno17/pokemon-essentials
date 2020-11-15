@@ -137,9 +137,9 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
 # Items
 #--------------------------------------
 #TODO:
- - Eject Pack triggers when stat stages are lowered even if the resulting stat stage is not negative (sb879)
 
 #Done:
+ - Eject Pack triggers when stat stages are lowered even if the resulting stat stage is not negative (sb879)
  - If multiple Eject Packs would trigger during the same attack, only the fastest Pokemon uses theirs (DaWoblefet)
  - Eject Pack will not activate when switches from U-turn or Parting Shot are happening (sb879)
  - Eject Pack will not activate if Parting Shot lowers the holder's stats and the user switched out (DaWoblefet)
