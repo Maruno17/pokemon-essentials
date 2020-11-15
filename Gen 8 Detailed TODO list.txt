@@ -145,10 +145,10 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Utility Umbrella holders take normal damage from what would be rain- and sun-weakened attacks (sb879)
  - Utility Umbrella holders ignore rain- and sun-based move and Ability effects that would affect them (sb879) (Anubis)
  - Utility Umbrella does not affect damage modifiers from the holder's Water and Fire attacks in rain/sun (sb879)
- - Utility Umbrella holders can become frozen in sun (Anubis)
- - Utility Umbrella holders can avoid Hurricane and Thunder in rain (Anubis)
 
 #Done:
+ - Utility Umbrella holders can avoid Hurricane and Thunder in rain (Anubis)
+ - Utility Umbrella holders can become frozen in sun (Anubis)
  - Throat Spray activates when the user's sound move hits a target, not when it fails or all targets are protected (BountyHunterStev)
  - Throat Spray activates when using Clangorous Soul (BountyHunterStev)
  - Heavy-Duty Boots still allows Poison-type holders to soak up Toxic Spikes (GMars and TPP)
