@@ -186,6 +186,10 @@ class PokeBattle_Battler
       end
       if user.pbCanLowerStatStage?(stat) && !user.hasActiveAbility?(:MIRRORARMOR)
         user.pbLowerStatStageByAbility(stat,increment,user,splashAnim=false,checkContact=false)
+		# Trigger user's abilities upon stat loss
+		if user.abilityActive?
+		  BattleHandlers.triggerAbilityOnStatLoss(user.ability,user,stat,self)
+		end
       end
       battle.pbHideAbilitySplash(self)
       return false
@@ -224,6 +228,10 @@ class PokeBattle_Battler
       end
       if user.pbCanLowerStatStage?(stat) && !user.hasActiveAbility?(:MIRRORARMOR)
         user.pbLowerStatStageByAbility(stat,increment,user,splashAnim=false,checkContact=false)
+		# Trigger user's abilities upon stat loss
+		if user.abilityActive?
+		  BattleHandlers.triggerAbilityOnStatLoss(user.ability,user,stat,self)
+		end
       end
       battle.pbHideAbilitySplash(self)
       return false
