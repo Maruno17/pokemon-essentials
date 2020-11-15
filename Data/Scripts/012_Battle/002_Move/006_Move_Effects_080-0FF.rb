@@ -3577,6 +3577,7 @@ class PokeBattle_Move_0F7 < PokeBattle_Move
       return
     end
     return if pbIsMegaStone?(user.item)
+    return if pbIsTechnicalRecord?(user.item) if NEWEST_BATTLE_MECHANICS
     flingableItem = false
     @flingPowers.each do |_power,items|
       items.each do |i|
@@ -3608,6 +3609,12 @@ class PokeBattle_Move_0F7 < PokeBattle_Move
   def pbNumHits(user,targets); return 1; end
 
   def pbBaseDamage(baseDmg,user,target)
+	if pbIsTechnicalRecord?(user.item)
+		movedata = pbGetMoveData(pbGetMachine(user.item))
+		return 10 if movedata[MOVE_CATEGORY] == 2 # status move
+		return 10 if movedata[MOVE_BASE_DAMAGE] < 10
+		return movedata[MOVE_BASE_DAMAGE]
+	end 
     return 10 if pbIsBerry?(user.item)
     return 80 if pbIsMegaStone?(user.item)
     @flingPowers.each do |power,items|
