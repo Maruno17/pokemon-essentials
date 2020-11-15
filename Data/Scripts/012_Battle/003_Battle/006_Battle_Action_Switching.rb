@@ -326,7 +326,31 @@ class PokeBattle_Battle
     # Check forms are correct
     eachBattler { |b| b.pbCheckForm }
   end
-
+  
+  
+  # Called when a Pokémon switches in + after using Ally Switch (Gen 8 mechanics)
+  def pbActivateHealingWish(battler)
+	return if !battler.canTakeHealingWish?
+    # Healing Wish
+    if @positions[battler.index].effects[PBEffects::HealingWish]
+      pbCommonAnimation("HealingWish",battler)
+      pbDisplay(_INTL("The healing wish came true for {1}!",battler.pbThis(true)))
+      battler.pbRecoverHP(battler.totalhp)
+      battler.pbCureStatus(false)
+      @positions[battler.index].effects[PBEffects::HealingWish] = false
+    end
+    # Lunar Dance
+    if @positions[battler.index].effects[PBEffects::LunarDance]
+      pbCommonAnimation("LunarDance",battler)
+      pbDisplay(_INTL("{1} became cloaked in mystical moonlight!",battler.pbThis))
+      battler.pbRecoverHP(battler.totalhp)
+      battler.pbCureStatus(false)
+      battler.eachMove { |m| m.pp = m.totalpp }
+      @positions[battler.index].effects[PBEffects::LunarDance] = false
+    end
+  end 
+  
+  
   # Called when a Pokémon switches in (entry effects, entry hazards).
   def pbOnActiveOne(battler)
     return false if battler.fainted?
@@ -342,23 +366,8 @@ class PokeBattle_Battle
     end
     # Update battlers' participants (who will gain Exp/EVs when a battler faints)
     eachBattler { |b| b.pbUpdateParticipants }
-    # Healing Wish
-    if @positions[battler.index].effects[PBEffects::HealingWish] && battler.canTakeHealingWish?
-      pbCommonAnimation("HealingWish",battler)
-      pbDisplay(_INTL("The healing wish came true for {1}!",battler.pbThis(true)))
-      battler.pbRecoverHP(battler.totalhp)
-      battler.pbCureStatus(false)
-      @positions[battler.index].effects[PBEffects::HealingWish] = false
-    end
-    # Lunar Dance
-    if @positions[battler.index].effects[PBEffects::LunarDance] && battler.canTakeHealingWish?
-      pbCommonAnimation("LunarDance",battler)
-      pbDisplay(_INTL("{1} became cloaked in mystical moonlight!",battler.pbThis))
-      battler.pbRecoverHP(battler.totalhp)
-      battler.pbCureStatus(false)
-      battler.eachMove { |m| m.pp = m.totalpp }
-      @positions[battler.index].effects[PBEffects::LunarDance] = false
-    end
+	# Healing Wish / Lunar Dance
+	pbActivateHealingWish(battler)
     # Entry hazards
     # Stealth Rock
     if battler.pbOwnSide.effects[PBEffects::StealthRock] && battler.takesIndirectDamage? &&

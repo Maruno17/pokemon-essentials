@@ -916,6 +916,8 @@ class PokeBattle_Move_120 < PokeBattle_Move
     if @battle.pbSwapBattlers(idxA,idxB)
       @battle.pbDisplay(_INTL("{1} and {2} switched places!",
          @battle.battlers[idxB].pbThis,@battle.battlers[idxA].pbThis(true)))
+		@battle.pbActivateHealingWish(@battle.battlers[idxA]) if NEWEST_BATTLE_MECHANICS
+		@battle.pbActivateHealingWish(@battle.battlers[idxB]) if NEWEST_BATTLE_MECHANICS
     end
   end
 end
