@@ -532,13 +532,13 @@ def pbGetWildBattleBGM(_wildParty)   # wildParty is an array of Pokémon objects
   end
   ret = nil
   if !ret
-    # Check map-specific metadata
-    music = pbGetMetadata($game_map.map_id,MapMetadata::WILD_BATTLE_BGM)
+    # Check map metadata
+    music = GameData::MapMetadata.get($game_map.map_id).wild_battle_BGM
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   if !ret
     # Check global metadata
-    music = pbGetMetadata(0,Metadata::WILD_BATTLE_BGM)
+    music = GameData::Metadata.get.wild_battle_BGM
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   ret = pbStringToAudioFile("Battle wild") if !ret
@@ -551,13 +551,13 @@ def pbGetWildVictoryME
   end
   ret = nil
   if !ret
-    # Check map-specific metadata
-    music = pbGetMetadata($game_map.map_id,MapMetadata::WILD_VICTORY_ME)
+    # Check map metadata
+    music = GameData::MapMetadata.get($game_map.map_id).wild_victory_ME
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   if !ret
     # Check global metadata
-    music = pbGetMetadata(0,Metadata::WILD_VICTORY_ME)
+    music = GameData::Metadata.get.wild_victory_ME
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   ret = pbStringToAudioFile("Battle victory") if !ret
@@ -571,13 +571,13 @@ def pbGetWildCaptureME
   end
   ret = nil
   if !ret
-    # Check map-specific metadata
-    music = pbGetMetadata($game_map.map_id,MapMetadata::WILD_CAPTURE_ME)
+    # Check map metadata
+    music = GameData::MapMetadata.get($game_map.map_id).wild_capture_ME
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   if !ret
     # Check global metadata
-    music = pbGetMetadata(0,Metadata::WILD_CAPTURE_ME)
+    music = GameData::Metadata.get.wild_capture_ME
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   ret = pbStringToAudioFile("Battle capture success") if !ret
@@ -611,15 +611,15 @@ def pbGetTrainerBattleBGM(trainer)   # can be a PokeBattle_Trainer or an array o
   end
   ret = pbStringToAudioFile(music) if music && music!=""
   if !ret
-    # Check map-specific metadata
-    music = pbGetMetadata($game_map.map_id,MapMetadata::TRAINER_BATTLE_BGM)
+    # Check map metadata
+    music = GameData::MapMetadata.get($game_map.map_id).trainer_battle_BGM
     if music && music!=""
       ret = pbStringToAudioFile(music)
     end
   end
   if !ret
     # Check global metadata
-    music = pbGetMetadata(0,Metadata::TRAINER_BATTLE_BGM)
+    music = GameData::Metadata.get.trainer_battle_BGM
     if music && music!=""
       ret = pbStringToAudioFile(music)
     end
@@ -635,13 +635,13 @@ def pbGetTrainerBattleBGMFromType(trainertype)
   data = pbGetTrainerTypeData(trainertype)
   ret = pbStringToAudioFile(data[4]) if data && data[4]
   if !ret
-    # Check map-specific metadata
-    music = pbGetMetadata($game_map.map_id,MapMetadata::TRAINER_BATTLE_BGM)
+    # Check map metadata
+    music = GameData::MapMetadata.get($game_map.map_id).trainer_battle_BGM
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   if !ret
     # Check global metadata
-    music = pbGetMetadata(0,Metadata::TRAINER_BATTLE_BGM)
+    music = GameData::Metadata.get.trainer_battle_BGM
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   ret = pbStringToAudioFile("Battle trainer") if !ret
@@ -663,15 +663,15 @@ def pbGetTrainerVictoryME(trainer)   # can be a PokeBattle_Trainer or an array o
     ret = pbStringToAudioFile(music)
   end
   if !ret
-    # Check map-specific metadata
-    music = pbGetMetadata($game_map.map_id,MapMetadata::TRAINER_VICTORY_ME)
+    # Check map metadata
+    music = GameData::MapMetadata.get($game_map.map_id).trainer_victory_ME
     if music && music!=""
       ret = pbStringToAudioFile(music)
     end
   end
   if !ret
     # Check global metadata
-    music = pbGetMetadata(0,Metadata::TRAINER_VICTORY_ME)
+    music = GameData::Metadata.get.trainer_victory_ME
     if music && music!=""
       ret = pbStringToAudioFile(music)
     end

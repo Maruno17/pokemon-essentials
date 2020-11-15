@@ -553,27 +553,85 @@ end
 #===============================================================================
 # Metadata editor
 #===============================================================================
-def pbMetadataScreen(defaultMapId=nil)
-  metadata = nil
-  mapinfos = pbLoadRxData("Data/MapInfos")
-  metadata = pbLoadMetadata
-  map = defaultMapId ? defaultMapId : 0
+def pbMetadataScreen(map_id = 0)
   loop do
-    map = pbListScreen(_INTL("SET METADATA"),MapLister.new(map,true))
-    break if map<0
-    mapname = (map==0) ? _INTL("Global Metadata") : mapinfos[map].name
-    data = []
-    properties = (map==0) ? MapScreenScene::GLOBALMETADATA : MapScreenScene::LOCALMAPS
-    for i in 0...properties.length
-      data.push((metadata[map]) ? metadata[map][i+1] : nil)
-    end
-    pbPropertyList(mapname,data,properties)
-    for i in 0...properties.length
-      metadata[map] = [] if !metadata[map]
-      metadata[map][i+1] = data[i]
-    end
+    map_id = pbListScreen(_INTL("SET METADATA"), MapLister.new(map_id, true))
+    break if map_id < 0
+    pbEditMetadata(map_id)
   end
-  pbSerializeMetadata(metadata,mapinfos) if metadata
+end
+
+def pbEditMetadata(map_id = 0)
+  mapinfos = pbLoadRxData("Data/MapInfos")
+  data = []
+  if map_id == 0   # Global metadata
+    map_name = _INTL("Global Metadata")
+    metadata = GameData::Metadata.get
+    properties = GameData::Metadata.editor_properties
+  else   # Map metadata
+    map_name = mapinfos[map_id].name
+    metadata = GameData::MapMetadata.get(map_id)
+    properties = GameData::MapMetadata.editor_properties
+  end
+  properties.each do |property|
+    data.push(metadata.property_from_string(property[0]))
+  end
+  if pbPropertyList(map_name, data, properties, true)
+    if map_id == 0   # Global metadata
+      # Construct metadata hash
+      metadata_hash = {
+        :id                 => map_id,
+        :home               => data[0],
+        :wild_battle_BGM    => data[1],
+        :trainer_battle_BGM => data[2],
+        :wild_victory_ME    => data[3],
+        :trainer_victory_ME => data[4],
+        :wild_capture_ME    => data[5],
+        :surf_BGM           => data[6],
+        :bicycle_BGM        => data[7],
+        :player_A           => data[8],
+        :player_B           => data[9],
+        :player_C           => data[10],
+        :player_D           => data[11],
+        :player_E           => data[12],
+        :player_F           => data[13],
+        :player_G           => data[14],
+        :player_H           => data[15]
+      }
+      # Add metadata's data to records
+      GameData::Metadata::DATA[map_id] = GameData::Metadata.new(metadata_hash)
+      GameData::Metadata.save
+    else   # Map metadata
+      # Construct metadata hash
+      metadata_hash = {
+        :id                   => map_id,
+        :outdoor_map          => data[0],
+        :announce_location    => data[1],
+        :can_bicycle          => data[2],
+        :always_bicycle       => data[3],
+        :teleport_destination => data[4],
+        :weather              => data[5],
+        :town_map_position    => data[6],
+        :dive_map_id          => data[7],
+        :dark_map             => data[8],
+        :safari_map           => data[9],
+        :snap_edges           => data[10],
+        :random_dungeon       => data[11],
+        :battle_background    => data[12],
+        :wild_battle_BGM      => data[13],
+        :trainer_battle_BGM   => data[14],
+        :wild_victory_ME      => data[15],
+        :trainer_victory_ME   => data[16],
+        :wild_capture_ME      => data[17],
+        :town_map_size        => data[18],
+        :battle_environment   => data[19]
+      }
+      # Add metadata's data to records
+      GameData::MapMetadata::DATA[map_id] = GameData::MapMetadata.new(metadata_hash)
+      GameData::MapMetadata.save
+    end
+    pbSaveMetadata
+  end
 end
 
 
@@ -638,8 +696,7 @@ def pbItemEditor
             itm.type,
             itm.move || 0
           ]
-          save = pbPropertyList(itm.id.to_s, data, items, true)
-          if save
+          if pbPropertyList(itm.id.to_s, data, items, true)
             # Construct item hash
             item_hash = {
               :id_number   => itm.id_number,

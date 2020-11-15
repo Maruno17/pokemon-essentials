@@ -183,7 +183,8 @@ EncounterModifier.register(proc { |encounter|
     # are in the same region
     if roamerMap!=$game_map.map_id
       currentRegion = pbGetCurrentRegion
-      next if pbGetMetadata(roamerMap,MapMetadata::MAP_POSITION)[0]!=currentRegion
+      map_position = GameData::MapMetadata.get(roamerMap).town_map_position
+      next if !map_position || map_position[0] != currentRegion
       currentMapName = pbGetMessage(MessageTypes::MapNames,$game_map.map_id)
       next if pbGetMessage(MessageTypes::MapNames,roamerMap)!=currentMapName
     end

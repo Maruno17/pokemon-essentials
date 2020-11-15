@@ -166,7 +166,7 @@ def pbDebugMenuCommands(showall=true)
   commands.add("main","editorsmenu",_INTL("Information editors..."),
      _INTL("Edit information in the PBS files, terrain tags, battle animations, etc."))
   commands.add("editorsmenu","setmetadata",_INTL("Edit Metadata"),
-     _INTL("Edit global and map-specific metadata."))
+     _INTL("Edit global and map metadata."))
   commands.add("editorsmenu","mapconnections",_INTL("Edit Map Connections"),
      _INTL("Connect maps using a visual interface. Can also edit map encounters/metadata."))
   commands.add("editorsmenu","terraintags",_INTL("Edit Terrain Tags"),
@@ -679,7 +679,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
   when "setplayer"
     limit = 0
     for i in 0...8
-      meta = pbGetMetadata(0,Metadata::PLAYER_A+i)
+      meta = GameData::Metadata.get_player(i)
       if !meta
         limit = i; break
       end

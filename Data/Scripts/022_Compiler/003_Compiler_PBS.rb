@@ -7,45 +7,89 @@ module Compiler
   # Compile metadata
   #=============================================================================
   def compile_metadata
-    sections = []
-    currentmap = -1
-    pbCompilerEachCommentedLine("PBS/metadata.txt") { |line,lineno|
-      if line[/^\s*\[\s*(\d+)\s*\]\s*$/]
-        sectionname = $~[1]
-        if currentmap==0
-          if sections[currentmap][Metadata::HOME]==nil
-            raise _INTL("The entry Home is required in metadata.txt section [{1}].",sectionname)
-          elsif sections[currentmap][Metadata::PLAYER_A]==nil
-            raise _INTL("The entry PlayerA is required in metadata.txt section [{1}].",sectionname)
+    GameData::Metadata::DATA.clear
+    GameData::MapMetadata::DATA.clear
+    # Read from PBS file
+    File.open("PBS/metadata.txt", "rb") { |f|
+      FileLineData.file = "PBS/metadata.txt"   # For error reporting
+      # Read a whole section's lines at once, then run through this code.
+      # contents is a hash containing all the XXX=YYY lines in that section, where
+      # the keys are the XXX and the values are the YYY (as unprocessed strings).
+      pbEachFileSection(f) { |contents, map_id|
+        schema = (map_id == 0) ? GameData::Metadata::SCHEMA : GameData::MapMetadata::SCHEMA
+        # Go through schema hash of compilable data and compile this section
+        for key in schema.keys
+          FileLineData.setSection(map_id, key, contents[key])   # For error reporting
+          # Skip empty properties, or raise an error if a required property is
+          # empty
+          if contents[key].nil?
+            if map_id == 0 && ["Home", "PlayerA"].include?(key)
+              raise _INTL("The entry {1} is required in PBS/metadata.txt section 0.", key)
+            end
+            next
           end
+          # Compile value for key
+          value = pbGetCsvRecord(contents[key], key, schema[key])
+          value = nil if value.is_a?(Array) && value.length == 0
+          contents[key] = value
         end
-        currentmap = sectionname.to_i
-        if sections[currentmap]
-          raise _INTL("Section [{1}] is defined twice in metadata.txt.\r\n{2}",currentmap,FileLineData.linereport)
+        if map_id == 0   # Global metadata
+          # Construct metadata hash
+          metadata_hash = {
+            :id                 => map_id,
+            :home               => contents["Home"],
+            :wild_battle_BGM    => contents["WildBattleBGM"],
+            :trainer_battle_BGM => contents["TrainerBattleBGM"],
+            :wild_victory_ME    => contents["WildVictoryME"],
+            :trainer_victory_ME => contents["TrainerVictoryME"],
+            :wild_capture_ME    => contents["WildCaptureME"],
+            :surf_BGM           => contents["SurfBGM"],
+            :bicycle_BGM        => contents["BicycleBGM"],
+            :player_A           => contents["PlayerA"],
+            :player_B           => contents["PlayerB"],
+            :player_C           => contents["PlayerC"],
+            :player_D           => contents["PlayerD"],
+            :player_E           => contents["PlayerE"],
+            :player_F           => contents["PlayerF"],
+            :player_G           => contents["PlayerG"],
+            :player_H           => contents["PlayerH"]
+          }
+          # Add metadata's data to records
+          GameData::Metadata::DATA[map_id] = GameData::Metadata.new(metadata_hash)
+        else   # Map metadata
+          # Construct metadata hash
+          metadata_hash = {
+            :id                   => map_id,
+            :outdoor_map          => contents["Outdoor"],
+            :announce_location    => contents["ShowArea"],
+            :can_bicycle          => contents["Bicycle"],
+            :always_bicycle       => contents["BicycleAlways"],
+            :teleport_destination => contents["HealingSpot"],
+            :weather              => contents["Weather"],
+            :town_map_position    => contents["MapPosition"],
+            :dive_map_id          => contents["DiveMap"],
+            :dark_map             => contents["DarkMap"],
+            :safari_map           => contents["SafariMap"],
+            :snap_edges           => contents["SnapEdges"],
+            :random_dungeon       => contents["Dungeon"],
+            :battle_background    => contents["BattleBack"],
+            :wild_battle_BGM      => contents["WildBattleBGM"],
+            :trainer_battle_BGM   => contents["TrainerBattleBGM"],
+            :wild_victory_ME      => contents["WildVictoryME"],
+            :trainer_victory_ME   => contents["TrainerVictoryME"],
+            :wild_capture_ME      => contents["WildCaptureME"],
+            :town_map_size        => contents["MapSize"],
+            :battle_environment   => contents["Environment"]
+          }
+          # Add metadata's data to records
+          GameData::MapMetadata::DATA[map_id] = GameData::MapMetadata.new(metadata_hash)
         end
-        sections[currentmap] = []
-      else
-        if currentmap<0
-          raise _INTL("Expected a section at the beginning of the file.\r\n{1}",FileLineData.linereport)
-        end
-        if !line[/^\s*(\w+)\s*=\s*(.*)$/]
-          raise _INTL("Bad line syntax (expected syntax like XXX=YYY).\r\n{1}",FileLineData.linereport)
-        end
-        matchData = $~
-        schema = nil
-        FileLineData.setSection(currentmap,matchData[1],matchData[2])
-        if currentmap==0
-          schema = Metadata::SCHEMA[matchData[1]]
-        else
-          schema = MapMetadata::SCHEMA[matchData[1]]
-        end
-        if schema
-          record = pbGetCsvRecord(matchData[2],lineno,schema)
-          sections[currentmap][schema[0]] = record
-        end
-      end
+      }
     }
-    save_data(sections,"Data/metadata.dat")
+    # Save all data
+    GameData::Metadata.save
+    GameData::MapMetadata.save
+    Graphics.update
   end
 
   #=============================================================================
@@ -164,27 +208,6 @@ module Compiler
     # Save all data
     GameData::BerryPlant.save
     Graphics.update
-  end
-
-  def compile_berry_plants
-    sections = {}
-    if File.exists?("PBS/berryplants.txt")
-      pbCompilerEachCommentedLine("PBS/berryplants.txt") { |line,_lineno|
-        if line[ /^\s*(\w+)\s*=\s*(.*)$/ ]
-          key   = $1
-          value = $2
-          value = value.split(",")
-          for i in 0...value.length
-            value[i].sub!(/^\s*/,"")
-            value[i].sub!(/\s*$/,"")
-            value[i] = value[i].to_i
-          end
-          item = parseItem(key)
-          sections[item] = value
-        end
-      }
-    end
-    save_data(sections, "Data/berry_plants.dat")
   end
 
   #=============================================================================

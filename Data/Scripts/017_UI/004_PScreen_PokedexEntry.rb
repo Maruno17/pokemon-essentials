@@ -27,7 +27,7 @@ class PokemonPokedexInfo_Scene
     @sprites["infosprite"].x = 104
     @sprites["infosprite"].y = 136
     @mapdata = pbLoadTownMapData
-    mappos = ($game_map) ? pbGetMetadata($game_map.map_id,MapMetadata::MAP_POSITION) : nil
+    mappos = ($game_map) ? GameData::MapMetadata.get($game_map.map_id).town_map_position : nil
     if @region<0                                   # Use player's current region
       @region = (mappos) ? mappos[0] : 0                      # Region 0 default
     end
@@ -311,7 +311,7 @@ class PokemonPokedexInfo_Scene
     for enc in encdata.keys
       enctypes = encdata[enc][1]
       if pbFindEncounter(enctypes,@species)
-        mappos = pbGetMetadata(enc,MapMetadata::MAP_POSITION)
+        mappos = GameData::MapMetadata.get(enc).town_map_position
         if mappos && mappos[0]==@region
           showpoint = true
           for loc in @mapdata[@region][2]
@@ -319,7 +319,7 @@ class PokemonPokedexInfo_Scene
                                  loc[7] && !$game_switches[loc[7]]
           end
           if showpoint
-            mapsize = pbGetMetadata(enc,MapMetadata::MAP_SIZE)
+            mapsize = GameData::MapMetadata.get(enc).town_map_size
             if mapsize && mapsize[0] && mapsize[0]>0
               sqwidth  = mapsize[0]
               sqheight = (mapsize[1].length*1.0/mapsize[0]).ceil

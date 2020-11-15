@@ -361,14 +361,14 @@ def pbBikeCheck
     return false
   end
   if $PokemonGlobal.bicycle
-    if pbGetMetadata($game_map.map_id,MapMetadata::BICYCLE_ALWAYS)
+    if GameData::MapMetadata.get($game_map.map_id).always_bicycle
       pbMessage(_INTL("You can't dismount your Bike here."))
       return false
     end
     return true
   end
-  val = pbGetMetadata($game_map.map_id,MapMetadata::BICYCLE)
-  val = pbGetMetadata($game_map.map_id,MapMetadata::OUTDOOR) if val==nil
+  val = GameData::MapMetadata.get($game_map.map_id).can_bicycle
+  val = GameData::MapMetadata.get($game_map.map_id).outdoor_map if val.nil?
   if !val
     pbMessage(_INTL("Can't use that here."))
     return false

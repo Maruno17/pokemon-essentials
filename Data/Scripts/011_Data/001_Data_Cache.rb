@@ -50,23 +50,6 @@ def pbClearData
 end
 
 #===============================================================================
-# Methods to get metadata.
-#===============================================================================
-def pbLoadMetadata
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.metadata
-    $PokemonTemp.metadata = load_data("Data/metadata.dat") || []
-  end
-  return $PokemonTemp.metadata
-end
-
-def pbGetMetadata(map_id, metadata_type)
-  meta = pbLoadMetadata
-  return meta[map_id][metadata_type] if meta[map_id]
-  return nil
-end
-
-#===============================================================================
 # Method to get Town Map data.
 #===============================================================================
 def pbLoadTownMapData

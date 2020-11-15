@@ -52,7 +52,7 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
       location = 3
     elsif $PokemonEncounters.isCave?
       location = 2
-    elsif !pbGetMetadata($game_map.map_id,MapMetadata::OUTDOOR)
+    elsif !GameData::MapMetadata.get($game_map.map_id).outdoor_map
       location = 1
     end
     anim = ""
@@ -654,7 +654,7 @@ def pbStartOver(gameover=false)
     $scene.transfer_player if $scene.is_a?(Scene_Map)
     $game_map.refresh
   else
-    homedata = pbGetMetadata(0,Metadata::HOME)
+    homedata = GameData::Metadata.get.home
     if homedata && !pbRxdataExists?(sprintf("Data/Map%03d",homedata[0]))
       if $DEBUG
         pbMessage(_ISPRINTF("Can't find the map 'Map{1:03d}' in the Data folder. The game will resume at the player's position.",homedata[0]))

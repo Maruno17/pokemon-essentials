@@ -2,6 +2,7 @@ module GameData
   # A mixin module for data classes which provides common class methods (called
   # by GameData::Thing.method) that provide access to data held within.
   # Assumes the data class's data is stored in a class constant hash called DATA.
+  # For data that is known by a symbol or an ID number.
   module ClassMethods
     # @param other [Symbol, self, String, Integer]
     # @return [Boolean] whether the given other is defined as a self
@@ -39,9 +40,51 @@ module GameData
 
     def each
       keys = self::DATA.keys.sort { |a, b| self::DATA[a].id_number <=> self::DATA[b].id_number }
-      keys.each do |key|
-        yield self::DATA[key] if key.is_a?(Symbol)
-      end
+      keys.each { |key| yield self::DATA[key] if key.is_a?(Symbol) }
+    end
+
+    def load
+      const_set(:DATA, load_data("Data/#{self::DATA_FILENAME}"))
+    end
+
+    def save
+      save_data(self::DATA, "Data/#{self::DATA_FILENAME}")
+    end
+  end
+
+  # A mixin module for data classes which provides common class methods (called
+  # by GameData::Thing.method) that provide access to data held within.
+  # Assumes the data class's data is stored in a class constant hash called DATA.
+  # For data that is only known by an ID number.
+  module ClassMethodsIDNumbers
+    # @param other [self, Integer]
+    # @return [Boolean] whether the given other is defined as a self
+    def exists?(other)
+      return false if other.nil?
+      validate other => [self, Integer]
+      other = other.id if other.is_a?(self)
+      return !self::DATA[other].nil?
+    end
+
+    # @param other [self, Integer]
+    # @return [self]
+    def get(other)
+      validate other => [self, Integer]
+      return other if other.is_a?(self)
+      raise "Unknown ID #{other}." unless self::DATA.has_key?(other)
+      return self::DATA[other]
+    end
+
+    def try_get(other)
+      return nil if other.nil?
+      validate other => [self, Integer]
+      return other if other.is_a?(self)
+      return (self::DATA.has_key?(other)) ? self::DATA[other] : nil
+    end
+
+    def each
+      keys = self::DATA.keys.sort
+      keys.each { |key| yield self::DATA[key] }
     end
 
     def load

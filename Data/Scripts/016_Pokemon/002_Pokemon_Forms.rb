@@ -667,13 +667,13 @@ MultipleForms.register(:NECROZMA,{
 
 # These species don't have visually different Alolan forms, but they need to
 # evolve into different forms depending on the location where they evolved.
-MultipleForms.register(:PIKACHU,{
+MultipleForms.register(:PIKACHU, {
   "getForm" => proc { |pkmn|
-    next if pkmn.formSimple>=2
-    mapPos = pbGetMetadata($game_map.map_id,MapMetadata::MAP_POSITION)
-    next 1 if mapPos && mapPos[0]==1   # Tiall region
+    next if pkmn.formSimple >= 2
+    mapPos = GameData::MapMetadata.get($game_map.map_id).town_map_position
+    next 1 if mapPos && mapPos[0] == 1   # Tiall region
     next 0
   }
 })
 
-MultipleForms.copy(:PIKACHU,:EXEGGCUTE,:CUBONE)
+MultipleForms.copy(:PIKACHU, :EXEGGCUTE, :CUBONE)

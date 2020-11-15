@@ -80,6 +80,8 @@ def pbSetUpSystem
     GameData::Ability.load
     GameData::Item.load
     GameData::BerryPlant.load
+    GameData::Metadata.load
+    GameData::MapMetadata.load
   rescue
     consts = []
   end

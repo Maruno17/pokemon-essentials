@@ -184,42 +184,45 @@ end
 #===============================================================================
 # Save metadata data to PBS file
 #===============================================================================
-def pbSerializeMetadata(metadata,mapinfos)
-  save_data(metadata,"Data/metadata.dat")
+def pbSaveMetadata
   File.open("PBS/metadata.txt","wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
     f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
     f.write("\r\n")
-    for i in 0...metadata.length
-      next if !metadata[i]
+    # Write global metadata
+    f.write("\#-------------------------------\r\n")
+    f.write("[000]\r\n")
+    metadata = GameData::Metadata.get
+    schema = GameData::Metadata::SCHEMA
+    keys = schema.keys.sort {|a, b| schema[a][0] <=> schema[b][0] }
+    for key in keys
+      record = metadata.property_from_string(key)
+      next if record.nil?
+      f.write(sprintf("%s = ", key))
+      pbWriteCsvRecord(record, f, schema[key])
+      f.write("\r\n")
+    end
+    # Write map metadata
+    map_infos = pbLoadRxData("Data/MapInfos")
+    schema = GameData::MapMetadata::SCHEMA
+    keys = schema.keys.sort {|a, b| schema[a][0] <=> schema[b][0] }
+    GameData::MapMetadata.each do |map_data|
       f.write("\#-------------------------------\r\n")
-      f.write(sprintf("[%03d]\r\n",i))
-      if i==0
-        types = Metadata::SCHEMA
-      else
-        if mapinfos && mapinfos[i]
-          f.write(sprintf("# %s\r\n",mapinfos[i].name))
-        end
-        types = MapMetadata::SCHEMA
+      f.write(sprintf("[%03d]\r\n", map_data.id))
+      if map_infos && map_infos[map_data.id]
+        f.write(sprintf("# %s\r\n", map_infos[map_data.id].name))
       end
-      for key in types.keys
-        schema = types[key]
-        record = metadata[i][schema[0]]
-        next if record==nil
-        f.write(sprintf("%s = ",key))
-        pbWriteCsvRecord(record,f,schema)
+      for key in keys
+        record = map_data.property_from_string(key)
+        next if record.nil?
+        f.write(sprintf("%s = ", key))
+        pbWriteCsvRecord(record, f, schema[key])
         f.write("\r\n")
       end
     end
   }
-end
-
-def pbSaveMetadata
-  data = load_data("Data/metadata.dat") rescue nil
-  return if !data
-  pbSerializeMetadata(data,pbLoadRxData("Data/MapInfos"))
 end
 
 

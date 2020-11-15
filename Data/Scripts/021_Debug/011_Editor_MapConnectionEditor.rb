@@ -240,83 +240,6 @@ end
 # Visual Editor (map connections)
 #===============================================================================
 class MapScreenScene
-  GLOBALMETADATA=[
-     ["Home",MapCoordsFacingProperty,
-        _INTL("Map ID and X and Y coordinates of where the player goes if no Pokémon Center was entered after a loss.")],
-     ["WildBattleBGM",BGMProperty,
-        _INTL("Default BGM for wild Pokémon battles.")],
-     ["TrainerBattleBGM",BGMProperty,
-        _INTL("Default BGM for Trainer battles.")],
-     ["WildVictoryME",MEProperty,
-        _INTL("Default ME played after winning a wild Pokémon battle.")],
-     ["TrainerVictoryME",MEProperty,
-        _INTL("Default ME played after winning a Trainer battle.")],
-     ["WildCaptureME",MEProperty,
-        _INTL("Default ME played after catching a Pokémon.")],
-     ["SurfBGM",BGMProperty,
-        _INTL("BGM played while surfing.")],
-     ["BicycleBGM",BGMProperty,
-        _INTL("BGM played while on a bicycle.")],
-     ["PlayerA",PlayerProperty,
-        _INTL("Specifies player A.")],
-     ["PlayerB",PlayerProperty,
-        _INTL("Specifies player B.")],
-     ["PlayerC",PlayerProperty,
-        _INTL("Specifies player C.")],
-     ["PlayerD",PlayerProperty,
-        _INTL("Specifies player D.")],
-     ["PlayerE",PlayerProperty,
-        _INTL("Specifies player E.")],
-     ["PlayerF",PlayerProperty,
-        _INTL("Specifies player F.")],
-     ["PlayerG",PlayerProperty,
-        _INTL("Specifies player G.")],
-     ["PlayerH",PlayerProperty,
-        _INTL("Specifies player H.")]
-  ]
-  LOCALMAPS = [
-     ["Outdoor",BooleanProperty,
-        _INTL("If true, this map is an outdoor map and will be tinted according to time of day.")],
-     ["ShowArea",BooleanProperty,
-        _INTL("If true, the game will display the map's name upon entry.")],
-     ["Bicycle",BooleanProperty,
-        _INTL("If true, the bicycle can be used on this map.")],
-     ["BicycleAlways",BooleanProperty,
-        _INTL("If true, the bicycle will be mounted automatically on this map and cannot be dismounted.")],
-     ["HealingSpot",MapCoordsProperty,
-        _INTL("Map ID of this Pokémon Center's town, and X and Y coordinates of its entrance within that town.")],
-     ["Weather",WeatherEffectProperty,
-        _INTL("Weather conditions in effect for this map.")],
-     ["MapPosition",RegionMapCoordsProperty,
-        _INTL("Identifies the point on the regional map for this map.")],
-     ["DiveMap",MapProperty,
-        _INTL("Specifies the underwater layer of this map. Use only if this map has deep water.")],
-     ["DarkMap",BooleanProperty,
-        _INTL("If true, this map is dark and a circle of light appears around the player. Flash can be used to expand the circle.")],
-     ["SafariMap",BooleanProperty,
-        _INTL("If true, this map is part of the Safari Zone (both indoor and outdoor). Not to be used in the reception desk.")],
-     ["SnapEdges",BooleanProperty,
-        _INTL("If true, when the player goes near this map's edge, the game doesn't center the player as usual.")],
-     ["Dungeon",BooleanProperty,
-        _INTL("If true, this map has a randomly generated layout. See the wiki for more information.")],
-     ["BattleBack",StringProperty,
-        _INTL("PNG files named 'XXX_bg', 'XXX_base0', 'XXX_base1', 'XXX_message' in Battlebacks folder, where XXX is this property's value.")],
-     ["WildBattleBGM",BGMProperty,
-        _INTL("Default BGM for wild Pokémon battles on this map.")],
-     ["TrainerBattleBGM",BGMProperty,
-        _INTL("Default BGM for trainer battles on this map.")],
-     ["WildVictoryME",MEProperty,
-        _INTL("Default ME played after winning a wild Pokémon battle on this map.")],
-     ["TrainerVictoryME",MEProperty,
-        _INTL("Default ME played after winning a Trainer battle on this map.")],
-     ["WildCaptureME",MEProperty,
-        _INTL("Default ME played after catching a wild Pokémon on this map.")],
-     ["MapSize",MapSizeProperty,
-        _INTL("The width of the map in Town Map squares, and a string indicating which squares are part of this map.")],
-     ["Environment",EnvironmentProperty,
-        _INTL("The default battle environment for battles on this map.")]
-  ]
-
   def getMapSprite(id)
     if !@mapsprites[id]
       @mapsprites[id]=Sprite.new(@viewport)
@@ -405,7 +328,7 @@ class MapScreenScene
     ret.compact!
   end
 
-# Returns the maps within _keys_ that are directly connected to this map, _map_.
+  # Returns the maps within _keys_ that are directly connected to this map, _map_.
   def getDirectConnections(keys,map)
     thissprite=getMapSprite(map)
     thisdims=MapFactoryHelper.getMapDims(map)
@@ -520,7 +443,6 @@ class MapScreenScene
     for c in conns
       @mapconns.push(c.clone)
     end
-    @metadata=pbLoadMetadata
     if $game_map
       @currentmap=$game_map.map_id
     else
@@ -532,25 +454,8 @@ class MapScreenScene
 
   def setTopSprite(id)
     for i in @mapsprites.keys
-      if i==id
-        @mapsprites[i].z=1
-      else
-        @mapsprites[i].z=0
-      end
+      @mapsprites[i].z = (i == id) ? 1 : 0
     end
-  end
-
-  def getMetadata(mapid,metadataType)
-    return @metadata[mapid][metadataType] if @metadata[mapid]
-  end
-
-  def setMetadata(mapid,metadataType,data)
-    @metadata[mapid]=[] if !@metadata[mapid]
-    @metadata[mapid][metadataType]=data
-  end
-
-  def serializeMetadata
-    pbSerializeMetadata(@metadata,@mapinfos)
   end
 
   def helpWindow
@@ -578,19 +483,6 @@ class MapScreenScene
     title.dispose
   end
 
-  def propertyList(map,properties)
-    infos=load_data("Data/MapInfos.rxdata")
-    mapname=(map==0) ? _INTL("Global Metadata") : infos[map].name
-    data=[]
-    for i in 0...properties.length
-      data.push(getMetadata(map,i+1))
-    end
-    pbPropertyList(mapname,data,properties)
-    for i in 0...properties.length
-      setMetadata(map,i+1,data[i])
-    end
-  end
-
   def getMapRect(mapid)
     sprite=getMapSprite(mapid)
     if sprite
@@ -605,16 +497,12 @@ class MapScreenScene
     end
   end
 
-  def onDoubleClick(mapid)
-    if mapid>=0
-      propertyList(mapid,LOCALMAPS)
-    else
-      propertyList(0,GLOBALMETADATA)
-    end
+  def onDoubleClick(map_id)
+    pbEditMetadata(map_id)
   end
 
   def onClick(mapid,x,y)
-    if @lastclick>0 && Graphics.frame_count-@lastclick<15
+    if @lastclick>0 && Graphics.frame_count - @lastclick < Graphics.frame_rate * 0.5
       onDoubleClick(mapid)
       @lastclick=-1
     else
@@ -718,7 +606,7 @@ class MapScreenScene
           onMouseOver(hitmap,mousepos[0],mousepos[1])
           @lasthitmap=hitmap
         end
-        if @oldmousex!=mousepos[0]||@oldmousey!=mousepos[1]
+        if @oldmousex!=mousepos[0] || @oldmousey!=mousepos[1]
           onMouseMove(hitmap,mousepos[0],mousepos[1])
           @oldmousex=mousepos[0]
           @oldmousey=mousepos[1]
@@ -727,26 +615,22 @@ class MapScreenScene
     end
     if Input.press?(Input::UP)
       for i in @mapsprites
-        next if !i
-        i[1].y+=4
+        i[1].y += 4 if i
       end
     end
     if Input.press?(Input::DOWN)
       for i in @mapsprites
-        next if !i
-        i[1].y-=4
+        i[1].y -= 4 if i
       end
     end
     if Input.press?(Input::LEFT)
       for i in @mapsprites
-        next if !i
-        i[1].x+=4
+        i[1].x += 4 if i
       end
     end
     if Input.press?(Input::RIGHT)
       for i in @mapsprites
-        next if !i
-        i[1].x-=4
+        i[1].x -= 4 if i
       end
     end
     if Input.triggerex?("A"[0])
@@ -791,9 +675,8 @@ class MapScreenScene
       if Input.trigger?(Input::B)
         if pbConfirmMessage(_INTL("Save changes?"))
           serializeConnectionData
-          serializeMetadata
           save_data(@encdata,"Data/encounters.dat")
-          # TODO: Only need to reload connections, metadata, encounter data.
+          # TODO: Only need to reload connections and encounter data.
           pbClearData
           pbSaveEncounterData
         end
