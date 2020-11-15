@@ -137,19 +137,19 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
 # Items
 #--------------------------------------
 #TODO:
- - Throat Spray activates when the user's sound move hits a target, not when it fails or all targets are protected (BountyHunterStev)
- - Utility Umbrella does not protect from weather damage, but the holder takes normal damage from what would otherwise be rain- and sun-boosted attacks. It does not appear to affect move accuracy in weather. (BountyHunterStev)
  - Eject Pack triggers when stat stages are lowered even if the resulting stat stage is not negative (sb879)
  - Eject Pack will not activate when switches from U-turn or Parting Shot are happening (sb879)
+ - If multiple Eject Packs would trigger during the same attack, only the fastest Pokemon uses theirs (DaWoblefet)
+ - Eject Pack will not activate if Parting Shot lowers the holder's stats and the user switched out (DaWoblefet)
+ - Utility Umbrella does not protect from weather damage, but the holder takes normal damage from what would otherwise be rain- and sun-boosted attacks. It does not appear to affect move accuracy in weather. (BountyHunterStev)
  - Utility Umbrella holders take normal damage from what would be rain- and sun-weakened attacks (sb879)
  - Utility Umbrella holders ignore rain- and sun-based move and Ability effects that would affect them (sb879) (Anubis)
  - Utility Umbrella does not affect damage modifiers from the holder's Water and Fire attacks in rain/sun (sb879)
  - Utility Umbrella holders can become frozen in sun (Anubis)
  - Utility Umbrella holders can avoid Hurricane and Thunder in rain (Anubis)
- - If multiple Eject Packs would trigger during the same attack, only the fastest Pokemon uses theirs (DaWoblefet)
- - Eject Pack will not activate if Parting Shot lowers the holder's stats and the user switched out (DaWoblefet)
 
 #Done:
+ - Throat Spray activates when the user's sound move hits a target, not when it fails or all targets are protected (BountyHunterStev)
  - Throat Spray activates when using Clangorous Soul (BountyHunterStev)
  - Heavy-Duty Boots still allows Poison-type holders to soak up Toxic Spikes (GMars and TPP)
  - Blunder Policy activates when a move with multiple targets is avoided by at least one of the targets (BountyHunterStev)

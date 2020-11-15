@@ -1313,7 +1313,7 @@ BattleHandlers::UserItemAfterMoveUse.add(:SHELLBELL,
 
 BattleHandlers::UserItemAfterMoveUse.add(:THROATSPRAY,
   proc { |item,user,targets,move,numHits,battle|
-    next if !move.soundMove?
+    next if !move.soundMove? || numHits==0
     next if !user.pbCanRaiseStatStage?(PBStats::SPATK,user)
     battle.pbCommonAnimation("UseItem",user)
     showAnim = true
