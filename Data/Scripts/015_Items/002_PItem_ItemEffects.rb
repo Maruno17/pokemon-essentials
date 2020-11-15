@@ -1166,6 +1166,39 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYXS,proc { |item,pkmn,scene|
    end
 })
 
+ItemHandlers::UseOnPokemon.add(:ROTOMCATALOG,proc{|item,pkmn,scene|
+  if (isConst?(pkmn.species,PBSpecies,:ROTOM))
+    if pkmn.hp>0
+      scene.pbDisplay(_INTL("The Catalogue contains a list of appliances for {1} to possess!",pkmn.name))
+      cmd=0
+      msg = _INTL("Which appliance would you like to order?")
+      cmd = scene.pbShowCommands(msg,[
+        _INTL("Light Bulb"),
+        _INTL("Microwave Oven"),
+        _INTL("Washing Machine"),
+        _INTL("Refrigerator"),
+        _INTL("Electric Fan"),
+        _INTL("Lawn Mower"),
+        _INTL("Cancel")],cmd)
+      if cmd>=0 && cmd<6
+        scene.pbDisplay(_INTL("{1} transformed!",pkmn.name))
+        scene.pbRefresh
+        pkmn.form = cmd
+        scene.pbRefresh
+      else
+        scene.pbDisplay(_INTL("No appliance was ordered"))
+      end
+      scene.pbRefresh
+      next true
+    else
+      scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    end
+  else
+    scene.pbDisplay(_INTL("It had no effect."))
+    next false
+  end
+})
+
 ItemHandlers::UseOnPokemon.copy(:EXPCANDYXS,:EXPCANDYS,:EXPCANDYM,:EXPCANDYL,:EXPCANDYXL)
 
 ItemHandlers::UseOnPokemon.add(:LONELYMINT,proc { |item,pkmn,scene|
@@ -1280,4 +1313,57 @@ ItemHandlers::UseOnPokemon.add(:REINSOFUNITY,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
   }
   next true
+})
+
+ItemHandlers::UseFromBag.add(:ZYGARDECUBE,proc {|item|
+  pbChooseAblePokemon(1,3)
+  pkmn = $Trainer.party[$game_variables[1]]
+  next 2 if pkmn.isSpecies?(:ZYGARDE)
+  Kernel.pbMessage(_INTL("It won't have any effect."))
+  next 0
+})
+
+ItemHandlers::UseInField.add(:ZYGARDECUBE,proc{|item|
+  poke = $Trainer.party[$game_variables[1]]
+  loop do
+    cmd = pbMessage(_INTL("What would you like to do?"), ["Check Cells","Teach Move", "Change Forms","Cancel"],3)
+    case cmd
+    when 0
+      value = $game_variables[69].is_a?(Numeric)? $game_variables[69] : 69 # A Variable to store nymber of Cells
+      pbMessage(_INTL("You have collected {1}/100 Zygarde Cores and Zygarde Cells.",value))
+    when 1
+      choices = [:EXTREMESPEED,:THOUSANDARROWS,:DRAGONDANCE,:THOUSANDWAVES,:COREENFORCER] # A variable which is an array of moves unlocked
+      displayChoices = []
+      choices.each{|ch| displayChoices.push(ch)};
+      displayChoices.map!{ |name| PBMoves.getName(getID(PBMoves,name))}
+      displayChoices.push("Cancel")
+      if displayChoices.length>1
+        cmd2 = pbMessage(_INTL("What would you like to teach the Zygarde?"),displayChoices)
+        if cmd2 < (displayChoices.length - 1)
+          pbLearnMove(poke,getConst(PBMoves,choices[cmd2]))
+        end
+      else
+        pbMessage(_INTL("No Cores have been found"))
+      end
+    when 2
+      if poke.form == 0
+        pbMessage(_INTL("Only a Zygarde with the Power Construct Ability can change its Form."))
+        next
+      end
+      oldForm = poke.form
+      cmd2 = Kernel.pbMessage(_INTL("What form would you like to change to?"),["10%","50%","Cancel"])
+      poke.form = 1 if cmd2 == 0
+      poke.form = 3 if cmd2 == 1
+      next if cmd2 == 2
+      if poke.form != oldForm
+        Kernel.pbMessage(_INTL("{1} changed Form!",poke.name))
+        next 1
+      else
+        Kernel.pbMessage(_INTL("It's already in it's {1} form!",(oldForm==3? "50%":"10%")))
+      end
+    when 3
+      break
+    end
+  end
+  next 2
 })
