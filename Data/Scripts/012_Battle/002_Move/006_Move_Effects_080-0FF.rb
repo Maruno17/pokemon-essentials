@@ -2578,6 +2578,12 @@ class PokeBattle_Move_0D8 < PokeBattle_HealingMove
       else
         @healAmount = (user.totalhp/2.0).round
       end
+    when PBWeather::Rain, PBWeather::HeavyRain
+      if !user.hasActiveItem?(:UTILITYUMBRELLA)
+        @healAmount = (user.totalhp/4.0).round
+      else
+        @healAmount = (user.totalhp/2.0).round
+      end
     when PBWeather::None, PBWeather::StrongWinds
       @healAmount = (user.totalhp/2.0).round
     else
