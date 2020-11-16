@@ -122,9 +122,9 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Steely Spirit is not ignored by a Mold Breaker ally (Anubis)
  - Perish Body will not activate if the attacker already has a perish count (even if the Pokemon with Perish Body doesn't) (Skeli)
  - Hunger Switch can be removed by Entrainment (doipy hooves)
- - On switch-in, Pastel Veil cures itself and its ally. Switching into Toxic Spikes also prevents poisoning, but without displaying Pastel Veil. It also cures itself when bypassed by Mold Breaker, but an ally will remain poisoned. (DaWoblefet)
 
 #Done:
+ - On switch-in, Pastel Veil cures itself and its ally. Switching into Toxic Spikes also prevents poisoning, but without displaying Pastel Veil. It also cures itself when bypassed by Mold Breaker, but an ally will remain poisoned. (DaWoblefet)
  - Gulp Missile triggers from the first turn of Dive even if the second turn doesn't happen (if Surf is fully blocked it doesn't trigger) (Vengeance417)
  - Gulp Missile fires the projectile even if Cramorant gets knocked out (GMars)
  - Gulp Missile's Arrokuda projectile deals 1/4 max HP damage and lowers the target's Defense 1 stage (Vengeance417)

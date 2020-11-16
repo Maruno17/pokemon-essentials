@@ -276,6 +276,8 @@ BattleHandlers::StatusCureAbility.add(:IMMUNITY,
   }
 )
 
+BattleHandlers::StatusCureAbility.copy(:IMMUNITY,:PASTELVEIL)
+
 BattleHandlers::StatusCureAbility.add(:INSOMNIA,
   proc { |ability,battler|
     next if battler.status!=PBStatuses::SLEEP
