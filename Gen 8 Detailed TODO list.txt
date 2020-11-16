@@ -104,11 +104,6 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Neutralizing Gas activates before Unnerve (Lego)
  - Steam Engine grants +6 Speed (Revelation)
  - Ice Face breaks from a self-hit in confusion (like Disguise) (PokemonTrainerLui)
- - Gulp Missile triggers from the first turn of Dive even if the second turn doesn't happen (if Surf is fully blocked it doesn't trigger) (Vengeance417)
- - Gulp Missile's Arrokuda projectile deals 1/4 max HP damage and lowers the target's Defense 1 stage (Vengeance417)
- - Gulp Missile's Pikachu projectile deals 1/4 max HP damage and paralyzes the target (even Ground types) (GMars)
- - Gulp Missile fires the projectile even if Cramorant gets knocked out (GMars)
- - Gulp Missile doesn't deal damage to Magic Guard Pokemon (Siggu)
  - Ice Face regenerates whenever Hail begins (Anubis)
  - Ice Face also regenerates when switched in and Hail is active (ck49)
  - Gorilla Tactics is a 1.5x Attack boost, and stacks with Choice Band (GMars and TPP)
@@ -130,6 +125,11 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - On switch-in, Pastel Veil cures itself and its ally. Switching into Toxic Spikes also prevents poisoning, but without displaying Pastel Veil. It also cures itself when bypassed by Mold Breaker, but an ally will remain poisoned. (DaWoblefet)
 
 #Done:
+ - Gulp Missile triggers from the first turn of Dive even if the second turn doesn't happen (if Surf is fully blocked it doesn't trigger) (Vengeance417)
+ - Gulp Missile fires the projectile even if Cramorant gets knocked out (GMars)
+ - Gulp Missile's Arrokuda projectile deals 1/4 max HP damage and lowers the target's Defense 1 stage (Vengeance417)
+ - Gulp Missile's Pikachu projectile deals 1/4 max HP damage and paralyzes the target (even Ground types) (GMars)
+ - Gulp Missile doesn't deal damage to Magic Guard Pokemon (Siggu)
  - Gulp Missile's obtained projectile is based on Cramorant's current HP. Arrokuda when > 50% and Pikachu when <= 50%. Dynamaxing or switching out removes the Gulping/Gorging form (Theorymon and Martin)
  - Mirror Armor bounces Strength Sap's Attack drop back (Anubis)
  - Mirror Armor-reflected stat drops are blocked by substitutes (DaWoblefet)
