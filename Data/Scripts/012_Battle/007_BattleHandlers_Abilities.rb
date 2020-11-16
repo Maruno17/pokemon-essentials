@@ -1151,7 +1151,7 @@ BattleHandlers::DamageCalcUserAbility.add(:GORILLATACTICS,
 
 BattleHandlers::DamageCalcUserAbility.add(:PUNKROCK,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] = (mults[ATK_MULT]*1.3).round if move.soundMove?
+    mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.3).round if move.soundMove?
   }
 )
 
@@ -1305,7 +1305,7 @@ BattleHandlers::DamageCalcTargetAbility.add(:WATERBUBBLE,
 
 BattleHandlers::DamageCalcTargetAbility.add(:PUNKROCK,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[DEF_MULT] *= 2 if move.soundMove?
+    mults[FINAL_DMG_MULT] /= 2 if move.soundMove?
   }
 )
 
