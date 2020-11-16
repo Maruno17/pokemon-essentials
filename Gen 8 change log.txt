@@ -5,7 +5,6 @@ CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lo
 HIGH PRIORITY:
 Add TM,TR and Tutor Learnsets for Returning Crown Tundra Pokemon
 Update Egg Moves for Gen 1-7
-Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
 
 LOW PRIORITY:
 Update Item Prices
