@@ -1,0 +1,169 @@
+##########################################
+# 
+# Pokémon Essentials
+# Generation 8 mechanics
+# Extensive TODO list
+# 
+##########################################
+
+
+This is a TODO list, taken from the following list of new mechanics: 
+https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/ 
+
+Note: some of what's listed here was already implemented. 
+
+
+#######################################
+# The Isle of Armor DLC Stuff
+#######################################
+
+
+#--------------------------------------
+# New Moves
+#--------------------------------------
+#TODO:
+ - Poltergeist works against a Ghost-weak target holding Kasib Berry
+ - Shell Side Arm's physical version is also a contact move 
+ - Grassy Glide changes priority mid-turn if Grassy Terrain starts or ends before the user can move
+ - Shell Side Arm considers stat stages when determining whether physical or special will deal more damage 
+ - Poltergeist works against Pokemon holding items that are otherwise unremovable
+ - Lash Out doubles in power when an ally lowers the user's stats, and when Intimidate lowers the user's stats prior to Turn 1 
+ - Triple Axel behaves exactly like Triple Kick, just with 20/40/60 power instead. It delays its power boost if the first hit breaks Disguise 
+ - Corrosive Gas cannot remove items from Sticky Hold targets
+ - Misty Explosion is blocked by Damp
+ - Coaching bypasses Max Guard and Crafty Shield 
+ - Shell Side Arm mechanics 
+ - Terrain Pulse is boosted by Mega Launcher 
+ - Rising Voltage doubles in power if the target is grounded in Electric Terrain
+ - Terrain Pulse, Misty Explosion, Grassy Glide, and Expanding Force require the user to be grounded in the appropriate terrain to get their boosts 
+ - Burning Jealousy/Lash Out still trigger their effects if the relevant stat boosts/drops are no longer boosted/dropped at the time the user attacks 
+ - Burning Jealousy is boosted by Sheer Force whether or not the target would have been burned 
+ - Burning Jealousy's secondary happens before Weakness Policy triggers
+
+#--------------------------------------
+# New Abilities
+#--------------------------------------
+#TODO:
+ - Unseen Fist makes contact moves ignore protection entirely. Protective Pads does nothing to prevent this 
+ - Quick Draw only works on attacking movesand activates at a 30% chance. Quick Draw will activate instead of Quick Claw/Custap Berry when both would otherwise activate
+
+
+#######################################
+# 
+# New Mechanics in Sword and Shield
+# 
+#######################################
+
+#--------------------------------------
+# Moves
+#--------------------------------------
+#TODO:
+ - Magic Powder is a powder move and fails against pure Psychic types
+ - Life Dew triggers ally Water immunity Abilities 
+ - Tar Shot's effect adds a weakness to the Fire type to the target's types 
+ - No Retreat fails if the user trapped itself with it on the first use. Ghost types can still switch out of the effect, and phazing also works 
+ - Aura Wheel cannot be used by non-Morpeko forms (like Hyperspace Fury and Dark Void mechanics)
+ - Dragon Darts will not attack into a target protecting themselves in Doubles, hitting the other Pokemon twice instead
+ - Dragon Darts will not attack into Fairy types in Doubles, hitting the other Pokemon twice instead 
+ - Fishious Rend is a bite move 
+ - Pyro Ball is a bullet move
+ - Octolock's effect stacks with binding moves like Wrap and Snap Trap
+ - Court Change swaps hazards, screens, Tailwind , Mist, G-Max Wildfire, and Pledge combo effects
+ - Bolt Beak and Fishious Rend have their power doubled against Pokemon switched in the same turn 
+ - Dragon Darts will not attack into a target in a semi-invulnerable turn 
+ - Clangorous Soul can be used despite Soundproof, but fails if the HP loss would knock out the user. The HP loss will not happen if the move can't change any of the user's stats.
+ - No Retreat can be used multiple times if the user had been fully trapped already 
+ - No Retreat cannot be used multiple times just because the user is a Ghost type.
+ - Court Change-swapped Sticky Web still counts as having been set up by the original user for the purposes of Competitive and Defiant
+ - Dragon Darts is not blocked by Wide Guard 
+ - Octolock's stat drops activate opposing Competitive and Defiant, but not Mirror Armor 
+ - Body Press uses the user's Defense stat and stat stage in the damage formula to replace its Attack and Attack stat stage. This means any other effects that affect the user's Attack stat continue to apply, such as Choice Band and Hustle. Effects that alter the user's Defense stat other than its stat stage do nothing to change Body Press damage.
+ - Teatime forces Berry consumption regardless of Unnerve or substitutes, and misses against semi-invulnerable Pokemon. It does this in the order: user, ally, opponent's left, opponent's right. Teatime also ignores Magic Room and Klutz.
+ - Behemoth Bash, Behemoth Blade, and Dynamax Cannon have their damage doubled against Dynamax Pokemon, not their power.
+ - Grav Apple has 1.5x power during Gravity
+ - No Retreat users can switch out with Shed Shell 
+ - Court Change preserves the current duration of existing field effects 
+ - Recycle can restore Berries used through Teatime
+ - Dragon Darts targeting and detailed mechanics
+
+#--------------------------------------
+# Abilities
+#--------------------------------------
+#TODO:
+ - Cotton Down is not a powder-based effect
+ - Mimicry changes type(s) to the Terrain type and reverts back to original type(s) when Terrain ends
+ - Neutralizing Gas leaving the field reactivates "on switch-in" Abilities that activated previously, even against the Pokemon with Neutralizing Gas which is no longer on the field
+ - Screen Cleaner removes screens from both sides and does not affect Safeguard 
+ - Neutralizing Gas activates before Unnerve
+ - Steam Engine grants +6 Speed 
+ - Ice Face breaks from a self-hit in confusion (like Disguise)
+ - Gulp Missile triggers from the first turn of Dive even if the second turn doesn't happen (if Surf is fully blocked it doesn't trigger)
+ - Gulp Missile's Arrokuda projectile deals 1/4 max HP damage and lowers the target's Defense 1 stage
+ - Gulp Missile's Pikachu projectile deals 1/4 max HP damage and paralyzes the target (even Ground types) 
+ - Gulp Missile fires the projectile even if Cramorant gets knocked out 
+ - Gulp Missile doesn't deal damage to Magic Guard Pokemon 
+ - Ice Face regenerates whenever Hail begins 
+ - Ice Face also regenerates when switched in and Hail is active 
+ - Gorilla Tactics is a 1.5x Attack boost, and stacks with Choice Band 
+ - Mirror Armor bounces Strength Sap's Attack drop back 
+ - Sand Spit activates after the effects of Max Moves 
+ - Gulp Missile's obtained projectile is based on Cramorant's current HP. Arrokuda when > 50% and Pikachu when <= 50%. Dynamaxing or switching out removes the Gulping/Gorging form
+ - Ice Face is unaffected by Neutralizing Gas
+ - Power Spot multiplies an ally's move power by 1.3 (but not the Pokemon with Power Spot)
+ - Steely Spirit multiplies an ally's Steel-type move power by 1.5 (including the Pokemon with Steely Spirit) 
+ - Punk Rock sound moves have 1.3x power, and sound moves against Punk Rock deal 0.5x damage 
+ - Ripen doubles Jaboca and Rowap Berries' damage
+ - Ice Face does not reactivate instantly when broken by a physical Max Hailstorm 
+ - Ripen doubles Berry healing after determining the non-doubled heal amount
+ - Neutralizing Gas can be suppressed by Gastro Acid
+ - Mimicry activates on Transformed Pokemon to change them back to their original type(s) if no Terrain is active
+ - Ice Scales halves special damage, as opposed to doubling Special Defense 
+ - If Neutralizing Gas disables an active Unburden, the Speed boost is regained when Neutralizing Gas leaves
+ - Mirror Armor-reflected stat drops are blocked by substitutes 
+ - Steely Spirit is not ignored by a Mold Breaker ally
+ - Perish Body will not activate if the attacker already has a perish count (even if the Pokemon with Perish Body doesn't)
+ - Hunger Switch can be removed by Entrainment 
+ - On switch-in, Pastel Veil cures itself and its ally. Switching into Toxic Spikes also prevents poisoning, but without displaying Pastel Veil. It also cures itself when bypassed by Mold Breaker, but an ally will remain poisoned.
+ - Mirror Armor will not activate if the stat stage is already -6
+
+#--------------------------------------
+# Items
+#--------------------------------------
+#TODO:
+ - Blunder Policy activates when a move with multiple targets is avoided by at least one of the targets 
+ - Throat Spray activates when the user's sound move hits a target, not when it fails or all targets are protected 
+ - Utility Umbrella does not protect from weather damage, but the holder takes normal damage from what would otherwise be rain- and sun-boosted attacks. It does not appear to affect move accuracy in weather.
+ - Throat Spray activates when using Clangorous Soul 
+ - Blunder Policy does not trigger on moves avoided through semi-invulnerability, avoided OHKO moves, or moves avoided by Telepathy allies 
+ - Eject Pack triggers when stat stages are lowered even if the resulting stat stage is not negative 
+ - Eject Pack will not activate when switches from U-turn or Parting Shot are happening 
+ - Utility Umbrella holders take normal damage from what would be rain- and sun-weakened attacks 
+ - Utility Umbrella holders ignore rain- and sun-based move and Ability effects that would affect them 
+ - Utility Umbrella does not affect damage modifiers from the holder's Water and Fire attacks in rain/sun 
+ - Heavy-Duty Boots still allows Poison-type holders to soak up Toxic Spikes 
+ - Utility Umbrella holders can become frozen in sun 
+ - Utility Umbrella holders can avoid Hurricane and Thunder in rain 
+ - If multiple Eject Packs would trigger during the same attack, only the fastest Pokemon uses theirs 
+ - Eject Pack will not activate if Parting Shot lowers the holder's stats and the user switched out 
+
+#--------------------------------------
+# Misc
+#--------------------------------------
+#TODO:
+ - Silvally forms without RKS System or a Memory now behave as the form's type instead of Normal 
+ - The guy in-game who says sun thaws frozen Pokemon is a liar 
+ - Ally Switch can take the Healing Wish effect if it's used the turn after Healing Wish was used into a full HP target 
+ - Fling can be used with Technical Records (TRs), and its power is determined by the contained move's power, or 10 for Status moves and moves with "---" power. 
+ - Stalwart, Propeller Tail, and Snipe Shot have bizarre targeting in Doubles when moves are called through Instruct or Sleep Talk 
+ - The user can attack itself with Dragon Darts (Anubis)
+ - Mirror Armor reflecting a Parting Shot stat drop counts as success for Parting Shot's switch effect, even if the drops themselves fail to do anything to the user
+ - Competitive/Defiant activate from opposing Mirror Armor reflecting the user's stat drops 
+
+#Done: 
+ - Pokemon Transformed into Morpeko can use Aura Wheel; it always appears as Electric type, but is actually Dark type if the Transformed Pokemon copied Hangry Mode
+ - Slush Rush still doesn't provide immunity to Hail damage
+ - Anticipation and Forewarn can detect Hidden Power's type 
+ - The effect of Healing Wish and Lunar Dance is actually stored for that slot until a Pokemon not at full HP switches in 
+ - Aguav/Figy/Iapapa/Mago/Wiki Berries cause confusion based on the Pokemon's original Nature, ignoring the effect of Nature Mints 
+ - Plates still function, Razor Fang does not function 
+ - Neutralizing Gas cannot be Skill Swapped/Wandering Spirited or obtained via Entrainment, Power of Alchemy/Receiver, or Role Play, but can be replaced via Entrainment, Mummy, Simple Beam, and Worry Seed. Gastro Acid also suppresses it.
