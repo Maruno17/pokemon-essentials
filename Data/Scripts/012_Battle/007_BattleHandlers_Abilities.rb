@@ -1803,15 +1803,15 @@ BattleHandlers::TargetAbilityOnHit.add(:GULPMISSILE,
       gulpform=target.form
       target.form = 0
       battle.scene.pbChangePokemon(target,target.pokemon)
+      battle.scene.pbDamageAnimation(user)
       if user.takesIndirectDamage?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
-        battle.scene.pbDamageAnimation(user)
         user.pbReduceHP(user.totalhp/4,false)
-        if gulpform==1
-          user.pbLowerStatStageByAbility(PBStats::DEFENSE,1,target,false)
-        elsif gulpform==2
-          msg = nil
-          user.pbParalyze(target,msg)
-        end
+      end
+      if gulpform==1
+        user.pbLowerStatStageByAbility(PBStats::DEFENSE,1,target,false)
+      elsif gulpform==2
+        msg = nil
+        user.pbParalyze(target,msg)
       end
       battle.pbHideAbilitySplash(target)
     end
