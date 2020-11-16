@@ -111,10 +111,10 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Ripen doubles Berry healing after determining the non-doubled heal amount (Anubis)
  - Neutralizing Gas can be suppressed by Gastro Acid (UnderdarkFox)
  - Mimicry activates on Transformed Pokemon to change them back to their original type(s) if no Terrain is active (Anubis)
- - Ice Scales halves special damage, as opposed to doubling Special Defense (OZY)
  - If Neutralizing Gas disables an active Unburden, the Speed boost is regained when Neutralizing Gas leaves (DaWoblefet)
 
 #Done:
+ - Ice Scales halves special damage, as opposed to doubling Special Defense (OZY)
  - Steely Spirit is not ignored by a Mold Breaker ally (Anubis)
  - Steely Spirit multiplies an ally's Steel-type move power by 1.5 (including the Pokemon with Steely Spirit) (Anubis)
  - Ice Face is unaffected by Neutralizing Gas (Anubis)

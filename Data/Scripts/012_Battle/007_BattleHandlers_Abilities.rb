@@ -1253,7 +1253,7 @@ BattleHandlers::DamageCalcTargetAbility.add(:FURCOAT,
 
   BattleHandlers::DamageCalcTargetAbility.add(:ICESCALES,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[DEF_MULT] *= 2 if move.specialMove? || move.function=="122"   # Psyshock
+    mults[FINAL_DMG_MULT] /= 2 if move.specialMove?
   }
 )
 
