@@ -1157,7 +1157,7 @@ BattleHandlers::DamageCalcUserAbility.add(:PUNKROCK,
 
 BattleHandlers::DamageCalcUserAbility.add(:STEELYSPIRIT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-      mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)
+      mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)
   }
 )
 
@@ -1202,7 +1202,7 @@ BattleHandlers::DamageCalcUserAllyAbility.add(:POWERSPOT,
 
 BattleHandlers::DamageCalcUserAllyAbility.add(:STEELYSPIRIT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)
+    mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)
   }
 )
 
