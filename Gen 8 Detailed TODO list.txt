@@ -112,7 +112,6 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Ice Face regenerates whenever Hail begins (Anubis)
  - Ice Face also regenerates when switched in and Hail is active (ck49)
  - Gorilla Tactics is a 1.5x Attack boost, and stacks with Choice Band (GMars and TPP)
- - Mirror Armor bounces Strength Sap's Attack drop back (Anubis)
  - Sand Spit activates after the effects of Max Moves (Count Bleck)
  - Gulp Missile's obtained projectile is based on Cramorant's current HP. Arrokuda when > 50% and Pikachu when <= 50%. Dynamaxing or switching out removes the Gulping/Gorging form (Theorymon and Martin)
  - Ice Face is unaffected by Neutralizing Gas (Anubis)
@@ -126,12 +125,17 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Mimicry activates on Transformed Pokemon to change them back to their original type(s) if no Terrain is active (Anubis)
  - Ice Scales halves special damage, as opposed to doubling Special Defense (OZY)
  - If Neutralizing Gas disables an active Unburden, the Speed boost is regained when Neutralizing Gas leaves (DaWoblefet)
- - Mirror Armor-reflected stat drops are blocked by substitutes (DaWoblefet)
  - Steely Spirit is not ignored by a Mold Breaker ally (Anubis)
  - Perish Body will not activate if the attacker already has a perish count (even if the Pokemon with Perish Body doesn't) (Skeli)
  - Hunger Switch can be removed by Entrainment (doipy hooves)
  - On switch-in, Pastel Veil cures itself and its ally. Switching into Toxic Spikes also prevents poisoning, but without displaying Pastel Veil. It also cures itself when bypassed by Mold Breaker, but an ally will remain poisoned. (DaWoblefet)
+
+#Done:
+ - Mirror Armor bounces Strength Sap's Attack drop back (Anubis)
+ - Mirror Armor-reflected stat drops are blocked by substitutes (DaWoblefet)
  - Mirror Armor will not activate if the stat stage is already -6 (DaWoblefet)
+
+
 
 #--------------------------------------
 # Items
