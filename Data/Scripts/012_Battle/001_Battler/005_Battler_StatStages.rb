@@ -174,11 +174,11 @@ class PokeBattle_Battler
     return increment
   end
 
-  def pbLowerStatStage(stat,increment,user,showAnim=true,ignoreContrary=false)
+  def pbLowerStatStage(stat,increment,user,showAnim=true,ignoreContrary=false, ignoreMirrorArmor=false)
     return false if !PBStats.validBattleStat?(stat)
     # Mirror Armor
-    if hasActiveAbility?(:MIRRORARMOR) && (!user || user.index!=@index) && !@battle.moldBreaker && 
-		pbCanLowerStatStage?(stat)
+    if !ignoreMirrorArmor && hasActiveAbility?(:MIRRORARMOR) && (!user || user.index!=@index) && 
+	  !@battle.moldBreaker && pbCanLowerStatStage?(stat)
       battle.pbShowAbilitySplash(self)
       @battle.pbDisplay(_INTL("{1}'s Mirror Armor activated!",pbThis))
       if !user
@@ -217,11 +217,11 @@ class PokeBattle_Battler
     return true
   end
 
-  def pbLowerStatStageByCause(stat,increment,user,cause,showAnim=true,ignoreContrary=false)
+  def pbLowerStatStageByCause(stat,increment,user,cause,showAnim=true,ignoreContrary=false, ignoreMirrorArmor=false)
     return false if !PBStats.validBattleStat?(stat)
     # Mirror Armor
-    if hasActiveAbility?(:MIRRORARMOR) && (!user || user.index!=@index) && !@battle.moldBreaker && 
-		pbCanLowerStatStage?(stat)
+    if !ignoreMirrorArmor && hasActiveAbility?(:MIRRORARMOR) && (!user || user.index!=@index) && 
+	  !@battle.moldBreaker && pbCanLowerStatStage?(stat)
       battle.pbShowAbilitySplash(self)
       @battle.pbDisplay(_INTL("{1}'s Mirror Armor activated!",pbThis))
       if !user
