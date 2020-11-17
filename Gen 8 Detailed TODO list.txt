@@ -14,6 +14,16 @@ Note: some of what's listed here was already implemented.
 
 
 #######################################
+# Crown of Tundra DLC Stuff
+#######################################
+
+# TODO:
+ - Need to check Smogon to see if any subtlety appeared in the second DLC.
+ - Update level-up learnsets for returning old Pokémons 
+ - Update tm.txt for returning old Pokémons
+
+
+#######################################
 # The Isle of Armor DLC Stuff
 #######################################
 
