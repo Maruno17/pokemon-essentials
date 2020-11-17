@@ -483,7 +483,18 @@ class PokeBattle_Move_198 < PokeBattle_Move
   end
 end
 
-# NOTE: If you're inventing new move effects, use function code 198 and onwards.
+
+#===============================================================================
+# Deals double damage to Dynamax POkémons. Dynamax is not implemented though.
+# (Behemoth Blade, Behemoth Bash, Dynamax Cannon)
+#===============================================================================
+class PokeBattle_Move_199 < PokeBattle_Move
+  # DYNAMAX IS NOT IMPLEMENTED. 
+end 
+
+
+
+# NOTE: If you're inventing new move effects, use function code 199 and onwards.
 #       Actually, you might as well use high numbers like 500+ (up to FFFF),
 #       just to make sure later additions to Essentials don't clash with your
 #       new effects.
