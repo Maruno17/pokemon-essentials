@@ -729,7 +729,10 @@ class PokeBattle_Battle
       pbDisplay(_INTL("The battlefield got weird!"))
     end
     # Check for terrain seeds that boost stats in a terrain
-    eachBattler { |b| b.pbItemTerrainStatBoostCheck }
+    eachBattler { |b| 
+	  b.pbCheckFormOnTerrainChange
+	  b.pbItemTerrainStatBoostCheck 
+	}
   end
 
   #=============================================================================
