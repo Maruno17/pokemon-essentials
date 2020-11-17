@@ -74,7 +74,6 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Court Change-swapped Sticky Web still counts as having been set up by the original user for the purposes of Competitive and Defiant (Yung Dramps)
  - Octolock's stat drops activate opposing Competitive and Defiant, but not Mirror Armor (Kalalokki)
  - Teatime forces Berry consumption regardless of Unnerve or substitutes, and misses against semi-invulnerable Pokemon (Anubis). It does this in the order: user, ally, opponent's left, opponent's right (Anubis) Teatime also ignores Magic Room and Klutz (LatiosRider)
- - Grav Apple has 1.5x power during Gravity (Anubis)
  - No Retreat users can switch out with Shed Shell (DragonWhale)
  - Recycle can restore Berries used through Teatime (DaWoblefet)
  - Dragon Darts will not attack into Fairy types in Doubles, hitting the other Pokemon twice instead (Nails)
@@ -85,6 +84,7 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Dragon Darts is not blocked by Wide Guard (RagiingAlways)
 
 #Done:
+ - Grav Apple has 1.5x power during Gravity (Anubis)
  - Clangorous Soul can be used despite Soundproof, but fails if the HP loss would knock out the user (Anubis) The HP loss will not happen if the move can't change any of the user's stats (DaWoblefet)
  - Aura Wheel cannot be used by non-Morpeko forms (like Hyperspace Fury and Dark Void mechanics) (Anubis)
  - Tar Shot's effect adds a weakness to the Fire type to the target's types (viol and bass)

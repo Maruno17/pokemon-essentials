@@ -107,7 +107,7 @@ class PokeBattle_Move_185 < PokeBattle_TargetStatDownMove
   end
 
   def pbBaseDamage(baseDmg,user,target)
-    baseDmg=120 if @battle.field.effects[PBEffects::Gravity]>0
+    baseDmg=baseDmg*1.5 if @battle.field.effects[PBEffects::Gravity]>0
     return baseDmg
   end
 end
