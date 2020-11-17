@@ -101,9 +101,9 @@ class PokemonTilesetScene
     @x = 0
     @y = -TILE_SIZE
     @topy = -TILE_SIZE
+    height = @sprites["tileset"].bitmap.height
     pbUpdateTileset
     pbFadeInAndShow(@sprites)
-    height = @sprites["tileset"].bitmap.height
     ########
     loop do
       Graphics.update
@@ -161,6 +161,7 @@ class PokemonTilesetScene
           pbUpdateTileset
         when 2
           pbChooseTileset
+          height = @sprites["tileset"].bitmap.height
         end
       elsif Input.trigger?(Input::B)
         if pbConfirmMessage(_INTL("Save changes?"))
