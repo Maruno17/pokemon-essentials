@@ -240,7 +240,7 @@
 232,HEATCRASH,Heat Crash,09B,1,FIRE,Physical,100,10,0,NearOther,0,abef,"The user slams the foe with its flaming body. The heavier the user is, the greater the damage."
 233,SUNNYDAY,Sunny Day,0FF,0,FIRE,Status,0,5,0,BothSides,0,,"The user intensifies the sun for five turns, powering up Fire-type moves."
 234,WILLOWISP,Will-O-Wisp,00A,0,FIRE,Status,85,15,0,NearOther,0,bce,"The user shoots a sinister, bluish-white flame at the target to inflict a burn."
-235,PYROBALL,Pyro Ball,00A,120,FIRE,Physical,90,5,10,NearOther,0,bef,"The user attacks by igniting a small stone and launching it as a fiery ball at the target. This may also leave the target with a burn."
+235,PYROBALL,Pyro Ball,00A,120,FIRE,Physical,90,5,10,NearOther,0,befn,"The user attacks by igniting a small stone and launching it as a fiery ball at the target. This may also leave the target with a burn."
 236,BURNINGJEALOUSY,Burning Jealousy,18B,70,FIRE,Special,100,5,0,AllNearFoes,0,bef,"The user attacks with energy from jealousy. This leaves all opposing Pokémon that have had their stats boosted during the turn with a burn."
 #-------------------------------
 237,SKYATTACK,Sky Attack,0C7,140,FLYING,Physical,90,5,30,Other,0,beh,"A second-turn attack move where critical hits land more easily. It may also make the target flinch."
