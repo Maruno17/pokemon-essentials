@@ -17,9 +17,11 @@ Note: some of what's listed here was already implemented.
 # Crown of Tundra DLC Stuff
 #######################################
 
-# TODO:
+#TODO:
  - Need to check Smogon to see if any subtlety appeared in the second DLC.
  - Update level-up learnsets for returning old Pokémons 
+
+#Done:
  - Update tm.txt for returning old Pokémons
 
 
@@ -78,8 +80,7 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Life Dew triggers ally Water immunity Abilities (Siggu)
  - Court Change-swapped Sticky Web still counts as having been set up by the original user for the purposes of Competitive and Defiant (Yung Dramps)
  - Octolock's stat drops activate opposing Competitive and Defiant, but not Mirror Armor (Kalalokki)
- - Teatime forces Berry consumption regardless of Unnerve or substitutes, and misses against semi-invulnerable Pokemon (Anubis). It does this in the order: user, ally, opponent's left, opponent's right (Anubis) Teatime also ignores Magic Room and Klutz (LatiosRider)
- - Recycle can restore Berries used through Teatime (DaWoblefet)
+ - It does this in the order: user, ally, opponent's left, opponent's right (Anubis)
  - No Retreat fails if the user trapped itself with it on the first use. Ghost types can still switch out of the effect, and phazing also works (Beware I Live!!!)
  - Octolock's effect stacks with binding moves like Wrap and Snap Trap (Skeli)
  - No Retreat can be used multiple times if the user had been fully trapped already (Zaggyo)
@@ -93,6 +94,8 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Dragon Darts is not blocked by Wide Guard (RagiingAlways)
 
 #Done:
+ - Teatime forces Berry consumption regardless of Unnerve or substitutes, and misses against semi-invulnerable Pokemon (Anubis). Teatime also ignores Magic Room and Klutz (LatiosRider)
+ - Recycle can restore Berries used through Teatime (DaWoblefet)
  - Bolt Beak and Fishious Rend have their power doubled against Pokemon switched in the same turn (Nails)
  - Grav Apple has 1.5x power during Gravity (Anubis)
  - Clangorous Soul can be used despite Soundproof, but fails if the HP loss would knock out the user (Anubis) The HP loss will not happen if the move can't change any of the user's stats (DaWoblefet)

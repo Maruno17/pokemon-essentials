@@ -69,6 +69,8 @@ end
 # Substitutes. (Tea Time)
 #===============================================================================
 class PokeBattle_Move_184 < PokeBattle_Move
+  def ignoresSubstitute?(user); return true; end
+  
   def pbMoveFailed?(user,targets)
     @validTargets = []
     @battle.eachBattler do |b|
