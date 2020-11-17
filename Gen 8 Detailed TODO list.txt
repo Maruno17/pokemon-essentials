@@ -97,10 +97,10 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
 # Abilities
 #--------------------------------------
 #TODO:
- - Neutralizing Gas activates before Unnerve (Lego)
  - Mimicry activates on Transformed Pokemon to change them back to their original type(s) if no Terrain is active (Anubis)
 
 #Done:
+ - Neutralizing Gas activates before Unnerve (Lego) => Neutralizing Gas activates before any other ability (ErwanBeurier)
  - If Neutralizing Gas disables an active Unburden, the Speed boost is regained when Neutralizing Gas leaves (DaWoblefet)
  - Neutralizing Gas leaving the field reactivates "on switch-in" Abilities that activated previously (DragonMasterX34) (DaWoblefet), even against the Pokemon with Neutralizing Gas which is no longer on the field (Anubis)
  - Screen Cleaner removes screens from both sides and does not affect Safeguard (Anubis)

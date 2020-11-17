@@ -319,6 +319,8 @@ class PokeBattle_Battle
   #=============================================================================
   # Called at the start of battle only.
   def pbOnActiveAll
+    # Neutralizing Gas activates before anything. 
+	pbPriorityNeutralizingGas
     # Weather-inducing abilities, Trace, Imposter, etc.
     pbCalculatePriority(true)
     pbPriority(true).each { |b| b.pbEffectsOnSwitchIn(true) }
@@ -327,6 +329,17 @@ class PokeBattle_Battle
     eachBattler { |b| b.pbCheckForm }
   end
   
+  # Called at the start of battle only; Neutralizing Gas activates before anything. 
+  def pbPriorityNeutralizingGas
+    eachBattler {|b|
+      next if !b || b.fainted?
+      # neutralizing gas can be blocked with gastro acid, ending the effect.
+      if isConst?(b.ability,PBAbilities,:NEUTRALIZINGGAS) && !b.effects[PBEffects::GastroAcid]
+        BattleHandlers.triggerAbilityOnSwitchIn(:NEUTRALIZINGGAS,b,self)
+		return 
+      end
+    }
+  end
   
   # Called when a Pokémon switches in + after using Ally Switch (Gen 8 mechanics)
   def pbActivateHealingWish(battler)
