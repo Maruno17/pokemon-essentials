@@ -97,19 +97,18 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
 # Abilities
 #--------------------------------------
 #TODO:
- - Cotton Down is not a powder-based effect (Anubis)
- - Mimicry changes type(s) to the Terrain type and reverts back to original type(s) when Terrain ends (Anubis) (follow-up)
- - Neutralizing Gas leaving the field reactivates "on switch-in" Abilities that activated previously (DragonMasterX34) (DaWoblefet), even against the Pokemon with Neutralizing Gas which is no longer on the field (Anubis)
- - Screen Cleaner removes screens from both sides and does not affect Safeguard (Anubis)
  - Neutralizing Gas activates before Unnerve (Lego)
- - Sand Spit activates after the effects of Max Moves (Count Bleck)
- - Power Spot multiplies an ally's move power by 1.3 (but not the Pokemon with Power Spot) (Anubis)
- - Punk Rock sound moves have 1.3x power, and sound moves against Punk Rock deal 0.5x damage (Anubis)
- - Ripen doubles Berry healing after determining the non-doubled heal amount (Anubis)
  - Mimicry activates on Transformed Pokemon to change them back to their original type(s) if no Terrain is active (Anubis)
  - If Neutralizing Gas disables an active Unburden, the Speed boost is regained when Neutralizing Gas leaves (DaWoblefet)
 
 #Done:
+ - Neutralizing Gas leaving the field reactivates "on switch-in" Abilities that activated previously (DragonMasterX34) (DaWoblefet), even against the Pokemon with Neutralizing Gas which is no longer on the field (Anubis)
+ - Screen Cleaner removes screens from both sides and does not affect Safeguard (Anubis)
+ - Ripen doubles Berry healing after determining the non-doubled heal amount (Anubis)
+ - Mimicry changes type(s) to the Terrain type and reverts back to original type(s) when Terrain ends (Anubis) (follow-up)
+ - Cotton Down is not a powder-based effect (Anubis)
+ - Power Spot multiplies an ally's move power by 1.3 (but not the Pokemon with Power Spot) (Anubis)
+ - Punk Rock sound moves have 1.3x power, and sound moves against Punk Rock deal 0.5x damage (Anubis)
  - Ripen doubles Jaboca and Rowap Berries' damage (Skeli)
  - Neutralizing Gas can be suppressed by Gastro Acid (UnderdarkFox)
  - Steam Engine grants +6 Speed (Revelation)
@@ -136,6 +135,7 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
 
 #Not our concern:
  - Ice Face does not reactivate instantly when broken by a physical Max Hailstorm (ck49)
+ - Sand Spit activates after the effects of Max Moves (Count Bleck)
 
 
 #--------------------------------------
