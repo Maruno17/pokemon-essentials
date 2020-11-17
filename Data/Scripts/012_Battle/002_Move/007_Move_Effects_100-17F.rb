@@ -2673,11 +2673,11 @@ end
 class PokeBattle_Move_179 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
     if user.hp<=(user.totalhp/3) ||
-      !user.pbCanRaiseStatStage?(PBStats::ATTACK,user,self) ||
-      !user.pbCanRaiseStatStage?(PBStats::DEFENSE,user,self) ||
-      !user.pbCanRaiseStatStage?(PBStats::SPEED,user,self) ||
-      !user.pbCanRaiseStatStage?(PBStats::SPATK,user,self) ||
-      !user.pbCanRaiseStatStage?(PBStats::SPDEF,user,self)
+	  (!user.pbCanRaiseStatStage?(PBStats::ATTACK,user,self) &&
+      !user.pbCanRaiseStatStage?(PBStats::DEFENSE,user,self) &&
+      !user.pbCanRaiseStatStage?(PBStats::SPEED,user,self) &&
+      !user.pbCanRaiseStatStage?(PBStats::SPATK,user,self) &&
+      !user.pbCanRaiseStatStage?(PBStats::SPDEF,user,self))
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end

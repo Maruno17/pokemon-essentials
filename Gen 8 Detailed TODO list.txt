@@ -65,14 +65,10 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
 # Moves
 #--------------------------------------
 #TODO:
- - Magic Powder is a powder move and fails against pure Psychic types (Anubis)
  - Life Dew triggers ally Water immunity Abilities (Siggu)
- - Tar Shot's effect adds a weakness to the Fire type to the target's types (viol and bass)
  - No Retreat fails if the user trapped itself with it on the first use. Ghost types can still switch out of the effect, and phazing also works (Beware I Live!!!)
- - Aura Wheel cannot be used by non-Morpeko forms (like Hyperspace Fury and Dark Void mechanics) (Anubis)
  - Octolock's effect stacks with binding moves like Wrap and Snap Trap (Skeli)
  - Bolt Beak and Fishious Rend have their power doubled against Pokemon switched in the same turn (Nails)
- - Clangorous Soul can be used despite Soundproof, but fails if the HP loss would knock out the user (Anubis) The HP loss will not happen if the move can't change any of the user's stats (DaWoblefet)
  - No Retreat can be used multiple times if the user had been fully trapped already (Zaggyo)
  - No Retreat cannot be used multiple times just because the user is a Ghost type (Merritt)
  - Court Change-swapped Sticky Web still counts as having been set up by the original user for the purposes of Competitive and Defiant (Yung Dramps)
@@ -89,6 +85,10 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Dragon Darts is not blocked by Wide Guard (RagiingAlways)
 
 #Done:
+ - Clangorous Soul can be used despite Soundproof, but fails if the HP loss would knock out the user (Anubis) The HP loss will not happen if the move can't change any of the user's stats (DaWoblefet)
+ - Aura Wheel cannot be used by non-Morpeko forms (like Hyperspace Fury and Dark Void mechanics) (Anubis)
+ - Tar Shot's effect adds a weakness to the Fire type to the target's types (viol and bass)
+ - Magic Powder is a powder move and fails against pure Psychic types (Anubis)
  - Fishious Rend is a bite move (KuraiTenshi26)
  - Pyro Ball is a bullet move (Skeli)
  - Body Press uses the user's Defense stat and stat stage in the damage formula to replace its Attack and Attack stat stage. This means any other effects that affect the user's Attack stat continue to apply, such as Choice Band and Hustle. (OZY) Effects that alter the user's Defense stat other than its stat stage do nothing to change Body Press damage.
