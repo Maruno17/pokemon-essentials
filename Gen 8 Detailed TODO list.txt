@@ -80,7 +80,6 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Life Dew triggers ally Water immunity Abilities (Siggu)
  - Court Change-swapped Sticky Web still counts as having been set up by the original user for the purposes of Competitive and Defiant (Yung Dramps)
  - Teatime's activation order: user, ally, opponent's left, opponent's right (Anubis)
- - Octolock's effect stacks with binding moves like Wrap and Snap Trap (Skeli)
  - Octolock's stat drops activate opposing Competitive and Defiant, but not Mirror Armor (Kalalokki)
  - Dragon Darts will not attack into Fairy types in Doubles, hitting the other Pokemon twice instead (Nails)
  - Dragon Darts will not attack into a target protecting themselves in Doubles, hitting the other Pokemon twice instead (Ckarasu)
@@ -90,6 +89,7 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Dragon Darts is not blocked by Wide Guard (RagiingAlways)
 
 #Done:
+ - Octolock's effect stacks with binding moves like Wrap and Snap Trap (Skeli)
  - No Retreat can be used multiple times if the user had been fully trapped already (Zaggyo)
  - No Retreat users can switch out with Shed Shell (DragonWhale)
  - No Retreat cannot be used multiple times just because the user is a Ghost type (Merritt)
