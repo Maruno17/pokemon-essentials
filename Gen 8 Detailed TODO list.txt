@@ -77,13 +77,13 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
 # Moves
 #--------------------------------------
 #TODO:
- - Life Dew triggers ally Water immunity Abilities (Siggu)
  - Teatime's activation order: user, ally, opponent's left, opponent's right (Anubis)
  - Dragon Darts targeting and detailed mechanics (Anubis, peach) (2) (incomplete; see next items)
  - Dragon Darts VS Ally Switch: if Dragon Darts targets a faster ally, and the ally uses Ally Switch, then the first Dragon Dart should target the user (unimplemented), while the second can never target the user (implemented)
  - In the following configuration : Electrify with Stalwart VS Dragon Darts with Stalwart VS Lightning Rod: Electrify electrified Dragon Darts will activate Lightning Rod, but still hit the real target twice. See https://twitter.com/Sibuna_Switch/status/1222001441365098496 In PE, Lightning Rod doesn't trigger at all. 
  
 #Done:
+ - Life Dew triggers ally Water immunity Abilities (Siggu)
  - Dragon Darts: https://bulbapedia.bulbagarden.net/wiki/Dragon_Darts_(move)
  - Dragon Darts bug: in Double battle, the accuracy of the second Dragon Dart is based on the missed state of the ally's accuracy check (If Ally misses Target 2, and User uses Dragon Darts, then it will hit Target 1 but miss Target 2. If Ally hits Target 2, then User will hit Target 2). 
  - Dragon Darts is not blocked by Wide Guard (RagiingAlways)
