@@ -32,23 +32,36 @@ module SaveData
       @load_proc.call(value)
     end
 
+    # Uses the +get_from_legacy+ proc to select the correct data from
+    # the old_format and then loads it.
+    # Does nothing if the proc is undefined.
+    # @param old_format [Array] old format to load value from
+    def load_from_legacy(old_format)
+      return if @legacy_conversion_proc.nil?
+      load(@legacy_conversion_proc.call(old_format))
+    end
+
     private
 
     def save_value(&block)
       raise ArgumentError, "No block given for save_value proc" unless block_given?
-      validate block => Proc
       @save_proc = block
     end
 
     def load_value(&block)
       raise ArgumentError, "No block given for load_value proc" unless block_given?
-      validate block => Proc
       @load_proc = block
     end
 
     # @param class_name [Symbol]
     def ensure_class(class_name)
+      validate class_name => Symbol
       @ensured_class = class_name
+    end
+
+    def get_from_legacy(&block)
+      raise ArgumentError, "No block given for get_from_legacy proc" unless block_given?
+      @legacy_conversion_proc = block
     end
   end
 end

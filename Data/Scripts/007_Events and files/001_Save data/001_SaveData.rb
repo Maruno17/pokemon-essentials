@@ -20,12 +20,26 @@ module SaveData
   end
 
   # Loads the save data from the given file and returns it.
+  # Returns an Array in the case of a pre-v19 save file.
   # @param file_path [String] path of the file to load from
-  # @return [Hash] loaded save data
+  # @return [Hash, Array] loaded save data
   def load_from_file(file_path)
     validate file_path => String
     save_data = nil
-    File.open(file_path) { |file| save_data = Marshal.load(file) }
+
+    File.open(file_path) do |file|
+      data = Marshal.load(file)
+      unless file.eof?
+        save_data = [] if save_data.nil?
+        save_data << data
+      end
+      if save_data.is_a?(Array)
+        save_data.push(data)
+      else
+        save_data = data
+      end
+    end
+
     return save_data
   end
 
@@ -36,7 +50,8 @@ module SaveData
 
   # Registers a value to be saved into save data.
   # Takes a block which defines the value's saving (+save_value+)
-  # and loading (+load_value+) procedures.
+  # and loading (+load_value+) procedures, as well as a possible
+  # proc for fetching the value from the pre-v19 format (+get_from_legacy+)
   # @param id [Symbol] value id
   def register(id, &block)
     unless block_given?
@@ -62,6 +77,15 @@ module SaveData
     validate save_data => Hash
     save_data.each do |id, value|
       @schema[id].load(value)
+    end
+  end
+
+  # Loads the values from the given pre-v19 format save data.
+  # @param old_format [Array] pre-v19 format save data
+  def load_values_from_legacy(old_format)
+    validate old_format => Array
+    @schema.each do |value|
+      value.load_from_legacy(old_format)
     end
   end
 end
