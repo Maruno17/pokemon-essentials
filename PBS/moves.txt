@@ -70,7 +70,7 @@
 67,FALSESURRENDER,False Surrender,000,80,DARK,Physical,0,10,0,NearOther,0,abef,"The user fakes out the target and stabs them with its disheveled hair. This attack never misses."
 68,OBSTRUCT,Obstruct,180,0,DARK,Status,0,10,0,NearOther,4,,"Protect the user from all attacks. Direct contact harshly lowers the attacker's Defense stat."
 69,WICKEDBLOW,Wicked Blow,0A0,80,DARK,Physical,100,5,0,NearOther,0,abef,"The user strikes the target with a fierce blow of Dark Mastery. It always results in a critical hit."
-70,LASHOUT,Lash Out,194,75,DARK,Physical,100,5,0,NearOther,0,abef,"If the user's stats were lowered during the turn, the power of this move is doubled."
+70,LASHOUT,Lash Out,194,75,DARK,Physical,100,5,100,NearOther,0,abef,"If the user's stats were lowered during the turn, the power of this move is doubled."
 71,FIERYWRATH,Fiery Wrath,00F,90,DARK,Special,100,10,20,AllNearFoes,0,ef,"The user transforms its wrath into a fire-like aura to attack. This may also make opposing Pokémon flinch."
 #-------------------------------
 72,ROAROFTIME,Roar of Time,0C2,150,DRAGON,Special,90,5,0,NearOther,0,bef,"The user blasts the target with power that distorts even time. The user must rest on the next turn."
@@ -241,7 +241,7 @@
 233,SUNNYDAY,Sunny Day,0FF,0,FIRE,Status,0,5,0,BothSides,0,,"The user intensifies the sun for five turns, powering up Fire-type moves."
 234,WILLOWISP,Will-O-Wisp,00A,0,FIRE,Status,85,15,0,NearOther,0,bce,"The user shoots a sinister, bluish-white flame at the target to inflict a burn."
 235,PYROBALL,Pyro Ball,00A,120,FIRE,Physical,90,5,10,NearOther,0,bef,"The user attacks by igniting a small stone and launching it as a fiery ball at the target. This may also leave the target with a burn."
-236,BURNINGJEALOUSY,Burning Jealousy,18B,70,FIRE,Special,100,5,0,AllNearFoes,0,bef,"The user attacks with energy from jealousy. This leaves all opposing Pokémon that have had their stats boosted during the turn with a burn."
+236,BURNINGJEALOUSY,Burning Jealousy,18B,70,FIRE,Special,100,5,100,AllNearFoes,0,bef,"The user attacks with energy from jealousy. This leaves all opposing Pokémon that have had their stats boosted during the turn with a burn."
 #-------------------------------
 237,SKYATTACK,Sky Attack,0C7,140,FLYING,Physical,90,5,30,Other,0,beh,"A second-turn attack move where critical hits land more easily. It may also make the target flinch."
 238,BRAVEBIRD,Brave Bird,0FB,120,FLYING,Physical,100,15,0,Other,0,abef,"The user tucks in its wings and charges from a low altitude. The user also takes serious damage."
