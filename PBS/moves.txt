@@ -755,6 +755,6 @@
 736,WITHDRAW,Withdraw,01D,0,WATER,Status,0,40,0,User,0,d,"The user withdraws its body into its hard shell, raising its Defense stat."
 737,SNIPESHOT,Snipe Shot,182,80,WATER,Special,100,15,0,NearOther,0,bef,"The user ignores the effects of opposing Pokémon's moves and Abilities that draw in moves, allowing this move to hit the chosen target."
 738,FISHIOUSREND,Fishious Rend,178,85,WATER,Physical,100,10,0,NearOther,0,abefi,"The user rends the target with its hard gills. If the user attacks before the target, the power of this move is doubled."
-739,LIFEDEW,Life Dew,17E,0,WATER,Status,0,10,0,UserSide,0,d,"The user scatters mysterious water around and restores the HP of itself."
+739,LIFEDEW,Life Dew,17E,0,WATER,Status,0,10,0,UserAndAllies,0,d,"The user scatters mysterious water around and restores the HP of itself."
 740,SURGINGSTRIKES,Surging Strikes,188,25,WATER,Physical,100,5,0,NearOther,0,abef,"The user, having mastered the Water style, strikes the target with a flowing motion three times in a row. This attack always results in a critical hit."
 741,FLIPTURN,Flip Turn,0EE,60,WATER,Physical,100,20,0,NearOther,0,abef,"After making its attack, the user rushes back to switch places with a party Pokémon in waiting."
