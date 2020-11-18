@@ -90,7 +90,7 @@
 86,DRAGONRAGE,Dragon Rage,06B,1,DRAGON,Special,100,10,0,NearOther,0,bef,"This attack hits the target with a shock wave of pure rage. This attack always inflicts 40 HP damage."
 87,DRAGONDANCE,Dragon Dance,026,0,DRAGON,Status,0,20,0,User,0,do,"The user vigorously performs a mystic, powerful dance that boosts its Attack and Speed stats."
 88,BREAKINGSWIPE,Breaking Swipe,042,60,DRAGON,Physical,100,15,100,AllNearFoes,0,abef,"	The user swings its tough tail wildly and attacks opposing Pokémon. This also lowers their Attack stats."
-89,DRAGONDARTS,Dragon Darts,17C,50,DRAGON,Physical,100,10,0,AllNearFoes,0,bef,"The user attacks twice using Dreepy. If there are two targets, this move hits each target once."
+89,DRAGONDARTS,Dragon Darts,17C,50,DRAGON,Physical,100,10,0,NearOther,0,bef,"The user attacks twice using Dreepy. If there are two targets, this move hits each target once."
 90,DYNAMAXCANNON,Dynamax Cannon,199,100,DRAGON,Special,100,5,0,NearOther,0,bf,"The user unleashes a strong beam from its core."
 91,ETERNABEAM,Eternabeam,0C2,160,DRAGON,Special,90,5,0,NearOther,0,bef,"This is Eternatus's most powerful attack in its original form. The user can't move on the next turn."
 92,CLANGOROUSSOUL,Clangorous Soul,179,0,DRAGON,Status,100,5,0,User,0,dk,"The user raises all its stats by using some of its HP."
