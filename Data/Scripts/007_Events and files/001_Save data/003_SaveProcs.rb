@@ -1,3 +1,5 @@
+# Contains the save values defined by default in Essentials.
+
 SaveData.register(:player) do
   ensure_class :PokeBattle_Trainer
   save_value { $Trainer }

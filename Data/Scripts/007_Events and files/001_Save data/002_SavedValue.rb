@@ -13,6 +13,8 @@ module SaveData
       raise "No load_value defined for save value #{id.inspect}" if @load_proc.nil?
     end
 
+    # Calls the value's save proc and returns its value.
+    # @return [Object] save proc value
     def save
       data = @save_proc.call
       if @ensured_class && data.class.name == @ensured_class.to_s
@@ -21,6 +23,8 @@ module SaveData
       return data
     end
 
+    # Calls the value's load proc with the given argument passed into it.
+    # @param value [Object] load proc argument
     def load(value)
       if @ensured_class && data.class.name == @ensured_class.to_s
         raise TypeError, "Save value #{@id.inspect} is not a #{@ensured_class}"
