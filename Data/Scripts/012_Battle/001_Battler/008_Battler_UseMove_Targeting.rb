@@ -161,6 +161,7 @@ class PokeBattle_Battler
       # Redirect first use if necessary or get another target on each consecutive use
       if neednewtarget || dragondarts==1
         targets[0].eachAlly do |b|
+		  next if b.index == user.index && dragondarts==1 # Don't attack yourself on the second hit. 
           next if b.effects[PBEffects::Protect] ||
           (b.effects[PBEffects::QuickGuard] && @battle.choices[user.index][4]>0) ||
           b.effects[PBEffects::SpikyShield] ||
