@@ -383,7 +383,7 @@ BattleHandlers::StatusCureItem.add(:RAWSTBERRY,
 BattleHandlers::PriorityBracketChangeItem.add(:CUSTAPBERRY,
   proc { |item,battler,subPri,battle|
     next if !battler.pbCanConsumeBerry?(item)
-    next 1 if subPri<1
+    next 1 if subPri<1 && (!battler.effects[PBEffects::PriorityAbility] && b.hasActiveAbility?(:QUICKDRAW))
   }
 )
 
@@ -397,7 +397,7 @@ BattleHandlers::PriorityBracketChangeItem.copy(:LAGGINGTAIL,:FULLINCENSE)
 
 BattleHandlers::PriorityBracketChangeItem.add(:QUICKCLAW,
   proc { |item,battler,subPri,battle|
-    next 1 if subPri<1 && battle.pbRandom(100)<20
+    next 1 if subPri<1 && battle.pbRandom(100)<20 && (!battler.effects[PBEffects::PriorityAbility] && b.hasActiveAbility?(:QUICKDRAW))
   }
 )
 
