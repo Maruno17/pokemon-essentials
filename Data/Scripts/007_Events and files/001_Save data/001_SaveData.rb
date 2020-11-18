@@ -7,7 +7,7 @@ module SaveData
 
   # Contains {SavedValue} objects for each save element.
   # Populated during runtime by {#register} calls.
-  @schema = {}
+  @values = {}
 
   module_function
 
@@ -33,10 +33,10 @@ module SaveData
         save_data = [] if save_data.nil?
         save_data << data
       end
-      if save_data.is_a?(Array)
-        save_data.push(data)
-      else
+      if save_data.is_a?(Hash)
         save_data = data
+      else
+        save_data << data
       end
     end
 
@@ -58,13 +58,13 @@ module SaveData
       raise ArgumentError, "No block given to save value #{id.inspect}"
     end
     validate id => Symbol
-    @schema[id] = Value.new(id, &block)
+    @values[id] = Value.new(id, &block)
   end
 
   # @return [Hash{Symbol => Object}] a hash representation of the save data
   def compile
     save_data = {}
-    @schema.each do |id, data|
+    @values.each do |id, data|
       save_data[id] = data.save
     end
     return save_data
@@ -76,7 +76,7 @@ module SaveData
   def load_values(save_data)
     validate save_data => Hash
     save_data.each do |id, value|
-      @schema[id].load(value)
+      @values[id].load(value)
     end
   end
 
@@ -84,7 +84,7 @@ module SaveData
   # @param old_format [Array] pre-v19 format save data
   def load_values_from_legacy(old_format)
     validate old_format => Array
-    @schema.each do |value|
+    @values.each_value do |value|
       value.load_from_legacy(old_format)
     end
   end
