@@ -2817,6 +2817,10 @@ end
 # (Dragon Darts)
 #===============================================================================
 class PokeBattle_Move_17C < PokeBattle_Move_0BD
+  def pbNumHits(user,targets)
+    return 1 if targets.length > 1
+    return 2
+  end 
 end
 
 
