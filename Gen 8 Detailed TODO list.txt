@@ -83,6 +83,7 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Dragon Darts: https://bulbapedia.bulbagarden.net/wiki/Dragon_Darts_(move)
 
 #Done:
+ - Dragon Darts bug: in Double battle, the accuracy of the second Dragon Dart is based on the missed state of the ally's accuracy check (If Ally misses Target 2, and User uses Dragon Darts, then it will hit Target 1 but miss Target 2. If Ally hits Target 2, then User will hit Target 2). 
  - Dragon Darts is not blocked by Wide Guard (RagiingAlways)
  - Dragon Darts will not attack into a target in a semi-invulnerable turn (Nails)
  - Dragon Darts will not attack into a target protecting themselves in Doubles, hitting the other Pokemon twice instead (Ckarasu)

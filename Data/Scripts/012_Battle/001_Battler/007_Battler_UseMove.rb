@@ -596,13 +596,13 @@ class PokeBattle_Battler
     # For two-turn attacks being used in a single turn
     move.pbInitialEffect(user,targets,hitNum)
     numTargets = 0   # Number of targets that are affected by this hit
-    targets.each { |b| b.damageState.resetPerHit }
     # Count a hit for Parental Bond (if it applies)
     user.effects[PBEffects::ParentalBond] -= 1 if user.effects[PBEffects::ParentalBond]>0
     # Redirect Dragon Darts other hits
 	if move.function=="17C" && @battle.pbSideSize(targets[0].index)>1 && hitNum>0
 	  targets=pbChangeTargets(move,user,targets,1)
 	end
+    targets.each { |b| b.damageState.resetPerHit }
     # Accuracy check (accuracy/evasion calc)
     if hitNum==0 || move.successCheckPerHit?
       targets.each do |b|
