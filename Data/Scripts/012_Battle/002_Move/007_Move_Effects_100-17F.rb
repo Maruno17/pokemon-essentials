@@ -2814,6 +2814,7 @@ end
 # In singles, this move hits the target twice. In doubles, this move hits each
 # target once. If one of the two opponents protects or while semi-invulnerable
 # or is a Fairy-type Pokémon, it hits the opponent that doesn't protect twice.
+# In Doubles, not affected by WideGuard. 
 # (Dragon Darts)
 #===============================================================================
 class PokeBattle_Move_17C < PokeBattle_Move_0BD

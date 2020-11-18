@@ -81,9 +81,9 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Teatime's activation order: user, ally, opponent's left, opponent's right (Anubis)
  - Dragon Darts targeting and detailed mechanics (Anubis, peach) (2)
  - Dragon Darts: https://bulbapedia.bulbagarden.net/wiki/Dragon_Darts_(move)
- - Dragon Darts is not blocked by Wide Guard (RagiingAlways)
 
 #Done:
+ - Dragon Darts is not blocked by Wide Guard (RagiingAlways)
  - Dragon Darts will not attack into a target in a semi-invulnerable turn (Nails)
  - Dragon Darts will not attack into a target protecting themselves in Doubles, hitting the other Pokemon twice instead (Ckarasu)
  - Dragon Darts will not attack into Fairy types in Doubles, hitting the other Pokemon twice instead (Nails)
