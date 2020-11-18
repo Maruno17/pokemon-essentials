@@ -43,7 +43,7 @@ module SaveData
       raise ArgumentError, "No block given to save value #{id.inspect}"
     end
     validate id => Symbol
-    @schema[id] = SavedValue.new(id, &block)
+    @schema[id] = Value.new(id, &block)
   end
 
   # @return [Hash{Symbol => Object}] a hash representation of the save data
