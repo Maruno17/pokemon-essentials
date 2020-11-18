@@ -430,7 +430,9 @@ class PokeBattle_Battle
        !battler.airborne? && !battler.hasActiveItem?(:HEAVYDUTYBOOTS)
       pbDisplay(_INTL("{1} was caught in a sticky web!",battler.pbThis))
       if battler.pbCanLowerStatStage?(PBStats::SPEED)
-        battler.pbLowerStatStage(PBStats::SPEED,1,nil)
+	    stickyuser = (battler.pbOwnSide.effects[PBEffects::StickyWebUser] > -1 ? 
+		  battlers[battler.pbOwnSide.effects[PBEffects::StickyWebUser]] : nil)
+        battler.pbLowerStatStage(PBStats::SPEED,1,stickyuser)
         battler.pbItemStatRestoreCheck
       end
     end

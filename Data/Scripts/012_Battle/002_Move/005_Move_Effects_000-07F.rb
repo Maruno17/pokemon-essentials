@@ -1361,7 +1361,9 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
        (NEWEST_BATTLE_MECHANICS &&
        target.pbOpposingSide.effects[PBEffects::StickyWeb])
       target.pbOwnSide.effects[PBEffects::StickyWeb]      = false
+      target.pbOwnSide.effects[PBEffects::StickyWebUser]  = -1
       target.pbOpposingSide.effects[PBEffects::StickyWeb] = false if NEWEST_BATTLE_MECHANICS
+      target.pbOpposingSide.effects[PBEffects::StickyWebUser] = -1 if NEWEST_BATTLE_MECHANICS
       @battle.pbDisplay(_INTL("{1} blew away sticky webs!",user.pbThis))
     end
     case @battle.field.terrain
