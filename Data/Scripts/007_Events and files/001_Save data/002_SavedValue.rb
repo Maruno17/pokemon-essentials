@@ -17,7 +17,7 @@ module SaveData
     # @return [Object] save proc value
     def save
       data = @save_proc.call
-      if @ensured_class && data.class.name == @ensured_class.to_s
+      if @ensured_class && data.class.name != @ensured_class.to_s
         raise TypeError, "Save value #{@id.inspect} is not a #{@ensured_class}"
       end
       return data
@@ -26,7 +26,7 @@ module SaveData
     # Calls the value's load proc with the given argument passed into it.
     # @param value [Object] load proc argument
     def load(value)
-      if @ensured_class && data.class.name == @ensured_class.to_s
+      if @ensured_class && data.class.name != @ensured_class.to_s
         raise TypeError, "Save value #{@id.inspect} is not a #{@ensured_class}"
       end
       @load_proc.call(value)
