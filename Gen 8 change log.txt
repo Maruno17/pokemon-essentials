@@ -3,11 +3,9 @@ CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lo
 
 # To Do
 HIGH PRIORITY:
-Add TM,TR and Tutor Learnsets for Returning Crown Tundra Pokemon
 Update Egg Moves for Gen 1-7
 
 LOW PRIORITY:
-Update Item Prices
 Update Pokedex Entries for Gen 1-7
 Update Habitats for all Pokemon
 
