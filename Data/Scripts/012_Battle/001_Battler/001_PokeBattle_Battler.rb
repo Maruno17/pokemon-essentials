@@ -429,16 +429,15 @@ class PokeBattle_Battler
   end
 
   def eachMove
-    @moves.each { |m| yield m if m && m.id != 0 }
+    @moves.each { |m| yield m }
   end
 
   def eachMoveWithIndex
-    @moves.each_with_index { |m, i| yield m, i if m && m.id != 0 }
+    @moves.each_with_index { |m, i| yield m, i }
   end
 
   def pbHasMove?(move_id)
-    move_id = getID(PBMoves, move_id)
-    return false if !move_id || move_id <= 0
+    return false if !move_id
     eachMove { |m| return true if m.id == move_id }
     return false
   end
@@ -574,7 +573,7 @@ class PokeBattle_Battler
   end
 
   def usingMultiTurnAttack?
-    return true if @effects[PBEffects::TwoTurnAttack]>0
+    return true if @effects[PBEffects::TwoTurnAttack]
     return true if @effects[PBEffects::HyperBeam]>0
     return true if @effects[PBEffects::Rollout]>0
     return true if @effects[PBEffects::Outrage]>0
@@ -584,8 +583,8 @@ class PokeBattle_Battler
   end
 
   def inTwoTurnAttack?(*arg)
-    return false if @effects[PBEffects::TwoTurnAttack]==0
-    ttaFunction = pbGetMoveData(@effects[PBEffects::TwoTurnAttack],MoveData::FUNCTION_CODE)
+    return false if !@effects[PBEffects::TwoTurnAttack]
+    ttaFunction = GameData::Move.get(@effects[PBEffects::TwoTurnAttack]).function_code
     arg.each { |a| return true if a==ttaFunction }
     return false
   end
@@ -595,7 +594,7 @@ class PokeBattle_Battler
   end
 
   def pbEncoredMoveIndex
-    return -1 if @effects[PBEffects::Encore]==0 || @effects[PBEffects::EncoreMove]==0
+    return -1 if @effects[PBEffects::Encore]==0 || !@effects[PBEffects::EncoreMove]
     ret = -1
     eachMoveWithIndex do |m,i|
       next if m.id!=@effects[PBEffects::EncoreMove]

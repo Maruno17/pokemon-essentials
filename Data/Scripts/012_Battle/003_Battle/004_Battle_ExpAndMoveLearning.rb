@@ -222,11 +222,11 @@ class PokeBattle_Battle
     return if !pkmn
     pkmnName = pkmn.name
     battler = pbFindBattler(idxParty)
-    moveName = PBMoves.getName(newMove)
+    moveName = GameData::Move.get(newMove).name
     # Find a space for the new move in pkmn's moveset and learn it
-    pkmn.moves.each_with_index do |m,i|
-      return if m.id==newMove   # Already knows the new move
-      next if m.id!=0           # Not a blank move slot
+    for i in 0...Pokemon::MAX_MOVES
+      m = pkmn.moves[i]
+      return if m && m.id==newMove   # Already knows the new move
       pkmn.moves[i] = PBMove.new(newMove)
       battler.moves[i] = PokeBattle_Move.pbFromPBMove(self,pkmn.moves[i]) if battler
       pbDisplay(_INTL("{1} learned {2}!",pkmnName,moveName)) { pbSEPlay("Pkmn move learnt") }
@@ -240,7 +240,7 @@ class PokeBattle_Battle
         pbDisplayPaused(_INTL("Which move should be forgotten?"))
         forgetMove = @scene.pbForgetMove(pkmn,newMove)
         if forgetMove>=0
-          oldMoveName = PBMoves.getName(pkmn.moves[forgetMove].id)
+          oldMoveName = pkmn.moves[forgetMove].name
           pkmn.moves[forgetMove] = PBMove.new(newMove)   # Replaces current/total PP
           battler.moves[forgetMove] = PokeBattle_Move.pbFromPBMove(self,pkmn.moves[forgetMove]) if battler
           pbDisplayPaused(_INTL("1, 2, and... ... ... Ta-da!"))

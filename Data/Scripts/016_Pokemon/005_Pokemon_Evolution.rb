@@ -493,7 +493,7 @@ PBEvolution.register(:HappinessNight, {
 
 PBEvolution.register(:HappinessMove, {
   "minimumLevel"  => 1,   # Needs any level up
-  "parameterType" => :PBMoves,
+  "parameterType" => :Move,
   "levelUpCheck"  => proc { |pkmn, parameter|
     if pkmn.happiness >= 220
       next pkmn.moves.any? { |m| m && m.id == parameter }
@@ -619,7 +619,7 @@ PBEvolution.register(:HoldItemHappiness, {
 
 PBEvolution.register(:HasMove, {
   "minimumLevel"  => 1,   # Needs any level up
-  "parameterType" => :PBMoves,
+  "parameterType" => :Move,
   "levelUpCheck"  => proc { |pkmn, parameter|
     next pkmn.moves.any? { |m| m && m.id == parameter }
   }

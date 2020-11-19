@@ -590,7 +590,7 @@ ItemHandlers::UseOnPokemon.copy(:ETHER,:LEPPABERRY)
 ItemHandlers::UseOnPokemon.add(:MAXETHER,proc { |item,pkmn,scene|
   move = scene.pbChooseMove(pkmn,_INTL("Restore which move?"))
   next false if move<0
-  if pbRestorePP(pkmn,move,pkmn.moves[move].totalpp-pkmn.moves[move].pp)==0
+  if pbRestorePP(pkmn,move,pkmn.moves[move].total_pp-pkmn.moves[move].pp)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -614,7 +614,7 @@ ItemHandlers::UseOnPokemon.add(:ELIXIR,proc { |item,pkmn,scene|
 ItemHandlers::UseOnPokemon.add(:MAXELIXIR,proc { |item,pkmn,scene|
   pprestored = 0
   for i in 0...pkmn.moves.length
-    pprestored += pbRestorePP(pkmn,i,pkmn.moves[i].totalpp-pkmn.moves[i].pp)
+    pprestored += pbRestorePP(pkmn,i,pkmn.moves[i].total_pp-pkmn.moves[i].pp)
   end
   if pprestored==0
     scene.pbDisplay(_INTL("It won't have any effect."))
@@ -627,12 +627,12 @@ ItemHandlers::UseOnPokemon.add(:MAXELIXIR,proc { |item,pkmn,scene|
 ItemHandlers::UseOnPokemon.add(:PPUP,proc { |item,pkmn,scene|
   move = scene.pbChooseMove(pkmn,_INTL("Boost PP of which move?"))
   if move>=0
-    if pkmn.moves[move].totalpp<=1 || pkmn.moves[move].ppup>=3
+    if pkmn.moves[move].total_pp<=1 || pkmn.moves[move].ppup>=3
       scene.pbDisplay(_INTL("It won't have any effect."))
       next false
     end
     pkmn.moves[move].ppup += 1
-    movename = PBMoves.getName(pkmn.moves[move].id)
+    movename = pkmn.moves[move].name
     scene.pbDisplay(_INTL("{1}'s PP increased.",movename))
     next true
   end
@@ -642,12 +642,12 @@ ItemHandlers::UseOnPokemon.add(:PPUP,proc { |item,pkmn,scene|
 ItemHandlers::UseOnPokemon.add(:PPMAX,proc { |item,pkmn,scene|
   move = scene.pbChooseMove(pkmn,_INTL("Boost PP of which move?"))
   if move>=0
-    if pkmn.moves[move].totalpp<=1 || pkmn.moves[move].ppup>=3
+    if pkmn.moves[move].total_pp<=1 || pkmn.moves[move].ppup>=3
       scene.pbDisplay(_INTL("It won't have any effect."))
       next false
     end
     pkmn.moves[move].ppup = 3
-    movename = PBMoves.getName(pkmn.moves[move].id)
+    movename = pkmn.moves[move].name
     scene.pbDisplay(_INTL("{1}'s PP increased.",movename))
     next true
   end

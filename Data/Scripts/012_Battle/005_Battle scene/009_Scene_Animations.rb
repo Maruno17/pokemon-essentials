@@ -383,13 +383,14 @@ class PokeBattle_Scene
   # Returns the animation ID to use for a given move/user. Returns nil if that
   # move has no animations defined for it.
   def pbFindMoveAnimDetails(move2anim,moveID,idxUser,hitNum=0)
+    id_number = GameData::Move.get(moveID).id_number
     noFlip = false
     if (idxUser&1)==0   # On player's side
-      anim = move2anim[0][moveID]
+      anim = move2anim[0][id_number]
     else                # On opposing side
-      anim = move2anim[1][moveID]
+      anim = move2anim[1][id_number]
       noFlip = true if anim
-      anim = move2anim[0][moveID] if !anim
+      anim = move2anim[0][id_number] if !anim
     end
     return [anim+hitNum,noFlip] if anim
     return nil
@@ -399,62 +400,62 @@ class PokeBattle_Scene
   # animations, tries to use a default move animation depending on the move's
   # type. If that default move animation doesn't exist, trues to use Tackle's
   # move animation. Returns nil if it can't find any of these animations to use.
-  def pbFindMoveAnimation(moveID,idxUser,hitNum)
+  def pbFindMoveAnimation(moveID, idxUser, hitNum)
     begin
       move2anim = pbLoadMoveToAnim
       # Find actual animation requested (an opponent using the animation first
       # looks for an OppMove version then a Move version)
-      anim = pbFindMoveAnimDetails(move2anim,moveID,idxUser,hitNum)
+      anim = pbFindMoveAnimDetails(move2anim, moveID, idxUser, hitNum)
       return anim if anim
       # Actual animation not found, get the default animation for the move's type
-      moveData = pbGetMoveData(moveID)
-      moveType = moveData[MoveData::TYPE]
-      moveKind = moveData[MoveData::CATEGORY]
-      moveKind += 3 if PBTargets.multipleTargets?(moveData[MoveData::TARGET]) ||
-                       PBTargets.targetsFoeSide?(moveData[MoveData::TARGET])
-      moveKind += 3 if moveKind==2 && moveData[MoveData::TARGET]!=PBTargets::User &&
-                       moveData[MoveData::TARGET]!=PBTargets::UserSide
+      moveData = GameData::Move.get(moveID)
+      moveType = moveData.type
+      moveKind = moveData.category
+      moveKind += 3 if PBTargets.multipleTargets?(moveData.target) ||
+                       PBTargets.targetsFoeSide?(moveData.target)
+      moveKind += 3 if moveKind == 2 && moveData.target != PBTargets::User &&
+                       moveData.target != PBTargets::UserSide
       # [one target physical, one target special, user status,
       #  multiple targets physical, multiple targets special, non-user status]
       typeDefaultAnim = {
-         :NORMAL   => [:TACKLE,:SONICBOOM,:DEFENSECURL,:EXPLOSION,:SWIFT,:TAILWHIP],
-         :FIGHTING => [:MACHPUNCH,:AURASPHERE,:DETECT,nil,nil,nil],
-         :FLYING   => [:WINGATTACK,:GUST,:ROOST,nil,:AIRCUTTER,:FEATHERDANCE],
-         :POISON   => [:POISONSTING,:SLUDGE,:ACIDARMOR,nil,:ACID,:POISONPOWDER],
-         :GROUND   => [:SANDTOMB,:MUDSLAP,nil,:EARTHQUAKE,:EARTHPOWER,:MUDSPORT],
-         :ROCK     => [:ROCKTHROW,:POWERGEM,:ROCKPOLISH,:ROCKSLIDE,nil,:SANDSTORM],
-         :BUG      => [:TWINEEDLE,:BUGBUZZ,:QUIVERDANCE,nil,:STRUGGLEBUG,:STRINGSHOT],
-         :GHOST    => [:LICK,:SHADOWBALL,:GRUDGE,nil,nil,:CONFUSERAY],
-         :STEEL    => [:IRONHEAD,:MIRRORSHOT,:IRONDEFENSE,nil,nil,:METALSOUND],
-         :FIRE     => [:FIREPUNCH,:EMBER,:SUNNYDAY,nil,:INCINERATE,:WILLOWISP],
-         :WATER    => [:CRABHAMMER,:WATERGUN,:AQUARING,nil,:SURF,:WATERSPORT],
-         :GRASS    => [:VINEWHIP,:MEGADRAIN,:COTTONGUARD,:RAZORLEAF,nil,:SPORE],
-         :ELECTRIC => [:THUNDERPUNCH,:THUNDERSHOCK,:CHARGE,nil,:DISCHARGE,:THUNDERWAVE],
-         :PSYCHIC  => [:ZENHEADBUTT,:CONFUSION,:CALMMIND,nil,:SYNCHRONOISE,:MIRACLEEYE],
-         :ICE      => [:ICEPUNCH,:ICEBEAM,:MIST,nil,:POWDERSNOW,:HAIL],
-         :DRAGON   => [:DRAGONCLAW,:DRAGONRAGE,:DRAGONDANCE,nil,:TWISTER,nil],
-         :DARK     => [:PURSUIT,:DARKPULSE,:HONECLAWS,nil,:SNARL,:EMBARGO],
-         :FAIRY    => [:TACKLE,:FAIRYWIND,:MOONLIGHT,nil,:SWIFT,:SWEETKISS]
+        :NORMAL   => [:TACKLE,       :SONICBOOM,    :DEFENSECURL, :EXPLOSION,  :SWIFT,        :TAILWHIP],
+        :FIGHTING => [:MACHPUNCH,    :AURASPHERE,   :DETECT,      nil,         nil,           nil],
+        :FLYING   => [:WINGATTACK,   :GUST,         :ROOST,       nil,         :AIRCUTTER,    :FEATHERDANCE],
+        :POISON   => [:POISONSTING,  :SLUDGE,       :ACIDARMOR,   nil,         :ACID,         :POISONPOWDER],
+        :GROUND   => [:SANDTOMB,     :MUDSLAP,      nil,          :EARTHQUAKE, :EARTHPOWER,   :MUDSPORT],
+        :ROCK     => [:ROCKTHROW,    :POWERGEM,     :ROCKPOLISH,  :ROCKSLIDE,  nil,           :SANDSTORM],
+        :BUG      => [:TWINEEDLE,    :BUGBUZZ,      :QUIVERDANCE, nil,         :STRUGGLEBUG,  :STRINGSHOT],
+        :GHOST    => [:LICK,         :SHADOWBALL,   :GRUDGE,      nil,         nil,           :CONFUSERAY],
+        :STEEL    => [:IRONHEAD,     :MIRRORSHOT,   :IRONDEFENSE, nil,         nil,           :METALSOUND],
+        :FIRE     => [:FIREPUNCH,    :EMBER,        :SUNNYDAY,    nil,         :INCINERATE,   :WILLOWISP],
+        :WATER    => [:CRABHAMMER,   :WATERGUN,     :AQUARING,    nil,         :SURF,         :WATERSPORT],
+        :GRASS    => [:VINEWHIP,     :MEGADRAIN,    :COTTONGUARD, :RAZORLEAF,  nil,           :SPORE],
+        :ELECTRIC => [:THUNDERPUNCH, :THUNDERSHOCK, :CHARGE,      nil,         :DISCHARGE,    :THUNDERWAVE],
+        :PSYCHIC  => [:ZENHEADBUTT,  :CONFUSION,    :CALMMIND,    nil,         :SYNCHRONOISE, :MIRACLEEYE],
+        :ICE      => [:ICEPUNCH,     :ICEBEAM,      :MIST,        nil,         :POWDERSNOW,   :HAIL],
+        :DRAGON   => [:DRAGONCLAW,   :DRAGONRAGE,   :DRAGONDANCE, nil,         :TWISTER,      nil],
+        :DARK     => [:PURSUIT,      :DARKPULSE,    :HONECLAWS,   nil,         :SNARL,        :EMBARGO],
+        :FAIRY    => [:TACKLE,       :FAIRYWIND,    :MOONLIGHT,   nil,         :SWIFT,        :SWEETKISS]
       }
       typeDefaultAnim.each do |type, anims|
-        next if !isConst?(moveType,PBTypes,type)
-        if anims[moveKind] && hasConst?(PBMoves,anims[moveKind])
-          anim = pbFindMoveAnimDetails(move2anim,getConst(PBMoves,anims[moveKind]),idxUser)
+        next if !isConst?(moveType, PBTypes, type)
+        if GameData::Move.exists?(anims[moveKind])
+          anim = pbFindMoveAnimDetails(move2anim, anims[moveKind], idxUser)
         end
         break if anim
-        if moveKind>=3 && anims[moveKind-3] && hasConst?(PBMoves,anims[moveKind-3])
-          anim = pbFindMoveAnimDetails(move2anim,getConst(PBMoves,anims[moveKind-3]),idxUser)
+        if moveKind >= 3 && GameData::Move.exists?(anims[moveKind - 3])
+          anim = pbFindMoveAnimDetails(move2anim, anims[moveKind - 3], idxUser)
         end
         break if anim
-        if anims[2] && hasConst?(PBMoves,anims[2])
-          anim = pbFindMoveAnimDetails(move2anim,getConst(PBMoves,anims[2]),idxUser)
+        if GameData::Move.exists?(anims[2])
+          anim = pbFindMoveAnimDetails(move2anim, anims[2], idxUser)
         end
         break
       end
       return anim if anim
       # Default animation for the move's type not found, use Tackle's animation
-      if hasConst?(PBMoves,:TACKLE)
-        return pbFindMoveAnimDetails(move2anim,getConst(PBMoves,:TACKLE),idxUser)
+      if GameData::Move.exists?(:TACKLE)
+        return pbFindMoveAnimDetails(move2anim, :TACKLE, idxUser)
       end
     rescue
     end

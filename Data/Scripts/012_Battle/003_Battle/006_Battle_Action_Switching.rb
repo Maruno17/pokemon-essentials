@@ -342,7 +342,7 @@ class PokeBattle_Battle
       pbDisplay(_INTL("{1} became cloaked in mystical moonlight!",battler.pbThis))
       battler.pbRecoverHP(battler.totalhp)
       battler.pbCureStatus(false)
-      battler.eachMove { |m| m.pp = m.totalpp }
+      battler.eachMove { |m| m.pp = m.total_pp }
       @positions[battler.index].effects[PBEffects::LunarDance] = false
     end
     # Entry hazards

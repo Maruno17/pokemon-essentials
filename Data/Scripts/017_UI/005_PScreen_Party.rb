@@ -941,10 +941,10 @@ class PokemonPartyScreen
     movenames = []
     for i in pokemon.moves
       break if i.id==0
-      if i.totalpp<=0
-        movenames.push(_INTL("{1} (PP: ---)",PBMoves.getName(i.id)))
+      if i.total_pp<=0
+        movenames.push(_INTL("{1} (PP: ---)",i.name))
       else
-        movenames.push(_INTL("{1} (PP: {2}/{3})",PBMoves.getName(i.id),i.pp,i.totalpp))
+        movenames.push(_INTL("{1} (PP: {2}/{3})",i.name,i.pp,i.total_pp))
       end
     end
     return @scene.pbShowCommands(helptext,movenames,index)
@@ -1129,20 +1129,20 @@ class PokemonPartyScreen
       commands   = []
       cmdSummary = -1
       cmdDebug   = -1
-      cmdMoves   = [-1,-1,-1,-1]
+      cmdMoves   = [-1] * pkmn.numMoves
       cmdSwitch  = -1
       cmdMail    = -1
       cmdItem    = -1
       # Build the commands
       commands[cmdSummary = commands.length]      = _INTL("Summary")
       commands[cmdDebug = commands.length]        = _INTL("Debug") if $DEBUG
-      for i in 0...pkmn.moves.length
-        move = pkmn.moves[i]
+      if !pkmn.egg?
         # Check for hidden moves and add any that were found
-        if !pkmn.egg? && (isConst?(move.id,PBMoves,:MILKDRINK) ||
-                          isConst?(move.id,PBMoves,:SOFTBOILED) ||
-                          HiddenMoveHandlers.hasHandler(move.id))
-          commands[cmdMoves[i] = commands.length] = [PBMoves.getName(move.id),1]
+        pkmn.moves.each_with_index do |m, i|
+          if [:MILKDRINK, :SOFTBOILED].include?(m.id) ||
+             HiddenMoveHandlers.hasHandler(m.id)
+            commands[cmdMoves[i] = commands.length] = [m.name, 1]
+          end
         end
       end
       commands[cmdSwitch = commands.length]       = _INTL("Switch") if @party.length>1
@@ -1156,60 +1156,56 @@ class PokemonPartyScreen
       commands[commands.length]                   = _INTL("Cancel")
       command = @scene.pbShowCommands(_INTL("Do what with {1}?",pkmn.name),commands)
       havecommand = false
-      for i in 0...4
-        if cmdMoves[i]>=0 && command==cmdMoves[i]
-          havecommand = true
-          if isConst?(pkmn.moves[i].id,PBMoves,:SOFTBOILED) ||
-             isConst?(pkmn.moves[i].id,PBMoves,:MILKDRINK)
-            amt = [(pkmn.totalhp/5).floor,1].max
-            if pkmn.hp<=amt
-              pbDisplay(_INTL("Not enough HP..."))
+      cmdMoves.each_with_index do |cmd, i|
+        next if cmd < 0 || cmd != command
+        havecommand = true
+        if [:MILKDRINK, :SOFTBOILED].include?(pkmn.moves[i].id)
+          amt = [(pkmn.totalhp/5).floor,1].max
+          if pkmn.hp<=amt
+            pbDisplay(_INTL("Not enough HP..."))
+            break
+          end
+          @scene.pbSetHelpText(_INTL("Use on which Pokémon?"))
+          oldpkmnid = pkmnid
+          loop do
+            @scene.pbPreSelect(oldpkmnid)
+            pkmnid = @scene.pbChoosePokemon(true,pkmnid)
+            break if pkmnid<0
+            newpkmn = @party[pkmnid]
+            movename = pkmn.moves[i].name
+            if pkmnid==oldpkmnid
+              pbDisplay(_INTL("{1} can't use {2} on itself!",pkmn.name,movename))
+            elsif newpkmn.egg?
+              pbDisplay(_INTL("{1} can't be used on an Egg!",movename))
+            elsif newpkmn.hp==0 || newpkmn.hp==newpkmn.totalhp
+              pbDisplay(_INTL("{1} can't be used on that Pokémon.",movename))
+            else
+              pkmn.hp -= amt
+              hpgain = pbItemRestoreHP(newpkmn,amt)
+              @scene.pbDisplay(_INTL("{1}'s HP was restored by {2} points.",newpkmn.name,hpgain))
+              pbRefresh
+            end
+            break if pkmn.hp<=amt
+          end
+          @scene.pbSelect(oldpkmnid)
+          pbRefresh
+          break
+        elsif pbCanUseHiddenMove?(pkmn,pkmn.moves[i].id)
+          if pbConfirmUseHiddenMove(pkmn,pkmn.moves[i].id)
+            @scene.pbEndScene
+            if pkmn.moves[i].id == :FLY
+              scene = PokemonRegionMap_Scene.new(-1,false)
+              screen = PokemonRegionMapScreen.new(scene)
+              ret = screen.pbStartFlyScreen
+              if ret
+                $PokemonTemp.flydata=ret
+                return [pkmn,pkmn.moves[i].id]
+              end
+              @scene.pbStartScene(@party,
+                 (@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
               break
             end
-            @scene.pbSetHelpText(_INTL("Use on which Pokémon?"))
-            oldpkmnid = pkmnid
-            loop do
-              @scene.pbPreSelect(oldpkmnid)
-              pkmnid = @scene.pbChoosePokemon(true,pkmnid)
-              break if pkmnid<0
-              newpkmn = @party[pkmnid]
-              movename = PBMoves.getName(pkmn.moves[i].id)
-              if pkmnid==oldpkmnid
-                pbDisplay(_INTL("{1} can't use {2} on itself!",pkmn.name,movename))
-              elsif newpkmn.egg?
-                pbDisplay(_INTL("{1} can't be used on an Egg!",movename))
-              elsif newpkmn.hp==0 || newpkmn.hp==newpkmn.totalhp
-                pbDisplay(_INTL("{1} can't be used on that Pokémon.",movename))
-              else
-                pkmn.hp -= amt
-                hpgain = pbItemRestoreHP(newpkmn,amt)
-                @scene.pbDisplay(_INTL("{1}'s HP was restored by {2} points.",newpkmn.name,hpgain))
-                pbRefresh
-              end
-              break if pkmn.hp<=amt
-            end
-            @scene.pbSelect(oldpkmnid)
-            pbRefresh
-            break
-          elsif pbCanUseHiddenMove?(pkmn,pkmn.moves[i].id)
-            if pbConfirmUseHiddenMove(pkmn,pkmn.moves[i].id)
-              @scene.pbEndScene
-              if isConst?(pkmn.moves[i].id,PBMoves,:FLY)
-                scene = PokemonRegionMap_Scene.new(-1,false)
-                screen = PokemonRegionMapScreen.new(scene)
-                ret = screen.pbStartFlyScreen
-                if ret
-                  $PokemonTemp.flydata=ret
-                  return [pkmn,pkmn.moves[i].id]
-                end
-                @scene.pbStartScene(@party,
-                   (@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
-                break
-              end
-              return [pkmn,pkmn.moves[i].id]
-            end
-          else
-            break
+            return [pkmn,pkmn.moves[i].id]
           end
         end
       end

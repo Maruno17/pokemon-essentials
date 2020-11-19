@@ -1080,7 +1080,8 @@ BattleHandlers::DamageCalcUserAbility.add(:SWARM,
 
 BattleHandlers::DamageCalcUserAbility.add(:TECHNICIAN,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.index!=target.index && move.id>0 && baseDmg*mults[BASE_DMG_MULT]<=60
+    if user.index!=target.index && move && move.id != :STRUGGLE &&
+       baseDmg*mults[BASE_DMG_MULT]<=60
       mults[BASE_DMG_MULT] *= 1.5
     end
   }
@@ -1358,7 +1359,7 @@ BattleHandlers::TargetAbilityOnHit.add(:CURSEDBODY,
       regularMove = m
       break
     end
-    next if !regularMove || (regularMove.pp==0 && regularMove.totalpp>0)
+    next if !regularMove || (regularMove.pp==0 && regularMove.total_pp>0)
     next if battle.pbRandom(100)>=30
     battle.pbShowAbilitySplash(target)
     if !move.pbMoveFailedAromaVeil?(target,user,PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
@@ -2098,17 +2099,16 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
     battle.eachOtherSideBattler(battler.index) do |b|
       b.eachMove do |m|
         next if m.statusMove?
-        moveData = pbGetMoveData(m.id)
         if type1
-          moveType = moveData[MoveData::TYPE]
-          if NEWEST_BATTLE_MECHANICS && isConst?(m.id,PBMoves,:HIDDENPOWER)
+          moveType = m.type
+          if NEWEST_BATTLE_MECHANICS && m.function == "090"   # Hidden Power
             moveType = pbHiddenPower(b.pokemon)[0]
           end
           eff = PBTypes.getCombinedEffectiveness(moveType,type1,type2,type3)
           next if PBTypes.ineffective?(eff)
-          next if !PBTypes.superEffective?(eff) && moveData[MoveData::FUNCTION_CODE]!="070"   # OHKO
+          next if !PBTypes.superEffective?(eff) && m.function != "070"   # OHKO
         else
-          next if moveData[MoveData::FUNCTION_CODE]!="070"   # OHKO
+          next if m.function != "070"   # OHKO
         end
         found = true
         break
@@ -2207,33 +2207,32 @@ BattleHandlers::AbilityOnSwitchIn.add(:FOREWARN,
     forewarnMoves = []
     battle.eachOtherSideBattler(battler.index) do |b|
       b.eachMove do |m|
-        moveData = pbGetMoveData(m.id)
-        power = moveData[MoveData::BASE_DAMAGE]
-        power = 160 if ["070"].include?(moveData[MoveData::FUNCTION_CODE])    # OHKO
-        power = 150 if ["08B"].include?(moveData[MoveData::FUNCTION_CODE])    # Eruption
+        power = m.baseDamage
+        power = 160 if ["070"].include?(m.function)    # OHKO
+        power = 150 if ["08B"].include?(m.function)    # Eruption
         # Counter, Mirror Coat, Metal Burst
-        power = 120 if ["071","072","073"].include?(moveData[MoveData::FUNCTION_CODE])
+        power = 120 if ["071","072","073"].include?(m.function)
         # Sonic Boom, Dragon Rage, Night Shade, Endeavor, Psywave,
         # Return, Frustration, Crush Grip, Gyro Ball, Hidden Power,
         # Natural Gift, Trump Card, Flail, Grass Knot
         power = 80 if ["06A","06B","06D","06E","06F",
                        "089","08A","08C","08D","090",
-                       "096","097","098","09A"].include?(moveData[MoveData::FUNCTION_CODE])
+                       "096","097","098","09A"].include?(m.function)
         next if power<highestPower
         forewarnMoves = [] if power>highestPower
-        forewarnMoves.push(m.id)
+        forewarnMoves.push(m.name)
         highestPower = power
       end
     end
     if forewarnMoves.length>0
       battle.pbShowAbilitySplash(battler)
-      forewarnMoveID = forewarnMoves[battle.pbRandom(forewarnMoves.length)]
+      forewarnMoveName = forewarnMoves[battle.pbRandom(forewarnMoves.length)]
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         battle.pbDisplay(_INTL("{1} was alerted to {2}!",
-          battler.pbThis,PBMoves.getName(forewarnMoveID)))
+          battler.pbThis, forewarnMoveName))
       else
         battle.pbDisplay(_INTL("{1}'s Forewarn alerted it to {2}!",
-          battler.pbThis,PBMoves.getName(forewarnMoveID)))
+          battler.pbThis, forewarnMoveName))
       end
       battle.pbHideAbilitySplash(battler)
     end
@@ -2285,7 +2284,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:IMPOSTER,
             choice.semiInvulnerable?
     battle.pbShowAbilitySplash(battler,true)
     battle.pbHideAbilitySplash(battler)
-    battle.pbAnimation(getConst(PBMoves,:TRANSFORM),battler,choice)
+    battle.pbAnimation(:TRANSFORM,battler,choice)
     battle.scene.pbChangePokemon(battler,choice.pokemon)
     battler.pbTransform(choice)
   }

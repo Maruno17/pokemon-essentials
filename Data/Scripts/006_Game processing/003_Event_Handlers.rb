@@ -217,8 +217,5 @@ end
 
 
 
-class MoveHandlerHash < HandlerHash
-  def initialize
-    super(:PBMoves)
-  end
+class MoveHandlerHash < HandlerHash2
 end

@@ -179,7 +179,7 @@ end
 def pbLoadSpeciesTMData
   $PokemonTemp = PokemonTemp.new if !$PokemonTemp
   if !$PokemonTemp.speciesTMData
-    $PokemonTemp.speciesTMData = load_data("Data/tm.dat") || []
+    $PokemonTemp.speciesTMData = load_data("Data/tm.dat") || {}
   end
   return $PokemonTemp.speciesTMData
 end

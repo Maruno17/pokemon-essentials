@@ -287,7 +287,7 @@ class PokeBattle_AI
       abilityBlacklist = [:ANALYTIC,:SNIPER,:TINTEDLENS,:AERILATE,:PIXILATE,:REFRIGERATE]
       canCheck = true
       abilityBlacklist.each do |m|
-        next if !isConst?(move.id,PBMoves,m)
+        next if move.id != m
         canCheck = false
         break
       end
@@ -309,7 +309,7 @@ class PokeBattle_AI
       abilityBlacklist = [:FILTER,:SOLIDROCK]
       canCheck = true
       abilityBlacklist.each do |m|
-        next if !isConst?(move.id,PBMoves,m)
+        next if move.id != m
         canCheck = false
         break
       end

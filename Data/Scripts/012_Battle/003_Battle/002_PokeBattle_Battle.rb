@@ -152,7 +152,7 @@ class PokeBattle_Battle
     @battleBond        = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
     @usedInBattle      = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
     @successStates     = []
-    @lastMoveUsed      = -1
+    @lastMoveUsed      = nil
     @lastMoveUser      = -1
     @switching         = false
     @futureSight       = false
@@ -160,8 +160,8 @@ class PokeBattle_Battle
     @moldBreaker       = false
     @runCommand        = 0
     @nextPickupUse     = 0
-    if hasConst?(PBMoves,:STRUGGLE)
-      @struggle = PokeBattle_Move.pbFromPBMove(self,PBMove.new(getConst(PBMoves,:STRUGGLE)))
+    if GameData::Move.exists?(:STRUGGLE)
+      @struggle = PokeBattle_Move.pbFromPBMove(self,PBMove.new(:STRUGGLE))
     else
       @struggle = PokeBattle_Struggle.new(self,nil)
     end

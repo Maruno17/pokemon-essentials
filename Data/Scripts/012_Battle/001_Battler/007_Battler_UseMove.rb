@@ -80,7 +80,7 @@ class PokeBattle_Battler
     # Encore's effect ends if the encored move is no longer available
     if @effects[PBEffects::Encore]>0 && pbEncoredMoveIndex<0
       @effects[PBEffects::Encore]     = 0
-      @effects[PBEffects::EncoreMove] = 0
+      @effects[PBEffects::EncoreMove] = nil
     end
   end
 
@@ -96,23 +96,23 @@ class PokeBattle_Battler
       pbConfuse(_INTL("{1} became confused due to fatigue!",pbThis))
     end
     # Cancel usage of most multi-turn moves
-    @effects[PBEffects::TwoTurnAttack] = 0
+    @effects[PBEffects::TwoTurnAttack] = nil
     @effects[PBEffects::Rollout]       = 0
     @effects[PBEffects::Outrage]       = 0
     @effects[PBEffects::Uproar]        = 0
     @effects[PBEffects::Bide]          = 0
-    @currentMove = 0
+    @currentMove = nil
     # Reset counters for moves which increase them when used in succession
     @effects[PBEffects::FuryCutter]    = 0
   end
 
   def pbEndTurn(_choice)
     @lastRoundMoved = @battle.turnCount   # Done something this round
-    if @effects[PBEffects::ChoiceBand]<0 &&
+    if !@effects[PBEffects::ChoiceBand] &&
        hasActiveItem?([:CHOICEBAND,:CHOICESPECS,:CHOICESCARF])
-      if @lastMoveUsed>=0 && pbHasMove?(@lastMoveUsed)
+      if @lastMoveUsed && pbHasMove?(@lastMoveUsed)
         @effects[PBEffects::ChoiceBand] = @lastMoveUsed
-      elsif @lastRegularMoveUsed>=0 && pbHasMove?(@lastRegularMoveUsed)
+      elsif @lastRegularMoveUsed && pbHasMove?(@lastRegularMoveUsed)
         @effects[PBEffects::ChoiceBand] = @lastRegularMoveUsed
       end
     end
@@ -184,14 +184,14 @@ class PokeBattle_Battler
     end
     # Labels the move being used as "move"
     move = choice[2]
-    return if !move || move.id==0   # if move was not chosen somehow
+    return if !move   # if move was not chosen somehow
     # Try to use the move (inc. disobedience)
     @lastMoveFailed = false
     if !pbTryUseMove(choice,move,specialUsage,skipAccuracyCheck)
-      @lastMoveUsed     = -1
+      @lastMoveUsed     = nil
       @lastMoveUsedType = -1
       if !specialUsage
-        @lastRegularMoveUsed   = -1
+        @lastRegularMoveUsed   = nil
         @lastRegularMoveTarget = -1
       end
       @battle.pbGainExp   # In case self is KO'd due to confusion
@@ -200,15 +200,15 @@ class PokeBattle_Battler
       return
     end
     move = choice[2]   # In case disobedience changed the move to be used
-    return if !move || move.id==0   # if move was not chosen somehow
+    return if !move   # if move was not chosen somehow
     # Subtract PP
     if !specialUsage
       if !pbReducePP(move)
         @battle.pbDisplay(_INTL("{1} used {2}!",pbThis,move.name))
         @battle.pbDisplay(_INTL("But there was no PP left for the move!"))
-        @lastMoveUsed          = -1
+        @lastMoveUsed          = nil
         @lastMoveUsedType      = -1
-        @lastRegularMoveUsed   = -1
+        @lastRegularMoveUsed   = nil
         @lastRegularMoveTarget = -1
         @lastMoveFailed        = true
         pbCancelMoves
@@ -220,7 +220,7 @@ class PokeBattle_Battler
     if isSpecies?(:AEGISLASH) && self.ability == :STANCECHANGE
       if move.damagingMove?
         pbChangeForm(1,_INTL("{1} changed to Blade Forme!",pbThis))
-      elsif isConst?(move.id,PBMoves,:KINGSSHIELD)
+      elsif move.id == :KINGSSHIELD
         pbChangeForm(0,_INTL("{1} changed to Shield Forme!",pbThis))
       end
     end
@@ -234,13 +234,13 @@ class PokeBattle_Battler
       @effects[PBEffects::TwoTurnAttack] = move.id
       @currentMove = move.id
     else
-      @effects[PBEffects::TwoTurnAttack] = 0   # Cancel use of two-turn attack
+      @effects[PBEffects::TwoTurnAttack] = nil   # Cancel use of two-turn attack
     end
     # Add to counters for moves which increase them when used in succession
     move.pbChangeUsageCounters(self,specialUsage)
     # Charge up Metronome item
     if hasActiveItem?(:METRONOME) && !move.callsAnotherMove?
-      if @lastMoveUsed==move.id && !@lastMoveFailed
+      if @lastMoveUsed && @lastMoveUsed==move.id && !@lastMoveFailed
         @effects[PBEffects::Metronome] += 1
       else
         @effects[PBEffects::Metronome] = 0
@@ -516,7 +516,7 @@ class PokeBattle_Battler
     pbEndTurn(choice)
     # Instruct
     @battle.eachBattler do |b|
-      next if !b.effects[PBEffects::Instruct]
+      next if !b.effects[PBEffects::Instruct] || !b.lastMoveUsed
       b.effects[PBEffects::Instruct] = false
       idxMove = -1
       b.eachMoveWithIndex { |m,i| idxMove = i if m.id==b.lastMoveUsed }

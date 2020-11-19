@@ -980,11 +980,10 @@ class PokemonDebugPartyScreen
   def pbChooseMove(pkmn,text,index=0)
     moveNames = []
     for i in pkmn.moves
-      break if i.id==0
-      if i.totalpp<=0
-        moveNames.push(_INTL("{1} (PP: ---)",PBMoves.getName(i.id)))
+      if i.total_pp<=0
+        moveNames.push(_INTL("{1} (PP: ---)",i.name))
       else
-        moveNames.push(_INTL("{1} (PP: {2}/{3})",PBMoves.getName(i.id),i.pp,i.totalpp))
+        moveNames.push(_INTL("{1} (PP: {2}/{3})",i.name,i.pp,i.total_pp))
       end
     end
     return pbShowCommands(text,moveNames,index)

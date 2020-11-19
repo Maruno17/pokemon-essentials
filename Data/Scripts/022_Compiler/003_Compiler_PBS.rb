@@ -505,62 +505,56 @@ module Compiler
   # Compile move data
   #=============================================================================
   def compile_moves
-    records   = []
-    moveNames = []
-    moveDescs = []
-    maxValue = 0
-    count = 0
-    pbCompilerEachPreppedLine("PBS/moves.txt") { |line,lineno|
-      record = []
-      lineRecord = pbGetCsvRecord(line,lineno,[0,"vnssueeuuuyiss",
-         nil,nil,nil,nil,nil,PBTypes,["Physical","Special","Status"],
-         nil,nil,nil,PBTargets,nil,nil,nil
+    GameData::Move::DATA.clear
+    move_names        = []
+    move_descriptions = []
+    # Read each line of moves.txt at a time and compile it into an move
+    pbCompilerEachPreppedLine("PBS/moves.txt") { |line, line_no|
+      line = pbGetCsvRecord(line, line_no, [0, "vnssueeuuuyiss",
+         nil, nil, nil, nil, nil, PBTypes, ["Physical", "Special", "Status"],
+         nil, nil, nil, PBTargets, nil, nil, nil
       ])
-      if records[lineRecord[0]]
-        raise _INTL("Move ID number '{1}' is used twice.\r\n{2}",lineRecord[0],FileLineData.linereport)
+      move_number = line[0]
+      move_symbol = line[1].to_sym
+      if GameData::Move::DATA[move_number]
+        raise _INTL("Move ID number '{1}' is used twice.\r\n{2}", move_number, FileLineData.linereport)
+      elsif GameData::Move::DATA[move_symbol]
+        raise _INTL("Move ID '{1}' is used twice.\r\n{2}", move_symbol, FileLineData.linereport)
       end
-      if lineRecord[6]==2 && lineRecord[4]!=0
-        raise _INTL("Status moves must have a base damage of 0, use either Physical or Special.\r\n{1}",FileLineData.linereport)
+      # Sanitise data
+      if line[6] == 2 && line[4] != 0
+        raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}", line[2], FileLineData.linereport)
+      elsif line[6] != 2 && line[4] == 0
+        print _INTL("Warning: Move {1} was defined as Physical or Special but had a base damage of 0. Changing it to a Status move.\r\n{2}", line[2], FileLineData.linereport)
+        line[6] = 2
       end
-      if lineRecord[6]!=2 && lineRecord[4]==0
-        print _INTL("Warning: Physical and special moves can't have a base damage of 0, changing to a Status move.\r\n{1}",FileLineData.linereport)
-        lineRecord[6] = 2
-      end
-      record[MoveData::ID]            = lineRecord[0]
-      record[MoveData::INTERNAL_NAME] = lineRecord[1]
-      record[MoveData::NAME]          = lineRecord[2]
-      record[MoveData::FUNCTION_CODE] = lineRecord[3]
-      record[MoveData::BASE_DAMAGE]   = lineRecord[4]
-      record[MoveData::TYPE]          = lineRecord[5]
-      record[MoveData::CATEGORY]      = lineRecord[6]
-      record[MoveData::ACCURACY]      = lineRecord[7]
-      record[MoveData::TOTAL_PP]      = lineRecord[8]
-      record[MoveData::EFFECT_CHANCE] = lineRecord[9]
-      record[MoveData::TARGET]        = lineRecord[10]
-      record[MoveData::PRIORITY]      = lineRecord[11]
-      record[MoveData::FLAGS]         = lineRecord[12]
-      record[MoveData::DESCRIPTION]   = lineRecord[13]
-      maxValue = [maxValue,lineRecord[0]].max
-      count += 1
-      moveNames[lineRecord[0]] = lineRecord[2]    # Name
-      moveDescs[lineRecord[0]] = lineRecord[13]   # Description
-      records[lineRecord[0]]   = record
+      # Construct move hash
+      move_hash = {
+        :id_number     => move_number,
+        :id            => move_symbol,
+        :name          => line[2],
+        :function_code => line[3],
+        :base_damage   => line[4],
+        :type          => line[5],
+        :category      => line[6],
+        :accuracy      => line[7],
+        :total_pp      => line[8],
+        :effect_chance => line[9],
+        :target        => line[10],
+        :priority      => line[11],
+        :flags         => line[12],
+        :description   => line[13]
+      }
+      # Add move's data to records
+      GameData::Move::DATA[move_number] = GameData::Move::DATA[move_symbol] = GameData::Move.new(move_hash)
+      move_names[move_number]        = move_hash[:name]
+      move_descriptions[move_number] = move_hash[:description]
     }
-    save_data(records,"Data/moves.dat")
-    MessageTypes.setMessages(MessageTypes::Moves,moveNames)
-    MessageTypes.setMessages(MessageTypes::MoveDescriptions,moveDescs)
-    code = "class PBMoves\r\n"
-    for rec in records
-      code += "#{rec[MoveData::INTERNAL_NAME]}=#{rec[MoveData::ID]}\r\n" if rec
-    end
-    code += "def self.getName(id)\r\n"
-    code += "id=getID(PBMoves,id)\r\n"
-    code += "return pbGetMessage(MessageTypes::Moves,id); end\r\n"
-    code += "def self.getCount; return #{count}; end\r\n"
-    code += "def self.maxValue; return #{maxValue}; end\r\n"
-    code += "end\r\n"
-    eval(code, TOPLEVEL_BINDING)
-    pbAddScript(code,"PBMoves")
+    # Save all data
+    GameData::Move.save
+    MessageTypes.setMessages(MessageTypes::Moves, move_names)
+    MessageTypes.setMessages(MessageTypes::MoveDescriptions, move_descriptions)
+    Graphics.update
   end
 
   #=============================================================================
@@ -598,13 +592,13 @@ module Compiler
     for i in 0...pbanims.length
       next if !pbanims[i]
       if pbanims[i].name[/^OppMove\:\s*(.*)$/]
-        if hasConst?(PBMoves,$~[1])
-          moveid = PBMoves.const_get($~[1])
+        if GameData::Move.exists?($~[1])
+          moveid = GameData::Move.get($~[1]).id_number
           move2anim[1][moveid] = i
         end
       elsif pbanims[i].name[/^Move\:\s*(.*)$/]
-        if hasConst?(PBMoves,$~[1])
-          moveid = PBMoves.const_get($~[1])
+        if GameData::Move.exists?($~[1])
+          moveid = GameData::Move.get($~[1]).id_number
           move2anim[0][moveid] = i
         end
       end
@@ -1055,7 +1049,7 @@ module Compiler
     lineno = 1
     havesection = false
     sectionname = nil
-    sections    = []
+    sections    = {}
     if safeExists?("PBS/tm.txt")
       f = File.open("PBS/tm.txt","rb")
       FileLineData.file = "PBS/tm.txt"
@@ -1070,7 +1064,7 @@ module Compiler
             if sections[sectionname]
               raise _INTL("TM section [{1}] is defined twice.\r\n{2}",sectionname,FileLineData.linereport)
             end
-            sections[sectionname] = WordArray.new
+            sections[sectionname] = []
             havesection = true
           else
             if sectionname==nil
@@ -1107,8 +1101,9 @@ module Compiler
           value = value.split(",")
           species = parseSpecies(key)
           moves = []
-          for i in 0...[4,value.length].min
-            moves.push((parseMove(value[i]) rescue nil))
+          for i in 0...[Pokemon::MAX_MOVES,value.length].min
+            move = parseMove(value[i], true)
+            moves.push(move) if move
           end
           moves.compact!
           sections[species] = moves if moves.length>0
@@ -1316,7 +1311,7 @@ module Compiler
             raise _INTL("Bad level: {1} (must be 1-{2}).\r\n{3}",record[1],mLevel,FileLineData.linereport)
           end
         when "Moves"
-          record = [record] if record.is_a?(Integer)
+          record = [record] if record.is_a?(Symbol)
           record.compact!
         when "Ability"
           if record>5
@@ -1407,8 +1402,8 @@ module Compiler
           pokemonindex += 1
           trainers[trainerindex][3][pokemonindex] = []
           record = pbGetCsvRecord(line,lineno,
-             [0,"evEEEEEUEUBEUUSBU",PBSpecies,nil,Item,PBMoves,PBMoves,PBMoves,
-                                    PBMoves,nil,{"M"=>0,"m"=>0,"Male"=>0,"male"=>0,
+             [0,"evEEEEEUEUBEUUSBU",PBSpecies,nil,:Item,:Move,:Move,:Move,:Move,
+                                    nil,{"M"=>0,"m"=>0,"Male"=>0,"male"=>0,
                                     "0"=>0,"F"=>1,"f"=>1,"Female"=>1,"female"=>1,
                                     "1"=>1},nil,nil,PBNatures,nil,nil,nil,nil,nil])
           # Error checking (the +3 is for properties after the four moves)

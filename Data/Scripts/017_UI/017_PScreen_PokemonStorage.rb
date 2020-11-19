@@ -1839,11 +1839,10 @@ class PokemonStorageScreen
   def pbChooseMove(pkmn,helptext,index=0)
     movenames = []
     for i in pkmn.moves
-      break if i.id==0
-      if i.totalpp<=0
-        movenames.push(_INTL("{1} (PP: ---)",PBMoves.getName(i.id)))
+      if i.total_pp<=0
+        movenames.push(_INTL("{1} (PP: ---)",i.name))
       else
-        movenames.push(_INTL("{1} (PP: {2}/{3})",PBMoves.getName(i.id),i.pp,i.totalpp))
+        movenames.push(_INTL("{1} (PP: {2}/{3})",i.name,i.pp,i.total_pp))
       end
     end
     return @scene.pbShowCommands(helptext,movenames,index)

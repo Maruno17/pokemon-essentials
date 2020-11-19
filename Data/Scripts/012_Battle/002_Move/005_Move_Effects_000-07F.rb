@@ -32,7 +32,7 @@ end
 #===============================================================================
 class PokeBattle_Move_003 < PokeBattle_SleepMove
   def pbMoveFailed?(user,targets)
-    if NEWEST_BATTLE_MECHANICS && isConst?(@id,PBMoves,:DARKVOID)
+    if NEWEST_BATTLE_MECHANICS && @id == :DARKVOID
       if !user.isSpecies?(:DARKRAI) &&
          !isConst?(user.effects[PBEffects::TransformSpecies],PBSpecies,:DARKRAI)
         @battle.pbDisplay(_INTL("But {1} can't use the move!",user.pbThis))
@@ -45,7 +45,7 @@ class PokeBattle_Move_003 < PokeBattle_SleepMove
   def pbEndOfMoveUsageEffect(user,targets,numHits,switchedBattlers)
     return if numHits==0
     return if user.fainted? || user.effects[PBEffects::Transform]
-    return if !isConst?(@id,PBMoves,:RELICSONG)
+    return if @id != :RELICSONG
     return if !user.isSpecies?(:MELOETTA)
     return if user.hasActiveAbility?(:SHEERFORCE) && @addlEffect>0
     newForm = (oldForm+1)%2
@@ -108,12 +108,12 @@ end
 class PokeBattle_Move_007 < PokeBattle_ParalysisMove
   def tramplesMinimize?(param=1)
     # Perfect accuracy and double damage (for Body Slam only)
-    return NEWEST_BATTLE_MECHANICS if isConst?(@id,PBMoves,:BODYSLAM)
+    return NEWEST_BATTLE_MECHANICS if @id == :BODYSLAM
     return super
   end
 
   def pbFailsAgainstTarget?(user,target)
-    if isConst?(@id,PBMoves,:THUNDERWAVE) && PBTypes.ineffective?(target.damageState.typeMod)
+    if @id == :THUNDERWAVE && PBTypes.ineffective?(target.damageState.typeMod)
       @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
       return true
     end
@@ -242,7 +242,7 @@ end
 #===============================================================================
 class PokeBattle_Move_010 < PokeBattle_FlinchMove
   def tramplesMinimize?(param=1)
-    return super if isConst?(@id,PBMoves,:DRAGONRUSH) && !NEWEST_BATTLE_MECHANICS
+    return super if @id == :DRAGONRUSH && !NEWEST_BATTLE_MECHANICS
     return true if param==1 && NEWEST_BATTLE_MECHANICS   # Perfect accuracy
     return true if param==2   # Double damage
     return super
@@ -492,9 +492,9 @@ class PokeBattle_Move_019 < PokeBattle_Move
 
   def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
     super
-    if isConst?(@id,PBMoves,:AROMATHERAPY)
+    if @id == :AROMATHERAPY
       @battle.pbDisplay(_INTL("A soothing aroma wafted through the area!"))
-    elsif isConst?(@id,PBMoves,:HEALBELL)
+    elsif @id == :HEALBELL
       @battle.pbDisplay(_INTL("A bell chimed!"))
     end
   end
@@ -1217,7 +1217,7 @@ class PokeBattle_Move_044 < PokeBattle_TargetStatDownMove
   end
 
   def pbBaseDamage(baseDmg,user,target)
-    if isConst?(@id,PBMoves,:BULLDOZE) && @battle.field.terrain==PBBattleTerrains::Grassy
+    if @id == :BULLDOZE && @battle.field.terrain==PBBattleTerrains::Grassy
       baseDmg = (baseDmg/2.0).round
     end
     return baseDmg
@@ -1406,7 +1406,7 @@ class PokeBattle_Move_04D < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
     inc = 2
-    inc = 1 if isConst?(@id,PBMoves,:STRINGSHOT) && !NEWEST_BATTLE_MECHANICS
+    inc = 1 if @id == :STRINGSHOT && !NEWEST_BATTLE_MECHANICS
     @statDown = [PBStats::SPEED,inc]
   end
 end
@@ -1705,11 +1705,11 @@ class PokeBattle_Move_05C < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    lastMoveData = pbGetMoveData(target.lastRegularMoveUsed)
-    if target.lastRegularMoveUsed<=0 ||
+    lastMoveData = GameData::Move.try_get(target.lastRegularMoveUsed)
+    if !lastMoveData ||
        user.pbHasMove?(target.lastRegularMoveUsed) ||
-       @moveBlacklist.include?(lastMoveData[MoveData::FUNCTION_CODE]) ||
-       isConst?(lastMoveData[MoveData::TYPE],PBTypes,:SHADOW)
+       @moveBlacklist.include?(lastMoveData.function_code) ||
+       isConst?(lastMoveData.type, PBTypes,:SHADOW)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1721,8 +1721,7 @@ class PokeBattle_Move_05C < PokeBattle_Move
       next if m.id!=@id
       newMove = PBMove.new(target.lastRegularMoveUsed)
       user.moves[i] = PokeBattle_Move.pbFromPBMove(@battle,newMove)
-      @battle.pbDisplay(_INTL("{1} learned {2}!",user.pbThis,
-         PBMoves.getName(target.lastRegularMoveUsed)))
+      @battle.pbDisplay(_INTL("{1} learned {2}!",user.pbThis,newMove.name))
       user.pbCheckFormOnMovesetChange
       break
     end
@@ -1756,11 +1755,11 @@ class PokeBattle_Move_05D < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    lastMoveData = pbGetMoveData(target.lastRegularMoveUsed)
-    if target.lastRegularMoveUsed<=0 ||
+    lastMoveData = GameData::Move.try_get(target.lastRegularMoveUsed)
+    if !lastMoveData ||
        user.pbHasMove?(target.lastRegularMoveUsed) ||
-       @moveBlacklist.include?(lastMoveData[MoveData::FUNCTION_CODE]) ||
-       isConst?(lastMoveData[MoveData::TYPE],PBTypes,:SHADOW)
+       @moveBlacklist.include?(lastMoveData.function_code) ||
+       isConst?(lastMoveData.type, PBTypes,:SHADOW)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1773,8 +1772,7 @@ class PokeBattle_Move_05D < PokeBattle_Move
       newMove = PBMove.new(target.lastRegularMoveUsed)
       user.pokemon.moves[i] = newMove
       user.moves[i] = PokeBattle_Move.pbFromPBMove(@battle,newMove)
-      @battle.pbDisplay(_INTL("{1} learned {2}!",user.pbThis,
-         PBMoves.getName(target.lastRegularMoveUsed)))
+      @battle.pbDisplay(_INTL("{1} learned {2}!",user.pbThis,newMove.name))
       user.pbCheckFormOnMovesetChange
       break
     end
@@ -1835,9 +1833,8 @@ class PokeBattle_Move_05F < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    if target.lastMoveUsed<=0 ||
-       target.lastMoveUsedType<0 ||
-       PBTypes.isPseudoType?(pbGetMoveData(target.lastMoveUsed,MoveData::TYPE))
+    if !target.lastMoveUsed || target.lastMoveUsedType < 0 ||
+       PBTypes.isPseudoType?(GameData::Move.get(target.lastMoveUsed).type)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2347,7 +2344,7 @@ end
 # OHKO. Accuracy increases by difference between levels of user and target.
 #===============================================================================
 class PokeBattle_Move_070 < PokeBattle_FixedDamageMove
-  def hitsDiggingTargets?; return isConst?(@id,PBMoves,:FISSURE); end
+  def hitsDiggingTargets?; return @id == :FISSURE; end
 
   def pbFailsAgainstTarget?(user,target)
     if target.level>user.level
@@ -2375,8 +2372,7 @@ class PokeBattle_Move_070 < PokeBattle_FixedDamageMove
 
   def pbAccuracyCheck(user,target)
     acc = @accuracy+user.level-target.level
-    acc -= 10 if NEWEST_BATTLE_MECHANICS && isConst?(@id,PBMoves,:SHEERCOLD) &&
-                                            !user.pbHasType?(:ICE)
+    acc -= 10 if NEWEST_BATTLE_MECHANICS && @id == :SHEERCOLD && !user.pbHasType?(:ICE)
     return @battle.pbRandom(100)<acc
   end
 

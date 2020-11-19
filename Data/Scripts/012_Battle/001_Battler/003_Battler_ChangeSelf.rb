@@ -94,9 +94,9 @@ class PokeBattle_Battler
 
   def pbReducePP(move)
     return true if usingMultiTurnAttack?
-    return true if move.pp<0         # Don't reduce PP for special calls of moves
-    return true if move.totalpp<=0   # Infinite PP, can always be used
-    return false if move.pp==0       # Ran out of PP, couldn't reduce
+    return true if move.pp<0          # Don't reduce PP for special calls of moves
+    return true if move.total_pp<=0   # Infinite PP, can always be used
+    return false if move.pp==0        # Ran out of PP, couldn't reduce
     pbSetPP(move,move.pp-1) if move.pp>0
     return true
   end
@@ -284,11 +284,11 @@ class PokeBattle_Battler
     @moves.clear
     target.moves.each_with_index do |m,i|
       @moves[i] = PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(m.id))
-      @moves[i].pp      = 5
-      @moves[i].totalpp = 5
+      @moves[i].pp       = 5
+      @moves[i].total_pp = 5
     end
     @effects[PBEffects::Disable]      = 0
-    @effects[PBEffects::DisableMove]  = 0
+    @effects[PBEffects::DisableMove]  = nil
     @effects[PBEffects::WeightChange] = target.effects[PBEffects::WeightChange]
     @battle.scene.pbRefreshOne(@index)
     @battle.pbDisplay(_INTL("{1} transformed into {2}!",pbThis,target.pbThis(true)))

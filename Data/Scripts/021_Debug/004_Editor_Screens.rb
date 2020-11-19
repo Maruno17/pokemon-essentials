@@ -694,7 +694,7 @@ def pbItemEditor
             itm.field_use,
             itm.battle_use,
             itm.type,
-            itm.move || 0
+            itm.move
           ]
           if pbPropertyList(itm.id.to_s, data, items, true)
             # Construct item hash
@@ -709,7 +709,7 @@ def pbItemEditor
               :field_use   => data[6],
               :battle_use  => data[7],
               :type        => data[8],
-              :move        => (data[9] > 0) ? data[9] : nil
+              :move        => data[9]
             }
             # Add item's data to records
             GameData::Item::DATA[itm.id_number] = GameData::Item::DATA[itm.id] = GameData::Item.new(item_hash)
@@ -938,7 +938,7 @@ def pbPokemonEditor
           movelist.sort! { |a,b| (a[0]==b[0]) ? a[2]<=>b[2] : a[0]<=>b[0] }
           originalEggMoves = pbGetSpeciesEggMoves(selection)
           eggmovelist = []
-          originalEggMoves.each { |m| eggmovelist.push(m) if m!=0 }
+          originalEggMoves.each { |m| eggmovelist.push(m) }
           regionallist = []
           for i in 0...regionalDexes.length
             regionallist.push(regionalDexes[i][selection])
@@ -1162,12 +1162,12 @@ def pbRegionalDexEditor(dex)
     refreshlist = false
     cmd = pbCommands3(cmdwin,commands,-1,cmd[1],true)
     case cmd[0]
-    when 1   # Swap move up
+    when 1   # Swap entry up
       if cmd[1]<tdex.length-1
         tdex[cmd[1]+1],tdex[cmd[1]] = tdex[cmd[1]],tdex[cmd[1]+1]
         refreshlist = true
       end
-     when 2   # Swap move down
+     when 2   # Swap entry down
       if cmd[1]>0
         tdex[cmd[1]-1],tdex[cmd[1]] = tdex[cmd[1]],tdex[cmd[1]-1]
         refreshlist = true

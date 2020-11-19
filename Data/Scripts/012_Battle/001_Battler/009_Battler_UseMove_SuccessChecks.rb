@@ -41,19 +41,19 @@ class PokeBattle_Battler
       return false
     end
     # Choice Band
-    if @effects[PBEffects::ChoiceBand]>=0
+    if @effects[PBEffects::ChoiceBand]
       if hasActiveItem?([:CHOICEBAND,:CHOICESPECS,:CHOICESCARF]) &&
          pbHasMove?(@effects[PBEffects::ChoiceBand])
         if move.id!=@effects[PBEffects::ChoiceBand]
           if showMessages
             msg = _INTL("{1} allows the use of only {2}!",itemName,
-               PBMoves.getName(@effects[PBEffects::ChoiceBand]))
+               GameData::Move.get(@effects[PBEffects::ChoiceBand]).name)
             (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
           end
           return false
         end
       else
-        @effects[PBEffects::ChoiceBand] = -1
+        @effects[PBEffects::ChoiceBand] = nil
       end
     end
     # Taunt
@@ -66,7 +66,7 @@ class PokeBattle_Battler
     end
     # Torment
     if @effects[PBEffects::Torment] && !@effects[PBEffects::Instructed] &&
-       move.id==@lastMoveUsed && move.id!=@battle.struggle.id
+       @lastMoveUsed && move.id==@lastMoveUsed && move.id!=@battle.struggle.id
       if showMessages
         msg = _INTL("{1} can't use the same move twice in a row due to the torment!",pbThis)
         (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
@@ -138,7 +138,7 @@ class PokeBattle_Battler
       otherMoves = []
       eachMoveWithIndex do |_m,i|
         next if i==choice[1]
-        otherMoves[otherMoves.length] = i if @battle.pbCanChooseMove?(@index,i,false)
+        otherMoves.push(i) if @battle.pbCanChooseMove?(@index,i,false)
       end
       return false if otherMoves.length==0   # No other move to use; do nothing
       newChoice = otherMoves[@battle.pbRandom(otherMoves.length)]
@@ -291,7 +291,7 @@ class PokeBattle_Battler
     typeMod = move.pbCalcTypeMod(move.calcType,user,target)
     target.damageState.typeMod = typeMod
     # Two-turn attacks can't fail here in the charging turn
-    return true if user.effects[PBEffects::TwoTurnAttack]>0
+    return true if user.effects[PBEffects::TwoTurnAttack]
     # Move-specific failures
     return false if move.pbFailsAgainstTarget?(user,target)
     # Immunity to priority moves because of Psychic Terrain
@@ -479,7 +479,7 @@ class PokeBattle_Battler
   #=============================================================================
   def pbSuccessCheckPerHit(move,user,target,skipAccuracyCheck)
     # Two-turn attacks can't fail here in the charging turn
-    return true if user.effects[PBEffects::TwoTurnAttack]>0
+    return true if user.effects[PBEffects::TwoTurnAttack]
     # Lock-On
     return true if user.effects[PBEffects::LockOn]>0 &&
                    user.effects[PBEffects::LockOnPos]==target.index
@@ -495,7 +495,7 @@ class PokeBattle_Battler
     hitsInvul = true if move.function=="09C"
     if !hitsInvul
       # Semi-invulnerable moves
-      if target.effects[PBEffects::TwoTurnAttack]>0
+      if target.effects[PBEffects::TwoTurnAttack]
         if target.inTwoTurnAttack?("0C9","0CC","0CE")   # Fly, Bounce, Sky Drop
           miss = true if !move.hitsFlyingTargets?
         elsif target.inTwoTurnAttack?("0CA")            # Dig
@@ -529,7 +529,7 @@ class PokeBattle_Battler
     tar = move.pbTarget(user)
     if PBTargets.multipleTargets?(tar)
       @battle.pbDisplay(_INTL("{1} avoided the attack!",target.pbThis))
-    elsif target.effects[PBEffects::TwoTurnAttack]>0
+    elsif target.effects[PBEffects::TwoTurnAttack]
       @battle.pbDisplay(_INTL("{1} avoided the attack!",target.pbThis))
     elsif !move.pbMissMessage(user,target)
       @battle.pbDisplay(_INTL("{1}'s attack missed!",user.pbThis))

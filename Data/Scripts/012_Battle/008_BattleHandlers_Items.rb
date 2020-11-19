@@ -309,7 +309,7 @@ BattleHandlers::StatusCureItem.add(:MENTALHERB,
     battler.effects[PBEffects::Taunt]      = 0
     battle.pbDisplay(_INTL("{1}'s encore ended!",battler.pbThis)) if battler.effects[PBEffects::Encore]>0
     battler.effects[PBEffects::Encore]     = 0
-    battler.effects[PBEffects::EncoreMove] = 0
+    battler.effects[PBEffects::EncoreMove] = nil
     battle.pbDisplay(_INTL("{1}'s torment wore off!",battler.pbThis)) if battler.effects[PBEffects::Torment]
     battler.effects[PBEffects::Torment]    = false
     battle.pbDisplay(_INTL("{1} is no longer disabled!",battler.pbThis)) if battler.effects[PBEffects::Disable]>0
@@ -1288,8 +1288,7 @@ BattleHandlers::EndOfMoveItem.add(:LEPPABERRY,
     next false if !forced && battle.pbCheckOpposingAbility(:UNNERVE,battler.index)
     found = []
     battler.pokemon.moves.each_with_index do |m,i|
-      next if !m || m.id==0
-      next if m.totalpp<=0 || m.pp==m.totalpp
+      next if m.total_pp<=0 || m.pp==m.total_pp
       next if !forced && m.pp>0
       found.push(i)
     end
@@ -1300,9 +1299,9 @@ BattleHandlers::EndOfMoveItem.add(:LEPPABERRY,
     choice = found[battle.pbRandom(found.length)]
     pkmnMove = battler.pokemon.moves[choice]
     pkmnMove.pp += 10
-    pkmnMove.pp = pkmnMove.totalpp if pkmnMove.pp>pkmnMove.totalpp
+    pkmnMove.pp = pkmnMove.total_pp if pkmnMove.pp>pkmnMove.total_pp
     battler.moves[choice].pp = pkmnMove.pp
-    moveName = PBMoves.getName(pkmnMove.id)
+    moveName = pkmnMove.name
     if forced
       battle.pbDisplay(_INTL("{1} restored its {2}'s PP.",battler.pbThis,moveName))
     else

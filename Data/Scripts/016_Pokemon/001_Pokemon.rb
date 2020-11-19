@@ -103,6 +103,8 @@ class Pokemon
   EV_STAT_LIMIT = 252
   # Maximum length a Pokémon's nickname can be
   MAX_NAME_SIZE = 10
+  # Maximum number of moves a Pokémon can know at once
+  MAX_MOVES     = 4
 
   #=============================================================================
   # Ownership, obtained information
@@ -495,18 +497,15 @@ class Pokemon
 
   # @return [Integer] the number of moves known by the Pokémon
   def numMoves
-    ret = 0
-    @moves.each { |m| ret += 1 if m && m.id != 0 }
-    return ret
+    return @moves.length
   end
 
   # @param move [Integer, Symbol, String] ID of the move to check
   # @return [Boolean] whether the Pokémon knows the given move
-  def hasMove?(move)
-    move = getID(PBMoves, move)
-    return false if !move || move <= 0
-    @moves.each { |m| return true if m && m.id == move }
-    return false
+  def hasMove?(move_id)
+    move_data = GameData::Move.try_get(move_id)
+    return false if !move_data
+    return @moves.any? { |m| m.id == move_data.id }
   end
   alias knowsMove? hasMove?
 
@@ -518,101 +517,79 @@ class Pokemon
 
   # Sets this Pokémon's movelist to the default movelist it originally had.
   def resetMoves
-    lvl = self.level
-    fullMoveList = self.getMoveList
-    moveList = []
-    fullMoveList.each { |m| moveList.push(m[1]) if m[0] <= lvl }
-    moveList = moveList.reverse
-    moveList |= []   # Remove duplicates
-    moveList = moveList.reverse
-    listend = moveList.length - 4
-    listend = 0 if listend < 0
-    j = 0
-    for i in listend...listend+4
-      moveid = (i >= moveList.length) ? 0 : moveList[i]
-      @moves[j] = PBMove.new(moveid)
-      j += 1
+    this_level = self.level
+    # Find all level-up moves that self could have learned
+    moveset = self.getMoveList
+    knowable_moves = []
+    moveset.each { |m| knowable_moves.push(m[1]) if m[0] <= this_level }
+    # Remove duplicates (retaining the latest copy of each move)
+    knowable_moves = knowable_moves.reverse
+    knowable_moves |= []
+    knowable_moves = knowable_moves.reverse
+    # Add all moves
+    @moves.clear
+    first_move_index = knowable_moves.length - MAX_MOVES
+    first_move_index = 0 if first_move_index < 0
+    for i in first_move_index...knowable_moves.length
+      @moves.push(PBMove.new(knowable_moves[i]))
     end
   end
 
   # Silently learns the given move. Will erase the first known move if it has to.
-  # @param move [Integer, Symbol, String] ID of the move to learn
-  def pbLearnMove(move)
-    move = getID(PBMoves, move)
-    return if move <= 0
-    for i in 0...4   # Already knows move, relocate it to the end of the list
-      next if @moves[i].id != move
-      j = i + 1
-      while j < 4
-        break if @moves[j].id == 0
-        tmp = @moves[j]
-        @moves[j] = @moves[j - 1]
-        @moves[j - 1] = tmp
-        j += 1
-      end
+  # @param move_id [Integer, Symbol, String] ID of the move to learn
+  def pbLearnMove(move_id)
+    move_data = GameData::Move.try_get(move_id)
+    return if !move_data
+    # Check if self already knows the move; if so, move it to the end of the array
+    @moves.each_with_index do |m, i|
+      next if m.id != move_data.id
+      @moves.push(m)
+      @moves.delete_at(i)
       return
     end
-    for i in 0...4   # Has empty move slot, put move in there
-      next if @moves[i].id != 0
-      @moves[i] = PBMove.new(move)
-      return
-    end
-    # Already knows 4 moves, forget the first move and learn the new move
-    @moves[0] = @moves[1]
-    @moves[1] = @moves[2]
-    @moves[2] = @moves[3]
-    @moves[3] = PBMove.new(move)
+    # Move is not already known; learn it
+    @moves.push(PBMove.new(move_data.id))
+    # Delete the first known move if self now knows more moves than it should
+    @moves.shift if numMoves > MAX_MOVES
   end
 
   # Deletes the given move from the Pokémon.
-  # @param move [Integer, Symbol, String] ID of the move to delete
-  def pbDeleteMove(move)
-    move = getID(PBMoves,move)
-    return if !move || move <= 0
-    newMoves = []
-    @moves.each { |m| newMoves.push(m) if m && m.id != move }
-    newMoves.push(PBMove.new(0))
-    for i in 0...4
-      @moves[i] = newMoves[i]
-    end
+  # @param move_id [Integer, Symbol, String] ID of the move to delete
+  def pbDeleteMove(move_id)
+    move_data = GameData::Move.try_get(move_id)
+    return if !move_data
+    @moves.delete_if { |m| m.id == move_data.id }
   end
 
   # Deletes the move at the given index from the Pokémon.
   # @param index [Integer] index of the move to be deleted
   def pbDeleteMoveAtIndex(index)
-    newMoves = []
-    @moves.each_with_index { |m, i| newMoves.push(m) if m && i != index }
-    newMoves.push(PBMove.new(0))
-    for i in 0...4
-      @moves[i] = newMoves[i]
-    end
+    @moves.delete_at(index)
   end
 
   # Deletes all moves from the Pokémon.
   def pbDeleteAllMoves
-    for i in 0...4
-      @moves[i] = PBMove.new(0)
-    end
+    @moves = []
   end
 
   # Copies currently known moves into a separate array, for Move Relearner.
   def pbRecordFirstMoves
     @firstmoves = []
-    @moves.each { |m| @firstmoves.push(m.id) if m && m.id > 0 }
+    @moves.each { |m| @firstmoves.push(m.id) }
   end
 
   # Adds a move to this Pokémon's first moves.
-  # @param move [Integer, Symbol, String] ID of the move to add
-  def pbAddFirstMove(move)
-    move = getID(PBMoves, move)
-    @firstmoves.push(move) if move > 0 && !@firstmoves.include?(move)
+  # @param move_id [Integer, Symbol, String] ID of the move to add
+  def pbAddFirstMove(move_id)
+    move_data = GameData::Move.try_get(move_id)
+    @firstmoves.push(move_data.id) if move_data && !@firstmoves.include?(move_data.id)
   end
 
   # Removes a move from this Pokémon's first moves.
-  # @param move [Integer, Symbol, String] ID of the move to remove
-  def pbRemoveFirstMove(move)
-    move = getID(PBMoves, move)
-    @firstmoves.delete(move) if move > 0
+  # @param move_id [Integer, Symbol, String] ID of the move to remove
+  def pbRemoveFirstMove(move_id)
+    move_data = GameData::Move.try_get(move_id)
+    @firstmoves.delete(move_data.id) if move_data
   end
 
   # Clears this Pokémon's first moves.
@@ -622,8 +599,8 @@ class Pokemon
 
   # @param move [Integer, Symbol, String] ID of the move to check
   # @return [Boolean] whether the Pokémon is compatible with the given move
-  def compatibleWithMove?(move)
-    return pbSpeciesCompatible?(self.fSpecies, move)
+  def compatibleWithMove?(move_id)
+    return pbSpeciesCompatible?(self.fSpecies, move_id)
   end
 
   #=============================================================================
@@ -830,9 +807,9 @@ class Pokemon
   def healPP(move_index = -1)
     return if egg?
     if move_index >= 0
-      @moves[move_index].pp = @moves[move_index].totalpp
+      @moves[move_index].pp = @moves[move_index].total_pp
     else
-      @moves.each { |m| m.pp = m.totalpp }
+      @moves.each { |m| m.pp = m.total_pp }
     end
   end
 
@@ -1107,12 +1084,6 @@ class Pokemon
     calcStats
     @hp           = @totalhp
     @happiness    = pbGetSpeciesData(@species, formSimple, SpeciesData::HAPPINESS)
-    if withMoves
-      self.resetMoves
-    else
-      for i in 0...4
-        @moves[i] = PBMove.new(0)
-      end
-    end
+    self.resetMoves if withMoves
   end
 end

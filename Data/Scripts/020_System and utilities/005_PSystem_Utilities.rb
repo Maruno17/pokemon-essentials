@@ -982,28 +982,24 @@ def pbTextEntry(helptext,minlength,maxlength,variableNumber)
   $game_map.need_refresh = true if $game_map
 end
 
-def pbMoveTutorAnnotations(move,movelist=nil)
+def pbMoveTutorAnnotations(move, movelist = nil)
   ret = []
-  for i in 0...6
-    ret[i] = nil
-    next if i>=$Trainer.party.length
-    found = false
-    for j in 0...4
-      if !$Trainer.party[i].egg? && $Trainer.party[i].moves[j].id==move
-        ret[i] = _INTL("LEARNED")
-        found = true
-      end
-    end
-    next if found
-    species = $Trainer.party[i].species
-    if !$Trainer.party[i].egg? && movelist && movelist.any? { |j| j==species }
-      # Checked data from movelist
-      ret[i] = _INTL("ABLE")
-    elsif !$Trainer.party[i].egg? && $Trainer.party[i].compatibleWithMove?(move)
-      # Checked data from PBS/tm.txt
-      ret[i] = _INTL("ABLE")
-    else
+  $Trainer.party.each_with_index do |pkmn, i|
+    if pkmn.egg?
       ret[i] = _INTL("NOT ABLE")
+    elsif pkmn.hasMove?(move)
+      ret[i] = _INTL("LEARNED")
+    else
+      species = pkmn.species
+      if movelist && movelist.any? { |j| j == species }
+        # Checked data from movelist given in parameter
+        ret[i] = _INTL("ABLE")
+      elsif pkmn.compatibleWithMove?(move)
+        # Checked data from PBS/tm.txt
+        ret[i] = _INTL("ABLE")
+      else
+        ret[i] = _INTL("NOT ABLE")
+      end
     end
   end
   return ret
@@ -1011,14 +1007,14 @@ end
 
 def pbMoveTutorChoose(move,movelist=nil,bymachine=false)
   ret = false
-  move = getID(PBMoves,move)
+  move = GameData::Move.get(move).id
   if movelist!=nil && movelist.is_a?(Array)
     for i in 0...movelist.length
-      movelist[i] = getID(PBSpecies,movelist[i])
+      movelist[i] = GameData::Move.get(movelist[i]).id
     end
   end
   pbFadeOutIn {
-    movename = PBMoves.getName(move)
+    movename = GameData::Move.get(move).name
     annot = pbMoveTutorAnnotations(move,movelist)
     scene = PokemonParty_Scene.new
     screen = PokemonPartyScreen.new(scene,$Trainer.party)
@@ -1053,11 +1049,11 @@ def pbChooseMove(pokemon,variableNumber,nameVarNumber)
   pbFadeOutIn {
     scene = PokemonSummary_Scene.new
     screen = PokemonSummaryScreen.new(scene)
-    ret = screen.pbStartForgetScreen([pokemon],0,0)
+    ret = screen.pbStartForgetScreen([pokemon],0,nil)
   }
   $game_variables[variableNumber] = ret
   if ret>=0
-    $game_variables[nameVarNumber] = PBMoves.getName(pokemon.moves[ret].id)
+    $game_variables[nameVarNumber] = pokemon.moves[ret].name
   else
     $game_variables[nameVarNumber] = ""
   end

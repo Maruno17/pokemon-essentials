@@ -29,7 +29,7 @@ class PokeBattle_Move
   # Is false if Power Herb or another effect lets a two turn move charge and
   # attack in the same turn.
   # user.effects[PBEffects::TwoTurnAttack] is set to the move's ID during the
-  # charging turn, and is 0 during the attack turn.
+  # charging turn, and is nil during the attack turn.
   def pbIsChargingTurn?(user); return false; end
   def pbDamagingMove?; return damagingMove?; end
 

@@ -246,11 +246,11 @@ end
 # Restore PP
 #===============================================================================
 def pbRestorePP(pkmn,idxMove,pp)
-  return 0 if !pkmn.moves[idxMove] || pkmn.moves[idxMove].id==0
-  return 0 if pkmn.moves[idxMove].totalpp<=0
+  return 0 if !pkmn.moves[idxMove] || !pkmn.moves[idxMove].id
+  return 0 if pkmn.moves[idxMove].total_pp<=0
   oldpp = pkmn.moves[idxMove].pp
   newpp = pkmn.moves[idxMove].pp+pp
-  newpp = pkmn.moves[idxMove].totalpp if newpp>pkmn.moves[idxMove].totalpp
+  newpp = pkmn.moves[idxMove].total_pp if newpp>pkmn.moves[idxMove].total_pp
   pkmn.moves[idxMove].pp = newpp
   return newpp-oldpp
 end
@@ -407,7 +407,7 @@ end
 #===============================================================================
 def pbLearnMove(pkmn,move,ignoreifknown=false,bymachine=false,&block)
   return false if !pkmn
-  movename = PBMoves.getName(move)
+  move = GameData::Move.get(move).id
   if pkmn.egg? && !$DEBUG
     pbMessage(_INTL("Eggs can't be taught any moves."),&block)
     return false
@@ -417,11 +417,12 @@ def pbLearnMove(pkmn,move,ignoreifknown=false,bymachine=false,&block)
     return false
   end
   pkmnname = pkmn.name
+  movename = GameData::Move.get(move).name
   if pkmn.hasMove?(move)
     pbMessage(_INTL("{1} already knows {2}.",pkmnname,movename),&block) if !ignoreifknown
     return false
   end
-  if pkmn.numMoves<4
+  if pkmn.numMoves<Pokemon::MAX_MOVES
     pkmn.pbLearnMove(move)
     pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]",pkmnname,movename),&block)
     return true
@@ -431,11 +432,11 @@ def pbLearnMove(pkmn,move,ignoreifknown=false,bymachine=false,&block)
     pbMessage(_INTL("Please choose a move that will be replaced with {1}.",movename),&block)
     forgetmove = pbForgetMove(pkmn,move)
     if forgetmove>=0
-      oldmovename = PBMoves.getName(pkmn.moves[forgetmove].id)
+      oldmovename = pkmn.moves[forgetmove].name
       oldmovepp   = pkmn.moves[forgetmove].pp
       pkmn.moves[forgetmove] = PBMove.new(move)   # Replaces current/total PP
       if bymachine && !NEWEST_BATTLE_MECHANICS
-        pkmn.moves[forgetmove].pp = [oldmovepp,pkmn.moves[forgetmove].totalpp].min
+        pkmn.moves[forgetmove].pp = [oldmovepp,pkmn.moves[forgetmove].total_pp].min
       end
       pbMessage(_INTL("1,\\wt[16] 2, and\\wt[16]...\\wt[16] ...\\wt[16] ... Ta-da!\\se[Battle ball drop]\1"),&block)
       pbMessage(_INTL("{1} forgot how to use {2}.\\nAnd...\1",pkmnname,oldmovename),&block)
@@ -480,7 +481,7 @@ def pbUseItem(bag,item,bagscene=nil)
     end
     machine = itm.move
     return 0 if !machine
-    movename = PBMoves.getName(machine)
+    movename = GameData::Move.get(machine).name
     pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",itm.name))
     if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?",movename))
       return 0
@@ -554,7 +555,7 @@ def pbUseItemOnPokemon(item,pkmn,scene)
   if itm.is_machine?
     machine = itm.move
     return false if !machine
-    movename = PBMoves.getName(machine)
+    movename = GameData::Move.get(machine).name
     if pkmn.shadowPokemon?
       pbMessage(_INTL("Shadow Pokémon can't be taught any moves.")) { scene.pbUpdate }
     elsif !pkmn.compatibleWithMove?(machine)

@@ -24,7 +24,7 @@ module TrainerData
                                            :Item, :Item, :Item, :Item],
     "Pokemon"   => [SPECIES,   "ev", :PBSpecies, nil],   # Species, level
     "Item"      => [ITEM,      "e", :Item],
-    "Moves"     => [MOVES,     "eEEE", :PBMoves, :PBMoves, :PBMoves, :PBMoves],
+    "Moves"     => [MOVES,     "eEEE", :Move, :Move, :Move, :Move],
     "Ability"   => [ABILITY,   "u"],
     "Gender"    => [GENDER,    "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
                                       "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],

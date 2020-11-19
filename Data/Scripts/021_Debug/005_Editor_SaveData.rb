@@ -48,7 +48,7 @@ end
 # Save ability data to PBS file
 #===============================================================================
 def pbSaveAbilities
-  File.open("PBS/abilities.txt","wb") { |f|
+  File.open("PBS/abilities.txt", "wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
@@ -72,39 +72,34 @@ end
 # Save move data to PBS file
 #===============================================================================
 def pbSaveMoveData
-  movesData = pbLoadMovesData
-  return if !movesData
-  File.open("PBS/moves.txt","wb") { |f|
+  File.open("PBS/moves.txt", "wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
     f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
     f.write("\r\n")
-    currentType = -1
-    for i in 1..(PBMoves.maxValue rescue PBMoves.getCount-1 rescue pbGetMessageCount(MessageTypes::Moves)-1)
-      moveData = movesData[i]
-      next if !moveData   # No move with that ID defined
-      if currentType!=moveData[MoveData::TYPE]
-        currentType = moveData[MoveData::TYPE]
+    current_type = -1
+    GameData::Move.each do |m|
+      if current_type != m.type
+        current_type = m.type
         f.write("\#-------------------------------\r\n")
       end
-      f.write(sprintf("%d,%s,%s,%s,%d,%s,%s,%d,%d,%d,%s,%d,%s,%s",
-         moveData[MoveData::ID],
-         moveData[MoveData::INTERNAL_NAME],
-         csvQuote(moveData[MoveData::NAME]),
-         csvQuote(moveData[MoveData::FUNCTION_CODE]),
-         moveData[MoveData::BASE_DAMAGE],
-         (getConstantName(PBTypes,moveData[MoveData::TYPE]) rescue pbGetTypeConst(moveData[MoveData::TYPE]) rescue ""),
-         ["Physical","Special","Status"][moveData[MoveData::CATEGORY]],
-         moveData[MoveData::ACCURACY],
-         moveData[MoveData::TOTAL_PP],
-         moveData[MoveData::EFFECT_CHANCE],
-         (getConstantName(PBTargets,moveData[MoveData::TARGET]) rescue sprintf("%02X",moveData[MoveData::TARGET])),
-         moveData[MoveData::PRIORITY],
-         csvQuote(moveData[MoveData::FLAGS]),
-         csvQuoteAlways(moveData[MoveData::DESCRIPTION])
+      f.write(sprintf("%d,%s,%s,%s,%d,%s,%s,%d,%d,%d,%s,%d,%s,%s\r\n",
+        m.id_number,
+        csvQuote(m.id.to_s),
+        csvQuote(m.real_name),
+        csvQuote(m.function_code),
+        m.base_damage,
+        (getConstantName(PBTypes, m.type) rescue pbGetTypeConst(m.type) rescue ""),
+        ["Physical", "Special", "Status"][m.category],
+        m.accuracy,
+        m.total_pp,
+        m.effect_chance,
+        (getConstantName(PBTargets, m.target) rescue sprintf("%02X", m.target)),
+        m.priority,
+        csvQuote(m.flags),
+        csvQuoteAlways(m.real_description)
       ))
-      f.write("\r\n")
     end
   }
 end
@@ -185,7 +180,7 @@ end
 # Save metadata data to PBS file
 #===============================================================================
 def pbSaveMetadata
-  File.open("PBS/metadata.txt","wb") { |f|
+  File.open("PBS/metadata.txt", "wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
@@ -231,7 +226,7 @@ end
 # Save item data to PBS file
 #===============================================================================
 def pbSaveItems
-  File.open("PBS/items.txt","wb") { |f|
+  File.open("PBS/items.txt", "wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
@@ -243,11 +238,10 @@ def pbSaveItems
         current_pocket = i.pocket
         f.write("\#-------------------------------\r\n")
       end
-      move_name = ""
-      if i.move
-        move_name = getConstantName(PBMoves, i.move) rescue pbGetMoveConst(i.move) rescue ""
-      end
-      f.write(sprintf("%d,%s,%s,%s,%d,%d,%s,%d,%d,%d,%s\r\n",
+      move_name = (i.move) ? GameData::Move.get(i.move).id.to_s : ""
+      sprintf_text = "%d,%s,%s,%s,%d,%d,%s,%d,%d,%d\r\n"
+      sprintf_text = "%d,%s,%s,%s,%d,%d,%s,%d,%d,%d,%s\r\n" if move_name != ""
+      f.write(sprintf(sprintf_text,
         i.id_number,
         csvQuote(i.id.to_s),
         csvQuote(i.real_name),
@@ -270,7 +264,7 @@ end
 # Save berry plant data to PBS file
 #===============================================================================
 def pbSaveBerryPlants
-  File.open("PBS/berryplants.txt","wb") { |f|
+  File.open("PBS/berryplants.txt", "wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
@@ -329,17 +323,18 @@ def pbSaveMachines
     f.write(0xBF.chr)
     f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
     f.write("\r\n")
-    for i in 1...machines.length
+    keys = machines.keys.sort { |a, b| GameData::Move.get(a).id_number <=> GameData::Move.get(b).id_number }
+    for i in 0...keys.length
       Graphics.update if i%50==0
-      Win32API.SetWindowText(_INTL("Writing move {1}/{2}",i,machines.length)) if i%20==0
-      next if !machines[i]
-      movename = getConstantName(PBMoves,i) rescue pbGetMoveConst(i) rescue nil
+      Win32API.SetWindowText(_INTL("Writing move {1}/{2}",i,keys.length)) if i%20==0
+      next if !machines[keys[i]]
+      movename = GameData::Move.get(keys[i]).id.to_s
       next if !movename || movename==""
       f.write("\#-------------------------------\r\n")
       f.write(sprintf("[%s]\r\n",movename))
       x = []
-      for j in 0...machines[i].length
-        speciesname = getConstantName(PBSpecies,machines[i][j]) rescue pbGetSpeciesConst(machines[i][j]) rescue nil
+      machines[keys[i]].each do |species|
+        speciesname = getConstantName(PBSpecies,species) rescue pbGetSpeciesConst(species) rescue nil
         next if !speciesname || speciesname==""
         x.push(speciesname)
       end
@@ -487,7 +482,7 @@ def pbSaveTrainerBattles
         if poke[TrainerData::MOVES] && poke[TrainerData::MOVES].length>0
           movestring = ""
           for i in 0...poke[TrainerData::MOVES].length
-            movename = getConstantName(PBMoves,poke[TrainerData::MOVES][i]) rescue pbGetMoveConst(poke[TrainerData::MOVES][i]) rescue nil
+            movename = GameData::Move.get(poke[TrainerData::MOVES][i]).id.to_s
             next if !movename
             movestring.concat(",") if i>0
             movestring.concat(movename)
@@ -747,7 +742,7 @@ def pbSavePokemonData
         level = m[0]
         move  = m[1]
         pokedata.write(",") if !first
-        cmove = getConstantName(PBMoves,move) rescue pbGetMoveConst(move)
+        cmove = GameData::Move.get(move).id.to_s
         pokedata.write(sprintf("%d,%s",level,cmove))
         first = false
       end
@@ -759,7 +754,7 @@ def pbSavePokemonData
       eggMoves[i].each do |m|
         next if !m || m==0
         pokedata.write(",") if !first
-        cmove = getConstantName(PBMoves,m) rescue pbGetMoveConst(m)
+        cmove = GameData::Move.get(m).id.to_s
         pokedata.write("#{cmove}")
         first = false
       end
@@ -1053,7 +1048,7 @@ def pbSavePokemonFormsData
     incense          = nil if incense==origdata["incense"]
     pokedexform      = speciesData[i][SpeciesData::POKEDEX_FORM] || 0   # No nil check
     megastone        = speciesData[i][SpeciesData::MEGA_STONE]          # No nil check
-    megamove         = speciesData[i][SpeciesData::MEGA_MOVE] || 0      # No nil check
+    megamove         = speciesData[i][SpeciesData::MEGA_MOVE]           # No nil check
     unmega           = speciesData[i][SpeciesData::UNMEGA_FORM] || 0    # No nil check
     megamessage      = speciesData[i][SpeciesData::MEGA_MESSAGE] || 0   # No nil check
     pokedata.write("\#-------------------------------\r\n")
@@ -1064,8 +1059,8 @@ def pbSavePokemonFormsData
       citem = GameData::Item.get(megastone).id.to_s
       pokedata.write("MegaStone = #{citem}\r\n")
     end
-    if megamove>0
-      cmove = getConstantName(PBMoves,megamove) rescue pbGetMoveConst(megamove)
+    if megamove
+      cmove = GameData::Move.get(megamove).id.to_s
       pokedata.write("MegaMove = #{cmove}\r\n")
     end
     pokedata.write("UnmegaForm = #{unmega}\r\n") if unmega>0
@@ -1163,7 +1158,7 @@ def pbSavePokemonFormsData
         level = m[0]
         move  = m[1]
         pokedata.write(",") if !first
-        cmove = getConstantName(PBMoves,move) rescue pbGetMoveConst(move)
+        cmove = GameData::Move.get(move).id.to_s
         pokedata.write(sprintf("%d,%s",level,cmove))
         first = false
       end
@@ -1189,7 +1184,7 @@ def pbSavePokemonFormsData
       eggList.each do |m|
         next if !m || m==0
         pokedata.write(",") if !first
-        cmove = getConstantName(PBMoves,m) rescue pbGetMoveConst(m)
+        cmove = GameData::Move.get(m).id.to_s
         pokedata.write("#{cmove}")
         first = false
       end
@@ -1351,7 +1346,7 @@ def pbSaveShadowMoves
       f.write(sprintf("%s = ",constname))
       movenames = []
       for m in move
-        movenames.push((getConstantName(PBMoves,m) rescue pbGetMoveConst(m) rescue nil))
+        movenames.push(GameData::Move.get(m).id.to_s)
       end
       f.write(sprintf("%s\r\n",movenames.compact.join(",")))
     end
@@ -1443,14 +1438,10 @@ def pbFastInspect(pkmn,moves,species,items,natures)
       evlist += evs[i]
     end
   end
-  c4 = (moves[pkmn.move1]) ? moves[pkmn.move1] :
-     (moves[pkmn.move1] = (getConstantName(PBMoves,pkmn.move1) rescue pbGetMoveConst(pkmn.move1)))
-  c5 = (moves[pkmn.move2]) ? moves[pkmn.move2] :
-     (moves[pkmn.move2] = (getConstantName(PBMoves,pkmn.move2) rescue pbGetMoveConst(pkmn.move2)))
-  c6 = (moves[pkmn.move3]) ? moves[pkmn.move3] :
-     (moves[pkmn.move3] = (getConstantName(PBMoves,pkmn.move3) rescue pbGetMoveConst(pkmn.move3)))
-  c7 = (moves[pkmn.move4]) ? moves[pkmn.move4] :
-     (moves[pkmn.move4] = (getConstantName(PBMoves,pkmn.move4) rescue pbGetMoveConst(pkmn.move4)))
+  c4 = (moves[pkmn.move1]) ? moves[pkmn.move1] : (moves[pkmn.move1] = GameData::Move.get(pkmn.move1).id_to_s)
+  c5 = (moves[pkmn.move2]) ? moves[pkmn.move2] : (moves[pkmn.move2] = GameData::Move.get(pkmn.move2).id_to_s)
+  c6 = (moves[pkmn.move3]) ? moves[pkmn.move3] : (moves[pkmn.move3] = GameData::Move.get(pkmn.move3).id_to_s)
+  c7 = (moves[pkmn.move4]) ? moves[pkmn.move4] : (moves[pkmn.move4] = GameData::Move.get(pkmn.move4).id_to_s)
   return "#{c1};#{c2};#{c3};#{evlist};#{c4},#{c5},#{c6},#{c7}"
 end
 

@@ -22,13 +22,12 @@ def pbPurify(pokemon,scene)
   pokemon.shadow = false
   pokemon.giveRibbon(PBRibbons::NATIONAL)
   scene.pbDisplay(_INTL("{1} opened the door to its heart!",pokemon.name))
-  oldmoves = []
-  for i in 0...4; oldmoves.push(pokemon.moves[i].id); end
+  old_moves = []
+  pokemon.moves.each { |m| old_moves.push(m.id) }
   pokemon.pbUpdateShadowMoves
-  for i in 0...4
-    next if pokemon.moves[i].id<=0 || pokemon.moves[i].id==oldmoves[i]
-    scene.pbDisplay(_INTL("{1} regained the move \n{2}!",
-       pokemon.name,PBMoves.getName(pokemon.moves[i].id)))
+  pokemon.moves.each_with_index do |m, i|
+    next if m == old_moves[i]
+    scene.pbDisplay(_INTL("{1} regained the move {2}!", pokemon.name, m.name))
   end
   pokemon.pbRecordFirstMoves
   if pokemon.savedev
@@ -75,31 +74,23 @@ def pbApplyEVGain(pokemon,ev,evgain)
   end
 end
 
-def pbReplaceMoves(pokemon,move1,move2=0,move3=0,move4=0)
-  return if !pokemon
-  [move1,move2,move3,move4].each { |move|
-    moveIndex = -1
-    if move!=0
-      # Look for given move
-      for i in 0...4
-        moveIndex = i if pokemon.moves[i].id==move
+def pbReplaceMoves(pkmn, new_moves)
+  return if !pkmn
+  new_moves.each do |move|
+    next if !move || pkmn.hasMove?(move)
+    # Find a move slot to put move into
+    for i in 0...Pokemon::MAX_MOVES
+      if i >= pkmn.numMoves
+        # Empty slot; add the new move there
+        pkmn.pbLearnMove(move)
+        break
+      elsif !new_moves.include?(pkmn.moves[i].id)
+        # Known move that isn't a move to be relearned; replace it
+        pkmn.moves[i].id = move
+        break
       end
     end
-    if moveIndex==-1
-      # Look for slot to replace move
-      for i in 0...4
-        if (pokemon.moves[i].id==0 && move!=0) || (
-            pokemon.moves[i].id!=move1 &&
-            pokemon.moves[i].id!=move2 &&
-            pokemon.moves[i].id!=move3 &&
-            pokemon.moves[i].id!=move4)
-          # Replace move
-          pokemon.moves[i] = PBMove.new(move)
-          break
-        end
-      end
-    end
-  }
+  end
 end
 
 
@@ -288,47 +279,57 @@ class Pokemon
     self.heartgauge  = HEARTGAUGESIZE
     self.savedexp    = 0
     self.savedev     = [0,0,0,0,0,0]
-    self.shadowmoves = [0,0,0,0,0,0,0,0]
-    # Retrieve shadow moves
-    moves = pbLoadShadowMovesets
-    if moves[self.species] && moves[self.species].length>0
-      for i in 0...[4,moves[self.species].length].min
-        self.shadowmoves[i] = moves[self.species][i]
+    self.shadowmoves = []
+    # Retrieve Shadow moveset for this Pokémon
+    shadow_moveset = pbLoadShadowMovesets[self.fSpecies]
+    shadow_moveset = pbLoadShadowMovesets[self.species] if !shadow_moveset || shadow_moveset.length == 0
+    # Record this Pokémon's Shadow moves
+    if shadow_moveset && shadow_moveset.length > 0
+      for i in 0...[shadow_moveset.length, MAX_MOVES].min
+        self.shadowmoves[i] = shadow_moveset[i]
       end
-      self.shadowmovenum = moves[self.species].length
+      self.shadowmovenum = shadow_moveset.length
     else
-      # No special shadow moves
-      self.shadowmoves[0] = getConst(PBMoves,:SHADOWRUSH) || 0
+      # No Shadow moveset defined; just use Shadow Rush
+      self.shadowmoves[0] = :SHADOWRUSH if GameData::Move.exists?(:SHADOWRUSH)
       self.shadowmovenum = 1
     end
-    for i in 0...4   # Save old moves
-      self.shadowmoves[4+i] = self.moves[i].id
-    end
+    # Record this Pokémon's original moves
+    @moves.each_with_index { |m, i| self.shadowmoves[MAX_MOVES + i] = m.id }
+    # Update moves
     pbUpdateShadowMoves
   end
 
-  def pbUpdateShadowMoves(allmoves=false)
+  def pbUpdateShadowMoves(relearn_all_moves = false)
     return if !@shadowmoves
-    m = @shadowmoves
+    # Not a Shadow Pokémon (any more); relearn all its original moves
     if !@shadow
-      # No shadow moves
-      pbReplaceMoves(self,m[4],m[5],m[6],m[7])
-      @shadowmoves = nil
-    else
-      moves = []
-      relearning = (allmoves) ? 3 : [3,3,2,1,1,0][self.heartStage]
-      relearned = 0
-      # Add all Shadow moves
-      for i in 0...4; moves.push(m[i]) if m[i]!=0; end
-      # Add X regular moves
-      for i in 0...4
-        next if i<@shadowmovenum
-        if m[i+4]!=0 && relearned<relearning
-          moves.push(m[i+4]); relearned += 1
-        end
+      if @shadowmoves.length > MAX_MOVES
+        new_moves = []
+        @shadowmoves.each_with_index { |m, i| new_moves.push(m) if m && i >= MAX_MOVES }
+        pbReplaceMoves(self, new_moves)
       end
-      pbReplaceMoves(self,moves[0] || 0,moves[1] || 0,moves[2] || 0,moves[3] || 0)
+      @shadowmoves = nil
+      return
     end
+    # Is a Shadow Pokémon; ensure it knows the appropriate moves depending on its heart stage
+    m = @shadowmoves
+    # Start with all Shadow moves
+    new_moves = []
+    @shadowmoves.each_with_index { |m, i| new_moves.push(m) if m && i < MAX_MOVES }
+    # Add some original moves (skipping ones in the same slot as a Shadow Move)
+    num_original_moves = (relearn_all_moves) ? 3 : [3, 3, 2, 1, 1, 0][self.heartStage]
+    if num_original_moves > 0
+      relearned_count = 0
+      @shadowmoves.each_with_index do |m, i|
+        next if !m || i < MAX_MOVES + @shadowmovenum
+        new_moves.push(m)
+        relearned_count += 1
+        break if relearned_count >= num_original_moves
+      end
+    end
+    # Relearn Shadow moves plus some original moves (may not change anything)
+    pbReplaceMoves(self, new_moves)
   end
 
   alias :__shadow_clone :clone

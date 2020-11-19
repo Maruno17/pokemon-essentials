@@ -286,20 +286,18 @@ def pbDayCareGenerateEgg
       mother.hasItem?(:LIGHTBALL)
     lightball = true
   end
-  if lightball && isConst?(babyspecies,PBSpecies,:PICHU) &&
-     hasConst?(PBMoves,:VOLTTACKLE)
-    moves.push(getConst(PBMoves,:VOLTTACKLE))
+  if lightball && isConst?(babyspecies,PBSpecies,:PICHU) && GameData::Move.exists?(:VOLTTACKLE)
+    moves.push(:VOLTTACKLE)
   end
   moves = moves.reverse
   moves |= []   # remove duplicates
   moves = moves.reverse
   # Assembling move list
+  first_move_index = moves.length - Pokemon::MAX_MOVES
+  first_move_index = 0 if first_move_index < 0
   finalmoves = []
-  listend = moves.length-4
-  listend = 0 if listend<0
-  for i in listend...listend+4
-    moveid = (i>=moves.length) ? 0 : moves[i]
-    finalmoves[finalmoves.length] = PBMove.new(moveid)
+  for i in first_move_index...moves.length
+    finalmoves.push(PBMove.new(moves[i]))
   end
   # Inheriting Individual Values
   ivs = []
@@ -386,10 +384,7 @@ def pbDayCareGenerateEgg
   egg.iv[3] = ivs[3]
   egg.iv[4] = ivs[4]
   egg.iv[5] = ivs[5]
-  egg.moves[0] = finalmoves[0]
-  egg.moves[1] = finalmoves[1]
-  egg.moves[2] = finalmoves[2]
-  egg.moves[3] = finalmoves[3]
+  egg.moves = finalmoves
   egg.calcStats
   egg.obtainText = _INTL("Day-Care Couple")
   egg.name = _INTL("Egg")

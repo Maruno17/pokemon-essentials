@@ -105,7 +105,7 @@ class PokeBattle_AI
     end
     # Log the result
     if @battle.choices[idxBattler][2]
-      PBDebug.log("[AI] #{user.pbThis} (#{user.index}) will use #{@battle.choices[user.index][2].name}")
+      PBDebug.log("[AI] #{user.pbThis} (#{user.index}) will use #{@battle.choices[idxBattler][2].name}")
     end
   end
 

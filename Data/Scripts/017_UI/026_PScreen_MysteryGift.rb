@@ -412,7 +412,8 @@ def pbReceiveMysteryGift(id)
       if item == :LEFTOVERS
         pbMessage(_INTL("\\me[Item get]You obtained some \\c[1]{1}\\c[0]!\\wtnp[30]",itemname))
       elsif itm.is_machine?   # TM or HM
-        pbMessage(_INTL("\\me[Item get]You obtained \\c[1]{1} {2}\\c[0]!\\wtnp[30]",itemname,PBMoves.getName(itm.move)))
+        pbMessage(_INTL("\\me[Item get]You obtained \\c[1]{1} {2}\\c[0]!\\wtnp[30]",itemname,
+           GameData::Move.get(itm.move).name))
       elsif qty>1
         pbMessage(_INTL("\\me[Item get]You obtained {1} \\c[1]{2}\\c[0]!\\wtnp[30]",qty,itemname))
       elsif itemname.starts_with_vowel?

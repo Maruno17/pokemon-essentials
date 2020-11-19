@@ -347,7 +347,7 @@ module PokemonDebugMixin
     #===========================================================================
     when "teachmove"
       move = pbChooseMoveList
-      if move!=0
+      if move
         pbLearnMove(pkmn,move)
         pbRefreshSingle(pkmnid)
       end
@@ -355,7 +355,7 @@ module PokemonDebugMixin
     when "forgetmove"
       moveindex = pbChooseMove(pkmn,_INTL("Choose move to forget."))
       if moveindex>=0
-        movename = PBMoves.getName(pkmn.moves[moveindex].id)
+        movename = pkmn.moves[moveindex].name
         pkmn.pbDeleteMoveAtIndex(moveindex)
         pbDisplay(_INTL("{1} forgot {2}.",pkmn.name,movename))
         pbRefreshSingle(pkmnid)
@@ -371,11 +371,11 @@ module PokemonDebugMixin
       loop do
         commands = []
         for i in pkmn.moves
-          break if i.id==0
-          if i.totalpp<=0
-            commands.push(_INTL("{1} (PP: ---)",PBMoves.getName(i.id)))
+          break if !i.id
+          if i.total_pp<=0
+            commands.push(_INTL("{1} (PP: ---)",i.name))
           else
-            commands.push(_INTL("{1} (PP: {2}/{3})",PBMoves.getName(i.id),i.pp,i.totalpp))
+            commands.push(_INTL("{1} (PP: {2}/{3})",i.name,i.pp,i.total_pp))
           end
         end
         commands.push(_INTL("Restore all PP"))
@@ -383,13 +383,13 @@ module PokemonDebugMixin
         break if cmd<0
         if cmd>=0 && cmd<commands.length-1   # Move
           move = pkmn.moves[cmd]
-          movename = PBMoves.getName(move.id)
-          if move.totalpp<=0
+          movename = move.name
+          if move.total_pp<=0
             pbDisplay(_INTL("{1} has infinite PP.",movename))
           else
             cmd2 = 0
             loop do
-              msg = _INTL("{1}: PP {2}/{3} (PP Up {4}/3)",movename,move.pp,move.totalpp,move.ppup)
+              msg = _INTL("{1}: PP {2}/{3} (PP Up {4}/3)",movename,move.pp,move.total_pp,move.ppup)
               cmd2 = pbShowCommands(msg,[
                  _INTL("Set PP"),
                  _INTL("Full PP"),
@@ -398,13 +398,13 @@ module PokemonDebugMixin
               case cmd2
               when 0   # Change PP
                 params = ChooseNumberParams.new
-                params.setRange(0,move.totalpp)
+                params.setRange(0,move.total_pp)
                 params.setDefaultValue(move.pp)
                 h = pbMessageChooseNumber(
-                   _INTL("Set PP of {1} (max. {2}).",movename,move.totalpp),params) { pbUpdate }
+                   _INTL("Set PP of {1} (max. {2}).",movename,move.total_pp),params) { pbUpdate }
                 move.pp = h
               when 1   # Full PP
-                move.pp = move.totalpp
+                move.pp = move.total_pp
               when 2   # Change PP Up
                 params = ChooseNumberParams.new
                 params.setRange(0,3)
@@ -412,7 +412,7 @@ module PokemonDebugMixin
                 h = pbMessageChooseNumber(
                    _INTL("Set PP Up of {1} (max. 3).",movename),params) { pbUpdate }
                 move.ppup = h
-                move.pp = move.totalpp if move.pp>move.totalpp
+                move.pp = move.total_pp if move.pp>move.total_pp
               end
             end
           end

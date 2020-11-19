@@ -296,17 +296,17 @@ end
 
 
 module MoveProperty
-  def self.set(_settingname,oldsetting)
-    ret = pbChooseMoveList((oldsetting) ? oldsetting : 1)
-    return (ret<=0) ? (oldsetting) ? oldsetting : 0 : ret
+  def self.set(_settingname, oldsetting)
+    ret = pbChooseMoveList(oldsetting || nil)
+    return ret || oldsetting
   end
 
   def self.defaultValue
-    return 0
+    return nil
   end
 
   def self.format(value)
-    return (value) ? PBMoves.getName(value) : "-"
+    return (value && GameData::Move.exists?(value)) ? GameData::Move.get(value).real_name : "-"
   end
 end
 
@@ -317,9 +317,9 @@ class MoveProperty2
     @pokemondata = pokemondata
   end
 
-  def set(_settingname,oldsetting)
-    ret = pbChooseMoveListForSpecies(@pokemondata[0],(oldsetting) ? oldsetting : 1)
-    return (ret>0) ? ret : (oldsetting) ? oldsetting : nil
+  def set(_settingname, oldsetting)
+    ret = pbChooseMoveListForSpecies(@pokemondata[TrainerData::SPECIES], oldsetting || nil)
+    return ret || oldsetting
   end
 
   def defaultValue
@@ -327,7 +327,7 @@ class MoveProperty2
   end
 
   def format(value)
-    return (value) ? PBMoves.getName(value) : "-"
+    return (value && GameData::Move.exists?(value)) ? GameData::Move.get(value).real_name : "-"
   end
 end
 
@@ -399,14 +399,13 @@ class IVsProperty
     for i in 0...6
       oldsetting[i] = oldsetting[0] if !oldsetting[i]
     end
-    properties = [
-       [_INTL("HP"),LimitProperty2.new(@limit),_INTL("Individual values for the Pokémon's HP stat (0-{1}).",@limit)],
-       [_INTL("Attack"),LimitProperty2.new(@limit),_INTL("Individual values for the Pokémon's Attack stat (0-{1}).",@limit)],
-       [_INTL("Defense"),LimitProperty2.new(@limit),_INTL("Individual values for the Pokémon's Defense stat (0-{1}).",@limit)],
-       [_INTL("Speed"),LimitProperty2.new(@limit),_INTL("Individual values for the Pokémon's Speed stat (0-{1}).",@limit)],
-       [_INTL("Sp. Atk"),LimitProperty2.new(@limit),_INTL("Individual values for the Pokémon's Sp. Atk stat (0-{1}).",@limit)],
-       [_INTL("Sp. Def"),LimitProperty2.new(@limit),_INTL("Individual values for the Pokémon's Sp. Def stat (0-{1}).",@limit)]
-    ]
+    properties = []
+    properties[PBStats::HP]      = [_INTL("HP"),      LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's HP stat (0-{1}).", @limit)]
+    properties[PBStats::ATTACK]  = [_INTL("Attack"),  LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Attack stat (0-{1}).", @limit)]
+    properties[PBStats::DEFENSE] = [_INTL("Defense"), LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Defense stat (0-{1}).", @limit)]
+    properties[PBStats::SPATK]   = [_INTL("Sp. Atk"), LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Sp. Atk stat (0-{1}).", @limit)]
+    properties[PBStats::SPDEF]   = [_INTL("Sp. Def"), LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Sp. Def stat (0-{1}).", @limit)]
+    properties[PBStats::SPEED]   = [_INTL("Speed"),   LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Speed stat (0-{1}).", @limit)]
     pbPropertyList(settingname,oldsetting,properties,false)
     hasNonNil = false
     hasAltVal = false
@@ -452,14 +451,13 @@ class EVsProperty
     for i in 0...6
       oldsetting[i] = oldsetting[0] if !oldsetting[i]
     end
-    properties = [
-       [_INTL("HP"),LimitProperty2.new(@limit),_INTL("Effort values for the Pokémon's HP stat (0-{1}).",@limit)],
-       [_INTL("Attack"),LimitProperty2.new(@limit),_INTL("Effort values for the Pokémon's Attack stat (0-{1}).",@limit)],
-       [_INTL("Defense"),LimitProperty2.new(@limit),_INTL("Effort values for the Pokémon's Defense stat (0-{1}).",@limit)],
-       [_INTL("Speed"),LimitProperty2.new(@limit),_INTL("Effort values for the Pokémon's Speed stat (0-{1}).",@limit)],
-       [_INTL("Sp. Atk"),LimitProperty2.new(@limit),_INTL("Effort values for the Pokémon's Sp. Atk stat (0-{1}).",@limit)],
-       [_INTL("Sp. Def"),LimitProperty2.new(@limit),_INTL("Effort values for the Pokémon's Sp. Def stat (0-{1}).",@limit)]
-    ]
+    properties = []
+    properties[PBStats::HP]      = [_INTL("HP"),      LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's HP stat (0-{1}).", @limit)]
+    properties[PBStats::ATTACK]  = [_INTL("Attack"),  LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's Attack stat (0-{1}).", @limit)]
+    properties[PBStats::DEFENSE] = [_INTL("Defense"), LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's Defense stat (0-{1}).", @limit)]
+    properties[PBStats::SPATK]   = [_INTL("Sp. Atk"), LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's Sp. Atk stat (0-{1}).", @limit)]
+    properties[PBStats::SPDEF]   = [_INTL("Sp. Def"), LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's Sp. Def stat (0-{1}).", @limit)]
+    properties[PBStats::SPEED]   = [_INTL("Speed"),   LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's Speed stat (0-{1}).", @limit)]
     loop do
       pbPropertyList(settingname,oldsetting,properties,false)
       evtotal = 0
@@ -467,8 +465,7 @@ class EVsProperty
         evtotal += oldsetting[i] if oldsetting[i]
       end
       if evtotal>Pokemon::EV_LIMIT
-        pbMessage(_INTL("Total EVs ({1}) are greater than allowed ({2}). Please reduce them.",
-                        evtotal, Pokemon::EV_LIMIT))
+        pbMessage(_INTL("Total EVs ({1}) are greater than allowed ({2}). Please reduce them.", evtotal, Pokemon::EV_LIMIT))
       else
         break
       end
@@ -545,14 +542,14 @@ module PlayerProperty
   def self.set(settingname,oldsetting)
     oldsetting = [0,"xxx","xxx","xxx","xxx","xxx","xxx","xxx"] if !oldsetting
     properties = [
-       [_INTL("Trainer Type"),TrainerTypeProperty,_INTL("Trainer type of this player.")],
-       [_INTL("Sprite"),CharacterProperty,_INTL("Walking character sprite.")],
-       [_INTL("Cycling"),CharacterProperty,_INTL("Cycling character sprite.")],
-       [_INTL("Surfing"),CharacterProperty,_INTL("Surfing character sprite.")],
-       [_INTL("Running"),CharacterProperty,_INTL("Running character sprite.")],
-       [_INTL("Diving"),CharacterProperty,_INTL("Diving character sprite.")],
-       [_INTL("Fishing"),CharacterProperty,_INTL("Fishing character sprite.")],
-       [_INTL("Field Move"),CharacterProperty,_INTL("Using a field move character sprite.")]
+       [_INTL("Trainer Type"), TrainerTypeProperty, _INTL("Trainer type of this player.")],
+       [_INTL("Sprite"),       CharacterProperty,   _INTL("Walking character sprite.")],
+       [_INTL("Cycling"),      CharacterProperty,   _INTL("Cycling character sprite.")],
+       [_INTL("Surfing"),      CharacterProperty,   _INTL("Surfing character sprite.")],
+       [_INTL("Running"),      CharacterProperty,   _INTL("Running character sprite.")],
+       [_INTL("Diving"),       CharacterProperty,   _INTL("Diving character sprite.")],
+       [_INTL("Fishing"),      CharacterProperty,   _INTL("Fishing character sprite.")],
+       [_INTL("Field Move"),   CharacterProperty,   _INTL("Using a field move character sprite.")]
     ]
     pbPropertyList(settingname,oldsetting,properties,false)
     return oldsetting
@@ -717,7 +714,7 @@ end
 
 
 module ItemNameProperty
-  def self.set(settingname,oldsetting)
+  def self.set(settingname, oldsetting)
     return pbMessageFreeText(_INTL("Set the value for {1}.",settingname),
        (oldsetting) ? oldsetting : "",false,30)
   end
@@ -735,14 +732,14 @@ end
 
 module PocketProperty
   def self.pocketnames
-    return [_INTL("Items"),_INTL("Medicine"),_INTL("Poké Balls"),
-       _INTL("TMs & HMs"),_INTL("Berries"),_INTL("Mail"),
-       _INTL("Battle Items"),_INTL("Key Items")]
+    return [_INTL("Items"), _INTL("Medicine"), _INTL("Poké Balls"),
+       _INTL("TMs & HMs"), _INTL("Berries"), _INTL("Mail"),
+       _INTL("Battle Items"), _INTL("Key Items")]
   end
 
-  def self.set(_settingname,oldsetting)
-    cmd = pbMessage(_INTL("Choose a pocket for this item."),pocketnames(),-1)
-    return (cmd>=0) ? cmd+1 : oldsetting
+  def self.set(_settingname, oldsetting)
+    cmd = pbMessage(_INTL("Choose a pocket for this item."), pocketnames(), -1)
+    return (cmd >= 0) ? cmd + 1 : oldsetting
   end
 
   def self.defaultValue
@@ -750,8 +747,8 @@ module PocketProperty
   end
 
   def self.format(value)
-    return _INTL("No Pocket") if value==0
-    return (value) ? pocketnames[value-1] : value.inspect
+    return _INTL("No Pocket") if value == 0
+    return (value) ? pocketnames[value - 1] : value.inspect
   end
 end
 
@@ -761,12 +758,12 @@ module BaseStatsProperty
   def self.set(settingname,oldsetting)
     return oldsetting if !oldsetting
     properties = []
-    properties[PBStats::HP]      = _INTL("Base HP"),NonzeroLimitProperty.new(255),_INTL("Base HP stat of the Pokémon.")
-    properties[PBStats::ATTACK]  = _INTL("Base Attack"),NonzeroLimitProperty.new(255),_INTL("Base Attack stat of the Pokémon.")
-    properties[PBStats::DEFENSE] = _INTL("Base Defense"),NonzeroLimitProperty.new(255),_INTL("Base Defense stat of the Pokémon.")
-    properties[PBStats::SPATK]   = _INTL("Base Sp. Attack"),NonzeroLimitProperty.new(255),_INTL("Base Special Attack stat of the Pokémon.")
-    properties[PBStats::SPDEF]   = _INTL("Base Sp. Defense"),NonzeroLimitProperty.new(255),_INTL("Base Special Defense stat of the Pokémon.")
-    properties[PBStats::SPEED]   = _INTL("Base Speed"),NonzeroLimitProperty.new(255),_INTL("Base Speed stat of the Pokémon.")
+    properties[PBStats::HP]      = _INTL("Base HP"),          NonzeroLimitProperty.new(255), _INTL("Base HP stat of the Pokémon.")
+    properties[PBStats::ATTACK]  = _INTL("Base Attack"),      NonzeroLimitProperty.new(255), _INTL("Base Attack stat of the Pokémon.")
+    properties[PBStats::DEFENSE] = _INTL("Base Defense"),     NonzeroLimitProperty.new(255), _INTL("Base Defense stat of the Pokémon.")
+    properties[PBStats::SPATK]   = _INTL("Base Sp. Attack"),  NonzeroLimitProperty.new(255), _INTL("Base Special Attack stat of the Pokémon.")
+    properties[PBStats::SPDEF]   = _INTL("Base Sp. Defense"), NonzeroLimitProperty.new(255), _INTL("Base Special Defense stat of the Pokémon.")
+    properties[PBStats::SPEED]   = _INTL("Base Speed"),       NonzeroLimitProperty.new(255), _INTL("Base Speed stat of the Pokémon.")
     if !pbPropertyList(settingname,oldsetting,properties,true)
       oldsetting = nil
     else
@@ -790,12 +787,12 @@ module EffortValuesProperty
   def self.set(settingname,oldsetting)
     return oldsetting if !oldsetting
     properties = []
-    properties[PBStats::HP]      = _INTL("HP EVs"),LimitProperty.new(255),_INTL("Number of HP Effort Value points gained from the Pokémon.")
-    properties[PBStats::ATTACK]  = _INTL("Attack EVs"),LimitProperty.new(255),_INTL("Number of Attack Effort Value points gained from the Pokémon.")
-    properties[PBStats::DEFENSE] = _INTL("Defense EVs"),LimitProperty.new(255),_INTL("Number of Defense Effort Value points gained from the Pokémon.")
-    properties[PBStats::SPATK]   = _INTL("Sp. Attack EVs"),LimitProperty.new(255),_INTL("Number of Special Attack Effort Value points gained from the Pokémon.")
-    properties[PBStats::SPDEF]   = _INTL("Sp. Defense EVs"),LimitProperty.new(255),_INTL("Number of Special Defense Effort Value points gained from the Pokémon.")
-    properties[PBStats::SPEED]   = _INTL("Speed EVs"),LimitProperty.new(255),_INTL("Number of Speed Effort Value points gained from the Pokémon.")
+    properties[PBStats::HP]      = [_INTL("HP EVs"),          LimitProperty.new(255), _INTL("Number of HP Effort Value points gained from the Pokémon.")]
+    properties[PBStats::ATTACK]  = [_INTL("Attack EVs"),      LimitProperty.new(255), _INTL("Number of Attack Effort Value points gained from the Pokémon.")]
+    properties[PBStats::DEFENSE] = [_INTL("Defense EVs"),     LimitProperty.new(255), _INTL("Number of Defense Effort Value points gained from the Pokémon.")]
+    properties[PBStats::SPATK]   = [_INTL("Sp. Attack EVs"),  LimitProperty.new(255), _INTL("Number of Special Attack Effort Value points gained from the Pokémon.")]
+    properties[PBStats::SPDEF]   = [_INTL("Sp. Defense EVs"), LimitProperty.new(255), _INTL("Number of Special Defense Effort Value points gained from the Pokémon.")]
+    properties[PBStats::SPEED]   = [_INTL("Speed EVs"),       LimitProperty.new(255), _INTL("Number of Speed Effort Value points gained from the Pokémon.")]
     if !pbPropertyList(settingname,oldsetting,properties,true)
       oldsetting = nil
     else
@@ -833,127 +830,133 @@ end
 
 
 module MovePoolProperty
-  def self.set(_settingname,oldsetting)
-    ret = oldsetting
-    cmdwin = pbListWindow([],200)
-    commands = []
+  def self.set(_settingname, oldsetting)
+    # Get all moves in move pool
     realcmds = []
-    realcmds.push([-1,0,-1])
+    realcmds.push([-1, nil, -1, "-"])   # Level, move ID, index in this list, name
     for i in 0...oldsetting.length
-      realcmds.push([oldsetting[i][0],oldsetting[i][1],i])
+      realcmds.push([oldsetting[i][0], oldsetting[i][1], i, GameData::Move.get(oldsetting[i][1]).real_name])
     end
-    refreshlist = true; oldsel = -1
-    cmd = [0,0]
+    # Edit move pool
+    cmdwin = pbListWindow([], 200)
+    oldsel = -1
+    ret = oldsetting
+    cmd = [0, 0]
+    commands = []
+    refreshlist = true
     loop do
       if refreshlist
-        realcmds.sort! { |a,b| (a[0]==b[0]) ? a[2]<=>b[2] : a[0]<=>b[0] }
+        realcmds.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=> b[0] }
         commands = []
-        for i in 0...realcmds.length
-          if realcmds[i][0]==-1
+        realcmds.each_with_index do |entry, i|
+          if entry[0] == -1
             commands.push(_INTL("[ADD MOVE]"))
           else
-            commands.push(_INTL("{1}: {2}",realcmds[i][0],PBMoves.getName(realcmds[i][1])))
+            commands.push(_INTL("{1}: {2}", entry[0], entry[3]))
           end
-          cmd[1] = i if oldsel>=0 && realcmds[i][2]==oldsel
+          cmd[1] = i if oldsel >= 0 && entry[2] == oldsel
         end
       end
-      refreshlist = false; oldsel = -1
-      cmd = pbCommands3(cmdwin,commands,-1,cmd[1],true)
-      if cmd[0]==1   # Swap move up
-        if cmd[1]<realcmds.length-1 && realcmds[cmd[1]][0]==realcmds[cmd[1]+1][0]
-          realcmds[cmd[1]+1][2],realcmds[cmd[1]][2] = realcmds[cmd[1]][2],realcmds[cmd[1]+1][2]
+      refreshlist = false
+      oldsel = -1
+      cmd = pbCommands3(cmdwin, commands, -1, cmd[1], true)
+      case cmd[0]
+      when 1   # Swap move up (if both moves have the same level)
+        if cmd[1] < realcmds.length - 1 && realcmds[cmd[1]][0] == realcmds[cmd[1] + 1][0]
+          realcmds[cmd[1] + 1][2], realcmds[cmd[1]][2] = realcmds[cmd[1]][2], realcmds[cmd[1] + 1][2]
           refreshlist = true
         end
-      elsif cmd[0]==2   # Swap move down
-        if cmd[1]>0 && realcmds[cmd[1]][0]==realcmds[cmd[1]-1][0]
-          realcmds[cmd[1]-1][2],realcmds[cmd[1]][2] = realcmds[cmd[1]][2],realcmds[cmd[1]-1][2]
+      when 2   # Swap move down (if both moves have the same level)
+        if cmd[1] > 0 && realcmds[cmd[1]][0] == realcmds[cmd[1] - 1][0]
+          realcmds[cmd[1] - 1][2], realcmds[cmd[1]][2] = realcmds[cmd[1]][2], realcmds[cmd[1] - 1][2]
           refreshlist = true
         end
-      elsif cmd[0]==0
-        if cmd[1]>=0
+      when 0
+        if cmd[1] >= 0   # Chose an entry
           entry = realcmds[cmd[1]]
-          if entry[0]==-1   # Add new move
+          if entry[0] == -1   # Add new move
             params = ChooseNumberParams.new
-            params.setRange(0,PBExperience.maxLevel)
+            params.setRange(0, PBExperience.maxLevel)
             params.setDefaultValue(1)
             params.setCancelValue(-1)
             newlevel = pbMessageChooseNumber(_INTL("Choose a level."),params)
-            if newlevel>=0
+            if newlevel >= 0
               newmove = pbChooseMoveList
-              if newmove>0
+              if newmove
                 havemove = -1
-                for i in 0...realcmds.length
-                  havemove = realcmds[i][2] if realcmds[i][0]==newlevel && realcmds[i][1]==newmove
+                realcmds.each do |e|
+                  havemove = e[2] if e[0] == newlevel && e[1] == newmove
                 end
-                if havemove>=0
+                if havemove >= 0
                   oldsel = havemove
                 else
                   maxid = -1
-                  for i in realcmds; maxid = [maxid,i[2]].max; end
-                  realcmds.push([newlevel,newmove,maxid+1])
+                  realcmds.each { |e| maxid = [maxid, e[2]].max }
+                  realcmds.push([newlevel, newmove, maxid + 1, GameData::Move.get(newmove).real_name])
                 end
                 refreshlist = true
               end
             end
-          else   # Edit move
-            cmd2 = pbMessage(_INTL("\\ts[]Do what with this move?"),
-               [_INTL("Change level"),_INTL("Change move"),_INTL("Delete"),_INTL("Cancel")],4)
-            if cmd2==0
+          else   # Edit existing move
+            case pbMessage(_INTL("\\ts[]Do what with this move?"),
+               [_INTL("Change level"), _INTL("Change move"), _INTL("Delete"), _INTL("Cancel")], 4)
+            when 0   # Change level
               params = ChooseNumberParams.new
-              params.setRange(0,PBExperience.maxLevel)
+              params.setRange(0, PBExperience.maxLevel)
               params.setDefaultValue(entry[0])
-              newlevel = pbMessageChooseNumber(_INTL("Choose a new level."),params)
-              if newlevel>=0 && newlevel!=entry[0]
+              newlevel = pbMessageChooseNumber(_INTL("Choose a new level."), params)
+              if newlevel >= 0 && newlevel != entry[0]
                 havemove = -1
-                for i in 0...realcmds.length
-                  havemove = realcmds[i][2] if realcmds[i][0]==newlevel && realcmds[i][1]==entry[1]
+                realcmds.each do |e|
+                  havemove = e[2] if e[0] == newlevel && e[1] == entry[1]
                 end
-                if havemove>=0
+                if havemove >= 0   # Move already known at new level; delete this move
                   realcmds[cmd[1]] = nil
                   realcmds.compact!
                   oldsel = havemove
-                else
+                else   # Apply the new level
                   entry[0] = newlevel
                   oldsel = entry[2]
                 end
                 refreshlist = true
               end
-            elsif cmd2==1
+            when 1   # Change move
               newmove = pbChooseMoveList(entry[1])
-              if newmove>0
+              if newmove
                 havemove = -1
-                for i in 0...realcmds.length
-                  havemove = realcmds[i][2] if realcmds[i][0]==entry[0] && realcmds[i][1]==newmove
+                realcmds.each do |e|
+                  havemove = e[2] if e[0] == entry[0] && e[1] == newmove
                 end
-                if havemove>=0
+                if havemove >= 0   # New move already known at level; delete this move
                   realcmds[cmd[1]] = nil
                   realcmds.compact!
                   oldsel = havemove
-                else
+                else   # Apply the new move
                   entry[1] = newmove
+                  entry[3] = GameData::Move.get(newmove).real_name
                   oldsel = entry[2]
                 end
                 refreshlist = true
               end
-            elsif cmd2==2
+            when 2   # Delete
               realcmds[cmd[1]] = nil
               realcmds.compact!
-              cmd[1] = [cmd[1],realcmds.length-1].min
+              cmd[1] = [cmd[1], realcmds.length - 1].min
               refreshlist = true
             end
           end
-        else
-          cmd2 = pbMessage(_INTL("Save changes?"),
-             [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
-          if cmd2==0 || cmd2==1
-            if cmd2==0
-              for i in 0...realcmds.length
-                realcmds[i].pop
-                realcmds[i] = nil if realcmds[i][0]==0
-              end
-              realcmds.compact!
-              ret = realcmds
+        else   # Cancel/quit
+          case pbMessage(_INTL("Save changes?"),
+             [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+          when 0
+            for i in 0...realcmds.length
+              realcmds[i].pop   # Remove name
+              realcmds[i].pop   # Remove index in this list
             end
+            realcmds.compact!
+            ret = realcmds
+            break
+          when 1
             break
           end
         end
@@ -970,8 +973,8 @@ module MovePoolProperty
   def self.format(value)
     ret = ""
     for i in 0...value.length
-      ret << "," if i>0
-      ret << sprintf("#{value[i][0]},#{PBMoves.getName(value[i][1])}")
+      ret << "," if i > 0
+      ret << sprintf("%s,%s", value[i][0], GameData::Move.get(value[i][1]).real_name)
     end
     return ret
   end
@@ -980,83 +983,78 @@ end
 
 
 module EggMovesProperty
-  def self.set(_settingname,oldsetting)
-    ret = oldsetting
-    cmdwin = pbListWindow([],200)
-    commands = []
+  def self.set(_settingname, oldsetting)
+    # Get all egg moves
     realcmds = []
-    realcmds.push([0,_INTL("[ADD MOVE]"),-1])
+    realcmds.push([nil, _INTL("[ADD MOVE]"), -1])
     for i in 0...oldsetting.length
-      realcmds.push([oldsetting[i],PBMoves.getName(oldsetting[i]),0])
+      realcmds.push([oldsetting[i], GameData::Move.get(oldsetting[i]).real_name, 0])
     end
-    refreshlist = true; oldsel = -1
+    # Edit egg moves list
+    cmdwin = pbListWindow([], 200)
+    oldsel = nil
+    ret = oldsetting
     cmd = 0
+    commands = []
+    refreshlist = true
     loop do
       if refreshlist
-        realcmds.sort! { |a,b| (a[2]==b[2]) ? a[1]<=>b[1] : a[2]<=>b[2] }
+        realcmds.sort! { |a, b| (a[2] == b[2]) ? a[1] <=> b[1] : a[2] <=> b[2] }
         commands = []
-        for i in 0...realcmds.length
-          commands.push(realcmds[i][1])
-          cmd = i if oldsel>=0 && realcmds[i][0]==oldsel
+        realcmds.each_with_index do |entry, i|
+          commands.push(entry[1])
+          cmd = i if oldsel && entry[0] == oldsel
         end
       end
-      refreshlist = false; oldsel = -1
-      cmd = pbCommands2(cmdwin,commands,-1,cmd,true)
-      if cmd>=0
+      refreshlist = false
+      oldsel = nil
+      cmd = pbCommands2(cmdwin, commands, -1, cmd, true)
+      if cmd >= 0   # Chose an entry
         entry = realcmds[cmd]
-        if entry[0]==0   # Add new move
+        if entry[2] == -1   # Add new move
           newmove = pbChooseMoveList
-          if newmove>0
-            havemove = false
-            for i in 0...realcmds.length
-              havemove = true if realcmds[i][0]==newmove
-            end
-            if havemove
-              oldsel = newmove
+          if newmove
+            if realcmds.any? { |e| e[0] == newmove }
+              oldsel = newmove   # Already have move; just move cursor to it
             else
-              realcmds.push([newmove,PBMoves.getName(newmove),0])
+              realcmds.push([newmove, GameData::Move.get(newmove).name, 0])
             end
             refreshlist = true
           end
         else   # Edit move
-          cmd2 = pbMessage(_INTL("\\ts[]Do what with this move?"),
-             [_INTL("Change move"),_INTL("Delete"),_INTL("Cancel")],3)
-          if cmd2==0
+          case pbMessage(_INTL("\\ts[]Do what with this move?"),
+             [_INTL("Change move"), _INTL("Delete"), _INTL("Cancel")], 3)
+          when 0   # Change move
             newmove = pbChooseMoveList(entry[0])
-            if newmove>0
-              havemove = false
-              for i in 0...realcmds.length
-                havemove = true if realcmds[i][0]==newmove
-              end
-              if havemove
+            if newmove
+              if realcmds.any? { |e| e[0] == newmove }   # Already have move; delete this one
                 realcmds[cmd] = nil
                 realcmds.compact!
-                cmd = [cmd,realcmds.length-1].min
-              else
-                realcmds[cmd] = [newmove,PBMoves.getName(newmove),0]
+                cmd = [cmd, realcmds.length - 1].min
+              else   # Change move
+                realcmds[cmd] = [newmove, GameData::Move.get(newmove).name, 0]
               end
               oldsel = newmove
               refreshlist = true
             end
-          elsif cmd2==1
+          when 1   # Delete
             realcmds[cmd] = nil
             realcmds.compact!
-            cmd = [cmd,realcmds.length-1].min
+            cmd = [cmd, realcmds.length - 1].min
             refreshlist = true
           end
         end
-      else
-        cmd2 = pbMessage(_INTL("Save changes?"),
-           [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
-        if cmd2==0 || cmd2==1
-          if cmd2==0
-            for i in 0...realcmds.length
-              realcmds[i] = realcmds[i][0]
-              realcmds[i] = nil if realcmds[i]==0
-            end
-            realcmds.compact!
-            ret = realcmds
+      else   # Cancel/quit
+        case pbMessage(_INTL("Save changes?"),
+           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+        when 0
+          for i in 0...realcmds.length
+            realcmds[i] = realcmds[i][0]
           end
+          realcmds.compact!
+          ret = realcmds
+          break
+        when 1
           break
         end
       end
@@ -1072,8 +1070,8 @@ module EggMovesProperty
   def self.format(value)
     ret = ""
     for i in 0...value.length
-      ret << "," if i>0
-      ret << sprintf("#{PBMoves.getName(value[i])}")
+      ret << "," if i > 0
+      ret << GameData::Move.get(value[i]).real_name
     end
     return ret
   end
@@ -1254,7 +1252,7 @@ class EvolutionsProperty
                   case param_type
                   when :Item
                     newparam = pbChooseItemList
-                  when :PBMoves
+                  when :Move
                     newparam = pbChooseMoveList
                   when :PBSpecies
                     newparam = pbChooseSpeciesList
@@ -1343,7 +1341,7 @@ class EvolutionsProperty
                 case param_type
                 when :Item
                   newparam = pbChooseItemList(entry[1])
-                when :PBMoves
+                when :Move
                   newparam = pbChooseMoveList(entry[1])
                 when :PBSpecies
                   newparam = pbChooseSpeciesList(entry[1])

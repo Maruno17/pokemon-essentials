@@ -107,8 +107,8 @@ class PokeBattle_Move_106 < PokeBattle_PledgeMove
   def initialize(battle,move)
     super
     # [Function code to combo with, effect, override type, override animation]
-    @combos = [["107",:SeaOfFire,getConst(PBTypes,:FIRE),getConst(PBMoves,:FIREPLEDGE)],
-               ["108",:Swamp,nil,nil]]
+    @combos = [["107", :SeaOfFire, getConst(PBTypes, :FIRE), :FIREPLEDGE],
+               ["108", :Swamp,     nil,                      nil]]
   end
 end
 
@@ -123,8 +123,8 @@ class PokeBattle_Move_107 < PokeBattle_PledgeMove
   def initialize(battle,move)
     super
     # [Function code to combo with, effect, override type, override animation]
-    @combos = [["108",:Rainbow,getConst(PBTypes,:WATER),getConst(PBMoves,:WATERPLEDGE)],
-               ["106",:SeaOfFire,nil,nil]]
+    @combos = [["108", :Rainbow,   getConst(PBTypes, :WATER), :WATERPLEDGE],
+               ["106", :SeaOfFire, nil,                       nil]]
   end
 end
 
@@ -139,8 +139,8 @@ class PokeBattle_Move_108 < PokeBattle_PledgeMove
   def initialize(battle,move)
     super
     # [Function code to combo with, effect, override type, override animation]
-    @combos = [["106",:Swamp,getConst(PBTypes,:GRASS),getConst(PBMoves,:GRASSPLEDGE)],
-               ["107",:Rainbow,nil,nil]]
+    @combos = [["106", :Swamp,   getConst(PBTypes, :GRASS), :GRASSPLEDGE],
+               ["107", :Rainbow, nil,                        nil]]
   end
 end
 
@@ -243,7 +243,7 @@ class PokeBattle_Move_10C < PokeBattle_Move
 
   def pbEffectGeneral(user)
     user.effects[PBEffects::Trapping]     = 0
-    user.effects[PBEffects::TrappingMove] = 0
+    user.effects[PBEffects::TrappingMove] = nil
     user.effects[PBEffects::Substitute]   = @subLife
     @battle.pbDisplay(_INTL("{1} put in a substitute!",user.pbThis))
   end
@@ -326,9 +326,11 @@ class PokeBattle_Move_10E < PokeBattle_Move
 
   def pbFailsAgainstTarget?(user,target)
     failed = true
-    target.eachMove do |m|
-      next if m.id!=target.lastRegularMoveUsed || m.pp==0 || m.totalpp<=0
-      failed = false; break
+    if target.lastRegularMoveUsed
+      target.eachMove do |m|
+        next if m.id!=target.lastRegularMoveUsed || m.pp==0 || m.total_pp<=0
+        failed = false; break
+      end
     end
     if failed
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -379,11 +381,11 @@ class PokeBattle_Move_110 < PokeBattle_Move
   def pbEffectAfterAllHits(user,target)
     return if user.fainted? || target.damageState.unaffected
     if user.effects[PBEffects::Trapping]>0
-      trapMove = PBMoves.getName(user.effects[PBEffects::TrappingMove])
+      trapMove = GameData::Move.get(user.effects[PBEffects::TrappingMove]).name
       trapUser = @battle.battlers[user.effects[PBEffects::TrappingUser]]
       @battle.pbDisplay(_INTL("{1} got free of {2}'s {3}!",user.pbThis,trapUser.pbThis(true),trapMove))
       user.effects[PBEffects::Trapping]     = 0
-      user.effects[PBEffects::TrappingMove] = 0
+      user.effects[PBEffects::TrappingMove] = nil
       user.effects[PBEffects::TrappingUser] = -1
     end
     if user.effects[PBEffects::LeechSeed]>=0
@@ -447,7 +449,7 @@ class PokeBattle_Move_111 < PokeBattle_Move
     effects[PBEffects::FutureSightMove]           = @id
     effects[PBEffects::FutureSightUserIndex]      = user.index
     effects[PBEffects::FutureSightUserPartyIndex] = user.pokemonIndex
-    if isConst?(@id,PBMoves,:DOOMDESIRE)
+    if @id == :DOOMDESIRE
       @battle.pbDisplay(_INTL("{1} chose Doom Desire as its destiny!",user.pbThis))
     else
       @battle.pbDisplay(_INTL("{1} foresaw an attack!",user.pbThis))
@@ -624,7 +626,7 @@ class PokeBattle_Move_116 < PokeBattle_Move
       return true
     end
     oppMove = @battle.choices[target.index][2]
-    if !oppMove || oppMove.id<=0 ||
+    if !oppMove ||
        (oppMove.function!="0B0" &&   # Me First
        (target.movedThisRound? || oppMove.statusMove?))
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -647,7 +649,7 @@ class PokeBattle_Move_117 < PokeBattle_Move
       next if b.effects[PBEffects::FollowMe]<user.effects[PBEffects::FollowMe]
       user.effects[PBEffects::FollowMe] = b.effects[PBEffects::FollowMe]+1
     end
-    user.effects[PBEffects::RagePowder] = true if isConst?(@id,PBMoves,:RAGEPOWDER)
+    user.effects[PBEffects::RagePowder] = true if @id == :RAGEPOWDER
     @battle.pbDisplay(_INTL("{1} became the center of attention!",user.pbThis))
   end
 end
@@ -673,7 +675,7 @@ class PokeBattle_Move_118 < PokeBattle_Move
     @battle.eachBattler do |b|
       showMessage = false
       if b.inTwoTurnAttack?("0C9","0CC","0CE")   # Fly/Bounce/Sky Drop
-        b.effects[PBEffects::TwoTurnAttack] = 0
+        b.effects[PBEffects::TwoTurnAttack] = nil
         @battle.pbClearChoice(b.index) if !b.movedThisRound?
         showMessage = true
       end
@@ -778,7 +780,7 @@ class PokeBattle_Move_11C < PokeBattle_Move
     return if !target.airborne? && !target.inTwoTurnAttack?("0C9","0CC")   # Fly/Bounce
     target.effects[PBEffects::SmackDown]   = true
     if target.inTwoTurnAttack?("0C9","0CC")   # Fly/Bounce. NOTE: Not Sky Drop.
-      target.effects[PBEffects::TwoTurnAttack] = 0
+      target.effects[PBEffects::TwoTurnAttack] = nil
       @battle.pbClearChoice(target.index) if !target.movedThisRound?
     end
     target.effects[PBEffects::MagnetRise]  = 0
@@ -805,7 +807,7 @@ class PokeBattle_Move_11D < PokeBattle_Move
     end
     # Target didn't choose to use a move this round
     oppMove = @battle.choices[target.index][2]
-    if !oppMove || oppMove.id<=0
+    if !oppMove
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -829,7 +831,7 @@ class PokeBattle_Move_11E < PokeBattle_Move
     return true if pbMoveFailedTargetAlreadyMoved?(target)
     # Target isn't going to use a move
     oppMove = @battle.choices[target.index][2]
-    if !oppMove || oppMove.id<=0
+    if !oppMove
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1636,7 +1638,7 @@ end
 #===============================================================================
 class PokeBattle_Move_14E < PokeBattle_TwoTurnMove
   def pbMoveFailed?(user,targets)
-    return false if user.effects[PBEffects::TwoTurnAttack]>0   # Charging turn
+    return false if user.effects[PBEffects::TwoTurnAttack]   # Charging turn
     if !user.pbCanRaiseStatStage?(PBStats::SPATK,user,self) &&
        !user.pbCanRaiseStatStage?(PBStats::SPDEF,user,self) &&
        !user.pbCanRaiseStatStage?(PBStats::SPEED,user,self)
@@ -2327,7 +2329,7 @@ class PokeBattle_Move_16B < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    if target.lastRegularMoveUsed<0 || !target.pbHasMove?(target.lastRegularMoveUsed)
+    if !target.lastRegularMoveUsed || !target.pbHasMove?(target.lastRegularMoveUsed)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2342,7 +2344,7 @@ class PokeBattle_Move_16B < PokeBattle_Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    if @moveBlacklist.include?(pbGetMoveData(target.lastRegularMoveUsed,MoveData::FUNCTION_CODE))
+    if @moveBlacklist.include?(GameData::Move.get(target.lastRegularMoveUsed).function_code)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2350,7 +2352,7 @@ class PokeBattle_Move_16B < PokeBattle_Move
     target.eachMoveWithIndex do |m,i|
       idxMove = i if m.id==target.lastRegularMoveUsed
     end
-    if target.moves[idxMove].pp==0 && target.moves[idxMove].totalpp>0
+    if target.moves[idxMove].pp==0 && target.moves[idxMove].total_pp>0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end

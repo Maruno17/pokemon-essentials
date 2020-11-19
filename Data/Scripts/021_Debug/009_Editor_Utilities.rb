@@ -17,8 +17,7 @@ def pbGetLegalMoves(species)
   tmdat = pbLoadSpeciesTMData
   GameData::Item.each do |i|
     next if !i.move
-    atk = getConst(PBMoves, i.move)
-    moves.push(atk) if tmdat[atk] && tmdat[atk].include?(species)
+    moves.push(i.move) if tmdat[i.move] && tmdat[i.move].include?(species)
   end
   babyspecies = pbGetBabySpecies(species)
   eggMoves = pbGetSpeciesEggMoves(babyspecies)
@@ -228,7 +227,7 @@ def pbGetGenderConst(i)
 end
 
 def pbGetHabitatConst(i)
-  ret = MakeshiftConsts.get(53,i,PBHabitats)
+  ret = MakeshiftConsts.get(54,i,PBHabitats)
   if !ret
     ret = ["","Grassland","Forest","WatersEdge","Sea","Cave","Mountain",
            "RoughTerrain","Urban","Rare"]
@@ -243,9 +242,10 @@ end
 #  return MakeshiftConsts.get(MessageTypes::Abilities,i,PBAbilities)
 #end
 
-def pbGetMoveConst(i)
-  return MakeshiftConsts.get(MessageTypes::Moves,i,PBMoves)
-end
+# Unused
+#def pbGetMoveConst(i)
+#  return MakeshiftConsts.get(MessageTypes::Moves,i,PBMoves)
+#end
 
 # Unused
 #def pbGetItemConst(i)
@@ -283,47 +283,44 @@ end
 # is the ID of the move to initially select.
 def pbChooseMoveList(default=0)
   commands = []
-  for i in 1..PBMoves.maxValue
-    cname = getConstantName(PBMoves,i) rescue nil
-    commands.push([i,PBMoves.getName(i)]) if cname
-  end
-  return pbChooseList(commands,default,0)
+  GameData::Move.each { |i| commands.push([i.id_number, i.name, i.id]) }
+  return pbChooseList(commands, default, nil, -1)
 end
 
-def pbChooseMoveListForSpecies(species,defaultMoveID=0)
-  cmdwin = pbListWindow([],200)
+def pbChooseMoveListForSpecies(species, defaultMoveID = nil)
+  cmdwin = pbListWindow([], 200)
   commands = []
-  moveDefault = 0
+  # Get all legal moves
   legalMoves = pbGetLegalMoves(species)
-  for move in legalMoves
-    commands.push([move,PBMoves.getName(move)])
+  legalMoves.each do |move|
+    move_data = GameData::Move.get(move)
+    commands.push([move_data.id_number, move_data.name, move_data.id])
   end
-  commands.sort! { |a,b| a[1]<=>b[1] }
-  if defaultMoveID>0
-    commands.each_with_index do |_item,i|
-      moveDefault = i if moveDefault==0 && i[0]==defaultMoveID
+  commands.sort! { |a, b| a[1] <=> b[1] }
+  moveDefault = 0
+  if defaultMoveID
+    commands.each_with_index do |_item, i|
+      moveDefault = i if moveDefault == 0 && i[2] == defaultMoveID
     end
   end
+  # Get all moves
   commands2 = []
-  for i in 1..PBMoves.maxValue
-    if PBMoves.getName(i)!=nil && PBMoves.getName(i)!=""
-      commands2.push([i,PBMoves.getName(i)])
+  GameData::Move.each do |move_data|
+    commands2.push([move_data.id_number, move_data.name, move_data.id])
+  end
+  commands2.sort! { |a, b| a[0] <=> b[0] }
+  if defaultMoveID
+    commands2.each_with_index do |_item, i|
+      moveDefault = i if moveDefault == 0 && i[2] == defaultMoveID
     end
   end
-  commands2.sort! { |a,b| a[1]<=>b[1] }
-  if defaultMoveID>0
-    commands2.each_with_index do |_item,i|
-      moveDefault = i if moveDefault==0 && i[0]==defaultMoveID
-    end
-  end
+  # Choose from all moves
   commands.concat(commands2)
   realcommands = []
-  for command in commands
-    realcommands.push("#{command[1]}")
-  end
-  ret = pbCommands2(cmdwin,realcommands,-1,moveDefault,true)
+  commands.each { |cmd| realcommands.push(cmd[1]) }
+  ret = pbCommands2(cmdwin, realcommands, -1, moveDefault, true)
   cmdwin.dispose
-  return (ret>=0) ? commands[ret][0] : 0
+  return (ret >= 0) ? commands[ret][2] : nil
 end
 
 # Displays an alphabetically sorted list of all types, and returns the ID of the
@@ -352,7 +349,7 @@ end
 # (or -1 if the selection was canceled). "default", if specified, is the ID of
 # the ability to initially select. Pressing Input::A will toggle the list
 # sorting between numerical and alphabetical.
-def pbChooseAbilityList(default = 0)
+def pbChooseAbilityList(default = nil)
   commands = []
   GameData::Ability.each { |a| commands.push([a.id_number, a.name, a.id]) }
   return pbChooseList(commands, default, nil, -1)
@@ -364,7 +361,7 @@ def pbChooseBallList(defaultMoveID = -1)
   moveDefault = 0
   for key in $BallTypes.keys
     item = GameData::Item.try_get($BallTypes[key])
-    balls.push([key.to_i, item.name]) if item
+    commands.push([key.to_i, item.name]) if item
   end
   commands.sort! { |a, b| a[1] <=> b[1] }
   if defaultMoveID >= 0

@@ -261,7 +261,7 @@ class PokeBattle_Battler
     #       disabled/anything else). This behaviour was tested in Gen 5.
     if @status==PBStatuses::SLEEP && @effects[PBEffects::Outrage]>0
       @effects[PBEffects::Outrage] = 0
-      @currentMove = 0
+      @currentMove = nil
     end
   end
 

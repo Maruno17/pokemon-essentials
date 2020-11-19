@@ -368,12 +368,8 @@ end
 # Checks whether any Pokémon in the party knows the given move, and returns
 # the first Pokémon it finds with that move, or nil if no Pokémon has that move.
 def pbCheckMove(move)
-  move = getID(PBMoves,move)
-  return nil if !move || move<=0
-  for i in $Trainer.pokemonParty
-    for j in i.moves
-      return i if j.id==move
-    end
+  $Trainer.pokemonParty.each do |pkmn|
+    return pkmn if pkmn.hasMove?(move)
   end
   return nil
 end

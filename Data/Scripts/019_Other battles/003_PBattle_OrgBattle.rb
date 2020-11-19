@@ -53,13 +53,11 @@ class PBPokemon
     moves=pieces[4].split(/\s*,\s*/)
     moveid=[]
     for i in 0...4
-      if (PBMoves.const_defined?(moves[i]) rescue false)
-        moveid.push(PBMoves.const_get(moves[i]))
-      end
+      move_data = GameData::Move.try_get(moves[i])
+      moveid.push(move_data.id) if move_data
     end
-    moveid=[1] if moveid.length==0
-    return self.new(species,item,nature,
-       moveid[0],(moveid[1]||0),(moveid[2]||0),(moveid[3]||0),evvalue)
+    moveid=[GameData::Move.get(1)] if moveid.length==0
+    return self.new(species, item, nature, moveid[0], moveid[1], moveid[2], moveid[3], evvalue)
   end
 
   def self.fromPokemon(pokemon)
@@ -70,9 +68,12 @@ class PBPokemon
     evvalue|=0x08 if pokemon.ev[3]>60
     evvalue|=0x10 if pokemon.ev[4]>60
     evvalue|=0x20 if pokemon.ev[5]>60
+    mov1 = (pokemon.moves[0]) ? pokemon.moves[0].id : nil
+    mov2 = (pokemon.moves[1]) ? pokemon.moves[1].id : nil
+    mov3 = (pokemon.moves[2]) ? pokemon.moves[2].id : nil
+    mov4 = (pokemon.moves[3]) ? pokemon.moves[3].id : nil
     return self.new(pokemon.species,pokemon.item_id,pokemon.nature,
-       pokemon.moves[0].id,pokemon.moves[1].id,pokemon.moves[2].id,
-       pokemon.moves[3].id,evvalue)
+       mov1,mov2,mov3,mov4,evvalue)
   end
 
   def self.constFromStr(mod,str)
@@ -97,10 +98,10 @@ class PBPokemon
     species=self.constFromStr(PBSpecies,s[1])
     item=s[2].to_sym
     nature=self.constFromStr(PBNatures,s[3])
-    move1=self.constFromStr(PBMoves,s[4])
-    move2=(s.length>=12) ? self.constFromStr(PBMoves,s[5]) : 0
-    move3=(s.length>=13) ? self.constFromStr(PBMoves,s[6]) : 0
-    move4=(s.length>=14) ? self.constFromStr(PBMoves,s[7]) : 0
+    move1=GameData::Move.get(s[4]).id
+    move2=(s.length>=12) ? GameData::Move.get(s[5]).id : nil
+    move3=(s.length>=13) ? GameData::Move.get(s[6]).id : nil
+    move4=(s.length>=14) ? GameData::Move.get(s[7]).id : nil
     ev=0
     slen=s.length-6
     ev|=0x01 if s[slen].to_i>0
@@ -129,7 +130,7 @@ class PBPokemon
 
   def inspect
     c1=getConstantName(PBSpecies,@species)
-    c2=(@item) ? GameData::Item.get(@item).name : ""
+    c2=(@item) ? GameData::Item.get(@item).id_to_s : ""
     c3=getConstantName(PBNatures,@nature)
     evlist=""
     for i in 0...@ev
@@ -138,10 +139,10 @@ class PBPokemon
         evlist+=["HP","ATK","DEF","SPD","SA","SD"][i]
       end
     end
-    c4=(@move1==0) ? "" : getConstantName(PBMoves,@move1)
-    c5=(@move2==0) ? "" : getConstantName(PBMoves,@move2)
-    c6=(@move3==0) ? "" : getConstantName(PBMoves,@move3)
-    c7=(@move4==0) ? "" : getConstantName(PBMoves,@move4)
+    c4=(@move1) ? GameData::Move.get(@move1).id_to_s : ""
+    c5=(@move2) ? GameData::Move.get(@move2).id_to_s : ""
+    c6=(@move3) ? GameData::Move.get(@move3).id_to_s : ""
+    c7=(@move4) ? GameData::Move.get(@move4).id_to_s : ""
     return "#{c1};#{c2};#{c3};#{evlist};#{c4},#{c5},#{c6},#{c7}"
   end
 
@@ -150,9 +151,7 @@ class PBPokemon
   end
 
   def convertMove(move)
-    if isConst?(move,PBMoves,:RETURN) && hasConst?(PBMoves,:FRUSTRATION)
-      move=getConst(PBMoves,:FRUSTRATION)
-    end
+    move = :FRUSTRATION if move == :RETURN && GameData::Move.exists?(:FRUSTRATION)
     return move
   end
 

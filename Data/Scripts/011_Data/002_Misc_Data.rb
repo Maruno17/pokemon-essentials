@@ -84,7 +84,7 @@ module SpeciesData
       "Weight"           => [WEIGHT,         "f"],
       "Color"            => [COLOR,          "e", :PBColors],
       "Shape"            => [SHAPE,          "u"],
-      "Moves"            => [0,              "*ue", nil, :PBMoves],
+      "Moves"            => [0,              "*ue", nil, :Move],
       "Kind"             => [0,              "s"],
       "Pokedex"          => [0,              "q"]
     }
@@ -114,14 +114,14 @@ module SpeciesData
       "BattlerAltitude"     => [METRIC_ALTITUDE,    "i"],
       "BattlerShadowX"      => [METRIC_SHADOW_X,    "i"],
       "BattlerShadowSize"   => [METRIC_SHADOW_SIZE, "u"],
-      "EggMoves"            => [0,                  "*e", :PBMoves],
+      "EggMoves"            => [0,                  "*e", :Move],
       "FormName"            => [0,                  "q"],
       "Evolutions"          => [0,                  "*ses", nil, :PBEvolution, nil]
     }
     if compilingForms
       ret["PokedexForm"]     = [POKEDEX_FORM,       "u"]
       ret["MegaStone"]       = [MEGA_STONE,         "e", :Item]
-      ret["MegaMove"]        = [MEGA_MOVE,          "e", :PBMoves]
+      ret["MegaMove"]        = [MEGA_MOVE,          "e", :Move]
       ret["UnmegaForm"]      = [UNMEGA_FORM,        "u"]
       ret["MegaMessage"]     = [MEGA_MESSAGE,       "u"]
     else

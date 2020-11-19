@@ -143,8 +143,8 @@ ItemHandlers::CanUseInBattle.copy(:REVIVE,:MAXREVIVE,:REVIVALHERB)
 
 ItemHandlers::CanUseInBattle.add(:ETHER,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
   if !pokemon.able? || move<0 ||
-     pokemon.moves[move].totalpp<=0 ||
-     pokemon.moves[move].pp==pokemon.moves[move].totalpp
+     pokemon.moves[move].total_pp<=0 ||
+     pokemon.moves[move].pp==pokemon.moves[move].total_pp
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
     next false
   end
@@ -161,7 +161,7 @@ ItemHandlers::CanUseInBattle.add(:ELIXIR,proc { |item,pokemon,battler,move,first
   canRestore = false
   for m in pokemon.moves
     next if m.id==0
-    next if m.totalpp<=0 || m.pp==m.totalpp
+    next if m.total_pp<=0 || m.pp==m.total_pp
     canRestore = true
     break
   end
@@ -487,7 +487,7 @@ ItemHandlers::BattleUseOnPokemon.copy(:ETHER,:LEPPABERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:MAXETHER,proc { |item,pokemon,battler,choices,scene|
   idxMove = choices[3]
-  pbBattleRestorePP(pokemon,battler,idxMove,pokemon.moves[idxMove].totalpp)
+  pbBattleRestorePP(pokemon,battler,idxMove,pokemon.moves[idxMove].total_pp)
   scene.pbDisplay(_INTL("PP was restored."))
 })
 
@@ -500,7 +500,7 @@ ItemHandlers::BattleUseOnPokemon.add(:ELIXIR,proc { |item,pokemon,battler,choice
 
 ItemHandlers::BattleUseOnPokemon.add(:MAXELIXIR,proc { |item,pokemon,battler,choices,scene|
   for i in 0...pokemon.moves.length
-    pbBattleRestorePP(pokemon,battler,i,pokemon.moves[i].totalpp)
+    pbBattleRestorePP(pokemon,battler,i,pokemon.moves[i].total_pp)
   end
   scene.pbDisplay(_INTL("PP was restored."))
 })

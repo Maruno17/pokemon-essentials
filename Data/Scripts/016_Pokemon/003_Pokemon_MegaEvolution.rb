@@ -16,8 +16,8 @@ class Pokemon
         ret = i; break
       end
       if !checkItemOnly
-        megaMove = speciesData[fSpec][SpeciesData::MEGA_MOVE] || 0
-        if megaMove>0 && self.hasMove?(megaMove)
+        megaMove = speciesData[fSpec][SpeciesData::MEGA_MOVE]
+        if self.hasMove?(megaMove)
           ret = i; break
         end
       end
