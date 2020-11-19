@@ -18,7 +18,7 @@ module SaveData
     def save
       data = @save_proc.call
       if @ensured_class && data.class.name != @ensured_class.to_s
-        raise TypeError, "Save value #{@id.inspect} is not a #{@ensured_class}"
+        raise TypeError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{data.class.name} given)"
       end
       return data
     end
@@ -26,19 +26,19 @@ module SaveData
     # Calls the value's load proc with the given argument passed into it.
     # @param value [Object] load proc argument
     def load(value)
-      if @ensured_class && data.class.name != @ensured_class.to_s
-        raise TypeError, "Save value #{@id.inspect} is not a #{@ensured_class}"
+      if @ensured_class && value.class.name != @ensured_class.to_s
+        raise TypeError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{value.class.name} given)"
       end
       @load_proc.call(value)
     end
 
-    # Uses the +get_from_legacy+ proc to select the correct data from
-    # the old_format and then loads it.
+    # Uses the +get_from_old_format+ proc to select the correct data from
+    # +old_format+ and then loads it.
     # Does nothing if the proc is undefined.
     # @param old_format [Array] old format to load value from
-    def load_from_legacy(old_format)
-      return if @legacy_conversion_proc.nil?
-      load(@legacy_conversion_proc.call(old_format))
+    def load_from_old_format(old_format)
+      return if @old_format_get_proc.nil?
+      load(@old_format_get_proc.call(old_format))
     end
 
     private
@@ -59,9 +59,9 @@ module SaveData
       @ensured_class = class_name
     end
 
-    def get_from_legacy(&block)
-      raise ArgumentError, "No block given for get_from_legacy proc" unless block_given?
-      @legacy_conversion_proc = block
+    def get_from_old_format(&block)
+      raise ArgumentError, "No block given for get_from_old_format proc" unless block_given?
+      @old_format_get_proc = block
     end
   end
 end

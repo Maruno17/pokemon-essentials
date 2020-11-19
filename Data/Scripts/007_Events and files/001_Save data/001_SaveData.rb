@@ -36,7 +36,7 @@ module SaveData
       if save_data.is_a?(Hash)
         save_data = data
       else
-        save_data << data
+        save_data << data if file.eof?
       end
     end
 
@@ -80,12 +80,12 @@ module SaveData
     end
   end
 
-  # Loads the values from the given pre-v19 format save data.
+  # Loads the values from pre-v19 format save data.
   # @param old_format [Array] pre-v19 format save data
-  def load_values_from_legacy(old_format)
+  def load_values_from_old_format(old_format)
     validate old_format => Array
     @values.each_value do |value|
-      value.load_from_legacy(old_format)
+      value.load_from_old_format(old_format)
     end
   end
 end
