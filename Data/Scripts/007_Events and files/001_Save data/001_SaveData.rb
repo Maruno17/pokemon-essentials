@@ -5,7 +5,7 @@ module SaveData
   #   mkxp-z introduces System.data_directory, maybe use that later?
   FILE_PATH = RTP.getSaveFileName('Game.rxdata')
 
-  # Contains {SavedValue} objects for each save element.
+  # Contains {Value} objects for each save element.
   # Populated during runtime by {#register} calls.
   @values = {}
 
@@ -71,7 +71,7 @@ module SaveData
   end
 
   # Loads the values from the given save data into memory by
-  # calling each {SavedValue} object's +load_value+ proc.
+  # calling each {Value} object's +load_value+ proc.
   # @param save_data [Hash] save data to load
   def load_values(save_data)
     validate save_data => Hash
