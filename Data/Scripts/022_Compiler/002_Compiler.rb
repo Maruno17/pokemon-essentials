@@ -110,7 +110,7 @@ module Compiler
       end
       lineno += 1
       Graphics.update if lineno%500==0
-      Win32API.SetWindowText(_INTL("Processing {1} line {2}",FileLineData.file,lineno)) if lineno%50==0
+      pbSetWindowText(_INTL("Processing {1} line {2}",FileLineData.file,lineno)) if lineno%50==0
     }
     yield lastsection,sectionname  if havesection
   end
@@ -668,6 +668,7 @@ module Compiler
     if !$INEDITOR && LANGUAGES.length>=2
       pbLoadMessages("Data/"+LANGUAGES[$PokemonSystem.language][1])
     end
+    pbSetWindowText(nil) if mkxp?
   end
 
   def main
@@ -731,24 +732,26 @@ module Compiler
       end
       # Check data files and PBS files, and recompile if any PBS file was edited
       # more recently than the data files were last created
-      for i in 0...dataFiles.length
-        begin
-          File.open("Data/#{dataFiles[i]}") { |file|
-            latestDataTime = [latestDataTime,file.mtime.to_i].max
-          }
-        rescue SystemCallError
-          mustCompile = true
+      if !mkxp?
+        for i in 0...dataFiles.length
+          begin
+            File.open("Data/#{dataFiles[i]}") { |file|
+              latestDataTime = [latestDataTime,file.mtime.to_i].max
+            }
+          rescue SystemCallError
+            mustCompile = true
+          end
         end
-      end
-      for i in 0...textFiles.length
-        begin
-          File.open("PBS/#{textFiles[i]}") { |file|
-            latestTextTime = [latestTextTime,file.mtime.to_i].max
-          }
-        rescue SystemCallError
+        for i in 0...textFiles.length
+          begin
+            File.open("PBS/#{textFiles[i]}") { |file|
+              latestTextTime = [latestTextTime,file.mtime.to_i].max
+            }
+          rescue SystemCallError
+          end
         end
+        mustCompile |= (latestTextTime>=latestDataTime)
       end
-      mustCompile |= (latestTextTime>=latestDataTime)
       # Should recompile if holding Ctrl
       Input.update
       mustCompile = true if Input.press?(Input::CTRL)
@@ -762,7 +765,7 @@ module Compiler
         end
       end
       # Recompile all data
-      compile_all(mustCompile) { |msg| Win32API.SetWindowText(msg) }
+      compile_all(mustCompile) { |msg| pbSetWindowText(msg) }
     rescue Exception
       e = $!
       raise e if "#{e.class}"=="Reset" || e.is_a?(Reset) || e.is_a?(SystemExit)
