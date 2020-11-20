@@ -76,7 +76,7 @@ class Spriteset_Map
 
   def update
     return if @tilemap.disposed?
-    if $RPGVX || $PokemonSystem.tilemap==0
+    if $PokemonSystem.tilemap==0
       if self.map==$game_map
         pbDayNightTint(@@viewport3)
       else

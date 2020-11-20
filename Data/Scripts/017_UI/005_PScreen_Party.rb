@@ -122,7 +122,8 @@ class Window_CommandPokemonColor < Window_CommandPokemon
       base   = Color.new(0,80,160)
       shadow = Color.new(128,192,240)
     end
-    pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,@commands[index],base,shadow)
+    pbDrawShadowText(self.contents,rect.x,rect.y + (mkxp? ? 6 : 0),rect.width,rect.height,
+       @commands[index],base,shadow)
   end
 end
 
@@ -398,7 +399,7 @@ class PokemonPartyPanel < SpriteWrapper
            "Graphics/Pictures/Party/overlay_lv",20,70,0,0,22,14]])
         pbSetSmallFont(@overlaysprite.bitmap)
         pbDrawTextPositions(@overlaysprite.bitmap,[
-           [@pokemon.level.to_s,42,62,0,basecolor,shadowcolor]
+           [@pokemon.level.to_s,42,63,0,basecolor,shadowcolor]
         ])
       end
       # Draw annotation text

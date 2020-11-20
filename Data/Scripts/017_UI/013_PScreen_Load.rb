@@ -259,8 +259,7 @@ class PokemonLoadScreen
     savefile = RTP.getSaveFileName("Game.rxdata")
     FontInstaller.install
     data_system = pbLoadRxData("Data/System")
-    mapfile = ($RPGVX) ? sprintf("Data/Map%03d.rvdata",data_system.start_map_id) :
-                         sprintf("Data/Map%03d.rxdata",data_system.start_map_id)
+    mapfile = sprintf("Data/Map%03d.rxdata",data_system.start_map_id)
     if data_system.start_map_id==0 || !pbRgssExists?(mapfile)
       pbMessage(_INTL("No starting position was set in the map editor.\1"))
       pbMessage(_INTL("The game cannot continue."))

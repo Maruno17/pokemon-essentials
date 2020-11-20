@@ -413,7 +413,8 @@ class PokemonBoxSprite < SpriteWrapper
       pbSetSystemFont(@contents)
       widthval = @contents.text_size(boxname).width
       xval = 162-(widthval/2)
-      pbDrawShadowText(@contents,xval,8,widthval,32,boxname,Color.new(248,248,248),Color.new(40,48,48))
+      pbDrawShadowText(@contents,xval,8 + (mkxp? ? 6 : 0),widthval,32,
+         boxname,Color.new(248,248,248),Color.new(40,48,48))
       @refreshBox = false
     end
     yval = self.y+30
@@ -536,7 +537,7 @@ class PokemonBoxPartySprite < SpriteWrapper
   def refresh
     @contents.blt(0,0,@boxbitmap.bitmap,Rect.new(0,0,172,352))
     pbDrawTextPositions(self.bitmap,[
-       [_INTL("Back"),86,242,2,Color.new(248,248,248),Color.new(80,80,80),1]
+       [_INTL("Back"),86,242 - (mkxp? ? 2 : 0),2,Color.new(248,248,248),Color.new(80,80,80),1]
     ])
 
     xvalues = [18,90,18,90,18,90]
@@ -1384,8 +1385,8 @@ class PokemonStorageScene
     buttonbase = Color.new(248,248,248)
     buttonshadow = Color.new(80,80,80)
     pbDrawTextPositions(overlay,[
-       [_INTL("Party: {1}",(@storage.party.length rescue 0)),270,328,2,buttonbase,buttonshadow,1],
-       [_INTL("Exit"),446,328,2,buttonbase,buttonshadow,1],
+       [_INTL("Party: {1}",(@storage.party.length rescue 0)),270,328 - (mkxp? ? 2 : 0),2,buttonbase,buttonshadow,1],
+       [_INTL("Exit"),446,328 - (mkxp? ? 2 : 0),2,buttonbase,buttonshadow,1],
     ])
     pokemon = nil
     if @screen.pbHeldPokemon

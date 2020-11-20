@@ -85,7 +85,7 @@ end
 
 
 #===============================================================================
-# Abstraction layer for RPG Maker XP/VX
+# Abstraction layer for RPG Maker XP
 # Won't be used if $PokemonBag exists
 #===============================================================================
 class RpgxpMartAdapter
@@ -882,35 +882,5 @@ class Interpreter
 
   def setSellPrice(item,sellprice)
     setPrice(item,-1,sellprice)
-  end
-end
-
-
-
-class Game_Interpreter
-  def getItem(p)
-    if p[0]==0;    return $data_items[p[1]]
-    elsif p[0]==1; return $data_weapons[p[1]]
-    elsif p[0]==2; return $data_armors[p[1]]
-    end
-    return nil
-  end
-
-  def command_302
-    shop_goods = [getItem(@params)]
-    # Loop
-    loop do
-      # Advance index
-      @index += 1
-      # If next event command has shop on second line or after
-      if @list[@index].code == 605
-        # Add goods list to new item
-        shop_goods.push(getItem(@list[@index].parameters))
-      else
-        # End
-        pbPokemonMart(shop_goods.compact,nil,@params[2])
-        return true
-      end
-    end
   end
 end
