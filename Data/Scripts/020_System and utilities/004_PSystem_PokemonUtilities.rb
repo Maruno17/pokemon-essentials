@@ -77,7 +77,7 @@ def pbAddPokemon(pokemon,level=nil,seeform=true)
     pokemon = pbNewPkmn(pokemon,level)
   end
   speciesname = PBSpecies.getName(pokemon.species)
-  pbMessage(_INTL("\\me[Pkmn get]{1} obtained {2}!\1",$Trainer.name,speciesname))
+  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1",$Trainer.name,speciesname))
   pbNicknameAndStore(pokemon)
   pbSeenForm(pokemon) if seeform
   return true
@@ -113,7 +113,7 @@ def pbAddToParty(pokemon,level=nil,seeform=true)
     pokemon = pbNewPkmn(pokemon,level)
   end
   speciesname = PBSpecies.getName(pokemon.species)
-  pbMessage(_INTL("\\me[Pkmn get]{1} obtained {2}!\1",$Trainer.name,speciesname))
+  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1",$Trainer.name,speciesname))
   pbNicknameAndStore(pokemon)
   pbSeenForm(pokemon) if seeform
   return true

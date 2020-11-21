@@ -335,18 +335,6 @@ Pokedex = Because Galarian Slowpoke eat the seeds of a plant that grows only in 
 Evolutions = SLOWBRO,Item,GALARICACUFF,SLOWKING,Item,GALARICAWREATH
 #-------------------------------
 [SLOWBRO,1]
-FormName = Mega Slowbro
-MegaStone = SLOWBRONITE
-BaseStats = 95,75,180,30,130,80
-Abilities = SHELLARMOR
-HiddenAbility = SHELLARMOR
-Height = 2.0
-Weight = 120.0
-Shape = 4
-Pokedex = Having been swallowed whole by Shellder, Slowbro now has an iron defense. It's pretty comfortable in there, too.
-BattlerPlayerY = 12
-#-------------------------------
-[SLOWBRO,2]
 FormName = Galarian
 Type1 = POISON
 Type2 = PSYCHIC
@@ -358,6 +346,18 @@ Shape = 4
 Pokedex = If this Pokémon squeezes the tongue of the Shellder biting it, the Shellder will launch a toxic liquid from the tip of its shell.
 BattlerPlayerY = 10
 BattlerEnemyY = 22
+#-------------------------------
+[SLOWBRO,2]
+FormName = Mega Slowbro
+MegaStone = SLOWBRONITE
+BaseStats = 95,75,180,30,130,80
+Abilities = SHELLARMOR
+HiddenAbility = SHELLARMOR
+Height = 2.0
+Weight = 120.0
+Shape = 4
+Pokedex = Having been swallowed whole by Shellder, Slowbro now has an iron defense. It's pretty comfortable in there, too.
+BattlerPlayerY = 12
 #-------------------------------
 [FARFETCHD,1]
 FormName = Galarian

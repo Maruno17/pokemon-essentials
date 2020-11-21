@@ -91,6 +91,7 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatGain(@ability,self,stat,user)
     end
+    @effects[PBEffects::BurningJealousy] = true
     return true
   end
 
@@ -213,7 +214,7 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatLoss(@ability,self,stat,user)
     end
-    effects[PBEffects::LashOut] = true
+    @effects[PBEffects::LashOut] = true
     return true
   end
 
@@ -263,6 +264,7 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatLoss(@ability,self,stat,user)
     end
+    @effects[PBEffects::LashOut] = true
     return true
   end
 

@@ -4,12 +4,19 @@ CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lo
 # To Do
 Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
 
+HIGH PRIORITY:
+Update Egg Moves for Gen 1-7
+
+LOW PRIORITY:
+Update Pokedex Entries for Gen 1-7
+Update Habitats for all Pokemon
+
 ##### PBS Files #####
 Abilities.txt            by Zerokid, Golisopod User
 Items.txt                by Zerokid, HM100, Golisopod User
-Moves.txt                by TheToxic, KyureJL
-Pokemon.txt              by Zerokid, TheToxic, KyureJL
-Pokemonforms.txt         by Zerokid, TheToxic, KyureJL
+Moves.txt                by TheToxic, KyureJL, Golisopod User
+Pokemon.txt              by Zerokid, TheToxic, KyureJL, Golisopod User
+Pokemonforms.txt         by Zerokid, TheToxic, KyureJL, Golisopod User
 tm.txt                   by ErwanBeurier
 
 ##### New Evolution Methods #####
@@ -43,6 +50,8 @@ Exp Charm		 by Golisopod User
 Catching Charm		 by Golisopod User
 Ability Patch		 by Golisopod User
 Reins of Unity		 by Golisopod User 
+Rotom Catalog            by Golisopod User
+Zygarde Cube             by Golisopod User
 
 ##### New Moves #####
 Surging Strikes          by KyureJL, lolface
@@ -121,4 +130,3 @@ Galarian in Daycare      by KyureJL
 Fog Weather              by TheKandinavian
 Updating Old Mechanics   by Golisopod User 
 to Gen 8 Standard 
-

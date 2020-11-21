@@ -566,7 +566,7 @@ def pbAfterBattle(decision,canLose)
     if pkmn.isSpecies?(:ZACIAN) || pkmn.isSpecies?(:ZAMAZENTA) && @form == 1
       for i in 0...pkmn.moves.length
         if isConst?(pkmn.moves[i].id,PBMoves,:IRONHEAD) && pkmn.moves[i].pp < 5
-          pkmn.moves[i].pp *= 3#isSpecies?(:ZACIAN) ? PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(getConst(PBMoves,:BEHEMOTHBLADE))) : PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(getConst(PBMoves,:BEHEMOTHBASH)))
+          pkmn.moves[i].pp *= 3
         end
       end
     end

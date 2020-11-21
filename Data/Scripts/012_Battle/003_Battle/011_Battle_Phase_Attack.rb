@@ -86,7 +86,7 @@ class PokeBattle_Battle
       end
       return if @decision>0
     end
-    pbCalculatePriority if NEWEST_BATTLE_MECHANICS
+    pbCalculatePriority if DYNAMIC_PRIORITY
   end
 
   def pbAttackPhaseMegaEvolution

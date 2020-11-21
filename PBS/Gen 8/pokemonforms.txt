@@ -332,21 +332,9 @@ Abilities = GLUTTONY,OWNTEMPO
 Moves = 1,TACKLE,1,CURSE,3,GROWL,6,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERPULSE,21,HEADBUTT,24,ZENHEADBUTT,27,AMNESIA,30,SURF,33,SLACKOFF,36,PSYCHIC,39,PSYCHUP,42,RAINDANCE,45,HEALPULSE
 EggMoves = BELCH,BELLYDRUM,BLOCK,STOMP
 Pokedex = Because Galarian Slowpoke eat the seeds of a plant that grows only in Galar, their tails have developed a spicy flavor.
-Evolutions = SLOWBRO,Item,GALARICACUFF
+Evolutions = SLOWBRO,Item,GALARICACUFF,SLOWKING,Item,GALARICAWREATH
 #-------------------------------
 [SLOWBRO,1]
-FormName = Mega Slowbro
-MegaStone = SLOWBRONITE
-BaseStats = 95,75,180,30,130,80
-Abilities = SHELLARMOR
-HiddenAbility = SHELLARMOR
-Height = 2.0
-Weight = 120.0
-Shape = 4
-Pokedex = Having been swallowed whole by Shellder, Slowbro now has an iron defense. It's pretty comfortable in there, too.
-BattlerPlayerY = 12
-#-------------------------------
-[SLOWBRO,2]
 FormName = Galarian
 Type1 = POISON
 Type2 = PSYCHIC
@@ -358,6 +346,18 @@ Shape = 4
 Pokedex = If this Pokémon squeezes the tongue of the Shellder biting it, the Shellder will launch a toxic liquid from the tip of its shell.
 BattlerPlayerY = 10
 BattlerEnemyY = 22
+#-------------------------------
+[SLOWBRO,2]
+FormName = Mega Slowbro
+MegaStone = SLOWBRONITE
+BaseStats = 95,75,180,30,130,80
+Abilities = SHELLARMOR
+HiddenAbility = SHELLARMOR
+Height = 2.0
+Weight = 120.0
+Shape = 4
+Pokedex = Having been swallowed whole by Shellder, Slowbro now has an iron defense. It's pretty comfortable in there, too.
+BattlerPlayerY = 12
 #-------------------------------
 [FARFETCHD,1]
 FormName = Galarian

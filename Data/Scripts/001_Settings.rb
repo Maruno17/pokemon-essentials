@@ -134,6 +134,7 @@ BADGE_FOR_WATERFALL      = 8
 # * Whether a move's physical/special category depends on the move itself as in
 #      newer Gens (true), or on its type as in older Gens (false).
 # * Whether the battle mechanics mimic Gen 5 (false) or Gen 7 (true).
+# * Whether priority is calculated like Gen 8 (true) or Gen 7 (false)
 # * Whether the Exp gained from beating a Pokémon should be scaled depending on
 #      the gainer's level as in Gens 5/7 (true) or not as in other Gens (false).
 # * Whether the Exp gained from beating a Pokémon should be divided equally
@@ -151,6 +152,7 @@ BADGE_FOR_WATERFALL      = 8
 #===============================================================================
 MOVE_CATEGORY_PER_MOVE    = true
 NEWEST_BATTLE_MECHANICS   = true
+DYNAMIC_PRIORITY          = true
 SCALED_EXP_FORMULA        = true
 SPLIT_EXP_BETWEEN_GAINERS = false
 ENABLE_CRITICAL_CAPTURES  = false
