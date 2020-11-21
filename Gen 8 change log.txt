@@ -2,13 +2,14 @@
 CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lolface, Golisopod User, KyureJL, DarrylBD99, Turn20Negate, Zerokid, TheKandinavian, ErwanBeurier.
 
 # To Do
+Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
+
 HIGH PRIORITY:
 Update Egg Moves for Gen 1-7
 
 LOW PRIORITY:
 Update Pokedex Entries for Gen 1-7
 Update Habitats for all Pokemon
-
 
 ##### PBS Files #####
 Abilities.txt            by Zerokid, Golisopod User

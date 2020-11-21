@@ -393,7 +393,7 @@ class PokeBattle_Move
       multipliers[FINAL_DMG_MULT] *= 0.75
     end
     # Weather
-    if !user.hasActiveItem?(:UTILITYUMBRELLA)
+    if !target.hasActiveItem?(:UTILITYUMBRELLA)
       case @battle.pbWeather
       when PBWeather::Sun, PBWeather::HarshSun
         if isConst?(type,PBTypes,:FIRE)
@@ -407,12 +407,13 @@ class PokeBattle_Move
         elsif isConst?(type,PBTypes,:WATER)
           multipliers[FINAL_DMG_MULT] = (multipliers[FINAL_DMG_MULT]*1.5).round
         end
-      when PBWeather::Sandstorm
-        if target.pbHasType?(:ROCK) && specialMove? && @function!="122"   # Psyshock
-          multipliers[DEF_MULT] *= 1.5
-        end
-      end
+	  end
     end
+	if @battle.pbWeather == PBWeather::Sandstorm
+	  if target.pbHasType?(:ROCK) && specialMove? && @function!="122"   # Psyshock
+	    multipliers[DEF_MULT] *= 1.5
+	  end
+	end
     # Critical hits
     if target.damageState.critical
       if NEWEST_BATTLE_MECHANICS

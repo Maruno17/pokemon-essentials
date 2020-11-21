@@ -732,7 +732,10 @@ class PokeBattle_Battle
     end
     pbCalculatePriority(true) if DYNAMIC_PRIORITY
     # Check for terrain seeds that boost stats in a terrain
-    eachBattler { |b| b.pbItemTerrainStatBoostCheck }
+    eachBattler { |b| 
+	  b.pbCheckFormOnTerrainChange
+	  b.pbItemTerrainStatBoostCheck 
+	}
   end
 
   #=============================================================================

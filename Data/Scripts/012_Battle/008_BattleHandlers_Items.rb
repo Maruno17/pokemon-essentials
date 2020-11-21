@@ -1313,7 +1313,7 @@ BattleHandlers::UserItemAfterMoveUse.add(:SHELLBELL,
 
 BattleHandlers::UserItemAfterMoveUse.add(:THROATSPRAY,
   proc { |item,user,targets,move,numHits,battle|
-    next if !move.soundMove?
+    next if !move.soundMove? || numHits==0
     next if !user.pbCanRaiseStatStage?(PBStats::SPATK,user)
     battle.pbCommonAnimation("UseItem",user)
     showAnim = true
@@ -1654,6 +1654,8 @@ BattleHandlers::ItemOnStatLoss.add(:EJECTPACK,
   proc { |item,battler,user,move,switched,battle|
     next if battle.pbAllFainted?(battler.idxOpposingSide)
     next if !battle.pbCanChooseNonActive?(battler.index)
+	next if move.function=="0EE" # U-Turn, Volt-Switch, Flip Turn
+	next if move.function=="151" # Parting Shot
     battle.pbCommonAnimation("UseItem",battler)
     battle.pbDisplay(_INTL("{1} is switched out with the {2}!",battler.pbThis,battler.itemName))
     battler.pbConsumeItem(true,false)

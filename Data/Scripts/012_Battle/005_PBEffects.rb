@@ -168,6 +168,8 @@ begin
     Tailwind           = 19
     ToxicSpikes        = 20
     WideGuard          = 21
+	StickyWebUser      = 22 
+	
 
     #===========================================================================
     # These effects apply to the battle (i.e. both sides)

@@ -250,7 +250,7 @@ class PokeBattle_Battler
   end
 
    def pbCheckFormOnTerrainChange
-    return if fainted? || @effects[PBEffects::Transform]
+    return if fainted? #|| @effects[PBEffects::Transform] Ditto reverts back to Normal.
     if hasActiveAbility?(:MIMICRY)
       newTypes = self.pbTypes
       originalTypes=[@pokemon.type1,@pokemon.type2] | []
@@ -287,6 +287,7 @@ class PokeBattle_Battler
     return if fainted? || @effects[PBEffects::Transform]
     # Form changes upon entering battle and when the weather changes
     pbCheckFormOnWeatherChange if !endOfRound
+	pbCheckFormOnTerrainChange if !endOfRound
     # Darmanitan - Zen Mode
     if isConst?(@species,PBSpecies,:DARMANITAN) && isConst?(@ability,PBAbilities,:ZENMODE)
       if @hp<=@totalhp/2

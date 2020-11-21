@@ -404,6 +404,7 @@ class PokeBattle_Move_110 < PokeBattle_Move
     end
     if user.pbOwnSide.effects[PBEffects::StickyWeb]
       user.pbOwnSide.effects[PBEffects::StickyWeb] = false
+      user.pbOwnSide.effects[PBEffects::StickyWebUser] = -1
       @battle.pbDisplay(_INTL("{1} blew away sticky webs!",user.pbThis))
     end
     user.pbRaiseStatStage(PBStats::SPEED,1,user)
@@ -916,6 +917,8 @@ class PokeBattle_Move_120 < PokeBattle_Move
     if @battle.pbSwapBattlers(idxA,idxB)
       @battle.pbDisplay(_INTL("{1} and {2} switched places!",
          @battle.battlers[idxB].pbThis,@battle.battlers[idxA].pbThis(true)))
+		@battle.pbActivateHealingWish(@battle.battlers[idxA]) if NEWEST_BATTLE_MECHANICS
+		@battle.pbActivateHealingWish(@battle.battlers[idxB]) if NEWEST_BATTLE_MECHANICS
     end
   end
 end
@@ -1762,6 +1765,7 @@ class PokeBattle_Move_153 < PokeBattle_Move
 
   def pbEffectGeneral(user)
     user.pbOpposingSide.effects[PBEffects::StickyWeb] = true
+    user.pbOpposingSide.effects[PBEffects::StickyWebUser] = user.index
     @battle.pbDisplay(_INTL("A sticky web has been laid out beneath {1}'s feet!",
        user.pbOpposingTeam(true)))
   end
@@ -2671,11 +2675,11 @@ end
 class PokeBattle_Move_179 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
     if user.hp<=(user.totalhp/3) ||
-      !user.pbCanRaiseStatStage?(PBStats::ATTACK,user,self) ||
-      !user.pbCanRaiseStatStage?(PBStats::DEFENSE,user,self) ||
-      !user.pbCanRaiseStatStage?(PBStats::SPEED,user,self) ||
-      !user.pbCanRaiseStatStage?(PBStats::SPATK,user,self) ||
-      !user.pbCanRaiseStatStage?(PBStats::SPDEF,user,self)
+	  (!user.pbCanRaiseStatStage?(PBStats::ATTACK,user,self) &&
+      !user.pbCanRaiseStatStage?(PBStats::DEFENSE,user,self) &&
+      !user.pbCanRaiseStatStage?(PBStats::SPEED,user,self) &&
+      !user.pbCanRaiseStatStage?(PBStats::SPATK,user,self) &&
+      !user.pbCanRaiseStatStage?(PBStats::SPDEF,user,self))
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2733,39 +2737,55 @@ class PokeBattle_Move_17A < PokeBattle_Move
       return -1
     else
       ownside=sides[0]; oppside=sides[1]
+	  # Reflect 
       reflect=ownside.effects[PBEffects::Reflect]
       ownside.effects[PBEffects::Reflect]=oppside.effects[PBEffects::Reflect]
       oppside.effects[PBEffects::Reflect]=reflect
+	  # Lighscreen
       lightscreen=ownside.effects[PBEffects::LightScreen]
       ownside.effects[PBEffects::LightScreen]=oppside.effects[PBEffects::LightScreen]
       oppside.effects[PBEffects::LightScreen]=lightscreen
+	  # Aurora Veil 
       auroraveil=ownside.effects[PBEffects::AuroraVeil]
       ownside.effects[PBEffects::AuroraVeil]=oppside.effects[PBEffects::AuroraVeil]
       oppside.effects[PBEffects::AuroraVeil]=auroraveil
+	  # Fire Plegde 
       firepledge=ownside.effects[PBEffects::SeaOfFire]
       ownside.effects[PBEffects::SeaOfFire]=oppside.effects[PBEffects::SeaOfFire]
       oppside.effects[PBEffects::SeaOfFire]=firepledge
+	  # Grass Pledge
       grasspledge=ownside.effects[PBEffects::Swamp]
       ownside.effects[PBEffects::Swamp]=oppside.effects[PBEffects::Swamp]
       oppside.effects[PBEffects::Swamp]=grasspledge
+	  # Water Pledge 
       waterpledge=ownside.effects[PBEffects::Rainbow]
       ownside.effects[PBEffects::Rainbow]=oppside.effects[PBEffects::Rainbow]
       oppside.effects[PBEffects::Rainbow]=waterpledge
+	  # Mist 
       mist=ownside.effects[PBEffects::Mist]
       ownside.effects[PBEffects::Mist]=oppside.effects[PBEffects::Mist]
       oppside.effects[PBEffects::Mist]=mist
+	  # Spikes 
       spikes=ownside.effects[PBEffects::Spikes]
       ownside.effects[PBEffects::Spikes]=oppside.effects[PBEffects::Spikes]
       oppside.effects[PBEffects::Spikes]=spikes
+	  # Toxic Spikes 
       toxicspikes=ownside.effects[PBEffects::ToxicSpikes]
       ownside.effects[PBEffects::ToxicSpikes]=oppside.effects[PBEffects::ToxicSpikes]
       oppside.effects[PBEffects::ToxicSpikes]=toxicspikes
+	  # Stealth Rock 
       stealthrock=ownside.effects[PBEffects::StealthRock]
       ownside.effects[PBEffects::StealthRock]=oppside.effects[PBEffects::StealthRock]
       oppside.effects[PBEffects::StealthRock]=stealthrock
+	  # Sticky Web 
       stickyweb=ownside.effects[PBEffects::StickyWeb]
       ownside.effects[PBEffects::StickyWeb]=oppside.effects[PBEffects::StickyWeb]
       oppside.effects[PBEffects::StickyWeb]=stickyweb
+	  # Sticky Web user is preserved, for Defiant/Competitive. 
+      stickywebuser=ownside.effects[PBEffects::StickyWebUser]
+      ownside.effects[PBEffects::StickyWebUser]=oppside.effects[PBEffects::StickyWebUser]
+      oppside.effects[PBEffects::StickyWebUser]=stickywebuser
+	  # Tailwind 
       tailwind=ownside.effects[PBEffects::Tailwind]
       ownside.effects[PBEffects::Tailwind]=oppside.effects[PBEffects::Tailwind]
       oppside.effects[PBEffects::Tailwind]=tailwind
@@ -2794,9 +2814,14 @@ end
 # In singles, this move hits the target twice. In doubles, this move hits each
 # target once. If one of the two opponents protects or while semi-invulnerable
 # or is a Fairy-type Pokémon, it hits the opponent that doesn't protect twice.
+# In Doubles, not affected by WideGuard. 
 # (Dragon Darts)
 #===============================================================================
 class PokeBattle_Move_17C < PokeBattle_Move_0BD
+  def pbNumHits(user,targets)
+    return 1 if targets.length > 1
+    return 2
+  end 
 end
 
 
