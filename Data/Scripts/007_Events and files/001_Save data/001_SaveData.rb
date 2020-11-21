@@ -51,7 +51,7 @@ module SaveData
   # Registers a value to be saved into save data.
   # Takes a block which defines the value's saving (+save_value+)
   # and loading (+load_value+) procedures, as well as a possible
-  # proc for fetching the value from the pre-v19 format (+get_from_legacy+)
+  # proc for fetching the value from the pre-v19 format (+from_old_format+)
   # @param id [Symbol] value id
   def register(id, &block)
     unless block_given?
@@ -80,12 +80,18 @@ module SaveData
     end
   end
 
-  # Loads the values from pre-v19 format save data.
+  # Converts the pre-v19 format data to the new format.
   # @param old_format [Array] pre-v19 format save data
-  def load_values_from_old_format(old_format)
+  # @return [Hash] save data in new format
+  def to_hash_format(old_format)
     validate old_format => Array
-    @values.each_value do |value|
-      value.load_from_old_format(old_format)
+    hash = {}
+
+    @values.each do |id, value|
+      data = value.get_from_old_format(old_format)
+      hash[id] = data unless data.nil?
     end
+
+    return hash
   end
 end

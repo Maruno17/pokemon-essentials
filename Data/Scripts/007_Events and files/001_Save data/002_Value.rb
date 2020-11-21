@@ -35,13 +35,14 @@ module SaveData
       @load_proc.call(value)
     end
 
-    # Uses the +get_from_old_format+ proc to select the correct data from
-    # +old_format+ and then loads it.
-    # Does nothing if the proc is undefined.
+    # Uses the +from_old_format+ proc to select the correct data from
+    # +old_format+ and return it.
+    # Returns nil if the proc is undefined.
     # @param old_format [Array] old format to load value from
-    def load_from_old_format(old_format)
-      return if @old_format_get_proc.nil?
-      load(@old_format_get_proc.call(old_format))
+    # @return [Object] data from the old format
+    def get_from_old_format(old_format)
+      return nil if @old_format_get_proc.nil?
+      return @old_format_get_proc.call(old_format)
     end
 
     private
@@ -62,7 +63,7 @@ module SaveData
       @ensured_class = class_name
     end
 
-    def get_from_old_format(&block)
+    def from_old_format(&block)
       raise ArgumentError, "No block given for get_from_old_format proc" unless block_given?
       @old_format_get_proc = block
     end
