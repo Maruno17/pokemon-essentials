@@ -154,8 +154,8 @@ BattleHandlers::StatusImmunityAbility.copy(:INSOMNIA,:SWEETVEIL,:VITALSPIRIT)
 BattleHandlers::StatusImmunityAbility.add(:LEAFGUARD,
   proc { |ability,battler,status|
     w = battler.battle.pbWeather
-    next true if w==PBWeather::Sun || w==PBWeather::HarshSun &&
-    !hasActiveItem?(:UTILITYUMBRELLA)
+    next true if (w==PBWeather::Sun || w==PBWeather::HarshSun) &&
+    !battler.hasActiveItem?(:UTILITYUMBRELLA)
   }
 )
 
@@ -275,6 +275,8 @@ BattleHandlers::StatusCureAbility.add(:IMMUNITY,
     battler.battle.pbHideAbilitySplash(battler)
   }
 )
+
+BattleHandlers::StatusCureAbility.copy(:IMMUNITY,:PASTELVEIL)
 
 BattleHandlers::StatusCureAbility.add(:INSOMNIA,
   proc { |ability,battler|
@@ -945,7 +947,7 @@ BattleHandlers::DamageCalcUserAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
     if move.physicalMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun) &&
-      !user.hasActiveItem?(:UTILITYUMBRELLA)
+      !target.hasActiveItem?(:UTILITYUMBRELLA)
       mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
     end
   }
@@ -1059,7 +1061,7 @@ BattleHandlers::DamageCalcUserAbility.add(:SOLARPOWER,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
     if move.specialMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun) &&
-      !user.hasActiveItem?(:UTILITYUMBRELLA)
+      !target.hasActiveItem?(:UTILITYUMBRELLA)
       mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round
     end
   }
@@ -1149,13 +1151,13 @@ BattleHandlers::DamageCalcUserAbility.add(:GORILLATACTICS,
 
 BattleHandlers::DamageCalcUserAbility.add(:PUNKROCK,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] = (mults[ATK_MULT]*1.3).round if move.soundMove?
+    mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.3).round if move.soundMove?
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:STEELYSPIRIT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-      mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)
+      mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)
   }
 )
 
@@ -1200,7 +1202,7 @@ BattleHandlers::DamageCalcUserAllyAbility.add(:POWERSPOT,
 
 BattleHandlers::DamageCalcUserAllyAbility.add(:STEELYSPIRIT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] = (mults[ATK_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)
+    mults[BASE_DMG_MULT] = (mults[BASE_DMG_MULT]*1.5).round if isConst?(type,PBTypes,:STEEL)
   }
 )
 
@@ -1251,7 +1253,7 @@ BattleHandlers::DamageCalcTargetAbility.add(:FURCOAT,
 
   BattleHandlers::DamageCalcTargetAbility.add(:ICESCALES,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[DEF_MULT] *= 2 if move.specialMove? || move.function=="122"   # Psyshock
+    mults[FINAL_DMG_MULT] /= 2 if move.specialMove?
   }
 )
 
@@ -1303,7 +1305,7 @@ BattleHandlers::DamageCalcTargetAbility.add(:WATERBUBBLE,
 
 BattleHandlers::DamageCalcTargetAbility.add(:PUNKROCK,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[DEF_MULT] *= 2 if move.soundMove?
+    mults[FINAL_DMG_MULT] /= 2 if move.soundMove?
   }
 )
 
@@ -1803,15 +1805,15 @@ BattleHandlers::TargetAbilityOnHit.add(:GULPMISSILE,
       gulpform=target.form
       target.form = 0
       battle.scene.pbChangePokemon(target,target.pokemon)
+      battle.scene.pbDamageAnimation(user)
       if user.takesIndirectDamage?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
-        battle.scene.pbDamageAnimation(user)
         user.pbReduceHP(user.totalhp/4,false)
-        if gulpform==1
-          user.pbLowerStatStageByAbility(PBStats::DEFENSE,1,target,false)
-        elsif gulpform==2
-          msg = nil
-          user.pbParalyze(target,msg)
-        end
+      end
+      if gulpform==1
+        user.pbLowerStatStageByAbility(PBStats::DEFENSE,1,target,false)
+      elsif gulpform==2
+        msg = nil
+        user.pbParalyze(target,msg)
       end
       battle.pbHideAbilitySplash(target)
     end

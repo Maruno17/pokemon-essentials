@@ -319,6 +319,8 @@ class PokeBattle_Battle
   #=============================================================================
   # Called at the start of battle only.
   def pbOnActiveAll
+    # Neutralizing Gas activates before anything. 
+	pbPriorityNeutralizingGas
     # Weather-inducing abilities, Trace, Imposter, etc.
     pbCalculatePriority(true)
     pbPriority(true).each { |b| b.pbEffectsOnSwitchIn(true) }
@@ -326,22 +328,22 @@ class PokeBattle_Battle
     # Check forms are correct
     eachBattler { |b| b.pbCheckForm }
   end
-
-  # Called when a Pokémon switches in (entry effects, entry hazards).
-  def pbOnActiveOne(battler)
-    return false if battler.fainted?
-    # Introduce Shadow Pokémon
-    if battler.opposes? && battler.shadowPokemon?
-      pbCommonAnimation("Shadow",battler)
-      pbDisplay(_INTL("Oh!\nA Shadow Pokémon!"))
-    end
-    # Record money-doubling effect of Amulet Coin/Luck Incense
-    if !battler.opposes? && (isConst?(battler.item,PBItems,:AMULETCOIN) ||
-                             isConst?(battler.item,PBItems,:LUCKINCENSE))
-      @field.effects[PBEffects::AmuletCoin] = true
-    end
-    # Update battlers' participants (who will gain Exp/EVs when a battler faints)
-    eachBattler { |b| b.pbUpdateParticipants }
+  
+  # Called at the start of battle only; Neutralizing Gas activates before anything. 
+  def pbPriorityNeutralizingGas
+    eachBattler {|b|
+      next if !b || b.fainted?
+      # neutralizing gas can be blocked with gastro acid, ending the effect.
+      if isConst?(b.ability,PBAbilities,:NEUTRALIZINGGAS) && !b.effects[PBEffects::GastroAcid]
+        BattleHandlers.triggerAbilityOnSwitchIn(:NEUTRALIZINGGAS,b,self)
+		return 
+      end
+    }
+  end
+  
+  # Called when a Pokémon switches in + after using Ally Switch (Gen 8 mechanics)
+  def pbActivateHealingWish(battler)
+	return if !battler.canTakeHealingWish?
     # Healing Wish
     if @positions[battler.index].effects[PBEffects::HealingWish]
       pbCommonAnimation("HealingWish",battler)
@@ -359,6 +361,26 @@ class PokeBattle_Battle
       battler.eachMove { |m| m.pp = m.totalpp }
       @positions[battler.index].effects[PBEffects::LunarDance] = false
     end
+  end 
+  
+  
+  # Called when a Pokémon switches in (entry effects, entry hazards).
+  def pbOnActiveOne(battler)
+    return false if battler.fainted?
+    # Introduce Shadow Pokémon
+    if battler.opposes? && battler.shadowPokemon?
+      pbCommonAnimation("Shadow",battler)
+      pbDisplay(_INTL("Oh!\nA Shadow Pokémon!"))
+    end
+    # Record money-doubling effect of Amulet Coin/Luck Incense
+    if !battler.opposes? && (isConst?(battler.item,PBItems,:AMULETCOIN) ||
+                             isConst?(battler.item,PBItems,:LUCKINCENSE))
+      @field.effects[PBEffects::AmuletCoin] = true
+    end
+    # Update battlers' participants (who will gain Exp/EVs when a battler faints)
+    eachBattler { |b| b.pbUpdateParticipants }
+	# Healing Wish / Lunar Dance
+	pbActivateHealingWish(battler)
     # Entry hazards
     # Stealth Rock
     if battler.pbOwnSide.effects[PBEffects::StealthRock] && battler.takesIndirectDamage? &&
@@ -408,7 +430,9 @@ class PokeBattle_Battle
        !battler.airborne? && !battler.hasActiveItem?(:HEAVYDUTYBOOTS)
       pbDisplay(_INTL("{1} was caught in a sticky web!",battler.pbThis))
       if battler.pbCanLowerStatStage?(PBStats::SPEED)
-        battler.pbLowerStatStage(PBStats::SPEED,1,nil)
+	    stickyuser = (battler.pbOwnSide.effects[PBEffects::StickyWebUser] > -1 ? 
+		  battlers[battler.pbOwnSide.effects[PBEffects::StickyWebUser]] : nil)
+        battler.pbLowerStatStage(PBStats::SPEED,1,stickyuser)
         battler.pbItemStatRestoreCheck
       end
     end

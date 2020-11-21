@@ -131,14 +131,15 @@ class PokeBattle_Move_008 < PokeBattle_ParalysisMove
   def hitsFlyingTargets?; return true; end
 
   def pbBaseAccuracy(user,target)
-    if !user.hasActiveItem?(:UTILITYUMBRELLA)
-      case @battle.pbWeather
-      when PBWeather::Sun, PBWeather::HarshSun
-        return 50
-      when PBWeather::Rain, PBWeather::HeavyRain
-        return 0
-      end
-    end
+	if target.hasActiveItem?(:UTILITYUMBRELLA)
+		return super
+	end 
+	case @battle.pbWeather
+	when PBWeather::Sun, PBWeather::HarshSun
+	  return 50
+	when PBWeather::Rain, PBWeather::HeavyRain
+	  return 0
+	end
     return super
   end
 end
@@ -323,14 +324,15 @@ class PokeBattle_Move_015 < PokeBattle_ConfuseMove
   def hitsFlyingTargets?; return true; end
 
   def pbBaseAccuracy(user,target)
-    if !user.hasActiveItem?(:UTILITYUMBRELLA)
-      case @battle.pbWeather
-      when PBWeather::Sun, PBWeather::HarshSun
-        return 50
-      when PBWeather::Rain, PBWeather::HeavyRain
-        return 0
-      end
-    end
+    if target.hasActiveItem?(:UTILITYUMBRELLA)
+	  return super
+	end 
+	case @battle.pbWeather
+	when PBWeather::Sun, PBWeather::HarshSun
+	  return 50
+	when PBWeather::Rain, PBWeather::HeavyRain
+	  return 0
+	end
     return super
   end
 end
@@ -1359,7 +1361,9 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
        (NEWEST_BATTLE_MECHANICS &&
        target.pbOpposingSide.effects[PBEffects::StickyWeb])
       target.pbOwnSide.effects[PBEffects::StickyWeb]      = false
+      target.pbOwnSide.effects[PBEffects::StickyWebUser]  = -1
       target.pbOpposingSide.effects[PBEffects::StickyWeb] = false if NEWEST_BATTLE_MECHANICS
+      target.pbOpposingSide.effects[PBEffects::StickyWebUser] = -1 if NEWEST_BATTLE_MECHANICS
       @battle.pbDisplay(_INTL("{1} blew away sticky webs!",user.pbThis))
     end
     case @battle.field.terrain
@@ -2556,7 +2560,9 @@ class PokeBattle_Move_075 < PokeBattle_Move
   end
 
   def pbEffectAfterAllHits(user,target)
-    if isConst?(user.species,PBSpecies,:CRAMORANT) &&
+    if !target.damageState.unaffected && !target.damageState.protected && 
+	  !target.damageState.missed && 
+	  isConst?(user.species,PBSpecies,:CRAMORANT) &&
       user.hasActiveAbility?(:GULPMISSILE) && user.form==0
       user.form=2
       user.form=1 if user.hp>(user.totalhp/2)

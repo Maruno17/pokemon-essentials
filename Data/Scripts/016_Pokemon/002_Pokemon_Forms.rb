@@ -709,7 +709,7 @@ MultipleForms.register(:MORPEKO,{
 
 MultipleForms.register(:CRAMORANT,{
   "getFormOnLeavingBattle" => proc { |pkmn,battle,usedInBattle,endBattle|
-    next 0 if pkmn.fainted? || endBattle
+    next 0 
   }
 })
 

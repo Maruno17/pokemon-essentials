@@ -1,0 +1,234 @@
+##########################################
+# 
+# Pokémon Essentials
+# Generation 8 mechanics
+# Extensive TODO list
+# 
+##########################################
+
+
+This is a TODO list, taken from the following list of new mechanics: 
+https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/ 
+
+Note: some of what's listed here was already implemented. 
+
+
+#######################################
+# Crown of Tundra DLC Stuff
+#######################################
+
+#TODO:
+ - Need to check Smogon to see if any subtlety appeared in the second DLC.
+ - Update level-up learnsets for returning old Pokémons 
+
+#Done:
+ - Update tm.txt for returning old Pokémons
+
+
+#######################################
+# The Isle of Armor DLC Stuff
+#######################################
+
+
+#--------------------------------------
+# New Moves
+#--------------------------------------
+#Done:
+ - Poltergeist works against a Ghost-weak target holding Kasib Berry (Marty)
+ - Shell Side Arm's physical version is also a contact move (Seth Vilo)
+ - Grassy Glide changes priority mid-turn if Grassy Terrain starts or ends before the user can move (Marty)
+ - Shell Side Arm considers stat stages when determining whether physical or special will deal more damage (Vengeance417)
+ - Poltergeist works against Pokemon holding items that are otherwise unremovable (RocketSurgery)
+ - Lash Out doubles in power when an ally lowers the user's stats, and when Intimidate lowers the user's stats prior to Turn 1 (McCoolDude)
+ - Triple Axel behaves exactly like Triple Kick, just with 20/40/60 power instead (Marty) It delays its power boost if the first hit breaks Disguise (DragonWhale)
+ - Corrosive Gas cannot remove items from Sticky Hold targets (Marty)
+ - Misty Explosion is blocked by Damp (Marty)
+ - Coaching bypasses Max Guard (LatiosRider) and Crafty Shield (LatiosRider)
+ - Shell Side Arm mechanics (Marty) (more tests) (Anubis) (Marty)
+ - Terrain Pulse is boosted by Mega Launcher (LatiosRider)
+ - Rising Voltage doubles in power if the target is grounded in Electric Terrain (Marty)
+ - Terrain Pulse, Misty Explosion, Grassy Glide, and Expanding Force require the user to be grounded in the appropriate terrain to get their boosts (LatiosRider)
+ - Burning Jealousy/Lash Out still trigger their effects if the relevant stat boosts/drops are no longer boosted/dropped at the time the user attacks (Anubis)
+ - Burning Jealousy is boosted by Sheer Force whether or not the target would have been burned (DaWoblefet)
+ - Burning Jealousy's secondary happens before Weakness Policy triggers (Marty)
+ 
+#--------------------------------------
+# New Abilities
+#--------------------------------------
+#Done:
+ - Unseen Fist makes contact moves ignore protection entirely (besides Max Guard) (Marty) Protective Pads does nothing to prevent this (DaWoblefet)
+ - Quick Draw only works on attacking moves (Marty) and activates at a 30% chance (Marty) Quick Draw will activate instead of Quick Claw/Custap Berry when both would otherwise activate (Anubis)
+
+
+#######################################
+# 
+# New Mechanics in Sword and Shield
+# 
+#######################################
+
+
+#--------------------------------------
+# Dynamax/Gigantamax 
+# Max/G-Max Moves
+#--------------------------------------
+Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none of our concerns.  
+
+#--------------------------------------
+# Moves
+#--------------------------------------
+#TODO:
+ - Teatime's activation order: user, ally, opponent's left, opponent's right (Anubis)
+ - Dragon Darts targeting and detailed mechanics (Anubis, peach) (2) (incomplete; see next items)
+ - Dragon Darts VS Ally Switch: if Dragon Darts targets a faster ally, and the ally uses Ally Switch, then the first Dragon Dart should target the user (unimplemented), while the second can never target the user (implemented)
+ - In the following configuration : Electrify with Stalwart VS Dragon Darts with Stalwart VS Lightning Rod: Electrify electrified Dragon Darts will activate Lightning Rod, but still hit the real target twice. See https://twitter.com/Sibuna_Switch/status/1222001441365098496 In PE, Lightning Rod doesn't trigger at all. 
+ 
+#Done:
+ - Life Dew triggers ally Water immunity Abilities (Siggu)
+ - Dragon Darts: https://bulbapedia.bulbagarden.net/wiki/Dragon_Darts_(move)
+ - Dragon Darts bug: in Double battle, the accuracy of the second Dragon Dart is based on the missed state of the ally's accuracy check (If Ally misses Target 2, and User uses Dragon Darts, then it will hit Target 1 but miss Target 2. If Ally hits Target 2, then User will hit Target 2). 
+ - Dragon Darts is not blocked by Wide Guard (RagiingAlways)
+ - Dragon Darts will not attack into a target in a semi-invulnerable turn (Nails)
+ - Dragon Darts will not attack into a target protecting themselves in Doubles, hitting the other Pokemon twice instead (Ckarasu)
+ - Dragon Darts will not attack into Fairy types in Doubles, hitting the other Pokemon twice instead (Nails)
+ - Court Change-swapped Sticky Web still counts as having been set up by the original user for the purposes of Competitive and Defiant (Yung Dramps)
+ - Octolock's stat drops activate opposing Competitive and Defiant, but not Mirror Armor (Kalalokki)
+ - Octolock's effect stacks with binding moves like Wrap and Snap Trap (Skeli)
+ - No Retreat can be used multiple times if the user had been fully trapped already (Zaggyo)
+ - No Retreat users can switch out with Shed Shell (DragonWhale)
+ - No Retreat cannot be used multiple times just because the user is a Ghost type (Merritt)
+ - No Retreat fails if the user trapped itself with it on the first use. Ghost types can still switch out of the effect, and phazing also works (Beware I Live!!!)
+ - Teatime forces Berry consumption regardless of Unnerve or substitutes, and misses against semi-invulnerable Pokemon (Anubis). Teatime also ignores Magic Room and Klutz (LatiosRider)
+ - Recycle can restore Berries used through Teatime (DaWoblefet)
+ - Bolt Beak and Fishious Rend have their power doubled against Pokemon switched in the same turn (Nails)
+ - Grav Apple has 1.5x power during Gravity (Anubis)
+ - Clangorous Soul can be used despite Soundproof, but fails if the HP loss would knock out the user (Anubis) The HP loss will not happen if the move can't change any of the user's stats (DaWoblefet)
+ - Aura Wheel cannot be used by non-Morpeko forms (like Hyperspace Fury and Dark Void mechanics) (Anubis)
+ - Tar Shot's effect adds a weakness to the Fire type to the target's types (viol and bass)
+ - Magic Powder is a powder move and fails against pure Psychic types (Anubis)
+ - Fishious Rend is a bite move (KuraiTenshi26)
+ - Pyro Ball is a bullet move (Skeli)
+ - Body Press uses the user's Defense stat and stat stage in the damage formula to replace its Attack and Attack stat stage. This means any other effects that affect the user's Attack stat continue to apply, such as Choice Band and Hustle. (OZY) Effects that alter the user's Defense stat other than its stat stage do nothing to change Body Press damage.
+ - Court Change preserves the current duration of existing field effects (Anubis)
+ - Court Change swaps hazards, screens, Tailwind (Skeli), Mist, G-Max Wildfire, and Pledge combo effects (DaWoblefet)
+ - Behemoth Bash, Behemoth Blade, and Dynamax Cannon have their damage doubled against Dynamax Pokemon, not their power (OZY) (Anubis)
+
+
+
+#--------------------------------------
+# Abilities
+#--------------------------------------
+#Done:
+ - Mimicry activates on Transformed Pokemon to change them back to their original type(s) if no Terrain is active (Anubis)
+ - Neutralizing Gas activates before Unnerve (Lego) => Neutralizing Gas activates before any other ability (ErwanBeurier)
+ - If Neutralizing Gas disables an active Unburden, the Speed boost is regained when Neutralizing Gas leaves (DaWoblefet)
+ - Neutralizing Gas leaving the field reactivates "on switch-in" Abilities that activated previously (DragonMasterX34) (DaWoblefet), even against the Pokemon with Neutralizing Gas which is no longer on the field (Anubis)
+ - Screen Cleaner removes screens from both sides and does not affect Safeguard (Anubis)
+ - Ripen doubles Berry healing after determining the non-doubled heal amount (Anubis)
+ - Mimicry changes type(s) to the Terrain type and reverts back to original type(s) when Terrain ends (Anubis) (follow-up)
+ - Cotton Down is not a powder-based effect (Anubis)
+ - Power Spot multiplies an ally's move power by 1.3 (but not the Pokemon with Power Spot) (Anubis)
+ - Punk Rock sound moves have 1.3x power, and sound moves against Punk Rock deal 0.5x damage (Anubis)
+ - Ripen doubles Jaboca and Rowap Berries' damage (Skeli)
+ - Neutralizing Gas can be suppressed by Gastro Acid (UnderdarkFox)
+ - Steam Engine grants +6 Speed (Revelation)
+ - Gorilla Tactics is a 1.5x Attack boost, and stacks with Choice Band (GMars and TPP)
+ - Ice Scales halves special damage, as opposed to doubling Special Defense (OZY)
+ - Steely Spirit is not ignored by a Mold Breaker ally (Anubis)
+ - Steely Spirit multiplies an ally's Steel-type move power by 1.5 (including the Pokemon with Steely Spirit) (Anubis)
+ - Ice Face is unaffected by Neutralizing Gas (Anubis)
+ - Ice Face also regenerates when switched in and Hail is active (ck49)
+ - Ice Face regenerates whenever Hail begins (Anubis)
+ - Ice Face breaks from a self-hit in confusion (like Disguise) (PokemonTrainerLui)
+ - Perish Body will not activate if the attacker already has a perish count (even if the Pokemon with Perish Body doesn't) (Skeli)
+ - Hunger Switch can be removed by Entrainment (doipy hooves)
+ - On switch-in, Pastel Veil cures itself and its ally. Switching into Toxic Spikes also prevents poisoning, but without displaying Pastel Veil. It also cures itself when bypassed by Mold Breaker, but an ally will remain poisoned. (DaWoblefet)
+ - Gulp Missile triggers from the first turn of Dive even if the second turn doesn't happen (if Surf is fully blocked it doesn't trigger) (Vengeance417)
+ - Gulp Missile fires the projectile even if Cramorant gets knocked out (GMars)
+ - Gulp Missile's Arrokuda projectile deals 1/4 max HP damage and lowers the target's Defense 1 stage (Vengeance417)
+ - Gulp Missile's Pikachu projectile deals 1/4 max HP damage and paralyzes the target (even Ground types) (GMars)
+ - Gulp Missile doesn't deal damage to Magic Guard Pokemon (Siggu)
+ - Gulp Missile's obtained projectile is based on Cramorant's current HP. Arrokuda when > 50% and Pikachu when <= 50%. Dynamaxing or switching out removes the Gulping/Gorging form (Theorymon and Martin)
+ - Mirror Armor bounces Strength Sap's Attack drop back (Anubis)
+ - Mirror Armor-reflected stat drops are blocked by substitutes (DaWoblefet)
+ - Mirror Armor will not activate if the stat stage is already -6 (DaWoblefet)
+
+#Not our concern:
+ - Ice Face does not reactivate instantly when broken by a physical Max Hailstorm (ck49)
+ - Sand Spit activates after the effects of Max Moves (Count Bleck)
+
+
+#--------------------------------------
+# Items
+#--------------------------------------
+#TODO:
+
+#Done:
+ - Eject Pack triggers when stat stages are lowered even if the resulting stat stage is not negative (sb879)
+ - If multiple Eject Packs would trigger during the same attack, only the fastest Pokemon uses theirs (DaWoblefet)
+ - Eject Pack will not activate when switches from U-turn or Parting Shot are happening (sb879)
+ - Eject Pack will not activate if Parting Shot lowers the holder's stats and the user switched out (DaWoblefet)
+ - Utility Umbrella does not protect from weather damage, but the holder takes normal damage from what would otherwise be rain- and sun-boosted attacks. It does not appear to affect move accuracy in weather. (BountyHunterStev)
+ - Utility Umbrella holders ignore rain- and sun-based move and Ability effects that would affect them (sb879) (Anubis)
+ - Utility Umbrella holders take normal damage from what would be rain- and sun-weakened attacks (sb879)
+ - Utility Umbrella does not affect damage modifiers from the holder's Water and Fire attacks in rain/sun (sb879)
+ - Utility Umbrella holders can avoid Hurricane and Thunder in rain (Anubis)
+ - Utility Umbrella holders can become frozen in sun (Anubis)
+ - Throat Spray activates when the user's sound move hits a target, not when it fails or all targets are protected (BountyHunterStev)
+ - Throat Spray activates when using Clangorous Soul (BountyHunterStev)
+ - Heavy-Duty Boots still allows Poison-type holders to soak up Toxic Spikes (GMars and TPP)
+ - Blunder Policy activates when a move with multiple targets is avoided by at least one of the targets (BountyHunterStev)
+ - Blunder Policy does not trigger on moves avoided through semi-invulnerability, avoided OHKO moves, or moves avoided by Telepathy allies (sb879)
+
+
+
+#--------------------------------------
+# Misc
+#--------------------------------------
+#TODO:
+ - Silvally forms without RKS System or a Memory now behave as the form's type instead of Normal (Anubis)
+ - Stalwart, Propeller Tail, and Snipe Shot have bizarre targeting in Doubles when moves are called through Instruct or Sleep Talk (DaWoblefet and Anubis)
+ - The user can attack itself with Dragon Darts (Anubis)
+ 
+#Done: 
+ - Fling can be used with Technical Records (TRs), and its power is determined by the contained move's power, or 10 for Status moves and moves with "---" power. (OZY)
+ - Ally Switch can take the Healing Wish effect if it's used the turn after Healing Wish was used into a full HP target (Sejun Park) 
+ - Mirror Armor reflecting a Parting Shot stat drop counts as success for Parting Shot's switch effect, even if the drops themselves fail to do anything to the user (Anubis)
+ - Competitive/Defiant activate from opposing Mirror Armor reflecting the user's stat drops (TheMantyke) 
+ - The guy in-game who says sun thaws frozen Pokemon is a liar (doipy hooves) 
+ - Pokemon Transformed into Morpeko can use Aura Wheel; it always appears as Electric type, but is actually Dark type if the Transformed Pokemon copied Hangry Mode (Anubis)
+ - Slush Rush still doesn't provide immunity to Hail damage (Skeli)
+ - Anticipation and Forewarn can detect Hidden Power's type (Anubis)
+ - The effect of Healing Wish and Lunar Dance is actually stored for that slot until a Pokemon not at full HP switches in (Givrix)
+ - Aguav/Figy/Iapapa/Mago/Wiki Berries cause confusion based on the Pokemon's original Nature, ignoring the effect of Nature Mints (DaWoblefet)
+ - Plates still function, Razor Fang does not function (Anubis)
+ - Neutralizing Gas cannot be Skill Swapped/Wandering Spirited or obtained via Entrainment, Power of Alchemy/Receiver, or Role Play, but can be replaced via Entrainment, Mummy, Simple Beam, and Worry Seed. Gastro Acid also suppresses it. (DaWoblefet and Cracticus)
+
+#None of our business:
+ - Team Preview shows regular Zacian and Zamazenta regardless of their held item (Death Phenomeno)
+ - Symbiosis has a new bug (SadisticMystic) This has been fixed as of v1.1.1 ((DaWoblefet))
+ - Hacked Zen Mode Galarian Darmanitan and Crowned Sword Zacian are reverted to their base formes in battle (Anubis) (2)
+ - 16-bit damage overflow is still a thing (DaWoblefet)
+ - Due to a bug, Sucker Punch will fail in Doubles in certain situations (DaWoblefet and Anubis) (Team Rocket Elite) (DaWoblefet and Anubis) This has been fixed as of v1.1 (Anubis)
+ - Using Fairy Lock with animations on crashes the game in v1.1 (Anubis) and is fixed in v1.1.1 (Anubis)
+ - Parental Bond has no effect on Max Moves (Anubis)
+
+#--------------------------------------
+# Changes to Old Mechanics
+#--------------------------------------
+#TODO: 
+ 
+#Done: 
+ - Turn order now changes dynamically mid-turn whenever Speed changes (Pan.), but alterations like Quick Claw or Lagging Tail will not change turn order again once the turn has started (Anubis). Obtaining Prankster mid-turn does change turn order (Anubis), but obtaining Stall does not (Anubis).
+ - Inner Focus now blocks Intimidate (DaWoblefet)
+ - Own Tempo now blocks Intimidate
+ - Aguav/Figy/Iapapa/Mago/Wiki Berries now heal 33% max HP instead of 50% (Pyritie)
+ - Disguise now causes the user to lose 1/8 max HP when broken (Anubis)
+ - Rattled now activates from being Intimidated (Whitephoenixace)
+ - Moody can no longer raise or lower accuracy or evasiveness (DragonWhale)
+ - Oblivious now blocks Intimidate (Cloudy Mistral)
+ - King's Shield now lowers Attack on contact by 1 stage instead of 2 (Team Rocket Elite)
+ - Scrappy now blocks Intimidate
+ - Defog now removes Terrains (Serebii)
+ - Electric/Grassy/Psychic Terrain now provide a 1.3x boost instead of 1.5x (Jibaku); Misty Terrain is unchanged (OZY), and rain and sun are also unchanged (Anubis)
+ - Technician is now the first power modifier considered in damage calculation (DaWoblefet, Anubis, SadisticMystic)
+
