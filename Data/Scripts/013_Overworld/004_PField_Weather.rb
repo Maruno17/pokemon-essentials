@@ -247,7 +247,7 @@ module RPG
         @viewport.flash(Color.new(255,255,255,230),rnd*20) if rnd<4
       end
       @viewport.update
-      return if @type==PBFieldWeather::None || @type==PBFieldWeather::Sun || @type=PBFieldWeather::Fog
+      return if (@type==PBFieldWeather::None || @type==PBFieldWeather::Sun || @type==PBFieldWeather::Fog)
       # Update weather particles (raindrops, snowflakes, etc.)
       ensureSprites
       for i in 1..@max

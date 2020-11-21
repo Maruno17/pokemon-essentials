@@ -48,7 +48,7 @@ class PokeBattle_Move_003 < PokeBattle_SleepMove
     return if !isConst?(@id,PBMoves,:RELICSONG)
     return if !user.isSpecies?(:MELOETTA)
     return if user.hasActiveAbility?(:SHEERFORCE) && @addlEffect>0
-    newForm = (oldForm+1)%2
+    newForm = (user.Form+1)%2
     user.pbChangeForm(newForm,_INTL("{1} transformed!",user.pbThis))
   end
 end
@@ -1373,6 +1373,7 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
         @battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
     end
     @battle.field.terrain = PBBattleTerrains::None
+    pbCalculatePriority(true) if DYNAMIC_PRIORITY 
     case @battle.pbWeather
     when PBWeather::Fog
       @battle.pbDisplay(_INTL("{1} blew away the deep fog!",user.pbThis))

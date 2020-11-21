@@ -290,12 +290,14 @@ class PokeBattle_Pokemon
     self.savedev     = [0,0,0,0,0,0]
     self.shadowmoves = [0,0,0,0,0,0,0,0]
     # Retrieve shadow moves
-    moves = pbLoadShadowMovesets
-    if moves[self.species] && moves[self.species].length>0
-      for i in 0...[4,moves[self.species].length].min
-        self.shadowmoves[i] = moves[self.species][i]
+    shadow_movesets = pbLoadShadowMovesets
+    shadow_moves = shadow_movesets[self.fSpecies]
+    shadow_moves = shadow_movesets[self.species] if !shadow_moves || shadow_moves.length == 0
+    if shadow_moves && shadow_moves.length > 0
+      for i in 0...[4,shadow_moves.length].min
+        self.shadowmoves[i] = shadow_moves[i]
       end
-      self.shadowmovenum = moves[self.species].length
+      self.shadowmovenum = shadow_moves.length
     else
       # No special shadow moves
       self.shadowmoves[0] = getConst(PBMoves,:SHADOWRUSH) || 0

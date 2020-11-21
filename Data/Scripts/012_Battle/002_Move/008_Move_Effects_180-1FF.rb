@@ -300,7 +300,7 @@ end
 
 
 #===============================================================================
-# Renders item unusable (Corrosive Ga)s
+# Renders item unusable (Corrosive Gas)
 #===============================================================================
 class PokeBattle_Move_18F < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
@@ -414,6 +414,7 @@ class PokeBattle_Move_195 < PokeBattle_Move
         @battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
     end
     @battle.field.terrain = PBBattleTerrains::None
+    pbCalculatePriority(true) if DYNAMIC_PRIORITY
   end
 end
 
@@ -424,7 +425,7 @@ end
 #===============================================================================
 class PokeBattle_Move_196 < PokeBattle_Move_0E0
   def pbBaseDamage(baseDmg,user,target)
-    if @battle.field.terrain==PBBattleTerrains::Misty
+    if @battle.field.terrain==PBBattleTerrains::Misty && !user.airborne?
       baseDmg = (baseDmg*1.5).round
     end
     return baseDmg
