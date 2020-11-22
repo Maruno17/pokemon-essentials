@@ -98,11 +98,7 @@ def pbScreenCapture
   filestart = sprintf("%s.%03d",filestart,(t.to_f-t.to_i)*1000)   # milliseconds
   capturefile = RTP.getSaveFileName(sprintf("%s.png",filestart))
   if capturefile && safeExists?("rubyscreen.dll")
-    if mkxp?
-      Graphics.screenshot(capturefile)
-    else
-      Graphics.snap_to_bitmap(false).saveToPng(capturefile)
-    end
+    Graphics.screenshot(capturefile)
     pbSEPlay("Pkmn exp full") if FileTest.audio_exist?("Audio/SE/Pkmn exp full")
   end
 end

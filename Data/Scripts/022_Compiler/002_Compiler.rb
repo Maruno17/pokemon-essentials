@@ -668,7 +668,7 @@ module Compiler
     if !$INEDITOR && LANGUAGES.length>=2
       pbLoadMessages("Data/"+LANGUAGES[$PokemonSystem.language][1])
     end
-    pbSetWindowText(nil) if mkxp?
+    pbSetWindowText(nil)
   end
 
   def main
@@ -729,28 +729,6 @@ module Compiler
         Dir.mkdir("PBS") rescue nil
         pbSaveAllData
         mustCompile = true
-      end
-      # Check data files and PBS files, and recompile if any PBS file was edited
-      # more recently than the data files were last created
-      if !mkxp?
-        for i in 0...dataFiles.length
-          begin
-            File.open("Data/#{dataFiles[i]}") { |file|
-              latestDataTime = [latestDataTime,file.mtime.to_i].max
-            }
-          rescue SystemCallError
-            mustCompile = true
-          end
-        end
-        for i in 0...textFiles.length
-          begin
-            File.open("PBS/#{textFiles[i]}") { |file|
-              latestTextTime = [latestTextTime,file.mtime.to_i].max
-            }
-          rescue SystemCallError
-          end
-        end
-        mustCompile |= (latestTextTime>=latestDataTime)
       end
       # Should recompile if holding Ctrl
       Input.update

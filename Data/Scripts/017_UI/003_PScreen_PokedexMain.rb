@@ -45,7 +45,7 @@ class Window_Pokedex < Window_DrawableCommand
     else
       text = sprintf("%03d  ----------",indexNumber)
     end
-    pbDrawShadowText(self.contents,rect.x+36,rect.y+6 + (mkxp? ? 6 : 0),rect.width,rect.height,
+    pbDrawShadowText(self.contents,rect.x+36,rect.y+6 + 6,rect.width,rect.height,
        text,self.baseColor,self.shadowColor)
   end
 

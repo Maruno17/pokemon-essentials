@@ -122,7 +122,7 @@ class Window_CommandPokemonColor < Window_CommandPokemon
       base   = Color.new(0,80,160)
       shadow = Color.new(128,192,240)
     end
-    pbDrawShadowText(self.contents,rect.x,rect.y + (mkxp? ? 6 : 0),rect.width,rect.height,
+    pbDrawShadowText(self.contents,rect.x,rect.y + 6,rect.width,rect.height,
        @commands[index],base,shadow)
   end
 end

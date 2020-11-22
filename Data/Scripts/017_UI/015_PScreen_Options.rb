@@ -331,7 +331,7 @@ class Window_PokemonOption < Window_DrawableCommand
     rect = drawCursor(index,rect)
     optionname = (index==@options.length) ? _INTL("Cancel") : @options[index].name
     optionwidth = rect.width*9/20
-    text_y = rect.y + (mkxp? ? 6 : 0)
+    text_y = rect.y + 6
     pbDrawShadowText(self.contents,rect.x,text_y,optionwidth,rect.height,optionname,
        @nameBaseColor,@nameShadowColor)
     return if index==@options.length

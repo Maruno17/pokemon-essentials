@@ -49,16 +49,16 @@ class Window_CharacterEntry < Window_DrawableCommand
   def drawItem(index,_count,rect)
     rect=drawCursor(index,rect)
     if index==@charset.length # -1
-      pbDrawShadowText(self.contents,rect.x,rect.y + (mkxp? ? 6 : 0),rect.width,rect.height,"[ ]",
+      pbDrawShadowText(self.contents,rect.x,rect.y + 6,rect.width,rect.height,"[ ]",
          self.baseColor,self.shadowColor)
     elsif index==@charset.length+1 # -2
-      pbDrawShadowText(self.contents,rect.x,rect.y + (mkxp? ? 6 : 0),rect.width,rect.height,@othercharset,
+      pbDrawShadowText(self.contents,rect.x,rect.y + 6,rect.width,rect.height,@othercharset,
          self.baseColor,self.shadowColor)
     elsif index==@charset.length+2 # -3
-      pbDrawShadowText(self.contents,rect.x,rect.y + (mkxp? ? 6 : 0),rect.width,rect.height,_INTL("OK"),
+      pbDrawShadowText(self.contents,rect.x,rect.y + 6,rect.width,rect.height,_INTL("OK"),
          self.baseColor,self.shadowColor)
     else
-      pbDrawShadowText(self.contents,rect.x,rect.y + (mkxp? ? 6 : 0),rect.width,rect.height,@charset[index],
+      pbDrawShadowText(self.contents,rect.x,rect.y + 6,rect.width,rect.height,@charset[index],
          self.baseColor,self.shadowColor)
     end
   end
