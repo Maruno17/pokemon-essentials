@@ -299,10 +299,7 @@ module PokemonDebugMixin
             end
           end
         when 2   # Randomise pID
-          pkmn.personalID = rand(256)
-          pkmn.personalID |= rand(256)<<8
-          pkmn.personalID |= rand(256)<<16
-          pkmn.personalID |= rand(256)<<24
+          pkmn.personalID = rand(2**16) | rand(2**16) << 16
           pkmn.calcStats
           pbRefreshSingle(pkmnid)
         end

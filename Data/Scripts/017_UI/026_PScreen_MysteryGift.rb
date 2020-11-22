@@ -380,11 +380,7 @@ def pbReceiveMysteryGift(id)
   end
   gift=$Trainer.mysterygift[index]
   if gift[1]==0   # Pokémon
-    pID=rand(256)
-    pID|=rand(256)<<8
-    pID|=rand(256)<<16
-    pID|=rand(256)<<24
-    gift[2].personalID=pID
+    gift[2].personalID = rand(2**16) | rand(2**16) << 16
     gift[2].calcStats
     time=pbGetTimeNow
     gift[2].timeReceived=time.getgm.to_i

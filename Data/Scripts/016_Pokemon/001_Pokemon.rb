@@ -1047,7 +1047,7 @@ class Pokemon
     end
     @species      = realSpecies
     @name         = PBSpecies.getName(@species)
-    @personalID   = rand(2**32)
+    @personalID   = rand(2**16) | rand(2**16) << 16
     @hp           = 1
     @totalhp      = 1
     @iv           = []

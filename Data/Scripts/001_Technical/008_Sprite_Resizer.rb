@@ -21,15 +21,17 @@ def pbSetResizeFactor(factor)
     Graphics.resize_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
     $ResizeInitialized = true
   end
-  if factor < 0 || factor == 3
+  if factor < 0 || factor == 4
     Graphics.fullscreen = true if !Graphics.fullscreen
   else
     Graphics.fullscreen = false if Graphics.fullscreen
-    Graphics.scale = factor
+    Graphics.scale = (factor + 1) * 0.5
     Graphics.center
   end
 end
 
+=begin
+# Unused
 def pbRefreshResizeFactor
   ObjectSpace.each_object(Sprite) { |o|
     next if o.disposed?
@@ -119,6 +121,7 @@ def pbConfigureWindowedScreen(value)
   pbSetResizeFactor2(value,true)
   Win32API.restoreScreen
 end
+=end
 
 def setScreenBorderName(border)
   if !$HaveResizeBorder
@@ -187,6 +190,8 @@ module Graphics
   @@haveresizescreen = true
   @@deletefailed = false
 
+=begin
+  # TODO: Can this be removed?
   def self.snap_to_bitmap(resize=true)
     tempPath = ENV["TEMP"]+"\\tempscreen.bmp"
     if safeExists?(tempPath) && @@deletefailed
@@ -243,10 +248,11 @@ module Graphics
     end
     return bm
   end
+=end
 end
 
 
-
+=begin
 class Sprite
   unless @SpriteResizerMethodsAliased
     alias _initialize_SpriteResizer initialize
@@ -570,7 +576,7 @@ class Plane
     @resizedZoomY=val
   end
 end
-
+=end
 
 
 

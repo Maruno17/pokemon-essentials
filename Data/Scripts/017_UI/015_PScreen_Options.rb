@@ -20,7 +20,7 @@ class PokemonSystem
     @frame       = 0     # Default window frame (see also $TextFrames)
     @textskin    = 0     # Speech frame
     @font        = 0     # Font (see also $VersionStyles)
-    @screensize  = (SCREEN_ZOOM.floor).to_i   # 0=half size, 1=full size, 2=double size
+    @screensize  = (SCREEN_ZOOM * 2).floor - 1   # 0=half size, 1=full size, 2=full-and-a-half size, 3=double size
     @border      = 0     # Screen border (0=off, 1=on)
     @language    = 0     # Language (see also LANGUAGES in script PokemonSystem)
     @runstyle    = 0     # Run key functionality (0=hold to run, 1=toggle auto-run)
@@ -508,8 +508,8 @@ class PokemonOption_Scene
          proc { $PokemonSystem.textinput },
          proc { |value| $PokemonSystem.textinput = value }
        ),
-       EnumOption.new(_INTL("Screen Size"),[_INTL("S"),_INTL("M"),_INTL("L"),_INTL("Full")],
-         proc { [$PokemonSystem.screensize,3].min },
+       EnumOption.new(_INTL("Screen Size"),[_INTL("S"),_INTL("M"),_INTL("L"),_INTL("XL"),_INTL("Full")],
+         proc { [$PokemonSystem.screensize,4].min },
          proc { |value|
            oldvalue = $PokemonSystem.screensize
            $PokemonSystem.screensize = value

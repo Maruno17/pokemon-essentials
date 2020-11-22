@@ -351,7 +351,7 @@ def pbDayCareGenerateEgg
   if shinyretries>0
     shinyretries.times do
       break if egg.shiny?
-      egg.personalID = rand(65536)|(rand(65536)<<16)
+      egg.personalID = rand(2**16) | rand(2**16) << 16
     end
   end
   # Inheriting ability from the mother

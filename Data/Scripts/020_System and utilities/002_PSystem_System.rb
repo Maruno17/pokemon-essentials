@@ -73,12 +73,6 @@ def pbSetUpSystem
   begin
     consts = pbSafeLoad("Data/Constants.rxdata")
     consts = [] if !consts
-    GameData::Ability.load
-    GameData::Item.load
-    GameData::Move.load
-    GameData::BerryPlant.load
-    GameData::Metadata.load
-    GameData::MapMetadata.load
   rescue
     consts = []
   end
@@ -86,6 +80,7 @@ def pbSetUpSystem
     next if !script
     eval(Zlib::Inflate.inflate(script[2]),nil,script[1])
   end
+  GameData.load_all
   if LANGUAGES.length>=2
     pokemonSystem.language = pbChooseLanguage if !havedata
     pbLoadMessages("Data/"+LANGUAGES[pokemonSystem.language][1])
@@ -96,11 +91,12 @@ def pbScreenCapture
   t = pbGetTimeNow
   filestart = t.strftime("[%Y-%m-%d] %H_%M_%S")
   filestart = sprintf("%s.%03d",filestart,(t.to_f-t.to_i)*1000)   # milliseconds
-  capturefile = RTP.getSaveFileName(sprintf("%s.png",filestart))
-  if capturefile && safeExists?("rubyscreen.dll")
+  capturefile = RTP.getSaveFileName(sprintf("%s.bmp",filestart))
+#  if capturefile && safeExists?("rubyscreen.dll")
     Graphics.screenshot(capturefile)
+#    Graphics.snap_to_bitmap.saveToPng(capturefile)
     pbSEPlay("Pkmn exp full") if FileTest.audio_exist?("Audio/SE/Pkmn exp full")
-  end
+#  end
 end
 
 def pbDebugF7

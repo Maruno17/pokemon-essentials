@@ -158,11 +158,10 @@ class PBPokemon
   def createPokemon(level,iv,trainer)
     pokemon=Pokemon.new(@species,level,trainer,false)
     pokemon.setItem(@item)
-    pokemon.personalID=rand(65536)
-    pokemon.personalID|=rand(65536)<<8
-    pokemon.personalID-=pokemon.personalID%25
-    pokemon.personalID+=nature
-    pokemon.personalID&=0xFFFFFFFF
+    pokemon.personalID = rand(2**16) | rand(2**16) << 16
+    pokemon.personalID -= pokemon.personalID % 25
+    pokemon.personalID += nature
+    pokemon.personalID &= 0xFFFFFFFF
     pokemon.happiness=0
     pokemon.moves[0]=PBMove.new(self.convertMove(@move1))
     pokemon.moves[1]=PBMove.new(self.convertMove(@move2))

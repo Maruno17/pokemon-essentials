@@ -355,7 +355,6 @@ class PokemonLoadScreen
           $PokemonBag          = Marshal.load(f)
           $PokemonStorage      = Marshal.load(f)
           $SaveVersion         = Marshal.load(f) unless f.eof?
-          pbRefreshResizeFactor   # To fix Game_Screen pictures
           magicNumberMatches = false
           if $data_system.respond_to?("magic_number")
             magicNumberMatches = ($game_system.magic_number==$data_system.magic_number)
@@ -427,7 +426,6 @@ class PokemonLoadScreen
         $PokemonStorage      = PokemonStorage.new
         $PokemonEncounters   = PokemonEncounters.new
         $PokemonTemp.begunNewGame = true
-        pbRefreshResizeFactor   # To fix Game_Screen pictures
         $data_system         = pbLoadRxData("Data/System")
         $MapFactory          = PokemonMapFactory.new($data_system.start_map_id)   # calls setMapChanged
         $game_player.moveto($data_system.start_x, $data_system.start_y)

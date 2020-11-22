@@ -117,4 +117,13 @@ module GameData
       return false
     end
   end
+
+  def self.load_all
+    Ability.load
+    Item.load
+    Move.load
+    BerryPlant.load
+    Metadata.load
+    MapMetadata.load
+  end
 end
