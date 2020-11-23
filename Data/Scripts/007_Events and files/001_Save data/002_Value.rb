@@ -48,12 +48,12 @@ module SaveData
     private
 
     def save_value(&block)
-      raise ArgumentError, "No block given for save_value proc" unless block_given?
+      raise ArgumentError, 'No block given for save_value proc' unless block_given?
       @save_proc = block
     end
 
     def load_value(&block)
-      raise ArgumentError, "No block given for load_value proc" unless block_given?
+      raise ArgumentError, 'No block given for load_value proc' unless block_given?
       @load_proc = block
     end
 
@@ -64,7 +64,7 @@ module SaveData
     end
 
     def from_old_format(&block)
-      raise ArgumentError, "No block given for get_from_old_format proc" unless block_given?
+      raise ArgumentError, 'No block given for get_from_old_format proc' unless block_given?
       @old_format_get_proc = block
     end
   end
