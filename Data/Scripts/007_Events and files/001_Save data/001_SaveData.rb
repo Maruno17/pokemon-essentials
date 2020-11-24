@@ -1,9 +1,7 @@
 # The SaveData module is used to analyze and modify the save file.
 module SaveData
   # Contains the file path of the save file.
-  # TODO: This should be changed at some point, as RTP.getSaveFileName uses Win32API.
-  #   mkxp-z introduces System.data_directory, maybe use that later?
-  FILE_PATH = RTP.getSaveFileName('Game.rxdata')
+  FILE_PATH = System.data_directory + '/Game.rxdata'
 
   # Contains {Value} objects for each save element.
   # Populated during runtime by {#register} calls.
