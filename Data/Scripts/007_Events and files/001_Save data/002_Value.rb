@@ -1,6 +1,6 @@
 module SaveData
-  # An exception raised if an invalid save value is saved or loaded.
-  class InvalidValueException < RuntimeError; end
+  # An error raised if an invalid save value is saved or loaded.
+  class InvalidValueError < RuntimeError; end
 
   # Contains the data of a single value in save data.
   class Value
@@ -21,7 +21,7 @@ module SaveData
     def save
       data = @save_proc.call
       if @ensured_class && data.class.name != @ensured_class.to_s
-        raise InvalidValueException, "Save value #{@id.inspect} is not a #{@ensured_class} (#{data.class.name} given)"
+        raise InvalidValueError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{data.class.name} given)"
       end
       return data
     end
@@ -30,7 +30,7 @@ module SaveData
     # @param value [Object] load proc argument
     def load(value)
       if @ensured_class && value.class.name != @ensured_class.to_s
-        raise InvalidValueException, "Save value #{@id.inspect} is not a #{@ensured_class} (#{value.class.name} given)"
+        raise InvalidValueError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{value.class.name} given)"
       end
       @load_proc.call(value)
     end
