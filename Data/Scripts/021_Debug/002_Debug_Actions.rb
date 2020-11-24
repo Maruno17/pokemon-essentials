@@ -816,7 +816,7 @@ def pbDebugFixInvalidTiles
     changed = false
     map = mapData.getMap(id)
     next if !map || !mapData.mapinfos[id]
-    Win32API.SetWindowText(_INTL("Processing map {1} ({2})", id, mapData.mapinfos[id].name))
+    pbSetWindowText(_INTL("Processing map {1} ({2})", id, mapData.mapinfos[id].name))
     passages = mapData.getTilesetPassages(map, id)
     # Check all tiles in map for non-existent tiles
     for x in 0...map.data.xsize

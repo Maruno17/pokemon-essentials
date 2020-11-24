@@ -317,28 +317,28 @@ end
 def pbSaveMachines
   machines = pbLoadSpeciesTMData
   return if !machines
-  File.open("PBS/tm.txt","wb") { |f|
+  File.open("PBS/tm.txt", "wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file."))
     f.write("\r\n")
     keys = machines.keys.sort { |a, b| GameData::Move.get(a).id_number <=> GameData::Move.get(b).id_number }
     for i in 0...keys.length
       Graphics.update if i%50==0
-      Win32API.SetWindowText(_INTL("Writing move {1}/{2}",i,keys.length)) if i%20==0
+      pbSetWindowText(_INTL("Writing move {1}/{2}", i, keys.length)) if i % 20 == 0
       next if !machines[keys[i]]
       movename = GameData::Move.get(keys[i]).id.to_s
-      next if !movename || movename==""
+      next if !movename || movename == ""
       f.write("\#-------------------------------\r\n")
-      f.write(sprintf("[%s]\r\n",movename))
+      f.write(sprintf("[%s]\r\n", movename))
       x = []
       machines[keys[i]].each do |species|
-        speciesname = getConstantName(PBSpecies,species) rescue pbGetSpeciesConst(species) rescue nil
-        next if !speciesname || speciesname==""
+        speciesname = getConstantName(PBSpecies, species) rescue pbGetSpeciesConst(species) rescue nil
+        next if !speciesname || speciesname == ""
         x.push(speciesname)
       end
-      f.write(x.join(",")+"\r\n")
+      f.write(x.join(",") + "\r\n")
     end
   }
 end
@@ -855,7 +855,7 @@ def pbSavePokemonData
     end
     if i%20==0
       Graphics.update
-      Win32API.SetWindowText(_INTL("Processing species {1}...",i))
+      pbSetWindowText(_INTL("Processing species {1}...",i))
     end
   end
   pokedata.close
@@ -1317,7 +1317,7 @@ def pbSavePokemonFormsData
     end
     if i%20==0
       Graphics.update
-      Win32API.SetWindowText(_INTL("Processing species {1}...",i))
+      pbSetWindowText(_INTL("Processing species {1}...",i))
     end
   end
   pokedata.close

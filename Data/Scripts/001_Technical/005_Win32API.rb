@@ -4,12 +4,6 @@ class Win32API
   @@GetWindowThreadProcessId = Win32API.new('user32', 'GetWindowThreadProcessId', '%w(l p)', 'l')
   @@FindWindowEx             = Win32API.new('user32', 'FindWindowEx', '%w(l l p p)', 'l')
 
-  def Win32API.SetWindowText(text)
-    hWnd = pbFindRgssWindow
-    swp = Win32API.new('user32','SetWindowTextA',%(l, p),'i')
-    swp.call(hWnd, text.to_s)
-  end
-
  # Added by Peter O. as a more reliable way to get the RGSS window
   def Win32API.pbFindRgssWindow
     return @@RGSSWINDOW if @@RGSSWINDOW
@@ -30,6 +24,24 @@ class Win32API
     raise "Can't find RGSS player window"
   end
 
+  # Returns the size of the window. Used in detecting the mouse position.
+  def Win32API.client_size
+    hWnd = pbFindRgssWindow
+    rect = [0,0,0,0].pack('l4')
+    Win32API.new('user32','GetClientRect',%w(l p),'i').call(hWnd,rect)
+    width,height = rect.unpack('l4')[2..3]
+    return width,height
+  end
+
+=begin
+  # Unused
+  def Win32API.SetWindowText(text)
+    hWnd = pbFindRgssWindow
+    swp = Win32API.new('user32','SetWindowTextA',%(l, p),'i')
+    swp.call(hWnd, text.to_s)
+  end
+
+  # Unused
   def Win32API.SetWindowPos(w, h)
     hWnd = pbFindRgssWindow
     windowrect = Win32API.GetWindowRect
@@ -41,14 +53,7 @@ class Win32API
     return win
   end
 
-  def Win32API.client_size
-    hWnd = pbFindRgssWindow
-    rect = [0,0,0,0].pack('l4')
-    Win32API.new('user32','GetClientRect',%w(l p),'i').call(hWnd,rect)
-    width,height = rect.unpack('l4')[2..3]
-    return width,height
-  end
-
+  # Unused
   def Win32API.GetWindowRect
     hWnd = pbFindRgssWindow
     rect = [0,0,0,0].pack('l4')
@@ -57,12 +62,14 @@ class Win32API
     return Rect.new(x,y,width-x,height-y)
   end
 
+  # Unused
   def Win32API.focusWindow
     window = Win32API.new('user32','ShowWindow','LL','L')
     hWnd = pbFindRgssWindow
     window.call(hWnd,9)
   end
 
+  # Unused
   def Win32API.fillScreen
     setWindowLong = Win32API.new('user32','SetWindowLong','LLL','L')
     setWindowPos  = Win32API.new('user32','SetWindowPos','LLIIIII','I')
@@ -76,17 +83,14 @@ class Win32API
     return [width,height]
   end
 
+  # Unused
   def Win32API.restoreScreen
     setWindowLong = Win32API.new('user32','SetWindowLong','LLL','L')
     setWindowPos  = Win32API.new('user32','SetWindowPos','LLIIIII','I')
     metrics = Win32API.new('user32','GetSystemMetrics','I','I')
     hWnd = pbFindRgssWindow
-    width  = SCREEN_WIDTH*$ResizeFactor
-    height = SCREEN_HEIGHT*$ResizeFactor
-    if $PokemonSystem && $PokemonSystem.border==1
-      width += BORDER_WIDTH*2*$ResizeFactor
-      height += BORDER_HEIGHT*2*$ResizeFactor
-    end
+    width  = SCREEN_WIDTH
+    height = SCREEN_HEIGHT
     x = [(metrics.call(0)-width)/2,0].max
     y = [(metrics.call(1)-height)/2,0].max
     setWindowLong.call(hWnd,-16,0x14CA0000)
@@ -94,6 +98,7 @@ class Win32API
     Win32API.focusWindow
     return [width,height]
   end
+=end
 end
 
 

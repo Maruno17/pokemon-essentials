@@ -1073,7 +1073,7 @@ module Compiler
         end
         lineno += 1
         Graphics.update if lineno%50==0
-        Win32API.SetWindowText(_INTL("Processing {1} line {2}",FileLineData.file,lineno)) if lineno%50==0
+        pbSetWindowText(_INTL("Processing {1} line {2}",FileLineData.file,lineno)) if lineno%50==0
       }
       f.close
     end

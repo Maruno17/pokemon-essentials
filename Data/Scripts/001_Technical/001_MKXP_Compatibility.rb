@@ -16,3 +16,17 @@ class Bitmap
     mkxp_draw_text(x, y, width, height, text, align)
   end
 end
+
+def pbSetResizeFactor(factor)
+  if !$ResizeInitialized
+    Graphics.resize_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+    $ResizeInitialized = true
+  end
+  if factor < 0 || factor == 4
+    Graphics.fullscreen = true if !Graphics.fullscreen
+  else
+    Graphics.fullscreen = false if Graphics.fullscreen
+    Graphics.scale = (factor + 1) * 0.5
+    Graphics.center
+  end
+end

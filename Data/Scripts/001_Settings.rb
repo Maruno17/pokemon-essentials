@@ -1,29 +1,18 @@
 #==============================================================================#
 #                              Pokémon Essentials                              #
-#                                 Version 18.1                                 #
+#                               Version 18.1.dev                               #
 #==============================================================================#
 
 #===============================================================================
-# * The default screen width (at a zoom of 1.0; size is half this at zoom 0.5).
-# * The default screen height (at a zoom of 1.0).
-# * The default screen zoom. (1.0 means each tile is 32x32 pixels, 0.5 means
-#      each tile is 16x16 pixels, 2.0 means each tile is 64x64 pixels.)
-# * Whether full-screen display lets the border graphic go outside the edges of
-#      the screen (true), or forces the border graphic to always be fully shown
-#      (false).
-# * The width of each of the left and right sides of the screen border. This is
-#      added on to the screen width above, only if the border is turned on.
-# * The height of each of the top and bottom sides of the screen border. This is
-#      added on to the screen height above, only if the border is turned on.
+# * The default screen width (at a scale of 1.0).
+# * The default screen height (at a scale of 1.0).
+# * The default screen scale factor. Possible values are 0.5, 1.0, 1.5 and 2.0.
 # * Map view mode (0=original, 1=custom, 2=perspective).
 #===============================================================================
-SCREEN_WIDTH       = 512
-SCREEN_HEIGHT      = 384
-SCREEN_ZOOM        = 1.0
-BORDER_FULLY_SHOWS = false
-BORDER_WIDTH       = 78
-BORDER_HEIGHT      = 78
-MAP_VIEW_MODE      = 1
+SCREEN_WIDTH  = 512
+SCREEN_HEIGHT = 384
+SCREEN_SCALE  = 1.0
+MAP_VIEW_MODE = 1
 # To forbid the player from changing the screen size themselves, quote out or
 # delete the relevant bit of code in the PScreen_Options script section.
 

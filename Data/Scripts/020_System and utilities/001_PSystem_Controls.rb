@@ -274,12 +274,11 @@ module Mouse
 
   # Returns the position of the mouse relative to the game window.
   def getMousePos(catch_anywhere=false)
-    resizeFactor = ($ResizeFactor) ? $ResizeFactor : 1
     x, y = screen_to_client(*getMouseGlobalPos)
     return nil unless x and y
     width, height = Win32API.client_size
     if catch_anywhere or (x>=0 and y>=0 and x<width and y<height)
-      return (x/resizeFactor).to_i, (y/resizeFactor).to_i
+      return x, y
     end
     return nil
   end
