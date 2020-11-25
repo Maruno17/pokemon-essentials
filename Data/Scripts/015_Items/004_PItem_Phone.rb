@@ -66,13 +66,14 @@ end
 def pbRandomPhoneTrainer
   $PokemonGlobal.phoneNumbers = [] if !$PokemonGlobal.phoneNumbers
   temparray = []
-  currentRegion = pbGetMetadata($game_map.map_id,MapMetadata::MAP_POSITION)
+  currentRegion = GameData::MapMetadata.get($game_map.map_id).town_map_position
+  return nil if !currentRegion
   for num in $PokemonGlobal.phoneNumbers
     next if !num[0] || num.length!=8   # if not visible or not a trainer
     next if $game_map.map_id==num[6]   # Can't call if on same map
-    callerRegion  = pbGetMetadata(num[6],MapMetadata::MAP_POSITION)
+    callerRegion  = GameData::MapMetadata.get(num[6]).town_map_position
     # Can't call if in different region
-    next if callerRegion && currentRegion && callerRegion[0]!=currentRegion[0]
+    next if !callerRegion || callerRegion[0] != currentRegion[0]
     temparray.push(num)
   end
   return nil if temparray.length==0
@@ -193,9 +194,9 @@ def pbCallTrainer(trtype,trname)
     pbMessage(_INTL("The Trainer is close by.\nTalk to the Trainer in person!"))
     return
   end
-  callerregion  = pbGetMetadata(trainer[6],MapMetadata::MAP_POSITION)
-  currentregion = pbGetMetadata($game_map.map_id,MapMetadata::MAP_POSITION)
-  if callerregion && currentregion && callerregion[0]!=currentregion[0]
+  callerregion  = GameData::MapMetadata.get(trainer[6]).town_map_position
+  currentregion = GameData::MapMetadata.get($game_map.map_id).town_map_position
+  if !callerregion || !currentregion || callerregion[0] != currentregion[0]
     pbMessage(_INTL("The Trainer is out of range."))
     return   # Can't call if in different region
   end

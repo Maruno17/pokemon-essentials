@@ -70,7 +70,7 @@ class PokeBattle_AI
     when "007", "008", "009", "0C5"
       if target.pbCanParalyze?(user,false) &&
          !(skill>=PBTrainerAI.mediumSkill &&
-         isConst?(move.id,PBMoves,:THUNDERWAVE) &&
+         move.id == :THUNDERWAVE &&
          PBTypes.ineffective?(pbCalcTypeMod(move.type,user,target)))
         score += 30
         if skill>=PBTrainerAI.mediumSkill
@@ -1275,17 +1275,19 @@ class PokeBattle_AI
          "05D",   # Sketch
          "0B6"    # Metronome
       ]
-      lastMoveData = pbGetMoveData(target.lastRegularMoveUsed)
-      if user.effects[PBEffects::Transform] ||
-         target.lastRegularMoveUsed<=0 ||
-         moveBlacklist.include?(lastMoveData[MoveData::FUNCTION_CODE]) ||
-         isConst?(lastMoveData[MoveData::TYPE],PBTypes,:SHADOW)
+      if user.effects[PBEffects::Transform] || !target.lastRegularMoveUsed
         score -= 90
-      end
-      user.eachMove do |m|
-        next if m.id!=target.lastRegularMoveUsed
-        score -= 90
-        break
+      else
+        lastMoveData = GameData::Move.get(target.lastRegularMoveUsed)
+        if moveBlacklist.include?(lastMoveData.function_code) ||
+           isConst?(lastMoveData.type, PBTypes,:SHADOW)
+          score -= 90
+        end
+        user.eachMove do |m|
+          next if m != target.lastRegularMoveUsed
+          score -= 90
+          break
+        end
       end
     #---------------------------------------------------------------------------
     when "05D"
@@ -1294,22 +1296,23 @@ class PokeBattle_AI
          "014",   # Chatter
          "05D"    # Sketch
       ]
-      lastMoveData = pbGetMoveData(target.lastRegularMoveUsed)
-      if user.effects[PBEffects::Transform] ||
-         target.lastRegularMoveUsed<=0 ||
-         moveBlacklist.include?(lastMoveData[MoveData::FUNCTION_CODE]) ||
-         isConst?(lastMoveData[MoveData::TYPE],PBTypes,:SHADOW)
+      if user.effects[PBEffects::Transform] || !target.lastRegularMoveUsed
         score -= 90
-      end
-      user.eachMove do |m|
-        next if m.id!=target.lastRegularMoveUsed
-        score -= 90   # User already knows the move that will be Sketched
-        break
+      else
+        lastMoveData = GameData::Move.get(target.lastRegularMoveUsed)
+        if moveBlacklist.include?(lastMoveData.function_code) ||
+           isConst?(lastMoveData.type, PBTypes,:SHADOW)
+          score -= 90
+        end
+        user.eachMove do |m|
+          next if m != target.lastRegularMoveUsed
+          score -= 90   # User already knows the move that will be Sketched
+          break
+        end
       end
     #---------------------------------------------------------------------------
     when "05E"
-      if isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-         isConst?(user.ability,PBAbilities,:RKSSYSTEM)
+      if user.ability == :MULTITYPE || user.ability == :RKSSYSTEM
         score -= 90
       else
         types = []
@@ -1323,11 +1326,10 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "05F"
-      if isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-         isConst?(user.ability,PBAbilities,:RKSSYSTEM)
+      if user.ability == :MULTITYPE || user.ability == :RKSSYSTEM
         score -= 90
-      elsif target.lastMoveUsed<=0 ||
-         PBTypes.isPseudoType?(pbGetMoveData(target.lastMoveUsed,MoveData::TYPE))
+      elsif !target.lastMoveUsed ||
+         PBTypes.isPseudoType?(GameData::Move.get(target.lastMoveUsed).type)
         score -= 90
       else
         aType = -1
@@ -1349,8 +1351,7 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "060"
-      if isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-         isConst?(user.ability,PBAbilities,:RKSSYSTEM)
+      if user.ability == :MULTITYPE || user.ability == :RKSSYSTEM
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
         envtypes = [
@@ -1370,16 +1371,14 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "061"
       if target.effects[PBEffects::Substitute]>0 ||
-         isConst?(target.ability,PBAbilities,:MULTITYPE) ||
-         isConst?(target.ability,PBAbilities,:RKSSYSTEM)
+         target.ability == :MULTITYPE || target.ability == :RKSSYSTEM
         score -= 90
       elsif target.pbHasType?(:WATER)
         score -= 90
       end
     #---------------------------------------------------------------------------
     when "062"
-      if isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-         isConst?(user.ability,PBAbilities,:RKSSYSTEM)
+      if user.ability == :MULTITYPE || user.ability == :RKSSYSTEM
         score -= 90
       elsif user.pbHasType?(target.type1) &&
          user.pbHasType?(target.type2) &&
@@ -1392,10 +1391,7 @@ class PokeBattle_AI
       if target.effects[PBEffects::Substitute]>0
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
-        if isConst?(target.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:SIMPLE) ||
-           isConst?(target.ability,PBAbilities,:TRUANT)
+        if [:MULTITYPE, :RKSSYSTEM, :SIMPLE, :TRUANT].include?(target.ability_id)
           score -= 90
         end
       end
@@ -1404,10 +1400,7 @@ class PokeBattle_AI
       if target.effects[PBEffects::Substitute]>0
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
-        if isConst?(target.ability,PBAbilities,:INSOMNIA) ||
-           isConst?(target.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:TRUANT)
+        if [:INSOMNIA, :MULTITYPE, :RKSSYSTEM, :TRUANT].include?(target.ability_id)
           score -= 90
         end
       end
@@ -1415,27 +1408,17 @@ class PokeBattle_AI
     when "065"
       score -= 40   # don't prefer this move
       if skill>=PBTrainerAI.mediumSkill
-        if target.ability==0 || user.ability==target.ability ||
-           isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(user.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:FLOWERGIFT) ||
-           isConst?(target.ability,PBAbilities,:FORECAST) ||
-           isConst?(target.ability,PBAbilities,:ILLUSION) ||
-           isConst?(target.ability,PBAbilities,:IMPOSTER) ||
-           isConst?(target.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:TRACE) ||
-           isConst?(target.ability,PBAbilities,:WONDERGUARD) ||
-           isConst?(target.ability,PBAbilities,:ZENMODE)
+        if !target.ability || user.ability==target.ability ||
+           [:MULTITYPE, :RKSSYSTEM].include?(user.ability_id) ||
+           [:FLOWERGIFT, :FORECAST, :ILLUSION, :IMPOSTER, :MULTITYPE, :RKSSYSTEM,
+            :TRACE, :WONDERGUARD, :ZENMODE].include?(target.ability_id)
           score -= 90
         end
       end
       if skill>=PBTrainerAI.highSkill
-        if isConst?(target.ability,PBAbilities,:TRUANT) &&
-           user.opposes?(target)
+        if target.ability == :TRUANT && user.opposes?(target)
           score -= 90
-        elsif isConst?(target.ability,PBAbilities,:SLOWSTART) &&
-           user.opposes?(target)
+        elsif target.ability == :SLOWSTART && user.opposes?(target)
           score -= 90
         end
       end
@@ -1445,26 +1428,16 @@ class PokeBattle_AI
       if target.effects[PBEffects::Substitute]>0
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
-        if user.ability==0 || user.ability==target.ability ||
-           isConst?(target.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:TRUANT) ||
-           isConst?(user.ability,PBAbilities,:FLOWERGIFT) ||
-           isConst?(user.ability,PBAbilities,:FORECAST) ||
-           isConst?(user.ability,PBAbilities,:ILLUSION) ||
-           isConst?(user.ability,PBAbilities,:IMPOSTER) ||
-           isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(user.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(user.ability,PBAbilities,:TRACE) ||
-           isConst?(user.ability,PBAbilities,:ZENMODE)
+        if !user.ability || user.ability==target.ability ||
+          [:MULTITYPE, :RKSSYSTEM, :TRUANT].include?(target.ability_id) ||
+          [:FLOWERGIFT, :FORECAST, :ILLUSION, :IMPOSTER, :MULTITYPE, :RKSSYSTEM,
+           :TRACE, :ZENMODE].include?(user.ability_id)
           score -= 90
         end
         if skill>=PBTrainerAI.highSkill
-          if isConst?(user.ability,PBAbilities,:TRUANT) &&
-             user.opposes?(target)
+          if user.ability == :TRUANT && user.opposes?(target)
             score += 90
-          elsif isConst?(user.ability,PBAbilities,:SLOWSTART) &&
-             user.opposes?(target)
+          elsif user.ability == :SLOWSTART && user.opposes?(target)
             score += 90
           end
         end
@@ -1473,25 +1446,17 @@ class PokeBattle_AI
     when "067"
       score -= 40   # don't prefer this move
       if skill>=PBTrainerAI.mediumSkill
-        if (user.ability==0 && target.ability==0) ||
+        if (!user.ability && !target.ability) ||
            user.ability==target.ability ||
-           isConst?(user.ability,PBAbilities,:ILLUSION) ||
-           isConst?(user.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(user.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(user.ability,PBAbilities,:WONDERGUARD) ||
-           isConst?(target.ability,PBAbilities,:ILLUSION) ||
-           isConst?(target.ability,PBAbilities,:MULTITYPE) ||
-           isConst?(target.ability,PBAbilities,:RKSSYSTEM) ||
-           isConst?(target.ability,PBAbilities,:WONDERGUARD)
+           [:ILLUSION, :MULTITYPE, :RKSSYSTEM, :WONDERGUARD].include?(user.ability_id) ||
+           [:ILLUSION, :MULTITYPE, :RKSSYSTEM, :WONDERGUARD].include?(target.ability_id)
           score -= 90
         end
       end
       if skill>=PBTrainerAI.highSkill
-        if isConst?(target.ability,PBAbilities,:TRUANT) &&
-           user.opposes?(target)
+        if target.ability == :TRUANT && user.opposes?(target)
           score -= 90
-        elsif isConst?(target.ability,PBAbilities,:SLOWSTART) &&
-          user.opposes?(target)
+        elsif target.ability == :SLOWSTART && user.opposes?(target)
           score -= 90
         end
       end
@@ -1501,10 +1466,7 @@ class PokeBattle_AI
          target.effects[PBEffects::GastroAcid]
         score -= 90
       elsif skill>=PBTrainerAI.highSkill
-        score -= 90 if isConst?(target.ability,PBAbilities,:MULTITYPE)
-        score -= 90 if isConst?(target.ability,PBAbilities,:RKSSYSTEM)
-        score -= 90 if isConst?(target.ability,PBAbilities,:SLOWSTART)
-        score -= 90 if isConst?(target.ability,PBAbilities,:TRUANT)
+        score -= 90 if [:MULTITYPE, :RKSSYSTEM, :SLOWSTART, :TRUANT].include?(target.ability_id)
       end
     #---------------------------------------------------------------------------
     when "069"
@@ -1549,11 +1511,11 @@ class PokeBattle_AI
         spatk  = pbRoughStat(user,PBStats::SPATK,skill)
         if attack*1.5<spatk
           score -= 60
-        elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed>0
-          moveData = pbGetMoveData(target.lastMoveUsed)
-          if moveData[MoveData::BASE_DAMAGE]>0 &&
-             (MOVE_CATEGORY_PER_MOVE && moveData[MoveData::CATEGORY]==0) ||
-             (!MOVE_CATEGORY_PER_MOVE && PBTypes.isPhysicalType?(moveData[MoveData::TYPE]))
+        elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed
+          moveData = GameData::Move.get(target.lastMoveUsed)
+          if moveData.base_damage > 0 &&
+             (MOVE_CATEGORY_PER_MOVE && moveData.category == 0) ||
+             (!MOVE_CATEGORY_PER_MOVE && PBTypes.isPhysicalType?(moveData.type))
             score -= 60
           end
         end
@@ -1567,11 +1529,11 @@ class PokeBattle_AI
         spatk  = pbRoughStat(user,PBStats::SPATK,skill)
         if attack>spatk*1.5
           score -= 60
-        elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed>0
-          moveData = pbGetMoveData(target.lastMoveUsed)
-          if moveData[MoveData::BASE_DAMAGE]>0 &&
-             (MOVE_CATEGORY_PER_MOVE && moveData[MoveData::CATEGORY]==1) ||
-             (!MOVE_CATEGORY_PER_MOVE && !PBTypes.isSpecialType?(moveData[MoveData::TYPE]))
+        elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed
+          moveData = GameData::Move.get(target.lastMoveUsed)
+          if moveData.base_damage > 0 &&
+             (MOVE_CATEGORY_PER_MOVE && moveData.caegory == 1) ||
+             (!MOVE_CATEGORY_PER_MOVE && !PBTypes.isSpecialType?(moveData.type))
             score -= 60
           end
         end
@@ -1674,7 +1636,7 @@ class PokeBattle_AI
     when "095"
     #---------------------------------------------------------------------------
     when "096"
-      score -= 90 if !pbIsBerry?(user.item) || !user.itemActive?
+      score -= 90 if !user.item || !user.item.is_berry? || !user.itemActive?
     #---------------------------------------------------------------------------
     when "097"
     #---------------------------------------------------------------------------
@@ -1751,7 +1713,7 @@ class PokeBattle_AI
           score -= user.effects[PBEffects::ProtectRate]*40
         end
         score += 50 if user.turnCount==0
-        score += 30 if target.effects[PBEffects::TwoTurnAttack]>0
+        score += 30 if target.effects[PBEffects::TwoTurnAttack]
       end
     #---------------------------------------------------------------------------
     when "0AB"
@@ -1763,8 +1725,8 @@ class PokeBattle_AI
     when "0AE"
       score -= 40
       if skill>=PBTrainerAI.highSkill
-        score -= 100 if target.lastRegularMoveUsed<=0 ||
-           !pbGetMoveData(target.lastRegularMoveUsed,MoveData::FLAGS)[/e/]   # Not copyable by Mirror Move
+        score -= 100 if !target.lastRegularMoveUsed ||
+           !GameData::Move.get(target.lastRegularMoveUsed).flags[/e/]   # Not copyable by Mirror Move
       end
     #---------------------------------------------------------------------------
     when "0AF"
@@ -1809,17 +1771,16 @@ class PokeBattle_AI
       if target.effects[PBEffects::Encore]>0
         score -= 90
       elsif aspeed>ospeed
-        if target.lastMoveUsed<=0
+        if !target.lastRegularMoveUsed
           score -= 90
         else
-          moveData = pbGetMoveData(target.lastRegularMoveUsed)
-          if moveData[MoveData::CATEGORY]==2 &&   # Status move
-             (moveData[MoveData::TARGET]==PBTargets::User ||
-             moveData[MoveData::TARGET]==PBTargets::BothSides)
+          moveData = GameData::Move.get(target.lastRegularMoveUsed)
+          if moveData.category == 2 &&   # Status move
+             [PBTargets::User, PBTargets::BothSides].include?(moveData.target)
             score += 60
-          elsif moveData[MoveData::CATEGORY]!=2 &&   # Damaging move
-             moveData[MoveData::TARGET]==PBTargets::NearOther &&
-             PBTypes.ineffective?(pbCalcTypeMod(moveData[MoveData::TYPE],target,user))
+          elsif moveData.category != 2 &&   # Damaging move
+             moveData.target == PBTargets::NearOther &&
+             PBTypes.ineffective?(pbCalcTypeMod(moveData.type, target, user))
             score += 60
           end
         end
@@ -2073,12 +2034,12 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "0F0"
       if skill>=PBTrainerAI.highSkill
-        score += 20 if target.item!=0
+        score += 20 if target.item
       end
     #---------------------------------------------------------------------------
     when "0F1"
       if skill>=PBTrainerAI.highSkill
-        if user.item==0 && target.item!=0
+        if !user.item && target.item
           score += 40
         else
           score -= 90
@@ -2088,19 +2049,20 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "0F2"
-      if user.item==0 && target.item==0
+      if !user.item && !target.item
         score -= 90
       elsif skill>=PBTrainerAI.highSkill && target.hasActiveAbility?(:STICKYHOLD)
         score -= 90
       elsif user.hasActiveItem?([:FLAMEORB,:TOXICORB,:STICKYBARB,:IRONBALL,
                                  :CHOICEBAND,:CHOICESCARF,:CHOICESPECS])
         score += 50
-      elsif user.item==0 && target.item!=0
-        score -= 30 if pbGetMoveData(user.lastMoveUsed,MoveData::FUNCTION_CODE)=="0F2"   # Trick/Switcheroo
+      elsif !user.item && target.item
+        score -= 30 if user.lastMoveUsed &&
+                       GameData::Move.get(user.lastMoveUsed).function_code == "0F2"   # Trick/Switcheroo
       end
     #---------------------------------------------------------------------------
     when "0F3"
-      if user.item==0 || target.item!=0
+      if !user.item || target.item
         score -= 90
       else
         if user.hasActiveItem?([:FLAMEORB,:TOXICORB,:STICKYBARB,:IRONBALL,
@@ -2113,21 +2075,21 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "0F4", "0F5"
       if target.effects[PBEffects::Substitute]==0
-        if skill>=PBTrainerAI.highSkill && pbIsBerry?(target.item)
+        if skill>=PBTrainerAI.highSkill && target.item && target.item.is_berry?
           score += 30
         end
       end
     #---------------------------------------------------------------------------
     when "0F6"
-      if user.recycleItem==0 || user.item!=0
+      if !user.recycleItem || user.item
         score -= 80
-      elsif user.recycleItem!=0
+      elsif user.recycleItem
         score += 30
       end
     #---------------------------------------------------------------------------
     when "0F7"
-      if user.item==0 || !user.itemActive? ||
-         user.unlosableItem?(user.item) || pbIsPokeBall?(user.item)
+      if !user.item || !user.itemActive? ||
+         user.unlosableItem?(user.item) || user.item.is_poke_ball?
         score -= 90
       end
     #---------------------------------------------------------------------------
@@ -2138,7 +2100,7 @@ class PokeBattle_AI
       if @battle.field.effects[PBEffects::MagicRoom]>0
         score -= 90
       else
-        score += 30 if user.item==0 && target.item!=0
+        score += 30 if !user.item && target.item
       end
     #---------------------------------------------------------------------------
     when "0FA"
@@ -2754,7 +2716,7 @@ class PokeBattle_AI
           score -= user.effects[PBEffects::ProtectRate]*40
         end
         score += 50 if user.turnCount==0
-        score += 30 if target.effects[PBEffects::TwoTurnAttack]>0
+        score += 30 if target.effects[PBEffects::TwoTurnAttack]
       end
     #---------------------------------------------------------------------------
     when "14D"
@@ -2966,7 +2928,7 @@ class PokeBattle_AI
           score -= user.effects[PBEffects::ProtectRate]*40
         end
         score += 50 if user.turnCount==0
-        score += 30 if target.effects[PBEffects::TwoTurnAttack]>0
+        score += 30 if target.effects[PBEffects::TwoTurnAttack]
         score += 20   # Because of possible poisoning
       end
     #---------------------------------------------------------------------------
@@ -2982,7 +2944,7 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "16B"
       if skill>=PBTrainerAI.mediumSkill
-        if target.lastRegularMoveUsed<0 ||
+        if !target.lastRegularMoveUsed ||
            !target.pbHasMove?(target.lastRegularMoveUsed) ||
            target.usingMultiTurnAttack?
           score -= 90

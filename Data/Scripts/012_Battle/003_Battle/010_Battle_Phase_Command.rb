@@ -12,9 +12,9 @@ class PokeBattle_Battle
 
   def pbCancelChoice(idxBattler)
     # If idxBattler's choice was to use an item, return that item to the Bag
-    if @choices[idxBattler][0]==:UseItem
+    if @choices[idxBattler][0] == :UseItem
       item = @choices[idxBattler][1]
-      pbReturnUnusedItemToBag(item,idxBattler) if item && item>0
+      pbReturnUnusedItemToBag(item, idxBattler) if item
     end
     # If idxBattler chose to Mega Evolve, cancel it
     pbUnregisterMegaEvolution(idxBattler)
@@ -76,7 +76,7 @@ class PokeBattle_Battle
         ret = true
       else      # Chose a move to use
         next false if cmd<0 || !@battlers[idxBattler].moves[cmd] ||
-                                @battlers[idxBattler].moves[cmd].id<=0
+                               !@battlers[idxBattler].moves[cmd].id
         next false if !pbRegisterMove(idxBattler,cmd)
         next false if !singleBattle? &&
            !pbChooseTarget(@battlers[idxBattler],@battlers[idxBattler].moves[cmd])
@@ -104,7 +104,7 @@ class PokeBattle_Battle
     end
     ret = false
     @scene.pbItemMenu(idxBattler,firstAction) { |item,useType,idxPkmn,idxMove,itemScene|
-      next false if item<0
+      next false if !item
       battler = pkmn = nil
       case useType
       when 1, 2, 6, 7   # Use on Pokémon/Pokémon's move

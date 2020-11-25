@@ -11,6 +11,7 @@ end
 
 
 class PokemonTemp
+  attr_accessor :encounterTriggered
   attr_accessor :encounterType
   attr_accessor :evolutionLevels
 
@@ -130,7 +131,7 @@ def pbPrepareBattle(battle)
   elsif $PokemonGlobal.surfing
     backdrop = "water"   # This applies wherever you are, including in caves
   else
-    back = pbGetMetadata($game_map.map_id,MapMetadata::BATTLE_BACK)
+    back = GameData::MapMetadata.get($game_map.map_id).battle_background
     backdrop = back if back && back!=""
   end
   backdrop = "indoor1" if !backdrop
@@ -151,7 +152,7 @@ def pbPrepareBattle(battle)
   end
   battle.backdropBase = base if base
   # Time of day
-  if pbGetMetadata($game_map.map_id,MapMetadata::ENVIRONMENT)==PBEnvironment::Cave
+  if GameData::MapMetadata.get($game_map.map_id).battle_environment == PBEnvironment::Cave
     battle.time = 2   # This makes Dusk Balls work properly in caves
   elsif TIME_SHADING
     timeNow = pbGetTimeNow
@@ -165,7 +166,7 @@ end
 # Used to determine the environment in battle, and also the form of Burmy/
 # Wormadam.
 def pbGetEnvironment
-  ret = pbGetMetadata($game_map.map_id,MapMetadata::ENVIRONMENT)
+  ret = GameData::MapMetadata.get($game_map.map_id).battle_environment
   ret = PBEnvironment::None if !ret
   if $PokemonTemp.encounterType==EncounterTypes::OldRod ||
      $PokemonTemp.encounterType==EncounterTypes::GoodRod ||
@@ -251,7 +252,12 @@ def pbWildBattleCore(*args)
   playerTrainers    = [$Trainer]
   playerParty       = $Trainer.party
   playerPartyStarts = [0]
-  if $PokemonGlobal.partner && !$PokemonTemp.battleRules["noPartner"] && foeParty.length>1
+  room_for_partner = (foeParty.length > 1)
+  if !room_for_partner && $PokemonTemp.battleRules["size"] &&
+     !["single", "1v1", "1v2", "1v3"].include?($PokemonTemp.battleRules["size"])
+    room_for_partner = true
+  end
+  if $PokemonGlobal.partner && !$PokemonTemp.battleRules["noPartner"] && room_for_partner
     ally = PokeBattle_Trainer.new($PokemonGlobal.partner[1],$PokemonGlobal.partner[0])
     ally.id    = $PokemonGlobal.partner[2]
     ally.party = $PokemonGlobal.partner[3]
@@ -391,7 +397,12 @@ def pbTrainerBattleCore(*args)
   playerTrainers    = [$Trainer]
   playerParty       = $Trainer.party
   playerPartyStarts = [0]
-  if $PokemonGlobal.partner && !$PokemonTemp.battleRules["noPartner"] && foeParty.length>1
+  room_for_partner = (foeParty.length > 1)
+  if !room_for_partner && $PokemonTemp.battleRules["size"] &&
+     !["single", "1v1", "1v2", "1v3"].include?($PokemonTemp.battleRules["size"])
+    room_for_partner = true
+  end
+  if $PokemonGlobal.partner && !$PokemonTemp.battleRules["noPartner"] && room_for_partner
     ally = PokeBattle_Trainer.new($PokemonGlobal.partner[1],$PokemonGlobal.partner[0])
     ally.id    = $PokemonGlobal.partner[2]
     ally.party = $PokemonGlobal.partner[3]
@@ -553,6 +564,7 @@ def pbAfterBattle(decision,canLose)
     end
   end
   Events.onEndBattle.trigger(nil,decision,canLose)
+  $game_player.straighten
 end
 
 Events.onEndBattle += proc { |_sender,e|
@@ -596,8 +608,7 @@ end
 def pbDynamicItemList(*args)
   ret = []
   for i in 0...args.length
-    next if !hasConst?(PBItems,args[i])
-    ret.push(getConst(PBItems,args[i].to_sym))
+    ret.push(i) if GameData::Item.exists?(args[i])
   end
   return ret
 end
@@ -674,7 +685,7 @@ end
 def pbHoneyGather(pkmn)
   return if pkmn.egg? || !pkmn.hasAbility?(:HONEYGATHER)
   return if pkmn.hasItem?
-  return if !hasConst?(PBItems,:HONEY)
+  return if !GameData::Item.exists?(:HONEY)
   chance = 5+((pkmn.level-1)/10)*5
   return unless rand(100)<chance
   pkmn.setItem(:HONEY)

@@ -8,7 +8,7 @@ class PokeBattle_Battle
     return if !@internalBattle || !@expGain
     # Go through each battler in turn to find the Pokémon that participated in
     # battle against it, and award those Pokémon Exp/EVs
-    expAll = (hasConst?(PBItems,:EXPALL) && $PokemonBag.pbHasItem?(:EXPALL))
+    expAll = (GameData::Item.exists?(:EXPALL) && $PokemonBag.pbHasItem?(:EXPALL))
     p1 = pbParty(0)
     @battlers.each do |b|
       next unless b && b.opposes?   # Can only gain Exp from fainted foes
@@ -25,8 +25,7 @@ class PokeBattle_Battle
       if !expAll
         eachInTeam(0,0) do |pkmn,i|
           next if !pkmn.able?
-          next if !pkmn.hasItem?(:EXPSHARE) &&
-                  !isConst?(@initialItems[0][i],PBItems,:EXPSHARE)
+          next if !pkmn.hasItem?(:EXPSHARE) && GameData::Item.try_get(@initialItems[0][i]) != :EXPSHARE
           expShare.push(i)
         end
       end
@@ -223,11 +222,11 @@ class PokeBattle_Battle
     return if !pkmn
     pkmnName = pkmn.name
     battler = pbFindBattler(idxParty)
-    moveName = PBMoves.getName(newMove)
+    moveName = GameData::Move.get(newMove).name
     # Find a space for the new move in pkmn's moveset and learn it
-    pkmn.moves.each_with_index do |m,i|
-      return if m.id==newMove   # Already knows the new move
-      next if m.id!=0           # Not a blank move slot
+    for i in 0...Pokemon::MAX_MOVES
+      m = pkmn.moves[i]
+      return if m && m.id==newMove   # Already knows the new move
       pkmn.moves[i] = PBMove.new(newMove)
       battler.moves[i] = PokeBattle_Move.pbFromPBMove(self,pkmn.moves[i]) if battler
       pbDisplay(_INTL("{1} learned {2}!",pkmnName,moveName)) { pbSEPlay("Pkmn move learnt") }
@@ -241,7 +240,7 @@ class PokeBattle_Battle
         pbDisplayPaused(_INTL("Which move should be forgotten?"))
         forgetMove = @scene.pbForgetMove(pkmn,newMove)
         if forgetMove>=0
-          oldMoveName = PBMoves.getName(pkmn.moves[forgetMove].id)
+          oldMoveName = pkmn.moves[forgetMove].name
           pkmn.moves[forgetMove] = PBMove.new(newMove)   # Replaces current/total PP
           battler.moves[forgetMove] = PokeBattle_Move.pbFromPBMove(self,pkmn.moves[forgetMove]) if battler
           pbDisplayPaused(_INTL("1, 2, and... ... ... Ta-da!"))

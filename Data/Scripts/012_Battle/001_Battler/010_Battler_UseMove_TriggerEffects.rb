@@ -96,8 +96,7 @@ class PokeBattle_Battler
     end
     # Greninja - Battle Bond
     if !user.fainted? && !user.effects[PBEffects::Transform] &&
-       user.isSpecies?(:GRENINJA) &&
-       isConst?(user.ability,PBAbilities,:BATTLEBOND)
+       user.isSpecies?(:GRENINJA) && user.ability == :BATTLEBOND
       if !@battle.pbAllFainted?(user.idxOpposingSide) &&
          !@battle.battleBond[user.index&1][user.pokemonIndex]
         numFainted = 0
@@ -112,7 +111,7 @@ class PokeBattle_Battler
       end
     end
     # Consume user's Gem
-    if user.effects[PBEffects::GemConsumed]>0
+    if user.effects[PBEffects::GemConsumed]
       # NOTE: The consume animation and message for Gems are shown immediately
       #       after the move's animation, but the item is only consumed now.
       user.pbConsumeItem

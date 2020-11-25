@@ -77,7 +77,7 @@ def pbAddPokemon(pokemon,level=nil,seeform=true)
     pokemon = Pokemon.new(pokemon,level)
   end
   speciesname = PBSpecies.getName(pokemon.species)
-  pbMessage(_INTL("\\me[Pkmn get]{1} obtained {2}!\1",$Trainer.name,speciesname))
+  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1",$Trainer.name,speciesname))
   pbNicknameAndStore(pokemon)
   pbSeenForm(pokemon) if seeform
   return true
@@ -113,7 +113,7 @@ def pbAddToParty(pokemon,level=nil,seeform=true)
     pokemon = Pokemon.new(pokemon,level)
   end
   speciesname = PBSpecies.getName(pokemon.species)
-  pbMessage(_INTL("\\me[Pkmn get]{1} obtained {2}!\1",$Trainer.name,speciesname))
+  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1",$Trainer.name,speciesname))
   pbNicknameAndStore(pokemon)
   pbSeenForm(pokemon) if seeform
   return true
@@ -368,12 +368,8 @@ end
 # Checks whether any Pokémon in the party knows the given move, and returns
 # the first Pokémon it finds with that move, or nil if no Pokémon has that move.
 def pbCheckMove(move)
-  move = getID(PBMoves,move)
-  return nil if !move || move<=0
-  for i in $Trainer.pokemonParty
-    for j in i.moves
-      return i if j.id==move
-    end
+  $Trainer.pokemonParty.each do |pkmn|
+    return pkmn if pkmn.hasMove?(move)
   end
   return nil
 end
@@ -495,7 +491,7 @@ def pbHasEgg?(species)
   return false if compat.include?(getConst(PBEggGroups,:Ditto))
   baby = pbGetBabySpecies(species)
   return true if species==baby   # Is a basic species
-  baby = pbGetBabySpecies(species,0,0)
+  baby = pbGetBabySpecies(species,true)
   return true if species==baby   # Is an egg species without incense
   return false
 end

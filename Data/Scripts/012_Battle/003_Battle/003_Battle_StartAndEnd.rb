@@ -478,7 +478,7 @@ class PokeBattle_Battle
     pbParty(0).each_with_index do |pkmn,i|
       next if !pkmn
       @peer.pbOnLeavingBattle(self,pkmn,@usedInBattle[0][i],true)   # Reset form
-      pkmn.setItem(@initialItems[0][i] || 0)
+      pkmn.setItem(@initialItems[0][i])
     end
     return @decision
   end

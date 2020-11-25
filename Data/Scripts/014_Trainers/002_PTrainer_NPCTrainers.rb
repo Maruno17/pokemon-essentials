@@ -20,11 +20,11 @@ module TrainerData
   LOSETEXT  = 15
 
   SCHEMA = {
-    "Items"     => [0,         "eEEEEEEE", :PBItems, :PBItems, :PBItems, :PBItems,
-                                           :PBItems, :PBItems, :PBItems, :PBItems],
+    "Items"     => [0,         "eEEEEEEE", :Item, :Item, :Item, :Item,
+                                           :Item, :Item, :Item, :Item],
     "Pokemon"   => [SPECIES,   "ev", :PBSpecies, nil],   # Species, level
-    "Item"      => [ITEM,      "e", :PBItems],
-    "Moves"     => [MOVES,     "eEEE", :PBMoves, :PBMoves, :PBMoves, :PBMoves],
+    "Item"      => [ITEM,      "e", :Item],
+    "Moves"     => [MOVES,     "eEEE", :Move, :Move, :Move, :Move],
     "Ability"   => [ABILITY,   "u"],
     "Gender"    => [GENDER,    "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
                                       "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
@@ -81,7 +81,7 @@ def pbLoadTrainer(trainerid,trainername,partyid=0)
         pokemon.forcedForm = poke[TrainerData::FORM] if MultipleForms.hasFunction?(pokemon.species,"getForm")
         pokemon.formSimple = poke[TrainerData::FORM]
       end
-      pokemon.setItem(poke[TrainerData::ITEM]) if poke[TrainerData::ITEM]
+      pokemon.setItem(poke[TrainerData::ITEM])
       if poke[TrainerData::MOVES] && poke[TrainerData::MOVES].length>0
         for move in poke[TrainerData::MOVES]
           pokemon.pbLearnMove(move)

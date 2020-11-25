@@ -46,8 +46,8 @@ class Pokemon
   attr_accessor :moves
   # @return [Array<Integer>] the IDs of moves known by this Pokémon when it was obtained
   attr_accessor :firstmoves
-  # @return [Integer] the ID of the item held by this Pokémon (0 = no held item)
-  attr_accessor :item
+  # @return [Symbol] the ID of the item held by this Pokémon (nil = no held item)
+  attr_accessor :item_id
   # @return [Integer] this Pokémon's current status (from PBStatuses)
   attr_reader   :status
   # @return [Integer] sleep count / toxic flag / 0:
@@ -103,6 +103,8 @@ class Pokemon
   EV_STAT_LIMIT = 252
   # Maximum length a Pokémon's nickname can be
   MAX_NAME_SIZE = 10
+  # Maximum number of moves a Pokémon can know at once
+  MAX_MOVES     = 4
 
   #=============================================================================
   # Ownership, obtained information
@@ -279,17 +281,23 @@ class Pokemon
     return @abilityflag || (@personalID & 1)
   end
 
-  # @return [Integer] the ID of this Pokémon's ability
+  # @return [GameData::Ability, nil] an Ability object corresponding to this Pokémon's ability
   def ability
+    ret = ability_id
+    return GameData::Ability.try_get(ret)
+  end
+
+  # @return [Symbol, nil] the ability symbol of this Pokémon's ability
+  def ability_id
     abilIndex = abilityIndex
     # Hidden ability
     if abilIndex >= 2
       hiddenAbil = pbGetSpeciesData(@species, formSimple, SpeciesData::HIDDEN_ABILITY)
       if hiddenAbil.is_a?(Array)
         ret = hiddenAbil[abilIndex - 2]
-        return ret if ret && ret > 0
-      else
-        return hiddenAbil if abilIndex == 2 && hiddenAbil > 0
+        return ret if GameData::Ability.exists?(ret)
+      elsif abilIndex == 2
+        return hiddenAbil if GameData::Ability.exists?(hiddenAbil)
       end
       abilIndex = (@personalID & 1)
     end
@@ -297,21 +305,21 @@ class Pokemon
     abilities = pbGetSpeciesData(@species, formSimple, SpeciesData::ABILITIES)
     if abilities.is_a?(Array)
       ret = abilities[abilIndex]
-      ret = abilities[(abilIndex + 1) % 2] if !ret || ret == 0
-      return ret || 0
+      ret = abilities[(abilIndex + 1) % 2] if !GameData::Ability.exists?(ret)
+      return ret
     end
-    return abilities || 0
+    return abilities
   end
 
   # Returns whether this Pokémon has a particular ability. If no value
   # is given, returns whether this Pokémon has an ability set.
-  # @param ability [Integer] ability ID to check
+  # @param check_ability [Symbol, GameData::Ability, Integer] ability ID to check
   # @return [Boolean] whether this Pokémon has a particular ability or
   #   an ability at all
-  def hasAbility?(ability = 0)
+  def hasAbility?(check_ability = nil)
     current_ability = self.ability
-    return current_ability > 0 if ability == 0
-    return current_ability == getID(PBAbilities, ability)
+    return !current_ability.nil? if check_ability.nil?
+    return current_ability == check_ability
   end
 
   # Sets this Pokémon's ability index.
@@ -323,7 +331,7 @@ class Pokemon
   # @return [Boolean] whether this Pokémon has a hidden ability
   def hasHiddenAbility?
     abil = abilityIndex
-    return abil != nil && abil >= 2
+    return abil >= 2
   end
 
   # @return [Array<Array<Integer>>] the list of abilities this Pokémon can have,
@@ -332,13 +340,13 @@ class Pokemon
     ret = []
     abilities = pbGetSpeciesData(@species, formSimple, SpeciesData::ABILITIES)
     if abilities.is_a?(Array)
-      abilities.each_with_index { |a, i| ret.push([a, i]) if a && a > 0 }
+      abilities.each_with_index { |a, i| ret.push([a, i]) if a }
     else
       ret.push([abilities, 0]) if abilities > 0
     end
     hiddenAbil = pbGetSpeciesData(@species, formSimple, SpeciesData::HIDDEN_ABILITY)
     if hiddenAbil.is_a?(Array)
-      hiddenAbil.each_with_index { |a, i| ret.push([a, i + 2]) if a && a > 0 }
+      hiddenAbil.each_with_index { |a, i| ret.push([a, i + 2]) if a }
     else
       ret.push([hiddenAbil, 2]) if hiddenAbil > 0
     end
@@ -387,7 +395,7 @@ class Pokemon
   # @return [Boolean] whether this Pokémon is shiny (differently colored)
   def shiny?
     return @shinyflag if @shinyflag != nil
-    a = @personalID ^ @trainerID
+    a = @personalID ^ @owner.id
     b = a & 0xFFFF
     c = (a >> 16) & 0xFFFF
     d = b ^ c
@@ -489,18 +497,15 @@ class Pokemon
 
   # @return [Integer] the number of moves known by the Pokémon
   def numMoves
-    ret = 0
-    @moves.each { |m| ret += 1 if m && m.id != 0 }
-    return ret
+    return @moves.length
   end
 
   # @param move [Integer, Symbol, String] ID of the move to check
   # @return [Boolean] whether the Pokémon knows the given move
-  def hasMove?(move)
-    move = getID(PBMoves, move)
-    return false if !move || move <= 0
-    @moves.each { |m| return true if m && m.id == move }
-    return false
+  def hasMove?(move_id)
+    move_data = GameData::Move.try_get(move_id)
+    return false if !move_data
+    return @moves.any? { |m| m.id == move_data.id }
   end
   alias knowsMove? hasMove?
 
@@ -512,101 +517,79 @@ class Pokemon
 
   # Sets this Pokémon's movelist to the default movelist it originally had.
   def resetMoves
-    lvl = self.level
-    fullMoveList = self.getMoveList
-    moveList = []
-    fullMoveList.each { |m| moveList.push(m[1]) if m[0] <= lvl }
-    moveList = moveList.reverse
-    moveList |= []   # Remove duplicates
-    moveList = moveList.reverse
-    listend = moveList.length - 4
-    listend = 0 if listend < 0
-    j = 0
-    for i in listend...listend+4
-      moveid = (i >= moveList.length) ? 0 : moveList[i]
-      @moves[j] = PBMove.new(moveid)
-      j += 1
+    this_level = self.level
+    # Find all level-up moves that self could have learned
+    moveset = self.getMoveList
+    knowable_moves = []
+    moveset.each { |m| knowable_moves.push(m[1]) if m[0] <= this_level }
+    # Remove duplicates (retaining the latest copy of each move)
+    knowable_moves = knowable_moves.reverse
+    knowable_moves |= []
+    knowable_moves = knowable_moves.reverse
+    # Add all moves
+    @moves.clear
+    first_move_index = knowable_moves.length - MAX_MOVES
+    first_move_index = 0 if first_move_index < 0
+    for i in first_move_index...knowable_moves.length
+      @moves.push(PBMove.new(knowable_moves[i]))
     end
   end
 
   # Silently learns the given move. Will erase the first known move if it has to.
-  # @param move [Integer, Symbol, String] ID of the move to learn
-  def pbLearnMove(move)
-    move = getID(PBMoves, move)
-    return if move <= 0
-    for i in 0...4   # Already knows move, relocate it to the end of the list
-      next if @moves[i].id != move
-      j = i + 1
-      while j < 4
-        break if @moves[j].id == 0
-        tmp = @moves[j]
-        @moves[j] = @moves[j - 1]
-        @moves[j - 1] = tmp
-        j += 1
-      end
+  # @param move_id [Integer, Symbol, String] ID of the move to learn
+  def pbLearnMove(move_id)
+    move_data = GameData::Move.try_get(move_id)
+    return if !move_data
+    # Check if self already knows the move; if so, move it to the end of the array
+    @moves.each_with_index do |m, i|
+      next if m.id != move_data.id
+      @moves.push(m)
+      @moves.delete_at(i)
       return
     end
-    for i in 0...4   # Has empty move slot, put move in there
-      next if @moves[i].id != 0
-      @moves[i] = PBMove.new(move)
-      return
-    end
-    # Already knows 4 moves, forget the first move and learn the new move
-    @moves[0] = @moves[1]
-    @moves[1] = @moves[2]
-    @moves[2] = @moves[3]
-    @moves[3] = PBMove.new(move)
+    # Move is not already known; learn it
+    @moves.push(PBMove.new(move_data.id))
+    # Delete the first known move if self now knows more moves than it should
+    @moves.shift if numMoves > MAX_MOVES
   end
 
   # Deletes the given move from the Pokémon.
-  # @param move [Integer, Symbol, String] ID of the move to delete
-  def pbDeleteMove(move)
-    move = getID(PBMoves,move)
-    return if !move || move <= 0
-    newMoves = []
-    @moves.each { |m| newMoves.push(m) if m && m.id != move }
-    newMoves.push(PBMove.new(0))
-    for i in 0...4
-      @moves[i] = newMoves[i]
-    end
+  # @param move_id [Integer, Symbol, String] ID of the move to delete
+  def pbDeleteMove(move_id)
+    move_data = GameData::Move.try_get(move_id)
+    return if !move_data
+    @moves.delete_if { |m| m.id == move_data.id }
   end
 
   # Deletes the move at the given index from the Pokémon.
   # @param index [Integer] index of the move to be deleted
   def pbDeleteMoveAtIndex(index)
-    newMoves = []
-    @moves.each_with_index { |m, i| newMoves.push(m) if m && i != index }
-    newMoves.push(PBMove.new(0))
-    for i in 0...4
-      @moves[i] = newMoves[i]
-    end
+    @moves.delete_at(index)
   end
 
   # Deletes all moves from the Pokémon.
   def pbDeleteAllMoves
-    for i in 0...4
-      @moves[i] = PBMove.new(0)
-    end
+    @moves = []
   end
 
   # Copies currently known moves into a separate array, for Move Relearner.
   def pbRecordFirstMoves
     @firstmoves = []
-    @moves.each { |m| @firstmoves.push(m.id) if m && m.id > 0 }
+    @moves.each { |m| @firstmoves.push(m.id) }
   end
 
   # Adds a move to this Pokémon's first moves.
-  # @param move [Integer, Symbol, String] ID of the move to add
-  def pbAddFirstMove(move)
-    move = getID(PBMoves, move)
-    @firstmoves.push(move) if move > 0 && !@firstmoves.include?(move)
+  # @param move_id [Integer, Symbol, String] ID of the move to add
+  def pbAddFirstMove(move_id)
+    move_data = GameData::Move.try_get(move_id)
+    @firstmoves.push(move_data.id) if move_data && !@firstmoves.include?(move_data.id)
   end
 
   # Removes a move from this Pokémon's first moves.
-  # @param move [Integer, Symbol, String] ID of the move to remove
-  def pbRemoveFirstMove(move)
-    move = getID(PBMoves, move)
-    @firstmoves.delete(move) if move > 0
+  # @param move_id [Integer, Symbol, String] ID of the move to remove
+  def pbRemoveFirstMove(move_id)
+    move_data = GameData::Move.try_get(move_id)
+    @firstmoves.delete(move_data.id) if move_data
   end
 
   # Clears this Pokémon's first moves.
@@ -616,8 +599,8 @@ class Pokemon
 
   # @param move [Integer, Symbol, String] ID of the move to check
   # @return [Boolean] whether the Pokémon is compatible with the given move
-  def compatibleWithMove?(move)
-    return pbSpeciesCompatible?(self.fSpecies, move)
+  def compatibleWithMove?(move_id)
+    return pbSpeciesCompatible?(self.fSpecies, move_id)
   end
 
   #=============================================================================
@@ -721,21 +704,29 @@ class Pokemon
   # Items
   #=============================================================================
 
+  # @return [GameData::Item, nil] an Item object corresponding to this Pokémon's item
+  def item
+    ret = @item_id
+    return GameData::Item.try_get(ret)
+  end
+
   # Returns whether this Pokémon is holding an item. If an item id is passed,
   # returns whether the Pokémon is holding that item.
-  # @param item_id [Integer, Symbol, String] id of the item to check
+  # @param check_item [Symbol, GameData::Item, Integer] item ID to check
   # @return [Boolean] whether the Pokémon is holding the specified item or
   #   an item at all
-  def hasItem?(item_id = 0)
-    held_item = self.item
-    return held_item > 0 if item_id == 0
-    return held_item == getID(PBItems, item_id)
+  def hasItem?(check_item = nil)
+    current_item = self.item
+    return !current_item.nil? if check_item.nil?
+    return current_item == check_item
   end
 
   # Gives an item to this Pokémon. Passing 0 as the argument removes the held item.
-  # @param item_id [Integer, Symbol, String] id of the item to give to this Pokémon (0 removes held item)
-  def setItem(item_id)
-    self.item = getID(PBItems, item_id) || 0
+  # @param value [Symbol, GameData::Item, Integer] id of the item to give to this
+  #   Pokémon (a non-valid value sets it to nil)
+  def setItem(value)
+    new_item = GameData::Item.try_get(value)
+    @item_id = (new_item) ? new_item.id : nil
   end
 
   # @return [Array<Integer>] the items this species can be found holding in the wild
@@ -750,7 +741,7 @@ class Pokemon
   # @return [PokemonMail, nil] mail held by this Pokémon (nil if there is none)
   def mail
     return nil if !@mail
-    @mail = nil if @mail.item == 0 || !hasItem?(@mail.item)
+    @mail = nil if !@mail.item || !hasItem?(@mail.item)
     return @mail
   end
 
@@ -816,9 +807,9 @@ class Pokemon
   def healPP(move_index = -1)
     return if egg?
     if move_index >= 0
-      @moves[move_index].pp = @moves[move_index].totalpp
+      @moves[move_index].pp = @moves[move_index].total_pp
     else
-      @moves.each { |m| m.pp = m.totalpp }
+      @moves.each { |m| m.pp = m.total_pp }
     end
   end
 
@@ -1056,7 +1047,7 @@ class Pokemon
     end
     @species      = realSpecies
     @name         = PBSpecies.getName(@species)
-    @personalID   = rand(2**32)
+    @personalID   = rand(2**16) | rand(2**16) << 16
     @hp           = 1
     @totalhp      = 1
     @iv           = []
@@ -1069,7 +1060,7 @@ class Pokemon
     @moves        = []
     @status       = PBStatuses::NONE
     @statusCount  = 0
-    @item         = 0
+    @item_id      = nil
     @mail         = nil
     @fused        = nil
     @ribbons      = []
@@ -1093,12 +1084,6 @@ class Pokemon
     calcStats
     @hp           = @totalhp
     @happiness    = pbGetSpeciesData(@species, formSimple, SpeciesData::HAPPINESS)
-    if withMoves
-      self.resetMoves
-    else
-      for i in 0...4
-        @moves[i] = PBMove.new(0)
-      end
-    end
+    self.resetMoves if withMoves
   end
 end

@@ -21,7 +21,7 @@ ItemHandlers::CanUseInBattle.add(:POKEDOLL,proc { |item,pokemon,battler,move,fir
 
 ItemHandlers::CanUseInBattle.copy(:POKEDOLL,:FLUFFYTAIL,:POKETOY)
 
-ItemHandlers::CanUseInBattle.addIf(proc { |item| pbIsPokeBall?(item) },   # Poké Balls
+ItemHandlers::CanUseInBattle.addIf(proc { |item| GameData::Item.get(item).is_poke_ball? },   # Poké Balls
   proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
     if battle.pbPlayer.party.length>=6 && $PokemonStorage.full?
       scene.pbDisplay(_INTL("There is no room left in the PC!")) if showMessages
@@ -42,7 +42,7 @@ ItemHandlers::CanUseInBattle.addIf(proc { |item| pbIsPokeBall?(item) },   # Pok�
     #       than one unfainted opposing Pokémon. (Snag Balls can be thrown in
     #       this case, but only in trainer battles, and the trainer will deflect
     #       them if they are trying to catch a non-Shadow Pokémon.)
-    if battle.pbOpposingBattlerCount>1 && !(pbIsSnagBall?(item) && battle.trainerBattle?)
+    if battle.pbOpposingBattlerCount>1 && !(GameData::Item.get(item).is_snag_ball? && battle.trainerBattle?)
       if battle.pbOpposingBattlerCount==2
         scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are two Pokémon!")) if showMessages
       else
@@ -143,8 +143,8 @@ ItemHandlers::CanUseInBattle.copy(:REVIVE,:MAXREVIVE,:REVIVALHERB)
 
 ItemHandlers::CanUseInBattle.add(:ETHER,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
   if !pokemon.able? || move<0 ||
-     pokemon.moves[move].totalpp<=0 ||
-     pokemon.moves[move].pp==pokemon.moves[move].totalpp
+     pokemon.moves[move].total_pp<=0 ||
+     pokemon.moves[move].pp==pokemon.moves[move].total_pp
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
     next false
   end
@@ -161,7 +161,7 @@ ItemHandlers::CanUseInBattle.add(:ELIXIR,proc { |item,pokemon,battler,move,first
   canRestore = false
   for m in pokemon.moves
     next if m.id==0
-    next if m.totalpp<=0 || m.pp==m.totalpp
+    next if m.total_pp<=0 || m.pp==m.total_pp
     canRestore = true
     break
   end
@@ -302,7 +302,7 @@ ItemHandlers::UseInBattle.add(:POKEFLUTE,proc { |item,battler,battle|
   scene.pbDisplay(_INTL("All Pokémon were roused by the tune!"))
 })
 
-ItemHandlers::UseInBattle.addIf(proc { |item| pbIsPokeBall?(item) },   # Poké Balls
+ItemHandlers::UseInBattle.addIf(proc { |item| GameData::Item.get(item).is_poke_ball? },   # Poké Balls
   proc { |item,battler,battle|
     battle.pbThrowPokeBall(battler.index,item)
   }
@@ -487,7 +487,7 @@ ItemHandlers::BattleUseOnPokemon.copy(:ETHER,:LEPPABERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:MAXETHER,proc { |item,pokemon,battler,choices,scene|
   idxMove = choices[3]
-  pbBattleRestorePP(pokemon,battler,idxMove,pokemon.moves[idxMove].totalpp)
+  pbBattleRestorePP(pokemon,battler,idxMove,pokemon.moves[idxMove].total_pp)
   scene.pbDisplay(_INTL("PP was restored."))
 })
 
@@ -500,7 +500,7 @@ ItemHandlers::BattleUseOnPokemon.add(:ELIXIR,proc { |item,pokemon,battler,choice
 
 ItemHandlers::BattleUseOnPokemon.add(:MAXELIXIR,proc { |item,pokemon,battler,choices,scene|
   for i in 0...pokemon.moves.length
-    pbBattleRestorePP(pokemon,battler,i,pokemon.moves[i].totalpp)
+    pbBattleRestorePP(pokemon,battler,i,pokemon.moves[i].total_pp)
   end
   scene.pbDisplay(_INTL("PP was restored."))
 })

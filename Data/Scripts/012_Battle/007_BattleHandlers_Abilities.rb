@@ -50,7 +50,7 @@ BattleHandlers::SpeedCalcAbility.add(:SWIFTSWIM,
 
 BattleHandlers::SpeedCalcAbility.add(:UNBURDEN,
   proc { |ability,battler,mult|
-    next mult*2 if battler.effects[PBEffects::Unburden] && battler.item==0
+    next mult*2 if battler.effects[PBEffects::Unburden] && !battler.item
   }
 )
 
@@ -83,7 +83,8 @@ BattleHandlers::AbilityOnHPDroppedBelowHalf.add(:EMERGENCYEXIT,
       next false if !battle.pbCanRun?(battler.index)
       battle.pbShowAbilitySplash(battler,true)
       battle.pbHideAbilitySplash(battler)
-      battle.pbDisplay(_INTL("{1} fled from battle!",battler.pbThis)) { pbSEPlay("Battle flee") }
+      pbSEPlay("Battle flee")
+      battle.pbDisplay(_INTL("{1} fled from battle!",battler.pbThis))
       battle.decision = 3   # Escaped
       next true
     end
@@ -1079,7 +1080,8 @@ BattleHandlers::DamageCalcUserAbility.add(:SWARM,
 
 BattleHandlers::DamageCalcUserAbility.add(:TECHNICIAN,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.index!=target.index && move.id>0 && baseDmg*mults[BASE_DMG_MULT]<=60
+    if user.index!=target.index && move && move.id != :STRUGGLE &&
+       baseDmg*mults[BASE_DMG_MULT]<=60
       mults[BASE_DMG_MULT] *= 1.5
     end
   }
@@ -1357,7 +1359,7 @@ BattleHandlers::TargetAbilityOnHit.add(:CURSEDBODY,
       regularMove = m
       break
     end
-    next if !regularMove || (regularMove.pp==0 && regularMove.totalpp>0)
+    next if !regularMove || (regularMove.pp==0 && regularMove.total_pp>0)
     next if battle.pbRandom(100)>=30
     battle.pbShowAbilitySplash(target)
     if !move.pbMoveFailedAromaVeil?(target,user,PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
@@ -1673,11 +1675,11 @@ BattleHandlers::UserAbilityEndOfMove.add(:MAGICIAN,
   proc { |ability,user,targets,move,battle|
     next if !battle.futureSight
     next if !move.pbDamagingMove?
-    next if user.item>0
+    next if user.item
     next if battle.wildBattle? && user.opposes?
     targets.each do |b|
       next if b.damageState.unaffected || b.damageState.substitute
-      next if b.item==0
+      next if !b.item
       next if b.unlosableItem?(b.item) || user.unlosableItem?(b.item)
       battle.pbShowAbilitySplash(user)
       if b.hasActiveAbility?(:STICKYHOLD)
@@ -1689,11 +1691,11 @@ BattleHandlers::UserAbilityEndOfMove.add(:MAGICIAN,
         next
       end
       user.item = b.item
-      b.item = 0
+      b.item = nil
       b.effects[PBEffects::Unburden] = true
-      if battle.wildBattle? && user.initialItem==0 && b.initialItem==user.item
+      if battle.wildBattle? && !user.initialItem && b.initialItem==user.item
         user.setInitialItem(user.item)
-        b.setInitialItem(0)
+        b.setInitialItem(nil)
       end
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         battle.pbDisplay(_INTL("{1} stole {2}'s {3}!",user.pbThis,
@@ -1755,7 +1757,7 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:PICKPOCKET,
     next if !move.contactMove?
     next if switched.include?(user.index)
     next if user.effects[PBEffects::Substitute]>0 || target.damageState.substitute
-    next if target.item>0 || user.item==0
+    next if target.item || !user.item
     next if user.unlosableItem?(user.item) || target.unlosableItem?(user.item)
     battle.pbShowAbilitySplash(target)
     if user.hasActiveAbility?(:STICKYHOLD)
@@ -1768,11 +1770,11 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:PICKPOCKET,
       next
     end
     target.item = user.item
-    user.item = 0
+    user.item = nil
     user.effects[PBEffects::Unburden] = true
-    if battle.wildBattle? && target.initialItem==0 && user.initialItem==target.item
+    if battle.wildBattle? && !target.initialItem && user.initialItem==target.item
       target.setInitialItem(target.item)
-      user.setInitialItem(0)
+      user.setInitialItem(nil)
     end
     battle.pbDisplay(_INTL("{1} pickpocketed {2}'s {3}!",target.pbThis,
        user.pbThis(true),target.itemName))
@@ -1998,16 +2000,16 @@ BattleHandlers::EOREffectAbility.add(:SPEEDBOOST,
 
 BattleHandlers::EORGainItemAbility.add(:HARVEST,
   proc { |ability,battler,battle|
-    next if battler.item>0
-    next if battler.recycleItem<=0 || !pbIsBerry?(battler.recycleItem)
+    next if battler.item
+    next if !battler.recycleItem || !GameData::Item.get(battler.recycleItem).is_berry?
     curWeather = battle.pbWeather
     if curWeather!=PBWeather::Sun && curWeather!=PBWeather::HarshSun
       next unless battle.pbRandom(100)<50
     end
     battle.pbShowAbilitySplash(battler)
     battler.item = battler.recycleItem
-    battler.setRecycleItem(0)
-    battler.setInitialItem(battler.item) if battler.initialItem==0
+    battler.setRecycleItem(nil)
+    battler.setInitialItem(battler.item) if !battler.initialItem
     battle.pbDisplay(_INTL("{1} harvested one {2}!",battler.pbThis,battler.itemName))
     battle.pbHideAbilitySplash(battler)
     battler.pbHeldItemTriggerCheck
@@ -2016,8 +2018,8 @@ BattleHandlers::EORGainItemAbility.add(:HARVEST,
 
 BattleHandlers::EORGainItemAbility.add(:PICKUP,
   proc { |ability,battler,battle|
-    next if battler.item>0
-    foundItem = 0; fromBattler = nil; use = 0
+    next if battler.item
+    foundItem = nil; fromBattler = nil; use = 0
     battle.eachBattler do |b|
       next if b.index==battler.index
       next if b.effects[PBEffects::PickupUse]<=use
@@ -2025,15 +2027,15 @@ BattleHandlers::EORGainItemAbility.add(:PICKUP,
       fromBattler = b
       use         = b.effects[PBEffects::PickupUse]
     end
-    next if foundItem<=0
+    next if !foundItem
     battle.pbShowAbilitySplash(battler)
     battler.item = foundItem
-    fromBattler.effects[PBEffects::PickupItem] = 0
+    fromBattler.effects[PBEffects::PickupItem] = nil
     fromBattler.effects[PBEffects::PickupUse]  = 0
-    fromBattler.setRecycleItem(0) if fromBattler.recycleItem==foundItem
-    if battle.wildBattle? && battler.initialItem==0 && fromBattler.initialItem==foundItem
+    fromBattler.setRecycleItem(nil) if fromBattler.recycleItem==foundItem
+    if battle.wildBattle? && !battler.initialItem && fromBattler.initialItem==foundItem
       battler.setInitialItem(foundItem)
-      fromBattler.setInitialItem(0)
+      fromBattler.setInitialItem(nil)
     end
     battle.pbDisplay(_INTL("{1} found one {2}!",battler.pbThis,battler.itemName))
     battle.pbHideAbilitySplash(battler)
@@ -2097,17 +2099,16 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
     battle.eachOtherSideBattler(battler.index) do |b|
       b.eachMove do |m|
         next if m.statusMove?
-        moveData = pbGetMoveData(m.id)
         if type1
-          moveType = moveData[MoveData::TYPE]
-          if NEWEST_BATTLE_MECHANICS && isConst?(m.id,PBMoves,:HIDDENPOWER)
+          moveType = m.type
+          if NEWEST_BATTLE_MECHANICS && m.function == "090"   # Hidden Power
             moveType = pbHiddenPower(b.pokemon)[0]
           end
           eff = PBTypes.getCombinedEffectiveness(moveType,type1,type2,type3)
           next if PBTypes.ineffective?(eff)
-          next if !PBTypes.superEffective?(eff) && moveData[MoveData::FUNCTION_CODE]!="070"   # OHKO
+          next if !PBTypes.superEffective?(eff) && m.function != "070"   # OHKO
         else
-          next if moveData[MoveData::FUNCTION_CODE]!="070"   # OHKO
+          next if m.function != "070"   # OHKO
         end
         found = true
         break
@@ -2206,33 +2207,32 @@ BattleHandlers::AbilityOnSwitchIn.add(:FOREWARN,
     forewarnMoves = []
     battle.eachOtherSideBattler(battler.index) do |b|
       b.eachMove do |m|
-        moveData = pbGetMoveData(m.id)
-        power = moveData[MoveData::BASE_DAMAGE]
-        power = 160 if ["070"].include?(moveData[MoveData::FUNCTION_CODE])    # OHKO
-        power = 150 if ["08B"].include?(moveData[MoveData::FUNCTION_CODE])    # Eruption
+        power = m.baseDamage
+        power = 160 if ["070"].include?(m.function)    # OHKO
+        power = 150 if ["08B"].include?(m.function)    # Eruption
         # Counter, Mirror Coat, Metal Burst
-        power = 120 if ["071","072","073"].include?(moveData[MoveData::FUNCTION_CODE])
+        power = 120 if ["071","072","073"].include?(m.function)
         # Sonic Boom, Dragon Rage, Night Shade, Endeavor, Psywave,
         # Return, Frustration, Crush Grip, Gyro Ball, Hidden Power,
         # Natural Gift, Trump Card, Flail, Grass Knot
         power = 80 if ["06A","06B","06D","06E","06F",
                        "089","08A","08C","08D","090",
-                       "096","097","098","09A"].include?(moveData[MoveData::FUNCTION_CODE])
+                       "096","097","098","09A"].include?(m.function)
         next if power<highestPower
         forewarnMoves = [] if power>highestPower
-        forewarnMoves.push(m.id)
+        forewarnMoves.push(m.name)
         highestPower = power
       end
     end
     if forewarnMoves.length>0
       battle.pbShowAbilitySplash(battler)
-      forewarnMoveID = forewarnMoves[battle.pbRandom(forewarnMoves.length)]
+      forewarnMoveName = forewarnMoves[battle.pbRandom(forewarnMoves.length)]
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         battle.pbDisplay(_INTL("{1} was alerted to {2}!",
-          battler.pbThis,PBMoves.getName(forewarnMoveID)))
+          battler.pbThis, forewarnMoveName))
       else
         battle.pbDisplay(_INTL("{1}'s Forewarn alerted it to {2}!",
-          battler.pbThis,PBMoves.getName(forewarnMoveID)))
+          battler.pbThis, forewarnMoveName))
       end
       battle.pbHideAbilitySplash(battler)
     end
@@ -2244,19 +2244,19 @@ BattleHandlers::AbilityOnSwitchIn.add(:FRISK,
     next if !battler.pbOwnedByPlayer?
     foes = []
     battle.eachOtherSideBattler(battler.index) do |b|
-      foes.push(b) if b.item>0
+      foes.push(b) if b.item
     end
     if foes.length>0
       battle.pbShowAbilitySplash(battler)
       if NEWEST_BATTLE_MECHANICS
         foes.each do |b|
           battle.pbDisplay(_INTL("{1} frisked {2} and found its {3}!",
-             battler.pbThis,b.pbThis(true),PBItems.getName(b.item)))
+             battler.pbThis,b.pbThis(true),b.itemName))
         end
       else
         foe = foes[battle.pbRandom(foes.length)]
         battle.pbDisplay(_INTL("{1} frisked the foe and found one {2}!",
-           battler.pbThis,PBItems.getName(foe.item)))
+           battler.pbThis,foe.itemName))
       end
       battle.pbHideAbilitySplash(battler)
     end
@@ -2284,7 +2284,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:IMPOSTER,
             choice.semiInvulnerable?
     battle.pbShowAbilitySplash(battler,true)
     battle.pbHideAbilitySplash(battler)
-    battle.pbAnimation(getConst(PBMoves,:TRANSFORM),battler,choice)
+    battle.pbAnimation(:TRANSFORM,battler,choice)
     battle.scene.pbChangePokemon(battler,choice.pokemon)
     battler.pbTransform(choice)
   }
@@ -2419,10 +2419,7 @@ BattleHandlers::AbilityChangeOnBattlerFainting.add(:POWEROFALCHEMY,
   proc { |ability,battler,fainted,battle|
     next if battler.opposes?(fainted)
     next if fainted.ungainableAbility? ||
-       isConst?(fainted.ability, PBAbilities, :POWEROFALCHEMY) ||
-       isConst?(fainted.ability, PBAbilities, :RECEIVER) ||
-       isConst?(fainted.ability, PBAbilities, :TRACE) ||
-       isConst?(fainted.ability, PBAbilities, :WONDERGUARD)
+       [:POWEROFALCHEMY, :RECEIVER, :TRACE, :WONDERGUARD].include?(fainted.ability_id)
     battle.pbShowAbilitySplash(battler,true)
     battler.ability = fainted.ability
     battle.pbReplaceAbilitySplash(battler)

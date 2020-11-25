@@ -31,8 +31,8 @@ class Game_Map
 
   TILE_WIDTH  = 32
   TILE_HEIGHT = 32
-  X_SUBPIXELS = ($RPGVX) ? 8 : 4
-  Y_SUBPIXELS = ($RPGVX) ? 8 : 4
+  X_SUBPIXELS = 4
+  Y_SUBPIXELS = 4
   REAL_RES_X  = TILE_WIDTH * X_SUBPIXELS
   REAL_RES_Y  = TILE_HEIGHT * Y_SUBPIXELS
 
@@ -44,7 +44,7 @@ class Game_Map
 
   def setup(map_id)
     @map_id               = map_id
-    @map = load_data(sprintf("Data/Map%03d.%s",map_id,($RPGVX) ? "rvdata" : "rxdata"))
+    @map = load_data(sprintf("Data/Map%03d.rxdata",map_id))
     tileset = $data_tilesets[@map.tileset_id]
     updateTileset
     @fog_ox               = 0
@@ -318,7 +318,7 @@ class Game_Map
 
   def display_x=(value)
     @display_x = value
-    if pbGetMetadata(self.map_id,MapMetadata::SNAP_EDGES)
+    if GameData::MapMetadata.get(self.map_id).snap_edges
       max_x = (self.width - Graphics.width*1.0/TILE_WIDTH) * REAL_RES_X
       @display_x = [0, [@display_x, max_x].min].max
     end
@@ -327,7 +327,7 @@ class Game_Map
 
   def display_y=(value)
     @display_y = value
-    if pbGetMetadata(self.map_id,MapMetadata::SNAP_EDGES)
+    if GameData::MapMetadata.get(self.map_id).snap_edges
       max_y = (self.height - Graphics.height*1.0/TILE_HEIGHT) * REAL_RES_Y
       @display_y = [0, [@display_y, max_y].min].max
     end

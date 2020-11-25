@@ -31,96 +31,6 @@ module PhoneMsgType
 end
 
 #===============================================================================
-# Global metadata
-#===============================================================================
-module Metadata
-  HOME               = 1
-  WILD_BATTLE_BGM    = 2
-  TRAINER_BATTLE_BGM = 3
-  WILD_VICTORY_ME    = 4
-  TRAINER_VICTORY_ME = 5
-  WILD_CAPTURE_ME    = 6
-  SURF_BGM           = 7
-  BICYCLE_BGM        = 8
-  PLAYER_A           = 9
-  PLAYER_B           = 10
-  PLAYER_C           = 11
-  PLAYER_D           = 12
-  PLAYER_E           = 13
-  PLAYER_F           = 14
-  PLAYER_G           = 15
-  PLAYER_H           = 16
-
-  SCHEMA = {
-    "Home"             => [HOME,               "uuuu"],
-    "WildBattleBGM"    => [WILD_BATTLE_BGM,    "s"],
-    "TrainerBattleBGM" => [TRAINER_BATTLE_BGM, "s"],
-    "WildVictoryME"    => [WILD_VICTORY_ME,    "s"],
-    "TrainerVictoryME" => [TRAINER_VICTORY_ME, "s"],
-    "WildCaptureME"    => [WILD_CAPTURE_ME,    "s"],
-    "SurfBGM"          => [SURF_BGM,           "s"],
-    "BicycleBGM"       => [BICYCLE_BGM,        "s"],
-    "PlayerA"          => [PLAYER_A,           "esssssss", :PBTrainers],
-    "PlayerB"          => [PLAYER_B,           "esssssss", :PBTrainers],
-    "PlayerC"          => [PLAYER_C,           "esssssss", :PBTrainers],
-    "PlayerD"          => [PLAYER_D,           "esssssss", :PBTrainers],
-    "PlayerE"          => [PLAYER_E,           "esssssss", :PBTrainers],
-    "PlayerF"          => [PLAYER_F,           "esssssss", :PBTrainers],
-    "PlayerG"          => [PLAYER_G,           "esssssss", :PBTrainers],
-    "PlayerH"          => [PLAYER_H,           "esssssss", :PBTrainers]
-  }
-end
-
-#===============================================================================
-# Map-specific metadata
-#===============================================================================
-module MapMetadata
-  OUTDOOR            = 1
-  SHOW_AREA          = 2
-  BICYCLE            = 3
-  BICYCLE_ALWAYS     = 4
-  HEALING_SPOT       = 5
-  WEATHER            = 6
-  MAP_POSITION       = 7
-  DIVE_MAP           = 8
-  DARK_MAP           = 9
-  SAFARI_MAP         = 10
-  SNAP_EDGES         = 11
-  DUNGEON            = 12
-  BATTLE_BACK        = 13
-  WILD_BATTLE_BGM    = 14
-  TRAINER_BATTLE_BGM = 15
-  WILD_VICTORY_ME    = 16
-  TRAINER_VICTORY_ME = 17
-  WILD_CAPTURE_ME    = 18
-  MAP_SIZE           = 19
-  ENVIRONMENT        = 20
-
-  SCHEMA = {
-     "Outdoor"          => [OUTDOOR,            "b"],
-     "ShowArea"         => [SHOW_AREA,          "b"],
-     "Bicycle"          => [BICYCLE,            "b"],
-     "BicycleAlways"    => [BICYCLE_ALWAYS,     "b"],
-     "HealingSpot"      => [HEALING_SPOT,       "uuu"],
-     "Weather"          => [WEATHER,            "eu", :PBFieldWeather],
-     "MapPosition"      => [MAP_POSITION,       "uuu"],
-     "DiveMap"          => [DIVE_MAP,           "u"],
-     "DarkMap"          => [DARK_MAP,           "b"],
-     "SafariMap"        => [SAFARI_MAP,         "b"],
-     "SnapEdges"        => [SNAP_EDGES,         "b"],
-     "Dungeon"          => [DUNGEON,            "b"],
-     "BattleBack"       => [BATTLE_BACK,        "s"],
-     "WildBattleBGM"    => [WILD_BATTLE_BGM,    "s"],
-     "TrainerBattleBGM" => [TRAINER_BATTLE_BGM, "s"],
-     "WildVictoryME"    => [WILD_VICTORY_ME,    "s"],
-     "TrainerVictoryME" => [TRAINER_VICTORY_ME, "s"],
-     "WildCaptureME"    => [WILD_CAPTURE_ME,    "s"],
-     "MapSize"          => [MAP_SIZE,           "us"],
-     "Environment"      => [ENVIRONMENT,        "e", :PBEnvironment]
-  }
-end
-
-#===============================================================================
 # Pokémon data
 #===============================================================================
 module SpeciesData
@@ -174,7 +84,7 @@ module SpeciesData
       "Weight"           => [WEIGHT,         "f"],
       "Color"            => [COLOR,          "e", :PBColors],
       "Shape"            => [SHAPE,          "u"],
-      "Moves"            => [0,              "*ue", nil, :PBMoves],
+      "Moves"            => [0,              "*ue", nil, :Move],
       "Kind"             => [0,              "s"],
       "Pokedex"          => [0,              "q"]
     }
@@ -190,13 +100,13 @@ module SpeciesData
   def self.optionalValues(compilingForms = false)
     ret = {
       "Type2"               => [TYPE2,              "e", :PBTypes],
-      "Abilities"           => [ABILITIES,          "eE", :PBAbilities, :PBAbilities],
-      "HiddenAbility"       => [HIDDEN_ABILITY,     "eEEE", :PBAbilities, :PBAbilities,
-                                                            :PBAbilities, :PBAbilities],
+      "Abilities"           => [ABILITIES,          "eE", :Ability, :Ability],
+      "HiddenAbility"       => [HIDDEN_ABILITY,     "eEEE", :Ability, :Ability,
+                                                            :Ability, :Ability],
       "Habitat"             => [HABITAT,            "e", :PBHabitats],
-      "WildItemCommon"      => [WILD_ITEM_COMMON,   "e", :PBItems],
-      "WildItemUncommon"    => [WILD_ITEM_UNCOMMON, "e", :PBItems],
-      "WildItemRare"        => [WILD_ITEM_RARE,     "e", :PBItems],
+      "WildItemCommon"      => [WILD_ITEM_COMMON,   "e", :Item],
+      "WildItemUncommon"    => [WILD_ITEM_UNCOMMON, "e", :Item],
+      "WildItemRare"        => [WILD_ITEM_RARE,     "e", :Item],
       "BattlerPlayerX"      => [METRIC_PLAYER_X,    "i"],
       "BattlerPlayerY"      => [METRIC_PLAYER_Y,    "i"],
       "BattlerEnemyX"       => [METRIC_ENEMY_X,     "i"],
@@ -204,18 +114,18 @@ module SpeciesData
       "BattlerAltitude"     => [METRIC_ALTITUDE,    "i"],
       "BattlerShadowX"      => [METRIC_SHADOW_X,    "i"],
       "BattlerShadowSize"   => [METRIC_SHADOW_SIZE, "u"],
-      "EggMoves"            => [0,                  "*e", :PBMoves],
+      "EggMoves"            => [0,                  "*e", :Move],
       "FormName"            => [0,                  "q"],
       "Evolutions"          => [0,                  "*ses", nil, :PBEvolution, nil]
     }
     if compilingForms
       ret["PokedexForm"]     = [POKEDEX_FORM,       "u"]
-      ret["MegaStone"]       = [MEGA_STONE,         "e", :PBItems]
-      ret["MegaMove"]        = [MEGA_MOVE,          "e", :PBMoves]
+      ret["MegaStone"]       = [MEGA_STONE,         "e", :Item]
+      ret["MegaMove"]        = [MEGA_MOVE,          "e", :Move]
       ret["UnmegaForm"]      = [UNMEGA_FORM,        "u"]
       ret["MegaMessage"]     = [MEGA_MESSAGE,       "u"]
     else
-      ret["Incense"]         = [INCENSE,            "e", :PBItems]
+      ret["Incense"]         = [INCENSE,            "e", :Item]
       ret["RegionalNumbers"] = [0,                  "*u"]
     end
     return ret

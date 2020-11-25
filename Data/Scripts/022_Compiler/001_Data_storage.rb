@@ -133,7 +133,7 @@ class ByteArray
   end
 end
 
-# Used for tm.txt data
+# Unused
 class WordArray
   include Enumerable
 

@@ -15,7 +15,7 @@ module PokeBattle_BattleCommon
     storedBox  = @peer.pbStorePokemon(pbPlayer,pkmn)
     if storedBox<0
       pbDisplayPaused(_INTL("{1} has been added to your party.",pkmn.name))
-      @initialItems[0][pbPlayer.party.length-1] = pkmn.item if @initialItems
+      @initialItems[0][pbPlayer.party.length-1] = pkmn.item_id if @initialItems
       return
     end
     # Messages saying the Pokémon was stored in a PC box
@@ -80,7 +80,7 @@ module PokeBattle_BattleCommon
       end
     end
     # Messages
-    itemName = PBItems.getName(ball)
+    itemName = GameData::Item.get(ball).name
     if battler.fainted?
       if itemName.starts_with_vowel?
         pbDisplay(_INTL("{1} threw an {2}!",pbPlayer.name,itemName))
@@ -97,7 +97,7 @@ module PokeBattle_BattleCommon
     end
     # Animation of opposing trainer blocking Poké Balls (unless it's a Snag Ball
     # at a Shadow Pokémon)
-    if trainerBattle? && !(pbIsSnagBall?(ball) && battler.shadowPokemon?)
+    if trainerBattle? && !(GameData::Item.get(ball).is_snag_ball? && battler.shadowPokemon?)
       @scene.pbThrowAndDeflect(ball,1)
       pbDisplay(_INTL("The Trainer blocked your Poké Ball! Don't be a thief!"))
       return
@@ -140,7 +140,7 @@ module PokeBattle_BattleCommon
         @decision = 4 if pbAllFainted?(battler.index)   # Battle ended by capture
       end
       # Modify the Pokémon's properties because of the capture
-      if pbIsSnagBall?(ball)
+      if GameData::Item.get(ball).is_snag_ball?
         pkmn.owner = Pokemon::Owner.new_from_trainer(pbPlayer)
       end
       BallHandlers.onCatch(ball,self,pkmn)
@@ -180,7 +180,7 @@ module PokeBattle_BattleCommon
        battler.isSpecies?(:NAGANADEL) ||
        battler.isSpecies?(:STAKATAKA) ||
        battler.isSpecies?(:BLACEPHALON))
-    if !ultraBeast || isConst?(ball,PBItems,:BEASTBALL)
+    if !ultraBeast || ball == :BEASTBALL
       rareness = BallHandlers.modifyCatchRate(ball,rareness,self,battler,ultraBeast)
     else
       rareness /= 10

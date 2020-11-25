@@ -78,15 +78,15 @@ class PokeBattle_BattlePalace < PokeBattle_Battle
   def pbCanChooseMovePartial?(idxPokemon,idxMove)
     thispkmn = @battlers[idxPokemon]
     thismove = thispkmn.moves[idxMove]
-    return false if !thismove || thismove.id==0
+    return false if !thismove
     return false if thismove.pp<=0
-    if thispkmn.effects[PBEffects::ChoiceBand]>=0 &&
+    if thispkmn.effects[PBEffects::ChoiceBand] &&
        thismove.id!=thispkmn.effects[PBEffects::ChoiceBand] &&
        thispkmn.hasActiveItem?(:CHOICEBAND)
       return false
     end
     # though incorrect, just for convenience (actually checks Torment later)
-    if thispkmn.effects[PBEffects::Torment]
+    if thispkmn.effects[PBEffects::Torment] && thispkmn.lastMoveUsed
       return false if thismove.id==thispkmn.lastMoveUsed
     end
     return true
@@ -135,28 +135,28 @@ class PokeBattle_BattlePalace < PokeBattle_Battle
   end
 
   def pbRegisterMove(idxBattler,idxMove,_showMessages=true)
-    thispkmn = @battlers[idxBattler]
+    this_battler = @battlers[idxBattler]
     if idxMove==-2
-      @choices[idxPokemon][0] = :UseMove   # Move
-      @choices[idxPokemon][1] = -2         # "Incapable of using its power..."
-      @choices[idxPokemon][2] = @struggle
-      @choices[idxPokemon][3] = -1
+      @choices[idxBattler][0] = :UseMove   # Move
+      @choices[idxBattler][1] = -2         # "Incapable of using its power..."
+      @choices[idxBattler][2] = @struggle
+      @choices[idxBattler][3] = -1
     else
-      @choices[idxPokemon][0] = :UseMove                  # Move
-      @choices[idxPokemon][1] = idxMove                   # Index of move
-      @choices[idxPokemon][2] = thispkmn.moves[idxMove]   # Move object
-      @choices[idxPokemon][3] = -1                        # No target chosen
+      @choices[idxBattler][0] = :UseMove                      # Move
+      @choices[idxBattler][1] = idxMove                       # Index of move
+      @choices[idxBattler][2] = this_battler.moves[idxMove]   # Move object
+      @choices[idxBattler][3] = -1                            # No target chosen
     end
   end
 
   def pbAutoFightMenu(idxBattler)
-    thispkmn = @battlers[idxBattler]
-    nature = thispkmn.nature
+    this_battler = @battlers[idxBattler]
+    nature = this_battler.nature
     randnum = @battleAI.pbAIRandom(100)
     category = 0
     atkpercent = 0
     defpercent = 0
-    if thispkmn.effects[PBEffects::Pinch]
+    if this_battler.effects[PBEffects::Pinch]
       atkpercent = @@BattlePalacePinchTable[nature*3]
       defpercent = atkpercent+@@BattlePalacePinchTable[nature*3+1]
     else
@@ -171,9 +171,9 @@ class PokeBattle_BattlePalace < PokeBattle_Battle
       category = 2
     end
     moves = []
-    for i in 0...thispkmn.moves.length
+    for i in 0...this_battler.moves.length
       next if !pbCanChooseMovePartial?(idxBattler,i)
-      next if pbMoveCategory(thispkmn.moves[i])!=category
+      next if pbMoveCategory(this_battler.moves[i])!=category
       moves[moves.length] = i
     end
     if moves.length==0

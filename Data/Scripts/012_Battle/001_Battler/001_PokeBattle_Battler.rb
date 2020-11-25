@@ -8,7 +8,8 @@ class PokeBattle_Battler
   attr_accessor :species
   attr_accessor :type1
   attr_accessor :type2
-  attr_accessor :ability
+  attr_accessor :ability_id
+  attr_accessor :item_id
   attr_accessor :moves
   attr_accessor :gender
   attr_accessor :iv
@@ -59,11 +60,23 @@ class PokeBattle_Battler
     @pokemon.form = value if @pokemon
   end
 
-  attr_reader :item
+  def ability
+    return GameData::Ability.try_get(@ability_id)
+  end
+
+  def ability=(value)
+    new_ability = GameData::Ability.try_get(value)
+    @ability_id = (new_ability) ? new_ability.id : nil
+  end
+
+  def item
+    return GameData::Item.try_get(@item_id)
+  end
 
   def item=(value)
-    @item = value
-    @pokemon.setItem(value) if @pokemon
+    new_item = GameData::Item.try_get(value)
+    @item_id = (new_item) ? new_item.id : nil
+    @pokemon.setItem(@item_id) if @pokemon
   end
 
   def defense
@@ -181,8 +194,15 @@ class PokeBattle_Battler
   end
   alias owned owned?
 
-  def abilityName; return PBAbilities.getName(@ability); end
-  def itemName;    return PBItems.getName(@item);        end
+  def abilityName
+    abil = self.ability
+    return (abil) ? abil.name : ""
+  end
+
+  def itemName
+    itm = self.item
+    return (itm) ? itm.name : ""
+  end
 
   def pbThis(lowerCase=false)
     if opposes?
@@ -223,11 +243,11 @@ class PokeBattle_Battler
     speedMult = 1.0
     # Ability effects that alter calculated Speed
     if abilityActive?
-      speedMult = BattleHandlers.triggerSpeedCalcAbility(@ability,self,speedMult)
+      speedMult = BattleHandlers.triggerSpeedCalcAbility(self.ability,self,speedMult)
     end
     # Item effects that alter calculated Speed
     if itemActive?
-      speedMult = BattleHandlers.triggerSpeedCalcItem(@item,self,speedMult)
+      speedMult = BattleHandlers.triggerSpeedCalcItem(self.item,self,speedMult)
     end
     # Other effects
     speedMult *= 2 if pbOwnSide.effects[PBEffects::Tailwind]>0
@@ -250,10 +270,10 @@ class PokeBattle_Battler
     ret += @effects[PBEffects::WeightChange]
     ret = 1 if ret<1
     if abilityActive? && !@battle.moldBreaker
-      ret = BattleHandlers.triggerWeightCalcAbility(@ability,self,ret)
+      ret = BattleHandlers.triggerWeightCalcAbility(self.ability,self,ret)
     end
     if itemActive?
-      ret = BattleHandlers.triggerWeightCalcItem(@item,self,ret)
+      ret = BattleHandlers.triggerWeightCalcItem(self.item,self,ret)
     end
     return [ret,1].max
   end
@@ -318,31 +338,26 @@ class PokeBattle_Battler
   #       active, and the code for the two combined would cause an infinite loop
   #       (regardless of whether any Pokémon actualy has either the ability or
   #       the item - the code existing is enough to cause the loop).
-  def abilityActive?(ignoreFainted=false)
-    return false if fainted? && !ignoreFainted
+  def abilityActive?(ignore_fainted = false)
+    return false if fainted? && !ignore_fainted
     return false if @effects[PBEffects::GastroAcid]
     return true
   end
 
-  def hasActiveAbility?(ability,ignoreFainted=false)
-    return false if !abilityActive?(ignoreFainted)
-    if ability.is_a?(Array)
-      ability.each do |a|
-        a = getID(PBAbilities,a)
-        return true if a!=0 && a==@ability
-      end
-      return false
-    end
-    ability = getID(PBAbilities,ability)
-    return ability!=0 && ability==@ability
+  def hasActiveAbility?(check_ability, ignore_fainted = false)
+    return false if !abilityActive?(ignore_fainted)
+    return check_ability.include?(@ability_id) if check_ability.is_a?(Array)
+    return check_ability == self.ability
   end
   alias hasWorkingAbility hasActiveAbility?
 
   # Applies to both losing self's ability (i.e. being replaced by another) and
   # having self's ability be negated.
   def unstoppableAbility?(abil = nil)
-    abil = @ability if !abil
-    abilityBlacklist = [
+    abil = @ability_id if !abil
+    abil = GameData::Ability.try_get(abil)
+    return false if !abil
+    ability_blacklist = [
       # Form-changing abilities
       :BATTLEBOND,
       :DISGUISE,
@@ -358,16 +373,15 @@ class PokeBattle_Battler
       :COMATOSE,
       :RKSSYSTEM
     ]
-    abilityBlacklist.each do |a|
-      return true if isConst?(abil, PBAbilities, a)
-    end
-    return false
+    return ability_blacklist.include?(abil.id)
   end
 
   # Applies to gaining the ability.
   def ungainableAbility?(abil = nil)
-    abil = @ability if !abil
-    abilityBlacklist = [
+    abil = @ability_id if !abil
+    abil = GameData::Ability.try_get(abil)
+    return false if !abil
+    ability_blacklist = [
       # Form-changing abilities
       :BATTLEBOND,
       :DISGUISE,
@@ -386,10 +400,7 @@ class PokeBattle_Battler
       :COMATOSE,
       :RKSSYSTEM
     ]
-    abilityBlacklist.each do |a|
-      return true if isConst?(abil, PBAbilities, a)
-    end
-    return false
+    return ability_blacklist.include?(abil.id)
   end
 
   def itemActive?(ignoreFainted=false)
@@ -400,41 +411,33 @@ class PokeBattle_Battler
     return true
   end
 
-  def hasActiveItem?(item,ignoreFainted=false)
-    return false if !itemActive?(ignoreFainted)
-    if item.is_a?(Array)
-      item.each do |i|
-        i = getID(PBItems,i)
-        return true if i!=0 && i==@item
-      end
-      return false
-    end
-    item = getID(PBItems,item)
-    return item!=0 && item==@item
+  def hasActiveItem?(check_item, ignore_fainted = false)
+    return false if !itemActive?(ignore_fainted)
+    return check_item.include?(@item_id) if check_item.is_a?(Array)
+    return check_item == self.item
   end
   alias hasWorkingItem hasActiveItem?
 
   # Returns whether the specified item will be unlosable for this Pokémon.
   def unlosableItem?(check_item)
-    return false if check_item <= 0
-    return true if pbIsMail?(check_item)
+    return false if !check_item
+    return true if GameData::Item.get(check_item).is_mail?
     return false if @effects[PBEffects::Transform]
     # Items that change a Pokémon's form
     return true if @pokemon && @pokemon.getMegaForm(true) > 0   # Mega Stone
-    return pbIsUnlosableItem?(check_item, @species, @ability)
+    return GameData::Item.get(check_item).unlosable?(@species, self.ability)
   end
 
   def eachMove
-    @moves.each { |m| yield m if m && m.id != 0 }
+    @moves.each { |m| yield m }
   end
 
   def eachMoveWithIndex
-    @moves.each_with_index { |m, i| yield m, i if m && m.id != 0 }
+    @moves.each_with_index { |m, i| yield m, i }
   end
 
   def pbHasMove?(move_id)
-    move_id = getID(PBMoves, move_id)
-    return false if !move_id || move_id <= 0
+    return false if !move_id
     eachMove { |m| return true if m.id == move_id }
     return false
   end
@@ -459,9 +462,7 @@ class PokeBattle_Battler
   end
 
   def canChangeType?
-    return false if isConst?(@ability,PBAbilities,:MULTITYPE) ||
-                    isConst?(@ability,PBAbilities,:RKSSYSTEM)
-    return true
+    return ![:MULTITYPE, :RKSSYSTEM].include?(@ability_id)
   end
 
   def airborne?
@@ -572,7 +573,7 @@ class PokeBattle_Battler
   end
 
   def usingMultiTurnAttack?
-    return true if @effects[PBEffects::TwoTurnAttack]>0
+    return true if @effects[PBEffects::TwoTurnAttack]
     return true if @effects[PBEffects::HyperBeam]>0
     return true if @effects[PBEffects::Rollout]>0
     return true if @effects[PBEffects::Outrage]>0
@@ -582,8 +583,8 @@ class PokeBattle_Battler
   end
 
   def inTwoTurnAttack?(*arg)
-    return false if @effects[PBEffects::TwoTurnAttack]==0
-    ttaFunction = pbGetMoveData(@effects[PBEffects::TwoTurnAttack],MoveData::FUNCTION_CODE)
+    return false if !@effects[PBEffects::TwoTurnAttack]
+    ttaFunction = GameData::Move.get(@effects[PBEffects::TwoTurnAttack]).function_code
     arg.each { |a| return true if a==ttaFunction }
     return false
   end
@@ -593,7 +594,7 @@ class PokeBattle_Battler
   end
 
   def pbEncoredMoveIndex
-    return -1 if @effects[PBEffects::Encore]==0 || @effects[PBEffects::EncoreMove]==0
+    return -1 if @effects[PBEffects::Encore]==0 || !@effects[PBEffects::EncoreMove]
     ret = -1
     eachMoveWithIndex do |m,i|
       next if m.id!=@effects[PBEffects::EncoreMove]

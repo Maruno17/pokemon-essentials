@@ -72,7 +72,7 @@ begin
     def initialize
       @effects = []
       @effects[PBEffects::FutureSightCounter]        = 0
-      @effects[PBEffects::FutureSightMove]           = 0
+      @effects[PBEffects::FutureSightMove]           = nil
       @effects[PBEffects::FutureSightUserIndex]      = -1
       @effects[PBEffects::FutureSightUserPartyIndex] = -1
       @effects[PBEffects::HealingWish]               = false

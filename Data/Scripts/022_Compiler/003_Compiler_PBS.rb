@@ -7,45 +7,89 @@ module Compiler
   # Compile metadata
   #=============================================================================
   def compile_metadata
-    sections = []
-    currentmap = -1
-    pbCompilerEachCommentedLine("PBS/metadata.txt") { |line,lineno|
-      if line[/^\s*\[\s*(\d+)\s*\]\s*$/]
-        sectionname = $~[1]
-        if currentmap==0
-          if sections[currentmap][Metadata::HOME]==nil
-            raise _INTL("The entry Home is required in metadata.txt section [{1}].",sectionname)
-          elsif sections[currentmap][Metadata::PLAYER_A]==nil
-            raise _INTL("The entry PlayerA is required in metadata.txt section [{1}].",sectionname)
+    GameData::Metadata::DATA.clear
+    GameData::MapMetadata::DATA.clear
+    # Read from PBS file
+    File.open("PBS/metadata.txt", "rb") { |f|
+      FileLineData.file = "PBS/metadata.txt"   # For error reporting
+      # Read a whole section's lines at once, then run through this code.
+      # contents is a hash containing all the XXX=YYY lines in that section, where
+      # the keys are the XXX and the values are the YYY (as unprocessed strings).
+      pbEachFileSection(f) { |contents, map_id|
+        schema = (map_id == 0) ? GameData::Metadata::SCHEMA : GameData::MapMetadata::SCHEMA
+        # Go through schema hash of compilable data and compile this section
+        for key in schema.keys
+          FileLineData.setSection(map_id, key, contents[key])   # For error reporting
+          # Skip empty properties, or raise an error if a required property is
+          # empty
+          if contents[key].nil?
+            if map_id == 0 && ["Home", "PlayerA"].include?(key)
+              raise _INTL("The entry {1} is required in PBS/metadata.txt section 0.", key)
+            end
+            next
           end
+          # Compile value for key
+          value = pbGetCsvRecord(contents[key], key, schema[key])
+          value = nil if value.is_a?(Array) && value.length == 0
+          contents[key] = value
         end
-        currentmap = sectionname.to_i
-        if sections[currentmap]
-          raise _INTL("Section [{1}] is defined twice in metadata.txt.\r\n{2}",currentmap,FileLineData.linereport)
+        if map_id == 0   # Global metadata
+          # Construct metadata hash
+          metadata_hash = {
+            :id                 => map_id,
+            :home               => contents["Home"],
+            :wild_battle_BGM    => contents["WildBattleBGM"],
+            :trainer_battle_BGM => contents["TrainerBattleBGM"],
+            :wild_victory_ME    => contents["WildVictoryME"],
+            :trainer_victory_ME => contents["TrainerVictoryME"],
+            :wild_capture_ME    => contents["WildCaptureME"],
+            :surf_BGM           => contents["SurfBGM"],
+            :bicycle_BGM        => contents["BicycleBGM"],
+            :player_A           => contents["PlayerA"],
+            :player_B           => contents["PlayerB"],
+            :player_C           => contents["PlayerC"],
+            :player_D           => contents["PlayerD"],
+            :player_E           => contents["PlayerE"],
+            :player_F           => contents["PlayerF"],
+            :player_G           => contents["PlayerG"],
+            :player_H           => contents["PlayerH"]
+          }
+          # Add metadata's data to records
+          GameData::Metadata::DATA[map_id] = GameData::Metadata.new(metadata_hash)
+        else   # Map metadata
+          # Construct metadata hash
+          metadata_hash = {
+            :id                   => map_id,
+            :outdoor_map          => contents["Outdoor"],
+            :announce_location    => contents["ShowArea"],
+            :can_bicycle          => contents["Bicycle"],
+            :always_bicycle       => contents["BicycleAlways"],
+            :teleport_destination => contents["HealingSpot"],
+            :weather              => contents["Weather"],
+            :town_map_position    => contents["MapPosition"],
+            :dive_map_id          => contents["DiveMap"],
+            :dark_map             => contents["DarkMap"],
+            :safari_map           => contents["SafariMap"],
+            :snap_edges           => contents["SnapEdges"],
+            :random_dungeon       => contents["Dungeon"],
+            :battle_background    => contents["BattleBack"],
+            :wild_battle_BGM      => contents["WildBattleBGM"],
+            :trainer_battle_BGM   => contents["TrainerBattleBGM"],
+            :wild_victory_ME      => contents["WildVictoryME"],
+            :trainer_victory_ME   => contents["TrainerVictoryME"],
+            :wild_capture_ME      => contents["WildCaptureME"],
+            :town_map_size        => contents["MapSize"],
+            :battle_environment   => contents["Environment"]
+          }
+          # Add metadata's data to records
+          GameData::MapMetadata::DATA[map_id] = GameData::MapMetadata.new(metadata_hash)
         end
-        sections[currentmap] = []
-      else
-        if currentmap<0
-          raise _INTL("Expected a section at the beginning of the file.\r\n{1}",FileLineData.linereport)
-        end
-        if !line[/^\s*(\w+)\s*=\s*(.*)$/]
-          raise _INTL("Bad line syntax (expected syntax like XXX=YYY).\r\n{1}",FileLineData.linereport)
-        end
-        matchData = $~
-        schema = nil
-        FileLineData.setSection(currentmap,matchData[1],matchData[2])
-        if currentmap==0
-          schema = Metadata::SCHEMA[matchData[1]]
-        else
-          schema = MapMetadata::SCHEMA[matchData[1]]
-        end
-        if schema
-          record = pbGetCsvRecord(matchData[2],lineno,schema)
-          sections[currentmap][schema[0]] = record
-        end
-      end
+      }
     }
-    save_data(sections,"Data/metadata.dat")
+    # Save all data
+    GameData::Metadata.save
+    GameData::MapMetadata.save
+    Graphics.update
   end
 
   #=============================================================================
@@ -140,24 +184,30 @@ module Compiler
   # Compile berry plants
   #=============================================================================
   def compile_berry_plants
-    sections = []
-    if File.exists?("PBS/berryplants.txt")
-      pbCompilerEachCommentedLine("PBS/berryplants.txt") { |line,_lineno|
-        if line[ /^\s*(\w+)\s*=\s*(.*)$/ ]
-          key   = $1
-          value = $2
-          value = value.split(",")
-          for i in 0...value.length
-            value[i].sub!(/^\s*/,"")
-            value[i].sub!(/\s*$/,"")
-            value[i] = value[i].to_i
-          end
-          item = parseItem(key)
-          sections[item] = value
-        end
-      }
-    end
-    save_data(sections,"Data/berry_plants.dat")
+    GameData::BerryPlant::DATA.clear
+    pbCompilerEachCommentedLine("PBS/berryplants.txt") { |line, line_no|
+      if line[/^\s*(\w+)\s*=\s*(.*)$/]   # Of the format XXX = YYY
+        key   = $1
+        value = $2
+        item_symbol = parseItem(key).to_sym
+        item_number = GameData::Item.get(item_symbol).id_number
+        line = pbGetCsvRecord(value, line_no, [0, "vuuv"])
+        # Construct berry plant hash
+        berry_plant_hash = {
+          :id              => item_symbol,
+          :id_number       => item_number,
+          :hours_per_stage => line[0],
+          :drying_per_hour => line[1],
+          :minimum_yield   => line[2],
+          :maximum_yield   => line[3]
+        }
+        # Add berry plant's data to records
+        GameData::BerryPlant::DATA[item_number] = GameData::BerryPlant::DATA[item_symbol] = GameData::BerryPlant.new(berry_plant_hash)
+      end
+    }
+    # Save all data
+    GameData::BerryPlant.save
+    Graphics.update
   end
 
   #=============================================================================
@@ -326,34 +376,35 @@ module Compiler
   # Compile abilities
   #=============================================================================
   def compile_abilities
-    records   = []
-    movenames = []
-    movedescs = []
-    maxValue = 0
-    pbCompilerEachPreppedLine("PBS/abilities.txt") { |line,lineno|
-      record = pbGetCsvRecord(line,lineno,[0,"vnss"])
-      if movenames[record[0]]
-        raise _INTL("Ability ID number '{1}' is used twice.\r\n{2}",record[0],FileLineData.linereport)
+    GameData::Ability::DATA.clear
+    ability_names        = []
+    ability_descriptions = []
+    pbCompilerEachPreppedLine("PBS/abilities.txt") { |line, line_no|
+      line = pbGetCsvRecord(line, line_no, [0, "vnss"])
+      ability_number = line[0]
+      ability_symbol = line[1].to_sym
+      if GameData::Ability::DATA[ability_number]
+        raise _INTL("Ability ID number '{1}' is used twice.\r\n{2}", ability_number, FileLineData.linereport)
+      elsif GameData::Ability::DATA[ability_symbol]
+        raise _INTL("Ability ID '{1}' is used twice.\r\n{2}", ability_symbol, FileLineData.linereport)
       end
-      movenames[record[0]] = record[2]
-      movedescs[record[0]] = record[3]
-      maxValue = [maxValue,record[0]].max
-      records.push(record)
+      # Construct ability hash
+      ability_hash = {
+        :id          => ability_symbol,
+        :id_number   => ability_number,
+        :name        => line[2],
+        :description => line[3]
+      }
+      # Add ability's data to records
+      GameData::Ability::DATA[ability_number] = GameData::Ability::DATA[ability_symbol] = GameData::Ability.new(ability_hash)
+      ability_names[ability_number]        = ability_hash[:name]
+      ability_descriptions[ability_number] = ability_hash[:description]
     }
-    MessageTypes.setMessages(MessageTypes::Abilities,movenames)
-    MessageTypes.setMessages(MessageTypes::AbilityDescs,movedescs)
-    code = "class PBAbilities\r\n"
-    for rec in records
-      code += "#{rec[1]}=#{rec[0]}\r\n"
-    end
-    code += "def self.getName(id)\r\n"
-    code += "id=getID(PBAbilities,id)\r\n"
-    code += "return pbGetMessage(MessageTypes::Abilities,id); end\r\n"
-    code += "def self.getCount; return #{records.length}; end\r\n"
-    code += "def self.maxValue; return #{maxValue}; end\r\n"
-    code += "end\r\n"
-    eval(code, TOPLEVEL_BINDING)
-    pbAddScript(code,"PBAbilities")
+    # Save all data
+    GameData::Ability.save
+    MessageTypes.setMessages(MessageTypes::Abilities, ability_names)
+    MessageTypes.setMessages(MessageTypes::AbilityDescs, ability_descriptions)
+    Graphics.update
   end
 
   #=============================================================================
@@ -408,58 +459,45 @@ module Compiler
 =end
 
   def compile_items
-    records         = []
-    constants       = ""
-    itemnames       = []
-    itempluralnames = []
-    itemdescs       = []
-    maxValue = 0
-    pbCompilerEachCommentedLine("PBS/items.txt") { |line,lineno|
-      linerecord = pbGetCsvRecord(line,lineno,[0,"vnssuusuuUN"])
-      id = linerecord[0]
-      if records[id]
-        raise _INTL("Item ID number '{1}' is used twice.\r\n{2}",id,FileLineData.linereport)
+    GameData::Item::DATA.clear
+    item_names        = []
+    item_names_plural = []
+    item_descriptions = []
+    # Read each line of items.txt at a time and compile it into an item
+    pbCompilerEachCommentedLine("PBS/items.txt") { |line, line_no|
+      line = pbGetCsvRecord(line, line_no, [0, "vnssuusuuUN"])
+      item_number = line[0]
+      item_symbol = line[1].to_sym
+      if GameData::Item::DATA[item_number]
+        raise _INTL("Item ID number '{1}' is used twice.\r\n{2}", item_number, FileLineData.linereport)
+      elsif GameData::Item::DATA[item_symbol]
+        raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_symbol, FileLineData.linereport)
       end
-      record = []
-      record[ItemData::ID]          = id
-      constant                      = linerecord[1]
-      constants                     += "#{constant}=#{id}\r\n"
-      record[ItemData::NAME]        = linerecord[2]
-      itemnames[id]                 = linerecord[2]
-      record[ItemData::NAME_PLURAL] = linerecord[3]
-      itempluralnames[id]           = linerecord[3]
-      record[ItemData::POCKET]      = linerecord[4]
-      record[ItemData::PRICE]       = linerecord[5]
-      record[ItemData::DESCRIPTION] = linerecord[6]
-      itemdescs[id]                 = linerecord[6]
-      record[ItemData::FIELD_USE]   = linerecord[7]
-      record[ItemData::BATTLE_USE]  = linerecord[8]
-      record[ItemData::TYPE]        = linerecord[9]
-      if record[ItemData::TYPE]!="" && linerecord[10]
-        record[ItemData::MOVE]      = parseMove(linerecord[10])
-      else
-        record[ItemData::MOVE]      = 0
-      end
-      maxValue = [maxValue,id].max
-      records[id] = record
+      # Construct item hash
+      item_hash = {
+        :id_number   => item_number,
+        :id          => item_symbol,
+        :name        => line[2],
+        :name_plural => line[3],
+        :pocket      => line[4],
+        :price       => line[5],
+        :description => line[6],
+        :field_use   => line[7],
+        :battle_use  => line[8],
+        :type        => line[9]
+      }
+      item_hash[:move] = parseMove(line[10]) if !nil_or_empty?(line[10])
+      # Add item's data to records
+      GameData::Item::DATA[item_number] = GameData::Item::DATA[item_symbol] = GameData::Item.new(item_hash)
+      item_names[item_number]        = item_hash[:name]
+      item_names_plural[item_number] = item_hash[:name_plural]
+      item_descriptions[item_number] = item_hash[:description]
     }
-    MessageTypes.setMessages(MessageTypes::Items,itemnames)
-    MessageTypes.setMessages(MessageTypes::ItemPlurals,itempluralnames)
-    MessageTypes.setMessages(MessageTypes::ItemDescriptions,itemdescs)
-    save_data(records,"Data/items.dat")
-    code = "class PBItems\r\n"
-    code += constants
-    code += "def self.getName(id)\r\n"
-    code += "id=getID(PBItems,id)\r\n"
-    code += "return pbGetMessage(MessageTypes::Items,id); end\r\n"
-    code += "def self.getNamePlural(id)\r\n"
-    code += "id=getID(PBItems,id)\r\n"
-    code += "return pbGetMessage(MessageTypes::ItemPlurals,id); end\r\n"
-    code += "def self.getCount; return #{records.length}; end\r\n"
-    code += "def self.maxValue; return #{maxValue}; end\r\n"
-    code += "end\r\n"
-    eval(code, TOPLEVEL_BINDING)
-    pbAddScript(code,"PBItems")
+    # Save all data
+    GameData::Item.save
+    MessageTypes.setMessages(MessageTypes::Items, item_names)
+    MessageTypes.setMessages(MessageTypes::ItemPlurals, item_names_plural)
+    MessageTypes.setMessages(MessageTypes::ItemDescriptions, item_descriptions)
     Graphics.update
   end
 
@@ -467,62 +505,56 @@ module Compiler
   # Compile move data
   #=============================================================================
   def compile_moves
-    records   = []
-    moveNames = []
-    moveDescs = []
-    maxValue = 0
-    count = 0
-    pbCompilerEachPreppedLine("PBS/moves.txt") { |line,lineno|
-      record = []
-      lineRecord = pbGetCsvRecord(line,lineno,[0,"vnssueeuuuyiss",
-         nil,nil,nil,nil,nil,PBTypes,["Physical","Special","Status"],
-         nil,nil,nil,PBTargets,nil,nil,nil
+    GameData::Move::DATA.clear
+    move_names        = []
+    move_descriptions = []
+    # Read each line of moves.txt at a time and compile it into an move
+    pbCompilerEachPreppedLine("PBS/moves.txt") { |line, line_no|
+      line = pbGetCsvRecord(line, line_no, [0, "vnssueeuuuyiss",
+         nil, nil, nil, nil, nil, PBTypes, ["Physical", "Special", "Status"],
+         nil, nil, nil, PBTargets, nil, nil, nil
       ])
-      if records[lineRecord[0]]
-        raise _INTL("Move ID number '{1}' is used twice.\r\n{2}",lineRecord[0],FileLineData.linereport)
+      move_number = line[0]
+      move_symbol = line[1].to_sym
+      if GameData::Move::DATA[move_number]
+        raise _INTL("Move ID number '{1}' is used twice.\r\n{2}", move_number, FileLineData.linereport)
+      elsif GameData::Move::DATA[move_symbol]
+        raise _INTL("Move ID '{1}' is used twice.\r\n{2}", move_symbol, FileLineData.linereport)
       end
-      if lineRecord[6]==2 && lineRecord[4]!=0
-        raise _INTL("Status moves must have a base damage of 0, use either Physical or Special.\r\n{1}",FileLineData.linereport)
+      # Sanitise data
+      if line[6] == 2 && line[4] != 0
+        raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}", line[2], FileLineData.linereport)
+      elsif line[6] != 2 && line[4] == 0
+        print _INTL("Warning: Move {1} was defined as Physical or Special but had a base damage of 0. Changing it to a Status move.\r\n{2}", line[2], FileLineData.linereport)
+        line[6] = 2
       end
-      if lineRecord[6]!=2 && lineRecord[4]==0
-        print _INTL("Warning: Physical and special moves can't have a base damage of 0, changing to a Status move.\r\n{1}",FileLineData.linereport)
-        lineRecord[6] = 2
-      end
-      record[MoveData::ID]            = lineRecord[0]
-      record[MoveData::INTERNAL_NAME] = lineRecord[1]
-      record[MoveData::NAME]          = lineRecord[2]
-      record[MoveData::FUNCTION_CODE] = lineRecord[3]
-      record[MoveData::BASE_DAMAGE]   = lineRecord[4]
-      record[MoveData::TYPE]          = lineRecord[5]
-      record[MoveData::CATEGORY]      = lineRecord[6]
-      record[MoveData::ACCURACY]      = lineRecord[7]
-      record[MoveData::TOTAL_PP]      = lineRecord[8]
-      record[MoveData::EFFECT_CHANCE] = lineRecord[9]
-      record[MoveData::TARGET]        = lineRecord[10]
-      record[MoveData::PRIORITY]      = lineRecord[11]
-      record[MoveData::FLAGS]         = lineRecord[12]
-      record[MoveData::DESCRIPTION]   = lineRecord[13]
-      maxValue = [maxValue,lineRecord[0]].max
-      count += 1
-      moveNames[lineRecord[0]] = lineRecord[2]    # Name
-      moveDescs[lineRecord[0]] = lineRecord[13]   # Description
-      records[lineRecord[0]]   = record
+      # Construct move hash
+      move_hash = {
+        :id_number     => move_number,
+        :id            => move_symbol,
+        :name          => line[2],
+        :function_code => line[3],
+        :base_damage   => line[4],
+        :type          => line[5],
+        :category      => line[6],
+        :accuracy      => line[7],
+        :total_pp      => line[8],
+        :effect_chance => line[9],
+        :target        => line[10],
+        :priority      => line[11],
+        :flags         => line[12],
+        :description   => line[13]
+      }
+      # Add move's data to records
+      GameData::Move::DATA[move_number] = GameData::Move::DATA[move_symbol] = GameData::Move.new(move_hash)
+      move_names[move_number]        = move_hash[:name]
+      move_descriptions[move_number] = move_hash[:description]
     }
-    save_data(records,"Data/moves.dat")
-    MessageTypes.setMessages(MessageTypes::Moves,moveNames)
-    MessageTypes.setMessages(MessageTypes::MoveDescriptions,moveDescs)
-    code = "class PBMoves\r\n"
-    for rec in records
-      code += "#{rec[MoveData::INTERNAL_NAME]}=#{rec[MoveData::ID]}\r\n" if rec
-    end
-    code += "def self.getName(id)\r\n"
-    code += "id=getID(PBMoves,id)\r\n"
-    code += "return pbGetMessage(MessageTypes::Moves,id); end\r\n"
-    code += "def self.getCount; return #{count}; end\r\n"
-    code += "def self.maxValue; return #{maxValue}; end\r\n"
-    code += "end\r\n"
-    eval(code, TOPLEVEL_BINDING)
-    pbAddScript(code,"PBMoves")
+    # Save all data
+    GameData::Move.save
+    MessageTypes.setMessages(MessageTypes::Moves, move_names)
+    MessageTypes.setMessages(MessageTypes::MoveDescriptions, move_descriptions)
+    Graphics.update
   end
 
   #=============================================================================
@@ -530,21 +562,13 @@ module Compiler
   #=============================================================================
   def compile_animations
     begin
-      if $RPGVX
-        pbanims = load_data("Data/PkmnAnimations.rvdata")
-      else
-        pbanims = load_data("Data/PkmnAnimations.rxdata")
-      end
+      pbanims = load_data("Data/PkmnAnimations.rxdata")
     rescue
       pbanims = PBAnimations.new
     end
     move2anim = [[],[]]
 =begin
-    if $RPGVX
-      anims = load_data("Data/Animations.rvdata")
-    else
-      anims = load_data("Data/Animations.rxdata")
-    end
+    anims = load_data("Data/Animations.rxdata")
     for anim in anims
       next if !anim || anim.frames.length==1
       found = false
@@ -560,13 +584,13 @@ module Compiler
     for i in 0...pbanims.length
       next if !pbanims[i]
       if pbanims[i].name[/^OppMove\:\s*(.*)$/]
-        if hasConst?(PBMoves,$~[1])
-          moveid = PBMoves.const_get($~[1])
+        if GameData::Move.exists?($~[1])
+          moveid = GameData::Move.get($~[1]).id_number
           move2anim[1][moveid] = i
         end
       elsif pbanims[i].name[/^Move\:\s*(.*)$/]
-        if hasConst?(PBMoves,$~[1])
-          moveid = PBMoves.const_get($~[1])
+        if GameData::Move.exists?($~[1])
+          moveid = GameData::Move.get($~[1]).id_number
           move2anim[0][moveid] = i
         end
       end
@@ -1017,7 +1041,7 @@ module Compiler
     lineno = 1
     havesection = false
     sectionname = nil
-    sections    = []
+    sections    = {}
     if safeExists?("PBS/tm.txt")
       f = File.open("PBS/tm.txt","rb")
       FileLineData.file = "PBS/tm.txt"
@@ -1032,7 +1056,7 @@ module Compiler
             if sections[sectionname]
               raise _INTL("TM section [{1}] is defined twice.\r\n{2}",sectionname,FileLineData.linereport)
             end
-            sections[sectionname] = WordArray.new
+            sections[sectionname] = []
             havesection = true
           else
             if sectionname==nil
@@ -1069,8 +1093,9 @@ module Compiler
           value = value.split(",")
           species = parseSpecies(key)
           moves = []
-          for i in 0...[4,value.length].min
-            moves.push((parseMove(value[i]) rescue nil))
+          for i in 0...[Pokemon::MAX_MOVES,value.length].min
+            move = parseMove(value[i], true)
+            moves.push(move) if move
           end
           moves.compact!
           sections[species] = moves if moves.length>0
@@ -1278,7 +1303,7 @@ module Compiler
             raise _INTL("Bad level: {1} (must be 1-{2}).\r\n{3}",record[1],mLevel,FileLineData.linereport)
           end
         when "Moves"
-          record = [record] if record.is_a?(Integer)
+          record = [record] if record.is_a?(Symbol)
           record.compact!
         when "Ability"
           if record>5
@@ -1358,8 +1383,8 @@ module Compiler
           trainernames[trainerindex] = record[0]
           trainers[trainerindex][4] = record[1] if record[1]
         when 3   # Number of Pokémon, items
-          record = pbGetCsvRecord(line,lineno,[0,"vEEEEEEEE",nil,PBItems,PBItems,
-                                  PBItems,PBItems,PBItems,PBItems,PBItems,PBItems])
+          record = pbGetCsvRecord(line,lineno,[0,"vEEEEEEEE",nil,
+                                  Item,Item,Item,Item,Item,Item,Item,Item])
           record = [record] if record.is_a?(Integer)
           record.compact!
           oldcompilerlength += record[0]
@@ -1369,8 +1394,8 @@ module Compiler
           pokemonindex += 1
           trainers[trainerindex][3][pokemonindex] = []
           record = pbGetCsvRecord(line,lineno,
-             [0,"evEEEEEUEUBEUUSBU",PBSpecies,nil, PBItems,PBMoves,PBMoves,PBMoves,
-                                    PBMoves,nil,{"M"=>0,"m"=>0,"Male"=>0,"male"=>0,
+             [0,"evEEEEEUEUBEUUSBU",PBSpecies,nil,:Item,:Move,:Move,:Move,:Move,
+                                    nil,{"M"=>0,"m"=>0,"Male"=>0,"male"=>0,
                                     "0"=>0,"F"=>1,"f"=>1,"Female"=>1,"female"=>1,
                                     "1"=>1},nil,nil,PBNatures,nil,nil,nil,nil,nil])
           # Error checking (the +3 is for properties after the four moves)

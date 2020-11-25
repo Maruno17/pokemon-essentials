@@ -277,7 +277,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
   if $PokemonGlobal.stepcount%4==0 && POISON_IN_FIELD
     flashed = false
     for i in $Trainer.ablePokemonParty
-      if i.status==PBStatuses::POISON && !isConst?(i.ability,PBAbilities,:IMMUNITY)
+      if i.status==PBStatuses::POISON && !i.hasAbility?(:IMMUNITY)
         if !flashed
           $game_screen.start_flash(Color.new(255,0,0,128), 4)
           flashed = true
@@ -325,7 +325,7 @@ Events.onStepTakenFieldMovement += proc { |_sender,e|
       break
     end
   end
-  if sootlevel>=0 && hasConst?(PBItems,:SOOTSACK)
+  if sootlevel>=0 && GameData::Item.exists?(:SOOTSACK)
     $PokemonGlobal.sootsack = 0 if !$PokemonGlobal.sootsack
 #    map.data[thistile[1],thistile[2],sootlevel]=0
     if event==$game_player && $PokemonBag.pbHasItem?(:SOOTSACK)
@@ -368,32 +368,34 @@ def pbOnStepTaken(eventTriggered)
   Events.onStepTakenTransferPossible.trigger(nil,handled)
   return if handled[0]
   pbBattleOnStepTaken(repel) if !eventTriggered && !$game_temp.in_menu
+  $PokemonTemp.encounterTriggered = false   # This info isn't needed
 end
 
 # Start wild encounters while turning on the spot
 Events.onChangeDirection += proc {
-  repel = ($PokemonGlobal.repel>0)
+  repel = ($PokemonGlobal.repel > 0)
   pbBattleOnStepTaken(repel) if !$game_temp.in_menu
 }
 
-def pbBattleOnStepTaken(repel=false)
-  return if $Trainer.ablePokemonCount==0
+def pbBattleOnStepTaken(repel = false)
+  return if $Trainer.ablePokemonCount == 0
   encounterType = $PokemonEncounters.pbEncounterType
-  return if encounterType<0
+  return if encounterType < 0
   return if !$PokemonEncounters.isEncounterPossibleHere?
   $PokemonTemp.encounterType = encounterType
   encounter = $PokemonEncounters.pbGenerateEncounter(encounterType)
   encounter = EncounterModifier.trigger(encounter)
-  if $PokemonEncounters.pbCanEncounter?(encounter,repel)
+  if $PokemonEncounters.pbCanEncounter?(encounter, repel)
     if !$PokemonTemp.forceSingleBattle && !pbInSafari? && ($PokemonGlobal.partner ||
-       ($Trainer.ablePokemonCount>1 && PBTerrain.isDoubleWildBattle?(pbGetTerrainTag) && rand(100)<30))
+       ($Trainer.ablePokemonCount > 1 && PBTerrain.isDoubleWildBattle?(pbGetTerrainTag) && rand(100) < 30))
       encounter2 = $PokemonEncounters.pbEncounteredPokemon(encounterType)
       encounter2 = EncounterModifier.trigger(encounter2)
-      pbDoubleWildBattle(encounter[0],encounter[1],encounter2[0],encounter2[1])
+      pbDoubleWildBattle(encounter[0], encounter[1], encounter2[0], encounter2[1])
     else
-      pbWildBattle(encounter[0],encounter[1])
+      pbWildBattle(encounter[0], encounter[1])
     end
     $PokemonTemp.encounterType = -1
+    $PokemonTemp.encounterTriggered = true
   end
   $PokemonTemp.forceSingleBattle = false
   EncounterModifier.triggerEncounterEnd
@@ -409,12 +411,12 @@ end
 Events.onMapChanging += proc { |_sender,e|
   newMapID = e[0]
   if newMapID>0
-    mapinfos = ($RPGVX) ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
-    oldWeather = pbGetMetadata($game_map.map_id,MapMetadata::WEATHER)
+    mapinfos = load_data("Data/MapInfos.rxdata")
+    oldWeather = GameData::MapMetadata.get($game_map.map_id).weather
     if $game_map.name!=mapinfos[newMapID].name
       $game_screen.weather(0,0,0) if oldWeather
     else
-      newWeather = pbGetMetadata(newMapID,MapMetadata::WEATHER)
+      newWeather = GameData::MapMetadata.get(newMapID).weather
       $game_screen.weather(0,0,0) if oldWeather && !newWeather
     end
   end
@@ -422,19 +424,19 @@ Events.onMapChanging += proc { |_sender,e|
 
 # Set up various data related to the new map
 Events.onMapChange += proc { |_sender,e|
-  oldid = e[0] # previous map ID, 0 if no map ID
-  healing = pbGetMetadata($game_map.map_id,MapMetadata::HEALING_SPOT)
+  oldid = e[0]   # previous map ID, is 0 if no map ID
+  healing = GameData::MapMetadata.get($game_map.map_id).teleport_destination
   $PokemonGlobal.healingSpot = healing if healing
   $PokemonMap.clear if $PokemonMap
   $PokemonEncounters.setup($game_map.map_id) if $PokemonEncounters
   $PokemonGlobal.visitedMaps[$game_map.map_id] = true
   if oldid!=0 && oldid!=$game_map.map_id
-    mapinfos = ($RPGVX) ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
-    weather = pbGetMetadata($game_map.map_id,MapMetadata::WEATHER)
+    mapinfos = load_data("Data/MapInfos.rxdata")
+    weather = GameData::MapMetadata.get($game_map.map_id).weather
     if $game_map.name!=mapinfos[oldid].name
       $game_screen.weather(weather[0],8,20) if weather && rand(100)<weather[1]
     else
-      oldweather = pbGetMetadata(oldid,MapMetadata::WEATHER)
+      oldweather = GameData::MapMetadata.get(oldid).weather
       $game_screen.weather(weather[0],8,20) if weather && !oldweather && rand(100)<weather[1]
     end
   end
@@ -455,7 +457,7 @@ Events.onMapSceneChange += proc { |_sender,e|
     $PokemonGlobal.mapTrail[0] = $game_map.map_id
   end
   # Display darkness circle on dark maps
-  darkmap = pbGetMetadata($game_map.map_id,MapMetadata::DARK_MAP)
+  darkmap = GameData::MapMetadata.get($game_map.map_id).dark_map
   if darkmap
     if $PokemonGlobal.flashUsed
       $PokemonTemp.darknessSprite = DarknessSprite.new
@@ -475,7 +477,7 @@ Events.onMapSceneChange += proc { |_sender,e|
   end
   # Show location signpost
   if mapChanged
-    if pbGetMetadata($game_map.map_id,MapMetadata::SHOW_AREA)
+    if GameData::MapMetadata.get($game_map.map_id).announce_location
       nosignpost = false
       if $PokemonGlobal.mapTrail[1]
         for i in 0...NO_SIGNPOSTS.length/2
@@ -483,7 +485,7 @@ Events.onMapSceneChange += proc { |_sender,e|
           nosignpost = true if NO_SIGNPOSTS[2*i+1]==$PokemonGlobal.mapTrail[1] && NO_SIGNPOSTS[2*i]==$game_map.map_id
           break if nosignpost
         end
-        mapinfos = $RPGVX ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
+        mapinfos = load_data("Data/MapInfos.rxdata")
         oldmapname = mapinfos[$PokemonGlobal.mapTrail[1]].name
         nosignpost = true if $game_map.name==oldmapname
       end
@@ -491,7 +493,7 @@ Events.onMapSceneChange += proc { |_sender,e|
     end
   end
   # Force cycling/walking
-  if pbGetMetadata($game_map.map_id,MapMetadata::BICYCLE_ALWAYS)
+  if GameData::MapMetadata.get($game_map.map_id).always_bicycle
     pbMountBike
   elsif !pbCanUseBike?($game_map.map_id)
     pbDismountBike
@@ -828,7 +830,7 @@ def pbCueBGM(bgm,seconds,volume=nil,pitch=nil)
 end
 
 def pbAutoplayOnTransition
-  surfbgm = pbGetMetadata(0,Metadata::SURF_BGM)
+  surfbgm = GameData::Metadata.get.surf_BGM
   if $PokemonGlobal.surfing && surfbgm
     pbBGMPlay(surfbgm)
   else
@@ -837,7 +839,7 @@ def pbAutoplayOnTransition
 end
 
 def pbAutoplayOnSave
-  surfbgm = pbGetMetadata(0,Metadata::SURF_BGM)
+  surfbgm = GameData::Metadata.get.surf_BGM
   if $PokemonGlobal.surfing && surfbgm
     pbBGMPlay(surfbgm)
   else
@@ -1124,7 +1126,7 @@ def pbFishingBegin
   $PokemonGlobal.fishing = true
   if !pbCommonEvent(FISHING_BEGIN_COMMON_EVENT)
     patternb = 2*$game_player.direction - 1
-    meta = pbGetMetadata(0,Metadata::PLAYER_A+$PokemonGlobal.playerID)
+    meta = GameData::Metadata.get_player($PokemonGlobal.playerID)
     num = ($PokemonGlobal.surfing) ? 7 : 6
     if meta && meta[num] && meta[num]!=""
       charset = pbGetPlayerCharset(meta,num)
@@ -1143,7 +1145,7 @@ end
 def pbFishingEnd
   if !pbCommonEvent(FISHING_END_COMMON_EVENT)
     patternb = 2*($game_player.direction - 2)
-    meta = pbGetMetadata(0,Metadata::PLAYER_A+$PokemonGlobal.playerID)
+    meta = GameData::Metadata.get_player($PokemonGlobal.playerID)
     num = ($PokemonGlobal.surfing) ? 7 : 6
     if meta && meta[num] && meta[num]!=""
       charset = pbGetPlayerCharset(meta,num)
@@ -1161,9 +1163,7 @@ def pbFishingEnd
 end
 
 def pbFishing(hasEncounter,rodType=1)
-  speedup = ($Trainer.firstPokemon &&
-            (isConst?($Trainer.firstPokemon.ability,PBAbilities,:STICKYHOLD) ||
-            isConst?($Trainer.firstPokemon.ability,PBAbilities,:SUCTIONCUPS)))
+  speedup = ($Trainer.firstPokemon && [:STICKYHOLD, :SUCTIONCUPS].include?($Trainer.firstPokemon.ability_id))
   biteChance = 20+(25*rodType)   # 45, 70, 95
   biteChance *= 1.5 if speedup   # 67.5, 100, 100
   hookChance = 100
@@ -1324,16 +1324,17 @@ end
 # Picking up an item found on the ground
 #===============================================================================
 def pbItemBall(item,quantity=1)
-  item = getID(PBItems,item)
-  return false if !item || item<=0 || quantity<1
-  itemname = (quantity>1) ? PBItems.getNamePlural(item) : PBItems.getName(item)
-  pocket = pbGetPocket(item)
+  item = GameData::Item.get(item)
+  return false if !item || quantity<1
+  itemname = (quantity>1) ? item.name_plural : item.name
+  pocket = item.pocket
+  move = item.move
   if $PokemonBag.pbStoreItem(item,quantity)   # If item can be picked up
-    meName = (pbIsKeyItem?(item)) ? "Key item get" : "Item get"
-    if isConst?(item,PBItems,:LEFTOVERS)
+    meName = (item.is_key_item?) ? "Key item get" : "Item get"
+    if item == :LEFTOVERS
       pbMessage(_INTL("\\me[{1}]You found some \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
-    elsif pbIsMachine?(item)   # TM or HM
-      pbMessage(_INTL("\\me[{1}]You found \\c[1]{2} {3}\\c[0]!\\wtnp[30]",meName,itemname,PBMoves.getName(pbGetMachine(item))))
+    elsif item.is_machine?   # TM or HM
+      pbMessage(_INTL("\\me[{1}]You found \\c[1]{2} {3}\\c[0]!\\wtnp[30]",meName,itemname,GameData::Move.get(move).name))
     elsif quantity>1
       pbMessage(_INTL("\\me[{1}]You found {2} \\c[1]{3}\\c[0]!\\wtnp[30]",meName,quantity,itemname))
     elsif itemname.starts_with_vowel?
@@ -1346,10 +1347,10 @@ def pbItemBall(item,quantity=1)
     return true
   end
   # Can't add the item
-  if isConst?(item,PBItems,:LEFTOVERS)
+  if item == :LEFTOVERS
     pbMessage(_INTL("You found some \\c[1]{1}\\c[0]!\\wtnp[30]",itemname))
-  elsif pbIsMachine?(item)   # TM or HM
-    pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!\\wtnp[30]",itemname,PBMoves.getName(pbGetMachine(item))))
+  elsif item.is_machine?   # TM or HM
+    pbMessage(_INTL("You found \\c[1]{1} {2}\\c[0]!\\wtnp[30]",itemname,GameData::Move.get(move).name))
   elsif quantity>1
     pbMessage(_INTL("You found {1} \\c[1]{2}\\c[0]!\\wtnp[30]",quantity,itemname))
   elsif itemname.starts_with_vowel?
@@ -1367,15 +1368,16 @@ end
 # Being given an item
 #===============================================================================
 def pbReceiveItem(item,quantity=1)
-  item = getID(PBItems,item)
-  return false if !item || item<=0 || quantity<1
-  itemname = (quantity>1) ? PBItems.getNamePlural(item) : PBItems.getName(item)
-  pocket = pbGetPocket(item)
-  meName = (pbIsKeyItem?(item)) ? "Key item get" : "Item get"
-  if isConst?(item,PBItems,:LEFTOVERS)
+  item = GameData::Item.get(item)
+  return false if !item || quantity<1
+  itemname = (quantity>1) ? item.name_plural : item.name
+  pocket = item.pocket
+  move = item.move
+  meName = (item.is_key_item?) ? "Key item get" : "Item get"
+  if item == :LEFTOVERS
     pbMessage(_INTL("\\me[{1}]You obtained some \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
-  elsif pbIsMachine?(item)   # TM or HM
-    pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2} {3}\\c[0]!\\wtnp[30]",meName,itemname,PBMoves.getName(pbGetMachine(item))))
+  elsif item.is_machine?   # TM or HM
+    pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2} {3}\\c[0]!\\wtnp[30]",meName,itemname,GameData::Move.get(move).name))
   elsif quantity>1
     pbMessage(_INTL("\\me[{1}]You obtained {2} \\c[1]{3}\\c[0]!\\wtnp[30]",meName,quantity,itemname))
   elsif itemname.starts_with_vowel?

@@ -14,10 +14,10 @@ class ItemIconSprite < SpriteWrapper
     @frame = 0
     self.x = x
     self.y = y
+    @blankzero = false
     @forceitemchange = true
     self.item = item
     @forceitemchange = false
-    @blankzero = false
   end
 
   def dispose
@@ -71,8 +71,8 @@ class ItemIconSprite < SpriteWrapper
     @item = value
     @animbitmap.dispose if @animbitmap
     @animbitmap = nil
-    if @item && !(@item==0 && @blankzero)
-      @animbitmap = AnimatedBitmap.new(pbItemIconFile(value))
+    if @item || !@blankzero
+      @animbitmap = AnimatedBitmap.new(pbItemIconFile(@item))
       self.bitmap = @animbitmap.bitmap
       if self.bitmap.height==ANIM_ICON_SIZE
         @numframes = [(self.bitmap.width/ANIM_ICON_SIZE).floor,1].max
@@ -120,26 +120,8 @@ class HeldItemIconSprite < SpriteWrapper
     self.x = x
     self.y = y
     @pokemon = pokemon
-    @item = 0
-    self.item = @pokemon.item
-  end
-
-  def pokemon=(value)
-    @pokemon = value
-    self.item = @pokemon.item
-  end
-
-  def item=(value)
-    return if @item==value
-    @item = value
-    @animbitmap.dispose if @animbitmap
-    @animbitmap = nil
-    if @item && @item>0
-      @animbitmap = AnimatedBitmap.new(pbHeldItemIconFile(value))
-      self.bitmap = @animbitmap.bitmap
-    else
-      self.bitmap = nil
-    end
+    @item = nil
+    self.item = @pokemon.item_id
   end
 
   def dispose
@@ -147,9 +129,27 @@ class HeldItemIconSprite < SpriteWrapper
     super
   end
 
+  def pokemon=(value)
+    @pokemon = value
+    self.item = @pokemon.item_id
+  end
+
+  def item=(value)
+    return if @item==value
+    @item = value
+    @animbitmap.dispose if @animbitmap
+    @animbitmap = nil
+    if @item
+      @animbitmap = AnimatedBitmap.new(pbHeldItemIconFile(@item))
+      self.bitmap = @animbitmap.bitmap
+    else
+      self.bitmap = nil
+    end
+  end
+
   def update
     super
-    self.item = @pokemon.item
+    self.item = @pokemon.item_id
     if @animbitmap
       @animbitmap.update
       self.bitmap = @animbitmap.bitmap

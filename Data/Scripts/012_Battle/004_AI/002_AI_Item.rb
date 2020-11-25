@@ -5,24 +5,24 @@ class PokeBattle_AI
   def pbEnemyShouldUseItem?(idxBattler)
     user = @battle.battlers[idxBattler]
     item, idxTarget = pbEnemyItemToUse(idxBattler)
-    return false if item==0
+    return false if !item
     # Determine target of item (always the Pokémon choosing the action)
-    useType = pbGetItemData(item,ItemData::BATTLE_USE)
-    if useType && (useType==1 || useType==6)   # Use on Pokémon
+    useType = GameData::Item.get(item).battle_use
+    if useType==1 || useType==6   # Use on Pokémon
       idxTarget = @battle.battlers[idxTarget].pokemonIndex   # Party Pokémon
     end
     # Register use of item
     @battle.pbRegisterItem(idxBattler,item,idxTarget)
-    PBDebug.log("[AI] #{user.pbThis} (#{user.index}) will use item #{PBItems.getName(item)}")
+    PBDebug.log("[AI] #{user.pbThis} (#{user.index}) will use item #{GameData::Item.get(item).name}")
     return true
   end
 
   # NOTE: The AI will only consider using an item on the Pokémon it's currently
   #       choosing an action for.
   def pbEnemyItemToUse(idxBattler)
-    return 0 if !@battle.internalBattle
+    return nil if !@battle.internalBattle
     items = @battle.pbGetOwnerItems(idxBattler)
-    return 0 if !items || items.length==0
+    return nil if !items || items.length==0
     # Determine target of item (always the Pokémon choosing the action)
     idxTarget = idxBattler   # Battler using the item
     battler = @battle.battlers[idxTarget]
@@ -49,106 +49,95 @@ class PokeBattle_AI
        :FULLRESTORE
     ]
     oneStatusItems = [   # Preferred over items that heal all status problems
-       :AWAKENING,:CHESTOBERRY,:BLUEFLUTE,
-       :ANTIDOTE,:PECHABERRY,
-       :BURNHEAL,:RAWSTBERRY,
-       :PARALYZEHEAL,:PARLYZHEAL,:CHERIBERRY,
-       :ICEHEAL,:ASPEARBERRY
+      :AWAKENING, :CHESTOBERRY, :BLUEFLUTE,
+      :ANTIDOTE, :PECHABERRY,
+      :BURNHEAL, :RAWSTBERRY,
+      :PARALYZEHEAL, :PARLYZHEAL, :CHERIBERRY,
+      :ICEHEAL, :ASPEARBERRY
     ]
     allStatusItems = [
-       :FULLHEAL,:LAVACOOKIE,:OLDGATEAU,:CASTELIACONE,:LUMIOSEGALETTE,
-       :SHALOURSABLE,:BIGMALASADA,:LUMBERRY,:HEALPOWDER
+       :FULLHEAL, :LAVACOOKIE, :OLDGATEAU, :CASTELIACONE, :LUMIOSEGALETTE,
+       :SHALOURSABLE, :BIGMALASADA, :LUMBERRY, :HEALPOWDER
     ]
     allStatusItems.push(:RAGECANDYBAR) if NEWEST_BATTLE_MECHANICS
     xItems = {
-       :XATTACK    => [PBStats::ATTACK,(NEWEST_BATTLE_MECHANICS) ? 2 : 1],
-       :XATTACK2   => [PBStats::ATTACK,2],
-       :XATTACK3   => [PBStats::ATTACK,3],
-       :XATTACK6   => [PBStats::ATTACK,6],
-       :XDEFENSE   => [PBStats::DEFENSE,(NEWEST_BATTLE_MECHANICS) ? 2 : 1],
-       :XDEFENSE2  => [PBStats::DEFENSE,2],
-       :XDEFENSE3  => [PBStats::DEFENSE,3],
-       :XDEFENSE6  => [PBStats::DEFENSE,6],
-       :XDEFEND    => [PBStats::DEFENSE,(NEWEST_BATTLE_MECHANICS) ? 2 : 1],
-       :XDEFEND2   => [PBStats::DEFENSE,2],
-       :XDEFEND3   => [PBStats::DEFENSE,3],
-       :XDEFEND6   => [PBStats::DEFENSE,6],
-       :XSPATK     => [PBStats::SPATK,(NEWEST_BATTLE_MECHANICS) ? 2 : 1],
-       :XSPATK2    => [PBStats::SPATK,2],
-       :XSPATK3    => [PBStats::SPATK,3],
-       :XSPATK6    => [PBStats::SPATK,6],
-       :XSPECIAL   => [PBStats::SPATK,(NEWEST_BATTLE_MECHANICS) ? 2 : 1],
-       :XSPECIAL2  => [PBStats::SPATK,2],
-       :XSPECIAL3  => [PBStats::SPATK,3],
-       :XSPECIAL6  => [PBStats::SPATK,6],
-       :XSPDEF     => [PBStats::SPDEF,(NEWEST_BATTLE_MECHANICS) ? 2 : 1],
-       :XSPDEF2    => [PBStats::SPDEF,2],
-       :XSPDEF3    => [PBStats::SPDEF,3],
-       :XSPDEF6    => [PBStats::SPDEF,6],
-       :XSPEED     => [PBStats::SPEED,(NEWEST_BATTLE_MECHANICS) ? 2 : 1],
-       :XSPEED2    => [PBStats::SPEED,2],
-       :XSPEED3    => [PBStats::SPEED,3],
-       :XSPEED6    => [PBStats::SPEED,6],
-       :XACCURACY  => [PBStats::ACCURACY,(NEWEST_BATTLE_MECHANICS) ? 2 : 1],
-       :XACCURACY2 => [PBStats::ACCURACY,2],
-       :XACCURACY3 => [PBStats::ACCURACY,3],
-       :XACCURACY6 => [PBStats::ACCURACY,6]
+       :XATTACK    => [PBStats::ATTACK, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XATTACK2   => [PBStats::ATTACK, 2],
+       :XATTACK3   => [PBStats::ATTACK, 3],
+       :XATTACK6   => [PBStats::ATTACK, 6],
+       :XDEFENSE   => [PBStats::DEFENSE, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XDEFENSE2  => [PBStats::DEFENSE, 2],
+       :XDEFENSE3  => [PBStats::DEFENSE, 3],
+       :XDEFENSE6  => [PBStats::DEFENSE, 6],
+       :XDEFEND    => [PBStats::DEFENSE, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XDEFEND2   => [PBStats::DEFENSE, 2],
+       :XDEFEND3   => [PBStats::DEFENSE, 3],
+       :XDEFEND6   => [PBStats::DEFENSE, 6],
+       :XSPATK     => [PBStats::SPATK, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XSPATK2    => [PBStats::SPATK, 2],
+       :XSPATK3    => [PBStats::SPATK, 3],
+       :XSPATK6    => [PBStats::SPATK, 6],
+       :XSPECIAL   => [PBStats::SPATK, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XSPECIAL2  => [PBStats::SPATK, 2],
+       :XSPECIAL3  => [PBStats::SPATK, 3],
+       :XSPECIAL6  => [PBStats::SPATK, 6],
+       :XSPDEF     => [PBStats::SPDEF, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XSPDEF2    => [PBStats::SPDEF, 2],
+       :XSPDEF3    => [PBStats::SPDEF, 3],
+       :XSPDEF6    => [PBStats::SPDEF, 6],
+       :XSPEED     => [PBStats::SPEED, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XSPEED2    => [PBStats::SPEED, 2],
+       :XSPEED3    => [PBStats::SPEED, 3],
+       :XSPEED6    => [PBStats::SPEED, 6],
+       :XACCURACY  => [PBStats::ACCURACY, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XACCURACY2 => [PBStats::ACCURACY, 2],
+       :XACCURACY3 => [PBStats::ACCURACY, 3],
+       :XACCURACY6 => [PBStats::ACCURACY, 6]
     }
-    losthp = battler.totalhp-battler.hp
-    preferFullRestore = (battler.hp<=battler.totalhp*2/3 &&
-       (battler.status!=PBStatuses::NONE || battler.effects[PBEffects::Confusion]>0))
+    losthp = battler.totalhp - battler.hp
+    preferFullRestore = (battler.hp <= battler.totalhp * 2 / 3 &&
+       (battler.status != PBStatuses::NONE || battler.effects[PBEffects::Confusion] > 0))
     # Find all usable items
     usableHPItems     = []
     usableStatusItems = []
     usableXItems      = []
     items.each do |i|
-      next if !i || i==0
+      next if !i
       next if !@battle.pbCanUseItemOnPokemon?(i,pkmn,battler,@battle.scene,false)
       next if !ItemHandlers.triggerCanUseInBattle(i,pkmn,battler,nil,
          false,self,@battle.scene,false)
-      checkedItem = false
       # Log HP healing items
-      if losthp>0
-        hpItems.each do |item, power|
-          next if !isConst?(i,PBItems,item)
-          checkedItem = true
-          usableHPItems.push([i,5,power])
+      if losthp > 0
+        power = hpItems[i]
+        if power
+          usableHPItems.push([i, 5, power])
+          next
         end
-        next if checkedItem
       end
       # Log Full Restores (HP healer and status curer)
-      if losthp>0 || battler.status!=PBStatuses::NONE
-        fullRestoreItems.each do |item|
-          next if !isConst?(i,PBItems,item)
-          checkedItem = true
-          usableHPItems.push([i,(preferFullRestore) ? 3 : 7,999])
-          usableStatusItems.push([i,(preferFullRestore) ? 3 : 9])
+      if losthp > 0 || battler.status != PBStatuses::NONE
+        if fullRestoreItems.include?(i)
+          usableHPItems.push([i, (preferFullRestore) ? 3 : 7, 999])
+          usableStatusItems.push([i, (preferFullRestore) ? 3 : 9])
+          next
         end
-        next if checkedItem
       end
       # Log single status-curing items
-      if battler.status!=PBStatuses::NONE
-        oneStatusItems.each do |item|
-          next if !isConst?(i,PBItems,item)
-          checkedItem = true
-          usableStatusItems.push([i,5])
-        end
-        next if checkedItem
-        # Log Full Heal-type items
-        allStatusItems.each do |item|
-          next if !isConst?(i,PBItems,item)
-          checkedItem = true
-          usableStatusItems.push([i,7])
-        end
-        next if checkedItem
+      if oneStatusItems.include?(i)
+        usableStatusItems.push([i, 5])
+        next
+      end
+      # Log Full Heal-type items
+      if allStatusItems.include?(i)
+        usableStatusItems.push([i, 7])
+        next
       end
       # Log stat-raising items
-      xItems.each do |item, data|
-        next if !isConst?(i,PBItems,item)
-        checkedItem = true
-        usableXItems.push([i,battler.stages[data[0]],data[1]])
+      if xItems[i]
+        data = xItems[i]
+        usableXItems.push([i, battler.stages[data[0]], data[1]])
+        next
       end
-      next if checkedItem
     end
     # Prioritise using a HP restoration item
     if usableHPItems.length>0 && (battler.hp<=battler.totalhp/4 ||
@@ -156,15 +145,15 @@ class PokeBattle_AI
       usableHPItems.sort! { |a,b| (a[1]==b[1]) ? a[2]<=>b[2] : a[1]<=>b[1] }
       prevItem = nil
       usableHPItems.each do |i|
-        return i[0],idxTarget if i[2]>=losthp
+        return i[0], idxTarget if i[2]>=losthp
         prevItem = i
       end
-      return prevItem[0],idxTarget
+      return prevItem[0], idxTarget
     end
     # Next prioritise using a status-curing item
     if usableStatusItems.length>0 && pbAIRandom(100)<40
       usableStatusItems.sort! { |a,b| a[1]<=>b[1] }
-      return usableStatusItems[0][0],idxTarget
+      return usableStatusItems[0][0], idxTarget
     end
     # Next try using an X item
     if usableXItems.length>0 && pbAIRandom(100)<30
@@ -172,11 +161,11 @@ class PokeBattle_AI
       prevItem = nil
       usableXItems.each do |i|
         break if prevItem && i[1]>prevItem[1]
-        return i[0],idxTarget if i[1]+i[2]>=6
+        return i[0], idxTarget if i[1]+i[2]>=6
         prevItem = i
       end
-      return prevItem[0],idxTarget
+      return prevItem[0], idxTarget
     end
-    return 0
+    return nil
   end
 end

@@ -20,7 +20,7 @@ class PokemonSystem
     @frame       = 0     # Default window frame (see also $TextFrames)
     @textskin    = 0     # Speech frame
     @font        = 0     # Font (see also $VersionStyles)
-    @screensize  = (SCREEN_ZOOM.floor).to_i   # 0=half size, 1=full size, 2=double size
+    @screensize  = (SCREEN_ZOOM * 2).floor - 1   # 0=half size, 1=full size, 2=full-and-a-half size, 3=double size
     @border      = 0     # Screen border (0=off, 1=on)
     @language    = 0     # Language (see also LANGUAGES in script PokemonSystem)
     @runstyle    = 0     # Run key functionality (0=hold to run, 1=toggle auto-run)
@@ -331,7 +331,8 @@ class Window_PokemonOption < Window_DrawableCommand
     rect = drawCursor(index,rect)
     optionname = (index==@options.length) ? _INTL("Cancel") : @options[index].name
     optionwidth = rect.width*9/20
-    pbDrawShadowText(self.contents,rect.x,rect.y,optionwidth,rect.height,optionname,
+    text_y = rect.y + 6
+    pbDrawShadowText(self.contents,rect.x,text_y,optionwidth,rect.height,optionname,
        @nameBaseColor,@nameShadowColor)
     return if index==@options.length
     if @options[index].is_a?(EnumOption)
@@ -345,7 +346,7 @@ class Window_PokemonOption < Window_DrawableCommand
         xpos = optionwidth+rect.x
         ivalue = 0
         for value in @options[index].values
-          pbDrawShadowText(self.contents,xpos,rect.y,optionwidth,rect.height,value,
+          pbDrawShadowText(self.contents,xpos,text_y,optionwidth,rect.height,value,
              (ivalue==self[index]) ? @selBaseColor : self.baseColor,
              (ivalue==self[index]) ? @selShadowColor : self.shadowColor
           )
@@ -354,14 +355,14 @@ class Window_PokemonOption < Window_DrawableCommand
           ivalue += 1
         end
       else
-        pbDrawShadowText(self.contents,rect.x+optionwidth,rect.y,optionwidth,rect.height,
+        pbDrawShadowText(self.contents,rect.x+optionwidth,text_y,optionwidth,rect.height,
            optionname,self.baseColor,self.shadowColor)
       end
     elsif @options[index].is_a?(NumberOption)
       value = _INTL("Type {1}/{2}",@options[index].optstart+self[index],
          @options[index].optend-@options[index].optstart+1)
       xpos = optionwidth+rect.x
-      pbDrawShadowText(self.contents,xpos,rect.y,optionwidth,rect.height,value,
+      pbDrawShadowText(self.contents,xpos,text_y,optionwidth,rect.height,value,
          @selBaseColor,@selShadowColor)
     elsif @options[index].is_a?(SliderOption)
       value = sprintf(" %d",@options[index].optend)
@@ -375,12 +376,12 @@ class Window_PokemonOption < Window_DrawableCommand
          8,16,@selBaseColor)
       value = sprintf("%d",@options[index].optstart+self[index])
       xpos += optionwidth-self.contents.text_size(value).width
-      pbDrawShadowText(self.contents,xpos,rect.y,optionwidth,rect.height,value,
+      pbDrawShadowText(self.contents,xpos,text_y,optionwidth,rect.height,value,
          @selBaseColor,@selShadowColor)
     else
       value = @options[index].values[self[index]]
       xpos = optionwidth+rect.x
-      pbDrawShadowText(self.contents,xpos,rect.y,optionwidth,rect.height,value,
+      pbDrawShadowText(self.contents,xpos,text_y,optionwidth,rect.height,value,
          @selBaseColor,@selShadowColor)
     end
   end
@@ -507,8 +508,8 @@ class PokemonOption_Scene
          proc { $PokemonSystem.textinput },
          proc { |value| $PokemonSystem.textinput = value }
        ),
-       EnumOption.new(_INTL("Screen Size"),[_INTL("S"),_INTL("M"),_INTL("L"),_INTL("Full")],
-         proc { [$PokemonSystem.screensize,3].min },
+       EnumOption.new(_INTL("Screen Size"),[_INTL("S"),_INTL("M"),_INTL("L"),_INTL("XL"),_INTL("Full")],
+         proc { [$PokemonSystem.screensize,4].min },
          proc { |value|
            oldvalue = $PokemonSystem.screensize
            $PokemonSystem.screensize = value

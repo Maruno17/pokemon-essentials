@@ -110,7 +110,7 @@ module Compiler
       end
       lineno += 1
       Graphics.update if lineno%500==0
-      Win32API.SetWindowText(_INTL("Processing {1} line {2}",FileLineData.file,lineno)) if lineno%50==0
+      pbSetWindowText(_INTL("Processing {1} line {2}",FileLineData.file,lineno)) if lineno%50==0
     }
     yield lastsection,sectionname  if havesection
   end
@@ -311,6 +311,18 @@ module Compiler
       end
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
+      if [:Ability, :Item, :Move].include?(enumer)
+        enumer = GameData.const_get(enumer.to_sym)
+        begin
+          if ret == "" || !enumer.exists?(ret.to_sym)
+            raise _INTL("Undefined value {1} in {2}\r\n{3}", ret, enumer.name, FileLineData.linereport)
+          end
+        rescue NameError
+          raise _INTL("Incorrect value {1} in {2}\r\n{3}", ret, enumer.name, FileLineData.linereport)
+        end
+        return ret.to_sym
+      end
+
       enumer = Object.const_get(enumer.to_sym)
       begin
         if ret=="" || !enumer.const_defined?(ret)
@@ -341,6 +353,12 @@ module Compiler
       return nil if ret=="" || !(enumer.const_defined?(ret) rescue false)
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
+      if [:Ability, :Item, :Move].include?(enumer)
+        enumer = GameData.const_get(enumer.to_sym)
+        return nil if ret == "" || !enumer.exists?(ret.to_sym)
+        return ret.to_sym
+      end
+
       enumer = Object.const_get(enumer.to_sym)
       return nil if ret=="" || !(enumer.const_defined?(ret) rescue false)
       return enumer.const_get(ret.to_sym)
@@ -548,7 +566,11 @@ module Compiler
     clonitem = item.upcase
     clonitem.sub!(/^\s*/,"")
     clonitem.sub!(/\s*$/,"")
-    return pbGetConst(PBItems,clonitem,_INTL("Undefined item constant name: %s\r\nName must consist only of letters, numbers, and\r\nunderscores and can't begin with a number.\r\nMake sure the item is defined in\r\nPBS/items.txt.\r\n{1}",FileLineData.linereport))
+    itm = GameData::Item.try_get(clonitem)
+    if !itm
+      raise _INTL("Undefined item constant name: %s\r\nName must consist only of letters, numbers and\r\nunderscores, and can't begin with a number.\r\nMake sure the item is defined in\r\nPBS/items.txt.\r\n{1}", item, FileLineData.linereport)
+    end
+    return itm.id.to_s
   end
 
   def parseSpecies(item)
@@ -560,11 +582,16 @@ module Compiler
     return pbGetConst(PBSpecies,clonitem,_INTL("Undefined species constant name: [%s]\r\nName must consist only of letters, numbers, and\r\nunderscores and can't begin with a number.\r\nMake sure the name is defined in\r\nPBS/pokemon.txt.\r\n{1}",FileLineData.linereport))
   end
 
-  def parseMove(item)
-    clonitem = item.upcase
-    clonitem.sub!(/^\s*/,"")
-    clonitem.sub!(/\s*$/,"")
-    return pbGetConst(PBMoves,clonitem,_INTL("Undefined move constant name: %s\r\nName must consist only of letters, numbers, and\r\nunderscores and can't begin with a number.\r\nMake sure the name is defined in\r\nPBS/moves.txt.\r\n{1}",FileLineData.linereport))
+  def parseMove(move, skip_unknown = false)
+    clonmove = move.upcase
+    clonmove.sub!(/^\s*/, "")
+    clonmove.sub!(/\s*$/, "")
+    mov = GameData::Move.try_get(clonmove)
+    if !mov
+      return nil if skip_unknown
+      raise _INTL("Undefined move constant name: %s\r\nName must consist only of letters, numbers and\r\nunderscores, and can't begin with a number.\r\nMake sure the move is defined in\r\nPBS/moves.txt.\r\n{1}", move, FileLineData.linereport)
+    end
+    return mov.id.to_s
   end
 
   # Unused
@@ -603,19 +630,19 @@ module Compiler
       yield(_INTL("Compiling move data"))
       compile_moves                  # Depends on PBTypes
       yield(_INTL("Compiling item data"))
-      compile_items                  # Depends on PBMoves
+      compile_items                  # Depends on Move
       yield(_INTL("Compiling berry plant data"))
-      compile_berry_plants           # Depends on PBItems
+      compile_berry_plants           # Depends on Item
       yield(_INTL("Compiling Pokémon data"))
-      compile_pokemon                # Depends on PBMoves, PBItems, PBTypes, PBAbilities
+      compile_pokemon                # Depends on Move, Item, PBTypes, Ability
       yield(_INTL("Compiling Pokémon forms data"))
-      compile_pokemon_forms          # Depends on PBSpecies, PBMoves, PBItems, PBTypes, PBAbilities
+      compile_pokemon_forms          # Depends on PBSpecies, Move, Item, PBTypes, Ability
       yield(_INTL("Compiling machine data"))
-      compile_move_compatibilities   # Depends on PBSpecies, PBMoves
+      compile_move_compatibilities   # Depends on PBSpecies, Move
       yield(_INTL("Compiling Trainer type data"))
       compile_trainer_types          # No dependencies
       yield(_INTL("Compiling Trainer data"))
-      compile_trainers               # Depends on PBSpecies, PBItems, PBMoves
+      compile_trainers               # Depends on PBSpecies, Item, Move
       yield(_INTL("Compiling phone data"))
       compile_phone                  # Depends on PBTrainers
       yield(_INTL("Compiling metadata"))
@@ -625,7 +652,7 @@ module Compiler
       yield(_INTL("Compiling encounter data"))
       compile_encounters             # Depends on PBSpecies
       yield(_INTL("Compiling shadow moveset data"))
-      compile_shadow_movesets        # Depends on PBSpecies, PBMoves
+      compile_shadow_movesets        # Depends on PBSpecies, Move
       yield(_INTL("Compiling animations"))
       compile_animations
       yield(_INTL("Converting events"))
@@ -641,6 +668,7 @@ module Compiler
     if !$INEDITOR && LANGUAGES.length>=2
       pbLoadMessages("Data/"+LANGUAGES[$PokemonSystem.language][1])
     end
+    pbSetWindowText(nil)
   end
 
   def main
@@ -702,26 +730,6 @@ module Compiler
         pbSaveAllData
         mustCompile = true
       end
-      # Check data files and PBS files, and recompile if any PBS file was edited
-      # more recently than the data files were last created
-      for i in 0...dataFiles.length
-        begin
-          File.open("Data/#{dataFiles[i]}") { |file|
-            latestDataTime = [latestDataTime,file.mtime.to_i].max
-          }
-        rescue SystemCallError
-          mustCompile = true
-        end
-      end
-      for i in 0...textFiles.length
-        begin
-          File.open("PBS/#{textFiles[i]}") { |file|
-            latestTextTime = [latestTextTime,file.mtime.to_i].max
-          }
-        rescue SystemCallError
-        end
-      end
-      mustCompile |= (latestTextTime>=latestDataTime)
       # Should recompile if holding Ctrl
       Input.update
       mustCompile = true if Input.press?(Input::CTRL)
@@ -735,7 +743,7 @@ module Compiler
         end
       end
       # Recompile all data
-      compile_all(mustCompile) { |msg| Win32API.SetWindowText(msg) }
+      compile_all(mustCompile) { |msg| pbSetWindowText(msg) }
     rescue Exception
       e = $!
       raise e if "#{e.class}"=="Reset" || e.is_a?(Reset) || e.is_a?(SystemExit)

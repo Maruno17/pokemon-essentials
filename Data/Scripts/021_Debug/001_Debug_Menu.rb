@@ -166,7 +166,7 @@ def pbDebugMenuCommands(showall=true)
   commands.add("main","editorsmenu",_INTL("Information editors..."),
      _INTL("Edit information in the PBS files, terrain tags, battle animations, etc."))
   commands.add("editorsmenu","setmetadata",_INTL("Edit Metadata"),
-     _INTL("Edit global and map-specific metadata."))
+     _INTL("Edit global and map metadata."))
   commands.add("editorsmenu","mapconnections",_INTL("Edit Map Connections"),
      _INTL("Connect maps using a visual interface. Can also edit map encounters/metadata."))
   commands.add("editorsmenu","terraintags",_INTL("Edit Terrain Tags"),
@@ -208,6 +208,8 @@ def pbDebugMenuCommands(showall=true)
     _INTL("Fully compile all data."))
   commands.add("othermenu","debugconsole",_INTL("Debug Console"),
     _INTL("Open the Debug Console."))
+  commands.add("othermenu","invalidtiles",_INTL("Fix Invalid Tiles"),
+    _INTL("Scans all maps and erases non-existent tiles."))
 
   return commands
 end
@@ -366,7 +368,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
     battle = pbListScreen(_INTL("SINGLE TRAINER"),TrainerBattleLister.new(0,false))
     if battle
       trainerdata = battle[1]
-      pbTrainerBattle(trainerdata[0],trainerdata[1],"...",false,trainerdata[4],true)
+      pbTrainerBattle(trainerdata[0],trainerdata[1],nil,false,trainerdata[4],true)
     end
   when "testtrainerbattleadvanced"
     trainers = []
@@ -490,16 +492,17 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
   # Item options
   #=============================================================================
   when "additem"
-    pbListScreenBlock(_INTL("ADD ITEM"),ItemLister.new(0)) { |button,item|
-      if button==Input::C && item && item>0
+    pbListScreenBlock(_INTL("ADD ITEM"),ItemLister.new) { |button,item|
+      if button==Input::C && item
         params = ChooseNumberParams.new
         params.setRange(1,BAG_MAX_PER_SLOT)
         params.setInitialValue(1)
         params.setCancelValue(0)
-        qty = pbMessageChooseNumber(_INTL("Choose the number of items."),params)
+        qty = pbMessageChooseNumber(_INTL("Add how many {1}?",
+           GameData::Item.get(item).name_plural), params)
         if qty>0
           $PokemonBag.pbStoreItem(item,qty)
-          pbMessage(_INTL("Gave {1}x {2}.",qty,PBItems.getName(item)))
+          pbMessage(_INTL("Gave {1}x {2}.",qty,GameData::Item.get(item).name))
         end
       end
     }
@@ -510,14 +513,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
     params.setCancelValue(0)
     qty = pbMessageChooseNumber(_INTL("Choose the number of items."),params)
     if qty>0
-      itemconsts = []
-      for i in PBItems.constants
-        itemconsts.push(PBItems.const_get(i))
-      end
-      itemconsts.sort! { |a,b| a<=>b }
-      for i in itemconsts
-        $PokemonBag.pbStoreItem(i,qty)
-      end
+      GameData::Item.each { |i| $PokemonBag.pbStoreItem(i.id, qty) }
       pbMessage(_INTL("The Bag was filled with {1} of each item.",qty))
     end
   when "emptybag"
@@ -683,7 +679,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
   when "setplayer"
     limit = 0
     for i in 0...8
-      meta = pbGetMetadata(0,Metadata::PLAYER_A+i)
+      meta = GameData::Metadata.get_player(i)
       if !meta
         limit = i; break
       end
@@ -731,6 +727,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
   #=============================================================================
   when "setmetadata"
     pbMetadataScreen(pbDefaultMap)
+    # TODO: Only need to reload the metadata.
     pbClearData
   when "mapconnections"
     pbFadeOutIn { pbConnectionsEditor }
@@ -745,8 +742,9 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
       pbEncounterEditorMap(encdata,map)
     end
     save_data(encdata,"Data/encounters.dat")
+    # TODO: Only need to reload the encounters data.
     pbClearData
-    pbSaveEncounterData
+    pbSaveEncounterData   # Rewrite PBS file encounters.txt
   when "trainertypes"
     pbFadeOutIn { pbTrainerTypeEditor }
   when "edittrainers"
@@ -795,6 +793,8 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
     pbDisposeMessageWindow(msgwindow)
   when "debugconsole"
     Console::setup_console
+  when "invalidtiles"
+    pbDebugFixInvalidTiles
   end
   return false
 end

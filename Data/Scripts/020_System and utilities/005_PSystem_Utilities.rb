@@ -666,7 +666,7 @@ end
 #===============================================================================
 def pbChangePlayer(id)
   return false if id<0 || id>=8
-  meta = pbGetMetadata(0,Metadata::PLAYER_A+id)
+  meta = GameData::Metadata.get_player(id)
   return false if !meta
   $Trainer.trainertype = meta[0] if $Trainer
   $game_player.character_name = meta[1]
@@ -678,7 +678,7 @@ end
 def pbGetPlayerGraphic
   id = $PokemonGlobal.playerID
   return "" if id<0 || id>=8
-  meta = pbGetMetadata(0,Metadata::PLAYER_A+id)
+  meta = GameData::Metadata.get_player(id)
   return "" if !meta
   return pbPlayerSpriteFile(meta[0])
 end
@@ -686,7 +686,7 @@ end
 def pbGetPlayerTrainerType
   id = $PokemonGlobal.playerID
   return 0 if id<0 || id>=8
-  meta = pbGetMetadata(0,Metadata::PLAYER_A+id)
+  meta = GameData::Metadata.get_player(id)
   return 0 if !meta
   return meta[0]
 end
@@ -868,7 +868,7 @@ end
 # no region was defined in the game's metadata. The ID numbers returned by
 # this function depend on the current map's position metadata.
 def pbGetCurrentRegion(defaultRegion=-1)
-  mappos = ($game_map) ? pbGetMetadata($game_map.map_id,MapMetadata::MAP_POSITION) : nil
+  mappos = ($game_map) ? GameData::MapMetadata.get($game_map.map_id).town_map_position : nil
   return (mappos) ? mappos[0] : defaultRegion
 end
 
@@ -982,28 +982,24 @@ def pbTextEntry(helptext,minlength,maxlength,variableNumber)
   $game_map.need_refresh = true if $game_map
 end
 
-def pbMoveTutorAnnotations(move,movelist=nil)
+def pbMoveTutorAnnotations(move, movelist = nil)
   ret = []
-  for i in 0...6
-    ret[i] = nil
-    next if i>=$Trainer.party.length
-    found = false
-    for j in 0...4
-      if !$Trainer.party[i].egg? && $Trainer.party[i].moves[j].id==move
-        ret[i] = _INTL("LEARNED")
-        found = true
-      end
-    end
-    next if found
-    species = $Trainer.party[i].species
-    if !$Trainer.party[i].egg? && movelist && movelist.any? { |j| j==species }
-      # Checked data from movelist
-      ret[i] = _INTL("ABLE")
-    elsif !$Trainer.party[i].egg? && $Trainer.party[i].compatibleWithMove?(move)
-      # Checked data from PBS/tm.txt
-      ret[i] = _INTL("ABLE")
-    else
+  $Trainer.party.each_with_index do |pkmn, i|
+    if pkmn.egg?
       ret[i] = _INTL("NOT ABLE")
+    elsif pkmn.hasMove?(move)
+      ret[i] = _INTL("LEARNED")
+    else
+      species = pkmn.species
+      if movelist && movelist.any? { |j| j == species }
+        # Checked data from movelist given in parameter
+        ret[i] = _INTL("ABLE")
+      elsif pkmn.compatibleWithMove?(move)
+        # Checked data from PBS/tm.txt
+        ret[i] = _INTL("ABLE")
+      else
+        ret[i] = _INTL("NOT ABLE")
+      end
     end
   end
   return ret
@@ -1011,14 +1007,14 @@ end
 
 def pbMoveTutorChoose(move,movelist=nil,bymachine=false)
   ret = false
-  move = getID(PBMoves,move)
+  move = GameData::Move.get(move).id
   if movelist!=nil && movelist.is_a?(Array)
     for i in 0...movelist.length
-      movelist[i] = getID(PBSpecies,movelist[i])
+      movelist[i] = GameData::Move.get(movelist[i]).id
     end
   end
   pbFadeOutIn {
-    movename = PBMoves.getName(move)
+    movename = GameData::Move.get(move).name
     annot = pbMoveTutorAnnotations(move,movelist)
     scene = PokemonParty_Scene.new
     screen = PokemonPartyScreen.new(scene,$Trainer.party)
@@ -1053,33 +1049,32 @@ def pbChooseMove(pokemon,variableNumber,nameVarNumber)
   pbFadeOutIn {
     scene = PokemonSummary_Scene.new
     screen = PokemonSummaryScreen.new(scene)
-    ret = screen.pbStartForgetScreen([pokemon],0,0)
+    ret = screen.pbStartForgetScreen([pokemon],0,nil)
   }
   $game_variables[variableNumber] = ret
   if ret>=0
-    $game_variables[nameVarNumber] = PBMoves.getName(pokemon.moves[ret].id)
+    $game_variables[nameVarNumber] = pokemon.moves[ret].name
   else
     $game_variables[nameVarNumber] = ""
   end
   $game_map.need_refresh = true if $game_map
 end
 
-def pbConvertItemToItem(variable,array)
-  item = pbGet(variable)
-  pbSet(variable,0)
+def pbConvertItemToItem(variable, array)
+  item = GameData::Item.get(pbGet(variable))
+  pbSet(variable, nil)
   for i in 0...(array.length/2)
-    if isConst?(item,PBItems,array[2*i])
-      pbSet(variable,getID(PBItems,array[2*i+1]))
-      return
-    end
+    next if item != array[2 * i]
+    pbSet(variable, array[2 * i + 1])
+    return
   end
 end
 
 def pbConvertItemToPokemon(variable,array)
-  item = pbGet(variable)
-  pbSet(variable,0)
+  item = GameData::Item.get(pbGet(variable))
+  pbSet(variable, 0)
   for i in 0...(array.length/2)
-    next if !isConst?(item,PBItems,array[2*i])
+    next if item != array[2 * i]
     pbSet(variable,getID(PBSpecies,array[2*i+1]))
     return
   end

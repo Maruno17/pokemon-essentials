@@ -9,7 +9,7 @@ class PokeBattle_Move
   attr_reader   :category
   attr_reader   :accuracy
   attr_accessor :pp
-  attr_writer   :totalpp
+  attr_writer   :total_pp
   attr_reader   :addlEffect
   attr_reader   :target
   attr_reader   :priority
@@ -23,23 +23,22 @@ class PokeBattle_Move
   #=============================================================================
   # Creating a move
   #=============================================================================
-  def initialize(battle,move)
+  def initialize(battle, move)
     @battle     = battle
     @realMove   = move
     @id         = move.id
-    @name       = PBMoves.getName(@id)   # Get the move's name
+    @name       = move.name   # Get the move's name
     # Get data on the move
-    moveData = pbGetMoveData(@id)
-    @function   = moveData[MoveData::FUNCTION_CODE]
-    @baseDamage = moveData[MoveData::BASE_DAMAGE]
-    @type       = moveData[MoveData::TYPE]
-    @category   = moveData[MoveData::CATEGORY]
-    @accuracy   = moveData[MoveData::ACCURACY]
+    @function   = move.function_code
+    @baseDamage = move.base_damage
+    @type       = move.type
+    @category   = move.category
+    @accuracy   = move.accuracy
     @pp         = move.pp   # Can be changed with Mimic/Transform
-    @addlEffect = moveData[MoveData::EFFECT_CHANCE]
-    @target     = moveData[MoveData::TARGET]
-    @priority   = moveData[MoveData::PRIORITY]
-    @flags      = moveData[MoveData::FLAGS]
+    @addlEffect = move.effect_chance
+    @target     = move.target
+    @priority   = move.priority
+    @flags      = move.flags
     @calcType   = -1
     @powerBoost = false   # For Aerilate, Pixilate, Refrigerate, Galvanize
     @snatched   = false
@@ -48,14 +47,14 @@ class PokeBattle_Move
   # This is the code actually used to generate a PokeBattle_Move object. The
   # object generated is a subclass of this one which depends on the move's
   # function code (found in the script section PokeBattle_MoveEffect).
-  def PokeBattle_Move.pbFromPBMove(battle,move)
-    move = PBMove.new(0) if !move
-    moveFunction = pbGetMoveData(move.id,MoveData::FUNCTION_CODE) || "000"
-    className = sprintf("PokeBattle_Move_%s",moveFunction)
+  def PokeBattle_Move.pbFromPBMove(battle, move)
+    validate move => PBMove
+    moveFunction = move.function_code || "000"
+    className = sprintf("PokeBattle_Move_%s", moveFunction)
     if Object.const_defined?(className)
-      return Object.const_get(className).new(battle,move)
+      return Object.const_get(className).new(battle, move)
     end
-    return PokeBattle_UnimplementedMove.new(battle,move)
+    return PokeBattle_UnimplementedMove.new(battle, move)
   end
 
   #=============================================================================
@@ -63,9 +62,9 @@ class PokeBattle_Move
   #=============================================================================
   def pbTarget(_user); return @target; end
 
-  def totalpp
-    return @totalpp if @totalpp && @totalpp>0   # Usually undefined
-    return @realMove.totalpp if @realMove
+  def total_pp
+    return @total_pp if @total_pp && @total_pp>0   # Usually undefined
+    return @realMove.total_pp if @realMove
     return 0
   end
 

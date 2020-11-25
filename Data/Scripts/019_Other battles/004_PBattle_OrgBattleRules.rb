@@ -333,15 +333,12 @@ class BannedItemRestriction
   end
 
   def isSpecies?(species,specieslist)
-    for s in specieslist
-      return true if isConst?(species,PBItems,s)
-    end
-    return false
+    return specieslist.any? { |s| species == s }
   end
 
   def isValid?(pokemon)
     count=0
-    if pokemon.item!=0 && isSpecies?(pokemon.item,@specieslist)
+    if pokemon.item && isSpecies?(pokemon.item,@specieslist)
       count+=1
     end
     return count==0
@@ -399,8 +396,7 @@ class StandardRestriction
     abilities = pbGetSpeciesData(pokemon.species,pokemon.form,SpeciesData::ABILITIES)
     abilities = [abilities] if !abilities.is_a?(Array)
     abilities.each do |a|
-      return true if isConst?(a,PBAbilities,:TRUANT) ||
-                     isConst?(a,PBAbilities,:SLOWSTART)
+      return true if [:TRUANT, :SLOWSTART].include?(a)
     end
     # Certain named species are not banned
     speciesWhitelist = [:DRAGONITE,:SALAMENCE,:TYRANITAR]

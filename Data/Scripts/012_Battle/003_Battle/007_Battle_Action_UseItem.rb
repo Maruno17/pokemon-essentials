@@ -20,7 +20,7 @@ class PokeBattle_Battle
   #       below is one half of making this happen; the other half is in the
   #       ItemHandlers::CanUseInBattle for Poké Balls.
   def pbItemUsesAllActions?(item)
-    return true if pbIsPokeBall?(item)
+    return true if GameData::Item.get(item).is_poke_ball?
     return false
   end
 
@@ -40,9 +40,9 @@ class PokeBattle_Battle
   # Using an item
   #=============================================================================
   def pbConsumeItemInBag(item,idxBattler)
-    return if item==0
-    useType = pbGetItemData(item,ItemData::BATTLE_USE)
-    return if !useType || useType==0 || (useType>=6 && useType<=10)   # Not consumed upon use
+    return if !item
+    useType = GameData::Item.get(item).battle_use
+    return if useType==0 || (useType>=6 && useType<=10)   # Not consumed upon use
     if pbOwnedByPlayer?(idxBattler)
       if !$PokemonBag.pbDeleteItem(item)
         raise _INTL("Tried to consume item that wasn't in the Bag somehow.")
@@ -59,9 +59,9 @@ class PokeBattle_Battle
   end
 
   def pbReturnUnusedItemToBag(item,idxBattler)
-    return if item==0
-    useType = pbGetItemData(item,ItemData::BATTLE_USE)
-    return if !useType || useType==0 || (useType>=6 && useType<=10)   # Not consumed upon use
+    return if item!
+    useType = GameData::Item.get(item).battle_use
+    return if useType==0 || (useType>=6 && useType<=10)   # Not consumed upon use
     if pbOwnedByPlayer?(idxBattler)
       if $PokemonBag && $PokemonBag.pbCanStore?(item)
         $PokemonBag.pbStoreItem(item)
@@ -75,7 +75,7 @@ class PokeBattle_Battle
   end
 
   def pbUseItemMessage(item,trainerName)
-    itemName = PBItems.getName(item)
+    itemName = GameData::Item.get(item).name
     if itemName.starts_with_vowel?
       pbDisplayBrief(_INTL("{1} used an {2}.",trainerName,itemName))
     else
@@ -83,7 +83,7 @@ class PokeBattle_Battle
     end
   end
 
-  # Uses an item on a Pokémon in the player's party.
+  # Uses an item on a Pokémon in the trainer's party.
   def pbUseItemOnPokemon(item,idxParty,userBattler)
     trainerName = pbGetOwnerName(userBattler.index)
     pbUseItemMessage(item,trainerName)
@@ -92,7 +92,7 @@ class PokeBattle_Battle
     ch = @choices[userBattler.index]
     if ItemHandlers.triggerCanUseInBattle(item,pkmn,battler,ch[3],true,self,@scene,false)
       ItemHandlers.triggerBattleUseOnPokemon(item,pkmn,battler,ch,@scene)
-      ch[1] = 0   # Delete item from choice
+      ch[1] = nil   # Delete item from choice
       return
     end
     pbDisplay(_INTL("But it had no effect!"))
@@ -100,16 +100,16 @@ class PokeBattle_Battle
     pbReturnUnusedItemToBag(item,userBattler.index)
   end
 
-  # Uses an item on a Pokémon in battle that belongs to the player.
-  def pbUseItemOnBattler(item,idxParty,userBattler)
+  # Uses an item on a Pokémon in battle that belongs to the trainer.
+  def pbUseItemOnBattler(item,idxBattler,userBattler)
     trainerName = pbGetOwnerName(userBattler.index)
     pbUseItemMessage(item,trainerName)
-    pkmn = pbParty(userBattler.index)[idxParty]
-    battler = pbFindBattler(idxParty,userBattler.index)
+    idxBattler = userBattler.index if idxBattler<0
+    battler = @battlers[idxBattler]
     ch = @choices[userBattler.index]
-    if ItemHandlers.triggerCanUseInBattle(item,pkmn,battler,ch[3],true,self,@scene,false)
+    if ItemHandlers.triggerCanUseInBattle(item,battler.pokemon,battler,ch[3],true,self,@scene,false)
       ItemHandlers.triggerBattleUseOnBattler(item,battler,@scene)
-      ch[1] = 0   # Delete item from choice
+      ch[1] = nil   # Delete item from choice
       return
     end
     pbDisplay(_INTL("But it's not where this item can be used!"))
@@ -122,7 +122,7 @@ class PokeBattle_Battle
     idxBattler = userBattler.index if idxBattler<0
     battler = @battlers[idxBattler]
     ItemHandlers.triggerUseInBattle(item,battler,self)
-    @choices[userBattler.index][1] = 0   # Delete item from choice
+    @choices[userBattler.index][1] = nil   # Delete item from choice
   end
 
   # Uses an item in battle directly.
@@ -134,7 +134,7 @@ class PokeBattle_Battle
     ch = @choices[userBattler.index]
     if ItemHandlers.triggerCanUseInBattle(item,pkmn,battler,ch[3],true,self,@scene,false)
       ItemHandlers.triggerUseInBattle(item,battler,self)
-      ch[1] = 0   # Delete item from choice
+      ch[1] = nil   # Delete item from choice
       return
     end
     pbDisplay(_INTL("But it had no effect!"))

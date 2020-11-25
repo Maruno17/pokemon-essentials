@@ -51,7 +51,7 @@ class MoveRelearner_Scene
     @pokemon=pokemon
     @moves=moves
     moveCommands=[]
-    moves.each { |m| moveCommands.push(PBMoves.getName(m)) }
+    moves.each { |m| moveCommands.push(GameData::Move.get(m).name) }
     # Create sprite hash
     @viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z=99999
@@ -81,7 +81,6 @@ class MoveRelearner_Scene
   end
 
   def pbDrawMoveList
-    movesData = pbLoadMovesData
     overlay=@sprites["overlay"].bitmap
     overlay.clear
     type1rect=Rect.new(0,@pokemon.type1*28,64,28)
@@ -100,19 +99,13 @@ class MoveRelearner_Scene
     for i in 0...VISIBLEMOVES
       moveobject=@moves[@sprites["commands"].top_item+i]
       if moveobject
-        moveData=movesData[moveobject]
-        if moveData
-          imagepos.push(["Graphics/Pictures/types",12,yPos+2,0,
-             moveData[MoveData::TYPE]*28,64,28])
-          textpos.push([PBMoves.getName(moveobject),80,yPos,0,
-             Color.new(248,248,248),Color.new(0,0,0)])
-          if moveData[MoveData::TOTAL_PP]>0
-            textpos.push([_INTL("PP"),112,yPos+32,0,
-               Color.new(64,64,64),Color.new(176,176,176)])
-            textpos.push([_INTL("{1}/{2}",
-               moveData[MoveData::TOTAL_PP],moveData[MoveData::TOTAL_PP]),230,yPos+32,1,
-               Color.new(64,64,64),Color.new(176,176,176)])
-          end
+        moveData=GameData::Move.get(moveobject)
+        imagepos.push(["Graphics/Pictures/types",12,yPos+2,0,moveData.type*28,64,28])
+        textpos.push([moveData.name,80,yPos,0,Color.new(248,248,248),Color.new(0,0,0)])
+        if moveData.total_pp>0
+          textpos.push([_INTL("PP"),112,yPos+32,0,Color.new(64,64,64),Color.new(176,176,176)])
+          textpos.push([_INTL("{1}/{1}",moveData.total_pp),230,yPos+32,1,
+             Color.new(64,64,64),Color.new(176,176,176)])
         else
           textpos.push(["-",80,yPos,0,Color.new(64,64,64),Color.new(176,176,176)])
           textpos.push(["--",228,yPos+32,1,Color.new(64,64,64),Color.new(176,176,176)])
@@ -123,10 +116,10 @@ class MoveRelearner_Scene
     imagepos.push(["Graphics/Pictures/reminderSel",
        0,78+(@sprites["commands"].index-@sprites["commands"].top_item)*64,
        0,0,258,72])
-    selMoveData=movesData[@moves[@sprites["commands"].index]]
-    basedamage=selMoveData[MoveData::BASE_DAMAGE]
-    category=selMoveData[MoveData::CATEGORY]
-    accuracy=selMoveData[MoveData::ACCURACY]
+    selMoveData=GameData::Move.get(@moves[@sprites["commands"].index])
+    basedamage=selMoveData.base_damage
+    category=selMoveData.category
+    accuracy=selMoveData.accuracy
     textpos.push([_INTL("CATEGORY"),272,114,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([_INTL("POWER"),272,146,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([basedamage<=1 ? basedamage==1 ? "???" : "---" : sprintf("%d",basedamage),
@@ -143,8 +136,7 @@ class MoveRelearner_Scene
       imagepos.push(["Graphics/Pictures/reminderButtons",134,350,76,0,76,32])
     end
     pbDrawImagePositions(overlay,imagepos)
-    drawTextEx(overlay,272,210,230,5,
-       pbGetMessage(MessageTypes::MoveDescriptions,@moves[@sprites["commands"].index]),
+    drawTextEx(overlay,272,210,230,5,selMoveData.description,
        Color.new(64,64,64),Color.new(176,176,176))
   end
 
@@ -193,19 +185,16 @@ class MoveRelearnerScreen
     @scene.pbStartScene(pokemon,moves)
     loop do
       move=@scene.pbChooseMove
-      if move<=0
-        if @scene.pbConfirm(
-          _INTL("Give up trying to teach a new move to {1}?",pokemon.name))
-          @scene.pbEndScene
-          return false
-        end
-      else
-        if @scene.pbConfirm(_INTL("Teach {1}?",PBMoves.getName(move)))
+      if move
+        if @scene.pbConfirm(_INTL("Teach {1}?",GameData::Move.get(move).name))
           if pbLearnMove(pokemon,move)
             @scene.pbEndScene
             return true
           end
         end
+      elsif @scene.pbConfirm(_INTL("Give up trying to teach a new move to {1}?",pokemon.name))
+        @scene.pbEndScene
+        return false
       end
     end
   end

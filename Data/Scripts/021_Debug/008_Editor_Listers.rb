@@ -376,9 +376,9 @@ end
 
 
 class ItemLister
-  def initialize(selection,includeNew=false)
+  def initialize(selection=0,includeNew=false)
     @sprite = IconSprite.new(0,0)
-    @sprite = ItemIconSprite.new(Graphics.width*3/4,Graphics.height/2,-1)
+    @sprite = ItemIconSprite.new(Graphics.width*3/4,Graphics.height/2,nil)
     @sprite.z = 2
     @selection = selection
     @commands = []
@@ -404,23 +404,18 @@ class ItemLister
   def commands   # Sorted alphabetically
     @commands.clear
     @ids.clear
-    @itemdata = pbLoadItemsData
     cmds = []
-    for i in 1..PBItems.maxValue
-      next if !@itemdata[i]
-      name = @itemdata[i][ItemData::NAME]
-      if name && name!="" && @itemdata[i][ItemData::POCKET]!=0
-        cmds.push([i,name])
-      end
+    GameData::Item.each do |item|
+      cmds.push([item.id_number, item.id, item.real_name])
     end
-    cmds.sort! { |a,b| a[1]<=>b[1] }
+    cmds.sort! { |a, b| a[2].downcase <=> b[2].downcase }
     if @includeNew
       @commands.push(_INTL("[NEW ITEM]"))
-      @ids.push(-1)
+      @ids.push(true)
     end
     for i in cmds
-      @commands.push(sprintf("%03d: %s",i[0],i[1]))
-      @ids.push(i[0])
+      @commands.push(sprintf("%03d: %s", i[0], i[2]))
+      @ids.push(i[1])
     end
     @index = @selection
     @index = @commands.length-1 if @index>=@commands.length
@@ -434,7 +429,7 @@ class ItemLister
   end
 
   def refresh(index)
-    @sprite.item = @ids[index]
+    @sprite.item = (@ids[index].is_a?(Symbol)) ? @ids[index] : nil
   end
 end
 

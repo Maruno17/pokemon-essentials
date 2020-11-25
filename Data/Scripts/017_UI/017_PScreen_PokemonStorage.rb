@@ -413,7 +413,8 @@ class PokemonBoxSprite < SpriteWrapper
       pbSetSystemFont(@contents)
       widthval = @contents.text_size(boxname).width
       xval = 162-(widthval/2)
-      pbDrawShadowText(@contents,xval,8,widthval,32,boxname,Color.new(248,248,248),Color.new(40,48,48))
+      pbDrawShadowText(@contents,xval,8 + 6,widthval,32,
+         boxname,Color.new(248,248,248),Color.new(40,48,48))
       @refreshBox = false
     end
     yval = self.y+30
@@ -536,7 +537,7 @@ class PokemonBoxPartySprite < SpriteWrapper
   def refresh
     @contents.blt(0,0,@boxbitmap.bitmap,Rect.new(0,0,172,352))
     pbDrawTextPositions(self.bitmap,[
-       [_INTL("Back"),86,242,2,Color.new(248,248,248),Color.new(80,80,80),1]
+       [_INTL("Back"),86,240,2,Color.new(248,248,248),Color.new(80,80,80),1]
     ])
 
     xvalues = [18,90,18,90,18,90]
@@ -1205,11 +1206,11 @@ class PokemonStorageScene
   end
 
   def pbChooseItem(bag)
-    ret = 0
+    ret = nil
     pbFadeOutIn {
       scene = PokemonBag_Scene.new
       screen = PokemonBagScreen.new(scene,bag)
-      ret = screen.pbChooseItemScreen(Proc.new { |item| pbCanHoldItem?(item) })
+      ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).can_hold? })
     }
     return ret
   end
@@ -1384,8 +1385,8 @@ class PokemonStorageScene
     buttonbase = Color.new(248,248,248)
     buttonshadow = Color.new(80,80,80)
     pbDrawTextPositions(overlay,[
-       [_INTL("Party: {1}",(@storage.party.length rescue 0)),270,328,2,buttonbase,buttonshadow,1],
-       [_INTL("Exit"),446,328,2,buttonbase,buttonshadow,1],
+       [_INTL("Party: {1}",(@storage.party.length rescue 0)),270,326,2,buttonbase,buttonshadow,1],
+       [_INTL("Exit"),446,326,2,buttonbase,buttonshadow,1],
     ])
     pokemon = nil
     if @screen.pbHeldPokemon
@@ -1415,13 +1416,13 @@ class PokemonStorageScene
       end
       imagepos.push(["Graphics/Pictures/Storage/overlay_lv",6,246])
       textstrings.push([pokemon.level.to_s,28,234,false,base,shadow])
-      if pokemon.ability>0
-        textstrings.push([PBAbilities.getName(pokemon.ability),86,306,2,base,shadow])
+      if pokemon.ability
+        textstrings.push([pokemon.ability.name,86,306,2,base,shadow])
       else
         textstrings.push([_INTL("No ability"),86,306,2,nonbase,nonshadow])
       end
-      if pokemon.item>0
-        textstrings.push([PBItems.getName(pokemon.item),86,342,2,base,shadow])
+      if pokemon.item
+        textstrings.push([pokemon.item.name,86,342,2,base,shadow])
       else
         textstrings.push([_INTL("No item"),86,342,2,nonbase,nonshadow])
       end
@@ -1839,11 +1840,10 @@ class PokemonStorageScreen
   def pbChooseMove(pkmn,helptext,index=0)
     movenames = []
     for i in pkmn.moves
-      break if i.id==0
-      if i.totalpp<=0
-        movenames.push(_INTL("{1} (PP: ---)",PBMoves.getName(i.id)))
+      if i.total_pp<=0
+        movenames.push(_INTL("{1} (PP: ---)",i.name))
       else
-        movenames.push(_INTL("{1} (PP: {2}/{3})",PBMoves.getName(i.id),i.pp,i.totalpp))
+        movenames.push(_INTL("{1} (PP: {2}/{3})",i.name,i.pp,i.total_pp))
       end
     end
     return @scene.pbShowCommands(helptext,movenames,index)
@@ -1868,21 +1868,21 @@ class PokemonStorageScreen
       pbDisplay(_INTL("Please remove the mail."))
       return
     end
-    if pokemon.item>0
-      itemname = PBItems.getName(pokemon.item)
+    if pokemon.item
+      itemname = pokemon.item.name
       if pbConfirm(_INTL("Take this {1}?",itemname))
         if !$PokemonBag.pbStoreItem(pokemon.item)
           pbDisplay(_INTL("Can't store the {1}.",itemname))
         else
           pbDisplay(_INTL("Took the {1}.",itemname))
-          pokemon.setItem(0)
+          pokemon.setItem(nil)
           @scene.pbHardRefresh
         end
       end
     else
       item = scene.pbChooseItem($PokemonBag)
-      if item>0
-        itemname = PBItems.getName(item)
+      if item
+        itemname = GameData::Item.get(item).name
         pokemon.setItem(item)
         $PokemonBag.pbDeleteItem(item)
         pbDisplay(_INTL("{1} is now being held.",itemname))

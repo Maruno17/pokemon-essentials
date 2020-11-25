@@ -99,7 +99,7 @@ end
 Events.onMapChange += proc { |_sender,e|
   oldMapID = e[0]
   # Get and compare map names
-  mapInfos = $RPGVX ? load_data("Data/MapInfos.rvdata") : load_data("Data/MapInfos.rxdata")
+  mapInfos = load_data("Data/MapInfos.rxdata")
   next if mapInfos && oldMapID>0 && mapInfos[oldMapID] &&
      mapInfos[oldMapID].name && $game_map.name==mapInfos[oldMapID].name
   # Make roaming Pokémon roam
@@ -183,7 +183,8 @@ EncounterModifier.register(proc { |encounter|
     # are in the same region
     if roamerMap!=$game_map.map_id
       currentRegion = pbGetCurrentRegion
-      next if pbGetMetadata(roamerMap,MapMetadata::MAP_POSITION)[0]!=currentRegion
+      map_position = GameData::MapMetadata.get(roamerMap).town_map_position
+      next if !map_position || map_position[0] != currentRegion
       currentMapName = pbGetMessage(MessageTypes::MapNames,$game_map.map_id)
       next if pbGetMessage(MessageTypes::MapNames,roamerMap)!=currentMapName
     end

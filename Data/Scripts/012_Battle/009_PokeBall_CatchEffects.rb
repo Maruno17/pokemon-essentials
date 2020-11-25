@@ -27,22 +27,18 @@ $BallTypes = {
   25 => :BEASTBALL
 }
 
-def pbBallTypeToItem(balltype)
-  if $BallTypes[balltype]
-    ret = getID(PBItems,$BallTypes[balltype])
-    return ret if ret!=0
-  end
-  if $BallTypes[0]
-    ret = getID(PBItems,$BallTypes[0])
-    return ret if ret!=0
-  end
-  return getID(PBItems,:POKEBALL)
+def pbBallTypeToItem(ball_type)
+  ret = GameData::Item.try_get($BallTypes[ball_type])
+  return ret if ret
+  ret = GameData::Item.try_get($BallTypes[0])
+  return ret if ret
+  return GameData::Item.get(:POKEBALL)
 end
 
 def pbGetBallType(ball)
-  ball = getID(PBItems,ball)
+  ball = GameData::Item.try_get(ball)
   $BallTypes.keys.each do |key|
-    return key if isConst?(ball,PBItems,$BallTypes[key])
+    return key if ball == $BallTypes[key]
   end
   return 0
 end
@@ -206,8 +202,8 @@ BallHandlers::ModifyCatchRate.add(:MOONBALL,proc { |ball,catchRate,battle,battle
   # NOTE: Moon Ball cares about whether any species in the target's evolutionary
   #       family can evolve with the Moon Stone, not whether the target itself
   #       can immediately evolve with the Moon Stone.
-  if hasConst?(PBItems,:MOONSTONE) &&
-     pbCheckEvolutionFamilyForItemMethodItem(battler.species,getConst(PBItems,:MOONSTONE))
+  moon_stone = GameData::Item.try_get(:MOONSTONE)
+  if moon_stone && pbCheckEvolutionFamilyForItemMethodItem(battler.species, moon_stone.id)
     catchRate *= 4
   end
   next [catchRate,255].min

@@ -266,16 +266,16 @@ class Interpreter
     when 402; return command_402   # When [**]
     when 403; return command_403   # When Cancel
     when 103; return command_103   # Input Number
-    when 104; return command_104   # Change Text Options [not in VX]
-    when 105; return command_105   # Button Input Processing [not in VX]
-    when 106; return command_106   # Wait [in VX: 230]
+    when 104; return command_104   # Change Text Options
+    when 105; return command_105   # Button Input Processing
+    when 106; return command_106   # Wait
     when 111; return command_111   # Conditional Branch
     when 411; return command_411   # Else
     when 112; return command_112   # Loop
     when 413; return command_413   # Repeat Above
     when 113; return command_113   # Break Loop
     when 115; return command_115   # Exit Event Processing
-    when 116; return command_116   # Erase Event [in VX: 214]
+    when 116; return command_116   # Erase Event
     when 117; return command_117   # Call Common Event
     when 118; return command_118   # Label
     when 119; return command_119   # Jump to Label
@@ -288,7 +288,7 @@ class Interpreter
     when 127; return command_127   # Change Weapons
     when 128; return command_128   # Change Armor
     when 129; return command_129   # Change Party Member
-    when 131; return command_131   # Change Windowskin [not in VX]
+    when 131; return command_131   # Change Windowskin
     when 132; return command_132   # Change Battle BGM
     when 133; return command_133   # Change Battle End ME
     when 134; return command_134   # Change Save Access
@@ -298,14 +298,14 @@ class Interpreter
     when 202; return command_202   # Set Event Location
     when 203; return command_203   # Scroll Map
     when 204; return command_204   # Change Map Settings
-    when 205; return command_205   # Change Fog Color Tone [in VX: Set Move Route]
-    when 206; return command_206   # Change Fog Opacity [in VX: Get on/off Vehicle]
-    when 207; return command_207   # Show Animation [in VX: 212]
-    when 208; return command_208   # Change Transparent Flag [in VX: 211]
-    when 209; return command_209   # Set Move Route [in VX: 205]
+    when 205; return command_205   # Change Fog Color Tone
+    when 206; return command_206   # Change Fog Opacity
+    when 207; return command_207   # Show Animation
+    when 208; return command_208   # Change Transparent Flag
+    when 209; return command_209   # Set Move Route
     when 210; return command_210   # Wait for Move's Completion
-    when 221; return command_221   # Prepare for Transition [Not in VX, now called Fadeout Screen]
-    when 222; return command_222   # Execute Transition [Not in VX, now called Fadein Screen]
+    when 221; return command_221   # Prepare for Transition
+    when 222; return command_222   # Execute Transition
     when 223; return command_223   # Change Screen Color Tone
     when 224; return command_224   # Screen Flash
     when 225; return command_225   # Screen Shake
@@ -319,8 +319,8 @@ class Interpreter
     when 242; return command_242   # Fade Out BGM
     when 245; return command_245   # Play BGS
     when 246; return command_246   # Fade Out BGS
-    when 247; return command_247   # Memorize BGM/BGS [not in VX]
-    when 248; return command_248   # Restore BGM/BGS [not in VX]
+    when 247; return command_247   # Memorize BGM/BGS
+    when 248; return command_248   # Restore BGM/BGS
     when 249; return command_249   # Play ME
     when 250; return command_250   # Play SE
     when 251; return command_251   # Stop SE

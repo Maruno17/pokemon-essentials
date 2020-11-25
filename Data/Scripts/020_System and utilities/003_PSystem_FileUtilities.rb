@@ -259,19 +259,18 @@ end
 
 #===============================================================================
 # Load item icons
+# TODO: Put these methods into GameData::Item.
 #===============================================================================
 def pbItemIconFile(item)
-  return nil if !item
   bitmapFileName = nil
-  if item==0
-    bitmapFileName = sprintf("Graphics/Icons/itemBack")
-  else
-    bitmapFileName = sprintf("Graphics/Icons/item%s",getConstantName(PBItems,item)) rescue nil
+  if item
+    itm = GameData::Item.get(item)
+    bitmapFileName = sprintf("Graphics/Icons/item%s",itm.id.to_s) rescue nil
     if !pbResolveBitmap(bitmapFileName)
-      bitmapFileName = sprintf("Graphics/Icons/item%03d",item)
-      if !pbResolveBitmap(bitmapFileName) && pbIsMachine?(item)
-        move = pbGetMachine(item)
-        type = pbGetMoveData(move,MoveData::TYPE)
+      bitmapFileName = sprintf("Graphics/Icons/item%03d",itm.id_number)
+      if !pbResolveBitmap(bitmapFileName) && itm.is_machine?
+        move = itm.move
+        type = GameData::Move.get(move).type
         bitmapFileName = sprintf("Graphics/Icons/itemMachine%s",getConstantName(PBTypes,type)) rescue nil
         if !pbResolveBitmap(bitmapFileName)
           bitmapFileName = sprintf("Graphics/Icons/itemMachine%03d",type)
@@ -279,14 +278,16 @@ def pbItemIconFile(item)
       end
       bitmapFileName = "Graphics/Icons/item000" if !pbResolveBitmap(bitmapFileName)
     end
+  else
+    bitmapFileName = sprintf("Graphics/Icons/itemBack")
   end
   return bitmapFileName
 end
 
 def pbHeldItemIconFile(item)   # Used in the party screen
   return nil if !item || item==0
-  namebase = (pbIsMail?(item)) ? "mail" : "item"
-  bitmapFileName = sprintf("Graphics/Pictures/Party/icon_%s_%s",namebase,getConstantName(PBItems,item)) rescue nil
+  namebase = (GameData::Item.get(item).is_mail?) ? "mail" : "item"
+  bitmapFileName = sprintf("Graphics/Pictures/Party/icon_%s_%s",namebase,GameData::Item.get(item).id.to_s) rescue nil
   if !pbResolveBitmap(bitmapFileName)
     bitmapFileName = sprintf("Graphics/Pictures/Party/icon_%s_%03d",namebase,item)
     if !pbResolveBitmap(bitmapFileName)
@@ -303,7 +304,7 @@ end
 #===============================================================================
 def pbMailBackFile(item)
   return nil if !item
-  bitmapFileName = sprintf("Graphics/Pictures/Mail/mail_%s",getConstantName(PBItems,item)) rescue nil
+  bitmapFileName = sprintf("Graphics/Pictures/Mail/mail_%s",GameData::Item.get(item).id.to_s) rescue nil
   if !pbResolveBitmap(bitmapFileName)
     bitmapFileName = sprintf("Graphics/Pictures/Mail/mail_%03d",item)
   end
@@ -531,13 +532,13 @@ def pbGetWildBattleBGM(_wildParty)   # wildParty is an array of Pokémon objects
   end
   ret = nil
   if !ret
-    # Check map-specific metadata
-    music = pbGetMetadata($game_map.map_id,MapMetadata::WILD_BATTLE_BGM)
+    # Check map metadata
+    music = GameData::MapMetadata.get($game_map.map_id).wild_battle_BGM
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   if !ret
     # Check global metadata
-    music = pbGetMetadata(0,Metadata::WILD_BATTLE_BGM)
+    music = GameData::Metadata.get.wild_battle_BGM
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   ret = pbStringToAudioFile("Battle wild") if !ret
@@ -550,13 +551,13 @@ def pbGetWildVictoryME
   end
   ret = nil
   if !ret
-    # Check map-specific metadata
-    music = pbGetMetadata($game_map.map_id,MapMetadata::WILD_VICTORY_ME)
+    # Check map metadata
+    music = GameData::MapMetadata.get($game_map.map_id).wild_victory_ME
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   if !ret
     # Check global metadata
-    music = pbGetMetadata(0,Metadata::WILD_VICTORY_ME)
+    music = GameData::Metadata.get.wild_victory_ME
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   ret = pbStringToAudioFile("Battle victory") if !ret
@@ -570,13 +571,13 @@ def pbGetWildCaptureME
   end
   ret = nil
   if !ret
-    # Check map-specific metadata
-    music = pbGetMetadata($game_map.map_id,MapMetadata::WILD_CAPTURE_ME)
+    # Check map metadata
+    music = GameData::MapMetadata.get($game_map.map_id).wild_capture_ME
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   if !ret
     # Check global metadata
-    music = pbGetMetadata(0,Metadata::WILD_CAPTURE_ME)
+    music = GameData::Metadata.get.wild_capture_ME
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   ret = pbStringToAudioFile("Battle capture success") if !ret
@@ -610,15 +611,15 @@ def pbGetTrainerBattleBGM(trainer)   # can be a PokeBattle_Trainer or an array o
   end
   ret = pbStringToAudioFile(music) if music && music!=""
   if !ret
-    # Check map-specific metadata
-    music = pbGetMetadata($game_map.map_id,MapMetadata::TRAINER_BATTLE_BGM)
+    # Check map metadata
+    music = GameData::MapMetadata.get($game_map.map_id).trainer_battle_BGM
     if music && music!=""
       ret = pbStringToAudioFile(music)
     end
   end
   if !ret
     # Check global metadata
-    music = pbGetMetadata(0,Metadata::TRAINER_BATTLE_BGM)
+    music = GameData::Metadata.get.trainer_battle_BGM
     if music && music!=""
       ret = pbStringToAudioFile(music)
     end
@@ -634,13 +635,13 @@ def pbGetTrainerBattleBGMFromType(trainertype)
   data = pbGetTrainerTypeData(trainertype)
   ret = pbStringToAudioFile(data[4]) if data && data[4]
   if !ret
-    # Check map-specific metadata
-    music = pbGetMetadata($game_map.map_id,MapMetadata::TRAINER_BATTLE_BGM)
+    # Check map metadata
+    music = GameData::MapMetadata.get($game_map.map_id).trainer_battle_BGM
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   if !ret
     # Check global metadata
-    music = pbGetMetadata(0,Metadata::TRAINER_BATTLE_BGM)
+    music = GameData::Metadata.get.trainer_battle_BGM
     ret = pbStringToAudioFile(music) if music && music!=""
   end
   ret = pbStringToAudioFile("Battle trainer") if !ret
@@ -662,15 +663,15 @@ def pbGetTrainerVictoryME(trainer)   # can be a PokeBattle_Trainer or an array o
     ret = pbStringToAudioFile(music)
   end
   if !ret
-    # Check map-specific metadata
-    music = pbGetMetadata($game_map.map_id,MapMetadata::TRAINER_VICTORY_ME)
+    # Check map metadata
+    music = GameData::MapMetadata.get($game_map.map_id).trainer_victory_ME
     if music && music!=""
       ret = pbStringToAudioFile(music)
     end
   end
   if !ret
     # Check global metadata
-    music = pbGetMetadata(0,Metadata::TRAINER_VICTORY_ME)
+    music = GameData::Metadata.get.trainer_victory_ME
     if music && music!=""
       ret = pbStringToAudioFile(music)
     end

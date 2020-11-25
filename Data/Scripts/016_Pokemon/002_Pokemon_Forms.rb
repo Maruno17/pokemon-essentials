@@ -270,48 +270,48 @@ MultipleForms.register(:CHERRIM,{
 })
 
 MultipleForms.register(:ROTOM,{
-  "onSetForm" => proc { |pkmn,form,oldForm|
-    formMoves = [
+  "onSetForm" => proc { |pkmn, form, oldForm|
+    form_moves = [
        :OVERHEAT,    # Heat, Microwave
        :HYDROPUMP,   # Wash, Washing Machine
        :BLIZZARD,    # Frost, Refrigerator
        :AIRSLASH,    # Fan
        :LEAFSTORM    # Mow, Lawnmower
     ]
-    idxMoveToReplace = -1
-    pkmn.moves.each_with_index do |move,i|
-      next if !move
-      formMoves.each do |newMove|
-        next if !isConst?(move.id,PBMoves,newMove)
-        idxMoveToReplace = i
-        break
-      end
-      break if idxMoveToReplace>=0
+    move_index = -1
+    pkmn.moves.each_with_index do |move, i|
+      next if !form_moves.any? { |m| move == m }
+      move_index = i
+      break
     end
-    if form==0
-      if idxMoveToReplace>=0
-        moveName = PBMoves.getName(pkmn.moves[idxMoveToReplace].id)
-        pkmn.pbDeleteMoveAtIndex(idxMoveToReplace)
-        pbMessage(_INTL("{1} forgot {2}...",pkmn.name,moveName))
-        pkmn.pbLearnMove(:THUNDERSHOCK) if pkmn.numMoves==0
+    if form == 0
+      # Turned back into the base form; forget form-specific moves
+      if move_index >= 0
+        move_name = pkmn.moves[move_index].name
+        pkmn.pbDeleteMoveAtIndex(move_index)
+        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, move_name))
+        pkmn.pbLearnMove(:THUNDERSHOCK) if pkmn.numMoves == 0
       end
     else
-      newMove = getConst(PBMoves,formMoves[form-1])
-      if idxMoveToReplace>=0
-        oldMoveName = PBMoves.getName(pkmn.moves[idxMoveToReplace].id)
-        if newMove && newMove>0
-          newMoveName = PBMoves.getName(newMove)
-          pkmn.moves[idxMoveToReplace].id = newMove
+      # Turned into an alternate form; try learning that form's unique move
+      new_move_id = form_moves[form - 1]
+      if move_index >= 0
+        # Knows another form's unique move; replace it
+        old_move_name = pkmn.moves[move_index].name
+        if GameData::Move.exists?(new_move_id)
+          pkmn.moves[move_index].id = new_move_id
+          new_move_name = pkmn.moves[move_index].name
           pbMessage(_INTL("1,\\wt[16] 2, and\\wt[16]...\\wt[16] ...\\wt[16] ... Ta-da!\\se[Battle ball drop]\1"))
-          pbMessage(_INTL("{1} forgot how to use {2}.\\nAnd...\1",pkmn.name,oldMoveName))
-          pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]",pkmn.name,newMoveName))
+          pbMessage(_INTL("{1} forgot how to use {2}.\\nAnd...\1", pkmn.name, old_move_name))
+          pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]", pkmn.name, new_move_name))
         else
-          pkmn.pbDeleteMoveAtIndex(idxMoveToReplace)
-          pbMessage(_INTL("{1} forgot {2}...",pkmn.name,oldMoveName))
-          pkmn.pbLearnMove(:THUNDERSHOCK) if pkmn.numMoves==0
+          pkmn.pbDeleteMoveAtIndex(move_index)
+          pbMessage(_INTL("{1} forgot {2}...", pkmn.name, old_move_name))
+          pkmn.pbLearnMove(:THUNDERSHOCK) if pkmn.numMoves == 0
         end
-      elsif newMove && newMove>0
-        pbLearnMove(pkmn,newMove,true)
+      else
+        # Just try to learn this form's unique move
+        pbLearnMove(pkmn, new_move_id, true)
       end
     end
   }
@@ -336,25 +336,25 @@ MultipleForms.register(:SHAYMIN,{
 
 MultipleForms.register(:ARCEUS,{
   "getForm" => proc { |pkmn|
-    next nil if !isConst?(pkmn.ability,PBAbilities,:MULTITYPE)
+    next nil if !pkmn.hasAbility?(:MULTITYPE)
     typeArray = {
-       1  => [:FISTPLATE,:FIGHTINIUMZ],
-       2  => [:SKYPLATE,:FLYINIUMZ],
-       3  => [:TOXICPLATE,:POISONIUMZ],
-       4  => [:EARTHPLATE,:GROUNDIUMZ],
-       5  => [:STONEPLATE,:ROCKIUMZ],
-       6  => [:INSECTPLATE,:BUGINIUMZ],
-       7  => [:SPOOKYPLATE,:GHOSTIUMZ],
-       8  => [:IRONPLATE,:STEELIUMZ],
-       10 => [:FLAMEPLATE,:FIRIUMZ],
-       11 => [:SPLASHPLATE,:WATERIUMZ],
-       12 => [:MEADOWPLATE,:GRASSIUMZ],
-       13 => [:ZAPPLATE,:ELECTRIUMZ],
-       14 => [:MINDPLATE,:PSYCHIUMZ],
-       15 => [:ICICLEPLATE,:ICIUMZ],
-       16 => [:DRACOPLATE,:DRAGONIUMZ],
-       17 => [:DREADPLATE,:DARKINIUMZ],
-       18 => [:PIXIEPLATE,:FAIRIUMZ]
+       1  => [:FISTPLATE,   :FIGHTINIUMZ],
+       2  => [:SKYPLATE,    :FLYINIUMZ],
+       3  => [:TOXICPLATE,  :POISONIUMZ],
+       4  => [:EARTHPLATE,  :GROUNDIUMZ],
+       5  => [:STONEPLATE,  :ROCKIUMZ],
+       6  => [:INSECTPLATE, :BUGINIUMZ],
+       7  => [:SPOOKYPLATE, :GHOSTIUMZ],
+       8  => [:IRONPLATE,   :STEELIUMZ],
+       10 => [:FLAMEPLATE,  :FIRIUMZ],
+       11 => [:SPLASHPLATE, :WATERIUMZ],
+       12 => [:MEADOWPLATE, :GRASSIUMZ],
+       13 => [:ZAPPLATE,    :ELECTRIUMZ],
+       14 => [:MINDPLATE,   :PSYCHIUMZ],
+       15 => [:ICICLEPLATE, :ICIUMZ],
+       16 => [:DRACOPLATE,  :DRAGONIUMZ],
+       17 => [:DREADPLATE,  :DARKINIUMZ],
+       18 => [:PIXIEPLATE,  :FAIRIUMZ]
     }
     ret = 0
     typeArray.each do |f, items|
@@ -396,39 +396,26 @@ MultipleForms.register(:KYUREM,{
   "getFormOnLeavingBattle" => proc { |pkmn,battle,usedInBattle,endBattle|
     next pkmn.form-2 if pkmn.form>=3   # Fused forms stop glowing
   },
-  "onSetForm" => proc { |pkmn,form,oldForm|
+  "onSetForm" => proc { |pkmn, form, oldForm|
     case form
     when 0   # Normal
       pkmn.moves.each do |move|
-        next if !move
-        if (isConst?(move.id,PBMoves,:ICEBURN) ||
-           isConst?(move.id,PBMoves,:FREEZESHOCK)) && hasConst?(PBMoves,:GLACIATE)
-          move.id = getConst(PBMoves,:GLACIATE)
+        if [:ICEBURN, :FREEZESHOCK].include?(move.id)
+          move.id = :GLACIATE if GameData::Move.exists?(:GLACIATE)
         end
-        if (isConst?(move.id,PBMoves,:FUSIONFLARE) ||
-           isConst?(move.id,PBMoves,:FUSIONBOLT)) && hasConst?(PBMoves,:SCARYFACE)
-          move.id = getConst(PBMoves,:SCARYFACE)
+        if [:FUSIONFLARE, :FUSIONBOLT].include?(move.id)
+          move.id = :SCARYFACE if GameData::Move.exists?(:SCARYFACE)
         end
       end
     when 1   # White
       pkmn.moves.each do |move|
-        next if !move
-        if isConst?(move.id,PBMoves,:GLACIATE) && hasConst?(PBMoves,:ICEBURN)
-          move.id = getConst(PBMoves,:ICEBURN)
-        end
-        if isConst?(move.id,PBMoves,:SCARYFACE) && hasConst?(PBMoves,:FUSIONFLARE)
-          move.id = getConst(PBMoves,:FUSIONFLARE)
-        end
+        move.id = :ICEBURN if move == :GLACIATE && GameData::Move.exists?(:ICEBURN)
+        move.id = :FUSIONFLARE if move == :SCARYFACE && GameData::Move.exists?(:FUSIONFLARE)
       end
     when 2   # Black
       pkmn.moves.each do |move|
-        next if !move
-        if isConst?(move.id,PBMoves,:GLACIATE) && hasConst?(PBMoves,:FREEZESHOCK)
-          move.id = getConst(PBMoves,:FREEZESHOCK)
-        end
-        if isConst?(move.id,PBMoves,:SCARYFACE) && hasConst?(PBMoves,:FUSIONBOLT)
-          move.id = getConst(PBMoves,:FUSIONBOLT)
-        end
+        move.id = :FREEZESHOCK if move == :GLACIATE && GameData::Move.exists?(:FREEZESHOCK)
+        move.id = :FUSIONBOLT if move == :SCARYFACE && GameData::Move.exists?(:FUSIONBOLT)
       end
     end
   }
@@ -573,7 +560,7 @@ MultipleForms.register(:WISHIWASHI,{
 
 MultipleForms.register(:SILVALLY,{
   "getForm" => proc { |pkmn|
-    next nil if !isConst?(pkmn.ability,PBAbilities,:RKSSYSTEM)
+    next nil if !pkmn.hasAbility?(:RKSSYSTEM)
     typeArray = {
        1  => [:FIGHTINGMEMORY],
        2  => [:FLYINGMEMORY],
@@ -629,34 +616,30 @@ MultipleForms.register(:NECROZMA,{
     # Fused forms are 1 and 2, Ultra form is 3 or 4 depending on which fusion
     next pkmn.form-2 if pkmn.form>=3 && (pkmn.fainted? || endBattle)
   },
-  "onSetForm" => proc { |pkmn,form,oldForm|
-    next if form>2 || oldForm>2   # Ultra form changes don't affect moveset
-    formMoves = [
+  "onSetForm" => proc { |pkmn, form, oldForm|
+    next if form > 2 || oldForm > 2   # Ultra form changes don't affect moveset
+    form_moves = [
        :SUNSTEELSTRIKE,   # Dusk Mane (with Solgaleo) (form 1)
        :MOONGEISTBEAM     # Dawn Wings (with Lunala) (form 2)
     ]
-    if form==0
-      idxMoveToReplace = -1
-      pkmn.moves.each_with_index do |move,i|
-        next if !move
-        formMoves.each do |newMove|
-          next if !isConst?(move.id,PBMoves,newMove)
-          idxMoveToReplace = i
-          break
-        end
-        break if idxMoveToReplace>=0
+    if form == 0
+      # Turned back into the base form; forget form-specific moves
+      move_index = -1
+      pkmn.moves.each_with_index do |move, i|
+        next if !form_moves.any? { |m| move == m }
+        move_index = i
+        break
       end
-      if idxMoveToReplace>=0
-        moveName = PBMoves.getName(pkmn.moves[idxMoveToReplace].id)
-        pkmn.pbDeleteMoveAtIndex(idxMoveToReplace)
-        pbMessage(_INTL("{1} forgot {2}...",pkmn.name,moveName))
-        pkmn.pbLearnMove(:CONFUSION) if pkmn.numMoves==0
+      if move_index >= 0
+        move_name = pkmn.moves[move_index].name
+        pkmn.pbDeleteMoveAtIndex(move_index)
+        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, move_name))
+        pkmn.pbLearnMove(:CONFUSION) if pkmn.numMoves == 0
       end
     else
-      newMove = getConst(PBMoves,formMoves[form-1])
-      if newMove && newMove>0
-        pbLearnMove(pkmn,newMove,true)
-      end
+      # Turned into an alternate form; try learning that form's unique move
+      new_move_id = form_moves[form - 1]
+      pbLearnMove(pkmn, new_move_id, true)
     end
   }
 })
@@ -667,13 +650,13 @@ MultipleForms.register(:NECROZMA,{
 
 # These species don't have visually different Alolan forms, but they need to
 # evolve into different forms depending on the location where they evolved.
-MultipleForms.register(:PIKACHU,{
+MultipleForms.register(:PIKACHU, {
   "getForm" => proc { |pkmn|
-    next if pkmn.formSimple>=2
-    mapPos = pbGetMetadata($game_map.map_id,MapMetadata::MAP_POSITION)
-    next 1 if mapPos && mapPos[0]==1   # Tiall region
+    next if pkmn.formSimple >= 2
+    mapPos = GameData::MapMetadata.get($game_map.map_id).town_map_position
+    next 1 if mapPos && mapPos[0] == 1   # Tiall region
     next 0
   }
 })
 
-MultipleForms.copy(:PIKACHU,:EXEGGCUTE,:CUBONE)
+MultipleForms.copy(:PIKACHU, :EXEGGCUTE, :CUBONE)

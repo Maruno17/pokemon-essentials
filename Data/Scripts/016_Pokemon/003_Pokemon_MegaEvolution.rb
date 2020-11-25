@@ -11,13 +11,13 @@ class Pokemon
     for i in 0...formData[@species].length
       fSpec = formData[@species][i]
       next if !fSpec || fSpec<=0
-      megaStone = speciesData[fSpec][SpeciesData::MEGA_STONE] || 0
-      if megaStone>0 && self.hasItem?(megaStone)
+      megaStone = speciesData[fSpec][SpeciesData::MEGA_STONE]
+      if megaStone && self.hasItem?(megaStone)
         ret = i; break
       end
       if !checkItemOnly
-        megaMove = speciesData[fSpec][SpeciesData::MEGA_MOVE] || 0
-        if megaMove>0 && self.hasMove?(megaMove)
+        megaMove = speciesData[fSpec][SpeciesData::MEGA_MOVE]
+        if self.hasMove?(megaMove)
           ret = i; break
         end
       end

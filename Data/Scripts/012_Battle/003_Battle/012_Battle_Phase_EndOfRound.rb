@@ -234,7 +234,8 @@ class PokeBattle_Battle
       end
       next if !moveUser   # User is fainted
       move = pos.effects[PBEffects::FutureSightMove]
-      pbDisplay(_INTL("{1} took the {2} attack!",@battlers[idxPos].pbThis,PBMoves.getName(move)))
+      pbDisplay(_INTL("{1} took the {2} attack!",@battlers[idxPos].pbThis,
+         GameData::Move.get(move).name))
       # NOTE: Future Sight failing against the target here doesn't count towards
       #       Stomping Tantrum.
       userLastMoveFailed = moveUser.lastMoveFailed
@@ -244,7 +245,7 @@ class PokeBattle_Battle
       moveUser.lastMoveFailed = userLastMoveFailed
       @battlers[idxPos].pbFaint if @battlers[idxPos].fainted?
       pos.effects[PBEffects::FutureSightCounter]        = 0
-      pos.effects[PBEffects::FutureSightMove]           = 0
+      pos.effects[PBEffects::FutureSightMove]           = nil
       pos.effects[PBEffects::FutureSightUserIndex]      = -1
       pos.effects[PBEffects::FutureSightUserPartyIndex] = -1
     end
@@ -401,19 +402,19 @@ class PokeBattle_Battle
     priority.each do |b|
       next if b.fainted? || b.effects[PBEffects::Trapping]==0
       b.effects[PBEffects::Trapping] -= 1
-      moveName = PBMoves.getName(b.effects[PBEffects::TrappingMove])
+      moveName = GameData::Move.get(b.effects[PBEffects::TrappingMove]).name
       if b.effects[PBEffects::Trapping]==0
         pbDisplay(_INTL("{1} was freed from {2}!",b.pbThis,moveName))
       else
-        trappingMove = b.effects[PBEffects::TrappingMove]
-        if isConst?(trappingMove,PBMoves,:BIND);           pbCommonAnimation("Bind",b)
-        elsif isConst?(trappingMove,PBMoves,:CLAMP);       pbCommonAnimation("Clamp",b)
-        elsif isConst?(trappingMove,PBMoves,:FIRESPIN);    pbCommonAnimation("FireSpin",b)
-        elsif isConst?(trappingMove,PBMoves,:MAGMASTORM);  pbCommonAnimation("MagmaStorm",b)
-        elsif isConst?(trappingMove,PBMoves,:SANDTOMB);    pbCommonAnimation("SandTomb",b)
-        elsif isConst?(trappingMove,PBMoves,:WRAP);        pbCommonAnimation("Wrap",b)
-        elsif isConst?(trappingMove,PBMoves,:INFESTATION); pbCommonAnimation("Infestation",b)
-        else;                                              pbCommonAnimation("Wrap",b)
+        case b.effects[PBEffects::TrappingMove]
+        when :BIND        then pbCommonAnimation("Bind", b)
+        when :CLAMP       then pbCommonAnimation("Clamp", b)
+        when :FIRESPIN    then pbCommonAnimation("FireSpin", b)
+        when :MAGMASTORM  then pbCommonAnimation("MagmaStorm", b)
+        when :SANDTOMB    then pbCommonAnimation("SandTomb", b)
+        when :WRAP        then pbCommonAnimation("Wrap", b)
+        when :INFESTATION then pbCommonAnimation("Infestation", b)
+        else                   pbCommonAnimation("Wrap", b)
         end
         if b.takesIndirectDamage?
           hpLoss = (NEWEST_BATTLE_MECHANICS) ? b.totalhp/8 : b.totalhp/16
@@ -446,12 +447,12 @@ class PokeBattle_Battle
       else
         PBDebug.log("[End of effect] #{b.pbThis}'s encore ended (encored move no longer known)")
         b.effects[PBEffects::Encore]     = 0
-        b.effects[PBEffects::EncoreMove] = 0
+        b.effects[PBEffects::EncoreMove] = nil
       end
     end
     # Disable/Cursed Body
     pbEORCountDownBattlerEffect(priority,PBEffects::Disable) { |battler|
-      battler.effects[PBEffects::DisableMove] = 0
+      battler.effects[PBEffects::DisableMove] = nil
       pbDisplay(_INTL("{1} is no longer disabled!",battler.pbThis))
     }
     # Magnet Rise

@@ -5,8 +5,8 @@ class PokeBattle_Battle
   def pbCanChooseMove?(idxBattler,idxMove,showMessages,sleepTalk=false)
     battler = @battlers[idxBattler]
     move = battler.moves[idxMove]
-    return false unless move && move.id>0
-    if move.pp==0 && move.totalpp>0 && !sleepTalk
+    return false unless move
+    if move.pp==0 && move.total_pp>0 && !sleepTalk
       pbDisplayPaused(_INTL("There's no PP left for this move!")) if showMessages
       return false
     end
@@ -20,7 +20,7 @@ class PokeBattle_Battle
   def pbCanChooseAnyMove?(idxBattler,sleepTalk=false)
     battler = @battlers[idxBattler]
     battler.eachMoveWithIndex do |m,i|
-      next if m.pp==0 && m.totalpp>0 && !sleepTalk
+      next if m.pp==0 && m.total_pp>0 && !sleepTalk
       if battler.effects[PBEffects::Encore]>0
         idxEncoredMove = battler.pbEncoredMoveIndex
         next if idxEncoredMove>=0 && i!=idxEncoredMove
@@ -80,10 +80,8 @@ class PokeBattle_Battle
 
   def pbChoseMove?(idxBattler,moveID)
     return false if !@battlers[idxBattler] || @battlers[idxBattler].fainted?
-    idxMove = @choices[idxBattler][1]
-    if @choices[idxBattler][0]==:UseMove && idxMove>=0
-      chosenMoveID = @battlers[idxBattler].moves[idxMove].id
-      return isConst?(chosenMoveID,PBMoves,moveID)
+    if @choices[idxBattler][0]==:UseMove && @choices[idxBattler][1]
+      return @choices[idxBattler][2].id == moveID
     end
     return false
   end
@@ -91,8 +89,8 @@ class PokeBattle_Battle
   def pbChoseMoveFunctionCode?(idxBattler,code)
     return false if @battlers[idxBattler].fainted?
     idxMove = @choices[idxBattler][1]
-    if @choices[idxBattler][0]==:UseMove && idxMove>=0
-      return @battlers[idxBattler].moves[idxMove].function==code
+    if @choices[idxBattler][0]==:UseMove && @choices[idxBattler][1]
+      return @choices[idxBattler][2].function == code
     end
     return false
   end
