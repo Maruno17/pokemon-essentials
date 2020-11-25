@@ -63,9 +63,7 @@ module SaveData
   # @return [Hash{Symbol => Object}] a hash representation of the save data
   def compile
     save_data = {}
-    @values.each do |id, data|
-      save_data[id] = data.save
-    end
+    @values.each { |id, data| save_data[id] = data.save }
     return save_data
   end
 
@@ -74,9 +72,7 @@ module SaveData
   # @param save_data [Hash] save data to load
   def load_values(save_data)
     validate save_data => Hash
-    save_data.each do |id, value|
-      @values[id].load(value)
-    end
+    save_data.each { |id, value| @values[id].load(value) }
   end
 
   # Converts the pre-v19 format data to the new format.
