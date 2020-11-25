@@ -51,6 +51,7 @@ module SaveData
   # and loading (+load_value+) procedures, as well as a possible
   # proc for fetching the value from the pre-v19 format (+from_old_format+)
   # @param id [Symbol] value id
+  # @yieldself [Value]
   def register(id, &block)
     unless block_given?
       raise ArgumentError, "No block given to save value #{id.inspect}"
