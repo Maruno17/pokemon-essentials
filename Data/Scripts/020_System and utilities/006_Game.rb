@@ -2,6 +2,7 @@
 module Game
   # Saves the game. Returns whether the operation was successful.
   # @return [Boolean] whether the operation was successful
+  # @raise [InvalidValueError] if an invalid value is being saved
   def self.save
     return false unless File.writable?(SaveData::FILE_PATH)
 
@@ -18,6 +19,7 @@ module Game
 
   # Loads the game. Returns whether the operation was successful.
   # @return [Boolean] whether the operation was successful
+  # @raise [InvalidValueError] if an invalid value is being loaded
   def self.load
     return false unless File.readable?(SaveData::FILE_PATH)
 

@@ -12,6 +12,7 @@ module SaveData
   # Compiles the save data and saves a marshaled version of it into
   # the given file.
   # @param file_path [String] path of the file to save into
+  # @raise [InvalidValueError] if an invalid value is being saved
   def save_to_file(file_path)
     validate file_path => String
     File.open(file_path, 'wb') { |file| Marshal.dump(self.compile, file) }
@@ -61,6 +62,7 @@ module SaveData
   end
 
   # @return [Hash{Symbol => Object}] a hash representation of the save data
+  # @raise [InvalidValueError] if an invalid value is being saved
   def compile
     save_data = {}
     @values.each { |id, data| save_data[id] = data.save }
@@ -70,6 +72,7 @@ module SaveData
   # Loads the values from the given save data into memory by
   # calling each {Value} object's +load_value+ proc.
   # @param save_data [Hash] save data to load
+  # @raise [InvalidValueError] if an invalid value is being loaded
   def load_values(save_data)
     validate save_data => Hash
     save_data.each { |id, value| @values[id].load(value) }
