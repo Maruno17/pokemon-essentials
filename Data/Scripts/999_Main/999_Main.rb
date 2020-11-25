@@ -1,5 +1,5 @@
-pbSetUpSystem
 Compiler.main
+pbSetUpSystem
 
 class Scene_DebugIntro
   def main
