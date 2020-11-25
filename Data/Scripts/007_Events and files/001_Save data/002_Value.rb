@@ -20,6 +20,7 @@ module SaveData
     # @return [Object] save proc value
     def save
       data = @save_proc.call
+      # TODO: Checking for class name may cause trouble with renamed classes.
       if @ensured_class && data.class.name != @ensured_class.to_s
         raise InvalidValueError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{data.class.name} given)"
       end
@@ -52,6 +53,7 @@ module SaveData
       @save_proc = block
     end
 
+    # @yieldparam value [Object]
     def load_value(&block)
       raise ArgumentError, 'No block given for load_value proc' unless block_given?
       @load_proc = block
@@ -63,6 +65,7 @@ module SaveData
       @ensured_class = class_name
     end
 
+    # @yieldparam old_format [Array]
     def from_old_format(&block)
       raise ArgumentError, 'No block given for get_from_old_format proc' unless block_given?
       @old_format_get_proc = block
