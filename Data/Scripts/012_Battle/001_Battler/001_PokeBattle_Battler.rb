@@ -119,6 +119,7 @@ class PokeBattle_Battler
   def statusCount=(value)
     @statusCount = value
     @pokemon.statusCount = value if @pokemon
+    @battle.scene.pbRefreshOne(@index)
   end
 
   #=============================================================================

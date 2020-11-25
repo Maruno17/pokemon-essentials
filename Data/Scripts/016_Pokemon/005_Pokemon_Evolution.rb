@@ -163,7 +163,7 @@ def pbGetBabySpecies(species, check_items = false, item1 = nil, item2 = nil)
     end
     break
   end
-  ret = pbGetBabySpecies(ret) if ret != species
+  ret = pbGetBabySpecies(ret, item1, item2) if ret != species
   return ret
 end
 

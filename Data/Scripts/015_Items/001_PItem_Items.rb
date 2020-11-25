@@ -255,14 +255,12 @@ def pbRestorePP(pkmn,idxMove,pp)
   return newpp-oldpp
 end
 
-def pbBattleRestorePP(pkmn,battler,idxMove,pp)
-  if pbRestorePP(pkmn,idxMove,pp)>0
-    if battler && !battler.effects[PBEffects::Transform] &&
-       battler.moves[idxMove] && battler.moves[idxMove].id==pkmn.moves[idxMove].id
-      battler.pbSetPP(battler.moves[idxMove],pkmn.moves[idxMove].pp)
-    end
+def pbBattleRestorePP(pkmn, battler, idxMove, pp)
+  return if pbRestorePP(pkmn,idxMove,pp) == 0
+  if battler && !battler.effects[PBEffects::Transform] &&
+     battler.moves[idxMove] && battler.moves[idxMove].id == pkmn.moves[idxMove].id
+    battler.pbSetPP(battler.moves[idxMove], pkmn.moves[idxMove].pp)
   end
-  return ret
 end
 
 #===============================================================================

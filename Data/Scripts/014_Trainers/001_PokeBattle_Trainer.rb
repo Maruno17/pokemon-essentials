@@ -169,13 +169,13 @@ class PokeBattle_Trainer
   def pokedexSeen(region=-1)   # Number of Pokémon seen
     ret=0
     if region==-1
-      for i in 0..PBSpecies.maxValue
+      for i in 1..PBSpecies.maxValue
         ret+=1 if @seen[i]
       end
     else
       regionlist=pbAllRegionalSpecies(region)
       for i in regionlist
-        ret+=1 if @seen[i]
+        ret+=1 if i > 0 && @seen[i]
       end
     end
     return ret
