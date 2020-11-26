@@ -17,3 +17,5 @@ RGSS*.dll
 ~*
 # Word files
 *.docx
+
+STRAT/*
