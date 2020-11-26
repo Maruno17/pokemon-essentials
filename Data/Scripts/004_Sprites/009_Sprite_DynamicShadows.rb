@@ -68,10 +68,10 @@ class Sprite_Shadow < RPG::Sprite
       sy = (@character.direction - 2) / 2 * @ch
       if self.angle > 90 or angle < -90
         case @character.direction
-        when 2; sy = (8- 2) / 2 * @ch
-        when 4; sy = (6- 2) / 2 * @ch
-        when 6; sy = (4- 2) / 2 * @ch
-        when 8; sy = (2- 2) / 2 * @ch
+        when 2 then sy = (8- 2) / 2 * @ch
+        when 4 then sy = (6- 2) / 2 * @ch
+        when 6 then sy = (4- 2) / 2 * @ch
+        when 8 then sy = (2- 2) / 2 * @ch
         end
       end
       self.src_rect.set(sx, sy, @cw, @ch)

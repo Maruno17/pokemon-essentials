@@ -72,10 +72,10 @@ class Scene_Map
     end
     $game_player.moveto($game_temp.player_new_x, $game_temp.player_new_y)
     case $game_temp.player_new_direction
-    when 2; $game_player.turn_down
-    when 4; $game_player.turn_left
-    when 6; $game_player.turn_right
-    when 8; $game_player.turn_up
+    when 2 then $game_player.turn_down
+    when 4 then $game_player.turn_left
+    when 6 then $game_player.turn_right
+    when 8 then $game_player.turn_up
     end
     $game_player.straighten
     $game_map.update

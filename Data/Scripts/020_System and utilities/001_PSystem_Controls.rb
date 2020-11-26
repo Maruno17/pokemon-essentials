@@ -98,36 +98,36 @@ module Input
 
   def self.buttonToKey(button)
     case button
-    when Input::DOWN;      return [0x28]                # Down
-    when Input::LEFT;      return [0x25]                # Left
-    when Input::RIGHT;     return [0x27]                # Right
-    when Input::UP;        return [0x26]                # Up
-    when Input::TAB;       return [0x09]                # Tab
-    when Input::A;         return [0x5A,0x57,0x59,0x10] # Z, W, Y, Shift
-    when Input::B;         return [0x58,0x1B]           # X, ESC
-    when Input::C;         return [0x43,0x0D,0x20]      # C, ENTER, Space
-#    when Input::X;         return [0x41]                # A
-#    when Input::Y;         return [0x53]                # S
-#    when Input::Z;         return [0x44]                # D
-    when Input::L;         return [0x41,0x51,0x21]      # A, Q, Page Up
-    when Input::R;         return [0x53,0x22]           # S, Page Down
-    when Input::ENTER;     return [0x0D]                # ENTER
-    when Input::ESC;       return [0x1B]                # ESC
-    when Input::SHIFT;     return [0x10]                # Shift
-    when Input::CTRL;      return [0x11]                # Ctrl
-    when Input::ALT;       return [0x12]                # Alt
-    when Input::BACKSPACE; return [0x08]                # Backspace
-    when Input::DELETE;    return [0x2E]                # Delete
-    when Input::HOME;      return [0x24]                # Home
-    when Input::ENDKEY;    return [0x23]                # End
-    when Input::F5;        return [0x46,0x74,0x09]      # F, F5, Tab
-    when Input::ONLYF5;    return [0x74]                # F5
-    when Input::F6;        return [0x75]                # F6
-    when Input::F7;        return [0x76]                # F7
-    when Input::F8;        return [0x77]                # F8
-    when Input::F9;        return [0x78]                # F9
-    else; return []
+    when Input::DOWN      then return [0x28]                     # Down
+    when Input::LEFT      then return [0x25]                     # Left
+    when Input::RIGHT     then return [0x27]                     # Right
+    when Input::UP        then return [0x26]                     # Up
+    when Input::TAB       then return [0x09]                     # Tab
+    when Input::A         then return [0x5A, 0x57, 0x59, 0x10]   # Z, W, Y, Shift
+    when Input::B         then return [0x58, 0x1B]               # X, ESC
+    when Input::C         then return [0x43, 0x0D, 0x20]         # C, ENTER, Space
+#    when Input::X         then return [0x41]                     # A
+#    when Input::Y         then return [0x53]                     # S
+#    when Input::Z         then return [0x44]                     # D
+    when Input::L         then return [0x41, 0x51, 0x21]         # A, Q, Page Up
+    when Input::R         then return [0x53, 0x22]               # S, Page Down
+    when Input::ENTER     then return [0x0D]                     # ENTER
+    when Input::ESC       then return [0x1B]                     # ESC
+    when Input::SHIFT     then return [0x10]                     # Shift
+    when Input::CTRL      then return [0x11]                     # Ctrl
+    when Input::ALT       then return [0x12]                     # Alt
+    when Input::BACKSPACE then return [0x08]                     # Backspace
+    when Input::DELETE    then return [0x2E]                     # Delete
+    when Input::HOME      then return [0x24]                     # Home
+    when Input::ENDKEY    then return [0x23]                     # End
+    when Input::F5        then return [0x46, 0x74, 0x09]         # F, F5, Tab
+    when Input::ONLYF5    then return [0x74]                     # F5
+    when Input::F6        then return [0x75]                     # F6
+    when Input::F7        then return [0x76]                     # F7
+    when Input::F8        then return [0x77]                     # F8
+    when Input::F9        then return [0x78]                     # F9
     end
+    return []
   end
 
   def self.dir4

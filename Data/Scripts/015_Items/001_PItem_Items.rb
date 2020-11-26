@@ -532,11 +532,15 @@ def pbUseItem(bag,item,bagscene=nil)
   elsif useType==2   # Item is usable from bag
     intret = ItemHandlers.triggerUseFromBag(item)
     case intret
-    when 0; return 0
-    when 1; return 1   # Item used
-    when 2; return 2   # Item used, end screen
-    when 3; bag.pbDeleteItem(item); return 1   # Item used, consume item
-    when 4; bag.pbDeleteItem(item); return 2   # Item used, end screen and consume item
+    when 0 then return 0
+    when 1 then return 1   # Item used
+    when 2 then return 2   # Item used, end screen
+    when 3                 # Item used, consume item
+      bag.pbDeleteItem(item)
+      return 1
+    when 4                 # Item used, end screen and consume item
+      bag.pbDeleteItem(item)
+      return 2
     end
     pbMessage(_INTL("Can't use that here."))
     return 0

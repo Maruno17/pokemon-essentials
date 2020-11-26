@@ -182,8 +182,8 @@ class PokeBattle_Move
     return false if c<0
     # Move-specific "always/never a critical hit" effects
     case pbCritialOverride(user,target)
-    when 1;  return true
-    when -1; return false
+    when 1  then return true
+    when -1 then return false
     end
     # Other effects
     return true if c>50   # Merciless

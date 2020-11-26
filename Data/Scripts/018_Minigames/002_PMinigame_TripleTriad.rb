@@ -56,9 +56,9 @@ class TriadCard
     aType = @type
     oType = opponent.type
     case PBTypes.getEffectiveness(aType,oType)
-    when PBTypeEffectiveness::INEFFECTIVE;         return -2
-    when PBTypeEffectiveness::NOT_EFFECTIVE_ONE;   return -1
-    when PBTypeEffectiveness::SUPER_EFFECTIVE_ONE; return 1
+    when PBTypeEffectiveness::INEFFECTIVE         then return -2
+    when PBTypeEffectiveness::NOT_EFFECTIVE_ONE   then return -1
+    when PBTypeEffectiveness::SUPER_EFFECTIVE_ONE then return 1
     end
     return 0
   end

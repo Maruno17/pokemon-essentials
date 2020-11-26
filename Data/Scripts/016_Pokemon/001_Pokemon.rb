@@ -224,9 +224,9 @@ class Pokemon
     # Return sole gender option for all male/all female/genderless species
     gender_rate = pbGetSpeciesData(@species, formSimple, SpeciesData::GENDER_RATE)
     case gender_rate
-    when PBGenderRates::AlwaysMale;   return 0
-    when PBGenderRates::AlwaysFemale; return 1
-    when PBGenderRates::Genderless;   return 2
+    when PBGenderRates::AlwaysMale   then return 0
+    when PBGenderRates::AlwaysFemale then return 1
+    when PBGenderRates::Genderless   then return 2
     end
     # Return gender for species that can be male or female
     return @genderflag if @genderflag && (@genderflag == 0 || @genderflag == 1)

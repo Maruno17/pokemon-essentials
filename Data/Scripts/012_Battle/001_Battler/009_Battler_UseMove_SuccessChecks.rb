@@ -162,10 +162,10 @@ class PokeBattle_Battler
     end
     # Show refusal message and do nothing
     case @battle.pbRandom(4)
-    when 0; @battle.pbDisplay(_INTL("{1} won't obey!",pbThis))
-    when 1; @battle.pbDisplay(_INTL("{1} turned away!",pbThis))
-    when 2; @battle.pbDisplay(_INTL("{1} is loafing around!",pbThis))
-    when 3; @battle.pbDisplay(_INTL("{1} pretended not to notice!",pbThis))
+    when 0 then @battle.pbDisplay(_INTL("{1} won't obey!",pbThis))
+    when 1 then @battle.pbDisplay(_INTL("{1} turned away!",pbThis))
+    when 2 then @battle.pbDisplay(_INTL("{1} is loafing around!",pbThis))
+    when 3 then @battle.pbDisplay(_INTL("{1} pretended not to notice!",pbThis))
     end
     return false
   end

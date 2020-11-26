@@ -623,9 +623,9 @@ class BattlerDamageAnimation < PokeBattle_Animation
     # Animation
     delay = 0
     case @effectiveness
-    when 0; battler.setSE(delay,"Battle damage normal")
-    when 1; battler.setSE(delay,"Battle damage weak")
-    when 2; battler.setSE(delay,"Battle damage super")
+    when 0 then battler.setSE(delay, "Battle damage normal")
+    when 1 then battler.setSE(delay, "Battle damage weak")
+    when 2 then battler.setSE(delay, "Battle damage super")
     end
     4.times do   # 4 flashes, each lasting 0.2 (4/20) seconds
       battler.setVisible(delay,false)

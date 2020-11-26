@@ -117,9 +117,12 @@ def pbGetSpeciesData(species, form = 0, species_data_type = -1)
   end
   return species_data[s][species_data_type] if species_data[s] && species_data[s][species_data_type]
   case species_data_type
-  when SpeciesData::TYPE2;         return nil
-  when SpeciesData::BASE_STATS;    return [1, 1, 1, 1, 1, 1]
-  when SpeciesData::EFFORT_POINTS; return [0, 0, 0, 0, 0, 0]
+  when SpeciesData::TYPE2
+    return nil
+  when SpeciesData::BASE_STATS
+    return [1, 1, 1, 1, 1, 1]
+  when SpeciesData::EFFORT_POINTS
+    return [0, 0, 0, 0, 0, 0]
   when SpeciesData::STEPS_TO_HATCH, SpeciesData::HEIGHT, SpeciesData::WEIGHT
     return 1
   end

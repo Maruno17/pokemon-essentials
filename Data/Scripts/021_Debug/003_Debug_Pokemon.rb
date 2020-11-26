@@ -318,12 +318,24 @@ module PokemonDebugMixin
     #===========================================================================
     when "setbeauty", "setcool", "setcute", "setsmart", "settough", "setsheen"
       case command
-      when "setbeauty"; statname = _INTL("Beauty"); defval = pkmn.beauty
-      when "setcool";   statname = _INTL("Cool");   defval = pkmn.cool
-      when "setcute";   statname = _INTL("Cute");   defval = pkmn.cute
-      when "setsmart";  statname = _INTL("Smart");  defval = pkmn.smart
-      when "settough";  statname = _INTL("Tough");  defval = pkmn.tough
-      when "setsheen";  statname = _INTL("Sheen");  defval = pkmn.sheen
+      when "setbeauty"
+        statname = _INTL("Beauty")
+        defval = pkmn.beauty
+      when "setcool"
+        statname = _INTL("Cool")
+        defval = pkmn.cool
+      when "setcute"
+        statname = _INTL("Cute")
+        defval = pkmn.cute
+      when "setsmart"
+        statname = _INTL("Smart")
+        defval = pkmn.smart
+      when "settough"
+        statname = _INTL("Tough")
+        defval = pkmn.tough
+      when "setsheen"
+        statname = _INTL("Sheen")
+        defval = pkmn.sheen
       end
       params = ChooseNumberParams.new
       params.setRange(0,255)
@@ -332,12 +344,12 @@ module PokemonDebugMixin
          _INTL("Set the Pokémon's {1} (max. 255).",statname),params) { pbUpdate }
       if newval!=defval
         case command
-        when "setbeauty"; pkmn.beauty = newval
-        when "setcool";   pkmn.cool   = newval
-        when "setcute";   pkmn.cute   = newval
-        when "setsmart";  pkmn.smart  = newval
-        when "settough";  pkmn.tough  = newval
-        when "setsheen";  pkmn.sheen  = newval
+        when "setbeauty" then pkmn.beauty = newval
+        when "setcool"   then pkmn.cool   = newval
+        when "setcute"   then pkmn.cute   = newval
+        when "setsmart"  then pkmn.smart  = newval
+        when "settough"  then pkmn.tough  = newval
+        when "setsheen"  then pkmn.sheen  = newval
         end
         pbRefreshSingle(pkmnid)
       end

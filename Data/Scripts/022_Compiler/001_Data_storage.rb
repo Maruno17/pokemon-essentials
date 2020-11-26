@@ -52,11 +52,11 @@ module SerialRecords
       while strm.pos<offset+length
         datatype = strm.read(1)
         case datatype
-        when "0"; ret.push(nil)
-        when "T"; ret.push(true)
-        when "F"; ret.push(false)
-        when "\""; ret.push(decodeString(strm))
-        when "i"; ret.push(decodeInt(strm))
+        when "0"  then ret.push(nil)
+        when "T"  then ret.push(true)
+        when "F"  then ret.push(false)
+        when "\"" then ret.push(decodeString(strm))
+        when "i"  then ret.push(decodeInt(strm))
         end
       end
       return ret

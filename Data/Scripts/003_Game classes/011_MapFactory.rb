@@ -294,15 +294,28 @@ class PokemonMapFactory
   def getFacingTileFromPos(mapID,x,y,direction=0,steps=1)
     id = mapID
     case direction
-    when 1; x -= steps; y += steps
-    when 2;             y += steps
-    when 3; x += steps; y += steps
-    when 4; x -= steps
-    when 6; x += steps
-    when 7; x -= steps; y -= steps
-    when 8;             y -= steps
-    when 9; x += steps; y -= steps
-    else;   return [id,x,y]
+    when 1
+      x -= steps
+      y += steps
+    when 2
+      y += steps
+    when 3
+      x += steps
+      y += steps
+    when 4
+      x -= steps
+    when 6
+      x += steps
+    when 7
+      x -= steps
+      y -= steps
+    when 8
+      y -= steps
+    when 9
+      x += steps
+      y -= steps
+    else
+      return [id,x,y]
     end
     return getRealTilePos(mapID,x,y)
   end
@@ -333,14 +346,26 @@ class PokemonMapFactory
 
   def getFacingCoords(x,y,direction=0,steps=1)
     case direction
-    when 1; x -= steps; y += steps
-    when 2;             y += steps
-    when 3; x += steps; y += steps
-    when 4; x -= steps
-    when 6; x += steps
-    when 7; x -= steps; y -= steps
-    when 8;             y -= steps
-    when 9; x += steps; y -= steps
+    when 1
+      x -= steps
+      y += steps
+    when 2
+      y += steps
+    when 3
+      x += steps
+      y += steps
+    when 4
+      x -= steps
+    when 6
+      x += steps
+    when 7
+      x -= steps
+      y -= steps
+    when 8
+      y -= steps
+    when 9
+      x += steps
+      y -= steps
     end
     return [x,y]
   end

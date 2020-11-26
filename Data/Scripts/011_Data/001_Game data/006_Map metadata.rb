@@ -77,7 +77,6 @@ module GameData
     end
 
     def initialize(hash)
-      validate hash => Hash, hash[:id] => Integer
       @id                   = hash[:id]
       @outdoor_map          = hash[:outdoor_map]
       @announce_location    = hash[:announce_location]

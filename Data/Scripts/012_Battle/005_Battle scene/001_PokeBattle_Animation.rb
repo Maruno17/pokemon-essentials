@@ -65,21 +65,21 @@ module PokeBattle_BallAnimationMixin
   # Poké Ball.
   def getBattlerColorFromBallType(ballType)
     case ballType
-    when 1;  return Color.new(132, 189, 247)   # Great Ball
-    when 2;  return Color.new(189, 247, 165)   # Safari Ball
-    when 3;  return Color.new(255, 255, 123)   # Ultra Ball
-    when 4;  return Color.new(189, 165, 231)   # Master Ball
-    when 5;  return Color.new(173, 255, 206)   # Net Ball
-    when 6;  return Color.new( 99, 206, 247)   # Dive Ball
-    when 7;  return Color.new(247, 222,  82)   # Nest Ball
-    when 8;  return Color.new(255, 198, 132)   # Repeat Ball
-    when 9;  return Color.new(239, 247, 247)   # Timer Ball
-    when 10; return Color.new(255, 140,  82)   # Luxury Ball
-    when 11; return Color.new(255,  74,  82)   # Premier Ball
-    when 12; return Color.new(115, 115, 140)   # Dusk Ball
-    when 13; return Color.new(255, 198, 231)   # Heal Ball
-    when 14; return Color.new(140, 214, 255)   # Quick Ball
-    when 15; return Color.new(247,  66,  41)   # Cherish Ball
+    when 1  then return Color.new(132, 189, 247)   # Great Ball
+    when 2  then return Color.new(189, 247, 165)   # Safari Ball
+    when 3  then return Color.new(255, 255, 123)   # Ultra Ball
+    when 4  then return Color.new(189, 165, 231)   # Master Ball
+    when 5  then return Color.new(173, 255, 206)   # Net Ball
+    when 6  then return Color.new( 99, 206, 247)   # Dive Ball
+    when 7  then return Color.new(247, 222,  82)   # Nest Ball
+    when 8  then return Color.new(255, 198, 132)   # Repeat Ball
+    when 9  then return Color.new(239, 247, 247)   # Timer Ball
+    when 10 then return Color.new(255, 140,  82)   # Luxury Ball
+    when 11 then return Color.new(255,  74,  82)   # Premier Ball
+    when 12 then return Color.new(115, 115, 140)   # Dusk Ball
+    when 13 then return Color.new(255, 198, 231)   # Heal Ball
+    when 14 then return Color.new(140, 214, 255)   # Quick Ball
+    when 15 then return Color.new(247,  66,  41)   # Cherish Ball
     end
     return Color.new(255, 181, 247)   # Poké Ball, Sport Ball, Apricorn Balls, others
   end

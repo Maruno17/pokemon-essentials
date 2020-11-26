@@ -244,39 +244,39 @@ class SpritePositioner
       Input.update
       self.update
       case param
-      when 0; @sprites["info"].setTextToFit("Ally Position = #{xpos},#{ypos}")
-      when 1; @sprites["info"].setTextToFit("Enemy Position = #{xpos},#{ypos}")
-      when 3; @sprites["info"].setTextToFit("Shadow Position = #{xpos}")
+      when 0 then @sprites["info"].setTextToFit("Ally Position = #{xpos},#{ypos}")
+      when 1 then @sprites["info"].setTextToFit("Enemy Position = #{xpos},#{ypos}")
+      when 3 then @sprites["info"].setTextToFit("Shadow Position = #{xpos}")
       end
       if Input.repeat?(Input::UP) && param!=3
         ypos -= 1
         case param
-        when 0; @metrics[SpeciesData::METRIC_PLAYER_Y][@species] = ypos
-        when 1; @metrics[SpeciesData::METRIC_ENEMY_Y][@species]  = ypos
+        when 0 then @metrics[SpeciesData::METRIC_PLAYER_Y][@species] = ypos
+        when 1 then @metrics[SpeciesData::METRIC_ENEMY_Y][@species]  = ypos
         end
         refresh
       elsif Input.repeat?(Input::DOWN) && param!=3
         ypos += 1
         case param
-        when 0; @metrics[SpeciesData::METRIC_PLAYER_Y][@species] = ypos
-        when 1; @metrics[SpeciesData::METRIC_ENEMY_Y][@species]  = ypos
+        when 0 then @metrics[SpeciesData::METRIC_PLAYER_Y][@species] = ypos
+        when 1 then @metrics[SpeciesData::METRIC_ENEMY_Y][@species]  = ypos
         end
         refresh
       end
       if Input.repeat?(Input::LEFT)
         xpos -= 1
         case param
-        when 0; @metrics[SpeciesData::METRIC_PLAYER_X][@species] = xpos
-        when 1; @metrics[SpeciesData::METRIC_ENEMY_X][@species]  = xpos
-        when 3; @metrics[SpeciesData::METRIC_SHADOW_X][@species] = xpos
+        when 0 then @metrics[SpeciesData::METRIC_PLAYER_X][@species] = xpos
+        when 1 then @metrics[SpeciesData::METRIC_ENEMY_X][@species]  = xpos
+        when 3 then @metrics[SpeciesData::METRIC_SHADOW_X][@species] = xpos
         end
         refresh
       elsif Input.repeat?(Input::RIGHT)
         xpos += 1
         case param
-        when 0; @metrics[SpeciesData::METRIC_PLAYER_X][@species] = xpos
-        when 1; @metrics[SpeciesData::METRIC_ENEMY_X][@species]  = xpos
-        when 3; @metrics[SpeciesData::METRIC_SHADOW_X][@species] = xpos
+        when 0 then @metrics[SpeciesData::METRIC_PLAYER_X][@species] = xpos
+        when 1 then @metrics[SpeciesData::METRIC_ENEMY_X][@species]  = xpos
+        when 3 then @metrics[SpeciesData::METRIC_SHADOW_X][@species] = xpos
         end
         refresh
       end

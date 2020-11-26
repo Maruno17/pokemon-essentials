@@ -347,11 +347,11 @@ class PokemonSummary_Scene
     drawMarkings(overlay,84,292)
     # Draw page-specific information
     case page
-    when 1; drawPageOne
-    when 2; drawPageTwo
-    when 3; drawPageThree
-    when 4; drawPageFour
-    when 5; drawPageFive
+    when 1 then drawPageOne
+    when 2 then drawPageTwo
+    when 3 then drawPageThree
+    when 4 then drawPageFour
+    when 5 then drawPageFive
     end
   end
 
@@ -409,8 +409,12 @@ class PokemonSummary_Scene
       ownerbase   = Color.new(64,64,64)
       ownershadow = Color.new(176,176,176)
       case @pokemon.owner.gender
-      when 0; ownerbase = Color.new(24,112,216); ownershadow = Color.new(136,168,208)
-      when 1; ownerbase = Color.new(248,56,32);  ownershadow = Color.new(224,152,144)
+      when 0
+        ownerbase = Color.new(24, 112, 216)
+        ownershadow = Color.new(136, 168, 208)
+      when 1
+        ownerbase = Color.new(248, 56, 32)
+        ownershadow = Color.new(224, 152, 144)
       end
       textpos.push([@pokemon.owner.name,435,176,2,ownerbase,ownershadow])
       textpos.push([sprintf("%05d",@pokemon.owner.public_id),435,208,2,Color.new(64,64,64),Color.new(176,176,176)])

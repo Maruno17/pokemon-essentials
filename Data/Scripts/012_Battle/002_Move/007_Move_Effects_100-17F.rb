@@ -563,9 +563,9 @@ class PokeBattle_Move_114 < PokeBattle_Move
   def pbEffectGeneral(user)
     hpGain = 0
     case [user.effects[PBEffects::Stockpile],1].max
-    when 1; hpGain = user.totalhp/4
-    when 2; hpGain = user.totalhp/2
-    when 3; hpGain = user.totalhp
+    when 1 then hpGain = user.totalhp/4
+    when 2 then hpGain = user.totalhp/2
+    when 3 then hpGain = user.totalhp
     end
     if user.pbRecoverHP(hpGain)>0
       @battle.pbDisplay(_INTL("{1}'s HP was restored.",user.pbThis))

@@ -471,14 +471,16 @@ module MiniRegistry
     type = type.unpack("V")[0]
     data = data[0,size.unpack("V")[0]]
     case type
-    when 1; return data.chop                                   # REG_SZ
-    when 2; return data.gsub(/%([^%]+)%/) { ENV[$1] || $& }    # REG_EXPAND_SZ
-    when 3; return data                                        # REG_BINARY
-    when 4; return data.unpack("V")[0]                         # REG_DWORD
-    when 5; return data.unpack("V")[0]                         # REG_DWORD_BIG_ENDIAN
-    when 11; data.unpack("VV"); return (data[1]<<32|data[0])   # REG_QWORD
-    else; raise "Type #{type} not supported."
+    when 1 then return data.chop                                  # REG_SZ
+    when 2 then return data.gsub(/%([^%]+)%/) { ENV[$1] || $& }   # REG_EXPAND_SZ
+    when 3 then return data                                       # REG_BINARY
+    when 4 then return data.unpack("V")[0]                        # REG_DWORD
+    when 5 then return data.unpack("V")[0]                        # REG_DWORD_BIG_ENDIAN
+    when 11                                                        # REG_QWORD
+      data.unpack("VV")
+      return (data[1]<<32|data[0])
     end
+    raise "Type #{type} not supported."
   end
 
   private
@@ -548,9 +550,9 @@ class StringInput
   def seek(offset, whence=IO::SEEK_SET)
     raise IOError, 'closed stream' if @closed
     case whence
-    when IO::SEEK_SET; @pos = offset
-    when IO::SEEK_CUR; @pos += offset
-    when IO::SEEK_END; @pos = @string.size - offset
+    when IO::SEEK_SET then @pos = offset
+    when IO::SEEK_CUR then @pos += offset
+    when IO::SEEK_END then @pos = @string.size - offset
     else
       raise ArgumentError, "unknown seek flag: #{whence}"
     end

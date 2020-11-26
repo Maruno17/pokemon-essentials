@@ -30,9 +30,9 @@ def pbSaveTypes
         cname = getConstantName(PBTypes,j) rescue pbGetTypeConst(j)
         next if !cname || cname==""
         case PBTypes.getEffectiveness(j,i)
-        when PBTypeEffectiveness::SUPER_EFFECTIVE_ONE; weak.push(cname)
-        when PBTypeEffectiveness::NOT_EFFECTIVE_ONE;   resist.push(cname)
-        when PBTypeEffectiveness::INEFFECTIVE;         immune.push(cname)
+        when PBTypeEffectiveness::SUPER_EFFECTIVE_ONE then weak.push(cname)
+        when PBTypeEffectiveness::NOT_EFFECTIVE_ONE   then resist.push(cname)
+        when PBTypeEffectiveness::INEFFECTIVE         then immune.push(cname)
         end
       end
       f.write("Weaknesses = "+weak.join(",")+"\r\n") if weak.length>0

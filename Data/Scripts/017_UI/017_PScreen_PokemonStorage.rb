@@ -1582,10 +1582,10 @@ class PokemonStorageScreen
              _INTL("Cancel")
           ])
           case command
-          when 0; pbWithdraw(selected,nil)
-          when 1; pbSummary(selected,nil)
-          when 2; pbMark(selected,nil)
-          when 3; pbRelease(selected,nil)
+          when 0 then pbWithdraw(selected, nil)
+          when 1 then pbSummary(selected, nil)
+          when 2 then pbMark(selected, nil)
+          when 3 then pbRelease(selected, nil)
           end
         end
       end
@@ -1615,10 +1615,10 @@ class PokemonStorageScreen
              _INTL("Cancel")
           ])
           case command
-          when 0; pbStore([-1,selected],nil)
-          when 1; pbSummary([-1,selected],nil)
-          when 2; pbMark([-1,selected],nil)
-          when 3; pbRelease([-1,selected],nil)
+          when 0 then pbStore([-1, selected], nil)
+          when 1 then pbSummary([-1, selected], nil)
+          when 2 then pbMark([-1, selected], nil)
+          when 3 then pbRelease([-1, selected], nil)
           end
         end
       end
@@ -1961,15 +1961,18 @@ class PokemonStorageScreen
             retval = selected
             break
           end
-        when 1; pbSummary(selected,nil)
+        when 1
+          pbSummary(selected,nil)
         when 2   # Store/Withdraw
           if selected[0]==-1
             pbStore(selected,nil)
           else
             pbWithdraw(selected,nil)
           end
-        when 3; pbItem(selected,nil)
-        when 4; pbMark(selected,nil)
+        when 3
+          pbItem(selected,nil)
+        when 4
+          pbMark(selected,nil)
         end
       end
     end

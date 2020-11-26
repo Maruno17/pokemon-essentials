@@ -259,22 +259,22 @@ class SpriteMetafilePlayer
         value=@metafile[j][1]
         for sprite in @sprites
           case code
-          when SpriteMetafile::X; sprite.x=value
-          when SpriteMetafile::Y; sprite.y=value
-          when SpriteMetafile::OX; sprite.ox=value
-          when SpriteMetafile::OY; sprite.oy=value
-          when SpriteMetafile::ZOOM_X; sprite.zoom_x=value
-          when SpriteMetafile::ZOOM_Y; sprite.zoom_y=value
-          when SpriteMetafile::SRC_RECT; sprite.src_rect=value
-          when SpriteMetafile::VISIBLE; sprite.visible=value
-          when SpriteMetafile::Z; sprite.z=value # prevent crashes
-          when SpriteMetafile::ANGLE; sprite.angle=(value==180) ? 179.9 : value
-          when SpriteMetafile::MIRROR; sprite.mirror=value
-          when SpriteMetafile::BUSH_DEPTH; sprite.bush_depth=value
-          when SpriteMetafile::OPACITY; sprite.opacity=value
-          when SpriteMetafile::BLEND_TYPE; sprite.blend_type=value
-          when SpriteMetafile::COLOR; sprite.color=value
-          when SpriteMetafile::TONE; sprite.tone=value
+          when SpriteMetafile::X          then sprite.x = value
+          when SpriteMetafile::Y          then sprite.y = value
+          when SpriteMetafile::OX         then sprite.ox = value
+          when SpriteMetafile::OY         then sprite.oy = value
+          when SpriteMetafile::ZOOM_X     then sprite.zoom_x = value
+          when SpriteMetafile::ZOOM_Y     then sprite.zoom_y = value
+          when SpriteMetafile::SRC_RECT   then sprite.src_rect = value
+          when SpriteMetafile::VISIBLE    then sprite.visible = value
+          when SpriteMetafile::Z          then sprite.z = value   # prevent crashes
+          when SpriteMetafile::ANGLE      then sprite.angle = (value == 180) ? 179.9 : value
+          when SpriteMetafile::MIRROR     then sprite.mirror = value
+          when SpriteMetafile::BUSH_DEPTH then sprite.bush_depth = value
+          when SpriteMetafile::OPACITY    then sprite.opacity = value
+          when SpriteMetafile::BLEND_TYPE then sprite.blend_type = value
+          when SpriteMetafile::COLOR      then sprite.color = value
+          when SpriteMetafile::TONE       then sprite.tone = value
           end
         end
       end

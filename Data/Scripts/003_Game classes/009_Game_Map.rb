@@ -161,14 +161,26 @@ class Game_Map
     # All other events
     newx = x; newy = y
     case d
-    when 1; newx -= 1; newy += 1
-    when 2;            newy += 1
-    when 3; newx += 1; newy += 1
-    when 4; newx -= 1
-    when 6; newx += 1
-    when 7; newx -= 1; newy -= 1
-    when 8;            newy -= 1
-    when 9; newx += 1; newy -= 1
+    when 1
+      newx -= 1
+      newy += 1
+    when 2
+      newy += 1
+    when 3
+      newx += 1
+      newy += 1
+    when 4
+      newx -= 1
+    when 6
+      newx += 1
+    when 7
+      newx -= 1
+      newy -= 1
+    when 8
+      newy -= 1
+    when 9
+      newx += 1
+      newy -= 1
     end
     return false if !valid?(newx, newy)
     for i in [2, 1, 0]
@@ -403,10 +415,10 @@ class Game_Map
       distance = (1<<@scroll_speed)*40.0/Graphics.frame_rate
       distance = @scroll_rest if distance>@scroll_rest
       case @scroll_direction
-      when 2; scroll_down(distance)
-      when 4; scroll_left(distance)
-      when 6; scroll_right(distance)
-      when 8; scroll_up(distance)
+      when 2 then scroll_down(distance)
+      when 4 then scroll_left(distance)
+      when 6 then scroll_right(distance)
+      when 8 then scroll_up(distance)
       end
       @scroll_rest -= distance
     end

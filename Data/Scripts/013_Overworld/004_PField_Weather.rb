@@ -206,11 +206,11 @@ module RPG
         @sprites.each { |s| s.dispose }
         @sprites.clear
         return
-      when PBFieldWeather::Rain;                             prepareRainBitmap
-      when PBFieldWeather::HeavyRain, PBFieldWeather::Storm; prepareStormBitmap
-      when PBFieldWeather::Snow;                             prepareSnowBitmaps
-      when PBFieldWeather::Blizzard;                         prepareBlizzardBitmaps
-      when PBFieldWeather::Sandstorm;                        prepareSandstormBitmaps
+      when PBFieldWeather::Rain                             then prepareRainBitmap
+      when PBFieldWeather::HeavyRain, PBFieldWeather::Storm then prepareStormBitmap
+      when PBFieldWeather::Snow                             then prepareSnowBitmaps
+      when PBFieldWeather::Blizzard                         then prepareBlizzardBitmaps
+      when PBFieldWeather::Sandstorm                        then prepareSandstormBitmaps
       end
       weatherBitmaps = (@type==PBFieldWeather::None || @type==PBFieldWeather::Sun) ? nil : @weatherTypes[@type][0]
       ensureSprites
@@ -226,13 +226,13 @@ module RPG
       # @max is (power+1)*4, where power is between 1 and 9
       # Set tone of viewport (general screen brightening/darkening)
       case @type
-      when PBFieldWeather::None;      @viewport.tone.set(0,0,0,0)
-      when PBFieldWeather::Rain;      @viewport.tone.set(-@max*3/4, -@max*3/4, -@max*3/4, 10)
-      when PBFieldWeather::HeavyRain; @viewport.tone.set(-@max*6/4, -@max*6/4, -@max*6/4, 20)
-      when PBFieldWeather::Storm;     @viewport.tone.set(-@max*6/4, -@max*6/4, -@max*6/4, 20)
-      when PBFieldWeather::Snow;      @viewport.tone.set(   @max/2,    @max/2,    @max/2,  0)
-      when PBFieldWeather::Blizzard;  @viewport.tone.set( @max*3/4,  @max*3/4,   max*3/4,  0)
-      when PBFieldWeather::Sandstorm; @viewport.tone.set(   @max/2,         0,   -@max/2,  0)
+      when PBFieldWeather::None      then @viewport.tone.set(0, 0, 0, 0)
+      when PBFieldWeather::Rain      then @viewport.tone.set(-@max * 3 / 4, -@max * 3 / 4, -@max * 3 / 4, 10)
+      when PBFieldWeather::HeavyRain then @viewport.tone.set(-@max * 6 / 4, -@max * 6 / 4, -@max * 6 / 4, 20)
+      when PBFieldWeather::Storm     then @viewport.tone.set(-@max * 6 / 4, -@max * 6 / 4, -@max * 6 / 4, 20)
+      when PBFieldWeather::Snow      then @viewport.tone.set(     @max / 2,      @max / 2,      @max / 2,  0)
+      when PBFieldWeather::Blizzard  then @viewport.tone.set( @max * 3 / 4,  @max * 3 / 4,   max * 3 / 4,  0)
+      when PBFieldWeather::Sandstorm then @viewport.tone.set(     @max / 2,             0,     -@max / 2,  0)
       when PBFieldWeather::Sun
         @sun = @max if @sun!=@max && @sun!=-@max
         @sun = -@sun if @sunValue>@max || @sunValue<0

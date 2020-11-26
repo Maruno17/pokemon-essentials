@@ -61,14 +61,14 @@ class PokeBattle_Battle
     # Weather continues
     pbCommonAnimation(PBWeather.animationName(@field.weather))
     case @field.weather
-#    when PBWeather::Sun;         pbDisplay(_INTL("The sunlight is strong."))
-#    when PBWeather::Rain;        pbDisplay(_INTL("Rain continues to fall."))
-    when PBWeather::Sandstorm;   pbDisplay(_INTL("The sandstorm is raging."))
-    when PBWeather::Hail;        pbDisplay(_INTL("The hail is crashing down."))
-#    when PBWeather::HarshSun;    pbDisplay(_INTL("The sunlight is extremely harsh."))
-#    when PBWeather::HeavyRain;   pbDisplay(_INTL("It is raining heavily."))
-#    when PBWeather::StrongWinds; pbDisplay(_INTL("The wind is strong."))
-    when PBWeather::ShadowSky;   pbDisplay(_INTL("The shadow sky continues."));
+#    when PBWeather::Sun         then pbDisplay(_INTL("The sunlight is strong."))
+#    when PBWeather::Rain        then pbDisplay(_INTL("Rain continues to fall."))
+    when PBWeather::Sandstorm   then pbDisplay(_INTL("The sandstorm is raging."))
+    when PBWeather::Hail        then pbDisplay(_INTL("The hail is crashing down."))
+#    when PBWeather::HarshSun    then pbDisplay(_INTL("The sunlight is extremely harsh."))
+#    when PBWeather::HeavyRain   then pbDisplay(_INTL("It is raining heavily."))
+#    when PBWeather::StrongWinds then pbDisplay(_INTL("The wind is strong."))
+    when PBWeather::ShadowSky   then pbDisplay(_INTL("The shadow sky continues."))
     end
     # Effects due to weather
     curWeather = pbWeather
@@ -132,10 +132,10 @@ class PokeBattle_Battle
     # Terrain continues
     pbCommonAnimation(PBBattleTerrains.animationName(@field.terrain))
     case @field.terrain
-    when PBBattleTerrains::Electric; pbDisplay(_INTL("An electric current is running across the battlefield."))
-    when PBBattleTerrains::Grassy;   pbDisplay(_INTL("Grass is covering the battlefield."))
-    when PBBattleTerrains::Misty;    pbDisplay(_INTL("Mist is swirling about the battlefield."))
-    when PBBattleTerrains::Psychic;  pbDisplay(_INTL("The battlefield is weird."))
+    when PBBattleTerrains::Electric then pbDisplay(_INTL("An electric current is running across the battlefield."))
+    when PBBattleTerrains::Grassy   then pbDisplay(_INTL("Grass is covering the battlefield."))
+    when PBBattleTerrains::Misty    then pbDisplay(_INTL("Mist is swirling about the battlefield."))
+    when PBBattleTerrains::Psychic  then pbDisplay(_INTL("The battlefield is weird."))
     end
   end
 
@@ -174,8 +174,8 @@ class PokeBattle_Battle
           # Get the position to move to
           pos = -1
           case pbSideSize(side)
-          when 2; pos = [2,3,0,1][b.index]   # The unoccupied position
-          when 3; pos = (side==0) ? 2 : 3    # The centre position
+          when 2 then pos = [2,3,0,1][b.index]   # The unoccupied position
+          when 3 then pos = (side==0) ? 2 : 3    # The centre position
           end
           next if pos<0
           # Can't move if the same trainer doesn't control both positions

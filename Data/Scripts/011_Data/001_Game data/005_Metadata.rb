@@ -83,7 +83,6 @@ module GameData
     end
 
     def initialize(hash)
-      validate hash => Hash, hash[:id] => Integer
       @id                  = hash[:id]
       @home                = hash[:home]
       @wild_battle_BGM     = hash[:wild_battle_BGM]

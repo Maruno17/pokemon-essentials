@@ -703,10 +703,10 @@ end
 def pbScrollMap(direction,distance,speed)
   if speed==0
     case direction
-    when 2; $game_map.scroll_down(distance * Game_Map::REAL_RES_Y)
-    when 4; $game_map.scroll_left(distance * Game_Map::REAL_RES_X)
-    when 6; $game_map.scroll_right(distance * Game_Map::REAL_RES_X)
-    when 8; $game_map.scroll_up(distance * Game_Map::REAL_RES_Y)
+    when 2 then $game_map.scroll_down(distance * Game_Map::REAL_RES_Y)
+    when 4 then $game_map.scroll_left(distance * Game_Map::REAL_RES_X)
+    when 6 then $game_map.scroll_right(distance * Game_Map::REAL_RES_X)
+    when 8 then $game_map.scroll_up(distance * Game_Map::REAL_RES_Y)
     end
   else
     $game_map.start_scroll(direction, distance, speed)

@@ -93,8 +93,8 @@ class PokeBattle_Scene
 
   def pbCreateBackdropSprites
     case @battle.time
-    when 1; time = "eve"
-    when 2; time = "night"
+    when 1 then time = "eve"
+    when 2 then time = "night"
     end
     # Put everything together into backdrop, bases and message bar filenames
     backdropFilename = @battle.backdrop

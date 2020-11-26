@@ -179,15 +179,15 @@ class PokeBattle_Battle
   def setBattleMode(mode)
     @sideSizes =
       case mode
-      when "triple", "3v3"; [3,3]
-      when "3v2";           [3,2]
-      when "3v1";           [3,1]
-      when "2v3";           [2,3]
-      when "double", "2v2"; [2,2]
-      when "2v1";           [2,1]
-      when "1v3";           [1,3]
-      when "1v2";           [1,2]
-      else;                 [1,1]   # Single, 1v1 (default)
+      when "triple", "3v3" then [3, 3]
+      when "3v2"           then [3, 2]
+      when "3v1"           then [3, 1]
+      when "2v3"           then [2, 3]
+      when "double", "2v2" then [2, 2]
+      when "2v1"           then [2, 1]
+      when "1v3"           then [1, 3]
+      when "1v2"           then [1, 2]
+      else                      [1, 1]   # Single, 1v1 (default)
       end
   end
 
@@ -220,7 +220,8 @@ class PokeBattle_Battle
       n = pbSideSize(idxBattler%2)
       return [0,0,1][idxBattler/2] if n==3
       return idxBattler/2   # Same as [0,1][idxBattler/2], i.e. 2 battler slots
-    when 3; return idxBattler/2
+    when 3
+      return idxBattler/2
     end
     return 0
   end
@@ -658,14 +659,14 @@ class PokeBattle_Battle
     pbCommonAnimation(PBWeather.animationName(@field.weather)) if showAnim
     pbHideAbilitySplash(user) if user
     case @field.weather
-    when PBWeather::Sun;         pbDisplay(_INTL("The sunlight turned harsh!"))
-    when PBWeather::Rain;        pbDisplay(_INTL("It started to rain!"))
-    when PBWeather::Sandstorm;   pbDisplay(_INTL("A sandstorm brewed!"))
-    when PBWeather::Hail;        pbDisplay(_INTL("It started to hail!"))
-    when PBWeather::HarshSun;    pbDisplay(_INTL("The sunlight turned extremely harsh!"))
-    when PBWeather::HeavyRain;   pbDisplay(_INTL("A heavy rain began to fall!"))
-    when PBWeather::StrongWinds; pbDisplay(_INTL("Mysterious strong winds are protecting Flying-type Pokémon!"))
-    when PBWeather::ShadowSky;   pbDisplay(_INTL("A shadow sky appeared!"))
+    when PBWeather::Sun         then pbDisplay(_INTL("The sunlight turned harsh!"))
+    when PBWeather::Rain        then pbDisplay(_INTL("It started to rain!"))
+    when PBWeather::Sandstorm   then pbDisplay(_INTL("A sandstorm brewed!"))
+    when PBWeather::Hail        then pbDisplay(_INTL("It started to hail!"))
+    when PBWeather::HarshSun    then pbDisplay(_INTL("The sunlight turned extremely harsh!"))
+    when PBWeather::HeavyRain   then pbDisplay(_INTL("A heavy rain began to fall!"))
+    when PBWeather::StrongWinds then pbDisplay(_INTL("Mysterious strong winds are protecting Flying-type Pokémon!"))
+    when PBWeather::ShadowSky   then pbDisplay(_INTL("A shadow sky appeared!"))
     end
     # Check for end of primordial weather, and weather-triggered form changes
     eachBattler { |b| b.pbCheckFormOnWeatherChange }

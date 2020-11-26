@@ -105,13 +105,13 @@ def pbGetLanguage()
     return 0 if ret==0  # Unknown
   end
   case ret
-  when 0x11; return 1 # Japanese
-  when 0x09; return 2 # English
-  when 0x0C; return 3 # French
-  when 0x10; return 4 # Italian
-  when 0x07; return 5 # German
-  when 0x0A; return 7 # Spanish
-  when 0x12; return 8 # Korean
+  when 0x11 then return 1   # Japanese
+  when 0x09 then return 2   # English
+  when 0x0C then return 3   # French
+  when 0x10 then return 4   # Italian
+  when 0x07 then return 5   # German
+  when 0x0A then return 7   # Spanish
+  when 0x12 then return 8   # Korean
   end
   return 2 # Use 'English' by default
 end
@@ -182,7 +182,8 @@ end
 def beginRecordUI
   code = beginRecord
   case code
-  when 0; return true
+  when 0
+    return true
   when 256+66
     pbMessage(_INTL("All recording devices are in use. Recording is not possible now."))
     return false
@@ -758,10 +759,10 @@ def getRandomNameEx(type,variable,upper,maxLength=100)
     name = ""
     formats = []
     case type
-    when 0; formats = %w( F5 BvE FE FE5 FEvE )            # Names for males
-    when 1; formats = %w( vE6 vEvE6 BvE6 B4 v3 vEv3 Bv3 ) # Names for females
-    when 2; formats = %w( WE WEU WEvE BvE BvEU BvEvE )    # Neutral gender names
-    else; return ""
+    when 0 then formats = %w( F5 BvE FE FE5 FEvE )              # Names for males
+    when 1 then formats = %w( vE6 vEvE6 BvE6 B4 v3 vEv3 Bv3 )   # Names for females
+    when 2 then formats = %w( WE WEU WEvE BvE BvEU BvEvE )      # Neutral gender names
+    else        return ""
     end
     format = formats[rand(formats.length)]
     format.scan(/./) { |c|
@@ -816,8 +817,8 @@ def getRandomNameEx(type,variable,upper,maxLength=100)
   }
   name = name[0,maxLength]
   case upper
-  when 0; name = name.upcase
-  when 1; name[0,1] = name[0,1].upcase
+  when 0 then name = name.upcase
+  when 1 then name[0, 1] = name[0, 1].upcase
   end
   if $game_variables && variable
     $game_variables[variable] = name

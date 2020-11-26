@@ -106,9 +106,9 @@ $VersionStyles = [
 
 def pbSettingToTextSpeed(speed)
   case speed
-  when 0; return 2
-  when 1; return 1
-  when 2; return -2
+  when 0 then return 2
+  when 1 then return 1
+  when 2 then return -2
   end
   return MessageConfig::TextSpeed || 1
 end

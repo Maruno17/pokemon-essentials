@@ -104,7 +104,6 @@ module GameData
     # @return [Boolean] whether other represents the same thing as this thing
     def ==(other)
       return false if other.nil?
-      validate other => [Symbol, self.class, String, Integer]
       if other.is_a?(Symbol)
         return @id == other
       elsif other.is_a?(self.class)

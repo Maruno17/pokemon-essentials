@@ -65,10 +65,10 @@ def moveThrough(follower,direction)
   oldThrough=follower.through
   follower.through=true
   case direction
-  when 2; follower.move_down # down
-  when 4; follower.move_left # left
-  when 6; follower.move_right # right
-  when 8; follower.move_up # up
+  when 2 then follower.move_down
+  when 4 then follower.move_left
+  when 6 then follower.move_right
+  when 8 then follower.move_up
   end
   follower.through=oldThrough
 end
@@ -87,10 +87,10 @@ def moveFancy(follower,direction)
     oldThrough=follower.through
     follower.through=true
     case direction
-    when 2; follower.move_down # down
-    when 4; follower.move_left # left
-    when 6; follower.move_right # right
-    when 8; follower.move_up # up
+    when 2 then follower.move_down
+    when 4 then follower.move_left
+    when 6 then follower.move_right
+    when 8 then follower.move_up
     end
     follower.through=oldThrough
   end
@@ -155,11 +155,11 @@ class DependentEvents
     newEvent = Game_Event.new(eventData[0],rpgEvent,$MapFactory.getMap(eventData[2]))
     newEvent.character_name = eventData[6]
     newEvent.character_hue  = eventData[7]
-    case eventData[5] # direction
-    when 2; newEvent.turn_down
-    when 4; newEvent.turn_left
-    when 6; newEvent.turn_right
-    when 8; newEvent.turn_up
+    case eventData[5]   # direction
+    when 2 then newEvent.turn_down
+    when 4 then newEvent.turn_left
+    when 6 then newEvent.turn_right
+    when 8 then newEvent.turn_up
     end
     return newEvent
   end

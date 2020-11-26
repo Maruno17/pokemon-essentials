@@ -66,11 +66,7 @@ class Sprite_Reflection
       @sprite.zoom_x   = @rsprite.zoom_x
       @sprite.zoom_y   = @rsprite.zoom_y
       frame = (Graphics.frame_count%40)/10
-      case frame
-      when 1; @sprite.zoom_x *= 0.95
-      when 3; @sprite.zoom_x *= 1.05
-      else; @sprite.zoom_x *= 1.0
-      end
+      @sprite.zoom_x   *= [1.0, 0.95, 1.0, 1.05][frame]
       @sprite.angle    = 180.0
       @sprite.mirror   = true
       @sprite.bitmap   = @rsprite.bitmap

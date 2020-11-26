@@ -111,9 +111,9 @@ def pbTrainerPCMenu
        _INTL("Turn Off")
        ],-1,nil,command)
     case command
-    when 0; pbPCItemStorage
-    when 1; pbPCMailbox
-    else; break
+    when 0 then pbPCItemStorage
+    when 1 then pbPCMailbox
+    else        break
     end
   end
 end

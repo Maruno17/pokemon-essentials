@@ -299,10 +299,10 @@ ItemHandlers::UseInField.add(:ITEMFINDER,proc { |item|
         direction = (offsetY<0) ? 8 : 2
       end
       case direction
-      when 2; $game_player.turn_down
-      when 4; $game_player.turn_left
-      when 6; $game_player.turn_right
-      when 8; $game_player.turn_up
+      when 2 then $game_player.turn_down
+      when 4 then $game_player.turn_left
+      when 6 then $game_player.turn_right
+      when 8 then $game_player.turn_up
       end
       pbWait(Graphics.frame_rate*3/10)
       pbMessage(_INTL("Huh? The {1}'s responding!\1",GameData::Item.get(item).name))

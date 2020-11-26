@@ -169,10 +169,14 @@ module Compiler
         print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\r\n{2}",record[3],FileLineData.linereport)
       end
       case record[1]
-      when "N"; raise _INTL("North side of first map must connect with south side of second map\r\n{1}",FileLineData.linereport) if record[4]!="S"
-      when "S"; raise _INTL("South side of first map must connect with north side of second map\r\n{1}",FileLineData.linereport) if record[4]!="N"
-      when "E"; raise _INTL("East side of first map must connect with west side of second map\r\n{1}",FileLineData.linereport) if record[4]!="W"
-      when "W"; raise _INTL("West side of first map must connect with east side of second map\r\n{1}",FileLineData.linereport) if record[4]!="E"
+      when "N"
+        raise _INTL("North side of first map must connect with south side of second map\r\n{1}", FileLineData.linereport) if record[4] != "S"
+      when "S"
+        raise _INTL("South side of first map must connect with north side of second map\r\n{1}", FileLineData.linereport) if record[4] != "N"
+      when "E"
+        raise _INTL("East side of first map must connect with west side of second map\r\n{1}", FileLineData.linereport) if record[4] != "W"
+      when "W"
+        raise _INTL("West side of first map must connect with east side of second map\r\n{1}", FileLineData.linereport) if record[4] != "E"
       end
       records.push(record)
     }

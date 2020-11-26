@@ -309,9 +309,9 @@ class Game_Character
   #=============================================================================
   def move_type_random
     case rand(6)
-    when 0..3; move_random
-    when 4;    move_forward
-    when 5;    @stop_count = 0
+    when 0..3 then move_random
+    when 4    then move_forward
+    when 5    then @stop_count = 0
     end
   end
 
@@ -323,9 +323,9 @@ class Game_Character
       return
     end
     case rand(6)
-    when 0..3; move_toward_player
-    when 4;    move_random
-    when 5;    move_forward
+    when 0..3 then move_toward_player
+    when 4    then move_random
+    when 5    then move_forward
     end
   end
 
@@ -349,20 +349,20 @@ class Game_Character
       end
       if command.code <= 14
         case command.code
-        when 1;  move_down
-        when 2;  move_left
-        when 3;  move_right
-        when 4;  move_up
-        when 5;  move_lower_left
-        when 6;  move_lower_right
-        when 7;  move_upper_left
-        when 8;  move_upper_right
-        when 9;  move_random
-        when 10; move_toward_player
-        when 11; move_away_from_player
-        when 12; move_forward
-        when 13; move_backward
-        when 14; jump(command.parameters[0], command.parameters[1])
+        when 1  then move_down
+        when 2  then move_left
+        when 3  then move_right
+        when 4  then move_up
+        when 5  then move_lower_left
+        when 6  then move_lower_right
+        when 7  then move_upper_left
+        when 8  then move_upper_right
+        when 9  then move_random
+        when 10 then move_toward_player
+        when 11 then move_away_from_player
+        when 12 then move_forward
+        when 13 then move_backward
+        when 14 then jump(command.parameters[0], command.parameters[1])
         end
         @move_route_index += 1 if @move_route.skippable or moving? or jumping?
         return
@@ -374,17 +374,17 @@ class Game_Character
       end
       if command.code >= 16 and command.code <= 26
         case command.code
-        when 16; turn_down
-        when 17; turn_left
-        when 18; turn_right
-        when 19; turn_up
-        when 20; turn_right_90
-        when 21; turn_left_90
-        when 22; turn_180
-        when 23; turn_right_or_left_90
-        when 24; turn_random
-        when 25; turn_toward_player
-        when 26; turn_away_from_player
+        when 16 then turn_down
+        when 17 then turn_left
+        when 18 then turn_right
+        when 19 then turn_up
+        when 20 then turn_right_90
+        when 21 then turn_left_90
+        when 22 then turn_180
+        when 23 then turn_right_or_left_90
+        when 24 then turn_random
+        when 25 then turn_toward_player
+        when 26 then turn_away_from_player
         end
         @move_route_index += 1
         return
@@ -397,18 +397,18 @@ class Game_Character
         when 28
           $game_switches[command.parameters[0]] = false
           self.map.need_refresh = true
-        when 29; self.move_speed = command.parameters[0]
-        when 30; self.move_frequency = command.parameters[0]
-        when 31; @walk_anime = true
-        when 32; @walk_anime = false
-        when 33; @step_anime = true
-        when 34; @step_anime = false
-        when 35; @direction_fix = true
-        when 36; @direction_fix = false
-        when 37; @through = true
-        when 38; @through = false
-        when 39; @always_on_top = true
-        when 40; @always_on_top = false
+        when 29 then self.move_speed = command.parameters[0]
+        when 30 then self.move_frequency = command.parameters[0]
+        when 31 then @walk_anime = true
+        when 32 then @walk_anime = false
+        when 33 then @step_anime = true
+        when 34 then @step_anime = false
+        when 35 then @direction_fix = true
+        when 36 then @direction_fix = false
+        when 37 then @through = true
+        when 38 then @through = false
+        when 39 then @always_on_top = true
+        when 40 then @always_on_top = false
         when 41
           @tile_id = 0
           @character_name = command.parameters[0]
@@ -422,10 +422,10 @@ class Game_Character
             @pattern = command.parameters[3]
             @original_pattern = @pattern
           end
-        when 42; @opacity = command.parameters[0]
-        when 43; @blend_type = command.parameters[0]
-        when 44; pbSEPlay(command.parameters[0])
-        when 45; eval(command.parameters[0])
+        when 42 then @opacity = command.parameters[0]
+        when 43 then @blend_type = command.parameters[0]
+        when 44 then pbSEPlay(command.parameters[0])
+        when 45 then eval(command.parameters[0])
         end
         @move_route_index += 1
       end
@@ -512,28 +512,28 @@ class Game_Character
 
   def moveLeft90   # anticlockwise
     case self.direction
-    when 2; move_right   # down
-    when 4; move_down    # left
-    when 6; move_up      # right
-    when 8; move_left    # up
+    when 2 then move_right   # down
+    when 4 then move_down    # left
+    when 6 then move_up      # right
+    when 8 then move_left    # up
     end
   end
 
   def moveRight90   # clockwise
     case self.direction
-    when 2; move_left    # down
-    when 4; move_up      # left
-    when 6; move_down    # right
-    when 8; move_right   # up
+    when 2 then move_left    # down
+    when 4 then move_up      # left
+    when 6 then move_down    # right
+    when 8 then move_right   # up
     end
   end
 
   def move_random
     case rand(4)
-    when 0; move_down(false)
-    when 1; move_left(false)
-    when 2; move_right(false)
-    when 3; move_up(false)
+    when 0 then move_down(false)
+    when 1 then move_left(false)
+    when 2 then move_right(false)
+    when 3 then move_up(false)
     end
   end
 
@@ -553,10 +553,10 @@ class Game_Character
     end
     return if dirs.length==0
     case dirs[rand(dirs.length)]
-    when 0; move_down(false)
-    when 1; move_left(false)
-    when 2; move_right(false)
-    when 3; move_up(false)
+    when 0 then move_down(false)
+    when 1 then move_left(false)
+    when 2 then move_right(false)
+    when 3 then move_up(false)
     end
   end
 
@@ -614,10 +614,10 @@ class Game_Character
 
   def move_forward
     case @direction
-    when 2; move_down(false)
-    when 4; move_left(false)
-    when 6; move_right(false)
-    when 8; move_up(false)
+    when 2 then move_down(false)
+    when 4 then move_left(false)
+    when 6 then move_right(false)
+    when 8 then move_up(false)
     end
   end
 
@@ -625,10 +625,10 @@ class Game_Character
     last_direction_fix = @direction_fix
     @direction_fix = true
     case @direction
-    when 2; move_up(false)
-    when 4; move_right(false)
-    when 6; move_left(false)
-    when 8; move_down(false)
+    when 2 then move_up(false)
+    when 4 then move_right(false)
+    when 6 then move_left(false)
+    when 8 then move_down(false)
     end
     @direction_fix = last_direction_fix
   end
@@ -666,19 +666,19 @@ class Game_Character
 
   def jumpForward
     case self.direction
-    when 2; jump(0,1)    # down
-    when 4; jump(-1,0)   # left
-    when 6; jump(1,0)    # right
-    when 8; jump(0,-1)   # up
+    when 2 then jump(0,1)    # down
+    when 4 then jump(-1,0)   # left
+    when 6 then jump(1,0)    # right
+    when 8 then jump(0,-1)   # up
     end
   end
 
   def jumpBackward
     case self.direction
-    when 2; jump(0,-1)   # down
-    when 4; jump(1,0)    # left
-    when 6; jump(-1,0)   # right
-    when 8; jump(0,1)    # up
+    when 2 then jump(0,-1)   # down
+    when 4 then jump(1,0)    # left
+    when 6 then jump(-1,0)   # right
+    when 8 then jump(0,1)    # up
     end
   end
 
@@ -697,28 +697,28 @@ class Game_Character
 
   def turn_right_90
     case @direction
-    when 2; turn_left
-    when 4; turn_up
-    when 6; turn_down
-    when 8; turn_right
+    when 2 then turn_left
+    when 4 then turn_up
+    when 6 then turn_down
+    when 8 then turn_right
     end
   end
 
   def turn_left_90
     case @direction
-    when 2; turn_right
-    when 4; turn_down
-    when 6; turn_up
-    when 8; turn_left
+    when 2 then turn_right
+    when 4 then turn_down
+    when 6 then turn_up
+    when 8 then turn_left
     end
   end
 
   def turn_180
     case @direction
-    when 2; turn_up
-    when 4; turn_right
-    when 6; turn_left
-    when 8; turn_down
+    when 2 then turn_up
+    when 4 then turn_right
+    when 6 then turn_left
+    when 8 then turn_down
     end
   end
 
@@ -728,10 +728,10 @@ class Game_Character
 
   def turn_random
     case rand(4)
-    when 0; turn_up
-    when 1; turn_right
-    when 2; turn_left
-    when 3; turn_down
+    when 0 then turn_up
+    when 1 then turn_right
+    when 2 then turn_left
+    when 3 then turn_down
     end
   end
 
@@ -793,9 +793,9 @@ class Game_Character
     # 6 => @stop_count > 0     # 0 seconds
     if @stop_count >= self.move_frequency_real
       case @move_type
-      when 1; move_type_random
-      when 2; move_type_toward_player
-      when 3; move_type_custom
+      when 1 then move_type_random
+      when 2 then move_type_toward_player
+      when 3 then move_type_custom
       end
     end
   end

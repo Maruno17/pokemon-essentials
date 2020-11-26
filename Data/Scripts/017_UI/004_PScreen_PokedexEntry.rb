@@ -186,8 +186,8 @@ class PokemonPokedexInfo_Scene
         thisformname = thisform[2]
       else   # Necessarily applies only to form 0
         case thisform[1]
-        when 0; thisformname = _INTL("Male")
-        when 1; thisformname = _INTL("Female")
+        when 0 then thisformname = _INTL("Male")
+        when 1 then thisformname = _INTL("Female")
         else
           thisformname = (multiforms) ? _INTL("One Form") : _INTL("Genderless")
         end
@@ -212,9 +212,9 @@ class PokemonPokedexInfo_Scene
     @sprites["formicon"].visible      = (@page==3) if @sprites["formicon"]
     # Draw page-specific information
     case page
-    when 1; drawPageInfo
-    when 2; drawPageArea
-    when 3; drawPageForms
+    when 1 then drawPageInfo
+    when 2 then drawPageArea
+    when 3 then drawPageForms
     end
   end
 

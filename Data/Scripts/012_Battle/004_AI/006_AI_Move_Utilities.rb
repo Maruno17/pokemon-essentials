@@ -146,11 +146,11 @@ class PokeBattle_AI
     stage = battler.stages[stat]+6
     value = 0
     case stat
-    when PBStats::ATTACK;  value = battler.attack
-    when PBStats::DEFENSE; value = battler.defense
-    when PBStats::SPATK;   value = battler.spatk
-    when PBStats::SPDEF;   value = battler.spdef
-    when PBStats::SPEED;   value = battler.speed
+    when PBStats::ATTACK  then value = battler.attack
+    when PBStats::DEFENSE then value = battler.defense
+    when PBStats::SPATK   then value = battler.spatk
+    when PBStats::SPDEF   then value = battler.spdef
+    when PBStats::SPEED   then value = battler.speed
     end
     return (value.to_f*stageMul[stage]/stageDiv[stage]).floor
   end

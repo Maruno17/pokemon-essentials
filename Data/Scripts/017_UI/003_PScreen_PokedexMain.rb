@@ -760,12 +760,12 @@ class PokemonPokedex_Scene
     # Remove all unseen species from the results
     dexlist = dexlist.find_all { |item| next $Trainer.seen[item[0]] }
     case $PokemonGlobal.pokedexMode
-    when MODENUMERICAL; dexlist.sort! { |a,b| a[4]<=>b[4] }
-    when MODEATOZ;      dexlist.sort! { |a,b| a[1]<=>b[1] }
-    when MODEHEAVIEST;  dexlist.sort! { |a,b| b[3]<=>a[3] }
-    when MODELIGHTEST;  dexlist.sort! { |a,b| a[3]<=>b[3] }
-    when MODETALLEST;   dexlist.sort! { |a,b| b[2]<=>a[2] }
-    when MODESMALLEST;  dexlist.sort! { |a,b| a[2]<=>b[2] }
+    when MODENUMERICAL then dexlist.sort! { |a,b| a[4]<=>b[4] }
+    when MODEATOZ      then dexlist.sort! { |a,b| a[1]<=>b[1] }
+    when MODEHEAVIEST  then dexlist.sort! { |a,b| b[3]<=>a[3] }
+    when MODELIGHTEST  then dexlist.sort! { |a,b| a[3]<=>b[3] }
+    when MODETALLEST   then dexlist.sort! { |a,b| b[2]<=>a[2] }
+    when MODESMALLEST  then dexlist.sort! { |a,b| a[2]<=>b[2] }
     end
     return dexlist
   end
@@ -822,17 +822,17 @@ class PokemonPokedex_Scene
     ret = nil
     # Set background
     case mode
-    when 0;   @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_order")
-    when 1;   @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_name")
+    when 0    then @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_order")
+    when 1    then @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_name")
     when 2
       if PBTypes.regularTypesCount==18
         @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_type_18")
       else
         @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_type")
       end
-    when 3,4; @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_size")
-    when 5;   @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_color")
-    when 6;   @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_shape")
+    when 3, 4 then @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_size")
+    when 5    then @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_color")
+    when 6    then @sprites["searchbg"].setBitmap("Graphics/Pictures/Pokedex/bg_search_shape")
     end
     selindex = selitems.clone
     index     = selindex[0]

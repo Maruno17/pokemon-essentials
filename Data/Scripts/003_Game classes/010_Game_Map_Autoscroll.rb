@@ -178,14 +178,14 @@ class Game_Map
       distance = @scroll_rest if distance>@scroll_rest
       # Execute scrolling
       case @scroll_direction
-      when 1; scroll_downleft(distance)
-      when 2; scroll_down(distance)
-      when 3; scroll_downright(distance)
-      when 4; scroll_left(distance)
-      when 6; scroll_right(distance)
-      when 7; scroll_upleft(distance)
-      when 8; scroll_up(distance)
-      when 9; scroll_upright(distance)
+      when 1 then scroll_downleft(distance)
+      when 2 then scroll_down(distance)
+      when 3 then scroll_downright(distance)
+      when 4 then scroll_left(distance)
+      when 6 then scroll_right(distance)
+      when 7 then scroll_upleft(distance)
+      when 8 then scroll_up(distance)
+      when 9 then scroll_upright(distance)
       end
       # Subtract distance scrolled
       @scroll_rest -= distance

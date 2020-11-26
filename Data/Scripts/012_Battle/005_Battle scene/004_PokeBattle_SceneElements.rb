@@ -350,8 +350,8 @@ class PokemonDataBox < SpriteWrapper
     # Data box bobbing while Pokémon is selected
     if @selected==1 || @selected==2   # Choosing commands/targeted or damaged
       case (frameCounter/QUARTER_ANIM_PERIOD).floor
-      when 1; self.y = @spriteY-2
-      when 3; self.y = @spriteY+2
+      when 1 then self.y = @spriteY-2
+      when 3 then self.y = @spriteY+2
       end
     end
   end
@@ -574,8 +574,8 @@ class PokemonBattlerSprite < RPG::Sprite
     @spriteYExtra = 0
     if @selected==1    # When choosing commands for this Pokémon
       case (frameCounter/QUARTER_ANIM_PERIOD).floor
-      when 1; @spriteYExtra = 2
-      when 3; @spriteYExtra = -2
+      when 1 then @spriteYExtra = 2
+      when 3 then @spriteYExtra = -2
       end
     end
     self.x       = self.x
@@ -584,8 +584,8 @@ class PokemonBattlerSprite < RPG::Sprite
     # Pokémon sprite blinking when targeted
     if @selected==2 && @spriteVisible
       case (frameCounter/SIXTH_ANIM_PERIOD).floor
-      when 2, 5; self.visible = false
-      else;      self.visible = true
+      when 2, 5 then self.visible = false
+      else           self.visible = true
       end
     end
     @updating = false

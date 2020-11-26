@@ -85,11 +85,11 @@ def pbCheckPokemonBitmapFiles(params)
     factors.each_with_index do |factor,index|
       newVal = ((i/(2**index))%2==0) ? factor[1] : factor[2]
       case factor[0]
-      when 0; trySpecies = newVal
-      when 2; tryGender  = newVal
-      when 3; tryShiny   = newVal
-      when 4; tryForm    = newVal
-      when 5; tryShadow  = newVal
+      when 0 then trySpecies = newVal
+      when 2 then tryGender  = newVal
+      when 3 then tryShiny   = newVal
+      when 4 then tryForm    = newVal
+      when 5 then tryShadow  = newVal
       end
     end
     for j in 0...2   # Try using the species' internal name and then its ID number
@@ -192,11 +192,11 @@ def pbCheckPokemonIconFiles(params,egg=false)
     factors.each_with_index do |factor,index|
       newVal = ((i/(2**index))%2==0) ? factor[1] : factor[2]
       case factor[0]
-      when 0; trySpecies = newVal
-      when 1; tryGender  = newVal
-      when 2; tryShiny   = newVal
-      when 3; tryForm    = newVal
-      when 4; tryShadow  = newVal
+      when 0 then trySpecies = newVal
+      when 1 then tryGender  = newVal
+      when 2 then tryShiny   = newVal
+      when 3 then tryForm    = newVal
+      when 4 then tryShadow  = newVal
       end
     end
     for j in 0...2   # Try using the species' internal name and then its ID number

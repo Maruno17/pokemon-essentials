@@ -22,7 +22,6 @@ module GameData
     include InstanceMethods
 
     def initialize(hash)
-      validate hash => Hash, hash[:id] => Symbol
       @id               = hash[:id]
       @id_number        = hash[:id_number]   || -1
       @real_name        = hash[:name]        || "Unnamed"

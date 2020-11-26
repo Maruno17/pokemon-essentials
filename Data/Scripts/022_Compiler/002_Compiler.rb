@@ -615,10 +615,10 @@ module Compiler
   #=============================================================================
   def compile_all(mustCompile)
     FileLineData.clear
+    if (!$INEDITOR || LANGUAGES.length < 2) && safeExists?("Data/messages.dat")
+      MessageTypes.loadMessageFile("Data/messages.dat")
+    end
     if mustCompile
-      if (!$INEDITOR || LANGUAGES.length<2) && pbRgssExists?("Data/messages.dat")
-        MessageTypes.loadMessageFile("Data/messages.dat")
-      end
       yield(_INTL("Compiling type data"))
       compile_types                  # No dependencies
       yield(_INTL("Compiling town map data"))
@@ -660,13 +660,6 @@ module Compiler
       yield(_INTL("Saving messages"))
       pbSetTextMessages
       MessageTypes.saveMessages
-    else
-      if (!$INEDITOR || LANGUAGES.length<2) && safeExists?("Data/messages.dat")
-        MessageTypes.loadMessageFile("Data/messages.dat")
-      end
-    end
-    if !$INEDITOR && LANGUAGES.length>=2
-      pbLoadMessages("Data/"+LANGUAGES[$PokemonSystem.language][1])
     end
     pbSetWindowText(nil)
   end
@@ -722,8 +715,6 @@ module Compiler
       mustCompile = false
       # Should recompile if new maps were imported
       mustCompile |= import_new_maps
-      # Should recompile if no existing data is found
-      mustCompile |= !(PBSpecies.respond_to?("maxValue") rescue false)
       # If no PBS file, create one and fill it, then recompile
       if !safeIsDirectory?("PBS")
         Dir.mkdir("PBS") rescue nil

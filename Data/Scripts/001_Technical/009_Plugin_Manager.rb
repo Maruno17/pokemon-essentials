@@ -219,9 +219,13 @@ module PluginManager
               optional    = false
               exact       = false
               case def_arg
-              when :optional;       optional = true
-              when :exact;          exact    = true
-              when :optional_exact; optional = true; exact = true
+              when :optional
+                optional = true
+              when :exact
+                exact = true
+              when :optional_exact
+                optional = true
+                exact = true
               else
                 self.error("Expected first dependency argument to be one of " +
                            ":optional, :exact or :optional_exact, but got #{dep_arg.inspect}.")

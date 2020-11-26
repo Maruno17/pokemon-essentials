@@ -565,14 +565,26 @@ def pbFacingTileRegular(direction=nil,event=nil)
   y = event.y
   direction = event.direction if !direction
   case direction
-  when 1; y += 1; x -= 1
-  when 2; y += 1
-  when 3; y += 1; x += 1
-  when 4; x -= 1
-  when 6; x += 1
-  when 7; y -= 1; x -= 1
-  when 8; y -= 1
-  when 9; y -= 1; x += 1
+  when 1
+    y += 1
+    x -= 1
+  when 2
+    y += 1
+  when 3
+    y += 1
+    x += 1
+  when 4
+    x -= 1
+  when 6
+    x += 1
+  when 7
+    y -= 1
+    x -= 1
+  when 8
+    y -= 1
+  when 9
+    y -= 1
+    x += 1
   end
   return [$game_map.map_id,x,y]
 end
@@ -652,10 +664,10 @@ module InterpreterFieldMixin
     # tiles that are passable only from certain directions
     return if !event.passableStrict?(event.x,event.y,$game_player.direction)
     case $game_player.direction
-    when 2; event.move_down  # down
-    when 4; event.move_left  # left
-    when 6; event.move_right # right
-    when 8; event.move_up    # up
+    when 2 then event.move_down
+    when 4 then event.move_left
+    when 6 then event.move_right
+    when 8 then event.move_up
     end
     $PokemonMap.addMovedEvent(@event_id) if $PokemonMap
     if oldx!=event.x || oldy!=event.y
@@ -1098,10 +1110,10 @@ def pbJumpToward(dist=1,playSound=false,cancelSurf=false)
   x = $game_player.x
   y = $game_player.y
   case $game_player.direction
-  when 2; $game_player.jump(0,dist)    # down
-  when 4; $game_player.jump(-dist,0)   # left
-  when 6; $game_player.jump(dist,0)    # right
-  when 8; $game_player.jump(0,-dist)   # up
+  when 2 then $game_player.jump(0, dist)    # down
+  when 4 then $game_player.jump(-dist, 0)   # left
+  when 6 then $game_player.jump(dist, 0)    # right
+  when 8 then $game_player.jump(0, -dist)   # up
   end
   if $game_player.x!=x || $game_player.y!=y
     pbSEPlay("Player jump") if playSound
@@ -1276,10 +1288,18 @@ def pbSetEscapePoint
   xco = $game_player.x
   yco = $game_player.y
   case $game_player.direction
-  when 2; yco -= 1; dir = 8   # Down
-  when 4; xco += 1; dir = 6   # Left
-  when 6; xco -= 1; dir = 4   # Right
-  when 8; yco += 1; dir = 2   # Up
+  when 2   # Down
+    yco -= 1
+    dir = 8
+  when 4   # Left
+    xco += 1
+    dir = 6
+  when 6   # Right
+    xco -= 1
+    dir = 4
+  when 8   # Up
+    yco += 1
+    dir = 2
   end
   $PokemonGlobal.escapePoint = [$game_map.map_id,xco,yco,dir]
 end

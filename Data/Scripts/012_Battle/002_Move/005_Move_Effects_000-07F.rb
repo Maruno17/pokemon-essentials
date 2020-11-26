@@ -366,9 +366,9 @@ class PokeBattle_Move_017 < PokeBattle_Move
   def pbAdditionalEffect(user,target)
     return if target.damageState.substitute
     case @battle.pbRandom(3)
-    when 0; target.pbBurn(user) if target.pbCanBurn?(user,false,self)
-    when 1; target.pbFreeze if target.pbCanFreeze?(user,false,self)
-    when 2; target.pbParalyze(user) if target.pbCanParalyze?(user,false,self)
+    when 0 then target.pbBurn(user) if target.pbCanBurn?(user, false, self)
+    when 1 then target.pbFreeze if target.pbCanFreeze?(user, false, self)
+    when 2 then target.pbParalyze(user) if target.pbCanParalyze?(user, false, self)
     end
   end
 end
@@ -1893,24 +1893,24 @@ class PokeBattle_Move_060 < PokeBattle_Move
     end
     if !checkedTerrain
       case @battle.environment
-      when PBEnvironment::Grass;       @newType = getID(PBTypes,:GRASS)
-      when PBEnvironment::TallGrass;   @newType = getID(PBTypes,:GRASS)
-      when PBEnvironment::MovingWater; @newType = getID(PBTypes,:WATER)
-      when PBEnvironment::StillWater;  @newType = getID(PBTypes,:WATER)
-      when PBEnvironment::Puddle;      @newType = getID(PBTypes,:WATER)
-      when PBEnvironment::Underwater;  @newType = getID(PBTypes,:WATER)
-      when PBEnvironment::Cave;        @newType = getID(PBTypes,:ROCK)
-      when PBEnvironment::Rock;        @newType = getID(PBTypes,:GROUND)
-      when PBEnvironment::Sand;        @newType = getID(PBTypes,:GROUND)
-      when PBEnvironment::Forest;      @newType = getID(PBTypes,:BUG)
-      when PBEnvironment::ForestGrass; @newType = getID(PBTypes,:BUG)
-      when PBEnvironment::Snow;        @newType = getID(PBTypes,:ICE)
-      when PBEnvironment::Ice;         @newType = getID(PBTypes,:ICE)
-      when PBEnvironment::Volcano;     @newType = getID(PBTypes,:FIRE)
-      when PBEnvironment::Graveyard;   @newType = getID(PBTypes,:GHOST)
-      when PBEnvironment::Sky;         @newType = getID(PBTypes,:FLYING)
-      when PBEnvironment::Space;       @newType = getID(PBTypes,:DRAGON)
-      when PBEnvironment::UltraSpace;  @newType = getID(PBTypes,:PSYCHIC)
+      when PBEnvironment::Grass       then @newType = getID(PBTypes,:GRASS)
+      when PBEnvironment::TallGrass   then @newType = getID(PBTypes,:GRASS)
+      when PBEnvironment::MovingWater then @newType = getID(PBTypes,:WATER)
+      when PBEnvironment::StillWater  then @newType = getID(PBTypes,:WATER)
+      when PBEnvironment::Puddle      then @newType = getID(PBTypes,:WATER)
+      when PBEnvironment::Underwater  then @newType = getID(PBTypes,:WATER)
+      when PBEnvironment::Cave        then @newType = getID(PBTypes,:ROCK)
+      when PBEnvironment::Rock        then @newType = getID(PBTypes,:GROUND)
+      when PBEnvironment::Sand        then @newType = getID(PBTypes,:GROUND)
+      when PBEnvironment::Forest      then @newType = getID(PBTypes,:BUG)
+      when PBEnvironment::ForestGrass then @newType = getID(PBTypes,:BUG)
+      when PBEnvironment::Snow        then @newType = getID(PBTypes,:ICE)
+      when PBEnvironment::Ice         then @newType = getID(PBTypes,:ICE)
+      when PBEnvironment::Volcano     then @newType = getID(PBTypes,:FIRE)
+      when PBEnvironment::Graveyard   then @newType = getID(PBTypes,:GHOST)
+      when PBEnvironment::Sky         then @newType = getID(PBTypes,:FLYING)
+      when PBEnvironment::Space       then @newType = getID(PBTypes,:DRAGON)
+      when PBEnvironment::UltraSpace  then @newType = getID(PBTypes,:PSYCHIC)
       end
     end
     if !user.pbHasOtherType?(@newType)
