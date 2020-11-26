@@ -15,3 +15,7 @@ RGSS*.dll
 # Temp files
 
 ~*
+
+STRAT/*
+
+
