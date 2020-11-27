@@ -663,11 +663,11 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     self.contents.clear
     s=sprintf("%0*d",@digits_max,@number.abs)
     if @sign
-      textHelper(0,0,@negative ? "-" : "+",0)
+      textHelper(0,6,@negative ? "-" : "+",0)
     end
     for i in 0...@digits_max
       index=i+(@sign ? 1 : 0)
-      textHelper(index*24,0,s[i,1],index)
+      textHelper(index*24,6,s[i,1],index)
     end
   end
 
@@ -715,13 +715,9 @@ class Window_InputNumberPokemon < SpriteWindow_Base
 
   def textHelper(x,y,text,i)
     textwidth=self.contents.text_size(text).width
-    self.contents.font.color=@shadowColor
-    pbDrawShadow(self.contents,x+(12-textwidth/2),y, textwidth+4, 32, text)
-    self.contents.font.color=@baseColor
-    self.contents.draw_text(x+(12-textwidth/2),y, textwidth+4, 32, text)
+    pbDrawShadowText(self.contents, x+(12-textwidth/2), y, textwidth+4, 32, text, @baseColor, @shadowColor)
     if @index==i && @active && @frame/15==0
-      colors=getDefaultTextColors(self.windowskin)
-      self.contents.fill_rect(x+(12-textwidth/2),y+30,textwidth,2,colors[0])
+      self.contents.fill_rect(x+(12-textwidth/2), y+24, textwidth, 2, @baseColor)
     end
   end
 end

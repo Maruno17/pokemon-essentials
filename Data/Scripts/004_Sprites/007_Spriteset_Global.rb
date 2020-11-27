@@ -1,6 +1,6 @@
 class Spriteset_Global
   attr_reader :playersprite
-  @@viewport2 = Viewport.new(0, 0, Graphics.width, Graphics.height)
+  @@viewport2 = Viewport.new(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
   @@viewport2.z = 200
 
   def initialize
