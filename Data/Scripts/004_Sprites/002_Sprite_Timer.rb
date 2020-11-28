@@ -19,6 +19,7 @@ class Sprite_Timer
   def update
     return if disposed?
     if $game_system.timer_working
+      @timer.visible = true if @timer
       if !@timer
         @timer=Window_AdvancedTextPokemon.newWithSize("",Graphics.width-120,0,120,64)
         @timer.width=@timer.borderX+96
