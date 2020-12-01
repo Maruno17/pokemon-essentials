@@ -9,14 +9,6 @@ LOW PRIORITY:
 Update Pokedex Entries for Gen 1-7
 Update Habitats for all Pokemon
 
-
-HIGH PRIORITY:
-Update Egg Moves for Gen 1-7
-
-LOW PRIORITY:
-Update Pokedex Entries for Gen 1-7
-Update Habitats for all Pokemon
-
 ##### PBS Files #####
 Abilities.txt            by Zerokid, Golisopod User
 Items.txt                by Zerokid, HM100, Golisopod User

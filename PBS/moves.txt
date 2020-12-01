@@ -341,7 +341,7 @@
 330,GRAVAPPLE,Grav Apple,185,80,GRASS,Physical,100,10,100,NearOther,0,bef,"The user inflicts damage by dropping an apple from high above. This also lowers the target's Defense stat."
 331,APPLEACID,Apple Acid,046,80,GRASS,Special,100,10,100,NearOther,0,bef,"The user attacks the target with an acidic liquid created from tart apples. This also lowers the target's Sp. Def stat."
 332,GRASSYGLIDE,Grassy Glide,18C,70,GRASS,Physical,100,20,0,NearOther,0,abef,"Gliding on the ground, the user attacks the target. This move always goes first on Grassy Terrain."
-333,JUNGLEHEALING,Jungle Healing,189,0,GRASS,Status,0,10,0,UserSide,0,,"The user becomes one with the jungle, restoring HP and healing any status conditions of itself and its ally Pokémon in battle."
+333,JUNGLEHEALING,Jungle Healing,189,0,GRASS,Status,0,10,0,UserAndAllies,0,,"The user becomes one with the jungle, restoring HP and healing any status conditions of itself and its ally Pokémon in battle."
 #-------------------------------
 334,PRECIPICEBLADES,Precipice Blades,000,120,GROUND,Physical,85,10,0,AllNearFoes,0,bef,"The user attacks its foes by manifesting the power of the land in fearsome blades of stone."
 335,EARTHQUAKE,Earthquake,076,100,GROUND,Physical,100,10,0,AllNearOthers,0,bef,"The user sets off an earthquake that strikes every Pokémon around it."
