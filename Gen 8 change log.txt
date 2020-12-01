@@ -9,7 +9,6 @@ LOW PRIORITY:
 Update Pokedex Entries for Gen 1-7
 Update Habitats for all Pokemon
 
-
 ##### PBS Files #####
 Abilities.txt            by Zerokid, Golisopod User
 Items.txt                by Zerokid, HM100, Golisopod User
@@ -48,7 +47,7 @@ Mints                    by KyureJL, Aioross
 Exp Charm		 by Golisopod User
 Catching Charm		 by Golisopod User
 Ability Patch		 by Golisopod User
-Reins of Unity		 by Golisopod User 
+Reins of Unity		 by Golisopod User
 Rotom Catalog            by Golisopod User
 Zygarde Cube             by Golisopod User
 
@@ -127,5 +126,5 @@ As One                   by Golisopod User
 ##### Miscellaneous #####
 Galarian in Daycare      by KyureJL
 Fog Weather              by TheKandinavian
-Updating Old Mechanics   by Golisopod User 
-to Gen 8 Standard 
+Updating Old Mechanics   by Golisopod User
+to Gen 8 Standard
