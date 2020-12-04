@@ -61,6 +61,7 @@ class PokeBattle_RealBattlePeer
 
   # For switching out, including due to fainting, and for the end of battle
   def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle=false)
+    return if !pkmn
     f = MultipleForms.call("getFormOnLeavingBattle",pkmn,battle,usedInBattle,endBattle)
     pkmn.form = f if f && pkmn.form!=f
     pkmn.hp = pkmn.totalhp if pkmn.hp>pkmn.totalhp

@@ -88,10 +88,8 @@ class PokeBattle_AI
         next if !@battle.pbCanChooseMove?(idxBattler,i,false)
         choices.push([i,100,-1])   # Move index, score, target
       end
-      if choices.length==0   # No moves are physically possible to use
-        user.eachMoveWithIndex do |_m,i|
-          choices.push([i,100,-1])   # Move index, score, target
-        end
+      if choices.length==0   # No moves are physically possible to use; use Struggle
+        @battle.pbAutoChooseMove(user.index)
       end
     end
     # Randomly choose a move from the choices and register it
