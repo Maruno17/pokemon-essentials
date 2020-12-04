@@ -829,8 +829,9 @@ class Pokemon
   # @param species_id [Integer] id of the species to change this Pokémon to
   def species=(species_id)
     has_nickname = nicknamed?
-    @species    = species_id
-    @name       = PBSpecies.getName(@species) unless has_nickname
+    @species, new_form = pbGetSpeciesFromFSpecies(species_id)
+    @form = new_form if @species != value
+    @name       = speciesName unless has_nickname
     @level      = nil   # In case growth rate is different for the new species
     @forcedForm = nil
     calcStats
@@ -1046,7 +1047,7 @@ class Pokemon
       raise ArgumentError.new(_INTL("The species given ({1}) is invalid.", ospecies))
     end
     @species      = realSpecies
-    @name         = PBSpecies.getName(@species)
+    @name         = speciesName
     @personalID   = rand(2**16) | rand(2**16) << 16
     @hp           = 1
     @totalhp      = 1
