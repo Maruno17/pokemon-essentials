@@ -908,7 +908,7 @@ def pbAllRegionalSpecies(region)
   dexList = pbLoadRegionalDexes[region]
   return ret if !dexList || dexList.length==0
   for i in 0...dexList.length
-    ret[dexList[i]] = i if dexList[i]
+    ret[dexList[i]] = i if dexList[i] && dexList[i] > 0
   end
   ret.map! { |e| e ? e : 0 }   # Replace nils with 0s
   return ret
