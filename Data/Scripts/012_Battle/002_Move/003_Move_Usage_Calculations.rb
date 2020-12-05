@@ -57,7 +57,7 @@ class PokeBattle_Move
       ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if isConst?(defType,PBTypes,:FLYING) &&
                                                          isConst?(moveType,PBTypes,:GROUND)
     end
-    if target.effects[PBEffects::TarShot] && isConst?(moveType,PBTypes,:FIRE) 
+    if target.effects[PBEffects::TarShot] && isConst?(moveType,PBTypes,:FIRE)
       ret = PBTypeEffectiveness::SUPER_EFFECTIVE_ONE if PBTypes.normalEffective?(moveType,target.type1,target.type2)
       ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if PBTypes.notVeryEffective?(moveType,target.type1,target.type2)
     end
@@ -393,7 +393,7 @@ class PokeBattle_Move
       multipliers[FINAL_DMG_MULT] *= 0.75
     end
     # Weather
-    if !target.hasActiveItem?(:UTILITYUMBRELLA)
+    if target.affectedByWeather?
       case @battle.pbWeather
       when PBWeather::Sun, PBWeather::HarshSun
         if isConst?(type,PBTypes,:FIRE)
