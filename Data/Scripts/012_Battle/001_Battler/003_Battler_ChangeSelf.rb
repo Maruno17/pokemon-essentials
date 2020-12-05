@@ -167,7 +167,7 @@ class PokeBattle_Battler
 
   def pbCheckFormOnWeatherChange
     return if fainted? || @effects[PBEffects::Transform]
-    return if !affectedByWeather?
+    return if hasUtilityUmbrella?
     # Castform - Forecast
     if isSpecies?(:CASTFORM)
       if hasActiveAbility?(:FORECAST)

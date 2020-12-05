@@ -514,9 +514,9 @@ class PokeBattle_Battler
     return true
   end
 
-  def affectedByWeather?
-    return false if hasActiveItem?(:UTILITYUMBRELLA)
-    return true
+  def hasUtilityUmbrella?
+    return true if hasActiveItem?(:UTILITYUMBRELLA)
+    return false
   end
 
   def takesIndirectDamage?(showMsg=false)

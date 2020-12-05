@@ -131,7 +131,7 @@ class PokeBattle_Move_008 < PokeBattle_ParalysisMove
   def hitsFlyingTargets?; return true; end
 
   def pbBaseAccuracy(user,target)
-	if !target.affectedByWeather?
+	if target.hasUtilityUmbrella?
 		return super
 	end
 	case @battle.pbWeather
@@ -324,7 +324,7 @@ class PokeBattle_Move_015 < PokeBattle_ConfuseMove
   def hitsFlyingTargets?; return true; end
 
   def pbBaseAccuracy(user,target)
-    if !target.affectedByWeather?
+    if target.hasUtilityUmbrella?
 	    return super
 	  end
 	  case @battle.pbWeather
@@ -755,7 +755,7 @@ class PokeBattle_Move_028 < PokeBattle_MultiStatUpMove
     increment = 1
     if @battle.pbWeather==PBWeather::Sun ||
        @battle.pbWeather==PBWeather::HarshSun
-      increment = 2 if user.affectedByWeather?
+      increment = 2 if !user.hasUtilityUmbrella?
     end
     @statUp[1] = @statUp[3] = increment
   end

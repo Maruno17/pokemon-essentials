@@ -107,7 +107,7 @@ class PokeBattle_Move_087 < PokeBattle_Move
     if @battle.pbWeather!=PBWeather::None && @battle.pbWeather != PBWeather::StrongWinds
       if @battle.pbWeather == PBWeather::Sandstorm || @battle.pbWeather == PBWeather::Hail || @battle.pbWeather == PBWeather::Fog
         baseDmg *= 2
-      elsif user.affectedByWeather?
+      elsif !user.hasUtilityUmbrella?
         baseDmg *= 2
       end
     end
@@ -126,7 +126,7 @@ class PokeBattle_Move_087 < PokeBattle_Move
     when PBWeather::Hail
       ret = getConst(PBTypes,:ICE) || ret
     end
-    if !user.affectedByWeather? && (ret == getConst(PBTypes,:FIRE) || ret == getConst(PBTypes,:WATER))
+    if user.hasUtilityUmbrella? && (ret == getConst(PBTypes,:FIRE) || ret == getConst(PBTypes,:WATER))
       ret = getID(PBTypes,:NORMAL)
     end
     return ret
@@ -2065,7 +2065,7 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
     ret = super
     if user.effects[PBEffects::TwoTurnAttack]==0
       w = @battle.pbWeather
-      if (w==PBWeather::Sun || w==PBWeather::HarshSun) && user.affectedByWeather?
+      if (w==PBWeather::Sun || w==PBWeather::HarshSun) && !user.hasUtilityUmbrella?
         @powerHerb = false
         @chargingTurn = true
         @damagingTurn = true
@@ -2081,7 +2081,7 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
   def pbBaseDamageMultiplier(damageMult,user,target)
     w = @battle.pbWeather
     if w!=PBWeather::None && w!=PBWeather::Sun && w!=PBWeather::HarshSun
-      if !((w==PBWeather::Rain || w==PBWeather::HeavyRain) && !user.affectedByWeather?)
+      if !((w==PBWeather::Rain || w==PBWeather::HeavyRain) && user.hasUtilityUmbrella?)
         damageMult = (damageMult/2.0).round
       end
     end
@@ -2575,13 +2575,13 @@ class PokeBattle_Move_0D8 < PokeBattle_HealingMove
   def pbOnStartUse(user,targets)
     case @battle.pbWeather
     when PBWeather::Sun, PBWeather::HarshSun
-      if user.affectedByWeather?
+      if !user.hasUtilityUmbrella?
         @healAmount = (user.totalhp*2/3.0).round
       else
         @healAmount = (user.totalhp/2.0).round
       end
     when PBWeather::Rain, PBWeather::HeavyRain
-      if user.affectedByWeather?
+      if !user.hasUtilityUmbrella?
         @healAmount = (user.totalhp/4.0).round
       else
         @healAmount = (user.totalhp/2.0).round
