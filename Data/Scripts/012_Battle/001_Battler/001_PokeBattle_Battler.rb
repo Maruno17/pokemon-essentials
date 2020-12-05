@@ -106,6 +106,7 @@ class PokeBattle_Battler
   def statusCount=(value)
     @statusCount = value
     @pokemon.statusCount = value if @pokemon
+    @battle.scene.pbRefreshOne(@index)
   end
 
   attr_reader :criticalHits
@@ -405,7 +406,9 @@ class PokeBattle_Battler
       :COMATOSE,
       :RKSSYSTEM,
       :ASONEICE,
-      :ASONEGHOST
+      :ASONEGHOST,
+	  :NEUTRALIZINGGAS,
+	  :HUNGERSWITCH
     ]
     abilityBlacklist.each do |a|
       return true if isConst?(abil, PBAbilities, a)
@@ -511,6 +514,11 @@ class PokeBattle_Battler
     return true
   end
 
+  def affectedByWeather?
+    return false if hasActiveItem?(:UTILITYUMBRELLA)
+    return true
+  end
+
   def takesIndirectDamage?(showMsg=false)
     return false if fainted?
     if hasActiveAbility?(:MAGICGUARD)
@@ -584,6 +592,11 @@ class PokeBattle_Battler
     return false if fainted? || @hp>=@totalhp
     return false if @effects[PBEffects::HealBlock]>0
     return true
+  end
+
+  def canTakeHealingWish?
+	# Also works with Lunar Dance.
+	return canHeal? || pbHasAnyStatus?
   end
 
   def affectedByContactEffect?(showMsg=false)
