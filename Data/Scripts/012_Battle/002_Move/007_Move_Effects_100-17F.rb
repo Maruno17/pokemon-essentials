@@ -914,7 +914,7 @@ class PokeBattle_Move_120 < PokeBattle_Move
   def pbEffectGeneral(user)
     idxA = user.index
     idxB = @idxAlly
-    user.effects[PBEffects::SwitchedAlly] = @idxAlly
+    $PokemonTemp.allySwitchTemp = @idxAlly
     if @battle.pbSwapBattlers(idxA,idxB)
       @battle.pbDisplay(_INTL("{1} and {2} switched places!",
       @battle.battlers[idxB].pbThis,@battle.battlers[idxA].pbThis(true)))
@@ -923,6 +923,16 @@ class PokeBattle_Move_120 < PokeBattle_Move
     end
   end
 end
+# Temporary Variable to store Ally Switch target
+class PokemonTemp
+  attr_accessor :allySwitchTemp
+
+  def allySwitchTemp
+    @allySwitchTemp = -1 if !@allySwitchTemp
+    return @allySwitchTemp
+  end
+end
+
 #===============================================================================
 # Target's Attack is used instead of user's Attack for this move's calculations.
 # (Foul Play)

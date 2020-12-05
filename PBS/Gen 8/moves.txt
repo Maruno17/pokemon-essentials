@@ -28,7 +28,7 @@
 26,STICKYWEB,Sticky Web,153,0,BUG,Status,0,20,0,FoeSide,0,c,"Weaves a sticky net around the opposing team, which lowers their Speed stats upon switching in."
 27,STRINGSHOT,String Shot,04D,0,BUG,Status,95,40,0,AllNearFoes,0,bce,"The foe is bound with silk blown from the user's mouth. This silk reduces the target's Speed."
 28,TAILGLOW,Tail Glow,039,0,BUG,Status,0,20,0,User,0,d,"The user stares at flashing lights to focus its mind, drastically raising its Sp. Atk stat."
-29,SKITTERSMACK,Skitter Smack,045,70,BUG,Physical,90,10,100,00,0,abef,"The user skitters behind the target to attack. This also lowers the target's Sp. Atk stat."
+29,SKITTERSMACK,Skitter Smack,045,70,BUG,Physical,90,10,100,NearOther,0,abef,"The user skitters behind the target to attack. This also lowers the target's Sp. Atk stat."
 #-------------------------------
 30,HYPERSPACEFURY,Hyperspace Fury,13B,100,DARK,Physical,0,5,0,NearOther,0,ef,"Unleashes a barrage of multi-arm attacks, skipping protections. The user's Defense stat falls."
 31,FOULPLAY,Foul Play,121,95,DARK,Physical,100,15,0,NearOther,0,abef,"The user turns the foe's power against it. It does more damage the higher the target's Attack stat."
@@ -127,7 +127,7 @@
 122,MAGNETICFLUX,Magnetic Flux,137,0,ELECTRIC,Status,0,20,0,UserAndAllies,0,d,"Manipulates magnetic fields to raise the Defense and Sp. Def stats of allies with Plus or Minus Abilities."
 123,THUNDERWAVE,Thunder Wave,007,0,ELECTRIC,Status,90,20,0,NearOther,0,bce,"A weak electric charge is launched at the target. It causes paralysis if it hits."
 124,OVERDRIVE,Overdrive,000,80,ELECTRIC,Special,100,10,0,AllNearFoes,0,bef,"The user attacks opposing Pokémon by twanging a guitar or bass guitar, causing a huge echo and strong vibration."
-125,AURAWHEEL,Aura Wheel,176,110,ELECTRIC,Physical,100,10,0,NearOther,0,bef,"Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form."
+125,AURAWHEEL,Aura Wheel,176,110,ELECTRIC,Physical,100,10,100,NearOther,0,bef,"Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form."
 126,BOLTBEAK,Bolt Beak,178,85,ELECTRIC,Physical,100,10,0,NearOther,0,abef,"The user stabs the target with its electrified beak. If the user attacks before the target, the power of this move is doubled."
 127,RISINGVOLTAGE,Rising Voltage,18D,70,ELECTRIC,Special,100,20,0,NearOther,0,bef,"The user attacks with electric voltage rising from the ground. This move's power doubles when the target is on Electric Terrain."
 129,THUNDERCAGE,Thunder Cage,0CF,80,ELECTRIC,Special,90,15,0,NearOther,0,bef,"The user traps the target in a cage of sparking electricity for four to five turns."
@@ -154,7 +154,7 @@
 149,SWEETKISS,Sweet Kiss,013,0,FAIRY,Status,75,10,0,NearOther,0,bce,"The user kisses the target with a sweet, angelic cuteness that causes confusion."
 150,SPIRITBREAK,Spirit Break,045,75,FAIRY,Physical,100,15,100,NearOther,0,abef,"The user attacks the target with so much force that it could break the target's spirit. This also lowers the target's Sp. Atk stat."
 151,DECORATE,Decorate,17B,0,FAIRY,Status,0,15,0,NearOther,0,,"The user sharply raises the target's Attack and Sp. Atk stats by decorating the target."
-152,MISTYEXPLOSION,Misty Explosion,196,100,FAIRY,Special,100,5,0,08,0,bef,"The user attacks everything around it and faints upon using this move. This move's power is increased on Misty Terrain."
+152,MISTYEXPLOSION,Misty Explosion,196,100,FAIRY,Special,100,5,0,AllNearOthers,0,bef,"The user attacks everything around it and faints upon using this move. This move's power is increased on Misty Terrain."
 153,STRANGESTEAM,Strange Steam,013,90,FAIRY,Special,95,10,20,NearOther,0,bef,"The user attacks the target by emitting steam. This may also confuse the target."
 #-------------------------------
 154,FOCUSPUNCH,Focus Punch,115,150,FIGHTING,Physical,100,20,0,NearOther,-3,abfj,"The user focuses its mind before launching a punch. It will fail if the user is hit before it is used."

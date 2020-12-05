@@ -69,6 +69,8 @@ end
 # Substitutes. (Tea Time)
 #===============================================================================
 class PokeBattle_Move_184 < PokeBattle_Move
+  def ignoresSubstitute?(user); return true; end
+
   def pbMoveFailed?(user,targets)
     @validTargets = []
     @battle.eachBattler do |b|
@@ -107,7 +109,7 @@ class PokeBattle_Move_185 < PokeBattle_TargetStatDownMove
   end
 
   def pbBaseDamage(baseDmg,user,target)
-    baseDmg=120 if @battle.field.effects[PBEffects::Gravity]>0
+    baseDmg=baseDmg*1.5 if @battle.field.effects[PBEffects::Gravity]>0
     return baseDmg
   end
 end
@@ -413,8 +415,7 @@ class PokeBattle_Move_195 < PokeBattle_Move
       when PBBattleTerrains::Psychic
         @battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
     end
-    @battle.field.terrain = PBBattleTerrains::None
-    pbCalculatePriority(true) if DYNAMIC_PRIORITY
+    @battle.pbStartTerrain(user,PBBattleTerrains::None,true)
   end
 end
 
@@ -484,7 +485,18 @@ class PokeBattle_Move_198 < PokeBattle_Move
   end
 end
 
-# NOTE: If you're inventing new move effects, use function code 198 and onwards.
+
+#===============================================================================
+# Deals double damage to Dynamax POkémons. Dynamax is not implemented though.
+# (Behemoth Blade, Behemoth Bash, Dynamax Cannon)
+#===============================================================================
+class PokeBattle_Move_199 < PokeBattle_Move
+  # DYNAMAX IS NOT IMPLEMENTED.
+end
+
+
+
+# NOTE: If you're inventing new move effects, use function code 199 and onwards.
 #       Actually, you might as well use high numbers like 500+ (up to FFFF),
 #       just to make sure later additions to Essentials don't clash with your
 #       new effects.
