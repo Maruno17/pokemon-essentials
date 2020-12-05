@@ -100,8 +100,21 @@ class PokeBattle_Battler
     return targets if move.cannotRedirect?
     return targets if move.function != "17C" && (!PBTargets.canChooseOneFoeTarget?(targetType) || targets.length!=1)
     # Stalwart / Propeller Tail
+    allySwitched = false
+    @battle.eachBattler do |b|
+      next if pbGetMoveData(b.lastMoveUsed,MOVE_FUNCTION_CODE) != "120"
+      next if !PBTargets.oneTarget?(move.pbTarget(user))
+      next if !hasActiveAbility?(:STALWART) && !hasActiveAbility?(:PROPELLERTAIL) && move.function != "182"
+      next if !@battle.choices[b.index][3] == targets
+      allySwitched = !allySwitched
+    end
+    if allySwitched && $PokemonTemp.allySwitchTemp != -1
+      targets = []
+      pbAddTarget(targets,user,@battle.battlers[$PokemonTemp.allySwitchTemp],move,!PBTargets.canChooseDistantTarget?(move.target))
+      return targets
+    end
     return targets if user.hasActiveAbility?(:STALWART) || user.hasActiveAbility?(:PROPELLERTAIL)
-	return targets if move.function == "182"
+	  return targets if move.function == "182"
     priority = @battle.pbPriority(true)
     nearOnly = !PBTargets.canChooseDistantTarget?(move.target)
     # Spotlight (takes priority over Follow Me/Rage Powder/Lightning Rod/Storm Drain)
@@ -161,7 +174,7 @@ class PokeBattle_Battler
       # Redirect first use if necessary or get another target on each consecutive use
       if neednewtarget || dragondarts==1
         targets[0].eachAlly do |b|
-		  next if b.index == user.index && dragondarts==1 # Don't attack yourself on the second hit. 
+		  next if b.index == user.index && dragondarts==1 # Don't attack yourself on the second hit.
           next if b.effects[PBEffects::Protect] ||
           (b.effects[PBEffects::QuickGuard] && @battle.choices[user.index][4]>0) ||
           b.effects[PBEffects::SpikyShield] ||
@@ -172,8 +185,8 @@ class PokeBattle_Battler
           PBTypes.ineffective?(move.type,b.type1,b.type2) ||
           !move.pbAccuracyCheck(user,b)
           newTargets.push(b)
-		  b.damageState.unaffected = false 
-		  # In double battle, the pokémon might keep this state from a hit from the ally. 
+		  b.damageState.unaffected = false
+		  # In double battle, the pokémon might keep this state from a hit from the ally.
           break
         end
       end

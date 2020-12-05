@@ -70,7 +70,7 @@ end
 #===============================================================================
 class PokeBattle_Move_184 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
-  
+
   def pbMoveFailed?(user,targets)
     @validTargets = []
     @battle.eachBattler do |b|
@@ -415,8 +415,7 @@ class PokeBattle_Move_195 < PokeBattle_Move
       when PBBattleTerrains::Psychic
         @battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
     end
-    @battle.field.terrain = PBBattleTerrains::None
-    pbCalculatePriority(true) if DYNAMIC_PRIORITY
+    @battle.pbStartTerrain(user,PBBattleTerrains::None,true)
   end
 end
 
@@ -492,8 +491,8 @@ end
 # (Behemoth Blade, Behemoth Bash, Dynamax Cannon)
 #===============================================================================
 class PokeBattle_Move_199 < PokeBattle_Move
-  # DYNAMAX IS NOT IMPLEMENTED. 
-end 
+  # DYNAMAX IS NOT IMPLEMENTED.
+end
 
 
 

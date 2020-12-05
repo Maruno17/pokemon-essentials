@@ -133,7 +133,7 @@ class PokeBattle_Move_008 < PokeBattle_ParalysisMove
   def pbBaseAccuracy(user,target)
 	if target.hasActiveItem?(:UTILITYUMBRELLA)
 		return super
-	end 
+	end
 	case @battle.pbWeather
 	when PBWeather::Sun, PBWeather::HarshSun
 	  return 50
@@ -326,7 +326,7 @@ class PokeBattle_Move_015 < PokeBattle_ConfuseMove
   def pbBaseAccuracy(user,target)
     if target.hasActiveItem?(:UTILITYUMBRELLA)
 	  return super
-	end 
+	end
 	case @battle.pbWeather
 	when PBWeather::Sun, PBWeather::HarshSun
 	  return 50
@@ -1376,8 +1376,7 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
       when PBBattleTerrains::Psychic
         @battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
     end
-    @battle.field.terrain = PBBattleTerrains::None
-    pbCalculatePriority(true) if DYNAMIC_PRIORITY 
+    @battle.pbStartTerrain(user,PBBattleTerrains::None,true)
     case @battle.pbWeather
     when PBWeather::Fog
       @battle.pbDisplay(_INTL("{1} blew away the deep fog!",user.pbThis))
@@ -2560,8 +2559,8 @@ class PokeBattle_Move_075 < PokeBattle_Move
   end
 
   def pbEffectAfterAllHits(user,target)
-    if !target.damageState.unaffected && !target.damageState.protected && 
-	  !target.damageState.missed && 
+    if !target.damageState.unaffected && !target.damageState.protected &&
+	  !target.damageState.missed &&
 	  isConst?(user.species,PBSpecies,:CRAMORANT) &&
       user.hasActiveAbility?(:GULPMISSILE) && user.form==0
       user.form=2
