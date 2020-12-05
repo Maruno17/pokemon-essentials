@@ -946,6 +946,9 @@ class PokeBattle_Pokemon
         @moves[i] = PBMove.new(0)
       end
     end
+    # Set spinning to false if a new Pokemon in created. Prevents evolution by illegal means
+    $PokemonTemp.clockwiseSpin = false
+    $PokemonTemp.antiClockwiseSpin = false
   end
 end
 
