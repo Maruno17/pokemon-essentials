@@ -44,33 +44,28 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbLoadTrainer(trainerid,trainername,partyid=0)
-  if trainerid.is_a?(String) || trainerid.is_a?(Symbol)
-    if !hasConst?(PBTrainers,trainerid)
-      raise _INTL("Trainer type does not exist ({1}, {2}, ID {3})",trainerid,trainername,partyid)
-    end
-    trainerid = getID(PBTrainers,trainerid)
+def pbLoadTrainer(tr_type, tr_name, tr_id = 0)
+  if !GameData::TrainerType.exists?(tr_type)
+    raise _INTL("Trainer type {1} does not exist.", tr_type)
   end
+  tr_type = GameData::TrainerType.get(tr_type).id
   success = false
   items = []
   party = []
   opponent = nil
   trainers = pbLoadTrainersData
   for trainer in trainers
-    thistrainerid = trainer[0]
-    name          = trainer[1]
-    thispartyid   = trainer[4]
-    next if thistrainerid!=trainerid || name!=trainername || thispartyid!=partyid
+    next if trainer[0] != tr_type || trainer[1] != tr_name || trainer[4] != tr_id
     # Found the trainer we want, load it up
     items = trainer[2].clone
-    name = pbGetMessageFromHash(MessageTypes::TrainerNames,name)
+    tr_name = pbGetMessageFromHash(MessageTypes::TrainerNames, tr_name)
     for i in RIVAL_NAMES
-      next if !isConst?(trainerid,PBTrainers,i[0]) || !$game_variables[i[1]].is_a?(String)
-      name = $game_variables[i[1]]
+      next if i[0] != tr_type || !$game_variables[i[1]].is_a?(String)
+      tr_name = $game_variables[i[1]]
       break
     end
     loseText = pbGetMessageFromHash(MessageTypes::TrainerLoseText,trainer[5])
-    opponent = PokeBattle_Trainer.new(name,thistrainerid)
+    opponent = PokeBattle_Trainer.new(tr_name, tr_type)
     opponent.setForeignID($Trainer)
     # Load up each Pokémon in the trainer's party
     for poke in trainer[3]
@@ -93,7 +88,11 @@ def pbLoadTrainer(trainerid,trainername,partyid=0)
       g = (poke[TrainerData::GENDER]) ? poke[TrainerData::GENDER] : (opponent.female?) ? 1 : 0
       pokemon.setGender(g)
       (poke[TrainerData::SHINY]) ? pokemon.makeShiny : pokemon.makeNotShiny
-      n = (poke[TrainerData::NATURE]) ? poke[TrainerData::NATURE] : (pokemon.species+opponent.trainertype)%(PBNatures.maxValue+1)
+      if poke[TrainerData::NATURE]
+        n = poke[TrainerData::NATURE]
+      else
+        n = (pokemon.species + GameData::TrainerType.get(opponent.trainertype).id_number) % (PBNatures.maxValue + 1)
+      end
       pokemon.setNature(n)
       for i in 0...6
         if poke[TrainerData::IV] && poke[TrainerData::IV].length>0
@@ -125,18 +124,16 @@ def pbLoadTrainer(trainerid,trainername,partyid=0)
 end
 
 def pbConvertTrainerData
-  data = pbLoadTrainerTypesData
-  trainertypes = []
-  for i in 0...data.length
-    record = data[i]
-    trainertypes[record[0]] = record[2] if record
+  tr_type_names = []
+  GameData::TrainerType.each do |t|
+    tr_type_names[t.id_number] = t.real_name
   end
-  MessageTypes.setMessages(MessageTypes::TrainerTypes,trainertypes)
+  MessageTypes.setMessages(MessageTypes::TrainerTypes, tr_type_names)
   pbSaveTrainerTypes
   pbSaveTrainerBattles
 end
 
-def pbNewTrainer(trainerid,trainername,trainerparty,savechanges=true)
+def pbNewTrainer(tr_type, tr_name, tr_id, savechanges = true)
   pokemon = []
   for i in 0...6
     if i==0
@@ -160,7 +157,7 @@ def pbNewTrainer(trainerid,trainername,trainerparty,savechanges=true)
       end
     end
   end
-  trainer = [trainerid,trainername,[],pokemon,trainerparty]
+  trainer = [tr_type,tr_name,[],pokemon,tr_id]
   if savechanges
     data = pbLoadTrainersData
     data.push(trainer)
@@ -172,87 +169,67 @@ def pbNewTrainer(trainerid,trainername,trainerparty,savechanges=true)
   return trainer
 end
 
-def pbTrainerTypeCheck(symbol)
+def pbTrainerTypeCheck(trainer_type)
   return true if !$DEBUG
-  ret = false
-  if hasConst?(PBTrainers,symbol)
-    trtype = PBTrainers.const_get(symbol)
-    data = pbGetTrainerTypeData(trtype)
-    ret = true if data
+  return true if GameData::TrainerType.exists?(trainer_type)
+  if pbConfirmMessage(_INTL("Add new trainer type {1}?", trainer_type.to_s))
+    pbTrainerTypeEditorNew(trainer_type.to_s)
   end
-  if !ret
-    if pbConfirmMessage(_INTL("Add new trainer type {1}?",symbol))
-      pbTrainerTypeEditorNew(symbol.to_s)
-    end
-    pbMapInterpreter.command_end if pbMapInterpreter
-  end
-  return ret
+  pbMapInterpreter.command_end if pbMapInterpreter
+  return false
 end
 
-def pbGetFreeTrainerParty(trainerid,trainername)
-  if trainerid.is_a?(String) || trainerid.is_a?(Symbol)
-    if !hasConst?(PBTrainers,trainerid)
-      raise _INTL("Trainer type does not exist ({1}, {2}, ID {3})",trainerid,trainername,partyid)
-    end
-    trainerid = getID(PBTrainers,trainerid)
+def pbGetFreeTrainerParty(tr_type, tr_name)
+  if !GameData::TrainerType.exists?(tr_type)
+    raise _INTL("Trainer type {1} does not exist.", tr_type)
   end
+  tr_type = GameData::TrainerType.get(tr_type).id
   trainers = pbLoadTrainersData
-  usedparties = []
+  used_ids = []
   for trainer in trainers
-    thistrainerid = trainer[0]
-    name          = trainer[1]
-    next if thistrainerid!=trainerid || name!=trainername
-    usedparties.push(trainer[4])
+    next if trainer[0] != tr_type || trainer[1] != tr_name
+    used_ids.push(trainer[4])
   end
-  ret = -1
   for i in 0...256
-    next if usedparties.include?(i)
-    ret = i
-    break
+    return i if !used_ids.include?(i)
   end
-  return ret
+  return -1
 end
 
-def pbTrainerCheck(trainerid,trainername,maxbattles,startBattleId=0)
+# Called from trainer events to ensure the trainer exists
+def pbTrainerCheck(tr_type, tr_name, max_battles, tr_id = 0)
   return true if !$DEBUG
-  if trainerid.is_a?(String) || trainerid.is_a?(Symbol)
-    pbTrainerTypeCheck(trainerid)
-    return false if !hasConst?(PBTrainers,trainerid)
-    trainerid = PBTrainers.const_get(trainerid)
-  end
-  for i in 0...maxbattles
-    trainer = pbLoadTrainer(trainerid,trainername,i+startBattleId)
-    next if trainer
-    traineridstring = "#{trainerid}"
-    traineridstring = getConstantName(PBTrainers,trainerid) rescue "-"
-    if pbConfirmMessage(_INTL("Add new battle {1} (of {2}) for ({3}, {4})?",
-       i+1,maxbattles,traineridstring,trainername))
-      pbNewTrainer(trainerid,trainername,i)
-    end
+  # Check for existence of trainer type
+  pbTrainerTypeCheck(tr_type)
+  return false if !GameData::TrainerType.exists?(tr_type)
+  tr_type = GameData::TrainerType.get(tr_type).id
+  # Check for existence of trainer with given ID number
+  return true if pbLoadTrainer(tr_type, tr_name, tr_id)
+  # Add new trainer
+  if pbConfirmMessage(_INTL("Add new trainer variant {1} (of {2}) for {3} {4}?",
+     tr_id, max_battles, tr_type.to_s, tr_name))
+    pbNewTrainer(tr_type, tr_name, tr_id)
   end
   return true
 end
 
-def pbMissingTrainer(trainerid, trainername, trainerparty)
-  if trainerid.is_a?(String) || trainerid.is_a?(Symbol)
-    if !hasConst?(PBTrainers,trainerid)
-      raise _INTL("Trainer type does not exist ({1}, {2}, ID {3})",trainerid,trainername,partyid)
-    end
-    trainerid = getID(PBTrainers,trainerid)
+def pbMissingTrainer(tr_type, tr_name, tr_id)
+  if !GameData::TrainerType.exists?(tr_type)
+    raise _INTL("Trainer type {1} does not exist.", tr_type)
   end
-  traineridstring = getConstantName(PBTrainers,trainerid) rescue "#{trainerid}"
+  tr_type = GameData::TrainerType.get(tr_type).id
   if !$DEBUG
-    raise _INTL("Can't find trainer ({1}, {2}, ID {3})",traineridstring,trainername,trainerparty)
+    raise _INTL("Can't find trainer ({1}, {2}, ID {3})", tr_type.to_s, tr_name, tr_id)
   end
 	message = ""
-  if trainerparty!=0
-    message = (_INTL("Add new trainer ({1}, {2}, ID {3})?",traineridstring,trainername,trainerparty))
+  if tr_id != 0
+    message = _INTL("Add new trainer ({1}, {2}, ID {3})?", tr_type.to_s, tr_name, tr_id)
   else
-    message = (_INTL("Add new trainer ({1}, {2})?",traineridstring,trainername))
+    message = _INTL("Add new trainer ({1}, {2})?", tr_type.to_s, tr_name)
   end
-  cmd = pbMessage(message,[_INTL("Yes"),_INTL("No")],2)
-  if cmd==0
-    pbNewTrainer(trainerid,trainername,trainerparty)
+  cmd = pbMessage(message, [_INTL("Yes"), _INTL("No")], 2)
+  if cmd == 0
+    pbNewTrainer(tr_type, tr_name, tr_id)
   end
   return cmd
 end

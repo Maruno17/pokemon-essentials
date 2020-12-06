@@ -1,5 +1,3 @@
-class PBTrainers; end
-
 module Compiler
   module_function
 
@@ -1220,42 +1218,45 @@ module Compiler
   # Compile trainer types
   #=============================================================================
   def compile_trainer_types
-    records = []
-    trainernames = []
-    maxValue = 0
-    pbCompilerEachPreppedLine("PBS/trainertypes.txt") { |line,lineno|
-      record=pbGetCsvRecord(line,lineno,[0,"unsUSSSeUS",   # ID can be 0
-         nil,nil,nil,nil,nil,nil,nil,{
-         "" => 2,
-         "Male" => 0,"M" => 0,"0" => 0,
-         "Female" => 1,"F" => 1,"1" => 1,
-         "Mixed" => 2,"X" => 2,"2" => 2
-         },nil,nil]
+    GameData::TrainerType::DATA.clear
+    tr_type_names = []
+    # Read each line of trainertypes.txt at a time and compile it into a trainer type
+    pbCompilerEachCommentedLine("PBS/trainertypes.txt") { |line, line_no|
+      line = pbGetCsvRecord(line, line_no, [0, "unsUSSSeUS",
+        nil, nil, nil, nil, nil, nil, nil, {
+        "Male"   => 0, "M" => 0, "0" => 0,
+        "Female" => 1, "F" => 1, "1" => 1,
+        "Mixed"  => 2, "X" => 2, "2" => 2, "" => 2
+        }, nil, nil]
       )
-      if records[record[0]]
-        raise _INTL("Two trainer types ({1} and {2}) have the same ID ({3}), which is not allowed.\r\n{4}",
-           records[record[0]][1],record[1],record[0],FileLineData.linereport)
+      type_number = line[0]
+      type_symbol = line[1].to_sym
+      if GameData::TrainerType::DATA[type_number]
+        raise _INTL("Trainer type ID number '{1}' is used twice.\r\n{2}", type_number, FileLineData.linereport)
+      elsif GameData::TrainerType::DATA[type_symbol]
+        raise _INTL("Trainer type ID '{1}' is used twice.\r\n{2}", type_symbol, FileLineData.linereport)
       end
-      trainernames[record[0]] = record[2]
-      records[record[0]]      = record
-      maxValue = [maxValue,record[0]].max
+      # Construct trainer type hash
+      type_hash = {
+        :id_number   => type_number,
+        :id          => type_symbol,
+        :name        => line[2],
+        :base_money  => line[3],
+        :battle_BGM  => line[4],
+        :victory_ME  => line[5],
+        :intro_ME    => line[6],
+        :gender      => line[7],
+        :skill_level => line[8],
+        :skill_code  => line[9]
+      }
+      # Add trainer type's data to records
+      GameData::TrainerType::DATA[type_number] = GameData::TrainerType::DATA[type_symbol] = GameData::TrainerType.new(type_hash)
+      tr_type_names[type_number] = type_hash[:name]
     }
-    count = records.compact.length
-    MessageTypes.setMessages(MessageTypes::TrainerTypes,trainernames)
-    code = "class PBTrainers\r\n"
-    for rec in records
-      next if !rec
-      code += "#{rec[1]}=#{rec[0]}\r\n"
-    end
-    code += "def self.getName(id)\r\n"
-    code += "id=getID(PBTrainers,id)\r\n"
-    code += "return pbGetMessage(MessageTypes::TrainerTypes,id); end\r\n"
-    code += "def self.getCount; return #{count}; end\r\n"
-    code += "def self.maxValue; return #{maxValue}; end\r\n"
-    code += "end\r\n"
-    eval(code, TOPLEVEL_BINDING)
-    pbAddScript(code,"PBTrainers")
-    save_data(records,"Data/trainer_types.dat")
+    # Save all data
+    GameData::TrainerType.save
+    MessageTypes.setMessages(MessageTypes::TrainerTypes, tr_type_names)
+    Graphics.update
   end
 
   #=============================================================================
@@ -1280,7 +1281,7 @@ module Compiler
         if pokemonindex==-1
           raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}",FileLineData.linereport)
         end
-        section = pbGetCsvRecord($~[1],lineno,[0,"esU",PBTrainers])
+        section = pbGetCsvRecord($~[1],lineno,[0,"esU",:TrainerType])
         trainerindex += 1
         trainertype = section[0]
         trainername = section[1]
@@ -1378,7 +1379,7 @@ module Compiler
         oldcompilerline += 1
         case oldcompilerline
         when 1   # Trainer type
-          record = pbGetCsvRecord(line,lineno,[0,"e",PBTrainers])
+          record = pbGetCsvRecord(line,lineno,[0,"e",:TrainerType])
           trainers[trainerindex][0] = record
         when 2   # Trainer name, version number
           record = pbGetCsvRecord(line,lineno,[0,"sU"])
@@ -1462,7 +1463,7 @@ module Compiler
   def compile_battle_tower_trainers(filename)
     sections = []
     requiredtypes = {
-       "Type"          => [0, "e",PBTrainers],
+       "Type"          => [0, "e", :TrainerType],
        "Name"          => [1, "s"],
        "BeginSpeech"   => [2, "s"],
        "EndSpeechWin"  => [3, "s"],

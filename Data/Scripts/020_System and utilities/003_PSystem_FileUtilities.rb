@@ -318,18 +318,20 @@ end
 #===============================================================================
 def pbTrainerCharFile(type)   # Used by the phone
   return nil if !type
-  bitmapFileName = sprintf("Graphics/Characters/trchar%s",getConstantName(PBTrainers,type)) rescue nil
+  tr_type_data = GameData::TrainerType.get(type)
+  bitmapFileName = sprintf("Graphics/Characters/trchar%s", tr_type_data.id.to_s) rescue nil
   if !pbResolveBitmap(bitmapFileName)
-    bitmapFileName = sprintf("Graphics/Characters/trchar%03d",type)
+    bitmapFileName = sprintf("Graphics/Characters/trchar%03d", tr_type_data.id_number)
   end
   return bitmapFileName
 end
 
 def pbTrainerCharNameFile(type)   # Used by Battle Frontier and compiler
   return nil if !type
-  bitmapFileName = sprintf("trchar%s",getConstantName(PBTrainers,type)) rescue nil
-  if !pbResolveBitmap(sprintf("Graphics/Characters/"+bitmapFileName))
-    bitmapFileName = sprintf("trchar%03d",type)
+  tr_type_data = GameData::TrainerType.get(type)
+  bitmapFileName = sprintf("trchar%s", tr_type_data.id.to_s) rescue nil
+  if !pbResolveBitmap(sprintf("Graphics/Characters/" + bitmapFileName))
+    bitmapFileName = sprintf("trchar%03d", tr_type_data.id_number)
   end
   return bitmapFileName
 end
@@ -341,48 +343,44 @@ end
 #===============================================================================
 def pbTrainerSpriteFile(type)
   return nil if !type
-  bitmapFileName = sprintf("Graphics/Trainers/trainer%s",
-     getConstantName(PBTrainers,type)) rescue nil
+  tr_type_data = GameData::TrainerType.get(type)
+  bitmapFileName = sprintf("Graphics/Trainers/trainer%s", tr_type_data.id.to_s) rescue nil
   if !pbResolveBitmap(bitmapFileName)
-    bitmapFileName = sprintf("Graphics/Trainers/trainer%03d",type)
+    bitmapFileName = sprintf("Graphics/Trainers/trainer%03d", tr_type_data.id_number)
   end
   return bitmapFileName
 end
 
 def pbTrainerSpriteBackFile(type)
   return nil if !type
-  bitmapFileName = sprintf("Graphics/Trainers/trback%s",
-     getConstantName(PBTrainers,type)) rescue nil
+  tr_type_data = GameData::TrainerType.get(type)
+  bitmapFileName = sprintf("Graphics/Trainers/trback%s", tr_type_data.id.to_s) rescue nil
   if !pbResolveBitmap(bitmapFileName)
-    bitmapFileName = sprintf("Graphics/Trainers/trback%03d",type)
+    bitmapFileName = sprintf("Graphics/Trainers/trback%03d", tr_type_data.id_number)
   end
   return bitmapFileName
 end
 
 def pbPlayerSpriteFile(type)
   return nil if !type
+  tr_type_data = GameData::TrainerType.get(type)
   outfit = ($Trainer) ? $Trainer.outfit : 0
-  bitmapFileName = sprintf("Graphics/Trainers/trainer%s_%d",
-     getConstantName(PBTrainers,type),outfit) rescue nil
+  bitmapFileName = sprintf("Graphics/Trainers/trainer%s_%d", tr_type_data.id.to_s, outfit) rescue nil
   if !pbResolveBitmap(bitmapFileName)
-    bitmapFileName = sprintf("Graphics/Trainers/trainer%03d_%d",type,outfit)
-    if !pbResolveBitmap(bitmapFileName)
-      bitmapFileName = pbTrainerSpriteFile(type)
-    end
+    bitmapFileName = sprintf("Graphics/Trainers/trainer%03d_%d", tr_type_data.id_number, outfit)
+    bitmapFileName = pbTrainerSpriteFile(tr_type_data.id) if !pbResolveBitmap(bitmapFileName)
   end
   return bitmapFileName
 end
 
 def pbPlayerSpriteBackFile(type)
   return nil if !type
+  tr_type_data = GameData::TrainerType.get(type)
   outfit = ($Trainer) ? $Trainer.outfit : 0
-  bitmapFileName = sprintf("Graphics/Trainers/trback%s_%d",
-     getConstantName(PBTrainers,type),outfit) rescue nil
+  bitmapFileName = sprintf("Graphics/Trainers/trback%s_%d", tr_type_data.id.to_s, outfit) rescue nil
   if !pbResolveBitmap(bitmapFileName)
-    bitmapFileName = sprintf("Graphics/Trainers/trback%03d_%d",type,outfit)
-    if !pbResolveBitmap(bitmapFileName)
-      bitmapFileName = pbTrainerSpriteBackFile(type)
-    end
+    bitmapFileName = sprintf("Graphics/Trainers/trback%03d_%d", tr_type_data.id_number, outfit)
+    bitmapFileName = pbTrainerSpriteBackFile(tr_type_data.id) if !pbResolveBitmap(bitmapFileName)
   end
   return bitmapFileName
 end
@@ -394,23 +392,22 @@ end
 #===============================================================================
 def pbTrainerHeadFile(type)
   return nil if !type
-  bitmapFileName = sprintf("Graphics/Pictures/mapPlayer%s",getConstantName(PBTrainers,type)) rescue nil
+  tr_type_data = GameData::TrainerType.get(type)
+  bitmapFileName = sprintf("Graphics/Pictures/mapPlayer%s", tr_type_data.id.to_s) rescue nil
   if !pbResolveBitmap(bitmapFileName)
-    bitmapFileName = sprintf("Graphics/Pictures/mapPlayer%03d",type)
+    bitmapFileName = sprintf("Graphics/Pictures/mapPlayer%03d", tr_type_data.id_number)
   end
   return bitmapFileName
 end
 
 def pbPlayerHeadFile(type)
   return nil if !type
+  tr_type_data = GameData::TrainerType.get(type)
   outfit = ($Trainer) ? $Trainer.outfit : 0
-  bitmapFileName = sprintf("Graphics/Pictures/mapPlayer%s_%d",
-     getConstantName(PBTrainers,type),outfit) rescue nil
+  bitmapFileName = sprintf("Graphics/Pictures/mapPlayer%s_%d", tr_type_data.id.to_s, outfit) rescue nil
   if !pbResolveBitmap(bitmapFileName)
-    bitmapFileName = sprintf("Graphics/Pictures/mapPlayer%03d_%d",type,outfit)
-    if !pbResolveBitmap(bitmapFileName)
-      bitmapFileName = pbTrainerHeadFile(type)
-    end
+    bitmapFileName = sprintf("Graphics/Pictures/mapPlayer%03d_%d", tr_type_data.id_number, outfit)
+    bitmapFileName = pbTrainerHeadFile(tr_type_data.id) if !pbResolveBitmap(bitmapFileName)
   end
   return bitmapFileName
 end
@@ -590,12 +587,11 @@ end
 #===============================================================================
 # Load/play various trainer battle music
 #===============================================================================
-def pbPlayTrainerIntroME(trainerType)
-  data = pbGetTrainerTypeData(trainerType)
-  if data && data[6] && data[6]!=""
-    bgm = pbStringToAudioFile(data[6])
-    pbMEPlay(bgm)
-  end
+def pbPlayTrainerIntroME(trainer_type)
+  trainer_type_data = GameData::TrainerType.get(trainer_type)
+  return if !trainer_type_data.intro_ME || trainer_type_data.intro_ME == ""
+  bgm = pbStringToAudioFile(trainer_type_data.intro_ME)
+  pbMEPlay(bgm)
 end
 
 def pbGetTrainerBattleBGM(trainer)   # can be a PokeBattle_Trainer or an array of them
@@ -606,8 +602,8 @@ def pbGetTrainerBattleBGM(trainer)   # can be a PokeBattle_Trainer or an array o
   music = nil
   trainerarray = (trainer.is_a?(Array)) ? trainer : [trainer]
   trainerarray.each do |t|
-    data = pbGetTrainerTypeData(t.trainertype)
-    music = data[4] if data && data[4]
+    trainer_type_data = GameData::TrainerType.get(t.trainertype)
+    music = trainer_type_data.battle_BGM if trainer_type_data.battle_BGM
   end
   ret = pbStringToAudioFile(music) if music && music!=""
   if !ret
@@ -632,8 +628,8 @@ def pbGetTrainerBattleBGMFromType(trainertype)
   if $PokemonGlobal.nextBattleBGM
     return $PokemonGlobal.nextBattleBGM.clone
   end
-  data = pbGetTrainerTypeData(trainertype)
-  ret = pbStringToAudioFile(data[4]) if data && data[4]
+  trainer_type_data = GameData::TrainerType.get(trainertype)
+  ret = trainer_type_data.battle_BGM if trainer_type_data.battle_BGM
   if !ret
     # Check map metadata
     music = GameData::MapMetadata.get($game_map.map_id).trainer_battle_BGM
@@ -655,8 +651,8 @@ def pbGetTrainerVictoryME(trainer)   # can be a PokeBattle_Trainer or an array o
   music = nil
   trainerarray = (trainer.is_a?(Array)) ? trainer : [trainer]
   trainerarray.each do |t|
-    data = pbGetTrainerTypeData(t.trainertype)
-    music = data[5] if data && data[5]
+    trainer_type_data = GameData::TrainerType.get(t.trainertype)
+    music = trainer_type_data.victory_ME if trainer_type_data.victory_ME
   end
   ret = nil
   if music && music!=""

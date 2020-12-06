@@ -379,7 +379,7 @@ end
 # event - Game_Event object for the character's event
 # speeches - Array of 12 speeches
 def pbDuel(trainer_id, trainer_name, event, speeches)
-  trainer_id = getID(PBTrainers, trainer_id)
+  trainer_id = GameData::TrainerType.get(trainer_id).id
   duel = PokemonDuel.new
   opponent = PokeBattle_Trainer.new(
      pbGetMessageFromHash(MessageTypes::TrainerNames,trainer_name), trainer_id)

@@ -922,34 +922,30 @@ end
 def pbTrainerInfo(pokemonlist,trfile,rules)
   bttrainers=pbGetBTTrainers(trfile)
   btpokemon=pbGetBTPokemon(trfile)
-  trainertypes=pbLoadTrainerTypesData
   if bttrainers.length==0
     for i in 0...200
       yield(nil) if block_given? && i%50==0
       trainerid=0
-      money=30
-      loop do
-        trainerid=rand(PBTrainers.maxValue)+1
-        trainerid=getID(PBTrainers,:YOUNGSTER) if rand(30)==0
-        next if PBTrainers.getName(trainerid)==""
-        money=(!trainertypes[trainerid] ||
-               !trainertypes[trainerid][3]) ? 30 : trainertypes[trainerid][3]
-        next if money>=100
-        break
+      if GameData::TrainerType.exists?(:YOUNGSTER) && rand(30) == 0
+        trainerid = :YOUNGSTER
+      else
+        tr_type_values = GameData::TrainerType::DATA.values
+        loop do
+          tr_type_data = tr_type_values[rand(tr_type_values.length)]
+          next if tr_type_data.base_money >= 100
+          trainerid = tr_type_data.id
+        end
       end
-      gender=(!trainertypes[trainerid] ||
-              !trainertypes[trainerid][7]) ? 2 : trainertypes[trainerid][7]
+      gender = GameData::TrainerType.get(trainerid).gender
       randomName=getRandomNameEx(gender,nil,0,12)
       tr=[trainerid,randomName,_INTL("Here I come!"),
           _INTL("Yes, I won!"),_INTL("Man, I lost!"),[]]
       bttrainers.push(tr)
     end
-    bttrainers.sort! { |a,b|
-      money1=(!trainertypes[a[0]] ||
-              !trainertypes[a[0]][3]) ? 30 : trainertypes[a[0]][3]
-      money2=(!trainertypes[b[0]] ||
-              !trainertypes[b[0]][3]) ? 30 : trainertypes[b[0]][3]
-      money1==money2 ? a[0]<=>b[0] : money1<=>money2
+    bttrainers.sort! { |a, b|
+      money1 = GameData::TrainerType.get(a[0]).base_money
+      money2 = GameData::TrainerType.get(b[0]).base_money
+      (money1 == money2) ? a[0].to_s <=> b[0].to_s : money1 <=> money2
     }
   end
   yield(nil) if block_given?

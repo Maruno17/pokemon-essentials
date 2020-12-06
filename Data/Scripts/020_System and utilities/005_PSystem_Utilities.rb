@@ -685,17 +685,12 @@ def pbGetPlayerGraphic
 end
 
 def pbGetPlayerTrainerType
-  id = $PokemonGlobal.playerID
-  return 0 if id<0 || id>=8
-  meta = GameData::Metadata.get_player(id)
-  return 0 if !meta
-  return meta[0]
+  meta = GameData::Metadata.get_player($PokemonGlobal.playerID)
+  return (meta) ? meta[0] : nil
 end
 
-def pbGetTrainerTypeGender(trainertype)
-  data = pbGetTrainerTypeData(trainertype)
-  return data[7] if data && data[7]
-  return 2   # Gender unknown
+def pbGetTrainerTypeGender(trainer_type)
+  return GameData::TrainerType.get(trainer_type).gender
 end
 
 def pbTrainerName(name=nil,outfit=0)

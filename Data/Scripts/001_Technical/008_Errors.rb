@@ -13,18 +13,10 @@ def pbGetExceptionMessage(e,_script="")
     emessage = "File #{filename} not found."
   end
   if emessage && !safeExists?("Game.rgssad") && !safeExists?("Game.rgss2a")
-    emessage = emessage.gsub(/uninitialized constant PBItems\:\:(\S+)/) {
-       "The item '#{$1}' is not valid. Please add the item\r\nto the PBS/items.txt file. See the wiki for more information." }
-    emessage = emessage.gsub(/undefined method `(\S+?)' for PBItems\:Module/) {
-       "The item '#{$1}' is not valid. Please add the item\r\nto the PBS/items.txt file. See the wiki for more information." }
     emessage = emessage.gsub(/uninitialized constant PBTypes\:\:(\S+)/) {
        "The type '#{$1}' is not valid. Please add the type\r\nto the PBS/types.txt file." }
     emessage = emessage.gsub(/undefined method `(\S+?)' for PBTypes\:Module/) {
        "The type '#{$1}' is not valid. Please add the type\r\nto the PBS/types.txt file." }
-    emessage = emessage.gsub(/uninitialized constant PBTrainers\:\:(\S+)$/) {
-       "The trainer type '#{$1}' is not valid. Please add the trainer\r\nto the PBS/trainertypes.txt file. See the wiki for\r\nmore information." }
-    emessage = emessage.gsub(/undefined method `(\S+?)' for PBTrainers\:Module/) {
-       "The trainer type '#{$1}' is not valid. Please add the trainer\r\nto the PBS/trainertypes.txt file. See the wiki for\r\nmore information." }
     emessage = emessage.gsub(/uninitialized constant PBSpecies\:\:(\S+)$/) {
        "The Pokemon species '#{$1}' is not valid. Please\r\nadd the species to the PBS/pokemon.txt file.\r\nSee the wiki for more information." }
     emessage = emessage.gsub(/undefined method `(\S+?)' for PBSpecies\:Module/) {

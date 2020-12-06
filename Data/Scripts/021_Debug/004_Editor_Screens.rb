@@ -218,133 +218,132 @@ end
 #===============================================================================
 # Trainer type editor
 #===============================================================================
-def pbTrainerTypeEditorNew(trconst)
-  data = pbLoadTrainerTypesData
-  # Get the first unused ID after all existing t-types for the new t-type to use.
-  maxid = -1
-  for rec in data
-    next if !rec
-    maxid = rec[0] if rec[0]>maxid
-  end
-  trainertype = maxid+1
-  trname = pbMessageFreeText(_INTL("Please enter the trainer type's name."),
-     (trconst) ? trconst.gsub(/_+/," ") : "",false,30)
-  return -1 if trname=="" && !trconst
-  # Create an internal name based on the trainer type's name if there is none.
-  trconst = trname if !trconst
-  trconst = trconst.gsub(/é/,"e")
-  trconst = trconst.gsub(/[^A-Za-z0-9_]/,"")
-  trconst = trconst.upcase
-  if trconst.length==0
-    trconst = sprintf("T_%03d",trainertype)
-  elsif !trconst[0,1][/[A-Z]/]
-    trconst = "T_"+trconst
-  end
-  # Create a default name if there is none.
-  trname = trconst if trname==""
-  cname = trconst
-  if hasConst?(PBTrainers,cname)
-    suffix = 1
-    100.times do
-      tname = sprintf("%s_%d",cname,suffix)
-      if !hasConst?(PBTrainers,tname)
-        cname = tname
-        break
-      end
-      suffix += 1
-    end
-  end
-  if hasConst?(PBTrainers,cname)
-    pbMessage(_INTL("Failed to create the trainer type. Choose a different name."))
-    return -1
-  end
-  record = []
-  record[0] = trainertype
-  record[1] = cname
-  record[2] = trname
-  record[7] = pbMessage(_INTL("Is the Trainer male, female, or mixed gender?"),[
-     _INTL("Male"),_INTL("Female"),_INTL("Mixed")],0)
-  params = ChooseNumberParams.new
-  params.setRange(0,255)
-  params.setDefaultValue(30)
-  record[3] = pbMessageChooseNumber(_INTL("Set the money per level won for defeating the Trainer."),params)
-  record[8] = record[3]
-  record[9] = ""
-  PBTrainers.const_set(cname,record[0])
-  data[record[0]] = record
-  save_data(data,"Data/trainer_types.dat")
-  $PokemonTemp.trainerTypesData = nil
-  pbConvertTrainerData
-  pbMessage(_INTL("The Trainer type was created (ID: {1}).",record[0]))
-  pbMessage(_ISPRINTF("Put the Trainer's graphic (trainer{1:03d}.png or trainer{2:s}.png) in Graphics/Characters, or it will be blank.",
-     record[0],getConstantName(PBTrainers,record[0])))
-  return record[0]
-end
-
-def pbTrainerTypeEditorSave(trainertype,ttdata)
-  record = []
-  record[0] = trainertype
-  for i in 0..ttdata.length
-    record.push(ttdata[i])
-  end
-  setConstantName(PBTrainers,trainertype,ttdata[0])
-  data = pbLoadTrainerTypesData
-  data[record[0]] = record
-  save_data(data,"Data/trainer_types.dat")
-  $PokemonTemp.trainerTypesData = nil
-  pbConvertTrainerData
-end
-
 def pbTrainerTypeEditor
   selection = 0
-  trainerTypes = [
-    [_INTL("Internal Name"),   ReadOnlyProperty,        _INTL("Internal name that appears in constructs like PBTrainers::XXX.")],
+  trainer_types = [
+    [_INTL("Internal Name"),   ReadOnlyProperty,        _INTL("Internal name that is used as a symbol like :XXX.")],
     [_INTL("Trainer Name"),    StringProperty,          _INTL("Name of the trainer type as displayed by the game.")],
-    [_INTL("Money Per Level"), LimitProperty.new(9999), _INTL("Player earns this amount times the highest level among the trainer's Pokémon.")],
+    [_INTL("Base Money"),      LimitProperty.new(9999), _INTL("Player earns this much money times the highest level among the trainer's Pokémon.")],
     [_INTL("Battle BGM"),      BGMProperty,             _INTL("BGM played in battles against trainers of this type.")],
     [_INTL("Battle End ME"),   MEProperty,              _INTL("ME played when player wins battles against trainers of this type.")],
     [_INTL("Battle Intro ME"), MEProperty,              _INTL("ME played before battles against trainers of this type.")],
     [_INTL("Gender"),          EnumProperty.new([
-       _INTL("Male"),_INTL("Female"),_INTL("Mixed gender")]),
+       _INTL("Male"), _INTL("Female"), _INTL("Undefined")]),
                                                         _INTL("Gender of this Trainer type.")],
-    [_INTL("Skill"),           LimitProperty.new(9999), _INTL("Skill level of this Trainer type.")],
-    [_INTL("Skill Codes"),     StringProperty,          _INTL("Letters/phrases representing AI modifications of trainers of this type.")],
+    [_INTL("Skill Level"),     LimitProperty.new(9999), _INTL("Skill level of this Trainer type.")],
+    [_INTL("Skill Code"),      StringProperty,          _INTL("Letters/phrases representing AI modifications of trainers of this type.")],
   ]
-  pbListScreenBlock(_INTL("Trainer Types"),TrainerTypeLister.new(selection,true)) { |button,trtype|
-    if trtype
+  pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(selection, true)) { |button, tr_type|
+    if tr_type
       if button==Input::A
-        if trtype[0]>=0
+        if tr_type.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this trainer type?")
-            data = pbLoadTrainerTypesData
-            removeConstantValue(PBTrainers,trtype[0])
-            data[trtype[0]] = nil
-            save_data(data,"Data/trainer_types.dat")
-            $PokemonTemp.trainerTypesData = nil
+            id_number = GameData::TrainerType.get(tr_type).id_number
+            GameData::TrainerType::DATA.delete(tr_type)
+            GameData::TrainerType::DATA.delete(id_number)
+            GameData::TrainerType.save
             pbConvertTrainerData
             pbMessage(_INTL("The Trainer type was deleted."))
           end
         end
-      elsif button==Input::C
-        selection = trtype[0]
-        if selection<0
-          newid = pbTrainerTypeEditorNew(nil)
-          if newid>=0
-            selection = newid
+      elsif button == Input::C
+        if tr_type.is_a?(Symbol)
+          t_data = GameData::TrainerType.get(tr_type)
+          data = [
+            t_data.id.to_s,
+            t_data.real_name,
+            t_data.base_money,
+            t_data.battle_BGM,
+            t_data.victory_ME,
+            t_data.intro_ME,
+            t_data.gender,
+            t_data.skill_level,
+            t_data.skill_code
+          ]
+          if pbPropertyList(t_data.id.to_s, data, trainer_types, true)
+            # Construct trainer type hash
+            type_hash = {
+              :id_number   => t_data.id_number,
+              :id          => t_data.id,
+              :name        => line[1],
+              :base_money  => line[2],
+              :battle_BGM  => line[3],
+              :victory_ME  => line[4],
+              :intro_ME    => line[5],
+              :gender      => line[6],
+              :skill_level => line[7],
+              :skill_code  => line[8]
+            }
+            # Add trainer type's data to records
+            GameData::TrainerType::DATA[t_data.id_number] = GameData::TrainerType::DATA[t_data.id] = GameData::TrainerType.new(type_hash)
+            GameData::TrainerType.save
+            pbConvertTrainerData
           end
-        else
-          data = []
-          for i in 1..trtype.length
-            data.push(trtype[i])
-          end
-          # trtype[2] contains trainer's name to display as title
-          save = pbPropertyList(trtype[2],data,trainerTypes,true)
-          if save
-            pbTrainerTypeEditorSave(selection,data)
-          end
+        else   # Add a new trainer type
+          pbTrainerTypeEditorNew(nil)
         end
       end
     end
   }
+end
+
+def pbTrainerTypeEditorNew(default_name)
+  # Get an unused ID number for the new item
+  max_id = 0
+  GameData::TrainerType.each { |t| max_id = t.id_number if max_id < t.id_number }
+  id_number = max_id + 1
+  # Choose a name
+  name = pbMessageFreeText(_INTL("Please enter the trainer type's name."),
+     (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
+  if name == ""
+    return nil if !default_name
+    name = default_name
+  end
+  # Generate an ID based on the item name
+  id = name.gsub(/é/, "e")
+  id = id.gsub(/[^A-Za-z0-9_]/, "")
+  id = id.upcase
+  if id.length == 0
+    id = sprintf("T_%03d", id_number)
+  elsif !id[0, 1][/[A-Z]/]
+    id = "T_" + id
+  end
+  if GameData::TrainerType.exists?(id)
+    for i in 1..100
+      trial_id = sprintf("%s_%d", id, i)
+      next if GameData::TrainerType.exists?(trial_id)
+      id = trial_id
+      break
+    end
+  end
+  if GameData::TrainerType.exists?(id)
+    pbMessage(_INTL("Failed to create the trainer type. Choose a different name."))
+    return nil
+  end
+  # Choose a gender
+  gender = pbMessage(_INTL("Is the Trainer male, female or undefined?"), [
+     _INTL("Male"), _INTL("Female"), _INTL("Undefined")], 0)
+  # Choose a base money value
+  params = ChooseNumberParams.new
+  params.setRange(0, 255)
+  params.setDefaultValue(30)
+  base_money = pbMessageChooseNumber(_INTL("Set the money per level won for defeating the Trainer."), params)
+  # Construct trainer type hash
+  tr_type_hash = {
+    :id_number   => id_number,
+    :id          => id.to_sym,
+    :name        => name,
+    :base_money  => base_money,
+    :gender      => gender
+  }
+  # Add trainer type's data to records
+  GameData::TrainerType::DATA[id_number] = GameData::TrainerType::DATA[id.to_sym] = GameData::TrainerType.new(tr_type_hash)
+  GameData::TrainerType.save
+  pbConvertTrainerData
+  pbMessage(_INTL("The trainer type {1} was created (ID: {2}).", name, id.to_s))
+  pbMessage(_ISPRINTF("Put the Trainer's graphic (trainer{1:s}.png or trainer{2:03d}.png) in Graphics/Trainers, or it will be blank.",
+     id, id_number))
+  return id.to_sym
 end
 
 
@@ -391,13 +390,11 @@ end
 
 def pbTrainerBattleEditor
   selection = 0
-  trainertypes = pbLoadTrainerTypesData
-  trainers     = pbLoadTrainersData
+  trainers = pbLoadTrainersData
   modified = false
   for trainer in trainers
-    trtype = trainer[0]
-    next if trainertypes && trainertypes[trtype]
-    trainer[0] = 0
+    next if GameData::TrainerType.exists?(trainer[0])
+    trainer[0] = nil
     modified = true
   end
   pbListScreenBlock(_INTL("Trainer Battles"),TrainerBattleLister.new(selection,true)) { |button,trtype|
@@ -418,22 +415,19 @@ def pbTrainerBattleEditor
       selection = index
       if selection<0
         # New trainer
-        trainertype = -1
-        ret = pbMessage(_INTL("First, define the type of trainer."),[
+        trainertype = nil
+        ret = pbMessage(_INTL("First, define the new trainer's type."),[
            _INTL("Use existing type"),
-           _INTL("Use new type"),
-           _INTL("Cancel")],3)
+           _INTL("Create new type"),
+           _INTL("Cancel")], 3)
         if ret==0
           trainertype = pbListScreen(_INTL("TRAINER TYPE"),TrainerTypeLister.new(0,false))
-          next if !trainertype
-          trainertype = trainertype[0]
-          next if trainertype<0
         elsif ret==1
           trainertype = pbTrainerTypeEditorNew(nil)
-          next if trainertype<0
         else
           next
         end
+        next if !trainertype
         trainername = pbMessageFreeText(_INTL("Now enter the trainer's name."),"",false,30)
         next if trainername==""
         trainerparty = pbGetFreeTrainerParty(trainertype,trainername)
@@ -670,7 +664,7 @@ def pbItemEditor
   ]
   pbListScreenBlock(_INTL("Items"), ItemLister.new(selection, true)) { |button, item|
     if item
-      if button==Input::A
+      if button == Input::A
         if item.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this item?")
             id_number = GameData::Item.get(item).id_number
@@ -681,7 +675,7 @@ def pbItemEditor
             pbMessage(_INTL("The item was deleted."))
           end
         end
-      elsif button==Input::C
+      elsif button == Input::C
         if item.is_a?(Symbol)
           itm = GameData::Item.get(item)
           data = [
@@ -740,6 +734,11 @@ def pbItemEditorNew(default_name)
   id = name.gsub(/é/, "e")
   id = id.gsub(/[^A-Za-z0-9_]/, "")
   id = id.upcase
+  if id.length == 0
+    id = sprintf("ITEM_%03d", id_number)
+  elsif !id[0, 1][/[A-Z]/]
+    id = "ITEM_" + id
+  end
   if GameData::Item.exists?(id)
     for i in 1..100
       trial_id = sprintf("%s_%d", id, i)
@@ -776,7 +775,7 @@ def pbItemEditorNew(default_name)
   pbSaveItems
   pbMessage(_INTL("The item {1} was created (ID: {2}).", name, id.to_s))
   pbMessage(_ISPRINTF("Put the item's graphic (item{1:s}.png or item{2:03d}.png) in Graphics/Icons, or it will be blank.",
-     id.to_s, id_number))
+     id, id_number))
 end
 
 

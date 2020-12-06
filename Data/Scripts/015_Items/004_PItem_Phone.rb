@@ -41,15 +41,13 @@ end
 
 def pbPhoneRegisterBattle(message,event,trainertype,trainername,maxbattles)
   return if !$Trainer.pokegear               # Can't register without a Pokégear
-  if trainertype.is_a?(String) || trainertype.is_a?(Symbol)
-    return false if !hasConst?(PBTrainers,trainertype)
-    trainertype = PBTrainers.const_get(trainertype)
-  end
+  return false if !GameData::TrainerType.exists?(trainertype)
+  trainertype = GameData::TrainerType.get(trainertype)
   contact = pbFindPhoneTrainer(trainertype,trainername)
   return if contact && contact[0]              # Existing contact and is visible
   message = _INTL("Let me register you.") if !message
   return if !pbConfirmMessage(message)
-  displayname = _INTL("{1} {2}",PBTrainers.getName(trainertype),
+  displayname = _INTL("{1} {2}", GameData::TrainerType.get(trainertype).name,
      pbGetMessageFromHash(MessageTypes::TrainerNames,trainername))
   if contact                          # Previously registered, just make visible
     contact[0] = true
@@ -80,44 +78,42 @@ def pbRandomPhoneTrainer
   return temparray[rand(temparray.length)]
 end
 
-def pbFindPhoneTrainer(trtype,trname)           # Ignores whether visible or not
+def pbFindPhoneTrainer(tr_type, tr_name)        # Ignores whether visible or not
   return nil if !$PokemonGlobal.phoneNumbers
-  trtype = getID(PBTrainers,trtype)
-  return nil if !trtype || trtype<=0
+  tr_type = GameData::TrainerType.get(tr_type).id
   for num in $PokemonGlobal.phoneNumbers
-    return num if num[1]==trtype && num[2]==trname   # If a match
+    return num if num[1] == tr_type && num[2] == tr_name   # If a match
   end
   return nil
 end
 
-def pbHasPhoneTrainer?(trtype,trname)
-  return pbFindPhoneTrainer(trtype,trname)!=nil
+def pbHasPhoneTrainer?(tr_type, tr_name)
+  return pbFindPhoneTrainer(tr_type, tr_name) != nil
 end
 
-def pbPhoneBattleCount(trtype,trname)
-  trainer = pbFindPhoneTrainer(trtype,trname)
-  return trainer[5] if trainer
-  return 0
+def pbPhoneBattleCount(tr_type, tr_name)
+  trainer = pbFindPhoneTrainer(tr_type, tr_name)
+  return (trainer) ? trainer[5] : 0
 end
 
-def pbPhoneReadyToBattle?(trtype,trname)
-  trainer = pbFindPhoneTrainer(trtype,trname)
+def pbPhoneReadyToBattle?(tr_type, tr_name)
+  trainer = pbFindPhoneTrainer(tr_type, tr_name)
   return (trainer && trainer[4]>=2)
 end
 
 #===============================================================================
 # Contact rematch data modifications
 #===============================================================================
-def pbPhoneIncrement(trtype,trname,maxbattles)
-  trainer = pbFindPhoneTrainer(trtype,trname)
+def pbPhoneIncrement(tr_type, tr_name, maxbattles)
+  trainer = pbFindPhoneTrainer(tr_type, tr_name)
   return if !trainer
   trainer[5] += 1 if trainer[5]<maxbattles   # Increment battle count
   trainer[3] = 0   # reset time to can-battle
   trainer[4] = 0   # reset can-battle flag
 end
 
-def pbPhoneReset(trtype,trname)
-  trainer = pbFindPhoneTrainer(trtype,trname)
+def pbPhoneReset(tr_type, tr_name)
+  trainer = pbFindPhoneTrainer(tr_type, tr_name)
   return false if !trainer
   trainer[3] = 0   # reset time to can-battle
   trainer[4] = 0   # reset can-battle flag

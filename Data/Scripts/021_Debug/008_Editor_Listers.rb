@@ -376,9 +376,8 @@ end
 
 
 class ItemLister
-  def initialize(selection=0,includeNew=false)
-    @sprite = IconSprite.new(0,0)
-    @sprite = ItemIconSprite.new(Graphics.width*3/4,Graphics.height/2,nil)
+  def initialize(selection = 0, includeNew = false)
+    @sprite = ItemIconSprite.new(Graphics.width * 3 / 4, Graphics.height / 2, nil)
     @sprite.z = 2
     @selection = selection
     @commands = []
@@ -418,13 +417,13 @@ class ItemLister
       @ids.push(i[1])
     end
     @index = @selection
-    @index = @commands.length-1 if @index>=@commands.length
-    @index = 0 if @index<0
+    @index = @commands.length - 1 if @index >= @commands.length
+    @index = 0 if @index < 0
     return @commands
   end
 
   def value(index)
-    return nil if index<0
+    return nil if index < 0
     return @ids[index]
   end
 
@@ -436,12 +435,9 @@ end
 
 
 class TrainerTypeLister
-  def initialize(selection,includeNew)
-    @sprite = IconSprite.new(0,0)
-    @sprite.bitmap = nil
-    @sprite.x      = Graphics.width * 3 / 4
-    @sprite.y      = (Graphics.height - 64) / 2 + 64
-    @sprite.z      = 2
+  def initialize(selection = 0, includeNew = false)
+    @sprite = IconSprite.new(Graphics.width * 3 / 4, (Graphics.height - 64) / 2 + 64)
+    @sprite.z = 2
     @selection = selection
     @commands = []
     @ids = []
@@ -466,47 +462,41 @@ class TrainerTypeLister
   def commands
     @commands.clear
     @ids.clear
-    @trainers = pbLoadTrainerTypesData
+    cmds = []
+    GameData::TrainerType.each do |tr_type|
+      cmds.push([tr_type.id_number, tr_type.id, tr_type.real_name])
+    end
+    cmds.sort! { |a, b| a[2].downcase <=> b[2].downcase }
     if @includeNew
       @commands.push(_INTL("[NEW TRAINER TYPE]"))
-      @ids.push(-1)
+      @ids.push(true)
     end
-    @trainers.length.times do |i|
-      next if !@trainers[i]
-      @commands.push(sprintf("%3d: %s",i,@trainers[i][2]))
-      @ids.push(@trainers[i][0])
+    for t in cmds
+      @commands.push(sprintf("%03d: %s", t[0], t[2]))
+      @ids.push(t[1])
     end
-    @commands.length.times do |i|
-      @index = i if @ids[i]==@selection
-    end
+    @index = @selection
+    @index = @commands.length - 1 if @index >= @commands.length
+    @index = 0 if @index < 0
     return @commands
   end
 
   def value(index)
-    return nil if index<0
-    return [-1] if @ids[index]==-1
-    return @trainers[@ids[index]]
+    return nil if index < 0
+    return @ids[index]
   end
 
   def refresh(index)
     @sprite.bitmap.dispose if @sprite.bitmap
-    return if index<0
+    return if index < 0
     begin
-      @sprite.setBitmap(pbTrainerSpriteFile(@ids[index]),0)
+      @sprite.setBitmap(pbTrainerSpriteFile(@ids[index]), 0)
     rescue
       @sprite.setBitmap(nil)
     end
-    sprite_width = @sprite.bitmap.width
-    sprite_height = @sprite.bitmap.height
-    @sprite.ox = sprite_width/2
-    @sprite.oy = sprite_height/2
-    scale_x = (Graphics.width/2).to_f/sprite_width
-    scale_y = (Graphics.height-64).to_f/sprite_height
-    if scale_x<1.0 || scale_y<1.0
-      min_scale = [scale_x, scale_y].min
-      @sprite.zoom_x = @sprite.zoom_y = min_scale
-    else
-      @sprite.zoom_x = @sprite.zoom_y = 1.0
+    if @sprite.bitmap
+      @sprite.ox = @sprite.bitmap.width / 2
+      @sprite.oy = @sprite.bitmap.height / 2
     end
   end
 end
@@ -515,11 +505,8 @@ end
 
 class TrainerBattleLister
   def initialize(selection,includeNew)
-    @sprite = IconSprite.new
-    @sprite.bitmap = nil
-    @sprite.x      = Graphics.width*3/4
-    @sprite.y      = (Graphics.height/2)+32
-    @sprite.z      = 2
+    @sprite = IconSprite.new(Graphics.width * 3 / 4, (Graphics.height / 2) + 32)
+    @sprite.z = 2
     @pkmnList = Window_UnformattedTextPokemon.new()
     @pkmnList.x      = Graphics.width/2
     @pkmnList.y      = Graphics.height-64
@@ -562,12 +549,12 @@ class TrainerBattleLister
       if @trainers[i][4]>0
         # TrainerType TrainerName (version) xPartySize
         @commands.push(_ISPRINTF("{1:s} {2:s} ({3:d}) x{4:d}",
-           PBTrainers.getName(@trainers[i][0]),@trainers[i][1],@trainers[i][4],
-           @trainers[i][3].length))
+           GameData::TrainerType.get(@trainers[i][0]).name, @trainers[i][1],
+           @trainers[i][4], @trainers[i][3].length))
       else
         # TrainerType TrainerName xPartySize
         @commands.push(_ISPRINTF("{1:s} {2:s} x{3:d}",
-           PBTrainers.getName(@trainers[i][0]),@trainers[i][1],
+           GameData::TrainerType.get(@trainers[i][0]).name, @trainers[i][1],
            @trainers[i][3].length))
       end
       # Trainer type ID
@@ -594,8 +581,10 @@ class TrainerBattleLister
     rescue
       @sprite.setBitmap(nil)
     end
-    @sprite.ox = @sprite.bitmap.width/2
-    @sprite.oy = @sprite.bitmap.height
+    if @sprite.bitmap
+      @sprite.ox = @sprite.bitmap.width/2
+      @sprite.oy = @sprite.bitmap.height
+    end
     text = ""
     if !@includeNew || index>0
       @trainers[(@includeNew) ? index-1 : index][3].each_with_index do |p,i|

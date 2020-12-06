@@ -30,14 +30,14 @@ module GameData
       "WildCaptureME"    => [6,  "s"],
       "SurfBGM"          => [7,  "s"],
       "BicycleBGM"       => [8,  "s"],
-      "PlayerA"          => [9,  "esssssss", :PBTrainers],
-      "PlayerB"          => [10, "esssssss", :PBTrainers],
-      "PlayerC"          => [11, "esssssss", :PBTrainers],
-      "PlayerD"          => [12, "esssssss", :PBTrainers],
-      "PlayerE"          => [13, "esssssss", :PBTrainers],
-      "PlayerF"          => [14, "esssssss", :PBTrainers],
-      "PlayerG"          => [15, "esssssss", :PBTrainers],
-      "PlayerH"          => [16, "esssssss", :PBTrainers]
+      "PlayerA"          => [9,  "esssssss", :TrainerType],
+      "PlayerB"          => [10, "esssssss", :TrainerType],
+      "PlayerC"          => [11, "esssssss", :TrainerType],
+      "PlayerD"          => [12, "esssssss", :TrainerType],
+      "PlayerE"          => [13, "esssssss", :TrainerType],
+      "PlayerF"          => [14, "esssssss", :TrainerType],
+      "PlayerG"          => [15, "esssssss", :TrainerType],
+      "PlayerH"          => [16, "esssssss", :TrainerType]
     }
 
     extend ClassMethodsIDNumbers

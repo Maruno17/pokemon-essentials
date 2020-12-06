@@ -249,13 +249,13 @@ end
 
 
 module TrainerTypeProperty
-  def self.set(settingname,oldsetting)
-    chosenmap = pbListScreen(settingname,TrainerTypeLister.new(oldsetting,false))
-    return (chosenmap) ? chosenmap[0] : oldsetting
+  def self.set(settingname, oldsetting)
+    chosenmap = pbListScreen(settingname, TrainerTypeLister.new(0, false))
+    return chosenmap || oldsetting
   end
 
   def self.format(value)
-    return (!value) ? value.inspect : PBTrainers.getName(value)
+    return (value && GameData::TrainerType.exists?(value)) ? GameData::TrainerType.get(value).real_name : "-"
   end
 end
 

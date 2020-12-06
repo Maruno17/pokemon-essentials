@@ -237,27 +237,8 @@ def pbGetHabitatConst(i)
   return ret
 end
 
-# Unused
-#def pbGetAbilityConst(i)
-#  return MakeshiftConsts.get(MessageTypes::Abilities,i,PBAbilities)
-#end
-
-# Unused
-#def pbGetMoveConst(i)
-#  return MakeshiftConsts.get(MessageTypes::Moves,i,PBMoves)
-#end
-
-# Unused
-#def pbGetItemConst(i)
-#  return MakeshiftConsts.get(MessageTypes::Items,i,PBItems)
-#end
-
 def pbGetSpeciesConst(i)
   return MakeshiftConsts.get(MessageTypes::Species,i,PBSpecies)
-end
-
-def pbGetTrainerConst(i)
-  return MakeshiftConsts.get(MessageTypes::TrainerTypes,i,PBTrainers)
 end
 
 

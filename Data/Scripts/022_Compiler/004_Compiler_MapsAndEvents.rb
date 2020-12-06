@@ -385,55 +385,37 @@ module Compiler
   class TrainerChecker
     def initialize
       @trainers     = nil
-      @trainertypes = nil
       @dontaskagain = false
     end
 
-    def pbTrainerTypeCheck(symbol)
-      ret = true
-      if $DEBUG
-        return if @dontaskagain
-        if !hasConst?(PBTrainers,symbol)
-          ret = false
-        else
-          trtype = PBTrainers.const_get(symbol)
-          @trainertypes = load_data("Data/trainer_types.dat") if !@trainertypes
-          ret = false  if !@trainertypes || !@trainertypes[trtype]
-        end
-        if !ret
-          if pbConfirmMessage(_INTL("Add new trainer named {1}?",symbol))
-            pbTrainerTypeEditorNew(symbol.to_s)
-            @trainers     = nil
-            @trainertypes = nil
-          end
-#          if pbMapInterpreter
-#            pbMapInterpreter.command_end rescue nil
-#          end
-        end
+    def pbTrainerTypeCheck(trainer_type)
+      return if !$DEBUG || @dontaskagain
+      return if GameData::TrainerType.exists?(trainer_type)
+      if pbConfirmMessage(_INTL("Add new trainer type {1}?", trainer_type.to_s))
+        pbTrainerTypeEditorNew(trainer_type.to_s)
       end
-      return ret
     end
 
-    def pbTrainerBattleCheck(trtype,trname,trid)
+    def pbTrainerBattleCheck(tr_type, tr_name, tr_id)
       return if !$DEBUG || @dontaskagain
-      if trtype.is_a?(String) || trtype.is_a?(Symbol)
-        pbTrainerTypeCheck(trtype)
-        return if !hasConst?(PBTrainers,trtype)
-        trtype = PBTrainers.const_get(trtype)
-      end
+      # Check for existence of trainer type
+      pbTrainerTypeCheck(tr_type)
+      return if !GameData::TrainerType.exists?(tr_type)
+      tr_type = GameData::TrainerType.get(tr_type).id
+      # Check for existence of trainer
       @trainers = load_data("Data/trainers.dat") if !@trainers
       if @trainers
         for trainer in @trainers
-          return if trainer[0]==trtype && trainer[1]==trname && trainer[4]==trid
+          return if trainer[0]==tr_type && trainer[1]==tr_name && trainer[4]==tr_id
         end
       end
-      cmd = pbMissingTrainer(trtype,trname,trid)
+      # Add new trainer
+      cmd = pbMissingTrainer(tr_type,tr_name,tr_id)
       if cmd==2
         @dontaskagain = true
         Graphics.update
       end
-      @trainers     = nil
-      @trainertypes = nil
+      @trainers = nil
     end
   end
 
@@ -539,8 +521,8 @@ module Compiler
     trainerChecker.pbTrainerBattleCheck(trtype,trname,battleid) if !$INEDITOR
     # Set the event's charset to one depending on the trainer type if the event
     # doesn't have a charset
-    if firstpage.graphic.character_name=="" && hasConst?(PBTrainers,trtype)
-      trainerid = getConst(PBTrainers,trtype)
+    if firstpage.graphic.character_name=="" && GameData::TrainerType.exists?(trtype)
+      trainerid = GameData::TrainerType.get(trtype).id
       if trainerid
         filename = pbTrainerCharNameFile(trainerid)
         if FileTest.image_exist?("Graphics/Characters/"+filename)

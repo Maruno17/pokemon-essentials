@@ -120,9 +120,10 @@ module GameData
   def self.load_all
     Ability.load
     Item.load
-    Move.load
     BerryPlant.load
     Metadata.load
     MapMetadata.load
+    Move.load
+    TrainerType.load
   end
 end

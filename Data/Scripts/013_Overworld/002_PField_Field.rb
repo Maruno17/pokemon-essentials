@@ -695,10 +695,10 @@ module InterpreterFieldMixin
   end
 
   def pbTrainerIntro(symbol)
-    return if $DEBUG && !pbTrainerTypeCheck(symbol)
-    trtype = PBTrainers.const_get(symbol)
+    return true if $DEBUG && !GameData::TrainerType.exists?(symbol)
+    tr_type = GameData::TrainerType.get(symbol).id
     pbGlobalLock
-    pbPlayTrainerIntroME(trtype)
+    pbPlayTrainerIntroME(tr_type)
     return true
   end
 
@@ -1320,18 +1320,18 @@ end
 #===============================================================================
 # Partner trainer
 #===============================================================================
-def pbRegisterPartner(trainerid,trainername,partyid=0)
-  trainerid = getID(PBTrainers,trainerid)
+def pbRegisterPartner(tr_type, tr_name, tr_id = 0)
+  tr_type = GameData::TrainerType.get(tr_type).id
   pbCancelVehicles
-  trainer = pbLoadTrainer(trainerid,trainername,partyid)
-  Events.onTrainerPartyLoad.trigger(nil,trainer)
-  trainerobject = PokeBattle_Trainer.new(_INTL(trainer[0].name),trainerid)
+  trainer = pbLoadTrainer(tr_type, tr_name, tr_id)
+  Events.onTrainerPartyLoad.trigger(nil, trainer)
+  trainerobject = PokeBattle_Trainer.new(trainer[0].name, tr_type)
   trainerobject.setForeignID($Trainer)
   for i in trainer[2]
     i.owner = Pokemon::Owner.new_from_trainer(trainerobject)
     i.calcStats
   end
-  $PokemonGlobal.partner = [trainerid,trainerobject.name,trainerobject.id,trainer[2]]
+  $PokemonGlobal.partner = [tr_type, trainerobject.name, trainerobject.id, trainer[2]]
 end
 
 def pbDeregisterPartner

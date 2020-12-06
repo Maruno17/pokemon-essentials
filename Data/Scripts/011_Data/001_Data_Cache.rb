@@ -14,7 +14,6 @@ class PokemonTemp
   attr_accessor :speciesTMData
   attr_accessor :speciesShadowMovesets
   attr_accessor :pokemonFormToSpecies
-  attr_accessor :trainerTypesData
   attr_accessor :trainersData
   attr_accessor :moveToAnim
   attr_accessor :battleAnims
@@ -34,7 +33,6 @@ def pbClearData
     $PokemonTemp.speciesTMData         = nil
     $PokemonTemp.speciesShadowMovesets = nil
     $PokemonTemp.pokemonFormToSpecies  = nil
-    $PokemonTemp.trainerTypesData      = nil
     $PokemonTemp.trainersData          = nil
     $PokemonTemp.moveToAnim            = nil
     $PokemonTemp.battleAnims           = nil
@@ -207,23 +205,6 @@ def pbLoadFormToSpecies
     $PokemonTemp.pokemonFormToSpecies = load_data("Data/form2species.dat")
   end
   return $PokemonTemp.pokemonFormToSpecies
-end
-
-#===============================================================================
-# Methods to get trainer type data.
-#===============================================================================
-def pbLoadTrainerTypesData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.trainerTypesData
-    $PokemonTemp.trainerTypesData = load_data("Data/trainer_types.dat") || []
-  end
-  return $PokemonTemp.trainerTypesData
-end
-
-def pbGetTrainerTypeData(trainer_type)
-  trainer_type_data = pbLoadTrainerTypesData
-  return trainer_type_data[trainer_type] if trainer_type_data
-  return nil
 end
 
 #===============================================================================

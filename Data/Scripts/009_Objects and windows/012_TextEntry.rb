@@ -249,7 +249,7 @@ class Window_TextEntry < SpriteWindow_Base
     bitmap=self.contents
     bitmap.clear
     x=0
-    y=0
+    y=6
     if @heading
       textwidth=bitmap.text_size(@heading).width
       pbDrawShadowText(bitmap,x,y, textwidth+4, 32, @heading,@baseColor,@shadowColor)
@@ -278,13 +278,13 @@ class Window_TextEntry < SpriteWindow_Base
       pbDrawShadowText(bitmap,x,y, textwidth+4, 32, c,@baseColor,@shadowColor)
       # Draw cursor if necessary
       if ((@frame/10)&1) == 0 && i==@helper.cursor
-        bitmap.fill_rect(x,y+4,2,24,cursorcolor)
+        bitmap.fill_rect(x,y-2,2,24,cursorcolor)
       end
       # Add x to drawn text width
       x += textwidth
     end
     if ((@frame/10)&1) == 0 && textscan.length==@helper.cursor
-      bitmap.fill_rect(x,y+4,2,24,cursorcolor)
+      bitmap.fill_rect(x,y-2,2,24,cursorcolor)
     end
   end
 end

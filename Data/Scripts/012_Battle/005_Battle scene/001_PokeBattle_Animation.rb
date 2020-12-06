@@ -106,11 +106,12 @@ module PokeBattle_BallAnimationMixin
     end
     # Back sprite is animated, make the Poké Ball track the trainer's hand
     coordSets = [[traSprite.x-44,traSprite.y-32],[-10,-36],[118,-4]]
-    if isConst?(@trainer.trainertype,PBTrainers,:POKEMONTRAINER_Leaf)
+    case @trainer.trainertype
+    when :POKEMONTRAINER_Leaf
       coordSets = [[traSprite.x-30,traSprite.y-30],[-18,-36],[118,-6]]
-    elsif isConst?(@trainer.trainertype,PBTrainers,:POKEMONTRAINER_Brendan)
+    when :POKEMONTRAINER_Brendan
       coordSets = [[traSprite.x-46,traSprite.y-40],[-4,-30],[118,-2]]
-    elsif isConst?(@trainer.trainertype,PBTrainers,:POKEMONTRAINER_May)
+    when :POKEMONTRAINER_May
       coordSets = [[traSprite.x-44,traSprite.y-38],[-8,-30],[122,0]]
     end
     # Arm stretched out behind player
