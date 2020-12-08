@@ -27319,7 +27319,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 35
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions =
+Evolutions = ALCREMIE,SweetItem
 #-------------------------------
 [869]
 Name = Alcremie

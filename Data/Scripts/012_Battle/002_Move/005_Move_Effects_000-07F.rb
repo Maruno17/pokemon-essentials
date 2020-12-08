@@ -131,9 +131,9 @@ class PokeBattle_Move_008 < PokeBattle_ParalysisMove
   def hitsFlyingTargets?; return true; end
 
   def pbBaseAccuracy(user,target)
-	if target.hasActiveItem?(:UTILITYUMBRELLA)
+	if target.hasUtilityUmbrella?
 		return super
-	end 
+	end
 	case @battle.pbWeather
 	when PBWeather::Sun, PBWeather::HarshSun
 	  return 50
@@ -324,15 +324,15 @@ class PokeBattle_Move_015 < PokeBattle_ConfuseMove
   def hitsFlyingTargets?; return true; end
 
   def pbBaseAccuracy(user,target)
-    if target.hasActiveItem?(:UTILITYUMBRELLA)
-	  return super
-	end 
-	case @battle.pbWeather
-	when PBWeather::Sun, PBWeather::HarshSun
-	  return 50
-	when PBWeather::Rain, PBWeather::HeavyRain
-	  return 0
-	end
+    if target.hasUtilityUmbrella?
+	    return super
+	  end
+	  case @battle.pbWeather
+	  when PBWeather::Sun, PBWeather::HarshSun
+      return 50
+	  when PBWeather::Rain, PBWeather::HeavyRain
+	    return 0
+	  end
     return super
   end
 end
@@ -755,7 +755,7 @@ class PokeBattle_Move_028 < PokeBattle_MultiStatUpMove
     increment = 1
     if @battle.pbWeather==PBWeather::Sun ||
        @battle.pbWeather==PBWeather::HarshSun
-      increment = 2 if !user.hasActiveItem?(:UTILITYUMBRELLA)
+      increment = 2 if !user.hasUtilityUmbrella?
     end
     @statUp[1] = @statUp[3] = increment
   end
@@ -1376,8 +1376,7 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
       when PBBattleTerrains::Psychic
         @battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
     end
-    @battle.field.terrain = PBBattleTerrains::None
-    pbCalculatePriority(true) if DYNAMIC_PRIORITY 
+    @battle.pbStartTerrain(user,PBBattleTerrains::None,true)
     case @battle.pbWeather
     when PBWeather::Fog
       @battle.pbDisplay(_INTL("{1} blew away the deep fog!",user.pbThis))
@@ -2560,8 +2559,8 @@ class PokeBattle_Move_075 < PokeBattle_Move
   end
 
   def pbEffectAfterAllHits(user,target)
-    if !target.damageState.unaffected && !target.damageState.protected && 
-	  !target.damageState.missed && 
+    if !target.damageState.unaffected && !target.damageState.protected &&
+	  !target.damageState.missed &&
 	  isConst?(user.species,PBSpecies,:CRAMORANT) &&
       user.hasActiveAbility?(:GULPMISSILE) && user.form==0
       user.form=2

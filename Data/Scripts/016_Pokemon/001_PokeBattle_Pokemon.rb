@@ -603,6 +603,7 @@ class PokeBattle_Pokemon
   def hasItem?(item_id = 0)
     held_item = self.item
     return held_item > 0 if item_id == 0
+    return false if !hasConst?(PBItems,item_id)
     return held_item == getID(PBItems,item_id)
   end
 
@@ -945,6 +946,9 @@ class PokeBattle_Pokemon
         @moves[i] = PBMove.new(0)
       end
     end
+    # Set spinning to false if a new Pokemon in created. Prevents evolution by illegal means
+    $PokemonTemp.clockwiseSpin = false
+    $PokemonTemp.antiClockwiseSpin = false
   end
 end
 

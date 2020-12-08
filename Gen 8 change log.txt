@@ -2,8 +2,6 @@
 CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lolface, Golisopod User, KyureJL, DarrylBD99, Turn20Negate, Zerokid, TheKandinavian, ErwanBeurier.
 
 # To Do
-Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
-
 HIGH PRIORITY:
 Update Egg Moves for Gen 1-7
 
@@ -23,6 +21,7 @@ tm.txt                   by ErwanBeurier
 Toxel                    by WolfPP, Aioross
 Galarian Farfetch'd      by Vendily, Golisopod User, Aioross
 Yamask                   by WolfPP, Aioross, Golisopod User
+Milcery                 by Golisopod User
 
 ##### Alternate Forms #####
 Eiscue                   by Aioross
@@ -49,7 +48,7 @@ Mints                    by KyureJL, Aioross
 Exp Charm		 by Golisopod User
 Catching Charm		 by Golisopod User
 Ability Patch		 by Golisopod User
-Reins of Unity		 by Golisopod User 
+Reins of Unity		 by Golisopod User
 Rotom Catalog            by Golisopod User
 Zygarde Cube             by Golisopod User
 
@@ -70,7 +69,7 @@ Life Dew                 by lolface
 No Retreat               by lolface, Aioross
 Obstruct                 by WolfPP, Aioross
 Octolock                 by lolface, Aioross, Vendily
-Snap Trap                by lolface
+Snap Trap                by Golisopod User
 Stuff Cheeks             by WolfPP, Aioross, Golisopod User
 Tar Shot                 by Aioross
 Teatime                  by Aioross
@@ -128,5 +127,5 @@ As One                   by Golisopod User
 ##### Miscellaneous #####
 Galarian in Daycare      by KyureJL
 Fog Weather              by TheKandinavian
-Updating Old Mechanics   by Golisopod User 
-to Gen 8 Standard 
+Updating Old Mechanics   by Golisopod User
+to Gen 8 Standard
