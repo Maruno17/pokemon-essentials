@@ -75,7 +75,7 @@ class PokeBattle_Battle
     priority.each do |b|
       # Weather-related abilities
       if b.abilityActive?
-        next if b.hasActiveItem?(:UTILITYUMBRELLA) && !b.hasActiveAbility(:ICEBODY)
+        next if !b.hasActiveAbility?(:ICEBODY)
         BattleHandlers.triggerEORWeatherAbility(b.ability,curWeather,b,self)
         b.pbFaint if b.fainted?
       end
@@ -401,11 +401,12 @@ class PokeBattle_Battle
     # Octolock
     priority.each do |b|
       next if !b.effects[PBEffects::Octolock]
-      if b.pbCanLowerStatStage?(PBStats::DEFENSE,b,self)
-        b.pbLowerStatStage(PBStats::DEFENSE,1,b)
+	  octouser = @battlers[b.effects[PBEffects::OctolockUser]]
+      if b.pbCanLowerStatStage?(PBStats::DEFENSE,octouser,self)
+        b.pbLowerStatStage(PBStats::DEFENSE,1,octouser,true,false,true)
       end
-      if b.pbCanLowerStatStage?(PBStats::SPDEF,b,self)
-        b.pbLowerStatStage(PBStats::SPDEF,1,b)
+      if b.pbCanLowerStatStage?(PBStats::SPDEF,octouser,self)
+        b.pbLowerStatStage(PBStats::SPDEF,1,octouser,true,false,true)
       end
     end
     # Trapping attacks (Bind/Clamp/Fire Spin/Magma Storm/Sand Tomb/Whirlpool/Wrap)
@@ -653,6 +654,7 @@ class PokeBattle_Battle
       b.effects[PBEffects::BurningJealousy]          = false
       b.effects[PBEffects::LashOut]          = false
       b.effects[PBEffects::Obstruct]         = false
+      b.effects[PBEffects::SwitchedAlly]     = -1
       b.lastHPLost                           = 0
       b.lastHPLostFromFoe                    = 0
       b.tookDamage                           = false
@@ -678,19 +680,35 @@ class PokeBattle_Battle
     @field.effects[PBEffects::FairyLock]   -= 1 if @field.effects[PBEffects::FairyLock]>0
     @field.effects[PBEffects::FusionBolt]  = false
     @field.effects[PBEffects::FusionFlare] = false
+	  # Neutralizing Gas
+	  pbCheckNeutralizingGas
+    @endOfRound = false
+  end
+
+
+  def pbCheckNeutralizingGas(battler=nil)
+    # Battler = the battler to switch out.
+	# Should be specified when called from pbAttackPhaseSwitch
+	# Should be nil when called from pbEndOfRoundPhase
+    return if !@field.effects[PBEffects::NeutralizingGas]
+    return if battler && (!isConst?(battler.ability,PBAbilities,:NEUTRALIZINGGAS) ||
+		battler.effects[PBEffects::GastroAcid])
     hasabil=false
-    neutralactive=field.effects[PBEffects::NeutralizingGas]
     eachBattler {|b|
       next if !b || b.fainted?
+	  next if battler && b.index == battler.index
+	  # if specified, the battler will switch out, so don't consider it.
       # neutralizing gas can be blocked with gastro acid, ending the effect.
       if isConst?(b.ability,PBAbilities,:NEUTRALIZINGGAS) && !b.effects[PBEffects::GastroAcid]
         hasabil=true; break
       end
     }
-    if !hasabil && neutralactive
+    if !hasabil
       @field.effects[PBEffects::NeutralizingGas] = false
-      priority.each { |b| b.pbEffectsOnSwitchIn }
+      pbPriority(true).each { |b|
+	    next if battler && b.index == battler.index
+	    b.pbEffectsOnSwitchIn
+	  }
     end
-    @endOfRound = false
   end
 end
