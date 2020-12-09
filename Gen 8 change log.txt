@@ -1,5 +1,5 @@
 ﻿GEN 8 PROJECT CHANGE LOG
-CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lolface, Golisopod User, KyureJL, DarrylBD99, Turn20Negate, Zerokid, TheKandinavian, ErwanBeurier.
+CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lolface, Golisopod User, KyureJL, DarrylBD99, Turn20Negate, Zerokid, TheKandinavian, ErwanBeurier, UberDunsparce.
 
 # To Do
 HIGH PRIORITY:
@@ -14,7 +14,7 @@ Abilities.txt            by Zerokid, Golisopod User
 Items.txt                by Zerokid, HM100, Golisopod User
 Moves.txt                by TheToxic, KyureJL, Golisopod User
 Pokemon.txt              by Zerokid, TheToxic, KyureJL, Golisopod User
-Pokemonforms.txt         by Zerokid, TheToxic, KyureJL, Golisopod User
+Pokemonforms.txt         by Zerokid, TheToxic, KyureJL, Golisopod User, UberDunsparce
 tm.txt                   by ErwanBeurier
 
 ##### New Evolution Methods #####
