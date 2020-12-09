@@ -664,7 +664,7 @@
 647,SKILLSWAP,Skill Swap,067,0,PSYCHIC,Status,0,10,0,NearOther,0,be,"The user employs its psychic power to exchange Abilities with the target."
 648,SPEEDSWAP,Speed Swap,161,0,PSYCHIC,Status,0,10,0,NearOther,0,be,"The user exchanges Speed stats with the target."
 649,TELEKINESIS,Telekinesis,11A,0,PSYCHIC,Status,0,15,0,NearOther,0,bce,"The user makes the target float with its psychic power. The target is easier to hit for three turns."
-650,TELEPORT,Teleport,0EA,0,PSYCHIC,Status,0,20,0,User,0,,"Use it to flee from any wild Pokémon. It can also warp to the last Pokémon Center visited."
+650,TELEPORT,Teleport,0EA,0,PSYCHIC,Status,0,20,0,User,-6,,"Use it to flee from any wild Pokémon. It can also warp to the last Pokémon Center visited."
 651,TRICK,Trick,0F2,0,PSYCHIC,Status,100,10,0,NearOther,0,be,"The user catches the target off guard and swaps its held item with its own."
 652,TRICKROOM,Trick Room,11F,0,PSYCHIC,Status,0,5,0,BothSides,-7,e,"The user creates a bizarre area in which slower Pokémon get to move first for five turns."
 653,WONDERROOM,Wonder Room,124,0,PSYCHIC,Status,0,10,0,BothSides,-7,e,"The user creates a bizarre area in which Pokémon's Defense and Sp. Def stats are swapped for 5 turns."
