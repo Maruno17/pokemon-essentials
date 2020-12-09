@@ -66,7 +66,7 @@ class Game_Player < Game_Character
 
   def move_generic(dir, turn_enabled = true)
     # To block player movement when L is pressed
-    return false if Input.press?(Input::L)
+    return false if Input.press?(Input::L) && !@move_route_forcing
     turn_generic(dir, true) if turn_enabled
     if !$PokemonTemp.encounterTriggered
       x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
