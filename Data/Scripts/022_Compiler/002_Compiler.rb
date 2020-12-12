@@ -564,13 +564,13 @@ module Compiler
 
   def parseItem(item)
     clonitem = item.upcase
-    clonitem.sub!(/^\s*/,"")
-    clonitem.sub!(/\s*$/,"")
+    clonitem.sub!(/^\s*/, "")
+    clonitem.sub!(/\s*$/, "")
     itm = GameData::Item.try_get(clonitem)
     if !itm
       raise _INTL("Undefined item constant name: {1}\r\nName must consist only of letters, numbers and\r\nunderscores, and can't begin with a number.\r\nMake sure the item is defined in\r\nPBS/items.txt.\r\n{2}", item, FileLineData.linereport)
     end
-    return itm.id.to_s
+    return itm.id
   end
 
   def parseSpecies(item)
@@ -591,7 +591,7 @@ module Compiler
       return nil if skip_unknown
       raise _INTL("Undefined move constant name: {1}\r\nName must consist only of letters, numbers and\r\nunderscores, and can't begin with a number.\r\nMake sure the move is defined in\r\nPBS/moves.txt.\r\n{2}", move, FileLineData.linereport)
     end
-    return mov.id.to_s
+    return mov.id
   end
 
   # Unused
@@ -611,7 +611,7 @@ module Compiler
     if !typ
       raise _INTL("Undefined Trainer type constant name: {1}\r\nName must consist only of letters, numbers and\r\nunderscores, and can't begin with a number.\r\nMake sure the trainer type is defined in\r\ntrainertypes.txt.\r\n{2}", type, FileLineData.linereport)
     end
-    return typ.id.to_s
+    return typ.id
   end
 
   #=============================================================================

@@ -191,7 +191,7 @@ module Compiler
       if line[/^\s*(\w+)\s*=\s*(.*)$/]   # Of the format XXX = YYY
         key   = $1
         value = $2
-        item_symbol = parseItem(key).to_sym
+        item_symbol = parseItem(key)
         item_number = GameData::Item.get(item_symbol).id_number
         line = pbGetCsvRecord(value, line_no, [0, "vuuv"])
         # Construct berry plant hash
@@ -992,7 +992,7 @@ module Compiler
   def compile_move_compatibilities
     lineno = 1
     havesection = false
-    sectionname = nil
+    move_id = nil
     sections    = {}
     if safeExists?("PBS/tm.txt")
       f = File.open("PBS/tm.txt","rb")
@@ -1004,21 +1004,21 @@ module Compiler
         FileLineData.setLine(line,lineno)
         if !line[/^\#/] && !line[/^\s*$/]
           if line[/^\s*\[\s*(.*)\s*\]\s*$/]
-            sectionname = parseMove($~[1])
-            if sections[sectionname]
-              raise _INTL("TM section [{1}] is defined twice.\r\n{2}",sectionname,FileLineData.linereport)
+            move_id = parseMove($~[1])
+            if sections[move_id]
+              raise _INTL("TM section [{1}] is defined twice.\r\n{2}",move_id.to_s,FileLineData.linereport)
             end
-            sections[sectionname] = []
+            sections[move_id] = []
             havesection = true
           else
-            if sectionname==nil
+            if !move_id
               raise _INTL("Expected a section at the beginning of the file. This error may also occur if the file was not saved in UTF-8.\r\n{1}",
                  FileLineData.linereport)
             end
             specieslist = line.sub(/\s+$/,"").split(",")
             for species in specieslist
               next if !species || species==""
-              sec = sections[sectionname]
+              sec = sections[move_id]
               sec[sec.length] = parseSpecies(species)
             end
           end
