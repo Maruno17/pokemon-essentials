@@ -311,7 +311,7 @@ module Compiler
       end
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
-      if [:Ability, :Item, :Move, :TrainerType, :Type].include?(enumer)
+      if GameData.const_defined?(enumer.to_sym)
         enumer = GameData.const_get(enumer.to_sym)
         begin
           if ret == "" || !enumer.exists?(ret.to_sym)
@@ -322,7 +322,6 @@ module Compiler
         end
         return ret.to_sym
       end
-
       enumer = Object.const_get(enumer.to_sym)
       begin
         if ret=="" || !enumer.const_defined?(ret)
@@ -353,12 +352,11 @@ module Compiler
       return nil if ret=="" || !(enumer.const_defined?(ret) rescue false)
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
-      if [:Ability, :Item, :Move, :TrainerType, :Type].include?(enumer)
+      if GameData.const_defined?(enumer.to_sym)
         enumer = GameData.const_get(enumer.to_sym)
         return nil if ret == "" || !enumer.exists?(ret.to_sym)
         return ret.to_sym
       end
-
       enumer = Object.const_get(enumer.to_sym)
       return nil if ret=="" || !(enumer.const_defined?(ret) rescue false)
       return enumer.const_get(ret.to_sym)

@@ -788,7 +788,7 @@ def pbSavePokemonData
       has_param = !PBEvolution.hasFunction?(method, "parameterType") || param_type != nil
       if has_param
         if param_type
-          if [:Ability, :Item, :Move, :TrainerType, :Type].include?(param_type)
+          if GameData.const_defined?(param_type.to_sym)
             pokedata.write("#{parameter.to_s}")
           else
             cparameter = (getConstantName(param_type, parameter) rescue parameter)
@@ -1236,7 +1236,7 @@ def pbSavePokemonFormsData
         has_param = !PBEvolution.hasFunction?(method, "parameterType") || param_type != nil
         if has_param
           if param_type
-            if [:Ability, :Item, :Move, :TrainerType, :Type].include?(param_type)
+            if GameData.const_defined?(param_type.to_sym)
               pokedata.write("#{parameter.to_s}")
             else
               cparameter = (getConstantName(param_type, parameter) rescue parameter)
