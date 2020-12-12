@@ -273,10 +273,12 @@ class PokemonPokedexInfo_Scene
       # Show the owned icon
       imagepos.push(["Graphics/Pictures/Pokedex/icon_own",212,44])
       # Draw the type icon(s)
-      type1 = speciesData[SpeciesData::TYPE1] || 0
+      type1 = speciesData[SpeciesData::TYPE1]
       type2 = speciesData[SpeciesData::TYPE2] || type1
-      type1rect = Rect.new(0,type1*32,96,32)
-      type2rect = Rect.new(0,type2*32,96,32)
+      type1_number = GameData::Type.get(type1).id_number
+      type2_number = GameData::Type.get(type2).id_number
+      type1rect = Rect.new(0,type1_number*32,96,32)
+      type2rect = Rect.new(0,type2_number*32,96,32)
       overlay.blt(296,120,@typebitmap.bitmap,type1rect)
       overlay.blt(396,120,@typebitmap.bitmap,type2rect) if type1!=type2
     else

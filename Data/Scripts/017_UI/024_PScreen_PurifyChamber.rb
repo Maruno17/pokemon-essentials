@@ -94,7 +94,7 @@ Boosted based on number of best circles
 
   # Purify Chamber treats Normal/Normal matchup as super effective
   def self.typeAdvantage(p1,p2)
-    return true if isConst?(p1,PBTypes,:NORMAL) && isConst?(p2,PBTypes,:NORMAL)
+    return true if p1 == :NORMAL && p2 == :NORMAL
     return PBTypes.superEffective?(p1,p2)
   end
 
@@ -125,7 +125,7 @@ class PurifyChamber # German: der Kryptorbis
     @currentSet=value if value>=0 && value<NUMSETS
   end
 
-# Number of regular Pokemon in a set
+  # Number of regular Pokemon in a set
   def setCount(set)
     return @sets[set].length
   end
@@ -954,11 +954,11 @@ class PurifyChamberSetView < SpriteWrapper
     textpos=[]
     if pkmn
       if pkmn.type1==pkmn.type2
-        textpos.push([_INTL("{1}  Lv.{2}  {3}",pkmn.name,pkmn.level,PBTypes.getName(pkmn.type1)),2,0,0,
+        textpos.push([_INTL("{1}  Lv.{2}  {3}",pkmn.name,pkmn.level,GameData::Type.get(pkmn.type1).name),2,0,0,
            Color.new(248,248,248),Color.new(128,128,128)])
       else
-        textpos.push([_INTL("{1}  Lv.{2}  {3}/{4}",pkmn.name,pkmn.level,PBTypes.getName(pkmn.type1),
-           PBTypes.getName(pkmn.type2)),2,0,0,
+        textpos.push([_INTL("{1}  Lv.{2}  {3}/{4}",pkmn.name,pkmn.level,GameData::Type.get(pkmn.type1).name,
+           GameData::Type.get(pkmn.type2).name),2,0,0,
            Color.new(248,248,248),Color.new(128,128,128)])
       end
       textpos.push([_INTL("FLOW"),2+@info.bitmap.width/2,24,0,
@@ -1085,17 +1085,6 @@ class PurifyChamberSetView < SpriteWrapper
     @__sprites.clear
     super
   end
-end
-
-
-
-def pbPurifyChamber
-  $PokemonGlobal.seenPurifyChamber = true
-  pbFadeOutIn {
-    scene = PurifyChamberScene.new
-    screen = PurifyChamberScreen.new(scene)
-    screen.pbStartPurify
-  }
 end
 
 
@@ -1308,4 +1297,15 @@ class PurifyChamberScene
     pbFadeInAndShow(@sprites,visible)
     return pos
   end
+end
+
+
+
+def pbPurifyChamber
+  $PokemonGlobal.seenPurifyChamber = true
+  pbFadeOutIn {
+    scene = PurifyChamberScene.new
+    screen = PurifyChamberScreen.new(scene)
+    screen.pbStartPurify
+  }
 end

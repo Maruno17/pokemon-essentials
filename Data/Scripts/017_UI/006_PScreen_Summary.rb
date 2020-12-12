@@ -440,8 +440,10 @@ class PokemonSummary_Scene
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
     # Draw Pokémon type(s)
-    type1rect = Rect.new(0,@pokemon.type1*28,64,28)
-    type2rect = Rect.new(0,@pokemon.type2*28,64,28)
+    type1_number = GameData::Type.get(@pokemon.type1).id_number
+    type2_number = GameData::Type.get(@pokemon.type2).id_number
+    type1rect = Rect.new(0, type1_number * 28, 64, 28)
+    type2rect = Rect.new(0, type2_number * 28, 64, 28)
     if @pokemon.type1==@pokemon.type2
       overlay.blt(402,146,@typebitmap.bitmap,type1rect)
     else
@@ -686,7 +688,8 @@ class PokemonSummary_Scene
     for i in 0...Pokemon::MAX_MOVES
       move=@pokemon.moves[i]
       if move
-        imagepos.push(["Graphics/Pictures/types",248,yPos+2,0,move.type*28,64,28])
+        type_number = GameData::Type.get(move.type).id_number
+        imagepos.push(["Graphics/Pictures/types", 248, yPos + 2, 0, type_number * 28, 64, 28])
         textpos.push([move.name,316,yPos,0,moveBase,moveShadow])
         if move.total_pp>0
           textpos.push([_INTL("PP"),342,yPos+32,0,moveBase,moveShadow])
@@ -748,7 +751,8 @@ class PokemonSummary_Scene
         yPos += 20
       end
       if move
-        imagepos.push(["Graphics/Pictures/types",248,yPos+2,0,move.type*28,64,28])
+        type_number = GameData::Type.get(move.type).id_number
+        imagepos.push(["Graphics/Pictures/types", 248, yPos + 2, 0, type_number * 28, 64, 28])
         textpos.push([move.name,316,yPos,0,moveBase,moveShadow])
         if move.total_pp>0
           textpos.push([_INTL("PP"),342,yPos+32,0,moveBase,moveShadow])
@@ -769,8 +773,10 @@ class PokemonSummary_Scene
     pbDrawTextPositions(overlay,textpos)
     pbDrawImagePositions(overlay,imagepos)
     # Draw Pokémon's type icon(s)
-    type1rect = Rect.new(0,@pokemon.type1*28,64,28)
-    type2rect = Rect.new(0,@pokemon.type2*28,64,28)
+    type1_number = GameData::Type.get(@pokemon.type1).id_number
+    type2_number = GameData::Type.get(@pokemon.type2).id_number
+    type1rect = Rect.new(0, type1_number * 28, 64, 28)
+    type2rect = Rect.new(0, type2_number * 28, 64, 28)
     if @pokemon.type1==@pokemon.type2
       overlay.blt(130,78,@typebitmap.bitmap,type1rect)
     else

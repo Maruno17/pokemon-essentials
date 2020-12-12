@@ -110,26 +110,26 @@ class PokeBattle_Move_087 < PokeBattle_Move
   end
 
   def pbBaseType(user)
-    ret = getID(PBTypes,:NORMAL)
+    ret = :NORMAL
     case @battle.pbWeather
     when PBWeather::Sun, PBWeather::HarshSun
-      ret = getConst(PBTypes,:FIRE) || ret
+      ret = :FIRE if GameData::Type.exists?(:FIRE)
     when PBWeather::Rain, PBWeather::HeavyRain
-      ret = getConst(PBTypes,:WATER) || ret
+      ret = :WATER if GameData::Type.exists?(:WATER)
     when PBWeather::Sandstorm
-      ret = getConst(PBTypes,:ROCK) || ret
+      ret = :ROCK if GameData::Type.exists?(:ROCK)
     when PBWeather::Hail
-      ret = getConst(PBTypes,:ICE) || ret
+      ret = :ICE if GameData::Type.exists?(:ICE)
     end
     return ret
   end
 
   def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
     t = pbBaseType(user)
-    hitNum = 1 if isConst?(t,PBTypes,:FIRE)   # Type-specific anims
-    hitNum = 2 if isConst?(t,PBTypes,:WATER)
-    hitNum = 3 if isConst?(t,PBTypes,:ROCK)
-    hitNum = 4 if isConst?(t,PBTypes,:ICE)
+    hitNum = 1 if t == :FIRE   # Type-specific anims
+    hitNum = 2 if t == :WATER
+    hitNum = 3 if t == :ROCK
+    hitNum = 4 if t == :ICE
     super
   end
 end
@@ -262,11 +262,8 @@ def pbHiddenPower(pkmn)
   iv = pkmn.iv
   idxType = 0; power = 60
   types = []
-  for i in 0..PBTypes.maxValue
-    next if PBTypes.isPseudoType?(i)
-    next if isConst?(i,PBTypes,:NORMAL) || isConst?(i,PBTypes,:SHADOW)
-    types.push(i)
-  end
+  GameData::Type.each { |t| types.push(t.id) if !t.pseudo_type && ![:NORMAL, :SHADOW].include?(t.id)}
+  types.sort! { |a, b| GameData::Type.get(a).id_number <=> GameData::Type.get(b).id_number }
   idxType |= (iv[PBStats::HP]&1)
   idxType |= (iv[PBStats::ATTACK]&1)<<1
   idxType |= (iv[PBStats::DEFENSE]&1)<<2
@@ -491,10 +488,10 @@ class PokeBattle_Move_096 < PokeBattle_Move
   #       the AI won't want to use it if the user has no item anyway, and
   #       complex item movement is unlikely, perhaps this is good enough.
   def pbBaseType(user)
-    ret = getID(PBTypes,:NORMAL)
+    ret = :NORMAL
     @typeArray.each do |type, items|
       next if !items.include?(@berry.id)
-      ret = getConst(PBTypes,type) || ret
+      ret = type if GameData::Type.exists?(type)
       break
     end
     return ret
@@ -765,12 +762,11 @@ class PokeBattle_Move_09F < PokeBattle_Move
   end
 
   def pbBaseType(user)
-    ret = getID(PBTypes,:NORMAL)
+    ret = :NORMAL
     if user.itemActive?
       @itemTypes.each do |item, itemType|
         next if user.item != item
-        t = getConst(PBTypes,itemType)
-        ret = t || ret
+        ret = itemType if GameData::Type.exists?(itemType)
         break
       end
     end
@@ -781,10 +777,10 @@ class PokeBattle_Move_09F < PokeBattle_Move
     if @id == :TECHNOBLAST   # Type-specific anim
       t = pbBaseType(user)
       hitNum = 0
-      hitNum = 1 if isConst?(t,PBTypes,:ELECTRIC)
-      hitNum = 2 if isConst?(t,PBTypes,:FIRE)
-      hitNum = 3 if isConst?(t,PBTypes,:ICE)
-      hitNum = 4 if isConst?(t,PBTypes,:WATER)
+      hitNum = 1 if t == :ELECTRIC
+      hitNum = 2 if t == :FIRE
+      hitNum = 3 if t == :ICE
+      hitNum = 4 if t == :WATER
     end
     super
   end
@@ -1551,7 +1547,7 @@ class PokeBattle_Move_0B5 < PokeBattle_Move
       next if NEWEST_BATTLE_MECHANICS && pkmn.egg?
       pkmn.moves.each do |move|
         next if @moveBlacklist.include?(move.function_code)
-        next if isConst?(move.type,PBTypes,:SHADOW)
+        next if move.type == :SHADOW
         @assistMoves.push(move.id)
       end
     end
@@ -1670,7 +1666,7 @@ class PokeBattle_Move_0B6 < PokeBattle_Move
       move_data = GameData::Move.get(move_id)
       next if @moveBlacklist.include?(move_data.function_code)
       next if @moveBlacklistSignatures.include?(move_data.id)
-      next if isConst?(move_data.type, PBTypes, :SHADOW)
+      next if move_data.type == :SHADOW
       @metronomeMove = move_data.id
       break
     end

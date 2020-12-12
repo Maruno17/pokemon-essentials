@@ -311,7 +311,7 @@ module Compiler
       end
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
-      if [:Ability, :Item, :Move, :TrainerType].include?(enumer)
+      if [:Ability, :Item, :Move, :TrainerType, :Type].include?(enumer)
         enumer = GameData.const_get(enumer.to_sym)
         begin
           if ret == "" || !enumer.exists?(ret.to_sym)
@@ -353,7 +353,7 @@ module Compiler
       return nil if ret=="" || !(enumer.const_defined?(ret) rescue false)
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
-      if [:Ability, :Item, :Move, :TrainerType].include?(enumer)
+      if [:Ability, :Item, :Move, :TrainerType, :Type].include?(enumer)
         enumer = GameData.const_get(enumer.to_sym)
         return nil if ret == "" || !enumer.exists?(ret.to_sym)
         return ret.to_sym
@@ -632,15 +632,15 @@ module Compiler
       yield(_INTL("Compiling ability data"))
       compile_abilities              # No dependencies
       yield(_INTL("Compiling move data"))
-      compile_moves                  # Depends on PBTypes
+      compile_moves                  # Depends on Type
       yield(_INTL("Compiling item data"))
       compile_items                  # Depends on Move
       yield(_INTL("Compiling berry plant data"))
       compile_berry_plants           # Depends on Item
       yield(_INTL("Compiling Pokémon data"))
-      compile_pokemon                # Depends on Move, Item, PBTypes, Ability
+      compile_pokemon                # Depends on Move, Item, Type, Ability
       yield(_INTL("Compiling Pokémon forms data"))
-      compile_pokemon_forms          # Depends on PBSpecies, Move, Item, PBTypes, Ability
+      compile_pokemon_forms          # Depends on PBSpecies, Move, Item, Type, Ability
       yield(_INTL("Compiling machine data"))
       compile_move_compatibilities   # Depends on PBSpecies, Move
       yield(_INTL("Compiling Trainer type data"))

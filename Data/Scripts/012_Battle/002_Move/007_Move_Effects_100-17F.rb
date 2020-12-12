@@ -107,8 +107,8 @@ class PokeBattle_Move_106 < PokeBattle_PledgeMove
   def initialize(battle,move)
     super
     # [Function code to combo with, effect, override type, override animation]
-    @combos = [["107", :SeaOfFire, getConst(PBTypes, :FIRE), :FIREPLEDGE],
-               ["108", :Swamp,     nil,                      nil]]
+    @combos = [["107", :SeaOfFire, :FIRE, :FIREPLEDGE],
+               ["108", :Swamp,     nil,   nil]]
   end
 end
 
@@ -123,8 +123,8 @@ class PokeBattle_Move_107 < PokeBattle_PledgeMove
   def initialize(battle,move)
     super
     # [Function code to combo with, effect, override type, override animation]
-    @combos = [["108", :Rainbow,   getConst(PBTypes, :WATER), :WATERPLEDGE],
-               ["106", :SeaOfFire, nil,                       nil]]
+    @combos = [["108", :Rainbow,   :WATER, :WATERPLEDGE],
+               ["106", :SeaOfFire, nil,    nil]]
   end
 end
 
@@ -139,8 +139,8 @@ class PokeBattle_Move_108 < PokeBattle_PledgeMove
   def initialize(battle,move)
     super
     # [Function code to combo with, effect, override type, override animation]
-    @combos = [["106", :Swamp,   getConst(PBTypes, :GRASS), :GRASSPLEDGE],
-               ["107", :Rainbow, nil,                        nil]]
+    @combos = [["106", :Swamp,   :GRASS, :GRASSPLEDGE],
+               ["107", :Rainbow, nil,    nil]]
   end
 end
 
@@ -768,8 +768,7 @@ class PokeBattle_Move_11C < PokeBattle_Move
   def hitsFlyingTargets?; return true; end
 
   def pbCalcTypeModSingle(moveType,defType,user,target)
-    return PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if isConst?(moveType,PBTypes,:GROUND) &&
-                                                        isConst?(defType,PBTypes,:FLYING)
+    return PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if moveType == :GROUND && defType == :FLYING
     return super
   end
 
@@ -1065,7 +1064,7 @@ end
 #===============================================================================
 class PokeBattle_Move_135 < PokeBattle_FreezeMove
   def pbCalcTypeModSingle(moveType,defType,user,target)
-    return PBTypeEffectiveness::SUPER_EFFECTIVE_ONE if isConst?(defType,PBTypes,:WATER)
+    return PBTypeEffectiveness::SUPER_EFFECTIVE_ONE if defType == :WATER
     return super
   end
 end
@@ -1402,7 +1401,7 @@ end
 #===============================================================================
 class PokeBattle_Move_142 < PokeBattle_Move
   def pbFailsAgainstTarget?(user,target)
-    if !hasConst?(PBTypes,:GHOST) || target.pbHasType?(:GHOST) || !target.canChangeType?
+    if !GameData::Type.exists?(:GHOST) || target.pbHasType?(:GHOST) || !target.canChangeType?
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1410,9 +1409,8 @@ class PokeBattle_Move_142 < PokeBattle_Move
   end
 
   def pbEffectAgainstTarget(user,target)
-    ghostType = getConst(PBTypes,:GHOST)
-    target.effects[PBEffects::Type3] = ghostType
-    typeName = PBTypes.getName(ghostType)
+    target.effects[PBEffects::Type3] = :GHOST
+    typeName = GameData::Type.get(:GHOST).name
     @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",target.pbThis,typeName))
   end
 end
@@ -1424,7 +1422,7 @@ end
 #===============================================================================
 class PokeBattle_Move_143 < PokeBattle_Move
   def pbFailsAgainstTarget?(user,target)
-    if !hasConst?(PBTypes,:GRASS) || target.pbHasType?(:GRASS) || !target.canChangeType?
+    if !GameData::Type.exists?(:GRASS) || target.pbHasType?(:GRASS) || !target.canChangeType?
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1432,9 +1430,8 @@ class PokeBattle_Move_143 < PokeBattle_Move
   end
 
   def pbEffectAgainstTarget(user,target)
-    grassType = getConst(PBTypes,:GRASS)
-    target.effects[PBEffects::Type3] = grassType
-    typeName = PBTypes.getName(grassType)
+    target.effects[PBEffects::Type3] = :GRASS
+    typeName = GameData::Type.get(:GRASS).name
     @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",target.pbThis,typeName))
   end
 end
@@ -1455,9 +1452,9 @@ class PokeBattle_Move_144 < PokeBattle_Move
 
   def pbCalcTypeModSingle(moveType,defType,user,target)
     ret = super
-    if hasConst?(PBTypes,:FLYING)
-      flyingEff = PBTypes.getEffectiveness(getConst(PBTypes,:FLYING),defType)
-      ret *= flyingEff.to_f/PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE
+    if GameData::Type.exists?(:FLYING)
+      flyingEff = PBTypes.getEffectiveness(:FLYING, defType)
+      ret *= flyingEff.to_f / PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE
     end
     return ret
   end
@@ -2254,7 +2251,7 @@ end
 class PokeBattle_Move_169 < PokeBattle_Move
   def pbBaseType(user)
     userTypes = user.pbTypes(true)
-    return (userTypes.length==0) ? -1 : userTypes[0]
+    return userTypes[0]
   end
 end
 

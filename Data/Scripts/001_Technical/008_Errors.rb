@@ -13,10 +13,6 @@ def pbGetExceptionMessage(e,_script="")
     emessage = "File #{filename} not found."
   end
   if emessage && !safeExists?("Game.rgssad") && !safeExists?("Game.rgss2a")
-    emessage = emessage.gsub(/uninitialized constant PBTypes\:\:(\S+)/) {
-       "The type '#{$1}' is not valid. Please add the type\r\nto the PBS/types.txt file." }
-    emessage = emessage.gsub(/undefined method `(\S+?)' for PBTypes\:Module/) {
-       "The type '#{$1}' is not valid. Please add the type\r\nto the PBS/types.txt file." }
     emessage = emessage.gsub(/uninitialized constant PBSpecies\:\:(\S+)$/) {
        "The Pokemon species '#{$1}' is not valid. Please\r\nadd the species to the PBS/pokemon.txt file.\r\nSee the wiki for more information." }
     emessage = emessage.gsub(/undefined method `(\S+?)' for PBSpecies\:Module/) {

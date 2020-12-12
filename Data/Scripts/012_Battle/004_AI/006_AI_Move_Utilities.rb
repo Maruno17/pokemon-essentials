@@ -35,30 +35,29 @@ class PokeBattle_AI
     end
     # Foresight
     if user.hasActiveAbility?(:SCRAPPY) || target.effects[PBEffects::Foresight]
-      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if isConst?(defType,PBTypes,:GHOST) &&
+      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if defType == :GHOST &&
                                                          PBTypes.ineffective?(moveType,defType)
     end
     # Miracle Eye
     if target.effects[PBEffects::MiracleEye]
-      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if isConst?(defType,PBTypes,:DARK) &&
+      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if defType == :DARK &&
                                                          PBTypes.ineffective?(moveType,defType)
     end
     # Delta Stream's weather
     if @battle.pbWeather==PBWeather::StrongWinds
-      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if isConst?(defType,PBTypes,:FLYING) &&
+      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING &&
                                                          PBTypes.superEffective?(moveType,defType)
     end
     # Grounded Flying-type Pokémon become susceptible to Ground moves
     if !target.airborne?
-      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if isConst?(defType,PBTypes,:FLYING) &&
-                                                         isConst?(moveType,PBTypes,:GROUND)
+      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING && moveType == :GROUND
     end
     return ret
   end
 
   def pbCalcTypeMod(moveType,user,target)
     return PBTypeEffectiveness::NORMAL_EFFECTIVE if moveType<0
-    return PBTypeEffectiveness::NORMAL_EFFECTIVE if isConst?(moveType,PBTypes,:GROUND) &&
+    return PBTypeEffectiveness::NORMAL_EFFECTIVE if moveType == :GROUND &&
        target.pbHasType?(:FLYING) && target.hasActiveItem?(:IRONBALL)
     # Determine types
     tTypes = target.pbTypes(true)
@@ -91,21 +90,22 @@ class PokeBattle_AI
     type = pbRoughType(move,user,skill)
     typeMod = pbCalcTypeMod(type,user,target)
     # Type effectiveness
-    return true if PBTypes.ineffective?(typeMod) || score<=0
+    return true if PBTypeEffectiveness.ineffective?(typeMod) || score<=0
     # Immunity due to ability/item/other effects
     if skill>=PBTrainerAI.mediumSkill
-      if isConst?(move.type,PBTypes,:GROUND)
+      case move.type
+      when :GROUND
         return true if target.airborne? && !move.hitsFlyingTargets?
-      elsif isConst?(move.type,PBTypes,:FIRE)
+      when :FIRE
         return true if target.hasActiveAbility?(:FLASHFIRE)
-      elsif isConst?(move.type,PBTypes,:WATER)
+      when :WATER
         return true if target.hasActiveAbility?([:DRYSKIN,:STORMDRAIN,:WATERABSORB])
-      elsif isConst?(move.type,PBTypes,:GRASS)
+      when :GRASS
         return true if target.hasActiveAbility?(:SAPSIPPER)
-      elsif isConst?(move.type,PBTypes,:ELECTRIC)
+      when :ELECTRIC
         return true if target.hasActiveAbility?([:LIGHTNINGROD,:MOTORDRIVE,:VOLTABSORB])
       end
-      return true if PBTypes.notVeryEffective?(typeMod) &&
+      return true if PBTypeEffectiveness.notVeryEffective?(typeMod) &&
                      target.hasActiveAbility?(:WONDERGUARD)
       return true if move.damagingMove? && user.index!=target.index && !target.opposes?(user) &&
                      target.hasActiveAbility?(:TELEPATHY)
@@ -227,15 +227,14 @@ class PokeBattle_AI
     when "0E1"   # Final Gambit
       baseDmg = user.hp
     when "144"   # Flying Press
-      type = getConst(PBTypes,:FLYING) || -1
-      if type>=0
+      if GameData::Type.exists?(:FLYING)
         if skill>=PBTrainerAI.highSkill
           targetTypes = target.pbTypes(true)
-          mult = PBTypes.getCombinedEffectiveness(type,
+          mult = PBTypes.getCombinedEffectiveness(:FLYING,
              targetTypes[0],targetTypes[1],targetTypes[2])
           baseDmg = (baseDmg.to_f*mult/PBTypeEffectiveness::NORMAL_EFFECTIVE).round
         else
-          mult = PBTypes.getCombinedEffectiveness(type,
+          mult = PBTypes.getCombinedEffectiveness(:FLYING,
              target.type1,target.type2,target.effects[PBEffects::Type3])
           baseDmg = (baseDmg.to_f*mult/PBTypeEffectiveness::NORMAL_EFFECTIVE).round
         end
@@ -347,8 +346,8 @@ class PokeBattle_AI
     end
     # Global abilities
     if skill>=PBTrainerAI.mediumSkill
-      if (@battle.pbCheckGlobalAbility(:DARKAURA) && isConst?(type,PBTypes,:DARK)) ||
-         (@battle.pbCheckGlobalAbility(:FAIRYAURA) && isConst?(type,PBTypes,:FAIRY))
+      if (@battle.pbCheckGlobalAbility(:DARKAURA) && type == :DARK) ||
+         (@battle.pbCheckGlobalAbility(:FAIRYAURA) && type == :FAIRY)
         if @battle.pbCheckGlobalAbility(:AURABREAK)
           multipliers[BASE_DMG_MULT] *= 2/3
         else
@@ -365,13 +364,13 @@ class PokeBattle_AI
     # Helping Hand - n/a
     # Charge
     if skill>=PBTrainerAI.mediumSkill
-      if user.effects[PBEffects::Charge]>0 && isConst?(type,PBTypes,:ELECTRIC)
+      if user.effects[PBEffects::Charge]>0 && type == :ELECTRIC
         multipliers[BASE_DMG_MULT] *= 2
       end
     end
     # Mud Sport and Water Sport
     if skill>=PBTrainerAI.mediumSkill
-      if isConst?(type,PBTypes,:ELECTRIC)
+      if type == :ELECTRIC
         @battle.eachBattler do |b|
           next if !b.effects[PBEffects::MudSport]
           multipliers[BASE_DMG_MULT] /= 3
@@ -381,7 +380,7 @@ class PokeBattle_AI
           multipliers[BASE_DMG_MULT] /= 3
         end
       end
-      if isConst?(type,PBTypes,:FIRE)
+      if type == :FIRE
         @battle.eachBattler do |b|
           next if !b.effects[PBEffects::WaterSport]
           multipliers[BASE_DMG_MULT] /= 3
@@ -396,21 +395,15 @@ class PokeBattle_AI
     if user.affectedByTerrain? && skill>=PBTrainerAI.mediumSkill
       case @battle.field.terrain
       when PBBattleTerrains::Electric
-        if isConst?(type,PBTypes,:ELECTRIC)
-          multipliers[BASE_DMG_MULT] *= 1.5
-        end
+        multipliers[BASE_DMG_MULT] *= 1.5 if type == :ELECTRIC
       when PBBattleTerrains::Grassy
-        if isConst?(type,PBTypes,:GRASS)
-          multipliers[BASE_DMG_MULT] *= 1.5
-        end
+        multipliers[BASE_DMG_MULT] *= 1.5 if type == :GRASS
       when PBBattleTerrains::Psychic
-        if isConst?(type,PBTypes,:PSYCHIC)
-          multipliers[BASE_DMG_MULT] *= 1.5
-        end
+        multipliers[BASE_DMG_MULT] *= 1.5 if type == :PSYCHIC
       end
     end
     if target.affectedByTerrain? && skill>=PBTrainerAI.mediumSkill
-      if @battle.field.terrain==PBBattleTerrains::Misty && isConst?(type,PBTypes,:DRAGON)
+      if @battle.field.terrain==PBBattleTerrains::Misty && type == :DRAGON
         multipliers[BASE_DMG_MULT] /= 2
       end
     end
@@ -438,15 +431,15 @@ class PokeBattle_AI
     if skill>=PBTrainerAI.mediumSkill
       case @battle.pbWeather
       when PBWeather::Sun, PBWeather::HarshSun
-        if isConst?(type,PBTypes,:FIRE)
+        if type == :FIRE
           multipliers[FINAL_DMG_MULT] *= 1.5
-        elsif isConst?(type,PBTypes,:WATER)
+        elsif type == :WATER
           multipliers[FINAL_DMG_MULT] /= 2
         end
       when PBWeather::Rain, PBWeather::HeavyRain
-        if isConst?(type,PBTypes,:FIRE)
+        if type == :FIRE
           multipliers[FINAL_DMG_MULT] /= 2
-        elsif isConst?(type,PBTypes,:WATER)
+        elsif type == :WATER
           multipliers[FINAL_DMG_MULT] *= 1.5
         end
       when PBWeather::Sandstorm
@@ -459,7 +452,7 @@ class PokeBattle_AI
     # Random variance - n/a
     # STAB
     if skill>=PBTrainerAI.mediumSkill
-      if type>=0 && user.pbHasType?(type)
+      if type && user.pbHasType?(type)
         if user.hasActiveAbility?(:ADAPTABILITY)
           multipliers[FINAL_DMG_MULT] *= 2
         else
@@ -547,7 +540,7 @@ class PokeBattle_AI
       if c>=0
         c += 1 if move.highCriticalRate?
         c += user.effects[PBEffects::FocusEnergy]
-        c += 1 if user.inHyperMode? && isConst?(move.type,PBTypes,:SHADOW)
+        c += 1 if user.inHyperMode? && move.type == :SHADOW
       end
       if c>=0
         c = 4 if c>4

@@ -271,7 +271,7 @@ def pbItemIconFile(item)
       if !pbResolveBitmap(bitmapFileName) && itm.is_machine?
         move = itm.move
         type = GameData::Move.get(move).type
-        bitmapFileName = sprintf("Graphics/Icons/itemMachine%s",getConstantName(PBTypes,type)) rescue nil
+        bitmapFileName = sprintf("Graphics/Icons/itemMachine%s",type.to_s) rescue nil
         if !pbResolveBitmap(bitmapFileName)
           bitmapFileName = sprintf("Graphics/Icons/itemMachine%03d",type)
         end

@@ -71,7 +71,7 @@ class PokeBattle_AI
       if target.pbCanParalyze?(user,false) &&
          !(skill>=PBTrainerAI.mediumSkill &&
          move.id == :THUNDERWAVE &&
-         PBTypes.ineffective?(pbCalcTypeMod(move.type,user,target)))
+         PBTypeEffectiveness.ineffective?(pbCalcTypeMod(move.type,user,target)))
         score += 30
         if skill>=PBTrainerAI.mediumSkill
            aspeed = pbRoughStat(user,PBStats::SPEED,skill)
@@ -323,7 +323,7 @@ class PokeBattle_AI
     when "021"
       foundMove = false
       user.eachMove do |m|
-        next if !isConst?(m.type,PBTypes,:ELECTRIC) || !m.damagingMove?
+        next if m.type != :ELECTRIC || !m.damagingMove?
         foundMove = true
         break
       end
@@ -1280,7 +1280,7 @@ class PokeBattle_AI
       else
         lastMoveData = GameData::Move.get(target.lastRegularMoveUsed)
         if moveBlacklist.include?(lastMoveData.function_code) ||
-           isConst?(lastMoveData.type, PBTypes,:SHADOW)
+           lastMoveData.type == :SHADOW
           score -= 90
         end
         user.eachMove do |m|
@@ -1301,7 +1301,7 @@ class PokeBattle_AI
       else
         lastMoveData = GameData::Move.get(target.lastRegularMoveUsed)
         if moveBlacklist.include?(lastMoveData.function_code) ||
-           isConst?(lastMoveData.type, PBTypes,:SHADOW)
+           lastMoveData.type == :SHADOW
           score -= 90
         end
         user.eachMove do |m|
@@ -1328,23 +1328,23 @@ class PokeBattle_AI
     when "05F"
       if user.ability == :MULTITYPE || user.ability == :RKSSYSTEM
         score -= 90
-      elsif !target.lastMoveUsed ||
-         PBTypes.isPseudoType?(GameData::Move.get(target.lastMoveUsed).type)
+      elsif !target.lastMoveUsed || GameData::Move.get(target.lastMoveUsed).pseudo_type
         score -= 90
       else
-        aType = -1
+        aType = nil
         target.eachMove do |m|
           next if m.id!=target.lastMoveUsed
           aType = m.pbCalcType(user)
           break
         end
-        if aType<0
+        if !aType
           score -= 90
         else
           types = []
-          for i in 0..PBTypes.maxValue
-            next if user.pbHasType?(i)
-            types.push(i) if PBTypes.resistant?(aType,i)
+          GameData::Type.each do |t|
+            next if t.pseudo_type || user.pbHasType?(t.id) ||
+                    !PBTypes.resistant?(aType, t.id)
+            types.push(t.id)
           end
           score -= 90 if types.length==0
         end
@@ -1532,7 +1532,7 @@ class PokeBattle_AI
         elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed
           moveData = GameData::Move.get(target.lastMoveUsed)
           if moveData.base_damage > 0 &&
-             (MOVE_CATEGORY_PER_MOVE && moveData.caegory == 1) ||
+             (MOVE_CATEGORY_PER_MOVE && moveData.category == 1) ||
              (!MOVE_CATEGORY_PER_MOVE && !PBTypes.isSpecialType?(moveData.type))
             score -= 60
           end
@@ -1780,7 +1780,7 @@ class PokeBattle_AI
             score += 60
           elsif moveData.category != 2 &&   # Damaging move
              moveData.target == PBTargets::NearOther &&
-             PBTypes.ineffective?(pbCalcTypeMod(moveData.type, target, user))
+             PBTypeEffectiveness.ineffective?(pbCalcTypeMod(moveData.type, target, user))
             score += 60
           end
         end
@@ -2147,7 +2147,7 @@ class PokeBattle_AI
         score -= 90
       else
         user.eachMove do |m|
-          next if !m.damagingMove? || !isConst?(m.type,PBTypes,:FIRE)
+          next if !m.damagingMove? || m.type != :FIRE
           score += 20
         end
       end
@@ -2160,7 +2160,7 @@ class PokeBattle_AI
         score -= 90
       else
         user.eachMove do |m|
-          next if !m.damagingMove? || !isConst?(m.type,PBTypes,:WATER)
+          next if !m.damagingMove? || m.type != :WATER
           score += 20
         end
       end

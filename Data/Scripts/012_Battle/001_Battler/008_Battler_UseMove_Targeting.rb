@@ -138,7 +138,7 @@ class PokeBattle_Battler
   end
 
   def pbChangeTargetByAbility(drawingAbility,drawnType,move,user,targets,priority,nearOnly)
-    return targets if !isConst?(move.calcType,PBTypes,drawnType)
+    return targets if move.calcType != drawnType
     return targets if targets[0].hasActiveAbility?(drawingAbility)
     priority.each do |b|
       next if b.index==user.index || b.index==targets[0].index

@@ -481,14 +481,11 @@ class Pokemon
     return ret
   end
 
-  # @param type [Integer, Symbol, String] type to check (from PBTypes)
+  # @param type [Integer, Symbol, String] type to check
   # @return [Boolean] whether this Pokémon has the specified type
   def hasType?(type)
-    t = self.types
-    if !type.is_a?(Integer)
-      return t.any? { |tp| isConst?(tp, PBTypes, type) }
-    end
-    return t.any? { |tp| tp == type }
+    type = GameData::Type.get(type).id
+    return self.types.include?(type)
   end
 
   #=============================================================================

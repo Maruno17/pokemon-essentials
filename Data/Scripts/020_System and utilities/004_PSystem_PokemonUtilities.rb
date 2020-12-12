@@ -358,7 +358,7 @@ end
 
 # Returns true if there is a Pokémon with the given type in the player's party.
 def pbHasType?(type)
-  type = getID(PBTypes,type)
+  type = GameData::Type.get(type).id
   for pokemon in $Trainer.pokemonParty
     return true if pokemon.hasType?(type)
   end

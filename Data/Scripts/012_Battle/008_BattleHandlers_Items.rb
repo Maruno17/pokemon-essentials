@@ -446,8 +446,7 @@ BattleHandlers::AccuracyCalcTargetItem.copy(:BRIGHTPOWDER,:LAXINCENSE)
 
 BattleHandlers::DamageCalcUserItem.add(:ADAMANTORB,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if user.isSpecies?(:DIALGA) &&
-       (isConst?(type,PBTypes,:DRAGON) || isConst?(type,PBTypes,:STEEL))
+    if user.isSpecies?(:DIALGA) && (type == :DRAGON || type == :STEEL)
       mults[BASE_DMG_MULT] *= 1.2
     end
   }
@@ -455,7 +454,7 @@ BattleHandlers::DamageCalcUserItem.add(:ADAMANTORB,
 
 BattleHandlers::DamageCalcUserItem.add(:BLACKBELT,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:FIGHTING)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :FIGHTING
   }
 )
 
@@ -463,7 +462,7 @@ BattleHandlers::DamageCalcUserItem.copy(:BLACKBELT,:FISTPLATE)
 
 BattleHandlers::DamageCalcUserItem.add(:BLACKGLASSES,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:DARK)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :DARK
   }
 )
 
@@ -477,7 +476,7 @@ BattleHandlers::DamageCalcUserItem.add(:BUGGEM,
 
 BattleHandlers::DamageCalcUserItem.add(:CHARCOAL,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:FIRE)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :FIRE
   }
 )
 
@@ -511,7 +510,7 @@ BattleHandlers::DamageCalcUserItem.add(:DEEPSEATOOTH,
 
 BattleHandlers::DamageCalcUserItem.add(:DRAGONFANG,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:DRAGON)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :DRAGON
   }
 )
 
@@ -531,7 +530,7 @@ BattleHandlers::DamageCalcUserItem.add(:ELECTRICGEM,
 
 BattleHandlers::DamageCalcUserItem.add(:EXPERTBELT,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if PBTypes.superEffective?(target.damageState.typeMod)
+    if PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
       mults[FINAL_DMG_MULT] *= 1.2
     end
   }
@@ -575,8 +574,7 @@ BattleHandlers::DamageCalcUserItem.add(:GRASSGEM,
 
 BattleHandlers::DamageCalcUserItem.add(:GRISEOUSORB,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if user.isSpecies?(:GIRATINA) &&
-       (isConst?(type,PBTypes,:DRAGON) || isConst?(type,PBTypes,:GHOST))
+    if user.isSpecies?(:GIRATINA) && (type == :DRAGON || type == :GHOST)
       mults[BASE_DMG_MULT] *= 1.2
     end
   }
@@ -590,7 +588,7 @@ BattleHandlers::DamageCalcUserItem.add(:GROUNDGEM,
 
 BattleHandlers::DamageCalcUserItem.add(:HARDSTONE,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:ROCK)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :ROCK
   }
 )
 
@@ -620,8 +618,7 @@ BattleHandlers::DamageCalcUserItem.add(:LIGHTBALL,
 
 BattleHandlers::DamageCalcUserItem.add(:LUSTROUSORB,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if user.isSpecies?(:PALKIA) &&
-       (isConst?(type,PBTypes,:DRAGON) || isConst?(type,PBTypes,:WATER))
+    if user.isSpecies?(:PALKIA) && (type == :DRAGON || type == :WATER)
       mults[BASE_DMG_MULT] *= 1.2
     end
   }
@@ -629,7 +626,7 @@ BattleHandlers::DamageCalcUserItem.add(:LUSTROUSORB,
 
 BattleHandlers::DamageCalcUserItem.add(:MAGNET,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:ELECTRIC)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :ELECTRIC
   }
 )
 
@@ -637,7 +634,7 @@ BattleHandlers::DamageCalcUserItem.copy(:MAGNET,:ZAPPLATE)
 
 BattleHandlers::DamageCalcUserItem.add(:METALCOAT,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:STEEL)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :STEEL
   }
 )
 
@@ -652,7 +649,7 @@ BattleHandlers::DamageCalcUserItem.add(:METRONOME,
 
 BattleHandlers::DamageCalcUserItem.add(:MIRACLESEED,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:GRASS)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :GRASS
   }
 )
 
@@ -666,7 +663,7 @@ BattleHandlers::DamageCalcUserItem.add(:MUSCLEBAND,
 
 BattleHandlers::DamageCalcUserItem.add(:MYSTICWATER,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:WATER)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :WATER
   }
 )
 
@@ -674,7 +671,7 @@ BattleHandlers::DamageCalcUserItem.copy(:MYSTICWATER,:SPLASHPLATE,:SEAINCENSE,:W
 
 BattleHandlers::DamageCalcUserItem.add(:NEVERMELTICE,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:ICE)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :ICE
   }
 )
 
@@ -688,13 +685,13 @@ BattleHandlers::DamageCalcUserItem.add(:NORMALGEM,
 
 BattleHandlers::DamageCalcUserItem.add(:PIXIEPLATE,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:FAIRY)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :FAIRY
   }
 )
 
 BattleHandlers::DamageCalcUserItem.add(:POISONBARB,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:POISON)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :POISON
   }
 )
 
@@ -720,7 +717,7 @@ BattleHandlers::DamageCalcUserItem.add(:ROCKGEM,
 
 BattleHandlers::DamageCalcUserItem.add(:SHARPBEAK,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:FLYING)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :FLYING
   }
 )
 
@@ -728,13 +725,13 @@ BattleHandlers::DamageCalcUserItem.copy(:SHARPBEAK,:SKYPLATE)
 
 BattleHandlers::DamageCalcUserItem.add(:SILKSCARF,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:NORMAL)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :NORMAL
   }
 )
 
 BattleHandlers::DamageCalcUserItem.add(:SILVERPOWDER,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:BUG)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :BUG
   }
 )
 
@@ -742,7 +739,7 @@ BattleHandlers::DamageCalcUserItem.copy(:SILVERPOWDER,:INSECTPLATE)
 
 BattleHandlers::DamageCalcUserItem.add(:SOFTSAND,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:GROUND)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :GROUND
   }
 )
 
@@ -752,9 +749,7 @@ BattleHandlers::DamageCalcUserItem.add(:SOULDEW,
   proc { |item,user,target,move,mults,baseDmg,type|
     next if !user.isSpecies?(:LATIAS) && !user.isSpecies?(:LATIOS)
     if NEWEST_BATTLE_MECHANICS
-      if isConst?(type,PBTypes,:PSYCHIC) || isConst?(type,PBTypes,:DRAGON)
-        mults[FINAL_DMG_MULT] *= 1.2
-      end
+      mults[FINAL_DMG_MULT] *= 1.2 if type == :PSYCHIC || type == :DRAGON
     else
       if move.specialMove? && !user.battle.rules["souldewclause"]
         mults[ATK_MULT] *= 1.5
@@ -765,7 +760,7 @@ BattleHandlers::DamageCalcUserItem.add(:SOULDEW,
 
 BattleHandlers::DamageCalcUserItem.add(:SPELLTAG,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:GHOST)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :GHOST
   }
 )
 
@@ -787,7 +782,7 @@ BattleHandlers::DamageCalcUserItem.add(:THICKCLUB,
 
 BattleHandlers::DamageCalcUserItem.add(:TWISTEDSPOON,
   proc { |item,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if isConst?(type,PBTypes,:PSYCHIC)
+    mults[BASE_DMG_MULT] *= 1.2 if type == :PSYCHIC
   }
 )
 
@@ -999,7 +994,7 @@ BattleHandlers::CriticalCalcUserItem.add(:STICK,
 
 BattleHandlers::TargetItemOnHit.add(:ABSORBBULB,
   proc { |item,user,target,move,battle|
-    next if !isConst?(move.calcType,PBTypes,:WATER)
+    next if move.calcType != :WATER
     next if !target.pbCanRaiseStatStage?(PBStats::SPATK,target)
     battle.pbCommonAnimation("UseItem",target)
     target.pbRaiseStatStageByCause(PBStats::SPATK,1,target,target.itemName)
@@ -1017,7 +1012,7 @@ BattleHandlers::TargetItemOnHit.add(:AIRBALLOON,
 
 BattleHandlers::TargetItemOnHit.add(:CELLBATTERY,
   proc { |item,user,target,move,battle|
-    next if !isConst?(move.calcType,PBTypes,:ELECTRIC)
+    next if move.calcType != :ELECTRIC
     next if !target.pbCanRaiseStatStage?(PBStats::ATTACK,target)
     battle.pbCommonAnimation("UseItem",target)
     target.pbRaiseStatStageByCause(PBStats::ATTACK,1,target,target.itemName)
@@ -1028,7 +1023,7 @@ BattleHandlers::TargetItemOnHit.add(:CELLBATTERY,
 BattleHandlers::TargetItemOnHit.add(:ENIGMABERRY,
   proc { |item,user,target,move,battle|
     next if target.damageState.substitute || target.damageState.disguise
-    next if !PBTypes.superEffective?(target.damageState.typeMod)
+    next if !PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
     if BattleHandlers.triggerTargetItemOnHitPositiveBerry(item,target,battle,false)
       target.pbHeldItemTriggered(item)
     end
@@ -1065,7 +1060,7 @@ BattleHandlers::TargetItemOnHit.add(:KEEBERRY,
 
 BattleHandlers::TargetItemOnHit.add(:LUMINOUSMOSS,
   proc { |item,user,target,move,battle|
-    next if !isConst?(move.calcType,PBTypes,:WATER)
+    next if move.calcType != :WATER
     next if !target.pbCanRaiseStatStage?(PBStats::SPDEF,target)
     battle.pbCommonAnimation("UseItem",target)
     target.pbRaiseStatStageByCause(PBStats::SPDEF,1,target,target.itemName)
@@ -1113,7 +1108,7 @@ BattleHandlers::TargetItemOnHit.add(:ROWAPBERRY,
 
 BattleHandlers::TargetItemOnHit.add(:SNOWBALL,
   proc { |item,user,target,move,battle|
-    next if !isConst?(move.calcType,PBTypes,:ICE)
+    next if move.calcType != :ICE
     next if !target.pbCanRaiseStatStage?(PBStats::ATTACK,target)
     battle.pbCommonAnimation("UseItem",target)
     target.pbRaiseStatStageByCause(PBStats::ATTACK,1,target,target.itemName)
@@ -1142,7 +1137,7 @@ BattleHandlers::TargetItemOnHit.add(:STICKYBARB,
 BattleHandlers::TargetItemOnHit.add(:WEAKNESSPOLICY,
   proc { |item,user,target,move,battle|
     next if target.damageState.disguise
-    next if !PBTypes.superEffective?(target.damageState.typeMod)
+    next if !PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
     next if !target.pbCanRaiseStatStage?(PBStats::ATTACK,target) &&
             !target.pbCanRaiseStatStage?(PBStats::SPATK,target)
     battle.pbCommonAnimation("UseItem",target)

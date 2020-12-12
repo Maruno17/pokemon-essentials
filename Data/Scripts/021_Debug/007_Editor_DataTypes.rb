@@ -279,17 +279,17 @@ end
 
 
 module TypeProperty
-  def self.set(_settingname,oldsetting)
-    ret = pbChooseTypeList((oldsetting) ? oldsetting : 0)
-    return (ret<0) ? (oldsetting) ? oldsetting : 0 : ret
+  def self.set(_settingname, oldsetting)
+    ret = pbChooseTypeList(oldsetting || nil)
+    return ret || oldsetting
   end
 
   def self.defaultValue
-    return 0
+    return nil
   end
 
   def self.format(value)
-    return (value) ? PBTypes.getName(value) : "-"
+    return (value && GameData::Type.exists?(value)) ? GameData::Type.get(value).real_name : "-"
   end
 end
 
@@ -1256,8 +1256,7 @@ class EvolutionsProperty
                     newparam = pbChooseMoveList
                   when :PBSpecies
                     newparam = pbChooseSpeciesList
-                  when :PBTypes
-                    allow_zero = true
+                  when :Type
                     newparam = pbChooseTypeList
                   when :Ability
                     newparam = pbChooseAbilityList
@@ -1345,8 +1344,7 @@ class EvolutionsProperty
                   newparam = pbChooseMoveList(entry[1])
                 when :PBSpecies
                   newparam = pbChooseSpeciesList(entry[1])
-                when :PBTypes
-                  allow_zero = true
+                when :Type
                   newparam = pbChooseTypeList(entry[1])
                 when :Ability
                   newparam = pbChooseAbilityList(entry[1])

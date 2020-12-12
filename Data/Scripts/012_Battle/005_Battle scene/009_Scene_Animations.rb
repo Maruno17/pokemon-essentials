@@ -437,20 +437,17 @@ class PokeBattle_Scene
         :DARK     => [:PURSUIT,      :DARKPULSE,    :HONECLAWS,   nil,         :SNARL,        :EMBARGO],
         :FAIRY    => [:TACKLE,       :FAIRYWIND,    :MOONLIGHT,   nil,         :SWIFT,        :SWEETKISS]
       }
-      typeDefaultAnim.each do |type, anims|
-        next if !isConst?(moveType, PBTypes, type)
+      if typeDefaultAnim[moveType]
+        anims = typeDefaultAnim[moveType]
         if GameData::Move.exists?(anims[moveKind])
           anim = pbFindMoveAnimDetails(move2anim, anims[moveKind], idxUser)
         end
-        break if anim
-        if moveKind >= 3 && GameData::Move.exists?(anims[moveKind - 3])
+        if !anim && moveKind >= 3 && GameData::Move.exists?(anims[moveKind - 3])
           anim = pbFindMoveAnimDetails(move2anim, anims[moveKind - 3], idxUser)
         end
-        break if anim
-        if GameData::Move.exists?(anims[2])
+        if !anim && GameData::Move.exists?(anims[2])
           anim = pbFindMoveAnimDetails(move2anim, anims[2], idxUser)
         end
-        break
       end
       return anim if anim
       # Default animation for the move's type not found, use Tackle's animation

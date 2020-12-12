@@ -895,7 +895,7 @@ def pbPokemonEditor
           habitat          = speciesData[SpeciesData::HABITAT]
           type1            = speciesData[SpeciesData::TYPE1]
           type2            = speciesData[SpeciesData::TYPE2]
-          type2            = nil if type2==type1
+          type2            = nil if type2 == type1
           baseStats        = speciesData[SpeciesData::BASE_STATS].clone if speciesData[SpeciesData::BASE_STATS]
           rareness         = speciesData[SpeciesData::RARENESS]
           shape            = speciesData[SpeciesData::SHAPE]
@@ -993,7 +993,7 @@ def pbPokemonEditor
           save = pbPropertyList(data[0],data,species,true)
           if save
             # Make sure both Type1 and Type2 are recorded correctly
-            data[2] = (data[3] || 0) if !data[2]
+            data[2] = data[3] if !data[2]
             data[3] = data[2] if !data[3]
             # Make sure both Compatibilities are recorded correctly
             data[19] = (data[20] && data[20]!=0) ? data[20] : PBEggGroups::Undiscovered if !data[19] || data[19]==0

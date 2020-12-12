@@ -20,7 +20,7 @@ class PokeBattle_Battler
     @form           = 0
     @level          = 0
     @hp = @totalhp  = 0
-    @type1 = @type2 = 0
+    @type1 = @type2 = nil
     @ability_id     = nil
     @item_id        = nil
     @gender         = 0
@@ -148,7 +148,7 @@ class PokeBattle_Battler
     @tookDamage            = false
     @tookPhysicalHit       = false
     @lastMoveUsed          = nil
-    @lastMoveUsedType      = -1
+    @lastMoveUsedType      = nil
     @lastRegularMoveUsed   = nil
     @lastRegularMoveTarget = -1
     @lastRoundMoved        = -1
@@ -270,7 +270,7 @@ class PokeBattle_Battler
     end
     @effects[PBEffects::Truant]              = false
     @effects[PBEffects::TwoTurnAttack]       = nil
-    @effects[PBEffects::Type3]               = -1
+    @effects[PBEffects::Type3]               = nil
     @effects[PBEffects::Unburden]            = false
     @effects[PBEffects::Uproar]              = 0
     @effects[PBEffects::WaterSport]          = false

@@ -72,7 +72,7 @@ module SpeciesData
 
   def self.requiredValues(compilingForms = false)
     ret = {
-      "Type1"            => [TYPE1,          "e", :PBTypes],
+      "Type1"            => [TYPE1,          "e", :Type],
       "BaseStats"        => [BASE_STATS,     "vvvvvv"],
       "BaseEXP"          => [BASE_EXP,       "v"],
       "EffortPoints"     => [EFFORT_POINTS,  "uuuuuu"],
@@ -99,7 +99,7 @@ module SpeciesData
 
   def self.optionalValues(compilingForms = false)
     ret = {
-      "Type2"               => [TYPE2,              "e", :PBTypes],
+      "Type2"               => [TYPE2,              "e", :Type],
       "Abilities"           => [ABILITIES,          "eE", :Ability, :Ability],
       "HiddenAbility"       => [HIDDEN_ABILITY,     "eEEE", :Ability, :Ability,
                                                             :Ability, :Ability],

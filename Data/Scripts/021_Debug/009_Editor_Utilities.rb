@@ -1,14 +1,3 @@
-def pbIsOldSpecialType?(type)
-  return isConst?(type,PBTypes,:FIRE) ||
-         isConst?(type,PBTypes,:WATER) ||
-         isConst?(type,PBTypes,:ICE) ||
-         isConst?(type,PBTypes,:GRASS) ||
-         isConst?(type,PBTypes,:ELECTRIC) ||
-         isConst?(type,PBTypes,:PSYCHIC) ||
-         isConst?(type,PBTypes,:DRAGON) ||
-         isConst?(type,PBTypes,:DARK)
-end
-
 def pbGetLegalMoves(species)
   moves = []
   return moves if !species || species<=0
@@ -164,17 +153,6 @@ end
 
 
 
-def pbGetTypeConst(i)
-  ret = MakeshiftConsts.get(MessageTypes::Types,i,PBTypes)
-  if !ret
-    ret = ["NORMAL","FIGHTING","FLYING","POISON","GROUND",
-           "ROCK","BUG","GHOST","STEEL","QMARKS",
-           "FIRE","WATER","GRASS","ELECTRIC","PSYCHIC",
-           "ICE","DRAGON","DARK"][i]
-  end
-  return ret
-end
-
 def pbGetEvolutionConst(i)
   ret = MakeshiftConsts.get(50,i,PBEvolution)
   if !ret
@@ -259,10 +237,11 @@ def pbChooseSpeciesList(default=0)
   return pbChooseList(commands,default,0,-1)
 end
 
-# Displays an alphabetically sorted list of all moves, and returns the ID of the
-# move selected (or -1 if the selection was canceled). "default", if specified,
-# is the ID of the move to initially select.
-def pbChooseMoveList(default=0)
+# Displays a list of all moves, and returns the ID of the move selected (or nil
+# if the selection was canceled). "default", if specified, is the ID of the move
+# to initially select. Pressing Input::A will toggle the list sorting between
+# numerical and alphabetical.
+def pbChooseMoveList(default = nil)
   commands = []
   GameData::Move.each { |i| commands.push([i.id_number, i.name, i.id]) }
   return pbChooseList(commands, default, nil, -1)
@@ -304,19 +283,17 @@ def pbChooseMoveListForSpecies(species, defaultMoveID = nil)
   return (ret >= 0) ? commands[ret][2] : nil
 end
 
-# Displays an alphabetically sorted list of all types, and returns the ID of the
-# type selected (or -1 if the selection was canceled). "default", if specified,
-# is the ID of the type to initially select.
-def pbChooseTypeList(default=-1)
+# Displays a list of all types, and returns the ID of the type selected (or nil
+# if the selection was canceled). "default", if specified, is the ID of the type
+# to initially select. Pressing Input::A will toggle the list sorting between
+# numerical and alphabetical.
+def pbChooseTypeList(default = nil)
   commands = []
-  for i in 0..PBTypes.maxValue
-    cname = getConstantName(PBTypes,i) rescue nil
-    commands.push([i,PBTypes.getName(i)]) if cname && !PBTypes.isPseudoType?(i)
-  end
-  return pbChooseList(commands,default)
+  GameData::Type.each { |t| commands.push([t.id_number, t.name, t.id]) if !t.pseudo_type }
+  return pbChooseList(commands, default, nil, -1)
 end
 
-# Displays a list of all items, and returns the ID of the item selected (or -1
+# Displays a list of all items, and returns the ID of the item selected (or nil
 # if the selection was canceled). "default", if specified, is the ID of the item
 # to initially select. Pressing Input::A will toggle the list sorting between
 # numerical and alphabetical.
@@ -327,7 +304,7 @@ def pbChooseItemList(default = nil)
 end
 
 # Displays a list of all abilities, and returns the ID of the ability selected
-# (or -1 if the selection was canceled). "default", if specified, is the ID of
+# (or nil if the selection was canceled). "default", if specified, is the ID of
 # the ability to initially select. Pressing Input::A will toggle the list
 # sorting between numerical and alphabetical.
 def pbChooseAbilityList(default = nil)

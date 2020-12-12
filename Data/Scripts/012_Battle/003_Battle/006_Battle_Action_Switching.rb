@@ -347,11 +347,11 @@ class PokeBattle_Battle
     end
     # Entry hazards
     # Stealth Rock
-    if battler.pbOwnSide.effects[PBEffects::StealthRock] && battler.takesIndirectDamage?
-      aType = getConst(PBTypes,:ROCK) || 0
+    if battler.pbOwnSide.effects[PBEffects::StealthRock] && battler.takesIndirectDamage? &&
+       GameData::Type.exists?(:ROCK)
       bTypes = battler.pbTypes(true)
-      eff = PBTypes.getCombinedEffectiveness(aType,bTypes[0],bTypes[1],bTypes[2])
-      if !PBTypes.ineffective?(eff)
+      eff = PBTypes.getCombinedEffectiveness(:ROCK, bTypes[0], bTypes[1], bTypes[2])
+      if !PBTypeEffectiveness.ineffective?(eff)
         eff = eff.to_f/PBTypeEffectiveness::NORMAL_EFFECTIVE
         oldHP = battler.hp
         battler.pbReduceHP(battler.totalhp*eff/8,false)

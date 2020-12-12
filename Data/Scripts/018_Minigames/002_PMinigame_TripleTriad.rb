@@ -21,7 +21,7 @@ class TriadCard
     spDef   = baseStats[PBStats::SPDEF]
     speed   = baseStats[PBStats::SPEED]
     @type = pbGetSpeciesData(species,form,SpeciesData::TYPE1)
-    if isConst?(@type,PBTypes,:NORMAL)
+    if @type == :NORMAL
       type2 = pbGetSpeciesData(species,form,SpeciesData::TYPE2)
       @type = type2 if type2
     end
@@ -80,16 +80,17 @@ class TriadCard
     return ret
   end
 
-  def self.createBack(type=-1,noback=false)
+  def self.createBack(type = nil, noback = false)
     bitmap = BitmapWrapper.new(80,96)
     if !noback
       cardbitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/triad_card_opponent"))
       bitmap.blt(0,0,cardbitmap.bitmap,Rect.new(0,0,cardbitmap.width,cardbitmap.height))
       cardbitmap.dispose
     end
-    if type>=0
+    if type
       typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
-      typerect = Rect.new(0,type*28,64,28)
+      type_number = GameData::Type.get(type).id_number
+      typerect = Rect.new(0, type_number * 28, 64, 28)
       bitmap.blt(8,50,typebitmap.bitmap,typerect,192)
       typebitmap.dispose
     end
@@ -111,7 +112,8 @@ class TriadCard
     # Draw card background
     bitmap.blt(0,0,cardbitmap.bitmap,Rect.new(0,0,cardbitmap.width,cardbitmap.height))
     # Draw type icon
-    typerect = Rect.new(0,@type*28,64,28)
+    type_number = GameData::Type.get(@type).id_number
+    typerect = Rect.new(0,type_number*28,64,28)
     bitmap.blt(8,50,typebitmap.bitmap,typerect,192)
     # Draw Pokémon icon
     bitmap.blt(8,24,iconbitmap.bitmap,Rect.new(0,0,64,64))
@@ -139,7 +141,7 @@ class TriadSquare
   def initialize
     @owner = 0
     @card  = nil
-    @type  = -1
+    @type  = nil
   end
 
   def attack(panel)
@@ -355,7 +357,7 @@ class TriadScene
       @sprites["opponent#{i}"].x      = 12
       @sprites["opponent#{i}"].y      = 44+44*i
       @sprites["opponent#{i}"].z      = 2
-      @sprites["opponent#{i}"].bitmap = @battle.openHand ? TriadCard.new(cards[i]).createBitmap(2) : TriadCard.createBack(-1)
+      @sprites["opponent#{i}"].bitmap = @battle.openHand ? TriadCard.new(cards[i]).createBitmap(2) : TriadCard.createBack
       @opponentCardBitmaps.push(@sprites["opponent#{i}"].bitmap)
       @opponentCardIndexes.push(i)
     end
@@ -728,12 +730,14 @@ class TriadScreen
     @board = []
     @playerName   = $Trainer ? $Trainer.name : "Trainer"
     @opponentName = opponentName
+    type_keys = GameData::Type::DATA.keys
     for i in 0...@width*@height
       square = TriadSquare.new
       if @elements
         loop do
-          square.type = rand(PBTypes.maxValue+1)
-          break if !PBTypes.isPseudoType?(square.type)
+          trial_type = type_keys[rand(type_keys.length)]
+          break if !PBTypes.isPseudoType?(trial_type)
+          square.type = GameData::Type.get(trial_type).id
         end
       end
       @board.push(square)
@@ -831,8 +835,8 @@ class TriadScreen
           square.card = TriadCard.new(opponentCards[cardIndex])
           square.owner = 2
           for i in 0...@width*@height
-            x = i%@width
-            y = i/@width
+            x = i % @width
+            y = i / @width
             square.type = @board[i].type
             flips = flipBoard(x,y,square)
             if flips!=nil

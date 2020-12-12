@@ -113,7 +113,7 @@ class PokeBattle_Move_007 < PokeBattle_ParalysisMove
   end
 
   def pbFailsAgainstTarget?(user,target)
-    if @id == :THUNDERWAVE && PBTypes.ineffective?(target.damageState.typeMod)
+    if @id == :THUNDERWAVE && PBTypeEffectiveness.ineffective?(target.damageState.typeMod)
       @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
       return true
     end
@@ -1709,7 +1709,7 @@ class PokeBattle_Move_05C < PokeBattle_Move
     if !lastMoveData ||
        user.pbHasMove?(target.lastRegularMoveUsed) ||
        @moveBlacklist.include?(lastMoveData.function_code) ||
-       isConst?(lastMoveData.type, PBTypes,:SHADOW)
+       lastMoveData.type == :SHADOW
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1759,7 +1759,7 @@ class PokeBattle_Move_05D < PokeBattle_Move
     if !lastMoveData ||
        user.pbHasMove?(target.lastRegularMoveUsed) ||
        @moveBlacklist.include?(lastMoveData.function_code) ||
-       isConst?(lastMoveData.type, PBTypes,:SHADOW)
+       lastMoveData.type = :SHADOW
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1810,7 +1810,7 @@ class PokeBattle_Move_05E < PokeBattle_Move
   def pbEffectGeneral(user)
     newType = @newTypes[@battle.pbRandom(@newTypes.length)]
     user.pbChangeTypes(newType)
-    typeName = PBTypes.getName(newType)
+    typeName = GameData::Item.get(newType).name
     @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))
   end
 end
@@ -1824,7 +1824,7 @@ end
 class PokeBattle_Move_05F < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
-  def pbMoveFailed?(user,targets)
+  def pbMoveFailed?(user, targets)
     if !user.canChangeType?
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -1832,20 +1832,19 @@ class PokeBattle_Move_05F < PokeBattle_Move
     return false
   end
 
-  def pbFailsAgainstTarget?(user,target)
-    if !target.lastMoveUsed || target.lastMoveUsedType < 0 ||
-       PBTypes.isPseudoType?(GameData::Move.get(target.lastMoveUsed).type)
+  def pbFailsAgainstTarget?(user, target)
+    if !target.lastMoveUsed || !target.lastMoveUsedType ||
+       PBTypes.isPseudoType?(target.lastMoveUsedType)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     @newTypes = []
-    for i in 0..PBTypes.maxValue
-      next if PBTypes.isPseudoType?(i)
-      next if user.pbHasType?(i)
-      next if !PBTypes.resistant?(target.lastMoveUsedType,i)
-      @newTypes.push(i)
+    GameData::Type.each do |t|
+      next if t.pseudo_type || user.pbHasType?(t.id) ||
+              !PBTypes.resistant?(target.lastMoveUsedType, t.id)
+      @newTypes.push(t.id)
     end
-    if @newTypes.length==0
+    if @newTypes.length == 0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1855,8 +1854,8 @@ class PokeBattle_Move_05F < PokeBattle_Move
   def pbEffectGeneral(user)
     newType = @newTypes[@battle.pbRandom(@newTypes.length)]
     user.pbChangeTypes(newType)
-    typeName = PBTypes.getName(newType)
-    @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))
+    typeName = GameData::Type.get(newType).name
+    @battle.pbDisplay(_INTL("{1} transformed into the {2} type!", user.pbThis, typeName))
   end
 end
 
@@ -1871,49 +1870,59 @@ class PokeBattle_Move_060 < PokeBattle_Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    @newType = getID(PBTypes,:NORMAL)
+    @newType = :NORMAL
     checkedTerrain = false
     case @battle.field.terrain
     when PBBattleTerrains::Electric
-      if hasConst?(PBTypes,:ELECTRIC)
-        @newType = getID(PBTypes,:ELECTRIC); checkedTerrain = true
+      if GameData::Type.exists?(:ELECTRIC)
+        @newType = :ELECTRIC
+        checkedTerrain = true
       end
     when PBBattleTerrains::Grassy
-      if hasConst?(PBTypes,:GRASS)
-        @newType = getID(PBTypes,:GRASS); checkedTerrain = true
+      if GameData::Type.exists?(:GRASS)
+        @newType = :GRASS
+        checkedTerrain = true
       end
     when PBBattleTerrains::Misty
-      if hasConst?(PBTypes,:FAIRY)
-        @newType = getID(PBTypes,:FAIRY); checkedTerrain = true
+      if GameData::Type.exists?(:FAIRY)
+        @newType = :FAIRY
+        checkedTerrain = true
       end
     when PBBattleTerrains::Psychic
-      if hasConst?(PBTypes,:PSYCHIC)
-        @newType = getID(PBTypes,:PSYCHIC); checkedTerrain = true
+      if GameData::Type.exists?(:PSYCHIC)
+        @newType = :PSYCHIC
+        checkedTerrain = true
       end
     end
     if !checkedTerrain
       case @battle.environment
-      when PBEnvironment::Grass       then @newType = getID(PBTypes,:GRASS)
-      when PBEnvironment::TallGrass   then @newType = getID(PBTypes,:GRASS)
-      when PBEnvironment::MovingWater then @newType = getID(PBTypes,:WATER)
-      when PBEnvironment::StillWater  then @newType = getID(PBTypes,:WATER)
-      when PBEnvironment::Puddle      then @newType = getID(PBTypes,:WATER)
-      when PBEnvironment::Underwater  then @newType = getID(PBTypes,:WATER)
-      when PBEnvironment::Cave        then @newType = getID(PBTypes,:ROCK)
-      when PBEnvironment::Rock        then @newType = getID(PBTypes,:GROUND)
-      when PBEnvironment::Sand        then @newType = getID(PBTypes,:GROUND)
-      when PBEnvironment::Forest      then @newType = getID(PBTypes,:BUG)
-      when PBEnvironment::ForestGrass then @newType = getID(PBTypes,:BUG)
-      when PBEnvironment::Snow        then @newType = getID(PBTypes,:ICE)
-      when PBEnvironment::Ice         then @newType = getID(PBTypes,:ICE)
-      when PBEnvironment::Volcano     then @newType = getID(PBTypes,:FIRE)
-      when PBEnvironment::Graveyard   then @newType = getID(PBTypes,:GHOST)
-      when PBEnvironment::Sky         then @newType = getID(PBTypes,:FLYING)
-      when PBEnvironment::Space       then @newType = getID(PBTypes,:DRAGON)
-      when PBEnvironment::UltraSpace  then @newType = getID(PBTypes,:PSYCHIC)
+      when PBEnvironment::Grass, PBEnvironment::TallGrass
+        @newType = :GRASS
+      when PBEnvironment::MovingWater, PBEnvironment::StillWater,
+           PBEnvironment::Puddle, PBEnvironment::Underwater
+        @newType = :WATER
+      when PBEnvironment::Cave
+        @newType = :ROCK
+      when PBEnvironment::Rock, PBEnvironment::Sand
+        @newType = :GROUND
+      when PBEnvironment::Forest, PBEnvironment::ForestGrass
+        @newType = :BUG
+      when PBEnvironment::Snow, PBEnvironment::Ice
+        @newType = :ICE
+      when PBEnvironment::Volcano
+        @newType = :FIRE
+      when PBEnvironment::Graveyard
+        @newType = :GHOST
+      when PBEnvironment::Sky
+        @newType = :FLYING
+      when PBEnvironment::Space
+        @newType = :DRAGON
+      when PBEnvironment::UltraSpace
+        @newType = :PSYCHIC
       end
     end
-    if !user.pbHasOtherType?(@newType)
+    @newType = :NORMAL if !GameData::Type.exists?(@newType)
+    if !GameData::Type.exists?(@newType) || !user.pbHasOtherType?(@newType)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1922,7 +1931,7 @@ class PokeBattle_Move_060 < PokeBattle_Move
 
   def pbEffectGeneral(user)
     user.pbChangeTypes(@newType)
-    typeName = PBTypes.getName(@newType)
+    typeName = GameData::Type.get(@newType).name
     @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))
   end
 end
@@ -1934,8 +1943,8 @@ end
 #===============================================================================
 class PokeBattle_Move_061 < PokeBattle_Move
   def pbFailsAgainstTarget?(user,target)
-    if !target.canChangeType? ||
-       !target.pbHasOtherType?(getConst(PBTypes,:WATER))
+    if !target.canChangeType? || !GameData::Type.exists?(:WATER) ||
+       !target.pbHasOtherType?(:WATER)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1943,9 +1952,8 @@ class PokeBattle_Move_061 < PokeBattle_Move
   end
 
   def pbEffectAgainstTarget(user,target)
-    newType = getConst(PBTypes,:WATER)
-    target.pbChangeTypes(newType)
-    typeName = PBTypes.getName(newType)
+    target.pbChangeTypes(:WATER)
+    typeName = GameData::Type.get(:WATER).name
     @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",target.pbThis,typeName))
   end
 end
@@ -2362,8 +2370,7 @@ class PokeBattle_Move_070 < PokeBattle_FixedDamageMove
       @battle.pbHideAbilitySplash(target)
       return true
     end
-    if NEWEST_BATTLE_MECHANICS &&
-       isConst?(target.damageState.typeMod,PBTypes,:ICE) && target.pbHasType?(:ICE)
+    if NEWEST_BATTLE_MECHANICS && @id == :SHEERCOLD && target.pbHasType?(:ICE)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end

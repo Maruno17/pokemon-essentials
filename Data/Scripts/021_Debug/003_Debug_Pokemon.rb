@@ -273,7 +273,7 @@ module PokemonDebugMixin
               totaliv += pkmn.iv[i]
             end
             msg = _INTL("Change which IV?\nHidden Power:\n{1}, power {2}\nTotal: {3}/{4} ({5}%)",
-               PBTypes.getName(hiddenpower[0]),hiddenpower[1],totaliv,numstats*31,
+               GameData::Type.get(hiddenpower[0]).name,hiddenpower[1],totaliv,numstats*31,
                100*totaliv/(numstats*31))
             ivcommands.push(_INTL("Randomise all"))
             cmd2 = pbShowCommands(msg,ivcommands,cmd2)

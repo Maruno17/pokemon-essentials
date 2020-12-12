@@ -402,7 +402,7 @@ class PokeBattle_Battler
     # Immunity because of ability (intentionally before type immunity check)
     return false if move.pbImmunityByAbility(user,target)
     # Type immunity
-    if move.pbDamagingMove? && PBTypes.ineffective?(typeMod)
+    if move.pbDamagingMove? && PBTypeEffectiveness.ineffective?(typeMod)
       PBDebug.log("[Target immune] #{target.pbThis}'s type immunity")
       @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
       return false
@@ -415,7 +415,7 @@ class PokeBattle_Battler
       return false
     end
     # Airborne-based immunity to Ground moves
-    if move.damagingMove? && isConst?(move.calcType,PBTypes,:GROUND) &&
+    if move.damagingMove? && move.calcType == :GROUND &&
        target.airborne? && !move.hitsFlyingTargets?
       if target.hasActiveAbility?(:LEVITATE) && !@battle.moldBreaker
         @battle.pbShowAbilitySplash(target)

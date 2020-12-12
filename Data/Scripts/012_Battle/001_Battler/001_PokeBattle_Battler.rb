@@ -303,35 +303,31 @@ class PokeBattle_Battler
     ret = [@type1]
     ret.push(@type2) if @type2!=@type1
     # Burn Up erases the Fire-type.
-    if @effects[PBEffects::BurnUp]
-      ret.reject! { |type| isConst?(type,PBTypes,:FIRE) }
-    end
+    ret.delete(:FIRE) if @effects[PBEffects::BurnUp]
     # Roost erases the Flying-type. If there are no types left, adds the Normal-
     # type.
     if @effects[PBEffects::Roost]
-      ret.reject! { |type| isConst?(type,PBTypes,:FLYING) }
-      ret.push(getConst(PBTypes,:NORMAL) || 0) if ret.length==0
+      ret.delete(:FLYING)
+      ret.push(:NORMAL) if ret.length == 0
     end
     # Add the third type specially.
-    if withType3 && @effects[PBEffects::Type3]>=0
+    if withType3 && @effects[PBEffects::Type3]
       ret.push(@effects[PBEffects::Type3]) if !ret.include?(@effects[PBEffects::Type3])
     end
     return ret
   end
 
   def pbHasType?(type)
-    type = getConst(PBTypes,type) if type.is_a?(Symbol) || type.is_a?(String)
-    return false if !type || type<0
+    return false if !type
     activeTypes = pbTypes(true)
-    return activeTypes.include?(type)
+    return activeTypes.include?(GameData::Type.get(type).id)
   end
 
   def pbHasOtherType?(type)
-    type = getConst(PBTypes,type) if type.is_a?(Symbol) || type.is_a?(String)
-    return false if !type || type<0
+    return false if !type
     activeTypes = pbTypes(true)
-    activeTypes.reject! { |t| t==type }
-    return activeTypes.length>0
+    activeTypes.delete(GameData::Type.get(type).id)
+    return activeTypes.length > 0
   end
 
   # NOTE: Do not create any held item which affects whether a Pokémon's ability
@@ -444,8 +440,8 @@ class PokeBattle_Battler
   end
 
   def pbHasMoveType?(check_type)
-    check_type = getConst(PBTypes, check_type)
-    return false if !check_type || check_type < 0
+    return false if !check_type
+    check_type = GameData::Type.get(check_type).id
     eachMove { |m| return true if m.type == check_type }
     return false
   end

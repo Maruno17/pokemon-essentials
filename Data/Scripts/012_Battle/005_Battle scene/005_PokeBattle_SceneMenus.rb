@@ -384,7 +384,7 @@ class FightMenuDisplay < BattleMenuBase
   def refreshMoveData(move)
     # Write PP and type of the selected move
     if !USE_GRAPHICS
-      moveType = PBTypes.getName(move.type)
+      moveType = GameData::Type.get(move.type).name
       if move.total_pp<=0
         @msgBox.text = _INTL("PP: ---<br>TYPE/{1}",moveType)
       else
@@ -400,7 +400,8 @@ class FightMenuDisplay < BattleMenuBase
     end
     @visibility["typeIcon"] = true
     # Type icon
-    @typeIcon.src_rect.y = move.type*TYPE_ICON_HEIGHT
+    type_number = GameData::Type.get(move.type).id_number
+    @typeIcon.src_rect.y = type_number * TYPE_ICON_HEIGHT
     # PP text
     if move.total_pp>0
       ppFraction = [(4.0*move.pp/move.total_pp).ceil,3].min

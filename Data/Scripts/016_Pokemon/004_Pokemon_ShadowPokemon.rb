@@ -373,9 +373,9 @@ class PokeBattle_Battler
     __shadow__pbInitPokemon(*arg)
     # Called into battle
     if shadowPokemon?
-      if hasConst?(PBTypes,:SHADOW)
-        self.type1 = getID(PBTypes,:SHADOW)
-        self.type2 = getID(PBTypes,:SHADOW)
+      if GameData::Type.exists?(:SHADOW)
+        self.type1 = :SHADOW
+        self.type2 = :SHADOW
       end
       self.pokemon.adjustHeart(-30) if pbOwnedByPlayer?
     end
@@ -404,7 +404,7 @@ class PokeBattle_Battler
 
   def pbHyperModeObedience(move)
     return true if !inHyperMode?
-    return true if !move || isConst?(move.type,PBTypes,:SHADOW)
+    return true if !move || move.type == :SHADOW
     return rand(100)<20
   end
 end
