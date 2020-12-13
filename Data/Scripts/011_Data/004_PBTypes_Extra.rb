@@ -39,6 +39,10 @@ class PBTypes
     return GameData::Type.get(type).pseudo_type
   end
 
+  def PBTypes.isPhysicalType?(type)
+    return GameData::Type.get(type).physical?
+  end
+
   def PBTypes.isSpecialType?(type)
     return GameData::Type.get(type).special?
   end
