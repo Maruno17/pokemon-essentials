@@ -1346,3 +1346,25 @@ class PokemonSummaryScreen
     return ret
   end
 end
+
+
+
+#===============================================================================
+#
+#===============================================================================
+def pbChooseMove(pokemon,variableNumber,nameVarNumber)
+  return if !pokemon
+  ret = -1
+  pbFadeOutIn {
+    scene = PokemonSummary_Scene.new
+    screen = PokemonSummaryScreen.new(scene)
+    ret = screen.pbStartForgetScreen([pokemon],0,nil)
+  }
+  $game_variables[variableNumber] = ret
+  if ret>=0
+    $game_variables[nameVarNumber] = pokemon.moves[ret].name
+  else
+    $game_variables[nameVarNumber] = ""
+  end
+  $game_map.need_refresh = true if $game_map
+end

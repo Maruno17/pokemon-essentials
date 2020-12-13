@@ -681,7 +681,7 @@ def pbGetPlayerGraphic
   return "" if id<0 || id>=8
   meta = GameData::Metadata.get_player(id)
   return "" if !meta
-  return pbPlayerSpriteFile(meta[0])
+  return GameData::TrainerType.player_front_sprite_filename(meta[0])
 end
 
 def pbGetPlayerTrainerType
@@ -1037,23 +1037,6 @@ def pbMoveTutorChoose(move,movelist=nil,bymachine=false)
     screen.pbEndScene
   }
   return ret   # Returns whether the move was learned by a Pokemon
-end
-
-def pbChooseMove(pokemon,variableNumber,nameVarNumber)
-  return if !pokemon
-  ret = -1
-  pbFadeOutIn {
-    scene = PokemonSummary_Scene.new
-    screen = PokemonSummaryScreen.new(scene)
-    ret = screen.pbStartForgetScreen([pokemon],0,nil)
-  }
-  $game_variables[variableNumber] = ret
-  if ret>=0
-    $game_variables[nameVarNumber] = pokemon.moves[ret].name
-  else
-    $game_variables[nameVarNumber] = ""
-  end
-  $game_map.need_refresh = true if $game_map
 end
 
 def pbConvertItemToItem(variable, array)

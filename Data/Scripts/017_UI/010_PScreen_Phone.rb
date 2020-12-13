@@ -54,7 +54,7 @@ class PokemonPhoneScene
     addBackgroundPlane(@sprites,"bg","phonebg",@viewport)
     @sprites["icon"] = IconSprite.new(70,102,@viewport)
     if @trainers[0].length==4
-      filename = pbTrainerCharFile(@trainers[0][0])
+      filename = GameData::TrainerType.charset_filename(@trainers[0][0])
     else
       filename = sprintf("Graphics/Characters/phone%03d",@trainers[0][0])
     end
@@ -106,7 +106,7 @@ class PokemonPhoneScene
         if @sprites["list"].index!=oldindex
           trainer = @trainers[@sprites["list"].index]
           if trainer.length==4
-            filename = pbTrainerCharFile(trainer[0])
+            filename = GameData::TrainerType.charset_filename(trainer[0])
           else
             filename = sprintf("Graphics/Characters/phone%03d",trainer[0])
           end

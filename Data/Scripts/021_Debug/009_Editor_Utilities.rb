@@ -8,7 +8,7 @@ def pbGetLegalMoves(species)
     next if !i.move
     moves.push(i.move) if tmdat[i.move] && tmdat[i.move].include?(species)
   end
-  babyspecies = pbGetBabySpecies(species)
+  babyspecies = EvolutionHelper.baby_species(species)
   eggMoves = pbGetSpeciesEggMoves(babyspecies)
   eggMoves.each { |m| moves.push(m) }
   moves |= []

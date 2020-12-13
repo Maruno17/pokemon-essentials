@@ -36,8 +36,7 @@ class PokemonMartAdapter
   end
 
   def getItemIcon(item)
-    return nil if !item
-    return pbItemIconFile(item)
+    return (item) ? GameData::Item.icon_filename(item) : nil
   end
 
   # Unused

@@ -35,7 +35,7 @@ def pbDisplayMail(mail,_bearer=nil)
   viewport.z = 99999
   addBackgroundPlane(sprites,"background","mailbg",viewport)
   sprites["card"] = IconSprite.new(0,0,viewport)
-  sprites["card"].setBitmap(pbMailBackFile(mail.item))
+  sprites["card"].setBitmap(GameData::Item.mail_filename(mail.item))
   sprites["overlay"] = BitmapSprite.new(Graphics.width,Graphics.height,viewport)
   overlay = sprites["overlay"].bitmap
   pbSetSystemFont(overlay)

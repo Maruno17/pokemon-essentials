@@ -580,6 +580,43 @@ end
 
 
 
+def chooseMapPoint(map,rgnmap=false)
+  viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
+  viewport.z=99999
+  title=Window_UnformattedTextPokemon.new(_INTL("Click a point on the map."))
+  title.x=0
+  title.y=Graphics.height-64
+  title.width=Graphics.width
+  title.height=64
+  title.viewport=viewport
+  title.z=2
+  if rgnmap
+    sprite=RegionMapSprite.new(map,viewport)
+  else
+    sprite=MapSprite.new(map,viewport)
+  end
+  sprite.z=2
+  ret=nil
+  loop do
+    Graphics.update
+    Input.update
+    xy=sprite.getXY
+    if xy
+      ret=xy
+      break
+    end
+    if Input.trigger?(Input::B)
+      ret=nil
+      break
+    end
+  end
+  sprite.dispose
+  title.dispose
+  return ret
+end
+
+
+
 module MapCoordsProperty
   def self.set(settingname,oldsetting)
     chosenmap = pbListScreen(settingname,MapLister.new((oldsetting) ? oldsetting[0] : 0))
@@ -624,7 +661,7 @@ end
 
 module RegionMapCoordsProperty
   def self.set(_settingname,oldsetting)
-    regions = getMapNameList
+    regions = self.getMapNameList
     selregion = -1
     if regions.length==0
       pbMessage(_INTL("No region maps are defined."))
@@ -649,6 +686,18 @@ module RegionMapCoordsProperty
 
   def self.format(value)
     return value.inspect
+  end
+
+  def self.getMapNameList
+    mapdata = pbLoadTownMapData
+    ret=[]
+    for i in 0...mapdata.length
+      next if !mapdata[i]
+      ret.push(
+         [i,pbGetMessage(MessageTypes::RegionNames,i)]
+      )
+    end
+    return ret
   end
 end
 

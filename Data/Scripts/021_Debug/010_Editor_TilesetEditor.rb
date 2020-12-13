@@ -1,8 +1,6 @@
 #===============================================================================
-# Edits the terrain tags of tiles in tilesets.
+#
 #===============================================================================
-begin
-
 def pbTilesetWrapper
   return PokemonDataWrapper.new(
      "Data/Tilesets.rxdata",
@@ -14,8 +12,9 @@ def pbTilesetWrapper
   )
 end
 
-
-
+#===============================================================================
+# Edits the terrain tags of tiles in tilesets.
+#===============================================================================
 class PokemonTilesetScene
   TILESET_WIDTH = 256
   TILE_SIZE     = 32
@@ -202,12 +201,4 @@ def pbTilesetScreen
     scene = PokemonTilesetScene.new
     scene.pbStartScene
   }
-end
-
-
-
-rescue Exception
-  if $!.is_a?(SystemExit) || "#{$!.class}"=="Reset"
-    raise $!
-  end
 end

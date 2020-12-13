@@ -49,9 +49,9 @@ class PokemonDuel
     @viewport.z = 99999
     @sprites = {}
     @sprites["player"] = IconSprite.new(-128 - 32, 96, @viewport)
-    @sprites["player"].setBitmap(pbTrainerSpriteFile($Trainer.trainertype))
+    @sprites["player"].setBitmap(GameData::TrainerType.front_sprite_filename($Trainer.trainertype))
     @sprites["opponent"] = IconSprite.new(Graphics.width + 32, 96, @viewport)
-    @sprites["opponent"].setBitmap(pbTrainerSpriteFile(opponent.trainertype))
+    @sprites["opponent"].setBitmap(GameData::TrainerType.front_sprite_filename(opponent.trainertype))
     @sprites["playerwindow"] = DuelWindow.new($Trainer.name, false)
     @sprites["playerwindow"].x        = -@sprites["playerwindow"].width
     @sprites["playerwindow"].viewport = @viewport

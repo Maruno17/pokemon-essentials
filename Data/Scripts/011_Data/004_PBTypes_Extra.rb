@@ -35,17 +35,9 @@ class PBTypes
     return ret
   end
 
-  def PBTypes.isPseudoType?(type)
-    return GameData::Type.get(type).pseudo_type
-  end
-
-  def PBTypes.isPhysicalType?(type)
-    return GameData::Type.get(type).physical?
-  end
-
-  def PBTypes.isSpecialType?(type)
-    return GameData::Type.get(type).special?
-  end
+  def PBTypes.isPhysicalType?(type); return GameData::Type.get(type).physical?;   end
+  def PBTypes.isSpecialType?(type);  return GameData::Type.get(type).special?;    end
+  def PBTypes.isPseudoType?(type);   return GameData::Type.get(type).pseudo_type; end
 
   def PBTypes.getEffectiveness(attack_type, target_type)
     return GameData::Type.get(target_type).effectiveness(attack_type)

@@ -1,5 +1,5 @@
 #===============================================================================
-# Miniature game map/Town Map drawing
+# Miniature game map drawing
 #===============================================================================
 class MapSprite
   def initialize(map,viewport=nil)
@@ -34,8 +34,9 @@ class MapSprite
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class SelectionSprite < Sprite
   def initialize(viewport=nil)
     @sprite=Sprite.new(viewport)
@@ -82,8 +83,9 @@ class SelectionSprite < Sprite
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class RegionMapSprite
   def initialize(map,viewport=nil)
     @sprite=Sprite.new(viewport)
@@ -101,6 +103,20 @@ class RegionMapSprite
     @sprite.z=value
   end
 
+  def createRegionMap(map)
+    @mapdata = pbLoadTownMapData
+    @map=@mapdata[map]
+    bitmap=AnimatedBitmap.new("Graphics/Pictures/#{@map[1]}").deanimate
+    retbitmap=BitmapWrapper.new(bitmap.width/2,bitmap.height/2)
+    retbitmap.stretch_blt(
+       Rect.new(0,0,bitmap.width/2,bitmap.height/2),
+       bitmap,
+       Rect.new(0,0,bitmap.width,bitmap.height)
+    )
+    bitmap.dispose
+    return retbitmap
+  end
+
   def getXY
     return nil if !Input.triggerex?(Input::LeftMouseKey)
     mouse=Mouse::getMousePos(true)
@@ -116,125 +132,6 @@ class RegionMapSprite
     return [x/8,y/8]
   end
 end
-
-
-
-def createRegionMap(map)
-  @mapdata = pbLoadTownMapData
-  @map=@mapdata[map]
-  bitmap=AnimatedBitmap.new("Graphics/Pictures/#{@map[1]}").deanimate
-  retbitmap=BitmapWrapper.new(bitmap.width/2,bitmap.height/2)
-  retbitmap.stretch_blt(
-     Rect.new(0,0,bitmap.width/2,bitmap.height/2),
-     bitmap,
-     Rect.new(0,0,bitmap.width,bitmap.height)
-  )
-  bitmap.dispose
-  return retbitmap
-end
-
-def getMapNameList
-  @mapdata = pbLoadTownMapData
-  ret=[]
-  for i in 0...@mapdata.length
-    next if !@mapdata[i]
-    ret.push(
-       [i,pbGetMessage(MessageTypes::RegionNames,i)]
-    )
-  end
-  return ret
-end
-
-def createMinimap2(mapid)
-  map=load_data(sprintf("Data/Map%03d.rxdata",mapid)) rescue nil
-  return BitmapWrapper.new(32,32) if !map
-  bitmap=BitmapWrapper.new(map.width*4,map.height*4)
-  black=Color.new(0,0,0)
-  bigmap=(map.width>40 && map.height>40)
-  tilesets=load_data("Data/Tilesets.rxdata")
-  tileset=tilesets[map.tileset_id]
-  return bitmap if !tileset
-  helper=TileDrawingHelper.fromTileset(tileset)
-  for y in 0...map.height
-    for x in 0...map.width
-      if bigmap
-        next if (x>8 && x<=map.width-8 && y>8 && y<=map.height-8)
-      end
-      for z in 0..2
-        id=map.data[x,y,z]
-        next if id==0 || !id
-        helper.bltSmallTile(bitmap,x*4,y*4,4,4,id)
-      end
-    end
-  end
-  bitmap.fill_rect(0,0,bitmap.width,1,black)
-  bitmap.fill_rect(0,bitmap.height-1,bitmap.width,1,black)
-  bitmap.fill_rect(0,0,1,bitmap.height,black)
-  bitmap.fill_rect(bitmap.width-1,0,1,bitmap.height,black)
-  return bitmap
-end
-
-def createMinimap(mapid)
-  map=load_data(sprintf("Data/Map%03d.rxdata",mapid)) rescue nil
-  return BitmapWrapper.new(32,32) if !map
-  bitmap=BitmapWrapper.new(map.width*4,map.height*4)
-  black=Color.new(0,0,0)
-  tilesets=load_data("Data/Tilesets.rxdata")
-  tileset=tilesets[map.tileset_id]
-  return bitmap if !tileset
-  helper=TileDrawingHelper.fromTileset(tileset)
-  for y in 0...map.height
-    for x in 0...map.width
-      for z in 0..2
-        id=map.data[x,y,z]
-        id=0 if !id
-        helper.bltSmallTile(bitmap,x*4,y*4,4,4,id)
-      end
-    end
-  end
-  bitmap.fill_rect(0,0,bitmap.width,1,black)
-  bitmap.fill_rect(0,bitmap.height-1,bitmap.width,1,black)
-  bitmap.fill_rect(0,0,1,bitmap.height,black)
-  bitmap.fill_rect(bitmap.width-1,0,1,bitmap.height,black)
-  return bitmap
-end
-
-def chooseMapPoint(map,rgnmap=false)
-  viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
-  viewport.z=99999
-  title=Window_UnformattedTextPokemon.new(_INTL("Click a point on the map."))
-  title.x=0
-  title.y=Graphics.height-64
-  title.width=Graphics.width
-  title.height=64
-  title.viewport=viewport
-  title.z=2
-  if rgnmap
-    sprite=RegionMapSprite.new(map,viewport)
-  else
-    sprite=MapSprite.new(map,viewport)
-  end
-  sprite.z=2
-  ret=nil
-  loop do
-    Graphics.update
-    Input.update
-    xy=sprite.getXY
-    if xy
-      ret=xy
-      break
-    end
-    if Input.trigger?(Input::B)
-      ret=nil
-      break
-    end
-  end
-  sprite.dispose
-  title.dispose
-  return ret
-end
-
-
 
 #===============================================================================
 # Visual Editor (map connections)
@@ -686,8 +583,9 @@ class MapScreenScene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbConnectionsEditor
   pbCriticalCode {
      mapscreen = MapScreenScene.new

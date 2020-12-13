@@ -523,11 +523,9 @@ module Compiler
     # doesn't have a charset
     if firstpage.graphic.character_name=="" && GameData::TrainerType.exists?(trtype)
       trainerid = GameData::TrainerType.get(trtype).id
-      if trainerid
-        filename = pbTrainerCharNameFile(trainerid)
-        if FileTest.image_exist?("Graphics/Characters/"+filename)
-          firstpage.graphic.character_name = sprintf(filename)
-        end
+      filename = GameData::TrainerType.charset_filename_brief(trainerid)
+      if FileTest.image_exist?("Graphics/Characters/"+filename)
+        firstpage.graphic.character_name = sprintf(filename)
       end
     end
     # Create strings that will be used repeatedly

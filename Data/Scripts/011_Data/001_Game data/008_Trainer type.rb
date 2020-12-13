@@ -17,6 +17,59 @@ module GameData
     extend ClassMethods
     include InstanceMethods
 
+    def self.check_file(tr_type, path, suffix = "")
+      tr_type_data = self.try_get(tr_type)
+      return nil if tr_type_data.nil?
+      # Check for files
+      if !suffix.empty?
+        ret = path + tr_type_data.id.to_s + suffix
+        return ret if pbResolveBitmap(ret)
+        ret = path + sprintf("%03d", tr_type_data.id_number) + suffix
+        return ret if pbResolveBitmap(ret)
+      end
+      ret = path + tr_type_data.id.to_s
+      return ret if pbResolveBitmap(ret)
+      ret = path + sprintf("%03d", tr_type_data.id_number)
+      return (pbResolveBitmap(ret)) ? ret : nil
+    end
+
+    def self.charset_filename(tr_type)
+      return self.check_file(tr_type, "Graphics/Characters/trchar")
+    end
+
+    def self.charset_filename_brief(tr_type)
+      ret = self.charset_filename(tr_type)
+      ret.slice!("Graphics/Characters/") if ret
+      return ret
+    end
+
+    def self.front_sprite_filename(tr_type)
+      return self.check_file(tr_type, "Graphics/Trainers/trainer")
+    end
+
+    def self.player_front_sprite_filename(tr_type)
+      outfit = ($Trainer) ? $Trainer.outfit : 0
+      return self.check_file(tr_type, "Graphics/Trainers/trainer", sprintf("_%d", outfit))
+    end
+
+    def self.back_sprite_filename(tr_type)
+      return self.check_file(tr_type, "Graphics/Trainers/trback")
+    end
+
+    def self.player_back_sprite_filename(tr_type)
+      outfit = ($Trainer) ? $Trainer.outfit : 0
+      return self.check_file(tr_type, "Graphics/Trainers/trback", sprintf("_%d", outfit))
+    end
+
+    def self.map_icon_filename(tr_type)
+      return self.check_file(tr_type, "Graphics/Pictures/mapPlayer")
+    end
+
+    def self.player_map_icon_filename(tr_type)
+      outfit = ($Trainer) ? $Trainer.outfit : 0
+      return self.check_file(tr_type, "Graphics/Pictures/mapPlayer", sprintf("_%d", outfit))
+    end
+
     def initialize(hash)
       @id          = hash[:id]
       @id_number   = hash[:id_number]   || -1
@@ -43,7 +96,47 @@ end
 #===============================================================================
 # Deprecated methods
 #===============================================================================
-def pbGetTrainerTypeData(trainer_type)
+def pbGetTrainerTypeData(tr_type)
   Deprecation.warn_method('pbGetTrainerTypeData', 'v20', 'GameData::TrainerType.get(trainer_type)')
-  return GameData::TrainerType.get(trainer_type)
+  return GameData::TrainerType.get(tr_type)
+end
+
+def pbTrainerCharFile(tr_type)   # Used by the phone
+  Deprecation.warn_method('pbTrainerCharFile', 'v20', 'GameData::TrainerType.charset_filename(trainer_type)')
+  return GameData::TrainerType.charset_filename(tr_type)
+end
+
+def pbTrainerCharNameFile(tr_type)   # Used by Battle Frontier and compiler
+  Deprecation.warn_method('pbTrainerCharNameFile', 'v20', 'GameData::TrainerType.charset_filename_brief(trainer_type)')
+  return GameData::TrainerType.charset_filename_brief(tr_type)
+end
+
+def pbTrainerSpriteFile(tr_type)
+  Deprecation.warn_method('pbTrainerSpriteFile', 'v20', 'GameData::TrainerType.front_sprite_filename(trainer_type)')
+  return GameData::TrainerType.front_sprite_filename(tr_type)
+end
+
+def pbTrainerSpriteBackFile(tr_type)
+  Deprecation.warn_method('pbTrainerSpriteBackFile', 'v20', 'GameData::TrainerType.back_sprite_filename(trainer_type)')
+  return GameData::TrainerType.back_sprite_filename(tr_type)
+end
+
+def pbPlayerSpriteFile(tr_type)
+  Deprecation.warn_method('pbPlayerSpriteFile', 'v20', 'GameData::TrainerType.player_front_sprite_filename(trainer_type)')
+  return GameData::TrainerType.player_front_sprite_filename(tr_type)
+end
+
+def pbPlayerSpriteBackFile(tr_type)
+  Deprecation.warn_method('pbPlayerSpriteBackFile', 'v20', 'GameData::TrainerType.player_back_sprite_filename(trainer_type)')
+  return GameData::TrainerType.player_back_sprite_filename(tr_type)
+end
+
+def pbTrainerHeadFile(tr_type)
+  Deprecation.warn_method('pbTrainerHeadFile', 'v20', 'GameData::TrainerType.map_icon_filename(trainer_type)')
+  return GameData::TrainerType.map_icon_filename(tr_type)
+end
+
+def pbPlayerHeadFile(tr_type)
+  Deprecation.warn_method('pbPlayerHeadFile', 'v20', 'GameData::TrainerType.player_map_icon_filename(trainer_type)')
+  return GameData::TrainerType.player_map_icon_filename(tr_type)
 end

@@ -203,10 +203,10 @@ BallHandlers::ModifyCatchRate.add(:MOONBALL,proc { |ball,catchRate,battle,battle
   #       family can evolve with the Moon Stone, not whether the target itself
   #       can immediately evolve with the Moon Stone.
   moon_stone = GameData::Item.try_get(:MOONSTONE)
-  if moon_stone && pbCheckEvolutionFamilyForItemMethodItem(battler.species, moon_stone.id)
+  if moon_stone && EvolutionHelper.check_family_for_method_item(battler.species, moon_stone.id)
     catchRate *= 4
   end
-  next [catchRate,255].min
+  next [catchRate, 255].min
 })
 
 BallHandlers::ModifyCatchRate.add(:SPORTBALL,proc { |ball,catchRate,battle,battler,ultraBeast|

@@ -238,73 +238,6 @@ end
 
 
 #===============================================================================
-# Choose a Pokémon in the party
-#===============================================================================
-# Choose a Pokémon/egg from the party.
-# Stores result in variable _variableNumber_ and the chosen Pokémon's name in
-# variable _nameVarNumber_; result is -1 if no Pokémon was chosen
-def pbChoosePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneligible=false)
-  chosen = 0
-  pbFadeOutIn {
-    scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene,$Trainer.party)
-    if ableProc
-      chosen=screen.pbChooseAblePokemon(ableProc,allowIneligible)
-    else
-      screen.pbStartScene(_INTL("Choose a Pokémon."),false)
-      chosen = screen.pbChoosePokemon
-      screen.pbEndScene
-    end
-  }
-  pbSet(variableNumber,chosen)
-  if chosen>=0
-    pbSet(nameVarNumber,$Trainer.party[chosen].name)
-  else
-    pbSet(nameVarNumber,"")
-  end
-end
-
-def pbChooseNonEggPokemon(variableNumber,nameVarNumber)
-  pbChoosePokemon(variableNumber,nameVarNumber,proc { |pkmn| !pkmn.egg? })
-end
-
-def pbChooseAblePokemon(variableNumber,nameVarNumber)
-  pbChoosePokemon(variableNumber,nameVarNumber,proc { |pkmn| !pkmn.egg? && pkmn.hp>0 })
-end
-
-# Same as pbChoosePokemon, but prevents choosing an egg or a Shadow Pokémon.
-def pbChooseTradablePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneligible=false)
-  chosen = 0
-  pbFadeOutIn {
-    scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene,$Trainer.party)
-    if ableProc
-      chosen=screen.pbChooseTradablePokemon(ableProc,allowIneligible)
-    else
-      screen.pbStartScene(_INTL("Choose a Pokémon."),false)
-      chosen = screen.pbChoosePokemon
-      screen.pbEndScene
-    end
-  }
-  pbSet(variableNumber,chosen)
-  if chosen>=0
-    pbSet(nameVarNumber,$Trainer.party[chosen].name)
-  else
-    pbSet(nameVarNumber,"")
-  end
-end
-
-
-def pbChoosePokemonForTrade(variableNumber,nameVarNumber,wanted)
-  wanted = getID(PBSpecies,wanted)
-  pbChooseTradablePokemon(variableNumber,nameVarNumber,proc { |pkmn|
-    next pkmn.species==wanted
-  })
-end
-
-
-
-#===============================================================================
 # Analyse Pokémon in the party
 #===============================================================================
 # Returns the first unfainted, non-egg Pokémon in the player's party.
@@ -483,15 +416,15 @@ def pbHasEgg?(species)
   species = getID(PBSpecies,species)
   return false if !species
   # species may be unbreedable, so check its evolution's compatibilities
-  evoSpecies = pbGetEvolvedFormData(species,true)
+  evoSpecies = EvolutionHelper.evolutions(species, true)
   compatSpecies = (evoSpecies && evoSpecies[0]) ? evoSpecies[0][2] : species
   compat = pbGetSpeciesData(compatSpecies,0,SpeciesData::COMPATIBILITY)
   compat = [compat] if !compat.is_a?(Array)
   return false if compat.include?(getConst(PBEggGroups,:Undiscovered))
   return false if compat.include?(getConst(PBEggGroups,:Ditto))
-  baby = pbGetBabySpecies(species)
+  baby = EvolutionHelper.baby_species(species)
   return true if species==baby   # Is a basic species
-  baby = pbGetBabySpecies(species,true)
+  baby = EvolutionHelper.baby_species(species, true)
   return true if species==baby   # Is an egg species without incense
   return false
 end

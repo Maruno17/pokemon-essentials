@@ -48,6 +48,18 @@ module GameData
       return pbGetMessage(MessageTypes::MoveDescriptions, @id_number)
     end
 
+    def physical?
+      return false if @base_damage == 0
+      return @category == 0 if MOVE_CATEGORY_PER_MOVE
+      return GameData::Type.get(@type).physical?
+    end
+
+    def special?
+      return false if @base_damage == 0
+      return @category == 1 if MOVE_CATEGORY_PER_MOVE
+      return GameData::Type.get(@type).special?
+    end
+
     def hidden_move?
       GameData::Item.each do |i|
         return true if i.is_HM? && i.move == @id

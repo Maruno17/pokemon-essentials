@@ -863,7 +863,7 @@ BattleHandlers::DamageCalcTargetItem.add(:EVIOLITE,
     #       means it also cares about the Pokémon's form. Some forms cannot
     #       evolve even if the species generally can, and such forms are not
     #       affected by Eviolite.
-    evos = pbGetEvolvedFormData(target.pokemon.fSpecies,true)
+    evos = EvolutionHelper.evolutions(target.pokemon.fSpecies, true)
     mults[DEF_MULT] *= 1.5 if evos && evos.length>0
   }
 )

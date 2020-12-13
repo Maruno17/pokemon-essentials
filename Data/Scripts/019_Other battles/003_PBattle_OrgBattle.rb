@@ -692,7 +692,7 @@ end
 def pbBattleChallengeGraphic(event)
   nextTrainer=pbBattleChallenge.nextTrainer
   bttrainers=pbGetBTTrainers(pbBattleChallenge.currentChallenge)
-  filename=pbTrainerCharNameFile((bttrainers[nextTrainer][0] rescue 0))
+  filename=GameData::TrainerType.charset_filename_brief((bttrainers[nextTrainer][0] rescue 0))
   begin
     bitmap=AnimatedBitmap.new("Graphics/Characters/"+filename)
     bitmap.dispose

@@ -110,21 +110,21 @@ end
 
 def babySpecies(move)
   if !$babySpecies[move]
-    $babySpecies[move]=pbGetBabySpecies(move)
+    $babySpecies[move]=EvolutionHelper.baby_species(move)
   end
   return $babySpecies[move]
 end
 
 def minimumLevel(move)
   if !$minimumLevel[move]
-    $minimumLevel[move]=pbGetMinimumLevel(move)
+    $minimumLevel[move]=EvolutionHelper.minimum_level(move)
   end
   return $minimumLevel[move]
 end
 
 def evolutions(move)
   if !$evolutions[move]
-    $evolutions[move]=pbGetEvolvedFormData(move,true)
+    $evolutions[move]=EvolutionHelper.evolutions(move, true)
   end
   return $evolutions[move]
 end

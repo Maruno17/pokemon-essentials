@@ -947,7 +947,7 @@ def pbPokemonEditor
             (regionallist[numb]==0) ? regionallist.pop : break
             numb -= 1
           end
-          evolutions = pbGetEvolvedFormData(selection)
+          evolutions = EvolutionHelper.evolutions(selection)
           data = []
           data.push(speciesname)                    # 0
           data.push(cname)                          # 1
@@ -1068,7 +1068,7 @@ def pbPokemonEditor
                   evos[sp].push([data[41][i][2],data[41][i][0],data[41][i][1],false])
                 end
               else
-                t = pbGetEvolvedFormData(sp)
+                t = EvolutionHelper.evolutions(sp)
                 for i in 0...t.length
                   evos[sp].push([t[i][2],t[i][0],t[i][1],false])
                 end
@@ -1366,7 +1366,7 @@ end
 def pbAppendEvoToFamilyArray(species,array,seenarray)
   return if seenarray[species]
   array.push(species); seenarray[species] = true
-  evos = pbGetEvolvedFormData(species)
+  evos = EvolutionHelper.evolutions(species)
   if evos.length>0
     evos.sort! { |a,b| a[2]<=>b[2] }
     subarray = []
@@ -1381,7 +1381,7 @@ def pbGetEvoFamilies
   seen = []
   ret = []
   for sp in 1..PBSpecies.maxValue
-    species = pbGetBabySpecies(sp)
+    species = EvolutionHelper.baby_species(sp)
     next if seen[species]
     subret = []
     pbAppendEvoToFamilyArray(species,subret,seen)

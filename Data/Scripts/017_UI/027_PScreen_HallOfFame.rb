@@ -241,7 +241,7 @@ class HallOfFame_Scene
 
   def createTrainerBattler
     @sprites["trainer"]=IconSprite.new(@viewport)
-    @sprites["trainer"].setBitmap(pbTrainerSpriteFile($Trainer.trainertype))
+    @sprites["trainer"].setBitmap(GameData::TrainerType.front_sprite_filename($Trainer.trainertype))
     if !SINGLEROW
       @sprites["trainer"].x=Graphics.width-96
       @sprites["trainer"].y=160

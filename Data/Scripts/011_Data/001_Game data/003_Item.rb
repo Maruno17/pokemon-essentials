@@ -18,6 +18,49 @@ module GameData
     extend ClassMethods
     include InstanceMethods
 
+    def self.icon_filename(item)
+      return "Graphics/Icons/itemBack" if item.nil?
+      item_data = self.try_get(item)
+      return "Graphics/Icons/item000" if item_data.nil?
+      # Check for files
+      ret = sprintf("Graphics/Icons/item%s", item_data.id)
+      return ret if pbResolveBitmap(ret)
+      ret = sprintf("Graphics/Icons/item%03d", item_data.id_number)
+      return ret if pbResolveBitmap(ret)
+      # Check for TM/HM type icons
+      if item_data.is_machine?
+        move_type = GameData::Move.get(item_data.move).type
+        type_data = GameData::Type.get(move_type)
+        ret = sprintf("Graphics/Icons/itemMachine%s", type_data.id)
+        return ret if pbResolveBitmap(ret)
+        ret = sprintf("Graphics/Icons/itemMachine%03d", type_data.id_number)
+        return ret if pbResolveBitmap(ret)
+      end
+      return "Graphics/Icons/item000"
+    end
+
+    def self.held_icon_filename(item)
+      item_data = self.try_get(item)
+      return nil if !item_data
+      name_base = (item_data.is_mail?) ? "mail" : "item"
+      # Check for files
+      ret = sprintf("Graphics/Pictures/Party/icon_%s_%s", name_base, item_data.id)
+      return ret if pbResolveBitmap(ret)
+      ret = sprintf("Graphics/Pictures/Party/icon_%s_%03d", name_base, item_data.id_number)
+      return ret if pbResolveBitmap(ret)
+      return sprintf("Graphics/Pictures/Party/icon_%s", name_base)
+    end
+
+    def self.mail_filename(item)
+      item_data = self.try_get(item)
+      return nil if !item_data
+      # Check for files
+      ret = sprintf("Graphics/Pictures/Mail/mail_%s", item_data.id)
+      return ret if pbResolveBitmap(ret)
+      ret = sprintf("Graphics/Pictures/Mail/mail_%03d", item_data.id_number)
+      return pbResolveBitmap(ret) ? ret : nil
+    end
+
     def initialize(hash)
       @id               = hash[:id]
       @id_number        = hash[:id_number]   || -1
@@ -229,4 +272,19 @@ end
 def pbIsUnlosableItem?(check_item, species, ability)
   Deprecation.warn_method('pbIsUnlosableItem?', 'v20', 'GameData::Item.get(item).unlosable?')
   return GameData::Item.get(check_item).unlosable?(species, ability)
+end
+
+def pbItemIconFile(item)
+  Deprecation.warn_method('pbItemIconFile', 'v20', 'GameData::Item.icon_filename(item)')
+  return GameData::Item.icon_filename(item)
+end
+
+def pbHeldItemIconFile(item)
+  Deprecation.warn_method('pbHeldItemIconFile', 'v20', 'GameData::Item.held_icon_filename(item)')
+  return GameData::Item.held_icon_filename(item)
+end
+
+def pbMailBackFile(item)
+  Deprecation.warn_method('pbMailBackFile', 'v20', 'GameData::Item.mail_filename(item)')
+  return GameData::Item.mail_filename(item)
 end

@@ -152,9 +152,9 @@ class PokeBattle_Scene
 
   def pbCreateTrainerBackSprite(idxTrainer,trainerType,numTrainers=1)
     if idxTrainer==0   # Player's sprite
-      trainerFile = pbPlayerSpriteBackFile(trainerType)
+      trainerFile = GameData::TrainerType.player_back_sprite_filename(trainerType)
     else   # Partner trainer's sprite
-      trainerFile = pbTrainerSpriteBackFile(trainerType)
+      trainerFile = GameData::TrainerType.back_sprite_filename(trainerType)
     end
     spriteX, spriteY = PokeBattle_SceneConstants.pbTrainerPosition(0,idxTrainer,numTrainers)
     trainer = pbAddSprite("player_#{idxTrainer+1}",spriteX,spriteY,trainerFile,@viewport)
@@ -170,7 +170,7 @@ class PokeBattle_Scene
   end
 
   def pbCreateTrainerFrontSprite(idxTrainer,trainerType,numTrainers=1)
-    trainerFile = pbTrainerSpriteFile(trainerType)
+    trainerFile = GameData::TrainerType.front_sprite_filename(trainerType)
     spriteX, spriteY = PokeBattle_SceneConstants.pbTrainerPosition(1,idxTrainer,numTrainers)
     trainer = pbAddSprite("trainer_#{idxTrainer+1}",spriteX,spriteY,trainerFile,@viewport)
     return if !trainer.bitmap

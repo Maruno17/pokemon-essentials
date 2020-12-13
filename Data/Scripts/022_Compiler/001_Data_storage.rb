@@ -209,6 +209,7 @@ end
 #===============================================================================
 # Encoding and decoding
 #===============================================================================
+# Unused
 def intSize(value)
   return 1 if value<0x80
   return 2 if value<0x4000
@@ -217,6 +218,7 @@ def intSize(value)
   return 5
 end
 
+# Unused
 def encodeInt(strm,value)
   num = 0
   loop do
@@ -230,6 +232,7 @@ def encodeInt(strm,value)
   end
 end
 
+# Unused
 def decodeInt(strm)
   bits    = 0
   curbyte = 0
@@ -242,15 +245,18 @@ def decodeInt(strm)
   return ret
 end
 
+# Unused
 def strSize(str)
   return str.length+intSize(str.length)
 end
 
+# Unused
 def encodeString(strm,str)
   encodeInt(strm,str.length)
   strm.write(str)
 end
 
+# Unused
 def decodeString(strm)
   len = decodeInt(strm)
   return strm.read(len)
@@ -279,6 +285,7 @@ def pbFindScript(a,name)
   return nil
 end
 
+# TODO: Will be unused once PBSpecies is abolished. Method above only used by this one.
 def pbAddScript(script,sectionname)
   begin
     scripts = load_data("Data/Constants.rxdata")

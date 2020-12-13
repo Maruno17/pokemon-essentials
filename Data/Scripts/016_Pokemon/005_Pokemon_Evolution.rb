@@ -128,114 +128,141 @@ end
 #===============================================================================
 # Evolution helper functions
 #===============================================================================
-def pbGetEvolvedFormData(species,ignoreNone=false)
-  ret = []
-  evoData = pbGetEvolutionData(species)
-  return ret if !evoData || evoData.length==0
-  evoData.each do |evo|
-    next if evo[3]   # Is the prevolution
-    next if evo[1]==PBEvolution::None && ignoreNone
-    ret.push([evo[1],evo[2],evo[0]])   # [Method, parameter, species]
+module EvolutionHelper
+  module_function
+
+  def evolutions(species, ignore_none = false)
+    ret = []
+    evoData = pbGetEvolutionData(species)
+    return ret if !evoData || evoData.length == 0
+    evoData.each do |evo|
+      next if evo[3]   # Is the prevolution
+      next if evo[1] == PBEvolution::None && ignore_none
+      ret.push([evo[1], evo[2], evo[0]])   # [Method, parameter, species]
+    end
+    return ret
   end
-  return ret
+
+  def family_evolutions(species)
+    evos = self.evolutions(species, true)
+    return nil if evos.length == 0
+    ret = []
+    for i in 0...evos.length
+      ret.push([species].concat(evos[i]))
+      evo_array = self.family_evolutions(evos[i][2])
+      ret.concat(evo_array) if evo_array && evo_array.length > 0
+    end
+    return ret
+  end
+
+  def previous_species(species)
+    evoData = pbGetEvolutionData(species)
+    return species if !evoData || evoData.length == 0
+    evoData.each do |evo|
+      return evo[0] if evo[3]   # Is the prevolution
+    end
+    return species
+  end
+
+  def baby_species(species, check_items = false, item1 = nil, item2 = nil)
+    ret = species
+    evoData = pbGetEvolutionData(species)
+    return ret if !evoData || evoData.length == 0
+    evoData.each do |evo|
+      next if !evo[3]   # Not the prevolution
+      if check_items
+        incense = pbGetSpeciesData(evo[0], 0, SpeciesData::INCENSE)
+        ret = evo[0] if !incense || item1 == incense || item2 == incense
+      else
+        ret = evo[0]   # Species of prevolution
+      end
+      break
+    end
+    ret = self.baby_species(ret, item1, item2) if ret != species
+    return ret
+  end
+
+  def minimum_level(species)
+    evoData = pbGetEvolutionData(species)
+    return 1 if !evoData || evoData.length == 0
+    ret = -1
+    evoData.each do |evo|
+      next if !evo[3]   # Is the prevolution
+      if PBEvolution.hasFunction?(evo[1], "levelUpCheck")
+        min_level = PBEvolution.getFunction(evo[1], "minimumLevel")
+        ret = evo[2] if !min_level || min_level != 1
+      end
+      break   # Because only one prevolution method can be defined
+    end
+    return (ret == -1) ? 1 : ret
+  end
+
+  def check_family_for_method(species, method, param = nil)
+    species = self.baby_species(species)
+    evos = self.family_evolutions(species)
+    return false if !evos || evos.length == 0
+    for evo in evos
+      if method.is_a?(Array)
+        next if !method.include?(evo[0])
+      elsif method >= 0
+        next if evo[0] != method
+      end
+      next if param && evo[1] != param
+      return true
+    end
+    return false
+  end
+
+  def check_family_for_method_item(species, param = nil)
+    species = self.baby_species(species)
+    evos = self.family_evolutions(species)
+    return false if !evos || evos.length == 0
+    for evo in evos
+      next if !PBEvolution.hasFunction?(evo[1], "itemCheck")
+      next if param && evo[2] != param
+      return true
+    end
+    return false
+  end
+end
+
+
+
+def pbGetEvolvedFormData(species, ignore_none = false)
+  Deprecation.warn_method('pbGetEvolvedFormData', 'v20', 'EvolutionHelper.evolutions(species)')
+  return EvolutionHelper.evolutions(species, ignore_none)
+end
+
+def pbGetEvolutionFamilyData(species)   # Unused
+  Deprecation.warn_method('pbGetEvolutionFamilyData', 'v20', 'EvolutionHelper.family_evolutions(species)')
+  return EvolutionHelper.family_evolutions(species, ignore_none)
 end
 
 def pbGetPreviousForm(species)   # Unused
-  evoData = pbGetEvolutionData(species)
-  return species if !evoData || evoData.length==0
-  evoData.each do |evo|
-    return evo[0] if evo[3]   # Is the prevolution
-  end
-  return species
+  Deprecation.warn_method('pbGetPreviousForm', 'v20', 'EvolutionHelper.previous_species(species)')
+  return EvolutionHelper.previous_species(species)
 end
 
 def pbGetBabySpecies(species, check_items = false, item1 = nil, item2 = nil)
-  ret = species
-  evoData = pbGetEvolutionData(species)
-  return ret if !evoData || evoData.length == 0
-  evoData.each do |evo|
-    next if !evo[3]   # Not the prevolution
-    if check_items
-      incense = pbGetSpeciesData(evo[0], 0, SpeciesData::INCENSE)
-      ret = evo[0] if !incense || item1 == incense || item2 == incense
-    else
-      ret = evo[0]   # Species of prevolution
-    end
-    break
-  end
-  ret = pbGetBabySpecies(ret, item1, item2) if ret != species
-  return ret
+  Deprecation.warn_method('pbGetBabySpecies', 'v20', 'EvolutionHelper.baby_species(species)')
+  return EvolutionHelper.baby_species(species, check_items, item1, item2)
 end
 
 def pbGetMinimumLevel(species)
-  evoData = pbGetEvolutionData(species)
-  return 1 if !evoData || evoData.length == 0
-  ret = -1
-  evoData.each do |evo|
-    next if !evo[3]   # Is the prevolution
-    if PBEvolution.hasFunction?(evo[1], "levelUpCheck")
-      min_level = PBEvolution.getFunction(evo[1], "minimumLevel")
-      ret = evo[2] if !min_level || min_level != 1
-    end
-    break   # Because only one prevolution method can be defined
-  end
-  return (ret == -1) ? 1 : ret
+  Deprecation.warn_method('pbGetMinimumLevel', 'v20', 'EvolutionHelper.minimum_level(species)')
+  return EvolutionHelper.minimum_level(species)
 end
 
-def pbGetEvolutionFamilyData(species)
-  evos = pbGetEvolvedFormData(species,true)
-  return nil if evos.length==0
-  ret = []
-  for i in 0...evos.length
-    ret.push([species].concat(evos[i]))
-    evoData = pbGetEvolutionFamilyData(evos[i][2])
-    ret.concat(evoData) if evoData && evoData.length>0
-  end
-  return ret
-end
-
-def pbCheckEvolutionFamilyForMethod(species, method, param = -1)
-  species = pbGetBabySpecies(species)
-  evos = pbGetEvolutionFamilyData(species)
-  return false if !evos || evos.length == 0
-  for evo in evos
-    if method.is_a?(Array)
-      next if !method.include?(evo[1])
-    elsif method >= 0
-      next if evo[1] != method
-    end
-    next if param >= 0 && evo[2] != param
-    return true
-  end
-  return false
+def pbCheckEvolutionFamilyForMethod(species, method, param = nil)
+  Deprecation.warn_method('pbCheckEvolutionFamilyForMethod', 'v20', 'EvolutionHelper.check_family_for_method(species, method)')
+  return EvolutionHelper.check_family_for_method(species, method, param)
 end
 
 # Used by the Moon Ball when checking if a Pokémon's evolution family includes
 # an evolution that uses the Moon Stone.
 def pbCheckEvolutionFamilyForItemMethodItem(species, param = nil)
-  species = pbGetBabySpecies(species)
-  evos = pbGetEvolutionFamilyData(species)
-  return false if !evos || evos.length == 0
-  for evo in evos
-    next if !PBEvolution.hasFunction?(evo[1], "itemCheck")
-    next if param && evo[2] != param
-    return true
-  end
-  return false
-end
-
-def pbEvoDebug   # Unused
-  evosData = pbLoadEvolutionsData
-  for species in 1..PBSpecies.maxValueF
-    echo PBSpecies.getName(pbGetSpeciesFromFSpecies(species)[0])+"\n"
-    next if !evosData[species] || evosData[species].length==0
-    for evo in evosData[species]
-      echo sprintf("name=%s, type=%s (%02X), level=%d, evo/prevo=%s",
-         PBSpecies.getName(evo[0]),getConstantName(PBEvolution,evo[1]),evo[1],evo[2],
-         (evo[3]) ? "prevolution" : "evolution")+"\n"
-    end
-  end
-  echo "end\n"
+  Deprecation.warn_method('pbCheckEvolutionFamilyForItemMethodItem', 'v20', 'EvolutionHelper.check_family_for_method_item(species, item)')
+  return EvolutionHelper.check_family_for_method_item(species, param)
 end
 
 #===============================================================================
@@ -253,13 +280,13 @@ end
 
 # Checks whether a Pokemon can evolve now. If a block is given, calls the block
 # with the following parameters:
-#   Pokemon to check; evolution type; level or other parameter; ID of the new species
+#   Pokemon to check; evolution method; parameter; ID of the new species
 def pbCheckEvolutionEx(pokemon)
   return -1 if pokemon.species<=0 || pokemon.egg? || pokemon.shadowPokemon?
   return -1 if pokemon.hasItem?(:EVERSTONE)
   return -1 if pokemon.hasAbility?(:BATTLEBOND)
   ret = -1
-  for form in pbGetEvolvedFormData(pbGetFSpeciesFromForm(pokemon.species,pokemon.form),true)
+  for form in EvolutionHelper.evolutions(pbGetFSpeciesFromForm(pokemon.species,pokemon.form), true)
     ret = yield pokemon,form[0],form[1],form[2]
     break if ret>0
   end

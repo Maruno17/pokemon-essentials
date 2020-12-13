@@ -774,7 +774,7 @@ def pbSavePokemonData
     end
     pokedata.write("Evolutions = ")
     count = 0
-    for form in pbGetEvolvedFormData(i)
+    for form in EvolutionHelper.evolutions(i)
       method      = form[0]
       parameter   = form[1]
       new_species = form[2]
@@ -1189,7 +1189,7 @@ def pbSavePokemonFormsData
       end
     end
     origevos = []
-    for form in pbGetEvolvedFormData(species)
+    for form in EvolutionHelper.evolutions(species)
       method      = form[0]
       parameter   = form[1]
       new_species = form[2]
@@ -1200,7 +1200,7 @@ def pbSavePokemonFormsData
       origevos.push([method,parameter,new_species])
     end
     evos = []
-    for form in pbGetEvolvedFormData(i)
+    for form in EvolutionHelper.evolutions(i)
       method      = form[0]
       parameter   = form[1]
       new_species = form[2]

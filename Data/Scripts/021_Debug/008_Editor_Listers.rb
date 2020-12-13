@@ -121,10 +121,8 @@ def pbListScreenBlock(title,lister)
   Input.update
 end
 
-
-
 #===============================================================================
-# General listers
+#
 #===============================================================================
 class GraphicsLister
   def initialize(folder,selection)
@@ -196,8 +194,9 @@ class GraphicsLister
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class MusicFileLister
   def initialize(bgm,setting)
     @oldbgm = getPlayingBGM
@@ -263,8 +262,9 @@ class MusicFileLister
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class MapLister
   def initialize(selmap,addGlobal=false)
     @sprite = SpriteWrapper.new
@@ -322,8 +322,9 @@ class MapLister
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class SpeciesLister
   def initialize(selection,includeNew=false)
     @selection = selection
@@ -373,8 +374,9 @@ class SpeciesLister
   def refresh(index); end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class ItemLister
   def initialize(selection = 0, includeNew = false)
     @sprite = ItemIconSprite.new(Graphics.width * 3 / 4, Graphics.height / 2, nil)
@@ -432,8 +434,9 @@ class ItemLister
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class TrainerTypeLister
   def initialize(selection = 0, includeNew = false)
     @sprite = IconSprite.new(Graphics.width * 3 / 4, (Graphics.height - 64) / 2 + 64)
@@ -490,7 +493,7 @@ class TrainerTypeLister
     @sprite.bitmap.dispose if @sprite.bitmap
     return if index < 0
     begin
-      @sprite.setBitmap(pbTrainerSpriteFile(@ids[index]), 0)
+      @sprite.setBitmap(GameData::TrainerType.front_sprite_filename(@ids[index]), 0)
     rescue
       @sprite.setBitmap(nil)
     end
@@ -501,8 +504,9 @@ class TrainerTypeLister
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class TrainerBattleLister
   def initialize(selection,includeNew)
     @sprite = IconSprite.new(Graphics.width * 3 / 4, (Graphics.height / 2) + 32)
@@ -577,7 +581,7 @@ class TrainerBattleLister
     @sprite.bitmap.dispose if @sprite.bitmap
     return if index<0
     begin
-      @sprite.setBitmap(pbTrainerSpriteFile(@ids[index]),0)
+      @sprite.setBitmap(GameData::TrainerType.front_sprite_filename(@ids[index]),0)
     rescue
       @sprite.setBitmap(nil)
     end

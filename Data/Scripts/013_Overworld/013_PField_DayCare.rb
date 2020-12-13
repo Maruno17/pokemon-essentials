@@ -192,7 +192,7 @@ def pbDayCareGenerateEgg
     father = pokemon0
   end
   # Determine the egg's species
-  babyspecies = pbGetBabySpecies(babyspecies,true,mother.item_id,father.item_id)
+  babyspecies = EvolutionHelper.baby_species(babyspecies, true, mother.item_id, father.item_id)
   if isConst?(babyspecies,PBSpecies,:MANAPHY) && hasConst?(PBSpecies,:PHIONE)
     babyspecies = getConst(PBSpecies,:PHIONE)
   elsif (isConst?(babyspecies,PBSpecies,:NIDORANfE) && hasConst?(PBSpecies,:NIDORANmA)) ||
@@ -233,7 +233,7 @@ def pbDayCareGenerateEgg
      isConst?(babyspecies,PBSpecies,:GRIMER)
     if mother.form==1
       egg.form = 1 if mother.hasItem?(:EVERSTONE)
-    elsif pbGetBabySpecies(father.species,true,mother.item_id,father.item_id)==babyspecies
+    elsif EvolutionHelper.baby_species(father.species, true, mother.item_id, father.item_id) == babyspecies
       egg.form = 1 if father.form==1 && father.hasItem?(:EVERSTONE)
     end
   end
