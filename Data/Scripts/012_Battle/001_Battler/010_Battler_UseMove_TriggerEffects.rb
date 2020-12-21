@@ -18,6 +18,9 @@ class PokeBattle_Battler
       # Target's item
       if target.itemActive?(true)
         oldHP = user.hp
+        if move.function == "18B" && target.pbCanBurn?(user,false,self) &&  target.effects[PBEffects::BurningJealousy] && !target.damageState.substitute
+          target.pbBurn(user)
+        end
         BattleHandlers.triggerTargetItemOnHit(target.item,user,target,move,@battle)
         user.pbItemHPHealCheck if user.hp<oldHP
       end
@@ -141,20 +144,30 @@ class PokeBattle_Battler
     # Target's held item (Eject Button, Red Card)
     switchByItem = []
     @battle.pbPriority(true).each do |b|
-      next if !targets.any? { |targetB| targetB.index==b.index }
-      next if b.damageState.unaffected || b.damageState.calcDamage==0 ||
-         switchedBattlers.include?(b.index)
+      next if switchedBattlers.include?(b.index)
       next if !b.itemActive?
-      BattleHandlers.triggerTargetItemAfterMoveUse(b.item,b,user,move,switchByItem,@battle)
+	  next if switchByItem.length > 0 # Only one switch per move (Gen 8)
+	  next if switchedBattlers.length > 0 # Only one switch per move (Gen 8)
+	  
+      if targets.any? { |targetB| targetB.index==b.index } # Eject Button, Red Card
+        if !b.damageState.unaffected && b.damageState.calcDamage != 0
+		  BattleHandlers.triggerTargetItemAfterMoveUse(b.item,b,user,move,switchByItem,@battle)
+		end 
+	  end
+	  if b.effects[PBEffects::LashOut] # Eject Pack 
+        BattleHandlers.triggerItemOnStatLoss(b.item,b,user,move,switchByItem,@battle)
+	  end 
     end
     # Eject Pack
-    @battle.pbPriority(true).each do |b|
-      next if !targets.any? { |targetB| targetB.index==b.index }
-      next if b.effects[PBEffects::LashOut] == false ||
-         switchedBattlers.include?(b.index)
-      next if !b.itemActive?
-      BattleHandlers.triggerItemOnStatLoss(b.item,b,user,move,switchByItem,@battle)
-    end
+    # @battle.pbPriority(true).each do |b|
+      # next if !targets.any? { |targetB| targetB.index==b.index }
+      # next if b.effects[PBEffects::LashOut] == false ||
+         # switchedBattlers.include?(b.index)
+      # next if !b.itemActive?
+	  # next if switchByItem.length > 0 # Only one switch per move (Gen 8)
+	  # next if switchedBattlers.length > 0 # Only one switch per move (Gen 8)
+      # BattleHandlers.triggerItemOnStatLoss(b.item,b,user,move,switchByItem,@battle)
+    # end
     @battle.moldBreaker = false if switchByItem.include?(user.index)
     @battle.pbPriority(true).each do |b|
       b.pbEffectsOnSwitchIn(true) if switchByItem.include?(b.index)

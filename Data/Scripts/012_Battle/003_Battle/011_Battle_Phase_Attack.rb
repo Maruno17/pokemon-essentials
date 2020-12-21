@@ -58,7 +58,9 @@ class PokeBattle_Battle
       # Pursuit interrupts switching
       pbPursuit(b.index)
       return if @decision>0
-      # Switch Pokémon
+      # Neutralizing Gas
+	  pbCheckNeutralizingGas(b)
+	  # Switch Pokémon
       pbRecallAndReplace(b.index,idxNewPkmn)
       b.pbEffectsOnSwitchIn(true)
     end
@@ -84,7 +86,7 @@ class PokeBattle_Battle
       end
       return if @decision>0
     end
-    pbCalculatePriority if NEWEST_BATTLE_MECHANICS
+    pbCalculatePriority if DYNAMIC_PRIORITY
   end
 
   def pbAttackPhaseMegaEvolution

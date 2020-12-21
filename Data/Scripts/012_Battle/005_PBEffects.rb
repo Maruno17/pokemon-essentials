@@ -129,6 +129,7 @@ begin
     Octolock            = 125
     OctolockUser        = 126
     BlunderPolicy       = 127
+    SwitchedAlly        = 128
 
     #===========================================================================
     # These effects apply to a battler position
@@ -168,6 +169,8 @@ begin
     Tailwind           = 19
     ToxicSpikes        = 20
     WideGuard          = 21
+	StickyWebUser      = 22
+
 
     #===========================================================================
     # These effects apply to the battle (i.e. both sides)

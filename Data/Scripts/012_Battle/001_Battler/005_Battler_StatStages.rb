@@ -91,6 +91,7 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatGain(@ability,self,stat,user)
     end
+    @effects[PBEffects::BurningJealousy] = true
     return true
   end
 
@@ -174,18 +175,23 @@ class PokeBattle_Battler
     return increment
   end
 
-  def pbLowerStatStage(stat,increment,user,showAnim=true,ignoreContrary=false)
+  def pbLowerStatStage(stat,increment,user,showAnim=true,ignoreContrary=false, ignoreMirrorArmor=false)
     return false if !PBStats.validBattleStat?(stat)
     # Mirror Armor
-    if hasActiveAbility?(:MIRRORARMOR) && (!user || user.index!=@index) && !@battle.moldBreaker
+    if !ignoreMirrorArmor && hasActiveAbility?(:MIRRORARMOR) && (!user || user.index!=@index) && 
+	  !@battle.moldBreaker && pbCanLowerStatStage?(stat)
       battle.pbShowAbilitySplash(self)
       @battle.pbDisplay(_INTL("{1}'s Mirror Armor activated!",pbThis))
       if !user
         battle.pbHideAbilitySplash(self)
         return false
       end
-      if user.pbCanLowerStatStage?(stat) && !user.hasActiveAbility?(:MIRRORARMOR)
+      if !user.hasActiveAbility?(:MIRRORARMOR) && user.pbCanLowerStatStage?(stat,nil,nil,true)
         user.pbLowerStatStageByAbility(stat,increment,user,splashAnim=false,checkContact=false)
+		# Trigger user's abilities upon stat loss
+		if user.abilityActive?
+		  BattleHandlers.triggerAbilityOnStatLoss(user.ability,user,stat,self)
+		end
       end
       battle.pbHideAbilitySplash(self)
       return false
@@ -208,22 +214,27 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatLoss(@ability,self,stat,user)
     end
-    effects[PBEffects::LashOut] = true
+    @effects[PBEffects::LashOut] = true
     return true
   end
 
-  def pbLowerStatStageByCause(stat,increment,user,cause,showAnim=true,ignoreContrary=false)
+  def pbLowerStatStageByCause(stat,increment,user,cause,showAnim=true,ignoreContrary=false, ignoreMirrorArmor=false)
     return false if !PBStats.validBattleStat?(stat)
     # Mirror Armor
-    if hasActiveAbility?(:MIRRORARMOR) && (!user || user.index!=@index) && !@battle.moldBreaker
+    if !ignoreMirrorArmor && hasActiveAbility?(:MIRRORARMOR) && (!user || user.index!=@index) && 
+	  !@battle.moldBreaker && pbCanLowerStatStage?(stat)
       battle.pbShowAbilitySplash(self)
       @battle.pbDisplay(_INTL("{1}'s Mirror Armor activated!",pbThis))
       if !user
         battle.pbHideAbilitySplash(self)
         return false
       end
-      if user.pbCanLowerStatStage?(stat) && !user.hasActiveAbility?(:MIRRORARMOR)
+      if  !user.hasActiveAbility?(:MIRRORARMOR) && user.pbCanLowerStatStage?(stat,nil,nil,true)
         user.pbLowerStatStageByAbility(stat,increment,user,splashAnim=false,checkContact=false)
+		# Trigger user's abilities upon stat loss
+		if user.abilityActive?
+		  BattleHandlers.triggerAbilityOnStatLoss(user.ability,user,stat,self)
+		end
       end
       battle.pbHideAbilitySplash(self)
       return false
@@ -253,6 +264,7 @@ class PokeBattle_Battler
     if abilityActive?
       BattleHandlers.triggerAbilityOnStatLoss(@ability,self,stat,user)
     end
+    @effects[PBEffects::LashOut] = true
     return true
   end
 

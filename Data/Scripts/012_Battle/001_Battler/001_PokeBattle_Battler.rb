@@ -407,7 +407,8 @@ class PokeBattle_Battler
       :RKSSYSTEM,
       :ASONEICE,
       :ASONEGHOST,
-	  :NEUTRALIZINGGAS
+	  :NEUTRALIZINGGAS,
+	  :HUNGERSWITCH
     ]
     abilityBlacklist.each do |a|
       return true if isConst?(abil, PBAbilities, a)
@@ -513,6 +514,11 @@ class PokeBattle_Battler
     return true
   end
 
+  def hasUtilityUmbrella?
+    return true if hasActiveItem?(:UTILITYUMBRELLA)
+    return false
+  end
+
   def takesIndirectDamage?(showMsg=false)
     return false if fainted?
     if hasActiveAbility?(:MAGICGUARD)
@@ -587,12 +593,12 @@ class PokeBattle_Battler
     return false if @effects[PBEffects::HealBlock]>0
     return true
   end
-  
+
   def canTakeHealingWish?
-	# Also works with Lunar Dance. 
-	return canHeal? && pbHasAnyStatus?
-  end 
-  
+    # Also works with Lunar Dance.
+    return canHeal? || pbHasAnyStatus?
+  end
+
   def affectedByContactEffect?(showMsg=false)
     return false if fainted?
     if hasActiveItem?(:PROTECTIVEPADS)

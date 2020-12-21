@@ -327,7 +327,7 @@ class PokeBattle_Battler
     end
     # Crafty Shield
     if target.pbOwnSide.effects[PBEffects::CraftyShield] && user.index!=target.index &&
-       move.statusMove? && move.pbTarget(user)!=PBTargets::AllBattlers && !unseenfist
+       move.statusMove? && move.pbTarget(user)!=PBTargets::AllBattlers && !unseenfist && !move.function == "18E"
       @battle.pbCommonAnimation("CraftyShield",target)
       @battle.pbDisplay(_INTL("Crafty Shield protected {1}!",target.pbThis(true)))
       target.damageState.protected = true
@@ -336,8 +336,9 @@ class PokeBattle_Battler
     end
     # Wide Guard
     if target.pbOwnSide.effects[PBEffects::WideGuard] && user.index!=target.index &&
-       PBTargets.multipleTargets?(move.pbTarget(user)) &&
-       (NEWEST_BATTLE_MECHANICS || move.damagingMove?) && !unseenfist
+       PBTargets.multipleTargets?(move.pbTarget(user)) && move.function != "17C" &&
+       (NEWEST_BATTLE_MECHANICS || move.damagingMove?) && !unseenfist 
+	   # move.function == 17C is Dragon Darts. 
       @battle.pbCommonAnimation("WideGuard",target)
       @battle.pbDisplay(_INTL("Wide Guard protected {1}!",target.pbThis(true)))
       target.damageState.protected = true

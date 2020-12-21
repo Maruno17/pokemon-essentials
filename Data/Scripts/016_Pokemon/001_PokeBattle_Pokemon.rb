@@ -603,6 +603,7 @@ class PokeBattle_Pokemon
   def hasItem?(item_id = 0)
     held_item = self.item
     return held_item > 0 if item_id == 0
+    return false if !hasConst?(PBItems,item_id)
     return held_item == getID(PBItems,item_id)
   end
 
@@ -624,7 +625,7 @@ class PokeBattle_Pokemon
     @trmoves=[] if !@trmoves
     return @trmoves
   end
-  
+
   # Returns this Pokémon's mail.
   def mail
     return nil if !@mail
@@ -814,18 +815,18 @@ class PokeBattle_Pokemon
   #=============================================================================
   # Stat calculations, Pokémon creation
   #=============================================================================
-  # Yamask Evolution Method 
+  # Yamask Evolution Method
   def yamaskhp
     @yamaskhp=0 if !@yamaskhp
     return @yamaskhp
   end
-  
+
   # Galarian Farfetch'd Evolution Method
   def criticalHits
-    @criticalHits=0 if !@criticalHits 
+    @criticalHits=0 if !@criticalHits
     return @criticalHits
   end
-  
+
   # Returns this Pokémon's base stats. An array of six values.
   def baseStats
     ret = pbGetSpeciesData(@species,formSimple,SpeciesBaseStats)
@@ -945,6 +946,9 @@ class PokeBattle_Pokemon
         @moves[i] = PBMove.new(0)
       end
     end
+    # Set spinning to false if a new Pokemon in created. Prevents evolution by illegal means
+    $PokemonTemp.clockwiseSpin = false
+    $PokemonTemp.antiClockwiseSpin = false
   end
 end
 

@@ -377,6 +377,124 @@ Events.onChangeDirection += proc {
   pbBattleOnStepTaken(repel) if !$game_temp.in_menu
 }
 
+# Alcremie Evolution Method
+Events.onChangeDirection += proc {
+  if !$PokemonTemp.clockwiseSpin && !$PokemonTemp.antiClockwiseSpin
+    $PokemonTemp.startedSpinning = Graphics.frame_count
+  end
+  checkEvo = false
+  if (Graphics.frame_count - $PokemonTemp.lastTurned) <= (Graphics.frame_rate/2)
+    $PokemonTemp.lastTurned = Graphics.frame_count
+    case $PokemonTemp.oldDir
+    when 2
+      if $game_player.direction == 4
+        $PokemonTemp.clockwiseSpin = true
+        $PokemonTemp.antiClockwiseSpin = false
+      elsif $game_player.direction == 6
+        $PokemonTemp.antiClockwiseSpin = true
+        $PokemonTemp.clockwiseSpin = false
+      else
+        pbEvolveAlcremie
+      end
+    when 4
+      if $game_player.direction == 8
+        $PokemonTemp.clockwiseSpin = true
+        $PokemonTemp.antiClockwiseSpin = false
+      elsif $game_player.direction == 2
+        $PokemonTemp.antiClockwiseSpin = true
+        $PokemonTemp.clockwiseSpin = false
+      else
+        pbEvolveAlcremie
+      end
+    when 8
+      if $game_player.direction == 6
+        $PokemonTemp.clockwiseSpin = true
+        $PokemonTemp.antiClockwiseSpin = false
+      elsif $game_player.direction == 4
+        $PokemonTemp.antiClockwiseSpin = true
+        $PokemonTemp.clockwiseSpin = false
+      else
+        pbEvolveAlcremie
+      end
+    when 6
+      if $game_player.direction == 2
+        $PokemonTemp.clockwiseSpin = true
+        $PokemonTemp.antiClockwiseSpin = false
+      elsif $game_player.direction == 8
+        $PokemonTemp.antiClockwiseSpin = true
+        $PokemonTemp.clockwiseSpin = false
+      else
+        pbEvolveAlcremie
+      end
+    end
+  else
+    pbEvolveAlcremie
+  end
+}
+
+# Alcremie Evolution Method
+Events.onStepTaken += proc {
+  pbEvolveAlcremie
+}
+
+# Alcremie Evolution Method
+def pbEvolveAlcremie
+  for pkmn in $Trainer.ablePokemonParty
+    ret = pbCheckEvolutionEx(pkmn) { |pkmn, method, parameter, new_species|
+      success = PBEvolution.call("alcremieCheck", method, pkmn, parameter)
+      next (success) ? new_species : -1
+    }
+    if ret>0
+      pbExclaim($game_player)
+      pbWait(Graphics.frame_rate/2)
+      pbFadeOutIn(99999){
+        evo = PokemonEvolutionScene.new
+        evo.pbStartScreen(pkmn,ret)
+        evo.pbEvolution(true)
+        evo.pbEndScreen
+      }
+    end
+  end
+  $PokemonTemp.lastTurned = Graphics.frame_count
+  $PokemonTemp.antiClockwiseSpin = false
+  $PokemonTemp.clockwiseSpin = false
+  $PokemonTemp.startedSpinning = Graphics.frame_count
+end
+
+# Some extra PokemonTemp Items for Alcremies's Evolution
+class PokemonTemp
+  attr_accessor :clockwiseSpin
+  attr_accessor :antiClockwiseSpin
+  attr_accessor :lastTurned
+  attr_accessor :oldDir
+  attr_accessor :startedSpinning
+
+  def clockwiseSpin
+    @clockwiseSpin = false if !@clockwiseSpin
+    return @clockwiseSpin
+  end
+
+  def antiClockwiseSpin
+    @antiClockwiseSpin = false if !@antiClockwiseSpin
+    return @antiClockwiseSpin
+  end
+
+  def lastTurned
+    @lastTurned = Graphics.frame_count if !@lastTurned
+    return @lastTurned
+  end
+
+  def oldDir
+    @oldDir = $game_player.direction if !@oldDir
+    return @oldDir
+  end
+
+  def startedSpinning
+    @startedSpinning = Graphics.frame_count if !@startedSpinning
+    return @startedSpinning
+  end
+end
+
 def pbBattleOnStepTaken(repel = false)
   return if $Trainer.ablePokemonCount == 0
   encounterType = $PokemonEncounters.pbEncounterType

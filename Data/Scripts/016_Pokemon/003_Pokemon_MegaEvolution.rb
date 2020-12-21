@@ -7,18 +7,22 @@ class PokeBattle_Pokemon
     formData = pbLoadFormToSpecies
     return 0 if !formData[@species] || formData[@species].length==0
     ret = 0
-    speciesData = pbLoadSpeciesData
-    for i in 0...formData[@species].length
-      fSpec = formData[@species][i]
-      next if !fSpec || fSpec<=0
-      megaStone = speciesData[fSpec][SpeciesMegaStone] || 0
-      if megaStone>0 && self.hasItem?(megaStone)
-        ret = i; break
-      end
-      if !checkItemOnly
-        megaMove = speciesData[fSpec][SpeciesMegaMove] || 0
-        if megaMove>0 && self.hasMove?(megaMove)
+    if hasSpecificMegaForm?
+      ret = getSpecificMegaForm
+    else
+      speciesData = pbLoadSpeciesData
+      for i in 0...formData[@species].length
+        fSpec = formData[@species][i]
+        next if !fSpec || fSpec<=0
+        megaStone = speciesData[fSpec][SpeciesMegaStone] || 0
+        if megaStone>0 && self.hasItem?(megaStone)
           ret = i; break
+        end
+        if !checkItemOnly
+          megaMove = speciesData[fSpec][SpeciesMegaMove] || 0
+          if megaMove>0 && self.hasMove?(megaMove)
+            ret = i; break
+          end
         end
       end
     end
@@ -26,8 +30,9 @@ class PokeBattle_Pokemon
   end
 
   def getUnmegaForm
-    return -1 if !mega?
+    return -1 if !mega? && !hasSpecificUnmegaForm?
     unmegaForm = pbGetSpeciesData(@species,formSimple,SpeciesUnmegaForm)
+    unmegaForm = getSpecificUnmegaForm if hasSpecificUnmegaForm?
     return unmegaForm   # form number
   end
 
@@ -105,6 +110,46 @@ MultipleForms.register(:GROUDON,{
 MultipleForms.register(:KYOGRE,{
   "getPrimalForm" => proc { |pkmn|
     next 1 if pkmn.hasItem?(:BLUEORB)
+    next
+  }
+})
+
+#===============================================================================
+# Form Specific Mega Evolution
+# To prevent Galarian Slowbro from Mega Evolving
+#===============================================================================
+class PokeBattle_Pokemon
+  def hasSpecificMegaForm?
+    v = MultipleForms.call("getSpecificMegaForm",self)
+    return v!=nil
+  end
+
+  def getSpecificMegaForm
+    v = MultipleForms.call("getSpecificMegaForm",self)
+    return v if v.is_a?(Numeric)
+  end
+
+  def hasSpecificUnmegaForm?
+    v = MultipleForms.call("getSpecificUnmegaForm",self)
+    return v!=nil
+  end
+
+  def getSpecificUnmegaForm
+    v = MultipleForms.call("getSpecificUnmegaForm",self)
+    v = self.form if !v || v<0
+    return v if v.is_a?(Numeric)
+  end
+end
+
+
+
+MultipleForms.register(:SLOWBRO,{
+  "getSpecificMegaForm" => proc { |pkmn|
+    next 2 if (pkmn.form == 0 && pkmn.hasItem?(:SLOWBRONITE))
+    next
+  },
+  "getSpecificUnmegaForm" => proc { |pkmn|
+    next 0 if pkmn.form == 2
     next
   }
 })

@@ -65,6 +65,8 @@ class Game_Player < Game_Character
   end
 
   def move_generic(dir, turn_enabled = true)
+    # To block player movement when L is pressed
+    return false if Input.press?(Input::L) && !@move_route_forcing
     turn_generic(dir, true) if turn_enabled
     if !$PokemonTemp.encounterTriggered
       x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
@@ -92,6 +94,8 @@ class Game_Player < Game_Character
     old_direction = @direction
     super(dir)
     if @direction != old_direction && !@move_route_forcing && !pbMapInterpreterRunning?
+      # To store old player Dir
+      $PokemonTemp.oldDir = old_direction
       Events.onChangeDirection.trigger(self, self)
       $PokemonTemp.encounterTriggered = false if !keep_enc_indicator
     end

@@ -61,7 +61,7 @@ class PokeBattle_Battler
     }
     @battle.pbJudge
     # Update priority order
-    @battle.pbCalculatePriority if NEWEST_BATTLE_MECHANICS
+    @battle.pbCalculatePriority if DYNAMIC_PRIORITY
     return true
   end
 
@@ -382,7 +382,7 @@ class PokeBattle_Battler
       end
     end
     # Redirect Dragon Darts first hit if necessary
-    if move.function=="17C" && @battle.pbSideSize(@index)>1
+    if move.function=="17C" && @battle.pbSideSize(targets[0].index)>1
       targets=pbChangeTargets(move,user,targets,0)
     end
     #---------------------------------------------------------------------------
@@ -596,13 +596,13 @@ class PokeBattle_Battler
     # For two-turn attacks being used in a single turn
     move.pbInitialEffect(user,targets,hitNum)
     numTargets = 0   # Number of targets that are affected by this hit
-    targets.each { |b| b.damageState.resetPerHit }
     # Count a hit for Parental Bond (if it applies)
     user.effects[PBEffects::ParentalBond] -= 1 if user.effects[PBEffects::ParentalBond]>0
     # Redirect Dragon Darts other hits
-        if move.function=="17C" && @battle.pbSideSize(targets[0].index)>1 && hitNum>0
-          targets=pbChangeTargets(move,user,targets,1)
-        end
+	if move.function=="17C" && @battle.pbSideSize(targets[0].index)>1 && hitNum>0
+	  targets=pbChangeTargets(move,user,targets,1)
+	end
+    targets.each { |b| b.damageState.resetPerHit }
     # Accuracy check (accuracy/evasion calc)
     if hitNum==0 || move.successCheckPerHit?
       targets.each do |b|
@@ -665,6 +665,14 @@ class PokeBattle_Battler
     targets.each do |b|
       next if !b.damageState.missed
       pbMissMessage(move,user,b)
+		# Blunder Policy (also activates if only one target is missed)
+		if user.hasActiveItem?(:BLUNDERPOLICY) && user.effects[PBEffects::BlunderPolicy] &&
+		   b.effects[PBEffects::TwoTurnAttack]==0 && move.function!="070" && hitNum==0
+		  if user.pbCanRaiseStatStage?(PBStats::SPEED,user,self)
+			pbRaiseStatStageByCause(PBStats::SPEED,2,user,itemName,showAnim=true,ignoreContrary=false)
+			user.pbConsumeItem
+		  end
+		end
     end
     # Deal the damage (to all allies first simultaneously, then all foes
     # simultaneously)

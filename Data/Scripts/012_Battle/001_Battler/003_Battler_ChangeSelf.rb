@@ -72,7 +72,7 @@ class PokeBattle_Battler
     @battle.peer.pbOnLeavingBattle(@battle,@pokemon,@battle.usedInBattle[idxOwnSide][@index/2])
     @pokemon.makeUnmega if mega?
     @pokemon.makeUnprimal if primal?
-	@pokemon.yamaskhp = 0 # Yamask
+	  @pokemon.yamaskhp = 0 # Yamask
     # Do other things
     @battle.pbClearChoice(@index)   # Reset choice
     pbOwnSide.effects[PBEffects::LastRoundFainted] = @battle.turnCount
@@ -167,7 +167,7 @@ class PokeBattle_Battler
 
   def pbCheckFormOnWeatherChange
     return if fainted? || @effects[PBEffects::Transform]
-    return if hasActiveItem?(:UTILITYUMBRELLA)
+    return if hasUtilityUmbrella?
     # Castform - Forecast
     if isSpecies?(:CASTFORM)
       if hasActiveAbility?(:FORECAST)
@@ -250,7 +250,7 @@ class PokeBattle_Battler
   end
 
    def pbCheckFormOnTerrainChange
-    return if fainted? || @effects[PBEffects::Transform]
+    return if fainted? #|| @effects[PBEffects::Transform] Ditto reverts back to Normal.
     if hasActiveAbility?(:MIMICRY)
       newTypes = self.pbTypes
       originalTypes=[@pokemon.type1,@pokemon.type2] | []
@@ -287,6 +287,7 @@ class PokeBattle_Battler
     return if fainted? || @effects[PBEffects::Transform]
     # Form changes upon entering battle and when the weather changes
     pbCheckFormOnWeatherChange if !endOfRound
+	pbCheckFormOnTerrainChange if !endOfRound
     # Darmanitan - Zen Mode
     if isConst?(@species,PBSpecies,:DARMANITAN) && isConst?(@ability,PBAbilities,:ZENMODE)
       if @hp<=@totalhp/2
