@@ -2,7 +2,6 @@
 CREDITS TO COLLABORATORS: Vendily, TheToxic, HM100, Aioross, WolfPP, MFilice, lolface, Golisopod User, KyureJL, DarrylBD99, Turn20Negate, Zerokid, TheKandinavian, ErwanBeurier.
 
 # To Do
-Update Item prices and Descriptions
 Stuff From Here https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/
 
 ##### PBS Files #####

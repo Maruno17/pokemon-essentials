@@ -343,7 +343,7 @@ class PokeBattle_Battle
     # Update battlers' participants (who will gain Exp/EVs when a battler faints)
     eachBattler { |b| b.pbUpdateParticipants }
     # Healing Wish
-    if @positions[battler.index].effects[PBEffects::HealingWish]
+    if @positions[battler.index].effects[PBEffects::HealingWish] && battler.canTakeHealingWish?
       pbCommonAnimation("HealingWish",battler)
       pbDisplay(_INTL("The healing wish came true for {1}!",battler.pbThis(true)))
       battler.pbRecoverHP(battler.totalhp)
@@ -351,7 +351,7 @@ class PokeBattle_Battle
       @positions[battler.index].effects[PBEffects::HealingWish] = false
     end
     # Lunar Dance
-    if @positions[battler.index].effects[PBEffects::LunarDance]
+    if @positions[battler.index].effects[PBEffects::LunarDance] && battler.canTakeHealingWish?
       pbCommonAnimation("LunarDance",battler)
       pbDisplay(_INTL("{1} became cloaked in mystical moonlight!",battler.pbThis))
       battler.pbRecoverHP(battler.totalhp)
