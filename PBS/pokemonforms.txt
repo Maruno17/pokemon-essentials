@@ -101,6 +101,76 @@ WildItemUncommon = PECHABERRY
 BattlerPlayerY = 21
 BattlerEnemyY = 25
 #-------------------------------
+[PIKACHU,3]
+FormName = Cosplay Pikachu
+Compatibility = Undiscovered
+Pokedex = Whenever Pikachu comes across something new, it blasts it with a jolt of electricity. If you come across a blackened berry, it's evidence that this Pokémon mistook the intensity of its charge.
+#-------------------------------
+[PIKACHU,4]
+FormName = Cosplay Pikachu - Belle
+Compatibility = Undiscovered
+Pokedex = Whenever Pikachu comes across something new, it blasts it with a jolt of electricity. If you come across a blackened berry, it's evidence that this Pokémon mistook the intensity of its charge.
+#-------------------------------
+[PIKACHU,5]
+FormName = Cosplay Pikachu - Libre
+Compatibility = Undiscovered
+Pokedex = Whenever Pikachu comes across something new, it blasts it with a jolt of electricity. If you come across a blackened berry, it's evidence that this Pokémon mistook the intensity of its charge.
+#-------------------------------
+[PIKACHU,6]
+FormName = Cosplay Pikachu - Ph.D.
+Compatibility = Undiscovered
+Pokedex = Whenever Pikachu comes across something new, it blasts it with a jolt of electricity. If you come across a blackened berry, it's evidence that this Pokémon mistook the intensity of its charge.
+#-------------------------------
+[PIKACHU,7]
+FormName = Cosplay Pikachu - Pop Star
+Compatibility = Undiscovered
+Pokedex = Whenever Pikachu comes across something new, it blasts it with a jolt of electricity. If you come across a blackened berry, it's evidence that this Pokémon mistook the intensity of its charge.
+#-------------------------------
+[PIKACHU,8]
+FormName = Cosplay Pikachu - Rock Star
+Compatibility = Undiscovered
+Pokedex = Whenever Pikachu comes across something new, it blasts it with a jolt of electricity. If you come across a blackened berry, it's evidence that this Pokémon mistook the intensity of its charge.
+#-------------------------------
+[PIKACHU,9]
+FormName = Original Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of traveling through many different regions.
+#-------------------------------
+[PIKACHU,10]
+FormName = Hoenn Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of traveling through the Hoenn region.
+#-------------------------------
+[PIKACHU,11]
+FormName = Sinnoh Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of traveling through the Sinnoh region.
+#-------------------------------
+[PIKACHU,12]
+FormName = Unova Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of traveling through the Unova region.
+#-------------------------------
+[PIKACHU,13]
+FormName = Kalos Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of traveling through the Kalos region.
+#-------------------------------
+[PIKACHU,14]
+FormName = Alola Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of traveling through the Alola region.
+#-------------------------------
+[PIKACHU,15]
+FormName = Partner Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu wears its partner's cap, which is brimming with memories of when they first met.
+#-------------------------------
+[PIKACHU,16]
+FormName = World Cap Pikachu
+Compatibility = Undiscovered
+Pokedex = This Pikachu is wearing its Trainer's cap. The cap is a precious symbol that travels across different regions with Pikachu.
+#-------------------------------
 [RAICHU,1]
 FormName = Alolan
 Type1 = ELECTRIC

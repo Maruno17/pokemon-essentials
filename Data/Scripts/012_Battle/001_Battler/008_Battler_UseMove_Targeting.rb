@@ -101,16 +101,20 @@ class PokeBattle_Battler
     return targets if move.function != "17C" && (!PBTargets.canChooseOneFoeTarget?(targetType) || targets.length!=1)
     # Stalwart / Propeller Tail
     allySwitched = false
-    @battle.eachBattler do |b|
+    ally = -1
+    user.eachOpposing do |b|
       next if pbGetMoveData(b.lastMoveUsed,MOVE_FUNCTION_CODE) != "120"
       next if !PBTargets.oneTarget?(move.pbTarget(user))
       next if !hasActiveAbility?(:STALWART) && !hasActiveAbility?(:PROPELLERTAIL) && move.function != "182"
       next if !@battle.choices[b.index][3] == targets
+      next if b.effects[PBEffects::SwitchedAlly] == -1
       allySwitched = !allySwitched
+      ally = b.effects[PBEffects::SwitchedAlly]
+      b.effects[PBEffects::SwitchedAlly] = -1
     end
-    if allySwitched && $PokemonTemp.allySwitchTemp != -1
+    if allySwitched && ally >= 0
       targets = []
-      pbAddTarget(targets,user,@battle.battlers[$PokemonTemp.allySwitchTemp],move,!PBTargets.canChooseDistantTarget?(move.target))
+      pbAddTarget(targets,user,@battle.battlers[ally],move,!PBTargets.canChooseDistantTarget?(move.target))
       return targets
     end
     return targets if user.hasActiveAbility?(:STALWART) || user.hasActiveAbility?(:PROPELLERTAIL)
