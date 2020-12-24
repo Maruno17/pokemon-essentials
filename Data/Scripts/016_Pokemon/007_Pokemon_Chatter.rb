@@ -5,7 +5,7 @@ end
 
 
 def pbChatter(pokemon)
-  iconwindow=PictureWindow.new(pbLoadPokemonBitmap(pokemon))
+  iconwindow=PictureWindow.new(GameData::Species.sprite_bitmap_from_pokemon(pokemon))
   iconwindow.x=(Graphics.width/2)-(iconwindow.width/2)
   iconwindow.y=((Graphics.height-96)/2)-(iconwindow.height/2)
   if pokemon.chatter
@@ -40,7 +40,7 @@ HiddenMoveHandlers::UseMove.add(:CHATTER,proc { |move,pokemon|
 
 class PokeBattle_Scene
   def pbChatter(user,_target)
-    pbPlayCry(user.pokemon,90,100) if user.pokemon
+    GameData::Species.play_cry_from_pokemon(user.pokemon, nil, 100) if user.pokemon
     Graphics.frame_rate.times do
       Graphics.update
       Input.update

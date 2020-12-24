@@ -263,16 +263,16 @@ end
 
 module SpeciesProperty
   def self.set(_settingname,oldsetting)
-    ret = pbChooseSpeciesList((oldsetting) ? oldsetting : 1)
-    return (ret<=0) ? (oldsetting) ? oldsetting : 0 : ret
+    ret = pbChooseSpeciesList(oldsetting || nil)
+    return ret || oldsetting
   end
 
   def self.defaultValue
-    return 0
+    return nil
   end
 
   def self.format(value)
-    return (value) ? PBSpecies.getName(value) : "-"
+    return (value && GameData::Species.exists?(value)) ? GameData::Species.get(value).real_name : "-"
   end
 end
 
@@ -1258,15 +1258,17 @@ class EvolutionsProperty
             param_type = PBEvolution.getFunction(realcmds[i][0], "parameterType")
             has_param = !PBEvolution.hasFunction?(realcmds[i][0], "parameterType") || param_type != nil
             if has_param
-              if param_type
-                level = (Object.const_get(param_type).getName(level) rescue getConstantName(param_type, level) rescue level)
+              if param_type && !GameData.const_defined?(param_type.to_sym)
+                level = getConstantName(param_type, level)
+              else
+                level = level.to_s
               end
-              level = "???" if !level
+              level = "???" if !level || level.empty?
               commands.push(_INTL("{1}: {2}, {3}",
-                 PBSpecies.getName(realcmds[i][2]),@methods[realcmds[i][0]],level.to_s))
+                 GameData::Species.get(realcmds[i][2]).name, @methods[realcmds[i][0]], level.to_s))
             else
               commands.push(_INTL("{1}: {2}",
-                 PBSpecies.getName(realcmds[i][2]),@methods[realcmds[i][0]]))
+                 GameData::Species.get(realcmds[i][2]).name, @methods[realcmds[i][0]]))
             end
           end
           cmd[1] = i if oldsel>=0 && realcmds[i][3]==oldsel
@@ -1290,7 +1292,7 @@ class EvolutionsProperty
           if entry[0]==-1   # Add new evolution path
             pbMessage(_INTL("Choose an evolved form, method and parameter."))
             newspecies = pbChooseSpeciesList
-            if newspecies>0
+            if newspecies
               newmethod = pbMessage(_INTL("Choose an evolution method."),@methods,-1)
               if newmethod>0
                 newparam = -1
@@ -1303,7 +1305,7 @@ class EvolutionsProperty
                     newparam = pbChooseItemList
                   when :Move
                     newparam = pbChooseMoveList
-                  when :PBSpecies
+                  when :Species
                     newparam = pbChooseSpeciesList
                   when :Type
                     newparam = pbChooseTypeList
@@ -1343,7 +1345,7 @@ class EvolutionsProperty
                 _INTL("Change parameter"),_INTL("Delete"),_INTL("Cancel")],5)
             if cmd2==0   # Change species
               newspecies = pbChooseSpeciesList(entry[2])
-              if newspecies>0
+              if newspecies
                 havemove = -1
                 for i in 0...realcmds.length
                   havemove = realcmds[i][3] if realcmds[i][0]==entry[0] &&
@@ -1391,7 +1393,7 @@ class EvolutionsProperty
                   newparam = pbChooseItemList(entry[1])
                 when :Move
                   newparam = pbChooseMoveList(entry[1])
-                when :PBSpecies
+                when :Species
                   newparam = pbChooseSpeciesList(entry[1])
                 when :Type
                   newparam = pbChooseTypeList(entry[1])
@@ -1464,11 +1466,13 @@ class EvolutionsProperty
       ret << "," if i>0
       param = value[i][1]
       param_type = PBEvolution.getFunction(value[i][0], "parameterType")
-      if param_type
-        param = (Object.const_get(param_type).getName(param) rescue getConstantName(param_type, param) rescue param)
+      if param_type && !GameData.const_defined?(param_type.to_sym)
+        param = getConstantName(param_type, param)
+      else
+        param = param.to_s
       end
       param = "" if !param
-      ret << sprintf("#{PBSpecies.getName(value[i][2])},#{@methods[value[i][0]]},#{param}")
+      ret << sprintf("#{GameData::Species.get(value[i][2]).name},#{@methods[value[i][0]]},#{param}")
     end
     return ret
   end

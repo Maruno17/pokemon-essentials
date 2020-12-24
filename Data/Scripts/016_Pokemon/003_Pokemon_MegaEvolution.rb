@@ -3,62 +3,53 @@
 # NOTE: These are treated as form changes in Essentials.
 #===============================================================================
 class Pokemon
-  def getMegaForm(checkItemOnly=false)
-    formData = pbLoadFormToSpecies
-    return 0 if !formData[@species] || formData[@species].length==0
+  def getMegaForm(checkItemOnly = false)
     ret = 0
-    speciesData = pbLoadSpeciesData
-    for i in 0...formData[@species].length
-      fSpec = formData[@species][i]
-      next if !fSpec || fSpec<=0
-      megaStone = speciesData[fSpec][SpeciesData::MEGA_STONE]
-      if megaStone && self.hasItem?(megaStone)
-        ret = i; break
-      end
-      if !checkItemOnly
-        megaMove = speciesData[fSpec][SpeciesData::MEGA_MOVE]
-        if self.hasMove?(megaMove)
-          ret = i; break
-        end
+    GameData::Species.each do |data|
+      next if data.species != @species
+      if data.mega_stone && hasItem?(data.mega_stone)
+        ret = data.form
+        break
+      elsif !checkItemOnly && data.mega_move && hasMove?(data.mega_move)
+        ret = data.form
+        break
       end
     end
     return ret   # form number, or 0 if no accessible Mega form
   end
 
   def getUnmegaForm
-    return -1 if !mega?
-    unmegaForm = pbGetSpeciesData(@species,formSimple,SpeciesData::UNMEGA_FORM)
-    return unmegaForm   # form number
+    return (mega?) ? species_data.unmega_form : -1
   end
 
   def hasMegaForm?
     megaForm = self.getMegaForm
-    return megaForm>0 && megaForm!=self.formSimple
+    return megaForm > 0 && megaForm != self.formSimple
   end
 
   def mega?
     megaForm = self.getMegaForm
-    return megaForm>0 && megaForm==self.formSimple
+    return megaForm > 0 && megaForm == self.formSimple
   end
   alias isMega? mega?
 
   def makeMega
     megaForm = self.getMegaForm
-    self.form = megaForm if megaForm>0
+    self.form = megaForm if megaForm > 0
   end
 
   def makeUnmega
     unmegaForm = self.getUnmegaForm
-    self.form = unmegaForm if unmegaForm>=0
+    self.form = unmegaForm if unmegaForm >= 0
   end
 
   def megaName
-    formName = pbGetMessage(MessageTypes::FormNames,self.fSpecies)
-    return (formName && formName!="") ? formName : _INTL("Mega {1}",PBSpecies.getName(@species))
+    formName = species_data.form_name
+    return (formName && !formName.empty?) ? formName : _INTL("Mega {1}", species_data.name)
   end
 
   def megaMessage   # 0=default message, 1=Rayquaza message
-    return pbGetSpeciesData(@species,getMegaForm,SpeciesData::MEGA_MESSAGE)
+    return species_data.mega_message
   end
 end
 

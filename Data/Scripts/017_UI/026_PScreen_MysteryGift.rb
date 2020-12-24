@@ -236,7 +236,7 @@ def pbRefreshMGCommands(master, online)
   for gift in master
     itemname = "BLANK"
     if gift[1] == 0
-      itemname = PBSpecies.getName(gift[2].species)
+      itemname = gift[2].speciesName
     elsif gift[1] > 0
       itemname = GameData::Item.get(gift[2]).name + sprintf(" x%d", gift[1])
     end

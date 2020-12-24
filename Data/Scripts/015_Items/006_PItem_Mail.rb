@@ -42,19 +42,22 @@ def pbDisplayMail(mail,_bearer=nil)
   if GameData::Item.get(mail.item).is_icon_mail?
     if mail.poke1
       sprites["bearer"] = IconSprite.new(64,288,viewport)
-      bitmapFileName = pbCheckPokemonIconFiles(mail.poke1,mail.poke1[5])
+      bitmapFileName = GameData::Species.icon_filename(mail.poke1[0],
+         mail.poke1[3], mail.poke1[1], mail.poke1[2], mail.poke1[4], mail.poke1[5])
       sprites["bearer"].setBitmap(bitmapFileName)
       sprites["bearer"].src_rect.set(0,0,64,64)
     end
     if mail.poke2
       sprites["bearer2"] = IconSprite.new(144,288,viewport)
-      bitmapFileName = pbCheckPokemonIconFiles(mail.poke2,mail.poke2[5])
+      bitmapFileName = GameData::Species.icon_filename(mail.poke2[0],
+         mail.poke2[3], mail.poke2[1], mail.poke2[2], mail.poke2[4], mail.poke2[5])
       sprites["bearer2"].setBitmap(bitmapFileName)
       sprites["bearer2"].src_rect.set(0,0,64,64)
     end
     if mail.poke3
       sprites["bearer3"] = IconSprite.new(224,288,viewport)
-      bitmapFileName = pbCheckPokemonIconFiles(mail.poke3,mail.poke3[5])
+      bitmapFileName = GameData::Species.icon_filename(mail.poke3[0],
+         mail.poke3[3], mail.poke3[1], mail.poke3[2], mail.poke3[4], mail.poke3[5])
       sprites["bearer3"].setBitmap(bitmapFileName)
       sprites["bearer3"].src_rect.set(0,0,64,64)
     end

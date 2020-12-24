@@ -33,8 +33,7 @@ end
 class PokeBattle_Move_003 < PokeBattle_SleepMove
   def pbMoveFailed?(user,targets)
     if NEWEST_BATTLE_MECHANICS && @id == :DARKVOID
-      if !user.isSpecies?(:DARKRAI) &&
-         !isConst?(user.effects[PBEffects::TransformSpecies],PBSpecies,:DARKRAI)
+      if !user.isSpecies?(:DARKRAI) && user.effects[PBEffects::TransformSpecies] != :DARKRAI
         @battle.pbDisplay(_INTL("But {1} can't use the move!",user.pbThis))
         return true
       end

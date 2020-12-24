@@ -1,3 +1,4 @@
+# NOTE: Everything in here is unused.
 #===============================================================================
 # Serial record
 #===============================================================================
@@ -277,6 +278,7 @@ end
 #===============================================================================
 # Scripted constants
 #===============================================================================
+# Unused
 def pbFindScript(a,name)
   a.each { |i|
     next if !i
@@ -285,7 +287,7 @@ def pbFindScript(a,name)
   return nil
 end
 
-# TODO: Will be unused once PBSpecies is abolished. Method above only used by this one.
+# Unused
 def pbAddScript(script,sectionname)
   begin
     scripts = load_data("Data/Constants.rxdata")

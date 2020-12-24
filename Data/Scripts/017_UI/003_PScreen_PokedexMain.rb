@@ -300,45 +300,39 @@ class PokemonPokedex_Scene
     return index
   end
 
-  def pbCanAddForModeList?(mode,nationalSpecies)
+  def pbCanAddForModeList?(mode, species)
     case mode
-    when MODENUMERICAL
-      return true
     when MODEATOZ
-      return $Trainer.seen[nationalSpecies]
+      return $Trainer.seen[species]
     when MODEHEAVIEST, MODELIGHTEST, MODETALLEST, MODESMALLEST
-      return $Trainer.owned[nationalSpecies]
+      return $Trainer.owned[species]
     end
+    return true   # For MODENUMERICAL
   end
 
   def pbGetDexList
-    dexlist = []
-    speciesData = pbLoadSpeciesData
     region = pbGetPokedexRegion
     regionalSpecies = pbAllRegionalSpecies(region)
-    if regionalSpecies.length==1
-      # If no Regional Dex defined for the given region, use National Pokédex
-      for i in 1..PBSpecies.maxValue
-        regionalSpecies.push(i)
-      end
+    if !regionalSpecies || regionalSpecies.length == 0
+      # If no Regional Dex defined for the given region, use the National Pokédex
+      regionalSpecies = []
+      GameData::Species.each { |s| regionalSpecies.push(s.id) if s.form == 0 }
     end
-    for i in 1...regionalSpecies.length
-      nationalSpecies = regionalSpecies[i]
-      if pbCanAddForModeList?($PokemonGlobal.pokedexMode,nationalSpecies)
-        form = $Trainer.formlastseen[nationalSpecies][1] || 0
-        fspecies = pbGetFSpeciesFromForm(nationalSpecies,form)
-        color  = speciesData[fspecies][SpeciesData::COLOR] || 0
-        type1  = speciesData[fspecies][SpeciesData::TYPE1]
-        type2  = speciesData[fspecies][SpeciesData::TYPE2] || type1
-        shape  = speciesData[fspecies][SpeciesData::SHAPE] || 0
-        height = speciesData[fspecies][SpeciesData::HEIGHT] || 1
-        weight = speciesData[fspecies][SpeciesData::WEIGHT] || 1
-        shift = DEXES_WITH_OFFSETS.include?(region)
-        dexlist.push([nationalSpecies,PBSpecies.getName(nationalSpecies),
-           height,weight,i,shift,type1,type2,color,shape])
-      end
+    shift = DEXES_WITH_OFFSETS.include?(region)
+    ret = []
+    regionalSpecies.each_with_index do |species, i|
+      next if !species
+      next if !pbCanAddForModeList?($PokemonGlobal.pokedexMode, species)
+      species_data = GameData::Species.get(species)
+      color  = species_data.color
+      type1  = species_data.type1
+      type2  = species_data.type2 || type1
+      shape  = species_data.shape
+      height = species_data.height
+      weight = species_data.weight
+      ret.push([species, species_data.name, height, weight, i + 1, shift, type1, type2, color, shape])
     end
-    return dexlist
+    return ret
   end
 
   def pbRefreshDexList(index=0)
@@ -348,7 +342,8 @@ class PokemonPokedex_Scene
       # Hide the Dex number 0 species if unseen
       dexlist[0] = nil if dexlist[0][5] && !$Trainer.seen[dexlist[0][0]]
       # Remove unseen species from the end of the list
-      i = dexlist.length-1; loop do break unless i>=0
+      i = dexlist.length-1
+      loop do break unless i>=0
         break if !dexlist[i] || $Trainer.seen[dexlist[i][0]]
         dexlist[i] = nil
         i -= 1
@@ -385,7 +380,7 @@ class PokemonPokedex_Scene
     base   = Color.new(88,88,80)
     shadow = Color.new(168,184,184)
     iconspecies = @sprites["pokedex"].species
-    iconspecies = 0 if !$Trainer.seen[iconspecies]
+    iconspecies = nil if !$Trainer.seen[iconspecies]
     # Write various bits of text
     dexname = _INTL("Pokédex")
     if $PokemonGlobal.pokedexUnlocked.length>1
@@ -397,7 +392,7 @@ class PokemonPokedex_Scene
     textpos = [
        [dexname,Graphics.width/2,2,2,Color.new(248,248,248),Color.new(0,0,0)]
     ]
-    textpos.push([PBSpecies.getName(iconspecies),112,52,2,base,shadow]) if iconspecies>0
+    textpos.push([GameData::Species.get(iconspecies).name,112,52,2,base,shadow]) if iconspecies
     if @searchResults
       textpos.push([_INTL("Search results"),112,308,2,base,shadow])
       textpos.push([@dexlist.length.to_s,112,340,2,base,shadow])
@@ -678,9 +673,11 @@ class PokemonPokedex_Scene
   end
 
   def setIconBitmap(species)
-    gender = ($Trainer.formlastseen[species][0] rescue 0)
-    form   = ($Trainer.formlastseen[species][1] rescue 0)
-    @sprites["icon"].setSpeciesBitmap(species,(gender==1),form)
+    $Trainer.formlastseen = {} if !$Trainer.formlastseen
+    $Trainer.formlastseen[species] = [] if !$Trainer.formlastseen[species]
+    gender = $Trainer.formlastseen[species][0] || 0
+    form   = $Trainer.formlastseen[species][1] || 0
+    @sprites["icon"].setSpeciesBitmap(species, gender, form)
   end
 
   def pbSearchDexList(params)

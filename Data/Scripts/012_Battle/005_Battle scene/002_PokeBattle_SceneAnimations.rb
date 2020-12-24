@@ -668,10 +668,10 @@ class BattlerFaintAnimation < PokeBattle_Animation
     # Animation
     # Play cry
     delay = 10
-    cry = pbCryFile(batSprite.pkmn)
+    cry = GameData::Species.cry_filename_from_pokemon(batSprite.pkmn)
     if cry
-      battler.setSE(0,pbCryFile(batSprite.pkmn),nil,75)   # 75 is pitch
-      delay = pbCryFrameLength(batSprite.pkmn)*20/Graphics.frame_rate
+      battler.setSE(0, cry, nil, 75)   # 75 is pitch
+      delay = GameData::Species.cry_length(batSprite.pkmn) * 20 / Graphics.frame_rate
     end
     # Sprite drops down
     shadow.setVisible(delay,false)

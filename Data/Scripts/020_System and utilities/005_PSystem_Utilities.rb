@@ -203,6 +203,7 @@ end
 #===============================================================================
 # Constants utilities
 #===============================================================================
+# Unused
 def isConst?(val,mod,constant)
   begin
     return false if !mod.const_defined?(constant.to_sym)
@@ -212,6 +213,7 @@ def isConst?(val,mod,constant)
   return (val==mod.const_get(constant.to_sym))
 end
 
+# Unused
 def hasConst?(mod,constant)
   return false if !mod || !constant || constant==""
   return mod.const_defined?(constant.to_sym) rescue false
@@ -829,96 +831,48 @@ end
 
 
 #===============================================================================
-# fSpecies utilities
-#===============================================================================
-def pbGetFSpeciesFromForm(species,form=0)
-  return species if form==0
-  ret = species
-  species = pbGetSpeciesFromFSpecies(species)[0] if species>PBSpecies.maxValue
-  formData = pbLoadFormToSpecies
-  if formData[species] && formData[species][form] && formData[species][form]>0
-    ret = formData[species][form]
-  end
-  return ret
-end
-
-def pbGetSpeciesFromFSpecies(species)
-  return [species,0] if species<=PBSpecies.maxValue
-  formdata = pbLoadFormToSpecies
-  for i in 1...formdata.length
-    next if !formdata[i]
-    for j in 0...formdata[i].length
-      return [i,j] if formdata[i][j]==species
-    end
-  end
-  return [species,0]
-end
-
-
-
-#===============================================================================
 # Regional and National Pokédexes utilities
 #===============================================================================
-# Gets the ID number for the current region based on the player's current
-# position. Returns the value of "defaultRegion" (optional, default is -1) if
-# no region was defined in the game's metadata. The ID numbers returned by
-# this function depend on the current map's position metadata.
-def pbGetCurrentRegion(defaultRegion=-1)
-  mappos = ($game_map) ? GameData::MapMetadata.get($game_map.map_id).town_map_position : nil
-  return (mappos) ? mappos[0] : defaultRegion
+# Returns the ID number of the region containing the player's current location,
+# as determined by the current map's metadata.
+def pbGetCurrentRegion(default = -1)
+  map_pos = ($game_map) ? GameData::MapMetadata.get($game_map.map_id).town_map_position : nil
+  return (map_pos) ? map_pos[0] : default
 end
 
-# Gets the Regional Pokédex number of the national species for the specified
-# Regional Dex. The parameter "region" is zero-based. For example, if two
-# regions are defined, they would each be specified as 0 and 1.
-def pbGetRegionalNumber(region,nationalSpecies)
-  if nationalSpecies<=0 || nationalSpecies>PBSpecies.maxValue
-    # Return 0 if national species is outside range
-    return 0
-  end
-  dexList = pbLoadRegionalDexes[region]
-  return 0 if !dexList || dexList.length==0
-  return dexList[nationalSpecies] || 0
-end
-
-# Gets the National Pokédex number of the specified species and region.  The
-# parameter "region" is zero-based.  For example, if two regions are defined,
-# they would each be specified as 0 and 1.
-def pbGetNationalNumber(region,regionalSpecies)
-  dexList = pbLoadRegionalDexes[region]
-  return 0 if !dexList || dexList.length==0
-  for i in 0...dexList.length
-    return i if dexList[i]==regionalSpecies
+# Returns the Regional Pokédex number of the given species in the given Regional
+# Dex. The parameter "region" is zero-based. For example, if two regions are
+# defined, they would each be specified as 0 and 1.
+def pbGetRegionalNumber(region, species)
+  dex_list = pbLoadRegionalDexes[region]
+  return 0 if !dex_list || dex_list.length == 0
+  species_data = GameData::Species.try_get(species)
+  return 0 if !species_data
+  dex_list.each_with_index do |s, index|
+    return index + 1 if s == species_data.species
   end
   return 0
 end
 
-# Gets an array of all national species within the given Regional Dex, sorted by
-# Regional Dex number. The number of items in the array should be the
-# number of species in the Regional Dex plus 1, since index 0 is considered
-# to be empty. The parameter "region" is zero-based. For example, if two
-# regions are defined, they would each be specified as 0 and 1.
-def pbAllRegionalSpecies(region)
-  ret = [0]
-  return ret if region<0
-  dexList = pbLoadRegionalDexes[region]
-  return ret if !dexList || dexList.length==0
-  for i in 0...dexList.length
-    ret[dexList[i]] = i if dexList[i] && dexList[i] > 0
-  end
-  ret.map! { |e| e ? e : 0 }   # Replace nils with 0s
-  return ret
+# Returns an array of all species in the given Regional Dex in that Dex's order.
+def pbAllRegionalSpecies(region_dex)
+  return nil if region_dex < 0
+  dex_list = pbLoadRegionalDexes[region_dex]
+  return nil if !dex_list || dex_list.length == 0
+  return dex_list.clone
 end
 
-def pbGetRegionalDexLength(region)
-  return PBSpecies.maxValue if region<0
-  ret = 0
-  dexList = pbLoadRegionalDexes[region]
-  return ret if !dexList || dexList.length==0
-  for i in 0...dexList.length
-    ret = dexList[i] if dexList[i] && dexList[i]>ret
+# Returns the number of species in the given Regional Dex. Returns 0 if that
+# Regional Dex doesn't exist. If region_dex is a negative number, returns the
+# number of species in the National Dex (i.e. all species).
+def pbGetRegionalDexLength(region_dex)
+  if region_dex < 0
+    ret = 0
+    GameData::Species.each { |s| ret += 1 if s.form == 0 }
+    return ret
   end
-  return ret
+  dex_list = pbLoadRegionalDexes[region_dex]
+  return (dex_list) ? dex_list.length : 0
 end
 
 # Decides which Dex lists are able to be viewed (i.e. they are unlocked and have
@@ -991,7 +945,7 @@ def pbMoveTutorAnnotations(move, movelist = nil)
         # Checked data from movelist given in parameter
         ret[i] = _INTL("ABLE")
       elsif pkmn.compatibleWithMove?(move)
-        # Checked data from PBS/tm.txt
+        # Checked data from Pokémon's tutor moves in pokemon.txt
         ret[i] = _INTL("ABLE")
       else
         ret[i] = _INTL("NOT ABLE")
@@ -1049,12 +1003,12 @@ def pbConvertItemToItem(variable, array)
   end
 end
 
-def pbConvertItemToPokemon(variable,array)
+def pbConvertItemToPokemon(variable, array)
   item = GameData::Item.get(pbGet(variable))
   pbSet(variable, 0)
-  for i in 0...(array.length/2)
+  for i in 0...(array.length / 2)
     next if item != array[2 * i]
-    pbSet(variable,getID(PBSpecies,array[2*i+1]))
+    pbSet(variable, GameData::Species.get(array[2 * i + 1]).id)
     return
   end
 end

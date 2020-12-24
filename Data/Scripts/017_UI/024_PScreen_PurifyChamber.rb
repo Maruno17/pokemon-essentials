@@ -211,14 +211,12 @@ class PurifyChamber # German: der Kryptorbis
   end
 
   def debugAddShadow(set,species)
-    species=getID(PBSpecies,species)
     pkmn=Pokemon.new(species,1)
     pkmn.makeShadow
     setShadow(set,pkmn)
   end
 
   def debugAddNormal(set,species)
-    species=getID(PBSpecies,species)
     pkmn=Pokemon.new(species,1)
     insertAfter(set,setCount(set),pkmn)
   end

@@ -29,7 +29,7 @@ class PokemonBoxIcon < IconSprite
 
   def refresh
     return if !@pokemon
-    self.setBitmap(pbPokemonIconFile(@pokemon))
+    self.setBitmap(GameData::Species.icon_filename_from_pokemon(@pokemon))
     self.src_rect = Rect.new(0,0,self.bitmap.height,self.bitmap.height)
   end
 

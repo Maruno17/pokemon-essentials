@@ -50,9 +50,8 @@ def pbPurify(pokemon,scene)
     pbChangeLevel(pokemon,newlevel,scene) # for convenience
     pokemon.exp = newexp
   end
-  speciesname = PBSpecies.getName(pokemon.species)
-  if scene.pbConfirm(_INTL("Would you like to give a nickname to {1}?",speciesname))
-    newname = pbEnterPokemonName(_INTL("{1}'s nickname?",speciesname),
+  if scene.pbConfirm(_INTL("Would you like to give a nickname to {1}?", pokemon.speciesName))
+    newname = pbEnterPokemonName(_INTL("{1}'s nickname?", pokemon.speciesName),
                                  0, Pokemon::MAX_NAME_SIZE, "", pokemon)
     pokemon.name = newname if newname!=""
   end
@@ -281,8 +280,8 @@ class Pokemon
     self.savedev     = [0,0,0,0,0,0]
     self.shadowmoves = []
     # Retrieve Shadow moveset for this Pokémon
-    shadow_moveset = pbLoadShadowMovesets[self.fSpecies]
-    shadow_moveset = pbLoadShadowMovesets[self.species] if !shadow_moveset || shadow_moveset.length == 0
+    shadow_moveset = pbLoadShadowMovesets[species_data.id]
+    shadow_moveset = pbLoadShadowMovesets[@species] if !shadow_moveset || shadow_moveset.length == 0
     # Record this Pokémon's Shadow moves
     if shadow_moveset && shadow_moveset.length > 0
       for i in 0...[shadow_moveset.length, MAX_MOVES].min

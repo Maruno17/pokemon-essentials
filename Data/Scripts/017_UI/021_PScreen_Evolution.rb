@@ -532,7 +532,7 @@ class PokemonEvolutionScene
     metaplayer1.play
     metaplayer2.play
     pbBGMStop
-    pbPlayCry(@pokemon)
+    GameData::Species.play_cry_from_pokemon(@pokemon)
     pbMessageDisplay(@sprites["msgwindow"],
        _INTL("\\se[]What? {1} is evolving!\\^",@pokemon.name)) { pbUpdate }
     pbMessageWaitForInput(@sprites["msgwindow"],50,true) { pbUpdate }
@@ -567,17 +567,17 @@ class PokemonEvolutionScene
 
   def pbEvolutionSuccess
     # Play cry of evolved species
-    frames = pbCryFrameLength(@newspecies,@pokemon.form)
+    frames = GameData::Species.cry_length(@newspecies, @pokemon.form)
     pbBGMStop
-    pbPlayCrySpecies(@newspecies,@pokemon.form)
+    GameData::Species.play_cry_from_species(@newspecies, @pokemon.form)
     frames.times do
       Graphics.update
       pbUpdate
     end
     # Success jingle/message
     pbMEPlay("Evolution success")
-    newspeciesname = PBSpecies.getName(@newspecies)
-    oldspeciesname = PBSpecies.getName(@pokemon.species)
+    newspeciesname = GameData::Species.get(@newspecies).name
+    is_nicknamed = @pokemon.nicknamed?
     pbMessageDisplay(@sprites["msgwindow"],
        _INTL("\\se[]Congratulations! Your {1} evolved into {2}!\\wt[80]",
        @pokemon.name,newspeciesname)) { pbUpdate }
@@ -586,7 +586,7 @@ class PokemonEvolutionScene
     pbEvolutionMethodAfterEvolution
     # Modify Pokémon to make it evolved
     @pokemon.species = @newspecies
-    @pokemon.name    = newspeciesname if @pokemon.name==oldspeciesname
+    @pokemon.name    = newspeciesname if !is_nicknamed
     @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
     @pokemon.calcStats
     # See and own evolved species
@@ -611,7 +611,7 @@ class PokemonEvolutionScene
   def self.pbDuplicatePokemon(pkmn, new_species)
     new_pkmn = pkmn.clone
     new_pkmn.species  = new_species
-    new_pkmn.name     = PBSpecies.getName(new_species)
+    new_pkmn.name     = GameData::Species.get(new_species).name
     new_pkmn.markings = 0
     new_pkmn.ballused = 0
     new_pkmn.setItem(nil)

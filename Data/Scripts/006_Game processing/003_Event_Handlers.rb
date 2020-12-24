@@ -199,10 +199,7 @@ end
 
 
 
-class SpeciesHandlerHash < HandlerHash
-  def initialize
-    super(:PBSpecies)
-  end
+class SpeciesHandlerHash < HandlerHash2
 end
 
 

@@ -40,6 +40,14 @@ def safeGlob(dir,wildcard)
   return (block_given?) ? nil : ret
 end
 
+def pbResolveAudioSE(file)
+  return nil if !file
+  if RTP.exists?("Audio/SE/"+file,["",".wav",".mp3",".ogg"])
+    return RTP.getPath("Audio/SE/"+file,["",".wav",".mp3",".ogg"])
+  end
+  return nil
+end
+
 # Finds the real path for an image file.  This includes paths in encrypted
 # archives.  Returns nil if the path can't be found.
 def pbResolveBitmap(x)

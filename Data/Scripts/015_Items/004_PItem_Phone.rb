@@ -260,7 +260,7 @@ def pbEncounterSpecies(phonenum)
   species = pbRandomEncounterSpecies(enctypes[EncounterTypes::LandNight]) if species==0
   species = pbRandomEncounterSpecies(enctypes[EncounterTypes::Water]) if species==0
   return "" if species==0
-  return PBSpecies.getName(species)
+  return GameData::Species.get(species).name
 end
 
 def pbTrainerSpecies(phonenum)
@@ -269,7 +269,7 @@ def pbTrainerSpecies(phonenum)
   trainer = pbGetTrainerData(phonenum[1],phonenum[2],partyid)
   return "" if !trainer || trainer[3].length==0
   rndpoke = trainer[3][rand(trainer[3].length)]
-  return PBSpecies.getName(rndpoke[0])
+  return GameData::Species.get(rndpoke[0]).name
 end
 
 def pbTrainerMapName(phonenum)

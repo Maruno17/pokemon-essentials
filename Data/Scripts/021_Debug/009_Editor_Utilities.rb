@@ -1,17 +1,12 @@
 def pbGetLegalMoves(species)
+  species_data = GameData::Species.get(species)
   moves = []
-  return moves if !species || species<=0
-  moveset = pbGetSpeciesMoveset(species)
-  moveset.each { |m| moves.push(m[1]) }
-  tmdat = pbLoadSpeciesTMData
-  GameData::Item.each do |i|
-    next if !i.move
-    moves.push(i.move) if tmdat[i.move] && tmdat[i.move].include?(species)
-  end
+  return moves if !species_data
+  species_data.moves.each { |m| moves.push(m[1]) }
+  species_data.tutor_moves.each { |m| moves.push(m[1]) }
   babyspecies = EvolutionHelper.baby_species(species)
-  eggMoves = pbGetSpeciesEggMoves(babyspecies)
-  eggMoves.each { |m| moves.push(m) }
-  moves |= []
+  GameData::Species.get(babyspecies).egg_moves.each { |m| moves.push(m) }
+  moves |= []   # Remove duplicates
   return moves
 end
 
@@ -215,26 +210,19 @@ def pbGetHabitatConst(i)
   return ret
 end
 
-def pbGetSpeciesConst(i)
-  return MakeshiftConsts.get(MessageTypes::Species,i,PBSpecies)
-end
-
 
 
 #===============================================================================
 # List all members of a class
 #===============================================================================
 # Displays a list of all Pokémon species, and returns the ID of the species
-# selected (or 0 if the selection was canceled). "default", if specified, is the
-# ID of the species to initially select. Pressing Input::A will toggle the list
-# sorting between numerical and alphabetical.
-def pbChooseSpeciesList(default=0)
+# selected (or nil if the selection was canceled). "default", if specified, is
+# the ID of the species to initially select. Pressing Input::A will toggle the
+# list sorting between numerical and alphabetical.
+def pbChooseSpeciesList(default = nil)
   commands = []
-  for i in 1..PBSpecies.maxValue
-    cname = getConstantName(PBSpecies,i) rescue nil
-    commands.push([i,PBSpecies.getName(i)]) if cname
-  end
-  return pbChooseList(commands,default,0,-1)
+  GameData::Species.each { |s| commands.push([s.id_number, s.real_name, s.id]) if s.form == 0 }
+  return pbChooseList(commands, default, nil, -1)
 end
 
 # Displays a list of all moves, and returns the ID of the move selected (or nil
@@ -243,7 +231,7 @@ end
 # numerical and alphabetical.
 def pbChooseMoveList(default = nil)
   commands = []
-  GameData::Move.each { |i| commands.push([i.id_number, i.name, i.id]) }
+  GameData::Move.each { |i| commands.push([i.id_number, i.real_name, i.id]) }
   return pbChooseList(commands, default, nil, -1)
 end
 
@@ -407,10 +395,10 @@ def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
       elsif Input.repeat?(Input::DOWN)
         command = [2,cmdwindow.index]
         break
-      elsif Input.press?(Input::LEFT)
+      elsif Input.trigger?(Input::LEFT)
         command = [3,cmdwindow.index]
         break
-      elsif Input.press?(Input::RIGHT)
+      elsif Input.trigger?(Input::RIGHT)
         command = [4,cmdwindow.index]
         break
       end

@@ -1,8 +1,8 @@
 module PBGrowthRates
-  Medium = MediumFast    = 0
+  MediumFast = Medium    = 0
   Erratic                = 1
   Fluctuating            = 2
-  Parabolic = MediumSlow = 3
+  MediumSlow = Parabolic = 3
   Fast                   = 4
   Slow                   = 5
 

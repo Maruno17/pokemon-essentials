@@ -294,12 +294,12 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
   #=============================================================================
   when "testwildbattle"
     species = pbChooseSpeciesList
-    if species!=0
+    if species
       params = ChooseNumberParams.new
       params.setRange(1,PBExperience.maxLevel)
       params.setInitialValue(5)
       params.setCancelValue(0)
-      level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",PBSpecies.getName(species)),params)
+      level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.", GameData::Species.get(species).name), params)
       if level>0
         $PokemonTemp.encounterType = -1
         pbWildBattle(species,level)
@@ -343,12 +343,12 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
         size0 = newSize if newSize>0
       elsif pkmnCmd==pkmnCmds.length-3   # Add Pokémon
         species = pbChooseSpeciesList
-        if species!=0
+        if species
           params = ChooseNumberParams.new
           params.setRange(1,PBExperience.maxLevel)
           params.setInitialValue(5)
           params.setCancelValue(0)
-          level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",PBSpecies.getName(species)),params)
+          level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.", GameData::Species.get(species).name), params)
           if level>0
             pkmn.push(Pokemon.new(species,level))
           end
@@ -524,7 +524,7 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
   #=============================================================================
   when "addpokemon"
     species = pbChooseSpeciesList
-    if species!=0
+    if species
       params = ChooseNumberParams.new
       params.setRange(1,PBExperience.maxLevel)
       params.setInitialValue(5)
@@ -548,48 +548,41 @@ def pbDebugMenuActions(cmd="",sprites=nil,viewport=nil)
     end
     pbMessage(_INTL("All eggs in your party now require one step to hatch."))
   when "fillboxes"
-    $Trainer.formseen     = [] if !$Trainer.formseen
-    $Trainer.formlastseen = [] if !$Trainer.formlastseen
-    added = 0; completed = true
-    speciesData = pbLoadSpeciesData
-    formdata    = pbLoadFormToSpecies
-    for i in 1..PBSpecies.maxValue
-      if added>=NUM_STORAGE_BOXES*30
-        completed = false; break
-      end
-      cname = getConstantName(PBSpecies,i) rescue nil
-      next if !cname
-      pkmn = Pokemon.new(i,50)
-      $PokemonStorage[(i-1)/$PokemonStorage.maxPokemon(0),
-                      (i-1)%$PokemonStorage.maxPokemon(0)] = pkmn
-      # Record all forms of this Pokémon as seen and owned
-      $Trainer.seen[i]  = true
-      $Trainer.owned[i] = true
-      $Trainer.formseen[i] = [[],[]]
-      formdata[i] = [i] if !formdata[i]
-      for form in 0...formdata[i].length
-        next if !formdata[i][form] || formdata[i][form]==0
-        fSpecies = pbGetFSpeciesFromForm(i,form)
-        formname = pbGetMessage(MessageTypes::FormNames,fSpecies)
-        genderRate = speciesData[i][SpeciesData::GENDER_RATE] || 0
-        gender = (genderRate==PBGenderRates::AlwaysFemale) ? 1 : 0
-        if form==0
-          case genderRate
-          when PBGenderRates::AlwaysMale,
-               PBGenderRates::AlwaysFemale,
-               PBGenderRates::Genderless
-            $Trainer.formseen[i][gender][form] = true
-            $Trainer.formlastseen[i] = [gender,form]
-          else   # Both male and female
-            $Trainer.formseen[i][0][form] = true
-            $Trainer.formseen[i][1][form] = true
-            $Trainer.formlastseen[i] = [0,form]
-          end
-        elsif formname && formname!=""
-          $Trainer.formseen[i][gender][form] = true
+    $Trainer.formseen     = {} if !$Trainer.formseen
+    $Trainer.formlastseen = {} if !$Trainer.formlastseen
+    added = 0
+    box_qty = $PokemonStorage.maxPokemon(0)
+    completed = true
+    GameData::Species.each do |species_data|
+      sp = species_data.species
+      f = species_data.form
+      # Record each form of each species as seen and owned
+      $Trainer.formseen[sp] = [[], []] if !$Trainer.formseen[sp]
+      if f == 0
+        $Trainer.seen[sp]  = true
+        $Trainer.owned[sp] = true
+        if [PBGenderRates::AlwaysMale, PBGenderRates::AlwaysFemale,
+            PBGenderRates::Genderless].include?(species_data.gender_rate)
+          g = (species_data.gender_rate == PBGenderRates::AlwaysFemale) ? 1 : 0
+          $Trainer.formseen[sp][g][f] = true
+          $Trainer.formlastseen[sp] = [g, f] if f == 0
+        else   # Both male and female
+          $Trainer.formseen[sp][0][f] = true
+          $Trainer.formseen[sp][1][f] = true
+          $Trainer.formlastseen[i] = [0, f] if f == 0
         end
+      elsif species_data.real_form_name && !species_data.real_form_name.empty?
+        g = (species_data.gender_rate == PBGenderRates::AlwaysFemale) ? 1 : 0
+        $Trainer.formseen[sp][g][f] = true
+      end
+      # Add Pokémon (if form 0)
+      next if f != 0
+      if added >= NUM_STORAGE_BOXES * box_qty
+        completed = false
+        next
       end
       added += 1
+      $PokemonStorage[(added - 1) / box_qty, (added - 1) % box_qty] = Pokemon.new(sp, 50)
     end
     pbMessage(_INTL("Storage boxes were filled with one Pokémon of each species."))
     if !completed

@@ -118,16 +118,18 @@ def pbEditEncounterType(enc,etype)
       ch = chances[i]
       ch = sprintf("%.1f",100.0*chances[i]/chancetotal) if chancetotal!=100
       if enctype[i][1]==enctype[i][2]
-        commands.push(_INTL("{1}% {2} (Lv.{3})",ch,PBSpecies.getName(enctype[i][0]),enctype[i][1]))
+        commands.push(_INTL("{1}% {2} (Lv.{3})", ch,
+           GameData::Species.get(enctype[i][0]).real_name, enctype[i][1]))
       else
-        commands.push(_INTL("{1}% {2} (Lv.{3}-Lv.{4})",ch,PBSpecies.getName(enctype[i][0]),enctype[i][1],enctype[i][2]))
+        commands.push(_INTL("{1}% {2} (Lv.{3}-Lv.{4})", ch,
+           GameData::Species.get(enctype[i][0]).real_name, enctype[i][1], enctype[i][2]))
       end
     end
     ret = pbCommands2(cmdwin,commands,-1,ret)
     break if ret<0
     species = pbChooseSpeciesList(enctype[ret][0])
-    next if species<=0
-    enctype[ret][0] = species if species>0
+    next if !species
+    enctype[ret][0] = species
     mLevel = PBExperience.maxLevel
     params = ChooseNumberParams.new
     params.setRange(1,mLevel)
@@ -220,7 +222,7 @@ end
 #===============================================================================
 def pbTrainerTypeEditor
   selection = 0
-  trainer_types = [
+  trainer_type_properties = [
     [_INTL("Internal Name"),   ReadOnlyProperty,        _INTL("Internal name that is used as a symbol like :XXX.")],
     [_INTL("Trainer Name"),    StringProperty,          _INTL("Name of the trainer type as displayed by the game.")],
     [_INTL("Base Money"),      LimitProperty.new(9999), _INTL("Player earns this much money times the highest level among the trainer's Pokémon.")],
@@ -260,7 +262,7 @@ def pbTrainerTypeEditor
             t_data.skill_level,
             t_data.skill_code
           ]
-          if pbPropertyList(t_data.id.to_s, data, trainer_types, true)
+          if pbPropertyList(t_data.id.to_s, data, trainer_type_properties, true)
             # Construct trainer type hash
             type_hash = {
               :id_number   => t_data.id_number,
@@ -497,7 +499,7 @@ module TrainerPokemonProperty
       end
     end
     mLevel = PBExperience.maxLevel
-    properties = [
+    pkmn_properties = [
        [_INTL("Species"),   SpeciesProperty,                         _INTL("Species of the Pokémon.")],
        [_INTL("Level"),     NonzeroLimitProperty.new(mLevel),        _INTL("Level of the Pokémon (1-{1}).",mLevel)],
        [_INTL("Held item"), ItemProperty,                            _INTL("Item held by the Pokémon.")],
@@ -517,8 +519,8 @@ module TrainerPokemonProperty
        [_INTL("Ball"),      BallProperty.new(oldsetting),            _INTL("The kind of Poké Ball the Pokémon is kept in.")],
        [_INTL("EVs"),       EVsProperty.new(Pokemon::EV_STAT_LIMIT), _INTL("Effort values for each of the Pokémon's stats.")]
     ]
-    pbPropertyList(settingname,oldsetting,properties,false)
-    return nil if !oldsetting[TrainerData::SPECIES] || oldsetting[TrainerData::SPECIES]==0
+    pbPropertyList(settingname, oldsetting, pkmn_properties, false)
+    return nil if !oldsetting[TrainerData::SPECIES]
     ret = []
     moves = []
     for i in 0...oldsetting.length
@@ -537,8 +539,8 @@ module TrainerPokemonProperty
   end
 
   def self.format(value)
-    return "-" if !value || !value[TrainerData::SPECIES] || value[TrainerData::SPECIES]<=0
-    return sprintf("%s,%d",PBSpecies.getName(value[TrainerData::SPECIES]),value[TrainerData::LEVEL])
+    return "-" if !value || !value[TrainerData::SPECIES]
+    return sprintf("%s,%d", GameData::Species.get(value[TrainerData::SPECIES]).name, value[TrainerData::LEVEL])
   end
 end
 
@@ -635,7 +637,7 @@ end
 #===============================================================================
 def pbItemEditor
   selection = 0
-  items = [
+  item_properties = [
      [_INTL("Internal Name"),     ReadOnlyProperty,          _INTL("Internal name that is used as a symbol like :XXX.")],
      [_INTL("Item Name"),         ItemNameProperty,          _INTL("Name of the item as displayed by the game.")],
      [_INTL("Item Name Plural"),  ItemNameProperty,          _INTL("Plural name of the item as displayed by the game.")],
@@ -690,7 +692,7 @@ def pbItemEditor
             itm.type,
             itm.move
           ]
-          if pbPropertyList(itm.id.to_s, data, items, true)
+          if pbPropertyList(itm.id.to_s, data, item_properties, true)
             # Construct item hash
             item_hash = {
               :id_number   => itm.id_number,
@@ -784,66 +786,62 @@ end
 # Pokémon species editor
 #===============================================================================
 def pbPokemonEditor
-  regionalDexes = pbLoadRegionalDexes
-  metrics       = pbLoadSpeciesMetrics
   selection = 0
-  species = [
-     [_INTL("Name"),              LimitStringProperty.new(Pokemon::MAX_NAME_SIZE), _INTL("Name of the Pokémon.")],
+  species_properties = [
      [_INTL("InternalName"),      ReadOnlyProperty,               _INTL("Internal name of the Pokémon.")],
+     [_INTL("Name"),              LimitStringProperty.new(Pokemon::MAX_NAME_SIZE), _INTL("Name of the Pokémon.")],
+     [_INTL("FormName"),          StringProperty,                 _INTL("Name of this form of the Pokémon.")],
+     [_INTL("Kind"),              StringProperty,                 _INTL("Kind of Pokémon species.")],
+     [_INTL("Pokédex"),           StringProperty,                 _INTL("Description of the Pokémon as displayed in the Pokédex.")],
      [_INTL("Type1"),             TypeProperty,                   _INTL("Pokémon's type. If same as Type2, this Pokémon has a single type.")],
      [_INTL("Type2"),             TypeProperty,                   _INTL("Pokémon's type. If same as Type1, this Pokémon has a single type.")],
      [_INTL("BaseStats"),         BaseStatsProperty,              _INTL("Base stats of the Pokémon.")],
-     [_INTL("GenderRate"),        EnumProperty.new([
-        _INTL("Genderless"),_INTL("AlwaysMale"),_INTL("FemaleOneEighth"),
-        _INTL("Female25Percent"),_INTL("Female50Percent"),_INTL("Female75Percent"),
-        _INTL("FemaleSevenEighths"),_INTL("AlwaysFemale")]),
-                                                                  _INTL("Proportion of males to females for this species.")],
-     [_INTL("GrowthRate"),        EnumProperty.new([
-        _INTL("Medium"),_INTL("Erratic"),_INTL("Fluctuating"),_INTL("Parabolic"),
-        _INTL("Fast"),_INTL("Slow")]),
-                                                                  _INTL("Pokémon's growth rate.")],
-     [_INTL("BaseEXP"),           LimitProperty.new(9999),        _INTL("Base experience earned when this species is defeated.")],
      [_INTL("EffortPoints"),      EffortValuesProperty,           _INTL("Effort Value points earned when this species is defeated.")],
+     [_INTL("BaseEXP"),           LimitProperty.new(9999),        _INTL("Base experience earned when this species is defeated.")],
+     [_INTL("GrowthRate"),        EnumProperty.new([
+         _INTL("Medium"), _INTL("Erratic"), _INTL("Fluctuating"),
+         _INTL("Parabolic"), _INTL("Fast"), _INTL("Slow")]),      _INTL("Pokémon's growth rate.")],
+     [_INTL("GenderRate"),        EnumProperty.new([
+         _INTL("Genderless"), _INTL("AlwaysMale"), _INTL("FemaleOneEighth"),
+         _INTL("Female25Percent"), _INTL("Female50Percent"), _INTL("Female75Percent"),
+         _INTL("FemaleSevenEighths"), _INTL("AlwaysFemale")]),    _INTL("Proportion of males to females for this species.")],
      [_INTL("Rareness"),          LimitProperty.new(255),         _INTL("Catch rate of this species (0-255).")],
      [_INTL("Happiness"),         LimitProperty.new(255),         _INTL("Base happiness of this species (0-255).")],
+     [_INTL("Moves"),             MovePoolProperty,               _INTL("Moves which the Pokémon learns while levelling up.")],
+     [_INTL("TutorMoves"),        EggMovesProperty,               _INTL("Moves which the Pokémon can be taught by TM/HM/Move Tutor.")],
+     [_INTL("EggMoves"),          EggMovesProperty,               _INTL("Moves which the Pokémon can learn via breeding.")],
      [_INTL("Ability1"),          AbilityProperty,                _INTL("One ability which the Pokémon can have.")],
      [_INTL("Ability2"),          AbilityProperty,                _INTL("Another ability which the Pokémon can have.")],
      [_INTL("HiddenAbility 1"),   AbilityProperty,                _INTL("A secret ability which the Pokémon can have.")],
      [_INTL("HiddenAbility 2"),   AbilityProperty,                _INTL("A secret ability which the Pokémon can have.")],
      [_INTL("HiddenAbility 3"),   AbilityProperty,                _INTL("A secret ability which the Pokémon can have.")],
      [_INTL("HiddenAbility 4"),   AbilityProperty,                _INTL("A secret ability which the Pokémon can have.")],
-     [_INTL("Moves"),             MovePoolProperty,               _INTL("Moves which the Pokémon learns while levelling up.")],
-     [_INTL("EggMoves"),          EggMovesProperty,               _INTL("Moves which the Pokémon can learn via breeding.")],
-     [_INTL("Compat1"),           EnumProperty.new([
-        "Undiscovered","Monster","Water 1","Bug","Flying",
-        "Field","Fairy","Grass","Human-like","Water 3",
-        "Mineral","Amorphous","Water 2","Ditto","Dragon"]),
-                                                                  _INTL("Compatibility group (egg group) for breeding purposes.")],
-     [_INTL("Compat2"),           EnumProperty.new([
-        "Undiscovered","Monster","Water 1","Bug","Flying",
-        "Field","Fairy","Grass","Human-like","Water 3",
-        "Mineral","Amorphous","Water 2","Ditto","Dragon"]),
-                                                                  _INTL("Compatibility group (egg group) for breeding purposes.")],
-     [_INTL("StepsToHatch"),      LimitProperty.new(99999),       _INTL("Number of steps until an egg of this species hatches.")],
-     [_INTL("Height"),            NonzeroLimitProperty.new(999),  _INTL("Height of the Pokémon in 0.1 metres (e.g. 42 = 4.2m).")],
-     [_INTL("Weight"),            NonzeroLimitProperty.new(9999), _INTL("Weight of the Pokémon in 0.1 kilograms (e.g. 42 = 4.2kg).")],
-     [_INTL("Color"),             EnumProperty.new([
-        _INTL("Red"),_INTL("Blue"),_INTL("Yellow"),_INTL("Green"),_INTL("Black"),
-        _INTL("Brown"),_INTL("Purple"),_INTL("Gray"),_INTL("White"),_INTL("Pink")]),
-                                                                  _INTL("Pokémon's body color.")],
-     [_INTL("Shape"),             LimitProperty.new(14),          _INTL("Body shape of this species (0-14).")],
-     [_INTL("Habitat"),           EnumProperty.new([
-        _INTL("None"),_INTL("Grassland"),_INTL("Forest"),_INTL("WatersEdge"),
-        _INTL("Sea"),_INTL("Cave"),_INTL("Mountain"),_INTL("RoughTerrain"),
-        _INTL("Urban"),_INTL("Rare")]),
-                                                                  _INTL("The habitat of this species.")],
-     [_INTL("RegionalNumbers"),   ReadOnlyProperty,               _INTL("Regional Dex numbers for the Pokémon. These are edited elsewhere.")],
-     [_INTL("Kind"),              StringProperty,                 _INTL("Kind of Pokémon species.")],
-     [_INTL("Pokédex"),           StringProperty,                 _INTL("Description of the Pokémon as displayed in the Pokédex.")],
-     [_INTL("FormName"),          StringProperty,                 _INTL("Name of this form of the Pokémon.")],
      [_INTL("WildItemCommon"),    ItemProperty,                   _INTL("Item commonly held by wild Pokémon of this species.")],
      [_INTL("WildItemUncommon"),  ItemProperty,                   _INTL("Item uncommonly held by wild Pokémon of this species.")],
      [_INTL("WildItemRare"),      ItemProperty,                   _INTL("Item rarely held by wild Pokémon of this species.")],
+     [_INTL("Compat1"),           EnumProperty.new([
+         "Undiscovered", "Monster", "Water 1", "Bug", "Flying",
+         "Field", "Fairy", "Grass", "Human-like", "Water 3",
+         "Mineral", "Amorphous", "Water 2", "Ditto", "Dragon"]),  _INTL("Compatibility group (egg group) for breeding purposes.")],
+     [_INTL("Compat2"),           EnumProperty.new([
+         "Undiscovered", "Monster", "Water 1", "Bug", "Flying",
+         "Field", "Fairy", "Grass", "Human-like", "Water 3",
+         "Mineral", "Amorphous", "Water 2", "Ditto", "Dragon"]),  _INTL("Compatibility group (egg group) for breeding purposes.")],
+     [_INTL("StepsToHatch"),      LimitProperty.new(99999),       _INTL("Number of steps until an egg of this species hatches.")],
+     [_INTL("Incense"),           ItemProperty,                   _INTL("Item needed to be held by a parent to produce an egg of this species.")],
+     [_INTL("Evolutions"),        EvolutionsProperty.new,         _INTL("Evolution paths of this species.")],
+     [_INTL("Height"),            NonzeroLimitProperty.new(999),  _INTL("Height of the Pokémon in 0.1 metres (e.g. 42 = 4.2m).")],
+     [_INTL("Weight"),            NonzeroLimitProperty.new(9999), _INTL("Weight of the Pokémon in 0.1 kilograms (e.g. 42 = 4.2kg).")],
+     [_INTL("Color"),             EnumProperty.new([
+        _INTL("Red"), _INTL("Blue"), _INTL("Yellow"), _INTL("Green"),
+        _INTL("Black"), _INTL("Brown"), _INTL("Purple"), _INTL("Gray"),
+        _INTL("White"), _INTL("Pink")]),                          _INTL("Pokémon's body color.")],
+     [_INTL("Shape"),             LimitProperty.new(14),          _INTL("Body shape of this species (0-14).")],
+     [_INTL("Habitat"),           EnumProperty.new([
+        _INTL("None"), _INTL("Grassland"), _INTL("Forest"), _INTL("WatersEdge"),
+        _INTL("Sea"), _INTL("Cave"), _INTL("Mountain"), _INTL("RoughTerrain"),
+        _INTL("Urban"), _INTL("Rare")]),                          _INTL("The habitat of this species.")],
+     [_INTL("Generation"),        LimitProperty.new(99999),       _INTL("The number of the generation the Pokémon debuted in.")],
      [_INTL("BattlerPlayerX"),    ReadOnlyProperty,               _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
      [_INTL("BattlerPlayerY"),    ReadOnlyProperty,               _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
      [_INTL("BattlerEnemyX"),     ReadOnlyProperty,               _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
@@ -851,268 +849,139 @@ def pbPokemonEditor
      [_INTL("BattlerAltitude"),   ReadOnlyProperty,               _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
      [_INTL("BattlerShadowX"),    ReadOnlyProperty,               _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
      [_INTL("BattlerShadowSize"), ReadOnlyProperty,               _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("Evolutions"),        EvolutionsProperty.new,         _INTL("Evolution paths of this species.")],
-     [_INTL("Incense"),           ItemProperty,                   _INTL("Item needed to be held by a parent to produce an egg of this species.")],
   ]
-  pbListScreenBlock(_INTL("Pokémon species"),SpeciesLister.new(selection,false)) { |button,index|
-    if index
-      if button==Input::A
-        if index>=0
+  pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(selection, false)) { |button, species|
+    if species
+      if button == Input::A
+        if species.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this species?")
-            # A species existing depends on its constant existing, so just need
-            # to delete that - recompiling pokemon.txt will do the rest.
-            removeConstantValue(PBSpecies,index)
+            id_number = GameData::Species.get(species).id_number
+            GameData::Species::DATA.delete(species)
+            GameData::Species::DATA.delete(id_number)
+            GameData::Species.save
             pbSavePokemonData
-            pbMessage(_INTL("The species was deleted. You should fully recompile before doing anything else."))
+            pbMessage(_INTL("The species was deleted."))
           end
         end
-      elsif button==Input::C
-        selection = index
-        if selection<0
-          pbMessage(_INTL("Can't add a new species."))
-#          newid=pbSpeciesEditorNew(nil)
-#          selection=newid if newid>=0
-        else
-          speciesData = pbGetSpeciesData(selection)
-          messages = Messages.new("Data/messages.dat") rescue nil
-          if !speciesData || !messages
-            raise _INTL("Couldn't find species.dat or messages.dat to get Pokémon data from.")
-          end
-          speciesname = messages.get(MessageTypes::Species,selection)
-          kind        = messages.get(MessageTypes::Kinds,selection)
-          entry       = messages.get(MessageTypes::Entries,selection)
-          cname       = getConstantName(PBSpecies,selection) rescue sprintf("POKE%03d",selection)
-          formname    = messages.get(MessageTypes::FormNames,selection)
-          abilities = speciesData[SpeciesData::ABILITIES]
-          if abilities.is_a?(Array)
-            ability1       = abilities[0]
-            ability2       = abilities[1]
-          else
-            ability1       = abilities
-            ability2       = nil
-          end
-          color            = speciesData[SpeciesData::COLOR]
-          habitat          = speciesData[SpeciesData::HABITAT]
-          type1            = speciesData[SpeciesData::TYPE1]
-          type2            = speciesData[SpeciesData::TYPE2]
-          type2            = nil if type2 == type1
-          baseStats        = speciesData[SpeciesData::BASE_STATS].clone if speciesData[SpeciesData::BASE_STATS]
-          rareness         = speciesData[SpeciesData::RARENESS]
-          shape            = speciesData[SpeciesData::SHAPE]
-          genderrate       = speciesData[SpeciesData::GENDER_RATE]
-          happiness        = speciesData[SpeciesData::HAPPINESS]
-          growthrate       = speciesData[SpeciesData::GROWTH_RATE]
-          stepstohatch     = speciesData[SpeciesData::STEPS_TO_HATCH]
-          effort           = speciesData[SpeciesData::EFFORT_POINTS].clone if speciesData[SpeciesData::EFFORT_POINTS]
-          compats = speciesData[SpeciesData::COMPATIBILITY]
-          if compats.is_a?(Array)
-            compat1        = compats[0]
-            compat2        = compats[1]
-          else
-            compat1        = compats
-            compat2        = nil
-          end
-          height           = speciesData[SpeciesData::HEIGHT]
-          weight           = speciesData[SpeciesData::WEIGHT]
-          baseexp          = speciesData[SpeciesData::BASE_EXP]
-          hiddenAbils = speciesData[SpeciesData::HIDDEN_ABILITY]
-          if hiddenAbils.is_a?(Array)
-            hiddenability1 = hiddenAbils[0]
-            hiddenability2 = hiddenAbils[1]
-            hiddenability3 = hiddenAbils[2]
-            hiddenability4 = hiddenAbils[3]
-          else
-            hiddenability1 = hiddenAbils
-            hiddenability2 = nil
-            hiddenability3 = nil
-            hiddenability4 = nil
-          end
-          item1            = speciesData[SpeciesData::WILD_ITEM_COMMON]
-          item2            = speciesData[SpeciesData::WILD_ITEM_UNCOMMON]
-          item3            = speciesData[SpeciesData::WILD_ITEM_RARE]
-          incense          = speciesData[SpeciesData::INCENSE]
-          originalMoveset = pbGetSpeciesMoveset(selection)
-          movelist = []
-          originalMoveset.each_with_index { |m,i| movelist.push([m[0],m[1],i]) }
-          movelist.sort! { |a,b| (a[0]==b[0]) ? a[2]<=>b[2] : a[0]<=>b[0] }
-          originalEggMoves = pbGetSpeciesEggMoves(selection)
-          eggmovelist = []
-          originalEggMoves.each { |m| eggmovelist.push(m) }
-          regionallist = []
-          for i in 0...regionalDexes.length
-            regionallist.push(regionalDexes[i][selection])
-          end
-          numb = regionallist.size-1
-          while numb>=0   # Remove every 0 at end of array
-            (regionallist[numb]==0) ? regionallist.pop : break
-            numb -= 1
-          end
-          evolutions = EvolutionHelper.evolutions(selection)
-          data = []
-          data.push(speciesname)                    # 0
-          data.push(cname)                          # 1
-          data.push(type1)                          # 2
-          data.push(type2)                          # 3
-          data.push(baseStats)                      # 4
-          data.push(genderrate)                     # 5
-          data.push(growthrate)                     # 6
-          data.push(baseexp)                        # 7
-          data.push(effort)                         # 8
-          data.push(rareness)                       # 9
-          data.push(happiness)                      # 10
-          data.push(ability1)                       # 11
-          data.push(ability2)                       # 12
-          data.push(hiddenability1)                 # 13
-          data.push(hiddenability2)                 # 14
-          data.push(hiddenability3)                 # 15
-          data.push(hiddenability4)                 # 16
-          data.push(movelist)                       # 17
-          data.push(eggmovelist)                    # 18
-          data.push(compat1)                        # 19
-          data.push(compat2)                        # 20
-          data.push(stepstohatch)                   # 21
-          data.push(height)                         # 22
-          data.push(weight)                         # 23
-          data.push(color)                          # 24
-          data.push(shape)                          # 25
-          data.push(habitat)                        # 26
-          data.push(regionallist)                   # 27
-          data.push(kind)                           # 28
-          data.push(entry)                          # 29
-          data.push(formname)                       # 30
-          data.push(item1)                          # 31
-          data.push(item2)                          # 32
-          data.push(item3)                          # 33
-          for i in 0...6
-            data.push(metrics[i][selection] || 0)   # 34, 35, 36, 37, 38, 39
-          end
-          data.push(metrics[SpeciesData::METRIC_SHADOW_SIZE][selection] || 2)   # 40
-          data.push(evolutions)                     # 41
-          data.push(incense)                        # 42
+      elsif button == Input::C
+        if species.is_a?(Symbol)
+          spec = GameData::Species.get(species)
+          moves = []
+          spec.moves.each_with_index { |m, i| moves.push(m.clone.push(i)) }
+          moves.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=> b[0] }
+          moves.each { |m| m.pop }
+          evolutions = []
+          spec.evolutions.each { |e| evolutions.push(e.clone) if !e[3] }
+          data = [
+            spec.id.to_s,
+            spec.real_name,
+            spec.real_form_name,
+            spec.real_category,
+            spec.real_pokedex_entry,
+            spec.type1,
+            (spec.type2 == spec.type1) ? nil : spec.type2,
+            spec.base_stats.clone,
+            spec.evs.clone,
+            spec.base_exp,
+            spec.growth_rate,
+            spec.gender_rate,
+            spec.catch_rate,
+            spec.happiness,
+            moves,
+            spec.tutor_moves.clone,
+            spec.egg_moves.clone,
+            spec.abilities[0],
+            spec.abilities[1],
+            spec.hidden_abilities[0],
+            spec.hidden_abilities[1],
+            spec.hidden_abilities[2],
+            spec.hidden_abilities[3],
+            spec.wild_item_common,
+            spec.wild_item_uncommon,
+            spec.wild_item_rare,
+            spec.egg_groups[0],
+            spec.egg_groups[1],
+            spec.hatch_steps,
+            spec.incense,
+            evolutions,
+            spec.height,
+            spec.weight,
+            spec.color,
+            spec.shape,
+            spec.habitat,
+            spec.generation,
+            spec.back_sprite_x,
+            spec.back_sprite_y,
+            spec.front_sprite_x,
+            spec.front_sprite_y,
+            spec.front_sprite_altitude,
+            spec.shadow_x,
+            spec.shadow_size
+          ]
           # Edit the properties
-          save = pbPropertyList(data[0],data,species,true)
-          if save
-            # Make sure both Type1 and Type2 are recorded correctly
-            data[2] = data[3] if !data[2]
-            data[3] = data[2] if !data[3]
-            # Make sure both Compatibilities are recorded correctly
-            data[19] = (data[20] && data[20]!=0) ? data[20] : PBEggGroups::Undiscovered if !data[19] || data[19]==0
-            data[20] = data[19] if !data[20] || data[20]==0
-            compats = (data[20] && data[20]>0) ? [data[19],data[20]] : data[19]
-            # Make sure both Abilities are recorded correctly
-            data[11] = data[12] if !data[11]
-            data[12] = nil if data[11] == data[12]
-            abils = (data[12]) ? [data[11], data[12]] : data[11]
-            # Make sure all Hidden Abilities are recorded correctly
-            hiddenAbils = [data[13], data[14], data[15], data[16]]
-            hiddenAbils.compact!
-            hiddenAbils = hiddenAbils[0] if hiddenAbils.length <= 1
-            # Save data
-            speciesData[SpeciesData::ABILITIES]          = abils
-            speciesData[SpeciesData::COLOR]              = data[24]
-            speciesData[SpeciesData::HABITAT]            = data[26]
-            speciesData[SpeciesData::TYPE1]              = data[2]
-            speciesData[SpeciesData::TYPE2]              = data[3]
-            speciesData[SpeciesData::BASE_STATS]         = data[4]
-            speciesData[SpeciesData::RARENESS]           = data[9]
-            speciesData[SpeciesData::SHAPE]              = data[25]
-            speciesData[SpeciesData::GENDER_RATE]        = data[5]
-            speciesData[SpeciesData::HAPPINESS]          = data[10]
-            speciesData[SpeciesData::GROWTH_RATE]        = data[6]
-            speciesData[SpeciesData::STEPS_TO_HATCH]     = data[21]
-            speciesData[SpeciesData::EFFORT_POINTS]      = data[8]
-            speciesData[SpeciesData::COMPATIBILITY]      = compats
-            speciesData[SpeciesData::HEIGHT]             = data[22]
-            speciesData[SpeciesData::WEIGHT]             = data[23]
-            speciesData[SpeciesData::BASE_EXP]           = data[7]
-            speciesData[SpeciesData::HIDDEN_ABILITY]     = hiddenAbils
-            speciesData[SpeciesData::WILD_ITEM_COMMON]   = data[31]
-            speciesData[SpeciesData::WILD_ITEM_UNCOMMON] = data[32]
-            speciesData[SpeciesData::WILD_ITEM_RARE]     = data[33]
-            speciesData[SpeciesData::INCENSE]            = data[42]
-            save_data(pbLoadSpeciesData,"Data/species.dat")
-            namearray  = []
-            kindarray  = []
-            entryarray = []
-            formarray  = []
-            for i in 1..(PBSpecies.maxValue rescue PBSpecies.getCount-1 rescue messages.getCount(MessageTypes::Species)-1)
-              namearray[i]  = messages.get(MessageTypes::Species,i)
-              kindarray[i]  = messages.get(MessageTypes::Kinds,i)
-              entryarray[i] = messages.get(MessageTypes::Entries,i)
-              formarray[i]  = messages.get(MessageTypes::FormNames,i)
-            end
-            namearray[selection]  = data[0]
-            kindarray[selection]  = data[28]
-            entryarray[selection] = data[29]
-            formarray[selection]  = data[30]
-            MessageTypes.addMessages(MessageTypes::Species,namearray)
-            MessageTypes.addMessages(MessageTypes::Kinds,kindarray)
-            MessageTypes.addMessages(MessageTypes::Entries,entryarray)
-            MessageTypes.addMessages(MessageTypes::FormNames,formarray)
-            MessageTypes.saveMessages
-            # Save moves data
-            movesetsData = pbLoadMovesetsData
-            movesetsData[selection] = data[17]
-            save_data(movesetsData,"Data/species_movesets.dat")
-            # Save egg moves data
-            data[18].delete_if { |x| !x || x==0 }
-            eggMovesData = pbLoadEggMovesData
-            eggMovesData[selection] = data[18]
-            save_data(eggMovesData,"Data/species_eggmoves.dat")
-            # Save evolutions data
-            evos = []
-            for sp in 1..PBSpecies.maxValueF
-              evos[sp] = []
-              if sp==selection
-                for i in 0...data[41].length
-                  evos[sp].push([data[41][i][2],data[41][i][0],data[41][i][1],false])
-                end
-              else
-                t = EvolutionHelper.evolutions(sp)
-                for i in 0...t.length
-                  evos[sp].push([t[i][2],t[i][0],t[i][1],false])
-                end
-              end
-            end
-            for e in 0...evos.length
-              evolist = evos[e]
-              next if !evos
-              parent = nil
-              child = -1
-              for f in 0...evos.length
-                evolist = evos[f]
-                next if !evolist || e==f
-                for g in evolist
-                  if g[0]==e && !g[3]   # f evolves into e
-                    parent = g
-                    child = f
-                    break
-                  end
-                end
-                break if parent
-              end
-              if parent   # parent[1]=method, parent[2]=level - both are unused
-                # Found a species that evolves into e, record it as a prevolution
-                evos[e] = [[child,parent[1],parent[2],true]].concat(evos[e])
-              end
-            end
-            save_data(evos,"Data/species_evolutions.dat")
-            # Don't need to save metrics or regional numbers
-            # because they can't be edited here
-            # TODO: Only need to reload whichever sets of Pokémon data were
-            #       edited here (species, movesets, egg moves, evolutions).
-            #       These are likely to be merged into a single data file.
-            pbClearData
-            pbSavePokemonData   # Rewrite PBS files pokemon.txt and pokemonforms.txt
+          if pbPropertyList(spec.id.to_s, data, species_properties, true)
+            # Sanitise data
+            data[5] = data[6] if !data[5]                    # Type1
+            data[6] = data[5] if !data[6]                    # Type2
+            egg_groups = [data[26], data[27]].uniq.compact   # Egg groups
+            egg_groups.push(PBEggGroups::Undiscovered) if egg_groups.length == 0
+            abilities = [data[17], data[18]].uniq.compact    # Abilities
+            hidden_abilities = [data[19], data[20], data[21], data[22]].uniq.compact   # Hidden abilities
+            # Construct species hash
+            species_hash = {
+              :id                    => spec.id,
+              :id_number             => spec.id_number,
+              :name                  => data[1],
+              :form_name             => data[2],
+              :category              => data[3],
+              :pokedex_entry         => data[4],
+              :type1                 => data[5],
+              :type2                 => data[6],
+              :base_stats            => data[7],
+              :evs                   => data[8],
+              :base_exp              => data[9],
+              :growth_rate           => data[10],
+              :gender_rate           => data[11],
+              :catch_rate            => data[12],
+              :happiness             => data[13],
+              :moves                 => data[14],
+              :tutor_moves           => data[15],
+              :egg_moves             => data[16],
+              :abilities             => abilities,          # 17, 18
+              :hidden_abilities      => hidden_abilities,   # 19, 20, 21, 22
+              :wild_item_common      => data[23],
+              :wild_item_uncommon    => data[24],
+              :wild_item_rare        => data[25],
+              :egg_groups            => egg_groups,         # 26, 27
+              :hatch_steps           => data[28],
+              :incense               => data[29],
+              :evolutions            => data[30],
+              :height                => data[31],
+              :weight                => data[32],
+              :color                 => data[33],
+              :shape                 => data[34],
+              :habitat               => data[35],
+              :generation            => data[36],
+              :back_sprite_x         => data[37],
+              :back_sprite_y         => data[38],
+              :front_sprite_x        => data[39],
+              :front_sprite_y        => data[40],
+              :front_sprite_altitude => data[41],
+              :shadow_x              => data[42],
+              :shadow_size           => data[43]
+            }
+            # Add species' data to records
+            GameData::Species::DATA[spec.id_number] = GameData::Species::DATA[spec.id] = GameData::Species.new(species_hash)
+            GameData::Species.save
+            pbSavePokemonData
             pbMessage(_INTL("Data saved."))
           end
+        else
+          pbMessage(_INTL("Can't add a new species."))
         end
       end
     end
   }
-end
-
-def pbSpeciesEditorNew(defaultname)
 end
 
 
@@ -1121,237 +990,200 @@ end
 # Regional Dexes editor
 #===============================================================================
 def pbRegionalDexEditor(dex)
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
-  info = Window_AdvancedTextPokemon.new(_INTL("Z+Up/Down: Rearrange entries\nZ+Right: Insert new entry\nZ+Left: Delete entry\nF: Clear entry"))
-  info.x        = Graphics.width/2
-  info.y        = 64
-  info.width    = Graphics.width/2
-  info.height   = Graphics.height-64
-  info.viewport = viewport
-  info.z        = 2
-  ret = dex
-  tdex = dex.clone
-  tdex.compact!
-  cmdwin = pbListWindow([])
-  refreshlist = true
+  cmd_window = pbListWindow([])
+  info = Window_AdvancedTextPokemon.newWithSize(
+     _INTL("Z+Up/Down: Rearrange entries\nZ+Right: Insert new entry\nZ+Left: Delete entry\nF: Clear entry"),
+     Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport)
+  info.z = 2
+  dex.compact!
+  ret = dex.clone
   commands = []
-  cmd = [0,0]
+  refresh_list = true
+  cmd = [0, 0]   # [action, index in list]
   loop do
-    if refreshlist
-      if tdex.length>0
-        i = tdex.length-1
-        loop do break unless tdex[i]==0
-          tdex[i] = nil
-          i -= 1
-          break if i<0
-        end
-        tdex.compact!
+    # Populate commands
+    if refresh_list
+      loop do
+        break if dex.length == 0 || dex[-1]
+        dex.slice!(-1)
       end
-      tdex.push(0) if tdex.length==0 || tdex[tdex.length-1]!=0
       commands = []
-      for i in 0...tdex.length
-        text = "----------"
-        if tdex[i]>0 && (getConstantName(PBSpecies,tdex[i]) rescue false)
-          text = PBSpecies.getName(tdex[i])
-        end
-        commands.push(sprintf("%03d: %s",i+1,text))
+      dex.each_with_index do |species, i|
+        text = (species) ? GameData::Species.get(species).real_name : "----------"
+        commands.push(sprintf("%03d: %s", i + 1, text))
       end
+      commands.push(sprintf("%03d: ----------", commands.length + 1))
+      cmd[1] = [cmd[1], commands.length - 1].min
+      refresh_list = false
     end
-    refreshlist = false
-    cmd = pbCommands3(cmdwin,commands,-1,cmd[1],true)
+    # Choose to do something
+    cmd = pbCommands3(cmd_window, commands, -1, cmd[1], true)
     case cmd[0]
     when 1   # Swap entry up
-      if cmd[1]<tdex.length-1
-        tdex[cmd[1]+1],tdex[cmd[1]] = tdex[cmd[1]],tdex[cmd[1]+1]
-        refreshlist = true
+      if cmd[1] < dex.length - 1
+        dex[cmd[1] + 1], dex[cmd[1]] = dex[cmd[1]], dex[cmd[1] + 1]
+        refresh_list = true
       end
      when 2   # Swap entry down
-      if cmd[1]>0
-        tdex[cmd[1]-1],tdex[cmd[1]] = tdex[cmd[1]],tdex[cmd[1]-1]
-        refreshlist = true
+      if cmd[1] > 0
+        dex[cmd[1] - 1], dex[cmd[1]] = dex[cmd[1]], dex[cmd[1] - 1]
+        refresh_list = true
       end
     when 3   # Delete spot
-      tdex[cmd[1]] = nil
-      tdex.compact!
-      cmd[1] = [cmd[1],tdex.length-1].min
-      refreshlist = true
-    when 4   # Insert spot
-      i = tdex.length
-      loop do break unless i>=cmd[1]
-        tdex[i+1] = tdex[i]
-        i -= 1
+      if cmd[1] < dex.length
+        dex.delete_at(cmd[1])
+        refresh_list = true
       end
-      tdex[cmd[1]] = 0
-      refreshlist = true
+    when 4   # Insert spot
+      if cmd[1] < dex.length
+        dex.insert(cmd[1], nil)
+        refresh_list = true
+      end
     when 5   # Clear spot
-      tdex[cmd[1]] = 0
-      refreshlist = true
+      if dex[cmd[1]]
+        dex[cmd[1]] = nil
+        refresh_list = true
+      end
     when 0
-      if cmd[1]>=0   # Edit entry
-        cmd2 = pbMessage(_INTL("\\ts[]Do what with this entry?"),
-           [_INTL("Change species"),_INTL("Clear"),_INTL("Insert entry"),_INTL("Delete entry"),_INTL("Cancel")],5)
-        case cmd2
-        when 0
-          newspecies = pbChooseSpeciesList(tdex[cmd[1]])
-          if newspecies>0
-            tdex[cmd[1]] = newspecies
-            for i in 0...tdex.length
-              next if i==cmd[1]
-              tdex[i] = 0 if tdex[i]==newspecies
-            end
-            refreshlist = true
+      if cmd[1] >= 0   # Edit entry
+        case pbMessage(_INTL("\\ts[]Do what with this entry?"),
+           [_INTL("Change species"), _INTL("Clear"), _INTL("Insert entry"), _INTL("Delete entry"), _INTL("Cancel")], 5)
+        when 0   # Change species
+          species = pbChooseSpeciesList(dex[cmd[1]])
+          if species
+            dex[cmd[1]] = species
+            dex.each_with_index { |s, i| dex[i] = nil if i != cmd[1] && s == species }
+            refresh_list = true
           end
-        when 1
-          tdex[cmd[1]] = 0
-          refreshlist = true
-        when 2
-          i = tdex.length
-          loop do break unless i>=cmd[1]
-            tdex[i+1] = tdex[i]
-            i -= 1
+        when 1   # Clear spot
+          if dex[cmd[1]]
+            dex[cmd[1]] = nil
+            refresh_list = true
           end
-          tdex[cmd[1]] = 0
-          refreshlist = true
-        when 3
-          if cmd[1]<tdex.length-1
-            tdex[cmd[1]] = nil
-            tdex.compact!
-            cmd[1] = [cmd[1],tdex.length-1].min
-            refreshlist = true
+        when 2   # Insert spot
+          if cmd[1] < dex.length
+            dex.insert(cmd[1], nil)
+            refresh_list = true
+          end
+        when 3   # Delete spot
+          if cmd[1] < dex.length
+            dex.delete_at(cmd[1])
+            refresh_list = true
           end
         end
       else   # Cancel
-        cmd2 = pbMessage(_INTL("Save changes?"),
+        case pbMessage(_INTL("Save changes?"),
            [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
-        if cmd2==0   # Yes
-          if tdex.length>0
-            i = tdex.length-1
-            loop do break unless tdex[i]==0
-              tdex[i] = nil
-              i -= 1
-              break if i<0
-            end
-            tdex.compact!
-          end
-          tdex = [nil].concat(tdex)
-          ret = tdex
+        when 0   # Save all changes to Dex
+          dex.slice!(-1) while !dex[-1]
+          ret = dex
           break
-        elsif cmd2==1   # No
+        when 1   # Just quit
           break
         end
       end
     end
   end
   info.dispose
-  cmdwin.dispose
+  cmd_window.dispose
   viewport.dispose
+  ret.compact!
   return ret
 end
 
 def pbRegionalDexEditorMain
-  dexList = pbLoadRegionalDexes
-  regionallist = []
-  for i in 0...dexList.length
-    regionallist[i] = []
-    for j in 0...dexList[i].length
-      regionallist[i][dexList[i][j]] = j if dexList[i][j] && dexList[i][j]>0
-    end
-    for j in 1...regionallist[i].length   # Replace nils with 0s
-      regionallist[i][j] = 0 if !regionallist[i][j]
-    end
-  end
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
-  cmdwin = pbListWindow([])
-  cmdwin.viewport = viewport
-  cmdwin.z        = 2
-  title = Window_UnformattedTextPokemon.new(_INTL("Regional Dexes Editor"))
-  title.x        = Graphics.width/2
-  title.y        = 0
-  title.width    = Graphics.width/2
-  title.height   = 64
-  title.viewport = viewport
-  title.z        = 2
-  info = Window_AdvancedTextPokemon.new(_INTL("Z+Up/Down: Rearrange Dexes"))
-  info.x        = Graphics.width/2
-  info.y        = 64
-  info.width    = Graphics.width/2
-  info.height   = Graphics.height-64
-  info.viewport = viewport
-  info.z        = 2
+  cmd_window = pbListWindow([])
+  cmd_window.viewport = viewport
+  cmd_window.z        = 2
+  title = Window_UnformattedTextPokemon.newWithSize(_INTL("Regional Dexes Editor"),
+     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+  title.z = 2
+  info = Window_AdvancedTextPokemon.newWithSize(_INTL("Z+Up/Down: Rearrange Dexes"),
+     Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport)
+  info.z = 2
+  dex_lists = []
+  pbLoadRegionalDexes.each_with_index { |d, index| dex_lists[index] = d.clone }
   commands = []
-  refreshlist = true; oldsel = -1
-  cmd = [0,0]
+  refresh_list = true
+  oldsel = -1
+  cmd = [0, 0]   # [action, index in list]
   loop do
-    if refreshlist
+    # Populate commands
+    if refresh_list
       commands = [_INTL("[ADD DEX]")]
-      for i in 0...regionallist.length
-        commands.push(_INTL("Dex {1} (size {2})",i+1,regionallist[i].length-1))
+      dex_lists.each_with_index do |list, i|
+        commands.push(_INTL("Dex {1} (size {2})", i + 1, list.length))
       end
+      refresh_list = false
     end
-    refreshlist = false; oldsel = -1
-    cmd = pbCommands3(cmdwin,commands,-1,cmd[1],true)
+    # Choose to do something
+    oldsel = -1
+    cmd = pbCommands3(cmd_window, commands, -1, cmd[1], true)
     case cmd[0]
-    when 1   # Swap dex up
-      if cmd[1]>0 && cmd[1]<commands.length-1
-        regionallist[cmd[1]-1],regionallist[cmd[1]] = regionallist[cmd[1]],regionallist[cmd[1]-1]
-        refreshlist = true
+    when 1   # Swap Dex up
+      if cmd[1] > 0 && cmd[1] < commands.length - 1
+        dex_lists[cmd[1] - 1], dex_lists[cmd[1]] = dex_lists[cmd[1]], dex_lists[cmd[1] - 1]
+        refresh_list = true
       end
-    when 2   # Swap dex down
-      if cmd[1]>1
-        regionallist[cmd[1]-2],regionallist[cmd[1]-1] = regionallist[cmd[1]-1],regionallist[cmd[1]-2]
-        refreshlist = true
+    when 2   # Swap Dex down
+      if cmd[1] > 1
+        dex_lists[cmd[1] - 2], dex_lists[cmd[1] - 1] = dex_lists[cmd[1] - 1], dex_lists[cmd[1] - 2]
+        refresh_list = true
       end
-    when 0
-      if cmd[1]==0   # Add new dex
-        cmd2 = pbMessage(_INTL("Fill in this new Dex?"),
-           [_INTL("Leave blank"),_INTL("Fill with National Dex"),_INTL("Cancel")],3)
-        if cmd2<2
-          newdex = [nil]
-          if cmd2==1   # Fill with National Dex
-            for i in 1...PBSpecies.maxValue
-              newdex[i] = i
-            end
+    when 0   # Clicked on a command/Dex
+      if cmd[1] == 0   # Add new Dex
+        case pbMessage(_INTL("Fill in this new Dex?"),
+           [_INTL("Leave blank"), _INTL("National Dex"), _INTL("Nat. Dex grouped families"), _INTL("Cancel")], 4)
+        when 0   # Leave blank
+          dex_lists.push([])
+          refresh_list = true
+        when 1   # Fill with National Dex
+          new_dex = []
+          GameData::Species.each { |s| new_dex.push(s.species) if s.form == 0 }
+          dex_lists.push(new_dex)
+          refresh_list = true
+        when 2   # Fill with National Dex
+          new_dex = []
+          seen = []
+          GameData::Species.each do |s|
+            next if s.form != 0 || seen.include?(s.species)
+            family = EvolutionHelper.all_related_species(s.species)
+            new_dex.concat(family)
+            seen.concat(family)
           end
-          regionallist[regionallist.length] = newdex
-          refreshlist = true
+          dex_lists.push(new_dex)
+          refresh_list = true
         end
-      elsif cmd[1]>0   # Edit a dex
-        cmd2 = pbMessage(_INTL("\\ts[]Do what with this Dex?"),
-            [_INTL("Edit"),_INTL("Copy"),_INTL("Delete"),_INTL("Cancel")],4)
-        case cmd2
+      elsif cmd[1] > 0   # Edit a Dex
+        case pbMessage(_INTL("\\ts[]Do what with this Dex?"),
+            [_INTL("Edit"), _INTL("Copy"), _INTL("Delete"), _INTL("Cancel")], 4)
         when 0   # Edit
-          regionallist[cmd[1]-1] = pbRegionalDexEditor(regionallist[cmd[1]-1])
-          refreshlist = true
+          dex_lists[cmd[1] - 1] = pbRegionalDexEditor(dex_lists[cmd[1] - 1])
+          refresh_list = true
         when 1   # Copy
-          regionallist[regionallist.length] = regionallist[cmd[1]-1].clone
-          cmd[1] = regionallist.length
-          refreshlist = true
+          dex_lists[dex_lists.length] = dex_lists[cmd[1] - 1].clone
+          cmd[1] = dex_lists.length
+          refresh_list = true
         when 2   # Delete
-          regionallist[cmd[1]-1] = nil
-          regionallist.compact!
-          cmd[1] = [cmd[1],regionallist.length].min
-          refreshlist = true
+          dex_lists[cmd[1] - 1] = nil
+          dex_lists.compact!
+          cmd[1] = [cmd[1], dex_lists.length].min
+          refresh_list = true
         end
       else   # Cancel
-        cmd2 = pbMessage(_INTL("Save changes?"),
-           [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
-        if cmd2==0
-          # Save new dexes here
-          tosave = []
-          for i in 0...regionallist.length
-            tosave[i] = []
-            for j in 0...regionallist[i].length
-              tosave[i][regionallist[i][j]] = j if regionallist[i][j]
-            end
-          end
-          save_data(tosave,"Data/regional_dexes.dat")
+        case pbMessage(_INTL("Save changes?"),
+           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+        when 0   # Save all changes to Dexes
+          save_data(dex_lists, "Data/regional_dexes.dat")
           $PokemonTemp.regionalDexes = nil
-          pbSavePokemonData
+          pbSaveRegionalDexes
           pbMessage(_INTL("Data saved."))
           break
-        elsif cmd2==1
+        when 1   # Just quit
           break
         end
       end
@@ -1359,33 +1191,35 @@ def pbRegionalDexEditorMain
   end
   title.dispose
   info.dispose
-  cmdwin.dispose
+  cmd_window.dispose
   viewport.dispose
 end
 
-def pbAppendEvoToFamilyArray(species,array,seenarray)
+def pbAppendEvoToFamilyArray(species, array, seenarray)
   return if seenarray[species]
-  array.push(species); seenarray[species] = true
+  array.push(species)
+  seenarray[species] = true
   evos = EvolutionHelper.evolutions(species)
-  if evos.length>0
-    evos.sort! { |a,b| a[2]<=>b[2] }
+  if evos.length > 0
+    evos.sort! { |a, b| a[2] <=> b[2] }
     subarray = []
     for i in evos
-      pbAppendEvoToFamilyArray(i[2],subarray,seenarray)
+      pbAppendEvoToFamilyArray(i[2], subarray, seenarray)
     end
-    array.push(subarray) if subarray.length>0
+    array.push(subarray) if subarray.length > 0
   end
 end
 
 def pbGetEvoFamilies
   seen = []
   ret = []
-  for sp in 1..PBSpecies.maxValue
-    species = EvolutionHelper.baby_species(sp)
+  GameData::Species.each do |sp|
+    next if sp.form > 0
+    species = EvolutionHelper.baby_species(sp.species)
     next if seen[species]
     subret = []
-    pbAppendEvoToFamilyArray(species,subret,seen)
-    ret.push(subret.flatten) if subret.length>0
+    pbAppendEvoToFamilyArray(species, subret, seen)
+    ret.push(subret.flatten) if subret.length > 0
   end
   return ret
 end
@@ -1397,11 +1231,11 @@ def pbEvoFamiliesToStrings
     string = ""
     for p in 0...families[fam].length
       if p>=3
-        string += " + #{families[fam].length-3} more"
+        string += " + #{families[fam].length - 3} more"
         break
       end
-      string += "/" if p>0
-      string += PBSpecies.getName(families[fam][p])
+      string += "/" if p > 0
+      string += GameData::Species.get(families[fam][p]).name
     end
     ret[fam] = string
   end

@@ -99,33 +99,6 @@ module PBEvolution
 end
 
 #===============================================================================
-# Evolutions data cache
-#===============================================================================
-class PokemonTemp
-  attr_accessor :evolutionsData
-end
-
-def pbLoadEvolutionsData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.evolutionsData
-    $PokemonTemp.evolutionsData = load_data("Data/species_evolutions.dat") || []
-  end
-  return $PokemonTemp.evolutionsData
-end
-
-def pbGetEvolutionData(species)
-  species = getID(PBSpecies,species)
-  evosData = pbLoadEvolutionsData
-  return evosData[species] || nil
-end
-
-alias __evolutionsData__pbClearData pbClearData
-def pbClearData
-  $PokemonTemp.evolutionsData = nil if $PokemonTemp
-  __evolutionsData__pbClearData
-end
-
-#===============================================================================
 # Evolution helper functions
 #===============================================================================
 module EvolutionHelper
@@ -133,7 +106,7 @@ module EvolutionHelper
 
   def evolutions(species, ignore_none = false)
     ret = []
-    evoData = pbGetEvolutionData(species)
+    evoData =  GameData::Species.get(species).evolutions
     return ret if !evoData || evoData.length == 0
     evoData.each do |evo|
       next if evo[3]   # Is the prevolution
@@ -143,9 +116,10 @@ module EvolutionHelper
     return ret
   end
 
-  def family_evolutions(species)
-    evos = self.evolutions(species, true)
+  def family_evolutions(species, ignore_none = true)
+    evos = self.evolutions(species, ignore_none)
     return nil if evos.length == 0
+    evos.sort! { |a, b| GameData::Species.get(a[2]).id_number <=> GameData::Species.get(b[2]).id_number }
     ret = []
     for i in 0...evos.length
       ret.push([species].concat(evos[i]))
@@ -155,8 +129,15 @@ module EvolutionHelper
     return ret
   end
 
+  def all_related_species(species)
+    species = self.baby_species(species)
+    evos = self.family_evolutions(species, false)
+    return [species] if !evos || evos.length == 0
+    return [species].concat(evos.map { |e| e[3] }).uniq
+  end
+
   def previous_species(species)
-    evoData = pbGetEvolutionData(species)
+    evoData =  GameData::Species.get(species).evolutions
     return species if !evoData || evoData.length == 0
     evoData.each do |evo|
       return evo[0] if evo[3]   # Is the prevolution
@@ -166,12 +147,12 @@ module EvolutionHelper
 
   def baby_species(species, check_items = false, item1 = nil, item2 = nil)
     ret = species
-    evoData = pbGetEvolutionData(species)
+    evoData =  GameData::Species.get(species).evolutions
     return ret if !evoData || evoData.length == 0
     evoData.each do |evo|
       next if !evo[3]   # Not the prevolution
       if check_items
-        incense = pbGetSpeciesData(evo[0], 0, SpeciesData::INCENSE)
+        incense = GameData::Species.get(evo[0]).incense
         ret = evo[0] if !incense || item1 == incense || item2 == incense
       else
         ret = evo[0]   # Species of prevolution
@@ -183,7 +164,7 @@ module EvolutionHelper
   end
 
   def minimum_level(species)
-    evoData = pbGetEvolutionData(species)
+    evoData =  GameData::Species.get(species).evolutions
     return 1 if !evoData || evoData.length == 0
     ret = -1
     evoData.each do |evo|
@@ -203,11 +184,11 @@ module EvolutionHelper
     return false if !evos || evos.length == 0
     for evo in evos
       if method.is_a?(Array)
-        next if !method.include?(evo[0])
+        next if !method.include?(evo[1])
       elsif method >= 0
-        next if evo[0] != method
+        next if evo[1] != method
       end
-      next if param && evo[1] != param
+      next if param && evo[2] != param
       return true
     end
     return false
@@ -270,39 +251,40 @@ end
 #===============================================================================
 def pbMiniCheckEvolution(pkmn, method, parameter, new_species)
   success = PBEvolution.call("levelUpCheck", method, pkmn, parameter)
-  return (success) ? new_species : -1
+  return (success) ? new_species : nil
 end
 
 def pbMiniCheckEvolutionItem(pkmn, method, parameter, new_species, item)
   success = PBEvolution.call("itemCheck", method, pkmn, parameter, item)
-  return (success) ? new_species : -1
+  return (success) ? new_species : nil
 end
 
 # Checks whether a Pokemon can evolve now. If a block is given, calls the block
 # with the following parameters:
 #   Pokemon to check; evolution method; parameter; ID of the new species
-def pbCheckEvolutionEx(pokemon)
-  return -1 if pokemon.species<=0 || pokemon.egg? || pokemon.shadowPokemon?
-  return -1 if pokemon.hasItem?(:EVERSTONE)
-  return -1 if pokemon.hasAbility?(:BATTLEBOND)
-  ret = -1
-  for form in EvolutionHelper.evolutions(pbGetFSpeciesFromForm(pokemon.species,pokemon.form), true)
-    ret = yield pokemon,form[0],form[1],form[2]
-    break if ret>0
+def pbCheckEvolutionEx(pkmn)
+  return nil if !pkmn.species || pokemon.egg? || pokemon.shadowPokemon?
+  return nil if pkmn.hasItem?(:EVERSTONE)
+  return nil if pkmn.hasAbility?(:BATTLEBOND)
+  ret = nil
+  pkmn.species_data.evolutions.each do |evo|
+    next if evo[3]   # Prevolution
+    ret = yield pkmn, evo[1], evo[2], evo[0]   # pkmn, method, parameter, new_species
+    break if ret
   end
   return ret
 end
 
 # Checks whether a Pokemon can evolve now. If an item is used on the Pokémon,
 # checks whether the Pokemon can evolve with the given item.
-def pbCheckEvolution(pokemon,item=nil)
+def pbCheckEvolution(pkmn, item = nil)
   if item
-    return pbCheckEvolutionEx(pokemon) { |pokemon,evonib,level,poke|
-      next pbMiniCheckEvolutionItem(pokemon,evonib,level,poke,item)
+    return pbCheckEvolutionEx(pkmn) { |pkmn, method, parameter, new_species|
+      next pbMiniCheckEvolutionItem(pkmn, method, parameter, new_species, item)
     }
   else
-    return pbCheckEvolutionEx(pokemon) { |pokemon,evonib,level,poke|
-      next pbMiniCheckEvolution(pokemon,evonib,level,poke)
+    return pbCheckEvolutionEx(pkmn) { |pkmn, method, parameter, new_species|
+      next pbMiniCheckEvolution(pkmn, method, parameter, new_species)
     }
   end
 end
@@ -662,7 +644,7 @@ PBEvolution.register(:HasMoveType, {
 
 PBEvolution.register(:HasInParty, {
   "minimumLevel"  => 1,   # Needs any level up
-  "parameterType" => :PBSpecies,
+  "parameterType" => :Species,
   "levelUpCheck"  => proc { |pkmn, parameter|
     next pbHasSpecies?(parameter)
   }
@@ -779,7 +761,7 @@ PBEvolution.register(:TradeItem, {
 })
 
 PBEvolution.register(:TradeSpecies, {
-  "parameterType" => :PBSpecies,
+  "parameterType" => :Species,
   "tradeCheck"    => proc { |pkmn, parameter, other_pkmn|
     next pkmn.species == parameter && !other_pkmn.hasItem?(:EVERSTONE)
   }

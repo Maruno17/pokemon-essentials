@@ -103,7 +103,7 @@ class PokemonPokedexMenuScreen
           commands[i] = dexnames[index]
         end
       end
-      index = -1 if index>=$PokemonGlobal.pokedexUnlocked.length-1
+      index = -1 if index >= $PokemonGlobal.pokedexUnlocked.length - 1
       commands2[i] = [$Trainer.pokedexSeen(index),
                       $Trainer.pokedexOwned(index),
                       pbGetRegionalDexLength(index)]

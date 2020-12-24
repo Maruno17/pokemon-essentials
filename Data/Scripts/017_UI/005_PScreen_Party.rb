@@ -1395,7 +1395,7 @@ def pbChooseTradablePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneli
 end
 
 def pbChoosePokemonForTrade(variableNumber,nameVarNumber,wanted)
-  wanted = getID(PBSpecies,wanted)
+  wanted = GameData::Species.get(wanted).species
   pbChooseTradablePokemon(variableNumber,nameVarNumber,proc { |pkmn|
     next pkmn.species==wanted
   })

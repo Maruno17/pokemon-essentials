@@ -1,75 +1,3 @@
-class Pokemon
-  attr_accessor :formTime     # Time when Furfrou's/Hoopa's form was set
-  attr_accessor :forcedForm
-
-  def form
-    return @forcedForm if @forcedForm!=nil
-    return (@form || 0) if $game_temp.in_battle
-    v = MultipleForms.call("getForm",self)
-    self.form = v if v!=nil && (!@form || v!=@form)
-    return @form || 0
-  end
-
-  def form=(value)
-    setForm(value)
-  end
-
-  def setForm(value)
-    oldForm = @form
-    @form = value
-    yield if block_given?
-    MultipleForms.call("onSetForm",self,value,oldForm)
-    self.calcStats
-    pbSeenForm(self)
-  end
-
-  def formSimple
-    return @forcedForm if @forcedForm!=nil
-    return @form || 0
-  end
-
-  def formSimple=(value)
-    @form = value
-    self.calcStats
-  end
-
-  def fSpecies
-    return pbGetFSpeciesFromForm(@species,formSimple)
-  end
-
-  alias __mf_initialize initialize
-  def initialize(*args)
-    @form = (pbGetSpeciesFromFSpecies(args[0])[1] rescue 0)
-    __mf_initialize(*args)
-    if @form==0
-      f = MultipleForms.call("getFormOnCreation",self)
-      if f
-        self.form = f
-        self.resetMoves
-      end
-    end
-  end
-end
-
-
-
-class PokeBattle_RealBattlePeer
-  def pbOnEnteringBattle(_battle,pkmn,wild=false)
-    f = MultipleForms.call("getFormOnEnteringBattle",pkmn,wild)
-    pkmn.form = f if f
-  end
-
-  # For switching out, including due to fainting, and for the end of battle
-  def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle=false)
-    return if !pkmn
-    f = MultipleForms.call("getFormOnLeavingBattle",pkmn,battle,usedInBattle,endBattle)
-    pkmn.form = f if f && pkmn.form!=f
-    pkmn.hp = pkmn.totalhp if pkmn.hp>pkmn.totalhp
-  end
-end
-
-
-
 module MultipleForms
   @@formSpecies = SpeciesHandlerHash.new
 
@@ -86,13 +14,13 @@ module MultipleForms
   end
 
   def self.hasFunction?(pkmn,func)
-    spec = (pkmn.is_a?(Numeric)) ? pkmn : pkmn.species
+    spec = (pkmn.is_a?(Pokemon)) ? pkmn.species : pkmn
     sp = @@formSpecies[spec]
     return sp && sp[func]
   end
 
   def self.getFunction(pkmn,func)
-    spec = (pkmn.is_a?(Numeric)) ? pkmn : pkmn.species
+    spec = (pkmn.is_a?(Pokemon)) ? pkmn.species : pkmn
     sp = @@formSpecies[spec]
     return (sp && sp[func]) ? sp[func] : nil
   end
@@ -364,7 +292,7 @@ MultipleForms.register(:ARCEUS,{
         ret = f
         break
       end
-      break if ret>0
+      break if ret > 0
     end
     next ret
   }

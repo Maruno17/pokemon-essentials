@@ -125,5 +125,7 @@ module GameData
     MapMetadata.load
     Move.load
     TrainerType.load
+    Type.load
+    Species.load
   end
 end

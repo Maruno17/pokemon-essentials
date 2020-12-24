@@ -178,7 +178,7 @@ def pbChangeLevel(pkmn,newlevel,scene)
     end
     # Check for evolution
     newspecies = pbCheckEvolution(pkmn)
-    if newspecies>0
+    if newspecies
       pbFadeOutInWithMusic {
         evo = PokemonEvolutionScene.new
         evo.pbStartScreen(pkmn,newspecies)
@@ -458,13 +458,6 @@ def pbForgetMove(pkmn,moveToLearn)
   return ret
 end
 
-def pbSpeciesCompatible?(species,move)
-  return false if species<=0
-  data = pbLoadSpeciesTMData
-  return false if !data[move]
-  return data[move].any? { |item| item==species }
-end
-
 #===============================================================================
 # Use an item from the Bag and/or on a Pokémon
 #===============================================================================
@@ -498,7 +491,7 @@ def pbUseItem(bag,item,bagscene=nil)
     if itm.is_evolution_stone?
       annot = []
       for pkmn in $Trainer.party
-        elig = pbCheckEvolution(pkmn,item)>0
+        elig = pbCheckEvolution(pkmn,item)
         annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
       end
     end

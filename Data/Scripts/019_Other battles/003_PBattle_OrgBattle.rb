@@ -32,10 +32,7 @@ class PBPokemon
   def self.fromInspected(str)
     insp=str.gsub(/^\s+/,"").gsub(/\s+$/,"")
     pieces=insp.split(/\s*;\s*/)
-    species=1
-    if (PBSpecies.const_defined?(pieces[0]) rescue false)
-      species=PBSpecies.const_get(pieces[0])
-    end
+    species = (GameData::Species.exists?(pieces[0])) ? GameData::Species.get(pieces[0]).id : nil
     item = (GameData::Item.exists?(pieces[1])) ? GameData::Item.get(pieces[1]).id : nil
     nature=PBNatures.const_get(pieces[2])
     ev=pieces[3].split(/\s*,\s*/)
@@ -95,7 +92,7 @@ class PBPokemon
 
   def self.fromstring(str)
     s=str.split(/\s*,\s*/)
-    species=self.constFromStr(PBSpecies,s[1])
+    species=GameData::Species.get(s[1]).id
     item=s[2].to_sym
     nature=self.constFromStr(PBNatures,s[3])
     move1=GameData::Move.get(s[4]).id
@@ -129,8 +126,8 @@ class PBPokemon
 =end
 
   def inspect
-    c1=getConstantName(PBSpecies,@species)
-    c2=(@item) ? GameData::Item.get(@item).id_to_s : ""
+    c1=GameData::Species.get(@species).id.to_s
+    c2=(@item) ? GameData::Item.get(@item).id.to_s : ""
     c3=getConstantName(PBNatures,@nature)
     evlist=""
     for i in 0...@ev

@@ -241,11 +241,11 @@ def pbWildBattleCore(*args)
     if arg.is_a?(Pokemon)
       foeParty.push(arg)
     elsif arg.is_a?(Array)
-      species = getID(PBSpecies,arg[0])
+      species = GameData::Species.get(arg[0]).id
       pkmn = pbGenerateWildPokemon(species,arg[1])
       foeParty.push(pkmn)
     elsif sp
-      species = getID(PBSpecies,sp)
+      species = GameData::Species.get(sp).id
       pkmn = pbGenerateWildPokemon(species,arg)
       foeParty.push(pkmn)
       sp = nil
@@ -307,7 +307,7 @@ end
 #===============================================================================
 # Used when walking in tall grass, hence the additional code.
 def pbWildBattle(species, level, outcomeVar=1, canRun=true, canLose=false)
-  species = getID(PBSpecies,species)
+  species = GameData::Species.get(species).id
   # Potentially call a different pbWildBattle-type method instead (for roaming
   # Pokémon, Safari battles, Bug Contest battles)
   handled = [nil]
@@ -605,7 +605,7 @@ def pbEvolutionCheck(currentLevels)
     next if !pkmn || (pkmn.hp==0 && !NEWEST_BATTLE_MECHANICS)
     next if currentLevels[i] && pkmn.level==currentLevels[i]
     newSpecies = pbCheckEvolution(pkmn)
-    next if newSpecies<=0
+    next if !newSpecies
     evo = PokemonEvolutionScene.new
     evo.pbStartScreen(pkmn,newSpecies)
     evo.pbEvolution

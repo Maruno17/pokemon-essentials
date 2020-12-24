@@ -115,8 +115,8 @@ module GameData
     def can_hold?;           return !is_important?; end
 
     def unlosable?(species, ability)
-      return false if isConst?(species, PBSpecies, :ARCEUS) && ability != :MULTITYPE
-      return false if isConst?(species, PBSpecies, :SILVALLY) && ability != :RKSSYSTEM
+      return false if species == :ARCEUS && ability != :MULTITYPE
+      return false if species == :SILVALLY && ability != :RKSSYSTEM
       combos = {
          :ARCEUS   => [:FISTPLATE,   :FIGHTINIUMZ,
                        :SKYPLATE,    :FLYINIUMZ,
@@ -157,11 +157,7 @@ module GameData
          :KYOGRE   => [:BLUEORB],
          :GROUDON  => [:REDORB]
       }
-      combos.each do |comboSpecies, items|
-        next if !isConst?(species, PBSpecies, comboSpecies)
-        return items.include?(@id)
-      end
-      return false
+      return combos[species] && combos[species].include?(@id)
     end
   end
 end

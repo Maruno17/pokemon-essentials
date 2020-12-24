@@ -48,7 +48,7 @@ class PokemonSprite < SpriteWrapper
 
   def setPokemonBitmap(pokemon,back=false)
     @_iconbitmap.dispose if @_iconbitmap
-    @_iconbitmap = (pokemon) ? pbLoadPokemonBitmap(pokemon,back) : nil
+    @_iconbitmap = (pokemon) ? GameData::Species.sprite_bitmap_from_pokemon(pokemon, back) : nil
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
     self.color = Color.new(0,0,0,0)
     changeOrigin
@@ -56,14 +56,14 @@ class PokemonSprite < SpriteWrapper
 
   def setPokemonBitmapSpecies(pokemon,species,back=false)
     @_iconbitmap.dispose if @_iconbitmap
-    @_iconbitmap = (pokemon) ? pbLoadPokemonBitmapSpecies(pokemon,species,back) : nil
+    @_iconbitmap = (pokemon) ? GameData::Species.sprite_bitmap_from_pokemon(pokemon, back, species) : nil
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
     changeOrigin
   end
 
-  def setSpeciesBitmap(species,female=false,form=0,shiny=false,shadow=false,back=false,egg=false)
+  def setSpeciesBitmap(species, gender = 0, form = 0, shiny = false, shadow = false, back = false, egg = false)
     @_iconbitmap.dispose if @_iconbitmap
-    @_iconbitmap = pbLoadSpeciesBitmap(species,female,form,shiny,shadow,back,egg)
+    @_iconbitmap = GameData::Species.sprite_bitmap(species, form, gender, shiny, shadow, back, egg)
     self.bitmap = (@_iconbitmap) ? @_iconbitmap.bitmap : nil
     changeOrigin
   end
@@ -129,7 +129,7 @@ class PokemonIconSprite < SpriteWrapper
       @counter = 0
       return
     end
-    @animBitmap = AnimatedBitmap.new(pbPokemonIconFile(value))
+    @animBitmap = AnimatedBitmap.new(GameData::Species.icon_filename_from_pokemon(value))
     self.bitmap = @animBitmap.bitmap
     self.src_rect.width  = @animBitmap.height
     self.src_rect.height = @animBitmap.height
@@ -307,12 +307,13 @@ class PokemonSpeciesIconSprite < SpriteWrapper
   def refresh
     @animBitmap.dispose if @animBitmap
     @animBitmap = nil
-    bitmapFileName = pbCheckPokemonIconFiles([@species,(@gender==1),@shiny,@form,false])
+    bitmapFileName = GameData::Species.icon_filename(@species, @form, @gender, @shiny)
+    return if !bitmapFileName
     @animBitmap = AnimatedBitmap.new(bitmapFileName)
     self.bitmap = @animBitmap.bitmap
     self.src_rect.width  = @animBitmap.height
     self.src_rect.height = @animBitmap.height
-    @numFrames = @animBitmap.width/@animBitmap.height
+    @numFrames = @animBitmap.width / @animBitmap.height
     @currentFrame = 0 if @currentFrame>=@numFrames
     changeOrigin
   end
@@ -330,35 +331,4 @@ class PokemonSpeciesIconSprite < SpriteWrapper
     end
     self.src_rect.x = self.src_rect.width*@currentFrame
   end
-end
-
-
-
-#===============================================================================
-# Sprite position adjustments
-#===============================================================================
-def pbApplyBattlerMetricsToSprite(sprite,index,species,shadow=false,metrics=nil)
-  metrics = pbLoadSpeciesMetrics if !metrics
-  if shadow
-    if (index&1)==1   # Foe Pokémon
-      sprite.x += (metrics[SpeciesData::METRIC_SHADOW_X][species] || 0)*2
-    end
-  else
-    if (index&1)==0   # Player's Pokémon
-      sprite.x += (metrics[SpeciesData::METRIC_PLAYER_X][species] || 0)*2
-      sprite.y += (metrics[SpeciesData::METRIC_PLAYER_Y][species] || 0)*2
-    else              # Foe Pokémon
-      sprite.x += (metrics[SpeciesData::METRIC_ENEMY_X][species] || 0)*2
-      sprite.y += (metrics[SpeciesData::METRIC_ENEMY_Y][species] || 0)*2
-      sprite.y -= (metrics[SpeciesData::METRIC_ALTITUDE][species] || 0)*2
-    end
-  end
-end
-
-# NOTE: The species parameter here is typically the fSpecies, which contains
-#       information about both the species and the form.
-def showShadow?(species)
-  return true
-#  metrics = pbLoadSpeciesMetrics
-#  return (metrics[SpeciesData::METRIC_ALTITUDE][species] || 0)>0
 end

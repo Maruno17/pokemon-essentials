@@ -51,6 +51,19 @@ class PokeBattle_RealBattlePeer
   def pbBoxName(box)
     return (box<0) ? "" : $PokemonStorage[box].name
   end
+
+  def pbOnEnteringBattle(_battle,pkmn,wild=false)
+    f = MultipleForms.call("getFormOnEnteringBattle",pkmn,wild)
+    pkmn.form = f if f
+  end
+
+  # For switching out, including due to fainting, and for the end of battle
+  def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle=false)
+    return if !pkmn
+    f = MultipleForms.call("getFormOnLeavingBattle",pkmn,battle,usedInBattle,endBattle)
+    pkmn.form = f if f && pkmn.form!=f
+    pkmn.hp = pkmn.totalhp if pkmn.hp>pkmn.totalhp
+  end
 end
 
 

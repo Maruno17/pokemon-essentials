@@ -24,15 +24,14 @@ class PokemonEggHatch_Scene
     @sprites["pokemon"].setOffset(PictureOrigin::Bottom)
     @sprites["pokemon"].x = Graphics.width/2
     @sprites["pokemon"].y = 264+56   # 56 to offset the egg sprite
-    @sprites["pokemon"].setSpeciesBitmap(@pokemon.species,@pokemon.female?,
-                                         (@pokemon.form rescue 0),@pokemon.shiny?,
-                                         false,false,true)   # Egg sprite
+    @sprites["pokemon"].setSpeciesBitmap(@pokemon.species, @pokemon.gender,
+                                         @pokemon.form, @pokemon.shiny?,
+                                         false, false, true)   # Egg sprite
     # Load egg cracks bitmap
-    crackfilename=sprintf("Graphics/Battlers/%seggCracks",
-       getConstantName(PBSpecies,@pokemon.species)) rescue nil
+    crackfilename = sprintf("Graphics/Battlers/%seggCracks", @pokemon.species)
     if !pbResolveBitmap(crackfilename)
-      crackfilename=sprintf("Graphics/Battlers/%03deggCracks",@pokemon.species)
-      crackfilename=sprintf("Graphics/Battlers/eggCracks") if !pbResolveBitmap(crackfilename)
+      crackfilename = sprintf("Graphics/Battlers/%03deggCracks", @pokemon.species_data.id_number)
+      crackfilename = sprintf("Graphics/Battlers/eggCracks") if !pbResolveBitmap(crackfilename)
     end
     crackfilename=pbResolveBitmap(crackfilename)
     @hatchSheet=AnimatedBitmap.new(crackfilename)
@@ -90,7 +89,7 @@ class PokemonEggHatch_Scene
     @sprites["pokemon"].setPokemonBitmap(@pokemon) # Pokémon sprite
     @sprites["pokemon"].x = Graphics.width/2
     @sprites["pokemon"].y = 264
-    pbApplyBattlerMetricsToSprite(@sprites["pokemon"],1,@pokemon.fSpecies)
+    @pokemon.species_data.apply_metrics_to_sprite(@sprites["pokemon"], 1)
     @sprites["hatch"].visible=false
     for i in 1..fadeTime
       @sprites["pokemon"].tone=Tone.new(255-i*toneDiff,255-i*toneDiff,255-i*toneDiff)
@@ -100,8 +99,8 @@ class PokemonEggHatch_Scene
     @sprites["pokemon"].tone=Tone.new(0,0,0)
     @sprites["overlay"].opacity=0
     # Finish scene
-    frames=pbCryFrameLength(@pokemon)
-    pbPlayCry(@pokemon)
+    frames = GameData::Species.cry_length(@pokemon)
+    GameData::Species.play_cry_from_pokemon(@pokemon)
     updateScene(frames)
     pbBGMStop()
     pbMEPlay("Evolution success")

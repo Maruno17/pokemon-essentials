@@ -533,7 +533,7 @@ module PokemonDebugMixin
         case cmd
         when 0   # Set species
           species = pbChooseSpeciesList(pkmn.species)
-          if species!=0 && species!=pkmn.species
+          if species && species != pkmn.species
             pkmn.species = species
             pkmn.calcStats
             pbSeenForm(pkmn) if !settingUpBattle
@@ -541,25 +541,24 @@ module PokemonDebugMixin
           end
         when 1   # Set form
           cmd2 = 0
-          formcmds = [[],[]]
-          formdata = pbLoadFormToSpecies
-          formdata[pkmn.species] = [pkmn.species] if !formdata[pkmn.species]
-          for form in 0...formdata[pkmn.species].length
-            fSpecies = pbGetFSpeciesFromForm(pkmn.species,form)
-            formname = pbGetMessage(MessageTypes::FormNames,fSpecies)
-            formname = _INTL("Unnamed form") if !formname || formname==""
-            formname = _INTL("{1}: {2}",form,formname)
-            formcmds[0].push(form); formcmds[1].push(formname)
-            cmd2 = form if pkmn.form==form
+          formcmds = [[], []]
+          GameData::Species.each do |sp|
+            next if sp.species != pkmn.species
+            form_name = sp.form_name
+            form_name = _INTL("Unnamed form") if !form_name || form_name.empty?
+            form_name = sprintf("%d: %s", sp.form, form_name)
+            formcmds[0].push(sp.form)
+            formcmds[1].push(form_name)
+            cmd2 = sp.form if pkmn.form == sp.form
           end
-          if formcmds[0].length<=1
-            pbDisplay(_INTL("Species {1} only has one form.",pkmn.speciesName))
+          if formcmds[0].length <= 1
+            pbDisplay(_INTL("Species {1} only has one form.", pkmn.speciesName))
           else
-            cmd2 = pbShowCommands(_INTL("Set the Pokémon's form."),formcmds[1],cmd2)
-            next if cmd2<0
+            cmd2 = pbShowCommands(_INTL("Set the Pokémon's form."), formcmds[1], cmd2)
+            next if cmd2 < 0
             f = formcmds[0][cmd2]
-            if f!=pkmn.form
-              if MultipleForms.hasFunction?(pkmn,"getForm")
+            if f != pkmn.form
+              if MultipleForms.hasFunction?(pkmn, "getForm")
                 next if !pbConfirm(_INTL("This species decides its own form. Override?"))
                 pkmn.forcedForm = f
               end
@@ -599,7 +598,7 @@ module PokemonDebugMixin
     when "setnickname"
       cmd = 0
       loop do
-        speciesname = PBSpecies.getName(pkmn.species)
+        speciesname = pkmn.speciesName
         msg = [_INTL("{1} has the nickname {2}.",speciesname,pkmn.name),
                _INTL("{1} has no nickname.",speciesname)][pkmn.name==speciesname ? 1 : 0]
         cmd = pbShowCommands(msg,[
@@ -722,18 +721,18 @@ module PokemonDebugMixin
         case cmd
         when 0   # Make egg
           if !pkmn.egg? && (pbHasEgg?(pkmn.species) ||
-             pbConfirm(_INTL("{1} cannot legally be an egg. Make egg anyway?",PBSpecies.getName(pkmn.species))))
+             pbConfirm(_INTL("{1} cannot legally be an egg. Make egg anyway?", pkmn.speciesName)))
             pkmn.level = EGG_LEVEL
             pkmn.calcStats
             pkmn.name = _INTL("Egg")
-            pkmn.eggsteps = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesData::STEPS_TO_HATCH)
+            pkmn.eggsteps = pkmn.species_data.hatch_steps
             pkmn.hatchedMap = 0
             pkmn.obtainMode = 1
             pbRefreshSingle(pkmnid)
           end
         when 1   # Make Pokémon
           if pkmn.egg?
-            pkmn.name       = PBSpecies.getName(pkmn.species)
+            pkmn.name       = pkmn.speciesName
             pkmn.eggsteps   = 0
             pkmn.hatchedMap = 0
             pkmn.obtainMode = 0

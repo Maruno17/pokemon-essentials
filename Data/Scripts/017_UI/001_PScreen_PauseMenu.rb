@@ -128,7 +128,7 @@ class PokemonPauseMenu
     elsif pbInBugContest?
       if pbBugContestState.lastPokemon
         @scene.pbShowInfo(_INTL("Caught: {1}\nLevel: {2}\nBalls: {3}",
-           PBSpecies.getName(pbBugContestState.lastPokemon.species),
+           pbBugContestState.lastPokemon.speciesName,
            pbBugContestState.lastPokemon.level,
            pbBugContestState.ballcount))
       else

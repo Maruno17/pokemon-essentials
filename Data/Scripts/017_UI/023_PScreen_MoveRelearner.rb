@@ -1,10 +1,4 @@
-def pbEachNaturalMove(pokemon)
-  movelist=pokemon.getMoveList
-  for i in movelist
-    yield i[1],i[0]
-  end
-end
-
+# Unused
 def pbHasRelearnableMove?(pokemon)
   return pbGetRelearnableMoves(pokemon).length>0
 end
@@ -12,11 +6,10 @@ end
 def pbGetRelearnableMoves(pokemon)
   return [] if !pokemon || pokemon.egg? || pokemon.shadowPokemon?
   moves=[]
-  pbEachNaturalMove(pokemon) { |move,level|
-    if level<=pokemon.level && !pokemon.hasMove?(move)
-      moves.push(move) if !moves.include?(move)
-    end
-  }
+  pokemon.getMoveList.each do |m|
+    next if m[0] > pokemon.level || pokemon.hasMove?(m[1])
+    moves.push(m[1]) if !moves.include?(m[1])
+  end
   tmoves=[]
   if pokemon.firstmoves
     for i in pokemon.firstmoves

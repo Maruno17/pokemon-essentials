@@ -22,7 +22,7 @@ module TrainerData
   SCHEMA = {
     "Items"     => [0,         "eEEEEEEE", :Item, :Item, :Item, :Item,
                                            :Item, :Item, :Item, :Item],
-    "Pokemon"   => [SPECIES,   "ev", :PBSpecies, nil],   # Species, level
+    "Pokemon"   => [SPECIES,   "ev", :Species, nil],   # Species, level
     "Item"      => [ITEM,      "e", :Item],
     "Moves"     => [MOVES,     "eEEE", :Move, :Move, :Move, :Move],
     "Ability"   => [ABILITY,   "u"],
@@ -69,7 +69,7 @@ def pbLoadTrainer(tr_type, tr_name, tr_id = 0)
     opponent.setForeignID($Trainer)
     # Load up each Pokémon in the trainer's party
     for poke in trainer[3]
-      species = pbGetSpeciesFromFSpecies(poke[TrainerData::SPECIES])[0]
+      species = GameData::Species.get(poke[TrainerData::SPECIES]).species
       level = poke[TrainerData::LEVEL]
       pokemon = Pokemon.new(species,level,opponent,false)
       if poke[TrainerData::FORM]
@@ -84,14 +84,15 @@ def pbLoadTrainer(tr_type, tr_name, tr_id = 0)
       else
         pokemon.resetMoves
       end
-      pokemon.setAbility(poke[TrainerData::ABILITY] || 0)
+      pokemon.setAbility(poke[TrainerData::ABILITY])
       g = (poke[TrainerData::GENDER]) ? poke[TrainerData::GENDER] : (opponent.female?) ? 1 : 0
       pokemon.setGender(g)
       (poke[TrainerData::SHINY]) ? pokemon.makeShiny : pokemon.makeNotShiny
       if poke[TrainerData::NATURE]
         n = poke[TrainerData::NATURE]
       else
-        n = (pokemon.species + GameData::TrainerType.get(opponent.trainertype).id_number) % (PBNatures.maxValue + 1)
+        n = pokemon.species_data.id_number + GameData::TrainerType.get(opponent.trainertype).id_number
+        n = n % (PBNatures.maxValue + 1)
       end
       pokemon.setNature(n)
       for i in 0...6
@@ -143,17 +144,17 @@ def pbNewTrainer(tr_type, tr_name, tr_id, savechanges = true)
     end
     loop do
       species = pbChooseSpeciesList
-      if species<=0
-        break if i>0
-        pbMessage(_INTL("This trainer must have at least 1 Pokémon!"))
-      else
+      if species
         params = ChooseNumberParams.new
         params.setRange(1,PBExperience.maxLevel)
         params.setDefaultValue(10)
         level = pbMessageChooseNumber(_INTL("Set the level for {1} (max. #{PBExperience.maxLevel}).",
-           PBSpecies.getName(species)),params)
+           GameData::Species.get(species).name),params)
         pokemon.push([species,level])
         break
+      else
+        break if i>0
+        pbMessage(_INTL("This trainer must have at least 1 Pokémon!"))
       end
     end
   end

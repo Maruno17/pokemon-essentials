@@ -540,13 +540,13 @@ class PokemonBattlerSprite < RPG::Sprite
     @spriteX = p[0]
     @spriteY = p[1]
     # Apply metrics
-    pbApplyBattlerMetricsToSprite(self,@index,@pkmn.fSpecies)
+    @pkmn.species_data.apply_metrics_to_sprite(self, @index)
   end
 
   def setPokemonBitmap(pkmn,back=false)
     @pkmn = pkmn
     @_iconBitmap.dispose if @_iconBitmap
-    @_iconBitmap = pbLoadPokemonBitmap(@pkmn,back)
+    @_iconBitmap = GameData::Species.sprite_bitmap_from_pokemon(@pkmn, back)
     self.bitmap = (@_iconBitmap) ? @_iconBitmap.bitmap : nil
     pbSetPosition
   end
@@ -557,8 +557,7 @@ class PokemonBattlerSprite < RPG::Sprite
   # @battleAnimations array.
   def pbPlayIntroAnimation(pictureEx=nil)
     return if !@pkmn
-    cry = pbCryFile(@pkmn)
-    pbSEPlay(cry) if cry
+    GameData::Species.play_cry_from_pokemon(@pkmn)
   end
 
   QUARTER_ANIM_PERIOD = Graphics.frame_rate*3/20
@@ -637,13 +636,13 @@ class PokemonBattlerShadowSprite < RPG::Sprite
     self.x = p[0]
     self.y = p[1]
     # Apply metrics
-    pbApplyBattlerMetricsToSprite(self,@index,@pkmn.fSpecies,true)
+    @pkmn.species_data.apply_metrics_to_sprite(self, @index, true)
   end
 
   def setPokemonBitmap(pkmn)
     @pkmn = pkmn
     @_iconBitmap.dispose if @_iconBitmap
-    @_iconBitmap = pbLoadPokemonShadowBitmap(@pkmn)
+    @_iconBitmap = GameData::Species.shadow_bitmap_from_pokemon(@pkmn)
     self.bitmap = (@_iconBitmap) ? @_iconBitmap.bitmap : nil
     pbSetPosition
   end

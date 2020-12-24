@@ -153,14 +153,9 @@ class PokeBattle_Trainer
   def pokedexSeen(region = -1)   # Number of Pokémon seen
     ret = 0
     if region == -1
-      for i in 1..PBSpecies.maxValue
-        ret += 1 if @seen[i]
-      end
+      GameData::Species.each { |s| ret += 1 if s.form == 0 && @seen[s.species] }
     else
-      regionlist = pbAllRegionalSpecies(region)
-      for i in regionlist
-        ret += 1 if i > 0 && @seen[i]
-      end
+      pbAllRegionalSpecies(region).each { |s| ret += 1 if s && @seen[s] }
     end
     return ret
   end
@@ -168,22 +163,19 @@ class PokeBattle_Trainer
   def pokedexOwned(region = -1)   # Number of Pokémon owned
     ret = 0
     if region == -1
-      for i in 0..PBSpecies.maxValue
-        ret += 1 if @owned[i]
-      end
+      GameData::Species.each { |s| ret += 1 if s.form == 0 && @owned[s.species] }
     else
-      regionlist = pbAllRegionalSpecies(region)
-      for i in regionlist
-        ret += 1 if @owned[i]
-      end
+      pbAllRegionalSpecies(region).each { |s| ret += 1 if s && @owned[s] }
     end
     return ret
   end
 
   def numFormsSeen(species)
-    species = getID(PBSpecies, species)
-    return 0 if species <= 0
+    species_data = GameData::Species.try_get(species)
+    return 0 if !species_data
+    species = species_data.species
     ret = 0
+    @formseen[species] = [[], []] if !@formseen[species]
     array = @formseen[species]
     for i in 0...[array[0].length, array[1].length].max
       ret += 1 if array[0][i] || array[1][i]
@@ -192,38 +184,32 @@ class PokeBattle_Trainer
   end
 
   def seen?(species)
-    species = getID(PBSpecies, species)
-    return species > 0 ? @seen[species] : false
+    species_data = GameData::Species.try_get(species)
+    return (species_data) ? @seen[species_data.species] : false
   end
   alias hasSeen? seen?
 
   def owned?(species)
-    species = getID(PBSpecies, species)
-    return species > 0 ? @owned[species] : false
+    species_data = GameData::Species.try_get(species)
+    return (species_data) ? @owned[species_data.species] : false
   end
   alias hasOwned? owned?
 
   def setSeen(species)
-    species = getID(PBSpecies, species)
-    @seen[species] = true if species > 0
+    species_data = GameData::Species.try_get(species)
+    @seen[species_data.species] = true if species_data
   end
 
   def setOwned(species)
-    species = getID(PBSpecies, species)
-    @owned[species] = true if species > 0
+    species_data = GameData::Species.try_get(species)
+    @owned[species_data.species] = true if species_data
   end
 
   def clearPokedex
-    @seen         = []
-    @owned        = []
-    @formseen     = []
-    @formlastseen = []
-    for i in 1..PBSpecies.maxValue
-      @seen[i]         = false
-      @owned[i]        = false
-      @formlastseen[i] = []
-      @formseen[i]     = [[], []]
-    end
+    @seen         = {}
+    @owned        = {}
+    @formseen     = {}
+    @formlastseen = {}
   end
 
   #=============================================================================
@@ -239,10 +225,7 @@ class PokeBattle_Trainer
     @pokegear          = false
     @pokedex           = false
     clearPokedex
-    @shadowcaught      = []
-    for i in 1..PBSpecies.maxValue
-      @shadowcaught[i] = false
-    end
+    @shadowcaught      = {}
     @badges            = []
     for i in 0...8
       @badges[i]       = false

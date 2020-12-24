@@ -109,10 +109,10 @@ module Compiler
         end
       end
       lineno += 1
-      Graphics.update if lineno%500==0
+      Graphics.update if lineno%200==0
       pbSetWindowText(_INTL("Processing {1} line {2}",FileLineData.file,lineno)) if lineno%50==0
     }
-    yield lastsection,sectionname  if havesection
+    yield lastsection,sectionname if havesection
   end
 
   # Used for pokemon.txt
@@ -566,18 +566,22 @@ module Compiler
     clonitem.sub!(/\s*$/, "")
     itm = GameData::Item.try_get(clonitem)
     if !itm
-      raise _INTL("Undefined item constant name: {1}\r\nName must consist only of letters, numbers and\r\nunderscores, and can't begin with a number.\r\nMake sure the item is defined in\r\nPBS/items.txt.\r\n{2}", item, FileLineData.linereport)
+      raise _INTL("Undefined item constant name: {1}\r\nMake sure the item is defined in PBS/items.txt.\r\n{2}", item, FileLineData.linereport)
     end
     return itm.id
   end
 
-  def parseSpecies(item)
-    clonitem = item.upcase
-    clonitem.gsub!(/^[\s\n]*/,"")
-    clonitem.gsub!(/[\s\n]*$/,"")
-    clonitem = "NIDORANmA" if clonitem=="NIDORANMA"
-    clonitem = "NIDORANfE" if clonitem=="NIDORANFE"
-    return pbGetConst(PBSpecies,clonitem,_INTL("Undefined species constant name: [%s]\r\nName must consist only of letters, numbers, and\r\nunderscores and can't begin with a number.\r\nMake sure the name is defined in\r\nPBS/pokemon.txt.\r\n{1}",FileLineData.linereport))
+  def parseSpecies(species)
+    clonspecies = species.upcase
+    clonspecies.gsub!(/^\s*/, "")
+    clonspecies.gsub!(/\s*$/, "")
+    clonspecies = "NIDORANmA" if clonspecies == "NIDORANMA"
+    clonspecies = "NIDORANfE" if clonspecies == "NIDORANFE"
+    spec = GameData::Species.try_get(clonspecies)
+    if !spec
+      raise _INTL("Undefined species constant name: {1}\r\nMake sure the species is defined in PBS/pokemon.txt.\r\n{2}", species, FileLineData.linereport)
+    end
+    return spec.id
   end
 
   def parseMove(move, skip_unknown = false)
@@ -587,7 +591,7 @@ module Compiler
     mov = GameData::Move.try_get(clonmove)
     if !mov
       return nil if skip_unknown
-      raise _INTL("Undefined move constant name: {1}\r\nName must consist only of letters, numbers and\r\nunderscores, and can't begin with a number.\r\nMake sure the move is defined in\r\nPBS/moves.txt.\r\n{2}", move, FileLineData.linereport)
+      raise _INTL("Undefined move constant name: {1}\r\nMake sure the move is defined in PBS/moves.txt.\r\n{2}", move, FileLineData.linereport)
     end
     return mov.id
   end
@@ -595,9 +599,9 @@ module Compiler
   # Unused
   def parseNature(item)
     clonitem = item.upcase
-    clonitem.sub!(/^\s*/,"")
-    clonitem.sub!(/\s*$/,"")
-    return pbGetConst(PBNatures,clonitem,_INTL("Undefined nature constant name: %s\r\nName must consist only of letters, numbers, and\r\nunderscores and can't begin with a number.\r\nMake sure the name is defined in\r\nthe script section PBNatures.\r\n{1}",FileLineData.linereport))
+    clonitem.sub!(/^\s*/, "")
+    clonitem.sub!(/\s*$/, "")
+    return pbGetConst(PBNatures, clonitem, _INTL("Undefined nature constant name: {1}\r\nMake sure the name is defined in the script section PBNatures.\r\n{1}", item, FileLineData.linereport))
   end
 
   # Unused
@@ -607,7 +611,7 @@ module Compiler
     clontype.sub!(/\s*$/, "")
     typ = GameData::TrainerType.try_get(clontype)
     if !typ
-      raise _INTL("Undefined Trainer type constant name: {1}\r\nName must consist only of letters, numbers and\r\nunderscores, and can't begin with a number.\r\nMake sure the trainer type is defined in\r\ntrainertypes.txt.\r\n{2}", type, FileLineData.linereport)
+      raise _INTL("Undefined Trainer type constant name: {1}\r\nMake sure the trainer type is defined in PBS/trainertypes.txt.\r\n{2}", type, FileLineData.linereport)
     end
     return typ.id
   end
@@ -638,13 +642,13 @@ module Compiler
       yield(_INTL("Compiling Pokémon data"))
       compile_pokemon                # Depends on Move, Item, Type, Ability
       yield(_INTL("Compiling Pokémon forms data"))
-      compile_pokemon_forms          # Depends on PBSpecies, Move, Item, Type, Ability
+      compile_pokemon_forms          # Depends on Species, Move, Item, Type, Ability
       yield(_INTL("Compiling machine data"))
-      compile_move_compatibilities   # Depends on PBSpecies, Move
+      compile_move_compatibilities   # Depends on Species, Move
       yield(_INTL("Compiling Trainer type data"))
       compile_trainer_types          # No dependencies
       yield(_INTL("Compiling Trainer data"))
-      compile_trainers               # Depends on PBSpecies, Item, Move
+      compile_trainers               # Depends on Species, Item, Move
       yield(_INTL("Compiling phone data"))
       compile_phone
       yield(_INTL("Compiling metadata"))
@@ -652,9 +656,11 @@ module Compiler
       yield(_INTL("Compiling battle Trainer data"))
       compile_trainer_lists          # Depends on TrainerType
       yield(_INTL("Compiling encounter data"))
-      compile_encounters             # Depends on PBSpecies
+      compile_encounters             # Depends on Species
       yield(_INTL("Compiling shadow moveset data"))
-      compile_shadow_movesets        # Depends on PBSpecies, Move
+      compile_shadow_movesets        # Depends on Species, Move
+      yield(_INTL("Compiling Regional Dexes"))
+      compile_regional_dexes         # Depends on Species
       yield(_INTL("Compiling animations"))
       compile_animations
       yield(_INTL("Converting events"))
@@ -704,8 +710,8 @@ module Compiler
          "phone.txt",
          "pokemon.txt",
          "pokemonforms.txt",
+         "regionaldexes.txt",
          "shadowmoves.txt",
-         "tm.txt",
          "townmap.txt",
          "trainerlists.txt",
          "trainers.txt",

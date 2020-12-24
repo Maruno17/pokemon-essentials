@@ -326,12 +326,11 @@ end
 #
 #===============================================================================
 class SpeciesLister
-  def initialize(selection,includeNew=false)
+  def initialize(selection = 0, includeNew = false)
     @selection = selection
     @commands = []
     @ids = []
     @includeNew = includeNew
-    @trainers = nil
     @index = 0
   end
 
@@ -346,28 +345,27 @@ class SpeciesLister
     @commands.clear
     @ids.clear
     cmds = []
-    for i in 1..PBSpecies.maxValue
-      cname = getConstantName(PBSpecies,i) rescue next
-      name = PBSpecies.getName(i)
-      cmds.push([i,name]) if name && name!=""
+    GameData::Species.each do |species|
+      next if species.form != 0
+      cmds.push([species.id_number, species.id, species.real_name])
     end
-    cmds.sort! { |a,b| a[1]<=>b[1] }
+    cmds.sort! { |a, b| a[2].downcase <=> b[2].downcase }
     if @includeNew
       @commands.push(_INTL("[NEW SPECIES]"))
-      @ids.push(-1)
+      @ids.push(true)
     end
     for i in cmds
-      @commands.push(sprintf("%03d: %s",i[0],i[1]))
-      @ids.push(i[0])
+      @commands.push(sprintf("%03d: %s", i[0], i[2]))
+      @ids.push(i[1])
     end
     @index = @selection
-    @index = @commands.length-1 if @index>=@commands.length
-    @index = 0 if @index<0
+    @index = @commands.length - 1 if @index >= @commands.length
+    @index = 0 if @index < 0
     return @commands
   end
 
   def value(index)
-    return nil if index<0
+    return nil if index < 0
     return @ids[index]
   end
 
@@ -385,7 +383,6 @@ class ItemLister
     @commands = []
     @ids = []
     @includeNew = includeNew
-    @trainers = nil
     @index = 0
   end
 
@@ -593,7 +590,7 @@ class TrainerBattleLister
     if !@includeNew || index>0
       @trainers[(@includeNew) ? index-1 : index][3].each_with_index do |p,i|
         text += "\r\n" if i>0
-        text += sprintf("%s Lv.%d",PBSpecies.getName(p[TrainerData::SPECIES]),p[TrainerData::LEVEL])
+        text += sprintf("%s Lv.%d",GameData::Species.get(p[TrainerData::SPECIES]).name, p[TrainerData::LEVEL])
       end
     end
     @pkmnList.text = text

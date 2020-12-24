@@ -2,18 +2,11 @@
 # Data caches.
 #===============================================================================
 class PokemonTemp
-  attr_accessor :metadata
   attr_accessor :townMapData
   attr_accessor :encountersData
   attr_accessor :phoneData
   attr_accessor :regionalDexes
-  attr_accessor :speciesData
-  attr_accessor :speciesEggMoves
-  attr_accessor :speciesMetrics
-  attr_accessor :speciesMovesets
-  attr_accessor :speciesTMData
   attr_accessor :speciesShadowMovesets
-  attr_accessor :pokemonFormToSpecies
   attr_accessor :trainersData
   attr_accessor :moveToAnim
   attr_accessor :battleAnims
@@ -21,18 +14,11 @@ end
 
 def pbClearData
   if $PokemonTemp
-    $PokemonTemp.metadata              = nil
     $PokemonTemp.townMapData           = nil
     $PokemonTemp.encountersData        = nil
     $PokemonTemp.phoneData             = nil
     $PokemonTemp.regionalDexes         = nil
-    $PokemonTemp.speciesData           = nil
-    $PokemonTemp.speciesEggMoves       = nil
-    $PokemonTemp.speciesMetrics        = nil
-    $PokemonTemp.speciesMovesets       = nil
-    $PokemonTemp.speciesTMData         = nil
     $PokemonTemp.speciesShadowMovesets = nil
-    $PokemonTemp.pokemonFormToSpecies  = nil
     $PokemonTemp.trainersData          = nil
     $PokemonTemp.moveToAnim            = nil
     $PokemonTemp.battleAnims           = nil
@@ -96,96 +82,6 @@ def pbLoadRegionalDexes
 end
 
 #===============================================================================
-# Methods to get Pokémon species data.
-#===============================================================================
-def pbLoadSpeciesData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.speciesData
-    $PokemonTemp.speciesData = load_data("Data/species.dat") || []
-  end
-  return $PokemonTemp.speciesData
-end
-
-def pbGetSpeciesData(species, form = 0, species_data_type = -1)
-  species = getID(PBSpecies, species)
-  s = pbGetFSpeciesFromForm(species, form)
-  species_data = pbLoadSpeciesData
-  if species_data_type < 0
-    return species_data[s] || []
-  end
-  return species_data[s][species_data_type] if species_data[s] && species_data[s][species_data_type]
-  case species_data_type
-  when SpeciesData::TYPE2
-    return nil
-  when SpeciesData::BASE_STATS
-    return [1, 1, 1, 1, 1, 1]
-  when SpeciesData::EFFORT_POINTS
-    return [0, 0, 0, 0, 0, 0]
-  when SpeciesData::STEPS_TO_HATCH, SpeciesData::HEIGHT, SpeciesData::WEIGHT
-    return 1
-  end
-  return 0
-end
-
-#===============================================================================
-# Methods to get egg moves data.
-#===============================================================================
-def pbLoadEggMovesData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.speciesEggMoves
-    $PokemonTemp.speciesEggMoves = load_data("Data/species_eggmoves.dat") || []
-  end
-  return $PokemonTemp.speciesEggMoves
-end
-
-def pbGetSpeciesEggMoves(species, form = 0)
-  species = getID(PBSpecies, species)
-  s = pbGetFSpeciesFromForm(species, form)
-  egg_moves_data = pbLoadEggMovesData
-  return egg_moves_data[s] || []
-end
-
-#===============================================================================
-# Method to get Pokémon species metrics (sprite positioning) data.
-#===============================================================================
-def pbLoadSpeciesMetrics
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.speciesMetrics
-    $PokemonTemp.speciesMetrics = load_data("Data/species_metrics.dat") || []
-  end
-  return $PokemonTemp.speciesMetrics
-end
-
-#===============================================================================
-# Methods to get Pokémon moveset data.
-#===============================================================================
-def pbLoadMovesetsData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.speciesMovesets
-    $PokemonTemp.speciesMovesets = load_data("Data/species_movesets.dat") || []
-  end
-  return $PokemonTemp.speciesMovesets
-end
-
-def pbGetSpeciesMoveset(species, form = 0)
-  species = getID(PBSpecies, species)
-  s = pbGetFSpeciesFromForm(species, form)
-  movesets_data = pbLoadMovesetsData
-  return movesets_data[s] || []
-end
-
-#===============================================================================
-# Method to get TM/Move Tutor compatibility data.
-#===============================================================================
-def pbLoadSpeciesTMData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.speciesTMData
-    $PokemonTemp.speciesTMData = load_data("Data/tm.dat") || {}
-  end
-  return $PokemonTemp.speciesTMData
-end
-
-#===============================================================================
 # Method to get Shadow Pokémon moveset data.
 #===============================================================================
 def pbLoadShadowMovesets
@@ -194,17 +90,6 @@ def pbLoadShadowMovesets
     $PokemonTemp.speciesShadowMovesets = load_data("Data/shadow_movesets.dat") || []
   end
   return $PokemonTemp.speciesShadowMovesets
-end
-
-#===============================================================================
-# Method to get array that converts species + form to and from fSpecies values.
-#===============================================================================
-def pbLoadFormToSpecies
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.pokemonFormToSpecies
-    $PokemonTemp.pokemonFormToSpecies = load_data("Data/form2species.dat")
-  end
-  return $PokemonTemp.pokemonFormToSpecies
 end
 
 #===============================================================================

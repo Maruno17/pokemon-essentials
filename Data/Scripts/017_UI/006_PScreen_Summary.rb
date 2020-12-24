@@ -374,7 +374,7 @@ class PokemonSummary_Scene
     textpos = [
        [_INTL("Dex No."),238,80,0,base,shadow],
        [_INTL("Species"),238,112,0,base,shadow],
-       [PBSpecies.getName(@pokemon.species),435,112,2,Color.new(64,64,64),Color.new(176,176,176)],
+       [@pokemon.speciesName,435,112,2,Color.new(64,64,64),Color.new(176,176,176)],
        [_INTL("Type"),238,144,0,base,shadow],
        [_INTL("OT"),238,176,0,base,shadow],
        [_INTL("ID No."),238,208,0,base,shadow],
@@ -898,7 +898,7 @@ class PokemonSummary_Scene
     @sprites["pokemon"].setPokemonBitmap(@pokemon)
     @sprites["itemicon"].item = @pokemon.item_id
     pbSEStop
-    pbPlayCry(@pokemon)
+    GameData::Species.play_cry_from_pokemon(@pokemon)
   end
 
   def pbMoveSelection
@@ -1235,7 +1235,7 @@ class PokemonSummary_Scene
   end
 
   def pbScene
-    pbPlayCry(@pokemon)
+    GameData::Species.play_cry_from_pokemon(@pokemon)
     loop do
       Graphics.update
       Input.update
@@ -1243,7 +1243,7 @@ class PokemonSummary_Scene
       dorefresh = false
       if Input.trigger?(Input::A)
         pbSEStop
-        pbPlayCry(@pokemon)
+        GameData::Species.play_cry_from_pokemon(@pokemon)
       elsif Input.trigger?(Input::B)
         pbPlayCloseMenuSE
         break
