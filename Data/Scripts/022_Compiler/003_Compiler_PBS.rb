@@ -675,7 +675,6 @@ module Compiler
         species_pokedex_entries[species_number] = species_hash[:pokedex_entry]
       }
     }
-#p GameData::Species::DATA.keys
     # Enumerate all evolution species and parameters (this couldn't be done earlier)
     GameData::Species.each do |species|
       FileLineData.setSection(species.id_number, "Evolutions", nil)   # For error reporting
@@ -694,19 +693,15 @@ module Compiler
       end
     end
     # Add prevolution "evolution" entry for all evolved species
-    GameData::Species.each do |species|
-      found_prevolution = false
-      Graphics.update if species.id_number % 200 == 0
-      pbSetWindowText(_INTL("Processing {1} prevolution line {2}", FileLineData.file, species.id_number)) if species.id_number % 50 == 0
-      GameData::Species.each do |other_species|
-        other_species.evolutions.each do |evo|
-          next if evo[0] != species.species || evo[3]
-          species.evolutions.push([other_species.species, evo[1], evo[2], true])
-          found_prevolution = true
-          break
-        end
-        break if found_prevolution
+    all_evos = {}
+    GameData::Species.each do |species|   # Build a hash of prevolutions for each species
+      next if all_evos[species.species]
+      species.evolutions.each do |evo|
+        all_evos[evo[0]] = [species.species, evo[1], evo[2], true] if !all_evos[evo[0]]
       end
+    end
+    GameData::Species.each do |species|   # Distribute prevolutions
+      species.evolutions.push(all_evos[species.species].clone) if all_evos[species.species]
     end
     # Save all data
     GameData::Species.save
@@ -885,21 +880,17 @@ module Compiler
     }
     # Add prevolution "evolution" entry for all evolved forms that define their
     # own evolution methods (and thus won't have a prevolution listed already)
-    GameData::Species.each do |species|
+    all_evos = {}
+    GameData::Species.each do |species|   # Build a hash of prevolutions for each species
+      next if all_evos[species.species]
+      species.evolutions.each do |evo|
+        all_evos[evo[0]] = [species.species, evo[1], evo[2], true] if !evo[3] && !all_evos[evo[0]]
+      end
+    end
+    GameData::Species.each do |species|   # Distribute prevolutions
       next if species.form == 0   # Looking at alternate forms only
       next if species.evolutions.any? { |evo| evo[3] }   # Already has prevo listed
-      found_prevolution = false
-      Graphics.update if species.id_number % 200 == 0
-      pbSetWindowText(_INTL("Processing {1} prevolution line {2}", FileLineData.file, species.id_number)) if species.id_number % 50 == 0
-      GameData::Species.each do |other_species|
-        other_species.evolutions.each do |evo|
-          next if evo[0] != species.species || evo[3]
-          species.evolutions.push([other_species.species, evo[1], evo[2], true])
-          found_prevolution = true
-          break
-        end
-        break if found_prevolution
-      end
+      species.evolutions.push(all_evos[species.species].clone) if all_evos[species.species]
     end
     # Save all data
     GameData::Species.save
