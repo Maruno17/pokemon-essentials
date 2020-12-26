@@ -17,19 +17,19 @@ module GameData
     extend ClassMethods
     include InstanceMethods
 
-    def self.check_file(tr_type, path, suffix = "")
+    def self.check_file(tr_type, path, optional_suffix = "", suffix = "")
       tr_type_data = self.try_get(tr_type)
       return nil if tr_type_data.nil?
       # Check for files
-      if !suffix.empty?
-        ret = path + tr_type_data.id.to_s + suffix
+      if !optional_suffix.empty?
+        ret = path + tr_type_data.id.to_s + optional_suffix + suffix
         return ret if pbResolveBitmap(ret)
-        ret = path + sprintf("%03d", tr_type_data.id_number) + suffix
+        ret = path + sprintf("%03d", tr_type_data.id_number) + optional_suffix + suffix
         return ret if pbResolveBitmap(ret)
       end
-      ret = path + tr_type_data.id.to_s
+      ret = path + tr_type_data.id.to_s + suffix
       return ret if pbResolveBitmap(ret)
-      ret = path + sprintf("%03d", tr_type_data.id_number)
+      ret = path + sprintf("%03d", tr_type_data.id_number) + suffix
       return (pbResolveBitmap(ret)) ? ret : nil
     end
 
@@ -44,21 +44,21 @@ module GameData
     end
 
     def self.front_sprite_filename(tr_type)
-      return self.check_file(tr_type, "Graphics/Trainers/trainer")
+      return self.check_file(tr_type, "Graphics/Trainers/")
     end
 
     def self.player_front_sprite_filename(tr_type)
       outfit = ($Trainer) ? $Trainer.outfit : 0
-      return self.check_file(tr_type, "Graphics/Trainers/trainer", sprintf("_%d", outfit))
+      return self.check_file(tr_type, "Graphics/Trainers/", sprintf("_%d", outfit))
     end
 
     def self.back_sprite_filename(tr_type)
-      return self.check_file(tr_type, "Graphics/Trainers/trback")
+      return self.check_file(tr_type, "Graphics/Trainers/", nil, "_back")
     end
 
     def self.player_back_sprite_filename(tr_type)
       outfit = ($Trainer) ? $Trainer.outfit : 0
-      return self.check_file(tr_type, "Graphics/Trainers/trback", sprintf("_%d", outfit))
+      return self.check_file(tr_type, "Graphics/Trainers/", sprintf("_%d", outfit), "_back")
     end
 
     def self.map_icon_filename(tr_type)

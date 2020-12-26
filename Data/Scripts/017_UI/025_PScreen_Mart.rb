@@ -108,7 +108,7 @@ class RpgxpMartAdapter
   def getItemIcon(item)
     return nil if !item
     if item == 0
-      return sprintf("Graphics/Icons/itemBack")
+      return sprintf("Graphics/Items/back")
     elsif item.respond_to?("icon_index")
       return "Graphics/System/IconSet"
     else

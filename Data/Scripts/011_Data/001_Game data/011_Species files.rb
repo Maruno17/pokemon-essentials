@@ -1,18 +1,17 @@
 module GameData
   class Species
-    def self.check_graphic_file(path, species, form = 0, gender = 0, shiny = false, shadow = false, back = false)
+    def self.check_graphic_file(path, species, form = 0, gender = 0, shiny = false, shadow = false, subfolder = "")
+      try_subfolder = sprintf("%s/", subfolder)
       species_data = self.get_species_form(species, form)
       species_id = sprintf("%03d", (species_data) ? self.get(species_data.species).id_number : 0)
       try_species = species
       try_form    = (form > 0) ? sprintf("_%d", form) : ""
-      try_gender  = (gender == 1) ? "f" : ""
-      try_shiny   = (shiny) ? "s" : ""
+      try_gender  = (gender == 1) ? "_female" : ""
       try_shadow  = (shadow) ? "_shadow" : ""
-      try_back    = (back) ? "b" : ""
       factors = []
-      factors.push([4, try_shadow, ""]) if shadow
+      factors.push([4, sprintf("%s shiny/", subfolder), try_subfolder]) if shiny
+      factors.push([3, try_shadow, ""]) if shadow
       factors.push([2, try_gender, ""]) if gender == 1
-      factors.push([3, try_shiny, ""]) if shiny
       factors.push([1, try_form, ""]) if form > 0
       factors.push([0, try_species, "000"])
       # Go through each combination of parameters in turn to find an existing sprite
@@ -21,19 +20,19 @@ module GameData
         factors.each_with_index do |factor, index|
           value = ((i / (2 ** index)) % 2 == 0) ? factor[1] : factor[2]
           case factor[0]
-          when 0 then try_species = value
-          when 1 then try_form    = value
-          when 2 then try_gender  = value
-          when 3 then try_shiny   = value
-          when 4 then try_shadow  = value
+          when 0 then try_species   = value
+          when 1 then try_form      = value
+          when 2 then try_gender    = value
+          when 3 then try_shadow    = value
+          when 4 then try_subfolder = value   # Shininess
           end
         end
         # Look for a graphic matching this combination's parameters
         for j in 0...2   # Try using the species' ID symbol and then its ID number
           next if !try_species || (try_species == "000" && j == 1)
           try_species_text = (j == 0) ? try_species : species_id
-          ret = pbResolveBitmap(sprintf("%s%s%s%s%s%s%s", path,
-             try_species_text, try_gender, try_shiny, try_back, try_form, try_shadow))
+          ret = pbResolveBitmap(sprintf("%s%s%s%s%s%s", path, try_subfolder,
+             try_species_text, try_form, try_gender, try_shadow))
           return ret if ret
         end
       end
@@ -45,27 +44,27 @@ module GameData
       return nil if species_data.nil?
       species_id = self.get(species_data.species).id_number
       if form > 0
-        ret = pbResolveBitmap(sprintf("%s%segg_%d", path, species_data.species, form))
+        ret = pbResolveBitmap(sprintf("%s%s_%d", path, species_data.species, form))
         return ret if ret
-        ret = pbResolveBitmap(sprintf("%s%03degg_%d", path, species_id, form))
+        ret = pbResolveBitmap(sprintf("%s%03d_%d", path, species_id, form))
         return ret if ret
       end
-      ret = pbResolveBitmap(sprintf("%s%segg", path, species_data.species))
+      ret = pbResolveBitmap(sprintf("%s%s", path, species_data.species))
       return ret if ret
-      return pbResolveBitmap(sprintf("%s%03degg", path, species_id))
+      return pbResolveBitmap(sprintf("%s%03d", path, species_id))
     end
 
     def self.front_sprite_filename(species, form = 0, gender = 0, shiny = false, shadow = false)
-      return self.check_graphic_file("Graphics/Battlers/", species, form, gender, shiny, shadow)
+      return self.check_graphic_file("Graphics/Pokemon/", species, form, gender, shiny, shadow, "Front")
     end
 
     def self.back_sprite_filename(species, form = 0, gender = 0, shiny = false, shadow = false)
-      return self.check_graphic_file("Graphics/Battlers/", species, form, gender, shiny, shadow, true)
+      return self.check_graphic_file("Graphics/Pokemon/", species, form, gender, shiny, shadow, "Back")
     end
 
     def self.egg_sprite_filename(species, form)
-      ret = self.check_egg_graphic_file("Graphics/Battlers/", species, form)
-      return (ret) ? ret : pbResolveBitmap("Graphics/Battlers/egg")
+      ret = self.check_egg_graphic_file("Graphics/Pokemon/Eggs/", species, form)
+      return (ret) ? ret : pbResolveBitmap("Graphics/Pokemon/Eggs/000")
     end
 
     def self.sprite_filename(species, form = 0, gender = 0, shiny = false, shadow = false, back = false, egg = false)
@@ -117,13 +116,13 @@ module GameData
     #===========================================================================
 
     def self.egg_icon_filename(species, form)
-      ret = self.check_egg_graphic_file("Graphics/Icons/icon", species, form)
-      return (ret) ? ret : pbResolveBitmap("Graphics/Icons/iconEgg")
+      ret = self.check_egg_graphic_file("Graphics/Pokemon/Icons", species, form)
+      return (ret) ? ret : pbResolveBitmap("Graphics/Pokemon/Icons/000_egg")
     end
 
     def self.icon_filename(species, form = 0, gender = 0, shiny = false, shadow = false, egg = false)
       return self.egg_icon_filename(species, form) if egg
-      return self.check_graphic_file("Graphics/Icons/icon", species, form, gender, shiny, shadow)
+      return self.check_graphic_file("Graphics/Pokemon/", species, form, gender, shiny, shadow, "Icons")
     end
 
     def self.icon_filename_from_pokemon(pkmn)
@@ -151,14 +150,14 @@ module GameData
       return nil if species_data.nil?
       species_id = self.get(species_data.species).id_number
       if form > 0
-        ret = pbResolveBitmap(sprintf("Graphics/Icons/Footprints/footprint%s_%d", species_data.species, form))
+        ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Footprints/%s_%d", species_data.species, form))
         return ret if ret
-        ret = pbResolveBitmap(sprintf("Graphics/Icons/Footprints/footprint%03d_%d", species_id, form))
+        ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Footprints/%03d_%d", species_id, form))
         return ret if ret
       end
-      ret = pbResolveBitmap(sprintf("Graphics/Icons/Footprints/footprint%s", species_data.species))
+      ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Footprints/%s", species_data.species))
       return ret if ret
-      return pbResolveBitmap(sprintf("Graphics/Icons/Footprints/footprint%03d", species_id))
+      return pbResolveBitmap(sprintf("Graphics/Pokemon/Footprints/%03d", species_id))
     end
 
     #===========================================================================
@@ -169,17 +168,17 @@ module GameData
       species_id = self.get(species_data.species).id_number
       # Look for species-specific shadow graphic
       if form > 0
-        ret = pbResolveBitmap(sprintf("Graphics/Battlers/%s_%d_battleshadow", species_data.species, form))
+        ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%s_%d", species_data.species, form))
         return ret if ret
-        ret = pbResolveBitmap(sprintf("Graphics/Battlers/%03d_%d_battleshadow", species_id, form))
+        ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%03d_%d", species_id, form))
         return ret if ret
       end
-      ret = pbResolveBitmap(sprintf("Graphics/Battlers/%s_battleshadow", species_data.species))
+      ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%s", species_data.species))
       return ret if ret
-      ret = pbResolveBitmap(sprintf("Graphics/Battlers/%03d_battleshadow", species_id))
+      ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%03d", species_id))
       return ret if ret
       # Use general shadow graphic
-      return pbResolveBitmap(sprintf("Graphics/Pictures/Battle/battler_shadow_%d", species_data.shadow_size))
+      return pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%d", species_data.shadow_size))
     end
 
     def self.shadow_bitmap(species, form = 0)

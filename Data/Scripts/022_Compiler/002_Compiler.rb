@@ -668,6 +668,8 @@ module Compiler
       yield(_INTL("Saving messages"))
       pbSetTextMessages
       MessageTypes.saveMessages
+      yield(_INTL("Renaming sprites and cries"))
+      convert_files
     end
     pbSetWindowText(nil)
   end

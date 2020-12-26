@@ -19,24 +19,24 @@ module GameData
     include InstanceMethods
 
     def self.icon_filename(item)
-      return "Graphics/Icons/itemBack" if item.nil?
+      return "Graphics/Items/back" if item.nil?
       item_data = self.try_get(item)
-      return "Graphics/Icons/item000" if item_data.nil?
+      return "Graphics/Items/000" if item_data.nil?
       # Check for files
-      ret = sprintf("Graphics/Icons/item%s", item_data.id)
+      ret = sprintf("Graphics/Items/%s", item_data.id)
       return ret if pbResolveBitmap(ret)
-      ret = sprintf("Graphics/Icons/item%03d", item_data.id_number)
+      ret = sprintf("Graphics/Items/%03d", item_data.id_number)
       return ret if pbResolveBitmap(ret)
       # Check for TM/HM type icons
       if item_data.is_machine?
         move_type = GameData::Move.get(item_data.move).type
         type_data = GameData::Type.get(move_type)
-        ret = sprintf("Graphics/Icons/itemMachine%s", type_data.id)
+        ret = sprintf("Graphics/Items/machine_%s", type_data.id)
         return ret if pbResolveBitmap(ret)
-        ret = sprintf("Graphics/Icons/itemMachine%03d", type_data.id_number)
+        ret = sprintf("Graphics/Items/machine_%03d", type_data.id_number)
         return ret if pbResolveBitmap(ret)
       end
-      return "Graphics/Icons/item000"
+      return "Graphics/Items/000"
     end
 
     def self.held_icon_filename(item)

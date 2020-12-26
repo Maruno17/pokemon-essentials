@@ -28,10 +28,10 @@ class PokemonEggHatch_Scene
                                          @pokemon.form, @pokemon.shiny?,
                                          false, false, true)   # Egg sprite
     # Load egg cracks bitmap
-    crackfilename = sprintf("Graphics/Battlers/%seggCracks", @pokemon.species)
+    crackfilename = sprintf("Graphics/Pokemon/Eggs/%s_cracks", @pokemon.species)
     if !pbResolveBitmap(crackfilename)
-      crackfilename = sprintf("Graphics/Battlers/%03deggCracks", @pokemon.species_data.id_number)
-      crackfilename = sprintf("Graphics/Battlers/eggCracks") if !pbResolveBitmap(crackfilename)
+      crackfilename = sprintf("Graphics/Pokemon/Eggs/%03d_cracks", @pokemon.species_data.id_number)
+      crackfilename = sprintf("Graphics/Pokemon/Eggs/000_cracks") if !pbResolveBitmap(crackfilename)
     end
     crackfilename=pbResolveBitmap(crackfilename)
     @hatchSheet=AnimatedBitmap.new(crackfilename)
