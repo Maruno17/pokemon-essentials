@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class PokemonTrade_Scene
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
@@ -187,8 +190,9 @@ class PokemonTrade_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
   myPokemon = $Trainer.party[pokemonIndex]
   opponent = PokeBattle_Trainer.new(trainerName,trainerGender)
@@ -220,9 +224,6 @@ def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
   $Trainer.party[pokemonIndex] = yourPokemon
 end
 
-#===============================================================================
-# Evolution methods
-#===============================================================================
 def pbTradeCheckEvolution(pkmn, other_pkmn)
   return pbCheckEvolutionEx(pkmn) { |pkmn, method, parameter, new_species|
     success = PBEvolution.call("tradeCheck", method, pkmn, parameter, other_pkmn)

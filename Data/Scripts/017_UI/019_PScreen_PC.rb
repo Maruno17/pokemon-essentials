@@ -1,4 +1,114 @@
 #===============================================================================
+#
+#===============================================================================
+class TrainerPC
+  def shouldShow?
+    return true
+  end
+
+  def name
+    return _INTL("{1}'s PC",$Trainer.name)
+  end
+
+  def access
+    pbMessage(_INTL("\\se[PC access]Accessed {1}'s PC.",$Trainer.name))
+    pbTrainerPCMenu
+  end
+end
+
+#===============================================================================
+#
+#===============================================================================
+class StorageSystemPC
+  def shouldShow?
+    return true
+  end
+
+  def name
+    if $PokemonGlobal.seenStorageCreator
+      return _INTL("{1}'s PC",pbGetStorageCreator)
+    else
+      return _INTL("Someone's PC")
+    end
+  end
+
+  def access
+    pbMessage(_INTL("\\se[PC access]The Pokémon Storage System was opened."))
+    command = 0
+    loop do
+      command = pbShowCommandsWithHelp(nil,
+         [_INTL("Organize Boxes"),
+         _INTL("Withdraw Pokémon"),
+         _INTL("Deposit Pokémon"),
+         _INTL("See ya!")],
+         [_INTL("Organize the Pokémon in Boxes and in your party."),
+         _INTL("Move Pokémon stored in Boxes to your party."),
+         _INTL("Store Pokémon in your party in Boxes."),
+         _INTL("Return to the previous menu.")],-1,command
+      )
+      if command>=0 && command<3
+        if command==1   # Withdraw
+          if $PokemonStorage.party.length>=6
+            pbMessage(_INTL("Your party is full!"))
+            next
+          end
+        elsif command==2   # Deposit
+          count=0
+          for p in $PokemonStorage.party
+            count += 1 if p && !p.egg? && p.hp>0
+          end
+          if count<=1
+            pbMessage(_INTL("Can't deposit the last Pokémon!"))
+            next
+          end
+        end
+        pbFadeOutIn {
+          scene = PokemonStorageScene.new
+          screen = PokemonStorageScreen.new(scene,$PokemonStorage)
+          screen.pbStartScreen(command)
+        }
+      else
+        break
+      end
+    end
+  end
+end
+
+#===============================================================================
+#
+#===============================================================================
+module PokemonPCList
+  @@pclist = []
+
+  def self.registerPC(pc)
+    @@pclist.push(pc)
+  end
+
+  def self.getCommandList
+    commands = []
+    for pc in @@pclist
+      commands.push(pc.name) if pc.shouldShow?
+    end
+    commands.push(_INTL("Log Off"))
+    return commands
+  end
+
+  def self.callCommand(cmd)
+    return false if cmd<0 || cmd>=@@pclist.length
+    i = 0
+    for pc in @@pclist
+      next if !pc.shouldShow?
+      if i==cmd
+        pc.access
+        return true
+      end
+      i += 1
+    end
+    return false
+  end
+end
+
+#===============================================================================
 # PC menus
 #===============================================================================
 def pbPCItemStorage
@@ -118,90 +228,6 @@ def pbTrainerPCMenu
   end
 end
 
-
-
-class TrainerPC
-  def shouldShow?
-    return true
-  end
-
-  def name
-    return _INTL("{1}'s PC",$Trainer.name)
-  end
-
-  def access
-    pbMessage(_INTL("\\se[PC access]Accessed {1}'s PC.",$Trainer.name))
-    pbTrainerPCMenu
-  end
-end
-
-
-
-def pbGetStorageCreator
-  creator = pbStorageCreator
-  creator = _INTL("Bill") if !creator || creator==""
-  return creator
-end
-
-
-
-class StorageSystemPC
-  def shouldShow?
-    return true
-  end
-
-  def name
-    if $PokemonGlobal.seenStorageCreator
-      return _INTL("{1}'s PC",pbGetStorageCreator)
-    else
-      return _INTL("Someone's PC")
-    end
-  end
-
-  def access
-    pbMessage(_INTL("\\se[PC access]The Pokémon Storage System was opened."))
-    command = 0
-    loop do
-      command = pbShowCommandsWithHelp(nil,
-         [_INTL("Organize Boxes"),
-         _INTL("Withdraw Pokémon"),
-         _INTL("Deposit Pokémon"),
-         _INTL("See ya!")],
-         [_INTL("Organize the Pokémon in Boxes and in your party."),
-         _INTL("Move Pokémon stored in Boxes to your party."),
-         _INTL("Store Pokémon in your party in Boxes."),
-         _INTL("Return to the previous menu.")],-1,command
-      )
-      if command>=0 && command<3
-        if command==1   # Withdraw
-          if $PokemonStorage.party.length>=6
-            pbMessage(_INTL("Your party is full!"))
-            next
-          end
-        elsif command==2   # Deposit
-          count=0
-          for p in $PokemonStorage.party
-            count += 1 if p && !p.egg? && p.hp>0
-          end
-          if count<=1
-            pbMessage(_INTL("Can't deposit the last Pokémon!"))
-            next
-          end
-        end
-        pbFadeOutIn {
-          scene = PokemonStorageScene.new
-          screen = PokemonStorageScreen.new(scene,$PokemonStorage)
-          screen.pbStartScreen(command)
-        }
-      else
-        break
-      end
-    end
-  end
-end
-
-
-
 def pbTrainerPC
   pbMessage(_INTL("\\se[PC open]{1} booted up the PC.",$Trainer.name))
   pbTrainerPCMenu
@@ -220,40 +246,14 @@ def pbPokeCenterPC
   pbSEPlay("PC close")
 end
 
-
-
-module PokemonPCList
-  @@pclist = []
-
-  def self.registerPC(pc)
-    @@pclist.push(pc)
-  end
-
-  def self.getCommandList
-    commands = []
-    for pc in @@pclist
-      commands.push(pc.name) if pc.shouldShow?
-    end
-    commands.push(_INTL("Log Off"))
-    return commands
-  end
-
-  def self.callCommand(cmd)
-    return false if cmd<0 || cmd>=@@pclist.length
-    i = 0
-    for pc in @@pclist
-      next if !pc.shouldShow?
-      if i==cmd
-        pc.access
-        return true
-      end
-      i += 1
-    end
-    return false
-  end
+def pbGetStorageCreator
+  creator = pbStorageCreator
+  creator = _INTL("Bill") if !creator || creator==""
+  return creator
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 PokemonPCList.registerPC(StorageSystemPC.new)
 PokemonPCList.registerPC(TrainerPC.new)

@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class PokemonPauseMenu_Scene
   def pbStartScene
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
@@ -78,8 +81,9 @@ class PokemonPauseMenu_Scene
   def pbRefresh; end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPauseMenu
   def initialize(scene)
     @scene = scene

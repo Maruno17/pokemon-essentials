@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class MapBottomSprite < SpriteWrapper
   attr_reader :mapname
   attr_reader :maplocation
@@ -52,8 +55,9 @@ class MapBottomSprite < SpriteWrapper
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonRegionMap_Scene
   LEFT   = 0
   TOP    = 0
@@ -339,8 +343,9 @@ class PokemonRegionMap_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonRegionMapScreen
   def initialize(scene)
     @scene = scene
@@ -360,8 +365,9 @@ class PokemonRegionMapScreen
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbShowMap(region=-1,wallmap=true)
   pbFadeOutIn {
     scene = PokemonRegionMap_Scene.new(region,wallmap)

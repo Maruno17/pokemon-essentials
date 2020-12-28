@@ -437,8 +437,9 @@ class HallOfFame_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class HallOfFameScreen
   def initialize(scene)
     @scene = scene
@@ -457,8 +458,9 @@ class HallOfFameScreen
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class HallOfFamePC
   def shouldShow?
     return $PokemonGlobal.hallOfFameLastNumber>0
@@ -474,12 +476,14 @@ class HallOfFamePC
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 PokemonPCList.registerPC(HallOfFamePC.new)
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonGlobalMetadata
   attr_writer :hallOfFame
   # Number necessary if hallOfFame array reach in its size limit
@@ -495,8 +499,9 @@ class PokemonGlobalMetadata
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbHallOfFameEntry
   scene=HallOfFame_Scene.new
   screen=HallOfFameScreen.new(scene)

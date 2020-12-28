@@ -106,9 +106,20 @@ class Game_Event < Game_Character
     return elapsed>=days
   end
 
+  def cooledDown?(seconds)
+    return true if expired?(seconds) && tsOff?("A")
+    self.need_refresh = true
+    return false
+  end
+
+  def cooledDownDays?(days)
+    return true if expiredDays?(days) && tsOff?("A")
+    self.need_refresh = true
+    return false
+  end
+
   def onEvent?
-    return @map_id==$game_map.map_id &&
-       $game_player.x==self.x && $game_player.y==self.y
+    return @map_id == $game_map.map_id && $game_player.x == self.x && $game_player.y == self.y
   end
 
   def over_trigger?

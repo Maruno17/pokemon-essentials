@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class Window_PokemonItemStorage < Window_DrawableCommand
   attr_reader :bag
   attr_reader :pocket
@@ -47,8 +50,9 @@ class Window_PokemonItemStorage < Window_DrawableCommand
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class ItemStorage_Scene
   ITEMLISTBASECOLOR   = Color.new(88,88,80)
   ITEMLISTSHADOWCOLOR = Color.new(168,184,184)
@@ -169,23 +173,23 @@ class ItemStorage_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class WithdrawItemScene < ItemStorage_Scene
   def initialize
     super(_INTL("Withdraw\nItem"))
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class TossItemScene < ItemStorage_Scene
   def initialize
     super(_INTL("Toss\nItem"))
   end
 end
-
-
 
 #===============================================================================
 # Common UI functions used in both the Bag and item storage screens.

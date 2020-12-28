@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class MoveSelectionSprite < SpriteWrapper
   attr_reader :preselected
   attr_reader :index
@@ -52,8 +55,9 @@ class MoveSelectionSprite < SpriteWrapper
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class RibbonSelectionSprite < MoveSelectionSprite
   def initialize(viewport=nil)
     super(viewport)
@@ -94,8 +98,9 @@ class RibbonSelectionSprite < MoveSelectionSprite
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonSummary_Scene
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
@@ -1305,8 +1310,9 @@ class PokemonSummary_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonSummaryScreen
   def initialize(scene,inbattle=false)
     @scene = scene
@@ -1346,8 +1352,6 @@ class PokemonSummaryScreen
     return ret
   end
 end
-
-
 
 #===============================================================================
 #

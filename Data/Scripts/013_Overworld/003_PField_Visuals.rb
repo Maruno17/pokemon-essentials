@@ -1,12 +1,6 @@
 #===============================================================================
 # Battle start animation
 #===============================================================================
-class Game_Temp
-  attr_accessor :background_bitmap
-end
-
-
-
 def pbSceneStandby
   $scene.disposeSpritesets if $scene && $scene.is_a?(Scene_Map)
   GC.start

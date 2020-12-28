@@ -1508,32 +1508,6 @@ end
 
 
 #===============================================================================
-# Interpreter functions for naming the player
-#===============================================================================
-class Interpreter
-  def command_303
-    if $Trainer
-      $Trainer.name=pbEnterPlayerName(_INTL("Your name?"),1,@parameters[1],$Trainer.name)
-      return true
-    end
-    if $game_actors && $data_actors && $data_actors[@parameters[0]] != nil
-      # Set battle abort flag
-      $game_temp.battle_abort = true
-      pbFadeOutIn {
-        sscene=PokemonEntryScene.new
-        sscreen=PokemonEntry.new(sscene)
-        $game_actors[@parameters[0]].name=sscreen.pbStartScreen(
-           _INTL("Enter {1}'s name.",$game_actors[@parameters[0]].name),
-           1,@parameters[1],$game_actors[@parameters[0]].name)
-      }
-    end
-    return true
-  end
-end
-
-
-
-#===============================================================================
 #
 #===============================================================================
 def pbEnterText(helptext,minlength,maxlength,initialText="",mode=0,pokemon=nil,nofadeout=false)

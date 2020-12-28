@@ -162,8 +162,9 @@ class PokemonEggHatch_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonEggHatchScreen
   def initialize(scene)
     @scene=scene
@@ -176,8 +177,9 @@ class PokemonEggHatchScreen
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbHatchAnimation(pokemon)
   pbMessage(_INTL("Huh?\1"))
   pbFadeOutInWithMusic {

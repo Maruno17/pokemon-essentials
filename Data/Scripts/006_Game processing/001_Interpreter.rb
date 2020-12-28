@@ -13,112 +13,91 @@ class Interpreter
   def initialize(depth = 0, main = false)
     @depth = depth
     @main  = main
-    # Depth goes up to level 100
     if depth > 100
       print("Common event call has exceeded maximum limit.")
       exit
     end
-    # Clear inner situation of interpreter
     clear
   end
 
   def clear
-    @map_id                   = 0       # map ID when starting up
-    @event_id                 = 0       # event ID
-    @message_waiting          = false   # waiting for message to end
-    @move_route_waiting       = false   # waiting for move completion
-    @button_input_variable_id = 0       # button input variable ID
-    @wait_count               = 0       # wait count
-    @child_interpreter        = nil     # child interpreter
-    @branch                   = {}      # branch data
+    @map_id             = 0       # map ID when starting up
+    @event_id           = 0       # event ID
+    @message_waiting    = false   # waiting for message to end
+    @move_route_waiting = false   # waiting for move completion
+    @wait_count         = 0       # wait count
+    @child_interpreter  = nil     # child interpreter
+    @branch             = {}      # branch data
+    @buttonInput        = false
   end
   #-----------------------------------------------------------------------------
   # * Event Setup
   #     list     : list of event commands
   #     event_id : event ID
   #-----------------------------------------------------------------------------
-  def setup(list, event_id, map_id=nil)
-    # Clear inner situation of interpreter
+  def setup(list, event_id, map_id = nil)
     clear
-    # Remember map ID
-    @map_id = map_id ? map_id : $game_map.map_id
-    # Remember event ID
+    @map_id = map_id || $game_map.map_id
     @event_id = event_id
-    # Remember list of event commands
     @list = list
-    # Initialize index
     @index = 0
-    # Clear branch data hash
     @branch.clear
+  end
+
+  def setup_starting_event
+    $game_map.refresh if $game_map.need_refresh
+    # Set up common event if one wants to start
+    if $game_temp.common_event_id > 0
+      setup($data_common_events[$game_temp.common_event_id].list, 0)
+      $game_temp.common_event_id = 0
+      return
+    end
+    # Check all map events for one that wants to start, and set it up
+    for event in $game_map.events.values
+      next if !event.starting
+      if event.trigger < 3   # Isn't autorun or parallel processing
+        event.lock
+        event.clear_starting
+      end
+      setup(event.list, event.id, event.map.map_id)
+      return
+    end
+    # Check all common events for one that is autorun, and set it up
+    for common_event in $data_common_events.compact
+      next if common_event.trigger != 1 || !$game_switches[common_event.switch_id]
+      setup(common_event.list, 0)
+      return
+    end
   end
 
   def running?
     return @list != nil
   end
-
-  def setup_starting_event
-    $game_map.refresh if $game_map.need_refresh
-    # If common event call is reserved
-    if $game_temp.common_event_id > 0
-      # Set up event
-      setup($data_common_events[$game_temp.common_event_id].list, 0)
-      # Release reservation
-      $game_temp.common_event_id = 0
-      return
-    end
-    # Loop (map events)
-    for event in $game_map.events.values
-      # If running event is found
-      next if !event.starting
-      # If not auto run
-      if event.trigger < 3
-        # Lock
-        event.lock
-        # Clear starting flag
-        event.clear_starting
-      end
-      # Set up event
-      setup(event.list, event.id, event.map.map_id)   #### CHANGED
-      return
-    end
-    # Loop (common events)
-    for common_event in $data_common_events.compact
-      # If trigger is auto run, and condition switch is ON
-      if common_event.trigger == 1 and
-         $game_switches[common_event.switch_id] == true
-        # Set up event
-        setup(common_event.list, 0)
-        return
-      end
-    end
-  end
   #-----------------------------------------------------------------------------
   # * Frame Update
   #-----------------------------------------------------------------------------
   def update
-    # Initialize loop count
     @loop_count = 0
-    # Loop
     loop do
       @loop_count += 1
-      if @loop_count > 100
-        # Call Graphics.update for freeze prevention
+      if @loop_count > 100   # Call Graphics.update for freeze prevention
         Graphics.update
         @loop_count = 0
       end
-      # If map is different than event startup time
-      if $game_map.map_id != @map_id &&
-         (!$MapFactory || !$MapFactory.areConnected?($game_map.map_id,@map_id))
+      # If this interpreter's map isn't the current map or connected to it,
+      # forget this interpreter's event ID
+      if $game_map.map_id != @map_id && !$MapFactory.areConnected?($game_map.map_id, @map_id)
         @event_id = 0
       end
-      if @child_interpreter != nil
+      # Update child interpreter if one exists
+      if @child_interpreter
         @child_interpreter.update
-        unless @child_interpreter.running?
-          @child_interpreter = nil
-        end
-        return if @child_interpreter != nil
+        @child_interpreter = nil if !@child_interpreter.running?
+        return if @child_interpreter
       end
+      # Do nothing if a message is being shown
       return if @message_waiting
+      # Do nothing if any event or the player is in the middle of a move route
       if @move_route_waiting
         return if $game_player.move_route_forcing
         for event in $game_map.events.values
@@ -126,1332 +105,343 @@ class Interpreter
         end
         @move_route_waiting = false
       end
-      # If waiting for button input
-      if @button_input_variable_id > 0
-        input_button
-        return
-      end
+      # Do nothing while waiting
       if @wait_count > 0
         @wait_count -= 1
         return
       end
-      # If an action forcing battler exists
-      return if $game_temp.forcing_battler != nil
-      # If a call flag is set for each type of screen
-      if $game_temp.battle_calling or
-         $game_temp.shop_calling or
-         $game_temp.name_calling or
-         $game_temp.menu_calling or
-         $game_temp.save_calling or
-         $game_temp.gameover
-        return
-      end
-      # If list of event commands is empty
-      if @list == nil
+      # Do nothing if the pause menu is going to open
+      return if $game_temp.menu_calling
+      # If there are no commands in the list, try to find something that wants to run
+      if @list.nil?
         setup_starting_event if @main
-        return if @list == nil
+        return if @list.nil?   # Couldn't find anything that wants to run
       end
-      # If return value is false when trying to execute event command
+      # Execute the next command
       return if execute_command == false
-      # Advance index
+      # Move to the next @index
       @index += 1
     end
   end
   #-----------------------------------------------------------------------------
-  # * Button Input
+  # * Execute script
   #-----------------------------------------------------------------------------
-  def input_button
-    # Determine pressed button
-    n = 0
-    for i in 1..18
-      n = i if Input.trigger?(i)
-    end
-    # If button was pressed
-    if n > 0
-      # Change value of variables
-      $game_variables[@button_input_variable_id] = n
-      $game_map.need_refresh = true
-      # End button input
-      @button_input_variable_id = 0
-    end
-  end
-  #-----------------------------------------------------------------------------
-  # * Setup Choices
-  #-----------------------------------------------------------------------------
-  def setup_choices(parameters)
-    # Set choice item count to choice_max
-    $game_temp.choice_max = parameters[0].size
-    # Set choice to message_text
-    for text in parameters[0]
-      $game_temp.message_text += text + "\n"
-    end
-    # Set cancel processing
-    $game_temp.choice_cancel_type = parameters[1]
-    # Set callback
-    current_indent = @list[@index].indent
-    $game_temp.choice_proc = Proc.new { |n| @branch[current_indent] = n }
-  end
-
-  def pbExecuteScript(script)
+  def execute_script(script)
     begin
       result = eval(script)
       return result
     rescue Exception
       e = $!
-      raise if e.is_a?(SystemExit) || "#{e.class}"=="Reset"
-      event = get_character(0)
+      raise if e.is_a?(SystemExit) || "#{e.class}" == "Reset"
+      event = get_self
       s = "Backtrace:\r\n"
       message = pbGetExceptionMessage(e)
       if e.is_a?(SyntaxError)
         script.each_line { |line|
-          line.gsub!(/\s+$/,"")
-          if line[/\:\:\s*$/]
-            message += "\r\n***Line '#{line}' can't begin with '::'. Try putting\r\n"
-            message += "the next word on the same line, e.g. 'PBSpecies:"+":MEW'"
-          end
+          line.gsub!(/\s+$/, "")
           if line[/^\s*\(/]
             message += "\r\n***Line '#{line}' shouldn't begin with '('. Try\r\n"
             message += "putting the '(' at the end of the previous line instead,\r\n"
             message += "or using 'extendtext.exe'."
           end
+          if line[/\:\:\s*$/]
+            message += "\r\n***Line '#{line}' can't end with '::'. Try putting\r\n"
+            message += "the next word on the same line, e.g. 'PBSpecies:" + ":MEW'"
+          end
         }
       else
-        for bt in e.backtrace[0,10]
-          s += bt+"\r\n"
+        for bt in e.backtrace[0, 10]
+          s += bt + "\r\n"
         end
         s.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] }
       end
-      message = "Exception: #{e.class}\r\nMessage: "+message+"\r\n"
+      message = "Exception: #{e.class}\r\nMessage: " + message + "\r\n"
       message += "\r\n***Full script:\r\n#{script}\r\n"
       if event && $game_map
-        mapname = ($game_map.name rescue nil) || "???"
-        err  = "Script error within event #{event.id} (coords #{event.x},#{event.y}), "
-        err += "map #{$game_map.map_id} (#{mapname}):\r\n#{message}\r\n#{s}"
+        map_name = ($game_map.name rescue nil) || "???"
+        err  = "Script error in event #{event.id} (coords #{event.x},#{event.y}), map #{$game_map.map_id} (#{map_name}):\r\n"
+        err += "#{message}\r\n#{s}"
         if e.is_a?(Hangup)
-          $EVENTHANGUPMSG = err; raise
+          $EVENTHANGUPMSG = err
+          raise
         end
       elsif $game_map
-        mapname = ($game_map.name rescue nil) || "???"
-        err  = "Script error within map #{$game_map.map_id} "
-        err += "(#{mapname}):\r\n#{message}\r\n#{s}"
+        map_name = ($game_map.name rescue nil) || "???"
+        err = "Script error in map #{$game_map.map_id} (#{map_name}):\r\n"
+        err += "#{message}\r\n#{s}"
         if e.is_a?(Hangup)
-          $EVENTHANGUPMSG = err; raise
+          $EVENTHANGUPMSG = err
+          raise
         end
       else
         err = "Script error in interpreter:\r\n#{message}\r\n#{s}"
         if e.is_a?(Hangup)
-          $EVENTHANGUPMSG = err; raise
+          $EVENTHANGUPMSG = err
+          raise
         end
       end
       raise err
     end
   end
   #-----------------------------------------------------------------------------
-  # * Event Command Execution
-  #-----------------------------------------------------------------------------
-  def execute_command
-    # If last to arrive for list of event commands
-    if @index >= @list.size - 1
-      # End event
-      command_end
-      # Continue
-      return true
-    end
-    # Make event command parameters available for reference via @parameters
-    @parameters = @list[@index].parameters
-    # Branch by command code
-    case @list[@index].code
-    when 101 then return command_101   # Show Text
-    when 102 then return command_102   # Show Choices
-    when 402 then return command_402   # When [**]
-    when 403 then return command_403   # When Cancel
-    when 103 then return command_103   # Input Number
-    when 104 then return command_104   # Change Text Options
-    when 105 then return command_105   # Button Input Processing
-    when 106 then return command_106   # Wait
-    when 111 then return command_111   # Conditional Branch
-    when 411 then return command_411   # Else
-    when 112 then return command_112   # Loop
-    when 413 then return command_413   # Repeat Above
-    when 113 then return command_113   # Break Loop
-    when 115 then return command_115   # Exit Event Processing
-    when 116 then return command_116   # Erase Event
-    when 117 then return command_117   # Call Common Event
-    when 118 then return command_118   # Label
-    when 119 then return command_119   # Jump to Label
-    when 121 then return command_121   # Control Switches
-    when 122 then return command_122   # Control Variables
-    when 123 then return command_123   # Control Self Switch
-    when 124 then return command_124   # Control Timer
-    when 125 then return command_125   # Change Gold
-    when 126 then return command_126   # Change Items
-    when 127 then return command_127   # Change Weapons
-    when 128 then return command_128   # Change Armor
-    when 129 then return command_129   # Change Party Member
-    when 131 then return command_131   # Change Windowskin
-    when 132 then return command_132   # Change Battle BGM
-    when 133 then return command_133   # Change Battle End ME
-    when 134 then return command_134   # Change Save Access
-    when 135 then return command_135   # Change Menu Access
-    when 136 then return command_136   # Change Encounter
-    when 201 then return command_201   # Transfer Player
-    when 202 then return command_202   # Set Event Location
-    when 203 then return command_203   # Scroll Map
-    when 204 then return command_204   # Change Map Settings
-    when 205 then return command_205   # Change Fog Color Tone
-    when 206 then return command_206   # Change Fog Opacity
-    when 207 then return command_207   # Show Animation
-    when 208 then return command_208   # Change Transparent Flag
-    when 209 then return command_209   # Set Move Route
-    when 210 then return command_210   # Wait for Move's Completion
-    when 221 then return command_221   # Prepare for Transition
-    when 222 then return command_222   # Execute Transition
-    when 223 then return command_223   # Change Screen Color Tone
-    when 224 then return command_224   # Screen Flash
-    when 225 then return command_225   # Screen Shake
-    when 231 then return command_231   # Show Picture
-    when 232 then return command_232   # Move Picture
-    when 233 then return command_233   # Rotate Picture
-    when 234 then return command_234   # Change Picture Color Tone
-    when 235 then return command_235   # Erase Picture
-    when 236 then return command_236   # Set Weather Effects
-    when 241 then return command_241   # Play BGM
-    when 242 then return command_242   # Fade Out BGM
-    when 245 then return command_245   # Play BGS
-    when 246 then return command_246   # Fade Out BGS
-    when 247 then return command_247   # Memorize BGM/BGS
-    when 248 then return command_248   # Restore BGM/BGS
-    when 249 then return command_249   # Play ME
-    when 250 then return command_250   # Play SE
-    when 251 then return command_251   # Stop SE
-    when 301 then return command_301   # Battle Processing
-    when 601 then return command_601   # If Win
-    when 602 then return command_602   # If Escape
-    when 603 then return command_603   # If Lose
-    when 302 then return command_302   # Shop Processing
-    when 303 then return command_303   # Name Input Processing
-    when 311 then return command_311   # Change HP
-    when 312 then return command_312   # Change SP
-    when 313 then return command_313   # Change State
-    when 314 then return command_314   # Recover All
-    when 315 then return command_315   # Change EXP
-    when 316 then return command_316   # Change Level
-    when 317 then return command_317   # Change Parameters
-    when 318 then return command_318   # Change Skills
-    when 319 then return command_319   # Change Equipment
-    when 320 then return command_320   # Change Actor Name
-    when 321 then return command_321   # Change Actor Class
-    when 322 then return command_322   # Change Actor Graphic
-    when 331 then return command_331   # Change Enemy HP
-    when 332 then return command_332   # Change Enemy SP
-    when 333 then return command_333   # Change Enemy State
-    when 334 then return command_334   # Enemy Recover All
-    when 335 then return command_335   # Enemy Appearance
-    when 336 then return command_336   # Enemy Transform
-    when 337 then return command_337   # Show Battle Animation
-    when 338 then return command_338   # Deal Damage
-    when 339 then return command_339   # Force Action
-    when 340 then return command_340   # Abort Battle
-    when 351 then return command_351   # Call Menu Screen
-    when 352 then return command_352   # Call Save Screen
-    when 353 then return command_353   # Game Over
-    when 354 then return command_354   # Return to Title Screen
-    when 355 then return command_355   # Script
-    else          return true          # Other
-    end
-  end
-
-  def command_dummy
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * End Event
-  #-----------------------------------------------------------------------------
-  def command_end
-    # Clear list of event commands
-    @list = nil
-    # If main map event and event ID are valid
-    if @main and @event_id > 0 && $game_map.events[@event_id]
-      # Unlock event
-      $game_map.events[@event_id].unlock
-    end
-  end
-  #-----------------------------------------------------------------------------
-  # * Command Skip
-  #-----------------------------------------------------------------------------
-  def command_skip
-    # Get indent
-    indent = @list[@index].indent
-    # Loop
-    loop do
-      # If next event command is at the same level as indent
-      if @list[@index+1].indent == indent
-        # Continue
-        return true
-      end
-      # Advance index
-      @index += 1
-    end
-  end
-  #-----------------------------------------------------------------------------
   # * Get Character
   #     parameter : parameter
   #-----------------------------------------------------------------------------
-  def get_character(parameter)
-    # Branch by parameter
+  def get_character(parameter = 0)
     case parameter
     when -1   # player
       return $game_player
     when 0    # this event
       events = $game_map.events
-      return events == nil ? nil : events[@event_id]
+      return (events) ? events[@event_id] : nil
     else      # specific event
       events = $game_map.events
-      return events == nil ? nil : events[parameter]
+      return (events) ? events[parameter] : nil
     end
   end
-  #-----------------------------------------------------------------------------
-  # * Calculate Operated Value
-  #     operation    : operation
-  #     operand_type : operand type (0: invariable 1: variable)
-  #     operand      : operand (number or variable ID)
-  #-----------------------------------------------------------------------------
-  def operate_value(operation, operand_type, operand)
-    # Get operand
-    if operand_type == 0
-      value = operand
-    else
-      value = $game_variables[operand]
-    end
-    # Reverse sign of integer if operation is [decrease]
-    if operation == 1
-      value = -value
-    end
-    # Return value
-    return value
+
+  def get_player
+    return get_character(-1)
+  end
+
+  def get_self
+    return get_character(0)
+  end
+
+  def get_event(parameter)
+    return get_character(parameter)
   end
   #-----------------------------------------------------------------------------
-  # * Show Text
+  # * Freezes all events on the map (for use at the beginning of common events)
   #-----------------------------------------------------------------------------
-  def command_101
-    # If other text has been set to message_text
-    if $game_temp.message_text != nil
-      # End
-      return false
-    end
-    # Set message end waiting flag and callback
-    @message_waiting = true
-    $game_temp.message_proc = Proc.new { @message_waiting = false }
-    # Set message text on first line
-    $game_temp.message_text = @list[@index].parameters[0] + "\n"
-    line_count = 1
-    # Loop
+  def pbGlobalLock
+    $game_map.events.values.each { |event| event.minilock }
+  end
+  #-----------------------------------------------------------------------------
+  # * Unfreezes all events on the map (for use at the end of common events)
+  #-----------------------------------------------------------------------------
+  def pbGlobalUnlock
+    $game_map.events.values.each { |event| event.unlock }
+  end
+  #-----------------------------------------------------------------------------
+  # * Gets the next index in the interpreter, ignoring certain commands between messages
+  #-----------------------------------------------------------------------------
+  def pbNextIndex(index)
+    return -1 if !@list || @list.length == 0
+    i = index + 1
     loop do
-      # If next event command text is on the second line or after
-      if @list[@index+1].code == 401
-        # Add the second line or after to message_text
-        $game_temp.message_text += @list[@index+1].parameters[0] + "\n"
-        line_count += 1
-      # If event command is not on the second line or after
+      return i if i >= @list.length - 1
+      case @list[i].code
+      when 118, 108, 408   # Label, Comment
+        i += 1
+      when 413             # Repeat Above
+        i = pbRepeatAbove(i)
+      when 113             # Break Loop
+        i = pbBreakLoop(i)
+      when 119             # Jump to Label
+        newI = pbJumpToLabel(i, @list[i].parameters[0])
+        i = (newI > i) ? newI : i + 1
       else
-        # If next event command is show choices
-        if @list[@index+1].code == 102
-          # If choices fit on screen
-          if @list[@index+1].parameters[0].size <= 4 - line_count
-            # Advance index
-            @index += 1
-            # Choices setup
-            $game_temp.choice_start = line_count
-            setup_choices(@list[@index].parameters)
-          end
-        # If next event command is input number
-        elsif @list[@index+1].code == 103
-          # If number input window fits on screen
-          if line_count < 4
-            # Advance index
-            @index += 1
-            # Number input setup
-            $game_temp.num_input_start = line_count
-            $game_temp.num_input_variable_id = @list[@index].parameters[0]
-            $game_temp.num_input_digits_max = @list[@index].parameters[1]
-          end
-        end
-        # Continue
-        return true
+        return i
       end
-      # Advance index
-      @index += 1
     end
   end
-  #-----------------------------------------------------------------------------
-  # * Show Choices
-  #-----------------------------------------------------------------------------
-  def command_102
-    # If text has been set to message_text
-    if $game_temp.message_text != nil
-      # End
-      return false
-    end
-    # Set message end waiting flag and callback
-    @message_waiting = true
-    $game_temp.message_proc = Proc.new { @message_waiting = false }
-    # Choices setup
-    $game_temp.message_text = ""
-    $game_temp.choice_start = 0
-    setup_choices(@parameters)
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * When [**]
-  #-----------------------------------------------------------------------------
-  def command_402
-    # If fitting choices are selected
-    if @branch[@list[@index].indent] == @parameters[0]
-      # Delete branch data
-      @branch.delete(@list[@index].indent)
-      # Continue
-      return true
-    end
-    # If it doesn't meet the condition: command skip
-    return command_skip
-  end
-  #-----------------------------------------------------------------------------
-  # * When Cancel
-  #-----------------------------------------------------------------------------
-  def command_403
-    # If choices are cancelled
-    if @branch[@list[@index].indent] == 4
-      # Delete branch data
-      @branch.delete(@list[@index].indent)
-      # Continue
-      return true
-    end
-    # If it doen't meet the condition: command skip
-    return command_skip
-  end
-  #-----------------------------------------------------------------------------
-  # * Input Number
-  #-----------------------------------------------------------------------------
-  def command_103
-    # If text has been set to message_text
-    if $game_temp.message_text != nil
-      # End
-      return false
-    end
-    # Set message end waiting flag and callback
-    @message_waiting = true
-    $game_temp.message_proc = Proc.new { @message_waiting = false }
-    # Number input setup
-    $game_temp.message_text = ""
-    $game_temp.num_input_start = 0
-    $game_temp.num_input_variable_id = @parameters[0]
-    $game_temp.num_input_digits_max = @parameters[1]
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Change Text Options
-  #-----------------------------------------------------------------------------
-  def command_104
-    # If message is showing
-    if $game_temp.message_window_showing
-      # End
-      return false
-    end
-    # Change each option
-    $game_system.message_position = @parameters[0]
-    $game_system.message_frame = @parameters[1]
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Button Input Processing
-  #-----------------------------------------------------------------------------
-  def command_105
-    # Set variable ID for button input
-    @button_input_variable_id = @parameters[0]
-    # Advance index
-    @index += 1
-    # End
-    return false
-  end
-  #-----------------------------------------------------------------------------
-  # * Wait
-  #-----------------------------------------------------------------------------
-  def command_106
-    # Set wait count
-    @wait_count = @parameters[0] * Graphics.frame_rate/20
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Conditional Branch
-  #-----------------------------------------------------------------------------
-  def command_111
-    # Initialize local variable: result
-    result = false
-    case @parameters[0]
-    when 0  # switch
-      result = false
-      switchname=$data_system.switches[@parameters[1]]
-      if switchname && switchname[/^s\:/]
-        result = (eval($~.post_match) == (@parameters[2] == 0))
-      else
-        result = ($game_switches[@parameters[1]] == (@parameters[2] == 0))
-      end
-    when 1  # variable
-      value1 = $game_variables[@parameters[1]]
-      if @parameters[2] == 0
-        value2 = @parameters[3]
-      else
-        value2 = $game_variables[@parameters[3]]
-      end
-      case @parameters[4]
-      when 0  # value1 is equal to value2
-        result = (value1 == value2)
-      when 1  # value1 is greater than or equal to value2
-        result = (value1 >= value2)
-      when 2  # value1 is less than or equal to value2
-        result = (value1 <= value2)
-      when 3  # value1 is greater than value2
-        result = (value1 > value2)
-      when 4  # value1 is less than value2
-        result = (value1 < value2)
-      when 5  # value1 is not equal to value2
-        result = (value1 != value2)
-      end
-    when 2  # self switch
-      if @event_id > 0
-        key = [$game_map.map_id, @event_id, @parameters[1]]
-        if @parameters[2] == 0
-          result = ($game_self_switches[key] == true)
-        else
-          result = ($game_self_switches[key] != true)
-        end
-      end
-    when 3  # timer
-      if $game_system.timer_working
-        sec = $game_system.timer / Graphics.frame_rate
-        if @parameters[2] == 0
-          result = (sec >= @parameters[1])
-        else
-          result = (sec <= @parameters[1])
-        end
-      end
-    when 4, 5 # actor, enemy
-    when 6  # character
-      character = get_character(@parameters[1])
-      if character != nil
-        result = (character.direction == @parameters[2])
-      end
-    when 7
-      if @parameters[2] == 0
-        result = ($Trainer.money >= @parameters[1])
-      else
-        result = ($Trainer.money <= @parameters[1])
-      end
-    when 8, 9, 10  # item, weapon, armor
-    when 11  # button
-      result = (Input.press?(@parameters[1]))
-    when 12  # script
-      result = pbExecuteScript(@parameters[1])
-    end
-    # Store determinant results in hash
-    @branch[@list[@index].indent] = result
-    # If determinant results are true
-    if @branch[@list[@index].indent] == true
-      # Delete branch data
-      @branch.delete(@list[@index].indent)
-      # Continue
-      return true
-    end
-    # If it doesn't meet the conditions: command skip
-    return command_skip
-  end
-  #-----------------------------------------------------------------------------
-  # * Else
-  #-----------------------------------------------------------------------------
-  def command_411
-    # If determinant results are false
-    if @branch[@list[@index].indent] == false
-      # Delete branch data
-      @branch.delete(@list[@index].indent)
-      # Continue
-      return true
-    end
-    # If it doesn't meet the conditions: command skip
-    return command_skip
-  end
-  #-----------------------------------------------------------------------------
-  # * Loop
-  #-----------------------------------------------------------------------------
-  def command_112
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Repeat Above
-  #-----------------------------------------------------------------------------
-  def command_413
-    # Get indent
-    indent = @list[@index].indent
-    # Loop
+
+  def pbRepeatAbove(index)
+    index = @list[index].indent
     loop do
-      # Return index
-      @index -= 1
-      # If this event command is the same level as indent
-      if @list[@index].indent == indent
-        # Continue
-        return true
-      end
+      index -= 1
+      return index + 1 if @list[index].indent == indent
     end
   end
-  #-----------------------------------------------------------------------------
-  # * Break Loop
-  #-----------------------------------------------------------------------------
-  def command_113
-    # Get indent
-    indent = @list[@index].indent
-    # Copy index to temporary variables
-    temp_index = @index
-    # Loop
+
+  def pbBreakLoop(index)
+    indent = @list[index].indent
+    temp_index = index
     loop do
-      # Advance index
       temp_index += 1
-      # If a fitting loop was not found
-      if temp_index >= @list.size-1
-        # Continue
-        return true
-      end
-      # If this event command is [repeat above] and indent is shallow
-      if @list[temp_index].code == 413 and @list[temp_index].indent < indent
-        # Update index
-        @index = temp_index
-        # Continue
-        return true
-      end
+      return index + 1 if temp_index >= @list.size - 1
+      return temp_index + 1 if @list[temp_index].code == 413 &&
+                               @list[temp_index].indent < indent
+    end
+  end
+
+  def pbJumpToLabel(index, label_name)
+    temp_index = 0
+    loop do
+      return index + 1 if temp_index >= @list.size - 1
+      return temp_index + 1 if @list[temp_index].code == 118 &&
+                               @list[temp_index].parameters[0] == label_name
+      temp_index += 1
     end
   end
   #-----------------------------------------------------------------------------
-  # * Exit Event Processing
+  # * Various methods to be used in a script event command.
   #-----------------------------------------------------------------------------
-  def command_115
-    # End event
-    command_end
-    # Continue
-    return true
+  # Helper function that shows a picture in a script.
+  def pbShowPicture(number, name, origin, x, y, zoomX = 100, zoomY = 100, opacity = 255, blendType = 0)
+    number = number + ($game_temp.in_battle ? 50 : 0)
+    $game_screen.pictures[number].show(name, origin, x, y, zoomX, zoomY, opacity, blendType)
   end
-  #-----------------------------------------------------------------------------
-  # * Erase Event
-  #-----------------------------------------------------------------------------
-  def command_116
-    # If event ID is valid
-    if @event_id > 0
-      # Erase event
-      $game_map.events[@event_id].erase if $game_map.events[@event_id]
+
+  # Erases an event and adds it to the list of erased events so that
+  # it can stay erased when the game is saved then loaded again.
+  def pbEraseThisEvent
+    if $game_map.events[@event_id]
+      $game_map.events[@event_id].erase
       $PokemonMap.addErasedEvent(@event_id) if $PokemonMap
     end
-    # Advance index
     @index += 1
-    # End
-    return false
-  end
-  #-----------------------------------------------------------------------------
-  # * Call Common Event
-  #-----------------------------------------------------------------------------
-  def command_117
-    # Get common event
-    common_event = $data_common_events[@parameters[0]]
-    # If common event is valid
-    if common_event != nil
-      # Make child interpreter
-      @child_interpreter = Interpreter.new(@depth + 1)
-      @child_interpreter.setup(common_event.list, @event_id)
-    end
-    # Continue
     return true
   end
-  #-----------------------------------------------------------------------------
-  # * Label
-  #-----------------------------------------------------------------------------
-  def command_118
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Jump to Label
-  #-----------------------------------------------------------------------------
-  def command_119
-    # Get label name
-    label_name = @parameters[0]
-    # Initialize temporary variables
-    temp_index = 0
-    # Loop
-    loop do
-      # If a fitting label was not found
-      if temp_index >= @list.size-1
-        # Continue
-        return true
-      end
-      # If this event command is a designated label name
-      if @list[temp_index].code == 118 and
-         @list[temp_index].parameters[0] == label_name
-        # Update index
-        @index = temp_index
-        # Continue
-        return true
-      end
-      # Advance index
-      temp_index += 1
-    end
-  end
-  #-----------------------------------------------------------------------------
-  # * Control Switches
-  #-----------------------------------------------------------------------------
-  def command_121
-    shouldRefresh = false
-    # Loop for group control
-    for i in @parameters[0] .. @parameters[1]
-      next if $game_switches[i] == (@parameters[2] == 0)
-      # Change switch
-      $game_switches[i] = (@parameters[2] == 0)
-      shouldRefresh = true
-    end
-    # Refresh map
-    $game_map.need_refresh = true if shouldRefresh
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Control Variables
-  #-----------------------------------------------------------------------------
-  def command_122
-    # Initialize value
-    value = 0
-    # Branch with operand
-    case @parameters[3]
-    when 0   # invariable (fixed value)
-      value = @parameters[4]
-    when 1   # variable
-      value = $game_variables[@parameters[4]]
-    when 2   # random number
-      value = @parameters[4] + rand(@parameters[5] - @parameters[4] + 1)
-#    when 3, 4, 5   # item, actor, enemy
-    when 6   # character
-      character = get_character(@parameters[4])
-      if character != nil
-        case @parameters[5]
-        when 0 then value = character.x             # x-coordinate
-        when 1 then value = character.y             # y-coordinate
-        when 2 then value = character.direction     # direction
-        when 3 then value = character.screen_x      # screen x-coordinate
-        when 4 then value = character.screen_y      # screen y-coordinate
-        when 5 then value = character.terrain_tag   # terrain tag
-        end
-      end
-    when 7   # other
-      case @parameters[4]
-      when 0 then value = $game_map.map_id                             # map ID
-#      when 1, 3   # number of party members, steps
-      when 2 then value = $Trainer.money                               # gold
-      when 4 then value = Graphics.frame_count / Graphics.frame_rate   # play time
-      when 5 then value = $game_system.timer / Graphics.frame_rate     # timer
-      when 6 then value = $game_system.save_count                      # save count
+
+  # Runs a common event.
+  def pbCommonEvent(id)
+    common_event = $data_common_events[id]
+    return if !common_event
+    if $game_temp.in_battle
+      $game_system.battle_interpreter.setup(common_event.list, 0)
+    else
+      interp = Interpreter.new
+      interp.setup(common_event.list, 0)
+      loop do
+        Graphics.update
+        Input.update
+        interp.update
+        pbUpdateSceneMap
+        break if !interp.running?
       end
     end
-    # Loop for group control
-    for i in @parameters[0] .. @parameters[1]
-      # Branch with control
-      case @parameters[2]
-      when 0   # substitute
-        next if $game_variables[i] == value
-        $game_variables[i] = value
-      when 1   # add
-        next if $game_variables[i] >= 99999999
-        $game_variables[i] += value
-      when 2   # subtract
-        next if $game_variables[i] <= -99999999
-        $game_variables[i] -= value
-      when 3   # multiply
-        next if value == 1
-        $game_variables[i] *= value
-      when 4   # divide
-        next if value == 1 || value == 0
-        $game_variables[i] /= value
-      when 5   # remainder
-        next if value == 1 || value == 0
-        $game_variables[i] %= value
-      end
-      # Maximum limit check
-      $game_variables[i] = 99999999 if $game_variables[i] > 99999999
-      # Minimum limit check
-      $game_variables[i] = -99999999 if $game_variables[i] < -99999999
-      # Refresh map
+  end
+
+  # Sets another event's self switch (eg. pbSetSelfSwitch(20, "A", true) ).
+  def pbSetSelfSwitch(eventid, switch_name, value, mapid = -1)
+    mapid = @map_id if mapid < 0
+    old_value = $game_self_switches[[mapid, eventid, switch_name]]
+    $game_self_switches[[mapid, eventid, switch_name]] = value
+    if value != old_value && $MapFactory.hasMap?(mapid)
+      $MapFactory.getMap(mapid, false).need_refresh = true
+    end
+  end
+
+  def tsOff?(c)
+    return get_self.tsOff?(c)
+  end
+  alias isTempSwitchOff? tsOff?
+
+  def tsOn?(c)
+    return get_self.tsOn?(c)
+  end
+  alias isTempSwitchOn? tsOn?
+
+  def setTempSwitchOn(c)
+    get_self.setTempSwitchOn(c)
+  end
+
+  def setTempSwitchOff(c)
+    get_self.setTempSwitchOff(c)
+  end
+
+  def getVariable(*arg)
+    if arg.length == 0
+      return nil if !$PokemonGlobal.eventvars
+      return $PokemonGlobal.eventvars[[@map_id, @event_id]]
+    else
+      return $game_variables[arg[0]]
+    end
+  end
+
+  def setVariable(*arg)
+    if arg.length == 1
+      $PokemonGlobal.eventvars = {} if !$PokemonGlobal.eventvars
+      $PokemonGlobal.eventvars[[@map_id, @event_id]] = arg[0]
+    else
+      $game_variables[arg[0]] = arg[1]
       $game_map.need_refresh = true
     end
-    # Continue
-    return true
   end
-  #-----------------------------------------------------------------------------
-  # * Control Self Switch
-  #-----------------------------------------------------------------------------
-  def command_123
-    # If event ID is valid
-    if @event_id > 0
-      # Make a self switch key
-      key = [$game_map.map_id, @event_id, @parameters[0]]
-      newValue = (@parameters[1] == 0)
-      if $game_self_switches[key] != newValue
-        # Change self switches
-        $game_self_switches[key] = newValue
-        # Refresh map
-        $game_map.need_refresh = true
+
+  def pbGetPokemon(id)
+    return $Trainer.party[pbGet(id)]
+  end
+
+  def pbSetEventTime(*arg)
+    $PokemonGlobal.eventvars = {} if !$PokemonGlobal.eventvars
+    time = pbGetTimeNow
+    time = time.to_i
+    pbSetSelfSwitch(@event_id, "A", true)
+    $PokemonGlobal.eventvars[[@map_id, @event_id]] = time
+    for otherevt in arg
+      pbSetSelfSwitch(otherevt, "A", true)
+      $PokemonGlobal.eventvars[[@map_id, otherevt]] = time
+    end
+  end
+
+  # Used in boulder events. Allows an event to be pushed.
+  def pbPushThisEvent
+    event = get_self
+    old_x  = event.x
+    old_y  = event.y
+    # Apply strict version of passable, which treats tiles that are passable
+    # only from certain directions as fully impassible
+    return if !event.passableStrict?(event.x, event.y, $game_player.direction)
+    case $game_player.direction
+    when 2 then event.move_down
+    when 4 then event.move_left
+    when 6 then event.move_right
+    when 8 then event.move_up
+    end
+    $PokemonMap.addMovedEvent(@event_id) if $PokemonMap
+    if old_x != event.x || old_y != event.y
+      $game_player.lock
+      loop do
+        Graphics.update
+        Input.update
+        pbUpdateSceneMap
+        break if !event.moving?
       end
+      $game_player.unlock
     end
-    # Continue
-    return true
   end
-  #-----------------------------------------------------------------------------
-  # * Control Timer
-  #-----------------------------------------------------------------------------
-  def command_124
-    # If started
-    if @parameters[0] == 0
-      $game_system.timer = @parameters[1] * Graphics.frame_rate
-      $game_system.timer_working = true
-    end
-    # If stopped
-    $game_system.timer_working = false if @parameters[0] == 1
-    # Continue
+
+  def pbPushThisBoulder
+    pbPushThisEvent if $PokemonMap.strengthUsed
     return true
   end
 
-  def command_125; command_dummy; end   # Change Gold
-  def command_126; command_dummy; end   # Change Items
-  def command_127; command_dummy; end   # Change Weapons
-  def command_128; command_dummy; end   # Change Armor
-  def command_129; command_dummy; end   # Change Party Member
-  #-----------------------------------------------------------------------------
-  # * Change Windowskin
-  #-----------------------------------------------------------------------------
-  def command_131
-    # Change windowskin file name
-    for i in 0...$SpeechFrames.length
-      if $SpeechFrames[i]==@parameters[0]
-        $PokemonSystem.textskin=i
-        MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/"+$SpeechFrames[i])
-        return true
-      end
-    end
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Change Battle BGM
-  #-----------------------------------------------------------------------------
-  def command_132
-    # Change battle BGM
-    $game_system.battle_bgm = @parameters[0]
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Change Battle End ME
-  #-----------------------------------------------------------------------------
-  def command_133
-    # Change battle end ME
-    $game_system.battle_end_me = @parameters[0]
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Change Save Access
-  #-----------------------------------------------------------------------------
-  def command_134
-    # Change save access flag
-    $game_system.save_disabled = (@parameters[0] == 0)
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Change Menu Access
-  #-----------------------------------------------------------------------------
-  def command_135
-    # Change menu access flag
-    $game_system.menu_disabled = (@parameters[0] == 0)
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Change Encounter
-  #-----------------------------------------------------------------------------
-  def command_136
-    # Change encounter flag
-    $game_system.encounter_disabled = (@parameters[0] == 0)
-    # Make encounter count
-    $game_player.make_encounter_count
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Transfer Player
-  #-----------------------------------------------------------------------------
-  def command_201
-    # If in battle
-    if $game_temp.in_battle
-      # Continue
-      return true
-    end
-    # If transferring player, showing message, or processing transition
-    if $game_temp.player_transferring or
-       $game_temp.message_window_showing or
-       $game_temp.transition_processing
-      # End
-      return false
-    end
-    # Set transferring player flag
-    $game_temp.player_transferring = true
-    # If appointment method is [direct appointment]
-    if @parameters[0] == 0
-      # Set player move destination
-      $game_temp.player_new_map_id = @parameters[1]
-      $game_temp.player_new_x = @parameters[2]
-      $game_temp.player_new_y = @parameters[3]
-      $game_temp.player_new_direction = @parameters[4]
-    # If appointment method is [appoint with variables]
-    else
-      # Set player move destination
-      $game_temp.player_new_map_id = $game_variables[@parameters[1]]
-      $game_temp.player_new_x = $game_variables[@parameters[2]]
-      $game_temp.player_new_y = $game_variables[@parameters[3]]
-      $game_temp.player_new_direction = @parameters[4]
-    end
-    # Advance index
+  def pbSmashThisEvent
+    event = get_self
+    pbSmashEvent(event) if event
     @index += 1
-    # If fade is set
-    if @parameters[5] == 0
-      # Prepare for transition
-      Graphics.freeze
-      # Set transition processing flag
-      $game_temp.transition_processing = true
-      $game_temp.transition_name = ""
-    end
-    # End
-    return false
-  end
-  #-----------------------------------------------------------------------------
-  # * Set Event Location
-  #-----------------------------------------------------------------------------
-  def command_202
-    # If in battle
-    if $game_temp.in_battle
-      # Continue
-      return true
-    end
-    # Get character
-    character = get_character(@parameters[0])
-    # If no character exists
-    if character == nil
-      # Continue
-      return true
-    end
-    # If appointment method is [direct appointment]
-    if @parameters[1] == 0
-      # Set character position
-      character.moveto(@parameters[2], @parameters[3])
-    # If appointment method is [appoint with variables]
-    elsif @parameters[1] == 1
-      # Set character position
-      character.moveto($game_variables[@parameters[2]],
-        $game_variables[@parameters[3]])
-    # If appointment method is [exchange with another event]
-    else
-      old_x = character.x
-      old_y = character.y
-      character2 = get_character(@parameters[2])
-      if character2 != nil
-        character.moveto(character2.x, character2.y)
-        character2.moveto(old_x, old_y)
-      end
-    end
-    # Set character direction
-    case @parameters[4]
-    when 2 then character.turn_down
-    when 4 then character.turn_left
-    when 6 then character.turn_right
-    when 8 then character.turn_up
-    end
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Scroll Map
-  #-----------------------------------------------------------------------------
-  def command_203
-    # If in battle
-    if $game_temp.in_battle
-      # Continue
-      return true
-    end
-    # If already scrolling
-    if $game_map.scrolling?
-      # End
-      return false
-    end
-    # Start scroll
-    $game_map.start_scroll(@parameters[0], @parameters[1], @parameters[2])
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Change Map Settings
-  #-----------------------------------------------------------------------------
-  def command_204
-    case @parameters[0]
-    when 0   # panorama
-      $game_map.panorama_name = @parameters[1]
-      $game_map.panorama_hue = @parameters[2]
-    when 1   # fog
-      $game_map.fog_name = @parameters[1]
-      $game_map.fog_hue = @parameters[2]
-      $game_map.fog_opacity = @parameters[3]
-      $game_map.fog_blend_type = @parameters[4]
-      $game_map.fog_zoom = @parameters[5]
-      $game_map.fog_sx = @parameters[6]
-      $game_map.fog_sy = @parameters[7]
-    when 2   # battleback
-      $game_map.battleback_name = @parameters[1]
-      $game_temp.battleback_name = @parameters[1]
-    end
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Change Fog Color Tone
-  #-----------------------------------------------------------------------------
-  def command_205
-    # Start color tone change
-    $game_map.start_fog_tone_change(@parameters[0], @parameters[1] * Graphics.frame_rate / 20)
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Change Fog Opacity
-  #-----------------------------------------------------------------------------
-  def command_206
-    # Start opacity level change
-    $game_map.start_fog_opacity_change(@parameters[0], @parameters[1] * Graphics.frame_rate / 20)
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Show Animation
-  #-----------------------------------------------------------------------------
-  def command_207
-    # Get character
-    character = get_character(@parameters[0])
-    # If no character exists
-    if character == nil
-      # Continue
-      return true
-    end
-    # Set animation ID
-    character.animation_id = @parameters[1]
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Change Transparent Flag
-  #-----------------------------------------------------------------------------
-  def command_208
-    # Change player transparent flag
-    $game_player.transparent = (@parameters[0] == 0)
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Set Move Route
-  #-----------------------------------------------------------------------------
-  def command_209
-    # Get character
-    character = get_character(@parameters[0])
-    # If no character exists
-    if character == nil
-      # Continue
-      return true
-    end
-    # Force move route
-    character.force_move_route(@parameters[1])
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Wait for Move's Completion
-  #-----------------------------------------------------------------------------
-  def command_210
-    # If not in battle
-    unless $game_temp.in_battle
-      # Set move route completion waiting flag
-      @move_route_waiting = true
-    end
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Prepare for Transition
-  #-----------------------------------------------------------------------------
-  def command_221
-    # If showing message window
-    if $game_temp.message_window_showing
-      # End
-      return false
-    end
-    # Prepare for transition
-    Graphics.freeze
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Execute Transition
-  #-----------------------------------------------------------------------------
-  def command_222
-    # If transition processing flag is already set
-    if $game_temp.transition_processing
-      # End
-      return false
-    end
-    # Set transition processing flag
-    $game_temp.transition_processing = true
-    $game_temp.transition_name = @parameters[0]
-    # Advance index
-    @index += 1
-    # End
-    return false
-  end
-  #-----------------------------------------------------------------------------
-  # * Change Screen Color Tone
-  #-----------------------------------------------------------------------------
-  def command_223
-    # Start changing color tone
-    $game_screen.start_tone_change(@parameters[0], @parameters[1] * Graphics.frame_rate / 20)
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Screen Flash
-  #-----------------------------------------------------------------------------
-  def command_224
-    # Start flash
-    $game_screen.start_flash(@parameters[0], @parameters[1] * Graphics.frame_rate / 20)
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Screen Shake
-  #-----------------------------------------------------------------------------
-  def command_225
-    # Start shake
-    $game_screen.start_shake(@parameters[0], @parameters[1],
-      @parameters[2] * Graphics.frame_rate / 20)
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Show Picture
-  #-----------------------------------------------------------------------------
-  def command_231
-    # Get picture number
-    number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
-    # If appointment method is [direct appointment]
-    if @parameters[3] == 0
-      x = @parameters[4]
-      y = @parameters[5]
-    # If appointment method is [appoint with variables]
-    else
-      x = $game_variables[@parameters[4]]
-      y = $game_variables[@parameters[5]]
-    end
-    # Show picture
-    $game_screen.pictures[number].show(@parameters[1], @parameters[2],
-       x, y, @parameters[6], @parameters[7], @parameters[8], @parameters[9])
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Move Picture
-  #-----------------------------------------------------------------------------
-  def command_232
-    # Get picture number
-    number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
-    # If appointment method is [direct appointment]
-    if @parameters[3] == 0
-      x = @parameters[4]
-      y = @parameters[5]
-    # If appointment method is [appoint with variables]
-    else
-      x = $game_variables[@parameters[4]]
-      y = $game_variables[@parameters[5]]
-    end
-    # Move picture
-    $game_screen.pictures[number].move(@parameters[1] * Graphics.frame_rate / 20,
-       @parameters[2], x, y,
-       @parameters[6], @parameters[7], @parameters[8], @parameters[9])
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Rotate Picture
-  #-----------------------------------------------------------------------------
-  def command_233
-    # Get picture number
-    number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
-    # Set rotation speed
-    $game_screen.pictures[number].rotate(@parameters[1])
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Change Picture Color Tone
-  #-----------------------------------------------------------------------------
-  def command_234
-    # Get picture number
-    number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
-    # Start changing color tone
-    $game_screen.pictures[number].start_tone_change(@parameters[1],
-       @parameters[2] * Graphics.frame_rate / 20)
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Erase Picture
-  #-----------------------------------------------------------------------------
-  def command_235
-    # Get picture number
-    number = @parameters[0] + ($game_temp.in_battle ? 50 : 0)
-    # Erase picture
-    $game_screen.pictures[number].erase
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Set Weather Effects
-  #-----------------------------------------------------------------------------
-  def command_236
-    # Set Weather Effects
-    $game_screen.weather(@parameters[0], @parameters[1], @parameters[2])
-    # Continue
     return true
   end
 
-  def command_247
-    # Memorize BGM/BGS
-    $game_system.bgm_memorize
-    $game_system.bgs_memorize
-    # Continue
-    return true
-  end
-  #-----------------------------------------------------------------------------
-  # * Restore BGM/BGS
-  #-----------------------------------------------------------------------------
-  def command_248
-    # Restore BGM/BGS
-    $game_system.bgm_restore
-    $game_system.bgs_restore
-    # Continue
+  def pbTrainerIntro(symbol)
+    return true if $DEBUG && !GameData::TrainerType.exists?(symbol)
+    tr_type = GameData::TrainerType.get(symbol).id
+    pbGlobalLock
+    pbPlayTrainerIntroME(tr_type)
     return true
   end
 
-  def command_if(value)
-    if @branch[@list[@index].indent] == value
-      @branch.delete(@list[@index].indent)
-      return true
-    end
-    return command_skip
+  def pbTrainerEnd
+    pbGlobalUnlock
+    event = get_self
+    event.erase_route if event
   end
 
-  def command_301; command_dummy; end # Battle Processing
-  def command_601; command_if(0); end # If Win
-  def command_602; command_if(1); end # If Escape
-  def command_603; command_if(2); end # If Lose
-  def command_302; command_dummy; end # Shop Processing
-  def command_303; command_dummy; end # Name Processing
-  def command_311; command_dummy; end # Change HP
-  def command_312; command_dummy; end # Change SP
-  def command_313; command_dummy; end # Change State
-  def command_314; command_dummy; end # Recover All
-  def command_315; command_dummy; end # Change EXP
-  def command_316; command_dummy; end # Change Level
-  def command_317; command_dummy; end # Change Parameters
-  def command_318; command_dummy; end # Change Skills
-  def command_319; command_dummy; end # Change Equipment
-  def command_320; command_dummy; end # Change Actor Name
-  def command_321; command_dummy; end # Change Actor Class
-  def command_322; command_dummy; end # Change Actor Graphic
-  def command_331; command_dummy; end # Change Enemy HP
-  def command_332; command_dummy; end # Change Enemy SP
-  def command_333; command_dummy; end # Change Enemy State
-  def command_334; command_dummy; end # Enemy Recover All
-  def command_335; command_dummy; end # Enemy Appearance
-  def command_336; command_dummy; end # Enemy Transform
-  def command_337; command_dummy; end # Show Battle Animation
-  def command_338; command_dummy; end # Deal Damage
-  def command_339; command_dummy; end # Force Action
-  def command_340; command_dummy; end # Abort Battle
-  #-----------------------------------------------------------------------------
-  # * Call Menu Screen
-  #-----------------------------------------------------------------------------
-  def command_351
-    # Set menu calling flag
-    $game_temp.menu_calling = true
-    # Advance index
-    @index += 1
-    # End
-    return false
-  end
-  #-----------------------------------------------------------------------------
-  # * Call Save Screen
-  #-----------------------------------------------------------------------------
-  def command_352
-    # Set save calling flag
-    $game_temp.save_calling = true
-    # Advance index
-    @index += 1
-    # End
-    return false
-  end
-  #-----------------------------------------------------------------------------
-  # * Game Over
-  #-----------------------------------------------------------------------------
-  def command_353
-    # Set game over flag
-    $game_temp.gameover = true
-    # End
-    return false
-  end
-  #-----------------------------------------------------------------------------
-  # * Return to Title Screen
-  #-----------------------------------------------------------------------------
-  def command_354
-    # Set return to title screen flag
-    $game_temp.to_title = true
-    # End
-    return false
-  end
-  #-----------------------------------------------------------------------------
-  # * Script
-  #-----------------------------------------------------------------------------
-  def command_355
-    script = @list[@index].parameters[0] + "\n"
-    loop do
-      if @list[@index+1].code == 655 || @list[@index+1].code == 355
-        script += @list[@index+1].parameters[0] + "\n"
-      else
-        break
-      end
-      @index += 1
+  def setPrice(item, buy_price = -1, sell_price = -1)
+    item = GameData::Item.get(item).id
+    $game_temp.mart_prices[item] = [-1, -1] if !$game_temp.mart_prices[item]
+    $game_temp.mart_prices[item][0] = buy_price if buy_price > 0
+    if sell_price >= 0   # 0=can't sell
+      $game_temp.mart_prices[item][1] = sell_price * 2
+    else
+      $game_temp.mart_prices[item][1] = buy_price if buy_price > 0
     end
-    pbExecuteScript(script)
-    return true
+  end
+
+  def setSellPrice(item, sell_price)
+    setPrice(item, -1, sell_price)
   end
 end

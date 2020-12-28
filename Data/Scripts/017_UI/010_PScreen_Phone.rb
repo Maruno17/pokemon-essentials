@@ -17,8 +17,9 @@ class Window_PhoneList < Window_CommandPokemon
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPhoneScene
   def start
     commands = []

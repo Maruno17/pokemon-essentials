@@ -226,8 +226,9 @@ class SpriteMetafile
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class SpriteMetafilePlayer
   def initialize(metafile,sprite=nil)
     @metafile=metafile
@@ -283,8 +284,9 @@ class SpriteMetafilePlayer
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbSaveSpriteState(sprite)
   state=[]
   return state if !sprite || sprite.disposed?
@@ -341,8 +343,6 @@ def pbRestoreSpriteStateAndBitmap(sprite,state)
   pbRestoreSpriteState(sprite,state)
   return state
 end
-
-
 
 #===============================================================================
 # Evolution screen

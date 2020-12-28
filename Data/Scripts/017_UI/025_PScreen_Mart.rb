@@ -81,8 +81,6 @@ class PokemonMartAdapter
   end
 end
 
-
-
 #===============================================================================
 # Abstraction layer for RPG Maker XP
 # Won't be used if $PokemonBag exists
@@ -216,7 +214,6 @@ class RpgxpMartAdapter
   end
 end
 
-
 #===============================================================================
 # Buy and Sell adapters
 #===============================================================================
@@ -238,8 +235,9 @@ class BuyAdapter
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class SellAdapter
   def initialize(adapter)
     @adapter = adapter
@@ -261,8 +259,6 @@ class SellAdapter
     return true
   end
 end
-
-
 
 #===============================================================================
 # Pokémon Mart
@@ -305,8 +301,9 @@ class Window_PokemonMart < Window_DrawableCommand
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonMart_Scene
   def update
     pbUpdateSpriteHash(@sprites)
@@ -657,10 +654,9 @@ class PokemonMart_Scene
   end
 end
 
-
-#######################################################
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonMartScreen
   def initialize(scene,stock)
     @scene=scene
@@ -786,8 +782,9 @@ class PokemonMartScreen
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbPokemonMart(stock,speech=nil,cantsell=false)
   for i in 0...stock.length
     stock[i] = GameData::Item.get(stock[i]).id
@@ -821,65 +818,4 @@ def pbPokemonMart(stock,speech=nil,cantsell=false)
        commands,cmdQuit+1)
   end
   $game_temp.clear_mart_prices
-end
-
-
-
-class Game_Temp
-  attr_writer :mart_prices
-
-  def mart_prices
-    @mart_prices = [] if !@mart_prices
-    return @mart_prices
-  end
-
-  def clear_mart_prices
-    @mart_prices = []
-  end
-end
-
-
-
-class Interpreter
-  def getItem(p)
-    if p[0]==0;    return $data_items[p[1]]
-    elsif p[0]==1; return $data_weapons[p[1]]
-    elsif p[0]==2; return $data_armors[p[1]]
-    end
-    return nil
-  end
-
-  def command_302
-    $game_temp.battle_abort = true
-    shop_goods = [getItem(@parameters)]
-    # Loop
-    loop do
-      # Advance index
-      @index += 1
-      # If next event command has shop on second line or after
-      if @list[@index].code == 605
-        # Add goods list to new item
-        shop_goods.push(getItem(@list[@index].parameters))
-      else
-        # End
-        pbPokemonMart(shop_goods.compact)
-        return true
-      end
-    end
-  end
-
-  def setPrice(item,buyprice=-1,sellprice=-1)
-    item = GameData::Item.get(item).id
-    $game_temp.mart_prices[item] = [-1,-1] if !$game_temp.mart_prices[item]
-    $game_temp.mart_prices[item][0] = buyprice if buyprice>0
-    if sellprice>=0   # 0=can't sell
-      $game_temp.mart_prices[item][1] = sellprice*2
-    else
-      $game_temp.mart_prices[item][1] = buyprice if buyprice>0
-    end
-  end
-
-  def setSellPrice(item,sellprice)
-    setPrice(item,-1,sellprice)
-  end
 end

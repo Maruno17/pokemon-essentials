@@ -41,8 +41,6 @@ class PokemonBoxIcon < IconSprite
   end
 end
 
-
-
 #===============================================================================
 # Pokémon sprite
 #===============================================================================
@@ -106,16 +104,15 @@ class MosaicPokemonSprite < PokemonSprite
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class AutoMosaicPokemonSprite < MosaicPokemonSprite
   def update
     super
     self.mosaic -= 1
   end
 end
-
-
 
 #===============================================================================
 # Cursor
@@ -288,8 +285,6 @@ class PokemonBoxArrow < SpriteWrapper
   end
 end
 
-
-
 #===============================================================================
 # Box
 #===============================================================================
@@ -444,8 +439,6 @@ class PokemonBoxSprite < SpriteWrapper
   end
 end
 
-
-
 #===============================================================================
 # Party pop-up panel
 #===============================================================================
@@ -564,8 +557,6 @@ class PokemonBoxPartySprite < SpriteWrapper
     end
   end
 end
-
-
 
 #===============================================================================
 # Pokémon storage visuals
@@ -1452,8 +1443,6 @@ class PokemonStorageScene
   end
 end
 
-
-
 #===============================================================================
 # Pokémon storage mechanics
 #===============================================================================
@@ -1469,8 +1458,7 @@ class PokemonStorageScreen
 
   def pbStartScreen(command)
     @heldpkmn = nil
-    if command==0
-### ORGANISE ###################################################################
+    if command==0   # Organise
       @scene.pbStartBox(self,command)
       loop do
         selected = @scene.pbSelectBox(@storage.party)
@@ -1551,8 +1539,7 @@ class PokemonStorageScreen
         end
       end
       @scene.pbCloseBox
-    elsif command==1
-### WITHDRAW ###################################################################
+    elsif command==1   # Withdraw
       @scene.pbStartBox(self,command)
       loop do
         selected = @scene.pbSelectBox(@storage.party)
@@ -1592,8 +1579,7 @@ class PokemonStorageScreen
         end
       end
       @scene.pbCloseBox
-    elsif command==2
-### DEPOSIT ####################################################################
+    elsif command==2   # Deposit
       @scene.pbStartBox(self,command)
       loop do
         selected = @scene.pbSelectParty(@storage.party)

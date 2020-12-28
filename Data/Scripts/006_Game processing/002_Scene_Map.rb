@@ -91,12 +91,6 @@ class Scene_Map
     Input.update
   end
 
-  def call_name
-    $game_temp.name_calling = false
-    $game_player.straighten
-    $game_map.update
-  end
-
   def call_menu
     $game_temp.menu_calling = false
     $game_temp.in_menu = true
@@ -202,12 +196,8 @@ class Scene_Map
       end
     end
     unless $game_player.moving?
-      if $game_temp.name_calling;      call_name
-      elsif $game_temp.menu_calling;   call_menu
+      if $game_temp.menu_calling;      call_menu
       elsif $game_temp.debug_calling;  call_debug
-#      elsif $game_temp.battle_calling; call_battle
-#      elsif $game_temp.shop_calling;   call_shop
-#      elsif $game_temp.save_calling;   call_save
       elsif $PokemonTemp.keyItemCalling
         $PokemonTemp.keyItemCalling = false
         $game_player.straighten

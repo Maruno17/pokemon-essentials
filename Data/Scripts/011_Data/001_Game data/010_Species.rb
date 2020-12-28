@@ -72,7 +72,6 @@ module GameData
       return (DATA.has_key?(species_form)) ? DATA[species_form] : nil
     end
 
-    # TODO: Needs tidying up.
     def self.schema(compiling_forms = false)
       ret = {
         "FormName"          => [0, "q"],
@@ -224,92 +223,11 @@ end
 #===============================================================================
 # Deprecated methods
 #===============================================================================
-module SpeciesData
-  TYPE1              = 0
-  TYPE2              = 1
-  BASE_STATS         = 2
-  GENDER_RATE        = 3
-  GROWTH_RATE        = 4
-  BASE_EXP           = 5
-  EFFORT_POINTS      = 6
-  RARENESS           = 7
-  HAPPINESS          = 8
-  ABILITIES          = 9
-  HIDDEN_ABILITY     = 10
-  COMPATIBILITY      = 11
-  STEPS_TO_HATCH     = 12
-  HEIGHT             = 13
-  WEIGHT             = 14
-  COLOR              = 15
-  SHAPE              = 16
-  HABITAT            = 17
-  WILD_ITEM_COMMON   = 18
-  WILD_ITEM_UNCOMMON = 19
-  WILD_ITEM_RARE     = 20
-  INCENSE            = 21
-  POKEDEX_FORM       = 22   # For alternate forms
-  MEGA_STONE         = 23   # For alternate forms
-  MEGA_MOVE          = 24   # For alternate forms
-  UNMEGA_FORM        = 25   # For alternate forms
-  MEGA_MESSAGE       = 26   # For alternate forms
-  METRIC_PLAYER_X    = 27
-  METRIC_PLAYER_Y    = 28
-  METRIC_ENEMY_X     = 29
-  METRIC_ENEMY_Y     = 30
-  METRIC_ALTITUDE    = 31
-  METRIC_SHADOW_X    = 32
-  METRIC_SHADOW_SIZE = 33
-end
-
-#===============================================================================
-# Methods to get Pokémon species data.
-#===============================================================================
 def pbGetSpeciesData(species, form = 0, species_data_type = -1)
   Deprecation.warn_method('pbGetSpeciesData', 'v20', 'GameData::Species.get_species_form(species, form).something')
-  ret = GameData::Species.get_species_form(species, form)
-  return ret if species_data_type == -1
-  case species_data_type
-  when SpeciesData::TYPE1              then return ret.type1
-  when SpeciesData::TYPE2              then return ret.type2
-  when SpeciesData::BASE_STATS         then return ret.base_stats
-  when SpeciesData::GENDER_RATE        then return ret.gender_rate
-  when SpeciesData::GROWTH_RATE        then return ret.growth_rate
-  when SpeciesData::BASE_EXP           then return ret.base_exp
-  when SpeciesData::EFFORT_POINTS      then return ret.evs
-  when SpeciesData::RARENESS           then return ret.catch_rate
-  when SpeciesData::HAPPINESS          then return ret.happiness
-  when SpeciesData::ABILITIES          then return ret.abilities
-  when SpeciesData::HIDDEN_ABILITY     then return ret.hidden_abilities
-  when SpeciesData::COMPATIBILITY      then return ret.egg_groups
-  when SpeciesData::STEPS_TO_HATCH     then return ret.hatch_steps
-  when SpeciesData::HEIGHT             then return ret.height
-  when SpeciesData::WEIGHT             then return ret.weight
-  when SpeciesData::COLOR              then return ret.color
-  when SpeciesData::SHAPE              then return ret.shape
-  when SpeciesData::HABITAT            then return ret.habitat
-  when SpeciesData::WILD_ITEM_COMMON   then return ret.wild_item_common
-  when SpeciesData::WILD_ITEM_UNCOMMON then return ret.wild_item_uncommon
-  when SpeciesData::WILD_ITEM_RARE     then return ret.wild_item_rare
-  when SpeciesData::INCENSE            then return ret.incense
-  when SpeciesData::POKEDEX_FORM       then return ret.pokedex_form
-  when SpeciesData::MEGA_STONE         then return ret.mega_stone
-  when SpeciesData::MEGA_MOVE          then return ret.mega_move
-  when SpeciesData::UNMEGA_FORM        then return ret.unmega_form
-  when SpeciesData::MEGA_MESSAGE       then return ret.mega_message
-  when SpeciesData::METRIC_PLAYER_X    then return ret.back_sprite_x
-  when SpeciesData::METRIC_PLAYER_Y    then return ret.back_sprite_y
-  when SpeciesData::METRIC_ENEMY_X     then return ret.front_sprite_x
-  when SpeciesData::METRIC_ENEMY_Y     then return ret.front_sprite_y
-  when SpeciesData::METRIC_ALTITUDE    then return ret.front_sprite_altitude
-  when SpeciesData::METRIC_SHADOW_X    then return ret.shadow_x
-  when SpeciesData::METRIC_SHADOW_SIZE then return ret.shadow_size
-  end
-  return 0
+  return GameData::Species.get_species_form(species, form)
 end
 
-#===============================================================================
-# Methods to get Pokémon moves data.
-#===============================================================================
 def pbGetSpeciesEggMoves(species, form = 0)
   Deprecation.warn_method('pbGetSpeciesEggMoves', 'v20', 'GameData::Species.get_species_form(species, form).egg_moves')
   return GameData::Species.get_species_form(species, form).egg_moves
@@ -325,9 +243,6 @@ def pbGetEvolutionData(species)
   return GameData::Species.get(species).evolutions
 end
 
-#===============================================================================
-# Method to get Pokémon species metrics (sprite positioning) data.
-#===============================================================================
 def pbApplyBattlerMetricsToSprite(sprite, index, species_data, shadow = false, metrics = nil)
   Deprecation.warn_method('pbApplyBattlerMetricsToSprite', 'v20', 'GameData::Species.get(species).apply_metrics_to_sprite')
   GameData::Species.get(species).apply_metrics_to_sprite(sprite, index, shadow)

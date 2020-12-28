@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class Window_Pokedex < Window_DrawableCommand
   def initialize(x,y,width,height,viewport)
     @commands = []
@@ -69,8 +72,9 @@ class Window_Pokedex < Window_DrawableCommand
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokedexSearchSelectionSprite < SpriteWrapper
   attr_reader :index
   attr_accessor :cmds
@@ -207,8 +211,6 @@ class PokedexSearchSelectionSprite < SpriteWrapper
   end
 end
 
-
-
 #===============================================================================
 # Pokédex main screen
 #===============================================================================
@@ -236,8 +238,8 @@ class PokemonPokedex_Scene
     @viewport.z = 99999
     addBackgroundPlane(@sprites,"background","Pokedex/bg_list",@viewport)
 =begin
-# Suggestion for changing the background depending on region. You can change
-# the line above with the following:
+    # Suggestion for changing the background depending on region. You can change
+    # the line above with the following:
     if pbGetPokedexRegion==-1   # Using national Pokédex
       addBackgroundPlane(@sprites,"background","Pokedex/bg_national",@viewport)
     elsif pbGetPokedexRegion==0   # Using first regional Pokédex
@@ -1174,8 +1176,9 @@ class PokemonPokedex_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPokedexScreen
   def initialize(scene)
     @scene = scene

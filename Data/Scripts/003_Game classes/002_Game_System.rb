@@ -5,7 +5,6 @@
 #  is managed here as well. Refer to "$game_system" for the instance of
 #  this class.
 #==============================================================================
-
 class Game_System
   attr_reader   :map_interpreter          # map event interpreter
   attr_reader   :battle_interpreter       # battle event interpreter

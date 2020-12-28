@@ -400,8 +400,6 @@ class PokemonMapFactory
   end
 end
 
-
-
 #===============================================================================
 # Map Factory Helper (stores map connection and size data and calculations
 # involving them)
@@ -506,8 +504,10 @@ module MapFactoryHelper
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
+# Unused
 def updateTilesets
   maps = $MapFactory.maps
   for map in maps

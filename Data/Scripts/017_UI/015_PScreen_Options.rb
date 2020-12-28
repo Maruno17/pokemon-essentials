@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class PokemonSystem
   attr_accessor :textspeed
   attr_accessor :battlescene
@@ -35,8 +38,6 @@ class PokemonSystem
   def textinput; return @textinput || 0;   end
   def tilemap;   return MAP_VIEW_MODE;     end
 end
-
-
 
 #===============================================================================
 # Stores game options
@@ -113,8 +114,9 @@ def pbSettingToTextSpeed(speed)
   return MessageConfig::TextSpeed || 1
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 module MessageConfig
   def self.pbDefaultSystemFrame
     begin
@@ -153,8 +155,6 @@ module MessageConfig
   end
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -168,8 +168,9 @@ module PropertyMixin
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class EnumOption
   include PropertyMixin
   attr_reader :values
@@ -195,8 +196,9 @@ class EnumOption
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class EnumOption2
   include PropertyMixin
   attr_reader :values
@@ -222,8 +224,9 @@ class EnumOption2
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class NumberOption
   include PropertyMixin
   attr_reader :name
@@ -253,8 +256,9 @@ class NumberOption
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class SliderOption
   include PropertyMixin
   attr_reader :name
@@ -284,8 +288,6 @@ class SliderOption
     return index-@optstart
   end
 end
-
-
 
 #===============================================================================
 # Main options list
@@ -402,8 +404,6 @@ class Window_PokemonOption < Window_DrawableCommand
     refresh if dorefresh
   end
 end
-
-
 
 #===============================================================================
 # Options main screen
@@ -586,8 +586,6 @@ class PokemonOption_Scene
     @viewport.dispose
   end
 end
-
-
 
 #===============================================================================
 #

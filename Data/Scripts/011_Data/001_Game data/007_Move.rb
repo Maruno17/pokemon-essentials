@@ -72,23 +72,6 @@ end
 #===============================================================================
 # Deprecated methods
 #===============================================================================
-module MoveData
-  ID            = 0
-  INTERNAL_NAME = 1
-  NAME          = 2
-  FUNCTION_CODE = 3
-  BASE_DAMAGE   = 4
-  TYPE          = 5
-  CATEGORY      = 6
-  ACCURACY      = 7
-  TOTAL_PP      = 8
-  EFFECT_CHANCE = 9
-  TARGET        = 10
-  PRIORITY      = 11
-  FLAGS         = 12
-  DESCRIPTION   = 13
-end
-
 def pbGetMoveData(move_id, move_data_type = -1)
   Deprecation.warn_method('pbGetMoveData', 'v20', 'GameData::Move.get(move_id)')
   return GameData::Move.get(move_id)

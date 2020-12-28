@@ -268,7 +268,7 @@ module GameData
 end
 
 #===============================================================================
-# Deprecated
+# Deprecated methods
 #===============================================================================
 def pbLoadSpeciesBitmap(species, gender = 0, form = 0, shiny = false, shadow = false, back = false , egg = false)
   Deprecation.warn_method('pbLoadSpeciesBitmap', 'v20', 'GameData::Species.sprite_bitmap(species, form, gender, shiny, shadow, back, egg)')

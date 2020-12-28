@@ -513,21 +513,9 @@ def pbDisposed?(x)
   return false
 end
 
-
-
 #===============================================================================
 # Fades and window activations for sprite hashes
 #===============================================================================
-class Game_Temp
-  attr_writer :fadestate
-
-  def fadestate
-    return @fadestate || 0
-  end
-end
-
-
-
 def pbPushFade
   $game_temp.fadestate = [$game_temp.fadestate+1,0].max if $game_temp
 end

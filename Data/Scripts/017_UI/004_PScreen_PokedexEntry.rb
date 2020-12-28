@@ -1,16 +1,6 @@
-def pbFindEncounter(encounter,species)
-  return false if !encounter
-  for i in 0...encounter.length
-    next if !encounter[i]
-    for j in 0...encounter[i].length
-      return true if encounter[i][j][0]==species
-    end
-  end
-  return false
-end
-
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPokedexInfo_Scene
   def pbStartScene(dexlist,index,region)
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
@@ -286,6 +276,17 @@ class PokemonPokedexInfo_Scene
     pbDrawImagePositions(overlay, imagepos)
   end
 
+  def pbFindEncounter(encounter,species)
+    return false if !encounter
+    for i in 0...encounter.length
+      next if !encounter[i]
+      for j in 0...encounter[i].length
+        return true if encounter[i][j][0]==species
+      end
+    end
+    return false
+  end
+
   def drawPageArea
     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_area"))
     overlay = @sprites["overlay"].bitmap
@@ -539,8 +540,9 @@ class PokemonPokedexInfo_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPokedexInfoScreen
   def initialize(scene)
     @scene = scene

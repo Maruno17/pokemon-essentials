@@ -31,8 +31,9 @@ class Window_DexesList < Window_CommandPokemon
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPokedexMenu_Scene
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
@@ -81,8 +82,9 @@ class PokemonPokedexMenu_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPokedexMenuScreen
   def initialize(scene)
     @scene = scene
