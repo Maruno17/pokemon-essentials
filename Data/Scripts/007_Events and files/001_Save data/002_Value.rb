@@ -13,27 +13,36 @@ module SaveData
       @id = id
       instance_eval(&block)
       raise "No save_value defined for save value #{id.inspect}" if @save_proc.nil?
-      raise "No load_value defined for save value #{id.inspect}" if @load_proc.nil?
     end
 
     # Calls the value's save proc and returns its value.
     # @return [Object] save proc value
     def save
       data = @save_proc.call
+
       # TODO: Checking for class name may cause trouble with renamed classes.
       if @ensured_class && data.class.name != @ensured_class.to_s
         raise InvalidValueError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{data.class.name} given)"
       end
+
       return data
     end
 
     # Calls the value's load proc with the given argument passed into it.
     # @param value [Object] load proc argument
     def load(value)
+      raise "Save value #{@id.inspect} has no load proc defined" if @load_proc.nil?
+
       if @ensured_class && value.class.name != @ensured_class.to_s
         raise InvalidValueError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{value.class.name} given)"
       end
+
       @load_proc.call(value)
+    end
+
+    # @return [Boolean] whether the value has a load proc defined
+    def has_load_proc?
+      return @load_proc.is_a?(Block)
     end
 
     # Uses the +from_old_format+ proc to select the correct data from

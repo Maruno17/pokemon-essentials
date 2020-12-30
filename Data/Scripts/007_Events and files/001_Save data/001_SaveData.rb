@@ -75,7 +75,9 @@ module SaveData
   # @raise [InvalidValueError] if an invalid value is being loaded
   def load_values(save_data)
     validate save_data => Hash
-    save_data.each { |id, value| @values[id].load(value) }
+    save_data.each do |id, value|
+      @values[id].load(value) if @values[id].has_load_proc?
+    end
   end
 
   # Converts the pre-v19 format data to the new format.
