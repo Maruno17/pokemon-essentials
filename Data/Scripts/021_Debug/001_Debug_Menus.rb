@@ -124,9 +124,9 @@ def pbDebugMenu(show_all = true)
       cmdwindow.index = 0
       refresh = true
     elsif cmd == "warp"
-      return if DebugMenuCommands.call(cmd, "effect", sprites, viewport)
+      return if DebugMenuCommands.call("effect", cmd, sprites, viewport)
     else
-      return if DebugMenuCommands.call(cmd, "effect")
+      return if DebugMenuCommands.call("effect", cmd)
     end
   end
   pbPlayCloseMenuSE
@@ -161,7 +161,7 @@ module PokemonDebugMixin
         if commands.hasSubMenu?(cmd)
           commands.currentList = cmd
           command = 0
-        elsif PokemonDebugMenuCommands.call(cmd, "effect", pkmn, pkmnid, heldpoke, settingUpBattle, self)
+        elsif PokemonDebugMenuCommands.call("effect", cmd, pkmn, pkmnid, heldpoke, settingUpBattle, self)
           break
         end
       end

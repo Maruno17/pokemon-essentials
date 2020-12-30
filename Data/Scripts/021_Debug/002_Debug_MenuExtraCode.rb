@@ -392,12 +392,13 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
     rect = drawCursor(index,rect)
     nameWidth   = rect.width*50/100
     statusWidth = rect.width*50/100
+    text_y = rect.y + 6
     if index==self.itemCount-2
       # Advance roaming
-      self.shadowtext(_INTL("[All roam to new locations]"),rect.x,rect.y,nameWidth,rect.height)
+      self.shadowtext(_INTL("[All roam to new locations]"),rect.x,text_y,nameWidth,rect.height)
     elsif index==self.itemCount-1
       # Advance roaming
-      self.shadowtext(_INTL("[Clear all current roamer locations]"),rect.x,rect.y,nameWidth,rect.height)
+      self.shadowtext(_INTL("[Clear all current roamer locations]"),rect.x,text_y,nameWidth,rect.height)
     else
       pkmn = ROAMING_SPECIES[index]
       name = GameData::Species.get(pkmn[0]).name + " (Lv. #{pkmn[1]})"
@@ -426,7 +427,6 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
       else
         status = "[NOT ROAMING][Switch #{pkmn[2]} is off]"
       end
-      text_y = rect.y + 6
       self.shadowtext(name,rect.x,text_y,nameWidth,rect.height)
       self.shadowtext(status,rect.x+nameWidth,text_y,statusWidth,rect.height,1,statuscolor)
     end

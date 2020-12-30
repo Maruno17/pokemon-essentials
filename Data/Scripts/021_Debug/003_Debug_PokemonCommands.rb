@@ -33,7 +33,7 @@ module PokemonDebugMenuCommands
   def self.call(function, option, *args)
     option_hash = @@commands[option]
     return nil if !option_hash || !option_hash[function]
-    return option_hash[function].call(*args)
+    return (option_hash[function].call(*args) == true)
   end
 end
 
@@ -64,7 +64,7 @@ PokemonDebugMenuCommands.register("sethp", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setstatus", {
@@ -112,7 +112,7 @@ PokemonDebugMenuCommands.register("setstatus", {
         end
       end
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("fullheal", {
@@ -127,7 +127,7 @@ PokemonDebugMenuCommands.register("fullheal", {
       screen.pbDisplay(_INTL("{1} was fully healed.", pkmn.name))
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("makefainted", {
@@ -141,7 +141,7 @@ PokemonDebugMenuCommands.register("makefainted", {
       pkmn.hp = 0
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setpokerus", {
@@ -155,7 +155,7 @@ PokemonDebugMenuCommands.register("setpokerus", {
       msg = [_INTL("{1} doesn't have Pokérus.", pkmn.name),
              _INTL("Has strain {1}, infectious for {2} more days.", pokerus / 16, pokerus % 16),
              _INTL("Has strain {1}, not infectious.", pokerus / 16)][pkmn.pokerusStage]
-      cmd = screen.pbShowCommands(msg,[
+      cmd = screen.pbShowCommands(msg, [
          _INTL("Give random strain"),
          _INTL("Make not infectious"),
          _INTL("Clear Pokérus")], cmd)
@@ -176,7 +176,7 @@ PokemonDebugMenuCommands.register("setpokerus", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
-  )
+  }
 })
 
 #===============================================================================
@@ -208,7 +208,7 @@ PokemonDebugMenuCommands.register("setlevel", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setexp", {
@@ -236,7 +236,7 @@ PokemonDebugMenuCommands.register("setexp", {
         end
       end
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("hiddenvalues", {
@@ -248,7 +248,7 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
     cmd = 0
     loop do
       persid = sprintf("0x%08X", pkmn.personalID)
-      cmd = screen.pbShowCommands(_INTL("Personal ID is {1}.", persid),[
+      cmd = screen.pbShowCommands(_INTL("Personal ID is {1}.", persid), [
            _INTL("Set EVs"),
            _INTL("Set IVs"),
            _INTL("Randomise pID")], cmd)
@@ -352,7 +352,7 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("sethappiness", {
@@ -369,7 +369,7 @@ PokemonDebugMenuCommands.register("sethappiness", {
       pkmn.happiness = h
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("conteststats", {
@@ -392,7 +392,7 @@ PokemonDebugMenuCommands.register("setbeauty", {
       pkmn.beauty = newval
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setcool", {
@@ -409,7 +409,7 @@ PokemonDebugMenuCommands.register("setcool", {
       pkmn.cool = newval
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setcute", {
@@ -426,7 +426,7 @@ PokemonDebugMenuCommands.register("setcute", {
       pkmn.cute = newval
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setsmart", {
@@ -443,7 +443,7 @@ PokemonDebugMenuCommands.register("setsmart", {
       pkmn.smart = newval
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("settough", {
@@ -460,7 +460,7 @@ PokemonDebugMenuCommands.register("settough", {
       pkmn.tough = newval
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setsheen", {
@@ -477,7 +477,7 @@ PokemonDebugMenuCommands.register("setsheen", {
       pkmn.sheen = newval
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 #===============================================================================
@@ -499,7 +499,7 @@ PokemonDebugMenuCommands.register("teachmove", {
       pbLearnMove(pkmn, move)
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("forgetmove", {
@@ -514,7 +514,7 @@ PokemonDebugMenuCommands.register("forgetmove", {
       screen.pbDisplay(_INTL("{1} forgot {2}.", pkmn.name, movename))
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("resetmoves", {
@@ -525,7 +525,7 @@ PokemonDebugMenuCommands.register("resetmoves", {
     pkmn.resetMoves
     screen.pbDisplay(_INTL("{1}'s moves were reset.", pkmn.name))
     screen.pbRefreshSingle(pkmnid)
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setmovepp", {
@@ -586,7 +586,7 @@ PokemonDebugMenuCommands.register("setmovepp", {
         pkmn.healPP
       end
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setinitialmoves", {
@@ -597,7 +597,7 @@ PokemonDebugMenuCommands.register("setinitialmoves", {
     pkmn.pbRecordFirstMoves
     screen.pbDisplay(_INTL("{1}'s moves were set as its first-known moves.", pkmn.name))
     screen.pbRefreshSingle(pkmnid)
-  )
+  }
 })
 
 #===============================================================================
@@ -628,7 +628,7 @@ PokemonDebugMenuCommands.register("setability", {
       end
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setnature", {
@@ -664,7 +664,7 @@ PokemonDebugMenuCommands.register("setnature", {
       end
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setgender", {
@@ -680,7 +680,7 @@ PokemonDebugMenuCommands.register("setgender", {
         oldgender = (pkmn.male?) ? _INTL("male") : _INTL("female")
         msg = [_INTL("Gender {1} is natural.", oldgender),
              _INTL("Gender {1} is being forced.", oldgender)][pkmn.genderflag ? 1 : 0]
-        cmd = pbShowCommands(msg, [
+        cmd = screen.pbShowCommands(msg, [
            _INTL("Make male"),
            _INTL("Make female"),
            _INTL("Remove override")], cmd)
@@ -703,7 +703,7 @@ PokemonDebugMenuCommands.register("setgender", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("speciesform", {
@@ -762,7 +762,7 @@ PokemonDebugMenuCommands.register("speciesform", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
-  )
+  }
 })
 
 #===============================================================================
@@ -799,7 +799,7 @@ PokemonDebugMenuCommands.register("setshininess", {
       end
       screen.pbRefreshSingle(pkmnid)
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setpokeball", {
@@ -827,7 +827,7 @@ PokemonDebugMenuCommands.register("setpokeball", {
       break if cmd < 0
       pkmn.ballused = balls[cmd][0]
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setribbons", {
@@ -862,7 +862,7 @@ PokemonDebugMenuCommands.register("setribbons", {
         end
       end
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("setnickname", {
@@ -893,7 +893,7 @@ PokemonDebugMenuCommands.register("setnickname", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("ownership", {
@@ -934,7 +934,7 @@ PokemonDebugMenuCommands.register("ownership", {
         pkmn.owner.id = val | val << 16
       end
     end
-  )
+  }
 })
 
 #===============================================================================
@@ -978,7 +978,7 @@ PokemonDebugMenuCommands.register("setegg", {
         pkmn.eggsteps = 1 if pkmn.egg?
       end
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("shadowpkmn", {
@@ -1021,7 +1021,7 @@ PokemonDebugMenuCommands.register("shadowpkmn", {
         end
       end
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("mysterygift", {
@@ -1029,7 +1029,7 @@ PokemonDebugMenuCommands.register("mysterygift", {
   "name"        => _INTL("Mystery Gift"),
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     pbCreateMysteryGift(0, pkmn)
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("duplicate", {
@@ -1061,7 +1061,7 @@ PokemonDebugMenuCommands.register("duplicate", {
       end
       next true
     end
-  )
+  }
 })
 
 PokemonDebugMenuCommands.register("delete", {
@@ -1080,5 +1080,5 @@ PokemonDebugMenuCommands.register("delete", {
       end
       next true
     end
-  )
+  }
 })

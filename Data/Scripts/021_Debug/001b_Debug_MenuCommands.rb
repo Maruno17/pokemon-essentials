@@ -33,7 +33,7 @@ module DebugMenuCommands
   def self.call(function, option, *args)
     option_hash = @@commands[option]
     return nil if !option_hash || !option_hash[function]
-    return option_hash[function].call(*args)
+    return (option_hash[function].call(*args) == true)
   end
 end
 
@@ -74,7 +74,7 @@ DebugMenuCommands.register("warp", {
       $game_map.refresh
       next true   # Closes the debug menu to allow the warp
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("refreshmap", {
@@ -84,7 +84,7 @@ DebugMenuCommands.register("refreshmap", {
   "effect"      => proc {
     $game_map.need_refresh = true
     pbMessage(_INTL("The map will refresh."))
-  )
+  }
 })
 
 DebugMenuCommands.register("switches", {
@@ -93,7 +93,7 @@ DebugMenuCommands.register("switches", {
   "description" => _INTL("Edit all Game Switches (except Script Switches)."),
   "effect"      => proc {
     pbDebugVariables(0)
-  )
+  }
 })
 
 DebugMenuCommands.register("variables", {
@@ -102,7 +102,7 @@ DebugMenuCommands.register("variables", {
   "description" => _INTL("Edit all Game Variables. Can set them to numbers or text."),
   "effect"      => proc {
     pbDebugVariables(1)
-  )
+  }
 })
 
 DebugMenuCommands.register("usepc", {
@@ -111,7 +111,7 @@ DebugMenuCommands.register("usepc", {
   "description" => _INTL("Use a PC to access Pokémon storage and player's PC."),
   "effect"      => proc {
     pbPokeCenterPC
-  )
+  }
 })
 
 DebugMenuCommands.register("togglewallpapers", {
@@ -148,7 +148,7 @@ DebugMenuCommands.register("togglewallpapers", {
         end
       end
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("daycare", {
@@ -157,7 +157,7 @@ DebugMenuCommands.register("daycare", {
   "description" => _INTL("View Pokémon in the Day Care and edit them."),
   "effect"      => proc {
     pbDebugDayCare
-  )
+  }
 })
 
 DebugMenuCommands.register("relicstone", {
@@ -166,16 +166,16 @@ DebugMenuCommands.register("relicstone", {
   "description" => _INTL("Shadow Pokémon. Choose a Pokémon to show to the Relic Stone for purification."),
   "effect"      => proc {
     pbRelicStone
-  )
+  }
 })
 
 DebugMenuCommands.register("purifychamber", {
   "parent"      => "fieldmenu",
-  "name"        => _INTL("Use Relic Stone"),
+  "name"        => _INTL("Use Purify Chamber"),
   "description" => _INTL("Shadow Pokémon. Open the Purify Chamber for purification."),
   "effect"      => proc {
     pbPurifyChamber
-  )
+  }
 })
 
 #===============================================================================
@@ -205,7 +205,7 @@ DebugMenuCommands.register("testwildbattle", {
         pbWildBattle(species, level)
       end
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("testwildbattleadvanced", {
@@ -268,7 +268,7 @@ DebugMenuCommands.register("testwildbattleadvanced", {
         end
       end
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("testtrainerbattle", {
@@ -281,7 +281,7 @@ DebugMenuCommands.register("testtrainerbattle", {
       trainerdata = battle[1]
       pbTrainerBattle(trainerdata[0], trainerdata[1], nil, false, trainerdata[4], true)
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("testtrainerbattleadvanced", {
@@ -296,7 +296,6 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
     loop do
       trainerCmds = []
       trainers.each { |t| trainerCmds.push(sprintf("%s x%d", t[1][0].fullname, t[1][2].length)) }
-      end
       trainerCmds.push(_INTL("[Add trainer]"))
       trainerCmds.push(_INTL("[Set player side size]"))
       trainerCmds.push(_INTL("[Set opponent side size]"))
@@ -372,7 +371,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
         end
       end
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("togglelogging", {
@@ -383,7 +382,7 @@ DebugMenuCommands.register("togglelogging", {
     $INTERNAL = !$INTERNAL
     pbMessage(_INTL("Debug logs for battles will be made in the Data folder.")) if $INTERNAL
     pbMessage(_INTL("Debug logs for battles will not be made.")) if !$INTERNAL
-  )
+  }
 })
 
 DebugMenuCommands.register("resettrainers", {
@@ -403,7 +402,7 @@ DebugMenuCommands.register("resettrainers", {
     else
       pbMessage(_INTL("This command can't be used here."))
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("readyrematches", {
@@ -421,7 +420,7 @@ DebugMenuCommands.register("readyrematches", {
       end
       pbMessage(_INTL("All trainers in the Phone are now ready to rebattle."))
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("roamers", {
@@ -430,7 +429,7 @@ DebugMenuCommands.register("roamers", {
   "description" => _INTL("Toggle and edit all roaming Pokémon."),
   "effect"      => proc {
     pbDebugRoamers
-  )
+  }
 })
 
 #===============================================================================
@@ -461,7 +460,7 @@ DebugMenuCommands.register("additem", {
         end
       end
     }
-  )
+  }
 })
 
 DebugMenuCommands.register("fillbag", {
@@ -478,7 +477,7 @@ DebugMenuCommands.register("fillbag", {
       GameData::Item.each { |i| $PokemonBag.pbStoreItem(i.id, qty) }
       pbMessage(_INTL("The Bag was filled with {1} of each item.", qty))
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("emptybag", {
@@ -488,7 +487,7 @@ DebugMenuCommands.register("emptybag", {
   "effect"      => proc {
     $PokemonBag.clear
     pbMessage(_INTL("The Bag was cleared."))
-  )
+  }
 })
 
 #===============================================================================
@@ -514,7 +513,7 @@ DebugMenuCommands.register("addpokemon", {
       level = pbMessageChooseNumber(_INTL("Set the Pokémon's level."), params)
       pbAddPokemon(species, level) if level > 0
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("demoparty", {
@@ -557,7 +556,7 @@ DebugMenuCommands.register("demoparty", {
       pkmn.pbRecordFirstMoves
     end
     pbMessage(_INTL("Filled party with demo Pokémon."))
-  )
+  }
 })
 
 DebugMenuCommands.register("healparty", {
@@ -567,7 +566,7 @@ DebugMenuCommands.register("healparty", {
   "effect"      => proc {
     $Trainer.party.each { |pkmn| pkmn.heal }
     pbMessage(_INTL("Your Pokémon were fully healed."))
-  )
+  }
 })
 
 DebugMenuCommands.register("quickhatch", {
@@ -577,7 +576,7 @@ DebugMenuCommands.register("quickhatch", {
   "effect"      => proc {
     $Trainer.party.each { |pkmn| pkmn.eggsteps = 1 if pkmn.egg? }
     pbMessage(_INTL("All eggs in your party now require one step to hatch."))
-  )
+  }
 })
 
 DebugMenuCommands.register("fillboxes", {
@@ -625,7 +624,7 @@ DebugMenuCommands.register("fillboxes", {
     if !completed
       pbMessage(_INTL("Note: The number of storage spaces ({1} boxes of {2}) is less than the number of species.", NUM_STORAGE_BOXES, box_qty))
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("clearboxes", {
@@ -639,7 +638,7 @@ DebugMenuCommands.register("clearboxes", {
       end
     end
     pbMessage(_INTL("The storage boxes were cleared."))
-  )
+  }
 })
 
 DebugMenuCommands.register("openstorage", {
@@ -652,7 +651,7 @@ DebugMenuCommands.register("openstorage", {
       screen = PokemonStorageScreen.new(scene, $PokemonStorage)
       screen.pbStartScreen(0)
     }
-  )
+  }
 })
 
 #===============================================================================
@@ -681,13 +680,13 @@ DebugMenuCommands.register("setbadges", {
       break if badgecmd < 0
       if badgecmd == 0   # Give all
         24.times { |i| $Trainer.badges[i] = true }
-      elsif badgecmd==1   # Remove all
+      elsif badgecmd == 1   # Remove all
         24.times { |i| $Trainer.badges[i] = false }
       else
         $Trainer.badges[badgecmd - 2] = !$Trainer.badges[badgecmd - 2]
       end
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("setmoney", {
@@ -700,7 +699,7 @@ DebugMenuCommands.register("setmoney", {
     params.setDefaultValue($Trainer.money)
     $Trainer.money = pbMessageChooseNumber(_INTL("Set the player's money."), params)
     pbMessage(_INTL("You now have ${1}.", $Trainer.money.to_s_formatted))
-  )
+  }
 })
 
 DebugMenuCommands.register("setcoins", {
@@ -713,7 +712,7 @@ DebugMenuCommands.register("setcoins", {
     params.setDefaultValue($PokemonGlobal.coins)
     $PokemonGlobal.coins = pbMessageChooseNumber(_INTL("Set the player's Coin amount."), params)
     pbMessage(_INTL("You now have {1} Coins.", $PokemonGlobal.coins.to_s_formatted))
-  )
+  }
 })
 
 DebugMenuCommands.register("toggleshoes", {
@@ -724,7 +723,7 @@ DebugMenuCommands.register("toggleshoes", {
     $PokemonGlobal.runningShoes = !$PokemonGlobal.runningShoes
     pbMessage(_INTL("Gave Running Shoes.")) if $PokemonGlobal.runningShoes
     pbMessage(_INTL("Lost Running Shoes.")) if !$PokemonGlobal.runningShoes
-  )
+  }
 })
 
 DebugMenuCommands.register("togglepokegear", {
@@ -735,7 +734,7 @@ DebugMenuCommands.register("togglepokegear", {
     $Trainer.pokegear = !$Trainer.pokegear
     pbMessage(_INTL("Gave Pokégear.")) if $Trainer.pokegear
     pbMessage(_INTL("Lost Pokégear.")) if !$Trainer.pokegear
-  )
+  }
 })
 
 DebugMenuCommands.register("dexlists", {
@@ -768,7 +767,7 @@ DebugMenuCommands.register("dexlists", {
         end
       end
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("setplayer", {
@@ -779,10 +778,9 @@ DebugMenuCommands.register("setplayer", {
     limit = 0
     for i in 0...8
       meta = GameData::Metadata.get_player(i)
-      if !meta
-        limit = i
-        break
-      end
+      next if meta
+      limit = i
+      break
     end
     if limit <= 1
       pbMessage(_INTL("There is only one player defined."))
@@ -796,7 +794,7 @@ DebugMenuCommands.register("setplayer", {
         pbMessage(_INTL("The player character was changed."))
       end
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("changeoutfit", {
@@ -810,7 +808,7 @@ DebugMenuCommands.register("changeoutfit", {
     params.setDefaultValue(oldoutfit)
     $Trainer.outfit = pbMessageChooseNumber(_INTL("Set the player's outfit."), params)
     pbMessage(_INTL("Player's outfit was changed.")) if $Trainer.outfit != oldoutfit
-  )
+  }
 })
 
 DebugMenuCommands.register("renameplayer", {
@@ -830,7 +828,7 @@ DebugMenuCommands.register("renameplayer", {
       $Trainer.name = trname
       pbMessage(_INTL("The player's name was changed to {1}.", $Trainer.name))
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("randomid", {
@@ -840,7 +838,7 @@ DebugMenuCommands.register("randomid", {
   "effect"      => proc {
     $Trainer.id = rand(2 ** 16) | rand(2 ** 16) << 16
     pbMessage(_INTL("The player's ID was changed to {1} (full ID: {2}).", $Trainer.publicID, $Trainer.id))
-  )
+  }
 })
 
 #===============================================================================
@@ -860,7 +858,7 @@ DebugMenuCommands.register("setmetadata", {
   "always_show" => true,
   "effect"      => proc {
     pbMetadataScreen(pbDefaultMap)
-  )
+  }
 })
 
 DebugMenuCommands.register("mapconnections", {
@@ -870,7 +868,7 @@ DebugMenuCommands.register("mapconnections", {
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbConnectionsEditor }
-  )
+  }
 })
 
 DebugMenuCommands.register("terraintags", {
@@ -880,7 +878,7 @@ DebugMenuCommands.register("terraintags", {
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbTilesetScreen }
-  )
+  }
 })
 
 DebugMenuCommands.register("setencounters", {
@@ -899,7 +897,7 @@ DebugMenuCommands.register("setencounters", {
     save_data(encdata, "Data/encounters.dat")
     $PokemonTemp.encountersData = nil
     pbSaveEncounterData   # Rewrite PBS file encounters.txt
-  )
+  }
 })
 
 DebugMenuCommands.register("trainertypes", {
@@ -909,7 +907,7 @@ DebugMenuCommands.register("trainertypes", {
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbTrainerTypeEditor }
-  )
+  }
 })
 
 DebugMenuCommands.register("edittrainers", {
@@ -919,7 +917,7 @@ DebugMenuCommands.register("edittrainers", {
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbTrainerBattleEditor }
-  )
+  }
 })
 
 DebugMenuCommands.register("edititems", {
@@ -929,7 +927,7 @@ DebugMenuCommands.register("edititems", {
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbItemEditor }
-  )
+  }
 })
 
 DebugMenuCommands.register("editpokemon", {
@@ -939,7 +937,7 @@ DebugMenuCommands.register("editpokemon", {
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbPokemonEditor }
-  )
+  }
 })
 
 DebugMenuCommands.register("editdexes", {
@@ -949,7 +947,7 @@ DebugMenuCommands.register("editdexes", {
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbRegionalDexEditorMain }
-  )
+  }
 })
 
 DebugMenuCommands.register("positionsprites", {
@@ -963,7 +961,7 @@ DebugMenuCommands.register("positionsprites", {
       sps = SpritePositionerScreen.new(sp)
       sps.pbStart
     }
-  )
+  }
 })
 
 DebugMenuCommands.register("autopositionsprites", {
@@ -979,7 +977,7 @@ DebugMenuCommands.register("autopositionsprites", {
       pbAutoPositionAll
       pbDisposeMessageWindow(msgwindow)
     end
-  )
+  }
 })
 
 DebugMenuCommands.register("animeditor", {
@@ -989,7 +987,7 @@ DebugMenuCommands.register("animeditor", {
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbAnimationEditor }
-  )
+  }
 })
 
 DebugMenuCommands.register("animorganiser", {
@@ -999,7 +997,7 @@ DebugMenuCommands.register("animorganiser", {
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbAnimationsOrganiser }
-  )
+  }
 })
 
 DebugMenuCommands.register("importanims", {
@@ -1009,7 +1007,7 @@ DebugMenuCommands.register("importanims", {
   "always_show" => true,
   "effect"      => proc {
     pbImportAllAnimations
-  )
+  }
 })
 
 DebugMenuCommands.register("exportanims", {
@@ -1019,7 +1017,7 @@ DebugMenuCommands.register("exportanims", {
   "always_show" => true,
   "effect"      => proc {
     pbExportAllAnimations
-  )
+  }
 })
 
 #===============================================================================
@@ -1039,7 +1037,7 @@ DebugMenuCommands.register("mysterygift", {
   "always_show" => true,
   "effect"      => proc {
     pbManageMysteryGifts
-  )
+  }
 })
 
 DebugMenuCommands.register("extracttext", {
@@ -1049,7 +1047,7 @@ DebugMenuCommands.register("extracttext", {
   "always_show" => true,
   "effect"      => proc {
     pbExtractText
-  )
+  }
 })
 
 DebugMenuCommands.register("compiletext", {
@@ -1059,7 +1057,7 @@ DebugMenuCommands.register("compiletext", {
   "always_show" => true,
   "effect"      => proc {
     pbCompileTextUI
-  )
+  }
 })
 
 DebugMenuCommands.register("compiledata", {
@@ -1072,7 +1070,7 @@ DebugMenuCommands.register("compiledata", {
     Compiler.compile_all(true) { |msg| pbMessageDisplay(msgwindow, msg, false) }
     pbMessageDisplay(msgwindow, _INTL("All game data was compiled."))
     pbDisposeMessageWindow(msgwindow)
-  )
+  }
 })
 
 DebugMenuCommands.register("debugconsole", {
@@ -1082,7 +1080,7 @@ DebugMenuCommands.register("debugconsole", {
   "always_show" => true,
   "effect"      => proc {
     Console::setup_console
-  )
+  }
 })
 
 DebugMenuCommands.register("invalidtiles", {
@@ -1092,5 +1090,5 @@ DebugMenuCommands.register("invalidtiles", {
   "always_show" => true,
   "effect"      => proc {
     pbDebugFixInvalidTiles
-  )
+  }
 })
