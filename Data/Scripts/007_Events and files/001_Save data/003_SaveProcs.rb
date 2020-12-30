@@ -33,14 +33,6 @@ SaveData.register(:pokemon_system) do
   from_old_format { |old_format| old_format[3] }
 end
 
-# saving the map_id may be unnecessary, since all data is loaded at once, including $MapFactory
-SaveData.register(:map_id) do
-  ensure_class :Integer
-  save_value { $game_map.map_id }
-  load_value { |value| nil } # TODO: Figure out how to deal with the map id (or whether to deal with it at all)
-  from_old_format { |old_format| old_format[4] }
-end
-
 SaveData.register(:switches) do
   ensure_class :Game_Switches
   save_value { $game_switches }
