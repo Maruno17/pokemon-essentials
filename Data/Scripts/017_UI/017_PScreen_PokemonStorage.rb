@@ -1449,6 +1449,7 @@ end
 class PokemonStorageScreen
   attr_reader :scene
   attr_reader :storage
+  attr_accessor :heldpkmn
 
   def initialize(scene,storage)
     @scene = scene

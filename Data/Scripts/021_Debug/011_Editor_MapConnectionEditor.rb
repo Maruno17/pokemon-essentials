@@ -572,9 +572,9 @@ class MapScreenScene
       if Input.trigger?(Input::B)
         if pbConfirmMessage(_INTL("Save changes?"))
           serializeConnectionData
+          MapFactoryHelper.clear
           save_data(@encdata,"Data/encounters.dat")
-          # TODO: Only need to reload connections and encounter data.
-          pbClearData
+          $PokemonTemp.encountersData = nil
           pbSaveEncounterData
         end
         break if pbConfirmMessage(_INTL("Exit from the editor?"))

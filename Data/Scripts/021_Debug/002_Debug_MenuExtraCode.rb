@@ -521,50 +521,6 @@ def pbDebugRoamers
   viewport.dispose
 end
 
-#===============================================================================
-# Give the player a party of Pokémon.
-# For demonstration purposes only, not to be used in a real game.
-#===============================================================================
-def pbCreatePokemon
-  party = []
-  species = [:PIKACHU, :PIDGEOTTO, :KADABRA, :GYARADOS, :DIGLETT, :CHANSEY]
-  for id in species
-    party.push(id) if GameData::Species.exists?(id)
-  end
-  # Species IDs of the Pokémon to be created
-  for i in 0...party.length
-    species = party[i]
-    # Generate Pokémon with species and level 20
-    $Trainer.party[i] = Pokemon.new(species, 20)
-    $Trainer.seen[species]  = true
-    $Trainer.owned[species] = true
-    pbSeenForm($Trainer.party[i])
-    case species
-    when :PIDGEOTTO
-      $Trainer.party[i].pbLearnMove(:FLY)
-    when :KADABRA
-      $Trainer.party[i].pbLearnMove(:FLASH)
-      $Trainer.party[i].pbLearnMove(:TELEPORT)
-    when :GYARADOS
-      $Trainer.party[i].pbLearnMove(:SURF)
-      $Trainer.party[i].pbLearnMove(:DIVE)
-      $Trainer.party[i].pbLearnMove(:WATERFALL)
-    when :DIGLETT
-      $Trainer.party[i].pbLearnMove(:DIG)
-      $Trainer.party[i].pbLearnMove(:CUT)
-      $Trainer.party[i].pbLearnMove(:HEADBUTT)
-      $Trainer.party[i].pbLearnMove(:ROCKSMASH)
-    when :CHANSEY
-      $Trainer.party[i].pbLearnMove(:SOFTBOILED)
-      $Trainer.party[i].pbLearnMove(:STRENGTH)
-      $Trainer.party[i].pbLearnMove(:SWEETSCENT)
-    end
-  end
-  for i in 0...party.length
-    $Trainer.party[i].pbRecordFirstMoves
-  end
-end
-
 
 
 #===============================================================================

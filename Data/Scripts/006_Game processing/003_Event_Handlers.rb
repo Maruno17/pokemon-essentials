@@ -1,4 +1,6 @@
+#===============================================================================
 # Defines an event that procedures can subscribe to.
+#===============================================================================
 class Event
   def initialize
     @callbacks = []
@@ -63,8 +65,9 @@ class Event
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class HandlerHash
   def initialize(mod)
     @mod         = mod
@@ -145,10 +148,10 @@ class HandlerHash
   end
 end
 
-
-
+#===============================================================================
 # A stripped-down version of class HandlerHash which only deals with symbols and
 # doesn't care about whether those symbols actually relate to a defined thing.
+#===============================================================================
 class HandlerHash2
   def initialize
     @hash    = {}
@@ -197,22 +200,76 @@ class HandlerHash2
   end
 end
 
+#===============================================================================
+# An even more stripped down version of class HandlerHash which just takes
+# hashes with keys, no matter what the keys are.
+#===============================================================================
+class HandlerHashBasic
+  def initialize
+    @ordered_keys = []
+    @hash         = {}
+    @addIfs       = []
+  end
 
+  def [](entry)
+    ret = nil
+    ret = @hash[entry] if entry && @hash[entry]
+    unless ret
+      for addif in @addIfs
+        return addif[1] if addif[0].call(entry)
+      end
+    end
+    return ret
+  end
 
-class SpeciesHandlerHash < HandlerHash2
+  def each
+    @ordered_keys.each { |key| yield key, @hash[key] }
+  end
+
+  def add(entry, handler = nil, &handlerBlock)
+    if ![Proc,Hash].include?(handler.class) && !block_given?
+      raise ArgumentError, "#{self.class.name} for #{entry.inspect} has no valid handler (#{handler.inspect} was given)"
+    end
+    return if !entry || entry.empty?
+    @ordered_keys.push(entry) if !@ordered_keys.include?(entry)
+    @hash[entry] = handler || handlerBlock
+  end
+
+  def addIf(conditionProc, handler = nil, &handlerBlock)
+    if ![Proc, Hash].include?(handler.class) && !block_given?
+      raise ArgumentError, "addIf call for #{self.class.name} has no valid handler (#{handler.inspect} was given)"
+    end
+    @addIfs.push([conditionProc, handler || handlerBlock])
+  end
+
+  def copy(src, *dests)
+    handler = self[src]
+    return if !handler
+    dests.each { |dest| self.add(dest, handler) }
+  end
+
+  def clear
+    @hash.clear
+    @ordered_keys.clear
+  end
+
+  def trigger(entry, *args)
+    handler = self[entry]
+    return (handler) ? handler.call(*args) : nil
+  end
 end
 
-
+#===============================================================================
+#
+#===============================================================================
+class SpeciesHandlerHash < HandlerHash2
+end
 
 class AbilityHandlerHash < HandlerHash2
 end
 
-
-
 class ItemHandlerHash < HandlerHash2
 end
-
-
 
 class MoveHandlerHash < HandlerHash2
 end

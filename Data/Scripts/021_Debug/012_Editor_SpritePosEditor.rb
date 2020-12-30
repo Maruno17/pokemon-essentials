@@ -159,7 +159,6 @@ class SpritePositioner
     frm = species_data.form
     @sprites["pokemon_0"].setSpeciesBitmap(spe, 0, frm, false, false, true)
     @sprites["pokemon_1"].setSpeciesBitmap(spe, 0, frm)
-    # TODO
     @sprites["shadow_1"].setBitmap(GameData::Species.shadow_filename(spe, frm))
   end
 
