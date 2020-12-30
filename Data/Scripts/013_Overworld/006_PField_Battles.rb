@@ -30,26 +30,26 @@ class PokemonTemp
     when "single", "1v1", "1v2", "2v1", "1v3", "3v1",
          "double", "2v2", "2v3", "3v2", "triple", "3v3"
       rules["size"] = rule.to_s.downcase
-    when "canlose";                rules["canLose"]        = true
-    when "cannotlose";             rules["canLose"]        = false
-    when "canrun";                 rules["canRun"]         = true
-    when "cannotrun";              rules["canRun"]         = false
-    when "roamerflees";            rules["roamerFlees"]    = true
-    when "noexp";                  rules["expGain"]        = false
-    when "nomoney";                rules["moneyGain"]      = false
-    when "switchstyle";            rules["switchStyle"]    = true
-    when "setstyle";               rules["switchStyle"]    = false
-    when "anims";                  rules["battleAnims"]    = true
-    when "noanims";                rules["battleAnims"]    = false
-    when "terrain";                rules["defaultTerrain"] = getID(PBBattleTerrains,var)
-    when "weather";                rules["defaultWeather"] = getID(PBWeather,var)
-    when "environment", "environ"; rules["environment"]    = getID(PBEnvironment,var)
-    when "backdrop", "battleback"; rules["backdrop"]       = var
-    when "base";                   rules["base"]           = var
-    when "outcome", "outcomevar";  rules["outcomeVar"]     = var
-    when "nopartner";              rules["noPartner"]      = true
+    when "canlose"                then rules["canLose"]        = true
+    when "cannotlose"             then rules["canLose"]        = false
+    when "canrun"                 then rules["canRun"]         = true
+    when "cannotrun"              then rules["canRun"]         = false
+    when "roamerflees"            then rules["roamerFlees"]    = true
+    when "noexp"                  then rules["expGain"]        = false
+    when "nomoney"                then rules["moneyGain"]      = false
+    when "switchstyle"            then rules["switchStyle"]    = true
+    when "setstyle"               then rules["switchStyle"]    = false
+    when "anims"                  then rules["battleAnims"]    = true
+    when "noanims"                then rules["battleAnims"]    = false
+    when "terrain"                then rules["defaultTerrain"] = getID(PBBattleTerrains, var)
+    when "weather"                then rules["defaultWeather"] = getID(PBWeather, var)
+    when "environment", "environ" then rules["environment"]    = getID(PBEnvironment, var)
+    when "backdrop", "battleback" then rules["backdrop"]       = var
+    when "base"                   then rules["base"]           = var
+    when "outcome", "outcomevar"  then rules["outcomeVar"]     = var
+    when "nopartner"              then rules["noPartner"]      = true
     else
-      raise _INTL("Battle rule \"{1}\" does not exist.",rule)
+      raise _INTL("Battle rule \"{1}\" does not exist.", rule)
     end
   end
 end
@@ -140,12 +140,18 @@ def pbPrepareBattle(battle)
   if battleRules["base"].nil?
     case battle.environment
     when PBEnvironment::Grass, PBEnvironment::TallGrass,
-         PBEnvironment::ForestGrass;                            base = "grass"
-#    when PBEnvironment::Rock;                                   base = "rock"
-    when PBEnvironment::Sand;                                   base = "sand"
-    when PBEnvironment::MovingWater, PBEnvironment::StillWater; base = "water"
-    when PBEnvironment::Puddle;                                 base = "puddle"
-    when PBEnvironment::Ice;                                    base = "ice"
+         PBEnvironment::ForestGrass
+      base = "grass"
+#    when PBEnvironment::Rock
+#      base = "rock"
+    when PBEnvironment::Sand
+      base = "sand"
+    when PBEnvironment::MovingWater, PBEnvironment::StillWater
+      base = "water"
+    when PBEnvironment::Puddle
+      base = "puddle"
+    when PBEnvironment::Ice
+      base = "ice"
     end
   else
     base = battleRules["base"]
@@ -168,24 +174,24 @@ end
 def pbGetEnvironment
   ret = GameData::MapMetadata.get($game_map.map_id).battle_environment
   ret = PBEnvironment::None if !ret
-  if $PokemonTemp.encounterType==EncounterTypes::OldRod ||
-     $PokemonTemp.encounterType==EncounterTypes::GoodRod ||
-     $PokemonTemp.encounterType==EncounterTypes::SuperRod
+  if $PokemonTemp.encounterType == EncounterTypes::OldRod ||
+     $PokemonTemp.encounterType == EncounterTypes::GoodRod ||
+     $PokemonTemp.encounterType == EncounterTypes::SuperRod
     terrainTag = pbFacingTerrainTag
   else
     terrainTag = $game_player.terrain_tag
   end
   case terrainTag
   when PBTerrain::Grass, PBTerrain::SootGrass
-    ret = (ret==PBEnvironment::Forest) ? PBEnvironment::ForestGrass : PBEnvironment::Grass
+    ret = (ret == PBEnvironment::Forest) ? PBEnvironment::ForestGrass : PBEnvironment::Grass
   when PBTerrain::TallGrass
-    ret = (ret==PBEnvironment::Forest) ? PBEnvironment::ForestGrass : PBEnvironment::TallGrass
-  when PBTerrain::Rock;                        ret = PBEnvironment::Rock
-  when PBTerrain::Sand;                        ret = PBEnvironment::Sand
-  when PBTerrain::DeepWater, PBTerrain::Water; ret = PBEnvironment::MovingWater
-  when PBTerrain::StillWater;                  ret = PBEnvironment::StillWater
-  when PBTerrain::Puddle;                      ret = PBEnvironment::Puddle
-  when PBTerrain::Ice;                         ret = PBEnvironment::Ice
+    ret = (ret == PBEnvironment::Forest) ? PBEnvironment::ForestGrass : PBEnvironment::TallGrass
+  when PBTerrain::Rock                        then ret = PBEnvironment::Rock
+  when PBTerrain::Sand                        then ret = PBEnvironment::Sand
+  when PBTerrain::DeepWater, PBTerrain::Water then ret = PBEnvironment::MovingWater
+  when PBTerrain::StillWater                  then ret = PBEnvironment::StillWater
+  when PBTerrain::Puddle                      then ret = PBEnvironment::Puddle
+  when PBTerrain::Ice                         then ret = PBEnvironment::Ice
   end
   return ret
 end
@@ -235,11 +241,11 @@ def pbWildBattleCore(*args)
     if arg.is_a?(Pokemon)
       foeParty.push(arg)
     elsif arg.is_a?(Array)
-      species = getID(PBSpecies,arg[0])
+      species = GameData::Species.get(arg[0]).id
       pkmn = pbGenerateWildPokemon(species,arg[1])
       foeParty.push(pkmn)
     elsif sp
-      species = getID(PBSpecies,sp)
+      species = GameData::Species.get(sp).id
       pkmn = pbGenerateWildPokemon(species,arg)
       foeParty.push(pkmn)
       sp = nil
@@ -266,6 +272,7 @@ def pbWildBattleCore(*args)
     $Trainer.party.each { |pkmn| playerParty.push(pkmn) }
     playerPartyStarts.push(playerParty.length)
     ally.party.each { |pkmn| playerParty.push(pkmn) }
+    setBattleRule("double") if !$PokemonTemp.battleRules["size"]
   end
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
@@ -300,7 +307,7 @@ end
 #===============================================================================
 # Used when walking in tall grass, hence the additional code.
 def pbWildBattle(species, level, outcomeVar=1, canRun=true, canLose=false)
-  species = getID(PBSpecies,species)
+  species = GameData::Species.get(species).id
   # Potentially call a different pbWildBattle-type method instead (for roaming
   # Pokémon, Safari battles, Bug Contest battles)
   handled = [nil]
@@ -411,6 +418,7 @@ def pbTrainerBattleCore(*args)
     $Trainer.party.each { |pkmn| playerParty.push(pkmn) }
     playerPartyStarts.push(playerParty.length)
     ally.party.each { |pkmn| playerParty.push(pkmn) }
+    setBattleRule("double") if !$PokemonTemp.battleRules["size"]
   end
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
@@ -597,7 +605,7 @@ def pbEvolutionCheck(currentLevels)
     next if !pkmn || (pkmn.hp==0 && !NEWEST_BATTLE_MECHANICS)
     next if currentLevels[i] && pkmn.level==currentLevels[i]
     newSpecies = pbCheckEvolution(pkmn)
-    next if newSpecies<=0
+    next if !newSpecies
     evo = PokemonEvolutionScene.new
     evo.pbStartScreen(pkmn,newSpecies)
     evo.pbEvolution

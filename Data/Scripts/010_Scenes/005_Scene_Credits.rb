@@ -79,6 +79,10 @@ and everyone else who helped out
 
 
 
+"mkxp-z" by:
+Roza
+Based on MKXP by Ancurio et al.
+
 "RPG Maker XP" by:
 Enterbrain
 
@@ -165,7 +169,6 @@ _END_
     @credit_sprite.z      = 9998
     @credit_sprite.oy     = @realOY
     @bg_index = 0
-    @zoom_adjustment = 1.0/$ResizeFactor
     @last_flag = false
     #--------
     # Setup

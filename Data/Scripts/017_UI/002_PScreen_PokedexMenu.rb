@@ -31,8 +31,9 @@ class Window_DexesList < Window_CommandPokemon
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPokedexMenu_Scene
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
@@ -81,8 +82,9 @@ class PokemonPokedexMenu_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPokedexMenuScreen
   def initialize(scene)
     @scene = scene
@@ -103,7 +105,7 @@ class PokemonPokedexMenuScreen
           commands[i] = dexnames[index]
         end
       end
-      index = -1 if index>=$PokemonGlobal.pokedexUnlocked.length-1
+      index = -1 if index >= $PokemonGlobal.pokedexUnlocked.length - 1
       commands2[i] = [$Trainer.pokedexSeen(index),
                       $Trainer.pokedexOwned(index),
                       pbGetRegionalDexLength(index)]

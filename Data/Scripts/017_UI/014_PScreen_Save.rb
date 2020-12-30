@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 def pbSave(safesave=false)
   $Trainer.metaID=$PokemonGlobal.playerID
   begin
@@ -55,8 +58,9 @@ def pbEmergencySave
   $scene=oldscene
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonSave_Scene
   def pbStartScreen
     @viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
@@ -93,8 +97,9 @@ class PokemonSave_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonSaveScreen
   def initialize(scene)
     @scene=scene
@@ -146,8 +151,9 @@ class PokemonSaveScreen
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbSaveScreen
   scene = PokemonSave_Scene.new
   screen = PokemonSaveScreen.new(scene)

@@ -249,7 +249,7 @@ class Window_TextEntry < SpriteWindow_Base
     bitmap=self.contents
     bitmap.clear
     x=0
-    y=0
+    y=6
     if @heading
       textwidth=bitmap.text_size(@heading).width
       pbDrawShadowText(bitmap,x,y, textwidth+4, 32, @heading,@baseColor,@shadowColor)
@@ -278,13 +278,13 @@ class Window_TextEntry < SpriteWindow_Base
       pbDrawShadowText(bitmap,x,y, textwidth+4, 32, c,@baseColor,@shadowColor)
       # Draw cursor if necessary
       if ((@frame/10)&1) == 0 && i==@helper.cursor
-        bitmap.fill_rect(x,y+4,2,24,cursorcolor)
+        bitmap.fill_rect(x,y-2,2,24,cursorcolor)
       end
       # Add x to drawn text width
       x += textwidth
     end
     if ((@frame/10)&1) == 0 && textscan.length==@helper.cursor
-      bitmap.fill_rect(x,y+4,2,24,cursorcolor)
+      bitmap.fill_rect(x,y-2,2,24,cursorcolor)
     end
   end
 end
@@ -1093,9 +1093,9 @@ class PokemonEntryScene2
       @cursor3.update
       updateCursorPos
       case @cursortype
-      when 0; @sprite.bitmap=@cursor1.bitmap
-      when 1; @sprite.bitmap=@cursor2.bitmap
-      when 2; @sprite.bitmap=@cursor3.bitmap
+      when 0 then @sprite.bitmap=@cursor1.bitmap
+      when 1 then @sprite.bitmap=@cursor2.bitmap
+      when 2 then @sprite.bitmap=@cursor3.bitmap
       end
     end
 
@@ -1369,19 +1369,19 @@ class PokemonEntryScene2
     elsif Input.repeat?(Input::UP)
       if @cursorpos<0         # Controls
         case @cursorpos
-        when MODE1; @cursorpos = ROWS*(COLUMNS-1)
-        when MODE2; @cursorpos = ROWS*(COLUMNS-1)+2
-        when MODE3; @cursorpos = ROWS*(COLUMNS-1)+4
-        when BACK;  @cursorpos = ROWS*(COLUMNS-1)+8
-        when OK;    @cursorpos = ROWS*(COLUMNS-1)+11
+        when MODE1 then @cursorpos = ROWS*(COLUMNS-1)
+        when MODE2 then @cursorpos = ROWS*(COLUMNS-1)+2
+        when MODE3 then @cursorpos = ROWS*(COLUMNS-1)+4
+        when BACK  then @cursorpos = ROWS*(COLUMNS-1)+8
+        when OK    then @cursorpos = ROWS*(COLUMNS-1)+11
         end
       elsif @cursorpos<ROWS   # Top row of letters
         case @cursorpos
-        when 0,1;      @cursorpos = MODE1
-        when 2,3;      @cursorpos = MODE2
-        when 4,5,6;    @cursorpos = MODE3
-        when 7,8,9,10; @cursorpos = BACK
-        when 11,12;    @cursorpos = OK
+        when 0, 1        then @cursorpos = MODE1
+        when 2, 3        then @cursorpos = MODE2
+        when 4, 5, 6     then @cursorpos = MODE3
+        when 7, 8, 9, 10 then @cursorpos = BACK
+        when 11, 12      then @cursorpos = OK
         end
       else
         cursordiv=wrapmod((cursordiv-1),COLUMNS)
@@ -1390,11 +1390,11 @@ class PokemonEntryScene2
     elsif Input.repeat?(Input::DOWN)
       if @cursorpos<0                      # Controls
         case @cursorpos
-        when MODE1; @cursorpos = 0
-        when MODE2; @cursorpos = 2
-        when MODE3; @cursorpos = 4
-        when BACK;  @cursorpos = 8
-        when OK;    @cursorpos = 11
+        when MODE1 then @cursorpos = 0
+        when MODE2 then @cursorpos = 2
+        when MODE3 then @cursorpos = 4
+        when BACK  then @cursorpos = 8
+        when OK    then @cursorpos = 11
         end
       elsif @cursorpos>=ROWS*(COLUMNS-1)   # Bottom row of letters
         case @cursorpos
@@ -1502,32 +1502,6 @@ class PokemonEntry
     ret=@scene.pbEntry
     @scene.pbEndScene
     return ret
-  end
-end
-
-
-
-#===============================================================================
-# Interpreter functions for naming the player
-#===============================================================================
-class Interpreter
-  def command_303
-    if $Trainer
-      $Trainer.name=pbEnterPlayerName(_INTL("Your name?"),1,@parameters[1],$Trainer.name)
-      return true
-    end
-    if $game_actors && $data_actors && $data_actors[@parameters[0]] != nil
-      # Set battle abort flag
-      $game_temp.battle_abort = true
-      pbFadeOutIn {
-        sscene=PokemonEntryScene.new
-        sscreen=PokemonEntry.new(sscene)
-        $game_actors[@parameters[0]].name=sscreen.pbStartScreen(
-           _INTL("Enter {1}'s name.",$game_actors[@parameters[0]].name),
-           1,@parameters[1],$game_actors[@parameters[0]].name)
-      }
-    end
-    return true
   end
 end
 

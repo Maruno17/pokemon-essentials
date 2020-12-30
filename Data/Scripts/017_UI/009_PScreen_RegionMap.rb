@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class MapBottomSprite < SpriteWrapper
   attr_reader :mapname
   attr_reader :maplocation
@@ -52,8 +55,9 @@ class MapBottomSprite < SpriteWrapper
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonRegionMap_Scene
   LEFT   = 0
   TOP    = 0
@@ -133,7 +137,7 @@ class PokemonRegionMap_Scene
     @sprites["mapbottom"].mapdetails  = pbGetMapDetails(@mapX,@mapY)
     if playerpos && mapindex==playerpos[0]
       @sprites["player"] = IconSprite.new(0,0,@viewport)
-      @sprites["player"].setBitmap(pbPlayerHeadFile($Trainer.trainertype))
+      @sprites["player"].setBitmap(GameData::TrainerType.player_map_icon_filename($Trainer.trainertype))
       @sprites["player"].x = -SQUAREWIDTH/2+(@mapX*SQUAREWIDTH)+(Graphics.width-@sprites["map"].bitmap.width)/2
       @sprites["player"].y = -SQUAREHEIGHT/2+(@mapY*SQUAREHEIGHT)+(Graphics.height-@sprites["map"].bitmap.height)/2
     end
@@ -339,8 +343,9 @@ class PokemonRegionMap_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonRegionMapScreen
   def initialize(scene)
     @scene = scene
@@ -360,8 +365,9 @@ class PokemonRegionMapScreen
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbShowMap(region=-1,wallmap=true)
   pbFadeOutIn {
     scene = PokemonRegionMap_Scene.new(region,wallmap)

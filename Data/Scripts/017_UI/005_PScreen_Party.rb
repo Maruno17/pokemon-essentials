@@ -75,32 +75,36 @@ class PokemonPartyConfirmCancelSprite < SpriteWrapper
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPartyCancelSprite < PokemonPartyConfirmCancelSprite
   def initialize(viewport=nil)
     super(_INTL("CANCEL"),398,328,false,viewport)
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPartyConfirmSprite < PokemonPartyConfirmCancelSprite
   def initialize(viewport=nil)
     super(_INTL("CONFIRM"),398,308,true,viewport)
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPartyCancelSprite2 < PokemonPartyConfirmCancelSprite
   def initialize(viewport=nil)
     super(_INTL("CANCEL"),398,346,true,viewport)
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Window_CommandPokemonColor < Window_CommandPokemon
   def initialize(commands,width=nil)
     @colorKey = []
@@ -127,10 +131,8 @@ class Window_CommandPokemonColor < Window_CommandPokemon
   end
 end
 
-
-
 #===============================================================================
-# Pokémon party panels
+# Blank party panel
 #===============================================================================
 class PokemonPartyBlankPanel < SpriteWrapper
   attr_accessor :text
@@ -158,8 +160,9 @@ class PokemonPartyBlankPanel < SpriteWrapper
   def refresh; end
 end
 
-
-
+#===============================================================================
+# Pokémon party panel
+#===============================================================================
 class PokemonPartyPanel < SpriteWrapper
   attr_reader :pokemon
   attr_reader :active
@@ -422,8 +425,6 @@ class PokemonPartyPanel < SpriteWrapper
     @helditemsprite.update if @helditemsprite && !@helditemsprite.disposed?
   end
 end
-
-
 
 #===============================================================================
 # Pokémon party visuals
@@ -820,8 +821,6 @@ class PokemonParty_Scene
   end
 end
 
-
-
 #===============================================================================
 # Pokémon party mechanics
 #===============================================================================
@@ -941,7 +940,7 @@ class PokemonPartyScreen
   def pbChooseMove(pokemon,helptext,index=0)
     movenames = []
     for i in pokemon.moves
-      break if i.id==0
+      next if !i || !i.id
       if i.total_pp<=0
         movenames.push(_INTL("{1} (PP: ---)",i.name))
       else
@@ -1324,12 +1323,77 @@ class PokemonPartyScreen
   end
 end
 
-
-
+#===============================================================================
+# Open the party screen
+#===============================================================================
 def pbPokemonScreen
   pbFadeOutIn {
     sscene = PokemonParty_Scene.new
     sscreen = PokemonPartyScreen.new(sscene,$Trainer.party)
     sscreen.pbPokemonScreen
   }
+end
+
+#===============================================================================
+# Choose a Pokémon in the party
+#===============================================================================
+# Choose a Pokémon/egg from the party.
+# Stores result in variable _variableNumber_ and the chosen Pokémon's name in
+# variable _nameVarNumber_; result is -1 if no Pokémon was chosen
+def pbChoosePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneligible=false)
+  chosen = 0
+  pbFadeOutIn {
+    scene = PokemonParty_Scene.new
+    screen = PokemonPartyScreen.new(scene,$Trainer.party)
+    if ableProc
+      chosen=screen.pbChooseAblePokemon(ableProc,allowIneligible)
+    else
+      screen.pbStartScene(_INTL("Choose a Pokémon."),false)
+      chosen = screen.pbChoosePokemon
+      screen.pbEndScene
+    end
+  }
+  pbSet(variableNumber,chosen)
+  if chosen>=0
+    pbSet(nameVarNumber,$Trainer.party[chosen].name)
+  else
+    pbSet(nameVarNumber,"")
+  end
+end
+
+def pbChooseNonEggPokemon(variableNumber,nameVarNumber)
+  pbChoosePokemon(variableNumber,nameVarNumber,proc { |pkmn| !pkmn.egg? })
+end
+
+def pbChooseAblePokemon(variableNumber,nameVarNumber)
+  pbChoosePokemon(variableNumber,nameVarNumber,proc { |pkmn| !pkmn.egg? && pkmn.hp>0 })
+end
+
+# Same as pbChoosePokemon, but prevents choosing an egg or a Shadow Pokémon.
+def pbChooseTradablePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneligible=false)
+  chosen = 0
+  pbFadeOutIn {
+    scene = PokemonParty_Scene.new
+    screen = PokemonPartyScreen.new(scene,$Trainer.party)
+    if ableProc
+      chosen=screen.pbChooseTradablePokemon(ableProc,allowIneligible)
+    else
+      screen.pbStartScene(_INTL("Choose a Pokémon."),false)
+      chosen = screen.pbChoosePokemon
+      screen.pbEndScene
+    end
+  }
+  pbSet(variableNumber,chosen)
+  if chosen>=0
+    pbSet(nameVarNumber,$Trainer.party[chosen].name)
+  else
+    pbSet(nameVarNumber,"")
+  end
+end
+
+def pbChoosePokemonForTrade(variableNumber,nameVarNumber,wanted)
+  wanted = GameData::Species.get(wanted).species
+  pbChooseTradablePokemon(variableNumber,nameVarNumber,proc { |pkmn|
+    next pkmn.species==wanted
+  })
 end

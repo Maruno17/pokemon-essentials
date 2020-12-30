@@ -242,20 +242,20 @@ class PokemonEncounters
     # not have the type they favor. If none have that type, nothing is changed.
     firstPkmn = $Trainer.firstPokemon
     if firstPkmn && rand(100)<50   # 50% chance of happening
-      favoredType = -1
-      if firstPkmn.hasAbility?(:STATIC) && hasConst?(PBTypes,:ELECTRIC)
-        favoredType = getConst(PBTypes,:ELECTRIC)
-      elsif firstPkmn.hasAbility?(:MAGNETPULL) && hasConst?(PBTypes,:STEEL)
-        favoredType = getConst(PBTypes,:STEEL)
+      favoredType = nil
+      if firstPkmn.hasAbility?(:STATIC) && GameData::Type.exists?(:ELECTRIC)
+        favoredType = :ELECTRIC
+      elsif firstPkmn.hasAbility?(:MAGNETPULL) && GameData::Type.exists?(:STEEL)
+        favoredType = :STEEL
       end
-      if favoredType>=0
+      if favoredType
         newEncList = []
         newChances = []
-        speciesData = pbLoadSpeciesData
         for i in 0...encList.length
-          t1 = speciesData[encList[i][0]][SpeciesData::TYPE1]
-          t2 = speciesData[encList[i][0]][SpeciesData::TYPE2]
-          next if t1!=favoredType && (!t2 || t2!=favoredType)
+          speciesData = GameData::Species.get(encList[i][0])
+          t1 = speciesData.type1
+          t2 = speciesData.type2
+          next if t1 != favoredType && (!t2 || t2 != favoredType)
           newEncList.push(encList[i])
           newChances.push(chances[i])
         end

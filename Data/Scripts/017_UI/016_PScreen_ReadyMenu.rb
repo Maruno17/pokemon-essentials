@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class ReadyMenuButton < SpriteWrapper
   attr_reader :index   # ID of button
   attr_reader :selected
@@ -91,8 +94,9 @@ class ReadyMenuButton < SpriteWrapper
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonReadyMenu_Scene
   attr_reader :sprites
 
@@ -217,8 +221,9 @@ class PokemonReadyMenu_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonReadyMenu
   def initialize(scene)
     @scene = scene
@@ -289,8 +294,6 @@ class PokemonReadyMenu
     @scene.pbEndScene
   end
 end
-
-
 
 #===============================================================================
 # Using a registered item

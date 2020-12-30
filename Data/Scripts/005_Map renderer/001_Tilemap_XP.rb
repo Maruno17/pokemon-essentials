@@ -216,27 +216,13 @@ class CustomTilemap
     @tilesetChanged = true
   end
 
-  def getResizeFactor
-    return $ResizeFactor || 1.0
-  end
-
   def ox=(val)
-    rf = getResizeFactor
-    if rf!=1.0
-      val = (val*rf).to_i
-      val = (val/rf).to_i
-    end
     wasshown = self.shown?
     @ox = val.floor
     @nowshown = (!wasshown && self.shown?)
   end
 
   def oy=(val)
-    rf = getResizeFactor
-    if rf!=1.0
-      val = (val*rf).to_i
-      val = (val/rf).to_i
-    end
     wasshown = self.shown?
     @oy = val.floor
     @nowshown = (!wasshown && self.shown?)

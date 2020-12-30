@@ -3,10 +3,10 @@ class Game_Player < Game_Character
 
   def fullPattern
     case self.direction
-    when 2; return self.pattern
-    when 4; return 4+self.pattern
-    when 6; return 8+self.pattern
-    when 8; return 12+self.pattern
+    when 2 then return self.pattern
+    when 4 then return self.pattern + 4
+    when 6 then return self.pattern + 8
+    when 8 then return self.pattern + 12
     end
     return 0
   end

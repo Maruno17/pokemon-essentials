@@ -125,7 +125,7 @@ class PokeBattle_Battler
     @damageState.reset
     @damageState.initialHP = @hp
     confusionMove = PokeBattle_Confusion.new(@battle,nil)
-    confusionMove.calcType = confusionMove.pbCalcType(self)   # -1
+    confusionMove.calcType = confusionMove.pbCalcType(self)   # nil
     @damageState.typeMod = confusionMove.pbCalcTypeMod(confusionMove.calcType,self,self)   # 8
     confusionMove.pbCheckDamageAbsorption(self,self)
     confusionMove.pbCalcDamage(self,self)
@@ -189,7 +189,7 @@ class PokeBattle_Battler
     @lastMoveFailed = false
     if !pbTryUseMove(choice,move,specialUsage,skipAccuracyCheck)
       @lastMoveUsed     = nil
-      @lastMoveUsedType = -1
+      @lastMoveUsedType = nil
       if !specialUsage
         @lastRegularMoveUsed   = nil
         @lastRegularMoveTarget = -1
@@ -207,7 +207,7 @@ class PokeBattle_Battler
         @battle.pbDisplay(_INTL("{1} used {2}!",pbThis,move.name))
         @battle.pbDisplay(_INTL("But there was no PP left for the move!"))
         @lastMoveUsed          = nil
-        @lastMoveUsedType      = -1
+        @lastMoveUsedType      = nil
         @lastRegularMoveUsed   = nil
         @lastRegularMoveTarget = -1
         @lastMoveFailed        = true
@@ -319,7 +319,7 @@ class PokeBattle_Battler
       @battle.pbDisplay(_INTL("{1} melted the ice!",user.pbThis))
     end
     # Powder
-    if user.effects[PBEffects::Powder] && isConst?(move.calcType,PBTypes,:FIRE)
+    if user.effects[PBEffects::Powder] && move.calcType == :FIRE
       @battle.pbCommonAnimation("Powder",user)
       @battle.pbDisplay(_INTL("When the flame touched the powder on the Pokémon, it exploded!"))
       user.lastMoveFailed = true
@@ -342,7 +342,7 @@ class PokeBattle_Battler
     if move.damagingMove?
       case @battle.pbWeather
       when PBWeather::HeavyRain
-        if isConst?(move.calcType,PBTypes,:FIRE)
+        if move.calcType == :FIRE
           @battle.pbDisplay(_INTL("The Fire-type attack fizzled out in the heavy rain!"))
           user.lastMoveFailed = true
           pbCancelMoves
@@ -350,7 +350,7 @@ class PokeBattle_Battler
           return
         end
       when PBWeather::HarshSun
-        if isConst?(move.calcType,PBTypes,:WATER)
+        if move.calcType == :WATER
           @battle.pbDisplay(_INTL("The Water-type attack evaporated in the harsh sunlight!"))
           user.lastMoveFailed = true
           pbCancelMoves
@@ -364,7 +364,7 @@ class PokeBattle_Battler
       if user.pbHasOtherType?(move.calcType) && !PBTypes.isPseudoType?(move.calcType)
         @battle.pbShowAbilitySplash(user)
         user.pbChangeTypes(move.calcType)
-        typeName = PBTypes.getName(move.calcType)
+        typeName = GameData::Type.get(move.calcType).name
         @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))
         @battle.pbHideAbilitySplash(user)
         # NOTE: The GF games say that if Curse is used by a non-Ghost-type

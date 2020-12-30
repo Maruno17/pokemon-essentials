@@ -1,3 +1,4 @@
+# NOTE: Everything in here is unused.
 #===============================================================================
 # Serial record
 #===============================================================================
@@ -52,11 +53,11 @@ module SerialRecords
       while strm.pos<offset+length
         datatype = strm.read(1)
         case datatype
-        when "0"; ret.push(nil)
-        when "T"; ret.push(true)
-        when "F"; ret.push(false)
-        when "\""; ret.push(decodeString(strm))
-        when "i"; ret.push(decodeInt(strm))
+        when "0"  then ret.push(nil)
+        when "T"  then ret.push(true)
+        when "F"  then ret.push(false)
+        when "\"" then ret.push(decodeString(strm))
+        when "i"  then ret.push(decodeInt(strm))
         end
       end
       return ret
@@ -209,6 +210,7 @@ end
 #===============================================================================
 # Encoding and decoding
 #===============================================================================
+# Unused
 def intSize(value)
   return 1 if value<0x80
   return 2 if value<0x4000
@@ -217,6 +219,7 @@ def intSize(value)
   return 5
 end
 
+# Unused
 def encodeInt(strm,value)
   num = 0
   loop do
@@ -230,6 +233,7 @@ def encodeInt(strm,value)
   end
 end
 
+# Unused
 def decodeInt(strm)
   bits    = 0
   curbyte = 0
@@ -242,15 +246,18 @@ def decodeInt(strm)
   return ret
 end
 
+# Unused
 def strSize(str)
   return str.length+intSize(str.length)
 end
 
+# Unused
 def encodeString(strm,str)
   encodeInt(strm,str.length)
   strm.write(str)
 end
 
+# Unused
 def decodeString(strm)
   len = decodeInt(strm)
   return strm.read(len)
@@ -271,6 +278,7 @@ end
 #===============================================================================
 # Scripted constants
 #===============================================================================
+# Unused
 def pbFindScript(a,name)
   a.each { |i|
     next if !i
@@ -279,6 +287,7 @@ def pbFindScript(a,name)
   return nil
 end
 
+# Unused
 def pbAddScript(script,sectionname)
   begin
     scripts = load_data("Data/Constants.rxdata")

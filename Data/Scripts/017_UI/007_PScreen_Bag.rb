@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class Window_PokemonBag < Window_DrawableCommand
   attr_reader :pocket
   attr_accessor :sorting
@@ -116,8 +119,6 @@ class Window_PokemonBag < Window_DrawableCommand
     @downarrow.visible = false
   end
 end
-
-
 
 #===============================================================================
 # Bag visuals
@@ -319,7 +320,6 @@ class PokemonBag_Scene
     # Set the selected item's description
     @sprites["itemtext"].text =
        (itemlist.item) ? GameData::Item.get(itemlist.item).description : _INTL("Close bag.")
-
   end
 
   def pbRefreshFilter
@@ -442,8 +442,6 @@ class PokemonBag_Scene
     }
   end
 end
-
-
 
 #===============================================================================
 # Bag mechanics

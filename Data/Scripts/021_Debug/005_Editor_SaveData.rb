@@ -2,47 +2,25 @@
 # Save type data to PBS file
 #===============================================================================
 def pbSaveTypes
-  return if (PBTypes.maxValue rescue 0)==0
-  File.open("PBS/types.txt","wb") { |f|
+  File.open("PBS/types.txt", "wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
-    for i in 0..(PBTypes.maxValue rescue 25)
-      name = PBTypes.getName(i) rescue nil
-      next if !name || name==""
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
+    # Write each type in turn
+    GameData::Type.each do |type|
       f.write("\#-------------------------------\r\n")
-      constname = getConstantName(PBTypes,i) rescue pbGetTypeConst(i)
-      f.write(sprintf("[%d]\r\n",i))
-      f.write(sprintf("Name = %s\r\n",name))
-      f.write(sprintf("InternalName = %s\r\n",constname))
-      if (PBTypes.isPseudoType?(i) rescue isConst?(i,PBTypes,QMARKS))
-        f.write("IsPseudoType = true\r\n")
-      end
-      if (PBTypes.isSpecialType?(i) rescue pbIsOldSpecialType?(i))
-        f.write("IsSpecialType = true\r\n")
-      end
-      weak   = []
-      resist = []
-      immune = []
-      for j in 0..(PBTypes.maxValue rescue 25)
-        cname = getConstantName(PBTypes,j) rescue pbGetTypeConst(j)
-        next if !cname || cname==""
-        case PBTypes.getEffectiveness(j,i)
-        when PBTypeEffectiveness::SUPER_EFFECTIVE_ONE; weak.push(cname)
-        when PBTypeEffectiveness::NOT_EFFECTIVE_ONE;   resist.push(cname)
-        when PBTypeEffectiveness::INEFFECTIVE;         immune.push(cname)
-        end
-      end
-      f.write("Weaknesses = "+weak.join(",")+"\r\n") if weak.length>0
-      f.write("Resistances = "+resist.join(",")+"\r\n") if resist.length>0
-      f.write("Immunities = "+immune.join(",")+"\r\n") if immune.length>0
+      f.write("[#{type.id_number}]\r\n")
+      f.write("Name = #{type.real_name}\r\n")
+      f.write("InternalName = #{type.id.to_s}\r\n")
+      f.write("IsPseudoType = true\r\n") if type.pseudo_type
+      f.write("IsSpecialType = true\r\n") if type.special?
+      f.write("Weaknesses = #{type.weaknesses.join(",")}\r\n") if type.weaknesses.length > 0
+      f.write("Resistances = #{type.resistances.join(",")}\r\n") if type.resistances.length > 0
+      f.write("Immunities = #{type.immunities.join(",")}\r\n") if type.immunities.length > 0
     end
   }
 end
-
-
 
 #===============================================================================
 # Save ability data to PBS file
@@ -52,8 +30,7 @@ def pbSaveAbilities
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     f.write("\#-------------------------------\r\n")
     GameData::Ability.each do |a|
       f.write(sprintf("%d,%s,%s,%s\r\n",
@@ -66,8 +43,6 @@ def pbSaveAbilities
   }
 end
 
-
-
 #===============================================================================
 # Save move data to PBS file
 #===============================================================================
@@ -76,8 +51,7 @@ def pbSaveMoveData
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     current_type = -1
     GameData::Move.each do |m|
       if current_type != m.type
@@ -90,12 +64,12 @@ def pbSaveMoveData
         csvQuote(m.real_name),
         csvQuote(m.function_code),
         m.base_damage,
-        (getConstantName(PBTypes, m.type) rescue pbGetTypeConst(m.type) rescue ""),
+        m.type.to_s,
         ["Physical", "Special", "Status"][m.category],
         m.accuracy,
         m.total_pp,
         m.effect_chance,
-        (getConstantName(PBTargets, m.target) rescue sprintf("%02X", m.target)),
+        (getConstantName(PBTargets, m.target) rescue sprintf("%d", m.target)),
         m.priority,
         csvQuote(m.flags),
         csvQuoteAlways(m.real_description)
@@ -103,8 +77,6 @@ def pbSaveMoveData
     end
   }
 end
-
-
 
 #===============================================================================
 # Save map connection data to PBS file
@@ -144,8 +116,7 @@ def pbSerializeConnectionData(conndata,mapinfos)
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     f.write("\#-------------------------------\r\n")
     for conn in conndata
       if mapinfos
@@ -174,8 +145,6 @@ def pbSaveConnectionData
   pbSerializeConnectionData(data,pbLoadRxData("Data/MapInfos"))
 end
 
-
-
 #===============================================================================
 # Save metadata data to PBS file
 #===============================================================================
@@ -184,8 +153,7 @@ def pbSaveMetadata
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     # Write global metadata
     f.write("\#-------------------------------\r\n")
     f.write("[000]\r\n")
@@ -220,8 +188,6 @@ def pbSaveMetadata
   }
 end
 
-
-
 #===============================================================================
 # Save item data to PBS file
 #===============================================================================
@@ -230,8 +196,7 @@ def pbSaveItems
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     current_pocket = 0
     GameData::Item.each do |i|
       if current_pocket != i.pocket
@@ -258,8 +223,6 @@ def pbSaveItems
   }
 end
 
-
-
 #===============================================================================
 # Save berry plant data to PBS file
 #===============================================================================
@@ -268,8 +231,7 @@ def pbSaveBerryPlants
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     f.write("\#-------------------------------\r\n")
     GameData::BerryPlant.each do |bp|
       f.write(sprintf("%s = %d,%d,%d,%d\r\n",
@@ -283,8 +245,6 @@ def pbSaveBerryPlants
   }
 end
 
-
-
 #===============================================================================
 # Save trainer list data to PBS file
 #===============================================================================
@@ -295,8 +255,7 @@ def pbSaveTrainerLists
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     for tr in trainerlists
       f.write("\#-------------------------------\r\n")
       f.write(((tr[5]) ? "[DefaultTrainerList]" : "[TrainerList]")+"\r\n")
@@ -309,42 +268,6 @@ def pbSaveTrainerLists
   }
 end
 
-
-
-#===============================================================================
-# Save TM compatibility data to PBS file
-#===============================================================================
-def pbSaveMachines
-  machines = pbLoadSpeciesTMData
-  return if !machines
-  File.open("PBS/tm.txt","wb") { |f|
-    f.write(0xEF.chr)
-    f.write(0xBB.chr)
-    f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
-    keys = machines.keys.sort { |a, b| GameData::Move.get(a).id_number <=> GameData::Move.get(b).id_number }
-    for i in 0...keys.length
-      Graphics.update if i%50==0
-      Win32API.SetWindowText(_INTL("Writing move {1}/{2}",i,keys.length)) if i%20==0
-      next if !machines[keys[i]]
-      movename = GameData::Move.get(keys[i]).id.to_s
-      next if !movename || movename==""
-      f.write("\#-------------------------------\r\n")
-      f.write(sprintf("[%s]\r\n",movename))
-      x = []
-      machines[keys[i]].each do |species|
-        speciesname = getConstantName(PBSpecies,species) rescue pbGetSpeciesConst(species) rescue nil
-        next if !speciesname || speciesname==""
-        x.push(speciesname)
-      end
-      f.write(x.join(",")+"\r\n")
-    end
-  }
-end
-
-
-
 #===============================================================================
 # Save wild encounter data to PBS file
 #===============================================================================
@@ -356,8 +279,7 @@ def pbSaveEncounterData
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     sortedkeys = encdata.keys.sort
     for i in sortedkeys
       next if !encdata[i]
@@ -376,12 +298,12 @@ def pbSaveEncounterData
         next if !enc
         f.write(sprintf("%s\r\n",EncounterTypes::Names[j]))
         for k in 0...EncounterTypes::EnctypeChances[j].length
-          encentry = (enc[k]) ? enc[k] : [1,5,5]
-          species = getConstantName(PBSpecies,encentry[0]) rescue pbGetSpeciesConst(encentry[0])
+          next if !enc[k]
+          encentry = enc[k]
           if encentry[1]==encentry[2]
-            f.write(sprintf("    %s,%d\r\n",species,encentry[1]))
+            f.write(sprintf("    %s,%d\r\n",encentry[0],encentry[1]))
           else
-            f.write(sprintf("    %s,%d,%d\r\n",species,encentry[1],encentry[2]))
+            f.write(sprintf("    %s,%d,%d\r\n",encentry[0],encentry[1],encentry[2]))
           end
         end
       end
@@ -389,40 +311,32 @@ def pbSaveEncounterData
   }
 end
 
-
-
 #===============================================================================
 # Save trainer type data to PBS file
 #===============================================================================
 def pbSaveTrainerTypes
-  data = pbLoadTrainerTypesData
-  return if !data
-  File.open("PBS/trainertypes.txt","wb") { |f|
+  File.open("PBS/trainertypes.txt", "wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     f.write("\#-------------------------------\r\n")
-    for i in 0...data.length
-      record = data[i]
-      next if !record
-      dataline = sprintf("%d,%s,%s,%d,%s,%s,%s,%s,%s,%s",
-         i,record[1],record[2],
-         record[3],
-         record[4] ? record[4] : "",
-         record[5] ? record[5] : "",
-         record[6] ? record[6] : "",
-         record[7] ? ["Male","Female","Mixed"][record[7]] : "Mixed",
-         (record[8]!=record[3]) ? record[8] : "",
-         record[9] ? record[9] : "")
-      f.write(dataline)
-      f.write("\r\n")
+    GameData::TrainerType.each do |t|
+      f.write(sprintf("%d,%s,%s,%d,%s,%s,%s,%s,%s,%s\r\n",
+        t.id_number,
+        csvQuote(t.id.to_s),
+        csvQuote(t.real_name),
+        t.base_money,
+        csvQuote(t.battle_BGM),
+        csvQuote(t.victory_ME),
+        csvQuote(t.intro_ME),
+        ["Male", "Female", "Mixed"][t.gender],
+        (t.skill_level == t.base_money) ? "" : t.skill_level.to_s,
+        csvQuote(t.skill_code)
+      ))
     end
   }
 end
-
-
 
 #===============================================================================
 # Save individual trainer data to PBS file
@@ -434,10 +348,9 @@ def pbSaveTrainerBattles
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     for trainer in data
-      trtypename = getConstantName(PBTrainers,trainer[0]) rescue pbGetTrainerConst(trainer[0]) rescue nil
+      trtypename = trainer[0].to_s
       next if !trtypename
       f.write("\#-------------------------------\r\n")
       # Section
@@ -462,8 +375,7 @@ def pbSaveTrainerBattles
       end
       # Pokémon
       for poke in trainer[3]
-        species = getConstantName(PBSpecies,poke[TrainerData::SPECIES]) rescue pbGetSpeciesConst(poke[TrainerData::SPECIES]) rescue ""
-        f.write(sprintf("Pokemon = %s,%d\r\n",species,poke[TrainerData::LEVEL]))
+        f.write(sprintf("Pokemon = %s,%d\r\n",poke[TrainerData::SPECIES],poke[TrainerData::LEVEL]))
         if poke[TrainerData::NAME] && poke[TrainerData::NAME]!=""
           f.write(sprintf("    Name = %s\r\n",poke[TrainerData::NAME]))
         end
@@ -528,8 +440,6 @@ def pbSaveTrainerBattles
   }
 end
 
-
-
 #===============================================================================
 # Save Town Map data to PBS file
 #===============================================================================
@@ -540,8 +450,7 @@ def pbSaveTownMap
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     for i in 0...mapdata.length
       map = mapdata[i]
       next if !map
@@ -560,8 +469,6 @@ def pbSaveTownMap
   }
 end
 
-
-
 #===============================================================================
 # Save phone message data to PBS file
 #===============================================================================
@@ -572,8 +479,7 @@ def pbSavePhoneData
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     f.write("\#-------------------------------\r\n")
     f.write("[<Generics>]\r\n")
     f.write(data.generics.join("\r\n")+"\r\n")
@@ -598,762 +504,262 @@ def pbSavePhoneData
   }
 end
 
-
-
 #===============================================================================
 # Save Pokémon data to PBS file
 #===============================================================================
 def pbSavePokemonData
-  speciesData  = pbLoadSpeciesData
-  messages     = Messages.new("Data/messages.dat") rescue nil
-  return if !speciesData || !messages
-  metrics      = pbLoadSpeciesMetrics
-  movesets     = pbLoadMovesetsData
-  eggMoves     = pbLoadEggMovesData
-  regionaldata = pbLoadRegionalDexes
-  numRegions   = regionaldata.length
-  pokedata = File.open("PBS/pokemon.txt","wb") rescue nil
-  pokedata.write(0xEF.chr)
-  pokedata.write(0xBB.chr)
-  pokedata.write(0xBF.chr)
-  pokedata.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-  pokedata.write("\r\n")
-  for i in 1..(PBSpecies.maxValue rescue PBSpecies.getCount-1 rescue messages.getCount(MessageTypes::Species)-1)
-    cname       = getConstantName(PBSpecies,i) rescue next
-    speciesname = messages.get(MessageTypes::Species,i)
-    kind        = messages.get(MessageTypes::Kinds,i)
-    entry       = messages.get(MessageTypes::Entries,i)
-    formname    = messages.get(MessageTypes::FormNames,i)
-    abilities = speciesData[i][SpeciesData::ABILITIES]
-    if abilities.is_a?(Array)
-      ability1       = abilities[0]
-      ability2       = abilities[1]
-    else
-      ability1       = abilities
-      ability2       = nil
-    end
-    color            = speciesData[i][SpeciesData::COLOR] || 0
-    habitat          = speciesData[i][SpeciesData::HABITAT] || 0
-    type1            = speciesData[i][SpeciesData::TYPE1] || 0
-    type2            = speciesData[i][SpeciesData::TYPE2] || type1
-    if speciesData[i][SpeciesData::BASE_STATS]
-      basestats      = speciesData[i][SpeciesData::BASE_STATS].clone
-    else
-      basestats      = [1,1,1,1,1,1]
-    end
-    rareness         = speciesData[i][SpeciesData::RARENESS] || 0
-    shape            = speciesData[i][SpeciesData::SHAPE] || 0
-    gender           = speciesData[i][SpeciesData::GENDER_RATE] || 0
-    happiness        = speciesData[i][SpeciesData::HAPPINESS] || 0
-    growthrate       = speciesData[i][SpeciesData::GROWTH_RATE] || 0
-    stepstohatch     = speciesData[i][SpeciesData::STEPS_TO_HATCH] || 1
-    if speciesData[i][SpeciesData::EFFORT_POINTS]
-      effort         = speciesData[i][SpeciesData::EFFORT_POINTS].clone
-    else
-      effort         = [0,0,0,0,0,0]
-    end
-    compats = speciesData[i][SpeciesData::COMPATIBILITY]
-    if compats.is_a?(Array)
-      compat1        = compats[0] || 0
-      compat2        = compats[1] || compat1
-    else
-      compat1        = compats || 0
-      compat2        = compat1
-    end
-    height           = speciesData[i][SpeciesData::HEIGHT] || 1
-    weight           = speciesData[i][SpeciesData::WEIGHT] || 1
-    baseexp          = speciesData[i][SpeciesData::BASE_EXP] || 0
-    hiddenAbils = speciesData[i][SpeciesData::HIDDEN_ABILITY]
-    if hiddenAbils.is_a?(Array)
-      hiddenability1 = hiddenAbils[0]
-      hiddenability2 = hiddenAbils[1]
-      hiddenability3 = hiddenAbils[2]
-      hiddenability4 = hiddenAbils[3]
-    else
-      hiddenability1 = hiddenAbils
-      hiddenability2 = nil
-      hiddenability3 = nil
-      hiddenability4 = nil
-    end
-    item1            = speciesData[i][SpeciesData::WILD_ITEM_COMMON]
-    item2            = speciesData[i][SpeciesData::WILD_ITEM_UNCOMMON]
-    item3            = speciesData[i][SpeciesData::WILD_ITEM_RARE]
-    incense          = speciesData[i][SpeciesData::INCENSE]
-    pokedata.write("\#-------------------------------\r\n")
-    pokedata.write("[#{i}]\r\nName = #{speciesname}\r\n")
-    pokedata.write("InternalName = #{cname}\r\n")
-    ctype1 = getConstantName(PBTypes,type1) rescue pbGetTypeConst(type1) || pbGetTypeConst(0) || "NORMAL"
-    pokedata.write("Type1 = #{ctype1}\r\n")
-    if type1!=type2
-      ctype2 = getConstantName(PBTypes,type2) rescue pbGetTypeConst(type2) || pbGetTypeConst(0) || "NORMAL"
-      pokedata.write("Type2 = #{ctype2}\r\n")
-    end
-    pokedata.write("BaseStats = #{basestats[0]},#{basestats[1]},#{basestats[2]},#{basestats[3]},#{basestats[4]},#{basestats[5]}\r\n")
-    gendername = getConstantName(PBGenderRates,gender) rescue pbGetGenderConst(gender)
-    pokedata.write("GenderRate = #{gendername}\r\n")
-    pokedata.write("GrowthRate = " + ["Medium","Erratic","Fluctuating","Parabolic","Fast","Slow"][growthrate]+"\r\n")
-    pokedata.write("BaseEXP = #{baseexp}\r\n")
-    pokedata.write("EffortPoints = #{effort[0]},#{effort[1]},#{effort[2]},#{effort[3]},#{effort[4]},#{effort[5]}\r\n")
-    pokedata.write("Rareness = #{rareness}\r\n")
-    pokedata.write("Happiness = #{happiness}\r\n")
-    pokedata.write("Abilities = ")
-    if ability1
-      cability1 = GameData::Ability.get(ability1).id.to_s
-      pokedata.write("#{cability1}")
-      pokedata.write(",") if ability2
-    end
-    if ability2
-      cability2 = GameData::Ability.get(ability2).id.to_s
-      pokedata.write("#{cability2}")
-    end
-    pokedata.write("\r\n")
-    if hiddenability1 || hiddenability2 || hiddenability3 || hiddenability4
-      pokedata.write("HiddenAbility = ")
-      needcomma = false
-      if hiddenability1
-        cabilityh = GameData::Ability.get(hiddenability1).id.to_s
-        pokedata.write("#{cabilityh}"); needcomma = true
+  File.open("PBS/pokemon.txt", "wb") { |f|
+    f.write(0xEF.chr)
+    f.write(0xBB.chr)
+    f.write(0xBF.chr)
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
+    GameData::Species.each do |species|
+      next if species.form != 0
+      pbSetWindowText(_INTL("Writing species {1}...", species.id_number))
+      Graphics.update if species.id_number % 50 == 0
+      f.write("\#-------------------------------\r\n")
+      f.write(sprintf("[%d]\r\n", species.id_number))
+      f.write(sprintf("Name = %s\r\n", species.real_name))
+      f.write(sprintf("InternalName = %s\r\n", species.species))
+      f.write(sprintf("Type1 = %s\r\n", species.type1))
+      f.write(sprintf("Type2 = %s\r\n", species.type2)) if species.type2 != species.type1
+      f.write(sprintf("BaseStats = %s\r\n", species.base_stats.join(",")))
+      f.write(sprintf("GenderRate = %s\r\n", getConstantName(PBGenderRates, species.gender_rate)))
+      f.write(sprintf("GrowthRate = %s\r\n", getConstantName(PBGrowthRates, species.growth_rate)))
+      f.write(sprintf("BaseEXP = %d\r\n", species.base_exp))
+      f.write(sprintf("EffortPoints = %s\r\n", species.evs.join(",")))
+      f.write(sprintf("Rareness = %d\r\n", species.catch_rate))
+      f.write(sprintf("Happiness = %d\r\n", species.happiness))
+      if species.abilities.length > 0
+        f.write(sprintf("Abilities = %s\r\n", species.abilities.join(",")))
       end
-      if hiddenability2
-        pokedata.write(",") if needcomma
-        cabilityh = GameData::Ability.get(hiddenability2).id.to_s
-        pokedata.write("#{cabilityh}"); needcomma = true
+      if species.hidden_abilities.length > 0
+        f.write(sprintf("HiddenAbility = %s\r\n", species.hidden_abilities.join(",")))
       end
-      if hiddenability3
-        pokedata.write(",") if needcomma
-        cabilityh = GameData::Ability.get(hiddenability3).id.to_s
-        pokedata.write("#{cabilityh}"); needcomma = true
+      if species.moves.length > 0
+        f.write(sprintf("Moves = %s\r\n", species.moves.join(",")))
       end
-      if hiddenability4
-        pokedata.write(",") if needcomma
-        cabilityh = GameData::Ability.get(hiddenability4).id.to_s
-        pokedata.write("#{cabilityh}")
+      if species.tutor_moves.length > 0
+        f.write(sprintf("TutorMoves = %s\r\n", species.tutor_moves.join(",")))
       end
-      pokedata.write("\r\n")
-    end
-    if movesets[i] && movesets[i].length>0
-      movelist = []
-      movesets[i].each_with_index { |m,j| movelist.push([m[0],m[1],j]) }
-      movelist.sort! { |a,b| (a[0]==b[0]) ? a[2]<=>b[2] : a[0]<=>b[0] }
-      pokedata.write("Moves = ")
-      first = true
-      movelist.each do |m|
-        next if !m
-        level = m[0]
-        move  = m[1]
-        pokedata.write(",") if !first
-        cmove = GameData::Move.get(move).id.to_s
-        pokedata.write(sprintf("%d,%s",level,cmove))
-        first = false
+      if species.egg_moves.length > 0
+        f.write(sprintf("EggMoves = %s\r\n", species.egg_moves.join(",")))
       end
-      pokedata.write("\r\n")
-    end
-    if eggMoves[i] && eggMoves[i].length>0
-      pokedata.write("EggMoves = ")
-      first = true
-      eggMoves[i].each do |m|
-        next if !m || m==0
-        pokedata.write(",") if !first
-        cmove = GameData::Move.get(m).id.to_s
-        pokedata.write("#{cmove}")
-        first = false
-      end
-      pokedata.write("\r\n")
-    end
-    comp1 = getConstantName(PBEggGroups,compat1) rescue pbGetEggGroupConst(compat1)
-    comp2 = getConstantName(PBEggGroups,compat2) rescue pbGetEggGroupConst(compat2)
-    if compat1==compat2
-      pokedata.write("Compatibility = #{comp1}\r\n")
-    else
-      pokedata.write("Compatibility = #{comp1},#{comp2}\r\n")
-    end
-    pokedata.write("StepsToHatch = #{stepstohatch}\r\n")
-    pokedata.write("Height = ")
-    pokedata.write(sprintf("%.1f",height/10.0)) if height
-    pokedata.write("\r\n")
-    pokedata.write("Weight = ")
-    pokedata.write(sprintf("%.1f",weight/10.0)) if weight
-    pokedata.write("\r\n")
-    colorname = getConstantName(PBColors,color) rescue pbGetColorConst(color)
-    pokedata.write("Color = #{colorname}\r\n")
-    pokedata.write("Shape = #{shape}\r\n")
-    pokedata.write("Habitat = "+["","Grassland","Forest","WatersEdge","Sea","Cave","Mountain","RoughTerrain","Urban","Rare"][habitat]+"\r\n") if habitat>0
-    regionallist = []
-    for region in 0...numRegions
-      regionallist.push(regionaldata[region][i])
-    end
-    numb = regionallist.length-1
-    while (numb>=0)   # remove every 0 at end of array
-      (!regionallist[numb] || regionallist[numb]==0) ? regionallist.pop : break
-      numb -= 1
-    end
-    if !regionallist.empty?
-      pokedata.write("RegionalNumbers = "+(regionallist[0] || 0).to_s)
-      for numb in 1...regionallist.size
-        pokedata.write(","+(regionallist[numb] || 0).to_s)
-      end
-      pokedata.write("\r\n")
-    end
-    pokedata.write("Kind = #{kind}\r\n")
-    pokedata.write("Pokedex = #{entry}\r\n")
-    if formname && formname!=""
-      pokedata.write("FormName = #{formname}\r\n")
-    end
-    if item1
-      citem1 = GameData::Item.get(item1).id.to_s
-      pokedata.write("WildItemCommon = #{citem1}\r\n")
-    end
-    if item2
-      citem2 = GameData::Item.get(item2).id.to_s
-      pokedata.write("WildItemUncommon = #{citem2}\r\n")
-    end
-    if item3
-      citem3 = GameData::Item.get(item3).id.to_s
-      pokedata.write("WildItemRare = #{citem3}\r\n")
-    end
-    if metrics && metrics.length>0
-      pokedata.write("BattlerPlayerX = #{metrics[SpeciesData::METRIC_PLAYER_X][i] || 0}\r\n")
-      pokedata.write("BattlerPlayerY = #{metrics[SpeciesData::METRIC_PLAYER_Y][i] || 0}\r\n")
-      pokedata.write("BattlerEnemyX = #{metrics[SpeciesData::METRIC_ENEMY_X][i] || 0}\r\n")
-      pokedata.write("BattlerEnemyY = #{metrics[SpeciesData::METRIC_ENEMY_Y][i] || 0}\r\n")
-      pokedata.write("BattlerAltitude = #{metrics[SpeciesData::METRIC_ALTITUDE][i] || 0}\r\n") if metrics[SpeciesData::METRIC_ALTITUDE][i]!=0
-      pokedata.write("BattlerShadowX = #{metrics[SpeciesData::METRIC_SHADOW_X][i] || 0}\r\n")
-      pokedata.write("BattlerShadowSize = #{metrics[SpeciesData::METRIC_SHADOW_SIZE][i] || 2}\r\n")
-    end
-    pokedata.write("Evolutions = ")
-    count = 0
-    for form in pbGetEvolvedFormData(i)
-      method      = form[0]
-      parameter   = form[1]
-      new_species = form[2]
-      next if new_species==0
-      cnew_species = getConstantName(PBSpecies,new_species) rescue pbGetSpeciesConst(new_species)
-      evoname = getConstantName(PBEvolution,method) rescue pbGetEvolutionConst(method)
-      next if !cnew_species || cnew_species==""
-      pokedata.write(",") if count>0
-      pokedata.write(sprintf("%s,%s,",cnew_species,evoname))
-      param_type = PBEvolution.getFunction(method, "parameterType")
-      has_param = !PBEvolution.hasFunction?(method, "parameterType") || param_type != nil
-      if has_param
-        if param_type
-          if [:Ability, :Item].include?(param_type)
-            pokedata.write("#{parameter.to_s}")
-          else
-            cparameter = (getConstantName(param_type, parameter) rescue parameter)
-            pokedata.write("#{cparameter}")
-          end
-        else
-          pokedata.write("#{parameter}")
+      if species.egg_groups.length > 0
+        f.write("Compatibility = ")
+        species.egg_groups.each_with_index do |group, i|
+          f.write(",") if i > 0
+          f.write(getConstantName(PBEggGroups, group))
         end
+        f.write("\r\n")
       end
-      count += 1
+      f.write(sprintf("StepsToHatch = %d\r\n", species.hatch_steps))
+      f.write(sprintf("Height = %.1f\r\n", species.height / 10.0))
+      f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0))
+      f.write(sprintf("Color = %s\r\n", getConstantName(PBColors, species.color)))
+      f.write(sprintf("Shape = %d\r\n", species.shape))
+      f.write(sprintf("Habitat = %s\r\n", getConstantName(PBHabitats, species.habitat))) if species.habitat != PBHabitats::None
+      f.write(sprintf("Kind = %s\r\n", species.real_category))
+      f.write(sprintf("Pokedex = %s\r\n", species.real_pokedex_entry))
+      f.write(sprintf("FormName = %s\r\n", species.real_form_name)) if species.real_form_name && !species.real_form_name.empty?
+      f.write(sprintf("Generation = %d\r\n", species.generation)) if species.generation != 0
+      f.write(sprintf("WildItemCommon = %s\r\n", species.wild_item_common)) if species.wild_item_common
+      f.write(sprintf("WildItemUncommon = %s\r\n", species.wild_item_uncommon)) if species.wild_item_uncommon
+      f.write(sprintf("WildItemRare = %s\r\n", species.wild_item_rare)) if species.wild_item_rare
+      f.write(sprintf("BattlerPlayerX = %d\r\n", species.back_sprite_x))
+      f.write(sprintf("BattlerPlayerY = %d\r\n", species.back_sprite_y))
+      f.write(sprintf("BattlerEnemyX = %d\r\n", species.front_sprite_x))
+      f.write(sprintf("BattlerEnemyY = %d\r\n", species.front_sprite_y))
+      f.write(sprintf("BattlerAltitude = %d\r\n", species.front_sprite_altitude)) if species.front_sprite_altitude != 0
+      f.write(sprintf("BattlerShadowX = %d\r\n", species.shadow_x))
+      f.write(sprintf("BattlerShadowSize = %d\r\n", species.shadow_size))
+      if species.evolutions.any? { |evo| !evo[3] }
+        f.write("Evolutions = ")
+        need_comma = false
+        species.evolutions.each do |evo|
+          next if evo[3]   # Skip prevolution entries
+          f.write(",") if need_comma
+          need_comma = true
+          f.write(sprintf("%s,%s,", evo[0], getConstantName(PBEvolution, evo[1])))
+          param_type = PBEvolution.getFunction(evo[1], "parameterType")
+          has_param = !PBEvolution.hasFunction?(evo[1], "parameterType") || param_type != nil
+          next if !has_param
+          if param_type
+            if GameData.const_defined?(param_type.to_sym)
+              f.write(evo[2].to_s)
+            else
+              f.write(getConstantName(param_type, evo[2]))
+            end
+          else
+            f.write(evo[2].to_s)
+          end
+        end
+        f.write("\r\n")
+      end
+      f.write(sprintf("Incense = %s\r\n", species.incense)) if species.incense
     end
-    pokedata.write("\r\n")
-    if incense
-      initem = GameData::Item.get(incense).id.to_s
-      pokedata.write("Incense = #{initem}\r\n")
-    end
-    if i%20==0
-      Graphics.update
-      Win32API.SetWindowText(_INTL("Processing species {1}...",i))
-    end
-  end
-  pokedata.close
+  }
   Graphics.update
 end
-
-
 
 #===============================================================================
 # Save Pokémon forms data to PBS file
 #===============================================================================
 def pbSavePokemonFormsData
-  speciesData  = pbLoadSpeciesData
-  messages     = Messages.new("Data/messages.dat") rescue nil
-  return if !speciesData || !messages
-  metrics      = pbLoadSpeciesMetrics
-  movesets     = pbLoadMovesetsData
-  eggMoves     = pbLoadEggMovesData
-  pokedata = File.open("PBS/pokemonforms.txt","wb") rescue nil
-  pokedata.write(0xEF.chr)
-  pokedata.write(0xBB.chr)
-  pokedata.write(0xBF.chr)
-  pokedata.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-  pokedata.write("\r\n")
-  m1 = (PBSpecies.maxValue+1 rescue PBSpecies.getCount rescue messages.getCount(MessageTypes::Species))
-  m2 = (PBSpecies.maxValueF rescue m1)
-  for i in m1..m2
-    species,form = pbGetSpeciesFromFSpecies(i)
-    next if !species || species==0 || !form || form==0
-    cname = getConstantName(PBSpecies,species) rescue next
-    origkind    = messages.get(MessageTypes::Kinds,species)
-    kind        = messages.get(MessageTypes::Kinds,i)
-    kind = nil if kind==origkind || kind==""
-    origentry   = messages.get(MessageTypes::Entries,species)
-    entry       = messages.get(MessageTypes::Entries,i)
-    entry = nil if entry==origentry || entry==""
-    formname    = messages.get(MessageTypes::FormNames,i)
-    origdata = {}
-    abilities = speciesData[species][SpeciesData::ABILITIES]
-    if abilities.is_a?(Array)
-      origdata["ability1"]       = abilities[0]
-      origdata["ability2"]       = abilities[1]
-    else
-      origdata["ability1"]       = abilities
-      origdata["ability2"]       = nil
-    end
-    origdata["color"]            = speciesData[species][SpeciesData::COLOR] || 0
-    origdata["habitat"]          = speciesData[species][SpeciesData::HABITAT] || 0
-    origdata["type1"]            = speciesData[species][SpeciesData::TYPE1] || 0
-    origdata["type2"]            = speciesData[species][SpeciesData::TYPE2] || type1
-    if speciesData[species][SpeciesData::BASE_STATS]
-      origdata["basestats"]      = speciesData[species][SpeciesData::BASE_STATS].clone
-    else
-      origdata["basestats"]      = [1,1,1,1,1,1]
-    end
-    origdata["rareness"]         = speciesData[species][SpeciesData::RARENESS] || 0
-    origdata["shape"]            = speciesData[species][SpeciesData::SHAPE] || 0
-    origdata["gender"]           = speciesData[species][SpeciesData::GENDER_RATE] || 0
-    origdata["happiness"]        = speciesData[species][SpeciesData::HAPPINESS] || 0
-    origdata["growthrate"]       = speciesData[species][SpeciesData::GROWTH_RATE] || 0
-    origdata["stepstohatch"]     = speciesData[species][SpeciesData::STEPS_TO_HATCH] || 1
-    if speciesData[species][SpeciesData::EFFORT_POINTS]
-      origdata["effort"]         = speciesData[species][SpeciesData::EFFORT_POINTS].clone
-    else
-      origdata["effort"]         = [0,0,0,0,0,0]
-    end
-    compats = speciesData[species][SpeciesData::COMPATIBILITY]
-    if compats.is_a?(Array)
-      origdata["compat1"]        = compats[0] || 0
-      origdata["compat2"]        = compats[1] || origdata["compat1"]
-    else
-      origdata["compat1"]        = compats || 0
-      origdata["compat2"]        = origdata["compat1"]
-    end
-    origdata["height"]           = speciesData[species][SpeciesData::HEIGHT] || 1
-    origdata["weight"]           = speciesData[species][SpeciesData::WEIGHT] || 1
-    origdata["baseexp"]          = speciesData[species][SpeciesData::BASE_EXP] || 0
-    hiddenAbils = speciesData[species][SpeciesData::HIDDEN_ABILITY]
-    if hiddenAbils.is_a?(Array)
-      origdata["hiddenability1"] = hiddenAbils[0]
-      origdata["hiddenability2"] = hiddenAbils[1]
-      origdata["hiddenability3"] = hiddenAbils[2]
-      origdata["hiddenability4"] = hiddenAbils[3]
-    else
-      origdata["hiddenability1"] = hiddenAbils
-      origdata["hiddenability2"] = nil
-      origdata["hiddenability3"] = nil
-      origdata["hiddenability4"] = nil
-    end
-    origdata["item1"]            = speciesData[species][SpeciesData::WILD_ITEM_COMMON]
-    origdata["item2"]            = speciesData[species][SpeciesData::WILD_ITEM_UNCOMMON]
-    origdata["item3"]            = speciesData[species][SpeciesData::WILD_ITEM_RARE]
-    origdata["incense"]          = speciesData[species][SpeciesData::INCENSE]
-    abilities = speciesData[i][SpeciesData::ABILITIES]
-    if abilities.is_a?(Array)
-      ability1       = abilities[0]
-      ability2       = abilities[1]
-    else
-      ability1       = abilities
-      ability2       = nil
-    end
-    if ability1==origdata["ability1"] && ability2==origdata["ability2"]
-      ability1 = ability2 = nil
-    end
-    color            = speciesData[i][SpeciesData::COLOR] || 0
-    color            = nil if color==origdata["color"]
-    habitat          = speciesData[i][SpeciesData::HABITAT] || 0
-    habitat          = nil if habitat==origdata["habitat"]
-    type1            = speciesData[i][SpeciesData::TYPE1] || 0
-    type2            = speciesData[i][SpeciesData::TYPE2] || type1
-    if type1==origdata["type1"] && type2==origdata["type2"]
-      type1 = type2  = nil
-    end
-    if speciesData[i][SpeciesData::BASE_STATS]
-      basestats      = speciesData[i][SpeciesData::BASE_STATS].clone
-    else
-      basestats      = [1,1,1,1,1,1]
-    end
-    diff = false
-    for k in 0...6
-      next if basestats[k]==origdata["basestats"][k]
-      diff = true; break
-    end
-    basestats        = nil if !diff
-    rareness         = speciesData[i][SpeciesData::RARENESS] || 0
-    rareness         = nil if rareness==origdata["rareness"]
-    shape            = speciesData[i][SpeciesData::SHAPE] || 0
-    shape            = nil if shape==origdata["shape"]
-    gender           = speciesData[i][SpeciesData::GENDER_RATE] || 0
-    gender           = nil if gender==origdata["gender"]
-    happiness        = speciesData[i][SpeciesData::HAPPINESS] || 0
-    happiness        = nil if happiness==origdata["happiness"]
-    growthrate       = speciesData[i][SpeciesData::GROWTH_RATE] || 0
-    growthrate       = nil if growthrate==origdata["growthrate"]
-    stepstohatch     = speciesData[i][SpeciesData::STEPS_TO_HATCH] || 1
-    stepstohatch     = nil if stepstohatch==origdata["stepstohatch"]
-    if speciesData[i][SpeciesData::EFFORT_POINTS]
-      effort         = speciesData[i][SpeciesData::EFFORT_POINTS].clone
-    else
-      effort         = [0,0,0,0,0,0]
-    end
-    diff = false
-    for k in 0...6
-      next if effort[k]==origdata["effort"][k]
-      diff = true; break
-    end
-    effort           = nil if !diff
-    compats = speciesData[i][SpeciesData::COMPATIBILITY]
-    if compats.is_a?(Array)
-      compat1        = compats[0] || 0
-      compat2        = compats[1] || compat1
-    else
-      compat1        = compats || 0
-      compat2        = compat1
-    end
-    if compat1==origdata["compat1"] && compat2==origdata["compat2"]
-      compat1 = compat2 = nil
-    end
-    height           = speciesData[i][SpeciesData::HEIGHT] || 1
-    height           = nil if height==origdata["height"]
-    weight           = speciesData[i][SpeciesData::WEIGHT] || 1
-    weight           = nil if weight==origdata["weight"]
-    baseexp          = speciesData[i][SpeciesData::BASE_EXP] || 0
-    baseexp          = nil if baseexp==origdata["baseexp"]
-    hiddenAbils = speciesData[i][SpeciesData::HIDDEN_ABILITY]
-    if hiddenAbils.is_a?(Array)
-      hiddenability1 = hiddenAbils[0]
-      hiddenability2 = hiddenAbils[1]
-      hiddenability3 = hiddenAbils[2]
-      hiddenability4 = hiddenAbils[3]
-    else
-      hiddenability1 = hiddenAbils
-      hiddenability2 = nil
-      hiddenability3 = nil
-      hiddenability4 = nil
-    end
-    if hiddenability1==origdata["hiddenability1"] &&
-       hiddenability2==origdata["hiddenability2"] &&
-       hiddenability3==origdata["hiddenability3"] &&
-       hiddenability4==origdata["hiddenability4"]
-      hiddenability1 = hiddenability2 = hiddenability3 = hiddenability4 = nil
-    end
-    item1            = speciesData[i][SpeciesData::WILD_ITEM_COMMON]
-    item2            = speciesData[i][SpeciesData::WILD_ITEM_UNCOMMON]
-    item3            = speciesData[i][SpeciesData::WILD_ITEM_RARE]
-    if item1==origdata["item1"] && item2==origdata["item2"] && item3==origdata["item3"]
-      item1 = item2 = item3 = nil
-    end
-    incense          = speciesData[i][SpeciesData::INCENSE]
-    incense          = nil if incense==origdata["incense"]
-    pokedexform      = speciesData[i][SpeciesData::POKEDEX_FORM] || 0   # No nil check
-    megastone        = speciesData[i][SpeciesData::MEGA_STONE]          # No nil check
-    megamove         = speciesData[i][SpeciesData::MEGA_MOVE]           # No nil check
-    unmega           = speciesData[i][SpeciesData::UNMEGA_FORM] || 0    # No nil check
-    megamessage      = speciesData[i][SpeciesData::MEGA_MESSAGE] || 0   # No nil check
-    pokedata.write("\#-------------------------------\r\n")
-    pokedata.write("[#{cname},#{form}]\r\n")
-    pokedata.write("FormName = #{formname}\r\n") if formname && formname!=""
-    pokedata.write("PokedexForm = #{pokedexform}\r\n") if pokedexform>0
-    if megastone
-      citem = GameData::Item.get(megastone).id.to_s
-      pokedata.write("MegaStone = #{citem}\r\n")
-    end
-    if megamove
-      cmove = GameData::Move.get(megamove).id.to_s
-      pokedata.write("MegaMove = #{cmove}\r\n")
-    end
-    pokedata.write("UnmegaForm = #{unmega}\r\n") if unmega>0
-    pokedata.write("MegaMessage = #{megamessage}\r\n") if megamessage>0
-    if type1!=nil && type2!=nil
-      ctype1 = getConstantName(PBTypes,type1) rescue pbGetTypeConst(type1) || pbGetTypeConst(0) || "NORMAL"
-      pokedata.write("Type1 = #{ctype1}\r\n")
-      if type1!=type2
-        ctype2 = getConstantName(PBTypes,type2) rescue pbGetTypeConst(type2) || pbGetTypeConst(0) || "NORMAL"
-        pokedata.write("Type2 = #{ctype2}\r\n")
+  File.open("PBS/pokemonforms.txt", "wb") { |f|
+    f.write(0xEF.chr)
+    f.write(0xBB.chr)
+    f.write(0xBF.chr)
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
+    GameData::Species.each do |species|
+      next if species.form == 0
+      base_species = GameData::Species.get(species.species)
+      pbSetWindowText(_INTL("Writing species {1}...", species.id_number))
+      Graphics.update if species.id_number % 50 == 0
+      f.write("\#-------------------------------\r\n")
+      f.write(sprintf("[%s,%d]\r\n", species.species, species.form))
+      f.write(sprintf("FormName = %s\r\n", species.real_form_name)) if species.real_form_name && !species.real_form_name.empty?
+      f.write(sprintf("PokedexForm = %d\r\n", species.pokedex_form)) if species.pokedex_form != species.form
+      f.write(sprintf("MegaStone = %s\r\n", species.mega_stone)) if species.mega_stone
+      f.write(sprintf("MegaMove = %s\r\n", species.mega_move)) if species.mega_move
+      f.write(sprintf("UnmegaForm = %d\r\n", species.unmega_form)) if species.unmega_form != 0
+      f.write(sprintf("MegaMessage = %d\r\n", species.mega_message)) if species.mega_message != 0
+      if species.type1 != base_species.type1 || species.type2 != base_species.type2
+        f.write(sprintf("Type1 = %s\r\n", species.type1))
+        f.write(sprintf("Type2 = %s\r\n", species.type2)) if species.type2 != species.type1
       end
-    end
-    if basestats!=nil
-      pokedata.write("BaseStats = #{basestats[0]},#{basestats[1]},#{basestats[2]},#{basestats[3]},#{basestats[4]},#{basestats[5]}\r\n")
-    end
-    if gender!=nil
-      gendername = getConstantName(PBGenderRates,gender) rescue pbGetGenderConst(gender)
-      pokedata.write("GenderRate = #{gendername}\r\n")
-    end
-    if growthrate!=nil
-      pokedata.write("GrowthRate = " + ["Medium","Erratic","Fluctuating","Parabolic","Fast","Slow"][growthrate]+"\r\n")
-    end
-    if baseexp!=nil
-      pokedata.write("BaseEXP = #{baseexp}\r\n")
-    end
-    if effort!=nil
-      pokedata.write("EffortPoints = #{effort[0]},#{effort[1]},#{effort[2]},#{effort[3]},#{effort[4]},#{effort[5]}\r\n")
-    end
-    if rareness!=nil
-      pokedata.write("Rareness = #{rareness}\r\n")
-    end
-    if happiness!=nil
-      pokedata.write("Happiness = #{happiness}\r\n")
-    end
-    if ability1 || ability2
-      pokedata.write("Abilities = ")
-      if ability1
-        cability1 = GameData::Ability.get(ability1).id.to_s
-        pokedata.write("#{cability1}")
-        pokedata.write(",") if ability2
+      f.write(sprintf("BaseStats = %s\r\n", species.base_stats.join(","))) if species.base_stats != base_species.base_stats
+      f.write(sprintf("BaseEXP = %d\r\n", species.base_exp)) if species.base_exp != base_species.base_exp
+      f.write(sprintf("EffortPoints = %s\r\n", species.evs.join(","))) if species.evs != base_species.evs
+      f.write(sprintf("Rareness = %d\r\n", species.catch_rate)) if species.catch_rate != base_species.catch_rate
+      f.write(sprintf("Happiness = %d\r\n", species.happiness)) if species.happiness != base_species.happiness
+      if species.abilities.length > 0 && species.abilities != base_species.abilities
+        f.write(sprintf("Abilities = %s\r\n", species.abilities.join(",")))
       end
-      if ability2
-        cability2 = GameData::Ability.get(ability2).id.to_s
-        pokedata.write("#{cability2}")
+      if species.hidden_abilities.length > 0 && species.hidden_abilities != base_species.hidden_abilities
+        f.write(sprintf("HiddenAbility = %s\r\n", species.hidden_abilities.join(",")))
       end
-      pokedata.write("\r\n")
-    end
-    if hiddenability1!=nil
-      if hiddenability1 || hiddenability2 || hiddenability3 || hiddenability4
-        pokedata.write("HiddenAbility = ")
-        needcomma = false
-        if hiddenability1
-          cabilityh = GameData::Ability.get(hiddenability1).id.to_s
-          pokedata.write("#{cabilityh}"); needcomma=true
+      if species.moves.length > 0 && species.moves != base_species.moves
+        f.write(sprintf("Moves = %s\r\n", species.moves.join(",")))
+      end
+      if species.tutor_moves.length > 0 && species.tutor_moves != base_species.tutor_moves
+        f.write(sprintf("TutorMoves = %s\r\n", species.tutor_moves.join(",")))
+      end
+      if species.egg_moves.length > 0 && species.egg_moves != base_species.egg_moves
+        f.write(sprintf("EggMoves = %s\r\n", species.egg_moves.join(",")))
+      end
+      if species.egg_groups.length > 0 && species.egg_groups != base_species.egg_groups
+        f.write("Compatibility = ")
+        species.egg_groups.each_with_index do |group, i|
+          f.write(",") if i > 0
+          f.write(getConstantName(PBEggGroups, group))
         end
-        if hiddenability2
-          pokedata.write(",") if needcomma
-          cabilityh = GameData::Ability.get(hiddenability2).id.to_s
-          pokedata.write("#{cabilityh}"); needcomma=true
-        end
-        if hiddenability3
-          pokedata.write(",") if needcomma
-          cabilityh = GameData::Ability.get(hiddenability3).id.to_s
-          pokedata.write("#{cabilityh}"); needcomma=true
-        end
-        if hiddenability4
-          pokedata.write(",") if needcomma
-          cabilityh = GameData::Ability.get(hiddenability4).id.to_s
-          pokedata.write("#{cabilityh}")
-        end
-        pokedata.write("\r\n")
+        f.write("\r\n")
       end
-    end
-    origMoveset = []
-    movesets[species].each_with_index { |m,j| origMoveset.push([m[0],m[1],j]) }
-    origMoveset.sort! { |a,b| (a[0]==b[0]) ? a[2]<=>b[2] : a[0]<=>b[0] }
-    moveList = []
-    movesets[i].each_with_index { |m,j| moveList.push([m[0],m[1],j]) }
-    moveList.sort! { |a,b| (a[0]==b[0]) ? a[2]<=>b[2] : a[0]<=>b[0] }
-    movesetDifferent = false
-    if origMoveset.length!=moveList.length
-      movesetDifferent = true
-    else
-      for k in 0...moveList.length
-        next if origMoveset[k][0]==moveList[k][0] && origMoveset[k][1]==moveList[k][1]
-        movesetDifferent = true
-        break
+      f.write(sprintf("StepsToHatch = %d\r\n", species.hatch_steps)) if species.hatch_steps != base_species.hatch_steps
+      f.write(sprintf("Height = %.1f\r\n", species.height / 10.0)) if species.height != base_species.height
+      f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0)) if species.weight != base_species.weight
+      f.write(sprintf("Color = %s\r\n", getConstantName(PBColors, species.color))) if species.color != base_species.color
+      f.write(sprintf("Shape = %d\r\n", species.shape)) if species.shape != base_species.shape
+      if species.habitat != PBHabitats::None && species.habitat != base_species.habitat
+        f.write(sprintf("Habitat = %s\r\n", getConstantName(PBHabitats, species.habitat)))
       end
-    end
-    if movesetDifferent
-      pokedata.write("Moves = ")
-      first = true
-      moveList.each do |m|
-        next if !m
-        level = m[0]
-        move  = m[1]
-        pokedata.write(",") if !first
-        cmove = GameData::Move.get(move).id.to_s
-        pokedata.write(sprintf("%d,%s",level,cmove))
-        first = false
+      f.write(sprintf("Kind = %s\r\n", species.real_category)) if species.real_category != base_species.real_category
+      f.write(sprintf("Pokedex = %s\r\n", species.real_pokedex_entry)) if species.real_pokedex_entry != base_species.real_pokedex_entry
+      f.write(sprintf("Generation = %d\r\n", species.generation)) if species.generation != base_species.generation
+      if species.wild_item_common != base_species.wild_item_common ||
+         species.wild_item_uncommon != base_species.wild_item_uncommon ||
+         species.wild_item_rare != base_species.wild_item_rare
+        f.write(sprintf("WildItemCommon = %s\r\n", species.wild_item_common)) if species.wild_item_common
+        f.write(sprintf("WildItemUncommon = %s\r\n", species.wild_item_uncommon)) if species.wild_item_uncommon
+        f.write(sprintf("WildItemRare = %s\r\n", species.wild_item_rare)) if species.wild_item_rare
       end
-      pokedata.write("\r\n")
-    end
-    origEggMoves = []
-    origEggMoves = eggMoves[species].clone if eggMoves[species] && eggMoves[species].length>0
-    eggList = []
-    eggList = eggMoves[i].clone if eggMoves[i] && eggMoves[i].length>0
-    eggMovesDifferent = false
-    if origEggMoves.length!=eggList.length
-      eggMovesDifferent = true
-    else
-      for k in 0...eggList.length
-        next if origEggMoves[k]==eggList[k]
-        eggMovesDifferent = true
-        break
-      end
-    end
-    if eggMovesDifferent
-      pokedata.write("EggMoves = ")
-      first = true
-      eggList.each do |m|
-        next if !m || m==0
-        pokedata.write(",") if !first
-        cmove = GameData::Move.get(m).id.to_s
-        pokedata.write("#{cmove}")
-        first = false
-      end
-      pokedata.write("\r\n")
-    end
-    if compat1!=nil && compat2!=nil
-      comp1 = getConstantName(PBEggGroups,compat1) rescue pbGetEggGroupConst(compat1)
-      comp2 = getConstantName(PBEggGroups,compat2) rescue pbGetEggGroupConst(compat2)
-      if compat1==compat2
-        pokedata.write("Compatibility = #{comp1}\r\n")
-      else
-        pokedata.write("Compatibility = #{comp1},#{comp2}\r\n")
-      end
-    end
-    if stepstohatch!=nil
-      pokedata.write("StepsToHatch = #{stepstohatch}\r\n")
-    end
-    if height!=nil
-      pokedata.write("Height = ")
-      pokedata.write(sprintf("%.1f",height/10.0))
-      pokedata.write("\r\n")
-    end
-    if weight!=nil
-      pokedata.write("Weight = ")
-      pokedata.write(sprintf("%.1f",weight/10.0))
-      pokedata.write("\r\n")
-    end
-    if color!=nil
-      colorname = getConstantName(PBColors,color) rescue pbGetColorConst(color)
-      pokedata.write("Color = #{colorname}\r\n")
-    end
-    if shape!=nil
-      pokedata.write("Shape = #{shape}\r\n")
-    end
-    if habitat!=nil && habitat>0
-      habitat_name = getConstantName(PBHabitats,habitat) rescue pbGetHabitatConst(habitat)
-      pokedata.write("Habitat = #{habitat_name}\r\n")
-    end
-    if kind!=nil
-      pokedata.write("Kind = #{kind}\r\n")
-    end
-    if entry!=nil
-      pokedata.write("Pokedex = #{entry}\r\n")
-    end
-    if item1
-      citem1 = GameData::Item.get(item1).id.to_s
-      pokedata.write("WildItemCommon = #{citem1}\r\n")
-    end
-    if item2
-      citem1 = GameData::Item.get(item2).id.to_s
-      pokedata.write("WildItemUncommon = #{citem2}\r\n")
-    end
-    if item3
-      citem1 = GameData::Item.get(item3).id.to_s
-      pokedata.write("WildItemRare = #{citem3}\r\n")
-    end
-    if metrics && metrics.length>0
-      for j in 0...6
-        met = ["BattlerPlayerX","BattlerPlayerY","BattlerEnemyX","BattlerEnemyY",
-               "BattlerAltitude","BattlerShadowX"][j]
-        if metrics[j][i]!=metrics[j][species]
-          pokedata.write(met+" = #{metrics[j][i] || 0}\r\n")
-        end
-      end
-      if metrics[SpeciesData::METRIC_SHADOW_SIZE][i]!=metrics[SpeciesData::METRIC_SHADOW_SIZE][species]
-        pokedata.write("BattlerShadowSize = #{metrics[SpeciesData::METRIC_SHADOW_SIZE][i] || 2}\r\n")
-      end
-    end
-    origevos = []
-    for form in pbGetEvolvedFormData(species)
-      method      = form[0]
-      parameter   = form[1]
-      new_species = form[2]
-      next if new_species==0
-      cnew_species = getConstantName(PBSpecies,new_species) rescue pbGetSpeciesConst(new_species)
-      evoname = getConstantName(PBEvolution,method) rescue pbGetEvolutionConst(method)
-      next if !cnew_species || cnew_species==""
-      origevos.push([method,parameter,new_species])
-    end
-    evos = []
-    for form in pbGetEvolvedFormData(i)
-      method      = form[0]
-      parameter   = form[1]
-      new_species = form[2]
-      next if new_species==0
-      cnew_species = getConstantName(PBSpecies,new_species) rescue pbGetSpeciesConst(new_species)
-      evoname = getConstantName(PBEvolution,method) rescue pbGetEvolutionConst(method)
-      next if !cnew_species || cnew_species==""
-      evos.push([method,parameter,new_species])
-    end
-    diff = false
-    if evos.length!=origevos.length
-      diff = true
-    else
-      for k in 0...evos.length
-        if evos[k][0]!=origevos[k][0] ||
-           evos[k][1]!=origevos[k][1] ||
-           evos[k][2]!=origevos[k][2]
-          diff = true; break
-        end
-      end
-    end
-    if diff
-      pokedata.write("Evolutions = ")
-      for k in 0...evos.length
-        method      = form[0]
-        parameter   = form[1]
-        new_species = form[2]
-        cnew_species = getConstantName(PBSpecies,new_species) rescue pbGetSpeciesConst(new_species)
-        evoname = getConstantName(PBEvolution,method) rescue pbGetEvolutionConst(method)
-        next if !cnew_species || cnew_species==""
-        pokedata.write(sprintf("%s,%s,",cnew_species,evoname))
-        param_type = PBEvolution.getFunction(method, "parameterType")
-        has_param = !PBEvolution.hasFunction?(method, "parameterType") || param_type != nil
-        if has_param
+      f.write(sprintf("BattlerPlayerX = %d\r\n", species.back_sprite_x)) if species.back_sprite_x != base_species.back_sprite_x
+      f.write(sprintf("BattlerPlayerY = %d\r\n", species.back_sprite_y)) if species.back_sprite_y != base_species.back_sprite_y
+      f.write(sprintf("BattlerEnemyX = %d\r\n", species.front_sprite_x)) if species.front_sprite_x != base_species.front_sprite_x
+      f.write(sprintf("BattlerEnemyY = %d\r\n", species.front_sprite_y)) if species.front_sprite_y != base_species.front_sprite_y
+      f.write(sprintf("BattlerAltitude = %d\r\n", species.front_sprite_altitude)) if species.front_sprite_altitude != base_species.front_sprite_altitude
+      f.write(sprintf("BattlerShadowX = %d\r\n", species.shadow_x)) if species.shadow_x != base_species.shadow_x
+      f.write(sprintf("BattlerShadowSize = %d\r\n", species.shadow_size)) if species.shadow_size != base_species.shadow_size
+      if species.evolutions != base_species.evolutions && species.evolutions.any? { |evo| !evo[3] }
+        f.write("Evolutions = ")
+        need_comma = false
+        species.evolutions.each do |evo|
+          next if evo[3]   # Skip prevolution entries
+          f.write(",") if need_comma
+          need_comma = true
+          f.write(sprintf("%s,%s,", evo[0], getConstantName(PBEvolution, evo[1])))
+          param_type = PBEvolution.getFunction(evo[1], "parameterType")
+          has_param = !PBEvolution.hasFunction?(evo[1], "parameterType") || param_type != nil
+          next if !has_param
           if param_type
-            cparameter = (getConstantName(param_type, parameter) rescue parameter)
-            pokedata.write("#{cparameter}")
+            if GameData.const_defined?(param_type.to_sym)
+              f.write(evo[2].to_s)
+            else
+              f.write(getConstantName(param_type, evo[2]))
+            end
           else
-            pokedata.write("#{parameter}")
+            f.write(evo[2].to_s)
           end
         end
-        pokedata.write(",") if k<evos.length-1
+        f.write("\r\n")
       end
-      pokedata.write("\r\n")
     end
-    if incense
-      initem = GameData::Item.get(incense).id.to_s
-      pokedata.write("Incense = #{initem}\r\n")
-    end
-    if i%20==0
-      Graphics.update
-      Win32API.SetWindowText(_INTL("Processing species {1}...",i))
-    end
-  end
-  pokedata.close
+  }
   Graphics.update
 end
-
-
 
 #===============================================================================
 # Save Shadow move data to PBS file
 #===============================================================================
 def pbSaveShadowMoves
-  moves = pbLoadShadowMovesets
-  File.open("PBS/shadowmoves.txt","wb") { |f|
+  shadow_movesets = pbLoadShadowMovesets
+  File.open("PBS/shadowmoves.txt", "wb") { |f|
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     f.write("\#-------------------------------\r\n")
-    for i in 0...moves.length
-      move = moves[i]
-      next if !move || moves.length==0
-      constname = (getConstantName(PBSpecies,i) rescue pbGetSpeciesConst(i) rescue nil)
-      next if !constname
-      f.write(sprintf("%s = ",constname))
-      movenames = []
-      for m in move
-        movenames.push(GameData::Move.get(m).id.to_s)
-      end
-      f.write(sprintf("%s\r\n",movenames.compact.join(",")))
+    GameData::Species.each do |species_data|
+      moveset = shadow_movesets[species_data.id]
+      next if !moveset || moveset.length == 0
+      f.write(sprintf("%s = %s\r\n", species_data.id, moveset.join(",")))
     end
   }
 end
 
-
+#===============================================================================
+# Save Regional Dexes data to PBS file
+#===============================================================================
+def pbSaveRegionalDexes
+  dex_lists = pbLoadRegionalDexes
+  File.open("PBS/regionaldexes.txt", "wb") { |f|
+    f.write(0xEF.chr)
+    f.write(0xBB.chr)
+    f.write(0xBF.chr)
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
+    # Write each Dex list in turn
+    dex_lists.each_with_index do |list, index|
+      f.write("\#-------------------------------\r\n")
+      f.write("[#{index}]")
+      comma = false
+      current_family = nil
+      list.each do |species|
+        next if !species
+        if current_family && current_family.include?(species)
+          f.write(",") if comma
+        else
+          current_family = EvolutionHelper.all_related_species(species)
+          comma = false
+          f.write("\r\n")
+        end
+        f.write(species)
+        comma = true
+      end
+      f.write("\r\n")
+    end
+  }
+end
 
 #===============================================================================
 # Save Battle Tower trainer data to PBS file
@@ -1372,8 +778,7 @@ def pbSaveBTTrainers(bttrainers,filename)
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     for i in 0...bttrainers.length
       next if !bttrainers[i]
       f.write("\#-------------------------------\r\n")
@@ -1384,7 +789,7 @@ def pbSaveBTTrainers(bttrainers,filename)
         next if record==nil
         f.write(sprintf("%s = ",key))
         if key=="Type"
-          f.write((getConstantName(PBTrainers,record) rescue pbGetTrainerConst(record)))
+          f.write(record.to_s)
         elsif key=="PokemonNos"
           f.write(record.join(","))   # pbWriteCsvRecord somehow won't work here
         else
@@ -1395,8 +800,6 @@ def pbSaveBTTrainers(bttrainers,filename)
     end
   }
 end
-
-
 
 #===============================================================================
 # Save Battle Tower Pokémon data to PBS file
@@ -1411,8 +814,7 @@ def pbSaveBattlePokemon(btpokemon,filename)
     f.write(0xEF.chr)
     f.write(0xBB.chr)
     f.write(0xBF.chr)
-    f.write("\# "+_INTL("See the documentation on the wiki to learn how to edit this file."))
-    f.write("\r\n")
+    f.write("\# " + _INTL("See the documentation on the wiki to learn how to edit this file.") + "\r\n")
     f.write("\#-------------------------------\r\n")
     for i in 0...btpokemon.length
       Graphics.update if i%500==0
@@ -1424,8 +826,7 @@ def pbSaveBattlePokemon(btpokemon,filename)
 end
 
 def pbFastInspect(pkmn,moves,species,items,natures)
-  c1 = (species[pkmn.species]) ? species[pkmn.species] :
-     (species[pkmn.species] = (getConstantName(PBSpecies,pkmn.species) rescue pbGetSpeciesConst(pkmn.species)))
+  c1 = (species[pkmn.species]) ? species[pkmn.species] : (species[pkmn.species] = GameData::Species.get(pkmn.species).species.to_s)
   c2 = (items[pkmn.item]) ? items[pkmn.item] : (items[pkmn.item] = GameData::Item.get(pkmn.item).id.to_s)
   c3 = (natures[pkmn.nature]) ? natures[pkmn.nature] :
      (natures[pkmn.nature] = getConstantName(PBNatures,pkmn.nature))
@@ -1438,14 +839,12 @@ def pbFastInspect(pkmn,moves,species,items,natures)
       evlist += evs[i]
     end
   end
-  c4 = (moves[pkmn.move1]) ? moves[pkmn.move1] : (moves[pkmn.move1] = GameData::Move.get(pkmn.move1).id_to_s)
-  c5 = (moves[pkmn.move2]) ? moves[pkmn.move2] : (moves[pkmn.move2] = GameData::Move.get(pkmn.move2).id_to_s)
-  c6 = (moves[pkmn.move3]) ? moves[pkmn.move3] : (moves[pkmn.move3] = GameData::Move.get(pkmn.move3).id_to_s)
-  c7 = (moves[pkmn.move4]) ? moves[pkmn.move4] : (moves[pkmn.move4] = GameData::Move.get(pkmn.move4).id_to_s)
+  c4 = (moves[pkmn.move1]) ? moves[pkmn.move1] : (moves[pkmn.move1] = GameData::Move.get(pkmn.move1).id.to_s)
+  c5 = (moves[pkmn.move2]) ? moves[pkmn.move2] : (moves[pkmn.move2] = GameData::Move.get(pkmn.move2).id.to_s)
+  c6 = (moves[pkmn.move3]) ? moves[pkmn.move3] : (moves[pkmn.move3] = GameData::Move.get(pkmn.move3).id.to_s)
+  c7 = (moves[pkmn.move4]) ? moves[pkmn.move4] : (moves[pkmn.move4] = GameData::Move.get(pkmn.move4).id.to_s)
   return "#{c1};#{c2};#{c3};#{evlist};#{c4},#{c5},#{c6},#{c7}"
 end
-
-
 
 #===============================================================================
 # Save all data to PBS files
@@ -1459,7 +858,6 @@ def pbSaveAllData
   pbSaveItems;            Graphics.update
   pbSaveBerryPlants;      Graphics.update
   pbSaveTrainerLists;     Graphics.update
-  pbSaveMachines;         Graphics.update
   pbSaveEncounterData;    Graphics.update
   pbSaveTrainerTypes;     Graphics.update
   pbSaveTrainerBattles;   Graphics.update
@@ -1468,4 +866,5 @@ def pbSaveAllData
   pbSavePokemonData;      Graphics.update
   pbSavePokemonFormsData; Graphics.update
   pbSaveShadowMoves;      Graphics.update
+  pbSaveRegionalDexes;    Graphics.update
 end

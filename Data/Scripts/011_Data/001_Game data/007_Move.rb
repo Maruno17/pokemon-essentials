@@ -22,7 +22,6 @@ module GameData
     include InstanceMethods
 
     def initialize(hash)
-      validate hash => Hash, hash[:id] => Symbol
       @id               = hash[:id]
       @id_number        = hash[:id_number]   || -1
       @real_name        = hash[:name]        || "Unnamed"
@@ -49,6 +48,18 @@ module GameData
       return pbGetMessage(MessageTypes::MoveDescriptions, @id_number)
     end
 
+    def physical?
+      return false if @base_damage == 0
+      return @category == 0 if MOVE_CATEGORY_PER_MOVE
+      return GameData::Type.get(@type).physical?
+    end
+
+    def special?
+      return false if @base_damage == 0
+      return @category == 1 if MOVE_CATEGORY_PER_MOVE
+      return GameData::Type.get(@type).special?
+    end
+
     def hidden_move?
       GameData::Item.each do |i|
         return true if i.is_HM? && i.move == @id
@@ -61,23 +72,6 @@ end
 #===============================================================================
 # Deprecated methods
 #===============================================================================
-module MoveData
-  ID            = 0
-  INTERNAL_NAME = 1
-  NAME          = 2
-  FUNCTION_CODE = 3
-  BASE_DAMAGE   = 4
-  TYPE          = 5
-  CATEGORY      = 6
-  ACCURACY      = 7
-  TOTAL_PP      = 8
-  EFFECT_CHANCE = 9
-  TARGET        = 10
-  PRIORITY      = 11
-  FLAGS         = 12
-  DESCRIPTION   = 13
-end
-
 def pbGetMoveData(move_id, move_data_type = -1)
   Deprecation.warn_method('pbGetMoveData', 'v20', 'GameData::Move.get(move_id)')
   return GameData::Move.get(move_id)

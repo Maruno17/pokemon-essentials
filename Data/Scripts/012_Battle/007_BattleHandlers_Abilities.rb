@@ -519,7 +519,7 @@ BattleHandlers::AbilityOnStatLoss.add(:DEFIANT,
 
 BattleHandlers::PriorityChangeAbility.add(:GALEWINGS,
   proc { |ability,battler,move,pri|
-    next pri+1 if battler.hp==battler.totalhp && isConst?(move.type,PBTypes,:FLYING)
+    next pri+1 if battler.hp==battler.totalhp && move.type == :FLYING
   }
 )
 
@@ -605,7 +605,7 @@ BattleHandlers::MoveImmunityTargetAbility.add(:BULLETPROOF,
 BattleHandlers::MoveImmunityTargetAbility.add(:FLASHFIRE,
   proc { |ability,user,target,move,type,battle|
     next false if user.index==target.index
-    next false if !isConst?(type,PBTypes,:FIRE)
+    next false if type != :FIRE
     battle.pbShowAbilitySplash(target)
     if !target.effects[PBEffects::FlashFire]
       target.effects[PBEffects::FlashFire] = true
@@ -700,7 +700,7 @@ BattleHandlers::MoveImmunityTargetAbility.copy(:WATERABSORB,:DRYSKIN)
 BattleHandlers::MoveImmunityTargetAbility.add(:WONDERGUARD,
   proc { |ability,user,target,move,type,battle|
     next false if move.statusMove?
-    next false if type<0 || PBTypes.superEffective?(target.damageState.typeMod)
+    next false if !type || PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
     battle.pbShowAbilitySplash(target)
     if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
       battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
@@ -718,47 +718,47 @@ BattleHandlers::MoveImmunityTargetAbility.add(:WONDERGUARD,
 
 BattleHandlers::MoveBaseTypeModifierAbility.add(:AERILATE,
   proc { |ability,user,move,type|
-    next if !isConst?(type,PBTypes,:NORMAL) || !hasConst?(PBTypes,:FLYING)
+    next if type != :NORMAL || !GameData::Type.exists?(:FLYING)
     move.powerBoost = true
-    next getConst(PBTypes,:FLYING)
+    next :FLYING
   }
 )
 
 BattleHandlers::MoveBaseTypeModifierAbility.add(:GALVANIZE,
   proc { |ability,user,move,type|
-    next if !isConst?(type,PBTypes,:NORMAL) || !hasConst?(PBTypes,:ELECTRIC)
+    next if type != :NORMAL || !GameData::Type.exists?(:ELECTRIC)
     move.powerBoost = true
-    next getConst(PBTypes,:ELECTRIC)
+    next :ELECTRIC
   }
 )
 
 BattleHandlers::MoveBaseTypeModifierAbility.add(:LIQUIDVOICE,
   proc { |ability,user,move,type|
-    next getConst(PBTypes,:WATER) if hasConst?(PBTypes,:WATER) && move.soundMove?
+    next :WATER if GameData::Type.exists?(:WATER) && move.soundMove?
   }
 )
 
 BattleHandlers::MoveBaseTypeModifierAbility.add(:NORMALIZE,
   proc { |ability,user,move,type|
-    next if !hasConst?(PBTypes,:NORMAL)
+    next if !GameData::Type.exists?(:NORMAL)
     move.powerBoost = true if NEWEST_BATTLE_MECHANICS
-    next getConst(PBTypes,:NORMAL)
+    next :NORMAL
   }
 )
 
 BattleHandlers::MoveBaseTypeModifierAbility.add(:PIXILATE,
   proc { |ability,user,move,type|
-    next if !isConst?(type,PBTypes,:NORMAL) || !hasConst?(PBTypes,:FAIRY)
+    next if type != :NORMAL || !GameData::Type.exists?(:FAIRY)
     move.powerBoost = true
-    next getConst(PBTypes,:FAIRY)
+    next :FAIRY
   }
 )
 
 BattleHandlers::MoveBaseTypeModifierAbility.add(:REFRIGERATE,
   proc { |ability,user,move,type|
-    next if !isConst?(type,PBTypes,:NORMAL) || !hasConst?(PBTypes,:ICE)
+    next if type != :NORMAL || !GameData::Type.exists?(:ICE)
     move.powerBoost = true
-    next getConst(PBTypes,:ICE)
+    next :ICE
   }
 )
 
@@ -818,7 +818,7 @@ BattleHandlers::AccuracyCalcUserAllyAbility.add(:VICTORYSTAR,
 
 BattleHandlers::AccuracyCalcTargetAbility.add(:LIGHTNINGROD,
   proc { |ability,mods,user,target,move,type|
-    mods[BASE_ACC] = 0 if isConst?(type,PBTypes,:ELECTRIC)
+    mods[BASE_ACC] = 0 if type == :ELECTRIC
   }
 )
 
@@ -846,7 +846,7 @@ BattleHandlers::AccuracyCalcTargetAbility.add(:SNOWCLOAK,
 
 BattleHandlers::AccuracyCalcTargetAbility.add(:STORMDRAIN,
   proc { |ability,mods,user,target,move,type|
-    mods[BASE_ACC] = 0 if isConst?(type,PBTypes,:WATER)
+    mods[BASE_ACC] = 0 if type == :WATER
   }
 )
 
@@ -894,7 +894,7 @@ BattleHandlers::DamageCalcUserAbility.add(:ANALYTIC,
 
 BattleHandlers::DamageCalcUserAbility.add(:BLAZE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.hp<=user.totalhp/3 && isConst?(type,PBTypes,:FIRE)
+    if user.hp<=user.totalhp/3 && type == :FIRE
       mults[ATK_MULT] *= 1.5
     end
   }
@@ -916,7 +916,7 @@ BattleHandlers::DamageCalcUserAbility.add(:FLAREBOOST,
 
 BattleHandlers::DamageCalcUserAbility.add(:FLASHFIRE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.effects[PBEffects::FlashFire] && isConst?(type,PBTypes,:FIRE)
+    if user.effects[PBEffects::FlashFire] && type == :FIRE
       mults[ATK_MULT] *= 1.5
     end
   }
@@ -980,7 +980,7 @@ BattleHandlers::DamageCalcUserAbility.copy(:MINUS,:PLUS)
 
 BattleHandlers::DamageCalcUserAbility.add(:NEUROFORCE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if PBTypes.superEffective?(target.damageState.typeMod)
+    if PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
       mults[FINAL_DMG_MULT] *= 1.25
     end
   }
@@ -988,7 +988,7 @@ BattleHandlers::DamageCalcUserAbility.add(:NEUROFORCE,
 
 BattleHandlers::DamageCalcUserAbility.add(:OVERGROW,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.hp<=user.totalhp/3 && isConst?(type,PBTypes,:GRASS)
+    if user.hp<=user.totalhp/3 && type == :GRASS
       mults[ATK_MULT] *= 1.5
     end
   }
@@ -1015,9 +1015,7 @@ BattleHandlers::DamageCalcUserAbility.add(:RIVALRY,
 BattleHandlers::DamageCalcUserAbility.add(:SANDFORCE,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if user.battle.pbWeather==PBWeather::Sandstorm &&
-       (isConst?(type,PBTypes,:ROCK) ||
-       isConst?(type,PBTypes,:GROUND) ||
-       isConst?(type,PBTypes,:STEEL))
+       [:ROCK, :GROUND, :STEEL].include?(type)
       mults[BASE_DMG_MULT] *= 1.3
     end
   }
@@ -1060,7 +1058,7 @@ BattleHandlers::DamageCalcUserAbility.add(:STAKEOUT,
 
 BattleHandlers::DamageCalcUserAbility.add(:STEELWORKER,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] *= 1.5 if isConst?(type,PBTypes,:STEEL)
+    mults[ATK_MULT] *= 1.5 if type == :STEEL
   }
 )
 
@@ -1072,7 +1070,7 @@ BattleHandlers::DamageCalcUserAbility.add(:STRONGJAW,
 
 BattleHandlers::DamageCalcUserAbility.add(:SWARM,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.hp<=user.totalhp/3 && isConst?(type,PBTypes,:BUG)
+    if user.hp<=user.totalhp/3 && type == :BUG
       mults[ATK_MULT] *= 1.5
     end
   }
@@ -1089,13 +1087,13 @@ BattleHandlers::DamageCalcUserAbility.add(:TECHNICIAN,
 
 BattleHandlers::DamageCalcUserAbility.add(:TINTEDLENS,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[FINAL_DMG_MULT] *= 2 if PBTypes.resistant?(target.damageState.typeMod)
+    mults[FINAL_DMG_MULT] *= 2 if PBTypeEffectiveness.resistant?(target.damageState.typeMod)
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:TORRENT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.hp<=user.totalhp/3 && isConst?(type,PBTypes,:WATER)
+    if user.hp<=user.totalhp/3 && type == :WATER
       mults[ATK_MULT] *= 1.5
     end
   }
@@ -1117,7 +1115,7 @@ BattleHandlers::DamageCalcUserAbility.add(:TOXICBOOST,
 
 BattleHandlers::DamageCalcUserAbility.add(:WATERBUBBLE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] *= 2 if isConst?(type,PBTypes,:WATER)
+    mults[ATK_MULT] *= 2 if type == :WATER
   }
 )
 
@@ -1147,15 +1145,13 @@ BattleHandlers::DamageCalcUserAllyAbility.add(:FLOWERGIFT,
 
 BattleHandlers::DamageCalcTargetAbility.add(:DRYSKIN,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if isConst?(type,PBTypes,:FIRE)
-      mults[BASE_DMG_MULT] *= 1.25
-    end
+    mults[BASE_DMG_MULT] *= 1.25 if type == :FIRE
   }
 )
 
 BattleHandlers::DamageCalcTargetAbility.add(:FILTER,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if PBTypes.superEffective?(target.damageState.typeMod)
+    if PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
       mults[FINAL_DMG_MULT] *= 0.75
     end
   }
@@ -1174,7 +1170,7 @@ BattleHandlers::DamageCalcTargetAbility.add(:FLOWERGIFT,
 
 BattleHandlers::DamageCalcTargetAbility.add(:FLUFFY,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[FINAL_DMG_MULT] *= 2 if isConst?(move.calcType,PBTypes,:FIRE)
+    mults[FINAL_DMG_MULT] *= 2 if move.calcType == :FIRE
     mults[FINAL_DMG_MULT] /= 2 if move.contactMove?
   }
 )
@@ -1195,7 +1191,7 @@ BattleHandlers::DamageCalcTargetAbility.add(:GRASSPELT,
 
 BattleHandlers::DamageCalcTargetAbility.add(:HEATPROOF,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] /= 2 if isConst?(type,PBTypes,:FIRE)
+    mults[BASE_DMG_MULT] /= 2 if type == :FIRE
   }
 )
 
@@ -1209,25 +1205,19 @@ BattleHandlers::DamageCalcTargetAbility.add(:MARVELSCALE,
 
 BattleHandlers::DamageCalcTargetAbility.add(:MULTISCALE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if target.hp==target.totalhp
-      mults[FINAL_DMG_MULT] /= 2
-    end
+    mults[FINAL_DMG_MULT] /= 2 if target.hp==target.totalhp
   }
 )
 
 BattleHandlers::DamageCalcTargetAbility.add(:THICKFAT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if isConst?(type,PBTypes,:FIRE) || isConst?(type,PBTypes,:ICE)
-      mults[BASE_DMG_MULT] /= 2
-    end
+    mults[BASE_DMG_MULT] /= 2 if type == :FIRE || type == :ICE
   }
 )
 
 BattleHandlers::DamageCalcTargetAbility.add(:WATERBUBBLE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if isConst?(type,PBTypes,:FIRE)
-      mults[FINAL_DMG_MULT] /= 2
-    end
+    mults[FINAL_DMG_MULT] /= 2 if type == :FIRE
   }
 )
 
@@ -1237,7 +1227,7 @@ BattleHandlers::DamageCalcTargetAbility.add(:WATERBUBBLE,
 
 BattleHandlers::DamageCalcTargetAbilityNonIgnorable.add(:PRISMARMOR,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if PBTypes.superEffective?(target.damageState.typeMod)
+    if PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
       mults[FINAL_DMG_MULT] *= 0.75
     end
   }
@@ -1523,7 +1513,7 @@ BattleHandlers::TargetAbilityOnHit.copy(:IRONBARBS,:ROUGHSKIN)
 
 BattleHandlers::TargetAbilityOnHit.add(:JUSTIFIED,
   proc { |ability,user,target,move,battle|
-    next if !isConst?(move.calcType,PBTypes,:DARK)
+    next if move.calcType != :DARK
     target.pbRaiseStatStageByAbility(PBStats::ATTACK,1,target)
   }
 )
@@ -1572,9 +1562,7 @@ BattleHandlers::TargetAbilityOnHit.add(:POISONPOINT,
 
 BattleHandlers::TargetAbilityOnHit.add(:RATTLED,
   proc { |ability,user,target,move,battle|
-    next if !isConst?(move.calcType,PBTypes,:BUG) &&
-            !isConst?(move.calcType,PBTypes,:DARK) &&
-            !isConst?(move.calcType,PBTypes,:GHOST)
+    next if ![:BUG, :DARK, :GHOST].include?(move.calcType)
     target.pbRaiseStatStageByAbility(PBStats::SPEED,1,target)
   }
 )
@@ -1605,7 +1593,7 @@ BattleHandlers::TargetAbilityOnHit.add(:STATIC,
 
 BattleHandlers::TargetAbilityOnHit.add(:WATERCOMPACTION,
   proc { |ability,user,target,move,battle|
-    next if !isConst?(move.calcType,PBTypes,:WATER)
+    next if move.calcType != :WATER
     target.pbRaiseStatStageByAbility(PBStats::DEFENSE,2,target)
   }
 )
@@ -1737,9 +1725,9 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:BERSERK,
 BattleHandlers::TargetAbilityAfterMoveUse.add(:COLORCHANGE,
   proc { |ability,target,user,move,switched,battle|
     next if target.damageState.calcDamage==0 || target.damageState.substitute
-    next if move.calcType<0 || PBTypes.isPseudoType?(move.calcType)
+    next if !move.calcType || PBTypes.isPseudoType?(move.calcType)
     next if target.pbHasType?(move.calcType) && !target.pbHasOtherType?(move.calcType)
-    typeName = PBTypes.getName(move.calcType)
+    typeName = GameData::Type.get(move.calcType).name
     battle.pbShowAbilitySplash(target)
     target.pbChangeTypes(move.calcType)
     battle.pbDisplay(_INTL("{1}'s {2} made it the {3} type!",target.pbThis,
@@ -2092,9 +2080,9 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
   proc { |ability,battler,battle|
     next if !battler.pbOwnedByPlayer?
     battlerTypes = battler.pbTypes(true)
-    type1 = (battlerTypes.length>0) ? battlerTypes[0] : nil
-    type2 = (battlerTypes.length>1) ? battlerTypes[1] : type1
-    type3 = (battlerTypes.length>2) ? battlerTypes[2] : type2
+    type1 = battlerTypes[0]
+    type2 = battlerTypes[1] || type1
+    type3 = battlerTypes[2] || type2
     found = false
     battle.eachOtherSideBattler(battler.index) do |b|
       b.eachMove do |m|
@@ -2105,8 +2093,8 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
             moveType = pbHiddenPower(b.pokemon)[0]
           end
           eff = PBTypes.getCombinedEffectiveness(moveType,type1,type2,type3)
-          next if PBTypes.ineffective?(eff)
-          next if !PBTypes.superEffective?(eff) && m.function != "070"   # OHKO
+          next if PBTypeEffectiveness.ineffective?(eff)
+          next if !PBTypeEffectiveness.superEffective?(eff) && m.function != "070"   # OHKO
         else
           next if m.function != "070"   # OHKO
         end

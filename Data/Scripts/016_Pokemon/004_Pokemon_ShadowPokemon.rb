@@ -50,9 +50,8 @@ def pbPurify(pokemon,scene)
     pbChangeLevel(pokemon,newlevel,scene) # for convenience
     pokemon.exp = newexp
   end
-  speciesname = PBSpecies.getName(pokemon.species)
-  if scene.pbConfirm(_INTL("Would you like to give a nickname to {1}?",speciesname))
-    newname = pbEnterPokemonName(_INTL("{1}'s nickname?",speciesname),
+  if scene.pbConfirm(_INTL("Would you like to give a nickname to {1}?", pokemon.speciesName))
+    newname = pbEnterPokemonName(_INTL("{1}'s nickname?", pokemon.speciesName),
                                  0, Pokemon::MAX_NAME_SIZE, "", pokemon)
     pokemon.name = newname if newname!=""
   end
@@ -281,8 +280,8 @@ class Pokemon
     self.savedev     = [0,0,0,0,0,0]
     self.shadowmoves = []
     # Retrieve Shadow moveset for this Pokémon
-    shadow_moveset = pbLoadShadowMovesets[self.fSpecies]
-    shadow_moveset = pbLoadShadowMovesets[self.species] if !shadow_moveset || shadow_moveset.length == 0
+    shadow_moveset = pbLoadShadowMovesets[species_data.id]
+    shadow_moveset = pbLoadShadowMovesets[@species] if !shadow_moveset || shadow_moveset.length == 0
     # Record this Pokémon's Shadow moves
     if shadow_moveset && shadow_moveset.length > 0
       for i in 0...[shadow_moveset.length, MAX_MOVES].min
@@ -373,9 +372,9 @@ class PokeBattle_Battler
     __shadow__pbInitPokemon(*arg)
     # Called into battle
     if shadowPokemon?
-      if hasConst?(PBTypes,:SHADOW)
-        self.type1 = getID(PBTypes,:SHADOW)
-        self.type2 = getID(PBTypes,:SHADOW)
+      if GameData::Type.exists?(:SHADOW)
+        self.type1 = :SHADOW
+        self.type2 = :SHADOW
       end
       self.pokemon.adjustHeart(-30) if pbOwnedByPlayer?
     end
@@ -404,7 +403,7 @@ class PokeBattle_Battler
 
   def pbHyperModeObedience(move)
     return true if !inHyperMode?
-    return true if !move || isConst?(move.type,PBTypes,:SHADOW)
+    return true if !move || move.type == :SHADOW
     return rand(100)<20
   end
 end

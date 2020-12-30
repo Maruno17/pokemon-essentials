@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class PokemonPauseMenu_Scene
   def pbStartScene
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
@@ -78,8 +81,9 @@ class PokemonPauseMenu_Scene
   def pbRefresh; end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonPauseMenu
   def initialize(scene)
     @scene = scene
@@ -128,7 +132,7 @@ class PokemonPauseMenu
     elsif pbInBugContest?
       if pbBugContestState.lastPokemon
         @scene.pbShowInfo(_INTL("Caught: {1}\nLevel: {2}\nBalls: {3}",
-           PBSpecies.getName(pbBugContestState.lastPokemon.species),
+           pbBugContestState.lastPokemon.speciesName,
            pbBugContestState.lastPokemon.level,
            pbBugContestState.ballcount))
       else

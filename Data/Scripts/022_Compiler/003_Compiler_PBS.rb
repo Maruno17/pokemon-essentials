@@ -1,5 +1,3 @@
-class PBTrainers; end
-
 module Compiler
   module_function
 
@@ -169,10 +167,14 @@ module Compiler
         print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\r\n{2}",record[3],FileLineData.linereport)
       end
       case record[1]
-      when "N"; raise _INTL("North side of first map must connect with south side of second map\r\n{1}",FileLineData.linereport) if record[4]!="S"
-      when "S"; raise _INTL("South side of first map must connect with north side of second map\r\n{1}",FileLineData.linereport) if record[4]!="N"
-      when "E"; raise _INTL("East side of first map must connect with west side of second map\r\n{1}",FileLineData.linereport) if record[4]!="W"
-      when "W"; raise _INTL("West side of first map must connect with east side of second map\r\n{1}",FileLineData.linereport) if record[4]!="E"
+      when "N"
+        raise _INTL("North side of first map must connect with south side of second map\r\n{1}", FileLineData.linereport) if record[4] != "S"
+      when "S"
+        raise _INTL("South side of first map must connect with north side of second map\r\n{1}", FileLineData.linereport) if record[4] != "N"
+      when "E"
+        raise _INTL("East side of first map must connect with west side of second map\r\n{1}", FileLineData.linereport) if record[4] != "W"
+      when "W"
+        raise _INTL("West side of first map must connect with east side of second map\r\n{1}", FileLineData.linereport) if record[4] != "E"
       end
       records.push(record)
     }
@@ -189,7 +191,7 @@ module Compiler
       if line[/^\s*(\w+)\s*=\s*(.*)$/]   # Of the format XXX = YYY
         key   = $1
         value = $2
-        item_symbol = parseItem(key).to_sym
+        item_symbol = parseItem(key)
         item_number = GameData::Item.get(item_symbol).id_number
         line = pbGetCsvRecord(value, line_no, [0, "vuuv"])
         # Construct berry plant hash
@@ -252,123 +254,73 @@ module Compiler
   # Compile types
   #=============================================================================
   def compile_types
-    typechart  = []
-    types      = []
-    requiredtypes = {
-      "Name"          => [1, "s"],
-      "InternalName"  => [2, "s"],
-    }
-    optionaltypes = {
-      "IsPseudoType"  => [3, "b"],
-      "IsSpecialType" => [4, "b"],
-      "Weaknesses"    => [5, "*s"],
-      "Resistances"   => [6, "*s"],
-      "Immunities"    => [7, "*s"]
-    }
-    currentmap = -1
-    foundtypes = []
-    pbCompilerEachCommentedLine("PBS/types.txt") { |line,lineno|
-      if line[/^\s*\[\s*(\d+)\s*\]\s*$/]
-        sectionname = $~[1]
-        if currentmap>=0
-          for reqtype in requiredtypes.keys
-            if !foundtypes.include?(reqtype)
-              raise _INTL("Required value '{1}' not given in section [{2}].\r\n{3}",reqtype,currentmap,FileLineData.linereport)
+    GameData::Type::DATA.clear
+    type_names = []
+    # Read from PBS file
+    File.open("PBS/types.txt", "rb") { |f|
+      FileLineData.file = "PBS/types.txt"   # For error reporting
+      # Read a whole section's lines at once, then run through this code.
+      # contents is a hash containing all the XXX=YYY lines in that section, where
+      # the keys are the XXX and the values are the YYY (as unprocessed strings).
+      schema = GameData::Type::SCHEMA
+      pbEachFileSection(f) { |contents, type_number|
+        # Go through schema hash of compilable data and compile this section
+        for key in schema.keys
+          FileLineData.setSection(type_number, key, contents[key])   # For error reporting
+          # Skip empty properties, or raise an error if a required property is
+          # empty
+          if contents[key].nil?
+            if ["Name", "InternalName"].include?(key)
+              raise _INTL("The entry {1} is required in PBS/types.txt section {2}.", key, type_id)
             end
+            next
           end
-          foundtypes.clear
+          # Compile value for key
+          value = pbGetCsvRecord(contents[key], key, schema[key])
+          value = nil if value.is_a?(Array) && value.length == 0
+          contents[key] = value
+          # Ensure weaknesses/resistances/immunities are in arrays and are symbols
+          if value && ["Weaknesses", "Resistances", "Immunities"].include?(key)
+            contents[key] = [contents[key]] if !contents[key].is_a?(Array)
+            contents[key].map! { |x| x.to_sym }
+            contents[key].uniq!
+          end
         end
-        currentmap = sectionname.to_i
-        types[currentmap] = [currentmap,nil,nil,false,false,[],[],[]]
-      else
-        if currentmap<0
-          raise _INTL("Expected a section at the beginning of the file.\r\n{1}",FileLineData.linereport)
-        end
-        if !line[/^\s*(\w+)\s*=\s*(.*)$/]
-          raise _INTL("Bad line syntax (expected syntax like XXX=YYY).\r\n{1}",FileLineData.linereport)
-        end
-        matchData = $~
-        schema = nil
-        FileLineData.setSection(currentmap,matchData[1],matchData[2])
-        if requiredtypes.keys.include?(matchData[1])
-          schema = requiredtypes[matchData[1]]
-          foundtypes.push(matchData[1])
-        else
-          schema = optionaltypes[matchData[1]]
-        end
-        if schema
-          record = pbGetCsvRecord(matchData[2],lineno,schema)
-          types[currentmap][schema[0]] = record
-        end
-      end
+        # Construct type hash
+        type_symbol = contents["InternalName"].to_sym
+        type_hash = {
+          :id           => type_symbol,
+          :id_number    => type_number,
+          :name         => contents["Name"],
+          :pseudo_type  => contents["IsPseudoType"],
+          :special_type => contents["IsSpecialType"],
+          :weaknesses   => contents["Weaknesses"],
+          :resistances  => contents["Resistances"],
+          :immunities   => contents["Immunities"]
+        }
+        # Add type's data to records
+        GameData::Type::DATA[type_number] = GameData::Type::DATA[type_symbol] = GameData::Type.new(type_hash)
+        type_names[type_number] = type_hash[:name]
+      }
     }
-    types.compact!
-    maxValue = 0
-    for type in types; maxValue = [maxValue,type[0]].max; end
-    pseudotypes  = []
-    specialtypes = []
-    typenames    = []
-    typeinames   = []
-    typehash     = {}
-    for type in types
-      pseudotypes.push(type[0]) if type[3]
-      typenames[type[0]]  = type[1]
-      typeinames[type[0]] = type[2]
-      typehash[type[0]]   = type
-    end
-    for type in types
-      n = type[1]
-      for w in type[5]
-        if !typeinames.include?(w)
-          raise _INTL("'{1}' is not a defined type (PBS/types.txt, {2}, Weaknesses).",w,n)
-        end
+    # Ensure all weaknesses/resistances/immunities are valid types
+    GameData::Type.each do |type|
+      type.weaknesses.each do |other_type|
+        next if GameData::Type.exists?(other_type)
+        raise _INTL("'{1}' is not a defined type (PBS/types.txt, section {2}, Weaknesses).", other_type.to_s, type.id_number)
       end
-      for w in type[6]
-        if !typeinames.include?(w)
-          raise _INTL("'{1}' is not a defined type (PBS/types.txt, {2}, Resistances).",w,n)
-        end
+      type.resistances.each do |other_type|
+        next if GameData::Type.exists?(other_type)
+        raise _INTL("'{1}' is not a defined type (PBS/types.txt, section {2}, Resistances).", other_type.to_s, type.id_number)
       end
-      for w in type[7]
-        if !typeinames.include?(w)
-          raise _INTL("'{1}' is not a defined type (PBS/types.txt, {2}, Immunities).",w,n)
-        end
+      type.immunities.each do |other_type|
+        next if GameData::Type.exists?(other_type)
+        raise _INTL("'{1}' is not a defined type (PBS/types.txt, section {2}, Immunities).", other_type.to_s, type.id_number)
       end
     end
-    for i in 0..maxValue
-      pseudotypes.push(i) if !typehash[i]
-    end
-    pseudotypes.sort!
-    types.each { |type| specialtypes.push(type[0]) if type[4] }
-    specialtypes.sort!
-    count = maxValue+1
-    for i in 0...count
-      type = typehash[i]
-      j = 0; k = i
-      while j<count
-        typechart[k] = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE
-        atype = typehash[j]
-        if type && atype
-          typechart[k] = PBTypeEffectiveness::SUPER_EFFECTIVE_ONE if type[5].include?(atype[2])   # weakness
-          typechart[k] = PBTypeEffectiveness::NOT_EFFECTIVE_ONE if type[6].include?(atype[2])     # resistance
-          typechart[k] = PBTypeEffectiveness::INEFFECTIVE if type[7].include?(atype[2])           # immune
-        end
-        j += 1; k += count
-      end
-    end
-    MessageTypes.setMessages(MessageTypes::Types,typenames)
-    code = "class PBTypes\r\n"
-    for type in types
-      code += "#{type[2]}=#{type[0]}\r\n"
-    end
-    code += "def self.getName(id)\r\n"
-    code += "id=getID(PBTypes,id)\r\n"
-    code += "return pbGetMessage(MessageTypes::Types,id); end\r\n"
-    code += "def self.getCount; return #{types.length}; end\r\n"
-    code += "def self.maxValue; return #{maxValue}; end\r\n"
-    code += "end\r\n"
-    eval(code, TOPLEVEL_BINDING)
-    save_data([pseudotypes,specialtypes,typechart],"Data/types.dat")
-    pbAddScript(code,"PBTypes")
+    # Save all data
+    GameData::Type.save
+    MessageTypes.setMessages(MessageTypes::Types, type_names)
     Graphics.update
   end
 
@@ -511,7 +463,7 @@ module Compiler
     # Read each line of moves.txt at a time and compile it into an move
     pbCompilerEachPreppedLine("PBS/moves.txt") { |line, line_no|
       line = pbGetCsvRecord(line, line_no, [0, "vnssueeuuuyiss",
-         nil, nil, nil, nil, nil, PBTypes, ["Physical", "Special", "Status"],
+         nil, nil, nil, nil, nil, :Type, ["Physical", "Special", "Status"],
          nil, nil, nil, PBTargets, nil, nil, nil
       ])
       move_number = line[0]
@@ -603,506 +555,451 @@ module Compiler
   # Compile Pokémon
   #=============================================================================
   def compile_pokemon
-    # Get schemas.
-    requiredValues = SpeciesData.requiredValues
-    optionalValues = SpeciesData.optionalValues
-    # Prepare arrays for compiled data.
-    speciesData    = []
-    movesets       = []
-    eggMoves       = []
-    regionalDexes  = []
-    spriteMetrics  = []
-    evolutions     = []
-    speciesNames   = []
-    formNames      = []
-    pokedexKinds   = []
-    pokedexEntries = []
-    # Prepare variables used to record scripted constants.
-    constants = ""
-    maxValue = 0   # Highest species ID
-    # Read from PBS file.
-    File.open("PBS/pokemon.txt","rb") { |f|
+    GameData::Species::DATA.clear
+    species_names           = []
+    species_form_names      = []
+    species_categories      = []
+    species_pokedex_entries = []
+    # Read from PBS file
+    File.open("PBS/pokemon.txt", "rb") { |f|
       FileLineData.file = "PBS/pokemon.txt"   # For error reporting
       # Read a whole section's lines at once, then run through this code.
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      pbEachFileSection(f) { |contents,speciesID|
-        # Raise an error if the species ID is 0.
-        if speciesID==0
+      schema = GameData::Species.schema
+      pbEachFileSection(f) { |contents, species_number|
+        FileLineData.setSection(species_number, "header", nil)   # For error reporting
+        # Raise an error if a species number is invalid or used twice
+        if species_number == 0
           raise _INTL("A Pokémon species can't be numbered 0 (PBS/pokemon.txt).")
+        elsif GameData::Species::DATA[species_number]
+          raise _INTL("Species ID number '{1}' is used twice.\r\n{2}", species_number, FileLineData.linereport)
         end
-        # Raise an error if the species ID has already been defined.
-        if speciesData[speciesID]
-          raise _INTL("Species ID number '{1}' is used twice.\r\n{2}",speciesID,FileLineData.linereport)
-        end
-        # Create array to store compiled data in.
-        speciesData[speciesID] = []
-        # Copy Type1 into Type2 if Type2 is undefined. (All species must have two
-        # defined types; if both are the same, it is treated as single typed.)
-        if !contents["Type2"] || contents["Type2"]==""
-          if !contents["Type1"] || contents["Type1"]==""
-            raise _INTL("No Pokémon type is defined in section {1} (PBS/pokemon.txt)",speciesID.to_s)
+        # Go through schema hash of compilable data and compile this section
+        for key in schema.keys
+          # Skip empty properties, or raise an error if a required property is
+          # empty
+          if contents[key].nil? || contents[key] == ""
+            if ["Name", "InternalName"].include?(key)
+              raise _INTL("The entry {1} is required in PBS/pokemon.txt section {2}.", key, species_number)
+            end
+            contents[key] = nil
+            next
           end
-          contents["Type2"] = contents["Type1"].clone
-        end
-        # Go through hashes of compilable data and compile this section.
-        [requiredValues,optionalValues].each do |hash|
-          for key in hash.keys
-            FileLineData.setSection(speciesID,key,contents[key])   # For error reporting
-            maxValue = [maxValue,speciesID].max   # Set highest species ID
-            next if hash[key][0]<0   # Property is not to be compiled; skip it
-            # Skip empty optional properties, or raise an error if a required
-            # property is empty.
-            if !contents[key] || contents[key]==""
-              raise _INTL("Required entry {1} is missing or empty in section {2} (PBS/pokemon.txt)",
-                 key,speciesID.to_s) if hash==requiredValues
-              next
+          # Raise an error if a species internal name is used twice
+          FileLineData.setSection(species_number, key, contents[key])   # For error reporting
+          if GameData::Species::DATA[contents["InternalName"].to_sym]
+            raise _INTL("Species ID '{1}' is used twice.\r\n{2}", contents["InternalName"], FileLineData.linereport)
+          end
+          # Compile value for key
+          value = pbGetCsvRecord(contents[key], key, schema[key])
+          value = nil if value.is_a?(Array) && value.length == 0
+          contents[key] = value
+          # Sanitise data
+          case key
+          when "Height", "Weight"
+            # Convert height/weight to 1 decimal place and multiply by 10
+            value = (value * 10).round
+            if value <= 0
+              raise _INTL("Value for '{1}' can't be less than or close to 0 (section {2}, PBS/pokemon.txt)", key, species_number)
             end
-            # Compile value for key.
-            schema = hash[key]
-            value = pbGetCsvRecord(contents[key],key,schema)
-            # Modify value as required.
-            case key
-            when "Height", "Weight"
-              # Convert height/weight to 1 decimal place and multiply by 10.
-              value = (value*10).round
-              if value<=0
-                raise _INTL("Value for '{1}' can't be less than or close to 0 (section {2}, PBS/pokemon.txt)",key,speciesID)
-              end
+            contents[key] = value
+          when "Moves"
+            move_array = []
+            for i in 0...value.length / 2
+              move_array.push([value[i * 2], value[i * 2 + 1], i])
             end
-            # Add value to appropriate array for saving.
-            case key
-            when "Moves"
-              speciesMoves = []
-              for i in 0...value.length/2
-                speciesMoves.push([value[i*2],value[i*2+1],i])
-              end
-              speciesMoves.sort! { |a,b| (a[0]==b[0]) ? a[2]<=>b[2] : a[0]<=>b[0] }
-              for i in speciesMoves; i.pop; end
-              movesets[speciesID] = speciesMoves
-            when "EggMoves"
-              if value.is_a?(Array); eggMoves[speciesID] = value
-              else;                  eggMoves[speciesID] = [value]
-              end
-            when "RegionalNumbers"
-              if value.is_a?(Array)
-                value.each_with_index do |num,dexID|
-                  regionalDexes[dexID] = [] if !regionalDexes[dexID]
-                  regionalDexes[dexID][speciesID] = num
-                end
-              else
-                regionalDexes[0] = [] if !regionalDexes[0]
-                regionalDexes[0][speciesID] = value
-              end
-            when "BattlerPlayerX", "BattlerPlayerY",
-                 "BattlerEnemyX", "BattlerEnemyY",
-                 "BattlerAltitude", "BattlerShadowX", "BattlerShadowSize"
-              spriteMetrics[schema[0]] = [] if !spriteMetrics[schema[0]]
-              spriteMetrics[schema[0]][speciesID] = value
-            when "Evolutions"
-              speciesEvolutions  = []
-              for i in 0...value.length/3
-                speciesEvolutions.push([value[i*3],value[i*3+1],value[i*3+2],false])
-              end
-              evolutions[speciesID] = speciesEvolutions
-            when "Name"
-              speciesNames[speciesID] = value
-            when "FormName"
-              formNames[speciesID] = value
-            when "Kind"
-              pokedexKinds[speciesID] = value
-            when "Pokedex"
-              pokedexEntries[speciesID] = value
-            when "InternalName"
-              constants += "#{value}=#{speciesID}\r\n"
-            else   # All other data
-              speciesData[speciesID][schema[0]] = value
+            move_array.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=>b [0] }
+            move_array.each { |arr| arr.pop }
+            contents[key] = move_array
+          when "TutorMoves", "EggMoves", "Abilities", "HiddenAbility", "Compatibility"
+            contents[key] = [contents[key]] if !contents[key].is_a?(Array)
+            contents[key].compact!
+          when "Evolutions"
+            evo_array = []
+            for i in 0...value.length / 3
+              evo_array.push([value[i * 3], value[i * 3 + 1], value[i * 3 + 2], false])
             end
+            contents[key] = evo_array
           end
         end
+        # Construct species hash
+        species_symbol = contents["InternalName"].to_sym
+        species_hash = {
+          :id                    => species_symbol,
+          :id_number             => species_number,
+          :name                  => contents["Name"],
+          :form_name             => contents["FormName"],
+          :category              => contents["Kind"],
+          :pokedex_entry         => contents["Pokedex"],
+          :type1                 => contents["Type1"],
+          :type2                 => contents["Type2"],
+          :base_stats            => contents["BaseStats"],
+          :evs                   => contents["EffortPoints"],
+          :base_exp              => contents["BaseEXP"],
+          :growth_rate           => contents["GrowthRate"],
+          :gender_rate           => contents["GenderRate"],
+          :catch_rate            => contents["Rareness"],
+          :happiness             => contents["Happiness"],
+          :moves                 => contents["Moves"],
+          :tutor_moves           => contents["TutorMoves"],
+          :egg_moves             => contents["EggMoves"],
+          :abilities             => contents["Abilities"],
+          :hidden_abilities      => contents["HiddenAbility"],
+          :wild_item_common      => contents["WildItemCommon"],
+          :wild_item_uncommon    => contents["WildItemUncommon"],
+          :wild_item_rare        => contents["WildItemRare"],
+          :egg_groups            => contents["Compatibility"],
+          :hatch_steps           => contents["StepsToHatch"],
+          :incense               => contents["Incense"],
+          :evolutions            => contents["Evolutions"],
+          :height                => contents["Height"],
+          :weight                => contents["Weight"],
+          :color                 => contents["Color"],
+          :shape                 => contents["Shape"],
+          :habitat               => contents["Habitat"],
+          :generation            => contents["Generation"],
+          :back_sprite_x         => contents["BattlerPlayerX"],
+          :back_sprite_y         => contents["BattlerPlayerY"],
+          :front_sprite_x        => contents["BattlerEnemyX"],
+          :front_sprite_y        => contents["BattlerEnemyY"],
+          :front_sprite_altitude => contents["BattlerAltitude"],
+          :shadow_x              => contents["BattlerShadowX"],
+          :shadow_size           => contents["BattlerShadowSize"]
+        }
+        # Add species' data to records
+        GameData::Species::DATA[species_number] = GameData::Species::DATA[species_symbol] = GameData::Species.new(species_hash)
+        species_names[species_number]           = species_hash[:name]
+        species_form_names[species_number]      = species_hash[:form_name]
+        species_categories[species_number]      = species_hash[:category]
+        species_pokedex_entries[species_number] = species_hash[:pokedex_entry]
       }
     }
-    # All data is compiled now, just need to save it.
-    raise _INTL("No Pokémon species are defined (PBS/pokemon.txt)") if speciesData.length==0
-    # Write all constants and some helpful code for PBSpecies.
-    count = speciesData.compact.length
-    code = "module PBSpecies\r\n#{constants}"
-    code += "def PBSpecies.getName(id)\r\n"
-    code += "id=getID(PBSpecies,id)\r\n"
-    code += "return pbGetMessage(MessageTypes::Species,id); end\r\n"
-    code += "def PBSpecies.getCount; return #{count}; end\r\n"
-    code += "def PBSpecies.maxValue; return #{maxValue}; end\r\n"
-    code += "end\r\n"
-    eval(code, TOPLEVEL_BINDING)
-    pbAddScript(code,"PBSpecies")
-    # Save main species data.
-    save_data(speciesData,"Data/species.dat")
-    # Save movesets data.
-    save_data(movesets,"Data/species_movesets.dat")
-    # Save egg moves data.
-    save_data(eggMoves,"Data/species_eggmoves.dat")
-    # Save regional dexes data.
-    save_data(regionalDexes,"Data/regional_dexes.dat")
-    # Save metrics data.
-    for i in 0...7
-      defaultValue = (i==SpeciesData::METRIC_SHADOW_SIZE) ? 2 : 0   # Shadow size 2, other metrics 0
-      for j in 0..maxValue
-        spriteMetrics[i] = [] if !spriteMetrics[i]
-        spriteMetrics[i][j] ||= defaultValue
-      end
-    end
-    save_data(spriteMetrics,"Data/species_metrics.dat")
-    # Evaluate evolution data (has to be done after all species are read).
-    for e in 0...evolutions.length
-      next if !evolutions[e]
-      evolutions[e].each_with_index do |evo,i|
-        FileLineData.setSection(i,"Evolutions","")
-        evo[0] = csvEnumField!(evo[0],PBSpecies,"Evolutions",i)   # Species
+    # Enumerate all evolution species and parameters (this couldn't be done earlier)
+    GameData::Species.each do |species|
+      FileLineData.setSection(species.id_number, "Evolutions", nil)   # For error reporting
+      Graphics.update if species.id_number % 200 == 0
+      pbSetWindowText(_INTL("Processing {1} evolution line {2}", FileLineData.file, species.id_number)) if species.id_number % 50 == 0
+      species.evolutions.each do |evo|
+        evo[0] = csvEnumField!(evo[0], :Species, "Evolutions", species.id_number)
         param_type = PBEvolution.getFunction(evo[1], "parameterType")
         if param_type
-          evo[2] = csvEnumField!(evo[2], param_type, "Evolutions", i)
+          evo[2] = csvEnumField!(evo[2], param_type, "Evolutions", species.id_number)
+        elsif evo[2] && !evo[2].empty?
+          evo[2] = csvInt!(evo[2])
         else
-          evo[2] = csvInt!(evo[2]) if evo[2] && evo[2] != ""
+          evo[2] = nil
         end
       end
     end
-    # Add prevolution data to all species as the first "evolution method".
-    for sp in 1..maxValue
-      preSpecies = -1
-      evoData = nil
-      # Check for another species that evolves into sp.
-      for f in 0...evolutions.length
-        next if !evolutions[f] || f==sp
-        evolutions[f].each do |evo|
-          next if evo[0]!=sp || evo[3]   # Evolved species isn't sp or is a prevolution
-          preSpecies = f   # f evolves into sp
-          evoData = evo
-          break
-        end
-        break if evoData
+    # Add prevolution "evolution" entry for all evolved species
+    all_evos = {}
+    GameData::Species.each do |species|   # Build a hash of prevolutions for each species
+      next if all_evos[species.species]
+      species.evolutions.each do |evo|
+        all_evos[evo[0]] = [species.species, evo[1], evo[2], true] if !all_evos[evo[0]]
       end
-      next if !evoData   # evoData[1]=method, evoData[2]=level - both are unused
-      # Found a species that evolves into e, record it as a prevolution.
-      evolutions[sp] = [] if !evolutions[sp]
-      evolutions[sp] = [[preSpecies,evoData[1],evoData[2],true]].concat(evolutions[sp])
     end
-    # Save evolutions data.
-    save_data(evolutions,"Data/species_evolutions.dat")
-    # Save all messages.
-    speciesNames.map! { |name| name || "????????" }
-    MessageTypes.setMessages(MessageTypes::Species,speciesNames)
-    MessageTypes.setMessages(MessageTypes::FormNames,formNames)
-    MessageTypes.setMessages(MessageTypes::Kinds,pokedexKinds)
-    MessageTypes.setMessages(MessageTypes::Entries,pokedexEntries)
+    GameData::Species.each do |species|   # Distribute prevolutions
+      species.evolutions.push(all_evos[species.species].clone) if all_evos[species.species]
+    end
+    # Save all data
+    GameData::Species.save
+    MessageTypes.setMessages(MessageTypes::Species, species_names)
+    MessageTypes.setMessages(MessageTypes::FormNames, species_form_names)
+    MessageTypes.setMessages(MessageTypes::Kinds, species_categories)
+    MessageTypes.setMessages(MessageTypes::Entries, species_pokedex_entries)
+    Graphics.update
   end
 
   #=============================================================================
   # Compile Pokémon forms
   #=============================================================================
   def compile_pokemon_forms
-    # Get schemas.
-    requiredValues = SpeciesData.requiredValues(true)
-    optionalValues = SpeciesData.optionalValues(true)
-    # Prepare arrays for compiled data.
-    speciesData    = pbLoadSpeciesData
-    movesets       = []
-    eggMoves       = []
-    spriteMetrics  = []
-    evolutions     = []
-    formNames      = []
-    pokedexKinds   = []
-    pokedexEntries = []
-    formToSpecies  = []   # Saved
-    speciesToForm  = []   # Only used in this method
-    for i in 1..PBSpecies.maxValue
-      formToSpecies[i] = [i]
-      speciesToForm[i] = i
+    species_names           = []
+    species_form_names      = []
+    species_categories      = []
+    species_pokedex_entries = []
+    used_forms = {}
+    # Get maximum species ID number
+    form_number = 0
+    GameData::Species.each do |species|
+      form_number = species.id_number if form_number < species.id_number
     end
-    # Prepare variables used to record scripted constants.
-    constants = ""
-    maxValue = PBSpecies.maxValue   # Highest species ID
-    # Read from PBS file.
-    File.open("PBS/pokemonforms.txt","rb") { |f|
+    # Read from PBS file
+    File.open("PBS/pokemonforms.txt", "rb") { |f|
       FileLineData.file = "PBS/pokemonforms.txt"   # For error reporting
       # Read a whole section's lines at once, then run through this code.
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      pbEachFileSection2(f) { |contents,sectionName|
-        # Split sectionName into a species number and form number.
-        splitSectionName = sectionName.split(/[-,\s]/)
-        if splitSectionName.length!=2
-          raise _INTL("Section name {1} is invalid (PBS/pokemonforms.txt). Expected syntax like [XXX,Y] (XXX=internal name, Y=form number).",sectionName)
+      schema = GameData::Species.schema(true)
+      pbEachFileSection2(f) { |contents, section_name|
+        FileLineData.setSection(section_name, "header", nil)   # For error reporting
+        # Split section_name into a species number and form number
+        split_section_name = section_name.split(/[-,\s]/)
+        if split_section_name.length != 2
+          raise _INTL("Section name {1} is invalid (PBS/pokemonforms.txt). Expected syntax like [XXX,Y] (XXX=internal name, Y=form number).", sectionName)
         end
-        baseSpeciesID = parseSpecies(splitSectionName[0])
-        form          = csvInt!(splitSectionName[1])
-        # Ensure this is a valid form and not a duplicate.
-        if form==0
-          raise _INTL("Form {1} is invalid (PBS/pokemonforms.txt). Form 0 data should be defined in \"PBS/pokemon.txt\".",sectionName)
+        species_symbol = csvEnumField!(split_section_name[0], :Species, nil, nil)
+        form           = csvPosInt!(split_section_name[1])
+        # Raise an error if a species is undefined, the form number is invalid or
+        # a species/form combo is used twice
+        if !GameData::Species.exists?(species_symbol)
+          raise _INTL("Species ID '{1}' is not defined in pokemon.txt.\r\n{2}", species_symbol, FileLineData.linereport)
+        elsif form == 0
+          raise _INTL("A form cannot be defined with a form number of 0.\r\n{1}", FileLineData.linereport)
+        elsif used_forms[species_symbol] && used_forms[species_symbol].include?(form)
+          raise _INTL("Form {1} for species ID {2} is defined twice.\r\n{3}", form, species_symbol, FileLineData.linereport)
         end
-        if formToSpecies[baseSpeciesID] && formToSpecies[baseSpeciesID][form]
-          raise _INTL("Form {1} is defined at least twice (PBS/pokemonforms.txt). It should only be defined once.",sectionName)
-        end
-        # Record new species number in formToSpecies.
-        speciesID = baseSpeciesID
-        if form>0
-          maxValue += 1
-          speciesID = maxValue
-          formToSpecies[baseSpeciesID] = [] if !formToSpecies[baseSpeciesID]
-          formToSpecies[baseSpeciesID][form] = speciesID
-          speciesToForm[speciesID] = baseSpeciesID
-        end
-        # Generate internal name for this form.
-        cName = getConstantName(PBSpecies,baseSpeciesID).to_s+"_"+form.to_s
-        constants += "#{cName}=#{speciesID}\r\n"
-        # Create array to store compiled data in.
-        speciesData[speciesID] = []
-        # Clone data from base form as a starting point.
-        speciesData[baseSpeciesID].each_with_index do |val,i|
-          speciesData[speciesID][i] = (val.is_a?(Array)) ? val.clone : val
-        end
-        # Copy Type1 into Type2 if if Type1 is defined but Type2 isn't. (Shouldn't
-        # inherit either of the base form's types if Type1 is defined for a form.)
-        if contents["Type1"] && contents["Type1"]!=""
-          if !contents["Type2"] || contents["Type2"]==""
-            contents["Type2"] = contents["Type1"].clone
+        used_forms[species_symbol] = [] if !used_forms[species_symbol]
+        used_forms[species_symbol].push(form)
+        form_number += 1
+        base_data = GameData::Species.get(species_symbol)
+        # Go through schema hash of compilable data and compile this section
+        for key in schema.keys
+          # Skip empty properties (none are required)
+          if contents[key].nil? || contents[key] == ""
+            contents[key] = nil
+            next
+          end
+          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
+          # Compile value for key
+          value = pbGetCsvRecord(contents[key], key, schema[key])
+          value = nil if value.is_a?(Array) && value.length == 0
+          contents[key] = value
+          # Sanitise data
+          case key
+          when "Height", "Weight"
+            # Convert height/weight to 1 decimal place and multiply by 10
+            value = (value * 10).round
+            if value <= 0
+              raise _INTL("Value for '{1}' can't be less than or close to 0 (section {2}, PBS/pokemonforms.txt)", key, section_name)
+            end
+            contents[key] = value
+          when "Moves"
+            move_array = []
+            for i in 0...value.length / 2
+              move_array.push([value[i * 2], value[i * 2 + 1], i])
+            end
+            move_array.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=>b [0] }
+            move_array.each { |arr| arr.pop }
+            contents[key] = move_array
+          when "TutorMoves", "EggMoves", "Abilities", "HiddenAbility", "Compatibility"
+            contents[key] = [contents[key]] if !contents[key].is_a?(Array)
+            contents[key].compact!
+          when "Evolutions"
+            evo_array = []
+            for i in 0...value.length / 3
+              param_type = PBEvolution.getFunction(value[i * 3 + 1], "parameterType")
+              param = value[i * 3 + 2]
+              if param_type
+                param = csvEnumField!(param, param_type, "Evolutions", section_name)
+              elsif param && !param.empty?
+                param = csvInt!(param)
+              else
+                param = nil
+              end
+              evo_array.push([value[i * 3], value[i * 3 + 1], param, false])
+            end
+            contents[key] = evo_array
           end
         end
-        # If any held item is defined for this form, clear default data for all
-        # three held items.
-        if (contents["WildItemCommon"] && contents["WildItemCommon"]!="") ||
-           (contents["WildItemUncommon"] && contents["WildItemUncommon"]!="") ||
-           (contents["WildItemRare"] && contents["WildItemRare"]!="")
-          speciesData[speciesID][SpeciesData::WILD_ITEM_COMMON]   = nil
-          speciesData[speciesID][SpeciesData::WILD_ITEM_UNCOMMON] = nil
-          speciesData[speciesID][SpeciesData::WILD_ITEM_RARE]     = nil
+        # Construct species hash
+        form_symbol = sprintf("%s_%d", species_symbol.to_s, form).to_sym
+        moves = contents["Moves"]
+        if !moves
+          moves = []
+          base_data.moves.each { |m| moves.push(m.clone) }
         end
-        # Go through hashes of compilable data and compile this section.
-        [requiredValues,optionalValues].each do |hash|
-          for key in hash.keys
-            FileLineData.setSection(speciesID,key,contents[key])   # For error reporting
-            next if hash[key][0]<0   # Property is not to be compiled; skip it
-            # Skip empty properties (none are required).
-            next if !contents[key] || contents[key]==""
-            # Compile value for key.
-            schema = hash[key]
-            value = pbGetCsvRecord(contents[key],key,schema)
-            # Modify value as required.
-            case key
-            when "Height", "Weight"
-              # Convert height/weight to 1 decimal place and multiply by 10.
-              value = (value*10).round
-              if value<=0
-                raise _INTL("Value for '{1}' can't be less than or close to 0 (section {2}, PBS/pokemonforms.txt)",key,speciesID)
-              end
-            end
-            # Add value to appropriate array for saving.
-            case key
-            when "Moves"
-              speciesMoves = []
-              for i in 0...value.length/2
-                speciesMoves.push([value[i*2],value[i*2+1],i])
-              end
-              speciesMoves.sort! { |a,b| (a[0]==b[0]) ? a[2]<=>b[2] : a[0]<=>b[0] }
-              for i in speciesMoves; i.pop; end
-              movesets[speciesID] = speciesMoves
-            when "EggMoves"
-              if value.is_a?(Array); eggMoves[speciesID] = value
-              else;                  eggMoves[speciesID] = [value]
-              end
-            when "BattlerPlayerX", "BattlerPlayerY",
-                 "BattlerEnemyX", "BattlerEnemyY",
-                 "BattlerAltitude", "BattlerShadowX", "BattlerShadowSize"
-              spriteMetrics[schema[0]] = [] if !spriteMetrics[schema[0]]
-              spriteMetrics[schema[0]][speciesID] = value
-            when "Evolutions"
-              speciesEvolutions  = []
-              for i in 0...value.length/3
-                speciesEvolutions.push([value[i*3],value[i*3+1],value[i*3+2],false])
-              end
-              evolutions[speciesID] = speciesEvolutions
-            when "FormName"
-              formNames[speciesID] = value
-            when "Kind"
-              pokedexKinds[speciesID] = value
-            when "Pokedex"
-              pokedexEntries[speciesID] = value
-            else   # All other data
-              speciesData[speciesID][schema[0]] = value
-            end
-          end
+        evolutions = contents["Evolutions"]
+        if !evolutions
+          evolutions = []
+          base_data.evolutions.each { |e| evolutions.push(e.clone) }
         end
+        species_hash = {
+          :id                    => form_symbol,
+          :id_number             => form_number,
+          :species               => species_symbol,
+          :form                  => form,
+          :name                  => base_data.real_name,
+          :form_name             => contents["FormName"],
+          :category              => contents["Kind"] || base_data.real_category,
+          :pokedex_entry         => contents["Pokedex"] || base_data.real_pokedex_entry,
+          :pokedex_form          => contents["PokedexForm"],
+          :type1                 => contents["Type1"] || base_data.type1,
+          :type2                 => contents["Type2"] || base_data.type2,
+          :base_stats            => contents["BaseStats"] || base_data.base_stats,
+          :evs                   => contents["EffortPoints"] || base_data.evs,
+          :base_exp              => contents["BaseEXP"] || base_data.base_exp,
+          :catch_rate            => contents["Rareness"] || base_data.catch_rate,
+          :happiness             => contents["Happiness"] || base_data.happiness,
+          :moves                 => moves,
+          :tutor_moves           => contents["TutorMoves"] || base_data.tutor_moves.clone,
+          :egg_moves             => contents["EggMoves"] || base_data.egg_moves.clone,
+          :abilities             => contents["Abilities"] || base_data.abilities.clone,
+          :hidden_abilities      => contents["HiddenAbility"] || base_data.hidden_abilities.clone,
+          :wild_item_common      => contents["WildItemCommon"] || base_data.wild_item_common,
+          :wild_item_uncommon    => contents["WildItemUncommon"] || base_data.wild_item_uncommon,
+          :wild_item_rare        => contents["WildItemRare"] || base_data.wild_item_rare,
+          :egg_groups            => contents["Compatibility"] || base_data.egg_groups.clone,
+          :hatch_steps           => contents["StepsToHatch"] || base_data.hatch_steps,
+          :evolutions            => evolutions,
+          :height                => contents["Height"] || base_data.height,
+          :weight                => contents["Weight"] || base_data.weight,
+          :color                 => contents["Color"] || base_data.color,
+          :shape                 => contents["Shape"] || base_data.shape,
+          :habitat               => contents["Habitat"] || base_data.habitat,
+          :generation            => contents["Generation"] || base_data.generation,
+          :mega_stone            => contents["MegaStone"],
+          :mega_move             => contents["MegaMove"],
+          :unmega_form           => contents["UnmegaForm"],
+          :mega_message          => contents["MegaMessage"],
+          :back_sprite_x         => contents["BattlerPlayerX"] || base_data.back_sprite_x,
+          :back_sprite_y         => contents["BattlerPlayerY"] || base_data.back_sprite_y,
+          :front_sprite_x        => contents["BattlerEnemyX"] || base_data.front_sprite_x,
+          :front_sprite_y        => contents["BattlerEnemyY"] || base_data.front_sprite_y,
+          :front_sprite_altitude => contents["BattlerAltitude"] || base_data.front_sprite_altitude,
+          :shadow_x              => contents["BattlerShadowX"] || base_data.shadow_x,
+          :shadow_size           => contents["BattlerShadowSize"] || base_data.shadow_size
+        }
+        # If form is single-typed, ensure it remains so if base species is dual-typed
+        species_hash[:type2] = contents["Type1"] if contents["Type1"] && !contents["Type2"]
+        # If form has any wild items, ensure none are inherited from base species
+        if contents["WildItemCommon"] || contents["WildItemUncommon"] || contents["WildItemRare"]
+          species_hash[:wild_item_common]   = contents["WildItemCommon"]
+          species_hash[:wild_item_uncommon] = contents["WildItemUncommon"]
+          species_hash[:wild_item_rare]     = contents["WildItemRare"]
+        end
+        # Add form's data to records
+        GameData::Species::DATA[form_number] = GameData::Species::DATA[form_symbol] = GameData::Species.new(species_hash)
+        species_names[form_number]           = species_hash[:name]
+        species_form_names[form_number]      = species_hash[:form_name]
+        species_categories[form_number]      = species_hash[:category]
+        species_pokedex_entries[form_number] = species_hash[:pokedex_entry]
       }
     }
-    # All data is compiled now, just need to save it.
-    # Write all constants and some helpful code for PBSpecies.
-    code = "module PBSpecies\r\n#{constants}"
-    code += "def PBSpecies.maxValueF; return #{maxValue}; end\r\n"
-    code += "end\r\n"
-    eval(code, TOPLEVEL_BINDING)
-    pbAddScript(code,"PBSpecies")
-    # Save main species data.
-    save_data(speciesData,"Data/species.dat")
-    # Save conversions of form to species data.
-    save_data(formToSpecies,"Data/form2species.dat")
-    # Inherit base form moveset.
-    newMovesets = pbLoadMovesetsData
-    append_to_base_form_data(PBSpecies.maxValue+1,maxValue,newMovesets,movesets,speciesToForm,true)
-    save_data(newMovesets,"Data/species_movesets.dat")
-    $PokemonTemp.speciesMovesets = nil if $PokemonTemp
-    # Inherit base form egg moves.
-    newEggMoves = pbLoadEggMovesData
-    append_to_base_form_data(PBSpecies.maxValue+1,maxValue,newEggMoves,eggMoves,speciesToForm,false)
-    save_data(newEggMoves,"Data/species_eggmoves.dat")
-    $PokemonTemp.speciesEggMoves = nil if $PokemonTemp
-    # Inherit base form metrics data.
-    newSpriteMetrics = pbLoadSpeciesMetrics
-    for i in 0...7
-      defaultValue = (i==SpeciesData::METRIC_SHADOW_SIZE) ? 2 : 0   # Shadow size 2, other metrics 0
-      append_to_base_form_data(PBSpecies.maxValue+1,maxValue,newSpriteMetrics[i],
-         spriteMetrics[i] || [],speciesToForm,false,defaultValue)
-    end
-    save_data(newSpriteMetrics,"Data/species_metrics.dat")
-    # Evaluate evolution data (has to be done after all species are read).
-    for e in 0...evolutions.length
-      next if !evolutions[e]
-      evolutions[e].each_with_index do |evo,i|
-        FileLineData.setSection(i,"Evolutions","")
-        evo[0] = csvEnumField!(evo[0],PBSpecies,"Evolutions",i)   # Species
-        param_type = PBEvolution.getFunction(evo[1], "parameterType")
-        if param_type
-          evo[2] = csvEnumField!(evo[2], param_type, "Evolutions", i)
-        else
-          evo[2] = csvPosInt!(evo[2]) if evo[2] && evo[2] != ""
-        end
+    # Add prevolution "evolution" entry for all evolved forms that define their
+    # own evolution methods (and thus won't have a prevolution listed already)
+    all_evos = {}
+    GameData::Species.each do |species|   # Build a hash of prevolutions for each species
+      next if all_evos[species.species]
+      species.evolutions.each do |evo|
+        all_evos[evo[0]] = [species.species, evo[1], evo[2], true] if !evo[3] && !all_evos[evo[0]]
       end
     end
-    # Inherit base form evolution methods.
-    newEvolutions = pbLoadEvolutionsData
-    append_to_base_form_data(PBSpecies.maxValue+1,maxValue,newEvolutions,evolutions,speciesToForm,true)
-    # Add prevolution data to all species as the first "evolution method".
-    for i in (PBSpecies.maxValue+1)..maxValue
-      baseSpecies = speciesToForm[i]
-      preSpecies = -1
-      evoData = nil
-      # Check for another species that evolves into baseSpecies.
-      for f in 0...newEvolutions.length
-        next if !newEvolutions[f] || speciesToForm[f]==baseSpecies
-        newEvolutions[f].each do |evo|
-          next if evo[0]!=baseSpecies || evo[3]   # Evolved species isn't baseSpecies or is a prevolution
-          preSpecies = speciesToForm[f]   # f evolves into baseSpecies
-          evoData = evo
-          break
-        end
-        break if evoData
-      end
-      next if !evoData   # evoData[1]=method, evoData[2]=level - both are unused
-      # Found a species that evolves into e, record it as a prevolution.
-      if newEvolutions[i]
-        newEvolutions[i] = [[preSpecies,evoData[1],evoData[2],true]].concat(newEvolutions[i])
-      else
-        newEvolutions[i] = [[preSpecies,evoData[1],evoData[2],true]]
-      end
+    GameData::Species.each do |species|   # Distribute prevolutions
+      next if species.form == 0   # Looking at alternate forms only
+      next if species.evolutions.any? { |evo| evo[3] }   # Already has prevo listed
+      species.evolutions.push(all_evos[species.species].clone) if all_evos[species.species]
     end
-    # Save evolutions data.
-    save_data(newEvolutions,"Data/species_evolutions.dat")
-    $PokemonTemp.evolutionsData = nil if $PokemonTemp
-    # Save all messages.
-    MessageTypes.addMessages(MessageTypes::FormNames,formNames)
-    MessageTypes.addMessages(MessageTypes::Kinds,pokedexKinds)
-    MessageTypes.addMessages(MessageTypes::Entries,pokedexEntries)
-  end
-
-  def append_to_base_form_data(idxStart,idxEnd,baseData,extraData,speciesToForm,clone=false,defaultValue=nil)
-    for i in idxStart..idxEnd
-      if extraData[i]
-        baseData[i] = extraData[i]
-      else
-        species = speciesToForm[i]
-        if baseData[species]
-          if clone
-            baseData[i] = []
-            baseData[species].each { |datum| baseData[i].push(datum.clone) }
-          elsif baseData[species].is_a?(Array)
-            baseData[i] = baseData[species].clone
-          else
-            baseData[i] = baseData[species]
-          end
-        else
-          baseData[i] = defaultValue
-        end
-      end
-    end
+    # Save all data
+    GameData::Species.save
+    MessageTypes.addMessages(MessageTypes::Species, species_names)
+    MessageTypes.addMessages(MessageTypes::FormNames, species_form_names)
+    MessageTypes.addMessages(MessageTypes::Kinds, species_categories)
+    MessageTypes.addMessages(MessageTypes::Entries, species_pokedex_entries)
+    Graphics.update
   end
 
   #=============================================================================
   # Compile TM/TM/Move Tutor compatibilities
   #=============================================================================
   def compile_move_compatibilities
-    lineno = 1
-    havesection = false
-    sectionname = nil
-    sections    = {}
-    if safeExists?("PBS/tm.txt")
-      f = File.open("PBS/tm.txt","rb")
-      FileLineData.file = "PBS/tm.txt"
-      f.each_line { |line|
-        if lineno==1 && line[0]==0xEF && line[1]==0xBB && line[2]==0xBF
-          line = line[3,line.length-3]
+    return if !safeExists?("PBS/tm.txt")
+    species_hash = {}
+    move = nil
+    pbCompilerEachCommentedLine("PBS/tm.txt") { |line, line_no|
+      Graphics.update if line_no % 50 == 0
+      if line[/^\s*\[\s*(\S+)\s*\]\s*$/]
+        move = parseMove($~[1])
+        pbSetWindowText(_INTL("Processing {1} section [{2}]", FileLineData.file, move))
+      else
+        raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport) if !move
+        species_list = line.split(",")
+        for species in species_list
+          next if !species || species.empty?
+          s = parseSpecies(species)
+          species_hash[s] = [] if !species_hash[s]
+          species_hash[s].push(move)
         end
-        FileLineData.setLine(line,lineno)
-        if !line[/^\#/] && !line[/^\s*$/]
-          if line[/^\s*\[\s*(.*)\s*\]\s*$/]
-            sectionname = parseMove($~[1])
-            if sections[sectionname]
-              raise _INTL("TM section [{1}] is defined twice.\r\n{2}",sectionname,FileLineData.linereport)
-            end
-            sections[sectionname] = []
-            havesection = true
-          else
-            if sectionname==nil
-              raise _INTL("Expected a section at the beginning of the file. This error may also occur if the file was not saved in UTF-8.\r\n{1}",
-                 FileLineData.linereport)
-            end
-            specieslist = line.sub(/\s+$/,"").split(",")
-            for species in specieslist
-              next if !species || species==""
-              sec = sections[sectionname]
-              sec[sec.length] = parseSpecies(species)
-            end
-          end
-        end
-        lineno += 1
-        Graphics.update if lineno%50==0
-        Win32API.SetWindowText(_INTL("Processing {1} line {2}",FileLineData.file,lineno)) if lineno%50==0
-      }
-      f.close
+      end
+    }
+    GameData::Species.each do |species_data|
+      next if !species_hash[species_data.id]
+      species_hash[species_data.id].sort! { |a, b| a.to_s <=> b.to_s }
+      species_hash[species_data.id].each { |move| species_data.tutor_moves.push(move) }
     end
-    save_data(sections,"Data/tm.dat")
+    GameData::Species.save
+    pbSavePokemonData
+    pbSavePokemonFormsData
+    begin
+      File.delete("PBS/tm.txt")
+    rescue SystemCallError
+    end
   end
 
   #=============================================================================
   # Compile Shadow movesets
   #=============================================================================
   def compile_shadow_movesets
-    sections = []
+    sections = {}
     if File.exists?("PBS/shadowmoves.txt")
-      pbCompilerEachCommentedLine("PBS/shadowmoves.txt") { |line,_lineno|
-        if line[ /^\s*(\w+)\s*=\s*(.*)$/ ]
+      pbCompilerEachCommentedLine("PBS/shadowmoves.txt") { |line, _line_no|
+        if line[/^\s*(\w+)\s*=\s*(.*)$/]
           key   = $1
           value = $2
           value = value.split(",")
           species = parseSpecies(key)
           moves = []
-          for i in 0...[Pokemon::MAX_MOVES,value.length].min
+          for i in 0...[Pokemon::MAX_MOVES, value.length].min
             move = parseMove(value[i], true)
             moves.push(move) if move
           end
           moves.compact!
-          sections[species] = moves if moves.length>0
+          sections[species] = moves if moves.length > 0
         end
       }
     end
-    save_data(sections,"Data/shadow_movesets.dat")
+    save_data(sections, "Data/shadow_movesets.dat")
+  end
+
+  #=============================================================================
+  # Compile Regional Dexes
+  #=============================================================================
+  def compile_regional_dexes
+    dex_lists = []
+    section = nil
+    pbCompilerEachPreppedLine("PBS/regionaldexes.txt") { |line, line_no|
+      Graphics.update if line_no % 200 == 0
+      if line[/^\s*\[\s*(\d+)\s*\]\s*$/]
+        section = $~[1].to_i
+        if dex_lists[section]
+          raise _INTL("Dex list number {1} is defined at least twice.\r\n{2}", section, FileLineData.linereport)
+        end
+        dex_lists[section] = []
+        pbSetWindowText(_INTL("Processing {1} section [{2}]", FileLineData.file, section))
+      else
+        raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport) if !section
+        species_list = line.split(",")
+        for species in species_list
+          next if !species || species.empty?
+          s = parseSpecies(species)
+          dex_lists[section].push(s)
+        end
+      end
+    }
+    # Check for duplicate species in a Regional Dex
+    dex_lists.each_with_index do |list, index|
+      unique_list = list.uniq
+      next if list == unique_list
+      list.each_with_index do |s, i|
+        next if unique_list[i] == s
+        raise _INTL("Dex list number {1} has species {2} listed twice.\r\n{3}", index, s, FileLineData.linereport)
+      end
+    end
+    # Save all data
+    save_data(dex_lists, "Data/regional_dexes.dat")
+    Graphics.update
   end
 
   #=============================================================================
@@ -1216,42 +1113,45 @@ module Compiler
   # Compile trainer types
   #=============================================================================
   def compile_trainer_types
-    records = []
-    trainernames = []
-    maxValue = 0
-    pbCompilerEachPreppedLine("PBS/trainertypes.txt") { |line,lineno|
-      record=pbGetCsvRecord(line,lineno,[0,"unsUSSSeUS",   # ID can be 0
-         nil,nil,nil,nil,nil,nil,nil,{
-         "" => 2,
-         "Male" => 0,"M" => 0,"0" => 0,
-         "Female" => 1,"F" => 1,"1" => 1,
-         "Mixed" => 2,"X" => 2,"2" => 2
-         },nil,nil]
+    GameData::TrainerType::DATA.clear
+    tr_type_names = []
+    # Read each line of trainertypes.txt at a time and compile it into a trainer type
+    pbCompilerEachCommentedLine("PBS/trainertypes.txt") { |line, line_no|
+      line = pbGetCsvRecord(line, line_no, [0, "unsUSSSeUS",
+        nil, nil, nil, nil, nil, nil, nil, {
+        "Male"   => 0, "M" => 0, "0" => 0,
+        "Female" => 1, "F" => 1, "1" => 1,
+        "Mixed"  => 2, "X" => 2, "2" => 2, "" => 2
+        }, nil, nil]
       )
-      if records[record[0]]
-        raise _INTL("Two trainer types ({1} and {2}) have the same ID ({3}), which is not allowed.\r\n{4}",
-           records[record[0]][1],record[1],record[0],FileLineData.linereport)
+      type_number = line[0]
+      type_symbol = line[1].to_sym
+      if GameData::TrainerType::DATA[type_number]
+        raise _INTL("Trainer type ID number '{1}' is used twice.\r\n{2}", type_number, FileLineData.linereport)
+      elsif GameData::TrainerType::DATA[type_symbol]
+        raise _INTL("Trainer type ID '{1}' is used twice.\r\n{2}", type_symbol, FileLineData.linereport)
       end
-      trainernames[record[0]] = record[2]
-      records[record[0]]      = record
-      maxValue = [maxValue,record[0]].max
+      # Construct trainer type hash
+      type_hash = {
+        :id_number   => type_number,
+        :id          => type_symbol,
+        :name        => line[2],
+        :base_money  => line[3],
+        :battle_BGM  => line[4],
+        :victory_ME  => line[5],
+        :intro_ME    => line[6],
+        :gender      => line[7],
+        :skill_level => line[8],
+        :skill_code  => line[9]
+      }
+      # Add trainer type's data to records
+      GameData::TrainerType::DATA[type_number] = GameData::TrainerType::DATA[type_symbol] = GameData::TrainerType.new(type_hash)
+      tr_type_names[type_number] = type_hash[:name]
     }
-    count = records.compact.length
-    MessageTypes.setMessages(MessageTypes::TrainerTypes,trainernames)
-    code = "class PBTrainers\r\n"
-    for rec in records
-      next if !rec
-      code += "#{rec[1]}=#{rec[0]}\r\n"
-    end
-    code += "def self.getName(id)\r\n"
-    code += "id=getID(PBTrainers,id)\r\n"
-    code += "return pbGetMessage(MessageTypes::TrainerTypes,id); end\r\n"
-    code += "def self.getCount; return #{count}; end\r\n"
-    code += "def self.maxValue; return #{maxValue}; end\r\n"
-    code += "end\r\n"
-    eval(code, TOPLEVEL_BINDING)
-    pbAddScript(code,"PBTrainers")
-    save_data(records,"Data/trainer_types.dat")
+    # Save all data
+    GameData::TrainerType.save
+    MessageTypes.setMessages(MessageTypes::TrainerTypes, tr_type_names)
+    Graphics.update
   end
 
   #=============================================================================
@@ -1276,7 +1176,7 @@ module Compiler
         if pokemonindex==-1
           raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}",FileLineData.linereport)
         end
-        section = pbGetCsvRecord($~[1],lineno,[0,"esU",PBTrainers])
+        section = pbGetCsvRecord($~[1],lineno,[0,"esU",:TrainerType])
         trainerindex += 1
         trainertype = section[0]
         trainername = section[1]
@@ -1374,7 +1274,7 @@ module Compiler
         oldcompilerline += 1
         case oldcompilerline
         when 1   # Trainer type
-          record = pbGetCsvRecord(line,lineno,[0,"e",PBTrainers])
+          record = pbGetCsvRecord(line,lineno,[0,"e",:TrainerType])
           trainers[trainerindex][0] = record
         when 2   # Trainer name, version number
           record = pbGetCsvRecord(line,lineno,[0,"sU"])
@@ -1394,7 +1294,7 @@ module Compiler
           pokemonindex += 1
           trainers[trainerindex][3][pokemonindex] = []
           record = pbGetCsvRecord(line,lineno,
-             [0,"evEEEEEUEUBEUUSBU",PBSpecies,nil,:Item,:Move,:Move,:Move,:Move,
+             [0,"evEEEEEUEUBEUUSBU",Species,nil,:Item,:Move,:Move,:Move,:Move,
                                     nil,{"M"=>0,"m"=>0,"Male"=>0,"male"=>0,
                                     "0"=>0,"F"=>1,"f"=>1,"Female"=>1,"female"=>1,
                                     "1"=>1},nil,nil,PBNatures,nil,nil,nil,nil,nil])
@@ -1458,7 +1358,7 @@ module Compiler
   def compile_battle_tower_trainers(filename)
     sections = []
     requiredtypes = {
-       "Type"          => [0, "e",PBTrainers],
+       "Type"          => [0, "e", :TrainerType],
        "Name"          => [1, "s"],
        "BeginSpeech"   => [2, "s"],
        "EndSpeechWin"  => [3, "s"],

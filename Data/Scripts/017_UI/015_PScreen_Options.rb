@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class PokemonSystem
   attr_accessor :textspeed
   attr_accessor :battlescene
@@ -6,7 +9,6 @@ class PokemonSystem
   attr_writer   :textskin
   attr_accessor :font
   attr_accessor :screensize
-  attr_writer   :border
   attr_writer   :language
   attr_writer   :runstyle
   attr_writer   :bgmvolume
@@ -20,8 +22,7 @@ class PokemonSystem
     @frame       = 0     # Default window frame (see also $TextFrames)
     @textskin    = 0     # Speech frame
     @font        = 0     # Font (see also $VersionStyles)
-    @screensize  = (SCREEN_ZOOM * 2).floor - 1   # 0=half size, 1=full size, 2=full-and-a-half size, 3=double size
-    @border      = 0     # Screen border (0=off, 1=on)
+    @screensize  = (SCREEN_SCALE * 2).floor - 1   # 0=half size, 1=full size, 2=full-and-a-half size, 3=double size
     @language    = 0     # Language (see also LANGUAGES in script PokemonSystem)
     @runstyle    = 0     # Run key functionality (0=hold to run, 1=toggle auto-run)
     @bgmvolume   = 100   # Volume of background music and ME
@@ -30,7 +31,6 @@ class PokemonSystem
   end
 
   def textskin;  return @textskin || 0;    end
-  def border;    return @border || 0;      end
   def language;  return @language || 0;    end
   def runstyle;  return @runstyle || 0;    end
   def bgmvolume; return @bgmvolume || 100; end
@@ -38,8 +38,6 @@ class PokemonSystem
   def textinput; return @textinput || 0;   end
   def tilemap;   return MAP_VIEW_MODE;     end
 end
-
-
 
 #===============================================================================
 # Stores game options
@@ -109,15 +107,16 @@ $VersionStyles = [
 
 def pbSettingToTextSpeed(speed)
   case speed
-  when 0; return 2
-  when 1; return 1
-  when 2; return -2
+  when 0 then return 2
+  when 1 then return 1
+  when 2 then return -2
   end
   return MessageConfig::TextSpeed || 1
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 module MessageConfig
   def self.pbDefaultSystemFrame
     begin
@@ -156,8 +155,6 @@ module MessageConfig
   end
 end
 
-
-
 #===============================================================================
 #
 #===============================================================================
@@ -171,8 +168,9 @@ module PropertyMixin
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class EnumOption
   include PropertyMixin
   attr_reader :values
@@ -198,8 +196,9 @@ class EnumOption
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class EnumOption2
   include PropertyMixin
   attr_reader :values
@@ -225,8 +224,9 @@ class EnumOption2
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class NumberOption
   include PropertyMixin
   attr_reader :name
@@ -256,8 +256,9 @@ class NumberOption
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class SliderOption
   include PropertyMixin
   attr_reader :name
@@ -287,8 +288,6 @@ class SliderOption
     return index-@optstart
   end
 end
-
-
 
 #===============================================================================
 # Main options list
@@ -406,8 +405,6 @@ class Window_PokemonOption < Window_DrawableCommand
   end
 end
 
-
-
 #===============================================================================
 # Options main screen
 #===============================================================================
@@ -509,24 +506,11 @@ class PokemonOption_Scene
          proc { |value| $PokemonSystem.textinput = value }
        ),
        EnumOption.new(_INTL("Screen Size"),[_INTL("S"),_INTL("M"),_INTL("L"),_INTL("XL"),_INTL("Full")],
-         proc { [$PokemonSystem.screensize,4].min },
+         proc { [$PokemonSystem.screensize, 4].min },
          proc { |value|
-           oldvalue = $PokemonSystem.screensize
-           $PokemonSystem.screensize = value
-           if value!=oldvalue
+           if $PokemonSystem.screensize != value
+             $PokemonSystem.screensize = value
              pbSetResizeFactor($PokemonSystem.screensize)
-             ObjectSpace.each_object(TilemapLoader) { |o| o.updateClass if !o.disposed? }
-           end
-         }
-       ),
-       EnumOption.new(_INTL("Screen Border"),[_INTL("Off"),_INTL("On")],
-         proc { $PokemonSystem.border },
-         proc { |value|
-           oldvalue = $PokemonSystem.border
-           $PokemonSystem.border = value
-           if value!=oldvalue
-             pbSetResizeFactor($PokemonSystem.screensize)
-             ObjectSpace.each_object(TilemapLoader) { |o| o.updateClass if !o.disposed? }
            end
          }
        )
@@ -602,8 +586,6 @@ class PokemonOption_Scene
     @viewport.dispose
   end
 end
-
-
 
 #===============================================================================
 #

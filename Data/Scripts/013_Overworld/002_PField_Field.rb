@@ -565,14 +565,26 @@ def pbFacingTileRegular(direction=nil,event=nil)
   y = event.y
   direction = event.direction if !direction
   case direction
-  when 1; y += 1; x -= 1
-  when 2; y += 1
-  when 3; y += 1; x += 1
-  when 4; x -= 1
-  when 6; x += 1
-  when 7; y -= 1; x -= 1
-  when 8; y -= 1
-  when 9; y -= 1; x += 1
+  when 1
+    y += 1
+    x -= 1
+  when 2
+    y += 1
+  when 3
+    y += 1
+    x += 1
+  when 4
+    x -= 1
+  when 6
+    x += 1
+  when 7
+    y -= 1
+    x -= 1
+  when 8
+    y -= 1
+  when 9
+    y -= 1
+    x += 1
   end
   return [$game_map.map_id,x,y]
 end
@@ -618,195 +630,6 @@ def pbFacingTerrainTag(event=nil,dir=nil)
   return 0 if !event
   facing = pbFacingTile(dir,event)
   return $game_map.terrain_tag(facing[1],facing[2])
-end
-
-
-
-#===============================================================================
-# Events
-#===============================================================================
-class Game_Event
-  def cooledDown?(seconds)
-    return true if expired?(seconds) && tsOff?("A")
-    self.need_refresh = true
-    return false
-  end
-
-  def cooledDownDays?(days)
-    return true if expiredDays?(days) && tsOff?("A")
-    self.need_refresh = true
-    return false
-  end
-end
-
-
-
-module InterpreterFieldMixin
-  # Used in boulder events. Allows an event to be pushed. To be used in
-  # a script event command.
-  def pbPushThisEvent
-    event = get_character(0)
-    oldx  = event.x
-    oldy  = event.y
-    # Apply strict version of passable, which makes impassable
-    # tiles that are passable only from certain directions
-    return if !event.passableStrict?(event.x,event.y,$game_player.direction)
-    case $game_player.direction
-    when 2; event.move_down  # down
-    when 4; event.move_left  # left
-    when 6; event.move_right # right
-    when 8; event.move_up    # up
-    end
-    $PokemonMap.addMovedEvent(@event_id) if $PokemonMap
-    if oldx!=event.x || oldy!=event.y
-      $game_player.lock
-      loop do
-        Graphics.update
-        Input.update
-        pbUpdateSceneMap
-        break if !event.moving?
-      end
-      $game_player.unlock
-    end
-  end
-
-  def pbPushThisBoulder
-    pbPushThisEvent if $PokemonMap.strengthUsed
-    return true
-  end
-
-  def pbSmashThisEvent
-    event = get_character(0)
-    pbSmashEvent(event) if event
-    @index += 1
-    return true
-  end
-
-  def pbTrainerIntro(symbol)
-    return if $DEBUG && !pbTrainerTypeCheck(symbol)
-    trtype = PBTrainers.const_get(symbol)
-    pbGlobalLock
-    pbPlayTrainerIntroME(trtype)
-    return true
-  end
-
-  def pbTrainerEnd
-    pbGlobalUnlock
-    e = get_character(0)
-    e.erase_route if e
-  end
-
-  def pbParams
-    (@parameters) ? @parameters : @params
-  end
-
-  def pbGetPokemon(id)
-    return $Trainer.party[pbGet(id)]
-  end
-
-  def pbSetEventTime(*arg)
-    $PokemonGlobal.eventvars = {} if !$PokemonGlobal.eventvars
-    time = pbGetTimeNow
-    time = time.to_i
-    pbSetSelfSwitch(@event_id,"A",true)
-    $PokemonGlobal.eventvars[[@map_id,@event_id]]=time
-    for otherevt in arg
-      pbSetSelfSwitch(otherevt,"A",true)
-      $PokemonGlobal.eventvars[[@map_id,otherevt]]=time
-    end
-  end
-
-  def getVariable(*arg)
-    if arg.length==0
-      return nil if !$PokemonGlobal.eventvars
-      return $PokemonGlobal.eventvars[[@map_id,@event_id]]
-    else
-      return $game_variables[arg[0]]
-    end
-  end
-
-  def setVariable(*arg)
-    if arg.length==1
-      $PokemonGlobal.eventvars = {} if !$PokemonGlobal.eventvars
-      $PokemonGlobal.eventvars[[@map_id,@event_id]]=arg[0]
-    else
-      $game_variables[arg[0]] = arg[1]
-      $game_map.need_refresh = true
-    end
-  end
-
-  def tsOff?(c)
-    get_character(0).tsOff?(c)
-  end
-
-  def tsOn?(c)
-    get_character(0).tsOn?(c)
-  end
-
-  alias isTempSwitchOn? tsOn?
-  alias isTempSwitchOff? tsOff?
-
-  def setTempSwitchOn(c)
-    get_character(0).setTempSwitchOn(c)
-  end
-
-  def setTempSwitchOff(c)
-    get_character(0).setTempSwitchOff(c)
-  end
-
-  # Must use this approach to share the methods because the methods already
-  # defined in a class override those defined in an included module
-  CustomEventCommands=<<_END_
-
-  def command_352
-    scene = PokemonSave_Scene.new
-    screen = PokemonSaveScreen.new(scene)
-    screen.pbSaveScreen
-    return true
-  end
-
-  def command_125
-    value = operate_value(pbParams[0], pbParams[1], pbParams[2])
-    $Trainer.money += value
-    return true
-  end
-
-  def command_132
-    ($PokemonGlobal.nextBattleBGM = pbParams[0]) ? pbParams[0].clone : nil
-    return true
-  end
-
-  def command_133
-    ($PokemonGlobal.nextBattleME = pbParams[0]) ? pbParams[0].clone : nil
-    return true
-  end
-
-  def command_353
-    pbBGMFade(1.0)
-    pbBGSFade(1.0)
-    pbFadeOutIn { pbStartOver(true) }
-  end
-
-  def command_314
-    pbHealAll if pbParams[0]==0
-    return true
-  end
-
-_END_
-end
-
-
-
-class Interpreter
-  include InterpreterFieldMixin
-  eval(InterpreterFieldMixin::CustomEventCommands)
-end
-
-
-
-class Game_Interpreter
-  include InterpreterFieldMixin
-  eval(InterpreterFieldMixin::CustomEventCommands)
 end
 
 
@@ -1098,10 +921,10 @@ def pbJumpToward(dist=1,playSound=false,cancelSurf=false)
   x = $game_player.x
   y = $game_player.y
   case $game_player.direction
-  when 2; $game_player.jump(0,dist)    # down
-  when 4; $game_player.jump(-dist,0)   # left
-  when 6; $game_player.jump(dist,0)    # right
-  when 8; $game_player.jump(0,-dist)   # up
+  when 2 then $game_player.jump(0, dist)    # down
+  when 4 then $game_player.jump(-dist, 0)   # left
+  when 6 then $game_player.jump(dist, 0)    # right
+  when 8 then $game_player.jump(0, -dist)   # up
   end
   if $game_player.x!=x || $game_player.y!=y
     pbSEPlay("Player jump") if playSound
@@ -1276,10 +1099,18 @@ def pbSetEscapePoint
   xco = $game_player.x
   yco = $game_player.y
   case $game_player.direction
-  when 2; yco -= 1; dir = 8   # Down
-  when 4; xco += 1; dir = 6   # Left
-  when 6; xco -= 1; dir = 4   # Right
-  when 8; yco += 1; dir = 2   # Up
+  when 2   # Down
+    yco -= 1
+    dir = 8
+  when 4   # Left
+    xco += 1
+    dir = 6
+  when 6   # Right
+    xco -= 1
+    dir = 4
+  when 8   # Up
+    yco += 1
+    dir = 2
   end
   $PokemonGlobal.escapePoint = [$game_map.map_id,xco,yco,dir]
 end
@@ -1300,18 +1131,18 @@ end
 #===============================================================================
 # Partner trainer
 #===============================================================================
-def pbRegisterPartner(trainerid,trainername,partyid=0)
-  trainerid = getID(PBTrainers,trainerid)
+def pbRegisterPartner(tr_type, tr_name, tr_id = 0)
+  tr_type = GameData::TrainerType.get(tr_type).id
   pbCancelVehicles
-  trainer = pbLoadTrainer(trainerid,trainername,partyid)
-  Events.onTrainerPartyLoad.trigger(nil,trainer)
-  trainerobject = PokeBattle_Trainer.new(_INTL(trainer[0].name),trainerid)
+  trainer = pbLoadTrainer(tr_type, tr_name, tr_id)
+  Events.onTrainerPartyLoad.trigger(nil, trainer)
+  trainerobject = PokeBattle_Trainer.new(trainer[0].name, tr_type)
   trainerobject.setForeignID($Trainer)
   for i in trainer[2]
     i.owner = Pokemon::Owner.new_from_trainer(trainerobject)
     i.calcStats
   end
-  $PokemonGlobal.partner = [trainerid,trainerobject.name,trainerobject.id,trainer[2]]
+  $PokemonGlobal.partner = [tr_type, trainerobject.name, trainerobject.id, trainer[2]]
 end
 
 def pbDeregisterPartner

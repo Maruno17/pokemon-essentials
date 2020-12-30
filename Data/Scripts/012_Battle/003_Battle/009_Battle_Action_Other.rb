@@ -73,7 +73,7 @@ class PokeBattle_Battle
       end
     end
     # NOTE: Add your own Mega objects for particular NPC trainers here.
-#    if isConst?(pbGetOwnerFromBattlerIndex(idxBattler).trainertype,PBTrainers,:BUGCATCHER)
+#    if pbGetOwnerFromBattlerIndex(idxBattler).trainertype == :BUGCATCHER
 #      return _INTL("Mega Net")
 #    end
     return _INTL("Mega Ring")
@@ -148,7 +148,7 @@ class PokeBattle_Battle
     pbCommonAnimation("MegaEvolution2",battler)
     megaName = battler.pokemon.megaName
     if !megaName || megaName==""
-      megaName = _INTL("Mega {1}",PBSpecies.getName(battler.pokemon.species))
+      megaName = _INTL("Mega {1}", battler.pokemon.speciesName)
     end
     pbDisplay(_INTL("{1} has Mega Evolved into {2}!",battler.pbThis,megaName))
     side  = battler.idxOwnSide

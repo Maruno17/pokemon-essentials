@@ -410,28 +410,28 @@ class PokeBattle_SafariZone
   #=============================================================================
   # Safari battle-specific methods
   #=============================================================================
-  def pbEscapeRate(rareness)
-    return 125 if rareness<=45   # Escape factor 9 (45%)
-    return 100 if rareness<=60   # Escape factor 7 (35%)
-    return 75 if rareness<=120   # Escape factor 5 (25%)
-    return 50 if rareness<=250   # Escape factor 3 (15%)
-    return 25                    # Escape factor 2 (10%)
+  def pbEscapeRate(catch_rate)
+    return 125 if catch_rate <= 45   # Escape factor 9 (45%)
+    return 100 if catch_rate <= 60   # Escape factor 7 (35%)
+    return 75 if catch_rate <= 120   # Escape factor 5 (25%)
+    return 50 if catch_rate <= 250   # Escape factor 3 (15%)
+    return 25                        # Escape factor 2 (10%)
   end
 
   def pbStartBattle
     begin
-      wildpoke = @party2[0]
-      self.pbPlayer.seen[wildpoke.species] = true
-      pbSeenForm(wildpoke)
+      pkmn = @party2[0]
+      self.pbPlayer.seen[pkmn.species] = true
+      pbSeenForm(pkmn)
       @scene.pbStartBattle(self)
-      pbDisplayPaused(_INTL("Wild {1} appeared!",wildpoke.name))
+      pbDisplayPaused(_INTL("Wild {1} appeared!",pkmn.name))
       @scene.pbSafariStart
       @scene.pbCommonAnimation(PBWeather.animationName(@weather))
       safariBall = GameData::Item.get(:SAFARIBALL).id
-      rareness = pbGetSpeciesData(wildpoke.species,wildpoke.form,SpeciesData::RARENESS)
-      catchFactor  = (rareness*100)/1275
+      catch_rate = pkmn.species_data.catch_rate
+      catchFactor  = (catch_rate*100)/1275
       catchFactor  = [[catchFactor,3].max,20].min
-      escapeFactor = (pbEscapeRate(rareness)*100)/1275
+      escapeFactor = (pbEscapeRate(catch_rate)*100)/1275
       escapeFactor = [[escapeFactor,2].max,20].min
       loop do
         cmd = @scene.pbSafariCommandMenu(0)
@@ -452,12 +452,12 @@ class PokeBattle_SafariZone
             end
           end
         when 1   # Bait
-          pbDisplayBrief(_INTL("{1} threw some bait at the {2}!",self.pbPlayer.name,wildpoke.name))
+          pbDisplayBrief(_INTL("{1} threw some bait at the {2}!",self.pbPlayer.name,pkmn.name))
           @scene.pbThrowBait
           catchFactor  /= 2 if pbRandom(100)<90   # Harder to catch
           escapeFactor /= 2                       # Less likely to escape
         when 2   # Rock
-          pbDisplayBrief(_INTL("{1} threw a rock at the {2}!",self.pbPlayer.name,wildpoke.name))
+          pbDisplayBrief(_INTL("{1} threw a rock at the {2}!",self.pbPlayer.name,pkmn.name))
           @scene.pbThrowRock
           catchFactor  *= 2                       # Easier to catch
           escapeFactor *= 2 if pbRandom(100)<90   # More likely to escape
@@ -475,14 +475,14 @@ class PokeBattle_SafariZone
             @decision = 2
           elsif pbRandom(100)<5*escapeFactor
             pbSEPlay("Battle flee")
-            pbDisplay(_INTL("{1} fled!",wildpoke.name))
+            pbDisplay(_INTL("{1} fled!",pkmn.name))
             @decision = 3
           elsif cmd==1   # Bait
-            pbDisplay(_INTL("{1} is eating!",wildpoke.name))
+            pbDisplay(_INTL("{1} is eating!",pkmn.name))
           elsif cmd==2   # Rock
-            pbDisplay(_INTL("{1} is angry!",wildpoke.name))
+            pbDisplay(_INTL("{1} is angry!",pkmn.name))
           else
-            pbDisplay(_INTL("{1} is watching carefully!",wildpoke.name))
+            pbDisplay(_INTL("{1} is watching carefully!",pkmn.name))
           end
           # Weather continues
           @scene.pbCommonAnimation(PBWeather.animationName(@weather))

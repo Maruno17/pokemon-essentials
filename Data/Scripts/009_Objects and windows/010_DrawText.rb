@@ -863,9 +863,9 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
     next if block[0]>=block[1]
     for i in block[0]...block[1]
       case block[2]
-      when 1; characters[i][1]=xDst+(widthDst-block[3]-4)+characters[i][1]
-      when 2; characters[i][1]=xDst+((widthDst/2)-(block[3]/2))+characters[i][1]
-      else; characters[i][1]=xDst+characters[i][1]
+      when 1 then characters[i][1] = xDst + (widthDst - block[3] - 4) + characters[i][1]
+      when 2 then characters[i][1] = xDst + ((widthDst / 2) - (block[3] / 2)) + characters[i][1]
+      else        characters[i][1] = xDst + characters[i][1]
       end
     end
   end

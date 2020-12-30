@@ -134,3 +134,61 @@ class TileDrawingHelper
     end
   end
 end
+
+#===============================================================================
+#
+#===============================================================================
+# Unused
+def createMinimap2(mapid)
+  map=load_data(sprintf("Data/Map%03d.rxdata",mapid)) rescue nil
+  return BitmapWrapper.new(32,32) if !map
+  bitmap=BitmapWrapper.new(map.width*4,map.height*4)
+  black=Color.new(0,0,0)
+  bigmap=(map.width>40 && map.height>40)
+  tilesets=load_data("Data/Tilesets.rxdata")
+  tileset=tilesets[map.tileset_id]
+  return bitmap if !tileset
+  helper=TileDrawingHelper.fromTileset(tileset)
+  for y in 0...map.height
+    for x in 0...map.width
+      if bigmap
+        next if (x>8 && x<=map.width-8 && y>8 && y<=map.height-8)
+      end
+      for z in 0..2
+        id=map.data[x,y,z]
+        next if id==0 || !id
+        helper.bltSmallTile(bitmap,x*4,y*4,4,4,id)
+      end
+    end
+  end
+  bitmap.fill_rect(0,0,bitmap.width,1,black)
+  bitmap.fill_rect(0,bitmap.height-1,bitmap.width,1,black)
+  bitmap.fill_rect(0,0,1,bitmap.height,black)
+  bitmap.fill_rect(bitmap.width-1,0,1,bitmap.height,black)
+  return bitmap
+end
+
+def createMinimap(mapid)
+  map=load_data(sprintf("Data/Map%03d.rxdata",mapid)) rescue nil
+  return BitmapWrapper.new(32,32) if !map
+  bitmap=BitmapWrapper.new(map.width*4,map.height*4)
+  black=Color.new(0,0,0)
+  tilesets=load_data("Data/Tilesets.rxdata")
+  tileset=tilesets[map.tileset_id]
+  return bitmap if !tileset
+  helper=TileDrawingHelper.fromTileset(tileset)
+  for y in 0...map.height
+    for x in 0...map.width
+      for z in 0..2
+        id=map.data[x,y,z]
+        id=0 if !id
+        helper.bltSmallTile(bitmap,x*4,y*4,4,4,id)
+      end
+    end
+  end
+  bitmap.fill_rect(0,0,bitmap.width,1,black)
+  bitmap.fill_rect(0,bitmap.height-1,bitmap.width,1,black)
+  bitmap.fill_rect(0,0,1,bitmap.height,black)
+  bitmap.fill_rect(bitmap.width-1,0,1,bitmap.height,black)
+  return bitmap
+end

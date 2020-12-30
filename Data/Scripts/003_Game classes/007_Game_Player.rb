@@ -351,17 +351,17 @@ class Game_Player < Game_Character
       if @moved_last_frame ||
          (dir > 0 && dir == @lastdir && Graphics.frame_count - @lastdirframe > Graphics.frame_rate / 20)
         case dir
-        when 2; move_down
-        when 4; move_left
-        when 6; move_right
-        when 8; move_up
+        when 2 then move_down
+        when 4 then move_left
+        when 6 then move_right
+        when 8 then move_up
         end
       elsif dir != @lastdir
         case dir
-        when 2; turn_down
-        when 4; turn_left
-        when 6; turn_right
-        when 8; turn_up
+        when 2 then turn_down
+        when 4 then turn_left
+        when 6 then turn_right
+        when 8 then turn_up
         end
       end
     end

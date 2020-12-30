@@ -12,14 +12,14 @@ begin
 
     def self.animationName(weather)
       case weather
-      when Sun;         return "Sun"
-      when Rain;        return "Rain"
-      when Sandstorm;   return "Sandstorm"
-      when Hail;        return "Hail"
-      when HarshSun;    return "HarshSun"
-      when HeavyRain;   return "HeavyRain"
-      when StrongWinds; return "StrongWinds"
-      when ShadowSky;   return "ShadowSky"
+      when Sun         then return "Sun"
+      when Rain        then return "Rain"
+      when Sandstorm   then return "Sandstorm"
+      when Hail        then return "Hail"
+      when HarshSun    then return "HarshSun"
+      when HeavyRain   then return "HeavyRain"
+      when StrongWinds then return "StrongWinds"
+      when ShadowSky   then return "ShadowSky"
       end
       return nil
     end

@@ -34,7 +34,7 @@ class PokeBattle_Confusion < PokeBattle_Move
     @priority   = 0
     @flags      = ""
     @addlEffect = 0
-    @calcType   = -1
+    @calcType   = nil
     @powerBoost = false
     @snatched   = false
   end
@@ -66,7 +66,7 @@ class PokeBattle_Struggle < PokeBattle_Move
     @priority   = 0
     @flags      = ""
     @addlEffect = 0
-    @calcType   = -1
+    @calcType   = nil
     @powerBoost = false
     @snatched   = false
   end
@@ -636,6 +636,7 @@ class PokeBattle_PledgeMove < PokeBattle_Move
       @battle.pbDisplay(_INTL("The two moves have become one! It's a combined move!"))
       @pledgeCombo = true
       @comboEffect = i[1]; @overrideType = i[2]; @overrideAnim = i[3]
+      @overrideType = nil if !GameData::Type.exists?(@overrideType)
       break
     end
     return if @pledgeCombo

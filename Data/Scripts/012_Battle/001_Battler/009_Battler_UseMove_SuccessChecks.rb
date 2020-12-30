@@ -162,10 +162,10 @@ class PokeBattle_Battler
     end
     # Show refusal message and do nothing
     case @battle.pbRandom(4)
-    when 0; @battle.pbDisplay(_INTL("{1} won't obey!",pbThis))
-    when 1; @battle.pbDisplay(_INTL("{1} turned away!",pbThis))
-    when 2; @battle.pbDisplay(_INTL("{1} is loafing around!",pbThis))
-    when 3; @battle.pbDisplay(_INTL("{1} pretended not to notice!",pbThis))
+    when 0 then @battle.pbDisplay(_INTL("{1} won't obey!",pbThis))
+    when 1 then @battle.pbDisplay(_INTL("{1} turned away!",pbThis))
+    when 2 then @battle.pbDisplay(_INTL("{1} is loafing around!",pbThis))
+    when 3 then @battle.pbDisplay(_INTL("{1} pretended not to notice!",pbThis))
     end
     return false
   end
@@ -402,7 +402,7 @@ class PokeBattle_Battler
     # Immunity because of ability (intentionally before type immunity check)
     return false if move.pbImmunityByAbility(user,target)
     # Type immunity
-    if move.pbDamagingMove? && PBTypes.ineffective?(typeMod)
+    if move.pbDamagingMove? && PBTypeEffectiveness.ineffective?(typeMod)
       PBDebug.log("[Target immune] #{target.pbThis}'s type immunity")
       @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
       return false
@@ -415,7 +415,7 @@ class PokeBattle_Battler
       return false
     end
     # Airborne-based immunity to Ground moves
-    if move.damagingMove? && isConst?(move.calcType,PBTypes,:GROUND) &&
+    if move.damagingMove? && move.calcType == :GROUND &&
        target.airborne? && !move.hitsFlyingTargets?
       if target.hasActiveAbility?(:LEVITATE) && !@battle.moldBreaker
         @battle.pbShowAbilitySplash(target)

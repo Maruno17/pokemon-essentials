@@ -206,8 +206,8 @@ def pbRepositionMessageWindow(msgwindow, linecount=2)
   end
   if $game_message
     case $game_message.background
-    when 1; msgwindow.opacity=0  # dim
-    when 2; msgwindow.opacity=0  # transparent
+    when 1 then msgwindow.opacity=0  # dim
+    when 2 then msgwindow.opacity=0  # transparent
     end
   end
 end
@@ -513,21 +513,9 @@ def pbDisposed?(x)
   return false
 end
 
-
-
 #===============================================================================
 # Fades and window activations for sprite hashes
 #===============================================================================
-class Game_Temp
-  attr_writer :fadestate
-
-  def fadestate
-    return @fadestate || 0
-  end
-end
-
-
-
 def pbPushFade
   $game_temp.fadestate = [$game_temp.fadestate+1,0].max if $game_temp
 end

@@ -226,8 +226,9 @@ class SpriteMetafile
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class SpriteMetafilePlayer
   def initialize(metafile,sprite=nil)
     @metafile=metafile
@@ -259,22 +260,22 @@ class SpriteMetafilePlayer
         value=@metafile[j][1]
         for sprite in @sprites
           case code
-          when SpriteMetafile::X; sprite.x=value
-          when SpriteMetafile::Y; sprite.y=value
-          when SpriteMetafile::OX; sprite.ox=value
-          when SpriteMetafile::OY; sprite.oy=value
-          when SpriteMetafile::ZOOM_X; sprite.zoom_x=value
-          when SpriteMetafile::ZOOM_Y; sprite.zoom_y=value
-          when SpriteMetafile::SRC_RECT; sprite.src_rect=value
-          when SpriteMetafile::VISIBLE; sprite.visible=value
-          when SpriteMetafile::Z; sprite.z=value # prevent crashes
-          when SpriteMetafile::ANGLE; sprite.angle=(value==180) ? 179.9 : value
-          when SpriteMetafile::MIRROR; sprite.mirror=value
-          when SpriteMetafile::BUSH_DEPTH; sprite.bush_depth=value
-          when SpriteMetafile::OPACITY; sprite.opacity=value
-          when SpriteMetafile::BLEND_TYPE; sprite.blend_type=value
-          when SpriteMetafile::COLOR; sprite.color=value
-          when SpriteMetafile::TONE; sprite.tone=value
+          when SpriteMetafile::X          then sprite.x = value
+          when SpriteMetafile::Y          then sprite.y = value
+          when SpriteMetafile::OX         then sprite.ox = value
+          when SpriteMetafile::OY         then sprite.oy = value
+          when SpriteMetafile::ZOOM_X     then sprite.zoom_x = value
+          when SpriteMetafile::ZOOM_Y     then sprite.zoom_y = value
+          when SpriteMetafile::SRC_RECT   then sprite.src_rect = value
+          when SpriteMetafile::VISIBLE    then sprite.visible = value
+          when SpriteMetafile::Z          then sprite.z = value   # prevent crashes
+          when SpriteMetafile::ANGLE      then sprite.angle = (value == 180) ? 179.9 : value
+          when SpriteMetafile::MIRROR     then sprite.mirror = value
+          when SpriteMetafile::BUSH_DEPTH then sprite.bush_depth = value
+          when SpriteMetafile::OPACITY    then sprite.opacity = value
+          when SpriteMetafile::BLEND_TYPE then sprite.blend_type = value
+          when SpriteMetafile::COLOR      then sprite.color = value
+          when SpriteMetafile::TONE       then sprite.tone = value
           end
         end
       end
@@ -283,8 +284,9 @@ class SpriteMetafilePlayer
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 def pbSaveSpriteState(sprite)
   state=[]
   return state if !sprite || sprite.disposed?
@@ -341,8 +343,6 @@ def pbRestoreSpriteStateAndBitmap(sprite,state)
   pbRestoreSpriteState(sprite,state)
   return state
 end
-
-
 
 #===============================================================================
 # Evolution screen
@@ -532,7 +532,7 @@ class PokemonEvolutionScene
     metaplayer1.play
     metaplayer2.play
     pbBGMStop
-    pbPlayCry(@pokemon)
+    GameData::Species.play_cry_from_pokemon(@pokemon)
     pbMessageDisplay(@sprites["msgwindow"],
        _INTL("\\se[]What? {1} is evolving!\\^",@pokemon.name)) { pbUpdate }
     pbMessageWaitForInput(@sprites["msgwindow"],50,true) { pbUpdate }
@@ -567,17 +567,17 @@ class PokemonEvolutionScene
 
   def pbEvolutionSuccess
     # Play cry of evolved species
-    frames = pbCryFrameLength(@newspecies,@pokemon.form)
+    frames = GameData::Species.cry_length(@newspecies, @pokemon.form)
     pbBGMStop
-    pbPlayCrySpecies(@newspecies,@pokemon.form)
+    GameData::Species.play_cry_from_species(@newspecies, @pokemon.form)
     frames.times do
       Graphics.update
       pbUpdate
     end
     # Success jingle/message
     pbMEPlay("Evolution success")
-    newspeciesname = PBSpecies.getName(@newspecies)
-    oldspeciesname = PBSpecies.getName(@pokemon.species)
+    newspeciesname = GameData::Species.get(@newspecies).name
+    is_nicknamed = @pokemon.nicknamed?
     pbMessageDisplay(@sprites["msgwindow"],
        _INTL("\\se[]Congratulations! Your {1} evolved into {2}!\\wt[80]",
        @pokemon.name,newspeciesname)) { pbUpdate }
@@ -586,7 +586,7 @@ class PokemonEvolutionScene
     pbEvolutionMethodAfterEvolution
     # Modify Pokémon to make it evolved
     @pokemon.species = @newspecies
-    @pokemon.name    = newspeciesname if @pokemon.name==oldspeciesname
+    @pokemon.name    = newspeciesname if !is_nicknamed
     @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
     @pokemon.calcStats
     # See and own evolved species
@@ -611,7 +611,7 @@ class PokemonEvolutionScene
   def self.pbDuplicatePokemon(pkmn, new_species)
     new_pkmn = pkmn.clone
     new_pkmn.species  = new_species
-    new_pkmn.name     = PBSpecies.getName(new_species)
+    new_pkmn.name     = GameData::Species.get(new_species).name
     new_pkmn.markings = 0
     new_pkmn.ballused = 0
     new_pkmn.setItem(nil)

@@ -39,7 +39,7 @@ class PokeBattle_Move
     @target     = move.target
     @priority   = move.priority
     @flags      = move.flags
-    @calcType   = -1
+    @calcType   = nil
     @powerBoost = false   # For Aerilate, Pixilate, Refrigerate, Galvanize
     @snatched   = false
   end
@@ -72,8 +72,9 @@ class PokeBattle_Move
   #       AI), so using @calcType here is acceptable.
   def physicalMove?(thisType=nil)
     return (@category==0) if MOVE_CATEGORY_PER_MOVE
-    thisType ||= @calcType if @calcType>=0
-    thisType = @type if !thisType
+    thisType ||= @calcType
+    thisType ||= @type
+    return true if !thisType
     return !PBTypes.isSpecialType?(thisType)
   end
 
@@ -81,8 +82,9 @@ class PokeBattle_Move
   #       AI), so using @calcType here is acceptable.
   def specialMove?(thisType=nil)
     return (@category==1) if MOVE_CATEGORY_PER_MOVE
-    thisType ||= @calcType if @calcType>=0
-    thisType = @type if !thisType
+    thisType ||= @calcType
+    thisType ||= @type
+    return false if !thisType
     return PBTypes.isSpecialType?(thisType)
   end
 

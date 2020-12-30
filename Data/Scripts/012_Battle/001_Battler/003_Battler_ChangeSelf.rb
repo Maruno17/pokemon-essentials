@@ -111,17 +111,17 @@ class PokeBattle_Battler
   def pbChangeTypes(newType)
     if newType.is_a?(PokeBattle_Battler)
       newTypes = newType.pbTypes
-      newTypes.push(getConst(PBTypes,:NORMAL) || 0) if newTypes.length==0
+      newTypes.push(:NORMAL) if newTypes.length == 0
       newType3 = newType.effects[PBEffects::Type3]
-      newType3 = -1 if newTypes.include?(newType3)
+      newType3 = nil if newTypes.include?(newType3)
       @type1 = newTypes[0]
-      @type2 = (newTypes.length==1) ? newTypes[0] : newTypes[1]
+      @type2 = (newTypes.length == 1) ? newTypes[0] : newTypes[1]
       @effects[PBEffects::Type3] = newType3
     else
-      newType = getConst(PBTypes,newType) if newType.is_a?(Symbol) || newType.is_a?(String)
+      newType = GameData::Item.get(newType).id
       @type1 = newType
       @type2 = newType
-      @effects[PBEffects::Type3] = -1
+      @effects[PBEffects::Type3] = nil
     end
     @effects[PBEffects::BurnUp] = false
     @effects[PBEffects::Roost]  = false
@@ -170,9 +170,9 @@ class PokeBattle_Battler
       if hasActiveAbility?(:FORECAST)
         newForm = 0
         case @battle.pbWeather
-        when PBWeather::Sun, PBWeather::HarshSun;   newForm = 1
-        when PBWeather::Rain, PBWeather::HeavyRain; newForm = 2
-        when PBWeather::Hail;                       newForm = 3
+        when PBWeather::Sun, PBWeather::HarshSun   then newForm = 1
+        when PBWeather::Rain, PBWeather::HeavyRain then newForm = 2
+        when PBWeather::Hail                       then newForm = 3
         end
         if @form!=newForm
           @battle.pbShowAbilitySplash(self,true)
@@ -187,9 +187,7 @@ class PokeBattle_Battler
     if isSpecies?(:CHERRIM)
       if hasActiveAbility?(:FLOWERGIFT)
         newForm = 0
-        case @battle.pbWeather
-        when PBWeather::Sun, PBWeather::HarshSun; newForm = 1
-        end
+        newForm = 1 if [PBWeather::Sun, PBWeather::HarshSun].include?(@battle.pbWeather)
         if @form!=newForm
           @battle.pbShowAbilitySplash(self,true)
           @battle.pbHideAbilitySplash(self)

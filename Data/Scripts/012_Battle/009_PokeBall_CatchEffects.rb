@@ -143,10 +143,10 @@ BallHandlers::ModifyCatchRate.add(:QUICKBALL,proc { |ball,catchRate,battle,battl
 })
 
 BallHandlers::ModifyCatchRate.add(:FASTBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
-  baseStats = pbGetSpeciesData(battler.species,battler.form,SpeciesData::BASE_STATS)
+  baseStats = battler.pokemon.baseStats
   baseSpeed = baseStats[PBStats::SPEED]
-  catchRate *= 4 if baseSpeed>=100
-  next [catchRate,255].min
+  catchRate *= 4 if baseSpeed >= 100
+  next [catchRate, 255].min
 })
 
 BallHandlers::ModifyCatchRate.add(:LEVELBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
@@ -203,10 +203,10 @@ BallHandlers::ModifyCatchRate.add(:MOONBALL,proc { |ball,catchRate,battle,battle
   #       family can evolve with the Moon Stone, not whether the target itself
   #       can immediately evolve with the Moon Stone.
   moon_stone = GameData::Item.try_get(:MOONSTONE)
-  if moon_stone && pbCheckEvolutionFamilyForItemMethodItem(battler.species, moon_stone.id)
+  if moon_stone && EvolutionHelper.check_family_for_method_item(battler.species, moon_stone.id)
     catchRate *= 4
   end
-  next [catchRate,255].min
+  next [catchRate, 255].min
 })
 
 BallHandlers::ModifyCatchRate.add(:SPORTBALL,proc { |ball,catchRate,battle,battler,ultraBeast|

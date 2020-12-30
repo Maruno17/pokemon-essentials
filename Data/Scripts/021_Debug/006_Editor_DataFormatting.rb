@@ -23,6 +23,8 @@ def pbWriteCsvRecord(record,file,schema)
       # do nothing
     elsif rec[i].is_a?(String)
       file.write(csvQuote(rec[i]))
+    elsif rec[i].is_a?(Symbol)
+      file.write(csvQuote(rec[i].to_s))
     elsif rec[i]==true
       file.write("true")
     elsif rec[i]==false
@@ -35,11 +37,7 @@ def pbWriteCsvRecord(record,file,schema)
           file.write(enumer[rec[i]])
         elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
           mod = Object.const_get(enumer.to_sym)
-          if enumer.to_s=="PBTrainers" && !mod.respond_to?("getCount")
-            file.write((getConstantName(mod,rec[i]) rescue pbGetTrainerConst(rec[i])))
-          else
-            file.write(getConstantName(mod,rec[i]))
-          end
+          file.write(getConstantName(mod,rec[i]))
         elsif enumer.is_a?(Module)
           file.write(getConstantName(enumer,rec[i]))
         elsif enumer.is_a?(Hash)
@@ -60,11 +58,7 @@ def pbWriteCsvRecord(record,file,schema)
           end
         elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
           mod = Object.const_get(enumer.to_sym)
-          if enumer.to_s=="PBTrainers" && !mod.respond_to?("getCount")
-            file.write((getConstantNameOrValue(mod,rec[i]) rescue pbGetTrainerConst(rec[i])))
-          else
-            file.write(getConstantNameOrValue(mod,rec[i]))
-          end
+          file.write(getConstantNameOrValue(mod,rec[i]))
         elsif enumer.is_a?(Module)
           file.write(getConstantNameOrValue(enumer,rec[i]))
         elsif enumer.is_a?(Hash)

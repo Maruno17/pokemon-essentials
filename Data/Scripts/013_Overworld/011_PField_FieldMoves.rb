@@ -119,7 +119,7 @@ def pbHiddenMoveAnimation(pokemon)
       sprite.visible=true
       if ptinterp.done?
         phase=3
-        pbPlayCry(pokemon)
+        GameData::Species.play_cry_from_pokemon(pokemon)
         frames=0
       end
     when 3   # Wait

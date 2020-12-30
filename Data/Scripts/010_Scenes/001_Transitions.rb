@@ -55,39 +55,39 @@ module Graphics
     dc = File.basename(filename).downcase
     case dc
     # Other coded transitions
-    when "breakingglass";    @@transition = Transitions::BreakingGlass.new(duration)
-    when "rotatingpieces";   @@transition = Transitions::ShrinkingPieces.new(duration, true)
-    when "shrinkingpieces";  @@transition = Transitions::ShrinkingPieces.new(duration, false)
-    when "splash";           @@transition = Transitions::SplashTransition.new(duration)
-    when "random_stripe_v";  @@transition = Transitions::RandomStripeTransition.new(duration, 0)
-    when "random_stripe_h";  @@transition = Transitions::RandomStripeTransition.new(duration, 1)
-    when "zoomin";           @@transition = Transitions::ZoomInTransition.new(duration)
-    when "scrolldown";       @@transition = Transitions::ScrollScreen.new(duration, 2)
-    when "scrollleft";       @@transition = Transitions::ScrollScreen.new(duration, 4)
-    when "scrollright";      @@transition = Transitions::ScrollScreen.new(duration, 6)
-    when "scrollup";         @@transition = Transitions::ScrollScreen.new(duration, 8)
-    when "scrolldownleft";   @@transition = Transitions::ScrollScreen.new(duration, 1)
-    when "scrolldownright";  @@transition = Transitions::ScrollScreen.new(duration, 3)
-    when "scrollupleft";     @@transition = Transitions::ScrollScreen.new(duration, 7)
-    when "scrollupright";    @@transition = Transitions::ScrollScreen.new(duration, 9)
-    when "mosaic";           @@transition = Transitions::MosaicTransition.new(duration)
+    when "breakingglass"    then @@transition = Transitions::BreakingGlass.new(duration)
+    when "rotatingpieces"   then @@transition = Transitions::ShrinkingPieces.new(duration, true)
+    when "shrinkingpieces"  then @@transition = Transitions::ShrinkingPieces.new(duration, false)
+    when "splash"           then @@transition = Transitions::SplashTransition.new(duration)
+    when "random_stripe_v"  then @@transition = Transitions::RandomStripeTransition.new(duration, 0)
+    when "random_stripe_h"  then @@transition = Transitions::RandomStripeTransition.new(duration, 1)
+    when "zoomin"           then @@transition = Transitions::ZoomInTransition.new(duration)
+    when "scrolldown"       then @@transition = Transitions::ScrollScreen.new(duration, 2)
+    when "scrollleft"       then @@transition = Transitions::ScrollScreen.new(duration, 4)
+    when "scrollright"      then @@transition = Transitions::ScrollScreen.new(duration, 6)
+    when "scrollup"         then @@transition = Transitions::ScrollScreen.new(duration, 8)
+    when "scrolldownleft"   then @@transition = Transitions::ScrollScreen.new(duration, 1)
+    when "scrolldownright"  then @@transition = Transitions::ScrollScreen.new(duration, 3)
+    when "scrollupleft"     then @@transition = Transitions::ScrollScreen.new(duration, 7)
+    when "scrollupright"    then @@transition = Transitions::ScrollScreen.new(duration, 9)
+    when "mosaic"           then @@transition = Transitions::MosaicTransition.new(duration)
     # HGSS transitions
-    when "snakesquares";     @@transition = Transitions::SnakeSquares.new(duration)
-    when "diagonalbubbletl"; @@transition = Transitions::DiagonalBubble.new(duration, 0)
-    when "diagonalbubbletr"; @@transition = Transitions::DiagonalBubble.new(duration, 1)
-    when "diagonalbubblebl"; @@transition = Transitions::DiagonalBubble.new(duration, 2)
-    when "diagonalbubblebr"; @@transition = Transitions::DiagonalBubble.new(duration, 3)
-    when "risingsplash";     @@transition = Transitions::RisingSplash.new(duration)
-    when "twoballpass";      @@transition = Transitions::TwoBallPass.new(duration)
-    when "spinballsplit";    @@transition = Transitions::SpinBallSplit.new(duration)
-    when "threeballdown";    @@transition = Transitions::ThreeBallDown.new(duration)
-    when "balldown";         @@transition = Transitions::BallDown.new(duration)
-    when "wavythreeballup";  @@transition = Transitions::WavyThreeBallUp.new(duration)
-    when "wavyspinball";     @@transition = Transitions::WavySpinBall.new(duration)
-    when "fourballburst";    @@transition = Transitions::FourBallBurst.new(duration)
+    when "snakesquares"     then @@transition = Transitions::SnakeSquares.new(duration)
+    when "diagonalbubbletl" then @@transition = Transitions::DiagonalBubble.new(duration, 0)
+    when "diagonalbubbletr" then @@transition = Transitions::DiagonalBubble.new(duration, 1)
+    when "diagonalbubblebl" then @@transition = Transitions::DiagonalBubble.new(duration, 2)
+    when "diagonalbubblebr" then @@transition = Transitions::DiagonalBubble.new(duration, 3)
+    when "risingsplash"     then @@transition = Transitions::RisingSplash.new(duration)
+    when "twoballpass"      then @@transition = Transitions::TwoBallPass.new(duration)
+    when "spinballsplit"    then @@transition = Transitions::SpinBallSplit.new(duration)
+    when "threeballdown"    then @@transition = Transitions::ThreeBallDown.new(duration)
+    when "balldown"         then @@transition = Transitions::BallDown.new(duration)
+    when "wavythreeballup"  then @@transition = Transitions::WavyThreeBallUp.new(duration)
+    when "wavyspinball"     then @@transition = Transitions::WavySpinBall.new(duration)
+    when "fourballburst"    then @@transition = Transitions::FourBallBurst.new(duration)
     # Graphic transitions
-    when "";                 @@transition = Transitions::FadeTransition.new(duration)
-    else; ret = false
+    when ""                 then @@transition = Transitions::FadeTransition.new(duration)
+    else                         ret = false
     end
     Graphics.frame_reset if ret
     return ret
@@ -736,9 +736,9 @@ module Transitions
           @sprites[k].visible = false
           @sprites[k].bitmap = @bitmap
           case origin
-          when 1; k = i*cx+(cx-1-j)               # Top right
-          when 2; k = @numtiles-1-(i*cx+(cx-1-j)) # Bottom left
-          when 3; k = @numtiles-1-k               # Bottom right
+          when 1 then k = i*cx+(cx-1-j)               # Top right
+          when 2 then k = @numtiles-1-(i*cx+(cx-1-j)) # Bottom left
+          when 3 then k = @numtiles-1-k               # Bottom right
           end
           @frame[k] = ((0.6*j*width+0.8*i*height)*(@numframes/50)/l).floor
         end

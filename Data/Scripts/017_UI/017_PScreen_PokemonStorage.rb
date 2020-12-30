@@ -29,7 +29,7 @@ class PokemonBoxIcon < IconSprite
 
   def refresh
     return if !@pokemon
-    self.setBitmap(pbPokemonIconFile(@pokemon))
+    self.setBitmap(GameData::Species.icon_filename_from_pokemon(@pokemon))
     self.src_rect = Rect.new(0,0,self.bitmap.height,self.bitmap.height)
   end
 
@@ -40,8 +40,6 @@ class PokemonBoxIcon < IconSprite
     dispose if @startRelease && !releasing?
   end
 end
-
-
 
 #===============================================================================
 # Pokémon sprite
@@ -106,16 +104,15 @@ class MosaicPokemonSprite < PokemonSprite
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class AutoMosaicPokemonSprite < MosaicPokemonSprite
   def update
     super
     self.mosaic -= 1
   end
 end
-
-
 
 #===============================================================================
 # Cursor
@@ -288,8 +285,6 @@ class PokemonBoxArrow < SpriteWrapper
   end
 end
 
-
-
 #===============================================================================
 # Box
 #===============================================================================
@@ -444,8 +439,6 @@ class PokemonBoxSprite < SpriteWrapper
   end
 end
 
-
-
 #===============================================================================
 # Party pop-up panel
 #===============================================================================
@@ -564,8 +557,6 @@ class PokemonBoxPartySprite < SpriteWrapper
     end
   end
 end
-
-
 
 #===============================================================================
 # Pokémon storage visuals
@@ -1430,8 +1421,10 @@ class PokemonStorageScene
         imagepos.push(["Graphics/Pictures/shiny",156,198])
       end
       typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
-      type1rect = Rect.new(0,pokemon.type1*28,64,28)
-      type2rect = Rect.new(0,pokemon.type2*28,64,28)
+      type1_number = GameData::Type.get(pokemon.type1).id_number
+      type2_number = GameData::Type.get(pokemon.type2).id_number
+      type1rect = Rect.new(0, type1_number * 28, 64, 28)
+      type2rect = Rect.new(0, type2_number * 28, 64, 28)
       if pokemon.type1==pokemon.type2
         overlay.blt(52,272,typebitmap.bitmap,type1rect)
       else
@@ -1450,14 +1443,13 @@ class PokemonStorageScene
   end
 end
 
-
-
 #===============================================================================
 # Pokémon storage mechanics
 #===============================================================================
 class PokemonStorageScreen
   attr_reader :scene
   attr_reader :storage
+  attr_accessor :heldpkmn
 
   def initialize(scene,storage)
     @scene = scene
@@ -1467,8 +1459,7 @@ class PokemonStorageScreen
 
   def pbStartScreen(command)
     @heldpkmn = nil
-    if command==0
-### ORGANISE ###################################################################
+    if command==0   # Organise
       @scene.pbStartBox(self,command)
       loop do
         selected = @scene.pbSelectBox(@storage.party)
@@ -1549,8 +1540,7 @@ class PokemonStorageScreen
         end
       end
       @scene.pbCloseBox
-    elsif command==1
-### WITHDRAW ###################################################################
+    elsif command==1   # Withdraw
       @scene.pbStartBox(self,command)
       loop do
         selected = @scene.pbSelectBox(@storage.party)
@@ -1582,16 +1572,15 @@ class PokemonStorageScreen
              _INTL("Cancel")
           ])
           case command
-          when 0; pbWithdraw(selected,nil)
-          when 1; pbSummary(selected,nil)
-          when 2; pbMark(selected,nil)
-          when 3; pbRelease(selected,nil)
+          when 0 then pbWithdraw(selected, nil)
+          when 1 then pbSummary(selected, nil)
+          when 2 then pbMark(selected, nil)
+          when 3 then pbRelease(selected, nil)
           end
         end
       end
       @scene.pbCloseBox
-    elsif command==2
-### DEPOSIT ####################################################################
+    elsif command==2   # Deposit
       @scene.pbStartBox(self,command)
       loop do
         selected = @scene.pbSelectParty(@storage.party)
@@ -1615,10 +1604,10 @@ class PokemonStorageScreen
              _INTL("Cancel")
           ])
           case command
-          when 0; pbStore([-1,selected],nil)
-          when 1; pbSummary([-1,selected],nil)
-          when 2; pbMark([-1,selected],nil)
-          when 3; pbRelease([-1,selected],nil)
+          when 0 then pbStore([-1, selected], nil)
+          when 1 then pbSummary([-1, selected], nil)
+          when 2 then pbMark([-1, selected], nil)
+          when 3 then pbRelease([-1, selected], nil)
           end
         end
       end
@@ -1961,15 +1950,18 @@ class PokemonStorageScreen
             retval = selected
             break
           end
-        when 1; pbSummary(selected,nil)
+        when 1
+          pbSummary(selected,nil)
         when 2   # Store/Withdraw
           if selected[0]==-1
             pbStore(selected,nil)
           else
             pbWithdraw(selected,nil)
           end
-        when 3; pbItem(selected,nil)
-        when 4; pbMark(selected,nil)
+        when 3
+          pbItem(selected,nil)
+        when 4
+          pbMark(selected,nil)
         end
       end
     end

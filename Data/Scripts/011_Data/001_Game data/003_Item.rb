@@ -18,8 +18,50 @@ module GameData
     extend ClassMethods
     include InstanceMethods
 
+    def self.icon_filename(item)
+      return "Graphics/Items/back" if item.nil?
+      item_data = self.try_get(item)
+      return "Graphics/Items/000" if item_data.nil?
+      # Check for files
+      ret = sprintf("Graphics/Items/%s", item_data.id)
+      return ret if pbResolveBitmap(ret)
+      ret = sprintf("Graphics/Items/%03d", item_data.id_number)
+      return ret if pbResolveBitmap(ret)
+      # Check for TM/HM type icons
+      if item_data.is_machine?
+        move_type = GameData::Move.get(item_data.move).type
+        type_data = GameData::Type.get(move_type)
+        ret = sprintf("Graphics/Items/machine_%s", type_data.id)
+        return ret if pbResolveBitmap(ret)
+        ret = sprintf("Graphics/Items/machine_%03d", type_data.id_number)
+        return ret if pbResolveBitmap(ret)
+      end
+      return "Graphics/Items/000"
+    end
+
+    def self.held_icon_filename(item)
+      item_data = self.try_get(item)
+      return nil if !item_data
+      name_base = (item_data.is_mail?) ? "mail" : "item"
+      # Check for files
+      ret = sprintf("Graphics/Pictures/Party/icon_%s_%s", name_base, item_data.id)
+      return ret if pbResolveBitmap(ret)
+      ret = sprintf("Graphics/Pictures/Party/icon_%s_%03d", name_base, item_data.id_number)
+      return ret if pbResolveBitmap(ret)
+      return sprintf("Graphics/Pictures/Party/icon_%s", name_base)
+    end
+
+    def self.mail_filename(item)
+      item_data = self.try_get(item)
+      return nil if !item_data
+      # Check for files
+      ret = sprintf("Graphics/Pictures/Mail/mail_%s", item_data.id)
+      return ret if pbResolveBitmap(ret)
+      ret = sprintf("Graphics/Pictures/Mail/mail_%03d", item_data.id_number)
+      return pbResolveBitmap(ret) ? ret : nil
+    end
+
     def initialize(hash)
-      validate hash => Hash, hash[:id] => Symbol
       @id               = hash[:id]
       @id_number        = hash[:id_number]   || -1
       @real_name        = hash[:name]        || "Unnamed"
@@ -73,8 +115,8 @@ module GameData
     def can_hold?;           return !is_important?; end
 
     def unlosable?(species, ability)
-      return false if isConst?(species, PBSpecies, :ARCEUS) && ability != :MULTITYPE
-      return false if isConst?(species, PBSpecies, :SILVALLY) && ability != :RKSSYSTEM
+      return false if species == :ARCEUS && ability != :MULTITYPE
+      return false if species == :SILVALLY && ability != :RKSSYSTEM
       combos = {
          :ARCEUS   => [:FISTPLATE,   :FIGHTINIUMZ,
                        :SKYPLATE,    :FLYINIUMZ,
@@ -115,11 +157,7 @@ module GameData
          :KYOGRE   => [:BLUEORB],
          :GROUDON  => [:REDORB]
       }
-      combos.each do |comboSpecies, items|
-        next if !isConst?(species, PBSpecies, comboSpecies)
-        return items.include?(@id)
-      end
-      return false
+      return combos[species] && combos[species].include?(@id)
     end
   end
 end
@@ -230,4 +268,19 @@ end
 def pbIsUnlosableItem?(check_item, species, ability)
   Deprecation.warn_method('pbIsUnlosableItem?', 'v20', 'GameData::Item.get(item).unlosable?')
   return GameData::Item.get(check_item).unlosable?(species, ability)
+end
+
+def pbItemIconFile(item)
+  Deprecation.warn_method('pbItemIconFile', 'v20', 'GameData::Item.icon_filename(item)')
+  return GameData::Item.icon_filename(item)
+end
+
+def pbHeldItemIconFile(item)
+  Deprecation.warn_method('pbHeldItemIconFile', 'v20', 'GameData::Item.held_icon_filename(item)')
+  return GameData::Item.held_icon_filename(item)
+end
+
+def pbMailBackFile(item)
+  Deprecation.warn_method('pbMailBackFile', 'v20', 'GameData::Item.mail_filename(item)')
+  return GameData::Item.mail_filename(item)
 end

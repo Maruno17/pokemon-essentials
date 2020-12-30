@@ -53,7 +53,7 @@ module PokeBattle_BattleCommon
       end
       # Record a Shadow Pokémon's species as having been caught
       if pkmn.shadowPokemon?
-        pbPlayer.shadowcaught = [] if !pbPlayer.shadowcaught
+        pbPlayer.shadowcaught = {} if !pbPlayer.shadowcaught
         pbPlayer.shadowcaught[pkmn.species] = true
       end
       # Store caught Pokémon
@@ -65,7 +65,7 @@ module PokeBattle_BattleCommon
   #=============================================================================
   # Throw a Poké Ball
   #=============================================================================
-  def pbThrowPokeBall(idxBattler,ball,rareness=nil,showPlayer=false)
+  def pbThrowPokeBall(idxBattler,ball,catch_rate=nil,showPlayer=false)
     # Determine which Pokémon you're throwing the Poké Ball at
     battler = nil
     if opposes?(idxBattler)
@@ -105,7 +105,7 @@ module PokeBattle_BattleCommon
     # Calculate the number of shakes (4=capture)
     pkmn = battler.pokemon
     @criticalCapture = false
-    numShakes = pbCaptureCalc(pkmn,battler,rareness,ball)
+    numShakes = pbCaptureCalc(pkmn,battler,catch_rate,ball)
     PBDebug.log("[Threw Poké Ball] #{itemName}, #{numShakes} shakes (4=capture)")
     # Animation of Ball throw, absorb, shake and capture/burst out
     @scene.pbThrow(ball,numShakes,@criticalCapture,battler.index,showPlayer)
@@ -162,33 +162,23 @@ module PokeBattle_BattleCommon
   #=============================================================================
   # Calculate how many shakes a thrown Poké Ball will make (4 = capture)
   #=============================================================================
-  def pbCaptureCalc(pkmn,battler,rareness,ball)
+  def pbCaptureCalc(pkmn,battler,catch_rate,ball)
     return 4 if $DEBUG && Input.press?(Input::CTRL)
-    # Get a rareness if one wasn't provided
-    if !rareness
-      rareness = pbGetSpeciesData(pkmn.species,pkmn.form,SpeciesData::RARENESS)
-    end
-    # Modify rareness depending on the Poké Ball's effect
-    ultraBeast = (battler.isSpecies?(:NIHILEGO) ||
-       battler.isSpecies?(:BUZZWOLE) ||
-       battler.isSpecies?(:PHEROMOSA) ||
-       battler.isSpecies?(:XURKITREE) ||
-       battler.isSpecies?(:CELESTEELA) ||
-       battler.isSpecies?(:KARTANA) ||
-       battler.isSpecies?(:GUZZLORD) ||
-       battler.isSpecies?(:POIPOLE) ||
-       battler.isSpecies?(:NAGANADEL) ||
-       battler.isSpecies?(:STAKATAKA) ||
-       battler.isSpecies?(:BLACEPHALON))
+    # Get a catch rate if one wasn't provided
+    catch_rate = pkmn.species_data.catch_rate if !catch_rate
+    # Modify catch_rate depending on the Poké Ball's effect
+    ultraBeast = [:NIHILEGO, :BUZZWOLE, :PHEROMOSA, :XURKITREE, :CELESTEELA,
+                  :KARTANA, :GUZZLORD, :POIPOLE, :NAGANADEL, :STAKATAKA,
+                  :BLACEPHALON].include?(pkmn.species)
     if !ultraBeast || ball == :BEASTBALL
-      rareness = BallHandlers.modifyCatchRate(ball,rareness,self,battler,ultraBeast)
+      catch_rate = BallHandlers.modifyCatchRate(ball,catch_rate,self,battler,ultraBeast)
     else
-      rareness /= 10
+      catch_rate /= 10
     end
     # First half of the shakes calculation
     a = battler.totalhp
     b = battler.hp
-    x = ((3*a-2*b)*rareness.to_f)/(3*a)
+    x = ((3*a-2*b)*catch_rate.to_f)/(3*a)
     # Calculation modifiers
     if battler.status==PBStatuses::SLEEP || battler.status==PBStatuses::FROZEN
       x *= 2.5

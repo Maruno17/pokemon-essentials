@@ -178,7 +178,7 @@ def pbChangeLevel(pkmn,newlevel,scene)
     end
     # Check for evolution
     newspecies = pbCheckEvolution(pkmn)
-    if newspecies>0
+    if newspecies
       pbFadeOutInWithMusic {
         evo = PokemonEvolutionScene.new
         evo.pbStartScreen(pkmn,newspecies)
@@ -255,14 +255,12 @@ def pbRestorePP(pkmn,idxMove,pp)
   return newpp-oldpp
 end
 
-def pbBattleRestorePP(pkmn,battler,idxMove,pp)
-  if pbRestorePP(pkmn,idxMove,pp)>0
-    if battler && !battler.effects[PBEffects::Transform] &&
-       battler.moves[idxMove] && battler.moves[idxMove].id==pkmn.moves[idxMove].id
-      battler.pbSetPP(battler.moves[idxMove],pkmn.moves[idxMove].pp)
-    end
+def pbBattleRestorePP(pkmn, battler, idxMove, pp)
+  return if pbRestorePP(pkmn,idxMove,pp) == 0
+  if battler && !battler.effects[PBEffects::Transform] &&
+     battler.moves[idxMove] && battler.moves[idxMove].id == pkmn.moves[idxMove].id
+    battler.pbSetPP(battler.moves[idxMove], pkmn.moves[idxMove].pp)
   end
-  return ret
 end
 
 #===============================================================================
@@ -460,13 +458,6 @@ def pbForgetMove(pkmn,moveToLearn)
   return ret
 end
 
-def pbSpeciesCompatible?(species,move)
-  return false if species<=0
-  data = pbLoadSpeciesTMData
-  return false if !data[move]
-  return data[move].any? { |item| item==species }
-end
-
 #===============================================================================
 # Use an item from the Bag and/or on a Pokémon
 #===============================================================================
@@ -500,7 +491,7 @@ def pbUseItem(bag,item,bagscene=nil)
     if itm.is_evolution_stone?
       annot = []
       for pkmn in $Trainer.party
-        elig = pbCheckEvolution(pkmn,item)>0
+        elig = pbCheckEvolution(pkmn,item)
         annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
       end
     end
@@ -534,11 +525,15 @@ def pbUseItem(bag,item,bagscene=nil)
   elsif useType==2   # Item is usable from bag
     intret = ItemHandlers.triggerUseFromBag(item)
     case intret
-    when 0; return 0
-    when 1; return 1   # Item used
-    when 2; return 2   # Item used, end screen
-    when 3; bag.pbDeleteItem(item); return 1   # Item used, consume item
-    when 4; bag.pbDeleteItem(item); return 2   # Item used, end screen and consume item
+    when 0 then return 0
+    when 1 then return 1   # Item used
+    when 2 then return 2   # Item used, end screen
+    when 3                 # Item used, consume item
+      bag.pbDeleteItem(item)
+      return 1
+    when 4                 # Item used, end screen and consume item
+      bag.pbDeleteItem(item)
+      return 2
     end
     pbMessage(_INTL("Can't use that here."))
     return 0

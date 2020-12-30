@@ -10,14 +10,14 @@ module PBGenderRates
 
   def self.genderByte(gender)
     case gender
-    when AlwaysMale;         return 0
-    when FemaleOneEighth;    return 32
-    when Female25Percent;    return 64
-    when Female50Percent;    return 128
-    when Female75Percent;    return 192
-    when FemaleSevenEighths; return 224
-    when AlwaysFemale;       return 254
-    when Genderless;         return 255
+    when AlwaysMale         then return 0
+    when FemaleOneEighth    then return 32
+    when Female25Percent    then return 64
+    when Female50Percent    then return 128
+    when Female75Percent    then return 192
+    when FemaleSevenEighths then return 224
+    when AlwaysFemale       then return 254
+    when Genderless         then return 255
     end
     return 255   # Default value (genderless)
   end

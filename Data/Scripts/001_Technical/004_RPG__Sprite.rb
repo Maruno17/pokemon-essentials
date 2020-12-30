@@ -205,10 +205,10 @@ class SpriteAnimation
       sprite.visible    = true
       sprite.src_rect.set(pattern % 5 * 192, pattern / 5 * 192, 192, 192)
       case @_animation_height
-      when 0; sprite.z  = 1
-      when 1; sprite.z  = sprite.y+32+15
-      when 2; sprite.z  = sprite.y+32+32+17
-      else;   sprite.z  = 2000
+      when 0 then sprite.z  = 1
+      when 1 then sprite.z  = sprite.y+32+15
+      when 2 then sprite.z  = sprite.y+32+32+17
+      else        sprite.z  = 2000
       end
       sprite.ox         = 96
       sprite.oy         = 96

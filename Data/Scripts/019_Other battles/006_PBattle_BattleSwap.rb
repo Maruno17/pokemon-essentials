@@ -72,19 +72,15 @@ class BattleSwapScene
     UIHelper.pbConfirm(@sprites["msgwindow"],message) { pbUpdate }
   end
 
-  def pbGetCommands(list,choices)
-    commands=[]
+  def pbGetCommands(list, choices)
+    commands = []
     for i in 0...list.length
-      pkmn=list[i]
-      kind=pbGetMessage(MessageTypes::Kinds,pbGetFSpeciesFromForm(pkmn.species,pkn.form))
-      selected=shadowctagFromColor(Color.new(232,0,0))
-      if choices.any?{ |item| item==i }
-        commands.push(selected+_INTL("{1} - {2} POKéMON",
-           PBSpecies.getName(pkmn.species),kind))
-      else
-        commands.push(_INTL("{1} - {2} POKéMON",
-           PBSpecies.getName(pkmn.species),kind))
-      end
+      pkmn = list[i]
+      category = pkmn.species_data.category
+      selected = shadowctagFromColor(Color.new(232, 0, 0))
+      cmd = _INTL("{1} - {2} Pokémon", pkmn.speciesName, category)
+      cmd = selected + cmd if choices.include?(i)
+      commands.push(cmd)
     end
     return commands
   end

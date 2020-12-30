@@ -37,10 +37,10 @@ class BerryPlantMoistureSprite
 
   def updateGraphic
     case @oldmoisture
-    when -1; @light.setBitmap("")
-    when 0; @light.setBitmap("Graphics/Characters/berrytreeDry")
-    when 1; @light.setBitmap("Graphics/Characters/berrytreeDamp")
-    when 2; @light.setBitmap("Graphics/Characters/berrytreeWet")
+    when -1 then @light.setBitmap("")
+    when 0  then @light.setBitmap("Graphics/Characters/berrytreeDry")
+    when 1  then @light.setBitmap("Graphics/Characters/berrytreeDamp")
+    when 2  then @light.setBitmap("Graphics/Characters/berrytreeWet")
     end
   end
 
@@ -257,10 +257,10 @@ class BerryPlantSprite
       if pbResolveBitmap("Graphics/Characters/"+filename)
         @event.character_name=filename
         case berryData[0]
-        when 2; @event.turn_down    # X sprouted
-        when 3; @event.turn_left    # X taller
-        when 4; @event.turn_right   # X flowering
-        when 5; @event.turn_up      # X berries
+        when 2 then @event.turn_down    # X sprouted
+        when 3 then @event.turn_left    # X taller
+        when 4 then @event.turn_right   # X flowering
+        when 5 then @event.turn_up      # X berries
         end
       else
         @event.character_name="Object ball"
@@ -288,11 +288,11 @@ def pbBerryPlant
   end
   # Stop the event turning towards the player
   case berryData[0]
-  when 1; thisEvent.turn_down  # X planted
-  when 2; thisEvent.turn_down  # X sprouted
-  when 3; thisEvent.turn_left  # X taller
-  when 4; thisEvent.turn_right  # X flowering
-  when 5; thisEvent.turn_up  # X berries
+  when 1 then thisEvent.turn_down  # X planted
+  when 2 then thisEvent.turn_down  # X sprouted
+  when 3 then thisEvent.turn_left  # X taller
+  when 4 then thisEvent.turn_right  # X flowering
+  when 5 then thisEvent.turn_up  # X berries
   end
   watering = [:SPRAYDUCK, :SQUIRTBOTTLE, :WAILMERPAIL, :SPRINKLOTAD]
   berry=berryData[1]

@@ -249,13 +249,13 @@ end
 
 
 module TrainerTypeProperty
-  def self.set(settingname,oldsetting)
-    chosenmap = pbListScreen(settingname,TrainerTypeLister.new(oldsetting,false))
-    return (chosenmap) ? chosenmap[0] : oldsetting
+  def self.set(settingname, oldsetting)
+    chosenmap = pbListScreen(settingname, TrainerTypeLister.new(0, false))
+    return chosenmap || oldsetting
   end
 
   def self.format(value)
-    return (!value) ? value.inspect : PBTrainers.getName(value)
+    return (value && GameData::TrainerType.exists?(value)) ? GameData::TrainerType.get(value).real_name : "-"
   end
 end
 
@@ -263,33 +263,33 @@ end
 
 module SpeciesProperty
   def self.set(_settingname,oldsetting)
-    ret = pbChooseSpeciesList((oldsetting) ? oldsetting : 1)
-    return (ret<=0) ? (oldsetting) ? oldsetting : 0 : ret
+    ret = pbChooseSpeciesList(oldsetting || nil)
+    return ret || oldsetting
   end
 
   def self.defaultValue
-    return 0
+    return nil
   end
 
   def self.format(value)
-    return (value) ? PBSpecies.getName(value) : "-"
+    return (value && GameData::Species.exists?(value)) ? GameData::Species.get(value).real_name : "-"
   end
 end
 
 
 
 module TypeProperty
-  def self.set(_settingname,oldsetting)
-    ret = pbChooseTypeList((oldsetting) ? oldsetting : 0)
-    return (ret<0) ? (oldsetting) ? oldsetting : 0 : ret
+  def self.set(_settingname, oldsetting)
+    ret = pbChooseTypeList(oldsetting || nil)
+    return ret || oldsetting
   end
 
   def self.defaultValue
-    return 0
+    return nil
   end
 
   def self.format(value)
-    return (value) ? PBTypes.getName(value) : "-"
+    return (value && GameData::Type.exists?(value)) ? GameData::Type.get(value).real_name : "-"
   end
 end
 
@@ -580,6 +580,43 @@ end
 
 
 
+def chooseMapPoint(map,rgnmap=false)
+  viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
+  viewport.z=99999
+  title=Window_UnformattedTextPokemon.new(_INTL("Click a point on the map."))
+  title.x=0
+  title.y=Graphics.height-64
+  title.width=Graphics.width
+  title.height=64
+  title.viewport=viewport
+  title.z=2
+  if rgnmap
+    sprite=RegionMapSprite.new(map,viewport)
+  else
+    sprite=MapSprite.new(map,viewport)
+  end
+  sprite.z=2
+  ret=nil
+  loop do
+    Graphics.update
+    Input.update
+    xy=sprite.getXY
+    if xy
+      ret=xy
+      break
+    end
+    if Input.trigger?(Input::B)
+      ret=nil
+      break
+    end
+  end
+  sprite.dispose
+  title.dispose
+  return ret
+end
+
+
+
 module MapCoordsProperty
   def self.set(settingname,oldsetting)
     chosenmap = pbListScreen(settingname,MapLister.new((oldsetting) ? oldsetting[0] : 0))
@@ -624,7 +661,7 @@ end
 
 module RegionMapCoordsProperty
   def self.set(_settingname,oldsetting)
-    regions = getMapNameList
+    regions = self.getMapNameList
     selregion = -1
     if regions.length==0
       pbMessage(_INTL("No region maps are defined."))
@@ -649,6 +686,18 @@ module RegionMapCoordsProperty
 
   def self.format(value)
     return value.inspect
+  end
+
+  def self.getMapNameList
+    mapdata = pbLoadTownMapData
+    ret=[]
+    for i in 0...mapdata.length
+      next if !mapdata[i]
+      ret.push(
+         [i,pbGetMessage(MessageTypes::RegionNames,i)]
+      )
+    end
+    return ret
   end
 end
 
@@ -1209,15 +1258,17 @@ class EvolutionsProperty
             param_type = PBEvolution.getFunction(realcmds[i][0], "parameterType")
             has_param = !PBEvolution.hasFunction?(realcmds[i][0], "parameterType") || param_type != nil
             if has_param
-              if param_type
-                level = (Object.const_get(param_type).getName(level) rescue getConstantName(param_type, level) rescue level)
+              if param_type && !GameData.const_defined?(param_type.to_sym)
+                level = getConstantName(param_type, level)
+              else
+                level = level.to_s
               end
-              level = "???" if !level
+              level = "???" if !level || level.empty?
               commands.push(_INTL("{1}: {2}, {3}",
-                 PBSpecies.getName(realcmds[i][2]),@methods[realcmds[i][0]],level.to_s))
+                 GameData::Species.get(realcmds[i][2]).name, @methods[realcmds[i][0]], level.to_s))
             else
               commands.push(_INTL("{1}: {2}",
-                 PBSpecies.getName(realcmds[i][2]),@methods[realcmds[i][0]]))
+                 GameData::Species.get(realcmds[i][2]).name, @methods[realcmds[i][0]]))
             end
           end
           cmd[1] = i if oldsel>=0 && realcmds[i][3]==oldsel
@@ -1241,7 +1292,7 @@ class EvolutionsProperty
           if entry[0]==-1   # Add new evolution path
             pbMessage(_INTL("Choose an evolved form, method and parameter."))
             newspecies = pbChooseSpeciesList
-            if newspecies>0
+            if newspecies
               newmethod = pbMessage(_INTL("Choose an evolution method."),@methods,-1)
               if newmethod>0
                 newparam = -1
@@ -1254,10 +1305,9 @@ class EvolutionsProperty
                     newparam = pbChooseItemList
                   when :Move
                     newparam = pbChooseMoveList
-                  when :PBSpecies
+                  when :Species
                     newparam = pbChooseSpeciesList
-                  when :PBTypes
-                    allow_zero = true
+                  when :Type
                     newparam = pbChooseTypeList
                   when :Ability
                     newparam = pbChooseAbilityList
@@ -1295,7 +1345,7 @@ class EvolutionsProperty
                 _INTL("Change parameter"),_INTL("Delete"),_INTL("Cancel")],5)
             if cmd2==0   # Change species
               newspecies = pbChooseSpeciesList(entry[2])
-              if newspecies>0
+              if newspecies
                 havemove = -1
                 for i in 0...realcmds.length
                   havemove = realcmds[i][3] if realcmds[i][0]==entry[0] &&
@@ -1343,10 +1393,9 @@ class EvolutionsProperty
                   newparam = pbChooseItemList(entry[1])
                 when :Move
                   newparam = pbChooseMoveList(entry[1])
-                when :PBSpecies
+                when :Species
                   newparam = pbChooseSpeciesList(entry[1])
-                when :PBTypes
-                  allow_zero = true
+                when :Type
                   newparam = pbChooseTypeList(entry[1])
                 when :Ability
                   newparam = pbChooseAbilityList(entry[1])
@@ -1417,11 +1466,13 @@ class EvolutionsProperty
       ret << "," if i>0
       param = value[i][1]
       param_type = PBEvolution.getFunction(value[i][0], "parameterType")
-      if param_type
-        param = (Object.const_get(param_type).getName(param) rescue getConstantName(param_type, param) rescue param)
+      if param_type && !GameData.const_defined?(param_type.to_sym)
+        param = getConstantName(param_type, param)
+      else
+        param = param.to_s
       end
       param = "" if !param
-      ret << sprintf("#{PBSpecies.getName(value[i][2])},#{@methods[value[i][0]]},#{param}")
+      ret << sprintf("#{GameData::Species.get(value[i][2]).name},#{@methods[value[i][0]]},#{param}")
     end
     return ret
   end

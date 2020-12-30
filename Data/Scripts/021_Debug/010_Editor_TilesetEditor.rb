@@ -1,8 +1,6 @@
 #===============================================================================
-# Edits the terrain tags of tiles in tilesets.
+#
 #===============================================================================
-begin
-
 def pbTilesetWrapper
   return PokemonDataWrapper.new(
      "Data/Tilesets.rxdata",
@@ -14,8 +12,9 @@ def pbTilesetWrapper
   )
 end
 
-
-
+#===============================================================================
+# Edits the terrain tags of tiles in tilesets.
+#===============================================================================
 class PokemonTilesetScene
   TILESET_WIDTH = 256
   TILE_SIZE     = 32
@@ -101,9 +100,9 @@ class PokemonTilesetScene
     @x = 0
     @y = -TILE_SIZE
     @topy = -TILE_SIZE
+    height = @sprites["tileset"].bitmap.height
     pbUpdateTileset
     pbFadeInAndShow(@sprites)
-    height = @sprites["tileset"].bitmap.height
     ########
     loop do
       Graphics.update
@@ -161,6 +160,7 @@ class PokemonTilesetScene
           pbUpdateTileset
         when 2
           pbChooseTileset
+          height = @sprites["tileset"].bitmap.height
         end
       elsif Input.trigger?(Input::B)
         if pbConfirmMessage(_INTL("Save changes?"))
@@ -201,12 +201,4 @@ def pbTilesetScreen
     scene = PokemonTilesetScene.new
     scene.pbStartScene
   }
-end
-
-
-
-rescue Exception
-  if $!.is_a?(SystemExit) || "#{$!.class}"=="Reset"
-    raise $!
-  end
 end

@@ -9,8 +9,9 @@
 MYSTERY_GIFT_URL = "http://images1.wikia.nocookie.net/pokemonessentials/images/e/e7/MysteryGift.txt"
 # MYSTERY_GIFT_URL = "http://pastebin.com/raw/w6BqqUsm"
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokeBattle_Trainer
   attr_writer :mysterygiftaccess   # Whether MG can be used from load screen
   attr_writer :mysterygift         # Variable that stores downloaded MG data
@@ -23,8 +24,6 @@ class PokeBattle_Trainer
     return @mysterygift || []
   end
 end
-
-
 
 #===============================================================================
 # Creating a new Mystery Gift for the Master file, and editing an existing one.
@@ -236,7 +235,7 @@ def pbRefreshMGCommands(master, online)
   for gift in master
     itemname = "BLANK"
     if gift[1] == 0
-      itemname = PBSpecies.getName(gift[2].species)
+      itemname = gift[2].speciesName
     elsif gift[1] > 0
       itemname = GameData::Item.get(gift[2]).name + sprintf(" x%d", gift[1])
     end

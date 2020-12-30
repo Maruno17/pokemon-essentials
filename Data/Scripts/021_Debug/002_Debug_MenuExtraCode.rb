@@ -237,7 +237,7 @@ def pbDebugDayCare
         pkmn      = $PokemonGlobal.daycare[i][0]
         initlevel = $PokemonGlobal.daycare[i][1]
         leveldiff = pkmn.level-initlevel
-        textpos.push([pkmn.name+" ("+PBSpecies.getName(pkmn.species)+")",8+i*Graphics.width/2,y,0,base,shadow])
+        textpos.push(["#{pkmn.name} (#{pkmn.speciesName})",8+i*Graphics.width/2,y,0,base,shadow])
         y += 32
         if pkmn.male?
           textpos.push([_INTL("Male ♂"),8+i*Graphics.width/2,y,0,Color.new(128,192,248),shadow])
@@ -347,8 +347,7 @@ def pbDebugDayCare
           pbDayCareGenerateEgg
           $PokemonGlobal.daycareEgg      = 0
           $PokemonGlobal.daycareEggSteps = 0
-          pbMessage(_INTL("Collected the {1} egg.",
-             PBSpecies.getName($Trainer.lastParty.species)))
+          pbMessage(_INTL("Collected the {1} egg.", $Trainer.lastParty.speciesName))
           refresh = true
         end
       end
@@ -393,15 +392,16 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
     rect = drawCursor(index,rect)
     nameWidth   = rect.width*50/100
     statusWidth = rect.width*50/100
+    text_y = rect.y + 6
     if index==self.itemCount-2
       # Advance roaming
-      self.shadowtext(_INTL("[All roam to new locations]"),rect.x,rect.y,nameWidth,rect.height)
+      self.shadowtext(_INTL("[All roam to new locations]"),rect.x,text_y,nameWidth,rect.height)
     elsif index==self.itemCount-1
       # Advance roaming
-      self.shadowtext(_INTL("[Clear all current roamer locations]"),rect.x,rect.y,nameWidth,rect.height)
+      self.shadowtext(_INTL("[Clear all current roamer locations]"),rect.x,text_y,nameWidth,rect.height)
     else
       pkmn = ROAMING_SPECIES[index]
-      name = PBSpecies.getName(getID(PBSpecies,pkmn[0]))+" (Lv. #{pkmn[1]})"
+      name = GameData::Species.get(pkmn[0]).name + " (Lv. #{pkmn[1]})"
       status = ""
       statuscolor = 0
       if pkmn[2]<=0 || $game_switches[pkmn[2]]
@@ -427,7 +427,6 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
       else
         status = "[NOT ROAMING][Switch #{pkmn[2]} is off]"
       end
-      text_y = rect.y + 6
       self.shadowtext(name,rect.x,text_y,nameWidth,rect.height)
       self.shadowtext(status,rect.x+nameWidth,text_y,statusWidth,rect.height,1,statuscolor)
     end
@@ -520,43 +519,6 @@ def pbDebugRoamers
   end
   pbDisposeSpriteHash(sprites)
   viewport.dispose
-end
-
-#===============================================================================
-# Give the player a party of Pokémon.
-# For demonstration purposes only, not to be used in a real game.
-#===============================================================================
-def pbCreatePokemon
-  party = []
-  species = [:PIKACHU,:PIDGEOTTO,:KADABRA,:GYARADOS,:DIGLETT,:CHANSEY]
-  for id in species
-    party.push(getConst(PBSpecies,id)) if hasConst?(PBSpecies,id)
-  end
-  # Species IDs of the Pokémon to be created
-  for i in 0...party.length
-    species = party[i]
-    # Generate Pokémon with species and level 20
-    $Trainer.party[i] = Pokemon.new(species,20)
-    $Trainer.seen[species]  = true # Set this species to seen and owned
-    $Trainer.owned[species] = true
-    pbSeenForm($Trainer.party[i])
-  end
-  $Trainer.party[1].pbLearnMove(:FLY)
-  $Trainer.party[2].pbLearnMove(:FLASH)
-  $Trainer.party[2].pbLearnMove(:TELEPORT)
-  $Trainer.party[3].pbLearnMove(:SURF)
-  $Trainer.party[3].pbLearnMove(:DIVE)
-  $Trainer.party[3].pbLearnMove(:WATERFALL)
-  $Trainer.party[4].pbLearnMove(:DIG)
-  $Trainer.party[4].pbLearnMove(:CUT)
-  $Trainer.party[4].pbLearnMove(:HEADBUTT)
-  $Trainer.party[4].pbLearnMove(:ROCKSMASH)
-  $Trainer.party[5].pbLearnMove(:SOFTBOILED)
-  $Trainer.party[5].pbLearnMove(:STRENGTH)
-  $Trainer.party[5].pbLearnMove(:SWEETSCENT)
-  for i in 0...party.length
-    $Trainer.party[i].pbRecordFirstMoves
-  end
 end
 
 
@@ -816,7 +778,7 @@ def pbDebugFixInvalidTiles
     changed = false
     map = mapData.getMap(id)
     next if !map || !mapData.mapinfos[id]
-    Win32API.SetWindowText(_INTL("Processing map {1} ({2})", id, mapData.mapinfos[id].name))
+    pbSetWindowText(_INTL("Processing map {1} ({2})", id, mapData.mapinfos[id].name))
     passages = mapData.getTilesetPassages(map, id)
     # Check all tiles in map for non-existent tiles
     for x in 0...map.data.xsize

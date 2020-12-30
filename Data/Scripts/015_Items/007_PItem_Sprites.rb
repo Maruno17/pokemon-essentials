@@ -72,7 +72,7 @@ class ItemIconSprite < SpriteWrapper
     @animbitmap.dispose if @animbitmap
     @animbitmap = nil
     if @item || !@blankzero
-      @animbitmap = AnimatedBitmap.new(pbItemIconFile(@item))
+      @animbitmap = AnimatedBitmap.new(GameData::Item.icon_filename(@item))
       self.bitmap = @animbitmap.bitmap
       if self.bitmap.height==ANIM_ICON_SIZE
         @numframes = [(self.bitmap.width/ANIM_ICON_SIZE).floor,1].max
@@ -140,7 +140,7 @@ class HeldItemIconSprite < SpriteWrapper
     @animbitmap.dispose if @animbitmap
     @animbitmap = nil
     if @item
-      @animbitmap = AnimatedBitmap.new(pbHeldItemIconFile(@item))
+      @animbitmap = AnimatedBitmap.new(GameData::Item.held_icon_filename(@item))
       self.bitmap = @animbitmap.bitmap
     else
       self.bitmap = nil

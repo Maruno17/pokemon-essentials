@@ -1,28 +1,12 @@
-def pbIsOldSpecialType?(type)
-  return isConst?(type,PBTypes,:FIRE) ||
-         isConst?(type,PBTypes,:WATER) ||
-         isConst?(type,PBTypes,:ICE) ||
-         isConst?(type,PBTypes,:GRASS) ||
-         isConst?(type,PBTypes,:ELECTRIC) ||
-         isConst?(type,PBTypes,:PSYCHIC) ||
-         isConst?(type,PBTypes,:DRAGON) ||
-         isConst?(type,PBTypes,:DARK)
-end
-
 def pbGetLegalMoves(species)
+  species_data = GameData::Species.get(species)
   moves = []
-  return moves if !species || species<=0
-  moveset = pbGetSpeciesMoveset(species)
-  moveset.each { |m| moves.push(m[1]) }
-  tmdat = pbLoadSpeciesTMData
-  GameData::Item.each do |i|
-    next if !i.move
-    moves.push(i.move) if tmdat[i.move] && tmdat[i.move].include?(species)
-  end
-  babyspecies = pbGetBabySpecies(species)
-  eggMoves = pbGetSpeciesEggMoves(babyspecies)
-  eggMoves.each { |m| moves.push(m) }
-  moves |= []
+  return moves if !species_data
+  species_data.moves.each { |m| moves.push(m[1]) }
+  species_data.tutor_moves.each { |m| moves.push(m[1]) }
+  babyspecies = EvolutionHelper.baby_species(species)
+  GameData::Species.get(babyspecies).egg_moves.each { |m| moves.push(m) }
+  moves |= []   # Remove duplicates
   return moves
 end
 
@@ -164,17 +148,6 @@ end
 
 
 
-def pbGetTypeConst(i)
-  ret = MakeshiftConsts.get(MessageTypes::Types,i,PBTypes)
-  if !ret
-    ret = ["NORMAL","FIGHTING","FLYING","POISON","GROUND",
-           "ROCK","BUG","GHOST","STEEL","QMARKS",
-           "FIRE","WATER","GRASS","ELECTRIC","PSYCHIC",
-           "ICE","DRAGON","DARK"][i]
-  end
-  return ret
-end
-
 def pbGetEvolutionConst(i)
   ret = MakeshiftConsts.get(50,i,PBEvolution)
   if !ret
@@ -237,53 +210,28 @@ def pbGetHabitatConst(i)
   return ret
 end
 
-# Unused
-#def pbGetAbilityConst(i)
-#  return MakeshiftConsts.get(MessageTypes::Abilities,i,PBAbilities)
-#end
-
-# Unused
-#def pbGetMoveConst(i)
-#  return MakeshiftConsts.get(MessageTypes::Moves,i,PBMoves)
-#end
-
-# Unused
-#def pbGetItemConst(i)
-#  return MakeshiftConsts.get(MessageTypes::Items,i,PBItems)
-#end
-
-def pbGetSpeciesConst(i)
-  return MakeshiftConsts.get(MessageTypes::Species,i,PBSpecies)
-end
-
-def pbGetTrainerConst(i)
-  return MakeshiftConsts.get(MessageTypes::TrainerTypes,i,PBTrainers)
-end
-
 
 
 #===============================================================================
 # List all members of a class
 #===============================================================================
 # Displays a list of all Pokémon species, and returns the ID of the species
-# selected (or 0 if the selection was canceled). "default", if specified, is the
-# ID of the species to initially select. Pressing Input::A will toggle the list
-# sorting between numerical and alphabetical.
-def pbChooseSpeciesList(default=0)
+# selected (or nil if the selection was canceled). "default", if specified, is
+# the ID of the species to initially select. Pressing Input::A will toggle the
+# list sorting between numerical and alphabetical.
+def pbChooseSpeciesList(default = nil)
   commands = []
-  for i in 1..PBSpecies.maxValue
-    cname = getConstantName(PBSpecies,i) rescue nil
-    commands.push([i,PBSpecies.getName(i)]) if cname
-  end
-  return pbChooseList(commands,default,0,-1)
+  GameData::Species.each { |s| commands.push([s.id_number, s.real_name, s.id]) if s.form == 0 }
+  return pbChooseList(commands, default, nil, -1)
 end
 
-# Displays an alphabetically sorted list of all moves, and returns the ID of the
-# move selected (or -1 if the selection was canceled). "default", if specified,
-# is the ID of the move to initially select.
-def pbChooseMoveList(default=0)
+# Displays a list of all moves, and returns the ID of the move selected (or nil
+# if the selection was canceled). "default", if specified, is the ID of the move
+# to initially select. Pressing Input::A will toggle the list sorting between
+# numerical and alphabetical.
+def pbChooseMoveList(default = nil)
   commands = []
-  GameData::Move.each { |i| commands.push([i.id_number, i.name, i.id]) }
+  GameData::Move.each { |i| commands.push([i.id_number, i.real_name, i.id]) }
   return pbChooseList(commands, default, nil, -1)
 end
 
@@ -323,19 +271,17 @@ def pbChooseMoveListForSpecies(species, defaultMoveID = nil)
   return (ret >= 0) ? commands[ret][2] : nil
 end
 
-# Displays an alphabetically sorted list of all types, and returns the ID of the
-# type selected (or -1 if the selection was canceled). "default", if specified,
-# is the ID of the type to initially select.
-def pbChooseTypeList(default=-1)
+# Displays a list of all types, and returns the ID of the type selected (or nil
+# if the selection was canceled). "default", if specified, is the ID of the type
+# to initially select. Pressing Input::A will toggle the list sorting between
+# numerical and alphabetical.
+def pbChooseTypeList(default = nil)
   commands = []
-  for i in 0..PBTypes.maxValue
-    cname = getConstantName(PBTypes,i) rescue nil
-    commands.push([i,PBTypes.getName(i)]) if cname && !PBTypes.isPseudoType?(i)
-  end
-  return pbChooseList(commands,default)
+  GameData::Type.each { |t| commands.push([t.id_number, t.name, t.id]) if !t.pseudo_type }
+  return pbChooseList(commands, default, nil, -1)
 end
 
-# Displays a list of all items, and returns the ID of the item selected (or -1
+# Displays a list of all items, and returns the ID of the item selected (or nil
 # if the selection was canceled). "default", if specified, is the ID of the item
 # to initially select. Pressing Input::A will toggle the list sorting between
 # numerical and alphabetical.
@@ -346,7 +292,7 @@ def pbChooseItemList(default = nil)
 end
 
 # Displays a list of all abilities, and returns the ID of the ability selected
-# (or -1 if the selection was canceled). "default", if specified, is the ID of
+# (or nil if the selection was canceled). "default", if specified, is the ID of
 # the ability to initially select. Pressing Input::A will toggle the list
 # sorting between numerical and alphabetical.
 def pbChooseAbilityList(default = nil)
@@ -449,10 +395,10 @@ def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
       elsif Input.repeat?(Input::DOWN)
         command = [2,cmdwindow.index]
         break
-      elsif Input.press?(Input::LEFT)
+      elsif Input.trigger?(Input::LEFT)
         command = [3,cmdwindow.index]
         break
-      elsif Input.press?(Input::RIGHT)
+      elsif Input.trigger?(Input::RIGHT)
         command = [4,cmdwindow.index]
         break
       end

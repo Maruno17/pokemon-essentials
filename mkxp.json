@@ -89,7 +89,7 @@
     // in RGSS2 or higher).
     // (default: 0)
     //
-    // "defScreenW": 640,
+    "defScreenW": 512,
 
 
     // Specify the window height on startup. If set to 0,
@@ -98,7 +98,7 @@
     // in RGSS2 or higher).
     // (default: 0)
     //
-    // "defScreenH": 480,
+    "defScreenH": 384,
 
 
     // Override the game window title

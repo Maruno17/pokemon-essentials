@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class PokemonLoadPanel < SpriteWrapper
   attr_reader :selected
 
@@ -91,8 +94,9 @@ class PokemonLoadPanel < SpriteWrapper
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonLoad_Scene
   def pbStartScene(commands,showContinue,trainer,framecount,mapid)
     @commands = commands
@@ -202,8 +206,9 @@ class PokemonLoad_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonLoadScreen
   def initialize(scene)
     @scene = scene

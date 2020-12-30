@@ -299,10 +299,10 @@ ItemHandlers::UseInField.add(:ITEMFINDER,proc { |item|
         direction = (offsetY<0) ? 8 : 2
       end
       case direction
-      when 2; $game_player.turn_down
-      when 4; $game_player.turn_left
-      when 6; $game_player.turn_right
-      when 8; $game_player.turn_up
+      when 2 then $game_player.turn_down
+      when 4 then $game_player.turn_left
+      when 6 then $game_player.turn_right
+      when 8 then $game_player.turn_up
       end
       pbWait(Graphics.frame_rate*3/10)
       pbMessage(_INTL("Huh? The {1}'s responding!\1",GameData::Item.get(item).name))
@@ -349,22 +349,21 @@ ItemHandlers::UseOnPokemon.addIf(proc { |item| GameData::Item.get(item).is_evolu
       next false
     end
     newspecies = pbCheckEvolution(pkmn,item)
-    if newspecies<=0
-      scene.pbDisplay(_INTL("It won't have any effect."))
-      next false
-    else
+    if newspecies
       pbFadeOutInWithMusic {
         evo = PokemonEvolutionScene.new
         evo.pbStartScreen(pkmn,newspecies)
         evo.pbEvolution(false)
         evo.pbEndScreen
         if scene.is_a?(PokemonPartyScreen)
-          scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p,item)>0 })
+          scene.pbRefreshAnnotations(proc { |p| !pbCheckEvolution(p,item).nil? })
           scene.pbRefresh
         end
       }
       next true
     end
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    next false
   }
 )
 

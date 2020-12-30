@@ -1,3 +1,6 @@
+#===============================================================================
+#
+#===============================================================================
 class MoveSelectionSprite < SpriteWrapper
   attr_reader :preselected
   attr_reader :index
@@ -52,8 +55,9 @@ class MoveSelectionSprite < SpriteWrapper
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class RibbonSelectionSprite < MoveSelectionSprite
   def initialize(viewport=nil)
     super(viewport)
@@ -94,8 +98,9 @@ class RibbonSelectionSprite < MoveSelectionSprite
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonSummary_Scene
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
@@ -347,11 +352,11 @@ class PokemonSummary_Scene
     drawMarkings(overlay,84,292)
     # Draw page-specific information
     case page
-    when 1; drawPageOne
-    when 2; drawPageTwo
-    when 3; drawPageThree
-    when 4; drawPageFour
-    when 5; drawPageFive
+    when 1 then drawPageOne
+    when 2 then drawPageTwo
+    when 3 then drawPageThree
+    when 4 then drawPageFour
+    when 5 then drawPageFive
     end
   end
 
@@ -374,7 +379,7 @@ class PokemonSummary_Scene
     textpos = [
        [_INTL("Dex No."),238,80,0,base,shadow],
        [_INTL("Species"),238,112,0,base,shadow],
-       [PBSpecies.getName(@pokemon.species),435,112,2,Color.new(64,64,64),Color.new(176,176,176)],
+       [@pokemon.speciesName,435,112,2,Color.new(64,64,64),Color.new(176,176,176)],
        [_INTL("Type"),238,144,0,base,shadow],
        [_INTL("OT"),238,176,0,base,shadow],
        [_INTL("ID No."),238,208,0,base,shadow],
@@ -409,8 +414,12 @@ class PokemonSummary_Scene
       ownerbase   = Color.new(64,64,64)
       ownershadow = Color.new(176,176,176)
       case @pokemon.owner.gender
-      when 0; ownerbase = Color.new(24,112,216); ownershadow = Color.new(136,168,208)
-      when 1; ownerbase = Color.new(248,56,32);  ownershadow = Color.new(224,152,144)
+      when 0
+        ownerbase = Color.new(24, 112, 216)
+        ownershadow = Color.new(136, 168, 208)
+      when 1
+        ownerbase = Color.new(248, 56, 32)
+        ownershadow = Color.new(224, 152, 144)
       end
       textpos.push([@pokemon.owner.name,435,176,2,ownerbase,ownershadow])
       textpos.push([sprintf("%05d",@pokemon.owner.public_id),435,208,2,Color.new(64,64,64),Color.new(176,176,176)])
@@ -436,8 +445,10 @@ class PokemonSummary_Scene
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
     # Draw Pokémon type(s)
-    type1rect = Rect.new(0,@pokemon.type1*28,64,28)
-    type2rect = Rect.new(0,@pokemon.type2*28,64,28)
+    type1_number = GameData::Type.get(@pokemon.type1).id_number
+    type2_number = GameData::Type.get(@pokemon.type2).id_number
+    type1rect = Rect.new(0, type1_number * 28, 64, 28)
+    type2rect = Rect.new(0, type2_number * 28, 64, 28)
     if @pokemon.type1==@pokemon.type2
       overlay.blt(402,146,@typebitmap.bitmap,type1rect)
     else
@@ -682,7 +693,8 @@ class PokemonSummary_Scene
     for i in 0...Pokemon::MAX_MOVES
       move=@pokemon.moves[i]
       if move
-        imagepos.push(["Graphics/Pictures/types",248,yPos+2,0,move.type*28,64,28])
+        type_number = GameData::Type.get(move.type).id_number
+        imagepos.push(["Graphics/Pictures/types", 248, yPos + 2, 0, type_number * 28, 64, 28])
         textpos.push([move.name,316,yPos,0,moveBase,moveShadow])
         if move.total_pp>0
           textpos.push([_INTL("PP"),342,yPos+32,0,moveBase,moveShadow])
@@ -744,7 +756,8 @@ class PokemonSummary_Scene
         yPos += 20
       end
       if move
-        imagepos.push(["Graphics/Pictures/types",248,yPos+2,0,move.type*28,64,28])
+        type_number = GameData::Type.get(move.type).id_number
+        imagepos.push(["Graphics/Pictures/types", 248, yPos + 2, 0, type_number * 28, 64, 28])
         textpos.push([move.name,316,yPos,0,moveBase,moveShadow])
         if move.total_pp>0
           textpos.push([_INTL("PP"),342,yPos+32,0,moveBase,moveShadow])
@@ -765,8 +778,10 @@ class PokemonSummary_Scene
     pbDrawTextPositions(overlay,textpos)
     pbDrawImagePositions(overlay,imagepos)
     # Draw Pokémon's type icon(s)
-    type1rect = Rect.new(0,@pokemon.type1*28,64,28)
-    type2rect = Rect.new(0,@pokemon.type2*28,64,28)
+    type1_number = GameData::Type.get(@pokemon.type1).id_number
+    type2_number = GameData::Type.get(@pokemon.type2).id_number
+    type1rect = Rect.new(0, type1_number * 28, 64, 28)
+    type2rect = Rect.new(0, type2_number * 28, 64, 28)
     if @pokemon.type1==@pokemon.type2
       overlay.blt(130,78,@typebitmap.bitmap,type1rect)
     else
@@ -888,7 +903,7 @@ class PokemonSummary_Scene
     @sprites["pokemon"].setPokemonBitmap(@pokemon)
     @sprites["itemicon"].item = @pokemon.item_id
     pbSEStop
-    pbPlayCry(@pokemon)
+    GameData::Species.play_cry_from_pokemon(@pokemon)
   end
 
   def pbMoveSelection
@@ -1225,7 +1240,7 @@ class PokemonSummary_Scene
   end
 
   def pbScene
-    pbPlayCry(@pokemon)
+    GameData::Species.play_cry_from_pokemon(@pokemon)
     loop do
       Graphics.update
       Input.update
@@ -1233,7 +1248,7 @@ class PokemonSummary_Scene
       dorefresh = false
       if Input.trigger?(Input::A)
         pbSEStop
-        pbPlayCry(@pokemon)
+        GameData::Species.play_cry_from_pokemon(@pokemon)
       elsif Input.trigger?(Input::B)
         pbPlayCloseMenuSE
         break
@@ -1295,8 +1310,9 @@ class PokemonSummary_Scene
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class PokemonSummaryScreen
   def initialize(scene,inbattle=false)
     @scene = scene
@@ -1335,4 +1351,24 @@ class PokemonSummaryScreen
     @scene.pbEndScene
     return ret
   end
+end
+
+#===============================================================================
+#
+#===============================================================================
+def pbChooseMove(pokemon,variableNumber,nameVarNumber)
+  return if !pokemon
+  ret = -1
+  pbFadeOutIn {
+    scene = PokemonSummary_Scene.new
+    screen = PokemonSummaryScreen.new(scene)
+    ret = screen.pbStartForgetScreen([pokemon],0,nil)
+  }
+  $game_variables[variableNumber] = ret
+  if ret>=0
+    $game_variables[nameVarNumber] = pokemon.moves[ret].name
+  else
+    $game_variables[nameVarNumber] = ""
+  end
+  $game_map.need_refresh = true if $game_map
 end
