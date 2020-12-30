@@ -80,6 +80,15 @@ module SaveData
     end
   end
 
+  # Loads a single value from the given save data into memory.
+  # @param id [Symbol] save value id
+  # @param save_data [Hash] save data to load
+  # @raise [InvalidValueError] if an invalid value is being loaded
+  def load_value(id, save_data)
+    validate id => Symbol, save_data => Hash
+    @values[id].load(save_data[id])
+  end
+
   # Converts the pre-v19 format data to the new format.
   # @param old_format [Array] pre-v19 format save data
   # @return [Hash] save data in new format
