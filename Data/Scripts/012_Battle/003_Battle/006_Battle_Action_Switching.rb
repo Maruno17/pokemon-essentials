@@ -164,8 +164,8 @@ class PokeBattle_Battle
           #       Pokémon when an opponent replaces a fainted Pokémon in single
           #       battles. In double battles, etc. there is no such offer.
           if @internalBattle && @switchStyle && trainerBattle? && pbSideSize(0)==1 &&
-             opposes?(idxBattler) && !@battlers[0].fainted? && pbCanChooseNonActive?(0) &&
-             @battlers[0].effects[PBEffects::Outrage]==0
+             opposes?(idxBattler) && !@battlers[0].fainted? && !switched.include?(0) &&
+             pbCanChooseNonActive?(0) && @battlers[0].effects[PBEffects::Outrage]==0
             idxPartyForName = idxPartyNew
             enemyParty = pbParty(idxBattler)
             if isConst?(enemyParty[idxPartyNew].ability,PBAbilities,:ILLUSION)
