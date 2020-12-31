@@ -21,7 +21,7 @@ module SaveData
     def save
       data = @save_proc.call
 
-      if @ensured_class && data.class.name != @ensured_class.to_s
+      if @ensured_class_names && !@ensured_class_names.include?(data.class.name)
         raise InvalidValueError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{data.class.name} given)"
       end
 
@@ -35,7 +35,7 @@ module SaveData
     def load(value)
       raise "Save value #{@id.inspect} has no load proc defined" if @load_proc.nil?
 
-      if @ensured_class && value.class.name != @ensured_class.to_s
+      if @ensured_class_names && !@ensured_class_names.include?(value.class.name)
         raise InvalidValueError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{value.class.name} given)"
       end
 
@@ -88,10 +88,11 @@ module SaveData
       @reset_proc = block
     end
 
-    # @param class_name [Symbol]
-    def ensure_class(class_name)
-      validate class_name => Symbol
-      @ensured_class = class_name
+    # @param class_names [Symbol] class names for the accepted value
+    # @note This method accepts multiple class names to ensure compatibility with renamed classes.
+    def ensure_class(*class_names)
+      raise ArgumentError, 'No class names given for ensure_class' if class_names.empty?
+      @ensured_class_names = class_names.map { |name| name.to_s }
     end
 
     # @yieldparam old_format [Array]
