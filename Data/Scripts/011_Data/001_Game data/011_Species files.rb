@@ -39,19 +39,19 @@ module GameData
       return nil
     end
 
-    def self.check_egg_graphic_file(path, species, form)
+    def self.check_egg_graphic_file(path, species, form, suffix = "")
       species_data = self.get_species_form(species, form)
       return nil if species_data.nil?
       species_id = self.get(species_data.species).id_number
       if form > 0
-        ret = pbResolveBitmap(sprintf("%s%s_%d", path, species_data.species, form))
+        ret = pbResolveBitmap(sprintf("%s%s_%d%s", path, species_data.species, form, suffix))
         return ret if ret
-        ret = pbResolveBitmap(sprintf("%s%03d_%d", path, species_id, form))
+        ret = pbResolveBitmap(sprintf("%s%03d_%d%s", path, species_id, form, suffix))
         return ret if ret
       end
-      ret = pbResolveBitmap(sprintf("%s%s", path, species_data.species))
+      ret = pbResolveBitmap(sprintf("%s%s%s", path, species_data.species, suffix))
       return ret if ret
-      return pbResolveBitmap(sprintf("%s%03d", path, species_id))
+      return pbResolveBitmap(sprintf("%s%03d%s", path, species_id, suffix))
     end
 
     def self.front_sprite_filename(species, form = 0, gender = 0, shiny = false, shadow = false)
@@ -116,8 +116,8 @@ module GameData
     #===========================================================================
 
     def self.egg_icon_filename(species, form)
-      ret = self.check_egg_graphic_file("Graphics/Pokemon/Icons", species, form)
-      return (ret) ? ret : pbResolveBitmap("Graphics/Pokemon/Icons/000_egg")
+      ret = self.check_egg_graphic_file("Graphics/Pokemon/Icons", species, form, "_icon")
+      return (ret) ? ret : pbResolveBitmap("Graphics/Pokemon/Eggs/000_icon")
     end
 
     def self.icon_filename(species, form = 0, gender = 0, shiny = false, shadow = false, egg = false)
