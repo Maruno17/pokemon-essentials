@@ -41,8 +41,8 @@ module SaveData
       end
       if save_data.is_a?(Hash)
         save_data = data
-      else
-        save_data << data if file.eof?
+      elsif file.eof?
+        save_data << data
       end
     end
 
