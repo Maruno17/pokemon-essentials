@@ -67,6 +67,8 @@ SaveData.register(:map_factory) do
   load_value do |value|
     $MapFactory = value
     $game_map = $MapFactory.map
+    $PokemonEncounters = PokemonEncounters.new
+    $PokemonEncounters.setup($game_map.map_id)
   end
   from_old_format { |old_format| old_format[9] }
 end
