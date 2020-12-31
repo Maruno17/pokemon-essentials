@@ -13,6 +13,7 @@ module SaveData
       @id = id
       instance_eval(&block)
       raise "No save_value defined for save value #{id.inspect}" if @save_proc.nil?
+      raise "No load_value defined for save value #{id.inspect}" if @load_proc.nil?
     end
 
     # Calls the value's save proc and returns its value.
@@ -33,8 +34,6 @@ module SaveData
     # @raise [RuntimeError] if no load proc is defined
     # @raise [InvalidValueError] if an invalid value is being loaded
     def load(value)
-      raise "Save value #{@id.inspect} has no load proc defined" if @load_proc.nil?
-
       if @ensured_class_names && !@ensured_class_names.include?(value.class.name)
         raise InvalidValueError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{value.class.name} given)"
       end
@@ -48,11 +47,6 @@ module SaveData
       raise "Save value #{@id.inspect} has no reset proc defined" if @reset_proc.nil?
 
       self.load(@reset_proc.call)
-    end
-
-    # @return [Boolean] whether the value has a load proc defined
-    def has_load_proc?
-      return @load_proc.is_a?(Block)
     end
 
     # @return [Boolean] whether the value has a reset proc defined
