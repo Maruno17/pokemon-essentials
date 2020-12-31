@@ -17,10 +17,10 @@ module SaveData
 
     # Calls the value's save proc and returns its value.
     # @return [Object] save proc value
+    # @raise [InvalidValueError] if an invalid value is being saved
     def save
       data = @save_proc.call
 
-      # TODO: Checking for class name may cause trouble with renamed classes.
       if @ensured_class && data.class.name != @ensured_class.to_s
         raise InvalidValueError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{data.class.name} given)"
       end
@@ -30,6 +30,8 @@ module SaveData
 
     # Calls the value's load proc with the given argument passed into it.
     # @param value [Object] load proc argument
+    # @raise [RuntimeError] if no load proc is defined
+    # @raise [InvalidValueError] if an invalid value is being loaded
     def load(value)
       raise "Save value #{@id.inspect} has no load proc defined" if @load_proc.nil?
 
@@ -40,9 +42,22 @@ module SaveData
       @load_proc.call(value)
     end
 
+    # Calls the save value's load proc with the value fetched from the defined reset proc.
+    # @raise (see #load)
+    def reset
+      raise "Save value #{@id.inspect} has no reset proc defined" if @reset_proc.nil?
+
+      self.load(@reset_proc.call)
+    end
+
     # @return [Boolean] whether the value has a load proc defined
     def has_load_proc?
       return @load_proc.is_a?(Block)
+    end
+
+    # @return [Boolean] whether the value has a reset proc defined
+    def has_reset_proc?
+      return @reset_proc.is_a?(Block)
     end
 
     # Uses the +from_old_format+ proc to select the correct data from
@@ -66,6 +81,11 @@ module SaveData
     def load_value(&block)
       raise ArgumentError, 'No block given for load_value proc' unless block_given?
       @load_proc = block
+    end
+
+    def reset_value(&block)
+      raise ArgumentError, 'No block given for reset_value proc' unless block_given?
+      @reset_proc = block
     end
 
     # @param class_name [Symbol]
