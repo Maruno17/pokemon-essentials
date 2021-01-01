@@ -68,7 +68,8 @@ module Compiler
       female = "_female" if name[/f/]
       shadow = "_shadow" if name[/_shadow/]
       if name[/egg/]
-        (default_prefix == "") ? prefix = "Eggs/" : crack = "_egg"
+        prefix = "Eggs/"
+        crack = "_icon" if default_prefix == "Icons/"
         crack = "_cracks" if name[/eggCracks/]
       end
     end
@@ -110,7 +111,7 @@ module Compiler
       pbSetWindowText(_INTL("Converting Pokémon icons {1}/{2}...", i, files.length)) if i % 50 == 0
       case file
       when "iconEgg.png"
-        File.move(src_dir + file, dest_dir + "Icons/000_egg.png")
+        File.move(src_dir + file, dest_dir + "Eggs/000_egg.png")
       else
         next if !file[/^icon\d{3}[^\.]*\.[^\.]*$/]
         new_filename = convert_pokemon_filename(file.sub(/^icon/, ''), "Icons/")
