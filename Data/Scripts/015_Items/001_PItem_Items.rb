@@ -433,7 +433,7 @@ def pbLearnMove(pkmn,move,ignoreifknown=false,bymachine=false,&block)
       oldmovename = pkmn.moves[forgetmove].name
       oldmovepp   = pkmn.moves[forgetmove].pp
       pkmn.moves[forgetmove] = PBMove.new(move)   # Replaces current/total PP
-      if bymachine && !NEWEST_BATTLE_MECHANICS
+      if bymachine && TAUGHT_MACHINES_KEEP_OLD_PP
         pkmn.moves[forgetmove].pp = [oldmovepp,pkmn.moves[forgetmove].total_pp].min
       end
       pbMessage(_INTL("1,\\wt[16] 2, and\\wt[16]...\\wt[16] ...\\wt[16] ... Ta-da!\\se[Battle ball drop]\1"),&block)
@@ -477,7 +477,7 @@ def pbUseItem(bag,item,bagscene=nil)
     if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?",movename))
       return 0
     elsif pbMoveTutorChoose(machine,nil,true)
-      bag.pbDeleteItem(item) if itm.is_TM? && !INFINITE_TMS
+      bag.pbDeleteItem(item) if itm.is_TR?
       return 1
     end
     return 0
@@ -522,7 +522,7 @@ def pbUseItem(bag,item,bagscene=nil)
       bagscene.pbRefresh if bagscene
     }
     return (ret) ? 1 : 0
-  elsif useType==2   # Item is usable from bag
+  elsif useType==2   # Item is usable from Bag
     intret = ItemHandlers.triggerUseFromBag(item)
     case intret
     when 0 then return 0
@@ -559,7 +559,7 @@ def pbUseItemOnPokemon(item,pkmn,scene)
       pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",itm.name)) { scene.pbUpdate }
       if pbConfirmMessage(_INTL("Do you want to teach {1} to {2}?",movename,pkmn.name)) { scene.pbUpdate }
         if pbLearnMove(pkmn,machine,false,true) { scene.pbUpdate }
-          $PokemonBag.pbDeleteItem(item) if itm.is_TM? && !INFINITE_TMS
+          $PokemonBag.pbDeleteItem(item) if itm.is_TR?
           return true
         end
       end

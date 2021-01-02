@@ -44,7 +44,7 @@ class PokeBattle_AI
        :ENERGYPOWDER => 50,
        :ENERGYROOT   => 200
     }
-    hpItems[:RAGECANDYBAR] = 20 if !NEWEST_BATTLE_MECHANICS
+    hpItems[:RAGECANDYBAR] = 20 if !RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
     fullRestoreItems = [
        :FULLRESTORE
     ]
@@ -59,37 +59,37 @@ class PokeBattle_AI
        :FULLHEAL, :LAVACOOKIE, :OLDGATEAU, :CASTELIACONE, :LUMIOSEGALETTE,
        :SHALOURSABLE, :BIGMALASADA, :LUMBERRY, :HEALPOWDER
     ]
-    allStatusItems.push(:RAGECANDYBAR) if NEWEST_BATTLE_MECHANICS
+    allStatusItems.push(:RAGECANDYBAR) if RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
     xItems = {
-       :XATTACK    => [PBStats::ATTACK, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XATTACK    => [PBStats::ATTACK, (X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
        :XATTACK2   => [PBStats::ATTACK, 2],
        :XATTACK3   => [PBStats::ATTACK, 3],
        :XATTACK6   => [PBStats::ATTACK, 6],
-       :XDEFENSE   => [PBStats::DEFENSE, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XDEFENSE   => [PBStats::DEFENSE, (X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
        :XDEFENSE2  => [PBStats::DEFENSE, 2],
        :XDEFENSE3  => [PBStats::DEFENSE, 3],
        :XDEFENSE6  => [PBStats::DEFENSE, 6],
-       :XDEFEND    => [PBStats::DEFENSE, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XDEFEND    => [PBStats::DEFENSE, (X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
        :XDEFEND2   => [PBStats::DEFENSE, 2],
        :XDEFEND3   => [PBStats::DEFENSE, 3],
        :XDEFEND6   => [PBStats::DEFENSE, 6],
-       :XSPATK     => [PBStats::SPATK, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XSPATK     => [PBStats::SPATK, (X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
        :XSPATK2    => [PBStats::SPATK, 2],
        :XSPATK3    => [PBStats::SPATK, 3],
        :XSPATK6    => [PBStats::SPATK, 6],
-       :XSPECIAL   => [PBStats::SPATK, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XSPECIAL   => [PBStats::SPATK, (X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
        :XSPECIAL2  => [PBStats::SPATK, 2],
        :XSPECIAL3  => [PBStats::SPATK, 3],
        :XSPECIAL6  => [PBStats::SPATK, 6],
-       :XSPDEF     => [PBStats::SPDEF, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XSPDEF     => [PBStats::SPDEF, (X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
        :XSPDEF2    => [PBStats::SPDEF, 2],
        :XSPDEF3    => [PBStats::SPDEF, 3],
        :XSPDEF6    => [PBStats::SPDEF, 6],
-       :XSPEED     => [PBStats::SPEED, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XSPEED     => [PBStats::SPEED, (X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
        :XSPEED2    => [PBStats::SPEED, 2],
        :XSPEED3    => [PBStats::SPEED, 3],
        :XSPEED6    => [PBStats::SPEED, 6],
-       :XACCURACY  => [PBStats::ACCURACY, (NEWEST_BATTLE_MECHANICS) ? 2 : 1],
+       :XACCURACY  => [PBStats::ACCURACY, (X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1],
        :XACCURACY2 => [PBStats::ACCURACY, 2],
        :XACCURACY3 => [PBStats::ACCURACY, 3],
        :XACCURACY6 => [PBStats::ACCURACY, 6]

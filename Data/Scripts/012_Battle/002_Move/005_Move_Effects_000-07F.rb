@@ -32,7 +32,7 @@ end
 #===============================================================================
 class PokeBattle_Move_003 < PokeBattle_SleepMove
   def pbMoveFailed?(user,targets)
-    if NEWEST_BATTLE_MECHANICS && @id == :DARKVOID
+    if MECHANICS_GENERATION >= 7 && @id == :DARKVOID
       if !user.isSpecies?(:DARKRAI) && user.effects[PBEffects::TransformSpecies] != :DARKRAI
         @battle.pbDisplay(_INTL("But {1} can't use the move!",user.pbThis))
         return true
@@ -93,7 +93,7 @@ class PokeBattle_Move_006 < PokeBattle_PoisonMove
   end
 
   def pbOverrideSuccessCheckPerHit(user,target)
-    return (NEWEST_BATTLE_MECHANICS && statusMove? && user.pbHasType?(:POISON))
+    return (MORE_TYPE_EFFECTS && statusMove? && user.pbHasType?(:POISON))
   end
 end
 
@@ -107,7 +107,7 @@ end
 class PokeBattle_Move_007 < PokeBattle_ParalysisMove
   def tramplesMinimize?(param=1)
     # Perfect accuracy and double damage (for Body Slam only)
-    return NEWEST_BATTLE_MECHANICS if @id == :BODYSLAM
+    return MECHANICS_GENERATION >= 6 if @id == :BODYSLAM
     return super
   end
 
@@ -241,8 +241,8 @@ end
 #===============================================================================
 class PokeBattle_Move_010 < PokeBattle_FlinchMove
   def tramplesMinimize?(param=1)
-    return super if @id == :DRAGONRUSH && !NEWEST_BATTLE_MECHANICS
-    return true if param==1 && NEWEST_BATTLE_MECHANICS   # Perfect accuracy
+    return super if @id == :DRAGONRUSH && MECHANICS_GENERATION <= 5
+    return true if param==1 && MECHANICS_GENERATION >= 6   # Perfect accuracy
     return true if param==2   # Double damage
     return super
   end
@@ -305,7 +305,7 @@ class PokeBattle_Move_014 < PokeBattle_ConfuseMove
   end
 
   def addlEffect
-    return @chatterChance if !NEWEST_BATTLE_MECHANICS
+    return @chatterChance if MECHANICS_GENERATION <= 5
     return super
   end
 end
@@ -1267,7 +1267,7 @@ end
 class PokeBattle_Move_048 < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::EVASION,(NEWEST_BATTLE_MECHANICS) ? 2 : 1]
+    @statDown = [PBStats::EVASION,(MECHANICS_GENERATION >= 6) ? 2 : 1]
   end
 end
 
@@ -1297,11 +1297,13 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
                     targetSide.effects[PBEffects::Spikes]>0 ||
                     targetSide.effects[PBEffects::ToxicSpikes]>0 ||
                     targetSide.effects[PBEffects::StickyWeb]
-    return false if NEWEST_BATTLE_MECHANICS &&
+    return false if MECHANICS_GENERATION >= 6 &&
                     (targetOpposingSide.effects[PBEffects::StealthRock] ||
                     targetOpposingSide.effects[PBEffects::Spikes]>0 ||
                     targetOpposingSide.effects[PBEffects::ToxicSpikes]>0 ||
                     targetOpposingSide.effects[PBEffects::StickyWeb])
+    return false if MECHANICS_GENERATION >= 8 &&
+                    @battle.field.terrain != PBBattleTerrains::None
     return super
   end
 
@@ -1330,32 +1332,45 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
       @battle.pbDisplay(_INTL("{1} is no longer protected by Safeguard!!",target.pbTeam))
     end
     if target.pbOwnSide.effects[PBEffects::StealthRock] ||
-       (NEWEST_BATTLE_MECHANICS &&
+       (MECHANICS_GENERATION >= 6 &&
        target.pbOpposingSide.effects[PBEffects::StealthRock])
       target.pbOwnSide.effects[PBEffects::StealthRock]      = false
-      target.pbOpposingSide.effects[PBEffects::StealthRock] = false if NEWEST_BATTLE_MECHANICS
+      target.pbOpposingSide.effects[PBEffects::StealthRock] = false if MECHANICS_GENERATION >= 6
       @battle.pbDisplay(_INTL("{1} blew away stealth rocks!",user.pbThis))
     end
     if target.pbOwnSide.effects[PBEffects::Spikes]>0 ||
-       (NEWEST_BATTLE_MECHANICS &&
+       (MECHANICS_GENERATION >= 6 &&
        target.pbOpposingSide.effects[PBEffects::Spikes]>0)
       target.pbOwnSide.effects[PBEffects::Spikes]      = 0
-      target.pbOpposingSide.effects[PBEffects::Spikes] = 0 if NEWEST_BATTLE_MECHANICS
+      target.pbOpposingSide.effects[PBEffects::Spikes] = 0 if MECHANICS_GENERATION >= 6
       @battle.pbDisplay(_INTL("{1} blew away spikes!",user.pbThis))
     end
     if target.pbOwnSide.effects[PBEffects::ToxicSpikes]>0 ||
-       (NEWEST_BATTLE_MECHANICS &&
+       (MECHANICS_GENERATION >= 6 &&
        target.pbOpposingSide.effects[PBEffects::ToxicSpikes]>0)
       target.pbOwnSide.effects[PBEffects::ToxicSpikes]      = 0
-      target.pbOpposingSide.effects[PBEffects::ToxicSpikes] = 0 if NEWEST_BATTLE_MECHANICS
+      target.pbOpposingSide.effects[PBEffects::ToxicSpikes] = 0 if MECHANICS_GENERATION >= 6
       @battle.pbDisplay(_INTL("{1} blew away poison spikes!",user.pbThis))
     end
     if target.pbOwnSide.effects[PBEffects::StickyWeb] ||
-       (NEWEST_BATTLE_MECHANICS &&
+       (MECHANICS_GENERATION >= 6 &&
        target.pbOpposingSide.effects[PBEffects::StickyWeb])
       target.pbOwnSide.effects[PBEffects::StickyWeb]      = false
-      target.pbOpposingSide.effects[PBEffects::StickyWeb] = false if NEWEST_BATTLE_MECHANICS
+      target.pbOpposingSide.effects[PBEffects::StickyWeb] = false if MECHANICS_GENERATION >= 6
       @battle.pbDisplay(_INTL("{1} blew away sticky webs!",user.pbThis))
+    end
+    if MECHANICS_GENERATION >= 8 && @battle.field.terrain != PBBattleTerrains::None
+      case @battle.field.terrain
+      when PBBattleTerrains::Electric
+        @battle.pbDisplay(_INTL("The electricity disappeared from the battlefield."))
+      when PBBattleTerrains::Grassy
+        @battle.pbDisplay(_INTL("The grass disappeared from the battlefield."))
+      when PBBattleTerrains::Misty
+        @battle.pbDisplay(_INTL("The mist disappeared from the battlefield."))
+      when PBBattleTerrains::Psychic
+        @battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield."))
+      end
+      @battle.field.terrain = PBBattleTerrains::None
     end
   end
 end
@@ -1405,7 +1420,7 @@ class PokeBattle_Move_04D < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
     inc = 2
-    inc = 1 if @id == :STRINGSHOT && !NEWEST_BATTLE_MECHANICS
+    inc = 1 if @id == :STRINGSHOT && MECHANICS_GENERATION <= 5
     @statDown = [PBStats::SPEED,inc]
   end
 end
@@ -1559,7 +1574,7 @@ class PokeBattle_Move_055 < PokeBattle_Move
 
   def pbEffectAgainstTarget(user,target)
     PBStats.eachBattleStat { |s| user.stages[s] = target.stages[s] }
-    if NEWEST_BATTLE_MECHANICS
+    if NEW_CRITICAL_HIT_RATE_MECHANICS
       user.effects[PBEffects::FocusEnergy] = target.effects[PBEffects::FocusEnergy]
       user.effects[PBEffects::LaserFocus]  = target.effects[PBEffects::LaserFocus]
     end
@@ -1794,7 +1809,7 @@ class PokeBattle_Move_05E < PokeBattle_Move
     userTypes = user.pbTypes(true)
     @newTypes = []
     user.eachMoveWithIndex do |m,i|
-      break if NEWEST_BATTLE_MECHANICS && i>0
+      break if MECHANICS_GENERATION >= 6 && i>0
       next if PBTypes.isPseudoType?(m.type)
       next if userTypes.include?(m.type)
       @newTypes.push(m.type) if !@newTypes.include?(m.type)
@@ -2167,7 +2182,7 @@ class PokeBattle_Move_067 < PokeBattle_Move
 
   def pbFailsAgainstTarget?(user,target)
     if !target.ability ||
-       (user.ability==target.ability && !NEWEST_BATTLE_MECHANICS)
+       (user.ability == target.ability && MECHANICS_GENERATION <= 5)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2369,7 +2384,7 @@ class PokeBattle_Move_070 < PokeBattle_FixedDamageMove
       @battle.pbHideAbilitySplash(target)
       return true
     end
-    if NEWEST_BATTLE_MECHANICS && @id == :SHEERCOLD && target.pbHasType?(:ICE)
+    if MECHANICS_GENERATION >= 7 && @id == :SHEERCOLD && target.pbHasType?(:ICE)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2378,7 +2393,7 @@ class PokeBattle_Move_070 < PokeBattle_FixedDamageMove
 
   def pbAccuracyCheck(user,target)
     acc = @accuracy+user.level-target.level
-    acc -= 10 if NEWEST_BATTLE_MECHANICS && @id == :SHEERCOLD && !user.pbHasType?(:ICE)
+    acc -= 10 if MECHANICS_GENERATION >= 7 && @id == :SHEERCOLD && !user.pbHasType?(:ICE)
     return @battle.pbRandom(100)<acc
   end
 
@@ -2697,7 +2712,7 @@ end
 # Burn's halving of Attack is negated (new mechanics).
 #===============================================================================
 class PokeBattle_Move_07E < PokeBattle_Move
-  def damageReducedByBurn?; return !NEWEST_BATTLE_MECHANICS; end
+  def damageReducedByBurn?; return MECHANICS_GENERATION <= 5; end
 
   def pbBaseDamage(baseDmg,user,target)
     baseDmg *= 2 if user.poisoned? || user.burned? || user.paralyzed?

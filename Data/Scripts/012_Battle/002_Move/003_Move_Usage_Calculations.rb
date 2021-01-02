@@ -160,7 +160,7 @@ class PokeBattle_Move
   def pbIsCritical?(user,target)
     return false if target.pbOwnSide.effects[PBEffects::LuckyChant]>0
     # Set up the critical hit ratios
-    ratios = (NEWEST_BATTLE_MECHANICS) ? [24,8,2,1] : [16,8,4,3,2]
+    ratios = (NEW_CRITICAL_HIT_RATE_MECHANICS) ? [24,8,2,1] : [16,8,4,3,2]
     c = 0
     # Ability effects that alter critical hit rate
     if c>=0 && user.abilityActive?
@@ -390,7 +390,7 @@ class PokeBattle_Move
     end
     # Critical hits
     if target.damageState.critical
-      if NEWEST_BATTLE_MECHANICS
+      if NEW_CRITICAL_HIT_RATE_MECHANICS
         multipliers[FINAL_DMG_MULT] *= 1.5
       else
         multipliers[FINAL_DMG_MULT] *= 2
@@ -455,7 +455,7 @@ class PokeBattle_Move
   def pbAdditionalEffectChance(user,target,effectChance=0)
     return 0 if target.hasActiveAbility?(:SHIELDDUST) && !@battle.moldBreaker
     ret = (effectChance>0) ? effectChance : @addlEffect
-    if NEWEST_BATTLE_MECHANICS || @function!="0A4"   # Secret Power
+    if MECHANICS_GENERATION >= 6 || @function != "0A4"   # Secret Power
       ret *= 2 if user.hasActiveAbility?(:SERENEGRACE) ||
                   user.pbOwnSide.effects[PBEffects::Rainbow]>0
     end

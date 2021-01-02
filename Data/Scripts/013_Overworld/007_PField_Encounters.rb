@@ -297,11 +297,11 @@ class PokemonEncounters
       end
     end
     # Black Flute and White Flute alter the level of the wild Pokémon
-    if NEWEST_BATTLE_MECHANICS
+    if FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
       if $PokemonMap.blackFluteUsed
-        level = [level+1+rand(3),PBExperience.maxLevel].min
+        level = [level + 1 + rand(4), PBExperience.maxLevel].min
       elsif $PokemonMap.whiteFluteUsed
-        level = [level-1-rand(3),1].max
+        level = [level - 1 - rand(4), 1].max
       end
     end
     # Return [species, level]
@@ -329,7 +329,7 @@ class PokemonEncounters
     # increase precision).
     encount = @density[enctype]*16
     encount *= 0.8 if $PokemonGlobal.bicycle
-    if !NEWEST_BATTLE_MECHANICS
+    if !FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
       if $PokemonMap.blackFluteUsed
         encount /= 2
       elsif $PokemonMap.whiteFluteUsed
@@ -382,7 +382,7 @@ class PokemonEncounters
     return false if $DEBUG && Input.press?(Input::CTRL)
     if !pbPokeRadarOnShakingGrass
       if $PokemonGlobal.repel>0 || repel
-        firstPkmn = (NEWEST_BATTLE_MECHANICS) ? $Trainer.firstPokemon : $Trainer.firstAblePokemon
+        firstPkmn = (REPEL_COUNTS_FAINTED_POKEMON) ? $Trainer.firstPokemon : $Trainer.firstAblePokemon
         return false if firstPkmn && encounter[1]<firstPkmn.level
       end
     end

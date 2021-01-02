@@ -646,22 +646,20 @@ def pbItemEditor
      [_INTL("Description"),       StringProperty,            _INTL("Description of the item")],
      [_INTL("Use Out of Battle"), EnumProperty.new([
         _INTL("Can't Use"), _INTL("On a Pokémon"), _INTL("Use directly"),
-        _INTL("TM"), _INTL("HM"), _INTL("On a Pokémon reusable")]),
-                                                             _INTL("Specifies how this item can be used outside of battle.")],
+        _INTL("TM"), _INTL("HM"), _INTL("On a Pokémon reusable"),
+       _INTL("TR")]),                                        _INTL("Specifies how this item can be used outside of battle.")],
      [_INTL("Use In Battle"),     EnumProperty.new([
         _INTL("Can't Use"), _INTL("On a Pokémon"), _INTL("On Pokémon's move"),
         _INTL("On battler"), _INTL("On foe battler"), _INTL("Use directly"),
         _INTL("On a Pokémon reusable"), _INTL("On Pokémon's move reusable"),
         _INTL("On battler reusable"), _INTL("On foe battler reusable"),
-        _INTL("Use directly reusable")]),
-                                                             _INTL("Specifies how this item can be used within a battle.")],
+        _INTL("Use directly reusable")]),                    _INTL("Specifies how this item can be used within a battle.")],
      [_INTL("Special Items"),     EnumProperty.new([
         _INTL("None of below"), _INTL("Mail"), _INTL("Mail with Pictures"),
         _INTL("Snag Ball"), _INTL("Poké Ball"), _INTL("Plantable Berry"),
         _INTL("Key Item"), _INTL("Evolution Stone"), _INTL("Fossil"),
         _INTL("Apricorn"), _INTL("Type-boosting Gem"), _INTL("Mulch"),
-        _INTL("Mega Stone")]),
-                                                             _INTL("For special kinds of items.")],
+        _INTL("Mega Stone")]),                               _INTL("For special kinds of items.")],
      [_INTL("Machine"),           MoveProperty,              _INTL("Move taught by this TM or HM.")]
   ]
   pbListScreenBlock(_INTL("Items"), ItemLister.new(selection, true)) { |button, item|

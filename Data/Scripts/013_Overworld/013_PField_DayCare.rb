@@ -228,7 +228,7 @@ def pbDayCareGenerateEgg
     moves.push(move)
   end
   # Inheriting Machine Moves
-  if !NEWEST_BATTLE_MECHANICS
+  if BREEDING_CAN_INHERIT_MACHINE_MOVES
     GameData::Item.each do |i|
       atk = i.move
       next if !atk
@@ -242,7 +242,7 @@ def pbDayCareGenerateEgg
   if movefather.male?
     babyEggMoves.each { |m| moves.push(m) if movefather.hasMove?(m) }
   end
-  if NEWEST_BATTLE_MECHANICS
+  if BREEDING_CAN_INHERIT_EGG_MOVES_FROM_MOTHER
     babyEggMoves.each { |m| moves.push(m) if movemother.hasMove?(m) }
   end
   # Volt Tackle
@@ -293,8 +293,7 @@ def pbDayCareGenerateEgg
     end
     r = (r+1)%2
   end
-  limit = (NEWEST_BATTLE_MECHANICS && (mother.hasItem?(:DESTINYKNOT) ||
-           father.hasItem?(:DESTINYKNOT))) ? 5 : 3
+  limit = (mother.hasItem?(:DESTINYKNOT) || father.hasItem?(:DESTINYKNOT)) ? 5 : 3
   loop do
     freestats = []
     PBStats.eachStat { |s| freestats.push(s) if !ivinherit.include?(s) }
@@ -307,11 +306,12 @@ def pbDayCareGenerateEgg
     break if num>=limit
   end
   # Inheriting nature
-  newnatures = []
-  newnatures.push(mother.nature) if mother.hasItem?(:EVERSTONE)
-  newnatures.push(father.nature) if father.hasItem?(:EVERSTONE)
-  if newnatures.length>0
-    egg.setNature(newnatures[rand(newnatures.length)])
+  new_natures = []
+  new_natures.push(mother.nature) if mother.hasItem?(:EVERSTONE)
+  new_natures.push(father.nature) if father.hasItem?(:EVERSTONE)
+  if new_natures.length > 0
+    new_nature = (new_natures.length == 1) ? new_natures[0] : new_natures[rand(new_natures.length)]
+    egg.setNature(new_nature)
   end
   # Masuda method and Shiny Charm
   shinyretries = 0
@@ -324,26 +324,34 @@ def pbDayCareGenerateEgg
     end
   end
   # Inheriting ability from the mother
-  if !ditto0 && !ditto1
-    if mother.hasHiddenAbility?
-      egg.setAbility(mother.abilityIndex) if rand(10)<6
-    else
-      if rand(10)<8
+  if !ditto0 || !ditto1
+    parent = (ditto0) ? father : mother   # The non-Ditto
+    if parent.hasHiddenAbility?
+      egg.setAbility(parent.abilityIndex) if rand(100) < 60
+    elsif !ditto0 && !ditto1
+      if rand(100) < 80
         egg.setAbility(mother.abilityIndex)
       else
-        egg.setAbility((mother.abilityIndex+1)%2)
+        egg.setAbility((mother.abilityIndex + 1) % 2)
       end
     end
-  elsif !(ditto0 && ditto1) && NEWEST_BATTLE_MECHANICS
-    parent = (!ditto0) ? mother : father
-    if parent.hasHiddenAbility?
-      egg.setAbility(parent.abilityIndex) if rand(10)<6
-    end
   end
-  # Inheriting Poké Ball from the mother
-  if mother.female? &&
-     ![:MASTERBALL, :CHERISHBALL].include?(pbBallTypeToItem(mother.ballused).id)
-    egg.ballused = mother.ballused
+  # Inheriting Poké Ball from the mother (or father if it's same species as mother)
+  if !ditto0 || !ditto1
+    possible_balls = []
+    if mother.species == father.species
+      possible_balls.push(mother.ballused)
+      possible_balls.push(father.ballused)
+    else
+      possible_balls.push(pkmn0.ballused) if pkmn0.female? || ditto1
+      possible_balls.push(pkmn1.ballused) if pkmn1.female? || ditto0
+    end
+    possible_balls.delete(pbGetBallType(:MASTERBALL))    # Can't inherit this Ball
+    possible_balls.delete(pbGetBallType(:CHERISHBALL))   # Can't inherit this Ball
+    if possible_balls.length > 0
+      egg.ballused = possible_balls[0]
+      egg.ballused = possible_balls[rand(possible_balls.length)] if possible_balls.length > 1
+    end
   end
   # Set all stats
   egg.happiness = 120

@@ -308,7 +308,7 @@ BattleHandlers::StatusCureAbility.add(:MAGMAARMOR,
 BattleHandlers::StatusCureAbility.add(:OBLIVIOUS,
   proc { |ability,battler|
     next if battler.effects[PBEffects::Attract]<0 &&
-            (battler.effects[PBEffects::Taunt]==0 || !NEWEST_BATTLE_MECHANICS)
+            (battler.effects[PBEffects::Taunt]==0 || MECHANICS_GENERATION <= 5)
     battler.battle.pbShowAbilitySplash(battler)
     if battler.effects[PBEffects::Attract]>=0
       battler.pbCureAttract
@@ -319,7 +319,7 @@ BattleHandlers::StatusCureAbility.add(:OBLIVIOUS,
            battler.pbThis,battler.abilityName))
       end
     end
-    if battler.effects[PBEffects::Taunt]>0 && NEWEST_BATTLE_MECHANICS
+    if battler.effects[PBEffects::Taunt]>0 && MECHANICS_GENERATION >= 6
       battler.effects[PBEffects::Taunt] = 0
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         battler.battle.pbDisplay(_INTL("{1}'s Taunt wore off!",battler.pbThis))
@@ -741,7 +741,7 @@ BattleHandlers::MoveBaseTypeModifierAbility.add(:LIQUIDVOICE,
 BattleHandlers::MoveBaseTypeModifierAbility.add(:NORMALIZE,
   proc { |ability,user,move,type|
     next if !GameData::Type.exists?(:NORMAL)
-    move.powerBoost = true if NEWEST_BATTLE_MECHANICS
+    move.powerBoost = true if MECHANICS_GENERATION >= 7
     next :NORMAL
   }
 )
@@ -780,7 +780,7 @@ BattleHandlers::AccuracyCalcUserAbility.add(:HUSTLE,
 
 BattleHandlers::AccuracyCalcUserAbility.add(:KEENEYE,
   proc { |ability,mods,user,target,move,type|
-    mods[EVA_STAGE] = 0 if mods[EVA_STAGE]>0 && NEWEST_BATTLE_MECHANICS
+    mods[EVA_STAGE] = 0 if mods[EVA_STAGE]>0 && MECHANICS_GENERATION >= 6
   }
 )
 
@@ -1601,12 +1601,12 @@ BattleHandlers::TargetAbilityOnHit.add(:WATERCOMPACTION,
 BattleHandlers::TargetAbilityOnHit.add(:WEAKARMOR,
   proc { |ability,user,target,move,battle|
     next if !move.physicalMove?
-    next if !target.pbCanLowerStatStage?(PBStats::DEFENSE,target) &&
-            !target.pbCanRaiseStatStage?(PBStats::SPEED,target)
+    next if !target.pbCanLowerStatStage?(PBStats::DEFENSE, target) &&
+            !target.pbCanRaiseStatStage?(PBStats::SPEED, target)
     battle.pbShowAbilitySplash(target)
-    target.pbLowerStatStageByAbility(PBStats::DEFENSE,1,target,false)
+    target.pbLowerStatStageByAbility(PBStats::DEFENSE, 1, target, false)
     target.pbRaiseStatStageByAbility(PBStats::SPEED,
-       (NEWEST_BATTLE_MECHANICS) ? 2 : 1,target,false)
+       (MECHANICS_GENERATION >= 7) ? 2 : 1, target, false)
     battle.pbHideAbilitySplash(target)
   }
 )
@@ -2089,7 +2089,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
         next if m.statusMove?
         if type1
           moveType = m.type
-          if NEWEST_BATTLE_MECHANICS && m.function == "090"   # Hidden Power
+          if MECHANICS_GENERATION >= 6 && m.function == "090"   # Hidden Power
             moveType = pbHiddenPower(b.pokemon)[0]
           end
           eff = PBTypes.getCombinedEffectiveness(moveType,type1,type2,type3)
@@ -2236,7 +2236,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:FRISK,
     end
     if foes.length>0
       battle.pbShowAbilitySplash(battler)
-      if NEWEST_BATTLE_MECHANICS
+      if MECHANICS_GENERATION >= 6
         foes.each do |b|
           battle.pbDisplay(_INTL("{1} frisked {2} and found its {3}!",
              battler.pbThis,b.pbThis(true),b.itemName))

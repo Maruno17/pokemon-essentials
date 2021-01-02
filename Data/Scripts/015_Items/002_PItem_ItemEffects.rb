@@ -372,7 +372,7 @@ ItemHandlers::UseOnPokemon.add(:POTION,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.copy(:POTION,:BERRYJUICE,:SWEETHEART)
-ItemHandlers::UseOnPokemon.copy(:POTION,:RAGECANDYBAR) if !NEWEST_BATTLE_MECHANICS
+ItemHandlers::UseOnPokemon.copy(:POTION,:RAGECANDYBAR) if !RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::UseOnPokemon.add(:SUPERPOTION,proc { |item,pkmn,scene|
   next pbHPItem(pkmn,50,scene)
@@ -489,7 +489,7 @@ ItemHandlers::UseOnPokemon.add(:FULLHEAL,proc { |item,pkmn,scene|
 ItemHandlers::UseOnPokemon.copy(:FULLHEAL,
    :LAVACOOKIE,:OLDGATEAU,:CASTELIACONE,:LUMIOSEGALETTE,:SHALOURSABLE,
    :BIGMALASADA,:LUMBERRY)
-ItemHandlers::UseOnPokemon.copy(:FULLHEAL,:RAGECANDYBAR) if NEWEST_BATTLE_MECHANICS
+ItemHandlers::UseOnPokemon.copy(:FULLHEAL,:RAGECANDYBAR) if RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::UseOnPokemon.add(:FULLRESTORE,proc { |item,pkmn,scene|
   if pkmn.fainted? || (pkmn.hp==pkmn.totalhp && pkmn.status==PBStatuses::NONE)

@@ -120,7 +120,7 @@ class PokeBattle_AI
       end
       return true if target.effects[PBEffects::Substitute]>0 && move.statusMove? &&
                      !move.ignoresSubstitute?(user) && user.index!=target.index
-      return true if NEWEST_BATTLE_MECHANICS && user.hasActiveAbility?(:PRANKSTER) &&
+      return true if MECHANICS_GENERATION >= 7 && user.hasActiveAbility?(:PRANKSTER) &&
                      target.pbHasType?(:DARK) && target.opposes?(user)
       return true if move.priority>0 && @battle.field.terrain==PBBattleTerrains::Psychic &&
                      target.affectedByTerrain? && target.opposes?(user)
@@ -200,7 +200,7 @@ class PokeBattle_AI
       baseDmg = move.pbNaturalGiftBaseDamage(user.item_id)
     when "09B"   # Heavy Slam
       baseDmg = move.pbBaseDamage(baseDmg,user,target)
-      baseDmg *= 2 if NEWEST_BATTLE_MECHANICS && skill>=PBTrainerAI.mediumSkill &&
+      baseDmg *= 2 if MECHANICS_GENERATION >= 7 && skill>=PBTrainerAI.mediumSkill &&
                       target.effects[PBEffects::Minimize]
     when "0A0", "0BD", "0BE"   # Frost Breath, Double Kick, Twineedle
       baseDmg *= 2
@@ -469,7 +469,7 @@ class PokeBattle_AI
     if skill>=PBTrainerAI.highSkill
       if user.status==PBStatuses::BURN && move.physicalMove?(type) &&
          !user.hasActiveAbility?(:GUTS) &&
-         !(NEWEST_BATTLE_MECHANICS && move.function=="07E")   # Facade
+         !(MECHANICS_GENERATION >= 6 && move.function == "07E")   # Facade
         multipliers[FINAL_DMG_MULT] /= 2
       end
     end
@@ -646,7 +646,7 @@ class PokeBattle_AI
     end
     if skill>=PBTrainerAI.highSkill
       if move.function=="006"   # Toxic
-        modifiers[BASE_ACC] = 0 if NEWEST_BATTLE_MECHANICS && move.statusMove? &&
+        modifiers[BASE_ACC] = 0 if MORE_TYPE_EFFECTS && move.statusMove? &&
                                    user.pbHasType?(:POISON)
       end
       if move.function=="070"   # OHKO moves

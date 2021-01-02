@@ -578,7 +578,7 @@ end
 Events.onEndBattle += proc { |_sender,e|
   decision = e[0]
   canLose  = e[1]
-  if NEWEST_BATTLE_MECHANICS || (decision!=2 && decision!=5)   # not a loss or a draw
+  if CHECK_EVOLUTION_AFTER_ALL_BATTLES || (decision!=2 && decision!=5)   # not a loss or a draw
     if $PokemonTemp.evolutionLevels
       pbEvolutionCheck($PokemonTemp.evolutionLevels)
       $PokemonTemp.evolutionLevels = nil
@@ -602,7 +602,7 @@ Events.onEndBattle += proc { |_sender,e|
 def pbEvolutionCheck(currentLevels)
   for i in 0...currentLevels.length
     pkmn = $Trainer.party[i]
-    next if !pkmn || (pkmn.hp==0 && !NEWEST_BATTLE_MECHANICS)
+    next if !pkmn || (pkmn.hp==0 && !CHECK_EVOLUTION_FOR_FAINTED_POKEMON)
     next if currentLevels[i] && pkmn.level==currentLevels[i]
     newSpecies = pbCheckEvolution(pkmn)
     next if !newSpecies

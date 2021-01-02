@@ -101,7 +101,7 @@ BallHandlers::ModifyCatchRate.add(:SAFARIBALL,proc { |ball,catchRate,battle,batt
 })
 
 BallHandlers::ModifyCatchRate.add(:NETBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
-  multiplier = (NEWEST_BATTLE_MECHANICS) ? 3.5 : 3
+  multiplier = (NEW_POKE_BALL_CATCH_RATES) ? 3.5 : 3
   catchRate *= multiplier if battler.pbHasType?(:BUG) || battler.pbHasType?(:WATER)
   next catchRate
 })
@@ -112,14 +112,14 @@ BallHandlers::ModifyCatchRate.add(:DIVEBALL,proc { |ball,catchRate,battle,battle
 })
 
 BallHandlers::ModifyCatchRate.add(:NESTBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
-  if battler.level<=((NEWEST_BATTLE_MECHANICS) ? 29 : 30)
-    catchRate *= [(41-battler.level)/10.0,1].max
+  if battler.level <= 30
+    catchRate *= [(41 - battler.level) / 10.0, 1].max
   end
   next catchRate
 })
 
 BallHandlers::ModifyCatchRate.add(:REPEATBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
-  multiplier = (NEWEST_BATTLE_MECHANICS) ? 3.5 : 3
+  multiplier = (NEW_POKE_BALL_CATCH_RATES) ? 3.5 : 3
   catchRate *= multiplier if battle.pbPlayer.owned[battler.species]
   next catchRate
 })
@@ -131,14 +131,13 @@ BallHandlers::ModifyCatchRate.add(:TIMERBALL,proc { |ball,catchRate,battle,battl
 })
 
 BallHandlers::ModifyCatchRate.add(:DUSKBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
-  multiplier = (NEWEST_BATTLE_MECHANICS) ? 3 : 3.5
+  multiplier = (NEW_POKE_BALL_CATCH_RATES) ? 3 : 3.5
   catchRate *= multiplier if battle.time==2
   next catchRate
 })
 
 BallHandlers::ModifyCatchRate.add(:QUICKBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
-  multiplier = (NEWEST_BATTLE_MECHANICS) ? 4 : 5
-  catchRate *= multiplier if battle.turnCount==0
+  catchRate *= 5 if battle.turnCount==0
   next catchRate
 })
 
@@ -162,7 +161,7 @@ BallHandlers::ModifyCatchRate.add(:LEVELBALL,proc { |ball,catchRate,battle,battl
 })
 
 BallHandlers::ModifyCatchRate.add(:LUREBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
-  multiplier = (NEWEST_BATTLE_MECHANICS) ? 5 : 3
+  multiplier = (NEW_POKE_BALL_CATCH_RATES) ? 5 : 3
   catchRate *= multiplier if $PokemonTemp.encounterType==EncounterTypes::OldRod ||
                              $PokemonTemp.encounterType==EncounterTypes::GoodRod ||
                              $PokemonTemp.encounterType==EncounterTypes::SuperRod
@@ -172,7 +171,7 @@ BallHandlers::ModifyCatchRate.add(:LUREBALL,proc { |ball,catchRate,battle,battle
 BallHandlers::ModifyCatchRate.add(:HEAVYBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
   next 0 if catchRate==0
   weight = battler.pbWeight
-  if NEWEST_BATTLE_MECHANICS
+  if NEW_POKE_BALL_CATCH_RATES
     if weight>=3000;    catchRate += 30
     elsif weight>=2000; catchRate += 20
     elsif weight<1000;  catchRate -= 20

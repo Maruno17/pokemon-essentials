@@ -92,7 +92,8 @@ module GameData
 
     def is_TM?;              return @field_use == 3; end
     def is_HM?;              return @field_use == 4; end
-    def is_machine?;         return is_TM? || is_HM?; end
+    def is_TR?;              return @field_use == 6; end
+    def is_machine?;         return is_TM? || is_HM? || is_TR?; end
     def is_mail?;            return @type == 1 || @type == 2; end
     def is_icon_mail?;       return @type == 2; end
     def is_poke_ball?;       return @type == 3 || @type == 4; end
@@ -107,8 +108,7 @@ module GameData
     def is_mega_stone?;      return @type == 12; end   # Does NOT include Red Orb/Blue Orb
 
     def is_important?
-      return true if is_key_item? || is_HM?
-      return true if is_TM? && INFINITE_TMS
+      return true if is_key_item? || is_HM? || is_TM?
       return false
     end
 

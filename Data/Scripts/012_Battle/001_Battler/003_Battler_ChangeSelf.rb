@@ -137,7 +137,7 @@ class PokeBattle_Battler
     self.form = newForm
     pbUpdate(true)
     @hp = @totalhp-oldDmg
-    @effects[PBEffects::WeightChange] = 0 if NEWEST_BATTLE_MECHANICS
+    @effects[PBEffects::WeightChange] = 0 if MECHANICS_GENERATION >= 6
     @battle.scene.pbChangePokemon(self,@pokemon)
     @battle.scene.pbRefreshOne(@index)
     @battle.pbDisplay(msg) if msg && msg!=""
@@ -275,7 +275,7 @@ class PokeBattle_Battler
     @spdef   = target.spdef
     @speed   = target.speed
     PBStats.eachBattleStat { |s| @stages[s] = target.stages[s] }
-    if NEWEST_BATTLE_MECHANICS
+    if NEW_CRITICAL_HIT_RATE_MECHANICS
       @effects[PBEffects::FocusEnergy] = target.effects[PBEffects::FocusEnergy]
       @effects[PBEffects::LaserFocus]  = target.effects[PBEffects::LaserFocus]
     end

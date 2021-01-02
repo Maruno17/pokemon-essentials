@@ -1,19 +1,15 @@
 module MessageConfig
-  FontName        = "Power Green"
-  # in Graphics/Windowskins/ (specify empty string to use the default windowskin)
-  TextSkinName    = "speech hgss 1"
-  ChoiceSkinName  = "choice 1"
   WindowOpacity   = 255
   TextSpeed       = nil   # can be positive to wait frames or negative to
                           # show multiple characters in a single frame
-  LIGHTTEXTBASE   = Color.new(248,248,248)
-  LIGHTTEXTSHADOW = Color.new(72,80,88)
-  DARKTEXTBASE    = Color.new(80,80,88)
-  DARKTEXTSHADOW  = Color.new(160,160,168)
   # 0 = Pause cursor is displayed at end of text
   # 1 = Pause cursor is displayed at bottom right
   # 2 = Pause cursor is displayed at lower middle side
   CURSORMODE      = 1
+  LIGHTTEXTBASE   = Color.new(248,248,248)
+  LIGHTTEXTSHADOW = Color.new(72,80,88)
+  DARKTEXTBASE    = Color.new(80,80,88)
+  DARKTEXTSHADOW  = Color.new(160,160,168)
   FontSubstitutes = {
      "Power Red and Blue"  => "Pokemon RS",
      "Power Red and Green" => "Pokemon FireLeaf",
@@ -44,21 +40,40 @@ module MessageConfig
   end
 
   def self.pbDefaultSystemFrame
-    return "" if !MessageConfig::ChoiceSkinName
-    return pbResolveBitmap("Graphics/Windowskins/"+MessageConfig::ChoiceSkinName) || ""
+    begin
+      return pbResolveBitmap("Graphics/Windowskins/" + $TextFrames[$PokemonSystem.frame]) || ""
+    rescue
+      return pbResolveBitmap("Graphics/Windowskins/" + $TextFrames[0]) || ""
+    end
   end
 
   def self.pbDefaultSpeechFrame
-    return "" if !MessageConfig::TextSkinName
-    return pbResolveBitmap("Graphics/Windowskins/"+MessageConfig::TextSkinName) || ""
+    begin
+      return pbResolveBitmap("Graphics/Windowskins/" + $SpeechFrames[$PokemonSystem.textskin]) || ""
+    rescue
+      return pbResolveBitmap("Graphics/Windowskins/" + $SpeechFrames[0]) || ""
+    end
   end
 
   def self.pbDefaultSystemFontName
-    return MessageConfig.pbTryFonts(MessageConfig::FontName,"Arial Narrow","Arial")
+    begin
+      return MessageConfig.pbTryFonts($VersionStyles[$PokemonSystem.font][0], "Arial Narrow", "Arial")
+    rescue
+      return MessageConfig.pbTryFonts($VersionStyles[0], "Arial Narrow", "Arial")
+    end
   end
 
   def self.pbDefaultTextSpeed
-    return (TextSpeed) ? TextSpeed : (Graphics.width>400) ? -2 : 1
+    return pbSettingToTextSpeed(($PokemonSystem.textspeed rescue nil))
+  end
+
+  def self.pbSettingToTextSpeed(speed)
+    case speed
+    when 0 then return 2
+    when 1 then return 1
+    when 2 then return -2
+    end
+    return TextSpeed || 1
   end
 
   def self.pbDefaultWindowskin
