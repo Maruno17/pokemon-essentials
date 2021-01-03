@@ -85,8 +85,14 @@ module SaveData
   # @param id [Symbol] save value id
   # @param save_data [Hash] save data to load
   # @raise [InvalidValueError] if an invalid value is being loaded
+  # @raise [ArgumentError] if given save data does not contain the value
   def load_value(id, save_data)
     validate id => Symbol, save_data => Hash
+
+    unless save_data.has_key?(id)
+      raise ArgumentError, "Save data does not contain value #{id.inspect}"
+    end
+
     @values[id].load(save_data[id])
   end
 
