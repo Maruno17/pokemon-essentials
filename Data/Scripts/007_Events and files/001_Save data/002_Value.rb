@@ -11,6 +11,7 @@ module SaveData
     def initialize(id, &block)
       validate id => Symbol, block => Proc
       @id = id
+      @loaded = false
       instance_eval(&block)
       raise "No save_value defined for save value #{id.inspect}" if @save_proc.nil?
       raise "No load_value defined for save value #{id.inspect}" if @load_proc.nil?
@@ -39,9 +40,11 @@ module SaveData
       end
 
       @load_proc.call(value)
+      @loaded = true
     end
 
-    # Calls the save value's load proc with the value fetched from the defined reset proc.
+    # Calls the save value's load proc with the value fetched
+    # from the defined reset proc.
     # @raise (see #load)
     def reset
       raise "Save value #{@id.inspect} has no reset proc defined" if @reset_proc.nil?
@@ -52,6 +55,11 @@ module SaveData
     # @return [Boolean] whether the value has a reset proc defined
     def has_reset_proc?
       return @reset_proc.is_a?(Block)
+    end
+
+    # @return [Boolean] whether the value has been loaded
+    def loaded?
+      return @loaded
     end
 
     # Uses the +from_old_format+ proc to select the correct data from
