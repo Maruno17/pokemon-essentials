@@ -1,11 +1,4 @@
 # The SaveData module is used to analyze and modify the save file.
-
-# TODO: Currently, values loaded using load_value are loaded again when
-#   load_values is called. A more robust system should be built instead.
-#   Maybe a "load_on_bootup" class method for flagging values to be
-#   loaded on bootup automatically. Examples of values that need this
-#   are :trainer, :pokemon_system etc.
-
 module SaveData
   # Contains the file path of the save file.
   FILE_PATH = System.data_directory + '/Game.rxdata'
@@ -76,18 +69,19 @@ module SaveData
     return save_data
   end
 
-  # Loads the values from the given save data into memory by
+  # Loads the values from the given save data by
   # calling each {Value} object's +load_value+ proc.
+  # Values that are already loaded are skipped.
   # @param save_data [Hash] save data to load
   # @raise [InvalidValueError] if an invalid value is being loaded
   def load_values(save_data)
     validate save_data => Hash
     save_data.each do |id, value|
-      @values[id].load(value)
+      @values[id].load(value) unless @values[id].loaded?
     end
   end
 
-  # Loads a single value from the given save data into memory.
+  # Loads a single value from the given save data.
   # @param id [Symbol] save value id
   # @param save_data [Hash] save data to load
   # @raise [InvalidValueError] if an invalid value is being loaded
