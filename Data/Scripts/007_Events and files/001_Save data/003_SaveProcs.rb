@@ -16,6 +16,7 @@ SaveData.register(:frame_count) do
   ensure_class :Integer
   save_value { Graphics.frame_count }
   load_value { |value| Graphics.frame_count = value }
+  new_game_value { 0 }
   from_old_format { |old_format| old_format[1] }
 end
 
@@ -23,6 +24,7 @@ SaveData.register(:game_system) do
   ensure_class :Game_System
   save_value { $game_system }
   load_value { |value| $game_system = value }
+  new_game_value { Game_System.new }
   from_old_format { |old_format| old_format[2] }
 end
 
@@ -37,6 +39,7 @@ SaveData.register(:switches) do
   ensure_class :Game_Switches
   save_value { $game_switches }
   load_value { |value| $game_switches = value }
+  new_game_value { Game_Switches.new }
   from_old_format { |old_format| old_format[5] }
 end
 
@@ -44,6 +47,7 @@ SaveData.register(:variables) do
   ensure_class :Game_Variables
   save_value { $game_variables }
   load_value { |value| $game_variables = value }
+  new_game_value { Game_Variables.new }
   from_old_format { |old_format| old_format[6] }
 end
 
@@ -51,6 +55,7 @@ SaveData.register(:self_switches) do
   ensure_class :Game_SelfSwitches
   save_value { $game_self_switches }
   load_value { |value| $game_self_switches = value }
+  new_game_value { Game_SelfSwitches.new }
   from_old_format { |old_format| old_format[7] }
 end
 
@@ -58,6 +63,7 @@ SaveData.register(:game_screen) do
   ensure_class :Game_Screen
   save_value { $game_screen }
   load_value { |value| $game_screen = value }
+  new_game_value { Game_SelfSwitches.new }
   from_old_format { |old_format| old_format[8] }
 end
 
@@ -70,6 +76,7 @@ SaveData.register(:map_factory) do
     $PokemonEncounters = PokemonEncounters.new
     $PokemonEncounters.setup($game_map.map_id)
   end
+  new_game_value { PokemonMapFactory.new($data_system.start_map_id) }
   from_old_format { |old_format| old_format[9] }
 end
 
@@ -77,6 +84,7 @@ SaveData.register(:game_player) do
   ensure_class :Game_Player
   save_value { $game_player }
   load_value { |value| $game_player = value }
+  new_game_value { Game_Player.new }
   from_old_format { |old_format| old_format[10] }
 end
 
@@ -84,6 +92,7 @@ SaveData.register(:global_metadata) do
   ensure_class :PokemonGlobalMetadata
   save_value { $PokemonGlobal }
   load_value { |value| $PokemonGlobal = value }
+  new_game_value { PokemonGlobalMetadata.new }
   from_old_format { |old_format| old_format[11] }
 end
 
@@ -91,6 +100,7 @@ SaveData.register(:map_metadata) do
   ensure_class :PokemonMapMetadata
   save_value { $PokemonMap }
   load_value { |value| $PokemonMap = value }
+  new_game_value { PokemonMapMetadata.new }
   from_old_format { |old_format| old_format[12] }
 end
 
@@ -105,6 +115,7 @@ SaveData.register(:storage_system) do
   ensure_class :PokemonStorage
   save_value { $PokemonStorage }
   load_value { |value| $PokemonStorage = value }
+  new_game_value { PokemonStorage.new }
   from_old_format { |old_format| old_format[14] }
 end
 
