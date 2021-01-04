@@ -15,6 +15,5 @@ RGSS*.dll
 # Temp files
 
 ~*
-STRAT/*
 # Word files
 *.docx
