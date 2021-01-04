@@ -3,6 +3,7 @@ module SaveData
   class InvalidValueError < RuntimeError; end
 
   # Contains the data of a single value in save data.
+  # New values are added using {SaveData.register}.
   class Value
     # @return [Symbol] the value id
     attr_reader :id
@@ -65,7 +66,7 @@ module SaveData
       return @loaded
     end
 
-    # Uses the +from_old_format+ proc to select the correct data from
+    # Uses the {#from_old_format} proc to select the correct data from
     # +old_format+ and return it.
     # Returns nil if the proc is undefined.
     # @param old_format [Array] old format to load value from
@@ -80,6 +81,7 @@ module SaveData
     # @!group Configuration
 
     # Defines what is saved into save data. Requires a block.
+    # @see SaveData.register
     def save_value(&block)
       raise ArgumentError, 'No block given for save_value proc' unless block_given?
       @save_proc = block
@@ -87,12 +89,14 @@ module SaveData
 
     # Defines how the loaded value is placed into a global variable.
     # Requires a block with the loaded value as its parameter.
+    # @see SaveData.register
     def load_value(&block)
       raise ArgumentError, 'No block given for load_value proc' unless block_given?
       @load_proc = block
     end
 
     # If present, defines what the value is set to at the start of a new game.
+    # @see SaveData.register
     def new_game_value(&block)
       raise ArgumentError, 'No block given for new_game_value proc' unless block_given?
       @new_game_value_proc = block
@@ -102,6 +106,7 @@ module SaveData
     # the passed parameter(s).
     # @param class_names [Symbol] class names for the accepted value
     # @note This method accepts multiple class names to ensure compatibility with renamed classes.
+    # @see SaveData.register
     def ensure_class(*class_names)
       raise ArgumentError, 'No class names given for ensure_class' if class_names.empty?
       @ensured_class_names = class_names.map { |name| name.to_s }
@@ -109,6 +114,7 @@ module SaveData
 
     # If present, defines how the value should be fetched from the pre-v19
     # save format. Requires a block with the old format array as its parameter.
+    # @see SaveData.register
     def from_old_format(&block)
       raise ArgumentError, 'No block given for from_old_format proc' unless block_given?
       @old_format_get_proc = block

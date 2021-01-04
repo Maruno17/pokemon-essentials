@@ -48,9 +48,23 @@ module SaveData
   end
 
   # Registers a {Value} to be saved into save data.
-  # Takes a block which defines the value's saving (+save_value+)
-  # and loading (+load_value+) procedures, as well as a possible
-  # proc for fetching the value from the pre-v19 format (+from_old_format+)
+  # Takes a block which defines the value's saving ({Value#save_value})
+  # and loading ({Value#load_value}) procedures.
+  #
+  # It is also possible to provide a proc for fetching the value
+  # from the pre-v19 format ({Value#from_old_format}), define
+  # a value to be set upon starting a new game with {Value#new_game_value}
+  # and ensure that the saved and loaded value is of the correct
+  # class with {Value#ensure_class}.
+  #
+  # @example Registering a new value
+  #   SaveData.register(:foo) do
+  #     ensure_class :Foo
+  #     save_value { $foo }
+  #     load_value { |value| $foo = value }
+  #     new_game_value { Foo.new }
+  #     from_old_format { |old_format| old_format[16] if old_format[16].is_a?(Foo) }
+  #   end
   # @param id [Symbol] value id
   # @yieldself [Value]
   def register(id, &block)
@@ -70,7 +84,7 @@ module SaveData
   end
 
   # Loads the values from the given save data by
-  # calling each {Value} object's +load_value+ proc.
+  # calling each {Value} object's {Value#load_value} proc.
   # Values that are already loaded are skipped.
   # @param save_data [Hash] save data to load
   # @raise [InvalidValueError] if an invalid value is being loaded
