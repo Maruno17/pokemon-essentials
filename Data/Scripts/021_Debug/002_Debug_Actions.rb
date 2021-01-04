@@ -119,6 +119,7 @@ def pbDebugSetVariable(id,diff)
     pbPlayCursorSE
     $game_variables[id] = [$game_variables[id]+diff,99999999].min
     $game_variables[id] = [$game_variables[id],-99999999].max
+    $game_map.need_refresh = true
   end
 end
 
@@ -132,10 +133,12 @@ def pbDebugVariableScreen(id)
     value = pbMessageChooseNumber(_INTL("Set variable {1}.",id),params)
     $game_variables[id] = [value,99999999].min
     $game_variables[id] = [$game_variables[id],-99999999].max
+    $game_map.need_refresh = true
   elsif $game_variables[id].is_a?(String)
     value = pbMessageFreeText(_INTL("Set variable {1}.",id),
        $game_variables[id],false,250,Graphics.width)
     $game_variables[id] = value
+    $game_map.need_refresh = true
   end
 end
 
@@ -161,6 +164,7 @@ def pbDebugVariables(mode)
         pbPlayDecisionSE
         $game_switches[current_id] = !$game_switches[current_id]
         right_window.refresh
+        $game_map.need_refresh = true
       end
     elsif mode==1 # Variables
       if Input.repeat?(Input::LEFT)
@@ -180,6 +184,7 @@ def pbDebugVariables(mode)
           $game_variables[current_id] = ""
         end
         right_window.refresh
+        $game_map.need_refresh = true
       elsif Input.trigger?(Input::C)
         pbPlayDecisionSE
         pbDebugVariableScreen(current_id)
