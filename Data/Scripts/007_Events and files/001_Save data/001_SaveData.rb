@@ -47,7 +47,7 @@ module SaveData
     return File.file?(FILE_PATH)
   end
 
-  # Registers a value to be saved into save data.
+  # Registers a {Value} to be saved into save data.
   # Takes a block which defines the value's saving (+save_value+)
   # and loading (+load_value+) procedures, as well as a possible
   # proc for fetching the value from the pre-v19 format (+from_old_format+)
@@ -94,6 +94,13 @@ module SaveData
     end
 
     @values[id].load(save_data[id])
+  end
+
+  # Loads each {Value}'s new game value, if one is defined.
+  def load_new_game_values
+    @values.each_value do |value|
+      value.load_new_game_value if value.has_new_game_proc?
+    end
   end
 
   # Converts the pre-v19 format data to the new format.
