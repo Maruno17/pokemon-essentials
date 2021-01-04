@@ -24,7 +24,8 @@ module SaveData
       data = @save_proc.call
 
       if @ensured_class_names && !@ensured_class_names.include?(data.class.name)
-        raise InvalidValueError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{data.class.name} given)"
+        raise InvalidValueError,
+              "Save value #{@id.inspect} is not a #{@ensured_class_names.first} (#{data.class.name} given)"
       end
 
       return data
@@ -32,11 +33,11 @@ module SaveData
 
     # Calls the value's load proc with the given argument passed into it.
     # @param value [Object] load proc argument
-    # @raise [RuntimeError] if no load proc is defined
     # @raise [InvalidValueError] if an invalid value is being loaded
     def load(value)
       if @ensured_class_names && !@ensured_class_names.include?(value.class.name)
-        raise InvalidValueError, "Save value #{@id.inspect} is not a #{@ensured_class} (#{value.class.name} given)"
+        raise InvalidValueError,
+              "Save value #{@id.inspect} is not a #{@ensured_class_names.first} (#{value.class.name} given)"
       end
 
       @load_proc.call(value)
@@ -44,17 +45,19 @@ module SaveData
     end
 
     # Calls the save value's load proc with the value fetched
-    # from the defined reset proc.
+    # from the defined new game value proc.
     # @raise (see #load)
-    def reset
-      raise "Save value #{@id.inspect} has no reset proc defined" if @reset_proc.nil?
+    def load_new_game_value
+      unless self.has_new_game_proc?
+        raise "Save value #{@id.inspect} has no new game value proc defined"
+      end
 
-      self.load(@reset_proc.call)
+      self.load(@new_game_value_proc.call)
     end
 
-    # @return [Boolean] whether the value has a reset proc defined
-    def has_reset_proc?
-      return @reset_proc.is_a?(Block)
+    # @return [Boolean] whether the value has a new game value proc defined
+    def has_new_game_proc?
+      return @new_game_value_proc.is_a?(Proc)
     end
 
     # @return [Boolean] whether the value has been loaded
@@ -85,9 +88,9 @@ module SaveData
       @load_proc = block
     end
 
-    def reset_value(&block)
-      raise ArgumentError, 'No block given for reset_value proc' unless block_given?
-      @reset_proc = block
+    def new_game_value(&block)
+      raise ArgumentError, 'No block given for new_game_value proc' unless block_given?
+      @new_game_value_proc = block
     end
 
     # @param class_names [Symbol] class names for the accepted value
@@ -99,7 +102,7 @@ module SaveData
 
     # @yieldparam old_format [Array]
     def from_old_format(&block)
-      raise ArgumentError, 'No block given for get_from_old_format proc' unless block_given?
+      raise ArgumentError, 'No block given for from_old_format proc' unless block_given?
       @old_format_get_proc = block
     end
   end
