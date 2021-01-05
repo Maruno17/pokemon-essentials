@@ -3,17 +3,15 @@ module SaveData
   # Contains the file path of the save file.
   FILE_PATH = System.data_directory + '/Game.rxdata'
 
-  # Contains {Value} objects for each save element.
-  # Populated during runtime by {#register} calls.
+  # Contains Value objects for each save element.
+  # Populated during runtime by SaveData.register calls.
   @values = {}
-
-  module_function
 
   # Compiles the save data and saves a marshaled version of it into
   # the given file.
   # @param file_path [String] path of the file to save into
   # @raise [InvalidValueError] if an invalid value is being saved
-  def save_to_file(file_path)
+  def self.save_to_file(file_path)
     validate file_path => String
     File.open(file_path, 'wb') { |file| Marshal.dump(self.compile, file) }
   end
@@ -22,7 +20,7 @@ module SaveData
   # Returns an Array in the case of a pre-v19 save file.
   # @param file_path [String] path of the file to load from
   # @return [Hash, Array] loaded save data
-  def load_from_file(file_path)
+  def self.load_from_file(file_path)
     validate file_path => String
     save_data = nil
 
@@ -43,7 +41,7 @@ module SaveData
   end
 
   # @return [Boolean] whether the save file exists
-  def exists?
+  def self.exists?
     return File.file?(FILE_PATH)
   end
 
@@ -67,7 +65,7 @@ module SaveData
   #   end
   # @param id [Symbol] value id
   # @yieldself [Value]
-  def register(id, &block)
+  def self.register(id, &block)
     unless block_given?
       raise ArgumentError, "No block given to save value #{id.inspect}"
     end
@@ -77,7 +75,7 @@ module SaveData
 
   # @return [Hash{Symbol => Object}] a hash representation of the save data
   # @raise [InvalidValueError] if an invalid value is being saved
-  def compile
+  def self.compile
     save_data = {}
     @values.each { |id, data| save_data[id] = data.save }
     return save_data
@@ -88,7 +86,7 @@ module SaveData
   # Values that are already loaded are skipped.
   # @param save_data [Hash] save data to load
   # @raise [InvalidValueError] if an invalid value is being loaded
-  def load_values(save_data)
+  def self.load_values(save_data)
     validate save_data => Hash
     save_data.each do |id, value|
       @values[id].load(value) unless @values[id].loaded?
@@ -100,7 +98,7 @@ module SaveData
   # @param save_data [Hash] save data to load
   # @raise [InvalidValueError] if an invalid value is being loaded
   # @raise [ArgumentError] if given save data does not contain the value
-  def load_value(id, save_data)
+  def self.load_value(id, save_data)
     validate id => Symbol, save_data => Hash
 
     unless save_data.has_key?(id)
@@ -111,7 +109,7 @@ module SaveData
   end
 
   # Loads each {Value}'s new game value, if one is defined.
-  def load_new_game_values
+  def self.load_new_game_values
     @values.each_value do |value|
       value.load_new_game_value if value.has_new_game_proc?
     end
@@ -120,7 +118,7 @@ module SaveData
   # Converts the pre-v19 format data to the new format.
   # @param old_format [Array] pre-v19 format save data
   # @return [Hash] save data in new format
-  def to_hash_format(old_format)
+  def self.to_hash_format(old_format)
     validate old_format => Array
     hash = {}
 
