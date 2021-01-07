@@ -238,7 +238,7 @@ class PokeBattle_Battle
       elsif battler.hp<=battler.totalhp/2
         pbDisplayBrief(_INTL("OK, {1}! Come back!",battler.name))
       elsif battler.turnCount>=5
-        pbDisplayBrief(_INTL("{1}, that’s enough! Come back!",battler.name))
+        pbDisplayBrief(_INTL("{1}, that's enough! Come back!",battler.name))
       elsif battler.turnCount>=2
         pbDisplayBrief(_INTL("{1}, come back!",battler.name))
       else
