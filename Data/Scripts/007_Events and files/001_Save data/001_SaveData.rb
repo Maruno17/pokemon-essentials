@@ -13,29 +13,23 @@ module SaveData
   # @raise [InvalidValueError] if an invalid value is being saved
   def self.save_to_file(file_path)
     validate file_path => String
+
     File.open(file_path, 'wb') { |file| Marshal.dump(self.compile, file) }
   end
 
-  # Loads the save data from the given file and returns it.
-  # Returns an Array in the case of a pre-v19 save file.
+  # Fetches the save data from the given file and runs all
+  # possible conversions on it.
   # @param file_path [String] path of the file to load from
-  # @return [Hash, Array] loaded save data
+  # @return [Hash] loaded save data
+  # @raise (see .get_data_from_file)
   def self.load_from_file(file_path)
     validate file_path => String
-    save_data = nil
 
-    File.open(file_path) do |file|
-      data = Marshal.load(file)
-      unless file.eof?
-        save_data = [] if save_data.nil?
-        save_data << data
-      end
-      if save_data.is_a?(Hash)
-        save_data = data
-      elsif file.eof?
-        save_data << data
-      end
-    end
+    save_data = get_data_from_file(file_path)
+
+    save_data = to_hash_format(save_data) if save_data.is_a?(Array)
+
+    # TODO: Handle save data conversion here
 
     return save_data
   end
@@ -66,10 +60,12 @@ module SaveData
   # @param id [Symbol] value id
   # @yieldself [Value]
   def self.register(id, &block)
-    unless block_given?
-      raise ArgumentError, "No block given to save value #{id.inspect}"
-    end
     validate id => Symbol
+
+    unless block_given?
+      raise ArgumentError, 'No block given to SaveData.register'
+    end
+
     @values[id] = Value.new(id, &block)
   end
 
@@ -88,6 +84,7 @@ module SaveData
   # @raise [InvalidValueError] if an invalid value is being loaded
   def self.load_values(save_data)
     validate save_data => Hash
+
     save_data.each do |id, value|
       @values[id].load(value) unless @values[id].loaded?
     end
@@ -113,6 +110,31 @@ module SaveData
     @values.each_value do |value|
       value.load_new_game_value if value.has_new_game_proc?
     end
+  end
+
+  # Fetches the save data from the given file.
+  # Returns an Array in the case of a pre-v19 save file.
+  # @param file_path [String] path of the file to load from
+  # @return [Hash, Array] loaded save data
+  # @raise [IOError, SystemCallError] if file opening fails
+  def self.get_data_from_file(file_path)
+    validate file_path => String
+    save_data = nil
+
+    File.open(file_path) do |file|
+      data = Marshal.load(file)
+      unless file.eof?
+        save_data = [] if save_data.nil?
+        save_data << data
+      end
+      if save_data.is_a?(Hash)
+        save_data = data
+      elsif file.eof?
+        save_data << data
+      end
+    end
+
+    return save_data
   end
 
   # Converts the pre-v19 format data to the new format.
