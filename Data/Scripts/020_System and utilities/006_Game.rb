@@ -26,23 +26,16 @@ module Game
     return true
   end
 
-  # Loads the game. Returns whether the operation was successful.
-  # TODO: Is this method necessary? It may be removed soon.
-  # @param save_file [String] the save file path ({SaveData::FILE_PATH} by default)
+  # Loads the game from the given save data.
+  # Returns whether the operation was successful.
+  # @param save_data [Hash] hash containing the save data
   # @return [Boolean] whether the operation was successful
-  # @raise [SaveData::InvalidValueError] if an invalid value is being loaded
-  def self.load(save_file = SaveData::FILE_PATH)
-    return false unless File.readable?(save_file)
-
+  def self.load(save_data)
     begin
-      data = SaveData.load_from_file(save_file)
-    rescue IOError, SystemCallError
+      SaveData.load_values(save_data)
+    rescue SaveData::InvalidValueError
       return false
     end
-
-    data = SaveData.to_hash_format(data) if data.is_a?(Array)
-    # TODO: Handle save data conversion here
-    SaveData.load_values(data)
     return true
   end
 
