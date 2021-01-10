@@ -1202,9 +1202,14 @@ class PokeBattle_Move_0AF < PokeBattle_Move
     end
   end
 
+  def pbChangeUsageCounters(user,specialUsage)
+    super
+    @copied_move = @battle.lastMoveUsed
+  end
+
   def pbMoveFailed?(user,targets)
-    if !@battle.lastMoveUsed ||
-       @moveBlacklist.include?(GameData::Move.get(@battle.lastMoveUsed).function_code)
+    if !@copied_move ||
+       @moveBlacklist.include?(GameData::Move.get(@copied_move).function_code)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1212,7 +1217,7 @@ class PokeBattle_Move_0AF < PokeBattle_Move
   end
 
   def pbEffectGeneral(user)
-    user.pbUseMoveSimple(@battle.lastMoveUsed)
+    user.pbUseMoveSimple(@copied_move)
   end
 end
 
@@ -3528,9 +3533,7 @@ class PokeBattle_Move_0F7 < PokeBattle_Move
     @willFail = false
     @willFail = true if !user.item || !user.itemActive? || user.unlosableItem?(user.item)
     return if @willFail
-    if user.item.is_berry? && @battle.pbCheckOpposingAbility(:UNNERVE,user.index)
-      @willFail = true
-    end
+    @willFail = true if user.item.is_berry? && !user.canConsumeBerry?
     return if @willFail
     return if user.item.is_mega_stone?
     flingableItem = false
