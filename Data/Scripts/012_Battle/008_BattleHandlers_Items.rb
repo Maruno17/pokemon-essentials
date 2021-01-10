@@ -97,7 +97,7 @@ BattleHandlers::HPHealItem.add(:IAPAPABERRY,
 
 BattleHandlers::HPHealItem.add(:LANSATBERRY,
   proc { |item,battler,battle,forced|
-    next false if !forced && !battler.canConsumePinchBerry?(item)
+    next false if !forced && !battler.canConsumePinchBerry?
     next false if battler.effects[PBEffects::FocusEnergy]>=2
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.effects[PBEffects::FocusEnergy] = 2
@@ -126,7 +126,7 @@ BattleHandlers::HPHealItem.add(:MAGOBERRY,
 
 BattleHandlers::HPHealItem.add(:MICLEBERRY,
   proc { |item,battler,battle,forced|
-    next false if !forced && !battler.canConsumePinchBerry?(item)
+    next false if !forced && !battler.canConsumePinchBerry?
     next false if !battler.effects[PBEffects::MicleBerry]
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.effects[PBEffects::MicleBerry] = true
@@ -145,8 +145,7 @@ BattleHandlers::HPHealItem.add(:MICLEBERRY,
 BattleHandlers::HPHealItem.add(:ORANBERRY,
   proc { |item,battler,battle,forced|
     next false if !battler.canHeal?
-    next false if !forced && !battler.canConsumeBerry?
-    next false if !forced && battler.hp>battler.totalhp/2
+    next false if !forced && !battler.canConsumePinchBerry?(false)
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbRecoverHP(10)
     itemName = GameData::Item.get(item).name
@@ -175,8 +174,7 @@ BattleHandlers::HPHealItem.add(:SALACBERRY,
 BattleHandlers::HPHealItem.add(:SITRUSBERRY,
   proc { |item,battler,battle,forced|
     next false if !battler.canHeal?
-    next false if !forced && !battler.canConsumeBerry?
-    next false if !forced && battler.hp>battler.totalhp/2
+    next false if !forced && !battler.canConsumePinchBerry?(false)
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     battler.pbRecoverHP(battler.totalhp/4)
     itemName = GameData::Item.get(item).name
@@ -370,7 +368,7 @@ BattleHandlers::StatusCureItem.add(:RAWSTBERRY,
 
 BattleHandlers::PriorityBracketChangeItem.add(:CUSTAPBERRY,
   proc { |item,battler,subPri,battle|
-    next if !battler.canConsumePinchBerry?(item)
+    next if !battler.canConsumePinchBerry?
     next 1 if subPri<1
   }
 )

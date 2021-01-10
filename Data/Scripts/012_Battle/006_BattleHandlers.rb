@@ -491,7 +491,7 @@ FINAL_DMG_MULT = 3
 
 def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
   return false if !forced && !battler.canHeal?
-  return false if !forced && !battler.canConsumePinchBerry?(item, (MECHANICS_GENERATION >= 7))
+  return false if !forced && !battler.canConsumePinchBerry?(MECHANICS_GENERATION >= 7)
   itemName = GameData::Item.get(item).name
   battle.pbCommonAnimation("EatBerry",battler) if !forced
   fraction_to_heal = 8   # Gens 6 and lower
@@ -517,7 +517,7 @@ def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
 end
 
 def pbBattleStatIncreasingBerry(battler,battle,item,forced,stat,increment=1)
-  return false if !forced && !battler.canConsumePinchBerry?(item)
+  return false if !forced && !battler.canConsumePinchBerry?
   return false if !battler.pbCanRaiseStatStage?(stat,battler)
   itemName = GameData::Item.get(item).name
   if forced
