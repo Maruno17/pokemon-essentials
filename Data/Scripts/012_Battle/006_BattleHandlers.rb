@@ -498,7 +498,7 @@ FINAL_DMG_MULT = 3
 
 def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
   return false if !forced && !battler.canHeal?
-  return false if !forced && !battler.pbCanConsumeBerry?(item,false)
+  return false if !forced && !battler.canConsumePinchBerry?(item,false)
   itemName = PBItems.getName(item)
   battle.pbCommonAnimation("EatBerry",battler) if !forced
   amt = (NEWEST_BATTLE_MECHANICS) ? battler.pbRecoverHP(battler.totalhp/3) : battler.pbRecoverHP(battler.totalhp/8)
@@ -523,7 +523,7 @@ def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
 end
 
 def pbBattleStatIncreasingBerry(battler,battle,item,forced,stat,increment=1)
-  return false if !forced && !battler.pbCanConsumeBerry?(item)
+  return false if !forced && !battler.canConsumePinchBerry?(item)
   return false if !battler.pbCanRaiseStatStage?(stat,battler)
   itemName = PBItems.getName(item)
   if battler.hasActiveAbility?(:RIPEN)
