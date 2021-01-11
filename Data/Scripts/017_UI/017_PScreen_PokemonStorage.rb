@@ -291,6 +291,7 @@ end
 class PokemonBoxSprite < SpriteWrapper
   attr_accessor :refreshBox
   attr_accessor :refreshSprites
+
   def initialize(storage,boxnumber,viewport=nil)
     super(viewport)
     @storage = storage
@@ -298,7 +299,7 @@ class PokemonBoxSprite < SpriteWrapper
     @refreshBox = true
     @refreshSprites = true
     @pokemonsprites = []
-    for i in 0...30
+    for i in 0...PokemonBox::BOX_SIZE
       @pokemonsprites[i] = nil
       pokemon = @storage[boxnumber,i]
       @pokemonsprites[i] = PokemonBoxIcon.new(pokemon,viewport)
@@ -312,7 +313,7 @@ class PokemonBoxSprite < SpriteWrapper
 
   def dispose
     if !disposed?
-      for i in 0...30
+      for i in 0...PokemonBox::BOX_SIZE
         @pokemonsprites[i].dispose if @pokemonsprites[i]
         @pokemonsprites[i] = nil
       end
@@ -335,7 +336,7 @@ class PokemonBoxSprite < SpriteWrapper
   def color=(value)
     super
     if @refreshSprites
-      for i in 0...30
+      for i in 0...PokemonBox::BOX_SIZE
         if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
           @pokemonsprites[i].color = value
         end
@@ -346,7 +347,7 @@ class PokemonBoxSprite < SpriteWrapper
 
   def visible=(value)
     super
-    for i in 0...30
+    for i in 0...PokemonBox::BOX_SIZE
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
         @pokemonsprites[i].visible = value
       end
@@ -413,10 +414,10 @@ class PokemonBoxSprite < SpriteWrapper
       @refreshBox = false
     end
     yval = self.y+30
-    for j in 0...5
+    for j in 0...PokemonBox::BOX_HEIGHT
       xval = self.x+10
-      for k in 0...6
-        sprite = @pokemonsprites[j*6+k]
+      for k in 0...PokemonBox::BOX_WIDTH
+        sprite = @pokemonsprites[j * PokemonBox::BOX_WIDTH + k]
         if sprite && !sprite.disposed?
           sprite.viewport = self.viewport
           sprite.x = xval
@@ -431,7 +432,7 @@ class PokemonBoxSprite < SpriteWrapper
 
   def update
     super
-    for i in 0...30
+    for i in 0...PokemonBox::BOX_SIZE
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
         @pokemonsprites[i].update
       end
@@ -448,7 +449,7 @@ class PokemonBoxPartySprite < SpriteWrapper
     @party = party
     @boxbitmap = AnimatedBitmap.new("Graphics/Pictures/Storage/overlay_party")
     @pokemonsprites = []
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       @pokemonsprites[i] = nil
       pokemon = @party[i]
       if pokemon
@@ -464,7 +465,7 @@ class PokemonBoxPartySprite < SpriteWrapper
   end
 
   def dispose
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       @pokemonsprites[i].dispose if @pokemonsprites[i]
     end
     @boxbitmap.dispose
@@ -484,7 +485,7 @@ class PokemonBoxPartySprite < SpriteWrapper
 
   def color=(value)
     super
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
         @pokemonsprites[i].color = pbSrcOver(@pokemonsprites[i].color,value)
       end
@@ -493,7 +494,7 @@ class PokemonBoxPartySprite < SpriteWrapper
 
   def visible=(value)
     super
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
         @pokemonsprites[i].visible = value
       end
@@ -528,23 +529,26 @@ class PokemonBoxPartySprite < SpriteWrapper
   end
 
   def refresh
-    @contents.blt(0,0,@boxbitmap.bitmap,Rect.new(0,0,172,352))
+    @contents.blt(0, 0, @boxbitmap.bitmap, Rect.new(0, 0, 172, 352))
     pbDrawTextPositions(self.bitmap,[
-       [_INTL("Back"),86,240,2,Color.new(248,248,248),Color.new(80,80,80),1]
+       [_INTL("Back"), 86, 240, 2, Color.new(248, 248, 248), Color.new(80, 80, 80), 1]
     ])
-
-    xvalues = [18,90,18,90,18,90]
-    yvalues = [2,18,66,82,130,146]
-    for j in 0...6
+    xvalues = []   # [18, 90, 18, 90, 18, 90]
+    yvalues = []   # [2, 18, 66, 82, 130, 146]
+    for i in 0...MAX_PARTY_SIZE
+      xvalues.push(18 + 72 * (i % 2))
+      yvalues.push(2 + 16 * (i % 2) + 64 * (i / 2))
+    end
+    for j in 0...MAX_PARTY_SIZE
       @pokemonsprites[j] = nil if @pokemonsprites[j] && @pokemonsprites[j].disposed?
     end
     @pokemonsprites.compact!
-    for j in 0...6
+    for j in 0...MAX_PARTY_SIZE
       sprite = @pokemonsprites[j]
       if sprite && !sprite.disposed?
         sprite.viewport = self.viewport
-        sprite.x = self.x+xvalues[j]
-        sprite.y = self.y+yvalues[j]
+        sprite.x = self.x + xvalues[j]
+        sprite.y = self.y + yvalues[j]
         sprite.z = 0
       end
     end
@@ -552,7 +556,7 @@ class PokemonBoxPartySprite < SpriteWrapper
 
   def update
     super
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       @pokemonsprites[i].update if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
     end
   end
@@ -702,8 +706,8 @@ class PokemonStorageScene
       arrow.x = 207*2
       arrow.y = 139*2
     else
-      arrow.x = (97+24*(selection%6))*2
-      arrow.y = (8+24*(selection/6))*2
+      arrow.x = (97 + 24 * (selection % PokemonBox::BOX_WIDTH)) * 2
+      arrow.y = (8 + 24 * (selection / PokemonBox::BOX_WIDTH)) * 2
     end
   end
 
@@ -713,24 +717,29 @@ class PokemonStorageScene
       if selection==-1   # Box name
         selection = -2
       elsif selection==-2   # Party
-        selection = 25
+        selection = PokemonBox::BOX_SIZE - 1 - PokemonBox::BOX_WIDTH * 2 / 3   # 25
       elsif selection==-3   # Close Box
-        selection = 28
+        selection = PokemonBox::BOX_SIZE - PokemonBox::BOX_WIDTH / 3   # 28
       else
-        selection -= 6
-        selection = -1 if selection<0
+        selection -= PokemonBox::BOX_WIDTH
+        selection = -1 if selection < 0
       end
     when Input::DOWN
       if selection==-1   # Box name
-        selection = 2
+        selection = PokemonBox::BOX_WIDTH / 3   # 2
       elsif selection==-2   # Party
         selection = -1
       elsif selection==-3   # Close Box
         selection = -1
       else
-        selection += 6
-        selection = -2 if selection==30 || selection==31 || selection==32
-        selection = -3 if selection==33 || selection==34 || selection==35
+        selection += PokemonBox::BOX_WIDTH
+        if selection >= PokemonBox::BOX_SIZE
+          if selection < PokemonBox::BOX_SIZE + PokemonBox::BOX_WIDTH / 2
+            selection = -2   # Party
+          else
+            selection = -3   # Close Box
+          end
+        end
       end
     when Input::LEFT
       if selection==-1   # Box name
@@ -739,9 +748,10 @@ class PokemonStorageScene
         selection = -3
       elsif selection==-3
         selection = -2
+      elsif (selection % PokemonBox::BOX_WIDTH) == 0   # Wrap around
+        selection += PokemonBox::BOX_WIDTH - 1
       else
         selection -= 1
-        selection += 6 if selection==-1 || selection%6==5
       end
     when Input::RIGHT
       if selection==-1   # Box name
@@ -750,48 +760,54 @@ class PokemonStorageScene
         selection = -3
       elsif selection==-3
         selection = -2
+      elsif (selection % PokemonBox::BOX_WIDTH) == PokemonBox::BOX_WIDTH - 1   # Wrap around
+        selection -= PokemonBox::BOX_WIDTH - 1
       else
         selection += 1
-        selection -= 6 if selection%6==0
       end
     end
     return selection
   end
 
   def pbPartySetArrow(arrow,selection)
-    if selection>=0
-      xvalues = [100,136,100,136,100,136,118]
-      yvalues = [1,9,33,41,65,73,110]
-      arrow.angle = 0
-      arrow.mirror = false
-      arrow.ox = 0
-      arrow.oy = 0
-      arrow.x = xvalues[selection]*2
-      arrow.y = yvalues[selection]*2
+    return if selection < 0
+    xvalues = []   # [200, 272, 200, 272, 200, 272, 236]
+    yvalues = []   # [2, 18, 66, 82, 130, 146, 220]
+    for i in 0...MAX_PARTY_SIZE
+      xvalues.push(200 + 72 * (i % 2))
+      yvalues.push(2 + 16 * (i % 2) + 64 * (i / 2))
     end
+    xvalues.push(236)
+    yvalues.push(220)
+    arrow.angle = 0
+    arrow.mirror = false
+    arrow.ox = 0
+    arrow.oy = 0
+    arrow.x = xvalues[selection]
+    arrow.y = yvalues[selection]
   end
 
   def pbPartyChangeSelection(key,selection)
     case key
     when Input::LEFT
       selection -= 1
-      selection = 6 if selection<0
+      selection = MAX_PARTY_SIZE if selection < 0
     when Input::RIGHT
       selection += 1
-      selection = 0 if selection>6
+      selection = 0 if selection > MAX_PARTY_SIZE
     when Input::UP
-      if selection==6
-        selection = 5
+      if selection == MAX_PARTY_SIZE
+        selection = MAX_PARTY_SIZE - 1
       else
         selection -= 2
-        selection = 6 if selection<0
+        selection = MAX_PARTY_SIZE if selection < 0
       end
     when Input::DOWN
-      if selection==6
+      if selection == MAX_PARTY_SIZE
         selection = 0
       else
         selection += 2
-        selection = 6 if selection>6
+        selection = MAX_PARTY_SIZE if selection > MAX_PARTY_SIZE
       end
     end
     return selection
@@ -929,17 +945,17 @@ class PokemonStorageScene
         pbSetMosaic(selection)
       end
       self.update
-      if Input.trigger?(Input::A) && @command==0   # Organize only
+      if Input.trigger?(Input::A) && @command == 0   # Organize only
         pbPlayDecisionSE
         pbSetQuickSwap(!@quickswap)
       elsif Input.trigger?(Input::B)
         @selection = selection
         return -1
       elsif Input.trigger?(Input::C)
-        if selection>=0 && selection<6
+        if selection >= 0 && selection < MAX_PARTY_SIZE
           @selection = selection
           return selection
-        elsif selection==6   # Close Box
+        elsif selection == MAX_PARTY_SIZE   # Close Box
           @selection = selection
           return (depositing) ? -3 : -1
         end
@@ -1665,7 +1681,7 @@ class PokemonStorageScreen
     if box==-1
       raise _INTL("Can't withdraw from party...");
     end
-    if @storage.party.nitems>=6
+    if @storage.party.length >= MAX_PARTY_SIZE
       pbDisplay(_INTL("Your party's full!"))
       return false
     end

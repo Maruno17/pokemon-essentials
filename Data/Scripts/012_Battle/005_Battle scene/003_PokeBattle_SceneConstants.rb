@@ -5,7 +5,7 @@ module PokeBattle_SceneConstants
   MESSAGE_SHADOW_COLOR = Color.new(160, 160, 168)
 
   # The number of party balls to show in each side's lineup.
-  NUM_BALLS = 6
+  NUM_BALLS = MAX_PARTY_SIZE
 
   # Centre bottom of the player's side base graphic
   PLAYER_BASE_X = 128

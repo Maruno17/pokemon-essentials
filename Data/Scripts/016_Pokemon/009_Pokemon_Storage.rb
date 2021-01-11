@@ -3,7 +3,11 @@ class PokemonBox
   attr_accessor :name
   attr_accessor :background
 
-  def initialize(name,maxPokemon=30)
+  BOX_WIDTH = 6
+  BOX_HEIGHT = 5
+  BOX_SIZE = BOX_WIDTH * BOX_HEIGHT
+
+  def initialize(name, maxPokemon = BOX_SIZE)
     @pokemon = []
     @name = name
     @background = 0
@@ -17,15 +21,17 @@ class PokemonBox
   end
 
   def nitems
-    return @pokemon.nitems
+    ret = 0
+    @pokemon.each { |pkmn| ret += 1 if !pkmn.nil? }
+    return ret
   end
 
   def full?
-    return (@pokemon.nitems==self.length)
+    return nitems == self.length
   end
 
   def empty?
-    return (@pokemon.nitems==0)
+    return nitems == 0
   end
 
   def [](i)
@@ -53,7 +59,7 @@ class PokemonStorage
   attr_writer   :unlockedWallpapers
   BASICWALLPAPERQTY = 16
 
-  def initialize(maxBoxes=NUM_STORAGE_BOXES,maxPokemon=30)
+  def initialize(maxBoxes = NUM_STORAGE_BOXES, maxPokemon = PokemonBox::BOX_SIZE)
     @boxes = []
     for i in 0...maxBoxes
       @boxes[i] = PokemonBox.new(_INTL("Box {1}",i+1),maxPokemon)
@@ -120,8 +126,8 @@ class PokemonStorage
   end
 
   def maxPokemon(box)
-    return 0 if box>=self.maxBoxes
-    return (box<0) ? 6 : self[box].length
+    return 0 if box >= self.maxBoxes
+    return (box < 0) ? MAX_PARTY_SIZE : self[box].length
   end
 
   def full?
@@ -133,14 +139,13 @@ class PokemonStorage
 
   def pbFirstFreePos(box)
     if box==-1
-      ret = self.party.nitems
-      return (ret==6) ? -1 : ret
-    else
-      for i in 0...maxPokemon(box)
-        return i if !self[box,i]
-      end
-      return -1
+      ret = self.party.length
+      return (ret >= MAX_PARTY_SIZE) ? -1 : ret
     end
+    for i in 0...maxPokemon(box)
+      return i if !self[box,i]
+    end
+    return -1
   end
 
   def [](x,y=nil)
@@ -174,7 +179,7 @@ class PokemonStorage
       return false if !found
     end
     if boxDst==-1   # Copying into party
-      return false if self.party.nitems>=6
+      return false if self.party.length >= MAX_PARTY_SIZE
       self.party[self.party.length] = self[boxSrc,indexSrc]
       self.party.compact!
     else   # Copying into box
@@ -195,7 +200,7 @@ class PokemonStorage
   end
 
   def pbMoveCaughtToParty(pkmn)
-    return false if self.party.nitems>=6
+    return false if self.party.length >= MAX_PARTY_SIZE
     self.party[self.party.length] = pkmn
   end
 

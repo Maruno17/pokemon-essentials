@@ -50,6 +50,8 @@ MAX_MONEY            = 999_999
 MAX_COINS            = 99_999
 # The maximum length, in characters, that the player's name can be.
 MAX_PLAYER_NAME_SIZE = 10
+# The maximum number of Pokémon that can be in the party.
+MAX_PARTY_SIZE       = 6
 
 #===============================================================================
 

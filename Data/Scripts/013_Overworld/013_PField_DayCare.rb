@@ -65,7 +65,7 @@ end
 def pbDayCareWithdraw(index)
   if !$PokemonGlobal.daycare[index][0]
     raise _INTL("There's no Pokémon here...")
-  elsif $Trainer.party.length>=6
+  elsif $Trainer.party.length >= MAX_PARTY_SIZE
     raise _INTL("Can't store the Pokémon...")
   else
     $Trainer.party[$Trainer.party.length] = $PokemonGlobal.daycare[index][0]
@@ -154,7 +154,7 @@ end
 #===============================================================================
 def pbDayCareGenerateEgg
   return if pbDayCareDeposited != 2
-  raise _INTL("Can't store the egg.") if $Trainer.party.length >= 6
+  raise _INTL("Can't store the egg.") if $Trainer.party.length >= MAX_PARTY_SIZE
   pkmn0 = $PokemonGlobal.daycare[0][0]
   pkmn1 = $PokemonGlobal.daycare[1][0]
   mother = nil

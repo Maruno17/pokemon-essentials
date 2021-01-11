@@ -605,7 +605,7 @@ DebugMenuCommands.register("fillboxes", {
         else   # Both male and female
           $Trainer.formseen[sp][0][f] = true
           $Trainer.formseen[sp][1][f] = true
-          $Trainer.formlastseen[i] = [0, f] if f == 0
+          $Trainer.formlastseen[sp] = [0, f] if f == 0
         end
       elsif species_data.real_form_name && !species_data.real_form_name.empty?
         g = (species_data.gender_rate == PBGenderRates::AlwaysFemale) ? 1 : 0

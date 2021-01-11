@@ -985,7 +985,7 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
     next true
   end
   # Unfusing
-  if $Trainer.party.length>=6
+  if $Trainer.party.length >= MAX_PARTY_SIZE
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
@@ -1034,7 +1034,7 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
     next true
   end
   # Unfusing
-  if $Trainer.party.length>=6
+  if $Trainer.party.length >= MAX_PARTY_SIZE
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
@@ -1083,7 +1083,7 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
     next true
   end
   # Unfusing
-  if $Trainer.party.length>=6
+  if $Trainer.party.length >= MAX_PARTY_SIZE
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end

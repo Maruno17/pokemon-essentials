@@ -139,8 +139,8 @@ class PokemonPartyBlankPanel < SpriteWrapper
 
   def initialize(_pokemon,index,viewport=nil)
     super(viewport)
-    self.x = [0, Graphics.width/2][index%2]
-    self.y = [0, 16, 96, 112, 192, 208][index]
+    self.x = (index % 2) * Graphics.width / 2
+    self.y = 16 * (index % 2) + 96 * (index / 2)
     @panelbgsprite = AnimatedBitmap.new("Graphics/Pictures/Party/panel_blank")
     self.bitmap = @panelbgsprite.bitmap
     @text = nil
@@ -176,8 +176,8 @@ class PokemonPartyPanel < SpriteWrapper
     @pokemon = pokemon
     @active = (index==0)   # true = rounded panel, false = rectangular panel
     @refreshing = true
-    self.x = [0, Graphics.width/2][index%2]
-    self.y = [0, 16, 96, 112, 192, 208][index]
+    self.x = (index % 2) * Graphics.width / 2
+    self.y = 16 * (index % 2) + 96 * (index / 2)
     @panelbgsprite = ChangelingSprite.new(0,0,viewport)
     @panelbgsprite.z = self.z
     if @active   # Rounded panel
@@ -448,7 +448,7 @@ class PokemonParty_Scene
     pbBottomLeftLines(@sprites["helpwindow"],1)
     pbSetHelpText(starthelptext)
     # Add party Pokémon sprites
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       if @party[i]
         @sprites["pokemon#{i}"] = PokemonPartyPanel.new(@party[i],i,@viewport)
       else
@@ -457,10 +457,10 @@ class PokemonParty_Scene
       @sprites["pokemon#{i}"].text = annotations[i] if annotations
     end
     if @multiselect
-      @sprites["pokemon6"] = PokemonPartyConfirmSprite.new(@viewport)
-      @sprites["pokemon7"] = PokemonPartyCancelSprite2.new(@viewport)
+      @sprites["pokemon#{MAX_PARTY_SIZE}"] = PokemonPartyConfirmSprite.new(@viewport)
+      @sprites["pokemon#{MAX_PARTY_SIZE + 1}"] = PokemonPartyCancelSprite2.new(@viewport)
     else
-      @sprites["pokemon6"] = PokemonPartyCancelSprite.new(@viewport)
+      @sprites["pokemon#{MAX_PARTY_SIZE}"] = PokemonPartyCancelSprite.new(@viewport)
     end
     # Select first Pokémon
     @activecmd = 0
@@ -573,14 +573,14 @@ class PokemonParty_Scene
   end
 
   def pbAnnotate(annot)
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       @sprites["pokemon#{i}"].text = (annot) ? annot[i] : nil
     end
   end
 
   def pbSelect(item)
     @activecmd = item
-    numsprites = (@multiselect) ? 8 : 7
+    numsprites = MAX_PARTY_SIZE + ((@multiselect) ? 2 : 1)
     for i in 0...numsprites
       @sprites["pokemon#{i}"].selected = (i==@activecmd)
     end
@@ -620,7 +620,7 @@ class PokemonParty_Scene
       Input.update
       self.update
     end
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       @sprites["pokemon#{i}"].preselected = false
       @sprites["pokemon#{i}"].switching   = false
     end
@@ -628,7 +628,7 @@ class PokemonParty_Scene
   end
 
   def pbClearSwitching
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       @sprites["pokemon#{i}"].preselected = false
       @sprites["pokemon#{i}"].switching   = false
     end
@@ -674,7 +674,7 @@ class PokemonParty_Scene
   end
 
   def pbChoosePokemon(switching=false,initialsel=-1,canswitch=0)
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       @sprites["pokemon#{i}"].preselected = (switching && i==@activecmd)
       @sprites["pokemon#{i}"].switching   = switching
     end
@@ -695,12 +695,12 @@ class PokemonParty_Scene
       end
       if @activecmd!=oldsel   # Changing selection
         pbPlayCursorSE
-        numsprites = (@multiselect) ? 8 : 7
+        numsprites = MAX_PARTY_SIZE + ((@multiselect) ? 2 : 1)
         for i in 0...numsprites
           @sprites["pokemon#{i}"].selected = (i==@activecmd)
         end
       end
-      cancelsprite = (@multiselect) ? 7 : 6
+      cancelsprite = MAX_PARTY_SIZE + ((@multiselect) ? 1 : 0)
       if Input.trigger?(Input::A) && canswitch==1 && @activecmd!=cancelsprite
         pbPlayDecisionSE
         return [1,@activecmd]
@@ -722,49 +722,49 @@ class PokemonParty_Scene
   end
 
   def pbChangeSelection(key,currentsel)
-    numsprites = (@multiselect) ? 8 : 7
+    numsprites = MAX_PARTY_SIZE + ((@multiselect) ? 2 : 1)
     case key
     when Input::LEFT
       begin
         currentsel -= 1
-      end while currentsel>0 && currentsel<@party.length && !@party[currentsel]
-      if currentsel>=@party.length && currentsel<6
-        currentsel = @party.length-1
+      end while currentsel > 0 && currentsel < @party.length && !@party[currentsel]
+      if currentsel >= @party.length && currentsel < MAX_PARTY_SIZE
+        currentsel = @party.length - 1
       end
-      currentsel = numsprites-1 if currentsel<0
+      currentsel = numsprites - 1 if currentsel < 0
     when Input::RIGHT
       begin
         currentsel += 1
-      end while currentsel<@party.length && !@party[currentsel]
-      if currentsel==@party.length
-        currentsel = 6
-      elsif currentsel==numsprites
+      end while currentsel < @party.length && !@party[currentsel]
+      if currentsel == @party.length
+        currentsel = MAX_PARTY_SIZE
+      elsif currentsel == numsprites
         currentsel = 0
       end
     when Input::UP
-      if currentsel>=6
+      if currentsel >= MAX_PARTY_SIZE
         begin
           currentsel -= 1
-        end while currentsel>0 && !@party[currentsel]
+        end while currentsel > 0 && !@party[currentsel]
       else
         begin
           currentsel -= 2
-        end while currentsel>0 && !@party[currentsel]
+        end while currentsel > 0 && !@party[currentsel]
       end
-      if currentsel>=@party.length && currentsel<6
+      if currentsel >= @party.length && currentsel < MAX_PARTY_SIZE
         currentsel = @party.length-1
       end
-      currentsel = numsprites-1 if currentsel<0
+      currentsel = numsprites - 1 if currentsel < 0
     when Input::DOWN
-      if currentsel>=5
+      if currentsel >= MAX_PARTY_SIZE - 1
         currentsel += 1
       else
         currentsel += 2
-        currentsel = 6 if currentsel<6 && !@party[currentsel]
+        currentsel = MAX_PARTY_SIZE if currentsel < MAX_PARTY_SIZE && !@party[currentsel]
       end
-      if currentsel>=@party.length && currentsel<6
-        currentsel = 6
-      elsif currentsel>=numsprites
+      if currentsel >= @party.length && currentsel < MAX_PARTY_SIZE
+        currentsel = MAX_PARTY_SIZE
+      elsif currentsel >= numsprites
         currentsel = 0
       end
     end
@@ -774,14 +774,14 @@ class PokemonParty_Scene
   def pbHardRefresh
     oldtext = []
     lastselected = -1
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       oldtext.push(@sprites["pokemon#{i}"].text)
       lastselected = i if @sprites["pokemon#{i}"].selected
       @sprites["pokemon#{i}"].dispose
     end
     lastselected = @party.length-1 if lastselected>=@party.length
     lastselected = 0 if lastselected<0
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       if @party[i]
         @sprites["pokemon#{i}"] = PokemonPartyPanel.new(@party[i],i,@viewport)
       else
@@ -793,7 +793,7 @@ class PokemonParty_Scene
   end
 
   def pbRefresh
-    for i in 0...6
+    for i in 0...MAX_PARTY_SIZE
       sprite = @sprites["pokemon#{i}"]
       if sprite
         if sprite.is_a?(PokemonPartyPanel)
@@ -967,17 +967,17 @@ class PokemonPartyScreen
   def pbPokemonMultipleEntryScreenEx(ruleset)
     annot = []
     statuses = []
-    ordinals = [
-       _INTL("INELIGIBLE"),
-       _INTL("NOT ENTERED"),
-       _INTL("BANNED"),
-       _INTL("FIRST"),
-       _INTL("SECOND"),
-       _INTL("THIRD"),
-       _INTL("FOURTH"),
-       _INTL("FIFTH"),
-       _INTL("SIXTH")
-    ]
+    ordinals = [_INTL("INELIGIBLE"), _INTL("NOT ENTERED"), _INTL("BANNED")]
+    positions = [_INTL("FIRST"), _INTL("SECOND"), _INTL("THIRD"), _INTL("FOURTH"),
+                 _INTL("FIFTH"), _INTL("SIXTH"), _INTL("SEVENTH"), _INTL("EIGHTH"),
+                 _INTL("NINTH"), _INTL("TENTH"), _INTL("ELEVENTH"), _INTL("TWELFTH")]
+    for i in 0...MAX_PARTY_SIZE
+      if i < positions.length
+        ordinals.push(positions[i])
+      else
+        ordinals.push("#{i + 1}th")
+      end
+    end
     return nil if !ruleset.hasValidTeam?(@party)
     ret = nil
     addedEntry = false
@@ -1006,12 +1006,12 @@ class PokemonPartyScreen
       end
       @scene.pbAnnotate(annot)
       if realorder.length==ruleset.number && addedEntry
-        @scene.pbSelect(6)
+        @scene.pbSelect(MAX_PARTY_SIZE)
       end
       @scene.pbSetHelpText(_INTL("Choose Pokémon and confirm."))
       pkmnid = @scene.pbChoosePokemon
       addedEntry = false
-      if pkmnid==6   # Confirm was chosen
+      if pkmnid == MAX_PARTY_SIZE   # Confirm was chosen
         ret = []
         for i in realorder; ret.push(@party[i]); end
         error = []

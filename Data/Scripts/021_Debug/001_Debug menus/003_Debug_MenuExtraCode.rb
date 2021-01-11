@@ -291,7 +291,7 @@ def pbDebugDayCare
       when 0   # Withdraw Pokémon 1
         if !$PokemonGlobal.daycare[0][0]
           pbPlayBuzzerSE
-        elsif $Trainer.party.length>=6
+        elsif $Trainer.party.length >= MAX_PARTY_SIZE
           pbPlayBuzzerSE
           pbMessage(_INTL("Party is full, can't withdraw Pokémon."))
         else
@@ -303,7 +303,7 @@ def pbDebugDayCare
       when 1  # Withdraw Pokémon 2
         if !$PokemonGlobal.daycare[1][0]
           pbPlayBuzzerSE
-        elsif $Trainer.party.length>=6
+        elsif $Trainer.party.length >= MAX_PARTY_SIZE
           pbPlayBuzzerSE
           pbMessage(_INTL("Party is full, can't withdraw Pokémon."))
         else
@@ -344,7 +344,7 @@ def pbDebugDayCare
       when 4   # Collect egg
         if $PokemonGlobal.daycareEgg!=1
           pbPlayBuzzerSE
-        elsif $Trainer.party.length>=6
+        elsif $Trainer.party.length >= MAX_PARTY_SIZE
           pbPlayBuzzerSE
           pbMessage(_INTL("Party is full, can't collect the egg."))
         else

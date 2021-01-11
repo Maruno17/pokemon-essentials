@@ -23,7 +23,7 @@ ItemHandlers::CanUseInBattle.copy(:POKEDOLL,:FLUFFYTAIL,:POKETOY)
 
 ItemHandlers::CanUseInBattle.addIf(proc { |item| GameData::Item.get(item).is_poke_ball? },   # Poké Balls
   proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-    if battle.pbPlayer.party.length>=6 && $PokemonStorage.full?
+    if battle.pbPlayer.party.length >= MAX_PARTY_SIZE && $PokemonStorage.full?
       scene.pbDisplay(_INTL("There is no room left in the PC!")) if showMessages
       next false
     end
