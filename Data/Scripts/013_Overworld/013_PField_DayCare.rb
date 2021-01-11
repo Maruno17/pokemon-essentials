@@ -154,7 +154,7 @@ end
 #===============================================================================
 def pbDayCareGenerateEgg
   return if pbDayCareDeposited != 2
-  raise _INTL("Can't store the egg.") if $Trainer.party.length >= MAX_PARTY_SIZE
+  raise _INTL("Can't store the egg.") if $Trainer.party_full?
   pkmn0 = $PokemonGlobal.daycare[0][0]
   pkmn1 = $PokemonGlobal.daycare[1][0]
   mother = nil
