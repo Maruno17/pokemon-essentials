@@ -626,7 +626,7 @@ def pbEditMetadata(map_id = 0)
       GameData::MapMetadata::DATA[map_id] = GameData::MapMetadata.new(metadata_hash)
       GameData::MapMetadata.save
     end
-    pbSaveMetadata
+    Compiler.write_metadata
   end
 end
 
@@ -671,7 +671,7 @@ def pbItemEditor
             GameData::Item::DATA.delete(item)
             GameData::Item::DATA.delete(id_number)
             GameData::Item.save
-            pbSaveItems
+            Compiler.write_items
             pbMessage(_INTL("The item was deleted."))
           end
         end
@@ -708,7 +708,7 @@ def pbItemEditor
             # Add item's data to records
             GameData::Item::DATA[itm.id_number] = GameData::Item::DATA[itm.id] = GameData::Item.new(item_hash)
             GameData::Item.save
-            pbSaveItems
+            Compiler.write_items
           end
         else   # Add a new item
           pbItemEditorNew(nil)
@@ -772,7 +772,7 @@ def pbItemEditorNew(default_name)
   # Add item's data to records
   GameData::Item::DATA[id_number] = GameData::Item::DATA[id.to_sym] = GameData::Item.new(item_hash)
   GameData::Item.save
-  pbSaveItems
+  Compiler.write_items
   pbMessage(_INTL("The item {1} was created (ID: {2}).", name, id.to_s))
   pbMessage(_ISPRINTF("Put the item's graphic (item{1:s}.png or item{2:03d}.png) in Graphics/Icons, or it will be blank.",
      id, id_number))
@@ -857,7 +857,7 @@ def pbPokemonEditor
             GameData::Species::DATA.delete(species)
             GameData::Species::DATA.delete(id_number)
             GameData::Species.save
-            pbSavePokemonData
+            Compiler.write_pokemon
             pbMessage(_INTL("The species was deleted."))
           end
         end
@@ -971,7 +971,7 @@ def pbPokemonEditor
             # Add species' data to records
             GameData::Species::DATA[spec.id_number] = GameData::Species::DATA[spec.id] = GameData::Species.new(species_hash)
             GameData::Species.save
-            pbSavePokemonData
+            Compiler.write_pokemon
             pbMessage(_INTL("Data saved."))
           end
         else
@@ -1178,7 +1178,7 @@ def pbRegionalDexEditorMain
         when 0   # Save all changes to Dexes
           save_data(dex_lists, "Data/regional_dexes.dat")
           $PokemonTemp.regionalDexes = nil
-          pbSaveRegionalDexes
+          Compiler.write_regional_dexes
           pbMessage(_INTL("Data saved."))
           break
         when 1   # Just quit

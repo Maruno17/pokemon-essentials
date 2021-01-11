@@ -896,7 +896,7 @@ DebugMenuCommands.register("setencounters", {
     end
     save_data(encdata, "Data/encounters.dat")
     $PokemonTemp.encountersData = nil
-    pbSaveEncounterData   # Rewrite PBS file encounters.txt
+    Compiler.write_encounters   # Rewrite PBS file encounters.txt
   }
 })
 

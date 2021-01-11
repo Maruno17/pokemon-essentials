@@ -219,12 +219,6 @@ def pbRepositionMessageWindow(msgwindow, linecount=2)
       msgwindow.opacity = 0
     end
   end
-  if $game_message
-    case $game_message.background
-    when 1 then msgwindow.opacity=0  # dim
-    when 2 then msgwindow.opacity=0  # transparent
-    end
-  end
 end
 
 # internal function

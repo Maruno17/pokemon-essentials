@@ -235,6 +235,22 @@ def getID(mod,constant)
   return constant
 end
 
+def getConstantName(mod,value)
+  mod = Object.const_get(mod) if mod.is_a?(Symbol)
+  for c in mod.constants
+    return c if mod.const_get(c.to_sym)==value
+  end
+  raise _INTL("Value {1} not defined by a constant in {2}",value,mod.name)
+end
+
+def getConstantNameOrValue(mod,value)
+  mod = Object.const_get(mod) if mod.is_a?(Symbol)
+  for c in mod.constants
+    return c if mod.const_get(c.to_sym)==value
+  end
+  return value.inspect
+end
+
 
 
 #===============================================================================

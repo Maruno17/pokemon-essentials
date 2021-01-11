@@ -251,11 +251,6 @@ module Mouse
   @ReleaseCapture = Win32API.new('user32','ReleaseCapture','','i')
   module_function
 
-  def getMouseGlobalPos
-    pos = [0, 0].pack('ll')
-    return (@GetCursorPos.call(pos)!=0) ? pos.unpack('ll') : [nil,nil]
-  end
-
   def screen_to_client(x, y)
     return nil unless x and y
     screenToClient = Win32API.new('user32','ScreenToClient',%w(l p),'i')
@@ -264,12 +259,9 @@ module Mouse
     return nil
   end
 
-  def setCapture
-    @SetCapture.call(Win32API.pbFindRgssWindow)
-  end
-
-  def releaseCapture
-    @ReleaseCapture.call
+  def getMouseGlobalPos
+    pos = [0, 0].pack('ll')
+    return (@GetCursorPos.call(pos)!=0) ? pos.unpack('ll') : [nil,nil]
   end
 
   # Returns the position of the mouse relative to the game window.
@@ -283,6 +275,17 @@ module Mouse
     return nil
   end
 
+  # Unused
+  def setCapture
+    @SetCapture.call(Win32API.pbFindRgssWindow)
+  end
+
+  # Unused
+  def releaseCapture
+    @ReleaseCapture.call
+  end
+
+  # Unused
   def del
     return if @oldcursor==nil
     @SetClassLong.call(Win32API.pbFindRgssWindow,-12,@oldcursor)

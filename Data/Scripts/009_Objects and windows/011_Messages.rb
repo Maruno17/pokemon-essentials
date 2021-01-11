@@ -1,30 +1,11 @@
 #===============================================================================
-# Message variables
-#===============================================================================
-class Game_Message
-  attr_writer :visible
-  attr_writer :background
-
-  def visible
-    return @visible || false
-  end
-
-  def background
-    return @background || 0
-  end
-end
-
-
-
-#===============================================================================
 #
 #===============================================================================
 class Scene_Map
   def updatemini
     oldmws=$game_temp.message_window_showing
-    oldvis=$game_message ? $game_message.visible : false
+    oldvis=false
     $game_temp.message_window_showing=true
-    $game_message.visible=true if $game_message
     loop do
       $game_map.update
       $game_player.update
@@ -39,7 +20,6 @@ class Scene_Map
       break if $game_temp.transition_processing
     end
     $game_temp.message_window_showing=oldmws
-    $game_message.visible=oldvis if $game_message
     @spriteset.update if @spriteset
     @message_window.update if @message_window
   end
@@ -52,10 +32,6 @@ class Scene_Battle
     if self.respond_to?("update_basic")
       update_basic(true)
       update_info_viewport                  # Update information viewport
-      if $game_message && $game_message.visible
-        @info_viewport.visible = false
-        @message_window.visible = true
-      end
     else
       oldmws=$game_temp.message_window_showing
       $game_temp.message_window_showing=true
@@ -507,7 +483,6 @@ def pbCreateMessageWindow(viewport=nil,skin=nil)
   msgwindow.back_opacity=MessageConfig::WindowOpacity
   pbBottomLeftLines(msgwindow,2)
   $game_temp.message_window_showing=true if $game_temp
-  $game_message.visible=true if $game_message
   skin=MessageConfig.pbGetSpeechFrame() if !skin
   msgwindow.setSkin(skin)
   return msgwindow
@@ -515,7 +490,6 @@ end
 
 def pbDisposeMessageWindow(msgwindow)
   $game_temp.message_window_showing=false if $game_temp
-  $game_message.visible=false if $game_message
   msgwindow.dispose
 end
 
@@ -592,9 +566,8 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
     break if text == last_text
   end
   colortag = ""
-  if ($game_message && $game_message.background>0) ||
-     ($game_system && $game_system.respond_to?("message_frame") &&
-      $game_system.message_frame != 0)
+  if $game_system && $game_system.respond_to?("message_frame") &&
+     $game_system.message_frame != 0
     colortag = getSkinColor(msgwindow.windowskin,0,true)
   else
     colortag = getSkinColor(msgwindow.windowskin,0,isDarkSkin)
@@ -674,11 +647,6 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
   end
   ########## Position message window  ##############
   pbRepositionMessageWindow(msgwindow,linecount)
-  if $game_message && $game_message.background==1
-    msgback = IconSprite.new(0,msgwindow.y,msgwindow.viewport)
-    msgback.z = msgwindow.z-1
-    msgback.setBitmap("Graphics/System/MessageBack")
-  end
   if facewindow
     pbPositionNearMsgWindow(facewindow,msgwindow,:left)
     facewindow.viewport = msgwindow.viewport

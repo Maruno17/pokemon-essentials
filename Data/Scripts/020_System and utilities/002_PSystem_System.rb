@@ -63,16 +63,6 @@ def pbSetUpSystem
     pbSetResizeFactor([$PokemonSystem.screensize, 4].min)
   end
   # Load constants
-  begin
-    consts = pbSafeLoad("Data/Constants.rxdata")
-    consts = [] if !consts
-  rescue
-    consts = []
-  end
-  for script in consts
-    next if !script
-    eval(Zlib::Inflate.inflate(script[2]),nil,script[1])
-  end
   GameData.load_all
   if LANGUAGES.length>=2
     pokemonSystem.language = pbChooseLanguage if !havedata

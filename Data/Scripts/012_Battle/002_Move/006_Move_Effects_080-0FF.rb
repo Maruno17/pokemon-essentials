@@ -1035,7 +1035,7 @@ end
 class PokeBattle_Move_0A9 < PokeBattle_Move
   def pbCalcAccuracyMultipliers(user,target,multipliers)
     super
-    modifiers[EVA_STAGE] = 0   # Accuracy stat stage
+    modifiers[:evasion_stage] = 0
   end
 
   def pbGetDefenseStats(user,target)

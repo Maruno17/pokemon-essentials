@@ -32,8 +32,8 @@ def pbAutoPositionAll
     bitmap2.dispose if bitmap2
   end
   GameData::Species.save
-  pbSavePokemonData
-  pbSavePokemonFormsData
+  Compiler.write_pokemon
+  Compiler.write_pokemon_forms
 end
 
 #===============================================================================
@@ -97,8 +97,8 @@ class SpritePositioner
 
   def pbSaveMetrics
     GameData::Species.save
-    pbSavePokemonData
-    pbSavePokemonFormsData
+    Compiler.write_pokemon
+    Compiler.write_pokemon_forms
   end
 
   def update

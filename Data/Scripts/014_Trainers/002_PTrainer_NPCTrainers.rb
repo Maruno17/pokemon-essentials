@@ -130,8 +130,8 @@ def pbConvertTrainerData
     tr_type_names[t.id_number] = t.real_name
   end
   MessageTypes.setMessages(MessageTypes::TrainerTypes, tr_type_names)
-  pbSaveTrainerTypes
-  pbSaveTrainerBattles
+  Compiler.write_trainer_types
+  Compiler.write_trainers
 end
 
 def pbNewTrainer(tr_type, tr_name, tr_id, savechanges = true)

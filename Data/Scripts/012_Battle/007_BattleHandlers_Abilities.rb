@@ -768,37 +768,37 @@ BattleHandlers::MoveBaseTypeModifierAbility.add(:REFRIGERATE,
 
 BattleHandlers::AccuracyCalcUserAbility.add(:COMPOUNDEYES,
   proc { |ability,mods,user,target,move,type|
-    mods[ACC_MULT] *= 1.3
+    mods[:accuracy_multiplier] *= 1.3
   }
 )
 
 BattleHandlers::AccuracyCalcUserAbility.add(:HUSTLE,
   proc { |ability,mods,user,target,move,type|
-    mods[ACC_MULT] *= 0.8 if move.physicalMove?
+    mods[:accuracy_multiplier] *= 0.8 if move.physicalMove?
   }
 )
 
 BattleHandlers::AccuracyCalcUserAbility.add(:KEENEYE,
   proc { |ability,mods,user,target,move,type|
-    mods[EVA_STAGE] = 0 if mods[EVA_STAGE]>0 && MECHANICS_GENERATION >= 6
+    mods[:evasion_stage] = 0 if mods[:evasion_stage] > 0 && MECHANICS_GENERATION >= 6
   }
 )
 
 BattleHandlers::AccuracyCalcUserAbility.add(:NOGUARD,
   proc { |ability,mods,user,target,move,type|
-    mods[BASE_ACC] = 0
+    mods[:base_accuracy] = 0
   }
 )
 
 BattleHandlers::AccuracyCalcUserAbility.add(:UNAWARE,
   proc { |ability,mods,user,target,move,type|
-    mods[EVA_STAGE] = 0 if move.damagingMove?
+    mods[:evasion_stage] = 0 if move.damagingMove?
   }
 )
 
 BattleHandlers::AccuracyCalcUserAbility.add(:VICTORYSTAR,
   proc { |ability,mods,user,target,move,type|
-    mods[ACC_MULT] *= 1.1
+    mods[:accuracy_multiplier] *= 1.1
   }
 )
 
@@ -808,7 +808,7 @@ BattleHandlers::AccuracyCalcUserAbility.add(:VICTORYSTAR,
 
 BattleHandlers::AccuracyCalcUserAllyAbility.add(:VICTORYSTAR,
   proc { |ability,mods,user,target,move,type|
-    mods[ACC_MULT] *= 1.1
+    mods[:accuracy_multiplier] *= 1.1
   }
 )
 
@@ -818,20 +818,20 @@ BattleHandlers::AccuracyCalcUserAllyAbility.add(:VICTORYSTAR,
 
 BattleHandlers::AccuracyCalcTargetAbility.add(:LIGHTNINGROD,
   proc { |ability,mods,user,target,move,type|
-    mods[BASE_ACC] = 0 if type == :ELECTRIC
+    mods[:base_accuracy] = 0 if type == :ELECTRIC
   }
 )
 
 BattleHandlers::AccuracyCalcTargetAbility.add(:NOGUARD,
   proc { |ability,mods,user,target,move,type|
-    mods[BASE_ACC] = 0
+    mods[:base_accuracy] = 0
   }
 )
 
 BattleHandlers::AccuracyCalcTargetAbility.add(:SANDVEIL,
   proc { |ability,mods,user,target,move,type|
     if target.battle.pbWeather==PBWeather::Sandstorm
-      mods[EVA_MULT] *= 1.25
+      mods[:evasion_multiplier] *= 1.25
     end
   }
 )
@@ -839,33 +839,33 @@ BattleHandlers::AccuracyCalcTargetAbility.add(:SANDVEIL,
 BattleHandlers::AccuracyCalcTargetAbility.add(:SNOWCLOAK,
   proc { |ability,mods,user,target,move,type|
     if target.battle.pbWeather==PBWeather::Hail
-      mods[EVA_MULT] *= 1.25
+      mods[:evasion_multiplier] *= 1.25
     end
   }
 )
 
 BattleHandlers::AccuracyCalcTargetAbility.add(:STORMDRAIN,
   proc { |ability,mods,user,target,move,type|
-    mods[BASE_ACC] = 0 if type == :WATER
+    mods[:base_accuracy] = 0 if type == :WATER
   }
 )
 
 BattleHandlers::AccuracyCalcTargetAbility.add(:TANGLEDFEET,
   proc { |ability,mods,user,target,move,type|
-    mods[ACC_MULT] /= 2 if target.effects[PBEffects::Confusion]>0
+    mods[:accuracy_multiplier] /= 2 if target.effects[PBEffects::Confusion] > 0
   }
 )
 
 BattleHandlers::AccuracyCalcTargetAbility.add(:UNAWARE,
   proc { |ability,mods,user,target,move,type|
-    mods[ACC_STAGE] = 0 if move.damagingMove?
+    mods[:accuracy_stage] = 0 if move.damagingMove?
   }
 )
 
 BattleHandlers::AccuracyCalcTargetAbility.add(:WONDERSKIN,
   proc { |ability,mods,user,target,move,type|
     if move.statusMove? && user.opposes?(target)
-      mods[BASE_ACC] = 0 if mods[BASE_ACC]>50
+      mods[:base_accuracy] = 0 if mods[:base_accuracy] > 50
     end
   }
 )
@@ -876,7 +876,7 @@ BattleHandlers::AccuracyCalcTargetAbility.add(:WONDERSKIN,
 
 BattleHandlers::DamageCalcUserAbility.add(:AERILATE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if move.powerBoost
+    mults[:base_damage_multiplier] *= 1.2 if move.powerBoost
   }
 )
 
@@ -887,29 +887,29 @@ BattleHandlers::DamageCalcUserAbility.add(:ANALYTIC,
     if (target.battle.choices[target.index][0]!=:UseMove &&
        target.battle.choices[target.index][0]!=:Shift) ||
        target.movedThisRound?
-      mults[BASE_DMG_MULT] *= 1.3
+      mults[:base_damage_multiplier] *= 1.3
     end
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:BLAZE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.hp<=user.totalhp/3 && type == :FIRE
-      mults[ATK_MULT] *= 1.5
+    if user.hp <= user.totalhp / 3 && type == :FIRE
+      mults[:attack_multiplier] *= 1.5
     end
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:DEFEATIST,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] /= 2 if user.hp<=user.totalhp/2
+    mults[:attack_multiplier] /= 2 if user.hp <= user.totalhp / 2
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:FLAREBOOST,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if user.burned? && move.specialMove?
-      mults[BASE_DMG_MULT] *= 1.5
+      mults[:base_damage_multiplier] *= 1.5
     end
   }
 )
@@ -917,7 +917,7 @@ BattleHandlers::DamageCalcUserAbility.add(:FLAREBOOST,
 BattleHandlers::DamageCalcUserAbility.add(:FLASHFIRE,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if user.effects[PBEffects::FlashFire] && type == :FIRE
-      mults[ATK_MULT] *= 1.5
+      mults[:attack_multiplier] *= 1.5
     end
   }
 )
@@ -926,7 +926,7 @@ BattleHandlers::DamageCalcUserAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
     if move.physicalMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun)
-      mults[ATK_MULT] *= 1.5
+      mults[:attack_multiplier] *= 1.5
     end
   }
 )
@@ -934,14 +934,14 @@ BattleHandlers::DamageCalcUserAbility.add(:FLOWERGIFT,
 BattleHandlers::DamageCalcUserAbility.add(:GUTS,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if user.pbHasAnyStatus? && move.physicalMove?
-      mults[ATK_MULT] *= 1.5
+      mults[:attack_multiplier] *= 1.5
     end
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:HUGEPOWER,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] *= 2 if move.physicalMove?
+    mults[:attack_multiplier] *= 2 if move.physicalMove?
   }
 )
 
@@ -949,19 +949,19 @@ BattleHandlers::DamageCalcUserAbility.copy(:HUGEPOWER,:PUREPOWER)
 
 BattleHandlers::DamageCalcUserAbility.add(:HUSTLE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] *= 1.5 if move.physicalMove?
+    mults[:attack_multiplier] *= 1.5 if move.physicalMove?
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:IRONFIST,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if move.punchingMove?
+    mults[:base_damage_multiplier] *= 1.2 if move.punchingMove?
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:MEGALAUNCHER,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.5 if move.pulseMove?
+    mults[:base_damage_multiplier] *= 1.5 if move.pulseMove?
   }
 )
 
@@ -969,8 +969,8 @@ BattleHandlers::DamageCalcUserAbility.add(:MINUS,
   proc { |ability,user,target,move,mults,baseDmg,type|
     next if !move.specialMove?
     user.eachAlly do |b|
-      next if !b.hasActiveAbility?([:MINUS,:PLUS])
-      mults[ATK_MULT] *= 1.5
+      next if !b.hasActiveAbility?([:MINUS, :PLUS])
+      mults[:attack_multiplier] *= 1.5
       break
     end
   }
@@ -981,22 +981,22 @@ BattleHandlers::DamageCalcUserAbility.copy(:MINUS,:PLUS)
 BattleHandlers::DamageCalcUserAbility.add(:NEUROFORCE,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
-      mults[FINAL_DMG_MULT] *= 1.25
+      mults[:final_damage_multiplier] *= 1.25
     end
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:OVERGROW,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.hp<=user.totalhp/3 && type == :GRASS
-      mults[ATK_MULT] *= 1.5
+    if user.hp <= user.totalhp / 3 && type == :GRASS
+      mults[:attack_multiplier] *= 1.5
     end
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:RECKLESS,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.2 if move.recoilMove?
+    mults[:base_damage_multiplier] *= 1.2 if move.recoilMove?
   }
 )
 
@@ -1004,9 +1004,9 @@ BattleHandlers::DamageCalcUserAbility.add(:RIVALRY,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if user.gender!=2 && target.gender!=2
       if user.gender==target.gender
-        mults[BASE_DMG_MULT] *= 1.25
+        mults[:base_damage_multiplier] *= 1.25
       else
-        mults[BASE_DMG_MULT] *= 0.75
+        mults[:base_damage_multiplier] *= 0.75
       end
     end
   }
@@ -1016,28 +1016,28 @@ BattleHandlers::DamageCalcUserAbility.add(:SANDFORCE,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if user.battle.pbWeather==PBWeather::Sandstorm &&
        [:ROCK, :GROUND, :STEEL].include?(type)
-      mults[BASE_DMG_MULT] *= 1.3
+      mults[:base_damage_multiplier] *= 1.3
     end
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:SHEERFORCE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.3 if move.addlEffect>0
+    mults[:base_damage_multiplier] *= 1.3 if move.addlEffect > 0
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:SLOWSTART,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] /= 2 if user.effects[PBEffects::SlowStart]>0 && move.physicalMove?
+    mults[:attack_multiplier] /= 2 if user.effects[PBEffects::SlowStart] > 0 && move.physicalMove?
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:SOLARPOWER,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
-    if move.specialMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun)
-      mults[ATK_MULT] *= 1.5
+    if move.specialMove? && (w == PBWeather::Sun || w == PBWeather::HarshSun)
+      mults[:attack_multiplier] *= 1.5
     end
   }
 )
@@ -1045,77 +1045,77 @@ BattleHandlers::DamageCalcUserAbility.add(:SOLARPOWER,
 BattleHandlers::DamageCalcUserAbility.add(:SNIPER,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if target.damageState.critical
-      mults[FINAL_DMG_MULT] *= 1.5
+      mults[:final_damage_multiplier] *= 1.5
     end
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:STAKEOUT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] *= 2 if target.battle.choices[target.index][0]==:SwitchOut
+    mults[:attack_multiplier] *= 2 if target.battle.choices[target.index][0] == :SwitchOut
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:STEELWORKER,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] *= 1.5 if type == :STEEL
+    mults[:attack_multiplier] *= 1.5 if type == :STEEL
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:STRONGJAW,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.5 if move.bitingMove?
+    mults[:base_damage_multiplier] *= 1.5 if move.bitingMove?
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:SWARM,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.hp<=user.totalhp/3 && type == :BUG
-      mults[ATK_MULT] *= 1.5
+    if user.hp <= user.totalhp / 3 && type == :BUG
+      mults[:attack_multiplier] *= 1.5
     end
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:TECHNICIAN,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.index!=target.index && move && move.id != :STRUGGLE &&
-       baseDmg*mults[BASE_DMG_MULT]<=60
-      mults[BASE_DMG_MULT] *= 1.5
+    if user.index != target.index && move && move.id != :STRUGGLE &&
+       baseDmg * mults[:base_damage_multiplier] <= 60
+      mults[:base_damage_multiplier] *= 1.5
     end
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:TINTEDLENS,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[FINAL_DMG_MULT] *= 2 if PBTypeEffectiveness.resistant?(target.damageState.typeMod)
+    mults[:final_damage_multiplier] *= 2 if PBTypeEffectiveness.resistant?(target.damageState.typeMod)
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:TORRENT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.hp<=user.totalhp/3 && type == :WATER
-      mults[ATK_MULT] *= 1.5
+    if user.hp <= user.totalhp / 3 && type == :WATER
+      mults[:attack_multiplier] *= 1.5
     end
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:TOUGHCLAWS,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 4/3.0 if move.contactMove?
+    mults[:base_damage_multiplier] *= 4 / 3.0 if move.contactMove?
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:TOXICBOOST,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if user.poisoned? && move.physicalMove?
-      mults[BASE_DMG_MULT] *= 1.5
+      mults[:base_damage_multiplier] *= 1.5
     end
   }
 )
 
 BattleHandlers::DamageCalcUserAbility.add(:WATERBUBBLE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[ATK_MULT] *= 2 if type == :WATER
+    mults[:attack_multiplier] *= 2 if type == :WATER
   }
 )
 
@@ -1126,15 +1126,15 @@ BattleHandlers::DamageCalcUserAbility.add(:WATERBUBBLE,
 BattleHandlers::DamageCalcUserAllyAbility.add(:BATTERY,
   proc { |ability,user,target,move,mults,baseDmg,type|
     next if !move.specialMove?
-    mults[FINAL_DMG_MULT] *= 1.3
+    mults[:final_damage_multiplier] *= 1.3
   }
 )
 
 BattleHandlers::DamageCalcUserAllyAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
-    if move.physicalMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun)
-      mults[ATK_MULT] *= 1.5
+    if move.physicalMove? && (w == PBWeather::Sun || w == PBWeather::HarshSun)
+      mults[:attack_multiplier] *= 1.5
     end
   }
 )
@@ -1145,14 +1145,14 @@ BattleHandlers::DamageCalcUserAllyAbility.add(:FLOWERGIFT,
 
 BattleHandlers::DamageCalcTargetAbility.add(:DRYSKIN,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] *= 1.25 if type == :FIRE
+    mults[:base_damage_multiplier] *= 1.25 if type == :FIRE
   }
 )
 
 BattleHandlers::DamageCalcTargetAbility.add(:FILTER,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
-      mults[FINAL_DMG_MULT] *= 0.75
+      mults[:final_damage_multiplier] *= 0.75
     end
   }
 )
@@ -1162,62 +1162,62 @@ BattleHandlers::DamageCalcTargetAbility.copy(:FILTER,:SOLIDROCK)
 BattleHandlers::DamageCalcTargetAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
-    if move.specialMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun)
-      mults[DEF_MULT] *= 1.5
+    if move.specialMove? && (w == PBWeather::Sun || w == PBWeather::HarshSun)
+      mults[:defense_multiplier] *= 1.5
     end
   }
 )
 
 BattleHandlers::DamageCalcTargetAbility.add(:FLUFFY,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[FINAL_DMG_MULT] *= 2 if move.calcType == :FIRE
-    mults[FINAL_DMG_MULT] /= 2 if move.contactMove?
+    mults[:final_damage_multiplier] *= 2 if move.calcType == :FIRE
+    mults[:final_damage_multiplier] /= 2 if move.contactMove?
   }
 )
 
 BattleHandlers::DamageCalcTargetAbility.add(:FURCOAT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[DEF_MULT] *= 2 if move.physicalMove? || move.function=="122"   # Psyshock
+    mults[:defense_multiplier] *= 2 if move.physicalMove? || move.function == "122"   # Psyshock
   }
 )
 
 BattleHandlers::DamageCalcTargetAbility.add(:GRASSPELT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.battle.field.terrain==PBBattleTerrains::Grassy
-      mults[DEF_MULT] *= 1.5
+    if user.battle.field.terrain == PBBattleTerrains::Grassy
+      mults[:defense_multiplier] *= 1.5
     end
   }
 )
 
 BattleHandlers::DamageCalcTargetAbility.add(:HEATPROOF,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] /= 2 if type == :FIRE
+    mults[:base_damage_multiplier] /= 2 if type == :FIRE
   }
 )
 
 BattleHandlers::DamageCalcTargetAbility.add(:MARVELSCALE,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if target.pbHasAnyStatus? && move.physicalMove?
-      mults[DEF_MULT] *= 1.5
+      mults[:defense_multiplier] *= 1.5
     end
   }
 )
 
 BattleHandlers::DamageCalcTargetAbility.add(:MULTISCALE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[FINAL_DMG_MULT] /= 2 if target.hp==target.totalhp
+    mults[:final_damage_multiplier] /= 2 if target.hp == target.totalhp
   }
 )
 
 BattleHandlers::DamageCalcTargetAbility.add(:THICKFAT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[BASE_DMG_MULT] /= 2 if type == :FIRE || type == :ICE
+    mults[:base_damage_multiplier] /= 2 if type == :FIRE || type == :ICE
   }
 )
 
 BattleHandlers::DamageCalcTargetAbility.add(:WATERBUBBLE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[FINAL_DMG_MULT] /= 2 if type == :FIRE
+    mults[:final_damage_multiplier] /= 2 if type == :FIRE
   }
 )
 
@@ -1228,7 +1228,7 @@ BattleHandlers::DamageCalcTargetAbility.add(:WATERBUBBLE,
 BattleHandlers::DamageCalcTargetAbilityNonIgnorable.add(:PRISMARMOR,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
-      mults[FINAL_DMG_MULT] *= 0.75
+      mults[:final_damage_multiplier] *= 0.75
     end
   }
 )
@@ -1236,7 +1236,7 @@ BattleHandlers::DamageCalcTargetAbilityNonIgnorable.add(:PRISMARMOR,
 BattleHandlers::DamageCalcTargetAbilityNonIgnorable.add(:SHADOWSHIELD,
   proc { |ability,user,target,move,mults,baseDmg,type|
     if target.hp==target.totalhp
-      mults[FINAL_DMG_MULT] /= 2
+      mults[:final_damage_multiplier] /= 2
     end
   }
 )
@@ -1248,15 +1248,15 @@ BattleHandlers::DamageCalcTargetAbilityNonIgnorable.add(:SHADOWSHIELD,
 BattleHandlers::DamageCalcTargetAllyAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
     w = user.battle.pbWeather
-    if move.specialMove? && (w==PBWeather::Sun || w==PBWeather::HarshSun)
-      mults[DEF_MULT] *= 1.5
+    if move.specialMove? && (w == PBWeather::Sun || w == PBWeather::HarshSun)
+      mults[:defense_multiplier] *= 1.5
     end
   }
 )
 
 BattleHandlers::DamageCalcTargetAllyAbility.add(:FRIENDGUARD,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[FINAL_DMG_MULT] *= 0.75
+    mults[:final_damage_multiplier] *= 0.75
   }
 )
 

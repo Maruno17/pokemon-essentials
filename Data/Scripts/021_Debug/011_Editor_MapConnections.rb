@@ -284,7 +284,8 @@ class MapScreenScene
 
   def serializeConnectionData
     conndata=generateConnectionData()
-    pbSerializeConnectionData(conndata,@mapinfos)
+    save_data(conndata, "Data/map_connections.dat")
+    Compiler.write_connections
     @mapconns=conndata
   end
 
@@ -575,7 +576,7 @@ class MapScreenScene
           MapFactoryHelper.clear
           save_data(@encdata,"Data/encounters.dat")
           $PokemonTemp.encountersData = nil
-          pbSaveEncounterData
+          Compiler.write_encounters
         end
         break if pbConfirmMessage(_INTL("Exit from the editor?"))
       end

@@ -1059,7 +1059,7 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
   yield(nil) if block_given?
   save_data(trlists,"Data/trainer_lists.dat")
   yield(nil) if block_given?
-  pbSaveTrainerLists()
+  Compiler.write_trainer_lists
   yield(nil) if block_given?
 end
 
@@ -1298,8 +1298,7 @@ def pbWriteCup(id,rules)
       trlists[cmd][2].push(id) if !trlists[cmd][5]
       save_data(trlists,"Data/trainer_lists.dat")
       Graphics.update
-      pbSaveTrainerLists
-      Graphics.update
+      Compiler.write_trainer_lists
     end
     return
   # Yes, use new

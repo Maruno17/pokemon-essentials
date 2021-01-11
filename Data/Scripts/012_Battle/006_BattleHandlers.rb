@@ -478,17 +478,6 @@ end
 
 
 
-BASE_ACC  = 0
-ACC_STAGE = 1
-EVA_STAGE = 2
-ACC_MULT  = 3
-EVA_MULT  = 4
-
-BASE_DMG_MULT  = 0
-ATK_MULT       = 1
-DEF_MULT       = 2
-FINAL_DMG_MULT = 3
-
 def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
   return false if !forced && !battler.canHeal?
   return false if !forced && !battler.canConsumePinchBerry?(MECHANICS_GENERATION >= 7)
@@ -582,16 +571,16 @@ def pbBattleGem(user,type,move,mults,moveType)
   return if moveType != type
   user.effects[PBEffects::GemConsumed] = user.item_id
   if MECHANICS_GENERATION >= 6
-    mults[BASE_DMG_MULT] *= 1.3
+    mults[:base_damage_multiplier] *= 1.3
   else
-    mults[BASE_DMG_MULT] *= 1.5
+    mults[:base_damage_multiplier] *= 1.5
   end
 end
 
 def pbBattleTypeWeakingBerry(type,moveType,target,mults)
   return if moveType != type
   return if PBTypeEffectiveness.resistant?(target.damageState.typeMod) && moveType != :NORMAL
-  mults[FINAL_DMG_MULT] /= 2
+  mults[:final_damage_multiplier] /= 2
   target.damageState.berryWeakened = true
   target.battle.pbCommonAnimation("EatBerry",target)
 end
