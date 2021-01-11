@@ -452,7 +452,7 @@ PBEvolution.register(:Ninjask, {
 PBEvolution.register(:Shedinja, {
   "parameterType"  => nil,
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
-    next false if $Trainer.party.length >= MAX_PARTY_SIZE
+    next false if $Trainer.party_full?
     next false if !$PokemonBag.pbHasItem?(:POKEBALL)
     PokemonEvolutionScene.pbDuplicatePokemon(pkmn, new_species)
     $PokemonBag.pbDeleteItem(:POKEBALL)

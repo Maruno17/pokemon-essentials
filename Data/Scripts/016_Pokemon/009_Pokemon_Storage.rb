@@ -3,9 +3,9 @@ class PokemonBox
   attr_accessor :name
   attr_accessor :background
 
-  BOX_WIDTH = 6
+  BOX_WIDTH  = 6
   BOX_HEIGHT = 5
-  BOX_SIZE = BOX_WIDTH * BOX_HEIGHT
+  BOX_SIZE   = BOX_WIDTH * BOX_HEIGHT
 
   def initialize(name, maxPokemon = BOX_SIZE)
     @pokemon = []
@@ -121,6 +121,10 @@ class PokemonStorage
     raise ArgumentError.new("Not supported")
   end
 
+  def party_full?
+    return $Trainer.party_full?
+  end
+
   def maxBoxes
     return @boxes.length
   end
@@ -179,7 +183,7 @@ class PokemonStorage
       return false if !found
     end
     if boxDst==-1   # Copying into party
-      return false if self.party.length >= MAX_PARTY_SIZE
+      return false if party_full?
       self.party[self.party.length] = self[boxSrc,indexSrc]
       self.party.compact!
     else   # Copying into box
@@ -200,7 +204,7 @@ class PokemonStorage
   end
 
   def pbMoveCaughtToParty(pkmn)
-    return false if self.party.length >= MAX_PARTY_SIZE
+    return false if party_full?
     self.party[self.party.length] = pkmn
   end
 
@@ -304,6 +308,10 @@ class RegionalStorage
 
   def party
     return getCurrentStorage.party
+  end
+
+  def party_full?
+    return getCurrentStorage.party_full?
   end
 
   def maxBoxes

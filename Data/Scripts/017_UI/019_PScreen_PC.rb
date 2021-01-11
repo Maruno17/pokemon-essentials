@@ -48,7 +48,7 @@ class StorageSystemPC
       )
       if command>=0 && command<3
         if command==1   # Withdraw
-          if $PokemonStorage.party.length >= MAX_PARTY_SIZE
+          if $PokemonStorage.party_full?
             pbMessage(_INTL("Your party is full!"))
             next
           end

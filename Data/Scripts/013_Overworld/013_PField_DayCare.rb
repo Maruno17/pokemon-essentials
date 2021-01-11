@@ -65,7 +65,7 @@ end
 def pbDayCareWithdraw(index)
   if !$PokemonGlobal.daycare[index][0]
     raise _INTL("There's no Pokémon here...")
-  elsif $Trainer.party.length >= MAX_PARTY_SIZE
+  elsif $Trainer.party_full?
     raise _INTL("Can't store the Pokémon...")
   else
     $Trainer.party[$Trainer.party.length] = $PokemonGlobal.daycare[index][0]

@@ -1681,7 +1681,7 @@ class PokemonStorageScreen
     if box==-1
       raise _INTL("Can't withdraw from party...");
     end
-    if @storage.party.length >= MAX_PARTY_SIZE
+    if @storage.party_full?
       pbDisplay(_INTL("Your party's full!"))
       return false
     end
