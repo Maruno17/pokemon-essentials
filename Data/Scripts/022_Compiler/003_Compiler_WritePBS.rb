@@ -38,7 +38,7 @@ module Compiler
   #===============================================================================
   # Save map connections to PBS file
   #===============================================================================
-  def normalizeConnectionPoint(conn)
+  def normalize_connection(conn)
     ret = conn.clone
     if conn[1] < 0 && conn[4] < 0
     elsif conn[1] < 0 || conn[4] < 0
@@ -53,7 +53,7 @@ module Compiler
     return ret
   end
 
-  def writeConnectionPoint(map1, x1, y1, map2, x2, y2)
+  def get_connection_text(map1, x1, y1, map2, x2, y2)
     dims1 = MapFactoryHelper.getMapDims(map1)
     dims2 = MapFactoryHelper.getMapDims(map2)
     if x1 == 0 && x2 == dims2[0]
@@ -87,8 +87,8 @@ module Compiler
           f.write(sprintf("%d,%s,%d,%d,%s,%d", conn[0], conn[1], conn[2],
             conn[3], conn[4], conn[5]))
         else
-          ret = normalizeConnectionPoint(conn)
-          f.write(writeConnectionPoint(ret[0], ret[1], ret[2], ret[3], ret[4], ret[5]))
+          ret = normalize_connection(conn)
+          f.write(get_connection_text(ret[0], ret[1], ret[2], ret[3], ret[4], ret[5]))
         end
         f.write("\r\n")
       end
@@ -733,42 +733,36 @@ module Compiler
   #===============================================================================
   def write_battle_tower_pokemon(btpokemon,filename)
     return if !btpokemon || !filename
-    species = {0=>""}
-    moves   = {0=>""}
-    items   = {0=>""}
+    species = { 0 => "" }
+    moves   = { 0 => "" }
+    items   = { 0 => "" }
     natures = {}
+    evs = ["HP", "ATK", "DEF", "SPD", "SA", "SD"]
     File.open(filename,"wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       for i in 0...btpokemon.length
         Graphics.update if i%500==0
         pkmn = btpokemon[i]
-        f.write(pbFastInspect(pkmn,moves,species,items,natures))
-        f.write("\r\n")
+        c1 = (species[pkmn.species]) ? species[pkmn.species] : (species[pkmn.species] = GameData::Species.get(pkmn.species).species.to_s)
+        c2 = (items[pkmn.item]) ? items[pkmn.item] : (items[pkmn.item] = GameData::Item.get(pkmn.item).id.to_s)
+        c3 = (natures[pkmn.nature]) ? natures[pkmn.nature] : (natures[pkmn.nature] = getConstantName(PBNatures, pkmn.nature))
+        evlist = ""
+        ev = pkmn.ev
+        for i in 0...ev
+          if (ev & (1 << i)) != 0
+            evlist += "," if evlist.length > 0
+            evlist += evs[i]
+          end
+        end
+        c4 = (moves[pkmn.move1]) ? moves[pkmn.move1] : (moves[pkmn.move1] = GameData::Move.get(pkmn.move1).id.to_s)
+        c5 = (moves[pkmn.move2]) ? moves[pkmn.move2] : (moves[pkmn.move2] = GameData::Move.get(pkmn.move2).id.to_s)
+        c6 = (moves[pkmn.move3]) ? moves[pkmn.move3] : (moves[pkmn.move3] = GameData::Move.get(pkmn.move3).id.to_s)
+        c7 = (moves[pkmn.move4]) ? moves[pkmn.move4] : (moves[pkmn.move4] = GameData::Move.get(pkmn.move4).id.to_s)
+        f.write("#{c1};#{c2};#{c3};#{evlist};#{c4},#{c5},#{c6},#{c7}\r\n")
       end
     }
     Graphics.update
-  end
-
-  def pbFastInspect(pkmn,moves,species,items,natures)
-    c1 = (species[pkmn.species]) ? species[pkmn.species] : (species[pkmn.species] = GameData::Species.get(pkmn.species).species.to_s)
-    c2 = (items[pkmn.item]) ? items[pkmn.item] : (items[pkmn.item] = GameData::Item.get(pkmn.item).id.to_s)
-    c3 = (natures[pkmn.nature]) ? natures[pkmn.nature] :
-    (natures[pkmn.nature] = getConstantName(PBNatures,pkmn.nature))
-    evlist = ""
-    ev = pkmn.ev
-    evs = ["HP","ATK","DEF","SPD","SA","SD"]
-    for i in 0...ev
-      if ((ev&(1<<i))!=0)
-        evlist += "," if evlist.length>0
-        evlist += evs[i]
-      end
-    end
-    c4 = (moves[pkmn.move1]) ? moves[pkmn.move1] : (moves[pkmn.move1] = GameData::Move.get(pkmn.move1).id.to_s)
-    c5 = (moves[pkmn.move2]) ? moves[pkmn.move2] : (moves[pkmn.move2] = GameData::Move.get(pkmn.move2).id.to_s)
-    c6 = (moves[pkmn.move3]) ? moves[pkmn.move3] : (moves[pkmn.move3] = GameData::Move.get(pkmn.move3).id.to_s)
-    c7 = (moves[pkmn.move4]) ? moves[pkmn.move4] : (moves[pkmn.move4] = GameData::Move.get(pkmn.move4).id.to_s)
-    return "#{c1};#{c2};#{c3};#{evlist};#{c4},#{c5},#{c6},#{c7}"
   end
 
   #===============================================================================
