@@ -1,4 +1,4 @@
-#===============================================================================
+﻿#===============================================================================
 # SpeedCalcAbility handlers
 #===============================================================================
 
@@ -2348,6 +2348,26 @@ BattleHandlers::AbilityOnSwitchIn.add(:SANDSTREAM,
     pbBattleWeatherAbility(PBWeather::Sandstorm,battler,battle)
   }
 )
+
+BattleHandlers::AbilityOnSwitchIn.add(:SCREENCLEANER,
+  proc { |ability,battler,battle|
+    showAbility = PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+    for side in 0...2
+      [PBEffects::AuroraVeil,PBEffects::LightScreen,PBEffects::Reflect].each do |s|
+        next if battle.sides[side].effects[s]==0
+        teamSide=(side==0) ? battler.pbTeam : battler.pbOpposingTeam 
+        moveName = getConst(PBMoves,:AURORAVEIL)
+        moveName = getConst(PBMoves,:LIGHTSCREEN) if s==PBEffects::LightScreen
+        moveName = getConst(PBMoves,:REFLECT)     if s==PBEffects::Reflect
+        battle.pbShowAbilitySplash(battler) if showAbility; showAbility=false
+        battle.pbDisplay(_INTL("{1}'s {2} wore off!",teamSide,PBMoves.getName(moveName)))
+        battle.sides[side].effects[s]=0
+      end
+    end
+    battle.pbHideAbilitySplash(battler) if !showAbility && PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+  }
+)
+
 
 BattleHandlers::AbilityOnSwitchIn.add(:SLOWSTART,
   proc { |ability,battler,battle|
