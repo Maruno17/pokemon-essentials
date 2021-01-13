@@ -595,8 +595,8 @@ class PokeBattle_Battler
   end
 
   def canTakeHealingWish?
-	# Also works with Lunar Dance.
-	return canHeal? || pbHasAnyStatus?
+    # Also works with Lunar Dance.
+    return canHeal? || pbHasAnyStatus?
   end
 
   def affectedByContactEffect?(showMsg=false)

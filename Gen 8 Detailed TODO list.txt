@@ -160,8 +160,6 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
 #--------------------------------------
 # Items
 #--------------------------------------
-#TODO:
-
 #Done:
  - Eject Pack triggers when stat stages are lowered even if the resulting stat stage is not negative (sb879)
  - If multiple Eject Packs would trigger during the same attack, only the fastest Pokemon uses theirs (DaWoblefet)
@@ -178,7 +176,6 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
  - Heavy-Duty Boots still allows Poison-type holders to soak up Toxic Spikes (GMars and TPP)
  - Blunder Policy activates when a move with multiple targets is avoided by at least one of the targets (BountyHunterStev)
  - Blunder Policy does not trigger on moves avoided through semi-invulnerability, avoided OHKO moves, or moves avoided by Telepathy allies (sb879)
-
 
 
 #--------------------------------------
@@ -215,8 +212,6 @@ Dynamax isn’t implemented in Pokémon Essentials, so these mechanics are none 
 #--------------------------------------
 # Changes to Old Mechanics
 #--------------------------------------
-#TODO: 
- 
 #Done: 
  - Turn order now changes dynamically mid-turn whenever Speed changes (Pan.), but alterations like Quick Claw or Lagging Tail will not change turn order again once the turn has started (Anubis). Obtaining Prankster mid-turn does change turn order (Anubis), but obtaining Stall does not (Anubis).
  - Inner Focus now blocks Intimidate (DaWoblefet)

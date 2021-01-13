@@ -98,7 +98,12 @@ class Game_Character
   end
 
   def jump_speed_real
-    return (2 ** (3 + 1)) * 0.8 * 40.0 / Graphics.frame_rate   # Walking speed
+    self.jump_speed_real = (2 ** (3 + 1)) * 0.8 if !@jump_speed_real   # 3 is walking speed
+    return @jump_speed_real
+  end
+
+  def jump_speed_real=(val)
+    @jump_speed_real = val * 40.0 / Graphics.frame_rate
   end
 
   def move_frequency=(val)
@@ -654,6 +659,7 @@ class Game_Character
       if real_distance > 0   # Jumping to somewhere else
         @jump_count = 0
       else   # Jumping on the spot
+        @jump_speed_real = nil   # Reset jump speed
         @jump_count = Game_Map::REAL_RES_X / jump_speed_real   # Number of frames to jump one tile
       end
       @stop_count = 0
