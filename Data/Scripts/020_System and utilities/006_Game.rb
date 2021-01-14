@@ -32,17 +32,15 @@ module Game
     return true
   end
 
-  # Loads the game from the given save data.
-  # Returns whether the operation was successful.
+  # Loads the game from the given save data and starts the map scene.
   # @param save_data [Hash] hash containing the save data
-  # @return [Boolean] whether the operation was successful
+  # @raise [SaveData::InvalidValueError] if an invalid value is being loaded
   def self.load(save_data)
-    begin
-      SaveData.load_values(save_data)
-    rescue SaveData::InvalidValueError
-      return false
-    end
-    return true
+    SaveData.load_values(save_data)
+    pbAutoplayOnSave
+    $game_map.update
+    $PokemonMap.updateMap
+    $scene = Scene_Map.new
   end
 
   def self.start_new
