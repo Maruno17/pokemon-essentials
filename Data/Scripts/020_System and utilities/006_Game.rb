@@ -7,10 +7,10 @@ module Game
     $data_system   = pbLoadRxData('Data/System')
     $PokemonSystem = PokemonSystem.new if $PokemonSystem.nil?
 
-    map_file = format("Data/Map%03d.rxdata", $data_system.start_map_id)
+    map_file = format('Data/Map%03d.rxdata', $data_system.start_map_id)
 
     if $data_system.start_map_id == 0 || !pbRgssExists?(map_file)
-      raise 'No starting position was set in the map editor.'
+      raise _INTL('No starting position was set in the map editor.')
     end
   end
 
