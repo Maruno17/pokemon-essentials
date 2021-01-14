@@ -29,11 +29,7 @@ def mainFunctionDebug
   begin
     Compiler.main
     pbSetUpSystem
-    $data_animations    = pbLoadRxData("Data/Animations")
-    $data_tilesets      = pbLoadRxData("Data/Tilesets")
-    $data_common_events = pbLoadRxData("Data/CommonEvents")
-    $data_system        = pbLoadRxData("Data/System")
-    $game_system        = Game_System.new
+    Game.initialize
     Graphics.update
     Graphics.freeze
     $scene = pbCallTitle
