@@ -1,11 +1,15 @@
 # The Game module contains methods for saving and loading the game.
 module Game
   def self.initialize
-    $PokemonTemp   = PokemonTemp.new
-    $game_temp     = Game_Temp.new
-    $game_system   = Game_System.new
-    $data_system   = pbLoadRxData('Data/System')
-    $PokemonSystem = PokemonSystem.new if $PokemonSystem.nil?
+    $PokemonTemp        = PokemonTemp.new
+    $game_temp          = Game_Temp.new
+    $game_system        = Game_System.new
+    $data_animations    = pbLoadRxData("Data/Animations")
+    $data_tilesets      = pbLoadRxData("Data/Tilesets")
+    $data_common_events = pbLoadRxData("Data/CommonEvents")
+    $data_system        = pbLoadRxData('Data/System')
+    # TODO Implement a load_in_bootup feature in SaveData::Value for values like $PokemonSystem?
+    $PokemonSystem      = PokemonSystem.new if $PokemonSystem.nil?
 
     map_file = format('Data/Map%03d.rxdata', $data_system.start_map_id)
 
