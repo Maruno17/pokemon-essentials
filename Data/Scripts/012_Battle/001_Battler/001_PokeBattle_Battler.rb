@@ -482,13 +482,6 @@ class PokeBattle_Battler
     return hasActiveAbility?([:MOLDBREAKER, :TERAVOLT, :TURBOBLAZE])
   end
 
-  def isUnnerved?
-    return true if @battle.pbCheckOpposingAbility(:UNNERVE,@index)
-    return true if @battle.pbCheckOpposingAbility(:ASONEICE,@index)
-    return true if @battle.pbCheckOpposingAbility(:ASONEGHOST,@index)
-    return false
-  end
-
   def canChangeType?
     return false if isConst?(@ability,PBAbilities,:MULTITYPE) ||
                     isConst?(@ability,PBAbilities,:RKSSYSTEM)
