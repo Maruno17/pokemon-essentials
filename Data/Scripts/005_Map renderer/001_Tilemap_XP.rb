@@ -112,9 +112,9 @@ class CustomTilemap
     @flash               = nil
     @oxFlash             = 0
     @oyFlash             = 0
-    @priotiles           = []
+    @priotiles           = {}
     @priotilesfast       = []
-    @prioautotiles       = []
+    @prioautotiles       = {}
     @autosprites         = []
     @framecount          = [0,0,0,0,0,0,0,0]   # For autotiles
     @tilesetChanged      = true
@@ -362,7 +362,7 @@ class CustomTilemap
   def addTile(tiles,count,xpos,ypos,id)
     terrain  = @terrain_tags[id]
     priority = @priorities[id]
-    if id>=384
+    if id >= 384   # Tileset tile
       if count>=tiles.length
         sprite = CustomTilemapSprite.new(@viewport)
         tiles.push(sprite,0)
@@ -376,7 +376,7 @@ class CustomTilemap
       sprite.tone    = @tone
       sprite.color   = @color
       getRegularTile(sprite,id)
-    else
+    else   # Autotile
       if count>=tiles.length
         sprite = CustomTilemapSprite.new(@viewport)
         tiles.push(sprite,1)
@@ -477,8 +477,9 @@ class CustomTilemap
   end
 
   def refresh_tileset
-    i = 0; len = @regularTileInfo.length
-    while i<len
+    i = 0
+    len = @regularTileInfo.length
+    while i < len
       if @regularTileInfo[i]
         @regularTileInfo[i].dispose
         @regularTileInfo[i] = nil
@@ -490,16 +491,17 @@ class CustomTilemap
     ysize = @map_data.ysize
     xsize = @map_data.xsize
     zsize = @map_data.zsize
-    if xsize>100 || ysize>100
+    if xsize > 100 || ysize > 100
       @fullyrefreshed = false
     else
       for z in 0...zsize
         for y in 0...ysize
           for x in 0...xsize
             id = @map_data[x, y, z]
-            next if id==0
-            next if @priorities[id]==0 && !PBTerrain.hasReflections?(@terrain_tags[id])
-            @priotiles.push([x,y,z,id])
+            next if id == 0
+            next if @priorities[id] == 0 && !PBTerrain.hasReflections?(@terrain_tags[id])
+            @priotiles[[x, y]] = [] if !@priotiles[[x, y]]
+            @priotiles[[x, y]].push([z, id])
           end
         end
       end
@@ -508,16 +510,18 @@ class CustomTilemap
   end
 
   def refresh_autotiles
-    i = 0; len = @autotileInfo.length
-    while i<len
+    i = 0
+    len = @autotileInfo.length
+    while i < len
       if @autotileInfo[i]
         @autotileInfo[i].dispose
         @autotileInfo[i] = nil
       end
       i += 1
     end
-    i = 0; len = @autosprites.length
-    while i<len
+    i = 0
+    len = @autosprites.length
+    while i < len
       if @autosprites[i]
         @autosprites[i].dispose
         @autosprites[i] = nil
@@ -531,29 +535,27 @@ class CustomTilemap
     @priorectautos = nil
     hasanimated = false
     for i in 0...7
-      numframes = autotileNumFrames(48*(i+1))
-      hasanimated = true if numframes>=2
+      numframes = autotileNumFrames(48 * (i + 1))
+      hasanimated = true if numframes >= 2
       @framecount[i] = numframes
     end
     if hasanimated
       ysize = @map_data.ysize
       xsize = @map_data.xsize
       zsize = @map_data.zsize
-      if xsize>100 || ysize>100
+      if xsize > 100 || ysize > 100
         @fullyrefreshedautos = false
       else
         for y in 0...ysize
           for x in 0...xsize
-            haveautotile = false
             for z in 0...zsize
               id = @map_data[x, y, z]
-              next if id==0 || id>=384
-              next if @priorities[id]!=0 || PBTerrain.hasReflections?(@terrain_tags[id])
-              next if @framecount[id/48-1]<2
-              haveautotile = true
+              next if id == 0 || id >= 384   # Skip non-autotiles
+              next if @priorities[id] != 0 || PBTerrain.hasReflections?(@terrain_tags[id])
+              next if @framecount[id / 48 - 1] < 2
+              @prioautotiles[[x, y]] = true
               break
             end
-            @prioautotiles.push([x,y]) if haveautotile
           end
         end
         @fullyrefreshedautos = true
@@ -563,22 +565,21 @@ class CustomTilemap
     end
   end
 
-  def refreshLayer0(autotiles=false)
+  def refreshLayer0(autotiles = false)
     return true if autotiles && !shown?
-    ptX = @ox-@oxLayer0
-    ptY = @oy-@oyLayer0
+    ptX = @ox - @oxLayer0
+    ptY = @oy - @oyLayer0
     if !autotiles && !@firsttime && !@usedsprites &&
-       ptX>=0 && ptX+@viewport.rect.width<=@layer0.bitmap.width &&
-       ptY>=0 && ptY+@viewport.rect.height<=@layer0.bitmap.height
-      if @layer0clip && @viewport.ox==0 && @viewport.oy==0
+       ptX >= 0 && ptX + @viewport.rect.width <= @layer0.bitmap.width &&
+       ptY >= 0 && ptY + @viewport.rect.height <= @layer0.bitmap.height
+      if @layer0clip && @viewport.ox == 0 && @viewport.oy == 0
         @layer0.ox = 0
         @layer0.oy = 0
-        @layer0.src_rect.set(ptX.round,ptY.round,
-           @viewport.rect.width,@viewport.rect.height)
+        @layer0.src_rect.set(ptX.round, ptY.round, @viewport.rect.width, @viewport.rect.height)
       else
         @layer0.ox = ptX.round
         @layer0.oy = ptY.round
-        @layer0.src_rect.set(0,0,@layer0.bitmap.width,@layer0.bitmap.height)
+        @layer0.src_rect.set(0, 0, @layer0.bitmap.width, @layer0.bitmap.height)
       end
       return true
     end
@@ -592,74 +593,70 @@ class CustomTilemap
     theight = @tileHeight
     mapdata = @map_data
     if autotiles
-      return true if @fullyrefreshedautos && @prioautotiles.length==0
-      xStart = @oxLayer0/twidth
-      xStart = 0 if xStart<0
-      yStart = @oyLayer0/theight
-      yStart = 0 if yStart<0
-      xEnd = xStart+(width/twidth)+1
-      yEnd = yStart+(height/theight)+1
-      xEnd = xsize if xEnd>xsize
-      yEnd = ysize if yEnd>ysize
-      return true if xStart>=xEnd || yStart>=yEnd
-      trans = Color.new(0,0,0,0)
-      temprect = Rect.new(0,0,0,0)
-      tilerect = Rect.new(0,0,twidth,theight)
+      return true if @fullyrefreshedautos && @prioautotiles.length == 0
+      xStart = @oxLayer0 / twidth
+      xStart = 0 if xStart < 0
+      yStart = @oyLayer0 / theight
+      yStart = 0 if yStart < 0
+      xEnd = xStart + (width / twidth) + 1
+      xEnd = xsize if xEnd > xsize
+      yEnd = yStart + (height / theight) + 1
+      yEnd = ysize if yEnd > ysize
+      return true if xStart >= xEnd || yStart >= yEnd
+      trans = Color.new(0, 0, 0, 0)
+      temprect = Rect.new(0, 0, 0, 0)
+      tilerect = Rect.new(0, 0, twidth, theight)
       zrange = 0...zsize
       overallcount = 0
       count = 0
       if !@fullyrefreshedautos
         for y in yStart..yEnd
           for x in xStart..xEnd
-            haveautotile = false
             for z in zrange
               id = mapdata[x, y, z]
-              next if !id || id<48 || id>=384
+              next if !id || id < 48 || id >= 384   # Skip non-autotiles
               prioid = @priorities[id]
-              next if prioid!=0 || PBTerrain.hasReflections?(@terrain_tags[id])
-              fcount = @framecount[id/48-1]
-              next if !fcount || fcount<2
-              if !haveautotile
-                haveautotile = true
-                overallcount += 1
-                xpos = (x*twidth)-@oxLayer0
-                ypos = (y*theight)-@oyLayer0
-                bitmap.fill_rect(xpos,ypos,twidth,theight,trans) if overallcount<=2000
-                break
-              end
+              next if prioid != 0 || PBTerrain.hasReflections?(@terrain_tags[id])
+              fcount = @framecount[id / 48 - 1]
+              next if !fcount || fcount < 2
+              overallcount += 1
+              xpos = (x * twidth) - @oxLayer0
+              ypos = (y * theight) - @oyLayer0
+              bitmap.fill_rect(xpos, ypos, twidth, theight, trans) if overallcount <= 2000
+              break
             end
             for z in zrange
-              id = mapdata[x,y,z]
-              next if !id || id<48
+              id = mapdata[x, y, z]
+              next if !id || id < 48
               prioid = @priorities[id]
-              next if prioid!=0 || PBTerrain.hasReflections?(@terrain_tags[id])
-              if overallcount>2000
-                xpos = (x*twidth)-@oxLayer0
-                ypos = (y*theight)-@oyLayer0
-                count = addTile(@autosprites,count,xpos,ypos,id)
-                next
-              elsif id>=384
-                temprect.set(((id - 384)&7)*@tileSrcWidth,((id - 384)>>3)*@tileSrcHeight,
-                   @tileSrcWidth,@tileSrcHeight)
-                xpos = (x*twidth)-@oxLayer0
-                ypos = (y*theight)-@oyLayer0
+              next if prioid != 0 || PBTerrain.hasReflections?(@terrain_tags[id])
+              if overallcount > 2000
+                xpos = (x * twidth) - @oxLayer0
+                ypos = (y * theight) - @oyLayer0
+                count = addTile(@autosprites, count, xpos, ypos, id)
+              elsif id >= 384   # Tileset tiles
+                temprect.set(((id - 384) & 7) * @tileSrcWidth,
+                             ((id - 384) >> 3) * @tileSrcHeight,
+                             @tileSrcWidth, @tileSrcHeight)
+                xpos = (x * twidth) - @oxLayer0
+                ypos = (y * theight) - @oyLayer0
                 if @diffsizes
-                  bitmap.stretch_blt(Rect.new(xpos,ypos,twidth,theight),@tileset,temprect)
+                  bitmap.stretch_blt(Rect.new(xpos, ypos, twidth, theight), @tileset, temprect)
                 else
-                  bitmap.blt(xpos,ypos,@tileset,temprect)
+                  bitmap.blt(xpos, ypos, @tileset, temprect)
                 end
-              else
+              else   # Autotiles
                 tilebitmap = @autotileInfo[id]
                 if !tilebitmap
                   anim = autotileFrame(id)
-                  next if anim<0
-                  tilebitmap = Bitmap.new(twidth,theight)
-                  bltAutotile(tilebitmap,0,0,id,anim)
+                  next if anim < 0
+                  tilebitmap = Bitmap.new(twidth, theight)
+                  bltAutotile(tilebitmap, 0, 0, id, anim)
                   @autotileInfo[id] = tilebitmap
                 end
-                xpos = (x*twidth)-@oxLayer0
-                ypos = (y*theight)-@oyLayer0
-                bitmap.blt(xpos,ypos,tilebitmap,tilerect)
+                xpos = (x * twidth) - @oxLayer0
+                ypos = (y * theight) - @oyLayer0
+                bitmap.blt(xpos, ypos, tilebitmap, tilerect)
               end
             end
           end
@@ -667,108 +664,108 @@ class CustomTilemap
         Graphics.frame_reset
       else
         if !@priorect || !@priorectautos ||
-           @priorect[0]!=xStart || @priorect[1]!=yStart ||
-           @priorect[2]!=xEnd || @priorect[3]!=yEnd
-          @priorectautos = @prioautotiles.find_all { |tile|
-            x = tile[0]
-            y = tile[1]
-            # "next" means "return" here
-            next !(x<xStart || x>xEnd || y<yStart || y>yEnd)
-          }
-          @priorect = [xStart,yStart,xEnd,yEnd]
-        end
-#        echoln ["autos",@priorect,@priorectautos.length,@prioautotiles.length]
-        for tile in @priorectautos
-          x = tile[0]
-          y = tile[1]
-          overallcount+=1
-          xpos = (x*twidth)-@oxLayer0
-          ypos = (y*theight)-@oyLayer0
-          bitmap.fill_rect(xpos,ypos,twidth,theight,trans)
-          z = 0
-          while z<zsize
-            id = mapdata[x,y,z]
-            z += 1
-            next if !id || id<48
-            prioid = @priorities[id]
-            next if prioid!=0 || PBTerrain.hasReflections?(@terrain_tags[id])
-            if id>=384
-              temprect.set(((id - 384)&7)*@tileSrcWidth,((id - 384)>>3)*@tileSrcHeight,
-                 @tileSrcWidth,@tileSrcHeight)
-              if @diffsizes
-                bitmap.stretch_blt(Rect.new(xpos,ypos,twidth,theight),@tileset,temprect)
-              else
-                bitmap.blt(xpos,ypos,@tileset,temprect)
-              end
-            else
-              tilebitmap = @autotileInfo[id]
-              if !tilebitmap
-                anim = autotileFrame(id)
-                next if anim<0
-                tilebitmap = Bitmap.new(twidth,theight)
-                bltAutotile(tilebitmap,0,0,id,anim)
-                @autotileInfo[id] = tilebitmap
-              end
-              bitmap.blt(xpos,ypos,tilebitmap,tilerect)
+           @priorect[0] != xStart || @priorect[1] != yStart ||
+           @priorect[2] != xEnd || @priorect[3] != yEnd
+          @priorect = [xStart, yStart, xEnd, yEnd]
+          @priorectautos = []
+          for y in yStart..yEnd
+            for x in xStart..xEnd
+              @priorectautos.push([x, y]) if @prioautotiles[[x, y]]
             end
           end
         end
-        Graphics.frame_reset if overallcount>500
+        for tile in @priorectautos
+          x = tile[0]
+          y = tile[1]
+          overallcount += 1
+          xpos = (x * twidth) - @oxLayer0
+          ypos = (y * theight) - @oyLayer0
+          bitmap.fill_rect(xpos, ypos, twidth, theight, trans)
+          z = 0
+          while z < zsize
+            id = mapdata[x, y, z]
+            z += 1
+            next if !id || id < 48
+            prioid = @priorities[id]
+            next if prioid != 0 || PBTerrain.hasReflections?(@terrain_tags[id])
+            if id >= 384   # Tileset tiles
+              temprect.set(((id - 384) & 7) * @tileSrcWidth,
+                           ((id - 384) >> 3) * @tileSrcHeight,
+                           @tileSrcWidth, @tileSrcHeight)
+              if @diffsizes
+                bitmap.stretch_blt(Rect.new(xpos, ypos, twidth, theight), @tileset, temprect)
+              else
+                bitmap.blt(xpos, ypos, @tileset, temprect)
+              end
+            else   # Autotiles
+              tilebitmap = @autotileInfo[id]
+              if !tilebitmap
+                anim = autotileFrame(id)
+                next if anim < 0
+                tilebitmap = Bitmap.new(twidth, theight)
+                bltAutotile(tilebitmap, 0, 0, id, anim)
+                @autotileInfo[id] = tilebitmap
+              end
+              bitmap.blt(xpos, ypos, tilebitmap, tilerect)
+            end
+          end
+        end
+        Graphics.frame_reset if overallcount > 500
       end
       @usedsprites = false
       return true
     end
     return false if @usedsprites
     @firsttime = false
-    @oxLayer0 = @ox-(width>>2)
-    @oyLayer0 = @oy-(height>>2)
+    @oxLayer0 = @ox - (width >> 2)
+    @oyLayer0 = @oy - (height >> 2)
     if @layer0clip
       @layer0.ox = 0
       @layer0.oy = 0
-      @layer0.src_rect.set(width>>2,height>>2,
-         @viewport.rect.width,@viewport.rect.height)
+      @layer0.src_rect.set(width >> 2, height >> 2, @viewport.rect.width, @viewport.rect.height)
     else
-      @layer0.ox = (width>>2)
-      @layer0.oy = (height>>2)
+      @layer0.ox = (width >> 2)
+      @layer0.oy = (height >> 2)
     end
     @layer0.bitmap.clear
     @oxLayer0 = @oxLayer0.round
     @oyLayer0 = @oyLayer0.round
-    xStart = @oxLayer0/twidth
-    xStart = 0 if xStart<0
-    yStart = @oyLayer0/theight
-    yStart = 0 if yStart<0
-    xEnd = xStart+(width/twidth)+1
-    yEnd = yStart+(height/theight)+1
-    xEnd = xsize if xEnd>=xsize
-    yEnd = ysize if yEnd>=ysize
-    if xStart<xEnd && yStart<yEnd
-      tmprect = Rect.new(0,0,0,0)
+    xStart = @oxLayer0 / twidth
+    xStart = 0 if xStart < 0
+    yStart = @oyLayer0 / theight
+    yStart = 0 if yStart < 0
+    xEnd = xStart + (width / twidth) + 1
+    xEnd = xsize if xEnd >= xsize
+    yEnd = yStart + (height / theight) + 1
+    yEnd = ysize if yEnd >= ysize
+    if xStart < xEnd && yStart < yEnd
+      tmprect = Rect.new(0, 0, 0, 0)
       yrange = yStart...yEnd
       xrange = xStart...xEnd
       for z in 0...zsize
         for y in yrange
-          ypos = (y*theight)-@oyLayer0
+          ypos = (y * theight) - @oyLayer0
           for x in xrange
-            xpos = (x*twidth)-@oxLayer0
+            xpos = (x * twidth) - @oxLayer0
             id = mapdata[x, y, z]
-            next if id==0 || @priorities[id]!=0 || PBTerrain.hasReflections?(@terrain_tags[id])
-            if id>=384
-              tmprect.set( ((id - 384)&7)*@tileSrcWidth,((id - 384)>>3)*@tileSrcHeight,
-                 @tileSrcWidth,@tileSrcHeight)
+            next if id == 0 || @priorities[id] != 0 || PBTerrain.hasReflections?(@terrain_tags[id])
+            if id >= 384   # Tileset tiles
+              tmprect.set(((id - 384) & 7) * @tileSrcWidth,
+                          ((id - 384) >> 3) * @tileSrcHeight,
+                          @tileSrcWidth, @tileSrcHeight)
               if @diffsizes
-                bitmap.stretch_blt(Rect.new(xpos,ypos,twidth,theight),@tileset,tmprect)
+                bitmap.stretch_blt(Rect.new(xpos, ypos, twidth, theight), @tileset, tmprect)
               else
-                bitmap.blt(xpos,ypos,@tileset,tmprect)
+                bitmap.blt(xpos, ypos, @tileset, tmprect)
               end
-            else
-              frames = @framecount[id/48-1]
-              if frames<=1
+            else   # Autotiles
+              frames = @framecount[id / 48 - 1]
+              if frames <= 1
                 frame = 0
               else
-                frame = (Graphics.frame_count/Animated_Autotiles_Frames)%frames
+                frame = (Graphics.frame_count / Animated_Autotiles_Frames) % frames
               end
-              bltAutotile(bitmap,xpos,ypos,id,frame)
+              bltAutotile(bitmap, xpos, ypos, id, frame)
             end
           end
         end
@@ -778,7 +775,7 @@ class CustomTilemap
     return true
   end
 
-  def refresh(autotiles=false)
+  def refresh(autotiles = false)
     @oldOx = @ox
     @oldOy = @oy
     usesprites = false
@@ -792,80 +789,60 @@ class CustomTilemap
     refreshFlashSprite
     xsize = @map_data.xsize
     ysize = @map_data.ysize
-    minX = (@ox/@tileWidth)-1
-    minX = 0 if minX<0
-    minX = xsize-1 if minX>=xsize
-    maxX = ((@ox+@viewport.rect.width)/@tileWidth)+1
-    maxX = 0 if maxX<0
-    maxX = xsize-1 if maxX>=xsize
-    minY = (@oy/@tileHeight)-1
-    minY = 0 if minY<0
-    minY = ysize-1 if minY>=ysize
-    maxY = ((@oy+@viewport.rect.height)/@tileHeight)+1
-    maxY = 0 if maxY<0
-    maxY = ysize-1 if maxY>=ysize
+    minX = (@ox / @tileWidth) - 1
+    minX.clamp(0, xsize - 1)
+    maxX = ((@ox + @viewport.rect.width) / @tileWidth) + 1
+    maxX.clamp(0, xsize - 1)
+    minY = (@oy / @tileHeight) - 1
+    minY.clamp(0, ysize - 1)
+    maxY = ((@oy + @viewport.rect.height) / @tileHeight) + 1
+    maxY.clamp(0, ysize - 1)
     count = 0
-    if minX<maxX && minY<maxY
+    if minX < maxX && minY < maxY
       @usedsprites = usesprites || @usedsprites
-      if @layer0
-        @layer0.visible = false if usesprites
-      end
-      if @fullyrefreshed
-        if !@priotilesrect || !@priotilesfast ||
-           @priotilesrect[0]!=minX ||
-           @priotilesrect[1]!=minY ||
-           @priotilesrect[2]!=maxX ||
-           @priotilesrect[3]!=maxY
-          @priotilesfast = @priotiles.find_all { |tile|
-            x = tile[0]
-            y = tile[1]
-            # "next" means "return" here
-            next !(x<minX || x>maxX || y<minY || y>maxY)
-          }
-          @priotilesrect = [minX,minY,maxX,maxY]
-        end
-        #   echoln [minX,minY,maxX,maxY,@priotilesfast.length,@priotiles.length]
-        for prio in @priotilesfast
-          xpos = (prio[0]*@tileWidth)-@ox
-          ypos = (prio[1]*@tileHeight)-@oy
-          count = addTile(@tiles,count,xpos,ypos,prio[3])
-        end
-      else
-        if !@priotilesrect || !@priotilesfast ||
-           @priotilesrect[0]!=minX ||
-           @priotilesrect[1]!=minY ||
-           @priotilesrect[2]!=maxX ||
-           @priotilesrect[3]!=maxY
-          @priotilesfast=[]
+      @layer0.visible = false if usesprites && @layer0
+      if !@priotilesrect || !@priotilesfast ||
+         @priotilesrect[0] != minX || @priotilesrect[1] != minY ||
+         @priotilesrect[2] != maxX || @priotilesrect[3] != maxY
+        @priotilesrect = [minX, minY, maxX, maxY]
+        @priotilesfast = []
+        if @fullyrefreshed
+          for y in minY..maxY
+            for x in minX..maxX
+              next if !@priotiles[[x, y]]
+              @priotiles[[x, y]].each { |tile| @priotilesfast.push([x, y, tile[0], tile[1]]) }
+            end
+          end
+        else
           for z in 0...@map_data.zsize
             for y in minY..maxY
               for x in minX..maxX
                 id = @map_data[x, y, z]
-                next if id==0
-                next if @priorities[id]==0 && !PBTerrain.hasReflections?(@terrain_tags[id])
-                @priotilesfast.push([x,y,z,id])
+                next if id == 0
+                next if @priorities[id] == 0 && !PBTerrain.hasReflections?(@terrain_tags[id])
+                @priotilesfast.push([x, y, z, id])
               end
             end
           end
-          @priotilesrect = [minX,minY,maxX,maxY]
-        end
-        for prio in @priotilesfast
-          xpos = (prio[0]*@tileWidth)-@ox
-          ypos = (prio[1]*@tileHeight)-@oy
-          count = addTile(@tiles,count,xpos,ypos,prio[3])
         end
       end
+      for prio in @priotilesfast
+        xpos = (prio[0] * @tileWidth) - @ox
+        ypos = (prio[1] * @tileHeight) - @oy
+        count = addTile(@tiles, count, xpos, ypos, prio[3])
+      end
     end
-    if count<@tiles.length
-      bigchange = (count<=(@tiles.length*2/3)) && (@tiles.length*2/3)>25
-      j = count; len = @tiles.length
-      while j<len
+    if count < @tiles.length
+      bigchange = (count <= (@tiles.length * 2 / 3)) && @tiles.length > 40
+      j = count
+      len = @tiles.length
+      while j < len
         sprite = @tiles[j]
-        @tiles[j+1] = -1
+        @tiles[j + 1] = -1
         if bigchange
           sprite.dispose
           @tiles[j] = nil
-          @tiles[j+1] = nil
+          @tiles[j + 1] = nil
         elsif !@tiles[j].disposed?
           sprite.visible = false if sprite.visible
         end
@@ -881,7 +858,7 @@ class CustomTilemap
       @graphicsHeight = Graphics.height
     end
     # Update tone
-    if @oldtone!=@tone
+    if @oldtone != @tone
       @layer0.tone = @tone
       @flash.tone  = @tone if @flash
       for sprite in @autosprites
@@ -893,7 +870,7 @@ class CustomTilemap
       @oldtone = @tone.clone
     end
     # Update color
-    if @oldcolor!=@color
+    if @oldcolor != @color
       @layer0.color = @color
       @flash.color  = @color if @flash
       for sprite in @autosprites
@@ -909,23 +886,17 @@ class CustomTilemap
       refresh_autotiles
       repaintAutotiles
     end
-    if @flashChanged
-      refresh_flash
-    end
-    if @tilesetChanged
-      refresh_tileset
-    end
-    if @flash
-      @flash.opacity = FlashOpacity[(Graphics.frame_count/2) % 6]
-    end
-    mustrefresh = (@oldOx!=@ox || @oldOy!=@oy || @tilesetChanged || @autotiles.changed)
-    if @viewport.ox!=@oldViewportOx || @viewport.oy!=@oldViewportOy
+    refresh_flash if @flashChanged
+    refresh_tileset if @tilesetChanged
+    @flash.opacity = FlashOpacity[(Graphics.frame_count / 2) % 6] if @flash
+    mustrefresh = (@oldOx != @ox || @oldOy != @oy || @tilesetChanged || @autotiles.changed)
+    if @viewport.ox != @oldViewportOx || @viewport.oy != @oldViewportOy
       mustrefresh = true
       @oldViewportOx = @viewport.ox
       @oldViewportOy = @viewport.oy
     end
     refresh if mustrefresh
-    if (Graphics.frame_count % Animated_Autotiles_Frames == 0) || @nowshown
+    if (Graphics.frame_count % Animated_Autotiles_Frames) == 0 || @nowshown
       repaintAutotiles
       refresh(true)
     end
