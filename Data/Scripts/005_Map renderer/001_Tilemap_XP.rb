@@ -804,13 +804,13 @@ class CustomTilemap
     xsize = @map_data.xsize
     ysize = @map_data.ysize
     minX = (@ox / @tileWidth) - 1
-    minX.clamp(0, xsize - 1)
+    minX = minX.clamp(0, xsize - 1)
     maxX = ((@ox + @viewport.rect.width) / @tileWidth) + 1
-    maxX.clamp(0, xsize - 1)
+    maxX = maxX.clamp(0, xsize - 1)
     minY = (@oy / @tileHeight) - 1
-    minY.clamp(0, ysize - 1)
+    minY = minY.clamp(0, ysize - 1)
     maxY = ((@oy + @viewport.rect.height) / @tileHeight) + 1
-    maxY.clamp(0, ysize - 1)
+    maxY = maxY.clamp(0, ysize - 1)
     count = 0
     if minX < maxX && minY < maxY
       @usedsprites = usesprites || @usedsprites
