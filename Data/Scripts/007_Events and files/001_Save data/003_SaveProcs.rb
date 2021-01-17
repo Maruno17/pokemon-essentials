@@ -13,7 +13,7 @@ SaveData.register(:player) do
 end
 
 SaveData.register(:frame_count) do
-  ensure_class :Integer
+  ensure_class :Fixnum
   save_value { Graphics.frame_count }
   load_value { |value| Graphics.frame_count = value }
   new_game_value { 0 }
@@ -63,7 +63,7 @@ SaveData.register(:game_screen) do
   ensure_class :Game_Screen
   save_value { $game_screen }
   load_value { |value| $game_screen = value }
-  new_game_value { Game_SelfSwitches.new }
+  new_game_value { Game_Screen.new }
   from_old_format { |old_format| old_format[8] }
 end
 
@@ -75,6 +75,36 @@ SaveData.register(:map_factory) do
     $game_map = $MapFactory.map
     $PokemonEncounters = PokemonEncounters.new
     $PokemonEncounters.setup($game_map.map_id)
+    next unless loading_new_game_value?
+    if $data_system.respond_to?(:magic_number)
+      magic_number_matches = ($game_system.magic_number == $data_system.magic_number)
+    else
+      magic_number_matches = ($game_system.magic_number == $data_system.version_id)
+    end
+    if !magic_number_matches || $PokemonGlobal.safesave
+      if pbMapInterpreterRunning?
+        pbMapInterpreter.setup(nil, 0)
+      end
+      begin
+        $MapFactory.setup($game_map.map_id)
+      rescue Errno::ENOENT
+        if $DEBUG
+          pbMessage(_INTL('Map {1} was not found.', $game_map.map_id))
+          map = pbWarpToMap
+          exit unless map
+          $MapFactory.setup(map[0])
+          $game_player.moveto(map[1], map[2])
+        else
+          raise _INTL('The map was not found. The game cannot continue.')
+        end
+      end
+      $game_player.center($game_player.x, $game_player.y)
+    else
+      $MapFactory.setMapChanged($game_map.map_id)
+    end
+    if $game_map.events.nil?
+      raise _INTL('The map is corrupt. The game cannot continue.')
+    end
   end
   new_game_value { PokemonMapFactory.new($data_system.start_map_id) }
   from_old_format { |old_format| old_format[9] }
