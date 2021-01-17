@@ -25,7 +25,7 @@ module Game
   # @raise [SaveData::InvalidValueError] if an invalid value is being saved
   def self.save(save_file = SaveData::FILE_PATH)
     validate save_file => String
-    return false unless File.writable?(save_file)
+    return false if File.file?(save_file) && !File.writable?(save_file)
 
     $Trainer.metaID = $PokemonGlobal.playerID # TODO: Is this necessary?
     $game_system.save_count += 1
