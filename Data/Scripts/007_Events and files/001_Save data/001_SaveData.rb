@@ -39,6 +39,19 @@ module SaveData
     return File.file?(FILE_PATH)
   end
 
+  # @param save_data [Hash] save data to validate
+  # @return [Boolean] whether the given save data is valid
+  def self.valid?(save_data)
+    return @values.all? { |id, value| value.valid?(save_data[id]) }
+  end
+
+  # Deletes the save file (and a possible .bak backup file if one exists)
+  # @raise [Error::ENOENT]
+  def self.delete_file
+    File.delete(FILE_PATH)
+    File.delete(FILE_PATH + '.bak') if File.file?(FILE_PATH + '.bak')
+  end
+
   # Registers a {Value} to be saved into save data.
   # Takes a block which defines the value's saving ({Value#save_value})
   # and loading ({Value#load_value}) procedures.
