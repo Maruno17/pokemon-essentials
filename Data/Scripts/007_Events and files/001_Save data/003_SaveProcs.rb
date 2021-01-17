@@ -151,7 +151,7 @@ end
 
 SaveData.register(:essentials_version) do
   ensure_class :String
-  save_value { $SaveVersion }
+  save_value { ESSENTIALS_VERSION }
   load_value { |value| $SaveVersion = value }
   from_old_format { |old_format| old_format[15] }
 end
