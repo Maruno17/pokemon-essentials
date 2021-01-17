@@ -14,7 +14,9 @@ module SaveData
   def self.save_to_file(file_path)
     validate file_path => String
 
-    File.open(file_path, 'wb') { |file| Marshal.dump(self.compile, file) }
+    save_data = self.compile
+
+    File.open(file_path, 'wb') { |file| Marshal.dump(save_data, file) }
   end
 
   # Fetches the save data from the given file and runs all
@@ -140,7 +142,7 @@ module SaveData
         save_data = [] if save_data.nil?
         save_data << data
       end
-      if save_data.is_a?(Hash)
+      if data.is_a?(Hash)
         save_data = data
       elsif file.eof?
         save_data << data
