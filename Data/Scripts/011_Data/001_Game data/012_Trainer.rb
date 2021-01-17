@@ -1,0 +1,170 @@
+module GameData
+  class Trainer
+    attr_reader :id_number
+    attr_reader :trainer_type
+    attr_reader :real_name
+    attr_reader :version
+    attr_reader :items
+    attr_reader :real_lose_text
+    attr_reader :pokemon
+
+    DATA = {}
+    DATA_FILENAME = "trainers.dat"
+
+    SCHEMA = {
+      "Items"     => [:items,        "*e", :Item],
+      "LoseText"  => [:lose_text,    "s"],
+      "Pokemon"   => [:pokemon,      "ev", :Species],   # Species, level
+      "Form"      => [:form,         "u"],
+      "Name"      => [:name,         "s"],
+      "Moves"     => [:moves,        "*e", :Move],
+      "Ability"   => [:ability_flag, "u"],
+      "Item"      => [:item,         "e", :Item],
+      "Gender"    => [:gender,       "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
+                                            "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
+      "Nature"    => [:nature,       "e", :PBNatures],
+      "IV"        => [:iv,           "uUUUUU"],
+      "EV"        => [:ev,           "uUUUUU"],
+      "Happiness" => [:happiness,    "u"],
+      "Shiny"     => [:shininess,    "b"],
+      "Shadow"    => [:shadowness,   "b"],
+      "Ball"      => [:poke_ball,    "u"],
+    }
+
+    extend ClassMethods
+    include InstanceMethods
+
+    # @param tr_type [Symbol, String]
+    # @param tr_name [String]
+    # @param tr_version [Integer]
+    # @return [Boolean] whether the given other is defined as a self
+    def self.exists?(tr_type, tr_name, tr_version = 0)
+      validate tr_type => [Symbol, String]
+      validate tr_name => [String]
+      key = [tr_type.to_sym, tr_name, tr_version]
+      return !self::DATA[key].nil?
+    end
+
+    # @param tr_type [Symbol, String]
+    # @param tr_name [String]
+    # @param tr_version [Integer]
+    # @return [self]
+    def self.get(tr_type, tr_name, tr_version = 0)
+      validate tr_type => [Symbol, String]
+      validate tr_name => [String]
+      key = [tr_type.to_sym, tr_name, tr_version]
+      raise "Unknown trainer #{tr_type} #{tr_name} #{tr_version}." unless self::DATA.has_key?(key)
+      return self::DATA[key]
+    end
+
+    # @param other [Symbol, self, String, Integer]
+    # @return [self, nil]
+    def try_get(tr_type, tr_name, tr_version = 0)
+      validate tr_type => [Symbol, String]
+      validate tr_name => [String]
+      key = [tr_type.to_sym, tr_name, tr_version]
+      return (self::DATA.has_key?(key)) ? self::DATA[key] : nil
+    end
+
+    def initialize(hash)
+      @id_number      = hash[:id]
+      @trainer_type   = hash[:trainer_type]
+      @real_name      = hash[:name]         || "Unnamed"
+      @version        = hash[:version]      || 0
+      @items          = hash[:items]        || []
+      @real_lose_text = hash[:lose_text]    || "..."
+      @pokemon        = hash[:pokemon]      || []
+      @pokemon.each do |pkmn|
+        if pkmn[:iv]
+          6.times { |i| pkmn[:iv][i] = pkmn[:iv][0] if !pkmn[:iv][i] }
+        end
+        if pkmn[:ev]
+          6.times { |i| pkmn[:ev][i] = pkmn[:ev][0] if !pkmn[:ev][i] }
+        end
+      end
+    end
+
+    # @return [String] the translated name of this trainer
+    def name
+      return pbGetMessageFromHash(MessageTypes::TrainerNames, @real_name)
+    end
+
+    # @return [String] the translated in-battle lose message of this trainer
+    def lose_text
+      return pbGetMessageFromHash(MessageTypes::TrainerLoseText, @real_lose_text)
+    end
+
+    # Creates a battle-ready version of a trainer's data.
+    # @return [Array] all information about a trainer in a usable form
+    def to_trainer
+      # Determine trainer's name
+      tr_name = self.name
+      RIVAL_NAMES.each do |rival|
+        next if rival[0] != @trainer_type || !$game_variables[rival[1]].is_a?(String)
+        tr_name = $game_variables[rival[1]]
+        break
+      end
+      # Create trainer object
+      trainer = PokeBattle_Trainer.new(tr_name, @trainer_type)
+      trainer.setForeignID($Trainer)
+      party = []
+      # Create each Pokémon owned by the trainer
+      @pokemon.each do |pkmn_data|
+        species = GameData::Species.get(pkmn_data[:species]).species
+        pkmn = Pokemon.new(species, pkmn_data[:level], trainer, false)
+        party.push(pkmn)
+        # Set Pokémon's properties if defined
+        if pkmn_data[:form]
+          pkmn.forcedForm = pkmn_data[:form] if MultipleForms.hasFunction?(species, "getForm")
+          pkmn.formSimple = pkmn_data[:form]
+        end
+        pkmn.setItem(pkmn_data[:item])
+        if pkmn_data[:moves] && pkmn_data[:moves].length > 0
+          pkmn_data[:moves].each { |move| pkmn.pbLearnMove(move) }
+        else
+          pkmn.resetMoves
+        end
+        pkmn.setAbility(pkmn_data[:ability_flag])
+        gender = pkmn_data[:gender] || ((trainer.female?) ? 1 : 0)
+        pkmn.setGender(gender)
+        (pkmn_data[:shininess]) ? pkmn.makeShiny : pkmn.makeNotShiny
+        if pkmn_data[:nature]
+          pkmn.setNature(pkmn_data[:nature])
+        else
+          nature = pkmn.species_data.id_number + GameData::TrainerType.get(trainer.trainertype).id_number
+          pkmn.setNature(nature % (PBNatures.maxValue + 1))
+        end
+        PBStats.eachStat do |s|
+          if pkmn_data[:iv] && pkmn_data[:iv].length > 0
+            pkmn.iv[s] = pkmn_data[:iv][s] || pkmn_data[:iv][0]
+          else
+            pkmn.iv[s] = [pkmn_data[:level] / 2, Pokemon::IV_STAT_LIMIT].min
+          end
+          if pkmn_data[:ev] && pkmn_data[:ev].length > 0
+            pkmn.ev[s] = pkmn_data[:ev][s] || pkmn_data[:ev][0]
+          else
+            pkmn.ev[s] = [pkmn_data[:level] * 3 / 2, Pokemon::EV_LIMIT / 6].min
+          end
+        end
+        pkmn.happiness = pkmn_data[:happiness] if pkmn_data[:happiness]
+        pkmn.name = pkmn_data[:name] if pkmn_data[:name] && !pkmn_data[:name].empty?
+        if pkmn_data[:shadowness]
+          pkmn.makeShadow
+          pkmn.pbUpdateShadowMoves(true)
+          pkmn.makeNotShiny
+        end
+        pkmn.ballused = pkmn_data[:poke_ball] if pkmn_data[:poke_ball]
+        pkmn.calcStats
+      end
+      return [trainer, @items.clone, party, self.lose_text]
+    end
+  end
+end
+
+#===============================================================================
+# Deprecated methods
+#===============================================================================
+def pbGetTrainerData(tr_type, tr_name, tr_version = 0)
+  Deprecation.warn_method('pbGetTrainerData', 'v20', 'GameData::Trainer.get(tr_type, tr_name, tr_version)')
+  return GameData::Trainer.get(tr_type, tr_name, tr_version)
+end

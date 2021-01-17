@@ -1,143 +1,26 @@
 #===============================================================================
-# Trainer data
-#===============================================================================
-module TrainerData
-  SPECIES   = 0
-  LEVEL     = 1
-  ITEM      = 2
-  MOVES     = 3
-  ABILITY   = 4
-  GENDER    = 5
-  FORM      = 6
-  SHINY     = 7
-  NATURE    = 8
-  IV        = 9
-  HAPPINESS = 10
-  NAME      = 11
-  SHADOW    = 12
-  BALL      = 13
-  EV        = 14
-  LOSETEXT  = 15
-
-  SCHEMA = {
-    "Items"     => [0,         "eEEEEEEE", :Item, :Item, :Item, :Item,
-                                           :Item, :Item, :Item, :Item],
-    "Pokemon"   => [SPECIES,   "ev", :Species, nil],   # Species, level
-    "Item"      => [ITEM,      "e", :Item],
-    "Moves"     => [MOVES,     "eEEE", :Move, :Move, :Move, :Move],
-    "Ability"   => [ABILITY,   "u"],
-    "Gender"    => [GENDER,    "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
-                                      "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
-    "Form"      => [FORM,      "u"],
-    "Shiny"     => [SHINY,     "b"],
-    "Nature"    => [NATURE,    "e", :PBNatures],
-    "IV"        => [IV,        "uUUUUU"],
-    "Happiness" => [HAPPINESS, "u"],
-    "Name"      => [NAME,      "s"],
-    "Shadow"    => [SHADOW,    "b"],
-    "Ball"      => [BALL,      "u"],
-    "EV"        => [EV,        "uUUUUU"],
-    "LoseText"  => [LOSETEXT,  "s"]
-  }
-end
-
-#===============================================================================
 #
 #===============================================================================
-def pbLoadTrainer(tr_type, tr_name, tr_id = 0)
-  if !GameData::TrainerType.exists?(tr_type)
-    raise _INTL("Trainer type {1} does not exist.", tr_type)
-  end
-  tr_type = GameData::TrainerType.get(tr_type).id
-  success = false
-  items = []
-  party = []
-  opponent = nil
-  trainers = pbLoadTrainersData
-  for trainer in trainers
-    next if trainer[0] != tr_type || trainer[1] != tr_name || trainer[4] != tr_id
-    # Found the trainer we want, load it up
-    items = trainer[2].clone
-    tr_name = pbGetMessageFromHash(MessageTypes::TrainerNames, tr_name)
-    for i in RIVAL_NAMES
-      next if i[0] != tr_type || !$game_variables[i[1]].is_a?(String)
-      tr_name = $game_variables[i[1]]
-      break
-    end
-    loseText = pbGetMessageFromHash(MessageTypes::TrainerLoseText,trainer[5])
-    opponent = PokeBattle_Trainer.new(tr_name, tr_type)
-    opponent.setForeignID($Trainer)
-    # Load up each Pokémon in the trainer's party
-    for poke in trainer[3]
-      species = GameData::Species.get(poke[TrainerData::SPECIES]).species
-      level = poke[TrainerData::LEVEL]
-      pokemon = Pokemon.new(species,level,opponent,false)
-      if poke[TrainerData::FORM]
-        pokemon.forcedForm = poke[TrainerData::FORM] if MultipleForms.hasFunction?(pokemon.species,"getForm")
-        pokemon.formSimple = poke[TrainerData::FORM]
-      end
-      pokemon.setItem(poke[TrainerData::ITEM])
-      if poke[TrainerData::MOVES] && poke[TrainerData::MOVES].length>0
-        for move in poke[TrainerData::MOVES]
-          pokemon.pbLearnMove(move)
-        end
-      else
-        pokemon.resetMoves
-      end
-      pokemon.setAbility(poke[TrainerData::ABILITY])
-      g = (poke[TrainerData::GENDER]) ? poke[TrainerData::GENDER] : (opponent.female?) ? 1 : 0
-      pokemon.setGender(g)
-      (poke[TrainerData::SHINY]) ? pokemon.makeShiny : pokemon.makeNotShiny
-      if poke[TrainerData::NATURE]
-        n = poke[TrainerData::NATURE]
-      else
-        n = pokemon.species_data.id_number + GameData::TrainerType.get(opponent.trainertype).id_number
-        n = n % (PBNatures.maxValue + 1)
-      end
-      pokemon.setNature(n)
-      for i in 0...6
-        if poke[TrainerData::IV] && poke[TrainerData::IV].length>0
-          pokemon.iv[i] = (i<poke[TrainerData::IV].length) ? poke[TrainerData::IV][i] : poke[TrainerData::IV][0]
-        else
-          pokemon.iv[i] = [level/2, Pokemon::IV_STAT_LIMIT].min
-        end
-        if poke[TrainerData::EV] && poke[TrainerData::EV].length>0
-          pokemon.ev[i] = (i<poke[TrainerData::EV].length) ? poke[TrainerData::EV][i] : poke[TrainerData::EV][0]
-        else
-          pokemon.ev[i] = [level*3/2, Pokemon::EV_LIMIT/6].min
-        end
-      end
-      pokemon.happiness = poke[TrainerData::HAPPINESS] if poke[TrainerData::HAPPINESS]
-      pokemon.name = poke[TrainerData::NAME] if poke[TrainerData::NAME] && poke[TrainerData::NAME]!=""
-      if poke[TrainerData::SHADOW]   # if this is a Shadow Pokémon
-        pokemon.makeShadow rescue nil
-        pokemon.pbUpdateShadowMoves(true) rescue nil
-        pokemon.makeNotShiny
-      end
-      pokemon.ballused = poke[TrainerData::BALL] if poke[TrainerData::BALL]
-      pokemon.calcStats
-      party.push(pokemon)
-    end
-    success = true
-    break
-  end
-  return success ? [opponent,items,party,loseText] : nil
+def pbLoadTrainer(tr_type, tr_name, tr_version = 0)
+  tr_type_data = GameData::TrainerType.try_get(tr_type)
+  raise _INTL("Trainer type {1} does not exist.", tr_type) if !tr_type_data
+  tr_type = tr_type_data.id
+  trainer_data = GameData::Trainer.try_get(tr_type, tr_name, tr_version)
+  return (trainer_data) ? trainer_data.to_trainer : nil
 end
 
 def pbConvertTrainerData
   tr_type_names = []
-  GameData::TrainerType.each do |t|
-    tr_type_names[t.id_number] = t.real_name
-  end
+  GameData::TrainerType.each { |t| tr_type_names[t.id_number] = t.real_name }
   MessageTypes.setMessages(MessageTypes::TrainerTypes, tr_type_names)
   Compiler.write_trainer_types
   Compiler.write_trainers
 end
 
-def pbNewTrainer(tr_type, tr_name, tr_id, savechanges = true)
-  pokemon = []
-  for i in 0...6
-    if i==0
+def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
+  party = []
+  for i in 0...MAX_PARTY_SIZE
+    if i == 0
       pbMessage(_INTL("Please enter the first Pokémon.",i))
     else
       break if !pbConfirmMessage(_INTL("Add another Pokémon?"))
@@ -146,24 +29,37 @@ def pbNewTrainer(tr_type, tr_name, tr_id, savechanges = true)
       species = pbChooseSpeciesList
       if species
         params = ChooseNumberParams.new
-        params.setRange(1,PBExperience.maxLevel)
+        params.setRange(1, PBExperience.maxLevel)
         params.setDefaultValue(10)
         level = pbMessageChooseNumber(_INTL("Set the level for {1} (max. #{PBExperience.maxLevel}).",
-           GameData::Species.get(species).name),params)
-        pokemon.push([species,level])
+           GameData::Species.get(species).name), params)
+        party.push([species, level])
         break
       else
-        break if i>0
+        break if i > 0
         pbMessage(_INTL("This trainer must have at least 1 Pokémon!"))
       end
     end
   end
-  trainer = [tr_type,tr_name,[],pokemon,tr_id]
-  if savechanges
-    data = pbLoadTrainersData
-    data.push(trainer)
-    save_data(data,"Data/trainers.dat")
-    $PokemonTemp.trainersData = nil
+  trainer = [tr_type, tr_name, [], party, tr_version]
+  if save_changes
+    trainer_hash = {
+      :id           => GameData::Trainer::HASH.keys.length / 2,
+      :trainer_type => tr_type,
+      :name         => tr_name,
+      :version      => tr_version,
+      :pokemon      => []
+    }
+    party.each do |pkmn|
+      trainer_hash[:pokemon].push({
+        :species => pkmn[0],
+        :level   => pkmn[1]
+      })
+    end
+    # Add trainer's data to records
+    key = [tr_type, tr_name, tr_version]
+    GameData::Trainer::DATA[trainer_hash[:id]] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
+    GameData::Trainer.save
     pbConvertTrainerData
     pbMessage(_INTL("The Trainer's data was added to the list of battles and in PBS/trainers.txt."))
   end
@@ -181,57 +77,48 @@ def pbTrainerTypeCheck(trainer_type)
 end
 
 def pbGetFreeTrainerParty(tr_type, tr_name)
-  if !GameData::TrainerType.exists?(tr_type)
-    raise _INTL("Trainer type {1} does not exist.", tr_type)
-  end
-  tr_type = GameData::TrainerType.get(tr_type).id
-  trainers = pbLoadTrainersData
-  used_ids = []
-  for trainer in trainers
-    next if trainer[0] != tr_type || trainer[1] != tr_name
-    used_ids.push(trainer[4])
-  end
+  tr_type_data = GameData::TrainerType.try_get(tr_type)
+  raise _INTL("Trainer type {1} does not exist.", tr_type) if !tr_type_data
+  tr_type = tr_type_data.id
   for i in 0...256
-    return i if !used_ids.include?(i)
+    return i if !GameData::Trainer.try_get(tr_type, tr_name, i)
   end
   return -1
 end
 
 # Called from trainer events to ensure the trainer exists
-def pbTrainerCheck(tr_type, tr_name, max_battles, tr_id = 0)
+def pbTrainerCheck(tr_type, tr_name, max_battles, tr_version = 0)
   return true if !$DEBUG
   # Check for existence of trainer type
   pbTrainerTypeCheck(tr_type)
-  return false if !GameData::TrainerType.exists?(tr_type)
-  tr_type = GameData::TrainerType.get(tr_type).id
+  tr_type_data = GameData::TrainerType.try_get(tr_type)
+  return false if !tr_type_data
+  tr_type = tr_type_data.id
   # Check for existence of trainer with given ID number
-  return true if pbLoadTrainer(tr_type, tr_name, tr_id)
+  return true if GameData::Trainer.exists?(tr_type, tr_name, tr_version)
   # Add new trainer
   if pbConfirmMessage(_INTL("Add new trainer variant {1} (of {2}) for {3} {4}?",
-     tr_id, max_battles, tr_type.to_s, tr_name))
-    pbNewTrainer(tr_type, tr_name, tr_id)
+     tr_version, max_battles, tr_type.to_s, tr_name))
+    pbNewTrainer(tr_type, tr_name, tr_version)
   end
   return true
 end
 
-def pbMissingTrainer(tr_type, tr_name, tr_id)
-  if !GameData::TrainerType.exists?(tr_type)
-    raise _INTL("Trainer type {1} does not exist.", tr_type)
-  end
-  tr_type = GameData::TrainerType.get(tr_type).id
+def pbMissingTrainer(tr_type, tr_name, tr_version)
+  tr_type_data = GameData::TrainerType.try_get(tr_type)
+  raise _INTL("Trainer type {1} does not exist.", tr_type) if !tr_type_data
+  tr_type = tr_type_data.id
   if !$DEBUG
-    raise _INTL("Can't find trainer ({1}, {2}, ID {3})", tr_type.to_s, tr_name, tr_id)
+    raise _INTL("Can't find trainer ({1}, {2}, ID {3})", tr_type.to_s, tr_name, tr_version)
   end
 	message = ""
-  if tr_id != 0
-    message = _INTL("Add new trainer ({1}, {2}, ID {3})?", tr_type.to_s, tr_name, tr_id)
+  if tr_version != 0
+    message = _INTL("Add new trainer ({1}, {2}, ID {3})?", tr_type.to_s, tr_name, tr_version)
   else
     message = _INTL("Add new trainer ({1}, {2})?", tr_type.to_s, tr_name)
   end
   cmd = pbMessage(message, [_INTL("Yes"), _INTL("No")], 2)
-  if cmd == 0
-    pbNewTrainer(tr_type, tr_name, tr_id)
-  end
+  pbNewTrainer(tr_type, tr_name, tr_version) if cmd == 0
   return cmd
 end
 

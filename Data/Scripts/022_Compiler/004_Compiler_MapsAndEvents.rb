@@ -384,7 +384,6 @@ module Compiler
   #=============================================================================
   class TrainerChecker
     def initialize
-      @trainers     = nil
       @dontaskagain = false
     end
 
@@ -396,26 +395,20 @@ module Compiler
       end
     end
 
-    def pbTrainerBattleCheck(tr_type, tr_name, tr_id)
+    def pbTrainerBattleCheck(tr_type, tr_name, tr_version)
       return if !$DEBUG || @dontaskagain
       # Check for existence of trainer type
       pbTrainerTypeCheck(tr_type)
       return if !GameData::TrainerType.exists?(tr_type)
       tr_type = GameData::TrainerType.get(tr_type).id
       # Check for existence of trainer
-      @trainers = load_data("Data/trainers.dat") if !@trainers
-      if @trainers
-        for trainer in @trainers
-          return if trainer[0]==tr_type && trainer[1]==tr_name && trainer[4]==tr_id
-        end
-      end
+      return if GameData::Trainer.exists?(tr_type, tr_name, tr_version)
       # Add new trainer
-      cmd = pbMissingTrainer(tr_type,tr_name,tr_id)
-      if cmd==2
+      cmd = pbMissingTrainer(tr_type, tr_name, tr_version)
+      if cmd == 2
         @dontaskagain = true
         Graphics.update
       end
-      @trainers = nil
     end
   end
 

@@ -27,6 +27,8 @@ module GameData
       return self::DATA[other]
     end
 
+    # @param other [Symbol, self, String, Integer]
+    # @return [self, nil]
     def try_get(other)
       return nil if other.nil?
       validate other => [Symbol, self, String, Integer]
@@ -40,7 +42,7 @@ module GameData
 
     def each
       keys = self::DATA.keys.sort { |a, b| self::DATA[a].id_number <=> self::DATA[b].id_number }
-      keys.each { |key| yield self::DATA[key] if key.is_a?(Symbol) }
+      keys.each { |key| yield self::DATA[key] if !key.is_a?(Integer) }
     end
 
     def load
@@ -127,5 +129,6 @@ module GameData
     TrainerType.load
     Type.load
     Species.load
+    Trainer.load
   end
 end

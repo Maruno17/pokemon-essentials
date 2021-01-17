@@ -265,16 +265,20 @@ end
 
 def pbTrainerSpecies(phonenum)
   return "" if !phonenum[0]
-  partyid = [0,(phonenum[5]-1)].max
-  trainer = pbGetTrainerData(phonenum[1],phonenum[2],partyid)
-  return "" if !trainer || trainer[3].length==0
-  rndpoke = trainer[3][rand(trainer[3].length)]
-  return GameData::Species.get(rndpoke[0]).name
+  partyid = [0, phonenum[5] - 1].max
+  trainer_data = GameData::Trainer.try_get(phonenum[1], phonenum[2], partyid)
+  return "" if !trainer_data
+  if trainer_data.pokemon.length == 1
+    pkmn = trainer_data.pokemon[0][:species]
+  else
+    pkmn = trainer_data.pokemon[rand(trainer_data.pokemon.length)][:species]
+  end
+  return GameData::Species.get(pkmn).name
 end
 
 def pbTrainerMapName(phonenum)
-  return "" if !phonenum[6] || phonenum[6]==0
-  return pbGetMessage(MessageTypes::MapNames,phonenum[6])
+  return "" if !phonenum[6] || phonenum[6] == 0
+  return pbGetMessage(MessageTypes::MapNames, phonenum[6])
 end
 
 #===============================================================================

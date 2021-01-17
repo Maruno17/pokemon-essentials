@@ -979,198 +979,120 @@ module Compiler
   # Compile individual trainer data
   #=============================================================================
   def compile_trainers
-    trainer_info_types = TrainerData::SCHEMA
-    mLevel = PBExperience.maxLevel
-    trainerindex    = -1
-    trainers        = []
-    trainernames    = []
-    trainerlosetext = []
-    pokemonindex    = -2
-    oldcompilerline   = 0
-    oldcompilerlength = 0
-    pbCompilerEachCommentedLine("PBS/trainers.txt") { |line,lineno|
+    schema = GameData::Trainer::SCHEMA
+    max_level = PBExperience.maxLevel
+    trainer_names      = []
+    trainer_lose_texts = []
+    trainer_hash       = nil
+    trainer_id         = -1
+    current_pkmn       = nil
+    # Read each line of trainers.txt at a time and compile it as a trainer property
+    pbCompilerEachPreppedLine("PBS/trainers.txt") { |line, line_no|
+      # New section [trainer_type, name] or [trainer_type, name, version]
       if line[/^\s*\[\s*(.+)\s*\]\s*$/]
-        # Section [trainertype,trainername] or [trainertype,trainername,partyid]
-        if oldcompilerline>0
-          raise _INTL("Previous trainer not defined with as many Pokémon as expected.\r\n{1}",FileLineData.linereport)
+        if trainer_hash
+          if !current_pkmn
+            raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}", FileLineData.linereport)
+          end
+          # Add trainer's data to records
+          key = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+          GameData::Trainer::DATA[trainer_id] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
         end
-        if pokemonindex==-1
-          raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}",FileLineData.linereport)
-        end
-        section = pbGetCsvRecord($~[1],lineno,[0,"esU",:TrainerType])
-        trainerindex += 1
-        trainertype = section[0]
-        trainername = section[1]
-        partyid     = section[2] || 0
-        trainers[trainerindex] = [trainertype,trainername,[],[],partyid,nil]
-        trainernames[trainerindex] = trainername
-        pokemonindex = -1
+        trainer_id += 1
+        line_data = pbGetCsvRecord($~[1], line_no, [0, "esU", :TrainerType])
+        # Construct trainer hash
+        trainer_hash = {
+          :id           => trainer_id,
+          :trainer_type => line_data[0],
+          :name         => line_data[1],
+          :version      => line_data[2] || 0,
+          :pokemon      => []
+        }
+        current_pkmn = nil
+        trainer_names[trainer_id] = trainer_hash[:name]
+      # XXX=YYY lines
       elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
-        # XXX=YYY lines
-        if trainerindex<0
-          raise _INTL("Expected a section at the beginning of the file.\r\n{1}",FileLineData.linereport)
+        if !trainer_hash
+          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
         end
-        if oldcompilerline>0
-          raise _INTL("Previous trainer not defined with as many Pokémon as expected.\r\n{1}",FileLineData.linereport)
-        end
-        settingname = $~[1]
-        schema = trainer_info_types[settingname]
-        next if !schema
-        record = pbGetCsvRecord($~[2],lineno,schema)
+        property_name = $~[1]
+        line_schema = schema[property_name]
+        next if !line_schema
+        property_value = pbGetCsvRecord($~[2], line_no, line_schema)
         # Error checking in XXX=YYY lines
-        case settingname
+        case property_name
+        when "Items"
+          property_value = [property_value] if !property_value.is_a?(Array)
+          property_value.compact!
         when "Pokemon"
-          if record[1]>mLevel
-            raise _INTL("Bad level: {1} (must be 1-{2}).\r\n{3}",record[1],mLevel,FileLineData.linereport)
+          if property_value[1] > max_level
+            raise _INTL("Bad level: {1} (must be 1-{2}).\r\n{3}", property_value[1], max_level, FileLineData.linereport)
+          end
+        when "Name"
+          if property_value.length > Pokemon::MAX_NAME_SIZE
+            raise _INTL("Bad nickname: {1} (must be 1-{2} characters).\r\n{3}", property_value, Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
           end
         when "Moves"
-          record = [record] if record.is_a?(Symbol)
-          record.compact!
-        when "Ability"
-          if record>5
-            raise _INTL("Bad ability flag: {1} (must be 0 or 1 or 2-5).\r\n{2}",record,FileLineData.linereport)
-          end
+          property_value = [property_value] if !property_value.is_a?(Array)
+          property_value.uniq!
+          property_value.compact!
         when "IV"
-          record = [record] if record.is_a?(Integer)
-          record.compact!
-          for i in record
-            next if i<=Pokemon::IV_STAT_LIMIT
-            raise _INTL("Bad IV: {1} (must be 0-{2}).\r\n{3}", i, Pokemon::IV_STAT_LIMIT, FileLineData.linereport)
+          property_value = [property_value] if !property_value.is_a?(Array)
+          property_value.compact!
+          property_value.each do |iv|
+            next if iv <= Pokemon::IV_STAT_LIMIT
+            raise _INTL("Bad IV: {1} (must be 0-{2}).\r\n{3}", iv, Pokemon::IV_STAT_LIMIT, FileLineData.linereport)
           end
         when "EV"
-          record = [record] if record.is_a?(Integer)
-          record.compact!
-          for i in record
-            next if i<=Pokemon::EV_STAT_LIMIT
-            raise _INTL("Bad EV: {1} (must be 0-{2}).\r\n{3}", i, Pokemon::EV_STAT_LIMIT, FileLineData.linereport)
+          property_value = [property_value] if !property_value.is_a?(Array)
+          property_value.compact!
+          property_value.each do |ev|
+            next if ev <= Pokemon::EV_STAT_LIMIT
+            raise _INTL("Bad EV: {1} (must be 0-{2}).\r\n{3}", ev, Pokemon::EV_STAT_LIMIT, FileLineData.linereport)
           end
-          evtotal = 0
-          for i in 0...6
-            evtotal += (i<record.length) ? record[i] : record[0]
+          ev_total = 0
+          PBStats.eachStat do |stat|
+            ev_total += (stat < property_value.length) ? property_value[stat] : property_value[0]
           end
-          if evtotal>Pokemon::EV_LIMIT
+          if ev_total > Pokemon::EV_LIMIT
             raise _INTL("Total EVs are greater than allowed ({1}).\r\n{2}", Pokemon::EV_LIMIT, FileLineData.linereport)
           end
         when "Happiness"
-          if record>255
-            raise _INTL("Bad happiness: {1} (must be 0-255).\r\n{2}",record,FileLineData.linereport)
-          end
-        when "Name"
-          if record.length>Pokemon::MAX_NAME_SIZE
-            raise _INTL("Bad nickname: {1} (must be 1-{2} characters).\r\n{3}", record, Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
+          if property_value > 255
+            raise _INTL("Bad happiness: {1} (must be 0-255).\r\n{2}", property_value, FileLineData.linereport)
           end
         end
         # Record XXX=YYY setting
-        case settingname
-        when "Items"   # Items in the trainer's Bag, not the held item
-          record = [record] if record.is_a?(Integer)
-          record.compact!
-          trainers[trainerindex][2] = record
-        when "LoseText"
-          trainerlosetext[trainerindex] = record
-          trainers[trainerindex][5] = record
+        case property_name
+        when "Items", "LoseText"
+          trainer_hash[line_schema[0]] = property_value
+          trainer_lose_texts[trainer_id] = property_value if property_name == "LoseText"
         when "Pokemon"
-          pokemonindex += 1
-          trainers[trainerindex][3][pokemonindex] = []
-          trainers[trainerindex][3][pokemonindex][TrainerData::SPECIES] = record[0]
-          trainers[trainerindex][3][pokemonindex][TrainerData::LEVEL]   = record[1]
+          current_pkmn = {
+            :species => property_value[0],
+            :level   => property_value[1]
+          }
+          trainer_hash[line_schema[0]].push(current_pkmn)
         else
-          if pokemonindex<0
-            raise _INTL("Pokémon hasn't been defined yet!\r\n{1}",FileLineData.linereport)
+          if !current_pkmn
+            raise _INTL("Pokémon hasn't been defined yet!\r\n{1}", FileLineData.linereport)
           end
-          trainers[trainerindex][3][pokemonindex][schema[0]] = record
+          current_pkmn[line_schema[0]] = property_value
         end
       else
-        # Old compiler - backwards compatibility is SUCH fun!
-        if pokemonindex==-1 && oldcompilerline==0
-          raise _INTL("Unexpected line format, started new trainer while previous trainer has no Pokémon.\r\n{1}",FileLineData.linereport)
-        end
-        if oldcompilerline==0   # Started an old trainer section
-          oldcompilerlength = 3
-          oldcompilerline   = 0
-          trainerindex += 1
-          trainers[trainerindex] = [0,"",[],[],0]
-          pokemonindex = -1
-        end
-        oldcompilerline += 1
-        case oldcompilerline
-        when 1   # Trainer type
-          record = pbGetCsvRecord(line,lineno,[0,"e",:TrainerType])
-          trainers[trainerindex][0] = record
-        when 2   # Trainer name, version number
-          record = pbGetCsvRecord(line,lineno,[0,"sU"])
-          record = [record] if record.is_a?(Integer)
-          trainers[trainerindex][1] = record[0]
-          trainernames[trainerindex] = record[0]
-          trainers[trainerindex][4] = record[1] if record[1]
-        when 3   # Number of Pokémon, items
-          record = pbGetCsvRecord(line,lineno,[0,"vEEEEEEEE",nil,
-                                  Item,Item,Item,Item,Item,Item,Item,Item])
-          record = [record] if record.is_a?(Integer)
-          record.compact!
-          oldcompilerlength += record[0]
-          record.shift
-          trainers[trainerindex][2] = record if record
-        else   # Pokémon lines
-          pokemonindex += 1
-          trainers[trainerindex][3][pokemonindex] = []
-          record = pbGetCsvRecord(line,lineno,
-             [0,"evEEEEEUEUBEUUSBU",Species,nil,:Item,:Move,:Move,:Move,:Move,
-                                    nil,{"M"=>0,"m"=>0,"Male"=>0,"male"=>0,
-                                    "0"=>0,"F"=>1,"f"=>1,"Female"=>1,"female"=>1,
-                                    "1"=>1},nil,nil,PBNatures,nil,nil,nil,nil,nil])
-          # Error checking (the +3 is for properties after the four moves)
-          for i in 0...record.length
-            next if record[i]==nil
-            case i
-            when TrainerData::LEVEL
-              if record[i]>mLevel
-                raise _INTL("Bad level: {1} (must be 1-{2}).\r\n{3}",record[i],mLevel,FileLineData.linereport)
-              end
-            when TrainerData::ABILITY+3
-              if record[i]>5
-                raise _INTL("Bad ability flag: {1} (must be 0 or 1 or 2-5).\r\n{2}",record[i],FileLineData.linereport)
-              end
-            when TrainerData::IV+3
-              if record[i]>31
-                raise _INTL("Bad IV: {1} (must be 0-31).\r\n{2}",record[i],FileLineData.linereport)
-              end
-              record[i] = [record[i]]
-            when TrainerData::EV+3
-              if record[i]>Pokemon::EV_STAT_LIMIT
-                raise _INTL("Bad EV: {1} (must be 0-{2}).\r\n{3}", record[i], Pokemon::EV_STAT_LIMIT, FileLineData.linereport)
-              end
-              record[i] = [record[i]]
-            when TrainerData::HAPPINESS+3
-              if record[i]>255
-                raise _INTL("Bad happiness: {1} (must be 0-255).\r\n{2}",record[i],FileLineData.linereport)
-              end
-            when TrainerData::NAME+3
-              if record[i].length>Pokemon::MAX_NAME_SIZE
-                raise _INTL("Bad nickname: {1} (must be 1-{2} characters).\r\n{3}", record[i], Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
-              end
-            end
-          end
-          # Write data to trainer array
-          for i in 0...record.length
-            next if record[i]==nil
-            if i>=TrainerData::MOVES && i<TrainerData::MOVES+4
-              if !trainers[trainerindex][3][pokemonindex][TrainerData::MOVES]
-                trainers[trainerindex][3][pokemonindex][TrainerData::MOVES] = []
-              end
-              trainers[trainerindex][3][pokemonindex][TrainerData::MOVES].push(record[i])
-            else
-              d = (i>=TrainerData::MOVES+4) ? i-3 : i
-              trainers[trainerindex][3][pokemonindex][d] = record[i]
-            end
-          end
-        end
-        oldcompilerline = 0 if oldcompilerline>=oldcompilerlength
+        raise _INTL("Expected a new section or a line like XXX=YYY, got:\r\n{1}\r\n{2}", line, FileLineData.linereport)
       end
     }
-    save_data(trainers,"Data/trainers.dat")
-    MessageTypes.setMessagesAsHash(MessageTypes::TrainerNames,trainernames)
-    MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseText,trainerlosetext)
+    # Add last trainer's data to records
+    if trainer_hash
+      key = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+      GameData::Trainer::DATA[trainer_id] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
+    end
+    # Save all data
+    GameData::Trainer.save
+    MessageTypes.setMessagesAsHash(MessageTypes::TrainerNames, trainer_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseText, trainer_lose_texts)
+    Graphics.update
   end
 
   #=============================================================================

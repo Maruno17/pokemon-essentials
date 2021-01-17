@@ -442,7 +442,6 @@ class TrainerTypeLister
     @commands = []
     @ids = []
     @includeNew = includeNew
-    @trainers = nil
     @index = 0
   end
 
@@ -466,7 +465,7 @@ class TrainerTypeLister
     GameData::TrainerType.each do |tr_type|
       cmds.push([tr_type.id_number, tr_type.id, tr_type.real_name])
     end
-    cmds.sort! { |a, b| a[2].downcase <=> b[2].downcase }
+    cmds.sort! { |a, b| a[2] == b[2] ? a[0] <=> b[0] : a[2].downcase <=> b[2].downcase }
     if @includeNew
       @commands.push(_INTL("[NEW TRAINER TYPE]"))
       @ids.push(true)
@@ -508,17 +507,13 @@ class TrainerBattleLister
   def initialize(selection,includeNew)
     @sprite = IconSprite.new(Graphics.width * 3 / 4, (Graphics.height / 2) + 32)
     @sprite.z = 2
-    @pkmnList = Window_UnformattedTextPokemon.new()
-    @pkmnList.x      = Graphics.width/2
-    @pkmnList.y      = Graphics.height-64
-    @pkmnList.width  = Graphics.width/2
-    @pkmnList.height = 64
-    @pkmnList.z      = 3
+    @pkmnList = Window_UnformattedTextPokemon.newWithSize("",
+      Graphics.width / 2, Graphics.height - 64, Graphics.width / 2, 64)
+    @pkmnList.z = 3
     @selection = selection
     @commands = []
     @ids = []
     @includeNew = includeNew
-    @trainers = nil
     @index = 0
   end
 
@@ -540,61 +535,74 @@ class TrainerBattleLister
   def commands
     @commands.clear
     @ids.clear
-    @trainers = pbLoadTrainersData
+    cmds = []
+    GameData::Trainer.each do |trainer|
+      cmds.push([trainer.id_number, trainer.trainer_type, trainer.real_name, trainer.version])
+    end
+    cmds.sort! { |a, b|
+      if a[1] == b[1]
+        if a[2] == b[2]
+          (a[3] == b[3]) ? a[0] <=> b[0] : a[3] <=> b[3]
+        else
+          a[2].downcase <=> b[2].downcase
+        end
+      else
+        a[1].to_s.downcase <=> b[1].to_s.downcase
+      end
+    }
     if @includeNew
       @commands.push(_INTL("[NEW TRAINER BATTLE]"))
-      @ids.push(-1)
+      @ids.push(true)
     end
-    @trainers.length.times do |i|
-      next if !@trainers[i]
-      if @trainers[i][4]>0
-        # TrainerType TrainerName (version) xPartySize
-        @commands.push(_ISPRINTF("{1:s} {2:s} ({3:d}) x{4:d}",
-           GameData::TrainerType.get(@trainers[i][0]).name, @trainers[i][1],
-           @trainers[i][4], @trainers[i][3].length))
+    for t in cmds
+      if t[3] > 0
+        @commands.push(_INTL("{1} {2} ({3}) x{4}",
+           GameData::TrainerType.get(t[1]).name, t[2], t[3],
+           GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
       else
-        # TrainerType TrainerName xPartySize
-        @commands.push(_ISPRINTF("{1:s} {2:s} x{3:d}",
-           GameData::TrainerType.get(@trainers[i][0]).name, @trainers[i][1],
-           @trainers[i][3].length))
+        @commands.push(_INTL("{1} {2} x{3}",
+           GameData::TrainerType.get(t[1]).name, t[2],
+           GameData::Trainer.get(t[1], t[2], t[3]).pokemon.length))
       end
-      # Trainer type ID
-      @ids.push(@trainers[i][0])
+      @ids.push([t[1], t[2], t[3]])
     end
-    @index =  @selection
-    @index = @commands.length-1 if @index>=@commands.length
-    @index = 0 if @index<0
+    @index = @selection
+    @index = @commands.length - 1 if @index >= @commands.length
+    @index = 0 if @index < 0
     return @commands
   end
 
   def value(index)
-    return nil if index<0
-    return [-1,nil] if index==0 && @includeNew
-    realIndex = (@includeNew) ? index-1 : index
-    return [realIndex,@trainers[realIndex]]
+    return nil if index < 0
+    return @ids[index]
   end
 
   def refresh(index)
+    # Refresh trainer sprite
     @sprite.bitmap.dispose if @sprite.bitmap
-    return if index<0
+    return if index < 0
     begin
-      @sprite.setBitmap(GameData::TrainerType.front_sprite_filename(@ids[index]),0)
+      @sprite.setBitmap(GameData::TrainerType.front_sprite_filename(@ids[index][0]), 0)
     rescue
       @sprite.setBitmap(nil)
     end
     if @sprite.bitmap
-      @sprite.ox = @sprite.bitmap.width/2
+      @sprite.ox = @sprite.bitmap.width / 2
       @sprite.oy = @sprite.bitmap.height
     end
+    # Refresh list of Pokémon
     text = ""
-    if !@includeNew || index>0
-      @trainers[(@includeNew) ? index-1 : index][3].each_with_index do |p,i|
-        text += "\r\n" if i>0
-        text += sprintf("%s Lv.%d",GameData::Species.get(p[TrainerData::SPECIES]).name, p[TrainerData::LEVEL])
+    if !@includeNew || index > 0
+      tr_data = GameData::Trainer.get(@ids[index][0], @ids[index][1], @ids[index][2])
+      if tr_data
+        tr_data.pokemon.each_with_index do |pkmn, i|
+          text += "\r\n" if i > 0
+          text += sprintf("%s Lv.%d", GameData::Species.get(pkmn[:species]).real_name, pkmn[:level])
+        end
       end
     end
     @pkmnList.text = text
-    @pkmnList.resizeHeightToFit(text,Graphics.width/2)
-    @pkmnList.y = Graphics.height-@pkmnList.height
+    @pkmnList.resizeHeightToFit(text,Graphics.width / 2)
+    @pkmnList.y = Graphics.height - @pkmnList.height
   end
 end

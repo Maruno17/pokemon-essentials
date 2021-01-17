@@ -3,7 +3,7 @@ def pbGetLegalMoves(species)
   moves = []
   return moves if !species_data
   species_data.moves.each { |m| moves.push(m[1]) }
-  species_data.tutor_moves.each { |m| moves.push(m[1]) }
+  species_data.tutor_moves.each { |m| moves.push(m) }
   babyspecies = EvolutionHelper.baby_species(species)
   GameData::Species.get(babyspecies).egg_moves.each { |m| moves.push(m) }
   moves |= []   # Remove duplicates
@@ -152,7 +152,7 @@ def pbChooseMoveListForSpecies(species, defaultMoveID = nil)
   GameData::Move.each do |move_data|
     commands2.push([move_data.id_number, move_data.name, move_data.id])
   end
-  commands2.sort! { |a, b| a[0] <=> b[0] }
+  commands2.sort! { |a, b| a[1] <=> b[1] }
   if defaultMoveID
     commands2.each_with_index do |_item, i|
       moveDefault = i if moveDefault == 0 && i[2] == defaultMoveID

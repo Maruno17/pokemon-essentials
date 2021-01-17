@@ -312,13 +312,13 @@ end
 
 
 
-class MoveProperty2
+class MovePropertyForSpecies
   def initialize(pokemondata)
     @pokemondata = pokemondata
   end
 
   def set(_settingname, oldsetting)
-    ret = pbChooseMoveListForSpecies(@pokemondata[TrainerData::SPECIES], oldsetting || nil)
+    ret = pbChooseMoveListForSpecies(@pokemondata[0], oldsetting || nil)
     return ret || oldsetting
   end
 
@@ -394,7 +394,7 @@ class IVsProperty
     @limit = limit
   end
 
-  def set(settingname,oldsetting)
+  def set(settingname, oldsetting)
     oldsetting = [nil] if !oldsetting
     for i in 0...6
       oldsetting[i] = oldsetting[0] if !oldsetting[i]
@@ -406,21 +406,13 @@ class IVsProperty
     properties[PBStats::SPATK]   = [_INTL("Sp. Atk"), LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Sp. Atk stat (0-{1}).", @limit)]
     properties[PBStats::SPDEF]   = [_INTL("Sp. Def"), LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Sp. Def stat (0-{1}).", @limit)]
     properties[PBStats::SPEED]   = [_INTL("Speed"),   LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Speed stat (0-{1}).", @limit)]
-    pbPropertyList(settingname,oldsetting,properties,false)
+    pbPropertyList(settingname, oldsetting, properties, false)
     hasNonNil = false
-    hasAltVal = false
     firstVal = oldsetting[0] || 0
     for i in 0...6
-      if oldsetting[i]
-        hasNonNil = true
-        hasAltVal = true if oldsetting[i]!=firstVal
-      else
-        oldsetting[i] = firstVal
-      end
+      (oldsetting[i]) ? hasNonNil = true : oldsetting[i] = firstVal
     end
-    return nil if !hasNonNil   # All IVs are nil
-    return [firstVal] if !hasAltVal   # All IVs are the same, just return 1 value
-    return oldsetting   # 6 IVs defined
+    return (hasNonNil) ? oldsetting : nil
   end
 
   def defaultValue
@@ -429,10 +421,10 @@ class IVsProperty
 
   def format(value)
     return "-" if !value
-    return value[0].to_s if value.length==1
+    return value[0].to_s if value.uniq.length == 1
     ret = ""
     for i in 0...6
-      ret.concat(",") if i>0
+      ret.concat(",") if i > 0
       ret.concat((value[i] || 0).to_s)
     end
     return ret
@@ -446,7 +438,7 @@ class EVsProperty
     @limit = limit
   end
 
-  def set(settingname,oldsetting)
+  def set(settingname, oldsetting)
     oldsetting = [nil] if !oldsetting
     for i in 0...6
       oldsetting[i] = oldsetting[0] if !oldsetting[i]
@@ -459,31 +451,23 @@ class EVsProperty
     properties[PBStats::SPDEF]   = [_INTL("Sp. Def"), LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's Sp. Def stat (0-{1}).", @limit)]
     properties[PBStats::SPEED]   = [_INTL("Speed"),   LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's Speed stat (0-{1}).", @limit)]
     loop do
-      pbPropertyList(settingname,oldsetting,properties,false)
+      pbPropertyList(settingname, oldsetting, properties, false)
       evtotal = 0
       for i in 0...6
         evtotal += oldsetting[i] if oldsetting[i]
       end
-      if evtotal>Pokemon::EV_LIMIT
+      if evtotal > Pokemon::EV_LIMIT
         pbMessage(_INTL("Total EVs ({1}) are greater than allowed ({2}). Please reduce them.", evtotal, Pokemon::EV_LIMIT))
       else
         break
       end
     end
     hasNonNil = false
-    hasAltVal = false
     firstVal = oldsetting[0] || 0
     for i in 0...6
-      if oldsetting[i]
-        hasNonNil = true
-        hasAltVal = true if oldsetting[i]!=firstVal
-      else
-        oldsetting[i] = firstVal
-      end
+      (oldsetting[i]) ? hasNonNil = true : oldsetting[i] = firstVal
     end
-    return nil if !hasNonNil   # All EVs are nil
-    return [firstVal] if !hasAltVal   # All EVs are the same, just return 1 value
-    return oldsetting   # 6 EVs defined
+    return (hasNonNil) ? oldsetting : nil
   end
 
   def defaultValue
@@ -492,10 +476,10 @@ class EVsProperty
 
   def format(value)
     return "-" if !value
-    return value[0].to_s if value.length==1
+    return value[0].to_s if value.uniq.length == 1
     ret = ""
     for i in 0...6
-      ret.concat(",") if i>0
+      ret.concat(",") if i > 0
       ret.concat((value[i] || 0).to_s)
     end
     return ret
