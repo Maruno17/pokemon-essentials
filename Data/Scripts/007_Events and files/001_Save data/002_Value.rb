@@ -1,3 +1,15 @@
+# TODO Add ensure_value for enhanced compatibility with other plugins etc.?
+#   example:
+#   SaveData.register(:foo) do
+#     ensure_value :bar if PluginManager.installed?('Bar')
+#     save_value { $foo }
+#     load_value do |value|
+#       $foo = value
+#       # We must be certain the Bar plugin's values have been loaded
+#       $bar.plugin_method if PluginManager.installed?('Bar')
+#     end
+#   end
+
 module SaveData
   # An error raised if an invalid save value is saved or loaded.
   class InvalidValueError < RuntimeError; end
@@ -13,6 +25,7 @@ module SaveData
       validate id => Symbol, block => Proc
       @id = id
       @loaded = false
+      @loading_new_game_value = false
       instance_eval(&block)
       raise "No save_value defined for save value #{id.inspect}" if @save_proc.nil?
       raise "No load_value defined for save value #{id.inspect}" if @load_proc.nil?
@@ -22,27 +35,34 @@ module SaveData
     # @return [Object] save proc value
     # @raise [InvalidValueError] if an invalid value is being saved
     def save
-      data = @save_proc.call
+      value = @save_proc.call
 
-      if @ensured_class_names && !@ensured_class_names.include?(data.class.name)
+      unless self.valid?(value)
         raise InvalidValueError,
-              "Save value #{@id.inspect} is not a #{@ensured_class_names.first} (#{data.class.name} given)"
+              "Save value #{@id.inspect} is not a #{@ensured_class_names.first} (#{value.class.name} given)"
       end
 
-      return data
+      return value
     end
 
     # Calls the value's load proc with the given argument passed into it.
     # @param value [Object] load proc argument
     # @raise [InvalidValueError] if an invalid value is being loaded
     def load(value)
-      if @ensured_class_names && !@ensured_class_names.include?(value.class.name)
+      unless self.valid?(value)
         raise InvalidValueError,
               "Save value #{@id.inspect} is not a #{@ensured_class_names.first} (#{value.class.name} given)"
       end
 
       @load_proc.call(value)
       @loaded = true
+    end
+
+    # @param value [Object] value to check
+    # @return [Boolean] whether the given value is valid
+    def valid?(value)
+      return true if @ensured_class_names.nil?
+      return @ensured_class_names.include?(value.class.name)
     end
 
     # Calls the save value's load proc with the value fetched
@@ -53,7 +73,9 @@ module SaveData
         raise "Save value #{@id.inspect} has no new game value proc defined"
       end
 
+      @loading_new_game_value = true
       self.load(@new_game_value_proc.call)
+      @loading_new_game_value = false
     end
 
     # @return [Boolean] whether the value has a new game value proc defined
@@ -121,5 +143,11 @@ module SaveData
     end
 
     #@!endgroup
+
+    # @return [Boolean] whether the value is being loaded using the {#new_game_value} proc.
+    # @note This method should be used in the {#load_value} proc.
+    def loading_new_game_value?
+      return @loading_new_game_value
+    end
   end
 end
