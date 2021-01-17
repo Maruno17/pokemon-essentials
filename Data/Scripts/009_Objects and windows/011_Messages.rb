@@ -732,9 +732,6 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
     Graphics.update
     Input.update
     facewindow.update if facewindow
-    if $DEBUG && Input.trigger?(Input::F6)
-      pbRecord(unformattedText)
-    end
     if autoresume && msgwindow.waitcount==0
       msgwindow.resume if msgwindow.busy?
       break if !msgwindow.busy?

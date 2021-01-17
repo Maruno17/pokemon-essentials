@@ -129,78 +129,6 @@ end
 
 
 #===============================================================================
-# General-purpose utilities with dependencies
-#===============================================================================
-# Similar to pbFadeOutIn, but pauses the music as it fades out.
-# Requires scripts "Audio" (for bgm_pause) and "SpriteWindow" (for pbFadeOutIn).
-def pbFadeOutInWithMusic(zViewport=99999)
-  playingBGS = $game_system.getPlayingBGS
-  playingBGM = $game_system.getPlayingBGM
-  $game_system.bgm_pause(1.0)
-  $game_system.bgs_pause(1.0)
-  pos = $game_system.bgm_position
-  pbFadeOutIn(zViewport) {
-     yield
-     $game_system.bgm_position = pos
-     $game_system.bgm_resume(playingBGM)
-     $game_system.bgs_resume(playingBGS)
-  }
-end
-
-# Gets the wave data from a file and displays an message if an error occurs.
-# Can optionally delete the wave file (this is useful if the file was a
-# temporary file created by a recording).
-# Requires the script AudioUtilities
-# Requires the script "PokemonMessages"
-def getWaveDataUI(filename,deleteFile=false)
-  error = getWaveData(filename)
-  if deleteFile
-    begin
-      File.delete(filename)
-    rescue Errno::EINVAL, Errno::EACCES, Errno::ENOENT
-    end
-  end
-  case error
-  when 1
-    pbMessage(_INTL("The recorded data could not be found or saved."))
-  when 2
-    pbMessage(_INTL("The recorded data was in an invalid format."))
-  when 3
-    pbMessage(_INTL("The recorded data's format is not supported."))
-  when 4
-    pbMessage(_INTL("There was no sound in the recording. Please ensure that a microphone is attached to the computer and is ready."))
-  else
-    return error
-  end
-  return nil
-end
-
-# Starts recording, and displays a message if the recording failed to start.
-# Returns true if successful, false otherwise
-# Requires the script AudioUtilities
-# Requires the script "PokemonMessages"
-def beginRecordUI
-  code = beginRecord
-  case code
-  when 0
-    return true
-  when 256+66
-    pbMessage(_INTL("All recording devices are in use. Recording is not possible now."))
-    return false
-  when 256+72
-    pbMessage(_INTL("No supported recording device was found. Recording is not possible."))
-    return false
-  else
-    buffer = "\0"*256
-    MciErrorString.call(code,buffer,256)
-    pbMessage(_INTL("Recording failed: {1}",buffer.gsub(/\x00/,"")))
-    return false
-  end
-end
-
-
-
-#===============================================================================
 # Constants utilities
 #===============================================================================
 # Unused
@@ -1120,21 +1048,4 @@ def pbLoadRpgxpScene(scene)
   $scene.createSpritesets
   pbShowObjects(visibleObjects)
   Graphics.transition(20)
-end
-
-
-
-class PokemonGlobalMetadata
-  attr_accessor :trainerRecording
-end
-
-
-
-def pbRecordTrainer
-  wave = pbRecord(nil,10)
-  if wave
-    $PokemonGlobal.trainerRecording = wave
-    return true
-  end
-  return false
 end

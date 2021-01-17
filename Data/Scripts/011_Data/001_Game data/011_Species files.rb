@@ -225,10 +225,6 @@ module GameData
 
     def self.play_cry_from_pokemon(pkmn, volume = 90, pitch = nil)
       return if !pkmn || pkmn.egg?
-      if pkmn.respond_to?("chatter") && pkmn.chatter
-        pkmn.chatter.play
-        return
-      end
       filename = self.cry_filename_from_pokemon(pkmn)
       return if !filename
       pitch ||= 75 + (pkmn.hp * 25 / pkmn.totalhp)
@@ -249,13 +245,8 @@ module GameData
       ret = 0.0
       if species.is_a?(Pokemon)
         if !species.egg?
-          if species.respond_to?("chatter") && species.chatter
-            ret = species.chatter.time
-            pitch = 1.0
-          else
-            filename = pbResolveAudioSE(GameData::Species.cry_filename_from_pokemon(species))
-            ret = getPlayTime(filename) if filename
-          end
+          filename = pbResolveAudioSE(GameData::Species.cry_filename_from_pokemon(species))
+          ret = getPlayTime(filename) if filename
         end
       else
         filename = pbResolveAudioSE(GameData::Species.cry_filename(species, form))

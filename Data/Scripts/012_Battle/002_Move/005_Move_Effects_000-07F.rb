@@ -292,22 +292,9 @@ end
 
 
 #===============================================================================
-# Confuses the target. Chance of causing confusion depends on the cry's volume.
-# Confusion chance is 0% if user doesn't have a recorded cry. (Chatter)
+# Confuses the target. (Chatter)
 #===============================================================================
-class PokeBattle_Move_014 < PokeBattle_ConfuseMove
-  def pbOnStartUse(user,targets)
-    @chatterChance = 0
-    if user.pokemon && user.pokemon.chatter
-      # Intensity can be 0-127, so return value is 0-10
-      @chatterChance = 10*user.pokemon.chatter.intensity/127
-    end
-  end
-
-  def addlEffect
-    return @chatterChance if MECHANICS_GENERATION <= 5
-    return super
-  end
+class PokeBattle_Move_014 < PokeBattle_Move_013
 end
 
 

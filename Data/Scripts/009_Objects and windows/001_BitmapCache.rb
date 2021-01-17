@@ -270,57 +270,24 @@ end
 
 
 
-# A safer version of RPG::Cache, this module loads bitmaps that keep an internal
-# reference count.  Each call to dispose decrements the reference count and the
-# bitmap is freed when the reference count reaches 0.
-class Thread
-  def Thread.exclusive
-    old_thread_status = Thread.critical
-    begin
-      Thread.critical = true
-      return yield
-    ensure
-      Thread.critical = old_thread_status
-    end
-  end
-end
-
-
-
 class BitmapWrapper < Bitmap
+  attr_reader :refcount
+
   @@disposedBitmaps={}
   @@keys={}
-=begin
-  @@final = lambda { |id|
-    Thread.exclusive {
-      if @@disposedBitmaps[id]!=true
-        File.open("debug.txt","ab") { |f|
-          f.write("Bitmap finalized without being disposed: #{@@keys[id]}\r\n")
-        }
-      end
-      @@disposedBitmaps[id]=nil
-    }
-  }
-=end
-  attr_reader :refcount
 
   def dispose
     return if self.disposed?
     @refcount-=1
-    if @refcount==0
-      super
-      #Thread.exclusive { @@disposedBitmaps[__id__]=true }
-    end
+    super if @refcount==0
   end
 
   def initialize(*arg)
     super
     @refcount=1
-    #Thread.exclusive { @@keys[__id__]=arg.inspect+caller(1).inspect }
-    #ObjectSpace.define_finalizer(self,@@final)
   end
 
-  def resetRef # internal
+  def resetRef
     @refcount=1
   end
 

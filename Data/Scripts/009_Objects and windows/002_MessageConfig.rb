@@ -600,6 +600,22 @@ def pbFadeOutInWithUpdate(z,sprites,nofadeout=false)
   end
 end
 
+# Similar to pbFadeOutIn, but pauses the music as it fades out.
+# Requires scripts "Audio" (for bgm_pause) and "SpriteWindow" (for pbFadeOutIn).
+def pbFadeOutInWithMusic(zViewport=99999)
+  playingBGS = $game_system.getPlayingBGS
+  playingBGM = $game_system.getPlayingBGM
+  $game_system.bgm_pause(1.0)
+  $game_system.bgs_pause(1.0)
+  pos = $game_system.bgm_position
+  pbFadeOutIn(zViewport) {
+     yield
+     $game_system.bgm_position = pos
+     $game_system.bgm_resume(playingBGM)
+     $game_system.bgs_resume(playingBGS)
+  }
+end
+
 def pbFadeOutAndHide(sprites)
   visiblesprites = {}
   numFrames = (Graphics.frame_rate*0.4).floor
