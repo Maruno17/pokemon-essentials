@@ -8,6 +8,7 @@ module Game
     $data_tilesets      = pbLoadRxData("Data/Tilesets")
     $data_common_events = pbLoadRxData("Data/CommonEvents")
     $data_system        = pbLoadRxData('Data/System')
+    pbLoadBattleAnimations
     # TODO Implement a load_in_bootup feature in SaveData::Value for values like $PokemonSystem?
     $PokemonSystem      = PokemonSystem.new if $PokemonSystem.nil?
 
@@ -23,11 +24,19 @@ module Game
   # @return [Boolean] whether the operation was successful
   # @raise [SaveData::InvalidValueError] if an invalid value is being saved
   def self.save(save_file = SaveData::FILE_PATH)
+    validate save_file => String
     return false unless File.writable?(save_file)
 
+    $Trainer.metaID = $PokemonGlobal.playerID # TODO: Is this necessary?
     $game_system.save_count += 1
+    if $data_system.respond_to?(:magic_number)
+      $game_system.magic_number = $data_system.magic_number
+    else
+      $game_system.magic_number = $data_system.version_id
+    end
     begin
       SaveData.save_to_file(save_file)
+      Graphics.frame_reset
     rescue IOError, SystemCallError
       $game_system.save_count -= 1
       return false
@@ -40,7 +49,10 @@ module Game
   # @param save_data [Hash] hash containing the save data
   # @raise [SaveData::InvalidValueError] if an invalid value is being loaded
   def self.load(save_data)
+    validate save_data => Hash
+
     SaveData.load_values(save_data)
+
     pbAutoplayOnSave
     $game_map.update
     $PokemonMap.updateMap
