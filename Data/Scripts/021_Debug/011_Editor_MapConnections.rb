@@ -344,8 +344,7 @@ class MapScreenScene
     if $game_map
       @currentmap=$game_map.map_id
     else
-      system=load_data("Data/System.rxdata")
-      @currentmap=system.edit_map_id
+      @currentmap=($data_system) ? $data_system.edit_map_id : 1
     end
     putSprite(@currentmap)
   end

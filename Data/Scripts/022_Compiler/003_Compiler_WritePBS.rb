@@ -71,7 +71,7 @@ module Compiler
   def write_connections
     conndata = load_data("Data/map_connections.dat") rescue nil
     return if !conndata
-    mapinfos = pbLoadRxData("Data/MapInfos")
+    mapinfos = load_data("Data/MapInfos.rxdata")
     File.open("PBS/connections.txt","wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
@@ -509,7 +509,7 @@ module Compiler
   def write_encounters
     encdata = pbLoadEncountersData
     return if !encdata
-    mapinfos = pbLoadRxData("Data/MapInfos")
+    mapinfos = load_data("Data/MapInfos.rxdata")
     File.open("PBS/encounters.txt","wb") { |f|
       add_PBS_header_to_file(f)
       sortedkeys = encdata.keys.sort
@@ -729,7 +729,7 @@ module Compiler
         f.write("\r\n")
       end
       # Write map metadata
-      map_infos = pbLoadRxData("Data/MapInfos")
+      map_infos = load_data("Data/MapInfos.rxdata")
       schema = GameData::MapMetadata::SCHEMA
       keys = schema.keys.sort {|a, b| schema[a][0] <=> schema[b][0] }
       GameData::MapMetadata.each do |map_data|

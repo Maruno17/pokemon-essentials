@@ -262,9 +262,8 @@ class PokemonLoadScreen
     $game_system   = Game_System.new
     $PokemonSystem = PokemonSystem.new if !$PokemonSystem
     savefile = RTP.getSaveFileName("Game.rxdata")
-    data_system = pbLoadRxData("Data/System")
-    mapfile = sprintf("Data/Map%03d.rxdata",data_system.start_map_id)
-    if data_system.start_map_id==0 || !pbRgssExists?(mapfile)
+    mapfile = sprintf("Data/Map%03d.rxdata", $data_system.start_map_id)
+    if $data_system.start_map_id == 0 || !pbRgssExists?(mapfile)
       pbMessage(_INTL("No starting position was set in the map editor.\1"))
       pbMessage(_INTL("The game cannot continue."))
       @scene.pbEndScene
@@ -431,7 +430,6 @@ class PokemonLoadScreen
         $PokemonStorage      = PokemonStorage.new
         $PokemonEncounters   = PokemonEncounters.new
         $PokemonTemp.begunNewGame = true
-        $data_system         = pbLoadRxData("Data/System")
         $MapFactory          = PokemonMapFactory.new($data_system.start_map_id)   # calls setMapChanged
         $game_player.moveto($data_system.start_x, $data_system.start_y)
         $game_player.refresh

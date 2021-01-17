@@ -34,7 +34,7 @@ def pbSetTextMessages
     end
     # Must add messages because this code is used by both game system and Editor
     MessageTypes.addMessagesAsHash(MessageTypes::ScriptTexts,texts)
-    commonevents=pbLoadRxData("Data/CommonEvents")
+    commonevents = load_data("Data/CommonEvents.rxdata")
     items=[]
     choices=[]
     for event in commonevents.compact
@@ -96,7 +96,7 @@ def pbSetTextMessages
     choices|=[]
     items.concat(choices)
     MessageTypes.setMapMessagesAsHash(0,items)
-    mapinfos = pbLoadRxData("Data/MapInfos")
+    mapinfos = load_data("Data/MapInfos.rxdata")
     mapnames=[]
     for id in mapinfos.keys
       mapnames[id]=mapinfos[id].name

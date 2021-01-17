@@ -82,139 +82,6 @@ class PokemonMartAdapter
 end
 
 #===============================================================================
-# Abstraction layer for RPG Maker XP
-# Won't be used if $PokemonBag exists
-#===============================================================================
-class RpgxpMartAdapter
-  def getMoney
-    return $game_party.gold
-  end
-
-  def getMoneyString
-    return pbGetGoldString
-  end
-
-  def setMoney(value)
-    $game_party.gain_gold(-$game_party.gold)
-    $game_party.gain_gold(value)
-  end
-
-  def getPrice(item, _selling = false)
-    return item.price
-  end
-
-  def getItemIcon(item)
-    return nil if !item
-    if item == 0
-      return sprintf("Graphics/Items/back")
-    elsif item.respond_to?("icon_index")
-      return "Graphics/System/IconSet"
-    else
-      return sprintf("Graphics/Icons/%s", item.icon_name)
-    end
-  end
-
-  def getItemIconRect(item)
-    if item && item.respond_to?("icon_index")
-      ix = item.icon_index % 16 * 24
-      iy = item.icon_index / 16 * 24
-      return Rect.new(ix, iy, 24, 24)
-    end
-    return Rect.new(0, 0, 32, 32)
-  end
-
-  def getInventory
-    data = []
-    for i in 1...$data_items.size
-      data.push($data_items[i]) if getQuantity($data_items[i]) > 0
-    end
-    for i in 1...$data_weapons.size
-      data.push($data_weapons[i]) if getQuantity($data_weapons[i]) > 0
-    end
-    for i in 1...$data_armors.size
-      data.push($data_armors[i]) if getQuantity($data_armors[i]) > 0
-    end
-    return data
-  end
-
-  def canSell?(item)
-    return item ? item.price > 0 : false
-  end
-
-  def getName(item)
-    return item ? item.name : ""
-  end
-
-  def getDisplayName(item)
-    return item ? item.name : ""
-  end
-
-  def getDescription(item)
-    return item ? item.description : ""
-  end
-
-  def getDisplayPrice(item, _selling = false)
-    price = item.price
-    return price.to_s
-  end
-
-  def addItem(item)
-    ret = (getQuantity(item) < 99)
-    if $game_party.respond_to?("gain_weapon")
-      case item
-      when RPG::Item
-        $game_party.gain_item(item.id, 1) if ret
-      when RPG::Weapon
-        $game_party.gain_weapon(item.id, 1) if ret
-      when RPG::Armor
-        $game_party.gain_armor(item.id, 1) if ret
-      end
-    else
-      $game_party.gain_item(item, 1) if ret
-    end
-    return ret
-  end
-
-  def getQuantity(item)
-    ret = 0
-    if $game_party.respond_to?("weapon_number")
-      case item
-      when RPG::Item
-        ret = $game_party.item_number(item.id)
-      when RPG::Weapon
-        ret = ($game_party.weapon_number(item.id))
-      when RPG::Armor
-        ret = ($game_party.armor_number(item.id))
-      end
-    else
-      return $game_party.item_number(item)
-    end
-    return ret
-  end
-
-  def showQuantity?(_item)
-    return true
-  end
-
-  def removeItem(item)
-    ret = (getQuantity(item) > 0)
-    if $game_party.respond_to?("lose_weapon")
-      case item
-      when RPG::Item
-        $game_party.lose_item(item.id, 1) if ret
-      when RPG::Weapon
-        $game_party.lose_weapon(item.id, 1) if ret
-      when RPG::Armor
-        $game_party.lose_armor(item.id, 1) if ret
-      end
-    else
-      $game_party.lose_item(item, 1) if ret
-    end
-    return ret
-  end
-end
-
-#===============================================================================
 # Buy and Sell adapters
 #===============================================================================
 class BuyAdapter
@@ -661,7 +528,7 @@ class PokemonMartScreen
   def initialize(scene,stock)
     @scene=scene
     @stock=stock
-    @adapter=$PokemonBag ? PokemonMartAdapter.new : RpgxpMartAdapter.new
+    @adapter=PokemonMartAdapter.new
   end
 
   def pbConfirm(msg)

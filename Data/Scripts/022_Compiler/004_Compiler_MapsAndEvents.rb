@@ -14,7 +14,7 @@ module Compiler
         mapfiles[$1.to_i(10)] = true if map[/map(\d+)\.rxdata/i]
       end
     }
-    mapinfos = pbLoadRxData("Data/MapInfos")
+    mapinfos = load_data("Data/MapInfos.rxdata")
     maxOrder = 0
     # Exclude maps found in mapinfos
     for id in mapinfos.keys
@@ -239,9 +239,9 @@ module Compiler
     attr_reader :mapinfos
 
     def initialize
-      @mapinfos = pbLoadRxData("Data/MapInfos")
-      @system   = pbLoadRxData("Data/System")
-      @tilesets = pbLoadRxData("Data/Tilesets")
+      @mapinfos = load_data("Data/MapInfos.rxdata")
+      @system   = load_data("Data/System.rxdata")
+      @tilesets = load_data("Data/Tilesets.rxdata")
       @mapxy      = []
       @mapWidths  = []
       @mapHeights = []
@@ -1400,7 +1400,7 @@ module Compiler
     end
     changed = false
     Graphics.update
-    commonEvents = pbLoadRxData("Data/CommonEvents")
+    commonEvents = load_data("Data/CommonEvents.rxdata")
     pbSetWindowText(_INTL("Processing common events"))
     for key in 0...commonEvents.length
       newevent = fix_event_use(commonEvents[key],0,mapData)

@@ -29,10 +29,10 @@ def mainFunctionDebug
   begin
     Compiler.main
     pbSetUpSystem
-    $data_animations    = pbLoadRxData("Data/Animations")
-    $data_tilesets      = pbLoadRxData("Data/Tilesets")
-    $data_common_events = pbLoadRxData("Data/CommonEvents")
-    $data_system        = pbLoadRxData("Data/System")
+    $data_animations    = load_data("Data/Animations.rxdata")
+    $data_tilesets      = load_data("Data/Tilesets.rxdata")
+    $data_common_events = load_data("Data/CommonEvents.rxdata")
+    $data_system        = load_data("Data/System.rxdata")
     $game_system        = Game_System.new
     Graphics.update
     Graphics.freeze

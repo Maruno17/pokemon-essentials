@@ -48,7 +48,7 @@ class Scene_Map
     playingBGM = $game_system.playing_bgm
     playingBGS = $game_system.playing_bgs
     return if !playingBGM && !playingBGS
-    map = pbLoadRxData(sprintf("Data/Map%03d",mapid))
+    map = load_data(sprintf("Data/Map%03d.rxdata", mapid))
     if playingBGM && map.autoplay_bgm
       if (PBDayNight.isNight? rescue false)
         pbBGMFade(0.8) if playingBGM.name!=map.bgm.name && playingBGM.name!=map.bgm.name+"_n"

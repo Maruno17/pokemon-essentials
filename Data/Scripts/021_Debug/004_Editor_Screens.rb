@@ -604,7 +604,7 @@ def pbMetadataScreen(map_id = 0)
 end
 
 def pbEditMetadata(map_id = 0)
-  mapinfos = pbLoadRxData("Data/MapInfos")
+  mapinfos = load_data("Data/MapInfos.rxdata")
   data = []
   if map_id == 0   # Global metadata
     map_name = _INTL("Global Metadata")

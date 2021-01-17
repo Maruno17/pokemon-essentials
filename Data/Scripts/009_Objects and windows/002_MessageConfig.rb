@@ -77,7 +77,7 @@ module MessageConfig
   end
 
   def self.pbDefaultWindowskin
-    skin=load_data("Data/System.rxdata").windowskin_name rescue nil
+    skin=($data_system) ? $data_system.windowskin_name : nil
     if skin && skin!=""
       skin=pbResolveBitmap("Graphics/Windowskins/"+skin) || ""
     end

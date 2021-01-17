@@ -771,7 +771,7 @@ end
 def pbDebugFixInvalidTiles
   num_errors = 0
   num_error_maps = 0
-  @tilesets = pbLoadRxData("Data/Tilesets")
+  @tilesets = load_data("Data/Tilesets.rxdata")
   mapData = MapData.new
   t = Time.now.to_i
   Graphics.update
