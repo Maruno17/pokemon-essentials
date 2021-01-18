@@ -4,10 +4,10 @@ module Game
     $PokemonTemp        = PokemonTemp.new
     $game_temp          = Game_Temp.new
     $game_system        = Game_System.new
-    $data_animations    = pbLoadRxData("Data/Animations")
-    $data_tilesets      = pbLoadRxData("Data/Tilesets")
-    $data_common_events = pbLoadRxData("Data/CommonEvents")
-    $data_system        = pbLoadRxData('Data/System')
+    $data_animations    = load_data('Data/Animations.rxdata')
+    $data_tilesets      = load_data('Data/Tilesets.rxdata')
+    $data_common_events = load_data('Data/CommonEvents.rxdata')
+    $data_system        = load_data('Data/System.rxdata')
     pbLoadBattleAnimations
     # TODO Implement a load_in_bootup feature in SaveData::Value for values like $PokemonSystem?
     $PokemonSystem      = PokemonSystem.new if $PokemonSystem.nil?
