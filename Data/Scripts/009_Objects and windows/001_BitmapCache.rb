@@ -41,27 +41,19 @@ end
 class WeakRef
   @@id_map =  {}
   @@id_rev_map =  {}
-  @@final = lambda { |id|
-    old_thread_status = Thread.critical
-    Thread.critical = true
-    begin
-      rids = @@id_map[id]
-      if rids
-	      for rid in rids
-	        @@id_rev_map.delete(rid)
-        end
-        @@id_map.delete(id)
-      end
-      rid = @@id_rev_map[id]
-      if rid
-	      @@id_rev_map.delete(id)
-	      @@id_map[rid].delete(id)
-	      @@id_map.delete(rid) if @@id_map[rid].empty?
-      end
-    ensure
-      Thread.critical = old_thread_status
+  @@final = lambda do |id|
+    rids = @@id_map[id]
+    if rids
+      rids.each { |rid| @@id_rev_map.delete(rid) }
+      @@id_map.delete(id)
     end
-  }
+    rid = @@id_rev_map[id]
+    if rid
+      @@id_rev_map.delete(id)
+      @@id_map[rid].delete(id)
+      @@id_map.delete(rid) if @@id_map[rid].empty?
+    end
+  end
 
   # Create a new WeakRef from +orig+.
   def initialize(orig)
@@ -81,17 +73,11 @@ class WeakRef
 
   def __setobj__(obj)
     @__id = obj.__id__
-    old_thread_status = Thread.critical
-    begin
-      Thread.critical = true
-      unless @@id_rev_map.key?(self)
-        ObjectSpace.define_finalizer obj, @@final
-        ObjectSpace.define_finalizer self, @@final
-      end
-      @@id_map[@__id] = [] unless @@id_map[@__id]
-    ensure
-      Thread.critical = old_thread_status
+    unless @@id_rev_map.key?(self)
+      ObjectSpace.define_finalizer obj, @@final
+      ObjectSpace.define_finalizer self, @@final
     end
+    @@id_map[@__id] = [] unless @@id_map[@__id]
     @@id_map[@__id].push self.__id__
     @@id_rev_map[self.__id__] = @__id
   end
