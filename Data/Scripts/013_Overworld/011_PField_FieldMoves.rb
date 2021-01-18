@@ -374,19 +374,15 @@ end
 
 Events.onAction += proc { |_sender, _e|
   if $PokemonGlobal.diving
-    if DIVING_SURFACE_ANYWHERE
+    surface_map_id = nil
+    GameData::MapMetadata.each do |map_data|
+      next if !map_data.dive_map_id || map_data.dive_map_id != $game_map.map_id
+      surface_map_id = map_data.id
+      break
+    end
+    if surface_map_id &&
+       PBTerrain.isDeepWater?($MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y))
       pbSurfacing
-    else
-      surface_map_id = nil
-      GameData::MapMetadata.each do |map_data|
-        next if !map_data.dive_map_id || map_data.dive_map_id != $game_map.map_id
-        surface_map_id = map_data.id
-        break
-      end
-      if surface_map_id &&
-         PBTerrain.isDeepWater?($MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y))
-        pbSurfacing
-      end
     end
   else
     pbDive if PBTerrain.isDeepWater?($game_player.terrain_tag)
@@ -396,7 +392,6 @@ Events.onAction += proc { |_sender, _e|
 HiddenMoveHandlers::CanUseMove.add(:DIVE,proc { |move,pkmn,showmsg|
   next false if !pbCheckHiddenMoveBadge(BADGE_FOR_DIVE,showmsg)
   if $PokemonGlobal.diving
-    next true if DIVING_SURFACE_ANYWHERE
     surface_map_id = nil
     GameData::MapMetadata.each do |map_data|
       next if !map_data.dive_map_id || map_data.dive_map_id != $game_map.map_id

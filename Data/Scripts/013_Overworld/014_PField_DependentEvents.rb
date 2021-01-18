@@ -97,7 +97,7 @@ def moveFancy(follower,direction)
 end
 
 # Same map only
-def jumpFancy(follower,direction)
+def jumpFancy(follower,direction,leader)
   deltaX=(direction == 6 ? 2 : (direction == 4 ? -2 : 0))
   deltaY=(direction == 2 ? 2 : (direction == 8 ? -2 : 0))
   halfDeltaX=(direction == 6 ? 1 : (direction == 4 ? -1 : 0))
@@ -109,6 +109,11 @@ def jumpFancy(follower,direction)
     moveFancy(follower,direction)
   elsif ending
     if pbTestPass(follower,follower.x,follower.y,0)
+      if leader.jumping?
+        follower.jump_speed_real = leader.jump_speed_real * Graphics.frame_rate / 40.0
+      else
+        follower.jump_speed_real = leader.move_speed_real * Graphics.frame_rate / 20.0
+      end
       follower.jump(deltaX,deltaY)
     else
       moveThrough(follower,direction)
@@ -117,7 +122,7 @@ def jumpFancy(follower,direction)
   end
 end
 
-def pbFancyMoveTo(follower,newX,newY)
+def pbFancyMoveTo(follower,newX,newY,leader)
   if follower.x-newX==-1 && follower.y==newY
     moveFancy(follower,6)
   elsif follower.x-newX==1 && follower.y==newY
@@ -127,13 +132,13 @@ def pbFancyMoveTo(follower,newX,newY)
   elsif follower.y-newY==1 && follower.x==newX
     moveFancy(follower,8)
   elsif follower.x-newX==-2 && follower.y==newY
-    jumpFancy(follower,6)
+    jumpFancy(follower,6,leader)
   elsif follower.x-newX==2 && follower.y==newY
-    jumpFancy(follower,4)
+    jumpFancy(follower,4,leader)
   elsif follower.y-newY==-2 && follower.x==newX
-    jumpFancy(follower,2)
+    jumpFancy(follower,2,leader)
   elsif follower.y-newY==2 && follower.x==newX
-    jumpFancy(follower,8)
+    jumpFancy(follower,8,leader)
   elsif follower.x!=newX || follower.y!=newY
     follower.moveto(newX,newY)
   end
@@ -209,8 +214,8 @@ class DependentEvents
       end
     end
     facings=[facingDirection] # Get facing from behind
-    facings.push([0,0,4,0,8,0,2,0,6][d]) # Get right facing
-    facings.push([0,0,6,0,2,0,8,0,4][d]) # Get left facing
+#    facings.push([0,0,4,0,8,0,2,0,6][d])   # Get right facing
+#    facings.push([0,0,6,0,2,0,8,0,4][d])   # Get left facing
     if !leaderIsTrueLeader
       facings.push(d) # Get forward facing
     end
@@ -265,7 +270,7 @@ class DependentEvents
         if instant
           follower.moveto(newX,newY)
         else
-          pbFancyMoveTo(follower,newX,newY)
+          pbFancyMoveTo(follower,newX,newY,leader)
         end
       elsif (follower.x-newX==-2 && follower.y==newY) ||
             (follower.x-newX==2 && follower.y==newY) ||
@@ -274,17 +279,16 @@ class DependentEvents
         if instant
           follower.moveto(newX,newY)
         else
-          pbFancyMoveTo(follower,newX,newY)
+          pbFancyMoveTo(follower,newX,newY,leader)
         end
       elsif follower.x!=posX || follower.y!=posY
         if instant
           follower.moveto(newX,newY)
         else
-          pbFancyMoveTo(follower,posX,posY)
-          pbFancyMoveTo(follower,newX,newY)
+          pbFancyMoveTo(follower,posX,posY,leader)
+          pbFancyMoveTo(follower,newX,newY,leader)
         end
       end
-      pbTurnTowardEvent(follower,leader)
     else
       if !mapTile
         # Make current position into leader's position
@@ -293,7 +297,6 @@ class DependentEvents
       if follower.map.map_id==mapTile[0]
         # Follower is on same map as leader
         follower.moveto(leader.x,leader.y)
-        pbTurnTowardEvent(follower,leader)
       else
         # Follower will move to different map
         events=$PokemonGlobal.dependentEvents
@@ -305,7 +308,6 @@ class DependentEvents
           newEventData[3]=mapTile[1]
           newEventData[4]=mapTile[2]
           if mapTile[0]==leader.map.map_id
-            pbTurnTowardEvent(follower,leader)
           end
         end
       end

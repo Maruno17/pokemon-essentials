@@ -1,19 +1,15 @@
 module MessageConfig
-  FontName        = "Power Green"
-  # in Graphics/Windowskins/ (specify empty string to use the default windowskin)
-  TextSkinName    = "speech hgss 1"
-  ChoiceSkinName  = "choice 1"
   WindowOpacity   = 255
   TextSpeed       = nil   # can be positive to wait frames or negative to
                           # show multiple characters in a single frame
-  LIGHTTEXTBASE   = Color.new(248,248,248)
-  LIGHTTEXTSHADOW = Color.new(72,80,88)
-  DARKTEXTBASE    = Color.new(80,80,88)
-  DARKTEXTSHADOW  = Color.new(160,160,168)
   # 0 = Pause cursor is displayed at end of text
   # 1 = Pause cursor is displayed at bottom right
   # 2 = Pause cursor is displayed at lower middle side
   CURSORMODE      = 1
+  LIGHTTEXTBASE   = Color.new(248,248,248)
+  LIGHTTEXTSHADOW = Color.new(72,80,88)
+  DARKTEXTBASE    = Color.new(80,80,88)
+  DARKTEXTSHADOW  = Color.new(160,160,168)
   FontSubstitutes = {
      "Power Red and Blue"  => "Pokemon RS",
      "Power Red and Green" => "Pokemon FireLeaf",
@@ -44,25 +40,44 @@ module MessageConfig
   end
 
   def self.pbDefaultSystemFrame
-    return "" if !MessageConfig::ChoiceSkinName
-    return pbResolveBitmap("Graphics/Windowskins/"+MessageConfig::ChoiceSkinName) || ""
+    begin
+      return pbResolveBitmap("Graphics/Windowskins/" + $TextFrames[$PokemonSystem.frame]) || ""
+    rescue
+      return pbResolveBitmap("Graphics/Windowskins/" + $TextFrames[0]) || ""
+    end
   end
 
   def self.pbDefaultSpeechFrame
-    return "" if !MessageConfig::TextSkinName
-    return pbResolveBitmap("Graphics/Windowskins/"+MessageConfig::TextSkinName) || ""
+    begin
+      return pbResolveBitmap("Graphics/Windowskins/" + $SpeechFrames[$PokemonSystem.textskin]) || ""
+    rescue
+      return pbResolveBitmap("Graphics/Windowskins/" + $SpeechFrames[0]) || ""
+    end
   end
 
   def self.pbDefaultSystemFontName
-    return MessageConfig.pbTryFonts(MessageConfig::FontName,"Arial Narrow","Arial")
+    begin
+      return MessageConfig.pbTryFonts($VersionStyles[$PokemonSystem.font][0], "Arial Narrow", "Arial")
+    rescue
+      return MessageConfig.pbTryFonts($VersionStyles[0], "Arial Narrow", "Arial")
+    end
   end
 
   def self.pbDefaultTextSpeed
-    return (TextSpeed) ? TextSpeed : (Graphics.width>400) ? -2 : 1
+    return pbSettingToTextSpeed(($PokemonSystem.textspeed rescue nil))
+  end
+
+  def self.pbSettingToTextSpeed(speed)
+    case speed
+    when 0 then return 2
+    when 1 then return 1
+    when 2 then return -2
+    end
+    return TextSpeed || 1
   end
 
   def self.pbDefaultWindowskin
-    skin=load_data("Data/System.rxdata").windowskin_name rescue nil
+    skin=($data_system) ? $data_system.windowskin_name : nil
     if skin && skin!=""
       skin=pbResolveBitmap("Graphics/Windowskins/"+skin) || ""
     end
@@ -202,12 +217,6 @@ def pbRepositionMessageWindow(msgwindow, linecount=2)
   if $game_system && $game_system.respond_to?("message_frame")
     if $game_system.message_frame != 0
       msgwindow.opacity = 0
-    end
-  end
-  if $game_message
-    case $game_message.background
-    when 1 then msgwindow.opacity=0  # dim
-    when 2 then msgwindow.opacity=0  # transparent
     end
   end
 end
@@ -589,6 +598,22 @@ def pbFadeOutInWithUpdate(z,sprites,nofadeout=false)
     end
     viewport.dispose
   end
+end
+
+# Similar to pbFadeOutIn, but pauses the music as it fades out.
+# Requires scripts "Audio" (for bgm_pause) and "SpriteWindow" (for pbFadeOutIn).
+def pbFadeOutInWithMusic(zViewport=99999)
+  playingBGS = $game_system.getPlayingBGS
+  playingBGM = $game_system.getPlayingBGM
+  $game_system.bgm_pause(1.0)
+  $game_system.bgs_pause(1.0)
+  pos = $game_system.bgm_position
+  pbFadeOutIn(zViewport) {
+     yield
+     $game_system.bgm_position = pos
+     $game_system.bgm_resume(playingBGM)
+     $game_system.bgs_resume(playingBGS)
+  }
 end
 
 def pbFadeOutAndHide(sprites)

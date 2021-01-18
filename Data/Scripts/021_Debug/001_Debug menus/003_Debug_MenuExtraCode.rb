@@ -291,7 +291,7 @@ def pbDebugDayCare
       when 0   # Withdraw Pokémon 1
         if !$PokemonGlobal.daycare[0][0]
           pbPlayBuzzerSE
-        elsif $Trainer.party.length>=6
+        elsif $Trainer.party_full?
           pbPlayBuzzerSE
           pbMessage(_INTL("Party is full, can't withdraw Pokémon."))
         else
@@ -303,7 +303,7 @@ def pbDebugDayCare
       when 1  # Withdraw Pokémon 2
         if !$PokemonGlobal.daycare[1][0]
           pbPlayBuzzerSE
-        elsif $Trainer.party.length>=6
+        elsif $Trainer.party_full?
           pbPlayBuzzerSE
           pbMessage(_INTL("Party is full, can't withdraw Pokémon."))
         else
@@ -344,7 +344,7 @@ def pbDebugDayCare
       when 4   # Collect egg
         if $PokemonGlobal.daycareEgg!=1
           pbPlayBuzzerSE
-        elsif $Trainer.party.length>=6
+        elsif $Trainer.party_full?
           pbPlayBuzzerSE
           pbMessage(_INTL("Party is full, can't collect the egg."))
         else
@@ -771,7 +771,7 @@ end
 def pbDebugFixInvalidTiles
   num_errors = 0
   num_error_maps = 0
-  @tilesets = pbLoadRxData("Data/Tilesets")
+  @tilesets = load_data("Data/Tilesets.rxdata")
   mapData = MapData.new
   t = Time.now.to_i
   Graphics.update

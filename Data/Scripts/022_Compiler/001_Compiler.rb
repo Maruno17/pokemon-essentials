@@ -76,6 +76,19 @@ module Compiler
     return line
   end
 
+  def csvQuote(str,always=false)
+    return "" if !str || str==""
+    if always || str[/[,\"]/]   # || str[/^\s/] || str[/\s$/] || str[/^#/]
+      str = str.gsub(/[\"]/,"\\\"")
+      str = "\"#{str}\""
+    end
+    return str
+  end
+
+  def csvQuoteAlways(str)
+    return csvQuote(str,true)
+  end
+
   #=============================================================================
   # PBS file readers
   #=============================================================================
@@ -115,7 +128,7 @@ module Compiler
     yield lastsection,sectionname if havesection
   end
 
-  # Used for pokemon.txt
+  # Used for types.txt, pokemon.txt, metadata.txt
   def pbEachFileSection(f)
     pbEachFileSectionEx(f) { |section,name|
       yield section,name.to_i if block_given? && name[/^\d+$/]
@@ -201,7 +214,7 @@ module Compiler
     }
   end
 
-  # Used for connections.txt, abilities.txt, moves.txt, trainertypes.txt
+  # Used for connections.txt, abilities.txt, moves.txt, regionaldexes.txt
   def pbCompilerEachPreppedLine(filename)
     File.open(filename,"rb") { |f|
       FileLineData.file = filename
@@ -514,34 +527,73 @@ module Compiler
   end
 
   #=============================================================================
-  # Check whether a number fits in a given numerical range (all unused)
+  # Write values to a file using a schema
   #=============================================================================
-  def pbCheckByte(x,valuename)
-    if x<0 || x>255
-      raise _INTL("The value \"{1}\" must be from 0 through 255 (00-FF in hex), got a value of {2}\r\n{3}",
-        valuename,x,FileLineData.linereport)
+  def pbWriteCsvRecord(record,file,schema)
+    rec = (record.is_a?(Array)) ? record.clone : [record]
+    for i in 0...schema[1].length
+      chr = schema[1][i,1]
+      file.write(",") if i>0
+      if rec[i].nil?
+        # do nothing
+      elsif rec[i].is_a?(String)
+        file.write(csvQuote(rec[i]))
+      elsif rec[i].is_a?(Symbol)
+        file.write(csvQuote(rec[i].to_s))
+      elsif rec[i]==true
+        file.write("true")
+      elsif rec[i]==false
+        file.write("false")
+      elsif rec[i].is_a?(Numeric)
+        case chr
+        when "e", "E"   # Enumerable
+          enumer = schema[2+i]
+          if enumer.is_a?(Array)
+            file.write(enumer[rec[i]])
+          elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
+            mod = Object.const_get(enumer.to_sym)
+            file.write(getConstantName(mod,rec[i]))
+          elsif enumer.is_a?(Module)
+            file.write(getConstantName(enumer,rec[i]))
+          elsif enumer.is_a?(Hash)
+            for key in enumer.keys
+              if enumer[key]==rec[i]
+                file.write(key)
+                break
+              end
+            end
+          end
+        when "y", "Y"   # Enumerable or integer
+          enumer = schema[2+i]
+          if enumer.is_a?(Array)
+            if enumer[rec[i]]!=nil
+              file.write(enumer[rec[i]])
+            else
+              file.write(rec[i])
+            end
+          elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
+            mod = Object.const_get(enumer.to_sym)
+            file.write(getConstantNameOrValue(mod,rec[i]))
+          elsif enumer.is_a?(Module)
+            file.write(getConstantNameOrValue(enumer,rec[i]))
+          elsif enumer.is_a?(Hash)
+            hasenum = false
+            for key in enumer.keys
+              if enumer[key]==rec[i]
+                file.write(key)
+                hasenum = true; break
+              end
+            end
+            file.write(rec[i]) unless hasenum
+          end
+        else   # Any other record type
+          file.write(rec[i].inspect)
+        end
+      else
+        file.write(rec[i].inspect)
+      end
     end
-  end
-
-  def pbCheckSignedByte(x,valuename)
-    if x<-128 || x>127
-      raise _INTL("The value \"{1}\" must be from -128 through 127, got a value of {2}\r\n{3}",
-        valuename,x,FileLineData.linereport)
-    end
-  end
-
-  def pbCheckWord(x,valuename)
-    if x<0 || x>65535
-      raise _INTL("The value \"{1}\" must be from 0 through 65535 (0000-FFFF in hex), got a value of {2}\r\n{3}",
-        valuename,x,FileLineData.linereport)
-    end
-  end
-
-  def pbCheckSignedWord(x,valuename)
-    if x<-32768 || x>32767
-      raise _INTL("The value \"{1}\" must be from -32768 through 32767, got a value of {2}\r\n{3}",
-        valuename,x,FileLineData.linereport)
-    end
+    return record
   end
 
   #=============================================================================
@@ -625,12 +677,14 @@ module Compiler
       MessageTypes.loadMessageFile("Data/messages.dat")
     end
     if mustCompile
-      yield(_INTL("Compiling type data"))
-      compile_types                  # No dependencies
       yield(_INTL("Compiling town map data"))
       compile_town_map               # No dependencies
       yield(_INTL("Compiling map connection data"))
       compile_connections            # No dependencies
+      yield(_INTL("Compiling phone data"))
+      compile_phone
+      yield(_INTL("Compiling type data"))
+      compile_types                  # No dependencies
       yield(_INTL("Compiling ability data"))
       compile_abilities              # No dependencies
       yield(_INTL("Compiling move data"))
@@ -645,22 +699,20 @@ module Compiler
       compile_pokemon_forms          # Depends on Species, Move, Item, Type, Ability
       yield(_INTL("Compiling machine data"))
       compile_move_compatibilities   # Depends on Species, Move
-      yield(_INTL("Compiling Trainer type data"))
-      compile_trainer_types          # No dependencies
-      yield(_INTL("Compiling Trainer data"))
-      compile_trainers               # Depends on Species, Item, Move
-      yield(_INTL("Compiling phone data"))
-      compile_phone
-      yield(_INTL("Compiling metadata"))
-      compile_metadata               # Depends on TrainerType
-      yield(_INTL("Compiling battle Trainer data"))
-      compile_trainer_lists          # Depends on TrainerType
-      yield(_INTL("Compiling encounter data"))
-      compile_encounters             # Depends on Species
       yield(_INTL("Compiling shadow moveset data"))
       compile_shadow_movesets        # Depends on Species, Move
       yield(_INTL("Compiling Regional Dexes"))
       compile_regional_dexes         # Depends on Species
+      yield(_INTL("Compiling encounter data"))
+      compile_encounters             # Depends on Species
+      yield(_INTL("Compiling Trainer type data"))
+      compile_trainer_types          # No dependencies
+      yield(_INTL("Compiling Trainer data"))
+      compile_trainers               # Depends on Species, Item, Move
+      yield(_INTL("Compiling battle Trainer data"))
+      compile_trainer_lists          # Depends on TrainerType
+      yield(_INTL("Compiling metadata"))
+      compile_metadata               # Depends on TrainerType
       yield(_INTL("Compiling animations"))
       compile_animations
       yield(_INTL("Converting events"))
@@ -698,8 +750,7 @@ module Compiler
          "trainer_lists.dat",
          "trainer_types.dat",
          "trainers.dat",
-         "types.dat",
-         "Constants.rxdata"
+         "types.dat"
       ]
       textFiles = [
          "abilities.txt",
@@ -728,7 +779,7 @@ module Compiler
       # If no PBS file, create one and fill it, then recompile
       if !safeIsDirectory?("PBS")
         Dir.mkdir("PBS") rescue nil
-        pbSaveAllData
+        write_all
         mustCompile = true
       end
       # Should recompile if holding Ctrl

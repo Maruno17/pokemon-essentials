@@ -1081,25 +1081,6 @@ def drawFormattedTextEx(bitmap,x,y,width,text,baseColor=nil,shadowColor=nil,line
   drawFormattedChars(bitmap,chars)
 end
 
-# Deprecated -- not to be used in new code
-def coloredToFormattedText(text,baseColor=nil,shadowColor=nil)
-  base=!baseColor ? Color.new(12*8,12*8,12*8) : baseColor.clone
-  shadow=!shadowColor ? Color.new(26*8,26*8,25*8) : shadowColor.clone
-  text2=text.gsub(/&/,"&amp;")
-  text2.gsub!(/</,"&lt;")
-  text2.gsub!(/>/,"&gt;")
-  text2.gsub!(/\\\[([A-Fa-f0-9]{8,8})\]/) { "<c2="+$1+">" }
-  text2="<c2="+colorToRgb16(base)+colorToRgb16(shadow)+">"+text2
-  text2.gsub!(/\\\\/,"\\")
-  return text2
-end
-
-# Deprecated -- not to be used in new code
-def drawColoredTextEx(bitmap,x,y,width,text,_baseColor=nil,_shadowColor=nil)
-  chars=getFormattedText(bitmap,x,y,width,-1,coloredToFormattedText(text),32)
-  drawFormattedChars(bitmap,chars)
-end
-
 def pbDrawShadow(bitmap,x,y,width,height,string)
   return if !bitmap || !string
   pbDrawShadowText(bitmap,x,y,width,height,string,nil,bitmap.font.color)

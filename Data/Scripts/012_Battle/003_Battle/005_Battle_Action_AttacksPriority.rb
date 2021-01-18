@@ -231,9 +231,6 @@ class PokeBattle_Battle
     end
   end
 
-  # NOTE: In Gen 8, battler speeds stored in priority are recalculated far more
-  #       frequently than they used to be. There are several quoted-out calls to
-  #       pbCalculatePriority in these scripts which do this; just unquote them.
   def pbPriority(onlySpeedSort=false)
     ret = []
     if onlySpeedSort

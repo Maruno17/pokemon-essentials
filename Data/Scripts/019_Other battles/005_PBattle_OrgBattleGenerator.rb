@@ -995,8 +995,8 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
         end
       end
       numbers|=[]
-      if (numbers.length<6 ||
-         !rulesetTeam.hasValidTeam?(numbersPokemon))
+      if numbers.length < MAX_PARTY_SIZE ||
+         !rulesetTeam.hasValidTeam?(numbersPokemon)
         for index in 0...pokemonlist.length
           pkmn=pokemonlist[index]
           next if !validities[index]
@@ -1013,11 +1013,11 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
               end
             }
           end
-          break if numbers.length>=6 && rules.ruleset.hasValidTeam?(numbersPokemon)
+          break if numbers.length >= MAX_PARTY_SIZE && rules.ruleset.hasValidTeam?(numbersPokemon)
         end
-        if numbers.length<6 || !rules.ruleset.hasValidTeam?(numbersPokemon)
+        if numbers.length < MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon)
           while numbers.length<pokemonlist.length &&
-             (numbers.length<6 || !rules.ruleset.hasValidTeam?(numbersPokemon))
+             (numbers.length < MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon))
             index=rand(pokemonlist.length)
             if !numbers.include?(index)
               numbers.push(index)
@@ -1059,7 +1059,7 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
   yield(nil) if block_given?
   save_data(trlists,"Data/trainer_lists.dat")
   yield(nil) if block_given?
-  pbSaveTrainerLists()
+  Compiler.write_trainer_lists
   yield(nil) if block_given?
 end
 
@@ -1298,8 +1298,7 @@ def pbWriteCup(id,rules)
       trlists[cmd][2].push(id) if !trlists[cmd][5]
       save_data(trlists,"Data/trainer_lists.dat")
       Graphics.update
-      pbSaveTrainerLists
-      Graphics.update
+      Compiler.write_trainer_lists
     end
     return
   # Yes, use new

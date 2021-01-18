@@ -12,8 +12,7 @@ class IntroEventScene < EventScene
     @pic2 = addImage(0,0,"")   # flashing "Press Enter" picture
     @pic2.setOpacity(0,0)
     @index = 0
-    data_system = pbLoadRxData("Data/System")
-    pbBGMPlay(data_system.title_bgm)
+    pbBGMPlay($data_system.title_bgm)
     openPic(self,nil)
   end
 

@@ -64,7 +64,7 @@ class PokeBattle_Battle
       end
     end
     # Other certain switching effects
-    return true if NEWEST_BATTLE_MECHANICS && battler.pbHasType?(:GHOST)
+    return true if MORE_TYPE_EFFECTS && battler.pbHasType?(:GHOST)
     # Other certain trapping effects
     if battler.effects[PBEffects::Trapping]>0 ||
        battler.effects[PBEffects::MeanLook]>=0 ||
@@ -238,7 +238,7 @@ class PokeBattle_Battle
       elsif battler.hp<=battler.totalhp/2
         pbDisplayBrief(_INTL("OK, {1}! Come back!",battler.name))
       elsif battler.turnCount>=5
-        pbDisplayBrief(_INTL("{1}, that’s enough! Come back!",battler.name))
+        pbDisplayBrief(_INTL("{1}, that's enough! Come back!",battler.name))
       elsif battler.turnCount>=2
         pbDisplayBrief(_INTL("{1}, come back!",battler.name))
       else
@@ -286,7 +286,7 @@ class PokeBattle_Battle
     partyOrder[idxParty],partyOrder[idxPartyOld] = partyOrder[idxPartyOld],partyOrder[idxParty]
     # Send out the new Pokémon
     pbSendOut([[idxBattler,party[idxParty]]])
-#    pbCalculatePriority(false,[idxBattler]) if NEWEST_BATTLE_MECHANICS
+    pbCalculatePriority(false,[idxBattler]) if RECALCULATE_TURN_ORDER_AFTER_SPEED_CHANGES
   end
 
   # Called from def pbReplace above and at the start of battle.

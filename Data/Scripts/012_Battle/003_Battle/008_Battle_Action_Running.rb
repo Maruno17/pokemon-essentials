@@ -6,7 +6,7 @@ class PokeBattle_Battle
     return false if trainerBattle?
     battler = @battlers[idxBattler]
     return false if !@canRun && !battler.opposes?
-    return true if battler.pbHasType?(:GHOST) && NEWEST_BATTLE_MECHANICS
+    return true if battler.pbHasType?(:GHOST) && MORE_TYPE_EFFECTS
     return true if battler.abilityActive? &&
                    BattleHandlers.triggerRunFromBattleAbility(battler.ability,battler)
     return true if battler.itemActive? &&
@@ -71,7 +71,7 @@ class PokeBattle_Battle
       return 0
     end
     if !duringBattle
-      if battler.pbHasType?(:GHOST) && NEWEST_BATTLE_MECHANICS
+      if battler.pbHasType?(:GHOST) && MORE_TYPE_EFFECTS
         pbSEPlay("Battle flee")
         pbDisplayPaused(_INTL("You got away safely!"))
         @decision = 3

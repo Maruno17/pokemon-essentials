@@ -7,7 +7,7 @@ class PokeBattle_NullBattlePeer
   def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle=false); end
 
   def pbStorePokemon(player,pkmn)
-    player.party[player.party.length] = pkmn if player.party.length<6
+    player.party[player.party.length] = pkmn if !player.party_full?
     return -1
   end
 
@@ -23,7 +23,7 @@ end
 #===============================================================================
 class PokeBattle_RealBattlePeer
   def pbStorePokemon(player,pkmn)
-    if player.party.length<6
+    if !player.party_full?
       player.party[player.party.length] = pkmn
       return -1
     end

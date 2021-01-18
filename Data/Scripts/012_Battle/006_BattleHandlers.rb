@@ -478,23 +478,16 @@ end
 
 
 
-BASE_ACC  = 0
-ACC_STAGE = 1
-EVA_STAGE = 2
-ACC_MULT  = 3
-EVA_MULT  = 4
-
-BASE_DMG_MULT  = 0
-ATK_MULT       = 1
-DEF_MULT       = 2
-FINAL_DMG_MULT = 3
-
 def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
   return false if !forced && !battler.canHeal?
-  return false if !forced && !battler.pbCanConsumeBerry?(item,false)
+  return false if !forced && !battler.canConsumePinchBerry?(MECHANICS_GENERATION >= 7)
   itemName = GameData::Item.get(item).name
   battle.pbCommonAnimation("EatBerry",battler) if !forced
-  amt = (NEWEST_BATTLE_MECHANICS) ? battler.pbRecoverHP(battler.totalhp/2) : battler.pbRecoverHP(battler.totalhp/8)
+  fraction_to_heal = 8   # Gens 6 and lower
+  if MECHANICS_GENERATION == 7;    fraction_to_heal = 2
+  elsif MECHANICS_GENERATION >= 8; fraction_to_heal = 3
+  end
+  amt = battler.pbRecoverHP(battler.totalhp / fraction_to_heal)
   if amt>0
     if forced
       PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
@@ -513,7 +506,7 @@ def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
 end
 
 def pbBattleStatIncreasingBerry(battler,battle,item,forced,stat,increment=1)
-  return false if !forced && !battler.pbCanConsumeBerry?(item)
+  return false if !forced && !battler.canConsumePinchBerry?
   return false if !battler.pbCanRaiseStatStage?(stat,battler)
   itemName = GameData::Item.get(item).name
   if forced
@@ -577,17 +570,17 @@ def pbBattleGem(user,type,move,mults,moveType)
   return if move.is_a?(PokeBattle_PledgeMove)
   return if moveType != type
   user.effects[PBEffects::GemConsumed] = user.item_id
-  if NEWEST_BATTLE_MECHANICS
-    mults[BASE_DMG_MULT] *= 1.3
+  if MECHANICS_GENERATION >= 6
+    mults[:base_damage_multiplier] *= 1.3
   else
-    mults[BASE_DMG_MULT] *= 1.5
+    mults[:base_damage_multiplier] *= 1.5
   end
 end
 
 def pbBattleTypeWeakingBerry(type,moveType,target,mults)
   return if moveType != type
   return if PBTypeEffectiveness.resistant?(target.damageState.typeMod) && moveType != :NORMAL
-  mults[FINAL_DMG_MULT] /= 2
+  mults[:final_damage_multiplier] /= 2
   target.damageState.berryWeakened = true
   target.battle.pbCommonAnimation("EatBerry",target)
 end
@@ -603,10 +596,10 @@ def pbBattleWeatherAbility(weather,battler,battle,ignorePrimal=false)
     battle.pbDisplay(_INTL("{1}'s {2} activated!",battler.pbThis,battler.abilityName))
   end
   fixedDuration = false
-  fixedDuration = true if NEWEST_BATTLE_MECHANICS &&
-                          weather!=PBWeather::HarshSun &&
-                          weather!=PBWeather::HeavyRain &&
-                          weather!=PBWeather::StrongWinds
+  fixedDuration = true if FIXED_DURATION_WEATHER_FROM_ABILITY &&
+                          weather != PBWeather::HarshSun &&
+                          weather != PBWeather::HeavyRain &&
+                          weather != PBWeather::StrongWinds
   battle.pbStartWeather(battler,weather,fixedDuration)
   # NOTE: The ability splash is hidden again in def pbStartWeather.
 end

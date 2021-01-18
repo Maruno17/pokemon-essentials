@@ -255,7 +255,7 @@ class PokeBattle_Battler
     speedMult /= 2 if pbOwnSide.effects[PBEffects::Swamp]>0
     # Paralysis
     if status==PBStatuses::PARALYSIS && !hasActiveAbility?(:QUICKFEET)
-      speedMult /= (NEWEST_BATTLE_MECHANICS) ? 2 : 4
+      speedMult /= (MECHANICS_GENERATION >= 7) ? 2 : 4
     end
     # Badge multiplier
     if @battle.internalBattle && pbOwnedByPlayer? &&
@@ -524,28 +524,29 @@ class PokeBattle_Battler
 
   def affectedByPowder?(showMsg=false)
     return false if fainted?
-    return true if !NEWEST_BATTLE_MECHANICS
-    if pbHasType?(:GRASS)
+    if pbHasType?(:GRASS) && MORE_TYPE_EFFECTS
       @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis)) if showMsg
       return false
     end
-    if hasActiveAbility?(:OVERCOAT) && !@battle.moldBreaker
-      if showMsg
-        @battle.pbShowAbilitySplash(self)
-        if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-          @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis))
-        else
-          @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",pbThis,abilityName))
+    if MECHANICS_GENERATION >= 6
+      if hasActiveAbility?(:OVERCOAT) && !@battle.moldBreaker
+        if showMsg
+          @battle.pbShowAbilitySplash(self)
+          if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+            @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis))
+          else
+            @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",pbThis,abilityName))
+          end
+          @battle.pbHideAbilitySplash(self)
         end
-        @battle.pbHideAbilitySplash(self)
+        return false
       end
-      return false
-    end
-    if hasActiveItem?(:SAFETYGOGGLES)
-      if showMsg
-        @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",pbThis,itemName))
+      if hasActiveItem?(:SAFETYGOGGLES)
+        if showMsg
+          @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",pbThis,itemName))
+        end
+        return false
       end
-      return false
     end
     return true
   end

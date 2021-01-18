@@ -406,7 +406,7 @@ class Pokemon
     return @moves.length
   end
 
-  # @param move [Integer, Symbol, String] ID of the move to check
+  # @param move_id [Integer, Symbol, String] ID of the move to check
   # @return [Boolean] whether the Pokémon knows the given move
   def hasMove?(move_id)
     move_data = GameData::Move.try_get(move_id)
@@ -503,7 +503,7 @@ class Pokemon
     @firstmoves = []
   end
 
-  # @param move [Integer, Symbol, String] ID of the move to check
+  # @param move_id [Integer, Symbol, String] ID of the move to check
   # @return [Boolean] whether the Pokémon is compatible with the given move
   def compatibleWithMove?(move_id)
     move_data = GameData::Move.try_get(move_id)
@@ -821,7 +821,7 @@ class Pokemon
     calcStats
   end
 
-  # @param species [Integer, Symbol, String] id of the species to check for
+  # @param check_species [Integer, Symbol, String] id of the species to check for
   # @return [Boolean] whether this Pokémon is of the specified species
   def isSpecies?(check_species)
     return @species == check_species || @species == GameData::Species.get(check_species).species

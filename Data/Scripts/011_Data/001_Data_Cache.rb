@@ -7,7 +7,6 @@ class PokemonTemp
   attr_accessor :phoneData
   attr_accessor :regionalDexes
   attr_accessor :speciesShadowMovesets
-  attr_accessor :trainersData
   attr_accessor :moveToAnim
   attr_accessor :battleAnims
 end
@@ -19,7 +18,6 @@ def pbClearData
     $PokemonTemp.phoneData             = nil
     $PokemonTemp.regionalDexes         = nil
     $PokemonTemp.speciesShadowMovesets = nil
-    $PokemonTemp.trainersData          = nil
     $PokemonTemp.moveToAnim            = nil
     $PokemonTemp.battleAnims           = nil
   end
@@ -90,26 +88,6 @@ def pbLoadShadowMovesets
     $PokemonTemp.speciesShadowMovesets = load_data("Data/shadow_movesets.dat") || []
   end
   return $PokemonTemp.speciesShadowMovesets
-end
-
-#===============================================================================
-# Methods to get data about individual trainers.
-#===============================================================================
-def pbLoadTrainersData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.trainersData
-    $PokemonTemp.trainersData = load_data("Data/trainers.dat") || []
-  end
-  return $PokemonTemp.trainersData
-end
-
-def pbGetTrainerData(trainer_id, trainer_name, party_id = 0)
-  trainers_data = pbLoadTrainersData
-  for t in trainers_data
-    next if t[0] != trainer_id || t[1] != trainer_name || t[4] != party_id
-    return t
-  end
-  return nil
 end
 
 #===============================================================================

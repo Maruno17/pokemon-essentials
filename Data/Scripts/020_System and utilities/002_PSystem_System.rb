@@ -8,10 +8,6 @@ def pbSafeLoad(file)
   return load_data(file)
 end
 
-def pbLoadRxData(file) # :nodoc:
-  return load_data(file+".rxdata")
-end
-
 def pbChooseLanguage
   commands=[]
   for lang in LANGUAGES
@@ -19,18 +15,6 @@ def pbChooseLanguage
   end
   return pbShowCommands(nil,commands)
 end
-
-if !respond_to?("pbSetResizeFactor")
-  def pbSetResizeFactor(dummy); end
-
-  module Graphics
-    def self.snap_to_bitmap; return nil; end
-  end
-end
-
-
-#############
-#############
 
 
 def pbSetUpSystem
@@ -63,16 +47,6 @@ def pbSetUpSystem
     pbSetResizeFactor([$PokemonSystem.screensize, 4].min)
   end
   # Load constants
-  begin
-    consts = pbSafeLoad("Data/Constants.rxdata")
-    consts = [] if !consts
-  rescue
-    consts = []
-  end
-  for script in consts
-    next if !script
-    eval(Zlib::Inflate.inflate(script[2]),nil,script[1])
-  end
   GameData.load_all
   if LANGUAGES.length>=2
     pokemonSystem.language = pbChooseLanguage if !havedata

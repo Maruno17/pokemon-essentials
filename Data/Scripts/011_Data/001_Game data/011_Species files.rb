@@ -116,7 +116,7 @@ module GameData
     #===========================================================================
 
     def self.egg_icon_filename(species, form)
-      ret = self.check_egg_graphic_file("Graphics/Pokemon/Icons", species, form, "_icon")
+      ret = self.check_egg_graphic_file("Graphics/Pokemon/Eggs/", species, form, "_icon")
       return (ret) ? ret : pbResolveBitmap("Graphics/Pokemon/Eggs/000_icon")
     end
 
@@ -198,14 +198,14 @@ module GameData
       return nil if species_data.nil?
       species_id = self.get(species_data.species).id_number
       if form > 0
-        ret = sprintf("Cries/%sCry_%d", species_data.species, form)
+        ret = sprintf("Cries/%s_%d", species_data.species, form)
         return ret if pbResolveAudioSE(ret)
-        ret = sprintf("Cries/%03dCry_%d", species_id, form)
+        ret = sprintf("Cries/%03d_%d", species_id, form)
         return ret if pbResolveAudioSE(ret)
       end
-      ret = sprintf("Cries/%sCry", species_data.species)
+      ret = sprintf("Cries/%s", species_data.species)
       return ret if pbResolveAudioSE(ret)
-      ret = sprintf("Cries/%03dCry", species_id)
+      ret = sprintf("Cries/%03d", species_id)
       return (pbResolveAudioSE(ret)) ? ret : nil
     end
 
@@ -225,10 +225,6 @@ module GameData
 
     def self.play_cry_from_pokemon(pkmn, volume = 90, pitch = nil)
       return if !pkmn || pkmn.egg?
-      if pkmn.respond_to?("chatter") && pkmn.chatter
-        pkmn.chatter.play
-        return
-      end
       filename = self.cry_filename_from_pokemon(pkmn)
       return if !filename
       pitch ||= 75 + (pkmn.hp * 25 / pkmn.totalhp)
@@ -249,13 +245,8 @@ module GameData
       ret = 0.0
       if species.is_a?(Pokemon)
         if !species.egg?
-          if species.respond_to?("chatter") && species.chatter
-            ret = species.chatter.time
-            pitch = 1.0
-          else
-            filename = pbResolveAudioSE(GameData::Species.cry_filename_from_pokemon(species))
-            ret = getPlayTime(filename) if filename
-          end
+          filename = pbResolveAudioSE(GameData::Species.cry_filename_from_pokemon(species))
+          ret = getPlayTime(filename) if filename
         end
       else
         filename = pbResolveAudioSE(GameData::Species.cry_filename(species, form))

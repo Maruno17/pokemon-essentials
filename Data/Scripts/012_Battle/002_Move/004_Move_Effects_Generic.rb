@@ -555,7 +555,7 @@ class PokeBattle_ProtectMove < PokeBattle_Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    if !(@sidedEffect && NEWEST_BATTLE_MECHANICS) &&
+    if (!@sidedEffect || MECHANICS_GENERATION <= 5) &&
        user.effects[PBEffects::ProtectRate]>1 &&
        @battle.pbRandom(user.effects[PBEffects::ProtectRate])!=0
       user.effects[PBEffects::ProtectRate] = 1
@@ -575,7 +575,7 @@ class PokeBattle_ProtectMove < PokeBattle_Move
     else
       user.effects[@effect] = true
     end
-    user.effects[PBEffects::ProtectRate] *= (NEWEST_BATTLE_MECHANICS) ? 3 : 2
+    user.effects[PBEffects::ProtectRate] *= (MECHANICS_GENERATION >= 6) ? 3 : 2
     pbProtectMessage(user)
   end
 

@@ -157,7 +157,7 @@ class PokeBattle_Battle
     if battler.isSpecies?(:GENGAR) && battler.mega?
       battler.effects[PBEffects::Telekinesis] = 0
     end
-    pbCalculatePriority(false,[idxBattler]) if NEWEST_BATTLE_MECHANICS
+    pbCalculatePriority(false,[idxBattler]) if RECALCULATE_TURN_ORDER_AFTER_MEGA_EVOLUTION
     # Trigger ability
     battler.pbEffectsOnSwitchIn
   end

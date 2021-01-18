@@ -147,6 +147,10 @@ class PokeBattle_Trainer
     return p[p.length - 1]
   end
 
+  def party_full?
+    return @party.length >= MAX_PARTY_SIZE
+  end
+
   #=============================================================================
   # Pokédex
   #=============================================================================

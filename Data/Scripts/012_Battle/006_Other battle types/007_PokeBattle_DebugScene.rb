@@ -44,7 +44,6 @@ class PokeBattle_DebugSceneNoLogging
   def pbItemMenu(idxBattler,firstAction); return -1; end
   def pbResetMoveIndex(idxBattler); end
 
-  def pbChatter(user,target); end
   def pbHPChanged(battler,oldHP,showAnim=false); end
   def pbFaintBattler(battler); end
   def pbEXPBar(battler,startExp,endExp,tempExp1,tempExp2); end

@@ -253,7 +253,7 @@ class PokeBattle_Battler
       else
         @battle.pbCommonAnimation("Confusion",self)
         @battle.pbDisplay(_INTL("{1} is confused!",pbThis))
-        threshold = (NEWEST_BATTLE_MECHANICS) ? 33 : 50   # % chance
+        threshold = (MECHANICS_GENERATION >= 7) ? 33 : 50   # % chance
         if @battle.pbRandom(100)<threshold
           pbConfusionDamage(_INTL("It hurt itself in its confusion!"))
           @lastMoveFailed = true
@@ -313,7 +313,7 @@ class PokeBattle_Battler
     # Wide Guard
     if target.pbOwnSide.effects[PBEffects::WideGuard] && user.index!=target.index &&
        PBTargets.multipleTargets?(move.pbTarget(user)) &&
-       (NEWEST_BATTLE_MECHANICS || move.damagingMove?)
+       (MECHANICS_GENERATION >= 7 || move.damagingMove?)
       @battle.pbCommonAnimation("WideGuard",target)
       @battle.pbDisplay(_INTL("Wide Guard protected {1}!",target.pbThis(true)))
       target.damageState.protected = true
@@ -408,7 +408,7 @@ class PokeBattle_Battler
       return false
     end
     # Dark-type immunity to moves made faster by Prankster
-    if NEWEST_BATTLE_MECHANICS && user.effects[PBEffects::Prankster] &&
+    if MECHANICS_GENERATION >= 7 && user.effects[PBEffects::Prankster] &&
        target.pbHasType?(:DARK) && target.opposes?(user)
       PBDebug.log("[Target immune] #{target.pbThis} is Dark-type and immune to Prankster-boosted moves")
       @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
@@ -441,26 +441,28 @@ class PokeBattle_Battler
       end
     end
     # Immunity to powder-based moves
-    if NEWEST_BATTLE_MECHANICS && move.powderMove?
-      if target.pbHasType?(:GRASS)
+    if move.powderMove?
+      if target.pbHasType?(:GRASS) && MORE_TYPE_EFFECTS
         PBDebug.log("[Target immune] #{target.pbThis} is Grass-type and immune to powder-based moves")
         @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
         return false
       end
-      if target.hasActiveAbility?(:OVERCOAT) && !@battle.moldBreaker
-        @battle.pbShowAbilitySplash(target)
-        if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-          @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
-        else
-          @battle.pbDisplay(_INTL("It doesn't affect {1} because of its {2}.",target.pbThis(true),target.abilityName))
+      if MECHANICS_GENERATION >= 6
+        if target.hasActiveAbility?(:OVERCOAT) && !@battle.moldBreaker
+          @battle.pbShowAbilitySplash(target)
+          if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+            @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
+          else
+            @battle.pbDisplay(_INTL("It doesn't affect {1} because of its {2}.",target.pbThis(true),target.abilityName))
+          end
+          @battle.pbHideAbilitySplash(target)
+          return false
         end
-        @battle.pbHideAbilitySplash(target)
-        return false
-      end
-      if target.hasActiveItem?(:SAFETYGOGGLES)
-        PBDebug.log("[Item triggered] #{target.pbThis} has Safety Goggles and is immune to powder-based moves")
-        @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
-        return false
+        if target.hasActiveItem?(:SAFETYGOGGLES)
+          PBDebug.log("[Item triggered] #{target.pbThis} has Safety Goggles and is immune to powder-based moves")
+          @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
+          return false
+        end
       end
     end
     # Substitute

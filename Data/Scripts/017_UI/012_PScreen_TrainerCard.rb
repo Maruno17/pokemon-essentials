@@ -31,9 +31,6 @@ class PokemonTrainerCard_Scene
     @sprites["trainer"].y -= (@sprites["trainer"].bitmap.height-128)
     @sprites["trainer"].z = 2
     pbDrawTrainerCardFront
-    if $PokemonGlobal.trainerRecording
-      $PokemonGlobal.trainerRecording.play
-    end
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
 

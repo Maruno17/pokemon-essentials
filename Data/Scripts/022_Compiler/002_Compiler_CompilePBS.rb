@@ -2,96 +2,7 @@ module Compiler
   module_function
 
   #=============================================================================
-  # Compile metadata
-  #=============================================================================
-  def compile_metadata
-    GameData::Metadata::DATA.clear
-    GameData::MapMetadata::DATA.clear
-    # Read from PBS file
-    File.open("PBS/metadata.txt", "rb") { |f|
-      FileLineData.file = "PBS/metadata.txt"   # For error reporting
-      # Read a whole section's lines at once, then run through this code.
-      # contents is a hash containing all the XXX=YYY lines in that section, where
-      # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      pbEachFileSection(f) { |contents, map_id|
-        schema = (map_id == 0) ? GameData::Metadata::SCHEMA : GameData::MapMetadata::SCHEMA
-        # Go through schema hash of compilable data and compile this section
-        for key in schema.keys
-          FileLineData.setSection(map_id, key, contents[key])   # For error reporting
-          # Skip empty properties, or raise an error if a required property is
-          # empty
-          if contents[key].nil?
-            if map_id == 0 && ["Home", "PlayerA"].include?(key)
-              raise _INTL("The entry {1} is required in PBS/metadata.txt section 0.", key)
-            end
-            next
-          end
-          # Compile value for key
-          value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.length == 0
-          contents[key] = value
-        end
-        if map_id == 0   # Global metadata
-          # Construct metadata hash
-          metadata_hash = {
-            :id                 => map_id,
-            :home               => contents["Home"],
-            :wild_battle_BGM    => contents["WildBattleBGM"],
-            :trainer_battle_BGM => contents["TrainerBattleBGM"],
-            :wild_victory_ME    => contents["WildVictoryME"],
-            :trainer_victory_ME => contents["TrainerVictoryME"],
-            :wild_capture_ME    => contents["WildCaptureME"],
-            :surf_BGM           => contents["SurfBGM"],
-            :bicycle_BGM        => contents["BicycleBGM"],
-            :player_A           => contents["PlayerA"],
-            :player_B           => contents["PlayerB"],
-            :player_C           => contents["PlayerC"],
-            :player_D           => contents["PlayerD"],
-            :player_E           => contents["PlayerE"],
-            :player_F           => contents["PlayerF"],
-            :player_G           => contents["PlayerG"],
-            :player_H           => contents["PlayerH"]
-          }
-          # Add metadata's data to records
-          GameData::Metadata::DATA[map_id] = GameData::Metadata.new(metadata_hash)
-        else   # Map metadata
-          # Construct metadata hash
-          metadata_hash = {
-            :id                   => map_id,
-            :outdoor_map          => contents["Outdoor"],
-            :announce_location    => contents["ShowArea"],
-            :can_bicycle          => contents["Bicycle"],
-            :always_bicycle       => contents["BicycleAlways"],
-            :teleport_destination => contents["HealingSpot"],
-            :weather              => contents["Weather"],
-            :town_map_position    => contents["MapPosition"],
-            :dive_map_id          => contents["DiveMap"],
-            :dark_map             => contents["DarkMap"],
-            :safari_map           => contents["SafariMap"],
-            :snap_edges           => contents["SnapEdges"],
-            :random_dungeon       => contents["Dungeon"],
-            :battle_background    => contents["BattleBack"],
-            :wild_battle_BGM      => contents["WildBattleBGM"],
-            :trainer_battle_BGM   => contents["TrainerBattleBGM"],
-            :wild_victory_ME      => contents["WildVictoryME"],
-            :trainer_victory_ME   => contents["TrainerVictoryME"],
-            :wild_capture_ME      => contents["WildCaptureME"],
-            :town_map_size        => contents["MapSize"],
-            :battle_environment   => contents["Environment"]
-          }
-          # Add metadata's data to records
-          GameData::MapMetadata::DATA[map_id] = GameData::MapMetadata.new(metadata_hash)
-        end
-      }
-    }
-    # Save all data
-    GameData::Metadata.save
-    GameData::MapMetadata.save
-    Graphics.update
-  end
-
-  #=============================================================================
-  # Compile town map points
+  # Compile Town Map data
   #=============================================================================
   def compile_town_map
     nonglobaltypes = {
@@ -183,36 +94,6 @@ module Compiler
   end
 
   #=============================================================================
-  # Compile berry plants
-  #=============================================================================
-  def compile_berry_plants
-    GameData::BerryPlant::DATA.clear
-    pbCompilerEachCommentedLine("PBS/berryplants.txt") { |line, line_no|
-      if line[/^\s*(\w+)\s*=\s*(.*)$/]   # Of the format XXX = YYY
-        key   = $1
-        value = $2
-        item_symbol = parseItem(key)
-        item_number = GameData::Item.get(item_symbol).id_number
-        line = pbGetCsvRecord(value, line_no, [0, "vuuv"])
-        # Construct berry plant hash
-        berry_plant_hash = {
-          :id              => item_symbol,
-          :id_number       => item_number,
-          :hours_per_stage => line[0],
-          :drying_per_hour => line[1],
-          :minimum_yield   => line[2],
-          :maximum_yield   => line[3]
-        }
-        # Add berry plant's data to records
-        GameData::BerryPlant::DATA[item_number] = GameData::BerryPlant::DATA[item_symbol] = GameData::BerryPlant.new(berry_plant_hash)
-      end
-    }
-    # Save all data
-    GameData::BerryPlant.save
-    Graphics.update
-  end
-
-  #=============================================================================
   # Compile phone messages
   #=============================================================================
   def compile_phone
@@ -251,7 +132,7 @@ module Compiler
   end
 
   #=============================================================================
-  # Compile types
+  # Compile type data
   #=============================================================================
   def compile_types
     GameData::Type::DATA.clear
@@ -325,7 +206,7 @@ module Compiler
   end
 
   #=============================================================================
-  # Compile abilities
+  # Compile ability data
   #=============================================================================
   def compile_abilities
     GameData::Ability::DATA.clear
@@ -356,100 +237,6 @@ module Compiler
     GameData::Ability.save
     MessageTypes.setMessages(MessageTypes::Abilities, ability_names)
     MessageTypes.setMessages(MessageTypes::AbilityDescs, ability_descriptions)
-    Graphics.update
-  end
-
-  #=============================================================================
-  # Compile items
-  #=============================================================================
-=begin
-  class ItemList
-    include Enumerable
-
-    def initialize; @list = []; end
-    def length; @list.length; end
-    def []=(x,v); @list[x] = v; end
-
-    def [](x)
-      if !@list[x]
-        defrecord = SerialRecords::SerialRecord.new
-        defrecord.push(0)
-        defrecord.push("????????")
-        defrecord.push(0)
-        defrecord.push(0)
-        defrecord.push("????????")
-        @list[x] = defrecord
-        return defrecord
-      end
-      return @list[x]
-    end
-
-    def each
-      for i in 0...self.length
-        yield self[i]
-      end
-    end
-  end
-
-  def readItemList(filename)
-    ret = ItemList.new
-    return ret if !pbRgssExists?(filename)
-    pbRgssOpen(filename,"rb") { |file|
-      numrec = file.fgetdw>>3
-      curpos = 0
-      numrec.times do
-        file.pos = curpos
-        offset = file.fgetdw
-        length = file.fgetdw
-        record = SerialRecords::SerialRecord.decode(file,offset,length)
-        ret[record[0]] = record
-        curpos += 8
-      end
-    }
-    return ret
-  end
-=end
-
-  def compile_items
-    GameData::Item::DATA.clear
-    item_names        = []
-    item_names_plural = []
-    item_descriptions = []
-    # Read each line of items.txt at a time and compile it into an item
-    pbCompilerEachCommentedLine("PBS/items.txt") { |line, line_no|
-      line = pbGetCsvRecord(line, line_no, [0, "vnssuusuuUN"])
-      item_number = line[0]
-      item_symbol = line[1].to_sym
-      if GameData::Item::DATA[item_number]
-        raise _INTL("Item ID number '{1}' is used twice.\r\n{2}", item_number, FileLineData.linereport)
-      elsif GameData::Item::DATA[item_symbol]
-        raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_symbol, FileLineData.linereport)
-      end
-      # Construct item hash
-      item_hash = {
-        :id_number   => item_number,
-        :id          => item_symbol,
-        :name        => line[2],
-        :name_plural => line[3],
-        :pocket      => line[4],
-        :price       => line[5],
-        :description => line[6],
-        :field_use   => line[7],
-        :battle_use  => line[8],
-        :type        => line[9]
-      }
-      item_hash[:move] = parseMove(line[10]) if !nil_or_empty?(line[10])
-      # Add item's data to records
-      GameData::Item::DATA[item_number] = GameData::Item::DATA[item_symbol] = GameData::Item.new(item_hash)
-      item_names[item_number]        = item_hash[:name]
-      item_names_plural[item_number] = item_hash[:name_plural]
-      item_descriptions[item_number] = item_hash[:description]
-    }
-    # Save all data
-    GameData::Item.save
-    MessageTypes.setMessages(MessageTypes::Items, item_names)
-    MessageTypes.setMessages(MessageTypes::ItemPlurals, item_names_plural)
-    MessageTypes.setMessages(MessageTypes::ItemDescriptions, item_descriptions)
     Graphics.update
   end
 
@@ -510,49 +297,83 @@ module Compiler
   end
 
   #=============================================================================
-  # Compile battle animations
+  # Compile item data
   #=============================================================================
-  def compile_animations
-    begin
-      pbanims = load_data("Data/PkmnAnimations.rxdata")
-    rescue
-      pbanims = PBAnimations.new
-    end
-    move2anim = [[],[]]
-=begin
-    anims = load_data("Data/Animations.rxdata")
-    for anim in anims
-      next if !anim || anim.frames.length==1
-      found = false
-      for i in 0...pbanims.length
-        if pbanims[i] && pbanims[i].id==anim.id
-          found = true if pbanims[i].array.length>1
-          break
-        end
+  def compile_items
+    GameData::Item::DATA.clear
+    item_names        = []
+    item_names_plural = []
+    item_descriptions = []
+    # Read each line of items.txt at a time and compile it into an item
+    pbCompilerEachCommentedLine("PBS/items.txt") { |line, line_no|
+      line = pbGetCsvRecord(line, line_no, [0, "vnssuusuuUN"])
+      item_number = line[0]
+      item_symbol = line[1].to_sym
+      if GameData::Item::DATA[item_number]
+        raise _INTL("Item ID number '{1}' is used twice.\r\n{2}", item_number, FileLineData.linereport)
+      elsif GameData::Item::DATA[item_symbol]
+        raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_symbol, FileLineData.linereport)
       end
-      pbanims[anim.id] = pbConvertRPGAnimation(anim) if !found
-    end
-=end
-    for i in 0...pbanims.length
-      next if !pbanims[i]
-      if pbanims[i].name[/^OppMove\:\s*(.*)$/]
-        if GameData::Move.exists?($~[1])
-          moveid = GameData::Move.get($~[1]).id_number
-          move2anim[1][moveid] = i
-        end
-      elsif pbanims[i].name[/^Move\:\s*(.*)$/]
-        if GameData::Move.exists?($~[1])
-          moveid = GameData::Move.get($~[1]).id_number
-          move2anim[0][moveid] = i
-        end
-      end
-    end
-    save_data(move2anim,"Data/move2anim.dat")
-    save_data(pbanims,"Data/PkmnAnimations.rxdata")
+      # Construct item hash
+      item_hash = {
+        :id_number   => item_number,
+        :id          => item_symbol,
+        :name        => line[2],
+        :name_plural => line[3],
+        :pocket      => line[4],
+        :price       => line[5],
+        :description => line[6],
+        :field_use   => line[7],
+        :battle_use  => line[8],
+        :type        => line[9]
+      }
+      item_hash[:move] = parseMove(line[10]) if !nil_or_empty?(line[10])
+      # Add item's data to records
+      GameData::Item::DATA[item_number] = GameData::Item::DATA[item_symbol] = GameData::Item.new(item_hash)
+      item_names[item_number]        = item_hash[:name]
+      item_names_plural[item_number] = item_hash[:name_plural]
+      item_descriptions[item_number] = item_hash[:description]
+    }
+    # Save all data
+    GameData::Item.save
+    MessageTypes.setMessages(MessageTypes::Items, item_names)
+    MessageTypes.setMessages(MessageTypes::ItemPlurals, item_names_plural)
+    MessageTypes.setMessages(MessageTypes::ItemDescriptions, item_descriptions)
+    Graphics.update
   end
 
   #=============================================================================
-  # Compile Pokémon
+  # Compile berry plant data
+  #=============================================================================
+  def compile_berry_plants
+    GameData::BerryPlant::DATA.clear
+    pbCompilerEachCommentedLine("PBS/berryplants.txt") { |line, line_no|
+      if line[/^\s*(\w+)\s*=\s*(.*)$/]   # Of the format XXX = YYY
+        key   = $1
+        value = $2
+        item_symbol = parseItem(key)
+        item_number = GameData::Item.get(item_symbol).id_number
+        line = pbGetCsvRecord(value, line_no, [0, "vuuv"])
+        # Construct berry plant hash
+        berry_plant_hash = {
+          :id              => item_symbol,
+          :id_number       => item_number,
+          :hours_per_stage => line[0],
+          :drying_per_hour => line[1],
+          :minimum_yield   => line[2],
+          :maximum_yield   => line[3]
+        }
+        # Add berry plant's data to records
+        GameData::BerryPlant::DATA[item_number] = GameData::BerryPlant::DATA[item_symbol] = GameData::BerryPlant.new(berry_plant_hash)
+      end
+    }
+    # Save all data
+    GameData::BerryPlant.save
+    Graphics.update
+  end
+
+  #=============================================================================
+  # Compile Pokémon data
   #=============================================================================
   def compile_pokemon
     GameData::Species::DATA.clear
@@ -713,7 +534,7 @@ module Compiler
   end
 
   #=============================================================================
-  # Compile Pokémon forms
+  # Compile Pokémon forms data
   #=============================================================================
   def compile_pokemon_forms
     species_names           = []
@@ -930,8 +751,8 @@ module Compiler
       species_hash[species_data.id].each { |move| species_data.tutor_moves.push(move) }
     end
     GameData::Species.save
-    pbSavePokemonData
-    pbSavePokemonFormsData
+    Compiler.write_pokemon
+    Compiler.write_pokemon_forms
     begin
       File.delete("PBS/tm.txt")
     rescue SystemCallError
@@ -1003,7 +824,7 @@ module Compiler
   end
 
   #=============================================================================
-  # Compile wild encounters
+  # Compile wild encounter data
   #=============================================================================
   def compile_encounters
     lines   = []
@@ -1110,7 +931,7 @@ module Compiler
   end
 
   #=============================================================================
-  # Compile trainer types
+  # Compile trainer type data
   #=============================================================================
   def compile_trainer_types
     GameData::TrainerType::DATA.clear
@@ -1155,252 +976,133 @@ module Compiler
   end
 
   #=============================================================================
-  # Compile individual trainers
+  # Compile individual trainer data
   #=============================================================================
   def compile_trainers
-    trainer_info_types = TrainerData::SCHEMA
-    mLevel = PBExperience.maxLevel
-    trainerindex    = -1
-    trainers        = []
-    trainernames    = []
-    trainerlosetext = []
-    pokemonindex    = -2
-    oldcompilerline   = 0
-    oldcompilerlength = 0
-    pbCompilerEachCommentedLine("PBS/trainers.txt") { |line,lineno|
+    schema = GameData::Trainer::SCHEMA
+    max_level = PBExperience.maxLevel
+    trainer_names      = []
+    trainer_lose_texts = []
+    trainer_hash       = nil
+    trainer_id         = -1
+    current_pkmn       = nil
+    # Read each line of trainers.txt at a time and compile it as a trainer property
+    pbCompilerEachPreppedLine("PBS/trainers.txt") { |line, line_no|
+      # New section [trainer_type, name] or [trainer_type, name, version]
       if line[/^\s*\[\s*(.+)\s*\]\s*$/]
-        # Section [trainertype,trainername] or [trainertype,trainername,partyid]
-        if oldcompilerline>0
-          raise _INTL("Previous trainer not defined with as many Pokémon as expected.\r\n{1}",FileLineData.linereport)
+        if trainer_hash
+          if !current_pkmn
+            raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}", FileLineData.linereport)
+          end
+          # Add trainer's data to records
+          key = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+          GameData::Trainer::DATA[trainer_id] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
         end
-        if pokemonindex==-1
-          raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}",FileLineData.linereport)
-        end
-        section = pbGetCsvRecord($~[1],lineno,[0,"esU",:TrainerType])
-        trainerindex += 1
-        trainertype = section[0]
-        trainername = section[1]
-        partyid     = section[2] || 0
-        trainers[trainerindex] = [trainertype,trainername,[],[],partyid,nil]
-        trainernames[trainerindex] = trainername
-        pokemonindex = -1
+        trainer_id += 1
+        line_data = pbGetCsvRecord($~[1], line_no, [0, "esU", :TrainerType])
+        # Construct trainer hash
+        trainer_hash = {
+          :id           => trainer_id,
+          :trainer_type => line_data[0],
+          :name         => line_data[1],
+          :version      => line_data[2] || 0,
+          :pokemon      => []
+        }
+        current_pkmn = nil
+        trainer_names[trainer_id] = trainer_hash[:name]
+      # XXX=YYY lines
       elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
-        # XXX=YYY lines
-        if trainerindex<0
-          raise _INTL("Expected a section at the beginning of the file.\r\n{1}",FileLineData.linereport)
+        if !trainer_hash
+          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
         end
-        if oldcompilerline>0
-          raise _INTL("Previous trainer not defined with as many Pokémon as expected.\r\n{1}",FileLineData.linereport)
-        end
-        settingname = $~[1]
-        schema = trainer_info_types[settingname]
-        next if !schema
-        record = pbGetCsvRecord($~[2],lineno,schema)
+        property_name = $~[1]
+        line_schema = schema[property_name]
+        next if !line_schema
+        property_value = pbGetCsvRecord($~[2], line_no, line_schema)
         # Error checking in XXX=YYY lines
-        case settingname
+        case property_name
+        when "Items"
+          property_value = [property_value] if !property_value.is_a?(Array)
+          property_value.compact!
         when "Pokemon"
-          if record[1]>mLevel
-            raise _INTL("Bad level: {1} (must be 1-{2}).\r\n{3}",record[1],mLevel,FileLineData.linereport)
+          if property_value[1] > max_level
+            raise _INTL("Bad level: {1} (must be 1-{2}).\r\n{3}", property_value[1], max_level, FileLineData.linereport)
+          end
+        when "Name"
+          if property_value.length > Pokemon::MAX_NAME_SIZE
+            raise _INTL("Bad nickname: {1} (must be 1-{2} characters).\r\n{3}", property_value, Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
           end
         when "Moves"
-          record = [record] if record.is_a?(Symbol)
-          record.compact!
-        when "Ability"
-          if record>5
-            raise _INTL("Bad ability flag: {1} (must be 0 or 1 or 2-5).\r\n{2}",record,FileLineData.linereport)
-          end
+          property_value = [property_value] if !property_value.is_a?(Array)
+          property_value.uniq!
+          property_value.compact!
         when "IV"
-          record = [record] if record.is_a?(Integer)
-          record.compact!
-          for i in record
-            next if i<=Pokemon::IV_STAT_LIMIT
-            raise _INTL("Bad IV: {1} (must be 0-{2}).\r\n{3}", i, Pokemon::IV_STAT_LIMIT, FileLineData.linereport)
+          property_value = [property_value] if !property_value.is_a?(Array)
+          property_value.compact!
+          property_value.each do |iv|
+            next if iv <= Pokemon::IV_STAT_LIMIT
+            raise _INTL("Bad IV: {1} (must be 0-{2}).\r\n{3}", iv, Pokemon::IV_STAT_LIMIT, FileLineData.linereport)
           end
         when "EV"
-          record = [record] if record.is_a?(Integer)
-          record.compact!
-          for i in record
-            next if i<=Pokemon::EV_STAT_LIMIT
-            raise _INTL("Bad EV: {1} (must be 0-{2}).\r\n{3}", i, Pokemon::EV_STAT_LIMIT, FileLineData.linereport)
+          property_value = [property_value] if !property_value.is_a?(Array)
+          property_value.compact!
+          property_value.each do |ev|
+            next if ev <= Pokemon::EV_STAT_LIMIT
+            raise _INTL("Bad EV: {1} (must be 0-{2}).\r\n{3}", ev, Pokemon::EV_STAT_LIMIT, FileLineData.linereport)
           end
-          evtotal = 0
-          for i in 0...6
-            evtotal += (i<record.length) ? record[i] : record[0]
+          ev_total = 0
+          PBStats.eachStat do |stat|
+            ev_total += (stat < property_value.length) ? property_value[stat] : property_value[0]
           end
-          if evtotal>Pokemon::EV_LIMIT
+          if ev_total > Pokemon::EV_LIMIT
             raise _INTL("Total EVs are greater than allowed ({1}).\r\n{2}", Pokemon::EV_LIMIT, FileLineData.linereport)
           end
         when "Happiness"
-          if record>255
-            raise _INTL("Bad happiness: {1} (must be 0-255).\r\n{2}",record,FileLineData.linereport)
-          end
-        when "Name"
-          if record.length>Pokemon::MAX_NAME_SIZE
-            raise _INTL("Bad nickname: {1} (must be 1-{2} characters).\r\n{3}", record, Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
+          if property_value > 255
+            raise _INTL("Bad happiness: {1} (must be 0-255).\r\n{2}", property_value, FileLineData.linereport)
           end
         end
         # Record XXX=YYY setting
-        case settingname
-        when "Items"   # Items in the trainer's Bag, not the held item
-          record = [record] if record.is_a?(Integer)
-          record.compact!
-          trainers[trainerindex][2] = record
-        when "LoseText"
-          trainerlosetext[trainerindex] = record
-          trainers[trainerindex][5] = record
+        case property_name
+        when "Items", "LoseText"
+          trainer_hash[line_schema[0]] = property_value
+          trainer_lose_texts[trainer_id] = property_value if property_name == "LoseText"
         when "Pokemon"
-          pokemonindex += 1
-          trainers[trainerindex][3][pokemonindex] = []
-          trainers[trainerindex][3][pokemonindex][TrainerData::SPECIES] = record[0]
-          trainers[trainerindex][3][pokemonindex][TrainerData::LEVEL]   = record[1]
+          current_pkmn = {
+            :species => property_value[0],
+            :level   => property_value[1]
+          }
+          trainer_hash[line_schema[0]].push(current_pkmn)
         else
-          if pokemonindex<0
-            raise _INTL("Pokémon hasn't been defined yet!\r\n{1}",FileLineData.linereport)
+          if !current_pkmn
+            raise _INTL("Pokémon hasn't been defined yet!\r\n{1}", FileLineData.linereport)
           end
-          trainers[trainerindex][3][pokemonindex][schema[0]] = record
+          current_pkmn[line_schema[0]] = property_value
         end
       else
-        # Old compiler - backwards compatibility is SUCH fun!
-        if pokemonindex==-1 && oldcompilerline==0
-          raise _INTL("Unexpected line format, started new trainer while previous trainer has no Pokémon.\r\n{1}",FileLineData.linereport)
-        end
-        if oldcompilerline==0   # Started an old trainer section
-          oldcompilerlength = 3
-          oldcompilerline   = 0
-          trainerindex += 1
-          trainers[trainerindex] = [0,"",[],[],0]
-          pokemonindex = -1
-        end
-        oldcompilerline += 1
-        case oldcompilerline
-        when 1   # Trainer type
-          record = pbGetCsvRecord(line,lineno,[0,"e",:TrainerType])
-          trainers[trainerindex][0] = record
-        when 2   # Trainer name, version number
-          record = pbGetCsvRecord(line,lineno,[0,"sU"])
-          record = [record] if record.is_a?(Integer)
-          trainers[trainerindex][1] = record[0]
-          trainernames[trainerindex] = record[0]
-          trainers[trainerindex][4] = record[1] if record[1]
-        when 3   # Number of Pokémon, items
-          record = pbGetCsvRecord(line,lineno,[0,"vEEEEEEEE",nil,
-                                  Item,Item,Item,Item,Item,Item,Item,Item])
-          record = [record] if record.is_a?(Integer)
-          record.compact!
-          oldcompilerlength += record[0]
-          record.shift
-          trainers[trainerindex][2] = record if record
-        else   # Pokémon lines
-          pokemonindex += 1
-          trainers[trainerindex][3][pokemonindex] = []
-          record = pbGetCsvRecord(line,lineno,
-             [0,"evEEEEEUEUBEUUSBU",Species,nil,:Item,:Move,:Move,:Move,:Move,
-                                    nil,{"M"=>0,"m"=>0,"Male"=>0,"male"=>0,
-                                    "0"=>0,"F"=>1,"f"=>1,"Female"=>1,"female"=>1,
-                                    "1"=>1},nil,nil,PBNatures,nil,nil,nil,nil,nil])
-          # Error checking (the +3 is for properties after the four moves)
-          for i in 0...record.length
-            next if record[i]==nil
-            case i
-            when TrainerData::LEVEL
-              if record[i]>mLevel
-                raise _INTL("Bad level: {1} (must be 1-{2}).\r\n{3}",record[i],mLevel,FileLineData.linereport)
-              end
-            when TrainerData::ABILITY+3
-              if record[i]>5
-                raise _INTL("Bad ability flag: {1} (must be 0 or 1 or 2-5).\r\n{2}",record[i],FileLineData.linereport)
-              end
-            when TrainerData::IV+3
-              if record[i]>31
-                raise _INTL("Bad IV: {1} (must be 0-31).\r\n{2}",record[i],FileLineData.linereport)
-              end
-              record[i] = [record[i]]
-            when TrainerData::EV+3
-              if record[i]>Pokemon::EV_STAT_LIMIT
-                raise _INTL("Bad EV: {1} (must be 0-{2}).\r\n{3}", record[i], Pokemon::EV_STAT_LIMIT, FileLineData.linereport)
-              end
-              record[i] = [record[i]]
-            when TrainerData::HAPPINESS+3
-              if record[i]>255
-                raise _INTL("Bad happiness: {1} (must be 0-255).\r\n{2}",record[i],FileLineData.linereport)
-              end
-            when TrainerData::NAME+3
-              if record[i].length>Pokemon::MAX_NAME_SIZE
-                raise _INTL("Bad nickname: {1} (must be 1-{2} characters).\r\n{3}", record[i], Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
-              end
-            end
-          end
-          # Write data to trainer array
-          for i in 0...record.length
-            next if record[i]==nil
-            if i>=TrainerData::MOVES && i<TrainerData::MOVES+4
-              if !trainers[trainerindex][3][pokemonindex][TrainerData::MOVES]
-                trainers[trainerindex][3][pokemonindex][TrainerData::MOVES] = []
-              end
-              trainers[trainerindex][3][pokemonindex][TrainerData::MOVES].push(record[i])
-            else
-              d = (i>=TrainerData::MOVES+4) ? i-3 : i
-              trainers[trainerindex][3][pokemonindex][d] = record[i]
-            end
-          end
-        end
-        oldcompilerline = 0 if oldcompilerline>=oldcompilerlength
+        raise _INTL("Expected a new section or a line like XXX=YYY, got:\r\n{1}\r\n{2}", line, FileLineData.linereport)
       end
     }
-    save_data(trainers,"Data/trainers.dat")
-    MessageTypes.setMessagesAsHash(MessageTypes::TrainerNames,trainernames)
-    MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseText,trainerlosetext)
+    # Add last trainer's data to records
+    if trainer_hash
+      key = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+      GameData::Trainer::DATA[trainer_id] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
+    end
+    # Save all data
+    GameData::Trainer.save
+    MessageTypes.setMessagesAsHash(MessageTypes::TrainerNames, trainer_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseText, trainer_lose_texts)
+    Graphics.update
   end
 
   #=============================================================================
   # Compile Battle Tower and other Cups trainers/Pokémon
   #=============================================================================
-  def compile_battle_tower_trainers(filename)
-    sections = []
-    requiredtypes = {
-       "Type"          => [0, "e", :TrainerType],
-       "Name"          => [1, "s"],
-       "BeginSpeech"   => [2, "s"],
-       "EndSpeechWin"  => [3, "s"],
-       "EndSpeechLose" => [4, "s"],
-       "PokemonNos"    => [5, "*u"]
-    }
-    trainernames  = []
-    beginspeech   = []
-    endspeechwin  = []
-    endspeechlose = []
-    if safeExists?(filename)
-      File.open(filename,"rb") { |f|
-        FileLineData.file = filename
-        pbEachFileSectionEx(f) { |section,name|
-          rsection = []
-          for key in section.keys
-            FileLineData.setSection(name,key,section[key])
-            schema = requiredtypes[key]
-            next if !schema
-            record = pbGetCsvRecord(section[key],0,schema)
-            rsection[schema[0]] = record
-          end
-          trainernames.push(rsection[1])
-          beginspeech.push(rsection[2])
-          endspeechwin.push(rsection[3])
-          endspeechlose.push(rsection[4])
-          sections.push(rsection)
-        }
-      }
-    end
-    MessageTypes.addMessagesAsHash(MessageTypes::TrainerNames,trainernames)
-    MessageTypes.addMessagesAsHash(MessageTypes::BeginSpeech,beginspeech)
-    MessageTypes.addMessagesAsHash(MessageTypes::EndSpeechWin,endspeechwin)
-    MessageTypes.addMessagesAsHash(MessageTypes::EndSpeechLose,endspeechlose)
-    return sections
-  end
-
   def compile_trainer_lists
     btTrainersRequiredTypes = {
-       "Trainers"   => [0, "s"],
-       "Pokemon"    => [1, "s"],
-       "Challenges" => [2, "*s"]
+      "Trainers"   => [0, "s"],
+      "Pokemon"    => [1, "s"],
+      "Challenges" => [2, "*s"]
     }
     if !safeExists?("PBS/trainerlists.txt")
       File.open("PBS/trainerlists.txt","wb") { |f|
@@ -1461,5 +1163,177 @@ module Compiler
       }
     }
     save_data(sections,"Data/trainer_lists.dat")
+  end
+
+  def compile_battle_tower_trainers(filename)
+    sections = []
+    requiredtypes = {
+       "Type"          => [0, "e", :TrainerType],
+       "Name"          => [1, "s"],
+       "BeginSpeech"   => [2, "s"],
+       "EndSpeechWin"  => [3, "s"],
+       "EndSpeechLose" => [4, "s"],
+       "PokemonNos"    => [5, "*u"]
+    }
+    trainernames  = []
+    beginspeech   = []
+    endspeechwin  = []
+    endspeechlose = []
+    if safeExists?(filename)
+      File.open(filename,"rb") { |f|
+        FileLineData.file = filename
+        pbEachFileSectionEx(f) { |section,name|
+          rsection = []
+          for key in section.keys
+            FileLineData.setSection(name,key,section[key])
+            schema = requiredtypes[key]
+            next if !schema
+            record = pbGetCsvRecord(section[key],0,schema)
+            rsection[schema[0]] = record
+          end
+          trainernames.push(rsection[1])
+          beginspeech.push(rsection[2])
+          endspeechwin.push(rsection[3])
+          endspeechlose.push(rsection[4])
+          sections.push(rsection)
+        }
+      }
+    end
+    MessageTypes.addMessagesAsHash(MessageTypes::TrainerNames,trainernames)
+    MessageTypes.addMessagesAsHash(MessageTypes::BeginSpeech,beginspeech)
+    MessageTypes.addMessagesAsHash(MessageTypes::EndSpeechWin,endspeechwin)
+    MessageTypes.addMessagesAsHash(MessageTypes::EndSpeechLose,endspeechlose)
+    return sections
+  end
+
+  #=============================================================================
+  # Compile metadata
+  #=============================================================================
+  def compile_metadata
+    GameData::Metadata::DATA.clear
+    GameData::MapMetadata::DATA.clear
+    # Read from PBS file
+    File.open("PBS/metadata.txt", "rb") { |f|
+      FileLineData.file = "PBS/metadata.txt"   # For error reporting
+      # Read a whole section's lines at once, then run through this code.
+      # contents is a hash containing all the XXX=YYY lines in that section, where
+      # the keys are the XXX and the values are the YYY (as unprocessed strings).
+      pbEachFileSection(f) { |contents, map_id|
+        schema = (map_id == 0) ? GameData::Metadata::SCHEMA : GameData::MapMetadata::SCHEMA
+        # Go through schema hash of compilable data and compile this section
+        for key in schema.keys
+          FileLineData.setSection(map_id, key, contents[key])   # For error reporting
+          # Skip empty properties, or raise an error if a required property is
+          # empty
+          if contents[key].nil?
+            if map_id == 0 && ["Home", "PlayerA"].include?(key)
+              raise _INTL("The entry {1} is required in PBS/metadata.txt section 0.", key)
+            end
+            next
+          end
+          # Compile value for key
+          value = pbGetCsvRecord(contents[key], key, schema[key])
+          value = nil if value.is_a?(Array) && value.length == 0
+          contents[key] = value
+        end
+        if map_id == 0   # Global metadata
+          # Construct metadata hash
+          metadata_hash = {
+            :id                 => map_id,
+            :home               => contents["Home"],
+            :wild_battle_BGM    => contents["WildBattleBGM"],
+            :trainer_battle_BGM => contents["TrainerBattleBGM"],
+            :wild_victory_ME    => contents["WildVictoryME"],
+            :trainer_victory_ME => contents["TrainerVictoryME"],
+            :wild_capture_ME    => contents["WildCaptureME"],
+            :surf_BGM           => contents["SurfBGM"],
+            :bicycle_BGM        => contents["BicycleBGM"],
+            :player_A           => contents["PlayerA"],
+            :player_B           => contents["PlayerB"],
+            :player_C           => contents["PlayerC"],
+            :player_D           => contents["PlayerD"],
+            :player_E           => contents["PlayerE"],
+            :player_F           => contents["PlayerF"],
+            :player_G           => contents["PlayerG"],
+            :player_H           => contents["PlayerH"]
+          }
+          # Add metadata's data to records
+          GameData::Metadata::DATA[map_id] = GameData::Metadata.new(metadata_hash)
+        else   # Map metadata
+          # Construct metadata hash
+          metadata_hash = {
+            :id                   => map_id,
+            :outdoor_map          => contents["Outdoor"],
+            :announce_location    => contents["ShowArea"],
+            :can_bicycle          => contents["Bicycle"],
+            :always_bicycle       => contents["BicycleAlways"],
+            :teleport_destination => contents["HealingSpot"],
+            :weather              => contents["Weather"],
+            :town_map_position    => contents["MapPosition"],
+            :dive_map_id          => contents["DiveMap"],
+            :dark_map             => contents["DarkMap"],
+            :safari_map           => contents["SafariMap"],
+            :snap_edges           => contents["SnapEdges"],
+            :random_dungeon       => contents["Dungeon"],
+            :battle_background    => contents["BattleBack"],
+            :wild_battle_BGM      => contents["WildBattleBGM"],
+            :trainer_battle_BGM   => contents["TrainerBattleBGM"],
+            :wild_victory_ME      => contents["WildVictoryME"],
+            :trainer_victory_ME   => contents["TrainerVictoryME"],
+            :wild_capture_ME      => contents["WildCaptureME"],
+            :town_map_size        => contents["MapSize"],
+            :battle_environment   => contents["Environment"]
+          }
+          # Add metadata's data to records
+          GameData::MapMetadata::DATA[map_id] = GameData::MapMetadata.new(metadata_hash)
+        end
+      }
+    }
+    # Save all data
+    GameData::Metadata.save
+    GameData::MapMetadata.save
+    Graphics.update
+  end
+
+  #=============================================================================
+  # Compile battle animations
+  #=============================================================================
+  def compile_animations
+    begin
+      pbanims = load_data("Data/PkmnAnimations.rxdata")
+    rescue
+      pbanims = PBAnimations.new
+    end
+    move2anim = [[],[]]
+=begin
+    anims = load_data("Data/Animations.rxdata")
+    for anim in anims
+      next if !anim || anim.frames.length==1
+      found = false
+      for i in 0...pbanims.length
+        if pbanims[i] && pbanims[i].id==anim.id
+          found = true if pbanims[i].array.length>1
+          break
+        end
+      end
+      pbanims[anim.id] = pbConvertRPGAnimation(anim) if !found
+    end
+=end
+    for i in 0...pbanims.length
+      next if !pbanims[i]
+      if pbanims[i].name[/^OppMove\:\s*(.*)$/]
+        if GameData::Move.exists?($~[1])
+          moveid = GameData::Move.get($~[1]).id_number
+          move2anim[1][moveid] = i
+        end
+      elsif pbanims[i].name[/^Move\:\s*(.*)$/]
+        if GameData::Move.exists?($~[1])
+          moveid = GameData::Move.get($~[1]).id_number
+          move2anim[0][moveid] = i
+        end
+      end
+    end
+    save_data(move2anim,"Data/move2anim.dat")
+    save_data(pbanims,"Data/PkmnAnimations.rxdata")
   end
 end
