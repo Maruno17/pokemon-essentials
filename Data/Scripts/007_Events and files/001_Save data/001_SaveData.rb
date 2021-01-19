@@ -44,6 +44,7 @@ module SaveData
   # @param save_data [Hash] save data to validate
   # @return [Boolean] whether the given save data is valid
   def self.valid?(save_data)
+    validate save_data => Hash
     return @values.all? { |id, value| value.valid?(save_data[id]) }
   end
 
