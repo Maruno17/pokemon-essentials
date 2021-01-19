@@ -222,7 +222,6 @@ class PokemonLoadScreen
   # @param file_path [String] file to load save data from
   # @return [Hash] save data
   def load_save_file(file_path)
-    validate file_path => String
     save_data = SaveData.load_from_file(file_path)
 
     unless SaveData.valid?(save_data)
@@ -231,6 +230,7 @@ class PokemonLoadScreen
         save_data = load_save_file(file_path + '.bak')
       else
         self.prompt_save_deletion
+        return {}
       end
     end
 
