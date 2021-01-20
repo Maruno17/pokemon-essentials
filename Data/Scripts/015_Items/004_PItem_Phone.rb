@@ -64,14 +64,16 @@ end
 def pbRandomPhoneTrainer
   $PokemonGlobal.phoneNumbers = [] if !$PokemonGlobal.phoneNumbers
   temparray = []
-  currentRegion = GameData::MapMetadata.get($game_map.map_id).town_map_position
-  return nil if !currentRegion
+  this_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  return nil if !this_map_metadata || !this_map_metadata.town_map_position
+  currentRegion = this_map_metadata.town_map_position[0]
   for num in $PokemonGlobal.phoneNumbers
-    next if !num[0] || num.length!=8   # if not visible or not a trainer
-    next if $game_map.map_id==num[6]   # Can't call if on same map
-    callerRegion  = GameData::MapMetadata.get(num[6]).town_map_position
+    next if !num[0] || num.length != 8   # if not visible or not a trainer
+    next if $game_map.map_id == num[6]   # Can't call if on same map
+    caller_map_metadata = GameData::MapMetadata.try_get(num[6])
+    next if !caller_map_metadata || !caller_map_metadata.town_map_position
     # Can't call if in different region
-    next if !callerRegion || callerRegion[0] != currentRegion[0]
+    next if caller_map_metadata.town_map_position[0] != currentRegion
     temparray.push(num)
   end
   return nil if temparray.length==0
@@ -190,9 +192,11 @@ def pbCallTrainer(trtype,trname)
     pbMessage(_INTL("The Trainer is close by.\nTalk to the Trainer in person!"))
     return
   end
-  callerregion  = GameData::MapMetadata.get(trainer[6]).town_map_position
-  currentregion = GameData::MapMetadata.get($game_map.map_id).town_map_position
-  if !callerregion || !currentregion || callerregion[0] != currentregion[0]
+  caller_map_metadata = GameData::MapMetadata.try_get(trainer[6])
+  this_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  if !caller_map_metadata || !caller_map_metadata.town_map_position ||
+     !this_map_metadata || !this_map_metadata.town_map_position ||
+     caller_map_metadata.town_map_position[0] != this_map_metadata.town_map_position[0]
     pbMessage(_INTL("The Trainer is out of range."))
     return   # Can't call if in different region
   end

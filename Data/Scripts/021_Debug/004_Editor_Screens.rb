@@ -612,7 +612,8 @@ def pbEditMetadata(map_id = 0)
     properties = GameData::Metadata.editor_properties
   else   # Map metadata
     map_name = mapinfos[map_id].name
-    metadata = GameData::MapMetadata.get(map_id)
+    metadata = GameData::MapMetadata.try_get(map_id)
+    metadata = GameData::Metadata.new({}) if !metadata
     properties = GameData::MapMetadata.editor_properties
   end
   properties.each do |property|

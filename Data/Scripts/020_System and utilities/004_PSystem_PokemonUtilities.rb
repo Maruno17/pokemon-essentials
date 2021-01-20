@@ -79,7 +79,7 @@ def pbAddPokemon(pkmn, level = 1, see_form = true)
 end
 
 def pbAddPokemonSilent(pkmn, level = 1, see_form = true)
-  return false if !pokemon || pbBoxesFull?
+  return false if !pkmn || pbBoxesFull?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   $Trainer.seen[pkmn.species]  = true
   $Trainer.owned[pkmn.species] = true

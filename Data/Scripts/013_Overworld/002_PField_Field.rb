@@ -406,94 +406,85 @@ end
 #===============================================================================
 # Checks when moving between maps
 #===============================================================================
-# Clears the weather of the old map, if the old and new maps have different
-# names or defined weather
-Events.onMapChanging += proc { |_sender,e|
-  newMapID = e[0]
-  if newMapID>0
-    mapinfos = load_data("Data/MapInfos.rxdata")
-    oldWeather = GameData::MapMetadata.get($game_map.map_id).weather
-    if $game_map.name!=mapinfos[newMapID].name
-      $game_screen.weather(0,0,0) if oldWeather
-    else
-      newWeather = GameData::MapMetadata.get(newMapID).weather
-      $game_screen.weather(0,0,0) if oldWeather && !newWeather
-    end
+# Clears the weather of the old map, if the old map has defined weather and the
+# new map either has the same name as the old map or doesn't have defined
+# weather.
+Events.onMapChanging += proc { |_sender, e|
+  new_map_ID = e[0]
+  next if new_map_ID == 0
+  old_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  next if !old_map_metadata || !old_map_metadata.weather
+  map_infos = load_data("Data/MapInfos.rxdata")
+  if $game_map.name == map_infos[new_map_ID].name
+    new_map_metadata = GameData::MapMetadata.try_get(new_map_ID)
+    next if new_map_metadata && new_map_metadata.weather
   end
+  $game_screen.weather(0, 0, 0)
 }
 
 # Set up various data related to the new map
-Events.onMapChange += proc { |_sender,e|
-  oldid = e[0]   # previous map ID, is 0 if no map ID
-  healing = GameData::MapMetadata.get($game_map.map_id).teleport_destination
-  $PokemonGlobal.healingSpot = healing if healing
+Events.onMapChange += proc { |_sender, e|
+  old_map_ID = e[0]   # previous map ID, is 0 if no map ID
+  new_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  if new_map_metadata && new_map_metadata.teleport_destination
+    $PokemonGlobal.healingSpot = new_map_metadata.teleport_destination
+  end
   $PokemonMap.clear if $PokemonMap
   $PokemonEncounters.setup($game_map.map_id) if $PokemonEncounters
   $PokemonGlobal.visitedMaps[$game_map.map_id] = true
-  if oldid!=0 && oldid!=$game_map.map_id
-    mapinfos = load_data("Data/MapInfos.rxdata")
-    weather = GameData::MapMetadata.get($game_map.map_id).weather
-    if $game_map.name!=mapinfos[oldid].name
-      $game_screen.weather(weather[0],8,20) if weather && rand(100)<weather[1]
-    else
-      oldweather = GameData::MapMetadata.get(oldid).weather
-      $game_screen.weather(weather[0],8,20) if weather && !oldweather && rand(100)<weather[1]
-    end
+  next if old_map_ID == 0 || old_map_ID == $game_map.map_id
+  next if !new_map_metadata || !new_map_metadata.weather
+  map_infos = load_data("Data/MapInfos.rxdata")
+  if $game_map.name == map_infos[old_map_ID].name
+    old_map_metadata = GameData::MapMetadata.try_get(old_map_ID)
+    next if old_map_metadata && old_map_metadata.weather
   end
+  new_weather = new_map_metadata.weather
+  $game_screen.weather(new_weather[0], 8, 20) if rand(100) < new_weather[1]
 }
 
-Events.onMapSceneChange += proc { |_sender,e|
+Events.onMapSceneChange += proc { |_sender, e|
   scene      = e[0]
   mapChanged = e[1]
   next if !scene || !scene.spriteset
   # Update map trail
   if $game_map
     $PokemonGlobal.mapTrail = [] if !$PokemonGlobal.mapTrail
-    if $PokemonGlobal.mapTrail[0]!=$game_map.map_id
-      $PokemonGlobal.mapTrail[3] = $PokemonGlobal.mapTrail[2] if $PokemonGlobal.mapTrail[2]
-      $PokemonGlobal.mapTrail[2] = $PokemonGlobal.mapTrail[1] if $PokemonGlobal.mapTrail[1]
-      $PokemonGlobal.mapTrail[1] = $PokemonGlobal.mapTrail[0] if $PokemonGlobal.mapTrail[0]
+    if $PokemonGlobal.mapTrail[0] != $game_map.map_id
+      $PokemonGlobal.mapTrail.pop if $PokemonGlobal.mapTrail.length >= 4
     end
-    $PokemonGlobal.mapTrail[0] = $game_map.map_id
+    $PokemonGlobal.mapTrail = [$game_map.map_id] + $PokemonGlobal.mapTrail
   end
   # Display darkness circle on dark maps
-  darkmap = GameData::MapMetadata.get($game_map.map_id).dark_map
-  if darkmap
+  map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  if map_metadata && map_metadata.dark_map
+    $PokemonTemp.darknessSprite = DarknessSprite.new
+    scene.spriteset.addUserSprite($PokemonTemp.darknessSprite)
     if $PokemonGlobal.flashUsed
-      $PokemonTemp.darknessSprite = DarknessSprite.new
-      scene.spriteset.addUserSprite($PokemonTemp.darknessSprite)
-      darkness = $PokemonTemp.darknessSprite
-      darkness.radius = darkness.radiusMax
-    else
-      $PokemonTemp.darknessSprite = DarknessSprite.new
-      scene.spriteset.addUserSprite($PokemonTemp.darknessSprite)
+      $PokemonTemp.darknessSprite.radius = $PokemonTemp.darknessSprite.radiusMax
     end
-  elsif !darkmap
+  else
     $PokemonGlobal.flashUsed = false
-    if $PokemonTemp.darknessSprite
-      $PokemonTemp.darknessSprite.dispose
-      $PokemonTemp.darknessSprite = nil
-    end
+    $PokemonTemp.darknessSprite.dispose if $PokemonTemp.darknessSprite
+    $PokemonTemp.darknessSprite = nil
   end
   # Show location signpost
-  if mapChanged
-    if GameData::MapMetadata.get($game_map.map_id).announce_location
-      nosignpost = false
-      if $PokemonGlobal.mapTrail[1]
-        for i in 0...NO_SIGNPOSTS.length/2
-          nosignpost = true if NO_SIGNPOSTS[2*i]==$PokemonGlobal.mapTrail[1] && NO_SIGNPOSTS[2*i+1]==$game_map.map_id
-          nosignpost = true if NO_SIGNPOSTS[2*i+1]==$PokemonGlobal.mapTrail[1] && NO_SIGNPOSTS[2*i]==$game_map.map_id
-          break if nosignpost
-        end
-        mapinfos = load_data("Data/MapInfos.rxdata")
-        oldmapname = mapinfos[$PokemonGlobal.mapTrail[1]].name
-        nosignpost = true if $game_map.name==oldmapname
+  if mapChanged && map_metadata && map_metadata.announce_location
+    nosignpost = false
+    if $PokemonGlobal.mapTrail[1]
+      for i in 0...NO_SIGNPOSTS.length / 2
+        nosignpost = true if NO_SIGNPOSTS[2 * i] == $PokemonGlobal.mapTrail[1] && NO_SIGNPOSTS[2 * i + 1] == $game_map.map_id
+        nosignpost = true if NO_SIGNPOSTS[2 * i + 1] == $PokemonGlobal.mapTrail[1] && NO_SIGNPOSTS[2 * i] == $game_map.map_id
+        break if nosignpost
       end
-      scene.spriteset.addUserSprite(LocationWindow.new($game_map.name)) if !nosignpost
+      mapinfos = load_data("Data/MapInfos.rxdata")
+      oldmapname = mapinfos[$PokemonGlobal.mapTrail[1]].name
+      nosignpost = true if $game_map.name == oldmapname
     end
+    scene.spriteset.addUserSprite(LocationWindow.new($game_map.name)) if !nosignpost
   end
   # Force cycling/walking
-  if GameData::MapMetadata.get($game_map.map_id).always_bicycle
+  if map_metadata && map_metadata.always_bicycle
     pbMountBike
   elsif !pbCanUseBike?($game_map.map_id)
     pbDismountBike

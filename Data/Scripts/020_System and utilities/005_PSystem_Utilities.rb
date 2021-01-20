@@ -392,7 +392,9 @@ end
 # Returns the ID number of the region containing the player's current location,
 # as determined by the current map's metadata.
 def pbGetCurrentRegion(default = -1)
-  map_pos = ($game_map) ? GameData::MapMetadata.get($game_map.map_id).town_map_position : nil
+  return default if !$game_map
+  map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  map_pos = (map_metadata) ? map_metadata.town_map_position : nil
   return (map_pos) ? map_pos[0] : default
 end
 

@@ -582,8 +582,9 @@ MultipleForms.register(:NECROZMA,{
 MultipleForms.register(:PIKACHU, {
   "getForm" => proc { |pkmn|
     next if pkmn.formSimple >= 2
-    mapPos = GameData::MapMetadata.get($game_map.map_id).town_map_position
-    next 1 if mapPos && mapPos[0] == 1   # Tiall region
+    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+    next 1 if map_metadata && map_metadata.town_map_position &&
+              map_metadata.town_map_position[0] == 1   # Tiall region
     next 0
   }
 })

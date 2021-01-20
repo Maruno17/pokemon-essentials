@@ -81,7 +81,8 @@ class PokemonRegionMap_Scene
     @viewport.z = 99999
     @sprites = {}
     @mapdata = pbLoadTownMapData
-    playerpos = (!$game_map) ? nil : GameData::MapMetadata.get($game_map.map_id).town_map_position
+    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+    playerpos = (map_metadata) ? map_metadata.town_map_position : nil
     if !playerpos
       mapindex = 0
       @map     = @mapdata[0]
@@ -97,7 +98,7 @@ class PokemonRegionMap_Scene
       @map     = @mapdata[playerpos[0]]
       @mapX    = playerpos[1]
       @mapY    = playerpos[2]
-      mapsize = (!$game_map) ? nil : GameData::MapMetadata.get($game_map.map_id).town_map_size
+      mapsize = map_metadata.town_map_size
       if mapsize && mapsize[0] && mapsize[0]>0
         sqwidth  = mapsize[0]
         sqheight = (mapsize[1].length*1.0/mapsize[0]).ceil

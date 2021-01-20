@@ -61,8 +61,9 @@ def pbInSafari?
     # Reception map is handled separately from safari map since the reception
     # map can be outdoors, with its own grassy patches.
     reception = pbSafariState.pbReceptionMap
-    return true if $game_map.map_id==reception
-    return true if GameData::MapMetadata.get($game_map.map_id).safari_map
+    return true if $game_map.map_id == reception
+    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+    return true if map_metadata && map_metadata.safari_map
   end
   return false
 end

@@ -195,28 +195,28 @@ module GameData
     def pokedex_entry
       return pbGetMessage(MessageTypes::Entries, @id_number)
     end
-  end
 
-  def apply_metrics_to_sprite(sprite, index, shadow = false)
-    if shadow
-      if (index & 1) == 1   # Foe Pokémon
-        sprite.x += @shadow_x * 2
-      end
-    else
-      if (index & 1) == 0   # Player's Pokémon
-        sprite.x += @back_sprite_x * 2
-        sprite.y += @back_sprite_y * 2
-      else                  # Foe Pokémon
-        sprite.x += @front_sprite_x * 2
-        sprite.y += @front_sprite_y * 2
-        sprite.y -= @front_sprite_altitude * 2
+    def apply_metrics_to_sprite(sprite, index, shadow = false)
+      if shadow
+        if (index & 1) == 1   # Foe Pokémon
+          sprite.x += @shadow_x * 2
+        end
+      else
+        if (index & 1) == 0   # Player's Pokémon
+          sprite.x += @back_sprite_x * 2
+          sprite.y += @back_sprite_y * 2
+        else                  # Foe Pokémon
+          sprite.x += @front_sprite_x * 2
+          sprite.y += @front_sprite_y * 2
+          sprite.y -= @front_sprite_altitude * 2
+        end
       end
     end
-  end
 
-  def shows_shadow?
-    return true
-#    return @front_sprite_altitude > 0
+    def shows_shadow?
+      return true
+#      return @front_sprite_altitude > 0
+    end
   end
 end
 

@@ -17,8 +17,9 @@ class PokemonPokedexInfo_Scene
     @sprites["infosprite"].x = 104
     @sprites["infosprite"].y = 136
     @mapdata = pbLoadTownMapData
-    mappos = ($game_map) ? GameData::MapMetadata.get($game_map.map_id).town_map_position : nil
-    if @region<0                                   # Use player's current region
+    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+    mappos = (map_metadata) ? map_metadata.town_map_position : nil
+    if @region < 0                                 # Use player's current region
       @region = (mappos) ? mappos[0] : 0                      # Region 0 default
     end
     @sprites["areamap"] = IconSprite.new(0,0,@viewport)
@@ -300,31 +301,29 @@ class PokemonPokedexInfo_Scene
     encdata = pbLoadEncountersData
     for enc in encdata.keys
       enctypes = encdata[enc][1]
-      if pbFindEncounter(enctypes,@species)
-        mappos = GameData::MapMetadata.get(enc).town_map_position
-        if mappos && mappos[0]==@region
-          showpoint = true
-          for loc in @mapdata[@region][2]
-            showpoint = false if loc[0]==mappos[1] && loc[1]==mappos[2] &&
-                                 loc[7] && !$game_switches[loc[7]]
-          end
-          if showpoint
-            mapsize = GameData::MapMetadata.get(enc).town_map_size
-            if mapsize && mapsize[0] && mapsize[0]>0
-              sqwidth  = mapsize[0]
-              sqheight = (mapsize[1].length*1.0/mapsize[0]).ceil
-              for i in 0...sqwidth
-                for j in 0...sqheight
-                  if mapsize[1][i+j*sqwidth,1].to_i>0
-                    points[mappos[1]+i+(mappos[2]+j)*mapwidth] = true
-                  end
-                end
-              end
-            else
-              points[mappos[1]+mappos[2]*mapwidth] = true
+      next if !pbFindEncounter(enctypes, @species)
+      map_metadata = GameData::MapMetadata.try_get(enc)
+      mappos = (map_metadata) ? map_metadata.town_map_position : nil
+      next if !mappos || mappos[0] != @region
+      showpoint = true
+      for loc in @mapdata[@region][2]
+        showpoint = false if loc[0]==mappos[1] && loc[1]==mappos[2] &&
+                             loc[7] && !$game_switches[loc[7]]
+      end
+      next if !showpoint
+      mapsize = map_metadata.town_map_size
+      if mapsize && mapsize[0] && mapsize[0]>0
+        sqwidth  = mapsize[0]
+        sqheight = (mapsize[1].length*1.0/mapsize[0]).ceil
+        for i in 0...sqwidth
+          for j in 0...sqheight
+            if mapsize[1][i+j*sqwidth,1].to_i>0
+              points[mappos[1]+i+(mappos[2]+j)*mapwidth] = true
             end
           end
         end
+      else
+        points[mappos[1]+mappos[2]*mapwidth] = true
       end
     end
     # Draw coloured squares on each square of the region map with a nest

@@ -130,9 +130,9 @@ def pbPrepareBattle(battle)
     backdrop = $PokemonGlobal.nextBattleBack
   elsif $PokemonGlobal.surfing
     backdrop = "water"   # This applies wherever you are, including in caves
-  else
+  elsif GameData::MapMetadata.exists?($game_map.map_id)
     back = GameData::MapMetadata.get($game_map.map_id).battle_background
-    backdrop = back if back && back!=""
+    backdrop = back if back && back != ""
   end
   backdrop = "indoor1" if !backdrop
   battle.backdrop = backdrop
@@ -158,7 +158,8 @@ def pbPrepareBattle(battle)
   end
   battle.backdropBase = base if base
   # Time of day
-  if GameData::MapMetadata.get($game_map.map_id).battle_environment == PBEnvironment::Cave
+  if GameData::MapMetadata.exists?($game_map.map_id) &&
+     GameData::MapMetadata.get($game_map.map_id).battle_environment == PBEnvironment::Cave
     battle.time = 2   # This makes Dusk Balls work properly in caves
   elsif TIME_SHADING
     timeNow = pbGetTimeNow
@@ -172,8 +173,9 @@ end
 # Used to determine the environment in battle, and also the form of Burmy/
 # Wormadam.
 def pbGetEnvironment
-  ret = GameData::MapMetadata.get($game_map.map_id).battle_environment
-  ret = PBEnvironment::None if !ret
+  ret = PBEnvironment::None
+  map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  ret = map_metadata.battle_environment if map_metadata && map_metadata.battle_environment
   if $PokemonTemp.encounterType == EncounterTypes::OldRod ||
      $PokemonTemp.encounterType == EncounterTypes::GoodRod ||
      $PokemonTemp.encounterType == EncounterTypes::SuperRod

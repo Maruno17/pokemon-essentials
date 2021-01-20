@@ -562,27 +562,27 @@ def pbRandomRoomTile(dungeon,tiles)
 end
 
 Events.onMapCreate += proc { |_sender, e|
-  mapID=e[0]
-  map=e[1]
-  if GameData::MapMetadata.get(mapID).random_dungeon
-    # this map is a randomly generated dungeon
-    dungeon=Dungeon.new(map.width,map.height)
-    dungeon.generate
-    dungeon.generateMapInPlace(map)
-    roomtiles=[]
-    # Reposition events
-    for event in map.events.values
-      tile=pbRandomRoomTile(dungeon,roomtiles)
-      if tile
-        event.x=tile[0]
-        event.y=tile[1]
-      end
-    end
-    # Override transfer X and Y
+  mapID = e[0]
+  map = e[1]
+  next if !GameData::MapMetadata.exists?(mapID) ||
+          !GameData::MapMetadata.get(mapID).random_dungeon
+  # this map is a randomly generated dungeon
+  dungeon=Dungeon.new(map.width,map.height)
+  dungeon.generate
+  dungeon.generateMapInPlace(map)
+  roomtiles=[]
+  # Reposition events
+  for event in map.events.values
     tile=pbRandomRoomTile(dungeon,roomtiles)
     if tile
-      $game_temp.player_new_x=tile[0]
-      $game_temp.player_new_y=tile[1]
+      event.x=tile[0]
+      event.y=tile[1]
     end
+  end
+  # Override transfer X and Y
+  tile=pbRandomRoomTile(dungeon,roomtiles)
+  if tile
+    $game_temp.player_new_x=tile[0]
+    $game_temp.player_new_y=tile[1]
   end
 }

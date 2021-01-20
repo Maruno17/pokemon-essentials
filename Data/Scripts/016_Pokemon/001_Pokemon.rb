@@ -59,7 +59,7 @@ class Pokemon
   attr_reader   :status
   # @return [Integer] sleep count / toxic flag / 0:
   #   sleep (number of rounds before waking up), toxic (0 = regular poison, 1 = toxic)
-  attr_reader   :statusCount
+  attr_accessor :statusCount
   # Another Pokémon which has been fused with this Pokémon (or nil if there is none).
   # Currently only used by Kyurem, to record a fused Reshiram or Zekrom.
   # @return [Pokemon, nil] the Pokémon fused into this one (nil if there is none)
@@ -751,12 +751,6 @@ class Pokemon
     @status = new_status
   end
 
-  # Sets a new status count. See {#statusCount} for more information.
-  # @param new_status_count [Integer] new sleep count / toxic flag
-  def statusCount=(new_status_count)
-    @statusCount = new_status_count
-  end
-
   # @return [Boolean] whether the Pokémon is not fainted and not an egg
   def able?
     return !egg? && @hp > 0
@@ -824,7 +818,8 @@ class Pokemon
   # @param check_species [Integer, Symbol, String] id of the species to check for
   # @return [Boolean] whether this Pokémon is of the specified species
   def isSpecies?(check_species)
-    return @species == check_species || @species == GameData::Species.get(check_species).species
+    return @species == check_species || (GameData::Species.exists?(check_species) &&
+                                        @species == GameData::Species.get(check_species).species)
   end
 
   def form

@@ -330,7 +330,7 @@ class Game_Map
 
   def display_x=(value)
     @display_x = value
-    if GameData::MapMetadata.get(self.map_id).snap_edges
+    if GameData::MapMetadata.exists?(self.map_id) && GameData::MapMetadata.get(self.map_id).snap_edges
       max_x = (self.width - Graphics.width*1.0/TILE_WIDTH) * REAL_RES_X
       @display_x = [0, [@display_x, max_x].min].max
     end
@@ -339,7 +339,7 @@ class Game_Map
 
   def display_y=(value)
     @display_y = value
-    if GameData::MapMetadata.get(self.map_id).snap_edges
+    if GameData::MapMetadata.exists?(self.map_id) && GameData::MapMetadata.get(self.map_id).snap_edges
       max_y = (self.height - Graphics.height*1.0/TILE_HEIGHT) * REAL_RES_Y
       @display_y = [0, [@display_y, max_y].min].max
     end

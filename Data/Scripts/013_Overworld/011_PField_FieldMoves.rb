@@ -294,8 +294,8 @@ HiddenMoveHandlers::UseMove.add(:DIG,proc { |move,pokemon|
 # Dive
 #===============================================================================
 def pbDive
-  divemap = GameData::MapMetadata.get($game_map.map_id).dive_map_id
-  return false if !divemap
+  map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  return false if !map_metadata || !map_metadata.dive_map_id
   move = :DIVE
   movefinder = pbCheckMove(move)
   if !pbCheckHiddenMoveBadge(BADGE_FOR_DIVE,false) || (!$DEBUG && !movefinder)
@@ -307,7 +307,7 @@ def pbDive
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
     pbFadeOutIn {
-       $game_temp.player_new_map_id    = divemap
+       $game_temp.player_new_map_id    = map_metadata.dive_map_id
        $game_temp.player_new_x         = $game_player.x
        $game_temp.player_new_y         = $game_player.y
        $game_temp.player_new_direction = $game_player.direction
@@ -404,7 +404,8 @@ HiddenMoveHandlers::CanUseMove.add(:DIVE,proc { |move,pkmn,showmsg|
       next false
     end
   else
-    if !GameData::MapMetadata.get($game_map.map_id).dive_map_id
+    if !GameData::MapMetadata.exists?($game_map.map_id) ||
+       !GameData::MapMetadata.get($game_map.map_id).dive_map_id
       pbMessage(_INTL("Can't use that here.")) if showmsg
       next false
     end
@@ -426,7 +427,8 @@ HiddenMoveHandlers::UseMove.add(:DIVE,proc { |move,pokemon|
       break
     end
   else
-    dive_map_id = GameData::MapMetadata.get($game_map.map_id).dive_map_id
+    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+    dive_map_id = map_metadata.dive_map_id if map_metadata
   end
   next false if !dive_map_id
   if !pbHiddenMoveAnimation(pokemon)
@@ -454,7 +456,8 @@ HiddenMoveHandlers::UseMove.add(:DIVE,proc { |move,pokemon|
 #===============================================================================
 HiddenMoveHandlers::CanUseMove.add(:FLASH,proc { |move,pkmn,showmsg|
   next false if !pbCheckHiddenMoveBadge(BADGE_FOR_FLASH,showmsg)
-  if !GameData::MapMetadata.get($game_map.map_id).dark_map
+  if !GameData::MapMetadata.exists?($game_map.map_id) ||
+     !GameData::MapMetadata.get($game_map.map_id).dark_map
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
@@ -494,7 +497,8 @@ HiddenMoveHandlers::CanUseMove.add(:FLY,proc { |move,pkmn,showmsg|
     pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
     next false
   end
-  if !GameData::MapMetadata.get($game_map.map_id).outdoor_map
+  if !GameData::MapMetadata.exists?($game_map.map_id) ||
+     !GameData::MapMetadata.get($game_map.map_id).outdoor_map
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
@@ -753,7 +757,8 @@ end
 
 Events.onAction += proc { |_sender,_e|
   next if $PokemonGlobal.surfing
-  next if GameData::MapMetadata.get($game_map.map_id).always_bicycle
+  next if GameData::MapMetadata.exists?($game_map.map_id) &&
+          GameData::MapMetadata.get($game_map.map_id).always_bicycle
   next if !PBTerrain.isSurfable?(pbFacingTerrainTag)
   next if !$game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
   pbSurf
@@ -769,7 +774,8 @@ HiddenMoveHandlers::CanUseMove.add(:SURF,proc { |move,pkmn,showmsg|
     pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
     next false
   end
-  if GameData::MapMetadata.get($game_map.map_id).always_bicycle
+  if GameData::MapMetadata.exists?($game_map.map_id) &&
+     GameData::MapMetadata.get($game_map.map_id).always_bicycle
     pbMessage(_INTL("Let's enjoy cycling!")) if showmsg
     next false
   end
@@ -850,7 +856,8 @@ HiddenMoveHandlers::UseMove.add(:SWEETSCENT,proc { |move,pokemon|
 # Teleport
 #===============================================================================
 HiddenMoveHandlers::CanUseMove.add(:TELEPORT,proc { |move,pkmn,showmsg|
-  if !GameData::MapMetadata.get($game_map.map_id).outdoor_map
+  if !GameData::MapMetadata.exists?($game_map.map_id) ||
+     !GameData::MapMetadata.get($game_map.map_id).outdoor_map
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
