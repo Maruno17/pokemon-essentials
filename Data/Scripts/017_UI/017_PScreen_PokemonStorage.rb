@@ -1880,7 +1880,7 @@ class PokemonStorageScreen
           pbDisplay(_INTL("Can't store the {1}.",itemname))
         else
           pbDisplay(_INTL("Took the {1}.",itemname))
-          pokemon.setItem(nil)
+          pokemon.item = nil
           @scene.pbHardRefresh
         end
       end
@@ -1888,7 +1888,7 @@ class PokemonStorageScreen
       item = scene.pbChooseItem($PokemonBag)
       if item
         itemname = GameData::Item.get(item).name
-        pokemon.setItem(item)
+        pokemon.item = item
         $PokemonBag.pbDeleteItem(item)
         pbDisplay(_INTL("{1} is now being held.",itemname))
         @scene.pbHardRefresh

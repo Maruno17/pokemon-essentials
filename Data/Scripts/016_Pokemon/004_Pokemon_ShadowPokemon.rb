@@ -36,9 +36,9 @@ def pbPurify(pokemon,scene)
     end
     pokemon.savedev = nil
   end
-  newexp = PBExperience.pbAddExperience(pokemon.exp,pokemon.savedexp||0,pokemon.growthrate)
+  newexp = PBExperience.pbAddExperience(pokemon.exp,pokemon.savedexp||0,pokemon.growth_rate)
   pokemon.savedexp = nil
-  newlevel = PBExperience.pbGetLevelFromExperience(newexp,pokemon.growthrate)
+  newlevel = PBExperience.pbGetLevelFromExperience(newexp,pokemon.growth_rate)
   curlevel = pokemon.level
   if newexp!=pokemon.exp
     scene.pbDisplay(_INTL("{1} regained {2} Exp. Points!",pokemon.name,newexp-pokemon.exp))
@@ -53,7 +53,7 @@ def pbPurify(pokemon,scene)
   if scene.pbConfirm(_INTL("Would you like to give a nickname to {1}?", pokemon.speciesName))
     newname = pbEnterPokemonName(_INTL("{1}'s nickname?", pokemon.speciesName),
                                  0, Pokemon::MAX_NAME_SIZE, "", pokemon)
-    pokemon.name = newname if newname!=""
+    pokemon.name = newname
   end
 end
 

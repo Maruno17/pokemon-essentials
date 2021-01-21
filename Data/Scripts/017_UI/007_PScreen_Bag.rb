@@ -489,7 +489,7 @@ class PokemonBagScreen
       command = @scene.pbShowCommands(_INTL("{1} is selected.",itemname),commands)
       if cmdRead>=0 && command==cmdRead   # Read mail
         pbFadeOutIn {
-          pbDisplayMail(PokemonMail.new(item,"",""))
+          pbDisplayMail(Mail.new(item, "", ""))
         }
       elsif cmdUse>=0 && command==cmdUse   # Use item
         ret = pbUseItem(@bag,item,@scene)

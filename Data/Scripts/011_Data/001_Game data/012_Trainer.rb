@@ -118,21 +118,20 @@ module GameData
           pkmn.forcedForm = pkmn_data[:form] if MultipleForms.hasFunction?(species, "getForm")
           pkmn.formSimple = pkmn_data[:form]
         end
-        pkmn.setItem(pkmn_data[:item])
+        pkmn.item = pkmn_data[:item]
         if pkmn_data[:moves] && pkmn_data[:moves].length > 0
           pkmn_data[:moves].each { |move| pkmn.pbLearnMove(move) }
         else
           pkmn.resetMoves
         end
-        pkmn.setAbility(pkmn_data[:ability_flag])
-        gender = pkmn_data[:gender] || ((trainer.female?) ? 1 : 0)
-        pkmn.setGender(gender)
-        (pkmn_data[:shininess]) ? pkmn.makeShiny : pkmn.makeNotShiny
+        pkmn.ability_index = pkmn_data[:ability_flag]
+        pkmn.gender = pkmn_data[:gender] || ((trainer.male?) ? 0 : 1)
+        pkmn.shiny = (pkmn_data[:shininess]) ? true : false
         if pkmn_data[:nature]
-          pkmn.setNature(pkmn_data[:nature])
+          pkmn.nature = pkmn_data[:nature]
         else
           nature = pkmn.species_data.id_number + GameData::TrainerType.get(trainer.trainertype).id_number
-          pkmn.setNature(nature % (PBNatures.maxValue + 1))
+          pkmn.nature = nature % (PBNatures.maxValue + 1)
         end
         PBStats.eachStat do |s|
           if pkmn_data[:iv] && pkmn_data[:iv].length > 0
@@ -151,7 +150,7 @@ module GameData
         if pkmn_data[:shadowness]
           pkmn.makeShadow
           pkmn.pbUpdateShadowMoves(true)
-          pkmn.makeNotShiny
+          pkmn.shiny = false
         end
         pkmn.ballused = pkmn_data[:poke_ball] if pkmn_data[:poke_ball]
         pkmn.calcStats

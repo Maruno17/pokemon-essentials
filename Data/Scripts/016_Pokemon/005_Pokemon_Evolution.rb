@@ -529,7 +529,7 @@ PBEvolution.register(:HappinessHoldItem, {
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(nil)   # Item is now consumed
+    pkmn.item = nil   # Item is now consumed
     next true
   }
 })
@@ -557,7 +557,7 @@ PBEvolution.register(:HoldItem, {
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(nil)   # Item is now consumed
+    pkmn.item = nil   # Item is now consumed
     next true
   }
 })
@@ -570,7 +570,7 @@ PBEvolution.register(:HoldItemMale, {
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(nil)   # Item is now consumed
+    pkmn.item = nil   # Item is now consumed
     next true
   }
 })
@@ -583,7 +583,7 @@ PBEvolution.register(:HoldItemFemale, {
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(nil)   # Item is now consumed
+    pkmn.item = nil   # Item is now consumed
     next true
   }
 })
@@ -596,7 +596,7 @@ PBEvolution.register(:DayHoldItem, {
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(nil)   # Item is now consumed
+    pkmn.item = nil   # Item is now consumed
     next true
   }
 })
@@ -609,7 +609,7 @@ PBEvolution.register(:NightHoldItem, {
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(nil)   # Item is now consumed
+    pkmn.item = nil   # Item is now consumed
     next true
   }
 })
@@ -622,7 +622,7 @@ PBEvolution.register(:HoldItemHappiness, {
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(nil)   # Item is now consumed
+    pkmn.item = nil   # Item is now consumed
     next true
   }
 })
@@ -757,7 +757,7 @@ PBEvolution.register(:TradeItem, {
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.setItem(nil)   # Item is now consumed
+    pkmn.item = nil   # Item is now consumed
     next true
   }
 })

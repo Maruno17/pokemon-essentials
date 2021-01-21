@@ -47,8 +47,8 @@ class PokeBattle_Move
   # This is the code actually used to generate a PokeBattle_Move object. The
   # object generated is a subclass of this one which depends on the move's
   # function code (found in the script section PokeBattle_MoveEffect).
-  def PokeBattle_Move.pbFromPBMove(battle, move)
-    validate move => PBMove
+  def PokeBattle_Move.from_pokemon_move(battle, move)
+    validate move => Pokemon::Move
     moveFunction = move.function_code || "000"
     className = sprintf("PokeBattle_Move_%s", moveFunction)
     if Object.const_defined?(className)

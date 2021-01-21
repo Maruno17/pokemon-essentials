@@ -104,13 +104,14 @@ class PokemonEggHatch_Scene
     updateScene(frames)
     pbBGMStop()
     pbMEPlay("Evolution success")
-    pbMessage(_INTL("\\se[]{1} hatched from the Egg!\\wt[80]",@pokemon.name)) { update }
+    @pokemon.name = nil
+    pbMessage(_INTL("\\se[]{1} hatched from the Egg!\\wt[80]", @pokemon.name)) { update }
     if pbConfirmMessage(
-        _INTL("Would you like to nickname the newly hatched {1}?",@pokemon.name)) { update }
-      nickname=pbEnterPokemonName(_INTL("{1}'s nickname?",@pokemon.name),
+        _INTL("Would you like to nickname the newly hatched {1}?", @pokemon.name)) { update }
+      nickname = pbEnterPokemonName(_INTL("{1}'s nickname?", @pokemon.name),
                                   0, Pokemon::MAX_NAME_SIZE, "", @pokemon, true)
-      @pokemon.name=nickname if nickname!=""
-      @nicknamed=true
+      @pokemon.name = nickname
+      @nicknamed = true
     end
   end
 
@@ -192,11 +193,11 @@ end
 
 def pbHatch(pokemon)
   speciesname = pokemon.speciesName
-  pokemon.name           = speciesname
+  pokemon.name           = nil
   pokemon.owner          = Pokemon::Owner.new_from_trainer($Trainer)
   pokemon.happiness      = 120
   pokemon.timeEggHatched = pbGetTimeNow
-  pokemon.obtainMode     = 1   # hatched from egg
+  pokemon.obtain_method  = 1   # hatched from egg
   pokemon.hatchedMap     = $game_map.map_id
   $Trainer.seen[pokemon.species]  = true
   $Trainer.owned[pokemon.species] = true
@@ -206,11 +207,11 @@ def pbHatch(pokemon)
     pbMessage(_INTL("Huh?\1"))
     pbMessage(_INTL("...\1"))
     pbMessage(_INTL("... .... .....\1"))
-    pbMessage(_INTL("{1} hatched from the Egg!",speciesname))
-    if pbConfirmMessage(_INTL("Would you like to nickname the newly hatched {1}?",speciesname))
-      nickname = pbEnterPokemonName(_INTL("{1}'s nickname?",speciesname),
+    pbMessage(_INTL("{1} hatched from the Egg!", speciesname))
+    if pbConfirmMessage(_INTL("Would you like to nickname the newly hatched {1}?", speciesname))
+      nickname = pbEnterPokemonName(_INTL("{1}'s nickname?", speciesname),
                                     0, Pokemon::MAX_NAME_SIZE, "", pokemon)
-      pokemon.name = nickname if nickname!=""
+      pokemon.name = nickname
     end
   end
 end

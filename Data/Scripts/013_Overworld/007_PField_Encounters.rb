@@ -405,11 +405,11 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   chances = [60,20,5] if firstPkmn && firstPkmn.hasAbility?(:COMPOUNDEYES)
   itemrnd = rand(100)
   if (items[0]==items[1] && items[1]==items[2]) || itemrnd<chances[0]
-    genwildpoke.setItem(items[0])
+    genwildpoke.item = items[0]
   elsif itemrnd<(chances[0]+chances[1])
-    genwildpoke.setItem(items[1])
+    genwildpoke.item = items[1]
   elsif itemrnd<(chances[0]+chances[1]+chances[2])
-    genwildpoke.setItem(items[2])
+    genwildpoke.item = items[2]
   end
   # Shiny Charm makes shiny Pokémon more likely to generate
   if GameData::Item.exists?(:SHINYCHARM) && $PokemonBag.pbHasItem?(:SHINYCHARM)
@@ -432,7 +432,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
         (rand(3)<2) ? genwildpoke.makeMale : genwildpoke.makeFemale
       end
     elsif firstPkmn.hasAbility?(:SYNCHRONIZE)
-      genwildpoke.setNature(firstPkmn.nature) if !isRoamer && rand(100)<50
+      genwildpoke.nature = firstPkmn.nature if !isRoamer && rand(100)<50
     end
   end
   # Trigger events that may alter the generated Pokémon further

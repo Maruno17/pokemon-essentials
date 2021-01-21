@@ -150,7 +150,7 @@ class PokeBattle_Battler
     if idxMove>=0
       choice[2] = @moves[idxMove]
     else
-      choice[2] = PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(moveID))   # PokeBattle_Move object
+      choice[2] = PokeBattle_Move.from_pokemon_move(@battle, Pokemon::Move.new(moveID))
       choice[2].pp = -1
     end
     choice[3] = target     # Target (-1 means no target yet)
@@ -169,7 +169,7 @@ class PokeBattle_Battler
     pbBeginTurn(choice)
     # Force the use of certain moves if they're already being used
     if usingMultiTurnAttack?
-      choice[2] = PokeBattle_Move.pbFromPBMove(@battle,PBMove.new(@currentMove))
+      choice[2] = PokeBattle_Move.from_pokemon_move(@battle, Pokemon::Move.new(@currentMove))
       specialUsage = true
     elsif @effects[PBEffects::Encore]>0 && choice[1]>=0 &&
        @battle.pbCanShowCommands?(@index)

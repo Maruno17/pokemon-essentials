@@ -262,7 +262,7 @@ def pbDebugDayCare
         end
         y += 32
         if pkmn.level<PBExperience.maxLevel
-          endexp   = PBExperience.pbGetStartExperience(pkmn.level+1,pkmn.growthrate)
+          endexp   = PBExperience.pbGetStartExperience(pkmn.level+1,pkmn.growth_rate)
           textpos.push(["To next Lv.: #{endexp-pkmn.exp}",8+i*Graphics.width/2,y,0,base,shadow])
           y += 32
         end

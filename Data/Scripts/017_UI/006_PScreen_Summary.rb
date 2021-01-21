@@ -191,7 +191,7 @@ class PokemonSummary_Scene
     @sprites["movesel"].visible = false
     @sprites["movesel"].visible = true
     @sprites["movesel"].index   = 0
-    new_move = (move_to_learn) ? PBMove.new(move_to_learn) : nil
+    new_move = (move_to_learn) ? Pokemon::Move.new(move_to_learn) : nil
     drawSelectedMove(new_move,@pokemon.moves[0])
     pbFadeInAndShow(@sprites)
   end
@@ -436,7 +436,7 @@ class PokemonSummary_Scene
       memo = sprintf("<c3=404040,B0B0B0>%s\n",heartmessage)
       drawFormattedTextEx(overlay,234,304,264,memo)
     else
-      endexp = PBExperience.pbGetStartExperience(@pokemon.level+1,@pokemon.growthrate)
+      endexp = PBExperience.pbGetStartExperience(@pokemon.level+1,@pokemon.growth_rate)
       textpos.push([_INTL("Exp. Points"),238,240,0,base,shadow])
       textpos.push([@pokemon.exp.to_s_formatted,488,272,1,Color.new(64,64,64),Color.new(176,176,176)])
       textpos.push([_INTL("To Next Lv."),238,304,0,base,shadow])
@@ -554,10 +554,10 @@ class PokemonSummary_Scene
                _INTL("Traded at Lv. {1}.",@pokemon.obtainLevel),
                "",
                _INTL("Had a fateful encounter at Lv. {1}.",@pokemon.obtainLevel)
-              ][@pokemon.obtainMode]
+              ][@pokemon.obtain_method]
     memo += sprintf("<c3=404040,B0B0B0>%s\n",mettext) if mettext && mettext!=""
     # If Pokémon was hatched, write when and where it hatched
-    if @pokemon.obtainMode==1
+    if @pokemon.obtain_method == 1
       if @pokemon.timeEggHatched
         date  = @pokemon.timeEggHatched.day
         month = pbGetMonthName(@pokemon.timeEggHatched.mon)
@@ -627,8 +627,8 @@ class PokemonSummary_Scene
     statshadows = []
     PBStats.eachStat { |s| statshadows[s] = shadow }
     if !@pokemon.shadowPokemon? || @pokemon.heartStage>3
-      natup = PBNatures.getStatRaised(@pokemon.calcNature)
-      natdn = PBNatures.getStatLowered(@pokemon.calcNature)
+      natup = PBNatures.getStatRaised(@pokemon.nature_for_stats)
+      natdn = PBNatures.getStatLowered(@pokemon.nature_for_stats)
       statshadows[natup] = Color.new(136,96,72) if natup!=natdn
       statshadows[natdn] = Color.new(64,120,152) if natup!=natdn
     end
@@ -1202,7 +1202,7 @@ class PokemonSummary_Scene
   end
 
   def pbChooseMoveToForget(move_to_learn)
-    new_move = (move_to_learn) ? PBMove.new(move_to_learn) : nil
+    new_move = (move_to_learn) ? Pokemon::Move.new(move_to_learn) : nil
     selmove = 0
     maxmove = (new_move) ? Pokemon::MAX_MOVES : Pokemon::MAX_MOVES - 1
     loop do

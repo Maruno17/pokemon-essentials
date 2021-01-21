@@ -93,7 +93,7 @@ class PokeBattle_Battler
     @participants = []   # Participants earn Exp. if this battler is defeated
     @moves        = []
     pkmn.moves.each_with_index do |m,i|
-      @moves[i] = PokeBattle_Move.pbFromPBMove(@battle,m)
+      @moves[i] = PokeBattle_Move.from_pokemon_move(@battle,m)
     end
     @iv           = pkmn.iv.clone
   end

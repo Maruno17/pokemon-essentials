@@ -872,12 +872,12 @@ def pbRuledBattle(team1,team2,rule)
     team1.each_with_index do |p,i|
       next if !p
       p.heal
-      p.setItem(items1[i])
+      p.item = items1[i]
     end
     team2.each_with_index do |p,i|
       next if !p
       p.heal
-      p.setItem(items2[i])
+      p.item = items2[i]
     end
   end
   if decision==1 # Team 1 wins

@@ -383,7 +383,7 @@ def pbReceiveMysteryGift(id)
     gift[2].calcStats
     time=pbGetTimeNow
     gift[2].timeReceived=time.getgm.to_i
-    gift[2].obtainMode=4   # Fateful encounter
+    gift[2].obtain_method = 4   # Fateful encounter
     gift[2].pbRecordFirstMoves
     if $game_map
       gift[2].obtainMap=$game_map.map_id

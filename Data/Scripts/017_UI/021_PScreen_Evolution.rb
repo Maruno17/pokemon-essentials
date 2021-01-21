@@ -577,7 +577,6 @@ class PokemonEvolutionScene
     # Success jingle/message
     pbMEPlay("Evolution success")
     newspeciesname = GameData::Species.get(@newspecies).name
-    is_nicknamed = @pokemon.nicknamed?
     pbMessageDisplay(@sprites["msgwindow"],
        _INTL("\\se[]Congratulations! Your {1} evolved into {2}!\\wt[80]",
        @pokemon.name,newspeciesname)) { pbUpdate }
@@ -586,7 +585,6 @@ class PokemonEvolutionScene
     pbEvolutionMethodAfterEvolution
     # Modify Pokémon to make it evolved
     @pokemon.species = @newspecies
-    @pokemon.name    = newspeciesname if !is_nicknamed
     @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
     @pokemon.calcStats
     # See and own evolved species
@@ -611,10 +609,10 @@ class PokemonEvolutionScene
   def self.pbDuplicatePokemon(pkmn, new_species)
     new_pkmn = pkmn.clone
     new_pkmn.species  = new_species
-    new_pkmn.name     = GameData::Species.get(new_species).name
+    new_pkmn.name     = nil
     new_pkmn.markings = 0
     new_pkmn.ballused = 0
-    new_pkmn.setItem(nil)
+    new_pkmn.item     = nil
     new_pkmn.clearAllRibbons
     new_pkmn.calcStats
     new_pkmn.heal

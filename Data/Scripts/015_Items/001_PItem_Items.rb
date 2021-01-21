@@ -431,7 +431,7 @@ def pbLearnMove(pkmn,move,ignoreifknown=false,bymachine=false,&block)
     if forgetmove>=0
       oldmovename = pkmn.moves[forgetmove].name
       oldmovepp   = pkmn.moves[forgetmove].pp
-      pkmn.moves[forgetmove] = PBMove.new(move)   # Replaces current/total PP
+      pkmn.moves[forgetmove] = Pokemon::Move.new(move)   # Replaces current/total PP
       if bymachine && TAUGHT_MACHINES_KEEP_OLD_PP
         pkmn.moves[forgetmove].pp = [oldmovepp,pkmn.moves[forgetmove].total_pp].min
       end
@@ -633,7 +633,7 @@ def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
       else
         if GameData::Item.get(item).is_mail?
           if pbWriteMail(item,pkmn,pkmnid,scene)
-            pkmn.setItem(item)
+            pkmn.item = item
             scene.pbDisplay(_INTL("Took the {1} from {2} and gave it the {3}.",olditemname,pkmn.name,newitemname))
             return true
           else
@@ -642,7 +642,7 @@ def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
             end
           end
         else
-          pkmn.setItem(item)
+          pkmn.item = item
           scene.pbDisplay(_INTL("Took the {1} from {2} and gave it the {3}.",olditemname,pkmn.name,newitemname))
           return true
         end
@@ -651,7 +651,7 @@ def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
   else
     if !GameData::Item.get(item).is_mail? || pbWriteMail(item,pkmn,pkmnid,scene)
       $PokemonBag.pbDeleteItem(item)
-      pkmn.setItem(item)
+      pkmn.item = item
       scene.pbDisplay(_INTL("{1} is now holding the {2}.",pkmn.name,newitemname))
       return true
     end
@@ -671,20 +671,20 @@ def pbTakeItemFromPokemon(pkmn,scene)
         scene.pbDisplay(_INTL("Your PC's Mailbox is full."))
       else
         scene.pbDisplay(_INTL("The mail was saved in your PC."))
-        pkmn.setItem(nil)
+        pkmn.item = nil
         ret = true
       end
     elsif scene.pbConfirm(_INTL("If the mail is removed, its message will be lost. OK?"))
       $PokemonBag.pbStoreItem(pkmn.item)
       scene.pbDisplay(_INTL("Received the {1} from {2}.",pkmn.item.name,pkmn.name))
-      pkmn.setItem(nil)
+      pkmn.item = nil
       pkmn.mail = nil
       ret = true
     end
   else
     $PokemonBag.pbStoreItem(pkmn.item)
     scene.pbDisplay(_INTL("Received the {1} from {2}.",pkmn.item.name,pkmn.name))
-    pkmn.setItem(nil)
+    pkmn.item = nil
     ret = true
   end
   return ret

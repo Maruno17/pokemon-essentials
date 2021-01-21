@@ -686,17 +686,16 @@ def pbPickup(pkmn)
   chances.each_with_index do |c,i|
     cumul += c
     next if rnd>=cumul
-    pkmn.setItem(items[i])
+    pkmn.item = items[i]
     break
   end
 end
 
 # Try to gain a Honey item after a battle if a Pokemon has the ability Honey Gather.
 def pbHoneyGather(pkmn)
-  return if pkmn.egg? || !pkmn.hasAbility?(:HONEYGATHER)
-  return if pkmn.hasItem?
   return if !GameData::Item.exists?(:HONEY)
-  chance = 5+((pkmn.level-1)/10)*5
-  return unless rand(100)<chance
-  pkmn.setItem(:HONEY)
+  return if pkmn.egg? || !pkmn.hasAbility?(:HONEYGATHER) || pkmn.hasItem?
+  chance = 5 + ((pkmn.level - 1) / 10) * 5
+  return unless rand(100) < chance
+  pkmn.item = :HONEY
 end

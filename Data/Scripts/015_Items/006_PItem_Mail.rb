@@ -1,15 +1,25 @@
 # Data structure representing mail that the Pokémon can hold
-class PokemonMail
-  attr_accessor :item,:message,:sender,:poke1,:poke2,:poke3
+class Mail
+  attr_accessor :item, :message, :sender, :poke1, :poke2, :poke3
 
   def initialize(item, message, sender, poke1 = nil, poke2 = nil, poke3 = nil)
-    item = item.id if !item.is_a?(Symbol) && item.respond_to?("id")
-    @item    = item      # Item represented by this mail
+    @item    = GameData::Item.get(item).id   # Item represented by this mail
     @message = message   # Message text
     @sender  = sender    # Name of the message's sender
     @poke1   = poke1     # [species,gender,shininess,form,shadowness,is egg]
     @poke2   = poke2
     @poke3   = poke3
+  end
+end
+
+
+
+# @deprecated Use {Mail} instead. PokemonMail is slated to be removed in v20.
+class PokemonMail
+  attr_reader :item, :message, :sender, :poke1, :poke2, :poke3
+
+  def self.copy(mail)
+    return Mail.new(mail.item, item.message, item.sender, item.poke1, item.poke2, item.poke3)
   end
 end
 
@@ -26,7 +36,7 @@ end
 
 def pbStoreMail(pkmn,item,message,poke1=nil,poke2=nil,poke3=nil)
   raise _INTL("Pokémon already has mail") if pkmn.mail
-  pkmn.mail = PokemonMail.new(item,message,$Trainer.name,poke1,poke2,poke3)
+  pkmn.mail = Mail.new(item,message, $Trainer.name, poke1, poke2, poke3)
 end
 
 def pbDisplayMail(mail,_bearer=nil)
@@ -102,15 +112,15 @@ def pbWriteMail(item,pkmn,pkmnid,scene)
       poke1 = poke2 = nil
       if $Trainer.party[pkmnid+2]
         p = $Trainer.party[pkmnid+2]
-        poke1 = [p.species,p.gender,p.shiny?,(p.form rescue 0),p.shadowPokemon?]
+        poke1 = [p.species,p.gender,p.shiny?,p.form,p.shadowPokemon?]
         poke1.push(true) if p.egg?
       end
       if $Trainer.party[pkmnid+1]
         p = $Trainer.party[pkmnid+1]
-        poke2 = [p.species,p.gender,p.shiny?,(p.form rescue 0),p.shadowPokemon?]
+        poke2 = [p.species,p.gender,p.shiny?,p.form,p.shadowPokemon?]
         poke2.push(true) if p.egg?
       end
-      poke3 = [pkmn.species,pkmn.gender,pkmn.shiny?,(pkmn.form rescue 0),pkmn.shadowPokemon?]
+      poke3 = [pkmn.species,pkmn.gender,pkmn.shiny?,pkmn.form,pkmn.shadowPokemon?]
       poke3.push(true) if pkmn.egg?
       pbStoreMail(pkmn,item,message,poke1,poke2,poke3)
       return true

@@ -266,7 +266,7 @@ def pbDayCareGenerateEgg
   first_move_index = 0 if first_move_index < 0
   finalmoves = []
   for i in first_move_index...moves.length
-    finalmoves.push(PBMove.new(moves[i]))
+    finalmoves.push(Pokemon::Move.new(moves[i]))
   end
   # Inheriting Individual Values
   ivs = []
@@ -311,7 +311,7 @@ def pbDayCareGenerateEgg
   new_natures.push(father.nature) if father.hasItem?(:EVERSTONE)
   if new_natures.length > 0
     new_nature = (new_natures.length == 1) ? new_natures[0] : new_natures[rand(new_natures.length)]
-    egg.setNature(new_nature)
+    egg.nature = new_nature
   end
   # Masuda method and Shiny Charm
   shinyretries = 0
@@ -327,12 +327,12 @@ def pbDayCareGenerateEgg
   if !ditto0 || !ditto1
     parent = (ditto0) ? father : mother   # The non-Ditto
     if parent.hasHiddenAbility?
-      egg.setAbility(parent.abilityIndex) if rand(100) < 60
+      egg.ability_index = parent.ability_index if rand(100) < 60
     elsif !ditto0 && !ditto1
       if rand(100) < 80
-        egg.setAbility(mother.abilityIndex)
+        egg.ability_index = mother.ability_index
       else
-        egg.setAbility((mother.abilityIndex + 1) % 2)
+        egg.ability_index = (mother.ability_index + 1) % 2
       end
     end
   end
@@ -390,7 +390,7 @@ Events.onStepTaken += proc { |_sender,_e|
   for i in 0...2
     pkmn = $PokemonGlobal.daycare[i][0]
     next if !pkmn
-    maxexp = PBExperience.pbGetMaxExperience(pkmn.growthrate)
+    maxexp = PBExperience.pbGetMaxExperience(pkmn.growth_rate)
     next if pkmn.exp>=maxexp
     oldlevel = pkmn.level
     pkmn.exp += 1   # Gain Exp

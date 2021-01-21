@@ -161,9 +161,9 @@ class PokeBattle_Battle
     @runCommand        = 0
     @nextPickupUse     = 0
     if GameData::Move.exists?(:STRUGGLE)
-      @struggle = PokeBattle_Move.pbFromPBMove(self,PBMove.new(:STRUGGLE))
+      @struggle = PokeBattle_Move.from_pokemon_move(self, Pokemon::Move.new(:STRUGGLE))
     else
-      @struggle = PokeBattle_Struggle.new(self,nil)
+      @struggle = PokeBattle_Struggle.new(self, nil)
     end
   end
 

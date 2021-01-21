@@ -9,7 +9,7 @@
 Events.onWildPokemonCreate += proc { |_sender, e|
   pokemon = e[0]
   if $game_switches[SHINY_WILD_POKEMON_SWITCH]
-    pokemon.makeShiny
+    pokemon.shiny = true
   end
 }
 

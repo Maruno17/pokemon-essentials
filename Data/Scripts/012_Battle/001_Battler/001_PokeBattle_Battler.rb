@@ -76,7 +76,7 @@ class PokeBattle_Battler
   def item=(value)
     new_item = GameData::Item.try_get(value)
     @item_id = (new_item) ? new_item.id : nil
-    @pokemon.setItem(@item_id) if @pokemon
+    @pokemon.item = @item_id if @pokemon
   end
 
   def defense

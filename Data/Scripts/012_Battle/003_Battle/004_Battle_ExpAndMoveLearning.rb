@@ -89,7 +89,7 @@ class PokeBattle_Battle
 
   def pbGainExpOne(idxParty,defeatedBattler,numPartic,expShare,expAll,showMessages=true)
     pkmn = pbParty(0)[idxParty]   # The Pokémon gaining EVs from defeatedBattler
-    growthRate = pkmn.growthrate
+    growthRate = pkmn.growth_rate
     # Don't bother calculating if gainer is already at max Exp
     if pkmn.exp>=PBExperience.pbGetMaxExperience(growthRate)
       pkmn.calcStats   # To ensure new EVs still have an effect
@@ -100,7 +100,7 @@ class PokeBattle_Battle
     level = defeatedBattler.level
     # Main Exp calculation
     exp = 0
-    a = level*defeatedBattler.pokemon.baseExp
+    a = level*defeatedBattler.pokemon.base_exp
     if expShare.length>0 && (isPartic || hasExpShare)
       if numPartic==0   # No participants, all Exp goes to Exp Share holders
         exp = a/(SPLIT_EXP_BETWEEN_GAINERS ? expShare.length : 1)
@@ -227,8 +227,8 @@ class PokeBattle_Battle
     for i in 0...Pokemon::MAX_MOVES
       m = pkmn.moves[i]
       return if m && m.id==newMove   # Already knows the new move
-      pkmn.moves[i] = PBMove.new(newMove)
-      battler.moves[i] = PokeBattle_Move.pbFromPBMove(self,pkmn.moves[i]) if battler
+      pkmn.moves[i] = Pokemon::Move.new(newMove)
+      battler.moves[i] = PokeBattle_Move.from_pokemon_move(self, pkmn.moves[i]) if battler
       pbDisplay(_INTL("{1} learned {2}!",pkmnName,moveName)) { pbSEPlay("Pkmn move learnt") }
       battler.pbCheckFormOnMovesetChange if battler
       return
@@ -241,8 +241,8 @@ class PokeBattle_Battle
         forgetMove = @scene.pbForgetMove(pkmn,newMove)
         if forgetMove>=0
           oldMoveName = pkmn.moves[forgetMove].name
-          pkmn.moves[forgetMove] = PBMove.new(newMove)   # Replaces current/total PP
-          battler.moves[forgetMove] = PokeBattle_Move.pbFromPBMove(self,pkmn.moves[forgetMove]) if battler
+          pkmn.moves[forgetMove] = Pokemon::Move.new(newMove)   # Replaces current/total PP
+          battler.moves[forgetMove] = PokeBattle_Move.from_pokemon_move(self, pkmn.moves[forgetMove]) if battler
           pbDisplayPaused(_INTL("1, 2, and... ... ... Ta-da!"))
           pbDisplayPaused(_INTL("{1} forgot how to use {2}. And...",pkmnName,oldMoveName))
           pbDisplay(_INTL("{1} learned {2}!",pkmnName,moveName)) { pbSEPlay("Pkmn move learnt") }

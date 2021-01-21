@@ -208,8 +208,8 @@ def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
     raise _INTL("Species does not exist ({1}).", newpoke) if !species_data
     yourPokemon = Pokemon.new(species_data.id, myPokemon.level, opponent)
   end
-  yourPokemon.name       = nickname
-  yourPokemon.obtainMode = 2   # traded
+  yourPokemon.name          = nickname
+  yourPokemon.obtain_method = 2   # traded
   yourPokemon.resetMoves if resetmoves
   yourPokemon.pbRecordFirstMoves
   $Trainer.seen[yourPokemon.species]  = true

@@ -154,16 +154,16 @@ class PBPokemon
 
   def createPokemon(level,iv,trainer)
     pokemon=Pokemon.new(@species,level,trainer,false)
-    pokemon.setItem(@item)
+    pokemon.item = @item
     pokemon.personalID = rand(2**16) | rand(2**16) << 16
     pokemon.personalID -= pokemon.personalID % 25
     pokemon.personalID += nature
     pokemon.personalID &= 0xFFFFFFFF
     pokemon.happiness=0
-    pokemon.moves[0]=PBMove.new(self.convertMove(@move1))
-    pokemon.moves[1]=PBMove.new(self.convertMove(@move2))
-    pokemon.moves[2]=PBMove.new(self.convertMove(@move3))
-    pokemon.moves[3]=PBMove.new(self.convertMove(@move4))
+    pokemon.moves[0] = Pokemon::Move.new(self.convertMove(@move1))
+    pokemon.moves[1] = Pokemon::Move.new(self.convertMove(@move2))
+    pokemon.moves[2] = Pokemon::Move.new(self.convertMove(@move3))
+    pokemon.moves[3] = Pokemon::Move.new(self.convertMove(@move4))
     evcount=0
     for i in 0...6
       evcount+=1 if ((@ev&(1<<i))!=0)
@@ -958,13 +958,13 @@ def pbOrganizedBattleEx(opponent,challengedata,endspeech,endspeechwin)
     pkmn.heal
     pkmn.makeUnmega
     pkmn.makeUnprimal
-    pkmn.setItem(olditems[i])
+    pkmn.item = olditems[i]
   end
   opponent.party.each_with_index do |pkmn,i|
     pkmn.heal
     pkmn.makeUnmega
     pkmn.makeUnprimal
-    pkmn.setItem(olditems2[i])
+    pkmn.item = olditems2[i]
   end
   # Save the record of the battle
   $PokemonTemp.lastbattle = nil

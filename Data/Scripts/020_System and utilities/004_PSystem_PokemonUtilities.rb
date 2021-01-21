@@ -8,9 +8,8 @@ end
 def pbNickname(pkmn)
   species_name = pkmn.speciesName
   if pbConfirmMessage(_INTL("Would you like to give a nickname to {1}?", species_name))
-    new_name = pbEnterPokemonName(_INTL("{1}'s nickname?", species_name),
-                                  0, Pokemon::MAX_NAME_SIZE, "", pkmn)
-    pkmn.name = new_name if new_name != ""
+    pkmn.name = pbEnterPokemonName(_INTL("{1}'s nickname?", species_name),
+                                   0, Pokemon::MAX_NAME_SIZE, "", pkmn)
   end
 end
 
@@ -123,7 +122,7 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
   # Set original trainer to a foreign one
   pkmn.owner = Pokemon::Owner.new_foreign(owner_name || "", owner_gender)
   # Set nickname
-  pkmn.name = nickname[0, Pokemon::MAX_NAME_SIZE] if nickname && nickname!=""
+  pkmn.name = nickname[0, Pokemon::MAX_NAME_SIZE]
   # Recalculate stats
   pkmn.calcStats
   if owner_name
@@ -244,7 +243,7 @@ end
 # player's party.
 def pbHasFatefulSpecies?(species)
   $Trainer.pokemonParty.each do |pkmn|
-    return true if pkmn.isSpecies?(species) && pkmn.obtainMode == 4
+    return true if pkmn.isSpecies?(species) && pkmn.obtain_method == 4
   end
   return false
 end

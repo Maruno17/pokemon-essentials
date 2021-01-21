@@ -866,7 +866,7 @@ class PokemonPartyScreen
       else
         pbDisplay(_INTL("Mail was transferred from the Mailbox."))
         pkmn.mail = $PokemonGlobal.mailbox[mailIndex]
-        pkmn.setItem(pkmn.mail.item)
+        pkmn.item = pkmn.mail.item
         $PokemonGlobal.mailbox.delete_at(mailIndex)
         pbRefreshSingle(pkmnid)
       end
@@ -1286,8 +1286,8 @@ class PokemonPartyScreen
             if newpkmn.egg?
               pbDisplay(_INTL("Eggs can't hold items."))
             elsif !newpkmn.hasItem?
-              newpkmn.setItem(item)
-              pkmn.setItem(nil)
+              newpkmn.item = item
+              pkmn.item = nil
               @scene.pbClearSwitching
               pbRefresh
               pbDisplay(_INTL("{1} was given the {2} to hold.",newpkmn.name,itemname))
@@ -1305,8 +1305,8 @@ class PokemonPartyScreen
                 pbDisplay(_INTL("{1} is already holding a {2}.\1",newpkmn.name,newitemname))
               end
               if pbConfirm(_INTL("Would you like to switch the two items?"))
-                newpkmn.setItem(item)
-                pkmn.setItem(newitem)
+                newpkmn.item = item
+                pkmn.item = newitem
                 @scene.pbClearSwitching
                 pbRefresh
                 pbDisplay(_INTL("{1} was given the {2} to hold.",newpkmn.name,itemname))

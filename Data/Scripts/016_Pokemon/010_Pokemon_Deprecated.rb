@@ -28,49 +28,50 @@ class PokeBattle_Pokemon
   def self.copy(pkmn)
     owner = Pokemon::Owner.new(pkmn.trainerID, pkmn.ot, pkmn.otgender, pkmn.language)
     ret = Pokemon.new(pkmn.species, pkmn.level, owner, false)
-    ret.name           = pkmn.name
-    ret.exp            = pkmn.exp
+    ret.forcedForm     = pkmn.forcedForm if pkmn.forcedForm
     ret.formTime       = pkmn.formTime
-    ret.forcedForm     = pkmn.forcedForm
-    ret.hp             = pkmn.hp
-    ret.abilityflag    = pkmn.abilityflag
-    ret.genderflag     = pkmn.genderflag
-    ret.natureflag     = pkmn.natureflag
-    ret.natureOverride = pkmn.natureOverride
-    ret.shinyflag      = pkmn.shinyflag
-    ret.item_id        = pkmn.item
-    ret.mail           = pkmn.mail
-    ret.moves          = pkmn.moves
-    ret.firstmoves     = pkmn.firstmoves.clone
+    ret.exp            = pkmn.exp
+    ret.eggsteps       = pkmn.eggsteps
     ret.status         = pkmn.status
     ret.statusCount    = pkmn.statusCount
-    ret.iv             = pkmn.iv.clone
-    ret.ev             = pkmn.ev.clone
-    ret.ivMaxed        = pkmn.ivMaxed if pkmn.ivMaxed
-    ret.happiness      = pkmn.happiness
-    ret.ballused       = pkmn.ballused
-    ret.eggsteps       = pkmn.eggsteps
-    ret.markings       = pkmn.markings if pkmn.markings
-    ret.ribbons        = pkmn.ribbons.clone
-    ret.pokerus        = pkmn.pokerus
-    ret.personalID     = pkmn.personalID
-    ret.obtainMode     = pkmn.obtainMode
-    ret.obtainMap      = pkmn.obtainMap
-    ret.obtainText     = pkmn.obtainText
-    ret.obtainLevel    = pkmn.obtainLevel if pkmn.obtainLevel
-    ret.hatchedMap     = pkmn.hatchedMap
-    ret.timeReceived   = pkmn.timeReceived
-    ret.timeEggHatched = pkmn.timeEggHatched
+    ret.gender         = pkmn.genderflag
+    ret.shiny          = pkmn.shinyflag
+    ret.ability_index  = pkmn.abilityflag
+    ret.nature         = pkmn.natureflag
+    ret.nature_for_stats = pkmn.natureOverride
+    ret.item           = pkmn.item
+    ret.mail           = PokemonMail.copy(pkmn.mail) if pkmn.mail
+    pkmn.moves.each { |m| ret.moves.push(PBMove.copy(m)) if m && m.id > 0 }
+    pkmn.firstmoves.each { |m| ret.pbAddFirstMove(m) }
+    ret.ribbons        = pkmn.ribbons.clone if pkmn.ribbons
     ret.cool           = pkmn.cool if pkmn.cool
     ret.beauty         = pkmn.beauty if pkmn.beauty
     ret.cute           = pkmn.cute if pkmn.cute
     ret.smart          = pkmn.smart if pkmn.smart
     ret.tough          = pkmn.tough if pkmn.tough
     ret.sheen          = pkmn.sheen if pkmn.sheen
+    ret.pokerus        = pkmn.pokerus if pkmn.pokerus
+    ret.name           = pkmn.name
+    ret.happiness      = pkmn.happiness
+    ret.ballused       = pkmn.ballused
+    ret.markings       = pkmn.markings if pkmn.markings
+    ret.iv             = pkmn.iv.clone
+    ret.ivMaxed        = pkmn.ivMaxed.clone if pkmn.ivMaxed
+    ret.ev             = pkmn.ev.clone
+    ret.obtain_method  = pkmn.obtainMode
+    ret.obtainMap      = pkmn.obtainMap
+    ret.obtainText     = pkmn.obtainText
+    ret.obtainLevel    = pkmn.obtainLevel if pkmn.obtainLevel
+    ret.hatchedMap     = pkmn.hatchedMap
+    ret.timeReceived   = pkmn.timeReceived
+    ret.timeEggHatched = pkmn.timeEggHatched
     if pkmn.fused
       ret.fused = PokeBattle_Pokemon.copy(pkmn.fused) if pkmn.fused.is_a?(PokeBattle_Pokemon)
       ret.fused = pkmn.fused if pkmn.fused.is_a?(Pokemon)
     end
+    ret.personalID     = pkmn.personalID
+    ret.hp             = pkmn.hp
+
     ret.shadow         = pkmn.shadow
     ret.heartgauge     = pkmn.heartgauge
     ret.savedexp       = pkmn.savedexp
@@ -79,7 +80,8 @@ class PokeBattle_Pokemon
     ret.shadowmoves    = pkmn.shadowmoves.clone
     ret.shadowmovenum  = pkmn.shadowmovenum
     # NOTE: Intentionally set last, as it recalculates stats.
-    ret.formSimple = pkmn.form
+    ret.formSimple     = pkmn.form || 0
+    return ret
   end
 end
 
@@ -139,6 +141,42 @@ class Pokemon
   def language=(value)
     Deprecation.warn_method('Pokemon#language=', 'v20', 'Pokemon::Owner#language=')
     @owner.language = value
+  end
+
+  # @deprecated Use {Pokemon#gender=} instead. This alias is slated to be removed in v20.
+  def setGender(value)
+    Deprecation.warn_method('Pokemon#setGender', 'v20', 'Pokemon#gender=')
+    self.gender = value
+  end
+
+  # @deprecated Use {Pokemon#shiny=} instead. This alias is slated to be removed in v20.
+  def makeShiny
+    Deprecation.warn_method('Pokemon#makeShiny', 'v20', 'Pokemon#shiny=true')
+    self.shiny = true
+  end
+
+  # @deprecated Use {Pokemon#shiny=} instead. This alias is slated to be removed in v20.
+  def makeNotShiny
+    Deprecation.warn_method('Pokemon#makeNotShiny', 'v20', 'Pokemon#shiny=false')
+    self.shiny = false
+  end
+
+  # @deprecated Use {Pokemon#ability_index=} instead. This alias is slated to be removed in v20.
+  def setAbility(value)
+    Deprecation.warn_method('Pokemon#setAbility', 'v20', 'Pokemon#ability_index=')
+    self.ability_index = value
+  end
+
+  # @deprecated Use {Pokemon#nature=} instead. This alias is slated to be removed in v20.
+  def setNature(value)
+    Deprecation.warn_method('Pokemon#setNature', 'v20', 'Pokemon#nature=')
+    self.nature = value
+  end
+
+  # @deprecated Use {Pokemon#item=} instead. This alias is slated to be removed in v20.
+  def setItem(value)
+    Deprecation.warn_method('Pokemon#setItem', 'v20', 'Pokemon#item=')
+    self.item = value
   end
 end
 
