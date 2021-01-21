@@ -148,11 +148,7 @@ BattleHandlers::HPHealItem.add(:ORANBERRY,
     next false if !forced && !battler.canConsumeBerry?
     next false if !forced && battler.hp>battler.totalhp/2
     battle.pbCommonAnimation("EatBerry",battler) if !forced
-    if battler.hasActiveAbility?(:RIPEN)
-      battler.pbRecoverHP(20)
-    else
-      battler.pbRecoverHP(10)
-    end
+    battler.pbRecoverHP((battler.hasActiveAbility?(:RIPEN))? 20 : 10)
     itemName = PBItems.getName(item)
     if forced
       PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
@@ -182,11 +178,7 @@ BattleHandlers::HPHealItem.add(:SITRUSBERRY,
     next false if !forced && !battler.canConsumeBerry?
     next false if !forced && battler.hp>battler.totalhp/2
     battle.pbCommonAnimation("EatBerry",battler) if !forced
-    if battler.hasActiveAbility?(:RIPEN)
-      battler.pbRecoverHP?(battler.totalhp/2)
-    else
-      battler.pbRecoverHP(battler.totalhp/4)
-    end
+    battler.pbRecoverHP?(battler.totalhp/((battler.hasActiveAbility?(:RIPEN))? 2 : 4))
     itemName = PBItems.getName(item)
     if forced
       PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
@@ -204,11 +196,8 @@ BattleHandlers::HPHealItem.add(:STARFBERRY,
     PBStats.eachMainBattleStat { |s| stats.push(s) if battler.pbCanRaiseStatStage?(s,battler) }
     next false if stats.length==0
     stat = stats[battle.pbRandom(stats.length)]
-    if battler.hasActiveAbility?(:RIPEN)
-      next pbBattleStatIncreasingBerry(battler,battle,item,forced,stat,4)
-    else
-      next pbBattleStatIncreasingBerry(battler,battle,item,forced,stat,2)
-    end
+    increment = ((battler.hasActiveAbility?(:RIPEN))? 4 : 2)
+    next pbBattleStatIncreasingBerry(battler,battle,item,forced,stat,increment)
   }
 )
 
@@ -1056,11 +1045,7 @@ BattleHandlers::TargetItemOnHit.add(:JABOCABERRY,
     next if !user.takesIndirectDamage?
     battle.pbCommonAnimation("EatBerry",target)
     battle.scene.pbDamageAnimation(user)
-    if target.hasActiveAbility?(:RIPEN)
-      user.pbReduceHP(user.totalhp/4,false)
-    else
-      user.pbReduceHP(user.totalhp/8,false)
-    end
+    user.pbReduceHP((user.totalhp)/(target.hasActiveAbility?(:RIPEN)? 4 : 8),false)
     battle.pbDisplay(_INTL("{1} consumed its {2} and hurt {3}!",target.pbThis,
        target.itemName,user.pbThis(true)))
     target.pbHeldItemTriggered(item)
@@ -1122,11 +1107,7 @@ BattleHandlers::TargetItemOnHit.add(:ROWAPBERRY,
     next if !user.takesIndirectDamage?
     battle.pbCommonAnimation("EatBerry",target)
     battle.scene.pbDamageAnimation(user)
-    if target.hasActiveAbility?(:RIPEN)
-      user.pbReduceHP(user.totalhp/4,false)
-    else
-      user.pbReduceHP(user.totalhp/8,false)
-    end
+    user.pbReduceHP((user.totalhp)/(target.hasActiveAbility?(:RIPEN)? 4 : 8),false)
     battle.pbDisplay(_INTL("{1} consumed its {2} and hurt {3}!",target.pbThis,
        target.itemName,user.pbThis(true)))
     target.pbHeldItemTriggered(item)
@@ -1193,11 +1174,7 @@ BattleHandlers::TargetItemOnHitPositiveBerry.add(:ENIGMABERRY,
     itemName = PBItems.getName(item)
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
     battle.pbCommonAnimation("EatBerry",battler) if !forced
-    if battler.hasActiveAbility?(:RIPEN)
-      battler.pbRecoverHP(battler.totalhp/2)
-    else
-      battler.pbRecoverHP(battler.totalhp/4)
-    end
+    user.pbReduceHP((user.totalhp)/(target.hasActiveAbility?(:RIPEN)? 2 : 4),false)
     if forced
       battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
     else
