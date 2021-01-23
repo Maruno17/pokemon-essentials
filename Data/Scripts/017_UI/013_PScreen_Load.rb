@@ -222,7 +222,7 @@ class PokemonLoadScreen
   # @param file_path [String] file to load save data from
   # @return [Hash] save data
   def load_save_file(file_path)
-    save_data = SaveData.load_from_file(file_path)
+    save_data = SaveData.read_from_file(file_path)
 
     unless SaveData.valid?(save_data)
       if File.file?(file_path + '.bak')

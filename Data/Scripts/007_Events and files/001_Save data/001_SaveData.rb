@@ -19,19 +19,16 @@ module SaveData
     File.open(file_path, 'wb') { |file| Marshal.dump(save_data, file) }
   end
 
-  # Fetches the save data from the given file and runs all
-  # possible conversions on it.
-  # @param file_path [String] path of the file to load from
-  # @return [Hash] loaded save data
+  # Fetches save data from the given file.
+  # @param file_path [String] path of the file to read from
+  # @return [Hash] save data in Hash format
   # @raise (see .get_data_from_file)
-  def self.load_from_file(file_path)
+  def self.read_from_file(file_path)
     validate file_path => String
 
     save_data = get_data_from_file(file_path)
 
     save_data = to_hash_format(save_data) if save_data.is_a?(Array)
-
-    # TODO: Handle save data conversion here
 
     return save_data
   end
