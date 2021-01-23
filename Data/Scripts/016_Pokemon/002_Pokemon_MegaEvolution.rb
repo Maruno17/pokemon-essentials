@@ -1,8 +1,8 @@
-#===============================================================================
-# Mega Evolution
-# NOTE: These are treated as form changes in Essentials.
-#===============================================================================
 class Pokemon
+  #=============================================================================
+  # Mega Evolution
+  # NOTE: These are treated as form changes in Essentials.
+  #=============================================================================
   def getMegaForm(checkItemOnly = false)
     ret = 0
     GameData::Species.each do |data|
@@ -24,12 +24,12 @@ class Pokemon
 
   def hasMegaForm?
     megaForm = self.getMegaForm
-    return megaForm > 0 && megaForm != self.formSimple
+    return megaForm > 0 && megaForm != form_simple
   end
 
   def mega?
     megaForm = self.getMegaForm
-    return megaForm > 0 && megaForm == self.formSimple
+    return megaForm > 0 && megaForm == form_simple
   end
   alias isMega? mega?
 
@@ -51,15 +51,11 @@ class Pokemon
   def megaMessage   # 0=default message, 1=Rayquaza message
     return species_data.mega_message
   end
-end
 
-
-
-#===============================================================================
-# Primal Reversion
-# NOTE: These are treated as form changes in Essentials.
-#===============================================================================
-class Pokemon
+  #=============================================================================
+  # Primal Reversion
+  # NOTE: These are treated as form changes in Essentials.
+  #=============================================================================
   def hasPrimalForm?
     v = MultipleForms.call("getPrimalForm",self)
     return v!=nil
@@ -83,19 +79,3 @@ class Pokemon
     end
   end
 end
-
-
-
-MultipleForms.register(:GROUDON,{
-  "getPrimalForm" => proc { |pkmn|
-    next 1 if pkmn.hasItem?(:REDORB)
-    next
-  }
-})
-
-MultipleForms.register(:KYOGRE,{
-  "getPrimalForm" => proc { |pkmn|
-    next 1 if pkmn.hasItem?(:BLUEORB)
-    next
-  }
-})

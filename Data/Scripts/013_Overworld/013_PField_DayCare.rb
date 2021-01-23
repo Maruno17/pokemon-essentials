@@ -232,7 +232,7 @@ def pbDayCareGenerateEgg
     GameData::Item.each do |i|
       atk = i.move
       next if !atk
-      next if !egg.compatibleWithMove?(atk)
+      next if !egg.compatible_with_move?(atk)
       next if !movefather.hasMove?(atk)
       moves.push(atk)
     end
@@ -340,17 +340,17 @@ def pbDayCareGenerateEgg
   if !ditto0 || !ditto1
     possible_balls = []
     if mother.species == father.species
-      possible_balls.push(mother.ballused)
-      possible_balls.push(father.ballused)
+      possible_balls.push(mother.poke_ball)
+      possible_balls.push(father.poke_ball)
     else
-      possible_balls.push(pkmn0.ballused) if pkmn0.female? || ditto1
-      possible_balls.push(pkmn1.ballused) if pkmn1.female? || ditto0
+      possible_balls.push(pkmn0.poke_ball) if pkmn0.female? || ditto1
+      possible_balls.push(pkmn1.poke_ball) if pkmn1.female? || ditto0
     end
-    possible_balls.delete(pbGetBallType(:MASTERBALL))    # Can't inherit this Ball
-    possible_balls.delete(pbGetBallType(:CHERISHBALL))   # Can't inherit this Ball
+    possible_balls.delete(:MASTERBALL)    # Can't inherit this Ball
+    possible_balls.delete(:CHERISHBALL)   # Can't inherit this Ball
     if possible_balls.length > 0
-      egg.ballused = possible_balls[0]
-      egg.ballused = possible_balls[rand(possible_balls.length)] if possible_balls.length > 1
+      egg.poke_ball = possible_balls[0]
+      egg.poke_ball = possible_balls[rand(possible_balls.length)] if possible_balls.length > 1
     end
   end
   # Set all stats
@@ -358,9 +358,9 @@ def pbDayCareGenerateEgg
   egg.iv = ivs
   egg.moves = finalmoves
   egg.calcStats
-  egg.obtainText = _INTL("Day-Care Couple")
+  egg.obtain_text = _INTL("Day-Care Couple")
   egg.name = _INTL("Egg")
-  egg.eggsteps = egg.species_data.hatch_steps
+  egg.steps_to_hatch = egg.species_data.hatch_steps
   egg.givePokerus if rand(65536)<POKERUS_CHANCE
   # Add egg to party
   $Trainer.party[$Trainer.party.length] = egg
@@ -398,7 +398,7 @@ Events.onStepTaken += proc { |_sender,_e|
     pkmn.calcStats
     movelist = pkmn.getMoveList
     for i in movelist
-      pkmn.pbLearnMove(i[1]) if i[0]==pkmn.level   # Learned a new move
+      pkmn.learn_move(i[1]) if i[0]==pkmn.level   # Learned a new move
     end
   end
 }

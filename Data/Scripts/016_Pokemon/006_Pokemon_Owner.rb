@@ -1,5 +1,7 @@
+#===============================================================================
+# Stores information about a Pokémon's owner.
+#===============================================================================
 class Pokemon
-  # Stores information about a Pokémon's owner.
   class Owner
     # @return [Integer] the ID of the owner
     attr_reader :id

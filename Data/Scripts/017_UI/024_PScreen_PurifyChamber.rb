@@ -218,7 +218,7 @@ class PurifyChamber
   def isPurifiableIgnoreRegular?(set)
     shadow=getShadow(set)
     return false if !shadow
-    return false if shadow.heartgauge!=0
+    return false if shadow.heart_gauge != 0
     # Define an exception for Lugia
     if shadow.isSpecies?(:LUGIA)
       maxtempo=PurifyChamber.maximumTempo()
@@ -237,7 +237,7 @@ class PurifyChamber
     for set in 0...NUMSETS
       # If a shadow Pokemon and a regular Pokemon are on the same set
       if @sets[set].shadow
-        if @sets[set].shadow.heartgauge>0
+        if @sets[set].shadow.heart_gauge > 0
           flow=self.chamberFlow(set)
           @sets[set].shadow.adjustHeart(-flow)
           if isPurifiable?(set)
@@ -337,7 +337,7 @@ class PurifyChamberScreen
     @chamber=$PokemonGlobal.purifyChamber
 #    for j in 0...PurifyChamber::NUMSETS
 #      @chamber.debugAddShadow(j,rand(100)+1)
-#      @chamber[j].shadow.heartgauge=0
+#      @chamber[j].shadow.heart_gauge = 0
 #      for i in 0...PurifyChamber::SETSIZE
 #        @chamber.debugAddNormal(j,rand(100)+1)
 #      end
@@ -654,8 +654,8 @@ class Window_PurifyChamberSets < Window_DrawableCommand
     end
     if @chamber.getShadow(index)
       pbDrawGauge(self.contents, Rect.new(rect.x+16,rect.y+18,48,8),
-                  Color.new(192,0,256), @chamber.getShadow(index).heartgauge,
-                  Pokemon::HEARTGAUGESIZE)
+                  Color.new(192,0,256), @chamber.getShadow(index).heart_gauge,
+                  Pokemon::HEART_GAUGE_SIZE)
     end
     pbDrawTextPositions(self.contents,textpos)
   end
@@ -945,8 +945,7 @@ class PurifyChamberSetView < SpriteWrapper
          Color.new(248,248,248),Color.new(128,128,128)])
       # draw heart gauge
       pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width*3/4,8,@info.bitmap.width*1/4,8),
-                  Color.new(192,0,256), pkmn.heartgauge,
-                  Pokemon::HEARTGAUGESIZE)
+                  Color.new(192,0,256), pkmn.heart_gauge, Pokemon::HEART_GAUGE_SIZE)
       # draw flow gauge
       pbDrawGauge(@info.bitmap,Rect.new(@info.bitmap.width*3/4,24+8,@info.bitmap.width*1/4,8),
          Color.new(0,0,248),@chamber.chamberFlow(@set),6)

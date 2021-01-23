@@ -502,7 +502,7 @@ def pbMoveTutorAnnotations(move, movelist = nil)
       if movelist && movelist.any? { |j| j == species }
         # Checked data from movelist given in parameter
         ret[i] = _INTL("ABLE")
-      elsif pkmn.compatibleWithMove?(move)
+      elsif pkmn.compatible_with_move?(move)
         # Checked data from Pokémon's tutor moves in pokemon.txt
         ret[i] = _INTL("ABLE")
       else
@@ -537,7 +537,7 @@ def pbMoveTutorChoose(move,movelist=nil,bymachine=false)
         pbMessage(_INTL("Shadow Pokémon can't be taught any moves.")) { screen.pbUpdate }
       elsif movelist && !movelist.any? { |j| j==pokemon.species }
         pbMessage(_INTL("{1} can't learn {2}.",pokemon.name,movename)) { screen.pbUpdate }
-      elsif !pokemon.compatibleWithMove?(move)
+      elsif !pokemon.compatible_with_move?(move)
         pbMessage(_INTL("{1} can't learn {2}.",pokemon.name,movename)) { screen.pbUpdate }
       else
         if pbLearnMove(pokemon,move,false,bymachine) { screen.pbUpdate }

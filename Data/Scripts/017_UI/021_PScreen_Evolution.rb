@@ -608,11 +608,11 @@ class PokemonEvolutionScene
 
   def self.pbDuplicatePokemon(pkmn, new_species)
     new_pkmn = pkmn.clone
-    new_pkmn.species  = new_species
-    new_pkmn.name     = nil
-    new_pkmn.markings = 0
-    new_pkmn.ballused = 0
-    new_pkmn.item     = nil
+    new_pkmn.species   = new_species
+    new_pkmn.name      = nil
+    new_pkmn.markings  = 0
+    new_pkmn.poke_ball = :POKEBALL
+    new_pkmn.item      = nil
     new_pkmn.clearAllRibbons
     new_pkmn.calcStats
     new_pkmn.heal

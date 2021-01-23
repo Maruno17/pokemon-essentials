@@ -71,19 +71,21 @@ class PokeBattle_Battle
       evYield.collect! { |a| a*2 }
     end
     # Gain EVs for each stat in turn
-    PBStats.eachStat do |s|
-      evGain = evYield[s]
-      # Can't exceed overall limit
-      if evTotal+evGain>Pokemon::EV_LIMIT
-        evGain = Pokemon::EV_LIMIT-evTotal
+    if pkmn.shadowPokemon? && pkmn.saved_ev
+      PBStats.eachStat { |s| evTotal += pkmn.saved_ev[s] }
+      PBStats.eachStat do |s|
+        evGain = evYield[s].clamp(0, Pokemon::EV_STAT_LIMIT - pkmn.ev[s] - pkmn.saved_ev[s])
+        evGain = evGain.clamp(0, Pokemon::EV_LIMIT - evTotal)
+        pkmn.saved_ev[s] += evGain
+        evTotal += evGain
       end
-      # Can't exceed individual stat limit
-      if pkmn.ev[s]+evGain>Pokemon::EV_STAT_LIMIT
-        evGain = Pokemon::EV_STAT_LIMIT-pkmn.ev[s]
+    else
+      PBStats.eachStat do |s|
+        evGain = evYield[s].clamp(0, Pokemon::EV_STAT_LIMIT - pkmn.ev[s])
+        evGain = evGain.clamp(0, Pokemon::EV_LIMIT - evTotal)
+        pkmn.ev[s] += evGain
+        evTotal += evGain
       end
-      # Add EV gain
-      pkmn.ev[s] += evGain
-      evTotal += evGain
     end
   end
 

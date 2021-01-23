@@ -535,25 +535,25 @@ DebugMenuCommands.register("demoparty", {
       pbSeenForm(pkmn)
       case species
       when :PIDGEOTTO
-        pkmn.pbLearnMove(:FLY)
+        pkmn.learn_move(:FLY)
       when :KADABRA
-        pkmn.pbLearnMove(:FLASH)
-        pkmn.pbLearnMove(:TELEPORT)
+        pkmn.learn_move(:FLASH)
+        pkmn.learn_move(:TELEPORT)
       when :GYARADOS
-        pkmn.pbLearnMove(:SURF)
-        pkmn.pbLearnMove(:DIVE)
-        pkmn.pbLearnMove(:WATERFALL)
+        pkmn.learn_move(:SURF)
+        pkmn.learn_move(:DIVE)
+        pkmn.learn_move(:WATERFALL)
       when :DIGLETT
-        pkmn.pbLearnMove(:DIG)
-        pkmn.pbLearnMove(:CUT)
-        pkmn.pbLearnMove(:HEADBUTT)
-        pkmn.pbLearnMove(:ROCKSMASH)
+        pkmn.learn_move(:DIG)
+        pkmn.learn_move(:CUT)
+        pkmn.learn_move(:HEADBUTT)
+        pkmn.learn_move(:ROCKSMASH)
       when :CHANSEY
-        pkmn.pbLearnMove(:SOFTBOILED)
-        pkmn.pbLearnMove(:STRENGTH)
-        pkmn.pbLearnMove(:SWEETSCENT)
+        pkmn.learn_move(:SOFTBOILED)
+        pkmn.learn_move(:STRENGTH)
+        pkmn.learn_move(:SWEETSCENT)
       end
-      pkmn.pbRecordFirstMoves
+      pkmn.record_first_moves
     end
     pbMessage(_INTL("Filled party with demo Pokémon."))
   }
@@ -574,7 +574,7 @@ DebugMenuCommands.register("quickhatch", {
   "name"        => _INTL("Quick Hatch"),
   "description" => _INTL("Make all eggs in the party require just one more step to hatch."),
   "effect"      => proc {
-    $Trainer.party.each { |pkmn| pkmn.eggsteps = 1 if pkmn.egg? }
+    $Trainer.party.each { |pkmn| pkmn.steps_to_hatch = 1 if pkmn.egg? }
     pbMessage(_INTL("All eggs in your party now require one step to hatch."))
   }
 })

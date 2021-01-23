@@ -664,7 +664,7 @@ class PokemonParty_Scene
         next false if !pbCanUseOnPokemon?(itm)
         if itm.is_machine?
           move = itm.move
-          next false if pokemon.hasMove?(move) || !pokemon.compatibleWithMove?(move)
+          next false if pokemon.hasMove?(move) || !pokemon.compatible_with_move?(move)
         end
         next true
       })

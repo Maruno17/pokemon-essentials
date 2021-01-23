@@ -161,8 +161,8 @@ class PokemonDataBox < SpriteWrapper
     return (@animatingHP) ? @currentHP : @battler.hp
   end
 
-  def expFraction
-    return (@animatingExp) ? @currentExp.to_f/@rangeExp : @battler.pokemon.expFraction
+  def exp_fraction
+    return (@animatingExp) ? @currentExp.to_f/@rangeExp : @battler.pokemon.exp_fraction
   end
 
   def animateHP(oldHP,newHP,rangeHP)
@@ -283,7 +283,7 @@ class PokemonDataBox < SpriteWrapper
 
   def refreshExp
     return if !@showExp
-    w = self.expFraction*@expBarBitmap.width
+    w = exp_fraction * @expBarBitmap.width
     # NOTE: The line below snaps the bar's width to the nearest 2 pixels, to
     #       fit in with the rest of the graphics which are doubled in size.
     w = ((w/2).round)*2

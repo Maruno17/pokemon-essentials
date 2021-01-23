@@ -18,8 +18,7 @@ class PokeBattle_Pokemon
   attr_reader :timeReceived, :timeEggHatched
   attr_reader :cool, :beauty, :cute, :smart, :tough, :sheen
   attr_reader :trainerID, :ot, :otgender, :language
-  attr_reader :shadow, :heartgauge, :savedexp, :savedev, :hypermode
-  attr_reader :shadowmoves, :shadowmovenum
+  attr_reader :shadow, :heartgauge, :savedexp, :savedev, :hypermode, :shadowmoves
 
   def initialise
     raise "PokeBattle_Pokemon.new is deprecated. Use Pokemon.new instead."
@@ -28,10 +27,10 @@ class PokeBattle_Pokemon
   def self.copy(pkmn)
     owner = Pokemon::Owner.new(pkmn.trainerID, pkmn.ot, pkmn.otgender, pkmn.language)
     ret = Pokemon.new(pkmn.species, pkmn.level, owner, false)
-    ret.forcedForm     = pkmn.forcedForm if pkmn.forcedForm
-    ret.formTime       = pkmn.formTime
+    ret.forced_form    = pkmn.forcedForm if pkmn.forcedForm
+    ret.time_form_set  = pkmn.formTime
     ret.exp            = pkmn.exp
-    ret.eggsteps       = pkmn.eggsteps
+    ret.steps_to_hatch = pkmn.eggsteps
     ret.status         = pkmn.status
     ret.statusCount    = pkmn.statusCount
     ret.gender         = pkmn.genderflag
@@ -42,7 +41,7 @@ class PokeBattle_Pokemon
     ret.item           = pkmn.item
     ret.mail           = PokemonMail.copy(pkmn.mail) if pkmn.mail
     pkmn.moves.each { |m| ret.moves.push(PBMove.copy(m)) if m && m.id > 0 }
-    pkmn.firstmoves.each { |m| ret.pbAddFirstMove(m) }
+    pkmn.firstmoves.each { |m| ret.add_first_move(m) }
     ret.ribbons        = pkmn.ribbons.clone if pkmn.ribbons
     ret.cool           = pkmn.cool if pkmn.cool
     ret.beauty         = pkmn.beauty if pkmn.beauty
@@ -53,16 +52,16 @@ class PokeBattle_Pokemon
     ret.pokerus        = pkmn.pokerus if pkmn.pokerus
     ret.name           = pkmn.name
     ret.happiness      = pkmn.happiness
-    ret.ballused       = pkmn.ballused
+    ret.poke_ball      = pbBallTypeToItem(pkmn.ballused)
     ret.markings       = pkmn.markings if pkmn.markings
     ret.iv             = pkmn.iv.clone
     ret.ivMaxed        = pkmn.ivMaxed.clone if pkmn.ivMaxed
     ret.ev             = pkmn.ev.clone
     ret.obtain_method  = pkmn.obtainMode
-    ret.obtainMap      = pkmn.obtainMap
-    ret.obtainText     = pkmn.obtainText
-    ret.obtainLevel    = pkmn.obtainLevel if pkmn.obtainLevel
-    ret.hatchedMap     = pkmn.hatchedMap
+    ret.obtain_map     = pkmn.obtainMap
+    ret.obtain_text    = pkmn.obtainText
+    ret.obtain_level   = pkmn.obtainLevel if pkmn.obtainLevel
+    ret.hatched_map    = pkmn.hatchedMap
     ret.timeReceived   = pkmn.timeReceived
     ret.timeEggHatched = pkmn.timeEggHatched
     if pkmn.fused
@@ -71,16 +70,19 @@ class PokeBattle_Pokemon
     end
     ret.personalID     = pkmn.personalID
     ret.hp             = pkmn.hp
-
-    ret.shadow         = pkmn.shadow
-    ret.heartgauge     = pkmn.heartgauge
-    ret.savedexp       = pkmn.savedexp
-    ret.savedev        = pkmn.savedev.clone
-    ret.hypermode      = pkmn.hypermode
-    ret.shadowmoves    = pkmn.shadowmoves.clone
-    ret.shadowmovenum  = pkmn.shadowmovenum
+    if pkmn.shadow
+      ret.shadow       = pkmn.shadow
+      ret.heart_gauge  = pkmn.heartgauge
+      ret.hyper_mode   = pkmn.hypermode
+      ret.saved_exp    = pkmn.savedexp
+      ret.saved_ev     = pkmn.savedev.clone
+      ret.shadow_moves = []
+      pkmn.shadowmoves.each_with_index do |move, i|
+        ret.shadow_moves[i] = GameData::Move.get(move).id if move
+      end
+    end
     # NOTE: Intentionally set last, as it recalculates stats.
-    ret.formSimple     = pkmn.form || 0
+    ret.form_simple    = pkmn.form || 0
     return ret
   end
 end
@@ -178,6 +180,16 @@ class Pokemon
     Deprecation.warn_method('Pokemon#setItem', 'v20', 'Pokemon#item=')
     self.item = value
   end
+
+  alias healStatus heal_status
+  alias pbLearnMove learn_move
+  alias pbDeleteMove forget_move
+  alias pbDeleteMoveAtIndex forget_move_at_index
+  alias pbRecordFirstMoves record_first_moves
+  alias pbAddFirstMove add_first_move
+  alias pbRemoveFirstMove remove_first_move
+  alias pbClearFirstMoves clear_first_moves
+  alias pbUpdateShadowMoves update_shadow_moves
 end
 
 # (see Pokemon#initialize)

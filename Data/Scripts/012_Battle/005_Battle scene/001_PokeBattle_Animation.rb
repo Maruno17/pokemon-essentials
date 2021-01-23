@@ -63,34 +63,37 @@ end
 module PokeBattle_BallAnimationMixin
   # Returns the color that the Pokémon turns when it goes into or out of its
   # Poké Ball.
-  def getBattlerColorFromBallType(ballType)
-    case ballType
-    when 1  then return Color.new(132, 189, 247)   # Great Ball
-    when 2  then return Color.new(189, 247, 165)   # Safari Ball
-    when 3  then return Color.new(255, 255, 123)   # Ultra Ball
-    when 4  then return Color.new(189, 165, 231)   # Master Ball
-    when 5  then return Color.new(173, 255, 206)   # Net Ball
-    when 6  then return Color.new( 99, 206, 247)   # Dive Ball
-    when 7  then return Color.new(247, 222,  82)   # Nest Ball
-    when 8  then return Color.new(255, 198, 132)   # Repeat Ball
-    when 9  then return Color.new(239, 247, 247)   # Timer Ball
-    when 10 then return Color.new(255, 140,  82)   # Luxury Ball
-    when 11 then return Color.new(255,  74,  82)   # Premier Ball
-    when 12 then return Color.new(115, 115, 140)   # Dusk Ball
-    when 13 then return Color.new(255, 198, 231)   # Heal Ball
-    when 14 then return Color.new(140, 214, 255)   # Quick Ball
-    when 15 then return Color.new(247,  66,  41)   # Cherish Ball
+  def getBattlerColorFromPokeBall(poke_ball)
+    case poke_ball
+    when :GREATBALL   then return Color.new(132, 189, 247)
+    when :SAFARIBALL  then return Color.new(189, 247, 165)
+    when :ULTRABALL   then return Color.new(255, 255, 123)
+    when :MASTERBALL  then return Color.new(189, 165, 231)
+    when :NETBALL     then return Color.new(173, 255, 206)
+    when :DIVEBALL    then return Color.new( 99, 206, 247)
+    when :NESTBALL    then return Color.new(247, 222,  82)
+    when :REPEATBALL  then return Color.new(255, 198, 132)
+    when :TIMERBALL   then return Color.new(239, 247, 247)
+    when :LUXURYBALL  then return Color.new(255, 140,  82)
+    when :PREMIERBALL then return Color.new(255,  74,  82)
+    when :DUSKBALL    then return Color.new(115, 115, 140)
+    when :HEALBALL    then return Color.new(255, 198, 231)
+    when :QUICKBALL   then return Color.new(140, 214, 255)
+    when :CHERISHBALL then return Color.new(247,  66,  41)
     end
     return Color.new(255, 181, 247)   # Poké Ball, Sport Ball, Apricorn Balls, others
   end
 
-  def addBallSprite(ballX,ballY,ballType)
-    ball = addNewSprite(ballX,ballY,
-       sprintf("Graphics/Battle animations/ball_%02d",ballType),PictureOrigin::Center)
+  def addBallSprite(ballX, ballY, poke_ball)
+    file_path = sprintf("Graphics/Battle animations/ball_%s", poke_ball)
+    if !pbResolveBitmap(file_path)
+      file_path = sprintf("Graphics/Battle animations/ball_%02d", pbGetBallType(poke_ball))
+    end
+    ball = addNewSprite(ballX, ballY, file_path, PictureOrigin::Center)
     @ballSprite = @pictureSprites.last
-    if @ballSprite.bitmap.width>=@ballSprite.bitmap.height
-      @ballSprite.src_rect.width = @ballSprite.bitmap.height/2
-      ball.setSrcSize(0,@ballSprite.bitmap.height/2,@ballSprite.bitmap.height)
+    if @ballSprite.bitmap.width >= @ballSprite.bitmap.height
+      @ballSprite.src_rect.width = @ballSprite.bitmap.height / 2
+      ball.setSrcSize(0, @ballSprite.bitmap.height / 2, @ballSprite.bitmap.height)
     end
     return ball
   end
@@ -201,28 +204,36 @@ module PokeBattle_BallAnimationMixin
     ball.setAngle(delay+duration,0)
   end
 
-  def ballSetOpen(ball,delay,ballType)
-    ball.setName(delay,sprintf("Graphics/Battle animations/ball_%02d_open",ballType))
-    if @ballSprite && @ballSprite.bitmap.width>=@ballSprite.bitmap.height
-      ball.setSrcSize(delay,@ballSprite.bitmap.height/2,@ballSprite.bitmap.height)
+  def ballSetOpen(ball, delay, poke_ball)
+    file_path = sprintf("Graphics/Battle animations/ball_%s_open", poke_ball)
+    if !pbResolveBitmap(file_path)
+      file_path = sprintf("Graphics/Battle animations/ball_%02d_open", pbGetBallType(poke_ball))
+    end
+    ball.setName(delay, file_path)
+    if @ballSprite && @ballSprite.bitmap.width >= @ballSprite.bitmap.height
+      ball.setSrcSize(delay, @ballSprite.bitmap.height / 2, @ballSprite.bitmap.height)
     end
   end
 
-  def ballSetClosed(ball,delay,ballType)
-    ball.setName(delay,sprintf("Graphics/Battle animations/ball_%02d",ballType))
-    if @ballSprite && @ballSprite.bitmap.width>=@ballSprite.bitmap.height
-      ball.setSrcSize(delay,@ballSprite.bitmap.height/2,@ballSprite.bitmap.height)
+  def ballSetClosed(ball, delay, poke_ball)
+    file_path = sprintf("Graphics/Battle animations/ball_%s", poke_ball)
+    if !pbResolveBitmap(file_path)
+      file_path = sprintf("Graphics/Battle animations/ball_%02d", pbGetBallType(poke_ball))
+    end
+    ball.setName(delay, file_path)
+    if @ballSprite && @ballSprite.bitmap.width >= @ballSprite.bitmap.height
+      ball.setSrcSize(delay, @ballSprite.bitmap.height / 2, @ballSprite.bitmap.height)
     end
   end
 
-  def ballOpenUp(ball,delay,ballType,showSquish=true,playSE=true)
+  def ballOpenUp(ball, delay, poke_ball, showSquish = true, playSE = true)
     if showSquish
-      ball.moveZoomXY(delay,1,120,80)   # Squish
-      ball.moveZoom(delay+5,1,100)      # Unsquish
+      ball.moveZoomXY(delay, 1, 120, 80)   # Squish
+      ball.moveZoom(delay + 5, 1, 100)     # Unsquish
       delay += 6
     end
-    ball.setSE(delay,"Battle recall") if playSE
-    ballSetOpen(ball,delay,ballType)
+    ball.setSE(delay, "Battle recall") if playSE
+    ballSetOpen(ball, delay, poke_ball)
   end
 
   def battlerAppear(battler,delay,battlerX,battlerY,batSprite,color)
@@ -246,20 +257,20 @@ module PokeBattle_BallAnimationMixin
   end
 
   # The regular Poké Ball burst animation.
-  def ballBurst(delay,ballX,ballY,ballType)
+  def ballBurst(delay, ballX, ballY, poke_ball)
   end
 
   # The Poké Ball burst animation used when absorbing a wild Pokémon during a
   # capture attempt.
-  def ballBurstCapture(delay,ballX,ballY,ballType)
+  def ballBurstCapture(delay, ballX, ballY, poke_ball)
   end
 
-  def ballCaptureSuccess(ball,delay,ballX,ballY)
-    ball.setSE(delay,"Battle catch click")
-    ball.moveTone(delay,4,Tone.new(-64,-64,-64,128))
+  def ballCaptureSuccess(ball, delay, ballX, ballY)
+    ball.setSE(delay, "Battle catch click")
+    ball.moveTone(delay, 4, Tone.new(-64, -64, -64, 128))
   end
 
   # The Poké Ball burst animation used when recalling a Pokémon.
-  def ballBurstRecall(delay,ballX,ballY,ballType)
+  def ballBurstRecall(delay, ballX, ballY, poke_ball)
   end
 end

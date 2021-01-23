@@ -561,7 +561,7 @@ class PokeBattle_Battle
       # Hyper Mode (Shadow Pokémon)
       if b.inHyperMode?
         if pbRandom(100)<10
-          b.pokemon.hypermode = false
+          b.pokemon.hyper_mode = false
           b.pokemon.adjustHeart(-50)
           pbDisplay(_INTL("{1} came to its senses!",b.pbThis))
         else

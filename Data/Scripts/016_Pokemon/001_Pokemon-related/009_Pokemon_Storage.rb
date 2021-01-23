@@ -189,8 +189,8 @@ class PokemonStorage
     else   # Copying into box
       pkmn = self[boxSrc,indexSrc]
       raise "Trying to copy nil to storage" if !pkmn
-      pkmn.formTime = nil if pkmn.respond_to?("formTime")
-      pkmn.form     = 0 if pkmn.isSpecies?(:SHAYMIN)
+      pkmn.time_form_set = nil
+      pkmn.form          = 0 if pkmn.isSpecies?(:SHAYMIN)
       pkmn.heal
       self[boxDst,indexDst] = pkmn
     end
@@ -212,8 +212,8 @@ class PokemonStorage
     for i in 0...maxPokemon(box)
       if self[box,i]==nil
         if box>=0
-          pkmn.formTime = nil if pkmn.respond_to?("formTime") && pkmn.formTime
-          pkmn.form     = 0 if pkmn.isSpecies?(:SHAYMIN)
+          pkmn.time_form_set = nil if pkmn.time_form_set
+          pkmn.form          = 0 if pkmn.isSpecies?(:SHAYMIN)
           pkmn.heal
         end
         self[box,i] = pkmn
@@ -225,8 +225,8 @@ class PokemonStorage
 
   def pbStoreCaught(pkmn)
     if @currentBox>=0
-      pkmn.formTime = nil if pkmn.respond_to?("formTime")
-      pkmn.form     = 0 if pkmn.isSpecies?(:SHAYMIN)
+      pkmn.time_form_set = nil
+      pkmn.form          = 0 if pkmn.isSpecies?(:SHAYMIN)
       pkmn.heal
     end
     for i in 0...maxPokemon(@currentBox)

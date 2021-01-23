@@ -198,11 +198,11 @@ def pbHatch(pokemon)
   pokemon.happiness      = 120
   pokemon.timeEggHatched = pbGetTimeNow
   pokemon.obtain_method  = 1   # hatched from egg
-  pokemon.hatchedMap     = $game_map.map_id
+  pokemon.hatched_map    = $game_map.map_id
   $Trainer.seen[pokemon.species]  = true
   $Trainer.owned[pokemon.species] = true
   pbSeenForm(pokemon)
-  pokemon.pbRecordFirstMoves
+  pokemon.record_first_moves
   if !pbHatchAnimation(pokemon)
     pbMessage(_INTL("Huh?\1"))
     pbMessage(_INTL("...\1"))
@@ -218,15 +218,15 @@ end
 
 Events.onStepTaken += proc { |_sender,_e|
   for egg in $Trainer.party
-    next if egg.eggsteps<=0
-    egg.eggsteps -= 1
+    next if egg.steps_to_hatch <= 0
+    egg.steps_to_hatch -= 1
     for i in $Trainer.pokemonParty
       next if !i.hasAbility?(:FLAMEBODY) && !i.hasAbility?(:MAGMAARMOR)
-      egg.eggsteps -= 1
+      egg.steps_to_hatch -= 1
       break
     end
-    if egg.eggsteps<=0
-      egg.eggsteps = 0
+    if egg.steps_to_hatch <= 0
+      egg.steps_to_hatch = 0
       pbHatch(egg)
     end
   end

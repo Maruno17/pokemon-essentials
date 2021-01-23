@@ -61,9 +61,17 @@ class PokemonTrade_Scene
     spriteBall = IconSprite.new(0,0,@viewport)
     pictureBall = PictureEx.new(0)
     picturePoke = PictureEx.new(0)
+    ballimage = sprintf("Graphics/Battle animations/ball_%s", @pokemon.poke_ball)
+    if !pbResolveBitmap(ballimage)
+      ballimage = sprintf("Graphics/Battle animations/ball_%02d", pbGetBallType(@pokemon.poke_ball))
+    end
+    ballopenimage = sprintf("Graphics/Battle animations/ball_%s_open", @pokemon.poke_ball)
+    if !pbResolveBitmap(ballimage)
+      ballopenimage = sprintf("Graphics/Battle animations/ball_%02d_open", pbGetBallType(@pokemon.poke_ball))
+    end
     # Starting position of ball
     pictureBall.setXY(0,Graphics.width/2,48)
-    pictureBall.setName(0,sprintf("Graphics/Battle animations/ball_%02d",@pokemon.ballused))
+    pictureBall.setName(0,ballimage)
     pictureBall.setSrcSize(0,32,64)
     pictureBall.setOrigin(0,PictureOrigin::Center)
     pictureBall.setVisible(0,true)
@@ -76,7 +84,7 @@ class PokemonTrade_Scene
     # Recall
     delay = picturePoke.totalDuration
     picturePoke.setSE(delay,"Battle recall")
-    pictureBall.setName(delay,sprintf("Graphics/Battle animations/ball_%02d_open",@pokemon.ballused))
+    pictureBall.setName(delay,ballopenimage)
     pictureBall.setSrcSize(delay,32,64)
     # Move sprite to ball
     picturePoke.moveZoom(delay,8,0)
@@ -84,7 +92,7 @@ class PokemonTrade_Scene
     picturePoke.setSE(delay+5,"Battle jump to ball")
     picturePoke.setVisible(delay+8,false)
     delay = picturePoke.totalDuration+1
-    pictureBall.setName(delay,sprintf("Graphics/Battle animations/ball_%02d",@pokemon.ballused))
+    pictureBall.setName(delay,ballimage)
     pictureBall.setSrcSize(delay,32,64)
     # Make Poké Ball go off the top of the screen
     delay = picturePoke.totalDuration+10
@@ -101,9 +109,17 @@ class PokemonTrade_Scene
     spriteBall = IconSprite.new(0,0,@viewport)
     pictureBall = PictureEx.new(0)
     picturePoke = PictureEx.new(0)
+    ballimage = sprintf("Graphics/Battle animations/ball_%s", @pokemon2.poke_ball)
+    if !pbResolveBitmap(ballimage)
+      ballimage = sprintf("Graphics/Battle animations/ball_%02d", pbGetBallType(@pokemon2.poke_ball))
+    end
+    ballopenimage = sprintf("Graphics/Battle animations/ball_%s_open", @pokemon2.poke_ball)
+    if !pbResolveBitmap(ballimage)
+      ballopenimage = sprintf("Graphics/Battle animations/ball_%02d_open", pbGetBallType(@pokemon2.poke_ball))
+    end
     # Starting position of ball
     pictureBall.setXY(0,Graphics.width/2,-32)
-    pictureBall.setName(0,sprintf("Graphics/Battle animations/ball_%02d",@pokemon2.ballused))
+    pictureBall.setName(0,ballimage)
     pictureBall.setSrcSize(0,32,64)
     pictureBall.setOrigin(0,PictureOrigin::Center)
     pictureBall.setVisible(0,true)
@@ -132,7 +148,7 @@ class PokemonTrade_Scene
     # Open Poké Ball
     delay = pictureBall.totalDuration+15
     pictureBall.setSE(delay,"Battle recall")
-    pictureBall.setName(delay,sprintf("Graphics/Battle animations/ball_%02d_open",@pokemon2.ballused))
+    pictureBall.setName(delay,ballopenimage)
     pictureBall.setSrcSize(delay,32,64)
     pictureBall.setVisible(delay+5,false)
     # Pokémon appears and enlarges
@@ -211,7 +227,7 @@ def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
   yourPokemon.name          = nickname
   yourPokemon.obtain_method = 2   # traded
   yourPokemon.resetMoves if resetmoves
-  yourPokemon.pbRecordFirstMoves
+  yourPokemon.record_first_moves
   $Trainer.seen[yourPokemon.species]  = true
   $Trainer.owned[yourPokemon.species] = true
   pbSeenForm(yourPokemon)

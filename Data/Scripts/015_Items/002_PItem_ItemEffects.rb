@@ -415,7 +415,7 @@ ItemHandlers::UseOnPokemon.add(:AWAKENING,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  pkmn.healStatus
+  pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} woke up.",pkmn.name))
   next true
@@ -428,7 +428,7 @@ ItemHandlers::UseOnPokemon.add(:ANTIDOTE,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  pkmn.healStatus
+  pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} was cured of its poisoning.",pkmn.name))
   next true
@@ -441,7 +441,7 @@ ItemHandlers::UseOnPokemon.add(:BURNHEAL,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  pkmn.healStatus
+  pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1}'s burn was healed.",pkmn.name))
   next true
@@ -454,7 +454,7 @@ ItemHandlers::UseOnPokemon.add(:PARLYZHEAL,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  pkmn.healStatus
+  pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} was cured of paralysis.",pkmn.name))
   next true
@@ -467,7 +467,7 @@ ItemHandlers::UseOnPokemon.add(:ICEHEAL,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  pkmn.healStatus
+  pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} was thawed out.",pkmn.name))
   next true
@@ -480,7 +480,7 @@ ItemHandlers::UseOnPokemon.add(:FULLHEAL,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  pkmn.healStatus
+  pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} became healthy.",pkmn.name))
   next true
@@ -497,7 +497,7 @@ ItemHandlers::UseOnPokemon.add(:FULLRESTORE,proc { |item,pkmn,scene|
     next false
   end
   hpgain = pbItemRestoreHP(pkmn,pkmn.totalhp-pkmn.hp)
-  pkmn.healStatus
+  pkmn.heal_status
   scene.pbRefresh
   if hpgain>0
     scene.pbDisplay(_INTL("{1}'s HP was restored by {2} points.",pkmn.name,hpgain))
@@ -514,7 +514,7 @@ ItemHandlers::UseOnPokemon.add(:REVIVE,proc { |item,pkmn,scene|
   end
   pkmn.hp = (pkmn.totalhp/2).floor
   pkmn.hp = 1 if pkmn.hp<=0
-  pkmn.healStatus
+  pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1}'s HP was restored.",pkmn.name))
   next true
@@ -525,8 +525,8 @@ ItemHandlers::UseOnPokemon.add(:MAXREVIVE,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  pkmn.healHP
-  pkmn.healStatus
+  pkmn.heal_HP
+  pkmn.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1}'s HP was restored.",pkmn.name))
   next true
@@ -553,7 +553,7 @@ ItemHandlers::UseOnPokemon.add(:HEALPOWDER,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  pkmn.healStatus
+  pkmn.heal_status
   pkmn.changeHappiness("powder")
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} became healthy.",pkmn.name))
@@ -565,8 +565,8 @@ ItemHandlers::UseOnPokemon.add(:REVIVALHERB,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
-  pkmn.healHP
-  pkmn.healStatus
+  pkmn.heal_HP
+  pkmn.heal_status
   pkmn.changeHappiness("revivalherb")
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1}'s HP was restored.",pkmn.name))

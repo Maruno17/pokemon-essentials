@@ -19,7 +19,7 @@ def pbStorePokemon(pkmn)
     pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
     return
   end
-  pkmn.pbRecordFirstMoves
+  pkmn.record_first_moves
   if $Trainer.party_full?
     oldcurbox = $PokemonStorage.currentBox
     storedbox = $PokemonStorage.pbStoreCaught(pkmn)
@@ -83,7 +83,7 @@ def pbAddPokemonSilent(pkmn, level = 1, see_form = true)
   $Trainer.seen[pkmn.species]  = true
   $Trainer.owned[pkmn.species] = true
   pbSeenForm(pkmn) if see_form
-  pkmn.pbRecordFirstMoves
+  pkmn.record_first_moves
   if $Trainer.party_full?
     $PokemonStorage.pbStoreCaught(pkmn)
   else
@@ -111,7 +111,7 @@ def pbAddToPartySilent(pkmn, level = nil, see_form = true)
   $Trainer.seen[pkmn.species]  = true
   $Trainer.owned[pkmn.species] = true
   pbSeenForm(pkmn) if see_form
-  pkmn.pbRecordFirstMoves
+  pkmn.record_first_moves
   $Trainer.party[$Trainer.party.length] = pkmn
   return true
 end
@@ -141,9 +141,9 @@ def pbGenerateEgg(pkmn, text = "")
   return false if !pkmn || $Trainer.party_full?
   pkmn = Pokemon.new(pkmn, EGG_LEVEL) if !pkmn.is_a?(Pokemon)
   # Set egg's details
-  pkmn.name       = _INTL("Egg")
-  pkmn.eggsteps   = pkmn.species_data.hatch_steps
-  pkmn.obtainText = text
+  pkmn.name           = _INTL("Egg")
+  pkmn.steps_to_hatch = pkmn.species_data.hatch_steps
+  pkmn.obtain_text    = text
   pkmn.calcStats
   # Add egg to party
   $Trainer.party[$Trainer.party.length] = pkmn

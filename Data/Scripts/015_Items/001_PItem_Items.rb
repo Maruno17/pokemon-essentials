@@ -420,7 +420,7 @@ def pbLearnMove(pkmn,move,ignoreifknown=false,bymachine=false,&block)
     return false
   end
   if pkmn.numMoves<Pokemon::MAX_MOVES
-    pkmn.pbLearnMove(move)
+    pkmn.learn_move(move)
     pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]",pkmnname,movename),&block)
     return true
   end
@@ -552,7 +552,7 @@ def pbUseItemOnPokemon(item,pkmn,scene)
     movename = GameData::Move.get(machine).name
     if pkmn.shadowPokemon?
       pbMessage(_INTL("Shadow Pokémon can't be taught any moves.")) { scene.pbUpdate }
-    elsif !pkmn.compatibleWithMove?(machine)
+    elsif !pkmn.compatible_with_move?(machine)
       pbMessage(_INTL("{1} can't learn {2}.",pkmn.name,movename)) { scene.pbUpdate }
     else
       pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",itm.name)) { scene.pbUpdate }

@@ -155,6 +155,20 @@ MultipleForms.register(:CASTFORM,{
   }
 })
 
+MultipleForms.register(:GROUDON,{
+  "getPrimalForm" => proc { |pkmn|
+    next 1 if pkmn.hasItem?(:REDORB)
+    next
+  }
+})
+
+MultipleForms.register(:KYOGRE,{
+  "getPrimalForm" => proc { |pkmn|
+    next 1 if pkmn.hasItem?(:BLUEORB)
+    next
+  }
+})
+
 MultipleForms.register(:BURMY,{
   "getFormOnCreation" => proc { |pkmn|
     case pbGetEnvironment
@@ -217,9 +231,9 @@ MultipleForms.register(:ROTOM,{
       # Turned back into the base form; forget form-specific moves
       if move_index >= 0
         move_name = pkmn.moves[move_index].name
-        pkmn.pbDeleteMoveAtIndex(move_index)
+        pkmn.forget_move_at_index(move_index)
         pbMessage(_INTL("{1} forgot {2}...", pkmn.name, move_name))
-        pkmn.pbLearnMove(:THUNDERSHOCK) if pkmn.numMoves == 0
+        pkmn.learn_move(:THUNDERSHOCK) if pkmn.numMoves == 0
       end
     else
       # Turned into an alternate form; try learning that form's unique move
@@ -234,9 +248,9 @@ MultipleForms.register(:ROTOM,{
           pbMessage(_INTL("{1} forgot how to use {2}.\\nAnd...\1", pkmn.name, old_move_name))
           pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]", pkmn.name, new_move_name))
         else
-          pkmn.pbDeleteMoveAtIndex(move_index)
+          pkmn.forget_move_at_index(move_index)
           pbMessage(_INTL("{1} forgot {2}...", pkmn.name, old_move_name))
-          pkmn.pbLearnMove(:THUNDERSHOCK) if pkmn.numMoves == 0
+          pkmn.learn_move(:THUNDERSHOCK) if pkmn.numMoves == 0
         end
       else
         # Just try to learn this form's unique move
@@ -397,12 +411,13 @@ MultipleForms.copy(:FLABEBE,:FLOETTE,:FLORGES)
 
 MultipleForms.register(:FURFROU,{
   "getForm" => proc { |pkmn|
-    if !pkmn.formTime || pbGetTimeNow.to_i>pkmn.formTime.to_i+60*60*24*5   # 5 days
+    if !pkmn.time_form_set ||
+       pbGetTimeNow.to_i > pkmn.time_form_set.to_i + 60 * 60 * 24 * 5   # 5 days
       next 0
     end
   },
   "onSetForm" => proc { |pkmn,form,oldForm|
-    pkmn.formTime = (form>0) ? pbGetTimeNow.to_i : nil
+    pkmn.time_form_set = (form > 0) ? pbGetTimeNow.to_i : nil
   }
 })
 
@@ -450,12 +465,13 @@ MultipleForms.register(:ZYGARDE,{
 
 MultipleForms.register(:HOOPA,{
   "getForm" => proc { |pkmn|
-    if !pkmn.formTime || pbGetTimeNow.to_i>pkmn.formTime.to_i+60*60*24*3   # 3 days
+    if !pkmn.time_form_set ||
+       pbGetTimeNow.to_i > pkmn.time_form_set.to_i + 60 * 60 * 24 * 3   # 3 days
       next 0
     end
   },
   "onSetForm" => proc { |pkmn,form,oldForm|
-    pkmn.formTime = (form>0) ? pbGetTimeNow.to_i : nil
+    pkmn.time_form_set = (form>0) ? pbGetTimeNow.to_i : nil
   }
 })
 
@@ -467,7 +483,7 @@ MultipleForms.register(:ORICORIO,{
 
 MultipleForms.register(:ROCKRUFF,{
   "getForm" => proc { |pkmn|
-    next if pkmn.formSimple>=2   # Own Tempo Rockruff cannot become another form
+    next if pkmn.form_simple >= 2   # Own Tempo Rockruff cannot become another form
     next 1 if PBDayNight.isNight?
     next 0
   }
@@ -561,9 +577,9 @@ MultipleForms.register(:NECROZMA,{
       end
       if move_index >= 0
         move_name = pkmn.moves[move_index].name
-        pkmn.pbDeleteMoveAtIndex(move_index)
+        pkmn.forget_move_at_index(move_index)
         pbMessage(_INTL("{1} forgot {2}...", pkmn.name, move_name))
-        pkmn.pbLearnMove(:CONFUSION) if pkmn.numMoves == 0
+        pkmn.learn_move(:CONFUSION) if pkmn.numMoves == 0
       end
     else
       # Turned into an alternate form; try learning that form's unique move
@@ -581,7 +597,7 @@ MultipleForms.register(:NECROZMA,{
 # evolve into different forms depending on the location where they evolved.
 MultipleForms.register(:PIKACHU, {
   "getForm" => proc { |pkmn|
-    next if pkmn.formSimple >= 2
+    next if pkmn.form_simple >= 2
     map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
     next 1 if map_metadata && map_metadata.town_map_position &&
               map_metadata.town_map_position[0] == 1   # Tiall region

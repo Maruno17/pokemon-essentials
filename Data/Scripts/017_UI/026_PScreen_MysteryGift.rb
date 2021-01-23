@@ -35,7 +35,7 @@ def pbEditMysteryGift(type,item,id=0,giftname="")
     if type==0   # Pokémon
       commands=[_INTL("Mystery Gift"),
                 _INTL("Faraway place")]
-      commands.push(item.obtainText) if item.obtainText && item.obtainText!=""
+      commands.push(item.obtain_text) if item.obtain_text && !item.obtain_text.empty?
       commands.push(_INTL("[Custom]"))
       loop do
         command=pbMessage(
@@ -43,12 +43,12 @@ def pbEditMysteryGift(type,item,id=0,giftname="")
         if command<0
           return nil if pbConfirmMessage(_INTL("Stop editing this gift?"))
         elsif command<commands.length-1
-          item.obtainText=commands[command]
+          item.obtain_text = commands[command]
           break
         elsif command==commands.length-1
           obtainname=pbMessageFreeText(_INTL("Enter a phrase."),"",false,30)
           if obtainname!=""
-            item.obtainText=obtainname
+            item.obtain_text = obtainname
             break
           end
           return nil if pbConfirmMessage(_INTL("Stop editing this gift?"))
@@ -384,13 +384,13 @@ def pbReceiveMysteryGift(id)
     time=pbGetTimeNow
     gift[2].timeReceived=time.getgm.to_i
     gift[2].obtain_method = 4   # Fateful encounter
-    gift[2].pbRecordFirstMoves
+    gift[2].record_first_moves
     if $game_map
-      gift[2].obtainMap=$game_map.map_id
-      gift[2].obtainLevel=gift[2].level
+      gift[2].obtain_map=$game_map.map_id
+      gift[2].obtain_level=gift[2].level
     else
-      gift[2].obtainMap=0
-      gift[2].obtainLevel=gift[2].level
+      gift[2].obtain_map=0
+      gift[2].obtain_level=gift[2].level
     end
     if pbAddPokemonSilent(gift[2])
       pbMessage(_INTL("\\me[Pkmn get]{1} received {2}!",$Trainer.name,gift[2].name))

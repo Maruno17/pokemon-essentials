@@ -144,13 +144,13 @@ module PokeBattle_BattleCommon
         pkmn.owner = Pokemon::Owner.new_from_trainer(pbPlayer)
       end
       BallHandlers.onCatch(ball,self,pkmn)
-      pkmn.ballused = pbGetBallType(ball)
+      pkmn.poke_ball = ball
       pkmn.makeUnmega if pkmn.mega?
       pkmn.makeUnprimal
-      pkmn.pbUpdateShadowMoves if pkmn.shadowPokemon?
-      pkmn.pbRecordFirstMoves
+      pkmn.update_shadow_moves if pkmn.shadowPokemon?
+      pkmn.record_first_moves
       # Reset form
-      pkmn.forcedForm = nil if MultipleForms.hasFunction?(pkmn.species,"getForm")
+      pkmn.forced_form = nil if MultipleForms.hasFunction?(pkmn.species,"getForm")
       @peer.pbOnLeavingBattle(self,pkmn,true,true)
       # Make the Poké Ball and data box disappear
       @scene.pbHideCaptureBall(idxBattler)

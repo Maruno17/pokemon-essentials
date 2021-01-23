@@ -115,12 +115,12 @@ module GameData
         party.push(pkmn)
         # Set Pokémon's properties if defined
         if pkmn_data[:form]
-          pkmn.forcedForm = pkmn_data[:form] if MultipleForms.hasFunction?(species, "getForm")
-          pkmn.formSimple = pkmn_data[:form]
+          pkmn.forced_form = pkmn_data[:form] if MultipleForms.hasFunction?(species, "getForm")
+          pkmn.form_simple = pkmn_data[:form]
         end
         pkmn.item = pkmn_data[:item]
         if pkmn_data[:moves] && pkmn_data[:moves].length > 0
-          pkmn_data[:moves].each { |move| pkmn.pbLearnMove(move) }
+          pkmn_data[:moves].each { |move| pkmn.learn_move(move) }
         else
           pkmn.resetMoves
         end
@@ -149,10 +149,10 @@ module GameData
         pkmn.name = pkmn_data[:name] if pkmn_data[:name] && !pkmn_data[:name].empty?
         if pkmn_data[:shadowness]
           pkmn.makeShadow
-          pkmn.pbUpdateShadowMoves(true)
+          pkmn.update_shadow_moves(true)
           pkmn.shiny = false
         end
-        pkmn.ballused = pkmn_data[:poke_ball] if pkmn_data[:poke_ball]
+        pkmn.poke_ball = pbBallTypeToItem(pkmn_data[:poke_ball]) if pkmn_data[:poke_ball]
         pkmn.calcStats
       end
       return [trainer, @items.clone, party, self.lose_text]

@@ -8,14 +8,14 @@ class Pokemon
   # If defined, this Pokémon's form will be this value even if a MultipleForms
   # handler tries to say otherwise.
   # @return [Integer, nil] this Pokémon's form
-  attr_accessor :forcedForm
+  attr_accessor :forced_form
   # If defined, is the time (in Integer form) when this Pokémon's form was set.
   # @return [Integer, nil] the time this Pokémon's form was set
-  attr_accessor :formTime
+  attr_accessor :time_form_set
   # @return [Integer] the current experience points
   attr_reader   :exp
   # @return [Integer] the number of steps until this Pokémon hatches, 0 if this Pokémon is not an egg
-  attr_accessor :eggsteps
+  attr_accessor :steps_to_hatch
   # @return [Integer] the current HP
   attr_reader   :hp
   # @return [Integer] this Pokémon's current status (from PBStatuses)
@@ -37,7 +37,7 @@ class Pokemon
   # @return [Array<Pokemon::Move>] the moves known by this Pokémon
   attr_accessor :moves
   # @return [Array<Integer>] the IDs of moves known by this Pokémon when it was obtained
-  attr_accessor :firstmoves
+  attr_accessor :first_moves
   # @return [Array<Integer>] an array of ribbons owned by this Pokémon
   attr_accessor :ribbons
   # @return [Integer] contest stats
@@ -46,8 +46,8 @@ class Pokemon
   attr_accessor :pokerus
   # @return [Integer] this Pokémon's current happiness (an integer between 0 and 255)
   attr_accessor :happiness
-  # @return [Integer] the type of ball used (refer to {$BallTypes} for valid types)
-  attr_accessor :ballused
+  # @return [Symbol] the item ID of the Poké Ball this Pokémon is in
+  attr_accessor :poke_ball
   # @return [Integer] this Pokémon's markings, one bit per marking
   attr_accessor :markings
   # @return [Array<Integer>] an array of IV values for HP, Atk, Def, Speed, Sp. Atk and Sp. Def
@@ -66,17 +66,17 @@ class Pokemon
   #   0 (met), 1 (as egg), 2 (traded), 4 (fateful encounter)
   attr_accessor :obtain_method
   # @return [Integer] the ID of the map this Pokémon was obtained in
-  attr_accessor :obtainMap
+  attr_accessor :obtain_map
   # Describes the manner this Pokémon was obtained. If left undefined,
   # the obtain map's name is used.
   # @return [String] the obtain text
-  attr_accessor :obtainText
+  attr_accessor :obtain_text
   # @return [Integer] the level of this Pokémon when it was obtained
-  attr_accessor :obtainLevel
+  attr_accessor :obtain_level
   # If this Pokémon hatched from an egg, returns the map ID where the hatching happened.
   # Otherwise returns 0.
   # @return [Integer] the map ID where egg was hatched (0 by default)
-  attr_accessor :hatchedMap
+  attr_accessor :hatched_map
   # Another Pokémon which has been fused with this Pokémon (or nil if there is none).
   # Currently only used by Kyurem, to record a fused Reshiram or Zekrom.
   # @return [Pokemon, nil] the Pokémon fused into this one (nil if there is none)
@@ -96,7 +96,7 @@ class Pokemon
   MAX_MOVES     = 4
 
   def species_data
-    return GameData::Species.get_species_form(@species, formSimple)
+    return GameData::Species.get_species_form(@species, form_simple)
   end
 
   #=============================================================================
@@ -108,11 +108,11 @@ class Pokemon
   def species=(species_id)
     new_species_data = GameData::Species.get(species_id)
     return if @species == new_species_data.species
-    @species    = new_species_data.species
-    @form       = new_species_data.form if new_species_data.form != 0
-    @forcedForm = nil
-    @level      = nil   # In case growth rate is different for the new species
-    @ability    = nil
+    @species     = new_species_data.species
+    @form        = new_species_data.form if new_species_data.form != 0
+    @forced_form = nil
+    @level       = nil   # In case growth rate is different for the new species
+    @ability     = nil
     calcStats
   end
 
@@ -124,15 +124,15 @@ class Pokemon
   end
 
   def form
-    return @forcedForm if !@forcedForm.nil?
+    return @forced_form if !@forced_form.nil?
     return @form if $game_temp.in_battle
     calc_form = MultipleForms.call("getForm", self)
     self.form = calc_form if calc_form != nil && calc_form != @form
     return @form
   end
 
-  def formSimple
-    return @forcedForm || @form
+  def form_simple
+    return @forced_form || @form
   end
 
   def form=(value)
@@ -149,7 +149,7 @@ class Pokemon
     self.form = value
   end
 
-  def formSimple=(value)
+  def form_simple=(value)
     @form = value
     calcStats
   end
@@ -184,7 +184,7 @@ class Pokemon
 
   # @return [Boolean] whether this Pokémon is an egg
   def egg?
-    return @eggsteps > 0
+    return @steps_to_hatch > 0
   end
   alias isEgg? egg?
 
@@ -200,7 +200,7 @@ class Pokemon
 
   # @return [Float] a number between 0 and 1 indicating how much of the current level's
   #   Exp this Pokémon has
-  def expFraction
+  def exp_fraction
     lvl = self.level
     return 0.0 if lvl >= PBExperience.maxLevel
     g_rate = growth_rate
@@ -217,7 +217,7 @@ class Pokemon
   # @param value [Integer] new HP value
   def hp=(value)
     @hp = value.clamp(0, @totalhp)
-    healStatus if @hp == 0
+    heal_status if @hp == 0
   end
 
   # Sets this Pokémon's status. See {PBStatuses} for all possible status effects.
@@ -243,13 +243,13 @@ class Pokemon
   alias isFainted? fainted?
 
   # Heals all HP of this Pokémon.
-  def healHP
+  def heal_HP
     return if egg?
     @hp = @totalhp
   end
 
   # Heals the status problem of this Pokémon.
-  def healStatus
+  def heal_status
     return if egg?
     @status      = PBStatuses::NONE
     @statusCount = 0
@@ -259,7 +259,7 @@ class Pokemon
   # of the move in that index.
   # @param move_index [Integer] index of the move to heal (-1 if all moves
   #   should be healed)
-  def healPP(move_index = -1)
+  def heal_PP(move_index = -1)
     return if egg?
     if move_index >= 0
       @moves[move_index].pp = @moves[move_index].total_pp
@@ -271,9 +271,9 @@ class Pokemon
   # Heals all HP, PP, and status problems of this Pokémon.
   def heal
     return if egg?
-    healHP
-    healStatus
-    healPP
+    heal_HP
+    heal_status
+    heal_PP
   end
 
   #=============================================================================
@@ -572,7 +572,7 @@ class Pokemon
 
   # Silently learns the given move. Will erase the first known move if it has to.
   # @param move_id [Integer, Symbol, String] ID of the move to learn
-  def pbLearnMove(move_id)
+  def learn_move(move_id)
     move_data = GameData::Move.try_get(move_id)
     return if !move_data
     # Check if self already knows the move; if so, move it to the end of the array
@@ -590,7 +590,7 @@ class Pokemon
 
   # Deletes the given move from the Pokémon.
   # @param move_id [Integer, Symbol, String] ID of the move to delete
-  def pbDeleteMove(move_id)
+  def forget_move(move_id)
     move_data = GameData::Move.try_get(move_id)
     return if !move_data
     @moves.delete_if { |m| m.id == move_data.id }
@@ -598,43 +598,43 @@ class Pokemon
 
   # Deletes the move at the given index from the Pokémon.
   # @param index [Integer] index of the move to be deleted
-  def pbDeleteMoveAtIndex(index)
+  def forget_move_at_index(index)
     @moves.delete_at(index)
   end
 
   # Deletes all moves from the Pokémon.
-  def pbDeleteAllMoves
+  def forget_all_moves
     @moves.clear
   end
 
   # Copies currently known moves into a separate array, for Move Relearner.
-  def pbRecordFirstMoves
-    pbClearFirstMoves
-    @moves.each { |m| @firstmoves.push(m.id) }
+  def record_first_moves
+    clear_first_moves
+    @moves.each { |m| @first_moves.push(m.id) }
   end
 
   # Adds a move to this Pokémon's first moves.
   # @param move_id [Integer, Symbol, String] ID of the move to add
-  def pbAddFirstMove(move_id)
+  def add_first_move(move_id)
     move_data = GameData::Move.try_get(move_id)
-    @firstmoves.push(move_data.id) if move_data && !@firstmoves.include?(move_data.id)
+    @first_moves.push(move_data.id) if move_data && !@first_moves.include?(move_data.id)
   end
 
   # Removes a move from this Pokémon's first moves.
   # @param move_id [Integer, Symbol, String] ID of the move to remove
-  def pbRemoveFirstMove(move_id)
+  def remove_first_move(move_id)
     move_data = GameData::Move.try_get(move_id)
-    @firstmoves.delete(move_data.id) if move_data
+    @first_moves.delete(move_data.id) if move_data
   end
 
   # Clears this Pokémon's first moves.
-  def pbClearFirstMoves
-    @firstmoves.clear
+  def clear_first_moves
+    @first_moves.clear
   end
 
   # @param move_id [Integer, Symbol, String] ID of the move to check
   # @return [Boolean] whether the Pokémon is compatible with the given move
-  def compatibleWithMove?(move_id)
+  def compatible_with_move?(move_id)
     move_data = GameData::Move.try_get(move_id)
     return move_data && species_data.tutor_moves.include?(move_data.id)
   end
@@ -644,7 +644,7 @@ class Pokemon
   #=============================================================================
 
   # @return [Integer] the number of ribbons this Pokémon has
-  def ribbonCount
+  def numRibbons
     return @ribbons.length
   end
 
@@ -860,8 +860,8 @@ class Pokemon
       raise _INTL("Unknown happiness-changing method: {1}", method.to_s)
     end
     if gain > 0
-      gain += 1 if @obtainMap == $game_map.map_id
-      gain += 1 if @ballused == pbGetBallType(:LUXURYBALL)
+      gain += 1 if @obtain_map == $game_map.map_id
+      gain += 1 if @poke_ball == :LUXURYBALL
       gain = (gain * 1.5).floor if hasItem?(:SOOTHEBELL)
     end
     @happiness = (@happiness + gain).clamp(0, 255)
@@ -928,14 +928,14 @@ class Pokemon
   # @return [Pokemon] a copy of this Pokémon
   def clone
     ret = super
-    ret.iv         = @iv.clone
-    ret.ivMaxed    = @ivMaxed.clone
-    ret.ev         = @ev.clone
-    ret.moves      = []
+    ret.iv          = @iv.clone
+    ret.ivMaxed     = @ivMaxed.clone
+    ret.ev          = @ev.clone
+    ret.moves       = []
     @moves.each_with_index { |m, i| ret.moves[i] = m.clone }
-    ret.firstmoves = @firstmoves.cline
-    ret.owner      = @owner.clone
-    ret.ribbons    = @ribbons.clone
+    ret.first_moves = @first_moves.clone
+    ret.owner       = @owner.clone
+    ret.ribbons     = @ribbons.clone
     return ret
   end
 
@@ -948,11 +948,11 @@ class Pokemon
     species_data = GameData::Species.get(species)
     @species          = species_data.species
     @form             = species_data.form
-    @forcedForm       = nil
-    @formTime         = nil
+    @forced_form      = nil
+    @time_form_set    = nil
     self.level        = level
-    @eggsteps         = 0
-    healStatus
+    @steps_to_hatch   = 0
+    heal_status
     @gender           = nil
     @shiny            = nil
     @ability_index    = nil
@@ -963,7 +963,7 @@ class Pokemon
     @mail             = nil
     @moves            = []
     resetMoves if withMoves
-    @firstmoves       = []
+    @first_moves      = []
     @ribbons          = []
     @cool             = 0
     @beauty           = 0
@@ -974,7 +974,7 @@ class Pokemon
     @pokerus          = 0
     @name             = nil
     @happiness        = species_data.happiness
-    @ballused         = 0
+    @poke_ball        = :POKEBALL
     @markings         = 0
     @iv               = []
     @ivMaxed          = []
@@ -992,10 +992,10 @@ class Pokemon
     end
     @obtain_method    = 0   # Met
     @obtain_method    = 4 if $game_switches && $game_switches[FATEFUL_ENCOUNTER_SWITCH]
-    @obtainMap        = ($game_map) ? $game_map.map_id : 0
-    @obtainText       = nil
-    @obtainLevel      = level
-    @hatchedMap       = 0
+    @obtain_map       = ($game_map) ? $game_map.map_id : 0
+    @obtain_text      = nil
+    @obtain_level     = level
+    @hatched_map      = 0
     @timeReceived     = pbGetTimeNow.to_i
     @timeEggHatched   = nil
     @fused            = nil

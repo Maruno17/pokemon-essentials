@@ -356,7 +356,7 @@ ItemHandlers::BattleUseOnPokemon.add(:SITRUSBERRY,proc { |item,pokemon,battler,c
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:AWAKENING,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
@@ -366,7 +366,7 @@ ItemHandlers::BattleUseOnPokemon.add(:AWAKENING,proc { |item,pokemon,battler,cho
 ItemHandlers::BattleUseOnPokemon.copy(:AWAKENING,:CHESTOBERRY,:BLUEFLUTE)
 
 ItemHandlers::BattleUseOnPokemon.add(:ANTIDOTE,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
@@ -376,7 +376,7 @@ ItemHandlers::BattleUseOnPokemon.add(:ANTIDOTE,proc { |item,pokemon,battler,choi
 ItemHandlers::BattleUseOnPokemon.copy(:ANTIDOTE,:PECHABERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:BURNHEAL,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
@@ -386,7 +386,7 @@ ItemHandlers::BattleUseOnPokemon.add(:BURNHEAL,proc { |item,pokemon,battler,choi
 ItemHandlers::BattleUseOnPokemon.copy(:BURNHEAL,:RAWSTBERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:PARALYZEHEAL,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
@@ -396,7 +396,7 @@ ItemHandlers::BattleUseOnPokemon.add(:PARALYZEHEAL,proc { |item,pokemon,battler,
 ItemHandlers::BattleUseOnPokemon.copy(:PARALYZEHEAL,:PARLYZHEAL,:CHERIBERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:ICEHEAL,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
@@ -406,7 +406,7 @@ ItemHandlers::BattleUseOnPokemon.add(:ICEHEAL,proc { |item,pokemon,battler,choic
 ItemHandlers::BattleUseOnPokemon.copy(:ICEHEAL,:ASPEARBERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:FULLHEAL,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   battler.pbCureConfusion if battler
   name = (battler) ? battler.pbThis : pokemon.name
@@ -420,7 +420,7 @@ ItemHandlers::BattleUseOnPokemon.copy(:FULLHEAL,
 ItemHandlers::BattleUseOnPokemon.copy(:FULLHEAL,:RAGECANDYBAR) if RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::BattleUseOnPokemon.add(:FULLRESTORE,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   battler.pbCureConfusion if battler
   name = (battler) ? battler.pbThis : pokemon.name
@@ -435,14 +435,14 @@ ItemHandlers::BattleUseOnPokemon.add(:FULLRESTORE,proc { |item,pokemon,battler,c
 ItemHandlers::BattleUseOnPokemon.add(:REVIVE,proc { |item,pokemon,battler,choices,scene|
   pokemon.hp = pokemon.totalhp/2
   pokemon.hp = 1 if pokemon.hp<=0
-  pokemon.healStatus
+  pokemon.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} recovered from fainting!",pokemon.name))
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:MAXREVIVE,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healHP
-  pokemon.healStatus
+  pokemon.heal_HP
+  pokemon.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} recovered from fainting!",pokemon.name))
 })
@@ -460,7 +460,7 @@ ItemHandlers::BattleUseOnPokemon.add(:ENERGYROOT,proc { |item,pokemon,battler,ch
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:HEALPOWDER,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   battler.pbCureConfusion if battler
   pokemon.changeHappiness("powder")
@@ -470,8 +470,8 @@ ItemHandlers::BattleUseOnPokemon.add(:HEALPOWDER,proc { |item,pokemon,battler,ch
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:REVIVALHERB,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healHP
-  pokemon.healStatus
+  pokemon.heal_HP
+  pokemon.heal_status
   pokemon.changeHappiness("revivalherb")
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} recovered from fainting!",pokemon.name))

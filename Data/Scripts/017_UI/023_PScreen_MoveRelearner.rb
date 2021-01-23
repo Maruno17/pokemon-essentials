@@ -160,8 +160,8 @@ class MoveRelearnerScreen
       moves.push(m[1]) if !moves.include?(m[1])
     end
     tmoves = []
-    if pkmn.firstmoves
-      for i in pkmn.firstmoves
+    if pkmn.first_moves
+      for i in pkmn.first_moves
         tmoves.push(i) if !pkmn.hasMove?(i) && !moves.include?(i)
       end
     end
