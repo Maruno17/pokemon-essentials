@@ -105,14 +105,15 @@ module GameData
         break
       end
       # Create trainer object
-      trainer = PokeBattle_Trainer.new(tr_name, @trainer_type)
-      trainer.setForeignID($Trainer)
-      party = []
+      trainer = NPCTrainer.new(tr_name, @trainer_type)
+      trainer.id        = $Trainer.make_foreign_ID
+      trainer.items     = @items.clone
+      trainer.lose_text = self.lose_text
       # Create each Pokémon owned by the trainer
       @pokemon.each do |pkmn_data|
         species = GameData::Species.get(pkmn_data[:species]).species
         pkmn = Pokemon.new(species, pkmn_data[:level], trainer, false)
-        party.push(pkmn)
+        trainer.party.push(pkmn)
         # Set Pokémon's properties if defined
         if pkmn_data[:form]
           pkmn.forced_form = pkmn_data[:form] if MultipleForms.hasFunction?(species, "getForm")
@@ -130,7 +131,7 @@ module GameData
         if pkmn_data[:nature]
           pkmn.nature = pkmn_data[:nature]
         else
-          nature = pkmn.species_data.id_number + GameData::TrainerType.get(trainer.trainertype).id_number
+          nature = pkmn.species_data.id_number + GameData::TrainerType.get(trainer.trainer_type).id_number
           pkmn.nature = nature % (PBNatures.maxValue + 1)
         end
         PBStats.eachStat do |s|
@@ -155,7 +156,7 @@ module GameData
         pkmn.poke_ball = pbBallTypeToItem(pkmn_data[:poke_ball]) if pkmn_data[:poke_ball]
         pkmn.calcStats
       end
-      return [trainer, @items.clone, party, self.lose_text]
+      return trainer
     end
   end
 end

@@ -357,16 +357,16 @@ class PokeBattle_Move
     # Badge multipliers
     if @battle.internalBattle
       if user.pbOwnedByPlayer?
-        if physicalMove? && @battle.pbPlayer.numbadges >= NUM_BADGES_BOOST_ATTACK
+        if physicalMove? && @battle.pbPlayer.badge_count >= NUM_BADGES_BOOST_ATTACK
           multipliers[:attack_multiplier] *= 1.1
-        elsif specialMove? && @battle.pbPlayer.numbadges >= NUM_BADGES_BOOST_SPATK
+        elsif specialMove? && @battle.pbPlayer.badge_count >= NUM_BADGES_BOOST_SPATK
           multipliers[:attack_multiplier] *= 1.1
         end
       end
       if target.pbOwnedByPlayer?
-        if physicalMove? && @battle.pbPlayer.numbadges >= NUM_BADGES_BOOST_DEFENSE
+        if physicalMove? && @battle.pbPlayer.badge_count >= NUM_BADGES_BOOST_DEFENSE
           multipliers[:defense_multiplier] *= 1.1
-        elsif specialMove? && @battle.pbPlayer.numbadges >= NUM_BADGES_BOOST_SPDEF
+        elsif specialMove? && @battle.pbPlayer.badge_count >= NUM_BADGES_BOOST_SPDEF
           multipliers[:defense_multiplier] *= 1.1
         end
       end

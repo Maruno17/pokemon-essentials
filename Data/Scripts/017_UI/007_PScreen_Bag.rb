@@ -475,7 +475,7 @@ class PokemonBagScreen
           commands[cmdUse = commands.length]    = _INTL("Use")
         end
       end
-      commands[cmdGive = commands.length]       = _INTL("Give") if $Trainer.pokemonParty.length>0 && itm.can_hold?
+      commands[cmdGive = commands.length]       = _INTL("Give") if $Trainer.pokemon_party.length > 0 && itm.can_hold?
       commands[cmdToss = commands.length]       = _INTL("Toss") if !itm.is_important? || $DEBUG
       if @bag.pbIsRegistered?(item)
         commands[cmdRegister = commands.length] = _INTL("Deselect")
@@ -498,7 +498,7 @@ class PokemonBagScreen
         @scene.pbRefresh
         next
       elsif cmdGive>=0 && command==cmdGive   # Give item to Pokémon
-        if $Trainer.pokemonCount==0
+        if $Trainer.pokemon_count == 0
           @scene.pbDisplay(_INTL("There is no Pokémon."))
         elsif itm.is_important?
           @scene.pbDisplay(_INTL("The {1} can't be held.",itemname))

@@ -53,8 +53,8 @@ def pbNicknameAndStore(pkmn)
     pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
     return
   end
-  $Trainer.seen[pkmn.species]  = true
-  $Trainer.owned[pkmn.species] = true
+  $Trainer.set_seen(pkmn.species)
+  $Trainer.set_owned(pkmn.species)
   pbNickname(pkmn)
   pbStorePokemon(pkmn)
 end
@@ -80,8 +80,8 @@ end
 def pbAddPokemonSilent(pkmn, level = 1, see_form = true)
   return false if !pkmn || pbBoxesFull?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  $Trainer.seen[pkmn.species]  = true
-  $Trainer.owned[pkmn.species] = true
+  $Trainer.set_seen(pkmn.species)
+  $Trainer.set_owned(pkmn.species)
   pbSeenForm(pkmn) if see_form
   pkmn.record_first_moves
   if $Trainer.party_full?
@@ -108,8 +108,8 @@ end
 def pbAddToPartySilent(pkmn, level = nil, see_form = true)
   return false if !pkmn || $Trainer.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  $Trainer.seen[pkmn.species]  = true
-  $Trainer.owned[pkmn.species] = true
+  $Trainer.set_seen(pkmn.species)
+  $Trainer.set_owned(pkmn.species)
   pbSeenForm(pkmn) if see_form
   pkmn.record_first_moves
   $Trainer.party[$Trainer.party.length] = pkmn
@@ -131,8 +131,8 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
     pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon.\1", $Trainer.name))
   end
   pbStorePokemon(pkmn)
-  $Trainer.seen[pkmn.species]  = true
-  $Trainer.owned[pkmn.species] = true
+  $Trainer.set_seen(pkmn.species)
+  $Trainer.set_owned(pkmn.species)
   pbSeenForm(pkmn) if see_form
   return true
 end
@@ -153,26 +153,11 @@ alias pbAddEgg pbGenerateEgg
 alias pbGenEgg pbGenerateEgg
 
 #===============================================================================
-# Removing Pokémon from the party (fails if trying to remove last able Pokémon)
-#===============================================================================
-def pbRemovePokemonAt(index)
-  return false if index < 0 || index >= $Trainer.party.length
-  have_able = false
-  $Trainer.party.each_with_index do |pkmn, i|
-    have_able = true if i != index && !pkmn.egg? && pkmn.hp > 0
-    break if have_able
-  end
-  return false if !have_able
-  $Trainer.party.delete_at(index)
-  return true
-end
-
-#===============================================================================
 # Recording Pokémon forms as seen
 #===============================================================================
 def pbSeenForm(species, gender = 0, form = 0)
-  $Trainer.formseen     = {} if !$Trainer.formseen
-  $Trainer.formlastseen = {} if !$Trainer.formlastseen
+  $Trainer.seen_forms   = {} if !$Trainer.seen_forms
+  $Trainer.last_seen_forms = {} if !$Trainer.last_seen_forms
   if species.is_a?(Pokemon)
     species_data = species.species_data
     gender = species.gender
@@ -188,85 +173,32 @@ def pbSeenForm(species, gender = 0, form = 0)
     form = species_data.form
   end
   form = 0 if species_data.form_name.nil? || species_data.form_name.empty?
-  $Trainer.formseen[species] = [[], []] if !$Trainer.formseen[species]
-  $Trainer.formseen[species][gender][form] = true
-  $Trainer.formlastseen[species] = [] if !$Trainer.formlastseen[species]
-  $Trainer.formlastseen[species] = [gender, form] if $Trainer.formlastseen[species] == []
+  $Trainer.seen_forms[species] = [[], []] if !$Trainer.seen_forms[species]
+  $Trainer.seen_forms[species][gender][form] = true
+  $Trainer.last_seen_forms[species] = [] if !$Trainer.last_seen_forms[species]
+  $Trainer.last_seen_forms[species] = [gender, form] if $Trainer.last_seen_forms[species] == []
 end
 
 def pbUpdateLastSeenForm(pkmn)
-  $Trainer.formlastseen = {} if !$Trainer.formlastseen
+  $Trainer.last_seen_forms = {} if !$Trainer.last_seen_forms
   species_data = pkmn.species_data
   form = species_data.pokedex_form
   form = 0 if species_data.form_name.nil? || species_data.form_name.empty?
-  $Trainer.formlastseen[pkmn.species] = [pkmn.gender, form]
+  $Trainer.last_seen_forms[pkmn.species] = [pkmn.gender, form]
 end
 
 #===============================================================================
 # Analyse Pokémon in the party
 #===============================================================================
 # Returns the first unfainted, non-egg Pokémon in the player's party.
-def pbFirstAblePokemon(variableNumber)
+def pbFirstAblePokemon(variable_ID)
   $Trainer.party.each_with_index do |pkmn, i|
-    next if pkmn.egg? || pkmn.hp == 0
-    pbSet(variableNumber, i)
+    next if !pkmn.able?
+    pbSet(variable_ID, i)
     return pkmn
   end
-  pbSet(variableNumber, -1)
+  pbSet(variable_ID, -1)
   return nil
-end
-
-# Checks whether the player would still have an unfainted Pokémon if the
-# Pokémon given by _index_ were removed from the party.
-def pbCheckAble(index)
-  $Trainer.party.each_with_index do |pkmn, i|
-    return true if i != index && !pkmn.egg? && pkmn.hp > 0
-  end
-  return false
-end
-
-# Returns true if there are no usable Pokémon in the player's party.
-def pbAllFainted
-  return $Trainer.ablePokemonCount == 0
-end
-
-# Returns true if there is a Pokémon of the given species in the player's party.
-# You may also specify a particular form it should be.
-def pbHasSpecies?(species, form = -1)
-  $Trainer.pokemonParty.each do |pkmn|
-    return true if pkmn.isSpecies?(species) && (form < 0 || pkmn.form == form)
-  end
-  return false
-end
-
-# Returns true if there is a fatefully met Pokémon of the given species in the
-# player's party.
-def pbHasFatefulSpecies?(species)
-  $Trainer.pokemonParty.each do |pkmn|
-    return true if pkmn.isSpecies?(species) && pkmn.obtain_method == 4
-  end
-  return false
-end
-
-# Returns true if there is a Pokémon with the given type in the player's party.
-def pbHasType?(type)
-  type = GameData::Type.get(type).id
-  $Trainer.pokemonParty.each { |pkmn| return true if pkmn.hasType?(type) }
-  return false
-end
-
-# Checks whether any Pokémon in the party knows the given move, and returns
-# the first Pokémon it finds with that move, or nil if no Pokémon has that move.
-def pbCheckMove(move)
-  $Trainer.pokemonParty.each { |pkmn| return pkmn if pkmn.hasMove?(move) }
-  return nil
-end
-
-#===============================================================================
-# Fully heal all Pokémon in the party
-#===============================================================================
-def pbHealAll
-  $Trainer.party.each { |pkmn| pkmn.heal }
 end
 
 #===============================================================================

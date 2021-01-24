@@ -65,12 +65,12 @@ class PokeBattle_Scene
     end
     # Player's and partner trainer's back sprite
     @battle.player.each_with_index do |p,i|
-      pbCreateTrainerBackSprite(i,p.trainertype,@battle.player.length)
+      pbCreateTrainerBackSprite(i,p.trainer_type,@battle.player.length)
     end
     # Opposing trainer(s) sprites
     if @battle.trainerBattle?
       @battle.opponent.each_with_index do |p,i|
-        pbCreateTrainerFrontSprite(i,p.trainertype,@battle.opponent.length)
+        pbCreateTrainerFrontSprite(i,p.trainer_type,@battle.opponent.length)
       end
     end
     # Data boxes and Pokémon sprites

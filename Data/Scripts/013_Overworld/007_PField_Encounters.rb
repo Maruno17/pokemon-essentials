@@ -240,7 +240,7 @@ class PokemonEncounters
     # Static/Magnet Pull prefer wild encounters of certain types, if possible.
     # If they activate, they remove all Pokémon from the encounter table that do
     # not have the type they favor. If none have that type, nothing is changed.
-    firstPkmn = $Trainer.firstPokemon
+    firstPkmn = $Trainer.first_pokemon
     if firstPkmn && rand(100)<50   # 50% chance of happening
       favoredType = nil
       if firstPkmn.hasAbility?(:STATIC) && GameData::Type.exists?(:ELECTRIC)
@@ -336,7 +336,7 @@ class PokemonEncounters
         encount *= 1.5
       end
     end
-    firstPkmn = $Trainer.firstPokemon
+    firstPkmn = $Trainer.first_pokemon
     if firstPkmn
       case firstPkmn.item_id
       when :CLEANSETAG
@@ -382,7 +382,7 @@ class PokemonEncounters
     return false if $DEBUG && Input.press?(Input::CTRL)
     if !pbPokeRadarOnShakingGrass
       if $PokemonGlobal.repel>0 || repel
-        firstPkmn = (REPEL_COUNTS_FAINTED_POKEMON) ? $Trainer.firstPokemon : $Trainer.firstAblePokemon
+        firstPkmn = (REPEL_COUNTS_FAINTED_POKEMON) ? $Trainer.first_pokemon : $Trainer.first_able_pokemon
         return false if firstPkmn && encounter[1]<firstPkmn.level
       end
     end
@@ -400,7 +400,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   genwildpoke = Pokemon.new(species,level)
   # Give the wild Pokémon a held item
   items = genwildpoke.wildHoldItems
-  firstPkmn = $Trainer.firstPokemon
+  firstPkmn = $Trainer.first_pokemon
   chances = [50,5,1]
   chances = [60,20,5] if firstPkmn && firstPkmn.hasAbility?(:COMPOUNDEYES)
   itemrnd = rand(100)

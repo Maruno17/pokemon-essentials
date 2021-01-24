@@ -30,7 +30,7 @@ def pbSetUpSystem
       game_system   = Marshal.load(f)
       pokemonSystem = Marshal.load(f)
     }
-    raise "Corrupted file" if !trainer.is_a?(PokeBattle_Trainer)
+    raise "Corrupted file" if !trainer.is_a?(PlayerTrainer)
     raise "Corrupted file" if !framecount.is_a?(Numeric)
     raise "Corrupted file" if !game_system.is_a?(Game_System)
     raise "Corrupted file" if !pokemonSystem.is_a?(PokemonSystem)

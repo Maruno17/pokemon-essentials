@@ -418,9 +418,9 @@ class PokeBattle_AI
         # Don't need to check the Atk/Sp Atk-boosting badges because the AI
         # won't control the player's Pokémon.
         if target.pbOwnedByPlayer?
-          if move.physicalMove?(type) && @battle.pbPlayer.numbadges >= NUM_BADGES_BOOST_DEFENSE
+          if move.physicalMove?(type) && @battle.pbPlayer.badge_count >= NUM_BADGES_BOOST_DEFENSE
             multipliers[:defense_multiplier] *= 1.1
-          elsif move.specialMove?(type) && @battle.pbPlayer.numbadges >= NUM_BADGES_BOOST_SPDEF
+          elsif move.specialMove?(type) && @battle.pbPlayer.badge_count >= NUM_BADGES_BOOST_SPDEF
             multipliers[:defense_multiplier] *= 1.1
           end
         end

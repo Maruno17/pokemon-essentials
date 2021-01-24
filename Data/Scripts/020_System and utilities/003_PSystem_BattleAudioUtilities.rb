@@ -73,7 +73,7 @@ def pbPlayTrainerIntroME(trainer_type)
   pbMEPlay(bgm)
 end
 
-def pbGetTrainerBattleBGM(trainer)   # can be a PokeBattle_Trainer or an array of them
+def pbGetTrainerBattleBGM(trainer)   # can be a PlayerTrainer, NPCTrainer or an array of them
   if $PokemonGlobal.nextBattleBGM
     return $PokemonGlobal.nextBattleBGM.clone
   end
@@ -81,7 +81,7 @@ def pbGetTrainerBattleBGM(trainer)   # can be a PokeBattle_Trainer or an array o
   music = nil
   trainerarray = (trainer.is_a?(Array)) ? trainer : [trainer]
   trainerarray.each do |t|
-    trainer_type_data = GameData::TrainerType.get(t.trainertype)
+    trainer_type_data = GameData::TrainerType.get(t.trainer_type)
     music = trainer_type_data.battle_BGM if trainer_type_data.battle_BGM
   end
   ret = pbStringToAudioFile(music) if music && music!=""
@@ -123,14 +123,14 @@ def pbGetTrainerBattleBGMFromType(trainertype)
   return ret
 end
 
-def pbGetTrainerVictoryME(trainer)   # can be a PokeBattle_Trainer or an array of them
+def pbGetTrainerVictoryME(trainer)   # can be a PlayerTrainer, NPCTrainer or an array of them
   if $PokemonGlobal.nextBattleME
     return $PokemonGlobal.nextBattleME.clone
   end
   music = nil
   trainerarray = (trainer.is_a?(Array)) ? trainer : [trainer]
   trainerarray.each do |t|
-    trainer_type_data = GameData::TrainerType.get(t.trainertype)
+    trainer_type_data = GameData::TrainerType.get(t.trainer_type)
     music = trainer_type_data.victory_ME if trainer_type_data.victory_ME
   end
   ret = nil

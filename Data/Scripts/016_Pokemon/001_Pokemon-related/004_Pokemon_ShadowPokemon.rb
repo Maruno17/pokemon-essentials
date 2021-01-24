@@ -501,7 +501,7 @@ Events.onEndBattle += proc { |_sender,_e|
 }
 
 Events.onStepTaken += proc {
-  for pkmn in $Trainer.ablePokemonParty
+  for pkmn in $Trainer.able_party
     next if pkmn.heart_gauge == 0
     stage = pkmn.heartStage
     pkmn.adjustHeart(-1)

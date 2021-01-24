@@ -769,12 +769,13 @@ class TriadScreen
       candidates = []
       while candidates.length < 200
         card = species_keys[rand(species_keys.length)]
-        card = GameData::Species.get(card).id   # Make sure it's a symbol
+        card_data = GameData::Species.get(card)
+        card = card_data.id   # Make sure it's a symbol
         triad = TriadCard.new(card)
         total = triad.north + triad.south + triad.east + triad.west
         # Add random species and its total point count
         candidates.push([card, total])
-        if candidates.length < 200 && $Trainer.owned[card]
+        if candidates.length < 200 && $Trainer.owned?(card_data.species)
           # Add again if player owns the species
           candidates.push([card, total])
         end
@@ -1048,7 +1049,7 @@ def pbBuyTriads
   realcommands = []
   GameData::Species.each do |s|
     next if s.form != 0
-    next if !$Trainer.owned[s.id]
+    next if !$Trainer.owned?(s.species)
     price = TriadCard.new(i).price
     commands.push([price, s.name, _INTL("{1} - ${2}", s.name, price.to_s_formatted), s.id])
   end

@@ -11,7 +11,7 @@ class PokeBattle_AI
     shouldSwitch = forceSwitch
     batonPass = -1
     moveType = -1
-    skill = @battle.pbGetOwnerFromBattlerIndex(idxBattler).skill || 0
+    skill = @battle.pbGetOwnerFromBattlerIndex(idxBattler).skill_level || 0
     battler = @battle.battlers[idxBattler]
     # If Pokémon is within 6 levels of the foe, and foe's last move was
     # super-effective and powerful

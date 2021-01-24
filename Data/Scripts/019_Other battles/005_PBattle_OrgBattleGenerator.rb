@@ -840,8 +840,8 @@ def pbRuledBattle(team1,team2,rule)
     decision=pbDecideWinner(party1,party2,team1.rating,team2.rating)
   else
     level=rule.ruleset.suggestedLevel
-    trainer1=PokeBattle_Trainer.new("PLAYER1",1)
-    trainer2=PokeBattle_Trainer.new("PLAYER2",1)
+    trainer1=NPCTrainer.new("PLAYER1",1)
+    trainer2=NPCTrainer.new("PLAYER2",1)
     items1=[]
     items2=[]
     team1.each_with_index do |p,i|

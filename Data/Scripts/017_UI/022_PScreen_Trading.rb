@@ -211,8 +211,8 @@ end
 #===============================================================================
 def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
   myPokemon = $Trainer.party[pokemonIndex]
-  opponent = PokeBattle_Trainer.new(trainerName,trainerGender)
-  opponent.setForeignID($Trainer)
+  opponent = NPCTrainer.new(trainerName,trainerGender)
+  opponent.id = $Trainer.make_foreign_ID
   yourPokemon = nil
   resetmoves = true
   if newpoke.is_a?(Pokemon)
@@ -228,8 +228,8 @@ def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
   yourPokemon.obtain_method = 2   # traded
   yourPokemon.resetMoves if resetmoves
   yourPokemon.record_first_moves
-  $Trainer.seen[yourPokemon.species]  = true
-  $Trainer.owned[yourPokemon.species] = true
+  $Trainer.set_seen(yourPokemon.species)
+  $Trainer.set_owned(yourPokemon.species)
   pbSeenForm(yourPokemon)
   pbFadeOutInWithMusic {
     evo = PokemonTrade_Scene.new

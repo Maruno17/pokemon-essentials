@@ -408,9 +408,7 @@ PBEvolution.register(:LevelDarkness, {
 
 PBEvolution.register(:LevelDarkInParty, {
   "levelUpCheck" => proc { |pkmn, parameter|
-    if pkmn.level >= parameter
-      next $Trainer.pokemonParty.any? { |p| p && p.hasType(:DARK) }
-    end
+    next $Trainer.has_pokemon_of_type?(:DARK) if pkmn.level >= parameter
   }
 })
 
@@ -647,7 +645,7 @@ PBEvolution.register(:HasInParty, {
   "minimumLevel"  => 1,   # Needs any level up
   "parameterType" => :Species,
   "levelUpCheck"  => proc { |pkmn, parameter|
-    next pbHasSpecies?(parameter)
+    next $Trainer.has_species?(parameter)
   }
 })
 

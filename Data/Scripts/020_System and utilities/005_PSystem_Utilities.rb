@@ -223,48 +223,43 @@ end
 #===============================================================================
 # Player-related utilities, random name generator
 #===============================================================================
-def pbChangePlayer(id)
-  return false if id<0 || id>=8
-  meta = GameData::Metadata.get_player(id)
-  return false if !meta
-  $Trainer.trainertype = meta[0] if $Trainer
-  $game_player.character_name = meta[1]
-  $game_player.character_hue = 0
-  $PokemonGlobal.playerID = id
-  $Trainer.metaID = id if $Trainer
-end
-
 def pbGetPlayerGraphic
   id = $PokemonGlobal.playerID
-  return "" if id<0 || id>=8
+  return "" if id < 0 || id >= 8
   meta = GameData::Metadata.get_player(id)
   return "" if !meta
   return GameData::TrainerType.player_front_sprite_filename(meta[0])
-end
-
-def pbGetPlayerTrainerType
-  meta = GameData::Metadata.get_player($PokemonGlobal.playerID)
-  return (meta) ? meta[0] : nil
 end
 
 def pbGetTrainerTypeGender(trainer_type)
   return GameData::TrainerType.get(trainer_type).gender
 end
 
-def pbTrainerName(name=nil,outfit=0)
-  pbChangePlayer(0) if $PokemonGlobal.playerID<0
-  trainertype = pbGetPlayerTrainerType
-  trname = name
-  $Trainer = PokeBattle_Trainer.new(trname,trainertype)
-  $Trainer.outfit = outfit
-  if trname==nil
-    trname = pbEnterPlayerName(_INTL("Your name?"),0,MAX_PLAYER_NAME_SIZE)
-    if trname==""
-      gender = pbGetTrainerTypeGender(trainertype)
-      trname = pbSuggestTrainerName(gender)
+def pbChangePlayer(id)
+  return false if id < 0 || id >= 8
+  meta = GameData::Metadata.get_player(id)
+  return false if !meta
+  $Trainer.trainer_type = meta[0] if $Trainer
+  $game_player.character_name = meta[1]
+  $PokemonGlobal.playerID = id
+  $Trainer.character_ID = id if $Trainer
+end
+
+def pbTrainerName(name = nil, outfit = 0)
+  pbChangePlayer(0) if $PokemonGlobal.playerID < 0
+  player_metadata = GameData::Metadata.get_player($PokemonGlobal.playerID)
+  trainer_type = (player_metadata) ? player_metadata[0] : nil
+  $Trainer = PlayerTrainer.new(name, trainer_type)
+  $Trainer.outfit       = outfit
+  $Trainer.character_ID = $PokemonGlobal.playerID
+  if name.nil?
+    name = pbEnterPlayerName(_INTL("Your name?"), 0, MAX_PLAYER_NAME_SIZE)
+    if name.nil? || name.empty?
+      gender = pbGetTrainerTypeGender(trainer_type)
+      name = pbSuggestTrainerName(gender)
     end
   end
-  $Trainer.name = trname
+  $Trainer.name = name
   $PokemonBag = PokemonBag.new
   $PokemonTemp.begunNewGame = true
 end
@@ -444,18 +439,18 @@ def pbSetViableDexes
   if USE_CURRENT_REGION_DEX
     region = pbGetCurrentRegion
     region = -1 if region>=$PokemonGlobal.pokedexUnlocked.length-1
-    $PokemonGlobal.pokedexViable[0] = region if $Trainer.pokedexSeen(region)>0
+    $PokemonGlobal.pokedexViable[0] = region if $Trainer.seen_any?(region)
   else
     numDexes = $PokemonGlobal.pokedexUnlocked.length
-    if numDexes==1 # National Dex only
+    if numDexes==1   # National Dex only
       if $PokemonGlobal.pokedexUnlocked[0]
-        $PokemonGlobal.pokedexViable.push(0) if $Trainer.pokedexSeen>0
+        $PokemonGlobal.pokedexViable.push(0) if $Trainer.seen_any?
       end
-    else           # Regional dexes + National Dex
+    else             # Regional dexes + National Dex
       for i in 0...numDexes
         regionToCheck = (i==numDexes-1) ? -1 : i
         if $PokemonGlobal.pokedexUnlocked[i]
-          $PokemonGlobal.pokedexViable.push(i) if $Trainer.pokedexSeen(regionToCheck)>0
+          $PokemonGlobal.pokedexViable.push(i) if $Trainer.seen_any?(regionToCheck)
         end
       end
     end

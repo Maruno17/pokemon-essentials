@@ -279,7 +279,7 @@ DebugMenuCommands.register("testtrainerbattle", {
     battle = pbListScreen(_INTL("SINGLE TRAINER"), TrainerBattleLister.new(0, false))
     if battle
       trainerdata = battle[1]
-      pbTrainerBattle(trainerdata[0], trainerdata[1], nil, false, trainerdata[4], true)
+      pbTrainerBattle(trainerdata[0], trainerdata[1], nil, false, trainerdata[2], true)
     end
   }
 })
@@ -295,7 +295,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
     trainerCmd = 0
     loop do
       trainerCmds = []
-      trainers.each { |t| trainerCmds.push(sprintf("%s x%d", t[1][0].fullname, t[1][2].length)) }
+      trainers.each { |t| trainerCmds.push(sprintf("%s x%d", t[1].full_name, t[1].party_count)) }
       trainerCmds.push(_INTL("[Add trainer]"))
       trainerCmds.push(_INTL("[Set player side size]"))
       trainerCmds.push(_INTL("[Set opponent side size]"))
@@ -309,7 +309,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
         elsif size1 < trainers.length
           pbMessage(_INTL("Opposing side size is invalid. It should be at least {1}", trainers.length))
           next
-        elsif size1 > trainers.length && trainers[0][1][2].length == 1
+        elsif size1 > trainers.length && trainers[0][1].party_count == 1
           pbMessage(
              _INTL("Opposing side size cannot be {1}, as that requires the first trainer to have 2 or more Pokémon, which they don't.",
              size1))
@@ -317,18 +317,18 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
         end
         setBattleRule(sprintf("%dv%d", size0, size1))
         battleArgs = []
-        trainers.each { |t| battleArgs.push([t[1][0], t[1][2], t[1][3], t[1][1]]) }
+        trainers.each { |t| battleArgs.push(t[1]) }
         pbTrainerBattleCore(*battleArgs)
         break
       elsif trainerCmd == trainerCmds.length - 2   # Set opponent side size
-        if trainers.length == 0 || (trainers.length == 1 && trainers[0][1][2].length == 1)
+        if trainers.length == 0 || (trainers.length == 1 && trainers[0][1].party_count == 1)
           pbMessage(_INTL("No trainers were chosen or trainer only has one Pokémon."))
           next
         end
         maxVal = 2
         maxVal = 3 if trainers.length >= 3 ||
-                      (trainers.length == 2 && trainers[0][1][2].length >= 2) ||
-                      trainers[0][1][2].length >= 3
+                      (trainers.length == 2 && trainers[0][1].party_count >= 2) ||
+                      trainers[0][1].party_count >= 3
         params = ChooseNumberParams.new
         params.setRange(1, maxVal)
         params.setInitialValue(size1)
@@ -353,7 +353,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
         battle = pbListScreen(_INTL("CHOOSE A TRAINER"), TrainerBattleLister.new(0, false))
         if battle
           trainerdata = battle[1]
-          tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[4])
+          tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[2])
           trainers.push([battle[0], tr])
         end
       else                                         # Edit a trainer
@@ -362,7 +362,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
              TrainerBattleLister.new(trainers[trainerCmd][0], false))
           if battle
             trainerdata = battle[1]
-            tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[4])
+            tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[2])
             trainers[trainerCmd] = [battle[0], tr]
           end
         elsif pbConfirmMessage(_INTL("Delete this trainer?"))
@@ -530,8 +530,8 @@ DebugMenuCommands.register("demoparty", {
     party.each do |species|
       pkmn = Pokemon.new(species, 20)
       $Trainer.party.push(pkmn)
-      $Trainer.seen[species]  = true
-      $Trainer.owned[species] = true
+      $Trainer.set_seen(species)
+      $Trainer.set_owned(species)
       pbSeenForm(pkmn)
       case species
       when :PIDGEOTTO
@@ -584,8 +584,8 @@ DebugMenuCommands.register("fillboxes", {
   "name"        => _INTL("Fill Storage Boxes"),
   "description" => _INTL("Add one Pokémon of each species (at Level 50) to storage."),
   "effect"      => proc {
-    $Trainer.formseen     = {} if !$Trainer.formseen
-    $Trainer.formlastseen = {} if !$Trainer.formlastseen
+    $Trainer.seen_forms      = {} if !$Trainer.seen_forms
+    $Trainer.last_seen_forms = {} if !$Trainer.last_seen_forms
     added = 0
     box_qty = $PokemonStorage.maxPokemon(0)
     completed = true
@@ -593,23 +593,23 @@ DebugMenuCommands.register("fillboxes", {
       sp = species_data.species
       f = species_data.form
       # Record each form of each species as seen and owned
-      $Trainer.formseen[sp] = [[], []] if !$Trainer.formseen[sp]
+      $Trainer.seen_forms[sp] = [[], []] if !$Trainer.seen_forms[sp]
       if f == 0
-        $Trainer.seen[sp]  = true
-        $Trainer.owned[sp] = true
+        $Trainer.set_seen(sp)
+        $Trainer.set_owned(sp)
         if [PBGenderRates::AlwaysMale, PBGenderRates::AlwaysFemale,
             PBGenderRates::Genderless].include?(species_data.gender_rate)
           g = (species_data.gender_rate == PBGenderRates::AlwaysFemale) ? 1 : 0
-          $Trainer.formseen[sp][g][f] = true
-          $Trainer.formlastseen[sp] = [g, f] if f == 0
+          $Trainer.seen_forms[sp][g][f] = true
+          $Trainer.last_seen_forms[sp] = [g, f] if f == 0
         else   # Both male and female
-          $Trainer.formseen[sp][0][f] = true
-          $Trainer.formseen[sp][1][f] = true
-          $Trainer.formlastseen[sp] = [0, f] if f == 0
+          $Trainer.seen_forms[sp][0][f] = true
+          $Trainer.seen_forms[sp][1][f] = true
+          $Trainer.last_seen_forms[sp] = [0, f] if f == 0
         end
       elsif species_data.real_form_name && !species_data.real_form_name.empty?
         g = (species_data.gender_rate == PBGenderRates::AlwaysFemale) ? 1 : 0
-        $Trainer.formseen[sp][g][f] = true
+        $Trainer.seen_forms[sp][g][f] = true
       end
       # Add Pokémon (if form 0)
       next if f != 0
@@ -818,7 +818,7 @@ DebugMenuCommands.register("renameplayer", {
   "effect"      => proc {
     trname = pbEnterPlayerName("Your name?", 0, MAX_PLAYER_NAME_SIZE, $Trainer.name)
     if trname == "" && pbConfirmMessage(_INTL("Give yourself a default name?"))
-      trainertype = pbGetPlayerTrainerType
+      trainertype = $Trainer.trainer_type
       gender      = pbGetTrainerTypeGender(trainertype)
       trname      = pbSuggestTrainerName(gender)
     end
@@ -837,7 +837,7 @@ DebugMenuCommands.register("randomid", {
   "description" => _INTL("Generate a random new ID for the player."),
   "effect"      => proc {
     $Trainer.id = rand(2 ** 16) | rand(2 ** 16) << 16
-    pbMessage(_INTL("The player's ID was changed to {1} (full ID: {2}).", $Trainer.publicID, $Trainer.id))
+    pbMessage(_INTL("The player's ID was changed to {1} (full ID: {2}).", $Trainer.public_ID, $Trainer.id))
   }
 })
 

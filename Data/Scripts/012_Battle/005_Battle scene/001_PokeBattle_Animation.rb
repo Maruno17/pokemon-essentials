@@ -109,7 +109,7 @@ module PokeBattle_BallAnimationMixin
     end
     # Back sprite is animated, make the Poké Ball track the trainer's hand
     coordSets = [[traSprite.x-44,traSprite.y-32],[-10,-36],[118,-4]]
-    case @trainer.trainertype
+    case @trainer.trainer_type
     when :POKEMONTRAINER_Leaf
       coordSets = [[traSprite.x-30,traSprite.y-30],[-18,-36],[118,-6]]
     when :POKEMONTRAINER_Brendan

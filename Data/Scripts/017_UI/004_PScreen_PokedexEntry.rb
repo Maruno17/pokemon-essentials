@@ -121,10 +121,10 @@ class PokemonPokedexInfo_Scene
 
   def pbUpdateDummyPokemon
     @species = @dexlist[@index][0]
-    $Trainer.formlastseen = {} if !$Trainer.formlastseen
-    $Trainer.formlastseen[@species] = [] if !$Trainer.formlastseen[@species]
-    @gender  = $Trainer.formlastseen[@species][0] || 0
-    @form    = $Trainer.formlastseen[@species][1] || 0
+    $Trainer.last_seen_forms = {} if !$Trainer.last_seen_forms
+    $Trainer.last_seen_forms[@species] = [] if !$Trainer.last_seen_forms[@species]
+    @gender  = $Trainer.last_seen_forms[@species][0] || 0
+    @form    = $Trainer.last_seen_forms[@species][1] || 0
     species_data = GameData::Species.get_species_form(@species, @form)
     @sprites["infosprite"].setSpeciesBitmap(@species,@gender,@form)
     if @sprites["formfront"]
@@ -149,16 +149,16 @@ class PokemonPokedexInfo_Scene
       next if sp.form != 0 && (!sp.real_form_name || sp.real_form_name.empty?)
       next if sp.pokedex_form != sp.form
       multiple_forms = true if sp.form > 0
-      $Trainer.formseen[@species] = [[], []] if !$Trainer.formseen[@species]
+      $Trainer.seen_forms[@species] = [[], []] if !$Trainer.seen_forms[@species]
       case sp.gender_rate
       when PBGenderRates::AlwaysMale, PBGenderRates::AlwaysFemale, PBGenderRates::Genderless
         real_gender = (sp.gender_rate == PBGenderRates::AlwaysFemale) ? 1 : 0
-        next if !$Trainer.formseen[@species][real_gender][sp.form] && !DEX_SHOWS_ALL_FORMS
+        next if !$Trainer.seen_forms[@species][real_gender][sp.form] && !DEX_SHOWS_ALL_FORMS
         real_gender = 2 if sp.gender_rate == PBGenderRates::Genderless
         ret.push([sp.form_name, real_gender, sp.form])
       else   # Both male and female
         for real_gender in 0...2
-          next if !$Trainer.formseen[@species][real_gender][sp.form] && !DEX_SHOWS_ALL_FORMS
+          next if !$Trainer.seen_forms[@species][real_gender][sp.form] && !DEX_SHOWS_ALL_FORMS
           ret.push([sp.form_name, real_gender, sp.form])
           break if sp.form_name && !sp.form_name.empty?   # Only show 1 entry for each non-0 form
         end
@@ -223,7 +223,7 @@ class PokemonPokedexInfo_Scene
        [_INTL("Height"), 314, 158, 0, base, shadow],
        [_INTL("Weight"), 314, 190, 0, base, shadow]
     ]
-    if $Trainer.owned[@species]
+    if $Trainer.owned?(@species)
       # Write the category
       textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 74, 0, base, shadow])
       # Write the height and weight
@@ -390,7 +390,7 @@ class PokemonPokedexInfo_Scene
     newindex = @index
     while newindex>0
       newindex -= 1
-      if $Trainer.seen[@dexlist[newindex][0]]
+      if $Trainer.seen?(@dexlist[newindex][0])
         @index = newindex
         break
       end
@@ -401,7 +401,7 @@ class PokemonPokedexInfo_Scene
     newindex = @index
     while newindex<@dexlist.length-1
       newindex += 1
-      if $Trainer.seen[@dexlist[newindex][0]]
+      if $Trainer.seen?(@dexlist[newindex][0])
         @index = newindex
         break
       end
@@ -419,10 +419,10 @@ class PokemonPokedexInfo_Scene
     oldindex = -1
     loop do
       if oldindex!=index
-        $Trainer.formlastseen = {} if !$Trainer.formlastseen
-        $Trainer.formlastseen[@species] = [] if !$Trainer.formlastseen
-        $Trainer.formlastseen[@species][0] = @available[index][1]
-        $Trainer.formlastseen[@species][1] = @available[index][2]
+        $Trainer.last_seen_forms = {} if !$Trainer.last_seen_forms
+        $Trainer.last_seen_forms[@species] = [] if !$Trainer.last_seen_forms
+        $Trainer.last_seen_forms[@species][0] = @available[index][1]
+        $Trainer.last_seen_forms[@species][1] = @available[index][2]
         pbUpdateDummyPokemon
         drawPage(@page)
         @sprites["uparrow"].visible   = (index>0)

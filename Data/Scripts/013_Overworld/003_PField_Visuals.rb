@@ -131,7 +131,7 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
   ##### VS. animation, by Luka S.J. #####
   ##### Tweaked by Maruno           #####
   if (battletype==1 || battletype==3) && foe.length==1   # Against single trainer
-    tr_type = foe[0].trainertype
+    tr_type = foe[0].trainer_type
     tr_type_id = GameData::TrainerType.get(tr_type).id_number
     if tr_type
       tbargraphic = sprintf("Graphics/Transitions/vsBar%s", tr_type.to_s) rescue nil
@@ -139,7 +139,7 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
       tgraphic    = sprintf("Graphics/Transitions/vsTrainer%s", tr_type.to_s) rescue nil
       tgraphic    = sprintf("Graphics/Transitions/vsTrainer%d", tr_type_id) if !pbResolveBitmap(tgraphic)
       if pbResolveBitmap(tbargraphic) && pbResolveBitmap(tgraphic)
-        player_tr_type = $Trainer.trainertype
+        player_tr_type = $Trainer.trainer_type
         player_tr_type_id = GameData::TrainerType.get(player_tr_type).id_number
         outfit = $Trainer.outfit
         # Set up
@@ -631,7 +631,7 @@ def pbStartOver(gameover=false)
     pbBugContestStartOver
     return
   end
-  pbHealAll
+  $Trainer.heal_party
   if $PokemonGlobal.pokecenterMapId && $PokemonGlobal.pokecenterMapId>=0
     if gameover
       pbMessage(_INTL("\\w[]\\wm\\c[8]\\l[3]After the unfortunate defeat, you scurry back to a Pokémon Center."))
@@ -653,7 +653,7 @@ def pbStartOver(gameover=false)
       if $DEBUG
         pbMessage(_ISPRINTF("Can't find the map 'Map{1:03d}' in the Data folder. The game will resume at the player's position.",homedata[0]))
       end
-      pbHealAll
+      $Trainer.heal_party
       return
     end
     if gameover
@@ -672,7 +672,7 @@ def pbStartOver(gameover=false)
       $scene.transfer_player if $scene.is_a?(Scene_Map)
       $game_map.refresh
     else
-      pbHealAll
+      $Trainer.heal_party
     end
   end
   pbEraseEscapePoint

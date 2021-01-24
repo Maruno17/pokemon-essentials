@@ -187,12 +187,12 @@ ItemHandlers::UseInField.add(:ESCAPEROPE,proc { |item|
 })
 
 ItemHandlers::UseInField.add(:SACREDASH,proc { |item|
-  if $Trainer.pokemonCount==0
+  if $Trainer.pokemon_count == 0
     pbMessage(_INTL("There is no Pokémon."))
     next 0
   end
   canrevive = false
-  for i in $Trainer.pokemonParty
+  for i in $Trainer.pokemon_party
     next if !i.fainted?
     canrevive = true; break
   end
@@ -978,7 +978,7 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
     newForm = 2 if poke2.isSpecies?(:ZEKROM)
     pkmn.setForm(newForm) {
       pkmn.fused = poke2
-      pbRemovePokemonAt(chosen)
+      $Trainer.remove_pokemon_at_index(chosen)
       scene.pbHardRefresh
       scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
     }
@@ -1027,7 +1027,7 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
     end
     pkmn.setForm(1) {
       pkmn.fused = poke2
-      pbRemovePokemonAt(chosen)
+      $Trainer.remove_pokemon_at_index(chosen)
       scene.pbHardRefresh
       scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
     }
@@ -1076,7 +1076,7 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
     end
     pkmn.setForm(2) {
       pkmn.fused = poke2
-      pbRemovePokemonAt(chosen)
+      $Trainer.remove_pokemon_at_index(chosen)
       scene.pbHardRefresh
       scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
     }

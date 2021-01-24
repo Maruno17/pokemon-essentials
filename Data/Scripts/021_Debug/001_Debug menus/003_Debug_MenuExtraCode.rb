@@ -352,7 +352,7 @@ def pbDebugDayCare
           pbDayCareGenerateEgg
           $PokemonGlobal.daycareEgg      = 0
           $PokemonGlobal.daycareEggSteps = 0
-          pbMessage(_INTL("Collected the {1} egg.", $Trainer.lastParty.speciesName))
+          pbMessage(_INTL("Collected the {1} egg.", $Trainer.last_party.speciesName))
           refresh = true
         end
       end

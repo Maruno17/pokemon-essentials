@@ -10,22 +10,6 @@ MYSTERY_GIFT_URL = "http://images1.wikia.nocookie.net/pokemonessentials/images/e
 # MYSTERY_GIFT_URL = "http://pastebin.com/raw/w6BqqUsm"
 
 #===============================================================================
-#
-#===============================================================================
-class PokeBattle_Trainer
-  attr_writer :mysterygiftaccess   # Whether MG can be used from load screen
-  attr_writer :mysterygift         # Variable that stores downloaded MG data
-
-  def mysterygiftaccess
-    return @mysterygiftaccess || false
-  end
-
-  def mysterygift
-    return @mysterygift || []
-  end
-end
-
-#===============================================================================
 # Creating a new Mystery Gift for the Master file, and editing an existing one.
 #===============================================================================
 # type: 0=Pokémon; 1 or higher=item (is the item's quantity).
@@ -211,12 +195,12 @@ def pbManageMysteryGifts
           master[command]=newgift if newgift
         elsif cmd==2   # Receive
           replaced=false
-          for i in 0...$Trainer.mysterygift.length
-            if $Trainer.mysterygift[i][0]==gift[0]
-              $Trainer.mysterygift[i]=gift; replaced=true
+          for i in 0...$Trainer.mystery_gifts.length
+            if $Trainer.mystery_gifts[i][0]==gift[0]
+              $Trainer.mystery_gifts[i]=gift; replaced=true
             end
           end
-          $Trainer.mysterygift.push(gift) if !replaced
+          $Trainer.mystery_gifts.push(gift) if !replaced
           pbReceiveMysteryGift(gift[0])
         elsif cmd==3   # Delete
           if pbConfirmMessage(_INTL("Are you sure you want to delete this gift?"))
@@ -267,7 +251,7 @@ def pbDownloadMysteryGift(trainer)
     pending=[]
     for gift in online
       notgot=true
-      for j in trainer.mysterygift
+      for j in trainer.mystery_gifts
         notgot=false if j[0]==gift[0]
       end
       pending.push(gift) if notgot
@@ -315,7 +299,7 @@ def pbDownloadMysteryGift(trainer)
           sprites["msgwindow"].visible=true
           pbMessageDisplay(sprites["msgwindow"],_INTL("The gift has been received!")) { sprite.update }
           pbMessageDisplay(sprites["msgwindow"],_INTL("Please pick up your gift from the deliveryman in any Poké Mart.")) { sprite.update }
-          trainer.mysterygift.push(gift)
+          trainer.mystery_gifts.push(gift)
           pending[command]=nil; pending.compact!
           opacityDiff = 16*20/Graphics.frame_rate
           loop do
@@ -359,7 +343,7 @@ end
 # Collecting a Mystery Gift from the deliveryman.
 #===============================================================================
 def pbNextMysteryGiftID
-  for i in $Trainer.mysterygift
+  for i in $Trainer.mystery_gifts
     return i[0] if i.length>1
   end
   return 0
@@ -367,8 +351,8 @@ end
 
 def pbReceiveMysteryGift(id)
   index=-1
-  for i in 0...$Trainer.mysterygift.length
-    if $Trainer.mysterygift[i][0]==id && $Trainer.mysterygift[i].length>1
+  for i in 0...$Trainer.mystery_gifts.length
+    if $Trainer.mystery_gifts[i][0]==id && $Trainer.mystery_gifts[i].length>1
       index=i
       break
     end
@@ -377,7 +361,7 @@ def pbReceiveMysteryGift(id)
     pbMessage(_INTL("Couldn't find an unclaimed Mystery Gift with ID {1}.",id))
     return false
   end
-  gift=$Trainer.mysterygift[index]
+  gift=$Trainer.mystery_gifts[index]
   if gift[1]==0   # Pokémon
     gift[2].personalID = rand(2**16) | rand(2**16) << 16
     gift[2].calcStats
@@ -394,7 +378,7 @@ def pbReceiveMysteryGift(id)
     end
     if pbAddPokemonSilent(gift[2])
       pbMessage(_INTL("\\me[Pkmn get]{1} received {2}!",$Trainer.name,gift[2].name))
-      $Trainer.mysterygift[index]=[id]
+      $Trainer.mystery_gifts[index]=[id]
       return true
     end
   elsif gift[1]>0   # Item
@@ -416,7 +400,7 @@ def pbReceiveMysteryGift(id)
       else
         pbMessage(_INTL("\\me[Item get]You obtained a \\c[1]{1}\\c[0]!\\wtnp[30]",itemname))
       end
-      $Trainer.mysterygift[index]=[id]
+      $Trainer.mystery_gifts[index]=[id]
       return true
     end
   end

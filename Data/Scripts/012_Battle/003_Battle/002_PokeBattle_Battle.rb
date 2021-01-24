@@ -115,8 +115,8 @@ class PokeBattle_Battle
     @caughtPokemon     = []
     player   = [player] if !player.nil? && !player.is_a?(Array)
     opponent = [opponent] if !opponent.nil? && !opponent.is_a?(Array)
-    @player            = player     # Array of PokeBattle_Trainer objects, or nil
-    @opponent          = opponent   # Array of PokeBattle_Trainer objects, or nil
+    @player            = player     # Array of PlayerTrainer/NPCTrainer objects, or nil
+    @opponent          = opponent   # Array of NPCTrainer objects, or nil
     @items             = nil
     @endSpeeches       = []
     @endSpeechesWin    = []
@@ -249,8 +249,8 @@ class PokeBattle_Battle
 
   def pbGetOwnerName(idxBattler)
     idxTrainer = pbGetOwnerIndexFromBattlerIndex(idxBattler)
-    return @opponent[idxTrainer].fullname if opposes?(idxBattler)   # Opponent
-    return @player[idxTrainer].fullname if idxTrainer>0   # Ally trainer
+    return @opponent[idxTrainer].full_name if opposes?(idxBattler)   # Opponent
+    return @player[idxTrainer].full_name if idxTrainer>0   # Ally trainer
     return @player[idxTrainer].name   # Player
   end
 
@@ -622,7 +622,7 @@ class PokeBattle_Battle
 
   def pbSetSeen(battler)
     return if !battler || !@internalBattle
-    pbPlayer.seen[battler.displaySpecies] = true
+    pbPlayer.set_seen(battler.displaySpecies)
     pbSeenForm(battler.displaySpecies,battler.displayGender,battler.displayForm)
   end
 

@@ -120,7 +120,7 @@ BallHandlers::ModifyCatchRate.add(:NESTBALL,proc { |ball,catchRate,battle,battle
 
 BallHandlers::ModifyCatchRate.add(:REPEATBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
   multiplier = (NEW_POKE_BALL_CATCH_RATES) ? 3.5 : 3
-  catchRate *= multiplier if battle.pbPlayer.owned[battler.species]
+  catchRate *= multiplier if battle.pbPlayer.owned?(battler.species)
   next catchRate
 })
 

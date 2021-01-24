@@ -55,7 +55,7 @@ end
 def pbCheckHiddenMoveBadge(badge=-1,showmsg=true)
   return true if badge<0   # No badge requirement
   return true if $DEBUG
-  if (FIELD_MOVES_COUNT_BADGES) ? $Trainer.numbadges>=badge : $Trainer.badges[badge]
+  if (FIELD_MOVES_COUNT_BADGES) ? $Trainer.badge_count >= badge : $Trainer.badges[badge]
     return true
   end
   pbMessage(_INTL("Sorry, a new Badge is required.")) if showmsg
@@ -187,7 +187,7 @@ end
 #===============================================================================
 def pbCut
   move = :CUT
-  movefinder = pbCheckMove(move)
+  movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(BADGE_FOR_CUT,false) || (!$DEBUG && !movefinder)
     pbMessage(_INTL("This tree looks like it can be cut down."))
     return false
@@ -297,7 +297,7 @@ def pbDive
   map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
   return false if !map_metadata || !map_metadata.dive_map_id
   move = :DIVE
-  movefinder = pbCheckMove(move)
+  movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(BADGE_FOR_DIVE,false) || (!$DEBUG && !movefinder)
     pbMessage(_INTL("The sea is deep here. A Pokémon may be able to go underwater."))
     return false
@@ -333,7 +333,7 @@ def pbSurfacing
   end
   return if !surface_map_id
   move = :DIVE
-  movefinder = pbCheckMove(move)
+  movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(BADGE_FOR_DIVE,false) || (!$DEBUG && !movefinder)
     pbMessage(_INTL("Light is filtering down from above. A Pokémon may be able to surface here."))
     return false
@@ -536,7 +536,7 @@ def pbHeadbuttEffect(event=nil)
   event = $game_player.pbFacingEvent(true) if !event
   a = (event.x+(event.x/24).floor+1)*(event.y+(event.y/24).floor+1)
   a = (a*2/5)%10   # Even 2x as likely as odd, 0 is 1.5x as likely as odd
-  b = ($Trainer.publicID)%10   # Practically equal odds of each value
+  b = $Trainer.public_ID % 10   # Practically equal odds of each value
   chance = 1                             # ~50%
   if a==b;                  chance = 8   # 10%
   elsif a>b && (a-b).abs<5; chance = 5   # ~30.3%
@@ -554,7 +554,7 @@ end
 
 def pbHeadbutt(event=nil)
   move = :HEADBUTT
-  movefinder = pbCheckMove(move)
+  movefinder = $Trainer.get_pokemon_with_move(move)
   if !$DEBUG && !movefinder
     pbMessage(_INTL("A Pokémon could be in this tree. Maybe a Pokémon could shake it."))
     return false
@@ -599,7 +599,7 @@ end
 
 def pbRockSmash
   move = :ROCKSMASH
-  movefinder = pbCheckMove(move)
+  movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(BADGE_FOR_ROCKSMASH,false) || (!$DEBUG && !movefinder)
     pbMessage(_INTL("It's a rugged rock, but a Pokémon may be able to smash it."))
     return false
@@ -646,7 +646,7 @@ def pbStrength
     return false
   end
   move = :STRENGTH
-  movefinder = pbCheckMove(move)
+  movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(BADGE_FOR_STRENGTH,false) || (!$DEBUG && !movefinder)
     pbMessage(_INTL("It's a big boulder, but a Pokémon may be able to push it aside."))
     return false
@@ -695,7 +695,7 @@ def pbSurf
   return false if $game_player.pbFacingEvent
   return false if $game_player.pbHasDependentEvents?
   move = :SURF
-  movefinder = pbCheckMove(move)
+  movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(BADGE_FOR_SURF,false) || (!$DEBUG && !movefinder)
     return false
   end
@@ -947,7 +947,7 @@ end
 
 def pbWaterfall
   move = :WATERFALL
-  movefinder = pbCheckMove(move)
+  movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(BADGE_FOR_WATERFALL,false) || (!$DEBUG && !movefinder)
     pbMessage(_INTL("A wall of water is crashing down with a mighty roar."))
     return false

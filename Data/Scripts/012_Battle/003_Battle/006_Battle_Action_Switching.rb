@@ -172,7 +172,7 @@ class PokeBattle_Battle
               idxPartyForName = pbLastInTeam(idxBattler)
             end
             if pbDisplayConfirm(_INTL("{1} is about to send in {2}. Will you switch your Pokémon?",
-               opponent.fullname,enemyParty[idxPartyForName].name))
+               opponent.full_name, enemyParty[idxPartyForName].name))
               idxPlayerPartyNew = pbSwitchInBetween(0,false,true)
               if idxPlayerPartyNew>=0
                 pbMessageOnRecall(@battlers[0])
@@ -270,7 +270,7 @@ class PokeBattle_Battle
       end
     else
       owner = pbGetOwnerFromBattlerIndex(idxBattler)
-      pbDisplayBrief(_INTL("{1} sent out {2}!",owner.fullname,newPkmnName))
+      pbDisplayBrief(_INTL("{1} sent out {2}!",owner.full_name,newPkmnName))
     end
   end
 

@@ -30,16 +30,13 @@ Events.onWildPokemonCreate += proc { |_sender, e|
   end
 }
 
-# This is the basis of a trainer modifier.  It works both for trainers loaded
+# This is the basis of a trainer modifier. It works both for trainers loaded
 # when you battle them, and for partner trainers when they are registered.
 # Note that you can only modify a partner trainer's Pokémon, and not the trainer
 # themselves nor their items this way, as those are generated from scratch
 # before each battle.
-#Events.onTrainerPartyLoad += proc { |_sender, e|
-#  if e[0] # Trainer data should exist to be loaded, but may not exist somehow
-#    trainer = e[0][0] # A PokeBattle_Trainer object of the loaded trainer
-#    items = e[0][1]   # An array of the trainer's items they can use
-#    party = e[0][2]   # An array of the trainer's Pokémon
+#Events.onTrainerPartyLoad += proc { |_sender, trainer|
+#  if trainer   # An NPCTrainer object containing party/items/lose text, etc.
 #    YOUR CODE HERE
 #  end
 #}

@@ -752,7 +752,7 @@ class Pokemon
     @owner = new_owner
   end
 
-  # @param trainer [PokeBattle_Trainer] the trainer to compare to the original trainer
+  # @param trainer [PlayerTrainer, NPCTrainer] the trainer to compare to the original trainer
   # @return [Boolean] whether the given trainer is not this Pokémon's original trainer
   def foreign?(trainer)
     return @owner.id != trainer.id || @owner.name != trainer.name
@@ -787,7 +787,7 @@ class Pokemon
 
   # @return [String] the name of this Pokémon
   def name
-    return (nicknamed?) ? @name || speciesName
+    return (nicknamed?) ? @name : speciesName
   end
 
   # @param value [String] the nickname of this Pokémon
@@ -942,7 +942,7 @@ class Pokemon
   # Creates a new Pokémon object.
   # @param species [Symbol, String, Integer] Pokémon species
   # @param level [Integer] Pokémon level
-  # @param owner [Owner, PokeBattle_Trainer] Pokémon owner (the player by default)
+  # @param owner [Owner, PlayerTrainer, NPCTrainer] Pokémon owner (the player by default)
   # @param withMoves [Boolean] whether the Pokémon should have moves
   def initialize(species, level, owner = $Trainer, withMoves = true)
     species_data = GameData::Species.get(species)
@@ -985,7 +985,7 @@ class Pokemon
     end
     if owner.is_a?(Owner)
       @owner = owner
-    elsif owner.is_a?(PokeBattle_Trainer)
+    elsif owner.is_a?(PlayerTrainer) || owner.is_a?(NPCTrainer)
       @owner = Owner.new_from_trainer(owner)
     else
       @owner = Owner.new(0, '', 2, 2)

@@ -45,7 +45,7 @@ module PokeBattle_BattleCommon
       pbSeenForm(pkmn)   # In case the form changed upon leaving battle
       # Record the Pokémon's species as owned in the Pokédex
       if !pbPlayer.hasOwned?(pkmn.species)
-        pbPlayer.setOwned(pkmn.species)
+        pbPlayer.set_owned(pkmn.species)
         if $Trainer.pokedex
           pbDisplayPaused(_INTL("{1}'s data was added to the Pokédex.",pkmn.name))
           @scene.pbShowPokedex(pkmn.species)
@@ -53,8 +53,8 @@ module PokeBattle_BattleCommon
       end
       # Record a Shadow Pokémon's species as having been caught
       if pkmn.shadowPokemon?
-        pbPlayer.shadowcaught = {} if !pbPlayer.shadowcaught
-        pbPlayer.shadowcaught[pkmn.species] = true
+        pbPlayer.owned_shadow = {} if !pbPlayer.owned_shadow
+        pbPlayer.owned_shadow[pkmn.species] = true
       end
       # Store caught Pokémon
       pbStorePokemon(pkmn)
@@ -194,7 +194,7 @@ module PokeBattle_BattleCommon
     # Critical capture check
     if ENABLE_CRITICAL_CAPTURES
       c = 0
-      numOwned = $Trainer.pokedexOwned
+      numOwned = $Trainer.owned_count
       if numOwned>600;    c = x*5/12
       elsif numOwned>450; c = x*4/12
       elsif numOwned>300; c = x*3/12

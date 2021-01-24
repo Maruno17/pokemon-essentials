@@ -138,7 +138,7 @@ class PokemonRegionMap_Scene
     @sprites["mapbottom"].mapdetails  = pbGetMapDetails(@mapX,@mapY)
     if playerpos && mapindex==playerpos[0]
       @sprites["player"] = IconSprite.new(0,0,@viewport)
-      @sprites["player"].setBitmap(GameData::TrainerType.player_map_icon_filename($Trainer.trainertype))
+      @sprites["player"].setBitmap(GameData::TrainerType.player_map_icon_filename($Trainer.trainer_type))
       @sprites["player"].x = -SQUAREWIDTH/2+(@mapX*SQUAREWIDTH)+(Graphics.width-@sprites["map"].bitmap.width)/2
       @sprites["player"].y = -SQUAREHEIGHT/2+(@mapY*SQUAREHEIGHT)+(Graphics.height-@sprites["map"].bitmap.height)/2
     end

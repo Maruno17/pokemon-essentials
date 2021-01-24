@@ -739,7 +739,7 @@ class BattleFactoryData
     @trainerid=@bcdata.nextTrainer
     bttrainers=pbGetBTTrainers(@bcdata.currentChallenge)
     trainerdata=bttrainers[@trainerid]
-    @opponent=PokeBattle_Trainer.new(
+    @opponent=NPCTrainer.new(
        pbGetMessageFromHash(MessageTypes::TrainerNames,trainerdata[1]),
        trainerdata[0])
     opponentPkmn=pbBattleFactoryPokemon(1,@bcdata.wins,@bcdata.swaps,@rentals)
@@ -769,7 +769,7 @@ class BattleFactoryData
     trainerid=@bcdata.nextTrainer
     bttrainers=pbGetBTTrainers(@bcdata.currentChallenge)
     trainerdata=bttrainers[trainerid]
-    @opponent=PokeBattle_Trainer.new(
+    @opponent=NPCTrainer.new(
        pbGetMessageFromHash(MessageTypes::TrainerNames,trainerdata[1]),
        trainerdata[0])
     opponentPkmn=pbBattleFactoryPokemon(
@@ -882,7 +882,7 @@ end
 def pbGenerateBattleTrainer(trainerid,rule)
   bttrainers=pbGetBTTrainers(pbBattleChallenge.currentChallenge)
   trainerdata=bttrainers[trainerid]
-  opponent=PokeBattle_Trainer.new(
+  opponent=NPCTrainer.new(
      pbGetMessageFromHash(MessageTypes::TrainerNames,trainerdata[1]),
      trainerdata[0])
   btpokemon=pbGetBTPokemon(pbBattleChallenge.currentChallenge)
@@ -928,7 +928,7 @@ def pbOrganizedBattleEx(opponent,challengedata,endspeech,endspeechwin)
     $PokemonTemp.lastbattle = nil
     return true
   end
-  pbHealAll
+  $Trainer.heal_party
   # Remember original data, to be restored after battle
   challengedata = PokemonChallengeRules.new if !challengedata
   oldlevels = challengedata.adjustLevels($Trainer.party,opponent.party)

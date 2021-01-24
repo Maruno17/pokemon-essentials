@@ -106,8 +106,8 @@ class PokemonPokedexMenuScreen
         end
       end
       index = -1 if index >= $PokemonGlobal.pokedexUnlocked.length - 1
-      commands2[i] = [$Trainer.pokedexSeen(index),
-                      $Trainer.pokedexOwned(index),
+      commands2[i] = [$Trainer.seen_count(index),
+                      $Trainer.owned_count(index),
                       pbGetRegionalDexLength(index)]
     end
     commands.push(_INTL("Exit"))

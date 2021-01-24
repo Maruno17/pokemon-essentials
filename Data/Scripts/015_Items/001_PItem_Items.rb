@@ -465,7 +465,7 @@ def pbUseItem(bag,item,bagscene=nil)
   itm = GameData::Item.get(item)
   useType = itm.field_use
   if itm.is_machine?    # TM or HM
-    if $Trainer.pokemonCount==0
+    if $Trainer.pokemon_count == 0
       pbMessage(_INTL("There is no Pokémon."))
       return 0
     end
@@ -481,7 +481,7 @@ def pbUseItem(bag,item,bagscene=nil)
     end
     return 0
   elsif useType==1 || useType==5   # Item is usable on a Pokémon
-    if $Trainer.pokemonCount==0
+    if $Trainer.pokemon_count == 0
       pbMessage(_INTL("There is no Pokémon."))
       return 0
     end

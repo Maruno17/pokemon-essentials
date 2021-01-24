@@ -30,12 +30,12 @@ module PokeBattle_RecordedBattleModule
     if trainer.is_a?(Array)
       ret = []
       for i in 0...trainer.length
-        ret.push([trainer[i].trainertype,trainer[i].name.clone,trainer[i].id,trainer[i].badges.clone])
+        ret.push([trainer[i].trainer_type,trainer[i].name.clone,trainer[i].id,trainer[i].badges.clone])
       end
       return ret
     else
       return [
-         [trainer.trainertype,trainer.name.clone,trainer.id,trainer.badges.clone]
+         [trainer.trainer_type,trainer.name.clone,trainer.id,trainer.badges.clone]
       ]
     end
   end
@@ -146,15 +146,15 @@ module BattlePlayerHelper
     return nil if !trainer
     if trainer.length>1
       ret = []
-      ret[0]=PokeBattle_Trainer.new(trainer[0][1],trainer[0][0])
+      ret[0]=PlayerTrainer.new(trainer[0][1],trainer[0][0])
       ret[0].id     = trainer[0][2]
       ret[0].badges = trainer[0][3]
-      ret[1] = PokeBattle_Trainer.new(trainer[1][1],trainer[1][0])
+      ret[1] = PlayerTrainer.new(trainer[1][1],trainer[1][0])
       ret[1].id     = trainer[1][2]
       ret[1].badges = trainer[1][3]
       return ret
     else
-      ret = PokeBattle_Trainer.new(trainer[0][1],trainer[0][0])
+      ret = PlayerTrainer.new(trainer[0][1],trainer[0][0])
       ret.id     = trainer[0][2]
       ret.badges = trainer[0][3]
       return ret

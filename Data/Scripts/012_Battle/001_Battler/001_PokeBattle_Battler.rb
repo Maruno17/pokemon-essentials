@@ -191,7 +191,7 @@ class PokeBattle_Battler
 
   def owned?
     return false if !@battle.wildBattle?
-    return $Trainer.owned[displaySpecies]
+    return $Trainer.owned?(displaySpecies)
   end
   alias owned owned?
 
@@ -259,7 +259,7 @@ class PokeBattle_Battler
     end
     # Badge multiplier
     if @battle.internalBattle && pbOwnedByPlayer? &&
-       @battle.pbPlayer.numbadges>=NUM_BADGES_BOOST_SPEED
+       @battle.pbPlayer.badge_count >= NUM_BADGES_BOOST_SPEED
       speedMult *= 1.1
     end
     # Calculation

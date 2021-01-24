@@ -8,7 +8,7 @@ class PokeBattle_AI
     wildBattler = (@battle.wildBattle? && @battle.opposes?(idxBattler))
     skill       = 0
     if !wildBattler
-      skill     = @battle.pbGetOwnerFromBattlerIndex(user.index).skill || 0
+      skill     = @battle.pbGetOwnerFromBattlerIndex(user.index).skill_level || 0
     end
     # Get scores and targets for each move
     # NOTE: A move is only added to the choices array if it has a non-zero

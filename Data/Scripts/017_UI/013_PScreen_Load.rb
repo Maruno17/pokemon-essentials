@@ -64,9 +64,9 @@ class PokemonLoadPanel < SpriteWrapper
       if @isContinue
         textpos.push([@title,16*2,5*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
         textpos.push([_INTL("Badges:"),16*2,56*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([@trainer.numbadges.to_s,103*2,56*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([@trainer.badge_count.to_s,103*2,56*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
         textpos.push([_INTL("Pokédex:"),16*2,72*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([@trainer.pokedexSeen.to_s,103*2,72*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([@trainer.seen_count.to_s,103*2,72*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
         textpos.push([_INTL("Time:"),16*2,88*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
         hour = @totalsec / 60 / 60
         min  = @totalsec / 60 % 60
@@ -163,7 +163,7 @@ class PokemonLoad_Scene
 
   def pbSetParty(trainer)
     return if !trainer || !trainer.party
-    meta = GameData::Metadata.get_player(trainer.metaID)
+    meta = GameData::Metadata.get_player(trainer.character_ID)
     if meta
       filename = pbGetPlayerCharset(meta,1,trainer,true)
       @sprites["player"] = TrainerWalkingCharSprite.new(filename,@viewport)
@@ -227,7 +227,7 @@ class PokemonLoadScreen
       pokemonSystem = Marshal.load(f)
       mapid         = Marshal.load(f)
     }
-    raise "Corrupted file" if !trainer.is_a?(PokeBattle_Trainer)
+    raise "Corrupted file" if !trainer.is_a?(PlayerTrainer)
     raise "Corrupted file" if !framecount.is_a?(Numeric)
     raise "Corrupted file" if !game_system.is_a?(Game_System)
     raise "Corrupted file" if !pokemonSystem.is_a?(PokemonSystem)
@@ -318,7 +318,7 @@ class PokemonLoadScreen
       end
       commands[cmdContinue = commands.length]    = _INTL("Continue") if showContinue
       commands[cmdNewGame = commands.length]     = _INTL("New Game")
-      commands[cmdMysteryGift = commands.length] = _INTL("Mystery Gift") if (trainer.mysterygiftaccess rescue false)
+      commands[cmdMysteryGift = commands.length] = _INTL("Mystery Gift") if trainer.mystery_gift_unlocked
     else
       commands[cmdNewGame = commands.length]     = _INTL("New Game")
     end

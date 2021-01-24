@@ -183,7 +183,7 @@ Events.onMapUpdate += proc { |_sender,_e|
   last = $PokemonGlobal.pokerusTime
   now = pbGetTimeNow
   if !last || last.year!=now.year || last.month!=now.month || last.day!=now.day
-    for i in $Trainer.pokemonParty
+    for i in $Trainer.pokemon_party
       i.lowerPokerusCount
     end
     $PokemonGlobal.pokerusTime = now
@@ -263,7 +263,7 @@ Events.onStepTaken += proc {
   $PokemonGlobal.happinessSteps = 0 if !$PokemonGlobal.happinessSteps
   $PokemonGlobal.happinessSteps += 1
   if $PokemonGlobal.happinessSteps>=128
-    for pkmn in $Trainer.ablePokemonParty
+    for pkmn in $Trainer.able_party
       pkmn.changeHappiness("walking") if rand(2)==0
     end
     $PokemonGlobal.happinessSteps = 0
@@ -276,7 +276,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
   next if handled[0]
   if $PokemonGlobal.stepcount%4==0 && POISON_IN_FIELD
     flashed = false
-    for i in $Trainer.ablePokemonParty
+    for i in $Trainer.able_party
       if i.status==PBStatuses::POISON && !i.hasAbility?(:IMMUNITY)
         if !flashed
           $game_screen.start_flash(Color.new(255,0,0,128), 4)
@@ -292,7 +292,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
           i.status = PBStatuses::NONE
           pbMessage(_INTL("{1} fainted...",i.name))
         end
-        if pbAllFainted
+        if $Trainer.able_pokemon_count == 0
           handled[0] = true
           pbCheckAllFainted
         end
@@ -302,7 +302,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
 }
 
 def pbCheckAllFainted
-  if pbAllFainted
+  if $Trainer.able_pokemon_count == 0
     pbMessage(_INTL("You have no more Pokémon that can fight!\1"))
     pbMessage(_INTL("You blacked out!"))
     pbBGMFade(1.0)
@@ -378,7 +378,7 @@ Events.onChangeDirection += proc {
 }
 
 def pbBattleOnStepTaken(repel = false)
-  return if $Trainer.ablePokemonCount == 0
+  return if $Trainer.able_pokemon_count == 0
   encounterType = $PokemonEncounters.pbEncounterType
   return if encounterType < 0
   return if !$PokemonEncounters.isEncounterPossibleHere?
@@ -387,7 +387,7 @@ def pbBattleOnStepTaken(repel = false)
   encounter = EncounterModifier.trigger(encounter)
   if $PokemonEncounters.pbCanEncounter?(encounter, repel)
     if !$PokemonTemp.forceSingleBattle && !pbInSafari? && ($PokemonGlobal.partner ||
-       ($Trainer.ablePokemonCount > 1 && PBTerrain.isDoubleWildBattle?(pbGetTerrainTag) && rand(100) < 30))
+       ($Trainer.able_pokemon_count > 1 && PBTerrain.isDoubleWildBattle?(pbGetTerrainTag) && rand(100) < 30))
       encounter2 = $PokemonEncounters.pbEncounteredPokemon(encounterType)
       encounter2 = EncounterModifier.trigger(encounter2)
       pbDoubleWildBattle(encounter[0], encounter[1], encounter2[0], encounter2[1])
@@ -909,7 +909,7 @@ def pbFishingEnd
 end
 
 def pbFishing(hasEncounter,rodType=1)
-  speedup = ($Trainer.firstPokemon && [:STICKYHOLD, :SUCTIONCUPS].include?($Trainer.firstPokemon.ability_id))
+  speedup = ($Trainer.first_pokemon && [:STICKYHOLD, :SUCTIONCUPS].include?($Trainer.first_pokemon.ability_id))
   biteChance = 20+(25*rodType)   # 45, 70, 95
   biteChance *= 1.5 if speedup   # 67.5, 100, 100
   hookChance = 100
@@ -1059,13 +1059,11 @@ def pbRegisterPartner(tr_type, tr_name, tr_id = 0)
   pbCancelVehicles
   trainer = pbLoadTrainer(tr_type, tr_name, tr_id)
   Events.onTrainerPartyLoad.trigger(nil, trainer)
-  trainerobject = PokeBattle_Trainer.new(trainer[0].name, tr_type)
-  trainerobject.setForeignID($Trainer)
-  for i in trainer[2]
-    i.owner = Pokemon::Owner.new_from_trainer(trainerobject)
+  for i in trainer.party
+    i.owner = Pokemon::Owner.new_from_trainer(trainer)
     i.calcStats
   end
-  $PokemonGlobal.partner = [tr_type, trainerobject.name, trainerobject.id, trainer[2]]
+  $PokemonGlobal.partner = [tr_type, tr_name, trainer.id, trainer.party]
 end
 
 def pbDeregisterPartner

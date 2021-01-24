@@ -916,7 +916,7 @@ PokemonDebugMenuCommands.register("ownership", {
            [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], pkmn.owner.gender)
         pkmn.owner.gender = cmd2 if cmd2 >= 0
       when 3   # Random foreign ID
-        pkmn.owner.id = $Trainer.getForeignID
+        pkmn.owner.id = $Trainer.make_foreign_ID
       when 4   # Set foreign ID
         params = ChooseNumberParams.new
         params.setRange(0, 65535)
