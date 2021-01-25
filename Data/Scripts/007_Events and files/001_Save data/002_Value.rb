@@ -25,7 +25,7 @@ module SaveData
       validate id => Symbol, block => Proc
       @id = id
       @loaded = false
-      @loading_new_game_value = false
+      @load_in_bootup = false
       instance_eval(&block)
       raise "No save_value defined for save value #{id.inspect}" if @save_proc.nil?
       raise "No load_value defined for save value #{id.inspect}" if @load_proc.nil?
@@ -73,14 +73,17 @@ module SaveData
         raise "Save value #{@id.inspect} has no new game value proc defined"
       end
 
-      @loading_new_game_value = true
       self.load(@new_game_value_proc.call)
-      @loading_new_game_value = false
     end
 
     # @return [Boolean] whether the value has a new game value proc defined
     def has_new_game_proc?
       return @new_game_value_proc.is_a?(Proc)
+    end
+
+    # @return [Boolean] whether the value should be loaded during bootup
+    def load_in_bootup?
+      return @load_in_bootup
     end
 
     # @return [Boolean] whether the value has been loaded
@@ -117,6 +120,12 @@ module SaveData
       @load_proc = block
     end
 
+    # If present, sets the value to be loaded during bootup.
+    # @see SaveData.register
+    def load_in_bootup
+      @load_in_bootup = true
+    end
+
     # If present, defines what the value is set to at the start of a new game.
     # @see SaveData.register
     def new_game_value(&block)
@@ -143,11 +152,5 @@ module SaveData
     end
 
     #@!endgroup
-
-    # @return [Boolean] whether the value is being loaded using the {#new_game_value} proc.
-    # @note This method should be used in the {#load_value} proc.
-    def loading_new_game_value?
-      return @loading_new_game_value
-    end
   end
 end
