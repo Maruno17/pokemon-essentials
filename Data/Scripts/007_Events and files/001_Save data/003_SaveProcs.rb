@@ -1,10 +1,5 @@
 # Contains the save values defined by default in Essentials.
 
-# TODO: Do additional work (like setting up the map interpreter or initializing $PokemonEncounters)
-#   inside the load_value procs
-
-# TODO: Figure out how to handle the magic number and safesave stuff (what does the magic number even do?)
-
 SaveData.register(:player) do
   ensure_class :PokeBattle_Trainer
   save_value { $Trainer }
@@ -21,6 +16,7 @@ SaveData.register(:frame_count) do
 end
 
 SaveData.register(:game_system) do
+  load_in_bootup
   ensure_class :Game_System
   save_value { $game_system }
   load_value { |value| $game_system = value }
@@ -29,9 +25,11 @@ SaveData.register(:game_system) do
 end
 
 SaveData.register(:pokemon_system) do
+  load_in_bootup
   ensure_class :PokemonSystem
   save_value { $PokemonSystem }
   load_value { |value| $PokemonSystem = value }
+  new_game_value { PokemonSystem.new }
   from_old_format { |old_format| old_format[3] }
 end
 
@@ -70,43 +68,7 @@ end
 SaveData.register(:map_factory) do
   ensure_class :PokemonMapFactory
   save_value { $MapFactory }
-  load_value do |value|
-    $MapFactory = value
-    $game_map = $MapFactory.map
-    $PokemonEncounters = PokemonEncounters.new
-    $PokemonEncounters.setup($game_map.map_id)
-    next unless loading_new_game_value?
-    if $data_system.respond_to?(:magic_number)
-      magic_number_matches = ($game_system.magic_number == $data_system.magic_number)
-    else
-      magic_number_matches = ($game_system.magic_number == $data_system.version_id)
-    end
-    if !magic_number_matches || $PokemonGlobal.safesave
-      if pbMapInterpreterRunning?
-        pbMapInterpreter.setup(nil, 0)
-      end
-      begin
-        $MapFactory.setup($game_map.map_id)
-      rescue Errno::ENOENT
-        if $DEBUG
-          pbMessage(_INTL('Map {1} was not found.', $game_map.map_id))
-          map = pbWarpToMap
-          exit unless map
-          $MapFactory.setup(map[0])
-          $game_player.moveto(map[1], map[2])
-        else
-          raise _INTL('The map was not found. The game cannot continue.')
-        end
-      end
-      $game_player.center($game_player.x, $game_player.y)
-    else
-      $MapFactory.setMapChanged($game_map.map_id)
-    end
-    if $game_map.events.nil?
-      raise _INTL('The map is corrupt. The game cannot continue.')
-    end
-  end
-  new_game_value { PokemonMapFactory.new($data_system.start_map_id) }
+  load_value { |value| $MapFactory = value }
   from_old_format { |old_format| old_format[9] }
 end
 
