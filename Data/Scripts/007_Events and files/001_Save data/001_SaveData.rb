@@ -1,7 +1,11 @@
 # The SaveData module is used to analyze and modify the save file.
 module SaveData
   # Contains the file path of the save file.
-  FILE_PATH = System.data_directory + '/Game.rxdata'
+  FILE_PATH = if File.directory?(System.data_directory)
+                System.data_directory + '/Game.rxdata'
+              else
+                './Game.rxdata'
+              end
 
   # Contains Value objects for each save element.
   # Populated during runtime by SaveData.register calls.
@@ -70,6 +74,13 @@ module SaveData
   #     new_game_value { Foo.new }
   #     from_old_format { |old_format| old_format[16] if old_format[16].is_a?(Foo) }
   #   end
+  # @example Registering a value to be loaded on bootup
+  #   SaveData.register(:bar) do
+  #     load_in_bootup
+  #     save_value { $bar }
+  #     load_value { |value| $bar = value }
+  #     new_game_value { Bar.new }
+  #   end
   # @param id [Symbol] value id
   # @yieldself [Value]
   def self.register(id, &block)
@@ -121,7 +132,33 @@ module SaveData
   # Loads each {Value}'s new game value, if one is defined.
   def self.load_new_game_values
     @values.each_value do |value|
-      value.load_new_game_value if value.has_new_game_proc?
+      value.load_new_game_value if value.has_new_game_proc? && !value.loaded?
+    end
+  end
+
+  # Loads each value from the given save data that has
+  # been set to be loaded during bootup.
+  # @param save_data [Hash] save data to load
+  # @raise [InvalidValueError] if an invalid value is being loaded
+  def self.load_bootup_values(save_data)
+    validate save_data => Hash
+
+    @values.each do |id, value|
+      next if !@values[id].load_in_bootup? || @values[id].loaded?
+      if save_data.has_key?(id)
+        value.load(save_data[id])
+      elsif value.has_new_game_proc?
+        value.load_new_game_value
+      end
+    end
+  end
+
+  # Goes through each value with {#load_in_bootup} enabled and
+  # loads their new game value, if one is defined.
+  def self.initialize_bootup_values
+    @values.each_value do |value|
+      next unless value.load_in_bootup?
+      value.load_new_game_value if value.has_new_game_proc? && !value.loaded?
     end
   end
 
@@ -136,15 +173,15 @@ module SaveData
 
     File.open(file_path) do |file|
       data = Marshal.load(file)
-      unless file.eof?
-        save_data = [] if save_data.nil?
-        save_data << data
-      end
+
       if data.is_a?(Hash)
         save_data = data
-      elsif file.eof?
-        save_data << data
+        next
       end
+
+      save_data = [data]
+
+      save_data << Marshal.load(file) until file.eof?
     end
 
     return save_data
