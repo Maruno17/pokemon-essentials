@@ -146,16 +146,16 @@ class PokeBattle_Battler
     @battle.pbPriority(true).each do |b|
       next if switchedBattlers.include?(b.index)
       next if !b.itemActive?
-	    next if switchByItem.length > 0 # Only one switch per move (Gen 8)
-	    next if switchedBattlers.length > 0 # Only one switch per move (Gen 8)
+      next if switchByItem.length > 0 # Only one switch per move (Gen 8)
+      next if switchedBattlers.length > 0 # Only one switch per move (Gen 8)
       if targets.any? { |targetB| targetB.index==b.index } # Eject Button, Red Card
         if !b.damageState.unaffected && b.damageState.calcDamage != 0
-		      BattleHandlers.triggerTargetItemAfterMoveUse(b.item,b,user,move,switchByItem,@battle)
-		    end
-	    end
-	    if b.effects[PBEffects::LashOut] # Eject Pack
+          BattleHandlers.triggerTargetItemAfterMoveUse(b.item,b,user,move,switchByItem,@battle)
+        end
+      end
+      if b.effects[PBEffects::LashOut] # Eject Pack
         BattleHandlers.triggerItemOnStatLoss(b.item,b,user,move,switchByItem,@battle)
-	    end
+      end
     end
     @battle.moldBreaker = false if switchByItem.include?(user.index)
     @battle.pbPriority(true).each do |b|
