@@ -361,34 +361,32 @@ def pbOnStepTaken(eventTriggered)
   $PokemonGlobal.stepcount = 0 if !$PokemonGlobal.stepcount
   $PokemonGlobal.stepcount += 1
   $PokemonGlobal.stepcount &= 0x7FFFFFFF
-  repel = ($PokemonGlobal.repel>0)
   Events.onStepTaken.trigger(nil)
 #  Events.onStepTakenFieldMovement.trigger(nil,$game_player)
   handled = [nil]
   Events.onStepTakenTransferPossible.trigger(nil,handled)
   return if handled[0]
-  pbBattleOnStepTaken(repel) if !eventTriggered && !$game_temp.in_menu
-  $PokemonTemp.encounterTriggered = false   # This info isn't needed
+  pbBattleOnStepTaken if !eventTriggered && !$game_temp.in_menu
+  $PokemonTemp.encounterTriggered = false   # This info isn't needed here
 end
 
 # Start wild encounters while turning on the spot
 Events.onChangeDirection += proc {
-  repel = ($PokemonGlobal.repel > 0)
-  pbBattleOnStepTaken(repel) if !$game_temp.in_menu
+  pbBattleOnStepTaken if !$game_temp.in_menu
 }
 
-def pbBattleOnStepTaken(repel = false)
+def pbBattleOnStepTaken
   return if $Trainer.able_pokemon_count == 0
-  encounterType = $PokemonEncounters.pbEncounterType
+  return if !$PokemonEncounters.encounter_possible_here?
+  encounterType = $PokemonEncounters.encounter_type
   return if encounterType < 0
-  return if !$PokemonEncounters.isEncounterPossibleHere?
+  return if !$PokemonEncounter.step_triggers_encounter?(encounterType)
   $PokemonTemp.encounterType = encounterType
-  encounter = $PokemonEncounters.pbGenerateEncounter(encounterType)
+  encounter = $PokemonEncounters.choose_wild_pokemon(encounterType)
   encounter = EncounterModifier.trigger(encounter)
-  if $PokemonEncounters.pbCanEncounter?(encounter, repel)
-    if !$PokemonTemp.forceSingleBattle && !pbInSafari? && ($PokemonGlobal.partner ||
-       ($Trainer.able_pokemon_count > 1 && PBTerrain.isDoubleWildBattle?(pbGetTerrainTag) && rand(100) < 30))
-      encounter2 = $PokemonEncounters.pbEncounteredPokemon(encounterType)
+  if $PokemonEncounter.allow_encounter?(encounter)
+    if $PokemonEncounter.have_double_wild_battle?
+      encounter2 = $PokemonEncounters.choose_wild_pokemon(encounterType)
       encounter2 = EncounterModifier.trigger(encounter2)
       pbDoubleWildBattle(encounter[0], encounter[1], encounter2[0], encounter2[1])
     else
@@ -851,7 +849,7 @@ def pbJumpToward(dist=1,playSound=false,cancelSurf=false)
   end
   if $game_player.x!=x || $game_player.y!=y
     pbSEPlay("Player jump") if playSound
-    $PokemonEncounters.clearStepCount if cancelSurf
+    $PokemonEncounters.reset_step_count if cancelSurf
     $PokemonTemp.endSurf = true if cancelSurf
     while $game_player.jumping?
       Graphics.update

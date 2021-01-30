@@ -887,16 +887,7 @@ DebugMenuCommands.register("setencounters", {
   "description" => _INTL("Edit the wild Pokémon that can be found on maps, and how they are encountered."),
   "always_show" => true,
   "effect"      => proc {
-    encdata = pbLoadEncountersData
-    map = pbDefaultMap
-    loop do
-      map = pbListScreen(_INTL("SET ENCOUNTERS"), MapLister.new(map))
-      break if map <= 0
-      pbEncounterEditorMap(encdata, map)
-    end
-    save_data(encdata, "Data/encounters.dat")
-    $PokemonTemp.encountersData = nil
-    Compiler.write_encounters   # Rewrite PBS file encounters.txt
+    pbFadeOutIn { pbEncountersEditor }
   }
 })
 

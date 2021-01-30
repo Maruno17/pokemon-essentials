@@ -242,7 +242,7 @@ ItemHandlers::UseInField.add(:OLDROD,proc { |item|
     pbMessage(_INTL("Can't use that here."))
     next 0
   end
-  encounter = $PokemonEncounters.hasEncounter?(EncounterTypes::OldRod)
+  encounter = $PokemonEncounters.has_encounter_type?(EncounterTypes::OldRod)
   if pbFishing(encounter,1)
     pbEncounter(EncounterTypes::OldRod)
   end
@@ -256,7 +256,7 @@ ItemHandlers::UseInField.add(:GOODROD,proc { |item|
     pbMessage(_INTL("Can't use that here."))
     next 0
   end
-  encounter = $PokemonEncounters.hasEncounter?(EncounterTypes::GoodRod)
+  encounter = $PokemonEncounters.has_encounter_type?(EncounterTypes::GoodRod)
   if pbFishing(encounter,2)
     pbEncounter(EncounterTypes::GoodRod)
   end
@@ -270,7 +270,7 @@ ItemHandlers::UseInField.add(:SUPERROD,proc { |item|
     pbMessage(_INTL("Can't use that here."))
     next 0
   end
-  encounter = $PokemonEncounters.hasEncounter?(EncounterTypes::SuperRod)
+  encounter = $PokemonEncounters.has_encounter_type?(EncounterTypes::SuperRod)
   if pbFishing(encounter,3)
     pbEncounter(EncounterTypes::SuperRod)
   end

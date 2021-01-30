@@ -827,107 +827,194 @@ module Compiler
   # Compile wild encounter data
   #=============================================================================
   def compile_encounters
-    lines   = []
-    linenos = []
-    FileLineData.file = "PBS/encounters.txt"
-    File.open("PBS/encounters.txt","rb") { |f|
-      lineno = 1
-      f.each_line { |line|
-        if lineno==1 && line[0]==0xEF && line[1]==0xBB && line[2]==0xBF
-          line = line[3,line.length-3]
+    new_format        = nil
+    encounter_hash    = nil
+    step_chances      = nil
+    need_step_chances = false   # Not needed for new format only
+    probabilities     = nil
+    current_type      = -1
+    expected_lines    = 0
+    max_level = PBExperience.maxLevel
+    pbCompilerEachPreppedLine("PBS/encounters.txt") { |line, line_no|
+      next if line.length == 0
+      if expected_lines > 0 && line[/^\d+,/] && new_format   # Species line
+        values = line.split(',')
+        if !values || values.length < 3
+          raise _INTL("Expected a species entry line for encounter type {1} for map '{2}', got \"{3}\" instead.\r\n{4}",
+             EncounterTypes::Names[current_type], encounter_hash[:map], line, FileLineData.linereport)
         end
-        line = prepline(line)
-        if line.length!=0
-          lines[lines.length] = line
-          linenos[linenos.length] = lineno
+        values = pbGetCsvRecord(line, line_no, [0, "vevV", nil, :Species])
+        values[3] = values[2] if !values[3]
+        if values[2] > max_level
+          raise _INTL("Level number {1} is not valid (max. {2}).\r\n{3}", values[2], max_level, FileLineData.linereport)
+        elsif values[3] > max_level
+          raise _INTL("Level number {1} is not valid (max. {2}).\r\n{3}", values[3], max_level, FileLineData.linereport)
+        elsif values[2] > values[3]
+          raise _INTL("Minimum level is greater than maximum level: {1}\r\n{2}", line, FileLineData.linereport)
         end
-        lineno += 1
-      }
-    }
-    encounters  = {}
-    thisenc     = nil
-    needdensity = false
-    lastmapid   = -1
-    i = 0
-    while i<lines.length
-      line = lines[i]
-      FileLineData.setLine(line,linenos[i])
-      mapid = line[/^\d+$/]
-      if mapid
-        lastmapid = mapid
-        if encounters[mapid.to_i]
-          raise _INTL("Encounters for map ID '{1}' are defined twice.\r\n{2}",mapid,FileLineData.linereport)
+        encounter_hash[:types][current_type].push(values)
+      elsif expected_lines > 0 && !new_format   # Expect a species line and nothing else
+        values = line.split(',')
+        if !values || values.length < 2
+          raise _INTL("Expected a species entry line for encounter type {1} for map '{2}', got \"{3}\" instead.\r\n{4}",
+             EncounterTypes::Names[current_type], encounter_hash[:map], line, FileLineData.linereport)
         end
-        if thisenc && (thisenc[1][EncounterTypes::Land] ||
-                       thisenc[1][EncounterTypes::LandMorning] ||
-                       thisenc[1][EncounterTypes::LandDay] ||
-                       thisenc[1][EncounterTypes::LandNight] ||
-                       thisenc[1][EncounterTypes::BugContest]) &&
-                       thisenc[1][EncounterTypes::Cave]
-          raise _INTL("Can't define both Land and Cave encounters in the same area (map ID '{1}').",mapid)
+        values = pbGetCsvRecord(line, line_no, [0, "evV", :Species])
+        values[2] = values[1] if !values[2]
+        if values[1] > max_level
+          raise _INTL("Level number {1} is not valid (max. {2}).\r\n{3}", values[1], max_level, FileLineData.linereport)
+        elsif values[2] > max_level
+          raise _INTL("Level number {1} is not valid (max. {2}).\r\n{3}", values[2], max_level, FileLineData.linereport)
+        elsif values[1] > values[2]
+          raise _INTL("Minimum level is greater than maximum level: {1}\r\n{2}", line, FileLineData.linereport)
         end
-        thisenc = [EncounterTypes::EnctypeDensities.clone,[]]
-        encounters[mapid.to_i] = thisenc
-        needdensity = true
-        i += 1
-        next
-      end
-      enc = findIndex(EncounterTypes::Names) { |val| val==line }
-      if enc>=0
-        needdensity = false
-        enclines = EncounterTypes::EnctypeChances[enc].length
-        encarray = []
-        j = i+1; k = 0
-        while j<lines.length && k<enclines
-          line = lines[j]
-          FileLineData.setLine(lines[j],linenos[j])
-          splitarr = strsplit(line,/\s*,\s*/)
-          if !splitarr || splitarr.length<2
-            raise _INTL("Expected a species entry line, got \"{1}\" instead. Check the number of species lines in the previous section (number {2}).\r\n{3}",
-               line,lastmapid,FileLineData.linereport)
+        probability = probabilities[probabilities.length - expected_lines]
+        encounter_hash[:types][current_type].push([probability] + values)
+        expected_lines -= 1
+      elsif line[/^\[\s*(.+)\s*\]$/]   # Map ID line (new format)
+        if new_format == false
+          raise _INTL("Can't mix old and new formats.\r\n{1}", FileLineData.linereport)
+        end
+        new_format = true
+        values = $~[1].split(',')
+        values.collect! { |v| v.strip.to_i }
+        values[1] = 0 if !values[1] || values[1] == ""
+        map_number = values[0]
+        map_version = values[1]
+        # Add map encounter's data to records
+        if encounter_hash
+          encounter_hash[:types].each do |encounters|
+            next if !encounters || encounters.length == 0
+            encounters.each_with_index do |enc, i|
+              next if !enc
+              encounters.each_with_index do |other_enc, j|
+                next if i == j || !other_enc
+                next if enc[1] != other_enc[1] || enc[2] != other_enc[2] || enc[3] != other_enc[3]
+                enc[0] += other_enc[0]
+                encounters[j] = nil
+              end
+            end
+            encounters.compact!
+            encounters.sort! { |a, b| (a[0] == b[0]) ? a[1].to_s <=> b[1].to_s : b[0] <=> a[0] }
           end
-          splitarr[2] = splitarr[1] if splitarr.length==2
-          splitarr[1] = splitarr[1].to_i
-          splitarr[2] = splitarr[2].to_i
-          maxlevel = PBExperience.maxLevel
-          if splitarr[1]<=0 || splitarr[1]>maxlevel
-            raise _INTL("Level number is not valid: {1}\r\n{2}",splitarr[1],FileLineData.linereport)
-          end
-          if splitarr[2]<=0 || splitarr[2]>maxlevel
-            raise _INTL("Level number is not valid: {1}\r\n{2}",splitarr[2],FileLineData.linereport)
-          end
-          if splitarr[1]>splitarr[2]
-            raise _INTL("Minimum level is greater than maximum level: {1}\r\n{2}",line,FileLineData.linereport)
-          end
-          splitarr[0] = parseSpecies(splitarr[0])
-          encarray.push(splitarr)
-          thisenc[1][enc] = encarray
-          j += 1; k += 1
+          GameData::Encounter::DATA[encounter_hash[:id]] = GameData::Encounter.new(encounter_hash)
         end
-        if j==lines.length && k<enclines
-          raise _INTL("Reached end of file unexpectedly. There were too few species entry lines in the last section (number {1}), expected {2} entries.\r\n{3}",
-             lastmapid,enclines,FileLineData.linereport)
+        # Raise an error if a map/version combo is used twice
+        key = sprintf("%s_%d", map_number, map_version).to_sym
+        if GameData::Encounter::DATA[key]
+          raise _INTL("Encounters for map '{1}' are defined twice.\r\n{2}", map_number, FileLineData.linereport)
         end
-        i = j
-      elsif needdensity
-        needdensity = false
-        nums = strsplit(line,/,/)
-        if nums && nums.length>=3
-          for j in 0...EncounterTypes::EnctypeChances.length
-            next if !EncounterTypes::EnctypeChances[j] ||
-                    EncounterTypes::EnctypeChances[j].length==0
-            next if EncounterTypes::EnctypeCompileDens[j]==0
-            thisenc[0][j] = nums[EncounterTypes::EnctypeCompileDens[j]-1].to_i
+        step_chances = []
+        # Construct encounter hash
+        encounter_hash = {
+          :id           => key,
+          :map          => map_number,
+          :version      => map_version,
+          :step_chances => step_chances,
+          :types        => []
+        }
+        current_type = -1
+        need_step_chances = true
+        expected_lines = 0
+      elsif line[/^(\d+)$/]   # Map ID line (old format)
+        if new_format == true
+          raise _INTL("Can't mix old and new formats.\r\n{1}", FileLineData.linereport)
+        end
+        new_format = false
+        map_number = $~[1].to_i
+        # Add map encounter's data to records
+        if encounter_hash
+          encounter_hash[:types].each do |encounters|
+            next if !encounters || encounters.length == 0
+            encounters.each_with_index do |enc, i|
+              next if !enc
+              encounters.each_with_index do |other_enc, j|
+                next if i == j || !other_enc
+                next if enc[1] != other_enc[1] || enc[2] != other_enc[2] || enc[3] != other_enc[3]
+                enc[0] += other_enc[0]
+                encounters[j] = nil
+              end
+            end
+            encounters.compact!
+            encounters.sort! { |a, b| (a[0] == b[0]) ? a[1].to_s <=> b[1].to_s : b[0] <=> a[0] }
           end
-        else
-          raise _INTL("Wrong syntax for densities in encounters.txt; got \"{1}\"\r\n{2}",line,FileLineData.linereport)
+          GameData::Encounter::DATA[encounter_hash[:id]] = GameData::Encounter.new(encounter_hash)
         end
-        i += 1
+        # Raise an error if a map/version combo is used twice
+        key = sprintf("%s_0", map_number).to_sym
+        if GameData::Encounter::DATA[key]
+          raise _INTL("Encounters for map '{1}' are defined twice.\r\n{2}", map_number, FileLineData.linereport)
+        end
+        step_chances = EncounterTypes::Chances_Per_Step.clone
+        # Construct encounter hash
+        encounter_hash = {
+          :id           => key,
+          :map          => map_number,
+          :version      => 0,
+          :step_chances => step_chances,
+          :types        => []
+        }
+        current_type = -1
+        need_step_chances = true
+      elsif !encounter_hash   # File began with something other than a map ID line
+        raise _INTL("Expected a map number, got \"{1}\" instead.\r\n{2}", line, FileLineData.linereport)
+      elsif line[/^(\d+)\s*,/] && !new_format   # Step chances line
+        if !need_step_chances
+          raise _INTL("Encounter densities are defined twice or\r\nnot immediately for map '{1}'.\r\n{2}",
+             encounter_hash[:map], FileLineData.linereport)
+        end
+        need_step_chances = false
+        values = pbGetCsvRecord(line, line_no, [0, "vvv"])
+        for type in 0...step_chances.length
+          next if EncounterTypes::Kinds[type] == 0
+          step_chances[type] = values[EncounterTypes::Kinds[type] - 1]
+        end
       else
-        raise _INTL("Undefined encounter type {1}, expected one of the following:\r\n{2}\r\n{3}",line,EncounterTypes::Names.inspect,FileLineData.linereport)
+        # Check if line is an encounter method name or not
+        values = line.split(',')
+        values.collect! { |v| v.strip }
+        current_type = findIndex(EncounterTypes::Names) { |val| val == values[0] }
+        if current_type >= 0   # Start of a new encounter method
+          need_step_chances = false
+          if values[1] && !values[1].empty?
+            step_chances[current_type] = values[1].to_i
+          elsif new_format
+            step_chances[current_type] = 0
+          end
+          probabilities = EncounterTypes::Probabilities[current_type].clone
+          expected_lines = probabilities.length
+          encounter_hash[:types][current_type] = []
+        else
+          raise _INTL("Undefined encounter type \"{1}\" for map '{2}'.\r\n{2}",
+             line, encounter_hash[:map], FileLineData.linereport)
+        end
       end
+    }
+    if expected_lines > 0 && !new_format
+      raise _INTL("Not enough encounter lines given for encounter type {1} for map '{2}' (expected {3}).\r\n{4}",
+         EncounterTypes::Names[current_type], encounter_hash[:map], probabilities.length, FileLineData.linereport)
     end
-    save_data(encounters,"Data/encounters.dat")
+    # Add last map's encounter data to records
+    if encounter_hash
+      encounter_hash[:types].each do |encounters|
+        next if !encounters || encounters.length == 0
+        encounters.each_with_index do |enc, i|
+          next if !enc
+          encounters.each_with_index do |other_enc, j|
+            next if i == j || !other_enc
+            next if enc[1] != other_enc[1] || enc[2] != other_enc[2] || enc[3] != other_enc[3]
+            enc[0] += other_enc[0]
+            encounters[j] = nil
+          end
+        end
+        encounters.compact!
+        encounters.sort! { |a, b| (a[0] == b[0]) ? a[1].to_s <=> b[1].to_s : b[0] <=> a[0] }
+      end
+      GameData::Encounter::DATA[encounter_hash[:id]] = GameData::Encounter.new(encounter_hash)
+    end
+    # Save all data
+    GameData::Encounter.save
+    Graphics.update
   end
 
   #=============================================================================

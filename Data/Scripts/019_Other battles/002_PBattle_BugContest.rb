@@ -106,16 +106,16 @@ class BugContestState
       end
     end
     enctype=EncounterTypes::BugContest
-    if !$PokemonEncounters.pbMapHasEncounter?(@contestMap,enctype)
+    if !$PokemonEncounters.map_has_encounter_type?(@contestMap, enctype)
       enctype=EncounterTypes::Land
     end
     for cont in @contestants
-      enc=$PokemonEncounters.pbMapEncounter(@contestMap,enctype)
+      enc=$PokemonEncounters.choose_wild_pokemon_for_map(@contestMap,enctype)
       if !enc
         raise _INTL("No encounters for map {1}, so can't judge contest",@contestMap)
       end
       pokemon=Pokemon.new(enc[0],enc[1])
-      pokemon.hp=1+rand(pokemon.totalhp-1)
+      pokemon.hp = rand(1, pokemon.totalhp - 1)
       score=pbBugContestScore(pokemon)
       judgearray.push([cont,pokemon.species,score])
     end

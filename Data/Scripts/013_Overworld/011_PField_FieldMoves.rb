@@ -714,7 +714,7 @@ end
 
 def pbStartSurfing
   pbCancelVehicles
-  $PokemonEncounters.clearStepCount
+  $PokemonEncounters.reset_step_count
   $PokemonGlobal.surfing = true
   pbUpdateVehicle
   $PokemonTemp.surfJump = $MapFactory.getFacingCoords($game_player.x,$game_player.y,$game_player.direction)
@@ -831,8 +831,8 @@ def pbSweetScent
     break if viewport.color.alpha<=0
   end
   viewport.dispose
-  enctype = $PokemonEncounters.pbEncounterType
-  if enctype<0 || !$PokemonEncounters.isEncounterPossibleHere? ||
+  enctype = $PokemonEncounters.encounter_type
+  if enctype < 0 || !$PokemonEncounters.encounter_possible_here? ||
      !pbEncounter(enctype)
     pbMessage(_INTL("There appears to be nothing here..."))
   end

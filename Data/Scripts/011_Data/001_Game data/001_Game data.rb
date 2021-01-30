@@ -40,6 +40,7 @@ module GameData
       return (self::DATA.has_key?(other)) ? self::DATA[other] : nil
     end
 
+    # Yields all data in order of their id_number.
     def each
       keys = self::DATA.keys.sort { |a, b| self::DATA[a].id_number <=> self::DATA[b].id_number }
       keys.each { |key| yield self::DATA[key] if !key.is_a?(Integer) }
@@ -130,5 +131,6 @@ module GameData
     Type.load
     Species.load
     Trainer.load
+    Encounter.load
   end
 end

@@ -243,27 +243,34 @@ def pbRandomPhoneItem(array)
   return pbGetMessageFromHash(MessageTypes::PhoneMessages,ret)
 end
 
-def pbRandomEncounterSpecies(enctype)
-  return 0 if !enctype
-  len = [enctype.length,4].min
-  return enctype[rand(len)][0]
+def pbRandomEncounterSpecies(enc_table)
+  return nil if !enc_table || enc_table.length == 0
+  len = [enc_table.length, 4].min
+  return enc_table[rand(len)][1]
 end
 
 def pbEncounterSpecies(phonenum)
-  return "" if !phonenum[6] || phonenum[6]==0
-  begin
-    enctypes = $PokemonEncounters.pbGetEncounterTables(phonenum[6])
-    return "" if !enctypes
-  rescue
-    return ""
+  return "" if !phonenum[6] || phonenum[6] == 0
+  encounter_data = GameData::Encounter.get(phonenum[6], $PokemonGlobal.encounter_version)
+  return "" if !encounter_data
+  enc_tables = encounter_data.types
+  species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::Land])
+  if !species
+    species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::Cave])
+    if !species
+      species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::LandDay])
+      if !species
+        species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::LandMorning])
+        if !species
+          species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::LandNight])
+          if !species
+            species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::Water])
+          end
+        end
+      end
+    end
   end
-  species = pbRandomEncounterSpecies(enctypes[EncounterTypes::Land])
-  species = pbRandomEncounterSpecies(enctypes[EncounterTypes::Cave]) if species==0
-  species = pbRandomEncounterSpecies(enctypes[EncounterTypes::LandDay]) if species==0
-  species = pbRandomEncounterSpecies(enctypes[EncounterTypes::LandMorning]) if species==0
-  species = pbRandomEncounterSpecies(enctypes[EncounterTypes::LandNight]) if species==0
-  species = pbRandomEncounterSpecies(enctypes[EncounterTypes::Water]) if species==0
-  return "" if species==0
+  return "" if !species
   return GameData::Species.get(species).name
 end
 

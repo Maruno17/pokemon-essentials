@@ -277,12 +277,12 @@ class PokemonPokedexInfo_Scene
     pbDrawImagePositions(overlay, imagepos)
   end
 
-  def pbFindEncounter(encounter,species)
-    return false if !encounter
-    for i in 0...encounter.length
-      next if !encounter[i]
-      for j in 0...encounter[i].length
-        return true if encounter[i][j][0]==species
+  def pbFindEncounter(enc_types, species)
+    return false if !enc_types
+    enc_types.each do |enc_type|
+      next if !enc_type
+      enc_type.each do |slot|
+        return true if GameData::Species.get(slot[1]).species == species
       end
     end
     return false
@@ -298,11 +298,9 @@ class PokemonPokedexInfo_Scene
     # species can be found
     points = []
     mapwidth = 1+PokemonRegionMap_Scene::RIGHT-PokemonRegionMap_Scene::LEFT
-    encdata = pbLoadEncountersData
-    for enc in encdata.keys
-      enctypes = encdata[enc][1]
-      next if !pbFindEncounter(enctypes, @species)
-      map_metadata = GameData::MapMetadata.try_get(enc)
+    GameData::Encounter.each_of_version($PokemonGlobal.encounter_version) do |enc_data|
+      next if !pbFindEncounter(enc_data.types, @species)
+      map_metadata = GameData::MapMetadata.try_get(enc_data.id)
       mappos = (map_metadata) ? map_metadata.town_map_position : nil
       next if !mappos || mappos[0] != @region
       showpoint = true

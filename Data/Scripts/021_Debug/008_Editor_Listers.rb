@@ -1,8 +1,8 @@
 #===============================================================================
 # Core lister script
 #===============================================================================
-def pbListWindow(cmds,width=Graphics.width/2)
-  list = Window_CommandPokemon.newWithSize(cmds,0,0,width,Graphics.height)
+def pbListWindow(cmds, width = Graphics.width / 2)
+  list = Window_CommandPokemon.newWithSize(cmds, 0, 0, width, Graphics.height)
   list.index     = 0
   list.rowHeight = 24
   pbSetSmallFont(list.contents)
@@ -16,13 +16,9 @@ def pbListScreen(title,lister)
   list = pbListWindow([])
   list.viewport = viewport
   list.z        = 2
-  title = Window_UnformattedTextPokemon.new(title)
-  title.x        = Graphics.width/2
-  title.y        = 0
-  title.width    = Graphics.width-title.x
-  title.height   = 64
-  title.viewport = viewport
-  title.z        = 2
+  title = Window_UnformattedTextPokemon.newWithSize(title,
+     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+  title.z = 2
   lister.setViewport(viewport)
   selectedmap = -1
   commands = lister.commands
@@ -62,18 +58,14 @@ def pbListScreen(title,lister)
 end
 
 def pbListScreenBlock(title,lister)
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+  viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
-  list = pbListWindow([],Graphics.width/2)
+  list = pbListWindow([], Graphics.width / 2)
   list.viewport = viewport
   list.z        = 2
-  title = Window_UnformattedTextPokemon.new(title)
-  title.x        = Graphics.width/2
-  title.y        = 0
-  title.width    = Graphics.width-title.x
-  title.height   = 64
-  title.viewport = viewport
-  title.z        = 2
+  title = Window_UnformattedTextPokemon.newWithSize(title,
+     Graphics.width / 2, 0, Graphics.width - title.x, 64, viewport)
+  title.z = 2
   lister.setViewport(viewport)
   selectedmap = -1
   commands = lister.commands

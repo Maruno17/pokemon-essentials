@@ -507,35 +507,29 @@ module Compiler
   # Save wild encounter data to PBS file
   #===============================================================================
   def write_encounters
-    encdata = pbLoadEncountersData
-    return if !encdata
-    mapinfos = load_data("Data/MapInfos.rxdata")
-    File.open("PBS/encounters.txt","wb") { |f|
+    map_infos = load_data("Data/MapInfos.rxdata")
+    File.open("PBS/encounters.txt", "wb") { |f|
       add_PBS_header_to_file(f)
-      sortedkeys = encdata.keys.sort
-      for i in sortedkeys
-        next if !encdata[i]
-        e = encdata[i]
-        mapname = ""
-        if mapinfos[i]
-          map = mapinfos[i].name
-          mapname = " # #{map}"
-        end
+      GameData::Encounter.each do |encounter_data|
         f.write("\#-------------------------------\r\n")
-        f.write(sprintf("%03d%s\r\n",i,mapname))
-        f.write(sprintf("%d,%d,%d\r\n",e[0][EncounterTypes::Land],
-          e[0][EncounterTypes::Cave],e[0][EncounterTypes::Water]))
-        for j in 0...e[1].length
-          enc = e[1][j]
-          next if !enc
-          f.write(sprintf("%s\r\n",EncounterTypes::Names[j]))
-          for k in 0...EncounterTypes::EnctypeChances[j].length
-            next if !enc[k]
-            encentry = enc[k]
-            if encentry[1]==encentry[2]
-              f.write(sprintf("    %s,%d\r\n",encentry[0],encentry[1]))
+        map_name = (map_infos[encounter_data.map]) ? " # #{map_infos[encounter_data.map].name}" : ""
+        if encounter_data.version > 0
+          f.write(sprintf("[%03d,%d]%s\r\n", encounter_data.map, encounter_data.version, map_name))
+        else
+          f.write(sprintf("[%03d]%s\r\n", encounter_data.map, map_name))
+        end
+        encounter_data.types.each_with_index do |entries, type|
+          next if !entries || entries.length == 0
+          if encounter_data.step_chances[type] && encounter_data.step_chances[type] > 0
+            f.write(sprintf("%s,%d\r\n", EncounterTypes::Names[type], encounter_data.step_chances[type]))
+          else
+            f.write(sprintf("%s\r\n", EncounterTypes::Names[type]))
+          end
+          entries.each do |entry|
+            if entry[2] == entry[3]
+              f.write(sprintf("    %d,%s,%d\r\n", entry[0], entry[1], entry[2]))
             else
-              f.write(sprintf("    %s,%d,%d\r\n",encentry[0],encentry[1],encentry[2]))
+              f.write(sprintf("    %d,%s,%d,%d\r\n", entry[0], entry[1], entry[2], entry[3]))
             end
           end
         end

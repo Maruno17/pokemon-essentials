@@ -46,6 +46,7 @@ class PokemonGlobalMetadata
   attr_writer   :bridge
   attr_accessor :repel
   attr_accessor :flashUsed
+  attr_accessor :encounter_version
   # Map transfers
   attr_accessor :healingSpot
   attr_accessor :escapePoint
@@ -111,6 +112,7 @@ class PokemonGlobalMetadata
     @bridge               = 0
     @repel                = 0
     @flashused            = false
+    @encounter_version    = 0
     # Map transfers
     @healingSpot          = nil
     @escapePoint          = []

@@ -117,33 +117,23 @@ end
 
 # Returns whether the given category of encounter contains the actual encounter
 # method that will occur in the player's current position.
-def pbRoamingMethodAllowed(encType)
-  encounter = $PokemonEncounters.pbEncounterType
-  case encType
-  when 0   # Any encounter method (except triggered ones and Bug Contest)
-    return true if encounter==EncounterTypes::Land ||
-                   encounter==EncounterTypes::LandMorning ||
-                   encounter==EncounterTypes::LandDay ||
-                   encounter==EncounterTypes::LandNight ||
-                   encounter==EncounterTypes::Water ||
-                   encounter==EncounterTypes::Cave
-  when 1   # Grass (except Bug Contest)/walking in caves only
-    return true if encounter==EncounterTypes::Land ||
-                   encounter==EncounterTypes::LandMorning ||
-                   encounter==EncounterTypes::LandDay ||
-                   encounter==EncounterTypes::LandNight ||
-                   encounter==EncounterTypes::Cave
-  when 2   # Surfing only
-    return true if encounter==EncounterTypes::Water
-  when 3   # Fishing only
-    return true if encounter==EncounterTypes::OldRod ||
-                   encounter==EncounterTypes::GoodRod ||
-                   encounter==EncounterTypes::SuperRod
-  when 4   # Water-based only
-    return true if encounter==EncounterTypes::Water ||
-                   encounter==EncounterTypes::OldRod ||
-                   encounter==EncounterTypes::GoodRod ||
-                   encounter==EncounterTypes::SuperRod
+def pbRoamingMethodAllowed(roamer_method)
+  enc_type = $PokemonEncounters.encounter_type
+  case roamer_method
+  when 0   # Any step-triggered method (except Bug Contest)
+    return EncounterTypes.is_normal_land_type?(enc_type) ||
+           EncounterTypes.is_cave_type?(enc_type) ||
+           EncounterTypes.is_water_type?(enc_type)
+  when 1   # Walking (except Bug Contest)
+    return EncounterTypes.is_normal_land_type?(enc_type) ||
+           EncounterTypes.is_cave_type?(enc_type)
+  when 2   # Surfing
+    return EncounterTypes.is_water_type?(enc_type)
+  when 3   # Fishing
+    return EncounterTypes.is_fishing_type?(enc_type)
+  when 4   # Water-based
+    return EncounterTypes.is_water_type?(enc_type) ||
+           EncounterTypes.is_fishing_type?(enc_type)
   end
   return false
 end
@@ -155,51 +145,47 @@ EncounterModifier.register(proc { |encounter|
   next encounter if $PokemonGlobal.roamedAlready
   next encounter if $PokemonGlobal.partner
   next encounter if $PokemonTemp.pokeradar
-  next encounter if rand(100)<75   # 25% chance of encountering a roaming Pokémon
+  next encounter if rand(100) < 75   # 25% chance of encountering a roaming Pokémon
   # Look at each roaming Pokémon in turn and decide whether it's possible to
   # encounter it
-  roamerChoices = []
-  for i in 0...ROAMING_SPECIES.length
-    # [species ID, level, Game Switch, encounter type, battle BGM, area maps hash]
-    roamData = ROAMING_SPECIES[i]
-    next if roamData[2]>0 && !$game_switches[roamData[2]]   # Game Switch is off
-    next if $PokemonGlobal.roamPokemon[i]==true   # Roaming Pokémon has been caught
-    next if !GameData::Species.exists?(roamData[0])
-    # Get the roaming Pokémon's current map
+  currentRegion = pbGetCurrentRegion
+  currentMapName = pbGetMessage(MessageTypes::MapNames, $game_map.map_id)
+  possible_roamers = []
+  ROAMING_SPECIES.each_with_index do |data, i|
+    # data = [species, level, Game Switch, roamer method, battle BGM, area maps hash]
+    next if !GameData::Species.exists?(data[0])
+    next if data[2] > 0 && !$game_switches[data[2]]   # Isn't roaming
+    next if $PokemonGlobal.roamPokemon[i] == true   # Roaming Pokémon has been caught
+    # Get the roamer's current map
     roamerMap = $PokemonGlobal.roamPosition[i]
     if !roamerMap
       mapIDs = pbRoamingAreas(i).keys   # Hash of area patrolled by the roaming Pokémon
-      next if !mapIDs || mapIDs.length==0   # No roaming area defined somehow
+      next if !mapIDs || mapIDs.length == 0   # No roaming area defined somehow
       roamerMap = mapIDs[rand(mapIDs.length)]
       $PokemonGlobal.roamPosition[i] = roamerMap
     end
-    # Check if roaming Pokémon is on the current map. If not, check if roaming
-    # Pokémon is on a map with the same name as the current map and both maps
-    # are in the same region
-    if roamerMap!=$game_map.map_id
-      currentRegion = pbGetCurrentRegion
+    # If roamer isn't on the current map, check if it's on a map with the same
+    # name and in the same region
+    if roamerMap != $game_map.map_id
       map_metadata = GameData::MapMetadata.try_get(roamerMap)
       next if !map_metadata || !map_metadata.town_map_position ||
               map_metadata.town_map_position[0] != currentRegion
-      currentMapName = pbGetMessage(MessageTypes::MapNames,$game_map.map_id)
-      next if pbGetMessage(MessageTypes::MapNames,roamerMap)!=currentMapName
+      next if pbGetMessage(MessageTypes::MapNames, roamerMap) != currentMapName
     end
-    # Check whether the roaming Pokémon's category of encounter is currently possible
-    next if !pbRoamingMethodAllowed(roamData[3])
+    # Check whether the roamer's roamer method is currently possible
+    next if !pbRoamingMethodAllowed(data[3])
     # Add this roaming Pokémon to the list of possible roaming Pokémon to encounter
-    roamerChoices.push([i,roamData[0],roamData[1],roamData[4]])
+    possible_roamers.push([i, data[0], data[1], data[4]])   # [i, species, level, BGM]
   end
   # No encounterable roaming Pokémon were found, just have the regular encounter
-  next encounter if roamerChoices.length==0
+  next encounter if possible_roamers.length == 0
   # Pick a roaming Pokémon to encounter out of those available
-  chosenRoamer = roamerChoices[rand(roamerChoices.length)]
-  $PokemonGlobal.roamEncounter = chosenRoamer
-  $PokemonTemp.roamerIndex     = chosenRoamer[0]   # Roaming Pokémon's index
-  if chosenRoamer[3] && chosenRoamer[3]!=""
-    $PokemonGlobal.nextBattleBGM = chosenRoamer[3]
-  end
+  roamer = possible_roamers[rand(possible_roamers.length)]
+  $PokemonGlobal.roamEncounter = roamer
+  $PokemonTemp.roamerIndex     = roamer[0]
+  $PokemonGlobal.nextBattleBGM = roamer[3] if roamer[3] && !roamer[3].empty?
   $PokemonTemp.forceSingleBattle = true
-  next [chosenRoamer[1],chosenRoamer[2]]   # Species, level
+  next [roamer[1], roamer[2]]   # Species, level
 })
 
 Events.onWildBattleOverride += proc { |_sender,e|
@@ -207,9 +193,8 @@ Events.onWildBattleOverride += proc { |_sender,e|
   level   = e[1]
   handled = e[2]
   next if handled[0]!=nil
-  next if !$PokemonGlobal.roamEncounter
-  next if $PokemonTemp.roamerIndex==nil
-  handled[0] = pbRoamingPokemonBattle(species,level)
+  next if !$PokemonGlobal.roamEncounter || $PokemonTemp.roamerIndex.nil?
+  handled[0] = pbRoamingPokemonBattle(species, level)
 }
 
 def pbRoamingPokemonBattle(species, level)
