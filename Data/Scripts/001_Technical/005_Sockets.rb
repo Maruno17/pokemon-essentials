@@ -568,26 +568,28 @@ def pbPostData(url, postdata, filename=nil, depth=0)
   return ""
 end
 
-def pbDownloadData(url, filename=nil, depth=0)
-  raise "Redirection level too deep" if depth>10
+def pbDownloadData(url, filename = nil, authorization = nil, depth = 0, &block)
+  raise "Redirection level too deep" if depth > 10
   if url[/^(([^:\/?#]+):(?=\/\/))?(\/\/)?((([^:]+)(?::([^@]+)?)?@)?([^@\/?#:]*)(?::(\d+)?)?)?([^?#]*)(\?([^#]*))?(#(.*))?/]
-#  if url[/^http:\/\/([^\/]+)(.*)$/]
-    host = $1
-    path = $2
-    path = "/" if path.length==0
+    host       = $8
+    path       = $10
+    parameters = $11
+    port       = $9 ? $9.to_i : 80
+    path = "/" if path.length == 0
     userAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.14) Gecko/2009082707 Firefox/3.0.14"
-    request = "GET #{path} HTTP/1.1\r\n"
+    request = "GET #{path}#{parameters} HTTP/1.1\r\n"
     request += "User-Agent: #{userAgent}\r\n"
     request += "Pragma: no-cache\r\n"
     request += "Host: #{host}\r\n"
     request += "Proxy-Connection: Close\r\n"
+    request += "Authorization: #{authorization}\r\n" if authorization
     request += "\r\n"
-    return pbHttpRequest(host, request, filename, depth)
+    return pbHttpRequest(host, request, filename, depth, port, &block)
   end
   return ""
 end
 
-def pbHttpRequest(host, request, filename=nil, depth=0)
+def pbHttpRequest(host, request, filename = nil, depth = 0, port = nil)
   raise "Redirection level too deep" if depth>10
   socket = ::TCPSocket.new(host, 80)
   time = Time.now.to_i
@@ -618,7 +620,7 @@ def pbHttpRequest(host, request, filename=nil, depth=0)
       end
       if headers["Location"] && errorcode>=300 && errorcode<400
         socket.close rescue socket = nil
-        return pbDownloadData(headers["Location"],filename,depth+1)
+        return pbDownloadData(headers["Location"],filename,nil,depth+1)
       end
       if chunked
         # Chunked content
