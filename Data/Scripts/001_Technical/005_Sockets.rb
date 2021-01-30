@@ -570,7 +570,8 @@ end
 
 def pbDownloadData(url, filename=nil, depth=0)
   raise "Redirection level too deep" if depth>10
-  if url[/^http:\/\/([^\/]+)(.*)$/]
+  if url[/^(([^:\/?#]+):(?=\/\/))?(\/\/)?((([^:]+)(?::([^@]+)?)?@)?([^@\/?#:]*)(?::(\d+)?)?)?([^?#]*)(\?([^#]*))?(#(.*))?/]
+#  if url[/^http:\/\/([^\/]+)(.*)$/]
     host = $1
     path = $2
     path = "/" if path.length==0
