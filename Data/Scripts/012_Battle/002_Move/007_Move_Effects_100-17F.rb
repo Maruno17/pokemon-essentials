@@ -923,6 +923,7 @@ class PokeBattle_Move_120 < PokeBattle_Move
     end
   end
 end
+
 #===============================================================================
 # Target's Attack is used instead of user's Attack for this move's calculations.
 # (Foul Play)

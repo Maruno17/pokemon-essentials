@@ -413,6 +413,7 @@ MultipleForms.register(:ARCEUS,{
        18 => [:PIXIEPLATE,:FAIRIUMZ]
     }
     ret = 0
+    next 0 if !pkmn.hasItem?
     typeArray.each do |f, items|
       for item in items
         next if !pkmn.hasItem?(item)

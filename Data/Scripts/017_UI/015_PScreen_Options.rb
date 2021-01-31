@@ -486,14 +486,14 @@ class PokemonOption_Scene
          proc { $PokemonSystem.textskin },
          proc { |value|
            $PokemonSystem.textskin = value
-           MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/"+$SpeechFrames[value])
+           MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/" + $SpeechFrames[value])
          }
        ),
        NumberOption.new(_INTL("Menu Frame"),1,$TextFrames.length,
          proc { $PokemonSystem.frame },
          proc { |value|
            $PokemonSystem.frame = value
-           MessageConfig.pbSetSystemFrame($TextFrames[value])
+           MessageConfig.pbSetSystemFrame("Graphics/Windowskins/" + $TextFrames[value])
          }
        ),
        EnumOption.new(_INTL("Font Style"),[_INTL("Em"),_INTL("R/S"),_INTL("FRLG"),_INTL("DP")],
