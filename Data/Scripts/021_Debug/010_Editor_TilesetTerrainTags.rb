@@ -81,12 +81,8 @@ class PokemonTilesetScene
     @tileset = @tilesetwrapper.data[1]
     @tilehelper = TileDrawingHelper.fromTileset(@tileset)
     @sprites = {}
-    @sprites["title"] = Window_UnformattedTextPokemon.new(_INTL("Tileset Editor\r\nPgUp/PgDn: SCROLL\r\nZ: MENU"))
-    @sprites["title"].viewport = @viewport
-    @sprites["title"].x        = TILESET_WIDTH
-    @sprites["title"].y        = 0
-    @sprites["title"].width    = Graphics.width - TILESET_WIDTH
-    @sprites["title"].height   = 128
+    @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(_INTL("Tileset Editor\r\nPgUp/PgDn: SCROLL\r\nZ: MENU"),
+       TILESET_WIDTH, 0, Graphics.width - TILESET_WIDTH, 128, @viewport)
     @sprites["tileset"] = IconSprite.new(0,0,@viewport)
     @sprites["tileset"].setBitmap("Graphics/Tilesets/#{@tileset.tileset_name}")
     @sprites["tileset"].src_rect = Rect.new(0,0,TILESET_WIDTH,Graphics.height)

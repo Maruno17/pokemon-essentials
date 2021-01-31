@@ -637,7 +637,7 @@ PokemonDebugMenuCommands.register("setnature", {
   "always_show" => true,
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     commands = []
-    (PBNatures.getCount).times do |i|
+    (PBNatures.maxValue + 1).times do |i|
       statUp   = PBNatures.getStatRaised(i)
       statDown = PBNatures.getStatLowered(i)
       if statUp != statDown
@@ -654,10 +654,10 @@ PokemonDebugMenuCommands.register("setnature", {
       mag = _INTL("Nature is {1}.", PBNatures.getName(pkmn.nature))
       cmd = screen.pbShowCommands(mag, commands, cmd)
       break if cmd < 0
-      if cmd >= 0 && cmd < PBNatures.getCount   # Set nature
+      if cmd >= 0 && cmd <= PBNatures.maxValue   # Set nature
         pkmn.nature = cmd
         pkmn.calcStats
-      elsif cmd == PBNatures.getCount   # Reset
+      elsif cmd == PBNatures.maxValue + 1   # Reset
         pkmn.nature = nil
       end
       screen.pbRefreshSingle(pkmnid)

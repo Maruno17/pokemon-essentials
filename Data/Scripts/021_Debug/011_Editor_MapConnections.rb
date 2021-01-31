@@ -327,13 +327,9 @@ class MapScreenScene
     @selmapid=-1
     addBackgroundPlane(@sprites,"background","Trainer Card/bg",@viewport)
     @sprites["selsprite"]=SelectionSprite.new(@viewport)
-    @sprites["title"]=Window_UnformattedTextPokemon.new(_INTL("F: Help"))
-    @sprites["title"].x=0
-    @sprites["title"].y=600-64
-    @sprites["title"].width=800
-    @sprites["title"].height=64
-    @sprites["title"].viewport=@viewport
-    @sprites["title"].z=2
+    @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(_INTL("F: Help"),
+       0, 600 - 64, 800, 64, @viewport)
+    @sprites["title"].z = 2
     @mapinfos=load_data("Data/MapInfos.rxdata")
     conns=MapFactoryHelper.getMapConnections
     @mapconns=[]
@@ -362,13 +358,9 @@ class MapScreenScene
     helptext+=_INTL("Double-click: Edit map's metadata\r\n")
     helptext+=_INTL("Drag map to move it\r\n")
     helptext+=_INTL("Arrow keys/drag canvas: Move around canvas")
-    title=Window_UnformattedTextPokemon.new(helptext)
-    title.x=0
-    title.y=0
-    title.width=800*8/10
-    title.height=600
-    title.viewport=@viewport
-    title.z=2
+    title = Window_UnformattedTextPokemon.newWithSize(helptext,
+       0, 0, 800 * 8 / 10, 600, @viewport)
+    title.z = 2
     loop do
       Graphics.update
       Input.update

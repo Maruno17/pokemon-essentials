@@ -209,6 +209,32 @@ end
 
 
 
+class EnumProperty2
+  def initialize(value)
+    @module = value
+  end
+
+  def set(settingname,oldsetting)
+    commands = []
+    for i in 0..@module.maxValue
+      commands.push(getConstantName(@module, i))
+    end
+    cmd = pbMessage(_INTL("Choose a value for {1}.", settingname), commands, -1, nil, oldsetting)
+    return oldsetting if cmd < 0
+    return cmd
+  end
+
+  def defaultValue
+    return nil
+  end
+
+  def format(value)
+    return (value) ? getConstantName(@module, value) : "-"
+  end
+end
+
+
+
 module BGMProperty
   def self.set(settingname,oldsetting)
     chosenmap = pbListScreen(settingname,MusicFileLister.new(true,oldsetting))
@@ -393,27 +419,6 @@ end
 
 
 
-module NatureProperty
-  def self.set(_settingname,_oldsetting)
-    commands = []
-    (PBNatures.getCount).times do |i|
-      commands.push(PBNatures.getName(i))
-    end
-    ret = pbShowCommands(nil,commands,-1)
-    return (ret>=0) ? ret : nil
-  end
-
-  def self.defaultValue
-    return nil
-  end
-
-  def self.format(value)
-    return (value) ? getConstantName(PBNatures,value) : "-"
-  end
-end
-
-
-
 class IVsProperty
   def initialize(limit)
     @limit = limit
@@ -592,13 +597,9 @@ end
 def chooseMapPoint(map,rgnmap=false)
   viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z=99999
-  title=Window_UnformattedTextPokemon.new(_INTL("Click a point on the map."))
-  title.x=0
-  title.y=Graphics.height-64
-  title.width=Graphics.width
-  title.height=64
-  title.viewport=viewport
-  title.z=2
+  title = Window_UnformattedTextPokemon.newWithSize(_INTL("Click a point on the map."),
+     0, Graphics.height - 64, Graphics.width, 64, viewport)
+  title.z = 2
   if rgnmap
     sprite=RegionMapSprite.new(map,viewport)
   else
@@ -737,23 +738,6 @@ end
 
 
 
-module EnvironmentProperty
-  def self.set(_settingname,_oldsetting)
-    options = []
-    for i in 0..PBEnvironment.maxValue
-      options.push(getConstantName(PBEnvironment,i) || "ERROR")
-    end
-    cmd = pbMessage(_INTL("Choose an environment."),options,1)
-    return cmd
-  end
-
-  def self.format(value)
-    return (value) ? (getConstantName(PBEnvironment,value) || "ERROR") : "-"
-  end
-end
-
-
-
 module MapProperty
   def self.set(settingname,oldsetting)
     chosenmap = pbListScreen(settingname,MapLister.new(oldsetting ? oldsetting : 0))
@@ -789,14 +773,10 @@ end
 
 
 module PocketProperty
-  def self.pocketnames
-    return [_INTL("Items"), _INTL("Medicine"), _INTL("Poké Balls"),
-       _INTL("TMs & HMs"), _INTL("Berries"), _INTL("Mail"),
-       _INTL("Battle Items"), _INTL("Key Items")]
-  end
-
   def self.set(_settingname, oldsetting)
-    cmd = pbMessage(_INTL("Choose a pocket for this item."), pocketnames(), -1)
+    commands = pbPocketNames.clone
+    commands.shift
+    cmd = pbMessage(_INTL("Choose a pocket for this item."), commands, -1)
     return (cmd >= 0) ? cmd + 1 : oldsetting
   end
 
@@ -806,7 +786,7 @@ module PocketProperty
 
   def self.format(value)
     return _INTL("No Pocket") if value == 0
-    return (value) ? pocketnames[value - 1] : value.inspect
+    return (value) ? pbPocketNames[value] : value.inspect
   end
 end
 

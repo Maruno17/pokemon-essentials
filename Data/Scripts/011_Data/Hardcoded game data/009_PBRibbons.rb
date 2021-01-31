@@ -81,7 +81,6 @@ module PBRibbons
   WORLDCHAMPION      = 80
 
   def self.maxValue; 80; end
-  def self.getCount; 80; end
 
   def self.getName(id)
     id = getID(PBRibbons,id)

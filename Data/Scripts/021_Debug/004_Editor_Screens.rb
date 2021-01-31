@@ -667,7 +667,7 @@ module TrainerPokemonProperty
     pkmn_properties.concat([
        [_INTL("Ability"),   LimitProperty2.new(99),                  _INTL("Ability flag. 0=first ability, 1=second ability, 2-5=hidden ability.")],
        [_INTL("Held item"), ItemProperty,                            _INTL("Item held by the Pokémon.")],
-       [_INTL("Nature"),    NatureProperty,                          _INTL("Nature of the Pokémon.")],
+       [_INTL("Nature"),    EnumProperty2.new(PBNatures),            _INTL("Nature of the Pokémon.")],
        [_INTL("IVs"),       IVsProperty.new(Pokemon::IV_STAT_LIMIT), _INTL("Individual values for each of the Pokémon's stats.")],
        [_INTL("EVs"),       EVsProperty.new(Pokemon::EV_STAT_LIMIT), _INTL("Effort values for each of the Pokémon's stats.")],
        [_INTL("Happiness"), LimitProperty2.new(255),                 _INTL("Happiness of the Pokémon (0-255).")],
@@ -958,13 +958,8 @@ def pbPokemonEditor
      [_INTL("BaseStats"),         BaseStatsProperty,              _INTL("Base stats of the Pokémon.")],
      [_INTL("EffortPoints"),      EffortValuesProperty,           _INTL("Effort Value points earned when this species is defeated.")],
      [_INTL("BaseEXP"),           LimitProperty.new(9999),        _INTL("Base experience earned when this species is defeated.")],
-     [_INTL("GrowthRate"),        EnumProperty.new([
-         _INTL("Medium"), _INTL("Erratic"), _INTL("Fluctuating"),
-         _INTL("Parabolic"), _INTL("Fast"), _INTL("Slow")]),      _INTL("Pokémon's growth rate.")],
-     [_INTL("GenderRate"),        EnumProperty.new([
-         _INTL("Genderless"), _INTL("AlwaysMale"), _INTL("FemaleOneEighth"),
-         _INTL("Female25Percent"), _INTL("Female50Percent"), _INTL("Female75Percent"),
-         _INTL("FemaleSevenEighths"), _INTL("AlwaysFemale")]),    _INTL("Proportion of males to females for this species.")],
+     [_INTL("GrowthRate"),        EnumProperty2.new(PBGrowthRates), _INTL("Pokémon's growth rate.")],
+     [_INTL("GenderRate"),        EnumProperty2.new(PBGenderRates), _INTL("Proportion of males to females for this species.")],
      [_INTL("Rareness"),          LimitProperty.new(255),         _INTL("Catch rate of this species (0-255).")],
      [_INTL("Happiness"),         LimitProperty.new(255),         _INTL("Base happiness of this species (0-255).")],
      [_INTL("Moves"),             MovePoolProperty,               _INTL("Moves which the Pokémon learns while levelling up.")],
@@ -979,28 +974,16 @@ def pbPokemonEditor
      [_INTL("WildItemCommon"),    ItemProperty,                   _INTL("Item commonly held by wild Pokémon of this species.")],
      [_INTL("WildItemUncommon"),  ItemProperty,                   _INTL("Item uncommonly held by wild Pokémon of this species.")],
      [_INTL("WildItemRare"),      ItemProperty,                   _INTL("Item rarely held by wild Pokémon of this species.")],
-     [_INTL("Compat1"),           EnumProperty.new([
-         "Undiscovered", "Monster", "Water 1", "Bug", "Flying",
-         "Field", "Fairy", "Grass", "Human-like", "Water 3",
-         "Mineral", "Amorphous", "Water 2", "Ditto", "Dragon"]),  _INTL("Compatibility group (egg group) for breeding purposes.")],
-     [_INTL("Compat2"),           EnumProperty.new([
-         "Undiscovered", "Monster", "Water 1", "Bug", "Flying",
-         "Field", "Fairy", "Grass", "Human-like", "Water 3",
-         "Mineral", "Amorphous", "Water 2", "Ditto", "Dragon"]),  _INTL("Compatibility group (egg group) for breeding purposes.")],
+     [_INTL("Compat1"),           EnumProperty2.new(PBEggGroups), _INTL("Compatibility group (egg group) for breeding purposes.")],
+     [_INTL("Compat2"),           EnumProperty2.new(PBEggGroups), _INTL("Compatibility group (egg group) for breeding purposes.")],
      [_INTL("StepsToHatch"),      LimitProperty.new(99999),       _INTL("Number of steps until an egg of this species hatches.")],
      [_INTL("Incense"),           ItemProperty,                   _INTL("Item needed to be held by a parent to produce an egg of this species.")],
      [_INTL("Evolutions"),        EvolutionsProperty.new,         _INTL("Evolution paths of this species.")],
      [_INTL("Height"),            NonzeroLimitProperty.new(999),  _INTL("Height of the Pokémon in 0.1 metres (e.g. 42 = 4.2m).")],
      [_INTL("Weight"),            NonzeroLimitProperty.new(9999), _INTL("Weight of the Pokémon in 0.1 kilograms (e.g. 42 = 4.2kg).")],
-     [_INTL("Color"),             EnumProperty.new([
-        _INTL("Red"), _INTL("Blue"), _INTL("Yellow"), _INTL("Green"),
-        _INTL("Black"), _INTL("Brown"), _INTL("Purple"), _INTL("Gray"),
-        _INTL("White"), _INTL("Pink")]),                          _INTL("Pokémon's body color.")],
+     [_INTL("Color"),             EnumProperty2.new(PBColors),    _INTL("Pokémon's body color.")],
      [_INTL("Shape"),             LimitProperty.new(14),          _INTL("Body shape of this species (0-14).")],
-     [_INTL("Habitat"),           EnumProperty.new([
-        _INTL("None"), _INTL("Grassland"), _INTL("Forest"), _INTL("WatersEdge"),
-        _INTL("Sea"), _INTL("Cave"), _INTL("Mountain"), _INTL("RoughTerrain"),
-        _INTL("Urban"), _INTL("Rare")]),                          _INTL("The habitat of this species.")],
+     [_INTL("Habitat"),           EnumProperty2.new(PBHabitats),  _INTL("The habitat of this species.")],
      [_INTL("Generation"),        LimitProperty.new(99999),       _INTL("The number of the generation the Pokémon debuted in.")],
      [_INTL("BattlerPlayerX"),    ReadOnlyProperty,               _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
      [_INTL("BattlerPlayerY"),    ReadOnlyProperty,               _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
@@ -1418,20 +1401,12 @@ def pbAnimationsOrganiser
   cmdwin = pbListWindow([])
   cmdwin.viewport = viewport
   cmdwin.z        = 2
-  title = Window_UnformattedTextPokemon.new(_INTL("Animations Organiser"))
-  title.x        = Graphics.width/2
-  title.y        = 0
-  title.width    = Graphics.width/2
-  title.height   = 64
-  title.viewport = viewport
-  title.z        = 2
-  info = Window_AdvancedTextPokemon.new(_INTL("Z+Up/Down: Swap\nZ+Left: Delete\nZ+Right: Insert"))
-  info.x        = Graphics.width/2
-  info.y        = 64
-  info.width    = Graphics.width/2
-  info.height   = Graphics.height-64
-  info.viewport = viewport
-  info.z        = 2
+  title = Window_UnformattedTextPokemon.newWithSize(_INTL("Animations Organiser"),
+     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
+  title.z = 2
+  info = Window_AdvancedTextPokemon.newWithSize(_INTL("Z+Up/Down: Swap\nZ+Left: Delete\nZ+Right: Insert"),
+     Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport)
+  info.z = 2
   commands = []
   refreshlist = true; oldsel = -1
   cmd = [0,0]

@@ -64,7 +64,7 @@ def pbListScreenBlock(title,lister)
   list.viewport = viewport
   list.z        = 2
   title = Window_UnformattedTextPokemon.newWithSize(title,
-     Graphics.width / 2, 0, Graphics.width - title.x, 64, viewport)
+     Graphics.width / 2, 0, Graphics.width / 2, 64, viewport)
   title.z = 2
   lister.setViewport(viewport)
   selectedmap = -1

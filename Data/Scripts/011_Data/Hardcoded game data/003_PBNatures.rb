@@ -26,10 +26,9 @@ module PBNatures
   QUIRKY  = 24
 
   def self.maxValue; 24; end
-  def self.getCount; 25; end
 
   def self.getName(id)
-    id = getID(PBNatures,id)
+    id = getID(PBNatures, id)
     names = [
        _INTL("Hardy"),
        _INTL("Lonely"),
@@ -61,15 +60,17 @@ module PBNatures
   end
 
   def self.getStatRaised(id)
-    m = (id%25)/5   # 25 here is (number of stats)**2, not PBNatures.getCount
-    return [PBStats::ATTACK,PBStats::DEFENSE,PBStats::SPEED,
-            PBStats::SPATK,PBStats::SPDEF][m]
+    stats = [PBStats::ATTACK, PBStats::DEFENSE, PBStats::SPEED,
+             PBStats::SPATK, PBStats::SPDEF]
+    m = (id % (stats.length ** 2)) / stats.length
+    return stats[m]
   end
 
   def self.getStatLowered(id)
-    m = id%5   # Don't need to %25 here because 25 is a multiple of 5
-    return [PBStats::ATTACK,PBStats::DEFENSE,PBStats::SPEED,
-            PBStats::SPATK,PBStats::SPDEF][m]
+    stats = [PBStats::ATTACK, PBStats::DEFENSE, PBStats::SPEED,
+             PBStats::SPATK, PBStats::SPDEF]
+    m = id % stats.length
+    return stats[m]
   end
 
   def self.getStatChanges(id)

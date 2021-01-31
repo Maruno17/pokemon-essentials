@@ -284,12 +284,8 @@ def pbDefinePath(canvas)
       showline=false
       sliderwin2.visible=false
       # This window displays the mouse's current position
-      window=Window_UnformattedTextPokemon.new("")
-      window.x=0
-      window.y=320-64
-      window.width=128
-      window.height=64
-      window.viewport=canvas.viewport
+      window=Window_UnformattedTextPokemon.newWithSize("",
+         0, 320 - 64, 128, 64, canvas.viewport)
       loop do
         Graphics.update
         Input.update

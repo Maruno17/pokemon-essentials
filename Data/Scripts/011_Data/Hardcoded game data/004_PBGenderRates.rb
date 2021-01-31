@@ -8,6 +8,8 @@ module PBGenderRates
   FemaleSevenEighths = 6
   AlwaysFemale       = 7
 
+  def self.maxValue; return 7; end
+
   def self.genderByte(gender)
     case gender
     when AlwaysMale         then return 0
