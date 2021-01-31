@@ -70,7 +70,7 @@ module SaveData
     # @raise (see #load)
     def load_new_game_value
       unless self.has_new_game_proc?
-        raise "Save value #{@id.inspect} has no new game value proc defined"
+        raise "Save value #{@id.inspect} has no new_game_value defined"
       end
 
       self.load(@new_game_value_proc.call)
@@ -108,7 +108,7 @@ module SaveData
     # Defines what is saved into save data. Requires a block.
     # @see SaveData.register
     def save_value(&block)
-      raise ArgumentError, 'No block given for save_value proc' unless block_given?
+      raise ArgumentError, 'No block given to save_value' unless block_given?
       @save_proc = block
     end
 
@@ -116,7 +116,7 @@ module SaveData
     # Requires a block with the loaded value as its parameter.
     # @see SaveData.register
     def load_value(&block)
-      raise ArgumentError, 'No block given for load_value proc' unless block_given?
+      raise ArgumentError, 'No block given to load_value' unless block_given?
       @load_proc = block
     end
 
@@ -129,7 +129,7 @@ module SaveData
     # If present, defines what the value is set to at the start of a new game.
     # @see SaveData.register
     def new_game_value(&block)
-      raise ArgumentError, 'No block given for new_game_value proc' unless block_given?
+      raise ArgumentError, 'No block given to new_game_value' unless block_given?
       @new_game_value_proc = block
     end
 
@@ -139,7 +139,7 @@ module SaveData
     # @note This method accepts multiple class names to ensure compatibility with renamed classes.
     # @see SaveData.register
     def ensure_class(*class_names)
-      raise ArgumentError, 'No class names given for ensure_class' if class_names.empty?
+      raise ArgumentError, 'No class names given to ensure_class' if class_names.empty?
       @ensured_class_names = class_names.map { |name| name.to_s }
     end
 
@@ -147,7 +147,7 @@ module SaveData
     # save format. Requires a block with the old format array as its parameter.
     # @see SaveData.register
     def from_old_format(&block)
-      raise ArgumentError, 'No block given for from_old_format proc' unless block_given?
+      raise ArgumentError, 'No block given to from_old_format' unless block_given?
       @old_format_get_proc = block
     end
 
