@@ -75,7 +75,7 @@ module Game
   def self.load(save_data)
     validate save_data => Hash
 
-    SaveData.load_values(save_data)
+    SaveData.load_all_values(save_data)
 
     self.load_map
 

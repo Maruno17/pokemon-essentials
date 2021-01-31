@@ -1,4 +1,4 @@
-# The SaveData module is used to analyze and modify the save file.
+# The SaveData module is used to access save data.
 module SaveData
   # Contains the file path of the save file.
   FILE_PATH = if File.directory?(System.data_directory)
@@ -9,6 +9,7 @@ module SaveData
 
   # Contains Value objects for each save element.
   # Populated during runtime by SaveData.register calls.
+  # @type [Hash{Symbol => Value}]
   @values = {}
 
   # Compiles the save data and saves a marshaled version of it into
@@ -104,13 +105,39 @@ module SaveData
   # Loads the values from the given save data by
   # calling each {Value} object's {Value#load_value} proc.
   # Values that are already loaded are skipped.
+  # If a value does not exist in the save data and has
+  # a {Value#new_game_value} proc defined, that value
+  # is loaded instead.
   # @param save_data [Hash] save data to load
   # @raise [InvalidValueError] if an invalid value is being loaded
-  def self.load_values(save_data)
+  def self.load_all_values(save_data)
     validate save_data => Hash
 
-    save_data.each do |id, value|
-      @values[id].load(value) unless @values[id].loaded?
+    load_values(save_data) { |value| !value.loaded? }
+  end
+
+  # Loads each value from the given save data that has
+  # been set to be loaded during bootup.
+  # @param save_data [Hash] save data to load
+  # @raise [InvalidValueError] if an invalid value is being loaded
+  def self.load_bootup_values(save_data)
+    validate save_data => Hash
+
+    load_values(save_data) { |value| !value.loaded? && value.load_in_bootup? }
+  end
+
+  # Loads values from the given save data.
+  # @param save_data [Hash] save data to load from
+  # @param condition_block [Proc] optional condition
+  # @api private
+  def self.load_values(save_data, &condition_block)
+    @values.each do |id, value|
+      next if block_given? && !condition_block.call(value)
+      if save_data.has_key?(id)
+        value.load(save_data[id])
+      elsif value.has_new_game_proc?
+        value.load_new_game_value
+      end
     end
   end
 
@@ -136,24 +163,7 @@ module SaveData
     end
   end
 
-  # Loads each value from the given save data that has
-  # been set to be loaded during bootup.
-  # @param save_data [Hash] save data to load
-  # @raise [InvalidValueError] if an invalid value is being loaded
-  def self.load_bootup_values(save_data)
-    validate save_data => Hash
-
-    @values.each do |id, value|
-      next if !@values[id].load_in_bootup? || @values[id].loaded?
-      if save_data.has_key?(id)
-        value.load(save_data[id])
-      elsif value.has_new_game_proc?
-        value.load_new_game_value
-      end
-    end
-  end
-
-  # Goes through each value with {#load_in_bootup} enabled and
+  # Goes through each value with {Value#load_in_bootup} enabled and
   # loads their new game value, if one is defined.
   def self.initialize_bootup_values
     @values.each_value do |value|
