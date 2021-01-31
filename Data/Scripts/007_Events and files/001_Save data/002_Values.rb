@@ -1,18 +1,18 @@
-# TODO Add ensure_value for enhanced compatibility with other plugins etc.?
-#   example:
-#   SaveData.register(:foo) do
-#     ensure_value :bar if PluginManager.installed?('Bar')
-#     save_value { $foo }
-#     load_value do |value|
-#       $foo = value
-#       # We must be certain the Bar plugin's values have been loaded
-#       $bar.plugin_method if PluginManager.installed?('Bar')
-#     end
-#   end
-
 module SaveData
   # An error raised if an invalid save value is saved or loaded.
   class InvalidValueError < RuntimeError; end
+
+  # TODO Add ensure_value for enhanced compatibility with other plugins etc.?
+  #   example:
+  #   SaveData.register(:foo) do
+  #     ensure_value :bar if PluginManager.installed?('Bar')
+  #     save_value { $foo }
+  #     load_value do |value|
+  #       $foo = value
+  #       # We must be certain the Bar plugin's values have been loaded
+  #       $bar.plugin_method if PluginManager.installed?('Bar')
+  #     end
+  #   end
 
   # Contains the data of a single value in save data.
   # New values are added using {SaveData.register}.
