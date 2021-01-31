@@ -31,9 +31,6 @@ class Pokemon
   # defined at this index. Is recalculated (as 0 or 1) if made nil.
   # @param value [Integer, nil] forced ability index (nil if none is set)
   attr_writer   :ability_index
-  # If defined, this Pokémon's nature is considered to be this when calculating stats.
-  # @param value [Integer, nil] ID of the nature to use for calculating stats
-  attr_writer   :nature_for_stats
   # @return [Array<Pokemon::Move>] the moves known by this Pokémon
   attr_accessor :moves
   # @return [Array<Integer>] the IDs of moves known by this Pokémon when it was obtained
@@ -442,24 +439,42 @@ class Pokemon
   # Nature
   #=============================================================================
 
-  # @return [Integer] the ID of this Pokémon's nature
+  # @return [GameData::Nature, nil] a Nature object corresponding to this Pokémon's nature
   def nature
-    @nature = (@personalID % 25) if !@nature
-    return @nature
+    @nature = GameData::Nature.get(@personalID % 25).id if !@nature
+    return GameData::Nature.try_get(@nature)
   end
 
-  # Returns the calculated nature, taking into account things that change its
-  # stat-altering effect (i.e. Gen 8 mints). Only used for calculating stats.
-  # @return [Integer] this Pokémon's calculated nature
-  def nature_for_stats
-    return @nature_for_stats || self.nature
+  def nature_id
+    return @nature
   end
 
   # Sets this Pokémon's nature to a particular nature.
   # @param value [Integer, String, Symbol] nature to change to
   def nature=(value)
-    @nature = getID(PBNatures, value)
+    return if value && !GameData::Nature.exists?(value)
+    @nature = (value) ? GameData::Nature.get(value).id : value
     calcStats if !@nature_for_stats
+  end
+
+  # Returns the calculated nature, taking into account things that change its
+  # stat-altering effect (i.e. Gen 8 mints). Only used for calculating stats.
+  # @return [GameData::Nature, nil] this Pokémon's calculated nature
+  def nature_for_stats
+    return GameData::Nature.try_get(@nature_for_stats) if @nature_for_stats
+    return self.nature
+  end
+
+  def nature_for_stats_id
+    return @nature_for_stats
+  end
+
+  # If defined, this Pokémon's nature is considered to be this when calculating stats.
+  # @param value [Integer, nil] ID of the nature to use for calculating stats
+  def nature_for_stats=(value)
+    return if value && !GameData::Nature.exists?(value)
+    @nature_for_stats = (value) ? GameData::Nature.get(value).id : value
+    calcStats
   end
 
   # Returns whether this Pokémon has a particular nature. If no value is given,
@@ -467,10 +482,9 @@ class Pokemon
   # @param nature [Integer] nature ID to check
   # @return [Boolean] whether this Pokémon has a particular nature or a nature
   #   at all
-  def hasNature?(check_nature = -1)
-    current_nature = self.nature
-    return current_nature >= 0 if check_nature < 0
-    return current_nature == getID(PBNatures, check_nature)
+  def hasNature?(check_nature = nil)
+    return !@nature_id.nil? if check_nature.nil?
+    return self.nature == check_nature
   end
 
   #=============================================================================
@@ -901,7 +915,14 @@ class Pokemon
     base_stats = self.baseStats
     this_level = self.level
     this_IV    = self.calcIV
-    nature_mod = PBNatures.getStatChanges(self.nature_for_stats)
+    # Format stat multipliers due to nature
+    nature_mod = []
+    PBStats.eachStat { |s| nature_mod[s] = 100 }
+    this_nature = self.nature_for_stats
+    if this_nature
+      this_nature.stat_changes.each { |change| nature_mod[change[0]] += change[1] }
+    end
+    # Calculate stats
     stats = []
     PBStats.eachStat do |s|
       if s == PBStats::HP

@@ -496,11 +496,13 @@ def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
       battle.pbDisplay(_INTL("{1} restored its health using its {2}!",battler.pbThis,itemName))
     end
   end
-  nUp = PBNatures.getStatRaised(battler.nature)
-  nDn = PBNatures.getStatLowered(battler.nature)
-  if nUp!=nDn && nDn-1==flavor
+  flavor_stat = [PBStats::ATTACK, PBStats::DEFENSE, PBStats::SPEED,
+                 PBStats::SPATK, PBStats::SPDEF][flavor]
+  battler.nature.stat_changes.each do |change|
+    next if change[1] > 0 || change[0] != flavor_stat
     battle.pbDisplay(confuseMsg)
     battler.pbConfuse if battler.pbCanConfuseSelf?(false)
+    break
   end
   return true
 end

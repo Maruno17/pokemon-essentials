@@ -384,19 +384,36 @@ end
 
 
 
-class GenderProperty
-  def set(_settingname,_oldsetting)
+module GenderProperty
+  def self.set(_settingname,_oldsetting)
     ret = pbShowCommands(nil,[_INTL("Male"),_INTL("Female")],-1)
     return (ret>=0) ? ret : nil
   end
 
-  def defaultValue
+  def self.defaultValue
     return nil
   end
 
-  def format(value)
+  def self.format(value)
     return _INTL("-") if !value
     return (value==0) ? _INTL("Male") : (value==1) ? _INTL("Female") : "-"
+  end
+end
+
+
+
+module NatureProperty
+  def self.set(_settingname, oldsetting)
+    ret = pbChooseNatureList((oldsetting) ? oldsetting : nil)
+    return ret || oldsetting
+  end
+
+  def self.defaultValue
+    return nil
+  end
+
+  def self.format(value)
+    return (value && GameData::Nature.exists?(value)) ? GameData::Nature.get(value).real_name : "-"
   end
 end
 

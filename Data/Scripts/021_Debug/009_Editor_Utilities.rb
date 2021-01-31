@@ -206,6 +206,12 @@ def pbChooseAbilityList(default = nil)
   return pbChooseList(commands, default, nil, -1)
 end
 
+def pbChooseNatureList(default = nil)
+  commands = []
+  GameData::Nature.each { |n| commands.push([n.id_number, n.name, n.id]) }
+  return pbChooseList(commands, default, nil, -1)
+end
+
 def pbChooseBallList(defaultMoveID = -1)
   cmdwin = pbListWindow([], 200)
   commands = []

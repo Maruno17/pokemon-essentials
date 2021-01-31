@@ -637,27 +637,35 @@ PokemonDebugMenuCommands.register("setnature", {
   "always_show" => true,
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     commands = []
-    (PBNatures.maxValue + 1).times do |i|
-      statUp   = PBNatures.getStatRaised(i)
-      statDown = PBNatures.getStatLowered(i)
-      if statUp != statDown
-        text = _INTL("{1} (+{2}, -{3})", PBNatures.getName(i),
-           PBStats.getNameBrief(statUp), PBStats.getNameBrief(statDown))
+    ids = []
+    GameData::Nature.each do |nature|
+      if nature.stat_changes.length == 0
+        commands.push(_INTL("{1} (---)", nature.real_name))
       else
-        text = _INTL("{1} (---)", PBNatures.getName(i))
+        plus_text = ""
+        minus_text = ""
+        nature.stat_changes.each do |change|
+          if change[1] > 0
+            plus_text += "/" if !plus_text.empty?
+            plus_text += PBStats.getNameBrief(change[0])
+          elsif change[1] < 0
+            minus_text += "/" if !minus_text.empty?
+            minus_text += PBStats.getNameBrief(change[0])
+          end
+        end
+        commands.push(_INTL("{1} (+{2}, -{3})", nature.real_name, plus_text, minus_text))
       end
-      commands.push(text)
+      ids.push(nature.id)
     end
     commands.push(_INTL("[Reset]"))
-    cmd = pkmn.nature
+    cmd = ids.index(pkmn.nature_id || ids[0])
     loop do
-      mag = _INTL("Nature is {1}.", PBNatures.getName(pkmn.nature))
+      mag = _INTL("Nature is {1}.", pkmn.nature.name)
       cmd = screen.pbShowCommands(mag, commands, cmd)
       break if cmd < 0
-      if cmd >= 0 && cmd <= PBNatures.maxValue   # Set nature
-        pkmn.nature = cmd
-        pkmn.calcStats
-      elsif cmd == PBNatures.maxValue + 1   # Reset
+      if cmd >= 0 && cmd < commands.length - 1   # Set nature
+        pkmn.nature = ids[cmd]
+      elsif cmd == commands.length - 1   # Reset
         pkmn.nature = nil
       end
       screen.pbRefreshSingle(pkmnid)

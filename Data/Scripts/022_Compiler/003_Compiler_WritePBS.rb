@@ -592,7 +592,7 @@ module Compiler
           f.write(sprintf("    Moves = %s\r\n", pkmn[:moves].join(","))) if pkmn[:moves] && pkmn[:moves].length > 0
           f.write(sprintf("    Ability = %d\r\n", pkmn[:ability_flag])) if pkmn[:ability_flag]
           f.write(sprintf("    Item = %s\r\n", pkmn[:item])) if pkmn[:item]
-          f.write(sprintf("    Nature = %s\r\n", getConstantName(PBNatures, pkmn[:nature]))) if pkmn[:nature]
+          f.write(sprintf("    Nature = %s\r\n", pkmn[:nature])) if pkmn[:nature]
           if pkmn[:iv] && pkmn[:iv].length > 0
             f.write(sprintf("    IV = %s\r\n", (pkmn[:iv].uniq.length == 1) ? pkmn[:iv][0] : pkmn[:iv].join(",")))
           end
@@ -684,7 +684,7 @@ module Compiler
         pkmn = btpokemon[i]
         c1 = (species[pkmn.species]) ? species[pkmn.species] : (species[pkmn.species] = GameData::Species.get(pkmn.species).species.to_s)
         c2 = (items[pkmn.item]) ? items[pkmn.item] : (items[pkmn.item] = GameData::Item.get(pkmn.item).id.to_s)
-        c3 = (natures[pkmn.nature]) ? natures[pkmn.nature] : (natures[pkmn.nature] = getConstantName(PBNatures, pkmn.nature))
+        c3 = (natures[pkmn.nature]) ? natures[pkmn.nature] : (natures[pkmn.nature] = GameData::Nature.get(pkmn.nature).id.to_s)
         evlist = ""
         ev = pkmn.ev
         for i in 0...ev

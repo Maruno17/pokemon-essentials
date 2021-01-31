@@ -535,7 +535,7 @@ class PokemonSummary_Scene
     # Write nature
     showNature = !@pokemon.shadowPokemon? || @pokemon.heartStage>3
     if showNature
-      natureName = PBNatures.getName(@pokemon.nature)
+      natureName = @pokemon.nature.name
       memo += _INTL("<c3=F83820,E09890>{1}<c3=404040,B0B0B0> nature.\n",natureName)
     end
     # Write date received
@@ -628,11 +628,11 @@ class PokemonSummary_Scene
     # Determine which stats are boosted and lowered by the Pokémon's nature
     statshadows = []
     PBStats.eachStat { |s| statshadows[s] = shadow }
-    if !@pokemon.shadowPokemon? || @pokemon.heartStage>3
-      natup = PBNatures.getStatRaised(@pokemon.nature_for_stats)
-      natdn = PBNatures.getStatLowered(@pokemon.nature_for_stats)
-      statshadows[natup] = Color.new(136,96,72) if natup!=natdn
-      statshadows[natdn] = Color.new(64,120,152) if natup!=natdn
+    if !@pokemon.shadowPokemon? || @pokemon.heartStage > 3
+      @pokemon.nature_for_stats.stat_changes.each do |change|
+        statshadows[change[0]] = Color.new(136,96,72) if change[1] > 0
+        statshadows[change[0]] = Color.new(64,120,152) if change[1] < 0
+      end
     end
     # Write various bits of text
     textpos = [

@@ -649,11 +649,15 @@ module Compiler
   end
 
   # Unused
-  def parseNature(item)
-    clonitem = item.upcase
-    clonitem.sub!(/^\s*/, "")
-    clonitem.sub!(/\s*$/, "")
-    return pbGetConst(PBNatures, clonitem, _INTL("Undefined nature constant name: {1}\r\nMake sure the name is defined in the script section PBNatures.\r\n{1}", item, FileLineData.linereport))
+  def parseNature(nature)
+    clonnature = nature.upcase
+    clonnature.sub!(/^\s*/, "")
+    clonnature.sub!(/\s*$/, "")
+    nat = GameData::Nature.try_get(clonnature)
+    if !nat
+      raise _INTL("Undefined nature constant name: {1}\r\nMake sure the nature is defined in the scripts.\r\n{2}", nature, FileLineData.linereport)
+    end
+    return nat.id
   end
 
   # Unused

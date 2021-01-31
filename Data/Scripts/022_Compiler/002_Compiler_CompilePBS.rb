@@ -180,7 +180,7 @@ module Compiler
           :immunities   => contents["Immunities"]
         }
         # Add type's data to records
-        GameData::Type::DATA[type_number] = GameData::Type::DATA[type_symbol] = GameData::Type.new(type_hash)
+        GameData::Type.register(type_hash)
         type_names[type_number] = type_hash[:name]
       }
     }
@@ -229,7 +229,7 @@ module Compiler
         :description => line[3]
       }
       # Add ability's data to records
-      GameData::Ability::DATA[ability_number] = GameData::Ability::DATA[ability_symbol] = GameData::Ability.new(ability_hash)
+      GameData::Ability.register(ability_hash)
       ability_names[ability_number]        = ability_hash[:name]
       ability_descriptions[ability_number] = ability_hash[:description]
     }
@@ -285,7 +285,7 @@ module Compiler
         :description   => line[13]
       }
       # Add move's data to records
-      GameData::Move::DATA[move_number] = GameData::Move::DATA[move_symbol] = GameData::Move.new(move_hash)
+      GameData::Move.register(move_hash)
       move_names[move_number]        = move_hash[:name]
       move_descriptions[move_number] = move_hash[:description]
     }
@@ -329,7 +329,7 @@ module Compiler
       }
       item_hash[:move] = parseMove(line[10]) if !nil_or_empty?(line[10])
       # Add item's data to records
-      GameData::Item::DATA[item_number] = GameData::Item::DATA[item_symbol] = GameData::Item.new(item_hash)
+      GameData::Item.register(item_hash)
       item_names[item_number]        = item_hash[:name]
       item_names_plural[item_number] = item_hash[:name_plural]
       item_descriptions[item_number] = item_hash[:description]
@@ -364,7 +364,7 @@ module Compiler
           :maximum_yield   => line[3]
         }
         # Add berry plant's data to records
-        GameData::BerryPlant::DATA[item_number] = GameData::BerryPlant::DATA[item_symbol] = GameData::BerryPlant.new(berry_plant_hash)
+        GameData::BerryPlant.register(berry_plant_hash)
       end
     }
     # Save all data
@@ -489,7 +489,7 @@ module Compiler
           :shadow_size           => contents["BattlerShadowSize"]
         }
         # Add species' data to records
-        GameData::Species::DATA[species_number] = GameData::Species::DATA[species_symbol] = GameData::Species.new(species_hash)
+        GameData::Species.register(species_hash)
         species_names[species_number]           = species_hash[:name]
         species_form_names[species_number]      = species_hash[:form_name]
         species_categories[species_number]      = species_hash[:category]
@@ -692,7 +692,7 @@ module Compiler
           species_hash[:wild_item_rare]     = contents["WildItemRare"]
         end
         # Add form's data to records
-        GameData::Species::DATA[form_number] = GameData::Species::DATA[form_symbol] = GameData::Species.new(species_hash)
+        GameData::Species.register(species_hash)
         species_names[form_number]           = species_hash[:name]
         species_form_names[form_number]      = species_hash[:form_name]
         species_categories[form_number]      = species_hash[:category]
@@ -897,7 +897,7 @@ module Compiler
             encounters.compact!
             encounters.sort! { |a, b| (a[0] == b[0]) ? a[1].to_s <=> b[1].to_s : b[0] <=> a[0] }
           end
-          GameData::Encounter::DATA[encounter_hash[:id]] = GameData::Encounter.new(encounter_hash)
+          GameData::Encounter.register(encounter_hash)
         end
         # Raise an error if a map/version combo is used twice
         key = sprintf("%s_%d", map_number, map_version).to_sym
@@ -938,7 +938,7 @@ module Compiler
             encounters.compact!
             encounters.sort! { |a, b| (a[0] == b[0]) ? a[1].to_s <=> b[1].to_s : b[0] <=> a[0] }
           end
-          GameData::Encounter::DATA[encounter_hash[:id]] = GameData::Encounter.new(encounter_hash)
+          GameData::Encounter.register(encounter_hash)
         end
         # Raise an error if a map/version combo is used twice
         key = sprintf("%s_0", map_number).to_sym
@@ -1010,7 +1010,7 @@ module Compiler
         encounters.compact!
         encounters.sort! { |a, b| (a[0] == b[0]) ? a[1].to_s <=> b[1].to_s : b[0] <=> a[0] }
       end
-      GameData::Encounter::DATA[encounter_hash[:id]] = GameData::Encounter.new(encounter_hash)
+      GameData::Encounter.register(encounter_hash)
     end
     # Save all data
     GameData::Encounter.save
@@ -1053,7 +1053,7 @@ module Compiler
         :skill_code  => line[9]
       }
       # Add trainer type's data to records
-      GameData::TrainerType::DATA[type_number] = GameData::TrainerType::DATA[type_symbol] = GameData::TrainerType.new(type_hash)
+      GameData::TrainerType.register(type_hash)
       tr_type_names[type_number] = type_hash[:name]
     }
     # Save all data
@@ -1087,14 +1087,14 @@ module Compiler
             raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}", FileLineData.linereport)
           end
           # Add trainer's data to records
-          key = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
-          GameData::Trainer::DATA[trainer_id] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
+          trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+          GameData::Trainer.register(trainer_hash)
         end
         trainer_id += 1
         line_data = pbGetCsvRecord($~[1], line_no, [0, "esU", :TrainerType])
         # Construct trainer hash
         trainer_hash = {
-          :id           => trainer_id,
+          :id_number    => trainer_id,
           :trainer_type => line_data[0],
           :name         => line_data[1],
           :version      => line_data[2] || 0,
@@ -1179,14 +1179,14 @@ module Compiler
               raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}", FileLineData.linereport)
             end
             # Add trainer's data to records
-            key = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
-            GameData::Trainer::DATA[trainer_id] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
+            trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+            GameData::Trainer.register(trainer_hash)
           end
           trainer_id += 1
           old_format_expected_lines = 3
           # Construct trainer hash
           trainer_hash = {
-            :id           => trainer_id,
+            :id_number    => trainer_id,
             :trainer_type => nil,
             :name         => nil,
             :version      => 0,
@@ -1219,7 +1219,7 @@ module Compiler
              [0, "evEEEEEUEUBEUUSBU", :Species, nil, :Item, :Move, :Move, :Move, :Move, nil,
                                       {"M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
                                       "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1},
-                                      nil, nil, :PBNatures, nil, nil, nil, nil, nil])
+                                      nil, nil, :Nature, nil, nil, nil, nil, nil])
           current_pkmn = {
             :species => line_data[0]
           }
@@ -1276,8 +1276,8 @@ module Compiler
     end
     # Add last trainer's data to records
     if trainer_hash
-      key = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
-      GameData::Trainer::DATA[trainer_id] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
+      trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+      GameData::Trainer.register(trainer_hash)
     end
     # Save all data
     GameData::Trainer.save
@@ -1449,7 +1449,7 @@ module Compiler
             :player_H           => contents["PlayerH"]
           }
           # Add metadata's data to records
-          GameData::Metadata::DATA[map_id] = GameData::Metadata.new(metadata_hash)
+          GameData::Metadata.register(metadata_hash)
         else   # Map metadata
           # Construct metadata hash
           metadata_hash = {
@@ -1476,7 +1476,7 @@ module Compiler
             :battle_environment   => contents["Environment"]
           }
           # Add metadata's data to records
-          GameData::MapMetadata::DATA[map_id] = GameData::MapMetadata.new(metadata_hash)
+          GameData::MapMetadata.register(metadata_hash)
         end
       }
     }

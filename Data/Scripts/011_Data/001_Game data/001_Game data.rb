@@ -4,6 +4,10 @@ module GameData
   # Assumes the data class's data is stored in a class constant hash called DATA.
   # For data that is known by a symbol or an ID number.
   module ClassMethods
+    def register(hash)
+      self::DATA[hash[:id]] = self::DATA[hash[:id_number]] = self.new(hash)
+    end
+
     # @param other [Symbol, self, String, Integer]
     # @return [Boolean] whether the given other is defined as a self
     def exists?(other)
@@ -60,6 +64,10 @@ module GameData
   # Assumes the data class's data is stored in a class constant hash called DATA.
   # For data that is only known by an ID number.
   module ClassMethodsIDNumbers
+    def register(hash)
+      self::DATA[hash[:id]] = self.new(hash)
+    end
+
     # @param other [self, Integer]
     # @return [Boolean] whether the given other is defined as a self
     def exists?(other)

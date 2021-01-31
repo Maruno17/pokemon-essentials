@@ -1,5 +1,6 @@
 module GameData
   class Trainer
+    attr_reader :id
     attr_reader :id_number
     attr_reader :trainer_type
     attr_reader :real_name
@@ -22,7 +23,7 @@ module GameData
       "Item"      => [:item,         "e", :Item],
       "Gender"    => [:gender,       "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
                                             "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
-      "Nature"    => [:nature,       "e", :PBNatures],
+      "Nature"    => [:nature,       "e", :Nature],
       "IV"        => [:iv,           "uUUUUU"],
       "EV"        => [:ev,           "uUUUUU"],
       "Happiness" => [:happiness,    "u"],
@@ -67,7 +68,8 @@ module GameData
     end
 
     def initialize(hash)
-      @id_number      = hash[:id]
+      @id             = hash[:id]
+      @id_number      = hash[:id_number]
       @trainer_type   = hash[:trainer_type]
       @real_name      = hash[:name]         || "Unnamed"
       @version        = hash[:version]      || 0
@@ -132,7 +134,7 @@ module GameData
           pkmn.nature = pkmn_data[:nature]
         else
           nature = pkmn.species_data.id_number + GameData::TrainerType.get(trainer.trainer_type).id_number
-          pkmn.nature = nature % (PBNatures.maxValue + 1)
+          pkmn.nature = nature % (GameData::Nature::DATA.length / 2)
         end
         PBStats.eachStat do |s|
           if pkmn_data[:iv] && pkmn_data[:iv].length > 0

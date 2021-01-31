@@ -51,7 +51,7 @@ def pbEncountersEditor
               :step_chances => [],
               :types        => []
             }
-            GameData::Encounter::DATA[encounter_hash[:id]] = GameData::Encounter.new(encounter_hash)
+            GameData::Encounter.register(encounter_hash)
             maps.push([new_map_ID, new_version])
             maps.sort! { |a, b| (a[0] == b[0]) ? a[1] <=> b[1] : a[0] <=> b[0] }
             ret = maps.index([new_map_ID, new_version]) + 1
@@ -88,7 +88,7 @@ def pbEncountersEditor
                 :step_chances => GameData::Encounter.get(this_set[0], this_set[1]).step_chances.clone,
                 :types        => types
               }
-              GameData::Encounter::DATA[encounter_hash[:id]] = GameData::Encounter.new(encounter_hash)
+              GameData::Encounter.register(encounter_hash)
               maps.push([new_map_ID, new_version])
               maps.sort! { |a, b| (a[0] == b[0]) ? a[1] <=> b[1] : a[0] <=> b[0] }
               ret = maps.index([new_map_ID, new_version]) + 1
@@ -393,7 +393,7 @@ def pbTrainerTypeEditor
               :skill_code  => line[8]
             }
             # Add trainer type's data to records
-            GameData::TrainerType::DATA[t_data.id_number] = GameData::TrainerType::DATA[t_data.id] = GameData::TrainerType.new(type_hash)
+            GameData::TrainerType.register(type_hash)
             GameData::TrainerType.save
             pbConvertTrainerData
           end
@@ -455,7 +455,7 @@ def pbTrainerTypeEditorNew(default_name)
     :gender      => gender
   }
   # Add trainer type's data to records
-  GameData::TrainerType::DATA[id_number] = GameData::TrainerType::DATA[id.to_sym] = GameData::TrainerType.new(tr_type_hash)
+  GameData::TrainerType.register(tr_type_hash)
   GameData::TrainerType.save
   pbConvertTrainerData
   pbMessage(_INTL("The trainer type {1} was created (ID: {2}).", name, id.to_s))
@@ -549,7 +549,7 @@ def pbTrainerBattleEditor
               pbMessage(_INTL("Can't save. The Pokémon list is empty."))
             else
               trainer_hash = {
-                :id           => tr_data.id_number,
+                :id_number    => tr_data.id_number,
                 :trainer_type => data[0],
                 :name         => data[1],
                 :version      => data[2],
@@ -558,8 +558,8 @@ def pbTrainerBattleEditor
                 :items        => items
               }
               # Add trainer type's data to records
-              key = [data[0], data[1], data[2]]
-              GameData::Trainer::DATA[tr_data.id_number] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
+              trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+              GameData::Trainer.register(trainer_hash)
               if data[0] != old_type || data[1] != old_name || data[2] != old_version
                 GameData::Trainer::DATA.delete([old_type, old_name, old_version])
               end
@@ -592,7 +592,7 @@ def pbTrainerBattleEditor
           t = pbNewTrainer(tr_type, tr_name, tr_version, false)
           if t
             trainer_hash = {
-              :id           => GameData::Trainer::DATA.keys.length / 2,
+              :id_number    => GameData::Trainer::DATA.keys.length / 2,
               :trainer_type => tr_type,
               :name         => tr_name,
               :version      => tr_version,
@@ -605,8 +605,8 @@ def pbTrainerBattleEditor
               })
             end
             # Add trainer's data to records
-            key = [tr_type, tr_name, tr_version]
-            GameData::Trainer::DATA[trainer_hash[:id]] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
+            trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+            GameData::Trainer.register(trainer_hash)
             pbMessage(_INTL("The Trainer battle was added."))
             modified = true
           end
@@ -657,7 +657,7 @@ module TrainerPokemonProperty
        [_INTL("Level"),     NonzeroLimitProperty.new(max_level),     _INTL("Level of the Pokémon (1-{1}).", max_level)],
        [_INTL("Name"),      StringProperty,                          _INTL("Name of the Pokémon.")],
        [_INTL("Form"),      LimitProperty2.new(999),                 _INTL("Form of the Pokémon.")],
-       [_INTL("Gender"),    GenderProperty.new,                      _INTL("Gender of the Pokémon.")],
+       [_INTL("Gender"),    GenderProperty,                          _INTL("Gender of the Pokémon.")],
        [_INTL("Shiny"),     BooleanProperty2,                        _INTL("If set to true, the Pokémon is a different-colored Pokémon.")],
        [_INTL("Shadow"),    BooleanProperty2,                        _INTL("If set to true, the Pokémon is a Shadow Pokémon.")]
     ]
@@ -667,7 +667,7 @@ module TrainerPokemonProperty
     pkmn_properties.concat([
        [_INTL("Ability"),   LimitProperty2.new(99),                  _INTL("Ability flag. 0=first ability, 1=second ability, 2-5=hidden ability.")],
        [_INTL("Held item"), ItemProperty,                            _INTL("Item held by the Pokémon.")],
-       [_INTL("Nature"),    EnumProperty2.new(PBNatures),            _INTL("Nature of the Pokémon.")],
+       [_INTL("Nature"),    NatureProperty,                          _INTL("Nature of the Pokémon.")],
        [_INTL("IVs"),       IVsProperty.new(Pokemon::IV_STAT_LIMIT), _INTL("Individual values for each of the Pokémon's stats.")],
        [_INTL("EVs"),       EVsProperty.new(Pokemon::EV_STAT_LIMIT), _INTL("Effort values for each of the Pokémon's stats.")],
        [_INTL("Happiness"), LimitProperty2.new(255),                 _INTL("Happiness of the Pokémon (0-255).")],
@@ -759,7 +759,7 @@ def pbEditMetadata(map_id = 0)
         :player_H           => data[15]
       }
       # Add metadata's data to records
-      GameData::Metadata::DATA[map_id] = GameData::Metadata.new(metadata_hash)
+      GameData::Metadata.register(metadata_hash)
       GameData::Metadata.save
     else   # Map metadata
       # Construct metadata hash
@@ -787,7 +787,7 @@ def pbEditMetadata(map_id = 0)
         :battle_environment   => data[19]
       }
       # Add metadata's data to records
-      GameData::MapMetadata::DATA[map_id] = GameData::MapMetadata.new(metadata_hash)
+      GameData::MapMetadata.register(metadata_hash)
       GameData::MapMetadata.save
     end
     Compiler.write_metadata
@@ -869,7 +869,7 @@ def pbItemEditor
               :move        => data[9]
             }
             # Add item's data to records
-            GameData::Item::DATA[itm.id_number] = GameData::Item::DATA[itm.id] = GameData::Item.new(item_hash)
+            GameData::Item.register(item_hash)
             GameData::Item.save
             Compiler.write_items
           end
@@ -933,7 +933,7 @@ def pbItemEditorNew(default_name)
     :description => description
   }
   # Add item's data to records
-  GameData::Item::DATA[id_number] = GameData::Item::DATA[id.to_sym] = GameData::Item.new(item_hash)
+  GameData::Item.register(item_hash)
   GameData::Item.save
   Compiler.write_items
   pbMessage(_INTL("The item {1} was created (ID: {2}).", name, id.to_s))
@@ -1114,7 +1114,7 @@ def pbPokemonEditor
               :shadow_size           => data[43]
             }
             # Add species' data to records
-            GameData::Species::DATA[spec.id_number] = GameData::Species::DATA[spec.id] = GameData::Species.new(species_hash)
+            GameData::Species.register(species_hash)
             GameData::Species.save
             Compiler.write_pokemon
             pbMessage(_INTL("Data saved."))
