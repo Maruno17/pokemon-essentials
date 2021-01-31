@@ -1068,16 +1068,21 @@ module Compiler
   def compile_trainers
     schema = GameData::Trainer::SCHEMA
     max_level = PBExperience.maxLevel
-    trainer_names      = []
-    trainer_lose_texts = []
-    trainer_hash       = nil
-    trainer_id         = -1
-    current_pkmn       = nil
+    trainer_names             = []
+    trainer_lose_texts        = []
+    trainer_hash              = nil
+    trainer_id                = -1
+    current_pkmn              = nil
+    old_format_current_line   = 0
+    old_format_expected_lines = 0
     # Read each line of trainers.txt at a time and compile it as a trainer property
     pbCompilerEachPreppedLine("PBS/trainers.txt") { |line, line_no|
-      # New section [trainer_type, name] or [trainer_type, name, version]
       if line[/^\s*\[\s*(.+)\s*\]\s*$/]
+        # New section [trainer_type, name] or [trainer_type, name, version]
         if trainer_hash
+          if old_format_current_line > 0
+            raise _INTL("Previous trainer not defined with as many Pokémon as expected.\r\n{1}", FileLineData.linereport)
+          end
           if !current_pkmn
             raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}", FileLineData.linereport)
           end
@@ -1097,8 +1102,8 @@ module Compiler
         }
         current_pkmn = nil
         trainer_names[trainer_id] = trainer_hash[:name]
-      # XXX=YYY lines
       elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
+        # XXX=YYY lines
         if !trainer_hash
           raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
         end
@@ -1167,9 +1172,108 @@ module Compiler
           current_pkmn[line_schema[0]] = property_value
         end
       else
-        raise _INTL("Expected a new section or a line like XXX=YYY, got:\r\n{1}\r\n{2}", line, FileLineData.linereport)
+        # Old format - backwards compatibility is SUCH fun!
+        if old_format_current_line == 0   # Started an old trainer section
+          if trainer_hash
+            if !current_pkmn
+              raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}", FileLineData.linereport)
+            end
+            # Add trainer's data to records
+            key = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+            GameData::Trainer::DATA[trainer_id] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
+          end
+          trainer_id += 1
+          old_format_expected_lines = 3
+          # Construct trainer hash
+          trainer_hash = {
+            :id           => trainer_id,
+            :trainer_type => nil,
+            :name         => nil,
+            :version      => 0,
+            :pokemon      => []
+          }
+          current_pkmn = nil
+        end
+        # Evaluate line and add to hash
+        old_format_current_line += 1
+        case old_format_current_line
+        when 1   # Trainer type
+          line_data = pbGetCsvRecord(line, line_no, [0, "e", :TrainerType])
+          trainer_hash[:trainer_type] = line_data
+        when 2   # Trainer name, version number
+          line_data = pbGetCsvRecord(line, line_no, [0, "sU"])
+          line_data = [line_data] if !line_data.is_a?(Array)
+          trainer_hash[:name]    = line_data[0]
+          trainer_hash[:version] = line_data[1] if line_data[1]
+          trainer_names[trainer_hash[:id]] = line_data[0]
+        when 3   # Number of Pokémon, items
+          line_data = pbGetCsvRecord(line, line_no,
+             [0, "vEEEEEEEE", nil, :Item, :Item, :Item, :Item, :Item, :Item, :Item, :Item])
+          line_data = [line_data] if !line_data.is_a?(Array)
+          line_data.compact!
+          old_format_expected_lines += line_data[0]
+          line_data.shift
+          trainer_hash[:items] = line_data if line_data.length > 0
+        else   # Pokémon lines
+          line_data = pbGetCsvRecord(line, line_no,
+             [0, "evEEEEEUEUBEUUSBU", :Species, nil, :Item, :Move, :Move, :Move, :Move, nil,
+                                      {"M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
+                                      "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1},
+                                      nil, nil, :PBNatures, nil, nil, nil, nil, nil])
+          current_pkmn = {
+            :species => line_data[0]
+          }
+          trainer_hash[:pokemon].push(current_pkmn)
+          # Error checking in properties
+          line_data.each_with_index do |value, i|
+            next if value.nil?
+            case i
+            when 1   # Level
+              if value > max_level
+                raise _INTL("Bad level: {1} (must be 1-{2}).\r\n{3}", value, max_level, FileLineData.linereport)
+              end
+            when 12   # IV
+              if value > Pokemon::IV_STAT_LIMIT
+                raise _INTL("Bad IV: {1} (must be 0-{2}).\r\n{3}", value, Pokemon::IV_STAT_LIMIT, FileLineData.linereport)
+              end
+            when 13   # Happiness
+              if value > 255
+                raise _INTL("Bad happiness: {1} (must be 0-255).\r\n{2}", value, FileLineData.linereport)
+              end
+            when 14   # Nickname
+              if value.length > Pokemon::MAX_NAME_SIZE
+                raise _INTL("Bad nickname: {1} (must be 1-{2} characters).\r\n{3}", value, Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
+              end
+            end
+          end
+          # Write all line data to hash
+          moves = [line_data[3], line_data[4], line_data[5], line_data[6]]
+          moves.uniq!.compact!
+          ivs = []
+          if line_data[12]
+            PBStats.each { |s| ivs[s] = line_data[12] }
+          end
+          current_pkmn[:level]        = line_data[1]
+          current_pkmn[:item]         = line_data[2] if line_data[2]
+          current_pkmn[:moves]        = moves if moves.length > 0
+          current_pkmn[:ability_flag] = line_data[7] if line_data[7]
+          current_pkmn[:gender]       = line_data[8] if line_data[8]
+          current_pkmn[:form]         = line_data[9] if line_data[9]
+          current_pkmn[:shininess]    = line_data[10] if line_data[10]
+          current_pkmn[:nature]       = line_data[11] if line_data[11]
+          current_pkmn[:iv]           = ivs if ivs.length > 0
+          current_pkmn[:happiness]    = line_data[13] if line_data[13]
+          current_pkmn[:name]         = line_data[14] if line_data[14] && !line_data[14].empty?
+          current_pkmn[:shadowness]   = line_data[15] if line_data[15]
+          current_pkmn[:poke_ball]    = line_data[16] if line_data[16]
+          # Check if this is the last expected Pokémon
+          old_format_current_line = 0 if old_format_current_line >= old_format_expected_lines
+        end
       end
     }
+    if old_format_current_line > 0
+      raise _INTL("Unexpected end of file, last trainer not defined with as many Pokémon as expected.\r\n{1}", FileLineData.linereport)
+    end
     # Add last trainer's data to records
     if trainer_hash
       key = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
