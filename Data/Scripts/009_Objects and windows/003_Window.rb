@@ -1,57 +1,53 @@
 class WindowCursorRect < Rect
   def initialize(window)
-    @window=window
-    @x=0
-    @y=0
-    @width=0
-    @height=0
+    super(0, 0, 0, 0)
+    @window = window
   end
 
-  attr_reader :x,:y,:width,:height
-
   def empty
-    needupdate=@x!=0 || @y!=0 || @width!=0 || @height!=0
-    if needupdate
-      @x=0
-      @y=0
-      @width=0
-      @height=0
-      @window.width=@window.width
-    end
+    return unless needs_update?
+
+    set(0, 0, 0, 0)
   end
 
   def isEmpty?
-    return @x==0 && @y==0 && @width==0 && @height==0
+    return self.x == 0 && self.y == 0 && self.width == 0 && self.height == 0
   end
 
-  def set(x,y,width,height)
-    needupdate=@x!=x || @y!=y || @width!=width || @height!=height
-    if needupdate
-      @x=x
-      @y=y
-      @width=width
-      @height=height
-      @window.width=@window.width
-    end
+  def set(x, y, width, height)
+    return unless needs_update?
+
+    super(x, y, width, height)
+
+    @window.width = @window.width
   end
 
   def height=(value)
-    @height=value; @window.width=@window.width
+    super(value)
+    @window.width = @window.width
   end
 
   def width=(value)
-    @width=value; @window.width=@window.width
+    super(value)
+    @window.width = @window.width
   end
 
   def x=(value)
-    @x=value; @window.width=@window.width
+    super(value)
+    @window.width = @window.width
   end
 
   def y=(value)
-    @y=value; @window.width=@window.width
+    super(value)
+    @window.width = @window.width
+  end
+
+  private
+
+  def needs_update?
+    return self.x != 0 || self.y != 0 || self.width != 0 || self.height != 0
   end
 end
-
 
 
 class Window
