@@ -5,7 +5,7 @@ class WindowCursorRect < Rect
   end
 
   def empty
-    return unless needs_update?
+    return unless needs_update?(0, 0, 0, 0)
 
     set(0, 0, 0, 0)
   end
@@ -15,7 +15,7 @@ class WindowCursorRect < Rect
   end
 
   def set(x, y, width, height)
-    return unless needs_update?
+    return unless needs_update?(x, y, width, height)
 
     super(x, y, width, height)
 
@@ -44,8 +44,8 @@ class WindowCursorRect < Rect
 
   private
 
-  def needs_update?
-    return self.x != 0 || self.y != 0 || self.width != 0 || self.height != 0
+  def needs_update?(x, y, width, height)
+    return self.x != x || self.y != y || self.width != width || self.height != height
   end
 end
 
