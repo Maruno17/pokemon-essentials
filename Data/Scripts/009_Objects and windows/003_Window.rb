@@ -10,7 +10,7 @@ class WindowCursorRect < Rect
     set(0, 0, 0, 0)
   end
 
-  def isEmpty?
+  def empty?
     return self.x == 0 && self.y == 0 && self.width == 0 && self.height == 0
   end
 
@@ -305,7 +305,7 @@ class Window
         @cursoropacity+=8
         @cursorblink=0 if @cursoropacity>=255
       end
-      mustchange=true if !@cursor_rect.isEmpty?
+      mustchange=true if !@cursor_rect.empty?
     else
       mustchange=true if @cursoropacity!=128
       @cursoropacity=128
