@@ -15,7 +15,7 @@ module GameData
     include InstanceMethods
 
     # @param map_id [Integer]
-    # @param map_version [Integer]
+    # @param map_version [Integer, nil]
     # @return [Boolean] whether there is encounter data for the given map ID/version
     def self.exists?(map_id, map_version = 0)
       validate map_id => [Integer]
@@ -25,7 +25,7 @@ module GameData
     end
 
     # @param map_id [Integer]
-    # @param version [Integer]
+    # @param map_version [Integer, nil]
     # @return [self, nil]
     def self.get(map_id, map_version = 0)
       validate map_id => Integer
@@ -72,6 +72,7 @@ end
 #===============================================================================
 # Deprecated methods
 #===============================================================================
+# @deprecated This alias is slated to be removed in v20.
 def pbLoadEncountersData
   Deprecation.warn_method('pbLoadEncountersData', 'v20', 'GameData::Encounter.get(map_id, version)')
   return nil

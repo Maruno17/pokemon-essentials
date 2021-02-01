@@ -96,16 +96,18 @@ module PBExperience
   end
 
   # Erratic (600000):
-  #   For levels 0-50:   n**3([100-n]/50)
-  #   For levels 51-68:  n**3([150-n]/100)
-  #   For levels 69-98:  n**3(1.274-[1/50][n/3]-p(n mod 3))
-  #                      where p(x) = array(0.000,0.008,0.014)[x]
-  #   For levels 99-100: n**3([160-n]/100)
+  #   For levels 0-50:   n**3 * (100 - n) / 50
+  #   For levels 51-68:  n**3 * (150 - n) / 100
+  #   For levels 69-98:  n**3 * 1.274 - (n / 150) - p(n mod 3)
+  #                      where p(x) = array(0.000, 0.008, 0.014)[x]
+  #   For levels 99-100: n**3 * (160 - n) / 100
   # Fluctuating (1640000):
-  #   For levels 0-15  : n**3([24+{(n+1)/3}]/50)
-  #   For levels 16-35:  n**3([14+n]/50)
-  #   For levels 36-100: n**3([32+{n/2}]/50)
+  #   For levels 0-15  : n**3 * (24 + ((n + 1) / 3)) / 50
+  #   For levels 16-35:  n**3 * (14 + n) / 50
+  #   For levels 36-100: n**3 * (32 + (n / 2)) / 50
 
+  # @param level [Integer]
+  # @param growth [Integer] growth rate
   def self.pbGetExpInternal(level,growth)
     if level <= 100
       # Refer to experience table for levels 100 and less
@@ -138,7 +140,7 @@ module PBExperience
   end
 
   # Gets the maximum Exp Points possible for the given growth rate.
-  # growth -- Growth rate.
+  # @param growth [Integer] growth rate
   def self.pbGetMaxExperience(growth)
     if growth<0 || growth>PBGrowthRates.maxValue
       return ArgumentError.new("The growth rate is invalid.")
@@ -148,7 +150,8 @@ module PBExperience
 
   # Gets the number of Exp Points needed to reach the given
   # level with the given growth rate.
-  # growth -- Growth rate.
+  # @param level [Integer]
+  # @param growth [Integer] growth rate
   def self.pbGetStartExperience(level,growth)
     if growth<0 || growth>PBGrowthRates.maxValue
       return ArgumentError.new("The growth rate is invalid.")
@@ -163,9 +166,9 @@ module PBExperience
 
   # Adds experience points ensuring that the new total doesn't
   # exceed the maximum Exp. Points for the given growth rate.
-  # currexp -- Current Exp Points.
-  # expgain -- Exp. Points to add
-  # growth -- Growth rate.
+  # @param currexp [Integer] current Exp. points
+  # @param expgain [Integer] Exp. points to add
+  # @param growth [Integer] growth rate
   def self.pbAddExperience(currexp,expgain,growth)
     if growth<0 || growth>PBGrowthRates.maxValue
       return ArgumentError.new("The growth rate is invalid.")
@@ -177,7 +180,7 @@ module PBExperience
   end
 
   # Calculates a level given the number of Exp Points and growth rate.
-  # growth -- Growth rate.
+  # @param growth [Integer] growth rate
   def self.pbGetLevelFromExperience(exp,growth)
     if growth<0 || growth>PBGrowthRates.maxValue
       return ArgumentError.new("The growth rate is invalid.")

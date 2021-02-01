@@ -76,49 +76,49 @@ class PokeBattle_Trainer
   end
 end
 
-# @deprecated Use {PlayerTrainer#remove_pokemon_at_index} instead. This alias is slated to be removed in v20.
+# @deprecated Use {Trainer#remove_pokemon_at_index} instead. This alias is slated to be removed in v20.
 def pbRemovePokemonAt(index)
   Deprecation.warn_method('pbRemovePokemonAt', 'v20', 'PlayerTrainer#remove_pokemon_at_index')
   return $Trainer.remove_pokemon_at_index(index)
 end
 
-# @deprecated Use {PlayerTrainer#has_other_able_pokemon?} instead. This alias is slated to be removed in v20.
+# @deprecated Use {Trainer#has_other_able_pokemon?} instead. This alias is slated to be removed in v20.
 def pbCheckAble(index)
   Deprecation.warn_method('pbCheckAble', 'v20', 'PlayerTrainer#has_other_able_pokemon?')
   return $Trainer.has_other_able_pokemon?(index)
 end
 
-# @deprecated Use {PlayerTrainer#all_fainted?} instead. This alias is slated to be removed in v20.
+# @deprecated Use {Trainer#all_fainted?} instead. This alias is slated to be removed in v20.
 def pbAllFainted
   Deprecation.warn_method('pbAllFainted', 'v20', 'PlayerTrainer#all_fainted?')
   return $Trainer.all_fainted?
 end
 
-# @deprecated Use {PlayerTrainer#has_species?} instead. This alias is slated to be removed in v20.
+# @deprecated Use {Trainer#has_species?} instead. This alias is slated to be removed in v20.
 def pbHasSpecies?(species, form = -1)
   Deprecation.warn_method('pbHasSpecies?', 'v20', 'PlayerTrainer#has_species?')
   return $Trainer.has_species?(species, form)
 end
 
-# @deprecated Use {PlayerTrainer#has_fateful_species?} instead. This alias is slated to be removed in v20.
+# @deprecated Use {Trainer#has_fateful_species?} instead. This alias is slated to be removed in v20.
 def pbHasFatefulSpecies?(species)
   Deprecation.warn_method('pbHasSpecies?', 'v20', 'PlayerTrainer#has_fateful_species?')
   return $Trainer.has_fateful_species?(species)
 end
 
-# @deprecated Use {PlayerTrainer#has_pokemon_of_type?} instead. This alias is slated to be removed in v20.
+# @deprecated Use {Trainer#has_pokemon_of_type?} instead. This alias is slated to be removed in v20.
 def pbHasType?(type)
   Deprecation.warn_method('pbHasType?', 'v20', 'PlayerTrainer#has_pokemon_of_type?')
   return $Trainer.has_pokemon_of_type?(type)
 end
 
-# @deprecated Use {PlayerTrainer#get_pokemon_with_move} instead. This alias is slated to be removed in v20.
+# @deprecated Use {Trainer#get_pokemon_with_move} instead. This alias is slated to be removed in v20.
 def pbCheckMove(move)
   Deprecation.warn_method('pbCheckMove', 'v20', 'PlayerTrainer#get_pokemon_with_move')
   return $Trainer.get_pokemon_with_move(move)
 end
 
-# @deprecated Use {PlayerTrainer#heal_party} instead. This alias is slated to be removed in v20.
+# @deprecated Use {Trainer#heal_party} instead. This alias is slated to be removed in v20.
 def pbHealAll
   Deprecation.warn_method('pbHealAll', 'v20', 'PlayerTrainer#heal_party')
   $Trainer.heal_party

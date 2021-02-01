@@ -38,5 +38,7 @@ end
 
 # Well done for finding this place.
 # DO NOT EDIT THESE
-ESSENTIALS_VERSION = "18.1.dev"
-ERROR_TEXT = ""
+module Essentials
+  VERSION = "18.1.dev"
+  ERROR_TEXT = ""
+end

@@ -37,7 +37,7 @@ module GameData
 
     # @param tr_type [Symbol, String]
     # @param tr_name [String]
-    # @param tr_version [Integer]
+    # @param tr_version [Integer, nil]
     # @return [Boolean] whether the given other is defined as a self
     def self.exists?(tr_type, tr_name, tr_version = 0)
       validate tr_type => [Symbol, String]
@@ -48,7 +48,7 @@ module GameData
 
     # @param tr_type [Symbol, String]
     # @param tr_name [String]
-    # @param tr_version [Integer]
+    # @param tr_version [Integer, nil]
     # @return [self]
     def self.get(tr_type, tr_name, tr_version = 0)
       validate tr_type => [Symbol, String]
@@ -58,7 +58,9 @@ module GameData
       return self::DATA[key]
     end
 
-    # @param other [Symbol, self, String, Integer]
+    # @param tr_type [Symbol, String]
+    # @param tr_name [String]
+    # @param tr_version [Integer, nil]
     # @return [self, nil]
     def try_get(tr_type, tr_name, tr_version = 0)
       validate tr_type => [Symbol, String]
@@ -166,6 +168,7 @@ end
 #===============================================================================
 # Deprecated methods
 #===============================================================================
+# @deprecated This alias is slated to be removed in v20.
 def pbGetTrainerData(tr_type, tr_name, tr_version = 0)
   Deprecation.warn_method('pbGetTrainerData', 'v20', 'GameData::Trainer.get(tr_type, tr_name, tr_version)')
   return GameData::Trainer.get(tr_type, tr_name, tr_version)

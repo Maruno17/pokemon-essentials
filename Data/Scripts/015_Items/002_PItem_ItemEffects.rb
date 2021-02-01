@@ -348,7 +348,7 @@ ItemHandlers::UseOnPokemon.addIf(proc { |item| GameData::Item.get(item).is_evolu
       scene.pbDisplay(_INTL("It won't have any effect."))
       next false
     end
-    newspecies = pbCheckEvolution(pkmn,item)
+    newspecies = EvolutionCheck.check(pkmn,item)
     if newspecies
       pbFadeOutInWithMusic {
         evo = PokemonEvolutionScene.new
@@ -356,7 +356,7 @@ ItemHandlers::UseOnPokemon.addIf(proc { |item| GameData::Item.get(item).is_evolu
         evo.pbEvolution(false)
         evo.pbEndScreen
         if scene.is_a?(PokemonPartyScreen)
-          scene.pbRefreshAnnotations(proc { |p| !pbCheckEvolution(p,item).nil? })
+          scene.pbRefreshAnnotations(proc { |p| !EvolutionCheck.check(p, item).nil? })
           scene.pbRefresh
         end
       }

@@ -553,8 +553,8 @@ class PokemonBattlerSprite < RPG::Sprite
 
   # This method plays the battle entrance animation of a Pokémon. By default
   # this is just playing the Pokémon's cry, but you can expand on it. The
-  # recommendation is to create a PictureEx animation and push it into the
-  # @battleAnimations array.
+  # recommendation is to create a PictureEx animation and push it into
+  # the @battleAnimations array.
   def pbPlayIntroAnimation(pictureEx=nil)
     return if !@pkmn
     GameData::Species.play_cry_from_pokemon(@pkmn)

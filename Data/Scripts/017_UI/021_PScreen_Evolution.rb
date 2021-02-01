@@ -600,10 +600,7 @@ class PokemonEvolutionScene
   end
 
   def pbEvolutionMethodAfterEvolution
-    pbCheckEvolutionEx(@pokemon) { |pkmn, method, parameter, new_species|
-      success = PBEvolution.call("afterEvolution", method, pkmn, new_species, parameter, @newspecies)
-      next (success) ? 1 : -1
-    }
+    EvolutionCheck.check_after_evolution(@pokemon, @newspecies)
   end
 
   def self.pbDuplicatePokemon(pkmn, new_species)

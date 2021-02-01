@@ -6,8 +6,10 @@
 # You should change it to your file's url once you upload it.
 # NOTE: Essentials cannot handle https addresses. You must use a http address.
 #===============================================================================
-MYSTERY_GIFT_URL = "http://images1.wikia.nocookie.net/pokemonessentials/images/e/e7/MysteryGift.txt"
-# MYSTERY_GIFT_URL = "http://pastebin.com/raw/w6BqqUsm"
+module MysteryGift
+  URL = "http://images1.wikia.nocookie.net/pokemonessentials/images/e/e7/MysteryGift.txt"
+  # URL = "http://pastebin.com/raw/w6BqqUsm"
+end
 
 #===============================================================================
 # Creating a new Mystery Gift for the Master file, and editing an existing one.
@@ -135,7 +137,7 @@ def pbManageMysteryGifts
   # Download all gifts from online
   msgwindow=pbCreateMessageWindow
   pbMessageDisplay(msgwindow,_INTL("Searching for online gifts...\\wtnp[0]"))
-  online=pbDownloadToString(MYSTERY_GIFT_URL)
+  online = pbDownloadToString(MysteryGift::URL)
   pbDisposeMessageWindow(msgwindow)
   if online==""
     pbMessage(_INTL("No online Mystery Gifts found.\\wtnp[20]"))
@@ -243,7 +245,7 @@ def pbDownloadMysteryGift(trainer)
   pbFadeInAndShow(sprites)
   sprites["msgwindow"]=pbCreateMessageWindow
   pbMessageDisplay(sprites["msgwindow"],_INTL("Searching for a gift.\nPlease wait...\\wtnp[0]"))
-  string=pbDownloadToString(MYSTERY_GIFT_URL)
+  string = pbDownloadToString(MysteryGift::URL)
   if string==""
     pbMessageDisplay(sprites["msgwindow"],_INTL("No new gifts are available."))
   else

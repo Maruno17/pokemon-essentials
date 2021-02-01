@@ -223,31 +223,37 @@ end
 #===============================================================================
 # Deprecated methods
 #===============================================================================
+# @deprecated This alias is slated to be removed in v20.
 def pbGetSpeciesData(species, form = 0, species_data_type = -1)
   Deprecation.warn_method('pbGetSpeciesData', 'v20', 'GameData::Species.get_species_form(species, form).something')
   return GameData::Species.get_species_form(species, form)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbGetSpeciesEggMoves(species, form = 0)
   Deprecation.warn_method('pbGetSpeciesEggMoves', 'v20', 'GameData::Species.get_species_form(species, form).egg_moves')
   return GameData::Species.get_species_form(species, form).egg_moves
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbGetSpeciesMoveset(species, form = 0)
   Deprecation.warn_method('pbGetSpeciesMoveset', 'v20', 'GameData::Species.get_species_form(species, form).moves')
   return GameData::Species.get_species_form(species, form).moves
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbGetEvolutionData(species)
   Deprecation.warn_method('pbGetEvolutionData', 'v20', 'GameData::Species.get(species).evolutions')
   return GameData::Species.get(species).evolutions
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbApplyBattlerMetricsToSprite(sprite, index, species_data, shadow = false, metrics = nil)
   Deprecation.warn_method('pbApplyBattlerMetricsToSprite', 'v20', 'GameData::Species.get(species).apply_metrics_to_sprite')
   GameData::Species.get(species).apply_metrics_to_sprite(sprite, index, shadow)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def showShadow?(species)
   Deprecation.warn_method('showShadow?', 'v20', 'GameData::Species.get(species).shows_shadow?')
   return GameData::Species.get(species).shows_shadow?

@@ -9,13 +9,13 @@ class Pokemon
     attr_reader :name
     # @return [Integer] the gender of the owner (0 = male, 1 = female, 2 = unknown)
     attr_reader :gender
-    # @return [Integer] the language of the owner (see {pbGetLanguage} for language IDs)
+    # @return [Integer] the language of the owner (see pbGetLanguage for language IDs)
     attr_reader :language
 
     # @param id [Integer] the ID of the owner
     # @param name [String] the name of the owner
     # @param gender [Integer] the gender of the owner (0 = male, 1 = female, 2 = unknown)
-    # @param language [Integer] the language of the owner (see {pbGetLanguage} for language IDs)
+    # @param language [Integer] the language of the owner (see pbGetLanguage for language IDs)
     def initialize(id, name, gender, language)
       validate id => Integer, name => String, gender => Integer, language => Integer
       @id = id

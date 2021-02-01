@@ -479,7 +479,7 @@ class Pokemon
 
   # Returns whether this Pokémon has a particular nature. If no value is given,
   # returns whether this Pokémon has a nature set.
-  # @param nature [Integer] nature ID to check
+  # @param check_nature [Integer] nature ID to check
   # @return [Boolean] whether this Pokémon has a particular nature or a nature
   #   at all
   def hasNature?(check_nature = nil)

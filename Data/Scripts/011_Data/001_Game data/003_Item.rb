@@ -165,121 +165,145 @@ end
 #===============================================================================
 # Deprecated methods
 #===============================================================================
+# @deprecated This alias is slated to be removed in v20.
 def pbGetPocket(item)
   Deprecation.warn_method('pbGetPocket', 'v20', 'GameData::Item.get(item).pocket')
   return GameData::Item.get(item).pocket
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbGetPrice(item)
   Deprecation.warn_method('pbGetPrice', 'v20', 'GameData::Item.get(item).price')
   return GameData::Item.get(item).price
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbGetMachine(item)
   Deprecation.warn_method('pbGetMachine', 'v20', 'GameData::Item.get(item).move')
   return GameData::Item.get(item).move
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsTechnicalMachine?(item)
   Deprecation.warn_method('pbIsTechnicalMachine?', 'v20', 'GameData::Item.get(item).is_TM?')
   return GameData::Item.get(item).is_TM?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsHiddenMachine?(item)
   Deprecation.warn_method('pbIsHiddenMachine?', 'v20', 'GameData::Item.get(item).is_HM?')
   return GameData::Item.get(item).is_HM?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsMachine?(item)
   Deprecation.warn_method('pbIsMachine?', 'v20', 'GameData::Item.get(item).is_machine?')
   return GameData::Item.get(item).is_machine?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsMail?(item)
   Deprecation.warn_method('pbIsMail?', 'v20', 'GameData::Item.get(item).is_mail?')
   return GameData::Item.get(item).is_mail?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsMailWithPokemonIcons?(item)
   Deprecation.warn_method('pbIsMailWithPokemonIcons?', 'v20', 'GameData::Item.get(item).is_icon_mail?')
   return GameData::Item.get(item).is_icon_mail?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsPokeBall?(item)
   Deprecation.warn_method('pbIsPokeBall?', 'v20', 'GameData::Item.get(item).is_poke_ball?')
   return GameData::Item.get(item).is_poke_ball?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsSnagBall?(item)
   Deprecation.warn_method('pbIsSnagBall?', 'v20', 'GameData::Item.get(item).is_snag_ball?')
   return GameData::Item.get(item).is_snag_ball?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsBerry?(item)
   Deprecation.warn_method('pbIsBerry?', 'v20', 'GameData::Item.get(item).is_berry?')
   return GameData::Item.get(item).is_berry?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsKeyItem?(item)
   Deprecation.warn_method('pbIsKeyItem?', 'v20', 'GameData::Item.get(item).is_key_item?')
   return GameData::Item.get(item).is_key_item?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsEvolutionStone?(item)
   Deprecation.warn_method('pbIsEvolutionStone?', 'v20', 'GameData::Item.get(item).is_evolution_stone?')
   return GameData::Item.get(item).is_evolution_stone?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsFossil?(item)
   Deprecation.warn_method('pbIsFossil?', 'v20', 'GameData::Item.get(item).is_fossil?')
   return GameData::Item.get(item).is_fossil?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsApricorn?(item)
   Deprecation.warn_method('pbIsApricorn?', 'v20', 'GameData::Item.get(item).is_apricorn?')
   return GameData::Item.get(item).is_apricorn?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsGem?(item)
   Deprecation.warn_method('pbIsGem?', 'v20', 'GameData::Item.get(item).is_gem?')
   return GameData::Item.get(item).is_gem?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsMulch?(item)
   Deprecation.warn_method('pbIsMulch?', 'v20', 'GameData::Item.get(item).is_mulch?')
   return GameData::Item.get(item).is_mulch?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsMegaStone?(item)
   Deprecation.warn_method('pbIsMegaStone?', 'v20', 'GameData::Item.get(item).is_mega_stone?')
   return GameData::Item.get(item).is_mega_stone?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsImportantItem?(item)
   Deprecation.warn_method('pbIsImportantItem?', 'v20', 'GameData::Item.get(item).is_important?')
   return GameData::Item.get(item).is_important?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbCanHoldItem?(item)
   Deprecation.warn_method('pbCanHoldItem?', 'v20', 'GameData::Item.get(item).can_hold?')
   return GameData::Item.get(item).can_hold?
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsUnlosableItem?(check_item, species, ability)
   Deprecation.warn_method('pbIsUnlosableItem?', 'v20', 'GameData::Item.get(item).unlosable?')
   return GameData::Item.get(check_item).unlosable?(species, ability)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbItemIconFile(item)
   Deprecation.warn_method('pbItemIconFile', 'v20', 'GameData::Item.icon_filename(item)')
   return GameData::Item.icon_filename(item)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbHeldItemIconFile(item)
   Deprecation.warn_method('pbHeldItemIconFile', 'v20', 'GameData::Item.held_icon_filename(item)')
   return GameData::Item.held_icon_filename(item)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbMailBackFile(item)
   Deprecation.warn_method('pbMailBackFile', 'v20', 'GameData::Item.mail_filename(item)')
   return GameData::Item.mail_filename(item)

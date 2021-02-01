@@ -31,8 +31,8 @@ def pbPrintException(e)
     e.backtrace[0,maxlength].each { |i| btrace += "#{i}\r\n" }
   end
   btrace.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] }
-  message = "[Pokémon Essentials version #{ESSENTIALS_VERSION}]\r\n"
-  message += "#{ERROR_TEXT}"   # For third party scripts to add to
+  message = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
+  message += "#{Essentials::ERROR_TEXT}"   # For third party scripts to add to
   message += "Exception: #{e.class}\r\n"
   message += "Message: #{emessage}\r\n"
   message += "\r\nBacktrace:\r\n#{btrace}"

@@ -4,8 +4,6 @@
 # features Boushy
 # Modified by Peter O. to be compatible with Pokémon Essentials
 #===============================================================================
-SHADOW_WARN = true
-
 class Sprite_Shadow < RPG::Sprite
   attr_accessor :character
 
@@ -193,7 +191,7 @@ class Spriteset_Map
       params = XPML_read(map,"Shadow Source", ev, 4)
       @shadows.push([ev] + params) if params != nil
     end
-    if warn == true and SHADOW_WARN
+    if warn == true
       p "Warning : At least one event on this map uses the obsolete way to add shadows"
     end
     shadow_initialize(map)

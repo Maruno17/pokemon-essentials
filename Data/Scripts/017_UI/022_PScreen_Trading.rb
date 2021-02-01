@@ -173,7 +173,7 @@ class PokemonTrade_Scene
     pbFadeOutAndHide(@sprites)
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
-    newspecies = pbTradeCheckEvolution(@pokemon2,@pokemon)
+    newspecies = EvolutionCheck.check_trade_methods(@pokemon2,@pokemon)
     if newspecies
       evo = PokemonEvolutionScene.new
       evo.pbStartScreen(@pokemon2,newspecies)
@@ -238,11 +238,4 @@ def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
     evo.pbEndScreen
   }
   $Trainer.party[pokemonIndex] = yourPokemon
-end
-
-def pbTradeCheckEvolution(pkmn, other_pkmn)
-  return pbCheckEvolutionEx(pkmn) { |pkmn, method, parameter, new_species|
-    success = PBEvolution.call("tradeCheck", method, pkmn, parameter, other_pkmn)
-    next (success) ? new_species : -1
-  }
 end

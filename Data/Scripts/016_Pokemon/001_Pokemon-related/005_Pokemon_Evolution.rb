@@ -194,6 +194,8 @@ module EvolutionHelper
     return false
   end
 
+  # Used by the Moon Ball when checking if a Pokémon's evolution family includes
+  # an evolution that uses the Moon Stone.
   def check_family_for_method_item(species, param = nil)
     species = self.baby_species(species)
     evos = self.family_evolutions(species)
@@ -209,38 +211,43 @@ end
 
 
 
+# @deprecated Use {EvolutionHelper#evolutions} instead. This alias is slated to be removed in v20.
 def pbGetEvolvedFormData(species, ignore_none = false)
   Deprecation.warn_method('pbGetEvolvedFormData', 'v20', 'EvolutionHelper.evolutions(species)')
   return EvolutionHelper.evolutions(species, ignore_none)
 end
 
+# @deprecated Use {EvolutionHelper#family_evolutions} instead. This alias is slated to be removed in v20.
 def pbGetEvolutionFamilyData(species)   # Unused
   Deprecation.warn_method('pbGetEvolutionFamilyData', 'v20', 'EvolutionHelper.family_evolutions(species)')
   return EvolutionHelper.family_evolutions(species, ignore_none)
 end
 
+# @deprecated Use {EvolutionHelper#previous_species} instead. This alias is slated to be removed in v20.
 def pbGetPreviousForm(species)   # Unused
   Deprecation.warn_method('pbGetPreviousForm', 'v20', 'EvolutionHelper.previous_species(species)')
   return EvolutionHelper.previous_species(species)
 end
 
+# @deprecated Use {EvolutionHelper#baby_species} instead. This alias is slated to be removed in v20.
 def pbGetBabySpecies(species, check_items = false, item1 = nil, item2 = nil)
   Deprecation.warn_method('pbGetBabySpecies', 'v20', 'EvolutionHelper.baby_species(species)')
   return EvolutionHelper.baby_species(species, check_items, item1, item2)
 end
 
+# @deprecated Use {EvolutionHelper#minimum_level} instead. This alias is slated to be removed in v20.
 def pbGetMinimumLevel(species)
   Deprecation.warn_method('pbGetMinimumLevel', 'v20', 'EvolutionHelper.minimum_level(species)')
   return EvolutionHelper.minimum_level(species)
 end
 
+# @deprecated Use {EvolutionHelper#check_family_for_method} instead. This alias is slated to be removed in v20.
 def pbCheckEvolutionFamilyForMethod(species, method, param = nil)
   Deprecation.warn_method('pbCheckEvolutionFamilyForMethod', 'v20', 'EvolutionHelper.check_family_for_method(species, method)')
   return EvolutionHelper.check_family_for_method(species, method, param)
 end
 
-# Used by the Moon Ball when checking if a Pokémon's evolution family includes
-# an evolution that uses the Moon Stone.
+# @deprecated Use {EvolutionHelper#check_family_for_method_item} instead. This alias is slated to be removed in v20.
 def pbCheckEvolutionFamilyForItemMethodItem(species, param = nil)
   Deprecation.warn_method('pbCheckEvolutionFamilyForItemMethodItem', 'v20', 'EvolutionHelper.check_family_for_method_item(species, item)')
   return EvolutionHelper.check_family_for_method_item(species, param)
@@ -249,43 +256,61 @@ end
 #===============================================================================
 # Evolution checks
 #===============================================================================
-def pbMiniCheckEvolution(pkmn, method, parameter, new_species)
-  success = PBEvolution.call("levelUpCheck", method, pkmn, parameter)
-  return (success) ? new_species : nil
-end
-
-def pbMiniCheckEvolutionItem(pkmn, method, parameter, new_species, item)
-  success = PBEvolution.call("itemCheck", method, pkmn, parameter, item)
-  return (success) ? new_species : nil
-end
-
-# Checks whether a Pokemon can evolve now. If a block is given, calls the block
-# with the following parameters:
-#   Pokemon to check; evolution method; parameter; ID of the new species
-def pbCheckEvolutionEx(pkmn)
-  return nil if !pkmn.species || pokemon.egg? || pokemon.shadowPokemon?
-  return nil if pkmn.hasItem?(:EVERSTONE)
-  return nil if pkmn.hasAbility?(:BATTLEBOND)
-  ret = nil
-  pkmn.species_data.evolutions.each do |evo|
-    next if evo[3]   # Prevolution
-    ret = yield pkmn, evo[1], evo[2], evo[0]   # pkmn, method, parameter, new_species
-    break if ret
+module EvolutionCheck
+  # The core method that performs evolution checks. Needs a block given to it,
+  # which will provide either a GameData::Species ID (the species to evolve
+  # into) or nil (keep checking).
+  # @param pkmn [Pokemon] the Pokémon trying to evolve
+  def self.check_ex(pkmn)
+    return nil if !pkmn.species || pokemon.egg? || pokemon.shadowPokemon?
+    return nil if pkmn.hasItem?(:EVERSTONE)
+    return nil if pkmn.hasAbility?(:BATTLEBOND)
+    ret = nil
+    pkmn.species_data.evolutions.each do |evo|   # [new_species, method, parameter, boolean]
+      next if evo[3]   # Prevolution
+      ret = yield pkmn, evo[1], evo[2], evo[0]   # pkmn, method, parameter, new_species
+      break if ret
+    end
+    return ret
   end
-  return ret
-end
 
-# Checks whether a Pokemon can evolve now. If an item is used on the Pokémon,
-# checks whether the Pokemon can evolve with the given item.
-def pbCheckEvolution(pkmn, item = nil)
-  if item
-    return pbCheckEvolutionEx(pkmn) { |pkmn, method, parameter, new_species|
-      next pbMiniCheckEvolutionItem(pkmn, method, parameter, new_species, item)
+  # Checks whether a Pokemon can evolve because of levelling up. If the item
+  # parameter is not nil, instead checks whether a Pokémon can evolve because of
+  # using the item on it.
+  # @param pkmn [Pokemon] the Pokémon trying to evolve
+  # @param item [Symbol, GameData::Item, nil] the item being used
+  def self.check(pkmn, item = nil)
+    if item
+      return self.check_ex(pkmn) { |pkmn, method, parameter, new_species|
+        success = PBEvolution.call("itemCheck", method, pkmn, parameter, item)
+        return (success) ? new_species : nil
+      }
+    end
+    return self.check_ex(pkmn) { |pkmn, method, parameter, new_species|
+      success = PBEvolution.call("levelUpCheck", method, pkmn, parameter)
+      next (success) ? new_species : nil
     }
-  else
-    return pbCheckEvolutionEx(pkmn) { |pkmn, method, parameter, new_species|
-      next pbMiniCheckEvolution(pkmn, method, parameter, new_species)
+  end
+
+  # Checks whether a Pokemon can evolve because of being traded.
+  # @param pkmn [Pokemon] the Pokémon trying to evolve
+  # @param other_pkmn [Pokemon] the other Pokémon involved in the trade
+  def self.check_trade_methods(pkmn, other_pkmn)
+    return self.check_ex(pkmn) { |pkmn, method, parameter, new_species|
+      success = PBEvolution.call("tradeCheck", method, pkmn, parameter, other_pkmn)
+      next (success) ? new_species : nil
     }
+  end
+
+  # Called after a Pokémon evolves, to remove its held item (if the evolution
+  # required it to have a held item) or duplicate the Pokémon (Shedinja only).
+  # @param pkmn [Pokemon] the Pokémon trying to evolve
+  # @param evolved_species [Pokemon] the species that the Pokémon evolved into
+  def self.check_after_evolution(pkmn, evolved_species)
+    pkmn.species_data.evolutions.each do |evo|   # [new_species, method, parameter, boolean]
+      next if evo[3]   # Prevolution
+      break if PBEvolution.call("afterEvolution", evo[1], pkmn, evo[0], evo[2], evolved_species)
+    end
   end
 end
 
@@ -705,7 +730,7 @@ PBEvolution.register(:ItemNight, {
 
 PBEvolution.register(:ItemHappiness, {
   "parameterType" => :Item,
-  "levelUpCheck"  => proc { |pkmn, parameter, item|
+  "itemCheck"     => proc { |pkmn, parameter, item|
     next item == parameter && pkmn.happiness >= 220
   }
 })
