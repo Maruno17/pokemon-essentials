@@ -1,63 +1,4 @@
 #===============================================================================
-#
-#===============================================================================
-class SpriteWindowCursorRect < Rect
-  def initialize(window)
-    @window=window
-    @x=0
-    @y=0
-    @width=0
-    @height=0
-  end
-
-  attr_reader :x,:y,:width,:height
-
-  def empty
-    needupdate=@x!=0 || @y!=0 || @width!=0 || @height!=0
-    if needupdate
-      @x=0
-      @y=0
-      @width=0
-      @height=0
-      @window.width=@window.width
-    end
-  end
-
-  def isEmpty?
-    return @x==0 && @y==0 && @width==0 && @height==0
-  end
-
-  def set(x,y,width,height)
-    needupdate=@x!=x || @y!=y || @width!=width || @height!=height
-    if needupdate
-      @x=x
-      @y=y
-      @width=width
-      @height=height
-      @window.width=@window.width
-    end
-  end
-
-  def height=(value)
-    @height=value; @window.width=@window.width
-  end
-
-  def width=(value)
-    @width=value; @window.width=@window.width
-  end
-
-  def x=(value)
-    @x=value; @window.width=@window.width
-  end
-
-  def y=(value)
-    @y=value; @window.width=@window.width
-  end
-end
-
-
-
-#===============================================================================
 # SpriteWindow is a class based on Window which emulates Window's functionality.
 # This class is necessary in order to change the viewport of windows (with
 # viewport=) and to make windows fade in and out (with tone=).
@@ -156,7 +97,7 @@ class SpriteWindow < Window
     @blend_type=0
     @contents_blend_type=0
     @contents_opacity=255
-    @cursor_rect=SpriteWindowCursorRect.new(self)
+    @cursor_rect=WindowCursorRect.new(self)
     @cursorblink=0
     @cursoropacity=255
     @pause=false
