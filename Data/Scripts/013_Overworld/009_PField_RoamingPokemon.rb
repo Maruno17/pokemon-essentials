@@ -27,9 +27,9 @@ end
 # Gets the roaming areas for a particular Pokémon.
 def pbRoamingAreas(idxRoamer)
   # [species ID, level, Game Switch, encounter type, battle BGM, area maps hash]
-  roamData = ROAMING_SPECIES[idxRoamer]
+  roamData = Settings::ROAMING_SPECIES[idxRoamer]
   return roamData[5] if roamData && roamData[5]
-  return ROAMING_AREAS
+  return Settings::ROAMING_AREAS
 end
 
 # Puts a roamer in a completely random map available to it.
@@ -45,14 +45,14 @@ def pbRoamPokemon
   # Start all roamers off in random maps
   if !$PokemonGlobal.roamPosition
     $PokemonGlobal.roamPosition = {}
-    for i in 0...ROAMING_SPECIES.length
+    for i in 0...Settings::ROAMING_SPECIES.length
       next if !GameData::Species.exists?(i[0])
       keys = pbRoamingAreas(i).keys
       $PokemonGlobal.roamPosition[i] = keys[rand(keys.length)]
     end
   end
   # Roam each Pokémon in turn
-  for i in 0...ROAMING_SPECIES.length
+  for i in 0...Settings::ROAMING_SPECIES.length
     pbRoamPokemonOne(i)
   end
 end
@@ -61,7 +61,7 @@ end
 # currently possible to encounter it (i.e. its Game Switch is off).
 def pbRoamPokemonOne(idxRoamer)
   # [species ID, level, Game Switch, encounter type, battle BGM, area maps hash]
-  roamData = ROAMING_SPECIES[idxRoamer]
+  roamData = Settings::ROAMING_SPECIES[idxRoamer]
   return if roamData[2]>0 && !$game_switches[roamData[2]]   # Game Switch is off
   return if !GameData::Species.exists?(roamData[0])
   # Get hash of area patrolled by the roaming Pokémon
@@ -151,7 +151,7 @@ EncounterModifier.register(proc { |encounter|
   currentRegion = pbGetCurrentRegion
   currentMapName = pbGetMessage(MessageTypes::MapNames, $game_map.map_id)
   possible_roamers = []
-  ROAMING_SPECIES.each_with_index do |data, i|
+  Settings::ROAMING_SPECIES.each_with_index do |data, i|
     # data = [species, level, Game Switch, roamer method, battle BGM, area maps hash]
     next if !GameData::Species.exists?(data[0])
     next if data[2] > 0 && !$game_switches[data[2]]   # Isn't roaming

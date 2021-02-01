@@ -572,10 +572,10 @@ class Interpreter
   # * Change Windowskin
   #-----------------------------------------------------------------------------
   def command_131
-    for i in 0...$SpeechFrames.length
-      next if $SpeechFrames[i] != @parameters[0]
+    for i in 0...Settings::SPEECH_WINDOWSKINS.length
+      next if Settings::SPEECH_WINDOWSKINS[i] != @parameters[0]
       $PokemonSystem.textskin = i
-      MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/" + $SpeechFrames[i])
+      MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[i])
       return true
     end
     return true

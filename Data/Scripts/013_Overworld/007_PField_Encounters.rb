@@ -216,7 +216,7 @@ class PokemonEncounters
     # with modifiers applied, divided by 180.
     encount = @step_chances[enc_type].to_f
     encount *= 0.8 if $PokemonGlobal.bicycle
-    if !FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
+    if !Settings::FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
       encount /= 2 if $PokemonMap.blackFluteUsed
       encount *= 1.5 if $PokemonMap.whiteFluteUsed
     end
@@ -253,7 +253,7 @@ class PokemonEncounters
     return false if !enc_data
     # Repel
     if !ignore_repel && $PokemonGlobal.repel > 0 && !pbPokeRadarOnShakingGrass
-      first_pkmn = (REPEL_COUNTS_FAINTED_POKEMON) ? $Trainer.first_pokemon : $Trainer.first_able_pokemon
+      first_pkmn = (Settings::REPEL_COUNTS_FAINTED_POKEMON) ? $Trainer.first_pokemon : $Trainer.first_able_pokemon
       return false if first_pkmn && enc_data[1] < first_pkmn.level
     end
     # Some abilities make wild encounters less likely if the wild Pokémon is
@@ -391,7 +391,7 @@ class PokemonEncounters
       break
     end
     # Get the chosen species and level
-    level = rand(encounter[2], encounter[3])
+    level = rand(encounter[2]..encounter[3])
     # Some abilities alter the level of the wild Pokémon
     if first_pkmn
       case first_pkmn.ability_id
@@ -400,11 +400,11 @@ class PokemonEncounters
       end
     end
     # Black Flute and White Flute alter the level of the wild Pokémon
-    if FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
+    if Settings::FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
       if $PokemonMap.blackFluteUsed
-        level = [level + rand(1, 4), PBExperience.maxLevel].min
+        level = [level + rand(1..4), PBExperience.maxLevel].min
       elsif $PokemonMap.whiteFluteUsed
-        level = [level - rand(1, 4), 1].max
+        level = [level - rand(1..4), 1].max
       end
     end
     # Return [species, level]
@@ -441,7 +441,7 @@ class PokemonEncounters
       break
     end
     # Return [species, level]
-    level = rand(encounter[2], encounter[3])
+    level = rand(encounter[2]..encounter[3])
     return [encounter[1], level]
   end
 end
@@ -477,9 +477,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
     end
   end
   # Give Pokérus
-  if rand(65536)<POKERUS_CHANCE
-    genwildpoke.givePokerus
-  end
+  genwildpoke.givePokerus if rand(65536) < Settings::POKERUS_CHANCE
   # Change wild Pokémon's gender/nature depending on the lead party Pokémon's
   # ability
   if first_pkmn

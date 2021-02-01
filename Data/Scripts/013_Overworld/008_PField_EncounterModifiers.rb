@@ -8,7 +8,7 @@
 # Make all wild Pokémon shiny while a certain Switch is ON (see Settings).
 Events.onWildPokemonCreate += proc { |_sender, e|
   pokemon = e[0]
-  if $game_switches[SHINY_WILD_POKEMON_SWITCH]
+  if $game_switches[Settings::SHINY_WILD_POKEMON_SWITCH]
     pokemon.shiny = true
   end
 }

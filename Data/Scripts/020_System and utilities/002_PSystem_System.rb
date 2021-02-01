@@ -10,7 +10,7 @@ end
 
 def pbChooseLanguage
   commands=[]
-  for lang in LANGUAGES
+  for lang in Settings::LANGUAGES
     commands.push(lang[0])
   end
   return pbShowCommands(nil,commands)
@@ -48,9 +48,9 @@ def pbSetUpSystem
   end
   # Load constants
   GameData.load_all
-  if LANGUAGES.length>=2
+  if Settings::LANGUAGES.length>=2
     pokemonSystem.language = pbChooseLanguage if !havedata
-    pbLoadMessages("Data/"+LANGUAGES[pokemonSystem.language][1])
+    pbLoadMessages("Data/"+Settings::LANGUAGES[pokemonSystem.language][1])
   end
 end
 

@@ -367,7 +367,7 @@ class Pokemon
       b = a & 0xFFFF
       c = (a >> 16) & 0xFFFF
       d = b ^ c
-      @shiny = d < SHINY_POKEMON_CHANCE
+      @shiny = d < Settings::SHINY_POKEMON_CHANCE
     end
     return @shiny
   end
@@ -734,7 +734,7 @@ class Pokemon
   # @param strain [Integer] Pokérus strain to give
   def givePokerus(strain = 0)
     return if self.pokerusStage == 2   # Can't re-infect a cured Pokémon
-    strain = rand(1, 16) if strain <= 0 || strain >= 16
+    strain = rand(1..16) if strain <= 0 || strain >= 16
     time = 1 + (strain % 4)
     @pokerus = time
     @pokerus |= strain << 4
@@ -1012,7 +1012,7 @@ class Pokemon
       @owner = Owner.new(0, '', 2, 2)
     end
     @obtain_method    = 0   # Met
-    @obtain_method    = 4 if $game_switches && $game_switches[FATEFUL_ENCOUNTER_SWITCH]
+    @obtain_method    = 4 if $game_switches && $game_switches[Settings::FATEFUL_ENCOUNTER_SWITCH]
     @obtain_map       = ($game_map) ? $game_map.map_id : 0
     @obtain_text      = nil
     @obtain_level     = level

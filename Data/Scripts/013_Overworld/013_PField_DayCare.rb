@@ -186,7 +186,7 @@ def pbDayCareGenerateEgg
     end
   end
   # Generate egg
-  egg = Pokemon.new(babyspecies,EGG_LEVEL)
+  egg = Pokemon.new(babyspecies, Settings::EGG_LEVEL)
   # Randomise personal ID
   pid = rand(65536)
   pid |= (rand(65536)<<16)
@@ -217,7 +217,7 @@ def pbDayCareGenerateEgg
   # Initial Moves
   initialmoves = egg.getMoveList
   for k in initialmoves
-    if k[0]<=EGG_LEVEL
+    if k[0] <= Settings::EGG_LEVEL
       moves.push(k[1])
     elsif mother.hasMove?(k[1]) && father.hasMove?(k[1])
       othermoves.push(k[1])
@@ -228,7 +228,7 @@ def pbDayCareGenerateEgg
     moves.push(move)
   end
   # Inheriting Machine Moves
-  if BREEDING_CAN_INHERIT_MACHINE_MOVES
+  if Settings::BREEDING_CAN_INHERIT_MACHINE_MOVES
     GameData::Item.each do |i|
       atk = i.move
       next if !atk
@@ -242,7 +242,7 @@ def pbDayCareGenerateEgg
   if movefather.male?
     babyEggMoves.each { |m| moves.push(m) if movefather.hasMove?(m) }
   end
-  if BREEDING_CAN_INHERIT_EGG_MOVES_FROM_MOTHER
+  if Settings::BREEDING_CAN_INHERIT_EGG_MOVES_FROM_MOTHER
     babyEggMoves.each { |m| moves.push(m) if movemother.hasMove?(m) }
   end
   # Volt Tackle
@@ -361,7 +361,7 @@ def pbDayCareGenerateEgg
   egg.obtain_text = _INTL("Day-Care Couple")
   egg.name = _INTL("Egg")
   egg.steps_to_hatch = egg.species_data.hatch_steps
-  egg.givePokerus if rand(65536)<POKERUS_CHANCE
+  egg.givePokerus if rand(65536) < Settings::POKERUS_CHANCE
   # Add egg to party
   $Trainer.party[$Trainer.party.length] = egg
 end

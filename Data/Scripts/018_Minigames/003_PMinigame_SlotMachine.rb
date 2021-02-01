@@ -93,8 +93,8 @@ class SlotMachineScore < BitmapSprite
   end
 
   def score=(value)
-    @score=value
-    @score=MAX_COINS if @score>MAX_COINS
+    @score = value
+    @score = Settings::MAX_COINS if @score > Settings::MAX_COINS
     refresh
   end
 
@@ -212,7 +212,7 @@ class SlotMachineScene
         update
         @sprites["payout"].score -= 1
         @sprites["credit"].score += 1
-        if Input.trigger?(Input::C) || @sprites["credit"].score==MAX_COINS
+        if Input.trigger?(Input::C) || @sprites["credit"].score == Settings::MAX_COINS
           @sprites["credit"].score += @sprites["payout"].score
           @sprites["payout"].score = 0
         end
@@ -286,8 +286,8 @@ class SlotMachineScene
       update
       @sprites["window1"].bitmap.clear if @sprites["window1"].bitmap
       @sprites["window2"].bitmap.clear if @sprites["window2"].bitmap
-      if @sprites["credit"].score==MAX_COINS
-        pbMessage(_INTL("You've got {1} Coins.",MAX_COINS.to_s_formatted))
+      if @sprites["credit"].score == Settings::MAX_COINS
+        pbMessage(_INTL("You've got {1} Coins.", Settings::MAX_COINS.to_s_formatted))
         break
       elsif $PokemonGlobal.coins==0
         pbMessage(_INTL("You've run out of Coins.\nGame over!"))
@@ -392,7 +392,7 @@ def pbSlotMachine(difficulty=1)
     pbMessage(_INTL("It's a Slot Machine."))
   elsif $PokemonGlobal.coins==0
     pbMessage(_INTL("You don't have any Coins to play!"))
-  elsif $PokemonGlobal.coins==MAX_COINS
+  elsif $PokemonGlobal.coins == Settings::MAX_COINS
     pbMessage(_INTL("Your Coin Case is full!"))
   else
     pbFadeOutIn {

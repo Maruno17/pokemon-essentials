@@ -41,25 +41,25 @@ module MessageConfig
 
   def self.pbDefaultSystemFrame
     begin
-      return pbResolveBitmap("Graphics/Windowskins/" + $TextFrames[$PokemonSystem.frame]) || ""
+      return pbResolveBitmap("Graphics/Windowskins/" + Settings::MENU_WINDOWSKINS[$PokemonSystem.frame]) || ""
     rescue
-      return pbResolveBitmap("Graphics/Windowskins/" + $TextFrames[0]) || ""
+      return pbResolveBitmap("Graphics/Windowskins/" + Settings::MENU_WINDOWSKINS[0]) || ""
     end
   end
 
   def self.pbDefaultSpeechFrame
     begin
-      return pbResolveBitmap("Graphics/Windowskins/" + $SpeechFrames[$PokemonSystem.textskin]) || ""
+      return pbResolveBitmap("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[$PokemonSystem.textskin]) || ""
     rescue
-      return pbResolveBitmap("Graphics/Windowskins/" + $SpeechFrames[0]) || ""
+      return pbResolveBitmap("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[0]) || ""
     end
   end
 
   def self.pbDefaultSystemFontName
     begin
-      return MessageConfig.pbTryFonts($VersionStyles[$PokemonSystem.font][0], "Arial Narrow", "Arial")
+      return MessageConfig.pbTryFonts(Settings::FONT_OPTIONS[$PokemonSystem.font], "Arial Narrow", "Arial")
     rescue
-      return MessageConfig.pbTryFonts($VersionStyles[0], "Arial Narrow", "Arial")
+      return MessageConfig.pbTryFonts(Settings::FONT_OPTIONS[0], "Arial Narrow", "Arial")
     end
   end
 
@@ -123,7 +123,7 @@ module MessageConfig
   end
 
   def self.pbSetSystemFontName(value)
-    @@systemFont=MessageConfig.pbTryFonts(value,"Arial Narrow","Arial")
+    @@systemFont=MessageConfig.pbTryFonts([value],"Arial Narrow","Arial")
   end
 
   def self.pbSetTextSpeed(value)

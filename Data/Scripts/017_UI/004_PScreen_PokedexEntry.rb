@@ -26,7 +26,7 @@ class PokemonPokedexInfo_Scene
     @sprites["areamap"].setBitmap("Graphics/Pictures/#{@mapdata[@region][1]}")
     @sprites["areamap"].x += (Graphics.width-@sprites["areamap"].bitmap.width)/2
     @sprites["areamap"].y += (Graphics.height+32-@sprites["areamap"].bitmap.height)/2
-    for hidden in REGION_MAP_EXTRAS
+    for hidden in Settings::REGION_MAP_EXTRAS
       if hidden[0]==@region && hidden[1]>0 && $game_switches[hidden[1]]
         pbDrawImagePositions(@sprites["areamap"].bitmap,[
            ["Graphics/Pictures/#{hidden[4]}",
@@ -73,7 +73,7 @@ class PokemonPokedexInfo_Scene
     dexnum = species
     dexnumshift = false
     if $PokemonGlobal.pokedexUnlocked[$PokemonGlobal.pokedexUnlocked.length - 1]
-      dexnumshift = true if DEXES_WITH_OFFSETS.include?(-1)   # National Dex
+      dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)   # National Dex
     else
       dexnum = 0
       for i in 0...$PokemonGlobal.pokedexUnlocked.length - 1   # Regional Dexes
@@ -81,7 +81,7 @@ class PokemonPokedexInfo_Scene
         num = pbGetRegionalNumber(i,species)
         next if num <= 0
         dexnum = num
-        dexnumshift = true if DEXES_WITH_OFFSETS.include?(i)
+        dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(i)
         break
       end
     end
@@ -153,12 +153,12 @@ class PokemonPokedexInfo_Scene
       case sp.gender_rate
       when PBGenderRates::AlwaysMale, PBGenderRates::AlwaysFemale, PBGenderRates::Genderless
         real_gender = (sp.gender_rate == PBGenderRates::AlwaysFemale) ? 1 : 0
-        next if !$Trainer.seen_forms[@species][real_gender][sp.form] && !DEX_SHOWS_ALL_FORMS
+        next if !$Trainer.seen_forms[@species][real_gender][sp.form] && !Settings::DEX_SHOWS_ALL_FORMS
         real_gender = 2 if sp.gender_rate == PBGenderRates::Genderless
         ret.push([sp.form_name, real_gender, sp.form])
       else   # Both male and female
         for real_gender in 0...2
-          next if !$Trainer.seen_forms[@species][real_gender][sp.form] && !DEX_SHOWS_ALL_FORMS
+          next if !$Trainer.seen_forms[@species][real_gender][sp.form] && !Settings::DEX_SHOWS_ALL_FORMS
           ret.push([sp.form_name, real_gender, sp.form])
           break if sp.form_name && !sp.form_name.empty?   # Only show 1 entry for each non-0 form
         end
@@ -554,14 +554,14 @@ class PokemonPokedexInfoScreen
 
   def pbStartSceneSingle(species)   # For use from a Pokémon's summary screen
     region = -1
-    if USE_CURRENT_REGION_DEX
+    if Settings::USE_CURRENT_REGION_DEX
       region = pbGetCurrentRegion
       region = -1 if region>=$PokemonGlobal.pokedexUnlocked.length-1
     else
       region = $PokemonGlobal.pokedexDex # National Dex -1, regional dexes 0 etc.
     end
     dexnum = pbGetRegionalNumber(region,species)
-    dexnumshift = DEXES_WITH_OFFSETS.include?(region)
+    dexnumshift = Settings::DEXES_WITH_OFFSETS.include?(region)
     dexlist = [[species,GameData::Species.get(species).name,0,0,dexnum,dexnumshift]]
     @scene.pbStartScene(dexlist,0,region)
     @scene.pbScene

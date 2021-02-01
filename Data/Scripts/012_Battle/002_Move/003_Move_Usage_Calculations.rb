@@ -161,7 +161,7 @@ class PokeBattle_Move
   def pbIsCritical?(user,target)
     return false if target.pbOwnSide.effects[PBEffects::LuckyChant]>0
     # Set up the critical hit ratios
-    ratios = (NEW_CRITICAL_HIT_RATE_MECHANICS) ? [24,8,2,1] : [16,8,4,3,2]
+    ratios = (Settings::NEW_CRITICAL_HIT_RATE_MECHANICS) ? [24,8,2,1] : [16,8,4,3,2]
     c = 0
     # Ability effects that alter critical hit rate
     if c>=0 && user.abilityActive?
@@ -357,16 +357,16 @@ class PokeBattle_Move
     # Badge multipliers
     if @battle.internalBattle
       if user.pbOwnedByPlayer?
-        if physicalMove? && @battle.pbPlayer.badge_count >= NUM_BADGES_BOOST_ATTACK
+        if physicalMove? && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_ATTACK
           multipliers[:attack_multiplier] *= 1.1
-        elsif specialMove? && @battle.pbPlayer.badge_count >= NUM_BADGES_BOOST_SPATK
+        elsif specialMove? && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPATK
           multipliers[:attack_multiplier] *= 1.1
         end
       end
       if target.pbOwnedByPlayer?
-        if physicalMove? && @battle.pbPlayer.badge_count >= NUM_BADGES_BOOST_DEFENSE
+        if physicalMove? && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_DEFENSE
           multipliers[:defense_multiplier] *= 1.1
-        elsif specialMove? && @battle.pbPlayer.badge_count >= NUM_BADGES_BOOST_SPDEF
+        elsif specialMove? && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPDEF
           multipliers[:defense_multiplier] *= 1.1
         end
       end
@@ -396,7 +396,7 @@ class PokeBattle_Move
     end
     # Critical hits
     if target.damageState.critical
-      if NEW_CRITICAL_HIT_RATE_MECHANICS
+      if Settings::NEW_CRITICAL_HIT_RATE_MECHANICS
         multipliers[:final_damage_multiplier] *= 1.5
       else
         multipliers[:final_damage_multiplier] *= 2
@@ -461,7 +461,7 @@ class PokeBattle_Move
   def pbAdditionalEffectChance(user,target,effectChance=0)
     return 0 if target.hasActiveAbility?(:SHIELDDUST) && !@battle.moldBreaker
     ret = (effectChance>0) ? effectChance : @addlEffect
-    if MECHANICS_GENERATION >= 6 || @function != "0A4"   # Secret Power
+    if Settings::MECHANICS_GENERATION >= 6 || @function != "0A4"   # Secret Power
       ret *= 2 if user.hasActiveAbility?(:SERENEGRACE) ||
                   user.pbOwnSide.effects[PBEffects::Rainbow]>0
     end

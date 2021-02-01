@@ -72,7 +72,7 @@ class PokeBattle_Battler
         next if b.status!=PBStatuses::FROZEN
         # NOTE: Non-Fire-type moves that thaw the user will also thaw the
         #       target (in Gen 6+).
-        if move.calcType == :FIRE || (MECHANICS_GENERATION >= 6 && move.thawsUser?)
+        if move.calcType == :FIRE || (Settings::MECHANICS_GENERATION >= 6 && move.thawsUser?)
           b.pbCureStatus
         end
       end

@@ -558,8 +558,8 @@ class PokemonMartScreen
         end
         quantity=1
       else
-        maxafford=(price<=0) ? BAG_MAX_PER_SLOT : @adapter.getMoney/price
-        maxafford=BAG_MAX_PER_SLOT if maxafford>BAG_MAX_PER_SLOT
+        maxafford = (price <= 0) ? Settings::BAG_MAX_PER_SLOT : @adapter.getMoney / price
+        maxafford = Settings::BAG_MAX_PER_SLOT if maxafford > Settings::BAG_MAX_PER_SLOT
         quantity=@scene.pbChooseNumber(
            _INTL("{1}? Certainly. How many would you like?",itemname),item,maxafford)
         next if quantity==0

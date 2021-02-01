@@ -79,7 +79,7 @@ module PBDayNight
 # tone for the current time of day.
   def self.getTone
     @cachedTone = Tone.new(0,0,0) if !@cachedTone
-    return @cachedTone if !TIME_SHADING
+    return @cachedTone if !Settings::TIME_SHADING
     if !@dayNightToneLastUpdate ||
        Graphics.frame_count-@dayNightToneLastUpdate>=Graphics.frame_rate*30
       getToneInternal
@@ -117,7 +117,7 @@ end
 
 def pbDayNightTint(object)
   return if !$scene.is_a?(Scene_Map)
-  if TIME_SHADING && GameData::MapMetadata.exists?($game_map.map_id) &&
+  if Settings::TIME_SHADING && GameData::MapMetadata.exists?($game_map.map_id) &&
      GameData::MapMetadata.get($game_map.map_id).outdoor_map
     tone = PBDayNight.getTone
     object.tone.set(tone.red,tone.green,tone.blue,tone.gray)

@@ -105,15 +105,15 @@ class PokeBattle_Battle
     a = level*defeatedBattler.pokemon.base_exp
     if expShare.length>0 && (isPartic || hasExpShare)
       if numPartic==0   # No participants, all Exp goes to Exp Share holders
-        exp = a/(SPLIT_EXP_BETWEEN_GAINERS ? expShare.length : 1)
-      elsif SPLIT_EXP_BETWEEN_GAINERS   # Gain from participating and/or Exp Share
+        exp = a / (Settings::SPLIT_EXP_BETWEEN_GAINERS ? expShare.length : 1)
+      elsif Settings::SPLIT_EXP_BETWEEN_GAINERS   # Gain from participating and/or Exp Share
         exp = a/(2*numPartic) if isPartic
         exp += a/(2*expShare.length) if hasExpShare
       else   # Gain from participating and/or Exp Share (Exp not split)
         exp = (isPartic) ? a : a/2
       end
     elsif isPartic   # Participated in battle, no Exp Shares held by anyone
-      exp = a/(SPLIT_EXP_BETWEEN_GAINERS ? numPartic : 1)
+      exp = a / (Settings::SPLIT_EXP_BETWEEN_GAINERS ? numPartic : 1)
     elsif expAll   # Didn't participate in battle, gaining Exp due to Exp All
       # NOTE: Exp All works like the Exp Share from Gen 6+, not like the Exp All
       #       from Gen 1, i.e. Exp isn't split between all Pokémon gaining it.
@@ -123,7 +123,7 @@ class PokeBattle_Battle
     # Pokémon gain more Exp from trainer battles
     exp = (exp*1.5).floor if trainerBattle?
     # Scale the gained Exp based on the gainer's level (or not)
-    if SCALED_EXP_FORMULA
+    if Settings::SCALED_EXP_FORMULA
       exp /= 5
       levelAdjust = (2*level+10.0)/(pkmn.level+level+10.0)
       levelAdjust = levelAdjust**5

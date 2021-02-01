@@ -76,11 +76,11 @@ def pbPokeRadarHighlightGrass(showmessage=true)
       if PBTerrain.isJustGrass?($game_map.terrain_tag(x,y))
         # Choose a rarity for the grass (0=normal, 1=rare, 2=shiny)
         s = (rand(100) < 25) ? 1 : 0
-        if $PokemonTemp.pokeradar && $PokemonTemp.pokeradar[2]>0
-          v = [(65536/SHINY_POKEMON_CHANCE)-$PokemonTemp.pokeradar[2]*200,200].max
-          v = 0xFFFF/v
-          v = rand(65536)/v
-          s = 2 if v==0
+        if $PokemonTemp.pokeradar && $PokemonTemp.pokeradar[2] > 0
+          v = [(65536 / Settings::SHINY_POKEMON_CHANCE) - $PokemonTemp.pokeradar[2] * 200, 200].max
+          v = 0xFFFF / v
+          v = rand(65536) / v
+          s = 2 if v == 0
         end
         grasses.push([x,y,i,s])
       end
@@ -95,11 +95,11 @@ def pbPokeRadarHighlightGrass(showmessage=true)
     for grass in grasses
       case grass[3]
       when 0   # Normal rustle
-        $scene.spriteset.addUserAnimation(RUSTLE_NORMAL_ANIMATION_ID,grass[0],grass[1],true,1)
+        $scene.spriteset.addUserAnimation(Settings::RUSTLE_NORMAL_ANIMATION_ID,grass[0],grass[1],true,1)
       when 1   # Vigorous rustle
-        $scene.spriteset.addUserAnimation(RUSTLE_VIGOROUS_ANIMATION_ID,grass[0],grass[1],true,1)
+        $scene.spriteset.addUserAnimation(Settings::RUSTLE_VIGOROUS_ANIMATION_ID,grass[0],grass[1],true,1)
       when 2   # Shiny rustle
-        $scene.spriteset.addUserAnimation(RUSTLE_SHINY_ANIMATION_ID,grass[0],grass[1],true,1)
+        $scene.spriteset.addUserAnimation(Settings::RUSTLE_SHINY_ANIMATION_ID,grass[0],grass[1],true,1)
       end
     end
     $PokemonTemp.pokeradar[3] = grasses if $PokemonTemp.pokeradar
@@ -127,7 +127,7 @@ def pbPokeRadarGetEncounter(rarity = 0)
     # Get all Poké Radar-exclusive encounters for this map
     map = $game_map.map_id
     array = []
-    POKE_RADAR_ENCOUNTERS.each do |enc|
+    Settings::POKE_RADAR_ENCOUNTERS.each do |enc|
       array.push(enc) if enc[0] == map && GameData::Species.exists?(enc[2])
     end
     # If there are any exclusives, first have a chance of encountering those
@@ -137,7 +137,7 @@ def pbPokeRadarGetEncounter(rarity = 0)
       array.each do |enc|
         rnd -= enc[1]
         next if rnd >= 0
-        level = (enc[4] && enc[4] > enc[3]) ? rand(enc[3], enc[4]) : enc[3]
+        level = (enc[4] && enc[4] > enc[3]) ? rand(enc[3]..enc[4]) : enc[3]
         return [enc[2], level]
       end
     end

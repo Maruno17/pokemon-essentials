@@ -77,7 +77,7 @@ class Trainer
   end
 
   def party_full?
-    return party_count >= MAX_PARTY_SIZE
+    return party_count >= Settings::MAX_PARTY_SIZE
   end
 
   # Returns true if there are no usable Pokémon in the player's party.
@@ -211,7 +211,7 @@ class PlayerTrainer < Trainer
   end
 
   def money=(value)
-    @money = value.clamp(0, MAX_MONEY)
+    @money = value.clamp(0, Settings::MAX_MONEY)
   end
 
   def badge_count
@@ -301,7 +301,7 @@ class PlayerTrainer < Trainer
     @character_ID          = nil
     @outfit                = 0
     @badges                = [false] * 8
-    @money                 = INITIAL_MONEY
+    @money                 = Settings::INITIAL_MONEY
     clear_pokedex
     @pokegear              = false
     @pokedex               = false

@@ -64,7 +64,7 @@ class PokeBattle_Battle
       end
     end
     # Other certain switching effects
-    return true if MORE_TYPE_EFFECTS && battler.pbHasType?(:GHOST)
+    return true if Settings::MORE_TYPE_EFFECTS && battler.pbHasType?(:GHOST)
     # Other certain trapping effects
     if battler.effects[PBEffects::Trapping]>0 ||
        battler.effects[PBEffects::MeanLook]>=0 ||
@@ -286,7 +286,7 @@ class PokeBattle_Battle
     partyOrder[idxParty],partyOrder[idxPartyOld] = partyOrder[idxPartyOld],partyOrder[idxParty]
     # Send out the new Pokémon
     pbSendOut([[idxBattler,party[idxParty]]])
-    pbCalculatePriority(false,[idxBattler]) if RECALCULATE_TURN_ORDER_AFTER_SPEED_CHANGES
+    pbCalculatePriority(false,[idxBattler]) if Settings::RECALCULATE_TURN_ORDER_AFTER_SPEED_CHANGES
   end
 
   # Called from def pbReplace above and at the start of battle.

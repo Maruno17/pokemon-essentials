@@ -918,7 +918,7 @@ PokemonDebugMenuCommands.register("ownership", {
       when 0   # Make player's
         pkmn.owner = Pokemon::Owner.new_from_trainer($Trainer)
       when 1   # Set OT's name
-        pkmn.owner.name = pbEnterPlayerName(_INTL("{1}'s OT's name?", pkmn.name), 1, MAX_PLAYER_NAME_SIZE)
+        pkmn.owner.name = pbEnterPlayerName(_INTL("{1}'s OT's name?", pkmn.name), 1, Settings::MAX_PLAYER_NAME_SIZE)
       when 2   # Set OT's gender
         cmd2 = screen.pbShowCommands(_INTL("Set OT's gender."),
            [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], pkmn.owner.gender)
@@ -958,7 +958,7 @@ PokemonDebugMenuCommands.register("setegg", {
       when 0   # Make egg
         if !pkmn.egg? && (pbHasEgg?(pkmn.species) ||
            screen.pbConfirm(_INTL("{1} cannot legally be an egg. Make egg anyway?", pkmn.speciesName)))
-          pkmn.level          = EGG_LEVEL
+          pkmn.level          = Settings::EGG_LEVEL
           pkmn.calcStats
           pkmn.name           = _INTL("Egg")
           pkmn.steps_to_hatch = pkmn.species_data.hatch_steps

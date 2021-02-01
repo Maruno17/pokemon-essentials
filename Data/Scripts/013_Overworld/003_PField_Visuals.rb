@@ -640,7 +640,7 @@ def pbStartOver(gameover=false)
     end
     pbCancelVehicles
     pbRemoveDependencies
-    $game_switches[STARTING_OVER_SWITCH] = true
+    $game_switches[Settings::STARTING_OVER_SWITCH] = true
     $game_temp.player_new_map_id    = $PokemonGlobal.pokecenterMapId
     $game_temp.player_new_x         = $PokemonGlobal.pokecenterX
     $game_temp.player_new_y         = $PokemonGlobal.pokecenterY
@@ -664,7 +664,7 @@ def pbStartOver(gameover=false)
     if homedata
       pbCancelVehicles
       pbRemoveDependencies
-      $game_switches[STARTING_OVER_SWITCH] = true
+      $game_switches[Settings::STARTING_OVER_SWITCH] = true
       $game_temp.player_new_map_id    = homedata[0]
       $game_temp.player_new_x         = homedata[1]
       $game_temp.player_new_y         = homedata[2]

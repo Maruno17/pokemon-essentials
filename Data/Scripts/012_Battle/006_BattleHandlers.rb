@@ -480,12 +480,12 @@ end
 
 def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
   return false if !forced && !battler.canHeal?
-  return false if !forced && !battler.canConsumePinchBerry?(MECHANICS_GENERATION >= 7)
+  return false if !forced && !battler.canConsumePinchBerry?(Settings::MECHANICS_GENERATION >= 7)
   itemName = GameData::Item.get(item).name
   battle.pbCommonAnimation("EatBerry",battler) if !forced
   fraction_to_heal = 8   # Gens 6 and lower
-  if MECHANICS_GENERATION == 7;    fraction_to_heal = 2
-  elsif MECHANICS_GENERATION >= 8; fraction_to_heal = 3
+  if Settings::MECHANICS_GENERATION == 7;    fraction_to_heal = 2
+  elsif Settings::MECHANICS_GENERATION >= 8; fraction_to_heal = 3
   end
   amt = battler.pbRecoverHP(battler.totalhp / fraction_to_heal)
   if amt>0
@@ -572,7 +572,7 @@ def pbBattleGem(user,type,move,mults,moveType)
   return if move.is_a?(PokeBattle_PledgeMove)
   return if moveType != type
   user.effects[PBEffects::GemConsumed] = user.item_id
-  if MECHANICS_GENERATION >= 6
+  if Settings::MECHANICS_GENERATION >= 6
     mults[:base_damage_multiplier] *= 1.3
   else
     mults[:base_damage_multiplier] *= 1.5
@@ -598,7 +598,7 @@ def pbBattleWeatherAbility(weather,battler,battle,ignorePrimal=false)
     battle.pbDisplay(_INTL("{1}'s {2} activated!",battler.pbThis,battler.abilityName))
   end
   fixedDuration = false
-  fixedDuration = true if FIXED_DURATION_WEATHER_FROM_ABILITY &&
+  fixedDuration = true if Settings::FIXED_DURATION_WEATHER_FROM_ABILITY &&
                           weather != PBWeather::HarshSun &&
                           weather != PBWeather::HeavyRain &&
                           weather != PBWeather::StrongWinds

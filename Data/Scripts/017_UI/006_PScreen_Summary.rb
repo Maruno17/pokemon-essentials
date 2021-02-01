@@ -391,7 +391,7 @@ class PokemonSummary_Scene
     dexnum = @pokemon.species
     dexnumshift = false
     if $PokemonGlobal.pokedexUnlocked[$PokemonGlobal.pokedexUnlocked.length-1]
-      dexnumshift = true if DEXES_WITH_OFFSETS.include?(-1)
+      dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
     else
       dexnum = 0
       for i in 0...$PokemonGlobal.pokedexUnlocked.length-1
@@ -399,7 +399,7 @@ class PokemonSummary_Scene
         num = pbGetRegionalNumber(i,@pokemon.species)
         next if num<=0
         dexnum = num
-        dexnumshift = true if DEXES_WITH_OFFSETS.include?(i)
+        dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(i)
         break
       end
     end

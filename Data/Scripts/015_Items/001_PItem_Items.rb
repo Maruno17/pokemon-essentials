@@ -432,7 +432,7 @@ def pbLearnMove(pkmn,move,ignoreifknown=false,bymachine=false,&block)
       oldmovename = pkmn.moves[forgetmove].name
       oldmovepp   = pkmn.moves[forgetmove].pp
       pkmn.moves[forgetmove] = Pokemon::Move.new(move)   # Replaces current/total PP
-      if bymachine && TAUGHT_MACHINES_KEEP_OLD_PP
+      if bymachine && Settings::TAUGHT_MACHINES_KEEP_OLD_PP
         pkmn.moves[forgetmove].pp = [oldmovepp,pkmn.moves[forgetmove].total_pp].min
       end
       pbMessage(_INTL("1,\\wt[16] 2, and\\wt[16]...\\wt[16] ...\\wt[16] ... Ta-da!\\se[Battle ball drop]\1"),&block)

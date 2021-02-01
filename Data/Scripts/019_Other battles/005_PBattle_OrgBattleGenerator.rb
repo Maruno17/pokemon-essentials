@@ -1000,7 +1000,7 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
         end
       end
       numbers|=[]
-      if numbers.length < MAX_PARTY_SIZE ||
+      if numbers.length < Settings::MAX_PARTY_SIZE ||
          !rulesetTeam.hasValidTeam?(numbersPokemon)
         for index in 0...pokemonlist.length
           pkmn=pokemonlist[index]
@@ -1018,11 +1018,11 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
               end
             }
           end
-          break if numbers.length >= MAX_PARTY_SIZE && rules.ruleset.hasValidTeam?(numbersPokemon)
+          break if numbers.length >= Settings::MAX_PARTY_SIZE && rules.ruleset.hasValidTeam?(numbersPokemon)
         end
-        if numbers.length < MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon)
+        if numbers.length < Settings::MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon)
           while numbers.length<pokemonlist.length &&
-             (numbers.length < MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon))
+             (numbers.length < Settings::MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon))
             index=rand(pokemonlist.length)
             if !numbers.include?(index)
               numbers.push(index)

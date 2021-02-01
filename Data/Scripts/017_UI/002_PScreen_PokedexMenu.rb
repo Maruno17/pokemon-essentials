@@ -1,8 +1,8 @@
 #===============================================================================
 # Pokédex Regional Dexes list menu screen
 # * For choosing which region list to view. Only appears when there is more
-#   than one viable region list to choose from, and if USE_CURRENT_REGION_DEX is
-#   false.
+#   than one viable region list to choose from, and if
+#   Settings::USE_CURRENT_REGION_DEX is false.
 #===============================================================================
 class Window_DexesList < Window_CommandPokemon
   def initialize(commands,commands2,width)
@@ -93,7 +93,7 @@ class PokemonPokedexMenuScreen
   def pbStartScreen
     commands  = []
     commands2 = []
-    dexnames = pbDexNames
+    dexnames = Settings.pokedex_names
     for i in 0...$PokemonGlobal.pokedexViable.length
       index = $PokemonGlobal.pokedexViable[i]
       if dexnames[index]==nil

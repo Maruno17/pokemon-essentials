@@ -255,11 +255,11 @@ class PokeBattle_Battler
     speedMult /= 2 if pbOwnSide.effects[PBEffects::Swamp]>0
     # Paralysis
     if status==PBStatuses::PARALYSIS && !hasActiveAbility?(:QUICKFEET)
-      speedMult /= (MECHANICS_GENERATION >= 7) ? 2 : 4
+      speedMult /= (Settings::MECHANICS_GENERATION >= 7) ? 2 : 4
     end
     # Badge multiplier
     if @battle.internalBattle && pbOwnedByPlayer? &&
-       @battle.pbPlayer.badge_count >= NUM_BADGES_BOOST_SPEED
+       @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPEED
       speedMult *= 1.1
     end
     # Calculation
@@ -524,11 +524,11 @@ class PokeBattle_Battler
 
   def affectedByPowder?(showMsg=false)
     return false if fainted?
-    if pbHasType?(:GRASS) && MORE_TYPE_EFFECTS
+    if pbHasType?(:GRASS) && Settings::MORE_TYPE_EFFECTS
       @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis)) if showMsg
       return false
     end
-    if MECHANICS_GENERATION >= 6
+    if Settings::MECHANICS_GENERATION >= 6
       if hasActiveAbility?(:OVERCOAT) && !@battle.moldBreaker
         if showMsg
           @battle.pbShowAbilitySplash(self)

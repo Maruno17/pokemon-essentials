@@ -13,7 +13,7 @@ class BugContestState
      _INTL("Picnicker Cindy"),
      _INTL("Youngster Samuel")
   ]
-  TimerSeconds = BUG_CONTEST_TIME
+  TimerSeconds = Settings::BUG_CONTEST_TIME
 
   def initialize
     clear
@@ -115,7 +115,7 @@ class BugContestState
         raise _INTL("No encounters for map {1}, so can't judge contest",@contestMap)
       end
       pokemon=Pokemon.new(enc[0],enc[1])
-      pokemon.hp = rand(1, pokemon.totalhp - 1)
+      pokemon.hp = rand(1..pokemon.totalhp - 1)
       score=pbBugContestScore(pokemon)
       judgearray.push([cont,pokemon.species,score])
     end

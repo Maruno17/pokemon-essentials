@@ -161,7 +161,7 @@ def pbPrepareBattle(battle)
   if GameData::MapMetadata.exists?($game_map.map_id) &&
      GameData::MapMetadata.get($game_map.map_id).battle_environment == PBEnvironment::Cave
     battle.time = 2   # This makes Dusk Balls work properly in caves
-  elsif TIME_SHADING
+  elsif Settings::TIME_SHADING
     timeNow = pbGetTimeNow
     if PBDayNight.isNight?(timeNow);      battle.time = 2
     elsif PBDayNight.isEvening?(timeNow); battle.time = 1
@@ -487,7 +487,7 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
     # If there is exactly 1 other triggered trainer event, and this trainer has
     # 6 or fewer Pokémon, record this trainer for a double battle caused by the
     # other triggered trainer event
-    if otherEvent.length == 1 && trainer.party.length <= MAX_PARTY_SIZE
+    if otherEvent.length == 1 && trainer.party.length <= Settings::MAX_PARTY_SIZE
       trainer.lose_text = endSpeech if endSpeech && !endSpeech.empty?
       $PokemonTemp.waitingTrainer = [trainer, thisEvent.id]
       return false
@@ -579,7 +579,7 @@ end
 Events.onEndBattle += proc { |_sender,e|
   decision = e[0]
   canLose  = e[1]
-  if CHECK_EVOLUTION_AFTER_ALL_BATTLES || (decision!=2 && decision!=5)   # not a loss or a draw
+  if Settings::CHECK_EVOLUTION_AFTER_ALL_BATTLES || (decision!=2 && decision!=5)   # not a loss or a draw
     if $PokemonTemp.evolutionLevels
       pbEvolutionCheck($PokemonTemp.evolutionLevels)
       $PokemonTemp.evolutionLevels = nil
@@ -603,7 +603,7 @@ Events.onEndBattle += proc { |_sender,e|
 def pbEvolutionCheck(currentLevels)
   for i in 0...currentLevels.length
     pkmn = $Trainer.party[i]
-    next if !pkmn || (pkmn.hp==0 && !CHECK_EVOLUTION_FOR_FAINTED_POKEMON)
+    next if !pkmn || (pkmn.hp==0 && !Settings::CHECK_EVOLUTION_FOR_FAINTED_POKEMON)
     next if currentLevels[i] && pkmn.level==currentLevels[i]
     newSpecies = pbCheckEvolution(pkmn)
     next if !newSpecies

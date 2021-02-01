@@ -101,7 +101,7 @@ module GameData
     def to_trainer
       # Determine trainer's name
       tr_name = self.name
-      RIVAL_NAMES.each do |rival|
+      Settings::RIVAL_NAMES.each do |rival|
         next if rival[0] != @trainer_type || !$game_variables[rival[1]].is_a?(String)
         tr_name = $game_variables[rival[1]]
         break

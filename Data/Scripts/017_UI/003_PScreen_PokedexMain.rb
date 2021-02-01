@@ -282,7 +282,7 @@ class PokemonPokedex_Scene
   # return value of pbGetCurrentRegion, and thus will change according to the
   # current map's MapPosition metadata setting.
   def pbGetPokedexRegion
-    if USE_CURRENT_REGION_DEX
+    if Settings::USE_CURRENT_REGION_DEX
       region = pbGetCurrentRegion
       region = -1 if region>=$PokemonGlobal.pokedexUnlocked.length-1
       return region
@@ -320,7 +320,7 @@ class PokemonPokedex_Scene
       regionalSpecies = []
       GameData::Species.each { |s| regionalSpecies.push(s.id) if s.form == 0 }
     end
-    shift = DEXES_WITH_OFFSETS.include?(region)
+    shift = Settings::DEXES_WITH_OFFSETS.include?(region)
     ret = []
     regionalSpecies.each_with_index do |species, i|
       next if !species
@@ -386,7 +386,7 @@ class PokemonPokedex_Scene
     # Write various bits of text
     dexname = _INTL("Pokédex")
     if $PokemonGlobal.pokedexUnlocked.length>1
-      thisdex = pbDexNames[pbGetSavePositionIndex]
+      thisdex = Settings.pokedex_names[pbGetSavePositionIndex]
       if thisdex!=nil
         dexname = (thisdex.is_a?(Array)) ? thisdex[0] : thisdex
       end
@@ -792,8 +792,8 @@ class PokemonPokedex_Scene
   def pbDexEntry(index)
     oldsprites = pbFadeOutAndHide(@sprites)
     region = -1
-    if !USE_CURRENT_REGION_DEX
-      dexnames = pbDexNames
+    if !Settings::USE_CURRENT_REGION_DEX
+      dexnames = Settings.pokedex_names
       if dexnames[pbGetSavePositionIndex].is_a?(Array)
         region = dexnames[pbGetSavePositionIndex][1]
       end

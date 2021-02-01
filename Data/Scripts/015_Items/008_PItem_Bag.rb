@@ -5,7 +5,7 @@ class PokemonBag
   attr_accessor :lastpocket
 
   def self.pocketNames
-    return pbPocketNames
+    return Settings.bag_pocket_names
   end
 
   def self.numPockets
@@ -52,7 +52,7 @@ class PokemonBag
   end
 
   def maxPocketSize(pocket)
-    maxsize = BAG_MAX_POCKET_SIZE[pocket]
+    maxsize = Settings::BAG_MAX_POCKET_SIZE[pocket]
     return -1 if !maxsize
     return maxsize
   end
@@ -103,7 +103,7 @@ class PokemonBag
     maxsize = maxPocketSize(pocket)
     maxsize = @pockets[pocket].length + 1 if maxsize < 0
     return ItemStorageHelper.pbCanStore?(
-       @pockets[pocket], maxsize, BAG_MAX_PER_SLOT, item.id, qty)
+       @pockets[pocket], maxsize, Settings::BAG_MAX_PER_SLOT, item.id, qty)
   end
 
   def pbStoreItem(item, qty = 1)
@@ -112,7 +112,7 @@ class PokemonBag
     maxsize = maxPocketSize(pocket)
     maxsize = @pockets[pocket].length + 1 if maxsize < 0
     return ItemStorageHelper.pbStoreItem(
-       @pockets[pocket], maxsize, BAG_MAX_PER_SLOT, item.id, qty, true)
+       @pockets[pocket], maxsize, Settings::BAG_MAX_PER_SLOT, item.id, qty, true)
   end
 
   def pbStoreAllOrNone(item, qty = 1)
@@ -307,7 +307,7 @@ module ItemStorageHelper
       if !itemslot
         items[i] = [item, [qty, maxPerSlot].min]
         qty -= items[i][1]
-        if itemPocket > 0 && sorting && BAG_POCKET_AUTO_SORT[itemPocket]
+        if itemPocket > 0 && sorting && Settings::BAG_POCKET_AUTO_SORT[itemPocket]
           items.sort! { |a, b| GameData::Item.get(a[0]).id_number <=> GameData::Item.get(b[0]).id_number }
         end
         return true if qty == 0

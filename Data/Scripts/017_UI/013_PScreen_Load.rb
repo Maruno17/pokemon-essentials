@@ -323,7 +323,7 @@ class PokemonLoadScreen
       commands[cmdNewGame = commands.length]     = _INTL("New Game")
     end
     commands[cmdOption = commands.length]        = _INTL("Options")
-    commands[cmdLanguage = commands.length]      = _INTL("Language") if LANGUAGES.length>=2
+    commands[cmdLanguage = commands.length]      = _INTL("Language") if Settings::LANGUAGES.length>=2
     commands[cmdDebug = commands.length]         = _INTL("Debug") if $DEBUG
     commands[cmdQuit = commands.length]          = _INTL("Quit Game")
     @scene.pbStartScene(commands,showContinue,trainer,framecount,mapid)
@@ -452,7 +452,7 @@ class PokemonLoadScreen
         pbPlayDecisionSE
         @scene.pbEndScene
         $PokemonSystem.language = pbChooseLanguage
-        pbLoadMessages("Data/"+LANGUAGES[$PokemonSystem.language][1])
+        pbLoadMessages("Data/"+Settings::LANGUAGES[$PokemonSystem.language][1])
         savedata = []
         if safeExists?(savefile)
           File.open(savefile,"rb") { |f|

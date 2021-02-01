@@ -746,7 +746,7 @@ BattleHandlers::DamageCalcUserItem.copy(:SOFTSAND,:EARTHPLATE)
 BattleHandlers::DamageCalcUserItem.add(:SOULDEW,
   proc { |item,user,target,move,mults,baseDmg,type|
     next if !user.isSpecies?(:LATIAS) && !user.isSpecies?(:LATIOS)
-    if SOUL_DEW_POWERS_UP_TYPES
+    if Settings::SOUL_DEW_POWERS_UP_TYPES
       mults[:final_damage_multiplier] *= 1.2 if type == :PSYCHIC || type == :DRAGON
     else
       if move.specialMove? && !user.battle.rules["souldewclause"]
@@ -932,7 +932,7 @@ BattleHandlers::DamageCalcTargetItem.add(:SHUCABERRY,
 
 BattleHandlers::DamageCalcTargetItem.add(:SOULDEW,
   proc { |item,user,target,move,mults,baseDmg,type|
-    next if SOUL_DEW_POWERS_UP_TYPES
+    next if Settings::SOUL_DEW_POWERS_UP_TYPES
     next if !target.isSpecies?(:LATIAS) && !target.isSpecies?(:LATIOS)
     if move.specialMove? && !user.battle.rules["souldewclause"]
       mults[:defense_multiplier] *= 1.5

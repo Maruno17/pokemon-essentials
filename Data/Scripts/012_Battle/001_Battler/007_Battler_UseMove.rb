@@ -61,7 +61,7 @@ class PokeBattle_Battler
     }
     @battle.pbJudge
     # Update priority order
-    @battle.pbCalculatePriority if RECALCULATE_TURN_ORDER_AFTER_SPEED_CHANGES
+    @battle.pbCalculatePriority if Settings::RECALCULATE_TURN_ORDER_AFTER_SPEED_CHANGES
     return true
   end
 

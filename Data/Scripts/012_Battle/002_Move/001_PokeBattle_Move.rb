@@ -71,7 +71,7 @@ class PokeBattle_Move
   # NOTE: This method is only ever called while using a move (and also by the
   #       AI), so using @calcType here is acceptable.
   def physicalMove?(thisType=nil)
-    return (@category==0) if MOVE_CATEGORY_PER_MOVE
+    return (@category==0) if Settings::MOVE_CATEGORY_PER_MOVE
     thisType ||= @calcType
     thisType ||= @type
     return true if !thisType
@@ -81,7 +81,7 @@ class PokeBattle_Move
   # NOTE: This method is only ever called while using a move (and also by the
   #       AI), so using @calcType here is acceptable.
   def specialMove?(thisType=nil)
-    return (@category==1) if MOVE_CATEGORY_PER_MOVE
+    return (@category==1) if Settings::MOVE_CATEGORY_PER_MOVE
     thisType ||= @calcType
     thisType ||= @type
     return false if !thisType
@@ -132,7 +132,7 @@ class PokeBattle_Move
   def nonLethal?(_user,_target); return false; end   # For False Swipe
 
   def ignoresSubstitute?(user)   # user is the Pokémon using this move
-    if MECHANICS_GENERATION >= 6
+    if Settings::MECHANICS_GENERATION >= 6
       return true if soundMove?
       return true if user && user.hasActiveAbility?(:INFILTRATOR)
     end

@@ -193,7 +193,7 @@ Events.onMapUpdate += proc { |_sender,_e|
 # Returns whether the Poké Center should explain Pokérus to the player, if a
 # healed Pokémon has it.
 def pbPokerus?
-  return false if $game_switches[SEEN_POKERUS_SWITCH]
+  return false if $game_switches[Settings::SEEN_POKERUS_SWITCH]
   for i in $Trainer.party
     return true if i.pokerusStage==1
   end
@@ -274,7 +274,7 @@ Events.onStepTaken += proc {
 Events.onStepTakenTransferPossible += proc { |_sender,e|
   handled = e[0]
   next if handled[0]
-  if $PokemonGlobal.stepcount%4==0 && POISON_IN_FIELD
+  if $PokemonGlobal.stepcount%4==0 && Settings::POISON_IN_FIELD
     flashed = false
     for i in $Trainer.able_party
       if i.status==PBStatuses::POISON && !i.hasAbility?(:IMMUNITY)
@@ -282,8 +282,8 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
           $game_screen.start_flash(Color.new(255,0,0,128), 4)
           flashed = true
         end
-        i.hp -= 1 if i.hp>1 || POISON_FAINT_IN_FIELD
-        if i.hp==1 && !POISON_FAINT_IN_FIELD
+        i.hp -= 1 if i.hp>1 || Settings::POISON_FAINT_IN_FIELD
+        if i.hp==1 && !Settings::POISON_FAINT_IN_FIELD
           i.status = PBStatuses::NONE
           pbMessage(_INTL("{1} survived the poisoning.\\nThe poison faded away!\1",i.name))
           next
@@ -341,7 +341,7 @@ Events.onStepTakenFieldMovement += proc { |_sender,e|
   if $scene.is_a?(Scene_Map)
     currentTag = pbGetTerrainTag(event)
     if PBTerrain.isJustGrass?(pbGetTerrainTag(event,true))  # Won't show if under bridge
-      $scene.spriteset.addUserAnimation(GRASS_ANIMATION_ID,event.x,event.y,true,1)
+      $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID,event.x,event.y,true,1)
     elsif event==$game_player
       if currentTag==PBTerrain::WaterfallCrest
         # Descend waterfall, but only if this event is the player
@@ -470,9 +470,11 @@ Events.onMapSceneChange += proc { |_sender, e|
   if mapChanged && map_metadata && map_metadata.announce_location
     nosignpost = false
     if $PokemonGlobal.mapTrail[1]
-      for i in 0...NO_SIGNPOSTS.length / 2
-        nosignpost = true if NO_SIGNPOSTS[2 * i] == $PokemonGlobal.mapTrail[1] && NO_SIGNPOSTS[2 * i + 1] == $game_map.map_id
-        nosignpost = true if NO_SIGNPOSTS[2 * i + 1] == $PokemonGlobal.mapTrail[1] && NO_SIGNPOSTS[2 * i] == $game_map.map_id
+      for i in 0...Settings::NO_SIGNPOSTS.length / 2
+        nosignpost = true if Settings::NO_SIGNPOSTS[2 * i] == $PokemonGlobal.mapTrail[1] &&
+                             Settings::NO_SIGNPOSTS[2 * i + 1] == $game_map.map_id
+        nosignpost = true if Settings::NO_SIGNPOSTS[2 * i + 1] == $PokemonGlobal.mapTrail[1] &&
+                             Settings::NO_SIGNPOSTS[2 * i] == $game_map.map_id
         break if nosignpost
       end
       mapinfos = load_data("Data/MapInfos.rxdata")
@@ -769,7 +771,7 @@ end
 def pbLedge(_xOffset,_yOffset)
   if PBTerrain.isLedge?(pbFacingTerrainTag)
     if pbJumpToward(2,true)
-      $scene.spriteset.addUserAnimation(DUST_ANIMATION_ID,$game_player.x,$game_player.y,true,1)
+      $scene.spriteset.addUserAnimation(Settings::DUST_ANIMATION_ID,$game_player.x,$game_player.y,true,1)
       $game_player.increase_steps
       $game_player.check_event_trigger_here([1,2])
     end
@@ -868,7 +870,7 @@ end
 #===============================================================================
 def pbFishingBegin
   $PokemonGlobal.fishing = true
-  if !pbCommonEvent(FISHING_BEGIN_COMMON_EVENT)
+  if !pbCommonEvent(Settings::FISHING_BEGIN_COMMON_EVENT)
     patternb = 2*$game_player.direction - 1
     meta = GameData::Metadata.get_player($PokemonGlobal.playerID)
     num = ($PokemonGlobal.surfing) ? 7 : 6
@@ -887,7 +889,7 @@ def pbFishingBegin
 end
 
 def pbFishingEnd
-  if !pbCommonEvent(FISHING_END_COMMON_EVENT)
+  if !pbCommonEvent(Settings::FISHING_END_COMMON_EVENT)
     patternb = 2*($game_player.direction - 2)
     meta = GameData::Metadata.get_player($PokemonGlobal.playerID)
     num = ($PokemonGlobal.surfing) ? 7 : 6
@@ -927,7 +929,7 @@ def pbFishing(hasEncounter,rodType=1)
       break
     end
     if hasEncounter && rand(100)<biteChance
-      $scene.spriteset.addUserAnimation(EXCLAMATION_ANIMATION_ID,$game_player.x,$game_player.y,true,3)
+      $scene.spriteset.addUserAnimation(Settings::EXCLAMATION_ANIMATION_ID,$game_player.x,$game_player.y,true,3)
       frames = Graphics.frame_rate - rand(Graphics.frame_rate/2)   # 0.5-1 second
       if !pbWaitForInput(msgWindow,message+_INTL("\r\nOh! A bite!"),frames)
         pbFishingEnd
@@ -935,9 +937,9 @@ def pbFishing(hasEncounter,rodType=1)
         pbMessageDisplay(msgWindow,_INTL("The Pokémon got away..."))
         break
       end
-      if FISHING_AUTO_HOOK || rand(100)<hookChance
+      if Settings::FISHING_AUTO_HOOK || rand(100) < hookChance
         pbFishingEnd
-        pbMessageDisplay(msgWindow,_INTL("Landed a Pokémon!")) if !FISHING_AUTO_HOOK
+        pbMessageDisplay(msgWindow,_INTL("Landed a Pokémon!")) if !Settings::FISHING_AUTO_HOOK
         $game_player.setDefaultCharName(nil,oldpattern)
         ret = true
         break
@@ -996,7 +998,7 @@ def pbWaitForInput(msgWindow,message,frames)
       $game_player.pattern = 0
       return true
     end
-    break if !FISHING_AUTO_HOOK && numFrame>frames
+    break if !Settings::FISHING_AUTO_HOOK && numFrame > frames
     numFrame += 1
   end
   return false

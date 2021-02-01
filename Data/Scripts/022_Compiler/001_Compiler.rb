@@ -677,7 +677,7 @@ module Compiler
   #=============================================================================
   def compile_all(mustCompile)
     FileLineData.clear
-    if (!$INEDITOR || LANGUAGES.length < 2) && safeExists?("Data/messages.dat")
+    if (!$INEDITOR || Settings::LANGUAGES.length < 2) && safeExists?("Data/messages.dat")
       MessageTypes.loadMessageFile("Data/messages.dat")
     end
     if mustCompile

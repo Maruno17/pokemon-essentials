@@ -868,7 +868,7 @@ def pbBattleFactoryPokemon(rule,numwins,numswaps,_rentals)
   party=[]
   loop do
     party.clear
-    while party.length < MAX_PARTY_SIZE
+    while party.length < Settings::MAX_PARTY_SIZE
       rnd=pokemonNumbers[0]+rand(pokemonNumbers[1]-pokemonNumbers[0]+1)
       rndpoke=btpokemon[rnd]
       indvalue=(party.length<ivgroups[0]) ? ivs[0] : ivs[1]

@@ -85,8 +85,8 @@ module DungeonMaze
     paintTile(dungeon, xDst, yDst, tile, rotation)
     return false if rand(100) < 30
     # Generate a randomly placed room
-    width = rand(MINWIDTH, MAXWIDTH)
-    height = rand(MINHEIGHT, MAXHEIGHT)
+    width = rand(MINWIDTH..MAXWIDTH)
+    height = rand(MINHEIGHT..MAXHEIGHT)
     return false if width <= 0 || height <= 0
     centerX = TILE_WIDTH / 2 + rand(5) - 2
     centerY = TILE_HEIGHT / 2 + rand(5) - 2

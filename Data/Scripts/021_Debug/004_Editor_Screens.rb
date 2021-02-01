@@ -480,7 +480,7 @@ module TrainerBattleProperty
        [_INTL("Version"),      LimitProperty.new(9999), _INTL("Number used to distinguish Trainers with the same name and trainer type.")],
        [_INTL("Lose Text"),    StringProperty,          _INTL("Message shown in battle when the Trainer is defeated.")]
     ]
-    MAX_PARTY_SIZE.times do |i|
+    Settings::MAX_PARTY_SIZE.times do |i|
       properties.push([_INTL("Pokémon {1}", i + 1), TrainerPokemonProperty, _INTL("A Pokémon owned by the Trainer.")])
     end
     NUM_ITEMS.times do |i|
@@ -524,7 +524,7 @@ def pbTrainerBattleEditor
             tr_data.version,
             tr_data.real_lose_text
           ]
-          for i in 0...MAX_PARTY_SIZE
+          for i in 0...Settings::MAX_PARTY_SIZE
             data.push(tr_data.pokemon[i])
           end
           for i in 0...TrainerBattleProperty::NUM_ITEMS
@@ -535,11 +535,11 @@ def pbTrainerBattleEditor
             break if !data
             party = []
             items = []
-            for i in 0...MAX_PARTY_SIZE
+            for i in 0...Settings::MAX_PARTY_SIZE
               party.push(data[4 + i]) if data[4 + i] && data[4 + i][:species]
             end
             for i in 0...TrainerBattleProperty::NUM_ITEMS
-              items.push(data[4 + MAX_PARTY_SIZE + i]) if data[4 + MAX_PARTY_SIZE + i]
+              items.push(data[4 + Settings::MAX_PARTY_SIZE + i]) if data[4 + Settings::MAX_PARTY_SIZE + i]
             end
             if !data[0]
               pbMessage(_INTL("Can't save. No trainer type was chosen."))

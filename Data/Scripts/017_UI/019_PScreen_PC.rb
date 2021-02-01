@@ -247,7 +247,7 @@ def pbPokeCenterPC
 end
 
 def pbGetStorageCreator
-  creator = pbStorageCreator
+  creator = Settings.storage_creator_name
   creator = _INTL("Bill") if !creator || creator==""
   return creator
 end

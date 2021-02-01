@@ -19,7 +19,7 @@ end
 
 def pbSetResizeFactor(factor)
   if !$ResizeInitialized
-    Graphics.resize_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+    Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
     $ResizeInitialized = true
   end
   if factor < 0 || factor == 4

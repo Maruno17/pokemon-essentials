@@ -449,7 +449,7 @@ DebugMenuCommands.register("additem", {
     pbListScreenBlock(_INTL("ADD ITEM"), ItemLister.new) { |button, item|
       if button == Input::C && item
         params = ChooseNumberParams.new
-        params.setRange(1, BAG_MAX_PER_SLOT)
+        params.setRange(1, Settings::BAG_MAX_PER_SLOT)
         params.setInitialValue(1)
         params.setCancelValue(0)
         qty = pbMessageChooseNumber(_INTL("Add how many {1}?",
@@ -469,7 +469,7 @@ DebugMenuCommands.register("fillbag", {
   "description" => _INTL("Add a certain number of every item to the Bag."),
   "effect"      => proc {
     params = ChooseNumberParams.new
-    params.setRange(1, BAG_MAX_PER_SLOT)
+    params.setRange(1, Settings::BAG_MAX_PER_SLOT)
     params.setInitialValue(1)
     params.setCancelValue(0)
     qty = pbMessageChooseNumber(_INTL("Choose the number of items."), params)
@@ -613,7 +613,7 @@ DebugMenuCommands.register("fillboxes", {
       end
       # Add Pokémon (if form 0)
       next if f != 0
-      if added >= NUM_STORAGE_BOXES * box_qty
+      if added >= Settings::NUM_STORAGE_BOXES * box_qty
         completed = false
         next
       end
@@ -622,7 +622,8 @@ DebugMenuCommands.register("fillboxes", {
     end
     pbMessage(_INTL("Storage boxes were filled with one Pokémon of each species."))
     if !completed
-      pbMessage(_INTL("Note: The number of storage spaces ({1} boxes of {2}) is less than the number of species.", NUM_STORAGE_BOXES, box_qty))
+      pbMessage(_INTL("Note: The number of storage spaces ({1} boxes of {2}) is less than the number of species.",
+         Settings::NUM_STORAGE_BOXES, box_qty))
     end
   }
 })
@@ -695,7 +696,7 @@ DebugMenuCommands.register("setmoney", {
   "description" => _INTL("Edit how much money you have."),
   "effect"      => proc {
     params = ChooseNumberParams.new
-    params.setRange(0, MAX_MONEY)
+    params.setRange(0, Settings::MAX_MONEY)
     params.setDefaultValue($Trainer.money)
     $Trainer.money = pbMessageChooseNumber(_INTL("Set the player's money."), params)
     pbMessage(_INTL("You now have ${1}.", $Trainer.money.to_s_formatted))
@@ -708,7 +709,7 @@ DebugMenuCommands.register("setcoins", {
   "description" => _INTL("Edit how many Game Corner Coins you have."),
   "effect"      => proc {
     params = ChooseNumberParams.new
-    params.setRange(0, MAX_COINS)
+    params.setRange(0, Settings::MAX_COINS)
     params.setDefaultValue($PokemonGlobal.coins)
     $PokemonGlobal.coins = pbMessageChooseNumber(_INTL("Set the player's Coin amount."), params)
     pbMessage(_INTL("You now have {1} Coins.", $PokemonGlobal.coins.to_s_formatted))
@@ -746,7 +747,7 @@ DebugMenuCommands.register("dexlists", {
     loop do
       dexescmds = []
       dexescmds.push(_INTL("Have Pokédex: {1}", $Trainer.pokedex ? "[YES]" : "[NO]"))
-      d = pbDexNames
+      d = Settings.pokedex_names
       for i in 0...d.length
         name = d[i]
         name = name[0] if name.is_a?(Array)
@@ -816,7 +817,7 @@ DebugMenuCommands.register("renameplayer", {
   "name"        => _INTL("Set Player Name"),
   "description" => _INTL("Rename the player."),
   "effect"      => proc {
-    trname = pbEnterPlayerName("Your name?", 0, MAX_PLAYER_NAME_SIZE, $Trainer.name)
+    trname = pbEnterPlayerName("Your name?", 0, Settings::MAX_PLAYER_NAME_SIZE, $Trainer.name)
     if trname == "" && pbConfirmMessage(_INTL("Give yourself a default name?"))
       trainertype = $Trainer.trainer_type
       gender      = pbGetTrainerTypeGender(trainertype)

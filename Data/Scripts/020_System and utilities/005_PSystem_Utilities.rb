@@ -190,7 +190,7 @@ def pbTimeEventValid(variableNumber)
   return retval
 end
 
-def pbExclaim(event,id=EXCLAMATION_ANIMATION_ID,tinting=false)
+def pbExclaim(event,id=Settings::EXCLAMATION_ANIMATION_ID,tinting=false)
   if event.is_a?(Array)
     sprite = nil
     done = []
@@ -253,7 +253,7 @@ def pbTrainerName(name = nil, outfit = 0)
   $Trainer.outfit       = outfit
   $Trainer.character_ID = $PokemonGlobal.playerID
   if name.nil?
-    name = pbEnterPlayerName(_INTL("Your name?"), 0, MAX_PLAYER_NAME_SIZE)
+    name = pbEnterPlayerName(_INTL("Your name?"), 0, Settings::MAX_PLAYER_NAME_SIZE)
     if name.nil? || name.empty?
       gender = pbGetTrainerTypeGender(trainer_type)
       name = pbSuggestTrainerName(gender)
@@ -283,7 +283,7 @@ def pbSuggestTrainerName(gender)
     owner[0,1] = owner[0,1].upcase
     return owner
   end
-  return getRandomNameEx(gender,nil,1,MAX_PLAYER_NAME_SIZE)
+  return getRandomNameEx(gender, nil, 1, Settings::MAX_PLAYER_NAME_SIZE)
 end
 
 def pbGetUserName
@@ -436,7 +436,7 @@ end
 # Here, just used to decide whether to show the Pokédex in the Pause menu.
 def pbSetViableDexes
   $PokemonGlobal.pokedexViable = []
-  if USE_CURRENT_REGION_DEX
+  if Settings::USE_CURRENT_REGION_DEX
     region = pbGetCurrentRegion
     region = -1 if region>=$PokemonGlobal.pokedexUnlocked.length-1
     $PokemonGlobal.pokedexViable[0] = region if $Trainer.seen_any?(region)

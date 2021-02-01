@@ -967,7 +967,7 @@ end
 # Main
 ################################################################################
 def animationEditorMain(animation)
-  viewport=Viewport.new(0, 0, SCREEN_WIDTH + 288, SCREEN_HEIGHT + 288)
+  viewport=Viewport.new(0, 0, Settings::SCREEN_WIDTH + 288, Settings::SCREEN_HEIGHT + 288)
   viewport.z=99999
   # Canvas
   canvas=AnimationCanvas.new(animation[animation.selected],viewport)
@@ -1184,10 +1184,10 @@ def pbAnimationEditor
     animation=PBAnimations.new
     animation[0].graphic=""
   end
-  Graphics.resize_screen(SCREEN_WIDTH + 288, SCREEN_HEIGHT + 288)
+  Graphics.resize_screen(Settings::SCREEN_WIDTH + 288, Settings::SCREEN_HEIGHT + 288)
   pbSetResizeFactor(1)
   animationEditorMain(animation)
-  Graphics.resize_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+  Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
   pbSetResizeFactor($PokemonSystem.screensize)
   $game_map.autoplay if $game_map
 end

@@ -370,7 +370,7 @@ class PokeBattle_Battle
     priority.each do |b|
       next if b.status!=PBStatuses::BURN || !b.takesIndirectDamage?
       oldHP = b.hp
-      dmg = (MECHANICS_GENERATION >= 7) ? b.totalhp/16 : b.totalhp/8
+      dmg = (Settings::MECHANICS_GENERATION >= 7) ? b.totalhp/16 : b.totalhp/8
       dmg = (dmg/2.0).round if b.hasActiveAbility?(:HEATPROOF)
       b.pbContinueStatus { b.pbReduceHP(dmg,false) }
       b.pbItemHPHealCheck
@@ -417,9 +417,9 @@ class PokeBattle_Battle
         else                   pbCommonAnimation("Wrap", b)
         end
         if b.takesIndirectDamage?
-          hpLoss = (MECHANICS_GENERATION >= 6) ? b.totalhp/8 : b.totalhp/16
+          hpLoss = (Settings::MECHANICS_GENERATION >= 6) ? b.totalhp/8 : b.totalhp/16
           if @battlers[b.effects[PBEffects::TrappingUser]].hasActiveItem?(:BINDINGBAND)
-            hpLoss = (MECHANICS_GENERATION >= 6) ? b.totalhp/6 : b.totalhp/8
+            hpLoss = (Settings::MECHANICS_GENERATION >= 6) ? b.totalhp/6 : b.totalhp/8
           end
           @scene.pbDamageAnimation(b)
           b.pbReduceHP(hpLoss,false)

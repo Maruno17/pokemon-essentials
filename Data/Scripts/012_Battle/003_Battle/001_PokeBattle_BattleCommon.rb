@@ -128,7 +128,7 @@ module PokeBattle_BattleCommon
       @scene.pbThrowSuccess   # Play capture success jingle
       pbRemoveFromParty(battler.index,battler.pokemonIndex)
       # Gain Exp
-      if GAIN_EXP_FOR_CAPTURE
+      if Settings::GAIN_EXP_FOR_CAPTURE
         battler.captured = true
         pbGainExp
         battler.captured = false
@@ -192,7 +192,7 @@ module PokeBattle_BattleCommon
     # Second half of the shakes calculation
     y = ( 65536 / ((255.0/x)**0.1875) ).floor
     # Critical capture check
-    if ENABLE_CRITICAL_CAPTURES
+    if Settings::ENABLE_CRITICAL_CAPTURES
       c = 0
       numOwned = $Trainer.owned_count
       if numOwned>600;    c = x*5/12

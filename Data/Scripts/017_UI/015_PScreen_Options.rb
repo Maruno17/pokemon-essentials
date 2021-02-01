@@ -19,24 +19,24 @@ class PokemonSystem
     @textspeed   = 1     # Text speed (0=slow, 1=normal, 2=fast)
     @battlescene = 0     # Battle effects (animations) (0=on, 1=off)
     @battlestyle = 0     # Battle style (0=switch, 1=set)
-    @frame       = 0     # Default window frame (see also $TextFrames)
+    @frame       = 0     # Default window frame (see also Settings::MENU_WINDOWSKINS)
     @textskin    = 0     # Speech frame
-    @font        = 0     # Font (see also $VersionStyles)
-    @screensize  = (SCREEN_SCALE * 2).floor - 1   # 0=half size, 1=full size, 2=full-and-a-half size, 3=double size
-    @language    = 0     # Language (see also LANGUAGES in script PokemonSystem)
+    @font        = 0     # Font (see also Settings::FONT_OPTIONS)
+    @screensize  = (Settings::SCREEN_SCALE * 2).floor - 1   # 0=half size, 1=full size, 2=full-and-a-half size, 3=double size
+    @language    = 0     # Language (see also Settings::LANGUAGES in script PokemonSystem)
     @runstyle    = 0     # Run key functionality (0=hold to run, 1=toggle auto-run)
     @bgmvolume   = 100   # Volume of background music and ME
     @sevolume    = 100   # Volume of sound effects
     @textinput   = 0     # Text input mode (0=cursor, 1=keyboard)
   end
 
-  def textskin;  return @textskin || 0;    end
-  def language;  return @language || 0;    end
-  def runstyle;  return @runstyle || 0;    end
-  def bgmvolume; return @bgmvolume || 100; end
-  def sevolume;  return @sevolume || 100;  end
-  def textinput; return @textinput || 0;   end
-  def tilemap;   return MAP_VIEW_MODE;     end
+  def textskin;  return @textskin || 0;          end
+  def language;  return @language || 0;          end
+  def runstyle;  return @runstyle || 0;          end
+  def bgmvolume; return @bgmvolume || 100;       end
+  def sevolume;  return @sevolume || 100;        end
+  def textinput; return @textinput || 0;         end
+  def tilemap;   return Settings::MAP_VIEW_MODE; end
 end
 
 #===============================================================================
@@ -364,25 +364,25 @@ class PokemonOption_Scene
            end
          }
        ),
-       NumberOption.new(_INTL("Speech Frame"),1,$SpeechFrames.length,
+       NumberOption.new(_INTL("Speech Frame"),1,Settings::SPEECH_WINDOWSKINS.length,
          proc { $PokemonSystem.textskin },
          proc { |value|
            $PokemonSystem.textskin = value
-           MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/" + $SpeechFrames[value])
+           MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[value])
          }
        ),
-       NumberOption.new(_INTL("Menu Frame"),1,$TextFrames.length,
+       NumberOption.new(_INTL("Menu Frame"),1,Settings::MENU_WINDOWSKINS.length,
          proc { $PokemonSystem.frame },
          proc { |value|
            $PokemonSystem.frame = value
-           MessageConfig.pbSetSystemFrame("Graphics/Windowskins/" + $TextFrames[value])
+           MessageConfig.pbSetSystemFrame("Graphics/Windowskins/" + Settings::MENU_WINDOWSKINS[value])
          }
        ),
        EnumOption.new(_INTL("Font Style"),[_INTL("Em"),_INTL("R/S"),_INTL("FRLG"),_INTL("DP")],
          proc { $PokemonSystem.font },
          proc { |value|
            $PokemonSystem.font = value
-           MessageConfig.pbSetSystemFontName($VersionStyles[value])
+           MessageConfig.pbSetSystemFontName(Settings::FONT_OPTIONS[value])
          }
        ),
        EnumOption.new(_INTL("Text Entry"),[_INTL("Cursor"),_INTL("Keyboard")],

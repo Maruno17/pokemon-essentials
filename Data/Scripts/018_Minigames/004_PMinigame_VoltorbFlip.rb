@@ -108,9 +108,9 @@ class VoltorbFlip
     @sprites["curtainL"].visible=false
     @sprites["curtainR"].visible=false
     @sprites["curtain"].opacity=100
-    if $PokemonGlobal.coins>=MAX_COINS
-      pbMessage(_INTL("You've gathered {1} Coins. You cannot gather any more.",MAX_COINS.to_s_formatted))
-      $PokemonGlobal.coins=MAX_COINS # As a precaution
+    if $PokemonGlobal.coins >= Settings::MAX_COINS
+      pbMessage(_INTL("You've gathered {1} Coins. You cannot gather any more.", Settings::MAX_COINS.to_s_formatted))
+      $PokemonGlobal.coins = Settings::MAX_COINS   # As a precaution
       @quit=true
 #    elsif !pbConfirmMessage(_INTL("Play Voltorb Flip Lv. {1}?",@level)) && $PokemonGlobal.coins<99999
 #      @quit=true
@@ -616,7 +616,7 @@ end
 def pbVoltorbFlip
   if GameData::Item.exists?(:COINCASE) && !$PokemonBag.pbHasItem?(:COINCASE)
     pbMessage(_INTL("You can't play unless you have a Coin Case."))
-  elsif $PokemonGlobal.coins==MAX_COINS
+  elsif $PokemonGlobal.coins == Settings::MAX_COINS
     pbMessage(_INTL("Your Coin Case is full!"))
   else
     scene=VoltorbFlip.new

@@ -365,7 +365,7 @@ class PokeBattle_Battle
 
   def pbLoseMoney
     return if !@internalBattle || !@moneyGain
-    return if $game_switches[NO_MONEY_LOSS]
+    return if $game_switches[Settings::NO_MONEY_LOSS]
     maxLevel = pbMaxLevelInTeam(0,0)   # Player's Pokémon only, not partner's
     multiplier = [8,16,24,36,48,64,80,100,120]
     idxMultiplier = [pbPlayer.badge_count, multiplier.length - 1].min
@@ -446,7 +446,7 @@ class PokeBattle_Battle
       end
     ##### CAUGHT WILD POKÉMON #####
     when 4
-      @scene.pbWildBattleSuccess if !GAIN_EXP_FOR_CAPTURE
+      @scene.pbWildBattleSuccess if !Settings::GAIN_EXP_FOR_CAPTURE
     end
     # Register captured Pokémon in the Pokédex, and store them
     pbRecordAndStoreCaughtPokemon

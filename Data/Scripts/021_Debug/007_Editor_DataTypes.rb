@@ -791,7 +791,7 @@ end
 
 module PocketProperty
   def self.set(_settingname, oldsetting)
-    commands = pbPocketNames.clone
+    commands = Settings.bag_pocket_names.clone
     commands.shift
     cmd = pbMessage(_INTL("Choose a pocket for this item."), commands, -1)
     return (cmd >= 0) ? cmd + 1 : oldsetting
@@ -803,7 +803,7 @@ module PocketProperty
 
   def self.format(value)
     return _INTL("No Pocket") if value == 0
-    return (value) ? pbPocketNames[value] : value.inspect
+    return (value) ? Settings.bag_pocket_names[value] : value.inspect
   end
 end
 

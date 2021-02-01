@@ -419,7 +419,7 @@ class PokemonBag_Scene
           elsif Input.trigger?(Input::A)   # Start switching the selected item
             if !@choosing
               if thispocket.length>1 && itemwindow.index<thispocket.length &&
-                 !BAG_POCKET_AUTO_SORT[itemwindow.pocket]
+                 !Settings::BAG_POCKET_AUTO_SORT[itemwindow.pocket]
                 itemwindow.sorting = true
                 swapinitialpos = itemwindow.index
                 pbPlayDecisionSE
@@ -544,10 +544,10 @@ class PokemonBagScreen
             qty = @bag.pbQuantity(item)
             itemplural = itm.name_plural
             params = ChooseNumberParams.new
-            params.setRange(0,BAG_MAX_PER_SLOT)
+            params.setRange(0, Settings::BAG_MAX_PER_SLOT)
             params.setDefaultValue(qty)
             newqty = pbMessageChooseNumber(
-               _INTL("Choose new quantity of {1} (max. #{BAG_MAX_PER_SLOT}).",itemplural),params) { @scene.pbUpdate }
+               _INTL("Choose new quantity of {1} (max. #{Settings::BAG_MAX_PER_SLOT}).",itemplural),params) { @scene.pbUpdate }
             if newqty>qty
               @bag.pbStoreItem(item,newqty-qty)
             elsif newqty<qty

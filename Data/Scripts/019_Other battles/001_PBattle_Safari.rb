@@ -37,7 +37,7 @@ class SafariState
     @start      = [$game_map.map_id,$game_player.x,$game_player.y,$game_player.direction]
     @ballcount  = ballcount
     @inProgress = true
-    @steps      = SAFARI_STEPS
+    @steps      = Settings::SAFARI_STEPS
   end
 
   def pbEnd
@@ -76,7 +76,7 @@ end
 Events.onStepTakenTransferPossible += proc { |_sender,e|
   handled = e[0]
   next if handled[0]
-  if pbInSafari? && pbSafariState.decision==0 && SAFARI_STEPS>0
+  if pbInSafari? && pbSafariState.decision==0 && Settings::SAFARI_STEPS > 0
     pbSafariState.steps -= 1
     if pbSafariState.steps<=0
       pbMessage(_INTL("PA:  Ding-dong!\1"))
