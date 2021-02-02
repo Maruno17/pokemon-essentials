@@ -605,7 +605,7 @@ def pbEvolutionCheck(currentLevels)
     pkmn = $Trainer.party[i]
     next if !pkmn || (pkmn.hp==0 && !Settings::CHECK_EVOLUTION_FOR_FAINTED_POKEMON)
     next if currentLevels[i] && pkmn.level==currentLevels[i]
-    newSpecies = EvolutionCheck.check(pkmn)
+    newSpecies = EvolutionCheck.check_level_up_methods(pkmn)
     next if !newSpecies
     evo = PokemonEvolutionScene.new
     evo.pbStartScreen(pkmn,newSpecies)

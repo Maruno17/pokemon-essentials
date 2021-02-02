@@ -62,7 +62,7 @@ module GameData
     # @param tr_name [String]
     # @param tr_version [Integer, nil]
     # @return [self, nil]
-    def try_get(tr_type, tr_name, tr_version = 0)
+    def self.try_get(tr_type, tr_name, tr_version = 0)
       validate tr_type => [Symbol, String]
       validate tr_name => [String]
       key = [tr_type.to_sym, tr_name, tr_version]
