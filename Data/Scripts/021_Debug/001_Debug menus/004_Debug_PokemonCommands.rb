@@ -840,28 +840,28 @@ PokemonDebugMenuCommands.register("setribbons", {
     cmd = 0
     loop do
       commands = []
-      for i in 1..PBRibbons.maxValue
+      ids = []
+      GameData::Ribbon.each do |ribbon_data|
         commands.push(_INTL("{1} {2}",
-           (pkmn.hasRibbon?(i)) ? "[Y]" : "[  ]", PBRibbons.getName(i)))
+           (pkmn.hasRibbon?(ribbon_data.id)) ? "[Y]" : "[  ]", ribbon_data.name))
+        ids.push(ribbon_data.id)
       end
       commands.push(_INTL("Give all"))
       commands.push(_INTL("Clear all"))
       cmd = screen.pbShowCommands(_INTL("{1} ribbons.", pkmn.numRibbons), commands, cmd)
       break if cmd < 0
-      if cmd >= 0 && cmd < PBRibbons.maxValue   # Toggle ribbon
-        if pkmn.hasRibbon?(cmd + 1)
-          pkmn.takeRibbon(cmd + 1)
+      if cmd >= 0 && cmd < ids.length   # Toggle ribbon
+        if pkmn.hasRibbon?(ids[cmd])
+          pkmn.takeRibbon(ids[cmd])
         else
-          pkmn.giveRibbon(cmd + 1)
+          pkmn.giveRibbon(ids[cmd])
         end
       elsif cmd == commands.length - 2   # Give all
-        for i in 1..PBRibbons.maxValue
-          pkmn.giveRibbon(i)
+        GameData::Ribbon.each do |ribbon_data|
+          pkmn.giveRibbon(ribbon_data.id)
         end
       elsif cmd == commands.length - 1   # Clear all
-        for i in 1..PBRibbons.maxValue
-          pkmn.takeRibbon(i)
-        end
+        pkmn.clearAllRibbons
       end
     end
   }

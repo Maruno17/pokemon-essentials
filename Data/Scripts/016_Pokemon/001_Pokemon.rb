@@ -35,7 +35,7 @@ class Pokemon
   attr_accessor :moves
   # @return [Array<Integer>] the IDs of moves known by this Pokémon when it was obtained
   attr_accessor :first_moves
-  # @return [Array<Integer>] an array of ribbons owned by this Pokémon
+  # @return [Array<Symbol>] an array of ribbons owned by this Pokémon
   attr_accessor :ribbons
   # @return [Integer] contest stats
   attr_accessor :cool, :beauty, :cute, :smart, :tough, :sheen
@@ -662,50 +662,56 @@ class Pokemon
     return @ribbons.length
   end
 
-  # @param ribbon [Integer, Symbol, String] ribbon ID to check
+  # @param ribbon [Symbol, String, GameData::Ribbon, Integer] ribbon ID to check for
   # @return [Boolean] whether this Pokémon has the specified ribbon
   def hasRibbon?(ribbon)
-    ribbon = getID(PBRibbons, ribbon)
-    return ribbon > 0 && @ribbons.include?(ribbon)
+    ribbon_data = GameData::Ribbon.try_get(ribbon)
+    return ribbon_data && @ribbons.include?(ribbon_data.id)
   end
 
   # Gives a ribbon to this Pokémon.
-  # @param ribbon [Integer, Symbol, String] ID of the ribbon to give
+  # @param ribbon [Symbol, String, GameData::Ribbon, Integer] ID of the ribbon to give
   def giveRibbon(ribbon)
-    ribbon = getID(PBRibbons, ribbon)
-    return if ribbon == 0
-    @ribbons.push(ribbon) if !@ribbons.include?(ribbon)
+    ribbon_data = GameData::Ribbon.try_get(ribbon)
+    return if !ribbon_data || @ribbons.include?(ribbon_data.id)
+    @ribbons.push(ribbon_data.id)
   end
 
-  # Replaces one ribbon with the next one along, if possible.
+  # Replaces one ribbon with the next one along, if possible. If none of the
+  # given ribbons are owned, give the first one.
+  # @return [Symbol, nil] ID of the ribbon that was gained
   def upgradeRibbon(*arg)
     for i in 0...arg.length - 1
+      this_ribbon_data = GameData::Ribbon.try_get(i)
+      next if !this_ribbon_data
       for j in 0...@ribbons.length
-        next if @ribbons[j] != getID(PBRibbons, arg[i])
-        @ribbons[j] = getID(PBRibbons, arg[i + 1])
+        next if @ribbons[j] != this_ribbon_data.id
+        next_ribbon_data = GameData::Ribbon.try_get(arg[i + 1])
+        next if !next_ribbon_data
+        @ribbons[j] = next_ribbon_data.id
         return @ribbons[j]
       end
     end
-    if !hasRibbon?(arg[arg.length - 1])
-      first_ribbon = getID(PBRibbons, arg[0])
-      giveRibbon(first_ribbon)
-      return first_ribbon
+    first_ribbon_data = GameData::Ribbon.try_get(arg[0])
+    last_ribbon_data = GameData::Ribbon.try_get(arg[arg.length - 1])
+    if first_ribbon_data && last_ribbon_data && !hasRibbon?(last_ribbon_data.id)
+      giveRibbon(first_ribbon_data.id)
+      return first_ribbon_data.id
     end
-    return 0
+    return nil
   end
 
   # Removes the specified ribbon from this Pokémon.
-  # @param ribbon [Integer, Symbol, String] id of the ribbon to remove
+  # @param ribbon [Symbol, String, GameData::Ribbon, Integer] ID of the ribbon to remove
   def takeRibbon(ribbon)
-    return if !@ribbons
-    ribbon = getID(PBRibbons, ribbon)
-    return if ribbon == 0
+    ribbon_data = GameData::Ribbon.try_get(ribbon)
+    return if !ribbon_data
     for i in 0...@ribbons.length
-      next if @ribbons[i] != ribbon
+      next if @ribbons[i] != ribbon_data.id
       @ribbons[i] = nil
+      @ribbons.compact!
       break
     end
-    @ribbons.compact!
   end
 
   # Removes all ribbons from this Pokémon.

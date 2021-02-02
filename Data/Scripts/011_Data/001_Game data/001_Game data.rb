@@ -140,5 +140,6 @@ module GameData
     Species.load
     Trainer.load
     Encounter.load
+    Ribbon.load
   end
 end

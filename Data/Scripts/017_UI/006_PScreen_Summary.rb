@@ -838,15 +838,14 @@ class PokemonSummary_Scene
     # Show all ribbons
     imagepos = []
     coord = 0
-    if @pokemon.ribbons
-      for i in @ribbonOffset*4...@ribbonOffset*4+12
-        break if !@pokemon.ribbons[i]
-        ribn = @pokemon.ribbons[i]-1
-        imagepos.push(["Graphics/Pictures/ribbons",230+68*(coord%4),78+68*(coord/4).floor,
-                                                   64*(ribn%8),64*(ribn/8).floor,64,64])
-        coord += 1
-        break if coord>=12
-      end
+    for i in @ribbonOffset*4...@ribbonOffset*4+12
+      break if !@pokemon.ribbons[i]
+      ribbon_data = GameData::Ribbon.get(@pokemon.ribbons[i])
+      ribn = ribbon_data.id_number - 1
+      imagepos.push(["Graphics/Pictures/ribbons",
+         230 + 68 * (coord % 4), 78 + 68 * (coord / 4).floor,
+         64 * (ribn % 8), 64 * (ribn / 8).floor, 64, 64])
+      coord += 1
     end
     # Draw all images
     pbDrawImagePositions(overlay,imagepos)
@@ -862,8 +861,8 @@ class PokemonSummary_Scene
     nameBase   = Color.new(248,248,248)
     nameShadow = Color.new(104,104,104)
     # Get data for selected ribbon
-    name = ribbonid ? PBRibbons.getName(ribbonid) : ""
-    desc = ribbonid ? PBRibbons.getDescription(ribbonid) : ""
+    name = ribbonid ? GameData::Ribbon.get(ribbonid).name : ""
+    desc = ribbonid ? GameData::Ribbon.get(ribbonid).description : ""
     # Draw the description box
     imagepos = [
        ["Graphics/Pictures/Summary/overlay_ribbon",8,280]

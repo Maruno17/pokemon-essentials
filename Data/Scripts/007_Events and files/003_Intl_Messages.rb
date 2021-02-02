@@ -587,30 +587,32 @@ end
 
 module MessageTypes
   # Value 0 is used for common event and map event text
-  Species           = 1
-  Kinds             = 2
-  Entries           = 3
-  FormNames         = 4
-  Moves             = 5
-  MoveDescriptions  = 6
-  Items             = 7
-  ItemPlurals       = 8
-  ItemDescriptions  = 9
-  Abilities         = 10
-  AbilityDescs      = 11
-  Types             = 12
-  TrainerTypes      = 13
-  TrainerNames      = 14
-  BeginSpeech       = 15
-  EndSpeechWin      = 16
-  EndSpeechLose     = 17
-  RegionNames       = 18
-  PlaceNames        = 19
-  PlaceDescriptions = 20
-  MapNames          = 21
-  PhoneMessages     = 22
-  TrainerLoseText   = 23
-  ScriptTexts       = 24
+  Species            = 1
+  Kinds              = 2
+  Entries            = 3
+  FormNames          = 4
+  Moves              = 5
+  MoveDescriptions   = 6
+  Items              = 7
+  ItemPlurals        = 8
+  ItemDescriptions   = 9
+  Abilities          = 10
+  AbilityDescs       = 11
+  Types              = 12
+  TrainerTypes       = 13
+  TrainerNames       = 14
+  BeginSpeech        = 15
+  EndSpeechWin       = 16
+  EndSpeechLose      = 17
+  RegionNames        = 18
+  PlaceNames         = 19
+  PlaceDescriptions  = 20
+  MapNames           = 21
+  PhoneMessages      = 22
+  TrainerLoseText    = 23
+  ScriptTexts        = 24
+  RibbonNames        = 25
+  RibbonDescriptions = 26
   @@messages         = Messages.new
   @@messagesFallback = Messages.new("Data/messages.dat",true)
 

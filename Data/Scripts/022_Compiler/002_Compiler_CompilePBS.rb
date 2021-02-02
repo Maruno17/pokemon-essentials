@@ -824,6 +824,41 @@ module Compiler
   end
 
   #=============================================================================
+  # Compile ribbon data
+  #=============================================================================
+  def compile_ribbons
+    GameData::Ribbon::DATA.clear
+    ribbon_names        = []
+    ribbon_descriptions = []
+    pbCompilerEachPreppedLine("PBS/ribbons.txt") { |line, line_no|
+      line = pbGetCsvRecord(line, line_no, [0, "vnss"])
+      ribbon_number = line[0]
+      ribbon_symbol = line[1].to_sym
+      if GameData::Ribbon::DATA[ribbon_number]
+        raise _INTL("Ribbon ID number '{1}' is used twice.\r\n{2}", ribbon_number, FileLineData.linereport)
+      elsif GameData::Ribbon::DATA[ribbon_symbol]
+        raise _INTL("Ribbon ID '{1}' is used twice.\r\n{2}", ribbon_symbol, FileLineData.linereport)
+      end
+      # Construct ribbon hash
+      ribbon_hash = {
+        :id          => ribbon_symbol,
+        :id_number   => ribbon_number,
+        :name        => line[2],
+        :description => line[3]
+      }
+      # Add ribbon's data to records
+      GameData::Ribbon.register(ribbon_hash)
+      ribbon_names[ribbon_number]        = ribbon_hash[:name]
+      ribbon_descriptions[ribbon_number] = ribbon_hash[:description]
+    }
+    # Save all data
+    GameData::Ribbon.save
+    MessageTypes.setMessages(MessageTypes::RibbonNames, ribbon_names)
+    MessageTypes.setMessages(MessageTypes::RibbonDescriptions, ribbon_descriptions)
+    Graphics.update
+  end
+
+  #=============================================================================
   # Compile wild encounter data
   #=============================================================================
   def compile_encounters

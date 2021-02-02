@@ -27,62 +27,64 @@ class PokeBattle_Pokemon
   def self.copy(pkmn)
     owner = Pokemon::Owner.new(pkmn.trainerID, pkmn.ot, pkmn.otgender, pkmn.language)
     ret = Pokemon.new(pkmn.species, pkmn.level, owner, false)
-    ret.forced_form    = pkmn.forcedForm if pkmn.forcedForm
-    ret.time_form_set  = pkmn.formTime
-    ret.exp            = pkmn.exp
-    ret.steps_to_hatch = pkmn.eggsteps
-    ret.status         = pkmn.status
-    ret.statusCount    = pkmn.statusCount
-    ret.gender         = pkmn.genderflag
-    ret.shiny          = pkmn.shinyflag
-    ret.ability_index  = pkmn.abilityflag
-    ret.nature         = pkmn.natureflag
+    ret.forced_form      = pkmn.forcedForm if pkmn.forcedForm
+    ret.time_form_set    = pkmn.formTime
+    ret.exp              = pkmn.exp
+    ret.steps_to_hatch   = pkmn.eggsteps
+    ret.status           = pkmn.status
+    ret.statusCount      = pkmn.statusCount
+    ret.gender           = pkmn.genderflag
+    ret.shiny            = pkmn.shinyflag
+    ret.ability_index    = pkmn.abilityflag
+    ret.nature           = pkmn.natureflag
     ret.nature_for_stats = pkmn.natureOverride
-    ret.item           = pkmn.item
-    ret.mail           = PokemonMail.copy(pkmn.mail) if pkmn.mail
+    ret.item             = pkmn.item
+    ret.mail             = PokemonMail.copy(pkmn.mail) if pkmn.mail
     pkmn.moves.each { |m| ret.moves.push(PBMove.copy(m)) if m && m.id > 0 }
     pkmn.firstmoves.each { |m| ret.add_first_move(m) }
-    ret.ribbons        = pkmn.ribbons.clone if pkmn.ribbons
-    ret.cool           = pkmn.cool if pkmn.cool
-    ret.beauty         = pkmn.beauty if pkmn.beauty
-    ret.cute           = pkmn.cute if pkmn.cute
-    ret.smart          = pkmn.smart if pkmn.smart
-    ret.tough          = pkmn.tough if pkmn.tough
-    ret.sheen          = pkmn.sheen if pkmn.sheen
-    ret.pokerus        = pkmn.pokerus if pkmn.pokerus
-    ret.name           = pkmn.name
-    ret.happiness      = pkmn.happiness
-    ret.poke_ball      = pbBallTypeToItem(pkmn.ballused)
-    ret.markings       = pkmn.markings if pkmn.markings
-    ret.iv             = pkmn.iv.clone
-    ret.ivMaxed        = pkmn.ivMaxed.clone if pkmn.ivMaxed
-    ret.ev             = pkmn.ev.clone
-    ret.obtain_method  = pkmn.obtainMode
-    ret.obtain_map     = pkmn.obtainMap
-    ret.obtain_text    = pkmn.obtainText
-    ret.obtain_level   = pkmn.obtainLevel if pkmn.obtainLevel
-    ret.hatched_map    = pkmn.hatchedMap
-    ret.timeReceived   = pkmn.timeReceived
-    ret.timeEggHatched = pkmn.timeEggHatched
+    if pkmn.ribbons
+      pkmn.ribbons.each { |r| ret.giveRibbon(r) }
+    end
+    ret.cool             = pkmn.cool if pkmn.cool
+    ret.beauty           = pkmn.beauty if pkmn.beauty
+    ret.cute             = pkmn.cute if pkmn.cute
+    ret.smart            = pkmn.smart if pkmn.smart
+    ret.tough            = pkmn.tough if pkmn.tough
+    ret.sheen            = pkmn.sheen if pkmn.sheen
+    ret.pokerus          = pkmn.pokerus if pkmn.pokerus
+    ret.name             = pkmn.name
+    ret.happiness        = pkmn.happiness
+    ret.poke_ball        = pbBallTypeToItem(pkmn.ballused)
+    ret.markings         = pkmn.markings if pkmn.markings
+    ret.iv               = pkmn.iv.clone
+    ret.ivMaxed          = pkmn.ivMaxed.clone if pkmn.ivMaxed
+    ret.ev               = pkmn.ev.clone
+    ret.obtain_method    = pkmn.obtainMode
+    ret.obtain_map       = pkmn.obtainMap
+    ret.obtain_text      = pkmn.obtainText
+    ret.obtain_level     = pkmn.obtainLevel if pkmn.obtainLevel
+    ret.hatched_map      = pkmn.hatchedMap
+    ret.timeReceived     = pkmn.timeReceived
+    ret.timeEggHatched   = pkmn.timeEggHatched
     if pkmn.fused
       ret.fused = PokeBattle_Pokemon.copy(pkmn.fused) if pkmn.fused.is_a?(PokeBattle_Pokemon)
       ret.fused = pkmn.fused if pkmn.fused.is_a?(Pokemon)
     end
-    ret.personalID     = pkmn.personalID
-    ret.hp             = pkmn.hp
+    ret.personalID       = pkmn.personalID
+    ret.hp               = pkmn.hp
     if pkmn.shadow
-      ret.shadow       = pkmn.shadow
-      ret.heart_gauge  = pkmn.heartgauge
-      ret.hyper_mode   = pkmn.hypermode
-      ret.saved_exp    = pkmn.savedexp
-      ret.saved_ev     = pkmn.savedev.clone
-      ret.shadow_moves = []
+      ret.shadow         = pkmn.shadow
+      ret.heart_gauge    = pkmn.heartgauge
+      ret.hyper_mode     = pkmn.hypermode
+      ret.saved_exp      = pkmn.savedexp
+      ret.saved_ev       = pkmn.savedev.clone
+      ret.shadow_moves   = []
       pkmn.shadowmoves.each_with_index do |move, i|
         ret.shadow_moves[i] = GameData::Move.get(move).id if move
       end
     end
     # NOTE: Intentionally set last, as it recalculates stats.
-    ret.form_simple    = pkmn.form || 0
+    ret.form_simple      = pkmn.form || 0
     return ret
   end
 end

@@ -707,6 +707,8 @@ module Compiler
       compile_shadow_movesets        # Depends on Species, Move
       yield(_INTL("Compiling Regional Dexes"))
       compile_regional_dexes         # Depends on Species
+      yield(_INTL("Compiling ribbon data"))
+      compile_ribbons                # No dependencies
       yield(_INTL("Compiling encounter data"))
       compile_encounters             # Depends on Species
       yield(_INTL("Compiling Trainer type data"))
@@ -743,6 +745,7 @@ module Compiler
          "moves.dat",
          "phone.dat",
          "regional_dexes.dat",
+         "ribbons.dat",
          "shadow_movesets.dat",
          "species.dat",
          "species_eggmoves.dat",
@@ -768,6 +771,7 @@ module Compiler
          "pokemon.txt",
          "pokemonforms.txt",
          "regionaldexes.txt",
+         "ribbons.txt",
          "shadowmoves.txt",
          "townmap.txt",
          "trainerlists.txt",
