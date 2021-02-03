@@ -56,7 +56,7 @@ class PokeBattle_AI
   end
 
   def pbCalcTypeMod(moveType,user,target)
-    return PBTypeEffectiveness::NORMAL_EFFECTIVE if moveType<0
+    return PBTypeEffectiveness::NORMAL_EFFECTIVE if !moveType
     return PBTypeEffectiveness::NORMAL_EFFECTIVE if moveType == :GROUND &&
        target.pbHasType?(:FLYING) && target.hasActiveItem?(:IRONBALL)
     # Determine types
@@ -93,7 +93,7 @@ class PokeBattle_AI
     return true if PBTypeEffectiveness.ineffective?(typeMod) || score<=0
     # Immunity due to ability/item/other effects
     if skill>=PBTrainerAI.mediumSkill
-      case move.type
+      case type
       when :GROUND
         return true if target.airborne? && !move.hitsFlyingTargets?
       when :FIRE

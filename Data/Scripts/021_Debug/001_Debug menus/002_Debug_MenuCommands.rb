@@ -205,6 +205,7 @@ DebugMenuCommands.register("testwildbattle", {
         pbWildBattle(species, level)
       end
     end
+    next false
   }
 })
 
@@ -268,6 +269,7 @@ DebugMenuCommands.register("testwildbattleadvanced", {
         end
       end
     end
+    next false
   }
 })
 
@@ -276,11 +278,11 @@ DebugMenuCommands.register("testtrainerbattle", {
   "name"        => _INTL("Test Trainer Battle"),
   "description" => _INTL("Start a single battle against a trainer of your choice."),
   "effect"      => proc {
-    battle = pbListScreen(_INTL("SINGLE TRAINER"), TrainerBattleLister.new(0, false))
-    if battle
-      trainerdata = battle[1]
+    trainerdata = pbListScreen(_INTL("SINGLE TRAINER"), TrainerBattleLister.new(0, false))
+    if trainerdata
       pbTrainerBattle(trainerdata[0], trainerdata[1], nil, false, trainerdata[2], true)
     end
+    next false
   }
 })
 
@@ -350,20 +352,18 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
            _INTL("Choose the number of battlers on the player's side (max. {1}).", maxVal), params)
         size0 = newSize if newSize > 0
       elsif trainerCmd == trainerCmds.length - 4   # Add trainer
-        battle = pbListScreen(_INTL("CHOOSE A TRAINER"), TrainerBattleLister.new(0, false))
-        if battle
-          trainerdata = battle[1]
+        trainerdata = pbListScreen(_INTL("CHOOSE A TRAINER"), TrainerBattleLister.new(0, false))
+        if trainerdata
           tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[2])
-          trainers.push([battle[0], tr])
+          trainers.push([0, tr])
         end
       else                                         # Edit a trainer
         if pbConfirmMessage(_INTL("Change this trainer?"))
-          battle = pbListScreen(_INTL("CHOOSE A TRAINER"),
+          trainerdata = pbListScreen(_INTL("CHOOSE A TRAINER"),
              TrainerBattleLister.new(trainers[trainerCmd][0], false))
-          if battle
-            trainerdata = battle[1]
+          if trainerdata
             tr = pbLoadTrainer(trainerdata[0], trainerdata[1], trainerdata[2])
-            trainers[trainerCmd] = [battle[0], tr]
+            trainers[trainerCmd] = [0, tr]
           end
         elsif pbConfirmMessage(_INTL("Delete this trainer?"))
           trainers[trainerCmd] = nil
@@ -371,6 +371,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
         end
       end
     end
+    next false
   }
 })
 

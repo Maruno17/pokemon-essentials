@@ -183,7 +183,7 @@ class NPCTrainer < Trainer
   def initialize(name, trainer_type)
     super
     @items     = []
-    @lose_text = GameData::TrainerType.get(@trainer_type).lose_text
+    @lose_text = nil
   end
 end
 
