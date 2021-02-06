@@ -98,7 +98,7 @@ module GameData
         "Weight"            => [0, "f"],
         "Color"             => [0, "e", :PBColors],
         "Shape"             => [0, "u"],
-        "Habitat"           => [0, "e", :PBHabitats],
+        "Habitat"           => [0, "e", :Habitat],
         "Generation"        => [0, "i"],
         "BattlerPlayerX"    => [0, "i"],
         "BattlerPlayerY"    => [0, "i"],
@@ -161,7 +161,7 @@ module GameData
       @weight                = hash[:weight]                || 1
       @color                 = hash[:color]                 || PBColors::Red
       @shape                 = hash[:shape]                 || 1
-      @habitat               = hash[:habitat]               || PBHabitats::None
+      @habitat               = hash[:habitat]               || :None
       @generation            = hash[:generation]            || 0
       @mega_stone            = hash[:mega_stone]
       @mega_move             = hash[:mega_move]

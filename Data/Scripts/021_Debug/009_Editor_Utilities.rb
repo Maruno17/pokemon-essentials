@@ -206,22 +206,6 @@ def pbChooseAbilityList(default = nil)
   return pbChooseList(commands, default, nil, -1)
 end
 
-def pbChooseNatureList(default = nil)
-  commands = []
-  GameData::Nature.each { |n| commands.push([n.id_number, n.name, n.id]) }
-  return pbChooseList(commands, default, nil, -1)
-end
-
-def pbChooseEggGroupList(default = nil)
-  commands = []
-  i = 0
-  GameData::EggGroup.each do |g|
-    commands.push([i, g.name, g.id])
-    i += 1
-  end
-  return pbChooseList(commands, default, nil, -1)
-end
-
 def pbChooseBallList(defaultMoveID = -1)
   cmdwin = pbListWindow([], 200)
   commands = []

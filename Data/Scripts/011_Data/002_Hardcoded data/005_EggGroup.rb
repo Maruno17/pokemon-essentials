@@ -5,18 +5,8 @@ module GameData
 
     DATA = {}
 
-    extend ClassMethods
+    extend ClassMethodsSymbols
     include InstanceMethods
-
-    def register(hash)
-      self::DATA[hash[:id]] =  self.new(hash)
-    end
-
-    # Yields all data in alphabetical order.
-    def each
-      keys = self::DATA.keys.sort { |a, b| self::DATA[a].real_name <=> self::DATA[b].real_name }
-      keys.each { |key| yield self::DATA[key] }
-    end
 
     def self.load; end
     def self.save; end

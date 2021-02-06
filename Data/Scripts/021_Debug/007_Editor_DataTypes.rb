@@ -235,6 +235,37 @@ end
 
 
 
+class GameDataProperty
+  def initialize(value)
+    raise _INTL("Couldn't find class {1} in module GameData.", value.to_s) if !GameData.const_defined?(value.to_sym)
+    @module = GameData.const_get(value.to_sym)
+  end
+
+  def set(settingname, oldsetting)
+    commands = []
+    i = 0
+    @module.each do |data|
+      if data.respond_to?("id_number")
+        commands.push([data.id_number, data.name, data.id])
+      else
+        commands.push([i, data.name, data.id])
+      end
+      i += 1
+    end
+    return pbChooseList(commands, oldsetting, nil, -1)
+  end
+
+  def defaultValue
+    return nil
+  end
+
+  def format(value)
+    return (value && @module.exists?(value)) ? @module.get(value).real_name : "-"
+  end
+end
+
+
+
 module BGMProperty
   def self.set(settingname,oldsetting)
     chosenmap = pbListScreen(settingname,MusicFileLister.new(true,oldsetting))
@@ -402,23 +433,6 @@ end
 
 
 
-module NatureProperty
-  def self.set(_settingname, oldsetting)
-    ret = pbChooseNatureList((oldsetting) ? oldsetting : nil)
-    return ret || oldsetting
-  end
-
-  def self.defaultValue
-    return nil
-  end
-
-  def self.format(value)
-    return (value && GameData::Nature.exists?(value)) ? GameData::Nature.get(value).real_name : "-"
-  end
-end
-
-
-
 module ItemProperty
   def self.set(_settingname, oldsetting)
     ret = pbChooseItemList((oldsetting) ? oldsetting : nil)
@@ -431,23 +445,6 @@ module ItemProperty
 
   def self.format(value)
     return (value && GameData::Item.exists?(value)) ? GameData::Item.get(value).real_name : "-"
-  end
-end
-
-
-
-module EggGroupProperty
-  def self.set(_settingname, oldsetting)
-    ret = pbChooseEggGroupList((oldsetting) ? oldsetting : nil)
-    return ret || oldsetting
-  end
-
-  def self.defaultValue
-    return nil
-  end
-
-  def self.format(value)
-    return (value && GameData::EggGroup.exists?(value)) ? GameData::EggGroup.get(value).real_name : "-"
   end
 end
 
@@ -614,8 +611,8 @@ module MapSizeProperty
   def self.set(settingname,oldsetting)
     oldsetting = [0,""] if !oldsetting
     properties = [
-       [_INTL("Width"),NonzeroLimitProperty.new(30),_INTL("The width of this map in Region Map squares.")],
-       [_INTL("Valid Squares"),StringProperty,_INTL("A series of 1s and 0s marking which squares are part of this map (1=part, 0=not part).")],
+       [_INTL("Width"),         NonzeroLimitProperty.new(30), _INTL("The width of this map in Region Map squares.")],
+       [_INTL("Valid Squares"), StringProperty,               _INTL("A series of 1s and 0s marking which squares are part of this map (1=part, 0=not part).")],
     ]
     pbPropertyList(settingname,oldsetting,properties,false)
     return oldsetting

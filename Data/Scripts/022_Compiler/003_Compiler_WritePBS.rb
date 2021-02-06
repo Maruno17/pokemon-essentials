@@ -302,7 +302,7 @@ module Compiler
         f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0))
         f.write(sprintf("Color = %s\r\n", getConstantName(PBColors, species.color)))
         f.write(sprintf("Shape = %d\r\n", species.shape))
-        f.write(sprintf("Habitat = %s\r\n", getConstantName(PBHabitats, species.habitat))) if species.habitat != PBHabitats::None
+        f.write(sprintf("Habitat = %s\r\n", species.habitat)) if species.habitat != :None
         f.write(sprintf("Kind = %s\r\n", species.real_category))
         f.write(sprintf("Pokedex = %s\r\n", species.real_pokedex_entry))
         f.write(sprintf("FormName = %s\r\n", species.real_form_name)) if species.real_form_name && !species.real_form_name.empty?
@@ -397,8 +397,8 @@ module Compiler
         f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0)) if species.weight != base_species.weight
         f.write(sprintf("Color = %s\r\n", getConstantName(PBColors, species.color))) if species.color != base_species.color
         f.write(sprintf("Shape = %d\r\n", species.shape)) if species.shape != base_species.shape
-        if species.habitat != PBHabitats::None && species.habitat != base_species.habitat
-          f.write(sprintf("Habitat = %s\r\n", getConstantName(PBHabitats, species.habitat)))
+        if species.habitat != :None && species.habitat != base_species.habitat
+          f.write(sprintf("Habitat = %s\r\n", species.habitat))
         end
         f.write(sprintf("Kind = %s\r\n", species.real_category)) if species.real_category != base_species.real_category
         f.write(sprintf("Pokedex = %s\r\n", species.real_pokedex_entry)) if species.real_pokedex_entry != base_species.real_pokedex_entry
