@@ -460,7 +460,7 @@ class PokemonPokedex_Scene
     # Write order, name and color parameters
     textpos.push([@orderCommands[params[0]],344,60,2,base,shadow,1])
     textpos.push([(params[1]<0) ? "----" : @nameCommands[params[1]],176,118,2,base,shadow,1])
-    textpos.push([(params[8]<0) ? "----" : @colorCommands[params[8]],444,118,2,base,shadow,1])
+    textpos.push([(params[8]<0) ? "----" : @colorCommands[params[8]].name,444,118,2,base,shadow,1])
     # Draw type icons
     if params[2]>=0
       type_number = @typeCommands[params[2]].id_number
@@ -600,6 +600,12 @@ class PokemonPokedex_Scene
       textpos.push([txt1,286,58,2,base,shadow,1])
       textpos.push([txt2,414,58,2,base,shadow,1])
       overlay.blt(462,52,@hwbitmap.bitmap,Rect.new(32,(hwoffset) ? 44 : 0,32,44))
+    when 5   # Color
+      if sel[0]<0
+        textpos.push(["----",362,58,2,base,shadow,1])
+      else
+        textpos.push([cmds[sel[0]].name,362,58,2,base,shadow,1])
+      end
     when 6   # Shape icon
       if sel[0]>=0
         shaperect = Rect.new(0,@shapeCommands[sel[0]]*60,60,60)
@@ -614,7 +620,7 @@ class PokemonPokedex_Scene
       end
     end
     # Draw selected option(s) button graphic
-    if mode==3 || mode==4 # Height, weight
+    if mode==3 || mode==4   # Height, weight
       xpos1 = xstart+(sel[0]+1)*xgap
       xpos1 = xstart if sel[0]<-1
       xpos2 = xstart+(sel[1]+1)*xgap
@@ -645,7 +651,7 @@ class PokemonPokedex_Scene
     end
     # Draw options
     case mode
-    when 0,1,5 # Order, name, color
+    when 0,1   # Order, name
       for i in 0...cmds.length
         x = xstart+halfwidth+(i%cols)*xgap
         y = ystart+6+(i/cols).floor*ygap
@@ -655,7 +661,7 @@ class PokemonPokedex_Scene
         textpos.push([(mode==1) ? "-" : "----",
            xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
       end
-    when 2 # Type
+    when 2   # Type
       typerect = Rect.new(0,0,96,32)
       for i in 0...cmds.length
         typerect.y = @typeCommands[i].id_number*32
@@ -663,7 +669,15 @@ class PokemonPokedex_Scene
       end
       textpos.push(["----",
          xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
-    when 6 # Shape
+    when 5   # Color
+      for i in 0...cmds.length
+        x = xstart+halfwidth+(i%cols)*xgap
+        y = ystart+6+(i/cols).floor*ygap
+        textpos.push([cmds[i].name,x,y,2,base,shadow,1])
+      end
+      textpos.push(["----",
+         xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
+    when 6   # Shape
       shaperect = Rect.new(0,0,60,60)
       for i in 0...cmds.length
         shaperect.y = i*60
@@ -738,16 +752,10 @@ class PokemonPokedex_Scene
     end
     # Filter by color
     if params[8]>=0
-      colorCommands = []
-      for i in 0..PBColors.maxValue
-        j = PBColors.getName(i)
-        colorCommands.push(i) if j
-      end
-      scolor = colorCommands[params[8]]
+      scolor = @colorCommands[params[8]].id
       dexlist = dexlist.find_all { |item|
         next false if !$Trainer.seen?(item[0])
-        color = item[8]
-        next color==scolor
+        next item[8] == scolor
       }
     end
     # Filter by shape
@@ -841,7 +849,9 @@ class PokemonPokedex_Scene
     oldindex  = index
     minmax    = 1
     oldminmax = minmax
-    if mode==3 || mode==4; index = oldindex = selindex[minmax]; end
+    if mode==3 || mode==4
+      index = oldindex = selindex[minmax]
+    end
     @sprites["searchcursor"].mode   = mode
     @sprites["searchcursor"].cmds   = cmds.length
     @sprites["searchcursor"].minmax = minmax
@@ -1013,10 +1023,7 @@ class PokemonPokedex_Scene
                        180,200,250,300,350,400,500,600,700,800,
                        900,1000,1250,1500,2000,3000,5000]
     @colorCommands = []
-    for i in 0..PBColors.maxValue
-      j = PBColors.getName(i)
-      @colorCommands.push(j) if j
-    end
+    GameData::BodyColor.each { |c| @colorCommands.push(c) }
     @shapeCommands = []
     for i in 0...14; @shapeCommands.push(i); end
     @sprites["searchbg"].visible     = true

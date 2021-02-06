@@ -300,7 +300,7 @@ module Compiler
         f.write(sprintf("StepsToHatch = %d\r\n", species.hatch_steps))
         f.write(sprintf("Height = %.1f\r\n", species.height / 10.0))
         f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0))
-        f.write(sprintf("Color = %s\r\n", getConstantName(PBColors, species.color)))
+        f.write(sprintf("Color = %s\r\n", species.color))
         f.write(sprintf("Shape = %d\r\n", species.shape))
         f.write(sprintf("Habitat = %s\r\n", species.habitat)) if species.habitat != :None
         f.write(sprintf("Kind = %s\r\n", species.real_category))
@@ -395,7 +395,7 @@ module Compiler
         f.write(sprintf("StepsToHatch = %d\r\n", species.hatch_steps)) if species.hatch_steps != base_species.hatch_steps
         f.write(sprintf("Height = %.1f\r\n", species.height / 10.0)) if species.height != base_species.height
         f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0)) if species.weight != base_species.weight
-        f.write(sprintf("Color = %s\r\n", getConstantName(PBColors, species.color))) if species.color != base_species.color
+        f.write(sprintf("Color = %s\r\n", species.color)) if species.color != base_species.color
         f.write(sprintf("Shape = %d\r\n", species.shape)) if species.shape != base_species.shape
         if species.habitat != :None && species.habitat != base_species.habitat
           f.write(sprintf("Habitat = %s\r\n", species.habitat))

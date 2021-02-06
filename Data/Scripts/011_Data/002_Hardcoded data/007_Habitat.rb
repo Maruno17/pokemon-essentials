@@ -16,7 +16,7 @@ module GameData
       @real_name = hash[:name] || "Unnamed"
     end
 
-    # @return [String] the translated name of this egg group
+    # @return [String] the translated name of this habitat
     def name
       return _INTL(@real_name)
     end

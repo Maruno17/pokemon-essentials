@@ -96,7 +96,7 @@ module GameData
         "StepsToHatch"      => [0, "v"],
         "Height"            => [0, "f"],
         "Weight"            => [0, "f"],
-        "Color"             => [0, "e", :PBColors],
+        "Color"             => [0, "e", :BodyColor],
         "Shape"             => [0, "u"],
         "Habitat"           => [0, "e", :Habitat],
         "Generation"        => [0, "i"],
@@ -159,7 +159,7 @@ module GameData
       @evolutions            = hash[:evolutions]            || []
       @height                = hash[:height]                || 1
       @weight                = hash[:weight]                || 1
-      @color                 = hash[:color]                 || PBColors::Red
+      @color                 = hash[:color]                 || :Red
       @shape                 = hash[:shape]                 || 1
       @habitat               = hash[:habitat]               || :None
       @generation            = hash[:generation]            || 0
