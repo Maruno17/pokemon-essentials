@@ -974,8 +974,8 @@ def pbPokemonEditor
      [_INTL("WildItemCommon"),    ItemProperty,                   _INTL("Item commonly held by wild Pokémon of this species.")],
      [_INTL("WildItemUncommon"),  ItemProperty,                   _INTL("Item uncommonly held by wild Pokémon of this species.")],
      [_INTL("WildItemRare"),      ItemProperty,                   _INTL("Item rarely held by wild Pokémon of this species.")],
-     [_INTL("Compat1"),           EnumProperty2.new(PBEggGroups), _INTL("Compatibility group (egg group) for breeding purposes.")],
-     [_INTL("Compat2"),           EnumProperty2.new(PBEggGroups), _INTL("Compatibility group (egg group) for breeding purposes.")],
+     [_INTL("Compat1"),           EggGroupProperty,               _INTL("Compatibility group (egg group) for breeding purposes.")],
+     [_INTL("Compat2"),           EggGroupProperty,               _INTL("Compatibility group (egg group) for breeding purposes.")],
      [_INTL("StepsToHatch"),      LimitProperty.new(99999),       _INTL("Number of steps until an egg of this species hatches.")],
      [_INTL("Incense"),           ItemProperty,                   _INTL("Item needed to be held by a parent to produce an egg of this species.")],
      [_INTL("Evolutions"),        EvolutionsProperty.new,         _INTL("Evolution paths of this species.")],
@@ -1067,7 +1067,7 @@ def pbPokemonEditor
             data[5] = data[6] if !data[5]                    # Type1
             data[6] = data[5] if !data[6]                    # Type2
             egg_groups = [data[26], data[27]].uniq.compact   # Egg groups
-            egg_groups.push(PBEggGroups::Undiscovered) if egg_groups.length == 0
+            egg_groups.push(:Undiscovered) if egg_groups.length == 0
             abilities = [data[17], data[18]].uniq.compact    # Abilities
             hidden_abilities = [data[19], data[20], data[21], data[22]].uniq.compact   # Hidden abilities
             # Construct species hash

@@ -151,7 +151,7 @@ end
 class NonlegendaryRestriction
   def isValid?(pkmn)
     return true if !pkmn.genderless?
-    return false if pkmn.species_data.egg_groups.include?(PBEggGroups::Undiscovered)
+    return false if pkmn.species_data.egg_groups.include?(:Undiscovered)
     return true
   end
 end

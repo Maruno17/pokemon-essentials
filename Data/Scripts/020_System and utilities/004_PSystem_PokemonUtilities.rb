@@ -296,8 +296,8 @@ def pbHasEgg?(species)
   compatSpecies = (evoSpecies && evoSpecies[0]) ? evoSpecies[0][2] : species
   species_data = GameData::Species.try_get(compatSpecies)
   compat = species_data.egg_groups
-  return false if compat.include?(PBEggGroups::Undiscovered)
-  return false if compat.include?(PBEggGroups::Ditto)
+  return false if compat.include?(:Undiscovered)
+  return false if compat.include?(:Ditto)
   baby = EvolutionHelper.baby_species(species)
   return true if species == baby   # Is a basic species
   baby = EvolutionHelper.baby_species(species, true)

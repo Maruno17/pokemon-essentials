@@ -295,12 +295,7 @@ module Compiler
           f.write(sprintf("EggMoves = %s\r\n", species.egg_moves.join(",")))
         end
         if species.egg_groups.length > 0
-          f.write("Compatibility = ")
-          species.egg_groups.each_with_index do |group, i|
-            f.write(",") if i > 0
-            f.write(getConstantName(PBEggGroups, group))
-          end
-          f.write("\r\n")
+          f.write(sprintf("Compatibility = %s\r\n", species.egg_groups.join(",")))
         end
         f.write(sprintf("StepsToHatch = %d\r\n", species.hatch_steps))
         f.write(sprintf("Height = %.1f\r\n", species.height / 10.0))
@@ -395,12 +390,7 @@ module Compiler
           f.write(sprintf("EggMoves = %s\r\n", species.egg_moves.join(",")))
         end
         if species.egg_groups.length > 0 && species.egg_groups != base_species.egg_groups
-          f.write("Compatibility = ")
-          species.egg_groups.each_with_index do |group, i|
-            f.write(",") if i > 0
-            f.write(getConstantName(PBEggGroups, group))
-          end
-          f.write("\r\n")
+          f.write(sprintf("Compatibility = %s\r\n", species.egg_groups.join(",")))
         end
         f.write(sprintf("StepsToHatch = %d\r\n", species.hatch_steps)) if species.hatch_steps != base_species.hatch_steps
         f.write(sprintf("Height = %.1f\r\n", species.height / 10.0)) if species.height != base_species.height

@@ -436,6 +436,23 @@ end
 
 
 
+module EggGroupProperty
+  def self.set(_settingname, oldsetting)
+    ret = pbChooseEggGroupList((oldsetting) ? oldsetting : nil)
+    return ret || oldsetting
+  end
+
+  def self.defaultValue
+    return nil
+  end
+
+  def self.format(value)
+    return (value && GameData::EggGroup.exists?(value)) ? GameData::EggGroup.get(value).real_name : "-"
+  end
+end
+
+
+
 class IVsProperty
   def initialize(limit)
     @limit = limit

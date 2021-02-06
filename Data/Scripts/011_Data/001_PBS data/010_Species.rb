@@ -92,7 +92,7 @@ module GameData
         "WildItemCommon"    => [0, "e", :Item],
         "WildItemUncommon"  => [0, "e", :Item],
         "WildItemRare"      => [0, "e", :Item],
-        "Compatibility"     => [0, "*e", :PBEggGroups],
+        "Compatibility"     => [0, "*e", :EggGroup],
         "StepsToHatch"      => [0, "v"],
         "Height"            => [0, "f"],
         "Weight"            => [0, "f"],
@@ -153,7 +153,7 @@ module GameData
       @wild_item_common      = hash[:wild_item_common]
       @wild_item_uncommon    = hash[:wild_item_uncommon]
       @wild_item_rare        = hash[:wild_item_rare]
-      @egg_groups            = hash[:egg_groups]            || [PBEggGroups::Undiscovered]
+      @egg_groups            = hash[:egg_groups]            || [:Undiscovered]
       @hatch_steps           = hash[:hatch_steps]           || 1
       @incense               = hash[:incense]
       @evolutions            = hash[:evolutions]            || []

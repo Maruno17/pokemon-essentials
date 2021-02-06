@@ -105,7 +105,7 @@ end
 # Check compatibility of Pokémon in the Day Care.
 #===============================================================================
 def pbIsDitto?(pkmn)
-  return pkmn.species_data.egg_groups.include?(PBEggGroups::Ditto)
+  return pkmn.species_data.egg_groups.include?(:Ditto)
 end
 
 def pbDayCareCompatibleGender(pkmn1, pkmn2)
@@ -127,12 +127,12 @@ def pbDayCareGetCompat
   # Pokémon in the Undiscovered egg group cannot breed
   egg_groups1 = pkmn1.species_data.egg_groups
   egg_groups2 = pkmn2.species_data.egg_groups
-  return 0 if egg_groups1.include?(PBEggGroups::Undiscovered) ||
-              egg_groups2.include?(PBEggGroups::Undiscovered)
+  return 0 if egg_groups1.include?(:Undiscovered) ||
+              egg_groups2.include?(:Undiscovered)
   # Pokémon that don't share an egg group (and neither is in the Ditto group)
   # cannot breed
-  return 0 if !egg_groups1.include?(PBEggGroups::Ditto) &&
-              !egg_groups2.include?(PBEggGroups::Ditto) &&
+  return 0 if !egg_groups1.include?(:Ditto) &&
+              !egg_groups2.include?(:Ditto) &&
               (egg_groups1 & egg_groups2).length == 0
   # Pokémon with incompatible genders cannot breed
   return 0 if !pbDayCareCompatibleGender(pkmn1, pkmn2)
