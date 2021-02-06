@@ -459,7 +459,7 @@ module Compiler
           :evs                   => contents["EffortPoints"],
           :base_exp              => contents["BaseEXP"],
           :growth_rate           => contents["GrowthRate"],
-          :gender_rate           => contents["GenderRate"],
+          :gender_ratio          => contents["GenderRate"],
           :catch_rate            => contents["Rareness"],
           :happiness             => contents["Happiness"],
           :moves                 => contents["Moves"],

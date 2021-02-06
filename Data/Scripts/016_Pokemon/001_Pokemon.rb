@@ -310,13 +310,14 @@ class Pokemon
   # @return [0, 1, 2] this Pokémon's gender (0 = male, 1 = female, 2 = genderless)
   def gender
     if !@gender
-      gender_rate = species_data.gender_rate
-      case gender_rate
-      when PBGenderRates::AlwaysMale   then @gender = 0
-      when PBGenderRates::AlwaysFemale then @gender = 1
-      when PBGenderRates::Genderless   then @gender = 2
+      gender_ratio = species_data.gender_ratio
+      case gender_ratio
+      when :AlwaysMale   then @gender = 0
+      when :AlwaysFemale then @gender = 1
+      when :Genderless   then @gender = 2
       else
-        @gender = ((@personalID & 0xFF) < PBGenderRates.genderByte(gender_rate)) ? 1 : 0
+        female_chance = GameData::GenderRatio.get(gender_ratio).female_chance
+        @gender = ((@personalID & 0xFF) < female_chance) ? 1 : 0
       end
     end
     return @gender
@@ -350,9 +351,8 @@ class Pokemon
   # @return [Boolean] whether this Pokémon species is restricted to only ever being one
   #   gender (or genderless)
   def singleGendered?
-    gender_rate = species_data.gender_rate
-    return [PBGenderRates::AlwaysMale, PBGenderRates::AlwaysFemale,
-            PBGenderRates::Genderless].include?(gender_rate)
+    gender_ratio = species_data.gender_ratio
+    return [:AlwaysMale, :AlwaysFemale, :Genderless].include?(gender_ratio)
   end
   alias isSingleGendered? singleGendered?
 

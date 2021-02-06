@@ -150,11 +150,11 @@ class PokemonPokedexInfo_Scene
       next if sp.pokedex_form != sp.form
       multiple_forms = true if sp.form > 0
       $Trainer.seen_forms[@species] = [[], []] if !$Trainer.seen_forms[@species]
-      case sp.gender_rate
-      when PBGenderRates::AlwaysMale, PBGenderRates::AlwaysFemale, PBGenderRates::Genderless
-        real_gender = (sp.gender_rate == PBGenderRates::AlwaysFemale) ? 1 : 0
+      case sp.gender_ratio
+      when :AlwaysMale, :AlwaysFemale, :Genderless
+        real_gender = (sp.gender_ratio == :AlwaysFemale) ? 1 : 0
         next if !$Trainer.seen_forms[@species][real_gender][sp.form] && !Settings::DEX_SHOWS_ALL_FORMS
-        real_gender = 2 if sp.gender_rate == PBGenderRates::Genderless
+        real_gender = 2 if sp.gender_ratio == :Genderless
         ret.push([sp.form_name, real_gender, sp.form])
       else   # Both male and female
         for real_gender in 0...2

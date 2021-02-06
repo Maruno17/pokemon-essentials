@@ -15,7 +15,7 @@ module GameData
     attr_reader :evs
     attr_reader :base_exp
     attr_reader :growth_rate
-    attr_reader :gender_rate
+    attr_reader :gender_ratio
     attr_reader :catch_rate
     attr_reader :happiness
     attr_reader :moves
@@ -119,7 +119,7 @@ module GameData
         ret["InternalName"] = [0, "n"]
         ret["Name"]         = [0, "s"]
         ret["GrowthRate"]   = [0, "e", :PBGrowthRates]
-        ret["GenderRate"]   = [0, "e", :PBGenderRates]
+        ret["GenderRate"]   = [0, "e", :GenderRatio]
         ret["Incense"]      = [0, "e", :Item]
         ret["Evolutions"]   = [0, "*ses", nil, :PBEvolution, nil]
       end
@@ -142,7 +142,7 @@ module GameData
       @evs                   = hash[:evs]                   || [0, 0, 0, 0, 0, 0]
       @base_exp              = hash[:base_exp]              || 100
       @growth_rate           = hash[:growth_rate]           || PBGrowthRates::Medium
-      @gender_rate           = hash[:gender_rate]           || PBGenderRates::Female50Percent
+      @gender_ratio          = hash[:gender_ratio]          || :Female50Percent
       @catch_rate            = hash[:catch_rate]            || 255
       @happiness             = hash[:happiness]             || 70
       @moves                 = hash[:moves]                 || []

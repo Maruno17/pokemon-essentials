@@ -598,9 +598,8 @@ DebugMenuCommands.register("fillboxes", {
       if f == 0
         $Trainer.set_seen(sp)
         $Trainer.set_owned(sp)
-        if [PBGenderRates::AlwaysMale, PBGenderRates::AlwaysFemale,
-            PBGenderRates::Genderless].include?(species_data.gender_rate)
-          g = (species_data.gender_rate == PBGenderRates::AlwaysFemale) ? 1 : 0
+        if [:AlwaysMale, :AlwaysFemale, :Genderless].include?(species_data.gender_ratio)
+          g = (species_data.gender_ratio == :AlwaysFemale) ? 1 : 0
           $Trainer.seen_forms[sp][g][f] = true
           $Trainer.last_seen_forms[sp] = [g, f] if f == 0
         else   # Both male and female
@@ -609,7 +608,7 @@ DebugMenuCommands.register("fillboxes", {
           $Trainer.last_seen_forms[sp] = [0, f] if f == 0
         end
       elsif species_data.real_form_name && !species_data.real_form_name.empty?
-        g = (species_data.gender_rate == PBGenderRates::AlwaysFemale) ? 1 : 0
+        g = (species_data.gender_ratio == :AlwaysFemale) ? 1 : 0
         $Trainer.seen_forms[sp][g][f] = true
       end
       # Add Pokémon (if form 0)
