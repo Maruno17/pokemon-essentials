@@ -297,7 +297,7 @@ class PokemonLoadScreen
     commands[cmd_language = commands.length]  = _INTL('Language') if LANGUAGES.length >= 2
     commands[cmd_debug = commands.length]     = _INTL('Debug') if $DEBUG
     commands[cmd_quit = commands.length]      = _INTL('Quit Game')
-    map_id = show_continue ? @save_data[:map_factory].map.id : 0
+    map_id = show_continue ? @save_data[:map_factory].map.map_id : 0
     @scene.pbStartScene(commands, show_continue, @save_data[:player],
                         @save_data[:frame_count] || 0, map_id)
     @scene.pbSetParty(@save_data[:player]) if show_continue
