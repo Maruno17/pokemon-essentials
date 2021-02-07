@@ -41,9 +41,9 @@ module Game
 
     pbSetResizeFactor([$PokemonSystem.screensize, 4].min)
     GameData.load_all
-    if LANGUAGES.length >= 2
+    if Settings::LANGUAGES.length >= 2
       $PokemonSystem.language = pbChooseLanguage if save_data.empty?
-      pbLoadMessages('Data/' + LANGUAGES[$PokemonSystem.language][1])
+      pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
     end
   end
 

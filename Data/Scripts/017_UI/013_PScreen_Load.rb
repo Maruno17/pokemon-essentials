@@ -288,7 +288,7 @@ class PokemonLoadScreen
     show_continue = !@save_data.empty?
     if show_continue
       commands[cmd_continue = commands.length] = _INTL('Continue')
-      if (@save_data[:player].mysterygiftaccess rescue false)
+      if @save_data[:player].mystery_gift_unlocked
         commands[cmd_mystery_gift = commands.length] = _INTL('Mystery Gift')
       end
     end

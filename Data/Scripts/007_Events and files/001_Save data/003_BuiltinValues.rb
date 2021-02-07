@@ -1,7 +1,7 @@
 # Contains the save values defined by default in Essentials.
 
 SaveData.register(:player) do
-  ensure_class :PokeBattle_Trainer
+  ensure_class :PlayerTrainer
   save_value { $Trainer }
   load_value { |value| $Trainer = value }
   from_old_format { |old_format| old_format[0] }
@@ -114,7 +114,7 @@ end
 
 SaveData.register(:essentials_version) do
   ensure_class :String
-  save_value { ESSENTIALS_VERSION }
+  save_value { Essentials::VERSION }
   load_value { |value| $SaveVersion = value }
   from_old_format { |old_format| old_format[15] }
 end
