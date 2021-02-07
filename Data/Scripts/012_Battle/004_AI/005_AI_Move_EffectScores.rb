@@ -1514,8 +1514,8 @@ class PokeBattle_AI
         elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed
           moveData = GameData::Move.get(target.lastMoveUsed)
           if moveData.base_damage > 0 &&
-             (MOVE_CATEGORY_PER_MOVE && moveData.category == 0) ||
-             (!MOVE_CATEGORY_PER_MOVE && PBTypes.isPhysicalType?(moveData.type))
+             (Settings::MOVE_CATEGORY_PER_MOVE && moveData.category == 0) ||
+             (!Settings::MOVE_CATEGORY_PER_MOVE && PBTypes.isPhysicalType?(moveData.type))
             score -= 60
           end
         end
@@ -1532,8 +1532,8 @@ class PokeBattle_AI
         elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed
           moveData = GameData::Move.get(target.lastMoveUsed)
           if moveData.base_damage > 0 &&
-             (MOVE_CATEGORY_PER_MOVE && moveData.category == 1) ||
-             (!MOVE_CATEGORY_PER_MOVE && !PBTypes.isSpecialType?(moveData.type))
+             (Settings::MOVE_CATEGORY_PER_MOVE && moveData.category == 1) ||
+             (!Settings::MOVE_CATEGORY_PER_MOVE && !PBTypes.isSpecialType?(moveData.type))
             score -= 60
           end
         end

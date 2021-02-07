@@ -161,8 +161,8 @@ class PokemonDataBox < SpriteWrapper
     return (@animatingHP) ? @currentHP : @battler.hp
   end
 
-  def expFraction
-    return (@animatingExp) ? @currentExp.to_f/@rangeExp : @battler.pokemon.expFraction
+  def exp_fraction
+    return (@animatingExp) ? @currentExp.to_f/@rangeExp : @battler.pokemon.exp_fraction
   end
 
   def animateHP(oldHP,newHP,rangeHP)
@@ -283,7 +283,7 @@ class PokemonDataBox < SpriteWrapper
 
   def refreshExp
     return if !@showExp
-    w = self.expFraction*@expBarBitmap.width
+    w = exp_fraction * @expBarBitmap.width
     # NOTE: The line below snaps the bar's width to the nearest 2 pixels, to
     #       fit in with the rest of the graphics which are doubled in size.
     w = ((w/2).round)*2
@@ -553,8 +553,8 @@ class PokemonBattlerSprite < RPG::Sprite
 
   # This method plays the battle entrance animation of a Pokémon. By default
   # this is just playing the Pokémon's cry, but you can expand on it. The
-  # recommendation is to create a PictureEx animation and push it into the
-  # @battleAnimations array.
+  # recommendation is to create a PictureEx animation and push it into
+  # the @battleAnimations array.
   def pbPlayIntroAnimation(pictureEx=nil)
     return if !@pkmn
     GameData::Species.play_cry_from_pokemon(@pkmn)

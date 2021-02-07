@@ -174,13 +174,13 @@ class PokeBattle_Battle
     else   # Trainer battle
       case @opponent.length
       when 1
-        pbDisplayPaused(_INTL("You are challenged by {1}!",@opponent[0].fullname))
+        pbDisplayPaused(_INTL("You are challenged by {1}!",@opponent[0].full_name))
       when 2
-        pbDisplayPaused(_INTL("You are challenged by {1} and {2}!",@opponent[0].fullname,
-           @opponent[1].fullname))
+        pbDisplayPaused(_INTL("You are challenged by {1} and {2}!",@opponent[0].full_name,
+           @opponent[1].full_name))
       when 3
         pbDisplayPaused(_INTL("You are challenged by {1}, {2} and {3}!",
-           @opponent[0].fullname,@opponent[1].fullname,@opponent[2].fullname))
+           @opponent[0].full_name,@opponent[1].full_name,@opponent[2].full_name))
       end
     end
     # Send out Pokémon (opposing trainers first)
@@ -196,12 +196,12 @@ class PokeBattle_Battle
         sent = sendOuts[side][i]
         case sent.length
         when 1
-          msg += _INTL("{1} sent out {2}!",t.fullname,@battlers[sent[0]].name)
+          msg += _INTL("{1} sent out {2}!",t.full_name,@battlers[sent[0]].name)
         when 2
-          msg += _INTL("{1} sent out {2} and {3}!",t.fullname,
+          msg += _INTL("{1} sent out {2} and {3}!",t.full_name,
              @battlers[sent[0]].name,@battlers[sent[1]].name)
         when 3
-          msg += _INTL("{1} sent out {2}, {3} and {4}!",t.fullname,
+          msg += _INTL("{1} sent out {2}, {3} and {4}!",t.full_name,
              @battlers[sent[0]].name,@battlers[sent[1]].name,@battlers[sent[2]].name)
         end
         toSendOut.concat(sent)
@@ -339,7 +339,7 @@ class PokeBattle_Battle
     if trainerBattle?
       tMoney = 0
       @opponent.each_with_index do |t,i|
-        tMoney += pbMaxLevelInTeam(1,i)*t.moneyEarned
+        tMoney += pbMaxLevelInTeam(1, i) * t.base_money
       end
       tMoney *= 2 if @field.effects[PBEffects::AmuletCoin]
       tMoney *= 2 if @field.effects[PBEffects::HappyHour]
@@ -365,10 +365,10 @@ class PokeBattle_Battle
 
   def pbLoseMoney
     return if !@internalBattle || !@moneyGain
-    return if $game_switches[NO_MONEY_LOSS]
+    return if $game_switches[Settings::NO_MONEY_LOSS]
     maxLevel = pbMaxLevelInTeam(0,0)   # Player's Pokémon only, not partner's
     multiplier = [8,16,24,36,48,64,80,100,120]
-    idxMultiplier = [pbPlayer.numbadges,multiplier.length-1].min
+    idxMultiplier = [pbPlayer.badge_count, multiplier.length - 1].min
     tMoney = maxLevel*multiplier[idxMultiplier]
     tMoney = pbPlayer.money if tMoney>pbPlayer.money
     oldMoney = pbPlayer.money
@@ -395,13 +395,13 @@ class PokeBattle_Battle
         @scene.pbTrainerBattleSuccess
         case @opponent.length
         when 1
-          pbDisplayPaused(_INTL("You defeated {1}!",@opponent[0].fullname))
+          pbDisplayPaused(_INTL("You defeated {1}!",@opponent[0].full_name))
         when 2
-          pbDisplayPaused(_INTL("You defeated {1} and {2}!",@opponent[0].fullname,
-             @opponent[1].fullname))
+          pbDisplayPaused(_INTL("You defeated {1} and {2}!",@opponent[0].full_name,
+             @opponent[1].full_name))
         when 3
-          pbDisplayPaused(_INTL("You defeated {1}, {2} and {3}!",@opponent[0].fullname,
-             @opponent[1].fullname,@opponent[2].fullname))
+          pbDisplayPaused(_INTL("You defeated {1}, {2} and {3}!",@opponent[0].full_name,
+             @opponent[1].full_name,@opponent[2].full_name))
         end
         @opponent.each_with_index do |_t,i|
           @scene.pbShowOpponent(i)
@@ -423,13 +423,13 @@ class PokeBattle_Battle
         if trainerBattle?
           case @opponent.length
           when 1
-            pbDisplayPaused(_INTL("You lost against {1}!",@opponent[0].fullname))
+            pbDisplayPaused(_INTL("You lost against {1}!",@opponent[0].full_name))
           when 2
             pbDisplayPaused(_INTL("You lost against {1} and {2}!",
-               @opponent[0].fullname,@opponent[1].fullname))
+               @opponent[0].full_name,@opponent[1].full_name))
           when 3
             pbDisplayPaused(_INTL("You lost against {1}, {2} and {3}!",
-               @opponent[0].fullname,@opponent[1].fullname,@opponent[2].fullname))
+               @opponent[0].full_name,@opponent[1].full_name,@opponent[2].full_name))
           end
         end
         # Lose money from losing a battle
@@ -446,7 +446,7 @@ class PokeBattle_Battle
       end
     ##### CAUGHT WILD POKÉMON #####
     when 4
-      @scene.pbWildBattleSuccess if !GAIN_EXP_FOR_CAPTURE
+      @scene.pbWildBattleSuccess if !Settings::GAIN_EXP_FOR_CAPTURE
     end
     # Register captured Pokémon in the Pokédex, and store them
     pbRecordAndStoreCaughtPokemon
@@ -478,7 +478,7 @@ class PokeBattle_Battle
     pbParty(0).each_with_index do |pkmn,i|
       next if !pkmn
       @peer.pbOnLeavingBattle(self,pkmn,@usedInBattle[0][i],true)   # Reset form
-      pkmn.setItem(@initialItems[0][i])
+      pkmn.item = @initialItems[0][i]
     end
     return @decision
   end

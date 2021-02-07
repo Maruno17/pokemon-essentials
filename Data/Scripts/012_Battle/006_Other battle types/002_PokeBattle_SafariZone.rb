@@ -43,7 +43,7 @@ class PokeBattle_FakeBattler
   def captured=(value); end
 
   def owned?
-    return $Trainer.owned[pokemon.species]
+    return $Trainer.owned?(pokemon.species)
   end
 
   def pbThis(lowerCase=false)
@@ -421,7 +421,7 @@ class PokeBattle_SafariZone
   def pbStartBattle
     begin
       pkmn = @party2[0]
-      self.pbPlayer.seen[pkmn.species] = true
+      self.pbPlayer.set_seen(pkmn.species)
       pbSeenForm(pkmn)
       @scene.pbStartBattle(self)
       pbDisplayPaused(_INTL("Wild {1} appeared!",pkmn.name))

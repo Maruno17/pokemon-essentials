@@ -180,7 +180,7 @@ module Compiler
           :immunities   => contents["Immunities"]
         }
         # Add type's data to records
-        GameData::Type::DATA[type_number] = GameData::Type::DATA[type_symbol] = GameData::Type.new(type_hash)
+        GameData::Type.register(type_hash)
         type_names[type_number] = type_hash[:name]
       }
     }
@@ -229,7 +229,7 @@ module Compiler
         :description => line[3]
       }
       # Add ability's data to records
-      GameData::Ability::DATA[ability_number] = GameData::Ability::DATA[ability_symbol] = GameData::Ability.new(ability_hash)
+      GameData::Ability.register(ability_hash)
       ability_names[ability_number]        = ability_hash[:name]
       ability_descriptions[ability_number] = ability_hash[:description]
     }
@@ -285,7 +285,7 @@ module Compiler
         :description   => line[13]
       }
       # Add move's data to records
-      GameData::Move::DATA[move_number] = GameData::Move::DATA[move_symbol] = GameData::Move.new(move_hash)
+      GameData::Move.register(move_hash)
       move_names[move_number]        = move_hash[:name]
       move_descriptions[move_number] = move_hash[:description]
     }
@@ -329,7 +329,7 @@ module Compiler
       }
       item_hash[:move] = parseMove(line[10]) if !nil_or_empty?(line[10])
       # Add item's data to records
-      GameData::Item::DATA[item_number] = GameData::Item::DATA[item_symbol] = GameData::Item.new(item_hash)
+      GameData::Item.register(item_hash)
       item_names[item_number]        = item_hash[:name]
       item_names_plural[item_number] = item_hash[:name_plural]
       item_descriptions[item_number] = item_hash[:description]
@@ -364,7 +364,7 @@ module Compiler
           :maximum_yield   => line[3]
         }
         # Add berry plant's data to records
-        GameData::BerryPlant::DATA[item_number] = GameData::BerryPlant::DATA[item_symbol] = GameData::BerryPlant.new(berry_plant_hash)
+        GameData::BerryPlant.register(berry_plant_hash)
       end
     }
     # Save all data
@@ -459,7 +459,7 @@ module Compiler
           :evs                   => contents["EffortPoints"],
           :base_exp              => contents["BaseEXP"],
           :growth_rate           => contents["GrowthRate"],
-          :gender_rate           => contents["GenderRate"],
+          :gender_ratio          => contents["GenderRate"],
           :catch_rate            => contents["Rareness"],
           :happiness             => contents["Happiness"],
           :moves                 => contents["Moves"],
@@ -489,7 +489,7 @@ module Compiler
           :shadow_size           => contents["BattlerShadowSize"]
         }
         # Add species' data to records
-        GameData::Species::DATA[species_number] = GameData::Species::DATA[species_symbol] = GameData::Species.new(species_hash)
+        GameData::Species.register(species_hash)
         species_names[species_number]           = species_hash[:name]
         species_form_names[species_number]      = species_hash[:form_name]
         species_categories[species_number]      = species_hash[:category]
@@ -692,7 +692,7 @@ module Compiler
           species_hash[:wild_item_rare]     = contents["WildItemRare"]
         end
         # Add form's data to records
-        GameData::Species::DATA[form_number] = GameData::Species::DATA[form_symbol] = GameData::Species.new(species_hash)
+        GameData::Species.register(species_hash)
         species_names[form_number]           = species_hash[:name]
         species_form_names[form_number]      = species_hash[:form_name]
         species_categories[form_number]      = species_hash[:category]
@@ -824,110 +824,232 @@ module Compiler
   end
 
   #=============================================================================
+  # Compile ribbon data
+  #=============================================================================
+  def compile_ribbons
+    GameData::Ribbon::DATA.clear
+    ribbon_names        = []
+    ribbon_descriptions = []
+    pbCompilerEachPreppedLine("PBS/ribbons.txt") { |line, line_no|
+      line = pbGetCsvRecord(line, line_no, [0, "vnss"])
+      ribbon_number = line[0]
+      ribbon_symbol = line[1].to_sym
+      if GameData::Ribbon::DATA[ribbon_number]
+        raise _INTL("Ribbon ID number '{1}' is used twice.\r\n{2}", ribbon_number, FileLineData.linereport)
+      elsif GameData::Ribbon::DATA[ribbon_symbol]
+        raise _INTL("Ribbon ID '{1}' is used twice.\r\n{2}", ribbon_symbol, FileLineData.linereport)
+      end
+      # Construct ribbon hash
+      ribbon_hash = {
+        :id          => ribbon_symbol,
+        :id_number   => ribbon_number,
+        :name        => line[2],
+        :description => line[3]
+      }
+      # Add ribbon's data to records
+      GameData::Ribbon.register(ribbon_hash)
+      ribbon_names[ribbon_number]        = ribbon_hash[:name]
+      ribbon_descriptions[ribbon_number] = ribbon_hash[:description]
+    }
+    # Save all data
+    GameData::Ribbon.save
+    MessageTypes.setMessages(MessageTypes::RibbonNames, ribbon_names)
+    MessageTypes.setMessages(MessageTypes::RibbonDescriptions, ribbon_descriptions)
+    Graphics.update
+  end
+
+  #=============================================================================
   # Compile wild encounter data
   #=============================================================================
   def compile_encounters
-    lines   = []
-    linenos = []
-    FileLineData.file = "PBS/encounters.txt"
-    File.open("PBS/encounters.txt","rb") { |f|
-      lineno = 1
-      f.each_line { |line|
-        if lineno==1 && line[0]==0xEF && line[1]==0xBB && line[2]==0xBF
-          line = line[3,line.length-3]
+    new_format        = nil
+    encounter_hash    = nil
+    step_chances      = nil
+    need_step_chances = false   # Not needed for new format only
+    probabilities     = nil
+    current_type      = -1
+    expected_lines    = 0
+    max_level = PBExperience.maxLevel
+    pbCompilerEachPreppedLine("PBS/encounters.txt") { |line, line_no|
+      next if line.length == 0
+      if expected_lines > 0 && line[/^\d+,/] && new_format   # Species line
+        values = line.split(',')
+        if !values || values.length < 3
+          raise _INTL("Expected a species entry line for encounter type {1} for map '{2}', got \"{3}\" instead.\r\n{4}",
+             EncounterTypes::Names[current_type], encounter_hash[:map], line, FileLineData.linereport)
         end
-        line = prepline(line)
-        if line.length!=0
-          lines[lines.length] = line
-          linenos[linenos.length] = lineno
+        values = pbGetCsvRecord(line, line_no, [0, "vevV", nil, :Species])
+        values[3] = values[2] if !values[3]
+        if values[2] > max_level
+          raise _INTL("Level number {1} is not valid (max. {2}).\r\n{3}", values[2], max_level, FileLineData.linereport)
+        elsif values[3] > max_level
+          raise _INTL("Level number {1} is not valid (max. {2}).\r\n{3}", values[3], max_level, FileLineData.linereport)
+        elsif values[2] > values[3]
+          raise _INTL("Minimum level is greater than maximum level: {1}\r\n{2}", line, FileLineData.linereport)
         end
-        lineno += 1
-      }
-    }
-    encounters  = {}
-    thisenc     = nil
-    needdensity = false
-    lastmapid   = -1
-    i = 0
-    while i<lines.length
-      line = lines[i]
-      FileLineData.setLine(line,linenos[i])
-      mapid = line[/^\d+$/]
-      if mapid
-        lastmapid = mapid
-        if encounters[mapid.to_i]
-          raise _INTL("Encounters for map ID '{1}' are defined twice.\r\n{2}",mapid,FileLineData.linereport)
+        encounter_hash[:types][current_type].push(values)
+      elsif expected_lines > 0 && !new_format   # Expect a species line and nothing else
+        values = line.split(',')
+        if !values || values.length < 2
+          raise _INTL("Expected a species entry line for encounter type {1} for map '{2}', got \"{3}\" instead.\r\n{4}",
+             EncounterTypes::Names[current_type], encounter_hash[:map], line, FileLineData.linereport)
         end
-        if thisenc && (thisenc[1][EncounterTypes::Land] ||
-                       thisenc[1][EncounterTypes::LandMorning] ||
-                       thisenc[1][EncounterTypes::LandDay] ||
-                       thisenc[1][EncounterTypes::LandNight] ||
-                       thisenc[1][EncounterTypes::BugContest]) &&
-                       thisenc[1][EncounterTypes::Cave]
-          raise _INTL("Can't define both Land and Cave encounters in the same area (map ID '{1}').",mapid)
+        values = pbGetCsvRecord(line, line_no, [0, "evV", :Species])
+        values[2] = values[1] if !values[2]
+        if values[1] > max_level
+          raise _INTL("Level number {1} is not valid (max. {2}).\r\n{3}", values[1], max_level, FileLineData.linereport)
+        elsif values[2] > max_level
+          raise _INTL("Level number {1} is not valid (max. {2}).\r\n{3}", values[2], max_level, FileLineData.linereport)
+        elsif values[1] > values[2]
+          raise _INTL("Minimum level is greater than maximum level: {1}\r\n{2}", line, FileLineData.linereport)
         end
-        thisenc = [EncounterTypes::EnctypeDensities.clone,[]]
-        encounters[mapid.to_i] = thisenc
-        needdensity = true
-        i += 1
-        next
-      end
-      enc = findIndex(EncounterTypes::Names) { |val| val==line }
-      if enc>=0
-        needdensity = false
-        enclines = EncounterTypes::EnctypeChances[enc].length
-        encarray = []
-        j = i+1; k = 0
-        while j<lines.length && k<enclines
-          line = lines[j]
-          FileLineData.setLine(lines[j],linenos[j])
-          splitarr = strsplit(line,/\s*,\s*/)
-          if !splitarr || splitarr.length<2
-            raise _INTL("Expected a species entry line, got \"{1}\" instead. Check the number of species lines in the previous section (number {2}).\r\n{3}",
-               line,lastmapid,FileLineData.linereport)
+        probability = probabilities[probabilities.length - expected_lines]
+        encounter_hash[:types][current_type].push([probability] + values)
+        expected_lines -= 1
+      elsif line[/^\[\s*(.+)\s*\]$/]   # Map ID line (new format)
+        if new_format == false
+          raise _INTL("Can't mix old and new formats.\r\n{1}", FileLineData.linereport)
+        end
+        new_format = true
+        values = $~[1].split(',')
+        values.collect! { |v| v.strip.to_i }
+        values[1] = 0 if !values[1] || values[1] == ""
+        map_number = values[0]
+        map_version = values[1]
+        # Add map encounter's data to records
+        if encounter_hash
+          encounter_hash[:types].each do |encounters|
+            next if !encounters || encounters.length == 0
+            encounters.each_with_index do |enc, i|
+              next if !enc
+              encounters.each_with_index do |other_enc, j|
+                next if i == j || !other_enc
+                next if enc[1] != other_enc[1] || enc[2] != other_enc[2] || enc[3] != other_enc[3]
+                enc[0] += other_enc[0]
+                encounters[j] = nil
+              end
+            end
+            encounters.compact!
+            encounters.sort! { |a, b| (a[0] == b[0]) ? a[1].to_s <=> b[1].to_s : b[0] <=> a[0] }
           end
-          splitarr[2] = splitarr[1] if splitarr.length==2
-          splitarr[1] = splitarr[1].to_i
-          splitarr[2] = splitarr[2].to_i
-          maxlevel = PBExperience.maxLevel
-          if splitarr[1]<=0 || splitarr[1]>maxlevel
-            raise _INTL("Level number is not valid: {1}\r\n{2}",splitarr[1],FileLineData.linereport)
-          end
-          if splitarr[2]<=0 || splitarr[2]>maxlevel
-            raise _INTL("Level number is not valid: {1}\r\n{2}",splitarr[2],FileLineData.linereport)
-          end
-          if splitarr[1]>splitarr[2]
-            raise _INTL("Minimum level is greater than maximum level: {1}\r\n{2}",line,FileLineData.linereport)
-          end
-          splitarr[0] = parseSpecies(splitarr[0])
-          encarray.push(splitarr)
-          thisenc[1][enc] = encarray
-          j += 1; k += 1
+          GameData::Encounter.register(encounter_hash)
         end
-        if j==lines.length && k<enclines
-          raise _INTL("Reached end of file unexpectedly. There were too few species entry lines in the last section (number {1}), expected {2} entries.\r\n{3}",
-             lastmapid,enclines,FileLineData.linereport)
+        # Raise an error if a map/version combo is used twice
+        key = sprintf("%s_%d", map_number, map_version).to_sym
+        if GameData::Encounter::DATA[key]
+          raise _INTL("Encounters for map '{1}' are defined twice.\r\n{2}", map_number, FileLineData.linereport)
         end
-        i = j
-      elsif needdensity
-        needdensity = false
-        nums = strsplit(line,/,/)
-        if nums && nums.length>=3
-          for j in 0...EncounterTypes::EnctypeChances.length
-            next if !EncounterTypes::EnctypeChances[j] ||
-                    EncounterTypes::EnctypeChances[j].length==0
-            next if EncounterTypes::EnctypeCompileDens[j]==0
-            thisenc[0][j] = nums[EncounterTypes::EnctypeCompileDens[j]-1].to_i
+        step_chances = []
+        # Construct encounter hash
+        encounter_hash = {
+          :id           => key,
+          :map          => map_number,
+          :version      => map_version,
+          :step_chances => step_chances,
+          :types        => []
+        }
+        current_type = -1
+        need_step_chances = true
+        expected_lines = 0
+      elsif line[/^(\d+)$/]   # Map ID line (old format)
+        if new_format == true
+          raise _INTL("Can't mix old and new formats.\r\n{1}", FileLineData.linereport)
+        end
+        new_format = false
+        map_number = $~[1].to_i
+        # Add map encounter's data to records
+        if encounter_hash
+          encounter_hash[:types].each do |encounters|
+            next if !encounters || encounters.length == 0
+            encounters.each_with_index do |enc, i|
+              next if !enc
+              encounters.each_with_index do |other_enc, j|
+                next if i == j || !other_enc
+                next if enc[1] != other_enc[1] || enc[2] != other_enc[2] || enc[3] != other_enc[3]
+                enc[0] += other_enc[0]
+                encounters[j] = nil
+              end
+            end
+            encounters.compact!
+            encounters.sort! { |a, b| (a[0] == b[0]) ? a[1].to_s <=> b[1].to_s : b[0] <=> a[0] }
           end
-        else
-          raise _INTL("Wrong syntax for densities in encounters.txt; got \"{1}\"\r\n{2}",line,FileLineData.linereport)
+          GameData::Encounter.register(encounter_hash)
         end
-        i += 1
+        # Raise an error if a map/version combo is used twice
+        key = sprintf("%s_0", map_number).to_sym
+        if GameData::Encounter::DATA[key]
+          raise _INTL("Encounters for map '{1}' are defined twice.\r\n{2}", map_number, FileLineData.linereport)
+        end
+        step_chances = EncounterTypes::Chances_Per_Step.clone
+        # Construct encounter hash
+        encounter_hash = {
+          :id           => key,
+          :map          => map_number,
+          :version      => 0,
+          :step_chances => step_chances,
+          :types        => []
+        }
+        current_type = -1
+        need_step_chances = true
+      elsif !encounter_hash   # File began with something other than a map ID line
+        raise _INTL("Expected a map number, got \"{1}\" instead.\r\n{2}", line, FileLineData.linereport)
+      elsif line[/^(\d+)\s*,/] && !new_format   # Step chances line
+        if !need_step_chances
+          raise _INTL("Encounter densities are defined twice or\r\nnot immediately for map '{1}'.\r\n{2}",
+             encounter_hash[:map], FileLineData.linereport)
+        end
+        need_step_chances = false
+        values = pbGetCsvRecord(line, line_no, [0, "vvv"])
+        for type in 0...step_chances.length
+          next if EncounterTypes::Kinds[type] == 0
+          step_chances[type] = values[EncounterTypes::Kinds[type] - 1]
+        end
       else
-        raise _INTL("Undefined encounter type {1}, expected one of the following:\r\n{2}\r\n{3}",line,EncounterTypes::Names.inspect,FileLineData.linereport)
+        # Check if line is an encounter method name or not
+        values = line.split(',')
+        values.collect! { |v| v.strip }
+        current_type = findIndex(EncounterTypes::Names) { |val| val == values[0] }
+        if current_type >= 0   # Start of a new encounter method
+          need_step_chances = false
+          if values[1] && !values[1].empty?
+            step_chances[current_type] = values[1].to_i
+          elsif new_format
+            step_chances[current_type] = 0
+          end
+          probabilities = EncounterTypes::Probabilities[current_type].clone
+          expected_lines = probabilities.length
+          encounter_hash[:types][current_type] = []
+        else
+          raise _INTL("Undefined encounter type \"{1}\" for map '{2}'.\r\n{2}",
+             line, encounter_hash[:map], FileLineData.linereport)
+        end
       end
+    }
+    if expected_lines > 0 && !new_format
+      raise _INTL("Not enough encounter lines given for encounter type {1} for map '{2}' (expected {3}).\r\n{4}",
+         EncounterTypes::Names[current_type], encounter_hash[:map], probabilities.length, FileLineData.linereport)
     end
-    save_data(encounters,"Data/encounters.dat")
+    # Add last map's encounter data to records
+    if encounter_hash
+      encounter_hash[:types].each do |encounters|
+        next if !encounters || encounters.length == 0
+        encounters.each_with_index do |enc, i|
+          next if !enc
+          encounters.each_with_index do |other_enc, j|
+            next if i == j || !other_enc
+            next if enc[1] != other_enc[1] || enc[2] != other_enc[2] || enc[3] != other_enc[3]
+            enc[0] += other_enc[0]
+            encounters[j] = nil
+          end
+        end
+        encounters.compact!
+        encounters.sort! { |a, b| (a[0] == b[0]) ? a[1].to_s <=> b[1].to_s : b[0] <=> a[0] }
+      end
+      GameData::Encounter.register(encounter_hash)
+    end
+    # Save all data
+    GameData::Encounter.save
+    Graphics.update
   end
 
   #=============================================================================
@@ -966,7 +1088,7 @@ module Compiler
         :skill_code  => line[9]
       }
       # Add trainer type's data to records
-      GameData::TrainerType::DATA[type_number] = GameData::TrainerType::DATA[type_symbol] = GameData::TrainerType.new(type_hash)
+      GameData::TrainerType.register(type_hash)
       tr_type_names[type_number] = type_hash[:name]
     }
     # Save all data
@@ -981,28 +1103,33 @@ module Compiler
   def compile_trainers
     schema = GameData::Trainer::SCHEMA
     max_level = PBExperience.maxLevel
-    trainer_names      = []
-    trainer_lose_texts = []
-    trainer_hash       = nil
-    trainer_id         = -1
-    current_pkmn       = nil
+    trainer_names             = []
+    trainer_lose_texts        = []
+    trainer_hash              = nil
+    trainer_id                = -1
+    current_pkmn              = nil
+    old_format_current_line   = 0
+    old_format_expected_lines = 0
     # Read each line of trainers.txt at a time and compile it as a trainer property
     pbCompilerEachPreppedLine("PBS/trainers.txt") { |line, line_no|
-      # New section [trainer_type, name] or [trainer_type, name, version]
       if line[/^\s*\[\s*(.+)\s*\]\s*$/]
+        # New section [trainer_type, name] or [trainer_type, name, version]
         if trainer_hash
+          if old_format_current_line > 0
+            raise _INTL("Previous trainer not defined with as many Pokémon as expected.\r\n{1}", FileLineData.linereport)
+          end
           if !current_pkmn
             raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}", FileLineData.linereport)
           end
           # Add trainer's data to records
-          key = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
-          GameData::Trainer::DATA[trainer_id] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
+          trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+          GameData::Trainer.register(trainer_hash)
         end
         trainer_id += 1
         line_data = pbGetCsvRecord($~[1], line_no, [0, "esU", :TrainerType])
         # Construct trainer hash
         trainer_hash = {
-          :id           => trainer_id,
+          :id_number    => trainer_id,
           :trainer_type => line_data[0],
           :name         => line_data[1],
           :version      => line_data[2] || 0,
@@ -1010,8 +1137,8 @@ module Compiler
         }
         current_pkmn = nil
         trainer_names[trainer_id] = trainer_hash[:name]
-      # XXX=YYY lines
       elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
+        # XXX=YYY lines
         if !trainer_hash
           raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
         end
@@ -1080,13 +1207,112 @@ module Compiler
           current_pkmn[line_schema[0]] = property_value
         end
       else
-        raise _INTL("Expected a new section or a line like XXX=YYY, got:\r\n{1}\r\n{2}", line, FileLineData.linereport)
+        # Old format - backwards compatibility is SUCH fun!
+        if old_format_current_line == 0   # Started an old trainer section
+          if trainer_hash
+            if !current_pkmn
+              raise _INTL("Started new trainer while previous trainer has no Pokémon.\r\n{1}", FileLineData.linereport)
+            end
+            # Add trainer's data to records
+            trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+            GameData::Trainer.register(trainer_hash)
+          end
+          trainer_id += 1
+          old_format_expected_lines = 3
+          # Construct trainer hash
+          trainer_hash = {
+            :id_number    => trainer_id,
+            :trainer_type => nil,
+            :name         => nil,
+            :version      => 0,
+            :pokemon      => []
+          }
+          current_pkmn = nil
+        end
+        # Evaluate line and add to hash
+        old_format_current_line += 1
+        case old_format_current_line
+        when 1   # Trainer type
+          line_data = pbGetCsvRecord(line, line_no, [0, "e", :TrainerType])
+          trainer_hash[:trainer_type] = line_data
+        when 2   # Trainer name, version number
+          line_data = pbGetCsvRecord(line, line_no, [0, "sU"])
+          line_data = [line_data] if !line_data.is_a?(Array)
+          trainer_hash[:name]    = line_data[0]
+          trainer_hash[:version] = line_data[1] if line_data[1]
+          trainer_names[trainer_hash[:id]] = line_data[0]
+        when 3   # Number of Pokémon, items
+          line_data = pbGetCsvRecord(line, line_no,
+             [0, "vEEEEEEEE", nil, :Item, :Item, :Item, :Item, :Item, :Item, :Item, :Item])
+          line_data = [line_data] if !line_data.is_a?(Array)
+          line_data.compact!
+          old_format_expected_lines += line_data[0]
+          line_data.shift
+          trainer_hash[:items] = line_data if line_data.length > 0
+        else   # Pokémon lines
+          line_data = pbGetCsvRecord(line, line_no,
+             [0, "evEEEEEUEUBEUUSBU", :Species, nil, :Item, :Move, :Move, :Move, :Move, nil,
+                                      {"M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
+                                      "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1},
+                                      nil, nil, :Nature, nil, nil, nil, nil, nil])
+          current_pkmn = {
+            :species => line_data[0]
+          }
+          trainer_hash[:pokemon].push(current_pkmn)
+          # Error checking in properties
+          line_data.each_with_index do |value, i|
+            next if value.nil?
+            case i
+            when 1   # Level
+              if value > max_level
+                raise _INTL("Bad level: {1} (must be 1-{2}).\r\n{3}", value, max_level, FileLineData.linereport)
+              end
+            when 12   # IV
+              if value > Pokemon::IV_STAT_LIMIT
+                raise _INTL("Bad IV: {1} (must be 0-{2}).\r\n{3}", value, Pokemon::IV_STAT_LIMIT, FileLineData.linereport)
+              end
+            when 13   # Happiness
+              if value > 255
+                raise _INTL("Bad happiness: {1} (must be 0-255).\r\n{2}", value, FileLineData.linereport)
+              end
+            when 14   # Nickname
+              if value.length > Pokemon::MAX_NAME_SIZE
+                raise _INTL("Bad nickname: {1} (must be 1-{2} characters).\r\n{3}", value, Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
+              end
+            end
+          end
+          # Write all line data to hash
+          moves = [line_data[3], line_data[4], line_data[5], line_data[6]]
+          moves.uniq!.compact!
+          ivs = []
+          if line_data[12]
+            PBStats.each { |s| ivs[s] = line_data[12] }
+          end
+          current_pkmn[:level]        = line_data[1]
+          current_pkmn[:item]         = line_data[2] if line_data[2]
+          current_pkmn[:moves]        = moves if moves.length > 0
+          current_pkmn[:ability_flag] = line_data[7] if line_data[7]
+          current_pkmn[:gender]       = line_data[8] if line_data[8]
+          current_pkmn[:form]         = line_data[9] if line_data[9]
+          current_pkmn[:shininess]    = line_data[10] if line_data[10]
+          current_pkmn[:nature]       = line_data[11] if line_data[11]
+          current_pkmn[:iv]           = ivs if ivs.length > 0
+          current_pkmn[:happiness]    = line_data[13] if line_data[13]
+          current_pkmn[:name]         = line_data[14] if line_data[14] && !line_data[14].empty?
+          current_pkmn[:shadowness]   = line_data[15] if line_data[15]
+          current_pkmn[:poke_ball]    = line_data[16] if line_data[16]
+          # Check if this is the last expected Pokémon
+          old_format_current_line = 0 if old_format_current_line >= old_format_expected_lines
+        end
       end
     }
+    if old_format_current_line > 0
+      raise _INTL("Unexpected end of file, last trainer not defined with as many Pokémon as expected.\r\n{1}", FileLineData.linereport)
+    end
     # Add last trainer's data to records
     if trainer_hash
-      key = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
-      GameData::Trainer::DATA[trainer_id] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
+      trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+      GameData::Trainer.register(trainer_hash)
     end
     # Save all data
     GameData::Trainer.save
@@ -1258,7 +1484,7 @@ module Compiler
             :player_H           => contents["PlayerH"]
           }
           # Add metadata's data to records
-          GameData::Metadata::DATA[map_id] = GameData::Metadata.new(metadata_hash)
+          GameData::Metadata.register(metadata_hash)
         else   # Map metadata
           # Construct metadata hash
           metadata_hash = {
@@ -1285,7 +1511,7 @@ module Compiler
             :battle_environment   => contents["Environment"]
           }
           # Add metadata's data to records
-          GameData::MapMetadata::DATA[map_id] = GameData::MapMetadata.new(metadata_hash)
+          GameData::MapMetadata.register(metadata_hash)
         end
       }
     }

@@ -1,5 +1,6 @@
 module GameData
   class Trainer
+    attr_reader :id
     attr_reader :id_number
     attr_reader :trainer_type
     attr_reader :real_name
@@ -22,7 +23,7 @@ module GameData
       "Item"      => [:item,         "e", :Item],
       "Gender"    => [:gender,       "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
                                             "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
-      "Nature"    => [:nature,       "e", :PBNatures],
+      "Nature"    => [:nature,       "e", :Nature],
       "IV"        => [:iv,           "uUUUUU"],
       "EV"        => [:ev,           "uUUUUU"],
       "Happiness" => [:happiness,    "u"],
@@ -36,7 +37,7 @@ module GameData
 
     # @param tr_type [Symbol, String]
     # @param tr_name [String]
-    # @param tr_version [Integer]
+    # @param tr_version [Integer, nil]
     # @return [Boolean] whether the given other is defined as a self
     def self.exists?(tr_type, tr_name, tr_version = 0)
       validate tr_type => [Symbol, String]
@@ -47,7 +48,7 @@ module GameData
 
     # @param tr_type [Symbol, String]
     # @param tr_name [String]
-    # @param tr_version [Integer]
+    # @param tr_version [Integer, nil]
     # @return [self]
     def self.get(tr_type, tr_name, tr_version = 0)
       validate tr_type => [Symbol, String]
@@ -57,9 +58,11 @@ module GameData
       return self::DATA[key]
     end
 
-    # @param other [Symbol, self, String, Integer]
+    # @param tr_type [Symbol, String]
+    # @param tr_name [String]
+    # @param tr_version [Integer, nil]
     # @return [self, nil]
-    def try_get(tr_type, tr_name, tr_version = 0)
+    def self.try_get(tr_type, tr_name, tr_version = 0)
       validate tr_type => [Symbol, String]
       validate tr_name => [String]
       key = [tr_type.to_sym, tr_name, tr_version]
@@ -67,7 +70,8 @@ module GameData
     end
 
     def initialize(hash)
-      @id_number      = hash[:id]
+      @id             = hash[:id]
+      @id_number      = hash[:id_number]
       @trainer_type   = hash[:trainer_type]
       @real_name      = hash[:name]         || "Unnamed"
       @version        = hash[:version]      || 0
@@ -99,40 +103,40 @@ module GameData
     def to_trainer
       # Determine trainer's name
       tr_name = self.name
-      RIVAL_NAMES.each do |rival|
+      Settings::RIVAL_NAMES.each do |rival|
         next if rival[0] != @trainer_type || !$game_variables[rival[1]].is_a?(String)
         tr_name = $game_variables[rival[1]]
         break
       end
       # Create trainer object
-      trainer = PokeBattle_Trainer.new(tr_name, @trainer_type)
-      trainer.setForeignID($Trainer)
-      party = []
+      trainer = NPCTrainer.new(tr_name, @trainer_type)
+      trainer.id        = $Trainer.make_foreign_ID
+      trainer.items     = @items.clone
+      trainer.lose_text = self.lose_text
       # Create each Pokémon owned by the trainer
       @pokemon.each do |pkmn_data|
         species = GameData::Species.get(pkmn_data[:species]).species
         pkmn = Pokemon.new(species, pkmn_data[:level], trainer, false)
-        party.push(pkmn)
+        trainer.party.push(pkmn)
         # Set Pokémon's properties if defined
         if pkmn_data[:form]
-          pkmn.forcedForm = pkmn_data[:form] if MultipleForms.hasFunction?(species, "getForm")
-          pkmn.formSimple = pkmn_data[:form]
+          pkmn.forced_form = pkmn_data[:form] if MultipleForms.hasFunction?(species, "getForm")
+          pkmn.form_simple = pkmn_data[:form]
         end
-        pkmn.setItem(pkmn_data[:item])
+        pkmn.item = pkmn_data[:item]
         if pkmn_data[:moves] && pkmn_data[:moves].length > 0
-          pkmn_data[:moves].each { |move| pkmn.pbLearnMove(move) }
+          pkmn_data[:moves].each { |move| pkmn.learn_move(move) }
         else
           pkmn.resetMoves
         end
-        pkmn.setAbility(pkmn_data[:ability_flag])
-        gender = pkmn_data[:gender] || ((trainer.female?) ? 1 : 0)
-        pkmn.setGender(gender)
-        (pkmn_data[:shininess]) ? pkmn.makeShiny : pkmn.makeNotShiny
+        pkmn.ability_index = pkmn_data[:ability_flag]
+        pkmn.gender = pkmn_data[:gender] || ((trainer.male?) ? 0 : 1)
+        pkmn.shiny = (pkmn_data[:shininess]) ? true : false
         if pkmn_data[:nature]
-          pkmn.setNature(pkmn_data[:nature])
+          pkmn.nature = pkmn_data[:nature]
         else
-          nature = pkmn.species_data.id_number + GameData::TrainerType.get(trainer.trainertype).id_number
-          pkmn.setNature(nature % (PBNatures.maxValue + 1))
+          nature = pkmn.species_data.id_number + GameData::TrainerType.get(trainer.trainer_type).id_number
+          pkmn.nature = nature % (GameData::Nature::DATA.length / 2)
         end
         PBStats.eachStat do |s|
           if pkmn_data[:iv] && pkmn_data[:iv].length > 0
@@ -150,13 +154,13 @@ module GameData
         pkmn.name = pkmn_data[:name] if pkmn_data[:name] && !pkmn_data[:name].empty?
         if pkmn_data[:shadowness]
           pkmn.makeShadow
-          pkmn.pbUpdateShadowMoves(true)
-          pkmn.makeNotShiny
+          pkmn.update_shadow_moves(true)
+          pkmn.shiny = false
         end
-        pkmn.ballused = pkmn_data[:poke_ball] if pkmn_data[:poke_ball]
+        pkmn.poke_ball = pbBallTypeToItem(pkmn_data[:poke_ball]) if pkmn_data[:poke_ball]
         pkmn.calcStats
       end
-      return [trainer, @items.clone, party, self.lose_text]
+      return trainer
     end
   end
 end
@@ -164,6 +168,7 @@ end
 #===============================================================================
 # Deprecated methods
 #===============================================================================
+# @deprecated This alias is slated to be removed in v20.
 def pbGetTrainerData(tr_type, tr_name, tr_version = 0)
   Deprecation.warn_method('pbGetTrainerData', 'v20', 'GameData::Trainer.get(tr_type, tr_name, tr_version)')
   return GameData::Trainer.get(tr_type, tr_name, tr_version)

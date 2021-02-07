@@ -306,7 +306,7 @@ class PokeBattle_Scene
   def pbThrow(ball,shakes,critical,targetBattler,showPlayer=false)
     @briefMessage = false
     captureAnim = PokeballThrowCaptureAnimation.new(@sprites,@viewport,
-       pbGetBallType(ball),shakes,critical,@battle.battlers[targetBattler],showPlayer)
+       ball,shakes,critical,@battle.battlers[targetBattler],showPlayer)
     loop do
       captureAnim.update
       pbUpdate
@@ -347,7 +347,7 @@ class PokeBattle_Scene
   def pbThrowAndDeflect(ball,idxBattler)
     @briefMessage = false
     throwAnim = PokeballThrowDeflectAnimation.new(@sprites,@viewport,
-       pbGetBallType(ball),@battle.battlers[idxBattler])
+       ball,@battle.battlers[idxBattler])
     loop do
       throwAnim.update
       pbUpdate

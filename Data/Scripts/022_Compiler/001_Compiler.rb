@@ -649,11 +649,15 @@ module Compiler
   end
 
   # Unused
-  def parseNature(item)
-    clonitem = item.upcase
-    clonitem.sub!(/^\s*/, "")
-    clonitem.sub!(/\s*$/, "")
-    return pbGetConst(PBNatures, clonitem, _INTL("Undefined nature constant name: {1}\r\nMake sure the name is defined in the script section PBNatures.\r\n{1}", item, FileLineData.linereport))
+  def parseNature(nature)
+    clonnature = nature.upcase
+    clonnature.sub!(/^\s*/, "")
+    clonnature.sub!(/\s*$/, "")
+    nat = GameData::Nature.try_get(clonnature)
+    if !nat
+      raise _INTL("Undefined nature constant name: {1}\r\nMake sure the nature is defined in the scripts.\r\n{2}", nature, FileLineData.linereport)
+    end
+    return nat.id
   end
 
   # Unused
@@ -673,7 +677,7 @@ module Compiler
   #=============================================================================
   def compile_all(mustCompile)
     FileLineData.clear
-    if (!$INEDITOR || LANGUAGES.length < 2) && safeExists?("Data/messages.dat")
+    if (!$INEDITOR || Settings::LANGUAGES.length < 2) && safeExists?("Data/messages.dat")
       MessageTypes.loadMessageFile("Data/messages.dat")
     end
     if mustCompile
@@ -703,6 +707,8 @@ module Compiler
       compile_shadow_movesets        # Depends on Species, Move
       yield(_INTL("Compiling Regional Dexes"))
       compile_regional_dexes         # Depends on Species
+      yield(_INTL("Compiling ribbon data"))
+      compile_ribbons                # No dependencies
       yield(_INTL("Compiling encounter data"))
       compile_encounters             # Depends on Species
       yield(_INTL("Compiling Trainer type data"))
@@ -739,6 +745,7 @@ module Compiler
          "moves.dat",
          "phone.dat",
          "regional_dexes.dat",
+         "ribbons.dat",
          "shadow_movesets.dat",
          "species.dat",
          "species_eggmoves.dat",
@@ -764,6 +771,7 @@ module Compiler
          "pokemon.txt",
          "pokemonforms.txt",
          "regionaldexes.txt",
+         "ribbons.txt",
          "shadowmoves.txt",
          "townmap.txt",
          "trainerlists.txt",

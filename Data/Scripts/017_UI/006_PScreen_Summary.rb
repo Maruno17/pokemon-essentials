@@ -191,7 +191,7 @@ class PokemonSummary_Scene
     @sprites["movesel"].visible = false
     @sprites["movesel"].visible = true
     @sprites["movesel"].index   = 0
-    new_move = (move_to_learn) ? PBMove.new(move_to_learn) : nil
+    new_move = (move_to_learn) ? Pokemon::Move.new(move_to_learn) : nil
     drawSelectedMove(new_move,@pokemon.moves[0])
     pbFadeInAndShow(@sprites)
   end
@@ -302,7 +302,10 @@ class PokemonSummary_Scene
     @sprites["background"].setBitmap("Graphics/Pictures/Summary/bg_#{page}")
     imagepos=[]
     # Show the Poké Ball containing the Pokémon
-    ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%02d",@pokemon.ballused)
+    ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%s", @pokemon.poke_ball)
+    if !pbResolveBitmap(ballimage)
+      ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%02d", pbGetBallType(@pokemon.poke_ball))
+    end
     imagepos.push([ballimage,14,60])
     # Show status/fainted/Pokérus infected icon
     status = -1
@@ -368,7 +371,7 @@ class PokemonSummary_Scene
     dexNumShadow = (@pokemon.shiny?) ? Color.new(224,152,144) : Color.new(176,176,176)
     # If a Shadow Pokémon, draw the heart gauge area and bar
     if @pokemon.shadowPokemon?
-      shadowfract = @pokemon.heartgauge*1.0/Pokemon::HEARTGAUGESIZE
+      shadowfract = @pokemon.heart_gauge.to_f / Pokemon::HEART_GAUGE_SIZE
       imagepos = [
          ["Graphics/Pictures/Summary/overlay_shadow",224,240],
          ["Graphics/Pictures/Summary/overlay_shadowbar",242,280,0,0,(shadowfract*248).floor,-1]
@@ -388,7 +391,7 @@ class PokemonSummary_Scene
     dexnum = @pokemon.species
     dexnumshift = false
     if $PokemonGlobal.pokedexUnlocked[$PokemonGlobal.pokedexUnlocked.length-1]
-      dexnumshift = true if DEXES_WITH_OFFSETS.include?(-1)
+      dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
     else
       dexnum = 0
       for i in 0...$PokemonGlobal.pokedexUnlocked.length-1
@@ -396,7 +399,7 @@ class PokemonSummary_Scene
         num = pbGetRegionalNumber(i,@pokemon.species)
         next if num<=0
         dexnum = num
-        dexnumshift = true if DEXES_WITH_OFFSETS.include?(i)
+        dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(i)
         break
       end
     end
@@ -436,7 +439,7 @@ class PokemonSummary_Scene
       memo = sprintf("<c3=404040,B0B0B0>%s\n",heartmessage)
       drawFormattedTextEx(overlay,234,304,264,memo)
     else
-      endexp = PBExperience.pbGetStartExperience(@pokemon.level+1,@pokemon.growthrate)
+      endexp = PBExperience.pbGetStartExperience(@pokemon.level+1,@pokemon.growth_rate)
       textpos.push([_INTL("Exp. Points"),238,240,0,base,shadow])
       textpos.push([@pokemon.exp.to_s_formatted,488,272,1,Color.new(64,64,64),Color.new(176,176,176)])
       textpos.push([_INTL("To Next Lv."),238,304,0,base,shadow])
@@ -457,7 +460,7 @@ class PokemonSummary_Scene
     end
     # Draw Exp bar
     if @pokemon.level<PBExperience.maxLevel
-      w = @pokemon.expFraction*128
+      w = @pokemon.exp_fraction * 128
       w = ((w/2).round)*2
       pbDrawImagePositions(overlay,[
          ["Graphics/Pictures/Summary/overlay_exp",362,372,0,0,w,6]
@@ -475,7 +478,10 @@ class PokemonSummary_Scene
     @sprites["background"].setBitmap("Graphics/Pictures/Summary/bg_egg")
     imagepos = []
     # Show the Poké Ball containing the Pokémon
-    ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%02d",@pokemon.ballused)
+    ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%s", @pokemon.poke_ball)
+    if !pbResolveBitmap(ballimage)
+      ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%02d", pbGetBallType(@pokemon.poke_ball))
+    end
     imagepos.push([ballimage,14,60])
     # Draw all images
     pbDrawImagePositions(overlay,imagepos)
@@ -502,11 +508,9 @@ class PokemonSummary_Scene
       memo += _INTL("<c3=404040,B0B0B0>{1} {2}, {3}\n",date,month,year)
     end
     # Write map name egg was received on
-    mapname = pbGetMapNameFromId(@pokemon.obtainMap)
-    if (@pokemon.obtainText rescue false) && @pokemon.obtainText!=""
-      mapname = @pokemon.obtainText
-    end
-    if mapname && mapname!=""
+    mapname = pbGetMapNameFromId(@pokemon.obtain_map)
+    mapname = @pokemon.obtain_text if @pokemon.obtain_text && !@pokemon.obtain_text.empty?
+    if mapname && mapname != ""
       memo += _INTL("<c3=404040,B0B0B0>A mysterious Pokémon Egg received from <c3=F83820,E09890>{1}<c3=404040,B0B0B0>.\n",mapname)
     else
       memo += _INTL("<c3=404040,B0B0B0>A mysterious Pokémon Egg.\n",mapname)
@@ -515,9 +519,9 @@ class PokemonSummary_Scene
     # Write Egg Watch blurb
     memo += _INTL("<c3=404040,B0B0B0>\"The Egg Watch\"\n")
     eggstate = _INTL("It looks like this Egg will take a long time to hatch.")
-    eggstate = _INTL("What will hatch from this? It doesn't seem close to hatching.") if @pokemon.eggsteps<10200
-    eggstate = _INTL("It appears to move occasionally. It may be close to hatching.") if @pokemon.eggsteps<2550
-    eggstate = _INTL("Sounds can be heard coming from inside! It will hatch soon!") if @pokemon.eggsteps<1275
+    eggstate = _INTL("What will hatch from this? It doesn't seem close to hatching.") if @pokemon.steps_to_hatch < 10200
+    eggstate = _INTL("It appears to move occasionally. It may be close to hatching.") if @pokemon.steps_to_hatch < 2550
+    eggstate = _INTL("Sounds can be heard coming from inside! It will hatch soon!") if @pokemon.steps_to_hatch < 1275
     memo += sprintf("<c3=404040,B0B0B0>%s\n",eggstate)
     # Draw all text
     drawFormattedTextEx(overlay,232,78,268,memo)
@@ -531,7 +535,7 @@ class PokemonSummary_Scene
     # Write nature
     showNature = !@pokemon.shadowPokemon? || @pokemon.heartStage>3
     if showNature
-      natureName = PBNatures.getName(@pokemon.nature)
+      natureName = @pokemon.nature.name
       memo += _INTL("<c3=F83820,E09890>{1}<c3=404040,B0B0B0> nature.\n",natureName)
     end
     # Write date received
@@ -542,29 +546,27 @@ class PokemonSummary_Scene
       memo += _INTL("<c3=404040,B0B0B0>{1} {2}, {3}\n",date,month,year)
     end
     # Write map name Pokémon was received on
-    mapname = pbGetMapNameFromId(@pokemon.obtainMap)
-    if (@pokemon.obtainText rescue false) && @pokemon.obtainText!=""
-      mapname = @pokemon.obtainText
-    end
+    mapname = pbGetMapNameFromId(@pokemon.obtain_map)
+    mapname = @pokemon.obtain_text if @pokemon.obtain_text && !@pokemon.obtain_text.empty?
     mapname = _INTL("Faraway place") if !mapname || mapname==""
     memo += sprintf("<c3=F83820,E09890>%s\n",mapname)
     # Write how Pokémon was obtained
-    mettext = [_INTL("Met at Lv. {1}.",@pokemon.obtainLevel),
+    mettext = [_INTL("Met at Lv. {1}.",@pokemon.obtain_level),
                _INTL("Egg received."),
-               _INTL("Traded at Lv. {1}.",@pokemon.obtainLevel),
+               _INTL("Traded at Lv. {1}.",@pokemon.obtain_level),
                "",
-               _INTL("Had a fateful encounter at Lv. {1}.",@pokemon.obtainLevel)
-              ][@pokemon.obtainMode]
+               _INTL("Had a fateful encounter at Lv. {1}.",@pokemon.obtain_level)
+              ][@pokemon.obtain_method]
     memo += sprintf("<c3=404040,B0B0B0>%s\n",mettext) if mettext && mettext!=""
     # If Pokémon was hatched, write when and where it hatched
-    if @pokemon.obtainMode==1
+    if @pokemon.obtain_method == 1
       if @pokemon.timeEggHatched
         date  = @pokemon.timeEggHatched.day
         month = pbGetMonthName(@pokemon.timeEggHatched.mon)
         year  = @pokemon.timeEggHatched.year
         memo += _INTL("<c3=404040,B0B0B0>{1} {2}, {3}\n",date,month,year)
       end
-      mapname = pbGetMapNameFromId(@pokemon.hatchedMap)
+      mapname = pbGetMapNameFromId(@pokemon.hatched_map)
       mapname = _INTL("Faraway place") if !mapname || mapname==""
       memo += sprintf("<c3=F83820,E09890>%s\n",mapname)
       memo += _INTL("<c3=404040,B0B0B0>Egg hatched.\n")
@@ -626,11 +628,11 @@ class PokemonSummary_Scene
     # Determine which stats are boosted and lowered by the Pokémon's nature
     statshadows = []
     PBStats.eachStat { |s| statshadows[s] = shadow }
-    if !@pokemon.shadowPokemon? || @pokemon.heartStage>3
-      natup = PBNatures.getStatRaised(@pokemon.calcNature)
-      natdn = PBNatures.getStatLowered(@pokemon.calcNature)
-      statshadows[natup] = Color.new(136,96,72) if natup!=natdn
-      statshadows[natdn] = Color.new(64,120,152) if natup!=natdn
+    if !@pokemon.shadowPokemon? || @pokemon.heartStage > 3
+      @pokemon.nature_for_stats.stat_changes.each do |change|
+        statshadows[change[0]] = Color.new(136,96,72) if change[1] > 0
+        statshadows[change[0]] = Color.new(64,120,152) if change[1] < 0
+      end
     end
     # Write various bits of text
     textpos = [
@@ -829,22 +831,21 @@ class PokemonSummary_Scene
     # Write various bits of text
     textpos = [
        [_INTL("No. of Ribbons:"),234,332,0,Color.new(64,64,64),Color.new(176,176,176)],
-       [@pokemon.ribbonCount.to_s,450,332,1,Color.new(64,64,64),Color.new(176,176,176)],
+       [@pokemon.numRibbons.to_s,450,332,1,Color.new(64,64,64),Color.new(176,176,176)],
     ]
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
     # Show all ribbons
     imagepos = []
     coord = 0
-    if @pokemon.ribbons
-      for i in @ribbonOffset*4...@ribbonOffset*4+12
-        break if !@pokemon.ribbons[i]
-        ribn = @pokemon.ribbons[i]-1
-        imagepos.push(["Graphics/Pictures/ribbons",230+68*(coord%4),78+68*(coord/4).floor,
-                                                   64*(ribn%8),64*(ribn/8).floor,64,64])
-        coord += 1
-        break if coord>=12
-      end
+    for i in @ribbonOffset*4...@ribbonOffset*4+12
+      break if !@pokemon.ribbons[i]
+      ribbon_data = GameData::Ribbon.get(@pokemon.ribbons[i])
+      ribn = ribbon_data.id_number - 1
+      imagepos.push(["Graphics/Pictures/ribbons",
+         230 + 68 * (coord % 4), 78 + 68 * (coord / 4).floor,
+         64 * (ribn % 8), 64 * (ribn / 8).floor, 64, 64])
+      coord += 1
     end
     # Draw all images
     pbDrawImagePositions(overlay,imagepos)
@@ -860,8 +861,8 @@ class PokemonSummary_Scene
     nameBase   = Color.new(248,248,248)
     nameShadow = Color.new(104,104,104)
     # Get data for selected ribbon
-    name = ribbonid ? PBRibbons.getName(ribbonid) : ""
-    desc = ribbonid ? PBRibbons.getDescription(ribbonid) : ""
+    name = ribbonid ? GameData::Ribbon.get(ribbonid).name : ""
+    desc = ribbonid ? GameData::Ribbon.get(ribbonid).description : ""
     # Draw the description box
     imagepos = [
        ["Graphics/Pictures/Summary/overlay_ribbon",8,280]
@@ -1202,7 +1203,7 @@ class PokemonSummary_Scene
   end
 
   def pbChooseMoveToForget(move_to_learn)
-    new_move = (move_to_learn) ? PBMove.new(move_to_learn) : nil
+    new_move = (move_to_learn) ? Pokemon::Move.new(move_to_learn) : nil
     selmove = 0
     maxmove = (new_move) ? Pokemon::MAX_MOVES : Pokemon::MAX_MOVES - 1
     loop do

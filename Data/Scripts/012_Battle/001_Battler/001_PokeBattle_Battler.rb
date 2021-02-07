@@ -76,7 +76,7 @@ class PokeBattle_Battler
   def item=(value)
     new_item = GameData::Item.try_get(value)
     @item_id = (new_item) ? new_item.id : nil
-    @pokemon.setItem(@item_id) if @pokemon
+    @pokemon.item = @item_id if @pokemon
   end
 
   def defense
@@ -191,7 +191,7 @@ class PokeBattle_Battler
 
   def owned?
     return false if !@battle.wildBattle?
-    return $Trainer.owned[displaySpecies]
+    return $Trainer.owned?(displaySpecies)
   end
   alias owned owned?
 
@@ -255,11 +255,11 @@ class PokeBattle_Battler
     speedMult /= 2 if pbOwnSide.effects[PBEffects::Swamp]>0
     # Paralysis
     if status==PBStatuses::PARALYSIS && !hasActiveAbility?(:QUICKFEET)
-      speedMult /= (MECHANICS_GENERATION >= 7) ? 2 : 4
+      speedMult /= (Settings::MECHANICS_GENERATION >= 7) ? 2 : 4
     end
     # Badge multiplier
     if @battle.internalBattle && pbOwnedByPlayer? &&
-       @battle.pbPlayer.numbadges>=NUM_BADGES_BOOST_SPEED
+       @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPEED
       speedMult *= 1.1
     end
     # Calculation
@@ -524,11 +524,11 @@ class PokeBattle_Battler
 
   def affectedByPowder?(showMsg=false)
     return false if fainted?
-    if pbHasType?(:GRASS) && MORE_TYPE_EFFECTS
+    if pbHasType?(:GRASS) && Settings::MORE_TYPE_EFFECTS
       @battle.pbDisplay(_INTL("{1} is unaffected!",pbThis)) if showMsg
       return false
     end
-    if MECHANICS_GENERATION >= 6
+    if Settings::MECHANICS_GENERATION >= 6
       if hasActiveAbility?(:OVERCOAT) && !@battle.moldBreaker
         if showMsg
           @battle.pbShowAbilitySplash(self)

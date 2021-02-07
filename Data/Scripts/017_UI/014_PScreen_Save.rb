@@ -47,9 +47,9 @@ class PokemonSave_Scene
     else
       loctext+=_INTL("Time<r><c3={1}>{2}m</c3><br>",textColor,min)
     end
-    loctext+=_INTL("Badges<r><c3={1}>{2}</c3><br>",textColor,$Trainer.numbadges)
+    loctext+=_INTL("Badges<r><c3={1}>{2}</c3><br>",textColor,$Trainer.badge_count)
     if $Trainer.pokedex
-      loctext+=_INTL("Pokédex<r><c3={1}>{2}/{3}</c3>",textColor,$Trainer.pokedexOwned,$Trainer.pokedexSeen)
+      loctext+=_INTL("Pokédex<r><c3={1}>{2}/{3}</c3>",textColor,$Trainer.owned_count,$Trainer.seen_count)
     end
     @sprites["locwindow"]=Window_AdvancedTextPokemon.new(loctext)
     @sprites["locwindow"].viewport=@viewport

@@ -449,9 +449,10 @@ def pbCancelVehicles(destination=nil)
 end
 
 def pbCanUseBike?(map_id)
-  return true if GameData::MapMetadata.get(map_id).always_bicycle
-  val = GameData::MapMetadata.get(map_id).can_bicycle
-  val = GameData::MapMetadata.get(map_id).outdoor_map if val.nil?
+  map_metadata = GameData::MapMetadata.try_get(map_id)
+  return false if !map_metadata
+  return true if map_metadata.always_bicycle
+  val = map_metadata.can_bicycle || map_metadata.outdoor_map
   return (val) ? true : false
 end
 
@@ -461,6 +462,7 @@ def pbMountBike
   pbUpdateVehicle
   bike_bgm = GameData::Metadata.get.bicycle_BGM
   pbCueBGM(bike_bgm, 0.5) if bike_bgm
+  pbPokeRadarCancel
 end
 
 def pbDismountBike

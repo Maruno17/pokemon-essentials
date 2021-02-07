@@ -17,15 +17,16 @@ class PokemonPokedexInfo_Scene
     @sprites["infosprite"].x = 104
     @sprites["infosprite"].y = 136
     @mapdata = pbLoadTownMapData
-    mappos = ($game_map) ? GameData::MapMetadata.get($game_map.map_id).town_map_position : nil
-    if @region<0                                   # Use player's current region
+    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+    mappos = (map_metadata) ? map_metadata.town_map_position : nil
+    if @region < 0                                 # Use player's current region
       @region = (mappos) ? mappos[0] : 0                      # Region 0 default
     end
     @sprites["areamap"] = IconSprite.new(0,0,@viewport)
     @sprites["areamap"].setBitmap("Graphics/Pictures/#{@mapdata[@region][1]}")
     @sprites["areamap"].x += (Graphics.width-@sprites["areamap"].bitmap.width)/2
     @sprites["areamap"].y += (Graphics.height+32-@sprites["areamap"].bitmap.height)/2
-    for hidden in REGION_MAP_EXTRAS
+    for hidden in Settings::REGION_MAP_EXTRAS
       if hidden[0]==@region && hidden[1]>0 && $game_switches[hidden[1]]
         pbDrawImagePositions(@sprites["areamap"].bitmap,[
            ["Graphics/Pictures/#{hidden[4]}",
@@ -72,7 +73,7 @@ class PokemonPokedexInfo_Scene
     dexnum = species
     dexnumshift = false
     if $PokemonGlobal.pokedexUnlocked[$PokemonGlobal.pokedexUnlocked.length - 1]
-      dexnumshift = true if DEXES_WITH_OFFSETS.include?(-1)   # National Dex
+      dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)   # National Dex
     else
       dexnum = 0
       for i in 0...$PokemonGlobal.pokedexUnlocked.length - 1   # Regional Dexes
@@ -80,7 +81,7 @@ class PokemonPokedexInfo_Scene
         num = pbGetRegionalNumber(i,species)
         next if num <= 0
         dexnum = num
-        dexnumshift = true if DEXES_WITH_OFFSETS.include?(i)
+        dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(i)
         break
       end
     end
@@ -120,10 +121,10 @@ class PokemonPokedexInfo_Scene
 
   def pbUpdateDummyPokemon
     @species = @dexlist[@index][0]
-    $Trainer.formlastseen = {} if !$Trainer.formlastseen
-    $Trainer.formlastseen[@species] = [] if !$Trainer.formlastseen[@species]
-    @gender  = $Trainer.formlastseen[@species][0] || 0
-    @form    = $Trainer.formlastseen[@species][1] || 0
+    $Trainer.last_seen_forms = {} if !$Trainer.last_seen_forms
+    $Trainer.last_seen_forms[@species] = [] if !$Trainer.last_seen_forms[@species]
+    @gender  = $Trainer.last_seen_forms[@species][0] || 0
+    @form    = $Trainer.last_seen_forms[@species][1] || 0
     species_data = GameData::Species.get_species_form(@species, @form)
     @sprites["infosprite"].setSpeciesBitmap(@species,@gender,@form)
     if @sprites["formfront"]
@@ -148,16 +149,16 @@ class PokemonPokedexInfo_Scene
       next if sp.form != 0 && (!sp.real_form_name || sp.real_form_name.empty?)
       next if sp.pokedex_form != sp.form
       multiple_forms = true if sp.form > 0
-      $Trainer.formseen[@species] = [[], []] if !$Trainer.formseen[@species]
-      case sp.gender_rate
-      when PBGenderRates::AlwaysMale, PBGenderRates::AlwaysFemale, PBGenderRates::Genderless
-        real_gender = (sp.gender_rate == PBGenderRates::AlwaysFemale) ? 1 : 0
-        next if !$Trainer.formseen[@species][real_gender][sp.form] && !DEX_SHOWS_ALL_FORMS
-        real_gender = 2 if sp.gender_rate == PBGenderRates::Genderless
+      $Trainer.seen_forms[@species] = [[], []] if !$Trainer.seen_forms[@species]
+      case sp.gender_ratio
+      when :AlwaysMale, :AlwaysFemale, :Genderless
+        real_gender = (sp.gender_ratio == :AlwaysFemale) ? 1 : 0
+        next if !$Trainer.seen_forms[@species][real_gender][sp.form] && !Settings::DEX_SHOWS_ALL_FORMS
+        real_gender = 2 if sp.gender_ratio == :Genderless
         ret.push([sp.form_name, real_gender, sp.form])
       else   # Both male and female
         for real_gender in 0...2
-          next if !$Trainer.formseen[@species][real_gender][sp.form] && !DEX_SHOWS_ALL_FORMS
+          next if !$Trainer.seen_forms[@species][real_gender][sp.form] && !Settings::DEX_SHOWS_ALL_FORMS
           ret.push([sp.form_name, real_gender, sp.form])
           break if sp.form_name && !sp.form_name.empty?   # Only show 1 entry for each non-0 form
         end
@@ -222,7 +223,7 @@ class PokemonPokedexInfo_Scene
        [_INTL("Height"), 314, 158, 0, base, shadow],
        [_INTL("Weight"), 314, 190, 0, base, shadow]
     ]
-    if $Trainer.owned[@species]
+    if $Trainer.owned?(@species)
       # Write the category
       textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 74, 0, base, shadow])
       # Write the height and weight
@@ -276,12 +277,12 @@ class PokemonPokedexInfo_Scene
     pbDrawImagePositions(overlay, imagepos)
   end
 
-  def pbFindEncounter(encounter,species)
-    return false if !encounter
-    for i in 0...encounter.length
-      next if !encounter[i]
-      for j in 0...encounter[i].length
-        return true if encounter[i][j][0]==species
+  def pbFindEncounter(enc_types, species)
+    return false if !enc_types
+    enc_types.each do |enc_type|
+      next if !enc_type
+      enc_type.each do |slot|
+        return true if GameData::Species.get(slot[1]).species == species
       end
     end
     return false
@@ -297,34 +298,30 @@ class PokemonPokedexInfo_Scene
     # species can be found
     points = []
     mapwidth = 1+PokemonRegionMap_Scene::RIGHT-PokemonRegionMap_Scene::LEFT
-    encdata = pbLoadEncountersData
-    for enc in encdata.keys
-      enctypes = encdata[enc][1]
-      if pbFindEncounter(enctypes,@species)
-        mappos = GameData::MapMetadata.get(enc).town_map_position
-        if mappos && mappos[0]==@region
-          showpoint = true
-          for loc in @mapdata[@region][2]
-            showpoint = false if loc[0]==mappos[1] && loc[1]==mappos[2] &&
-                                 loc[7] && !$game_switches[loc[7]]
-          end
-          if showpoint
-            mapsize = GameData::MapMetadata.get(enc).town_map_size
-            if mapsize && mapsize[0] && mapsize[0]>0
-              sqwidth  = mapsize[0]
-              sqheight = (mapsize[1].length*1.0/mapsize[0]).ceil
-              for i in 0...sqwidth
-                for j in 0...sqheight
-                  if mapsize[1][i+j*sqwidth,1].to_i>0
-                    points[mappos[1]+i+(mappos[2]+j)*mapwidth] = true
-                  end
-                end
-              end
-            else
-              points[mappos[1]+mappos[2]*mapwidth] = true
+    GameData::Encounter.each_of_version($PokemonGlobal.encounter_version) do |enc_data|
+      next if !pbFindEncounter(enc_data.types, @species)
+      map_metadata = GameData::MapMetadata.try_get(enc_data.id)
+      mappos = (map_metadata) ? map_metadata.town_map_position : nil
+      next if !mappos || mappos[0] != @region
+      showpoint = true
+      for loc in @mapdata[@region][2]
+        showpoint = false if loc[0]==mappos[1] && loc[1]==mappos[2] &&
+                             loc[7] && !$game_switches[loc[7]]
+      end
+      next if !showpoint
+      mapsize = map_metadata.town_map_size
+      if mapsize && mapsize[0] && mapsize[0]>0
+        sqwidth  = mapsize[0]
+        sqheight = (mapsize[1].length*1.0/mapsize[0]).ceil
+        for i in 0...sqwidth
+          for j in 0...sqheight
+            if mapsize[1][i+j*sqwidth,1].to_i>0
+              points[mappos[1]+i+(mappos[2]+j)*mapwidth] = true
             end
           end
         end
+      else
+        points[mappos[1]+mappos[2]*mapwidth] = true
       end
     end
     # Draw coloured squares on each square of the region map with a nest
@@ -391,7 +388,7 @@ class PokemonPokedexInfo_Scene
     newindex = @index
     while newindex>0
       newindex -= 1
-      if $Trainer.seen[@dexlist[newindex][0]]
+      if $Trainer.seen?(@dexlist[newindex][0])
         @index = newindex
         break
       end
@@ -402,7 +399,7 @@ class PokemonPokedexInfo_Scene
     newindex = @index
     while newindex<@dexlist.length-1
       newindex += 1
-      if $Trainer.seen[@dexlist[newindex][0]]
+      if $Trainer.seen?(@dexlist[newindex][0])
         @index = newindex
         break
       end
@@ -420,10 +417,10 @@ class PokemonPokedexInfo_Scene
     oldindex = -1
     loop do
       if oldindex!=index
-        $Trainer.formlastseen = {} if !$Trainer.formlastseen
-        $Trainer.formlastseen[@species] = [] if !$Trainer.formlastseen
-        $Trainer.formlastseen[@species][0] = @available[index][1]
-        $Trainer.formlastseen[@species][1] = @available[index][2]
+        $Trainer.last_seen_forms = {} if !$Trainer.last_seen_forms
+        $Trainer.last_seen_forms[@species] = [] if !$Trainer.last_seen_forms
+        $Trainer.last_seen_forms[@species][0] = @available[index][1]
+        $Trainer.last_seen_forms[@species][1] = @available[index][2]
         pbUpdateDummyPokemon
         drawPage(@page)
         @sprites["uparrow"].visible   = (index>0)
@@ -557,14 +554,14 @@ class PokemonPokedexInfoScreen
 
   def pbStartSceneSingle(species)   # For use from a Pokémon's summary screen
     region = -1
-    if USE_CURRENT_REGION_DEX
+    if Settings::USE_CURRENT_REGION_DEX
       region = pbGetCurrentRegion
       region = -1 if region>=$PokemonGlobal.pokedexUnlocked.length-1
     else
       region = $PokemonGlobal.pokedexDex # National Dex -1, regional dexes 0 etc.
     end
     dexnum = pbGetRegionalNumber(region,species)
-    dexnumshift = DEXES_WITH_OFFSETS.include?(region)
+    dexnumshift = Settings::DEXES_WITH_OFFSETS.include?(region)
     dexlist = [[species,GameData::Species.get(species).name,0,0,dexnum,dexnumshift]]
     @scene.pbStartScene(dexlist,0,region)
     @scene.pbScene

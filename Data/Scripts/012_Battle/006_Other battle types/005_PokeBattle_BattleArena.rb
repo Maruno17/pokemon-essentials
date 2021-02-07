@@ -97,7 +97,7 @@ class PokeBattle_BattleArena < PokeBattle_Battle
     @count += 1
     # Update skill rating
     for side in 0...2
-      @skill[side] += self.successStates[side].skill
+      @skill[side] += self.successStates[side].skill_level
     end
 #    PBDebug.log("[Mind: #{@mind.inspect}, Skill: #{@skill.inspect}]")
     if @count==3

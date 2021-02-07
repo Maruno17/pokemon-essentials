@@ -121,6 +121,15 @@ def pbChooseSpeciesList(default = nil)
   return pbChooseList(commands, default, nil, -1)
 end
 
+def pbChooseSpeciesFormList(default = nil)
+  commands = []
+  GameData::Species.each do |s|
+    name = (s.form == 0) ? s.real_name : sprintf("%s_%d", s.real_name, s.form)
+    commands.push([s.id_number, name, s.id])
+  end
+  return pbChooseList(commands, default, nil, -1)
+end
+
 # Displays a list of all moves, and returns the ID of the move selected (or nil
 # if the selection was canceled). "default", if specified, is the ID of the move
 # to initially select. Pressing Input::A will toggle the list sorting between

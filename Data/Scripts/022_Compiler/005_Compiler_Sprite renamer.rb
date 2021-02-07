@@ -215,7 +215,7 @@ module Compiler
   end
 
   def convert_files
-    return if !pbConfirmMessage("Do you want to check for Pokémon graphics/cries and item icons that need renaming?")
+    return if !pbConfirmMessage("Check for Pokémon/item/trainer files that need renaming?")
     # Rename and move Pokémon sprites/icons
     dest_dir = "Graphics/Pokemon/"
     Dir.mkdir(dest_dir) if !FileTest.directory?(dest_dir)

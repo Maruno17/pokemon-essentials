@@ -35,7 +35,7 @@ class UIntProperty
   def set(settingname,oldsetting)
     params = ChooseNumberParams.new
     params.setMaxDigits(@maxdigits)
-    params.setDefaultValue(oldsetting||0)
+    params.setDefaultValue(oldsetting || 0)
     return pbMessageChooseNumber(_INTL("Set the value for {1}.",settingname),params)
   end
 
@@ -209,6 +209,63 @@ end
 
 
 
+class EnumProperty2
+  def initialize(value)
+    @module = value
+  end
+
+  def set(settingname,oldsetting)
+    commands = []
+    for i in 0..@module.maxValue
+      commands.push(getConstantName(@module, i))
+    end
+    cmd = pbMessage(_INTL("Choose a value for {1}.", settingname), commands, -1, nil, oldsetting)
+    return oldsetting if cmd < 0
+    return cmd
+  end
+
+  def defaultValue
+    return nil
+  end
+
+  def format(value)
+    return (value) ? getConstantName(@module, value) : "-"
+  end
+end
+
+
+
+class GameDataProperty
+  def initialize(value)
+    raise _INTL("Couldn't find class {1} in module GameData.", value.to_s) if !GameData.const_defined?(value.to_sym)
+    @module = GameData.const_get(value.to_sym)
+  end
+
+  def set(settingname, oldsetting)
+    commands = []
+    i = 0
+    @module.each do |data|
+      if data.respond_to?("id_number")
+        commands.push([data.id_number, data.name, data.id])
+      else
+        commands.push([i, data.name, data.id])
+      end
+      i += 1
+    end
+    return pbChooseList(commands, oldsetting, nil, -1)
+  end
+
+  def defaultValue
+    return nil
+  end
+
+  def format(value)
+    return (value && @module.exists?(value)) ? @module.get(value).real_name : "-"
+  end
+end
+
+
+
 module BGMProperty
   def self.set(settingname,oldsetting)
     chosenmap = pbListScreen(settingname,MusicFileLister.new(true,oldsetting))
@@ -278,6 +335,31 @@ end
 
 
 
+module SpeciesFormProperty
+  def self.set(_settingname,oldsetting)
+    ret = pbChooseSpeciesFormList(oldsetting || nil)
+    return ret || oldsetting
+  end
+
+  def self.defaultValue
+    return nil
+  end
+
+  def self.format(value)
+    if value && GameData::Species.exists?(value)
+      species_data = GameData::Species.get(value)
+      if species_data.form > 0
+        return sprintf("%s_%d", species_data.real_name, species_data.form)
+      else
+        return species_data.real_name
+      end
+    end
+    return "-"
+  end
+end
+
+
+
 module TypeProperty
   def self.set(_settingname, oldsetting)
     ret = pbChooseTypeList(oldsetting || nil)
@@ -333,17 +415,17 @@ end
 
 
 
-class GenderProperty
-  def set(_settingname,_oldsetting)
+module GenderProperty
+  def self.set(_settingname,_oldsetting)
     ret = pbShowCommands(nil,[_INTL("Male"),_INTL("Female")],-1)
     return (ret>=0) ? ret : nil
   end
 
-  def defaultValue
+  def self.defaultValue
     return nil
   end
 
-  def format(value)
+  def self.format(value)
     return _INTL("-") if !value
     return (value==0) ? _INTL("Male") : (value==1) ? _INTL("Female") : "-"
   end
@@ -363,27 +445,6 @@ module ItemProperty
 
   def self.format(value)
     return (value && GameData::Item.exists?(value)) ? GameData::Item.get(value).real_name : "-"
-  end
-end
-
-
-
-module NatureProperty
-  def self.set(_settingname,_oldsetting)
-    commands = []
-    (PBNatures.getCount).times do |i|
-      commands.push(PBNatures.getName(i))
-    end
-    ret = pbShowCommands(nil,commands,-1)
-    return (ret>=0) ? ret : nil
-  end
-
-  def self.defaultValue
-    return nil
-  end
-
-  def self.format(value)
-    return (value) ? getConstantName(PBNatures,value) : "-"
   end
 end
 
@@ -550,8 +611,8 @@ module MapSizeProperty
   def self.set(settingname,oldsetting)
     oldsetting = [0,""] if !oldsetting
     properties = [
-       [_INTL("Width"),NonzeroLimitProperty.new(30),_INTL("The width of this map in Region Map squares.")],
-       [_INTL("Valid Squares"),StringProperty,_INTL("A series of 1s and 0s marking which squares are part of this map (1=part, 0=not part).")],
+       [_INTL("Width"),         NonzeroLimitProperty.new(30), _INTL("The width of this map in Region Map squares.")],
+       [_INTL("Valid Squares"), StringProperty,               _INTL("A series of 1s and 0s marking which squares are part of this map (1=part, 0=not part).")],
     ]
     pbPropertyList(settingname,oldsetting,properties,false)
     return oldsetting
@@ -567,13 +628,9 @@ end
 def chooseMapPoint(map,rgnmap=false)
   viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z=99999
-  title=Window_UnformattedTextPokemon.new(_INTL("Click a point on the map."))
-  title.x=0
-  title.y=Graphics.height-64
-  title.width=Graphics.width
-  title.height=64
-  title.viewport=viewport
-  title.z=2
+  title = Window_UnformattedTextPokemon.newWithSize(_INTL("Click a point on the map."),
+     0, Graphics.height - 64, Graphics.width, 64, viewport)
+  title.z = 2
   if rgnmap
     sprite=RegionMapSprite.new(map,viewport)
   else
@@ -712,23 +769,6 @@ end
 
 
 
-module EnvironmentProperty
-  def self.set(_settingname,_oldsetting)
-    options = []
-    for i in 0..PBEnvironment.maxValue
-      options.push(getConstantName(PBEnvironment,i) || "ERROR")
-    end
-    cmd = pbMessage(_INTL("Choose an environment."),options,1)
-    return cmd
-  end
-
-  def self.format(value)
-    return (value) ? (getConstantName(PBEnvironment,value) || "ERROR") : "-"
-  end
-end
-
-
-
 module MapProperty
   def self.set(settingname,oldsetting)
     chosenmap = pbListScreen(settingname,MapLister.new(oldsetting ? oldsetting : 0))
@@ -764,14 +804,10 @@ end
 
 
 module PocketProperty
-  def self.pocketnames
-    return [_INTL("Items"), _INTL("Medicine"), _INTL("Poké Balls"),
-       _INTL("TMs & HMs"), _INTL("Berries"), _INTL("Mail"),
-       _INTL("Battle Items"), _INTL("Key Items")]
-  end
-
   def self.set(_settingname, oldsetting)
-    cmd = pbMessage(_INTL("Choose a pocket for this item."), pocketnames(), -1)
+    commands = Settings.bag_pocket_names.clone
+    commands.shift
+    cmd = pbMessage(_INTL("Choose a pocket for this item."), commands, -1)
     return (cmd >= 0) ? cmd + 1 : oldsetting
   end
 
@@ -781,7 +817,7 @@ module PocketProperty
 
   def self.format(value)
     return _INTL("No Pocket") if value == 0
-    return (value) ? pocketnames[value - 1] : value.inspect
+    return (value) ? Settings.bag_pocket_names[value] : value.inspect
   end
 end
 
@@ -1112,105 +1148,6 @@ end
 
 
 
-module FormNamesProperty
-  def self.set(_settingname,oldsetting)
-    ret = oldsetting
-    cmdwin = pbListWindow([],200)
-    commands = []
-    realcmds = []
-    realcmds.push([_INTL("[ADD FORM]"),-1])
-    for i in 0...oldsetting.length
-      realcmds.push([oldsetting[i],i])
-    end
-    refreshlist = true; oldsel = -1
-    cmd = [0,0]
-    loop do
-      if refreshlist
-        realcmds.sort! { |a,b| a[1]<=>b[1] }
-        commands = []
-        for i in 0...realcmds.length
-          text = (realcmds[i][1]>=0) ? sprintf("#{realcmds[i][1]} - #{realcmds[i][0]}") : realcmds[i][0]
-          commands.push(text)
-          cmd[1] = i if oldsel>=0 && realcmds[i][1]==oldsel
-        end
-      end
-      refreshlist = false; oldsel = -1
-      cmd = pbCommands3(cmdwin,commands,-1,cmd[1],true)
-      if cmd[0]==1   # Swap name up
-        if cmd[1]<realcmds.length-1 && realcmds[cmd[1]][1]>=0 && realcmds[cmd[1]+1][1]>=0
-          realcmds[cmd[1]+1][1],realcmds[cmd[1]][1] = realcmds[cmd[1]][1],realcmds[cmd[1]+1][1]
-          refreshlist = true
-        end
-      elsif cmd[0]==2   # Swap name down
-        if cmd[1]>0 && realcmds[cmd[1]][1]>=0 && realcmds[cmd[1]-1][1]>=0
-          realcmds[cmd[1]-1][1],realcmds[cmd[1]][1] = realcmds[cmd[1]][1],realcmds[cmd[1]-1][1]
-          refreshlist = true
-        end
-      elsif cmd[0]==0
-        if cmd[1]>=0
-          entry = realcmds[cmd[1]]
-          if entry[1]<0   # Add new form
-            newname = pbMessageFreeText(_INTL("Choose a form name (no commas)."),"",false,250)
-            if newname!=""
-              realcmds.push([newname,realcmds.length-1])
-              refreshlist = true
-            end
-          else   # Edit form name
-            cmd2 = pbMessage(_INTL("\\ts[]Do what with this form name?"),
-               [_INTL("Rename"),_INTL("Delete"),_INTL("Cancel")],3)
-            if cmd2==0
-              newname = pbMessageFreeText(_INTL("Choose a form name (no commas)."),entry[0],false,250)
-              if newname!=""
-                realcmds[cmd[1]][0] = newname
-                refreshlist = true
-              end
-            elsif cmd2==1
-              realcmds[cmd[1]] = nil
-              realcmds.compact!
-              cmd[1] = [cmd[1],realcmds.length-1].min
-              refreshlist = true
-            end
-          end
-        else
-          cmd2 = pbMessage(_INTL("Save changes?"),
-             [_INTL("Yes"),_INTL("No"),_INTL("Cancel")],3)
-          if cmd2==0 || cmd2==1
-            if cmd2==0
-              for i in 0...realcmds.length
-                if realcmds[i][1]<0
-                  realcmds[i] = nil
-                else
-                  realcmds[i] = realcmds[i][0]
-                end
-              end
-              realcmds.compact!
-              ret = realcmds
-            end
-            break
-          end
-        end
-      end
-    end
-    cmdwin.dispose
-    return ret
-  end
-
-  def self.defaultValue
-    return []
-  end
-
-  def self.format(value)
-    ret = ""
-    for i in 0...value.length
-      ret << "," if i>0
-      ret << sprintf("#{value[i]}")
-    end
-    return ret
-  end
-end
-
-
-
 class EvolutionsProperty
   def initialize
     @methods = []
@@ -1464,29 +1401,69 @@ end
 
 
 
+module EncounterSlotProperty
+  def self.set(setting_name, data)
+    max_level = PBExperience.maxLevel
+    if !data
+      data = [20, nil, 5, 5]
+      GameData::Species.each do |species_data|
+        data[1] = species_data.species
+        break
+      end
+    end
+    data[3] = data[2] if !data[3]
+    properties = [
+      [_INTL("Probability"),   NonzeroLimitProperty.new(999),       _INTL("Relative probability of choosing this slot.")],
+      [_INTL("Species"),       SpeciesFormProperty,                 _INTL("A Pokémon species/form.")],
+      [_INTL("Minimum level"), NonzeroLimitProperty.new(max_level), _INTL("Minimum level of this species (1-{1}).", max_level)],
+      [_INTL("Maximum level"), NonzeroLimitProperty.new(max_level), _INTL("Maximum level of this species (1-{1}).", max_level)]
+    ]
+    pbPropertyList(setting_name, data, properties, false)
+    if data[2] > data[3]
+      data[3], data[2] = data[2], data[3]
+    end
+    return data
+  end
+
+  def self.defaultValue
+    return nil
+  end
+
+  def self.format(value)
+    return "-" if !value
+    species_data = GameData::Species.get(value[1])
+    if species_data.form > 0
+      if value[2] == value[3]
+        return sprintf("%d, %s_%d (Lv.%d)", value[0],
+           species_data.real_name, species_data.form, value[2])
+      end
+      return sprintf("%d, %s_%d (Lv.%d-%d)", value[0],
+         species_data.real_name, species_data.form, value[2], value[3])
+    end
+    if value[2] == value[3]
+      return sprintf("%d, %s (Lv.%d)", value[0], species_data.real_name, value[2])
+    end
+    return sprintf("%d, %s (Lv.%d-%d)", value[0], species_data.real_name, value[2], value[3])
+  end
+end
+
+
+
 #===============================================================================
 # Core property editor script
 #===============================================================================
 def pbPropertyList(title,data,properties,saveprompt=false)
   viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
   viewport.z = 99999
-  list = pbListWindow([],Graphics.width*5/10)
+  list = pbListWindow([], Graphics.width / 2)
   list.viewport = viewport
   list.z        = 2
-  title = Window_UnformattedTextPokemon.new(title)
-  title.x        = list.width
-  title.y        = 0
-  title.width    = Graphics.width*5/10
-  title.height   = 64
-  title.viewport = viewport
-  title.z        = 2
-  desc = Window_UnformattedTextPokemon.new("")
-  desc.x        = list.width
-  desc.y        = title.height
-  desc.width    = Graphics.width*5/10
-  desc.height   = Graphics.height-title.height
-  desc.viewport = viewport
-  desc.z        = 2
+  title = Window_UnformattedTextPokemon.newWithSize(title,
+     list.width, 0, Graphics.width / 2, 64, viewport)
+  title.z = 2
+  desc = Window_UnformattedTextPokemon.newWithSize("",
+     list.width, title.height, Graphics.width / 2, Graphics.height - title.height, viewport)
+  desc.z = 2
   selectedmap = -1
   retval = nil
   commands = []

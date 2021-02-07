@@ -15,7 +15,7 @@ module GameData
     attr_reader :evs
     attr_reader :base_exp
     attr_reader :growth_rate
-    attr_reader :gender_rate
+    attr_reader :gender_ratio
     attr_reader :catch_rate
     attr_reader :happiness
     attr_reader :moves
@@ -92,13 +92,13 @@ module GameData
         "WildItemCommon"    => [0, "e", :Item],
         "WildItemUncommon"  => [0, "e", :Item],
         "WildItemRare"      => [0, "e", :Item],
-        "Compatibility"     => [0, "*e", :PBEggGroups],
+        "Compatibility"     => [0, "*e", :EggGroup],
         "StepsToHatch"      => [0, "v"],
         "Height"            => [0, "f"],
         "Weight"            => [0, "f"],
-        "Color"             => [0, "e", :PBColors],
+        "Color"             => [0, "e", :BodyColor],
         "Shape"             => [0, "u"],
-        "Habitat"           => [0, "e", :PBHabitats],
+        "Habitat"           => [0, "e", :Habitat],
         "Generation"        => [0, "i"],
         "BattlerPlayerX"    => [0, "i"],
         "BattlerPlayerY"    => [0, "i"],
@@ -119,7 +119,7 @@ module GameData
         ret["InternalName"] = [0, "n"]
         ret["Name"]         = [0, "s"]
         ret["GrowthRate"]   = [0, "e", :PBGrowthRates]
-        ret["GenderRate"]   = [0, "e", :PBGenderRates]
+        ret["GenderRate"]   = [0, "e", :GenderRatio]
         ret["Incense"]      = [0, "e", :Item]
         ret["Evolutions"]   = [0, "*ses", nil, :PBEvolution, nil]
       end
@@ -142,7 +142,7 @@ module GameData
       @evs                   = hash[:evs]                   || [0, 0, 0, 0, 0, 0]
       @base_exp              = hash[:base_exp]              || 100
       @growth_rate           = hash[:growth_rate]           || PBGrowthRates::Medium
-      @gender_rate           = hash[:gender_rate]           || PBGenderRates::Female50Percent
+      @gender_ratio          = hash[:gender_ratio]          || :Female50Percent
       @catch_rate            = hash[:catch_rate]            || 255
       @happiness             = hash[:happiness]             || 70
       @moves                 = hash[:moves]                 || []
@@ -153,15 +153,15 @@ module GameData
       @wild_item_common      = hash[:wild_item_common]
       @wild_item_uncommon    = hash[:wild_item_uncommon]
       @wild_item_rare        = hash[:wild_item_rare]
-      @egg_groups            = hash[:egg_groups]            || [PBEggGroups::Undiscovered]
+      @egg_groups            = hash[:egg_groups]            || [:Undiscovered]
       @hatch_steps           = hash[:hatch_steps]           || 1
       @incense               = hash[:incense]
       @evolutions            = hash[:evolutions]            || []
       @height                = hash[:height]                || 1
       @weight                = hash[:weight]                || 1
-      @color                 = hash[:color]                 || PBColors::Red
+      @color                 = hash[:color]                 || :Red
       @shape                 = hash[:shape]                 || 1
-      @habitat               = hash[:habitat]               || PBHabitats::None
+      @habitat               = hash[:habitat]               || :None
       @generation            = hash[:generation]            || 0
       @mega_stone            = hash[:mega_stone]
       @mega_move             = hash[:mega_move]
@@ -195,59 +195,65 @@ module GameData
     def pokedex_entry
       return pbGetMessage(MessageTypes::Entries, @id_number)
     end
-  end
 
-  def apply_metrics_to_sprite(sprite, index, shadow = false)
-    if shadow
-      if (index & 1) == 1   # Foe Pokémon
-        sprite.x += @shadow_x * 2
-      end
-    else
-      if (index & 1) == 0   # Player's Pokémon
-        sprite.x += @back_sprite_x * 2
-        sprite.y += @back_sprite_y * 2
-      else                  # Foe Pokémon
-        sprite.x += @front_sprite_x * 2
-        sprite.y += @front_sprite_y * 2
-        sprite.y -= @front_sprite_altitude * 2
+    def apply_metrics_to_sprite(sprite, index, shadow = false)
+      if shadow
+        if (index & 1) == 1   # Foe Pokémon
+          sprite.x += @shadow_x * 2
+        end
+      else
+        if (index & 1) == 0   # Player's Pokémon
+          sprite.x += @back_sprite_x * 2
+          sprite.y += @back_sprite_y * 2
+        else                  # Foe Pokémon
+          sprite.x += @front_sprite_x * 2
+          sprite.y += @front_sprite_y * 2
+          sprite.y -= @front_sprite_altitude * 2
+        end
       end
     end
-  end
 
-  def shows_shadow?
-    return true
-#    return @front_sprite_altitude > 0
+    def shows_shadow?
+      return true
+#      return @front_sprite_altitude > 0
+    end
   end
 end
 
 #===============================================================================
 # Deprecated methods
 #===============================================================================
+# @deprecated This alias is slated to be removed in v20.
 def pbGetSpeciesData(species, form = 0, species_data_type = -1)
   Deprecation.warn_method('pbGetSpeciesData', 'v20', 'GameData::Species.get_species_form(species, form).something')
   return GameData::Species.get_species_form(species, form)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbGetSpeciesEggMoves(species, form = 0)
   Deprecation.warn_method('pbGetSpeciesEggMoves', 'v20', 'GameData::Species.get_species_form(species, form).egg_moves')
   return GameData::Species.get_species_form(species, form).egg_moves
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbGetSpeciesMoveset(species, form = 0)
   Deprecation.warn_method('pbGetSpeciesMoveset', 'v20', 'GameData::Species.get_species_form(species, form).moves')
   return GameData::Species.get_species_form(species, form).moves
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbGetEvolutionData(species)
   Deprecation.warn_method('pbGetEvolutionData', 'v20', 'GameData::Species.get(species).evolutions')
   return GameData::Species.get(species).evolutions
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbApplyBattlerMetricsToSprite(sprite, index, species_data, shadow = false, metrics = nil)
   Deprecation.warn_method('pbApplyBattlerMetricsToSprite', 'v20', 'GameData::Species.get(species).apply_metrics_to_sprite')
   GameData::Species.get(species).apply_metrics_to_sprite(sprite, index, shadow)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def showShadow?(species)
   Deprecation.warn_method('showShadow?', 'v20', 'GameData::Species.get(species).shows_shadow?')
   return GameData::Species.get(species).shows_shadow?

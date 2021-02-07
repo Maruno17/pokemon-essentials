@@ -496,7 +496,7 @@ class Interpreter
     when 7   # other
       case @parameters[4]
       when 0 then value = $game_map.map_id                             # map ID
-      when 1 then value = $Trainer.pokemonParty.length                 # party members
+      when 1 then value = $Trainer.pokemon_party.length                # party members
       when 2 then value = $Trainer.money                               # gold
 #      when 3   # steps
       when 4 then value = Graphics.frame_count / Graphics.frame_rate   # play time
@@ -572,10 +572,10 @@ class Interpreter
   # * Change Windowskin
   #-----------------------------------------------------------------------------
   def command_131
-    for i in 0...$SpeechFrames.length
-      next if $SpeechFrames[i] != @parameters[0]
+    for i in 0...Settings::SPEECH_WINDOWSKINS.length
+      next if Settings::SPEECH_WINDOWSKINS[i] != @parameters[0]
       $PokemonSystem.textskin = i
-      MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/" + $SpeechFrames[i])
+      MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[i])
       return true
     end
     return true
@@ -955,7 +955,7 @@ class Interpreter
   # * Recover All
   #-----------------------------------------------------------------------------
   def command_314
-    pbHealAll if @parameters[0] == 0
+    $Trainer.heal_party if @parameters[0] == 0
     return true
   end
 

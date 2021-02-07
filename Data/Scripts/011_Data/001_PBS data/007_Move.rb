@@ -50,13 +50,13 @@ module GameData
 
     def physical?
       return false if @base_damage == 0
-      return @category == 0 if MOVE_CATEGORY_PER_MOVE
+      return @category == 0 if Settings::MOVE_CATEGORY_PER_MOVE
       return GameData::Type.get(@type).physical?
     end
 
     def special?
       return false if @base_damage == 0
-      return @category == 1 if MOVE_CATEGORY_PER_MOVE
+      return @category == 1 if Settings::MOVE_CATEGORY_PER_MOVE
       return GameData::Type.get(@type).special?
     end
 
@@ -72,11 +72,13 @@ end
 #===============================================================================
 # Deprecated methods
 #===============================================================================
+# @deprecated This alias is slated to be removed in v20.
 def pbGetMoveData(move_id, move_data_type = -1)
   Deprecation.warn_method('pbGetMoveData', 'v20', 'GameData::Move.get(move_id)')
   return GameData::Move.get(move_id)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbIsHiddenMove?(move)
   Deprecation.warn_method('pbIsHiddenMove?', 'v20', 'GameData::Move.get(move).hidden_move?')
   return GameData::Move.get(move).hidden_move?

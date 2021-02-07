@@ -19,7 +19,7 @@ end
 
 def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
   party = []
-  for i in 0...MAX_PARTY_SIZE
+  for i in 0...Settings::MAX_PARTY_SIZE
     if i == 0
       pbMessage(_INTL("Please enter the first Pokémon.",i))
     else
@@ -44,7 +44,7 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
   trainer = [tr_type, tr_name, [], party, tr_version]
   if save_changes
     trainer_hash = {
-      :id           => GameData::Trainer::HASH.keys.length / 2,
+      :id_number    => GameData::Trainer::DATA.keys.length / 2,
       :trainer_type => tr_type,
       :name         => tr_name,
       :version      => tr_version,
@@ -57,8 +57,8 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
       })
     end
     # Add trainer's data to records
-    key = [tr_type, tr_name, tr_version]
-    GameData::Trainer::DATA[trainer_hash[:id]] = GameData::Trainer::DATA[key] = GameData::Trainer.new(trainer_hash)
+    trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
+    GameData::Trainer.register(trainer_hash)
     GameData::Trainer.save
     pbConvertTrainerData
     pbMessage(_INTL("The Trainer's data was added to the list of battles and in PBS/trainers.txt."))

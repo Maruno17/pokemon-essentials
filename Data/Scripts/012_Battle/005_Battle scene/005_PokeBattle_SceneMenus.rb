@@ -350,7 +350,7 @@ class FightMenuDisplay < BattleMenuBase
       x = button.x-self.x+button.src_rect.width/2
       y = button.y-self.y+8
       moveNameBase = TEXT_BASE_COLOR
-      if moves[i].type>=0
+      if moves[i].type
         # NOTE: This takes a colour from a particular pixel in the button
         #       graphic and makes the move name's base colour that same colour.
         #       The pixel is at coordinates 10,34 in the button box. If you
@@ -374,7 +374,7 @@ class FightMenuDisplay < BattleMenuBase
         end
         @visibility["button_#{i}"] = true
         button.src_rect.x = (i==@index) ? @buttonBitmap.width/2 : 0
-        button.src_rect.y = moves[i].type*BUTTON_HEIGHT
+        button.src_rect.y = GameData::Type.get(moves[i].type).id_number * BUTTON_HEIGHT
         button.z          = self.z + ((i==@index) ? 4 : 3)
       end
     end

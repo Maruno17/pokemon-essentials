@@ -196,15 +196,11 @@ class PokemonBag_Scene
     @sprites["itemlist"].baseColor   = ITEMLISTBASECOLOR
     @sprites["itemlist"].shadowColor = ITEMLISTSHADOWCOLOR
     @sprites["itemicon"] = ItemIconSprite.new(48,Graphics.height-48,nil,@viewport)
-    @sprites["itemtext"] = Window_UnformattedTextPokemon.new("")
-    @sprites["itemtext"].x           = 72
-    @sprites["itemtext"].y           = 270
-    @sprites["itemtext"].width       = Graphics.width-72-24
-    @sprites["itemtext"].height      = 128
+    @sprites["itemtext"] = Window_UnformattedTextPokemon.newWithSize("",
+       72, 270, Graphics.width - 72 - 24, 128, @viewport)
     @sprites["itemtext"].baseColor   = ITEMTEXTBASECOLOR
     @sprites["itemtext"].shadowColor = ITEMTEXTSHADOWCOLOR
     @sprites["itemtext"].visible     = true
-    @sprites["itemtext"].viewport    = @viewport
     @sprites["itemtext"].windowskin  = nil
     @sprites["helpwindow"] = Window_UnformattedTextPokemon.new("")
     @sprites["helpwindow"].visible  = false
@@ -423,7 +419,7 @@ class PokemonBag_Scene
           elsif Input.trigger?(Input::A)   # Start switching the selected item
             if !@choosing
               if thispocket.length>1 && itemwindow.index<thispocket.length &&
-                 !BAG_POCKET_AUTO_SORT[itemwindow.pocket]
+                 !Settings::BAG_POCKET_AUTO_SORT[itemwindow.pocket]
                 itemwindow.sorting = true
                 swapinitialpos = itemwindow.index
                 pbPlayDecisionSE
@@ -475,7 +471,7 @@ class PokemonBagScreen
           commands[cmdUse = commands.length]    = _INTL("Use")
         end
       end
-      commands[cmdGive = commands.length]       = _INTL("Give") if $Trainer.pokemonParty.length>0 && itm.can_hold?
+      commands[cmdGive = commands.length]       = _INTL("Give") if $Trainer.pokemon_party.length > 0 && itm.can_hold?
       commands[cmdToss = commands.length]       = _INTL("Toss") if !itm.is_important? || $DEBUG
       if @bag.pbIsRegistered?(item)
         commands[cmdRegister = commands.length] = _INTL("Deselect")
@@ -489,7 +485,7 @@ class PokemonBagScreen
       command = @scene.pbShowCommands(_INTL("{1} is selected.",itemname),commands)
       if cmdRead>=0 && command==cmdRead   # Read mail
         pbFadeOutIn {
-          pbDisplayMail(PokemonMail.new(item,"",""))
+          pbDisplayMail(Mail.new(item, "", ""))
         }
       elsif cmdUse>=0 && command==cmdUse   # Use item
         ret = pbUseItem(@bag,item,@scene)
@@ -498,7 +494,7 @@ class PokemonBagScreen
         @scene.pbRefresh
         next
       elsif cmdGive>=0 && command==cmdGive   # Give item to Pokémon
-        if $Trainer.pokemonCount==0
+        if $Trainer.pokemon_count == 0
           @scene.pbDisplay(_INTL("There is no Pokémon."))
         elsif itm.is_important?
           @scene.pbDisplay(_INTL("The {1} can't be held.",itemname))
@@ -548,10 +544,10 @@ class PokemonBagScreen
             qty = @bag.pbQuantity(item)
             itemplural = itm.name_plural
             params = ChooseNumberParams.new
-            params.setRange(0,BAG_MAX_PER_SLOT)
+            params.setRange(0, Settings::BAG_MAX_PER_SLOT)
             params.setDefaultValue(qty)
             newqty = pbMessageChooseNumber(
-               _INTL("Choose new quantity of {1} (max. #{BAG_MAX_PER_SLOT}).",itemplural),params) { @scene.pbUpdate }
+               _INTL("Choose new quantity of {1} (max. #{Settings::BAG_MAX_PER_SLOT}).",itemplural),params) { @scene.pbUpdate }
             if newqty>qty
               @bag.pbStoreItem(item,newqty-qty)
             elsif newqty<qty

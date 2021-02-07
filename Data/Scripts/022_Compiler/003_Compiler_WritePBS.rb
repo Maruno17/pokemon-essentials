@@ -35,9 +35,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save map connections to PBS file
-  #===============================================================================
+  #=============================================================================
   def normalize_connection(conn)
     ret = conn.clone
     if conn[1] < 0 && conn[4] < 0
@@ -96,9 +96,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save phone messages to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_phone
     data = load_data("Data/phone.dat") rescue nil
     return if !data
@@ -129,9 +129,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save type data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_types
     File.open("PBS/types.txt", "wb") { |f|
       add_PBS_header_to_file(f)
@@ -151,9 +151,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save ability data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_abilities
     File.open("PBS/abilities.txt", "wb") { |f|
       add_PBS_header_to_file(f)
@@ -170,9 +170,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save move data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_moves
     File.open("PBS/moves.txt", "wb") { |f|
       add_PBS_header_to_file(f)
@@ -203,9 +203,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save item data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_items
     File.open("PBS/items.txt", "wb") { |f|
       add_PBS_header_to_file(f)
@@ -236,9 +236,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save berry plant data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_berry_plants
     File.open("PBS/berryplants.txt", "wb") { |f|
       add_PBS_header_to_file(f)
@@ -256,9 +256,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save Pokémon data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_pokemon
     File.open("PBS/pokemon.txt", "wb") { |f|
       add_PBS_header_to_file(f)
@@ -273,7 +273,7 @@ module Compiler
         f.write(sprintf("Type1 = %s\r\n", species.type1))
         f.write(sprintf("Type2 = %s\r\n", species.type2)) if species.type2 != species.type1
         f.write(sprintf("BaseStats = %s\r\n", species.base_stats.join(",")))
-        f.write(sprintf("GenderRate = %s\r\n", getConstantName(PBGenderRates, species.gender_rate)))
+        f.write(sprintf("GenderRate = %s\r\n", species.gender_ratio))
         f.write(sprintf("GrowthRate = %s\r\n", getConstantName(PBGrowthRates, species.growth_rate)))
         f.write(sprintf("BaseEXP = %d\r\n", species.base_exp))
         f.write(sprintf("EffortPoints = %s\r\n", species.evs.join(",")))
@@ -295,19 +295,14 @@ module Compiler
           f.write(sprintf("EggMoves = %s\r\n", species.egg_moves.join(",")))
         end
         if species.egg_groups.length > 0
-          f.write("Compatibility = ")
-          species.egg_groups.each_with_index do |group, i|
-            f.write(",") if i > 0
-            f.write(getConstantName(PBEggGroups, group))
-          end
-          f.write("\r\n")
+          f.write(sprintf("Compatibility = %s\r\n", species.egg_groups.join(",")))
         end
         f.write(sprintf("StepsToHatch = %d\r\n", species.hatch_steps))
         f.write(sprintf("Height = %.1f\r\n", species.height / 10.0))
         f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0))
-        f.write(sprintf("Color = %s\r\n", getConstantName(PBColors, species.color)))
+        f.write(sprintf("Color = %s\r\n", species.color))
         f.write(sprintf("Shape = %d\r\n", species.shape))
-        f.write(sprintf("Habitat = %s\r\n", getConstantName(PBHabitats, species.habitat))) if species.habitat != PBHabitats::None
+        f.write(sprintf("Habitat = %s\r\n", species.habitat)) if species.habitat != :None
         f.write(sprintf("Kind = %s\r\n", species.real_category))
         f.write(sprintf("Pokedex = %s\r\n", species.real_pokedex_entry))
         f.write(sprintf("FormName = %s\r\n", species.real_form_name)) if species.real_form_name && !species.real_form_name.empty?
@@ -351,9 +346,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save Pokémon forms data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_pokemon_forms
     File.open("PBS/pokemonforms.txt", "wb") { |f|
       add_PBS_header_to_file(f)
@@ -395,20 +390,15 @@ module Compiler
           f.write(sprintf("EggMoves = %s\r\n", species.egg_moves.join(",")))
         end
         if species.egg_groups.length > 0 && species.egg_groups != base_species.egg_groups
-          f.write("Compatibility = ")
-          species.egg_groups.each_with_index do |group, i|
-            f.write(",") if i > 0
-            f.write(getConstantName(PBEggGroups, group))
-          end
-          f.write("\r\n")
+          f.write(sprintf("Compatibility = %s\r\n", species.egg_groups.join(",")))
         end
         f.write(sprintf("StepsToHatch = %d\r\n", species.hatch_steps)) if species.hatch_steps != base_species.hatch_steps
         f.write(sprintf("Height = %.1f\r\n", species.height / 10.0)) if species.height != base_species.height
         f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0)) if species.weight != base_species.weight
-        f.write(sprintf("Color = %s\r\n", getConstantName(PBColors, species.color))) if species.color != base_species.color
+        f.write(sprintf("Color = %s\r\n", species.color)) if species.color != base_species.color
         f.write(sprintf("Shape = %d\r\n", species.shape)) if species.shape != base_species.shape
-        if species.habitat != PBHabitats::None && species.habitat != base_species.habitat
-          f.write(sprintf("Habitat = %s\r\n", getConstantName(PBHabitats, species.habitat)))
+        if species.habitat != :None && species.habitat != base_species.habitat
+          f.write(sprintf("Habitat = %s\r\n", species.habitat))
         end
         f.write(sprintf("Kind = %s\r\n", species.real_category)) if species.real_category != base_species.real_category
         f.write(sprintf("Pokedex = %s\r\n", species.real_pokedex_entry)) if species.real_pokedex_entry != base_species.real_pokedex_entry
@@ -455,9 +445,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save Shadow movesets to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_shadow_movesets
     shadow_movesets = pbLoadShadowMovesets
     File.open("PBS/shadowmoves.txt", "wb") { |f|
@@ -472,9 +462,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save Regional Dexes to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_regional_dexes
     dex_lists = pbLoadRegionalDexes
     File.open("PBS/regionaldexes.txt", "wb") { |f|
@@ -503,39 +493,52 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
-  # Save wild encounter data to PBS file
-  #===============================================================================
-  def write_encounters
-    encdata = pbLoadEncountersData
-    return if !encdata
-    mapinfos = load_data("Data/MapInfos.rxdata")
-    File.open("PBS/encounters.txt","wb") { |f|
+  #=============================================================================
+  # Save ability data to PBS file
+  #=============================================================================
+  def write_ribbons
+    File.open("PBS/ribbons.txt", "wb") { |f|
       add_PBS_header_to_file(f)
-      sortedkeys = encdata.keys.sort
-      for i in sortedkeys
-        next if !encdata[i]
-        e = encdata[i]
-        mapname = ""
-        if mapinfos[i]
-          map = mapinfos[i].name
-          mapname = " # #{map}"
-        end
+      f.write("\#-------------------------------\r\n")
+      GameData::Ribbon.each do |r|
+        f.write(sprintf("%d,%s,%s,%s\r\n",
+          r.id_number,
+          csvQuote(r.id.to_s),
+          csvQuote(r.real_name),
+          csvQuoteAlways(r.real_description)
+        ))
+      end
+    }
+    Graphics.update
+  end
+
+  #=============================================================================
+  # Save wild encounter data to PBS file
+  #=============================================================================
+  def write_encounters
+    map_infos = load_data("Data/MapInfos.rxdata")
+    File.open("PBS/encounters.txt", "wb") { |f|
+      add_PBS_header_to_file(f)
+      GameData::Encounter.each do |encounter_data|
         f.write("\#-------------------------------\r\n")
-        f.write(sprintf("%03d%s\r\n",i,mapname))
-        f.write(sprintf("%d,%d,%d\r\n",e[0][EncounterTypes::Land],
-          e[0][EncounterTypes::Cave],e[0][EncounterTypes::Water]))
-        for j in 0...e[1].length
-          enc = e[1][j]
-          next if !enc
-          f.write(sprintf("%s\r\n",EncounterTypes::Names[j]))
-          for k in 0...EncounterTypes::EnctypeChances[j].length
-            next if !enc[k]
-            encentry = enc[k]
-            if encentry[1]==encentry[2]
-              f.write(sprintf("    %s,%d\r\n",encentry[0],encentry[1]))
+        map_name = (map_infos[encounter_data.map]) ? " # #{map_infos[encounter_data.map].name}" : ""
+        if encounter_data.version > 0
+          f.write(sprintf("[%03d,%d]%s\r\n", encounter_data.map, encounter_data.version, map_name))
+        else
+          f.write(sprintf("[%03d]%s\r\n", encounter_data.map, map_name))
+        end
+        encounter_data.types.each_with_index do |entries, type|
+          next if !entries || entries.length == 0
+          if encounter_data.step_chances[type] && encounter_data.step_chances[type] > 0
+            f.write(sprintf("%s,%d\r\n", EncounterTypes::Names[type], encounter_data.step_chances[type]))
+          else
+            f.write(sprintf("%s\r\n", EncounterTypes::Names[type]))
+          end
+          entries.each do |entry|
+            if entry[2] == entry[3]
+              f.write(sprintf("    %d,%s,%d\r\n", entry[0], entry[1], entry[2]))
             else
-              f.write(sprintf("    %s,%d,%d\r\n",encentry[0],encentry[1],encentry[2]))
+              f.write(sprintf("    %d,%s,%d,%d\r\n", entry[0], entry[1], entry[2], entry[3]))
             end
           end
         end
@@ -544,9 +547,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save trainer type data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_trainer_types
     File.open("PBS/trainertypes.txt", "wb") { |f|
       add_PBS_header_to_file(f)
@@ -569,9 +572,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save individual trainer data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_trainers
     File.open("PBS/trainers.txt", "wb") { |f|
       add_PBS_header_to_file(f)
@@ -598,7 +601,7 @@ module Compiler
           f.write(sprintf("    Moves = %s\r\n", pkmn[:moves].join(","))) if pkmn[:moves] && pkmn[:moves].length > 0
           f.write(sprintf("    Ability = %d\r\n", pkmn[:ability_flag])) if pkmn[:ability_flag]
           f.write(sprintf("    Item = %s\r\n", pkmn[:item])) if pkmn[:item]
-          f.write(sprintf("    Nature = %s\r\n", getConstantName(PBNatures, pkmn[:nature]))) if pkmn[:nature]
+          f.write(sprintf("    Nature = %s\r\n", pkmn[:nature])) if pkmn[:nature]
           if pkmn[:iv] && pkmn[:iv].length > 0
             f.write(sprintf("    IV = %s\r\n", (pkmn[:iv].uniq.length == 1) ? pkmn[:iv][0] : pkmn[:iv].join(",")))
           end
@@ -613,9 +616,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save trainer list data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_trainer_lists
     trainerlists = load_data("Data/trainer_lists.dat") rescue nil
     return if !trainerlists
@@ -634,9 +637,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save Battle Tower trainer data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_battle_tower_trainers(bttrainers, filename)
     return if !bttrainers || !filename
     btTrainersRequiredTypes = {
@@ -672,9 +675,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save Battle Tower Pokémon data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_battle_tower_pokemon(btpokemon,filename)
     return if !btpokemon || !filename
     species = { 0 => "" }
@@ -690,7 +693,7 @@ module Compiler
         pkmn = btpokemon[i]
         c1 = (species[pkmn.species]) ? species[pkmn.species] : (species[pkmn.species] = GameData::Species.get(pkmn.species).species.to_s)
         c2 = (items[pkmn.item]) ? items[pkmn.item] : (items[pkmn.item] = GameData::Item.get(pkmn.item).id.to_s)
-        c3 = (natures[pkmn.nature]) ? natures[pkmn.nature] : (natures[pkmn.nature] = getConstantName(PBNatures, pkmn.nature))
+        c3 = (natures[pkmn.nature]) ? natures[pkmn.nature] : (natures[pkmn.nature] = GameData::Nature.get(pkmn.nature).id.to_s)
         evlist = ""
         ev = pkmn.ev
         for i in 0...ev
@@ -709,9 +712,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save metadata data to PBS file
-  #===============================================================================
+  #=============================================================================
   def write_metadata
     File.open("PBS/metadata.txt", "wb") { |f|
       add_PBS_header_to_file(f)
@@ -750,9 +753,9 @@ module Compiler
     Graphics.update
   end
 
-  #===============================================================================
+  #=============================================================================
   # Save all data to PBS files
-  #===============================================================================
+  #=============================================================================
   def write_all
     write_town_map
     write_connections
@@ -766,6 +769,7 @@ module Compiler
     write_pokemon_forms
     write_shadow_movesets
     write_regional_dexes
+    write_ribbons
     write_encounters
     write_trainer_types
     write_trainers

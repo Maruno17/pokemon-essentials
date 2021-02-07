@@ -3,7 +3,6 @@
 #===============================================================================
 class PokemonTemp
   attr_accessor :townMapData
-  attr_accessor :encountersData
   attr_accessor :phoneData
   attr_accessor :regionalDexes
   attr_accessor :speciesShadowMovesets
@@ -14,7 +13,6 @@ end
 def pbClearData
   if $PokemonTemp
     $PokemonTemp.townMapData           = nil
-    $PokemonTemp.encountersData        = nil
     $PokemonTemp.phoneData             = nil
     $PokemonTemp.regionalDexes         = nil
     $PokemonTemp.speciesShadowMovesets = nil
@@ -40,19 +38,6 @@ def pbLoadTownMapData
     $PokemonTemp.townMapData = load_data("Data/town_map.dat")
   end
   return $PokemonTemp.townMapData
-end
-
-#===============================================================================
-# Method to get wild encounter data.
-#===============================================================================
-def pbLoadEncountersData
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.encountersData
-    if pbRgssExists?("Data/encounters.dat")
-      $PokemonTemp.encountersData = load_data("Data/encounters.dat")
-    end
-  end
-  return $PokemonTemp.encountersData
 end
 
 #===============================================================================

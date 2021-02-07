@@ -34,7 +34,7 @@ class PBPokemon
     pieces=insp.split(/\s*;\s*/)
     species = (GameData::Species.exists?(pieces[0])) ? GameData::Species.get(pieces[0]).id : nil
     item = (GameData::Item.exists?(pieces[1])) ? GameData::Item.get(pieces[1]).id : nil
-    nature=PBNatures.const_get(pieces[2])
+    nature = (GameData::Nature.exists?(pieces[2])) ? GameData::Nature.get(pieces[2]).id : nil
     ev=pieces[3].split(/\s*,\s*/)
     evvalue=0
     for i in 0...6
@@ -94,7 +94,7 @@ class PBPokemon
     s=str.split(/\s*,\s*/)
     species=GameData::Species.get(s[1]).id
     item=s[2].to_sym
-    nature=self.constFromStr(PBNatures,s[3])
+    nature=GameData::Nature.get(s[3]).id
     move1=GameData::Move.get(s[4]).id
     move2=(s.length>=12) ? GameData::Move.get(s[5]).id : nil
     move3=(s.length>=13) ? GameData::Move.get(s[6]).id : nil
@@ -128,7 +128,7 @@ class PBPokemon
   def inspect
     c1=GameData::Species.get(@species).id.to_s
     c2=(@item) ? GameData::Item.get(@item).id.to_s : ""
-    c3=getConstantName(PBNatures,@nature)
+    c3=(@nature) ? GameData::Nature.get(@nature).id.to_s : ""
     evlist=""
     for i in 0...@ev
       if ((@ev&(1<<i))!=0)
@@ -154,16 +154,16 @@ class PBPokemon
 
   def createPokemon(level,iv,trainer)
     pokemon=Pokemon.new(@species,level,trainer,false)
-    pokemon.setItem(@item)
+    pokemon.item = @item
     pokemon.personalID = rand(2**16) | rand(2**16) << 16
     pokemon.personalID -= pokemon.personalID % 25
     pokemon.personalID += nature
     pokemon.personalID &= 0xFFFFFFFF
     pokemon.happiness=0
-    pokemon.moves[0]=PBMove.new(self.convertMove(@move1))
-    pokemon.moves[1]=PBMove.new(self.convertMove(@move2))
-    pokemon.moves[2]=PBMove.new(self.convertMove(@move3))
-    pokemon.moves[3]=PBMove.new(self.convertMove(@move4))
+    pokemon.moves[0] = Pokemon::Move.new(self.convertMove(@move1))
+    pokemon.moves[1] = Pokemon::Move.new(self.convertMove(@move2))
+    pokemon.moves[2] = Pokemon::Move.new(self.convertMove(@move3))
+    pokemon.moves[3] = Pokemon::Move.new(self.convertMove(@move4))
     evcount=0
     for i in 0...6
       evcount+=1 if ((@ev&(1<<i))!=0)
@@ -737,7 +737,7 @@ class BattleFactoryData
     @trainerid=@bcdata.nextTrainer
     bttrainers=pbGetBTTrainers(@bcdata.currentChallenge)
     trainerdata=bttrainers[@trainerid]
-    @opponent=PokeBattle_Trainer.new(
+    @opponent=NPCTrainer.new(
        pbGetMessageFromHash(MessageTypes::TrainerNames,trainerdata[1]),
        trainerdata[0])
     opponentPkmn=pbBattleFactoryPokemon(1,@bcdata.wins,@bcdata.swaps,@rentals)
@@ -767,7 +767,7 @@ class BattleFactoryData
     trainerid=@bcdata.nextTrainer
     bttrainers=pbGetBTTrainers(@bcdata.currentChallenge)
     trainerdata=bttrainers[trainerid]
-    @opponent=PokeBattle_Trainer.new(
+    @opponent=NPCTrainer.new(
        pbGetMessageFromHash(MessageTypes::TrainerNames,trainerdata[1]),
        trainerdata[0])
     opponentPkmn=pbBattleFactoryPokemon(
@@ -866,7 +866,7 @@ def pbBattleFactoryPokemon(rule,numwins,numswaps,_rentals)
   party=[]
   loop do
     party.clear
-    while party.length < MAX_PARTY_SIZE
+    while party.length < Settings::MAX_PARTY_SIZE
       rnd=pokemonNumbers[0]+rand(pokemonNumbers[1]-pokemonNumbers[0]+1)
       rndpoke=btpokemon[rnd]
       indvalue=(party.length<ivgroups[0]) ? ivs[0] : ivs[1]
@@ -880,7 +880,7 @@ end
 def pbGenerateBattleTrainer(trainerid,rule)
   bttrainers=pbGetBTTrainers(pbBattleChallenge.currentChallenge)
   trainerdata=bttrainers[trainerid]
-  opponent=PokeBattle_Trainer.new(
+  opponent=NPCTrainer.new(
      pbGetMessageFromHash(MessageTypes::TrainerNames,trainerdata[1]),
      trainerdata[0])
   btpokemon=pbGetBTPokemon(pbBattleChallenge.currentChallenge)
@@ -926,7 +926,7 @@ def pbOrganizedBattleEx(opponent,challengedata,endspeech,endspeechwin)
     $PokemonTemp.lastbattle = nil
     return true
   end
-  pbHealAll
+  $Trainer.heal_party
   # Remember original data, to be restored after battle
   challengedata = PokemonChallengeRules.new if !challengedata
   oldlevels = challengedata.adjustLevels($Trainer.party,opponent.party)
@@ -956,13 +956,13 @@ def pbOrganizedBattleEx(opponent,challengedata,endspeech,endspeechwin)
     pkmn.heal
     pkmn.makeUnmega
     pkmn.makeUnprimal
-    pkmn.setItem(olditems[i])
+    pkmn.item = olditems[i]
   end
   opponent.party.each_with_index do |pkmn,i|
     pkmn.heal
     pkmn.makeUnmega
     pkmn.makeUnprimal
-    pkmn.setItem(olditems2[i])
+    pkmn.item = olditems2[i]
   end
   # Save the record of the battle
   $PokemonTemp.lastbattle = nil

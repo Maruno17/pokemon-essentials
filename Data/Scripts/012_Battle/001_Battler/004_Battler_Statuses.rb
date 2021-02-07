@@ -93,7 +93,7 @@ class PokeBattle_Battler
     when PBStatuses::BURN
       hasImmuneType |= pbHasType?(:FIRE)
     when PBStatuses::PARALYSIS
-      hasImmuneType |= pbHasType?(:ELECTRIC) && MORE_TYPE_EFFECTS
+      hasImmuneType |= pbHasType?(:ELECTRIC) && Settings::MORE_TYPE_EFFECTS
     when PBStatuses::FROZEN
       hasImmuneType |= pbHasType?(:ICE)
     end
@@ -189,7 +189,7 @@ class PokeBattle_Battler
     when PBStatuses::BURN
       hasImmuneType |= pbHasType?(:FIRE)
     when PBStatuses::PARALYSIS
-      hasImmuneType |= pbHasType?(:ELECTRIC) && MORE_TYPE_EFFECTS
+      hasImmuneType |= pbHasType?(:ELECTRIC) && Settings::MORE_TYPE_EFFECTS
     end
     return false if hasImmuneType
     # Ability immunity

@@ -81,7 +81,8 @@ class PokemonRegionMap_Scene
     @viewport.z = 99999
     @sprites = {}
     @mapdata = pbLoadTownMapData
-    playerpos = (!$game_map) ? nil : GameData::MapMetadata.get($game_map.map_id).town_map_position
+    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+    playerpos = (map_metadata) ? map_metadata.town_map_position : nil
     if !playerpos
       mapindex = 0
       @map     = @mapdata[0]
@@ -97,7 +98,7 @@ class PokemonRegionMap_Scene
       @map     = @mapdata[playerpos[0]]
       @mapX    = playerpos[1]
       @mapY    = playerpos[2]
-      mapsize = (!$game_map) ? nil : GameData::MapMetadata.get($game_map.map_id).town_map_size
+      mapsize = map_metadata.town_map_size
       if mapsize && mapsize[0] && mapsize[0]>0
         sqwidth  = mapsize[0]
         sqheight = (mapsize[1].length*1.0/mapsize[0]).ceil
@@ -118,7 +119,7 @@ class PokemonRegionMap_Scene
     @sprites["map"].setBitmap("Graphics/Pictures/#{@map[1]}")
     @sprites["map"].x += (Graphics.width-@sprites["map"].bitmap.width)/2
     @sprites["map"].y += (Graphics.height-@sprites["map"].bitmap.height)/2
-    for hidden in REGION_MAP_EXTRAS
+    for hidden in Settings::REGION_MAP_EXTRAS
       if hidden[0]==mapindex && ((@wallmap && hidden[5]) ||
          (!@wallmap && hidden[1]>0 && $game_switches[hidden[1]]))
         if !@sprites["map2"]
@@ -137,7 +138,7 @@ class PokemonRegionMap_Scene
     @sprites["mapbottom"].mapdetails  = pbGetMapDetails(@mapX,@mapY)
     if playerpos && mapindex==playerpos[0]
       @sprites["player"] = IconSprite.new(0,0,@viewport)
-      @sprites["player"].setBitmap(GameData::TrainerType.player_map_icon_filename($Trainer.trainertype))
+      @sprites["player"].setBitmap(GameData::TrainerType.player_map_icon_filename($Trainer.trainer_type))
       @sprites["player"].x = -SQUAREWIDTH/2+(@mapX*SQUAREWIDTH)+(Graphics.width-@sprites["map"].bitmap.width)/2
       @sprites["player"].y = -SQUAREHEIGHT/2+(@mapY*SQUAREHEIGHT)+(Graphics.height-@sprites["map"].bitmap.height)/2
     end

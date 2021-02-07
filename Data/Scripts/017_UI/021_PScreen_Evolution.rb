@@ -577,7 +577,6 @@ class PokemonEvolutionScene
     # Success jingle/message
     pbMEPlay("Evolution success")
     newspeciesname = GameData::Species.get(@newspecies).name
-    is_nicknamed = @pokemon.nicknamed?
     pbMessageDisplay(@sprites["msgwindow"],
        _INTL("\\se[]Congratulations! Your {1} evolved into {2}!\\wt[80]",
        @pokemon.name,newspeciesname)) { pbUpdate }
@@ -586,12 +585,11 @@ class PokemonEvolutionScene
     pbEvolutionMethodAfterEvolution
     # Modify Pokémon to make it evolved
     @pokemon.species = @newspecies
-    @pokemon.name    = newspeciesname if !is_nicknamed
     @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
     @pokemon.calcStats
     # See and own evolved species
-    $Trainer.seen[@newspecies]  = true
-    $Trainer.owned[@newspecies] = true
+    $Trainer.set_seen(@newspecies)
+    $Trainer.set_owned(@newspecies)
     pbSeenForm(@pokemon)
     # Learn moves upon evolution for evolved species
     movelist = @pokemon.getMoveList
@@ -602,27 +600,24 @@ class PokemonEvolutionScene
   end
 
   def pbEvolutionMethodAfterEvolution
-    pbCheckEvolutionEx(@pokemon) { |pkmn, method, parameter, new_species|
-      success = PBEvolution.call("afterEvolution", method, pkmn, new_species, parameter, @newspecies)
-      next (success) ? 1 : -1
-    }
+    EvolutionCheck.check_after_evolution(@pokemon, @newspecies)
   end
 
   def self.pbDuplicatePokemon(pkmn, new_species)
     new_pkmn = pkmn.clone
-    new_pkmn.species  = new_species
-    new_pkmn.name     = GameData::Species.get(new_species).name
-    new_pkmn.markings = 0
-    new_pkmn.ballused = 0
-    new_pkmn.setItem(nil)
+    new_pkmn.species   = new_species
+    new_pkmn.name      = nil
+    new_pkmn.markings  = 0
+    new_pkmn.poke_ball = :POKEBALL
+    new_pkmn.item      = nil
     new_pkmn.clearAllRibbons
     new_pkmn.calcStats
     new_pkmn.heal
     # Add duplicate Pokémon to party
     $Trainer.party.push(new_pkmn)
     # See and own duplicate Pokémon
-    $Trainer.seen[new_species]  = true
-    $Trainer.owned[new_species] = true
+    $Trainer.set_seen(new_species)
+    $Trainer.set_owned(new_species)
     pbSeenForm(new_pkmn)
   end
 end

@@ -266,7 +266,7 @@ class BerryPlantSprite
         @event.character_name="Object ball"
       end
       if @oldstage!=berryData[0] && berryData.length>6   # Gen 4 growth mechanisms
-        $scene.spriteset.addUserAnimation(PLANT_SPARKLE_ANIMATION_ID,@event.x,@event.y,false,1) if $scene.spriteset
+        $scene.spriteset.addUserAnimation(Settings::PLANT_SPARKLE_ANIMATION_ID,@event.x,@event.y,false,1) if $scene.spriteset
       end
     end
     @oldstage=berryData[0]
@@ -280,7 +280,7 @@ def pbBerryPlant
   thisEvent=interp.get_character(0)
   berryData=interp.getVariable
   if !berryData
-    if NEW_BERRY_PLANTS
+    if Settings::NEW_BERRY_PLANTS
       berryData=[0,nil,0,0,0,0,0,0]
     else
       berryData=[0,nil,false,0,0,0]
@@ -298,7 +298,7 @@ def pbBerryPlant
   berry=berryData[1]
   case berryData[0]
   when 0  # empty
-    if NEW_BERRY_PLANTS
+    if Settings::NEW_BERRY_PLANTS
       # Gen 4 planting mechanics
       if !berryData[7] || berryData[7]==0 # No mulch used yet
         cmd=pbMessage(_INTL("It's soft, earthy soil."),[
@@ -421,7 +421,7 @@ def pbBerryPlant
   when 3  # X taller
     pbMessage(_INTL("The {1} plant is growing bigger.",GameData::Item.get(berry).name))
   when 4  # X flowering
-    if NEW_BERRY_PLANTS
+    if Settings::NEW_BERRY_PLANTS
       pbMessage(_INTL("This {1} plant is in bloom!",GameData::Item.get(berry).name))
     else
       case berryData[4]
@@ -475,7 +475,7 @@ def pbBerryPlant
       end
       pbMessage(_INTL("{1} put the \\c[1]{2}\\c[0] in the <icon=bagPocket{3}>\\c[1]{4}\\c[0] Pocket.\1",
          $Trainer.name,itemname,pocket,PokemonBag.pocketNames()[pocket]))
-      if NEW_BERRY_PLANTS
+      if Settings::NEW_BERRY_PLANTS
         pbMessage(_INTL("The soil returned to its soft and earthy state."))
         berryData=[0,nil,0,0,0,0,0,0]
       else
@@ -502,7 +502,7 @@ def pbBerryPlant
         end
         interp.setVariable(berryData)
         pbMessage(_INTL("{1} watered the plant.\\wtnp[40]",$Trainer.name))
-        if NEW_BERRY_PLANTS
+        if Settings::NEW_BERRY_PLANTS
           pbMessage(_INTL("There! All happy!"))
         else
           pbMessage(_INTL("The plant seemed to be delighted."))
@@ -538,7 +538,7 @@ def pbPickBerry(berry, qty = 1)
     pocket = berry.pocket
     pbMessage(_INTL("{1} put the \\c[1]{2}\\c[0] in the <icon=bagPocket{3}>\\c[1]{4}\\c[0] Pocket.\1",
        $Trainer.name,itemname,pocket,PokemonBag.pocketNames()[pocket]))
-    if NEW_BERRY_PLANTS
+    if Settings::NEW_BERRY_PLANTS
       pbMessage(_INTL("The soil returned to its soft and earthy state."))
       berryData=[0,nil,0,0,0,0,0,0]
     else

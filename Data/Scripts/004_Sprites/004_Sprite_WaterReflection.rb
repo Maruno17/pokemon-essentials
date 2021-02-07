@@ -74,7 +74,7 @@ class Sprite_Reflection
       if @height>0
         @sprite.color   = Color.new(48,96,160,255)   # Dark still water
         @sprite.opacity = @rsprite.opacity
-        @sprite.visible = !TIME_SHADING   # Can't time-tone a colored sprite
+        @sprite.visible = !Settings::TIME_SHADING   # Can't time-tone a colored sprite
       else
         @sprite.color   = Color.new(224,224,224,96)
         @sprite.opacity = @rsprite.opacity*3/4

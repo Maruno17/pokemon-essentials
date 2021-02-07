@@ -30,7 +30,7 @@ class AnimatedBitmap
     if file==nil
       raise "Filename is nil (missing graphic)."
     end
-    if file.split(/[\\\/]/)[-1][/^\[\d+(?:,\d+)?]/]   # Starts with 1 or more digits in square brackets
+    if file.split(/[\\\/]/)[-1][/^\[\d+(?:,\d+)?\]/]   # Starts with 1 or 2 numbers in square brackets
       @bitmap = PngAnimatedBitmap.new(file,hue)
     else
       @bitmap = GifBitmap.new(file,hue)
@@ -62,7 +62,7 @@ class PngAnimatedBitmap
     @currentFrame=0
     @framecount=0
     panorama=BitmapCache.load_bitmap(file,hue)
-    if file.split(/[\\\/]/)[-1][/^\[(\d+)(?:,(\d+))?]/]   # Starts with 1 or more digits in brackets
+    if file.split(/[\\\/]/)[-1][/^\[(\d+)(?:,(\d+))?\]/]   # Starts with 1 or 2 numbers in brackets
       # File has a frame count
       numFrames = $1.to_i
       delay = $2.to_i

@@ -262,7 +262,7 @@ def pbDebugDayCare
         end
         y += 32
         if pkmn.level<PBExperience.maxLevel
-          endexp   = PBExperience.pbGetStartExperience(pkmn.level+1,pkmn.growthrate)
+          endexp   = PBExperience.pbGetStartExperience(pkmn.level+1,pkmn.growth_rate)
           textpos.push(["To next Lv.: #{endexp-pkmn.exp}",8+i*Graphics.width/2,y,0,base,shadow])
           y += 32
         end
@@ -352,7 +352,7 @@ def pbDebugDayCare
           pbDayCareGenerateEgg
           $PokemonGlobal.daycareEgg      = 0
           $PokemonGlobal.daycareEggSteps = 0
-          pbMessage(_INTL("Collected the {1} egg.", $Trainer.lastParty.speciesName))
+          pbMessage(_INTL("Collected the {1} egg.", $Trainer.last_party.speciesName))
           refresh = true
         end
       end
@@ -373,7 +373,7 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
   end
 
   def roamerCount
-    return ROAMING_SPECIES.length
+    return Settings::ROAMING_SPECIES.length
   end
 
   def itemCount
@@ -405,7 +405,7 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
       # Advance roaming
       self.shadowtext(_INTL("[Clear all current roamer locations]"),rect.x,text_y,nameWidth,rect.height)
     else
-      pkmn = ROAMING_SPECIES[index]
+      pkmn = Settings::ROAMING_SPECIES[index]
       name = GameData::Species.get(pkmn[0]).name + " (Lv. #{pkmn[1]})"
       status = ""
       statuscolor = 0
@@ -480,7 +480,7 @@ def pbDebugRoamers
       if cmdwindow.index<cmdwindow.roamerCount
         pbPlayDecisionSE
         # Toggle through roaming, not roaming, defeated
-        pkmn = ROAMING_SPECIES[cmdwindow.index]
+        pkmn = Settings::ROAMING_SPECIES[cmdwindow.index]
         if pkmn[2]>0 && !$game_switches[pkmn[2]]
           # not roaming -> roaming
           $game_switches[pkmn[2]] = true
@@ -500,7 +500,7 @@ def pbDebugRoamers
         end
         cmdwindow.refresh
       elsif cmdwindow.index==cmdwindow.itemCount-2   # All roam
-        if ROAMING_SPECIES.length==0
+        if Settings::ROAMING_SPECIES.length==0
           pbPlayBuzzerSE
         else
           pbPlayDecisionSE
@@ -509,11 +509,11 @@ def pbDebugRoamers
           cmdwindow.refresh
         end
       else   # Clear all roaming locations
-        if ROAMING_SPECIES.length==0
+        if Settings::ROAMING_SPECIES.length==0
           pbPlayBuzzerSE
         else
           pbPlayDecisionSE
-          for i in 0...ROAMING_SPECIES.length
+          for i in 0...Settings::ROAMING_SPECIES.length
             $PokemonGlobal.roamPosition[i] = nil
           end
           $PokemonGlobal.roamedAlready = false
@@ -638,7 +638,7 @@ def pbCompileTextUI
   begin
     pbCompileText
     pbMessageDisplay(msgwindow,_INTL("Successfully compiled text and saved it to intl.dat.\1"))
-    pbMessageDisplay(msgwindow,_INTL("To use the file in a game, place the file in the Data folder under a different name, and edit the LANGUAGES array in the Settings script."))
+    pbMessageDisplay(msgwindow,_INTL("To use the file in a game, place the file in the Data folder under a different name, and edit the Settings::LANGUAGES array in the scripts."))
   rescue RuntimeError
     pbMessageDisplay(msgwindow,_INTL("Failed to compile text: {1}",$!.message))
   end

@@ -327,15 +327,10 @@ class MapScreenScene
     @selmapid=-1
     addBackgroundPlane(@sprites,"background","Trainer Card/bg",@viewport)
     @sprites["selsprite"]=SelectionSprite.new(@viewport)
-    @sprites["title"]=Window_UnformattedTextPokemon.new(_INTL("F: Help"))
-    @sprites["title"].x=0
-    @sprites["title"].y=600-64
-    @sprites["title"].width=800
-    @sprites["title"].height=64
-    @sprites["title"].viewport=@viewport
-    @sprites["title"].z=2
+    @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(_INTL("F: Help"),
+       0, 600 - 64, 800, 64, @viewport)
+    @sprites["title"].z = 2
     @mapinfos=load_data("Data/MapInfos.rxdata")
-    @encdata=pbLoadEncountersData
     conns=MapFactoryHelper.getMapConnections
     @mapconns=[]
     for c in conns
@@ -361,16 +356,11 @@ class MapScreenScene
     helptext+=_INTL("S: Go to another map\r\n")
     helptext+=_INTL("Click to select a map\r\n")
     helptext+=_INTL("Double-click: Edit map's metadata\r\n")
-    helptext+=_INTL("E: Edit map's encounters\r\n")
     helptext+=_INTL("Drag map to move it\r\n")
     helptext+=_INTL("Arrow keys/drag canvas: Move around canvas")
-    title=Window_UnformattedTextPokemon.new(helptext)
-    title.x=0
-    title.y=0
-    title.width=800*8/10
-    title.height=600
-    title.viewport=@viewport
-    title.z=2
+    title = Window_UnformattedTextPokemon.newWithSize(helptext,
+       0, 0, 800 * 8 / 10, 600, @viewport)
+    title.z = 2
     loop do
       Graphics.update
       Input.update
@@ -556,8 +546,6 @@ class MapScreenScene
         @sprites["selsprite"].othersprite=nil
         @selmapid=-1
       end
-    elsif Input.triggerex?("E"[0])
-      pbEncounterEditorMap(@encdata,@selmapid) if @selmapid>=0
     elsif Input.trigger?(Input::F5)
       helpWindow
     end
@@ -573,9 +561,8 @@ class MapScreenScene
         if pbConfirmMessage(_INTL("Save changes?"))
           serializeConnectionData
           MapFactoryHelper.clear
-          save_data(@encdata,"Data/encounters.dat")
-          $PokemonTemp.encountersData = nil
-          Compiler.write_encounters
+        else
+          GameData.Encounter.load
         end
         break if pbConfirmMessage(_INTL("Exit from the editor?"))
       end

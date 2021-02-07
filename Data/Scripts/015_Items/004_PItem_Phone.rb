@@ -64,14 +64,16 @@ end
 def pbRandomPhoneTrainer
   $PokemonGlobal.phoneNumbers = [] if !$PokemonGlobal.phoneNumbers
   temparray = []
-  currentRegion = GameData::MapMetadata.get($game_map.map_id).town_map_position
-  return nil if !currentRegion
+  this_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  return nil if !this_map_metadata || !this_map_metadata.town_map_position
+  currentRegion = this_map_metadata.town_map_position[0]
   for num in $PokemonGlobal.phoneNumbers
-    next if !num[0] || num.length!=8   # if not visible or not a trainer
-    next if $game_map.map_id==num[6]   # Can't call if on same map
-    callerRegion  = GameData::MapMetadata.get(num[6]).town_map_position
+    next if !num[0] || num.length != 8   # if not visible or not a trainer
+    next if $game_map.map_id == num[6]   # Can't call if on same map
+    caller_map_metadata = GameData::MapMetadata.try_get(num[6])
+    next if !caller_map_metadata || !caller_map_metadata.town_map_position
     # Can't call if in different region
-    next if !callerRegion || callerRegion[0] != currentRegion[0]
+    next if caller_map_metadata.town_map_position[0] != currentRegion
     temparray.push(num)
   end
   return nil if temparray.length==0
@@ -190,9 +192,11 @@ def pbCallTrainer(trtype,trname)
     pbMessage(_INTL("The Trainer is close by.\nTalk to the Trainer in person!"))
     return
   end
-  callerregion  = GameData::MapMetadata.get(trainer[6]).town_map_position
-  currentregion = GameData::MapMetadata.get($game_map.map_id).town_map_position
-  if !callerregion || !currentregion || callerregion[0] != currentregion[0]
+  caller_map_metadata = GameData::MapMetadata.try_get(trainer[6])
+  this_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  if !caller_map_metadata || !caller_map_metadata.town_map_position ||
+     !this_map_metadata || !this_map_metadata.town_map_position ||
+     caller_map_metadata.town_map_position[0] != this_map_metadata.town_map_position[0]
     pbMessage(_INTL("The Trainer is out of range."))
     return   # Can't call if in different region
   end
@@ -239,27 +243,34 @@ def pbRandomPhoneItem(array)
   return pbGetMessageFromHash(MessageTypes::PhoneMessages,ret)
 end
 
-def pbRandomEncounterSpecies(enctype)
-  return 0 if !enctype
-  len = [enctype.length,4].min
-  return enctype[rand(len)][0]
+def pbRandomEncounterSpecies(enc_table)
+  return nil if !enc_table || enc_table.length == 0
+  len = [enc_table.length, 4].min
+  return enc_table[rand(len)][1]
 end
 
 def pbEncounterSpecies(phonenum)
-  return "" if !phonenum[6] || phonenum[6]==0
-  begin
-    enctypes = $PokemonEncounters.pbGetEncounterTables(phonenum[6])
-    return "" if !enctypes
-  rescue
-    return ""
+  return "" if !phonenum[6] || phonenum[6] == 0
+  encounter_data = GameData::Encounter.get(phonenum[6], $PokemonGlobal.encounter_version)
+  return "" if !encounter_data
+  enc_tables = encounter_data.types
+  species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::Land])
+  if !species
+    species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::Cave])
+    if !species
+      species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::LandDay])
+      if !species
+        species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::LandMorning])
+        if !species
+          species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::LandNight])
+          if !species
+            species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::Water])
+          end
+        end
+      end
+    end
   end
-  species = pbRandomEncounterSpecies(enctypes[EncounterTypes::Land])
-  species = pbRandomEncounterSpecies(enctypes[EncounterTypes::Cave]) if species==0
-  species = pbRandomEncounterSpecies(enctypes[EncounterTypes::LandDay]) if species==0
-  species = pbRandomEncounterSpecies(enctypes[EncounterTypes::LandMorning]) if species==0
-  species = pbRandomEncounterSpecies(enctypes[EncounterTypes::LandNight]) if species==0
-  species = pbRandomEncounterSpecies(enctypes[EncounterTypes::Water]) if species==0
-  return "" if species==0
+  return "" if !species
   return GameData::Species.get(species).name
 end
 

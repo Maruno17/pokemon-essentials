@@ -74,7 +74,7 @@ PokemonDebugMenuCommands.register("setstatus", {
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if pkmn.egg?
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
-    elsif pkmn.hp<=0
+    elsif pkmn.hp <= 0
       screen.pbDisplay(_INTL("{1} is fainted, can't change status.", pkmn.name))
     else
       cmd = 0
@@ -90,7 +90,7 @@ PokemonDebugMenuCommands.register("setstatus", {
         break if cmd < 0
         case cmd
         when 0   # Cure
-          pkmn.healStatus
+          pkmn.heal_status
           screen.pbDisplay(_INTL("{1}'s status was cured.", pkmn.name))
           screen.pbRefreshSingle(pkmnid)
         else   # Give status problem
@@ -219,8 +219,8 @@ PokemonDebugMenuCommands.register("setexp", {
     if pkmn.egg?
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
     else
-      minxp = PBExperience.pbGetStartExperience(pkmn.level, pkmn.growthrate)
-      maxxp = PBExperience.pbGetStartExperience(pkmn.level + 1, pkmn.growthrate)
+      minxp = PBExperience.pbGetStartExperience(pkmn.level, pkmn.growth_rate)
+      maxxp = PBExperience.pbGetStartExperience(pkmn.level + 1, pkmn.growth_rate)
       if minxp == maxxp
         screen.pbDisplay(_INTL("{1} is at the maximum level.", pkmn.name))
       else
@@ -228,7 +228,7 @@ PokemonDebugMenuCommands.register("setexp", {
         params.setRange(minxp, maxxp - 1)
         params.setDefaultValue(pkmn.exp)
         newexp = pbMessageChooseNumber(
-           _INTL("Set the Pokémon's Exp (range {1}-{2}).",minxp, maxxp - 1), params) { screen.pbUpdate }
+           _INTL("Set the Pokémon's Exp (range {1}-{2}).", minxp, maxxp - 1), params) { screen.pbUpdate }
         if newexp != pkmn.exp
           pkmn.exp = newexp
           pkmn.calcStats
@@ -510,7 +510,7 @@ PokemonDebugMenuCommands.register("forgetmove", {
     moveindex = screen.pbChooseMove(pkmn, _INTL("Choose move to forget."))
     if moveindex >= 0
       movename = pkmn.moves[moveindex].name
-      pkmn.pbDeleteMoveAtIndex(moveindex)
+      pkmn.forget_move_at_index(moveindex)
       screen.pbDisplay(_INTL("{1} forgot {2}.", pkmn.name, movename))
       screen.pbRefreshSingle(pkmnid)
     end
@@ -583,7 +583,7 @@ PokemonDebugMenuCommands.register("setmovepp", {
           end
         end
       elsif cmd == commands.length - 1   # Restore all PP
-        pkmn.healPP
+        pkmn.heal_PP
       end
     end
   }
@@ -594,7 +594,7 @@ PokemonDebugMenuCommands.register("setinitialmoves", {
   "name"        => _INTL("Reset initial moves"),
   "always_show" => true,
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
-    pkmn.pbRecordFirstMoves
+    pkmn.record_first_moves
     screen.pbDisplay(_INTL("{1}'s moves were set as its first-known moves.", pkmn.name))
     screen.pbRefreshSingle(pkmnid)
   }
@@ -616,15 +616,15 @@ PokemonDebugMenuCommands.register("setability", {
       for i in abils
         commands.push(((i[1] < 2) ? "" : "(H) ") + GameData::Ability.get(i[0]).name)
       end
-      commands.push(_INTL("Remove override"))
-      msg = [_INTL("Ability {1} is natural.", oldabil),
-             _INTL("Ability {1} is being forced.", oldabil)][pkmn.abilityflag != nil ? 1 : 0]
+      commands.push(_INTL("[Reset]"))
+      msg = [_INTL("Ability is {1} (normal).", oldabil),
+             _INTL("Ability is {1} (hidden).", oldabil)][(pkmn.ability_index < 2) ? 0 : 1]
       cmd = screen.pbShowCommands(msg, commands, cmd)
       break if cmd < 0
-      if cmd >= 0 && cmd < abils.length   # Set ability override
-        pkmn.setAbility(abils[cmd][1])
-      elsif cmd == abils.length   # Remove override
-        pkmn.abilityflag = nil
+      if cmd >= 0 && cmd < abils.length   # Set ability index
+        pkmn.ability_index = abils[cmd][1]
+      elsif cmd == abils.length   # Reset
+        pkmn.ability_index = nil
       end
       screen.pbRefreshSingle(pkmnid)
     end
@@ -637,30 +637,36 @@ PokemonDebugMenuCommands.register("setnature", {
   "always_show" => true,
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     commands = []
-    (PBNatures.getCount).times do |i|
-      statUp   = PBNatures.getStatRaised(i)
-      statDown = PBNatures.getStatLowered(i)
-      if statUp != statDown
-        text = _INTL("{1} (+{2}, -{3})", PBNatures.getName(i),
-           PBStats.getNameBrief(statUp), PBStats.getNameBrief(statDown))
+    ids = []
+    GameData::Nature.each do |nature|
+      if nature.stat_changes.length == 0
+        commands.push(_INTL("{1} (---)", nature.real_name))
       else
-        text = _INTL("{1} (---)", PBNatures.getName(i))
+        plus_text = ""
+        minus_text = ""
+        nature.stat_changes.each do |change|
+          if change[1] > 0
+            plus_text += "/" if !plus_text.empty?
+            plus_text += PBStats.getNameBrief(change[0])
+          elsif change[1] < 0
+            minus_text += "/" if !minus_text.empty?
+            minus_text += PBStats.getNameBrief(change[0])
+          end
+        end
+        commands.push(_INTL("{1} (+{2}, -{3})", nature.real_name, plus_text, minus_text))
       end
-      commands.push(text)
+      ids.push(nature.id)
     end
-    commands.push(_INTL("[Remove override]"))
-    cmd = pkmn.nature
+    commands.push(_INTL("[Reset]"))
+    cmd = ids.index(pkmn.nature_id || ids[0])
     loop do
-      oldnature = PBNatures.getName(pkmn.nature)
-      msg = [_INTL("Nature {1} is natural.", oldnature),
-             _INTL("Nature {1} is being forced.", oldnature)][pkmn.natureflag ? 1 : 0]
-      cmd = screen.pbShowCommands(msg, commands, cmd)
+      mag = _INTL("Nature is {1}.", pkmn.nature.name)
+      cmd = screen.pbShowCommands(mag, commands, cmd)
       break if cmd < 0
-      if cmd >= 0 && cmd < PBNatures.getCount   # Set nature override
-        pkmn.setNature(cmd)
-        pkmn.calcStats
-      elsif cmd == PBNatures.getCount   # Remove override
-        pkmn.natureflag = nil
+      if cmd >= 0 && cmd < commands.length - 1   # Set nature
+        pkmn.nature = ids[cmd]
+      elsif cmd == commands.length - 1   # Reset
+        pkmn.nature = nil
       end
       screen.pbRefreshSingle(pkmnid)
     end
@@ -677,13 +683,11 @@ PokemonDebugMenuCommands.register("setgender", {
     else
       cmd = 0
       loop do
-        oldgender = (pkmn.male?) ? _INTL("male") : _INTL("female")
-        msg = [_INTL("Gender {1} is natural.", oldgender),
-             _INTL("Gender {1} is being forced.", oldgender)][pkmn.genderflag ? 1 : 0]
+        msg = [_INTL("Gender is male."), _INTL("Gender is female.")][pkmn.male? ? 0 : 1]
         cmd = screen.pbShowCommands(msg, [
            _INTL("Make male"),
            _INTL("Make female"),
-           _INTL("Remove override")], cmd)
+           _INTL("Reset")], cmd)
         break if cmd < 0
         case cmd
         when 0   # Make male
@@ -696,8 +700,8 @@ PokemonDebugMenuCommands.register("setgender", {
           if !pkmn.female?
             screen.pbDisplay(_INTL("{1}'s gender couldn't be changed.", pkmn.name))
           end
-        when 2   # Remove override
-          pkmn.genderflag = nil
+        when 2   # Reset
+          pkmn.gender = nil
         end
         pbSeenForm(pkmn) if !settingUpBattle
         screen.pbRefreshSingle(pkmnid)
@@ -714,11 +718,11 @@ PokemonDebugMenuCommands.register("speciesform", {
     cmd = 0
     loop do
       msg = [_INTL("Species {1}, form {2}.", pkmn.speciesName, pkmn.form),
-             _INTL("Species {1}, form {2} (forced).", pkmn.speciesName, pkmn.form)][(pkmn.forcedForm != nil) ? 1 : 0]
+             _INTL("Species {1}, form {2} (forced).", pkmn.speciesName, pkmn.form)][(pkmn.forced_form.nil?) ? 0 : 1]
       cmd = screen.pbShowCommands(msg, [
          _INTL("Set species"),
          _INTL("Set form"),
-         _INTL("Remove override")], cmd)
+         _INTL("Remove form override")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Set species
@@ -750,15 +754,15 @@ PokemonDebugMenuCommands.register("speciesform", {
           if f != pkmn.form
             if MultipleForms.hasFunction?(pkmn, "getForm")
               next if !screen.pbConfirm(_INTL("This species decides its own form. Override?"))
-              pkmn.forcedForm = f
+              pkmn.forced_form = f
             end
             pkmn.form = f
             pbSeenForm(pkmn) if !settingUpBattle
             screen.pbRefreshSingle(pkmnid)
           end
         end
-      when 2   # Remove override
-        pkmn.forcedForm = nil
+      when 2   # Remove form override
+        pkmn.forced_form = nil
         screen.pbRefreshSingle(pkmnid)
       end
     end
@@ -781,21 +785,19 @@ PokemonDebugMenuCommands.register("setshininess", {
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
-      oldshiny = (pkmn.shiny?) ? _INTL("shiny") : _INTL("normal")
-      msg = [_INTL("Shininess ({1}) is natural.", oldshiny),
-             _INTL("Shininess ({1}) is being forced.", oldshiny)][pkmn.shinyflag != nil ? 1 : 0]
+      msg = [_INTL("Is shiny."), _INTL("Is normal (not shiny).")][pkmn.shiny? ? 0 : 1]
       cmd = screen.pbShowCommands(msg, [
            _INTL("Make shiny"),
            _INTL("Make normal"),
-           _INTL("Remove override")], cmd)
+           _INTL("Reset")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Make shiny
-        pkmn.makeShiny
+        pkmn.shiny = true
       when 1   # Make normal
-        pkmn.makeNotShiny
-      when 2   # Remove override
-        pkmn.shinyflag = nil
+        pkmn.shiny = false
+      when 2   # Reset
+        pkmn.shiny = nil
       end
       screen.pbRefreshSingle(pkmnid)
     end
@@ -811,21 +813,21 @@ PokemonDebugMenuCommands.register("setpokeball", {
     balls = []
     for key in $BallTypes.keys
       item = GameData::Item.try_get($BallTypes[key])
-      balls.push([key.to_i, item.name]) if item
+      balls.push([item.id, item.name]) if item
     end
     balls.sort! { |a, b| a[1] <=> b[1] }
     cmd = 0
     for i in 0...balls.length
-      next if balls[i][0] != pkmn.ballused
+      next if balls[i][0] != pkmn.poke_ball
       cmd = i
       break
     end
     balls.each { |ball| commands.push(ball[1]) }
     loop do
-      oldball = pbBallTypeToItem(pkmn.ballused).name
+      oldball = GameData::Item.get(pkmn.poke_ball).name
       cmd = screen.pbShowCommands(_INTL("{1} used.", oldball), commands, cmd)
       break if cmd < 0
-      pkmn.ballused = balls[cmd][0]
+      pkmn.poke_ball = balls[cmd][0]
     end
   }
 })
@@ -838,28 +840,28 @@ PokemonDebugMenuCommands.register("setribbons", {
     cmd = 0
     loop do
       commands = []
-      for i in 1..PBRibbons.maxValue
+      ids = []
+      GameData::Ribbon.each do |ribbon_data|
         commands.push(_INTL("{1} {2}",
-           (pkmn.hasRibbon?(i)) ? "[Y]" : "[  ]", PBRibbons.getName(i)))
+           (pkmn.hasRibbon?(ribbon_data.id)) ? "[Y]" : "[  ]", ribbon_data.name))
+        ids.push(ribbon_data.id)
       end
       commands.push(_INTL("Give all"))
       commands.push(_INTL("Clear all"))
-      cmd = screen.pbShowCommands(_INTL("{1} ribbons.", pkmn.ribbonCount), commands, cmd)
+      cmd = screen.pbShowCommands(_INTL("{1} ribbons.", pkmn.numRibbons), commands, cmd)
       break if cmd < 0
-      if cmd >= 0 && cmd < PBRibbons.maxValue   # Toggle ribbon
-        if pkmn.hasRibbon?(cmd + 1)
-          pkmn.takeRibbon(cmd + 1)
+      if cmd >= 0 && cmd < ids.length   # Toggle ribbon
+        if pkmn.hasRibbon?(ids[cmd])
+          pkmn.takeRibbon(ids[cmd])
         else
-          pkmn.giveRibbon(cmd + 1)
+          pkmn.giveRibbon(ids[cmd])
         end
       elsif cmd == commands.length - 2   # Give all
-        for i in 1..PBRibbons.maxValue
-          pkmn.giveRibbon(i)
+        GameData::Ribbon.each do |ribbon_data|
+          pkmn.giveRibbon(ribbon_data.id)
         end
       elsif cmd == commands.length - 1   # Clear all
-        for i in 1..PBRibbons.maxValue
-          pkmn.takeRibbon(i)
-        end
+        pkmn.clearAllRibbons
       end
     end
   }
@@ -874,22 +876,20 @@ PokemonDebugMenuCommands.register("setnickname", {
     loop do
       speciesname = pkmn.speciesName
       msg = [_INTL("{1} has the nickname {2}.", speciesname, pkmn.name),
-             _INTL("{1} has no nickname.", speciesname)][pkmn.name == speciesname ? 1 : 0]
+             _INTL("{1} has no nickname.", speciesname)][pkmn.nicknamed? ? 0 : 1]
       cmd = screen.pbShowCommands(msg, [
            _INTL("Rename"),
            _INTL("Erase name")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Rename
-        oldname = (pkmn.name && pkmn.name != speciesname) ? pkmn.name : ""
+        oldname = (pkmn.nicknamed?) ? pkmn.name : ""
         newname = pbEnterPokemonName(_INTL("{1}'s nickname?", speciesname),
                                      0, Pokemon::MAX_NAME_SIZE, oldname, pkmn)
-        if newname && newname != ""
-          pkmn.name = newname
-          screen.pbRefreshSingle(pkmnid)
-        end
+        pkmn.name = newname
+        screen.pbRefreshSingle(pkmnid)
       when 1   # Erase name
-        pkmn.name = speciesname
+        pkmn.name = nil
         screen.pbRefreshSingle(pkmnid)
       end
     end
@@ -918,13 +918,13 @@ PokemonDebugMenuCommands.register("ownership", {
       when 0   # Make player's
         pkmn.owner = Pokemon::Owner.new_from_trainer($Trainer)
       when 1   # Set OT's name
-        pkmn.owner.name = pbEnterPlayerName(_INTL("{1}'s OT's name?", pkmn.name), 1, MAX_PLAYER_NAME_SIZE)
+        pkmn.owner.name = pbEnterPlayerName(_INTL("{1}'s OT's name?", pkmn.name), 1, Settings::MAX_PLAYER_NAME_SIZE)
       when 2   # Set OT's gender
         cmd2 = screen.pbShowCommands(_INTL("Set OT's gender."),
            [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], pkmn.owner.gender)
         pkmn.owner.gender = cmd2 if cmd2 >= 0
       when 3   # Random foreign ID
-        pkmn.owner.id = $Trainer.getForeignID
+        pkmn.owner.id = $Trainer.make_foreign_ID
       when 4   # Set foreign ID
         params = ChooseNumberParams.new
         params.setRange(0, 65535)
@@ -948,34 +948,34 @@ PokemonDebugMenuCommands.register("setegg", {
     cmd = 0
     loop do
       msg = [_INTL("Not an egg"),
-             _INTL("Egg with eggsteps: {1}.", pkmn.eggsteps)][pkmn.egg? ? 1 : 0]
+             _INTL("Egg (hatches in {1} steps).", pkmn.steps_to_hatch)][pkmn.egg? ? 1 : 0]
       cmd = screen.pbShowCommands(msg, [
            _INTL("Make egg"),
            _INTL("Make Pokémon"),
-           _INTL("Set eggsteps to 1")], cmd)
+           _INTL("Set steps left to 1")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Make egg
         if !pkmn.egg? && (pbHasEgg?(pkmn.species) ||
            screen.pbConfirm(_INTL("{1} cannot legally be an egg. Make egg anyway?", pkmn.speciesName)))
-          pkmn.level = EGG_LEVEL
+          pkmn.level          = Settings::EGG_LEVEL
           pkmn.calcStats
-          pkmn.name = _INTL("Egg")
-          pkmn.eggsteps = pkmn.species_data.hatch_steps
-          pkmn.hatchedMap = 0
-          pkmn.obtainMode = 1
+          pkmn.name           = _INTL("Egg")
+          pkmn.steps_to_hatch = pkmn.species_data.hatch_steps
+          pkmn.hatched_map    = 0
+          pkmn.obtain_method  = 1
           screen.pbRefreshSingle(pkmnid)
         end
       when 1   # Make Pokémon
         if pkmn.egg?
-          pkmn.name       = pkmn.speciesName
-          pkmn.eggsteps   = 0
-          pkmn.hatchedMap = 0
-          pkmn.obtainMode = 0
+          pkmn.name           = nil
+          pkmn.steps_to_hatch = 0
+          pkmn.hatched_map    = 0
+          pkmn.obtain_method  = 0
           screen.pbRefreshSingle(pkmnid)
         end
-      when 2   # Set eggsteps to 1
-        pkmn.eggsteps = 1 if pkmn.egg?
+      when 2   # Set steps left to 1
+        pkmn.steps_to_hatch = 1 if pkmn.egg?
       end
     end
   }
@@ -989,7 +989,7 @@ PokemonDebugMenuCommands.register("shadowpkmn", {
     cmd = 0
     loop do
       msg = [_INTL("Not a Shadow Pokémon."),
-             _INTL("Heart gauge is {1} (stage {2}).", pkmn.heartgauge, pkmn.heartStage)
+             _INTL("Heart gauge is {1} (stage {2}).", pkmn.heart_gauge, pkmn.heartStage)
             ][pkmn.shadowPokemon? ? 1 : 0]
       cmd = screen.pbShowCommands(msg, [
          _INTL("Make Shadow"),
@@ -1005,16 +1005,16 @@ PokemonDebugMenuCommands.register("shadowpkmn", {
         end
       when 1   # Set heart gauge
         if pkmn.shadowPokemon?
-          oldheart = pkmn.heartgauge
+          oldheart = pkmn.heart_gauge
           params = ChooseNumberParams.new
-          params.setRange(0, Pokemon::HEARTGAUGESIZE)
-          params.setDefaultValue(pkmn.heartgauge)
+          params.setRange(0, Pokemon::HEART_GAUGE_SIZE)
+          params.setDefaultValue(pkmn.heart_gauge)
           val = pbMessageChooseNumber(
-             _INTL("Set the heart gauge (max. {1}).", Pokemon::HEARTGAUGESIZE),
+             _INTL("Set the heart gauge (max. {1}).", Pokemon::HEART_GAUGE_SIZE),
              params) { screen.pbUpdate }
           if val != oldheart
             pkmn.adjustHeart(val - oldheart)
-            pbReadyToPurify(pkmn)
+            pkmn.check_ready_to_purify
           end
         else
           screen.pbDisplay(_INTL("{1} is not a Shadow Pokémon.", pkmn.name))

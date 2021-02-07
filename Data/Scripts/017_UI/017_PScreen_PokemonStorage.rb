@@ -449,7 +449,7 @@ class PokemonBoxPartySprite < SpriteWrapper
     @party = party
     @boxbitmap = AnimatedBitmap.new("Graphics/Pictures/Storage/overlay_party")
     @pokemonsprites = []
-    for i in 0...MAX_PARTY_SIZE
+    for i in 0...Settings::MAX_PARTY_SIZE
       @pokemonsprites[i] = nil
       pokemon = @party[i]
       if pokemon
@@ -465,7 +465,7 @@ class PokemonBoxPartySprite < SpriteWrapper
   end
 
   def dispose
-    for i in 0...MAX_PARTY_SIZE
+    for i in 0...Settings::MAX_PARTY_SIZE
       @pokemonsprites[i].dispose if @pokemonsprites[i]
     end
     @boxbitmap.dispose
@@ -485,7 +485,7 @@ class PokemonBoxPartySprite < SpriteWrapper
 
   def color=(value)
     super
-    for i in 0...MAX_PARTY_SIZE
+    for i in 0...Settings::MAX_PARTY_SIZE
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
         @pokemonsprites[i].color = pbSrcOver(@pokemonsprites[i].color,value)
       end
@@ -494,7 +494,7 @@ class PokemonBoxPartySprite < SpriteWrapper
 
   def visible=(value)
     super
-    for i in 0...MAX_PARTY_SIZE
+    for i in 0...Settings::MAX_PARTY_SIZE
       if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
         @pokemonsprites[i].visible = value
       end
@@ -535,15 +535,15 @@ class PokemonBoxPartySprite < SpriteWrapper
     ])
     xvalues = []   # [18, 90, 18, 90, 18, 90]
     yvalues = []   # [2, 18, 66, 82, 130, 146]
-    for i in 0...MAX_PARTY_SIZE
+    for i in 0...Settings::MAX_PARTY_SIZE
       xvalues.push(18 + 72 * (i % 2))
       yvalues.push(2 + 16 * (i % 2) + 64 * (i / 2))
     end
-    for j in 0...MAX_PARTY_SIZE
+    for j in 0...Settings::MAX_PARTY_SIZE
       @pokemonsprites[j] = nil if @pokemonsprites[j] && @pokemonsprites[j].disposed?
     end
     @pokemonsprites.compact!
-    for j in 0...MAX_PARTY_SIZE
+    for j in 0...Settings::MAX_PARTY_SIZE
       sprite = @pokemonsprites[j]
       if sprite && !sprite.disposed?
         sprite.viewport = self.viewport
@@ -556,7 +556,7 @@ class PokemonBoxPartySprite < SpriteWrapper
 
   def update
     super
-    for i in 0...MAX_PARTY_SIZE
+    for i in 0...Settings::MAX_PARTY_SIZE
       @pokemonsprites[i].update if @pokemonsprites[i] && !@pokemonsprites[i].disposed?
     end
   end
@@ -773,7 +773,7 @@ class PokemonStorageScene
     return if selection < 0
     xvalues = []   # [200, 272, 200, 272, 200, 272, 236]
     yvalues = []   # [2, 18, 66, 82, 130, 146, 220]
-    for i in 0...MAX_PARTY_SIZE
+    for i in 0...Settings::MAX_PARTY_SIZE
       xvalues.push(200 + 72 * (i % 2))
       yvalues.push(2 + 16 * (i % 2) + 64 * (i / 2))
     end
@@ -791,23 +791,23 @@ class PokemonStorageScene
     case key
     when Input::LEFT
       selection -= 1
-      selection = MAX_PARTY_SIZE if selection < 0
+      selection = Settings::MAX_PARTY_SIZE if selection < 0
     when Input::RIGHT
       selection += 1
-      selection = 0 if selection > MAX_PARTY_SIZE
+      selection = 0 if selection > Settings::MAX_PARTY_SIZE
     when Input::UP
-      if selection == MAX_PARTY_SIZE
-        selection = MAX_PARTY_SIZE - 1
+      if selection == Settings::MAX_PARTY_SIZE
+        selection = Settings::MAX_PARTY_SIZE - 1
       else
         selection -= 2
-        selection = MAX_PARTY_SIZE if selection < 0
+        selection = Settings::MAX_PARTY_SIZE if selection < 0
       end
     when Input::DOWN
-      if selection == MAX_PARTY_SIZE
+      if selection == Settings::MAX_PARTY_SIZE
         selection = 0
       else
         selection += 2
-        selection = MAX_PARTY_SIZE if selection > MAX_PARTY_SIZE
+        selection = Settings::MAX_PARTY_SIZE if selection > Settings::MAX_PARTY_SIZE
       end
     end
     return selection
@@ -952,10 +952,10 @@ class PokemonStorageScene
         @selection = selection
         return -1
       elsif Input.trigger?(Input::C)
-        if selection >= 0 && selection < MAX_PARTY_SIZE
+        if selection >= 0 && selection < Settings::MAX_PARTY_SIZE
           @selection = selection
           return selection
-        elsif selection == MAX_PARTY_SIZE   # Close Box
+        elsif selection == Settings::MAX_PARTY_SIZE   # Close Box
           @selection = selection
           return (depositing) ? -3 : -1
         end
@@ -1720,8 +1720,8 @@ class PokemonStorageScreen
           end
           if heldpoke || selected[0]==-1
             p = (heldpoke) ? heldpoke : @storage[-1,index]
-            p.formTime = nil if p.respond_to?("formTime")
-            p.form     = 0 if p.isSpecies?(:SHAYMIN)
+            p.time_form_set = nil
+            p.form          = 0 if p.isSpecies?(:SHAYMIN)
             p.heal
           end
           @scene.pbStore(selected,heldpoke,destbox,firstfree)
@@ -1767,8 +1767,8 @@ class PokemonStorageScreen
       return
     end
     if box>=0
-      @heldpkmn.formTime = nil if @heldpkmn.respond_to?("formTime")
-      @heldpkmn.form     = 0 if @heldpkmn.isSpecies?(:SHAYMIN)
+      @heldpkmn.time_form_set = nil
+      @heldpkmn.form          = 0 if @heldpkmn.isSpecies?(:SHAYMIN)
       @heldpkmn.heal
     end
     @scene.pbPlace(selected,@heldpkmn)
@@ -1796,8 +1796,8 @@ class PokemonStorageScreen
       return false
     end
     if box>=0
-      @heldpkmn.formTime = nil if @heldpkmn.respond_to?("formTime")
-      @heldpkmn.form     = 0 if @heldpkmn.isSpecies?(:SHAYMIN)
+      @heldpkmn.time_form_set = nil
+      @heldpkmn.form          = 0 if @heldpkmn.isSpecies?(:SHAYMIN)
       @heldpkmn.heal
     end
     @scene.pbSwap(selected,@heldpkmn)
@@ -1880,7 +1880,7 @@ class PokemonStorageScreen
           pbDisplay(_INTL("Can't store the {1}.",itemname))
         else
           pbDisplay(_INTL("Took the {1}.",itemname))
-          pokemon.setItem(nil)
+          pokemon.item = nil
           @scene.pbHardRefresh
         end
       end
@@ -1888,7 +1888,7 @@ class PokemonStorageScreen
       item = scene.pbChooseItem($PokemonBag)
       if item
         itemname = GameData::Item.get(item).name
-        pokemon.setItem(item)
+        pokemon.item = item
         $PokemonBag.pbDeleteItem(item)
         pbDisplay(_INTL("{1} is now being held.",itemname))
         @scene.pbHardRefresh

@@ -151,7 +151,7 @@ end
 class NonlegendaryRestriction
   def isValid?(pkmn)
     return true if !pkmn.genderless?
-    return false if pkmn.species_data.egg_groups.include?(PBEggGroups::Undiscovered)
+    return false if pkmn.species_data.egg_groups.include?(:Undiscovered)
     return true
   end
 end
@@ -270,17 +270,22 @@ def pbRandomPokemonFromRule(rule,trainer)
       break
     end
     ev=rand(63)+1
-    nature=0
+    nature = nil
+    keys = GameData::Nature::DATA.keys
     loop do
-      nature = rand(25)
-      nd5 = PBNatures.getStatRaised(nature)
-      nm5 = PBNatures.getStatLowered(nature)
-      if nd5==nm5 || nature==PBNatures::LAX || nature==PBNatures::GENTLE
-        # Neutral nature, Lax, or Gentle
-        next if rand(20)<19
+      nature = keys[rand(keys.length)]
+      nature_data = GameData::Nature.get(nature)
+      if [:LAX, :GENTLE].include?(nature_data.id) || nature_data.stat_changes.length == 0
+        next if rand(20) < 19
       else
-        next if rand(10)<6 if ((ev>>nd5)&1)==0   # If stat to increase isn't emphasized
-        next if rand(10)<9 if ((ev>>nm5)&1)!=0   # If stat to decrease is emphasized
+        raised_emphasis = false
+        lowered_emphasis = false
+        nature_data.stat_changes.each do |change|
+          raised_emphasis = true if change[1] > 0 && ((ev >> change[0]) & 1) != 0
+          lowered_emphasis = true if change[1] < 0 && ((ev >> change[0]) & 1) != 0
+        end
+        next if rand(10) < 6 && !raised_emphasis
+        next if rand(10) < 9 && lowered_emphasis
       end
       break
     end
@@ -840,8 +845,8 @@ def pbRuledBattle(team1,team2,rule)
     decision=pbDecideWinner(party1,party2,team1.rating,team2.rating)
   else
     level=rule.ruleset.suggestedLevel
-    trainer1=PokeBattle_Trainer.new("PLAYER1",1)
-    trainer2=PokeBattle_Trainer.new("PLAYER2",1)
+    trainer1=NPCTrainer.new("PLAYER1",1)
+    trainer2=NPCTrainer.new("PLAYER2",1)
     items1=[]
     items2=[]
     team1.each_with_index do |p,i|
@@ -872,12 +877,12 @@ def pbRuledBattle(team1,team2,rule)
     team1.each_with_index do |p,i|
       next if !p
       p.heal
-      p.setItem(items1[i])
+      p.item = items1[i]
     end
     team2.each_with_index do |p,i|
       next if !p
       p.heal
-      p.setItem(items2[i])
+      p.item = items2[i]
     end
   end
   if decision==1 # Team 1 wins
@@ -995,7 +1000,7 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
         end
       end
       numbers|=[]
-      if numbers.length < MAX_PARTY_SIZE ||
+      if numbers.length < Settings::MAX_PARTY_SIZE ||
          !rulesetTeam.hasValidTeam?(numbersPokemon)
         for index in 0...pokemonlist.length
           pkmn=pokemonlist[index]
@@ -1013,11 +1018,11 @@ def pbTrainerInfo(pokemonlist,trfile,rules)
               end
             }
           end
-          break if numbers.length >= MAX_PARTY_SIZE && rules.ruleset.hasValidTeam?(numbersPokemon)
+          break if numbers.length >= Settings::MAX_PARTY_SIZE && rules.ruleset.hasValidTeam?(numbersPokemon)
         end
-        if numbers.length < MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon)
+        if numbers.length < Settings::MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon)
           while numbers.length<pokemonlist.length &&
-             (numbers.length < MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon))
+             (numbers.length < Settings::MAX_PARTY_SIZE || !rules.ruleset.hasValidTeam?(numbersPokemon))
             index=rand(pokemonlist.length)
             if !numbers.include?(index)
               numbers.push(index)

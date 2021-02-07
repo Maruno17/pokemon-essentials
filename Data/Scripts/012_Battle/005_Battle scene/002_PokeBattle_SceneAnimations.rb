@@ -421,12 +421,9 @@ class PokeballPlayerSendOutAnimation < PokeBattle_Animation
     shaSprite = @sprites["shadow_#{@battler.index}"]
     traSprite = @sprites["player_#{@idxTrainer}"]
     # Calculate the Poké Ball graphic to use
-    ballType = 0
-    if !batSprite.pkmn.nil?
-      ballType = batSprite.pkmn.ballused || 0
-    end
+    poke_ball = (batSprite.pkmn) ? batSprite.pkmn.poke_ball : nil
     # Calculate the color to turn the battler sprite
-    col = getBattlerColorFromBallType(ballType)
+    col = getBattlerColorFromPokeBall(poke_ball)
     col.alpha = 255
     # Calculate start and end coordinates for battler sprite movement
     ballPos = PokeBattle_SceneConstants.pbBattlerPosition(@battler.index,batSprite.sideSize)
@@ -440,7 +437,7 @@ class PokeballPlayerSendOutAnimation < PokeBattle_Animation
     ballMidX = 0   # Unused in trajectory calculation
     ballMidY = battlerStartY-144
     # Set up Poké Ball sprite
-    ball = addBallSprite(ballStartX,ballStartY,ballType)
+    ball = addBallSprite(ballStartX,ballStartY,poke_ball)
     ball.setZ(0,25)
     ball.setVisible(0,false)
     # Poké Ball tracking the player's hand animation (if trainer is visible)
@@ -455,8 +452,8 @@ class PokeballPlayerSendOutAnimation < PokeBattle_Animation
     ball.setZ(9,batSprite.z-1)
     delay = ball.totalDuration+4
     delay += 10*@idxOrder   # Stagger appearances if multiple Pokémon are sent out at once
-    ballOpenUp(ball,delay-2,ballType)
-    ballBurst(delay,battlerStartX,battlerStartY-18,ballType)
+    ballOpenUp(ball,delay-2,poke_ball)
+    ballBurst(delay,battlerStartX,battlerStartY-18,poke_ball)
     ball.moveOpacity(delay+2,2,0)
     # Set up battler sprite
     battler = addSprite(batSprite,PictureOrigin::Bottom)
@@ -501,12 +498,9 @@ class PokeballTrainerSendOutAnimation < PokeBattle_Animation
     batSprite = @sprites["pokemon_#{@battler.index}"]
     shaSprite = @sprites["shadow_#{@battler.index}"]
     # Calculate the Poké Ball graphic to use
-    ballType = 0
-    if !batSprite.pkmn.nil?
-      ballType = batSprite.pkmn.ballused || 0
-    end
+    poke_ball = (batSprite.pkmn) ? batSprite.pkmn.poke_ball : nil
     # Calculate the color to turn the battler sprite
-    col = getBattlerColorFromBallType(ballType)
+    col = getBattlerColorFromPokeBall(poke_ball)
     col.alpha = 255
     # Calculate start and end coordinates for battler sprite movement
     ballPos = PokeBattle_SceneConstants.pbBattlerPosition(@battler.index,batSprite.sideSize)
@@ -515,15 +509,15 @@ class PokeballTrainerSendOutAnimation < PokeBattle_Animation
     battlerEndX = batSprite.x
     battlerEndY = batSprite.y
     # Set up Poké Ball sprite
-    ball = addBallSprite(0,0,ballType)
+    ball = addBallSprite(0,0,poke_ball)
     ball.setZ(0,batSprite.z-1)
     # Poké Ball animation
     createBallTrajectory(ball,battlerStartX,battlerStartY)
     delay = ball.totalDuration+6
     delay += 10 if @showingTrainer   # Give time for trainer to slide off screen
     delay += 10*@idxOrder   # Stagger appearances if multiple Pokémon are sent out at once
-    ballOpenUp(ball,delay-2,ballType)
-    ballBurst(delay,battlerStartX,battlerStartY-18,ballType)
+    ballOpenUp(ball,delay-2,poke_ball)
+    ballBurst(delay,battlerStartX,battlerStartY-18,poke_ball)
     ball.moveOpacity(delay+2,2,0)
     # Set up battler sprite
     battler = addSprite(batSprite,PictureOrigin::Bottom)
@@ -567,12 +561,9 @@ class BattlerRecallAnimation < PokeBattle_Animation
     batSprite = @sprites["pokemon_#{@idxBattler}"]
     shaSprite = @sprites["shadow_#{@idxBattler}"]
     # Calculate the Poké Ball graphic to use
-    ballType = 0
-    if !batSprite.pkmn.nil?
-      ballType = batSprite.pkmn.ballused || 0
-    end
+    poke_ball = (batSprite.pkmn) ? batSprite.pkmn.poke_ball : nil
     # Calculate the color to turn the battler sprite
-    col = getBattlerColorFromBallType(ballType)
+    col = getBattlerColorFromPokeBall(poke_ball)
     col.alpha = 0
     # Calculate end coordinates for battler sprite movement
     ballPos = PokeBattle_SceneConstants.pbBattlerPosition(@idxBattler,batSprite.sideSize)
@@ -583,12 +574,12 @@ class BattlerRecallAnimation < PokeBattle_Animation
     battler.setVisible(0,true)
     battler.setColor(0,col)
     # Set up Poké Ball sprite
-    ball = addBallSprite(battlerEndX,battlerEndY,ballType)
+    ball = addBallSprite(battlerEndX,battlerEndY,poke_ball)
     ball.setZ(0,batSprite.z+1)
     # Poké Ball animation
-    ballOpenUp(ball,0,ballType)
+    ballOpenUp(ball,0,poke_ball)
     delay = ball.totalDuration
-    ballBurstRecall(delay,battlerEndX,battlerEndY,ballType)
+    ballBurstRecall(delay,battlerEndX,battlerEndY,poke_ball)
     ball.moveOpacity(10,2,0)
     # Battler animation
     battlerAbsorb(battler,delay,battlerEndX,battlerEndY,col)
@@ -693,8 +684,8 @@ class PokeballThrowCaptureAnimation < PokeBattle_Animation
   include PokeBattle_BallAnimationMixin
 
   def initialize(sprites,viewport,
-                 ballType,numShakes,critCapture,battler,showingTrainer)
-    @ballType       = ballType
+                 poke_ball,numShakes,critCapture,battler,showingTrainer)
+    @poke_ball      = poke_ball
     @numShakes      = (critCapture) ? 1 : numShakes
     @critCapture    = critCapture
     @battler        = battler
@@ -720,7 +711,7 @@ class PokeballThrowCaptureAnimation < PokeBattle_Animation
     ballEndY   = 112
     ballGroundY = ballPos[1]-4
     # Set up Poké Ball sprite
-    ball = addBallSprite(ballStartX,ballStartY,@ballType)
+    ball = addBallSprite(ballStartX,ballStartY,@poke_ball)
     ball.setZ(0,batSprite.z+1)
     @ballSpriteIndex = (@numShakes>=4 || @critCapture) ? @tempSprites.length-1 : -1
     # Set up trainer sprite (only visible in Safari Zone battles)
@@ -740,12 +731,12 @@ class PokeballThrowCaptureAnimation < PokeBattle_Animation
     ball.setSE(delay+16,"Battle ball hit")
     # Poké Ball opens up
     delay = ball.totalDuration+6
-    ballOpenUp(ball,delay,@ballType,true,false)
+    ballOpenUp(ball,delay,@poke_ball,true,false)
     # Set up battler sprite
     battler = addSprite(batSprite,PictureOrigin::Bottom)
     # Poké Ball absorbs battler
     delay = ball.totalDuration
-    ballBurstCapture(delay,ballEndX,ballEndY,@ballType)
+    ballBurstCapture(delay,ballEndX,ballEndY,@poke_ball)
     delay = ball.totalDuration+4
     # NOTE: The Pokémon does not change color while being absorbed into a Poké
     #       Ball during a capture attempt. This may be an oversight in HGSS.
@@ -763,7 +754,7 @@ class PokeballThrowCaptureAnimation < PokeBattle_Animation
     end
     # Poké Ball closes
     delay = battler.totalDuration
-    ballSetClosed(ball,delay,@ballType)
+    ballSetClosed(ball,delay,@poke_ball)
     ball.moveTone(delay,3,Tone.new(96,64,-160,160))
     ball.moveTone(delay+5,3,Tone.new(0,0,0,0))
     # Poké Ball critical capture animation
@@ -808,11 +799,11 @@ class PokeballThrowCaptureAnimation < PokeBattle_Animation
     if @numShakes==0 || (@numShakes<4 && !@critCapture)
       # Poké Ball opens
       ball.setZ(delay,batSprite.z-1)
-      ballOpenUp(ball,delay,@ballType,false)
-      ballBurst(delay,ballEndX,ballGroundY,@ballType)
+      ballOpenUp(ball,delay,@poke_ball,false)
+      ballBurst(delay,ballEndX,ballGroundY,@poke_ball)
       ball.moveOpacity(delay+2,2,0)
       # Battler emerges
-      col = getBattlerColorFromBallType(@ballType)
+      col = getBattlerColorFromPokeBall(@poke_ball)
       col.alpha = 255
       battler.setColor(delay,col)
       battlerAppear(battler,delay,battlerStartX,battlerStartY,batSprite,col)
@@ -846,9 +837,9 @@ end
 class PokeballThrowDeflectAnimation < PokeBattle_Animation
   include PokeBattle_BallAnimationMixin
 
-  def initialize(sprites,viewport,ballType,battler)
-    @ballType = ballType
-    @battler  = battler
+  def initialize(sprites,viewport,poke_ball,battler)
+    @poke_ball = poke_ball
+    @battler   = battler
     super(sprites,viewport)
   end
 
@@ -863,7 +854,7 @@ class PokeballThrowDeflectAnimation < PokeBattle_Animation
     ballEndX   = ballPos[0]
     ballEndY   = 112
     # Set up Poké Ball sprite
-    ball = addBallSprite(ballStartX,ballStartY,@ballType)
+    ball = addBallSprite(ballStartX,ballStartY,@poke_ball)
     ball.setZ(0,90)
     # Poké Ball arc animation
     ball.setSE(0,"Battle throw")

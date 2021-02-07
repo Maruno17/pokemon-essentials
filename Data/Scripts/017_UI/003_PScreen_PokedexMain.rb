@@ -38,8 +38,8 @@ class Window_Pokedex < Window_DrawableCommand
     species     = @commands[index][0]
     indexNumber = @commands[index][4]
     indexNumber -= 1 if @commands[index][5]
-    if $Trainer.seen[species]
-      if $Trainer.owned[species]
+    if $Trainer.seen?(species)
+      if $Trainer.owned?(species)
         pbCopyBitmap(self.contents,@pokeballOwn.bitmap,rect.x-6,rect.y+8)
       else
         pbCopyBitmap(self.contents,@pokeballSeen.bitmap,rect.x-6,rect.y+8)
@@ -282,7 +282,7 @@ class PokemonPokedex_Scene
   # return value of pbGetCurrentRegion, and thus will change according to the
   # current map's MapPosition metadata setting.
   def pbGetPokedexRegion
-    if USE_CURRENT_REGION_DEX
+    if Settings::USE_CURRENT_REGION_DEX
       region = pbGetCurrentRegion
       region = -1 if region>=$PokemonGlobal.pokedexUnlocked.length-1
       return region
@@ -305,9 +305,9 @@ class PokemonPokedex_Scene
   def pbCanAddForModeList?(mode, species)
     case mode
     when MODEATOZ
-      return $Trainer.seen[species]
+      return $Trainer.seen?(species)
     when MODEHEAVIEST, MODELIGHTEST, MODETALLEST, MODESMALLEST
-      return $Trainer.owned[species]
+      return $Trainer.owned?(species)
     end
     return true   # For MODENUMERICAL
   end
@@ -320,7 +320,7 @@ class PokemonPokedex_Scene
       regionalSpecies = []
       GameData::Species.each { |s| regionalSpecies.push(s.id) if s.form == 0 }
     end
-    shift = DEXES_WITH_OFFSETS.include?(region)
+    shift = Settings::DEXES_WITH_OFFSETS.include?(region)
     ret = []
     regionalSpecies.each_with_index do |species, i|
       next if !species
@@ -342,11 +342,11 @@ class PokemonPokedex_Scene
     case $PokemonGlobal.pokedexMode
     when MODENUMERICAL
       # Hide the Dex number 0 species if unseen
-      dexlist[0] = nil if dexlist[0][5] && !$Trainer.seen[dexlist[0][0]]
+      dexlist[0] = nil if dexlist[0][5] && !$Trainer.seen?(dexlist[0][0])
       # Remove unseen species from the end of the list
       i = dexlist.length-1
       loop do break unless i>=0
-        break if !dexlist[i] || $Trainer.seen[dexlist[i][0]]
+        break if !dexlist[i] || $Trainer.seen?(dexlist[i][0])
         dexlist[i] = nil
         i -= 1
       end
@@ -382,11 +382,11 @@ class PokemonPokedex_Scene
     base   = Color.new(88,88,80)
     shadow = Color.new(168,184,184)
     iconspecies = @sprites["pokedex"].species
-    iconspecies = nil if !$Trainer.seen[iconspecies]
+    iconspecies = nil if !$Trainer.seen?(iconspecies)
     # Write various bits of text
     dexname = _INTL("Pokédex")
     if $PokemonGlobal.pokedexUnlocked.length>1
-      thisdex = pbDexNames[pbGetSavePositionIndex]
+      thisdex = Settings.pokedex_names[pbGetSavePositionIndex]
       if thisdex!=nil
         dexname = (thisdex.is_a?(Array)) ? thisdex[0] : thisdex
       end
@@ -400,9 +400,9 @@ class PokemonPokedex_Scene
       textpos.push([@dexlist.length.to_s,112,340,2,base,shadow])
     else
       textpos.push([_INTL("Seen:"),42,308,0,base,shadow])
-      textpos.push([$Trainer.pokedexSeen(pbGetPokedexRegion).to_s,182,308,1,base,shadow])
+      textpos.push([$Trainer.seen_count(pbGetPokedexRegion).to_s,182,308,1,base,shadow])
       textpos.push([_INTL("Owned:"),42,340,0,base,shadow])
-      textpos.push([$Trainer.pokedexOwned(pbGetPokedexRegion).to_s,182,340,1,base,shadow])
+      textpos.push([$Trainer.owned_count(pbGetPokedexRegion).to_s,182,340,1,base,shadow])
     end
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
@@ -460,7 +460,7 @@ class PokemonPokedex_Scene
     # Write order, name and color parameters
     textpos.push([@orderCommands[params[0]],344,60,2,base,shadow,1])
     textpos.push([(params[1]<0) ? "----" : @nameCommands[params[1]],176,118,2,base,shadow,1])
-    textpos.push([(params[8]<0) ? "----" : @colorCommands[params[8]],444,118,2,base,shadow,1])
+    textpos.push([(params[8]<0) ? "----" : @colorCommands[params[8]].name,444,118,2,base,shadow,1])
     # Draw type icons
     if params[2]>=0
       type_number = @typeCommands[params[2]].id_number
@@ -600,6 +600,12 @@ class PokemonPokedex_Scene
       textpos.push([txt1,286,58,2,base,shadow,1])
       textpos.push([txt2,414,58,2,base,shadow,1])
       overlay.blt(462,52,@hwbitmap.bitmap,Rect.new(32,(hwoffset) ? 44 : 0,32,44))
+    when 5   # Color
+      if sel[0]<0
+        textpos.push(["----",362,58,2,base,shadow,1])
+      else
+        textpos.push([cmds[sel[0]].name,362,58,2,base,shadow,1])
+      end
     when 6   # Shape icon
       if sel[0]>=0
         shaperect = Rect.new(0,@shapeCommands[sel[0]]*60,60,60)
@@ -614,7 +620,7 @@ class PokemonPokedex_Scene
       end
     end
     # Draw selected option(s) button graphic
-    if mode==3 || mode==4 # Height, weight
+    if mode==3 || mode==4   # Height, weight
       xpos1 = xstart+(sel[0]+1)*xgap
       xpos1 = xstart if sel[0]<-1
       xpos2 = xstart+(sel[1]+1)*xgap
@@ -645,7 +651,7 @@ class PokemonPokedex_Scene
     end
     # Draw options
     case mode
-    when 0,1,5 # Order, name, color
+    when 0,1   # Order, name
       for i in 0...cmds.length
         x = xstart+halfwidth+(i%cols)*xgap
         y = ystart+6+(i/cols).floor*ygap
@@ -655,7 +661,7 @@ class PokemonPokedex_Scene
         textpos.push([(mode==1) ? "-" : "----",
            xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
       end
-    when 2 # Type
+    when 2   # Type
       typerect = Rect.new(0,0,96,32)
       for i in 0...cmds.length
         typerect.y = @typeCommands[i].id_number*32
@@ -663,7 +669,15 @@ class PokemonPokedex_Scene
       end
       textpos.push(["----",
          xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
-    when 6 # Shape
+    when 5   # Color
+      for i in 0...cmds.length
+        x = xstart+halfwidth+(i%cols)*xgap
+        y = ystart+6+(i/cols).floor*ygap
+        textpos.push([cmds[i].name,x,y,2,base,shadow,1])
+      end
+      textpos.push(["----",
+         xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
+    when 6   # Shape
       shaperect = Rect.new(0,0,60,60)
       for i in 0...cmds.length
         shaperect.y = i*60
@@ -675,10 +689,10 @@ class PokemonPokedex_Scene
   end
 
   def setIconBitmap(species)
-    $Trainer.formlastseen = {} if !$Trainer.formlastseen
-    $Trainer.formlastseen[species] = [] if !$Trainer.formlastseen[species]
-    gender = $Trainer.formlastseen[species][0] || 0
-    form   = $Trainer.formlastseen[species][1] || 0
+    $Trainer.last_seen_forms = {} if !$Trainer.last_seen_forms
+    $Trainer.last_seen_forms[species] = [] if !$Trainer.last_seen_forms[species]
+    gender = $Trainer.last_seen_forms[species][0] || 0
+    form   = $Trainer.last_seen_forms[species][1] || 0
     @sprites["icon"].setSpeciesBitmap(species, gender, form)
   end
 
@@ -689,7 +703,7 @@ class PokemonPokedex_Scene
     if params[1]>=0
       scanNameCommand = @nameCommands[params[1]].scan(/./)
       dexlist = dexlist.find_all { |item|
-        next false if !$Trainer.seen[item[0]]
+        next false if !$Trainer.seen?(item[0])
         firstChar = item[1][0,1]
         next scanNameCommand.any? { |v| v==firstChar }
       }
@@ -699,7 +713,7 @@ class PokemonPokedex_Scene
       stype1 = (params[2]>=0) ? @typeCommands[params[2]].id : nil
       stype2 = (params[3]>=0) ? @typeCommands[params[3]].id : nil
       dexlist = dexlist.find_all { |item|
-        next false if !$Trainer.owned[item[0]]
+        next false if !$Trainer.owned?(item[0])
         type1 = item[6]
         type2 = item[7]
         if stype1 && stype2
@@ -721,7 +735,7 @@ class PokemonPokedex_Scene
       minh = (params[4]<0) ? 0 : (params[4]>=@heightCommands.length) ? 999 : @heightCommands[params[4]]
       maxh = (params[5]<0) ? 999 : (params[5]>=@heightCommands.length) ? 0 : @heightCommands[params[5]]
       dexlist = dexlist.find_all { |item|
-        next false if !$Trainer.owned[item[0]]
+        next false if !$Trainer.owned?(item[0])
         height = item[2]
         next height>=minh && height<=maxh
       }
@@ -731,36 +745,30 @@ class PokemonPokedex_Scene
       minw = (params[6]<0) ? 0 : (params[6]>=@weightCommands.length) ? 9999 : @weightCommands[params[6]]
       maxw = (params[7]<0) ? 9999 : (params[7]>=@weightCommands.length) ? 0 : @weightCommands[params[7]]
       dexlist = dexlist.find_all { |item|
-        next false if !$Trainer.owned[item[0]]
+        next false if !$Trainer.owned?(item[0])
         weight = item[3]
         next weight>=minw && weight<=maxw
       }
     end
     # Filter by color
     if params[8]>=0
-      colorCommands = []
-      for i in 0..PBColors.maxValue
-        j = PBColors.getName(i)
-        colorCommands.push(i) if j
-      end
-      scolor = colorCommands[params[8]]
+      scolor = @colorCommands[params[8]].id
       dexlist = dexlist.find_all { |item|
-        next false if !$Trainer.seen[item[0]]
-        color = item[8]
-        next color==scolor
+        next false if !$Trainer.seen?(item[0])
+        next item[8] == scolor
       }
     end
     # Filter by shape
     if params[9]>=0
       sshape = @shapeCommands[params[9]]+1
       dexlist = dexlist.find_all { |item|
-        next false if !$Trainer.seen[item[0]]
+        next false if !$Trainer.seen?(item[0])
         shape = item[9]
         next shape==sshape
       }
     end
     # Remove all unseen species from the results
-    dexlist = dexlist.find_all { |item| next $Trainer.seen[item[0]] }
+    dexlist = dexlist.find_all { |item| next $Trainer.seen?(item[0]) }
     case $PokemonGlobal.pokedexMode
     when MODENUMERICAL then dexlist.sort! { |a,b| a[4]<=>b[4] }
     when MODEATOZ      then dexlist.sort! { |a,b| a[1]<=>b[1] }
@@ -792,8 +800,8 @@ class PokemonPokedex_Scene
   def pbDexEntry(index)
     oldsprites = pbFadeOutAndHide(@sprites)
     region = -1
-    if !USE_CURRENT_REGION_DEX
-      dexnames = pbDexNames
+    if !Settings::USE_CURRENT_REGION_DEX
+      dexnames = Settings.pokedex_names
       if dexnames[pbGetSavePositionIndex].is_a?(Array)
         region = dexnames[pbGetSavePositionIndex][1]
       end
@@ -841,7 +849,9 @@ class PokemonPokedex_Scene
     oldindex  = index
     minmax    = 1
     oldminmax = minmax
-    if mode==3 || mode==4; index = oldindex = selindex[minmax]; end
+    if mode==3 || mode==4
+      index = oldindex = selindex[minmax]
+    end
     @sprites["searchcursor"].mode   = mode
     @sprites["searchcursor"].cmds   = cmds.length
     @sprites["searchcursor"].minmax = minmax
@@ -1013,10 +1023,7 @@ class PokemonPokedex_Scene
                        180,200,250,300,350,400,500,600,700,800,
                        900,1000,1250,1500,2000,3000,5000]
     @colorCommands = []
-    for i in 0..PBColors.maxValue
-      j = PBColors.getName(i)
-      @colorCommands.push(j) if j
-    end
+    GameData::BodyColor.each { |c| @colorCommands.push(c) }
     @shapeCommands = []
     for i in 0...14; @shapeCommands.push(i); end
     @sprites["searchbg"].visible     = true
@@ -1166,7 +1173,7 @@ class PokemonPokedex_Scene
             break
           end
         elsif Input.trigger?(Input::C)
-          if $Trainer.seen[@sprites["pokedex"].species]
+          if $Trainer.seen?(@sprites["pokedex"].species)
             pbPlayDecisionSE
             pbDexEntry(@sprites["pokedex"].index)
           end

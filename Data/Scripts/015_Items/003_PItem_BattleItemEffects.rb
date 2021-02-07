@@ -66,7 +66,7 @@ ItemHandlers::CanUseInBattle.copy(:POTION,
    :SUPERPOTION,:HYPERPOTION,:MAXPOTION,:BERRYJUICE,:SWEETHEART,:FRESHWATER,
    :SODAPOP,:LEMONADE,:MOOMOOMILK,:ORANBERRY,:SITRUSBERRY,:ENERGYPOWDER,
    :ENERGYROOT)
-ItemHandlers::CanUseInBattle.copy(:POTION,:RAGECANDYBAR) if !RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
+ItemHandlers::CanUseInBattle.copy(:POTION,:RAGECANDYBAR) if !Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::CanUseInBattle.add(:AWAKENING,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
   next pbBattleItemCanCureStatus?(PBStatuses::SLEEP,pokemon,scene,showMessages)
@@ -119,7 +119,7 @@ ItemHandlers::CanUseInBattle.add(:FULLHEAL,proc { |item,pokemon,battler,move,fir
 ItemHandlers::CanUseInBattle.copy(:FULLHEAL,
    :LAVACOOKIE,:OLDGATEAU,:CASTELIACONE,:LUMIOSEGALETTE,:SHALOURSABLE,
    :BIGMALASADA,:LUMBERRY,:HEALPOWDER)
-ItemHandlers::CanUseInBattle.copy(:FULLHEAL,:RAGECANDYBAR) if RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
+ItemHandlers::CanUseInBattle.copy(:FULLHEAL,:RAGECANDYBAR) if Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::CanUseInBattle.add(:FULLRESTORE,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
   if !pokemon.able? ||
@@ -317,7 +317,7 @@ ItemHandlers::BattleUseOnPokemon.add(:POTION,proc { |item,pokemon,battler,choice
 })
 
 ItemHandlers::BattleUseOnPokemon.copy(:POTION,:BERRYJUICE,:SWEETHEART)
-ItemHandlers::BattleUseOnPokemon.copy(:POTION,:RAGECANDYBAR) if !RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
+ItemHandlers::BattleUseOnPokemon.copy(:POTION,:RAGECANDYBAR) if !Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::BattleUseOnPokemon.add(:SUPERPOTION,proc { |item,pokemon,battler,choices,scene|
   pbBattleHPItem(pokemon,battler,50,scene)
@@ -356,7 +356,7 @@ ItemHandlers::BattleUseOnPokemon.add(:SITRUSBERRY,proc { |item,pokemon,battler,c
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:AWAKENING,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
@@ -366,7 +366,7 @@ ItemHandlers::BattleUseOnPokemon.add(:AWAKENING,proc { |item,pokemon,battler,cho
 ItemHandlers::BattleUseOnPokemon.copy(:AWAKENING,:CHESTOBERRY,:BLUEFLUTE)
 
 ItemHandlers::BattleUseOnPokemon.add(:ANTIDOTE,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
@@ -376,7 +376,7 @@ ItemHandlers::BattleUseOnPokemon.add(:ANTIDOTE,proc { |item,pokemon,battler,choi
 ItemHandlers::BattleUseOnPokemon.copy(:ANTIDOTE,:PECHABERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:BURNHEAL,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
@@ -386,7 +386,7 @@ ItemHandlers::BattleUseOnPokemon.add(:BURNHEAL,proc { |item,pokemon,battler,choi
 ItemHandlers::BattleUseOnPokemon.copy(:BURNHEAL,:RAWSTBERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:PARALYZEHEAL,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
@@ -396,7 +396,7 @@ ItemHandlers::BattleUseOnPokemon.add(:PARALYZEHEAL,proc { |item,pokemon,battler,
 ItemHandlers::BattleUseOnPokemon.copy(:PARALYZEHEAL,:PARLYZHEAL,:CHERIBERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:ICEHEAL,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   name = (battler) ? battler.pbThis : pokemon.name
   scene.pbRefresh
@@ -406,7 +406,7 @@ ItemHandlers::BattleUseOnPokemon.add(:ICEHEAL,proc { |item,pokemon,battler,choic
 ItemHandlers::BattleUseOnPokemon.copy(:ICEHEAL,:ASPEARBERRY)
 
 ItemHandlers::BattleUseOnPokemon.add(:FULLHEAL,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   battler.pbCureConfusion if battler
   name = (battler) ? battler.pbThis : pokemon.name
@@ -417,10 +417,10 @@ ItemHandlers::BattleUseOnPokemon.add(:FULLHEAL,proc { |item,pokemon,battler,choi
 ItemHandlers::BattleUseOnPokemon.copy(:FULLHEAL,
    :LAVACOOKIE,:OLDGATEAU,:CASTELIACONE,:LUMIOSEGALETTE,:SHALOURSABLE,
    :BIGMALASADA,:LUMBERRY)
-ItemHandlers::BattleUseOnPokemon.copy(:FULLHEAL,:RAGECANDYBAR) if RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
+ItemHandlers::BattleUseOnPokemon.copy(:FULLHEAL,:RAGECANDYBAR) if Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::BattleUseOnPokemon.add(:FULLRESTORE,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   battler.pbCureConfusion if battler
   name = (battler) ? battler.pbThis : pokemon.name
@@ -435,14 +435,14 @@ ItemHandlers::BattleUseOnPokemon.add(:FULLRESTORE,proc { |item,pokemon,battler,c
 ItemHandlers::BattleUseOnPokemon.add(:REVIVE,proc { |item,pokemon,battler,choices,scene|
   pokemon.hp = pokemon.totalhp/2
   pokemon.hp = 1 if pokemon.hp<=0
-  pokemon.healStatus
+  pokemon.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} recovered from fainting!",pokemon.name))
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:MAXREVIVE,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healHP
-  pokemon.healStatus
+  pokemon.heal_HP
+  pokemon.heal_status
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} recovered from fainting!",pokemon.name))
 })
@@ -460,7 +460,7 @@ ItemHandlers::BattleUseOnPokemon.add(:ENERGYROOT,proc { |item,pokemon,battler,ch
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:HEALPOWDER,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healStatus
+  pokemon.heal_status
   battler.pbCureStatus(false) if battler
   battler.pbCureConfusion if battler
   pokemon.changeHappiness("powder")
@@ -470,8 +470,8 @@ ItemHandlers::BattleUseOnPokemon.add(:HEALPOWDER,proc { |item,pokemon,battler,ch
 })
 
 ItemHandlers::BattleUseOnPokemon.add(:REVIVALHERB,proc { |item,pokemon,battler,choices,scene|
-  pokemon.healHP
-  pokemon.healStatus
+  pokemon.heal_HP
+  pokemon.heal_status
   pokemon.changeHappiness("revivalherb")
   scene.pbRefresh
   scene.pbDisplay(_INTL("{1} recovered from fainting!",pokemon.name))
@@ -523,7 +523,7 @@ ItemHandlers::BattleUseOnBattler.add(:YELLOWFLUTE,proc { |item,battler,scene|
 ItemHandlers::BattleUseOnBattler.copy(:YELLOWFLUTE,:PERSIMBERRY)
 
 ItemHandlers::BattleUseOnBattler.add(:XATTACK,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::ATTACK,(X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
+  battler.pbRaiseStatStage(PBStats::ATTACK,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
@@ -543,7 +543,7 @@ ItemHandlers::BattleUseOnBattler.add(:XATTACK6,proc { |item,battler,scene|
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XDEFENSE,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::DEFENSE,(X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
+  battler.pbRaiseStatStage(PBStats::DEFENSE,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
@@ -571,7 +571,7 @@ ItemHandlers::BattleUseOnBattler.add(:XDEFENSE6,proc { |item,battler,scene|
 ItemHandlers::BattleUseOnBattler.copy(:XDEFENSE6,:XDEFEND6)
 
 ItemHandlers::BattleUseOnBattler.add(:XSPATK,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPATK,(X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
+  battler.pbRaiseStatStage(PBStats::SPATK,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
@@ -599,7 +599,7 @@ ItemHandlers::BattleUseOnBattler.add(:XSPATK6,proc { |item,battler,scene|
 ItemHandlers::BattleUseOnBattler.copy(:XSPATK6,:XSPECIAL6)
 
 ItemHandlers::BattleUseOnBattler.add(:XSPDEF,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPDEF,(X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
+  battler.pbRaiseStatStage(PBStats::SPDEF,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
@@ -619,7 +619,7 @@ ItemHandlers::BattleUseOnBattler.add(:XSPDEF6,proc { |item,battler,scene|
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XSPEED,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPEED,(X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
+  battler.pbRaiseStatStage(PBStats::SPEED,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
@@ -639,7 +639,7 @@ ItemHandlers::BattleUseOnBattler.add(:XSPEED6,proc { |item,battler,scene|
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XACCURACY,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::ACCURACY,(X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
+  battler.pbRaiseStatStage(PBStats::ACCURACY,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 

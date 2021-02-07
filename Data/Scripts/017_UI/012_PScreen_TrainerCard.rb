@@ -26,7 +26,7 @@ class PokemonTrainerCard_Scene
     @sprites["overlay"] = BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
     pbSetSystemFont(@sprites["overlay"].bitmap)
     @sprites["trainer"] = IconSprite.new(336,112,@viewport)
-    @sprites["trainer"].setBitmap(GameData::TrainerType.player_front_sprite_filename($Trainer.trainertype))
+    @sprites["trainer"].setBitmap(GameData::TrainerType.player_front_sprite_filename($Trainer.trainer_type))
     @sprites["trainer"].x -= (@sprites["trainer"].bitmap.width-128)/2
     @sprites["trainer"].y -= (@sprites["trainer"].bitmap.height-128)
     @sprites["trainer"].z = 2
@@ -52,11 +52,11 @@ class PokemonTrainerCard_Scene
        [_INTL("Name"),34,64,0,baseColor,shadowColor],
        [$Trainer.name,302,64,1,baseColor,shadowColor],
        [_INTL("ID No."),332,64,0,baseColor,shadowColor],
-       [sprintf("%05d",$Trainer.publicID($Trainer.id)),468,64,1,baseColor,shadowColor],
+       [sprintf("%05d",$Trainer.public_ID),468,64,1,baseColor,shadowColor],
        [_INTL("Money"),34,112,0,baseColor,shadowColor],
        [_INTL("${1}",$Trainer.money.to_s_formatted),302,112,1,baseColor,shadowColor],
        [_INTL("Pokédex"),34,160,0,baseColor,shadowColor],
-       [sprintf("%d/%d",$Trainer.pokedexOwned,$Trainer.pokedexSeen),302,160,1,baseColor,shadowColor],
+       [sprintf("%d/%d",$Trainer.owned_count,$Trainer.seen_count),302,160,1,baseColor,shadowColor],
        [_INTL("Time"),34,208,0,baseColor,shadowColor],
        [time,302,208,1,baseColor,shadowColor],
        [_INTL("Started"),34,256,0,baseColor,shadowColor],

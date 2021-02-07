@@ -105,7 +105,7 @@ end
 # Check compatibility of Pokémon in the Day Care.
 #===============================================================================
 def pbIsDitto?(pkmn)
-  return pkmn.species_data.egg_groups.include?(PBEggGroups::Ditto)
+  return pkmn.species_data.egg_groups.include?(:Ditto)
 end
 
 def pbDayCareCompatibleGender(pkmn1, pkmn2)
@@ -127,12 +127,12 @@ def pbDayCareGetCompat
   # Pokémon in the Undiscovered egg group cannot breed
   egg_groups1 = pkmn1.species_data.egg_groups
   egg_groups2 = pkmn2.species_data.egg_groups
-  return 0 if egg_groups1.include?(PBEggGroups::Undiscovered) ||
-              egg_groups2.include?(PBEggGroups::Undiscovered)
+  return 0 if egg_groups1.include?(:Undiscovered) ||
+              egg_groups2.include?(:Undiscovered)
   # Pokémon that don't share an egg group (and neither is in the Ditto group)
   # cannot breed
-  return 0 if !egg_groups1.include?(PBEggGroups::Ditto) &&
-              !egg_groups2.include?(PBEggGroups::Ditto) &&
+  return 0 if !egg_groups1.include?(:Ditto) &&
+              !egg_groups2.include?(:Ditto) &&
               (egg_groups1 & egg_groups2).length == 0
   # Pokémon with incompatible genders cannot breed
   return 0 if !pbDayCareCompatibleGender(pkmn1, pkmn2)
@@ -186,7 +186,7 @@ def pbDayCareGenerateEgg
     end
   end
   # Generate egg
-  egg = Pokemon.new(babyspecies,EGG_LEVEL)
+  egg = Pokemon.new(babyspecies, Settings::EGG_LEVEL)
   # Randomise personal ID
   pid = rand(65536)
   pid |= (rand(65536)<<16)
@@ -217,7 +217,7 @@ def pbDayCareGenerateEgg
   # Initial Moves
   initialmoves = egg.getMoveList
   for k in initialmoves
-    if k[0]<=EGG_LEVEL
+    if k[0] <= Settings::EGG_LEVEL
       moves.push(k[1])
     elsif mother.hasMove?(k[1]) && father.hasMove?(k[1])
       othermoves.push(k[1])
@@ -228,11 +228,11 @@ def pbDayCareGenerateEgg
     moves.push(move)
   end
   # Inheriting Machine Moves
-  if BREEDING_CAN_INHERIT_MACHINE_MOVES
+  if Settings::BREEDING_CAN_INHERIT_MACHINE_MOVES
     GameData::Item.each do |i|
       atk = i.move
       next if !atk
-      next if !egg.compatibleWithMove?(atk)
+      next if !egg.compatible_with_move?(atk)
       next if !movefather.hasMove?(atk)
       moves.push(atk)
     end
@@ -242,7 +242,7 @@ def pbDayCareGenerateEgg
   if movefather.male?
     babyEggMoves.each { |m| moves.push(m) if movefather.hasMove?(m) }
   end
-  if BREEDING_CAN_INHERIT_EGG_MOVES_FROM_MOTHER
+  if Settings::BREEDING_CAN_INHERIT_EGG_MOVES_FROM_MOTHER
     babyEggMoves.each { |m| moves.push(m) if movemother.hasMove?(m) }
   end
   # Volt Tackle
@@ -266,7 +266,7 @@ def pbDayCareGenerateEgg
   first_move_index = 0 if first_move_index < 0
   finalmoves = []
   for i in first_move_index...moves.length
-    finalmoves.push(PBMove.new(moves[i]))
+    finalmoves.push(Pokemon::Move.new(moves[i]))
   end
   # Inheriting Individual Values
   ivs = []
@@ -311,7 +311,7 @@ def pbDayCareGenerateEgg
   new_natures.push(father.nature) if father.hasItem?(:EVERSTONE)
   if new_natures.length > 0
     new_nature = (new_natures.length == 1) ? new_natures[0] : new_natures[rand(new_natures.length)]
-    egg.setNature(new_nature)
+    egg.nature = new_nature
   end
   # Masuda method and Shiny Charm
   shinyretries = 0
@@ -327,12 +327,12 @@ def pbDayCareGenerateEgg
   if !ditto0 || !ditto1
     parent = (ditto0) ? father : mother   # The non-Ditto
     if parent.hasHiddenAbility?
-      egg.setAbility(parent.abilityIndex) if rand(100) < 60
+      egg.ability_index = parent.ability_index if rand(100) < 60
     elsif !ditto0 && !ditto1
       if rand(100) < 80
-        egg.setAbility(mother.abilityIndex)
+        egg.ability_index = mother.ability_index
       else
-        egg.setAbility((mother.abilityIndex + 1) % 2)
+        egg.ability_index = (mother.ability_index + 1) % 2
       end
     end
   end
@@ -340,17 +340,17 @@ def pbDayCareGenerateEgg
   if !ditto0 || !ditto1
     possible_balls = []
     if mother.species == father.species
-      possible_balls.push(mother.ballused)
-      possible_balls.push(father.ballused)
+      possible_balls.push(mother.poke_ball)
+      possible_balls.push(father.poke_ball)
     else
-      possible_balls.push(pkmn0.ballused) if pkmn0.female? || ditto1
-      possible_balls.push(pkmn1.ballused) if pkmn1.female? || ditto0
+      possible_balls.push(pkmn0.poke_ball) if pkmn0.female? || ditto1
+      possible_balls.push(pkmn1.poke_ball) if pkmn1.female? || ditto0
     end
-    possible_balls.delete(pbGetBallType(:MASTERBALL))    # Can't inherit this Ball
-    possible_balls.delete(pbGetBallType(:CHERISHBALL))   # Can't inherit this Ball
+    possible_balls.delete(:MASTERBALL)    # Can't inherit this Ball
+    possible_balls.delete(:CHERISHBALL)   # Can't inherit this Ball
     if possible_balls.length > 0
-      egg.ballused = possible_balls[0]
-      egg.ballused = possible_balls[rand(possible_balls.length)] if possible_balls.length > 1
+      egg.poke_ball = possible_balls[0]
+      egg.poke_ball = possible_balls[rand(possible_balls.length)] if possible_balls.length > 1
     end
   end
   # Set all stats
@@ -358,10 +358,10 @@ def pbDayCareGenerateEgg
   egg.iv = ivs
   egg.moves = finalmoves
   egg.calcStats
-  egg.obtainText = _INTL("Day-Care Couple")
+  egg.obtain_text = _INTL("Day-Care Couple")
   egg.name = _INTL("Egg")
-  egg.eggsteps = egg.species_data.hatch_steps
-  egg.givePokerus if rand(65536)<POKERUS_CHANCE
+  egg.steps_to_hatch = egg.species_data.hatch_steps
+  egg.givePokerus if rand(65536) < Settings::POKERUS_CHANCE
   # Add egg to party
   $Trainer.party[$Trainer.party.length] = egg
 end
@@ -390,7 +390,7 @@ Events.onStepTaken += proc { |_sender,_e|
   for i in 0...2
     pkmn = $PokemonGlobal.daycare[i][0]
     next if !pkmn
-    maxexp = PBExperience.pbGetMaxExperience(pkmn.growthrate)
+    maxexp = PBExperience.pbGetMaxExperience(pkmn.growth_rate)
     next if pkmn.exp>=maxexp
     oldlevel = pkmn.level
     pkmn.exp += 1   # Gain Exp
@@ -398,7 +398,7 @@ Events.onStepTaken += proc { |_sender,_e|
     pkmn.calcStats
     movelist = pkmn.getMoveList
     for i in movelist
-      pkmn.pbLearnMove(i[1]) if i[0]==pkmn.level   # Learned a new move
+      pkmn.learn_move(i[1]) if i[0]==pkmn.level   # Learned a new move
     end
   end
 }

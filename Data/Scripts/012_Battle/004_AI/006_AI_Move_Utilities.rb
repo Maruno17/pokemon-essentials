@@ -56,7 +56,7 @@ class PokeBattle_AI
   end
 
   def pbCalcTypeMod(moveType,user,target)
-    return PBTypeEffectiveness::NORMAL_EFFECTIVE if moveType<0
+    return PBTypeEffectiveness::NORMAL_EFFECTIVE if !moveType
     return PBTypeEffectiveness::NORMAL_EFFECTIVE if moveType == :GROUND &&
        target.pbHasType?(:FLYING) && target.hasActiveItem?(:IRONBALL)
     # Determine types
@@ -93,7 +93,7 @@ class PokeBattle_AI
     return true if PBTypeEffectiveness.ineffective?(typeMod) || score<=0
     # Immunity due to ability/item/other effects
     if skill>=PBTrainerAI.mediumSkill
-      case move.type
+      case type
       when :GROUND
         return true if target.airborne? && !move.hitsFlyingTargets?
       when :FIRE
@@ -120,7 +120,7 @@ class PokeBattle_AI
       end
       return true if target.effects[PBEffects::Substitute]>0 && move.statusMove? &&
                      !move.ignoresSubstitute?(user) && user.index!=target.index
-      return true if MECHANICS_GENERATION >= 7 && user.hasActiveAbility?(:PRANKSTER) &&
+      return true if Settings::MECHANICS_GENERATION >= 7 && user.hasActiveAbility?(:PRANKSTER) &&
                      target.pbHasType?(:DARK) && target.opposes?(user)
       return true if move.priority>0 && @battle.field.terrain==PBBattleTerrains::Psychic &&
                      target.affectedByTerrain? && target.opposes?(user)
@@ -200,7 +200,7 @@ class PokeBattle_AI
       baseDmg = move.pbNaturalGiftBaseDamage(user.item_id)
     when "09B"   # Heavy Slam
       baseDmg = move.pbBaseDamage(baseDmg,user,target)
-      baseDmg *= 2 if MECHANICS_GENERATION >= 7 && skill>=PBTrainerAI.mediumSkill &&
+      baseDmg *= 2 if Settings::MECHANICS_GENERATION >= 7 && skill>=PBTrainerAI.mediumSkill &&
                       target.effects[PBEffects::Minimize]
     when "0A0", "0BD", "0BE"   # Frost Breath, Double Kick, Twineedle
       baseDmg *= 2
@@ -418,9 +418,9 @@ class PokeBattle_AI
         # Don't need to check the Atk/Sp Atk-boosting badges because the AI
         # won't control the player's Pokémon.
         if target.pbOwnedByPlayer?
-          if move.physicalMove?(type) && @battle.pbPlayer.numbadges >= NUM_BADGES_BOOST_DEFENSE
+          if move.physicalMove?(type) && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_DEFENSE
             multipliers[:defense_multiplier] *= 1.1
-          elsif move.specialMove?(type) && @battle.pbPlayer.numbadges >= NUM_BADGES_BOOST_SPDEF
+          elsif move.specialMove?(type) && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_SPDEF
             multipliers[:defense_multiplier] *= 1.1
           end
         end
@@ -474,7 +474,7 @@ class PokeBattle_AI
     if skill>=PBTrainerAI.highSkill
       if user.status==PBStatuses::BURN && move.physicalMove?(type) &&
          !user.hasActiveAbility?(:GUTS) &&
-         !(MECHANICS_GENERATION >= 6 && move.function == "07E")   # Facade
+         !(Settings::MECHANICS_GENERATION >= 6 && move.function == "07E")   # Facade
         multipliers[:final_damage_multiplier] /= 2
       end
     end
@@ -651,7 +651,7 @@ class PokeBattle_AI
     end
     if skill>=PBTrainerAI.highSkill
       if move.function=="006"   # Toxic
-        modifiers[:base_accuracy] = 0 if MORE_TYPE_EFFECTS && move.statusMove? &&
+        modifiers[:base_accuracy] = 0 if Settings::MORE_TYPE_EFFECTS && move.statusMove? &&
                                          user.pbHasType?(:POISON)
       end
       if move.function=="070"   # OHKO moves

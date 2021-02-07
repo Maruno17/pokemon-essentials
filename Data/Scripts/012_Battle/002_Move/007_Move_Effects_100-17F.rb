@@ -1445,7 +1445,7 @@ end
 #===============================================================================
 class PokeBattle_Move_144 < PokeBattle_Move
   def tramplesMinimize?(param=1)
-    return true if param==1 && MECHANICS_GENERATION >= 6   # Perfect accuracy
+    return true if param==1 && Settings::MECHANICS_GENERATION >= 6   # Perfect accuracy
     return true if param==2   # Double damage
     return super
   end
@@ -1666,7 +1666,7 @@ end
 # User gains 3/4 the HP it inflicts as damage. (Draining Kiss, Oblivion Wing)
 #===============================================================================
 class PokeBattle_Move_14F < PokeBattle_Move
-  def healingMove?; return MECHANICS_GENERATION >= 6; end
+  def healingMove?; return Settings::MECHANICS_GENERATION >= 6; end
 
   def pbEffectAgainstTarget(user,target)
     return if target.damageState.hpLost<=0

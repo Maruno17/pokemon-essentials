@@ -1,5 +1,7 @@
+#===============================================================================
+# Stores information about a Pokémon's owner.
+#===============================================================================
 class Pokemon
-  # Stores information about a Pokémon's owner.
   class Owner
     # @return [Integer] the ID of the owner
     attr_reader :id
@@ -7,13 +9,13 @@ class Pokemon
     attr_reader :name
     # @return [Integer] the gender of the owner (0 = male, 1 = female, 2 = unknown)
     attr_reader :gender
-    # @return [Integer] the language of the owner (see {pbGetLanguage} for language IDs)
+    # @return [Integer] the language of the owner (see pbGetLanguage for language IDs)
     attr_reader :language
 
     # @param id [Integer] the ID of the owner
     # @param name [String] the name of the owner
     # @param gender [Integer] the gender of the owner (0 = male, 1 = female, 2 = unknown)
-    # @param language [Integer] the language of the owner (see {pbGetLanguage} for language IDs)
+    # @param language [Integer] the language of the owner (see pbGetLanguage for language IDs)
     def initialize(id, name, gender, language)
       validate id => Integer, name => String, gender => Integer, language => Integer
       @id = id
@@ -23,10 +25,10 @@ class Pokemon
     end
 
     # Returns a new Owner object populated with values taken from +trainer+.
-    # @param trainer [PokeBattle_Trainer] trainer object to read data from
+    # @param trainer [PlayerTrainer, NPCTrainer] trainer object to read data from
     # @return [Owner] new Owner object
     def self.new_from_trainer(trainer)
-      validate trainer => PokeBattle_Trainer
+      validate trainer => [PlayerTrainer, NPCTrainer]
       return new(trainer.id, trainer.name, trainer.gender, trainer.language)
     end
 
@@ -36,7 +38,7 @@ class Pokemon
     # @param language [Integer] owner language
     # @return [Owner] foreign Owner object
     def self.new_foreign(name = '', gender = 2, language = 2)
-      return new($Trainer.getForeignID, name, gender, language)
+      return new($Trainer.make_foreign_ID, name, gender, language)
     end
 
     # @param new_id [Integer] new owner ID

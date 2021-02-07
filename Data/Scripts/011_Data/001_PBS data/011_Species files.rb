@@ -2,8 +2,8 @@ module GameData
   class Species
     def self.check_graphic_file(path, species, form = 0, gender = 0, shiny = false, shadow = false, subfolder = "")
       try_subfolder = sprintf("%s/", subfolder)
-      species_data = self.get_species_form(species, form)
-      species_id = sprintf("%03d", (species_data) ? self.get(species_data.species).id_number : 0)
+#      species_data = self.get_species_form(species, form)
+#      species_id = sprintf("%03d", (species_data) ? self.get(species_data.species).id_number : 0)
       try_species = species
       try_form    = (form > 0) ? sprintf("_%d", form) : ""
       try_gender  = (gender == 1) ? "_female" : ""
@@ -28,13 +28,14 @@ module GameData
           end
         end
         # Look for a graphic matching this combination's parameters
-        for j in 0...2   # Try using the species' ID symbol and then its ID number
-          next if !try_species || (try_species == "000" && j == 1)
-          try_species_text = (j == 0) ? try_species : species_id
+#        for j in 0...2   # Try using the species' ID symbol and then its ID number
+#          next if !try_species || (try_species == "000" && j == 1)
+#          try_species_text = (j == 0) ? try_species : species_id
+          try_species_text = try_species
           ret = pbResolveBitmap(sprintf("%s%s%s%s%s%s", path, try_subfolder,
              try_species_text, try_form, try_gender, try_shadow))
           return ret if ret
-        end
+#        end
       end
       return nil
     end
@@ -42,16 +43,17 @@ module GameData
     def self.check_egg_graphic_file(path, species, form, suffix = "")
       species_data = self.get_species_form(species, form)
       return nil if species_data.nil?
-      species_id = self.get(species_data.species).id_number
+#      species_id = self.get(species_data.species).id_number
       if form > 0
         ret = pbResolveBitmap(sprintf("%s%s_%d%s", path, species_data.species, form, suffix))
         return ret if ret
-        ret = pbResolveBitmap(sprintf("%s%03d_%d%s", path, species_id, form, suffix))
-        return ret if ret
+#        ret = pbResolveBitmap(sprintf("%s%03d_%d%s", path, species_id, form, suffix))
+#        return ret if ret
       end
       ret = pbResolveBitmap(sprintf("%s%s%s", path, species_data.species, suffix))
-      return ret if ret
-      return pbResolveBitmap(sprintf("%s%03d%s", path, species_id, suffix))
+      return ret
+#      return ret if ret
+#      return pbResolveBitmap(sprintf("%s%03d%s", path, species_id, suffix))
     end
 
     def self.front_sprite_filename(species, form = 0, gender = 0, shiny = false, shadow = false)
@@ -148,16 +150,17 @@ module GameData
     def self.footprint_filename(species, form = 0)
       species_data = self.get_species_form(species, form)
       return nil if species_data.nil?
-      species_id = self.get(species_data.species).id_number
+#      species_id = self.get(species_data.species).id_number
       if form > 0
         ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Footprints/%s_%d", species_data.species, form))
         return ret if ret
-        ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Footprints/%03d_%d", species_id, form))
-        return ret if ret
+#        ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Footprints/%03d_%d", species_id, form))
+#        return ret if ret
       end
       ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Footprints/%s", species_data.species))
-      return ret if ret
-      return pbResolveBitmap(sprintf("Graphics/Pokemon/Footprints/%03d", species_id))
+      return ret
+#      return ret if ret
+#      return pbResolveBitmap(sprintf("Graphics/Pokemon/Footprints/%03d", species_id))
     end
 
     #===========================================================================
@@ -165,18 +168,18 @@ module GameData
     def self.shadow_filename(species, form = 0)
       species_data = self.get_species_form(species, form)
       return nil if species_data.nil?
-      species_id = self.get(species_data.species).id_number
+#      species_id = self.get(species_data.species).id_number
       # Look for species-specific shadow graphic
       if form > 0
         ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%s_%d", species_data.species, form))
         return ret if ret
-        ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%03d_%d", species_id, form))
-        return ret if ret
+#        ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%03d_%d", species_id, form))
+#        return ret if ret
       end
       ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%s", species_data.species))
       return ret if ret
-      ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%03d", species_id))
-      return ret if ret
+#      ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%03d", species_id))
+#      return ret if ret
       # Use general shadow graphic
       return pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%d", species_data.shadow_size))
     end
@@ -196,16 +199,16 @@ module GameData
     def self.check_cry_file(species, form)
       species_data = self.get_species_form(species, form)
       return nil if species_data.nil?
-      species_id = self.get(species_data.species).id_number
+#      species_id = self.get(species_data.species).id_number
       if form > 0
         ret = sprintf("Cries/%s_%d", species_data.species, form)
         return ret if pbResolveAudioSE(ret)
-        ret = sprintf("Cries/%03d_%d", species_id, form)
-        return ret if pbResolveAudioSE(ret)
+#        ret = sprintf("Cries/%03d_%d", species_id, form)
+#        return ret if pbResolveAudioSE(ret)
       end
       ret = sprintf("Cries/%s", species_data.species)
-      return ret if pbResolveAudioSE(ret)
-      ret = sprintf("Cries/%03d", species_id)
+#      return ret if pbResolveAudioSE(ret)
+#      ret = sprintf("Cries/%03d", species_id)
       return (pbResolveAudioSE(ret)) ? ret : nil
     end
 
@@ -261,46 +264,55 @@ end
 #===============================================================================
 # Deprecated methods
 #===============================================================================
+# @deprecated This alias is slated to be removed in v20.
 def pbLoadSpeciesBitmap(species, gender = 0, form = 0, shiny = false, shadow = false, back = false , egg = false)
   Deprecation.warn_method('pbLoadSpeciesBitmap', 'v20', 'GameData::Species.sprite_bitmap(species, form, gender, shiny, shadow, back, egg)')
   return GameData::Species.sprite_bitmap(species, form, gender, shiny, shadow, back, egg)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbLoadPokemonBitmap(pkmn, back = false)
   Deprecation.warn_method('pbLoadPokemonBitmap', 'v20', 'GameData::Species.sprite_bitmap_from_pokemon(pkmn)')
   return GameData::Species.sprite_bitmap_from_pokemon(pkmn, back)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbLoadPokemonBitmapSpecies(pkmn, species, back = false)
   Deprecation.warn_method('pbLoadPokemonBitmapSpecies', 'v20', 'GameData::Species.sprite_bitmap_from_pokemon(pkmn, back, species)')
   return GameData::Species.sprite_bitmap_from_pokemon(pkmn, back, species)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbPokemonIconFile(pkmn)
   Deprecation.warn_method('pbPokemonIconFile', 'v20', 'GameData::Species.icon_filename_from_pokemon(pkmn)')
   return GameData::Species.icon_filename_from_pokemon(pkmn)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbLoadPokemonIcon(pkmn)
   Deprecation.warn_method('pbLoadPokemonIcon', 'v20', 'GameData::Species.icon_bitmap_from_pokemon(pkmn)')
   return GameData::Species.icon_bitmap_from_pokemon(pkmn)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbPokemonFootprintFile(species, form = 0)
   Deprecation.warn_method('pbPokemonFootprintFile', 'v20', 'GameData::Species.footprint_filename(species, form)')
   return GameData::Species.footprint_filename(species, form)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbCheckPokemonShadowBitmapFiles(species, form = 0)
   Deprecation.warn_method('pbCheckPokemonShadowBitmapFiles', 'v20', 'GameData::Species.shadow_filename(species, form)')
   return GameData::Species.shadow_filename(species, form)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbLoadPokemonShadowBitmap(pkmn)
   Deprecation.warn_method('pbLoadPokemonShadowBitmap', 'v20', 'GameData::Species.shadow_bitmap_from_pokemon(pkmn)')
   return GameData::Species.shadow_bitmap_from_pokemon(pkmn)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbCryFile(species, form = 0)
   if species.is_a?(Pokemon)
     Deprecation.warn_method('pbCryFile', 'v20', 'GameData::Species.cry_filename_from_pokemon(pkmn)')
@@ -310,21 +322,25 @@ def pbCryFile(species, form = 0)
   return GameData::Species.cry_filename(species, form)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbPlayCry(pkmn, volume = 90, pitch = nil)
   Deprecation.warn_method('pbPlayCry', 'v20', 'GameData::Species.play_cry(pkmn)')
   GameData::Species.play_cry(pkmn, volume, pitch)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbPlayCrySpecies(species, form = 0, volume = 90, pitch = nil)
   Deprecation.warn_method('pbPlayCrySpecies', 'v20', 'GameData::Species.play_cry_from_species(species, form)')
   GameData::Species.play_cry_from_species(species, form, volume, pitch)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbPlayCryPokemon(pkmn, volume = 90, pitch = nil)
   Deprecation.warn_method('pbPlayCryPokemon', 'v20', 'GameData::Species.play_cry_from_pokemon(pkmn)')
   GameData::Species.play_cry_from_pokemon(pkmn, volume, pitch)
 end
 
+# @deprecated This alias is slated to be removed in v20.
 def pbCryFrameLength(species, form = 0, pitch = 100)
   Deprecation.warn_method('pbCryFrameLength', 'v20', 'GameData::Species.cry_length(species, form)')
   return GameData::Species.cry_length(species, form, pitch)

@@ -33,11 +33,11 @@ end
 class Spriteset_Map
   attr_reader :map
   attr_accessor :tilemap
-  @@viewport0 = Viewport.new(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)   # Panorama
+  @@viewport0 = Viewport.new(0, 0, Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)   # Panorama
   @@viewport0.z = -100
-  @@viewport1 = Viewport.new(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)   # Map, events, player, fog
+  @@viewport1 = Viewport.new(0, 0, Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)   # Map, events, player, fog
   @@viewport1.z = 0
-  @@viewport3 = Viewport.new(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)   # Flashing
+  @@viewport3 = Viewport.new(0, 0, Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)   # Flashing
   @@viewport3.z = 500
 
   def Spriteset_Map.viewport   # For access by Spriteset_Global

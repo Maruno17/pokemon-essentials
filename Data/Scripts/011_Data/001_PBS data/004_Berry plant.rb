@@ -29,6 +29,7 @@ end
 #===============================================================================
 # Deprecated methods
 #===============================================================================
+# @deprecated This alias is slated to be removed in v20.
 def pbGetBerryPlantData(item)
   Deprecation.warn_method('pbGetBerryPlantData', 'v20', 'GameData::BerryPlant.get(item)')
   return GameData::BerryPlant.get(item)

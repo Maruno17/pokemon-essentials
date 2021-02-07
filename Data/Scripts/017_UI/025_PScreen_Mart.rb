@@ -207,16 +207,11 @@ class PokemonMart_Scene
     @sprites["itemwindow"].viewport = @viewport
     @sprites["itemwindow"].index = 0
     @sprites["itemwindow"].refresh
-    @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.new("")
+    @sprites["itemtextwindow"] = Window_UnformattedTextPokemon.newWithSize("",
+       64, Graphics.height - 96 - 16, Graphics.width - 64, 128, @viewport)
     pbPrepareWindow(@sprites["itemtextwindow"])
-    @sprites["itemtextwindow"].x = 64
-    @sprites["itemtextwindow"].y = Graphics.height - 96 - 16
-    @sprites["itemtextwindow"].width = Graphics.width - 64
-    @sprites["itemtextwindow"].height = 128
     @sprites["itemtextwindow"].baseColor = Color.new(248, 248, 248)
     @sprites["itemtextwindow"].shadowColor = Color.new(0, 0, 0)
-    @sprites["itemtextwindow"].visible = true
-    @sprites["itemtextwindow"].viewport = @viewport
     @sprites["itemtextwindow"].windowskin = nil
     @sprites["helpwindow"] = Window_AdvancedTextPokemon.new("")
     pbPrepareWindow(@sprites["helpwindow"])
@@ -563,8 +558,8 @@ class PokemonMartScreen
         end
         quantity=1
       else
-        maxafford=(price<=0) ? BAG_MAX_PER_SLOT : @adapter.getMoney/price
-        maxafford=BAG_MAX_PER_SLOT if maxafford>BAG_MAX_PER_SLOT
+        maxafford = (price <= 0) ? Settings::BAG_MAX_PER_SLOT : @adapter.getMoney / price
+        maxafford = Settings::BAG_MAX_PER_SLOT if maxafford > Settings::BAG_MAX_PER_SLOT
         quantity=@scene.pbChooseNumber(
            _INTL("{1}? Certainly. How many would you like?",itemname),item,maxafford)
         next if quantity==0

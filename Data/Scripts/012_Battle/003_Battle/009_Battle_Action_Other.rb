@@ -42,7 +42,7 @@ class PokeBattle_Battle
     pbDisplay(_INTL("{1}!",battler.name))
     if battler.shadowPokemon?
       if battler.inHyperMode?
-        battler.pokemon.hypermode = false
+        battler.pokemon.hyper_mode = false
         battler.pokemon.adjustHeart(-300)
         pbDisplay(_INTL("{1} came to its senses from the Trainer's call!",battler.pbThis))
       else
@@ -62,25 +62,25 @@ class PokeBattle_Battle
   #=============================================================================
   def pbHasMegaRing?(idxBattler)
     return true if !pbOwnedByPlayer?(idxBattler)   # Assume AI trainer have a ring
-    MEGA_RINGS.each { |item| return true if $PokemonBag.pbHasItem?(item) }
+    Settings::MEGA_RINGS.each { |item| return true if $PokemonBag.pbHasItem?(item) }
     return false
   end
 
   def pbGetMegaRingName(idxBattler)
     if pbOwnedByPlayer?(idxBattler)
-      MEGA_RINGS.each do |item|
+      Settings::MEGA_RINGS.each do |item|
         return GameData::Item.get(item).name if $PokemonBag.pbHasItem?(item)
       end
     end
     # NOTE: Add your own Mega objects for particular NPC trainers here.
-#    if pbGetOwnerFromBattlerIndex(idxBattler).trainertype == :BUGCATCHER
+#    if pbGetOwnerFromBattlerIndex(idxBattler).trainer_type == :BUGCATCHER
 #      return _INTL("Mega Net")
 #    end
     return _INTL("Mega Ring")
   end
 
   def pbCanMegaEvolve?(idxBattler)
-    return false if $game_switches[NO_MEGA_EVOLUTION]
+    return false if $game_switches[Settings::NO_MEGA_EVOLUTION]
     return false if !@battlers[idxBattler].hasMega?
     return false if wildBattle? && opposes?(idxBattler)
     return true if $DEBUG && Input.press?(Input::CTRL)
@@ -157,7 +157,7 @@ class PokeBattle_Battle
     if battler.isSpecies?(:GENGAR) && battler.mega?
       battler.effects[PBEffects::Telekinesis] = 0
     end
-    pbCalculatePriority(false,[idxBattler]) if RECALCULATE_TURN_ORDER_AFTER_MEGA_EVOLUTION
+    pbCalculatePriority(false,[idxBattler]) if Settings::RECALCULATE_TURN_ORDER_AFTER_MEGA_EVOLUTION
     # Trigger ability
     battler.pbEffectsOnSwitchIn
   end

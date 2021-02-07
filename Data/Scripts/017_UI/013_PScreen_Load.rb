@@ -64,9 +64,9 @@ class PokemonLoadPanel < SpriteWrapper
       if @isContinue
         textpos.push([@title,16*2,5*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
         textpos.push([_INTL("Badges:"),16*2,56*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([@trainer.numbadges.to_s,103*2,56*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([@trainer.badge_count.to_s,103*2,56*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
         textpos.push([_INTL("Pokédex:"),16*2,72*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([@trainer.pokedexSeen.to_s,103*2,72*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([@trainer.seen_count.to_s,103*2,72*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
         textpos.push([_INTL("Time:"),16*2,88*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
         hour = @totalsec / 60 / 60
         min  = @totalsec / 60 % 60
@@ -163,7 +163,7 @@ class PokemonLoad_Scene
 
   def pbSetParty(trainer)
     return if !trainer || !trainer.party
-    meta = GameData::Metadata.get_player(trainer.metaID)
+    meta = GameData::Metadata.get_player(trainer.character_ID)
     if meta
       filename = pbGetPlayerCharset(meta,1,trainer,true)
       @sprites["player"] = TrainerWalkingCharSprite.new(filename,@viewport)
@@ -294,7 +294,7 @@ class PokemonLoadScreen
     end
     commands[cmd_new_game = commands.length]  = _INTL('New Game')
     commands[cmd_options = commands.length]   = _INTL('Options')
-    commands[cmd_language = commands.length]  = _INTL('Language') if LANGUAGES.length >= 2
+    commands[cmd_language = commands.length]  = _INTL('Language') if Settings::LANGUAGES.length >= 2
     commands[cmd_debug = commands.length]     = _INTL('Debug') if $DEBUG
     commands[cmd_quit = commands.length]      = _INTL('Quit Game')
     map_id = show_continue ? @save_data[:map_factory].map.map_id : 0
@@ -327,7 +327,7 @@ class PokemonLoadScreen
       when cmd_language
         @scene.pbEndScene
         $PokemonSystem.language = pbChooseLanguage
-        pbLoadMessages('Data/' + LANGUAGES[$PokemonSystem.language][1])
+        pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
         if show_continue
           @save_data[:pokemon_system] = $PokemonSystem
           File.open(SaveData::FILE_PATH, 'wb') { |file| Marshal.dump(@save_data, file) }
