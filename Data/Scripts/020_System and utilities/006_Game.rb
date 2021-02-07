@@ -86,7 +86,7 @@ module Game
     $scene = Scene_Map.new
   end
 
-  # Loads and validates
+  # Loads and validates the map. Called when loading a saved game.
   def self.load_map
     $game_map = $MapFactory.map
     magic_number_matches = ($game_system.magic_number == $data_system.magic_number)
@@ -118,6 +118,8 @@ module Game
     $PokemonEncounters.setup($game_map.map_id)
   end
 
+  # Called when starting a new game. Initializes global variables
+  # and transfers the player into the map scene.
   def self.start_new
     if $game_map && $game_map.events
       $game_map.events.each_value { |event| event.clear_starting }
