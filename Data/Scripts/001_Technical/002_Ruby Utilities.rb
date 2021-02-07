@@ -22,12 +22,20 @@ unless Comparable.method_defined? :clamp
 end
 
 #===============================================================================
-# class Boolean
+# module Boolean
 #===============================================================================
-class Boolean
+module Boolean
   def to_i
     return self ? 1 : 0
   end
+end
+
+class TrueClass
+  include Boolean
+end
+
+class FalseClass
+  include Boolean
 end
 
 #===============================================================================
