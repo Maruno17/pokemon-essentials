@@ -388,7 +388,7 @@ class PokemonSummary_Scene
        [_INTL("ID No."),238,208,0,base,shadow],
     ]
     # Write the Regional/National Dex number
-    dexnum = @pokemon.species
+    dexnum = GameData::Species.get(@pokemon.species).id_number
     dexnumshift = false
     if $PokemonGlobal.pokedexUnlocked[$PokemonGlobal.pokedexUnlocked.length-1]
       dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)

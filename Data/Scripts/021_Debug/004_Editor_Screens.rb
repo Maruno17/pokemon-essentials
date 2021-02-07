@@ -459,8 +459,7 @@ def pbTrainerTypeEditorNew(default_name)
   GameData::TrainerType.save
   pbConvertTrainerData
   pbMessage(_INTL("The trainer type {1} was created (ID: {2}).", name, id.to_s))
-  pbMessage(_ISPRINTF("Put the Trainer's graphic (trainer{1:s}.png or trainer{2:03d}.png) in Graphics/Trainers, or it will be blank.",
-     id, id_number))
+  pbMessage(_INTL("Put the Trainer's graphic ({1}.png) in Graphics/Trainers, or it will be blank.", id.to_s))
   return id.to_sym
 end
 
@@ -937,8 +936,7 @@ def pbItemEditorNew(default_name)
   GameData::Item.save
   Compiler.write_items
   pbMessage(_INTL("The item {1} was created (ID: {2}).", name, id.to_s))
-  pbMessage(_ISPRINTF("Put the item's graphic (item{1:s}.png or item{2:03d}.png) in Graphics/Icons, or it will be blank.",
-     id, id_number))
+  pbMessage(_INTL("Put the item's graphic ({1}.png) in Graphics/Items, or it will be blank.", id.to_s))
 end
 
 

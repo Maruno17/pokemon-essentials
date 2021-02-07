@@ -361,12 +361,13 @@ def pbOnStepTaken(eventTriggered)
   $PokemonGlobal.stepcount = 0 if !$PokemonGlobal.stepcount
   $PokemonGlobal.stepcount += 1
   $PokemonGlobal.stepcount &= 0x7FFFFFFF
+  repel_active = ($PokemonGlobal.repel > 0)
   Events.onStepTaken.trigger(nil)
 #  Events.onStepTakenFieldMovement.trigger(nil,$game_player)
   handled = [nil]
   Events.onStepTakenTransferPossible.trigger(nil,handled)
   return if handled[0]
-  pbBattleOnStepTaken if !eventTriggered && !$game_temp.in_menu
+  pbBattleOnStepTaken(repel_active) if !eventTriggered && !$game_temp.in_menu
   $PokemonTemp.encounterTriggered = false   # This info isn't needed here
 end
 
@@ -375,7 +376,7 @@ Events.onChangeDirection += proc {
   pbBattleOnStepTaken if !$game_temp.in_menu
 }
 
-def pbBattleOnStepTaken
+def pbBattleOnStepTaken(repel_active)
   return if $Trainer.able_pokemon_count == 0
   return if !$PokemonEncounters.encounter_possible_here?
   encounterType = $PokemonEncounters.encounter_type
@@ -384,7 +385,7 @@ def pbBattleOnStepTaken
   $PokemonTemp.encounterType = encounterType
   encounter = $PokemonEncounters.choose_wild_pokemon(encounterType)
   encounter = EncounterModifier.trigger(encounter)
-  if $PokemonEncounter.allow_encounter?(encounter)
+  if $PokemonEncounter.allow_encounter?(encounter, repel_active)
     if $PokemonEncounter.have_double_wild_battle?
       encounter2 = $PokemonEncounters.choose_wild_pokemon(encounterType)
       encounter2 = EncounterModifier.trigger(encounter2)

@@ -132,15 +132,11 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
   ##### Tweaked by Maruno           #####
   if (battletype==1 || battletype==3) && foe.length==1   # Against single trainer
     tr_type = foe[0].trainer_type
-    tr_type_id = GameData::TrainerType.get(tr_type).id_number
     if tr_type
       tbargraphic = sprintf("Graphics/Transitions/vsBar_%s", tr_type.to_s) rescue nil
-      tbargraphic = sprintf("Graphics/Transitions/vsBar_%d", tr_type_id) if !pbResolveBitmap(tbargraphic)
       tgraphic    = sprintf("Graphics/Transitions/vsTrainer_%s", tr_type.to_s) rescue nil
-      tgraphic    = sprintf("Graphics/Transitions/vsTrainer_%d", tr_type_id) if !pbResolveBitmap(tgraphic)
       if pbResolveBitmap(tbargraphic) && pbResolveBitmap(tgraphic)
         player_tr_type = $Trainer.trainer_type
-        player_tr_type_id = GameData::TrainerType.get(player_tr_type).id_number
         outfit = $Trainer.outfit
         # Set up
         viewplayer = Viewport.new(0,Graphics.height/3,Graphics.width/2,128)
@@ -157,10 +153,8 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
         overlay.bitmap = Bitmap.new(Graphics.width,Graphics.height)
         pbSetSystemFont(overlay.bitmap)
         pbargraphic = sprintf("Graphics/Transitions/vsBar_%s_%d", player_tr_type.to_s, outfit) rescue nil
-        pbargraphic = sprintf("Graphics/Transitions/vsBar_%d_%d", player_tr_type_id, outfit) if !pbResolveBitmap(pbargraphic)
         if !pbResolveBitmap(pbargraphic)
           pbargraphic = sprintf("Graphics/Transitions/vsBar_%s", player_tr_type.to_s) rescue nil
-          pbargraphic = sprintf("Graphics/Transitions/vsBar_%d", player_tr_type_id) if !pbResolveBitmap(pbargraphic)
         end
         xoffset = ((Graphics.width/2)/10)*10
         bar1 = Sprite.new(viewplayer)
@@ -198,10 +192,8 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
         bar2 = AnimatedPlane.new(viewopp)
         bar2.bitmap = BitmapCache.load_bitmap(tbargraphic)
         pgraphic = sprintf("Graphics/Transitions/vsTrainer_%s_%d", player_tr_type.to_s, outfit) rescue nil
-        pgraphic = sprintf("Graphics/Transitions/vsTrainer_%d_%d", player_tr_type_id, outfit) if !pbResolveBitmap(pgraphic)
         if !pbResolveBitmap(pgraphic)
           pgraphic = sprintf("Graphics/Transitions/vsTrainer_%s", player_tr_type.to_s) rescue nil
-          pgraphic = sprintf("Graphics/Transitions/vsTrainer_%d", player_tr_type_id) if !pbResolveBitmap(pgraphic)
         end
         player = Sprite.new(viewplayer)
         player.bitmap = BitmapCache.load_bitmap(pgraphic)

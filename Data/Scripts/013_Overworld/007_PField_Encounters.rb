@@ -249,10 +249,10 @@ class PokemonEncounters
 
   # Returns whether an encounter with the given Pokémon should be allowed after
   # taking into account Repels and ability effects.
-  def allow_encounter?(enc_data, ignore_repel = false)
+  def allow_encounter?(enc_data, repel_active = false)
     return false if !enc_data
     # Repel
-    if !ignore_repel && $PokemonGlobal.repel > 0 && !pbPokeRadarOnShakingGrass
+    if repel_active && !pbPokeRadarOnShakingGrass
       first_pkmn = (Settings::REPEL_COUNTS_FAINTED_POKEMON) ? $Trainer.first_pokemon : $Trainer.first_able_pokemon
       return false if first_pkmn && enc_data[1] < first_pkmn.level
     end
