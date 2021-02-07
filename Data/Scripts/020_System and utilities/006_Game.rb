@@ -48,14 +48,15 @@ module Game
   end
 
   # Saves the game. Returns whether the operation was successful.
-  # @param save_file [String] the save file path ({SaveData::FILE_PATH} by default)
+  # @param save_file [String] the save file path
+  # @param safesave [Boolean] whether $PokemonGlobal.safesave should be set to true
   # @return [Boolean] whether the operation was successful
   # @raise [SaveData::InvalidValueError] if an invalid value is being saved
-  def self.save(save_file = SaveData::FILE_PATH)
-    validate save_file => String
-    return false if File.file?(save_file) && !File.writable?(save_file)
+  def self.save(save_file = SaveData::FILE_PATH, safesave = false)
+    validate save_file => String, safesave => Boolean
 
     $Trainer.metaID = $PokemonGlobal.playerID # TODO: Is this necessary?
+    $PokemonGlobal.safesave = safesave
     $game_system.save_count += 1
     $game_system.magic_number = $data_system.magic_number
     begin
