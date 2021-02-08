@@ -3064,7 +3064,7 @@ class PokeBattle_AI
     when "173"
     #---------------------------------------------------------------------------
     when "174"
-      score -= 90 if user.turnCount>0 || user.lastRoundMoved>=0
+      score -= 90 if user.turnCount > 0
     #---------------------------------------------------------------------------
     when "175"
       score += 30 if target.effects[PBEffects::Minimize]

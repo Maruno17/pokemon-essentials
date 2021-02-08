@@ -274,7 +274,7 @@ end
 #===============================================================================
 class PokeBattle_Move_012 < PokeBattle_FlinchMove
   def pbMoveFailed?(user,targets)
-    if user.turnCount>1 || user.lastRoundMoved>=0
+    if user.turnCount > 1
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
