@@ -1661,7 +1661,7 @@ BattleHandlers::UserAbilityEndOfMove.add(:BEASTBOOST,
 
 BattleHandlers::UserAbilityEndOfMove.add(:MAGICIAN,
   proc { |ability,user,targets,move,battle|
-    next if !battle.futureSight
+    next if battle.futureSight
     next if !move.pbDamagingMove?
     next if user.item
     next if battle.wildBattle? && user.opposes?
