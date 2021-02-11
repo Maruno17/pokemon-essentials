@@ -9,7 +9,7 @@ class Game_Map
   attr_accessor :tileset_name             # tileset file name
   attr_accessor :autotile_names           # autotile file name
   attr_reader   :passages                 # passage table
-  attr_reader   :priorities               # prioroty table
+  attr_reader   :priorities               # priority table
   attr_reader   :terrain_tags             # terrain tag table
   attr_reader   :events                   # events
   attr_accessor :panorama_name            # panorama file name
