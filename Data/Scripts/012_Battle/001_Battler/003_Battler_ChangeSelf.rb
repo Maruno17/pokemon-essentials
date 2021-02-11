@@ -287,7 +287,7 @@ class PokeBattle_Battler
     return if fainted? || @effects[PBEffects::Transform]
     # Form changes upon entering battle and when the weather changes
     pbCheckFormOnWeatherChange if !endOfRound
-	pbCheckFormOnTerrainChange if !endOfRound
+	  pbCheckFormOnTerrainChange if !endOfRound
     # Darmanitan - Zen Mode
     if isConst?(@species,PBSpecies,:DARMANITAN) && isConst?(@ability,PBAbilities,:ZENMODE)
       if @hp<=@totalhp/2
