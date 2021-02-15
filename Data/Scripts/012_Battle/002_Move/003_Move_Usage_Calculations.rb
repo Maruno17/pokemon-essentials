@@ -418,7 +418,7 @@ class PokeBattle_Move
     # Type effectiveness
     multipliers[:final_damage_multiplier] *= target.damageState.typeMod.to_f / PBTypeEffectiveness::NORMAL_EFFECTIVE
     # Burn
-    if user.status==PBStatuses::BURN && physicalMove? && damageReducedByBurn? &&
+    if user.status == :BURN && physicalMove? && damageReducedByBurn? &&
        !user.hasActiveAbility?(:GUTS)
       multipliers[:final_damage_multiplier] /= 2
     end

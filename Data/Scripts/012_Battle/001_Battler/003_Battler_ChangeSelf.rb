@@ -57,7 +57,7 @@ class PokeBattle_Battler
     @battle.scene.pbFaintBattler(self)
     pbInitEffects(false)
     # Reset status
-    self.status      = PBStatuses::NONE
+    self.status      = :NONE
     self.statusCount = 0
     # Lose happiness
     if @pokemon && @battle.internalBattle

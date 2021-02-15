@@ -366,9 +366,7 @@ end
 #===============================================================================
 class PokeBattle_Move_018 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if user.status!=PBStatuses::BURN &&
-       user.status!=PBStatuses::POISON &&
-       user.status!=PBStatuses::PARALYSIS
+    if ![:BURN, :POISON, :PARALYSIS].include?(user.status)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -376,14 +374,14 @@ class PokeBattle_Move_018 < PokeBattle_Move
   end
 
   def pbEffectGeneral(user)
-    t = user.status
+    old_status = user.status
     user.pbCureStatus(false)
-    case t
-    when PBStatuses::BURN
+    case old_status
+    when :BURN
       @battle.pbDisplay(_INTL("{1} healed its burn!",user.pbThis))
-    when PBStatuses::POISON
+    when :POISON
       @battle.pbDisplay(_INTL("{1} cured its poisoning!",user.pbThis))
-    when PBStatuses::PARALYSIS
+    when :PARALYSIS
       @battle.pbDisplay(_INTL("{1} cured its paralysis!",user.pbThis))
     end
   end
@@ -407,13 +405,13 @@ class PokeBattle_Move_019 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
     failed = true
     @battle.eachSameSideBattler(user) do |b|
-      next if b.status==PBStatuses::NONE
+      next if b.status == :NONE
       failed = false
       break
     end
     if !failed
       @battle.pbParty(user.index).each do |pkmn|
-        next if !pkmn || !pkmn.able? || pkmn.status==PBStatuses::NONE
+        next if !pkmn || !pkmn.able? || pkmn.status == :NONE
         failed = false
         break
       end
@@ -426,7 +424,7 @@ class PokeBattle_Move_019 < PokeBattle_Move
   end
 
   def pbFailsAgainstTarget?(user,target)
-    return target.status==PBStatuses::NONE
+    return target.status == :NONE
   end
 
   def pbAromatherapyHeal(pkmn,battler=nil)
@@ -435,19 +433,19 @@ class PokeBattle_Move_019 < PokeBattle_Move
     if battler
       battler.pbCureStatus(false)
     else
-      pkmn.status      = PBStatuses::NONE
+      pkmn.status      = :NONE
       pkmn.statusCount = 0
     end
     case oldStatus
-    when PBStatuses::SLEEP
+    when :SLEEP
       @battle.pbDisplay(_INTL("{1} was woken from sleep.",curedName))
-    when PBStatuses::POISON
+    when :POISON
       @battle.pbDisplay(_INTL("{1} was cured of its poisoning.",curedName))
-    when PBStatuses::BURN
+    when :BURN
       @battle.pbDisplay(_INTL("{1}'s burn was healed.",curedName))
-    when PBStatuses::PARALYSIS
+    when :PARALYSIS
       @battle.pbDisplay(_INTL("{1} was cured of paralysis.",curedName))
-    when PBStatuses::FROZEN
+    when :FROZEN
       @battle.pbDisplay(_INTL("{1} was thawed out.",curedName))
     end
   end
@@ -462,7 +460,7 @@ class PokeBattle_Move_019 < PokeBattle_Move
     # 5 version of this move, to make Pokémon out in battle get cured first.
     if pbTarget(user)!=PBTargets::UserAndAllies
       @battle.eachSameSideBattler(user) do |b|
-        next if b.status==PBStatuses::NONE
+        next if b.status == :NONE
         pbAromatherapyHeal(b.pokemon,b)
       end
     end
@@ -470,7 +468,7 @@ class PokeBattle_Move_019 < PokeBattle_Move
     # NOTE: This intentionally affects the partner trainer's inactive Pokémon
     #       too.
     @battle.pbParty(user.index).each_with_index do |pkmn,i|
-      next if !pkmn || !pkmn.able? || pkmn.status==PBStatuses::NONE
+      next if !pkmn || !pkmn.able? || pkmn.status == :NONE
       next if @battle.pbFindBattler(i,user)   # Skip Pokémon in battle
       pbAromatherapyHeal(pkmn)
     end
@@ -514,7 +512,7 @@ end
 #===============================================================================
 class PokeBattle_Move_01B < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if user.status==0
+    if user.status == :NONE
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -532,19 +530,19 @@ class PokeBattle_Move_01B < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     msg = ""
     case user.status
-    when PBStatuses::SLEEP
+    when :SLEEP
       target.pbSleep
       msg = _INTL("{1} woke up.",user.pbThis)
-    when PBStatuses::POISON
+    when :POISON
       target.pbPoison(user,nil,user.statusCount!=0)
       msg = _INTL("{1} was cured of its poisoning.",user.pbThis)
-    when PBStatuses::BURN
+    when :BURN
       target.pbBurn(user)
       msg = _INTL("{1}'s burn was healed.",user.pbThis)
-    when PBStatuses::PARALYSIS
+    when :PARALYSIS
       target.pbParalyze(user)
       msg = _INTL("{1} was cured of paralysis.",user.pbThis)
-    when PBStatuses::FROZEN
+    when :FROZEN
       target.pbFreeze
       msg = _INTL("{1} was thawed out.",user.pbThis)
     end
@@ -2665,7 +2663,7 @@ class PokeBattle_Move_07C < PokeBattle_Move
   def pbEffectAfterAllHits(user,target)
     return if target.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
-    return if target.status!=PBStatuses::PARALYSIS
+    return if target.status != :PARALYSIS
     target.pbCureStatus
   end
 end
@@ -2687,7 +2685,7 @@ class PokeBattle_Move_07D < PokeBattle_Move
   def pbEffectAfterAllHits(user,target)
     return if target.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
-    return if target.status!=PBStatuses::SLEEP
+    return if target.status != :SLEEP
     target.pbCureStatus
   end
 end

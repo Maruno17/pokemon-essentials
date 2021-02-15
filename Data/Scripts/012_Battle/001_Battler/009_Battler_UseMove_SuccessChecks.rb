@@ -126,7 +126,7 @@ class PokeBattle_Battler
     PBDebug.log("[Disobedience] #{pbThis} disobeyed")
     @effects[PBEffects::Rage] = false
     # Do nothing if using Snore/Sleep Talk
-    if @status==PBStatuses::SLEEP && move.usableWhenAsleep?
+    if @status == :SLEEP && move.usableWhenAsleep?
       @battle.pbDisplay(_INTL("{1} ignored orders and kept sleeping!",pbThis))
       return false
     end
@@ -156,7 +156,7 @@ class PokeBattle_Battler
     end
     # Hurt self in confusion
     r -= c
-    if r<c && @status!=PBStatuses::SLEEP
+    if r < c && @status != :SLEEP
       pbConfusionDamage(_INTL("{1} won't obey! It hurt itself in its confusion!",pbThis))
       return false
     end
@@ -200,7 +200,7 @@ class PokeBattle_Battler
     return true if skipAccuracyCheck
     # Check status problems and continue their effects/cure them
     case @status
-    when PBStatuses::SLEEP
+    when :SLEEP
       self.statusCount -= 1
       if @statusCount<=0
         pbCureStatus
@@ -211,7 +211,7 @@ class PokeBattle_Battler
           return false
         end
       end
-    when PBStatuses::FROZEN
+    when :FROZEN
       if !move.thawsUser?
         if @battle.pbRandom(100)<20
           pbCureStatus
@@ -262,7 +262,7 @@ class PokeBattle_Battler
       end
     end
     # Paralysis
-    if @status==PBStatuses::PARALYSIS
+    if @status == :PARALYSIS
       if @battle.pbRandom(100)<25
         pbContinueStatus
         @lastMoveFailed = true

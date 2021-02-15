@@ -374,11 +374,16 @@ class PokemonPartyPanel < SpriteWrapper
             @overlaysprite.bitmap.blt(128,52,@hpbar.bitmap,hprect)
           end
           # Draw status
-          status = -1
-          status = 6 if @pokemon.pokerusStage==1
-          status = @pokemon.status-1 if @pokemon.status>0
-          status = 5 if @pokemon.hp<=0
-          if status>=0
+          status = 0
+          if @pokemon.fainted?
+            status = GameData::Status::DATA.keys.length / 2
+          elsif @pokemon.status != :NONE
+            status = GameData::Status.get(@pokemon.status).id_number
+          elsif @pokemon.pokerusStage == 1
+            status = GameData::Status::DATA.keys.length / 2 + 1
+          end
+          status -= 1
+          if status >= 0
             statusrect = Rect.new(0,16*status,44,16)
             @overlaysprite.bitmap.blt(78,68,@statuses.bitmap,statusrect)
           end

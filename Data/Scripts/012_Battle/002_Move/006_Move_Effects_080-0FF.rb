@@ -1984,7 +1984,7 @@ class PokeBattle_Move_0C1 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
     @beatUpList = []
     @battle.eachInTeamFromBattlerIndex(user.index) do |pkmn,i|
-      next if !pkmn.able? || pkmn.status!=PBStatuses::NONE
+      next if !pkmn.able? || pkmn.status != :NONE
       @beatUpList.push(i)
     end
     if @beatUpList.length==0
@@ -2353,7 +2353,7 @@ class PokeBattle_Move_0D1 < PokeBattle_Move
     user.currentMove = @id
     @battle.pbDisplay(_INTL("{1} caused an uproar!",user.pbThis))
     @battle.pbPriority(true).each do |b|
-      next if b.fainted? || b.status!=PBStatuses::SLEEP
+      next if b.fainted? || b.status != :SLEEP
       next if b.hasActiveAbility?(:SOUNDPROOF)
       b.pbCureStatus
     end

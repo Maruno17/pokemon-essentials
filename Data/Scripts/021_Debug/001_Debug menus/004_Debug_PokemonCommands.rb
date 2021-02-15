@@ -78,15 +78,15 @@ PokemonDebugMenuCommands.register("setstatus", {
       screen.pbDisplay(_INTL("{1} is fainted, can't change status.", pkmn.name))
     else
       cmd = 0
+      commands = [_INTL("[Cure]")]
+      ids = [:NONE]
+      GameData::Status.each do |s|
+        next if s.id == :NONE
+        commands.push(s.name)
+        ids.push(s.id)
+      end
       loop do
-        cmd = screen.pbShowCommands(_INTL("Set {1}'s status.", pkmn.name), [
-           _INTL("[Cure]"),
-           _INTL("Sleep"),
-           _INTL("Poison"),
-           _INTL("Burn"),
-           _INTL("Paralysis"),
-           _INTL("Frozen")
-        ], cmd)
+        cmd = screen.pbShowCommands(_INTL("Set {1}'s status.", pkmn.name), commands, cmd)
         break if cmd < 0
         case cmd
         when 0   # Cure
@@ -96,7 +96,7 @@ PokemonDebugMenuCommands.register("setstatus", {
         else   # Give status problem
           count = 0
           cancel = false
-          if cmd == PBStatuses::SLEEP
+          if ids[cmd] == :SLEEP
             params = ChooseNumberParams.new
             params.setRange(0, 9)
             params.setDefaultValue(3)
@@ -105,7 +105,7 @@ PokemonDebugMenuCommands.register("setstatus", {
             cancel = true if count <= 0
           end
           if !cancel
-            pkmn.status      = cmd
+            pkmn.status      = ids[cmd]
             pkmn.statusCount = count
             screen.pbRefreshSingle(pkmnid)
           end

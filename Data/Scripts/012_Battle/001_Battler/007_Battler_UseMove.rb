@@ -314,7 +314,7 @@ class PokeBattle_Battler
     # Messages include Magnitude's number and Pledge moves' "it's a combo!"
     move.pbOnStartUse(user,targets)
     # Self-thawing due to the move
-    if user.status==PBStatuses::FROZEN && move.thawsUser?
+    if user.status == :FROZEN && move.thawsUser?
       user.pbCureStatus(false)
       @battle.pbDisplay(_INTL("{1} melted the ice!",user.pbThis))
     end
@@ -435,7 +435,7 @@ class PokeBattle_Battler
         end
         realNumHits += 1
         break if user.fainted?
-        break if user.status==PBStatuses::SLEEP || user.status==PBStatuses::FROZEN
+        break if [:SLEEP, :FROZEN].include?(user.status)
         # NOTE: If a multi-hit move becomes disabled partway through doing those
         #       hits (e.g. by Cursed Body), the rest of the hits continue as
         #       normal.

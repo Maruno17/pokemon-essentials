@@ -340,7 +340,7 @@ class PokeBattle_Battle
     # Damage from poisoning
     priority.each do |b|
       next if b.fainted?
-      next if b.status!=PBStatuses::POISON
+      next if b.status != :POISON
       if b.statusCount>0
         b.effects[PBEffects::Toxic] += 1
         b.effects[PBEffects::Toxic] = 15 if b.effects[PBEffects::Toxic]>15
@@ -368,7 +368,7 @@ class PokeBattle_Battle
     end
     # Damage from burn
     priority.each do |b|
-      next if b.status!=PBStatuses::BURN || !b.takesIndirectDamage?
+      next if b.status != :BURN || !b.takesIndirectDamage?
       oldHP = b.hp
       dmg = (Settings::MECHANICS_GENERATION >= 7) ? b.totalhp/16 : b.totalhp/8
       dmg = (dmg/2.0).round if b.hasActiveAbility?(:HEATPROOF)

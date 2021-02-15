@@ -121,7 +121,7 @@ BattleHandlers::AbilityOnHPDroppedBelowHalf.copy(:EMERGENCYEXIT,:WIMPOUT)
 BattleHandlers::StatusCheckAbilityNonIgnorable.add(:COMATOSE,
   proc { |ability,battler,status|
     next false if !battler.isSpecies?(:KOMALA)
-    next true if status.nil? || status==PBStatuses::SLEEP
+    next true if status.nil? || status == :SLEEP
   }
 )
 
@@ -137,13 +137,13 @@ BattleHandlers::StatusImmunityAbility.add(:FLOWERVEIL,
 
 BattleHandlers::StatusImmunityAbility.add(:IMMUNITY,
   proc { |ability,battler,status|
-    next true if status==PBStatuses::POISON
+    next true if status == :POISON
   }
 )
 
 BattleHandlers::StatusImmunityAbility.add(:INSOMNIA,
   proc { |ability,battler,status|
-    next true if status==PBStatuses::SLEEP
+    next true if status == :SLEEP
   }
 )
 
@@ -158,19 +158,19 @@ BattleHandlers::StatusImmunityAbility.add(:LEAFGUARD,
 
 BattleHandlers::StatusImmunityAbility.add(:LIMBER,
   proc { |ability,battler,status|
-    next true if status==PBStatuses::PARALYSIS
+    next true if status == :PARALYSIS
   }
 )
 
 BattleHandlers::StatusImmunityAbility.add(:MAGMAARMOR,
   proc { |ability,battler,status|
-    next true if status==PBStatuses::FROZEN
+    next true if status == :FROZEN
   }
 )
 
 BattleHandlers::StatusImmunityAbility.add(:WATERVEIL,
   proc { |ability,battler,status|
-    next true if status==PBStatuses::BURN
+    next true if status == :BURN
   }
 )
 
@@ -204,7 +204,7 @@ BattleHandlers::StatusImmunityAllyAbility.add(:FLOWERVEIL,
 
 BattleHandlers::StatusImmunityAbility.add(:SWEETVEIL,
   proc { |ability,battler,status|
-    next true if status==PBStatuses::SLEEP
+    next true if status == :SLEEP
   }
 )
 
@@ -216,7 +216,7 @@ BattleHandlers::AbilityOnStatusInflicted.add(:SYNCHRONIZE,
   proc { |ability,battler,user,status|
     next if !user || user.index==battler.index
     case status
-    when PBStatuses::POISON
+    when :POISON
       if user.pbCanPoisonSynchronize?(battler)
         battler.battle.pbShowAbilitySplash(battler)
         msg = nil
@@ -226,7 +226,7 @@ BattleHandlers::AbilityOnStatusInflicted.add(:SYNCHRONIZE,
         user.pbPoison(nil,msg,(battler.statusCount>0))
         battler.battle.pbHideAbilitySplash(battler)
       end
-    when PBStatuses::BURN
+    when :BURN
       if user.pbCanBurnSynchronize?(battler)
         battler.battle.pbShowAbilitySplash(battler)
         msg = nil
@@ -236,7 +236,7 @@ BattleHandlers::AbilityOnStatusInflicted.add(:SYNCHRONIZE,
         user.pbBurn(nil,msg)
         battler.battle.pbHideAbilitySplash(battler)
       end
-    when PBStatuses::PARALYSIS
+    when :PARALYSIS
       if user.pbCanParalyzeSynchronize?(battler)
         battler.battle.pbShowAbilitySplash(battler)
         msg = nil
@@ -257,7 +257,7 @@ BattleHandlers::AbilityOnStatusInflicted.add(:SYNCHRONIZE,
 
 BattleHandlers::StatusCureAbility.add(:IMMUNITY,
   proc { |ability,battler|
-    next if battler.status!=PBStatuses::POISON
+    next if battler.status != :POISON
     battler.battle.pbShowAbilitySplash(battler)
     battler.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
     if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
@@ -269,7 +269,7 @@ BattleHandlers::StatusCureAbility.add(:IMMUNITY,
 
 BattleHandlers::StatusCureAbility.add(:INSOMNIA,
   proc { |ability,battler|
-    next if battler.status!=PBStatuses::SLEEP
+    next if battler.status != :SLEEP
     battler.battle.pbShowAbilitySplash(battler)
     battler.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
     if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
@@ -283,7 +283,7 @@ BattleHandlers::StatusCureAbility.copy(:INSOMNIA,:VITALSPIRIT)
 
 BattleHandlers::StatusCureAbility.add(:LIMBER,
   proc { |ability,battler|
-    next if battler.status!=PBStatuses::PARALYSIS
+    next if battler.status != :PARALYSIS
     battler.battle.pbShowAbilitySplash(battler)
     battler.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
     if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
@@ -295,7 +295,7 @@ BattleHandlers::StatusCureAbility.add(:LIMBER,
 
 BattleHandlers::StatusCureAbility.add(:MAGMAARMOR,
   proc { |ability,battler|
-    next if battler.status!=PBStatuses::FROZEN
+    next if battler.status != :FROZEN
     battler.battle.pbShowAbilitySplash(battler)
     battler.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
     if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
@@ -349,7 +349,7 @@ BattleHandlers::StatusCureAbility.add(:OWNTEMPO,
 
 BattleHandlers::StatusCureAbility.add(:WATERVEIL,
   proc { |ability,battler|
-    next if battler.status!=PBStatuses::BURN
+    next if battler.status != :BURN
     battler.battle.pbShowAbilitySplash(battler)
     battler.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
     if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
@@ -1849,21 +1849,21 @@ BattleHandlers::EORHealingAbility.add(:HEALER,
   proc { |ability,battler,battle|
     next unless battle.pbRandom(100)<30
     battler.eachAlly do |b|
-      next if b.status==PBStatuses::NONE
+      next if b.status == :NONE
       battle.pbShowAbilitySplash(battler)
       oldStatus = b.status
       b.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
       if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
         case oldStatus
-        when PBStatuses::SLEEP
+        when :SLEEP
           battle.pbDisplay(_INTL("{1}'s {2} woke its partner up!",battler.pbThis,battler.abilityName))
-        when PBStatuses::POISON
+        when :POISON
           battle.pbDisplay(_INTL("{1}'s {2} cured its partner's poison!",battler.pbThis,battler.abilityName))
-        when PBStatuses::BURN
+        when :BURN
           battle.pbDisplay(_INTL("{1}'s {2} healed its partner's burn!",battler.pbThis,battler.abilityName))
-        when PBStatuses::PARALYSIS
+        when :PARALYSIS
           battle.pbDisplay(_INTL("{1}'s {2} cured its partner's paralysis!",battler.pbThis,battler.abilityName))
-        when PBStatuses::FROZEN
+        when :FROZEN
           battle.pbDisplay(_INTL("{1}'s {2} defrosted its partner!",battler.pbThis,battler.abilityName))
         end
       end
@@ -1874,7 +1874,7 @@ BattleHandlers::EORHealingAbility.add(:HEALER,
 
 BattleHandlers::EORHealingAbility.add(:HYDRATION,
   proc { |ability,battler,battle|
-    next if battler.status==PBStatuses::NONE
+    next if battler.status == :NONE
     curWeather = battle.pbWeather
     next if curWeather!=PBWeather::Rain && curWeather!=PBWeather::HeavyRain
     battle.pbShowAbilitySplash(battler)
@@ -1882,15 +1882,15 @@ BattleHandlers::EORHealingAbility.add(:HYDRATION,
     battler.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
     if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
       case oldStatus
-      when PBStatuses::SLEEP
+      when :SLEEP
         battle.pbDisplay(_INTL("{1}'s {2} woke it up!",battler.pbThis,battler.abilityName))
-      when PBStatuses::POISON
+      when :POISON
         battle.pbDisplay(_INTL("{1}'s {2} cured its poison!",battler.pbThis,battler.abilityName))
-      when PBStatuses::BURN
+      when :BURN
         battle.pbDisplay(_INTL("{1}'s {2} healed its burn!",battler.pbThis,battler.abilityName))
-      when PBStatuses::PARALYSIS
+      when :PARALYSIS
         battle.pbDisplay(_INTL("{1}'s {2} cured its paralysis!",battler.pbThis,battler.abilityName))
-      when PBStatuses::FROZEN
+      when :FROZEN
         battle.pbDisplay(_INTL("{1}'s {2} defrosted it!",battler.pbThis,battler.abilityName))
       end
     end
@@ -1900,22 +1900,22 @@ BattleHandlers::EORHealingAbility.add(:HYDRATION,
 
 BattleHandlers::EORHealingAbility.add(:SHEDSKIN,
   proc { |ability,battler,battle|
-    next if battler.status==PBStatuses::NONE
+    next if battler.status == :NONE
     next unless battle.pbRandom(100)<30
     battle.pbShowAbilitySplash(battler)
     oldStatus = battler.status
     battler.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
     if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
       case oldStatus
-      when PBStatuses::SLEEP
+      when :SLEEP
         battle.pbDisplay(_INTL("{1}'s {2} woke it up!",battler.pbThis,battler.abilityName))
-      when PBStatuses::POISON
+      when :POISON
         battle.pbDisplay(_INTL("{1}'s {2} cured its poison!",battler.pbThis,battler.abilityName))
-      when PBStatuses::BURN
+      when :BURN
         battle.pbDisplay(_INTL("{1}'s {2} healed its burn!",battler.pbThis,battler.abilityName))
-      when PBStatuses::PARALYSIS
+      when :PARALYSIS
         battle.pbDisplay(_INTL("{1}'s {2} cured its paralysis!",battler.pbThis,battler.abilityName))
-      when PBStatuses::FROZEN
+      when :FROZEN
         battle.pbDisplay(_INTL("{1}'s {2} defrosted it!",battler.pbThis,battler.abilityName))
       end
     end
@@ -2387,7 +2387,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:UNNERVE,
 BattleHandlers::AbilityOnSwitchOut.add(:NATURALCURE,
   proc { |ability,battler,endOfBattle|
     PBDebug.log("[Ability triggered] #{battler.pbThis}'s #{battler.abilityName}")
-    battler.status = PBStatuses::NONE
+    battler.status = :NONE
   }
 )
 

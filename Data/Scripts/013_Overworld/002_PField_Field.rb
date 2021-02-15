@@ -277,19 +277,19 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
   if $PokemonGlobal.stepcount%4==0 && Settings::POISON_IN_FIELD
     flashed = false
     for i in $Trainer.able_party
-      if i.status==PBStatuses::POISON && !i.hasAbility?(:IMMUNITY)
+      if i.status == :POISON && !i.hasAbility?(:IMMUNITY)
         if !flashed
           $game_screen.start_flash(Color.new(255,0,0,128), 4)
           flashed = true
         end
         i.hp -= 1 if i.hp>1 || Settings::POISON_FAINT_IN_FIELD
         if i.hp==1 && !Settings::POISON_FAINT_IN_FIELD
-          i.status = PBStatuses::NONE
+          i.status = :NONE
           pbMessage(_INTL("{1} survived the poisoning.\\nThe poison faded away!\1",i.name))
           next
         elsif i.hp==0
           i.changeHappiness("faint")
-          i.status = PBStatuses::NONE
+          i.status = :NONE
           pbMessage(_INTL("{1} fainted...",i.name))
         end
         if $Trainer.able_pokemon_count == 0
@@ -373,7 +373,8 @@ end
 
 # Start wild encounters while turning on the spot
 Events.onChangeDirection += proc {
-  pbBattleOnStepTaken if !$game_temp.in_menu
+  repel_active = ($PokemonGlobal.repel > 0)
+  pbBattleOnStepTaken(repel_active) if !$game_temp.in_menu
 }
 
 def pbBattleOnStepTaken(repel_active)

@@ -272,8 +272,7 @@ MultipleForms.register(:GIRATINA,{
 
 MultipleForms.register(:SHAYMIN,{
   "getForm" => proc { |pkmn|
-    next 0 if pkmn.fainted? || pkmn.status==PBStatuses::FROZEN ||
-              PBDayNight.isNight?
+    next 0 if pkmn.fainted? || pkmn.status == :FROZEN || PBDayNight.isNight?
   }
 })
 

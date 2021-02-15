@@ -291,7 +291,8 @@ class PokemonSummary_Scene
 
   def drawPage(page)
     if @pokemon.egg?
-      drawPageOneEgg; return
+      drawPageOneEgg
+      return
     end
     @sprites["itemicon"].item = @pokemon.item_id
     overlay = @sprites["overlay"].bitmap
@@ -308,11 +309,16 @@ class PokemonSummary_Scene
     end
     imagepos.push([ballimage,14,60])
     # Show status/fainted/Pokérus infected icon
-    status = -1
-    status = 6 if @pokemon.pokerusStage==1
-    status = @pokemon.status-1 if @pokemon.status>0
-    status = 5 if @pokemon.hp==0
-    if status>=0
+    status = 0
+    if @pokemon.fainted?
+      status = GameData::Status::DATA.keys.length / 2
+    elsif @pokemon.status != :NONE
+      status = GameData::Status.get(@pokemon.status).id_number
+    elsif @pokemon.pokerusStage == 1
+      status = GameData::Status::DATA.keys.length / 2 + 1
+    end
+    status -= 1
+    if status >= 0
       imagepos.push(["Graphics/Pictures/statuses",124,100,0,16*status,44,16])
     end
     # Show Pokérus cured icon

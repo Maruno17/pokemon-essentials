@@ -215,7 +215,7 @@ class PokeBattle_AI
     when "0C1"   # Beat Up
       mult = 0
       @battle.eachInTeamFromBattlerIndex(user.index) do |pkmn,_i|
-        mult += 1 if pkmn && pkmn.able? && pkmn.status==PBStatuses::NONE
+        mult += 1 if pkmn && pkmn.able? && pkmn.status == :NONE
       end
       baseDmg *= mult
     when "0C4"   # Solar Beam
@@ -472,7 +472,7 @@ class PokeBattle_AI
     end
     # Burn
     if skill>=PBTrainerAI.highSkill
-      if user.status==PBStatuses::BURN && move.physicalMove?(type) &&
+      if user.status == :BURN && move.physicalMove?(type) &&
          !user.hasActiveAbility?(:GUTS) &&
          !(Settings::MECHANICS_GENERATION >= 6 && move.function == "07E")   # Facade
         multipliers[:final_damage_multiplier] /= 2

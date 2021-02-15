@@ -1897,7 +1897,7 @@ end
 class PokeBattle_Move_15A < PokeBattle_Move
   def pbAdditionalEffect(user,target)
     return if target.fainted? || target.damageState.substitute
-    return if target.status!=PBStatuses::BURN
+    return if target.status != :BURN
     target.pbCureStatus
   end
 end
@@ -1910,7 +1910,7 @@ end
 #===============================================================================
 class PokeBattle_Move_15B < PokeBattle_HealingMove
   def pbFailsAgainstTarget?(user,target)
-    if target.status==PBStatuses::NONE
+    if target.status == :NONE
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end

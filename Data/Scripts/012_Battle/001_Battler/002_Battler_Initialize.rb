@@ -25,7 +25,7 @@ class PokeBattle_Battler
     @item_id        = nil
     @gender         = 0
     @attack = @defense = @spatk = @spdef = @speed = 0
-    @status         = PBStatuses::NONE
+    @status         = :NONE
     @statusCount    = 0
     @pokemon        = nil
     @pokemonIndex   = -1
@@ -309,7 +309,7 @@ class PokeBattle_Battler
     pbInitEffects(false)
     @participants = []
     # Reset status
-    @status       = PBStatuses::NONE
+    @status       = :NONE
     @statusCount  = 0
     # Reset choice
     @battle.pbClearChoice(@index)

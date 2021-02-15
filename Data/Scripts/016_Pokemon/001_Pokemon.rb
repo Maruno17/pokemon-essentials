@@ -18,7 +18,7 @@ class Pokemon
   attr_accessor :steps_to_hatch
   # @return [Integer] the current HP
   attr_reader   :hp
-  # @return [Integer] this Pokémon's current status (from PBStatuses)
+  # @return [Symbol] this Pokémon's current status (see GameData::Status)
   attr_reader   :status
   # @return [Integer] sleep count / toxic flag / 0:
   #   sleep (number of rounds before waking up), toxic (0 = regular poison, 1 = toxic)
@@ -217,14 +217,14 @@ class Pokemon
     heal_status if @hp == 0
   end
 
-  # Sets this Pokémon's status. See {PBStatuses} for all possible status effects.
-  # @param value [Integer, Symbol, String] status to set (from {PBStatuses})
+  # Sets this Pokémon's status. See {GameData::Status} for all possible status effects.
+  # @param value [Integer, Symbol, String] status to set
   def status=(value)
-    new_status = getID(PBStatuses, value)
+    new_status = GameData::Status.try_get(value)
     if !new_status
       raise ArgumentError, _INTL('Attempted to set {1} as Pokémon status', value.class.name)
     end
-    @status = new_status
+    @status = new_status.id
   end
 
   # @return [Boolean] whether the Pokémon is not fainted and not an egg
@@ -248,7 +248,7 @@ class Pokemon
   # Heals the status problem of this Pokémon.
   def heal_status
     return if egg?
-    @status      = PBStatuses::NONE
+    @status      = :NONE
     @statusCount = 0
   end
 

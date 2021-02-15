@@ -554,7 +554,7 @@ end
 #===============================================================================
 def pbAfterBattle(decision,canLose)
   $Trainer.party.each do |pkmn|
-    pkmn.statusCount = 0 if pkmn.status==PBStatuses::POISON   # Bad poison becomes regular
+    pkmn.statusCount = 0 if pkmn.status == :POISON   # Bad poison becomes regular
     pkmn.makeUnmega
     pkmn.makeUnprimal
   end

@@ -94,7 +94,7 @@ class PokeBattle_BattlePalace < PokeBattle_Battle
 
   def pbPinchChange(idxPokemon)
     thispkmn = @battlers[idxPokemon]
-    if !thispkmn.effects[PBEffects::Pinch] && thispkmn.status!=PBStatuses::SLEEP &&
+    if !thispkmn.effects[PBEffects::Pinch] && thispkmn.status != :SLEEP &&
        thispkmn.hp<=thispkmn.totalhp/2
       nature = thispkmn.nature
       thispkmn.effects[PBEffects::Pinch] = true
@@ -222,11 +222,11 @@ class PokeBattle_AI
         factor = (maxpercent<hppercent) ? 30 : 50
       end
       case thispkmn.status
-      when PBStatuses::SLEEP, PBStatuses::FROZEN
+      when :SLEEP, :FROZEN
         factor += 20
-      when PBStatuses::POISON, PBStatuses::BURN
+      when :POISON, :BURN
         factor += 10
-      when PBStatuses::PARALYSIS
+      when :PARALYSIS
         factor += 15
       end
       if @justswitched[idxBattler]

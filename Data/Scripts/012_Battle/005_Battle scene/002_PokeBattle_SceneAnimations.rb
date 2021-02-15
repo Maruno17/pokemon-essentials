@@ -166,7 +166,7 @@ class LineupAppearAnimation < PokeBattle_Animation
     if idxParty>=0 && idxParty<@party.length && @party[idxParty]
       if !@party[idxParty].able?
         graphicFilename = "Graphics/Pictures/Battle/icon_ball_faint"
-      elsif @party[idxParty].status!=PBStatuses::NONE
+      elsif @party[idxParty].status != :NONE
         graphicFilename = "Graphics/Pictures/Battle/icon_ball_status"
       else
         graphicFilename = "Graphics/Pictures/Battle/icon_ball"

@@ -5,7 +5,7 @@ class Hangup < Exception; end
 def strsplit(str, re)
   ret = []
   tstr = str
-  while re = ~tstr
+  while re =~ tstr
     ret[ret.length] = $~.pre_match
     tstr = $~.post_match
   end
@@ -279,7 +279,7 @@ module BitmapCache
 
   def self.load_bitmap(path, hue = 0, failsafe = false)
     cached = true
-    path = -canonicalize(path)   # Creates a frozen string from the path, to ensure identical paths are treated as identical.
+    path = canonicalize(path)
     objPath = fromCache(path)
     if !objPath
       # TODO: Delete this in Ruby 2+.

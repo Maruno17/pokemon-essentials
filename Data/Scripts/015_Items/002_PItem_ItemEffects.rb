@@ -411,7 +411,7 @@ ItemHandlers::UseOnPokemon.add(:SITRUSBERRY,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:AWAKENING,proc { |item,pkmn,scene|
-  if pkmn.fainted? || pkmn.status!=PBStatuses::SLEEP
+  if pkmn.fainted? || pkmn.status != :SLEEP
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -424,7 +424,7 @@ ItemHandlers::UseOnPokemon.add(:AWAKENING,proc { |item,pkmn,scene|
 ItemHandlers::UseOnPokemon.copy(:AWAKENING,:CHESTOBERRY,:BLUEFLUTE,:POKEFLUTE)
 
 ItemHandlers::UseOnPokemon.add(:ANTIDOTE,proc { |item,pkmn,scene|
-  if pkmn.fainted? || pkmn.status!=PBStatuses::POISON
+  if pkmn.fainted? || pkmn.status != :POISON
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -437,7 +437,7 @@ ItemHandlers::UseOnPokemon.add(:ANTIDOTE,proc { |item,pkmn,scene|
 ItemHandlers::UseOnPokemon.copy(:ANTIDOTE,:PECHABERRY)
 
 ItemHandlers::UseOnPokemon.add(:BURNHEAL,proc { |item,pkmn,scene|
-  if pkmn.fainted? || pkmn.status!=PBStatuses::BURN
+  if pkmn.fainted? || pkmn.status != :BURN
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -449,8 +449,8 @@ ItemHandlers::UseOnPokemon.add(:BURNHEAL,proc { |item,pkmn,scene|
 
 ItemHandlers::UseOnPokemon.copy(:BURNHEAL,:RAWSTBERRY)
 
-ItemHandlers::UseOnPokemon.add(:PARLYZHEAL,proc { |item,pkmn,scene|
-  if pkmn.fainted? || pkmn.status!=PBStatuses::PARALYSIS
+ItemHandlers::UseOnPokemon.add(:PARALYZEHEAL,proc { |item,pkmn,scene|
+  if pkmn.fainted? || pkmn.status != :PARALYSIS
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -460,10 +460,10 @@ ItemHandlers::UseOnPokemon.add(:PARLYZHEAL,proc { |item,pkmn,scene|
   next true
 })
 
-ItemHandlers::UseOnPokemon.copy(:PARLYZHEAL,:PARALYZEHEAL,:CHERIBERRY)
+ItemHandlers::UseOnPokemon.copy(:PARALYZEHEAL,:PARLYZHEAL,:CHERIBERRY)
 
 ItemHandlers::UseOnPokemon.add(:ICEHEAL,proc { |item,pkmn,scene|
-  if pkmn.fainted? || pkmn.status!=PBStatuses::FROZEN
+  if pkmn.fainted? || pkmn.status != :FROZEN
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -476,7 +476,7 @@ ItemHandlers::UseOnPokemon.add(:ICEHEAL,proc { |item,pkmn,scene|
 ItemHandlers::UseOnPokemon.copy(:ICEHEAL,:ASPEARBERRY)
 
 ItemHandlers::UseOnPokemon.add(:FULLHEAL,proc { |item,pkmn,scene|
-  if pkmn.fainted? || pkmn.status==PBStatuses::NONE
+  if pkmn.fainted? || pkmn.status == :NONE
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -492,7 +492,7 @@ ItemHandlers::UseOnPokemon.copy(:FULLHEAL,
 ItemHandlers::UseOnPokemon.copy(:FULLHEAL,:RAGECANDYBAR) if Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::UseOnPokemon.add(:FULLRESTORE,proc { |item,pkmn,scene|
-  if pkmn.fainted? || (pkmn.hp==pkmn.totalhp && pkmn.status==PBStatuses::NONE)
+  if pkmn.fainted? || (pkmn.hp==pkmn.totalhp && pkmn.status == :NONE)
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -549,7 +549,7 @@ ItemHandlers::UseOnPokemon.add(:ENERGYROOT,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:HEALPOWDER,proc { |item,pkmn,scene|
-  if pkmn.fainted? || pkmn.status==PBStatuses::NONE
+  if pkmn.fainted? || pkmn.status == :NONE
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -834,8 +834,8 @@ ItemHandlers::UseOnPokemon.add(:TAMATOBERRY,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:GRACIDEA,proc { |item,pkmn,scene|
-  if !pkmn.isSpecies?(:SHAYMIN) || pkmn.form!=0 ||
-     pkmn.status==PBStatuses::FROZEN || PBDayNight.isNight?
+  if !pkmn.isSpecies?(:SHAYMIN) || pkmn.form != 0 ||
+     pkmn.status == :FROZEN || PBDayNight.isNight?
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   end

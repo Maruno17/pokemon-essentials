@@ -180,9 +180,9 @@ module PokeBattle_BattleCommon
     b = battler.hp
     x = ((3*a-2*b)*catch_rate.to_f)/(3*a)
     # Calculation modifiers
-    if battler.status==PBStatuses::SLEEP || battler.status==PBStatuses::FROZEN
+    if battler.status == :SLEEP || battler.status == :FROZEN
       x *= 2.5
-    elsif battler.status!=PBStatuses::NONE
+    elsif battler.status != :NONE
       x *= 1.5
     end
     x = x.floor

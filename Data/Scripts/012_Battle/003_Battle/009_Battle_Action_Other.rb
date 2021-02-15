@@ -48,7 +48,7 @@ class PokeBattle_Battle
       else
         pbDisplay(_INTL("But nothing happened!"))
       end
-    elsif battler.status==PBStatuses::SLEEP
+    elsif battler.status == :SLEEP
       battler.pbCureStatus
     elsif battler.pbCanRaiseStatStage?(PBStats::ACCURACY,battler)
       battler.pbRaiseStatStage(PBStats::ACCURACY,1,battler)

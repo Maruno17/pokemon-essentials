@@ -96,7 +96,7 @@ class PokeBattle_AI
     }
     losthp = battler.totalhp - battler.hp
     preferFullRestore = (battler.hp <= battler.totalhp * 2 / 3 &&
-       (battler.status != PBStatuses::NONE || battler.effects[PBEffects::Confusion] > 0))
+       (battler.status != :NONE || battler.effects[PBEffects::Confusion] > 0))
     # Find all usable items
     usableHPItems     = []
     usableStatusItems = []
@@ -115,7 +115,7 @@ class PokeBattle_AI
         end
       end
       # Log Full Restores (HP healer and status curer)
-      if losthp > 0 || battler.status != PBStatuses::NONE
+      if losthp > 0 || battler.status != :NONE
         if fullRestoreItems.include?(i)
           usableHPItems.push([i, (preferFullRestore) ? 3 : 7, 999])
           usableStatusItems.push([i, (preferFullRestore) ? 3 : 9])

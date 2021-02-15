@@ -69,7 +69,7 @@ class PokeBattle_Battler
     if move.damagingMove?
       targets.each do |b|
         next if b.damageState.unaffected || b.damageState.substitute
-        next if b.status!=PBStatuses::FROZEN
+        next if b.status != :FROZEN
         # NOTE: Non-Fire-type moves that thaw the user will also thaw the
         #       target (in Gen 6+).
         if move.calcType == :FIRE || (Settings::MECHANICS_GENERATION >= 6 && move.thawsUser?)

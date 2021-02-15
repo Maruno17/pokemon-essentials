@@ -199,7 +199,7 @@ class PokeBattle_AI
         end
       end
       # If user is asleep, prefer moves that are usable while asleep
-      if user.status==PBStatuses::SLEEP && !move.usableWhenAsleep?
+      if user.status == :SLEEP && !move.usableWhenAsleep?
         user.eachMove do |m|
           next unless m.usableWhenAsleep?
           score -= 60
@@ -207,7 +207,7 @@ class PokeBattle_AI
         end
       end
       # If user is frozen, prefer a move that can thaw the user
-      if user.status==PBStatuses::FROZEN
+      if user.status == :FROZEN
         if move.thawsUser?
           score += 40
         else
@@ -219,7 +219,7 @@ class PokeBattle_AI
         end
       end
       # If target is frozen, don't prefer moves that could thaw them
-      if target.status==PBStatuses::FROZEN
+      if target.status == :FROZEN
         user.eachMove do |m|
           next if m.thawsUser?
           score -= 60
