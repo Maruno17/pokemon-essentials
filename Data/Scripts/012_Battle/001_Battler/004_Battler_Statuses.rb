@@ -219,32 +219,36 @@ class PokeBattle_Battler
     self.status      = newStatus
     self.statusCount = newStatusCount
     @effects[PBEffects::Toxic] = 0
-    # Record status change in debug log, generate default message, show animation
-    case newStatus
-    when :SLEEP
-      @battle.pbCommonAnimation("Sleep",self)
-      msg = _INTL("{1} fell asleep!",pbThis) if !msg || msg==""
-    when :POISON
-      if newStatusCount>0
-        @battle.pbCommonAnimation("Toxic",self)
-        msg = _INTL("{1} was badly poisoned!",pbThis) if !msg || msg==""
-      else
-        @battle.pbCommonAnimation("Poison",self)
-        msg = _INTL("{1} was poisoned!",pbThis) if !msg || msg==""
-      end
-    when :BURN
-      @battle.pbCommonAnimation("Burn",self)
-      msg = _INTL("{1} was burned!",pbThis) if !msg || msg==""
-    when :PARALYSIS
-      @battle.pbCommonAnimation("Paralysis",self)
-      msg = _INTL("{1} is paralyzed! It may be unable to move!",pbThis) if !msg || msg==""
-    when :FROZEN
-      @battle.pbCommonAnimation("Frozen",self)
-      msg = _INTL("{1} was frozen solid!",pbThis) if !msg || msg==""
+    # Show animation
+    if newStatus == :POISON && newStatusCount > 0
+      @battle.pbCommonAnimation("Toxic", self)
+    else
+      anim_name = GameData::Status.get(newStatus).animation
+      @battle.pbCommonAnimation(anim_name, self) if anim_name
     end
     # Show message
-    @battle.pbDisplay(msg) if msg && msg!=""
+    if msg && !msg.empty?
+      @battle.pbDisplay(msg)
+    else
+      case newStatus
+      when :SLEEP
+        @battle.pbDisplay(_INTL("{1} fell asleep!", pbThis))
+      when :POISON
+        if newStatusCount>0
+          @battle.pbDisplay(_INTL("{1} was badly poisoned!", pbThis))
+        else
+          @battle.pbDisplay(_INTL("{1} was poisoned!", pbThis))
+        end
+      when :BURN
+        @battle.pbDisplay(_INTL("{1} was burned!", pbThis))
+      when :PARALYSIS
+        @battle.pbDisplay(_INTL("{1} is paralyzed! It may be unable to move!", pbThis))
+      when :FROZEN
+        @battle.pbDisplay(_INTL("{1} was frozen solid!", pbThis))
+      end
+    end
     PBDebug.log("[Status change] #{pbThis}'s sleep count is #{newStatusCount}") if newStatus == :SLEEP
+    # Form change check
     pbCheckFormOnStatusChange
     # Synchronize
     if abilityActive?
@@ -397,28 +401,25 @@ class PokeBattle_Battler
   # Generalised status displays
   #=============================================================================
   def pbContinueStatus
-    anim = ""
-    msg = ""
+    if self.status == :POISON && @statusCount > 0
+      @battle.pbCommonAnimation("Toxic", self)
+    else
+      anim_name = GameData::Status.get(self.status).animation
+      @battle.pbCommonAnimation(anim_name, self) if anim_name
+    end
+    yield if block_given?
     case self.status
     when :SLEEP
-      anim = "Sleep"
-      msg = _INTL("{1} is fast asleep.", pbThis)
+      @battle.pbDisplay(_INTL("{1} is fast asleep.", pbThis))
     when :POISON
-      anim = (@statusCount>0) ? "Toxic" : "Poison"
-      msg = _INTL("{1} was hurt by poison!", pbThis)
+      @battle.pbDisplay(_INTL("{1} was hurt by poison!", pbThis))
     when :BURN
-      anim = "Burn"
-      msg = _INTL("{1} was hurt by its burn!", pbThis)
+      @battle.pbDisplay(_INTL("{1} was hurt by its burn!", pbThis))
     when :PARALYSIS
-      anim = "Paralysis"
-      msg = _INTL("{1} is paralyzed! It can't move!", pbThis)
+      @battle.pbDisplay(_INTL("{1} is paralyzed! It can't move!", pbThis))
     when :FROZEN
-      anim = "Frozen"
-      msg = _INTL("{1} is frozen solid!", pbThis)
+      @battle.pbDisplay(_INTL("{1} is frozen solid!", pbThis))
     end
-    @battle.pbCommonAnimation(anim,self) if anim!=""
-    yield if block_given?
-    @battle.pbDisplay(msg) if msg!=""
     PBDebug.log("[Status continues] #{pbThis}'s sleep count is #{@statusCount}") if self.status == :SLEEP
   end
 

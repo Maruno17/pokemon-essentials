@@ -347,7 +347,8 @@ class PokeBattle_Battle
       end
       if b.hasActiveAbility?(:POISONHEAL)
         if b.canHeal?
-          pbCommonAnimation("Poison",b)
+          anim_name = GameData::Status.get(:POISON).animation
+          pbCommonAnimation(anim_name, b) if anim_name
           pbShowAbilitySplash(b)
           b.pbRecoverHP(b.totalhp/8)
           if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
