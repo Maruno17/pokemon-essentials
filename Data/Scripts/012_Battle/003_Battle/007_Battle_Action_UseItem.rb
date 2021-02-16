@@ -3,7 +3,7 @@ class PokeBattle_Battle
   # Choosing to use an item
   #=============================================================================
   def pbCanUseItemOnPokemon?(item,pkmn,battler,scene,showMessages=true)
-    if pkmn.egg?
+    if !pkmn || pkmn.egg?
       scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
       return false
     end
@@ -101,18 +101,22 @@ class PokeBattle_Battle
   end
 
   # Uses an item on a Pokémon in battle that belongs to the trainer.
-  def pbUseItemOnBattler(item,idxBattler,userBattler)
+  def pbUseItemOnBattler(item,idxParty,userBattler)
     trainerName = pbGetOwnerName(userBattler.index)
     pbUseItemMessage(item,trainerName)
-    idxBattler = userBattler.index if idxBattler<0
-    battler = @battlers[idxBattler]
+    battler = pbFindBattler(idxParty,userBattler.index)
     ch = @choices[userBattler.index]
-    if ItemHandlers.triggerCanUseInBattle(item,battler.pokemon,battler,ch[3],true,self,@scene,false)
-      ItemHandlers.triggerBattleUseOnBattler(item,battler,@scene)
-      ch[1] = 0   # Delete item from choice
-      return
+    if battler
+      if ItemHandlers.triggerCanUseInBattle(item,battler.pokemon,battler,ch[3],true,self,@scene,false)
+        ItemHandlers.triggerBattleUseOnBattler(item,battler,@scene)
+        ch[1] = 0   # Delete item from choice
+        return
+      else
+        pbDisplay(_INTL("But it had no effect!"))
+      end
+    else
+      pbDisplay(_INTL("But it's not where this item can be used!"))
     end
-    pbDisplay(_INTL("But it's not where this item can be used!"))
     # Return unused item to Bag
     pbReturnUnusedItemToBag(item,userBattler.index)
   end
