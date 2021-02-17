@@ -460,7 +460,7 @@ PBEvolution.register(:Happiness, {
   "minimumLevel"  => 1,   # Needs any level up
   "parameterType" => nil,
   "levelUpCheck"  => proc { |pkmn, parameter|
-    next pkmn.happiness >= 220
+    next pkmn.happiness >= 160
   }
 })
 
@@ -468,7 +468,7 @@ PBEvolution.register(:HappinessMale, {
   "minimumLevel"  => 1,   # Needs any level up
   "parameterType" => nil,
   "levelUpCheck"  => proc { |pkmn, parameter|
-    next pkmn.happiness >= 220 && pkmn.male?
+    next pkmn.happiness >= 160 && pkmn.male?
   }
 })
 
@@ -476,7 +476,7 @@ PBEvolution.register(:HappinessFemale, {
   "minimumLevel"  => 1,   # Needs any level up
   "parameterType" => nil,
   "levelUpCheck"  => proc { |pkmn, parameter|
-    next pkmn.happiness >= 220 && pkmn.female?
+    next pkmn.happiness >= 160 && pkmn.female?
   }
 })
 
@@ -484,7 +484,7 @@ PBEvolution.register(:HappinessDay, {
   "minimumLevel"  => 1,   # Needs any level up
   "parameterType" => nil,
   "levelUpCheck"  => proc { |pkmn, parameter|
-    next pkmn.happiness >= 220 && PBDayNight.isDay?
+    next pkmn.happiness >= 160 && PBDayNight.isDay?
   }
 })
 
@@ -492,7 +492,7 @@ PBEvolution.register(:HappinessNight, {
   "minimumLevel"  => 1,   # Needs any level up
   "parameterType" => nil,
   "levelUpCheck"  => proc { |pkmn, parameter|
-    next pkmn.happiness >= 220 && PBDayNight.isNight?
+    next pkmn.happiness >= 160 && PBDayNight.isNight?
   }
 })
 
@@ -500,7 +500,7 @@ PBEvolution.register(:HappinessMove, {
   "minimumLevel"  => 1,   # Needs any level up
   "parameterType" => :PBMoves,
   "levelUpCheck"  => proc { |pkmn, parameter|
-    if pkmn.happiness >= 220
+    if pkmn.happiness >= 160
       next pkmn.moves.any? { |m| m && m.id == parameter }
     end
   }
@@ -510,7 +510,7 @@ PBEvolution.register(:HappinessMoveType, {
   "minimumLevel"  => 1,   # Needs any level up
   "parameterType" => :PBTypes,
   "levelUpCheck"  => proc { |pkmn, parameter|
-    if pkmn.happiness >= 220
+    if pkmn.happiness >= 160
       next pkmn.moves.any? { |m| m && m.id > 0 && m.type == parameter }
     end
   }
@@ -520,7 +520,7 @@ PBEvolution.register(:HappinessHoldItem, {
   "minimumLevel"  => 1,   # Needs any level up
   "parameterType" => :PBItems,
   "levelUpCheck"  => proc { |pkmn, parameter|
-    next pkmn.item == parameter && pkmn.happiness >= 220
+    next pkmn.item == parameter && pkmn.happiness >= 160
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
@@ -613,7 +613,7 @@ PBEvolution.register(:HoldItemHappiness, {
   "minimumLevel"  => 1,   # Needs any level up
   "parameterType" => :PBItems,
   "levelUpCheck"  => proc { |pkmn, parameter|
-    next pkmn.item == parameter && pkmn.happiness >= 220
+    next pkmn.item == parameter && pkmn.happiness >= 160
   },
   "afterEvolution" => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
@@ -702,7 +702,7 @@ PBEvolution.register(:ItemNight, {
 PBEvolution.register(:ItemHappiness, {
   "parameterType" => :PBItems,
   "levelUpCheck"  => proc { |pkmn, parameter, item|
-    next item == parameter && pkmn.happiness >= 220
+    next item == parameter && pkmn.happiness >= 160
   }
 })
 
