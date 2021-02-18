@@ -182,7 +182,7 @@ Moves=0,PSYCHIC,1,PSYCHIC,1,PLAYNICE,1,SWEETKISS,1,NUZZLE,1,NASTYPLOT,1,CHARM,1,
 Height = 0.7
 Weight = 21.0
 Color = Brown
-Pokedex = It uses psychokinesis to control electricity. It hops aboard its own tail, using psychic power to lift the tail and move about while riding it.
+Pokedex = It's believed that the weather, climate, and food of the Alola region all play a part in causing Pikachu to evolve into this form of Raichu.
 BattlerPlayerY = 16
 BattlerEnemyY = 18
 #-------------------------------
@@ -193,12 +193,12 @@ Type2 = STEEL
 BaseStats = 50,75,90,40,10,35
 Abilities = SNOWCLOAK
 HiddenAbility = SLUSHRUSH
-Moves=1,SCRATCH,1,DEFENSECURL,3,BIDE,5,POWDERSNOW,7,ICEBALL,9,RAPIDSPIN,11,FURYCUTTER,14,METALCLAW,17,SWIFT,20,FURYSWIPES,23,IRONDEFENSE,26,SLASH,30,IRONHEAD,34,GYROBALL,38,SWORDSDANCE,42,HAIL,46,BLIZZARD
-EggMoves=FLAIL,COUNTER,ICICLESPEAR,METALCLAW,CRUSHCLAW,NIGHTSLASH,ICICLECRASH,ENDURE,CHIPAWAY,CURSE,AMNESIA,HONECLAWS
+Moves = 1,SCRATCH,1,DEFENSECURL,3,BIDE,5,POWDERSNOW,7,ICEBALL,9,RAPIDSPIN,11,FURYCUTTER,14,METALCLAW,17,SWIFT,20,FURYSWIPES,23,IRONDEFENSE,26,SLASH,30,IRONHEAD,34,GYROBALL,38,SWORDSDANCE,42,HAIL,46,BLIZZARD
+EggMoves = FLAIL,COUNTER,NIGHTSLASH,HONECLAWS,CRUSHCLAW,CURSE
 Height = 0.7
 Weight = 40.0
 Color = White
-Pokedex = The skin on its back is as hard as steel. Predators go after its soft belly, so it clings to the ground desperately.
+Pokedex = It lives in snowy mountains on southern islands. When a blizzard rolls in, this Pokémon hunkers down in the snow to avoid getting blown away.
 BattlerPlayerY = 27
 BattlerEnemyY = 30
 Evolutions = SANDSLASH,Item,ICESTONE
@@ -214,7 +214,7 @@ Moves=0,ICICLESPEAR,1,ICICLESPEAR,1,METALBURST,1,ICICLECRASH,1,SLASH,1,DEFENSECU
 Height = 1.2
 Weight = 55.0
 Color = Blue
-Pokedex = It runs across snow-covered plains at high speeds. It developed thick, sharp claws to plow through the snow.
+Pokedex = It uses large, hooked claws to cut a path through deep snow as it runs. On snowy mountains, this Sandslash is faster than any other Pokémon.
 BattlerPlayerY = 23
 BattlerEnemyY = 24
 #-------------------------------
@@ -224,9 +224,9 @@ Type1 = ICE
 Abilities = SNOWCLOAK
 HiddenAbility = SNOWWARNING
 Moves=1,POWDERSNOW,1,TAILWHIP,4,DISABLE,8,ICESHARD,12,SPITE,16,ICYWIND,20,CONFUSERAY,24,AURORABEAM,28,EXTRASENSORY,32,ICEBEAM,36,IMPRISON,40,MIST,44,AURORAVEIL,48,SHEERCOLD,52,GRUDGE,56,BLIZZARD
-EggMoves=FREEZEDRY,HYPNOSIS,FLAIL,SPITE,DISABLE,HOWL,AGILITY,ENCORE,MOONBLAST,POWERSWAP,SECRETPOWER,CHARM,TAILSLAP,EXTRASENSORY,BABYDOLLEYES,ROAR
+EggMoves=HYPNOSIS,FLAIL,HOWL,HEATWAVE,BABYDOLLEYES,ROAR,FREEZEDRY,MOONBLAST
 Color = White
-Pokedex = In hot weather, this Pokémon makes ice shards with its six tails and sprays them around to cool itself off.
+Pokedex = After long years in the ever-snowcapped mountains of Alola, this Vulpix has gained power over ice.
 WildItemUncommon = SNOWBALL
 BattlerPlayerY = 23
 BattlerEnemyY = 28
@@ -242,7 +242,7 @@ Abilities = SNOWCLOAK
 HiddenAbility = SNOWWARNING
 Moves=0,DAZZLINGGLEAM,1,DAZZLINGGLEAM,1,NASTYPLOT,1,SPITE,1,ICYWIND,1,CONFUSERAY,1,AURORABEAM,1,EXTRASENSORY,1,ICEBEAM,1,IMPRISON,1,MIST,1,AURORAVEIL,1,SHEERCOLD,1,GRUDGE,1,BLIZZARD,1,POWDERSNOW,1,TAILWHIP,1,DISABLE,1,ICESHARD
 Color = Blue
-Pokedex = It lives on mountains perpetually covered in snow and is revered as a deity incarnate. It appears draped in a blizzard.
+Pokedex = A deity resides in the snowy mountains where this Pokémon lives. In ancient times, it was worshiped as that deity's incarnation.
 WildItemUncommon = SNOWBALL
 BattlerPlayerY = 18
 BattlerEnemyY = 20
@@ -254,9 +254,9 @@ Type2 = STEEL
 BaseStats = 10,55,30,90,35,45
 Abilities = SANDVEIL,TANGLINGHAIR
 Moves=1,SANDATTACK,1,METALCLAW,4,GROWL,8,ASTONISH,12,MUDSLAP,16,BULLDOZE,20,SUCKERPUNCH,24,IRONHEAD,28,SANDSTORM,32,DIG,36,EARTHPOWER,40,EARTHQUAKE,44,FISSURE
-EggMoves=FEINTATTACK,METALSOUND,ANCIENTPOWER,PURSUIT,BEATUP,THRASH,REVERSAL,HEADBUTT,ENDURE,FINALGAMBIT,MEMENTO,HONECLAWS
+EggMoves=ANCIENTPOWER,HEADBUTT,FINALGAMBIT,MEMENTO,HONECLAWS,METALSOUND,THRASH
 Weight = 1.0
-Pokedex = Its head sports an altered form of whiskers made of metal. When in communication with its comrades, its whiskers wobble to and fro.
+Pokedex = Its three hairs change shape depending on Diglett's mood. They're a useful communication tool among these Pokémon.
 BattlerPlayerY = 33
 BattlerEnemyY = 37
 #-------------------------------
@@ -269,7 +269,7 @@ EffortPoints = 0,2,0,0,0,0
 Abilities = SANDVEIL,TANGLINGHAIR
 Moves=0,SANDTOMB,1,SANDTOMB,1,NIGHTSLASH,1,TRIATTACK,1,SANDATTACK,1,METALCLAW,1,GROWL,1,ASTONISH,12,MUDSLAP,16,BULLDOZE,20,SUCKERPUNCH,24,IRONHEAD,30,SANDSTORM,36,DIG,42,EARTHPOWER,48,EARTHQUAKE,54,FISSURE
 Weight = 66.6
-Pokedex = Its shining gold hair provides it with protection. It's reputed that keeping any of its fallen hairs will bring bad luck.
+Pokedex = Their beautiful, metallic whiskers create a sort of protective helmet on their heads, and they also function as highly precise sensors.
 BattlerPlayerY = 25
 BattlerEnemyY = 29
 #-------------------------------
@@ -279,7 +279,7 @@ Type1 = DARK
 BaseStats = 40,35,35,90,50,40
 HiddenAbility = RATTLED
 Moves=1,FAKEOUT,1,GROWL,4,FEINT,8,SCRATCH,12,PAYDAY,16,BITE,20,TAUNT,24,ASSURANCE,29,FURYSWIPES,32,SCREECH,36,NIGHTSLASH,40,NASTYPLOT,44,PLAYROUGH
-EggMoves=HYPNOSIS,ASSIST,FOULPLAY,SPITE,CHARM,AMNESIA,PARTINGSHOT,FLAIL,FLATTER,PUNISHMENT,SNATCH,COVET
+EggMoves=SPITE,HYPNOSIS,FLAIL,COVET,PARTINGSHOT,FLATTER
 Color = Blue
 Pokedex = It's impulsive, selfish, and fickle. It's very popular with some Trainers who like giving it the attention it needs.
 BattlerPlayerY = 37
@@ -308,7 +308,7 @@ Moves=0,POWERGEM,1,POWERGEM,1,QUASH,1,SWITCHEROO,1,FAKEOUT,1,GROWL,1,FEINT,1,SCR
 Height = 1.1
 Weight = 33.0
 Color = Blue
-Pokedex = Its round face is a symbol of wealth. Persian that have bigger, plumper faces are considered more beautiful.
+Pokedex = The round face of Alolan Persian is considered to be a symbol of prosperity in the Alola region, so these Pokémon are very well cared for.
 BattlerPlayerY = 16
 BattlerEnemyY = 19
 #-------------------------------
@@ -493,7 +493,7 @@ Abilities = FRISK
 Moves=0,DRAGONHAMMER,1,DRAGONHAMMER,1,SEEDBOMB,1,BARRAGE,1,HYPNOSIS,1,CONFUSION,17,PSYSHOCK,27,EGGBOMB,37,WOODHAMMER,47,LEAFSTORM
 Height = 10.9
 Weight = 415.6
-Pokedex = As it grew taller and taller, it outgrew its reliance on psychic powers, while within it awakened the power of the sleeping dragon.
+Pokedex = This Pokémon's psychic powers aren't as strong as they once were. The head on this Exeggutor's tail scans surrounding areas with weak telepathy.
 BattlerPlayerY = 1
 BattlerEnemyY = 4
 #-------------------------------
@@ -509,7 +509,7 @@ HiddenAbility = ROCKHEAD
 Moves=1,GROWL,1,TAILWHIP,1,BONECLUB,1,FLAMEWHEEL,3,TAILWHIP,7,BONECLUB,11,FLAMEWHEEL,13,LEER,17,HEX,21,BONEMERANG,23,WILLOWISP,27,SHADOWBONE,33,THRASH,37,FLING,43,STOMPINGTANTRUM,49,ENDEAVOR,53,FLAREBLITZ,59,RETALIATE,65,BONERUSH
 Weight = 34.0
 Color = Purple
-Pokedex = Its custom is to mourn its lost companions. Mounds of dirt by the side of the road mark the graves of the Marowak
+Pokedex = The cursed flames that light up the bone carried by this Pokémon are said to cause both mental and physical pain that will never fade.
 BattlerPlayerY = 12
 BattlerEnemyY = 17
 #-------------------------------
@@ -1222,15 +1222,18 @@ Color = Red
 [CHERRIM,1]
 FormName = Sunshine Form
 Color = Pink
+Pokedex = After absorbing plenty of sunlight, Cherrim takes this form. It's full of energy while it's like this, and its liveliness will go on until sundown.
 BattlerEnemyY = 25
 #-------------------------------
 [SHELLOS,1]
 FormName = East Sea
 Color = Blue
+Pokedex = Its appearance changes depending on the environment. One theory suggests that living in cold seas causes Shellos to take on this form.
 #-------------------------------
 [GASTRODON,1]
 FormName = East Sea
 Color = Blue
+Pokedex = Its search for food sometimes leads it onto land, where it leaves behind a sticky trail of slime as it passes through.
 #-------------------------------
 [LOPUNNY,1]
 FormName = Mega Lopunny
@@ -1300,7 +1303,7 @@ FormName = Wash Rotom
 Type1 = ELECTRIC
 Type2 = WATER
 BaseStats = 50,65,107,86,105,107
-Pokedex = This form of Rotom enjoys coming up with water-based pranks. Be careful with it if you don't want your room flooded.
+Pokedex = This Rotom has possessed a washing machine that uses a special motor. It blasts out water to get enemies to back down.
 BattlerEnemyY = 14
 #-------------------------------
 [ROTOM,3]
@@ -1308,7 +1311,7 @@ FormName = Frost Rotom
 Type1 = ELECTRIC
 Type2 = ICE
 BaseStats = 50,65,107,86,105,107
-Pokedex = Rotom assumes this form when it takes over a refrigerator powered by a special motor. It battles by spewing cold air.
+Pokedex = When it's like this, Rotom likes to play pranks that are freezing cold. You may find it's turned the bath you just filled to solid ice!
 BattlerEnemyY = 11
 #-------------------------------
 [ROTOM,4]
@@ -1440,7 +1443,7 @@ BattlerEnemyY = 21
 [BASCULIN,1]
 FormName = Blue-Striped
 Abilities = ROCKHEAD,ADAPTABILITY
-Pokedex = Even Basculin, which devours everything it can with its huge jaws, is nothing more than food to organisms stronger than itself.
+Pokedex = Known for their violence, these Pokémon have the most fights with schools of red- striped Basculin.
 WildItemUncommon = DEEPSEASCALE
 BattlerEnemyY = 37
 #-------------------------------
@@ -1792,6 +1795,7 @@ FormName = Female
 HiddenAbility = COMPETITIVE
 Moves=1,MAGICALLEAF,1,SCRATCH,1,LEER,1,FAKEOUT,1,DISARMINGVOICE,9,CONFUSION,12,STOREDPOWER,15,CHARGEBEAM,18,COVET,21,PSYBEAM,24,SUCKERPUNCH,29,ROLEPLAY,34,LIGHTSCREEN,34,REFLECT,39,PSYSHOCK,44,EXTRASENSORY,49,SHADOWBALL,54,PSYCHIC,59,FUTURESIGHT
 Color=White
+Pokedex = Females are a bit more selfish and aggressive than males. If they don't get what they want, they will torment you with their psychic abilities.
 BattlerPlayerY = 28
 BattlerEnemyY = 23
 #-------------------------------
@@ -1799,11 +1803,13 @@ BattlerEnemyY = 23
 FormName = Blade Forme
 BaseStats = 60,150,50,60,150,50
 EffortPoints = 0,2,0,0,1,0
+Pokedex = Once upon a time, a king with an Aegislash reigned over the land. His Pokémon eventually drained him of life, and his kingdom fell with him.
 BattlerPlayerY = 13
 BattlerEnemyY = 13
 #-------------------------------
 [PUMPKABOO,1]
-FormName = Average Size
+FormName = Small Size
+Pokedex = The light that streams out from the holes in the pumpkin can hypnotize and control the people and Pokémon that see it.
 BattlerPlayerY = 31
 BattlerEnemyY = 35
 #-------------------------------
@@ -1812,6 +1818,7 @@ FormName = Large Size
 BaseStats = 54,66,70,46,44,55
 Height = 0.5
 Weight = 7.5
+Pokedex = When taking spirits to the afterlife, large Pumpkaboo prefer the spirits of adults to those of children.
 BattlerPlayerY = 28
 BattlerEnemyY = 32
 #-------------------------------
@@ -1820,6 +1827,7 @@ FormName = Super Size
 BaseStats = 59,66,70,41,44,55
 Height = 0.8
 Weight = 15.0
+Pokedex = Supersized Pumpkaboo are very partial to the spirits of people who were of similarly superior proportions.
 WildItemCommon = MIRACLESEED
 WildItemUncommon = MIRACLESEED
 WildItemRare = MIRACLESEED
@@ -1827,7 +1835,8 @@ BattlerPlayerY = 27
 BattlerEnemyY = 31
 #-------------------------------
 [GOURGEIST,1]
-FormName = Average Size
+FormName = Small Size
+Pokedex = In the darkness of a new-moon night, Gourgeist will come knocking. Whoever answers the door will be swept off to the afterlife.
 BattlerPlayerY = 13
 BattlerEnemyY = 18
 #-------------------------------
@@ -1836,6 +1845,7 @@ FormName = Large Size
 BaseStats = 75,95,122,69,58,75
 Height = 1.1
 Weight = 14.0
+Pokedex = A large-sized Pumpkaboo evolves into a large-sized Gourgeist. Its bodily proportions also get passed on to its descendants.
 BattlerPlayerY = 11
 BattlerEnemyY = 15
 #-------------------------------
@@ -1844,6 +1854,7 @@ FormName = Super Size
 BaseStats = 85,100,122,54,58,75
 Height = 1.7
 Weight = 39.0
+Pokedex = A supersized Pumpkaboo evolves into a supersized Gourgeist. Its bodily proportions also get passed on to its descendants.
 WildItemCommon = MIRACLESEED
 WildItemUncommon = MIRACLESEED
 WildItemRare = MIRACLESEED
@@ -1949,7 +1960,7 @@ Moves=0,COUNTER,1,COUNTER,1,REVERSAL,1,TAUNT,1,TACKLE,1,LEER,1,SANDATTACK,1,BITE
 Height = 1.1
 Color = Red
 Shape = 6
-Pokedex = It goads its enemies into attacking, withstands the hits, and in return, delivers a headbutt, crushing their bones with its rocky mane.
+Pokedex = It's invigorated by powerful opponents, the stronger the better. A full-force headbutt from one of these Lycanroc can shatter giant boulders.
 BattlerPlayerY = 13
 BattlerEnemyY = 14
 #-------------------------------
@@ -1958,9 +1969,8 @@ FormName = Dusk Form
 BaseStats = 75,117,65,110,55,65
 Abilities = TOUGHCLAWS
 HiddenAbility = TOUGHCLAWS
-
 Moves=0,THRASH,1,THRASH,1,ACCELEROCK,1,COUNTER,1,TACKLE,1,LEER,1,SANDATTACK,1,BITE,4,SANDATTACK,7,BITE,12,HOWL,15,ROCKTHROW,18,ODORSLEUTH,23,ROCKTOMB,26,ROAR,29,STEALTHROCK,34,ROCKSLIDE,37,SCARYFACE,40,CRUNCH,45,ROCKCLIMB,48,STONEEDGE
-Pokedex = Bathed in the setting sun of evening, Lycanroc has undergone a special kind of evolution. An intense fighting spirit underlies its calmness.
+Pokedex = These Pokémon have both calm and ferocious qualities. Their temperamental nature makes them a difficult species to raise.
 #-------------------------------
 [WISHIWASHI,1]
 FormName = School Form
@@ -1968,81 +1978,99 @@ BaseStats = 45,140,130,30,140,135
 Height = 8.2
 Weight = 78.6
 Shape = 11
-Pokedex = Weak Wishiwashi school together to concentrate their power. Their united force makes them the demon of the sea, feared near and far.
+Pokedex = When facing tough opponents, they get into formation. But if they get wounded in battle, they'll scatter and become solitary again.
 BattlerPlayerY = 9
 BattlerEnemyY = 16
 #-------------------------------
 [SILVALLY,1]
 FormName = Type: Fighting
 Type1 = FIGHTING
+Pokedex = Thanks to its awakened powers, it can change to the Fighting type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,2]
 FormName = Type: Flying
 Type1 = FLYING
+Pokedex = Thanks to its awakened powers, it can change to the Flying type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,3]
 FormName = Type: Poison
 Type1 = POISON
+Pokedex = Thanks to its awakened powers, it can change to the Poison type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,4]
 FormName = Type: Ground
 Type1 = GROUND
+Pokedex = Thanks to its awakened powers, it can change to the Ground type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,5]
 FormName = Type: Rock
 Type1 = ROCK
+Pokedex = Thanks to its awakened powers, it can change to the Rock type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,6]
 FormName = Type: Bug
 Type1 = BUG
+Pokedex = Thanks to its awakened powers, it can change to the Bug type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,7]
 FormName = Type: Ghost
 Type1 = GHOST
+Pokedex = Thanks to its awakened powers, it can change to the Ghost type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,8]
 FormName = Type: Steel
 Type1 = STEEL
+Pokedex = Thanks to its awakened powers, it can change to the Steel type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,9]
 FormName = Type: Unknown
 Type1 = QMARKS
+Pokedex = Thanks to its awakened powers, it can change to the ??? type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,10]
 FormName = Type: Fire
 Type1 = FIRE
+Pokedex = Thanks to its awakened powers, it can change to the Fire type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,11]
 FormName = Type: Water
 Type1 = WATER
+Pokedex = Thanks to its awakened powers, it can change to the Water type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,12]
 FormName = Type: Grass
 Type1 = GRASS
+Pokedex = Thanks to its awakened powers, it can change to the Grass type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,13]
 FormName = Type: Electric
 Type1 = ELECTRIC
+Pokedex = Thanks to its awakened powers, it can change to the Electric type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,14]
 FormName = Type: Psychic
 Type1 = PSYCHIC
+Pokedex = Thanks to its awakened powers, it can change to the Psychic type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,15]
 FormName = Type: Ice
 Type1 = ICE
+Pokedex = Thanks to its awakened powers, it can change to the Ice type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,16]
 FormName = Type: Dragon
 Type1 = DRAGON
+Pokedex = Thanks to its awakened powers, it can change to the Dragon type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,17]
 FormName = Type: Dark
 Type1 = DARK
+Pokedex = Thanks to its awakened powers, it can change to the Dark type to match the memory it has equipped.
 #-------------------------------
 [SILVALLY,18]
 FormName = Type: Fairy
 Type1 = FAIRY
+Pokedex = Thanks to its awakened powers, it can change to the Fairy type to match the memory it has equipped.
 #-------------------------------
 [MINIOR,7]
 FormName = Red Core
@@ -2116,7 +2144,7 @@ BattlerEnemyY = 36
 #-------------------------------
 [MIMIKYU,1]
 FormName = Busted Form
-Pokedex = Sad that its true identity may be exposed, Mimikyu will mercilessly seek revenge on any opponent that breaks its neck.
+Pokedex = Its disguise made from an old rag allowed it to avoid an attack, but the impact broke the neck of the disguise. Now everyone knows it's a Mimikyu.
 BattlerPlayerY = 33
 BattlerEnemyY = 38
 #-------------------------------
