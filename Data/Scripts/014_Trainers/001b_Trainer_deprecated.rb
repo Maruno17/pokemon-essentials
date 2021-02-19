@@ -45,9 +45,8 @@ class PokeBattle_Trainer
   attr_reader :mysterygiftaccess, :mysterygift
 
   def self.copy(trainer)
-    ret = PlayerTrainer.new
-    ret.trainer_type          = trainer.trainertype
-    ret.name                  = trainer.name
+    validate trainer => self
+    ret = PlayerTrainer.new(trainer.name, trainer.trainertype)
     ret.id                    = trainer.id
     ret.character_ID          = trainer.metaID if trainer.metaID
     ret.outfit                = trainer.outfit if trainer.outfit
