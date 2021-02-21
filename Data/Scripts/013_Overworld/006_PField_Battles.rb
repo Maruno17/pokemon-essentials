@@ -44,7 +44,9 @@ class PokemonTemp
     when "terrain"
       terrain_data = GameData::BattleTerrain.try_get(var)
       rules["defaultTerrain"] = (terrain_data) ? terrain_data.id : nil
-    when "weather"                then rules["defaultWeather"] = getID(PBWeather, var)
+    when "weather"
+      weather_data = GameData::BattleWeather.try_get(var)
+      rules["defaultWeather"] = (weather_data) ? weather_data.id : nil
     when "environment", "environ"
       environment_data = GameData::Environment.try_get(var)
       rules["environment"] = (environment_data) ? environment_data.id : nil
@@ -110,13 +112,13 @@ def pbPrepareBattle(battle)
   if battleRules["defaultWeather"].nil?
     case $game_screen.weather_type
     when PBFieldWeather::Rain, PBFieldWeather::HeavyRain, PBFieldWeather::Storm
-      battle.defaultWeather = PBWeather::Rain
+      battle.defaultWeather = :Rain
     when PBFieldWeather::Snow, PBFieldWeather::Blizzard
-      battle.defaultWeather = PBWeather::Hail
+      battle.defaultWeather = :Hail
     when PBFieldWeather::Sandstorm
-      battle.defaultWeather = PBWeather::Sandstorm
+      battle.defaultWeather = :Sandstorm
     when PBFieldWeather::Sun
-      battle.defaultWeather = PBWeather::Sun
+      battle.defaultWeather = :Sun
     end
   else
     battle.defaultWeather = battleRules["defaultWeather"]

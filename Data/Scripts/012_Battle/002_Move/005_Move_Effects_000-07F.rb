@@ -131,9 +131,9 @@ class PokeBattle_Move_008 < PokeBattle_ParalysisMove
 
   def pbBaseAccuracy(user,target)
     case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
+    when :Sun, :HarshSun
       return 50
-    when PBWeather::Rain, PBWeather::HeavyRain
+    when :Rain, :HeavyRain
       return 0
     end
     return super
@@ -201,7 +201,7 @@ end
 #===============================================================================
 class PokeBattle_Move_00D < PokeBattle_FreezeMove
   def pbBaseAccuracy(user,target)
-    return 0 if @battle.pbWeather==PBWeather::Hail
+    return 0 if @battle.pbWeather == :Hail
     return super
   end
 end
@@ -308,9 +308,9 @@ class PokeBattle_Move_015 < PokeBattle_ConfuseMove
 
   def pbBaseAccuracy(user,target)
     case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
+    when :Sun, :HarshSun
       return 50
-    when PBWeather::Rain, PBWeather::HeavyRain
+    when :Rain, :HeavyRain
       return 0
     end
     return super
@@ -731,10 +731,7 @@ class PokeBattle_Move_028 < PokeBattle_MultiStatUpMove
 
   def pbOnStartUse(user,targets)
     increment = 1
-    if @battle.pbWeather==PBWeather::Sun ||
-       @battle.pbWeather==PBWeather::HarshSun
-      increment = 2
-    end
+    increment = 2 if [:Sun, :HarshSun].include?(@battle.pbWeather)
     @statUp[1] = @statUp[3] = increment
   end
 end

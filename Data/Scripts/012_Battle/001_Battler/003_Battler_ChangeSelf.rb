@@ -170,9 +170,9 @@ class PokeBattle_Battler
       if hasActiveAbility?(:FORECAST)
         newForm = 0
         case @battle.pbWeather
-        when PBWeather::Sun, PBWeather::HarshSun   then newForm = 1
-        when PBWeather::Rain, PBWeather::HeavyRain then newForm = 2
-        when PBWeather::Hail                       then newForm = 3
+        when :Sun, :HarshSun   then newForm = 1
+        when :Rain, :HeavyRain then newForm = 2
+        when :Hail             then newForm = 3
         end
         if @form!=newForm
           @battle.pbShowAbilitySplash(self,true)
@@ -187,7 +187,7 @@ class PokeBattle_Battler
     if isSpecies?(:CHERRIM)
       if hasActiveAbility?(:FLOWERGIFT)
         newForm = 0
-        newForm = 1 if [PBWeather::Sun, PBWeather::HarshSun].include?(@battle.pbWeather)
+        newForm = 1 if [:Sun, :HarshSun].include?(@battle.pbWeather)
         if @form!=newForm
           @battle.pbShowAbilitySplash(self,true)
           @battle.pbHideAbilitySplash(self)

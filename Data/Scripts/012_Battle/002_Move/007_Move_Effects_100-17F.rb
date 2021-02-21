@@ -4,7 +4,7 @@
 class PokeBattle_Move_100 < PokeBattle_WeatherMove
   def initialize(battle,move)
     super
-    @weatherType = PBWeather::Rain
+    @weatherType = :Rain
   end
 end
 
@@ -16,7 +16,7 @@ end
 class PokeBattle_Move_101 < PokeBattle_WeatherMove
   def initialize(battle,move)
     super
-    @weatherType = PBWeather::Sandstorm
+    @weatherType = :Sandstorm
   end
 end
 
@@ -28,7 +28,7 @@ end
 class PokeBattle_Move_102 < PokeBattle_WeatherMove
   def initialize(battle,move)
     super
-    @weatherType = PBWeather::Hail
+    @weatherType = :Hail
   end
 end
 
@@ -2210,7 +2210,7 @@ end
 #===============================================================================
 class PokeBattle_Move_167 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if @battle.pbWeather!=PBWeather::Hail
+    if @battle.pbWeather != :Hail
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2382,7 +2382,7 @@ end
 #===============================================================================
 class PokeBattle_Move_16D < PokeBattle_HealingMove
   def pbHealAmount(user)
-    return (user.totalhp*2/3.0).round if @battle.pbWeather==PBWeather::Sandstorm
+    return (user.totalhp*2/3.0).round if @battle.pbWeather == :Sandstorm
     return (user.totalhp/2.0).round
   end
 end

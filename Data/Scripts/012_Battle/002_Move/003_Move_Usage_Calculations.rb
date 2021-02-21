@@ -46,7 +46,7 @@ class PokeBattle_Move
                                                          PBTypes.ineffective?(moveType,defType)
     end
     # Delta Stream's weather
-    if @battle.pbWeather==PBWeather::StrongWinds
+    if @battle.pbWeather == :StrongWinds
       ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING &&
                                                          PBTypes.superEffective?(moveType,defType)
     end
@@ -373,19 +373,19 @@ class PokeBattle_Move
     end
     # Weather
     case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
+    when :Sun, :HarshSun
       if type == :FIRE
         multipliers[:final_damage_multiplier] *= 1.5
       elsif type == :WATER
         multipliers[:final_damage_multiplier] /= 2
       end
-    when PBWeather::Rain, PBWeather::HeavyRain
+    when :Rain, :HeavyRain
       if type == :FIRE
         multipliers[:final_damage_multiplier] /= 2
       elsif type == :WATER
         multipliers[:final_damage_multiplier] *= 1.5
       end
-    when PBWeather::Sandstorm
+    when :Sandstorm
       if target.pbHasType?(:ROCK) && specialMove? && @function != "122"   # Psyshock
         multipliers[:defense_multiplier] *= 1.5
       end

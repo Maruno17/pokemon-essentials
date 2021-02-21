@@ -596,17 +596,18 @@ end
 class PokeBattle_WeatherMove < PokeBattle_Move
   def initialize(battle,move)
     super
-    @weatherType = PBWeather::None
+    @weatherType = :None
   end
+
   def pbMoveFailed?(user,targets)
     case @battle.field.weather
-    when PBWeather::HarshSun
+    when :HarshSun
       @battle.pbDisplay(_INTL("The extremely harsh sunlight was not lessened at all!"))
       return true
-    when PBWeather::HeavyRain
+    when :HeavyRain
       @battle.pbDisplay(_INTL("There is no relief from this heavy rain!"))
       return true
-    when PBWeather::StrongWinds
+    when :StrongWinds
       @battle.pbDisplay(_INTL("The mysterious air current blows on regardless!"))
       return true
     when @weatherType

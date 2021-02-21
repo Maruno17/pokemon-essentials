@@ -271,16 +271,17 @@ class PokeBattle_Battle
     # Show trainers on both sides sending out Pokémon
     pbStartBattleSendOut(sendOuts)
     # Weather announcement
-    pbCommonAnimation(PBWeather.animationName(@field.weather))
+    weather_data = GameData::BattleWeather.try_get(@field.weather)
+    pbCommonAnimation(weather_data.animation) if weather_data
     case @field.weather
-    when PBWeather::Sun         then pbDisplay(_INTL("The sunlight is strong."))
-    when PBWeather::Rain        then pbDisplay(_INTL("It is raining."))
-    when PBWeather::Sandstorm   then pbDisplay(_INTL("A sandstorm is raging."))
-    when PBWeather::Hail        then pbDisplay(_INTL("Hail is falling."))
-    when PBWeather::HarshSun    then pbDisplay(_INTL("The sunlight is extremely harsh."))
-    when PBWeather::HeavyRain   then pbDisplay(_INTL("It is raining heavily."))
-    when PBWeather::StrongWinds then pbDisplay(_INTL("The wind is strong."))
-    when PBWeather::ShadowSky   then pbDisplay(_INTL("The sky is shadowy."))
+    when :Sun         then pbDisplay(_INTL("The sunlight is strong."))
+    when :Rain        then pbDisplay(_INTL("It is raining."))
+    when :Sandstorm   then pbDisplay(_INTL("A sandstorm is raging."))
+    when :Hail        then pbDisplay(_INTL("Hail is falling."))
+    when :HarshSun    then pbDisplay(_INTL("The sunlight is extremely harsh."))
+    when :HeavyRain   then pbDisplay(_INTL("It is raining heavily."))
+    when :StrongWinds then pbDisplay(_INTL("The wind is strong."))
+    when :ShadowSky   then pbDisplay(_INTL("The sky is shadowy."))
     end
     # Terrain announcement
     terrain_data = GameData::BattleTerrain.try_get(@field.terrain)

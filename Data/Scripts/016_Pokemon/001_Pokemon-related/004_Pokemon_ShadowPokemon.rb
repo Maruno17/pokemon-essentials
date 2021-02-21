@@ -450,7 +450,7 @@ end
 class PokeBattle_Move_131 < PokeBattle_WeatherMove
   def initialize(battle,move)
     super
-    @weatherType = PBWeather::ShadowSky
+    @weatherType = :ShadowSky
   end
 end
 

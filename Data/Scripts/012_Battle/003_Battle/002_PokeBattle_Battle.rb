@@ -642,7 +642,7 @@ class PokeBattle_Battle
 
   # Returns the effective weather (note that weather effects can be negated)
   def pbWeather
-    eachBattler { |b| return PBWeather::None if b.hasActiveAbility?([:CLOUDNINE,:AIRLOCK]) }
+    eachBattler { |b| return :None if b.hasActiveAbility?([:CLOUDNINE, :AIRLOCK]) }
     return @field.weather
   end
 
@@ -656,17 +656,18 @@ class PokeBattle_Battle
          @field.weather,duration,user,self)
     end
     @field.weatherDuration = duration
-    pbCommonAnimation(PBWeather.animationName(@field.weather)) if showAnim
+    weather_data = GameData::BattleWeather.try_get(@field.weather)
+    pbCommonAnimation(weather_data.animation) if showAnim && weather_data
     pbHideAbilitySplash(user) if user
     case @field.weather
-    when PBWeather::Sun         then pbDisplay(_INTL("The sunlight turned harsh!"))
-    when PBWeather::Rain        then pbDisplay(_INTL("It started to rain!"))
-    when PBWeather::Sandstorm   then pbDisplay(_INTL("A sandstorm brewed!"))
-    when PBWeather::Hail        then pbDisplay(_INTL("It started to hail!"))
-    when PBWeather::HarshSun    then pbDisplay(_INTL("The sunlight turned extremely harsh!"))
-    when PBWeather::HeavyRain   then pbDisplay(_INTL("A heavy rain began to fall!"))
-    when PBWeather::StrongWinds then pbDisplay(_INTL("Mysterious strong winds are protecting Flying-type Pokémon!"))
-    when PBWeather::ShadowSky   then pbDisplay(_INTL("A shadow sky appeared!"))
+    when :Sun         then pbDisplay(_INTL("The sunlight turned harsh!"))
+    when :Rain        then pbDisplay(_INTL("It started to rain!"))
+    when :Sandstorm   then pbDisplay(_INTL("A sandstorm brewed!"))
+    when :Hail        then pbDisplay(_INTL("It started to hail!"))
+    when :HarshSun    then pbDisplay(_INTL("The sunlight turned extremely harsh!"))
+    when :HeavyRain   then pbDisplay(_INTL("A heavy rain began to fall!"))
+    when :StrongWinds then pbDisplay(_INTL("Mysterious strong winds are protecting Flying-type Pokémon!"))
+    when :ShadowSky   then pbDisplay(_INTL("A shadow sky appeared!"))
     end
     # Check for end of primordial weather, and weather-triggered form changes
     eachBattler { |b| b.pbCheckFormOnWeatherChange }
@@ -677,19 +678,19 @@ class PokeBattle_Battle
     oldWeather = @field.weather
     # End Primordial Sea, Desolate Land, Delta Stream
     case @field.weather
-    when PBWeather::HarshSun
+    when :HarshSun
       if !pbCheckGlobalAbility(:DESOLATELAND)
-        @field.weather = PBWeather::None
+        @field.weather = :None
         pbDisplay("The harsh sunlight faded!")
       end
-    when PBWeather::HeavyRain
+    when :HeavyRain
       if !pbCheckGlobalAbility(:PRIMORDIALSEA)
-        @field.weather = PBWeather::None
+        @field.weather = :None
         pbDisplay("The heavy rain has lifted!")
       end
-    when PBWeather::StrongWinds
+    when :StrongWinds
       if !pbCheckGlobalAbility(:DELTASTREAM)
-        @field.weather = PBWeather::None
+        @field.weather = :None
         pbDisplay("The mysterious air current has dissipated!")
       end
     end
@@ -697,7 +698,7 @@ class PokeBattle_Battle
       # Check for form changes caused by the weather changing
       eachBattler { |b| b.pbCheckFormOnWeatherChange }
       # Start up the default weather
-      pbStartWeather(nil,@field.defaultWeather) if @field.defaultWeather!=PBWeather::None
+      pbStartWeather(nil,@field.defaultWeather) if @field.defaultWeather != :None
     end
   end
 

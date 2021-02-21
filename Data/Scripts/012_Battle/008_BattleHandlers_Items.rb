@@ -1394,25 +1394,25 @@ BattleHandlers::EVGainModifierItem.add(:POWERWEIGHT,
 
 BattleHandlers::WeatherExtenderItem.add(:DAMPROCK,
   proc { |item,weather,duration,battler,battle|
-    next 8 if weather==PBWeather::Rain
+    next 8 if weather == :Rain
   }
 )
 
 BattleHandlers::WeatherExtenderItem.add(:HEATROCK,
   proc { |item,weather,duration,battler,battle|
-    next 8 if weather==PBWeather::Sun
+    next 8 if weather == :Sun
   }
 )
 
 BattleHandlers::WeatherExtenderItem.add(:ICYROCK,
   proc { |item,weather,duration,battler,battle|
-    next 8 if weather==PBWeather::Hail
+    next 8 if weather == :Hail
   }
 )
 
 BattleHandlers::WeatherExtenderItem.add(:SMOOTHROCK,
   proc { |item,weather,duration,battler,battle|
-    next 8 if weather==PBWeather::Sandstorm
+    next 8 if weather == :Sandstorm
   }
 )
 

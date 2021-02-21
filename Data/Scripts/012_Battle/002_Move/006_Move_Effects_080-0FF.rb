@@ -105,20 +105,20 @@ end
 #===============================================================================
 class PokeBattle_Move_087 < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
-    baseDmg *= 2 if @battle.pbWeather!=PBWeather::None
+    baseDmg *= 2 if @battle.pbWeather != :None
     return baseDmg
   end
 
   def pbBaseType(user)
     ret = :NORMAL
     case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
+    when :Sun, :HarshSun
       ret = :FIRE if GameData::Type.exists?(:FIRE)
-    when PBWeather::Rain, PBWeather::HeavyRain
+    when :Rain, :HeavyRain
       ret = :WATER if GameData::Type.exists?(:WATER)
-    when PBWeather::Sandstorm
+    when :Sandstorm
       ret = :ROCK if GameData::Type.exists?(:ROCK)
-    when PBWeather::Hail
+    when :Hail
       ret = :ICE if GameData::Type.exists?(:ICE)
     end
     return ret
@@ -2035,8 +2035,7 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
   def pbIsChargingTurn?(user)
     ret = super
     if !user.effects[PBEffects::TwoTurnAttack]
-      w = @battle.pbWeather
-      if w==PBWeather::Sun || w==PBWeather::HarshSun
+      if [:Sun, :HarshSun].include?(@battle.pbWeather)
         @powerHerb = false
         @chargingTurn = true
         @damagingTurn = true
@@ -2051,8 +2050,7 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
   end
 
   def pbBaseDamageMultiplier(damageMult,user,target)
-    w = @battle.pbWeather
-    damageMult /= 2 if w>0 && w!=PBWeather::Sun && w!=PBWeather::HarshSun
+    damageMult /= 2 if ![:None, :Sun, :HarshSun].include?(@battle.pbWeather)
     return damageMult
   end
 end
@@ -2533,9 +2531,9 @@ end
 class PokeBattle_Move_0D8 < PokeBattle_HealingMove
   def pbOnStartUse(user,targets)
     case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
+    when :Sun, :HarshSun
       @healAmount = (user.totalhp*2/3.0).round
-    when PBWeather::None, PBWeather::StrongWinds
+    when :None, :StrongWinds
       @healAmount = (user.totalhp/2.0).round
     else
       @healAmount = (user.totalhp/4.0).round
@@ -3717,6 +3715,6 @@ end
 class PokeBattle_Move_0FF < PokeBattle_WeatherMove
   def initialize(battle,move)
     super
-    @weatherType = PBWeather::Sun
+    @weatherType = :Sun
   end
 end

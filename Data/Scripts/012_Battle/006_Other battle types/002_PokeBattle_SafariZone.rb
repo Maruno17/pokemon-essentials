@@ -322,7 +322,7 @@ class PokeBattle_SafariZone
     @backdropBase  = nil
     @time          = 0
     @environment   = :None   # e.g. Tall grass, cave, still water
-    @weather       = PBWeather::None
+    @weather       = :None
     @decision      = 0
     @caughtPokemon = []
     @player        = [player]
@@ -426,7 +426,8 @@ class PokeBattle_SafariZone
       @scene.pbStartBattle(self)
       pbDisplayPaused(_INTL("Wild {1} appeared!",pkmn.name))
       @scene.pbSafariStart
-      @scene.pbCommonAnimation(PBWeather.animationName(@weather))
+      weather_data = GameData::BattleWeather.try_get(@weather)
+      @scene.pbCommonAnimation(weather_data.animation) if weather_data
       safariBall = GameData::Item.get(:SAFARIBALL).id
       catch_rate = pkmn.species_data.catch_rate
       catchFactor  = (catch_rate*100)/1275
@@ -485,7 +486,8 @@ class PokeBattle_SafariZone
             pbDisplay(_INTL("{1} is watching carefully!",pkmn.name))
           end
           # Weather continues
-          @scene.pbCommonAnimation(PBWeather.animationName(@weather))
+          weather_data = GameData::BattleWeather.try_get(@weather)
+          @scene.pbCommonAnimation(weather_data.animation) if weather_data
         end
         break if @decision > 0
       end

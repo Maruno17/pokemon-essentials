@@ -40,35 +40,31 @@ class PokeBattle_Battle
     # Weather wears off
     if @field.weatherDuration==0
       case @field.weather
-      when PBWeather::Sun
-        pbDisplay(_INTL("The sunlight faded."))
-      when PBWeather::Rain
-        pbDisplay(_INTL("The rain stopped."))
-      when PBWeather::Sandstorm
-        pbDisplay(_INTL("The sandstorm subsided."))
-      when PBWeather::Hail
-        pbDisplay(_INTL("The hail stopped."))
-      when PBWeather::ShadowSky
-        pbDisplay(_INTL("The shadow sky faded."))
+      when :Sun       then pbDisplay(_INTL("The sunlight faded."))
+      when :Rain      then pbDisplay(_INTL("The rain stopped."))
+      when :Sandstorm then pbDisplay(_INTL("The sandstorm subsided."))
+      when :Hail      then pbDisplay(_INTL("The hail stopped."))
+      when :ShadowSky then pbDisplay(_INTL("The shadow sky faded."))
       end
-      @field.weather = PBWeather::None
+      @field.weather = :None
       # Check for form changes caused by the weather changing
       eachBattler { |b| b.pbCheckFormOnWeatherChange }
       # Start up the default weather
-      pbStartWeather(nil,@field.defaultWeather) if @field.defaultWeather!=PBWeather::None
-      return if @field.weather==PBWeather::None
+      pbStartWeather(nil,@field.defaultWeather) if @field.defaultWeather != :None
+      return if @field.weather == :None
     end
     # Weather continues
-    pbCommonAnimation(PBWeather.animationName(@field.weather))
+    weather_data = GameData::BattleWeather.try_get(@field.weather)
+    pbCommonAnimation(weather_data.animation) if weather_data
     case @field.weather
-#    when PBWeather::Sun         then pbDisplay(_INTL("The sunlight is strong."))
-#    when PBWeather::Rain        then pbDisplay(_INTL("Rain continues to fall."))
-    when PBWeather::Sandstorm   then pbDisplay(_INTL("The sandstorm is raging."))
-    when PBWeather::Hail        then pbDisplay(_INTL("The hail is crashing down."))
-#    when PBWeather::HarshSun    then pbDisplay(_INTL("The sunlight is extremely harsh."))
-#    when PBWeather::HeavyRain   then pbDisplay(_INTL("It is raining heavily."))
-#    when PBWeather::StrongWinds then pbDisplay(_INTL("The wind is strong."))
-    when PBWeather::ShadowSky   then pbDisplay(_INTL("The shadow sky continues."))
+#    when :Sun         then pbDisplay(_INTL("The sunlight is strong."))
+#    when :Rain        then pbDisplay(_INTL("Rain continues to fall."))
+    when :Sandstorm   then pbDisplay(_INTL("The sandstorm is raging."))
+    when :Hail        then pbDisplay(_INTL("The hail is crashing down."))
+#    when :HarshSun    then pbDisplay(_INTL("The sunlight is extremely harsh."))
+#    when :HeavyRain   then pbDisplay(_INTL("It is raining heavily."))
+#    when :StrongWinds then pbDisplay(_INTL("The wind is strong."))
+    when :ShadowSky   then pbDisplay(_INTL("The shadow sky continues."))
     end
     # Effects due to weather
     curWeather = pbWeather
@@ -81,21 +77,21 @@ class PokeBattle_Battle
       # Weather damage
       # NOTE:
       case curWeather
-      when PBWeather::Sandstorm
+      when :Sandstorm
         next if !b.takesSandstormDamage?
         pbDisplay(_INTL("{1} is buffeted by the sandstorm!",b.pbThis))
         @scene.pbDamageAnimation(b)
         b.pbReduceHP(b.totalhp/16,false)
         b.pbItemHPHealCheck
         b.pbFaint if b.fainted?
-      when PBWeather::Hail
+      when :Hail
         next if !b.takesHailDamage?
         pbDisplay(_INTL("{1} is buffeted by the hail!",b.pbThis))
         @scene.pbDamageAnimation(b)
         b.pbReduceHP(b.totalhp/16,false)
         b.pbItemHPHealCheck
         b.pbFaint if b.fainted?
-      when PBWeather::ShadowSky
+      when :ShadowSky
         next if !b.takesShadowSkyDamage?
         pbDisplay(_INTL("{1} is hurt by the shadow sky!",b.pbThis))
         @scene.pbDamageAnimation(b)
@@ -264,7 +260,7 @@ class PokeBattle_Battle
     curWeather = pbWeather
     for side in 0...2
       next if sides[side].effects[PBEffects::SeaOfFire]==0
-      next if curWeather==PBWeather::Rain || curWeather==PBWeather::HeavyRain
+      next if [:Rain, :HeavyRain].include?(curWeather)
       @battle.pbCommonAnimation("SeaOfFire") if side==0
       @battle.pbCommonAnimation("SeaOfFireOpp") if side==1
       priority.each do |b|
