@@ -133,6 +133,9 @@ module SaveData
     @conversions[conversion.trigger_type][conversion.version] << conversion
   end
 
+  # TODO: Maybe make run_conversions return a boolean (whether the action was successful)
+  #   and remove should_convert? as it would be no longer needed
+
   # Runs all possible conversions on the given save data.
   # @param save_data [Hash] save data to run conversions on
   def self.run_conversions(save_data)
@@ -149,8 +152,10 @@ module SaveData
   def self.get_conversions(save_data)
     conversions_to_run = []
 
-    essentials_version = save_data[:essentials_version] || '18'
-    game_version = save_data[:game_version] || '0.0.0'
+    versions = {
+      :essentials => save_data[:essentials_version] || '18.1',
+      :game => save_data[:game_version] || '0.0.0'
+    }
 
     [:essentials, :game].each do |trigger_type|
       # Ensure the versions are sorted from lowest to highest
@@ -160,8 +165,7 @@ module SaveData
 
       sorted_versions.each do |version|
         @conversions[trigger_type][version].each do |conversion|
-          ver = trigger_type == :game ? game_version : essentials_version
-          next unless conversion.should_run?(ver)
+          next unless conversion.should_run?(versions[trigger_type])
           conversions_to_run << conversion
         end
       end
