@@ -2,6 +2,7 @@
 # Terrain tags
 #===============================================================================
 module PBTerrain
+  None            = 0
   Ledge           = 1
   Grass           = 2
   Sand            = 3
@@ -19,75 +20,61 @@ module PBTerrain
   Bridge          = 15
   Puddle          = 16
 
-  def self.isSurfable?(tag)
-    return PBTerrain.isWater?(tag)
+  module_function
+
+  def isSurfable?(tag)
+    return isWater?(tag)
   end
 
-  def self.isWater?(tag)
-    return tag==PBTerrain::Water ||
-           tag==PBTerrain::StillWater ||
-           tag==PBTerrain::DeepWater ||
-           tag==PBTerrain::WaterfallCrest ||
-           tag==PBTerrain::Waterfall
+  def isWater?(tag)
+    return [Water, StillWater, DeepWater, WaterfallCrest, Waterfall].include?(tag)
   end
 
-  def self.isPassableWater?(tag)
-    return tag==PBTerrain::Water ||
-           tag==PBTerrain::StillWater ||
-           tag==PBTerrain::DeepWater ||
-           tag==PBTerrain::WaterfallCrest
+  def isPassableWater?(tag)
+    return [Water, StillWater, DeepWater, WaterfallCrest].include?(tag)
   end
 
-  def self.isJustWater?(tag)
-    return tag==PBTerrain::Water ||
-           tag==PBTerrain::StillWater ||
-           tag==PBTerrain::DeepWater
+  def isJustWater?(tag)
+    return [Water, StillWater, DeepWater].include?(tag)
   end
 
-  def self.isDeepWater?(tag)
-    return tag==PBTerrain::DeepWater
+  def isDeepWater?(tag)
+    return tag == DeepWater
   end
 
-  def self.isWaterfall?(tag)
-    return tag==PBTerrain::WaterfallCrest ||
-           tag==PBTerrain::Waterfall
+  def isWaterfall?(tag)
+    return [WaterfallCrest, Waterfall].include?(tag)
   end
 
-  def self.isGrass?(tag)
-    return tag==PBTerrain::Grass ||
-           tag==PBTerrain::TallGrass ||
-           tag==PBTerrain::UnderwaterGrass ||
-           tag==PBTerrain::SootGrass
+  def isGrass?(tag)
+    return [Grass, TallGrass, UnderwaterGrass, SootGrass].include?(tag)
   end
 
-  def self.isJustGrass?(tag)   # The Poké Radar only works in these tiles
-    return tag==PBTerrain::Grass ||
-           tag==PBTerrain::SootGrass
+  def isJustGrass?(tag)   # The Poké Radar only works in these tiles
+    return [Grass, SootGrass].include?(tag)
   end
 
-  def self.isLedge?(tag)
-    return tag==PBTerrain::Ledge
+  def isLedge?(tag)
+    return tag == Ledge
   end
 
-  def self.isIce?(tag)
-    return tag==PBTerrain::Ice
+  def isIce?(tag)
+    return tag == Ice
   end
 
-  def self.isBridge?(tag)
-    return tag==PBTerrain::Bridge
+  def isBridge?(tag)
+    return tag == Bridge
   end
 
-  def self.hasReflections?(tag)
-    return tag==PBTerrain::StillWater ||
-           tag==PBTerrain::Puddle
+  def hasReflections?(tag)
+    return [StillWater, Puddle].include?(tag)
   end
 
-  def self.onlyWalk?(tag)
-    return tag==PBTerrain::TallGrass ||
-           tag==PBTerrain::Ice
+  def onlyWalk?(tag)
+    return [TallGrass, Ice].include?(tag)
   end
 
-  def self.isDoubleWildBattle?(tag)
-    return tag==PBTerrain::TallGrass
+  def isDoubleWildBattle?(tag)
+    return tag == TallGrass
   end
 end
