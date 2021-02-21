@@ -2982,7 +2982,7 @@ class PokeBattle_AI
         score += 50
         score -= user.hp*100/user.totalhp
         if skill>=PBTrainerAI.mediumSkill
-          score += 30 if @battle.field.terrain==PBBattleTerrains::Grassy
+          score += 30 if @battle.field.terrain == :Grassy
         end
       end
     #---------------------------------------------------------------------------

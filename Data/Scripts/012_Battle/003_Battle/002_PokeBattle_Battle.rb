@@ -109,7 +109,7 @@ class PokeBattle_Battle
     @backdrop          = ""
     @backdropBase      = nil
     @time              = 0
-    @environment       = PBEnvironment::None   # e.g. Tall grass, cave, still water
+    @environment       = :None   # e.g. Tall grass, cave, still water
     @turnCount         = 0
     @decision          = 0
     @caughtPokemon     = []
@@ -716,16 +716,17 @@ class PokeBattle_Battle
          newTerrain,duration,user,self)
     end
     @field.terrainDuration = duration
-    pbCommonAnimation(PBBattleTerrains.animationName(@field.terrain))
+    terrain_data = GameData::BattleTerrain.try_get(@field.terrain)
+    pbCommonAnimation(terrain_data.animation) if terrain_data
     pbHideAbilitySplash(user) if user
     case @field.terrain
-    when PBBattleTerrains::Electric
+    when :Electric
       pbDisplay(_INTL("An electric current runs across the battlefield!"))
-    when PBBattleTerrains::Grassy
+    when :Grassy
       pbDisplay(_INTL("Grass grew to cover the battlefield!"))
-    when PBBattleTerrains::Misty
+    when :Misty
       pbDisplay(_INTL("Mist swirled about the battlefield!"))
-    when PBBattleTerrains::Psychic
+    when :Psychic
       pbDisplay(_INTL("The battlefield got weird!"))
     end
     # Check for terrain seeds that boost stats in a terrain

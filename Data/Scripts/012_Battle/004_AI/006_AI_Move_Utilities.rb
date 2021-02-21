@@ -122,7 +122,7 @@ class PokeBattle_AI
                      !move.ignoresSubstitute?(user) && user.index!=target.index
       return true if Settings::MECHANICS_GENERATION >= 7 && user.hasActiveAbility?(:PRANKSTER) &&
                      target.pbHasType?(:DARK) && target.opposes?(user)
-      return true if move.priority>0 && @battle.field.terrain==PBBattleTerrains::Psychic &&
+      return true if move.priority>0 && @battle.field.terrain == :Psychic &&
                      target.affectedByTerrain? && target.opposes?(user)
     end
     return false
@@ -397,19 +397,16 @@ class PokeBattle_AI
       end
     end
     # Terrain moves
-    if user.affectedByTerrain? && skill>=PBTrainerAI.mediumSkill
+    if skill>=PBTrainerAI.mediumSkill
       case @battle.field.terrain
-      when PBBattleTerrains::Electric
-        multipliers[:base_damage_multiplier] *= 1.5 if type == :ELECTRIC
-      when PBBattleTerrains::Grassy
-        multipliers[:base_damage_multiplier] *= 1.5 if type == :GRASS
-      when PBBattleTerrains::Psychic
-        multipliers[:base_damage_multiplier] *= 1.5 if type == :PSYCHIC
-      end
-    end
-    if target.affectedByTerrain? && skill>=PBTrainerAI.mediumSkill
-      if @battle.field.terrain==PBBattleTerrains::Misty && type == :DRAGON
-        multipliers[:base_damage_multiplier] /= 2
+      when :Electric
+        multipliers[:base_damage_multiplier] *= 1.5 if type == :ELECTRIC && user.affectedByTerrain?
+      when :Grassy
+        multipliers[:base_damage_multiplier] *= 1.5 if type == :GRASS && user.affectedByTerrain?
+      when :Psychic
+        multipliers[:base_damage_multiplier] *= 1.5 if type == :PSYCHIC && user.affectedByTerrain?
+      when :Misty
+        multipliers[:base_damage_multiplier] /= 2 if type == :DRAGON && target.affectedByTerrain?
       end
     end
     # Badge multipliers

@@ -37,7 +37,7 @@ BattleHandlers::SpeedCalcAbility.add(:SLUSHRUSH,
 
 BattleHandlers::SpeedCalcAbility.add(:SURGESURFER,
   proc { |ability,battler,mult|
-    next mult*2 if battler.battle.field.terrain==PBBattleTerrains::Electric
+    next mult*2 if battler.battle.field.terrain == :Electric
   }
 )
 
@@ -1183,7 +1183,7 @@ BattleHandlers::DamageCalcTargetAbility.add(:FURCOAT,
 
 BattleHandlers::DamageCalcTargetAbility.add(:GRASSPELT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.battle.field.terrain == PBBattleTerrains::Grassy
+    if user.battle.field.terrain == :Grassy
       mults[:defense_multiplier] *= 1.5
     end
   }
@@ -2173,9 +2173,9 @@ BattleHandlers::AbilityOnSwitchIn.add(:DROUGHT,
 
 BattleHandlers::AbilityOnSwitchIn.add(:ELECTRICSURGE,
   proc { |ability,battler,battle|
-    next if battle.field.terrain==PBBattleTerrains::Electric
+    next if battle.field.terrain == :Electric
     battle.pbShowAbilitySplash(battler)
-    battle.pbStartTerrain(battler,PBBattleTerrains::Electric)
+    battle.pbStartTerrain(battler, :Electric)
     # NOTE: The ability splash is hidden again in def pbStartTerrain.
   }
 )
@@ -2253,9 +2253,9 @@ BattleHandlers::AbilityOnSwitchIn.add(:FRISK,
 
 BattleHandlers::AbilityOnSwitchIn.add(:GRASSYSURGE,
   proc { |ability,battler,battle|
-    next if battle.field.terrain==PBBattleTerrains::Grassy
+    next if battle.field.terrain == :Grassy
     battle.pbShowAbilitySplash(battler)
-    battle.pbStartTerrain(battler,PBBattleTerrains::Grassy)
+    battle.pbStartTerrain(battler, :Grassy)
     # NOTE: The ability splash is hidden again in def pbStartTerrain.
   }
 )
@@ -2292,9 +2292,9 @@ BattleHandlers::AbilityOnSwitchIn.add(:INTIMIDATE,
 
 BattleHandlers::AbilityOnSwitchIn.add(:MISTYSURGE,
   proc { |ability,battler,battle|
-    next if battle.field.terrain==PBBattleTerrains::Misty
+    next if battle.field.terrain == :Misty
     battle.pbShowAbilitySplash(battler)
-    battle.pbStartTerrain(battler,PBBattleTerrains::Misty)
+    battle.pbStartTerrain(battler, :Misty)
     # NOTE: The ability splash is hidden again in def pbStartTerrain.
   }
 )
@@ -2323,9 +2323,9 @@ BattleHandlers::AbilityOnSwitchIn.add(:PRIMORDIALSEA,
 
 BattleHandlers::AbilityOnSwitchIn.add(:PSYCHICSURGE,
   proc { |ability,battler,battle|
-    next if battle.field.terrain==PBBattleTerrains::Psychic
+    next if battle.field.terrain == :Psychic
     battle.pbShowAbilitySplash(battler)
-    battle.pbStartTerrain(battler,PBBattleTerrains::Psychic)
+    battle.pbStartTerrain(battler, :Psychic)
     # NOTE: The ability splash is hidden again in def pbStartTerrain.
   }
 )

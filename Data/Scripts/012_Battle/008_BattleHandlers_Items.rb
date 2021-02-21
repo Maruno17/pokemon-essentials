@@ -1432,7 +1432,7 @@ BattleHandlers::TerrainExtenderItem.add(:TERRAINEXTENDER,
 
 BattleHandlers::TerrainStatBoostItem.add(:ELECTRICSEED,
   proc { |item,battler,battle|
-    next false if battle.field.terrain!=PBBattleTerrains::Electric
+    next false if battle.field.terrain != :Electric
     next false if !battler.pbCanRaiseStatStage?(PBStats::DEFENSE,battler)
     itemName = GameData::Item.get(item).name
     battle.pbCommonAnimation("UseItem",battler)
@@ -1442,7 +1442,7 @@ BattleHandlers::TerrainStatBoostItem.add(:ELECTRICSEED,
 
 BattleHandlers::TerrainStatBoostItem.add(:GRASSYSEED,
   proc { |item,battler,battle|
-    next false if battle.field.terrain!=PBBattleTerrains::Grassy
+    next false if battle.field.terrain != :Grassy
     next false if !battler.pbCanRaiseStatStage?(PBStats::DEFENSE,battler)
     itemName = GameData::Item.get(item).name
     battle.pbCommonAnimation("UseItem",battler)
@@ -1452,7 +1452,7 @@ BattleHandlers::TerrainStatBoostItem.add(:GRASSYSEED,
 
 BattleHandlers::TerrainStatBoostItem.add(:MISTYSEED,
   proc { |item,battler,battle|
-    next false if battle.field.terrain!=PBBattleTerrains::Misty
+    next false if battle.field.terrain != :Misty
     next false if !battler.pbCanRaiseStatStage?(PBStats::SPDEF,battler)
     itemName = GameData::Item.get(item).name
     battle.pbCommonAnimation("UseItem",battler)
@@ -1462,7 +1462,7 @@ BattleHandlers::TerrainStatBoostItem.add(:MISTYSEED,
 
 BattleHandlers::TerrainStatBoostItem.add(:PSYCHICSEED,
   proc { |item,battler,battle|
-    next false if battle.field.terrain!=PBBattleTerrains::Psychic
+    next false if battle.field.terrain != :Psychic
     next false if !battler.pbCanRaiseStatStage?(PBStats::SPDEF,battler)
     itemName = GameData::Item.get(item).name
     battle.pbCommonAnimation("UseItem",battler)

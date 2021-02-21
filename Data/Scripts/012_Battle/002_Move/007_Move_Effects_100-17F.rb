@@ -1774,7 +1774,7 @@ end
 #===============================================================================
 class PokeBattle_Move_154 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if @battle.field.terrain==PBBattleTerrains::Electric
+    if @battle.field.terrain == :Electric
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1782,7 +1782,7 @@ class PokeBattle_Move_154 < PokeBattle_Move
   end
 
   def pbEffectGeneral(user)
-    @battle.pbStartTerrain(user,PBBattleTerrains::Electric)
+    @battle.pbStartTerrain(user, :Electric)
   end
 end
 
@@ -1795,7 +1795,7 @@ end
 #===============================================================================
 class PokeBattle_Move_155 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if @battle.field.terrain==PBBattleTerrains::Grassy
+    if @battle.field.terrain == :Grassy
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1803,7 +1803,7 @@ class PokeBattle_Move_155 < PokeBattle_Move
   end
 
   def pbEffectGeneral(user)
-    @battle.pbStartTerrain(user,PBBattleTerrains::Grassy)
+    @battle.pbStartTerrain(user, :Grassy)
   end
 end
 
@@ -1816,7 +1816,7 @@ end
 #===============================================================================
 class PokeBattle_Move_156 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if @battle.field.terrain==PBBattleTerrains::Misty
+    if @battle.field.terrain == :Misty
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1824,7 +1824,7 @@ class PokeBattle_Move_156 < PokeBattle_Move
   end
 
   def pbEffectGeneral(user)
-    @battle.pbStartTerrain(user,PBBattleTerrains::Misty)
+    @battle.pbStartTerrain(user, :Misty)
   end
 end
 
@@ -2409,7 +2409,7 @@ class PokeBattle_Move_16E < PokeBattle_Move
 
   def pbEffectAgainstTarget(user,target)
     hpGain = (target.totalhp/2.0).round
-    hpGain = (target.totalhp*2/3.0).round if @battle.field.terrain==PBBattleTerrains::Grassy
+    hpGain = (target.totalhp*2/3.0).round if @battle.field.terrain == :Grassy
     target.pbRecoverHP(hpGain)
     @battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))
   end
@@ -2556,7 +2556,7 @@ end
 #===============================================================================
 class PokeBattle_Move_173 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if @battle.field.terrain==PBBattleTerrains::Psychic
+    if @battle.field.terrain == :Psychic
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2564,7 +2564,7 @@ class PokeBattle_Move_173 < PokeBattle_Move
   end
 
   def pbEffectGeneral(user)
-    @battle.pbStartTerrain(user,PBBattleTerrains::Psychic)
+    @battle.pbStartTerrain(user, :Psychic)
   end
 end
 

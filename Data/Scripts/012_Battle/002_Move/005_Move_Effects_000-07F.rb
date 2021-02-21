@@ -1201,7 +1201,7 @@ class PokeBattle_Move_044 < PokeBattle_TargetStatDownMove
   end
 
   def pbBaseDamage(baseDmg,user,target)
-    if @id == :BULLDOZE && @battle.field.terrain==PBBattleTerrains::Grassy
+    if @id == :BULLDOZE && @battle.field.terrain == :Grassy
       baseDmg = (baseDmg/2.0).round
     end
     return baseDmg
@@ -1287,8 +1287,7 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
                     targetOpposingSide.effects[PBEffects::Spikes]>0 ||
                     targetOpposingSide.effects[PBEffects::ToxicSpikes]>0 ||
                     targetOpposingSide.effects[PBEffects::StickyWeb])
-    return false if Settings::MECHANICS_GENERATION >= 8 &&
-                    @battle.field.terrain != PBBattleTerrains::None
+    return false if Settings::MECHANICS_GENERATION >= 8 && @battle.field.terrain != :None
     return super
   end
 
@@ -1344,18 +1343,18 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
       target.pbOpposingSide.effects[PBEffects::StickyWeb] = false if Settings::MECHANICS_GENERATION >= 6
       @battle.pbDisplay(_INTL("{1} blew away sticky webs!",user.pbThis))
     end
-    if Settings::MECHANICS_GENERATION >= 8 && @battle.field.terrain != PBBattleTerrains::None
+    if Settings::MECHANICS_GENERATION >= 8 && @battle.field.terrain != :None
       case @battle.field.terrain
-      when PBBattleTerrains::Electric
+      when :Electric
         @battle.pbDisplay(_INTL("The electricity disappeared from the battlefield."))
-      when PBBattleTerrains::Grassy
+      when :Grassy
         @battle.pbDisplay(_INTL("The grass disappeared from the battlefield."))
-      when PBBattleTerrains::Misty
+      when :Misty
         @battle.pbDisplay(_INTL("The mist disappeared from the battlefield."))
-      when PBBattleTerrains::Psychic
+      when :Psychic
         @battle.pbDisplay(_INTL("The weirdness disappeared from the battlefield."))
       end
-      @battle.field.terrain = PBBattleTerrains::None
+      @battle.field.terrain = :None
     end
   end
 end
@@ -1872,22 +1871,22 @@ class PokeBattle_Move_060 < PokeBattle_Move
     @newType = :NORMAL
     checkedTerrain = false
     case @battle.field.terrain
-    when PBBattleTerrains::Electric
+    when :Electric
       if GameData::Type.exists?(:ELECTRIC)
         @newType = :ELECTRIC
         checkedTerrain = true
       end
-    when PBBattleTerrains::Grassy
+    when :Grassy
       if GameData::Type.exists?(:GRASS)
         @newType = :GRASS
         checkedTerrain = true
       end
-    when PBBattleTerrains::Misty
+    when :Misty
       if GameData::Type.exists?(:FAIRY)
         @newType = :FAIRY
         checkedTerrain = true
       end
-    when PBBattleTerrains::Psychic
+    when :Psychic
       if GameData::Type.exists?(:PSYCHIC)
         @newType = :PSYCHIC
         checkedTerrain = true
@@ -1895,28 +1894,27 @@ class PokeBattle_Move_060 < PokeBattle_Move
     end
     if !checkedTerrain
       case @battle.environment
-      when PBEnvironment::Grass, PBEnvironment::TallGrass
+      when :Grass, :TallGrass
         @newType = :GRASS
-      when PBEnvironment::MovingWater, PBEnvironment::StillWater,
-           PBEnvironment::Puddle, PBEnvironment::Underwater
+      when :MovingWater, :StillWater, :Puddle, :Underwater
         @newType = :WATER
-      when PBEnvironment::Cave
+      when :Cave
         @newType = :ROCK
-      when PBEnvironment::Rock, PBEnvironment::Sand
+      when :Rock, :Sand
         @newType = :GROUND
-      when PBEnvironment::Forest, PBEnvironment::ForestGrass
+      when :Forest, :ForestGrass
         @newType = :BUG
-      when PBEnvironment::Snow, PBEnvironment::Ice
+      when :Snow, :Ice
         @newType = :ICE
-      when PBEnvironment::Volcano
+      when :Volcano
         @newType = :FIRE
-      when PBEnvironment::Graveyard
+      when :Graveyard
         @newType = :GHOST
-      when PBEnvironment::Sky
+      when :Sky
         @newType = :FLYING
-      when PBEnvironment::Space
+      when :Space
         @newType = :DRAGON
-      when PBEnvironment::UltraSpace
+      when :UltraSpace
         @newType = :PSYCHIC
       end
     end
@@ -2539,7 +2537,7 @@ class PokeBattle_Move_076 < PokeBattle_Move
 
   def pbModifyDamage(damageMult,user,target)
     damageMult *= 2 if target.inTwoTurnAttack?("0CA")   # Dig
-    damageMult /= 2 if @battle.field.terrain==PBBattleTerrains::Grassy
+    damageMult /= 2 if @battle.field.terrain == :Grassy
     return damageMult
   end
 end

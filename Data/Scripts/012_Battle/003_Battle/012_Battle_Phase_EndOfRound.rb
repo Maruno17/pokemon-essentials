@@ -113,29 +113,30 @@ class PokeBattle_Battle
     # Count down terrain duration
     @field.terrainDuration -= 1 if @field.terrainDuration>0
     # Terrain wears off
-    if @field.terrain!=PBBattleTerrains::None && @field.terrainDuration==0
+    if @field.terrain != :None && @field.terrainDuration == 0
       case @field.terrain
-      when PBBattleTerrains::Electric
+      when :Electric
         pbDisplay(_INTL("The electric current disappeared from the battlefield!"))
-      when PBBattleTerrains::Grassy
+      when :Grassy
         pbDisplay(_INTL("The grass disappeared from the battlefield!"))
-      when PBBattleTerrains::Misty
+      when :Misty
         pbDisplay(_INTL("The mist disappeared from the battlefield!"))
-      when PBBattleTerrains::Psychic
+      when :Psychic
         pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
       end
-      @field.terrain = PBBattleTerrains::None
+      @field.terrain = :None
       # Start up the default terrain
-      pbStartTerrain(nil,@field.defaultTerrain,false) if @field.defaultTerrain!=PBBattleTerrains::None
-      return if @field.terrain==PBBattleTerrains::None
+      pbStartTerrain(nil, @field.defaultTerrain, false) if @field.defaultTerrain != :None
+      return if @field.terrain == :None
     end
     # Terrain continues
-    pbCommonAnimation(PBBattleTerrains.animationName(@field.terrain))
+    terrain_data = GameData::BattleTerrain.try_get(@field.terrain)
+    pbCommonAnimation(terrain_data.animation) if terrain_data
     case @field.terrain
-    when PBBattleTerrains::Electric then pbDisplay(_INTL("An electric current is running across the battlefield."))
-    when PBBattleTerrains::Grassy   then pbDisplay(_INTL("Grass is covering the battlefield."))
-    when PBBattleTerrains::Misty    then pbDisplay(_INTL("Mist is swirling about the battlefield."))
-    when PBBattleTerrains::Psychic  then pbDisplay(_INTL("The battlefield is weird."))
+    when :Electric then pbDisplay(_INTL("An electric current is running across the battlefield."))
+    when :Grassy   then pbDisplay(_INTL("Grass is covering the battlefield."))
+    when :Misty    then pbDisplay(_INTL("Mist is swirling about the battlefield."))
+    when :Psychic  then pbDisplay(_INTL("The battlefield is weird."))
     end
   end
 
@@ -282,7 +283,7 @@ class PokeBattle_Battle
     priority.each do |b|
       next if b.fainted?
       # Grassy Terrain (healing)
-      if @field.terrain==PBBattleTerrains::Grassy && b.affectedByTerrain? && b.canHeal?
+      if @field.terrain == :Grassy && b.affectedByTerrain? && b.canHeal?
         PBDebug.log("[Lingering effect] Grassy Terrain heals #{b.pbThis(true)}")
         b.pbRecoverHP(b.totalhp/16)
         pbDisplay(_INTL("{1}'s HP was restored.",b.pbThis))

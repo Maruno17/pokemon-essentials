@@ -172,9 +172,9 @@ MultipleForms.register(:KYOGRE,{
 MultipleForms.register(:BURMY,{
   "getFormOnCreation" => proc { |pkmn|
     case pbGetEnvironment
-    when PBEnvironment::Rock, PBEnvironment::Sand, PBEnvironment::Cave
+    when :Rock, :Sand, :Cave
       next 1   # Sandy Cloak
-    when PBEnvironment::None
+    when :None
       next 2   # Trash Cloak
     else
       next 0   # Plant Cloak
@@ -183,9 +183,9 @@ MultipleForms.register(:BURMY,{
   "getFormOnLeavingBattle" => proc { |pkmn,battle,usedInBattle,endBattle|
     next if !endBattle || !usedInBattle
     case battle.environment
-    when PBEnvironment::Rock, PBEnvironment::Sand, PBEnvironment::Cave
+    when :Rock, :Sand, :Cave
       next 1   # Sandy Cloak
-    when PBEnvironment::None
+    when :None
       next 2   # Trash Cloak
     else
       next 0   # Plant Cloak
@@ -196,9 +196,9 @@ MultipleForms.register(:BURMY,{
 MultipleForms.register(:WORMADAM,{
   "getFormOnCreation" => proc { |pkmn|
     case pbGetEnvironment
-    when PBEnvironment::Rock, PBEnvironment::Sand, PBEnvironment::Cave
+    when :Rock, :Sand, :Cave
       next 1   # Sandy Cloak
-    when PBEnvironment::None
+    when :None
       next 2   # Trash Cloak
     else
       next 0   # Plant Cloak

@@ -107,7 +107,7 @@ BallHandlers::ModifyCatchRate.add(:NETBALL,proc { |ball,catchRate,battle,battler
 })
 
 BallHandlers::ModifyCatchRate.add(:DIVEBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
-  catchRate *= 3.5 if battle.environment==PBEnvironment::Underwater
+  catchRate *= 3.5 if battle.environment == :Underwater
   next catchRate
 })
 

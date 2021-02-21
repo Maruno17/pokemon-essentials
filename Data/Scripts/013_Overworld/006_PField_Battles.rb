@@ -41,9 +41,13 @@ class PokemonTemp
     when "setstyle"               then rules["switchStyle"]    = false
     when "anims"                  then rules["battleAnims"]    = true
     when "noanims"                then rules["battleAnims"]    = false
-    when "terrain"                then rules["defaultTerrain"] = getID(PBBattleTerrains, var)
+    when "terrain"
+      terrain_data = GameData::BattleTerrain.try_get(var)
+      rules["defaultTerrain"] = (terrain_data) ? terrain_data.id : nil
     when "weather"                then rules["defaultWeather"] = getID(PBWeather, var)
-    when "environment", "environ" then rules["environment"]    = getID(PBEnvironment, var)
+    when "environment", "environ"
+      environment_data = GameData::Environment.try_get(var)
+      rules["environment"] = (environment_data) ? environment_data.id : nil
     when "backdrop", "battleback" then rules["backdrop"]       = var
     when "base"                   then rules["base"]           = var
     when "outcome", "outcomevar"  then rules["outcomeVar"]     = var
@@ -138,28 +142,15 @@ def pbPrepareBattle(battle)
   battle.backdrop = backdrop
   # Choose a name for bases depending on environment
   if battleRules["base"].nil?
-    case battle.environment
-    when PBEnvironment::Grass, PBEnvironment::TallGrass,
-         PBEnvironment::ForestGrass
-      base = "grass"
-#    when PBEnvironment::Rock
-#      base = "rock"
-    when PBEnvironment::Sand
-      base = "sand"
-    when PBEnvironment::MovingWater, PBEnvironment::StillWater
-      base = "water"
-    when PBEnvironment::Puddle
-      base = "puddle"
-    when PBEnvironment::Ice
-      base = "ice"
-    end
+    environment_data = GameData::Environment.try_get(battle.environment)
+    base = environment_data.battle_base if environment_data
   else
     base = battleRules["base"]
   end
   battle.backdropBase = base if base
   # Time of day
   if GameData::MapMetadata.exists?($game_map.map_id) &&
-     GameData::MapMetadata.get($game_map.map_id).battle_environment == PBEnvironment::Cave
+     GameData::MapMetadata.get($game_map.map_id).battle_environment == :Cave
     battle.time = 2   # This makes Dusk Balls work properly in caves
   elsif Settings::TIME_SHADING
     timeNow = pbGetTimeNow
@@ -173,7 +164,7 @@ end
 # Used to determine the environment in battle, and also the form of Burmy/
 # Wormadam.
 def pbGetEnvironment
-  ret = PBEnvironment::None
+  ret = :None
   map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
   ret = map_metadata.battle_environment if map_metadata && map_metadata.battle_environment
   if $PokemonTemp.encounterType == EncounterTypes::OldRod ||
@@ -185,15 +176,15 @@ def pbGetEnvironment
   end
   case terrainTag
   when PBTerrain::Grass, PBTerrain::SootGrass
-    ret = (ret == PBEnvironment::Forest) ? PBEnvironment::ForestGrass : PBEnvironment::Grass
+    ret = (ret == :Forest) ? :ForestGrass : :Grass
   when PBTerrain::TallGrass
-    ret = (ret == PBEnvironment::Forest) ? PBEnvironment::ForestGrass : PBEnvironment::TallGrass
-  when PBTerrain::Rock                        then ret = PBEnvironment::Rock
-  when PBTerrain::Sand                        then ret = PBEnvironment::Sand
-  when PBTerrain::DeepWater, PBTerrain::Water then ret = PBEnvironment::MovingWater
-  when PBTerrain::StillWater                  then ret = PBEnvironment::StillWater
-  when PBTerrain::Puddle                      then ret = PBEnvironment::Puddle
-  when PBTerrain::Ice                         then ret = PBEnvironment::Ice
+    ret = (ret == :Forest) ? :ForestGrass : :TallGrass
+  when PBTerrain::Rock                        then ret = :Rock
+  when PBTerrain::Sand                        then ret = :Sand
+  when PBTerrain::DeepWater, PBTerrain::Water then ret = :MovingWater
+  when PBTerrain::StillWater                  then ret = :StillWater
+  when PBTerrain::Puddle                      then ret = :Puddle
+  when PBTerrain::Ice                         then ret = :Ice
   end
   return ret
 end

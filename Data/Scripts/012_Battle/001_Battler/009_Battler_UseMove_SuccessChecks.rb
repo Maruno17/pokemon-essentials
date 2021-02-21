@@ -295,8 +295,7 @@ class PokeBattle_Battler
     # Move-specific failures
     return false if move.pbFailsAgainstTarget?(user,target)
     # Immunity to priority moves because of Psychic Terrain
-    if @battle.field.terrain==PBBattleTerrains::Psychic && target.affectedByTerrain? &&
-       target.opposes?(user) &&
+    if @battle.field.terrain == :Psychic && target.affectedByTerrain? && target.opposes?(user) &&
        @battle.choices[user.index][4]>0   # Move priority saved from pbCalculatePriority
       @battle.pbDisplay(_INTL("{1} surrounds itself with psychic terrain!",target.pbThis))
       return false

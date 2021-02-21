@@ -321,7 +321,7 @@ class PokeBattle_SafariZone
     @backdrop      = ""
     @backdropBase  = nil
     @time          = 0
-    @environment   = PBEnvironment::None   # e.g. Tall grass, cave, still water
+    @environment   = :None   # e.g. Tall grass, cave, still water
     @weather       = PBWeather::None
     @decision      = 0
     @caughtPokemon = []

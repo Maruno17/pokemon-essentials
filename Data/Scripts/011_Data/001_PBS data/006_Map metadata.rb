@@ -45,7 +45,7 @@ module GameData
        "TrainerVictoryME" => [17, "s"],
        "WildCaptureME"    => [18, "s"],
        "MapSize"          => [19, "us"],
-       "Environment"      => [20, "e", :PBEnvironment]
+       "Environment"      => [20, "e", :Environment]
     }
 
     extend ClassMethodsIDNumbers
@@ -53,26 +53,26 @@ module GameData
 
     def self.editor_properties
       return [
-         ["Outdoor",          BooleanProperty,                  _INTL("If true, this map is an outdoor map and will be tinted according to time of day.")],
-         ["ShowArea",         BooleanProperty,                  _INTL("If true, the game will display the map's name upon entry.")],
-         ["Bicycle",          BooleanProperty,                  _INTL("If true, the bicycle can be used on this map.")],
-         ["BicycleAlways",    BooleanProperty,                  _INTL("If true, the bicycle will be mounted automatically on this map and cannot be dismounted.")],
-         ["HealingSpot",      MapCoordsProperty,                _INTL("Map ID of this Pokémon Center's town, and X and Y coordinates of its entrance within that town.")],
-         ["Weather",          WeatherEffectProperty,            _INTL("Weather conditions in effect for this map.")],
-         ["MapPosition",      RegionMapCoordsProperty,          _INTL("Identifies the point on the regional map for this map.")],
-         ["DiveMap",          MapProperty,                      _INTL("Specifies the underwater layer of this map. Use only if this map has deep water.")],
-         ["DarkMap",          BooleanProperty,                  _INTL("If true, this map is dark and a circle of light appears around the player. Flash can be used to expand the circle.")],
-         ["SafariMap",        BooleanProperty,                  _INTL("If true, this map is part of the Safari Zone (both indoor and outdoor). Not to be used in the reception desk.")],
-         ["SnapEdges",        BooleanProperty,                  _INTL("If true, when the player goes near this map's edge, the game doesn't center the player as usual.")],
-         ["Dungeon",          BooleanProperty,                  _INTL("If true, this map has a randomly generated layout. See the wiki for more information.")],
-         ["BattleBack",       StringProperty,                   _INTL("PNG files named 'XXX_bg', 'XXX_base0', 'XXX_base1', 'XXX_message' in Battlebacks folder, where XXX is this property's value.")],
-         ["WildBattleBGM",    BGMProperty,                      _INTL("Default BGM for wild Pokémon battles on this map.")],
-         ["TrainerBattleBGM", BGMProperty,                      _INTL("Default BGM for trainer battles on this map.")],
-         ["WildVictoryME",    MEProperty,                       _INTL("Default ME played after winning a wild Pokémon battle on this map.")],
-         ["TrainerVictoryME", MEProperty,                       _INTL("Default ME played after winning a Trainer battle on this map.")],
-         ["WildCaptureME",    MEProperty,                       _INTL("Default ME played after catching a wild Pokémon on this map.")],
-         ["MapSize",          MapSizeProperty,                  _INTL("The width of the map in Town Map squares, and a string indicating which squares are part of this map.")],
-         ["Environment",      EnumProperty2.new(PBEnvironment), _INTL("The default battle environment for battles on this map.")]
+         ["Outdoor",          BooleanProperty,                    _INTL("If true, this map is an outdoor map and will be tinted according to time of day.")],
+         ["ShowArea",         BooleanProperty,                    _INTL("If true, the game will display the map's name upon entry.")],
+         ["Bicycle",          BooleanProperty,                    _INTL("If true, the bicycle can be used on this map.")],
+         ["BicycleAlways",    BooleanProperty,                    _INTL("If true, the bicycle will be mounted automatically on this map and cannot be dismounted.")],
+         ["HealingSpot",      MapCoordsProperty,                  _INTL("Map ID of this Pokémon Center's town, and X and Y coordinates of its entrance within that town.")],
+         ["Weather",          WeatherEffectProperty,              _INTL("Weather conditions in effect for this map.")],
+         ["MapPosition",      RegionMapCoordsProperty,            _INTL("Identifies the point on the regional map for this map.")],
+         ["DiveMap",          MapProperty,                        _INTL("Specifies the underwater layer of this map. Use only if this map has deep water.")],
+         ["DarkMap",          BooleanProperty,                    _INTL("If true, this map is dark and a circle of light appears around the player. Flash can be used to expand the circle.")],
+         ["SafariMap",        BooleanProperty,                    _INTL("If true, this map is part of the Safari Zone (both indoor and outdoor). Not to be used in the reception desk.")],
+         ["SnapEdges",        BooleanProperty,                    _INTL("If true, when the player goes near this map's edge, the game doesn't center the player as usual.")],
+         ["Dungeon",          BooleanProperty,                    _INTL("If true, this map has a randomly generated layout. See the wiki for more information.")],
+         ["BattleBack",       StringProperty,                     _INTL("PNG files named 'XXX_bg', 'XXX_base0', 'XXX_base1', 'XXX_message' in Battlebacks folder, where XXX is this property's value.")],
+         ["WildBattleBGM",    BGMProperty,                        _INTL("Default BGM for wild Pokémon battles on this map.")],
+         ["TrainerBattleBGM", BGMProperty,                        _INTL("Default BGM for trainer battles on this map.")],
+         ["WildVictoryME",    MEProperty,                         _INTL("Default ME played after winning a wild Pokémon battle on this map.")],
+         ["TrainerVictoryME", MEProperty,                         _INTL("Default ME played after winning a Trainer battle on this map.")],
+         ["WildCaptureME",    MEProperty,                         _INTL("Default ME played after catching a wild Pokémon on this map.")],
+         ["MapSize",          MapSizeProperty,                    _INTL("The width of the map in Town Map squares, and a string indicating which squares are part of this map.")],
+         ["Environment",      GameDataProperty.new(:Environment), _INTL("The default battle environment for battles on this map.")]
       ]
     end
 

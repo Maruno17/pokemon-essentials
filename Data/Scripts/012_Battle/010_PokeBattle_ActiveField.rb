@@ -26,8 +26,8 @@ begin
       @defaultWeather  = PBWeather::None
       @weather         = PBWeather::None
       @weatherDuration = 0
-      @defaultTerrain  = PBBattleTerrains::None
-      @terrain         = PBBattleTerrains::None
+      @defaultTerrain  = :None
+      @terrain         = :None
       @terrainDuration = 0
     end
   end

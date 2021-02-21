@@ -60,13 +60,13 @@ class PokeBattle_Battler
     # Terrains immunity
     if affectedByTerrain?
       case @battle.field.terrain
-      when PBBattleTerrains::Electric
+      when :Electric
         if newStatus == :SLEEP
           @battle.pbDisplay(_INTL("{1} surrounds itself with electrified terrain!",
              pbThis(true))) if showMessages
           return false
         end
-      when PBBattleTerrains::Misty
+      when :Misty
         @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!",pbThis(true))) if showMessages
         return false
       end
@@ -175,7 +175,7 @@ class PokeBattle_Battler
     # Trying to replace a status problem with another one
     return false if self.status != :NONE
     # Terrain immunity
-    return false if @battle.field.terrain==PBBattleTerrains::Misty && affectedByTerrain?
+    return false if @battle.field.terrain == :Misty && affectedByTerrain?
     # Type immunities
     hasImmuneType = false
     case newStatus
@@ -282,8 +282,7 @@ class PokeBattle_Battler
   def pbCanSleepYawn?
     return false if self.status != :NONE
     if affectedByTerrain?
-      return false if @battle.field.terrain==PBBattleTerrains::Electric
-      return false if @battle.field.terrain==PBBattleTerrains::Misty
+      return false if [:Electric, :Misty].include?(@battle.field.terrain)
     end
     if !hasActiveAbility?(:SOUNDPROOF)
       @battle.eachBattler do |b|
@@ -453,7 +452,7 @@ class PokeBattle_Battler
       return false
     end
     # Terrains immunity
-    if affectedByTerrain? && @battle.field.terrain==PBBattleTerrains::Misty
+    if affectedByTerrain? && @battle.field.terrain == :Misty
       @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!",pbThis(true))) if showMessages
       return false
     end

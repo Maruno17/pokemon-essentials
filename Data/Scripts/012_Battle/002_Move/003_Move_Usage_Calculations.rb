@@ -340,19 +340,15 @@ class PokeBattle_Move
       end
     end
     # Terrain moves
-    if user.affectedByTerrain?
-      case @battle.field.terrain
-      when PBBattleTerrains::Electric
-        multipliers[:base_damage_multiplier] *= 1.5 if type == :ELECTRIC
-      when PBBattleTerrains::Grassy
-        multipliers[:base_damage_multiplier] *= 1.5 if type == :GRASS
-      when PBBattleTerrains::Psychic
-        multipliers[:base_damage_multiplier] *= 1.5 if type == :PSYCHIC
-      end
-    end
-    if @battle.field.terrain==PBBattleTerrains::Misty && target.affectedByTerrain? &&
-       type == :DRAGON
-      multipliers[:base_damage_multiplier] /= 2
+    case @battle.field.terrain
+    when :Electric
+      multipliers[:base_damage_multiplier] *= 1.5 if type == :ELECTRIC && user.affectedByTerrain?
+    when :Grassy
+      multipliers[:base_damage_multiplier] *= 1.5 if type == :GRASS && user.affectedByTerrain?
+    when :Psychic
+      multipliers[:base_damage_multiplier] *= 1.5 if type == :PSYCHIC && user.affectedByTerrain?
+    when :Misty
+      multipliers[:base_damage_multiplier] /= 2 if type == :DRAGON && target.affectedByTerrain?
     end
     # Badge multipliers
     if @battle.internalBattle
