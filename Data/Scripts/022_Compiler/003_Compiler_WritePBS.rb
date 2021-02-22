@@ -301,7 +301,7 @@ module Compiler
         f.write(sprintf("Height = %.1f\r\n", species.height / 10.0))
         f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0))
         f.write(sprintf("Color = %s\r\n", species.color))
-        f.write(sprintf("Shape = %d\r\n", species.shape))
+        f.write(sprintf("Shape = %s\r\n", GameData::BodyShape.get(species.shape).id))
         f.write(sprintf("Habitat = %s\r\n", species.habitat)) if species.habitat != :None
         f.write(sprintf("Kind = %s\r\n", species.real_category))
         f.write(sprintf("Pokedex = %s\r\n", species.real_pokedex_entry))
@@ -343,6 +343,7 @@ module Compiler
         f.write(sprintf("Incense = %s\r\n", species.incense)) if species.incense
       end
     }
+    pbSetWindowText(nil)
     Graphics.update
   end
 
@@ -396,7 +397,9 @@ module Compiler
         f.write(sprintf("Height = %.1f\r\n", species.height / 10.0)) if species.height != base_species.height
         f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0)) if species.weight != base_species.weight
         f.write(sprintf("Color = %s\r\n", species.color)) if species.color != base_species.color
-        f.write(sprintf("Shape = %d\r\n", species.shape)) if species.shape != base_species.shape
+        if GameData::BodyShape.get(species.shape).id != GameData::BodyShape.get(base_species.shape).id
+          f.write(sprintf("Shape = %s\r\n", GameData::BodyShape.get(species.shape).id))
+        end
         if species.habitat != :None && species.habitat != base_species.habitat
           f.write(sprintf("Habitat = %s\r\n", species.habitat))
         end
@@ -404,8 +407,8 @@ module Compiler
         f.write(sprintf("Pokedex = %s\r\n", species.real_pokedex_entry)) if species.real_pokedex_entry != base_species.real_pokedex_entry
         f.write(sprintf("Generation = %d\r\n", species.generation)) if species.generation != base_species.generation
         if species.wild_item_common != base_species.wild_item_common ||
-          species.wild_item_uncommon != base_species.wild_item_uncommon ||
-          species.wild_item_rare != base_species.wild_item_rare
+           species.wild_item_uncommon != base_species.wild_item_uncommon ||
+           species.wild_item_rare != base_species.wild_item_rare
           f.write(sprintf("WildItemCommon = %s\r\n", species.wild_item_common)) if species.wild_item_common
           f.write(sprintf("WildItemUncommon = %s\r\n", species.wild_item_uncommon)) if species.wild_item_uncommon
           f.write(sprintf("WildItemRare = %s\r\n", species.wild_item_rare)) if species.wild_item_rare
@@ -442,6 +445,7 @@ module Compiler
         end
       end
     }
+    pbSetWindowText(nil)
     Graphics.update
   end
 
@@ -613,6 +617,7 @@ module Compiler
         end
       end
     }
+    pbSetWindowText(nil)
     Graphics.update
   end
 

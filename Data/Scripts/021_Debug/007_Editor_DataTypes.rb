@@ -252,7 +252,7 @@ class GameDataProperty
       end
       i += 1
     end
-    return pbChooseList(commands, oldsetting, nil, -1)
+    return pbChooseList(commands, oldsetting, oldsetting, -1)
   end
 
   def defaultValue
@@ -1165,19 +1165,20 @@ class EvolutionsProperty
     for i in 0...oldsetting.length
       realcmds.push([oldsetting[i][0],oldsetting[i][1],oldsetting[i][2],i])
     end
-    refreshlist = true; oldsel = -1
+    refreshlist = true
+    oldsel = -1
     cmd = [0,0]
     loop do
       if refreshlist
         realcmds.sort! { |a,b| a[3]<=>b[3] }
         commands = []
         for i in 0...realcmds.length
-          if realcmds[i][0]<0
+          if realcmds[i][3]<0
             commands.push(_INTL("[ADD EVOLUTION]"))
           else
-            level = realcmds[i][1]
-            param_type = PBEvolution.getFunction(realcmds[i][0], "parameterType")
-            has_param = !PBEvolution.hasFunction?(realcmds[i][0], "parameterType") || param_type != nil
+            level = realcmds[i][2]
+            param_type = PBEvolution.getFunction(realcmds[i][1], "parameterType")
+            has_param = !PBEvolution.hasFunction?(realcmds[i][1], "parameterType") || param_type != nil
             if has_param
               if param_type && !GameData.const_defined?(param_type.to_sym)
                 level = getConstantName(param_type, level)
@@ -1186,16 +1187,17 @@ class EvolutionsProperty
               end
               level = "???" if !level || level.empty?
               commands.push(_INTL("{1}: {2}, {3}",
-                 GameData::Species.get(realcmds[i][2]).name, @methods[realcmds[i][0]], level.to_s))
+                 GameData::Species.get(realcmds[i][0]).name, @methods[realcmds[i][1]], level.to_s))
             else
               commands.push(_INTL("{1}: {2}",
-                 GameData::Species.get(realcmds[i][2]).name, @methods[realcmds[i][0]]))
+                 GameData::Species.get(realcmds[i][0]).name, @methods[realcmds[i][1]]))
             end
           end
           cmd[1] = i if oldsel>=0 && realcmds[i][3]==oldsel
         end
       end
-      refreshlist = false; oldsel = -1
+      refreshlist = false
+      oldsel = -1
       cmd = pbCommands3(cmdwin,commands,-1,cmd[1],true)
       if cmd[0]==1   # Swap evolution up
         if cmd[1]>0 && cmd[1]<realcmds.length-1
@@ -1210,7 +1212,7 @@ class EvolutionsProperty
       elsif cmd[0]==0
         if cmd[1]>=0
           entry = realcmds[cmd[1]]
-          if entry[0]==-1   # Add new evolution path
+          if entry[3]==-1   # Add new evolution path
             pbMessage(_INTL("Choose an evolved form, method and parameter."))
             newspecies = pbChooseSpeciesList
             if newspecies
@@ -1244,16 +1246,16 @@ class EvolutionsProperty
                    (newparam.is_a?(Integer) && (newparam > 0 || (allow_zero && newparam == 0)))
                   havemove = -1
                   for i in 0...realcmds.length
-                    havemove = realcmds[i][3] if realcmds[i][0]==newmethod &&
-                                                 realcmds[i][1]==newparam &&
-                                                 realcmds[i][2]==newspecies
+                    havemove = realcmds[i][3] if realcmds[i][0]==newspecies &&
+                                                 realcmds[i][1]==newmethod &&
+                                                 realcmds[i][2]==newparam
                   end
                   if havemove>=0
                     oldsel = havemove
                   else
                     maxid = -1
-                    for i in realcmds; maxid = [maxid,i[3]].max; end
-                    realcmds.push([newmethod,newparam,newspecies,maxid+1])
+                    realcmds.each { |i| maxid = [maxid,i[3]].max }
+                    realcmds.push([newspecies,newmethod,newparam,maxid+1])
                     oldsel = maxid+1
                   end
                   refreshlist = true
@@ -1261,34 +1263,15 @@ class EvolutionsProperty
               end
             end
           else   # Edit evolution
-            cmd2 = pbMessage(_INTL("\\ts[]Do what with this evolution?"),
+            case pbMessage(_INTL("\\ts[]Do what with this evolution?"),
                [_INTL("Change species"),_INTL("Change method"),
                 _INTL("Change parameter"),_INTL("Delete"),_INTL("Cancel")],5)
-            if cmd2==0   # Change species
-              newspecies = pbChooseSpeciesList(entry[2])
+            when 0   # Change species
+              newspecies = pbChooseSpeciesList(entry[0])
               if newspecies
                 havemove = -1
                 for i in 0...realcmds.length
-                  havemove = realcmds[i][3] if realcmds[i][0]==entry[0] &&
-                                               realcmds[i][1]==entry[1] &&
-                                               realcmds[i][2]==newspecies
-                end
-                if havemove>=0
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
-                  oldsel = havemove
-                else
-                  entry[2] = newspecies
-                  oldsel = entry[3]
-                end
-                refreshlist = true
-              end
-            elsif cmd2==1   # Change method
-              newmethod = pbMessage(_INTL("Choose an evolution method."),@methods,-1,nil,entry[0])
-              if newmethod>0
-                havemove = -1
-                for i in 0...realcmds.length
-                  havemove = realcmds[i][3] if realcmds[i][0]==newmethod &&
+                  havemove = realcmds[i][3] if realcmds[i][0]==newspecies &&
                                                realcmds[i][1]==entry[1] &&
                                                realcmds[i][2]==entry[2]
                 end
@@ -1296,35 +1279,54 @@ class EvolutionsProperty
                   realcmds[cmd[1]] = nil
                   realcmds.compact!
                   oldsel = havemove
-                elsif newmethod != entry[0]
-                  entry[0] = newmethod
-                  entry[1] = 0
+                else
+                  entry[0] = newspecies
                   oldsel = entry[3]
                 end
                 refreshlist = true
               end
-            elsif cmd2==2   # Change parameter
+            when 1   # Change method
+              newmethod = pbMessage(_INTL("Choose an evolution method."),@methods,-1,nil,entry[1])
+              if newmethod>0
+                havemove = -1
+                for i in 0...realcmds.length
+                  havemove = realcmds[i][3] if realcmds[i][0]==entry[0] &&
+                                               realcmds[i][1]==newmethod &&
+                                               realcmds[i][2]==entry[2]
+                end
+                if havemove>=0
+                  realcmds[cmd[1]] = nil
+                  realcmds.compact!
+                  oldsel = havemove
+                elsif newmethod != entry[1]
+                  entry[1] = newmethod
+                  entry[2] = 0
+                  oldsel = entry[3]
+                end
+                refreshlist = true
+              end
+            when 2   # Change parameter
               newparam = -1
-              param_type = PBEvolution.getFunction(entry[0], "parameterType")
-              has_param = !PBEvolution.hasFunction?(entry[0], "parameterType") || param_type != nil
+              param_type = PBEvolution.getFunction(entry[1], "parameterType")
+              has_param = !PBEvolution.hasFunction?(entry[1], "parameterType") || param_type != nil
               if has_param
                 allow_zero = false
                 case param_type
                 when :Item
-                  newparam = pbChooseItemList(entry[1])
+                  newparam = pbChooseItemList(entry[2])
                 when :Move
-                  newparam = pbChooseMoveList(entry[1])
+                  newparam = pbChooseMoveList(entry[2])
                 when :Species
-                  newparam = pbChooseSpeciesList(entry[1])
+                  newparam = pbChooseSpeciesList(entry[2])
                 when :Type
-                  newparam = pbChooseTypeList(entry[1])
+                  newparam = pbChooseTypeList(entry[2])
                 when :Ability
-                  newparam = pbChooseAbilityList(entry[1])
+                  newparam = pbChooseAbilityList(entry[2])
                 else
                   allow_zero = true
                   params = ChooseNumberParams.new
                   params.setRange(0,65535)
-                  params.setDefaultValue(entry[1])
+                  params.setDefaultValue(entry[2])
                   params.setCancelValue(-1)
                   newparam = pbMessageChooseNumber(_INTL("Choose a parameter."),params)
                 end
@@ -1333,15 +1335,15 @@ class EvolutionsProperty
                   havemove = -1
                   for i in 0...realcmds.length
                     havemove = realcmds[i][3] if realcmds[i][0]==entry[0] &&
-                                                 realcmds[i][1]==newparam &&
-                                                 realcmds[i][2]==entry[2]
+                                                 realcmds[i][1]==entry[1] &&
+                                                 realcmds[i][2]==newparam
                   end
                   if havemove>=0
                     realcmds[cmd[1]] = nil
                     realcmds.compact!
                     oldsel = havemove
                   else
-                    entry[1] = newparam
+                    entry[2] = newparam
                     oldsel = entry[3]
                   end
                   refreshlist = true
@@ -1349,7 +1351,7 @@ class EvolutionsProperty
               else
                 pbMessage(_INTL("This evolution method doesn't use a parameter."))
               end
-            elsif cmd2==3   # Delete
+            when 3   # Delete
               realcmds[cmd[1]] = nil
               realcmds.compact!
               cmd[1] = [cmd[1],realcmds.length-1].min
@@ -1385,15 +1387,15 @@ class EvolutionsProperty
     ret = ""
     for i in 0...value.length
       ret << "," if i>0
-      param = value[i][1]
-      param_type = PBEvolution.getFunction(value[i][0], "parameterType")
+      param = value[i][2]
+      param_type = PBEvolution.getFunction(value[i][1], "parameterType")
       if param_type && !GameData.const_defined?(param_type.to_sym)
         param = getConstantName(param_type, param)
       else
         param = param.to_s
       end
       param = "" if !param
-      ret << sprintf("#{GameData::Species.get(value[i][2]).name},#{@methods[value[i][0]]},#{param}")
+      ret << sprintf("#{GameData::Species.get(value[i][0]).name},#{@methods[value[i][1]]},#{param}")
     end
     return ret
   end

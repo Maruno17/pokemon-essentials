@@ -1,10 +1,10 @@
 module PBGrowthRates
-  MediumFast = Medium    = 0
-  Erratic                = 1
-  Fluctuating            = 2
-  MediumSlow = Parabolic = 3
-  Fast                   = 4
-  Slow                   = 5
+  Medium      = 0   # MediumFast
+  Erratic     = 1
+  Fluctuating = 2
+  Parabolic   = 3   # MediumSlow
+  Fast        = 4
+  Slow        = 5
 
   def self.maxValue; return 5; end
 end
