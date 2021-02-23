@@ -157,18 +157,18 @@ class Pokemon
 
   # @return [Integer] this Pokémon's level
   def level
-    @level = PBExperience.pbGetLevelFromExperience(@exp, growth_rate) if !@level
+    @level = growth_rate.level_from_exp(@exp) if !@level
     return @level
   end
 
   # Sets this Pokémon's level. The given level must be between 1 and the
-  # maximum level (defined in {PBExperience}).
+  # maximum level (defined in {GameData::GrowthRate}).
   # @param value [Integer] new level (between 1 and the maximum level)
   def level=(value)
-    if value < 1 || value > PBExperience.maxLevel
+    if value < 1 || value > GameData::GrowthRate.max_level
       raise ArgumentError.new(_INTL("The level number ({1}) is invalid.", value))
     end
-    @exp = PBExperience.pbGetStartExperience(value, growth_rate)
+    @exp = growth_rate.minimum_exp_for_level(value)
     @level = value
   end
 
@@ -185,9 +185,9 @@ class Pokemon
   end
   alias isEgg? egg?
 
-  # @return [Integer] this Pokémon's growth rate (from PBGrowthRates)
+  # @return [GameData::GrowthRate] this Pokémon's growth rate
   def growth_rate
-    return species_data.growth_rate
+    return GameData::GrowthRate.get(species_data.growth_rate)
   end
 
   # @return [Integer] this Pokémon's base Experience value
@@ -199,10 +199,10 @@ class Pokemon
   #   Exp this Pokémon has
   def exp_fraction
     lvl = self.level
-    return 0.0 if lvl >= PBExperience.maxLevel
+    return 0.0 if lvl >= GameData::GrowthRate.max_level
     g_rate = growth_rate
-    start_exp = PBExperience.pbGetStartExperience(lvl, g_rate)
-    end_exp   = PBExperience.pbGetStartExperience(lvl + 1, g_rate)
+    start_exp = g_rate.minimum_exp_for_level(lvl)
+    end_exp   = g_rate.minimum_exp_for_level(lvl + 1)
     return (@exp - start_exp).to_f / (end_exp - start_exp)
   end
 

@@ -118,7 +118,7 @@ module GameData
       else
         ret["InternalName"] = [0, "n"]
         ret["Name"]         = [0, "s"]
-        ret["GrowthRate"]   = [0, "e", :PBGrowthRates]
+        ret["GrowthRate"]   = [0, "e", :GrowthRate]
         ret["GenderRate"]   = [0, "e", :GenderRatio]
         ret["Incense"]      = [0, "e", :Item]
         ret["Evolutions"]   = [0, "*ses", nil, :PBEvolution, nil]
@@ -141,7 +141,7 @@ module GameData
       @base_stats            = hash[:base_stats]            || [1, 1, 1, 1, 1, 1]
       @evs                   = hash[:evs]                   || [0, 0, 0, 0, 0, 0]
       @base_exp              = hash[:base_exp]              || 100
-      @growth_rate           = hash[:growth_rate]           || PBGrowthRates::Medium
+      @growth_rate           = hash[:growth_rate]           || :Medium
       @gender_ratio          = hash[:gender_ratio]          || :Female50Percent
       @catch_rate            = hash[:catch_rate]            || 255
       @happiness             = hash[:happiness]             || 70

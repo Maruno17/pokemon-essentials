@@ -274,7 +274,7 @@ module Compiler
         f.write(sprintf("Type2 = %s\r\n", species.type2)) if species.type2 != species.type1
         f.write(sprintf("BaseStats = %s\r\n", species.base_stats.join(",")))
         f.write(sprintf("GenderRate = %s\r\n", species.gender_ratio))
-        f.write(sprintf("GrowthRate = %s\r\n", getConstantName(PBGrowthRates, species.growth_rate)))
+        f.write(sprintf("GrowthRate = %s\r\n", species.growth_rate))
         f.write(sprintf("BaseEXP = %d\r\n", species.base_exp))
         f.write(sprintf("EffortPoints = %s\r\n", species.evs.join(",")))
         f.write(sprintf("Rareness = %d\r\n", species.catch_rate))

@@ -195,7 +195,7 @@ DebugMenuCommands.register("testwildbattle", {
     species = pbChooseSpeciesList
     if species
       params = ChooseNumberParams.new
-      params.setRange(1, PBExperience.maxLevel)
+      params.setRange(1, GameData::GrowthRate.max_level)
       params.setInitialValue(5)
       params.setCancelValue(0)
       level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",
@@ -251,7 +251,7 @@ DebugMenuCommands.register("testwildbattleadvanced", {
         species = pbChooseSpeciesList
         if species
           params = ChooseNumberParams.new
-          params.setRange(1, PBExperience.maxLevel)
+          params.setRange(1, GameData::GrowthRate.max_level)
           params.setInitialValue(5)
           params.setCancelValue(0)
           level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",
@@ -508,7 +508,7 @@ DebugMenuCommands.register("addpokemon", {
     species = pbChooseSpeciesList
     if species
       params = ChooseNumberParams.new
-      params.setRange(1, PBExperience.maxLevel)
+      params.setRange(1, GameData::GrowthRate.max_level)
       params.setInitialValue(5)
       params.setCancelValue(0)
       level = pbMessageChooseNumber(_INTL("Set the Pokémon's level."), params)

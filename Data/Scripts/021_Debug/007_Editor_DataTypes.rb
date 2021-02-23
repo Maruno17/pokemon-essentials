@@ -945,7 +945,7 @@ module MovePoolProperty
           entry = realcmds[cmd[1]]
           if entry[0] == -1   # Add new move
             params = ChooseNumberParams.new
-            params.setRange(0, PBExperience.maxLevel)
+            params.setRange(0, GameData::GrowthRate.max_level)
             params.setDefaultValue(1)
             params.setCancelValue(-1)
             newlevel = pbMessageChooseNumber(_INTL("Choose a level."),params)
@@ -971,7 +971,7 @@ module MovePoolProperty
                [_INTL("Change level"), _INTL("Change move"), _INTL("Delete"), _INTL("Cancel")], 4)
             when 0   # Change level
               params = ChooseNumberParams.new
-              params.setRange(0, PBExperience.maxLevel)
+              params.setRange(0, GameData::GrowthRate.max_level)
               params.setDefaultValue(entry[0])
               newlevel = pbMessageChooseNumber(_INTL("Choose a new level."), params)
               if newlevel >= 0 && newlevel != entry[0]
@@ -1405,7 +1405,7 @@ end
 
 module EncounterSlotProperty
   def self.set(setting_name, data)
-    max_level = PBExperience.maxLevel
+    max_level = GameData::GrowthRate.max_level
     if !data
       data = [20, nil, 5, 5]
       GameData::Species.each do |species_data|

@@ -452,10 +452,10 @@ class BattleChallenge
       rules.setBattleType(BattleTower.new)
     end
     if mode==1      # Open Level
-      rules.setRuleset(StandardRules(numPokemon,PBExperience.maxLevel))
+      rules.setRuleset(StandardRules(numPokemon,GameData::GrowthRate.max_level))
       rules.setLevelAdjustment(OpenLevelAdjustment.new(30))
     elsif mode==2   # Battle Tent
-      rules.setRuleset(StandardRules(numPokemon,PBExperience.maxLevel))
+      rules.setRuleset(StandardRules(numPokemon,GameData::GrowthRate.max_level))
       rules.setLevelAdjustment(OpenLevelAdjustment.new(60))
     else
       rules.setRuleset(StandardRules(numPokemon,50))

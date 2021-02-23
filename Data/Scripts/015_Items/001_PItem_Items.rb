@@ -118,9 +118,7 @@ end
 # Change a Pokémon's level
 #===============================================================================
 def pbChangeLevel(pkmn,newlevel,scene)
-  newlevel = 1 if newlevel<1
-  mLevel = PBExperience.maxLevel
-  newlevel = mLevel if newlevel>mLevel
+  newlevel = newlevel.clamp(1, GameData::GrowthRate.max_level)
   if pkmn.level==newlevel
     pbMessage(_INTL("{1}'s level remained unchanged.",pkmn.name))
   elsif pkmn.level>newlevel

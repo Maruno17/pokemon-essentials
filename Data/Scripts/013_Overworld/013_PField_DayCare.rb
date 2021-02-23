@@ -390,7 +390,7 @@ Events.onStepTaken += proc { |_sender,_e|
   for i in 0...2
     pkmn = $PokemonGlobal.daycare[i][0]
     next if !pkmn
-    maxexp = PBExperience.pbGetMaxExperience(pkmn.growth_rate)
+    maxexp = pkmn.growth_rate.maximum_exp
     next if pkmn.exp>=maxexp
     oldlevel = pkmn.level
     pkmn.exp += 1   # Gain Exp

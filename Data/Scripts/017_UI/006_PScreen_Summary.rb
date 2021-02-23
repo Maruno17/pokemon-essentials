@@ -445,7 +445,7 @@ class PokemonSummary_Scene
       memo = sprintf("<c3=404040,B0B0B0>%s\n",heartmessage)
       drawFormattedTextEx(overlay,234,304,264,memo)
     else
-      endexp = PBExperience.pbGetStartExperience(@pokemon.level+1,@pokemon.growth_rate)
+      endexp = @pokemon.growth_rate.minimum_exp_for_level(@pokemon.level + 1)
       textpos.push([_INTL("Exp. Points"),238,240,0,base,shadow])
       textpos.push([@pokemon.exp.to_s_formatted,488,272,1,Color.new(64,64,64),Color.new(176,176,176)])
       textpos.push([_INTL("To Next Lv."),238,304,0,base,shadow])
@@ -465,7 +465,7 @@ class PokemonSummary_Scene
       overlay.blt(436,146,@typebitmap.bitmap,type2rect)
     end
     # Draw Exp bar
-    if @pokemon.level<PBExperience.maxLevel
+    if @pokemon.level<GameData::GrowthRate.max_level
       w = @pokemon.exp_fraction * 128
       w = ((w/2).round)*2
       pbDrawImagePositions(overlay,[

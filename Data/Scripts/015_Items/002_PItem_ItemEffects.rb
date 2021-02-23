@@ -776,7 +776,7 @@ ItemHandlers::UseOnPokemon.add(:SWIFTWING,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:RARECANDY,proc { |item,pkmn,scene|
-  if pkmn.level>=PBExperience.maxLevel || pkmn.shadowPokemon?
+  if pkmn.level>=GameData::GrowthRate.max_level || pkmn.shadowPokemon?
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end

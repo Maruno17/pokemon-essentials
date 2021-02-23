@@ -196,12 +196,11 @@ PokemonDebugMenuCommands.register("setlevel", {
     if pkmn.egg?
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
     else
-      mLevel = PBExperience.maxLevel
       params = ChooseNumberParams.new
-      params.setRange(1, mLevel)
+      params.setRange(1, GameData::GrowthRate.max_level)
       params.setDefaultValue(pkmn.level)
       level = pbMessageChooseNumber(
-         _INTL("Set the Pokémon's level (max. {1}).", mLevel), params) { screen.pbUpdate }
+         _INTL("Set the Pokémon's level (max. {1}).", params.maxNumber), params) { screen.pbUpdate }
       if level != pkmn.level
         pkmn.level = level
         pkmn.calcStats
@@ -219,8 +218,8 @@ PokemonDebugMenuCommands.register("setexp", {
     if pkmn.egg?
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
     else
-      minxp = PBExperience.pbGetStartExperience(pkmn.level, pkmn.growth_rate)
-      maxxp = PBExperience.pbGetStartExperience(pkmn.level + 1, pkmn.growth_rate)
+      minxp = pkmn.growth_rate.minimum_exp_for_level(pkmn.level)
+      maxxp = pkmn.growth_rate.minimum_exp_for_level(pkmn.level + 1)
       if minxp == maxxp
         screen.pbDisplay(_INTL("{1} is at the maximum level.", pkmn.name))
       else

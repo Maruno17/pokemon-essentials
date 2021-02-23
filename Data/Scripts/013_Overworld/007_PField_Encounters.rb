@@ -305,7 +305,7 @@ class PokemonEncounters
     # Black Flute and White Flute alter the level of the wild Pokémon
     if Settings::FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
       if $PokemonMap.blackFluteUsed
-        level = [level + rand(1..4), PBExperience.maxLevel].min
+        level = [level + rand(1..4), GameData::GrowthRate.max_level].min
       elsif $PokemonMap.whiteFluteUsed
         level = [level - rand(1..4), 1].max
       end

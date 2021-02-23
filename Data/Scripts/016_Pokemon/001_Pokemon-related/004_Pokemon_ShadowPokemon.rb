@@ -34,9 +34,9 @@ def pbPurify(pkmn, scene)
     pkmn.saved_ev = nil
   end
   if pkmn.saved_exp
-    newexp = PBExperience.pbAddExperience(pkmn.exp, pkmn.saved_exp || 0, pkmn.growth_rate)
+    newexp = pkmn.growth_rate.add_exp(pkmn.exp, pkmn.saved_exp || 0)
     pkmn.saved_exp = nil
-    newlevel = PBExperience.pbGetLevelFromExperience(newexp, pkmn.growth_rate)
+    newlevel = pkmn.growth_rate.level_from_exp(newexp)
     curlevel = pkmn.level
     if newexp != pkmn.exp
       scene.pbDisplay(_INTL("{1} regained {2} Exp. Points!", pkmn.name, newexp - pkmn.exp))

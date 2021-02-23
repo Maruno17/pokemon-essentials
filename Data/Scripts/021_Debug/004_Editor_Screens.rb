@@ -650,7 +650,7 @@ module TrainerPokemonProperty
       initsetting[:happiness],
       initsetting[:poke_ball]
     ])
-    max_level = PBExperience.maxLevel
+    max_level = GameData::GrowthRate.max_level
     pkmn_properties = [
        [_INTL("Species"),   SpeciesProperty,                         _INTL("Species of the Pokémon.")],
        [_INTL("Level"),     NonzeroLimitProperty.new(max_level),     _INTL("Level of the Pokémon (1-{1}).", max_level)],
@@ -956,7 +956,7 @@ def pbPokemonEditor
      [_INTL("BaseStats"),         BaseStatsProperty,                  _INTL("Base stats of the Pokémon.")],
      [_INTL("EffortPoints"),      EffortValuesProperty,               _INTL("Effort Value points earned when this species is defeated.")],
      [_INTL("BaseEXP"),           LimitProperty.new(9999),            _INTL("Base experience earned when this species is defeated.")],
-     [_INTL("GrowthRate"),        EnumProperty2.new(PBGrowthRates),   _INTL("Pokémon's growth rate.")],
+     [_INTL("GrowthRate"),        GameDataProperty.new(:GrowthRate),  _INTL("Pokémon's growth rate.")],
      [_INTL("GenderRate"),        GameDataProperty.new(:GenderRatio), _INTL("Proportion of males to females for this species.")],
      [_INTL("Rareness"),          LimitProperty.new(255),             _INTL("Catch rate of this species (0-255).")],
      [_INTL("Happiness"),         LimitProperty.new(255),             _INTL("Base happiness of this species (0-255).")],

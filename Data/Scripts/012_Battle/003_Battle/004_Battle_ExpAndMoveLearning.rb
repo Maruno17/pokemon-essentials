@@ -91,9 +91,9 @@ class PokeBattle_Battle
 
   def pbGainExpOne(idxParty,defeatedBattler,numPartic,expShare,expAll,showMessages=true)
     pkmn = pbParty(0)[idxParty]   # The Pokémon gaining EVs from defeatedBattler
-    growthRate = pkmn.growth_rate
+    growth_rate = pkmn.growth_rate
     # Don't bother calculating if gainer is already at max Exp
-    if pkmn.exp>=PBExperience.pbGetMaxExperience(growthRate)
+    if pkmn.exp>=growth_rate.maximum_exp
       pkmn.calcStats   # To ensure new EVs still have an effect
       return
     end
@@ -151,7 +151,7 @@ class PokeBattle_Battle
     end
     exp = i if i>=0
     # Make sure Exp doesn't exceed the maximum
-    expFinal = PBExperience.pbAddExperience(pkmn.exp,exp,growthRate)
+    expFinal = growth_rate.add_exp(pkmn.exp, exp)
     expGained = expFinal-pkmn.exp
     return if expGained<=0
     # "Exp gained" message
@@ -163,7 +163,7 @@ class PokeBattle_Battle
       end
     end
     curLevel = pkmn.level
-    newLevel = PBExperience.pbGetLevelFromExperience(expFinal,growthRate)
+    newLevel = growth_rate.level_from_exp(expFinal)
     if newLevel<curLevel
       debugInfo = "Levels: #{curLevel}->#{newLevel} | Exp: #{pkmn.exp}->#{expFinal} | gain: #{expGained}"
       raise RuntimeError.new(
@@ -179,8 +179,8 @@ class PokeBattle_Battle
     battler = pbFindBattler(idxParty)
     loop do   # For each level gained in turn...
       # EXP Bar animation
-      levelMinExp = PBExperience.pbGetStartExperience(curLevel,growthRate)
-      levelMaxExp = PBExperience.pbGetStartExperience(curLevel+1,growthRate)
+      levelMinExp = growth_rate.minimum_exp_for_level(curLevel)
+      levelMaxExp = growth_rate.minimum_exp_for_level(curLevel + 1)
       tempExp2 = (levelMaxExp<expFinal) ? levelMaxExp : expFinal
       pkmn.exp = tempExp2
       @scene.pbEXPBar(battler,levelMinExp,levelMaxExp,tempExp1,tempExp2)

@@ -110,7 +110,7 @@ class PokeBattle_Battler
     disobedient = false
     # Pokémon may be disobedient; calculate if it is
     badgeLevel = 10 * (@battle.pbPlayer.badge_count + 1)
-    badgeLevel = PBExperience.maxLevel if @battle.pbPlayer.badge_count >= 8
+    badgeLevel = GameData::GrowthRate.max_level if @battle.pbPlayer.badge_count >= 8
     if @pokemon.foreign?(@battle.pbPlayer) && @level>badgeLevel
       a = ((@level+badgeLevel)*@battle.pbRandom(256)/256).floor
       disobedient |= (a>=badgeLevel)
