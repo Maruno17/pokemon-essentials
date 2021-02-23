@@ -113,9 +113,11 @@ SaveData.register(:storage_system) do
 end
 
 SaveData.register(:essentials_version) do
+  load_in_bootup
   ensure_class :String
   save_value { Essentials::VERSION }
   load_value { |value| $SaveVersion = value }
+  new_game_value { Essentials::VERSION }
   from_old_format { |old_format| old_format[15] }
 end
 
