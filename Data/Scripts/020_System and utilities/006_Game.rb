@@ -1,6 +1,6 @@
 # The Game module contains methods for saving and loading the game.
 module Game
-  # Initializes a bunch of global variables.
+  # Initializes various global variables.
   def self.initialize
     $PokemonTemp        = PokemonTemp.new
     $game_temp          = Game_Temp.new
@@ -18,13 +18,18 @@ module Game
     end
   end
 
-
+  # Loads values from the save file and runs any necessary
+  # conversions on it.
   def self.set_up_system
     if SaveData.exists?
       save_data = SaveData.read_from_file(SaveData::FILE_PATH)
     else
       save_data = {}
     end
+
+    # TODO: Right now, conversions are started before loading any values
+    #   from save data, like the language. This means that currently, conversion
+    #   titles can not be localized. Think of a solution?
 
     if SaveData.should_convert?(save_data)
       File.open(SaveData::FILE_PATH + '.bak', 'wb') { |f| Marshal.dump(save_data, f) }

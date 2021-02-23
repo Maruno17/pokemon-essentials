@@ -1,4 +1,4 @@
-# Contains conversions defined by default in Essentials.
+# Contains conversions defined in Essentials by default.
 
 SaveData.register_conversion(:define_versions) do
   essentials_version 19
