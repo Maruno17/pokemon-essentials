@@ -48,6 +48,9 @@ module SaveData
     # @param save_data [Hash]
     def run(save_data)
       @value_procs.each do |value_id, proc|
+        unless save_data.has_key?(value_id)
+          raise "Save data does not have value #{value_id.inspect}"
+        end
         proc.call(save_data[value_id])
       end
       @all_proc.call(save_data) if @all_proc.is_a?(Proc)
