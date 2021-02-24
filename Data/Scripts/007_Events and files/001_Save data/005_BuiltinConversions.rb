@@ -1,6 +1,6 @@
 # Contains conversions defined in Essentials by default.
 
-SaveData.register_conversion(:define_versions) do
+SaveData.register_conversion(:v19_define_versions) do
   essentials_version 19
   title _INTL('Defining versions in save data')
   to_all do |save_data|
@@ -13,7 +13,7 @@ SaveData.register_conversion(:define_versions) do
   end
 end
 
-SaveData.register_conversion(:convert_player) do
+SaveData.register_conversion(:v19_convert_player) do
   essentials_version 19
   title _INTL('Converting player trainer')
   to_all do |save_data|
@@ -23,7 +23,7 @@ SaveData.register_conversion(:convert_player) do
   end
 end
 
-SaveData.register_conversion(:convert_pokemon) do
+SaveData.register_conversion(:v19_convert_storage) do
   essentials_version 19
   title _INTL('Converting Pokémon in storage')
   to_value :storage_system do |storage|
@@ -39,9 +39,9 @@ SaveData.register_conversion(:convert_pokemon) do
   end # to_value
 end
 
-SaveData.register_conversion(:convert_global_metadata) do
+SaveData.register_conversion(:v19_convert_global_metadata) do
   essentials_version 19
-  title _INTL('Converting $PokemonGlobal')
+  title _INTL('Converting global metadata')
   to_value :global_metadata do |global|
     global.encounter_version ||= 0
   end
