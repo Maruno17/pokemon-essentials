@@ -13,7 +13,7 @@ def pbGetExceptionMessage(e,_script="")
     filename = emessage.sub("No such file or directory - ", "")
     emessage = "File #{filename} not found."
   end
-  emessage.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] }
+  emessage.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] } rescue nil
   return emessage
 end
 
@@ -31,7 +31,7 @@ def pbPrintException(e)
     maxlength = ($INTERNAL) ? 25 : 10
     e.backtrace[0,maxlength].each { |i| btrace += "#{i}\r\n" }
   end
-  btrace.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] }
+  btrace.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] } rescue nil
   message = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
   message += "#{Essentials::ERROR_TEXT}"   # For third party scripts to add to
   message += "Exception: #{e.class}\r\n"
