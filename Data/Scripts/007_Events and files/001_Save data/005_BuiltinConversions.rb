@@ -18,7 +18,7 @@ SaveData.register_conversion(:convert_player) do
   title _INTL('Converting player trainer')
   to_all do |save_data|
     next if save_data[:player].is_a?(PlayerTrainer)
-    # Conversion of the party is handled in the copy method
+    # Conversion of the party is handled in PokeBattle_Trainer.copy
     save_data[:player] = PokeBattle_Trainer.copy(save_data[:player])
   end
 end
@@ -35,6 +35,14 @@ SaveData.register_conversion(:convert_pokemon) do
           self[box, i] = PokeBattle_Pokemon.copy(self[box, i])
         end
       end
-    end
+    end # storage.instance_eval
+  end # to_value
+end
+
+SaveData.register_conversion(:convert_global_metadata) do
+  essentials_version 19
+  title _INTL('Converting $PokemonGlobal')
+  to_value :global_metadata do |global|
+    global.encounter_version ||= 0
   end
 end
