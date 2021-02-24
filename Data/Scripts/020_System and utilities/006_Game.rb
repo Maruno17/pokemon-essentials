@@ -59,7 +59,7 @@ module Game
   # @return [Boolean] whether the operation was successful
   # @raise [SaveData::InvalidValueError] if an invalid value is being saved
   def self.save(save_file = SaveData::FILE_PATH, safesave = false)
-    validate save_file => String, safesave => Boolean
+    validate save_file => String, safesave => [TrueClass, FalseClass]
 
     $Trainer.metaID = $PokemonGlobal.playerID # TODO: Is this necessary?
     $PokemonGlobal.safesave = safesave
