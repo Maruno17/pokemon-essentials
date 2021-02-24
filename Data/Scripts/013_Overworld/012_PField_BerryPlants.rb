@@ -251,9 +251,6 @@ class BerryPlantSprite
       @event.turn_down
     else
       filename=sprintf("berrytree%s",GameData::Item.get(berryData[1]).id.to_s)
-      if !pbResolveBitmap("Graphics/Characters/"+filename)
-        filename=sprintf("berrytree%03d",GameData::Item.get(berryData[1]).id_number)
-      end
       if pbResolveBitmap("Graphics/Characters/"+filename)
         @event.character_name=filename
         case berryData[0]

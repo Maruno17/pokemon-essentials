@@ -23,11 +23,11 @@ begin
       @effects[PBEffects::TrickRoom]       = 0
       @effects[PBEffects::WaterSportField] = 0
       @effects[PBEffects::WonderRoom]      = 0
-      @defaultWeather  = PBWeather::None
-      @weather         = PBWeather::None
+      @defaultWeather  = :None
+      @weather         = :None
       @weatherDuration = 0
-      @defaultTerrain  = PBBattleTerrains::None
-      @terrain         = PBBattleTerrains::None
+      @defaultTerrain  = :None
+      @terrain         = :None
       @terrainDuration = 0
     end
   end

@@ -210,7 +210,7 @@ def pbBalancedLevel(party)
   sum = 0
   party.each { |p| sum += p.level }
   return 1 if sum == 0
-  mLevel = PBExperience.maxLevel
+  mLevel = GameData::GrowthRate.max_level
   average = sum.to_f / party.length.to_f
   # Calculate the standard deviation
   varianceTimesN = 0

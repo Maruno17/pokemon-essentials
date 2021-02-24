@@ -501,9 +501,10 @@ class PokemonPokedex_Scene
     overlay.blt(344,214,@hwbitmap.bitmap,Rect.new(0,(hwoffset) ? 44 : 0,32,44))
     overlay.blt(344,266,@hwbitmap.bitmap,Rect.new(32,(hwoffset) ? 44 : 0,32,44))
     # Draw shape icon
-    if params[9]>=0
-      shaperect = Rect.new(0,params[9]*60,60,60)
-      overlay.blt(424,218,@shapebitmap.bitmap,shaperect)
+    if params[9] >= 0
+      shape_number = @shapeCommands[params[9]].id_number
+      shaperect = Rect.new(0, (shape_number - 1) * 60, 60, 60)
+      overlay.blt(424, 218, @shapebitmap.bitmap, shaperect)
     end
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
@@ -607,9 +608,9 @@ class PokemonPokedex_Scene
         textpos.push([cmds[sel[0]].name,362,58,2,base,shadow,1])
       end
     when 6   # Shape icon
-      if sel[0]>=0
-        shaperect = Rect.new(0,@shapeCommands[sel[0]]*60,60,60)
-        overlay.blt(332,50,@shapebitmap.bitmap,shaperect)
+      if sel[0] >= 0
+        shaperect = Rect.new(0, (@shapeCommands[sel[0]].id_number - 1) * 60, 60, 60)
+        overlay.blt(332, 50, @shapebitmap.bitmap, shaperect)
       end
     else
       if sel[0]<0
@@ -678,10 +679,10 @@ class PokemonPokedex_Scene
       textpos.push(["----",
          xstart+halfwidth+(cols-1)*xgap,ystart+6+(cmds.length/cols).floor*ygap,2,base,shadow,1])
     when 6   # Shape
-      shaperect = Rect.new(0,0,60,60)
+      shaperect = Rect.new(0, 0, 60, 60)
       for i in 0...cmds.length
-        shaperect.y = i*60
-        overlay.blt(xstart+4+(i%cols)*xgap,ystart+4+(i/cols).floor*ygap,@shapebitmap.bitmap,shaperect)
+        shaperect.y = (@shapeCommands[i].id_number - 1) * 60
+        overlay.blt(xstart + 4 + (i % cols) * xgap, ystart + 4 + (i / cols).floor * ygap, @shapebitmap.bitmap, shaperect)
       end
     end
     # Draw all text
@@ -760,11 +761,10 @@ class PokemonPokedex_Scene
     end
     # Filter by shape
     if params[9]>=0
-      sshape = @shapeCommands[params[9]]+1
+      sshape = @shapeCommands[params[9]].id
       dexlist = dexlist.find_all { |item|
         next false if !$Trainer.seen?(item[0])
-        shape = item[9]
-        next shape==sshape
+        next item[9] == sshape
       }
     end
     # Remove all unseen species from the results
@@ -1025,7 +1025,7 @@ class PokemonPokedex_Scene
     @colorCommands = []
     GameData::BodyColor.each { |c| @colorCommands.push(c) }
     @shapeCommands = []
-    for i in 0...14; @shapeCommands.push(i); end
+    GameData::BodyShape.each { |c| @shapeCommands.push(c) if c.id != :None }
     @sprites["searchbg"].visible     = true
     @sprites["overlay"].visible      = true
     @sprites["searchcursor"].visible = true

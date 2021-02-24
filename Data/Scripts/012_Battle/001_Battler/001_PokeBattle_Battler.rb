@@ -106,11 +106,11 @@ class PokeBattle_Battler
   attr_reader :status
 
   def status=(value)
-    @effects[PBEffects::Truant] = false if @status==PBStatuses::SLEEP && value!=PBStatuses::SLEEP
-    @effects[PBEffects::Toxic]  = 0 if value!=PBStatuses::POISON
+    @effects[PBEffects::Truant] = false if @status == :SLEEP && value != :SLEEP
+    @effects[PBEffects::Toxic]  = 0 if value != :POISON
     @status = value
     @pokemon.status = value if @pokemon
-    self.statusCount = 0 if value!=PBStatuses::POISON && value!=PBStatuses::SLEEP
+    self.statusCount = 0 if value != :POISON && value != :SLEEP
     @battle.scene.pbRefreshOne(@index)
   end
 
@@ -254,7 +254,7 @@ class PokeBattle_Battler
     speedMult *= 2 if pbOwnSide.effects[PBEffects::Tailwind]>0
     speedMult /= 2 if pbOwnSide.effects[PBEffects::Swamp]>0
     # Paralysis
-    if status==PBStatuses::PARALYSIS && !hasActiveAbility?(:QUICKFEET)
+    if status == :PARALYSIS && !hasActiveAbility?(:QUICKFEET)
       speedMult /= (Settings::MECHANICS_GENERATION >= 7) ? 2 : 4
     end
     # Badge multiplier

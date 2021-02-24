@@ -277,19 +277,19 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
   if $PokemonGlobal.stepcount%4==0 && Settings::POISON_IN_FIELD
     flashed = false
     for i in $Trainer.able_party
-      if i.status==PBStatuses::POISON && !i.hasAbility?(:IMMUNITY)
+      if i.status == :POISON && !i.hasAbility?(:IMMUNITY)
         if !flashed
           $game_screen.start_flash(Color.new(255,0,0,128), 4)
           flashed = true
         end
         i.hp -= 1 if i.hp>1 || Settings::POISON_FAINT_IN_FIELD
         if i.hp==1 && !Settings::POISON_FAINT_IN_FIELD
-          i.status = PBStatuses::NONE
+          i.status = :NONE
           pbMessage(_INTL("{1} survived the poisoning.\\nThe poison faded away!\1",i.name))
           next
         elsif i.hp==0
           i.changeHappiness("faint")
-          i.status = PBStatuses::NONE
+          i.status = :NONE
           pbMessage(_INTL("{1} fainted...",i.name))
         end
         if $Trainer.able_pokemon_count == 0
@@ -361,21 +361,23 @@ def pbOnStepTaken(eventTriggered)
   $PokemonGlobal.stepcount = 0 if !$PokemonGlobal.stepcount
   $PokemonGlobal.stepcount += 1
   $PokemonGlobal.stepcount &= 0x7FFFFFFF
+  repel_active = ($PokemonGlobal.repel > 0)
   Events.onStepTaken.trigger(nil)
 #  Events.onStepTakenFieldMovement.trigger(nil,$game_player)
   handled = [nil]
   Events.onStepTakenTransferPossible.trigger(nil,handled)
   return if handled[0]
-  pbBattleOnStepTaken if !eventTriggered && !$game_temp.in_menu
+  pbBattleOnStepTaken(repel_active) if !eventTriggered && !$game_temp.in_menu
   $PokemonTemp.encounterTriggered = false   # This info isn't needed here
 end
 
 # Start wild encounters while turning on the spot
 Events.onChangeDirection += proc {
-  pbBattleOnStepTaken if !$game_temp.in_menu
+  repel_active = ($PokemonGlobal.repel > 0)
+  pbBattleOnStepTaken(repel_active) if !$game_temp.in_menu
 }
 
-def pbBattleOnStepTaken
+def pbBattleOnStepTaken(repel_active)
   return if $Trainer.able_pokemon_count == 0
   return if !$PokemonEncounters.encounter_possible_here?
   encounterType = $PokemonEncounters.encounter_type
@@ -384,7 +386,7 @@ def pbBattleOnStepTaken
   $PokemonTemp.encounterType = encounterType
   encounter = $PokemonEncounters.choose_wild_pokemon(encounterType)
   encounter = EncounterModifier.trigger(encounter)
-  if $PokemonEncounter.allow_encounter?(encounter)
+  if $PokemonEncounter.allow_encounter?(encounter, repel_active)
     if $PokemonEncounter.have_double_wild_battle?
       encounter2 = $PokemonEncounters.choose_wild_pokemon(encounterType)
       encounter2 = EncounterModifier.trigger(encounter2)

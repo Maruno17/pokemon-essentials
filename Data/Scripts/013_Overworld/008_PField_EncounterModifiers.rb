@@ -20,10 +20,8 @@ Events.onWildPokemonCreate += proc { |_sender, e|
 Events.onWildPokemonCreate += proc { |_sender, e|
   pokemon = e[0]
   if $game_map.map_id == 51
-    max_level = PBExperience.maxLevel
     new_level = pbBalancedLevel($Trainer.party) - 4 + rand(5)   # For variety
-    new_level = 1 if new_level < 1
-    new_level = max_level if new_level > max_level
+    new_level = new_level.clamp(1, GameData::GrowthRate.max_level)
     pokemon.level = new_level
     pokemon.calcStats
     pokemon.resetMoves

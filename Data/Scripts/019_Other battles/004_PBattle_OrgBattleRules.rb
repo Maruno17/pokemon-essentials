@@ -128,7 +128,7 @@ end
 class EnemyLevelAdjustment < LevelAdjustment
   def initialize(level)
     super(LevelAdjustment::EnemyTeam)
-    @level=[[1,level].max,PBExperience.maxLevel].min
+    @level = level.clamp(1, GameData::GrowthRate.max_level)
   end
 
   def getAdjustment(thisTeam,_otherTeam)
@@ -173,7 +173,7 @@ end
 class CappedLevelAdjustment < LevelAdjustment
   def initialize(level)
     super(LevelAdjustment::BothTeams)
-    @level=[[1,level].max,PBExperience.maxLevel].min
+    @level = level.clamp(1, GameData::GrowthRate.max_level)
   end
 
   def getAdjustment(thisTeam,_otherTeam)
@@ -190,7 +190,7 @@ end
 class FixedLevelAdjustment < LevelAdjustment
   def initialize(level)
     super(LevelAdjustment::BothTeams)
-    @level=[[1,level].max,PBExperience.maxLevel].min
+    @level = level.clamp(1, GameData::GrowthRate.max_level)
   end
 
   def getAdjustment(thisTeam,_otherTeam)
@@ -207,9 +207,8 @@ end
 class TotalLevelAdjustment < LevelAdjustment
   def initialize(minLevel,maxLevel,totalLevel)
     super(LevelAdjustment::EnemyTeam)
-    mLevel = PBExperience.maxLevel
-    @minLevel=[[1,minLevel].max,mLevel].min
-    @maxLevel=[[1,maxLevel].max,mLevel].min
+    @minLevel = minLevel.clamp(1, GameData::GrowthRate.max_level)
+    @maxLevel = maxLevel.clamp(1, GameData::GrowthRate.max_level)
     @totalLevel=totalLevel
   end
 
@@ -707,7 +706,7 @@ class PokemonRuleSet
   # Returns a valid level to assign to each member of a valid Pokemon team.
   def suggestedLevel
     minLevel=1
-    maxLevel=PBExperience.maxLevel
+    maxLevel=GameData::GrowthRate.max_level
     num=self.suggestedNumber
     for rule in @pokemonRules
       if rule.is_a?(MinimumLevelRestriction)
@@ -1271,7 +1270,7 @@ end
 
 def pbPrimeCupRules(double)
   ret=PokemonChallengeRules.new
-  ret.setLevelAdjustment(OpenLevelAdjustment.new(PBExperience.maxLevel))
+  ret.setLevelAdjustment(OpenLevelAdjustment.new(GameData::GrowthRate.max_level))
   ret.addTeamRule(SpeciesClause.new)
   ret.addTeamRule(ItemClause.new)
   ret.addBattleRule(SleepClause.new)

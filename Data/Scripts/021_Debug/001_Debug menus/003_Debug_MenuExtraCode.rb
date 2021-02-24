@@ -252,7 +252,7 @@ def pbDebugDayCare
           textpos.push([_INTL("Genderless"),8+i*Graphics.width/2,y,0,base,shadow])
         end
         y += 32
-        if initlevel>=PBExperience.maxLevel
+        if initlevel>=GameData::GrowthRate.max_level
           textpos.push(["Lv. #{initlevel} (max)",8+i*Graphics.width/2,y,0,base,shadow])
         elsif leveldiff>0
           textpos.push(["Lv. #{initlevel} -> #{pkmn.level} (+#{leveldiff})",
@@ -261,8 +261,8 @@ def pbDebugDayCare
           textpos.push(["Lv. #{initlevel} (no change)",8+i*Graphics.width/2,y,0,base,shadow])
         end
         y += 32
-        if pkmn.level<PBExperience.maxLevel
-          endexp   = PBExperience.pbGetStartExperience(pkmn.level+1,pkmn.growth_rate)
+        if pkmn.level<GameData::GrowthRate.max_level
+          endexp = pkmn.growth_rate.minimum_exp_for_level(pkmn.level + 1)
           textpos.push(["To next Lv.: #{endexp-pkmn.exp}",8+i*Graphics.width/2,y,0,base,shadow])
           y += 32
         end

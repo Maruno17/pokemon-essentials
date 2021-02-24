@@ -588,10 +588,7 @@ def pbBattleTypeWeakingBerry(type,moveType,target,mults)
 end
 
 def pbBattleWeatherAbility(weather,battler,battle,ignorePrimal=false)
-  return if !ignorePrimal &&
-     (battle.field.weather==PBWeather::HarshSun ||
-     battle.field.weather==PBWeather::HeavyRain ||
-     battle.field.weather==PBWeather::StrongWinds)
+  return if !ignorePrimal && [:HarshSun, :HeavyRain, :StrongWinds].include?(battle.field.weather)
   return if battle.field.weather==weather
   battle.pbShowAbilitySplash(battler)
   if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
@@ -599,9 +596,7 @@ def pbBattleWeatherAbility(weather,battler,battle,ignorePrimal=false)
   end
   fixedDuration = false
   fixedDuration = true if Settings::FIXED_DURATION_WEATHER_FROM_ABILITY &&
-                          weather != PBWeather::HarshSun &&
-                          weather != PBWeather::HeavyRain &&
-                          weather != PBWeather::StrongWinds
+                          ![:HarshSun, :HeavyRain, :StrongWinds].include?(weather)
   battle.pbStartWeather(battler,weather,fixedDuration)
   # NOTE: The ability splash is hidden again in def pbStartWeather.
 end

@@ -44,7 +44,7 @@ class PokeBattle_AI
                                                          PBTypes.ineffective?(moveType,defType)
     end
     # Delta Stream's weather
-    if @battle.pbWeather==PBWeather::StrongWinds
+    if @battle.pbWeather == :StrongWinds
       ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING &&
                                                          PBTypes.superEffective?(moveType,defType)
     end
@@ -122,7 +122,7 @@ class PokeBattle_AI
                      !move.ignoresSubstitute?(user) && user.index!=target.index
       return true if Settings::MECHANICS_GENERATION >= 7 && user.hasActiveAbility?(:PRANKSTER) &&
                      target.pbHasType?(:DARK) && target.opposes?(user)
-      return true if move.priority>0 && @battle.field.terrain==PBBattleTerrains::Psychic &&
+      return true if move.priority>0 && @battle.field.terrain == :Psychic &&
                      target.affectedByTerrain? && target.opposes?(user)
     end
     return false
@@ -215,7 +215,7 @@ class PokeBattle_AI
     when "0C1"   # Beat Up
       mult = 0
       @battle.eachInTeamFromBattlerIndex(user.index) do |pkmn,_i|
-        mult += 1 if pkmn && pkmn.able? && pkmn.status==PBStatuses::NONE
+        mult += 1 if pkmn && pkmn.able? && pkmn.status == :NONE
       end
       baseDmg *= mult
     when "0C4"   # Solar Beam
@@ -397,19 +397,16 @@ class PokeBattle_AI
       end
     end
     # Terrain moves
-    if user.affectedByTerrain? && skill>=PBTrainerAI.mediumSkill
+    if skill>=PBTrainerAI.mediumSkill
       case @battle.field.terrain
-      when PBBattleTerrains::Electric
-        multipliers[:base_damage_multiplier] *= 1.5 if type == :ELECTRIC
-      when PBBattleTerrains::Grassy
-        multipliers[:base_damage_multiplier] *= 1.5 if type == :GRASS
-      when PBBattleTerrains::Psychic
-        multipliers[:base_damage_multiplier] *= 1.5 if type == :PSYCHIC
-      end
-    end
-    if target.affectedByTerrain? && skill>=PBTrainerAI.mediumSkill
-      if @battle.field.terrain==PBBattleTerrains::Misty && type == :DRAGON
-        multipliers[:base_damage_multiplier] /= 2
+      when :Electric
+        multipliers[:base_damage_multiplier] *= 1.5 if type == :ELECTRIC && user.affectedByTerrain?
+      when :Grassy
+        multipliers[:base_damage_multiplier] *= 1.5 if type == :GRASS && user.affectedByTerrain?
+      when :Psychic
+        multipliers[:base_damage_multiplier] *= 1.5 if type == :PSYCHIC && user.affectedByTerrain?
+      when :Misty
+        multipliers[:base_damage_multiplier] /= 2 if type == :DRAGON && target.affectedByTerrain?
       end
     end
     # Badge multipliers
@@ -435,19 +432,19 @@ class PokeBattle_AI
     # Weather
     if skill>=PBTrainerAI.mediumSkill
       case @battle.pbWeather
-      when PBWeather::Sun, PBWeather::HarshSun
+      when :Sun, :HarshSun
         if type == :FIRE
           multipliers[:final_damage_multiplier] *= 1.5
         elsif type == :WATER
           multipliers[:final_damage_multiplier] /= 2
         end
-      when PBWeather::Rain, PBWeather::HeavyRain
+      when :Rain, :HeavyRain
         if type == :FIRE
           multipliers[:final_damage_multiplier] /= 2
         elsif type == :WATER
           multipliers[:final_damage_multiplier] *= 1.5
         end
-      when PBWeather::Sandstorm
+      when :Sandstorm
         if target.pbHasType?(:ROCK) && move.specialMove?(type) && move.function != "122"   # Psyshock
           multipliers[:defense_multiplier] *= 1.5
         end
@@ -472,7 +469,7 @@ class PokeBattle_AI
     end
     # Burn
     if skill>=PBTrainerAI.highSkill
-      if user.status==PBStatuses::BURN && move.physicalMove?(type) &&
+      if user.status == :BURN && move.physicalMove?(type) &&
          !user.hasActiveAbility?(:GUTS) &&
          !(Settings::MECHANICS_GENERATION >= 6 && move.function == "07E")   # Facade
         multipliers[:final_damage_multiplier] /= 2

@@ -46,7 +46,7 @@ class PokeBattle_Move
                                                          PBTypes.ineffective?(moveType,defType)
     end
     # Delta Stream's weather
-    if @battle.pbWeather==PBWeather::StrongWinds
+    if @battle.pbWeather == :StrongWinds
       ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING &&
                                                          PBTypes.superEffective?(moveType,defType)
     end
@@ -340,19 +340,15 @@ class PokeBattle_Move
       end
     end
     # Terrain moves
-    if user.affectedByTerrain?
-      case @battle.field.terrain
-      when PBBattleTerrains::Electric
-        multipliers[:base_damage_multiplier] *= 1.5 if type == :ELECTRIC
-      when PBBattleTerrains::Grassy
-        multipliers[:base_damage_multiplier] *= 1.5 if type == :GRASS
-      when PBBattleTerrains::Psychic
-        multipliers[:base_damage_multiplier] *= 1.5 if type == :PSYCHIC
-      end
-    end
-    if @battle.field.terrain==PBBattleTerrains::Misty && target.affectedByTerrain? &&
-       type == :DRAGON
-      multipliers[:base_damage_multiplier] /= 2
+    case @battle.field.terrain
+    when :Electric
+      multipliers[:base_damage_multiplier] *= 1.5 if type == :ELECTRIC && user.affectedByTerrain?
+    when :Grassy
+      multipliers[:base_damage_multiplier] *= 1.5 if type == :GRASS && user.affectedByTerrain?
+    when :Psychic
+      multipliers[:base_damage_multiplier] *= 1.5 if type == :PSYCHIC && user.affectedByTerrain?
+    when :Misty
+      multipliers[:base_damage_multiplier] /= 2 if type == :DRAGON && target.affectedByTerrain?
     end
     # Badge multipliers
     if @battle.internalBattle
@@ -377,19 +373,19 @@ class PokeBattle_Move
     end
     # Weather
     case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
+    when :Sun, :HarshSun
       if type == :FIRE
         multipliers[:final_damage_multiplier] *= 1.5
       elsif type == :WATER
         multipliers[:final_damage_multiplier] /= 2
       end
-    when PBWeather::Rain, PBWeather::HeavyRain
+    when :Rain, :HeavyRain
       if type == :FIRE
         multipliers[:final_damage_multiplier] /= 2
       elsif type == :WATER
         multipliers[:final_damage_multiplier] *= 1.5
       end
-    when PBWeather::Sandstorm
+    when :Sandstorm
       if target.pbHasType?(:ROCK) && specialMove? && @function != "122"   # Psyshock
         multipliers[:defense_multiplier] *= 1.5
       end
@@ -418,7 +414,7 @@ class PokeBattle_Move
     # Type effectiveness
     multipliers[:final_damage_multiplier] *= target.damageState.typeMod.to_f / PBTypeEffectiveness::NORMAL_EFFECTIVE
     # Burn
-    if user.status==PBStatuses::BURN && physicalMove? && damageReducedByBurn? &&
+    if user.status == :BURN && physicalMove? && damageReducedByBurn? &&
        !user.hasActiveAbility?(:GUTS)
       multipliers[:final_damage_multiplier] /= 2
     end

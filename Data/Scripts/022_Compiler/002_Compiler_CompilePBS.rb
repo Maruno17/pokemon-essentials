@@ -869,7 +869,7 @@ module Compiler
     probabilities     = nil
     current_type      = -1
     expected_lines    = 0
-    max_level = PBExperience.maxLevel
+    max_level = GameData::GrowthRate.max_level
     pbCompilerEachPreppedLine("PBS/encounters.txt") { |line, line_no|
       next if line.length == 0
       if expected_lines > 0 && line[/^\d+,/] && new_format   # Species line
@@ -1102,7 +1102,7 @@ module Compiler
   #=============================================================================
   def compile_trainers
     schema = GameData::Trainer::SCHEMA
-    max_level = PBExperience.maxLevel
+    max_level = GameData::GrowthRate.max_level
     trainer_names             = []
     trainer_lose_texts        = []
     trainer_hash              = nil

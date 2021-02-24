@@ -25,15 +25,11 @@ module GameData
       # Check for files
       ret = sprintf("Graphics/Items/%s", item_data.id)
       return ret if pbResolveBitmap(ret)
-      ret = sprintf("Graphics/Items/%03d", item_data.id_number)
-      return ret if pbResolveBitmap(ret)
       # Check for TM/HM type icons
       if item_data.is_machine?
         move_type = GameData::Move.get(item_data.move).type
         type_data = GameData::Type.get(move_type)
         ret = sprintf("Graphics/Items/machine_%s", type_data.id)
-        return ret if pbResolveBitmap(ret)
-        ret = sprintf("Graphics/Items/machine_%03d", type_data.id_number)
         return ret if pbResolveBitmap(ret)
       end
       return "Graphics/Items/000"
@@ -46,8 +42,6 @@ module GameData
       # Check for files
       ret = sprintf("Graphics/Pictures/Party/icon_%s_%s", name_base, item_data.id)
       return ret if pbResolveBitmap(ret)
-      ret = sprintf("Graphics/Pictures/Party/icon_%s_%03d", name_base, item_data.id_number)
-      return ret if pbResolveBitmap(ret)
       return sprintf("Graphics/Pictures/Party/icon_%s", name_base)
     end
 
@@ -56,8 +50,6 @@ module GameData
       return nil if !item_data
       # Check for files
       ret = sprintf("Graphics/Pictures/Mail/mail_%s", item_data.id)
-      return ret if pbResolveBitmap(ret)
-      ret = sprintf("Graphics/Pictures/Mail/mail_%03d", item_data.id_number)
       return pbResolveBitmap(ret) ? ret : nil
     end
 

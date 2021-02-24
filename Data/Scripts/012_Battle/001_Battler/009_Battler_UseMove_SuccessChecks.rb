@@ -110,7 +110,7 @@ class PokeBattle_Battler
     disobedient = false
     # Pokémon may be disobedient; calculate if it is
     badgeLevel = 10 * (@battle.pbPlayer.badge_count + 1)
-    badgeLevel = PBExperience.maxLevel if @battle.pbPlayer.badge_count >= 8
+    badgeLevel = GameData::GrowthRate.max_level if @battle.pbPlayer.badge_count >= 8
     if @pokemon.foreign?(@battle.pbPlayer) && @level>badgeLevel
       a = ((@level+badgeLevel)*@battle.pbRandom(256)/256).floor
       disobedient |= (a>=badgeLevel)
@@ -126,7 +126,7 @@ class PokeBattle_Battler
     PBDebug.log("[Disobedience] #{pbThis} disobeyed")
     @effects[PBEffects::Rage] = false
     # Do nothing if using Snore/Sleep Talk
-    if @status==PBStatuses::SLEEP && move.usableWhenAsleep?
+    if @status == :SLEEP && move.usableWhenAsleep?
       @battle.pbDisplay(_INTL("{1} ignored orders and kept sleeping!",pbThis))
       return false
     end
@@ -156,7 +156,7 @@ class PokeBattle_Battler
     end
     # Hurt self in confusion
     r -= c
-    if r<c && @status!=PBStatuses::SLEEP
+    if r < c && @status != :SLEEP
       pbConfusionDamage(_INTL("{1} won't obey! It hurt itself in its confusion!",pbThis))
       return false
     end
@@ -200,7 +200,7 @@ class PokeBattle_Battler
     return true if skipAccuracyCheck
     # Check status problems and continue their effects/cure them
     case @status
-    when PBStatuses::SLEEP
+    when :SLEEP
       self.statusCount -= 1
       if @statusCount<=0
         pbCureStatus
@@ -211,7 +211,7 @@ class PokeBattle_Battler
           return false
         end
       end
-    when PBStatuses::FROZEN
+    when :FROZEN
       if !move.thawsUser?
         if @battle.pbRandom(100)<20
           pbCureStatus
@@ -262,7 +262,7 @@ class PokeBattle_Battler
       end
     end
     # Paralysis
-    if @status==PBStatuses::PARALYSIS
+    if @status == :PARALYSIS
       if @battle.pbRandom(100)<25
         pbContinueStatus
         @lastMoveFailed = true
@@ -295,8 +295,7 @@ class PokeBattle_Battler
     # Move-specific failures
     return false if move.pbFailsAgainstTarget?(user,target)
     # Immunity to priority moves because of Psychic Terrain
-    if @battle.field.terrain==PBBattleTerrains::Psychic && target.affectedByTerrain? &&
-       target.opposes?(user) &&
+    if @battle.field.terrain == :Psychic && target.affectedByTerrain? && target.opposes?(user) &&
        @battle.choices[user.index][4]>0   # Move priority saved from pbCalculatePriority
       @battle.pbDisplay(_INTL("{1} surrounds itself with psychic terrain!",target.pbThis))
       return false

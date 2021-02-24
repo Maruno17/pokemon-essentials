@@ -69,7 +69,7 @@ ItemHandlers::CanUseInBattle.copy(:POTION,
 ItemHandlers::CanUseInBattle.copy(:POTION,:RAGECANDYBAR) if !Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::CanUseInBattle.add(:AWAKENING,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-  next pbBattleItemCanCureStatus?(PBStatuses::SLEEP,pokemon,scene,showMessages)
+  next pbBattleItemCanCureStatus?(:SLEEP, pokemon, scene, showMessages)
 })
 
 ItemHandlers::CanUseInBattle.copy(:AWAKENING,:CHESTOBERRY)
@@ -79,36 +79,36 @@ ItemHandlers::CanUseInBattle.add(:BLUEFLUTE,proc { |item,pokemon,battler,move,fi
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
     next false
   end
-  next pbBattleItemCanCureStatus?(PBStatuses::SLEEP,pokemon,scene,showMessages)
+  next pbBattleItemCanCureStatus?(:SLEEP, pokemon, scene, showMessages)
 })
 
 ItemHandlers::CanUseInBattle.add(:ANTIDOTE,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-  next pbBattleItemCanCureStatus?(PBStatuses::POISON,pokemon,scene,showMessages)
+  next pbBattleItemCanCureStatus?(:POISON, pokemon, scene, showMessages)
 })
 
 ItemHandlers::CanUseInBattle.copy(:ANTIDOTE,:PECHABERRY)
 
 ItemHandlers::CanUseInBattle.add(:BURNHEAL,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-  next pbBattleItemCanCureStatus?(PBStatuses::BURN,pokemon,scene,showMessages)
+  next pbBattleItemCanCureStatus?(:BURN, pokemon, scene, showMessages)
 })
 
 ItemHandlers::CanUseInBattle.copy(:BURNHEAL,:RAWSTBERRY)
 
 ItemHandlers::CanUseInBattle.add(:PARALYZEHEAL,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-  next pbBattleItemCanCureStatus?(PBStatuses::PARALYSIS,pokemon,scene,showMessages)
+  next pbBattleItemCanCureStatus?(:PARALYSIS, pokemon, scene, showMessages)
 })
 
 ItemHandlers::CanUseInBattle.copy(:PARALYZEHEAL,:PARLYZHEAL,:CHERIBERRY)
 
 ItemHandlers::CanUseInBattle.add(:ICEHEAL,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-  next pbBattleItemCanCureStatus?(PBStatuses::FROZEN,pokemon,scene,showMessages)
+  next pbBattleItemCanCureStatus?(:FROZEN, pokemon, scene, showMessages)
 })
 
 ItemHandlers::CanUseInBattle.copy(:ICEHEAL,:ASPEARBERRY)
 
 ItemHandlers::CanUseInBattle.add(:FULLHEAL,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
   if !pokemon.able? ||
-     (pokemon.status==PBStatuses::NONE &&
+     (pokemon.status == :NONE &&
      (!battler || battler.effects[PBEffects::Confusion]==0))
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
     next false
@@ -123,7 +123,7 @@ ItemHandlers::CanUseInBattle.copy(:FULLHEAL,:RAGECANDYBAR) if Settings::RAGE_CAN
 
 ItemHandlers::CanUseInBattle.add(:FULLRESTORE,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
   if !pokemon.able? ||
-     (pokemon.hp==pokemon.totalhp && pokemon.status==PBStatuses::NONE &&
+     (pokemon.hp == pokemon.totalhp && pokemon.status == :NONE &&
      (!battler || battler.effects[PBEffects::Confusion]==0))
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
     next false
@@ -265,7 +265,7 @@ ItemHandlers::CanUseInBattle.add(:DIREHIT3,proc { |item,pokemon,battler,move,fir
 ItemHandlers::CanUseInBattle.add(:POKEFLUTE,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
   anyAsleep = false
   battle.eachBattler do |b|
-    next if b.status!=PBStatuses::SLEEP || b.hasActiveAbility?(:SOUNDPROOF)
+    next if b.status != :SLEEP || b.hasActiveAbility?(:SOUNDPROOF)
     anyAsleep = true
     break
   end
@@ -295,7 +295,7 @@ ItemHandlers::UseInBattle.copy(:POKEDOLL,:FLUFFYTAIL,:POKETOY)
 
 ItemHandlers::UseInBattle.add(:POKEFLUTE,proc { |item,battler,battle|
   battle.eachBattler do |b|
-    next if b.status!=PBStatuses::SLEEP || b.hasActiveAbility?(:SOUNDPROOF)
+    next if b.status != :SLEEP || b.hasActiveAbility?(:SOUNDPROOF)
     b.pbCureStatus(false)
   end
   scene.pbRefresh

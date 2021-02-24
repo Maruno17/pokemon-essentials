@@ -105,20 +105,20 @@ end
 #===============================================================================
 class PokeBattle_Move_087 < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
-    baseDmg *= 2 if @battle.pbWeather!=PBWeather::None
+    baseDmg *= 2 if @battle.pbWeather != :None
     return baseDmg
   end
 
   def pbBaseType(user)
     ret = :NORMAL
     case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
+    when :Sun, :HarshSun
       ret = :FIRE if GameData::Type.exists?(:FIRE)
-    when PBWeather::Rain, PBWeather::HeavyRain
+    when :Rain, :HeavyRain
       ret = :WATER if GameData::Type.exists?(:WATER)
-    when PBWeather::Sandstorm
+    when :Sandstorm
       ret = :ROCK if GameData::Type.exists?(:ROCK)
-    when PBWeather::Hail
+    when :Hail
       ret = :ICE if GameData::Type.exists?(:ICE)
     end
     return ret
@@ -419,7 +419,7 @@ class PokeBattle_Move_095 < PokeBattle_Move
 
   def pbModifyDamage(damageMult,user,target)
     damageMult *= 2 if target.inTwoTurnAttack?("0CA")   # Dig
-    damageMult /= 2 if @battle.field.terrain==PBBattleTerrains::Grassy
+    damageMult /= 2 if @battle.field.terrain == :Grassy
     return damageMult
   end
 end
@@ -870,39 +870,37 @@ class PokeBattle_Move_0A4 < PokeBattle_Move
     # NOTE: This is Gen 7's list plus some of Gen 6 plus a bit of my own.
     @secretPower = 0   # Body Slam, paralysis
     case @battle.field.terrain
-    when PBBattleTerrains::Electric
+    when :Electric
       @secretPower = 1   # Thunder Shock, paralysis
-    when PBBattleTerrains::Grassy
+    when :Grassy
       @secretPower = 2   # Vine Whip, sleep
-    when PBBattleTerrains::Misty
+    when :Misty
       @secretPower = 3   # Fairy Wind, lower Sp. Atk by 1
-    when PBBattleTerrains::Psychic
+    when :Psychic
       @secretPower = 4   # Confusion, lower Speed by 1
     else
       case @battle.environment
-      when PBEnvironment::Grass, PBEnvironment::TallGrass,
-           PBEnvironment::Forest, PBEnvironment::ForestGrass
+      when :Grass, :TallGrass, :Forest, :ForestGrass
         @secretPower = 2    # (Same as Grassy Terrain)
-      when PBEnvironment::MovingWater, PBEnvironment::StillWater,
-           PBEnvironment::Underwater
+      when :MovingWater, :StillWater, :Underwater
         @secretPower = 5    # Water Pulse, lower Attack by 1
-      when PBEnvironment::Puddle
+      when :Puddle
         @secretPower = 6    # Mud Shot, lower Speed by 1
-      when PBEnvironment::Cave
+      when :Cave
         @secretPower = 7    # Rock Throw, flinch
-      when PBEnvironment::Rock, PBEnvironment::Sand
+      when :Rock, :Sand
         @secretPower = 8    # Mud-Slap, lower Acc by 1
-      when PBEnvironment::Snow, PBEnvironment::Ice
+      when :Snow, :Ice
         @secretPower = 9    # Ice Shard, freeze
-      when PBEnvironment::Volcano
+      when :Volcano
         @secretPower = 10   # Incinerate, burn
-      when PBEnvironment::Graveyard
+      when :Graveyard
         @secretPower = 11   # Shadow Sneak, flinch
-      when PBEnvironment::Sky
+      when :Sky
         @secretPower = 12   # Gust, lower Speed by 1
-      when PBEnvironment::Space
+      when :Space
         @secretPower = 13   # Swift, flinch
-      when PBEnvironment::UltraSpace
+      when :UltraSpace
         @secretPower = 14   # Psywave, lower Defense by 1
       end
     end
@@ -1313,62 +1311,61 @@ class PokeBattle_Move_0B3 < PokeBattle_Move
     #       Attack in it?
     @npMove = :TRIATTACK
     case @battle.field.terrain
-    when PBBattleTerrains::Electric
+    when :Electric
       @npMove = :THUNDERBOLT if GameData::Move.exists?(:THUNDERBOLT)
-    when PBBattleTerrains::Grassy
+    when :Grassy
       @npMove = :ENERGYBALL if GameData::Move.exists?(:ENERGYBALL)
-    when PBBattleTerrains::Misty
+    when :Misty
       @npMove = :MOONBLAST if GameData::Move.exists?(:MOONBLAST)
-    when PBBattleTerrains::Psychic
+    when :Psychic
       @npMove = :PSYCHIC if GameData::Move.exists?(:PSYCHIC)
     else
       case @battle.environment
-      when PBEnvironment::Grass, PBEnvironment::TallGrass,
-           PBEnvironment::Forest, PBEnvironment::ForestGrass
+      when :Grass, :TallGrass, :Forest, :ForestGrass
         if Settings::MECHANICS_GENERATION >= 6
           @npMove = :ENERGYBALL if GameData::Move.exists?(:ENERGYBALL)
         else
           @npMove = :SEEDBOMB if GameData::Move.exists?(:SEEDBOMB)
         end
-      when PBEnvironment::MovingWater, PBEnvironment::StillWater, PBEnvironment::Underwater
+      when :MovingWater, :StillWater, :Underwater
         @npMove = :HYDROPUMP if GameData::Move.exists?(:HYDROPUMP)
-      when PBEnvironment::Puddle
+      when :Puddle
         @npMove = :MUDBOMB if GameData::Move.exists?(:MUDBOMB)
-      when PBEnvironment::Cave
+      when :Cave
         if Settings::MECHANICS_GENERATION >= 6
           @npMove = :POWERGEM if GameData::Move.exists?(:POWERGEM)
         else
           @npMove = :ROCKSLIDE if GameData::Move.exists?(:ROCKSLIDE)
         end
-      when PBEnvironment::Rock
+      when :Rock
         if Settings::MECHANICS_GENERATION >= 6
           @npMove = :EARTHPOWER if GameData::Move.exists?(:EARTHPOWER)
         else
           @npMove = :ROCKSLIDE if GameData::Move.exists?(:ROCKSLIDE)
         end
-      when PBEnvironment::Sand
+      when :Sand
         if Settings::MECHANICS_GENERATION >= 6
           @npMove = :EARTHPOWER if GameData::Move.exists?(:EARTHPOWER)
         else
           @npMove = :EARTHQUAKE if GameData::Move.exists?(:EARTHQUAKE)
         end
-      when PBEnvironment::Snow
+      when :Snow
         if Settings::MECHANICS_GENERATION >= 6
           @npMove = :FROSTBREATH if GameData::Move.exists?(:FROSTBREATH)
         else
           @npMove = :BLIZZARD if GameData::Move.exists?(:BLIZZARD)
         end
-      when PBEnvironment::Ice
+      when :Ice
         @npMove = :ICEBEAM if GameData::Move.exists?(:ICEBEAM)
-      when PBEnvironment::Volcano
+      when :Volcano
         @npMove = :LAVAPLUME if GameData::Move.exists?(:LAVAPLUME)
-      when PBEnvironment::Graveyard
+      when :Graveyard
         @npMove = :SHADOWBALL if GameData::Move.exists?(:SHADOWBALL)
-      when PBEnvironment::Sky
+      when :Sky
         @npMove = :AIRSLASH if GameData::Move.exists?(:AIRSLASH)
-      when PBEnvironment::Space
+      when :Space
         @npMove = :DRACOMETEOR if GameData::Move.exists?(:DRACOMETEOR)
-      when PBEnvironment::UltraSpace
+      when :UltraSpace
         @npMove = :PSYSHOCK if GameData::Move.exists?(:PSYSHOCK)
       end
     end
@@ -1984,7 +1981,7 @@ class PokeBattle_Move_0C1 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
     @beatUpList = []
     @battle.eachInTeamFromBattlerIndex(user.index) do |pkmn,i|
-      next if !pkmn.able? || pkmn.status!=PBStatuses::NONE
+      next if !pkmn.able? || pkmn.status != :NONE
       @beatUpList.push(i)
     end
     if @beatUpList.length==0
@@ -2038,8 +2035,7 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
   def pbIsChargingTurn?(user)
     ret = super
     if !user.effects[PBEffects::TwoTurnAttack]
-      w = @battle.pbWeather
-      if w==PBWeather::Sun || w==PBWeather::HarshSun
+      if [:Sun, :HarshSun].include?(@battle.pbWeather)
         @powerHerb = false
         @chargingTurn = true
         @damagingTurn = true
@@ -2054,8 +2050,7 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
   end
 
   def pbBaseDamageMultiplier(damageMult,user,target)
-    w = @battle.pbWeather
-    damageMult /= 2 if w>0 && w!=PBWeather::Sun && w!=PBWeather::HarshSun
+    damageMult /= 2 if ![:None, :Sun, :HarshSun].include?(@battle.pbWeather)
     return damageMult
   end
 end
@@ -2353,7 +2348,7 @@ class PokeBattle_Move_0D1 < PokeBattle_Move
     user.currentMove = @id
     @battle.pbDisplay(_INTL("{1} caused an uproar!",user.pbThis))
     @battle.pbPriority(true).each do |b|
-      next if b.fainted? || b.status!=PBStatuses::SLEEP
+      next if b.fainted? || b.status != :SLEEP
       next if b.hasActiveAbility?(:SOUNDPROOF)
       b.pbCureStatus
     end
@@ -2536,9 +2531,9 @@ end
 class PokeBattle_Move_0D8 < PokeBattle_HealingMove
   def pbOnStartUse(user,targets)
     case @battle.pbWeather
-    when PBWeather::Sun, PBWeather::HarshSun
+    when :Sun, :HarshSun
       @healAmount = (user.totalhp*2/3.0).round
-    when PBWeather::None, PBWeather::StrongWinds
+    when :None, :StrongWinds
       @healAmount = (user.totalhp/2.0).round
     else
       @healAmount = (user.totalhp/4.0).round
@@ -3720,6 +3715,6 @@ end
 class PokeBattle_Move_0FF < PokeBattle_WeatherMove
   def initialize(battle,move)
     super
-    @weatherType = PBWeather::Sun
+    @weatherType = :Sun
   end
 end

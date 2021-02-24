@@ -40,35 +40,31 @@ class PokeBattle_Battle
     # Weather wears off
     if @field.weatherDuration==0
       case @field.weather
-      when PBWeather::Sun
-        pbDisplay(_INTL("The sunlight faded."))
-      when PBWeather::Rain
-        pbDisplay(_INTL("The rain stopped."))
-      when PBWeather::Sandstorm
-        pbDisplay(_INTL("The sandstorm subsided."))
-      when PBWeather::Hail
-        pbDisplay(_INTL("The hail stopped."))
-      when PBWeather::ShadowSky
-        pbDisplay(_INTL("The shadow sky faded."))
+      when :Sun       then pbDisplay(_INTL("The sunlight faded."))
+      when :Rain      then pbDisplay(_INTL("The rain stopped."))
+      when :Sandstorm then pbDisplay(_INTL("The sandstorm subsided."))
+      when :Hail      then pbDisplay(_INTL("The hail stopped."))
+      when :ShadowSky then pbDisplay(_INTL("The shadow sky faded."))
       end
-      @field.weather = PBWeather::None
+      @field.weather = :None
       # Check for form changes caused by the weather changing
       eachBattler { |b| b.pbCheckFormOnWeatherChange }
       # Start up the default weather
-      pbStartWeather(nil,@field.defaultWeather) if @field.defaultWeather!=PBWeather::None
-      return if @field.weather==PBWeather::None
+      pbStartWeather(nil,@field.defaultWeather) if @field.defaultWeather != :None
+      return if @field.weather == :None
     end
     # Weather continues
-    pbCommonAnimation(PBWeather.animationName(@field.weather))
+    weather_data = GameData::BattleWeather.try_get(@field.weather)
+    pbCommonAnimation(weather_data.animation) if weather_data
     case @field.weather
-#    when PBWeather::Sun         then pbDisplay(_INTL("The sunlight is strong."))
-#    when PBWeather::Rain        then pbDisplay(_INTL("Rain continues to fall."))
-    when PBWeather::Sandstorm   then pbDisplay(_INTL("The sandstorm is raging."))
-    when PBWeather::Hail        then pbDisplay(_INTL("The hail is crashing down."))
-#    when PBWeather::HarshSun    then pbDisplay(_INTL("The sunlight is extremely harsh."))
-#    when PBWeather::HeavyRain   then pbDisplay(_INTL("It is raining heavily."))
-#    when PBWeather::StrongWinds then pbDisplay(_INTL("The wind is strong."))
-    when PBWeather::ShadowSky   then pbDisplay(_INTL("The shadow sky continues."))
+#    when :Sun         then pbDisplay(_INTL("The sunlight is strong."))
+#    when :Rain        then pbDisplay(_INTL("Rain continues to fall."))
+    when :Sandstorm   then pbDisplay(_INTL("The sandstorm is raging."))
+    when :Hail        then pbDisplay(_INTL("The hail is crashing down."))
+#    when :HarshSun    then pbDisplay(_INTL("The sunlight is extremely harsh."))
+#    when :HeavyRain   then pbDisplay(_INTL("It is raining heavily."))
+#    when :StrongWinds then pbDisplay(_INTL("The wind is strong."))
+    when :ShadowSky   then pbDisplay(_INTL("The shadow sky continues."))
     end
     # Effects due to weather
     curWeather = pbWeather
@@ -81,21 +77,21 @@ class PokeBattle_Battle
       # Weather damage
       # NOTE:
       case curWeather
-      when PBWeather::Sandstorm
+      when :Sandstorm
         next if !b.takesSandstormDamage?
         pbDisplay(_INTL("{1} is buffeted by the sandstorm!",b.pbThis))
         @scene.pbDamageAnimation(b)
         b.pbReduceHP(b.totalhp/16,false)
         b.pbItemHPHealCheck
         b.pbFaint if b.fainted?
-      when PBWeather::Hail
+      when :Hail
         next if !b.takesHailDamage?
         pbDisplay(_INTL("{1} is buffeted by the hail!",b.pbThis))
         @scene.pbDamageAnimation(b)
         b.pbReduceHP(b.totalhp/16,false)
         b.pbItemHPHealCheck
         b.pbFaint if b.fainted?
-      when PBWeather::ShadowSky
+      when :ShadowSky
         next if !b.takesShadowSkyDamage?
         pbDisplay(_INTL("{1} is hurt by the shadow sky!",b.pbThis))
         @scene.pbDamageAnimation(b)
@@ -113,29 +109,30 @@ class PokeBattle_Battle
     # Count down terrain duration
     @field.terrainDuration -= 1 if @field.terrainDuration>0
     # Terrain wears off
-    if @field.terrain!=PBBattleTerrains::None && @field.terrainDuration==0
+    if @field.terrain != :None && @field.terrainDuration == 0
       case @field.terrain
-      when PBBattleTerrains::Electric
+      when :Electric
         pbDisplay(_INTL("The electric current disappeared from the battlefield!"))
-      when PBBattleTerrains::Grassy
+      when :Grassy
         pbDisplay(_INTL("The grass disappeared from the battlefield!"))
-      when PBBattleTerrains::Misty
+      when :Misty
         pbDisplay(_INTL("The mist disappeared from the battlefield!"))
-      when PBBattleTerrains::Psychic
+      when :Psychic
         pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
       end
-      @field.terrain = PBBattleTerrains::None
+      @field.terrain = :None
       # Start up the default terrain
-      pbStartTerrain(nil,@field.defaultTerrain,false) if @field.defaultTerrain!=PBBattleTerrains::None
-      return if @field.terrain==PBBattleTerrains::None
+      pbStartTerrain(nil, @field.defaultTerrain, false) if @field.defaultTerrain != :None
+      return if @field.terrain == :None
     end
     # Terrain continues
-    pbCommonAnimation(PBBattleTerrains.animationName(@field.terrain))
+    terrain_data = GameData::BattleTerrain.try_get(@field.terrain)
+    pbCommonAnimation(terrain_data.animation) if terrain_data
     case @field.terrain
-    when PBBattleTerrains::Electric then pbDisplay(_INTL("An electric current is running across the battlefield."))
-    when PBBattleTerrains::Grassy   then pbDisplay(_INTL("Grass is covering the battlefield."))
-    when PBBattleTerrains::Misty    then pbDisplay(_INTL("Mist is swirling about the battlefield."))
-    when PBBattleTerrains::Psychic  then pbDisplay(_INTL("The battlefield is weird."))
+    when :Electric then pbDisplay(_INTL("An electric current is running across the battlefield."))
+    when :Grassy   then pbDisplay(_INTL("Grass is covering the battlefield."))
+    when :Misty    then pbDisplay(_INTL("Mist is swirling about the battlefield."))
+    when :Psychic  then pbDisplay(_INTL("The battlefield is weird."))
     end
   end
 
@@ -263,7 +260,7 @@ class PokeBattle_Battle
     curWeather = pbWeather
     for side in 0...2
       next if sides[side].effects[PBEffects::SeaOfFire]==0
-      next if curWeather==PBWeather::Rain || curWeather==PBWeather::HeavyRain
+      next if [:Rain, :HeavyRain].include?(curWeather)
       @battle.pbCommonAnimation("SeaOfFire") if side==0
       @battle.pbCommonAnimation("SeaOfFireOpp") if side==1
       priority.each do |b|
@@ -282,7 +279,7 @@ class PokeBattle_Battle
     priority.each do |b|
       next if b.fainted?
       # Grassy Terrain (healing)
-      if @field.terrain==PBBattleTerrains::Grassy && b.affectedByTerrain? && b.canHeal?
+      if @field.terrain == :Grassy && b.affectedByTerrain? && b.canHeal?
         PBDebug.log("[Lingering effect] Grassy Terrain heals #{b.pbThis(true)}")
         b.pbRecoverHP(b.totalhp/16)
         pbDisplay(_INTL("{1}'s HP was restored.",b.pbThis))
@@ -340,14 +337,15 @@ class PokeBattle_Battle
     # Damage from poisoning
     priority.each do |b|
       next if b.fainted?
-      next if b.status!=PBStatuses::POISON
+      next if b.status != :POISON
       if b.statusCount>0
         b.effects[PBEffects::Toxic] += 1
         b.effects[PBEffects::Toxic] = 15 if b.effects[PBEffects::Toxic]>15
       end
       if b.hasActiveAbility?(:POISONHEAL)
         if b.canHeal?
-          pbCommonAnimation("Poison",b)
+          anim_name = GameData::Status.get(:POISON).animation
+          pbCommonAnimation(anim_name, b) if anim_name
           pbShowAbilitySplash(b)
           b.pbRecoverHP(b.totalhp/8)
           if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
@@ -368,7 +366,7 @@ class PokeBattle_Battle
     end
     # Damage from burn
     priority.each do |b|
-      next if b.status!=PBStatuses::BURN || !b.takesIndirectDamage?
+      next if b.status != :BURN || !b.takesIndirectDamage?
       oldHP = b.hp
       dmg = (Settings::MECHANICS_GENERATION >= 7) ? b.totalhp/16 : b.totalhp/8
       dmg = (dmg/2.0).round if b.hasActiveAbility?(:HEATPROOF)

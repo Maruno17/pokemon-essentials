@@ -78,15 +78,15 @@ PokemonDebugMenuCommands.register("setstatus", {
       screen.pbDisplay(_INTL("{1} is fainted, can't change status.", pkmn.name))
     else
       cmd = 0
+      commands = [_INTL("[Cure]")]
+      ids = [:NONE]
+      GameData::Status.each do |s|
+        next if s.id == :NONE
+        commands.push(s.name)
+        ids.push(s.id)
+      end
       loop do
-        cmd = screen.pbShowCommands(_INTL("Set {1}'s status.", pkmn.name), [
-           _INTL("[Cure]"),
-           _INTL("Sleep"),
-           _INTL("Poison"),
-           _INTL("Burn"),
-           _INTL("Paralysis"),
-           _INTL("Frozen")
-        ], cmd)
+        cmd = screen.pbShowCommands(_INTL("Set {1}'s status.", pkmn.name), commands, cmd)
         break if cmd < 0
         case cmd
         when 0   # Cure
@@ -96,7 +96,7 @@ PokemonDebugMenuCommands.register("setstatus", {
         else   # Give status problem
           count = 0
           cancel = false
-          if cmd == PBStatuses::SLEEP
+          if ids[cmd] == :SLEEP
             params = ChooseNumberParams.new
             params.setRange(0, 9)
             params.setDefaultValue(3)
@@ -105,7 +105,7 @@ PokemonDebugMenuCommands.register("setstatus", {
             cancel = true if count <= 0
           end
           if !cancel
-            pkmn.status      = cmd
+            pkmn.status      = ids[cmd]
             pkmn.statusCount = count
             screen.pbRefreshSingle(pkmnid)
           end
@@ -196,12 +196,11 @@ PokemonDebugMenuCommands.register("setlevel", {
     if pkmn.egg?
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
     else
-      mLevel = PBExperience.maxLevel
       params = ChooseNumberParams.new
-      params.setRange(1, mLevel)
+      params.setRange(1, GameData::GrowthRate.max_level)
       params.setDefaultValue(pkmn.level)
       level = pbMessageChooseNumber(
-         _INTL("Set the Pokémon's level (max. {1}).", mLevel), params) { screen.pbUpdate }
+         _INTL("Set the Pokémon's level (max. {1}).", params.maxNumber), params) { screen.pbUpdate }
       if level != pkmn.level
         pkmn.level = level
         pkmn.calcStats
@@ -219,8 +218,8 @@ PokemonDebugMenuCommands.register("setexp", {
     if pkmn.egg?
       screen.pbDisplay(_INTL("{1} is an egg.", pkmn.name))
     else
-      minxp = PBExperience.pbGetStartExperience(pkmn.level, pkmn.growth_rate)
-      maxxp = PBExperience.pbGetStartExperience(pkmn.level + 1, pkmn.growth_rate)
+      minxp = pkmn.growth_rate.minimum_exp_for_level(pkmn.level)
+      maxxp = pkmn.growth_rate.minimum_exp_for_level(pkmn.level + 1)
       if minxp == maxxp
         screen.pbDisplay(_INTL("{1} is at the maximum level.", pkmn.name))
       else

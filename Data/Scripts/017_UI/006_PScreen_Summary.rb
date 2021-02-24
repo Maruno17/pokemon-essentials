@@ -291,7 +291,8 @@ class PokemonSummary_Scene
 
   def drawPage(page)
     if @pokemon.egg?
-      drawPageOneEgg; return
+      drawPageOneEgg
+      return
     end
     @sprites["itemicon"].item = @pokemon.item_id
     overlay = @sprites["overlay"].bitmap
@@ -308,11 +309,16 @@ class PokemonSummary_Scene
     end
     imagepos.push([ballimage,14,60])
     # Show status/fainted/Pokérus infected icon
-    status = -1
-    status = 6 if @pokemon.pokerusStage==1
-    status = @pokemon.status-1 if @pokemon.status>0
-    status = 5 if @pokemon.hp==0
-    if status>=0
+    status = 0
+    if @pokemon.fainted?
+      status = GameData::Status::DATA.keys.length / 2
+    elsif @pokemon.status != :NONE
+      status = GameData::Status.get(@pokemon.status).id_number
+    elsif @pokemon.pokerusStage == 1
+      status = GameData::Status::DATA.keys.length / 2 + 1
+    end
+    status -= 1
+    if status >= 0
       imagepos.push(["Graphics/Pictures/statuses",124,100,0,16*status,44,16])
     end
     # Show Pokérus cured icon
@@ -388,7 +394,7 @@ class PokemonSummary_Scene
        [_INTL("ID No."),238,208,0,base,shadow],
     ]
     # Write the Regional/National Dex number
-    dexnum = @pokemon.species
+    dexnum = GameData::Species.get(@pokemon.species).id_number
     dexnumshift = false
     if $PokemonGlobal.pokedexUnlocked[$PokemonGlobal.pokedexUnlocked.length-1]
       dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
@@ -439,7 +445,7 @@ class PokemonSummary_Scene
       memo = sprintf("<c3=404040,B0B0B0>%s\n",heartmessage)
       drawFormattedTextEx(overlay,234,304,264,memo)
     else
-      endexp = PBExperience.pbGetStartExperience(@pokemon.level+1,@pokemon.growth_rate)
+      endexp = @pokemon.growth_rate.minimum_exp_for_level(@pokemon.level + 1)
       textpos.push([_INTL("Exp. Points"),238,240,0,base,shadow])
       textpos.push([@pokemon.exp.to_s_formatted,488,272,1,Color.new(64,64,64),Color.new(176,176,176)])
       textpos.push([_INTL("To Next Lv."),238,304,0,base,shadow])
@@ -459,7 +465,7 @@ class PokemonSummary_Scene
       overlay.blt(436,146,@typebitmap.bitmap,type2rect)
     end
     # Draw Exp bar
-    if @pokemon.level<PBExperience.maxLevel
+    if @pokemon.level<GameData::GrowthRate.max_level
       w = @pokemon.exp_fraction * 128
       w = ((w/2).round)*2
       pbDrawImagePositions(overlay,[

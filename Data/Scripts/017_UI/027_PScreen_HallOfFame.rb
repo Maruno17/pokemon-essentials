@@ -303,7 +303,11 @@ class HallOfFame_Scene
     pokename+="/"+speciesname
     pokename=_INTL("Egg")+"/"+_INTL("Egg") if pokemon.egg?
     idno=(pokemon.owner.name.empty? || pokemon.egg?) ? "?????" : sprintf("%05d",pokemon.owner.public_id)
-    dexnumber=pokemon.egg? ? _INTL("No. ???") : _ISPRINTF("No. {1:03d}",pokemon.species)
+    dexnumber = _INTL("No. ???")
+    if !pokemon.egg?
+      species_data = GameData::Species.get(pokemon.species)
+      dexnumber = _ISPRINTF("No. {1:03d}",species_data.id_number)
+    end
     textPositions=[
        [dexnumber,32,Graphics.height-80,0,BASECOLOR,SHADOWCOLOR],
        [pokename,Graphics.width-192,Graphics.height-80,2,BASECOLOR,SHADOWCOLOR],

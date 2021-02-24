@@ -459,8 +459,7 @@ def pbTrainerTypeEditorNew(default_name)
   GameData::TrainerType.save
   pbConvertTrainerData
   pbMessage(_INTL("The trainer type {1} was created (ID: {2}).", name, id.to_s))
-  pbMessage(_ISPRINTF("Put the Trainer's graphic (trainer{1:s}.png or trainer{2:03d}.png) in Graphics/Trainers, or it will be blank.",
-     id, id_number))
+  pbMessage(_INTL("Put the Trainer's graphic ({1}.png) in Graphics/Trainers, or it will be blank.", id.to_s))
   return id.to_sym
 end
 
@@ -651,7 +650,7 @@ module TrainerPokemonProperty
       initsetting[:happiness],
       initsetting[:poke_ball]
     ])
-    max_level = PBExperience.maxLevel
+    max_level = GameData::GrowthRate.max_level
     pkmn_properties = [
        [_INTL("Species"),   SpeciesProperty,                         _INTL("Species of the Pokémon.")],
        [_INTL("Level"),     NonzeroLimitProperty.new(max_level),     _INTL("Level of the Pokémon (1-{1}).", max_level)],
@@ -937,8 +936,7 @@ def pbItemEditorNew(default_name)
   GameData::Item.save
   Compiler.write_items
   pbMessage(_INTL("The item {1} was created (ID: {2}).", name, id.to_s))
-  pbMessage(_ISPRINTF("Put the item's graphic (item{1:s}.png or item{2:03d}.png) in Graphics/Icons, or it will be blank.",
-     id, id_number))
+  pbMessage(_INTL("Put the item's graphic ({1}.png) in Graphics/Items, or it will be blank.", id.to_s))
 end
 
 
@@ -958,7 +956,7 @@ def pbPokemonEditor
      [_INTL("BaseStats"),         BaseStatsProperty,                  _INTL("Base stats of the Pokémon.")],
      [_INTL("EffortPoints"),      EffortValuesProperty,               _INTL("Effort Value points earned when this species is defeated.")],
      [_INTL("BaseEXP"),           LimitProperty.new(9999),            _INTL("Base experience earned when this species is defeated.")],
-     [_INTL("GrowthRate"),        EnumProperty2.new(PBGrowthRates),   _INTL("Pokémon's growth rate.")],
+     [_INTL("GrowthRate"),        GameDataProperty.new(:GrowthRate),  _INTL("Pokémon's growth rate.")],
      [_INTL("GenderRate"),        GameDataProperty.new(:GenderRatio), _INTL("Proportion of males to females for this species.")],
      [_INTL("Rareness"),          LimitProperty.new(255),             _INTL("Catch rate of this species (0-255).")],
      [_INTL("Happiness"),         LimitProperty.new(255),             _INTL("Base happiness of this species (0-255).")],
@@ -982,7 +980,7 @@ def pbPokemonEditor
      [_INTL("Height"),            NonzeroLimitProperty.new(999),      _INTL("Height of the Pokémon in 0.1 metres (e.g. 42 = 4.2m).")],
      [_INTL("Weight"),            NonzeroLimitProperty.new(9999),     _INTL("Weight of the Pokémon in 0.1 kilograms (e.g. 42 = 4.2kg).")],
      [_INTL("Color"),             GameDataProperty.new(:BodyColor),   _INTL("Pokémon's body color.")],
-     [_INTL("Shape"),             LimitProperty.new(14),              _INTL("Body shape of this species (0-14).")],
+     [_INTL("Shape"),             GameDataProperty.new(:BodyShape),   _INTL("Body shape of this species.")],
      [_INTL("Habitat"),           GameDataProperty.new(:Habitat),     _INTL("The habitat of this species.")],
      [_INTL("Generation"),        LimitProperty.new(99999),           _INTL("The number of the generation the Pokémon debuted in.")],
      [_INTL("BattlerPlayerX"),    ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],

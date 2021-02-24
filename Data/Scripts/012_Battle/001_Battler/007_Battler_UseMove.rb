@@ -314,7 +314,7 @@ class PokeBattle_Battler
     # Messages include Magnitude's number and Pledge moves' "it's a combo!"
     move.pbOnStartUse(user,targets)
     # Self-thawing due to the move
-    if user.status==PBStatuses::FROZEN && move.thawsUser?
+    if user.status == :FROZEN && move.thawsUser?
       user.pbCureStatus(false)
       @battle.pbDisplay(_INTL("{1} melted the ice!",user.pbThis))
     end
@@ -323,8 +323,7 @@ class PokeBattle_Battler
       @battle.pbCommonAnimation("Powder",user)
       @battle.pbDisplay(_INTL("When the flame touched the powder on the Pokémon, it exploded!"))
       user.lastMoveFailed = true
-      w = @battle.pbWeather
-      if w!=PBWeather::Rain && w!=PBWeather::HeavyRain && user.takesIndirectDamage?
+      if ![:Rain, :HeavyRain].include?(@battle.pbWeather) && user.takesIndirectDamage?
         oldHP = user.hp
         user.pbReduceHP((user.totalhp/4.0).round,false)
         user.pbFaint if user.fainted?
@@ -341,7 +340,7 @@ class PokeBattle_Battler
     # Primordial Sea, Desolate Land
     if move.damagingMove?
       case @battle.pbWeather
-      when PBWeather::HeavyRain
+      when :HeavyRain
         if move.calcType == :FIRE
           @battle.pbDisplay(_INTL("The Fire-type attack fizzled out in the heavy rain!"))
           user.lastMoveFailed = true
@@ -349,7 +348,7 @@ class PokeBattle_Battler
           pbEndTurn(choice)
           return
         end
-      when PBWeather::HarshSun
+      when :HarshSun
         if move.calcType == :WATER
           @battle.pbDisplay(_INTL("The Water-type attack evaporated in the harsh sunlight!"))
           user.lastMoveFailed = true
@@ -435,7 +434,7 @@ class PokeBattle_Battler
         end
         realNumHits += 1
         break if user.fainted?
-        break if user.status==PBStatuses::SLEEP || user.status==PBStatuses::FROZEN
+        break if [:SLEEP, :FROZEN].include?(user.status)
         # NOTE: If a multi-hit move becomes disabled partway through doing those
         #       hits (e.g. by Cursed Body), the rest of the hits continue as
         #       normal.
