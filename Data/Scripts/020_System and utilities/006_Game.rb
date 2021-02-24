@@ -21,6 +21,8 @@ module Game
   # Loads values from the save file and runs any necessary
   # conversions on it.
   def self.set_up_system
+    SaveData.move_old_windows_save if System.platform[/Windows/]
+
     if SaveData.exists?
       save_data = SaveData.read_from_file(SaveData::FILE_PATH)
     else
