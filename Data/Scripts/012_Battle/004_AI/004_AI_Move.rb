@@ -118,17 +118,17 @@ class PokeBattle_AI
   # Trainer Pokémon calculate how much they want to use each of their moves.
   def pbRegisterMoveTrainer(user,idxMove,choices,skill)
     move = user.moves[idxMove]
-    targetType = move.pbTarget(user)
-    if PBTargets.multipleTargets?(targetType)
+    target_data = move.pbTarget(user)
+    if target_data.num_targets > 1
       # If move affects multiple battlers and you don't choose a particular one
       totalScore = 0
       @battle.eachBattler do |b|
-        next if !@battle.pbMoveCanTarget?(user.index,b.index,targetType)
+        next if !@battle.pbMoveCanTarget?(user.index,b.index,target_data)
         score = pbGetMoveScore(move,user,b,skill)
         totalScore += ((user.opposes?(b)) ? score : -score)
       end
       choices.push([idxMove,totalScore,-1]) if totalScore>0
-    elsif PBTargets.noTargets?(targetType)
+    elsif target_data.num_targets == 0
       # If move has no targets, affects the user, a side or the whole field
       score = pbGetMoveScore(move,user,user,skill)
       choices.push([idxMove,score,-1]) if score>0
@@ -136,8 +136,8 @@ class PokeBattle_AI
       # If move affects one battler and you have to choose which one
       scoresAndTargets = []
       @battle.eachBattler do |b|
-        next if !@battle.pbMoveCanTarget?(user.index,b.index,targetType)
-        next if PBTargets.canChooseFoeTarget?(targetType) && !user.opposes?(b)
+        next if !@battle.pbMoveCanTarget?(user.index,b.index,target_data)
+        next if target_data.targets_foe && !user.opposes?(b)
         score = pbGetMoveScore(move,user,b,skill)
         scoresAndTargets.push([score,b.index]) if score>0
       end

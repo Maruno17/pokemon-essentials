@@ -269,7 +269,7 @@ class PokeBattle_Battler
         PBDebug.log("[Ability triggered] #{b.pbThis}'s #{b.abilityName}")
         user.pbReducePP(move)
       end
-      if PBTargets.targetsFoeSide?(move.pbTarget(user))
+      if move.pbTarget(user).affects_foe_side
         @battle.eachOtherSideBattler(user) do |b|
           next unless b.hasActiveAbility?(:PRESSURE)
           PBDebug.log("[Ability triggered] #{b.pbThis}'s #{b.abilityName}")
@@ -379,8 +379,7 @@ class PokeBattle_Battler
     #---------------------------------------------------------------------------
     magicCoater  = -1
     magicBouncer = -1
-    if targets.length==0 && !PBTargets.noTargets?(move.pbTarget(user)) &&
-       !move.worksWithNoTargets?
+    if targets.length == 0 && move.pbTarget(user).num_targets > 0 && !move.worksWithNoTargets?
       # def pbFindTargets should have found a target(s), but it didn't because
       # they were all fainted
       # All target types except: None, User, UserSide, FoeSide, BothSides

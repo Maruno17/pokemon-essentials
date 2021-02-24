@@ -1775,10 +1775,10 @@ class PokeBattle_AI
         else
           moveData = GameData::Move.get(target.lastRegularMoveUsed)
           if moveData.category == 2 &&   # Status move
-             [PBTargets::User, PBTargets::BothSides].include?(moveData.target)
+             [:User, :BothSides].include?(moveData.target)
             score += 60
           elsif moveData.category != 2 &&   # Damaging move
-             moveData.target == PBTargets::NearOther &&
+             moveData.target == :NearOther &&
              PBTypeEffectiveness.ineffective?(pbCalcTypeMod(moveData.type, target, user))
             score += 60
           end

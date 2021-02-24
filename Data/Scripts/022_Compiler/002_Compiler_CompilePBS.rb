@@ -251,7 +251,7 @@ module Compiler
     pbCompilerEachPreppedLine("PBS/moves.txt") { |line, line_no|
       line = pbGetCsvRecord(line, line_no, [0, "vnssueeuuuyiss",
          nil, nil, nil, nil, nil, :Type, ["Physical", "Special", "Status"],
-         nil, nil, nil, PBTargets, nil, nil, nil
+         nil, nil, nil, :Target, nil, nil, nil
       ])
       move_number = line[0]
       move_symbol = line[1].to_sym
@@ -279,7 +279,7 @@ module Compiler
         :accuracy      => line[7],
         :total_pp      => line[8],
         :effect_chance => line[9],
-        :target        => line[10],
+        :target        => GameData::Target.get(line[10]).id,
         :priority      => line[11],
         :flags         => line[12],
         :description   => line[13]
@@ -477,7 +477,7 @@ module Compiler
           :height                => contents["Height"],
           :weight                => contents["Weight"],
           :color                 => contents["Color"],
-          :shape                 => contents["Shape"],
+          :shape                 => GameData::BodyShape.get(contents["Shape"]).id,
           :habitat               => contents["Habitat"],
           :generation            => contents["Generation"],
           :back_sprite_x         => contents["BattlerPlayerX"],
@@ -668,7 +668,7 @@ module Compiler
           :height                => contents["Height"] || base_data.height,
           :weight                => contents["Weight"] || base_data.weight,
           :color                 => contents["Color"] || base_data.color,
-          :shape                 => contents["Shape"] || base_data.shape,
+          :shape                 => (contents["Shape"]) ? GameData::BodyShape.get(contents["Shape"]).id : base_data.shape,
           :habitat               => contents["Habitat"] || base_data.habitat,
           :generation            => contents["Generation"] || base_data.generation,
           :mega_stone            => contents["MegaStone"],

@@ -90,8 +90,8 @@ class PokeBattle_Battle
   def pbAutoFightMenu(idxBattler); return false; end
 
   def pbChooseTarget(battler,move)
-    targetType = move.pbTarget(battler)
-    idxTarget = @scene.pbChooseTarget(battler.index,targetType)
+    target_data = move.pbTarget(battler)
+    idxTarget = @scene.pbChooseTarget(battler.index,target_data)
     return false if idxTarget<0
     pbRegisterTarget(battler.index,idxTarget)
     return true

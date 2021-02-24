@@ -409,12 +409,11 @@ class PokeBattle_Scene
       return anim if anim
       # Actual animation not found, get the default animation for the move's type
       moveData = GameData::Move.get(moveID)
+      target_data = moveData.pbTarget(@battle.battlers[idxUser])
       moveType = moveData.type
       moveKind = moveData.category
-      moveKind += 3 if PBTargets.multipleTargets?(moveData.target) ||
-                       PBTargets.targetsFoeSide?(moveData.target)
-      moveKind += 3 if moveKind == 2 && moveData.target != PBTargets::User &&
-                       moveData.target != PBTargets::UserSide
+      moveKind += 3 if target_data.num_targets > 1 || target_data.affects_foe_side
+      moveKind += 3 if moveKind == 2 && target_data.num_targets > 0
       # [one target physical, one target special, user status,
       #  multiple targets physical, multiple targets special, non-user status]
       typeDefaultAnim = {

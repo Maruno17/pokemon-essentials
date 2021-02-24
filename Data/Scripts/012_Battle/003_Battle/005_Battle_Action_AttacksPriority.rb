@@ -99,31 +99,31 @@ class PokeBattle_Battle
     @choices[idxBattler][3] = idxTarget   # Set target of move
   end
 
-  # Returns whether the idxTarget will be targeted by a move with targetType
+  # Returns whether the idxTarget will be targeted by a move with target_data
   # used by a battler in idxUser.
-  def pbMoveCanTarget?(idxUser,idxTarget,targetType)
-    return false if PBTargets.noTargets?(targetType)
-    case targetType
-    when PBTargets::NearAlly
+  def pbMoveCanTarget?(idxUser,idxTarget,target_data)
+    return false if target_data.num_targets == 0
+    case target_data.id
+    when :NearAlly
       return false if opposes?(idxUser,idxTarget)
       return false if !nearBattlers?(idxUser,idxTarget)
-    when PBTargets::UserOrNearAlly
+    when :UserOrNearAlly
       return true if idxUser==idxTarget
       return false if opposes?(idxUser,idxTarget)
       return false if !nearBattlers?(idxUser,idxTarget)
-    when PBTargets::NearFoe, PBTargets::AllNearFoes, PBTargets::RandomNearFoe
-      return false if !opposes?(idxUser,idxTarget)
-      return false if !nearBattlers?(idxUser,idxTarget)
-    when PBTargets::Foe
-      return false if !opposes?(idxUser,idxTarget)
-    when PBTargets::NearOther, PBTargets::AllNearOthers
-      return false if !nearBattlers?(idxUser,idxTarget)
-    when PBTargets::Other
-      return false if idxUser==idxTarget
-    when PBTargets::UserAndAllies
+    when :UserAndAllies
       return false if opposes?(idxUser,idxTarget)
-    when PBTargets::AllFoes
+    when :NearFoe, :RandomNearFoe, :AllNearFoes
       return false if !opposes?(idxUser,idxTarget)
+      return false if !nearBattlers?(idxUser,idxTarget)
+    when :Foe
+      return false if !opposes?(idxUser,idxTarget)
+    when :AllFoes
+      return false if !opposes?(idxUser,idxTarget)
+    when :NearOther, :AllNearOthers
+      return false if !nearBattlers?(idxUser,idxTarget)
+    when :Other
+      return false if idxUser==idxTarget
     end
     return true
   end

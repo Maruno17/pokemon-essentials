@@ -296,7 +296,7 @@ class PokeBattle_Scene
           tempVisibleSprites = visibleSprites.clone
           tempVisibleSprites["commandWindow"] = false
           tempVisibleSprites["targetWindow"]  = true
-          idxTarget = pbChooseTarget(idxBattler,PBTargets::Foe,tempVisibleSprites)
+          idxTarget = pbChooseTarget(idxBattler,GameData::Target.get(:Foe),tempVisibleSprites)
           if idxTarget>=0
             break if yield item.id, useType, idxTarget, -1, self
           end
@@ -326,21 +326,24 @@ class PokeBattle_Scene
   # target.
   # nil means can't select that position, "" means can select that position but
   # there is no battler there, otherwise is a battler's name.
-  def pbCreateTargetTexts(idxBattler,targetType)
+  def pbCreateTargetTexts(idxBattler,target_data)
     texts = Array.new(@battle.battlers.length) do |i|
       next nil if !@battle.battlers[i]
       showName = false
-      case targetType
-      when PBTargets::None, PBTargets::User, PBTargets::RandomNearFoe
+      # NOTE: Targets listed here are ones with num_targets of 0, plus
+      #       RandomNearFoe which should look like it targets the user. All
+      #       other targets are handled by the "else" part.
+      case target_data.id
+      when :None, :User, :RandomNearFoe
         showName = (i==idxBattler)
-      when PBTargets::UserSide, PBTargets::UserAndAllies
+      when :UserSide
         showName = !@battle.opposes?(i,idxBattler)
-      when PBTargets::FoeSide, PBTargets::AllFoes
+      when :FoeSide
         showName = @battle.opposes?(i,idxBattler)
-      when PBTargets::BothSides, PBTargets::AllBattlers
+      when :BothSides
         showName = true
       else
-        showName = @battle.pbMoveCanTarget?(i,idxBattler,targetType)
+        showName = @battle.pbMoveCanTarget?(i,idxBattler,target_data)
       end
       next nil if !showName
       next (@battle.battlers[i].fainted?) ? "" : @battle.battlers[i].name
@@ -350,9 +353,9 @@ class PokeBattle_Scene
 
   # Returns the initial position of the cursor when choosing a target for a move
   # in a non-single battle.
-  def pbFirstTarget(idxBattler,targetType)
-    case targetType
-    when PBTargets::NearAlly
+  def pbFirstTarget(idxBattler,target_data)
+    case target_data.id
+    when :NearAlly
       @battle.eachSameSideBattler(idxBattler) do |b|
         next if b.index==idxBattler || !@battle.nearBattlers?(b,idxBattler)
         next if b.fainted?
@@ -362,27 +365,27 @@ class PokeBattle_Scene
         next if b.index==idxBattler || !@battle.nearBattlers?(b,idxBattler)
         return b.index
       end
-    when PBTargets::NearFoe, PBTargets::NearOther
+    when :NearFoe, :NearOther
       indices = @battle.pbGetOpposingIndicesInOrder(idxBattler)
       indices.each { |i| return i if @battle.nearBattlers?(i,idxBattler) && !@battle.battlers[i].fainted? }
       indices.each { |i| return i if @battle.nearBattlers?(i,idxBattler) }
-    when PBTargets::Foe, PBTargets::Other
+    when :Foe, :Other
       indices = @battle.pbGetOpposingIndicesInOrder(idxBattler)
       indices.each { |i| return i if !@battle.battlers[i].fainted? }
       indices.each { |i| return i }
     end
-    return idxBattler
+    return idxBattler   # Target the user initially
   end
 
-  def pbChooseTarget(idxBattler,targetType,visibleSprites=nil)
+  def pbChooseTarget(idxBattler,target_data,visibleSprites=nil)
     pbShowWindow(TARGET_BOX)
     cw = @sprites["targetWindow"]
     # Create an array of battler names (only valid targets are named)
-    texts = pbCreateTargetTexts(idxBattler,targetType)
-    # Determine mode based on targetType
-    mode = (PBTargets.oneTarget?(targetType)) ? 0 : 1
+    texts = pbCreateTargetTexts(idxBattler,target_data)
+    # Determine mode based on target_data
+    mode = (target_data.num_targets == 1) ? 0 : 1
     cw.setDetails(texts,mode)
-    cw.index = pbFirstTarget(idxBattler,targetType)
+    cw.index = pbFirstTarget(idxBattler,target_data)
     pbSelectBattler((mode==0) ? cw.index : texts,2)   # Select initial battler/data box
     pbFadeInAndShow(@sprites,visibleSprites) if visibleSprites
     ret = -1
