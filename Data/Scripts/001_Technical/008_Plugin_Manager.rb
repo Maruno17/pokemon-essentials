@@ -122,7 +122,7 @@
 
 module PluginManager
   # Win32API MessageBox function for custom errors.
-  MBOX = Win32API.new('user32', 'MessageBox', ['I','P','P','I'], 'I')
+  # MBOX = Win32API.new('user32', 'MessageBox', ['I','P','P','I'], 'I')
   # Holds all registered plugin data.
   @@Plugins = {}
 
@@ -307,7 +307,8 @@ module PluginManager
   def self.error(msg)
     Graphics.update
     t = Thread.new do
-      MBOX.call(Win32API.pbFindRgssWindow, msg, "Plugin Error", 0x10)
+      #MBOX.call(Win32API.pbFindRgssWindow, msg, "Plugin Error", 0x10)
+      p "Plugin Error:\n#{msg}"
       Thread.exit
     end
     while t.status

@@ -190,7 +190,7 @@ def pbEachIntlSection(file)
   sectionname=nil
   lastsection=[]
   file.each_line { |line|
-    if lineno==1 && line[0]==0xEF && line[1]==0xBB && line[2]==0xBF
+    if lineno==1 && line[0].ord==0xEF && line[1].ord==0xBB && line[2].ord==0xBF
       line=line[3,line.length-3]
     end
     if !line[/^\#/] && !line[/^\s*$/]

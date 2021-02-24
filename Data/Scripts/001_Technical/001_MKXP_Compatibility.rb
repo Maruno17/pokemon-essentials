@@ -1,5 +1,7 @@
 $MKXP = !!defined?(System)
 
+$VERBOSE = nil
+
 def mkxp?
   return $MKXP
 end

@@ -141,7 +141,7 @@ def pbTrackPopupMenu(commands)
     menuwindow.update
     hit=menuwindow.hittest
     menuwindow.index=hit if hit>=0
-    if Input.triggerex?(Input::LeftMouseKey) || Input.triggerex?(Input::RightMouseKey) # Left or right button
+    if Input.trigger?(Input::MOUSELEFT) || Input.trigger?(Input::MOUSELEFT) # Left or right button
       menuwindow.dispose
       return hit
     end
@@ -251,7 +251,7 @@ class AnimationWindow < SpriteWrapper
   def update
     mousepos=Mouse::getMousePos
     @changed=false
-    return if !Input.repeatex?(Input::LeftMouseKey)
+    return if !Input.repeat?(Input::MOUSELEFT)
     return if !mousepos
     return if !self.animbitmap
     arrowwidth=@arrows.bitmap.width/2
@@ -276,7 +276,7 @@ class AnimationWindow < SpriteWrapper
     end
     # Left arrow
     if left.contains(mousepos[0],mousepos[1])
-      if Input.repeatcount(Input::LeftMouseKey)>30
+      if Input.count(Input::MOUSELEFT)>30
         @start-=3
       else
         @start-=1
@@ -286,7 +286,7 @@ class AnimationWindow < SpriteWrapper
     end
     # Right arrow
     if right.contains(mousepos[0],mousepos[1])
-      if Input.repeatcount(Input::LeftMouseKey)>30
+      if Input.count(Input::MOUSELEFT)>30
         @start+=3
       else
         @start+=1
@@ -800,7 +800,7 @@ class AnimationCanvas < Sprite
     cel=currentCel
     mousepos=Mouse::getMousePos
     if mousepos && pbSpriteHitTest(self,mousepos[0],mousepos[1],false,true)
-      if Input.triggerex?(Input::LeftMouseKey)   # Left mouse button
+      if Input.trigger?(Input::MOUSELEFT)   # Left mouse button
         selectedcel=-1
         usealpha=(Input.press?(Input::ALT)) ? true : false
         for j in 0...PBAnimation::MAX_SPRITES
@@ -827,7 +827,8 @@ class AnimationCanvas < Sprite
       end
     end
     currentFrame=getCurrentFrame
-    if currentFrame && !@selecting && Input.repeat?(Input::TAB)
+    if currentFrame && !@selecting &&
+      (Input.triggerex?(:TAB) || Input.repeatex?(:TAB))
       currentFrame.length.times {
          @currentcel+=1
          @currentcel=0 if @currentcel>=currentFrame.length
@@ -841,42 +842,42 @@ class AnimationCanvas < Sprite
       cel[AnimFrame::Y]=mousepos[1]-BORDERSIZE+@selectOffsetY
       @dirty[@currentcel]=true
     end
-    if !Input.getstate(Input::LeftMouseKey) && @selecting
+    if !Input.press?(Input::MOUSELEFT) && @selecting
       @selecting=false
     end
     if cel
-      if Input.repeat?(Input::DELETE) && self.deletable?(@currentcel)
+      if (Input.triggerex?(:DELETE) || Input.repeatex?(:DELETE)) && self.deletable?(@currentcel)
         @animation[@currentframe][@currentcel]=nil
         @dirty[@currentcel]=true
         return
       end
-      if Input.repeatex?(0x50)   # "P" for properties
+      if Input.triggerex?(0x50) || Input.repeatex?(0x50)   # "P" for properties
         pbCellProperties(self)
         @dirty[@currentcel]=true
         return
       end
-      if Input.repeatex?(0x4C)   # "L" for lock
+      if Input.triggerex?(0x4C) || Input.repeatex?(0x4C)   # "L" for lock
         cel[AnimFrame::LOCKED]=(cel[AnimFrame::LOCKED]==0) ? 1 : 0
         @dirty[@currentcel]=true
       end
-      if Input.repeatex?(0x52)   # "R" for rotate right
+      if Input.triggerex?(0x52) || Input.repeatex?(0x52)   # "R" for rotate right
         cel[AnimFrame::ANGLE]+=10
         cel[AnimFrame::ANGLE]%=360
         @dirty[@currentcel]=true
       end
-      if Input.repeatex?(0x45)   # "E" for rotate left
+      if Input.triggerex?(0x45) || Input.repeatex?(0x45)   # "E" for rotate left
         cel[AnimFrame::ANGLE]-=10
         cel[AnimFrame::ANGLE]%=360
         @dirty[@currentcel]=true
       end
-      if Input.repeatex?(0x6B)   # "+" for zoom in
+      if Input.triggerex?(0x6B) || Input.repeatex?(0x6B)   # "+" for zoom in
         cel[AnimFrame::ZOOMX]+=10
         cel[AnimFrame::ZOOMX]=1000 if cel[AnimFrame::ZOOMX]>1000
         cel[AnimFrame::ZOOMY]+=10
         cel[AnimFrame::ZOOMY]=1000 if cel[AnimFrame::ZOOMY]>1000
         @dirty[@currentcel]=true
       end
-      if Input.repeatex?(0x6D)   # "-" for zoom in
+      if Input.triggerex?(0x6D) || Input.repeatex?(0x6D)   # "-" for zoom in
         cel[AnimFrame::ZOOMX]-=10
         cel[AnimFrame::ZOOMX]=10 if cel[AnimFrame::ZOOMX]<10
         cel[AnimFrame::ZOOMY]-=10
@@ -884,22 +885,22 @@ class AnimationCanvas < Sprite
         @dirty[@currentcel]=true
       end
       if !self.locked?(@currentcel)
-        if Input.repeat?(Input::UP)
+        if Input.trigger?(Input::UP) || Input.repeat?(Input::UP)
           increment=(Input.press?(Input::ALT)) ? 1 : 8
           cel[AnimFrame::Y]-=increment
           @dirty[@currentcel]=true
         end
-        if Input.repeat?(Input::DOWN)
+        if Input.trigger?(Input::DOWN) ||Input.repeat?(Input::DOWN)
           increment=(Input.press?(Input::ALT)) ? 1 : 8
           cel[AnimFrame::Y]+=increment
           @dirty[@currentcel]=true
         end
-        if Input.repeat?(Input::LEFT)
+        if Input.trigger?(Input::LEFT) || Input.repeat?(Input::LEFT)
           increment=(Input.press?(Input::ALT)) ? 1 : 8
           cel[AnimFrame::X]-=increment
           @dirty[@currentcel]=true
         end
-        if Input.repeat?(Input::RIGHT)
+        if Input.trigger?(Input::RIGHT) || Input.repeat?(Input::RIGHT)
           increment=(Input.press?(Input::ALT)) ? 1 : 8
           cel[AnimFrame::X]+=increment
           @dirty[@currentcel]=true

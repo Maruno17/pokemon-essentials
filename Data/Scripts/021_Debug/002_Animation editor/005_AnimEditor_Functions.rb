@@ -91,6 +91,7 @@ def pbAnimName(animation,cmdwin)
   window=ControlWindow.new(320,128,320,32*4)
   window.z=99999
   window.addControl(TextField.new(_INTL("New Name:"),animation.name))
+  Input.text_input = true
   okbutton=window.addButton(_INTL("OK"))
   cancelbutton=window.addButton(_INTL("Cancel"))
   window.opacity=224
@@ -108,6 +109,7 @@ def pbAnimName(animation,cmdwin)
     end
   end
   window.dispose
+  Input.text_input = false
   return
 end
 
@@ -1020,10 +1022,10 @@ def animationEditorMain(animation)
         break
       end
     end
-    if Input.trigger?(Input::ONLYF5)
+    if Input.triggerex?(:F5)
       pbAnimEditorHelpWindow
       next
-    elsif Input.triggerex?(Input::RightMouseKey) && sliderwin.hittest?(0)   # Right mouse button
+    elsif Input.trigger?(Input::MOUSERIGHT) && sliderwin.hittest?(0)   # Right mouse button
       commands=[
          _INTL("Copy Frame"),
          _INTL("Paste Frame"),
@@ -1058,7 +1060,7 @@ def animationEditorMain(animation)
         sliderwin.invalidate
       end
       next
-    elsif Input.triggerex?(Input::RightMouseKey)  # Right mouse button
+    elsif Input.trigger?(Input::MOUSERIGHT)  # Right mouse button
       mousepos=Mouse::getMousePos
       mousepos=[0,0] if !mousepos
       commands=[

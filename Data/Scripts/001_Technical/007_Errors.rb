@@ -5,7 +5,8 @@ class Reset < Exception
 end
 
 def pbGetExceptionMessage(e,_script="")
-  emessage = e.message
+  emessage = e.message.dup
+  emessage.force_encoding(Encoding::UTF_8)
   if e.is_a?(Hangup)
     emessage = "The script is taking too long. The game will restart."
   elsif e.is_a?(Errno::ENOENT)
@@ -46,7 +47,13 @@ def pbPrintException(e)
   errorlogline.sub!(pbGetUserName, "USERNAME")
   errorlogline = "\r\n" + errorlogline if errorlogline.length > 20
   errorlogline.gsub!("/", "\\")
-  print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nPress Ctrl+C to copy this message to the clipboard.")
+
+  print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl while clicking OK to copy this message to the clipboard.")
+  (0.3 / (1.0 / Graphics.frame_rate)).ceil.times{Graphics.update} # Give a ~300ms coyote time to start holding Control
+  Input.update
+  if Input.press?(Input::CTRL)
+    Input.clipboard = message
+  end
 end
 
 def pbCriticalCode
