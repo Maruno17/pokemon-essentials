@@ -1,6 +1,6 @@
 # The Game module contains methods for saving and loading the game.
 module Game
-  # Initializes various global variables.
+  # Initializes various global variables and loads the game data.
   def self.initialize
     $PokemonTemp        = PokemonTemp.new
     $game_temp          = Game_Temp.new
@@ -10,6 +10,7 @@ module Game
     $data_common_events = load_data('Data/CommonEvents.rxdata')
     $data_system        = load_data('Data/System.rxdata')
     pbLoadBattleAnimations
+    GameData.load_all
 
     map_file = format('Data/Map%03d.rxdata', $data_system.start_map_id)
 
@@ -46,7 +47,6 @@ module Game
     end
 
     pbSetResizeFactor([$PokemonSystem.screensize, 4].min)
-    GameData.load_all
     if Settings::LANGUAGES.length >= 2
       $PokemonSystem.language = pbChooseLanguage if save_data.empty?
       pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
