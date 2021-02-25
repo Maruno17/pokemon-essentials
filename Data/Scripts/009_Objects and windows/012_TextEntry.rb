@@ -1434,14 +1434,14 @@ def pbFreeText(msgwindow,currenttext,passwordbox,maxlength,width=240)
   pbPositionNearMsgWindow(window,msgwindow,:right)
   window.text=currenttext
   window.passwordChar="*" if passwordbox
-  $fullInputUpdate = true
+  Input.text_input = true
   loop do
     Graphics.update
     Input.update
-    if Input.trigger?(Input::ESC)
+    if Input.triggerex?(:ESCAPE)
       ret=currenttext
       break
-    elsif Input.trigger?(Input::ENTER)
+    elsif Input.triggerex?(:RETURN)
       ret=window.text
       break
     end
@@ -1449,7 +1449,7 @@ def pbFreeText(msgwindow,currenttext,passwordbox,maxlength,width=240)
     msgwindow.update if msgwindow
     yield if block_given?
   end
-  $fullInputUpdate = false
+  Input.text_input = false
   window.dispose
   Input.update
   return ret
