@@ -8,8 +8,7 @@ SaveData.register(:player) do
 end
 
 SaveData.register(:frame_count) do
-  # TODO: Get rid of this check soon
-  ensure_class RUBY_VERSION == '3.0.0' ? :Integer : :Fixnum
+  ensure_class :Integer
   save_value { Graphics.frame_count }
   load_value { |value| Graphics.frame_count = value }
   new_game_value { 0 }

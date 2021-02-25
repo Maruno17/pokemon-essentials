@@ -45,7 +45,7 @@ module SaveData
 
       unless self.valid?(value)
         raise InvalidValueError,
-              "Save value #{@id.inspect} is not a #{@ensured_class_names.first} (#{value.class.name} given)"
+              "Save value #{@id.inspect} is not a #{@ensured_class} (#{value.class.name} given)"
       end
 
       return value
@@ -57,7 +57,7 @@ module SaveData
     def load(value)
       unless self.valid?(value)
         raise InvalidValueError,
-              "Save value #{@id.inspect} is not a #{@ensured_class_names.first} (#{value.class.name} given)"
+              "Save value #{@id.inspect} is not a #{@ensured_class} (#{value.class.name} given)"
       end
 
       @load_proc.call(value)
@@ -67,8 +67,8 @@ module SaveData
     # @param value [Object] value to check
     # @return [Boolean] whether the given value is valid
     def valid?(value)
-      return true if @ensured_class_names.nil?
-      return @ensured_class_names.include?(value.class.name)
+      return true if @ensured_class.nil?
+      return value.is_a?(Object.const_get(@ensured_class))
     end
 
     # Calls the save value's load proc with the value fetched
@@ -139,14 +139,12 @@ module SaveData
       @new_game_value_proc = block
     end
 
-    # If present, ensures that the value's class's name is equal to that of
-    # the passed parameter(s).
-    # @param class_names [Symbol] class names for the accepted value
-    # @note This method accepts multiple class names to ensure compatibility with renamed classes.
+    # If present, ensures that the value is of the given class.
+    # @param class_name [Symbol] class to enforce
     # @see SaveData.register
-    def ensure_class(*class_names)
-      raise ArgumentError, 'No class names given to ensure_class' if class_names.empty?
-      @ensured_class_names = class_names.map { |name| name.to_s }
+    def ensure_class(class_name)
+      validate class_name => Symbol
+      @ensured_class = class_name
     end
 
     # If present, defines how the value should be fetched from the pre-v19
