@@ -280,7 +280,7 @@ class TextField < UIControl
       return
     end
     # Backspace
-    if Input.pressex?(:BACKSPACE) || Input.repeatex?(:BACKSPACE) ||
+    if Input.triggerex?(:BACKSPACE) || Input.repeatex?(:BACKSPACE) ||
        Input.triggerex?(:DELETE)  || Input.repeatex?(:DELETE)
       self.delete if @cursor > 0
       return
