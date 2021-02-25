@@ -50,7 +50,7 @@ def pbPrintException(e)
 
   print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl after closing this message to copy it to the clipboard.")
   # Give a ~500ms coyote time to start holding Control
-  (0.5 / (1.0 / Graphics.frame_rate)).ceil.times{
+  (Graphics.frame_rate / 2).ceil.times{
     Graphics.update
     Input.update
     if Input.press?(Input::CTRL)

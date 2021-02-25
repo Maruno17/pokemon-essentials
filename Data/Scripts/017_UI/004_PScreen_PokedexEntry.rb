@@ -229,7 +229,7 @@ class PokemonPokedexInfo_Scene
       # Write the height and weight
       height = species_data.height
       weight = species_data.weight
-      if pbGetCountry == 0xF4   # If the user is in the United States
+      if System.user_language[3..4] == "US"   # If the user is in the United States
         inches = (height / 0.254).round
         pounds = (weight / 0.45359).round
         textpos.push([_ISPRINTF("{1:d}'{2:02d}\"", inches / 12, inches % 12), 460, 158, 1, base, shadow])
@@ -263,7 +263,7 @@ class PokemonPokedexInfo_Scene
       # Write the category
       textpos.push([_INTL("????? Pokémon"), 246, 74, 0, base, shadow])
       # Write the height and weight
-      if pbGetCountry == 0xF4   # If the user is in the United States
+      if System.user_language[3..4] == "US"   # If the user is in the United States
         textpos.push([_INTL("???'??\""), 460, 158, 1, base, shadow])
         textpos.push([_INTL("????.? lbs."), 494, 190, 1, base, shadow])
       else

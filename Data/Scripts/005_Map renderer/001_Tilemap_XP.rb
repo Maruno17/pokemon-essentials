@@ -20,7 +20,7 @@
 #=======================================================================
 
 module TileWrap
- 
+
   TILESET_WIDTH        = 0x100
   # Looks useless, but covers weird numbers given to mkxp.json or a funky driver
   MAX_TEX_SIZE         = (Bitmap.max_size / 1024) * 1024
@@ -37,13 +37,13 @@ module TileWrap
     height = originalbmp.height
     if width == TILESET_WIDTH && originalbmp.mega?
       columns = (height / MAX_TEX_SIZE.to_f).ceil
-      
+
       if columns * TILESET_WIDTH > MAX_TEX_SIZE
         raise "Tilemap is too long!\n\nSIZE: #{originalbmp.height}px\nHARDWARE LIMIT: #{MAX_TEX_SIZE}px\nBOOSTED LIMIT: #{MAX_TEX_SIZE_BOOSTED}px"
       end
       bmp = Bitmap.new(TILESET_WIDTH*columns, MAX_TEX_SIZE)
       remainder = height % MAX_TEX_SIZE
-      
+
       columns.times{|col|
         srcrect = Rect.new(0, col * MAX_TEX_SIZE, width, (col + 1 == columns) ? remainder : MAX_TEX_SIZE)
         bmp.blt(col*TILESET_WIDTH, 0, originalbmp, srcrect)
@@ -464,7 +464,7 @@ class CustomTilemap
     else
       sprite.bitmap = @tileset if sprite.bitmap!=@tileset
       rect = Rect.new(((id - 384)&7)*@tileSrcWidth,((id - 384)>>3)*@tileSrcHeight,
-      @tileSrcWidth,@tileSrcHeight)
+         @tileSrcWidth,@tileSrcHeight)
       rect = TileWrap::getWrappedRect(rect) if @shouldWrap
       sprite.src_rect = rect
     end

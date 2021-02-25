@@ -851,33 +851,33 @@ class AnimationCanvas < Sprite
         @dirty[@currentcel]=true
         return
       end
-      if Input.triggerex?(0x50) || Input.repeatex?(0x50)   # "P" for properties
+      if Input.triggerex?(:P) || Input.repeatex?(:P)   # Properties
         pbCellProperties(self)
         @dirty[@currentcel]=true
         return
       end
-      if Input.triggerex?(0x4C) || Input.repeatex?(0x4C)   # "L" for lock
+      if Input.triggerex?(:L) || Input.repeatex?(:L)   # Lock
         cel[AnimFrame::LOCKED]=(cel[AnimFrame::LOCKED]==0) ? 1 : 0
         @dirty[@currentcel]=true
       end
-      if Input.triggerex?(0x52) || Input.repeatex?(0x52)   # "R" for rotate right
+      if Input.triggerex?(:R) || Input.repeatex?(:R)   # Rotate right
         cel[AnimFrame::ANGLE]+=10
         cel[AnimFrame::ANGLE]%=360
         @dirty[@currentcel]=true
       end
-      if Input.triggerex?(0x45) || Input.repeatex?(0x45)   # "E" for rotate left
+      if Input.triggerex?(:E) || Input.repeatex?(:E)   # Rotate left
         cel[AnimFrame::ANGLE]-=10
         cel[AnimFrame::ANGLE]%=360
         @dirty[@currentcel]=true
       end
-      if Input.triggerex?(0x6B) || Input.repeatex?(0x6B)   # "+" for zoom in
+      if Input.triggerex?(:KP_PLUS) || Input.repeatex?(:KP_PLUS)   # Zoom in
         cel[AnimFrame::ZOOMX]+=10
         cel[AnimFrame::ZOOMX]=1000 if cel[AnimFrame::ZOOMX]>1000
         cel[AnimFrame::ZOOMY]+=10
         cel[AnimFrame::ZOOMY]=1000 if cel[AnimFrame::ZOOMY]>1000
         @dirty[@currentcel]=true
       end
-      if Input.triggerex?(0x6D) || Input.repeatex?(0x6D)   # "-" for zoom in
+      if Input.triggerex?(:KP_MINUS) || Input.repeatex?(:KP_MINUS)   # Zoom out
         cel[AnimFrame::ZOOMX]-=10
         cel[AnimFrame::ZOOMX]=10 if cel[AnimFrame::ZOOMX]<10
         cel[AnimFrame::ZOOMY]-=10

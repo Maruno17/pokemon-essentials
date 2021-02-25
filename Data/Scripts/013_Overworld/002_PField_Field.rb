@@ -373,12 +373,12 @@ def pbBattleOnStepTaken(repel_active)
   return if !$PokemonEncounters.encounter_possible_here?
   encounterType = $PokemonEncounters.encounter_type
   return if encounterType < 0
-  return if !$PokemonEncounter.step_triggers_encounter?(encounterType)
+  return if !$PokemonEncounters.step_triggers_encounter?(encounterType)
   $PokemonTemp.encounterType = encounterType
   encounter = $PokemonEncounters.choose_wild_pokemon(encounterType)
   encounter = EncounterModifier.trigger(encounter)
-  if $PokemonEncounter.allow_encounter?(encounter, repel_active)
-    if $PokemonEncounter.have_double_wild_battle?
+  if $PokemonEncounters.allow_encounter?(encounter, repel_active)
+    if $PokemonEncounters.have_double_wild_battle?
       encounter2 = $PokemonEncounters.choose_wild_pokemon(encounterType)
       encounter2 = EncounterModifier.trigger(encounter2)
       pbDoubleWildBattle(encounter[0], encounter[1], encounter2[0], encounter2[1])

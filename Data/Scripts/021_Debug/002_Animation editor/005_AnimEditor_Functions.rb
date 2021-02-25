@@ -1054,7 +1054,7 @@ def animationEditorMain(animation)
         sliderwin.invalidate
       end
       next
-    elsif Input.triggerex?(0x51) # Q
+    elsif Input.triggerex?(:Q)
       if canvas.currentCel
         pbDefinePath(canvas)
         sliderwin.invalidate
