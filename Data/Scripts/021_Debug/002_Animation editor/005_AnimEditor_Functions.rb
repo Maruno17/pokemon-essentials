@@ -26,7 +26,7 @@ end
 ################################################################################
 def pbSelectAnim(canvas,animwin)
   animfiles=[]
-  pbRgssChdir(".\\Graphics\\Animations\\") {
+  pbRgssChdir(File.join("Graphics", "Animations")) {
      animfiles.concat(Dir.glob("*.png"))
   }
   cmdwin=pbListWindow(animfiles,320)
@@ -91,6 +91,7 @@ def pbAnimName(animation,cmdwin)
   window=ControlWindow.new(320,128,320,32*4)
   window.z=99999
   window.addControl(TextField.new(_INTL("New Name:"),animation.name))
+  Input.text_input = true
   okbutton=window.addButton(_INTL("OK"))
   cancelbutton=window.addButton(_INTL("Cancel"))
   window.opacity=224
@@ -98,16 +99,17 @@ def pbAnimName(animation,cmdwin)
     Graphics.update
     Input.update
     window.update
-    if window.changed?(okbutton) || Input.trigger?(Input::ENTER)
+    if window.changed?(okbutton) || Input.triggerex?(:RETURN)
       cmdwin.commands[cmdwin.index]=_INTL("{1} {2}",cmdwin.index,window.controls[0].text)
       animation.name=window.controls[0].text
       break
     end
-    if window.changed?(cancelbutton) || Input.trigger?(Input::ESC)
+    if window.changed?(cancelbutton) || Input.triggerex?(:ESCAPE)
       break
     end
   end
   window.dispose
+  Input.text_input = false
   return
 end
 
@@ -512,7 +514,7 @@ def pbSelectSE(canvas,audio)
   displayname=(filename!="") ? filename : _INTL("<user's cry>")
   animfiles=[]
   ret=false
-  pbRgssChdir(".\\Audio\\SE\\Anim\\") {
+  pbRgssChdir(File.join("Audio", "SE", "Anim")) {
      animfiles.concat(Dir.glob("*.wav"))
      animfiles.concat(Dir.glob("*.mp3"))
      animfiles.concat(Dir.glob("*.ogg"))
@@ -579,7 +581,7 @@ def pbSelectBG(canvas,timing)
   animfiles=[]
   animfiles[cmdErase=animfiles.length]=_INTL("[Erase background graphic]")
   ret=false
-  pbRgssChdir(".\\Graphics\\Animations\\") {
+  pbRgssChdir(File.join("Graphics", "Animations")) {
      animfiles.concat(Dir.glob("*.bmp"))
      animfiles.concat(Dir.glob("*.png"))
      animfiles.concat(Dir.glob("*.jpg"))
@@ -1020,10 +1022,10 @@ def animationEditorMain(animation)
         break
       end
     end
-    if Input.trigger?(Input::ONLYF5)
+    if Input.triggerex?(:F5)
       pbAnimEditorHelpWindow
       next
-    elsif Input.triggerex?(Input::RightMouseKey) && sliderwin.hittest?(0)   # Right mouse button
+    elsif Input.trigger?(Input::MOUSERIGHT) && sliderwin.hittest?(0)   # Right mouse button
       commands=[
          _INTL("Copy Frame"),
          _INTL("Paste Frame"),
@@ -1058,7 +1060,7 @@ def animationEditorMain(animation)
         sliderwin.invalidate
       end
       next
-    elsif Input.triggerex?(Input::RightMouseKey)  # Right mouse button
+    elsif Input.trigger?(Input::MOUSERIGHT)  # Right mouse button
       mousepos=Mouse::getMousePos
       mousepos=[0,0] if !mousepos
       commands=[

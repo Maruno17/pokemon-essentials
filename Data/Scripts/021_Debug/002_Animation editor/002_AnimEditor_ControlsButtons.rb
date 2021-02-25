@@ -125,12 +125,12 @@ class Button < UIControl
     return if !mousepos
     rect=Rect.new(self.x+1,self.y+1,self.width-2,self.height-2)
     rect=toAbsoluteRect(rect)
-    if Input.triggerex?(Input::LeftMouseKey) &&
+    if Input.trigger?(Input::MOUSELEFT) &&
        rect.contains(mousepos[0],mousepos[1]) && !@captured
       @captured=true
       self.invalidate
     end
-    if Input.releaseex?(Input::LeftMouseKey) && @captured
+    if Input.release?(Input::MOUSELEFT) && @captured
       self.changed=true if rect.contains(mousepos[0],mousepos[1])
       @captured=false
       self.invalidate
@@ -263,7 +263,7 @@ class TextField < UIControl
     self.changed=false
     self.invalidate if ((@frame%10)==0)
     # Moving cursor
-    if Input.repeat?(Input::LEFT)
+    if Input.triggerex?(:LEFT) || Input.repeatex?(:LEFT)
       if @cursor > 0
         @cursor-=1
         @frame=0
@@ -271,7 +271,7 @@ class TextField < UIControl
       end
       return
     end
-    if Input.repeat?(Input::RIGHT)
+    if Input.triggerex?(:LEFT) || Input.repeatex?(:RIGHT)
       if @cursor < self.text.scan(/./m).length
         @cursor+=1
         @frame=0
@@ -280,50 +280,13 @@ class TextField < UIControl
       return
     end
     # Backspace
-    if Input.repeat?(Input::BACKSPACE) || Input.repeat?(Input::DELETE)
+    if Input.triggerex?(:BACKSPACE) || Input.repeatex?(:BACKSPACE) ||
+       Input.triggerex?(:DELETE)  || Input.repeatex?(:DELETE)
       self.delete if @cursor > 0
       return
     end
-    # Letter keys
-    for i in 65..90
-      if Input.repeatex?(i)
-        shift=(Input.press?(Input::SHIFT)) ? 0x41 : 0x61
-        insert((shift+i-65).chr)
-        return
-      end
-    end
-    # Number keys
-    shifted=")!@\#$%^&*("
-    unshifted="0123456789"
-    for i in 48..57
-      if Input.repeatex?(i)
-        insert((Input.press?(Input::SHIFT)) ? shifted[i-48].chr : unshifted[i-48].chr)
-        return
-      end
-    end
-    keys=[
-       [32," "," "],
-       [106,"*","*"],
-       [107,"+","+"],
-       [109,"-","-"],
-       [111,"/","/"],
-       [186,";",":"],
-       [187,"=","+"],
-       [188,",","<"],
-       [189,"-","_"],
-       [190,".",">"],
-       [191,"/","?"],
-       [219,"[","{"],
-       [220,"\\","|"],
-       [221,"]","}"],
-       [222,"\"","'"]
-    ]
-    for i in keys
-      if Input.repeatex?(i[0])
-        insert((Input.press?(Input::SHIFT)) ? i[2] : i[1])
-        return
-      end
-    end
+    # Letter & Number keys
+    Input.gets.each_char{|c|insert(c)}
   end
 
   def refresh
@@ -428,17 +391,17 @@ class Slider < UIControl
       self.curvalue=self.minvalue
     end
     return false if self.disabled
-    return false if !Input.repeatex?(Input::LeftMouseKey)
+    return false if !Input.repeat?(Input::MOUSELEFT)
     return false if !mousepos
     left=toAbsoluteRect(@leftarrow)
     right=toAbsoluteRect(@rightarrow)
     oldvalue=self.curvalue
     # Left arrow
     if left.contains(mousepos[0],mousepos[1])
-      if Input.repeatcount(Input::LeftMouseKey)>100
+      if Input.count(Input::MOUSELEFT)>100
         self.curvalue-=10
         self.curvalue=self.curvalue.floor
-      elsif Input.repeatcount(Input::LeftMouseKey)>50
+      elsif Input.count(Input::MOUSELEFT)>50
         self.curvalue-=5
         self.curvalue=self.curvalue.floor
       else
@@ -450,10 +413,10 @@ class Slider < UIControl
     end
     #Right arrow
     if right.contains(mousepos[0],mousepos[1])
-      if Input.repeatcount(Input::LeftMouseKey)>100
+      if Input.count(Input::MOUSELEFT)>100
         self.curvalue+=10
         self.curvalue=self.curvalue.floor
-      elsif Input.repeatcount(Input::LeftMouseKey)>50
+      elsif Input.count(Input::MOUSELEFT)>50
         self.curvalue+=5
         self.curvalue=self.curvalue.floor
       else
@@ -676,16 +639,16 @@ class TextSlider < UIControl
       self.curvalue=self.minvalue
     end
     return false if self.disabled
-    return false if !Input.repeatex?(Input::LeftMouseKey)
+    return false if !Input.repeat?(Input::MOUSELEFT)
     return false if !mousepos
     left=toAbsoluteRect(@leftarrow)
     right=toAbsoluteRect(@rightarrow)
     oldvalue=self.curvalue
     # Left arrow
     if left.contains(mousepos[0],mousepos[1])
-      if Input.repeatcount(Input::LeftMouseKey)>100
+      if Input.count(Input::MOUSELEFT)>100
         self.curvalue-=10
-      elsif Input.repeatcount(Input::LeftMouseKey)>50
+      elsif Input.count(Input::MOUSELEFT)>50
         self.curvalue-=5
       else
         self.curvalue-=1
@@ -695,9 +658,9 @@ class TextSlider < UIControl
     end
     # Right arrow
     if right.contains(mousepos[0],mousepos[1])
-      if Input.repeatcount(Input::LeftMouseKey)>100
+      if Input.count(Input::MOUSELEFT)>100
         self.curvalue+=10
-      elsif Input.repeatcount(Input::LeftMouseKey)>50
+      elsif Input.count(Input::MOUSELEFT)>50
         self.curvalue+=5
       else
         self.curvalue+=1

@@ -393,3 +393,8 @@ module Settings
     "Power Clear"
   ]
 end
+
+module Essentials
+  VERSION = "18.1.dev"
+  ERROR_TEXT = ""
+end

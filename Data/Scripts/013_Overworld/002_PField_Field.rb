@@ -211,23 +211,14 @@ end
 
 
 def pbBatteryLow?
-  power="\0"*12
-  begin
-    sps=Win32API.new('kernel32.dll','GetSystemPowerStatus','p','l')
-  rescue
-    return false
-  end
-  if sps.call(power)==1
-    status=power.unpack("CCCCVV")
-    # AC line presence
-    return false if status[0]!=0   # Not plugged in or unknown
-    # Battery Flag
-    return true if status[1]==4   # Critical (<5%)
-    # Battery Life Percent
-    return true if status[2]<3   # Less than 3 percent
-    # Battery Life Time
-    return true if status[4]>0 && status[4]<300   # Less than 5 minutes and unplugged
-  end
+  pstate = System.power_state
+  # If it's not discharging, it doesn't matter if it's low
+  return false if !pstate[:discharging]
+  # Check for less than 10m, priority over the percentage
+  # Some laptops (Chromebooks, Macbooks) have very long lifetimes
+  return true if pstate[:seconds] && pstate[:seconds] <= 600
+  # Check for <=15%
+  return true if pstate[:percent] && pstate[:percent] <= 15
   return false
 end
 
