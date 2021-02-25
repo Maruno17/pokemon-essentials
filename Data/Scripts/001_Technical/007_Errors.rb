@@ -48,12 +48,16 @@ def pbPrintException(e)
   errorlogline = "\r\n" + errorlogline if errorlogline.length > 20
   errorlogline.gsub!("/", "\\") if System.platform[/Windows/]
 
-  print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl while clicking OK to copy this message to the clipboard.")
-  (0.3 / (1.0 / Graphics.frame_rate)).ceil.times{Graphics.update} # Give a ~300ms coyote time to start holding Control
-  Input.update
-  if Input.press?(Input::CTRL)
-    Input.clipboard = message
-  end
+  print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl after closing this message to copy it to the clipboard.")
+  # Give a ~500ms coyote time to start holding Control
+  (0.5 / (1.0 / Graphics.frame_rate)).ceil.times{
+    Graphics.update
+    Input.update
+    if Input.press?(Input::CTRL)
+      Input.clipboard = message
+      break
+    end
+  }
 end
 
 def pbCriticalCode
