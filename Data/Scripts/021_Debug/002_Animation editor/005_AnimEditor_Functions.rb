@@ -99,12 +99,12 @@ def pbAnimName(animation,cmdwin)
     Graphics.update
     Input.update
     window.update
-    if window.changed?(okbutton) || Input.trigger?(Input::ENTER)
+    if window.changed?(okbutton) || Input.triggerex?(:RETURN)
       cmdwin.commands[cmdwin.index]=_INTL("{1} {2}",cmdwin.index,window.controls[0].text)
       animation.name=window.controls[0].text
       break
     end
-    if window.changed?(cancelbutton) || Input.trigger?(Input::ESC)
+    if window.changed?(cancelbutton) || Input.triggerex?(:ESCAPE)
       break
     end
   end
