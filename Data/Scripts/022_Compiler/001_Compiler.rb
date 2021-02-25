@@ -324,7 +324,7 @@ module Compiler
       end
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
-      if GameData.const_defined?(enumer.to_sym)
+      if !Kernel.const_defined?(enumer.to_sym) && GameData.const_defined?(enumer.to_sym)
         enumer = GameData.const_get(enumer.to_sym)
         begin
           if ret == "" || !enumer.exists?(ret.to_sym)
