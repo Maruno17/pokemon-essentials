@@ -26,7 +26,7 @@ end
 ################################################################################
 def pbSelectAnim(canvas,animwin)
   animfiles=[]
-  pbRgssChdir(".\\Graphics\\Animations\\") {
+  pbRgssChdir(File.join("Graphics", "Animations")) {
      animfiles.concat(Dir.glob("*.png"))
   }
   cmdwin=pbListWindow(animfiles,320)
@@ -514,7 +514,7 @@ def pbSelectSE(canvas,audio)
   displayname=(filename!="") ? filename : _INTL("<user's cry>")
   animfiles=[]
   ret=false
-  pbRgssChdir(".\\Audio\\SE\\Anim\\") {
+  pbRgssChdir(File.join("Audio", "SE", "Anim")) {
      animfiles.concat(Dir.glob("*.wav"))
      animfiles.concat(Dir.glob("*.mp3"))
      animfiles.concat(Dir.glob("*.ogg"))
@@ -581,7 +581,7 @@ def pbSelectBG(canvas,timing)
   animfiles=[]
   animfiles[cmdErase=animfiles.length]=_INTL("[Erase background graphic]")
   ret=false
-  pbRgssChdir(".\\Graphics\\Animations\\") {
+  pbRgssChdir(File.join("Graphics", "Animations")) {
      animfiles.concat(Dir.glob("*.bmp"))
      animfiles.concat(Dir.glob("*.png"))
      animfiles.concat(Dir.glob("*.jpg"))

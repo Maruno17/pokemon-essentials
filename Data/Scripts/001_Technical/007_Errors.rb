@@ -42,11 +42,11 @@ def pbPrintException(e)
     errorlog = RTP.getSaveFileName("errorlog.txt")
   end
   File.open(errorlog,"ab") { |f| f.write(premessage); f.write(message) }
-  errorlogline = errorlog.sub("/", "\\")
-  errorlogline.sub!(Dir.pwd + "\\", "")
+  errorlogline = errorlog
+  errorlogline.sub!(Dir.pwd + "/", "")
   errorlogline.sub!(pbGetUserName, "USERNAME")
   errorlogline = "\r\n" + errorlogline if errorlogline.length > 20
-  errorlogline.gsub!("/", "\\")
+  errorlogline.gsub!("/", "\\") if System.platform[/Windows/]
 
   print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl while clicking OK to copy this message to the clipboard.")
   (0.3 / (1.0 / Graphics.frame_rate)).ceil.times{Graphics.update} # Give a ~300ms coyote time to start holding Control
