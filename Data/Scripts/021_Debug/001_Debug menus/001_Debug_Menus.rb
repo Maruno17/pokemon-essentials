@@ -126,7 +126,7 @@ def pbDebugMenu(show_all = true)
     elsif cmd == "warp"
       return if DebugMenuCommands.call("effect", cmd, sprites, viewport)
     else
-      return if DebugMenuCommands.call("effect", cmd)
+      DebugMenuCommands.call("effect", cmd)
     end
   end
   pbPlayCloseMenuSE

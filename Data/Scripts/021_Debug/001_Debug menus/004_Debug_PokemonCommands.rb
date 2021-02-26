@@ -64,6 +64,7 @@ PokemonDebugMenuCommands.register("sethp", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
+    next false
   }
 })
 
@@ -112,6 +113,7 @@ PokemonDebugMenuCommands.register("setstatus", {
         end
       end
     end
+    next false
   }
 })
 
@@ -127,6 +129,7 @@ PokemonDebugMenuCommands.register("fullheal", {
       screen.pbDisplay(_INTL("{1} was fully healed.", pkmn.name))
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -141,6 +144,7 @@ PokemonDebugMenuCommands.register("makefainted", {
       pkmn.hp = 0
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -176,6 +180,7 @@ PokemonDebugMenuCommands.register("setpokerus", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
+    next false
   }
 })
 
@@ -207,6 +212,7 @@ PokemonDebugMenuCommands.register("setlevel", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
+    next false
   }
 })
 
@@ -235,6 +241,7 @@ PokemonDebugMenuCommands.register("setexp", {
         end
       end
     end
+    next false
   }
 })
 
@@ -351,6 +358,7 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
+    next false
   }
 })
 
@@ -368,6 +376,7 @@ PokemonDebugMenuCommands.register("sethappiness", {
       pkmn.happiness = h
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -391,6 +400,7 @@ PokemonDebugMenuCommands.register("setbeauty", {
       pkmn.beauty = newval
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -408,6 +418,7 @@ PokemonDebugMenuCommands.register("setcool", {
       pkmn.cool = newval
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -425,6 +436,7 @@ PokemonDebugMenuCommands.register("setcute", {
       pkmn.cute = newval
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -442,6 +454,7 @@ PokemonDebugMenuCommands.register("setsmart", {
       pkmn.smart = newval
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -459,6 +472,7 @@ PokemonDebugMenuCommands.register("settough", {
       pkmn.tough = newval
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -476,6 +490,7 @@ PokemonDebugMenuCommands.register("setsheen", {
       pkmn.sheen = newval
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -498,6 +513,7 @@ PokemonDebugMenuCommands.register("teachmove", {
       pbLearnMove(pkmn, move)
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -513,6 +529,7 @@ PokemonDebugMenuCommands.register("forgetmove", {
       screen.pbDisplay(_INTL("{1} forgot {2}.", pkmn.name, movename))
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -524,6 +541,7 @@ PokemonDebugMenuCommands.register("resetmoves", {
     pkmn.resetMoves
     screen.pbDisplay(_INTL("{1}'s moves were reset.", pkmn.name))
     screen.pbRefreshSingle(pkmnid)
+    next false
   }
 })
 
@@ -585,6 +603,7 @@ PokemonDebugMenuCommands.register("setmovepp", {
         pkmn.heal_PP
       end
     end
+    next false
   }
 })
 
@@ -596,6 +615,7 @@ PokemonDebugMenuCommands.register("setinitialmoves", {
     pkmn.record_first_moves
     screen.pbDisplay(_INTL("{1}'s moves were set as its first-known moves.", pkmn.name))
     screen.pbRefreshSingle(pkmnid)
+    next false
   }
 })
 
@@ -627,6 +647,7 @@ PokemonDebugMenuCommands.register("setability", {
       end
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -669,6 +690,7 @@ PokemonDebugMenuCommands.register("setnature", {
       end
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -706,6 +728,7 @@ PokemonDebugMenuCommands.register("setgender", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
+    next false
   }
 })
 
@@ -765,6 +788,7 @@ PokemonDebugMenuCommands.register("speciesform", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
+    next false
   }
 })
 
@@ -800,6 +824,7 @@ PokemonDebugMenuCommands.register("setshininess", {
       end
       screen.pbRefreshSingle(pkmnid)
     end
+    next false
   }
 })
 
@@ -828,6 +853,7 @@ PokemonDebugMenuCommands.register("setpokeball", {
       break if cmd < 0
       pkmn.poke_ball = balls[cmd][0]
     end
+    next false
   }
 })
 
@@ -863,6 +889,7 @@ PokemonDebugMenuCommands.register("setribbons", {
         pkmn.clearAllRibbons
       end
     end
+    next false
   }
 })
 
@@ -892,6 +919,7 @@ PokemonDebugMenuCommands.register("setnickname", {
         screen.pbRefreshSingle(pkmnid)
       end
     end
+    next false
   }
 })
 
@@ -933,6 +961,7 @@ PokemonDebugMenuCommands.register("ownership", {
         pkmn.owner.id = val | val << 16
       end
     end
+    next false
   }
 })
 
@@ -977,6 +1006,7 @@ PokemonDebugMenuCommands.register("setegg", {
         pkmn.steps_to_hatch = 1 if pkmn.egg?
       end
     end
+    next false
   }
 })
 
@@ -1020,6 +1050,7 @@ PokemonDebugMenuCommands.register("shadowpkmn", {
         end
       end
     end
+    next false
   }
 })
 
@@ -1028,6 +1059,7 @@ PokemonDebugMenuCommands.register("mysterygift", {
   "name"        => _INTL("Mystery Gift"),
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     pbCreateMysteryGift(0, pkmn)
+    next false
   }
 })
 
@@ -1060,6 +1092,7 @@ PokemonDebugMenuCommands.register("duplicate", {
       end
       next true
     end
+    next false
   }
 })
 
@@ -1079,5 +1112,6 @@ PokemonDebugMenuCommands.register("delete", {
       end
       next true
     end
+    next false
   }
 })
