@@ -44,7 +44,7 @@ def pbListScreen(title,lister)
     if Input.trigger?(Input::B)
       selectedmap = -1
       break
-    elsif Input.trigger?(Input::C) || (list.doubleclick? rescue false)
+    elsif Input.trigger?(Input::C)
       break
     end
   end
@@ -97,7 +97,7 @@ def pbListScreenBlock(title,lister)
       lister.refresh(list.index)
     elsif Input.trigger?(Input::B)
       break
-    elsif Input.trigger?(Input::C) || (list.doubleclick? rescue false)
+    elsif Input.trigger?(Input::C)
       yield(Input::C, lister.value(selectedmap))
       list.commands = lister.commands
       if list.index==list.commands.length

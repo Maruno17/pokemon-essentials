@@ -261,7 +261,7 @@ def pbCommands2(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
         command = cmdIfCancel
         break
       end
-    elsif Input.trigger?(Input::C) || (cmdwindow.doubleclick? rescue false)
+    elsif Input.trigger?(Input::C)
       command = cmdwindow.index
       break
     end
@@ -315,7 +315,7 @@ def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
         command = [0,cmdIfCancel]
         break
       end
-    elsif Input.trigger?(Input::C) || (cmdwindow.doubleclick? rescue false)
+    elsif Input.trigger?(Input::C)
       command = [0,cmdwindow.index]
       break
     end
@@ -387,7 +387,7 @@ def pbCommandsSortable(cmdwindow,commands,cmdIfCancel,defaultindex=-1,sortable=f
     elsif Input.trigger?(Input::B)
       command = [0,(cmdIfCancel>0) ? cmdIfCancel-1 : cmdIfCancel]
       break
-    elsif Input.trigger?(Input::C) || (cmdwindow.doubleclick? rescue false)
+    elsif Input.trigger?(Input::C)
       command = [0,cmdwindow.index]
       break
     end
