@@ -8,43 +8,9 @@ class Class
 end
 
 #===============================================================================
-# module Comparable
-#===============================================================================
-unless Comparable.method_defined? :clamp
-  module Comparable
-    def clamp(min, max)
-      if max - min < 0
-        raise ArgumentError("min argument must be smaller than max argument")
-      end
-      return (self > max) ? max : (self < min) ? min : self
-    end
-  end
-end
-
-#===============================================================================
-# class Boolean
-#===============================================================================
-class Boolean
-  def to_i
-    return self ? 1 : 0
-  end
-end
-
-#===============================================================================
 # class String
 #===============================================================================
 class String
-  def starts_with?(str)
-    proc = (self[0...str.length] == str) if self.length >= str.length
-    return proc || false
-  end
-
-  def ends_with?(str)
-    e = self.length - 1
-    proc = (self[(e-str.length)...e] == str) if self.length >= str.length
-    return proc || false
-  end
-
   def starts_with_vowel?
     return ['a', 'e', 'i', 'o', 'u'].include?(self[0, 1].downcase)
   end
@@ -55,24 +21,6 @@ class String
 
   def last(n = 1)
     return self[-n..-1] || self
-  end
-
-  def bytesize
-    return self.size
-  end
-
-  def capitalize
-    proc = self.scan(/./)
-    proc[0] = proc[0].upcase
-    string = ""
-    for letter in proc
-      string += letter
-    end
-    return string
-  end
-
-  def capitalize!
-    self.replace(self.capitalize)
   end
 
   def blank?
@@ -115,43 +63,12 @@ class Numeric
 end
 
 #===============================================================================
-# class Integer
-#===============================================================================
-class Integer
-  # Returns an array containing each digit of the number in turn.
-  def digits(base = 10)
-    quotient, remainder = divmod(base)
-    return (quotient == 0) ? [remainder] : quotient.digits(base).push(remainder)
-  end
-end
-
-#===============================================================================
 # class Array
 #===============================================================================
 class Array
-  def first
-    return self[0]
-  end
-
-  def last
-    return self[self.length-1]
-  end
-
   def ^(other)   # xor of two arrays
     return (self|other) - (self&other)
   end
-
-  def shuffle
-    dup.shuffle!
-  end unless method_defined? :shuffle
-
-  def shuffle!
-    (size - 1).times do |i|
-      r = i + rand(size - i)
-      self[i], self[r] = self[r], self[i]
-    end
-    self
-  end unless method_defined? :shuffle!
 end
 
 #===============================================================================
