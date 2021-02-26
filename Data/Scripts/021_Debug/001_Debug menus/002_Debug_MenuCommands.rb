@@ -506,13 +506,16 @@ DebugMenuCommands.register("addpokemon", {
   "description" => _INTL("Give yourself a Pokémon of a chosen species/level. Goes to PC if party is full."),
   "effect"      => proc {
     species = pbChooseSpeciesList
-    if species
-      params = ChooseNumberParams.new
-      params.setRange(1, GameData::GrowthRate.max_level)
-      params.setInitialValue(5)
-      params.setCancelValue(0)
-      level = pbMessageChooseNumber(_INTL("Set the Pokémon's level."), params)
-      pbAddPokemon(species, level) if level > 0
+    next unless species
+    params = ChooseNumberParams.new
+    params.setRange(1, GameData::GrowthRate.max_level)
+    params.setInitialValue(5)
+    params.setCancelValue(0)
+    level = pbMessageChooseNumber(_INTL("Set the Pokémon's level."), params)
+    if level > 0
+      pbAddPokemon(species, level)
+      # pbAddPokemon may return true, so we have to explicitly return nil
+      next
     end
   }
 })
