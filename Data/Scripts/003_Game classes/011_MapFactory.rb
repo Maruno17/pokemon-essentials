@@ -70,24 +70,25 @@ class PokemonMapFactory
   def getNewMap(playerX,playerY)
     id = $game_map.map_id
     conns = MapFactoryHelper.getMapConnections
-    for conn in conns
-      next if conn[0]!=id && conn[3]!=id
-      mapidB = nil
-      newx = 0
-      newy = 0
-      if conn[0]==id
-        mapidB = conn[3]
-        mapB = MapFactoryHelper.getMapDims(conn[3])
-        newx = conn[4] - conn[1] + playerX
-        newy = conn[5] - conn[2] + playerY
-      else
-        mapidB = conn[0]
-        mapB = MapFactoryHelper.getMapDims(conn[0])
-        newx = conn[1] - conn[4] + playerX
-        newy = conn[2] - conn[5] + playerY
-      end
-      if newx>=0 && newx<mapB[0] && newy>=0 && newy<mapB[1]
-        return [getMap(mapidB),newx,newy]
+    if conns[id]
+      for conn in conns[id]
+        mapidB = nil
+        newx = 0
+        newy = 0
+        if conn[0] == id
+          mapidB = conn[3]
+          mapB = MapFactoryHelper.getMapDims(conn[3])
+          newx = conn[4] - conn[1] + playerX
+          newy = conn[5] - conn[2] + playerY
+        else
+          mapidB = conn[0]
+          mapB = MapFactoryHelper.getMapDims(conn[0])
+          newx = conn[1] - conn[4] + playerX
+          newy = conn[2] - conn[5] + playerY
+        end
+        if newx >= 0 && newx < mapB[0] && newy >= 0 && newy < mapB[1]
+          return [getMap(mapidB), newx, newy]
+        end
       end
     end
     return nil
@@ -116,24 +117,26 @@ class PokemonMapFactory
     @fixup = true
     id = $game_map.map_id
     conns = MapFactoryHelper.getMapConnections
-    for conn in conns
-      if conn[0]==id
-        mapA = getMap(conn[0])
-        newdispx = (conn[4] - conn[1]) * Game_Map::REAL_RES_X + mapA.display_x
-        newdispy = (conn[5] - conn[2]) * Game_Map::REAL_RES_Y + mapA.display_y
-        if hasMap?(conn[3]) || MapFactoryHelper.mapInRangeById?(conn[3],newdispx,newdispy)
-          mapB = getMap(conn[3])
-          mapB.display_x = newdispx if mapB.display_x!=newdispx
-          mapB.display_y = newdispy if mapB.display_y!=newdispy
-        end
-      elsif conn[3]==id
-        mapA = getMap(conn[3])
-        newdispx = (conn[1] - conn[4]) * Game_Map::REAL_RES_X + mapA.display_x
-        newdispy = (conn[2] - conn[5]) * Game_Map::REAL_RES_Y + mapA.display_y
-        if hasMap?(conn[0]) || MapFactoryHelper.mapInRangeById?(conn[0],newdispx,newdispy)
-          mapB = getMap(conn[0])
-          mapB.display_x = newdispx if mapB.display_x!=newdispx
-          mapB.display_y = newdispy if mapB.display_y!=newdispy
+    if conns[id]
+      for conn in conns[id]
+        if conn[0] == id
+          mapA = getMap(conn[0])
+          newdispx = (conn[4] - conn[1]) * Game_Map::REAL_RES_X + mapA.display_x
+          newdispy = (conn[5] - conn[2]) * Game_Map::REAL_RES_Y + mapA.display_y
+          if hasMap?(conn[3]) || MapFactoryHelper.mapInRangeById?(conn[3], newdispx, newdispy)
+            mapB = getMap(conn[3])
+            mapB.display_x = newdispx if mapB.display_x != newdispx
+            mapB.display_y = newdispy if mapB.display_y != newdispy
+          end
+        else
+          mapA = getMap(conn[3])
+          newdispx = (conn[1] - conn[4]) * Game_Map::REAL_RES_X + mapA.display_x
+          newdispy = (conn[2] - conn[5]) * Game_Map::REAL_RES_Y + mapA.display_y
+          if hasMap?(conn[0]) || MapFactoryHelper.mapInRangeById?(conn[0], newdispx, newdispy)
+            mapB = getMap(conn[0])
+            mapB.display_x = newdispx if mapB.display_x != newdispx
+            mapB.display_y = newdispy if mapB.display_y != newdispy
+          end
         end
       end
     end
@@ -227,36 +230,36 @@ class PokemonMapFactory
     return getTerrainTag(tile[0],tile[1],tile[2])
   end
 
-  def areConnected?(mapID1,mapID2)
-    return true if mapID1==mapID2
+  def areConnected?(mapID1, mapID2)
+    return true if mapID1 == mapID2
     conns = MapFactoryHelper.getMapConnections
-    for conn in conns
-      if (conn[0]==mapID1 && conn[3]==mapID2) ||
-         (conn[0]==mapID2 && conn[3]==mapID1)
-        return true
+    if conns[mapID1]
+      for conn in conns[mapID1]
+        return true if conn[0] == mapID2 || conn[3] == mapID2
       end
     end
     return false
   end
 
-  def getRelativePos(thisMapID,thisX,thisY,otherMapID,otherX,otherY)
-    if thisMapID==otherMapID
-      # Both events share the same map
-      return [otherX-thisX,otherY-thisY]
+  def getRelativePos(thisMapID, thisX, thisY, otherMapID, otherX, otherY)
+    if thisMapID == otherMapID   # Both events share the same map
+      return [otherX - thisX, otherY - thisY]
     end
     conns = MapFactoryHelper.getMapConnections
-    for conn in conns
-      if conn[0]==thisMapID && conn[1]==otherMapID
-        posX = thisX + conn[4] - conn[1] + otherX
-        posY = thisY + conn[5] - conn[2] + otherY
-        return [posX,posY]
-      elsif conn[1]==thisMapID && conn[0]==otherMapID
-        posX = thisX + conn[1] - conn[4] + otherX
-        posY = thisY + conn[2] - conn[5] + otherY
-        return [posX,posY]
+    if conns[thisMapID]
+      for conn in conns[thisMapID]
+        if conn[0] == otherMapID
+          posX = thisX + conn[1] - conn[4] + otherX
+          posY = thisY + conn[2] - conn[5] + otherY
+          return [posX, posY]
+        else
+          posX = thisX + conn[4] - conn[1] + otherX
+          posY = thisY + conn[5] - conn[2] + otherY
+          return [posX, posY]
+        end
       end
     end
-    return [0,0]
+    return [0, 0]
   end
 
   # Gets the distance from this event to another event.  Example: If this event's
@@ -320,25 +323,27 @@ class PokemonMapFactory
     return getRealTilePos(mapID,x,y)
   end
 
-  def getRealTilePos(mapID,x,y)
+  def getRealTilePos(mapID, x, y)
     id = mapID
-    return [id,x,y] if getMapNoAdd(id).valid?(x,y)
+    return [id, x, y] if getMapNoAdd(id).valid?(x, y)
     conns = MapFactoryHelper.getMapConnections
-    for conn in conns
-      if conn[0]==id
-        newX = x + conn[4] - conn[1]
-        newY = y + conn[5] - conn[2]
-        next if newX<0 || newY<0
-        dims = MapFactoryHelper.getMapDims(conn[3])
-        next if newX>=dims[0] || newY>=dims[1]
-        return [conn[3],newX,newY]
-      elsif conn[3]==id
-        newX = x + conn[1] - conn[4]
-        newY = y + conn[2] - conn[5]
-        next if newX<0 || newY<0
-        dims = MapFactoryHelper.getMapDims(conn[0])
-        next if newX>=dims[0] || newY>=dims[1]
-        return [conn[0],newX,newY]
+    if conns[id]
+      for conn in conns[id]
+        if conn[0] == id
+          newX = x + conn[4] - conn[1]
+          newY = y + conn[5] - conn[2]
+          next if newX < 0 || newY < 0
+          dims = MapFactoryHelper.getMapDims(conn[3])
+          next if newX >= dims[0] || newY >= dims[1]
+          return [conn[3], newX, newY]
+        else
+          newX = x + conn[1] - conn[4]
+          newY = y + conn[2] - conn[5]
+          next if newX < 0 || newY < 0
+          dims = MapFactoryHelper.getMapDims(conn[0])
+          next if newX >= dims[0] || newY >= dims[1]
+          return [conn[0], newX, newY]
+        end
       end
     end
     return nil
@@ -417,27 +422,35 @@ module MapFactoryHelper
     if !@@MapConnections
       @@MapConnections = []
       conns = load_data("Data/map_connections.dat")
-      for i in 0...conns.length
-        conn = conns[i]
-        v = getMapEdge(conn[0],conn[1])
-        dims = getMapDims(conn[0])
-        next if dims[0]==0 || dims[1]==0
-        if conn[1]=="N" || conn[1]=="S"
+      conns.each do |conn|
+        # Ensure both maps in a connection are valid
+        dimensions = getMapDims(conn[0])
+        next if dimensions[0] == 0 || dimensions[1] == 0
+        dimensions = getMapDims(conn[3])
+        next if dimensions[0] == 0 || dimensions[1] == 0
+        # Convert first map's edge and coordinate to pair of coordinates
+        edge = getMapEdge(conn[0], conn[1])
+        case conn[1]
+        when "N", "S"
           conn[1] = conn[2]
-          conn[2] = v
-        elsif conn[1]=="E" || conn[1]=="W"
-          conn[1] = v
+          conn[2] = edge
+        when "E", "W"
+          conn[1] = edge
         end
-        v = getMapEdge(conn[3],conn[4])
-        dims = getMapDims(conn[3])
-        next if dims[0]==0 || dims[1]==0
-        if conn[4]=="N" || conn[4]=="S"
+        # Convert second map's edge and coordinate to pair of coordinates
+        edge = getMapEdge(conn[3], conn[4])
+        case conn[4]
+        when "N", "S"
           conn[4] = conn[5]
-          conn[5] = v
-        elsif conn[4]=="E" || conn[4]=="W"
-          conn[4] = v
+          conn[5] = edge
+        when "E", "W"
+          conn[4] = edge
         end
-        @@MapConnections.push(conn)
+        # Add connection to arrays for both maps
+        @@MapConnections[conn[0]] = [] if !@@MapConnections[conn[0]]
+        @@MapConnections[conn[0]].push(conn)
+        @@MapConnections[conn[3]] = [] if !@@MapConnections[conn[3]]
+        @@MapConnections[conn[3]].push(conn)
       end
     end
     return @@MapConnections
@@ -445,10 +458,7 @@ module MapFactoryHelper
 
   def self.hasConnections?(id)
     conns = MapFactoryHelper.getMapConnections
-    for conn in conns
-      return true if conn[0]==id || conn[3]==id
-    end
-    return false
+    return conns[id] ? true : false
   end
 
   # Gets the height and width of the map with id
