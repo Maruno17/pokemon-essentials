@@ -9,7 +9,6 @@ class PokemonTemp
   attr_accessor :moveToAnim
   attr_accessor :battleAnims
   attr_accessor :mapInfos
-  attr_accessor :mapConnections
 end
 
 def pbClearData
@@ -21,7 +20,6 @@ def pbClearData
     $PokemonTemp.moveToAnim            = nil
     $PokemonTemp.battleAnims           = nil
     $PokemonTemp.mapInfos              = nil
-    $PokemonTemp.mapConnections        = nil
   end
   MapFactoryHelper.clear
   $PokemonEncounters.setup($game_map.map_id) if $game_map && $PokemonEncounters
@@ -95,17 +93,6 @@ def pbLoadBattleAnimations
     end
   end
   return $PokemonTemp.battleAnims
-end
-
-#===============================================================================
-# Method relating to map connections data.
-#===============================================================================
-def pbLoadMapConnections
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.mapConnections
-    $PokemonTemp.mapConnections = load_data("Data/map_connections.dat") || []
-  end
-  return $PokemonTemp.mapConnections
 end
 
 #===============================================================================

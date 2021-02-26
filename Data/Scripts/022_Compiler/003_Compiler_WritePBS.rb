@@ -69,7 +69,7 @@ module Compiler
   end
 
   def write_connections
-    conndata = pbLoadMapConnections
+    conndata = load_data("Data/map_connections.dat")
     return if !conndata
     mapinfos = pbLoadMapInfos
     File.open("PBS/connections.txt","wb") { |f|

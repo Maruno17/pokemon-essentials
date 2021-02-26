@@ -285,7 +285,6 @@ class MapScreenScene
   def serializeConnectionData
     conndata=generateConnectionData()
     save_data(conndata, "Data/map_connections.dat")
-    $PokemonTemp.mapConnections = nil
     Compiler.write_connections
     @mapconns=conndata
   end
