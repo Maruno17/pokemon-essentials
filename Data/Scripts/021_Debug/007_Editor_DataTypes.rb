@@ -1504,7 +1504,7 @@ def pbPropertyList(title,data,properties,saveprompt=false)
       elsif Input.trigger?(Input::B)
         selectedmap = -1
         break
-      elsif Input.trigger?(Input::C) || (list.doubleclick? rescue false)
+      elsif Input.trigger?(Input::C)
         propobj = properties[selectedmap][1]
         oldsetting = data[selectedmap]
         newsetting = propobj.set(properties[selectedmap][0],oldsetting)

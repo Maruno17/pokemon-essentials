@@ -46,7 +46,7 @@ def pbSelectAnim(canvas,animwin)
     bmpwin.update
     ctlwin.update
     bmpwin.hue=ctlwin.value(0) if ctlwin.changed?(0)
-    if (Input.trigger?(Input::C) || (cmdwin.doubleclick? rescue false)) && animfiles.length>0
+    if Input.trigger?(Input::C) && animfiles.length>0
       bitmap=AnimatedBitmap.new("Graphics/Animations/"+cmdwin.commands[cmdwin.index],ctlwin.value(0)).deanimate
       canvas.animation.graphic=cmdwin.commands[cmdwin.index]
       canvas.animation.hue=ctlwin.value(0)
@@ -149,7 +149,7 @@ def pbAnimList(animations,canvas,animwin)
       cmdwin.index=animations.selected
       next
     end
-    if (Input.trigger?(Input::C) || (cmdwin.doubleclick? rescue false)) && animations.length>0
+    if Input.trigger?(Input::C) && animations.length>0
       cmd2=pbShowCommands(helpwindow,[
          _INTL("Load Animation"),
          _INTL("Rename"),
@@ -435,7 +435,7 @@ def pbTimingList(canvas)
         next
       end
     end
-    if (Input.trigger?(Input::C) || (cmdwin.doubleclick? rescue false))
+    if Input.trigger?(Input::C)
       redrawcmds=false
       if cmdwin.index==cmdNewSound # Add new sound
         newaudio=PBAnimTiming.new(0)
@@ -562,7 +562,7 @@ def pbSelectSE(canvas,audio)
     if maxsizewindow.changed?(6) # Cancel
       break
     end
-    if (Input.trigger?(Input::C) || (cmdwin.doubleclick? rescue false)) && animfiles.length>0
+    if Input.trigger?(Input::C) && animfiles.length>0
       filename=(cmdwin.index==0) ? "" : cmdwin.commands[cmdwin.index]
       displayname=(filename!="") ? filename : _INTL("<user's cry>")
       maxsizewindow.controls[0].text=_INTL("File: \"{1}\"",displayname)
@@ -625,7 +625,7 @@ def pbSelectBG(canvas,timing)
     if maxsizewindow.changed?(9) # Cancel
       break
     end
-    if (Input.trigger?(Input::C) || (cmdwin.doubleclick? rescue false)) && animfiles.length>0
+    if Input.trigger?(Input::C) && animfiles.length>0
       filename=(cmdwin.index==cmdErase) ? "" : cmdwin.commands[cmdwin.index]
       maxsizewindow.controls[0].text=_INTL("File: \"{1}\"",filename)
     elsif Input.trigger?(Input::B)
