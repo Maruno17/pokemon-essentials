@@ -263,6 +263,7 @@ class AnimationWindow < SpriteWrapper
     right.x+=self.x
     right.y+=self.y
     swatchrects=[]
+    repeattime = Input.time?(Input::MOUSELEFT) / 1000
     for i in 0...NUMFRAMES
       swatchrects.push(Rect.new(arrowwidth+i*96+self.x,self.y,96,96))
     end
@@ -276,7 +277,7 @@ class AnimationWindow < SpriteWrapper
     end
     # Left arrow
     if left.contains(mousepos[0],mousepos[1])
-      if Input.count(Input::MOUSELEFT)>30
+      if repeattime>750
         @start-=3
       else
         @start-=1
@@ -286,7 +287,7 @@ class AnimationWindow < SpriteWrapper
     end
     # Right arrow
     if right.contains(mousepos[0],mousepos[1])
-      if Input.count(Input::MOUSELEFT)>30
+      if repeattime>750
         @start+=3
       else
         @start+=1

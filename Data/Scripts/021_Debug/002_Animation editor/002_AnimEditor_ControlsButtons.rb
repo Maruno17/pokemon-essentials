@@ -396,12 +396,13 @@ class Slider < UIControl
     left=toAbsoluteRect(@leftarrow)
     right=toAbsoluteRect(@rightarrow)
     oldvalue=self.curvalue
+    repeattime = Input.time?(Input::MOUSELEFT) / 1000
     # Left arrow
     if left.contains(mousepos[0],mousepos[1])
-      if Input.count(Input::MOUSELEFT)>100
+      if repeattime>2500
         self.curvalue-=10
         self.curvalue=self.curvalue.floor
-      elsif Input.count(Input::MOUSELEFT)>50
+      elsif repeattime>1250
         self.curvalue-=5
         self.curvalue=self.curvalue.floor
       else
@@ -413,10 +414,10 @@ class Slider < UIControl
     end
     #Right arrow
     if right.contains(mousepos[0],mousepos[1])
-      if Input.count(Input::MOUSELEFT)>100
+      if repeattime>2500
         self.curvalue+=10
         self.curvalue=self.curvalue.floor
-      elsif Input.count(Input::MOUSELEFT)>50
+      elsif repeattime>1250
         self.curvalue+=5
         self.curvalue=self.curvalue.floor
       else
@@ -644,11 +645,12 @@ class TextSlider < UIControl
     left=toAbsoluteRect(@leftarrow)
     right=toAbsoluteRect(@rightarrow)
     oldvalue=self.curvalue
+    repeattime = Input.time?(Input::MOUSELEFT) / 1000
     # Left arrow
     if left.contains(mousepos[0],mousepos[1])
-      if Input.count(Input::MOUSELEFT)>100
+      if repeattime>2500
         self.curvalue-=10
-      elsif Input.count(Input::MOUSELEFT)>50
+      elsif repeattime>1250
         self.curvalue-=5
       else
         self.curvalue-=1
@@ -658,9 +660,9 @@ class TextSlider < UIControl
     end
     # Right arrow
     if right.contains(mousepos[0],mousepos[1])
-      if Input.count(Input::MOUSELEFT)>100
+      if repeattime>2500
         self.curvalue+=10
-      elsif Input.count(Input::MOUSELEFT)>50
+      elsif repeattime>1250
         self.curvalue+=5
       else
         self.curvalue+=1

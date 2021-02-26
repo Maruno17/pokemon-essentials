@@ -20,7 +20,7 @@ class ControlPointSprite < SpriteWrapper
   end
 
   def mouseover
-    if Input.count(Input::MOUSELEFT)==0 || !@dragging
+    if Input.time?(Input::MOUSELEFT)==0 || !@dragging
       @dragging=false
       return
     end
@@ -389,7 +389,7 @@ def pbDefinePath(canvas)
         window.text = (mousepos) ? sprintf("(%d,%d)",mousepos[0],mousepos[1]) : "(??,??)"
         Graphics.update
         Input.update
-        if Input.triggerex?(:ESCAPE) || Input.count(Input::MOUSELEFT)==0
+        if Input.triggerex?(:ESCAPE) || Input.time?(Input::MOUSELEFT)==0
           break
         end
       end
