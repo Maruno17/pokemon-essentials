@@ -211,23 +211,14 @@ end
 
 
 def pbBatteryLow?
-  power="\0"*12
-  begin
-    sps=Win32API.new('kernel32.dll','GetSystemPowerStatus','p','l')
-  rescue
-    return false
-  end
-  if sps.call(power)==1
-    status=power.unpack("CCCCVV")
-    # AC line presence
-    return false if status[0]!=0   # Not plugged in or unknown
-    # Battery Flag
-    return true if status[1]==4   # Critical (<5%)
-    # Battery Life Percent
-    return true if status[2]<3   # Less than 3 percent
-    # Battery Life Time
-    return true if status[4]>0 && status[4]<300   # Less than 5 minutes and unplugged
-  end
+  pstate = System.power_state
+  # If it's not discharging, it doesn't matter if it's low
+  return false if !pstate[:discharging]
+  # Check for less than 10m, priority over the percentage
+  # Some laptops (Chromebooks, Macbooks) have very long lifetimes
+  return true if pstate[:seconds] && pstate[:seconds] <= 600
+  # Check for <=15%
+  return true if pstate[:percent] && pstate[:percent] <= 15
   return false
 end
 
@@ -382,12 +373,12 @@ def pbBattleOnStepTaken(repel_active)
   return if !$PokemonEncounters.encounter_possible_here?
   encounterType = $PokemonEncounters.encounter_type
   return if encounterType < 0
-  return if !$PokemonEncounter.step_triggers_encounter?(encounterType)
+  return if !$PokemonEncounters.step_triggers_encounter?(encounterType)
   $PokemonTemp.encounterType = encounterType
   encounter = $PokemonEncounters.choose_wild_pokemon(encounterType)
   encounter = EncounterModifier.trigger(encounter)
-  if $PokemonEncounter.allow_encounter?(encounter, repel_active)
-    if $PokemonEncounter.have_double_wild_battle?
+  if $PokemonEncounters.allow_encounter?(encounter, repel_active)
+    if $PokemonEncounters.have_double_wild_battle?
       encounter2 = $PokemonEncounters.choose_wild_pokemon(encounterType)
       encounter2 = EncounterModifier.trigger(encounter2)
       pbDoubleWildBattle(encounter[0], encounter[1], encounter2[0], encounter2[1])

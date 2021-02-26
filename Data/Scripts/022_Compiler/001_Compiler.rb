@@ -98,7 +98,7 @@ module Compiler
     sectionname = nil
     lastsection = {}
     f.each_line { |line|
-      if lineno==1 && line[0]==0xEF && line[1]==0xBB && line[2]==0xBF
+      if lineno==1 && line[0].ord==0xEF && line[1].ord==0xBB && line[2].ord==0xBF
         line = line[3,line.length-3]
       end
       if !line[/^\#/] && !line[/^\s*$/]
@@ -149,7 +149,7 @@ module Compiler
     sectionname = nil
     lastsection = []
     f.each_line { |line|
-      if lineno==1 && line[0]==0xEF && line[1]==0xBB && line[2]==0xBF
+      if lineno==1 && line[0].ord==0xEF && line[1].ord==0xBB && line[2].ord==0xBF
         line = line[3,line.length-3]
       end
       if !line[/^\#/] && !line[/^\s*$/]
@@ -175,7 +175,7 @@ module Compiler
   def pbEachCommentedLine(f)
     lineno = 1
     f.each_line { |line|
-      if lineno==1 && line[0]==0xEF && line[1]==0xBB && line[2]==0xBF
+      if lineno==1 && line[0].ord==0xEF && line[1].ord==0xBB && line[2].ord==0xBF
         line = line[3,line.length-3]
       end
       yield line, lineno if !line[/^\#/] && !line[/^\s*$/]
@@ -189,7 +189,7 @@ module Compiler
       FileLineData.file = filename
       lineno = 1
       f.each_line { |line|
-        if lineno==1 && line[0]==0xEF && line[1]==0xBB && line[2]==0xBF
+        if lineno==1 && line[0].ord==0xEF && line[1].ord==0xBB && line[2].ord==0xBF
           line = line[3,line.length-3]
         end
         if !line[/^\#/] && !line[/^\s*$/]
@@ -205,7 +205,7 @@ module Compiler
   def pbEachPreppedLine(f)
     lineno = 1
     f.each_line { |line|
-      if lineno==1 && line[0]==0xEF && line[1]==0xBB && line[2]==0xBF
+      if lineno==1 && line[0].ord==0xEF && line[1].ord==0xBB && line[2].ord==0xBF
         line = line[3,line.length-3]
       end
       line = prepline(line)
@@ -220,7 +220,7 @@ module Compiler
       FileLineData.file = filename
       lineno = 1
       f.each_line { |line|
-        if lineno==1 && line[0]==0xEF && line[1]==0xBB && line[2]==0xBF
+        if lineno==1 && line[0].ord==0xEF && line[1].ord==0xBB && line[2].ord==0xBF
           line = line[3,line.length-3]
         end
         line = prepline(line)
@@ -324,7 +324,7 @@ module Compiler
       end
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
-      if GameData.const_defined?(enumer.to_sym)
+      if !Kernel.const_defined?(enumer.to_sym) && GameData.const_defined?(enumer.to_sym)
         enumer = GameData.const_get(enumer.to_sym)
         begin
           if ret == "" || !enumer.exists?(ret.to_sym)
@@ -730,6 +730,7 @@ module Compiler
       convert_files
     end
     pbSetWindowText(nil)
+    System.reload_cache
   end
 
   def main

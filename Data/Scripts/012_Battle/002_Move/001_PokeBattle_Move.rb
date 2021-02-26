@@ -60,7 +60,7 @@ class PokeBattle_Move
   #=============================================================================
   # About the move
   #=============================================================================
-  def pbTarget(_user); return @target; end
+  def pbTarget(_user); return GameData::Target.get(@target); end
 
   def total_pp
     return @total_pp if @total_pp && @total_pp>0   # Usually undefined

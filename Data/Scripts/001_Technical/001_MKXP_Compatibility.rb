@@ -1,8 +1,4 @@
-$MKXP = !!defined?(System)
-
-def mkxp?
-  return $MKXP
-end
+$VERBOSE = nil
 
 def pbSetWindowText(string)
   System.set_window_title(string || System.game_title)

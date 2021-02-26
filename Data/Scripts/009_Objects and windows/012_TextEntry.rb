@@ -565,88 +565,39 @@ class Window_MultilineTextEntry < SpriteWindow_Base
     self.refresh if ((@frame%10)==0)
     return if !self.active
     # Moving cursor
-    if Input.repeat?(Input::UP)
+    if Input.triggerex?(:UP) || Input.repeatex?(:UP)
       moveCursor(-1,0)
       return
-    elsif Input.repeat?(Input::DOWN)
+    elsif Input.triggerex?(:DOWN) || Input.repeatex?(:DOWN)
       moveCursor(1,0)
       return
-    elsif Input.repeat?(Input::LEFT)
+    elsif Input.triggerex?(:LEFT) || Input.repeatex?(:LEFT)
       moveCursor(0,-1)
       return
-    elsif Input.repeat?(Input::RIGHT)
+    elsif Input.triggerex?(:RIGHT) || Input.repeatex?(:RIGHT)
       moveCursor(0,1)
       return
     end
-    if !@peekMessage
-      @peekMessage = Win32API.new("user32.dll","PeekMessage","pliii","i") rescue nil
-    end
-    if @peekMessage
-      msg=[0,0,0,0,0,0,0].pack("V*")
-      retval=@peekMessage.call(msg,0,0x102,0x102,1)
-      if retval!=0
-        p "WM_CHAR #{msg[2]}"
-      end
-    end
-    if Input.press?(Input::CTRL) && Input.trigger?(Input::HOME)
+    if Input.press?(Input::CTRL) && Input.triggerex?(:HOME)
       # Move cursor to beginning
       @cursorLine=0
       @cursorColumn=0
       updateCursorPos(true)
       return
-    elsif Input.press?(Input::CTRL) && Input.trigger?(Input::ENDKEY)
+    elsif Input.press?(Input::CTRL) && Input.triggerex?(:END)
       # Move cursor to end
       @cursorLine=getTotalLines()-1
       @cursorColumn=getColumnsInLine(@cursorLine)
       updateCursorPos(true)
       return
-    elsif Input.repeat?(Input::ENTER)
+    elsif Input.triggerex?(:RETURN) || Input.repeatex?(:RETURN)
       self.insert("\n")
       return
-    elsif Input.repeat?(Input::BACKSPACE)   # Backspace
+    elsif Input.triggerex?(:BACKSPACE) || Input.repeatex?(:BACKSPACE)   # Backspace
       self.delete
       return
     end
-    # Letter keys
-    for i in 65..90
-      if Input.repeatex?(i)
-        shift=(Input.press?(Input::SHIFT)) ? 0x41 : 0x61
-        insert((shift+i-65).chr)
-        return
-      end
-    end
-    # Number keys
-    shifted=")!@\#$%^&*("
-    unshifted="0123456789"
-    for i in 48..57
-      if Input.repeatex?(i)
-        insert((Input.press?(Input::SHIFT)) ? shifted[i-48].chr : unshifted[i-48].chr)
-        return
-      end
-    end
-    keys=[
-       [32," "," "],
-       [106,"*","*"],
-       [107,"+","+"],
-       [109,"-","-"],
-       [111,"/","/"],
-       [186,";",":"],
-       [187,"=","+"],
-       [188,",","<"],
-       [189,"-","_"],
-       [190,".",">"],
-       [191,"/","?"],
-       [219,"[","{"],
-       [220,"\\","|"],
-       [221,"]","}"],
-       [222,"'","\""]
-    ]
-    for i in keys
-      if Input.repeatex?(i[0])
-        insert((Input.press?(Input::SHIFT)) ? i[2] : i[1])
-        return
-      end
-    end
+    Input.gets.each_char{|c|insert(c)}
   end
 
   def refresh
@@ -719,97 +670,27 @@ class Window_TextEntry_Keyboard < Window_TextEntry
     self.refresh if ((@frame%10)==0)
     return if !self.active
     # Moving cursor
-    if Input.repeat?(Input::LEFT)
+    if Input.triggerex?(:LEFT) || Input.repeatex?(:LEFT)
       if @helper.cursor > 0
         @helper.cursor-=1
         @frame=0
         self.refresh
       end
       return
-    elsif Input.repeat?(Input::RIGHT)
+    elsif Input.triggerex?(:LEFT) || Input.repeatex?(:RIGHT)
       if @helper.cursor < self.text.scan(/./m).length
         @helper.cursor+=1
         @frame=0
         self.refresh
       end
       return
-    elsif Input.repeat?(Input::BACKSPACE)
+    elsif Input.triggerex?(:BACKSPACE) || Input.repeatex?(:BACKSPACE)
       self.delete if @helper.cursor>0
       return
-    elsif Input.trigger?(Input::ENTER) || Input.trigger?(Input::ESC)
+    elsif Input.triggerex?(:RETURN) || Input.triggerex?(:ESCAPE)
       return
     end
-    if !@toUnicode
-      @toUnicode        = Win32API.new("user32.dll","ToUnicode","iippii","i") rescue nil
-      @mapVirtualKey    = Win32API.new("user32.dll","MapVirtualKey","ii","i") rescue nil
-      @getKeyboardState = Win32API.new("user32.dll","GetKeyboardState","p","i") rescue nil
-    end
-    if @getKeyboardState
-      kbs = "\0"*256
-      @getKeyboardState.call(kbs)
-      kbcount = 0
-      for i in 3...256
-        next if !Input.triggerex?(i)
-        vsc = @mapVirtualKey.call(i,0)
-        buf = "\0"*8
-        ret = @toUnicode.call(i,vsc,kbs,buf,4,0)
-        next if ret<=0
-        b = buf.unpack("v*")
-        for j in 0...ret
-          if buf[j]<=0x7F
-            insert(buf[j].chr)
-          elsif buf[j]<=0x7FF
-            insert((0xC0|((buf[j]>>6)&0x1F)).chr+(0x80|(buf[j]&0x3F)).chr)
-          else
-            str  = (0xE0|((buf[j]>>12)&0x0F)).chr
-            str += (0x80|((buf[j]>>6)&0x3F)).chr
-            str += (0x80|(buf[j]&0x3F)).chr
-            insert(str)
-          end
-          kbcount += 1
-        end
-      end
-      return if kbcount>0
-    end
-    # Letter keys
-    for i in 65..90
-      if Input.repeatex?(i)
-        shift=(Input.press?(Input::SHIFT)) ? 0x41 : 0x61
-        insert((shift+i-65).chr)
-        return
-      end
-    end
-    # Number keys
-    shifted   = ")!@\#$%^&*("
-    unshifted = "0123456789"
-    for i in 48..57
-      if Input.repeatex?(i)
-        insert((Input.press?(Input::SHIFT)) ? shifted[i-48].chr : unshifted[i-48].chr)
-        return
-      end
-    end
-    keys = [
-       [32," "," "],
-       [106,"*","*"],
-       [107,"+","+"],
-       [109,"-","-"],
-       [111,"/","/"],
-       [186,";",":"],
-       [187,"=","+"],
-       [188,",","<"],
-       [189,"-","_"],
-       [190,".",">"],
-       [191,"/","?"],
-       [219,"[","{"],
-       [221,"]","}"],
-       [222,"'","\""]
-    ]
-    for i in keys
-      if Input.repeatex?(i[0])
-        insert((Input.press?(Input::SHIFT)) ? i[2] : i[1])
-        return
-      end
-    end
+    Input.gets.each_char{|c|insert(c)}
   end
 end
 
@@ -832,7 +713,7 @@ class PokemonEntryScene
     if USEKEYBOARD
       @sprites["entry"]=Window_TextEntry_Keyboard.new(initialText,
          0,0,400-112,96,helptext,true)
-      $fullInputUpdate = true
+      Input.text_input = true
     else
       @sprites["entry"]=Window_TextEntry.new(initialText,0,0,400,96,helptext,true)
     end
@@ -932,10 +813,10 @@ class PokemonEntryScene
     loop do
       Graphics.update
       Input.update
-      if Input.trigger?(Input::ESC) && @minlength==0
+      if Input.triggerex?(:ESCAPE) && @minlength==0
         ret=""
         break
-      elsif Input.trigger?(Input::ENTER) && @sprites["entry"].text.length>=@minlength
+      elsif Input.triggerex?(:RETURN) && @sprites["entry"].text.length>=@minlength
         ret=@sprites["entry"].text
         break
       end
@@ -997,10 +878,10 @@ class PokemonEntryScene
   end
 
   def pbEndScene
-    $fullInputUpdate = false
     pbFadeOutAndHide(@sprites)
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
+    Input.text_input = false if USEKEYBOARD
   end
 end
 
@@ -1553,14 +1434,14 @@ def pbFreeText(msgwindow,currenttext,passwordbox,maxlength,width=240)
   pbPositionNearMsgWindow(window,msgwindow,:right)
   window.text=currenttext
   window.passwordChar="*" if passwordbox
-  $fullInputUpdate = true
+  Input.text_input = true
   loop do
     Graphics.update
     Input.update
-    if Input.trigger?(Input::ESC)
+    if Input.triggerex?(:ESCAPE)
       ret=currenttext
       break
-    elsif Input.trigger?(Input::ENTER)
+    elsif Input.triggerex?(:RETURN)
       ret=window.text
       break
     end
@@ -1568,7 +1449,7 @@ def pbFreeText(msgwindow,currenttext,passwordbox,maxlength,width=240)
     msgwindow.update if msgwindow
     yield if block_given?
   end
-  $fullInputUpdate = false
+  Input.text_input = false
   window.dispose
   Input.update
   return ret

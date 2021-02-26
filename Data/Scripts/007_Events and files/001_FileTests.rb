@@ -75,81 +75,6 @@ def pbBitmapName(x)
   return (ret) ? ret : x
 end
 
-def getUnicodeString(addr)
-  return "" if addr==0
-  rtlMoveMemory_pi = Win32API.new('kernel32', 'RtlMoveMemory', 'pii', 'i')
-  ret = ""
-  data = "xx"
-  index = (addr.is_a?(String)) ? 0 : addr
-  loop do
-    if addr.is_a?(String)
-      data = addr[index,2]
-    else
-      rtlMoveMemory_pi.call(data, index, 2)
-    end
-    codepoint = data.unpack("v")[0]
-    break if codepoint==0
-    index += 2
-    if codepoint<=0x7F
-      ret += codepoint.chr
-    elsif codepoint<=0x7FF
-      ret += (0xC0|((codepoint>>6)&0x1F)).chr
-      ret += (0x80|(codepoint   &0x3F)).chr
-    elsif codepoint<=0xFFFF
-      ret += (0xE0|((codepoint>>12)&0x0F)).chr
-      ret += (0x80|((codepoint>>6)&0x3F)).chr
-      ret += (0x80|(codepoint   &0x3F)).chr
-    elsif codepoint<=0x10FFFF
-      ret += (0xF0|((codepoint>>18)&0x07)).chr
-      ret += (0x80|((codepoint>>12)&0x3F)).chr
-      ret += (0x80|((codepoint>>6)&0x3F)).chr
-      ret += (0x80|(codepoint   &0x3F)).chr
-    end
-  end
-  return ret
-end
-
-def getUnicodeStringFromAnsi(addr)
-  return "" if addr==0
-  rtlMoveMemory_pi = Win32API.new('kernel32', 'RtlMoveMemory', 'pii', 'i')
-  ret = ""
-  data = "x"
-  index = (addr.is_a?(String)) ? 0 : addr
-  loop do
-    if addr.is_a?(String)
-      data = addr[index,1]
-    else
-      rtlMoveMemory_pi.call(data, index, 1)
-    end
-    index += 1
-    codepoint = data.unpack("C")[0]
-    break if codepoint==0 || !codepoint
-    break if codepoint==0
-    if codepoint<=0x7F
-      ret += codepoint.chr
-    else
-      ret += (0xC0|((codepoint>>6)&0x1F)).chr
-      ret += (0x80|(codepoint   &0x3F)).chr
-    end
-  end
-  return ret
-end
-
-def getKnownFolder(guid)
-  packedGuid = guid.pack("VvvC*")
-  shGetKnownFolderPath = Win32API.new("shell32.dll","SHGetKnownFolderPath","pllp","i") rescue nil
-  coTaskMemFree        = Win32API.new("ole32.dll","CoTaskMemFree","i","") rescue nil
-  return "" if !shGetKnownFolderPath || !coTaskMemFree
-  path = "\0"*4
-  ret = shGetKnownFolderPath.call(packedGuid,0,0,path)
-  path = path.unpack("V")[0]
-  ret = getUnicodeString(path)
-  coTaskMemFree.call(path)
-  return ret
-end
-
-
-
 module RTP
   @rtpPaths = nil
 
@@ -202,121 +127,31 @@ module RTP
     end
   end
 
-  # Gets all RGSS search paths
+  # Gets all RGSS search paths.
+  # This function basically does nothing now, because 
+  # the passage of time and introduction of MKXP make
+  # it useless, but leaving it for compatibility
+  # reasons
   def self.eachPath
     # XXX: Use "." instead of Dir.pwd because of problems retrieving files if
     # the current directory contains an accent mark
     yield ".".gsub(/[\/\\]/,"/").gsub(/[\/\\]$/,"")+"/"
-    if !@rtpPaths
-      tmp = Sprite.new
-      isRgss2 = tmp.respond_to?("wave_amp")
-      tmp.dispose
-      @rtpPaths = []
-      if isRgss2
-        rtp = getGameIniValue("Game","RTP")
-        if rtp!=""
-          rtp = MiniRegistry.get(MiniRegistry::HKEY_LOCAL_MACHINE,
-             "SOFTWARE\\Enterbrain\\RGSS2\\RTP",rtp,nil)
-          if rtp && safeIsDirectory?(rtp)
-            @rtpPaths.push(rtp.sub(/[\/\\]$/,"")+"/")
-          end
-        end
-      else
-        %w( RTP1 RTP2 RTP3 ).each { |v|
-          rtp = getGameIniValue("Game",v)
-          if rtp!=""
-            rtp = MiniRegistry.get(MiniRegistry::HKEY_LOCAL_MACHINE,
-               "SOFTWARE\\Enterbrain\\RGSS\\RTP",rtp,nil)
-            if rtp && safeIsDirectory?(rtp)
-              @rtpPaths.push(rtp.sub(/[\/\\]$/,"")+"/")
-            end
-          end
-        }
-      end
-    end
-    @rtpPaths.each { |x| yield x }
   end
 
   private
 
-  @@folder = nil
-
-  def self.getGameIniValue(section,key)
-    val = "\0"*256
-    gps = Win32API.new('kernel32', 'GetPrivateProfileString',%w(p p p p l p), 'l')
-    gps.call(section, key, "", val, 256, ".\\Game.ini")
-    val.delete!("\0")
-    return val
-  end
-
-  def self.isDirWritable(dir)
-    return false if !dir || dir==""
-    loop do
-      name = dir.gsub(/[\/\\]$/,"")+"/writetest"
-      12.times do
-        name += sprintf("%02X",rand(256))
-      end
-      name += ".tmp"
-      if !safeExists?(name)
-        retval = false
-        begin
-          File.open(name,"wb") { retval = true }
-        rescue Errno::EINVAL, Errno::EACCES, Errno::ENOENT
-        ensure
-          File.delete(name) rescue nil
-        end
-        return retval
-      end
-    end
-  end
-
-  def self.ensureGameDir(dir)
-    title = RTP.getGameIniValue("Game","Title")
-    title = "RGSS Game" if title==""
-    title = title.gsub(/[^\w ]/,"_")
-    newdir = dir.gsub(/[\/\\]$/,"")+"/"
-    # Convert to UTF-8 because of ANSI function
-    newdir += getUnicodeStringFromAnsi(title)
-    Dir.mkdir(newdir) rescue nil
-    ret = safeIsDirectory?(newdir) ? newdir : dir
-    return ret
-  end
-
   def self.getSaveFileName(fileName)
-    return getSaveFolder().gsub(/[\/\\]$/,"")+"/"+fileName
+    File.join(getSaveFolder, fileName)
   end
 
   def self.getSaveFolder
-    if !@@folder
-      # XXX: Use "." instead of Dir.pwd because of problems retrieving files if
-      # the current directory contains an accent mark
-      pwd = "."
-      # Get the known folder path for saved games
-      savedGames = getKnownFolder([
-         0x4c5c32ff,0xbb9d,0x43b0,0xb5,0xb4,0x2d,0x72,0xe5,0x4e,0xaa,0xa4])
-      if savedGames && savedGames!="" && isDirWritable(savedGames)
-        pwd = ensureGameDir(savedGames)
-      end
-      if isDirWritable(pwd)
-        @@folder = pwd
-      else
-        appdata = ENV["LOCALAPPDATA"]
-        if isDirWritable(appdata)
-          appdata = ensureGameDir(appdata)
-        else
-          appdata = ENV["APPDATA"]
-          if isDirWritable(appdata)
-            appdata = ensureGameDir(appdata)
-          elsif isDirWritable(pwd)
-            appdata = pwd
-          else
-            appdata = "."
-          end
-        end
-        @@folder = appdata
-      end
-    end
-    return @@folder
+    # MKXP makes sure that this folder has been created
+    # once it starts. The location differs depending on
+    # the operating system:
+    # Windows: %APPDATA%
+    # Linux: $HOME/.local/share
+    # macOS (unsandboxed): $HOME/Library/Application Support
+    System.data_directory
   end
 end
 
@@ -339,6 +174,9 @@ end
 
 # Used to determine whether a data file exists (rather than a graphics or
 # audio file). Doesn't check RTP, but does check encrypted archives.
+
+# Note: pbGetFileChar checks anything added in MKXP's RTP setting,
+# and matching mount points added through System.mount
 def pbRgssExists?(filename)
   filename = canonicalize(filename)
   if safeExists?("./Game.rgssad") || safeExists?("./Game.rgss2a")
@@ -350,6 +188,9 @@ end
 
 # Opens an IO, even if the file is in an encrypted archive.
 # Doesn't check RTP for the file.
+
+# Note: load_data checks anything added in MKXP's RTP setting,
+# and matching mount points added through System.mount
 def pbRgssOpen(file,mode=nil)
   #File.open("debug.txt","ab") { |fw| fw.write([file,mode,Time.now.to_f].inspect+"\r\n") }
   if !safeExists?("./Game.rgssad") && !safeExists?("./Game.rgss2a")
@@ -362,11 +203,7 @@ def pbRgssOpen(file,mode=nil)
   end
   file = canonicalize(file)
   Marshal.neverload = true
-  begin
-    str = load_data(file)
-  ensure
-    Marshal.neverload = false
-  end
+  str = load_data(file, true)
   if block_given?
     StringInput.open(str) { |f| yield f }
     return nil
@@ -383,18 +220,15 @@ def pbGetFileChar(file)
     return nil if !safeExists?(file)
     begin
       File.open(file,"rb") { |f| return f.read(1) }   # read one byte
-    rescue Errno::ENOENT, Errno::EINVAL, Errno::EACCES
+    rescue Errno::ENOENT, Errno::EINVAL, Errno::EACCES, Errno::EISDIR
       return nil
     end
   end
-  Marshal.neverload = true
   str = nil
   begin
-    str = load_data(file)
-  rescue Errno::ENOENT, Errno::EINVAL, Errno::EACCES, RGSSError
+    str = load_data(file, true)
+  rescue Errno::ENOENT, Errno::EINVAL, Errno::EACCES, Errno::EISDIR, RGSSError, MKXPError
     str = nil
-  ensure
-    Marshal.neverload = false
   end
   return str
 end
@@ -406,6 +240,9 @@ end
 
 # Gets the contents of a file. Doesn't check RTP, but does check
 # encrypted archives.
+
+# Note: load_data will check anything added in MKXP's RTP setting,
+# and matching mount points added through System.mount
 def pbGetFileString(file)
   file = canonicalize(file)
   if !(safeExists?("./Game.rgssad") || safeExists?("./Game.rgss2a"))
@@ -416,14 +253,11 @@ def pbGetFileString(file)
       return nil
     end
   end
-  Marshal.neverload = true
   str = nil
   begin
-    str = load_data(file)
-  rescue Errno::ENOENT, Errno::EINVAL, Errno::EACCES, RGSSError
+    str = load_data(file, true)
+  rescue Errno::ENOENT, Errno::EINVAL, Errno::EACCES, RGSSError, MKXPError
     str = nil
-  ensure
-    Marshal.neverload = false
   end
   return str
 end
@@ -433,77 +267,6 @@ end
 #===============================================================================
 #
 #===============================================================================
-module MiniRegistry
-  HKEY_CLASSES_ROOT  = 0x80000000
-  HKEY_CURRENT_USER  = 0x80000001
-  HKEY_LOCAL_MACHINE = 0x80000002
-  HKEY_USERS         = 0x80000003
-  FormatMessageA   = Win32API.new("kernel32","FormatMessageA","LPLLPLP","L")
-  RegOpenKeyExA    = Win32API.new("advapi32","RegOpenKeyExA","LPLLP","L")
-  RegCloseKey      = Win32API.new("advapi32","RegCloseKey","L","L")
-  RegQueryValueExA = Win32API.new("advapi32","RegQueryValueExA","LPLPPP","L")
-
-  def self.open(hkey,subkey,bit64=false)
-    key = 0.chr*4
-    flag = bit64 ? 0x20119 : 0x20019
-    rg = RegOpenKeyExA.call(hkey, subkey, 0, flag, key)
-    return nil if rg!=0
-    key = key.unpack("V")[0]
-    if block_given?
-      begin
-        yield(key)
-      ensure
-        check(RegCloseKey.call(key))
-      end
-    else
-      return key
-    end
-  end
-
-  def self.close(hkey); check(RegCloseKey.call(hkey)) if hkey; end
-
-  def self.get(hkey,subkey,name,defaultValue=nil,bit64=false)
-    self.open(hkey,subkey,bit64) { |key|
-      return self.read(key,name) rescue defaultValue
-    }
-    return defaultValue
-  end
-
-  def self.read(hkey,name)
-    hkey = 0 if !hkey
-    type = 0.chr*4
-    size = 0.chr*4
-    check(RegQueryValueExA.call(hkey,name,0,type,0,size))
-    data = " "*size.unpack("V")[0]
-    check(RegQueryValueExA.call(hkey,name,0,type,data,size))
-    type = type.unpack("V")[0]
-    data = data[0,size.unpack("V")[0]]
-    case type
-    when 1 then return data.chop                                  # REG_SZ
-    when 2 then return data.gsub(/%([^%]+)%/) { ENV[$1] || $& }   # REG_EXPAND_SZ
-    when 3 then return data                                       # REG_BINARY
-    when 4 then return data.unpack("V")[0]                        # REG_DWORD
-    when 5 then return data.unpack("V")[0]                        # REG_DWORD_BIG_ENDIAN
-    when 11                                                        # REG_QWORD
-      data.unpack("VV")
-      return (data[1]<<32|data[0])
-    end
-    raise "Type #{type} not supported."
-  end
-
-  private
-
-  def self.check(code)
-    if code!=0
-      msg = "\0"*1024
-      len = FormatMessageA.call(0x1200, 0, code, 0, msg, 1024, 0)
-      raise msg[0, len].tr("\r", '').chomp
-    end
-  end
-end
-
-
-
 class StringInput
   include Enumerable
 
@@ -623,45 +386,4 @@ class StringInput
   def read_all; read(); end
 
   alias sysread read
-end
-
-
-
-module ::Marshal
-  class << self
-    if !@oldloadAliased
-      alias oldload load
-      @oldloadAliased = true
-    end
-
-    @@neverload = false
-
-    def neverload
-      return @@neverload
-    end
-
-    def neverload=(value)
-      @@neverload = value
-    end
-
-    def load(port,*arg)
-      if @@neverload
-        if port.is_a?(IO)
-          return port.read
-        end
-        return port
-      end
-      oldpos = port.pos if port.is_a?(IO)
-      begin
-        oldload(port,*arg)
-      rescue
-        p [$!.class,$!.message,$!.backtrace]
-        if port.is_a?(IO)
-          port.pos = oldpos
-          return port.read
-        end
-        return port
-      end
-    end
-  end
 end

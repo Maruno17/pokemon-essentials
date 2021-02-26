@@ -27,7 +27,7 @@ class PokeBattle_Battle
       next if b.fainted? || !b.opposes?(idxSwitcher)   # Shouldn't hit an ally
       next if b.movedThisRound? || !pbChoseMoveFunctionCode?(b.index,"088")   # Pursuit
       # Check whether Pursuit can be used
-      next unless pbMoveCanTarget?(b.index,idxSwitcher,@choices[b.index][2].target)
+      next unless pbMoveCanTarget?(b.index,idxSwitcher,@choices[b.index][2].pbTarget(b))
       next unless pbCanChooseMove?(b.index,@choices[b.index][1],false)
       next if b.status == :SLEEP || b.status == :FROZEN
       next if b.effects[PBEffects::SkyDrop]>=0

@@ -36,18 +36,21 @@ class PokeBattle_Battler
     preTarget = choice[3]   # A target that was already chosen
     targets = []
     # Get list of targets
-    case move.pbTarget(user)   # Curse can change its target type
-    when PBTargets::NearAlly
+    case move.pbTarget(user).id   # Curse can change its target type
+    when :NearAlly
       targetBattler = (preTarget>=0) ? @battle.battlers[preTarget] : nil
       if !pbAddTarget(targets,user,targetBattler,move)
         pbAddTargetRandomAlly(targets,user,move)
       end
-    when PBTargets::UserOrNearAlly
+    when :UserOrNearAlly
       targetBattler = (preTarget>=0) ? @battle.battlers[preTarget] : nil
       if !pbAddTarget(targets,user,targetBattler,move,true,true)
         pbAddTarget(targets,user,user,move,true,true)
       end
-    when PBTargets::NearFoe, PBTargets::NearOther
+    when :UserAndAllies
+      pbAddTarget(targets,user,user,move,true,true)
+      @battle.eachSameSideBattler(user.index) { |b| pbAddTarget(targets,user,b,move,false,true) }
+    when :NearFoe, :NearOther
       targetBattler = (preTarget>=0) ? @battle.battlers[preTarget] : nil
       if !pbAddTarget(targets,user,targetBattler,move)
         if preTarget>=0 && !user.opposes?(preTarget)
@@ -56,13 +59,11 @@ class PokeBattle_Battler
           pbAddTargetRandomFoe(targets,user,move)
         end
       end
-    when PBTargets::AllNearFoes
-      @battle.eachOtherSideBattler(user.index) { |b| pbAddTarget(targets,user,b,move) }
-    when PBTargets::RandomNearFoe
+    when :RandomNearFoe
       pbAddTargetRandomFoe(targets,user,move)
-    when PBTargets::AllNearOthers
-      @battle.eachBattler { |b| pbAddTarget(targets,user,b,move) }
-    when PBTargets::Other
+    when :AllNearFoes
+      @battle.eachOtherSideBattler(user.index) { |b| pbAddTarget(targets,user,b,move) }
+    when :Foe, :Other
       targetBattler = (preTarget>=0) ? @battle.battlers[preTarget] : nil
       if !pbAddTarget(targets,user,targetBattler,move,false)
         if preTarget>=0 && !user.opposes?(preTarget)
@@ -71,12 +72,11 @@ class PokeBattle_Battler
           pbAddTargetRandomFoe(targets,user,move,false)
         end
       end
-    when PBTargets::UserAndAllies
-      pbAddTarget(targets,user,user,move,true,true)
-      @battle.eachSameSideBattler(user.index) { |b| pbAddTarget(targets,user,b,move,false,true) }
-    when PBTargets::AllFoes
+    when :AllFoes
       @battle.eachOtherSideBattler(user.index) { |b| pbAddTarget(targets,user,b,move,false) }
-    when PBTargets::AllBattlers
+    when :AllNearOthers
+      @battle.eachBattler { |b| pbAddTarget(targets,user,b,move) }
+    when :AllBattlers
       @battle.eachBattler { |b| pbAddTarget(targets,user,b,move,false,true) }
     else
       # Used by Counter/Mirror Coat/Metal Burst/Bide
@@ -89,12 +89,12 @@ class PokeBattle_Battler
   # Redirect attack to another target
   #=============================================================================
   def pbChangeTargets(move,user,targets)
-    targetType = move.pbTarget(user)
+    target_data = move.pbTarget(user)
     return targets if @battle.switching   # For Pursuit interrupting a switch
     return targets if move.cannotRedirect?
-    return targets if !PBTargets.canChooseOneFoeTarget?(targetType) || targets.length!=1
+    return targets if !target_data.can_target_one_foe? || targets.length != 1
     priority = @battle.pbPriority(true)
-    nearOnly = !PBTargets.canChooseDistantTarget?(move.target)
+    nearOnly = !target_data.can_choose_distant_target?
     # Spotlight (takes priority over Follow Me/Rage Powder/Lightning Rod/Storm Drain)
     newTarget = nil; strength = 100   # Lower strength takes priority
     priority.each do |b|

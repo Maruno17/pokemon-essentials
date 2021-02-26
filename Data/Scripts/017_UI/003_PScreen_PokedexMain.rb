@@ -482,7 +482,7 @@ class PokemonPokedex_Scene
     wt1 = (params[6]<0) ? 0 : (params[6]>=@weightCommands.length) ? 9999 : @weightCommands[params[6]]
     wt2 = (params[7]<0) ? 9999 : (params[7]>=@weightCommands.length) ? 0 : @weightCommands[params[7]]
     hwoffset = false
-    if pbGetCountry==0xF4   # If the user is in the United States
+    if System.user_language[3..4]=="US"   # If the user is in the United States
       ht1 = (params[4]>=@heightCommands.length) ? 99*12 : (ht1/0.254).round
       ht2 = (params[5]<0) ? 99*12 : (ht2/0.254).round
       wt1 = (params[6]>=@weightCommands.length) ? 99990 : (wt1/0.254).round
@@ -571,7 +571,7 @@ class PokemonPokedex_Scene
       ht1 = (sel[0]<0) ? 0 : (sel[0]>=@heightCommands.length) ? 999 : @heightCommands[sel[0]]
       ht2 = (sel[1]<0) ? 999 : (sel[1]>=@heightCommands.length) ? 0 : @heightCommands[sel[1]]
       hwoffset = false
-      if pbGetCountry==0xF4   # If the user is in the United States
+      if System.user_language[3..4]=="US"    # If the user is in the United States
         ht1 = (sel[0]>=@heightCommands.length) ? 99*12 : (ht1/0.254).round
         ht2 = (sel[1]<0) ? 99*12 : (ht2/0.254).round
         txt1 = sprintf("%d'%02d''",ht1/12,ht1%12)
@@ -588,7 +588,7 @@ class PokemonPokedex_Scene
       wt1 = (sel[0]<0) ? 0 : (sel[0]>=@weightCommands.length) ? 9999 : @weightCommands[sel[0]]
       wt2 = (sel[1]<0) ? 9999 : (sel[1]>=@weightCommands.length) ? 0 : @weightCommands[sel[1]]
       hwoffset = false
-      if pbGetCountry==0xF4   # If the user is in the United States
+      if System.user_language[3..4]=="US"   # If the user is in the United States
         wt1 = (sel[0]>=@weightCommands.length) ? 99990 : (wt1/0.254).round
         wt2 = (sel[1]<0) ? 99990 : (wt2/0.254).round
         txt1 = sprintf("%.1f",wt1/10.0)

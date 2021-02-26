@@ -261,8 +261,8 @@ class PokeBattle_Move_10D < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
   def pbTarget(user)
-    return PBTargets::NearFoe if user.pbHasType?(:GHOST)
-    super
+    return GameData::Target.get(:NearFoe) if user.pbHasType?(:GHOST)
+    return super
   end
 
   def pbMoveFailed?(user,targets)
@@ -1132,7 +1132,7 @@ class PokeBattle_Move_137 < PokeBattle_Move
   end
 
   def pbEffectGeneral(user)
-    return if pbTarget(user)==PBTargets::UserAndAllies
+    return if pbTarget(user) != :UserSide
     @validTargets.each { |b| pbEffectAgainstTarget(user,b) }
   end
 end
@@ -1978,7 +1978,7 @@ class PokeBattle_Move_15C < PokeBattle_Move
   end
 
   def pbEffectGeneral(user)
-    return if pbTarget(user)==PBTargets::UserAndAllies
+    return if pbTarget(user) != :UserSide
     @validTargets.each { |b| pbEffectAgainstTarget(user,b) }
   end
 end
@@ -2423,8 +2423,8 @@ end
 #===============================================================================
 class PokeBattle_Move_16F < PokeBattle_Move
   def pbTarget(user)
-    return PBTargets::NearFoe if user.effects[PBEffects::HealBlock]>0
-    super
+    return GameData::Target.get(:NearFoe) if user.effects[PBEffects::HealBlock]>0
+    return super
   end
 
   def pbOnStartUse(user,targets)

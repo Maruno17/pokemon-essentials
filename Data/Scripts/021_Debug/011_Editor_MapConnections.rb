@@ -19,7 +19,7 @@ class MapSprite
   end
 
   def getXY
-    return nil if !Input.triggerex?(Input::LeftMouseKey)
+    return nil if !Input.trigger?(Input::MOUSELEFT)
     mouse = Mouse::getMousePos(true)
     return nil if !mouse
     if mouse[0]<@sprite.x || mouse[0]>=@sprite.x+@sprite.bitmap.width
@@ -118,7 +118,7 @@ class RegionMapSprite
   end
 
   def getXY
-    return nil if !Input.triggerex?(Input::LeftMouseKey)
+    return nil if !Input.trigger?(Input::MOUSELEFT)
     mouse=Mouse::getMousePos(true)
     return nil if !mouse
     if mouse[0]<@sprite.x||mouse[0]>=@sprite.x+@sprite.bitmap.width
@@ -480,13 +480,13 @@ class MapScreenScene
     mousepos=Mouse::getMousePos
     if mousepos
       hitmap=hittest(mousepos[0],mousepos[1])
-      if Input.triggerex?(Input::LeftMouseKey)
+      if Input.trigger?(Input::MOUSELEFT)
         onClick(hitmap,mousepos[0],mousepos[1])
-      elsif Input.triggerex?(Input::RightMouseKey)
+      elsif Input.trigger?(Input::MOUSERIGHT)
         onRightClick(hitmap,mousepos[0],mousepos[1])
-      elsif Input.releaseex?(Input::LeftMouseKey)
+      elsif Input.release?(Input::MOUSELEFT)
         onMouseUp(hitmap)
-      elsif Input.releaseex?(Input::RightMouseKey)
+      elsif Input.release?(Input::MOUSERIGHT)
         onRightMouseUp(hitmap)
       else
         if @lasthitmap!=hitmap
@@ -520,14 +520,14 @@ class MapScreenScene
         i[1].x -= 4 if i
       end
     end
-    if Input.triggerex?("A"[0])
+    if Input.triggerex?(:A)
       id=chooseMapScreen(_INTL("Add Map"),@currentmap)
       if id>0
         addSprite(id)
         setTopSprite(id)
         @mapconns=generateConnectionData
       end
-    elsif Input.triggerex?("S"[0])
+    elsif Input.triggerex?(:S)
       id=chooseMapScreen(_INTL("Go to Map"),@currentmap)
       if id>0
         @mapconns=generateConnectionData
@@ -538,7 +538,7 @@ class MapScreenScene
         putSprite(id)
         @currentmap=id
       end
-    elsif Input.trigger?(Input::DELETE)
+    elsif Input.triggerex?(:DELETE)
       if @mapsprites.keys.length>1 && @selmapid>=0
         @mapsprites[@selmapid].bitmap.dispose
         @mapsprites[@selmapid].dispose

@@ -1,3 +1,7 @@
+# Disabling animated GIF stuff because gif.dll is awful,
+# but leaving the code here just in case someone wants
+# to make Linux and macOS versions of it for some reason
+=begin
 module GifLibrary
   @@loadlib = Win32API.new("Kernel32.dll","LoadLibrary",'p','')
   if safeExists?("gif.dll")
@@ -22,6 +26,7 @@ module GifLibrary
     return ret
   end
 end
+=end
 
 
 
@@ -201,12 +206,13 @@ class GifBitmap
         end
       end
     end
-    if bitmap && filestring && filestring[0]==0x47 &&
+    if bitmap && filestring && filestring[0].ord==0x47 &&
        bitmap.width==32 && bitmap.height==32
       #File.open("debug.txt","ab") { |f| f.puts("rejecting bitmap") }
       bitmap.dispose
       bitmap=nil
     end
+    # Note: MKXP can open .gif files just fine, first frame only
     if bitmap
       #File.open("debug.txt","ab") { |f| f.puts("reusing bitmap") }
       # Have a regular non-animated bitmap
@@ -217,6 +223,7 @@ class GifBitmap
     else
       tmpBase=File.basename(file)+"_tmp_"
       filestring=pbGetFileString(filestrName) if filestring
+=begin
       Dir.chdir(ENV["TEMP"]) { # navigate to temp folder since game might be on a CD-ROM
         if filestring && filestring[0]==0x47 && GifLibrary::PngDll
           result=GifLibrary::GifToPngFilesInMemory.call(filestring,
@@ -244,6 +251,7 @@ class GifBitmap
           end
         end
       }
+=end
       if @gifbitmaps.length==0
         @gifbitmaps=[BitmapWrapper.new(32,32)]
         @gifdelays=[1]

@@ -3,25 +3,22 @@ class PokeBattle_AI
   #
   #=============================================================================
   def pbTargetsMultiple?(move,user)
-    numTargets = 0
-    case move.pbTarget(user)
-    when PBTargets::AllNearFoes
-      @battle.eachOtherSideBattler(user) { |b| numTargets += 1 if b.near?(user) }
-      return numTargets>1
-    when PBTargets::AllNearOthers
-      @battle.eachBattler { |b| numTargets += 1 if b.near?(user) }
-      return numTargets>1
-    when PBTargets::UserAndAllies
-      @battle.eachSameSideBattler(user) { |_b| numTargets += 1 }
-      return numTargets>1
-    when PBTargets::AllFoes
-      @battle.eachOtherSideBattler(user) { |_b| numTargets += 1 }
-      return numTargets>1
-    when PBTargets::AllBattlers
-      @battle.eachBattler { |_b| numTargets += 1 }
-      return numTargets>1
+    target_data = move.pbTarget(user)
+    return false if target_data.num_targets <= 1
+    num_targets = 0
+    case target_data.id
+    when :UserAndAllies
+      @battle.eachSameSideBattler(user) { |_b| num_targets += 1 }
+    when :AllNearFoes
+      @battle.eachOtherSideBattler(user) { |b| num_targets += 1 if b.near?(user) }
+    when :AllFoes
+      @battle.eachOtherSideBattler(user) { |_b| num_targets += 1 }
+    when :AllNearOthers
+      @battle.eachBattler { |b| num_targets += 1 if b.near?(user) }
+    when :AllBattlers
+      @battle.eachBattler { |_b| num_targets += 1 }
     end
-    return false
+    return num_targets > 1
   end
 
   #=============================================================================

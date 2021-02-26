@@ -458,7 +458,7 @@ class PokeBattle_Move_019 < PokeBattle_Move
   def pbEffectGeneral(user)
     # Cure all Pokémon in battle on the user's side. For the benefit of the Gen
     # 5 version of this move, to make Pokémon out in battle get cured first.
-    if pbTarget(user)!=PBTargets::UserAndAllies
+    if pbTarget(user) == :UserSide
       @battle.eachSameSideBattler(user) do |b|
         next if b.status == :NONE
         pbAromatherapyHeal(b.pokemon,b)

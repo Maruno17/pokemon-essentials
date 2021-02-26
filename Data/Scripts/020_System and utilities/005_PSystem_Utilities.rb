@@ -48,35 +48,16 @@ def pbEachCombination(array,num)
   end while _pbNextComb(currentComb,array.length)
 end
 
-# Returns a country ID
-# http://msdn.microsoft.com/en-us/library/dd374073%28VS.85%29.aspx?
-def pbGetCountry()
-  getUserGeoID = Win32API.new("kernel32","GetUserGeoID","l","i") rescue nil
-  return getUserGeoID.call(16) if getUserGeoID
-  return 0
-end
-
 # Returns a language ID
 def pbGetLanguage()
-  getUserDefaultLangID = Win32API.new("kernel32","GetUserDefaultLangID","","i") rescue nil
-  ret = 0
-  ret = getUserDefaultLangID.call()&0x3FF if getUserDefaultLangID
-  if ret==0 # Unknown
-    ret = MiniRegistry.get(MiniRegistry::HKEY_CURRENT_USER,
-       "Control Panel\\Desktop\\ResourceLocale","",0)
-    ret = MiniRegistry.get(MiniRegistry::HKEY_CURRENT_USER,
-       "Control Panel\\International","Locale","0").to_i(16) if ret==0
-    ret = ret&0x3FF
-    return 0 if ret==0  # Unknown
-  end
-  case ret
-  when 0x11 then return 1   # Japanese
-  when 0x09 then return 2   # English
-  when 0x0C then return 3   # French
-  when 0x10 then return 4   # Italian
-  when 0x07 then return 5   # German
-  when 0x0A then return 7   # Spanish
-  when 0x12 then return 8   # Korean
+  case System.user_language[0..1]
+  when "ja" then return 1   # Japanese
+  when "en" then return 2   # English
+  when "fr" then return 3   # French
+  when "it" then return 4   # Italian
+  when "de" then return 5   # German
+  when "es" then return 7   # Spanish
+  when "ko" then return 8   # Korean
   end
   return 2 # Use 'English' by default
 end
@@ -131,7 +112,7 @@ end
 def getConstantName(mod,value)
   mod = Object.const_get(mod) if mod.is_a?(Symbol)
   for c in mod.constants
-    return c if mod.const_get(c.to_sym)==value
+    return c if mod.const_get(c.to_sym).to_s==value
   end
   raise _INTL("Value {1} not defined by a constant in {2}",value,mod.name)
 end
@@ -139,7 +120,7 @@ end
 def getConstantNameOrValue(mod,value)
   mod = Object.const_get(mod) if mod.is_a?(Symbol)
   for c in mod.constants
-    return c if mod.const_get(c.to_sym)==value
+    return c if mod.const_get(c.to_sym).to_s==value
   end
   return value.inspect
 end
@@ -276,28 +257,13 @@ def pbSuggestTrainerName(gender)
     userName[0,1] = userName[0,1].upcase
     return userName
   end
-  owner = MiniRegistry.get(MiniRegistry::HKEY_LOCAL_MACHINE,
-     "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion","RegisteredOwner","")
-  owner = owner.gsub(/\s+.*$/,"")
-  if owner.length>0 && owner.length<7
-    owner[0,1] = owner[0,1].upcase
-    return owner
-  end
-  return getRandomNameEx(gender, nil, 1, Settings::MAX_PLAYER_NAME_SIZE)
+  return System.user_name.capitalize
+  # Unreachable
+  #return getRandomNameEx(gender, nil, 1, Settings::MAX_PLAYER_NAME_SIZE)
 end
 
 def pbGetUserName
-  buffersize = 100
-  getUserName=Win32API.new('advapi32.dll','GetUserName','pp','i')
-  10.times do
-    size = [buffersize].pack("V")
-    buffer = "\0"*buffersize
-    if getUserName.call(buffer,size)!=0
-      return buffer.gsub(/\0/,"")
-    end
-    buffersize += 200
-  end
-  return ""
+  return System.user_name
 end
 
 def getRandomNameEx(type,variable,upper,maxLength=100)

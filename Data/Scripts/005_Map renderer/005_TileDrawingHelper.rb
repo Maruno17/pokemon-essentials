@@ -66,8 +66,15 @@ class TileDrawingHelper
     return self.new(bmtileset,bmautotiles)
   end
 
-  def initialize(tileset,autotiles)
-    @tileset   = tileset
+  def initialize(tileset, autotiles)
+    if tileset.mega?
+      @tileset = TileWrap::wrapTileset(tileset)
+      tileset.dispose
+      @shouldWrap = true
+    else
+      @tileset = tileset
+      @shouldWrap = false
+    end
     @autotiles = autotiles
   end
 
@@ -107,6 +114,7 @@ class TileDrawingHelper
   def bltSmallRegularTile(bitmap,x,y,cxTile,cyTile,id)
     return if id < 384 || !@tileset || @tileset.disposed?
     rect = Rect.new((id - 384) % 8 * 32, (id - 384) / 8 * 32, 32, 32)
+    rect = TileWrap::getWrappedRect(rect) if @shouldWrap
     bitmap.stretch_blt(Rect.new(x, y, cxTile, cyTile), @tileset, rect)
   end
 

@@ -302,7 +302,7 @@ class PokeBattle_Battler
     end
     # Crafty Shield
     if target.pbOwnSide.effects[PBEffects::CraftyShield] && user.index!=target.index &&
-       move.statusMove? && move.pbTarget(user)!=PBTargets::AllBattlers
+       move.statusMove? && !move.pbTarget(user).targets_all
       @battle.pbCommonAnimation("CraftyShield",target)
       @battle.pbDisplay(_INTL("Crafty Shield protected {1}!",target.pbThis(true)))
       target.damageState.protected = true
@@ -311,7 +311,7 @@ class PokeBattle_Battler
     end
     # Wide Guard
     if target.pbOwnSide.effects[PBEffects::WideGuard] && user.index!=target.index &&
-       PBTargets.multipleTargets?(move.pbTarget(user)) &&
+       move.pbTarget(user).num_targets > 1 &&
        (Settings::MECHANICS_GENERATION >= 7 || move.damagingMove?)
       @battle.pbCommonAnimation("WideGuard",target)
       @battle.pbDisplay(_INTL("Wide Guard protected {1}!",target.pbThis(true)))
@@ -527,8 +527,7 @@ class PokeBattle_Battler
   # Message shown when a move fails the per-hit success check above.
   #=============================================================================
   def pbMissMessage(move,user,target)
-    tar = move.pbTarget(user)
-    if PBTargets.multipleTargets?(tar)
+    if move.pbTarget(user).num_targets > 1
       @battle.pbDisplay(_INTL("{1} avoided the attack!",target.pbThis))
     elsif target.effects[PBEffects::TwoTurnAttack]
       @battle.pbDisplay(_INTL("{1} avoided the attack!",target.pbThis))

@@ -64,7 +64,7 @@ class PokeBattle_DebugSceneNoLogging
     end
   end
 
-  def pbChooseTarget(idxBattler,targetType,visibleSprites=nil)
+  def pbChooseTarget(idxBattler,target_data,visibleSprites=nil)
     targets = []
     @battle.eachOtherSideBattler(idxBattler) { |b| targets.push(b.index) }
     return -1 if targets.length==0
