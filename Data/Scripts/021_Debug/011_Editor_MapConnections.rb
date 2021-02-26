@@ -285,6 +285,7 @@ class MapScreenScene
   def serializeConnectionData
     conndata=generateConnectionData()
     save_data(conndata, "Data/map_connections.dat")
+    $PokemonTemp.mapConnections = nil
     Compiler.write_connections
     @mapconns=conndata
   end
@@ -330,7 +331,7 @@ class MapScreenScene
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(_INTL("F: Help"),
        0, 600 - 64, 800, 64, @viewport)
     @sprites["title"].z = 2
-    @mapinfos=load_data("Data/MapInfos.rxdata")
+    @mapinfos=pbLoadMapInfos
     conns=MapFactoryHelper.getMapConnections
     @mapconns=[]
     for c in conns

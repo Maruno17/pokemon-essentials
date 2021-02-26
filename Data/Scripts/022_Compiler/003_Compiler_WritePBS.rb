@@ -69,9 +69,9 @@ module Compiler
   end
 
   def write_connections
-    conndata = load_data("Data/map_connections.dat") rescue nil
+    conndata = pbLoadMapConnections
     return if !conndata
-    mapinfos = load_data("Data/MapInfos.rxdata")
+    mapinfos = pbLoadMapInfos
     File.open("PBS/connections.txt","wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
@@ -518,7 +518,7 @@ module Compiler
   # Save wild encounter data to PBS file
   #=============================================================================
   def write_encounters
-    map_infos = load_data("Data/MapInfos.rxdata")
+    map_infos = pbLoadMapInfos
     File.open("PBS/encounters.txt", "wb") { |f|
       add_PBS_header_to_file(f)
       GameData::Encounter.each do |encounter_data|
@@ -735,7 +735,7 @@ module Compiler
         f.write("\r\n")
       end
       # Write map metadata
-      map_infos = load_data("Data/MapInfos.rxdata")
+      map_infos = pbLoadMapInfos
       schema = GameData::MapMetadata::SCHEMA
       keys = schema.keys.sort {|a, b| schema[a][0] <=> schema[b][0] }
       GameData::MapMetadata.each do |map_data|

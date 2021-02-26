@@ -128,7 +128,7 @@ module RTP
   end
 
   # Gets all RGSS search paths.
-  # This function basically does nothing now, because 
+  # This function basically does nothing now, because
   # the passage of time and introduction of MKXP make
   # it useless, but leaving it for compatibility
   # reasons
@@ -179,7 +179,7 @@ end
 # and matching mount points added through System.mount
 def pbRgssExists?(filename)
   filename = canonicalize(filename)
-  if safeExists?("./Game.rgssad") || safeExists?("./Game.rgss2a")
+  if safeExists?("./Game.rgssad")
     return pbGetFileChar(filename)!=nil
   else
     return safeExists?(filename)
@@ -193,7 +193,7 @@ end
 # and matching mount points added through System.mount
 def pbRgssOpen(file,mode=nil)
   #File.open("debug.txt","ab") { |fw| fw.write([file,mode,Time.now.to_f].inspect+"\r\n") }
-  if !safeExists?("./Game.rgssad") && !safeExists?("./Game.rgss2a")
+  if !safeExists?("./Game.rgssad")
     if block_given?
       File.open(file,mode) { |f| yield f }
       return nil
@@ -216,7 +216,7 @@ end
 # encrypted archives.
 def pbGetFileChar(file)
   file = canonicalize(file)
-  if !safeExists?("./Game.rgssad") && !safeExists?("./Game.rgss2a")
+  if !safeExists?("./Game.rgssad")
     return nil if !safeExists?(file)
     begin
       File.open(file,"rb") { |f| return f.read(1) }   # read one byte
@@ -245,7 +245,7 @@ end
 # and matching mount points added through System.mount
 def pbGetFileString(file)
   file = canonicalize(file)
-  if !(safeExists?("./Game.rgssad") || safeExists?("./Game.rgss2a"))
+  if !safeExists?("./Game.rgssad")
     return nil if !safeExists?(file)
     begin
       File.open(file,"rb") { |f| return f.read }   # read all data

@@ -416,11 +416,7 @@ module MapFactoryHelper
   def self.getMapConnections
     if !@@MapConnections
       @@MapConnections = []
-      begin
-        conns = load_data("Data/map_connections.dat")
-      rescue
-        conns = []
-      end
+      conns = pbLoadMapConnections
       for i in 0...conns.length
         conn = conns[i]
         v = getMapEdge(conn[0],conn[1])

@@ -59,7 +59,7 @@ def pbAllocateAnimation(animations,name)
 end
 
 def pbMapTree
-  mapinfos = load_data("Data/MapInfos.rxdata")
+  mapinfos = pbLoadMapInfos
   maplevels = []
   retarray = []
   for i in mapinfos.keys

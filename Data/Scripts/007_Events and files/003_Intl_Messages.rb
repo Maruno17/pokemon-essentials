@@ -96,7 +96,7 @@ def pbSetTextMessages
     choices|=[]
     items.concat(choices)
     MessageTypes.setMapMessagesAsHash(0,items)
-    mapinfos = load_data("Data/MapInfos.rxdata")
+    mapinfos = pbLoadMapInfos
     mapnames=[]
     for id in mapinfos.keys
       mapnames[id]=mapinfos[id].name
