@@ -1,24 +1,11 @@
 module SaveData
-
   # Contains Value objects for each save element.
   # Populated during runtime by SaveData.register calls.
-  # @type [Hash{Symbol => Value}]
-  @values = {}
+  # @type [Array<Value>]
+  @values = []
 
   # An error raised if an invalid save value is saved or loaded.
   class InvalidValueError < RuntimeError; end
-
-  # TODO Add ensure_value for enhanced compatibility with other plugins etc.?
-  #   example:
-  #   SaveData.register(:foo) do
-  #     ensure_value :bar if PluginManager.installed?('Bar')
-  #     save_value { $foo }
-  #     load_value do |value|
-  #       $foo = value
-  #       # We must be certain the Bar plugin's values have been loaded
-  #       $bar.plugin_method if PluginManager.installed?('Bar')
-  #     end
-  #   end
 
   # Contains the data of a single value in save data.
   # New values are added using {SaveData.register}.
@@ -192,21 +179,21 @@ module SaveData
       raise ArgumentError, 'No block given to SaveData.register'
     end
 
-    @values[id] = Value.new(id, &block)
+    @values << Value.new(id, &block)
   end
 
   # @param save_data [Hash] save data to validate
   # @return [Boolean] whether the given save data is valid
   def self.valid?(save_data)
     validate save_data => Hash
-    return @values.all? { |id, value| value.valid?(save_data[id]) }
+    return @values.all? { |value| value.valid?(save_data[value.id]) }
   end
 
   # @return [Hash{Symbol => Object}] a hash representation of the save data
   # @raise [InvalidValueError] if an invalid value is being saved
   def self.compile
     save_data = {}
-    @values.each { |id, data| save_data[id] = data.save }
+    @values.each { |value| save_data[value.id] = value.save }
     return save_data
   end
 
@@ -239,10 +226,11 @@ module SaveData
   # @param condition_block [Proc] optional condition
   # @api private
   def self.load_values(save_data, &condition_block)
-    @values.each do |id, value|
+    @values.each do |value|
       next if block_given? && !condition_block.call(value)
-      if save_data.has_key?(id)
-        value.load(save_data[id])
+      puts "loading value #{value.id}"
+      if save_data.has_key?(value.id)
+        value.load(save_data[value.id])
       elsif value.has_new_game_proc?
         value.load_new_game_value
       end
@@ -251,7 +239,7 @@ module SaveData
 
   # Loads each {Value}'s new game value, if one is defined.
   def self.load_new_game_values
-    @values.each_value do |value|
+    @values.each do |value|
       value.load_new_game_value if value.has_new_game_proc? && !value.loaded?
     end
   end
@@ -259,7 +247,7 @@ module SaveData
   # Goes through each value with {Value#load_in_bootup} enabled and
   # loads their new game value, if one is defined.
   def self.initialize_bootup_values
-    @values.each_value do |value|
+    @values.each do |value|
       next unless value.load_in_bootup?
       value.load_new_game_value if value.has_new_game_proc? && !value.loaded?
     end
