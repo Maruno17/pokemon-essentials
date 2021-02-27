@@ -4,7 +4,7 @@ module SaveData
   # @type [Array<Value>]
   @values = []
 
-  # An error raised if an invalid save value is saved or loaded.
+  # An error raised if an invalid save value is being saved or loaded.
   class InvalidValueError < RuntimeError; end
 
   # Represents a single value in save data.
@@ -30,10 +30,7 @@ module SaveData
     def save
       value = @save_proc.call
 
-      unless self.valid?(value)
-        raise InvalidValueError,
-              "Save value #{@id.inspect} is not a #{@ensured_class} (#{value.class.name} given)"
-      end
+      validate_value(value)
 
       return value
     end
@@ -42,10 +39,7 @@ module SaveData
     # @param value [Object] load proc argument
     # @raise [InvalidValueError] if an invalid value is being loaded
     def load(value)
-      unless self.valid?(value)
-        raise InvalidValueError,
-              "Save value #{@id.inspect} is not a #{@ensured_class} (#{value.class.name} given)"
-      end
+      validate_value(value)
 
       @load_proc.call(value)
       @loaded = true
@@ -143,6 +137,16 @@ module SaveData
     end
 
     # @!endgroup
+
+    # Raises an {InvalidValueError} if the given value is invalid.
+    # @param value [Object] value to check
+    # @raise [InvalidValueError] if the value is invalid
+    def validate_value(value)
+      return if self.valid?(value)
+
+      raise InvalidValueError,
+            "Save value #{@id.inspect} is not a #{@ensured_class} (#{value.class.name} given)"
+    end
   end
 
   # Registers a {Value} to be saved into save data.
