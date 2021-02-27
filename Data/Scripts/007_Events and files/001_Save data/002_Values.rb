@@ -234,7 +234,6 @@ module SaveData
   def self.load_values(save_data, &condition_block)
     @values.each do |value|
       next if block_given? && !condition_block.call(value)
-      puts "loading value #{value.id}"
       if save_data.has_key?(value.id)
         value.load(save_data[value.id])
       elsif value.has_new_game_proc?

@@ -68,6 +68,8 @@ module SaveData
 
     # Sets the conversion's title.
     # @param new_title [String] conversion title
+    # @note Since conversions are run before loading the player's chosen language,
+    #   conversion titles can not be localized.
     def display_title(new_title)
       validate new_title => String
       @title = new_title
