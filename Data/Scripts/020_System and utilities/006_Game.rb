@@ -61,7 +61,6 @@ module Game
   def self.save(save_file = SaveData::FILE_PATH, safe: false)
     validate save_file => String, safe => [TrueClass, FalseClass]
 
-    $Trainer.metaID = $PokemonGlobal.playerID # TODO: Is this necessary?
     $PokemonGlobal.safesave = safe
     $game_system.save_count += 1
     $game_system.magic_number = $data_system.magic_number
