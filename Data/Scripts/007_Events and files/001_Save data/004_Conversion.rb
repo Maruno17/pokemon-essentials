@@ -64,11 +64,11 @@ module SaveData
 
     private
 
-    #@!group Configuration
+    # @!group Configuration
 
     # Sets the conversion's title.
     # @param new_title [String] conversion title
-    def title(new_title)
+    def display_title(new_title)
       validate new_title => String
       @title = new_title
     end
