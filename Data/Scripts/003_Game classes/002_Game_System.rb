@@ -42,7 +42,10 @@ class Game_System
 ################################################################################
 
   def bgm_play(bgm)
+    old_pos = @bgm_position
+    @bgm_position = 0
     bgm_play_internal(bgm,0)
+    @bgm_position = old_pos
   end
 
   def bgm_play_internal2(name,volume,pitch,position) # :nodoc:

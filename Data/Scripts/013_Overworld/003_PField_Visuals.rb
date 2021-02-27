@@ -26,7 +26,7 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
   pbWait(Graphics.frame_rate/4)
   pbMEStop
   # Play battle music
-  bgm = pbGetWildBattleBGM([0]) if !bgm
+  bgm = pbGetWildBattleBGM([]) if !bgm
   pbBGMPlay(bgm)
   # Take screenshot of game, for use in some animations
   $game_temp.background_bitmap.dispose if $game_temp.background_bitmap
