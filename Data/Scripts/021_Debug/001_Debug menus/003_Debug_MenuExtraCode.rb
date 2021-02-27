@@ -422,7 +422,7 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
           # roaming
           curmap = $PokemonGlobal.roamPosition[index]
           if curmap
-            mapinfos = load_data("Data/MapInfos.rxdata")
+            mapinfos = pbLoadMapInfos
             status = "[ROAMING][#{curmap}: #{mapinfos[curmap].name}]"
           else
             status = "[ROAMING][map not set]"
@@ -771,7 +771,7 @@ end
 def pbDebugFixInvalidTiles
   num_errors = 0
   num_error_maps = 0
-  @tilesets = load_data("Data/Tilesets.rxdata")
+  @tilesets = $data_tilesets
   mapData = MapData.new
   t = Time.now.to_i
   Graphics.update

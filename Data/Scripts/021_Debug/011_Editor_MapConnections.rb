@@ -330,11 +330,11 @@ class MapScreenScene
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(_INTL("F: Help"),
        0, 600 - 64, 800, 64, @viewport)
     @sprites["title"].z = 2
-    @mapinfos=load_data("Data/MapInfos.rxdata")
+    @mapinfos=pbLoadMapInfos
     conns=MapFactoryHelper.getMapConnections
     @mapconns=[]
     for c in conns
-      @mapconns.push(c.clone)
+      @mapconns.push(c.clone) if !@mapconns.any? { |conn| conn[0] == c[0] && conn[3] == c[3] }
     end
     if $game_map
       @currentmap=$game_map.map_id

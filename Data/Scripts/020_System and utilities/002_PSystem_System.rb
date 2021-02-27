@@ -2,7 +2,7 @@
 # exists, the real file is deleted to ensure that the file is loaded from the
 # encrypted archive.
 def pbSafeLoad(file)
-  if (safeExists?("./Game.rgssad") || safeExists?("./Game.rgss2a")) && safeExists?(file)
+  if safeExists?("./Game.rgssad") && safeExists?(file)
     File.delete(file) rescue nil
   end
   return load_data(file)

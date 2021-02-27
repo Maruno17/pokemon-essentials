@@ -69,12 +69,10 @@ module Compiler
       record.push(csvInt!(thisline,lineno))
       record.push(csvEnumFieldOrInt!(thisline,hashenum,"",sprintf("(line %d)",lineno)))
       record.push(csvInt!(thisline,lineno))
-      if !pbRgssExists?(sprintf("Data/Map%03d.rxdata",record[0])) &&
-         !pbRgssExists?(sprintf("Data/Map%03d.rvdata",record[0]))
+      if !pbRgssExists?(sprintf("Data/Map%03d.rxdata",record[0]))
         print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\r\n{2}",record[0],FileLineData.linereport)
       end
-      if !pbRgssExists?(sprintf("Data/Map%03d.rxdata",record[3])) &&
-         !pbRgssExists?(sprintf("Data/Map%03d.rvdata",record[3]))
+      if !pbRgssExists?(sprintf("Data/Map%03d.rxdata",record[3]))
         print _INTL("Warning: Map {1}, as mentioned in the map connection data, was not found.\r\n{2}",record[3],FileLineData.linereport)
       end
       case record[1]
@@ -1530,6 +1528,7 @@ module Compiler
     rescue
       pbanims = PBAnimations.new
     end
+    changed = false
     move2anim = [[],[]]
 =begin
     anims = load_data("Data/Animations.rxdata")
@@ -1550,16 +1549,20 @@ module Compiler
       if pbanims[i].name[/^OppMove\:\s*(.*)$/]
         if GameData::Move.exists?($~[1])
           moveid = GameData::Move.get($~[1]).id_number
+          changed = true if !move2anim[0][moveid] || move2anim[1][moveid] != i
           move2anim[1][moveid] = i
         end
       elsif pbanims[i].name[/^Move\:\s*(.*)$/]
         if GameData::Move.exists?($~[1])
           moveid = GameData::Move.get($~[1]).id_number
+          changed = true if !move2anim[0][moveid] || move2anim[0][moveid] != i
           move2anim[0][moveid] = i
         end
       end
     end
-    save_data(move2anim,"Data/move2anim.dat")
-    save_data(pbanims,"Data/PkmnAnimations.rxdata")
+    if changed
+      save_data(move2anim,"Data/move2anim.dat")
+      save_data(pbanims,"Data/PkmnAnimations.rxdata")
+    end
   end
 end

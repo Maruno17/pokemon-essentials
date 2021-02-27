@@ -405,7 +405,7 @@ Events.onMapChanging += proc { |_sender, e|
   next if new_map_ID == 0
   old_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
   next if !old_map_metadata || !old_map_metadata.weather
-  map_infos = load_data("Data/MapInfos.rxdata")
+  map_infos = pbLoadMapInfos
   if $game_map.name == map_infos[new_map_ID].name
     new_map_metadata = GameData::MapMetadata.try_get(new_map_ID)
     next if new_map_metadata && new_map_metadata.weather
@@ -425,7 +425,7 @@ Events.onMapChange += proc { |_sender, e|
   $PokemonGlobal.visitedMaps[$game_map.map_id] = true
   next if old_map_ID == 0 || old_map_ID == $game_map.map_id
   next if !new_map_metadata || !new_map_metadata.weather
-  map_infos = load_data("Data/MapInfos.rxdata")
+  map_infos = pbLoadMapInfos
   if $game_map.name == map_infos[old_map_ID].name
     old_map_metadata = GameData::MapMetadata.try_get(old_map_ID)
     next if old_map_metadata && old_map_metadata.weather
@@ -470,7 +470,7 @@ Events.onMapSceneChange += proc { |_sender, e|
                              Settings::NO_SIGNPOSTS[2 * i] == $game_map.map_id
         break if nosignpost
       end
-      mapinfos = load_data("Data/MapInfos.rxdata")
+      mapinfos = pbLoadMapInfos
       oldmapname = mapinfos[$PokemonGlobal.mapTrail[1]].name
       nosignpost = true if $game_map.name == oldmapname
     end

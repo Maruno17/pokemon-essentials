@@ -343,7 +343,7 @@ end
 #===============================================================================
 def pbGetBasicMapNameFromId(id)
   begin
-    map = load_data("Data/MapInfos.rxdata")
+    map = pbLoadMapInfos
     return "" if !map
     return map[id].name
   rescue

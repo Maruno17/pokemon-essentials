@@ -14,7 +14,7 @@ module Compiler
         mapfiles[$1.to_i(10)] = true if map[/map(\d+)\.rxdata/i]
       end
     }
-    mapinfos = load_data("Data/MapInfos.rxdata")
+    mapinfos = pbLoadMapInfos
     maxOrder = 0
     # Exclude maps found in mapinfos
     for id in mapinfos.keys
@@ -38,6 +38,7 @@ module Compiler
     end
     if imported
       save_data(mapinfos,"Data/MapInfos.rxdata")
+      $PokemonTemp.mapInfos = nil
       pbMessage(_INTL("{1} new map(s) copied to the Data folder were successfully imported.",count))
     end
     return imported
@@ -239,7 +240,7 @@ module Compiler
     attr_reader :mapinfos
 
     def initialize
-      @mapinfos = load_data("Data/MapInfos.rxdata")
+      @mapinfos = pbLoadMapInfos
       @system   = load_data("Data/System.rxdata")
       @tilesets = load_data("Data/Tilesets.rxdata")
       @mapxy      = []

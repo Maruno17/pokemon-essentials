@@ -153,7 +153,7 @@ def createMinimap2(mapid)
   bitmap=BitmapWrapper.new(map.width*4,map.height*4)
   black=Color.new(0,0,0)
   bigmap=(map.width>40 && map.height>40)
-  tilesets=load_data("Data/Tilesets.rxdata")
+  tilesets=$data_tilesets
   tileset=tilesets[map.tileset_id]
   return bitmap if !tileset
   helper=TileDrawingHelper.fromTileset(tileset)
@@ -181,7 +181,7 @@ def createMinimap(mapid)
   return BitmapWrapper.new(32,32) if !map
   bitmap=BitmapWrapper.new(map.width*4,map.height*4)
   black=Color.new(0,0,0)
-  tilesets=load_data("Data/Tilesets.rxdata")
+  tilesets=$data_tilesets
   tileset=tilesets[map.tileset_id]
   return bitmap if !tileset
   helper=TileDrawingHelper.fromTileset(tileset)

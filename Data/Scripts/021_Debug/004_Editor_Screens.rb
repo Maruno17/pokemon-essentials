@@ -4,7 +4,7 @@
 # Main editor method for editing wild encounters. Lists all defined encounter
 # sets, and edits them.
 def pbEncountersEditor
-  map_infos = load_data("Data/MapInfos.rxdata")
+  map_infos = pbLoadMapInfos
   commands = []
   maps = []
   list = pbListWindow([])
@@ -122,7 +122,7 @@ end
 # Lists the map ID, version number and defined encounter types for the given
 # encounter data (a GameData::Encounter instance), and edits them.
 def pbEncounterMapVersionEditor(enc_data)
-  map_infos = load_data("Data/MapInfos.rxdata")
+  map_infos = pbLoadMapInfos
   commands = []
   enc_types = []
   list = pbListWindow([])
@@ -720,7 +720,7 @@ def pbMetadataScreen(map_id = 0)
 end
 
 def pbEditMetadata(map_id = 0)
-  mapinfos = load_data("Data/MapInfos.rxdata")
+  mapinfos = pbLoadMapInfos
   data = []
   if map_id == 0   # Global metadata
     map_name = _INTL("Global Metadata")
