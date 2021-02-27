@@ -1,7 +1,7 @@
 # @deprecated Use {Game.save} instead. pbSave is slated to be removed in v20.
 def pbSave(safesave = false)
   Deprecation.warn_method('pbSave', 'Game.save', 'v20')
-  Game.save(SaveData::FILE_PATH, safe: safesave)
+  Game.save(safe: safesave)
 end
 
 def pbEmergencySave
