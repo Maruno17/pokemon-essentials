@@ -55,14 +55,14 @@ module Game
 
   # Saves the game. Returns whether the operation was successful.
   # @param save_file [String] the save file path
-  # @param safesave [Boolean] whether $PokemonGlobal.safesave should be set to true
+  # @param safe [Boolean] whether $PokemonGlobal.safesave should be set to true
   # @return [Boolean] whether the operation was successful
   # @raise [SaveData::InvalidValueError] if an invalid value is being saved
-  def self.save(save_file = SaveData::FILE_PATH, safesave = false)
-    validate save_file => String, safesave => [TrueClass, FalseClass]
+  def self.save(save_file = SaveData::FILE_PATH, safe: false)
+    validate save_file => String, safe => [TrueClass, FalseClass]
 
     $Trainer.metaID = $PokemonGlobal.playerID # TODO: Is this necessary?
-    $PokemonGlobal.safesave = safesave
+    $PokemonGlobal.safesave = safe
     $game_system.save_count += 1
     $game_system.magic_number = $data_system.magic_number
     begin
