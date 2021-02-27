@@ -30,9 +30,7 @@ module Game
       save_data = {}
     end
 
-    if SaveData.should_convert?(save_data)
-      File.open(SaveData::FILE_PATH + '.bak', 'wb') { |f| Marshal.dump(save_data, f) }
-      SaveData.run_conversions(save_data)
+    if !save_data.empty? && SaveData.run_conversions(save_data)
       File.open(SaveData::FILE_PATH, 'wb') { |f| Marshal.dump(save_data, f) }
     end
 

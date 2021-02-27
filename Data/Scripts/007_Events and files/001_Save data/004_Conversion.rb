@@ -166,18 +166,27 @@ module SaveData
     @conversions[conversion.trigger_type][conversion.version] << conversion
   end
 
-  # TODO: Maybe make run_conversions return a boolean (whether the action was successful)
-  #   and remove should_convert? as it would be no longer needed
-
   # Runs all possible conversions on the given save data.
+  # Saves a backup before running conversions.
   # @param save_data [Hash] save data to run conversions on
+  # @return [Boolean] whether conversions were run
   def self.run_conversions(save_data)
     validate save_data => Hash
     conversions_to_run = self.get_conversions(save_data)
 
+    return false if conversions_to_run.none?
+
+    File.open(SaveData::FILE_PATH + '.bak', 'wb') { |f| Marshal.dump(save_data, f) }
+
+    echoln _INTL("Running {1} conversions...", conversions_to_run.length)
+
     conversions_to_run.each do |conversion|
+      echo _INTL("{1}...", conversion.title)
       conversion.run(save_data)
+      echoln _INTL(' done.')
     end
+
+    return true
   end
 
   # @param save_data [Hash] save data to get conversions for
@@ -205,14 +214,5 @@ module SaveData
     end
 
     return conversions_to_run
-  end
-
-  # @param save_data [Hash] save data to check
-  # @return [Boolean] whether the save data should be converted
-  def self.should_convert?(save_data)
-    validate save_data => Hash
-
-    return false if save_data.empty?
-    return !self.get_conversions(save_data).empty?
   end
 end
