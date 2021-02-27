@@ -81,9 +81,9 @@ module SaveData
     validate old_format => Array
     hash = {}
 
-    @values.each do |id, value|
+    @values.each do |value|
       data = value.get_from_old_format(old_format)
-      hash[id] = data unless data.nil?
+      hash[value.id] = data unless data.nil?
     end
 
     return hash
