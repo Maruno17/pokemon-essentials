@@ -7,7 +7,7 @@ module SaveData
   # An error raised if an invalid save value is saved or loaded.
   class InvalidValueError < RuntimeError; end
 
-  # Contains the data of a single value in save data.
+  # Represents a single value in save data.
   # New values are added using {SaveData.register}.
   class Value
     # @return [Symbol] the value id
@@ -142,7 +142,7 @@ module SaveData
       @old_format_get_proc = block
     end
 
-    #@!endgroup
+    # @!endgroup
   end
 
   # Registers a {Value} to be saved into save data.
@@ -154,6 +154,11 @@ module SaveData
   # a value to be set upon starting a new game with {Value#new_game_value}
   # and ensure that the saved and loaded value is of the correct
   # class with {Value#ensure_class}.
+  #
+  # Values can be registered to be loaded on bootup with
+  # {Value#load_in_bootup}. If a new_game_value proc is defined, it
+  # will be called when the game is launched for the first time,
+  # or if the save data does not contain the value in question.
   #
   # @example Registering a new value
   #   SaveData.register(:foo) do
@@ -222,6 +227,7 @@ module SaveData
   end
 
   # Loads values from the given save data.
+  # An optional condition can be passed.
   # @param save_data [Hash] save data to load from
   # @param condition_block [Proc] optional condition
   # @api private

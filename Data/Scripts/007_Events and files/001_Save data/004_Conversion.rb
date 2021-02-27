@@ -1,6 +1,5 @@
 module SaveData
-  # Contains Conversion objects for each defined conversion.
-  # A nested hash with the following structure:
+  # Contains Conversion objects for each defined conversion:
   # {
   #   :essentials => {
   #     '19'    => [<Conversion>, ...],
@@ -15,8 +14,8 @@ module SaveData
   # }
   # Populated during runtime by SaveData.register_conversion calls.
   @conversions = {
-    :essentials => {},
-    :game => {}
+    essentials: {},
+    game: {}
   }
 
   class Conversion
@@ -24,9 +23,9 @@ module SaveData
     attr_reader :id
     # @return [String] conversion title
     attr_reader :title
-    # @return [Symbol] the trigger type of the conversion (:essentials or :game)
+    # @return [Symbol] trigger type of the conversion (:essentials or :game)
     attr_reader :trigger_type
-    # @return [String] the trigger version of the conversion
+    # @return [String] trigger version of the conversion
     attr_reader :version
 
     # @param id [String] conversion ID
@@ -119,7 +118,7 @@ module SaveData
       @all_proc = block
     end
 
-    #@!endgroup
+    # @!endgroup
   end
 
   # @yieldself [Conversion]
@@ -156,8 +155,8 @@ module SaveData
     conversions_to_run = []
 
     versions = {
-      :essentials => save_data[:essentials_version] || '18.1',
-      :game => save_data[:game_version] || '0.0.0'
+      essentials: save_data[:essentials_version] || '18.1',
+      game: save_data[:game_version] || '0.0.0'
     }
 
     [:essentials, :game].each do |trigger_type|
