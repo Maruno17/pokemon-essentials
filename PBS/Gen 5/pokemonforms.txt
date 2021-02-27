@@ -3,6 +3,7 @@
 [PICHU,1]
 FormName = Spiky-Eared
 BattlerEnemyX = 3
+Generation = 4
 Evolutions = PIKACHU,None,
 #-------------------------------
 [UNOWN,1]
@@ -81,10 +82,12 @@ FormName = Yield
 FormName = Zoom
 #-------------------------------
 [UNOWN,26]
-FormName = ?????
+FormName = ?
+Generation = 3
 #-------------------------------
 [UNOWN,27]
-FormName = !!!!!
+FormName = !
+Generation = 3
 #-------------------------------
 [CASTFORM,1]
 FormName = Sunny Form

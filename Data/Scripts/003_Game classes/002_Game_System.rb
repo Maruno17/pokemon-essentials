@@ -77,7 +77,7 @@ class Game_System
   end
 
   def bgm_pause(fadetime=0.0) # :nodoc:
-    pos = Audio.bgm_position rescue 0
+    pos = Audio.bgm_pos rescue 0
     self.bgm_fade(fadetime) if fadetime>0.0
     @bgm_position = pos
     @bgm_paused   = true

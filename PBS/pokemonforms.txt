@@ -9,6 +9,7 @@ HiddenAbility = THICKFAT
 Height = 2.4
 Weight = 155.5
 Pokedex = In order to support its flower, which has grown larger due to Mega Evolution, its back and legs have become stronger.
+Generation = 6
 #-------------------------------
 [CHARIZARD,1]
 FormName = Mega Charizard X
@@ -21,6 +22,7 @@ HiddenAbility = TOUGHCLAWS
 Weight = 110.5
 Color = Black
 Pokedex = The overwhelming power that fills its entire body causes it to turn black and create intense blue flames.
+Generation = 6
 #-------------------------------
 [CHARIZARD,2]
 FormName = Mega Charizard Y
@@ -30,6 +32,7 @@ Abilities = DROUGHT
 HiddenAbility = DROUGHT
 Weight = 100.5
 Pokedex = Its bond with its Trainer is the source of its power. It boasts speed and maneuverability greater than that of a jet fighter.
+Generation = 6
 #-------------------------------
 [BLASTOISE,1]
 FormName = Mega Blastoise
@@ -39,6 +42,7 @@ Abilities = MEGALAUNCHER
 HiddenAbility = MEGALAUNCHER
 Weight = 101.1
 Pokedex = The cannon on its back is as powerful as a tank gun. Its tough legs and back enable it to withstand the recoil from firing the cannon.
+Generation = 6
 #-------------------------------
 [BEEDRILL,1]
 FormName = Mega Beedrill
@@ -49,6 +53,7 @@ HiddenAbility = ADAPTABILITY
 Height = 1.4
 Weight = 40.5
 Pokedex = Its legs have become poison stingers. It stabs its prey repeatedly with the stingers on its limbs, dealing the final blow with the stinger on its rear.
+Generation = 6
 #-------------------------------
 [PIDGEOT,1]
 FormName = Mega Pidgeot
@@ -59,6 +64,7 @@ HiddenAbility = NOGUARD
 Height = 2.2
 Weight = 50.5
 Pokedex = With its muscular strength now greatly increased, it can fly continuously for two weeks without resting.
+Generation = 6
 #-------------------------------
 [RATTATA,1]
 FormName = Alolan
@@ -71,6 +77,7 @@ EggMoves = COUNTER,FINALGAMBIT,FURYSWIPES,MEFIRST,REVENGE,REVERSAL,SNATCH,STOCKP
 Weight = 3.8
 Color = Black
 Pokedex = With its incisors, it gnaws through doors and infiltrates people’s homes. Then, with a twitch of its whiskers, it steals whatever food it finds.
+Generation = 7
 WildItemUncommon = PECHABERRY
 Evolutions = RATICATE,LevelNight,20
 #-------------------------------
@@ -85,6 +92,7 @@ TutorMoves = ATTRACT,BLIZZARD,BULKUP,CONFIDE,COVET,DARKPULSE,DOUBLETEAM,EMBARGO,
 Weight = 25.5
 Color = Black
 Pokedex = It forms a group of Rattata, which it assumes command of. Each group has its own territory, and disputes over food happen often.
+Generation = 7
 WildItemUncommon = PECHABERRY
 #-------------------------------
 [RAICHU,1]
@@ -100,6 +108,7 @@ Height = 0.7
 Weight = 21.0
 Color = Brown
 Pokedex = It uses psychokinesis to control electricity. It hops aboard its own tail, using psychic power to lift the tail and move about while riding it.
+Generation = 7
 #-------------------------------
 [SANDSHREW,1]
 FormName = Alolan
@@ -115,6 +124,7 @@ Height = 0.7
 Weight = 40.0
 Color = White
 Pokedex = The skin on its back is as hard as steel. Predators go after its soft belly, so it clings to the ground desperately.
+Generation = 7
 Evolutions = SANDSLASH,Item,ICESTONE
 #-------------------------------
 [SANDSLASH,1]
@@ -130,6 +140,7 @@ Height = 1.2
 Weight = 55.0
 Color = Blue
 Pokedex = It runs across snow-covered plains at high speeds. It developed thick, sharp claws to plow through the snow.
+Generation = 7
 #-------------------------------
 [VULPIX,1]
 FormName = Alolan
@@ -141,6 +152,7 @@ TutorMoves = AQUATAIL,ATTRACT,AURORAVEIL,BLIZZARD,CONFIDE,COVET,DARKPULSE,DOUBLE
 EggMoves = AGILITY,CHARM,DISABLE,ENCORE,EXTRASENSORY,FLAIL,FREEZEDRY,HOWL,HYPNOSIS,MOONBLAST,POWERSWAP,SECRETPOWER,SPITE,TAILSLAP
 Color = White
 Pokedex = In hot weather, this Pokémon makes ice shards with its six tails and sprays them around to cool itself off.
+Generation = 7
 WildItemUncommon = SNOWBALL
 Evolutions = NINETALES,Item,ICESTONE
 #-------------------------------
@@ -156,6 +168,7 @@ Moves = 0,DAZZLINGGLEAM,1,DAZZLINGGLEAM,1,IMPRISON,1,NASTYPLOT,1,ICEBEAM,1,ICESH
 TutorMoves = AQUATAIL,ATTRACT,AURORAVEIL,BLIZZARD,CALMMIND,CONFIDE,COVET,DARKPULSE,DAZZLINGGLEAM,DOUBLETEAM,DREAMEATER,FACADE,FOULPLAY,FROSTBREATH,FRUSTRATION,GIGAIMPACT,HAIL,HEALBELL,HIDDENPOWER,HYPERBEAM,ICEBEAM,ICYWIND,IRONTAIL,LASERFOCUS,PAINSPLIT,PAYBACK,PROTECT,PSYCHUP,PSYSHOCK,RAINDANCE,REST,RETURN,ROAR,ROLEPLAY,ROUND,SAFEGUARD,SLEEPTALK,SNORE,SPITE,SUBSTITUTE,SWAGGER,TOXIC,WONDERROOM,ZENHEADBUTT
 Color = Blue
 Pokedex = It lives on mountains perpetually covered in snow and is revered as a deity incarnate. It appears draped in a blizzard.
+Generation = 7
 WildItemUncommon = SNOWBALL
 #-------------------------------
 [DIGLETT,1]
@@ -169,6 +182,7 @@ TutorMoves = AERIALACE,ATTRACT,BULLDOZE,CONFIDE,DOUBLETEAM,EARTHPOWER,EARTHQUAKE
 EggMoves = ANCIENTPOWER,BEATUP,ENDURE,FEINTATTACK,FINALGAMBIT,HEADBUTT,MEMENTO,METALSOUND,PURSUIT,REVERSAL,THRASH
 Weight = 1.0
 Pokedex = Its head sports an altered form of whiskers made of metal. When in communication with its comrades, its whiskers wobble to and fro.
+Generation = 7
 #-------------------------------
 [DUGTRIO,1]
 FormName = Alolan
@@ -181,6 +195,7 @@ Moves = 0,SANDTOMB,1,SANDTOMB,1,ROTOTILLER,1,NIGHTSLASH,1,TRIATTACK,1,SANDATTACK
 TutorMoves = AERIALACE,ATTRACT,BULLDOZE,CONFIDE,DOUBLETEAM,EARTHPOWER,EARTHQUAKE,ECHOEDVOICE,FACADE,FLASHCANNON,FRUSTRATION,GIGAIMPACT,HIDDENPOWER,HYPERBEAM,IRONDEFENSE,IRONHEAD,PROTECT,REST,RETURN,ROCKSLIDE,ROCKTOMB,ROUND,SANDSTORM,SHADOWCLAW,SLEEPTALK,SLUDGEBOMB,SLUDGEWAVE,SNORE,STEALTHROCK,STOMPINGTANTRUM,STONEEDGE,SUBSTITUTE,SUNNYDAY,SWAGGER,THIEF,TOXIC,WORKUP
 Weight = 66.6
 Pokedex = Its shining gold hair provides it with protection. It's reputed that keeping any of its fallen hairs will bring bad luck.
+Generation = 7
 #-------------------------------
 [MEOWTH,1]
 FormName = Alolan
@@ -192,6 +207,7 @@ TutorMoves = AERIALACE,ATTRACT,CONFIDE,COVET,DARKPULSE,DOUBLETEAM,DREAMEATER,ECH
 EggMoves = AMNESIA,ASSIST,CHARM,COVET,FLAIL,FLATTER,FOULPLAY,HYPNOSIS,PARTINGSHOT,PUNISHMENT,SNATCH,SPITE
 Color = Blue
 Pokedex = It's impulsive, selfish, and fickle. It's very popular with some Trainers who like giving it the attention it needs.
+Generation = 7
 Evolutions = PERSIAN,Happiness,
 #-------------------------------
 [PERSIAN,1]
@@ -206,6 +222,7 @@ Height = 1.1
 Weight = 33.0
 Color = Blue
 Pokedex = Its round face is a symbol of wealth. Persian that have bigger, plumper faces are considered more beautiful.
+Generation = 7
 #-------------------------------
 [ALAKAZAM,1]
 FormName = Mega Alakazam
@@ -215,6 +232,7 @@ Abilities = TRACE
 HiddenAbility = TRACE
 Height = 1.2
 Pokedex = Having traded away its muscles, Alakazam's true power has been unleashed. With its psychic powers, it can foresee all things.
+Generation = 6
 #-------------------------------
 [GEODUDE,1]
 FormName = Alolan
@@ -228,6 +246,7 @@ EggMoves = AUTOTOMIZE,BLOCK,COUNTER,CURSE,ENDURE,FLAIL,MAGNETRISE,ROCKCLIMB,SCRE
 Weight = 20.3
 Color = Gray
 Pokedex = Geodude compete against each other with headbutts. The iron sand on their heads will stick to whichever one has stronger magnetism.
+Generation = 7
 WildItemUncommon = CELLBATTERY
 #-------------------------------
 [GRAVELER,1]
@@ -241,6 +260,7 @@ TutorMoves = ALLYSWITCH,ATTRACT,BLOCK,BRICKBREAK,BRUTALSWING,BULLDOZE,CHARGEBEAM
 Weight = 110.0
 Color = Gray
 Pokedex = They eat rocks and often get into a scrap over them. The shock of Graveler smashing together causes a flash of light and a booming noise.
+Generation = 7
 WildItemUncommon = CELLBATTERY
 #-------------------------------
 [GOLEM,1]
@@ -255,6 +275,7 @@ Height = 1.7
 Weight = 316.0
 Color = Gray
 Pokedex = It fires rocks charged with electricity. Even if the rock isn't fired that accurately, just grazing an opponent will cause numbness and fainting.
+Generation = 7
 WildItemCommon = CELLBATTERY
 #-------------------------------
 [SLOWBRO,1]
@@ -267,6 +288,7 @@ Height = 2.0
 Weight = 120.0
 Shape = HeadArms
 Pokedex = Having been swallowed whole by Shellder, Slowbro now has an iron defense. It's pretty comfortable in there, too.
+Generation = 6
 #-------------------------------
 [GRIMER,1]
 FormName = Alolan
@@ -281,6 +303,7 @@ Height = 0.7
 Weight = 42.0
 Color = Green
 Pokedex = A Grimer, which had been brought in to solve a problem with garbage, developed over time into this form.
+Generation = 7
 #-------------------------------
 [MUK,1]
 FormName = Alolan
@@ -294,6 +317,7 @@ Height = 1.0
 Weight = 52.0
 Color = Green
 Pokedex = The garbage it eats causes continuous chemical changes in its body, which produce its exceedingly vivid coloration.
+Generation = 7
 #-------------------------------
 [GENGAR,1]
 FormName = Mega Gengar
@@ -303,6 +327,7 @@ Abilities = SHADOWTAG
 HiddenAbility = SHADOWTAG
 Height = 1.4
 Pokedex = The energy of Mega Evolution awakened it. It sinks into another dimension, where it keeps a patient watch for its chance to attack.
+Generation = 6
 #-------------------------------
 [EXEGGUTOR,1]
 FormName = Alolan
@@ -315,8 +340,10 @@ TutorMoves = ATTRACT,BLOCK,BRICKBREAK,BRUTALSWING,BULLDOZE,CONFIDE,DOUBLETEAM,DR
 Height = 10.9
 Weight = 415.6
 Pokedex = As it grew taller and taller, it outgrew its reliance on psychic powers, while within it awakened the power of the sleeping dragon.
+Generation = 7
 #-------------------------------
 [CUBONE,1]
+Generation = 7
 Evolutions = MAROWAK,LevelNight,28
 #-------------------------------
 [MAROWAK,1]
@@ -329,7 +356,8 @@ Moves = 1,GROWL,1,TAILWHIP,1,BONECLUB,1,FLAMEWHEEL,3,TAILWHIP,7,BONECLUB,11,FLAM
 TutorMoves = AERIALACE,ALLYSWITCH,ATTRACT,BLIZZARD,BRICKBREAK,BRUTALSWING,BULLDOZE,CONFIDE,DARKPULSE,DOUBLETEAM,DREAMEATER,EARTHPOWER,EARTHQUAKE,ECHOEDVOICE,ENDEAVOR,FACADE,FALSESWIPE,FIREBLAST,FIREPUNCH,FLAMECHARGE,FLAMETHROWER,FLING,FOCUSBLAST,FOCUSPUNCH,FRUSTRATION,GIGAIMPACT,HEATWAVE,HIDDENPOWER,HYPERBEAM,ICEBEAM,ICYWIND,IRONDEFENSE,IRONHEAD,IRONTAIL,KNOCKOFF,LASERFOCUS,LOWKICK,OUTRAGE,PAINSPLIT,PROTECT,RAINDANCE,REST,RETURN,ROCKSLIDE,ROCKTOMB,ROUND,SANDSTORM,SHADOWBALL,SLEEPTALK,SMACKDOWN,SNORE,SPITE,STEALTHROCK,STOMPINGTANTRUM,STONEEDGE,SUBSTITUTE,SUNNYDAY,SWAGGER,SWORDSDANCE,THIEF,THROATCHOP,THUNDER,THUNDERBOLT,THUNDERPUNCH,TOXIC,UPROAR,WILLOWISP
 Weight = 34.0
 Color = Purple
-Pokedex = Its custom is to mourn its lost companions. Mounds of dirt by the side of the road mark the graves of the Marowak
+Pokedex = Its custom is to mourn its lost companions. Mounds of dirt by the side of the road mark the graves of the Marowak.
+Generation = 7
 #-------------------------------
 [KANGASKHAN,1]
 FormName = Mega Kangaskhan
@@ -339,6 +367,7 @@ Abilities = PARENTALBOND
 HiddenAbility = PARENTALBOND
 Weight = 100.0
 Pokedex = The explosive energy the child is bathed in causes temporary growth. The mother is beside herself with worry about it.
+Generation = 6
 #-------------------------------
 [PINSIR,1]
 FormName = Mega Pinsir
@@ -352,6 +381,7 @@ Height = 1.7
 Weight = 59.0
 Shape = MultiWinged
 Pokedex = It zips around at blistering speeds, looking for an opening to skewer its opponent on its giant pincers.
+Generation = 6
 #-------------------------------
 [GYARADOS,1]
 FormName = Mega Gyarados
@@ -363,6 +393,7 @@ Abilities = MOLDBREAKER
 HiddenAbility = MOLDBREAKER
 Weight = 305.0
 Pokedex = It zooms out of the water at Mach speeds. Even large ships caught in its path are split cleanly in two!
+Generation = 6
 #-------------------------------
 [AERODACTYL,1]
 FormName = Mega Aerodactyl
@@ -373,6 +404,7 @@ HiddenAbility = TOUGHCLAWS
 Height = 2.1
 Weight = 79.0
 Pokedex = When it Mega Evolves, it becomes more vicious than ever before. Some say that's because its excess of power is causing it pain.
+Generation = 6
 #-------------------------------
 [MEWTWO,1]
 FormName = Mega Mewtwo X
@@ -385,6 +417,7 @@ HiddenAbility = STEADFAST
 Height = 2.3
 Weight = 127.0
 Pokedex = Psychic power has augmented its muscles. It has a grip strength of one ton and can sprint a hundred meters in two seconds flat!
+Generation = 6
 #-------------------------------
 [MEWTWO,2]
 FormName = Mega Mewtwo Y
@@ -395,9 +428,11 @@ HiddenAbility = INSOMNIA
 Height = 1.5
 Weight = 33.0
 Pokedex = Despite its diminished size, its mental power has grown phenomenally. With a mere thought, it can smash a skyscraper to smithereens.
+Generation = 6
 #-------------------------------
 [PICHU,1]
 FormName = Spiky-Eared
+Generation = 4
 BattlerEnemyX = 3
 Evolutions = PIKACHU,None,
 #-------------------------------
@@ -410,6 +445,7 @@ BaseStats = 90,95,105,45,165,110
 Abilities = MOLDBREAKER
 HiddenAbility = MOLDBREAKER
 Pokedex = Massive amounts of energy intensely stimulated Ampharos's cells, apparently awakening its long-sleeping dragon's blood.
+Generation = 6
 #-------------------------------
 [UNOWN,1]
 FormName = B
@@ -488,9 +524,11 @@ FormName = Z
 #-------------------------------
 [UNOWN,26]
 FormName = ?
+Generation = 3
 #-------------------------------
 [UNOWN,27]
 FormName = !
+Generation = 3
 #-------------------------------
 [STEELIX,1]
 FormName = Mega Steelix
@@ -500,6 +538,7 @@ Abilities = SANDFORCE
 HiddenAbility = SANDFORCE
 Height = 10.5
 Weight = 740.0
+Generation = 6
 #-------------------------------
 [SCIZOR,1]
 FormName = Mega Scizor
@@ -510,6 +549,7 @@ HiddenAbility = TECHNICIAN
 Height = 2.0
 Weight = 125.0
 Pokedex = It's better at beating things than grasping them. When it battles for a long time, the weight of its pincers becomes too much to bear.
+Generation = 6
 #-------------------------------
 [HERACROSS,1]
 FormName = Mega Heracross
@@ -520,6 +560,7 @@ HiddenAbility = SKILLLINK
 Height = 1.7
 Weight = 62.5
 Pokedex = A tremendous influx of energy builds it up, but when Mega Evolution ends, Heracross is bothered by terrible soreness in its muscles.
+Generation = 6
 #-------------------------------
 [HOUNDOOM,1]
 FormName = Mega Houndoom
@@ -530,6 +571,7 @@ HiddenAbility = SOLARPOWER
 Height = 1.9
 Weight = 49.5
 Pokedex = Its red claws and the tips of its tail are melting from high internal temperatures that are painful to Houndoom itself.
+Generation = 6
 #-------------------------------
 [TYRANITAR,1]
 FormName = Mega Tyranitar
@@ -539,6 +581,7 @@ HiddenAbility = SANDSTREAM
 Height = 2.5
 Weight = 255.0
 Pokedex = Due to the colossal power poured into it, this Pokémon's back split right open. Its destructive instincts are the only thing keeping it moving.
+Generation = 6
 #-------------------------------
 [SCEPTILE,1]
 FormName = Mega Sceptile
@@ -550,12 +593,14 @@ Abilities = LIGHTNINGROD
 HiddenAbility = LIGHTNINGROD
 Height = 1.9
 Weight = 55.2
+Generation = 6
 #-------------------------------
 [BLAZIKEN,1]
 FormName = Mega Blaziken
 MegaStone = BLAZIKENITE
 BaseStats = 80,160,80,100,130,80
 Abilities = SPEEDBOOST
+Generation = 6
 #-------------------------------
 [SWAMPERT,1]
 FormName = Mega Swampert
@@ -565,6 +610,7 @@ Abilities = SWIFTSWIM
 HiddenAbility = SWIFTSWIM
 Height = 1.9
 Weight = 102.0
+Generation = 6
 #-------------------------------
 [GARDEVOIR,1]
 FormName = Mega Gardevoir
@@ -572,6 +618,7 @@ MegaStone = GARDEVOIRITE
 BaseStats = 68,85,65,100,165,135
 Abilities = PIXILATE
 HiddenAbility = PIXILATE
+Generation = 6
 #-------------------------------
 [SABLEYE,1]
 FormName = Mega Sableye
@@ -581,6 +628,7 @@ Abilities = MAGICBOUNCE
 HiddenAbility = MAGICBOUNCE
 Weight = 161.0
 Pokedex = Supporting a giant heavy jewel, it can't change direction very nimbly and is vulnerable to attack from behind.
+Generation = 6
 #-------------------------------
 [MAWILE,1]
 FormName = Mega Mawile
@@ -591,6 +639,7 @@ HiddenAbility = HUGEPOWER
 Height = 1.0
 Weight = 23.5
 Pokedex = Its two sets of jaws thrash about violently as if they each had a will of their own. One gnash from them can turn a boulder to dust.
+Generation = 6
 #-------------------------------
 [AGGRON,1]
 FormName = Mega Aggron
@@ -601,12 +650,14 @@ Abilities = FILTER
 HiddenAbility = FILTER
 Height = 2.2
 Weight = 395.0
+Generation = 6
 #-------------------------------
 [MEDICHAM,1]
 FormName = Mega Medicham
 MegaStone = MEDICHAMITE
 BaseStats = 60,100,85,100,80,85
 HiddenAbility = PUREPOWER
+Generation = 6
 #-------------------------------
 [MANECTRIC,1]
 FormName = Mega Manectric
@@ -617,6 +668,7 @@ HiddenAbility = INTIMIDATE
 Height = 1.8
 Weight = 44.0
 Pokedex = Too much electricity has built up in its body, irritating Manectric. Its explosive speed is equal to that of a lightning bolt.
+Generation = 6
 #-------------------------------
 [SHARPEDO,1]
 FormName = Mega Sharpedo
@@ -627,6 +679,7 @@ HiddenAbility = STRONGJAW
 Height = 2.5
 Weight = 130.3
 Pokedex = The yellow patterns it bears are old scars. The energy from Mega Evolution runs through them, causing it sharp pain and suffering.
+Generation = 6
 #-------------------------------
 [CAMERUPT,1]
 FormName = Mega Camerupt
@@ -636,6 +689,7 @@ Abilities = SHEERFORCE
 HiddenAbility = SHEERFORCE
 Height = 2.5
 Weight = 320.5
+Generation = 6
 #-------------------------------
 [ALTARIA,1]
 FormName = Mega Altaria
@@ -646,6 +700,7 @@ BaseStats = 75,110,110,80,110,105
 Abilities = PIXILATE
 HiddenAbility = PIXILATE
 Height = 1.5
+Generation = 6
 #-------------------------------
 [CASTFORM,1]
 FormName = Sunny Form
@@ -681,6 +736,7 @@ HiddenAbility = PRANKSTER
 Height = 1.2
 Weight = 13.0
 Pokedex = Extraordinary energy amplifies its cursing power to such an extent that it can't help but curse its own Trainer.
+Generation = 6
 #-------------------------------
 [ABSOL,1]
 FormName = Mega Absol
@@ -690,6 +746,7 @@ Abilities = MAGICBOUNCE
 HiddenAbility = MAGICBOUNCE
 Weight = 49.0
 Pokedex = When this Pokémon whips the winglike fur on its back as though beating its wings, it sends an intimidating aura flying at its opponents.
+Generation = 6
 #-------------------------------
 [GLALIE,1]
 FormName = Mega Glalie
@@ -700,6 +757,7 @@ HiddenAbility = REFRIGERATE
 Height = 2.1
 Weight = 350.2
 Pokedex = It envelops prey in its mouth, freezing them instantly. But its jaw is dislocated, so it's unable to eat them.
+Generation = 6
 #-------------------------------
 [SALAMENCE,1]
 FormName = Mega Salamence
@@ -710,6 +768,7 @@ HiddenAbility = AERILATE
 Height = 1.8
 Weight = 112.6
 Pokedex = It puts its forelegs inside its shell to streamline itself for flight. Salamence flies at high speeds over all kinds of topographical features.
+Generation = 6
 #-------------------------------
 [METAGROSS,1]
 FormName = Mega Metagross
@@ -720,6 +779,7 @@ HiddenAbility = TOUGHCLAWS
 Height = 2.5
 Weight = 942.9
 Pokedex = Its intellect surpasses its previous level, resulting in battles so cruel, they'll make you want to cover your eyes.
+Generation = 6
 #-------------------------------
 [LATIAS,1]
 FormName = Mega Latias
@@ -728,6 +788,7 @@ BaseStats = 80,100,120,110,140,150
 Height = 1.8
 Weight = 52.0
 Color = Purple
+Generation = 6
 #-------------------------------
 [LATIOS,1]
 FormName = Mega Latios
@@ -736,6 +797,7 @@ BaseStats = 80,130,100,110,160,120
 Height = 2.3
 Weight = 70.0
 Color = Purple
+Generation = 6
 #-------------------------------
 [KYOGRE,1]
 FormName = Primal Kyogre
@@ -743,6 +805,7 @@ BaseStats = 100,150,90,90,180,160
 Abilities = PRIMORDIALSEA
 Height = 9.8
 Weight = 430.0
+Generation = 6
 #-------------------------------
 [GROUDON,1]
 FormName = Primal Groudon
@@ -752,6 +815,7 @@ BaseStats = 100,180,160,90,150,90
 Abilities = DESOLATELAND
 Height = 5.0
 Weight = 999.7
+Generation = 6
 #-------------------------------
 [RAYQUAZA,1]
 FormName = Mega Rayquaza
@@ -762,6 +826,7 @@ Abilities = DELTASTREAM
 HiddenAbility = DELTASTREAM
 Height = 10.8
 Weight = 392.0
+Generation = 6
 #-------------------------------
 [DEOXYS,1]
 FormName = Attack Forme
@@ -850,6 +915,7 @@ HiddenAbility = SCRAPPY
 Height = 1.3
 Weight = 28.3
 Pokedex = It swings its ears like whips and strikes its enemies with them. It has an intensely combative disposition.
+Generation = 6
 #-------------------------------
 [GARCHOMP,1]
 FormName = Mega Garchomp
@@ -858,6 +924,7 @@ BaseStats = 108,170,115,92,120,95
 Abilities = SANDFORCE
 HiddenAbility = SANDFORCE
 Pokedex = Its vaunted wings become scythes, sending it mad with rage. It swings its scythes wildly and slices the ground to pieces.
+Generation = 6
 #-------------------------------
 [LUCARIO,1]
 FormName = Mega Lucario
@@ -868,6 +935,7 @@ HiddenAbility = ADAPTABILITY
 Height = 1.3
 Weight = 57.5
 Pokedex = It readies itself to face its enemies by focusing its mental energies. Its fighting style can be summed up in a single word: heartless.
+Generation = 6
 #-------------------------------
 [ABOMASNOW,1]
 FormName = Mega Abomasnow
@@ -876,6 +944,7 @@ BaseStats = 90,132,105,30,132,105
 HiddenAbility = SNOWWARNING
 Height = 2.7
 Weight = 185.0
+Generation = 6
 #-------------------------------
 [GALLADE,1]
 FormName = Mega Gallade
@@ -884,6 +953,7 @@ BaseStats = 68,165,95,110,65,115
 Abilities = INNERFOCUS
 HiddenAbility = INNERFOCUS
 Weight = 56.4
+Generation = 6
 #-------------------------------
 [ROTOM,1]
 FormName = Heat Rotom
@@ -1034,6 +1104,7 @@ Type1 = DARK
 [ARCEUS,18]
 FormName = Fairy Type
 Type1 = FAIRY
+Generation = 6
 #-------------------------------
 [AUDINO,1]
 FormName = Mega Audino
@@ -1046,6 +1117,7 @@ HiddenAbility = HEALER
 Height = 1.5
 Weight = 32.0
 Color = White
+Generation = 6
 #-------------------------------
 [BASCULIN,1]
 FormName = Blue-Striped
@@ -1206,6 +1278,7 @@ FormName = Ash-Greninja
 BaseStats = 72,145,67,132,153,71
 Abilities = BATTLEBOND
 HiddenAbility = BATTLEBOND
+Generation = 7
 #-------------------------------
 [VIVILLON,1]
 FormName = Continental Pattern
@@ -1404,6 +1477,7 @@ Weight = 33.5
 Color = Black
 Shape = Quadruped
 Pokedex = This is Zygarde when about 10% of its pieces have been assembled. It leaps at its opponent's chest and sinks its sharp fangs into them.
+Generation = 7
 #-------------------------------
 [ZYGARDE,2]
 FormName = Complete Forme
@@ -1414,6 +1488,7 @@ Weight = 610.0
 Color = Black
 Shape = BipedalTail
 Pokedex = This is Zygarde's perfected form. From the orifice on its chest, it radiates high-powered energy that eliminates everything.
+Generation = 7
 #-------------------------------
 [ZYGARDE,3]
 PokedexForm = 2

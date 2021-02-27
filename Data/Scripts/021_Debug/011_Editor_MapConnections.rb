@@ -314,7 +314,7 @@ class MapScreenScene
     @sprites={}
     @mapsprites={}
     @mapspritepos={}
-    @viewport=Viewport.new(0,0,800,600)
+    @viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z=99999
     @lasthitmap=-1
     @lastclick=-1
@@ -325,16 +325,19 @@ class MapScreenScene
     @dragOffsetX=0
     @dragOffsetY=0
     @selmapid=-1
-    addBackgroundPlane(@sprites,"background","Trainer Card/bg",@viewport)
+    @sprites["background"] = ColoredPlane.new(Color.new(160, 208, 240), @viewport)
     @sprites["selsprite"]=SelectionSprite.new(@viewport)
-    @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(_INTL("F: Help"),
-       0, 600 - 64, 800, 64, @viewport)
+    @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(_INTL("D: Help"),
+       0, Graphics.height - 64, Graphics.width, 64, @viewport)
     @sprites["title"].z = 2
     @mapinfos=pbLoadMapInfos
     conns=MapFactoryHelper.getMapConnections
     @mapconns=[]
-    for c in conns
-      @mapconns.push(c.clone) if !@mapconns.any? { |conn| conn[0] == c[0] && conn[3] == c[3] }
+    for map_conns in conns
+      next if !map_conns
+      map_conns.each do |c|
+        @mapconns.push(c.clone) if !@mapconns.any? { |x| x[0] == c[0] && x[3] == c[3] }
+      end
     end
     if $game_map
       @currentmap=$game_map.map_id
@@ -359,7 +362,7 @@ class MapScreenScene
     helptext+=_INTL("Drag map to move it\r\n")
     helptext+=_INTL("Arrow keys/drag canvas: Move around canvas")
     title = Window_UnformattedTextPokemon.newWithSize(helptext,
-       0, 0, 800 * 8 / 10, 600, @viewport)
+       0, 0, Graphics.width * 8 / 10, Graphics.height, @viewport)
     title.z = 2
     loop do
       Graphics.update
@@ -385,7 +388,7 @@ class MapScreenScene
   end
 
   def onDoubleClick(map_id)
-    pbEditMetadata(map_id)
+    pbEditMetadata(map_id) if map_id > 0
   end
 
   def onClick(mapid,x,y)
@@ -441,7 +444,7 @@ class MapScreenScene
         y=y+@dragOffsetY
         sprite.x=x&~3
         sprite.y=y&~3
-        @sprites["title"].text=_ISPRINTF("F: Help [{1:03d}: {2:s}]",mapid,@mapinfos[@dragmapid].name)
+        @sprites["title"].text=_ISPRINTF("D: Help [{1:03d}: {2:s}]",mapid,@mapinfos[@dragmapid].name)
       else
         xpos=x-@dragOffsetX
         ypos=y-@dragOffsetY
@@ -450,13 +453,13 @@ class MapScreenScene
           sprite.x=(@mapspritepos[i][0]+xpos)&~3
           sprite.y=(@mapspritepos[i][1]+ypos)&~3
         end
-        @sprites["title"].text=_INTL("F: Help")
+        @sprites["title"].text=_INTL("D: Help")
       end
     else
       if mapid>=0
-        @sprites["title"].text=_ISPRINTF("F: Help [{1:03d}: {2:s}]",mapid,@mapinfos[mapid].name)
+        @sprites["title"].text=_ISPRINTF("D: Help [{1:03d}: {2:s}]",mapid,@mapinfos[mapid].name)
       else
-        @sprites["title"].text=_INTL("F: Help")
+        @sprites["title"].text=_INTL("D: Help")
       end
     end
   end
@@ -546,7 +549,7 @@ class MapScreenScene
         @sprites["selsprite"].othersprite=nil
         @selmapid=-1
       end
-    elsif Input.trigger?(Input::F5)
+    elsif Input.triggerex?(:D)
       helpWindow
     end
     pbUpdateSpriteHash(@sprites)
@@ -562,7 +565,7 @@ class MapScreenScene
           serializeConnectionData
           MapFactoryHelper.clear
         else
-          GameData.Encounter.load
+          GameData::Encounter.load
         end
         break if pbConfirmMessage(_INTL("Exit from the editor?"))
       end
@@ -575,9 +578,13 @@ end
 #===============================================================================
 def pbConnectionsEditor
   pbCriticalCode {
-     mapscreen = MapScreenScene.new
-     mapscreen.mapScreen
-     mapscreen.pbMapScreenLoop
-     mapscreen.close
+    Graphics.resize_screen(Settings::SCREEN_WIDTH + 288, Settings::SCREEN_HEIGHT + 288)
+    pbSetResizeFactor(1)
+    mapscreen = MapScreenScene.new
+    mapscreen.mapScreen
+    mapscreen.pbMapScreenLoop
+    mapscreen.close
+    Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
+    pbSetResizeFactor($PokemonSystem.screensize)
   }
 end

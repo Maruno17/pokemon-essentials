@@ -111,7 +111,6 @@ def pbDebugMenu(show_all = true)
           break
         end
       elsif Input.trigger?(Input::C)
-        pbPlayDecisionSE
         ret = cmdwindow.index
         break
       end
@@ -119,6 +118,7 @@ def pbDebugMenu(show_all = true)
     break if ret < 0
     cmd = commands.getCommand(ret)
     if commands.hasSubMenu?(cmd)
+      pbPlayDecisionSE
       commands.currentList = cmd
       cmdwindow.commands = commands.list
       cmdwindow.index = 0
