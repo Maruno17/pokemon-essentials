@@ -512,12 +512,12 @@ class TilePuzzleScene
         loop do
           Graphics.update
           Input.update
-          break if Input.trigger?(Input::C) || Input.trigger?(Input::B)
+          break if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
         end
         return true
       end
       # Input
-      @sprites["cursor"].selected=(Input.press?(Input::C) && @game>=3 && @game<=6)
+      @sprites["cursor"].selected=(Input.press?(Input::USE) && @game>=3 && @game<=6)
       dir=0
       dir=2 if Input.trigger?(Input::DOWN) || Input.repeat?(Input::DOWN)
       dir=4 if Input.trigger?(Input::LEFT) || Input.repeat?(Input::LEFT)
@@ -535,13 +535,13 @@ class TilePuzzleScene
             @sprites["cursor"].position=pbMoveCursor(@sprites["cursor"].position,dir)
           end
         end
-      elsif (@game==1 || @game==2) && Input.trigger?(Input::C)
+      elsif (@game==1 || @game==2) && Input.trigger?(Input::USE)
         pbGrabTile(@sprites["cursor"].position)
-      elsif (@game==2 && Input.trigger?(Input::A)) ||
-            (@game==5 && Input.trigger?(Input::A)) ||
-            (@game==7 && Input.trigger?(Input::C))
+      elsif (@game==2 && Input.trigger?(Input::SPECIAL)) ||
+            (@game==5 && Input.trigger?(Input::SPECIAL)) ||
+            (@game==7 && Input.trigger?(Input::USE))
         pbRotateTile(@sprites["cursor"].position)
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         return false
       end
     end

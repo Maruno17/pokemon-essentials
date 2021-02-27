@@ -961,7 +961,7 @@ def pbWaitMessage(msgWindow,time)
       Graphics.update
       Input.update
       pbUpdateSceneMap
-      if Input.trigger?(Input::C) || Input.trigger?(Input::B)
+      if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
         return true
       end
     end
@@ -987,7 +987,7 @@ def pbWaitForInput(msgWindow,message,frames)
     else
       $game_player.pattern = 0
     end
-    if Input.trigger?(Input::C) || Input.trigger?(Input::B)
+    if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
       $game_player.pattern = 0
       return true
     end

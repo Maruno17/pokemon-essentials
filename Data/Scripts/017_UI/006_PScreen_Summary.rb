@@ -213,11 +213,11 @@ class PokemonSummary_Scene
       Input.update
       pbUpdate
       if @sprites["messagebox"].busy?
-        if Input.trigger?(Input::C)
+        if Input.trigger?(Input::USE)
           pbPlayDecisionSE() if @sprites["messagebox"].pausing?
           @sprites["messagebox"].resume
         end
-      elsif Input.trigger?(Input::C) || Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
         break
       end
     end
@@ -240,10 +240,10 @@ class PokemonSummary_Scene
         cmdwindow.update
         pbUpdate
         if !@sprites["messagebox"].busy?
-          if Input.trigger?(Input::B)
+          if Input.trigger?(Input::BACK)
             ret = false
             break
-          elsif Input.trigger?(Input::C) && @sprites["messagebox"].resume
+          elsif Input.trigger?(Input::USE) && @sprites["messagebox"].resume
             ret = (cmdwindow.index==0)
             break
           end
@@ -265,11 +265,11 @@ class PokemonSummary_Scene
          Input.update
          cmdwindow.update
          pbUpdate
-         if Input.trigger?(Input::B)
+         if Input.trigger?(Input::BACK)
            pbPlayCancelSE
            ret = -1
            break
-         elsif Input.trigger?(Input::C)
+         elsif Input.trigger?(Input::USE)
            pbPlayDecisionSE
            ret = cmdwindow.index
            break
@@ -929,12 +929,12 @@ class PokemonSummary_Scene
       else
         @sprites["movepresel"].z = @sprites["movesel"].z
       end
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         (switching) ? pbPlayCancelSE : pbPlayCloseMenuSE
         break if !switching
         @sprites["movepresel"].visible = false
         switching = false
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
         if selmove==Pokemon::MAX_MOVES
           break if !switching
@@ -1001,12 +1001,12 @@ class PokemonSummary_Scene
         @sprites["ribbonpresel"].z = @sprites["ribbonsel"].z
       end
       hasMovedCursor = false
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         (switching) ? pbPlayCancelSE : pbPlayCloseMenuSE
         break if !switching
         @sprites["ribbonpresel"].visible = false
         switching = false
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         if !switching
           if @pokemon.ribbons[selribbon]
             pbPlayDecisionSE
@@ -1110,10 +1110,10 @@ class PokemonSummary_Scene
       Graphics.update
       Input.update
       pbUpdate
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
         if index==6   # OK
           ret = markings
@@ -1216,11 +1216,11 @@ class PokemonSummary_Scene
       Graphics.update
       Input.update
       pbUpdate
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         selmove = Pokemon::MAX_MOVES
         pbPlayCloseMenuSE if new_move
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
         break
       elsif Input.trigger?(Input::UP)
@@ -1253,13 +1253,13 @@ class PokemonSummary_Scene
       Input.update
       pbUpdate
       dorefresh = false
-      if Input.trigger?(Input::A)
+      if Input.trigger?(Input::SPECIAL)
         pbSEStop
         GameData::Species.play_cry_from_pokemon(@pokemon)
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         if @page==4
           pbPlayDecisionSE
           pbMoveSelection

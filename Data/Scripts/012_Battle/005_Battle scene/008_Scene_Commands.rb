@@ -45,12 +45,12 @@ class PokeBattle_Scene
       end
       pbPlayCursorSE if cw.index!=oldIndex
       # Actions
-      if Input.trigger?(Input::C)                 # Confirm choice
+      if Input.trigger?(Input::USE)                 # Confirm choice
         pbPlayDecisionSE
         ret = cw.index
         @lastCmd[idxBattler] = ret
         break
-      elsif Input.trigger?(Input::B) && mode==1   # Cancel
+      elsif Input.trigger?(Input::BACK) && mode==1   # Cancel
         pbPlayCancelSE
         break
       elsif Input.trigger?(Input::F9) && $DEBUG    # Debug menu
@@ -110,22 +110,22 @@ class PokeBattle_Scene
       end
       pbPlayCursorSE if cw.index!=oldIndex
       # Actions
-      if Input.trigger?(Input::C)      # Confirm choice
+      if Input.trigger?(Input::USE)      # Confirm choice
         pbPlayDecisionSE
         break if yield cw.index
         needFullRefresh = true
         needRefresh = true
-      elsif Input.trigger?(Input::B)   # Cancel fight menu
+      elsif Input.trigger?(Input::BACK)   # Cancel fight menu
         pbPlayCancelSE
         break if yield -1
         needRefresh = true
-      elsif Input.trigger?(Input::A)   # Toggle Mega Evolution
+      elsif Input.trigger?(Input::SPECIAL)   # Toggle Mega Evolution
         if megaEvoPossible
           pbPlayDecisionSE
           break if yield -2
           needRefresh = true
         end
-      elsif Input.trigger?(Input::F5)   # Shift
+      elsif Input.trigger?(Input::Z)   # Shift
         if cw.shiftMode>0
           pbPlayDecisionSE
           break if yield -3
@@ -420,11 +420,11 @@ class PokeBattle_Scene
           pbSelectBattler(cw.index,2)   # Select the new battler/data box
         end
       end
-      if Input.trigger?(Input::C)   # Confirm
+      if Input.trigger?(Input::USE)   # Confirm
         ret = cw.index
         pbPlayDecisionSE
         break
-      elsif Input.trigger?(Input::B)   # Cancel
+      elsif Input.trigger?(Input::BACK)   # Cancel
         ret = -1
         pbPlayCancelSE
         break

@@ -200,7 +200,7 @@ def pbTopRightWindow(text, scene = nil)
     Input.update
     window.update
     scene.pbUpdate if scene
-    break if Input.trigger?(Input::C)
+    break if Input.trigger?(Input::USE)
   end
   window.dispose
 end

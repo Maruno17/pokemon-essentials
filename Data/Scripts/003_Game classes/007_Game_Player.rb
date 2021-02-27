@@ -401,7 +401,7 @@ class Game_Player < Game_Character
       pbOnStepTaken(result)
     end
     # If C button was pressed, try to manually interact with events
-    if Input.trigger?(Input::C) && !$PokemonTemp.miniupdate
+    if Input.trigger?(Input::USE) && !$PokemonTemp.miniupdate
       # Same position and front event determinant
       check_event_trigger_here([0])
       check_event_trigger_there([0,2])

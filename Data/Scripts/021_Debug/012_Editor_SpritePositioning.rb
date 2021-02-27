@@ -195,16 +195,16 @@ class SpritePositioner
         pbChangeSpecies(@species)
         refresh
       end
-      if Input.trigger?(Input::A)   # Cycle to next option
+      if Input.trigger?(Input::SPECIAL)   # Cycle to next option
         pbPlayDecisionSE
         @metricsChanged = true if species_data.shadow_size != oldval
         ret = true
         break
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         species_data.shadow_size = oldval
         pbPlayCancelSE
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
         break
       end
@@ -266,12 +266,12 @@ class SpritePositioner
         end
         refresh
       end
-      if Input.repeat?(Input::A) && param != 3   # Cycle to next option
+      if Input.repeat?(Input::SPECIAL) && param != 3   # Cycle to next option
         @metricsChanged = true if xpos != oldxpos || ypos != oldypos
         ret = true
         pbPlayDecisionSE
         break
-      elsif Input.repeat?(Input::B)
+      elsif Input.repeat?(Input::BACK)
         case param
         when 0
           species_data.back_sprite_x = oldxpos
@@ -285,7 +285,7 @@ class SpritePositioner
         pbPlayCancelSE
         refresh
         break
-      elsif Input.repeat?(Input::C)
+      elsif Input.repeat?(Input::USE)
         @metricsChanged = true if xpos != oldxpos || (param != 3 && ypos != oldypos)
         pbPlayDecisionSE
         break
@@ -315,11 +315,11 @@ class SpritePositioner
       Input.update
       cw.update
       self.update
-      if Input.trigger?(Input::C)
+      if Input.trigger?(Input::USE)
         pbPlayDecisionSE
         ret = cw.index
         break
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         pbPlayCancelSE
         break
       end
@@ -360,11 +360,11 @@ class SpritePositioner
         refresh
       end
       self.update
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         pbChangeSpecies(nil)
         refresh
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbChangeSpecies(allspecies[cw.index][0])
         ret = allspecies[cw.index][0]
         break

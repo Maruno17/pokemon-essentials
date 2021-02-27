@@ -448,9 +448,9 @@ class PokemonOption_Scene
             oldFont = $PokemonSystem.font
           end
         end
-        if Input.trigger?(Input::B)
+        if Input.trigger?(Input::BACK)
           break
-        elsif Input.trigger?(Input::C)
+        elsif Input.trigger?(Input::USE)
           break if @sprites["option"].index==@PokemonOptions.length
         end
       end

@@ -394,7 +394,7 @@ class DependentEvents
       events[i][5]=event.direction
     end
     # Check event triggers
-    if Input.trigger?(Input::C) && !$game_temp.in_menu && !$game_temp.in_battle &&
+    if Input.trigger?(Input::USE) && !$game_temp.in_menu && !$game_temp.in_battle &&
        !$game_player.move_route_forcing && !$game_temp.message_window_showing &&
        !pbMapInterpreterRunning?
       # Get position of tile facing the player

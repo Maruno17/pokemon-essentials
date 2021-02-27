@@ -353,7 +353,7 @@ def pbTrainerTypeEditor
   ]
   pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(0, true)) { |button, tr_type|
     if tr_type
-      if button == Input::A
+      if button == Input::SPECIAL
         if tr_type.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this trainer type?")
             id_number = GameData::TrainerType.get(tr_type).id_number
@@ -364,7 +364,7 @@ def pbTrainerTypeEditor
             pbMessage(_INTL("The Trainer type was deleted."))
           end
         end
-      elsif button == Input::C
+      elsif button == Input::USE
         if tr_type.is_a?(Symbol)
           t_data = GameData::TrainerType.get(tr_type)
           data = [
@@ -501,7 +501,7 @@ def pbTrainerBattleEditor
   modified = false
   pbListScreenBlock(_INTL("Trainer Battles"), TrainerBattleLister.new(0, true)) { |button, trainer_id|
     if trainer_id
-      if button == Input::A
+      if button == Input::SPECIAL
         if trainer_id.is_a?(Array)
           if pbConfirmMessageSerious("Delete this trainer battle?")
             tr_data = GameData::Trainer::DATA[trainer_id]
@@ -511,7 +511,7 @@ def pbTrainerBattleEditor
             pbMessage(_INTL("The Trainer battle was deleted."))
           end
         end
-      elsif button == Input::C
+      elsif button == Input::USE
         if trainer_id.is_a?(Array)   # Edit existing trainer
           tr_data = GameData::Trainer::DATA[trainer_id]
           old_type = tr_data.trainer_type
@@ -826,7 +826,7 @@ def pbItemEditor
   ]
   pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) { |button, item|
     if item
-      if button == Input::A
+      if button == Input::SPECIAL
         if item.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this item?")
             id_number = GameData::Item.get(item).id_number
@@ -837,7 +837,7 @@ def pbItemEditor
             pbMessage(_INTL("The item was deleted."))
           end
         end
-      elsif button == Input::C
+      elsif button == Input::USE
         if item.is_a?(Symbol)
           itm = GameData::Item.get(item)
           data = [
@@ -993,7 +993,7 @@ def pbPokemonEditor
   ]
   pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(0, false)) { |button, species|
     if species
-      if button == Input::A
+      if button == Input::SPECIAL
         if species.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this species?")
             id_number = GameData::Species.get(species).id_number
@@ -1004,7 +1004,7 @@ def pbPokemonEditor
             pbMessage(_INTL("The species was deleted."))
           end
         end
-      elsif button == Input::C
+      elsif button == Input::USE
         if species.is_a?(Symbol)
           spec = GameData::Species.get(species)
           moves = []

@@ -227,7 +227,7 @@ class TriadScene
       Graphics.update
       Input.update
       pbUpdate
-      if Input.trigger?(Input::C)
+      if Input.trigger?(Input::USE)
         if @sprites["helpwindow"].busy?
           pbPlayDecisionSE if @sprites["helpwindow"].pausing?
           @sprites["helpwindow"].resume
@@ -277,7 +277,7 @@ class TriadScene
         end
         index = command.index
       end
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         if chosenCards.length>0
           item = chosenCards.pop
           @battle.pbAdd(cardStorage,item)
@@ -290,7 +290,7 @@ class TriadScene
         else
           pbPlayBuzzerSE
         end
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         break if chosenCards.length==@battle.maxCards
         item = cardStorage[command.index]
         if !item || @battle.pbQuantity(cardStorage,item[0])==0
@@ -312,7 +312,7 @@ class TriadScene
           index = -1
         end
       end
-      if Input.trigger?(Input::C) || Input.trigger?(Input::B)
+      if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
         for i in 0...@battle.maxCards
           @sprites["player#{i}"].visible = (i<chosenCards.length)
         end
@@ -386,7 +386,7 @@ class TriadScene
         pbPlayCursorSE
         choice -= 1
         choice = numCards-1 if choice<0
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         pbPlayCancelSE
         choice = -1
       end
@@ -425,10 +425,10 @@ class TriadScene
         pbPlayCursorSE
         choice -= 1
         choice = numCards-1 if choice<0
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
         break
-      elsif Input.trigger?(Input::A) && @battle.openHand
+      elsif Input.trigger?(Input::SPECIAL) && @battle.openHand
         pbPlayDecisionSE
         pbViewOpponentCards(numCards)
         @sprites["helpwindow"].text = _INTL("Choose a card, or check opponent with Z.")
@@ -484,9 +484,9 @@ class TriadScene
         boardX += 1
         boardX = 0 if boardX>=@battle.width
         doRefresh = true
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         return nil
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         if @battle.isOccupied?(boardX,boardY)
           pbPlayBuzzerSE
         else
@@ -1089,9 +1089,9 @@ def pbBuyTriads
       preview.bitmap = TriadCard.new(commands[cmdwindow.index][3]).createBitmap(1)
       olditem = commands[cmdwindow.index][3]
     end
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       break
-    elsif Input.trigger?(Input::C)
+    elsif Input.trigger?(Input::USE)
       price    = commands[cmdwindow.index][0]
       item     = commands[cmdwindow.index][3]
       itemname = commands[cmdwindow.index][1]
@@ -1181,11 +1181,11 @@ def pbSellTriads
         end
         olditem = item
       end
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         done = true
         break
       end
-      if Input.trigger?(Input::C)
+      if Input.trigger?(Input::USE)
         if cmdwindow.index>=$PokemonGlobal.triads.length
           done = true
           break
@@ -1271,11 +1271,11 @@ def pbTriadList
         end
         lastIndex = cmdwindow.index
       end
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         done = true
         break
       end
-      if Input.trigger?(Input::C)
+      if Input.trigger?(Input::USE)
         if cmdwindow.index>=$PokemonGlobal.triads.length
           done = true
           break

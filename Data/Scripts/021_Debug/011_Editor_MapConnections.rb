@@ -367,7 +367,7 @@ class MapScreenScene
     loop do
       Graphics.update
       Input.update
-      break if Input.trigger?(Input::B) || Input.trigger?(Input::C)
+      break if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
     end
     Input.update
     title.dispose
@@ -560,7 +560,7 @@ class MapScreenScene
       Graphics.update
       Input.update
       update
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         if pbConfirmMessage(_INTL("Save changes?"))
           serializeConnectionData
           MapFactoryHelper.clear

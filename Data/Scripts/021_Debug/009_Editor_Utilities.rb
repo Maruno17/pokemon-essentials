@@ -113,8 +113,8 @@ end
 #===============================================================================
 # Displays a list of all Pokémon species, and returns the ID of the species
 # selected (or nil if the selection was canceled). "default", if specified, is
-# the ID of the species to initially select. Pressing Input::A will toggle the
-# list sorting between numerical and alphabetical.
+# the ID of the species to initially select. Pressing Input::SPECIAL will toggle
+# the list sorting between numerical and alphabetical.
 def pbChooseSpeciesList(default = nil)
   commands = []
   GameData::Species.each { |s| commands.push([s.id_number, s.real_name, s.id]) if s.form == 0 }
@@ -132,8 +132,8 @@ end
 
 # Displays a list of all moves, and returns the ID of the move selected (or nil
 # if the selection was canceled). "default", if specified, is the ID of the move
-# to initially select. Pressing Input::A will toggle the list sorting between
-# numerical and alphabetical.
+# to initially select. Pressing Input::SPECIAL will toggle the list sorting
+# between numerical and alphabetical.
 def pbChooseMoveList(default = nil)
   commands = []
   GameData::Move.each { |i| commands.push([i.id_number, i.real_name, i.id]) }
@@ -178,8 +178,8 @@ end
 
 # Displays a list of all types, and returns the ID of the type selected (or nil
 # if the selection was canceled). "default", if specified, is the ID of the type
-# to initially select. Pressing Input::A will toggle the list sorting between
-# numerical and alphabetical.
+# to initially select. Pressing Input::SPECIAL will toggle the list sorting
+# between numerical and alphabetical.
 def pbChooseTypeList(default = nil)
   commands = []
   GameData::Type.each { |t| commands.push([t.id_number, t.name, t.id]) if !t.pseudo_type }
@@ -188,8 +188,8 @@ end
 
 # Displays a list of all items, and returns the ID of the item selected (or nil
 # if the selection was canceled). "default", if specified, is the ID of the item
-# to initially select. Pressing Input::A will toggle the list sorting between
-# numerical and alphabetical.
+# to initially select. Pressing Input::SPECIAL will toggle the list sorting
+# between numerical and alphabetical.
 def pbChooseItemList(default = nil)
   commands = []
   GameData::Item.each { |i| commands.push([i.id_number, i.name, i.id]) }
@@ -198,7 +198,7 @@ end
 
 # Displays a list of all abilities, and returns the ID of the ability selected
 # (or nil if the selection was canceled). "default", if specified, is the ID of
-# the ability to initially select. Pressing Input::A will toggle the list
+# the ability to initially select. Pressing Input::SPECIAL will toggle the list
 # sorting between numerical and alphabetical.
 def pbChooseAbilityList(default = nil)
   commands = []
@@ -253,7 +253,7 @@ def pbCommands2(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
     Graphics.update
     Input.update
     cmdwindow.update
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       if cmdIfCancel>0
         command = cmdIfCancel-1
         break
@@ -261,7 +261,7 @@ def pbCommands2(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
         command = cmdIfCancel
         break
       end
-    elsif Input.trigger?(Input::C)
+    elsif Input.trigger?(Input::USE)
       command = cmdwindow.index
       break
     end
@@ -290,10 +290,10 @@ def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
     Graphics.update
     Input.update
     cmdwindow.update
-    if Input.trigger?(Input::F5)
+    if Input.trigger?(Input::Z)
       command = [5,cmdwindow.index]
       break
-    elsif Input.press?(Input::A)
+    elsif Input.press?(Input::SPECIAL)
       if Input.repeat?(Input::UP)
         command = [1,cmdwindow.index]
         break
@@ -307,7 +307,7 @@ def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
         command = [4,cmdwindow.index]
         break
       end
-    elsif Input.trigger?(Input::B)
+    elsif Input.trigger?(Input::BACK)
       if cmdIfCancel>0
         command = [0,cmdIfCancel-1]
         break
@@ -315,7 +315,7 @@ def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
         command = [0,cmdIfCancel]
         break
       end
-    elsif Input.trigger?(Input::C)
+    elsif Input.trigger?(Input::USE)
       command = [0,cmdwindow.index]
       break
     end
@@ -381,13 +381,13 @@ def pbCommandsSortable(cmdwindow,commands,cmdIfCancel,defaultindex=-1,sortable=f
     Graphics.update
     Input.update
     cmdwindow.update
-    if Input.trigger?(Input::A) && sortable
+    if Input.trigger?(Input::SPECIAL) && sortable
       command = [1,cmdwindow.index]
       break
-    elsif Input.trigger?(Input::B)
+    elsif Input.trigger?(Input::BACK)
       command = [0,(cmdIfCancel>0) ? cmdIfCancel-1 : cmdIfCancel]
       break
-    elsif Input.trigger?(Input::C)
+    elsif Input.trigger?(Input::USE)
       command = [0,cmdwindow.index]
       break
     end

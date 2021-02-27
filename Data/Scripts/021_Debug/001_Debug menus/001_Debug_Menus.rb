@@ -98,7 +98,7 @@ def pbDebugMenu(show_all = true)
       end
       Graphics.update
       Input.update
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         parent = commands.getParent
         if parent
           pbPlayCancelSE
@@ -110,7 +110,7 @@ def pbDebugMenu(show_all = true)
           ret = -1
           break
         end
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         ret = cmdwindow.index
         break
       end

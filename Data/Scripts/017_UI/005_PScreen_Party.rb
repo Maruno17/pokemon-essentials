@@ -489,12 +489,12 @@ class PokemonParty_Scene
       Input.update
       self.update
       if @sprites["messagebox"].busy?
-        if Input.trigger?(Input::C)
+        if Input.trigger?(Input::USE)
           pbPlayDecisionSE if @sprites["messagebox"].pausing?
           @sprites["messagebox"].resume
         end
       else
-        if Input.trigger?(Input::B) || Input.trigger?(Input::C)
+        if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
           break
         end
       end
@@ -520,10 +520,10 @@ class PokemonParty_Scene
         cmdwindow.update
         self.update
         if !@sprites["messagebox"].busy?
-          if Input.trigger?(Input::B)
+          if Input.trigger?(Input::BACK)
             ret = false
             break
-          elsif Input.trigger?(Input::C) && @sprites["messagebox"].resume
+          elsif Input.trigger?(Input::USE) && @sprites["messagebox"].resume
             ret = (cmdwindow.index==0)
             break
           end
@@ -551,11 +551,11 @@ class PokemonParty_Scene
         Input.update
         cmdwindow.update
         self.update
-        if Input.trigger?(Input::B)
+        if Input.trigger?(Input::BACK)
           pbPlayCancelSE
           ret = -1
           break
-        elsif Input.trigger?(Input::C)
+        elsif Input.trigger?(Input::USE)
           pbPlayDecisionSE
           ret = cmdwindow.index
           break
@@ -706,15 +706,15 @@ class PokemonParty_Scene
         end
       end
       cancelsprite = Settings::MAX_PARTY_SIZE + ((@multiselect) ? 1 : 0)
-      if Input.trigger?(Input::A) && canswitch==1 && @activecmd!=cancelsprite
+      if Input.trigger?(Input::SPECIAL) && canswitch==1 && @activecmd!=cancelsprite
         pbPlayDecisionSE
         return [1,@activecmd]
-      elsif Input.trigger?(Input::A) && canswitch==2
+      elsif Input.trigger?(Input::SPECIAL) && canswitch==2
         return -1
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE if !switching
         return -1
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         if @activecmd==cancelsprite
           (switching) ? pbPlayDecisionSE : pbPlayCloseMenuSE
           return -1

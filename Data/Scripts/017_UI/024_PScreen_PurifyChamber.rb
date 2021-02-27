@@ -1187,10 +1187,10 @@ class PurifyChamberScene
           nextset=(@sprites["setview"].set==PurifyChamber::NUMSETS-1) ? 0 : @sprites["setview"].set+1
           pbPlayCursorSE()
           return [1,nextset]
-        elsif Input.trigger?(Input::C)
+        elsif Input.trigger?(Input::USE)
           pbPlayDecisionSE()
           return [0,@sprites["setview"].cursor]
-        elsif Input.trigger?(Input::B)
+        elsif Input.trigger?(Input::BACK)
           pbPlayCancelSE()
           return [3,0]
         end
@@ -1207,11 +1207,11 @@ class PurifyChamberScene
           @sprites["setview"].set=oldindex
         end
         Graphics.update; Input.update; pbUpdate
-        if Input.trigger?(Input::C)
+        if Input.trigger?(Input::USE)
           pbPlayDecisionSE()
           return @sprites["setwindow"].index
         end
-        if Input.trigger?(Input::B)
+        if Input.trigger?(Input::BACK)
           pbPlayCancelSE()
           return -1
         end

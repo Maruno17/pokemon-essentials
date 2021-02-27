@@ -172,7 +172,7 @@ class PokemonTilesetScene
         update_cursor_position(0, -Graphics.height / TILE_SIZE)
       elsif Input.repeat?(Input::R)
         update_cursor_position(0, Graphics.height / TILE_SIZE)
-      elsif Input.trigger?(Input::A)
+      elsif Input.trigger?(Input::SPECIAL)
         commands = [
            _INTL("Go to bottom"),
            _INTL("Go to top"),
@@ -191,7 +191,7 @@ class PokemonTilesetScene
         when 2
           pbChooseTileset
         end
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         if pbConfirmMessage(_INTL("Save changes?"))
           @tilesetwrapper.save
           $data_tilesets = @tilesetwrapper.data
@@ -206,7 +206,7 @@ class PokemonTilesetScene
           pbMessage(_INTL("To ensure that the changes remain, close and reopen RPG Maker XP."))
         end
         break if pbConfirmMessage(_INTL("Exit from the editor?"))
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         selected = pbGetSelected(@x, @y)
         params = ChooseNumberParams.new
         params.setRange(0, 99)

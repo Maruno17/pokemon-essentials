@@ -176,18 +176,18 @@ class Scene_Map
     end
     return if $game_temp.message_window_showing
     if !pbMapInterpreterRunning?
-      if Input.trigger?(Input::C)
+      if Input.trigger?(Input::USE)
         $PokemonTemp.hiddenMoveEventCalling = true
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         unless $game_system.menu_disabled or $game_player.moving?
           $game_temp.menu_calling = true
           $game_temp.menu_beep = true
         end
-      elsif Input.trigger?(Input::F5)
+      elsif Input.trigger?(Input::Z)
         unless $game_player.moving?
           $PokemonTemp.keyItemCalling = true
         end
-      elsif Input.trigger?(Input::A)
+      elsif Input.trigger?(Input::SPECIAL)
         if $PokemonSystem.runstyle==1
           $PokemonGlobal.runtoggle = !$PokemonGlobal.runtoggle
         end

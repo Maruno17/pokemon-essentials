@@ -1,3 +1,9 @@
+module Input
+  USE     = C
+  BACK    = B
+  SPECIAL = A
+end
+
 module Mouse
   module_function
 

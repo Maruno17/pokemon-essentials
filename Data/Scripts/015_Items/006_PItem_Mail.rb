@@ -96,7 +96,7 @@ def pbDisplayMail(mail,_bearer=nil)
     Graphics.update
     Input.update
     pbUpdateSpriteHash(sprites)
-    if Input.trigger?(Input::B) || Input.trigger?(Input::C)
+    if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
       break
     end
   end

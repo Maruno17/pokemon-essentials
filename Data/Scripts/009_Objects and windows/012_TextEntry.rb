@@ -226,19 +226,19 @@ class Window_TextEntry < SpriteWindow_Base
     self.refresh if (@frame%10)==0
     return if !self.active
     # Moving cursor
-    if Input.repeat?(Input::LEFT) && Input.press?(Input::A)
+    if Input.repeat?(Input::LEFT) && Input.press?(Input::SPECIAL)
       if @helper.cursor > 0
         @helper.cursor -= 1
         @frame = 0
         self.refresh
       end
-    elsif Input.repeat?(Input::RIGHT) && Input.press?(Input::A)
+    elsif Input.repeat?(Input::RIGHT) && Input.press?(Input::SPECIAL)
       if @helper.cursor < self.text.scan(/./m).length
         @helper.cursor += 1
         @frame = 0
         self.refresh
       end
-    elsif Input.repeat?(Input::B)   # Backspace
+    elsif Input.repeat?(Input::BACK)   # Backspace
       self.delete if @helper.cursor > 0
     end
   end
@@ -837,7 +837,7 @@ class PokemonEntryScene
       @sprites["entry"].update
       @sprites["entry2"].update
       @sprites["subject"].update if @sprites["subject"]
-      if Input.trigger?(Input::C)
+      if Input.trigger?(Input::USE)
         index=@sprites["entry2"].command
         if index==-3 # Confirm text
           ret=@sprites["entry"].text
@@ -1311,16 +1311,16 @@ class PokemonEntryScene2
       Input.update
       pbUpdate
       next if pbMoveCursor
-      if Input.trigger?(Input::F5)
+      if Input.trigger?(Input::Z)
         pbChangeTab
-      elsif Input.trigger?(Input::A)
+      elsif Input.trigger?(Input::SPECIAL)
         @cursorpos = OK
         @sprites["cursor"].setCursorPos(@cursorpos)
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         @helper.delete
         pbPlayCancelSE()
         pbUpdateOverlay
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         case @cursorpos
         when BACK   # Backspace
           @helper.delete

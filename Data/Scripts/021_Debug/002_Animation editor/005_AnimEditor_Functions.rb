@@ -46,7 +46,7 @@ def pbSelectAnim(canvas,animwin)
     bmpwin.update
     ctlwin.update
     bmpwin.hue=ctlwin.value(0) if ctlwin.changed?(0)
-    if Input.trigger?(Input::C) && animfiles.length>0
+    if Input.trigger?(Input::USE) && animfiles.length>0
       bitmap=AnimatedBitmap.new("Graphics/Animations/"+cmdwin.commands[cmdwin.index],ctlwin.value(0)).deanimate
       canvas.animation.graphic=cmdwin.commands[cmdwin.index]
       canvas.animation.hue=ctlwin.value(0)
@@ -54,7 +54,7 @@ def pbSelectAnim(canvas,animwin)
       animwin.animbitmap=bitmap
       break
     end
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       break
     end
   end
@@ -79,7 +79,7 @@ def pbChangeMaximum(canvas)
       canvas.animation.resize(sliderwin2.value(0))
       break
     end
-    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::B)
+    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::BACK)
       break
     end
   end
@@ -149,7 +149,7 @@ def pbAnimList(animations,canvas,animwin)
       cmdwin.index=animations.selected
       next
     end
-    if Input.trigger?(Input::C) && animations.length>0
+    if Input.trigger?(Input::USE) && animations.length>0
       cmd2=pbShowCommands(helpwindow,[
          _INTL("Load Animation"),
          _INTL("Rename"),
@@ -171,7 +171,7 @@ def pbAnimList(animations,canvas,animwin)
         end
       end
     end
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       break
     end
   end
@@ -199,7 +199,7 @@ def pbChooseNum(cel)
       ret=sliderwin2.value(1)
       break
     end
-    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::B)
+    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::BACK)
       ret=-1
       break
     end
@@ -234,7 +234,7 @@ def pbSetTone(cel,previewsprite)
       cel[AnimFrame::TONEGRAY]=sliderwin2.value(3)
       break
     end
-    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::B)
+    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::BACK)
       break
     end
   end
@@ -268,7 +268,7 @@ def pbSetFlash(cel,previewsprite)
       cel[AnimFrame::COLORALPHA]=sliderwin2.value(3)
       break
     end
-    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::B)
+    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::BACK)
       break
     end
   end
@@ -366,7 +366,7 @@ def pbCellProperties(canvas)
       thiscel[0,thiscel.length]=cel
       break
     end
-    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::B)
+    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::BACK)
       break
     end
   end
@@ -435,7 +435,7 @@ def pbTimingList(canvas)
         next
       end
     end
-    if Input.trigger?(Input::C)
+    if Input.trigger?(Input::USE)
       redrawcmds=false
       if cmdwin.index==cmdNewSound # Add new sound
         newaudio=PBAnimTiming.new(0)
@@ -500,7 +500,7 @@ def pbTimingList(canvas)
         cmdwin.commands[cmdEditFO=cmdwin.commands.length]=_INTL("Add: Edit Foreground Color/Location...")
         cmdwin.refresh
       end
-    elsif Input.trigger?(Input::B)
+    elsif Input.trigger?(Input::BACK)
       break
     end
   end
@@ -562,11 +562,11 @@ def pbSelectSE(canvas,audio)
     if maxsizewindow.changed?(6) # Cancel
       break
     end
-    if Input.trigger?(Input::C) && animfiles.length>0
+    if Input.trigger?(Input::USE) && animfiles.length>0
       filename=(cmdwin.index==0) ? "" : cmdwin.commands[cmdwin.index]
       displayname=(filename!="") ? filename : _INTL("<user's cry>")
       maxsizewindow.controls[0].text=_INTL("File: \"{1}\"",displayname)
-    elsif Input.trigger?(Input::B)
+    elsif Input.trigger?(Input::BACK)
       break
     end
   end
@@ -625,10 +625,10 @@ def pbSelectBG(canvas,timing)
     if maxsizewindow.changed?(9) # Cancel
       break
     end
-    if Input.trigger?(Input::C) && animfiles.length>0
+    if Input.trigger?(Input::USE) && animfiles.length>0
       filename=(cmdwin.index==cmdErase) ? "" : cmdwin.commands[cmdwin.index]
       maxsizewindow.controls[0].text=_INTL("File: \"{1}\"",filename)
-    elsif Input.trigger?(Input::B)
+    elsif Input.trigger?(Input::BACK)
       break
     end
   end
@@ -688,7 +688,7 @@ def pbEditBG(canvas,timing)
     if maxsizewindow.changed?(9) # Cancel
       break
     end
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       break
     end
   end
@@ -735,7 +735,7 @@ def pbCopyFrames(canvas)
       end
       break
     end
-    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::B)
+    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::BACK)
       break
     end
   end
@@ -763,7 +763,7 @@ def pbClearFrames(canvas)
       end
       break
     end
-    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::B)
+    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::BACK)
       break
     end
   end
@@ -788,7 +788,7 @@ def pbTweening(canvas)
     Graphics.update
     Input.update
     sliderwin2.update
-    if sliderwin2.changed?(okbutton) || Input.trigger?(Input::C)
+    if sliderwin2.changed?(okbutton) || Input.trigger?(Input::USE)
       startframe=sliderwin2.value(s1set0)-1
       endframe=sliderwin2.value(s1set1)-1
       break if startframe>=endframe
@@ -841,7 +841,7 @@ def pbTweening(canvas)
       canvas.invalidate
       break
     end
-    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::B)
+    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::BACK)
       break
     end
   end
@@ -880,7 +880,7 @@ def pbCellBatch(canvas)
     Input.update
     sliderwin1.update
     sliderwin2.update
-    if sliderwin2.changed?(okbutton) || Input.trigger?(Input::C)
+    if sliderwin2.changed?(okbutton) || Input.trigger?(Input::USE)
       startframe=sliderwin1.value(s1set0)-1
       endframe=sliderwin1.value(s1set1)-1
       startcel=sliderwin1.value(s1set2)
@@ -905,7 +905,7 @@ def pbCellBatch(canvas)
       canvas.invalidate
       break
     end
-    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::B)
+    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::BACK)
       break
     end
   end
@@ -937,7 +937,7 @@ def pbEntireSlide(canvas)
       end
       break
     end
-    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::B)
+    if sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::BACK)
       break
     end
   end
@@ -960,7 +960,7 @@ def pbAnimEditorHelpWindow
     Graphics.update
     Input.update
     cmdwin.update
-    break if Input.trigger?(Input::B) || Input.trigger?(Input::C)
+    break if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
   end
   cmdwin.dispose
 end
@@ -1013,7 +1013,7 @@ def animationEditorMain(animation)
     if animwin.changed?
       canvas.pattern=animwin.selected
     end
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       if pbConfirmMessage(_INTL("Save changes?"))
         save_data(animation,"Data/PkmnAnimations.rxdata")
         $PokemonTemp.battleAnims = nil

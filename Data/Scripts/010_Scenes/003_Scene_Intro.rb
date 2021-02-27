@@ -111,7 +111,7 @@ class IntroEventScene < EventScene
       @pic2.moveOpacity(TICKS_PER_ENTER_FLASH*6/10,TICKS_PER_ENTER_FLASH*4/10,255)
     end
     if Input.press?(Input::DOWN) &&
-       Input.press?(Input::B) &&
+       Input.press?(Input::BACK) &&
        Input.press?(Input::CTRL)
       closeSplashDelete(scene,args)
     end

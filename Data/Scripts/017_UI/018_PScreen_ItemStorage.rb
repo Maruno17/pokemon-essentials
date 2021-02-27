@@ -158,9 +158,9 @@ class ItemStorage_Scene
         olditem = itemwindow.item
         self.update
         pbRefresh if itemwindow.item!=olditem
-        if Input.trigger?(Input::B)
+        if Input.trigger?(Input::BACK)
           return nil
-        elsif Input.trigger?(Input::C)
+        elsif Input.trigger?(Input::USE)
           if itemwindow.index<@bag.length
             pbRefresh
             return @bag[itemwindow.index][0]
@@ -210,7 +210,7 @@ module UIHelper
       Input.update
       (block_given?) ? yield : cw.update
       if !cw.busy?
-        if brief || (Input.trigger?(Input::C) && cw.resume)
+        if brief || (Input.trigger?(Input::USE) && cw.resume)
           break
         end
       end
@@ -230,7 +230,7 @@ module UIHelper
       Graphics.update
       Input.update
       (block_given?) ? yield : msgwindow.update
-      if Input.trigger?(Input::B) || Input.trigger?(Input::C)
+      if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
         break
       end
     end
@@ -261,10 +261,10 @@ module UIHelper
       cw.update
       (block_given?) ? yield : dw.update
       if !dw.busy? && dw.resume
-        if Input.trigger?(Input::B)
+        if Input.trigger?(Input::BACK)
           pbPlayCancelSE
           break
-        elsif Input.trigger?(Input::C)
+        elsif Input.trigger?(Input::USE)
           pbPlayDecisionSE
           ret = (cw.index==0)
           break
@@ -296,11 +296,11 @@ module UIHelper
         Input.update
         numwindow.update
         (block_given?) ? yield : helpwindow.update
-        if Input.trigger?(Input::B)
+        if Input.trigger?(Input::BACK)
           ret = 0
           pbPlayCancelSE
           break
-        elsif Input.trigger?(Input::C)
+        elsif Input.trigger?(Input::USE)
           ret = curnumber
           pbPlayDecisionSE
           break
@@ -349,12 +349,12 @@ module UIHelper
         Input.update
         yield
         cmdwindow.update
-        if Input.trigger?(Input::B)
+        if Input.trigger?(Input::BACK)
           ret = -1
           pbPlayCancelSE
           break
         end
-        if Input.trigger?(Input::C)
+        if Input.trigger?(Input::USE)
           ret = cmdwindow.index
           pbPlayDecisionSE
           break

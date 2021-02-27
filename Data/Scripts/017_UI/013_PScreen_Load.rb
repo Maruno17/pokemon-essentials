@@ -188,7 +188,7 @@ class PokemonLoad_Scene
       Graphics.update
       Input.update
       pbUpdate
-      if Input.trigger?(Input::C)
+      if Input.trigger?(Input::USE)
         return @sprites["cmdwindow"].index
       end
     end

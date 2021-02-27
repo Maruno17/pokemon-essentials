@@ -341,7 +341,7 @@ class PokemonMart_Scene
         return if brief
         pbRefresh if i == 0
       end
-      if Input.trigger?(Input::C) && cw.busy?
+      if Input.trigger?(Input::USE) && cw.busy?
         cw.resume
       end
       return if i >= Graphics.frame_rate * 3 / 2
@@ -367,7 +367,7 @@ class PokemonMart_Scene
         yielded = true
       end
       pbRefresh if !cw.busy? && wasbusy
-      if Input.trigger?(Input::C) && cw.resume && !cw.busy?
+      if Input.trigger?(Input::USE) && cw.resume && !cw.busy?
         @sprites["helpwindow"].visible = false
         return
       end
@@ -393,12 +393,12 @@ class PokemonMart_Scene
       Input.update
       cw.update
       self.update
-      if Input.trigger?(Input::B) && dw.resume && !dw.busy?
+      if Input.trigger?(Input::BACK) && dw.resume && !dw.busy?
         cw.dispose
         @sprites["helpwindow"].visible = false
         return false
       end
-      if Input.trigger?(Input::C) && dw.resume && !dw.busy?
+      if Input.trigger?(Input::USE) && dw.resume && !dw.busy?
         cw.dispose
         @sprites["helpwindow"].visible = false
         return (cw.index == 0)
@@ -461,11 +461,11 @@ class PokemonMart_Scene
             curnumber -= 1
             curnumber = maximum if curnumber < 1
             numwindow.text = _INTL("x{1}<r>$ {2}", curnumber, (curnumber * itemprice).to_s_formatted)
-          elsif Input.trigger?(Input::C)
+          elsif Input.trigger?(Input::USE)
             pbPlayDecisionSE
             ret = curnumber
             break
-          elsif Input.trigger?(Input::B)
+          elsif Input.trigger?(Input::BACK)
             pbPlayCancelSE
             ret = 0
             break
@@ -492,10 +492,10 @@ class PokemonMart_Scene
           @sprites["itemtextwindow"].text =
              (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
         end
-        if Input.trigger?(Input::B)
+        if Input.trigger?(Input::BACK)
           pbPlayCloseMenuSE
           return nil
-        elsif Input.trigger?(Input::C)
+        elsif Input.trigger?(Input::USE)
           if itemwindow.index < @stock.length
             pbRefresh
             return @stock[itemwindow.index]

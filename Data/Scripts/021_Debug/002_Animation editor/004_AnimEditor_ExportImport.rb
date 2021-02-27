@@ -54,7 +54,7 @@ def pbImportAnim(animations,canvas,animwin)
     Graphics.update
     Input.update
     cmdwin.update
-    if Input.trigger?(Input::C) && animfiles.length>0
+    if Input.trigger?(Input::USE) && animfiles.length>0
       begin
         textdata=loadBase64Anim(IO.read(animfiles[cmdwin.index]))
         throw "Bad data" if !textdata.is_a?(PBAnimation)
@@ -74,7 +74,7 @@ def pbImportAnim(animations,canvas,animwin)
       animwin.animbitmap=canvas.animbitmap
       break
     end
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       break
     end
   end

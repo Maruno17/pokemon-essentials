@@ -315,7 +315,7 @@ class PokemonRegionMap_Scene
         newX = @sprites["cursor"].x+xOffset
         newY = @sprites["cursor"].y+yOffset
       end
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         if @editor && @changed
           if pbConfirmMessage(_INTL("Save changes?")) { pbUpdate }
             pbSaveMapData
@@ -326,14 +326,14 @@ class PokemonRegionMap_Scene
         else
           break
         end
-      elsif Input.trigger?(Input::C) && mode==1   # Choosing an area to fly to
+      elsif Input.trigger?(Input::USE) && mode==1   # Choosing an area to fly to
         healspot = pbGetHealingSpot(@mapX,@mapY)
         if healspot
           if $PokemonGlobal.visitedMaps[healspot[0]] || ($DEBUG && Input.press?(Input::CTRL))
             return healspot
           end
         end
-      elsif Input.trigger?(Input::C) && @editor   # Intentionally after other C input check
+      elsif Input.trigger?(Input::USE) && @editor   # Intentionally after other C input check
         pbChangeMapLocation(@mapX,@mapY)
       end
     end

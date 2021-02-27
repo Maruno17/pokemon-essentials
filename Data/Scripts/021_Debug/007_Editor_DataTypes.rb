@@ -646,7 +646,7 @@ def chooseMapPoint(map,rgnmap=false)
       ret=xy
       break
     end
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       ret=nil
       break
     end
@@ -1485,7 +1485,7 @@ def pbPropertyList(title,data,properties,saveprompt=false)
         desc.text = properties[list.index][2]
         selectedmap = list.index
       end
-      if Input.trigger?(Input::A)
+      if Input.trigger?(Input::SPECIAL)
         propobj = properties[selectedmap][1]
         if propobj!=ReadOnlyProperty && !propobj.is_a?(ReadOnlyProperty) &&
            pbConfirmMessage(_INTL("Reset the setting {1}?",properties[selectedmap][0]))
@@ -1501,10 +1501,10 @@ def pbPropertyList(title,data,properties,saveprompt=false)
           commands.push(sprintf("%s=%s",properties[i][0],propobj.format(data[i])))
         end
         list.commands = commands
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         selectedmap = -1
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         propobj = properties[selectedmap][1]
         oldsetting = data[selectedmap]
         newsetting = propobj.set(properties[selectedmap][0],oldsetting)

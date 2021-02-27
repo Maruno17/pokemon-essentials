@@ -647,7 +647,7 @@ class PokemonStorageScene
     loop do
       Graphics.update
       Input.update
-      if Input.trigger?(Input::B) || Input.trigger?(Input::C)
+      if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
         break
       end
       msgwindow.update
@@ -679,10 +679,10 @@ class PokemonStorageScene
       Input.update
       msgwindow.update
       cmdwindow.update
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         ret = -1
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         ret = cmdwindow.index
         break
       end
@@ -858,7 +858,7 @@ class PokemonStorageScene
         @storage.currentBox = nextbox
         pbUpdateOverlay(selection)
         pbSetMosaic(selection)
-      elsif Input.trigger?(Input::F5)   # Jump to box name
+      elsif Input.trigger?(Input::Z)   # Jump to box name
         if selection!=-1
           pbPlayCursorSE
           selection = -1
@@ -866,13 +866,13 @@ class PokemonStorageScene
           pbUpdateOverlay(selection)
           pbSetMosaic(selection)
         end
-      elsif Input.trigger?(Input::A) && @command==0   # Organize only
+      elsif Input.trigger?(Input::SPECIAL) && @command==0   # Organize only
         pbPlayDecisionSE
         pbSetQuickSwap(!@quickswap)
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         @selection = selection
         return nil
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         @selection = selection
         if selection>=0
           return [@storage.currentBox,selection]
@@ -945,13 +945,13 @@ class PokemonStorageScene
         pbSetMosaic(selection)
       end
       self.update
-      if Input.trigger?(Input::A) && @command == 0   # Organize only
+      if Input.trigger?(Input::SPECIAL) && @command == 0   # Organize only
         pbPlayDecisionSE
         pbSetQuickSwap(!@quickswap)
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         @selection = selection
         return -1
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         if selection >= 0 && selection < Settings::MAX_PARTY_SIZE
           @selection = selection
           return selection
@@ -1337,10 +1337,10 @@ class PokemonStorageScene
         pbMarkingSetArrow(@sprites["arrow"],index)
       end
       self.update
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         pbPlayCancelSE
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
         if index==6   # OK
           pokemon.markings = markings

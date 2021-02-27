@@ -44,7 +44,7 @@ class PokeBattle_Scene
 
   def pbInputUpdate
     Input.update
-    if Input.trigger?(Input::B) && @abortable && !@aborted
+    if Input.trigger?(Input::BACK) && @abortable && !@aborted
       @aborted = true
       @battle.pbAbort
     end
@@ -140,7 +140,7 @@ class PokeBattle_Scene
         end
         i += 1
       end
-      if Input.trigger?(Input::B) || Input.trigger?(Input::C) || @abortable
+      if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE) || @abortable
         if cw.busy?
           pbPlayDecisionSE if cw.pausing? && !@abortable
           cw.skipAhead
@@ -182,7 +182,7 @@ class PokeBattle_Scene
           i += 1
         end
       end
-      if Input.trigger?(Input::B) || Input.trigger?(Input::C) || @abortable
+      if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE) || @abortable
         if cw.busy?
           pbPlayDecisionSE if cw.pausing? && !@abortable
           cw.skipAhead
@@ -215,7 +215,7 @@ class PokeBattle_Scene
       cw.visible = (!dw.busy?)
       pbUpdate(cw)
       dw.update
-      if Input.trigger?(Input::B) && defaultValue>=0
+      if Input.trigger?(Input::BACK) && defaultValue>=0
         if dw.busy?
           pbPlayDecisionSE if dw.pausing?
           dw.resume
@@ -224,7 +224,7 @@ class PokeBattle_Scene
           dw.text = ""
           return defaultValue
         end
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         if dw.busy?
           pbPlayDecisionSE if dw.pausing?
           dw.resume

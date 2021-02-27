@@ -131,10 +131,10 @@ class PokemonPhoneScene
             end
           end
         end
-        if Input.trigger?(Input::B)
+        if Input.trigger?(Input::BACK)
           pbPlayCloseMenuSE
           break
-        elsif Input.trigger?(Input::C)
+        elsif Input.trigger?(Input::USE)
           index = @sprites["list"].index
           if index>=0
             pbCallTrainer(@trainers[index][0],@trainers[index][1])

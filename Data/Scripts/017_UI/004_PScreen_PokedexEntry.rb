@@ -436,10 +436,10 @@ class PokemonPokedexInfo_Scene
       elsif Input.trigger?(Input::DOWN)
         pbPlayCursorSE
         index = (index+1)%@available.length
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         pbPlayCancelSE
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
         break
       end
@@ -455,13 +455,13 @@ class PokemonPokedexInfo_Scene
       Input.update
       pbUpdate
       dorefresh = false
-      if Input.trigger?(Input::A)
+      if Input.trigger?(Input::SPECIAL)
         pbSEStop
         GameData::Species.play_cry_from_species(@species, @form) if @page == 1
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         if @page==2   # Area
 #          dorefresh = true
         elsif @page==3   # Forms
@@ -523,13 +523,13 @@ class PokemonPokedexInfo_Scene
       Graphics.update
       Input.update
       pbUpdate
-      if Input.trigger?(Input::A)
+      if Input.trigger?(Input::SPECIAL)
         pbSEStop
         GameData::Species.play_cry_from_species(@species, @form)
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
         break
       end

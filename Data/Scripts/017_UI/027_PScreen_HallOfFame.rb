@@ -346,8 +346,8 @@ class HallOfFame_Scene
       Input.update
       pbUpdate
       continueScene=true
-      break if Input.trigger?(Input::B)   # Exits
-      if Input.trigger?(Input::C)   # Moves the selection one entry backward
+      break if Input.trigger?(Input::BACK)   # Exits
+      if Input.trigger?(Input::USE)   # Moves the selection one entry backward
         @battlerIndex+=10
         continueScene=pbUpdatePC
       end

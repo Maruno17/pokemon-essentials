@@ -275,7 +275,7 @@ def pbChooseNumber(msgwindow,params)
     cmdwindow.update
     msgwindow.update if msgwindow
     yield if block_given?
-    if Input.trigger?(Input::C)
+    if Input.trigger?(Input::USE)
       ret=cmdwindow.number
       if ret>maximum
         pbPlayBuzzerSE()
@@ -285,7 +285,7 @@ def pbChooseNumber(msgwindow,params)
         pbPlayDecisionSE()
         break
       end
-    elsif Input.trigger?(Input::B)
+    elsif Input.trigger?(Input::BACK)
       pbPlayCancelSE()
       ret=cancelNumber
       break
@@ -736,7 +736,7 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
       msgwindow.resume if msgwindow.busy?
       break if !msgwindow.busy?
     end
-    if Input.trigger?(Input::C) || Input.trigger?(Input::B)
+    if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
       if msgwindow.busy?
         pbPlayDecisionSE if msgwindow.pausing?
         msgwindow.resume
@@ -834,7 +834,7 @@ def pbShowCommands(msgwindow,commands=nil,cmdIfCancel=0,defaultCmd=0)
     cmdwindow.update
     msgwindow.update if msgwindow
     yield if block_given?
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       if cmdIfCancel>0
         command=cmdIfCancel-1
         break
@@ -843,7 +843,7 @@ def pbShowCommands(msgwindow,commands=nil,cmdIfCancel=0,defaultCmd=0)
         break
       end
     end
-    if Input.trigger?(Input::C)
+    if Input.trigger?(Input::USE)
       command=cmdwindow.index
       break
     end
@@ -880,7 +880,7 @@ def pbShowCommandsWithHelp(msgwindow,commands,help,cmdIfCancel=0,defaultCmd=0)
       end
       msgwin.update
       yield if block_given?
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         if cmdIfCancel>0
           command=cmdIfCancel-1
           break
@@ -889,7 +889,7 @@ def pbShowCommandsWithHelp(msgwindow,commands,help,cmdIfCancel=0,defaultCmd=0)
           break
         end
       end
-      if Input.trigger?(Input::C)
+      if Input.trigger?(Input::USE)
         command=cmdwindow.index
         break
       end
@@ -914,7 +914,7 @@ def pbMessageWaitForInput(msgwindow,frames,showPause=false)
     Input.update
     msgwindow.update if msgwindow
     pbUpdateSceneMap
-    if Input.trigger?(Input::C) || Input.trigger?(Input::B)
+    if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
       break
     end
     yield if block_given?

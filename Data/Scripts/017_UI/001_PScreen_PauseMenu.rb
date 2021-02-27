@@ -59,11 +59,11 @@ class PokemonPauseMenu_Scene
       Graphics.update
       Input.update
       pbUpdateSceneMap
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         ret = -1
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
         ret = cmdwindow.index
         $PokemonTemp.menuLastChoice = ret

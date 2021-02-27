@@ -126,9 +126,9 @@ class MoveRelearner_Scene
           @sprites["background"].y=78+(@sprites["commands"].index-@sprites["commands"].top_item)*64
           pbDrawMoveList
         end
-        if Input.trigger?(Input::B)
+        if Input.trigger?(Input::BACK)
           return 0
-        elsif Input.trigger?(Input::C)
+        elsif Input.trigger?(Input::USE)
           return @moves[@sprites["commands"].index]
         end
       end

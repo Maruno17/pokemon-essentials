@@ -41,10 +41,10 @@ def pbListScreen(title,lister)
       lister.refresh(list.index)
       selectedmap = list.index
     end
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       selectedmap = -1
       break
-    elsif Input.trigger?(Input::C)
+    elsif Input.trigger?(Input::USE)
       break
     end
   end
@@ -88,17 +88,17 @@ def pbListScreenBlock(title,lister)
       lister.refresh(list.index)
       selectedmap = list.index
     end
-    if Input.trigger?(Input::A)
-      yield(Input::A, lister.value(selectedmap))
+    if Input.trigger?(Input::SPECIAL)
+      yield(Input::SPECIAL, lister.value(selectedmap))
       list.commands = lister.commands
       if list.index==list.commands.length
         list.index = list.commands.length
       end
       lister.refresh(list.index)
-    elsif Input.trigger?(Input::B)
+    elsif Input.trigger?(Input::BACK)
       break
-    elsif Input.trigger?(Input::C)
-      yield(Input::C, lister.value(selectedmap))
+    elsif Input.trigger?(Input::USE)
+      yield(Input::USE, lister.value(selectedmap))
       list.commands = lister.commands
       if list.index==list.commands.length
         list.index = list.commands.length

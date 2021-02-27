@@ -356,12 +356,12 @@ class PokemonBag_Scene
           pbRefresh
         end
         if itemwindow.sorting
-          if Input.trigger?(Input::A) ||
-             Input.trigger?(Input::C)
+          if Input.trigger?(Input::SPECIAL) ||
+             Input.trigger?(Input::USE)
             itemwindow.sorting = false
             pbPlayDecisionSE
             pbRefresh
-          elsif Input.trigger?(Input::B)
+          elsif Input.trigger?(Input::BACK)
             thispocket.insert(swapinitialpos,thispocket.delete_at(itemwindow.index))
             itemwindow.index = swapinitialpos
             itemwindow.sorting = false
@@ -406,7 +406,7 @@ class PokemonBag_Scene
               pbPlayCursorSE
               pbRefresh
             end
-#          elsif Input.trigger?(Input::F5)   # Register/unregister selected item
+#          elsif Input.trigger?(Input::Z)   # Register/unregister selected item
 #            if !@choosing && itemwindow.index<thispocket.length
 #              if @bag.pbIsRegistered?(itemwindow.item)
 #                @bag.pbUnregisterItem(itemwindow.item)
@@ -416,7 +416,7 @@ class PokemonBag_Scene
 #              pbPlayDecisionSE
 #              pbRefresh
 #            end
-          elsif Input.trigger?(Input::A)   # Start switching the selected item
+          elsif Input.trigger?(Input::SPECIAL)   # Start switching the selected item
             if !@choosing
               if thispocket.length>1 && itemwindow.index<thispocket.length &&
                  !Settings::BAG_POCKET_AUTO_SORT[itemwindow.pocket]
@@ -426,10 +426,10 @@ class PokemonBag_Scene
                 pbRefresh
               end
             end
-          elsif Input.trigger?(Input::B)   # Cancel the item screen
+          elsif Input.trigger?(Input::BACK)   # Cancel the item screen
             pbPlayCloseMenuSE
             return nil
-          elsif Input.trigger?(Input::C)   # Choose selected item
+          elsif Input.trigger?(Input::USE)   # Choose selected item
             (itemwindow.item) ? pbPlayDecisionSE : pbPlayCloseMenuSE
             return itemwindow.item
           end

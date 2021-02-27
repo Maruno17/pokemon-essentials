@@ -255,7 +255,7 @@ class VoltorbFlip
         @index[0]=0
         @sprites["cursor"].x=0
       end
-    elsif Input.trigger?(Input::C)
+    elsif Input.trigger?(Input::USE)
       if @cursor[0][3]==64   # If in mark mode
         for i in 0...@squares.length
           if @index[0]*64+128==@squares[i][0] && @index[1]*64==@squares[i][1] && @squares[i][3]==false
@@ -404,7 +404,7 @@ class VoltorbFlip
         @cursor[0]=[@directory+"cursor",128,0,0,0,64,64]
         @sprites["memo"].visible=false
       end
-    elsif Input.trigger?(Input::B)
+    elsif Input.trigger?(Input::BACK)
       @sprites["curtain"].opacity=100
       if @points==0
         if pbConfirmMessage("You haven't found any Coins! Are you sure you want to quit?")
@@ -518,7 +518,7 @@ class VoltorbFlip
       Graphics.update
       Input.update
       update
-      if Input.trigger?(Input::C) || Input.trigger?(Input::B)
+      if Input.trigger?(Input::USE) || Input.trigger?(Input::BACK)
         break
       end
     end

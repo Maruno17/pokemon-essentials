@@ -145,12 +145,12 @@ def pbTrackPopupMenu(commands)
       menuwindow.dispose
       return hit
     end
-    if Input.trigger?(Input::C)
+    if Input.trigger?(Input::USE)
       hit=menuwindow.index
       menuwindow.dispose
       return hit
     end
-    if Input.trigger?(Input::B) # Escape
+    if Input.trigger?(Input::BACK) # Escape
       break
     end
   end

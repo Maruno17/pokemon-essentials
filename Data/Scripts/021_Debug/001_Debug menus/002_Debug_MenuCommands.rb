@@ -448,7 +448,7 @@ DebugMenuCommands.register("additem", {
   "description" => _INTL("Choose an item and a quantity of it to add to the Bag."),
   "effect"      => proc {
     pbListScreenBlock(_INTL("ADD ITEM"), ItemLister.new) { |button, item|
-      if button == Input::C && item
+      if button == Input::USE && item
         params = ChooseNumberParams.new
         params.setRange(1, Settings::BAG_MAX_PER_SLOT)
         params.setInitialValue(1)

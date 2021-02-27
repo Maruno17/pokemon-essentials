@@ -289,7 +289,7 @@ def pbDefinePath(canvas)
       loop do
         Graphics.update
         Input.update
-        if Input.trigger?(Input::B)
+        if Input.trigger?(Input::BACK)
           break
         end
         if Input.trigger?(Input::MOUSELEFT)
@@ -426,7 +426,7 @@ def pbDefinePath(canvas)
         cel[AnimFrame::Y]=path[i-canvas.currentframe][1]
       end
       break
-    elsif sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::B)
+    elsif sliderwin2.changed?(cancelbutton) || Input.trigger?(Input::BACK)
       break
     end
   end

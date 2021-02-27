@@ -194,6 +194,14 @@
     // "allowSymlinks": false,
 
 
+    // Names of the input buttons in the F1 key bindings
+	// window. This only affects the names displayed
+	// there, and won't enable those names as Input
+	// constants in the scripts.
+    "bindingNames": {"c": "Use",
+	                 "b": "Back",
+	                 "a": "Special"},
+	
     // Organisation / company and application / game
     // name to build the directory path where mkxp
     // will store game specific data (eg. key bindings).

@@ -170,11 +170,11 @@ class PokemonReadyMenu_Scene
       elsif Input.trigger?(Input::RIGHT) && @index[2]==0 && @itemcommands.length>0
         @index[2] = 1
         pbChangeSide
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         ret = -1
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         ret = [@index[2],cmdwindow.index]
         break
       end

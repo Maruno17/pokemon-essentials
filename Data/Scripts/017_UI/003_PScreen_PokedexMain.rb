@@ -951,14 +951,14 @@ class PokemonPokedex_Scene
           pbPlayCursorSE if index!=oldindex
         end
       end
-      if Input.trigger?(Input::A)
+      if Input.trigger?(Input::SPECIAL)
         index = -2
         pbPlayCursorSE if index!=oldindex
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         ret = nil
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         if index==-2      # OK
           pbPlayDecisionSE
           ret = selindex
@@ -1066,13 +1066,13 @@ class PokemonPokedex_Scene
         elsif index==7 || index==8; index += 1
         end
         pbPlayCursorSE if index!=oldindex
-      elsif Input.trigger?(Input::A)
+      elsif Input.trigger?(Input::SPECIAL)
         index = 8
         pbPlayCursorSE if index!=oldindex
-      elsif Input.trigger?(Input::B)
+      elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE if index!=9
         case index
         when 0   # Choose sort order
@@ -1159,12 +1159,12 @@ class PokemonPokedex_Scene
           $PokemonGlobal.pokedexIndex[pbGetSavePositionIndex] = @sprites["pokedex"].index if !@searchResults
           pbRefresh
         end
-        if Input.trigger?(Input::A)
+        if Input.trigger?(Input::SPECIAL)
           pbPlayDecisionSE
           @sprites["pokedex"].active = false
           pbDexSearch
           @sprites["pokedex"].active = true
-        elsif Input.trigger?(Input::B)
+        elsif Input.trigger?(Input::BACK)
           if @searchResults
             pbPlayCancelSE
             pbCloseSearch
@@ -1172,7 +1172,7 @@ class PokemonPokedex_Scene
             pbPlayCloseMenuSE
             break
           end
-        elsif Input.trigger?(Input::C)
+        elsif Input.trigger?(Input::USE)
           if $Trainer.seen?(@sprites["pokedex"].species)
             pbPlayDecisionSE
             pbDexEntry(@sprites["pokedex"].index)

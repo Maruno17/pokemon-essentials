@@ -561,15 +561,15 @@ class MiningGameScene
           pbSEPlay("Mining cursor")
           @sprites["cursor"].position+=1
         end
-      elsif Input.trigger?(Input::A)   # Change tool mode
+      elsif Input.trigger?(Input::SPECIAL)   # Change tool mode
         pbSEPlay("Mining tool change")
         newmode=(@sprites["cursor"].mode+1)%2
         @sprites["cursor"].mode=newmode
         @sprites["tool"].src_rect.set(newmode*68,0,68,100)
         @sprites["tool"].y=254-144*newmode
-      elsif Input.trigger?(Input::C)   # Hit
+      elsif Input.trigger?(Input::USE)   # Hit
         pbHit
-      elsif Input.trigger?(Input::B)   # Quit
+      elsif Input.trigger?(Input::BACK)   # Quit
         break if pbConfirmMessage(_INTL("Are you sure you want to give up?"))
       end
     end

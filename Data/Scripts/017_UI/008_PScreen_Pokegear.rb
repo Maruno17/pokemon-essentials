@@ -88,10 +88,10 @@ class PokemonPokegear_Scene
       Graphics.update
       Input.update
       pbUpdate
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
         ret = @index
         break

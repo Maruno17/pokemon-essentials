@@ -63,10 +63,10 @@ class PokemonPokedexMenu_Scene
       Graphics.update
       Input.update
       pbUpdate
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         ret = @sprites["commands"].index
         (ret==@commands.length-1) ? pbPlayCloseMenuSE : pbPlayDecisionSE
         break

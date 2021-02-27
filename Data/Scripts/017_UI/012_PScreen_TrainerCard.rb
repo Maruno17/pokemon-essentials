@@ -81,7 +81,7 @@ class PokemonTrainerCard_Scene
       Graphics.update
       Input.update
       pbUpdate
-      if Input.trigger?(Input::B)
+      if Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
       end

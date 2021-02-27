@@ -155,13 +155,13 @@ def pbDebugVariables(mode)
     Graphics.update
     Input.update
     pbUpdateSpriteHash(sprites)
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       pbPlayCancelSE
       break
     end
     current_id = right_window.index+1
     if mode==0 # Switches
-      if Input.trigger?(Input::C)
+      if Input.trigger?(Input::USE)
         pbPlayDecisionSE
         $game_switches[current_id] = !$game_switches[current_id]
         right_window.refresh
@@ -174,7 +174,7 @@ def pbDebugVariables(mode)
       elsif Input.repeat?(Input::RIGHT)
         pbDebugSetVariable(current_id,1)
         right_window.refresh
-      elsif Input.trigger?(Input::A)
+      elsif Input.trigger?(Input::SPECIAL)
         if $game_variables[current_id]==0
           $game_variables[current_id] = ""
         elsif $game_variables[current_id]==""
@@ -186,7 +186,7 @@ def pbDebugVariables(mode)
         end
         right_window.refresh
         $game_map.need_refresh = true
-      elsif Input.trigger?(Input::C)
+      elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
         pbDebugVariableScreen(current_id)
         right_window.refresh
@@ -284,9 +284,9 @@ def pbDebugDayCare
     pbUpdateSpriteHash(sprites)
     Graphics.update
     Input.update
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       break
-    elsif Input.trigger?(Input::C)
+    elsif Input.trigger?(Input::USE)
       case cmdwindow.index
       when 0   # Withdraw Pokémon 1
         if !$PokemonGlobal.daycare[0][0]
@@ -451,7 +451,7 @@ def pbDebugRoamers
     Graphics.update
     Input.update
     pbUpdateSpriteHash(sprites)
-    if Input.trigger?(Input::A) && cmdwindow.index<cmdwindow.roamerCount &&
+    if Input.trigger?(Input::SPECIAL) && cmdwindow.index<cmdwindow.roamerCount &&
        (pkmn[2]<=0 || $game_switches[pkmn[2]]) &&
        $PokemonGlobal.roamPokemon[cmdwindow.index]!=true
       # Roam selected Pokémon
@@ -473,10 +473,10 @@ def pbDebugRoamers
         $PokemonGlobal.roamedAlready = false
         cmdwindow.refresh
       end
-    elsif Input.trigger?(Input::B)
+    elsif Input.trigger?(Input::BACK)
       pbPlayCancelSE
       break
-    elsif Input.trigger?(Input::C)
+    elsif Input.trigger?(Input::USE)
       if cmdwindow.index<cmdwindow.roamerCount
         pbPlayDecisionSE
         # Toggle through roaming, not roaming, defeated
@@ -871,12 +871,12 @@ class PokemonDebugPartyScreen
       Input.update
       pbUpdate
       if @messageBox.busy?
-        if Input.trigger?(Input::C)
+        if Input.trigger?(Input::USE)
           pbPlayDecisionSE if @messageBox.pausing?
           @messageBox.resume
         end
       else
-        if Input.trigger?(Input::B) || Input.trigger?(Input::C)
+        if Input.trigger?(Input::BACK) || Input.trigger?(Input::USE)
           break
         end
       end
@@ -902,10 +902,10 @@ class PokemonDebugPartyScreen
         cmdwindow.update
         pbUpdate
         if !@messageBox.busy?
-          if Input.trigger?(Input::B)
+          if Input.trigger?(Input::BACK)
             ret = false
             break
-          elsif Input.trigger?(Input::C) && @messageBox.resume
+          elsif Input.trigger?(Input::USE) && @messageBox.resume
             ret = (cmdwindow.index==0)
             break
           end
@@ -932,11 +932,11 @@ class PokemonDebugPartyScreen
         Input.update
         cmdwindow.update
         pbUpdate
-        if Input.trigger?(Input::B)
+        if Input.trigger?(Input::BACK)
           pbPlayCancelSE
           ret = -1
           break
-        elsif Input.trigger?(Input::C)
+        elsif Input.trigger?(Input::USE)
           pbPlayDecisionSE
           ret = cmdwindow.index
           break

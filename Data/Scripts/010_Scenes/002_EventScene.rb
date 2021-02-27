@@ -167,9 +167,9 @@ class EventScene
       sprite.update
     end
     @onUpdate.trigger(self)
-    if Input.trigger?(Input::B)
+    if Input.trigger?(Input::BACK)
       @onBTrigger.trigger(self)
-    elsif Input.trigger?(Input::C)
+    elsif Input.trigger?(Input::USE)
       @onCTrigger.trigger(self)
     end
   end
