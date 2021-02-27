@@ -84,6 +84,8 @@ module SaveData
     def essentials_version(version)
       validate version => [Numeric, String]
 
+      raise "Multiple conditions in conversion #{@id}" unless @version.nil?
+
       @trigger_type = :essentials
       @version = version.to_s
     end
@@ -94,6 +96,8 @@ module SaveData
     # @see SaveData.register_conversion
     def game_version(version)
       validate version => [Numeric, String]
+
+      raise "Multiple conditions in conversion #{@id}" unless @version.nil?
 
       @trigger_type = :game
       @version = version.to_s
