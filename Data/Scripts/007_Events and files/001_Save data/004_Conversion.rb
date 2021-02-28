@@ -178,12 +178,12 @@ module SaveData
 
     File.open(SaveData::FILE_PATH + '.bak', 'wb') { |f| Marshal.dump(save_data, f) }
 
-    echoln _INTL("Running {1} conversions...", conversions_to_run.length)
+    echoln "Running #{conversions_to_run.length} conversions..."
 
     conversions_to_run.each do |conversion|
-      echo _INTL("{1}...", conversion.title)
+      echo "#{conversion.title}..."
       conversion.run(save_data)
-      echoln _INTL(' done.')
+      echoln ' done.'
     end
 
     return true
