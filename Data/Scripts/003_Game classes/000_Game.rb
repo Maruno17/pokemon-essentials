@@ -11,62 +11,46 @@ module Game
     $data_system        = load_data('Data/System.rxdata')
     pbLoadBattleAnimations
     GameData.load_all
-
     map_file = format('Data/Map%03d.rxdata', $data_system.start_map_id)
-
     if $data_system.start_map_id == 0 || !pbRgssExists?(map_file)
       raise _INTL('No starting position was set in the map editor.')
     end
   end
 
-  # Loads values from the save file and runs any necessary
-  # conversions on it.
+  # Loads bootup data from save file (if it exists) or creates bootup data (if
+  # it doesn't).
   def self.set_up_system
     SaveData.move_old_windows_save if System.platform[/Windows/]
-
-    if SaveData.exists?
-      save_data = SaveData.read_from_file(SaveData::FILE_PATH)
-    else
-      save_data = {}
-    end
-
-    if !save_data.empty? && SaveData.run_conversions(save_data)
-      File.open(SaveData::FILE_PATH, 'wb') { |f| Marshal.dump(save_data, f) }
-    end
-
+    save_data = (SaveData.exists?) ? SaveData.read_from_file(SaveData::FILE_PATH) : {}
     if save_data.empty?
       SaveData.initialize_bootup_values
     else
       SaveData.load_bootup_values(save_data)
     end
-
+    # Set resize factor
     pbSetResizeFactor([$PokemonSystem.screensize, 4].min)
+    # Set language (and choose language if there is no save file)
     if Settings::LANGUAGES.length >= 2
       $PokemonSystem.language = pbChooseLanguage if save_data.empty?
       pbLoadMessages('Data/' + Settings::LANGUAGES[$PokemonSystem.language][1])
     end
   end
 
-  # Saves the game. Returns whether the operation was successful.
-  # @param save_file [String] the save file path
-  # @param safe [Boolean] whether $PokemonGlobal.safesave should be set to true
-  # @return [Boolean] whether the operation was successful
-  # @raise [SaveData::InvalidValueError] if an invalid value is being saved
-  def self.save(save_file = SaveData::FILE_PATH, safe: false)
-    validate save_file => String, safe => [TrueClass, FalseClass]
-
-    $PokemonGlobal.safesave = safe
-    $game_system.save_count += 1
-    $game_system.magic_number = $data_system.magic_number
-    begin
-      SaveData.save_to_file(save_file)
-      Graphics.frame_reset
-    rescue IOError, SystemCallError
-      $game_system.save_count -= 1
-      return false
+  # Called when starting a new game. Initializes global variables
+  # and transfers the player into the map scene.
+  def self.start_new
+    if $game_map && $game_map.events
+      $game_map.events.each_value { |event| event.clear_starting }
     end
-
-    return true
+    $game_temp.common_event_id = 0 if $game_temp
+    $PokemonTemp.begunNewGame = true
+    $scene = Scene_Map.new
+    SaveData.load_new_game_values
+    $MapFactory = PokemonMapFactory.new($data_system.start_map_id)
+    $game_player.moveto($data_system.start_x, $data_system.start_y)
+    $game_player.refresh
+    $game_map.autoplay
+    $game_map.update
   end
 
   # Loads the game from the given save data and starts the map scene.
@@ -74,11 +58,8 @@ module Game
   # @raise [SaveData::InvalidValueError] if an invalid value is being loaded
   def self.load(save_data)
     validate save_data => Hash
-
     SaveData.load_all_values(save_data)
-
     self.load_map
-
     pbAutoplayOnSave
     $game_map.update
     $PokemonMap.updateMap
@@ -117,20 +98,23 @@ module Game
     $PokemonEncounters.setup($game_map.map_id)
   end
 
-  # Called when starting a new game. Initializes global variables
-  # and transfers the player into the map scene.
-  def self.start_new
-    if $game_map && $game_map.events
-      $game_map.events.each_value { |event| event.clear_starting }
+  # Saves the game. Returns whether the operation was successful.
+  # @param save_file [String] the save file path
+  # @param safe [Boolean] whether $PokemonGlobal.safesave should be set to true
+  # @return [Boolean] whether the operation was successful
+  # @raise [SaveData::InvalidValueError] if an invalid value is being saved
+  def self.save(save_file = SaveData::FILE_PATH, safe: false)
+    validate save_file => String, safe => [TrueClass, FalseClass]
+    $PokemonGlobal.safesave = safe
+    $game_system.save_count += 1
+    $game_system.magic_number = $data_system.magic_number
+    begin
+      SaveData.save_to_file(save_file)
+      Graphics.frame_reset
+    rescue IOError, SystemCallError
+      $game_system.save_count -= 1
+      return false
     end
-    $game_temp.common_event_id = 0 if $game_temp
-    $PokemonTemp.begunNewGame = true
-    $scene = Scene_Map.new
-    SaveData.load_new_game_values
-    $MapFactory = PokemonMapFactory.new($data_system.start_map_id)
-    $game_player.moveto($data_system.start_x, $data_system.start_y)
-    $game_player.refresh
-    $game_map.autoplay
-    $game_map.update
+    return true
   end
 end

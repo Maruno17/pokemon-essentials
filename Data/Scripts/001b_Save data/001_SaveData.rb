@@ -11,42 +11,9 @@ module SaveData
                 './Game.rxdata'
               end
 
-  # Compiles the save data and saves a marshaled version of it into
-  # the given file.
-  # @param file_path [String] path of the file to save into
-  # @raise [InvalidValueError] if an invalid value is being saved
-  def self.save_to_file(file_path)
-    validate file_path => String
-
-    save_data = self.compile
-
-    File.open(file_path, 'wb') { |file| Marshal.dump(save_data, file) }
-  end
-
-  # Fetches save data from the given file.
-  # @param file_path [String] path of the file to read from
-  # @return [Hash] save data in Hash format
-  # @raise (see .get_data_from_file)
-  def self.read_from_file(file_path)
-    validate file_path => String
-
-    save_data = get_data_from_file(file_path)
-
-    save_data = to_hash_format(save_data) if save_data.is_a?(Array)
-
-    return save_data
-  end
-
   # @return [Boolean] whether the save file exists
   def self.exists?
     return File.file?(FILE_PATH)
-  end
-
-  # Deletes the save file (and a possible .bak backup file if one exists)
-  # @raise [Error::ENOENT]
-  def self.delete_file
-    File.delete(FILE_PATH)
-    File.delete(FILE_PATH + '.bak') if File.file?(FILE_PATH + '.bak')
   end
 
   # Fetches the save data from the given file.
@@ -57,21 +24,47 @@ module SaveData
   def self.get_data_from_file(file_path)
     validate file_path => String
     save_data = nil
-
     File.open(file_path) do |file|
       data = Marshal.load(file)
-
       if data.is_a?(Hash)
         save_data = data
         next
       end
-
       save_data = [data]
-
       save_data << Marshal.load(file) until file.eof?
     end
-
     return save_data
+  end
+
+  # Fetches save data from the given file. If it needed converting, resaves it.
+  # @param file_path [String] path of the file to read from
+  # @return [Hash] save data in Hash format
+  # @raise (see .get_data_from_file)
+  def self.read_from_file(file_path)
+    validate file_path => String
+    save_data = get_data_from_file(file_path)
+    save_data = to_hash_format(save_data) if save_data.is_a?(Array)
+    if !save_data.empty? && run_conversions(save_data)
+      File.open(file_path, 'wb') { |file| Marshal.dump(save_data, file) }
+    end
+    return save_data
+  end
+
+  # Compiles the save data and saves a marshaled version of it into
+  # the given file.
+  # @param file_path [String] path of the file to save into
+  # @raise [InvalidValueError] if an invalid value is being saved
+  def self.save_to_file(file_path)
+    validate file_path => String
+    save_data = self.compile_save_hash
+    File.open(file_path, 'wb') { |file| Marshal.dump(save_data, file) }
+  end
+
+  # Deletes the save file (and a possible .bak backup file if one exists)
+  # @raise [Error::ENOENT]
+  def self.delete_file
+    File.delete(FILE_PATH)
+    File.delete(FILE_PATH + '.bak') if File.file?(FILE_PATH + '.bak')
   end
 
   # Converts the pre-v19 format data to the new format.
@@ -80,12 +73,10 @@ module SaveData
   def self.to_hash_format(old_format)
     validate old_format => Array
     hash = {}
-
     @values.each do |value|
       data = value.get_from_old_format(old_format)
       hash[value.id] = data unless data.nil?
     end
-
     return hash
   end
 

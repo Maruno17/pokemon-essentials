@@ -1,11 +1,11 @@
 #==============================================================================#
 #                              Pokémon Essentials                              #
-#                               Version 18.1.dev                               #
+#                                  Version 19                                  #
 #                https://github.com/Maruno17/pokemon-essentials                #
 #==============================================================================#
 
 module Settings
-  # The version of the game. It has to adhere to the MAJOR.MINOR.PATCH format.
+  # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
   GAME_VERSION = '1.0.0'
 
   # The generation that the battle system follows. Used throughout the battle
@@ -397,7 +397,8 @@ module Settings
   ]
 end
 
+# DO NOT EDIT THESE!
 module Essentials
-  VERSION = "18.1.dev"
+  VERSION = "19"
   ERROR_TEXT = ""
 end

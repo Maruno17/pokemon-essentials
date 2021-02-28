@@ -819,7 +819,7 @@ class PokemonSummary_Scene
     if selected_move.accuracy == 0
       textpos.push(["---", 216, 186, 1, base, shadow])
     else
-      textpos.push([sprintf("%d%", selected_move.accuracy), 216 + overlay.text_size("%").width, 186, 1, base, shadow])
+      textpos.push(["#{selected_move.accuracy}%", 216 + overlay.text_size("%").width, 186, 1, base, shadow])
     end
     # Draw all text
     pbDrawTextPositions(overlay, textpos)

@@ -18,6 +18,7 @@ module SaveData
     game: {}
   }
 
+  #=============================================================================
   # Represents a conversion made to save data.
   # New conversions are added using {SaveData.register_conversion}.
   class Conversion
@@ -44,6 +45,13 @@ module SaveData
       end
     end
 
+    # Returns whether the conversion should be run with the given version.
+    # @param version [String] version to check
+    # @return [Boolean] whether the conversion should be run
+    def should_run?(version)
+      return PluginManager.compare_versions(version, @version) < 0
+    end
+
     # Runs the conversion on the given save data.
     # @param save_data [Hash]
     def run(save_data)
@@ -54,13 +62,6 @@ module SaveData
         proc.call(save_data[value_id])
       end
       @all_proc.call(save_data) if @all_proc.is_a?(Proc)
-    end
-
-    # Returns whether the conversion should be run with the given version.
-    # @param version [String] version to check
-    # @return [Boolean] whether the conversion should be run
-    def should_run?(version)
-      return PluginManager.compare_versions(version, @version) < 0
     end
 
     private
@@ -83,9 +84,7 @@ module SaveData
     # @see SaveData.register_conversion
     def essentials_version(version)
       validate version => [Numeric, String]
-
       raise "Multiple conditions in conversion #{@id}" unless @version.nil?
-
       @trigger_type = :essentials
       @version = version.to_s
     end
@@ -96,9 +95,7 @@ module SaveData
     # @see SaveData.register_conversion
     def game_version(version)
       validate version => [Numeric, String]
-
       raise "Multiple conditions in conversion #{@id}" unless @version.nil?
-
       @trigger_type = :game
       @version = version.to_s
     end
@@ -108,13 +105,10 @@ module SaveData
     # @see SaveData.register_conversion
     def to_value(value_id, &block)
       validate value_id => Symbol
-
       raise ArgumentError, 'No block given to to_value' unless block_given?
-
       if @value_procs[value_id].is_a?(Proc)
         raise "Multiple to_value definitions in conversion #{@id} for #{value_id}"
       end
-
       @value_procs[value_id] = block
     end
 
@@ -122,17 +116,16 @@ module SaveData
     # @see SaveData.register_conversion
     def to_all(&block)
       raise ArgumentError, 'No block given to to_all' unless block_given?
-
       if @all_proc.is_a?(Proc)
         raise "Multiple to_all definitions in conversion #{@id}"
       end
-
       @all_proc = block
     end
 
     # @!endgroup
   end
 
+  #=============================================================================
   # Registers a {Conversion} to occur for save data that meets the given criteria.
   # Two types of criteria can be defined: {Conversion#essentials_version} and
   # {Conversion#game_version}. The conversion is automatically run on save data
@@ -152,18 +145,38 @@ module SaveData
   #       save_data[:new_value] = Foo.new
   #     end
   #   end
-  # @yieldself [Conversion]
+  # @yield self [Conversion]
   def self.register_conversion(id, &block)
     validate id => Symbol
-
     unless block_given?
       raise ArgumentError, 'No block given to SaveData.register_conversion'
     end
-
     conversion = Conversion.new(id, &block)
-
     @conversions[conversion.trigger_type][conversion.version] ||= []
     @conversions[conversion.trigger_type][conversion.version] << conversion
+  end
+
+  # @param save_data [Hash] save data to get conversions for
+  # @return [Array<Conversion>] all conversions that should be run on the data
+  def self.get_conversions(save_data)
+    conversions_to_run = []
+    versions = {
+      essentials: save_data[:essentials_version] || '18.1',
+      game: save_data[:game_version] || '0.0.0'
+    }
+    [:essentials, :game].each do |trigger_type|
+      # Ensure the versions are sorted from lowest to highest
+      sorted_versions = @conversions[trigger_type].keys.sort do |v1, v2|
+        PluginManager.compare_versions(v1, v2)
+      end
+      sorted_versions.each do |version|
+        @conversions[trigger_type][version].each do |conversion|
+          next unless conversion.should_run?(versions[trigger_type])
+          conversions_to_run << conversion
+        end
+      end
+    end
+    return conversions_to_run
   end
 
   # Runs all possible conversions on the given save data.
@@ -173,46 +186,16 @@ module SaveData
   def self.run_conversions(save_data)
     validate save_data => Hash
     conversions_to_run = self.get_conversions(save_data)
-
     return false if conversions_to_run.none?
-
     File.open(SaveData::FILE_PATH + '.bak', 'wb') { |f| Marshal.dump(save_data, f) }
-
     echoln "Running #{conversions_to_run.length} conversions..."
-
     conversions_to_run.each do |conversion|
       echo "#{conversion.title}..."
       conversion.run(save_data)
       echoln ' done.'
     end
-
+    save_data[:essentials_version] = Essentials::VERSION
+    save_data[:game_version] = Settings::GAME_VERSION
     return true
-  end
-
-  # @param save_data [Hash] save data to get conversions for
-  # @return [Array<Conversion>] all conversions that should be run on the data
-  def self.get_conversions(save_data)
-    conversions_to_run = []
-
-    versions = {
-      essentials: save_data[:essentials_version] || '18.1',
-      game: save_data[:game_version] || '0.0.0'
-    }
-
-    [:essentials, :game].each do |trigger_type|
-      # Ensure the versions are sorted from lowest to highest
-      sorted_versions = @conversions[trigger_type].keys.sort do |v1, v2|
-        PluginManager.compare_versions(v1, v2)
-      end
-
-      sorted_versions.each do |version|
-        @conversions[trigger_type][version].each do |conversion|
-          next unless conversion.should_run?(versions[trigger_type])
-          conversions_to_run << conversion
-        end
-      end
-    end
-
-    return conversions_to_run
   end
 end

@@ -28,7 +28,7 @@ class PokeBattle_Pokemon
     return pkmn if pkmn.is_a?(Pokemon)
     owner = Pokemon::Owner.new(pkmn.trainerID, pkmn.ot, pkmn.otgender, pkmn.language)
     # Set level to 1 initially, as it will be recalculated later
-    ret = Pokemon.new(pkmn.species, 1, owner, false)
+    ret = Pokemon.new(pkmn.species, 1, owner, false, false)
     ret.forced_form      = pkmn.forcedForm if pkmn.forcedForm
     ret.time_form_set    = pkmn.formTime
     ret.exp              = pkmn.exp
@@ -43,7 +43,9 @@ class PokeBattle_Pokemon
     ret.item             = pkmn.item
     ret.mail             = PokemonMail.copy(pkmn.mail) if pkmn.mail
     pkmn.moves.each { |m| ret.moves.push(PBMove.copy(m)) if m && m.id > 0 }
-    pkmn.firstmoves.each { |m| ret.add_first_move(m) }
+    if pkmn.firstmoves
+      pkmn.firstmoves.each { |m| ret.add_first_move(m) }
+    end
     if pkmn.ribbons
       pkmn.ribbons.each { |r| ret.giveRibbon(r) }
     end

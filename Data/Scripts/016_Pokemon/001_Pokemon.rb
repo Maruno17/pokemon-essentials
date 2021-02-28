@@ -970,8 +970,9 @@ class Pokemon
   # @param species [Symbol, String, Integer] Pokémon species
   # @param level [Integer] Pokémon level
   # @param owner [Owner, PlayerTrainer, NPCTrainer] Pokémon owner (the player by default)
-  # @param withMoves [Boolean] whether the Pokémon should have moves
-  def initialize(species, level, owner = $Trainer, withMoves = true)
+  # @param withMoves [TrueClass, FalseClass] whether the Pokémon should have moves
+  # @param rechech_form [TrueClass, FalseClass] whether to auto-check the form
+  def initialize(species, level, owner = $Trainer, withMoves = true, recheck_form = true)
     species_data = GameData::Species.get(species)
     @species          = species_data.species
     @form             = species_data.form
@@ -1030,7 +1031,7 @@ class Pokemon
     @hp               = 1
     @totalhp          = 1
     calcStats
-    if @form == 0
+    if @form == 0 && recheck_form
       f = MultipleForms.call("getFormOnCreation", self)
       if f
         self.form = f

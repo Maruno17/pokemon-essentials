@@ -223,7 +223,6 @@ class PokemonLoadScreen
   # @return [Hash] save data
   def load_save_file(file_path)
     save_data = SaveData.read_from_file(file_path)
-
     unless SaveData.valid?(save_data)
       if File.file?(file_path + '.bak')
         pbMessage(_INTL('The save file is corrupt. A backup will be loaded.'))
@@ -233,7 +232,6 @@ class PokemonLoadScreen
         return {}
       end
     end
-
     return save_data
   end
 
@@ -315,9 +313,7 @@ class PokemonLoadScreen
         Game.start_new
         return
       when cmd_mystery_gift
-        pbFadeOutIn do
-          @save_data[:player] = pbDownloadMysteryGift(@save_data[:player])
-        end
+        pbFadeOutIn { pbDownloadMysteryGift(@save_data[:player]) }
       when cmd_options
         pbFadeOutIn do
           scene = PokemonOption_Scene.new

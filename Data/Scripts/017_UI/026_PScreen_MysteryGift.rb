@@ -324,7 +324,6 @@ def pbDownloadMysteryGift(trainer)
   pbDisposeMessageWindow(sprites["msgwindow"])
   pbDisposeSpriteHash(sprites)
   viewport.dispose
-  return trainer
 end
 
 #===============================================================================

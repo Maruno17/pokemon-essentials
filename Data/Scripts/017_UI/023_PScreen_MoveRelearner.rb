@@ -97,7 +97,7 @@ class MoveRelearner_Scene
     textpos.push([basedamage<=1 ? basedamage==1 ? "???" : "---" : sprintf("%d",basedamage),
           468,146,2,Color.new(64,64,64),Color.new(176,176,176)])
     textpos.push([_INTL("ACCURACY"),272,178,0,Color.new(248,248,248),Color.new(0,0,0)])
-    textpos.push([accuracy==0 ? "---" : sprintf("%d%",accuracy),
+    textpos.push([accuracy==0 ? "---" : "#{accuracy}%",
           468,178,2,Color.new(64,64,64),Color.new(176,176,176)])
     pbDrawTextPositions(overlay,textpos)
     imagepos.push(["Graphics/Pictures/category",436,116,0,category*28,64,28])

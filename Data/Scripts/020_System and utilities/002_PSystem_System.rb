@@ -1,13 +1,3 @@
-# Loads data from a file "safely", similar to load_data. If an encrypted archive
-# exists, the real file is deleted to ensure that the file is loaded from the
-# encrypted archive.
-def pbSafeLoad(file)
-  if safeExists?("./Game.rgssad") && safeExists?(file)
-    File.delete(file) rescue nil
-  end
-  return load_data(file)
-end
-
 def pbChooseLanguage
   commands=[]
   for lang in Settings::LANGUAGES

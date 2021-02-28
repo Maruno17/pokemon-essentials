@@ -56,7 +56,7 @@ class PokeBattle_Trainer
     ret.money                 = trainer.money
     trainer.seen.each_with_index { |value, i| ret.set_seen(i) if value }
     trainer.owned.each_with_index { |value, i| ret.set_owned(i) if value }
-    ret.formseen.each_with_index do |value, i|
+    trainer.formseen.each_with_index do |value, i|
       ret.seen_forms[GameData::Species.get(i).species] = [value[0].clone, value[1].clone] if value
     end
     trainer.formlastseen.each_with_index do |value, i|

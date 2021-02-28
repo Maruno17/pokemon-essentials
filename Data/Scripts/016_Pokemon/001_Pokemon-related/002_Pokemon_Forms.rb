@@ -263,7 +263,7 @@ MultipleForms.register(:ROTOM,{
 MultipleForms.register(:GIRATINA,{
   "getForm" => proc { |pkmn|
     maps = [49,50,51,72,73]   # Map IDs for Origin Forme
-    if pkmn.hasItem?(:GRISEOUSORB) || maps.include?($game_map.map_id)
+    if pkmn.hasItem?(:GRISEOUSORB) || ($game_map && maps.include?($game_map.map_id))
       next 1
     end
     next 0
@@ -597,9 +597,11 @@ MultipleForms.register(:NECROZMA,{
 MultipleForms.register(:PIKACHU, {
   "getForm" => proc { |pkmn|
     next if pkmn.form_simple >= 2
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    next 1 if map_metadata && map_metadata.town_map_position &&
-              map_metadata.town_map_position[0] == 1   # Tiall region
+    if $game_map
+      map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+      next 1 if map_metadata && map_metadata.town_map_position &&
+                map_metadata.town_map_position[0] == 1   # Tiall region
+    end
     next 0
   }
 })

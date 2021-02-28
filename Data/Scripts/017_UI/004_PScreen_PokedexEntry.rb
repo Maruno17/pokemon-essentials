@@ -300,7 +300,7 @@ class PokemonPokedexInfo_Scene
     mapwidth = 1+PokemonRegionMap_Scene::RIGHT-PokemonRegionMap_Scene::LEFT
     GameData::Encounter.each_of_version($PokemonGlobal.encounter_version) do |enc_data|
       next if !pbFindEncounter(enc_data.types, @species)
-      map_metadata = GameData::MapMetadata.try_get(enc_data.id)
+      map_metadata = GameData::MapMetadata.try_get(enc_data.map)
       mappos = (map_metadata) ? map_metadata.town_map_position : nil
       next if !mappos || mappos[0] != @region
       showpoint = true
