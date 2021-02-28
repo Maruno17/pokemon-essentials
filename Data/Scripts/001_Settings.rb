@@ -5,6 +5,9 @@
 #==============================================================================#
 
 module Settings
+  # The version of the game. It has to adhere to the MAJOR.MINOR.PATCH format.
+  GAME_VERSION = '1.0.0'
+
   # The generation that the battle system follows. Used throughout the battle
   # scripts, and also by some other settings which are used in and out of battle
   # (you can of course change those settings to suit your game).

@@ -20,13 +20,15 @@ class PokeBattle_Pokemon
   attr_reader :trainerID, :ot, :otgender, :language
   attr_reader :shadow, :heartgauge, :savedexp, :savedev, :hypermode, :shadowmoves
 
-  def initialise
+  def initialize(*args)
     raise "PokeBattle_Pokemon.new is deprecated. Use Pokemon.new instead."
   end
 
   def self.copy(pkmn)
+    return pkmn if pkmn.is_a?(Pokemon)
     owner = Pokemon::Owner.new(pkmn.trainerID, pkmn.ot, pkmn.otgender, pkmn.language)
-    ret = Pokemon.new(pkmn.species, pkmn.level, owner, false)
+    # Set level to 1 initially, as it will be recalculated later
+    ret = Pokemon.new(pkmn.species, 1, owner, false)
     ret.forced_form      = pkmn.forcedForm if pkmn.forcedForm
     ret.time_form_set    = pkmn.formTime
     ret.exp              = pkmn.exp

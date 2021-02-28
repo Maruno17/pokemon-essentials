@@ -355,7 +355,7 @@ class BattleChallengeData
     @start=[$game_map.map_id,$game_player.x,$game_player.y]
     @oldParty=$Trainer.party
     $Trainer.party=@party if @party
-    pbSave(true)
+    Game.save(safe: true)
   end
 
   def pbCancel
@@ -369,9 +369,7 @@ class BattleChallengeData
     save=(@decision!=0)
     reset
     $game_map.need_refresh=true
-    if save
-      pbSave(true)
-    end
+    Game.save(safe: true) if save
   end
 
   def pbGoOn
@@ -410,7 +408,7 @@ class BattleChallengeData
     $game_map.map_id=@start[0]
     $game_player.moveto2(@start[1],@start[2])
     $game_player.direction=8 # facing up
-    pbSave(true)
+    Game.save(safe: true)
     $game_map.map_id=oldmapid
     $game_player.moveto2(oldx,oldy)
     $game_player.direction=olddirection

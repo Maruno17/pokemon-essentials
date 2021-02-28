@@ -1,60 +1,29 @@
-#===============================================================================
-#
-#===============================================================================
-def pbSave(safesave=false)
-  begin
-    File.open(RTP.getSaveFileName("Game.rxdata"),"wb") { |f|
-       Marshal.dump($Trainer,f)
-       Marshal.dump(Graphics.frame_count,f)
-       if $data_system.respond_to?("magic_number")
-         $game_system.magic_number = $data_system.magic_number
-       else
-         $game_system.magic_number = $data_system.version_id
-       end
-       $game_system.save_count+=1
-       Marshal.dump($game_system,f)
-       Marshal.dump($PokemonSystem,f)
-       Marshal.dump($game_map.map_id,f)
-       Marshal.dump($game_switches,f)
-       Marshal.dump($game_variables,f)
-       Marshal.dump($game_self_switches,f)
-       Marshal.dump($game_screen,f)
-       Marshal.dump($MapFactory,f)
-       Marshal.dump($game_player,f)
-       $PokemonGlobal.safesave=safesave
-       Marshal.dump($PokemonGlobal,f)
-       Marshal.dump($PokemonMap,f)
-       Marshal.dump($PokemonBag,f)
-       Marshal.dump($PokemonStorage,f)
-       Marshal.dump(Essentials::VERSION, f)
-    }
-    Graphics.frame_reset
-  rescue
-    return false
-  end
-  return true
+# @deprecated Use {Game.save} instead. pbSave is slated to be removed in v20.
+def pbSave(safesave = false)
+  Deprecation.warn_method('pbSave', 'Game.save', 'v20')
+  Game.save(safe: safesave)
 end
 
 def pbEmergencySave
-  oldscene=$scene
-  $scene=nil
+  oldscene = $scene
+  $scene = nil
   pbMessage(_INTL("The script is taking too long. The game will restart."))
   return if !$Trainer
-  if safeExists?(RTP.getSaveFileName("Game.rxdata"))
-    File.open(RTP.getSaveFileName("Game.rxdata"),  'rb') { |r|
-      File.open(RTP.getSaveFileName("Game.rxdata.bak"), 'wb') { |w|
+  if SaveData.exists?
+    File.open(SaveData::FILE_PATH, 'rb') do |r|
+      File.open(SaveData::FILE_PATH + '.bak', 'wb') do |w|
         while s = r.read(4096)
           w.write s
         end
-      }
-    }
+      end
+    end
   end
-  if pbSave
+  if Game.save
     pbMessage(_INTL("\\se[]The game was saved.\\me[GUI save game] The previous save file has been backed up.\\wtnp[30]"))
   else
     pbMessage(_INTL("\\se[]Save failed.\\wtnp[30]"))
   end
-  $scene=oldscene
+  $scene = oldscene
 end
 
 #===============================================================================
@@ -117,33 +86,31 @@ class PokemonSaveScreen
   end
 
   def pbSaveScreen
-    ret=false
+    ret = false
     @scene.pbStartScreen
-    if pbConfirmMessage(_INTL("Would you like to save the game?"))
-      if safeExists?(RTP.getSaveFileName("Game.rxdata"))
-        if $PokemonTemp.begunNewGame
-          pbMessage(_INTL("WARNING!"))
-          pbMessage(_INTL("There is a different game file that is already saved."))
-          pbMessage(_INTL("If you save now, the other file's adventure, including items and Pokémon, will be entirely lost."))
-          if !pbConfirmMessageSerious(
-             _INTL("Are you sure you want to save now and overwrite the other save file?"))
-            pbSEPlay("GUI save choice")
-            @scene.pbEndScreen
-            return false
-          end
+    if pbConfirmMessage(_INTL('Would you like to save the game?'))
+      if SaveData.exists? && $PokemonTemp.begunNewGame
+        pbMessage(_INTL('WARNING!'))
+        pbMessage(_INTL('There is a different game file that is already saved.'))
+        pbMessage(_INTL("If you save now, the other file's adventure, including items and Pokémon, will be entirely lost."))
+        if !pbConfirmMessageSerious(
+            _INTL('Are you sure you want to save now and overwrite the other save file?'))
+          pbSEPlay('GUI save choice')
+          @scene.pbEndScreen
+          return false
         end
       end
-      $PokemonTemp.begunNewGame=false
-      pbSEPlay("GUI save choice")
-      if pbSave
-        pbMessage(_INTL("\\se[]{1} saved the game.\\me[GUI save game]\\wtnp[30]",$Trainer.name))
-        ret=true
+      $PokemonTemp.begunNewGame = false
+      pbSEPlay('GUI save choice')
+      if Game.save
+        pbMessage(_INTL("\\se[]{1} saved the game.\\me[GUI save game]\\wtnp[30]", $Trainer.name))
+        ret = true
       else
         pbMessage(_INTL("\\se[]Save failed.\\wtnp[30]"))
-        ret=false
+        ret = false
       end
     else
-      pbSEPlay("GUI save choice")
+      pbSEPlay('GUI save choice')
     end
     @scene.pbEndScreen
     return ret
