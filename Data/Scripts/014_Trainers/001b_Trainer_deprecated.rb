@@ -51,13 +51,7 @@ class PokeBattle_Trainer
     ret.character_ID          = trainer.metaID if trainer.metaID
     ret.outfit                = trainer.outfit if trainer.outfit
     ret.language              = trainer.language if trainer.language
-    trainer.party.each do |p|
-      if p.is_a?(Pokemon)
-        ret.party.push(p)
-      else
-        ret.party.push(PokeBattle_Pokemon.copy(p))
-      end
-    end
+    trainer.party.each { |p| ret.party.push(PokeBattle_Pokemon.copy(p)) }
     ret.badges                = trainer.badges.clone
     ret.money                 = trainer.money
     trainer.seen.each_with_index { |value, i| ret.set_seen(i) if value }
