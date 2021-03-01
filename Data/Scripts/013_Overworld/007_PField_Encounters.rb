@@ -5,8 +5,9 @@ class PokemonEncounters
   attr_reader :step_count
 
   def initialize
-    @step_chances     = nil
-    @encounter_tables = []
+    @step_chances       = nil
+    @encounter_tables   = []
+    @chance_accumulator = 0
   end
 
   def setup(map_ID)
@@ -22,6 +23,7 @@ class PokemonEncounters
 
   def reset_step_count
     @step_count = 0
+    @chance_accumulator = 0
   end
 
   #=============================================================================
@@ -107,47 +109,66 @@ class PokemonEncounters
     return false if $game_system.encounter_disabled
     return false if !$Trainer
     return false if $DEBUG && Input.press?(Input::CTRL)
-    # Wild encounters cannot happen for the first 3 steps after a previous wild
-    # encounter
-    @step_count += 1
-    return false if @step_count <= 3
     # Check if enc_type has a defined step chance/encounter table
     return false if !@step_chances[enc_type] || @step_chances[enc_type] == 0
     return false if !has_encounter_type?(enc_type)
-    # Determine the encounter step chance (probability of a wild encounter
-    # happening). The actual probability is the written encounter step chance,
-    # with modifiers applied, divided by 180.
-    encount = @step_chances[enc_type].to_f
-    encount *= 0.8 if $PokemonGlobal.bicycle
+    # Get base encounter chance and minimum steps grace period
+    encounter_chance = @step_chances[enc_type].to_f
+    min_steps_needed = (8 - encounter_chance / 10).clamp(0, 8).to_f
+    # Apply modifiers to the encounter chance and the minimum steps amount
+    encounter_chance += @chance_accumulator / 200
+    encounter_chance *= 0.8 if $PokemonGlobal.bicycle
     if !Settings::FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
-      encount /= 2 if $PokemonMap.blackFluteUsed
-      encount *= 1.5 if $PokemonMap.whiteFluteUsed
+      encounter_chance /= 2 if $PokemonMap.blackFluteUsed
+      min_steps_needed *= 2 if $PokemonMap.blackFluteUsed
+      encounter_chance *= 1.5 if $PokemonMap.whiteFluteUsed
+      min_steps_needed /= 2 if $PokemonMap.whiteFluteUsed
     end
     first_pkmn = $Trainer.first_pokemon
     if first_pkmn
       case first_pkmn.item_id
       when :CLEANSETAG
-        encount *= 2.0 / 3
+        encounter_chance *= 2.0 / 3
+        min_steps_needed *= 4 / 3.0
       when :PUREINCENSE
-        encount *= 2.0 / 3
+        encounter_chance *= 2.0 / 3
+        min_steps_needed *= 4 / 3.0
       else   # Ignore ability effects if an item effect applies
         case first_pkmn.ability_id
         when :STENCH, :WHITESMOKE, :QUICKFEET
-          encount /= 2
+          encounter_chance /= 2
+          min_steps_needed *= 2
         when :SNOWCLOAK
-          encount /= 2 if $game_screen.weather_type == PBFieldWeather::Snow ||
+          if $game_screen.weather_type == PBFieldWeather::Snow ||
                           $game_screen.weather_type == PBFieldWeather::Blizzard
+            encounter_chance /= 2
+            min_steps_needed *= 2
+          end
         when :SANDVEIL
-          encount /= 2 if $game_screen.weather_type == PBFieldWeather::Sandstorm
+          if $game_screen.weather_type == PBFieldWeather::Sandstorm
+            encounter_chance /= 2
+            min_steps_needed *= 2
+          end
         when :SWARM
-          encount *= 1.5
+          encounter_chance *= 1.5
+          min_steps_needed /= 2
         when :ILLUMINATE, :ARENATRAP, :NOGUARD
-          encount *= 2
+          encounter_chance *= 2
+          min_steps_needed /= 2
         end
       end
     end
+    # Wild encounters are much less likely to happen for the first few steps
+    # after a previous wild encounter
+    if @step_count < min_steps_needed
+      @step_count += 1
+      return false if rand(100) >= encounter_chance * 5 / (@step_chances[enc_type] + @chance_accumulator / 200)
+    end
     # Decide whether the wild encounter should actually happen
-    return rand(180) < encount
+    return true if rand(100) < encounter_chance
+    # If encounter didn't happen, make the next step more likely to produce one
+    @chance_accumulator += @step_chances[enc_type]
+    return false
   end
 
   # Returns whether an encounter with the given Pokémon should be allowed after
@@ -157,7 +178,10 @@ class PokemonEncounters
     # Repel
     if repel_active && !pbPokeRadarOnShakingGrass
       first_pkmn = (Settings::REPEL_COUNTS_FAINTED_POKEMON) ? $Trainer.first_pokemon : $Trainer.first_able_pokemon
-      return false if first_pkmn && enc_data[1] < first_pkmn.level
+      if first_pkmn && enc_data[1] < first_pkmn.level
+        @chance_accumulator = 0
+        return false
+      end
     end
     # Some abilities make wild encounters less likely if the wild Pokémon is
     # sufficiently weaker than the Pokémon with the ability

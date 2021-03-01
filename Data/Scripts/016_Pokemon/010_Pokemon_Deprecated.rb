@@ -58,7 +58,7 @@ class PokeBattle_Pokemon
     ret.pokerus          = pkmn.pokerus if pkmn.pokerus
     ret.name             = pkmn.name
     ret.happiness        = pkmn.happiness
-    ret.poke_ball        = pbBallTypeToItem(pkmn.ballused)
+    ret.poke_ball        = pbBallTypeToItem(pkmn.ballused).id
     ret.markings         = pkmn.markings if pkmn.markings
     ret.iv               = pkmn.iv.clone
     ret.ivMaxed          = pkmn.ivMaxed.clone if pkmn.ivMaxed

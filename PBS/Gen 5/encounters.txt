@@ -1,7 +1,7 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
 [002] # Lappet Town
-Water,10
+Water,2
     60,TENTACOOL,14,19
     30,MANTYKE,15,16
     10,REMORAID,14,16
@@ -18,14 +18,14 @@ SuperRod
     5,STARYU,15,17
 #-------------------------------
 [005] # Route 1
-Land,25
+Land,21
     40,PIDGEY,11,14
     40,RATTATA,11,14
     9,PIDGEY,11,13
     9,RATTATA,11,13
     1,PIDGEY,14
     1,RATTATA,14
-LandNight,25
+LandNight,21
     39,RATTATA,10,14
     30,HOOTHOOT,10,13
     20,SPINARAK,8,12
@@ -34,12 +34,12 @@ LandNight,25
     1,RATTATA,15
 #-------------------------------
 [021] # Route 2
-Land,25
+Land,21
     50,RATTATA,12,15
     30,POOCHYENA,11,15
     10,SHINX,10,12
     10,SHINX,10,11
-Water,10
+Water,2
     60,MAGIKARP,7,10
     30,GOLDEEN,11,14
     10,STARYU,12,15
@@ -66,7 +66,7 @@ HeadbuttHigh
     20,SPINARAK,9,12
 #-------------------------------
 [028] # Natural Park
-Land,25
+Land,21
     20,CATERPIE,10
     20,SUNKERN,12
     20,WEEDLE,10
@@ -74,19 +74,19 @@ Land,25
     15,PIDGEY,12,14
     5,KAKUNA,10
     5,METAPOD,10
-LandNight,25
+LandNight,21
     30,HOOTHOOT,10,14
     30,SPINARAK,10,15
     20,PINECO,9,13
     10,DROWZEE,9,15
     10,NATU,12,14
-LandMorning,25
+LandMorning,21
     25,CATERPIE,10,12
     25,WEEDLE,10,12
     20,PIDGEY,10,14
     15,KAKUNA,10
     15,METAPOD,10
-BugContest,25
+BugContest,21
     20,CATERPIE,7,18
     20,WEEDLE,7,18
     10,KAKUNA,9,18
@@ -99,13 +99,13 @@ BugContest,25
     5,SCYTHER,13,14
 #-------------------------------
 [031] # Route 3
-Land,25
+Land,21
     30,NIDORANfE,12,15
     30,NIDORANmA,12,15
     20,PIKACHU,14,17
     10,EEVEE,15
     10,PONYTA,13,15
-Water,10
+Water,2
     60,SURSKIT,13,14
     35,LOTAD,14
     5,LOTAD,15
@@ -120,7 +120,7 @@ SuperRod
     40,CHINCHOU,11,12
     40,REMORAID,12,14
     20,LUVDISC,10,16
-RockSmash
+RockSmash,50
     60,NOSEPASS,13,14
     40,GEODUDE,12,15
 HeadbuttLow
@@ -137,7 +137,7 @@ HeadbuttHigh
     20,BURMY,12,15
 #-------------------------------
 [034] # Ice Cave
-Cave,10
+Cave,5
     40,SWINUB,16,18
     20,SNEASEL,14,16
     20,SNORUNT,12,15
@@ -145,35 +145,35 @@ Cave,10
     10,SNOVER,14
 #-------------------------------
 [039] # Route 4
-Land,25
+Land,21
     50,SHELLOS_1,12,15
     40,GRIMER,13,15
     10,MURKROW,12,14
 #-------------------------------
 [041] # Route 5
-Land,25
+Land,21
     50,GRIMER,13,15
     40,SPEAROW,13,16
     10,SLUGMA,13,14
 #-------------------------------
 [044] # Route 6
-Land,25
+Land,21
     50,SHELLOS_1,12,15
     40,GRIMER,13,15
     10,MURKROW,12,14
 #-------------------------------
 [047] # Route 7
-Land,25
+Land,21
     50,SHELLOS,12,15
     30,BIDOOF,14,17
     10,MURKROW,12,14
     10,WURMPLE,9,12
-RockSmash
+RockSmash,50
     90,NOSEPASS,13,14
     10,GEODUDE,12,15
 #-------------------------------
 [049] # Rock Cave
-Cave,10
+Cave,5
     20,MAGNETON,14,16
     20,MAGNETON,14,17
     20,NOSEPASS,14,15
@@ -182,7 +182,7 @@ Cave,10
     10,MAWILE,14,16
 #-------------------------------
 [050] # Rock Cave
-Cave,10
+Cave,5
     20,MAGNETON,14,16
     20,MAGNETON,14,17
     20,NOSEPASS,14,15
@@ -191,7 +191,7 @@ Cave,10
     10,GEODUDE,13,15
 #-------------------------------
 [051] # Dungeon
-Cave,10
+Cave,5
     20,CHINGLING,1
     20,CLEFFA,1
     20,IGGLYBUFF,1
@@ -200,7 +200,7 @@ Cave,10
     10,TYROGUE,1
 #-------------------------------
 [066] # Safari Zone
-Land,25
+Land,21
     20,ABRA,12,15
     20,DODUO,13,15
     20,NIDORANfE,15,16
@@ -209,7 +209,7 @@ Land,25
     10,TANGELA,14,16
 #-------------------------------
 [068] # Safari Zone
-Land,25
+Land,21
     20,EXEGGCUTE,15,18
     20,RHYHORN,16,18
     10,AIPOM,14,17
@@ -222,7 +222,7 @@ Land,25
     4,SCYTHER,16
     1,CHANSEY,17
     1,KANGASKHAN,19
-Water,10
+Water,2
     60,PSYDUCK,16,18
     30,MARILL,15,18
     5,BUIZEL,15,17
@@ -242,7 +242,7 @@ SuperRod
     1,DRATINI,17
 #-------------------------------
 [069] # Route 8
-Land,25
+Land,21
     20,MAREEP,16,18
     20,ODDISH,15,17
     13,BONSLY,14,16
@@ -253,7 +253,7 @@ Land,25
     5,BONSLY,14,17
     1,BONSLY,15,16
     1,BONSLY,15
-Water,10
+Water,2
     60,TENTACOOL,14,19
     30,MANTYKE,15,16
     10,REMORAID,14,16
@@ -270,7 +270,7 @@ SuperRod
     5,STARYU,15,17
 #-------------------------------
 [070] # Underwater
-Land,25
+Land,21
     20,CHINCHOU,17,21
     20,CLAMPERL,18,20
     20,SHELLDER,18,20
@@ -280,7 +280,7 @@ Land,25
     10,SHELLDER,18,19
 #-------------------------------
 [075] # Tiall Region
-Land,25
+Land,21
     20,GEODUDE,11,14
     20,RATTATA,11,14
     10,CUBONE,11,14

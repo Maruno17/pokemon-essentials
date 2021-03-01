@@ -157,7 +157,7 @@ module GameData
           pkmn.update_shadow_moves(true)
           pkmn.shiny = false
         end
-        pkmn.poke_ball = pbBallTypeToItem(pkmn_data[:poke_ball]) if pkmn_data[:poke_ball]
+        pkmn.poke_ball = pbBallTypeToItem(pkmn_data[:poke_ball]).id if pkmn_data[:poke_ball]
         pkmn.calcStats
       end
       return trainer
