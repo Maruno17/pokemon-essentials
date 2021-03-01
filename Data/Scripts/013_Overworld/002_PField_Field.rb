@@ -787,9 +787,9 @@ def pbSlideOnIce(event=nil)
     break if !PBTerrain.isIce?(pbGetTerrainTag(event))
     event.move_forward
     while event.moving?
+      pbUpdateSceneMap
       Graphics.update
       Input.update
-      pbUpdateSceneMap
     end
   end
   event.center(event.x,event.y)

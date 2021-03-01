@@ -196,8 +196,10 @@ class Scene_Map
       end
     end
     unless $game_player.moving?
-      if $game_temp.menu_calling;      call_menu
-      elsif $game_temp.debug_calling;  call_debug
+      if $game_temp.menu_calling
+        call_menu
+      elsif $game_temp.debug_calling
+        call_debug
       elsif $PokemonTemp.keyItemCalling
         $PokemonTemp.keyItemCalling = false
         $game_player.straighten

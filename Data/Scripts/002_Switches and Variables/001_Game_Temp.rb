@@ -54,10 +54,10 @@ class Game_Temp
     @message_window_showing = false
     @player_transferring    = false
     @transition_processing  = false
-    @mart_prices            = []
+    @mart_prices            = {}
   end
 
   def clear_mart_prices
-    @mart_prices = []
+    @mart_prices = {}
   end
 end
