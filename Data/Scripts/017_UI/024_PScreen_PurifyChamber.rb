@@ -262,9 +262,9 @@ class PurifyChamber
   def debugAdd(set,shadow,type1,type2=nil)
     pkmn=PseudoPokemon.new(shadow,type1,type2||type1)
     if pkmn.shadowPokemon?
-       self.setShadow(set,pkmn)
+      self.setShadow(set,pkmn)
     else
-       self.insertAfter(set,setCount(set),pkmn)
+      self.insertAfter(set,setCount(set),pkmn)
     end
   end
 end

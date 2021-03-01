@@ -988,6 +988,8 @@ end
 
 
 class TriadStorage
+  attr_reader :items
+
   def initialize
     @items = []
   end

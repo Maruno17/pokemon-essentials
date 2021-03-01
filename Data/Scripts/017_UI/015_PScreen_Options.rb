@@ -6,14 +6,14 @@ class PokemonSystem
   attr_accessor :battlescene
   attr_accessor :battlestyle
   attr_accessor :frame
-  attr_writer   :textskin
+  attr_accessor :textskin
   attr_accessor :font
   attr_accessor :screensize
-  attr_writer   :language
-  attr_writer   :runstyle
-  attr_writer   :bgmvolume
-  attr_writer   :sevolume
-  attr_writer   :textinput
+  attr_accessor :language
+  attr_accessor :runstyle
+  attr_accessor :bgmvolume
+  attr_accessor :sevolume
+  attr_accessor :textinput
 
   def initialize
     @textspeed   = 1     # Text speed (0=slow, 1=normal, 2=fast)
@@ -30,13 +30,7 @@ class PokemonSystem
     @textinput   = 0     # Text input mode (0=cursor, 1=keyboard)
   end
 
-  def textskin;  return @textskin || 0;          end
-  def language;  return @language || 0;          end
-  def runstyle;  return @runstyle || 0;          end
-  def bgmvolume; return @bgmvolume || 100;       end
-  def sevolume;  return @sevolume || 100;        end
-  def textinput; return @textinput || 0;         end
-  def tilemap;   return Settings::MAP_VIEW_MODE; end
+  def tilemap; return Settings::MAP_VIEW_MODE; end
 end
 
 #===============================================================================

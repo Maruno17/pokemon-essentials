@@ -24,7 +24,7 @@ class PokeBattle_Pokemon
     raise "PokeBattle_Pokemon.new is deprecated. Use Pokemon.new instead."
   end
 
-  def self.copy(pkmn)
+  def self.convert(pkmn)
     return pkmn if pkmn.is_a?(Pokemon)
     owner = Pokemon::Owner.new(pkmn.trainerID, pkmn.ot, pkmn.otgender, pkmn.language)
     # Set level to 1 initially, as it will be recalculated later
@@ -41,7 +41,7 @@ class PokeBattle_Pokemon
     ret.nature           = pkmn.natureflag
     ret.nature_for_stats = pkmn.natureOverride
     ret.item             = pkmn.item
-    ret.mail             = PokemonMail.copy(pkmn.mail) if pkmn.mail
+    ret.mail             = PokemonMail.convert(pkmn.mail) if pkmn.mail
     pkmn.moves.each { |m| ret.moves.push(PBMove.copy(m)) if m && m.id > 0 }
     if pkmn.firstmoves
       pkmn.firstmoves.each { |m| ret.add_first_move(m) }
@@ -71,7 +71,7 @@ class PokeBattle_Pokemon
     ret.timeReceived     = pkmn.timeReceived
     ret.timeEggHatched   = pkmn.timeEggHatched
     if pkmn.fused
-      ret.fused = PokeBattle_Pokemon.copy(pkmn.fused) if pkmn.fused.is_a?(PokeBattle_Pokemon)
+      ret.fused = PokeBattle_Pokemon.convert(pkmn.fused) if pkmn.fused.is_a?(PokeBattle_Pokemon)
       ret.fused = pkmn.fused if pkmn.fused.is_a?(Pokemon)
     end
     ret.personalID       = pkmn.personalID

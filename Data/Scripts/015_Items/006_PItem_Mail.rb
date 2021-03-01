@@ -18,7 +18,8 @@ end
 class PokemonMail
   attr_reader :item, :message, :sender, :poke1, :poke2, :poke3
 
-  def self.copy(mail)
+  def self.convert(mail)
+    return mail if mail.is_a?(Mail)
     item.poke1[0] = GameData::Species.get(item.poke1[0]).id if item.poke1
     item.poke2[0] = GameData::Species.get(item.poke2[0]).id if item.poke2
     item.poke3[0] = GameData::Species.get(item.poke3[0]).id if item.poke3

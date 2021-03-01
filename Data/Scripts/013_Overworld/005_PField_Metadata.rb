@@ -43,7 +43,7 @@ class PokemonGlobalMetadata
   # Events
   attr_accessor :eventvars
   # Affecting the map
-  attr_writer   :bridge
+  attr_accessor :bridge
   attr_accessor :repel
   attr_accessor :flashUsed
   attr_accessor :encounter_version
@@ -128,10 +128,6 @@ class PokemonGlobalMetadata
     @pokerusTime          = nil
     # Save file
     @safesave             = false
-  end
-
-  def bridge
-    return @bridge || 0
   end
 end
 

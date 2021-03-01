@@ -190,6 +190,8 @@ end
 # The PC item storage object, which actually contains all the items
 #===============================================================================
 class PCItemStorage
+  attr_reader :items
+
   MAX_SIZE     = 999   # Number of different slots in storage
   MAX_PER_SLOT = 999   # Max. number of items per slot
 
