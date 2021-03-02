@@ -2,39 +2,39 @@
 # Deprecated
 #===============================================================================
 class PlayerTrainer
-  alias fullname full_name
-  alias publicID public_ID
-  alias secretID secret_ID
-  alias getForeignID make_foreign_ID
-  alias trainerTypeName trainer_type_name
-  alias moneyEarned base_money
-  alias skill skill_level
-  alias skillCode skill_code
-  alias hasSkillCode has_skill_code?
-  alias pokemonParty pokemon_party
-  alias ablePokemonParty able_party
-  alias partyCount party_count
-  alias pokemonCount pokemon_count
-  alias ablePokemonCount able_pokemon_count
-  alias firstParty first_party
-  alias firstPokemon first_pokemon
-  alias firstAblePokemon first_able_pokemon
-  alias lastParty last_party
-  alias lastPokemon last_pokemon
-  alias lastAblePokemon last_able_pokemon
-  alias formseen seen_forms
-  alias formlastseen last_seen_forms
-  alias shadowcaught owned_shadow
-  alias numbadges badge_count
-  alias pokedexSeen seen_count
-  alias pokedexOwned owned_count
-  alias numFormsSeen seen_forms_count
-  alias clearPokedex clear_pokedex
-  alias metaID character_ID
-  alias mysterygiftaccess mystery_gift_unlocked
-  alias mysterygift mystery_gifts
-  alias setSeen set_seen
-  alias setOwned set_owned
+  deprecated_method_alias :fullname, :full_name, removal_in: 'v20'
+  deprecated_method_alias :publicID, :public_ID, removal_in: 'v20'
+  deprecated_method_alias :secretID, :secret_ID, removal_in: 'v20'
+  deprecated_method_alias :getForeignID, :make_foreign_ID, removal_in: 'v20'
+  deprecated_method_alias :trainerTypeName, :trainer_type_name, removal_in: 'v20'
+  deprecated_method_alias :moneyEarned, :base_money, removal_in: 'v20'
+  deprecated_method_alias :skill, :skill_level, removal_in: 'v20'
+  deprecated_method_alias :skillCode, :skill_code, removal_in: 'v20'
+  deprecated_method_alias :hasSkillCode, :has_skill_code?, removal_in: 'v20'
+  deprecated_method_alias :pokemonParty, :pokemon_party, removal_in: 'v20'
+  deprecated_method_alias :ablePokemonParty, :able_party, removal_in: 'v20'
+  deprecated_method_alias :partyCount, :party_count, removal_in: 'v20'
+  deprecated_method_alias :pokemonCount, :pokemon_count, removal_in: 'v20'
+  deprecated_method_alias :ablePokemonCount, :able_pokemon_count, removal_in: 'v20'
+  deprecated_method_alias :firstParty, :first_party, removal_in: 'v20'
+  deprecated_method_alias :firstPokemon, :first_pokemon, removal_in: 'v20'
+  deprecated_method_alias :firstAblePokemon, :first_able_pokemon, removal_in: 'v20'
+  deprecated_method_alias :lastParty, :last_party, removal_in: 'v20'
+  deprecated_method_alias :lastPokemon, :last_pokemon, removal_in: 'v20'
+  deprecated_method_alias :lastAblePokemon, :last_able_pokemon, removal_in: 'v20'
+  deprecated_method_alias :formseen, :seen_forms, removal_in: 'v20'
+  deprecated_method_alias :formlastseen, :last_seen_forms, removal_in: 'v20'
+  deprecated_method_alias :shadowcaught, :owned_shadow, removal_in: 'v20'
+  deprecated_method_alias :numbadges, :badge_count, removal_in: 'v20'
+  deprecated_method_alias :pokedexSeen, :seen_count, removal_in: 'v20'
+  deprecated_method_alias :pokedexOwned, :owned_count, removal_in: 'v20'
+  deprecated_method_alias :numFormsSeen, :seen_forms_count, removal_in: 'v20'
+  deprecated_method_alias :clearPokedex, :clear_pokedex, removal_in: 'v20'
+  deprecated_method_alias :metaID, :character_ID, removal_in: 'v20'
+  deprecated_method_alias :mysterygiftaccess, :mystery_gift_unlocked, removal_in: 'v20'
+  deprecated_method_alias :mysterygift, :mystery_gifts, removal_in: 'v20'
+  deprecated_method_alias :setSeen, :set_seen, removal_in: 'v20'
+  deprecated_method_alias :setOwned, :set_owned, removal_in: 'v20'
 end
 
 class PokeBattle_Trainer
