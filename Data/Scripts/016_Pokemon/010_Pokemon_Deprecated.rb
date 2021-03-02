@@ -187,15 +187,15 @@ class Pokemon
     self.item = value
   end
 
-  alias healStatus heal_status
-  alias pbLearnMove learn_move
-  alias pbDeleteMove forget_move
-  alias pbDeleteMoveAtIndex forget_move_at_index
-  alias pbRecordFirstMoves record_first_moves
-  alias pbAddFirstMove add_first_move
-  alias pbRemoveFirstMove remove_first_move
-  alias pbClearFirstMoves clear_first_moves
-  alias pbUpdateShadowMoves update_shadow_moves
+  deprecated_method_alias :healStatus, :heal_status, removal_in: 'v20'
+  deprecated_method_alias :pbLearnMove, :learn_move, removal_in: 'v20'
+  deprecated_method_alias :pbDeleteMove, :forget_move, removal_in: 'v20'
+  deprecated_method_alias :pbDeleteMoveAtIndex, :forget_move_at_index, removal_in: 'v20'
+  deprecated_method_alias :pbRecordFirstMoves, :record_first_moves, removal_in: 'v20'
+  deprecated_method_alias :pbAddFirstMove, :add_first_move, removal_in: 'v20'
+  deprecated_method_alias :pbRemoveFirstMove, :remove_first_move, removal_in: 'v20'
+  deprecated_method_alias :pbClearFirstMoves, :clear_first_moves, removal_in: 'v20'
+  deprecated_method_alias :pbUpdateShadowMoves, :update_shadow_moves, removal_in: 'v20'
 end
 
 # (see Pokemon#initialize)
