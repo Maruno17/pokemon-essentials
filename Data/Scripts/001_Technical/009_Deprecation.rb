@@ -36,6 +36,11 @@ class Module
 
     target = class_method ? self.class : self
     class_name = self.name
+
+    unless target.method_defined?(aliased_method)
+      raise ArgumentError, "#{class_name} does not have method #{aliased_method} defined"
+    end
+
     delimiter = class_method ? '.' : '#'
 
     target.define_method(name) do |*args, **kvargs|
