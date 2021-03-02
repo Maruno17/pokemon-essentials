@@ -373,7 +373,7 @@ def pbBattleOnStepTaken(repel_active)
   return if !$PokemonEncounters.encounter_possible_here?
   encounterType = $PokemonEncounters.encounter_type
   return if encounterType < 0
-  return if !$PokemonEncounters.step_triggers_encounter?(encounterType)
+  return if !$PokemonEncounters.encounter_triggered?(encounterType, repel_active)
   $PokemonTemp.encounterType = encounterType
   encounter = $PokemonEncounters.choose_wild_pokemon(encounterType)
   encounter = EncounterModifier.trigger(encounter)

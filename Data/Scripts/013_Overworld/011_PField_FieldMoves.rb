@@ -592,9 +592,7 @@ HiddenMoveHandlers::UseMove.add(:HEADBUTT,proc { |move,pokemon|
 # Rock Smash
 #===============================================================================
 def pbRockSmashRandomEncounter
-  encounter_data = GameData::Encounter.get($game_map.map_id, $PokemonGlobal.encounter_version)
-  chance = (encounter_data) ? encounter_data.step_chances[EncounterTypes::RockSmash] || 50 : 50
-  if rand(100) < chance
+  if $PokemonEncounters.encounter_triggered?(EncounterTypes::RockSmash, false, false)
     pbEncounter(EncounterTypes::RockSmash)
   end
 end

@@ -259,7 +259,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
   loop do
     if need_refresh
       commands.clear
-      commands.push(_INTL("Step chance={1}", enc_data.step_chances[enc_type] || 0))
+      commands.push(_INTL("Step chance={1}%", enc_data.step_chances[enc_type] || 0))
       commands.push(_INTL("Encounter type={1}", EncounterTypes::Names[enc_type]))
       if enc_data.types[enc_type] && enc_data.types[enc_type].length > 0
         enc_data.types[enc_type].each do |slot|
@@ -272,7 +272,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
     ret = pbCommands2(list, commands, -1, ret)
     if ret == 0   # Edit step chance
       old_step_chance = enc_data.step_chances[enc_type] || 0
-      new_step_chance = LimitProperty.new(180).set(_INTL("Step chance"), old_step_chance)
+      new_step_chance = LimitProperty.new(255).set(_INTL("Step chance"), old_step_chance)
       if new_step_chance != old_step_chance
         enc_data.step_chances[enc_type] = new_step_chance
         need_refresh = true

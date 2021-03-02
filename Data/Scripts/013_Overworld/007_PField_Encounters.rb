@@ -100,9 +100,9 @@ class PokemonEncounters
     return false
   end
 
-  # Returns whether a wild encounter should happen, based on the probability of
-  # one triggering upon taking a step.
-  def step_triggers_encounter?(enc_type)
+  # Returns whether a wild encounter should happen, based on its encounter
+  # chance. Called when taking a step and by Rock Smash.
+  def encounter_triggered?(enc_type, repel_active = false, triggered_by_step = true)
     if enc_type < 0 || enc_type > EncounterTypes::Probabilities.length
       raise ArgumentError.new(_INTL("Encounter type out of range"))
     end
@@ -116,8 +116,10 @@ class PokemonEncounters
     encounter_chance = @step_chances[enc_type].to_f
     min_steps_needed = (8 - encounter_chance / 10).clamp(0, 8).to_f
     # Apply modifiers to the encounter chance and the minimum steps amount
-    encounter_chance += @chance_accumulator / 200
-    encounter_chance *= 0.8 if $PokemonGlobal.bicycle
+    if triggered_by_step
+      encounter_chance += @chance_accumulator / 200
+      encounter_chance *= 0.8 if $PokemonGlobal.bicycle
+    end
     if !Settings::FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
       encounter_chance /= 2 if $PokemonMap.blackFluteUsed
       min_steps_needed *= 2 if $PokemonMap.blackFluteUsed
@@ -140,7 +142,7 @@ class PokemonEncounters
           min_steps_needed *= 2
         when :SNOWCLOAK
           if $game_screen.weather_type == PBFieldWeather::Snow ||
-                          $game_screen.weather_type == PBFieldWeather::Blizzard
+             $game_screen.weather_type == PBFieldWeather::Blizzard
             encounter_chance /= 2
             min_steps_needed *= 2
           end
@@ -160,14 +162,17 @@ class PokemonEncounters
     end
     # Wild encounters are much less likely to happen for the first few steps
     # after a previous wild encounter
-    if @step_count < min_steps_needed
+    if triggered_by_step && @step_count < min_steps_needed
       @step_count += 1
       return false if rand(100) >= encounter_chance * 5 / (@step_chances[enc_type] + @chance_accumulator / 200)
     end
     # Decide whether the wild encounter should actually happen
     return true if rand(100) < encounter_chance
     # If encounter didn't happen, make the next step more likely to produce one
-    @chance_accumulator += @step_chances[enc_type]
+    if triggered_by_step
+      @chance_accumulator += @step_chances[enc_type]
+      @chance_accumulator = 0 if repel_active
+    end
     return false
   end
 
@@ -423,8 +428,8 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   return genwildpoke
 end
 
-# Used by fishing rods and Headbutt/Rock Smash/Sweet Scent. Skips the
-# probability checks in def step_triggers_encounter? above.
+# Used by fishing rods and Headbutt/Rock Smash/Sweet Scent to generate a wild
+# Pokémon (or two) for a triggered wild encounter.
 def pbEncounter(enc_type)
   $PokemonTemp.encounterType = enc_type
   encounter1 = $PokemonEncounters.choose_wild_pokemon(enc_type)
