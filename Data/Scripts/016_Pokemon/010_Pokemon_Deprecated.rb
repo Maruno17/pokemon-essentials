@@ -96,6 +96,7 @@ end
 class Pokemon
   # @deprecated Use {MAX_NAME_SIZE} instead. This alias is slated to be removed in v20.
   MAX_POKEMON_NAME_SIZE = MAX_NAME_SIZE
+  deprecate_constant :MAX_POKEMON_NAME_SIZE
 
   # @deprecated Use {Owner#public_id} instead. This alias is slated to be removed in v20.
   def publicID
@@ -151,12 +152,6 @@ class Pokemon
     @owner.language = value
   end
 
-  # @deprecated Use {Pokemon#gender=} instead. This alias is slated to be removed in v20.
-  def setGender(value)
-    Deprecation.warn_method('Pokemon#setGender', 'v20', 'Pokemon#gender=')
-    self.gender = value
-  end
-
   # @deprecated Use {Pokemon#shiny=} instead. This alias is slated to be removed in v20.
   def makeShiny
     Deprecation.warn_method('Pokemon#makeShiny', 'v20', 'Pokemon#shiny=true')
@@ -169,23 +164,10 @@ class Pokemon
     self.shiny = false
   end
 
-  # @deprecated Use {Pokemon#ability_index=} instead. This alias is slated to be removed in v20.
-  def setAbility(value)
-    Deprecation.warn_method('Pokemon#setAbility', 'v20', 'Pokemon#ability_index=')
-    self.ability_index = value
-  end
-
-  # @deprecated Use {Pokemon#nature=} instead. This alias is slated to be removed in v20.
-  def setNature(value)
-    Deprecation.warn_method('Pokemon#setNature', 'v20', 'Pokemon#nature=')
-    self.nature = value
-  end
-
-  # @deprecated Use {Pokemon#item=} instead. This alias is slated to be removed in v20.
-  def setItem(value)
-    Deprecation.warn_method('Pokemon#setItem', 'v20', 'Pokemon#item=')
-    self.item = value
-  end
+  deprecated_method_alias :setGender, :gender=, removal_in: 'v20'
+  deprecated_method_alias :setAbility, :ability_index=, removal_in: 'v20'
+  deprecated_method_alias :setNature, :nature=, removal_in: 'v20'
+  deprecated_method_alias :setItem, :item=, removal_in: 'v20'
 
   deprecated_method_alias :healStatus, :heal_status, removal_in: 'v20'
   deprecated_method_alias :pbLearnMove, :learn_move, removal_in: 'v20'
