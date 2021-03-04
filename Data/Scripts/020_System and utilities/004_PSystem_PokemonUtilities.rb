@@ -255,12 +255,12 @@ end
 #===============================================================================
 def pbSize(pkmn)
   baseheight = pkmn.height
-  hpiv = pkmn.iv[0] & 15
-  ativ = pkmn.iv[1] & 15
-  dfiv = pkmn.iv[2] & 15
-  spiv = pkmn.iv[3] & 15
-  saiv = pkmn.iv[4] & 15
-  sdiv = pkmn.iv[5] & 15
+  hpiv = pkmn.iv[:HP] & 15
+  ativ = pkmn.iv[:ATTACK] & 15
+  dfiv = pkmn.iv[:DEFENSE] & 15
+  saiv = pkmn.iv[:SPECIAL_ATTACK] & 15
+  sdiv = pkmn.iv[:SPECIAL_DEFENSE] & 15
+  spiv = pkmn.iv[:SPEED] & 15
   m = pkmn.personalID & 0xFF
   n = (pkmn.personalID >> 8) & 0xFF
   s = (((ativ ^ dfiv) * hpiv) ^ m) * 256 + (((saiv ^ sdiv) * spiv) ^ n)

@@ -390,7 +390,7 @@ class StandardRestriction
     return false if speciesBlacklist.include?(pkmn.species)
     # Species with total base stat 600 or more are banned
     bst = 0
-    pkmn.baseStats.each { |s| bst += s }
+    pkmn.baseStats.each_value { |s| bst += s }
     return false if bst >= 600
     # Is valid
     return true

@@ -137,17 +137,17 @@ class PokeBattle_AI
   end
 
   def pbRoughStat(battler,stat,skill)
-    return battler.pbSpeed if skill>=PBTrainerAI.highSkill && stat==PBStats::SPEED
+    return battler.pbSpeed if skill>=PBTrainerAI.highSkill && stat==:SPEED
     stageMul = [2,2,2,2,2,2, 2, 3,4,5,6,7,8]
     stageDiv = [8,7,6,5,4,3, 2, 2,2,2,2,2,2]
     stage = battler.stages[stat]+6
     value = 0
     case stat
-    when PBStats::ATTACK  then value = battler.attack
-    when PBStats::DEFENSE then value = battler.defense
-    when PBStats::SPATK   then value = battler.spatk
-    when PBStats::SPDEF   then value = battler.spdef
-    when PBStats::SPEED   then value = battler.speed
+    when :ATTACK          then value = battler.attack
+    when :DEFENSE         then value = battler.defense
+    when :SPECIAL_ATTACK  then value = battler.spatk
+    when :SPECIAL_DEFENSE then value = battler.spdef
+    when :SPEED           then value = battler.speed
     end
     return (value.to_f*stageMul[stage]/stageDiv[stage]).floor
   end
@@ -185,8 +185,8 @@ class PokeBattle_AI
     when "086"   # Acrobatics
       baseDmg *= 2 if !user.item || user.hasActiveItem?(:FLYINGGEM)
     when "08D"   # Gyro Ball
-      targetSpeed = pbRoughStat(target,PBStats::SPEED,skill)
-      userSpeed = pbRoughStat(user,PBStats::SPEED,skill)
+      targetSpeed = pbRoughStat(target,:SPEED,skill)
+      userSpeed = pbRoughStat(user,:SPEED,skill)
       baseDmg = [[(25*targetSpeed/userSpeed).floor,150].min,1].max
     when "094"   # Present
       baseDmg = 50
@@ -255,20 +255,20 @@ class PokeBattle_AI
     # Get the move's type
     type = pbRoughType(move,user,skill)
     ##### Calculate user's attack stat #####
-    atk = pbRoughStat(user,PBStats::ATTACK,skill)
+    atk = pbRoughStat(user,:ATTACK,skill)
     if move.function=="121"   # Foul Play
-      atk = pbRoughStat(target,PBStats::ATTACK,skill)
+      atk = pbRoughStat(target,:ATTACK,skill)
     elsif move.specialMove?(type)
       if move.function=="121"   # Foul Play
-        atk = pbRoughStat(target,PBStats::SPATK,skill)
+        atk = pbRoughStat(target,:SPECIAL_ATTACK,skill)
       else
-        atk = pbRoughStat(user,PBStats::SPATK,skill)
+        atk = pbRoughStat(user,:SPECIAL_ATTACK,skill)
       end
     end
     ##### Calculate target's defense stat #####
-    defense = pbRoughStat(target,PBStats::DEFENSE,skill)
+    defense = pbRoughStat(target,:DEFENSE,skill)
     if move.specialMove?(type) && move.function!="122"   # Psyshock
-      defense = pbRoughStat(target,PBStats::SPDEF,skill)
+      defense = pbRoughStat(target,:SPECIAL_DEFENSE,skill)
     end
     ##### Calculate all multiplier effects #####
     multipliers = {
@@ -568,8 +568,8 @@ class PokeBattle_AI
     # Calculate all modifier effects
     modifiers = {}
     modifiers[:base_accuracy]  = baseAcc
-    modifiers[:accuracy_stage] = user.stages[PBStats::ACCURACY]
-    modifiers[:evasion_stage]  = target.stages[PBStats::EVASION]
+    modifiers[:accuracy_stage] = user.stages[:ACCURACY]
+    modifiers[:evasion_stage]  = target.stages[:EVASION]
     modifiers[:accuracy_multiplier] = 1.0
     modifiers[:evasion_multiplier]  = 1.0
     pbCalcAccuracyModifiers(user,target,modifiers,move,type,skill)

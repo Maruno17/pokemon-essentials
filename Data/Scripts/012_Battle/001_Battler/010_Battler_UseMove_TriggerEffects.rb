@@ -25,9 +25,9 @@ class PokeBattle_Battler
     if target.opposes?(user)
       # Rage
       if target.effects[PBEffects::Rage] && !target.fainted?
-        if target.pbCanRaiseStatStage?(PBStats::ATTACK,target)
+        if target.pbCanRaiseStatStage?(:ATTACK,target)
           @battle.pbDisplay(_INTL("{1}'s rage is building!",target.pbThis))
-          target.pbRaiseStatStage(PBStats::ATTACK,1,target)
+          target.pbRaiseStatStage(:ATTACK,1,target)
         end
       end
       # Beak Blast

@@ -79,11 +79,9 @@ module GameData
       @real_lose_text = hash[:lose_text]    || "..."
       @pokemon        = hash[:pokemon]      || []
       @pokemon.each do |pkmn|
-        if pkmn[:iv]
-          6.times { |i| pkmn[:iv][i] = pkmn[:iv][0] if !pkmn[:iv][i] }
-        end
-        if pkmn[:ev]
-          6.times { |i| pkmn[:ev][i] = pkmn[:ev][0] if !pkmn[:ev][i] }
+        GameData::Stat.each_main do |s|
+          pkmn[:iv][s.id] ||= 0 if pkmn[:iv]
+          pkmn[:ev][s.id] ||= 0 if pkmn[:ev]
         end
       end
     end
@@ -138,16 +136,16 @@ module GameData
           nature = pkmn.species_data.id_number + GameData::TrainerType.get(trainer.trainer_type).id_number
           pkmn.nature = nature % (GameData::Nature::DATA.length / 2)
         end
-        PBStats.eachStat do |s|
-          if pkmn_data[:iv] && pkmn_data[:iv].length > 0
-            pkmn.iv[s] = pkmn_data[:iv][s] || pkmn_data[:iv][0]
+        GameData::Stat.each_main do |s|
+          if pkmn_data[:iv]
+            pkmn.iv[s.id] = pkmn_data[:iv][s.id]
           else
-            pkmn.iv[s] = [pkmn_data[:level] / 2, Pokemon::IV_STAT_LIMIT].min
+            pkmn.iv[s.id] = [pkmn_data[:level] / 2, Pokemon::IV_STAT_LIMIT].min
           end
-          if pkmn_data[:ev] && pkmn_data[:ev].length > 0
-            pkmn.ev[s] = pkmn_data[:ev][s] || pkmn_data[:ev][0]
+          if pkmn_data[:ev]
+            pkmn.ev[s.id] = pkmn_data[:ev][s.id]
           else
-            pkmn.ev[s] = [pkmn_data[:level] * 3 / 2, Pokemon::EV_LIMIT / 6].min
+            pkmn.ev[s.id] = [pkmn_data[:level] * 3 / 2, Pokemon::EV_LIMIT / 6].min
           end
         end
         pkmn.happiness = pkmn_data[:happiness] if pkmn_data[:happiness]

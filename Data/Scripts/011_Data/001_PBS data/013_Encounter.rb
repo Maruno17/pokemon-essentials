@@ -1,5 +1,3 @@
-# $PokemonGlobal.encounter_version
-
 module GameData
   class Encounter
     attr_accessor :id

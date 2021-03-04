@@ -264,49 +264,37 @@ end
 #===============================================================================
 # Change EVs
 #===============================================================================
-def pbJustRaiseEffortValues(pkmn,ev,evgain)
-  totalev = 0
-  for i in 0...6
-    totalev += pkmn.ev[i]
-  end
-  if totalev+evgain>Pokemon::EV_LIMIT
-    evgain = Pokemon::EV_LIMIT-totalev
-  end
-  if pkmn.ev[ev]+evgain>Pokemon::EV_STAT_LIMIT
-    evgain = Pokemon::EV_STAT_LIMIT-pkmn.ev[ev]
-  end
-  if evgain>0
-    pkmn.ev[ev] += evgain
+def pbJustRaiseEffortValues(pkmn, stat, evGain)
+  stat = GameData::Stat.get(stat).id
+  evTotal = 0
+  GameData::Stat.each_main { |s| evTotal += pkmn.ev[s.id] }
+  evGain = evGain.clamp(0, Pokemon::EV_STAT_LIMIT - pkmn.ev[stat])
+  evGain = evGain.clamp(0, Pokemon::EV_LIMIT - evTotal)
+  if evGain > 0
+    pkmn.ev[stat] += evGain
     pkmn.calcStats
   end
-  return evgain
+  return evGain
 end
 
-def pbRaiseEffortValues(pkmn,ev,evgain=10,evlimit=true)
-  return 0 if evlimit && pkmn.ev[ev]>=100
-  totalev = 0
-  for i in 0...6
-    totalev += pkmn.ev[i]
-  end
-  if totalev+evgain>Pokemon::EV_LIMIT
-    evgain = Pokemon::EV_LIMIT-totalev
-  end
-  if pkmn.ev[ev]+evgain>Pokemon::EV_STAT_LIMIT
-    evgain = Pokemon::EV_STAT_LIMIT-pkmn.ev[ev]
-  end
-  if evlimit && pkmn.ev[ev]+evgain>100
-    evgain = 100-pkmn.ev[ev]
-  end
-  if evgain>0
-    pkmn.ev[ev] += evgain
+def pbRaiseEffortValues(pkmn, stat, evGain = 10, ev_limit = true)
+  stat = GameData::Stat.get(stat).id
+  return 0 if ev_limit && pkmn.ev[stat] >= 100
+  evTotal = 0
+  GameData::Stat.each_main { |s| evTotal += pkmn.ev[s.id] }
+  evGain = evGain.clamp(0, Pokemon::EV_STAT_LIMIT - pkmn.ev[stat])
+  evGain = evGain.clamp(0, 100 - pkmn.ev[stat]) if ev_limit
+  evGain = evGain.clamp(0, Pokemon::EV_LIMIT - evTotal)
+  if evGain > 0
+    pkmn.ev[stat] += evGain
     pkmn.calcStats
   end
-  return evgain
+  return evGain
 end
 
-def pbRaiseHappinessAndLowerEV(pkmn,scene,ev,messages)
+def pbRaiseHappinessAndLowerEV(pkmn,scene,stat,messages)
   h = pkmn.happiness<255
-  e = pkmn.ev[ev]>0
+  e = pkmn.ev[stat]>0
   if !h && !e
     scene.pbDisplay(_INTL("It won't have any effect."))
     return false
@@ -315,8 +303,8 @@ def pbRaiseHappinessAndLowerEV(pkmn,scene,ev,messages)
     pkmn.changeHappiness("evberry")
   end
   if e
-    pkmn.ev[ev] -= 10
-    pkmn.ev[ev] = 0 if pkmn.ev[ev]<0
+    pkmn.ev[stat] -= 10
+    pkmn.ev[stat] = 0 if pkmn.ev[stat]<0
     pkmn.calcStats
   end
   scene.pbRefresh

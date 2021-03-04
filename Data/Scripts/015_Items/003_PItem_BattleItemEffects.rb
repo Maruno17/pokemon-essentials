@@ -201,39 +201,39 @@ ItemHandlers::CanUseInBattle.add(:YELLOWFLUTE,proc { |item,pokemon,battler,move,
 })
 
 ItemHandlers::CanUseInBattle.add(:XATTACK,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-  next pbBattleItemCanRaiseStat?(PBStats::ATTACK,battler,scene,showMessages)
+  next pbBattleItemCanRaiseStat?(:ATTACK,battler,scene,showMessages)
 })
 
 ItemHandlers::CanUseInBattle.copy(:XATTACK,:XATTACK2,:XATTACK3,:XATTACK6)
 
 ItemHandlers::CanUseInBattle.add(:XDEFENSE,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-  next pbBattleItemCanRaiseStat?(PBStats::DEFENSE,battler,scene,showMessages)
+  next pbBattleItemCanRaiseStat?(:DEFENSE,battler,scene,showMessages)
 })
 
 ItemHandlers::CanUseInBattle.copy(:XDEFENSE,
    :XDEFENSE2,:XDEFENSE3,:XDEFENSE6,:XDEFEND,:XDEFEND2,:XDEFEND3,:XDEFEND6)
 
 ItemHandlers::CanUseInBattle.add(:XSPATK,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-  next pbBattleItemCanRaiseStat?(PBStats::SPATK,battler,scene,showMessages)
+  next pbBattleItemCanRaiseStat?(:SPECIAL_ATTACK,battler,scene,showMessages)
 })
 
 ItemHandlers::CanUseInBattle.copy(:XSPATK,
    :XSPATK2,:XSPATK3,:XSPATK6,:XSPECIAL,:XSPECIAL2,:XSPECIAL3,:XSPECIAL6)
 
 ItemHandlers::CanUseInBattle.add(:XSPDEF,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-  next pbBattleItemCanRaiseStat?(PBStats::SPDEF,battler,scene,showMessages)
+  next pbBattleItemCanRaiseStat?(:SPECIAL_DEFENSE,battler,scene,showMessages)
 })
 
 ItemHandlers::CanUseInBattle.copy(:XSPDEF,:XSPDEF2,:XSPDEF3,:XSPDEF6)
 
 ItemHandlers::CanUseInBattle.add(:XSPEED,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-  next pbBattleItemCanRaiseStat?(PBStats::SPEED,battler,scene,showMessages)
+  next pbBattleItemCanRaiseStat?(:SPEED,battler,scene,showMessages)
 })
 
 ItemHandlers::CanUseInBattle.copy(:XSPEED,:XSPEED2,:XSPEED3,:XSPEED6)
 
 ItemHandlers::CanUseInBattle.add(:XACCURACY,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-  next pbBattleItemCanRaiseStat?(PBStats::ACCURACY,battler,scene,showMessages)
+  next pbBattleItemCanRaiseStat?(:ACCURACY,battler,scene,showMessages)
 })
 
 ItemHandlers::CanUseInBattle.copy(:XACCURACY,:XACCURACY2,:XACCURACY3,:XACCURACY6)
@@ -523,138 +523,138 @@ ItemHandlers::BattleUseOnBattler.add(:YELLOWFLUTE,proc { |item,battler,scene|
 ItemHandlers::BattleUseOnBattler.copy(:YELLOWFLUTE,:PERSIMBERRY)
 
 ItemHandlers::BattleUseOnBattler.add(:XATTACK,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::ATTACK,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
+  battler.pbRaiseStatStage(:ATTACK,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XATTACK2,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::ATTACK,2,battler)
+  battler.pbRaiseStatStage(:ATTACK,2,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XATTACK3,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::ATTACK,3,battler)
+  battler.pbRaiseStatStage(:ATTACK,3,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XATTACK6,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::ATTACK,6,battler)
+  battler.pbRaiseStatStage(:ATTACK,6,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XDEFENSE,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::DEFENSE,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
+  battler.pbRaiseStatStage(:DEFENSE,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.copy(:XDEFENSE,:XDEFEND)
 
 ItemHandlers::BattleUseOnBattler.add(:XDEFENSE2,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::DEFENSE,2,battler)
+  battler.pbRaiseStatStage(:DEFENSE,2,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.copy(:XDEFENSE2,:XDEFEND2)
 
 ItemHandlers::BattleUseOnBattler.add(:XDEFENSE3,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::DEFENSE,3,battler)
+  battler.pbRaiseStatStage(:DEFENSE,3,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.copy(:XDEFENSE3,:XDEFEND3)
 
 ItemHandlers::BattleUseOnBattler.add(:XDEFENSE6,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::DEFENSE,6,battler)
+  battler.pbRaiseStatStage(:DEFENSE,6,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.copy(:XDEFENSE6,:XDEFEND6)
 
 ItemHandlers::BattleUseOnBattler.add(:XSPATK,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPATK,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
+  battler.pbRaiseStatStage(:SPECIAL_ATTACK,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.copy(:XSPATK,:XSPECIAL)
 
 ItemHandlers::BattleUseOnBattler.add(:XSPATK2,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPATK,2,battler)
+  battler.pbRaiseStatStage(:SPECIAL_ATTACK,2,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.copy(:XSPATK2,:XSPECIAL2)
 
 ItemHandlers::BattleUseOnBattler.add(:XSPATK3,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPATK,3,battler)
+  battler.pbRaiseStatStage(:SPECIAL_ATTACK,3,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.copy(:XSPATK3,:XSPECIAL3)
 
 ItemHandlers::BattleUseOnBattler.add(:XSPATK6,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPATK,6,battler)
+  battler.pbRaiseStatStage(:SPECIAL_ATTACK,6,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.copy(:XSPATK6,:XSPECIAL6)
 
 ItemHandlers::BattleUseOnBattler.add(:XSPDEF,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPDEF,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
+  battler.pbRaiseStatStage(:SPECIAL_DEFENSE,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XSPDEF2,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPDEF,2,battler)
+  battler.pbRaiseStatStage(:SPECIAL_DEFENSE,2,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XSPDEF3,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPDEF,3,battler)
+  battler.pbRaiseStatStage(:SPECIAL_DEFENSE,3,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XSPDEF6,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPDEF,6,battler)
+  battler.pbRaiseStatStage(:SPECIAL_DEFENSE,6,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XSPEED,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPEED,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
+  battler.pbRaiseStatStage(:SPEED,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XSPEED2,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPEED,2,battler)
+  battler.pbRaiseStatStage(:SPEED,2,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XSPEED3,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPEED,3,battler)
+  battler.pbRaiseStatStage(:SPEED,3,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XSPEED6,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::SPEED,6,battler)
+  battler.pbRaiseStatStage(:SPEED,6,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XACCURACY,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::ACCURACY,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
+  battler.pbRaiseStatStage(:ACCURACY,(Settings::X_STAT_ITEMS_RAISE_BY_TWO_STAGES) ? 2 : 1,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XACCURACY2,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::ACCURACY,2,battler)
+  battler.pbRaiseStatStage(:ACCURACY,2,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XACCURACY3,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::ACCURACY,3,battler)
+  battler.pbRaiseStatStage(:ACCURACY,3,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 
 ItemHandlers::BattleUseOnBattler.add(:XACCURACY6,proc { |item,battler,scene|
-  battler.pbRaiseStatStage(PBStats::ACCURACY,6,battler)
+  battler.pbRaiseStatStage(:ACCURACY,6,battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 

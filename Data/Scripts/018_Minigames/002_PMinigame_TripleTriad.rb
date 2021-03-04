@@ -15,12 +15,12 @@ class TriadCard
     @form    = form
     species_data = GameData::Species.get_species_form(@species, @form)
     baseStats = species_data.base_stats
-    hp      = baseStats[PBStats::HP]
-    attack  = baseStats[PBStats::ATTACK]
-    defense = baseStats[PBStats::DEFENSE]
-    spAtk   = baseStats[PBStats::SPATK]
-    spDef   = baseStats[PBStats::SPDEF]
-    speed   = baseStats[PBStats::SPEED]
+    hp      = baseStats[:HP]
+    attack  = baseStats[:ATTACK]
+    defense = baseStats[:DEFENSE]
+    spAtk   = baseStats[:SPECIAL_ATTACK]
+    spDef   = baseStats[:SPECIAL_DEFENSE]
+    speed   = baseStats[:SPEED]
     @type  = species_data.type1
     @type  = species_data.type2 if @type == :NORMAL && species_data.type2
     @west  = baseStatToValue(attack + speed / 3)

@@ -90,8 +90,8 @@ class PokeBattle_Move
     # Calculate all multiplier effects
     modifiers = {}
     modifiers[:base_accuracy]  = baseAcc
-    modifiers[:accuracy_stage] = user.stages[PBStats::ACCURACY]
-    modifiers[:evasion_stage]  = target.stages[PBStats::EVASION]
+    modifiers[:accuracy_stage] = user.stages[:ACCURACY]
+    modifiers[:evasion_stage]  = target.stages[:EVASION]
     modifiers[:accuracy_multiplier] = 1.0
     modifiers[:evasion_multiplier]  = 1.0
     pbCalcAccuracyModifiers(user,target,modifiers)
@@ -203,16 +203,16 @@ class PokeBattle_Move
 
   def pbGetAttackStats(user,target)
     if specialMove?
-      return user.spatk, user.stages[PBStats::SPATK]+6
+      return user.spatk, user.stages[:SPECIAL_ATTACK]+6
     end
-    return user.attack, user.stages[PBStats::ATTACK]+6
+    return user.attack, user.stages[:ATTACK]+6
   end
 
   def pbGetDefenseStats(user,target)
     if specialMove?
-      return target.spdef, target.stages[PBStats::SPDEF]+6
+      return target.spdef, target.stages[:SPECIAL_DEFENSE]+6
     end
-    return target.defense, target.stages[PBStats::DEFENSE]+6
+    return target.defense, target.stages[:DEFENSE]+6
   end
 
   def pbCalcDamage(user,target,numTargets=1)

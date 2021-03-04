@@ -581,47 +581,50 @@ class PokemonSummary_Scene
     end
     # Write characteristic
     if showNature
-      bestiv     = 0
-      tiebreaker = @pokemon.personalID%6
-      for i in 0...6
-        if @pokemon.iv[i]==@pokemon.iv[bestiv]
-          bestiv = i if i>=tiebreaker && bestiv<tiebreaker
-        elsif @pokemon.iv[i]>@pokemon.iv[bestiv]
-          bestiv = i
+      best_stat = nil
+      best_iv = 0
+      stats_order = [:HP, :ATTACK, :DEFENSE, :SPEED, :SPECIAL_ATTACK, :SPECIAL_DEFENSE]
+      start_point = @pokemon.personalID % stats_order.length   # Tiebreaker
+      for i in 0...stats_order.length
+        stat = stats_order[(i + start_point) % stats_order.length]
+        if !best_stat || @pokemon.iv[stat] > @pokemon.iv[best_stat]
+          best_stat = stat
+          best_iv = @pokemon.iv[best_stat]
         end
       end
-      characteristic = [_INTL("Loves to eat."),
-                        _INTL("Often dozes off."),
-                        _INTL("Often scatters things."),
-                        _INTL("Scatters things often."),
-                        _INTL("Likes to relax."),
-                        _INTL("Proud of its power."),
-                        _INTL("Likes to thrash about."),
-                        _INTL("A little quick tempered."),
-                        _INTL("Likes to fight."),
-                        _INTL("Quick tempered."),
-                        _INTL("Sturdy body."),
-                        _INTL("Capable of taking hits."),
-                        _INTL("Highly persistent."),
-                        _INTL("Good endurance."),
-                        _INTL("Good perseverance."),
-                        _INTL("Likes to run."),
-                        _INTL("Alert to sounds."),
-                        _INTL("Impetuous and silly."),
-                        _INTL("Somewhat of a clown."),
-                        _INTL("Quick to flee."),
-                        _INTL("Highly curious."),
-                        _INTL("Mischievous."),
-                        _INTL("Thoroughly cunning."),
-                        _INTL("Often lost in thought."),
-                        _INTL("Very finicky."),
-                        _INTL("Strong willed."),
-                        _INTL("Somewhat vain."),
-                        _INTL("Strongly defiant."),
-                        _INTL("Hates to lose."),
-                        _INTL("Somewhat stubborn.")
-                       ][bestiv*5+@pokemon.iv[bestiv]%5]
-      memo += sprintf("<c3=404040,B0B0B0>%s\n",characteristic)
+      characteristics = {
+        :HP              => [_INTL("Loves to eat."),
+                             _INTL("Takes plenty of siestas."),
+                             _INTL("Nods off a lot."),
+                             _INTL("Scatters things often."),
+                             _INTL("Likes to relax.")],
+        :ATTACK          => [_INTL("Proud of its power."),
+                             _INTL("Likes to thrash about."),
+                             _INTL("A little quick tempered."),
+                             _INTL("Likes to fight."),
+                             _INTL("Quick tempered.")],
+        :DEFENSE         => [_INTL("Sturdy body."),
+                             _INTL("Capable of taking hits."),
+                             _INTL("Highly persistent."),
+                             _INTL("Good endurance."),
+                             _INTL("Good perseverance.")],
+        :SPECIAL_ATTACK  => [_INTL("Highly curious."),
+                             _INTL("Mischievous."),
+                             _INTL("Thoroughly cunning."),
+                             _INTL("Often lost in thought."),
+                             _INTL("Very finicky.")],
+        :SPECIAL_DEFENSE => [_INTL("Strong willed."),
+                             _INTL("Somewhat vain."),
+                             _INTL("Strongly defiant."),
+                             _INTL("Hates to lose."),
+                             _INTL("Somewhat stubborn.")],
+        :SPEED           => [_INTL("Likes to run."),
+                             _INTL("Alert to sounds."),
+                             _INTL("Impetuous and silly."),
+                             _INTL("Somewhat of a clown."),
+                             _INTL("Quick to flee.")]
+      }
+      memo += sprintf("<c3=404040,B0B0B0>%s\n", characteristics[best_stat][best_iv % 5])
     end
     # Write all text
     drawFormattedTextEx(overlay,232,78,268,memo)
@@ -632,8 +635,8 @@ class PokemonSummary_Scene
     base   = Color.new(248,248,248)
     shadow = Color.new(104,104,104)
     # Determine which stats are boosted and lowered by the Pokémon's nature
-    statshadows = []
-    PBStats.eachStat { |s| statshadows[s] = shadow }
+    statshadows = {}
+    GameData::Stat.each_main { |s| statshadows[s.id] = shadow }
     if !@pokemon.shadowPokemon? || @pokemon.heartStage > 3
       @pokemon.nature_for_stats.stat_changes.each do |change|
         statshadows[change[0]] = Color.new(136,96,72) if change[1] > 0
@@ -642,17 +645,17 @@ class PokemonSummary_Scene
     end
     # Write various bits of text
     textpos = [
-       [_INTL("HP"),292,76,2,base,statshadows[PBStats::HP]],
+       [_INTL("HP"),292,76,2,base,statshadows[:HP]],
        [sprintf("%d/%d",@pokemon.hp,@pokemon.totalhp),462,76,1,Color.new(64,64,64),Color.new(176,176,176)],
-       [_INTL("Attack"),248,120,0,base,statshadows[PBStats::ATTACK]],
+       [_INTL("Attack"),248,120,0,base,statshadows[:ATTACK]],
        [sprintf("%d",@pokemon.attack),456,120,1,Color.new(64,64,64),Color.new(176,176,176)],
-       [_INTL("Defense"),248,152,0,base,statshadows[PBStats::DEFENSE]],
+       [_INTL("Defense"),248,152,0,base,statshadows[:DEFENSE]],
        [sprintf("%d",@pokemon.defense),456,152,1,Color.new(64,64,64),Color.new(176,176,176)],
-       [_INTL("Sp. Atk"),248,184,0,base,statshadows[PBStats::SPATK]],
+       [_INTL("Sp. Atk"),248,184,0,base,statshadows[:SPECIAL_ATTACK]],
        [sprintf("%d",@pokemon.spatk),456,184,1,Color.new(64,64,64),Color.new(176,176,176)],
-       [_INTL("Sp. Def"),248,216,0,base,statshadows[PBStats::SPDEF]],
+       [_INTL("Sp. Def"),248,216,0,base,statshadows[:SPECIAL_DEFENSE]],
        [sprintf("%d",@pokemon.spdef),456,216,1,Color.new(64,64,64),Color.new(176,176,176)],
-       [_INTL("Speed"),248,248,0,base,statshadows[PBStats::SPEED]],
+       [_INTL("Speed"),248,248,0,base,statshadows[:SPEED]],
        [sprintf("%d",@pokemon.speed),456,248,1,Color.new(64,64,64),Color.new(176,176,176)],
        [_INTL("Ability"),224,284,0,base,shadow]
     ]

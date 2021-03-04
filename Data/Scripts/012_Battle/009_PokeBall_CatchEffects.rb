@@ -143,7 +143,7 @@ BallHandlers::ModifyCatchRate.add(:QUICKBALL,proc { |ball,catchRate,battle,battl
 
 BallHandlers::ModifyCatchRate.add(:FASTBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
   baseStats = battler.pokemon.baseStats
-  baseSpeed = baseStats[PBStats::SPEED]
+  baseSpeed = baseStats[:SPEED]
   catchRate *= 4 if baseSpeed >= 100
   next [catchRate, 255].min
 })

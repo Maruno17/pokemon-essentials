@@ -7,7 +7,7 @@ class PokeBattle_Battler
     @index       = idxBattler
     @captured    = false
     @dummy       = false
-    @stages      = []
+    @stages      = {}
     @effects     = []
     @damageState = PokeBattle_DamageState.new
     pbInitBlank
@@ -31,7 +31,8 @@ class PokeBattle_Battler
     @pokemonIndex   = -1
     @participants   = []
     @moves          = []
-    @iv             = [0,0,0,0,0,0]
+    @iv             = {}
+    GameData::Stat.each_main { |s| @iv[s.id] = 0 }
   end
 
   # Used by Future Sight only, when Future Sight's user is no longer in battle.
@@ -58,7 +59,8 @@ class PokeBattle_Battler
     @pokemonIndex = idxParty
     @participants = []
     # moves intentionally not copied across here
-    @iv           = pkmn.iv.clone
+    @iv           = {}
+    GameData::Stat.each_main { |s| @iv[s.id] = pkmn.iv[s.id] }
     @dummy        = true
   end
 
@@ -95,7 +97,8 @@ class PokeBattle_Battler
     pkmn.moves.each_with_index do |m,i|
       @moves[i] = PokeBattle_Move.from_pokemon_move(@battle,m)
     end
-    @iv           = pkmn.iv.clone
+    @iv           = {}
+    GameData::Stat.each_main { |s| @iv[s.id] = pkmn.iv[s.id] }
   end
 
   def pbInitEffects(batonPass)
@@ -113,13 +116,13 @@ class PokeBattle_Battler
       @effects[PBEffects::GastroAcid]  = false if unstoppableAbility?
     else
       # These effects are passed on if Baton Pass is used
-      @stages[PBStats::ATTACK]   = 0
-      @stages[PBStats::DEFENSE]  = 0
-      @stages[PBStats::SPEED]    = 0
-      @stages[PBStats::SPATK]    = 0
-      @stages[PBStats::SPDEF]    = 0
-      @stages[PBStats::EVASION]  = 0
-      @stages[PBStats::ACCURACY] = 0
+      @stages[:ATTACK]          = 0
+      @stages[:DEFENSE]         = 0
+      @stages[:SPEED]           = 0
+      @stages[:SPECIAL_ATTACK]  = 0
+      @stages[:SPECIAL_DEFENSE] = 0
+      @stages[:ACCURACY]        = 0
+      @stages[:EVASION]         = 0
       @effects[PBEffects::AquaRing]          = false
       @effects[PBEffects::Confusion]         = 0
       @effects[PBEffects::Curse]             = false

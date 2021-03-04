@@ -15,7 +15,7 @@ class PokeBattle_Battler
     # Check the stat stage
     if statStageAtMax?(stat)
       @battle.pbDisplay(_INTL("{1}'s {2} won't go any higher!",
-         pbThis,PBStats.getName(stat))) if showFailMsg
+         pbThis, GameData::Stat.get(stat).name)) if showFailMsg
       return false
     end
     return true
@@ -33,15 +33,15 @@ class PokeBattle_Battler
     # Change the stat stage
     increment = [increment,6-@stages[stat]].min
     if increment>0
-      s = PBStats.getName(stat); new = @stages[stat]+increment
-      PBDebug.log("[Stat change] #{pbThis}'s #{s}: #{@stages[stat]} -> #{new} (+#{increment})")
+      stat_name = GameData::Stat.get(stat).name
+      new = @stages[stat]+increment
+      PBDebug.log("[Stat change] #{pbThis}'s #{stat_name}: #{@stages[stat]} -> #{new} (+#{increment})")
       @stages[stat] += increment
     end
     return increment
   end
 
   def pbRaiseStatStage(stat,increment,user,showAnim=true,ignoreContrary=false)
-    return false if !PBStats.validBattleStat?(stat)
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
       return pbLowerStatStage(stat,increment,user,showAnim,true)
@@ -52,9 +52,9 @@ class PokeBattle_Battler
     # Stat up animation and message
     @battle.pbCommonAnimation("StatUp",self) if showAnim
     arrStatTexts = [
-       _INTL("{1}'s {2} rose!",pbThis,PBStats.getName(stat)),
-       _INTL("{1}'s {2} rose sharply!",pbThis,PBStats.getName(stat)),
-       _INTL("{1}'s {2} rose drastically!",pbThis,PBStats.getName(stat))]
+       _INTL("{1}'s {2} rose!",pbThis,GameData::Stat.get(stat).name),
+       _INTL("{1}'s {2} rose sharply!",pbThis,GameData::Stat.get(stat).name),
+       _INTL("{1}'s {2} rose drastically!",pbThis,GameData::Stat.get(stat).name)]
     @battle.pbDisplay(arrStatTexts[[increment-1,2].min])
     # Trigger abilities upon stat gain
     if abilityActive?
@@ -64,7 +64,6 @@ class PokeBattle_Battler
   end
 
   def pbRaiseStatStageByCause(stat,increment,user,cause,showAnim=true,ignoreContrary=false)
-    return false if !PBStats.validBattleStat?(stat)
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
       return pbLowerStatStageByCause(stat,increment,user,cause,showAnim,true)
@@ -76,14 +75,14 @@ class PokeBattle_Battler
     @battle.pbCommonAnimation("StatUp",self) if showAnim
     if user.index==@index
       arrStatTexts = [
-         _INTL("{1}'s {2} raised its {3}!",pbThis,cause,PBStats.getName(stat)),
-         _INTL("{1}'s {2} sharply raised its {3}!",pbThis,cause,PBStats.getName(stat)),
-         _INTL("{1}'s {2} drastically raised its {3}!",pbThis,cause,PBStats.getName(stat))]
+         _INTL("{1}'s {2} raised its {3}!",pbThis,cause,GameData::Stat.get(stat).name),
+         _INTL("{1}'s {2} sharply raised its {3}!",pbThis,cause,GameData::Stat.get(stat).name),
+         _INTL("{1}'s {2} drastically raised its {3}!",pbThis,cause,GameData::Stat.get(stat).name)]
     else
       arrStatTexts = [
-         _INTL("{1}'s {2} raised {3}'s {4}!",user.pbThis,cause,pbThis(true),PBStats.getName(stat)),
-         _INTL("{1}'s {2} sharply raised {3}'s {4}!",user.pbThis,cause,pbThis(true),PBStats.getName(stat)),
-         _INTL("{1}'s {2} drastically raised {3}'s {4}!",user.pbThis,cause,pbThis(true),PBStats.getName(stat))]
+         _INTL("{1}'s {2} raised {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name),
+         _INTL("{1}'s {2} sharply raised {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name),
+         _INTL("{1}'s {2} drastically raised {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name)]
     end
     @battle.pbDisplay(arrStatTexts[[increment-1,2].min])
     # Trigger abilities upon stat gain
@@ -148,7 +147,7 @@ class PokeBattle_Battler
     # Check the stat stage
     if statStageAtMin?(stat)
       @battle.pbDisplay(_INTL("{1}'s {2} won't go any lower!",
-         pbThis,PBStats.getName(stat))) if showFailMsg
+         pbThis, GameData::Stat.get(stat).name)) if showFailMsg
       return false
     end
     return true
@@ -166,15 +165,15 @@ class PokeBattle_Battler
     # Change the stat stage
     increment = [increment,6+@stages[stat]].min
     if increment>0
-      s = PBStats.getName(stat); new = @stages[stat]-increment
-      PBDebug.log("[Stat change] #{pbThis}'s #{s}: #{@stages[stat]} -> #{new} (-#{increment})")
+      stat_name = GameData::Stat.get(stat).name
+      new = @stages[stat]-increment
+      PBDebug.log("[Stat change] #{pbThis}'s #{stat_name}: #{@stages[stat]} -> #{new} (-#{increment})")
       @stages[stat] -= increment
     end
     return increment
   end
 
   def pbLowerStatStage(stat,increment,user,showAnim=true,ignoreContrary=false)
-    return false if !PBStats.validBattleStat?(stat)
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
       return pbRaiseStatStage(stat,increment,user,showAnim,true)
@@ -185,9 +184,9 @@ class PokeBattle_Battler
     # Stat down animation and message
     @battle.pbCommonAnimation("StatDown",self) if showAnim
     arrStatTexts = [
-       _INTL("{1}'s {2} fell!",pbThis,PBStats.getName(stat)),
-       _INTL("{1}'s {2} harshly fell!",pbThis,PBStats.getName(stat)),
-       _INTL("{1}'s {2} severely fell!",pbThis,PBStats.getName(stat))]
+       _INTL("{1}'s {2} fell!",pbThis,GameData::Stat.get(stat).name),
+       _INTL("{1}'s {2} harshly fell!",pbThis,GameData::Stat.get(stat).name),
+       _INTL("{1}'s {2} severely fell!",pbThis,GameData::Stat.get(stat).name)]
     @battle.pbDisplay(arrStatTexts[[increment-1,2].min])
     # Trigger abilities upon stat loss
     if abilityActive?
@@ -197,7 +196,6 @@ class PokeBattle_Battler
   end
 
   def pbLowerStatStageByCause(stat,increment,user,cause,showAnim=true,ignoreContrary=false)
-    return false if !PBStats.validBattleStat?(stat)
     # Contrary
     if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
       return pbRaiseStatStageByCause(stat,increment,user,cause,showAnim,true)
@@ -209,14 +207,14 @@ class PokeBattle_Battler
     @battle.pbCommonAnimation("StatDown",self) if showAnim
     if user.index==@index
       arrStatTexts = [
-         _INTL("{1}'s {2} lowered its {3}!",pbThis,cause,PBStats.getName(stat)),
-         _INTL("{1}'s {2} harshly lowered its {3}!",pbThis,cause,PBStats.getName(stat)),
-         _INTL("{1}'s {2} severely lowered its {3}!",pbThis,cause,PBStats.getName(stat))]
+         _INTL("{1}'s {2} lowered its {3}!",pbThis,cause,GameData::Stat.get(stat).name),
+         _INTL("{1}'s {2} harshly lowered its {3}!",pbThis,cause,GameData::Stat.get(stat).name),
+         _INTL("{1}'s {2} severely lowered its {3}!",pbThis,cause,GameData::Stat.get(stat).name)]
     else
       arrStatTexts = [
-         _INTL("{1}'s {2} lowered {3}'s {4}!",user.pbThis,cause,pbThis(true),PBStats.getName(stat)),
-         _INTL("{1}'s {2} harshly lowered {3}'s {4}!",user.pbThis,cause,pbThis(true),PBStats.getName(stat)),
-         _INTL("{1}'s {2} severely lowered {3}'s {4}!",user.pbThis,cause,pbThis(true),PBStats.getName(stat))]
+         _INTL("{1}'s {2} lowered {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name),
+         _INTL("{1}'s {2} harshly lowered {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name),
+         _INTL("{1}'s {2} severely lowered {3}'s {4}!",user.pbThis,cause,pbThis(true),GameData::Stat.get(stat).name)]
     end
     @battle.pbDisplay(arrStatTexts[[increment-1,2].min])
     # Trigger abilities upon stat loss
@@ -254,7 +252,7 @@ class PokeBattle_Battler
       return false
     end
     if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-      return pbLowerStatStageByAbility(PBStats::ATTACK,1,user,false)
+      return pbLowerStatStageByAbility(:ATTACK,1,user,false)
     end
     # NOTE: These checks exist to ensure appropriate messages are shown if
     #       Intimidate is blocked somehow (i.e. the messages should mention the
@@ -266,8 +264,8 @@ class PokeBattle_Battler
         return false
       end
       if abilityActive?
-        if BattleHandlers.triggerStatLossImmunityAbility(self.ability,self,PBStats::ATTACK,@battle,false) ||
-           BattleHandlers.triggerStatLossImmunityAbilityNonIgnorable(self.ability,self,PBStats::ATTACK,@battle,false)
+        if BattleHandlers.triggerStatLossImmunityAbility(self.ability,self,:ATTACK,@battle,false) ||
+           BattleHandlers.triggerStatLossImmunityAbilityNonIgnorable(self.ability,self,:ATTACK,@battle,false)
           @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!",
              pbThis,abilityName,user.pbThis(true),user.abilityName))
           return false
@@ -275,36 +273,36 @@ class PokeBattle_Battler
       end
       eachAlly do |b|
         next if !b.abilityActive?
-        if BattleHandlers.triggerStatLossImmunityAllyAbility(b.ability,b,self,PBStats::ATTACK,@battle,false)
+        if BattleHandlers.triggerStatLossImmunityAllyAbility(b.ability,b,self,:ATTACK,@battle,false)
           @battle.pbDisplay(_INTL("{1} is protected from {2}'s {3} by {4}'s {5}!",
              pbThis,user.pbThis(true),user.abilityName,b.pbThis(true),b.abilityName))
           return false
         end
       end
     end
-    return false if !pbCanLowerStatStage?(PBStats::ATTACK,user)
-    return pbLowerStatStageByCause(PBStats::ATTACK,1,user,user.abilityName)
+    return false if !pbCanLowerStatStage?(:ATTACK,user)
+    return pbLowerStatStageByCause(:ATTACK,1,user,user.abilityName)
   end
 
   #=============================================================================
   # Reset stat stages
   #=============================================================================
   def hasAlteredStatStages?
-    PBStats.eachBattleStat { |s| return true if @stages[s]!=0 }
+    GameData::Stat.each_battle { |s| return true if @stages[s.id] != 0 }
     return false
   end
 
   def hasRaisedStatStages?
-    PBStats.eachBattleStat { |s| return true if @stages[s]>0 }
+    GameData::Stat.each_battle { |s| return true if @stages[s.id] > 0 }
     return false
   end
 
   def hasLoweredStatStages?
-    PBStats.eachBattleStat { |s| return true if @stages[s]<0 }
+    GameData::Stat.each_battle { |s| return true if @stages[s.id] < 0 }
     return false
   end
 
   def pbResetStatStages
-    PBStats.eachBattleStat { |s| @stages[s] = 0 }
+    GameData::Stat.each_battle { |s| @stages[s.id] = 0 }
   end
 end

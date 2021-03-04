@@ -174,7 +174,7 @@ class PokeBattle_AI
          (target.semiInvulnerable? || target.effects[PBEffects::SkyDrop]>=0)
         miss = true
         miss = false if user.hasActiveAbility?(:NOGUARD) || target.hasActiveAbility?(:NOGUARD)
-        if miss && pbRoughStat(user,PBStats::SPEED,skill)>pbRoughStat(target,PBStats::SPEED,skill)
+        if miss && pbRoughStat(user,:SPEED,skill)>pbRoughStat(target,:SPEED,skill)
           # Knows what can get past semi-invulnerability
           if target.effects[PBEffects::SkyDrop]>=0
             miss = false if move.hitsFlyingTargets?

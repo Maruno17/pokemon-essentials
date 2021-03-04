@@ -561,7 +561,7 @@ end
 class PokeBattle_Move_01C < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::ATTACK,1]
+    @statUp = [:ATTACK,1]
   end
 end
 
@@ -573,7 +573,7 @@ end
 class PokeBattle_Move_01D < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::DEFENSE,1]
+    @statUp = [:DEFENSE,1]
   end
 end
 
@@ -585,7 +585,7 @@ end
 class PokeBattle_Move_01E < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::DEFENSE,1]
+    @statUp = [:DEFENSE,1]
   end
 
   def pbEffectGeneral(user)
@@ -602,7 +602,7 @@ end
 class PokeBattle_Move_01F < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::SPEED,1]
+    @statUp = [:SPEED,1]
   end
 end
 
@@ -614,7 +614,7 @@ end
 class PokeBattle_Move_020 < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::SPATK,1]
+    @statUp = [:SPECIAL_ATTACK,1]
   end
 end
 
@@ -627,7 +627,7 @@ end
 class PokeBattle_Move_021 < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::SPDEF,1]
+    @statUp = [:SPECIAL_DEFENSE,1]
   end
 
   def pbEffectGeneral(user)
@@ -645,7 +645,7 @@ end
 class PokeBattle_Move_022 < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::EVASION,1]
+    @statUp = [:EVASION,1]
   end
 end
 
@@ -677,7 +677,7 @@ end
 class PokeBattle_Move_024 < PokeBattle_MultiStatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::ATTACK,1,PBStats::DEFENSE,1]
+    @statUp = [:ATTACK,1,:DEFENSE,1]
   end
 end
 
@@ -689,7 +689,7 @@ end
 class PokeBattle_Move_025 < PokeBattle_MultiStatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::ATTACK,1,PBStats::DEFENSE,1,PBStats::ACCURACY,1]
+    @statUp = [:ATTACK,1,:DEFENSE,1,:ACCURACY,1]
   end
 end
 
@@ -701,7 +701,7 @@ end
 class PokeBattle_Move_026 < PokeBattle_MultiStatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::ATTACK,1,PBStats::SPEED,1]
+    @statUp = [:ATTACK,1,:SPEED,1]
   end
 end
 
@@ -713,7 +713,7 @@ end
 class PokeBattle_Move_027 < PokeBattle_MultiStatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::ATTACK,1,PBStats::SPATK,1]
+    @statUp = [:ATTACK,1,:SPECIAL_ATTACK,1]
   end
 end
 
@@ -726,7 +726,7 @@ end
 class PokeBattle_Move_028 < PokeBattle_MultiStatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::ATTACK,1,PBStats::SPATK,1]
+    @statUp = [:ATTACK,1,:SPECIAL_ATTACK,1]
   end
 
   def pbOnStartUse(user,targets)
@@ -744,7 +744,7 @@ end
 class PokeBattle_Move_029 < PokeBattle_MultiStatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::ATTACK,1,PBStats::ACCURACY,1]
+    @statUp = [:ATTACK,1,:ACCURACY,1]
   end
 end
 
@@ -757,7 +757,7 @@ end
 class PokeBattle_Move_02A < PokeBattle_MultiStatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::DEFENSE,1,PBStats::SPDEF,1]
+    @statUp = [:DEFENSE,1,:SPECIAL_DEFENSE,1]
   end
 end
 
@@ -770,7 +770,7 @@ end
 class PokeBattle_Move_02B < PokeBattle_MultiStatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::SPATK,1,PBStats::SPDEF,1,PBStats::SPEED,1]
+    @statUp = [:SPECIAL_ATTACK,1,:SPECIAL_DEFENSE,1,:SPEED,1]
   end
 end
 
@@ -782,7 +782,7 @@ end
 class PokeBattle_Move_02C < PokeBattle_MultiStatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::SPATK,1,PBStats::SPDEF,1]
+    @statUp = [:SPECIAL_ATTACK,1,:SPECIAL_DEFENSE,1]
   end
 end
 
@@ -795,9 +795,7 @@ end
 class PokeBattle_Move_02D < PokeBattle_MultiStatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::ATTACK,1,PBStats::DEFENSE,1,
-               PBStats::SPATK,1,PBStats::SPDEF,1,
-               PBStats::SPEED,1]
+    @statUp = [:ATTACK,1,:DEFENSE,1,:SPECIAL_ATTACK,1,:SPECIAL_DEFENSE,1,:SPEED,1]
   end
 end
 
@@ -809,7 +807,7 @@ end
 class PokeBattle_Move_02E < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::ATTACK,2]
+    @statUp = [:ATTACK,2]
   end
 end
 
@@ -821,7 +819,7 @@ end
 class PokeBattle_Move_02F < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::DEFENSE,2]
+    @statUp = [:DEFENSE,2]
   end
 end
 
@@ -833,7 +831,7 @@ end
 class PokeBattle_Move_030 < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::SPEED,2]
+    @statUp = [:SPEED,2]
   end
 end
 
@@ -846,7 +844,7 @@ end
 class PokeBattle_Move_031 < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::SPEED,2]
+    @statUp = [:SPEED,2]
   end
 
   def pbEffectGeneral(user)
@@ -866,7 +864,7 @@ end
 class PokeBattle_Move_032 < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::SPATK,2]
+    @statUp = [:SPECIAL_ATTACK,2]
   end
 end
 
@@ -878,7 +876,7 @@ end
 class PokeBattle_Move_033 < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::SPDEF,2]
+    @statUp = [:SPECIAL_DEFENSE,2]
   end
 end
 
@@ -890,7 +888,7 @@ end
 class PokeBattle_Move_034 < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::EVASION,2]
+    @statUp = [:EVASION,2]
   end
 
   def pbEffectGeneral(user)
@@ -909,8 +907,8 @@ end
 class PokeBattle_Move_035 < PokeBattle_Move
   def initialize(battle,move)
     super
-    @statUp   = [PBStats::ATTACK,2,PBStats::SPATK,2,PBStats::SPEED,2]
-    @statDown = [PBStats::DEFENSE,1,PBStats::SPDEF,1]
+    @statUp   = [:ATTACK,2,:SPECIAL_ATTACK,2,:SPEED,2]
+    @statDown = [:DEFENSE,1,:SPECIAL_DEFENSE,1]
   end
 
   def pbMoveFailed?(user,targets)
@@ -958,7 +956,7 @@ end
 class PokeBattle_Move_036 < PokeBattle_MultiStatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::SPEED,2,PBStats::ATTACK,1]
+    @statUp = [:SPEED,2,:ATTACK,1]
   end
 end
 
@@ -970,8 +968,8 @@ end
 class PokeBattle_Move_037 < PokeBattle_Move
   def pbFailsAgainstTarget?(user,target)
     @statArray = []
-    PBStats.eachBattleStat do |s|
-      @statArray.push(s) if target.pbCanRaiseStatStage?(s,user,self)
+    GameData::Stat.each_battle do |s|
+      @statArray.push(s.id) if target.pbCanRaiseStatStage?(s.id,user,self)
     end
     if @statArray.length==0
       @battle.pbDisplay(_INTL("{1}'s stats won't go any higher!",target.pbThis))
@@ -994,7 +992,7 @@ end
 class PokeBattle_Move_038 < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::DEFENSE,3]
+    @statUp = [:DEFENSE,3]
   end
 end
 
@@ -1006,7 +1004,7 @@ end
 class PokeBattle_Move_039 < PokeBattle_StatUpMove
   def initialize(battle,move)
     super
-    @statUp = [PBStats::SPATK,3]
+    @statUp = [:SPECIAL_ATTACK,3]
   end
 end
 
@@ -1023,7 +1021,7 @@ class PokeBattle_Move_03A < PokeBattle_Move
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
-    return true if !user.pbCanRaiseStatStage?(PBStats::ATTACK,user,self,true)
+    return true if !user.pbCanRaiseStatStage?(:ATTACK,user,self,true)
     return false
   end
 
@@ -1031,11 +1029,11 @@ class PokeBattle_Move_03A < PokeBattle_Move
     hpLoss = [user.totalhp/2,1].max
     user.pbReduceHP(hpLoss,false)
     if user.hasActiveAbility?(:CONTRARY)
-      user.stages[PBStats::ATTACK] = -6
+      user.stages[:ATTACK] = -6
       @battle.pbCommonAnimation("StatDown",user)
       @battle.pbDisplay(_INTL("{1} cut its own HP and minimized its Attack!",user.pbThis))
     else
-      user.stages[PBStats::ATTACK] = 6
+      user.stages[:ATTACK] = 6
       @battle.pbCommonAnimation("StatUp",user)
       @battle.pbDisplay(_INTL("{1} cut its own HP and maximized its Attack!",user.pbThis))
     end
@@ -1051,7 +1049,7 @@ end
 class PokeBattle_Move_03B < PokeBattle_StatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::ATTACK,1,PBStats::DEFENSE,1]
+    @statDown = [:ATTACK,1,:DEFENSE,1]
   end
 end
 
@@ -1064,7 +1062,7 @@ end
 class PokeBattle_Move_03C < PokeBattle_StatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::DEFENSE,1,PBStats::SPDEF,1]
+    @statDown = [:DEFENSE,1,:SPECIAL_DEFENSE,1]
   end
 end
 
@@ -1077,7 +1075,7 @@ end
 class PokeBattle_Move_03D < PokeBattle_StatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::SPEED,1,PBStats::DEFENSE,1,PBStats::SPDEF,1]
+    @statDown = [:SPEED,1,:DEFENSE,1,:SPECIAL_DEFENSE,1]
   end
 end
 
@@ -1089,7 +1087,7 @@ end
 class PokeBattle_Move_03E < PokeBattle_StatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::SPEED,1]
+    @statDown = [:SPEED,1]
   end
 end
 
@@ -1101,7 +1099,7 @@ end
 class PokeBattle_Move_03F < PokeBattle_StatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::SPATK,2]
+    @statDown = [:SPECIAL_ATTACK,2]
   end
 end
 
@@ -1114,7 +1112,7 @@ class PokeBattle_Move_040 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
     failed = true
     targets.each do |b|
-      next if !b.pbCanRaiseStatStage?(PBStats::SPATK,user,self) &&
+      next if !b.pbCanRaiseStatStage?(:SPECIAL_ATTACK,user,self) &&
               !b.pbCanConfuse?(user,false,self)
       failed = false
       break
@@ -1127,8 +1125,8 @@ class PokeBattle_Move_040 < PokeBattle_Move
   end
 
   def pbEffectAgainstTarget(user,target)
-    if target.pbCanRaiseStatStage?(PBStats::SPATK,user,self)
-      target.pbRaiseStatStage(PBStats::SPATK,1,user)
+    if target.pbCanRaiseStatStage?(:SPECIAL_ATTACK,user,self)
+      target.pbRaiseStatStage(:SPECIAL_ATTACK,1,user)
     end
     target.pbConfuse if target.pbCanConfuse?(user,false,self)
   end
@@ -1143,7 +1141,7 @@ class PokeBattle_Move_041 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
     failed = true
     targets.each do |b|
-      next if !b.pbCanRaiseStatStage?(PBStats::ATTACK,user,self) &&
+      next if !b.pbCanRaiseStatStage?(:ATTACK,user,self) &&
               !b.pbCanConfuse?(user,false,self)
       failed = false
       break
@@ -1156,8 +1154,8 @@ class PokeBattle_Move_041 < PokeBattle_Move
   end
 
   def pbEffectAgainstTarget(user,target)
-    if target.pbCanRaiseStatStage?(PBStats::ATTACK,user,self)
-      target.pbRaiseStatStage(PBStats::ATTACK,2,user)
+    if target.pbCanRaiseStatStage?(:ATTACK,user,self)
+      target.pbRaiseStatStage(:ATTACK,2,user)
     end
     target.pbConfuse if target.pbCanConfuse?(user,false,self)
   end
@@ -1171,7 +1169,7 @@ end
 class PokeBattle_Move_042 < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::ATTACK,1]
+    @statDown = [:ATTACK,1]
   end
 end
 
@@ -1182,7 +1180,7 @@ end
 class PokeBattle_Move_043 < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::DEFENSE,1]
+    @statDown = [:DEFENSE,1]
   end
 end
 
@@ -1194,7 +1192,7 @@ end
 class PokeBattle_Move_044 < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::SPEED,1]
+    @statDown = [:SPEED,1]
   end
 
   def pbBaseDamage(baseDmg,user,target)
@@ -1213,7 +1211,7 @@ end
 class PokeBattle_Move_045 < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::SPATK,1]
+    @statDown = [:SPECIAL_ATTACK,1]
   end
 end
 
@@ -1225,7 +1223,7 @@ end
 class PokeBattle_Move_046 < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::SPDEF,1]
+    @statDown = [:SPECIAL_DEFENSE,1]
   end
 end
 
@@ -1237,7 +1235,7 @@ end
 class PokeBattle_Move_047 < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::ACCURACY,1]
+    @statDown = [:ACCURACY,1]
   end
 end
 
@@ -1249,7 +1247,7 @@ end
 class PokeBattle_Move_048 < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::EVASION, (Settings::MECHANICS_GENERATION >= 6) ? 2 : 1]
+    @statDown = [:EVASION, (Settings::MECHANICS_GENERATION >= 6) ? 2 : 1]
   end
 end
 
@@ -1264,7 +1262,7 @@ class PokeBattle_Move_049 < PokeBattle_TargetStatDownMove
 
   def initialize(battle,move)
     super
-    @statDown = [PBStats::EVASION,1]
+    @statDown = [:EVASION,1]
   end
 
   def pbFailsAgainstTarget?(user,target)
@@ -1364,7 +1362,7 @@ end
 class PokeBattle_Move_04A < PokeBattle_TargetMultiStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::ATTACK,1,PBStats::DEFENSE,1]
+    @statDown = [:ATTACK,1,:DEFENSE,1]
   end
 end
 
@@ -1376,7 +1374,7 @@ end
 class PokeBattle_Move_04B < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::ATTACK,2]
+    @statDown = [:ATTACK,2]
   end
 end
 
@@ -1388,7 +1386,7 @@ end
 class PokeBattle_Move_04C < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::DEFENSE,2]
+    @statDown = [:DEFENSE,2]
   end
 end
 
@@ -1402,7 +1400,7 @@ class PokeBattle_Move_04D < PokeBattle_TargetStatDownMove
     super
     inc = 2
     inc = 1 if @id == :STRINGSHOT && Settings::MECHANICS_GENERATION <= 5
-    @statDown = [PBStats::SPEED,inc]
+    @statDown = [:SPEED,inc]
   end
 end
 
@@ -1415,7 +1413,7 @@ end
 class PokeBattle_Move_04E < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::SPATK,2]
+    @statDown = [:SPECIAL_ATTACK,2]
   end
 
   def pbFailsAgainstTarget?(user,target)
@@ -1453,7 +1451,7 @@ end
 class PokeBattle_Move_04F < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::SPDEF,2]
+    @statDown = [:SPECIAL_DEFENSE,2]
   end
 end
 
@@ -1506,7 +1504,7 @@ class PokeBattle_Move_052 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
   def pbEffectAgainstTarget(user,target)
-    [PBStats::ATTACK,PBStats::SPATK].each do |s|
+    [:ATTACK,:SPECIAL_ATTACK].each do |s|
       user.stages[s],target.stages[s] = target.stages[s],user.stages[s]
     end
     @battle.pbDisplay(_INTL("{1} switched all changes to its Attack and Sp. Atk with the target!",user.pbThis))
@@ -1522,7 +1520,7 @@ class PokeBattle_Move_053 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
   def pbEffectAgainstTarget(user,target)
-    [PBStats::DEFENSE,PBStats::SPDEF].each do |s|
+    [:DEFENSE,:SPECIAL_DEFENSE].each do |s|
       user.stages[s],target.stages[s] = target.stages[s],user.stages[s]
     end
     @battle.pbDisplay(_INTL("{1} switched all changes to its Defense and Sp. Def with the target!",user.pbThis))
@@ -1538,8 +1536,8 @@ class PokeBattle_Move_054 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
   def pbEffectAgainstTarget(user,target)
-    PBStats.eachBattleStat do |s|
-      user.stages[s],target.stages[s] = target.stages[s],user.stages[s]
+    GameData::Stat.each_battle do |s|
+      user.stages[s.id],target.stages[s.id] = target.stages[s.id],user.stages[s.id]
     end
     @battle.pbDisplay(_INTL("{1} switched stat changes with the target!",user.pbThis))
   end
@@ -1554,7 +1552,7 @@ class PokeBattle_Move_055 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
   def pbEffectAgainstTarget(user,target)
-    PBStats.eachBattleStat { |s| user.stages[s] = target.stages[s] }
+    GameData::Stat.each_battle { |s| user.stages[s.id] = target.stages[s.id] }
     if Settings::NEW_CRITICAL_HIT_RATE_MECHANICS
       user.effects[PBEffects::FocusEnergy] = target.effects[PBEffects::FocusEnergy]
       user.effects[PBEffects::LaserFocus]  = target.effects[PBEffects::LaserFocus]

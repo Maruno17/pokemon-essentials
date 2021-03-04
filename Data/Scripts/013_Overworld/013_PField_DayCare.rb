@@ -269,21 +269,20 @@ def pbDayCareGenerateEgg
     finalmoves.push(Pokemon::Move.new(moves[i]))
   end
   # Inheriting Individual Values
-  ivs = []
-  for i in 0...6
-    ivs[i] = rand(32)
-  end
+  ivs = {}
+  GameData::Stat.each_main { |s| ivs[s.id] = rand(Pokemon::IV_STAT_LIMIT + 1) }
   ivinherit = []
   for i in 0...2
     parent = [mother,father][i]
-    ivinherit[i] = PBStats::HP if parent.hasItem?(:POWERWEIGHT)
-    ivinherit[i] = PBStats::ATTACK if parent.hasItem?(:POWERBRACER)
-    ivinherit[i] = PBStats::DEFENSE if parent.hasItem?(:POWERBELT)
-    ivinherit[i] = PBStats::SPATK if parent.hasItem?(:POWERLENS)
-    ivinherit[i] = PBStats::SPDEF if parent.hasItem?(:POWERBAND)
-    ivinherit[i] = PBStats::SPEED if parent.hasItem?(:POWERANKLET)
+    ivinherit[i] = :HP if parent.hasItem?(:POWERWEIGHT)
+    ivinherit[i] = :ATTACK if parent.hasItem?(:POWERBRACER)
+    ivinherit[i] = :DEFENSE if parent.hasItem?(:POWERBELT)
+    ivinherit[i] = :SPECIAL_ATTACK if parent.hasItem?(:POWERLENS)
+    ivinherit[i] = :SPECIAL_DEFENSE if parent.hasItem?(:POWERBAND)
+    ivinherit[i] = :SPEED if parent.hasItem?(:POWERANKLET)
   end
-  num = 0; r = rand(2)
+  num = 0
+  r = rand(2)
   2.times do
     if ivinherit[r]!=nil
       parent = [mother,father][r]
@@ -296,7 +295,7 @@ def pbDayCareGenerateEgg
   limit = (mother.hasItem?(:DESTINYKNOT) || father.hasItem?(:DESTINYKNOT)) ? 5 : 3
   loop do
     freestats = []
-    PBStats.eachStat { |s| freestats.push(s) if !ivinherit.include?(s) }
+    GameData::Stat.each_main { |s| freestats.push(s.id) if !ivinherit.include?(s.id) }
     break if freestats.length==0
     r = freestats[rand(freestats.length)]
     parent = [mother,father][rand(2)]

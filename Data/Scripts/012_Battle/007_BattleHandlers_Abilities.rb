@@ -362,14 +362,14 @@ BattleHandlers::StatusCureAbility.copy(:WATERVEIL,:WATERBUBBLE)
 
 BattleHandlers::StatLossImmunityAbility.add(:BIGPECKS,
   proc { |ability,battler,stat,battle,showMessages|
-    next false if stat!=PBStats::DEFENSE
+    next false if stat!=:DEFENSE
     if showMessages
       battle.pbShowAbilitySplash(battler)
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-        battle.pbDisplay(_INTL("{1}'s {2} cannot be lowered!",battler.pbThis,PBStats.getName(stat)))
+        battle.pbDisplay(_INTL("{1}'s {2} cannot be lowered!",battler.pbThis,GameData::Stat.get(stat).name))
       else
         battle.pbDisplay(_INTL("{1}'s {2} prevents {3} loss!",battler.pbThis,
-           battler.abilityName,PBStats.getName(stat)))
+           battler.abilityName,GameData::Stat.get(stat).name))
       end
       battle.pbHideAbilitySplash(battler)
     end
@@ -412,14 +412,14 @@ BattleHandlers::StatLossImmunityAbility.add(:FLOWERVEIL,
 
 BattleHandlers::StatLossImmunityAbility.add(:HYPERCUTTER,
   proc { |ability,battler,stat,battle,showMessages|
-    next false if stat!=PBStats::ATTACK
+    next false if stat!=:ATTACK
     if showMessages
       battle.pbShowAbilitySplash(battler)
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-        battle.pbDisplay(_INTL("{1}'s {2} cannot be lowered!",battler.pbThis,PBStats.getName(stat)))
+        battle.pbDisplay(_INTL("{1}'s {2} cannot be lowered!",battler.pbThis,GameData::Stat.get(stat).name))
       else
         battle.pbDisplay(_INTL("{1}'s {2} prevents {3} loss!",battler.pbThis,
-           battler.abilityName,PBStats.getName(stat)))
+           battler.abilityName,GameData::Stat.get(stat).name))
       end
       battle.pbHideAbilitySplash(battler)
     end
@@ -429,14 +429,14 @@ BattleHandlers::StatLossImmunityAbility.add(:HYPERCUTTER,
 
 BattleHandlers::StatLossImmunityAbility.add(:KEENEYE,
   proc { |ability,battler,stat,battle,showMessages|
-    next false if stat!=PBStats::ACCURACY
+    next false if stat!=:ACCURACY
     if showMessages
       battle.pbShowAbilitySplash(battler)
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-        battle.pbDisplay(_INTL("{1}'s {2} cannot be lowered!",battler.pbThis,PBStats.getName(stat)))
+        battle.pbDisplay(_INTL("{1}'s {2} cannot be lowered!",battler.pbThis,GameData::Stat.get(stat).name))
       else
         battle.pbDisplay(_INTL("{1}'s {2} prevents {3} loss!",battler.pbThis,
-           battler.abilityName,PBStats.getName(stat)))
+           battler.abilityName,GameData::Stat.get(stat).name))
       end
       battle.pbHideAbilitySplash(battler)
     end
@@ -497,14 +497,14 @@ BattleHandlers::StatLossImmunityAllyAbility.add(:FLOWERVEIL,
 BattleHandlers::AbilityOnStatLoss.add(:COMPETITIVE,
   proc { |ability,battler,stat,user|
     next if user && !user.opposes?(battler)
-    battler.pbRaiseStatStageByAbility(PBStats::SPATK,2,battler)
+    battler.pbRaiseStatStageByAbility(:SPECIAL_ATTACK,2,battler)
   }
 )
 
 BattleHandlers::AbilityOnStatLoss.add(:DEFIANT,
   proc { |ability,battler,stat,user|
     next if user && !user.opposes?(battler)
-    battler.pbRaiseStatStageByAbility(PBStats::ATTACK,2,battler)
+    battler.pbRaiseStatStageByAbility(:ATTACK,2,battler)
   }
 )
 
@@ -555,7 +555,7 @@ BattleHandlers::PriorityBracketChangeAbility.add(:STALL,
 
 BattleHandlers::AbilityOnFlinch.add(:STEADFAST,
   proc { |ability,battler,battle|
-    battler.pbRaiseStatStageByAbility(PBStats::SPEED,1,battler)
+    battler.pbRaiseStatStageByAbility(:SPEED,1,battler)
   }
 )
 
@@ -625,19 +625,19 @@ BattleHandlers::MoveImmunityTargetAbility.add(:FLASHFIRE,
 
 BattleHandlers::MoveImmunityTargetAbility.add(:LIGHTNINGROD,
   proc { |ability,user,target,move,type,battle|
-    next pbBattleMoveImmunityStatAbility(user,target,move,type,:ELECTRIC,PBStats::SPATK,1,battle)
+    next pbBattleMoveImmunityStatAbility(user,target,move,type,:ELECTRIC,:SPECIAL_ATTACK,1,battle)
   }
 )
 
 BattleHandlers::MoveImmunityTargetAbility.add(:MOTORDRIVE,
   proc { |ability,user,target,move,type,battle|
-    next pbBattleMoveImmunityStatAbility(user,target,move,type,:ELECTRIC,PBStats::SPEED,1,battle)
+    next pbBattleMoveImmunityStatAbility(user,target,move,type,:ELECTRIC,:SPEED,1,battle)
   }
 )
 
 BattleHandlers::MoveImmunityTargetAbility.add(:SAPSIPPER,
   proc { |ability,user,target,move,type,battle|
-    next pbBattleMoveImmunityStatAbility(user,target,move,type,:GRASS,PBStats::ATTACK,1,battle)
+    next pbBattleMoveImmunityStatAbility(user,target,move,type,:GRASS,:ATTACK,1,battle)
   }
 )
 
@@ -658,7 +658,7 @@ BattleHandlers::MoveImmunityTargetAbility.add(:SOUNDPROOF,
 
 BattleHandlers::MoveImmunityTargetAbility.add(:STORMDRAIN,
   proc { |ability,user,target,move,type,battle|
-    next pbBattleMoveImmunityStatAbility(user,target,move,type,:WATER,PBStats::SPATK,1,battle)
+    next pbBattleMoveImmunityStatAbility(user,target,move,type,:WATER,:SPECIAL_ATTACK,1,battle)
   }
 )
 
@@ -1311,15 +1311,15 @@ BattleHandlers::TargetAbilityOnHit.add(:AFTERMATH,
 BattleHandlers::TargetAbilityOnHit.add(:ANGERPOINT,
   proc { |ability,user,target,move,battle|
     next if !target.damageState.critical
-    next if !target.pbCanRaiseStatStage?(PBStats::ATTACK,target)
+    next if !target.pbCanRaiseStatStage?(:ATTACK,target)
     battle.pbShowAbilitySplash(target)
-    target.stages[PBStats::ATTACK] = 6
+    target.stages[:ATTACK] = 6
     battle.pbCommonAnimation("StatUp",target)
     if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-      battle.pbDisplay(_INTL("{1} maxed its {2}!",target.pbThis,PBStats.getName(PBStats::ATTACK)))
+      battle.pbDisplay(_INTL("{1} maxed its {2}!",target.pbThis,GameData::Stat.get(:ATTACK).name))
     else
       battle.pbDisplay(_INTL("{1}'s {2} maxed its {3}!",
-         target.pbThis,target.abilityName,PBStats.getName(PBStats::ATTACK)))
+         target.pbThis,target.abilityName,GameData::Stat.get(:ATTACK).name))
     end
     battle.pbHideAbilitySplash(target)
   }
@@ -1441,7 +1441,7 @@ BattleHandlers::TargetAbilityOnHit.add(:FLAMEBODY,
 BattleHandlers::TargetAbilityOnHit.add(:GOOEY,
   proc { |ability,user,target,move,battle|
     next if !move.pbContactMove?(user)
-    user.pbLowerStatStageByAbility(PBStats::SPEED,1,target,true,true)
+    user.pbLowerStatStageByAbility(:SPEED,1,target,true,true)
   }
 )
 
@@ -1500,7 +1500,7 @@ BattleHandlers::TargetAbilityOnHit.copy(:IRONBARBS,:ROUGHSKIN)
 BattleHandlers::TargetAbilityOnHit.add(:JUSTIFIED,
   proc { |ability,user,target,move,battle|
     next if move.calcType != :DARK
-    target.pbRaiseStatStageByAbility(PBStats::ATTACK,1,target)
+    target.pbRaiseStatStageByAbility(:ATTACK,1,target)
   }
 )
 
@@ -1549,13 +1549,13 @@ BattleHandlers::TargetAbilityOnHit.add(:POISONPOINT,
 BattleHandlers::TargetAbilityOnHit.add(:RATTLED,
   proc { |ability,user,target,move,battle|
     next if ![:BUG, :DARK, :GHOST].include?(move.calcType)
-    target.pbRaiseStatStageByAbility(PBStats::SPEED,1,target)
+    target.pbRaiseStatStageByAbility(:SPEED,1,target)
   }
 )
 
 BattleHandlers::TargetAbilityOnHit.add(:STAMINA,
   proc { |ability,user,target,move,battle|
-    target.pbRaiseStatStageByAbility(PBStats::DEFENSE,1,target)
+    target.pbRaiseStatStageByAbility(:DEFENSE,1,target)
   }
 )
 
@@ -1580,18 +1580,18 @@ BattleHandlers::TargetAbilityOnHit.add(:STATIC,
 BattleHandlers::TargetAbilityOnHit.add(:WATERCOMPACTION,
   proc { |ability,user,target,move,battle|
     next if move.calcType != :WATER
-    target.pbRaiseStatStageByAbility(PBStats::DEFENSE,2,target)
+    target.pbRaiseStatStageByAbility(:DEFENSE,2,target)
   }
 )
 
 BattleHandlers::TargetAbilityOnHit.add(:WEAKARMOR,
   proc { |ability,user,target,move,battle|
     next if !move.physicalMove?
-    next if !target.pbCanLowerStatStage?(PBStats::DEFENSE, target) &&
-            !target.pbCanRaiseStatStage?(PBStats::SPEED, target)
+    next if !target.pbCanLowerStatStage?(:DEFENSE, target) &&
+            !target.pbCanRaiseStatStage?(:SPEED, target)
     battle.pbShowAbilitySplash(target)
-    target.pbLowerStatStageByAbility(PBStats::DEFENSE, 1, target, false)
-    target.pbRaiseStatStageByAbility(PBStats::SPEED,
+    target.pbLowerStatStageByAbility(:DEFENSE, 1, target, false)
+    target.pbRaiseStatStageByAbility(:SPEED,
        (Settings::MECHANICS_GENERATION >= 7) ? 2 : 1, target, false)
     battle.pbHideAbilitySplash(target)
   }
@@ -1632,13 +1632,14 @@ BattleHandlers::UserAbilityEndOfMove.add(:BEASTBOOST,
     next if battle.pbAllFainted?(user.idxOpposingSide)
     numFainted = 0
     targets.each { |b| numFainted += 1 if b.damageState.fainted }
-    next if numFainted==0
+    next if numFainted == 0
     userStats = user.plainStats
-    highestStatValue = userStats.max
-    PBStats.eachMainBattleStat do |s|
-      next if userStats[s]<highestStatValue
-      if user.pbCanRaiseStatStage?(s,user)
-        user.pbRaiseStatStageByAbility(s,numFainted,user)
+    highestStatValue = 0
+    userStats.each_value { |value| highestStatValue = value if highestStatValue < value }
+    GameData::Stat.each_main_battle do |s|
+      next if userStats[s.id] < highestStatValue
+      if user.pbCanRaiseStatStage?(s.id, user)
+        user.pbRaiseStatStageByAbility(s.id, numFainted, user)
       end
       break
     end
@@ -1690,8 +1691,8 @@ BattleHandlers::UserAbilityEndOfMove.add(:MOXIE,
     next if battle.pbAllFainted?(user.idxOpposingSide)
     numFainted = 0
     targets.each { |b| numFainted += 1 if b.damageState.fainted }
-    next if numFainted==0 || !user.pbCanRaiseStatStage?(PBStats::ATTACK,user)
-    user.pbRaiseStatStageByAbility(PBStats::ATTACK,numFainted,user)
+    next if numFainted==0 || !user.pbCanRaiseStatStage?(:ATTACK,user)
+    user.pbRaiseStatStageByAbility(:ATTACK,numFainted,user)
   }
 )
 
@@ -1703,8 +1704,8 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:BERSERK,
   proc { |ability,target,user,move,switched,battle|
     next if !move.damagingMove?
     next if target.damageState.initialHP<target.totalhp/2 || target.hp>=target.totalhp/2
-    next if !target.pbCanRaiseStatStage?(PBStats::SPATK,target)
-    target.pbRaiseStatStageByAbility(PBStats::SPATK,1,target)
+    next if !target.pbCanRaiseStatStage?(:SPECIAL_ATTACK,target)
+    target.pbRaiseStatStageByAbility(:SPECIAL_ATTACK,1,target)
   }
 )
 
@@ -1936,10 +1937,11 @@ BattleHandlers::EOREffectAbility.add(:BADDREAMS,
 
 BattleHandlers::EOREffectAbility.add(:MOODY,
   proc { |ability,battler,battle|
-    randomUp = []; randomDown = []
-    PBStats.eachBattleStat do |s|
-      randomUp.push(s) if battler.pbCanRaiseStatStage?(s,battler)
-      randomDown.push(s) if battler.pbCanLowerStatStage?(s,battler)
+    randomUp = []
+    randomDown = []
+    GameData::Stat.each_battle do |s|
+      randomUp.push(s.id) if battler.pbCanRaiseStatStage?(s.id, battler)
+      randomDown.push(s.id) if battler.pbCanLowerStatStage?(s.id, battler)
     end
     next if randomUp.length==0 && randomDown.length==0
     battle.pbShowAbilitySplash(battler)
@@ -1961,8 +1963,8 @@ BattleHandlers::EOREffectAbility.add(:SPEEDBOOST,
   proc { |ability,battler,battle|
     # A Pokémon's turnCount is 0 if it became active after the beginning of a
     # round
-    if battler.turnCount>0 && battler.pbCanRaiseStatStage?(PBStats::SPEED,battler)
-      battler.pbRaiseStatStageByAbility(PBStats::SPEED,1,battler)
+    if battler.turnCount>0 && battler.pbCanRaiseStatStage?(:SPEED,battler)
+      battler.pbRaiseStatStageByAbility(:SPEED,1,battler)
     end
   }
 )
@@ -2138,7 +2140,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:DOWNLOAD,
       oDef   += b.defense
       oSpDef += b.spdef
     end
-    stat = (oDef<oSpDef) ? PBStats::ATTACK : PBStats::SPATK
+    stat = (oDef<oSpDef) ? :ATTACK : :SPECIAL_ATTACK
     battler.pbRaiseStatStageByAbility(stat,1,battler)
   }
 )
@@ -2408,7 +2410,7 @@ BattleHandlers::AbilityChangeOnBattlerFainting.copy(:POWEROFALCHEMY,:RECEIVER)
 
 BattleHandlers::AbilityOnBattlerFainting.add(:SOULHEART,
   proc { |ability,battler,fainted,battle|
-    battler.pbRaiseStatStageByAbility(PBStats::SPATK,1,battler)
+    battler.pbRaiseStatStageByAbility(:SPECIAL_ATTACK,1,battler)
   }
 )
 

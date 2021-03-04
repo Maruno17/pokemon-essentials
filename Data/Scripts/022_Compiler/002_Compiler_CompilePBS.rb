@@ -416,6 +416,12 @@ module Compiler
           contents[key] = value
           # Sanitise data
           case key
+          when "BaseStats", "EffortPoints"
+            value_hash = {}
+            GameData::Stat.each_main do |s|
+              value_hash[s.id] = value[s.pbs_order] if s.pbs_order >= 0
+            end
+            contents[key] = value_hash
           when "Height", "Weight"
             # Convert height/weight to 1 decimal place and multiply by 10
             value = (value * 10).round
@@ -588,6 +594,12 @@ module Compiler
           contents[key] = value
           # Sanitise data
           case key
+          when "BaseStats", "EffortPoints"
+            value_hash = {}
+            GameData::Stat.each_main do |s|
+              value_hash[s.id] = value[s.pbs_order] if s.pbs_order >= 0
+            end
+            contents[key] = value_hash
           when "Height", "Weight"
             # Convert height/weight to 1 decimal place and multiply by 10
             value = (value * 10).round
@@ -1176,8 +1188,9 @@ module Compiler
             raise _INTL("Bad EV: {1} (must be 0-{2}).\r\n{3}", ev, Pokemon::EV_STAT_LIMIT, FileLineData.linereport)
           end
           ev_total = 0
-          PBStats.eachStat do |stat|
-            ev_total += (stat < property_value.length) ? property_value[stat] : property_value[0]
+          GameData::Stat.each_main do |s|
+            next if s.pbs_order < 0
+            ev_total += (property_value[s.pbs_order] || property_value[0])
           end
           if ev_total > Pokemon::EV_LIMIT
             raise _INTL("Total EVs are greater than allowed ({1}).\r\n{2}", Pokemon::EV_LIMIT, FileLineData.linereport)
@@ -1202,7 +1215,17 @@ module Compiler
           if !current_pkmn
             raise _INTL("Pokémon hasn't been defined yet!\r\n{1}", FileLineData.linereport)
           end
-          current_pkmn[line_schema[0]] = property_value
+          case property_name
+          when "IV", "EV"
+            value_hash = {}
+            GameData::Stat.each_main do |s|
+              next if s.pbs_order < 0
+              value_hash[s.id] = property_value[s.pbs_order] || property_value[0]
+            end
+            current_pkmn[line_schema[0]] = value_hash
+          else
+            current_pkmn[line_schema[0]] = property_value
+          end
         end
       else
         # Old format - backwards compatibility is SUCH fun!
@@ -1282,9 +1305,11 @@ module Compiler
           # Write all line data to hash
           moves = [line_data[3], line_data[4], line_data[5], line_data[6]]
           moves.uniq!.compact!
-          ivs = []
+          ivs = {}
           if line_data[12]
-            PBStats.each { |s| ivs[s] = line_data[12] }
+            GameData::Stat.each_main do |s|
+              ivs[s.id] = line_data[12] if s.pbs_order >= 0
+            end
           end
           current_pkmn[:level]        = line_data[1]
           current_pkmn[:item]         = line_data[2] if line_data[2]

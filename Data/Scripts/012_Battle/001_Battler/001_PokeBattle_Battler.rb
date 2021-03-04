@@ -239,7 +239,7 @@ class PokeBattle_Battler
     return 1 if fainted?
     stageMul = [2,2,2,2,2,2, 2, 3,4,5,6,7,8]
     stageDiv = [8,7,6,5,4,3, 2, 2,2,2,2,2,2]
-    stage = @stages[PBStats::SPEED] + 6
+    stage = @stages[:SPEED] + 6
     speed = @speed*stageMul[stage]/stageDiv[stage]
     speedMult = 1.0
     # Ability effects that alter calculated Speed
@@ -283,12 +283,12 @@ class PokeBattle_Battler
   # Queries about what the battler has
   #=============================================================================
   def plainStats
-    ret = []
-    ret[PBStats::ATTACK]  = self.attack
-    ret[PBStats::DEFENSE] = self.defense
-    ret[PBStats::SPATK]   = self.spatk
-    ret[PBStats::SPDEF]   = self.spdef
-    ret[PBStats::SPEED]   = self.speed
+    ret = {}
+    ret[:ATTACK]          = self.attack
+    ret[:DEFENSE]         = self.defense
+    ret[:SPECIAL_ATTACK]  = self.spatk
+    ret[:SPECIAL_DEFENSE] = self.spdef
+    ret[:SPEED]           = self.speed
     return ret
   end
 

@@ -61,29 +61,29 @@ class PokeBattle_Battle
     evYield = defeatedBattler.pokemon.evYield
     # Num of effort points pkmn already has
     evTotal = 0
-    PBStats.eachStat { |s| evTotal += pkmn.ev[s] }
+    GameData::Stat.each_main { |s| evTotal += pkmn.ev[s.id] }
     # Modify EV yield based on pkmn's held item
     if !BattleHandlers.triggerEVGainModifierItem(pkmn.item,pkmn,evYield)
       BattleHandlers.triggerEVGainModifierItem(@initialItems[0][idxParty],pkmn,evYield)
     end
     # Double EV gain because of Pokérus
     if pkmn.pokerusStage>=1   # Infected or cured
-      evYield.collect! { |a| a*2 }
+      evYield.each_key { |stat| evYield[stat] *= 2 }
     end
     # Gain EVs for each stat in turn
     if pkmn.shadowPokemon? && pkmn.saved_ev
-      PBStats.eachStat { |s| evTotal += pkmn.saved_ev[s] }
-      PBStats.eachStat do |s|
-        evGain = evYield[s].clamp(0, Pokemon::EV_STAT_LIMIT - pkmn.ev[s] - pkmn.saved_ev[s])
+      pkmn.saved_ev.each_value { |e| evTotal += e }
+      GameData::Stat.each_main do |s|
+        evGain = evYield[s.id].clamp(0, Pokemon::EV_STAT_LIMIT - pkmn.ev[s.id] - pkmn.saved_ev[s.id])
         evGain = evGain.clamp(0, Pokemon::EV_LIMIT - evTotal)
-        pkmn.saved_ev[s] += evGain
+        pkmn.saved_ev[s.id] += evGain
         evTotal += evGain
       end
     else
-      PBStats.eachStat do |s|
-        evGain = evYield[s].clamp(0, Pokemon::EV_STAT_LIMIT - pkmn.ev[s])
+      GameData::Stat.each_main do |s|
+        evGain = evYield[s.id].clamp(0, Pokemon::EV_STAT_LIMIT - pkmn.ev[s.id])
         evGain = evGain.clamp(0, Pokemon::EV_LIMIT - evTotal)
-        pkmn.ev[s] += evGain
+        pkmn.ev[s.id] += evGain
         evTotal += evGain
       end
     end

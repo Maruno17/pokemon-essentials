@@ -26,53 +26,55 @@ class PBPokemon
     @move2 = move2 ? move2 : 0
     @move3 = move3 ? move3 : 0
     @move4 = move4 ? move4 : 0
+    # TODO: Stat changes (what is @ev here? Seems to be a set of bit flags
+    # indicating each stat that should have EVs put into it. Could change it).
     @ev = ev
   end
 
+  # This method is how each Pokémon is compiled from the PBS files listing
+  # Battle Tower/Cup Pokémon.
   def self.fromInspected(str)
     insp=str.gsub(/^\s+/,"").gsub(/\s+$/,"")
     pieces=insp.split(/\s*;\s*/)
     species = (GameData::Species.exists?(pieces[0])) ? GameData::Species.get(pieces[0]).id : nil
     item = (GameData::Item.exists?(pieces[1])) ? GameData::Item.get(pieces[1]).id : nil
     nature = (GameData::Nature.exists?(pieces[2])) ? GameData::Nature.get(pieces[2]).id : nil
-    ev=pieces[3].split(/\s*,\s*/)
-    evvalue=0
-    for i in 0...6
-      next if !ev[i]||ev[i]==""
-      evupcase=ev[i].upcase
-      evvalue|=0x01 if evupcase=="HP"
-      evvalue|=0x02 if evupcase=="ATK"
-      evvalue|=0x04 if evupcase=="DEF"
-      evvalue|=0x08 if evupcase=="SPD"
-      evvalue|=0x10 if evupcase=="SA"
-      evvalue|=0x20 if evupcase=="SD"
+    ev = pieces[3].split(/\s*,\s*/)
+    ev_array = []
+    ev.each do |stat|
+      case stat.upcase
+      when "HP"          then ev_array.push(:HP)
+      when "ATK"         then ev_array.push(:ATTACK)
+      when "DEF"         then ev_array.push(:DEFENSE)
+      when "SA", "SPATK" then ev_array.push(:SPECIAL_ATTACK)
+      when "SD", "SPDEF" then ev_array.push(:SPECIAL_DEFENSE)
+      when "SPD"         then ev_array.push(:SPEED)
+      end
     end
     moves=pieces[4].split(/\s*,\s*/)
     moveid=[]
-    for i in 0...4
+    for i in 0...Pokemon::MAX_MOVES
       move_data = GameData::Move.try_get(moves[i])
       moveid.push(move_data.id) if move_data
     end
     moveid=[GameData::Move.get(1)] if moveid.length==0
-    return self.new(species, item, nature, moveid[0], moveid[1], moveid[2], moveid[3], evvalue)
+    return self.new(species, item, nature, moveid[0], moveid[1], moveid[2], moveid[3], ev_array)
   end
 
   def self.fromPokemon(pokemon)
-    evvalue=0
-    evvalue|=0x01 if pokemon.ev[0]>60
-    evvalue|=0x02 if pokemon.ev[1]>60
-    evvalue|=0x04 if pokemon.ev[2]>60
-    evvalue|=0x08 if pokemon.ev[3]>60
-    evvalue|=0x10 if pokemon.ev[4]>60
-    evvalue|=0x20 if pokemon.ev[5]>60
     mov1 = (pokemon.moves[0]) ? pokemon.moves[0].id : nil
     mov2 = (pokemon.moves[1]) ? pokemon.moves[1].id : nil
     mov3 = (pokemon.moves[2]) ? pokemon.moves[2].id : nil
     mov4 = (pokemon.moves[3]) ? pokemon.moves[3].id : nil
+    ev_array = []
+    GameData::Stat.each_main do |s|
+      ev_array.push(s.id) if pokemon.ev[s.id] > 60
+    end
     return self.new(pokemon.species,pokemon.item_id,pokemon.nature,
-       mov1,mov2,mov3,mov4,evvalue)
+       mov1,mov2,mov3,mov4,ev_array)
   end
 
+  # Unused.
   def self.constFromStr(mod,str)
     maxconst=0
     for constant in mod.constants
@@ -86,10 +88,12 @@ class PBPokemon
     return 0
   end
 
+  # Unused.
   def self.fromString(str)
     return self.fromstring(str)
   end
 
+  # Unused.
   def self.fromstring(str)
     s=str.split(/\s*,\s*/)
     species=GameData::Species.get(s[1]).id
@@ -99,15 +103,12 @@ class PBPokemon
     move2=(s.length>=12) ? GameData::Move.get(s[5]).id : nil
     move3=(s.length>=13) ? GameData::Move.get(s[6]).id : nil
     move4=(s.length>=14) ? GameData::Move.get(s[7]).id : nil
-    ev=0
-    slen=s.length-6
-    ev|=0x01 if s[slen].to_i>0
-    ev|=0x02 if s[slen+1].to_i>0
-    ev|=0x04 if s[slen+2].to_i>0
-    ev|=0x08 if s[slen+3].to_i>0
-    ev|=0x10 if s[slen+4].to_i>0
-    ev|=0x20 if s[slen+5].to_i>0
-    return self.new(species,item,nature,move1,move2,move3,move4,ev)
+    slen = s.length - 6
+    ev_array = []
+    GameData::Stat.each_main do |s|
+      ev_array.push(s.id) if s[slen + s.pbs_order].to_i > 0
+    end
+    return self.new(species,item,nature,move1,move2,move3,move4,ev_array)
   end
 
 =begin
@@ -129,12 +130,10 @@ class PBPokemon
     c1=GameData::Species.get(@species).id.to_s
     c2=(@item) ? GameData::Item.get(@item).id.to_s : ""
     c3=(@nature) ? GameData::Nature.get(@nature).id.to_s : ""
-    evlist=""
-    for i in 0...@ev
-      if ((@ev&(1<<i))!=0)
-        evlist+="," if evlist.length>0
-        evlist+=["HP","ATK","DEF","SPD","SA","SD"][i]
-      end
+    evlist = ""
+    @ev.each do |stat|
+      evlist += "," if evlist != ""
+      evlist += stat.real_name_brief
     end
     c4=(@move1) ? GameData::Move.get(@move1).id_to_s : ""
     c5=(@move2) ? GameData::Move.get(@move2).id_to_s : ""
@@ -143,6 +142,7 @@ class PBPokemon
     return "#{c1};#{c2};#{c3};#{evlist};#{c4},#{c5},#{c6},#{c7}"
   end
 
+  # Unused.
   def tocompact
     return "#{species},#{item},#{nature},#{move1},#{move2},#{move3},#{move4},#{ev}"
   end
@@ -164,15 +164,10 @@ class PBPokemon
     pokemon.moves[1] = Pokemon::Move.new(self.convertMove(@move2))
     pokemon.moves[2] = Pokemon::Move.new(self.convertMove(@move3))
     pokemon.moves[3] = Pokemon::Move.new(self.convertMove(@move4))
-    evcount=0
-    for i in 0...6
-      evcount+=1 if ((@ev&(1<<i))!=0)
+    if ev.length > 0
+      ev.each { |stat| pokemon.ev[stat] = Pokemon::EV_LIMIT / ev.length }
     end
-    evperstat=(evcount==0) ? 0 : Pokemon::EV_LIMIT/evcount
-    for i in 0...6
-      pokemon.iv[i]=iv
-      pokemon.ev[i]=((@ev&(1<<i))!=0) ? evperstat : 0
-    end
+    GameData::Stat.each_main { |s| pokemon.iv[s.id] = iv }
     pokemon.calcStats
     return pokemon
   end

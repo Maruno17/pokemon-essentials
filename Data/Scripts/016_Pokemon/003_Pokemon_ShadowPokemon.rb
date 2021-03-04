@@ -54,7 +54,8 @@ class Pokemon
     @heart_gauge  = HEART_GAUGE_SIZE
     @hyper_mode   = false
     @saved_exp    = 0
-    @saved_ev     = [0, 0, 0, 0, 0, 0]
+    @saved_ev     = {}
+    GameData::Stat.each_main { |s| @saved_ev[s.id] = 0 }
     @shadow_moves = []
     # Retrieve Shadow moveset for this Pokémon
     shadow_moveset = pbLoadShadowMovesets[species_data.id]
@@ -136,12 +137,12 @@ class Pokemon
 
   def add_evs(added_evs)
     total = 0
-    @ev.each { |e| total += e }
-    PBStats.each do |s|
-      addition = added_evs[s].clamp(0, Pokemon::EV_STAT_LIMIT - @ev[s])
+    @ev.each_value { |e| total += e }
+    GameData::Stat.each_main do |s|
+      addition = added_evs[s.id].clamp(0, Pokemon::EV_STAT_LIMIT - @ev[s.id])
       addition = addition.clamp(0, Pokemon::EV_LIMIT - total)
       next if addition == 0
-      @ev[s] += addition
+      @ev[s.id] += addition
       total += addition
     end
   end
@@ -149,7 +150,9 @@ class Pokemon
   alias :__shadow_clone :clone
   def clone
     ret = __shadow_clone
-    ret.saved_ev     = @saved_ev.clone if @saved_ev
+    if @saved_ev
+      GameData::Stat.each_main { |s| ret.saved_ev[s.id] = @saved_ev[s.id] }
+    end
     ret.shadow_moves = @shadow_moves.clone if @shadow_moves
     return ret
   end

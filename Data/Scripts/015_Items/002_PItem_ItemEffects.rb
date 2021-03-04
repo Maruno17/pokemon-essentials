@@ -654,7 +654,7 @@ ItemHandlers::UseOnPokemon.add(:PPMAX,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:HPUP,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,PBStats::HP)==0
+  if pbRaiseEffortValues(pkmn,:HP)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -665,7 +665,7 @@ ItemHandlers::UseOnPokemon.add(:HPUP,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:PROTEIN,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,PBStats::ATTACK)==0
+  if pbRaiseEffortValues(pkmn,:ATTACK)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -675,7 +675,7 @@ ItemHandlers::UseOnPokemon.add(:PROTEIN,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:IRON,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,PBStats::DEFENSE)==0
+  if pbRaiseEffortValues(pkmn,:DEFENSE)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -685,7 +685,7 @@ ItemHandlers::UseOnPokemon.add(:IRON,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:CALCIUM,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,PBStats::SPATK)==0
+  if pbRaiseEffortValues(pkmn,:SPECIAL_ATTACK)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -695,7 +695,7 @@ ItemHandlers::UseOnPokemon.add(:CALCIUM,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:ZINC,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,PBStats::SPDEF)==0
+  if pbRaiseEffortValues(pkmn,:SPECIAL_DEFENSE)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -705,7 +705,7 @@ ItemHandlers::UseOnPokemon.add(:ZINC,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:CARBOS,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,PBStats::SPEED)==0
+  if pbRaiseEffortValues(pkmn,:SPEED)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -715,7 +715,7 @@ ItemHandlers::UseOnPokemon.add(:CARBOS,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:HEALTHWING,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,PBStats::HP,1,false)==0
+  if pbRaiseEffortValues(pkmn,:HP,1,false)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -726,7 +726,7 @@ ItemHandlers::UseOnPokemon.add(:HEALTHWING,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:MUSCLEWING,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,PBStats::ATTACK,1,false)==0
+  if pbRaiseEffortValues(pkmn,:ATTACK,1,false)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -736,7 +736,7 @@ ItemHandlers::UseOnPokemon.add(:MUSCLEWING,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:RESISTWING,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,PBStats::DEFENSE,1,false)==0
+  if pbRaiseEffortValues(pkmn,:DEFENSE,1,false)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -746,7 +746,7 @@ ItemHandlers::UseOnPokemon.add(:RESISTWING,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:GENIUSWING,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,PBStats::SPATK,1,false)==0
+  if pbRaiseEffortValues(pkmn,:SPECIAL_ATTACK,1,false)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -756,7 +756,7 @@ ItemHandlers::UseOnPokemon.add(:GENIUSWING,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:CLEVERWING,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,PBStats::SPDEF,1,false)==0
+  if pbRaiseEffortValues(pkmn,:SPECIAL_DEFENSE,1,false)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -766,7 +766,7 @@ ItemHandlers::UseOnPokemon.add(:CLEVERWING,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:SWIFTWING,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,PBStats::SPEED,1,false)==0
+  if pbRaiseEffortValues(pkmn,:SPEED,1,false)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -786,7 +786,7 @@ ItemHandlers::UseOnPokemon.add(:RARECANDY,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:POMEGBERRY,proc { |item,pkmn,scene|
-  next pbRaiseHappinessAndLowerEV(pkmn,scene,PBStats::HP,[
+  next pbRaiseHappinessAndLowerEV(pkmn,scene,:HP,[
      _INTL("{1} adores you! Its base HP fell!",pkmn.name),
      _INTL("{1} became more friendly. Its base HP can't go lower.",pkmn.name),
      _INTL("{1} became more friendly. However, its base HP fell!",pkmn.name)
@@ -794,7 +794,7 @@ ItemHandlers::UseOnPokemon.add(:POMEGBERRY,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:KELPSYBERRY,proc { |item,pkmn,scene|
-  next pbRaiseHappinessAndLowerEV(pkmn,scene,PBStats::ATTACK,[
+  next pbRaiseHappinessAndLowerEV(pkmn,scene,:ATTACK,[
      _INTL("{1} adores you! Its base Attack fell!",pkmn.name),
      _INTL("{1} became more friendly. Its base Attack can't go lower.",pkmn.name),
      _INTL("{1} became more friendly. However, its base Attack fell!",pkmn.name)
@@ -802,7 +802,7 @@ ItemHandlers::UseOnPokemon.add(:KELPSYBERRY,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:QUALOTBERRY,proc { |item,pkmn,scene|
-  next pbRaiseHappinessAndLowerEV(pkmn,scene,PBStats::DEFENSE,[
+  next pbRaiseHappinessAndLowerEV(pkmn,scene,:DEFENSE,[
      _INTL("{1} adores you! Its base Defense fell!",pkmn.name),
      _INTL("{1} became more friendly. Its base Defense can't go lower.",pkmn.name),
      _INTL("{1} became more friendly. However, its base Defense fell!",pkmn.name)
@@ -810,7 +810,7 @@ ItemHandlers::UseOnPokemon.add(:QUALOTBERRY,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:HONDEWBERRY,proc { |item,pkmn,scene|
-  next pbRaiseHappinessAndLowerEV(pkmn,scene,PBStats::SPATK,[
+  next pbRaiseHappinessAndLowerEV(pkmn,scene,:SPECIAL_ATTACK,[
      _INTL("{1} adores you! Its base Special Attack fell!",pkmn.name),
      _INTL("{1} became more friendly. Its base Special Attack can't go lower.",pkmn.name),
      _INTL("{1} became more friendly. However, its base Special Attack fell!",pkmn.name)
@@ -818,7 +818,7 @@ ItemHandlers::UseOnPokemon.add(:HONDEWBERRY,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:GREPABERRY,proc { |item,pkmn,scene|
-  next pbRaiseHappinessAndLowerEV(pkmn,scene,PBStats::SPDEF,[
+  next pbRaiseHappinessAndLowerEV(pkmn,scene,:SPECIAL_DEFENSE,[
      _INTL("{1} adores you! Its base Special Defense fell!",pkmn.name),
      _INTL("{1} became more friendly. Its base Special Defense can't go lower.",pkmn.name),
      _INTL("{1} became more friendly. However, its base Special Defense fell!",pkmn.name)
@@ -826,7 +826,7 @@ ItemHandlers::UseOnPokemon.add(:GREPABERRY,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:TAMATOBERRY,proc { |item,pkmn,scene|
-  next pbRaiseHappinessAndLowerEV(pkmn,scene,PBStats::SPEED,[
+  next pbRaiseHappinessAndLowerEV(pkmn,scene,:SPEED,[
      _INTL("{1} adores you! Its base Speed fell!",pkmn.name),
      _INTL("{1} became more friendly. Its base Speed can't go lower.",pkmn.name),
      _INTL("{1} became more friendly. However, its base Speed fell!",pkmn.name)

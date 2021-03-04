@@ -57,8 +57,8 @@ class PokeBattle_AI
           score -= 40 if target.effects[PBEffects::Yawn]>0
         end
         if skill>=PBTrainerAI.highSkill
-          score += 10 if pbRoughStat(target,PBStats::DEFENSE,skill)>100
-          score += 10 if pbRoughStat(target,PBStats::SPDEF,skill)>100
+          score += 10 if pbRoughStat(target,:DEFENSE,skill)>100
+          score += 10 if pbRoughStat(target,:SPECIAL_DEFENSE,skill)>100
           score -= 40 if target.hasActiveAbility?([:GUTS,:MARVELSCALE,:TOXICBOOST])
         end
       else
@@ -74,8 +74,8 @@ class PokeBattle_AI
          PBTypeEffectiveness.ineffective?(pbCalcTypeMod(move.type,user,target)))
         score += 30
         if skill>=PBTrainerAI.mediumSkill
-           aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-           ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+           aspeed = pbRoughStat(user,:SPEED,skill)
+           ospeed = pbRoughStat(target,:SPEED,skill)
           if aspeed<ospeed
             score += 30
           elsif aspeed>ospeed
@@ -229,10 +229,10 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "01C"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::ATTACK)
+        if user.statStageAtMax?(:ATTACK)
           score -= 90
         else
-          score -= user.stages[PBStats::ATTACK]*20
+          score -= user.stages[:ATTACK]*20
           if skill>=PBTrainerAI.mediumSkill
             hasPhysicalAttack = false
             user.eachMove do |m|
@@ -248,7 +248,7 @@ class PokeBattle_AI
           end
         end
       else
-        score += 20 if user.stages[PBStats::ATTACK]<0
+        score += 20 if user.stages[:ATTACK]<0
         if skill>=PBTrainerAI.mediumSkill
           hasPhysicalAttack = false
           user.eachMove do |m|
@@ -262,37 +262,37 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "01D", "01E", "0C8"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::DEFENSE)
+        if user.statStageAtMax?(:DEFENSE)
           score -= 90
         else
-          score -= user.stages[PBStats::DEFENSE]*20
+          score -= user.stages[:DEFENSE]*20
         end
       else
-        score += 20 if user.stages[PBStats::DEFENSE]<0
+        score += 20 if user.stages[:DEFENSE]<0
       end
     #---------------------------------------------------------------------------
     when "01F"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::SPEED)
+        if user.statStageAtMax?(:SPEED)
           score -= 90
         else
-          score -= user.stages[PBStats::SPEED]*10
+          score -= user.stages[:SPEED]*10
           if skill>=PBTrainerAI.highSkill
-            aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-            ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+            aspeed = pbRoughStat(user,:SPEED,skill)
+            ospeed = pbRoughStat(target,:SPEED,skill)
             score += 30 if aspeed<ospeed && aspeed*2>ospeed
           end
         end
       else
-        score += 20 if user.stages[PBStats::SPEED]<0
+        score += 20 if user.stages[:SPEED]<0
       end
     #---------------------------------------------------------------------------
     when "020"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::SPATK)
+        if user.statStageAtMax?(:SPECIAL_ATTACK)
           score -= 90
         else
-          score -= user.stages[PBStats::SPATK]*20
+          score -= user.stages[:SPECIAL_ATTACK]*20
           if skill>=PBTrainerAI.mediumSkill
             hasSpecicalAttack = false
             user.eachMove do |m|
@@ -308,7 +308,7 @@ class PokeBattle_AI
           end
         end
       else
-        score += 20 if user.stages[PBStats::SPATK]<0
+        score += 20 if user.stages[:SPECIAL_ATTACK]<0
         if skill>=PBTrainerAI.mediumSkill
           hasSpecicalAttack = false
           user.eachMove do |m|
@@ -329,24 +329,24 @@ class PokeBattle_AI
       end
       score += 20 if foundMove
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::SPDEF)
+        if user.statStageAtMax?(:SPECIAL_DEFENSE)
           score -= 90
         else
-          score -= user.stages[PBStats::SPDEF]*20
+          score -= user.stages[:SPECIAL_DEFENSE]*20
         end
       else
-        score += 20 if user.stages[PBStats::SPDEF]<0
+        score += 20 if user.stages[:SPECIAL_DEFENSE]<0
       end
     #---------------------------------------------------------------------------
     when "022"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::EVASION)
+        if user.statStageAtMax?(:EVASION)
           score -= 90
         else
-          score -= user.stages[PBStats::EVASION]*10
+          score -= user.stages[:EVASION]*10
         end
       else
-        score += 20 if user.stages[PBStats::EVASION]<0
+        score += 20 if user.stages[:EVASION]<0
       end
     #---------------------------------------------------------------------------
     when "023"
@@ -361,12 +361,12 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "024"
-      if user.statStageAtMax?(PBStats::ATTACK) &&
-         user.statStageAtMax?(PBStats::DEFENSE)
+      if user.statStageAtMax?(:ATTACK) &&
+         user.statStageAtMax?(:DEFENSE)
         score -= 90
       else
-        score -= user.stages[PBStats::ATTACK]*10
-        score -= user.stages[PBStats::DEFENSE]*10
+        score -= user.stages[:ATTACK]*10
+        score -= user.stages[:DEFENSE]*10
         if skill>=PBTrainerAI.mediumSkill
           hasPhysicalAttack = false
           user.eachMove do |m|
@@ -383,14 +383,14 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "025"
-      if user.statStageAtMax?(PBStats::ATTACK) &&
-         user.statStageAtMax?(PBStats::DEFENSE) &&
-         user.statStageAtMax?(PBStats::ACCURACY)
+      if user.statStageAtMax?(:ATTACK) &&
+         user.statStageAtMax?(:DEFENSE) &&
+         user.statStageAtMax?(:ACCURACY)
         score -= 90
       else
-        score -= user.stages[PBStats::ATTACK]*10
-        score -= user.stages[PBStats::DEFENSE]*10
-        score -= user.stages[PBStats::ACCURACY]*10
+        score -= user.stages[:ATTACK]*10
+        score -= user.stages[:DEFENSE]*10
+        score -= user.stages[:ACCURACY]*10
         if skill>=PBTrainerAI.mediumSkill
           hasPhysicalAttack = false
           user.eachMove do |m|
@@ -408,12 +408,12 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "026"
       score += 40 if user.turnCount==0   # Dragon Dance tends to be popular
-      if user.statStageAtMax?(PBStats::ATTACK) &&
-         user.statStageAtMax?(PBStats::SPEED)
+      if user.statStageAtMax?(:ATTACK) &&
+         user.statStageAtMax?(:SPEED)
         score -= 90
       else
-        score -= user.stages[PBStats::ATTACK]*10
-        score -= user.stages[PBStats::SPEED]*10
+        score -= user.stages[:ATTACK]*10
+        score -= user.stages[:SPEED]*10
         if skill>=PBTrainerAI.mediumSkill
           hasPhysicalAttack = false
           user.eachMove do |m|
@@ -428,19 +428,19 @@ class PokeBattle_AI
           end
         end
         if skill>=PBTrainerAI.highSkill
-          aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-          ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+          aspeed = pbRoughStat(user,:SPEED,skill)
+          ospeed = pbRoughStat(target,:SPEED,skill)
           score += 20 if aspeed<ospeed && aspeed*2>ospeed
         end
       end
     #---------------------------------------------------------------------------
     when "027", "028"
-      if user.statStageAtMax?(PBStats::ATTACK) &&
-         user.statStageAtMax?(PBStats::SPATK)
+      if user.statStageAtMax?(:ATTACK) &&
+         user.statStageAtMax?(:SPECIAL_ATTACK)
         score -= 90
       else
-        score -= user.stages[PBStats::ATTACK]*10
-        score -= user.stages[PBStats::SPATK]*10
+        score -= user.stages[:ATTACK]*10
+        score -= user.stages[:SPECIAL_ATTACK]*10
         if skill>=PBTrainerAI.mediumSkill
           hasDamagingAttack = false
           user.eachMove do |m|
@@ -460,12 +460,12 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "029"
-      if user.statStageAtMax?(PBStats::ATTACK) &&
-         user.statStageAtMax?(PBStats::ACCURACY)
+      if user.statStageAtMax?(:ATTACK) &&
+         user.statStageAtMax?(:ACCURACY)
         score -= 90
       else
-        score -= user.stages[PBStats::ATTACK]*10
-        score -= user.stages[PBStats::ACCURACY]*10
+        score -= user.stages[:ATTACK]*10
+        score -= user.stages[:ACCURACY]*10
         if skill>=PBTrainerAI.mediumSkill
           hasPhysicalAttack = false
           user.eachMove do |m|
@@ -482,23 +482,23 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "02A"
-      if user.statStageAtMax?(PBStats::DEFENSE) &&
-         user.statStageAtMax?(PBStats::SPDEF)
+      if user.statStageAtMax?(:DEFENSE) &&
+         user.statStageAtMax?(:SPECIAL_DEFENSE)
         score -= 90
       else
-        score -= user.stages[PBStats::DEFENSE]*10
-        score -= user.stages[PBStats::SPDEF]*10
+        score -= user.stages[:DEFENSE]*10
+        score -= user.stages[:SPECIAL_DEFENSE]*10
       end
     #---------------------------------------------------------------------------
     when "02B"
-      if user.statStageAtMax?(PBStats::SPEED) &&
-         user.statStageAtMax?(PBStats::SPATK) &&
-         user.statStageAtMax?(PBStats::SPDEF)
+      if user.statStageAtMax?(:SPEED) &&
+         user.statStageAtMax?(:SPECIAL_ATTACK) &&
+         user.statStageAtMax?(:SPECIAL_DEFENSE)
         score -= 90
       else
-        score -= user.stages[PBStats::SPATK]*10
-        score -= user.stages[PBStats::SPDEF]*10
-        score -= user.stages[PBStats::SPEED]*10
+        score -= user.stages[:SPECIAL_ATTACK]*10
+        score -= user.stages[:SPECIAL_DEFENSE]*10
+        score -= user.stages[:SPEED]*10
         if skill>=PBTrainerAI.mediumSkill
           hasSpecicalAttack = false
           user.eachMove do |m|
@@ -513,8 +513,8 @@ class PokeBattle_AI
           end
         end
         if skill>=PBTrainerAI.highSkill
-          aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-          ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+          aspeed = pbRoughStat(user,:SPEED,skill)
+          ospeed = pbRoughStat(target,:SPEED,skill)
           if aspeed<ospeed && aspeed*2>ospeed
             score += 20
           end
@@ -522,13 +522,13 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "02C"
-      if user.statStageAtMax?(PBStats::SPATK) &&
-         user.statStageAtMax?(PBStats::SPDEF)
+      if user.statStageAtMax?(:SPECIAL_ATTACK) &&
+         user.statStageAtMax?(:SPECIAL_DEFENSE)
         score -= 90
       else
         score += 40 if user.turnCount==0   # Calm Mind tends to be popular
-        score -= user.stages[PBStats::SPATK]*10
-        score -= user.stages[PBStats::SPDEF]*10
+        score -= user.stages[:SPECIAL_ATTACK]*10
+        score -= user.stages[:SPECIAL_DEFENSE]*10
         if skill>=PBTrainerAI.mediumSkill
           hasSpecicalAttack = false
           user.eachMove do |m|
@@ -545,7 +545,7 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "02D"
-      PBStats.eachMainBattleStat { |s| score += 10 if user.stages[s]<0 }
+      GameData::Stat.each_main_battle { |s| score += 10 if user.stages[s.id] < 0 }
       if skill>=PBTrainerAI.mediumSkill
         hasDamagingAttack = false
         user.eachMove do |m|
@@ -558,11 +558,11 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "02E"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::ATTACK)
+        if user.statStageAtMax?(:ATTACK)
           score -= 90
         else
           score += 40 if user.turnCount==0
-          score -= user.stages[PBStats::ATTACK]*20
+          score -= user.stages[:ATTACK]*20
           if skill>=PBTrainerAI.mediumSkill
             hasPhysicalAttack = false
             user.eachMove do |m|
@@ -579,7 +579,7 @@ class PokeBattle_AI
         end
       else
         score += 10 if user.turnCount==0
-        score += 20 if user.stages[PBStats::ATTACK]<0
+        score += 20 if user.stages[:ATTACK]<0
         if skill>=PBTrainerAI.mediumSkill
           hasPhysicalAttack = false
           user.eachMove do |m|
@@ -593,42 +593,42 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "02F"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::DEFENSE)
+        if user.statStageAtMax?(:DEFENSE)
           score -= 90
         else
           score += 40 if user.turnCount==0
-          score -= user.stages[PBStats::DEFENSE]*20
+          score -= user.stages[:DEFENSE]*20
         end
       else
         score += 10 if user.turnCount==0
-        score += 20 if user.stages[PBStats::DEFENSE]<0
+        score += 20 if user.stages[:DEFENSE]<0
       end
     #---------------------------------------------------------------------------
     when "030", "031"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::SPEED)
+        if user.statStageAtMax?(:SPEED)
           score -= 90
         else
           score += 20 if user.turnCount==0
-          score -= user.stages[PBStats::SPEED]*10
+          score -= user.stages[:SPEED]*10
           if skill>=PBTrainerAI.highSkill
-            aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-            ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+            aspeed = pbRoughStat(user,:SPEED,skill)
+            ospeed = pbRoughStat(target,:SPEED,skill)
             score += 30 if aspeed<ospeed && aspeed*2>ospeed
           end
         end
       else
         score += 10 if user.turnCount==0
-        score += 20 if user.stages[PBStats::SPEED]<0
+        score += 20 if user.stages[:SPEED]<0
       end
     #---------------------------------------------------------------------------
     when "032"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::SPATK)
+        if user.statStageAtMax?(:SPECIAL_ATTACK)
           score -= 90
         else
           score += 40 if user.turnCount==0
-          score -= user.stages[PBStats::SPATK]*20
+          score -= user.stages[:SPECIAL_ATTACK]*20
           if skill>=PBTrainerAI.mediumSkill
             hasSpecicalAttack = false
             user.eachMove do |m|
@@ -645,7 +645,7 @@ class PokeBattle_AI
         end
       else
         score += 10 if user.turnCount==0
-        score += 20 if user.stages[PBStats::SPATK]<0
+        score += 20 if user.stages[:SPECIAL_ATTACK]<0
         if skill>=PBTrainerAI.mediumSkill
           hasSpecicalAttack = false
           user.eachMove do |m|
@@ -659,36 +659,36 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "033"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::SPDEF)
+        if user.statStageAtMax?(:SPECIAL_DEFENSE)
           score -= 90
         else
           score += 40 if user.turnCount==0
-          score -= user.stages[PBStats::SPDEF]*20
+          score -= user.stages[:SPECIAL_DEFENSE]*20
         end
       else
         score += 10 if user.turnCount==0
-        score += 20 if user.stages[PBStats::SPDEF]<0
+        score += 20 if user.stages[:SPECIAL_DEFENSE]<0
       end
     #---------------------------------------------------------------------------
     when "034"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::EVASION)
+        if user.statStageAtMax?(:EVASION)
           score -= 90
         else
           score += 40 if user.turnCount==0
-          score -= user.stages[PBStats::EVASION]*10
+          score -= user.stages[:EVASION]*10
         end
       else
         score += 10 if user.turnCount==0
-        score += 20 if user.stages[PBStats::EVASION]<0
+        score += 20 if user.stages[:EVASION]<0
       end
     #---------------------------------------------------------------------------
     when "035"
-      score -= user.stages[PBStats::ATTACK]*20
-      score -= user.stages[PBStats::SPEED]*20
-      score -= user.stages[PBStats::SPATK]*20
-      score += user.stages[PBStats::DEFENSE]*10
-      score += user.stages[PBStats::SPDEF]*10
+      score -= user.stages[:ATTACK]*20
+      score -= user.stages[:SPEED]*20
+      score -= user.stages[:SPECIAL_ATTACK]*20
+      score += user.stages[:DEFENSE]*10
+      score += user.stages[:SPECIAL_DEFENSE]*10
       if skill>=PBTrainerAI.mediumSkill
         hasDamagingAttack = false
         user.eachMove do |m|
@@ -700,12 +700,12 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "036"
-      if user.statStageAtMax?(PBStats::ATTACK) &&
-         user.statStageAtMax?(PBStats::SPEED)
+      if user.statStageAtMax?(:ATTACK) &&
+         user.statStageAtMax?(:SPEED)
         score -= 90
       else
-        score -= user.stages[PBStats::ATTACK]*10
-        score -= user.stages[PBStats::SPEED]*10
+        score -= user.stages[:ATTACK]*10
+        score -= user.stages[:SPEED]*10
         if skill>=PBTrainerAI.mediumSkill
           hasPhysicalAttack = false
           user.eachMove do |m|
@@ -720,17 +720,17 @@ class PokeBattle_AI
           end
         end
         if skill>=PBTrainerAI.highSkill
-          aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-          ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+          aspeed = pbRoughStat(user,:SPEED,skill)
+          ospeed = pbRoughStat(target,:SPEED,skill)
           score += 30 if aspeed<ospeed && aspeed*2>ospeed
         end
       end
     #---------------------------------------------------------------------------
     when "037"
       avgStat = 0; canChangeStat = false
-      PBStats.eachBattleStat do |s|
-        next if target.statStageAtMax?(s)
-        avgStat -= target.stages[s]
+      GameData::Stat.each_battle do |s|
+        next if target.statStageAtMax?(s.id)
+        avgStat -= target.stages[s.id]
         canChangeStat = true
       end
       if canChangeStat
@@ -742,24 +742,24 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "038"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::DEFENSE)
+        if user.statStageAtMax?(:DEFENSE)
           score -= 90
         else
           score += 40 if user.turnCount==0
-          score -= user.stages[PBStats::DEFENSE]*30
+          score -= user.stages[:DEFENSE]*30
         end
       else
         score += 10 if user.turnCount==0
-        score += 30 if user.stages[PBStats::DEFENSE]<0
+        score += 30 if user.stages[:DEFENSE]<0
       end
     #---------------------------------------------------------------------------
     when "039"
       if move.statusMove?
-        if user.statStageAtMax?(PBStats::SPATK)
+        if user.statStageAtMax?(:SPECIAL_ATTACK)
           score -= 90
         else
           score += 40 if user.turnCount==0
-          score -= user.stages[PBStats::SPATK]*30
+          score -= user.stages[:SPECIAL_ATTACK]*30
           if skill>=PBTrainerAI.mediumSkill
             hasSpecicalAttack = false
             user.eachMove do |m|
@@ -776,7 +776,7 @@ class PokeBattle_AI
         end
       else
         score += 10 if user.turnCount==0
-        score += 30 if user.stages[PBStats::SPATK]<0
+        score += 30 if user.stages[:SPECIAL_ATTACK]<0
         if skill>=PBTrainerAI.mediumSkill
           hasSpecicalAttack = false
           user.eachMove do |m|
@@ -789,11 +789,11 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "03A"
-      if user.statStageAtMax?(PBStats::ATTACK) ||
+      if user.statStageAtMax?(:ATTACK) ||
          user.hp<=user.totalhp/2
         score -= 100
       else
-        score += (6-user.stages[PBStats::ATTACK])*10
+        score += (6-user.stages[:ATTACK])*10
         if skill>=PBTrainerAI.mediumSkill
           hasPhysicalAttack = false
           user.eachMove do |m|
@@ -810,47 +810,47 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "03B"
-      avg =  user.stages[PBStats::ATTACK]*10
-      avg += user.stages[PBStats::DEFENSE]*10
+      avg =  user.stages[:ATTACK]*10
+      avg += user.stages[:DEFENSE]*10
       score += avg/2
     #---------------------------------------------------------------------------
     when "03C"
-      avg =  user.stages[PBStats::DEFENSE]*10
-      avg += user.stages[PBStats::SPDEF]*10
+      avg =  user.stages[:DEFENSE]*10
+      avg += user.stages[:SPECIAL_DEFENSE]*10
       score += avg/2
     #---------------------------------------------------------------------------
     when "03D"
-      avg =  user.stages[PBStats::DEFENSE]*10
-      avg += user.stages[PBStats::SPEED]*10
-      avg += user.stages[PBStats::SPDEF]*10
+      avg =  user.stages[:DEFENSE]*10
+      avg += user.stages[:SPEED]*10
+      avg += user.stages[:SPECIAL_DEFENSE]*10
       score += (avg/3).floor
     #---------------------------------------------------------------------------
     when "03E"
-      score += user.stages[PBStats::SPEED]*10
+      score += user.stages[:SPEED]*10
     #---------------------------------------------------------------------------
     when "03F"
-      score += user.stages[PBStats::SPATK]*10
+      score += user.stages[:SPECIAL_ATTACK]*10
     #---------------------------------------------------------------------------
     when "040"
       if !target.pbCanConfuse?(user,false)
         score -= 90
       else
-        score += 30 if target.stages[PBStats::SPATK]<0
+        score += 30 if target.stages[:SPECIAL_ATTACK]<0
       end
     #---------------------------------------------------------------------------
     when "041"
       if !target.pbCanConfuse?(user,false)
         score -= 90
       else
-        score += 30 if target.stages[PBStats::ATTACK]<0
+        score += 30 if target.stages[:ATTACK]<0
       end
     #---------------------------------------------------------------------------
     when "042"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::ATTACK,user)
+        if !target.pbCanLowerStatStage?(:ATTACK,user)
           score -= 90
         else
-          score += target.stages[PBStats::ATTACK]*20
+          score += target.stages[:ATTACK]*20
           if skill>=PBTrainerAI.mediumSkill
             hasPhysicalAttack = false
             target.eachMove do |m|
@@ -866,7 +866,7 @@ class PokeBattle_AI
           end
         end
       else
-        score += 20 if target.stages[PBStats::ATTACK]>0
+        score += 20 if target.stages[:ATTACK]>0
         if skill>=PBTrainerAI.mediumSkill
           hasPhysicalAttack = false
           target.eachMove do |m|
@@ -880,37 +880,37 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "043"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::DEFENSE,user)
+        if !target.pbCanLowerStatStage?(:DEFENSE,user)
           score -= 90
         else
-          score += target.stages[PBStats::DEFENSE]*20
+          score += target.stages[:DEFENSE]*20
         end
       else
-        score += 20 if target.stages[PBStats::DEFENSE]>0
+        score += 20 if target.stages[:DEFENSE]>0
       end
     #---------------------------------------------------------------------------
     when "044"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::SPEED,user)
+        if !target.pbCanLowerStatStage?(:SPEED,user)
           score -= 90
         else
-          score += target.stages[PBStats::SPEED]*10
+          score += target.stages[:SPEED]*10
           if skill>=PBTrainerAI.highSkill
-            aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-            ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+            aspeed = pbRoughStat(user,:SPEED,skill)
+            ospeed = pbRoughStat(target,:SPEED,skill)
             score += 30 if aspeed<ospeed && aspeed*2>ospeed
           end
         end
       else
-        score += 20 if user.stages[PBStats::SPEED]>0
+        score += 20 if user.stages[:SPEED]>0
       end
     #---------------------------------------------------------------------------
     when "045"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::SPATK,user)
+        if !target.pbCanLowerStatStage?(:SPECIAL_ATTACK,user)
           score -= 90
         else
-          score += user.stages[PBStats::SPATK]*20
+          score += user.stages[:SPECIAL_ATTACK]*20
           if skill>=PBTrainerAI.mediumSkill
             hasSpecicalAttack = false
             target.eachMove do |m|
@@ -926,7 +926,7 @@ class PokeBattle_AI
           end
         end
       else
-        score += 20 if user.stages[PBStats::SPATK]>0
+        score += 20 if user.stages[:SPECIAL_ATTACK]>0
         if skill>=PBTrainerAI.mediumSkill
           hasSpecicalAttack = false
           target.eachMove do |m|
@@ -940,46 +940,46 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "046"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::SPDEF,user)
+        if !target.pbCanLowerStatStage?(:SPECIAL_DEFENSE,user)
           score -= 90
         else
-          score += target.stages[PBStats::SPDEF]*20
+          score += target.stages[:SPECIAL_DEFENSE]*20
         end
       else
-        score += 20 if target.stages[PBStats::SPDEF]>0
+        score += 20 if target.stages[:SPECIAL_DEFENSE]>0
       end
     #---------------------------------------------------------------------------
     when "047"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::ACCURACY,user)
+        if !target.pbCanLowerStatStage?(:ACCURACY,user)
           score -= 90
         else
-          score += target.stages[PBStats::ACCURACY]*10
+          score += target.stages[:ACCURACY]*10
         end
       else
-        score += 20 if target.stages[PBStats::ACCURACY]>0
+        score += 20 if target.stages[:ACCURACY]>0
       end
     #---------------------------------------------------------------------------
     when "048"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::EVASION,user)
+        if !target.pbCanLowerStatStage?(:EVASION,user)
           score -= 90
         else
-          score += target.stages[PBStats::EVASION]*10
+          score += target.stages[:EVASION]*10
         end
       else
-        score += 20 if target.stages[PBStats::EVASION]>0
+        score += 20 if target.stages[:EVASION]>0
       end
     #---------------------------------------------------------------------------
     when "049"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::EVASION,user)
+        if !target.pbCanLowerStatStage?(:EVASION,user)
           score -= 90
         else
-          score += target.stages[PBStats::EVASION]*10
+          score += target.stages[:EVASION]*10
         end
       else
-        score += 20 if target.stages[PBStats::EVASION]>0
+        score += 20 if target.stages[:EVASION]>0
       end
       score += 30 if target.pbOwnSide.effects[PBEffects::AuroraVeil]>0 ||
                      target.pbOwnSide.effects[PBEffects::Reflect]>0 ||
@@ -991,17 +991,17 @@ class PokeBattle_AI
                      target.pbOwnSide.effects[PBEffects::StealthRock]
     #---------------------------------------------------------------------------
     when "04A"
-      avg =  target.stages[PBStats::ATTACK]*10
-      avg += target.stages[PBStats::DEFENSE]*10
+      avg =  target.stages[:ATTACK]*10
+      avg += target.stages[:DEFENSE]*10
       score += avg/2
     #---------------------------------------------------------------------------
     when "04B"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::ATTACK,user)
+        if !target.pbCanLowerStatStage?(:ATTACK,user)
           score -= 90
         else
           score += 40 if user.turnCount==0
-          score += target.stages[PBStats::ATTACK]*20
+          score += target.stages[:ATTACK]*20
           if skill>=PBTrainerAI.mediumSkill
             hasPhysicalAttack = false
             target.eachMove do |m|
@@ -1018,7 +1018,7 @@ class PokeBattle_AI
         end
       else
         score += 10 if user.turnCount==0
-        score += 20 if target.stages[PBStats::ATTACK]>0
+        score += 20 if target.stages[:ATTACK]>0
         if skill>=PBTrainerAI.mediumSkill
           hasPhysicalAttack = false
           target.eachMove do |m|
@@ -1032,33 +1032,33 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "04C"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::DEFENSE,user)
+        if !target.pbCanLowerStatStage?(:DEFENSE,user)
           score -= 90
         else
           score += 40 if user.turnCount==0
-          score += target.stages[PBStats::DEFENSE]*20
+          score += target.stages[:DEFENSE]*20
         end
       else
         score += 10 if user.turnCount==0
-        score += 20 if target.stages[PBStats::DEFENSE]>0
+        score += 20 if target.stages[:DEFENSE]>0
       end
     #---------------------------------------------------------------------------
     when "04D"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::SPEED,user)
+        if !target.pbCanLowerStatStage?(:SPEED,user)
           score -= 90
         else
           score += 20 if user.turnCount==0
-          score += target.stages[PBStats::SPEED]*20
+          score += target.stages[:SPEED]*20
           if skill>=PBTrainerAI.highSkill
-            aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-            ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+            aspeed = pbRoughStat(user,:SPEED,skill)
+            ospeed = pbRoughStat(target,:SPEED,skill)
             score += 30 if aspeed<ospeed && aspeed*2>ospeed
           end
         end
       else
         score += 10 if user.turnCount==0
-        score += 30 if target.stages[PBStats::SPEED]>0
+        score += 30 if target.stages[:SPEED]>0
       end
     #---------------------------------------------------------------------------
     when "04E"
@@ -1066,11 +1066,11 @@ class PokeBattle_AI
          target.hasActiveAbility?(:OBLIVIOUS)
         score -= 90
       elsif move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::SPATK,user)
+        if !target.pbCanLowerStatStage?(:SPECIAL_ATTACK,user)
           score -= 90
         else
           score += 40 if user.turnCount==0
-          score += target.stages[PBStats::SPATK]*20
+          score += target.stages[:SPECIAL_ATTACK]*20
           if skill>=PBTrainerAI.mediumSkill
             hasSpecicalAttack = false
             target.eachMove do |m|
@@ -1087,7 +1087,7 @@ class PokeBattle_AI
         end
       else
         score += 10 if user.turnCount==0
-        score += 20 if target.stages[PBStats::SPATK]>0
+        score += 20 if target.stages[:SPECIAL_ATTACK]>0
         if skill>=PBTrainerAI.mediumSkill
           hasSpecicalAttack = false
           target.eachMove do |m|
@@ -1101,15 +1101,15 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "04F"
       if move.statusMove?
-        if !target.pbCanLowerStatStage?(PBStats::SPDEF,user)
+        if !target.pbCanLowerStatStage?(:SPECIAL_DEFENSE,user)
           score -= 90
         else
           score += 40 if user.turnCount==0
-          score += target.stages[PBStats::SPDEF]*20
+          score += target.stages[:SPECIAL_DEFENSE]*20
         end
       else
         score += 10 if user.turnCount==0
-        score += 20 if target.stages[PBStats::SPDEF]>0
+        score += 20 if target.stages[:SPECIAL_DEFENSE]>0
       end
     #---------------------------------------------------------------------------
     when "050"
@@ -1117,9 +1117,9 @@ class PokeBattle_AI
         score -= 90
       else
         avg = 0; anyChange = false
-        PBStats.eachBattleStat do |s|
-          next if target.stages[s]==0
-          avg += target.stages[s]
+        GameData::Stat.each_battle do |s|
+          next if target.stages[s.id]==0
+          avg += target.stages[s.id]
           anyChange = true
         end
         if anyChange
@@ -1134,7 +1134,7 @@ class PokeBattle_AI
         stages = 0
         @battle.eachBattler do |b|
           totalStages = 0
-          PBStats.eachBattleStat { |s| totalStages += b.stages[s] }
+          GameData::Stat.each_battle { |s| totalStages += b.stages[s.id] }
           if b.opposes?(user)
             stages += totalStages
           else
@@ -1146,10 +1146,10 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "052"
       if skill>=PBTrainerAI.mediumSkill
-        aatk = user.stages[PBStats::ATTACK]
-        aspa = user.stages[PBStats::SPATK]
-        oatk = target.stages[PBStats::ATTACK]
-        ospa = target.stages[PBStats::SPATK]
+        aatk = user.stages[:ATTACK]
+        aspa = user.stages[:SPECIAL_ATTACK]
+        oatk = target.stages[:ATTACK]
+        ospa = target.stages[:SPECIAL_ATTACK]
         if aatk>=oatk && aspa>=ospa
           score -= 80
         else
@@ -1162,10 +1162,10 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "053"
       if skill>=PBTrainerAI.mediumSkill
-        adef = user.stages[PBStats::DEFENSE]
-        aspd = user.stages[PBStats::SPDEF]
-        odef = target.stages[PBStats::DEFENSE]
-        ospd = target.stages[PBStats::SPDEF]
+        adef = user.stages[:DEFENSE]
+        aspd = user.stages[:SPECIAL_DEFENSE]
+        odef = target.stages[:DEFENSE]
+        ospd = target.stages[:SPECIAL_DEFENSE]
         if adef>=odef && aspd>=ospd
           score -= 80
         else
@@ -1179,9 +1179,9 @@ class PokeBattle_AI
     when "054"
       if skill>=PBTrainerAI.mediumSkill
         userStages = 0; targetStages = 0
-        PBStats.eachBattleStat do |s|
-          userStages   += user.stages[s]
-          targetStages += target.stages[s]
+        GameData::Stat.each_battle do |s|
+          userStages   += user.stages[s.id]
+          targetStages += target.stages[s.id]
         end
         score += (targetStages-userStages)*10
       else
@@ -1191,8 +1191,8 @@ class PokeBattle_AI
     when "055"
       if skill>=PBTrainerAI.mediumSkill
         equal = true
-        PBStats.eachBattleStat do |s|
-          stagediff = target.stages[s]-user.stages[s]
+        GameData::Stat.each_battle do |s|
+          stagediff = target.stages[s.id] - user.stages[s.id]
           score += stagediff*10
           equal = false if stagediff!=0
         end
@@ -1206,8 +1206,8 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "057"
       if skill>=PBTrainerAI.mediumSkill
-        aatk = pbRoughStat(user,PBStats::ATTACK,skill)
-        adef = pbRoughStat(user,PBStats::DEFENSE,skill)
+        aatk = pbRoughStat(user,:ATTACK,skill)
+        adef = pbRoughStat(user,:DEFENSE,skill)
         if aatk==adef ||
            user.effects[PBEffects::PowerTrick]   # No flip-flopping
           score -= 90
@@ -1222,10 +1222,10 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "058"
       if skill>=PBTrainerAI.mediumSkill
-        aatk   = pbRoughStat(user,PBStats::ATTACK,skill)
-        aspatk = pbRoughStat(user,PBStats::SPATK,skill)
-        oatk   = pbRoughStat(target,PBStats::ATTACK,skill)
-        ospatk = pbRoughStat(target,PBStats::SPATK,skill)
+        aatk   = pbRoughStat(user,:ATTACK,skill)
+        aspatk = pbRoughStat(user,:SPECIAL_ATTACK,skill)
+        oatk   = pbRoughStat(target,:ATTACK,skill)
+        ospatk = pbRoughStat(target,:SPECIAL_ATTACK,skill)
         if aatk<oatk && aspatk<ospatk
           score += 50
         elsif aatk+aspatk<oatk+ospatk
@@ -1239,10 +1239,10 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "059"
       if skill>=PBTrainerAI.mediumSkill
-        adef   = pbRoughStat(user,PBStats::DEFENSE,skill)
-        aspdef = pbRoughStat(user,PBStats::SPDEF,skill)
-        odef   = pbRoughStat(target,PBStats::DEFENSE,skill)
-        ospdef = pbRoughStat(target,PBStats::SPDEF,skill)
+        adef   = pbRoughStat(user,:DEFENSE,skill)
+        aspdef = pbRoughStat(user,:SPECIAL_DEFENSE,skill)
+        odef   = pbRoughStat(target,:DEFENSE,skill)
+        ospdef = pbRoughStat(target,:SPECIAL_DEFENSE,skill)
         if adef<odef && aspdef<ospdef
           score += 50
         elsif adef+aspdef<odef+ospdef
@@ -1506,8 +1506,8 @@ class PokeBattle_AI
       if target.effects[PBEffects::HyperBeam]>0
         score -= 90
       else
-        attack = pbRoughStat(user,PBStats::ATTACK,skill)
-        spatk  = pbRoughStat(user,PBStats::SPATK,skill)
+        attack = pbRoughStat(user,:ATTACK,skill)
+        spatk  = pbRoughStat(user,:SPECIAL_ATTACK,skill)
         if attack*1.5<spatk
           score -= 60
         elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed
@@ -1524,8 +1524,8 @@ class PokeBattle_AI
       if target.effects[PBEffects::HyperBeam]>0
         score -= 90
       else
-        attack = pbRoughStat(user,PBStats::ATTACK,skill)
-        spatk  = pbRoughStat(user,PBStats::SPATK,skill)
+        attack = pbRoughStat(user,:ATTACK,skill)
+        spatk  = pbRoughStat(user,:SPECIAL_ATTACK,skill)
         if attack>spatk*1.5
           score -= 60
         elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed
@@ -1579,8 +1579,8 @@ class PokeBattle_AI
     when "080"
     #---------------------------------------------------------------------------
     when "081"
-      attspeed = pbRoughStat(user,PBStats::SPEED,skill)
-      oppspeed = pbRoughStat(target,PBStats::SPEED,skill)
+      attspeed = pbRoughStat(user,:SPEED,skill)
+      oppspeed = pbRoughStat(target,:SPEED,skill)
       score += 30 if oppspeed>attspeed
     #---------------------------------------------------------------------------
     when "082"
@@ -1595,8 +1595,8 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "084"
-      attspeed = pbRoughStat(user,PBStats::SPEED,skill)
-      oppspeed = pbRoughStat(target,PBStats::SPEED,skill)
+      attspeed = pbRoughStat(user,:SPEED,skill)
+      oppspeed = pbRoughStat(target,:SPEED,skill)
       score += 30 if oppspeed>attspeed
     #---------------------------------------------------------------------------
     when "085"
@@ -1688,7 +1688,7 @@ class PokeBattle_AI
         score -= 90
       elsif target.pbHasType?(:GHOST)
         score += 70
-      elsif target.stages[PBStats::EVASION]<=0
+      elsif target.stages[:EVASION]<=0
         score -= 60
       end
     #---------------------------------------------------------------------------
@@ -1697,7 +1697,7 @@ class PokeBattle_AI
         score -= 90
       elsif target.pbHasType?(:DARK)
         score += 70
-      elsif target.stages[PBStats::EVASION]<=0
+      elsif target.stages[:EVASION]<=0
         score -= 60
       end
     #---------------------------------------------------------------------------
@@ -1765,8 +1765,8 @@ class PokeBattle_AI
       score -= 90 if target.effects[PBEffects::HealBlock]>0
     #---------------------------------------------------------------------------
     when "0BC"
-      aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-      ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+      aspeed = pbRoughStat(user,:SPEED,skill)
+      ospeed = pbRoughStat(target,:SPEED,skill)
       if target.effects[PBEffects::Encore]>0
         score -= 90
       elsif aspeed>ospeed
@@ -1927,14 +1927,14 @@ class PokeBattle_AI
     when "0E1"
     #---------------------------------------------------------------------------
     when "0E2"
-      if !target.pbCanLowerStatStage?(PBStats::ATTACK,user) &&
-         !target.pbCanLowerStatStage?(PBStats::SPATK,user)
+      if !target.pbCanLowerStatStage?(:ATTACK,user) &&
+         !target.pbCanLowerStatStage?(:SPECIAL_ATTACK,user)
         score -= 100
       elsif @battle.pbAbleNonActiveCount(user.idxOwnSide)==0
         score -= 100
       else
-        score += target.stages[PBStats::ATTACK]*10
-        score += target.stages[PBStats::SPATK]*10
+        score += target.stages[:ATTACK]*10
+        score += target.stages[:SPECIAL_ATTACK]*10
         score -= user.hp*100/user.totalhp
       end
     #---------------------------------------------------------------------------
@@ -2010,7 +2010,7 @@ class PokeBattle_AI
       else
         score -= 40 if user.effects[PBEffects::Confusion]>0
         total = 0
-        PBStats.eachBattleStat { |s| total += user.stages[s] }
+        GameData::Stat.each_battle { |s| total += user.stages[s.id] }
         if total<=0 || user.turnCount==0
           score -= 60
         else
@@ -2116,8 +2116,8 @@ class PokeBattle_AI
       if target.pbCanParalyze?(user,false)
         score += 30
         if skill>=PBTrainerAI.mediumSkill
-           aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-           ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+           aspeed = pbRoughStat(user,:SPEED,skill)
+           ospeed = pbRoughStat(target,:SPEED,skill)
           if aspeed<ospeed
             score += 30
           elsif aspeed>ospeed
@@ -2250,7 +2250,7 @@ class PokeBattle_AI
       score += 20 if user.pbOpposingSide.effects[PBEffects::LightScreen]>0
     #---------------------------------------------------------------------------
     when "10B"
-      score += 10*(user.stages[PBStats::ACCURACY]-target.stages[PBStats::EVASION])
+      score += 10*(user.stages[:ACCURACY]-target.stages[:EVASION])
     #---------------------------------------------------------------------------
     when "10C"
       if user.effects[PBEffects::Substitute]>0
@@ -2272,9 +2272,9 @@ class PokeBattle_AI
           end
         end
       else
-        avg  = user.stages[PBStats::SPEED]*10
-        avg -= user.stages[PBStats::ATTACK]*10
-        avg -= user.stages[PBStats::DEFENSE]*10
+        avg  = user.stages[:SPEED]*10
+        avg -= user.stages[:ATTACK]*10
+        avg -= user.stages[:DEFENSE]*10
         score += avg/3
       end
     #---------------------------------------------------------------------------
@@ -2311,8 +2311,8 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "112"
       avg = 0
-      avg -= user.stages[PBStats::DEFENSE]*10
-      avg -= user.stages[PBStats::SPDEF]*10
+      avg -= user.stages[:DEFENSE]*10
+      avg -= user.stages[:SPECIAL_DEFENSE]*10
       score += avg/2
       if user.effects[PBEffects::Stockpile]>=3
         score -= 80
@@ -2426,8 +2426,8 @@ class PokeBattle_AI
       if target.pbCanParalyze?(user,false)
         score += 30
         if skill>=PBTrainerAI.mediumSkill
-           aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-           ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+           aspeed = pbRoughStat(user,:SPEED,skill)
+           ospeed = pbRoughStat(target,:SPEED,skill)
           if aspeed<ospeed
             score += 30
           elsif aspeed>ospeed
@@ -2469,19 +2469,19 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "12B"
       score += 20   # Shadow moves are more preferable
-      if !target.pbCanLowerStatStage?(PBStats::DEFENSE,user)
+      if !target.pbCanLowerStatStage?(:DEFENSE,user)
         score -= 90
       else
         score += 40 if user.turnCount==0
-        score += target.stages[PBStats::DEFENSE]*20
+        score += target.stages[:DEFENSE]*20
       end
     #---------------------------------------------------------------------------
     when "12C"
       score += 20   # Shadow moves are more preferable
-      if !target.pbCanLowerStatStage?(PBStats::EVASION,user)
+      if !target.pbCanLowerStatStage?(:EVASION,user)
         score -= 90
       else
-        score += target.stages[PBStats::EVASION]*15
+        score += target.stages[:EVASION]*15
       end
     #---------------------------------------------------------------------------
     when "12D"
@@ -2537,36 +2537,36 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "136"
-      score += 20 if user.stages[PBStats::DEFENSE]<0
+      score += 20 if user.stages[:DEFENSE]<0
     #---------------------------------------------------------------------------
     when "137"
-      hasEffect = user.statStageAtMax?(PBStats::DEFENSE) &&
-                  user.statStageAtMax?(PBStats::SPDEF)
+      hasEffect = user.statStageAtMax?(:DEFENSE) &&
+                  user.statStageAtMax?(:SPECIAL_DEFENSE)
       user.eachAlly do |b|
-        next if b.statStageAtMax?(PBStats::DEFENSE) && b.statStageAtMax?(PBStats::SPDEF)
+        next if b.statStageAtMax?(:DEFENSE) && b.statStageAtMax?(:SPECIAL_DEFENSE)
         hasEffect = true
-        score -= b.stages[PBStats::DEFENSE]*10
-        score -= b.stages[PBStats::SPDEF]*10
+        score -= b.stages[:DEFENSE]*10
+        score -= b.stages[:SPECIAL_DEFENSE]*10
       end
       if hasEffect
-        score -= user.stages[PBStats::DEFENSE]*10
-        score -= user.stages[PBStats::SPDEF]*10
+        score -= user.stages[:DEFENSE]*10
+        score -= user.stages[:SPECIAL_DEFENSE]*10
       else
         score -= 90
       end
     #---------------------------------------------------------------------------
     when "138"
-      if target.statStageAtMax?(PBStats::SPDEF)
+      if target.statStageAtMax?(:SPECIAL_DEFENSE)
         score -= 90
       else
-        score -= target.stages[PBStats::SPDEF]*10
+        score -= target.stages[:SPECIAL_DEFENSE]*10
       end
     #---------------------------------------------------------------------------
     when "139"
-      if !target.pbCanLowerStatStage?(PBStats::ATTACK,user)
+      if !target.pbCanLowerStatStage?(:ATTACK,user)
         score -= 90
       else
-        score += target.stages[PBStats::ATTACK]*20
+        score += target.stages[:ATTACK]*20
         if skill>=PBTrainerAI.mediumSkill
           hasPhysicalAttack = false
           target.eachMove do |m|
@@ -2583,39 +2583,39 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "13A"
-      avg  = target.stages[PBStats::ATTACK]*10
-      avg += target.stages[PBStats::SPATK]*10
+      avg  = target.stages[:ATTACK]*10
+      avg += target.stages[:SPECIAL_ATTACK]*10
       score += avg/2
     #---------------------------------------------------------------------------
     when "13B"
       if !user.isSpecies?(:HOOPA) || user.form!=1
         score -= 100
       else
-        score += 20 if target.stages[PBStats::DEFENSE]>0
+        score += 20 if target.stages[:DEFENSE]>0
       end
     #---------------------------------------------------------------------------
     when "13C"
-      score += 20 if target.stages[PBStats::SPATK]>0
+      score += 20 if target.stages[:SPECIAL_ATTACK]>0
     #---------------------------------------------------------------------------
     when "13D"
-      if !target.pbCanLowerStatStage?(PBStats::SPATK,user)
+      if !target.pbCanLowerStatStage?(:SPECIAL_ATTACK,user)
         score -= 90
       else
         score += 40 if user.turnCount==0
-        score += target.stages[PBStats::SPATK]*20
+        score += target.stages[:SPECIAL_ATTACK]*20
       end
     #---------------------------------------------------------------------------
     when "13E"
       count = 0
       @battle.eachBattler do |b|
         if b.pbHasType?(:GRASS) && !b.airborne? &&
-           (!b.statStageAtMax?(PBStats::ATTACK) || !b.statStageAtMax?(PBStats::SPATK))
+           (!b.statStageAtMax?(:ATTACK) || !b.statStageAtMax?(:SPECIAL_ATTACK))
           count += 1
           if user.opposes?(b)
             score -= 20
           else
-            score -= user.stages[PBStats::ATTACK]*10
-            score -= user.stages[PBStats::SPATK]*10
+            score -= user.stages[:ATTACK]*10
+            score -= user.stages[:SPECIAL_ATTACK]*10
           end
         end
       end
@@ -2624,12 +2624,12 @@ class PokeBattle_AI
     when "13F"
       count = 0
       @battle.eachBattler do |b|
-        if b.pbHasType?(:GRASS) && !b.statStageAtMax?(PBStats::DEFENSE)
+        if b.pbHasType?(:GRASS) && !b.statStageAtMax?(:DEFENSE)
           count += 1
           if user.opposes?(b)
             score -= 20
           else
-            score -= user.stages[PBStats::DEFENSE]*10
+            score -= user.stages[:DEFENSE]*10
           end
         end
       end
@@ -2639,14 +2639,14 @@ class PokeBattle_AI
       count=0
       @battle.eachBattler do |b|
         if b.poisoned? &&
-           (!b.statStageAtMin?(PBStats::ATTACK) ||
-           !b.statStageAtMin?(PBStats::SPATK) ||
-           !b.statStageAtMin?(PBStats::SPEED))
+           (!b.statStageAtMin?(:ATTACK) ||
+           !b.statStageAtMin?(:SPECIAL_ATTACK) ||
+           !b.statStageAtMin?(:SPEED))
           count += 1
           if user.opposes?(b)
-            score += user.stages[PBStats::ATTACK]*10
-            score += user.stages[PBStats::SPATK]*10
-            score += user.stages[PBStats::SPEED]*10
+            score += user.stages[:ATTACK]*10
+            score += user.stages[:SPECIAL_ATTACK]*10
+            score += user.stages[:SPEED]*10
           else
             score -= 20
           end
@@ -2659,9 +2659,9 @@ class PokeBattle_AI
         score -= 90
       else
         numpos = 0; numneg = 0
-        PBStats.eachBattleStat do |s|
-          numpos += target.stages[s] if target.stages[s]>0
-          numneg += target.stages[s] if target.stages[s]<0
+        GameData::Stat.each_battle do |s|
+          numpos += target.stages[s.id] if target.stages[s.id] > 0
+          numneg += target.stages[s.id] if target.stages[s.id] < 0
         end
         if numpos!=0 || numneg!=0
           score += (numpos-numneg)*10
@@ -2679,8 +2679,8 @@ class PokeBattle_AI
     when "144"
     #---------------------------------------------------------------------------
     when "145"
-      aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-      ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+      aspeed = pbRoughStat(user,:SPEED,skill)
+      ospeed = pbRoughStat(target,:SPEED,skill)
       score -= 90 if aspeed>ospeed
     #---------------------------------------------------------------------------
     when "146"
@@ -2688,8 +2688,8 @@ class PokeBattle_AI
     when "147"
     #---------------------------------------------------------------------------
     when "148"
-      aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-      ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+      aspeed = pbRoughStat(user,:SPEED,skill)
+      ospeed = pbRoughStat(target,:SPEED,skill)
       if aspeed>ospeed
         score -= 90
       else
@@ -2721,14 +2721,14 @@ class PokeBattle_AI
     when "14D"
     #---------------------------------------------------------------------------
     when "14E"
-      if user.statStageAtMax?(PBStats::SPATK) &&
-         user.statStageAtMax?(PBStats::SPDEF) &&
-         user.statStageAtMax?(PBStats::SPEED)
+      if user.statStageAtMax?(:SPECIAL_ATTACK) &&
+         user.statStageAtMax?(:SPECIAL_DEFENSE) &&
+         user.statStageAtMax?(:SPEED)
         score -= 90
       else
-        score -= user.stages[PBStats::SPATK]*10   # Only *10 isntead of *20
-        score -= user.stages[PBStats::SPDEF]*10   # because two-turn attack
-        score -= user.stages[PBStats::SPEED]*10
+        score -= user.stages[:SPECIAL_ATTACK]*10   # Only *10 instead of *20
+        score -= user.stages[:SPECIAL_DEFENSE]*10   # because two-turn attack
+        score -= user.stages[:SPEED]*10
         if skill>=PBTrainerAI.mediumSkill
           hasSpecialAttack = false
           user.eachMove do |m|
@@ -2743,8 +2743,8 @@ class PokeBattle_AI
           end
         end
         if skill>=PBTrainerAI.highSkill
-          aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-          ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+          aspeed = pbRoughStat(user,:SPEED,skill)
+          ospeed = pbRoughStat(target,:SPEED,skill)
           score += 30 if aspeed<ospeed && aspeed*2>ospeed
         end
       end
@@ -2757,11 +2757,11 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "150"
-      score += 20 if !user.statStageAtMax?(PBStats::ATTACK) && target.hp<=target.totalhp/4
+      score += 20 if !user.statStageAtMax?(:ATTACK) && target.hp<=target.totalhp/4
     #---------------------------------------------------------------------------
     when "151"
-      avg  = target.stages[PBStats::ATTACK]*10
-      avg += target.stages[PBStats::SPATK]*10
+      avg  = target.stages[:ATTACK]*10
+      avg += target.stages[:SPECIAL_ATTACK]*10
       score += avg/2
     #---------------------------------------------------------------------------
     when "152"
@@ -2782,7 +2782,7 @@ class PokeBattle_AI
       score -= 90 if !user.belched?
     #---------------------------------------------------------------------------
     when "159"
-      if !target.pbCanPoison?(user,false) && !target.pbCanLowerStatStage?(PBStats::SPEED,user)
+      if !target.pbCanPoison?(user,false) && !target.pbCanLowerStatStage?(:SPEED,user)
         score -= 90
       else
         if target.pbCanPoison?(user,false)
@@ -2793,16 +2793,16 @@ class PokeBattle_AI
             score -= 40 if target.effects[PBEffects::Yawn]>0
           end
           if skill>=PBTrainerAI.highSkill
-            score += 10 if pbRoughStat(target,PBStats::DEFENSE,skill)>100
-            score += 10 if pbRoughStat(target,PBStats::SPDEF,skill)>100
+            score += 10 if pbRoughStat(target,:DEFENSE,skill)>100
+            score += 10 if pbRoughStat(target,:SPECIAL_DEFENSE,skill)>100
             score -= 40 if target.hasActiveAbility?([:GUTS,:MARVELSCALE,:TOXICBOOST])
           end
         end
-        if target.pbCanLowerStatStage?(PBStats::SPEED,user)
-          score += target.stages[PBStats::SPEED]*10
+        if target.pbCanLowerStatStage?(:SPEED,user)
+          score += target.stages[:SPEED]*10
           if skill>=PBTrainerAI.highSkill
-            aspeed = pbRoughStat(user,PBStats::SPEED,skill)
-            ospeed = pbRoughStat(target,PBStats::SPEED,skill)
+            aspeed = pbRoughStat(user,:SPEED,skill)
+            ospeed = pbRoughStat(target,:SPEED,skill)
             score += 30 if aspeed<ospeed && aspeed*2>ospeed
           end
         end
@@ -2826,26 +2826,26 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "15C"
-      hasEffect = user.statStageAtMax?(PBStats::ATTACK) &&
-                  user.statStageAtMax?(PBStats::SPATK)
+      hasEffect = user.statStageAtMax?(:ATTACK) &&
+                  user.statStageAtMax?(:SPECIAL_ATTACK)
       user.eachAlly do |b|
-        next if b.statStageAtMax?(PBStats::ATTACK) && b.statStageAtMax?(PBStats::SPATK)
+        next if b.statStageAtMax?(:ATTACK) && b.statStageAtMax?(:SPECIAL_ATTACK)
         hasEffect = true
-        score -= b.stages[PBStats::ATTACK]*10
-        score -= b.stages[PBStats::SPATK]*10
+        score -= b.stages[:ATTACK]*10
+        score -= b.stages[:SPECIAL_ATTACK]*10
       end
       if hasEffect
-        score -= user.stages[PBStats::ATTACK]*10
-        score -= user.stages[PBStats::SPATK]*10
+        score -= user.stages[:ATTACK]*10
+        score -= user.stages[:SPECIAL_ATTACK]*10
       else
         score -= 90
       end
     #---------------------------------------------------------------------------
     when "15D"
       numStages = 0
-      PBStats.eachBattleStat do |s|
-        next if target.stages[s]<=0
-        numStages += target.stages[s]
+      GameData::Stat.each_battle do |s|
+        next if target.stages[s.id] <= 0
+        numStages += target.stages[s.id]
       end
       score += numStages*20
     #---------------------------------------------------------------------------
@@ -2857,14 +2857,14 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "15F"
-      score += user.stages[PBStats::DEFENSE]*10
+      score += user.stages[:DEFENSE]*10
     #---------------------------------------------------------------------------
     when "160"
-      if target.statStageAtMin?(PBStats::ATTACK)
+      if target.statStageAtMin?(:ATTACK)
         score -= 90
       else
-        if target.pbCanLowerStatStage?(PBStats::ATTACK,user)
-          score += target.stages[PBStats::ATTACK]*20
+        if target.pbCanLowerStatStage?(:ATTACK,user)
+          score += target.stages[:ATTACK]*20
           if skill>=PBTrainerAI.mediumSkill
             hasPhysicalAttack = false
             target.eachMove do |m|
@@ -2900,8 +2900,8 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "165"
       if skill>=PBTrainerAI.mediumSkill
-         userSpeed   = pbRoughStat(user,PBStats::SPEED,skill)
-         targetSpeed = pbRoughStat(target,PBStats::SPEED,skill)
+         userSpeed   = pbRoughStat(user,:SPEED,skill)
+         targetSpeed = pbRoughStat(target,:SPEED,skill)
         if userSpeed<targetSpeed
           score += 30
         end

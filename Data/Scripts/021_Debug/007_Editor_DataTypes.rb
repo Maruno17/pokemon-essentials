@@ -456,35 +456,38 @@ class IVsProperty
   end
 
   def set(settingname, oldsetting)
-    oldsetting = [nil] if !oldsetting
-    for i in 0...6
-      oldsetting[i] = oldsetting[0] if !oldsetting[i]
-    end
+    oldsetting = {} if !oldsetting
     properties = []
-    properties[PBStats::HP]      = [_INTL("HP"),      LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's HP stat (0-{1}).", @limit)]
-    properties[PBStats::ATTACK]  = [_INTL("Attack"),  LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Attack stat (0-{1}).", @limit)]
-    properties[PBStats::DEFENSE] = [_INTL("Defense"), LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Defense stat (0-{1}).", @limit)]
-    properties[PBStats::SPATK]   = [_INTL("Sp. Atk"), LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Sp. Atk stat (0-{1}).", @limit)]
-    properties[PBStats::SPDEF]   = [_INTL("Sp. Def"), LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Sp. Def stat (0-{1}).", @limit)]
-    properties[PBStats::SPEED]   = [_INTL("Speed"),   LimitProperty2.new(@limit), _INTL("Individual values for the Pokémon's Speed stat (0-{1}).", @limit)]
-    pbPropertyList(settingname, oldsetting, properties, false)
-    hasNonNil = false
-    firstVal = oldsetting[0] || 0
-    for i in 0...6
-      (oldsetting[i]) ? hasNonNil = true : oldsetting[i] = firstVal
+    data = []
+    stat_ids = []
+    GameData::Stat.each_main do |s|
+      oldsetting[s.pbs_order] = 0 if !oldsetting[s.pbs_order]
+      properties[s.pbs_order] = [s.name, LimitProperty2.new(@limit),
+                                 _INTL("Individual values for the Pokémon's {1} stat (0-{2}).", s.name, @limit)]
+      data[s.pbs_order] = oldsetting[s.id]
+      stat_ids[s.pbs_order] = s.id
     end
-    return (hasNonNil) ? oldsetting : nil
+    pbPropertyList(settingname, data, properties, false)
+    allZeroes = true
+    data.each_with_index do |value, i|
+      data[i] ||= 0
+      allZeroes = false if value && value != 0
+    end
+    return nil if allZeroes
+    ret = {}
+    stat_ids.each_with_index { |s, i| ret[s] = data[i] }
+    return ret
   end
 
   def defaultValue
-    return nil
+    return 0
   end
 
   def format(value)
     return "-" if !value
     return value[0].to_s if value.uniq.length == 1
     ret = ""
-    for i in 0...6
+    for i in 0...value.length
       ret.concat(",") if i > 0
       ret.concat((value[i] || 0).to_s)
     end
@@ -500,46 +503,44 @@ class EVsProperty
   end
 
   def set(settingname, oldsetting)
-    oldsetting = [nil] if !oldsetting
-    for i in 0...6
-      oldsetting[i] = oldsetting[0] if !oldsetting[i]
-    end
+    oldsetting = {} if !oldsetting
     properties = []
-    properties[PBStats::HP]      = [_INTL("HP"),      LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's HP stat (0-{1}).", @limit)]
-    properties[PBStats::ATTACK]  = [_INTL("Attack"),  LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's Attack stat (0-{1}).", @limit)]
-    properties[PBStats::DEFENSE] = [_INTL("Defense"), LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's Defense stat (0-{1}).", @limit)]
-    properties[PBStats::SPATK]   = [_INTL("Sp. Atk"), LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's Sp. Atk stat (0-{1}).", @limit)]
-    properties[PBStats::SPDEF]   = [_INTL("Sp. Def"), LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's Sp. Def stat (0-{1}).", @limit)]
-    properties[PBStats::SPEED]   = [_INTL("Speed"),   LimitProperty2.new(@limit), _INTL("Effort values for the Pokémon's Speed stat (0-{1}).", @limit)]
+    data = []
+    stat_ids = []
+    GameData::Stat.each_main do |s|
+      oldsetting[s.pbs_order] = 0 if !oldsetting[s.pbs_order]
+      properties[s.pbs_order] = [s.name, LimitProperty2.new(@limit),
+                                 _INTL("Effort values for the Pokémon's {1} stat (0-{2}).", s.name, @limit)]
+      data[s.pbs_order] = oldsetting[s.id]
+      stat_ids[s.pbs_order] = s.id
+    end
     loop do
-      pbPropertyList(settingname, oldsetting, properties, false)
+      pbPropertyList(settingname,data,properties,true)
       evtotal = 0
-      for i in 0...6
-        evtotal += oldsetting[i] if oldsetting[i]
-      end
-      if evtotal > Pokemon::EV_LIMIT
-        pbMessage(_INTL("Total EVs ({1}) are greater than allowed ({2}). Please reduce them.", evtotal, Pokemon::EV_LIMIT))
-      else
-        break
-      end
+      data.each { |value| evtotal += value if value }
+      break if evtotal <= Pokemon::EV_LIMIT
+      pbMessage(_INTL("Total EVs ({1}) are greater than allowed ({2}). Please reduce them.", evtotal, Pokemon::EV_LIMIT))
     end
-    hasNonNil = false
-    firstVal = oldsetting[0] || 0
-    for i in 0...6
-      (oldsetting[i]) ? hasNonNil = true : oldsetting[i] = firstVal
+    allZeroes = true
+    data.each_with_index do |value, i|
+      data[i] ||= 0
+      allZeroes = false if value && value != 0
     end
-    return (hasNonNil) ? oldsetting : nil
+    return nil if allZeroes
+    ret = {}
+    stat_ids.each_with_index { |s, i| ret[s] = data[i] }
+    return ret
   end
 
   def defaultValue
-    return nil
+    return 0
   end
 
   def format(value)
     return "-" if !value
     return value[0].to_s if value.uniq.length == 1
     ret = ""
-    for i in 0...6
+    for i in 0...value.length
       ret.concat(",") if i > 0
       ret.concat((value[i] || 0).to_s)
     end
@@ -827,16 +828,18 @@ module BaseStatsProperty
   def self.set(settingname,oldsetting)
     return oldsetting if !oldsetting
     properties = []
-    properties[PBStats::HP]      = _INTL("Base HP"),          NonzeroLimitProperty.new(255), _INTL("Base HP stat of the Pokémon.")
-    properties[PBStats::ATTACK]  = _INTL("Base Attack"),      NonzeroLimitProperty.new(255), _INTL("Base Attack stat of the Pokémon.")
-    properties[PBStats::DEFENSE] = _INTL("Base Defense"),     NonzeroLimitProperty.new(255), _INTL("Base Defense stat of the Pokémon.")
-    properties[PBStats::SPATK]   = _INTL("Base Sp. Attack"),  NonzeroLimitProperty.new(255), _INTL("Base Special Attack stat of the Pokémon.")
-    properties[PBStats::SPDEF]   = _INTL("Base Sp. Defense"), NonzeroLimitProperty.new(255), _INTL("Base Special Defense stat of the Pokémon.")
-    properties[PBStats::SPEED]   = _INTL("Base Speed"),       NonzeroLimitProperty.new(255), _INTL("Base Speed stat of the Pokémon.")
-    if !pbPropertyList(settingname,oldsetting,properties,true)
-      oldsetting = nil
-    else
-      oldsetting = nil if !oldsetting[0] || oldsetting[0]==0
+    data = []
+    stat_ids = []
+    GameData::Stat.each_main do |s|
+      properties[s.pbs_order] = [_INTL("Base {1}", s.name), NonzeroLimitProperty.new(255),
+                                 _INTL("Base {1} stat of the Pokémon.", s.name)]
+      data[s.pbs_order] = oldsetting[s.id]
+      stat_ids[s.pbs_order] = s.id
+    end
+    if pbPropertyList(settingname,data,properties,true)
+      ret = {}
+      stat_ids.each_with_index { |s, i| ret[s] = data[i] }
+      oldsetting = ret
     end
     return oldsetting
   end
@@ -856,16 +859,18 @@ module EffortValuesProperty
   def self.set(settingname,oldsetting)
     return oldsetting if !oldsetting
     properties = []
-    properties[PBStats::HP]      = [_INTL("HP EVs"),          LimitProperty.new(255), _INTL("Number of HP Effort Value points gained from the Pokémon.")]
-    properties[PBStats::ATTACK]  = [_INTL("Attack EVs"),      LimitProperty.new(255), _INTL("Number of Attack Effort Value points gained from the Pokémon.")]
-    properties[PBStats::DEFENSE] = [_INTL("Defense EVs"),     LimitProperty.new(255), _INTL("Number of Defense Effort Value points gained from the Pokémon.")]
-    properties[PBStats::SPATK]   = [_INTL("Sp. Attack EVs"),  LimitProperty.new(255), _INTL("Number of Special Attack Effort Value points gained from the Pokémon.")]
-    properties[PBStats::SPDEF]   = [_INTL("Sp. Defense EVs"), LimitProperty.new(255), _INTL("Number of Special Defense Effort Value points gained from the Pokémon.")]
-    properties[PBStats::SPEED]   = [_INTL("Speed EVs"),       LimitProperty.new(255), _INTL("Number of Speed Effort Value points gained from the Pokémon.")]
-    if !pbPropertyList(settingname,oldsetting,properties,true)
-      oldsetting = nil
-    else
-      oldsetting = nil if !oldsetting[0] || oldsetting[0]==0
+    data = []
+    stat_ids = []
+    GameData::Stat.each_main do |s|
+      properties[s.pbs_order] = [_INTL("{1} EVs", s.name), LimitProperty.new(255),
+                                 _INTL("Number of {1} Effort Value points gained from the Pokémon.", s.name)]
+      data[s.pbs_order] = oldsetting[s.id]
+      stat_ids[s.pbs_order] = s.id
+    end
+    if pbPropertyList(settingname,oldsetting,properties,true)
+      ret = {}
+      stat_ids.each_with_index { |s, i| ret[s] = data[i] }
+      oldsetting = ret
     end
     return oldsetting
   end

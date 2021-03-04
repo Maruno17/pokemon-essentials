@@ -367,7 +367,7 @@ end
 class PokeBattle_Move_12C < PokeBattle_TargetStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::EVASION,2]
+    @statDown = [:EVASION,2]
   end
 end
 

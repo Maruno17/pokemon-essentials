@@ -250,7 +250,6 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
   "name"        => _INTL("EV/IV/pID..."),
   "always_show" => true,
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
-    numstats = 6
     cmd = 0
     loop do
       persid = sprintf("0x%08X", pkmn.personalID)
@@ -265,9 +264,11 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
         loop do
           totalev = 0
           evcommands = []
-          for i in 0...numstats
-            evcommands.push(PBStats.getName(i) + " (#{pkmn.ev[i]})")
-            totalev += pkmn.ev[i]
+          ev_id = []
+          GameData::Stat.each_main do |s|
+            evcommands.push(s.name + " (#{pkmn.ev[s.id]})")
+            ev_id.push(s.id)
+            totalev += pkmn.ev[s.id]
           end
           evcommands.push(_INTL("Randomise all"))
           evcommands.push(_INTL("Max randomise all"))
@@ -275,41 +276,37 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
                                       totalev, Pokemon::EV_LIMIT,
                                       100 * totalev / Pokemon::EV_LIMIT), evcommands, cmd2)
           break if cmd2 < 0
-          if cmd2 < numstats
+          if cmd2 < ev_id.length
             params = ChooseNumberParams.new
             upperLimit = 0
-            for i in 0...numstats
-              upperLimit += pkmn.ev[i] if i != cmd2
-            end
+            GameData::Stat.each_main { |s| upperLimit += pkmn.ev[s.id] if s.id != ev_id[cmd2] }
             upperLimit = Pokemon::EV_LIMIT - upperLimit
             upperLimit = [upperLimit, Pokemon::EV_STAT_LIMIT].min
-            thisValue = [pkmn.ev[cmd2], upperLimit].min
+            thisValue = [pkmn.ev[ev_id[cmd2]], upperLimit].min
             params.setRange(0, upperLimit)
             params.setDefaultValue(thisValue)
             params.setCancelValue(thisValue)
             f = pbMessageChooseNumber(_INTL("Set the EV for {1} (max. {2}).",
-               PBStats.getName(cmd2), upperLimit), params) { screen.pbUpdate }
-            if f != pkmn.ev[cmd2]
-              pkmn.ev[cmd2] = f
+               GameData::Stat.get(ev_id[cmd2]).name, upperLimit), params) { screen.pbUpdate }
+            if f != pkmn.ev[ev_id[cmd2]]
+              pkmn.ev[ev_id[cmd2]] = f
               pkmn.calcStats
               screen.pbRefreshSingle(pkmnid)
             end
-          elsif cmd2 < evcommands.length   # Randomise
+          else   # (Max) Randomise all
             evTotalTarget = Pokemon::EV_LIMIT
-            if cmd2 == evcommands.length - 2
+            if cmd2 == evcommands.length - 2   # Randomize all (not max)
               evTotalTarget = rand(Pokemon::EV_LIMIT)
             end
-            for i in 0...numstats
-              pkmn.ev[i] = 0
-            end
+            GameData::Stat.each_main { |s| pkmn.ev[s.id] = 0 }
             while evTotalTarget > 0
-              r = rand(numstats)
-              next if pkmn.ev[r] >= Pokemon::EV_STAT_LIMIT
-              addVal = 1 + rand(Pokemon::EV_STAT_LIMIT/4)
-              addVal = evTotalTarget if addVal > evTotalTarget
-              addVal = [addVal, Pokemon::EV_STAT_LIMIT - pkmn.ev[r]].min
+              r = rand(ev_id.length)
+              next if pkmn.ev[ev_id[r]] >= Pokemon::EV_STAT_LIMIT
+              addVal = 1 + rand(Pokemon::EV_STAT_LIMIT / 4)
+              addVal = addVal.clamp(0, evTotalTarget)
+              addVal = addVal.clamp(0, Pokemon::EV_STAT_LIMIT - pkmn.ev[ev_id[r]])
               next if addVal == 0
-              pkmn.ev[r] += addVal
+              pkmn.ev[ev_id[r]] += addVal
               evTotalTarget -= addVal
             end
             pkmn.calcStats
@@ -322,32 +319,32 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
           hiddenpower = pbHiddenPower(pkmn)
           totaliv = 0
           ivcommands = []
-          for i in 0...numstats
-            ivcommands.push(PBStats.getName(i) + " (#{pkmn.iv[i]})")
-            totaliv += pkmn.iv[i]
+          iv_id = []
+          GameData::Stat.each_main do |s|
+            ivcommands.push(s.name + " (#{pkmn.iv[s.id]})")
+            iv_id.push(s.id)
+            totaliv += pkmn.iv[s.id]
           end
           msg = _INTL("Change which IV?\nHidden Power:\n{1}, power {2}\nTotal: {3}/{4} ({5}%)",
-             GameData::Type.get(hiddenpower[0]).name, hiddenpower[1], totaliv, numstats * 31,
-             100 * totaliv / (numstats * 31))
+             GameData::Type.get(hiddenpower[0]).name, hiddenpower[1], totaliv,
+             iv_id.length * Pokemon::IV_STAT_LIMIT, 100 * totaliv / (iv_id.length * Pokemon::IV_STAT_LIMIT))
           ivcommands.push(_INTL("Randomise all"))
           cmd2 = screen.pbShowCommands(msg, ivcommands, cmd2)
           break if cmd2 < 0
-          if cmd2 < numstats
+          if cmd2 < iv_id.length
             params = ChooseNumberParams.new
-            params.setRange(0, 31)
-            params.setDefaultValue(pkmn.iv[cmd2])
-            params.setCancelValue(pkmn.iv[cmd2])
+            params.setRange(0, Pokemon::IV_STAT_LIMIT)
+            params.setDefaultValue(pkmn.iv[iv_id[cmd2]])
+            params.setCancelValue(pkmn.iv[iv_id[cmd2]])
             f = pbMessageChooseNumber(_INTL("Set the IV for {1} (max. 31).",
-               PBStats.getName(cmd2)), params) { screen.pbUpdate }
-            if f != pkmn.iv[cmd2]
-              pkmn.iv[cmd2] = f
+               GameData::Stat.get(iv_id[cmd2]).name), params) { screen.pbUpdate }
+            if f != pkmn.iv[iv_id[cmd2]]
+              pkmn.iv[iv_id[cmd2]] = f
               pkmn.calcStats
               screen.pbRefreshSingle(pkmnid)
             end
-          elsif cmd2 == ivcommands.length - 1   # Randomise
-            for i in 0...numstats
-              pkmn.iv[i] = rand(Pokemon::IV_STAT_LIMIT + 1)
-            end
+          else   # Randomise all
+            GameData::Stat.each_main { |s| pkmn.iv[s.id] = rand(Pokemon::IV_STAT_LIMIT + 1) }
             pkmn.calcStats
             screen.pbRefreshSingle(pkmnid)
           end
@@ -667,10 +664,10 @@ PokemonDebugMenuCommands.register("setnature", {
         nature.stat_changes.each do |change|
           if change[1] > 0
             plus_text += "/" if !plus_text.empty?
-            plus_text += PBStats.getNameBrief(change[0])
+            plus_text += GameData::Stat.get(change[0]).name_brief
           elsif change[1] < 0
             minus_text += "/" if !minus_text.empty?
-            minus_text += PBStats.getNameBrief(change[0])
+            minus_text += GameData::Stat.get(change[0]).name_brief
           end
         end
         commands.push(_INTL("{1} (+{2}, -{3})", nature.real_name, plus_text, minus_text))

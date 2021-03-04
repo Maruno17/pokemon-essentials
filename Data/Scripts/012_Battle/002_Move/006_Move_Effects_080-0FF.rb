@@ -217,8 +217,8 @@ end
 class PokeBattle_Move_08E < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
     mult = 1
-    PBStats.eachBattleStat { |s| mult += user.stages[s] if user.stages[s]>0 }
-    return 20*mult
+    GameData::Stat.each_battle { |s| mult += user.stages[s.id] if user.stages[s.id] > 0 }
+    return 20 * mult
   end
 end
 
@@ -231,8 +231,8 @@ end
 class PokeBattle_Move_08F < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
     mult = 3
-    PBStats.eachBattleStat { |s| mult += target.stages[s] if target.stages[s]>0 }
-    return [20*mult,200].min
+    GameData::Stat.each_battle { |s| mult += target.stages[s.id] if target.stages[s.id] > 0 }
+    return [20 * mult, 200].min
   end
 end
 
@@ -264,23 +264,23 @@ def pbHiddenPower(pkmn)
   types = []
   GameData::Type.each { |t| types.push(t.id) if !t.pseudo_type && ![:NORMAL, :SHADOW].include?(t.id)}
   types.sort! { |a, b| GameData::Type.get(a).id_number <=> GameData::Type.get(b).id_number }
-  idxType |= (iv[PBStats::HP]&1)
-  idxType |= (iv[PBStats::ATTACK]&1)<<1
-  idxType |= (iv[PBStats::DEFENSE]&1)<<2
-  idxType |= (iv[PBStats::SPEED]&1)<<3
-  idxType |= (iv[PBStats::SPATK]&1)<<4
-  idxType |= (iv[PBStats::SPDEF]&1)<<5
+  idxType |= (iv[:HP]&1)
+  idxType |= (iv[:ATTACK]&1)<<1
+  idxType |= (iv[:DEFENSE]&1)<<2
+  idxType |= (iv[:SPEED]&1)<<3
+  idxType |= (iv[:SPECIAL_ATTACK]&1)<<4
+  idxType |= (iv[:SPECIAL_DEFENSE]&1)<<5
   idxType = (types.length-1)*idxType/63
   type = types[idxType]
   if Settings::MECHANICS_GENERATION <= 5
     powerMin = 30
     powerMax = 70
-    power |= (iv[PBStats::HP]&2)>>1
-    power |= (iv[PBStats::ATTACK]&2)
-    power |= (iv[PBStats::DEFENSE]&2)<<1
-    power |= (iv[PBStats::SPEED]&2)<<2
-    power |= (iv[PBStats::SPATK]&2)<<3
-    power |= (iv[PBStats::SPDEF]&2)<<4
+    power |= (iv[:HP]&2)>>1
+    power |= (iv[:ATTACK]&2)
+    power |= (iv[:DEFENSE]&2)<<1
+    power |= (iv[:SPEED]&2)<<2
+    power |= (iv[:SPECIAL_ATTACK]&2)<<3
+    power |= (iv[:SPECIAL_DEFENSE]&2)<<4
     power = powerMin+(powerMax-powerMin)*power/63
   end
   return [type,power]
@@ -925,24 +925,24 @@ class PokeBattle_Move_0A4 < PokeBattle_Move
     when 9
       target.pbFreeze if target.pbCanFreeze?(user,false,self)
     when 5
-      if target.pbCanLowerStatStage?(PBStats::ATTACK,user,self)
-        target.pbLowerStatStage(PBStats::ATTACK,1,user)
+      if target.pbCanLowerStatStage?(:ATTACK,user,self)
+        target.pbLowerStatStage(:ATTACK,1,user)
       end
     when 14
-      if target.pbCanLowerStatStage?(PBStats::DEFENSE,user,self)
-        target.pbLowerStatStage(PBStats::DEFENSE,1,user)
+      if target.pbCanLowerStatStage?(:DEFENSE,user,self)
+        target.pbLowerStatStage(:DEFENSE,1,user)
       end
     when 3
-      if target.pbCanLowerStatStage?(PBStats::SPATK,user,self)
-        target.pbLowerStatStage(PBStats::SPATK,1,user)
+      if target.pbCanLowerStatStage?(:SPECIAL_ATTACK,user,self)
+        target.pbLowerStatStage(:SPECIAL_ATTACK,1,user)
       end
     when 4, 6, 12
-      if target.pbCanLowerStatStage?(PBStats::SPEED,user,self)
-        target.pbLowerStatStage(PBStats::SPEED,1,user)
+      if target.pbCanLowerStatStage?(:SPEED,user,self)
+        target.pbLowerStatStage(:SPEED,1,user)
       end
     when 8
-      if target.pbCanLowerStatStage?(PBStats::ACCURACY,user,self)
-        target.pbLowerStatStage(PBStats::ACCURACY,1,user)
+      if target.pbCanLowerStatStage?(:ACCURACY,user,self)
+        target.pbLowerStatStage(:ACCURACY,1,user)
       end
     when 7, 11, 13
       target.pbFlinch(user)
@@ -1997,7 +1997,7 @@ class PokeBattle_Move_0C1 < PokeBattle_Move
 
   def pbBaseDamage(baseDmg,user,target)
     i = @beatUpList.shift   # First element in array, and removes it from array
-    atk = @battle.pbParty(user.index)[i].baseStats[PBStats::ATTACK]
+    atk = @battle.pbParty(user.index)[i].baseStats[:ATTACK]
     return 5+(atk/10)
   end
 end
@@ -2120,8 +2120,8 @@ class PokeBattle_Move_0C8 < PokeBattle_TwoTurnMove
   end
 
   def pbChargingTurnEffect(user,target)
-    if user.pbCanRaiseStatStage?(PBStats::DEFENSE,user,self)
-      user.pbRaiseStatStage(PBStats::DEFENSE,1,user)
+    if user.pbCanRaiseStatStage?(:DEFENSE,user,self)
+      user.pbRaiseStatStage(:DEFENSE,1,user)
     end
   end
 end
@@ -2778,7 +2778,7 @@ end
 class PokeBattle_Move_0E2 < PokeBattle_TargetMultiStatDownMove
   def initialize(battle,move)
     super
-    @statDown = [PBStats::ATTACK,2,PBStats::SPATK,2]
+    @statDown = [:ATTACK,2,:SPECIAL_ATTACK,2]
   end
 
   # NOTE: The user faints even if the target's stats cannot be changed, so this

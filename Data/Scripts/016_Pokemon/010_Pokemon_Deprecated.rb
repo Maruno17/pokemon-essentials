@@ -56,13 +56,15 @@ class PokeBattle_Pokemon
     ret.tough            = pkmn.tough if pkmn.tough
     ret.sheen            = pkmn.sheen if pkmn.sheen
     ret.pokerus          = pkmn.pokerus if pkmn.pokerus
-    ret.name             = pkmn.name
+    ret.name             = pkmn.name if pkmn.name != ret.speciesName
     ret.happiness        = pkmn.happiness
     ret.poke_ball        = pbBallTypeToItem(pkmn.ballused).id
     ret.markings         = pkmn.markings if pkmn.markings
-    ret.iv               = pkmn.iv.clone
-    ret.ivMaxed          = pkmn.ivMaxed.clone if pkmn.ivMaxed
-    ret.ev               = pkmn.ev.clone
+    GameData::Stat.each_main do |s|
+      ret.iv[s.id]       = pkmn.iv[s.id_number]
+      ret.ivMaxed[s.id]  = pkmn.ivMaxed[s.id_number] if pkmn.ivMaxed
+      ret.ev[s.id]       = pkmn.ev[s.id_number]
+    end
     ret.obtain_method    = pkmn.obtainMode
     ret.obtain_map       = pkmn.obtainMap
     ret.obtain_text      = pkmn.obtainText
@@ -81,7 +83,9 @@ class PokeBattle_Pokemon
       ret.heart_gauge    = pkmn.heartgauge
       ret.hyper_mode     = pkmn.hypermode
       ret.saved_exp      = pkmn.savedexp
-      ret.saved_ev       = pkmn.savedev.clone
+      if pkmn.savedev
+        GameData::Stat.each_main { |s| ret.saved_ev[s.id] = pkmn.savedev[s.pbs_order] if s.pbs_order >= 0 }
+      end
       ret.shadow_moves   = []
       pkmn.shadowmoves.each_with_index do |move, i|
         ret.shadow_moves[i] = GameData::Move.get(move).id if move

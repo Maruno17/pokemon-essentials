@@ -269,7 +269,8 @@ def pbRandomPokemonFromRule(rule,trainer)
       next if r<7 && evolutions(species).length>0
       break
     end
-    ev=rand(63)+1
+    ev = []
+    GameData::Stat.each_main { |s| ev.push(s.id) if rand(100) < 50 }
     nature = nil
     keys = GameData::Nature::DATA.keys
     loop do
@@ -281,8 +282,9 @@ def pbRandomPokemonFromRule(rule,trainer)
         raised_emphasis = false
         lowered_emphasis = false
         nature_data.stat_changes.each do |change|
-          raised_emphasis = true if change[1] > 0 && ((ev >> change[0]) & 1) != 0
-          lowered_emphasis = true if change[1] < 0 && ((ev >> change[0]) & 1) != 0
+          next if !ev.include?(change[0])
+          raised_emphasis = true if change[1] > 0
+          lowered_emphasis = true if change[1] < 0
         end
         next if rand(10) < 6 && !raised_emphasis
         next if rand(10) < 9 && lowered_emphasis
@@ -340,18 +342,12 @@ def pbRandomPokemonFromRule(rule,trainer)
         next if species != :CLAMPERL
       when :THICKCLUB
         next if species != :CUBONE && species != :MAROWAK
-      end
-      if item == :LIECHIBERRY && (ev&0x02)==0
-        next if rand(2)==0
-        ev|=0x02
-      end
-      if item == :SALACBERRY && (ev&0x08)==0
-        next if rand(2)==0
-        ev|=0x08
-      end
-      if item == :PETAYABERRY && (ev&0x10)==0
-        next if rand(2)==0
-        ev|=0x10
+      when :LIECHIBERRY
+        ev.push(:ATTACK) if !ev.include?(:ATTACK) && rand(100) < 50
+      when :SALACBERRY
+        ev.push(:SPEED) if !ev.include?(:SPEED) && rand(100) < 50
+      when :PETAYABERRY
+        ev.push(:SPECIAL_ATTACK) if !ev.include?(:SPECIAL_ATTACK) && rand(100) < 50
       end
       break
     end
@@ -414,11 +410,11 @@ def pbRandomPokemonFromRule(rule,trainer)
             hasSpecial=true if d.category==1
           end
         end
-        if !hasPhysical && (ev&0x02)!=0
+        if !hasPhysical && ev.include?(:ATTACK)
           # No physical attack, but emphasizes Attack
           next if rand(10)<8
         end
-        if !hasSpecial && (ev&0x10)!=0
+        if !hasSpecial && ev.include?(:SPECIAL_ATTACK)
           # No special attack, but emphasizes Special Attack
           next if rand(10)<8
         end
@@ -429,12 +425,12 @@ def pbRandomPokemonFromRule(rule,trainer)
         ############
         # Moves accepted
         if hasPhysical && !hasSpecial
-          ev&=~0x10 if rand(10)<8 # Deemphasize Special Attack
-          ev|=0x02 if rand(10)<8 # Emphasize Attack
+          ev.push(:ATTACK) if rand(10)<8
+          ev.delete(:SPECIAL_ATTACK) if rand(10)<8
         end
         if !hasPhysical && hasSpecial
-          ev|=0x10 if rand(10)<8 # Emphasize Special Attack
-          ev&=~0x02 if rand(10)<8 # Deemphasize Attack
+          ev.delete(:ATTACK) if rand(10)<8
+          ev.push(:SPECIAL_ATTACK) if rand(10)<8
         end
         item = :LEFTOVERS if !hasNormal && item == :SILKSCARF
         moves=newmoves
@@ -1100,16 +1096,11 @@ def isBattlePokemonDuplicate(pk,pk2)
       # Accept as same if moves are same and there are four moves each
       return true if moves1[Pokemon::MAX_MOVES - 1]
     end
-    return true if pk.item==pk2.item &&
-                   pk.nature==pk2.nature &&
-                   pk.ev[0]==pk2.ev[0] &&
-                   pk.ev[1]==pk2.ev[1] &&
-                   pk.ev[2]==pk2.ev[2] &&
-                   pk.ev[3]==pk2.ev[3] &&
-                   pk.ev[4]==pk2.ev[4] &&
-                   pk.ev[5]==pk2.ev[5]
-    return false
+    same_evs = true
+    GameData::Stat.each_main { |s| same_evs = false if pk.ev[s.id] != pk2.ev[s.id] }
+    return pk.item==pk2.item && pk.nature==pk2.nature && same_evs
   end
+  return false
 end
 
 def pbRemoveDuplicates(party)

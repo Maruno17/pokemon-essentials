@@ -138,8 +138,12 @@ module GameData
       @pokedex_form          = hash[:pokedex_form]          || @form
       @type1                 = hash[:type1]                 || :NORMAL
       @type2                 = hash[:type2]                 || @type1
-      @base_stats            = hash[:base_stats]            || [1, 1, 1, 1, 1, 1]
-      @evs                   = hash[:evs]                   || [0, 0, 0, 0, 0, 0]
+      @base_stats            = hash[:base_stats]            || {}
+      @evs                   = hash[:evs]                   || {}
+      GameData::Stat.each_main do |s|
+        @base_stats[s.id] = 1 if !@base_stats[s.id] || @base_stats[s.id] <= 0
+        @evs[s.id]        = 0 if !@evs[s.id] || @evs[s.id] < 0
+      end
       @base_exp              = hash[:base_exp]              || 100
       @growth_rate           = hash[:growth_rate]           || :Medium
       @gender_ratio          = hash[:gender_ratio]          || :Female50Percent
