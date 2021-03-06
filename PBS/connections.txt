@@ -1,40 +1,136 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
 # Route 5 (41) - Route 4 (40)
-41,N,0,40,S,0
+41,North,0,40,South,0
 # Route 5 (41) - Route 6 (45)
-41,S,6,45,N,0
+41,South,6,45,North,0
 # Route 6 (44) - Route 1 (5)
-44,S,43,5,N,0
+44,South,43,5,North,0
 # Safari Zone (66) - Route 1 (5)
-66,N,18,5,S,0
+66,North,18,5,South,0
 # Cedolan City (7) - Route 1 (5)
-7,S,0,5,N,2
+7,South,0,5,North,2
 # Lappet Town (2) - Route 1 (5)
-2,N,0,5,S,4
+2,North,0,5,South,4
 # Cedolan City (7) - Route 6 (44)
-7,W,5,44,E,0
+7,West,5,44,East,0
 # Lappet Town (2) - Safari Zone (66)
-2,W,0,66,E,0
+2,West,0,66,East,0
 # Route 8 (69) - Safari Zone (66)
-69,N,0,66,S,10
+69,North,0,66,South,10
 # Ingido Plateau (35) - Route 4 (39)
-35,W,11,39,E,0
+35,West,11,39,East,0
 # Cedolan City (7) - Lerucean Town (23)
-7,E,0,23,W,78
+7,East,0,23,West,78
 # Route 3 (31) - Lerucean Town (23)
-31,S,32,23,N,0
+31,South,32,23,North,0
 # Route 2 (21) - Lerucean Town (23)
-21,E,0,23,W,1
+21,East,0,23,West,1
 # Route 7 (47) - Cedolan City (7)
-47,W,0,7,E,0
+47,West,0,7,East,0
 # Route 2 (21) - Cedolan City (7)
-21,S,0,7,N,21
+21,South,0,7,North,21
 # Route 3 (31) - Ingido Plateau (35)
-31,W,0,35,E,10
+31,West,0,35,East,10
 # Route 8 (69) - Lappet Town (2)
-69,N,12,2,S,0
+69,North,12,2,South,0
 # Route 7 (47) - Battle Frontier (52)
-47,E,8,52,W,0
+47,East,8,52,West,0
 # Route 2 (21) - Route 7 (47)
-21,E,77,47,W,0
+21,East,77,47,West,0
+# Crimson City (100) - Candy Corn Forest (94)
+100,East,0,94,West,4
+# Frodomar City (102) - Candy Corn Forest (94)
+102,West,0,94,East,5
+# Cerulean City (88) - Route 25 (104)
+88,North,30,104,South,0
+# Route 9 (105) - Route 25 (104)
+105,North,0,104,South,18
+# Route 24 (103) - Route 25 (104)
+103,East,0,104,West,5
+# Route 9 (105) - Silver Town (110)
+105,South,27,110,North,0
+# Route 10 (106) - Silver Town (110)
+106,West,38,110,East,0
+# Lavender Town (107) - Silver Town (110)
+107,North,0,110,South,52
+# Route 8 (108) - Silver Town (110)
+108,North,17,110,South,0
+# Route 9 (105) - Cerulean City (88)
+105,West,0,88,East,0
+# Route 5 (101) - Cerulean City (88)
+101,North,0,88,South,0
+# Hidden Village (113) - Cerulean City (88)
+113,East,0,88,West,66
+# Route 24 (103) - Cerulean City (88)
+103,South,0,88,North,0
+# Rifure Village (92) - Cerulean City (88)
+92,East,0,88,West,26
+# Route 4 (87) - Cerulean City (88)
+87,East,0,88,West,2
+# Terracotta Path (90) - Viridian City (77)
+90,West,0,77,East,0
+# Route 2 (79) - Viridian City (77)
+79,South,0,77,North,7
+# Route 1 (48) - Viridian City (77)
+48,North,0,77,South,9
+# Route 22 (98) - Viridian City (77)
+98,East,0,77,West,0
+# Route 1 (48) - Pallet Town (33)
+48,South,10,33,North,0
+# Route 21 (76) - Pallet Town (33)
+76,North,0,33,South,0
+# Route 10 (106) - Route 9 (105)
+106,West,0,105,East,7
+# Route 5 (101) - Route 9 (105)
+101,East,0,105,West,36
+# Route 24 (103) - Route 9 (105)
+103,South,48,105,North,0
+# Route 1 (48) - Pokemopolis (78)
+48,West,11,78,East,0
+# Route 22 (98) - Pokemopolis (78)
+98,South,25,78,North,0
+# Terracotta Path (90) - Terracotta Town (89)
+90,East,7,89,West,0
+# Lavender Town (107) - Route 10 (106)
+107,North,0,106,South,1
+# Route 8 (108) - Route 10 (106)
+108,North,68,106,South,0
+# Hidden Village (113) - Route 5 (101)
+113,East,0,101,West,30
+# Rifure Village (92) - Route 5 (101)
+92,East,10,101,West,0
+# Saffron City (109) - Route 5 (101)
+109,North,2,101,South,0
+# Route 4 (87) - Route 5 (101)
+87,East,34,101,West,0
+# Route 2 (79) - Terracotta Path (90)
+79,South,38,90,North,0
+# Route 1 (48) - Terracotta Path (90)
+48,North,36,90,South,0
+# Pewter City (85) - Route 2 (79)
+85,South,0,79,North,0
+# Route 22 (98) - Route 2 (79)
+98,North,80,79,South,0
+# Route 8 (108) - Lavender Town (107)
+108,East,0,107,West,0
+# Route 3 (86) - Pewter City (85)
+86,West,0,85,East,5
+# Route 24 (103) - Hidden Village (113)
+103,West,112,113,East,0
+# Rifure Village (92) - Hidden Village (113)
+92,South,10,113,North,0
+# Route 3 (86) - Sable City (91)
+86,South,31,91,North,0
+# Route 4 (87) - Sable City (91)
+87,West,58,91,East,0
+# Saffron City (109) - Route 8 (108)
+109,East,20,108,West,0
+# Route 4 (87) - Route 3 (86)
+87,West,0,86,East,4
+# Rifure Village (92) - Route 24 (103)
+92,East,0,103,West,72
+# Route 4 (87) - Route 24 (103)
+87,East,0,103,West,48
+# Route 4 (87) - Rifure Village (92)
+87,South,13,92,North,0

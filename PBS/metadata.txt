@@ -8,385 +8,376 @@ WildVictoryME = Battle victory wild.ogg
 TrainerBattleBGM = Battle trainer.mid
 SurfBGM = Surfing.mid
 BicycleBGM = Bicycle.mid
-Home = 3,7,5,8
+Home = 43,7,5,8
 WildBattleBGM = Battle wild.mid
 #-------------------------------
 [001]
 # Intro
 #-------------------------------
-[002]
-# Lappet Town
-BattleBack = field
-MapPosition = 0,13,12
+[033]
+# Pallet Town
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,10,11
 Outdoor = true
+WildBattleBGM = Battle wild.ogg
 ShowArea = true
 #-------------------------------
-[003]
-# \PN's house
-MapPosition = 0,13,12
-HealingSpot = 2,8,8
-#-------------------------------
-[004]
-# Pokémon Lab
-MapPosition = 0,13,12
+[043]
+# Pallet Town
+Bicycle = false
+Outdoor = false
 ShowArea = false
 #-------------------------------
-[005]
+[048]
 # Route 1
-BattleBack = field
-MapPosition = 0,13,11
-Outdoor = true
-ShowArea = true
-#-------------------------------
-[006]
-# Kurt's house
-MapPosition = 0,13,11
-#-------------------------------
-[007]
-# Cedolan City
-MapSize = 2,11
-MapPosition = 0,13,10
-Outdoor = true
-ShowArea = true
-#-------------------------------
-[008]
-# Daisy's house
-MapPosition = 0,13,12
-#-------------------------------
-[009]
-# Cedolan City Poké Center
-MapPosition = 0,14,10
-HealingSpot = 8,17,11
-#-------------------------------
-[010]
-# Cedolan Gym
-BattleBack = indoor3
-MapPosition = 0,13,10
-Environment = Rock
-#-------------------------------
-[011]
-# Pokémon Institute
-MapPosition = 0,14,10
-#-------------------------------
-[012]
-# Cedolan City Condo
-MapPosition = 0,14,10
-#-------------------------------
-[013]
-# Game Corner
-MapPosition = 0,14,10
-#-------------------------------
-[014]
-# Cedolan Dept. 1F
-MapPosition = 0,13,10
-#-------------------------------
-[015]
-# Cedolan Dept. 2F
-MapPosition = 0,13,10
-#-------------------------------
-[016]
-# Cedolan Dept. 3F
-MapPosition = 0,13,10
-#-------------------------------
-[017]
-# Cedolan Dept. 4F
-MapPosition = 0,13,10
-#-------------------------------
-[018]
-# Cedolan Dept. 5F
-MapPosition = 0,13,10
-#-------------------------------
-[019]
-# Cedolan Dept. Rooftop
-MapPosition = 0,13,10
-#-------------------------------
-[020]
-# Cedolan Dept. Elevator
-MapPosition = 0,13,10
-#-------------------------------
-[021]
-# Route 2
 MapSize = 1,11
-BattleBack = field
-Weather = Rain,100
-MapPosition = 0,14,8
-Outdoor = true
-ShowArea = true
-#-------------------------------
-[023]
-# Lerucean Town
-MapPosition = 0,15,8
-Outdoor = true
-ShowArea = true
-#-------------------------------
-[024]
-# Lerucean Town Poké Center
-MapPosition = 0,15,8
-HealingSpot = 23,11,15
-#-------------------------------
-[025]
-# Lerucean Town Mart
-MapPosition = 0,15,8
-#-------------------------------
-[026]
-# Pokémon Fan Club
-MapPosition = 0,15,8
-#-------------------------------
-[027]
-# Pokémon Day Care
-MapPosition = 0,15,8
-#-------------------------------
-[028]
-# Natural Park
-BattleBack = field
-MapPosition = 0,16,8
-Outdoor = true
-ShowArea = true
-#-------------------------------
-[029]
-# Natural Park Entrance
 Bicycle = true
-MapPosition = 0,16,8
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,10,9
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
 #-------------------------------
-[030]
-# Natural Park Pavillion
-MapPosition = 0,16,8
+[077]
+# Viridian City
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,10,8
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+HealingSpot = 77,47,34
+ShowArea = true
 #-------------------------------
-[031]
+[079]
+# Route 2
+MapSize = 1,1111
+Bicycle = true
+TrainerVictoryME = 011 Victory Against Wild Pokémon!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,10,4
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[080]
+# Viridian Forest
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,10,5
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[082]
+# Viridian City
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+#-------------------------------
+[085]
+# Pewter City
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,10,3
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+HealingSpot = 85,33,46
+ShowArea = true
+#-------------------------------
+[086]
 # Route 3
-MapSize = 2,1101
-BattleBack = field
-MapPosition = 0,14,6
-Outdoor = true
-ShowArea = true
-#-------------------------------
-[034]
-# Ice Cave
-BattleBack = cave1
+MapSize = 3,111000
 Bicycle = true
-MapPosition = 0,15,6
-Environment = Cave
-#-------------------------------
-[035]
-# Ingido Plateau
-MapPosition = 0,13,6
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,11,3
 Outdoor = true
+BicycleAlways = false
+WildBattleBGM = Battle wild.ogg
 ShowArea = true
 #-------------------------------
-[036]
-# Pokémon League
-MapPosition = 0,13,6
-HealingSpot = 35,17,7
-#-------------------------------
-[037]
-# Pokémon League
-BattleBack = elite1
-MapPosition = 0,13,6
-#-------------------------------
-[038]
-# Hall of Fame
-MapPosition = 0,13,6
-#-------------------------------
-[039]
+[087]
 # Route 4
-MapSize = 2,11
-BattleBack = field
-MapPosition = 0,11,6
+MapSize = 4,11110000
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,15,3
 Outdoor = true
+WildBattleBGM = Battle wild.ogg
 ShowArea = true
 #-------------------------------
-[040]
-# Route 4
-MapPosition = 0,11,6
+[088]
+# Cerulean City
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,20,3
 Outdoor = true
-BicycleAlways = true
+WildBattleBGM = Battle wild.ogg
+HealingSpot = 88,22,20
 ShowArea = true
 #-------------------------------
-[041]
+[089]
+# Terracotta Town
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,12,8
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[090]
+# Terracotta Path
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,11,8
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[091]
+# Sable City
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+HealingSpot = 91,29,8
+ShowArea = true
+#-------------------------------
+[092]
+# Rifure Village
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,16,4
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[094]
+# Candy Corn Forest
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,16,0
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[098]
+# Route 22
+MapSize = 4,1111
+Bicycle = true
+TrainerVictoryME = 011 Victory Against Wild Pokémon!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,6,8
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[099]
+# Mt. Moon
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,14,3
+Outdoor = false
+Environment = None
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[100]
+# Crimson City
+Weather = Flower,80
+Bicycle = true
+TrainerVictoryME = 011 Victory Against Wild Pokémon!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,14,0
+Outdoor = true
+Environment = None
+WildBattleBGM = Battle wild.ogg
+HealingSpot = 100,15,24
+ShowArea = true
+#-------------------------------
+[101]
 # Route 5
-MapSize = 1,111
-MapPosition = 0,11,7
-Outdoor = true
-BicycleAlways = true
-ShowArea = true
-#-------------------------------
-[044]
-# Route 6
-MapSize = 2,11
-BattleBack = field
-MapPosition = 0,11,10
-Outdoor = true
-ShowArea = true
-#-------------------------------
-[045]
-# Route 6
-MapPosition = 0,11,10
-Outdoor = true
-BicycleAlways = true
-ShowArea = true
-#-------------------------------
-[046]
-# Cycling Road gate
+MapSize = 3,101010
 Bicycle = true
-MapPosition = 0,12,6
-#-------------------------------
-[047]
-# Route 7
-MapSize = 2,11
-BattleBack = rocky
-Weather = Rain,0
-MapPosition = 0,15,10
+TrainerVictoryME = 011 Victory Against Wild Pokémon!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,19,4
 Outdoor = true
-Environment = Rock
+WildBattleBGM = Battle wild.ogg
 ShowArea = true
 #-------------------------------
-[049]
-# Rock Cave
-BattleBack = cave1
+[102]
+# Frodomar City
 Bicycle = true
-MapPosition = 0,16,10
-Environment = Cave
+TrainerVictoryME = 011 Victory Against Wild Pokémon!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,18,0
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+HealingSpot = 102,17,13
+ShowArea = true
 #-------------------------------
-[050]
-# Rock Cave
-BattleBack = cave3
+[103]
+# Route 24
 Bicycle = true
-MapPosition = 0,16,10
-DarkMap = true
-Environment = Cave
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,20,2
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
 #-------------------------------
-[051]
-# Dungeon
-BattleBack = cave2
+[104]
+# Route 25
 Bicycle = true
-Dungeon = true
-MapPosition = 0,16,10
-Environment = Cave
-#-------------------------------
-[052]
-# Battle Frontier
-MapPosition = 0,17,10
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,22,1
 Outdoor = true
+WildBattleBGM = Battle wild.ogg
 ShowArea = true
 #-------------------------------
-[053]
-# Battle Frontier Poké Center
-MapPosition = 0,17,10
-HealingSpot = 52,17,14
-#-------------------------------
-[054]
-# Battle Frontier Mart
-MapPosition = 0,17,10
-#-------------------------------
-[055]
-# Battle Tower
-MapPosition = 0,17,10
-HealingSpot = 52,30,10
-#-------------------------------
-[056]
-# Battle Tower arena
-BattleBack = indoor1
-MapPosition = 0,17,10
-#-------------------------------
-[057]
-# Stadium Cup lobby
-MapPosition = 0,17,10
-#-------------------------------
-[058]
-# Battle Palace
-MapPosition = 0,17,10
-#-------------------------------
-[059]
-# Battle Palace arena
-BattleBack = indoor1
-MapPosition = 0,17,10
-#-------------------------------
-[060]
-# Battle Arena
-MapPosition = 0,17,10
-#-------------------------------
-[061]
-# Battle Arena arena
-BattleBack = indoor1
-MapPosition = 0,17,10
-#-------------------------------
-[062]
-# Battle Factory
-MapPosition = 0,17,10
-#-------------------------------
-[063]
-# Battle Factory intro corridor
-MapPosition = 0,17,10
-#-------------------------------
-[064]
-# Battle Factory arena
-BattleBack = indoor1
-MapPosition = 0,17,10
-#-------------------------------
-[065]
-# Battle Factory corridor
-MapPosition = 0,17,10
-#-------------------------------
-[066]
-# Safari Zone
-BattleBack = field
-MapPosition = 0,12,12
+[105]
+# Route 9
+Bicycle = true
+TrainerVictoryME = 011 Victory Against Wild Pokémon!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,22,3
 Outdoor = true
+WildBattleBGM = Battle wild.ogg
 ShowArea = true
 #-------------------------------
-[067]
-# Safari Zone gate
-MapPosition = 0,12,12
-#-------------------------------
-[068]
-# Safari Zone
-BattleBack = forest
-MapPosition = 0,12,12
-SafariMap = true
+[106]
+# Route 10
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,24,4
 Outdoor = true
-Environment = Forest
+WildBattleBGM = Battle wild.ogg
 ShowArea = true
 #-------------------------------
-[069]
+[107]
+# Lavender Town
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,24,7
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[108]
 # Route 8
-DiveMap = 70
-BattleBack = field
-MapPosition = 0,13,13
-Outdoor = true
-ShowArea = true
-#-------------------------------
-[070]
-# Underwater
-BattleBack = underwater
-MapPosition = 0,13,13
-Environment = Underwater
-#-------------------------------
-[071]
-# Harbour
-MapPosition = 0,13,13
-#-------------------------------
-[072]
-# Berth Island
-BattleBack = field
-Weather = Storm,50
-MapPosition = 0,18,17
-Outdoor = true
-ShowArea = true
-#-------------------------------
-[073]
-# Faraday Island
-BattleBack = field
-MapPosition = 0,22,16
-Outdoor = true
-ShowArea = true
-#-------------------------------
-[074]
-# Cycling Road gate
 Bicycle = true
-MapPosition = 0,12,10
-#-------------------------------
-[075]
-# Tiall Region
-BattleBack = city
-MapPosition = 1,13,16
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,23,7
 Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[109]
+# Saffron City
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,20,7
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+HealingSpot = 109,21,37
+ShowArea = true
+#-------------------------------
+[110]
+# Silver Town
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,22,7
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[113]
+# Hidden Village
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,19,5
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[114]
+# Rock Tunnel
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,24,5
+DarkMap = false
+Outdoor = false
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[115]
+# Powerplant
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,24,4
+Outdoor = false
+WildBattleBGM = Battle wild.ogg
+ShowArea = true
+#-------------------------------
+[122]
+# Mt. Moon Square
+Bicycle = true
+TrainerVictoryME = 019 Victory Against Trainer!.ogg
+WildVictoryME = 011 Victory Against Wild Pokémon!.ogg
+TrainerBattleBGM = 143 Battle! Trainer (Kanto).ogg
+MapPosition = 0,14,3
+Outdoor = true
+WildBattleBGM = Battle wild.ogg
+ShowArea = true

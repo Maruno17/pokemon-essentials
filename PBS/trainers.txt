@@ -1,83 +1,52 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
 [CAMPER,Liam]
-LoseText = "A very good battle, indeed!"
 Pokemon = DIGLETT,10
 Pokemon = BONSLY,11
 #-------------------------------
-[LEADER_Brock,Brock]
-Items = FULLRESTORE,FULLRESTORE
-LoseText = "Very good."
-Pokemon = GEODUDE,12
-    Gender = male
-    Moves = DEFENSECURL,HEADSMASH,ROCKPOLISH,ROCKTHROW
-    Ability = 0
-    IV = 20
-Pokemon = ONIX,14
-    Name = Rocky
-    Gender = male
-    Shiny = yes
-    Moves = HEADSMASH,ROCKTHROW,RAGE,ROCKTOMB
-    Ability = 0
-    Item = SITRUSBERRY
-    IV = 20
-    Ball = 19
-#-------------------------------
 [TEAMROCKET_M,Grunt,1]
-LoseText = "You're too good for me!"
 Pokemon = WEEPINBELL,21
     Shadow = yes
 #-------------------------------
 [TEAMROCKET_F,Grunt,1]
-LoseText = "You're too good for me!"
 Pokemon = BURMY,19
 Pokemon = WINGULL,19
 Pokemon = ELECTABUZZ,20
     Shadow = yes
 #-------------------------------
 [YOUNGSTER,Ben]
-LoseText = "Aww, I lost."
 Pokemon = RATTATA,11
-Pokemon = EKANS,11
+Pokemon = RATICATE,12
 #-------------------------------
 [CAMPER,Jeff]
-LoseText = "A very good battle, indeed!"
 Pokemon = SPEAROW,16
 Pokemon = SENTRET,16
 #-------------------------------
 [CAMPER,Jeff,1]
-LoseText = "You beat me again!"
 Pokemon = FEAROW,29
 Pokemon = FURRET,29
 #-------------------------------
 [PICNICKER,Susie]
-LoseText = "Defeated! Oh my!"
 Pokemon = MEOWTH,18
 #-------------------------------
 [PICNICKER,Susie,1]
-LoseText = "Defeated! Oh my!"
 Pokemon = PERSIAN,32
 #-------------------------------
 [HIKER,Ford]
-LoseText = "You're too good for me!"
 Pokemon = MACHOP,19
 #-------------------------------
 [FISHERMAN,Andrew]
-LoseText = "Washed out!"
 Pokemon = MAGIKARP,14
 Pokemon = MAGIKARP,18
 #-------------------------------
 [BEAUTY,Bridget]
-LoseText = "My Skitty!"
 Pokemon = SKITTY,18
 #-------------------------------
 [LASS,Crissy]
-LoseText = "You didn't have to win so convincingly!"
 Pokemon = PLUSLE,17
 Pokemon = MINUN,17
 #-------------------------------
 [COOLCOUPLE,Alice & Bob]
-LoseText = "Our teamwork failed!"
 Pokemon = TURTWIG,19
 Pokemon = CHIMCHAR,19
 #-------------------------------
@@ -85,33 +54,1027 @@ Pokemon = CHIMCHAR,19
 Pokemon = MARSHTOMP,19
 #-------------------------------
 [SWIMMER2_F,Ariel]
-LoseText = "Washed out!"
 Pokemon = STARYU,15
 Pokemon = GOLDEEN,11
 #-------------------------------
-[RIVAL1,Blue]
-LoseText = "Not too shabby."
-Pokemon = PIDGEOTTO,17
-Pokemon = RATTATA,15
-Pokemon = BULBASAUR,18
-#-------------------------------
-[RIVAL1,Blue,1]
-LoseText = "Not too shabby."
-Pokemon = PIDGEOTTO,17
-Pokemon = RATTATA,15
-Pokemon = CHARMANDER,18
-#-------------------------------
-[RIVAL1,Blue,2]
-LoseText = "Not too shabby."
-Pokemon = PIDGEOTTO,17
-Pokemon = RATTATA,15
-Pokemon = SQUIRTLE,18
-#-------------------------------
 [CHAMPION,Blue]
-LoseText = "A good battle indeed!"
 Pokemon = VENUSAUR,63
     Item = SITRUSBERRY
 Pokemon = CHARIZARD,63
     Item = SITRUSBERRY
 Pokemon = BLASTOISE,63
     Item = SITRUSBERRY
+#-------------------------------
+[COOLTRAINER_M,Eric]
+Pokemon = PIDGEY,4
+    Moves = TACKLE,SANDATTACK
+Pokemon = ODDISH,3
+    Moves = ABSORB,GROWTH
+#-------------------------------
+[SCHOOLKID_F,Elsa]
+Pokemon = BELLSPROUT,2
+    Moves = VINEWHIP
+#-------------------------------
+[SCHOOLKID_M,Toby]
+Pokemon = RATICATE,6
+    Moves = TACKLE,TAILWHIP,QUICKATTACK,FOCUSENERGY
+#-------------------------------
+[LEADER_Giovanni,Giovanni]
+Pokemon = RHYHORN,10
+    Moves = SMACKDOWN,BULLDOZE
+    Ability = 2
+    Nature = CAREFUL
+    IV = 31,31,31,31,31,31
+Pokemon = DIGLETT,10
+    Moves = SCRATCH,SANDATTACK
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Giovanni,Giovanni,1]
+Pokemon = NIDORANmA,10
+    Moves = TOXICSPIKES,HORNATTACK,DOUBLEKICK
+    Ability = 0
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+Pokemon = RHYHORN,10
+    Moves = ROCKBLAST,BULLDOZE,THUNDERFANG
+    Ability = 1
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+Pokemon = DIGLETT,10
+    Moves = SANDSTORM,EARTHQUAKE,SUCKERPUNCH
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Giovanni,Giovanni,2]
+Pokemon = NIDORANfE,10
+    Moves = TOXICSPIKES,BITE,DOUBLEKICK,TOXIC
+    Ability = 0
+    Nature = MODEST
+    IV = 31,31,31,31,31,31
+Pokemon = RHYHORN,10
+    Moves = ROCKBLAST,EARTHQUAKE,TAKEDOWN,THUNDERPUNCH
+    Ability = 2
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+Pokemon = DIGLETT,10
+    Moves = SANDSTORM,MEMENTO,EARTHQUAKE,SUCKERPUNCH
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = NIDORANmA,10
+    Moves = TOXICSPIKES,HORNATTACK,DOUBLEKICK,TOXIC
+    Ability = 0
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Giovanni,Giovanni,3]
+Pokemon = NIDOQUEEN,10
+    Moves = SLUDGEWAVE,EARTHPOWER,FIREBLAST,TOXICSPIKES
+    Ability = 0
+    Item = LIFEORB
+    Nature = MODEST
+    IV = 31,31,31,31,31,31
+Pokemon = RHYPERIOR,10
+    Moves = ROCKPOLISH,EARTHQUAKE,STONEEDGE,MEGAHORN
+    Ability = 2
+    Item = LIFEORB
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+Pokemon = DIGLETT,10
+    Moves = STEALTHROCK,MEMENTO,EARTHQUAKE,TOXIC
+    Ability = 1
+    Item = FOCUSSASH
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = NIDOKING,10
+    Moves = SLUDGEWAVE,EARTHPOWER,ICEBEAM,SUBSTITUTE
+    Ability = 0
+    Item = LIFEORB
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+Pokemon = STEELIX,10
+    Moves = STEALTHROCK,GYROBALL,EARTHQUAKE,CURSE
+    Ability = 2
+    Item = LEFTOVERS
+    Nature = BRAVE
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Giovanni,Giovanni,4]
+Pokemon = NIDOQUEEN,10
+    Moves = SLUDGEWAVE,EARTHPOWER,FIREBLAST,TOXICSPIKES
+    Ability = 0
+    Item = LIFEORB
+    Nature = MODEST
+    IV = 31,31,31,31,31,31
+Pokemon = RHYPERIOR,10
+    Moves = ROCKPOLISH,EARTHQUAKE,STONEEDGE,MEGAHORN
+    Ability = 2
+    Item = LIFEORB
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+Pokemon = DIGLETT,10
+    Moves = STEALTHROCK,MEMENTO,EARTHQUAKE,TOXIC
+    Ability = 1
+    Item = FOCUSSASH
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = NIDOKING,10
+    Moves = SLUDGEWAVE,EARTHPOWER,ICEBEAM,SUBSTITUTE
+    Ability = 0
+    Item = LIFEORB
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+Pokemon = SANDSLASH,10
+    Moves = SPIKES,RAPIDSPIN,EARTHQUAKE,KNOCKOFF
+    Ability = 0
+    Item = LEFTOVERS
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = STEELIX,10
+    Moves = STEALTHROCK,GYROBALL,EARTHQUAKE,CURSE
+    Ability = 2
+    Item = LEFTOVERS
+    Nature = BRAVE
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Giovanni,Giovanni,5]
+Pokemon = NIDOQUEEN,10
+    Moves = SLUDGEWAVE,EARTHPOWER,FIREBLAST,TOXICSPIKES
+    Ability = 0
+    Item = LIFEORB
+    Nature = MODEST
+    IV = 31,31,31,31,31,31
+    EV = 0,0,0,252,252,4
+Pokemon = RHYPERIOR,10
+    Moves = ROCKPOLISH,EARTHQUAKE,STONEEDGE,MEGAHORN
+    Ability = 2
+    Item = LEFTOVERS
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+    EV = 0,252,0,252,0,4
+Pokemon = DUGTRIO,10
+    Moves = STEALTHROCK,MEMENTO,EARTHQUAKE,TOXIC
+    Ability = 1
+    Item = FOCUSSASH
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+    EV = 0,252,4,252,0,0
+Pokemon = NIDOKING,10
+    Moves = SLUDGEWAVE,EARTHPOWER,ICEBEAM,SUBSTITUTE
+    Ability = 0
+    Item = LIFEORB
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+    EV = 0,0,4,252,252,0
+Pokemon = SANDSLASH,10
+    Moves = SPIKES,RAPIDSPIN,EARTHQUAKE,KNOCKOFF
+    Ability = 0
+    Item = LEFTOVERS
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+    EV = 252,4,0,0,0,252
+Pokemon = STEELIX,10
+    Moves = STEALTHROCK,GYROBALL,EARTHQUAKE,CURSE
+    Ability = 2
+    Item = STEELIXITE
+    Nature = BRAVE
+    IV = 31,31,31,31,31,31
+    EV = 252,208,0,0,0,48
+#-------------------------------
+[LEADER_Brock,Brock]
+Pokemon = GEODUDE,10
+    Moves = ROCKTHROW,STEALTHROCK
+    Ability = 2
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+Pokemon = ONIX,10
+    Moves = DRAGONBREATH,ROCKPOLISH
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Brock,Brock,1]
+Pokemon = GEODUDE,10
+    Moves = TAKEDOWN,ROCKTHROW,STEALTHROCK
+    Ability = 1
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+Pokemon = OMANYTE,10
+    Moves = BIND,WATERGUN,ROLLOUT
+    Ability = 2
+    Nature = MODEST
+    IV = 31,31,31,31,31,31
+Pokemon = ONIX,10
+    Moves = DRAGONBREATH,ROCKPOLISH,ROCKSLIDE
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Brock,Brock,2]
+Pokemon = GEODUDE,10
+    Moves = STEALTHROCK,THUNDERPUNCH,ROCKSLIDE,EARTHQUAKE
+    Ability = 2
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+Pokemon = KABUTO,10
+    Moves = GIGADRAIN,AQUAJET,ICYWIND,ANCIENTPOWER
+    Ability = 0
+    Nature = CAREFUL
+    IV = 31,31,31,31,31,31
+Pokemon = OMANYTE,10
+    Moves = MUDSHOT,WATERGUN,ICYWIND,ANCIENTPOWER
+    Ability = 2
+    Nature = MODEST
+    IV = 31,31,31,31,31,31
+Pokemon = ONIX,10
+    Moves = SANDTOMB,CURSE,DRAGONBREATH,ROCKSLIDE
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Brock,Brock,3]
+Pokemon = GOLEM,10
+    Moves = STEALTHROCK,EARTHQUAKE,STONEEDGE,EXPLOSION
+    Ability = 2
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+Pokemon = RHYPERIOR,10
+    Moves = ROCKBLAST,EARTHQUAKE,STONEEDGE,MEGAHORN
+    Ability = 2
+    Item = CHOICEBAND
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+Pokemon = KABUTO,10
+    Moves = LIQUIDATION,STONEEDGE,KNOCKOFF,RAPIDSPIN
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = OMANYTE,10
+    Moves = SHELLSMASH,HYDROPUMP,ICEBEAM,EARTHPOWER
+    Ability = 0
+    Nature = MODEST
+    IV = 31,31,31,31,31,31
+Pokemon = STEELIX,10
+    Moves = STEALTHROCK,GYROBALL,EARTHQUAKE,CURSE
+    Ability = 2
+    Item = LEFTOVERS
+    Nature = BRAVE
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Brock,Brock,4]
+Items = WHITEHERB
+Pokemon = GOLEM,10
+    Moves = STEALTHROCK,EARTHQUAKE,STONEEDGE,EXPLOSION
+    Ability = 2
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+Pokemon = RHYPERIOR,10
+    Moves = ROCKBLAST,EARTHQUAKE,STONEEDGE,MEGAHORN
+    Ability = 2
+    Item = CHOICEBAND
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+Pokemon = KABUTO,10
+    Moves = LIQUIDATION,STONEEDGE,KNOCKOFF,RAPIDSPIN
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = OMANYTE,10
+    Moves = SHELLSMASH,HYDROPUMP,ICEBEAM,EARTHPOWER
+    Ability = 0
+    Nature = MODEST
+    IV = 31,31,31,31,31,31
+Pokemon = AERODACTYL,10
+    Moves = STONEEDGE,EARTHQUAKE,ROOST,PURSUIT
+    Ability = 0
+    Item = LIFEORB
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Brock,Brock,5]
+Pokemon = GOLEM,10
+    Moves = STEALTHROCK,EARTHQUAKE,STONEEDGE,EXPLOSION
+    Ability = 2
+	Item = WEAKNESSPOLICY
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+    EV = 0,252,4,252,0,0
+Pokemon = RHYPERIOR,10
+    Moves = ROCKPOLISH,EARTHQUAKE,STONEEDGE,MEGAHORN
+    Ability = 2
+    Item = LIFEORB
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+    EV = 0,252,0,252,0,4
+Pokemon = KABUTO,10
+    Moves = LIQUIDATION,STONEEDGE,KNOCKOFF,RAPIDSPIN
+    Ability = 1
+	Item = CHOICESCARF
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+    EV = 0,252,4,252,0,0
+Pokemon = OMANYTE,10
+    Moves = SHELLSMASH,HYDROPUMP,ICEBEAM,EARTHPOWER
+    Ability = 0
+	Item = WHITEHERB
+    Nature = MODEST
+    IV = 31,31,31,31,31,31
+    EV = 0,0,4,252,252,0
+Pokemon = STEELIX,10
+    Moves = STEALTHROCK,EARTHQUAKE,HEAVYSLAM,TOXIC
+    Ability = 2
+    Item = LEFTOVERS
+    Nature = CAREFUL
+    IV = 31,31,31,31,31,31
+    EV = 252,4,252,0,0,0
+Pokemon = AERODACTYL,10
+    Moves = STONEEDGE,EARTHQUAKE,ROOST,PURSUIT
+    Ability = 0
+    Item = AERODACTYLITE
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+    EV = 0,252,4,252,0,0
+#-------------------------------
+[LEADER_Misty,Misty]
+Pokemon = STARMIE,10
+    Moves = BRINE,PSYBEAM
+    Ability = 0 
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+Pokemon = STARMIE,10
+    Moves = BRINE,SWIFT
+    Ability = 0 
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Misty,Misty,1]
+Pokemon = PSYDUCK,10
+    Moves = WATERPULSE,CONFUSERAY,ZENHEADBUTT
+    Ability = 2
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+Pokemon = STARMIE,10
+    Moves = BRINE,SWIFT,PSYBEAM
+    Ability = 0 
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+Pokemon = SEEL,10
+    Moves = AQUAJET,AURORABEAM,REST
+    Ability = 2
+    Nature = CALM
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Misty,Misty,2]
+Pokemon = PSYDUCK,10
+    Moves = WATERPULSE,CONFUSERAY,ZENHEADBUTT,CROSSCHOP
+    Ability = 2
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+Pokemon = STARMIE,10
+    Moves = BRINE,SWIFT,PSYBEAM,POWERGEM
+    Ability = 0 
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+Pokemon = SEEL,10
+    Moves = AQUAJET,AURORABEAM,ENCORE,REST
+    Ability = 2
+    Nature = CALM
+    IV = 31,31,31,31,31,31
+Pokemon = LAPRAS,10
+    Moves = ICESHARD,WATERPULSE,BODYSLAM,FREEZEDRY
+    Ability = 1
+    Nature = MODEST
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Misty,Misty,3]
+Pokemon = PSYDUCK,10
+    Moves = HYDROPUMP,ICEBEAM,PSYCHIC,FOCUSBLAST
+    Ability = 2
+    Item = CHOICESCARF
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+Pokemon = STARMIE,10
+    Moves = HYDROPUMP,ICEBEAM,PSYCHIC,THUNDERBOLT
+    Ability = 0 
+    Item = LIFEORB
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+Pokemon = SEEL,10
+    Moves = WHIRLPOOL,PERISHSONG,RAINDANCE,REST
+    Ability = 2
+    Item = LEFTOVERS
+    Nature = CALM
+    IV = 31,31,31,31,31,31
+Pokemon = LAPRAS,10
+    Moves = FREEZEDRY,HYDROPUMP,ICEBEAM,HIDDENPOWER
+    Ability = 1
+    Item = CHOICESPECS
+    Nature = MODEST
+    IV = 31,30,31,30,30,31
+Pokemon = VAPOREON,10
+    Moves = WISH,PROTECT,SCALD,TOXIC
+    Ability = 1
+    Item = LEFTOVERS
+    Nature = BOLD
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Misty,Misty,4]
+Pokemon = PSYDUCK,10
+    Moves = HYDROPUMP,ICEBEAM,PSYCHIC,FOCUSBLAST
+    Ability = 2
+    Item = CHOICESCARF
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+Pokemon = STARMIE,10
+    Moves = HYDROPUMP,ICEBEAM,PSYCHIC,THUNDERBOLT
+    Ability = 0 
+    Item = LIFEORB
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+Pokemon = SEEL,10
+    Moves = WHIRLPOOL,PERISHSONG,RAINDANCE,REST
+    Ability = 2
+    Item = LEFTOVERS
+    Nature = CALM
+    IV = 31,31,31,31,31,31
+Pokemon = LAPRAS,10
+    Moves = FREEZEDRY,HYDROPUMP,ICEBEAM,HIDDENPOWER
+    Ability = 1
+    Item = CHOICESPECS
+    Nature = MODEST
+    IV = 31,30,31,30,30,31
+Pokemon = VAPOREON,10
+    Moves = WISH,PROTECT,SCALD,TOXIC
+    Ability = 1
+    Item = LEFTOVERS
+    Nature = BOLD
+    IV = 31,31,31,31,31,31
+pokemon = BLASTOISE,10
+    Moves = RAPIDSPIN,DARKPULSE,AURASPHERE,ICEBEAM
+    Ability = 0
+    Item = BLASTOISINITE
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[LEADER_Misty,Misty,5]
+Pokemon = PSYDUCK,10
+    Moves = HYDROPUMP,ICEBEAM,PSYCHIC,FOCUSBLAST
+    Ability = 2
+    Item = CHOICESCARF
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+    EV = 0,0,0,252,252,4
+Pokemon = STARMIE,10
+    Moves = HYDROPUMP,ICEBEAM,PSYCHIC,THUNDERBOLT
+    Ability = 0 
+    Item = LIFEORB
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+    EV = 0,0,0,252,252,4
+Pokemon = SEEL,10
+    Moves = WHIRLPOOL,PERISHSONG,RAINDANCE,REST
+    Ability = 2
+    Item = LEFTOVERS
+    Nature = CALM
+    IV = 31,31,31,31,31,31
+    EV = 252,4,0,0,0,252
+Pokemon = LAPRAS,10
+    Moves = FREEZEDRY,HYDROPUMP,ICEBEAM,HIDDENPOWER
+    Ability = 1
+    Item = CHOICESPECS
+    Nature = MODEST
+    IV = 31,30,31,30,30,31
+    EV = 80,0,0,176,252,0
+Pokemon = VAPOREON,10
+    Moves = WISH,PROTECT,SCALD,TOXIC
+    Ability = 1
+    Item = LEFTOVERS
+    Nature = BOLD
+    IV = 31,31,31,31,31,31
+    EV = 252,0,252,0,0,4
+pokemon = BLASTOISE,10
+    Moves = RAPIDSPIN,DARKPULSE,AURASPHERE,ICEBEAM
+    Ability = 0
+    Item = BLASTOISINITE
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+    EV = 0,0,4,252,252,0
+#-------------------------------	
+[RIVAL1,Blue]
+Pokemon = PIDGEY,7
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = RATICATE,7
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = BULBASAUR,9
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[RIVAL1,Blue,1]
+Pokemon = PIDGEY,7
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = RATICATE,7
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = CHARMANDER,9
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[RIVAL1,Blue,2]
+Pokemon = PIDGEY,7
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = RATICATE,7
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = SQUIRTLE,9
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[RIVAL1,Blue,3]
+Pokemon = PIDGEY,7
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = RATICATE,7
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = PIKACHU,9
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[RIVAL1,Blue,4]
+Pokemon = PIDGEY,7
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = RATICATE,7
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = EEVEE,9
+    Ability = 2
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[RIVAL1,Blue,5]
+Pokemon = PIDGEOTTO,22
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = RATICATE,22
+    Moves = QUICKATTACK,SWORDSDANCE,CRUNCH,SUPERFANG
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = GYARADOS,23
+    Moves = CRUNCH,WATERFALL,ICEFANG,TWISTER
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = IVYSAUR,24
+    Moves = LEECHSEED,SEEDBOMB,TAKEDOWN,SLEEPPOWDER
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[RIVAL1,Blue,6]
+Pokemon = PIDGEOTTO,22
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = RATICATE,23
+    Moves = QUICKATTACK,SWORDSDANCE,CRUNCH,SUPERFANG
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = GYARADOS,23
+    Moves = CRUNCH,WATERFALL,ICEFANG,TWISTER
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = CHARMELEON,24
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[RIVAL1,Blue,7]
+Pokemon = PIDGEOTTO,22
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = RATICATE,23
+    Moves = QUICKATTACK,SWORDSDANCE,CRUNCH,SUPERFANG
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = GYARADOS,23
+    Moves = CRUNCH,WATERFALL,ICEFANG,TWISTER
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = WARTORTLE,24
+    Nature = BOLD
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[RIVAL1,Blue,8]
+Pokemon = PIDGEOTTO,22
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = RATICATE,23
+    Moves = QUICKATTACK,SWORDSDANCE,CRUNCH,SUPERFANG
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = GYARADOS,23
+    Moves = CRUNCH,WATERFALL,ICEFANG,TWISTER
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = PIKACHU,24
+    Moves = AGILITY,ELECTROBALL,NUZZLE,QUICKATTACK
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[RIVAL1,Blue,9]
+Pokemon = PIDGEOTTO,22
+    Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = RATICATE,23
+    Moves = QUICKATTACK,SWORDSDANCE,CRUNCH,SUPERFANG
+    Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = GYARADOS,23
+    Moves = CRUNCH,WATERFALL,ICEFANG,TWISTER
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+Pokemon = EEVEE,24
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+#-------------------------------
+[BUGCATCHER,Jack]
+Pokemon = KAKUNA,8
+    Moves = POISONSTING,STRINGSHOT,HARDEN
+Pokemon = METAPOD,8
+    Moves = STRINGSHOT,TACKLE,HARDEN
+#-------------------------------
+[BUGCATCHER,Leon]
+Pokemon = BEEDRILL,10
+    Moves = TWINEEDLE,FURYATTACK,PECK
+#-------------------------------
+[TEAMSHADEGRUNT,Jarvis]
+Pokemon = CATERPIE,10
+    Form = 1
+    Moves = TACKLE,STRINGSHOT,BUGBITE
+Pokemon = WEEDLE,11
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Jules]
+Pokemon = BEEDRILL,15
+    Form = 1
+    Moves = TWINEEDLE,FURYATTACK,RAGE
+#-------------------------------
+[TEAMSHADEGRUNT,Nico]
+Pokemon = METAPOD,12
+    Form = 1
+    Moves = HARDEN
+#-------------------------------
+[TEAMSHADEGRUNT,Mike]
+Pokemon = PIDGEY,12
+    Form = 1
+    Moves = TACKLE,SANDATTACK,GUST
+#-------------------------------
+[TEAMSHADEGRUNT,Andreas]
+Pokemon = KAKUNA,11
+    Form = 1
+#-------------------------------
+[SHINYHUNTER,Dan]
+Pokemon = CATERPIE,8
+    Shiny = yes
+Pokemon = KAKUNA,12
+    Shiny = yes
+Pokemon = BUTTERFREE,14
+    Shiny = yes
+#-------------------------------
+[TEAMSHADEGRUNT,Kevin]
+Pokemon = RATICATE,13
+    Form = 1
+    Moves = QUICKATTACK,FOCUSENERGY,BITE,PURSUIT
+#-------------------------------
+[TEAMSHADEGRUNT,Lex]
+Pokemon = RATTATA,10
+    Form = 1
+    Moves = TAILWHIP,QUICKATTACK,FOCUSENERGY,BITE
+Pokemon = PIKACHU,13
+    Form = 1
+    Moves = QUICKATTACK,THUNDERWAVE,DOUBLETEAM,ELECTROBALL
+#-------------------------------
+[TEAMSHADEGRUNT,Steve]
+Pokemon = PIDGEOTTO,12
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Zane]
+Pokemon = BELLSPROUT,12
+    Form = 1
+    Moves = VINEWHIP,GROWTH,WRAP
+#-------------------------------
+[TEAMSHADEGRUNT,Victor]
+Pokemon = BUTTERFREE,16
+    Form = 1
+    Moves = POISONPOWDER,STUNSPORE,SLEEPPOWDER,PSYBEAM
+#-------------------------------
+[YOUNGSTER,Jake]
+Pokemon = NIDORANfE,14
+    Moves = SCRATCH,TAILWHIP,DOUBLEKICK,POISONSTING
+Pokemon = NIDORANmA,14
+    Moves = PECK,FOCUSENERGY,DOUBLEKICK,POISONSTING
+#-------------------------------
+[COOLTRAINER_M,Cal]
+Pokemon = BULBASAUR,10
+Pokemon = BULBASAUR,10
+Pokemon = BULBASAUR,10
+#-------------------------------
+[BIRDKEEPER,Toby]
+Pokemon = SPEAROW,16
+Pokemon = PIDGEY,17
+#-------------------------------
+[LASS,Margaux]
+Pokemon = EKANS,18
+#-------------------------------
+[BLACKBELT,Duke]
+Pokemon = MANKEY,18
+Pokemon = SANDSHREW,16
+#-------------------------------
+[CAMPER,Cameron]
+Pokemon = NIDORANfE,17
+Pokemon = NIDORANmA,18
+#-------------------------------
+[POKEMONBREEDER,Ellie]
+Pokemon = JIGGLYPUFF,18
+#-------------------------------
+[PSYCHIC_M,Xeno]
+Pokemon = ZUBAT,16
+Pokemon = ARBOK,21
+Pokemon = CLEFAIRY,18
+#-------------------------------
+[FISHERMAN,Laslo]
+Pokemon = HORSEA,5
+Pokemon = SEADRA,8
+#-------------------------------
+[BIKER,Jakob]
+Pokemon = TENTACOOL,6
+Pokemon = TENTACRUEL,8
+#-------------------------------
+[LASS,Karen]
+Pokemon = PSYDUCK,7
+#-------------------------------
+[TUBER_M,Casper]
+Pokemon = KRABBY,5
+Pokemon = KINGLER,7
+#-------------------------------
+[SAILOR,Louis]
+Pokemon = POLIWAG,5
+Pokemon = POLIWHIRL,6
+#-------------------------------
+[SCHOOLKID_M,Charlie,1]
+Pokemon = SLOWPOKE,24
+Pokemon = RATICATE,23
+#-------------------------------
+[SCHOOLKID_M,Charlie]
+Pokemon = SLOWPOKE,9
+#-------------------------------
+[FISHERMAN,Owen]
+Pokemon = MAGIKARP,5
+Pokemon = GYARADOS,10
+#-------------------------------
+[SUPERNERD,Miguel]
+Pokemon = PARASECT,22
+Pokemon = SANDSLASH,23
+Pokemon = ONIX,22
+#-------------------------------
+[AROMALADY,Emily]
+Pokemon = CLEFAIRY,20
+#-------------------------------
+[HIKER,Arthur]
+Pokemon = ZUBAT,20
+Pokemon = ZUBAT,21
+#-------------------------------
+[BLACKBELT,Bryan]
+Pokemon = GEODUDE,23
+#-------------------------------
+[BUGCATCHER,Chris]
+Pokemon = PARAS,21
+#-------------------------------
+[BUGCATCHER,Owen]
+Pokemon = PARAS,25
+Pokemon = PARASECT,27
+#-------------------------------
+[LASS,Josseline]
+Pokemon = KAKUNA,25
+Pokemon = BEEDRILL,26
+#-------------------------------
+[LASS,Grace]
+Pokemon = BELLSPROUT,25
+Pokemon = WEEPINBELL,26
+#-------------------------------
+[BIRDKEEPER,Fred]
+Pokemon = FARFETCHD,28
+#-------------------------------
+[LADY,Cassandra]
+Pokemon = CLEFAIRY,26
+#-------------------------------
+[BIKER,Taylor]
+Pokemon = RATICATE,27
+Pokemon = PIDGEOTTO,27
+Pokemon = FEAROW,27
+#-------------------------------
+[HIKER,Fred]
+Pokemon = SCYTHER,29
+Pokemon = PINSIR,30
+#-------------------------------
+[RIVAL3,Ritchie]
+Pokemon = CHARMELEON,36
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+	EV = 0,0,4,252,252,0
+Pokemon = BUTTERFREE,38
+    Moves = WHIRLWIND,SLEEPPOWDER,PSYBEAM,AIRSLASH
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+	EV = 0,0,0,252,252,4
+Pokemon = PIKACHU,37
+    Form = 2
+    Moves = AGILITY,ELECTROBALL,NUZZLE,QUICKATTACK
+    Nature = TIMID
+    IV = 31,31,31,31,31,31
+	EV = 0,252,0,252,4,0
+#-------------------------------
+[TEAMSHADEGRUNT,Lex,1]
+Pokemon = RATTATA,21
+    Form = 1
+Pokemon = PIKACHU,21
+    Form = 1
+Pokemon = SANDSLASH,23
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Lex,2]
+Pokemon = RATTATA,24
+    Form = 1
+Pokemon = RAICHU,27
+    Form = 1
+Pokemon = SANDSLASH,27
+    Form = 1
+Pokemon = DRATINI,26
+    Form = 1
+	Shiny = yes
+#-------------------------------
+[TEAMSHADEGRUNT,Oliver]
+Pokemon = GEODUDE,20
+    Form = 1
+Pokemon = GEODUDE,20
+    Form = 1
+Pokemon = ONIX,22
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Noah]
+Pokemon = ZUBAT,20
+    Form = 1
+Pokemon = ZUBAT,21
+    Form = 1
+Pokemon = ZUBAT,21
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Ben]
+Pokemon = ZUBAT,21
+    Form = 1
+Pokemon = GEODUDE,22
+    Form = 1
+Pokemon = ZUBAT,21
+    Form = 1
+#-------------------------------
+[LEADER_AJ,A.J.]
+Pokemon = SANDSHREW,35
+    Moves = AQUARING,DIG,SANDSTORM
+    Ability = 1
+    Nature = ADAMANT
+    IV = 31,31,31,31,31,31
+	EV = 36,156,76,196,0,36
+#-------------------------------
+[YOUNGSTER,Sander]
+Pokemon = SANDSHREW,22
+#-------------------------------
+[BLACKBELT,Brooke]
+Pokemon = MANKEY,23
+#-------------------------------
+[CRUSHGIRL,Jeanette]
+Pokemon = BELLSPROUT,29
+	Moves = SLAM,RAZORLEAF
+	Ability = 1
+    Nature = MODEST
+    IV = 31,31,31,31,31,31
+    EV = 0,0,76,196,196,36
+Pokemon = SCYTHER,32
+	Moves = SLASH,SWIFT,DOUBLETEAM
+	Ability = 2
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+    EV = 248,8,0,252,0,0
+Pokemon = BEEDRILL,32
+	Moves = TACKLE,TWINEELDE,POISONSTING
+	Ability = 1
+    Nature = JOLLY
+    IV = 31,31,31,31,31,31
+    EV = 0,252,0,252,0,4
+#-------------------------------
+[TEAMSHADEGRUNT,Gio]
+Pokemon = VENONAT,23
+    Form = 1
+Pokemon = HORSEA,24
+    Form = 1
+Pokemon = POLIWAG,24
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Lars]
+Pokemon = MAGIKARP,23
+    Form = 1
+Pokemon = KRABBY,24
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Timo]
+Pokemon = TENTACOOL,24
+    Form = 1
+Pokemon = VENOMOTH,25
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Ron]
+Pokemon = MEOWTH,23
+    Form = 1
+Pokemon = ABRA,24
+    Form = 1
+Pokemon = BUTTERFREE,26
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Ethan]
+Pokemon = PIDGEOTTO,23
+    Form = 1
+Pokemon = TENTACRUEL,24
+    Form = 1
+Pokemon = GYARADOS,25
+    Form = 1
+#-------------------------------
+[PAINTER,Jo]
+Pokemon = GLOOM,23
+Pokemon = WEEPINBELL,23
+Pokemon = SEAKING,24
+#-------------------------------
+[TEAMSHADEGRUNT,Ben,1]
+Pokemon = GOLBAT,24
+    Form = 1
+Pokemon = GRAVELER,25
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Kevin,1]
+Pokemon = RATICATE,24
+    Form = 1
+Pokemon = POLIWHIRL,24
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Oliver,1]
+Pokemon = GRAVELER,24
+    Form = 1
+Pokemon = ONIX,26
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Jules,1]
+Pokemon = BEEDRILL,25
+    Form = 1
+Pokemon = KINGLER,26
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Zane,1]
+Pokemon = WEEPINBELL,24
+    Form = 1
+Pokemon = GLOOM,24
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Steve,1]
+Pokemon = PIDGEOTTO,24
+    Form = 1
+Pokemon = PIDGEOT,26
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,NOAH,1]
+Pokemon = GOLBAT,24
+    Form = 1
+Pokemon = BEEDRILL,25
+    Form = 1
+#-------------------------------
+[TEAMSHADEGRUNT,Nico,1]
+Pokemon = BUTTERFREE,25
+    Form = 1
+Pokemon = VENOMOTH,26
+    Form = 1

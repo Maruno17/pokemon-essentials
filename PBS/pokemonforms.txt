@@ -1,6 +1,330 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
+[BULBASAUR,1]
+FormName=Shadow
+BattlerEnemyY=27
+#-------------------------------
+[IVYSAUR,1]
+FormName=Shadow
+BattlerEnemyY=23
+#-------------------------------
 [VENUSAUR,1]
+FormName=Shadow
+BattlerEnemyY=10
+#-------------------------------
+[CHARMANDER,1]
+FormName=Shadow
+BattlerEnemyY=23
+#-------------------------------
+[CHARMELEON,1]
+FormName=Shadow
+BattlerEnemyY=19
+#-------------------------------
+[CHARIZARD,1]
+FormName=Shadow
+BattlerPlayerY=7
+#-------------------------------
+[SQUIRTLE,1]
+FormName=Shadow
+BattlerEnemyY=24
+#-------------------------------
+[WARTORTLE,1]
+FormName=Shadow
+BattlerEnemyY=17
+#-------------------------------
+[BLASTOISE,1]
+FormName=Shadow
+BattlerPlayerY=8
+BattlerEnemyY=12
+#-------------------------------
+[CATERPIE,1]
+FormName=Shadow
+BattlerEnemyY=27
+#-------------------------------
+[METAPOD,1]
+FormName=Shadow
+BattlerEnemyY=26
+#-------------------------------
+[BUTTERFREE,1]
+FormName=Shadow
+BattlerEnemyY=18
+#-------------------------------
+[WEEDLE,1]
+FormName=Shadow
+BattlerEnemyY=28
+#-------------------------------
+[KAKUNA,1]
+FormName=Shadow
+BattlerEnemyY=26
+#-------------------------------
+[BEEDRILL,1]
+FormName=Shadow
+BattlerPlayerY=13
+BattlerEnemyY=15
+#-------------------------------
+[PIDGEY,1]
+FormName=Shadow
+BattlerEnemyY=24
+#-------------------------------
+[PIDGEOTTO,1]
+FormName=Shadow
+BattlerEnemyY=17
+#-------------------------------
+[PIDGEOT,1]
+FormName=Shadow
+BattlerEnemyY=8
+#-------------------------------
+[RATTATA,1]
+FormName=Shadow
+BattlerEnemyY=24
+#-------------------------------
+[RATICATE,1]
+FormName=Shadow
+BattlerEnemyY=16
+#-------------------------------
+[SPEAROW,1]
+FormName=Shadow
+BattlerEnemyY=25
+#-------------------------------
+[FEAROW,1]
+FormName=Shadow
+BattlerEnemyY=6
+#-------------------------------
+[EKANS,1]
+FormName=Shadow
+BattlerEnemyY=23
+#-------------------------------
+[ARBOK,1]
+FormName=Shadow
+BattlerEnemyY=12
+#-------------------------------
+[PIKACHU,1]
+FormName=Shadow
+BattlerEnemyY=18
+#-------------------------------
+[RAICHU,1]
+FormName=Shadow
+BattlerEnemyY=11
+#-------------------------------
+[SANDSHREW,1]
+FormName=Shadow
+BattlerEnemyY=23
+#-------------------------------
+[SANDSLASH,1]
+FormName=Shadow
+BattlerEnemyY=19
+#-------------------------------
+[NIDORANfE,1]
+FormName=Shadow
+BattlerEnemyY=27
+#-------------------------------
+[NIDORINA,1]
+FormName=Shadow
+BattlerEnemyY=20
+#-------------------------------
+[NIDOQUEEN,1]
+FormName=Shadow
+BattlerEnemyY=9
+#-------------------------------
+[NIDORANmA,1]
+FormName=Shadow
+BattlerEnemyY=24
+#-------------------------------
+[NIDORINO,1]
+FormName=Shadow
+BattlerEnemyY=19
+#-------------------------------
+[NIDOKING,1]
+FormName=Shadow
+BattlerEnemyY=10
+#-------------------------------
+[CLEFAIRY,1]
+FormName=Shadow
+BattlerEnemyY=27
+#-------------------------------
+[CLEFABLE,1]
+FormName=Shadow
+BattlerEnemyY=21
+#-------------------------------
+[VULPIX,1]
+FormName=Shadow
+BattlerEnemyY=22
+#-------------------------------
+[NINETALES,1]
+FormName=Shadow
+BattlerEnemyY=11
+#-------------------------------
+[JIGGLYPUFF,1]
+FormName=Shadow
+BattlerEnemyY=27
+#-------------------------------
+[WIGGLYTUFF,1]
+FormName=Shadow
+BattlerEnemyY=15
+#-------------------------------
+[ZUBAT,1]
+FormName=Shadow
+BattlerEnemyY=20
+#-------------------------------
+[GOLBAT,1]
+FormName=Shadow
+BattlerEnemyY=15
+#-------------------------------
+[ODDISH,1]
+FormName=Shadow
+BattlerEnemyY=26
+#-------------------------------
+[GLOOM,1]
+FormName=Shadow
+BattlerEnemyY=24
+#-------------------------------
+[VILEPLUME,1]
+FormName=Shadow
+BattlerEnemyY=19
+#-------------------------------
+[PARAS,1]
+FormName=Shadow
+BattlerEnemyY=27
+#-------------------------------
+[PARASECT,1]
+FormName=Shadow
+BattlerEnemyY=18
+#-------------------------------
+[VENONAT,1]
+FormName=Shadow
+BattlerEnemyY=16
+#-------------------------------
+[VENOMOTH,1]
+FormName=Shadow
+BattlerEnemyY=15
+#-------------------------------
+[DIGLETT,1]
+FormName=Shadow
+BattlerEnemyY=30
+#-------------------------------
+[DUGTRIO,1]
+FormName=Shadow
+BattlerEnemyY=23
+#-------------------------------
+[MEOWTH,1]
+FormName=Shadow
+BattlerEnemyY=20
+#-------------------------------
+[PERSIAN,1]
+FormName=Shadow
+BattlerEnemyY=16
+#-------------------------------
+[PSYDUCK,1]
+FormName=Shadow
+BattlerEnemyY=21
+#-------------------------------
+[MANKEY,1]
+FormName=Shadow
+BattlerEnemyY=22
+#-------------------------------
+[PRIMEAPE,1]
+FormName=Shadow
+BattlerEnemyY=16
+#-------------------------------
+[GROWLITHE,1]
+FormName=Shadow
+BattlerEnemyY=19
+#-------------------------------
+[ARCANINE,1]
+FormName=Shadow
+BattlerEnemyY=9
+#-------------------------------
+[POLIWAG,1]
+FormName=Shadow
+BattlerEnemyY=27
+#-------------------------------
+[POLIWHIRL,1]
+FormName=Shadow
+BattlerEnemyY=22
+#-------------------------------
+[POLIWRATH,1]
+FormName=Shadow
+#-------------------------------
+[ABRA,1]
+FormName=Shadow
+#-------------------------------
+[KADABRA,1]
+FormName=Shadow
+#-------------------------------
+[ALAKAZAM,1]
+FormName=Shadow
+BattlerPlayerY=6
+BattlerEnemyY=8
+#-------------------------------
+[MACHOP,1]
+FormName=Shadow
+BattlerEnemyY=17
+#-------------------------------
+[MACHOKE,1]
+FormName=Shadow
+BattlerEnemyY=12
+#-------------------------------
+[MACHAMP,1]
+FormName=Shadow
+BattlerEnemyY=5
+#-------------------------------
+[BELLSPROUT,1]
+FormName=Shadow
+BattlerEnemyY=25
+#-------------------------------
+[WEEPINBELL,1]
+FormName=Shadow
+BattlerEnemyY=22
+#-------------------------------
+[VICTREEBEL,1]
+FormName=Shadow
+BattlerEnemyY=15
+#-------------------------------
+[TENTACOOL,1]
+FormName=Shadow
+BattlerEnemyY=15
+#-------------------------------
+[TENTACRUEL,1]
+FormName=Shadow
+BattlerEnemyY=13
+#-------------------------------
+[GRIMER,1]
+FormName=Shadow
+#-------------------------------
+[MUK,1]
+FormName=Shadow
+#-------------------------------
+[EXEGGUTOR,1]
+FormName=Shadow
+#-------------------------------
+[CUBONE,1]
+FormName=Shadow
+#-------------------------------
+[MAROWAK,1]
+FormName=Shadow
+#-------------------------------
+[GEODUDE,1]
+FormName=Shadow
+#-------------------------------
+[GRAVELER,1]
+FormName=Shadow
+#-------------------------------
+[GOLEM,1]
+FormName=Shadow
+#-------------------------------
+[SLOWPOKE,1]
+FormName=Shadow
+#-------------------------------
+[SLOWBRO,1]
+FormName=Shadow
+#-------------------------------
+[PONYTA,1]
+FormName=Shadow
+#-------------------------------
+[RAPIDASH,1]
+FormName=Shadow
+#-------------------------------
+[VENUSAUR,2]
 FormName = Mega Venusaur
 MegaStone = VENUSAURITE
 BaseStats = 80,100,123,80,122,120
@@ -10,7 +334,7 @@ Height = 2.4
 Weight = 155.5
 Pokedex = In order to support its flower, which has grown larger due to Mega Evolution, its back and legs have become stronger.
 #-------------------------------
-[CHARIZARD,1]
+[CHARIZARD,2]
 FormName = Mega Charizard X
 MegaStone = CHARIZARDITEX
 Type1 = FIRE
@@ -22,7 +346,7 @@ Weight = 110.5
 Color = Black
 Pokedex = The overwhelming power that fills its entire body causes it to turn black and create intense blue flames.
 #-------------------------------
-[CHARIZARD,2]
+[CHARIZARD,4]
 FormName = Mega Charizard Y
 MegaStone = CHARIZARDITEY
 BaseStats = 78,104,78,100,159,115
@@ -31,7 +355,7 @@ HiddenAbility = DROUGHT
 Weight = 100.5
 Pokedex = Its bond with its Trainer is the source of its power. It boasts speed and maneuverability greater than that of a jet fighter.
 #-------------------------------
-[BLASTOISE,1]
+[BLASTOISE,2]
 FormName = Mega Blastoise
 MegaStone = BLASTOISINITE
 BaseStats = 79,103,120,78,135,115
@@ -40,7 +364,7 @@ HiddenAbility = MEGALAUNCHER
 Weight = 101.1
 Pokedex = The cannon on its back is as powerful as a tank gun. Its tough legs and back enable it to withstand the recoil from firing the cannon.
 #-------------------------------
-[BEEDRILL,1]
+[BEEDRILL,2]
 FormName = Mega Beedrill
 MegaStone = BEEDRILLITE
 BaseStats = 65,150,40,145,15,80
@@ -50,7 +374,7 @@ Height = 1.4
 Weight = 40.5
 Pokedex = Its legs have become poison stingers. It stabs its prey repeatedly with the stingers on its limbs, dealing the final blow with the stinger on its rear.
 #-------------------------------
-[PIDGEOT,1]
+[PIDGEOT,2]
 FormName = Mega Pidgeot
 MegaStone = PIDGEOTITE
 BaseStats = 83,80,80,121,135,80
@@ -60,7 +384,7 @@ Height = 2.2
 Weight = 50.5
 Pokedex = With its muscular strength now greatly increased, it can fly continuously for two weeks without resting.
 #-------------------------------
-[RATTATA,1]
+[RATTATA,2]
 FormName = Alolan
 Type1 = DARK
 Type2 = NORMAL
@@ -73,7 +397,7 @@ Pokedex = With its incisors, it gnaws through doors and infiltrates people’s h
 WildItemUncommon = PECHABERRY
 Evolutions = RATICATE,LevelNight,20
 #-------------------------------
-[RATICATE,1]
+[RATICATE,2]
 FormName = Alolan
 Type1 = DARK
 Type2 = NORMAL
@@ -85,7 +409,7 @@ Color = Black
 Pokedex = It forms a group of Rattata, which it assumes command of. Each group has its own territory, and disputes over food happen often.
 WildItemUncommon = PECHABERRY
 #-------------------------------
-[RAICHU,1]
+[RAICHU,2]
 FormName = Alolan
 Type1 = ELECTRIC
 Type2 = PSYCHIC
@@ -98,7 +422,7 @@ Weight = 21.0
 Color = Brown
 Pokedex = It uses psychokinesis to control electricity. It hops aboard its own tail, using psychic power to lift the tail and move about while riding it.
 #-------------------------------
-[SANDSHREW,1]
+[SANDSHREW,2]
 FormName = Alolan
 Type1 = ICE
 Type2 = STEEL
@@ -113,7 +437,7 @@ Color = White
 Pokedex = The skin on its back is as hard as steel. Predators go after its soft belly, so it clings to the ground desperately.
 Evolutions = SANDSLASH,Item,ICESTONE
 #-------------------------------
-[SANDSLASH,1]
+[SANDSLASH,2]
 FormName = Alolan
 Type1 = ICE
 Type2 = STEEL
@@ -126,7 +450,7 @@ Weight = 55.0
 Color = Blue
 Pokedex = It runs across snow-covered plains at high speeds. It developed thick, sharp claws to plow through the snow.
 #-------------------------------
-[VULPIX,1]
+[VULPIX,2]
 FormName = Alolan
 Type1 = ICE
 Abilities = SNOWCLOAK
@@ -138,7 +462,7 @@ Pokedex = In hot weather, this Pokémon makes ice shards with its six tails and 
 WildItemUncommon = SNOWBALL
 Evolutions = NINETALES,Item,ICESTONE
 #-------------------------------
-[NINETALES,1]
+[NINETALES,2]
 FormName = Alolan
 Type1 = ICE
 Type2 = FAIRY
@@ -152,7 +476,7 @@ Pokedex = It lives on mountains perpetually covered in snow and is revered as a 
 WildItemUncommon = SNOWBALL
 Evolutions = NINETALES,Item,ICESTONE
 #-------------------------------
-[DIGLETT,1]
+[DIGLETT,2]
 FormName = Alolan
 Type1 = GROUND
 Type2 = STEEL
@@ -163,7 +487,7 @@ EggMoves = ANCIENTPOWER,BEATUP,ENDURE,FEINTATTACK,FINALGAMBIT,HEADBUTT,MEMENTO,M
 Weight = 1.0
 Pokedex = Its head sports an altered form of whiskers made of metal. When in communication with its comrades, its whiskers wobble to and fro.
 #-------------------------------
-[DUGTRIO,1]
+[DUGTRIO,2]
 FormName = Alolan
 Type1 = GROUND
 Type2 = STEEL
@@ -174,7 +498,7 @@ Moves = 0,SANDTOMB,1,SANDTOMB,1,ROTOTILLER,1,NIGHTSLASH,1,TRIATTACK,1,SANDATTACK
 Weight = 66.6
 Pokedex = Its shining gold hair provides it with protection. It's reputed that keeping any of its fallen hairs will bring bad luck.
 #-------------------------------
-[MEOWTH,1]
+[MEOWTH,2]
 FormName = Alolan
 Type1 = DARK
 BaseStats = 40,35,35,90,50,40
@@ -185,7 +509,7 @@ Color = Blue
 Pokedex = It's impulsive, selfish, and fickle. It's very popular with some Trainers who like giving it the attention it needs.
 Evolutions = PERSIAN,Happiness,
 #-------------------------------
-[PERSIAN,1]
+[PERSIAN,2]
 FormName = Alolan
 Type1 = DARK
 BaseStats = 65,60,60,115,75,65
@@ -197,7 +521,7 @@ Weight = 33.0
 Color = Blue
 Pokedex = Its round face is a symbol of wealth. Persian that have bigger, plumper faces are considered more beautiful.
 #-------------------------------
-[ALAKAZAM,1]
+[ALAKAZAM,2]
 FormName = Mega Alakazam
 MegaStone = ALAKAZITE
 BaseStats = 55,50,65,150,175,105
@@ -206,7 +530,7 @@ HiddenAbility = TRACE
 Height = 1.2
 Pokedex = Having traded away its muscles, Alakazam's true power has been unleashed. With its psychic powers, it can foresee all things.
 #-------------------------------
-[GEODUDE,1]
+[GEODUDE,2]
 FormName = Alolan
 Type1 = ROCK
 Type2 = ELECTRIC
@@ -219,7 +543,7 @@ Color = Gray
 Pokedex = Geodude compete against each other with headbutts. The iron sand on their heads will stick to whichever one has stronger magnetism.
 WildItemUncommon = CELLBATTERY
 #-------------------------------
-[GRAVELER,1]
+[GRAVELER,2]
 FormName = Alolan
 Type1 = ROCK
 Type2 = ELECTRIC
@@ -231,7 +555,7 @@ Color = Gray
 Pokedex = They eat rocks and often get into a scrap over them. The shock of Graveler smashing together causes a flash of light and a booming noise.
 WildItemUncommon = CELLBATTERY
 #-------------------------------
-[GOLEM,1]
+[GOLEM,2]
 FormName = Alolan
 Type1 = ROCK
 Type2 = ELECTRIC
@@ -244,7 +568,37 @@ Color = Gray
 Pokedex = It fires rocks charged with electricity. Even if the rock isn't fired that accurately, just grazing an opponent will cause numbness and fainting.
 WildItemCommon = CELLBATTERY
 #-------------------------------
-[SLOWBRO,1]
+[SLOWPOKE-2]
+FormName=Galar Form
+Type1=PSYCHIC
+Abilities=GLUTTONY,OWNTEMPO
+HiddenAbility=REGENERATOR
+Moves=1,TACKLE,1,CURSE,3,GROWL,6,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERPULSE,21,HEADBUTT,24,ZENHEADBUTT,27,AMNESIA,30,SURF,33,SLACKOFF,36,PSYCHIC,39,PSYCHUP,42,RAINDANCE,45,HEALPULSE
+WildItemUncommon=
+BattlerEnemyY=30
+#-------------------------------
+[SLOWBRO,2]
+FormName=Galar Form
+Type1 = POISON
+Type2 = PSYCHIC
+BaseStats = 95,100,95,30,100,70
+Abilities = OWNTEMPO
+HiddenAbility = REGENERATOR
+Moves = 1,WITHDRAW,1,TACKLE,1,CURSE,1,GROWL,1,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERPULSE,21,HEADBUTT,24,ZENHEADBUTT,27,AMNESIA,30,SURF,33,SLACKOFF,36,PSYCHIC,39,PSYCHUP,42,RAINDANCE,45,HEALPULSE
+Height = 2.0
+Weight = 120.0
+Shape = 4
+Pokedex = If this Pokémon squeezes the tongue of the Shellder biting it, the Shellder will launch a toxic liquid from the tip of its shell.
+WildItemUncommon=
+BattlerPlayerX = 
+BattlerPlayerY = 
+BattlerEnemyX = 
+BattlerEnemyY = 
+BattlerShadowX = 
+BattlerShadowSize = 0
+Evolutions = 
+#-------------------------------
+[SLOWBRO,4]
 FormName = Mega Slowbro
 MegaStone = SLOWBRONITE
 BaseStats = 95,75,180,30,130,80
@@ -255,7 +609,7 @@ Weight = 120.0
 Shape = 4
 Pokedex = Having been swallowed whole by Shellder, Slowbro now has an iron defense. It's pretty comfortable in there, too.
 #-------------------------------
-[GRIMER,1]
+[GRIMER,2]
 FormName = Alolan
 Type1 = POISON
 Type2 = DARK
@@ -268,7 +622,7 @@ Weight = 42.0
 Color = Green
 Pokedex = A Grimer, which had been brought in to solve a problem with garbage, developed over time into this form.
 #-------------------------------
-[MUK,1]
+[MUK,2]
 FormName = Alolan
 Type1 = POISON
 Type2 = DARK
@@ -280,7 +634,7 @@ Weight = 52.0
 Color = Green
 Pokedex = The garbage it eats causes continuous chemical changes in its body, which produce its exceedingly vivid coloration.
 #-------------------------------
-[GENGAR,1]
+[GENGAR,2]
 FormName = Mega Gengar
 MegaStone = GENGARITE
 BaseStats = 60,65,80,130,170,95
@@ -289,7 +643,7 @@ HiddenAbility = SHADOWTAG
 Height = 1.4
 Pokedex = The energy of Mega Evolution awakened it. It sinks into another dimension, where it keeps a patient watch for its chance to attack.
 #-------------------------------
-[EXEGGUTOR,1]
+[EXEGGUTOR,2]
 FormName = Alolan
 Type1 = GRASS
 Type2 = DRAGON
@@ -300,10 +654,10 @@ Height = 10.9
 Weight = 415.6
 Pokedex = As it grew taller and taller, it outgrew its reliance on psychic powers, while within it awakened the power of the sleeping dragon.
 #-------------------------------
-[CUBONE,1]
+[CUBONE,2]
 Evolutions = MAROWAK,LevelNight,28
 #-------------------------------
-[MAROWAK,1]
+[MAROWAK,2]
 FormName = Alolan
 Type1 = FIRE
 Type2 = GHOST
@@ -314,7 +668,7 @@ Weight = 34.0
 Color = Purple
 Pokedex = Its custom is to mourn its lost companions. Mounds of dirt by the side of the road mark the graves of the Marowak
 #-------------------------------
-[KANGASKHAN,1]
+[KANGASKHAN,2]
 FormName = Mega Kangaskhan
 MegaStone = KANGASKHANITE
 BaseStats = 105,125,100,100,60,100
@@ -323,7 +677,7 @@ HiddenAbility = PARENTALBOND
 Weight = 100.0
 Pokedex = The explosive energy the child is bathed in causes temporary growth. The mother is beside herself with worry about it.
 #-------------------------------
-[PINSIR,1]
+[PINSIR,2]
 FormName = Mega Pinsir
 MegaStone = PINSIRITE
 Type1 = BUG
@@ -336,7 +690,7 @@ Weight = 59.0
 Shape = 13
 Pokedex = It zips around at blistering speeds, looking for an opening to skewer its opponent on its giant pincers.
 #-------------------------------
-[GYARADOS,1]
+[GYARADOS,2]
 FormName = Mega Gyarados
 MegaStone = GYARADOSITE
 Type1 = WATER
@@ -347,7 +701,7 @@ HiddenAbility = MOLDBREAKER
 Weight = 305.0
 Pokedex = It zooms out of the water at Mach speeds. Even large ships caught in its path are split cleanly in two!
 #-------------------------------
-[AERODACTYL,1]
+[AERODACTYL,2]
 FormName = Mega Aerodactyl
 MegaStone = AERODACTYLITE
 BaseStats = 80,135,85,150,70,95
@@ -357,7 +711,7 @@ Height = 2.1
 Weight = 79.0
 Pokedex = When it Mega Evolves, it becomes more vicious than ever before. Some say that's because its excess of power is causing it pain.
 #-------------------------------
-[MEWTWO,1]
+[MEWTWO,2]
 FormName = Mega Mewtwo X
 MegaStone = MEWTWONITEX
 Type1 = PSYCHIC
@@ -369,7 +723,7 @@ Height = 2.3
 Weight = 127.0
 Pokedex = Psychic power has augmented its muscles. It has a grip strength of one ton and can sprint a hundred meters in two seconds flat!
 #-------------------------------
-[MEWTWO,2]
+[MEWTWO,4]
 FormName = Mega Mewtwo Y
 MegaStone = MEWTWONITEY
 BaseStats = 106,150,70,140,194,120
@@ -1170,11 +1524,6 @@ FormName = Chill Drive
 FormName = Douse Drive
 #-------------------------------
 [GRENINJA,1]
-Abilities = BATTLEBOND
-HiddenAbility = BATTLEBOND
-Compatibility = Undiscovered
-#-------------------------------
-[GRENINJA,2]
 FormName = Ash-Greninja
 BaseStats = 72,145,67,132,153,71
 Abilities = BATTLEBOND

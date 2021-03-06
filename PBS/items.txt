@@ -290,40 +290,40 @@
 286,FRIENDBALL,Friend Ball,Friend Balls,3,300,"A Poké Ball that makes caught Pokémon more friendly.",0,4,4,
 287,MOONBALL,Moon Ball,Moon Balls,3,300,"A Poké Ball for catching Pokémon that evolve using the Moon Stone.",0,4,4,
 #-------------------------------
-288,TM01,TM01,TM01s,4,10000,"The user is roused, and its Attack and Sp. Atk stats increase.",3,0,0,WORKUP
-289,TM02,TM02,TM02s,4,10000,"The user slashes the target with huge, sharp claws.",3,0,0,DRAGONCLAW
-290,TM03,TM03,TM03s,4,10000,"The user materializes an odd psychic wave to attack the target. This attack does physical damage.",3,0,0,PSYSHOCK
-291,TM04,TM04,TM04s,4,10000,"The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats.",3,0,0,CALMMIND
-292,TM05,TM05,TM05s,4,10000,"The target is scared off and replaced by another Pokémon in its party. In the wild, the battle ends.",3,0,0,ROAR
+288,TM01,TM01,TM01s,4,10000,"Mega Punch deals damage and has no secondary effect",3,0,0,MEGAPUNCH
+289,TM02,TM02,TM02s,4,10000,"The user charges up Razor Wind on the first turn and deals damage on the second turn. This attack has an increased crititcal hit ratio.",3,0,0,RAZORWIND
+290,TM03,TM03,TM03s,4,10000,"A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.",3,0,0,SWORDSDANCE
+291,TM04,TM04,TM04s,4,10000,"The user forces the opponent to switch out. In the wild, the battle ends.",3,0,0,WHIRLWIND
+292,TM05,TM05,TM05s,4,10000,"Mega Punch deals damage and has no secondary effect",3,0,0,MEGAKICK
 293,TM06,TM06,TM06s,4,10000,"A move that leaves the target badly poisoned. Its poison damage worsens every turn.",3,0,0,TOXIC
-294,TM07,TM07,TM07s,4,50000,"Summons a hailstorm that lasts for five turns. The hailstorm damages all types except Ice.",3,0,0,HAIL
-295,TM08,TM08,TM08s,4,10000,"The user tenses its muscles to bulk up its body, boosting both its Attack and Defense stats.",3,0,0,BULKUP
-296,TM09,TM09,TM09s,4,10000,"The user drenches the target in a special poisonous liquid. Its power is doubled if the target is poisoned.",3,0,0,VENOSHOCK
-297,TM10,TM10,TM10s,4,10000,"A unique attack that varies in type and intensity depending on the Pokémon using it.",3,0,0,HIDDENPOWER
-298,TM11,TM11,TM11s,4,50000,"The user intensifies the sun for five turns, powering up Fire-type moves.",3,0,0,SUNNYDAY
-299,TM12,TM12,TM12s,4,10000,"The target is taunted into a rage that allows it to use only attack moves for three turns.",3,0,0,TAUNT
+294,TM07,TM07,TM07s,4,10000,"Horn Drill inflicts damage equal to the target's current HP. Horn Drill will not affect a target whose current Speed stat is greater than the user's current Speed stat. ",3,0,0,HORNDRILL
+295,TM08,TM08,TM08s,4,10000,"Body Slam inflicts damage and has a 30% chance of paralyzing the target.",3,0,0,BODYSLAM
+296,TM09,TM09,TM09s,4,10000,"Take Down inflicts damage, and the user receives recoil damage equal to ¼ of the damage done to the target. ",3,0,0,TAKEDOWN
+297,TM10,TM10,TM10s,4,10000,"Double-Edge inflicts damage, and the user receives recoil damage equal to ⅓ of the damage done to the target",3,0,0,DOUBLEEDGE
+298,TM11,TM11,TM11s,4,10000,"The user deals damage. This attack has a 10% of lowering the target's speed stat.",3,0,0,BUBBLEBEAM
+299,TM12,TM12,TM12s,4,10000,"Mega Punch deals damage and has no secondary effect",3,0,0,WATERGUN
 300,TM13,TM13,TM13s,4,10000,"The target is struck with an icy-cold beam of energy. It may also freeze the target solid.",3,0,0,ICEBEAM
-301,TM14,TM14,TM14s,4,30000,"A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.",3,0,0,BLIZZARD
-302,TM15,TM15,TM15s,4,50000,"The target is attacked with a powerful beam. The user must rest on the next turn to regain its energy.",3,0,0,HYPERBEAM
-303,TM16,TM16,TM16s,4,10000,"A wondrous wall of light is put up to suppress damage from special attacks for five turns.",3,0,0,LIGHTSCREEN
-304,TM17,TM17,TM17s,4,10000,"It enables the user to evade all attacks. Its chance of failing rises if it is used in succession.",3,0,0,PROTECT
-305,TM18,TM18,TM18s,4,50000,"The user summons a heavy rain that falls for five turns, powering up Water-type moves.",3,0,0,RAINDANCE
-306,TM19,TM19,TM19s,4,10000,"The user lands and rests its body. It restores the user's HP by up to half of its max HP.",3,0,0,ROOST
-307,TM20,TM20,TM20s,4,10000,"The user creates a protective field that prevents status problems for five turns.",3,0,0,SAFEGUARD
-308,TM21,TM21,TM21s,4,10000,"A full-power attack that grows more powerful the less the user likes its Trainer.",3,0,0,FRUSTRATION
-309,TM22,TM22,TM22s,4,10000,"A two-turn attack. The user gathers light, then blasts a bundled beam on the second turn.",3,0,0,SOLARBEAM
-310,TM23,TM23,TM23s,4,10000,"The user throws a stone or similar projectile to attack a foe. A flying Pokémon will fall to the ground if hit.",3,0,0,SMACKDOWN
+301,TM14,TM14,TM14s,4,10000,"A howling blizzard is summoned to strike the opposing team. It may also freeze them solid.",3,0,0,BLIZZARD
+302,TM15,TM15,TM15s,4,10000,"The target is attacked with a powerful beam. The user must rest on the next turn to regain its energy.",3,0,0,HYPERBEAM
+303,TM16,TM16,TM16s,4,10000,"The user deals damage. Each time this move is used, the prize money obtained at the end of battle increases.",3,0,0,PAYDAY
+304,TM17,TM17,TM17s,4,10000,"Submission inflicts damage, and the user receives recoil damage equal to 25% of the damage done to the target",3,0,0,SUBMISSION
+305,TM18,TM18,TM18s,4,10000,"When hit with a physical move this turn, the user strikes back with twice the power. This move fails otherwise.",3,0,0,COUNTER
+306,TM19,TM19,TM19s,4,10000,"Seismic Toss inflicts damage equal to the user's level.",3,0,0,SEISMICTOSS
+307,TM20,TM20,TM20s,4,10000,"The users attack stat raises by 1 stage each time this move is used in succession. If a different move is used, the gained attack falls back to 0",3,0,0,RAGE
+308,TM21,TM21,TM21s,4,10000,"The user restores it's HP by 50% of the damage dealt",3,0,0,MEGADRAIN
+309,TM22,TM22,TM22s,4,10000,"The user charges up the Solar Beam on the first turn and deals damage on the second turn.",3,0,0,SOLARBEAM
+310,TM23,TM23,TM23s,4,10000,"This Attack always deals 40HP damage if it hits",3,0,0,DRAGONRAGE
 311,TM24,TM24,TM24s,4,10000,"A strong electric blast is loosed at the target. It may also leave the target with paralysis.",3,0,0,THUNDERBOLT
-312,TM25,TM25,TM25s,4,30000,"A wicked thunderbolt is dropped on the target to inflict damage. It may also leave the target with paralysis.",3,0,0,THUNDER
+312,TM25,TM25,TM25s,4,10000,"A wicked thunderbolt is dropped on the target to inflict damage. It may also leave the target with paralysis.",3,0,0,THUNDER
 313,TM26,TM26,TM26s,4,10000,"The user sets off an earthquake that strikes every Pokémon around it.",3,0,0,EARTHQUAKE
-314,TM27,TM27,TM27s,4,10000,"A full-power attack that grows more powerful the more the user likes its Trainer.",3,0,0,RETURN
-315,TM28,TM28,TM28s,4,30000,"The user drains the target's blood. The user's HP is restored by half the damage taken by the target.",3,0,0,LEECHLIFE
+314,TM27,TM27,TM27s,4,10000,"The Target is knocked out if this move is used in succession",3,0,0,FISSURE
+315,TM28,TM28,TM28s,4,10000,"The user digs a tunnel beneath the playing field and attacks the target the followin turn.",3,0,0,DIG
 316,TM29,TM29,TM29s,4,10000,"The target is hit by a strong telekinetic force. It may also reduce the target's Sp. Def stat.",3,0,0,PSYCHIC
-317,TM30,TM30,TM30s,4,10000,"The user hurls a shadowy blob at the target. It may also lower the target's Sp. Def stat.",3,0,0,SHADOWBALL
-318,TM31,TM31,TM31s,4,10000,"The user attacks with tough fists, etc. It can also break any barrier such as Light Screen and Reflect.",3,0,0,BRICKBREAK
+317,TM30,TM30,TM30s,4,10000,"This move makes you run away from wild battles. It fails in trainer battles",3,0,0,TELEPORT
+318,TM31,TM31,TM31s,4,10000,"MIMIC copies the move last used by the target, it fails if the target already knows the move",3,0,0,MIMIC
 319,TM32,TM32,TM32s,4,10000,"By moving rapidly, the user makes illusory copies of itself to raise its evasiveness.",3,0,0,DOUBLETEAM
 320,TM33,TM33,TM33s,4,10000,"A wondrous wall of light is put up to suppress damage from physical attacks for five turns.",3,0,0,REFLECT
-321,TM34,TM34,TM34s,4,10000,"It swamps the area around the user with a giant sludge wave. It may also poison those hit.",3,0,0,SLUDGEWAVE
+321,TM34,TM34,TM34s,4,10000,"After Bide is selected, the user will be unable to select a move for an idling period of 2 turns. It deals damage equal to twice the damage taken during idle time",3,0,0,BIDE
 322,TM35,TM35,TM35s,4,10000,"The target is scorched with an intense blast of fire. It may also leave the target with a burn.",3,0,0,FLAMETHROWER
 323,TM36,TM36,TM36s,4,10000,"Unsanitary sludge is hurled at the target. It may also poison the target.",3,0,0,SLUDGEBOMB
 324,TM37,TM37,TM37s,4,50000,"A five-turn sandstorm is summoned to hurt all combatants except the Rock, Ground, and Steel types.",3,0,0,SANDSTORM
@@ -364,7 +364,7 @@
 359,TM72,TM72,TM72s,4,10000,"After making its attack, the user rushes back to switch places with a party Pokémon in waiting.",3,0,0,VOLTSWITCH
 360,TM73,TM73,TM73s,4,5000,"A weak electric charge is launched at the target. It causes paralysis if it hits.",3,0,0,THUNDERWAVE
 361,TM74,TM74,TM74s,4,10000,"The user tackles the target with a high-speed spin. The slower the user, the greater the damage.",3,0,0,GYROBALL
-362,TM75,TM75,TM75s,4,10000,"A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.",3,0,0,SWORDSDANCE
+362,TM75,TM75,TM75s,4,10000,"A frenetic dance to uplift the fighting spirit. It sharply raises the user's Attack stat.",3,0,0,WORKUP
 363,TM76,TM76,TM76s,4,5000,"Resisting, the user attacks the opposing Pokémon. The targets' Sp. Atk stat is reduced.",3,0,0,STRUGGLEBUG
 364,TM77,TM77,TM77s,4,10000,"The user hypnotizes itself into copying any stat change made by the target.",3,0,0,PSYCHUP
 365,TM78,TM78,TM78s,4,10000,"The user stomps down on the ground and attacks everything in the area. The targets' Speed stat is reduced.",3,0,0,BULLDOZE
@@ -646,3 +646,5 @@
 631,NSOLARIZER,N-Solarizer,N-Solarizers,8,0,"A machine to fuse Necrozma, which needs light, and Solgaleo.",5,0,6,
 632,NLUNARIZER,N-Lunarizer,N-Lunarizers,8,0,"A machine to fuse Necrozma, which needs light, and Lunala.",5,0,6,
 633,MEGARING,Mega Ring,Mega Rings,8,0,"This ring contains an untold power that somehow enables Pokémon carrying Mega Stones to Mega Evolve.",0,0,6,
+#-------------------------------
+642,DARKBALL,Dark Ball,Dark Balls,3,200,"A prototype device used by Team Shade to shadowify any pokemon, even those owned by other trainers",0,4,4,
