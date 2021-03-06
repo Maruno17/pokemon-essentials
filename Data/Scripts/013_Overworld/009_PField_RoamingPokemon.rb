@@ -119,21 +119,18 @@ end
 # method that will occur in the player's current position.
 def pbRoamingMethodAllowed(roamer_method)
   enc_type = $PokemonEncounters.encounter_type
+  type = GameData::EncounterType.get(enc_type).type
   case roamer_method
   when 0   # Any step-triggered method (except Bug Contest)
-    return EncounterTypes.is_normal_land_type?(enc_type) ||
-           EncounterTypes.is_cave_type?(enc_type) ||
-           EncounterTypes.is_water_type?(enc_type)
+    return [:land, :cave, :water].include?(type)
   when 1   # Walking (except Bug Contest)
-    return EncounterTypes.is_normal_land_type?(enc_type) ||
-           EncounterTypes.is_cave_type?(enc_type)
+    return [:land, :cave].include?(type)
   when 2   # Surfing
-    return EncounterTypes.is_water_type?(enc_type)
+    return type == :water
   when 3   # Fishing
-    return EncounterTypes.is_fishing_type?(enc_type)
+    return type == :fishing
   when 4   # Water-based
-    return EncounterTypes.is_water_type?(enc_type) ||
-           EncounterTypes.is_fishing_type?(enc_type)
+    return [:water, :fishing].include?(type)
   end
   return false
 end

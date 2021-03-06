@@ -150,7 +150,7 @@ end
 # Event handlers
 ################################################################################
 EncounterModifier.register(proc { |encounter|
-  if !EncounterTypes.is_normal_land_type?($PokemonTemp.encounterType) ||
+  if GameData::EncounterType.get($PokemonTemp.encounterType).type != :land ||
      $PokemonGlobal.bicycle || $PokemonGlobal.partner
     pbPokeRadarCancel
     next encounter

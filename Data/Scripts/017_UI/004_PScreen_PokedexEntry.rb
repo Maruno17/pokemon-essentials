@@ -279,11 +279,9 @@ class PokemonPokedexInfo_Scene
 
   def pbFindEncounter(enc_types, species)
     return false if !enc_types
-    enc_types.each do |enc_type|
-      next if !enc_type
-      enc_type.each do |slot|
-        return true if GameData::Species.get(slot[1]).species == species
-      end
+    enc_types.each_value do |slots|
+      next if !slots
+      slots.each { |slot| return true if GameData::Species.get(slot[1]).species == species }
     end
     return false
   end

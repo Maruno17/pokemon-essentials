@@ -371,21 +371,21 @@ Events.onChangeDirection += proc {
 def pbBattleOnStepTaken(repel_active)
   return if $Trainer.able_pokemon_count == 0
   return if !$PokemonEncounters.encounter_possible_here?
-  encounterType = $PokemonEncounters.encounter_type
-  return if encounterType < 0
-  return if !$PokemonEncounters.encounter_triggered?(encounterType, repel_active)
-  $PokemonTemp.encounterType = encounterType
-  encounter = $PokemonEncounters.choose_wild_pokemon(encounterType)
+  encounter_type = $PokemonEncounters.encounter_type
+  return if !encounter_type
+  return if !$PokemonEncounters.encounter_triggered?(encounter_type, repel_active)
+  $PokemonTemp.encounterType = encounter_type
+  encounter = $PokemonEncounters.choose_wild_pokemon(encounter_type)
   encounter = EncounterModifier.trigger(encounter)
   if $PokemonEncounters.allow_encounter?(encounter, repel_active)
     if $PokemonEncounters.have_double_wild_battle?
-      encounter2 = $PokemonEncounters.choose_wild_pokemon(encounterType)
+      encounter2 = $PokemonEncounters.choose_wild_pokemon(encounter_type)
       encounter2 = EncounterModifier.trigger(encounter2)
       pbDoubleWildBattle(encounter[0], encounter[1], encounter2[0], encounter2[1])
     else
       pbWildBattle(encounter[0], encounter[1])
     end
-    $PokemonTemp.encounterType = -1
+    $PokemonTemp.encounterType = nil
     $PokemonTemp.encounterTriggered = true
   end
   $PokemonTemp.forceSingleBattle = false

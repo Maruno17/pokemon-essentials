@@ -105,9 +105,9 @@ class BugContestState
         end
       end
     end
-    enctype=EncounterTypes::BugContest
+    enctype = :BugContest
     if !$PokemonEncounters.map_has_encounter_type?(@contestMap, enctype)
-      enctype=EncounterTypes::Land
+      enctype = :Land
     end
     for cont in @contestants
       enc=$PokemonEncounters.choose_wild_pokemon_for_map(@contestMap,enctype)

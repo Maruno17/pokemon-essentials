@@ -5,18 +5,18 @@ class PokemonEncounters
   attr_reader :step_count
 
   def initialize
-    @step_chances       = nil
-    @encounter_tables   = []
+    @step_chances       = {}
+    @encounter_tables   = {}
     @chance_accumulator = 0
   end
 
   def setup(map_ID)
     @step_count       = 0
-    @step_chances     = nil
-    @encounter_tables = []
+    @step_chances     = {}
+    @encounter_tables = {}
     encounter_data = GameData::Encounter.get(map_ID, $PokemonGlobal.encounter_version)
     if encounter_data
-      @step_chances     = encounter_data.step_chances.clone
+      encounter_data.step_chances.each { |type, value| @step_chances[type] = value }
       @encounter_tables = Marshal.load(Marshal.dump(encounter_data.types))
     end
   end
@@ -31,7 +31,7 @@ class PokemonEncounters
   # Returns whether encounters for the given encounter type have been defined
   # for the current map.
   def has_encounter_type?(enc_type)
-    return false if enc_type < 0
+    return false if !enc_type
     return @encounter_tables[enc_type] && @encounter_tables[enc_type].length > 0
   end
 
@@ -40,7 +40,7 @@ class PokemonEncounters
   # the map's BugContest encounter type to generate caught Pokémon for the other
   # contestants.
   def map_has_encounter_type?(map_ID, enc_type)
-    return false if enc_type < 0
+    return false if !enc_type
     encounter_data = GameData::Encounter.get(map_ID, $PokemonGlobal.encounter_version)
     return false if !encounter_data
     return encounter_data.types[enc_type] && encounter_data.types[enc_type].length > 0
@@ -49,42 +49,39 @@ class PokemonEncounters
   # Returns whether land-like encounters have been defined for the current map.
   # Applies only to encounters triggered by moving around.
   def has_land_encounters?
-    return has_normal_land_encounters? ||
-           has_encounter_type?(EncounterTypes::BugContest)
+    GameData::EncounterType.each do |enc_type|
+      next if ![:land, :contest].include?(enc_type.type)
+      return true if has_encounter_type?(enc_type.id)
+    end
+    return false
   end
 
   # Returns whether land-like encounters have been defined for the current map
   # (ignoring the Bug Catching Contest one).
   # Applies only to encounters triggered by moving around.
   def has_normal_land_encounters?
-    return has_encounter_type?(EncounterTypes::Land) ||
-           has_encounter_type?(EncounterTypes::LandDay) ||
-           has_encounter_type?(EncounterTypes::LandNight) ||
-           has_encounter_type?(EncounterTypes::LandMorning) ||
-           has_encounter_type?(EncounterTypes::LandAfternoon) ||
-           has_encounter_type?(EncounterTypes::LandEvening)
+    GameData::EncounterType.each do |enc_type|
+      return true if enc_type.type == :land && has_encounter_type?(enc_type.id)
+    end
+    return false
   end
 
   # Returns whether cave-like encounters have been defined for the current map.
   # Applies only to encounters triggered by moving around.
   def has_cave_encounters?
-    return has_encounter_type?(EncounterTypes::Cave) ||
-           has_encounter_type?(EncounterTypes::CaveDay) ||
-           has_encounter_type?(EncounterTypes::CaveNight) ||
-           has_encounter_type?(EncounterTypes::CaveMorning) ||
-           has_encounter_type?(EncounterTypes::CaveAfternoon) ||
-           has_encounter_type?(EncounterTypes::CaveEvening)
+    GameData::EncounterType.each do |enc_type|
+      return true if enc_type.type == :cave && has_encounter_type?(enc_type.id)
+    end
+    return false
   end
 
   # Returns whether water-like encounters have been defined for the current map.
   # Applies only to encounters triggered by moving around (i.e. not fishing).
   def has_water_encounters?
-    return has_encounter_type?(EncounterTypes::Water) ||
-           has_encounter_type?(EncounterTypes::WaterDay) ||
-           has_encounter_type?(EncounterTypes::WaterNight) ||
-           has_encounter_type?(EncounterTypes::WaterMorning) ||
-           has_encounter_type?(EncounterTypes::WaterAfternoon) ||
-           has_encounter_type?(EncounterTypes::WaterEvening)
+    GameData::EncounterType.each do |enc_type|
+      return true if enc_type.type == :water && has_encounter_type?(enc_type.id)
+    end
+    return false
   end
 
   #=============================================================================
@@ -103,8 +100,8 @@ class PokemonEncounters
   # Returns whether a wild encounter should happen, based on its encounter
   # chance. Called when taking a step and by Rock Smash.
   def encounter_triggered?(enc_type, repel_active = false, triggered_by_step = true)
-    if enc_type < 0 || enc_type > EncounterTypes::Probabilities.length
-      raise ArgumentError.new(_INTL("Encounter type out of range"))
+    if !enc_type || !GameData::EncounterType.exists?(enc_type)
+      raise ArgumentError.new(_INTL("Encounter type {1} does not exist", enc_type))
     end
     return false if $game_system.encounter_disabled
     return false if !$Trainer
@@ -211,61 +208,47 @@ class PokemonEncounters
     return false
   end
 
+  # Checks the defined encounters for the current map and returns the encounter
+  # type that the given time should produce. Only returns an encounter type if
+  # it has been defined for the current map.
+  def find_valid_encounter_type_for_time(base_type, time)
+    ret = nil
+    if PBDayNight.isDay?(time)
+      try_type = nil
+      if PBDayNight.isMorning?(time)
+        try_type = (base_type.to_s + "Morning").to_sym
+      elsif PBDayNight.isAfternoon?(time)
+        try_type = (base_type.to_s + "Afternoon").to_sym
+      elsif PBDayNight.isEvening?(time)
+        try_type = (base_type.to_s + "Evening").to_sym
+      end
+      ret = try_type if try_type && has_encounter_type?(try_type)
+      if !ret
+        try_type = (base_type.to_s + "Day").to_sym
+        ret = try_type if has_encounter_type?(try_type)
+      end
+    else
+      try_type = (base_type.to_s + "Night").to_sym
+      ret = try_type if has_encounter_type?(try_type)
+    end
+    return ret if ret
+    return (has_encounter_type?(base_type)) ? base_type : nil
+  end
+
   # Returns the encounter method that the current encounter should be generated
   # from, depending on the player's current location.
   def encounter_type
     time = pbGetTimeNow
-    ret = -1
+    ret = nil
     if $PokemonGlobal.surfing
-      ret = EncounterTypes::Water if has_encounter_type?(EncounterTypes::Water)
-      if PBDayNight.isDay?(time)
-        ret = EncounterTypes::WaterDay if has_encounter_type?(EncounterTypes::WaterDay)
-        if PBDayNight.isMorning?(time)
-          ret = EncounterTypes::WaterMorning if has_encounter_type?(EncounterTypes::WaterMorning)
-        elsif PBDayNight.isAfternoon?(time)
-          ret = EncounterTypes::WaterAfternoon if has_encounter_type?(EncounterTypes::WaterAfternoon)
-        elsif PBDayNight.isEvening?(time)
-          ret = EncounterTypes::WaterEvening if has_encounter_type?(EncounterTypes::WaterEvening)
-        end
-      else
-        ret = EncounterTypes::WaterNight if has_encounter_type?(EncounterTypes::WaterNight)
+      ret = find_valid_encounter_type_for_time(:Water, time)
+    else   # Land/Cave (can have both in the same map)
+      if has_land_encounters? && PBTerrain.isGrass?($game_map.terrain_tag($game_player.x, $game_player.y))
+        ret = :BugContest if pbInBugContest? && has_encounter_type?(:BugContest)
+        ret = find_valid_encounter_type_for_time(:Land, time) if !ret
       end
-    else
-      check_land = false
-      if has_cave_encounters?
-        check_land = PBTerrain.isGrass?($game_map.terrain_tag($game_player.x, $game_player.y))
-        ret = EncounterTypes::Cave if has_encounter_type?(EncounterTypes::Cave)
-        if PBDayNight.isDay?(time)
-          ret = EncounterTypes::CaveDay if has_encounter_type?(EncounterTypes::CaveDay)
-          if PBDayNight.isMorning?(time)
-            ret = EncounterTypes::CaveMorning if has_encounter_type?(EncounterTypes::CaveMorning)
-          elsif PBDayNight.isAfternoon?(time)
-            ret = EncounterTypes::CaveAfternoon if has_encounter_type?(EncounterTypes::CaveAfternoon)
-          elsif PBDayNight.isEvening?(time)
-            ret = EncounterTypes::CaveEvening if has_encounter_type?(EncounterTypes::CaveEvening)
-          end
-        else
-          ret = EncounterTypes::CaveNight if has_encounter_type?(EncounterTypes::CaveNight)
-        end
-      end
-      # Land
-      if has_land_encounters? || check_land
-        ret = EncounterTypes::Land if has_encounter_type?(EncounterTypes::Land)
-        if PBDayNight.isDay?(time)
-          ret = EncounterTypes::LandDay if has_encounter_type?(EncounterTypes::LandDay)
-          if PBDayNight.isMorning?(time)
-            ret = EncounterTypes::LandMorning if has_encounter_type?(EncounterTypes::LandMorning)
-          elsif PBDayNight.isAfternoon?(time)
-            ret = EncounterTypes::LandAfternoon if has_encounter_type?(EncounterTypes::LandAfternoon)
-          elsif PBDayNight.isEvening?(time)
-            ret = EncounterTypes::LandEvening if has_encounter_type?(EncounterTypes::LandEvening)
-          end
-        else
-          ret = EncounterTypes::LandNight if has_encounter_type?(EncounterTypes::LandNight)
-        end
-        if pbInBugContest? && has_encounter_type?(EncounterTypes::BugContest)
-          ret = EncounterTypes::BugContest
-        end
+      if !ret && has_cave_encounters?
+        ret = find_valid_encounter_type_for_time(:Cave, time)
       end
     end
     return ret
@@ -277,8 +260,8 @@ class PokemonEncounters
   # list for the given encounter type. Returns nil if there are none defined.
   # A higher chance_rolls makes this method prefer rarer encounter slots.
   def choose_wild_pokemon(enc_type, chance_rolls = 1)
-    if enc_type < 0 || enc_type > EncounterTypes::Probabilities.length
-      raise ArgumentError.new(_INTL("Encounter type out of range"))
+    if !enc_type || !GameData::EncounterType.exists?(enc_type)
+      raise ArgumentError.new(_INTL("Encounter type {1} does not exist", enc_type))
     end
     enc_list = @encounter_tables[enc_type]
     return nil if !enc_list || enc_list.length == 0
@@ -348,8 +331,8 @@ class PokemonEncounters
   # Used by the Bug Catching Contest to choose what the other participants
   # caught.
   def choose_wild_pokemon_for_map(map_ID, enc_type)
-    if enc_type < 0 || enc_type > EncounterTypes::Probabilities.length
-      raise ArgumentError.new(_INTL("Encounter type out of range"))
+    if !enc_type || !GameData::EncounterType.exists?(enc_type)
+      raise ArgumentError.new(_INTL("Encounter type {1} does not exist", enc_type))
     end
     # Get the encounter table
     encounter_data = GameData::Encounter.get(map_ID, $PokemonGlobal.encounter_version)
@@ -443,7 +426,7 @@ def pbEncounter(enc_type)
   else
     pbWildBattle(encounter1[0], encounter1[1])
   end
-	$PokemonTemp.encounterType = -1
+	$PokemonTemp.encounterType = nil
   $PokemonTemp.forceSingleBattle = false
   EncounterModifier.triggerEncounterEnd
   return true

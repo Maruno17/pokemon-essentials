@@ -48,8 +48,8 @@ def pbEncountersEditor
               :id           => key,
               :map          => new_map_ID,
               :version      => new_version,
-              :step_chances => [],
-              :types        => []
+              :step_chances => {},
+              :types        => {}
             }
             GameData::Encounter.register(encounter_hash)
             maps.push([new_map_ID, new_version])
@@ -73,21 +73,23 @@ def pbEncountersEditor
             if GameData::Encounter.exists?(new_map_ID, new_version)
               pbMessage(_INTL("A set of encounters for map {1} version {2} already exists.", new_map_ID, new_version))
             else
-              types = []
-              GameData::Encounter.get(this_set[0], this_set[1]).types.each_with_index do |enc_type, i|
-                next if !enc_type
-                types[i] = []
-                enc_type.each { |slot| types[i].push(slot.clone) }
-              end
               # Construct encounter hash
               key = sprintf("%s_%d", new_map_ID, new_version).to_sym
               encounter_hash = {
                 :id           => key,
                 :map          => new_map_ID,
                 :version      => new_version,
-                :step_chances => GameData::Encounter.get(this_set[0], this_set[1]).step_chances.clone,
-                :types        => types
+                :step_chances => {},
+                :types        => {}
               }
+              GameData::Encounter.get(this_set[0], this_set[1]).step_chances.each do |type, value|
+                encounter_hash[:step_chances][type] = value
+              end
+              GameData::Encounter.get(this_set[0], this_set[1]).types.each do |type, slots|
+                next if !type || !slots || slots.length == 0
+                encounter_hash[:types][type] = []
+                slots.each { |slot| encounter_hash[:types][type].push(slot.clone) }
+              end
               GameData::Encounter.register(encounter_hash)
               maps.push([new_map_ID, new_version])
               maps.sort! { |a, b| (a[0] == b[0]) ? a[1] <=> b[1] : a[0] <=> b[0] }
@@ -142,10 +144,10 @@ def pbEncounterMapVersionEditor(enc_data)
         commands.push(_INTL("Map ID={1}", enc_data.map))
       end
       commands.push(_INTL("Version={1}", enc_data.version))
-      enc_data.types.each_with_index do |enc_type, i|
-        next if !enc_type
-        commands.push(_INTL("{1} (x{2})", EncounterTypes::Names[i], enc_type.length))
-        enc_types.push(i)
+      enc_data.types.each do |enc_type, slots|
+        next if !enc_type || !slots || slots.length == 0
+        commands.push(_INTL("{1} (x{2})", enc_type.to_s, slots.length))
+        enc_types.push(enc_type)
       end
       commands.push(_INTL("[Add new encounter type]"))
       need_refresh = false
@@ -182,16 +184,16 @@ def pbEncounterMapVersionEditor(enc_data)
     elsif ret == commands.length - 1   # Add new encounter type
       new_type_commands = []
       new_types = []
-      EncounterTypes::Names.each_with_index do |new_type, i|
-        next if enc_data.types[i]
-        new_type_commands.push(new_type)
-        new_types.push(i)
+      GameData::EncounterType.each do |enc|
+        next if enc_data.types[enc.id]
+        new_type_commands.push(enc.real_name)
+        new_types.push(enc.id)
       end
       if new_type_commands.length > 0
         chosen_type_cmd = pbShowCommands(nil, new_type_commands, -1)
         if chosen_type_cmd >= 0
           new_type = new_types[chosen_type_cmd]
-          enc_data.step_chances[new_type] = 0
+          enc_data.step_chances[new_type] = GameData::EncounterType.get(new_type).trigger_chance
           enc_data.types[new_type] = []
           pbEncounterTypeEditor(enc_data, new_type)
           enc_types.push(new_type)
@@ -210,10 +212,10 @@ def pbEncounterMapVersionEditor(enc_data)
       when 1   # Copy
         new_type_commands = []
         new_types = []
-        EncounterTypes::Names.each_with_index do |new_type, i|
-          next if enc_data.types[i]
-          new_type_commands.push(new_type)
-          new_types.push(i)
+        GameData::EncounterType.each do |enc|
+          next if enc_data.types[enc.id]
+          new_type_commands.push(enc.real_name)
+          new_types.push(enc.id)
         end
         if new_type_commands.length > 0
           chosen_type_cmd = pbMessage(_INTL("Choose an encounter type to copy to."),
@@ -222,7 +224,7 @@ def pbEncounterMapVersionEditor(enc_data)
             new_type = new_types[chosen_type_cmd]
             enc_data.step_chances[new_type] = enc_data.step_chances[this_type]
             enc_data.types[new_type] = []
-            enc_data.types[this_type].each { |enc| enc_data.types[new_type].push(enc.clone) }
+            enc_data.types[this_type].each { |slot| enc_data.types[new_type].push(slot.clone) }
             enc_types.push(new_type)
             ret = enc_types.sort.index(new_type) + 2
             need_refresh = true
@@ -231,9 +233,9 @@ def pbEncounterMapVersionEditor(enc_data)
           pbMessage(_INTL("There are no unused encounter types to copy to."))
         end
       when 2   # Delete
-        if pbConfirmMessage(_INTL("Delete the encounter type {1}?", EncounterTypes::Names[this_type]))
-          enc_data.step_chances[this_type] = nil
-          enc_data.types[this_type] = nil
+        if pbConfirmMessage(_INTL("Delete the encounter type {1}?", GameData::EncounterType.get(this_type).real_name))
+          enc_data.step_chances.delete(this_type)
+          enc_data.types.delete(this_type)
           need_refresh = true
         end
       end
@@ -258,9 +260,10 @@ def pbEncounterTypeEditor(enc_data, enc_type)
   need_refresh = true
   loop do
     if need_refresh
+      enc_type_name = GameData::EncounterType.get(enc_type).real_name
       commands.clear
       commands.push(_INTL("Step chance={1}%", enc_data.step_chances[enc_type] || 0))
-      commands.push(_INTL("Encounter type={1}", EncounterTypes::Names[enc_type]))
+      commands.push(_INTL("Encounter type={1}", enc_type_name))
       if enc_data.types[enc_type] && enc_data.types[enc_type].length > 0
         enc_data.types[enc_type].each do |slot|
           commands.push(EncounterSlotProperty.format(slot))
@@ -281,24 +284,24 @@ def pbEncounterTypeEditor(enc_data, enc_type)
       new_type_commands = []
       new_types = []
       chosen_type_cmd = 0
-      EncounterTypes::Names.each_with_index do |type_name, i|
-        next if enc_data.types[i] && i != enc_type
-        new_type_commands.push(type_name)
-        new_types.push(i)
-        chosen_type_cmd = new_type_commands.length - 1 if i == enc_type
+      GameData::EncounterType.each do |enc|
+        next if enc_data.types[enc.id] && enc.id != enc_type
+        new_type_commands.push(enc.real_name)
+        new_types.push(enc.id)
+        chosen_type_cmd = new_type_commands.length - 1 if enc.id == enc_type
       end
       chosen_type_cmd = pbShowCommands(nil, new_type_commands, -1, chosen_type_cmd)
       if chosen_type_cmd >= 0 && new_types[chosen_type_cmd] != enc_type
         new_type = new_types[chosen_type_cmd]
         enc_data.step_chances[new_type] = enc_data.step_chances[enc_type]
-        enc_data.step_chances[enc_type] = nil
+        enc_data.step_chances.delete(enc_type)
         enc_data.types[new_type] = enc_data.types[enc_type]
-        enc_data.types[enc_type] = nil
+        enc_data.types.delete(enc_type)
         enc_type = new_type
         need_refresh = true
       end
     elsif ret == commands.length - 1   # Add new encounter slot
-      new_slot_data = EncounterSlotProperty.set(EncounterTypes::Names[enc_type], nil)
+      new_slot_data = EncounterSlotProperty.set(enc_type_name, nil)
       if new_slot_data
         enc_data.types[enc_type].push(new_slot_data)
         need_refresh = true
@@ -307,7 +310,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
       case pbShowCommands(nil, [_INTL("Edit"), _INTL("Copy"), _INTL("Delete"), _INTL("Cancel")], 4)
       when 0   # Edit
         old_slot_data = enc_data.types[enc_type][ret - 2]
-        new_slot_data = EncounterSlotProperty.set(EncounterTypes::Names[enc_type], old_slot_data.clone)
+        new_slot_data = EncounterSlotProperty.set(enc_type_name, old_slot_data.clone)
         if new_slot_data && new_slot_data != old_slot_data
           enc_data.types[enc_type][ret - 2] = new_slot_data
           need_refresh = true

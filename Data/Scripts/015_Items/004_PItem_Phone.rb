@@ -254,20 +254,11 @@ def pbEncounterSpecies(phonenum)
   encounter_data = GameData::Encounter.get(phonenum[6], $PokemonGlobal.encounter_version)
   return "" if !encounter_data
   enc_tables = encounter_data.types
-  species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::Land])
+  species = pbRandomEncounterSpecies(enc_tables[:Land])
   if !species
-    species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::Cave])
+    species = pbRandomEncounterSpecies(enc_tables[:Cave])
     if !species
-      species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::LandDay])
-      if !species
-        species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::LandMorning])
-        if !species
-          species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::LandNight])
-          if !species
-            species = pbRandomEncounterSpecies(enc_tables[EncounterTypes::Water])
-          end
-        end
-      end
+      species = pbRandomEncounterSpecies(enc_tables[:Water])
     end
   end
   return "" if !species

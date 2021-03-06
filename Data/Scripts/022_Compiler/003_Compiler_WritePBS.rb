@@ -543,18 +543,18 @@ module Compiler
         else
           f.write(sprintf("[%03d]%s\r\n", encounter_data.map, map_name))
         end
-        encounter_data.types.each_with_index do |entries, type|
-          next if !entries || entries.length == 0
+        encounter_data.types.each do |type, slots|
+          next if !slots || slots.length == 0
           if encounter_data.step_chances[type] && encounter_data.step_chances[type] > 0
-            f.write(sprintf("%s,%d\r\n", EncounterTypes::Names[type], encounter_data.step_chances[type]))
+            f.write(sprintf("%s,%d\r\n", type.to_s, encounter_data.step_chances[type]))
           else
-            f.write(sprintf("%s\r\n", EncounterTypes::Names[type]))
+            f.write(sprintf("%s\r\n", type.to_s))
           end
-          entries.each do |entry|
-            if entry[2] == entry[3]
-              f.write(sprintf("    %d,%s,%d\r\n", entry[0], entry[1], entry[2]))
+          slots.each do |slot|
+            if slot[2] == slot[3]
+              f.write(sprintf("    %d,%s,%d\r\n", slot[0], slot[1], slot[2]))
             else
-              f.write(sprintf("    %d,%s,%d,%d\r\n", entry[0], entry[1], entry[2], entry[3]))
+              f.write(sprintf("    %d,%s,%d,%d\r\n", slot[0], slot[1], slot[2], slot[3]))
             end
           end
         end

@@ -545,7 +545,7 @@ def pbHeadbuttEffect(event=nil)
   if rand(10)>=chance
     pbMessage(_INTL("Nope. Nothing..."))
   else
-    enctype = (chance==1) ? EncounterTypes::HeadbuttLow : EncounterTypes::HeadbuttHigh
+    enctype = (chance==1) ? :HeadbuttLow : :HeadbuttHigh
     if !pbEncounter(enctype)
       pbMessage(_INTL("Nope. Nothing..."))
     end
@@ -592,8 +592,8 @@ HiddenMoveHandlers::UseMove.add(:HEADBUTT,proc { |move,pokemon|
 # Rock Smash
 #===============================================================================
 def pbRockSmashRandomEncounter
-  if $PokemonEncounters.encounter_triggered?(EncounterTypes::RockSmash, false, false)
-    pbEncounter(EncounterTypes::RockSmash)
+  if $PokemonEncounters.encounter_triggered?(:RockSmash, false, false)
+    pbEncounter(:RockSmash)
   end
 end
 

@@ -40,9 +40,7 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
     if $PokemonGlobal.surfing || $PokemonGlobal.diving
       location = 3
     elsif $PokemonTemp.encounterType &&
-       ($PokemonTemp.encounterType==EncounterTypes::OldRod ||
-       $PokemonTemp.encounterType==EncounterTypes::GoodRod ||
-       $PokemonTemp.encounterType==EncounterTypes::SuperRod)
+       GameData::EncounterType.get($PokemonTemp.encounterType).type == :fishing
       location = 3
     elsif $PokemonEncounters.has_cave_encounters?
       location = 2

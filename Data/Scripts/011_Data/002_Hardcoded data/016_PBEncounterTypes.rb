@@ -1,94 +1,195 @@
-module EncounterTypes
-  Land           = 0
-  LandDay        = 1
-  LandNight      = 2
-  LandMorning    = 3
-  LandAfternoon  = 4
-  LandEvening    = 5
-  Cave           = 6
-  CaveDay        = 7
-  CaveNight      = 8
-  CaveMorning    = 9
-  CaveAfternoon  = 10
-  CaveEvening    = 11
-  Water          = 12
-  WaterDay       = 13
-  WaterNight     = 14
-  WaterMorning   = 15
-  WaterAfternoon = 16
-  WaterEvening   = 17
-  OldRod         = 18
-  GoodRod        = 19
-  SuperRod       = 20
-  RockSmash      = 21
-  HeadbuttLow    = 22
-  HeadbuttHigh   = 23
-  BugContest     = 24
+module GameData
+  class EncounterType
+    attr_reader :id
+    attr_reader :real_name
+    attr_reader :type   # :land, :cave, :water, :fishing, :contest, :none
+    attr_reader :trigger_chance
+    attr_reader :old_slots
 
-  Names = [
-    "Land", "LandDay", "LandNight", "LandMorning", "LandAfternoon", "LandEvening",
-    "Cave", "CaveDay", "CaveNight", "CaveMorning", "CaveAfternoon", "CaveEvening",
-    "Water", "WaterDay", "WaterNight", "WaterMorning", "WaterAfternoon", "WaterEvening",
-    "OldRod", "GoodRod", "SuperRod", "RockSmash", "HeadbuttLow", "HeadbuttHigh",
-    "BugContest"
-  ]
-  Probabilities = [
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1],
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1],
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1],
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1],
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1],
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1],
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1],
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1],
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1],
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1],
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1],
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1],
-    [60, 30, 5, 4, 1],
-    [60, 30, 5, 4, 1],
-    [60, 30, 5, 4, 1],
-    [60, 30, 5, 4, 1],
-    [60, 30, 5, 4, 1],
-    [60, 30, 5, 4, 1],
-    [70, 30],
-    [60, 20, 20],
-    [40, 40, 15, 4, 1],
-    [60, 30, 5, 4, 1],
-    [30, 25, 20, 10, 5, 5, 4, 1],
-    [30, 25, 20, 10, 5, 5, 4, 1],
-    [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
-  ]
-  Chances_Per_Step = [
-    21, 21, 21, 21, 21, 21,   # Lands
-    5, 5, 5, 5, 5, 5,         # Caves
-    2, 2, 2, 2, 2, 2,         # Waters
-    0, 0, 0, 50, 0, 0, 21
-  ]
-  Kinds = [
-    1, 1, 1, 1, 1, 1,   # Lands
-    2, 2, 2, 2, 2, 2,   # Caves
-    3, 3, 3, 3, 3, 3,   # Waters
-    0, 0, 0, 0, 0, 0, 1
-  ]
+    DATA = {}
 
-  def self.is_land_type?(enc_type)
-    return self.is_normal_land_type?(enc_type) || enc_type == BugContest
-  end
+    extend ClassMethodsSymbols
+    include InstanceMethods
 
-  def self.is_normal_land_type?(enc_type)
-    return [Land, LandDay, LandNight, LandMorning, LandAfternoon, LandEvening].include?(enc_type)
-  end
+    def self.load; end
+    def self.save; end
 
-  def self.is_cave_type?(enc_type)
-    return [Cave, CaveDay, CaveNight, CaveMorning, CaveAfternoon, CaveEvening].include?(enc_type)
-  end
-
-  def self.is_water_type?(enc_type)
-    return [Water, WaterDay, WaterNight, WaterMorning, WaterAfternoon, WaterEvening].include?(enc_type)
-  end
-
-  def self.is_fishing_type?(enc_type)
-    return [OldRod, GoodRod, SuperRod].include?(enc_type)
+    def initialize(hash)
+      @id             = hash[:id]
+      @real_name      = hash[:id].to_s        || "Unnamed"
+      @type           = hash[:type]           || :none
+      @trigger_chance = hash[:trigger_chance] || 0
+      @old_slots      = hash[:old_slots]
+    end
   end
 end
+
+GameData::EncounterType.register({
+  :id             => :Land,
+  :type           => :land,
+  :trigger_chance => 21,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :LandDay,
+  :type           => :land,
+  :trigger_chance => 21,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :LandNight,
+  :type           => :land,
+  :trigger_chance => 21,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :LandMorning,
+  :type           => :land,
+  :trigger_chance => 21,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :LandAfternoon,
+  :type           => :land,
+  :trigger_chance => 21,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :LandEvening,
+  :type           => :land,
+  :trigger_chance => 21,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :Cave,
+  :type           => :cave,
+  :trigger_chance => 5,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :CaveDay,
+  :type           => :cave,
+  :trigger_chance => 5,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :CaveNight,
+  :type           => :cave,
+  :trigger_chance => 5,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :CaveMorning,
+  :type           => :cave,
+  :trigger_chance => 5,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :CaveAfternoon,
+  :type           => :cave,
+  :trigger_chance => 5,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :CaveEvening,
+  :type           => :cave,
+  :trigger_chance => 5,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :Water,
+  :type           => :water,
+  :trigger_chance => 2,
+  :old_slots      => [60, 30, 5, 4, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :WaterDay,
+  :type           => :water,
+  :trigger_chance => 2,
+  :old_slots      => [60, 30, 5, 4, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :WaterNight,
+  :type           => :water,
+  :trigger_chance => 2,
+  :old_slots      => [60, 30, 5, 4, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :WaterMorning,
+  :type           => :water,
+  :trigger_chance => 2,
+  :old_slots      => [60, 30, 5, 4, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :WaterAfternoon,
+  :type           => :water,
+  :trigger_chance => 2,
+  :old_slots      => [60, 30, 5, 4, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :WaterEvening,
+  :type           => :water,
+  :trigger_chance => 2,
+  :old_slots      => [60, 30, 5, 4, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :OldRod,
+  :type           => :fishing,
+  :old_slots      => [70, 30]
+})
+
+GameData::EncounterType.register({
+  :id             => :GoodRod,
+  :type           => :fishing,
+  :old_slots      => [60, 20, 20]
+})
+
+GameData::EncounterType.register({
+  :id             => :SuperRod,
+  :type           => :fishing,
+  :old_slots      => [40, 40, 15, 4, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :RockSmash,
+  :type           => :none,
+  :trigger_chance => 50,
+  :old_slots      => [60, 30, 5, 4, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :HeadbuttLow,
+  :type           => :none,
+  :old_slots      => [30, 25, 20, 10, 5, 5, 4, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :HeadbuttHigh,
+  :type           => :none,
+  :old_slots      => [30, 25, 20, 10, 5, 5, 4, 1]
+})
+
+GameData::EncounterType.register({
+  :id             => :BugContest,
+  :type           => :contest,
+  :trigger_chance => 21,
+  :old_slots      => [20, 20, 10, 10, 10, 10, 5, 5, 4, 4, 1, 1]
+})

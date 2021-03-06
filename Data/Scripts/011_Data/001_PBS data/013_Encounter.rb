@@ -62,7 +62,7 @@ module GameData
       @map          = hash[:map]
       @version      = hash[:version]      || 0
       @step_chances = hash[:step_chances]
-      @types        = hash[:types]        || []
+      @types        = hash[:types]        || {}
     end
   end
 end

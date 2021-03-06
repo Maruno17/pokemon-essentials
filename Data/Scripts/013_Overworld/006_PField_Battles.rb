@@ -169,9 +169,7 @@ def pbGetEnvironment
   ret = :None
   map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
   ret = map_metadata.battle_environment if map_metadata && map_metadata.battle_environment
-  if $PokemonTemp.encounterType == EncounterTypes::OldRod ||
-     $PokemonTemp.encounterType == EncounterTypes::GoodRod ||
-     $PokemonTemp.encounterType == EncounterTypes::SuperRod
+  if GameData::EncounterType.get($PokemonTemp.encounterType).type == :fishing
     terrainTag = pbFacingTerrainTag
   else
     terrainTag = $game_player.terrain_tag
