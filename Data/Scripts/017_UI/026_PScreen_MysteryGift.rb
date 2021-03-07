@@ -7,8 +7,7 @@
 # NOTE: Essentials cannot handle https addresses. You must use a http address.
 #===============================================================================
 module MysteryGift
-  URL = "http://images1.wikia.nocookie.net/pokemonessentials/images/e/e7/MysteryGift.txt"
-  # URL = "http://pastebin.com/raw/w6BqqUsm"
+  URL = "https://pastebin.com/raw/w6BqqUsm"
 end
 
 #===============================================================================
@@ -57,7 +56,8 @@ def pbEditMysteryGift(type,item,id=0,giftname="")
       end
     end
     if id==0
-      master=[]; idlist=[]
+      master=[]
+      idlist=[]
       if safeExists?("MysteryGiftMaster.txt")
         master=IO.read("MysteryGiftMaster.txt")
         master=pbMysteryGiftDecrypt(master)
@@ -146,7 +146,7 @@ def pbManageMysteryGifts
     pbMessage(_INTL("Online Mystery Gifts found.\\wtnp[20]"))
     online=pbMysteryGiftDecrypt(online)
     t=[]
-    for gift in online; t.push(gift[0]); end
+    online.each { |gift| t.push(gift[0]) }
     online=t
   end
   # Show list of all gifts.
@@ -155,9 +155,9 @@ def pbManageMysteryGifts
     commands=pbRefreshMGCommands(master,online)
     command=pbMessage(_INTL("\\ts[]Manage Mystery Gifts (X=online)."),commands,-1,nil,command)
     # Gift chosen
-    if command==-1 || command==commands.length-1
+    if command==-1 || command==commands.length-1   # Cancel
       break
-    elsif command==commands.length-2
+    elsif command==commands.length-2   # Export selected to file
       begin
         newfile=[]
         for gift in master
@@ -170,7 +170,7 @@ def pbManageMysteryGifts
       rescue
         pbMessage(_INTL("Couldn't save the gifts to MysteryGift.txt."))
       end
-    elsif command>=0 && command<commands.length-2
+    elsif command>=0 && command<commands.length-2   # A gift
       cmd=0
       loop do
         commands=pbRefreshMGCommands(master,online)
@@ -336,7 +336,16 @@ end
 
 def pbMysteryGiftDecrypt(gift)
   return [] if gift==""
-  ret=Marshal.restore(Zlib::Inflate.inflate(gift.unpack("m")[0]))
+  ret = Marshal.restore(Zlib::Inflate.inflate(gift.unpack("m")[0]))
+  if ret
+    ret.each do |gift|
+      if gift[1] == 0   # Pokémon
+        gift[2] = PokeBattle_Pokemon.convert(gift[2])
+      else   # Item
+        gift[2] = GameData::Item.get(gift[2]).id
+      end
+    end
+  end
   return ret
 end
 

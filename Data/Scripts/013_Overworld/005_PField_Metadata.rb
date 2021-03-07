@@ -10,7 +10,6 @@ class PokemonGlobalMetadata
   attr_accessor :sliding
   attr_accessor :fishing
   attr_accessor :runningShoes
-  attr_accessor :runtoggle
   # Player data
   attr_accessor :startTime
   attr_accessor :stepcount
@@ -71,7 +70,6 @@ class PokemonGlobalMetadata
     @sliding              = false
     @fishing              = false
     @runningShoes         = false
-    @runtoggle            = false
     # Player data
     @startTime            = Time.now
     @stepcount            = 0

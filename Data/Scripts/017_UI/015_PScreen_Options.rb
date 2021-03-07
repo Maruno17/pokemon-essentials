@@ -349,14 +349,9 @@ class PokemonOption_Scene
          proc { $PokemonSystem.battlestyle },
          proc { |value| $PokemonSystem.battlestyle = value }
        ),
-       EnumOption.new(_INTL("Running Key"),[_INTL("Hold"),_INTL("Toggle")],
+       EnumOption.new(_INTL("Default Movement"),[_INTL("Walking"),_INTL("Running")],
          proc { $PokemonSystem.runstyle },
-         proc { |value|
-           if $PokemonSystem.runstyle!=value
-             $PokemonSystem.runstyle = value
-             $PokemonGlobal.runtoggle = false if $PokemonGlobal
-           end
-         }
+         proc { |value| $PokemonSystem.runstyle = value }
        ),
        NumberOption.new(_INTL("Speech Frame"),1,Settings::SPEECH_WINDOWSKINS.length,
          proc { $PokemonSystem.textskin },

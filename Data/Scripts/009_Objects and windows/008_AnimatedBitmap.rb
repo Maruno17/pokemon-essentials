@@ -296,7 +296,7 @@ class GifBitmap
   end
 
   def totalFrames
-    @totalframes/2 # Due to frame count being incremented by 2
+    @totalframes/2   # Due to frame count being incremented by 2
   end
 
   def disposed?
@@ -311,7 +311,7 @@ class GifBitmap
     @gifbitmaps.length==0 ? 0 : @gifbitmaps[0].height
   end
 
- # This function must be called in order to animate the GIF image.
+  # This function must be called in order to animate the GIF image.
   def update
     return if disposed?
     if @gifbitmaps.length>0

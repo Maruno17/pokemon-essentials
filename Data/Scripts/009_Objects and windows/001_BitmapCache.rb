@@ -114,7 +114,7 @@ class BitmapWrapper < Bitmap
   def dispose
     return if self.disposed?
     @refcount -= 1
-    super if @refcount == 0
+    super if @refcount <= 0
   end
 
   def initialize(*arg)
@@ -265,8 +265,8 @@ module BitmapCache
     objKey = fromCache(key)
     if !objKey
       bitmap = BitmapWrapper.new(Game_Map::TILE_WIDTH, Game_Map::TILE_HEIGHT)
-      x = (tile_id - 384) % 8 * 32
-      y = (tile_id - 384) / 8 * 32
+      x = (tile_id - 384) % 8 * Game_Map::TILE_WIDTH
+      y = (tile_id - 384) / 8 * Game_Map::TILE_HEIGHT
       rect = Rect.new(x, y, Game_Map::TILE_WIDTH, Game_Map::TILE_HEIGHT)
       tileset = yield(filename)
       bitmap.blt(0, 0, tileset, rect)

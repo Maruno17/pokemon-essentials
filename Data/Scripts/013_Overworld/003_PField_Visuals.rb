@@ -335,7 +335,7 @@ class LocationWindow
       @window.dispose
       return
     end
-    if @frames>80
+    if @frames > Graphics.frame_rate * 2
       @window.y -= 4
       @window.dispose if @window.y+@window.height<0
     else

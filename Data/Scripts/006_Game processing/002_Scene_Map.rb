@@ -187,10 +187,6 @@ class Scene_Map
         unless $game_player.moving?
           $PokemonTemp.keyItemCalling = true
         end
-      elsif Input.trigger?(Input::SPECIAL)
-        if $PokemonSystem.runstyle==1
-          $PokemonGlobal.runtoggle = !$PokemonGlobal.runtoggle
-        end
       elsif Input.press?(Input::F9)
         $game_temp.debug_calling = true if $DEBUG
       end

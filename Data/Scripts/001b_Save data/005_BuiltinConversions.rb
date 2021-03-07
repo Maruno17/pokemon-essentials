@@ -39,8 +39,8 @@ SaveData.register_conversion(:v19_convert_player) do
   display_title 'Converting player trainer class'
   to_all do |save_data|
     next if save_data[:player].is_a?(PlayerTrainer)
-    # Conversion of the party is handled in PokeBattle_Trainer.copy
-    save_data[:player] = PokeBattle_Trainer.copy(save_data[:player])
+    # Conversion of the party is handled in PokeBattle_Trainer.convert
+    save_data[:player] = PokeBattle_Trainer.convert(save_data[:player])
   end
 end
 

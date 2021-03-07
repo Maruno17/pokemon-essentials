@@ -48,7 +48,7 @@ def pbDownloadData(url, filename = nil, authorization = nil, depth = 0, &block)
   return ret if !ret.is_a?(Hash)
   return "" if ret[:status] != 200
   return ret[:body] if !filename
-  File.open(filename, "wb"){|f|f.write(ret[:body])}
+  File.open(filename, "wb") { |f| f.write(ret[:body]) }
   return ""
 end
 
