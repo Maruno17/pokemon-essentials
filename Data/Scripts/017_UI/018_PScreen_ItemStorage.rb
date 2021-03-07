@@ -30,20 +30,19 @@ class Window_PokemonItemStorage < Window_DrawableCommand
 
   def drawItem(index,_count,rect)
     rect = drawCursor(index,rect)
-    ypos = rect.y
     textpos = []
     if index==@bag.length
-      textpos.push([_INTL("CANCEL"),rect.x,ypos,false,self.baseColor,self.shadowColor])
+      textpos.push([_INTL("CANCEL"),rect.x,rect.y-6,false,self.baseColor,self.shadowColor])
     else
       item     = @bag[index][0]
       itemname = @adapter.getDisplayName(item)
       baseColor = (index==@sortIndex) ? Color.new(248,24,24) : self.baseColor
-      textpos.push([itemname,rect.x,ypos,false,self.baseColor,self.shadowColor])
+      textpos.push([itemname,rect.x,rect.y-6,false,self.baseColor,self.shadowColor])
       if !GameData::Item.get(item).is_important?   # Not a Key item or HM (or infinite TM)
         qty     = _ISPRINTF("x{1: 2d}",@bag[index][1])
         sizeQty = self.contents.text_size(qty).width
         xQty = rect.x+rect.width-sizeQty-2
-        textpos.push([qty,xQty,ypos,false,baseColor,self.shadowColor])
+        textpos.push([qty,xQty,rect.y-6,false,baseColor,self.shadowColor])
       end
     end
     pbDrawTextPositions(self.contents,textpos)
@@ -283,50 +282,50 @@ module UIHelper
     helpwindow.letterbyletter = false
     curnumber = initnum
     ret = 0
-    using(numwindow = Window_UnformattedTextPokemon.new("x000")) {
-      numwindow.viewport       = helpwindow.viewport
-      numwindow.letterbyletter = false
-      numwindow.text           = _ISPRINTF("x{1:03d}",curnumber)
-      numwindow.resizeToFit(numwindow.text,Graphics.width)
-      pbBottomRight(numwindow)
-      helpwindow.resizeHeightToFit(helpwindow.text,Graphics.width-numwindow.width)
-      pbBottomLeft(helpwindow)
-      loop do
-        Graphics.update
-        Input.update
-        numwindow.update
-        (block_given?) ? yield : helpwindow.update
-        if Input.trigger?(Input::BACK)
-          ret = 0
-          pbPlayCancelSE
-          break
-        elsif Input.trigger?(Input::USE)
-          ret = curnumber
-          pbPlayDecisionSE
-          break
-        elsif Input.repeat?(Input::UP)
-          curnumber += 1
-          curnumber = 1 if curnumber>maximum
-          numwindow.text = _ISPRINTF("x{1:03d}",curnumber)
-          pbPlayCursorSE
-        elsif Input.repeat?(Input::DOWN)
-          curnumber -= 1
-          curnumber = maximum if curnumber<1
-          numwindow.text = _ISPRINTF("x{1:03d}",curnumber)
-          pbPlayCursorSE
-        elsif Input.repeat?(Input::LEFT)
-          curnumber -= 10
-          curnumber = 1 if curnumber<1
-          numwindow.text = _ISPRINTF("x{1:03d}",curnumber)
-          pbPlayCursorSE
-        elsif Input.repeat?(Input::RIGHT)
-          curnumber += 10
-          curnumber = maximum if curnumber>maximum
-          numwindow.text = _ISPRINTF("x{1:03d}",curnumber)
-          pbPlayCursorSE
-        end
+    numwindow = Window_UnformattedTextPokemon.new("x000")
+    numwindow.viewport       = helpwindow.viewport
+    numwindow.letterbyletter = false
+    numwindow.text           = _ISPRINTF("x{1:03d}",curnumber)
+    numwindow.resizeToFit(numwindow.text,Graphics.width)
+    pbBottomRight(numwindow)
+    helpwindow.resizeHeightToFit(helpwindow.text,Graphics.width-numwindow.width)
+    pbBottomLeft(helpwindow)
+    loop do
+      Graphics.update
+      Input.update
+      numwindow.update
+      helpwindow.update
+      if Input.trigger?(Input::BACK)
+        ret = 0
+        pbPlayCancelSE
+        break
+      elsif Input.trigger?(Input::USE)
+        ret = curnumber
+        pbPlayDecisionSE
+        break
+      elsif Input.repeat?(Input::UP)
+        curnumber += 1
+        curnumber = 1 if curnumber>maximum
+        numwindow.text = _ISPRINTF("x{1:03d}",curnumber)
+        pbPlayCursorSE
+      elsif Input.repeat?(Input::DOWN)
+        curnumber -= 1
+        curnumber = maximum if curnumber<1
+        numwindow.text = _ISPRINTF("x{1:03d}",curnumber)
+        pbPlayCursorSE
+      elsif Input.repeat?(Input::LEFT)
+        curnumber -= 10
+        curnumber = 1 if curnumber<1
+        numwindow.text = _ISPRINTF("x{1:03d}",curnumber)
+        pbPlayCursorSE
+      elsif Input.repeat?(Input::RIGHT)
+        curnumber += 10
+        curnumber = maximum if curnumber>maximum
+        numwindow.text = _ISPRINTF("x{1:03d}",curnumber)
+        pbPlayCursorSE
       end
-    }
+    end
+    numwindow.dispose
     helpwindow.visible = oldvisible
     return ret
   end

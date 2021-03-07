@@ -71,16 +71,16 @@ class ReadyMenuButton < SpriteWrapper
     self.bitmap.blt(0,0,@button.bitmap,rect)
     textx = (@command[2]) ? 164 : (GameData::Item.get(@command[0]).is_important?) ? 146 : 124
     textpos = [
-       [@command[1],textx,18,2,Color.new(248,248,248),Color.new(40,40,40),1],
+       [@command[1],textx,16,2,Color.new(248,248,248),Color.new(40,40,40),1],
     ]
     if !@command[2]
       if !GameData::Item.get(@command[0]).is_important?
         qty = $PokemonBag.pbQuantity(@command[0])
         if qty>99
-          textpos.push([_INTL(">99"),230,18,1,
+          textpos.push([_INTL(">99"),230,16,1,
              Color.new(248,248,248),Color.new(40,40,40),1])
         else
-          textpos.push([_INTL("x{1}",qty),230,18,1,
+          textpos.push([_INTL("x{1}",qty),230,16,1,
              Color.new(248,248,248),Color.new(40,40,40),1])
         end
       end

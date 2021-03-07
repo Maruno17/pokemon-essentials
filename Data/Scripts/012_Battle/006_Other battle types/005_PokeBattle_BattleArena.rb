@@ -200,15 +200,15 @@ class PokeBattle_Scene
     window.contents.clear
     pbSetSystemFont(window.contents)
     textpos = [
-       [battler1.name,64,0,2,Color.new(248,0,0),Color.new(208,208,200)],
-       [_INTL("VS"),144,0,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [battler2.name,224,0,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [_INTL("Mind"),144,48,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [_INTL("Skill"),144,80,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [_INTL("Body"),144,112,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [sprintf("%d",total1),64,160,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [_INTL("Judgment"),144,160,2,Color.new(72,72,72),Color.new(208,208,200)],
-       [sprintf("%d",total2),224,160,2,Color.new(72,72,72),Color.new(208,208,200)]
+       [battler1.name,64,-6,2,Color.new(248,0,0),Color.new(208,208,200)],
+       [_INTL("VS"),144,-6,2,Color.new(72,72,72),Color.new(208,208,200)],
+       [battler2.name,224,-6,2,Color.new(72,72,72),Color.new(208,208,200)],
+       [_INTL("Mind"),144,42,2,Color.new(72,72,72),Color.new(208,208,200)],
+       [_INTL("Skill"),144,74,2,Color.new(72,72,72),Color.new(208,208,200)],
+       [_INTL("Body"),144,106,2,Color.new(72,72,72),Color.new(208,208,200)],
+       [sprintf("%d",total1),64,154,2,Color.new(72,72,72),Color.new(208,208,200)],
+       [_INTL("Judgment"),144,154,2,Color.new(72,72,72),Color.new(208,208,200)],
+       [sprintf("%d",total2),224,154,2,Color.new(72,72,72),Color.new(208,208,200)]
     ]
     pbDrawTextPositions(window.contents,textpos)
     images = []

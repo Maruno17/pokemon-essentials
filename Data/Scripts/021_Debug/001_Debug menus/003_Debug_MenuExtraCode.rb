@@ -105,10 +105,9 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
     idWidth     = totalWidth*15/100
     nameWidth   = totalWidth*65/100
     statusWidth = totalWidth*20/100
-    text_y = rect.y + 6
-    self.shadowtext(rect.x,text_y,idWidth,rect.height,id_text)
-    self.shadowtext(rect.x+idWidth,text_y,nameWidth,rect.height,name,0,(codeswitch) ? 1 : 0)
-    self.shadowtext(rect.x+idWidth+nameWidth,text_y,statusWidth,rect.height,status,1,colors)
+    self.shadowtext(rect.x,rect.y,idWidth,rect.height,id_text)
+    self.shadowtext(rect.x+idWidth,rect.y,nameWidth,rect.height,name,0,(codeswitch) ? 1 : 0)
+    self.shadowtext(rect.x+idWidth+nameWidth,rect.y,statusWidth,rect.height,status,1,colors)
   end
 end
 
@@ -234,11 +233,11 @@ def pbDebugDayCare
       sprites["overlay"].bitmap.clear
       textpos = []
       for i in 0...2
-        textpos.push([_INTL("Pokémon {1}",i+1),Graphics.width/4+i*Graphics.width/2,8,2,base,shadow])
+        textpos.push([_INTL("Pokémon {1}",i+1),Graphics.width/4+i*Graphics.width/2,2,2,base,shadow])
       end
       for i in 0...pbDayCareDeposited
         next if !$PokemonGlobal.daycare[i][0]
-        y = 40
+        y = 34
         pkmn      = $PokemonGlobal.daycare[i][0]
         initlevel = $PokemonGlobal.daycare[i][1]
         leveldiff = pkmn.level-initlevel
@@ -270,12 +269,12 @@ def pbDebugDayCare
         textpos.push(["Cost: $#{cost}",8+i*Graphics.width/2,y,0,base,shadow])
       end
       if pbEggGenerated?
-        textpos.push(["Egg waiting for collection",Graphics.width/2,216,2,Color.new(248,248,0),shadow])
+        textpos.push(["Egg waiting for collection",Graphics.width/2,210,2,Color.new(248,248,0),shadow])
       elsif pbDayCareDeposited==2
         if pbDayCareGetCompat==0
-          textpos.push(["Pokémon cannot breed",Graphics.width/2,216,2,Color.new(248,96,96),shadow])
+          textpos.push(["Pokémon cannot breed",Graphics.width/2,210,2,Color.new(248,96,96),shadow])
         else
-          textpos.push(["Pokémon can breed",Graphics.width/2,216,2,Color.new(64,248,64),shadow])
+          textpos.push(["Pokémon can breed",Graphics.width/2,210,2,Color.new(64,248,64),shadow])
         end
       end
       pbDrawTextPositions(sprites["overlay"].bitmap,textpos)
@@ -397,13 +396,12 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
     rect = drawCursor(index,rect)
     nameWidth   = rect.width*50/100
     statusWidth = rect.width*50/100
-    text_y = rect.y + 6
     if index==self.itemCount-2
       # Advance roaming
-      self.shadowtext(_INTL("[All roam to new locations]"),rect.x,text_y,nameWidth,rect.height)
+      self.shadowtext(_INTL("[All roam to new locations]"),rect.x,rect.y,nameWidth,rect.height)
     elsif index==self.itemCount-1
       # Advance roaming
-      self.shadowtext(_INTL("[Clear all current roamer locations]"),rect.x,text_y,nameWidth,rect.height)
+      self.shadowtext(_INTL("[Clear all current roamer locations]"),rect.x,rect.y,nameWidth,rect.height)
     else
       pkmn = Settings::ROAMING_SPECIES[index]
       name = GameData::Species.get(pkmn[0]).name + " (Lv. #{pkmn[1]})"
@@ -432,8 +430,8 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
       else
         status = "[NOT ROAMING][Switch #{pkmn[2]} is off]"
       end
-      self.shadowtext(name,rect.x,text_y,nameWidth,rect.height)
-      self.shadowtext(status,rect.x+nameWidth,text_y,statusWidth,rect.height,1,statuscolor)
+      self.shadowtext(name,rect.x,rect.y,nameWidth,rect.height)
+      self.shadowtext(status,rect.x+nameWidth,rect.y,statusWidth,rect.height,1,statuscolor)
     end
   end
 end
@@ -524,92 +522,6 @@ def pbDebugRoamers
   end
   pbDisposeSpriteHash(sprites)
   viewport.dispose
-end
-
-
-
-#===============================================================================
-#
-#===============================================================================
-class PokemonDataCopy
-  attr_accessor :dataOldHash
-  attr_accessor :dataNewHash
-  attr_accessor :dataTime
-  attr_accessor :data
-
-  def crc32(x)
-    return Zlib::crc32(x)
-  end
-
-  def readfile(filename)
-    File.open(filename, "rb") { |f| f.read }
-  end
-
-  def writefile(str,filename)
-    File.open(filename, "wb") { |f| f.write(str) }
-  end
-
-  def filetime(filename)
-    File.open(filename, "r") { |f| f.mtime }
-  end
-
-  def initialize(data,datasave)
-    @datafile = data
-    @datasave = datasave
-    @data = readfile(@datafile)
-    @dataOldHash = crc32(@data)
-    @dataTime = filetime(@datafile)
-  end
-
-  def changed?
-    ts     = readfile(@datafile)
-    tsDate = filetime(@datafile)
-    tsHash = crc32(ts)
-    return (tsHash!=@dataNewHash && tsHash!=@dataOldHash && tsDate>@dataTime)
-  end
-
-  def save(newtilesets)
-    newdata = Marshal.dump(newtilesets)
-    if !changed?
-      @data = newdata
-      @dataNewHash = crc32(newdata)
-      writefile(newdata,@datafile)
-    else
-      @dataOldHash = crc32(@data)
-      @dataNewHash = crc32(newdata)
-      @dataTime = filetime(@datafile)
-      @data = newdata
-      writefile(newdata,@datafile)
-    end
-    save_data(self,@datasave)
-  end
-end
-
-
-
-class PokemonDataWrapper
-  attr_reader :data
-
-  def initialize(file,savefile,prompt)
-    @savefile = savefile
-    @file     = file
-    if pbRgssExists?(@savefile)
-      @ts = load_data(@savefile)
-      if !@ts.changed? || prompt.call==true
-        @data = Marshal.load(StringInput.new(@ts.data))
-      else
-        @ts = PokemonDataCopy.new(@file,@savefile)
-        @data = load_data(@file)
-      end
-    else
-      @ts = PokemonDataCopy.new(@file,@savefile)
-      @data = load_data(@file)
-    end
-  end
-
-  def save
-    @ts.save(@data)
-  end
 end
 
 

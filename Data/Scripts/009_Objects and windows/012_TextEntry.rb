@@ -49,16 +49,16 @@ class Window_CharacterEntry < Window_DrawableCommand
   def drawItem(index,_count,rect)
     rect=drawCursor(index,rect)
     if index==@charset.length # -1
-      pbDrawShadowText(self.contents,rect.x,rect.y + 6,rect.width,rect.height,"[ ]",
+      pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,"[ ]",
          self.baseColor,self.shadowColor)
     elsif index==@charset.length+1 # -2
-      pbDrawShadowText(self.contents,rect.x,rect.y + 6,rect.width,rect.height,@othercharset,
+      pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,@othercharset,
          self.baseColor,self.shadowColor)
     elsif index==@charset.length+2 # -3
-      pbDrawShadowText(self.contents,rect.x,rect.y + 6,rect.width,rect.height,_INTL("OK"),
+      pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,_INTL("OK"),
          self.baseColor,self.shadowColor)
     else
-      pbDrawShadowText(self.contents,rect.x,rect.y + 6,rect.width,rect.height,@charset[index],
+      pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,@charset[index],
          self.baseColor,self.shadowColor)
     end
   end
@@ -249,7 +249,7 @@ class Window_TextEntry < SpriteWindow_Base
     bitmap=self.contents
     bitmap.clear
     x=0
-    y=6
+    y=0
     if @heading
       textwidth=bitmap.text_size(@heading).width
       pbDrawShadowText(bitmap,x,y, textwidth+4, 32, @heading,@baseColor,@shadowColor)
@@ -780,9 +780,9 @@ class PokemonEntryScene
         pbSetSystemFont(@sprites["gender"].bitmap)
         textpos=[]
         if pokemon.male?
-          textpos.push([_INTL("♂"),0,0,false,Color.new(0,128,248),Color.new(168,184,184)])
+          textpos.push([_INTL("♂"),0,-6,false,Color.new(0,128,248),Color.new(168,184,184)])
         elsif pokemon.female?
-          textpos.push([_INTL("♀"),0,0,false,Color.new(248,24,24),Color.new(168,184,184)])
+          textpos.push([_INTL("♀"),0,-6,false,Color.new(248,24,24),Color.new(168,184,184)])
         end
         pbDrawTextPositions(@sprites["gender"].bitmap,textpos)
       end
@@ -1014,7 +1014,7 @@ class PokemonEntryScene2
       textPos=[]
       for y in 0...COLUMNS
         for x in 0...ROWS
-          textPos.push([@@Characters[i][0][pos],44+x*32,18+y*38,2,
+          textPos.push([@@Characters[i][0][pos],44+x*32,12+y*38,2,
              Color.new(16,24,32), Color.new(160,160,160)])
           pos+=1
         end
@@ -1058,9 +1058,9 @@ class PokemonEntryScene2
         pbSetSystemFont(@sprites["gender"].bitmap)
         textpos=[]
         if pokemon.male?
-          textpos.push([_INTL("♂"),0,0,false,Color.new(0,128,248),Color.new(168,184,184)])
+          textpos.push([_INTL("♂"),0,-6,false,Color.new(0,128,248),Color.new(168,184,184)])
         elsif pokemon.female?
-          textpos.push([_INTL("♀"),0,0,false,Color.new(248,24,24),Color.new(168,184,184)])
+          textpos.push([_INTL("♀"),0,-6,false,Color.new(248,24,24),Color.new(168,184,184)])
         end
         pbDrawTextPositions(@sprites["gender"].bitmap,textpos)
       end
@@ -1135,12 +1135,12 @@ class PokemonEntryScene2
     bgoverlay.clear
     pbSetSystemFont(bgoverlay)
     textPositions=[
-       [@helptext,160,12,false,Color.new(16,24,32),Color.new(168,184,184)]
+       [@helptext,160,6,false,Color.new(16,24,32),Color.new(168,184,184)]
     ]
     chars=@helper.textChars
     x=166
     for ch in chars
-      textPositions.push([ch,x,48,false,Color.new(16,24,32),Color.new(168,184,184)])
+      textPositions.push([ch,x,42,false,Color.new(16,24,32),Color.new(168,184,184)])
       x+=24
     end
     pbDrawTextPositions(bgoverlay,textPositions)

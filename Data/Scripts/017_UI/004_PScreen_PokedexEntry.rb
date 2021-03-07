@@ -219,24 +219,24 @@ class PokemonPokedexInfo_Scene
     end
     textpos = [
        [_INTL("{1}{2} {3}", indexText, " ", species_data.name),
-          246, 42, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)],
-       [_INTL("Height"), 314, 158, 0, base, shadow],
-       [_INTL("Weight"), 314, 190, 0, base, shadow]
+          246, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)],
+       [_INTL("Height"), 314, 152, 0, base, shadow],
+       [_INTL("Weight"), 314, 184, 0, base, shadow]
     ]
     if $Trainer.owned?(@species)
       # Write the category
-      textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 74, 0, base, shadow])
+      textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 68, 0, base, shadow])
       # Write the height and weight
       height = species_data.height
       weight = species_data.weight
       if System.user_language[3..4] == "US"   # If the user is in the United States
         inches = (height / 0.254).round
         pounds = (weight / 0.45359).round
-        textpos.push([_ISPRINTF("{1:d}'{2:02d}\"", inches / 12, inches % 12), 460, 158, 1, base, shadow])
-        textpos.push([_ISPRINTF("{1:4.1f} lbs.", pounds / 10.0), 494, 190, 1, base, shadow])
+        textpos.push([_ISPRINTF("{1:d}'{2:02d}\"", inches / 12, inches % 12), 460, 152, 1, base, shadow])
+        textpos.push([_ISPRINTF("{1:4.1f} lbs.", pounds / 10.0), 494, 184, 1, base, shadow])
       else
-        textpos.push([_ISPRINTF("{1:.1f} m", height / 10.0), 470, 158, 1, base, shadow])
-        textpos.push([_ISPRINTF("{1:.1f} kg", weight / 10.0), 482, 190, 1, base, shadow])
+        textpos.push([_ISPRINTF("{1:.1f} m", height / 10.0), 470, 152, 1, base, shadow])
+        textpos.push([_ISPRINTF("{1:.1f} kg", weight / 10.0), 482, 184, 1, base, shadow])
       end
       # Draw the Pokédex entry text
       drawTextEx(overlay, 40, 240, Graphics.width - (40 * 2), 4,   # overlay, x, y, width, num lines
@@ -261,14 +261,14 @@ class PokemonPokedexInfo_Scene
       overlay.blt(396, 120, @typebitmap.bitmap, type2rect) if type1 != type2
     else
       # Write the category
-      textpos.push([_INTL("????? Pokémon"), 246, 74, 0, base, shadow])
+      textpos.push([_INTL("????? Pokémon"), 246, 68, 0, base, shadow])
       # Write the height and weight
       if System.user_language[3..4] == "US"   # If the user is in the United States
-        textpos.push([_INTL("???'??\""), 460, 158, 1, base, shadow])
-        textpos.push([_INTL("????.? lbs."), 494, 190, 1, base, shadow])
+        textpos.push([_INTL("???'??\""), 460, 152, 1, base, shadow])
+        textpos.push([_INTL("????.? lbs."), 494, 184, 1, base, shadow])
       else
-        textpos.push([_INTL("????.? m"), 470, 158, 1, base, shadow])
-        textpos.push([_INTL("????.? kg"), 482, 190, 1, base, shadow])
+        textpos.push([_INTL("????.? m"), 470, 152, 1, base, shadow])
+        textpos.push([_INTL("????.? kg"), 482, 184, 1, base, shadow])
       end
     end
     # Draw all text
@@ -354,11 +354,11 @@ class PokemonPokedexInfo_Scene
       pbDrawImagePositions(overlay,[
          [sprintf("Graphics/Pictures/Pokedex/overlay_areanone"),108,188]
       ])
-      textpos.push([_INTL("Area unknown"),Graphics.width/2,Graphics.height/2,2,base,shadow])
+      textpos.push([_INTL("Area unknown"),Graphics.width/2,Graphics.height/2 - 6,2,base,shadow])
     end
-    textpos.push([pbGetMessage(MessageTypes::RegionNames,@region),414,44,2,base,shadow])
+    textpos.push([pbGetMessage(MessageTypes::RegionNames,@region),414,38,2,base,shadow])
     textpos.push([_INTL("{1}'s area",GameData::Species.get(@species).name),
-       Graphics.width/2,352,2,base,shadow])
+       Graphics.width/2,346,2,base,shadow])
     pbDrawTextPositions(overlay,textpos)
   end
 
@@ -375,8 +375,8 @@ class PokemonPokedexInfo_Scene
       end
     end
     textpos = [
-       [GameData::Species.get(@species).name,Graphics.width/2,Graphics.height-88,2,base,shadow],
-       [formname,Graphics.width/2,Graphics.height-56,2,base,shadow],
+       [GameData::Species.get(@species).name,Graphics.width/2,Graphics.height-94,2,base,shadow],
+       [formname,Graphics.width/2,Graphics.height-62,2,base,shadow],
     ]
     # Draw all text
     pbDrawTextPositions(overlay,textpos)

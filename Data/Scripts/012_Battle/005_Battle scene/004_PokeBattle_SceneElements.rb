@@ -213,13 +213,13 @@ class PokemonDataBox < SpriteWrapper
     nameWidth = self.bitmap.text_size(@battler.name).width
     nameOffset = 0
     nameOffset = nameWidth-116 if nameWidth>116
-    textPos.push([@battler.name,@spriteBaseX+8-nameOffset,6,false,NAME_BASE_COLOR,NAME_SHADOW_COLOR])
+    textPos.push([@battler.name,@spriteBaseX+8-nameOffset,0,false,NAME_BASE_COLOR,NAME_SHADOW_COLOR])
     # Draw Pokémon's gender symbol
     case @battler.displayGender
     when 0   # Male
-      textPos.push([_INTL("♂"),@spriteBaseX+126,6,false,MALE_BASE_COLOR,MALE_SHADOW_COLOR])
+      textPos.push([_INTL("♂"),@spriteBaseX+126,0,false,MALE_BASE_COLOR,MALE_SHADOW_COLOR])
     when 1   # Female
-      textPos.push([_INTL("♀"),@spriteBaseX+126,6,false,FEMALE_BASE_COLOR,FEMALE_SHADOW_COLOR])
+      textPos.push([_INTL("♀"),@spriteBaseX+126,0,false,FEMALE_BASE_COLOR,FEMALE_SHADOW_COLOR])
     end
     pbDrawTextPositions(self.bitmap,textPos)
     # Draw Pokémon's level
@@ -451,10 +451,10 @@ class AbilitySplashBar < SpriteWrapper
     textPos = []
     textX = (@side==0) ? 10 : self.bitmap.width-8
     # Draw Pokémon's name
-    textPos.push([_INTL("{1}'s",@battler.name),textX,2,@side==1,
+    textPos.push([_INTL("{1}'s",@battler.name),textX,-4,@side==1,
        TEXT_BASE_COLOR,TEXT_SHADOW_COLOR,true])
     # Draw Pokémon's ability
-    textPos.push([@battler.abilityName,textX,32,@side==1,
+    textPos.push([@battler.abilityName,textX,26,@side==1,
        TEXT_BASE_COLOR,TEXT_SHADOW_COLOR,true])
     pbDrawTextPositions(self.bitmap,textPos)
   end

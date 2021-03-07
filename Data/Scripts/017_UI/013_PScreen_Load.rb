@@ -62,31 +62,31 @@ class PokemonLoadPanel < SpriteWrapper
       end
       textpos = []
       if @isContinue
-        textpos.push([@title,16*2,5*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([_INTL("Badges:"),16*2,56*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([@trainer.badge_count.to_s,103*2,56*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([_INTL("Pokédex:"),16*2,72*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([@trainer.seen_count.to_s,103*2,72*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
-        textpos.push([_INTL("Time:"),16*2,88*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([@title,16*2,2*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([_INTL("Badges:"),16*2,53*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([@trainer.badge_count.to_s,103*2,53*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([_INTL("Pokédex:"),16*2,69*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([@trainer.seen_count.to_s,103*2,69*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([_INTL("Time:"),16*2,85*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
         hour = @totalsec / 60 / 60
         min  = @totalsec / 60 % 60
         if hour>0
-          textpos.push([_INTL("{1}h {2}m",hour,min),103*2,88*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+          textpos.push([_INTL("{1}h {2}m",hour,min),103*2,85*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
         else
-          textpos.push([_INTL("{1}m",min),103*2,88*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+          textpos.push([_INTL("{1}m",min),103*2,85*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
         end
         if @trainer.male?
-          textpos.push([@trainer.name,56*2,32*2,0,MALETEXTCOLOR,MALETEXTSHADOWCOLOR])
+          textpos.push([@trainer.name,56*2,29*2,0,MALETEXTCOLOR,MALETEXTSHADOWCOLOR])
         elsif @trainer.female?
-          textpos.push([@trainer.name,56*2,32*2,0,FEMALETEXTCOLOR,FEMALETEXTSHADOWCOLOR])
+          textpos.push([@trainer.name,56*2,29*2,0,FEMALETEXTCOLOR,FEMALETEXTSHADOWCOLOR])
         else
-          textpos.push([@trainer.name,56*2,32*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
+          textpos.push([@trainer.name,56*2,29*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
         end
         mapname = pbGetMapNameFromId(@mapid)
         mapname.gsub!(/\\PN/,@trainer.name)
-        textpos.push([mapname,193*2,5*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([mapname,193*2,2*2,1,TEXTCOLOR,TEXTSHADOWCOLOR])
       else
-        textpos.push([@title,16*2,4*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
+        textpos.push([@title,16*2,1*2,0,TEXTCOLOR,TEXTSHADOWCOLOR])
       end
       pbDrawTextPositions(self.bitmap,textpos)
     end

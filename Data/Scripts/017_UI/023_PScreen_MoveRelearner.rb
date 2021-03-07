@@ -63,16 +63,16 @@ class MoveRelearner_Scene
       overlay.blt(436,70,@typebitmap.bitmap,type2rect)
     end
     textpos=[
-       [_INTL("Teach which move?"),16,8,0,Color.new(88,88,80),Color.new(168,184,184)]
+       [_INTL("Teach which move?"),16,2,0,Color.new(88,88,80),Color.new(168,184,184)]
     ]
     imagepos=[]
-    yPos=82
+    yPos=76
     for i in 0...VISIBLEMOVES
       moveobject=@moves[@sprites["commands"].top_item+i]
       if moveobject
         moveData=GameData::Move.get(moveobject)
         type_number = GameData::Type.get(moveData.type).id_number
-        imagepos.push(["Graphics/Pictures/types", 12, yPos + 2, 0, type_number * 28, 64, 28])
+        imagepos.push(["Graphics/Pictures/types", 12, yPos + 8, 0, type_number * 28, 64, 28])
         textpos.push([moveData.name,80,yPos,0,Color.new(248,248,248),Color.new(0,0,0)])
         if moveData.total_pp>0
           textpos.push([_INTL("PP"),112,yPos+32,0,Color.new(64,64,64),Color.new(176,176,176)])
@@ -92,13 +92,13 @@ class MoveRelearner_Scene
     basedamage=selMoveData.base_damage
     category=selMoveData.category
     accuracy=selMoveData.accuracy
-    textpos.push([_INTL("CATEGORY"),272,114,0,Color.new(248,248,248),Color.new(0,0,0)])
-    textpos.push([_INTL("POWER"),272,146,0,Color.new(248,248,248),Color.new(0,0,0)])
+    textpos.push([_INTL("CATEGORY"),272,108,0,Color.new(248,248,248),Color.new(0,0,0)])
+    textpos.push([_INTL("POWER"),272,140,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([basedamage<=1 ? basedamage==1 ? "???" : "---" : sprintf("%d",basedamage),
-          468,146,2,Color.new(64,64,64),Color.new(176,176,176)])
-    textpos.push([_INTL("ACCURACY"),272,178,0,Color.new(248,248,248),Color.new(0,0,0)])
+          468,140,2,Color.new(64,64,64),Color.new(176,176,176)])
+    textpos.push([_INTL("ACCURACY"),272,172,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([accuracy==0 ? "---" : "#{accuracy}%",
-          468,178,2,Color.new(64,64,64),Color.new(176,176,176)])
+          468,172,2,Color.new(64,64,64),Color.new(176,176,176)])
     pbDrawTextPositions(overlay,textpos)
     imagepos.push(["Graphics/Pictures/category",436,116,0,category*28,64,28])
     if @sprites["commands"].index<@moves.length-1
@@ -127,7 +127,7 @@ class MoveRelearner_Scene
           pbDrawMoveList
         end
         if Input.trigger?(Input::BACK)
-          return 0
+          return nil
         elsif Input.trigger?(Input::USE)
           return @moves[@sprites["commands"].index]
         end

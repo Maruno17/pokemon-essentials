@@ -20,7 +20,7 @@ class PokemonPartyConfirmCancelSprite < SpriteWrapper
     @overlaysprite.z = self.z+1
     pbSetSystemFont(@overlaysprite.bitmap)
     @yoffset = 8
-    textpos = [[text,56,(narrowbox) ? 2 : 8,2,Color.new(248,248,248),Color.new(40,40,40)]]
+    textpos = [[text,56,(narrowbox) ? -4 : 2,2,Color.new(248,248,248),Color.new(40,40,40)]]
     pbDrawTextPositions(@overlaysprite.bitmap,textpos)
     self.x = x
     self.y = y
@@ -126,7 +126,7 @@ class Window_CommandPokemonColor < Window_CommandPokemon
       base   = Color.new(0,80,160)
       shadow = Color.new(128,192,240)
     end
-    pbDrawShadowText(self.contents,rect.x,rect.y + 6,rect.width,rect.height,
+    pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,
        @commands[index],base,shadow)
   end
 end
@@ -357,11 +357,11 @@ class PokemonPartyPanel < SpriteWrapper
       pbSetSystemFont(@overlaysprite.bitmap)
       textpos = []
       # Draw Pokémon name
-      textpos.push([@pokemon.name,96,16,0,basecolor,shadowcolor])
+      textpos.push([@pokemon.name,96,10,0,basecolor,shadowcolor])
       if !@pokemon.egg?
         if !@text || @text.length==0
           # Draw HP numbers
-          textpos.push([sprintf("% 3d /% 3d",@pokemon.hp,@pokemon.totalhp),224,60,1,basecolor,shadowcolor])
+          textpos.push([sprintf("% 3d /% 3d",@pokemon.hp,@pokemon.totalhp),224,54,1,basecolor,shadowcolor])
           # Draw HP bar
           if @pokemon.hp>0
             w = @pokemon.hp*96*1.0/@pokemon.totalhp
@@ -390,9 +390,9 @@ class PokemonPartyPanel < SpriteWrapper
         end
         # Draw gender symbol
         if @pokemon.male?
-          textpos.push([_INTL("♂"),224,16,0,Color.new(0,112,248),Color.new(120,184,232)])
+          textpos.push([_INTL("♂"),224,10,0,Color.new(0,112,248),Color.new(120,184,232)])
         elsif @pokemon.female?
-          textpos.push([_INTL("♀"),224,16,0,Color.new(232,32,16),Color.new(248,168,184)])
+          textpos.push([_INTL("♀"),224,10,0,Color.new(232,32,16),Color.new(248,168,184)])
         end
         # Draw shiny icon
         if @pokemon.shiny?
@@ -407,14 +407,14 @@ class PokemonPartyPanel < SpriteWrapper
            "Graphics/Pictures/Party/overlay_lv",20,70,0,0,22,14]])
         pbSetSmallFont(@overlaysprite.bitmap)
         pbDrawTextPositions(@overlaysprite.bitmap,[
-           [@pokemon.level.to_s,42,63,0,basecolor,shadowcolor]
+           [@pokemon.level.to_s,42,57,0,basecolor,shadowcolor]
         ])
       end
       # Draw annotation text
       if @text && @text.length>0
         pbSetSystemFont(@overlaysprite.bitmap)
         pbDrawTextPositions(@overlaysprite.bitmap,[
-           [@text,96,58,0,basecolor,shadowcolor]
+           [@text,96,52,0,basecolor,shadowcolor]
         ])
       end
     end

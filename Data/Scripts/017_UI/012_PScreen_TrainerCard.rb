@@ -49,18 +49,18 @@ class PokemonTrainerCard_Scene
        $PokemonGlobal.startTime.day,
        $PokemonGlobal.startTime.year)
     textPositions = [
-       [_INTL("Name"),34,64,0,baseColor,shadowColor],
-       [$Trainer.name,302,64,1,baseColor,shadowColor],
-       [_INTL("ID No."),332,64,0,baseColor,shadowColor],
-       [sprintf("%05d",$Trainer.public_ID),468,64,1,baseColor,shadowColor],
-       [_INTL("Money"),34,112,0,baseColor,shadowColor],
-       [_INTL("${1}",$Trainer.money.to_s_formatted),302,112,1,baseColor,shadowColor],
-       [_INTL("Pokédex"),34,160,0,baseColor,shadowColor],
-       [sprintf("%d/%d",$Trainer.owned_count,$Trainer.seen_count),302,160,1,baseColor,shadowColor],
-       [_INTL("Time"),34,208,0,baseColor,shadowColor],
-       [time,302,208,1,baseColor,shadowColor],
-       [_INTL("Started"),34,256,0,baseColor,shadowColor],
-       [starttime,302,256,1,baseColor,shadowColor]
+       [_INTL("Name"),34,58,0,baseColor,shadowColor],
+       [$Trainer.name,302,58,1,baseColor,shadowColor],
+       [_INTL("ID No."),332,58,0,baseColor,shadowColor],
+       [sprintf("%05d",$Trainer.public_ID),468,58,1,baseColor,shadowColor],
+       [_INTL("Money"),34,106,0,baseColor,shadowColor],
+       [_INTL("${1}",$Trainer.money.to_s_formatted),302,106,1,baseColor,shadowColor],
+       [_INTL("Pokédex"),34,154,0,baseColor,shadowColor],
+       [sprintf("%d/%d",$Trainer.owned_count,$Trainer.seen_count),302,154,1,baseColor,shadowColor],
+       [_INTL("Time"),34,202,0,baseColor,shadowColor],
+       [time,302,202,1,baseColor,shadowColor],
+       [_INTL("Started"),34,250,0,baseColor,shadowColor],
+       [starttime,302,250,1,baseColor,shadowColor]
     ]
     pbDrawTextPositions(overlay,textPositions)
     x = 72

@@ -1,18 +1,4 @@
 #===============================================================================
-#
-#===============================================================================
-def pbTilesetWrapper
-  return PokemonDataWrapper.new(
-     "Data/Tilesets.rxdata",
-     "Data/TilesetsTemp.rxdata",
-     Proc.new{
-        pbMessage(_INTL("The editor has detected that the tileset data was recently edited in RPG Maker XP."))
-        next !pbConfirmMessage(_INTL("Do you want to load those recent edits?"))
-     }
-  )
-end
-
-#===============================================================================
 # Edits the terrain tags of tiles in tilesets.
 #===============================================================================
 class PokemonTilesetScene
@@ -28,8 +14,8 @@ class PokemonTilesetScene
   def initialize
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
     @viewport.z = 99999
-    @tilesetwrapper = pbTilesetWrapper
-    @tileset = @tilesetwrapper.data[1]
+    @tilesets_data = load_data("Data/Tilesets.rxdata")
+    @tileset = @tilesets_data[1]
     @tilehelper = TileDrawingHelper.fromTileset(@tileset)
     @sprites = {}
     @sprites["title"] = Window_UnformattedTextPokemon.newWithSize(_INTL("Tileset Editor\r\nPgUp/PgDn: SCROLL\r\nZ: MENU"),
@@ -65,7 +51,7 @@ class PokemonTilesetScene
           @tilehelper.bltTile(@sprites["overlay"].bitmap, xx * TILE_SIZE, yy * TILE_SIZE, xx * TILES_PER_AUTOTILE)
         end
         terr = (ypos < TILESET_START_ID) ? @tileset.terrain_tags[xx * TILES_PER_AUTOTILE] : @tileset.terrain_tags[ypos + xx]
-        textpos.push(["#{terr}", xx * TILE_SIZE + TILE_SIZE / 2, yy * TILE_SIZE, 2, TEXT_COLOR, TEXT_SHADOW_COLOR])
+        textpos.push(["#{terr}", xx * TILE_SIZE + TILE_SIZE / 2, yy * TILE_SIZE - 6, 2, TEXT_COLOR, TEXT_SHADOW_COLOR])
       end
     end
     pbDrawTextPositions(@sprites["overlay"].bitmap, textpos)
@@ -98,8 +84,8 @@ class PokemonTilesetScene
       terrain_tag_name = sprintf("%d: %s", terrain_tag, terrain_tag_name)
     end
     textpos = [
-      [_INTL("Terrain Tag:"), tile_x + TILE_SIZE, tile_y + TILE_SIZE * 2 + 16, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)],
-      [terrain_tag_name, tile_x + TILE_SIZE, tile_y + TILE_SIZE * 2 + 48, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)]
+      [_INTL("Terrain Tag:"), tile_x + TILE_SIZE, tile_y + TILE_SIZE * 2 + 10, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)],
+      [terrain_tag_name, tile_x + TILE_SIZE, tile_y + TILE_SIZE * 2 + 42, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)]
     ]
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
@@ -107,12 +93,12 @@ class PokemonTilesetScene
 
   def pbChooseTileset
     commands = []
-    for i in 1...@tilesetwrapper.data.length
-      commands.push(sprintf("%03d %s", i, @tilesetwrapper.data[i].name))
+    for i in 1...@tilesets_data.length
+      commands.push(sprintf("%03d %s", i, @tilesets_data[i].name))
     end
     ret = pbShowCommands(nil, commands, -1)
     if ret >= 0
-      @tileset = @tilesetwrapper.data[ret + 1]
+      @tileset = @tilesets_data[ret + 1]
       @tilehelper.dispose
       @tilehelper = TileDrawingHelper.fromTileset(@tileset)
       @sprites["tileset"].setBitmap("Graphics/Tilesets/#{@tileset.tileset_name}")
@@ -193,8 +179,8 @@ class PokemonTilesetScene
         end
       elsif Input.trigger?(Input::BACK)
         if pbConfirmMessage(_INTL("Save changes?"))
-          @tilesetwrapper.save
-          $data_tilesets = @tilesetwrapper.data
+          save_data("Data/Tilesets.rxdata", @tilesets_data)
+          $data_tilesets = @tilesets_data
           if $game_map && $MapFactory
             $MapFactory.setup($game_map.map_id)
             $game_player.center($game_player.x, $game_player.y)

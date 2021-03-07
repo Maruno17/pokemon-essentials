@@ -47,9 +47,9 @@ class MapBottomSprite < SpriteWrapper
   def refresh
     self.bitmap.clear
     textpos = [
-       [@mapname,18,-2,0,Color.new(248,248,248),Color.new(0,0,0)],
-       [@maplocation,18,354,0,Color.new(248,248,248),Color.new(0,0,0)],
-       [@mapdetails,Graphics.width-16,354,1,Color.new(248,248,248),Color.new(0,0,0)]
+       [@mapname,18,-8,0,Color.new(248,248,248),Color.new(0,0,0)],
+       [@maplocation,18,348,0,Color.new(248,248,248),Color.new(0,0,0)],
+       [@mapdetails,Graphics.width-16,348,1,Color.new(248,248,248),Color.new(0,0,0)]
     ]
     pbDrawTextPositions(self.bitmap,textpos)
   end

@@ -653,6 +653,14 @@ class Pokemon
     return move_data && species_data.tutor_moves.include?(move_data.id)
   end
 
+  def can_relearn_move?
+    return false if egg? || shadowPokemon?
+    this_level = self.level
+    getMoveList.each { |m| return true if m[0] <= this_level && !hasMove?(m[1]) }
+    @first_moves.each { |m| return true if !pkmn.hasMove?(m) }
+    return false
+  end
+
   #=============================================================================
   # Ribbons
   #=============================================================================

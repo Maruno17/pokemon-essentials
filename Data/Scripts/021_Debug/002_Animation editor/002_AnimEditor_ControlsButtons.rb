@@ -6,7 +6,7 @@ module ShadowText
     elsif align==1
       x+=(w/2)-(width/2)
     end
-    pbDrawShadowText(bitmap,x,y+6,w,h,t,
+    pbDrawShadowText(bitmap,x,y,w,h,t,
        disabled ? Color.new(26*8,26*8,25*8) : Color.new(12*8,12*8,12*8),
        Color.new(26*8,26*8,25*8))
   end

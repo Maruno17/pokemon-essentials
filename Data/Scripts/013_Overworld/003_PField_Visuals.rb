@@ -222,9 +222,9 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
         trainer.tone = Tone.new(0,0,0)
         trainername = foe[0].name
         textpos = [
-           [$Trainer.name,Graphics.width/4,(Graphics.height/1.5)+10,2,
+           [$Trainer.name,Graphics.width/4,(Graphics.height/1.5)+4,2,
               Color.new(248,248,248),Color.new(12*6,12*6,12*6)],
-           [trainername,(Graphics.width/4)+(Graphics.width/2),(Graphics.height/1.5)+10,2,
+           [trainername,(Graphics.width/4)+(Graphics.width/2),(Graphics.height/1.5)+4,2,
               Color.new(248,248,248),Color.new(12*6,12*6,12*6)]
         ]
         pbDrawTextPositions(overlay.bitmap,textpos)

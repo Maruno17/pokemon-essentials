@@ -61,16 +61,16 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     self.text=text
   end
 
-  def resizeToFit(text,maxwidth=-1) # maxwidth is maximum acceptable window width
-    dims=resizeToFitInternal(text,maxwidth)
-    self.width=dims[0]+self.borderX+SpriteWindow_Base::TEXTPADDING
-    self.height=dims[1]+self.borderY
+  def resizeToFit(text, maxwidth = -1)   # maxwidth is maximum acceptable window width
+    dims = resizeToFitInternal(text,maxwidth)
+    self.width = dims[0] + self.borderX + SpriteWindow_Base::TEXTPADDING
+    self.height = dims[1] + self.borderY - 4
     refresh
   end
 
-  def resizeHeightToFit(text,width=-1)   # width is current window width
-    dims=resizeToFitInternal(text,width)
-    self.width=width<0 ? Graphics.width : width
+  def resizeHeightToFit(text, width = -1)   # width is current window width
+    dims = resizeToFitInternal(text,width)
+    self.width  = (width < 0) ? Graphics.width : width
     self.height = dims[1] + self.borderY - 4
     refresh
   end
@@ -215,7 +215,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     oldstarting = @starting
     @starting = true
     self.width  = dims[0]+self.borderX+SpriteWindow_Base::TEXTPADDING
-    self.height = dims[1]+self.borderY
+    self.height = dims[1]+self.borderY - 4
     @starting = oldstarting
     redrawText
   end
@@ -225,7 +225,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     oldstarting = @starting
     @starting = true
     self.width  = [dims[0]+self.borderX+SpriteWindow_Base::TEXTPADDING,maxwidth].min
-    self.height = [dims[1]+self.borderY,maxheight].min
+    self.height = [dims[1]+self.borderY - 4,maxheight].min
     @starting = oldstarting
     redrawText
   end
@@ -246,8 +246,8 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     dims = resizeToFitInternal(text,width)
     oldstarting = @starting
     @starting = true
-    self.width  = (width<0) ? Graphics.width : width
-    self.height = dims[1]+self.borderY
+    self.width  = (width < 0) ? Graphics.width : width
+    self.height = dims[1] + self.borderY - 4
     @starting = oldstarting
     redrawText
   end
@@ -317,6 +317,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
           chy = ch[2]+ch[4]
           width  = chx if width<chx
           height = chy if height<chy
+          ch[2] += 4
           if !ch[5] && ch[0]=="\n"
             numlines += 1
             if numlines>=visiblelines
@@ -344,6 +345,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
           chy = ch[2]+ch[4]
           width  = chx if width<chx
           height = chy if height<chy
+          ch[2] += 4
           @textchars.push(ch[5] ? "" : ch[0])
         end
       end
@@ -663,11 +665,11 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     self.contents.clear
     s=sprintf("%0*d",@digits_max,@number.abs)
     if @sign
-      textHelper(0,6,@negative ? "-" : "+",0)
+      textHelper(0,0,@negative ? "-" : "+",0)
     end
     for i in 0...@digits_max
       index=i+(@sign ? 1 : 0)
-      textHelper(index*24,6,s[i,1],index)
+      textHelper(index*24,0,s[i,1],index)
     end
   end
 
@@ -717,7 +719,7 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     textwidth=self.contents.text_size(text).width
     pbDrawShadowText(self.contents, x+(12-textwidth/2), y, textwidth+4, 32, text, @baseColor, @shadowColor)
     if @index==i && @active && @frame/15==0
-      self.contents.fill_rect(x+(12-textwidth/2), y+24, textwidth, 2, @baseColor)
+      self.contents.fill_rect(x+(12-textwidth/2), y+30, textwidth, 2, @baseColor)
     end
   end
 end
@@ -1223,7 +1225,7 @@ class Window_CommandPokemon < Window_DrawableCommand
   def drawItem(index,_count,rect)
     pbSetSystemFont(self.contents) if @starting
     rect=drawCursor(index,rect)
-    pbDrawShadowText(self.contents,rect.x,rect.y + 6,rect.width,rect.height,
+    pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,
        @commands[index],self.baseColor,self.shadowColor)
   end
 end
@@ -1339,7 +1341,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
     rect=drawCursor(index,rect)
     if toUnformattedText(@commands[index]).gsub(/\n/,"")==@commands[index]
       # Use faster alternative for unformatted text without line breaks
-      pbDrawShadowText(self.contents,rect.x,rect.y + 6,rect.width,rect.height,
+      pbDrawShadowText(self.contents,rect.x,rect.y,rect.width,rect.height,
          @commands[index],self.baseColor,self.shadowColor)
     else
       chars=getFormattedText(
