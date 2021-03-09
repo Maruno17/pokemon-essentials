@@ -1,5 +1,5 @@
 class Sprite_SurfBase
-  attr_reader :visible
+  attr_reader   :visible
   attr_accessor :event
 
   def initialize(sprite,event,viewport=nil)
@@ -18,12 +18,12 @@ class Sprite_SurfBase
   end
 
   def dispose
-    if !@disposed
-      @sprite.dispose if @sprite
-      @sprite   = nil
-      @surfbitmap.dispose
-      @disposed = true
-    end
+    return if @disposed
+    @sprite.dispose if @sprite
+    @sprite   = nil
+    @surfbitmap.dispose
+    @divebitmap.dispose
+    @disposed = true
   end
 
   def disposed?
@@ -49,9 +49,13 @@ class Sprite_SurfBase
     @sprite = Sprite.new(@viewport) if !@sprite
     if @sprite
       if $PokemonGlobal.surfing
-        @sprite.bitmap = @surfbitmap.bitmap; cw = @cws; ch = @chs
+        @sprite.bitmap = @surfbitmap.bitmap
+        cw = @cws
+        ch = @chs
       elsif $PokemonGlobal.diving
-        @sprite.bitmap = @divebitmap.bitmap; cw = @cwd; ch = @chd
+        @sprite.bitmap = @divebitmap.bitmap
+        cw = @cwd
+        ch = @chd
       end
       sx = @event.pattern_surf*cw
       sy = ((@event.direction-2)/2)*ch

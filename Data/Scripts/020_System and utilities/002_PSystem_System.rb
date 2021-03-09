@@ -8,8 +8,7 @@ end
 
 def pbScreenCapture
   t = pbGetTimeNow
-  filestart = t.strftime("[%Y-%m-%d] %H_%M_%S")
-  filestart = sprintf("%s.%03d", filestart, (t.to_f - t.to_i) * 1000)   # milliseconds
+  filestart = t.strftime("[%Y-%m-%d] %H_%M_%S.%L")
 #  capturefile = RTP.getSaveFileName(sprintf("%s.png", filestart))
 #  Graphics.snap_to_bitmap.save_to_png(capturefile)
   capturefile = RTP.getSaveFileName(sprintf("%s.bmp", filestart))

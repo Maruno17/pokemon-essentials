@@ -149,12 +149,12 @@ class GraphicsLister
       Dir.glob("*.PNG") { |f| @commands.push(f) }
       Dir.glob("*.gif") { |f| @commands.push(f) }
       Dir.glob("*.GIF") { |f| @commands.push(f) }
-#      Dir.glob("*.bmp") { |f| @commands.push(f) }
-#      Dir.glob("*.BMP") { |f| @commands.push(f) }
 #      Dir.glob("*.jpg") { |f| @commands.push(f) }
 #      Dir.glob("*.JPG") { |f| @commands.push(f) }
 #      Dir.glob("*.jpeg") { |f| @commands.push(f) }
 #      Dir.glob("*.JPEG") { |f| @commands.push(f) }
+#      Dir.glob("*.bmp") { |f| @commands.push(f) }
+#      Dir.glob("*.BMP") { |f| @commands.push(f) }
     }
     @commands.sort!
     @commands.length.times do |i|

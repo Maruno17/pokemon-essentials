@@ -90,7 +90,7 @@ module RTP
   end
 
   def self.getImagePath(filename)
-    return self.getPath(filename,["",".png",".gif"])   # ".jpg",".bmp",".jpeg"
+    return self.getPath(filename,["",".png",".gif"])   # ".jpg", ".jpeg", ".bmp"
   end
 
   def self.getAudioPath(filename)
@@ -158,7 +158,7 @@ end
 
 
 module FileTest
-  Image_ext = ['.bmp', '.png', '.jpg', '.jpeg', '.gif']
+  Image_ext = ['.png', '.gif']   # '.jpg', '.jpeg', '.bmp',
   Audio_ext = ['.mp3', '.mid', '.midi', '.ogg', '.wav', '.wma']
 
   def self.audio_exist?(filename)

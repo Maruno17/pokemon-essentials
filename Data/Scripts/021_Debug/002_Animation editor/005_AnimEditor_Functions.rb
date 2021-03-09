@@ -582,11 +582,11 @@ def pbSelectBG(canvas,timing)
   animfiles[cmdErase=animfiles.length]=_INTL("[Erase background graphic]")
   ret=false
   pbRgssChdir(File.join("Graphics", "Animations")) {
-     animfiles.concat(Dir.glob("*.bmp"))
-     animfiles.concat(Dir.glob("*.png"))
-     animfiles.concat(Dir.glob("*.jpg"))
-     animfiles.concat(Dir.glob("*.jpeg"))
-     animfiles.concat(Dir.glob("*.gif"))
+    animfiles.concat(Dir.glob("*.png"))
+    animfiles.concat(Dir.glob("*.gif"))
+#    animfiles.concat(Dir.glob("*.jpg"))
+#    animfiles.concat(Dir.glob("*.jpeg"))
+#    animfiles.concat(Dir.glob("*.bmp"))
   }
   cmdwin=pbListWindow(animfiles,320)
   cmdwin.height=480

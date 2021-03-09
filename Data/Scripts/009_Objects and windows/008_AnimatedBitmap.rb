@@ -199,10 +199,10 @@ class GifBitmap
           filestrName=file+".gif"
         elsif (filestring=pbGetFileChar(file+".png"))
           filestrName=file+".png"
-        elsif (filestring=pbGetFileChar(file+".jpg"))
-          filestrName=file+".jpg"
-        elsif (filestring=pbGetFileChar(file+".bmp"))
-          filestrName=file+".bmp"
+#        elsif (filestring=pbGetFileChar(file+".jpg"))
+#          filestrName=file+".jpg"
+#        elsif (filestring=pbGetFileChar(file+".bmp"))
+#          filestrName=file+".bmp"
         end
       end
     end

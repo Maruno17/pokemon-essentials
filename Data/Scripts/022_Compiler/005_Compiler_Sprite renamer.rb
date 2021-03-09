@@ -79,7 +79,7 @@ module Compiler
   def convert_pokemon_sprites(src_dir, dest_dir)
     return if !FileTest.directory?(src_dir)
     # generates a list of all graphic files
-    files = readDirectoryFiles(src_dir, ["*.png", "*.gif"])
+    files = readDirectoryFiles(src_dir, ["*.png"])
     # starts automatic renaming
     files.each_with_index do |file, i|
       Graphics.update if i % 100 == 0
@@ -104,7 +104,7 @@ module Compiler
   def convert_pokemon_icons(src_dir, dest_dir)
     return if !FileTest.directory?(src_dir)
     # generates a list of all graphic files
-    files = readDirectoryFiles(src_dir, ["*.png", "*.gif"])
+    files = readDirectoryFiles(src_dir, ["*.png"])
     # starts automatic renaming
     files.each_with_index do |file, i|
       Graphics.update if i % 100 == 0
@@ -124,7 +124,7 @@ module Compiler
   def convert_pokemon_footprints(src_dir, dest_dir)
     return if !FileTest.directory?(src_dir)
     # generates a list of all graphic files
-    files = readDirectoryFiles(src_dir, ["*.png", "*.gif"])
+    files = readDirectoryFiles(src_dir, ["*.png"])
     # starts automatic renaming
     files.each_with_index do |file, i|
       Graphics.update if i % 100 == 0
@@ -140,7 +140,7 @@ module Compiler
   def convert_item_icons(src_dir, dest_dir)
     return if !FileTest.directory?(src_dir)
     # generates a list of all graphic files
-    files = readDirectoryFiles(src_dir, ["*.png", "*.gif"])
+    files = readDirectoryFiles(src_dir, ["*.png"])
     # starts automatic renaming
     files.each_with_index do |file, i|
       Graphics.update if i % 100 == 0
@@ -191,7 +191,7 @@ module Compiler
   def convert_trainer_sprites(src_dir)
     return if !FileTest.directory?(src_dir)
     # generates a list of all graphic files
-    files = readDirectoryFiles(src_dir, ["*.png", "*.gif"])
+    files = readDirectoryFiles(src_dir, ["*.png"])
     # starts automatic renaming
     files.each_with_index do |file, i|
       Graphics.update if i % 100 == 0

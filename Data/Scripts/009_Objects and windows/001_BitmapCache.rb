@@ -138,7 +138,6 @@ class BitmapWrapper < Bitmap
 end
 
 
-
 module BitmapCache
   @cache = ObjectSpace::WeakMap.new
 
@@ -154,7 +153,9 @@ module BitmapCache
   end
 
   def self.debug
-    File.open("bitmapcache2.txt", "wb") { |f|
+    t = Time.now
+    filename = t.strftime("%H %M %S.%L.txt")
+    File.open("bitmapcache_" + filename, "wb") { |f|
       for i in @cache.keys
         k = fromCache(i)
         if !k

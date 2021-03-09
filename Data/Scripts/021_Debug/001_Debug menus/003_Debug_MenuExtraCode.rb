@@ -634,7 +634,7 @@ def pbImportAllAnimations
         pbSafeCopyFile(audio,RTP.getAudioPath("Audio/SE/Anim/"+File.basename(audio)),"Audio/SE/Anim/"+File.basename(audio))
       end
       images = []
-      %w( png jpg bmp gif ).each { |ext|
+      %w( png gif ).each { |ext|   # jpg jpeg bmp
         upext = ext.upcase
         images.concat(files.find_all { |f| f[f.length-3,3]==ext })
         images.concat(files.find_all { |f| f[f.length-3,3]==upext })
