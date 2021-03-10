@@ -75,6 +75,42 @@ def pbBitmapName(x)
   return (ret) ? ret : x
 end
 
+def strsplit(str, re)
+  ret = []
+  tstr = str
+  while re =~ tstr
+    ret[ret.length] = $~.pre_match
+    tstr = $~.post_match
+  end
+  ret[ret.length] = tstr if ret.length
+  return ret
+end
+
+def canonicalize(c)
+  csplit = strsplit(c, /[\/\\]/)
+  pos = -1
+  ret = []
+  retstr = ""
+  for x in csplit
+    if x == ".."
+      if pos >= 0
+        ret.delete_at(pos)
+        pos -= 1
+      end
+    elsif x != "."
+      ret.push(x)
+      pos += 1
+    end
+  end
+  for i in 0...ret.length
+    retstr += "/" if i > 0
+    retstr += ret[i]
+  end
+  return retstr
+end
+
+
+
 module RTP
   @rtpPaths = nil
 

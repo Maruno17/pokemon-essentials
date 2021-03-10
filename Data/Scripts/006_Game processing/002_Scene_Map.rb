@@ -80,7 +80,7 @@ class Scene_Map
     $game_player.straighten
     $game_map.update
     disposeSpritesets
-    GC.start
+    RPG::Cache.clear
     createSpritesets
     if $game_temp.transition_processing
       $game_temp.transition_processing = false

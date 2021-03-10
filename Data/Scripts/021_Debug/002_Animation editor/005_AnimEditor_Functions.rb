@@ -1173,7 +1173,7 @@ def animationEditorMain(animation)
   sidewin.dispose
   bottomwindow.dispose
   viewport.dispose
-  GC.start
+  RPG::Cache.clear
 end
 
 ################################################################################

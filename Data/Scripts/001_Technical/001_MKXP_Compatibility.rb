@@ -1,4 +1,6 @@
 $VERBOSE = nil
+Font.default_shadow = false if Font.respond_to?(:default_shadow)
+Graphics.frame_rate = 40
 
 def pbSetWindowText(string)
   System.set_window_title(string || System.game_title)

@@ -629,7 +629,7 @@ module Transitions
       @numframes = numframes
       @duration = numframes
       @disposed = false
-      @bitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_square")
+      @bitmap = RPG::Cache.transition("black_square")
       if !@bitmap
         @disposed = true
         return
@@ -709,7 +709,7 @@ module Transitions
       @numframes = numframes
       @duration = numframes
       @disposed = false
-      @bitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_square")
+      @bitmap = RPG::Cache.transition("black_square")
       if !@bitmap
         @disposed = true
         return
@@ -794,9 +794,9 @@ module Transitions
         @disposed = true
         return
       end
-      @bubblebitmap = BitmapCache.load_bitmap("Graphics/Transitions/water_1")
-      @splashbitmap = BitmapCache.load_bitmap("Graphics/Transitions/water_2")
-      @blackbitmap  = BitmapCache.load_bitmap("Graphics/Transitions/black_half")
+      @bubblebitmap = RPG::Cache.transition("water_1")
+      @splashbitmap = RPG::Cache.transition("water_2")
+      @blackbitmap  = RPG::Cache.transition("black_half")
       @buffer = Graphics.snap_to_bitmap
       if !@bubblebitmap || !@splashbitmap || !@blackbitmap || !@buffer
         @disposed = true
@@ -898,8 +898,8 @@ module Transitions
         @disposed = true
         return
       end
-      @blackbitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_half")
-      @ballbitmap  = BitmapCache.load_bitmap("Graphics/Transitions/ball_small")
+      @blackbitmap = RPG::Cache.transition("black_half")
+      @ballbitmap  = RPG::Cache.transition("ball_small")
       @buffer = Graphics.snap_to_bitmap
       if !@blackbitmap || !@ballbitmap || !@buffer
         @disposed = true
@@ -996,8 +996,8 @@ module Transitions
         @disposed = true
         return
       end
-      @blackbitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_half")
-      @ballbitmap  = BitmapCache.load_bitmap("Graphics/Transitions/ball_large")
+      @blackbitmap = RPG::Cache.transition("black_half")
+      @ballbitmap  = RPG::Cache.transition("ball_large")
       @buffer = Graphics.snap_to_bitmap
       if !@blackbitmap || !@ballbitmap || !@buffer
         @disposed = true
@@ -1104,8 +1104,8 @@ module Transitions
         @disposed = true
         return
       end
-      @blackbitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_square")
-      @ballbitmap  = BitmapCache.load_bitmap("Graphics/Transitions/ball_small")
+      @blackbitmap = RPG::Cache.transition("black_square")
+      @ballbitmap  = RPG::Cache.transition("ball_small")
       @buffer = Graphics.snap_to_bitmap
       if !@blackbitmap || !@ballbitmap || !@buffer
         @disposed = true
@@ -1205,9 +1205,9 @@ module Transitions
         @disposed = true
         return
       end
-      @blackbitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_half")
-      @curvebitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_curve")
-      @ballbitmap  = BitmapCache.load_bitmap("Graphics/Transitions/ball_small")
+      @blackbitmap = RPG::Cache.transition("black_half")
+      @curvebitmap = RPG::Cache.transition("black_curve")
+      @ballbitmap  = RPG::Cache.transition("ball_small")
       @buffer = Graphics.snap_to_bitmap
       if !@blackbitmap || !@curvebitmap || !@ballbitmap || !@buffer
         @disposed = true
@@ -1301,8 +1301,8 @@ module Transitions
         @disposed = true
         return
       end
-      @blackbitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_half")
-      @ballbitmap  = BitmapCache.load_bitmap("Graphics/Transitions/ball_small")
+      @blackbitmap = RPG::Cache.transition("black_half")
+      @ballbitmap  = RPG::Cache.transition("ball_small")
       @buffer = Graphics.snap_to_bitmap
       if !@blackbitmap || !@ballbitmap || !@buffer
         @disposed = true
@@ -1403,8 +1403,8 @@ module Transitions
         @disposed = true
         return
       end
-      @blackbitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_half")
-      @ballbitmap  = BitmapCache.load_bitmap("Graphics/Transitions/ball_large")
+      @blackbitmap = RPG::Cache.transition("black_half")
+      @ballbitmap  = RPG::Cache.transition("ball_large")
       @buffer = Graphics.snap_to_bitmap
       if !@blackbitmap || !@ballbitmap || !@buffer
         @disposed = true
@@ -1502,11 +1502,11 @@ module Transitions
         @disposed = true
         return
       end
-      @black1bitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_wedge_1")
-      @black2bitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_wedge_2")
-      @black3bitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_wedge_3")
-      @black4bitmap = BitmapCache.load_bitmap("Graphics/Transitions/black_wedge_4")
-      @ballbitmap   = BitmapCache.load_bitmap("Graphics/Transitions/ball_small")
+      @black1bitmap = RPG::Cache.transition("black_wedge_1")
+      @black2bitmap = RPG::Cache.transition("black_wedge_2")
+      @black3bitmap = RPG::Cache.transition("black_wedge_3")
+      @black4bitmap = RPG::Cache.transition("black_wedge_4")
+      @ballbitmap   = RPG::Cache.transition("ball_small")
       if !@black1bitmap || !@black2bitmap || !@black3bitmap || !@black4bitmap || !@ballbitmap
         @disposed = true
         return

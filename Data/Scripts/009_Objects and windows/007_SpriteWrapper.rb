@@ -1,7 +1,7 @@
 #===============================================================================
-# SpriteWrapper is a class based on Sprite which wraps Sprite's properties.
+# SpriteWrapper is a class which wraps (most of) Sprite's properties.
 #===============================================================================
-class SpriteWrapper < Sprite
+class SpriteWrapper
   def initialize(viewport=nil)
     @sprite = Sprite.new(viewport)
   end
