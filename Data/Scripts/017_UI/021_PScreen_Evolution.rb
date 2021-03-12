@@ -600,7 +600,7 @@ class PokemonEvolutionScene
   end
 
   def pbEvolutionMethodAfterEvolution
-    EvolutionCheck.check_after_evolution(@pokemon, @newspecies)
+    @pokemon.action_after_evolution(@newspecies)
   end
 
   def self.pbDuplicatePokemon(pkmn, new_species)

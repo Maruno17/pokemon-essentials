@@ -292,15 +292,14 @@ def pbHasEgg?(species)
   return false if !species_data
   species = species_data.species
   # species may be unbreedable, so check its evolution's compatibilities
-  evoSpecies = EvolutionHelper.evolutions(species, true)
-  compatSpecies = (evoSpecies && evoSpecies[0]) ? evoSpecies[0][2] : species
+  evoSpecies = species_data.get_evolutions(true)
+  compatSpecies = (evoSpecies && evoSpecies[0]) ? evoSpecies[0][0] : species
   species_data = GameData::Species.try_get(compatSpecies)
   compat = species_data.egg_groups
-  return false if compat.include?(:Undiscovered)
-  return false if compat.include?(:Ditto)
-  baby = EvolutionHelper.baby_species(species)
+  return false if compat.include?(:Undiscovered) || compat.include?(:Ditto)
+  baby = GameData::Species.get(species).get_baby_species
   return true if species == baby   # Is a basic species
-  baby = EvolutionHelper.baby_species(species, true)
+  baby = GameData::Species.get(species).get_baby_species(true)
   return true if species == baby   # Is an egg species without incense
   return false
 end

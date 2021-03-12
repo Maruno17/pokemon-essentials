@@ -103,17 +103,17 @@ def baseStatTotal(species)
 end
 
 def babySpecies(species)
-  $babySpecies[species] = EvolutionHelper.baby_species(species) if !$babySpecies[species]
+  $babySpecies[species] = GameData::Species.get(species).get_baby_species if !$babySpecies[species]
   return $babySpecies[species]
 end
 
 def minimumLevel(move)
-  $minimumLevel[species] = EvolutionHelper.minimum_level(species) if !$minimumLevel[species]
+  $minimumLevel[species] = GameData::Species.get(species).minimum_level if !$minimumLevel[species]
   return $minimumLevel[species]
 end
 
 def evolutions(species)
-  $evolutions[species] = EvolutionHelper.evolutions(species, true) if !$evolutions[species]
+  $evolutions[species] = GameData::Species.get(species).get_evolutions(true) if !$evolutions[species]
   return $evolutions[species]
 end
 

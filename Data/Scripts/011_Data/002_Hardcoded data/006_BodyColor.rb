@@ -27,6 +27,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::BodyColor.register({
   :id        => :Red,
   :id_number => 0,

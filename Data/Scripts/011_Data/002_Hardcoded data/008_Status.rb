@@ -35,6 +35,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::Status.register({
   :id        => :NONE,
   :id_number => 0,

@@ -58,6 +58,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::Stat.register({
   :id         => :HP,
   :id_number  => 0,

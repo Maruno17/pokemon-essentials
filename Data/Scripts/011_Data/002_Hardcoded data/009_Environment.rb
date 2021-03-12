@@ -25,6 +25,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::Environment.register({
   :id   => :None,
   :name => _INTL("None")

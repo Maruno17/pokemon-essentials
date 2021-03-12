@@ -894,6 +894,64 @@ class Pokemon
   end
 
   #=============================================================================
+  # Evolution checks
+  #=============================================================================
+  # Checks whether this Pokemon can evolve because of levelling up.
+  # @return [Symbol, nil] the ID of the species to evolve into
+  def check_evolution_on_level_up
+    return check_evolution_internal { |pkmn, new_species, method, parameter|
+      success = GameData::Evolution.get(method).call_level_up(pkmn, parameter)
+      next (success) ? new_species : nil
+    }
+  end
+
+  # Checks whether this Pokemon can evolve because of using an item on it.
+  # @param item_used [Symbol, GameData::Item, nil] the item being used
+  # @return [Symbol, nil] the ID of the species to evolve into
+  def check_evolution_on_use_item(item_used)
+    return check_evolution_internal { |pkmn, new_species, method, parameter|
+      success = GameData::Evolution.get(method).call_use_item(pkmn, parameter, item_used)
+      next (success) ? new_species : nil
+    }
+  end
+
+  # Checks whether this Pokemon can evolve because of being traded.
+  # @param other_pkmn [Pokemon] the other Pokémon involved in the trade
+  # @return [Symbol, nil] the ID of the species to evolve into
+  def check_evolution_on_trade(other_pkmn)
+    return check_evolution_internal { |pkmn, new_species, method, parameter|
+      success = GameData::Evolution.get(method).call_on_trade(pkmn, parameter, other_pkmn)
+      next (success) ? new_species : nil
+    }
+  end
+
+  # Called after this Pokémon evolves, to remove its held item (if the evolution
+  # required it to have a held item) or duplicate this Pokémon (Shedinja only).
+  # @param new_species [Pokemon] the species that this Pokémon evolved into
+  def action_after_evolution(new_species)
+    species_data.get_evolutions(true).each do |evo|   # [new_species, method, parameter, boolean]
+      next if evo[3]   # Prevolution
+      break if GameData::Evolution.get(method).call_after_evolution(self, evo[0], evo[2], new_species)
+    end
+  end
+
+  # The core method that performs evolution checks. Needs a block given to it,
+  # which will provide either a GameData::Species ID (the species to evolve
+  # into) or nil (keep checking).
+  # @return [Symbol, nil] the ID of the species to evolve into
+  def check_evolution_internal
+    return nil if egg? || shadowPokemon?
+    return nil if hasItem?(:EVERSTONE)
+    return nil if hasAbility?(:BATTLEBOND)
+    species_data.get_evolutions(true).each do |evo|   # [new_species, method, parameter, boolean]
+      next if evo[3]   # Prevolution
+      ret = yield self, evo[0], evo[1], evo[2]   # pkmn, new_species, method, parameter
+      return ret if ret
+    end
+    return nil
+  end
+
+  #=============================================================================
   # Stat calculations
   #=============================================================================
 

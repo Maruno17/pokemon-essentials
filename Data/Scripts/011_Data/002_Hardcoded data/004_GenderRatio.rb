@@ -29,6 +29,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::GenderRatio.register({
   :id            => :AlwaysMale,
   :name          => _INTL("Always Male")

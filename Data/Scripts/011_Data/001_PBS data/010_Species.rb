@@ -110,7 +110,7 @@ module GameData
       }
       if compiling_forms
         ret["PokedexForm"]  = [0, "u"]
-        ret["Evolutions"]   = [0, "*ees", :Species, :PBEvolution, nil]
+        ret["Evolutions"]   = [0, "*ees", :Species, :Evolution, nil]
         ret["MegaStone"]    = [0, "e", :Item]
         ret["MegaMove"]     = [0, "e", :Move]
         ret["UnmegaForm"]   = [0, "u"]
@@ -121,7 +121,7 @@ module GameData
         ret["GrowthRate"]   = [0, "e", :GrowthRate]
         ret["GenderRate"]   = [0, "e", :GenderRatio]
         ret["Incense"]      = [0, "e", :Item]
-        ret["Evolutions"]   = [0, "*ses", nil, :PBEvolution, nil]
+        ret["Evolutions"]   = [0, "*ses", nil, :Evolution, nil]
       end
       return ret
     end
@@ -221,6 +221,98 @@ module GameData
       return true
 #      return @front_sprite_altitude > 0
     end
+
+    def get_evolutions(exclude_invalid = false)
+      ret = []
+      @evolutions.each do |evo|
+        next if evo[3]   # Is the prevolution
+        next if evo[1] == :None && exclude_invalid
+        ret.push([evo[0], evo[1], evo[2]])   # [Species, method, parameter]
+      end
+      return ret
+    end
+
+    def get_family_evolutions(exclude_invalid = true)
+      evos = self.get_evolutions(exclude_invalid)
+      evos = evos.sort { |a, b| GameData::Species.get(a[0]).id_number <=> GameData::Species.get(b[0]).id_number }
+      ret = []
+      evos.each do |evo|
+        ret.push([@species].concat(evo))   # [Prevo species, evo species, method, parameter]
+        evo_array = GameData::Species.get(evo[0]).get_family_evolutions(exclude_invalid)
+        ret.concat(evo_array) if evo_array && evo_array.length > 0
+      end
+      return ret
+    end
+
+    def get_previous_species
+      return @species if @evolutions.length == 0
+      @evolutions.each { |evo| return evo[0] if evo[3] }   # Is the prevolution
+      return @species
+    end
+
+    def get_baby_species(check_items = false, item1 = nil, item2 = nil)
+      ret = @species
+      return ret if @evolutions.length == 0
+      @evolutions.each do |evo|
+        next if !evo[3]   # Not the prevolution
+        if check_items
+          incense = GameData::Species.get(evo[0]).incense
+          ret = evo[0] if !incense || item1 == incense || item2 == incense
+        else
+          ret = evo[0]   # Species of prevolution
+        end
+        break
+      end
+      ret = GameData::Species.get(ret).get_baby_species(check_items, item1, item2) if ret != @species
+      return ret
+    end
+
+    def get_related_species
+      sp = self.get_baby_species
+      evos = GameData::Species.get(sp).get_family_evolutions(false)
+      return [sp] if evos.length == 0
+      return [sp].concat(evos.map { |e| e[1] }).uniq
+    end
+
+    def family_evolutions_have_method?(check_method, check_param = nil)
+      sp = self.get_baby_species
+      evos = GameData::Species.get(sp).get_family_evolutions
+      return false if evos.length == 0
+      evos.each do |evo|
+        if check_method.is_a?(Array)
+          next if !check_method.include?(evo[2])
+        else
+          next if evo[2] != check_method
+        end
+        return true if check_param.nil? || evo[3] == check_param
+      end
+      return false
+    end
+
+    # Used by the Moon Ball when checking if a Pokémon's evolution family
+    # includes an evolution that uses the Moon Stone.
+    def family_item_evolutions_use_item?(check_item = nil)
+      sp = self.get_baby_species
+      evos = GameData::Species.get(sp).get_family_evolutions
+      return false if !evos || evos.length == 0
+      evos.each do |evo|
+        next if GameData::Evolution.get(evo[2]).use_item_proc.nil?
+        return true if check_item.nil? || evo[3] == check_item
+      end
+      return false
+    end
+
+    def minimum_level
+      return 1 if @evolutions.length == 0
+      @evolutions.each do |evo|
+        next if !evo[3]   # Not the prevolution
+        evo_method_data = GameData::Evolution.get(evo[1])
+        next if evo_method_data.level_up_proc.nil?
+        min_level = evo_method_data.minimum_level
+        return (min_level == 0) ? evo[2] : min_level + 1
+      end
+      return 1
+    end
   end
 end
 
@@ -261,4 +353,46 @@ end
 def showShadow?(species)
   Deprecation.warn_method('showShadow?', 'v20', 'GameData::Species.get(species).shows_shadow?')
   return GameData::Species.get(species).shows_shadow?
+end
+
+# @deprecated Use {GameData#Species#get_evolutions} instead. This alias is slated to be removed in v20.
+def pbGetEvolvedFormData(species, exclude_invalid = false)
+  Deprecation.warn_method('pbGetEvolvedFormData', 'v20', 'GameData::Species.get(species).get_evolutions')
+  return GameData::Species.get(species).get_evolutions(exclude_invalid)
+end
+
+# @deprecated Use {GameData#Species#get_family_evolutions} instead. This alias is slated to be removed in v20.
+def pbGetEvolutionFamilyData(species)   # Unused
+  Deprecation.warn_method('pbGetEvolutionFamilyData', 'v20', 'GameData::Species.get(species).get_family_evolutions')
+  return GameData::Species.get(species).get_family_evolutions
+end
+
+# @deprecated Use {GameData#Species#get_previous_species} instead. This alias is slated to be removed in v20.
+def pbGetPreviousForm(species)   # Unused
+  Deprecation.warn_method('pbGetPreviousForm', 'v20', 'GameData::Species.get(species).get_previous_species')
+  return GameData::Species.get(species).get_previous_species
+end
+
+# @deprecated Use {GameData#Species#get_baby_species} instead. This alias is slated to be removed in v20.
+def pbGetBabySpecies(species, check_items = false, item1 = nil, item2 = nil)
+  Deprecation.warn_method('pbGetBabySpecies', 'v20', 'GameData::Species.get(species).get_baby_species')
+  return GameData::Species.get(species).get_baby_species(check_items, item1, item2)
+end
+
+# @deprecated Use {GameData#Species#family_evolutions_have_method?} instead. This alias is slated to be removed in v20.
+def pbCheckEvolutionFamilyForMethod(species, method, param = nil)   # Unused
+  Deprecation.warn_method('pbCheckEvolutionFamilyForMethod', 'v20', 'GameData::Species.get(species).family_evolutions_have_method?(method)')
+  return GameData::Species.get(species).family_evolutions_have_method?(method, param)
+end
+
+# @deprecated Use {GameData#Species#family_item_evolutions_use_item?} instead. This alias is slated to be removed in v20.
+def pbCheckEvolutionFamilyForItemMethodItem(species, param = nil)
+  Deprecation.warn_method('pbCheckEvolutionFamilyForItemMethodItem', 'v20', 'GameData::Species.get(species).family_item_evolutions_use_item?(item)')
+  return GameData::Species.get(species).family_item_evolutions_use_item?(param)
+end
+
+# @deprecated Use {GameData#Species#minimum_level} instead. This alias is slated to be removed in v20.
+def pbGetMinimumLevel(species)
+  Deprecation.warn_method('pbGetMinimumLevel', 'v20', 'GameData::Species.get(species).minimum_level')
+  return GameData::Species.get(species).minimum_level
 end

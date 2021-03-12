@@ -172,7 +172,7 @@ def pbDayCareGenerateEgg
     babyspecies = (ditto1) ? father.species : mother.species
   end
   # Determine the egg's species
-  babyspecies = EvolutionHelper.baby_species(babyspecies, true, mother.item_id, father.item_id)
+  babyspecies = GameData::Species.get(babyspecies).get_bably_species(true, mother.item_id, father.item_id)
   case babyspecies
   when :MANAPHY
     babyspecies = :PHIONE if GameData::Species.exists?(:PHIONE)
@@ -201,7 +201,7 @@ def pbDayCareGenerateEgg
   if [:RATTATA, :SANDSHREW, :VULPIX, :DIGLETT, :MEOWTH, :GEODUDE, :GRIMER].include?(babyspecies)
     if mother.form==1
       egg.form = 1 if mother.hasItem?(:EVERSTONE)
-    elsif EvolutionHelper.baby_species(father.species, true, mother.item_id, father.item_id) == babyspecies
+    elsif father.species_data.get_baby_species(true, mother.item_id, father.item_id) == babyspecies
       egg.form = 1 if father.form==1 && father.hasItem?(:EVERSTONE)
     end
   end

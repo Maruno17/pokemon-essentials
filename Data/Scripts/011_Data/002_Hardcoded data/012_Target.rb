@@ -49,6 +49,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 # Bide, Counter, Metal Burst, Mirror Coat (calculate a target)
 GameData::Target.register({
   :id               => :None,

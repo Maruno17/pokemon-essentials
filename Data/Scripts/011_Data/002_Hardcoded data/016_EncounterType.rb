@@ -24,6 +24,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::EncounterType.register({
   :id             => :Land,
   :type           => :land,

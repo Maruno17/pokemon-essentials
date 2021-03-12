@@ -1156,9 +1156,37 @@ end
 class EvolutionsProperty
   def initialize
     @methods = []
-    (PBEvolution.maxValue + 1).times do |i|
-      @methods[i] = getConstantName(PBEvolution, i)
+    @evo_ids = []
+    GameData::Evolution.each do |e|
+      @methods.push(e.real_name)
+      @evo_ids.push(e.id)
     end
+  end
+
+  def edit_parameter(evo_method, value = nil)
+    param_type = GameData::Evolution.get(evo_method).parameter
+    return nil if param_type.nil?
+    ret = value
+    case param_type
+    when :Item
+      ret = pbChooseItemList(value)
+    when :Move
+      ret = pbChooseMoveList(value)
+    when :Species
+      ret = pbChooseSpeciesList(value)
+    when :Type
+      ret = pbChooseTypeList(value)
+    when :Ability
+      ret = pbChooseAbilityList(value)
+    else
+      params = ChooseNumberParams.new
+      params.setRange(0, 65535)
+      params.setDefaultValue(value) if value
+      params.setCancelValue(-1)
+      ret = pbMessageChooseNumber(_INTL("Choose a parameter."), params)
+      ret = nil if ret < 0
+    end
+    return ret
   end
 
   def set(_settingname,oldsetting)
@@ -1182,20 +1210,18 @@ class EvolutionsProperty
             commands.push(_INTL("[ADD EVOLUTION]"))
           else
             level = realcmds[i][2]
-            param_type = PBEvolution.getFunction(realcmds[i][1], "parameterType")
-            has_param = !PBEvolution.hasFunction?(realcmds[i][1], "parameterType") || param_type != nil
-            if has_param
-              if param_type && !GameData.const_defined?(param_type.to_sym)
-                level = getConstantName(param_type, level)
-              else
-                level = level.to_s
-              end
-              level = "???" if !level || level.empty?
-              commands.push(_INTL("{1}: {2}, {3}",
-                 GameData::Species.get(realcmds[i][0]).name, @methods[realcmds[i][1]], level.to_s))
-            else
+            evo_method_data = GameData::Evolution.get(realcmds[i][1])
+            param_type = evo_method_data.parameter
+            if param_type.nil?
               commands.push(_INTL("{1}: {2}",
-                 GameData::Species.get(realcmds[i][0]).name, @methods[realcmds[i][1]]))
+                 GameData::Species.get(realcmds[i][0]).name, evo_method_data.real_name))
+            else
+              if !GameData.const_defined?(param_type.to_sym) && param_type.is_a?(Symbol)
+                level = getConstantName(param_type, level)
+              end
+              level = "???" if !level || (level.is_a?(String) && level.empty?)
+              commands.push(_INTL("{1}: {2}, {3}",
+                 GameData::Species.get(realcmds[i][0]).name, evo_method_data.real_name, level.to_s))
             end
           end
           cmd[1] = i if oldsel>=0 && realcmds[i][3]==oldsel
@@ -1221,42 +1247,19 @@ class EvolutionsProperty
             pbMessage(_INTL("Choose an evolved form, method and parameter."))
             newspecies = pbChooseSpeciesList
             if newspecies
-              newmethod = pbMessage(_INTL("Choose an evolution method."),@methods,-1)
-              if newmethod>0
-                newparam = -1
-                param_type = PBEvolution.getFunction(newmethod, "parameterType")
-                has_param = !PBEvolution.hasFunction?(newmethod, "parameterType") || param_type != nil
-                if has_param
-                  allow_zero = false
-                  case param_type
-                  when :Item
-                    newparam = pbChooseItemList
-                  when :Move
-                    newparam = pbChooseMoveList
-                  when :Species
-                    newparam = pbChooseSpeciesList
-                  when :Type
-                    newparam = pbChooseTypeList
-                  when :Ability
-                    newparam = pbChooseAbilityList
-                  else
-                    allow_zero = true
-                    params = ChooseNumberParams.new
-                    params.setRange(0,65535)
-                    params.setCancelValue(-1)
-                    newparam = pbMessageChooseNumber(_INTL("Choose a parameter."),params)
-                  end
-                end
-                if !has_param || newparam.is_a?(Symbol) ||
-                   (newparam.is_a?(Integer) && (newparam > 0 || (allow_zero && newparam == 0)))
-                  havemove = -1
+              newmethodindex = pbMessage(_INTL("Choose an evolution method."),@methods,-1)
+              if newmethodindex >= 0
+                newmethod = @evo_ids[newmethodindex]
+                newparam = edit_parameter(newmethod)
+                if newparam || GameData::Evolution.get(newmethod).parameter.nil?
+                  existing_evo = -1
                   for i in 0...realcmds.length
-                    havemove = realcmds[i][3] if realcmds[i][0]==newspecies &&
-                                                 realcmds[i][1]==newmethod &&
-                                                 realcmds[i][2]==newparam
+                    existing_evo = realcmds[i][3] if realcmds[i][0]==newspecies &&
+                                                     realcmds[i][1]==newmethod &&
+                                                     realcmds[i][2]==newparam
                   end
-                  if havemove>=0
-                    oldsel = havemove
+                  if existing_evo >= 0
+                    oldsel = existing_evo
                   else
                     maxid = -1
                     realcmds.each { |i| maxid = [maxid,i[3]].max }
@@ -1274,16 +1277,16 @@ class EvolutionsProperty
             when 0   # Change species
               newspecies = pbChooseSpeciesList(entry[0])
               if newspecies
-                havemove = -1
+                existing_evo = -1
                 for i in 0...realcmds.length
-                  havemove = realcmds[i][3] if realcmds[i][0]==newspecies &&
-                                               realcmds[i][1]==entry[1] &&
-                                               realcmds[i][2]==entry[2]
+                  existing_evo = realcmds[i][3] if realcmds[i][0]==newspecies &&
+                                                   realcmds[i][1]==entry[1] &&
+                                                   realcmds[i][2]==entry[2]
                 end
-                if havemove>=0
+                if existing_evo >= 0
                   realcmds[cmd[1]] = nil
                   realcmds.compact!
-                  oldsel = havemove
+                  oldsel = existing_evo
                 else
                   entry[0] = newspecies
                   oldsel = entry[3]
@@ -1291,18 +1294,21 @@ class EvolutionsProperty
                 refreshlist = true
               end
             when 1   # Change method
-              newmethod = pbMessage(_INTL("Choose an evolution method."),@methods,-1,nil,entry[1])
-              if newmethod>0
-                havemove = -1
+              default_index = 0
+              @evo_ids.each_with_index { |evo, i| default_index = i if evo == entry[1] }
+              newmethodindex = pbMessage(_INTL("Choose an evolution method."),@methods,-1,nil,default_index)
+              if newmethodindex >= 0
+                newmethod = @evo_ids[newmethodindex]
+                existing_evo = -1
                 for i in 0...realcmds.length
-                  havemove = realcmds[i][3] if realcmds[i][0]==entry[0] &&
-                                               realcmds[i][1]==newmethod &&
-                                               realcmds[i][2]==entry[2]
+                  existing_evo = realcmds[i][3] if realcmds[i][0]==entry[0] &&
+                                                   realcmds[i][1]==newmethod &&
+                                                   realcmds[i][2]==entry[2]
                 end
-                if havemove>=0
+                if existing_evo >= 0
                   realcmds[cmd[1]] = nil
                   realcmds.compact!
-                  oldsel = havemove
+                  oldsel = existing_evo
                 elsif newmethod != entry[1]
                   entry[1] = newmethod
                   entry[2] = 0
@@ -1311,50 +1317,27 @@ class EvolutionsProperty
                 refreshlist = true
               end
             when 2   # Change parameter
-              newparam = -1
-              param_type = PBEvolution.getFunction(entry[1], "parameterType")
-              has_param = !PBEvolution.hasFunction?(entry[1], "parameterType") || param_type != nil
-              if has_param
-                allow_zero = false
-                case param_type
-                when :Item
-                  newparam = pbChooseItemList(entry[2])
-                when :Move
-                  newparam = pbChooseMoveList(entry[2])
-                when :Species
-                  newparam = pbChooseSpeciesList(entry[2])
-                when :Type
-                  newparam = pbChooseTypeList(entry[2])
-                when :Ability
-                  newparam = pbChooseAbilityList(entry[2])
-                else
-                  allow_zero = true
-                  params = ChooseNumberParams.new
-                  params.setRange(0,65535)
-                  params.setDefaultValue(entry[2])
-                  params.setCancelValue(-1)
-                  newparam = pbMessageChooseNumber(_INTL("Choose a parameter."),params)
-                end
-                if newparam.is_a?(Symbol) ||
-                   (newparam.is_a?(Integer) && (newparam > 0 || (allow_zero && newparam == 0)))
-                  havemove = -1
+              if GameData::Evolution.get(entry[1]).parameter.nil?
+                pbMessage(_INTL("This evolution method doesn't use a parameter."))
+              else
+                newparam = edit_parameter(entry[1], entry[2])
+                if newparam
+                  existing_evo = -1
                   for i in 0...realcmds.length
-                    havemove = realcmds[i][3] if realcmds[i][0]==entry[0] &&
-                                                 realcmds[i][1]==entry[1] &&
-                                                 realcmds[i][2]==newparam
+                    existing_evo = realcmds[i][3] if realcmds[i][0]==entry[0] &&
+                                                     realcmds[i][1]==entry[1] &&
+                                                     realcmds[i][2]==newparam
                   end
-                  if havemove>=0
+                  if existing_evo >= 0
                     realcmds[cmd[1]] = nil
                     realcmds.compact!
-                    oldsel = havemove
+                    oldsel = existing_evo
                   else
                     entry[2] = newparam
                     oldsel = entry[3]
                   end
                   refreshlist = true
                 end
-              else
-                pbMessage(_INTL("This evolution method doesn't use a parameter."))
               end
             when 3   # Delete
               realcmds[cmd[1]] = nil
@@ -1391,16 +1374,19 @@ class EvolutionsProperty
   def format(value)
     ret = ""
     for i in 0...value.length
-      ret << "," if i>0
+      ret << "," if i > 0
       param = value[i][2]
-      param_type = PBEvolution.getFunction(value[i][1], "parameterType")
-      if param_type && !GameData.const_defined?(param_type.to_sym)
+      evo_method_data = GameData::Evolution.get(value[i][1])
+      param_type = evo_method_data.parameter
+      if param_type.nil?
+        param = ""
+      elsif !GameData.const_defined?(param_type.to_sym) && param_type.is_a?(Symbol)
         param = getConstantName(param_type, param)
       else
         param = param.to_s
       end
       param = "" if !param
-      ret << sprintf("#{GameData::Species.get(value[i][0]).name},#{@methods[value[i][1]]},#{param}")
+      ret << sprintf("#{GameData::Species.get(value[i][0]).name},#{evo_method_data.real_name},#{param}")
     end
     return ret
   end

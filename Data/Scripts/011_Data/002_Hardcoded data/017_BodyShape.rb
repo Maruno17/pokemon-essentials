@@ -30,6 +30,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::BodyShape.register({
   :id        => :Head,
   :id_number => 1,

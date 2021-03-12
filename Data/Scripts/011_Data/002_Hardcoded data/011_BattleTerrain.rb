@@ -26,6 +26,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::BattleTerrain.register({
   :id   => :None,
   :name => _INTL("None")

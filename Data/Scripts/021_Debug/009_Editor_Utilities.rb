@@ -4,7 +4,7 @@ def pbGetLegalMoves(species)
   return moves if !species_data
   species_data.moves.each { |m| moves.push(m[1]) }
   species_data.tutor_moves.each { |m| moves.push(m) }
-  babyspecies = EvolutionHelper.baby_species(species)
+  babyspecies = species_data.get_baby_species
   GameData::Species.get(babyspecies).egg_moves.each { |m| moves.push(m) }
   moves |= []   # Remove duplicates
   return moves

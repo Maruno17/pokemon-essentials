@@ -9807,7 +9807,7 @@ BattlerEnemyX = -1
 BattlerEnemyY = 29
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions = NINJASK,Ninjask,20,SHEDINJA,Shedinja,
+Evolutions = NINJASK,Ninjask,20,SHEDINJA,Shedinja,20
 #-------------------------------
 [291]
 Name = Ninjask

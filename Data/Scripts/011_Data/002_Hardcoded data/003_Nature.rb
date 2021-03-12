@@ -27,6 +27,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::Nature.register({
   :id           => :HARDY,
   :id_number    => 0,

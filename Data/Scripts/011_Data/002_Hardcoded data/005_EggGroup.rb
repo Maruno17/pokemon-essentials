@@ -23,6 +23,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::EggGroup.register({
   :id   => :Undiscovered,
   :name => _INTL("Undiscovered")

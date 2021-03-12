@@ -72,6 +72,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::GrowthRate.register({
   :id          => :Medium,   # Also known as Medium Fast
   :name        => _INTL("Medium"),

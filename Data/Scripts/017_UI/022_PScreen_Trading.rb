@@ -173,7 +173,7 @@ class PokemonTrade_Scene
     pbFadeOutAndHide(@sprites)
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
-    newspecies = EvolutionCheck.check_trade_methods(@pokemon2,@pokemon)
+    newspecies = @pokemon2.check_evolution_on_trade(@pokemon)
     if newspecies
       evo = PokemonEvolutionScene.new
       evo.pbStartScreen(@pokemon2,newspecies)

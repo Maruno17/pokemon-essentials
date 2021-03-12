@@ -175,7 +175,7 @@ def pbChangeLevel(pkmn,newlevel,scene)
       pbLearnMove(pkmn,i[1],true) { scene.pbUpdate }
     end
     # Check for evolution
-    newspecies = EvolutionCheck.check_level_up_methods(pkmn)
+    newspecies = pkmn.check_evolution_on_level_up
     if newspecies
       pbFadeOutInWithMusic {
         evo = PokemonEvolutionScene.new
@@ -476,7 +476,7 @@ def pbUseItem(bag,item,bagscene=nil)
     if itm.is_evolution_stone?
       annot = []
       for pkmn in $Trainer.party
-        elig = EvolutionCheck.check_item_methods(pkmn, item)
+        elig = pkmn.check_evolution_on_use_item(item)
         annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
       end
     end

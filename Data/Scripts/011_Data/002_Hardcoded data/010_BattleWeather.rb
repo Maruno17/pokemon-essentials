@@ -25,6 +25,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::BattleWeather.register({
   :id   => :None,
   :name => _INTL("None")

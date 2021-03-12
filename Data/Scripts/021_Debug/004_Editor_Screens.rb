@@ -1290,12 +1290,12 @@ def pbRegionalDexEditorMain
           GameData::Species.each { |s| new_dex.push(s.species) if s.form == 0 }
           dex_lists.push(new_dex)
           refresh_list = true
-        when 2   # Fill with National Dex
+        when 2   # Fill with National Dex (grouped families)
           new_dex = []
           seen = []
           GameData::Species.each do |s|
             next if s.form != 0 || seen.include?(s.species)
-            family = EvolutionHelper.all_related_species(s.species)
+            family = s.get_related_species
             new_dex.concat(family)
             seen.concat(family)
           end
@@ -1343,12 +1343,12 @@ def pbAppendEvoToFamilyArray(species, array, seenarray)
   return if seenarray[species]
   array.push(species)
   seenarray[species] = true
-  evos = EvolutionHelper.evolutions(species)
+  evos = GameData::Species.get(species).get_evolutions
   if evos.length > 0
-    evos.sort! { |a, b| a[2] <=> b[2] }
+    evos.sort! { |a, b| GameData::Species.get(a[0]).id_number <=> GameData::Species.get(b[0]).id_number }
     subarray = []
     for i in evos
-      pbAppendEvoToFamilyArray(i[2], subarray, seenarray)
+      pbAppendEvoToFamilyArray(i[0], subarray, seenarray)
     end
     array.push(subarray) if subarray.length > 0
   end
@@ -1359,7 +1359,7 @@ def pbGetEvoFamilies
   ret = []
   GameData::Species.each do |sp|
     next if sp.form > 0
-    species = EvolutionHelper.baby_species(sp.species)
+    species = sp.get_baby_species
     next if seen[species]
     subret = []
     pbAppendEvoToFamilyArray(species, subret, seen)

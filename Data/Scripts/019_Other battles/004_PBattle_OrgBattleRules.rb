@@ -553,7 +553,7 @@ $canEvolve       = {}
 class BabyRestriction
   def isValid?(pokemon)
     baby=$babySpeciesData[pokemon.species] ? $babySpeciesData[pokemon.species] :
-       ($babySpeciesData[pokemon.species]=EvolutionHelper.baby_species(pokemon.species))
+       ($babySpeciesData[pokemon.species] = pokemon.species_data.get_baby_species)
     return baby==pokemon.species
   end
 end
@@ -563,10 +563,10 @@ end
 class UnevolvedFormRestriction
   def isValid?(pokemon)
     baby=$babySpeciesData[pokemon.species] ? $babySpeciesData[pokemon.species] :
-       ($babySpeciesData[pokemon.species]=EvolutionHelper.baby_species(pokemon.species))
-    return false if baby!=pokemon.species
+       ($babySpeciesData[pokemon.species] = pokemon.species_data.get_baby_species)
+    return false if pokemon.species != baby
     canEvolve=($canEvolve[pokemon.species]!=nil) ? $canEvolve[pokemon.species] :
-       ($canEvolve[pokemon.species]=(EvolutionHelper.evolutions(pokemon.species, true).length!=0))
+       ($canEvolve[pokemon.species] = pokemon.species_data.get_evolutions(true).length > 0))
     return false if !canEvolve
     return true
   end

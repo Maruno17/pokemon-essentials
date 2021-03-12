@@ -23,6 +23,8 @@ module GameData
   end
 end
 
+#===============================================================================
+
 GameData::Habitat.register({
   :id   => :None,
   :name => _INTL("None")

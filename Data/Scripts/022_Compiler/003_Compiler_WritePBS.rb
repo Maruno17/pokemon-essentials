@@ -331,18 +331,15 @@ module Compiler
             next if evo[3]   # Skip prevolution entries
             f.write(",") if need_comma
             need_comma = true
-            f.write(sprintf("%s,%s,", evo[0], getConstantName(PBEvolution, evo[1])))
-            param_type = PBEvolution.getFunction(evo[1], "parameterType")
-            has_param = !PBEvolution.hasFunction?(evo[1], "parameterType") || param_type != nil
-            next if !has_param
-            if param_type
-              if GameData.const_defined?(param_type.to_sym)
-                f.write(evo[2].to_s)
-              else
+            evo_type_data = GameData::Evolution.get(evo[1])
+            param_type = evo_type_data.parameter
+            f.write(sprintf("%s,%s,", evo[0], evo_type_data.id.to_s))
+            if !param_type.nil?
+              if !GameData.const_defined?(param_type.to_sym) && param_type.is_a?(Symbol)
                 f.write(getConstantName(param_type, evo[2]))
+              else
+                f.write(evo[2].to_s)
               end
-            else
-              f.write(evo[2].to_s)
             end
           end
           f.write("\r\n")
@@ -439,18 +436,15 @@ module Compiler
             next if evo[3]   # Skip prevolution entries
             f.write(",") if need_comma
             need_comma = true
-            f.write(sprintf("%s,%s,", evo[0], getConstantName(PBEvolution, evo[1])))
-            param_type = PBEvolution.getFunction(evo[1], "parameterType")
-            has_param = !PBEvolution.hasFunction?(evo[1], "parameterType") || param_type != nil
-            next if !has_param
-            if param_type
-              if GameData.const_defined?(param_type.to_sym)
-                f.write(evo[2].to_s)
-              else
+            evo_type_data = GameData::Evolution.get(evo[1])
+            param_type = evo_type_data.parameter
+            f.write(sprintf("%s,%s,", evo[0], evo_type_data.id.to_s))
+            if !param_type.nil?
+              if !GameData.const_defined?(param_type.to_sym) && param_type.is_a?(Symbol)
                 f.write(getConstantName(param_type, evo[2]))
+              else
+                f.write(evo[2].to_s)
               end
-            else
-              f.write(evo[2].to_s)
             end
           end
           f.write("\r\n")
@@ -496,7 +490,7 @@ module Compiler
           if current_family && current_family.include?(species)
             f.write(",") if comma
           else
-            current_family = EvolutionHelper.all_related_species(species)
+            current_family = GameData::Species.get(species).get_related_species
             comma = false
             f.write("\r\n")
           end
