@@ -566,7 +566,7 @@ class UnevolvedFormRestriction
        ($babySpeciesData[pokemon.species] = pokemon.species_data.get_baby_species)
     return false if pokemon.species != baby
     canEvolve=($canEvolve[pokemon.species]!=nil) ? $canEvolve[pokemon.species] :
-       ($canEvolve[pokemon.species] = pokemon.species_data.get_evolutions(true).length > 0))
+       ($canEvolve[pokemon.species] = pokemon.species_data.get_evolutions(true).length > 0)
     return false if !canEvolve
     return true
   end
