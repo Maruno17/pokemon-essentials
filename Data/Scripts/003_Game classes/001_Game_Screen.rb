@@ -83,16 +83,14 @@ class Game_Screen
   #-----------------------------------------------------------------------------
   def weather(type, power, duration)
     @weather_type_target = type
-    if @weather_type_target!=0
-      @weather_type = @weather_type_target
-    end
-    if @weather_type_target==0
+    @weather_type = @weather_type_target if @weather_type_target != 0
+    if @weather_type_target == 0
       @weather_max_target = 0.0
     else
-      @weather_max_target = (power + 1) * 4.0
+      @weather_max_target = (power + 1) * RPG::Weather::MAX_SPRITES / 10
     end
-    @weather_duration = duration
-    if @weather_duration==0
+    @weather_duration = duration * Graphics.frame_rate / 20
+    if @weather_duration == 0
       @weather_type = @weather_type_target
       @weather_max  = @weather_max_target
     end
