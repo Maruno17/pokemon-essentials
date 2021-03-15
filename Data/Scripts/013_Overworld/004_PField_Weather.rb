@@ -21,19 +21,18 @@ module RPG
       @tiles_tall   = 0
       @sun          = 0
       @sunValue     = 0
+      @time_until_flash = 0
       # [array of particle bitmaps, array of tile bitmaps,
-      #  +x per frame (particle), +y per frame (particle), +opacity per frame (particle),
-      #  +x per frame (tile), +y per frame (tile)]
+      #  +x per second (particle), +y per second (particle), +opacity per second (particle),
+      #  +x per second (tile), +y per second (tile)]
       @weatherTypes = []
       @weatherTypes[PBFieldWeather::None]      = nil
-      @weatherTypes[PBFieldWeather::Rain]      = [[], nil, -1200 / Graphics.frame_rate, 4800 / Graphics.frame_rate, 0]
-      @weatherTypes[PBFieldWeather::HeavyRain] = [[], nil, -4800 / Graphics.frame_rate, 4800 / Graphics.frame_rate, 0]
-      @weatherTypes[PBFieldWeather::Storm]     = [[], nil, -4800 / Graphics.frame_rate, 4800 / Graphics.frame_rate, 0]
-      @weatherTypes[PBFieldWeather::Snow]      = [[], nil, -240 / Graphics.frame_rate, 240 / Graphics.frame_rate, 0]
-      @weatherTypes[PBFieldWeather::Blizzard]  = [[], [], -960 / Graphics.frame_rate, 64 / Graphics.frame_rate, 0,
-                                                  -1440 / Graphics.frame_rate, 720 / Graphics.frame_rate]
-      @weatherTypes[PBFieldWeather::Sandstorm] = [[], [], -1200 / Graphics.frame_rate, 640 / Graphics.frame_rate, 0,
-                                                  -720 / Graphics.frame_rate, 360 / Graphics.frame_rate]
+      @weatherTypes[PBFieldWeather::Rain]      = [[], nil, -1200, 4800, 0]
+      @weatherTypes[PBFieldWeather::HeavyRain] = [[], nil, -4800, 4800, 0]
+      @weatherTypes[PBFieldWeather::Storm]     = [[], nil, -4800, 4800, 0]
+      @weatherTypes[PBFieldWeather::Snow]      = [[], nil, -240, 240, 0]
+      @weatherTypes[PBFieldWeather::Blizzard]  = [[], [], -960, 64, 0, -1440, 720]
+      @weatherTypes[PBFieldWeather::Sandstorm] = [[], [], -1200, 640, 0, -720, 360]
       @weatherTypes[PBFieldWeather::Sun]       = nil
       @sprites = []
       @sprite_lifetimes = []
@@ -73,6 +72,8 @@ module RPG
         h = @weatherTypes[@type][1][0].height
         @tiles_wide = (Graphics.width.to_f / w).ceil + 1
         @tiles_tall = (Graphics.height.to_f / h).ceil + 1
+      else
+        @tiles_wide = @tiles_tall = 0
       end
       ensureSprites
       @sprites.each_with_index { |sprite, i| set_sprite_bitmap(sprite, i) }
@@ -215,36 +216,37 @@ module RPG
       if [PBFieldWeather::Rain, PBFieldWeather::HeavyRain, PBFieldWeather::Storm].include?(@type) && index % 2 != 0   # Splash
         sprite.x = @ox - sprite.bitmap.width + rand(Graphics.width + sprite.bitmap.width * 2)
         sprite.y = @oy - sprite.bitmap.height + rand(Graphics.height + sprite.bitmap.height * 2)
-        @sprite_lifetimes[index] = Graphics.frame_rate * (30 + rand(20)) / 100
+        @sprite_lifetimes[index] = (30 + rand(20)) * 10_000   # 0.3-0.5 seconds
       else
         gradient = @weatherTypes[@type][2].to_f / @weatherTypes[@type][3]
         sprite.x = @ox - sprite.bitmap.width + rand(Graphics.width + sprite.bitmap.width * 2 - gradient * Graphics.height)
         sprite.y = @oy - sprite.bitmap.height - rand(Graphics.height)
-        @sprite_lifetimes[index] = (@oy - sprite.y + rand(Graphics.height * 8 / 5)) / @weatherTypes[@type][3]
+        @sprite_lifetimes[index] = 1_000_000 * (@oy - sprite.y + rand(Graphics.height * 8 / 5)) / @weatherTypes[@type][3]
       end
       sprite.opacity = 255
     end
 
     def update_sprite_position(sprite, index)
       return if !sprite
+      delta_t = Graphics.delta
       if @sprite_lifetimes[index] > 0
-        @sprite_lifetimes[index] -= 1
-        if @sprite_lifetimes[index] == 0
+        @sprite_lifetimes[index] -= delta_t
+        if @sprite_lifetimes[index] <= 0
           reset_sprite_position(sprite, index)
           return
         end
       end
       if [PBFieldWeather::Rain, PBFieldWeather::HeavyRain, PBFieldWeather::Storm].include?(@type) && index % 2 != 0   # Splash
-        sprite.visible = (@sprite_lifetimes[index] < Graphics.frame_rate * 2 / 10)
+        sprite.visible = (@sprite_lifetimes[index] < 200_000)   # 0.2 seconds
       else
-        sprite.x += @weatherTypes[@type][2]
-        sprite.y += @weatherTypes[@type][3]
+        sprite.x += @weatherTypes[@type][2] * delta_t / 1_000_000
+        sprite.y += @weatherTypes[@type][3] * delta_t / 1_000_000
         if @type == PBFieldWeather::Snow || @type == PBFieldWeather::Blizzard
           sprite.x -= (4 * (sprite.y - @oy)) / Graphics.height
           sprite.x -= [2, 1, 0, -1][rand(4)]
           sprite.y += index % 6
         end
-        sprite.opacity += @weatherTypes[@type][4]
+        sprite.opacity += @weatherTypes[@type][4] * delta_t / 1_000_000
       end
       x = sprite.x - @ox
       y = sprite.y - @oy
@@ -261,9 +263,10 @@ module RPG
 
     def update_tile_position(sprite, index)
       return if !sprite || !sprite.bitmap
+      delta_t = Graphics.delta
       if @tiles_wide > 0 && @tiles_tall > 0
-        sprite.x += @weatherTypes[@type][5]
-        sprite.y += @weatherTypes[@type][6]
+        sprite.x += @weatherTypes[@type][5] * delta_t / 1_000_000
+        sprite.y += @weatherTypes[@type][6] * delta_t / 1_000_000
         sprite.x += @tiles_wide * sprite.bitmap.width if sprite.x - @ox + sprite.bitmap.width < 0
         sprite.y -= @tiles_tall * sprite.bitmap.height if sprite.y - @oy > Graphics.height
         sprite.visible = true
@@ -293,8 +296,8 @@ module RPG
         @viewport.tone.set(     @max / 2,             0,     -@max / 2,  0)
       when PBFieldWeather::Sun
         @sun = @max if @sun != @max && @sun != -@max
-        @sun = -@sun if @sunValue > @max || @sunValue < 0
-        @sunValue = @sunValue + @sun / 32
+        @sun *= -1 if (@sun > 0 && @sunValue > @max) || (@sun < 0 && @sunValue < 0)
+        @sunValue += @sun.to_f * Graphics.delta / 400_000   # 0.4 seconds
         @viewport.tone.set(@sunValue + 63, @sunValue + 63, @sunValue / 2 + 31, 0)
       end
     end
@@ -304,8 +307,15 @@ module RPG
       update_screen_tone
       # Storm flashes
       if @type == PBFieldWeather::Storm
-        rnd = rand(300)
-        @viewport.flash(Color.new(255, 255, 255, 230), rnd * 20) if rnd < 4
+        if @time_until_flash > 0
+          @time_until_flash -= Graphics.delta
+          if @time_until_flash <= 0
+            @viewport.flash(Color.new(255, 255, 255, 230), (2 + rand(3)) * 20)
+          end
+        end
+        if @time_until_flash <= 0
+          @time_until_flash = (1 + rand(12)) * 500_000   # 0.5-6 seconds
+        end
       end
       @viewport.update
       # Update weather particles (raindrops, snowflakes, etc.)
