@@ -94,6 +94,8 @@ class PokemonMapFactory
     return nil
   end
 
+  # Detects whether the player has moved onto a connected map, and if so, causes
+  # their transfer to that map.
   def setCurrentMap
     return if $game_player.moving?
     return if $game_map.valid?($game_player.x,$game_player.y)
@@ -110,6 +112,7 @@ class PokemonMapFactory
     pbAutoplayOnTransition
     $game_map.refresh
     setMapChanged(oldmap)
+    $game_screen.weather_duration = 20
   end
 
   def setMapsInRange

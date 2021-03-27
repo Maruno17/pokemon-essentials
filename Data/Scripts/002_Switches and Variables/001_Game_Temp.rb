@@ -25,7 +25,6 @@ class Game_Temp
   attr_accessor :fadestate                # for sprite hashes
   attr_accessor :background_bitmap
   attr_accessor :message_window_showing
-  attr_accessor :player_transferring
   attr_accessor :transition_processing
   attr_accessor :mart_prices
   #-----------------------------------------------------------------------------
@@ -52,7 +51,6 @@ class Game_Temp
     @fadestate              = 0
     @background_bitmap      = nil
     @message_window_showing = false
-    @player_transferring    = false
     @transition_processing  = false
     @mart_prices            = {}
   end

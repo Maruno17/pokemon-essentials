@@ -8,8 +8,9 @@ begin
     Sandstorm   = 5
     HeavyRain   = 6
     Sun = Sunny = 7
+    Fog         = 8
 
-    def PBFieldWeather.maxValue; return 7; end
+    def PBFieldWeather.maxValue; return 8; end
   end
 
 rescue Exception

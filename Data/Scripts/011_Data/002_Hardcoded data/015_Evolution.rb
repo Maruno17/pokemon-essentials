@@ -142,7 +142,7 @@ GameData::Evolution.register({
   :level_up_proc => proc { |pkmn, parameter|
     if pkmn.level >= parameter && $game_screen
       next [PBFieldWeather::Rain, PBFieldWeather::HeavyRain,
-            PBFieldWeather::Storm].include?($game_screen.weather_type)
+            PBFieldWeather::Storm, PBFieldWeather::Fog].include?($game_screen.weather_type)
     end
   }
 })

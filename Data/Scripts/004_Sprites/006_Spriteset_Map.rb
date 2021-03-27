@@ -143,21 +143,12 @@ class Spriteset_Map
       sprite.update
     end
     if self.map!=$game_map
-      if @weather.max>0
-        @weather.max -= 2
-        if @weather.max<=0
-          @weather.max  = 0
-          @weather.type = 0
-          @weather.ox   = 0
-          @weather.oy   = 0
-        end
-      end
+      @weather.fade_in(PBFieldWeather::None, 0, 20)
     else
-      @weather.type = $game_screen.weather_type
-      @weather.max  = $game_screen.weather_max
-      @weather.ox   = tmox
-      @weather.oy   = tmoy
+      @weather.fade_in($game_screen.weather_type, $game_screen.weather_max, $game_screen.weather_duration)
     end
+    @weather.ox   = tmox
+    @weather.oy   = tmoy
     @weather.update
     @@viewport1.tone = $game_screen.tone
     @@viewport3.color = $game_screen.flash_color

@@ -15,6 +15,12 @@ class Bitmap
   end
 end
 
+module Graphics
+  def self.delta_s
+    return self.delta.to_f / 1_000_000
+  end
+end
+
 def pbSetResizeFactor(factor)
   if !$ResizeInitialized
     Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)

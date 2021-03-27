@@ -9,39 +9,38 @@ class Game_Screen
   #-----------------------------------------------------------------------------
   # * Public Instance Variables
   #-----------------------------------------------------------------------------
-  attr_reader :brightness               # brightness
-  attr_reader :tone                     # color tone
-  attr_reader :flash_color              # flash color
-  attr_reader :shake                    # shake positioning
-  attr_reader :pictures                 # pictures
-  attr_reader :weather_type             # weather type
-  attr_reader :weather_max              # max number of weather sprites
+  attr_reader   :brightness         # brightness
+  attr_reader   :tone               # color tone
+  attr_reader   :flash_color        # flash color
+  attr_reader   :shake              # shake positioning
+  attr_reader   :pictures           # pictures
+  attr_reader   :weather_type       # weather type
+  attr_reader   :weather_max        # max number of weather sprites
+  attr_accessor :weather_duration   # ticks in which the weather should fade in
   #-----------------------------------------------------------------------------
   # * Object Initialization
   #-----------------------------------------------------------------------------
   def initialize
-    @brightness          = 255
-    @fadeout_duration    = 0
-    @fadein_duration     = 0
-    @tone                = Tone.new(0, 0, 0, 0)
-    @tone_target         = Tone.new(0, 0, 0, 0)
-    @tone_duration       = 0
-    @flash_color         = Color.new(0, 0, 0, 0)
-    @flash_duration      = 0
-    @shake_power         = 0
-    @shake_speed         = 0
-    @shake_duration      = 0
-    @shake_direction     = 1
-    @shake               = 0
-    @pictures            = [nil]
+    @brightness       = 255
+    @fadeout_duration = 0
+    @fadein_duration  = 0
+    @tone             = Tone.new(0, 0, 0, 0)
+    @tone_target      = Tone.new(0, 0, 0, 0)
+    @tone_duration    = 0
+    @flash_color      = Color.new(0, 0, 0, 0)
+    @flash_duration   = 0
+    @shake_power      = 0
+    @shake_speed      = 0
+    @shake_duration   = 0
+    @shake_direction  = 1
+    @shake            = 0
+    @pictures         = [nil]
     for i in 1..100
       @pictures.push(Game_Picture.new(i))
     end
-    @weather_type        = 0
-    @weather_max         = 0.0
-    @weather_type_target = 0
-    @weather_max_target  = 0.0
-    @weather_duration    = 0
+    @weather_type     = 0
+    @weather_max      = 0.0
+    @weather_duration = 0
   end
   #-----------------------------------------------------------------------------
   # * Start Changing Color Tone
@@ -82,18 +81,9 @@ class Game_Screen
   #     duration : time
   #-----------------------------------------------------------------------------
   def weather(type, power, duration)
-    @weather_type_target = type
-    @weather_type = @weather_type_target if @weather_type_target != 0
-    if @weather_type_target == 0
-      @weather_max_target = 0.0
-    else
-      @weather_max_target = (power + 1) * RPG::Weather::MAX_SPRITES / 10
-    end
-    @weather_duration = duration * Graphics.frame_rate / 20
-    if @weather_duration == 0
-      @weather_type = @weather_type_target
-      @weather_max  = @weather_max_target
-    end
+    @weather_type     = type
+    @weather_max      = (power + 1) * RPG::Weather::MAX_SPRITES / 10
+    @weather_duration = duration   # In 1/20ths of a seconds
   end
   #-----------------------------------------------------------------------------
   # * Frame Update
@@ -132,14 +122,6 @@ class Game_Screen
       @shake_direction = -1 if @shake>@shake_power*2
       @shake_direction = 1 if @shake<-@shake_power*2
       @shake_duration -= 1 if @shake_duration>=1
-    end
-    if @weather_duration>=1
-      d = @weather_duration
-      @weather_max = (@weather_max*(d-1)+@weather_max_target)/d
-      @weather_duration -= 1
-      if @weather_duration==0
-        @weather_type = @weather_type_target
-      end
     end
     if $game_temp.in_battle
       for i in 51..100
