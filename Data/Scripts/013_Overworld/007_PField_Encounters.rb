@@ -138,13 +138,12 @@ class PokemonEncounters
           encounter_chance /= 2
           min_steps_needed *= 2
         when :SNOWCLOAK
-          if $game_screen.weather_type == PBFieldWeather::Snow ||
-             $game_screen.weather_type == PBFieldWeather::Blizzard
+          if GameData::Weather.get($game_screen.weather_type).category == :Hail
             encounter_chance /= 2
             min_steps_needed *= 2
           end
         when :SANDVEIL
-          if $game_screen.weather_type == PBFieldWeather::Sandstorm
+          if GameData::Weather.get($game_screen.weather_type).category == :Sandstorm
             encounter_chance /= 2
             min_steps_needed *= 2
           end

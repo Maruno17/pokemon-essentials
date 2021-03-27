@@ -805,7 +805,7 @@ HiddenMoveHandlers::UseMove.add(:SURF,proc { |move,pokemon|
 # Sweet Scent
 #===============================================================================
 def pbSweetScent
-  if $game_screen.weather_type!=PBFieldWeather::None
+  if $game_screen.weather_type != :None
     pbMessage(_INTL("The sweet scent faded for some reason..."))
     return
   end

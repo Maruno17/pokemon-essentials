@@ -410,7 +410,7 @@ Events.onMapChanging += proc { |_sender, e|
     new_map_metadata = GameData::MapMetadata.try_get(new_map_ID)
     next if new_map_metadata && new_map_metadata.weather
   end
-  $game_screen.weather(PBFieldWeather::None, 0, 0)
+  $game_screen.weather(:None, 0, 0)
 }
 
 # Set up various data related to the new map

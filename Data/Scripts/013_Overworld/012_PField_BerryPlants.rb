@@ -223,18 +223,12 @@ class BerryPlantSprite
           end
         end
       end
-      # Check auto-watering
-      if berryData[0]>0 && berryData[0]<5
-        # Reset watering
-        if $game_screen &&
-           ($game_screen.weather_type==PBFieldWeather::Rain ||
-           $game_screen.weather_type==PBFieldWeather::HeavyRain ||
-           $game_screen.weather_type==PBFieldWeather::Storm)
-          # If raining, plant is already watered
-          if berryData[2]==false
-            berryData[2]=true
-            berryData[4]+=1
-          end
+      # If raining, automatically water the plant
+      if berryData[0] > 0 && berryData[0] < 5 && $game_screen &&
+         GameData::Weather.get($game_screen.weather_type).category == :Rain
+        if berryData[2] == false
+          berryData[2] = true
+          berryData[4] += 1
         end
       end
     end

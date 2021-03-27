@@ -747,24 +747,26 @@ end
 
 module WeatherEffectProperty
   def self.set(_settingname,oldsetting)
+    oldsetting = [:None, 100] if !oldsetting
     options = []
-    for i in 0..PBFieldWeather.maxValue
-      options.push(getConstantName(PBFieldWeather,i) || "ERROR")
+    ids = []
+    default = 0
+    GameData::Weather.each do |w|
+      default = ids.length if w.id == oldsetting[0]
+      options.push(w.real_name)
+      ids.push(w.id)
     end
-    cmd = pbMessage(_INTL("Choose a weather effect."),options,1)
-    if cmd==0
-      return nil
-    else
-      params = ChooseNumberParams.new
-      params.setRange(0,100)
-      params.setDefaultValue((oldsetting) ? oldsetting[1] : 100)
-      number = pbMessageChooseNumber(_INTL("Set the probability of the weather."),params)
-      return [cmd,number]
-    end
+    cmd = pbMessage(_INTL("Choose a weather effect."), options, -1, default)
+    return nil if cmd < 0 || ids[cmd] == :None
+    params = ChooseNumberParams.new
+    params.setRange(0, 100)
+    params.setDefaultValue(oldsetting[1])
+    number = pbMessageChooseNumber(_INTL("Set the probability of the weather."), params)
+    return [ids[cmd], number]
   end
 
   def self.format(value)
-    return (value) ? (getConstantName(PBFieldWeather,value[0]) || "ERROR")+",#{value[1]}" : "-"
+    return (value) ? GameData::Weather.get(value[0]).real_name + ",#{value[1]}" : "-"
   end
 end
 

@@ -121,7 +121,7 @@ GameData::Evolution.register({
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
     if pkmn.level >= parameter && $game_screen
-      next $game_screen.weather_type == PBFieldWeather::None
+      next $game_screen.weather_type == :None
     end
   }
 })
@@ -131,7 +131,7 @@ GameData::Evolution.register({
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
     if pkmn.level >= parameter && $game_screen
-      next $game_screen.weather_type == PBFieldWeather::Sun
+      next GameData::Weather.get($game_screen.weather_type).category == :Sun
     end
   }
 })
@@ -141,8 +141,7 @@ GameData::Evolution.register({
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
     if pkmn.level >= parameter && $game_screen
-      next [PBFieldWeather::Rain, PBFieldWeather::HeavyRain,
-            PBFieldWeather::Storm, PBFieldWeather::Fog].include?($game_screen.weather_type)
+      next [:Rain, :Fog].include?(GameData::Weather.get($game_screen.weather_type).category)
     end
   }
 })
@@ -152,7 +151,7 @@ GameData::Evolution.register({
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
     if pkmn.level >= parameter && $game_screen
-      next [PBFieldWeather::Snow, PBFieldWeather::Blizzard].include?($game_screen.weather_type)
+      next GameData::Weather.get($game_screen.weather_type).category == :Hail
     end
   }
 })
@@ -162,7 +161,7 @@ GameData::Evolution.register({
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
     if pkmn.level >= parameter && $game_screen
-      next $game_screen.weather_type == PBFieldWeather::Sandstorm
+      next GameData::Weather.get($game_screen.weather_type).category == :Sandstorm
     end
   }
 })

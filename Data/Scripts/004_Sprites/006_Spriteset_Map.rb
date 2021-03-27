@@ -143,7 +143,7 @@ class Spriteset_Map
       sprite.update
     end
     if self.map!=$game_map
-      @weather.fade_in(PBFieldWeather::None, 0, 20)
+      @weather.fade_in(:None, 0, 20)
     else
       @weather.fade_in($game_screen.weather_type, $game_screen.weather_max, $game_screen.weather_duration)
     end

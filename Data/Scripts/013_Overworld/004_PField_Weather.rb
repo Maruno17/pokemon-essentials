@@ -28,17 +28,8 @@ module RPG
       # [array of particle bitmaps, array of tile bitmaps,
       #  +x per second (particle), +y per second (particle), +opacity per second (particle),
       #  +x per second (tile), +y per second (tile)]
-      @weatherTypes = []
-      @weatherTypes[PBFieldWeather::None]      = nil
-      @weatherTypes[PBFieldWeather::Rain]      = [[], nil, -1200, 4800, 0]
-      @weatherTypes[PBFieldWeather::HeavyRain] = [[], nil, -4800, 4800, 0]
-      @weatherTypes[PBFieldWeather::Storm]     = [[], nil, -4800, 4800, 0]
-      @weatherTypes[PBFieldWeather::Snow]      = [[], nil, -240, 240, 0]
-      @weatherTypes[PBFieldWeather::Blizzard]  = [[], [], -960, 256, 0, -1440, 720]
-      @weatherTypes[PBFieldWeather::Sandstorm] = [[], [], -1200, 640, 0, -720, 360]
-      @weatherTypes[PBFieldWeather::Sun]       = nil
-      @weatherTypes[PBFieldWeather::Fog]       = [[], [], 0, 0, 0, -32, 0]
-      @type                 = 0
+      @weatherTypes = {}
+      @type                 = :None
       @max                  = 0
       @ox                   = 0
       @oy                   = 0
@@ -62,16 +53,17 @@ module RPG
       @new_sprites.each { |sprite| sprite.dispose if sprite }
       @tiles.each { |sprite| sprite.dispose if sprite }
       @viewport.dispose
-      @weatherTypes.each do |weather|
+      @weatherTypes.each_value do |weather|
         next if !weather
-        weather[0].each { |bitmap| bitmap.dispose if bitmap }
-        weather[1].each { |bitmap| bitmap.dispose if bitmap } if weather[1]
+        weather[1].each { |bitmap| bitmap.dispose if bitmap }
+        weather[2].each { |bitmap| bitmap.dispose if bitmap }
       end
     end
 
     def fade_in(new_type, new_max, duration = 1)
       return if @fading
-      new_max = 0 if new_type == PBFieldWeather::None
+      new_type = GameData::Weather.get(new_type).id
+      new_max = 0 if new_type == :None
       return if @type == new_type && @max == new_max
       if duration > 0
         @target_type = new_type
@@ -84,9 +76,9 @@ module RPG
         @target_tone = get_weather_tone(@target_type, @target_max)
         @fade_time = 0.0
         @time_shift = 0
-        if @type == PBFieldWeather::None
+        if @type == :None
           @time_shift += 2   # No previous weather to fade out first
-        elsif !@weatherTypes[@type] || !@weatherTypes[@type][1] || @weatherTypes[@type][1].length == 0
+        elsif !GameData::Weather.get(@type).has_tiles?
           @time_shift += 1   # No previous tiles to fade out first
         end
         @fading = true
@@ -101,6 +93,7 @@ module RPG
     end
 
     def type=(type)
+      type = GameData::Weather.get(type).id
       return if @type == type
       if @fading
         @max = @target_max
@@ -108,9 +101,9 @@ module RPG
       end
       @type = type
       prepare_bitmaps(@type)
-      if @weatherTypes[@type] && @weatherTypes[@type][1] && @weatherTypes[@type][1].length > 0
-        w = @weatherTypes[@type][1][0].width
-        h = @weatherTypes[@type][1][0].height
+      if GameData::Weather.get(@type).has_tiles?
+        w = @weatherTypes[@type][2][0].width
+        h = @weatherTypes[@type][2][0].height
         @tiles_wide = (Graphics.width.to_f / w).ceil + 1
         @tiles_tall = (Graphics.height.to_f / h).ceil + 1
       else
@@ -148,88 +141,24 @@ module RPG
     end
 
     def get_weather_tone(weather_type, maximum)
-      case weather_type
-      when PBFieldWeather::Rain
-        return Tone.new(-maximum * 3 / 4, -maximum * 3 / 4, -maximum * 3 / 4, 10)
-      when PBFieldWeather::HeavyRain
-        return Tone.new(-maximum * 6 / 4, -maximum * 6 / 4, -maximum * 6 / 4, 20)
-      when PBFieldWeather::Storm
-        return Tone.new(-maximum * 6 / 4, -maximum * 6 / 4, -maximum * 6 / 4, 20)
-      when PBFieldWeather::Snow
-        return Tone.new(     maximum / 2,      maximum / 2,      maximum / 2,  0)
-      when PBFieldWeather::Blizzard
-        return Tone.new( maximum * 3 / 4,  maximum * 3 / 4,  maximum * 3 / 4,  0)
-      when PBFieldWeather::Sandstorm
-        return Tone.new(     maximum / 2,             0,        -maximum / 2,  0)
-      when PBFieldWeather::Sun
-        return Tone.new(64, 64, 32, 0)
-      end
-      return Tone.new(0, 0, 0, 0)
+      return GameData::Weather.get(weather_type).tone(maximum)
     end
 
     def prepare_bitmaps(new_type)
-      case new_type
-      when PBFieldWeather::Rain                             then prepareRainBitmaps
-      when PBFieldWeather::HeavyRain, PBFieldWeather::Storm then prepareStormBitmaps
-      when PBFieldWeather::Snow                             then prepareSnowBitmaps
-      when PBFieldWeather::Blizzard                         then prepareBlizzardBitmaps
-      when PBFieldWeather::Sandstorm                        then prepareSandstormBitmaps
-      when PBFieldWeather::Fog                              then prepareFogBitmaps
+      weather_data = GameData::Weather.get(new_type)
+      bitmap_names = weather_data.graphics
+      @weatherTypes[new_type] = [weather_data, [], []]
+      for i in 0...2   # 0=particles, 1=tiles
+        next if !bitmap_names[i]
+        bitmap_names[i].each do |name|
+          bitmap = RPG::Cache.load_bitmap("Graphics/Weather/", name)
+          @weatherTypes[new_type][i + 1].push(bitmap)
+        end
       end
     end
 
-    def prepareRainBitmaps
-      rain1 = RPG::Cache.load_bitmap("Graphics/Weather/", "rain_1")
-      rain2 = RPG::Cache.load_bitmap("Graphics/Weather/", "rain_2")
-      rain3 = RPG::Cache.load_bitmap("Graphics/Weather/", "rain_3")
-      rain4 = RPG::Cache.load_bitmap("Graphics/Weather/", "rain_4")   # Splash
-      @weatherTypes[PBFieldWeather::Rain][0] = [rain1, rain2, rain3, rain4]
-    end
-
-    def prepareStormBitmaps
-      storm1 = RPG::Cache.load_bitmap("Graphics/Weather/", "storm_1")
-      storm2 = RPG::Cache.load_bitmap("Graphics/Weather/", "storm_2")
-      storm3 = RPG::Cache.load_bitmap("Graphics/Weather/", "storm_3")
-      storm4 = RPG::Cache.load_bitmap("Graphics/Weather/", "storm_4")   # Splash
-      @weatherTypes[PBFieldWeather::HeavyRain][0] = [storm1, storm2, storm3, storm4]
-      @weatherTypes[PBFieldWeather::Storm][0] = [storm1, storm2, storm3, storm4]
-    end
-
-    def prepareSnowBitmaps
-      hail1 = RPG::Cache.load_bitmap("Graphics/Weather/", "hail_1")
-      hail2 = RPG::Cache.load_bitmap("Graphics/Weather/", "hail_2")
-      hail3 = RPG::Cache.load_bitmap("Graphics/Weather/", "hail_3")
-      @weatherTypes[PBFieldWeather::Snow][0] = [hail1, hail2, hail3]
-    end
-
-    def prepareBlizzardBitmaps
-      blizzard1 = RPG::Cache.load_bitmap("Graphics/Weather/", "blizzard_1")
-      blizzard2 = RPG::Cache.load_bitmap("Graphics/Weather/", "blizzard_2")
-      blizzard3 = RPG::Cache.load_bitmap("Graphics/Weather/", "blizzard_3")
-      blizzard4 = RPG::Cache.load_bitmap("Graphics/Weather/", "blizzard_4")
-      @weatherTypes[PBFieldWeather::Blizzard][0] = [blizzard1, blizzard2, blizzard3, blizzard4]
-      blizzard_tile = RPG::Cache.load_bitmap("Graphics/Weather/", "blizzard_tile")
-      @weatherTypes[PBFieldWeather::Blizzard][1] = [blizzard_tile]
-    end
-
-    def prepareSandstormBitmaps
-      sandstorm1 = RPG::Cache.load_bitmap("Graphics/Weather/", "sandstorm_1")
-      sandstorm2 = RPG::Cache.load_bitmap("Graphics/Weather/", "sandstorm_2")
-      sandstorm3 = RPG::Cache.load_bitmap("Graphics/Weather/", "sandstorm_3")
-      sandstorm4 = RPG::Cache.load_bitmap("Graphics/Weather/", "sandstorm_4")
-      @weatherTypes[PBFieldWeather::Sandstorm][0] = [sandstorm1, sandstorm2, sandstorm3, sandstorm4]
-      sandstorm_tile = RPG::Cache.load_bitmap("Graphics/Weather/", "sandstorm_tile")
-      @weatherTypes[PBFieldWeather::Sandstorm][1] = [sandstorm_tile]
-    end
-
-    def prepareFogBitmaps
-      fog_tile = RPG::Cache.load_bitmap("Graphics/Weather/", "fog_tile")
-      @weatherTypes[PBFieldWeather::Fog][1] = [fog_tile]
-    end
-
     def ensureSprites
-      if @sprites.length < MAX_SPRITES && @weatherTypes[@type] &&
-         @weatherTypes[@type][0] && @weatherTypes[@type][0].length > 0
+      if @sprites.length < MAX_SPRITES && @weatherTypes[@type] && @weatherTypes[@type][1].length > 0
         for i in 0...MAX_SPRITES
           if !@sprites[i]
             sprite = Sprite.new(@origViewport)
@@ -244,7 +173,7 @@ module RPG
         end
       end
       if @fading && @new_sprites.length < MAX_SPRITES && @weatherTypes[@target_type] &&
-         @weatherTypes[@target_type][0] && @weatherTypes[@target_type][0].length > 0
+         @weatherTypes[@target_type][1].length > 0
         for i in 0...MAX_SPRITES
           if !@new_sprites[i]
             sprite = Sprite.new(@origViewport)
@@ -277,14 +206,13 @@ module RPG
 
     def set_sprite_bitmap(sprite, index, weather_type)
       return if !sprite
-      weatherBitmaps = (@weatherTypes[weather_type]) ? @weatherTypes[weather_type][0] : nil
+      weatherBitmaps = (@weatherTypes[weather_type]) ? @weatherTypes[weather_type][1] : nil
       if !weatherBitmaps || weatherBitmaps.length == 0
         sprite.bitmap = nil
         return
       end
-      case weather_type
-      when PBFieldWeather::Rain, PBFieldWeather::HeavyRain, PBFieldWeather::Storm
-        last_index = weatherBitmaps.length - 1   # Last sprite is splash
+      if @weatherTypes[weather_type][0].category == :Rain
+        last_index = weatherBitmaps.length - 1   # Last sprite is a splash
         if (index % 2) == 0
           sprite.bitmap = weatherBitmaps[index % last_index]
         else
@@ -297,7 +225,7 @@ module RPG
 
     def set_tile_bitmap(sprite, index, weather_type)
       return if !sprite || !weather_type
-      weatherBitmaps = (@weatherTypes[weather_type]) ? @weatherTypes[weather_type][1] : nil
+      weatherBitmaps = (@weatherTypes[weather_type]) ? @weatherTypes[weather_type][2] : nil
       if weatherBitmaps && weatherBitmaps.length > 0
         sprite.bitmap = weatherBitmaps[index % weatherBitmaps.length]
       else
@@ -315,25 +243,26 @@ module RPG
         lifetimes[index] = 0
         return
       end
-      if [PBFieldWeather::Rain, PBFieldWeather::HeavyRain,
-         PBFieldWeather::Storm].include?(weather_type) && (index % 2) != 0   # Splash
+      if @weatherTypes[weather_type][0].category == :Rain && (index % 2) != 0   # Splash
         sprite.x = @ox - sprite.bitmap.width + rand(Graphics.width + sprite.bitmap.width * 2)
         sprite.y = @oy - sprite.bitmap.height + rand(Graphics.height + sprite.bitmap.height * 2)
         lifetimes[index] = (30 + rand(20)) * 0.01   # 0.3-0.5 seconds
       else
-        gradient = @weatherTypes[weather_type][2].to_f / @weatherTypes[weather_type][3]
+        x_speed = @weatherTypes[weather_type][0].particle_delta_x
+        y_speed = @weatherTypes[weather_type][0].particle_delta_y
+        gradient = x_speed.to_f / y_speed
         if gradient.abs >= 1
           # Position sprite to the right of the screen
           sprite.x = @ox + Graphics.width + rand(Graphics.width)
           sprite.y = @oy + Graphics.height - rand(Graphics.height + sprite.bitmap.height - Graphics.width / gradient)
           distance_to_cover = sprite.x - @ox - Graphics.width / 2 + sprite.bitmap.width + rand(Graphics.width * 8 / 5)
-          lifetimes[index] = (distance_to_cover.to_f / @weatherTypes[weather_type][2]).abs
+          lifetimes[index] = (distance_to_cover.to_f / x_speed).abs
         else
           # Position sprite to the top of the screen
           sprite.x = @ox - sprite.bitmap.width + rand(Graphics.width + sprite.bitmap.width - gradient * Graphics.height)
           sprite.y = @oy - sprite.bitmap.height - rand(Graphics.height)
           distance_to_cover = @oy - sprite.y + Graphics.height / 2 + rand(Graphics.height * 8 / 5)
-          lifetimes[index] = (distance_to_cover.to_f / @weatherTypes[weather_type][3]).abs
+          lifetimes[index] = (distance_to_cover.to_f / y_speed).abs
         end
       end
       sprite.opacity = 255
@@ -353,20 +282,19 @@ module RPG
       # Determine which weather type this sprite is representing
       weather_type = (is_new_sprite) ? @target_type : @type
       # Update visibility/position/opacity of sprite
-      if [PBFieldWeather::Rain, PBFieldWeather::HeavyRain,
-          PBFieldWeather::Storm].include?(weather_type) && (index % 2) != 0   # Splash
+      if @weatherTypes[weather_type][0].category == :Rain && (index % 2) != 0   # Splash
         sprite.opacity = (lifetimes[index] < 0.2) ? 255 : 0   # 0.2 seconds
       else
-        dist_x = @weatherTypes[weather_type][2] * delta_t
-        dist_y = @weatherTypes[weather_type][3] * delta_t
+        dist_x = @weatherTypes[weather_type][0].particle_delta_x * delta_t
+        dist_y = @weatherTypes[weather_type][0].particle_delta_y * delta_t
         sprite.x += dist_x
         sprite.y += dist_y
-        if weather_type == PBFieldWeather::Snow
+        if weather_type == :Snow
           sprite.x += dist_x * (sprite.y - @oy) / (Graphics.height * 3)   # Faster when further down screen
           sprite.x += [2, 1, 0, -1][rand(4)] * dist_x / 8   # Random movement
           sprite.y += [2, 1, 1, 0, 0, -1][index % 6] * dist_y / 10   # Variety
         end
-        sprite.opacity += @weatherTypes[weather_type][4] * delta_t
+        sprite.opacity += @weatherTypes[weather_type][0].particle_delta_opacity * delta_t
         x = sprite.x - @ox
         y = sprite.y - @oy
         # Check if sprite is off-screen; if so, reset it
@@ -382,13 +310,13 @@ module RPG
       if @fading && @fade_time >= [FADE_OLD_TONE_END - @time_shift, 0].max
         weather_type = @target_type
       end
-      @tile_x += @weatherTypes[weather_type][5] * delta_t
-      @tile_y += @weatherTypes[weather_type][6] * delta_t
-      if @tile_x < -@tiles_wide * @weatherTypes[weather_type][1][0].width
-        @tile_x += @tiles_wide * @weatherTypes[weather_type][1][0].width
+      @tile_x += @weatherTypes[weather_type][0].tile_delta_x * delta_t
+      @tile_y += @weatherTypes[weather_type][0].tile_delta_y * delta_t
+      if @tile_x < -@tiles_wide * @weatherTypes[weather_type][2][0].width
+        @tile_x += @tiles_wide * @weatherTypes[weather_type][2][0].width
       end
-      if @tile_y > @tiles_tall * @weatherTypes[weather_type][1][0].height
-        @tile_y -= @tiles_tall * @weatherTypes[weather_type][1][0].height
+      if @tile_y > @tiles_tall * @weatherTypes[weather_type][2][0].height
+        @tile_y -= @tiles_tall * @weatherTypes[weather_type][2][0].height
       end
     end
 
@@ -472,11 +400,11 @@ module RPG
         tone_gray = base_tone.gray
       end
       # Modify base tone
-      if weather_type == PBFieldWeather::Sun
+      if weather_type == :Sun
         @sun_magnitude = weather_max if @sun_magnitude != weather_max && @sun_magnitude != -weather_max
         @sun_magnitude *= -1 if (@sun_magnitude > 0 && @sun_strength > @sun_magnitude) ||
                                 (@sun_magnitude < 0 && @sun_strength < 0)
-        @sun_strength += @sun_magnitude.to_f * Graphics.delta_s * 0.4   # 0.4 seconds
+        @sun_strength += @sun_magnitude.to_f * Graphics.delta_s / 0.4   # 0.4 seconds per half flash
         tone_red += @sun_strength
         tone_green += @sun_strength
         tone_blue += @sun_strength / 2
@@ -495,9 +423,9 @@ module RPG
         tile_change_threshold = [FADE_OLD_TONE_END - @time_shift, 0].max
         if old_fade_time <= tile_change_threshold && @fade_time > tile_change_threshold
           @tile_x = @tile_y = 0.0
-          if @weatherTypes[@target_type] && @weatherTypes[@target_type][1] && @weatherTypes[@target_type][1].length > 0
-            w = @weatherTypes[@target_type][1][0].width
-            h = @weatherTypes[@target_type][1][0].height
+          if @weatherTypes[@target_type] && @weatherTypes[@target_type][2].length > 0
+            w = @weatherTypes[@target_type][2][0].width
+            h = @weatherTypes[@target_type][2][0].height
             @tiles_wide = (Graphics.width.to_f / w).ceil + 1
             @tiles_tall = (Graphics.height.to_f / h).ceil + 1
             ensureTiles
@@ -521,7 +449,7 @@ module RPG
         @new_sprites.each_with_index { |sprite, i| sprite.visible = (i < @new_max) if sprite }
       end
       # End fading
-      if @fade_time >= ((@target_type == PBFieldWeather::None) ? FADE_OLD_PARTICLES_END : FADE_NEW_TILES_END) - @time_shift
+      if @fade_time >= ((@target_type == :None) ? FADE_OLD_PARTICLES_END : FADE_NEW_TILES_END) - @time_shift
         if !@sprites.any? { |sprite| sprite.visible }
           @type                 = @target_type
           @max                  = @target_max
@@ -547,7 +475,7 @@ module RPG
       update_fading
       update_screen_tone
       # Storm flashes
-      if @type == PBFieldWeather::Storm && !@fading
+      if @type == :Storm && !@fading
         if @time_until_flash > 0
           @time_until_flash -= Graphics.delta_s
           if @time_until_flash <= 0
@@ -560,7 +488,7 @@ module RPG
       end
       @viewport.update
       # Update weather particles (raindrops, snowflakes, etc.)
-      if @weatherTypes[@type] && @weatherTypes[@type][0] && @weatherTypes[@type][0].length > 0
+      if @weatherTypes[@type] && @weatherTypes[@type][1].length > 0
         ensureSprites
         for i in 0...MAX_SPRITES
           update_sprite_position(@sprites[i], i, false)
@@ -570,7 +498,7 @@ module RPG
         @sprites.clear
       end
       # Update new weather particles (while fading in only)
-      if @fading && @weatherTypes[@target_type] && @weatherTypes[@target_type][0] && @weatherTypes[@target_type][0].length > 0
+      if @fading && @weatherTypes[@target_type] && @weatherTypes[@target_type][1].length > 0
         ensureSprites
         for i in 0...MAX_SPRITES
           update_sprite_position(@new_sprites[i], i, true)

@@ -31,7 +31,7 @@ module GameData
        "Bicycle"          => [3,  "b"],
        "BicycleAlways"    => [4,  "b"],
        "HealingSpot"      => [5,  "vuu"],
-       "Weather"          => [6,  "eu", :PBFieldWeather],
+       "Weather"          => [6,  "eu", :Weather],
        "MapPosition"      => [7,  "uuu"],
        "DiveMap"          => [8,  "v"],
        "DarkMap"          => [9,  "b"],

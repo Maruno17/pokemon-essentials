@@ -81,7 +81,7 @@ class Game_Screen
   #     duration : time
   #-----------------------------------------------------------------------------
   def weather(type, power, duration)
-    @weather_type     = type
+    @weather_type     = GameData::Weather.get(type).id
     @weather_max      = (power + 1) * RPG::Weather::MAX_SPRITES / 10
     @weather_duration = duration   # In 1/20ths of a seconds
   end
