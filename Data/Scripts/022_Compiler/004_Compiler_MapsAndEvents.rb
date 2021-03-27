@@ -942,6 +942,7 @@ module Compiler
           end
         when 201   # Transfer Player
           if list.length<=8
+=begin
             if params[0]==0
               # Look for another event just above the position this Transfer
               # Player command will transfer to - it may be a door, in which case
@@ -1075,6 +1076,7 @@ module Compiler
                 end
               end
             end
+=end
             # If this is the only event command, convert to a full event
             if list.length==2 || (list.length==3 && (list[0].code==250 || list[1].code==250))   # Play SE
               params[5] = 1   # No fade

@@ -26,8 +26,6 @@ class PBPokemon
     @move2 = move2 ? move2 : 0
     @move3 = move3 ? move3 : 0
     @move4 = move4 ? move4 : 0
-    # TODO: Stat changes (what is @ev here? Seems to be a set of bit flags
-    # indicating each stat that should have EVs put into it. Could change it).
     @ev = ev
   end
 

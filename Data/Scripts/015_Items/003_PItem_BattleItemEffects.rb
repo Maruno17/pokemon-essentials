@@ -16,6 +16,10 @@ ItemHandlers::CanUseInBattle.add(:POKEDOLL,proc { |item,pokemon,battler,move,fir
     end
     next false
   end
+  if !battle.canRun
+    scene.pbDisplay(_INTL("You can't escape!")) if showMessages
+    next false
+  end
   next true
 })
 

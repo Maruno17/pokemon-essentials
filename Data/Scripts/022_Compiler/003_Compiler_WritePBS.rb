@@ -698,8 +698,14 @@ module Compiler
     moves   = { 0 => "" }
     items   = { 0 => "" }
     natures = {}
-    # TODO: Stat change (rewrite this).
-    evs = ["HP", "ATK", "DEF", "SPD", "SA", "SD"]
+    evs = {
+      :HP              => "HP",
+      :ATTACK          => "ATK",
+      :DEFENSE         => "DEF",
+      :SPECIAL_ATTACK  => "SA",
+      :SPECIAL_DEFENSE => "SD",
+      :SPEED           => "SPD"
+    }
     File.open(filename,"wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
@@ -709,15 +715,11 @@ module Compiler
         c1 = (species[pkmn.species]) ? species[pkmn.species] : (species[pkmn.species] = GameData::Species.get(pkmn.species).species.to_s)
         c2 = (items[pkmn.item]) ? items[pkmn.item] : (items[pkmn.item] = GameData::Item.get(pkmn.item).id.to_s)
         c3 = (natures[pkmn.nature]) ? natures[pkmn.nature] : (natures[pkmn.nature] = GameData::Nature.get(pkmn.nature).id.to_s)
-        # TODO: Stat change (rewrite this).
         evlist = ""
-        ev = pkmn.ev
-        for i in 0...evs.length
-          if (ev & (1 << i)) != 0
-            evlist += "," if evlist.length > 0
-            evlist += evs[i]
-          end
-        end
+        pkmn.ev.each do |stat|
+          evlist += "," if evlist.length > 0
+          evlist += evs[stat]
+        }
         c4 = (moves[pkmn.move1]) ? moves[pkmn.move1] : (moves[pkmn.move1] = GameData::Move.get(pkmn.move1).id.to_s)
         c5 = (moves[pkmn.move2]) ? moves[pkmn.move2] : (moves[pkmn.move2] = GameData::Move.get(pkmn.move2).id.to_s)
         c6 = (moves[pkmn.move3]) ? moves[pkmn.move3] : (moves[pkmn.move3] = GameData::Move.get(pkmn.move3).id.to_s)

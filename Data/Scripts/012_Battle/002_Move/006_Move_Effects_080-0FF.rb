@@ -2985,6 +2985,10 @@ class PokeBattle_Move_0EB < PokeBattle_Move
       @battle.pbDisplay(_INTL("{1} anchored itself with its roots!",target.pbThis))
       return true
     end
+    if !@battle.canRun
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
     if @battle.wildBattle? && target.level>user.level
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
@@ -3041,7 +3045,7 @@ end
 #===============================================================================
 class PokeBattle_Move_0EC < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
-    if @battle.wildBattle? && target.level<=user.level &&
+    if @battle.wildBattle? && target.level<=user.level && @battle.canRun &&
        (target.effects[PBEffects::Substitute]==0 || ignoresSubstitute?(user))
       @battle.decision = 3
     end
@@ -3282,11 +3286,7 @@ class PokeBattle_Move_0F2 < PokeBattle_Move
       user.setInitialItem(oldTargetItem)
     end
     @battle.pbDisplay(_INTL("{1} switched items with its opponent!",user.pbThis))
-    if oldUserItem && oldTargetItem
-      @battle.pbDisplay(_INTL("{1} obtained {2}.",user.pbThis,oldTargetItemName))
-    elsif oldTargetItem
-      @battle.pbDisplay(_INTL("{1} obtained {2}.",user.pbThis,oldTargetItemName))
-    end
+    @battle.pbDisplay(_INTL("{1} obtained {2}.",user.pbThis,oldTargetItemName)) if oldTargetItem
     @battle.pbDisplay(_INTL("{1} obtained {2}.",target.pbThis,oldUserItemName)) if oldUserItem
     user.pbHeldItemTriggerCheck
     target.pbHeldItemTriggerCheck
