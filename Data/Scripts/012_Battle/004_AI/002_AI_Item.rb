@@ -8,7 +8,7 @@ class PokeBattle_AI
     return false if !item
     # Determine target of item (always the Pokémon choosing the action)
     useType = GameData::Item.get(item).battle_use
-    if useType==1 || useType==6   # Use on Pokémon
+    if [1, 2, 3, 6, 7, 8].include?(useType)   # Use on Pokémon
       idxTarget = @battle.battlers[idxTarget].pokemonIndex   # Party Pokémon
     end
     # Register use of item
