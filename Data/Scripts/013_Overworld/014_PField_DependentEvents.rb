@@ -229,7 +229,7 @@ class DependentEvents
         tile=$MapFactory.getFacingTile(facing,leader)
         passable=tile && $MapFactory.isPassableStrict?(tile[0],tile[1],tile[2],follower)
         if i==0 && !passable && tile &&
-           PBTerrain.isLedge?($MapFactory.getTerrainTag(tile[0],tile[1],tile[2]))
+           $MapFactory.getTerrainTag(tile[0],tile[1],tile[2]).ledge
           # If the tile isn't passable and the tile is a ledge,
           # get tile from further behind
           tile=$MapFactory.getFacingTileFromPos(tile[0],tile[1],tile[2],facing)

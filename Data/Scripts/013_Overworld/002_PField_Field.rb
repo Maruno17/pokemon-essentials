@@ -304,40 +304,34 @@ end
 
 # Gather soot from soot grass
 Events.onStepTakenFieldMovement += proc { |_sender,e|
-  event = e[0] # Get the event affected by field movement
+  event = e[0]   # Get the event affected by field movement
   thistile = $MapFactory.getRealTilePos(event.map.map_id,event.x,event.y)
   map = $MapFactory.getMap(thistile[0])
-  sootlevel = -1
   for i in [2, 1, 0]
     tile_id = map.data[thistile[1],thistile[2],i]
-    next if tile_id==nil
-    if map.terrain_tags[tile_id]==PBTerrain::SootGrass
-      sootlevel = i
-      break
-    end
-  end
-  if sootlevel>=0 && GameData::Item.exists?(:SOOTSACK)
-    $PokemonGlobal.sootsack = 0 if !$PokemonGlobal.sootsack
-#    map.data[thistile[1],thistile[2],sootlevel]=0
-    if event==$game_player && $PokemonBag.pbHasItem?(:SOOTSACK)
+    next if tile_id == nil
+    next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
+    if event == $game_player && GameData::Item.exists?(:SOOTSACK) && $PokemonBag.pbHasItem?(:SOOTSACK)
+      $PokemonGlobal.sootsack = 0 if !$PokemonGlobal.sootsack
       $PokemonGlobal.sootsack += 1
     end
+#    map.data[thistile[1], thistile[2], i] = 0
 #    $scene.createSingleSpriteset(map.map_id)
+    break
   end
 }
 
 # Show grass rustle animation, and auto-move the player over waterfalls and ice
-Events.onStepTakenFieldMovement += proc { |_sender,e|
-  event = e[0] # Get the event affected by field movement
+Events.onStepTakenFieldMovement += proc { |_sender, e|
+  event = e[0]   # Get the event affected by field movement
   if $scene.is_a?(Scene_Map)
-    currentTag = pbGetTerrainTag(event)
-    if PBTerrain.isJustGrass?(pbGetTerrainTag(event,true))  # Won't show if under bridge
-      $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID,event.x,event.y,true,1)
-    elsif event==$game_player
-      if currentTag==PBTerrain::WaterfallCrest
-        # Descend waterfall, but only if this event is the player
+    if pbGetTerrainTag(event, true).shows_grass_rustle   # Won't show if under bridge
+      $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, event.x, event.y, true, 1)
+    elsif event == $game_player
+      currentTag = pbGetTerrainTag(event)
+      if currentTag.waterfall_crest
         pbDescendWaterfall(event)
-      elsif PBTerrain.isIce?(currentTag) && !$PokemonGlobal.sliding
+      elsif currentTag.ice && !$PokemonGlobal.sliding
         pbSlideOnIce(event)
       end
     end
@@ -599,19 +593,17 @@ end
 
 def pbGetTerrainTag(event=nil,countBridge=false)
   event = $game_player if !event
-  return 0 if !event
+  return GameData::TerrainTag.get(:None) if !event
   if $MapFactory
     return $MapFactory.getTerrainTag(event.map.map_id,event.x,event.y,countBridge)
   end
-  $game_map.terrain_tag(event.x,event.y,countBridge)
+  return $game_map.terrain_tag(event.x,event.y,countBridge)
 end
 
 def pbFacingTerrainTag(event=nil,dir=nil)
-  if $MapFactory
-    return $MapFactory.getFacingTerrainTag(dir,event)
-  end
+  return $MapFactory.getFacingTerrainTag(dir,event) if $MapFactory
   event = $game_player if !event
-  return 0 if !event
+  return GameData::TerrainTag.get(:None) if !event
   facing = pbFacingTile(dir,event)
   return $game_map.terrain_tag(facing[1],facing[2])
 end
@@ -762,7 +754,7 @@ end
 # Player/event movement in the field
 #===============================================================================
 def pbLedge(_xOffset,_yOffset)
-  if PBTerrain.isLedge?(pbFacingTerrainTag)
+  if pbFacingTerrainTag.ledge
     if pbJumpToward(2,true)
       $scene.spriteset.addUserAnimation(Settings::DUST_ANIMATION_ID,$game_player.x,$game_player.y,true,1)
       $game_player.increase_steps
@@ -776,7 +768,7 @@ end
 def pbSlideOnIce(event=nil)
   event = $game_player if !event
   return if !event
-  return if !PBTerrain.isIce?(pbGetTerrainTag(event))
+  return if !pbGetTerrainTag(event).ice
   $PokemonGlobal.sliding = true
   direction    = event.direction
   oldwalkanime = event.walk_anime
@@ -784,7 +776,7 @@ def pbSlideOnIce(event=nil)
   event.walk_anime = false
   loop do
     break if !event.passable?(event.x,event.y,direction)
-    break if !PBTerrain.isIce?(pbGetTerrainTag(event))
+    break if !pbGetTerrainTag(event).ice
     event.move_forward
     while event.moving?
       pbUpdateSceneMap

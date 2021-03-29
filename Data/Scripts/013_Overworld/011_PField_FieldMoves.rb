@@ -381,11 +381,11 @@ Events.onAction += proc { |_sender, _e|
       break
     end
     if surface_map_id &&
-       PBTerrain.isDeepWater?($MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y))
+       $MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
       pbSurfacing
     end
   else
-    pbDive if PBTerrain.isDeepWater?($game_player.terrain_tag)
+    pbDive if $game_player.terrain_tag.can_dive
   end
 }
 
@@ -399,7 +399,7 @@ HiddenMoveHandlers::CanUseMove.add(:DIVE,proc { |move,pkmn,showmsg|
       break
     end
     if !surface_map_id ||
-       !PBTerrain.isDeepWater?($MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y))
+       !$MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
       pbMessage(_INTL("Can't use that here.")) if showmsg
       next false
     end
@@ -409,7 +409,7 @@ HiddenMoveHandlers::CanUseMove.add(:DIVE,proc { |move,pkmn,showmsg|
       pbMessage(_INTL("Can't use that here.")) if showmsg
       next false
     end
-    if !PBTerrain.isDeepWater?($game_player.terrain_tag)
+    if !$game_player.terrain_tag.can_dive
       pbMessage(_INTL("Can't use that here.")) if showmsg
       next false
     end
@@ -727,9 +727,7 @@ def pbEndSurf(_xOffset,_yOffset)
   return false if !$PokemonGlobal.surfing
   x = $game_player.x
   y = $game_player.y
-  currentTag = $game_map.terrain_tag(x,y)
-  facingTag = pbFacingTerrainTag
-  if PBTerrain.isSurfable?(currentTag) && !PBTerrain.isSurfable?(facingTag)
+  if $game_map.terrain_tag(x,y).can_surf && !pbFacingTerrainTag.can_surf
     $PokemonTemp.surfJump = [x,y]
     if pbJumpToward(1,false,true)
       $game_map.autoplayAsCue
@@ -759,7 +757,7 @@ Events.onAction += proc { |_sender,_e|
   next if $PokemonGlobal.surfing
   next if GameData::MapMetadata.exists?($game_map.map_id) &&
           GameData::MapMetadata.get($game_map.map_id).always_bicycle
-  next if !PBTerrain.isSurfable?(pbFacingTerrainTag)
+  next if !pbFacingTerrainTag.can_surf_freely
   next if !$game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
   pbSurf
 }
@@ -779,7 +777,7 @@ HiddenMoveHandlers::CanUseMove.add(:SURF,proc { |move,pkmn,showmsg|
     pbMessage(_INTL("Let's enjoy cycling!")) if showmsg
     next false
   end
-  if !PBTerrain.isSurfable?(pbFacingTerrainTag) ||
+  if !pbFacingTerrainTag.can_surf_freely ||
      !$game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
     pbMessage(_INTL("No surfing here!")) if showmsg
     next false
@@ -914,13 +912,13 @@ def pbAscendWaterfall(event=nil)
   oldthrough   = event.through
   oldmovespeed = event.move_speed
   terrain = pbFacingTerrainTag
-  return if !PBTerrain.isWaterfall?(terrain)
+  return if !terrain.waterfall && !terrain.waterfall_crest
   event.through = true
   event.move_speed = 2
   loop do
     event.move_up
     terrain = pbGetTerrainTag(event)
-    break if !PBTerrain.isWaterfall?(terrain)
+    break if !terrain.waterfall && !terrain.waterfall_crest
   end
   event.through    = oldthrough
   event.move_speed = oldmovespeed
@@ -933,13 +931,13 @@ def pbDescendWaterfall(event=nil)
   oldthrough   = event.through
   oldmovespeed = event.move_speed
   terrain = pbFacingTerrainTag
-  return if !PBTerrain.isWaterfall?(terrain)
+  return if !terrain.waterfall && !terrain.waterfall_crest
   event.through = true
   event.move_speed = 2
   loop do
     event.move_down
     terrain = pbGetTerrainTag(event)
-    break if !PBTerrain.isWaterfall?(terrain)
+    break if !terrain.waterfall && !terrain.waterfall_crest
   end
   event.through    = oldthrough
   event.move_speed = oldmovespeed
@@ -964,16 +962,16 @@ end
 
 Events.onAction += proc { |_sender,_e|
   terrain = pbFacingTerrainTag
-  if terrain==PBTerrain::Waterfall
+  if terrain.waterfall
     pbWaterfall
-  elsif terrain==PBTerrain::WaterfallCrest
+  elsif terrain.waterfall_crest
     pbMessage(_INTL("A wall of water is crashing down with a mighty roar."))
   end
 }
 
 HiddenMoveHandlers::CanUseMove.add(:WATERFALL,proc { |move,pkmn,showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_WATERFALL,showmsg)
-  if pbFacingTerrainTag!=PBTerrain::Waterfall
+  if !pbFacingTerrainTag.waterfall
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end

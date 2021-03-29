@@ -174,17 +174,11 @@ def pbGetEnvironment
   else
     terrainTag = $game_player.terrain_tag
   end
-  case terrainTag
-  when PBTerrain::Grass, PBTerrain::SootGrass
-    ret = (ret == :Forest) ? :ForestGrass : :Grass
-  when PBTerrain::TallGrass
-    ret = (ret == :Forest) ? :ForestGrass : :TallGrass
-  when PBTerrain::Rock                        then ret = :Rock
-  when PBTerrain::Sand                        then ret = :Sand
-  when PBTerrain::DeepWater, PBTerrain::Water then ret = :MovingWater
-  when PBTerrain::StillWater                  then ret = :StillWater
-  when PBTerrain::Puddle                      then ret = :Puddle
-  when PBTerrain::Ice                         then ret = :Ice
+  tile_environment = terrainTag.battle_environment
+  if ret == :Forest && [:Grass, :TallGrass].include?(tile_environment)
+    ret = :ForestGrass
+  else
+    ret = tile_environment if tile_environment
   end
   return ret
 end

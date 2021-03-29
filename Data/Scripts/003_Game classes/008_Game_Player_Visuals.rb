@@ -23,11 +23,10 @@ class Game_Player < Game_Character
     return false if $game_temp.in_menu || $game_temp.in_battle ||
                     @move_route_forcing || $game_temp.message_window_showing ||
                     pbMapInterpreterRunning?
-    terrain = pbGetTerrainTag
     input = ($PokemonSystem.runstyle == 1) ^ Input.press?(Input::SPECIAL)
     return input && $PokemonGlobal.runningShoes && !jumping? &&
        !$PokemonGlobal.diving && !$PokemonGlobal.surfing &&
-       !$PokemonGlobal.bicycle && !PBTerrain.onlyWalk?(terrain)
+       !$PokemonGlobal.bicycle && !pbGetTerrainTag.must_walk
   end
 
   def pbIsRunning?
@@ -53,7 +52,7 @@ class Game_Player < Game_Character
   end
 
   def update_command
-    if PBTerrain.isIce?(pbGetTerrainTag)
+    if pbGetTerrainTag.ice
       self.move_speed = 4     # Sliding on ice
     elsif !moving? && !@move_route_forcing && $PokemonGlobal
       if $PokemonGlobal.bicycle

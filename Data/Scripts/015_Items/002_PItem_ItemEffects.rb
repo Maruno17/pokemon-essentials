@@ -41,12 +41,8 @@ ItemHandlers::UseFromBag.add(:BICYCLE,proc { |item|
 ItemHandlers::UseFromBag.copy(:BICYCLE,:MACHBIKE,:ACROBIKE)
 
 ItemHandlers::UseFromBag.add(:OLDROD,proc { |item|
-  terrain = pbFacingTerrainTag
   notCliff = $game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
-  if (PBTerrain.isWater?(terrain) && !$PokemonGlobal.surfing && notCliff) ||
-     (PBTerrain.isWater?(terrain) && $PokemonGlobal.surfing)
-    next 2
-  end
+  next 2 if pbFacingTerrainTag.can_fish && ($PokemonGlobal.surfing || notCliff)
   pbMessage(_INTL("Can't use that here."))
   next 0
 })
@@ -113,27 +109,25 @@ ItemHandlers::UseInField.add(:MAXREPEL,proc { |item|
 })
 
 Events.onStepTaken += proc {
-  if $PokemonGlobal.repel>0
-    if !PBTerrain.isIce?($game_player.terrain_tag)   # Shouldn't count down if on ice
-      $PokemonGlobal.repel -= 1
-      if $PokemonGlobal.repel<=0
-        if $PokemonBag.pbHasItem?(:REPEL) ||
-           $PokemonBag.pbHasItem?(:SUPERREPEL) ||
-           $PokemonBag.pbHasItem?(:MAXREPEL)
-          if pbConfirmMessage(_INTL("The repellent's effect wore off! Would you like to use another one?"))
-            ret = nil
-            pbFadeOutIn {
-              scene = PokemonBag_Scene.new
-              screen = PokemonBagScreen.new(scene,$PokemonBag)
-              ret = screen.pbChooseItemScreen(Proc.new { |item|
-                [:REPEL, :SUPERREPEL, :MAXREPEL].include?(item)
-              })
-            }
-            pbUseItem($PokemonBag,ret) if ret
-          end
-        else
-          pbMessage(_INTL("The repellent's effect wore off!"))
+  if $PokemonGlobal.repel > 0 && !$game_player.terrain_tag.ice   # Shouldn't count down if on ice
+    $PokemonGlobal.repel -= 1
+    if $PokemonGlobal.repel <= 0
+      if $PokemonBag.pbHasItem?(:REPEL) ||
+         $PokemonBag.pbHasItem?(:SUPERREPEL) ||
+         $PokemonBag.pbHasItem?(:MAXREPEL)
+        if pbConfirmMessage(_INTL("The repellent's effect wore off! Would you like to use another one?"))
+          ret = nil
+          pbFadeOutIn {
+            scene = PokemonBag_Scene.new
+            screen = PokemonBagScreen.new(scene,$PokemonBag)
+            ret = screen.pbChooseItemScreen(Proc.new { |item|
+              [:REPEL, :SUPERREPEL, :MAXREPEL].include?(item)
+            })
+          }
+          pbUseItem($PokemonBag,ret) if ret
         end
+      else
+        pbMessage(_INTL("The repellent's effect wore off!"))
       end
     end
   end
@@ -236,9 +230,8 @@ ItemHandlers::UseInField.add(:BICYCLE,proc { |item|
 ItemHandlers::UseInField.copy(:BICYCLE,:MACHBIKE,:ACROBIKE)
 
 ItemHandlers::UseInField.add(:OLDROD,proc { |item|
-  terrain = pbFacingTerrainTag
   notCliff = $game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
-  if !PBTerrain.isWater?(terrain) || (!notCliff && !$PokemonGlobal.surfing)
+  if !pbFacingTerrainTag.can_fish || (!$PokemonGlobal.surfing && !notCliff)
     pbMessage(_INTL("Can't use that here."))
     next 0
   end
@@ -250,9 +243,8 @@ ItemHandlers::UseInField.add(:OLDROD,proc { |item|
 })
 
 ItemHandlers::UseInField.add(:GOODROD,proc { |item|
-  terrain = pbFacingTerrainTag
   notCliff = $game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
-  if !PBTerrain.isWater?(terrain) || (!notCliff && !$PokemonGlobal.surfing)
+  if !pbFacingTerrainTag.can_fish || (!$PokemonGlobal.surfing && !notCliff)
     pbMessage(_INTL("Can't use that here."))
     next 0
   end
@@ -264,9 +256,8 @@ ItemHandlers::UseInField.add(:GOODROD,proc { |item|
 })
 
 ItemHandlers::UseInField.add(:SUPERROD,proc { |item|
-  terrain = pbFacingTerrainTag
   notCliff = $game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
-  if !PBTerrain.isWater?(terrain) || (!notCliff && !$PokemonGlobal.surfing)
+  if !pbFacingTerrainTag.can_fish || (!$PokemonGlobal.surfing && !notCliff)
     pbMessage(_INTL("Can't use that here."))
     next 0
   end

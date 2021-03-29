@@ -502,9 +502,10 @@ class CustomTilemap
       sprite.color   = @color
       getAutotile(sprite,id)
     end
-    if PBTerrain.hasReflections?(terrain)
+    terrain_tag_data = GameData::TerrainTag.try_get(terrain)
+    if terrain_tag_data.shows_reflections
       spriteZ = -100
-    elsif $PokemonGlobal.bridge>0 && PBTerrain.isBridge?(terrain)
+    elsif $PokemonGlobal.bridge > 0 && terrain_tag_data.bridge
       spriteZ = 1
     else
       spriteZ = (priority==0) ? 0 : ypos+priority*32+32
@@ -610,7 +611,7 @@ class CustomTilemap
           for x in 0...xsize
             id = @map_data[x, y, z]
             next if id == 0
-            next if @priorities[id] == 0 && !PBTerrain.hasReflections?(@terrain_tags[id])
+            next if @priorities[id] == 0 && !GameData::TerrainTag.try_get(@terrain_tags[id]).shows_reflections
             @priotiles[[x, y]] = [] if !@priotiles[[x, y]]
             @priotiles[[x, y]].push([z, id])
           end
@@ -662,7 +663,7 @@ class CustomTilemap
             for z in 0...zsize
               id = @map_data[x, y, z]
               next if id == 0 || id >= 384   # Skip non-autotiles
-              next if @priorities[id] != 0 || PBTerrain.hasReflections?(@terrain_tags[id])
+              next if @priorities[id] != 0 || GameData::TerrainTag.try_get(@terrain_tags[id]).shows_reflections
               next if @framecount[id / 48 - 1] < 2
               @prioautotiles[[x, y]] = true
               break
@@ -727,7 +728,7 @@ class CustomTilemap
               id = mapdata[x, y, z]
               next if !id || id < 48 || id >= 384   # Skip non-autotiles
               prioid = @priorities[id]
-              next if prioid != 0 || PBTerrain.hasReflections?(@terrain_tags[id])
+              next if prioid != 0 || GameData::TerrainTag.try_get(@terrain_tags[id]).shows_reflections
               fcount = @framecount[id / 48 - 1]
               next if !fcount || fcount < 2
               overallcount += 1
@@ -740,7 +741,7 @@ class CustomTilemap
               id = mapdata[x, y, z]
               next if !id || id < 48
               prioid = @priorities[id]
-              next if prioid != 0 || PBTerrain.hasReflections?(@terrain_tags[id])
+              next if prioid != 0 || GameData::TerrainTag.try_get(@terrain_tags[id]).shows_reflections
               if overallcount > 2000
                 xpos = (x * twidth) - @oxLayer0
                 ypos = (y * theight) - @oyLayer0
@@ -798,7 +799,7 @@ class CustomTilemap
             z += 1
             next if !id || id < 48
             prioid = @priorities[id]
-            next if prioid != 0 || PBTerrain.hasReflections?(@terrain_tags[id])
+            next if prioid != 0 || GameData::TerrainTag.try_get(@terrain_tags[id]).shows_reflections
             if id >= 384   # Tileset tiles
               temprect.set(((id - 384) & 7) * @tileSrcWidth,
                            ((id - 384) >> 3) * @tileSrcHeight,
@@ -859,7 +860,7 @@ class CustomTilemap
           for x in xrange
             xpos = (x * twidth) - @oxLayer0
             id = mapdata[x, y, z]
-            next if id == 0 || @priorities[id] != 0 || PBTerrain.hasReflections?(@terrain_tags[id])
+            next if id == 0 || @priorities[id] != 0 || GameData::TerrainTag.try_get(@terrain_tags[id]).shows_reflections
             if id >= 384   # Tileset tiles
               tmprect.set(((id - 384) & 7) * @tileSrcWidth,
                           ((id - 384) >> 3) * @tileSrcHeight,
@@ -930,7 +931,7 @@ class CustomTilemap
               for x in minX..maxX
                 id = @map_data[x, y, z]
                 next if id == 0
-                next if @priorities[id] == 0 && !PBTerrain.hasReflections?(@terrain_tags[id])
+                next if @priorities[id] == 0 && !GameData::TerrainTag.try_get(@terrain_tags[id]).shows_reflections
                 @priotilesfast.push([x, y, z, id])
               end
             end

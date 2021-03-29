@@ -77,11 +77,10 @@ class PokemonTilesetScene
     overlay.fill_rect(tile_x + TILE_SIZE * 2, tile_y - 1,             1, TILE_SIZE * 2 + 2, Color.new(255, 255, 255))
     # Write terrain tag info about selected tile
     terrain_tag = @tileset.terrain_tags[tile_id] || 0
-    terrain_tag_name = getConstantNameOrValue(PBTerrain, terrain_tag)
-    if terrain_tag_name == terrain_tag.to_s
-      terrain_tag_name = terrain_tag.to_s
+    if GameData::TerrainTag.exists?(terrain_tag)
+      terrain_tag_name = sprintf("%d: %s", terrain_tag, GameData::TerrainTag.get(terrain_tag).real_name)
     else
-      terrain_tag_name = sprintf("%d: %s", terrain_tag, terrain_tag_name)
+      terrain_tag_name = terrain_tag.to_s
     end
     textpos = [
       [_INTL("Terrain Tag:"), tile_x + TILE_SIZE, tile_y + TILE_SIZE * 2 + 10, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)],

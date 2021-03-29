@@ -490,7 +490,7 @@ class Interpreter
         when 2 then value = character.direction     # direction
         when 3 then value = character.screen_x      # screen x-coordinate
         when 4 then value = character.screen_y      # screen y-coordinate
-        when 5 then value = character.terrain_tag   # terrain tag
+        when 5 then value = character.terrain_tag.id_number   # terrain tag
         end
       end
     when 7   # other

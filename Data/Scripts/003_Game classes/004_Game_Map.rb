@@ -147,8 +147,7 @@ class Game_Map
     bit = (1 << (d / 2 - 1)) & 0x0f
     for event in events.values
       next if event.tile_id <= 0
-      terrain = @terrain_tags[event.tile_id]
-      next if terrain == PBTerrain::Neutral
+      next if GameData::TerrainTag.try_get(@terrain_tags[event.tile_id]).ignore_passability
       next if event == self_event
       next if event.x != x || event.y != y
       next if event.through
@@ -185,48 +184,35 @@ class Game_Map
     return false if !valid?(newx, newy)
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
-      terrain = @terrain_tags[tile_id]
+      terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       passage = @passages[tile_id]
       # If already on water, only allow movement to another water tile
-      if self_event!=nil && PBTerrain.isJustWater?(terrain)
+      if self_event != nil && terrain.can_surf_freely
         for j in [2, 1, 0]
           facing_tile_id = data[newx, newy, j]
-          return false if facing_tile_id==nil
-          facing_terrain = @terrain_tags[facing_tile_id]
-          if facing_terrain!=0 && facing_terrain!=PBTerrain::Neutral
-            return PBTerrain.isJustWater?(facing_terrain)
+          return false if facing_tile_id == nil
+          facing_terrain = GameData::TerrainTag.try_get(@terrain_tags[facing_tile_id])
+          if facing_terrain.id != :None && !facing_terrain.ignore_passability
+            return facing_terrain.can_surf_freely
           end
         end
         return false
       # Can't walk onto ice
-      elsif PBTerrain.isIce?(terrain)
+      elsif terrain.ice
         return false
-      elsif self_event!=nil && self_event.x==x && self_event.y==y
+      elsif self_event != nil && self_event.x == x && self_event.y == y
         # Can't walk onto ledges
         for j in [2, 1, 0]
           facing_tile_id = data[newx, newy, j]
-          return false if facing_tile_id==nil
-          facing_terrain = @terrain_tags[facing_tile_id]
-          if facing_terrain!=0 && facing_terrain!=PBTerrain::Neutral
-            return false if PBTerrain.isLedge?(facing_terrain)
-            break
-          end
+          return false if facing_tile_id == nil
+          return false if GameData::TerrainTag.try_get(@terrain_tags[facing_tile_id]).ledge
+          break
         end
-        # Regular passability checks
-        if terrain!=PBTerrain::Neutral
-          if passage & bit != 0 || passage & 0x0f == 0x0f
-            return false
-          elsif @priorities[tile_id] == 0
-            return true
-          end
-        end
+      end
       # Regular passability checks
-      elsif terrain!=PBTerrain::Neutral
-        if passage & bit != 0 || passage & 0x0f == 0x0f
-          return false
-        elsif @priorities[tile_id] == 0
-          return true
-        end
+      if !terrain || !terrain.ignore_passability
+        return false if passage & bit != 0 || passage & 0x0f == 0x0f
+        return true if @priorities[tile_id] == 0
       end
     end
     return true
@@ -236,26 +222,24 @@ class Game_Map
     bit = (1 << (d / 2 - 1)) & 0x0f
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
-      terrain = @terrain_tags[tile_id]
+      terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
       passage = @passages[tile_id]
-      # Ignore bridge tiles if not on a bridge
-      next if PBTerrain.isBridge?(terrain) && $PokemonGlobal.bridge==0
-      # Make water tiles passable if player is surfing
-      if $PokemonGlobal.surfing && PBTerrain.isPassableWater?(terrain)
-        return true
-      # Prevent cycling in really tall grass/on ice
-      elsif $PokemonGlobal.bicycle && PBTerrain.onlyWalk?(terrain)
-        return false
-      # Depend on passability of bridge tile if on bridge
-      elsif PBTerrain.isBridge?(terrain) && $PokemonGlobal.bridge>0
-        return (passage & bit == 0 && passage & 0x0f != 0x0f)
-      # Regular passability checks
-      elsif terrain!=PBTerrain::Neutral
-        if passage & bit != 0 || passage & 0x0f == 0x0f
-          return false
-        elsif @priorities[tile_id] == 0
-          return true
+      if terrain
+        # Ignore bridge tiles if not on a bridge
+        next if terrain.bridge && $PokemonGlobal.bridge == 0
+        # Make water tiles passable if player is surfing
+        return true if $PokemonGlobal.surfing && terrain.can_surf && !terrain.waterfall
+        # Prevent cycling in really tall grass/on ice
+        return false if $PokemonGlobal.bicycle && terrain.must_walk
+        # Depend on passability of bridge tile if on bridge
+        if terrain.bridge && $PokemonGlobal.bridge > 0
+          return (passage & bit == 0 && passage & 0x0f != 0x0f)
         end
+      end
+      # Regular passability checks
+      if !terrain || !terrain.ignore_passability
+        return false if passage & bit != 0 || passage & 0x0f == 0x0f
+        return true if @priorities[tile_id] == 0
       end
     end
     return true
@@ -268,15 +252,13 @@ class Game_Map
     for event in events.values
       next if event == self_event || event.tile_id < 0 || event.through
       next if event.x != x || event.y != y
-      terrain = @terrain_tags[event.tile_id]
-      next if terrain == PBTerrain::Neutral
+      next if GameData::TerrainTag.try_get(@terrain_tags[event.tile_id]).ignore_passability
       return false if @passages[event.tile_id] & 0x0f != 0
       return true if @priorities[event.tile_id] == 0
     end
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
-      terrain = @terrain_tags[tile_id]
-      next if terrain == PBTerrain::Neutral
+      next if GameData::TerrainTag.try_get(@terrain_tags[tile_id]).ignore_passability
       return false if @passages[tile_id] & 0x0f != 0
       return true if @priorities[tile_id] == 0
     end
@@ -286,7 +268,8 @@ class Game_Map
   def bush?(x,y)
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
-      return false if PBTerrain.isBridge?(@terrain_tags[tile_id]) && $PokemonGlobal.bridge>0
+      return false if GameData::TerrainTag.try_get(@terrain_tags[tile_id]).bridge &&
+                      $PokemonGlobal.bridge > 0
       return true if @passages[tile_id] & 0x40 == 0x40
     end
     return false
@@ -295,9 +278,9 @@ class Game_Map
   def deepBush?(x,y)
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
-      terrain = @terrain_tags[tile_id]
-      return false if $PokemonGlobal.bridge>0 && PBTerrain.isBridge?(terrain)
-      return true if terrain==PBTerrain::TallGrass && @passages[tile_id] & 0x40 == 0x40
+      terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
+      return false if terrain.bridge && $PokemonGlobal.bridge > 0
+      return true if terrain.deep_bush && @passages[tile_id] & 0x40 == 0x40
     end
     return false
   end
@@ -312,14 +295,16 @@ class Game_Map
   end
 
   def terrain_tag(x,y,countBridge=false)
-    return 0 if !valid?(x, y)
-    for i in [2, 1, 0]
-      tile_id = data[x, y, i]
-      terrain = @terrain_tags[tile_id]
-      next if !countBridge && PBTerrain.isBridge?(terrain) && $PokemonGlobal.bridge==0
-      return terrain if terrain > 0 && terrain!=PBTerrain::Neutral
+    if valid?(x, y)
+      for i in [2, 1, 0]
+        tile_id = data[x, y, i]
+        terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
+        next if terrain.id == :None || terrain.ignore_passability
+        next if !countBridge && terrain.bridge && $PokemonGlobal.bridge == 0
+        return terrain
+      end
     end
-    return 0
+    return GameData::TerrainTag.get(:None)
   end
 
   def check_event(x,y)

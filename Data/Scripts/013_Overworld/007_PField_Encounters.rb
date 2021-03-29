@@ -91,9 +91,9 @@ class PokemonEncounters
   def encounter_possible_here?
     return true if $PokemonGlobal.surfing
     terrain_tag = $game_map.terrain_tag($game_player.x, $game_player.y)
-    return false if PBTerrain.isIce?(terrain_tag)
+    return false if terrain_tag.ice
     return true if has_cave_encounters?   # i.e. this map is a cave
-    return true if PBTerrain.isGrass?(terrain_tag) && has_land_encounters?
+    return true if has_land_encounters? && terrain_tag.land_wild_encounters
     return false
   end
 
@@ -203,7 +203,7 @@ class PokemonEncounters
     return false if pbInSafari?
     return true if $PokemonGlobal.partner
     return false if $Trainer.able_pokemon_count <= 1
-    return true if PBTerrain.isDoubleWildBattle?(pbGetTerrainTag) && rand(100) < 30
+    return true if pbGetTerrainTag.double_wild_encounters && rand(100) < 30
     return false
   end
 
@@ -242,7 +242,7 @@ class PokemonEncounters
     if $PokemonGlobal.surfing
       ret = find_valid_encounter_type_for_time(:Water, time)
     else   # Land/Cave (can have both in the same map)
-      if has_land_encounters? && PBTerrain.isGrass?($game_map.terrain_tag($game_player.x, $game_player.y))
+      if has_land_encounters? && $game_map.terrain_tag($game_player.x, $game_player.y).land_wild_encounters
         ret = :BugContest if pbInBugContest? && has_encounter_type?(:BugContest)
         ret = find_valid_encounter_type_for_time(:Land, time) if !ret
       end

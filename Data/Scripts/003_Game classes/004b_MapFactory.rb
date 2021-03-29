@@ -223,13 +223,13 @@ class PokemonMapFactory
 
   def getFacingTerrainTag(dir=nil,event=nil)
     tile = getFacingTile(dir,event)
-    return 0 if !tile
+    return GameData::TerrainTag.get(:None) if !tile
     return getTerrainTag(tile[0],tile[1],tile[2])
   end
 
   def getTerrainTagFromCoords(mapid,x,y,countBridge=false)
     tile = getRealTilePos(mapid,x,y)
-    return 0 if !tile
+    return GameData::TerrainTag.get(:None) if !tile
     return getTerrainTag(tile[0],tile[1],tile[2])
   end
 
