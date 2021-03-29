@@ -24,7 +24,7 @@ class PokeBattle_DamageState
 
   def reset
     @initialHP          = 0
-    @typeMod            = PBTypeEffectiveness::INEFFECTIVE
+    @typeMod            = Effectiveness::INEFFECTIVE
     @unaffected         = false
     @protected          = false
     @magicCoat          = false
@@ -63,7 +63,7 @@ class PokeBattle_SuccessState
   def initialize; clear; end
 
   def clear(full=true)
-    @typeMod   = PBTypeEffectiveness::NORMAL_EFFECTIVE
+    @typeMod   = Effectiveness::NORMAL_EFFECTIVE
     @useState  = 0
     @protected = false
     @skill     = 0 if full
@@ -73,10 +73,10 @@ class PokeBattle_SuccessState
     if @useState==1
       @skill = -2 if !@protected
     elsif @useState==2
-      if PBTypeEffectiveness.superEffective?(@typeMod);      @skill = 2
-      elsif PBTypeEffectiveness.normalEffective?(@typeMod);  @skill = 1
-      elsif PBTypeEffectiveness.notVeryEffective?(@typeMod); @skill = -1
-      else;                                                  @skill = -2   # Ineffective
+      if Effectiveness.super_effective?(@typeMod);       @skill = 2
+      elsif Effectiveness.normal?(@typeMod);             @skill = 1
+      elsif Effectiveness.not_very_effective?(@typeMod); @skill = -1
+      else;                                              @skill = -2   # Ineffective
       end
     end
     clear(false)

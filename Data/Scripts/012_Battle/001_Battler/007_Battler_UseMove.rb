@@ -360,7 +360,7 @@ class PokeBattle_Battler
     end
     # Protean
     if user.hasActiveAbility?(:PROTEAN) && !move.callsAnotherMove? && !move.snatched
-      if user.pbHasOtherType?(move.calcType) && !PBTypes.isPseudoType?(move.calcType)
+      if user.pbHasOtherType?(move.calcType) && !GameData::Type.get(move.calcType).pseudo_type
         @battle.pbShowAbilitySplash(user)
         user.pbChangeTypes(move.calcType)
         typeName = GameData::Type.get(move.calcType).name

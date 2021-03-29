@@ -75,7 +75,7 @@ class PokeBattle_Move
     thisType ||= @calcType
     thisType ||= @type
     return true if !thisType
-    return !PBTypes.isSpecialType?(thisType)
+    return GameData::Type.get(thisType).physical?
   end
 
   # NOTE: This method is only ever called while using a move (and also by the
@@ -85,7 +85,7 @@ class PokeBattle_Move
     thisType ||= @calcType
     thisType ||= @type
     return false if !thisType
-    return PBTypes.isSpecialType?(thisType)
+    return GameData::Type.get(thisType).special?
   end
 
   def damagingMove?; return @category!=2; end

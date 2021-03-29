@@ -4,10 +4,10 @@
 class PokemonTemp
   attr_accessor :townMapData
   attr_accessor :phoneData
-  attr_accessor :regionalDexes
   attr_accessor :speciesShadowMovesets
-  attr_accessor :moveToAnim
+  attr_accessor :regionalDexes
   attr_accessor :battleAnims
+  attr_accessor :moveToAnim
   attr_accessor :mapInfos
 end
 
@@ -15,10 +15,10 @@ def pbClearData
   if $PokemonTemp
     $PokemonTemp.townMapData           = nil
     $PokemonTemp.phoneData             = nil
-    $PokemonTemp.regionalDexes         = nil
     $PokemonTemp.speciesShadowMovesets = nil
-    $PokemonTemp.moveToAnim            = nil
+    $PokemonTemp.regionalDexes         = nil
     $PokemonTemp.battleAnims           = nil
+    $PokemonTemp.moveToAnim            = nil
     $PokemonTemp.mapInfos              = nil
   end
   MapFactoryHelper.clear
@@ -53,17 +53,6 @@ def pbLoadPhoneData
 end
 
 #===============================================================================
-# Method to get Regional Dexes data.
-#===============================================================================
-def pbLoadRegionalDexes
-  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.regionalDexes
-    $PokemonTemp.regionalDexes = load_data("Data/regional_dexes.dat")
-  end
-  return $PokemonTemp.regionalDexes
-end
-
-#===============================================================================
 # Method to get Shadow Pokémon moveset data.
 #===============================================================================
 def pbLoadShadowMovesets
@@ -75,16 +64,19 @@ def pbLoadShadowMovesets
 end
 
 #===============================================================================
-# Methods relating to battle animations data.
+# Method to get Regional Dexes data.
 #===============================================================================
-def pbLoadMoveToAnim
+def pbLoadRegionalDexes
   $PokemonTemp = PokemonTemp.new if !$PokemonTemp
-  if !$PokemonTemp.moveToAnim
-    $PokemonTemp.moveToAnim = load_data("Data/move2anim.dat") || []
+  if !$PokemonTemp.regionalDexes
+    $PokemonTemp.regionalDexes = load_data("Data/regional_dexes.dat")
   end
-  return $PokemonTemp.moveToAnim
+  return $PokemonTemp.regionalDexes
 end
 
+#===============================================================================
+# Methods relating to battle animations data.
+#===============================================================================
 def pbLoadBattleAnimations
   $PokemonTemp = PokemonTemp.new if !$PokemonTemp
   if !$PokemonTemp.battleAnims
@@ -93,6 +85,14 @@ def pbLoadBattleAnimations
     end
   end
   return $PokemonTemp.battleAnims
+end
+
+def pbLoadMoveToAnim
+  $PokemonTemp = PokemonTemp.new if !$PokemonTemp
+  if !$PokemonTemp.moveToAnim
+    $PokemonTemp.moveToAnim = load_data("Data/move2anim.dat") || []
+  end
+  return $PokemonTemp.moveToAnim
 end
 
 #===============================================================================

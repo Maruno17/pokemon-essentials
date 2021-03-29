@@ -580,7 +580,7 @@ end
 
 def pbBattleTypeWeakingBerry(type,moveType,target,mults)
   return if moveType != type
-  return if PBTypeEffectiveness.resistant?(target.damageState.typeMod) && moveType != :NORMAL
+  return if Effectiveness.resistant?(target.damageState.typeMod) && moveType != :NORMAL
   mults[:final_damage_multiplier] /= 2
   target.damageState.berryWeakened = true
   target.battle.pbCommonAnimation("EatBerry",target)

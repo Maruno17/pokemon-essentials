@@ -401,7 +401,7 @@ class PokeBattle_Battler
     # Immunity because of ability (intentionally before type immunity check)
     return false if move.pbImmunityByAbility(user,target)
     # Type immunity
-    if move.pbDamagingMove? && PBTypeEffectiveness.ineffective?(typeMod)
+    if move.pbDamagingMove? && Effectiveness.ineffective?(typeMod)
       PBDebug.log("[Target immune] #{target.pbThis}'s type immunity")
       @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
       return false

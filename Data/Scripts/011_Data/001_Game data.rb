@@ -195,17 +195,17 @@ module GameData
   # A bulk loader method for all data stored in .dat files in the Data folder.
   #=============================================================================
   def self.load_all
+    Type.load
     Ability.load
+    Move.load
     Item.load
     BerryPlant.load
+    Species.load
+    Ribbon.load
+    Encounter.load
+    TrainerType.load
+    Trainer.load
     Metadata.load
     MapMetadata.load
-    Move.load
-    TrainerType.load
-    Type.load
-    Species.load
-    Trainer.load
-    Encounter.load
-    Ribbon.load
   end
 end

@@ -112,7 +112,7 @@ class PokeBattle_Move_007 < PokeBattle_ParalysisMove
   end
 
   def pbFailsAgainstTarget?(user,target)
-    if @id == :THUNDERWAVE && PBTypeEffectiveness.ineffective?(target.damageState.typeMod)
+    if @id == :THUNDERWAVE && Effectiveness.ineffective?(target.damageState.typeMod)
       @battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
       return true
     end
@@ -1789,7 +1789,7 @@ class PokeBattle_Move_05E < PokeBattle_Move
     @newTypes = []
     user.eachMoveWithIndex do |m,i|
       break if Settings::MECHANICS_GENERATION >= 6 && i>0
-      next if PBTypes.isPseudoType?(m.type)
+      next if GameData::Type.get(m.type).pseudo_type
       next if userTypes.include?(m.type)
       @newTypes.push(m.type) if !@newTypes.include?(m.type)
     end
@@ -1827,14 +1827,14 @@ class PokeBattle_Move_05F < PokeBattle_Move
 
   def pbFailsAgainstTarget?(user, target)
     if !target.lastMoveUsed || !target.lastMoveUsedType ||
-       PBTypes.isPseudoType?(target.lastMoveUsedType)
+       GameData::Type.get(target.lastMoveUsedType).pseudo_type
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     @newTypes = []
     GameData::Type.each do |t|
       next if t.pseudo_type || user.pbHasType?(t.id) ||
-              !PBTypes.resistant?(target.lastMoveUsedType, t.id)
+              !Effectiveness.resistant_type?(target.lastMoveUsedType, t.id)
       @newTypes.push(t.id)
     end
     if @newTypes.length == 0

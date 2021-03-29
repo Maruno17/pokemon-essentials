@@ -132,7 +132,7 @@ class PurifyChamberSet
   # Purify Chamber treats Normal/Normal matchup as super effective
   def self.typeAdvantage(p1,p2)
     return true if p1 == :NORMAL && p2 == :NORMAL
-    return PBTypes.superEffective?(p1,p2)
+    return Effectiveness.super_effective_type?(p1, p2)
   end
 
   def self.isSuperEffective(p1,p2)

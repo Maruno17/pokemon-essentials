@@ -25,41 +25,41 @@ class PokeBattle_AI
   # Move's type effectiveness
   #=============================================================================
   def pbCalcTypeModSingle(moveType,defType,user,target)
-    ret = PBTypes.getEffectiveness(moveType,defType)
+    ret = Effectiveness.calculate_one(moveType,defType)
     # Ring Target
     if target.hasActiveItem?(:RINGTARGET)
-      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if PBTypes.ineffective?(moveType,defType)
+      ret = Effectiveness::NORMAL_EFFECTIVE_ONE if Effectiveness.ineffective_type?(moveType, defType)
     end
     # Foresight
     if user.hasActiveAbility?(:SCRAPPY) || target.effects[PBEffects::Foresight]
-      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if defType == :GHOST &&
-                                                         PBTypes.ineffective?(moveType,defType)
+      ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :GHOST &&
+                                                   Effectiveness.ineffective_type?(moveType, defType)
     end
     # Miracle Eye
     if target.effects[PBEffects::MiracleEye]
-      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if defType == :DARK &&
-                                                         PBTypes.ineffective?(moveType,defType)
+      ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :DARK &&
+                                                   Effectiveness.ineffective_type?(moveType, defType)
     end
     # Delta Stream's weather
     if @battle.pbWeather == :StrongWinds
-      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING &&
-                                                         PBTypes.superEffective?(moveType,defType)
+      ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING &&
+                                                   Effectiveness.super_effective_type?(moveType, defType)
     end
     # Grounded Flying-type Pokémon become susceptible to Ground moves
     if !target.airborne?
-      ret = PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING && moveType == :GROUND
+      ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING && moveType == :GROUND
     end
     return ret
   end
 
   def pbCalcTypeMod(moveType,user,target)
-    return PBTypeEffectiveness::NORMAL_EFFECTIVE if !moveType
-    return PBTypeEffectiveness::NORMAL_EFFECTIVE if moveType == :GROUND &&
+    return Effectiveness::NORMAL_EFFECTIVE if !moveType
+    return Effectiveness::NORMAL_EFFECTIVE if moveType == :GROUND &&
        target.pbHasType?(:FLYING) && target.hasActiveItem?(:IRONBALL)
     # Determine types
     tTypes = target.pbTypes(true)
     # Get effectivenesses
-    typeMods = [PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE] * 3   # 3 types max
+    typeMods = [Effectiveness::NORMAL_EFFECTIVE_ONE] * 3   # 3 types max
     tTypes.each_with_index do |type,i|
       typeMods[i] = pbCalcTypeModSingle(moveType,type,user,target)
     end
@@ -72,12 +72,13 @@ class PokeBattle_AI
   # For switching. Determines the effectiveness of a potential switch-in against
   # an opposing battler.
   def pbCalcTypeModPokemon(battlerThis,_battlerOther)
-    mod1 = PBTypes.getCombinedEffectiveness(battlerThis.type1,target.type1,target.type2)
-    mod2 = PBTypeEffectiveness::NORMAL_EFFECTIVE
+    mod1 = Effectiveness.calculate(battlerThis.type1,target.type1,target.type2)
+    mod2 = Effectiveness::NORMAL_EFFECTIVE
     if battlerThis.type1!=battlerThis.type2
-      mod2 = PBTypes.getCombinedEffectiveness(battlerThis.type2,target.type1,target.type2)
+      mod2 = Effectiveness.calculate(battlerThis.type2,target.type1,target.type2)
+      mod2 = mod2.to_f / Effectivenesss::NORMAL_EFFECTIVE
     end
-    return mod1*mod2   # Normal effectiveness is 64 here
+    return mod1*mod2
   end
 
   #=============================================================================
@@ -87,7 +88,7 @@ class PokeBattle_AI
     type = pbRoughType(move,user,skill)
     typeMod = pbCalcTypeMod(type,user,target)
     # Type effectiveness
-    return true if PBTypeEffectiveness.ineffective?(typeMod) || score<=0
+    return true if Effectiveness.ineffective?(typeMod) || score<=0
     # Immunity due to ability/item/other effects
     if skill>=PBTrainerAI.mediumSkill
       case type
@@ -102,7 +103,7 @@ class PokeBattle_AI
       when :ELECTRIC
         return true if target.hasActiveAbility?([:LIGHTNINGROD,:MOTORDRIVE,:VOLTABSORB])
       end
-      return true if PBTypeEffectiveness.notVeryEffective?(typeMod) &&
+      return true if Effectiveness.not_very_effective?(typeMod) &&
                      target.hasActiveAbility?(:WONDERGUARD)
       return true if move.damagingMove? && user.index!=target.index && !target.opposes?(user) &&
                      target.hasActiveAbility?(:TELEPATHY)
@@ -227,13 +228,13 @@ class PokeBattle_AI
       if GameData::Type.exists?(:FLYING)
         if skill>=PBTrainerAI.highSkill
           targetTypes = target.pbTypes(true)
-          mult = PBTypes.getCombinedEffectiveness(:FLYING,
+          mult = Effectiveness.calculate(:FLYING,
              targetTypes[0],targetTypes[1],targetTypes[2])
-          baseDmg = (baseDmg.to_f*mult/PBTypeEffectiveness::NORMAL_EFFECTIVE).round
+          baseDmg = (baseDmg.to_f*mult/Effectiveness::NORMAL_EFFECTIVE).round
         else
-          mult = PBTypes.getCombinedEffectiveness(:FLYING,
+          mult = Effectiveness.calculate(:FLYING,
              target.type1,target.type2,target.effects[PBEffects::Type3])
-          baseDmg = (baseDmg.to_f*mult/PBTypeEffectiveness::NORMAL_EFFECTIVE).round
+          baseDmg = (baseDmg.to_f*mult/Effectiveness::NORMAL_EFFECTIVE).round
         end
       end
       baseDmg *= 2 if skill>=PBTrainerAI.mediumSkill && target.effects[PBEffects::Minimize]
@@ -462,7 +463,7 @@ class PokeBattle_AI
     # Type effectiveness
     if skill>=PBTrainerAI.mediumSkill
       typemod = pbCalcTypeMod(type,user,target)
-      multipliers[:final_damage_multiplier] *= typemod.to_f / PBTypeEffectiveness::NORMAL_EFFECTIVE
+      multipliers[:final_damage_multiplier] *= typemod.to_f / Effectiveness::NORMAL_EFFECTIVE
     end
     # Burn
     if skill>=PBTrainerAI.highSkill

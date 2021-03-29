@@ -528,7 +528,7 @@ BattleHandlers::DamageCalcUserItem.add(:ELECTRICGEM,
 
 BattleHandlers::DamageCalcUserItem.add(:EXPERTBELT,
   proc { |item,user,target,move,mults,baseDmg,type|
-    if PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
+    if Effectiveness.super_effective?(target.damageState.typeMod)
       mults[:final_damage_multiplier] *= 1.2
     end
   }
@@ -1022,7 +1022,7 @@ BattleHandlers::TargetItemOnHit.add(:CELLBATTERY,
 BattleHandlers::TargetItemOnHit.add(:ENIGMABERRY,
   proc { |item,user,target,move,battle|
     next if target.damageState.substitute || target.damageState.disguise
-    next if !PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
+    next if !Effectiveness.super_effective?(target.damageState.typeMod)
     if BattleHandlers.triggerTargetItemOnHitPositiveBerry(item,target,battle,false)
       target.pbHeldItemTriggered(item)
     end
@@ -1136,7 +1136,7 @@ BattleHandlers::TargetItemOnHit.add(:STICKYBARB,
 BattleHandlers::TargetItemOnHit.add(:WEAKNESSPOLICY,
   proc { |item,user,target,move,battle|
     next if target.damageState.disguise
-    next if !PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
+    next if !Effectiveness.super_effective?(target.damageState.typeMod)
     next if !target.pbCanRaiseStatStage?(:ATTACK,target) &&
             !target.pbCanRaiseStatStage?(:SPECIAL_ATTACK,target)
     battle.pbCommonAnimation("UseItem",target)

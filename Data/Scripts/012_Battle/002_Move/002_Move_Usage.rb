@@ -234,8 +234,8 @@ class PokeBattle_Move
         oldHP = b.hp+b.damageState.hpLost
         PBDebug.log("[Move damage] #{b.pbThis} lost #{b.damageState.hpLost} HP (#{oldHP}=>#{b.hp})")
         effectiveness = 0
-        if PBTypeEffectiveness.resistant?(b.damageState.typeMod);         effectiveness = 1
-        elsif PBTypeEffectiveness.superEffective?(b.damageState.typeMod); effectiveness = 2
+        if Effectiveness.resistant?(b.damageState.typeMod);          effectiveness = 1
+        elsif Effectiveness.super_effective?(b.damageState.typeMod); effectiveness = 2
         end
         animArray.push([b,oldHP,effectiveness])
       end
@@ -251,13 +251,13 @@ class PokeBattle_Move
   #=============================================================================
   def pbEffectivenessMessage(user,target,numTargets=1)
     return if target.damageState.disguise
-    if PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
+    if Effectiveness.super_effective?(target.damageState.typeMod)
       if numTargets>1
         @battle.pbDisplay(_INTL("It's super effective on {1}!",target.pbThis(true)))
       else
         @battle.pbDisplay(_INTL("It's super effective!"))
       end
-    elsif PBTypeEffectiveness.notVeryEffective?(target.damageState.typeMod)
+    elsif Effectiveness.not_very_effective?(target.damageState.typeMod)
       if numTargets>1
         @battle.pbDisplay(_INTL("It's not very effective on {1}...",target.pbThis(true)))
       else

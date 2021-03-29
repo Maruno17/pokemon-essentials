@@ -22,7 +22,7 @@ class PokeBattle_AI
         moveData = GameData::Move.get(target.lastMoveUsed)
         moveType = moveData.type
         typeMod = pbCalcTypeMod(moveType,target,battler)
-        if PBTypeEffectiveness.superEffective?(typeMod) && moveData.base_damage > 50
+        if Effectiveness.super_effective?(typeMod) && moveData.base_damage > 50
           switchChance = (moveData.base_damage > 70) ? 30 : 20
           shouldSwitch = (pbAIRandom(100) < switchChance)
         end
@@ -107,18 +107,18 @@ class PokeBattle_AI
           end
         end
         # moveType is the type of the target's last used move
-        if moveType>=0 && PBTypeEffectiveness.ineffective?(pbCalcTypeMod(moveType,battler,battler))
+        if moveType>=0 && Effectiveness.ineffective?(pbCalcTypeMod(moveType,battler,battler))
           weight = 65
           typeMod = pbCalcTypeModPokemon(pkmn,battler.pbDirectOpposing(true))
-          if PBTypeEffectiveness.superEffective?(typeMod.to_f/PBTypeEffectivenesss::NORMAL_EFFECTIVE)
+          if Effectiveness.super_effective?(typeMod)
             # Greater weight if new Pokemon's type is effective against target
             weight = 85
           end
           list.unshift(i) if pbAIRandom(100)<weight   # Put this Pokemon first
-        elsif moveType>=0 && PBTypeEffectiveness.resistant?(pbCalcTypeMod(moveType,battler,battler))
+        elsif moveType>=0 && Effectiveness.resistant?(pbCalcTypeMod(moveType,battler,battler))
           weight = 40
           typeMod = pbCalcTypeModPokemon(pkmn,battler.pbDirectOpposing(true))
-          if PBTypeEffectiveness.superEffective?(typeMod.to_f/PBTypeEffectivenesss::NORMAL_EFFECTIVE)
+          if Effectiveness.super_effective?(typeMod)
             # Greater weight if new Pokemon's type is effective against target
             weight = 60
           end
@@ -165,7 +165,7 @@ class PokeBattle_AI
         next if m.base_damage == 0
         @battle.battlers[idxBattler].eachOpposing do |b|
           bTypes = b.pbTypes(true)
-          sum += PBTypes.getCombinedEffectiveness(m.type, bTypes[0], bTypes[1], bTypes[2])
+          sum += Effectiveness.calculate(m.type, bTypes[0], bTypes[1], bTypes[2])
         end
       end
       if best==-1 || sum>bestSum

@@ -51,10 +51,10 @@ class TriadCard
   end
 
   def bonus(opponent)
-    case PBTypes.getEffectiveness(@type, opponent.type)
-    when PBTypeEffectiveness::INEFFECTIVE         then return -2
-    when PBTypeEffectiveness::NOT_EFFECTIVE_ONE   then return -1
-    when PBTypeEffectiveness::SUPER_EFFECTIVE_ONE then return 1
+    case Effectiveness.calculate_one(@type, opponent.type)
+    when Effectiveness::INEFFECTIVE            then return -2
+    when Effectiveness::NOT_VERY_EFFECTIVE_ONE then return -1
+    when Effectiveness::SUPER_EFFECTIVE_ONE    then return 1
     end
     return 0
   end
@@ -726,8 +726,9 @@ class TriadScreen
       if @elements
         loop do
           trial_type = type_keys[rand(type_keys.length)]
-          next if PBTypes.isPseudoType?(trial_type)
-          square.type = GameData::Type.get(trial_type).id
+          type_data = GameData::Type.get(trial_type)
+          next if type_data.pseudo_type
+          square.type = type_data.id
           break
         end
       end

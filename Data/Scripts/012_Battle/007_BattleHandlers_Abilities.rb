@@ -695,7 +695,7 @@ BattleHandlers::MoveImmunityTargetAbility.copy(:WATERABSORB,:DRYSKIN)
 BattleHandlers::MoveImmunityTargetAbility.add(:WONDERGUARD,
   proc { |ability,user,target,move,type,battle|
     next false if move.statusMove?
-    next false if !type || PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
+    next false if !type || Effectiveness.super_effective?(target.damageState.typeMod)
     battle.pbShowAbilitySplash(target)
     if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
       battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
@@ -970,7 +970,7 @@ BattleHandlers::DamageCalcUserAbility.copy(:MINUS,:PLUS)
 
 BattleHandlers::DamageCalcUserAbility.add(:NEUROFORCE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
+    if Effectiveness.super_effective?(target.damageState.typeMod)
       mults[:final_damage_multiplier] *= 1.25
     end
   }
@@ -1076,7 +1076,7 @@ BattleHandlers::DamageCalcUserAbility.add(:TECHNICIAN,
 
 BattleHandlers::DamageCalcUserAbility.add(:TINTEDLENS,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[:final_damage_multiplier] *= 2 if PBTypeEffectiveness.resistant?(target.damageState.typeMod)
+    mults[:final_damage_multiplier] *= 2 if Effectiveness.resistant?(target.damageState.typeMod)
   }
 )
 
@@ -1139,7 +1139,7 @@ BattleHandlers::DamageCalcTargetAbility.add(:DRYSKIN,
 
 BattleHandlers::DamageCalcTargetAbility.add(:FILTER,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
+    if Effectiveness.super_effective?(target.damageState.typeMod)
       mults[:final_damage_multiplier] *= 0.75
     end
   }
@@ -1214,7 +1214,7 @@ BattleHandlers::DamageCalcTargetAbility.add(:WATERBUBBLE,
 
 BattleHandlers::DamageCalcTargetAbilityNonIgnorable.add(:PRISMARMOR,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if PBTypeEffectiveness.superEffective?(target.damageState.typeMod)
+    if Effectiveness.super_effective?(target.damageState.typeMod)
       mults[:final_damage_multiplier] *= 0.75
     end
   }
@@ -1712,7 +1712,7 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:BERSERK,
 BattleHandlers::TargetAbilityAfterMoveUse.add(:COLORCHANGE,
   proc { |ability,target,user,move,switched,battle|
     next if target.damageState.calcDamage==0 || target.damageState.substitute
-    next if !move.calcType || PBTypes.isPseudoType?(move.calcType)
+    next if !move.calcType || GameData::Type.get(move.calcType).pseudo_type
     next if target.pbHasType?(move.calcType) && !target.pbHasOtherType?(move.calcType)
     typeName = GameData::Type.get(move.calcType).name
     battle.pbShowAbilitySplash(target)
@@ -2078,9 +2078,9 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
           if Settings::MECHANICS_GENERATION >= 6 && m.function == "090"   # Hidden Power
             moveType = pbHiddenPower(b.pokemon)[0]
           end
-          eff = PBTypes.getCombinedEffectiveness(moveType,type1,type2,type3)
-          next if PBTypeEffectiveness.ineffective?(eff)
-          next if !PBTypeEffectiveness.superEffective?(eff) && m.function != "070"   # OHKO
+          eff = Effectiveness.calculate(moveType,type1,type2,type3)
+          next if Effectiveness.ineffective?(eff)
+          next if !Effectiveness.super_effective?(eff) && m.function != "070"   # OHKO
         else
           next if m.function != "070"   # OHKO
         end

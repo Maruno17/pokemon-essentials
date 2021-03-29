@@ -768,7 +768,7 @@ class PokeBattle_Move_11C < PokeBattle_Move
   def hitsFlyingTargets?; return true; end
 
   def pbCalcTypeModSingle(moveType,defType,user,target)
-    return PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE if moveType == :GROUND && defType == :FLYING
+    return Effectiveness::NORMAL_EFFECTIVE_ONE if moveType == :GROUND && defType == :FLYING
     return super
   end
 
@@ -1064,7 +1064,7 @@ end
 #===============================================================================
 class PokeBattle_Move_135 < PokeBattle_FreezeMove
   def pbCalcTypeModSingle(moveType,defType,user,target)
-    return PBTypeEffectiveness::SUPER_EFFECTIVE_ONE if defType == :WATER
+    return Effectiveness::SUPER_EFFECTIVE_ONE if defType == :WATER
     return super
   end
 end
@@ -1453,8 +1453,8 @@ class PokeBattle_Move_144 < PokeBattle_Move
   def pbCalcTypeModSingle(moveType,defType,user,target)
     ret = super
     if GameData::Type.exists?(:FLYING)
-      flyingEff = PBTypes.getEffectiveness(:FLYING, defType)
-      ret *= flyingEff.to_f / PBTypeEffectiveness::NORMAL_EFFECTIVE_ONE
+      flyingEff = Effectiveness.calculate_one(:FLYING, defType)
+      ret *= flyingEff.to_f / Effectiveness::NORMAL_EFFECTIVE_ONE
     end
     return ret
   end

@@ -352,9 +352,9 @@ class PokeBattle_Battle
     if battler.pbOwnSide.effects[PBEffects::StealthRock] && battler.takesIndirectDamage? &&
        GameData::Type.exists?(:ROCK)
       bTypes = battler.pbTypes(true)
-      eff = PBTypes.getCombinedEffectiveness(:ROCK, bTypes[0], bTypes[1], bTypes[2])
-      if !PBTypeEffectiveness.ineffective?(eff)
-        eff = eff.to_f/PBTypeEffectiveness::NORMAL_EFFECTIVE
+      eff = Effectiveness.calculate(:ROCK, bTypes[0], bTypes[1], bTypes[2])
+      if !Effectiveness.ineffective?(eff)
+        eff = eff.to_f / Effectiveness::NORMAL_EFFECTIVE
         oldHP = battler.hp
         battler.pbReduceHP(battler.totalhp*eff/8,false)
         pbDisplay(_INTL("Pointed stones dug into {1}!",battler.pbThis))

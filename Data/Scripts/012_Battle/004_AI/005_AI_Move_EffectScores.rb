@@ -71,7 +71,7 @@ class PokeBattle_AI
       if target.pbCanParalyze?(user,false) &&
          !(skill>=PBTrainerAI.mediumSkill &&
          move.id == :THUNDERWAVE &&
-         PBTypeEffectiveness.ineffective?(pbCalcTypeMod(move.type,user,target)))
+         Effectiveness.ineffective?(pbCalcTypeMod(move.type,user,target)))
         score += 30
         if skill>=PBTrainerAI.mediumSkill
            aspeed = pbRoughStat(user,:SPEED,skill)
@@ -1317,7 +1317,7 @@ class PokeBattle_AI
         types = []
         user.eachMove do |m|
           next if m.id==@id
-          next if PBTypes.isPseudoType?(m.type)
+          next if GameData::Type.get(m.type).pseudo_type
           next if user.pbHasType?(m.type)
           types.push(m.type) if !types.include?(m.type)
         end
@@ -1342,7 +1342,7 @@ class PokeBattle_AI
           types = []
           GameData::Type.each do |t|
             next if t.pseudo_type || user.pbHasType?(t.id) ||
-                    !PBTypes.resistant?(aType, t.id)
+                    !Effectiveness.resistant_type?(aType, t.id)
             types.push(t.id)
           end
           score -= 90 if types.length==0
@@ -1512,11 +1512,7 @@ class PokeBattle_AI
           score -= 60
         elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed
           moveData = GameData::Move.get(target.lastMoveUsed)
-          if moveData.base_damage > 0 &&
-             (Settings::MOVE_CATEGORY_PER_MOVE && moveData.category == 0) ||
-             (!Settings::MOVE_CATEGORY_PER_MOVE && PBTypes.isPhysicalType?(moveData.type))
-            score -= 60
-          end
+          score += 60 if moveData.physical?
         end
       end
     #---------------------------------------------------------------------------
@@ -1530,11 +1526,7 @@ class PokeBattle_AI
           score -= 60
         elsif skill>=PBTrainerAI.mediumSkill && target.lastMoveUsed
           moveData = GameData::Move.get(target.lastMoveUsed)
-          if moveData.base_damage > 0 &&
-             (Settings::MOVE_CATEGORY_PER_MOVE && moveData.category == 1) ||
-             (!Settings::MOVE_CATEGORY_PER_MOVE && !PBTypes.isSpecialType?(moveData.type))
-            score -= 60
-          end
+          score += 60 if moveData.special?
         end
       end
     #---------------------------------------------------------------------------
@@ -1779,7 +1771,7 @@ class PokeBattle_AI
             score += 60
           elsif moveData.category != 2 &&   # Damaging move
              moveData.target == :NearOther &&
-             PBTypeEffectiveness.ineffective?(pbCalcTypeMod(moveData.type, target, user))
+             Effectiveness.ineffective?(pbCalcTypeMod(moveData.type, target, user))
             score += 60
           end
         end
