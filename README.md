@@ -1,20 +1,20 @@
 # Pokémon Essentials
 
-Based on Essentials v18.
+Based on Essentials v18.1.
 
 You can build your fangame on top of a fork of this repository. Doing so will let you update your fangame with improvements made to this repo as soon as they are made.
 
 ## Usage
 
 1. Fork this repo.
-2. Get a copy of Essentials v18 (a download link cannot be provided here).
-3. Clone your forked repo into the Essentials v18 folder, replacing the existing files with the ones from the repo.
+2. Get a copy of Essentials v18.1 (a download link cannot be provided here).
+3. Clone your forked repo into the Essentials v18.1 folder, replacing the existing files with the ones from the repo.
 
 From here, you can edit this project to turn it into your fangame/develop mods. When this repo is updated, you can pull the changes to update your fork and get the updates into your fangame/modding environment.
 
 ## Scripts
 
-The scripts no longer live in the Scripts.rxdata file. They have been extracted into separate files and placed in the Data/Scripts/ folder (and subfolders within). This makes them easier to work on concurrently with other people.
+The scripts no longer live in the Scripts.rxdata file. They have been extracted into separate files and placed in the Data/Scripts/ folder (and subfolders within). This makes it easier to work with other people and keep track of changes.
 
 The scripts are loaded into the game alphanumerically, starting from the top folder (Data/Scripts/) and going depth-first. That is, all scripts in a given folder are loaded, and then each of its subfolder is checked in turn (again in alphanumerical order) for files/folders to load/check.
 
@@ -27,7 +27,7 @@ This repo contains two script files in the main folder:
 * scripts_combine.rb - Run this to reintegrate all the individual .rb files back into Scripts.rxdata.
   * The individual .rb files are left where they are, but they no longer do anything.
 
-The intention is to replace these with something more user-friendly.
+You will need Ruby installed to run these scripts. The intention is to replace these with something more user-friendly.
 
 ## Files not in the repo
 
