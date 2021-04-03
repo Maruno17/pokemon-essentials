@@ -384,7 +384,7 @@ class Interpreter
     old_y  = event.y
     # Apply strict version of passable, which treats tiles that are passable
     # only from certain directions as fully impassible
-    return if !event.passableStrict?(event.x, event.y, $game_player.direction)
+    return if !event.can_move_in_direction?($game_player.direction, true)
     case $game_player.direction
     when 2 then event.move_down
     when 4 then event.move_left

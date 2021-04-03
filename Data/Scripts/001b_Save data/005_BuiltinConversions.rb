@@ -148,3 +148,13 @@ SaveData.register_conversion(:v19_convert_storage) do
     end # storage.instance_eval
   end # to_value
 end
+
+# TODO: See if there are more conversions needed for this. There may not be.
+SaveData.register_conversion(:v19_convert_game_player) do
+  essentials_version 19
+  display_title 'Converting game player character'
+  to_value :game_player do |game_player|
+    game_player.width = 1
+    game_player.height = 1
+  end
+end

@@ -60,11 +60,9 @@ class PokemonPauseMenu_Scene
       Input.update
       pbUpdateSceneMap
       if Input.trigger?(Input::BACK)
-        pbPlayCloseMenuSE
         ret = -1
         break
       elsif Input.trigger?(Input::USE)
-        pbPlayDecisionSE
         ret = cmdwindow.index
         $PokemonTemp.menuLastChoice = ret
         break
@@ -148,6 +146,7 @@ class PokemonPauseMenu
     loop do
       command = @scene.pbShowCommands(commands)
       if cmdPokedex>=0 && command==cmdPokedex
+        pbPlayDecisionSE
         if Settings::USE_CURRENT_REGION_DEX
           pbFadeOutIn {
             scene = PokemonPokedex_Scene.new
@@ -175,6 +174,7 @@ class PokemonPauseMenu
           end
         end
       elsif cmdPokemon>=0 && command==cmdPokemon
+        pbPlayDecisionSE
         hiddenmove = nil
         pbFadeOutIn {
           sscene = PokemonParty_Scene.new
@@ -188,6 +188,7 @@ class PokemonPauseMenu
           return
         end
       elsif cmdBag>=0 && command==cmdBag
+        pbPlayDecisionSE
         item = nil
         pbFadeOutIn {
           scene = PokemonBag_Scene.new
@@ -201,6 +202,7 @@ class PokemonPauseMenu
           return
         end
       elsif cmdPokegear>=0 && command==cmdPokegear
+        pbPlayDecisionSE
         pbFadeOutIn {
           scene = PokemonPokegear_Scene.new
           screen = PokemonPokegearScreen.new(scene)
@@ -208,6 +210,7 @@ class PokemonPauseMenu
           @scene.pbRefresh
         }
       elsif cmdTrainer>=0 && command==cmdTrainer
+        pbPlayDecisionSE
         pbFadeOutIn {
           scene = PokemonTrainerCard_Scene.new
           screen = PokemonTrainerCardScreen.new(scene)
@@ -246,6 +249,7 @@ class PokemonPauseMenu
           pbShowMenu
         end
       elsif cmdOption>=0 && command==cmdOption
+        pbPlayDecisionSE
         pbFadeOutIn {
           scene = PokemonOption_Scene.new
           screen = PokemonOptionScreen.new(scene)
@@ -254,6 +258,7 @@ class PokemonPauseMenu
           @scene.pbRefresh
         }
       elsif cmdDebug>=0 && command==cmdDebug
+        pbPlayDecisionSE
         pbFadeOutIn {
           pbDebugMenu
           @scene.pbRefresh
@@ -273,6 +278,7 @@ class PokemonPauseMenu
           pbShowMenu
         end
       else
+        pbPlayCloseMenuSE
         break
       end
     end

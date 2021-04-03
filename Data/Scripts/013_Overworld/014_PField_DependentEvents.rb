@@ -203,13 +203,14 @@ class DependentEvents
     facingDirection=10-d
     if !leaderIsTrueLeader && areConnected
       relativePos=$MapFactory.getThisAndOtherEventRelativePos(leader,follower)
-      if (relativePos[1]==0 && relativePos[0]==2) # 2 spaces to the right of leader
+      # Assumes leader and follower are both 1x1 tile in size
+      if (relativePos[1]==0 && relativePos[0]==2)   # 2 spaces to the right of leader
         facingDirection=6
-      elsif (relativePos[1]==0 && relativePos[0]==-2) # 2 spaces to the left of leader
+      elsif (relativePos[1]==0 && relativePos[0]==-2)   # 2 spaces to the left of leader
         facingDirection=4
-      elsif relativePos[1]==-2 && relativePos[0]==0 # 2 spaces above leader
+      elsif relativePos[1]==-2 && relativePos[0]==0   # 2 spaces above leader
         facingDirection=8
-      elsif relativePos[1]==2 && relativePos[0]==0 # 2 spaces below leader
+      elsif relativePos[1]==2 && relativePos[0]==0   # 2 spaces below leader
         facingDirection=2
       end
     end
@@ -227,6 +228,7 @@ class DependentEvents
       for i in 0...facings.length
         facing=facings[i]
         tile=$MapFactory.getFacingTile(facing,leader)
+        # Assumes leader is 1x1 tile in size
         passable=tile && $MapFactory.isPassableStrict?(tile[0],tile[1],tile[2],follower)
         if i==0 && !passable && tile &&
            $MapFactory.getTerrainTag(tile[0],tile[1],tile[2]).ledge
@@ -238,6 +240,7 @@ class DependentEvents
         if passable
           relativePos=$MapFactory.getThisAndOtherPosRelativePos(
              follower,tile[0],tile[1],tile[2])
+          # Assumes follower is 1x1 tile in size
           distance=Math.sqrt(relativePos[0]*relativePos[0]+relativePos[1]*relativePos[1])
           if bestRelativePos==-1 || bestRelativePos>distance
             bestRelativePos=distance
@@ -251,6 +254,7 @@ class DependentEvents
       follower.through=oldthrough
     else
       tile=$MapFactory.getFacingTile(facings[0],leader)
+      # Assumes leader is 1x1 tile in size
       passable=tile && $MapFactory.isPassableStrict?(tile[0],tile[1],tile[2],follower)
       mapTile=passable ? mapTile : nil
     end
@@ -399,9 +403,10 @@ class DependentEvents
        !pbMapInterpreterRunning?
       # Get position of tile facing the player
       facingTile=$MapFactory.getFacingTile()
+      # Assumes player is 1x1 tile in size
       self.eachEvent { |e,d|
         next if !d[9]
-        if e.x==$game_player.x && e.y==$game_player.y
+        if e.at_coordinate?($game_player.x, $game_player.y)
           # On same position
           if not e.jumping? && (!e.respond_to?("over_trigger") || e.over_trigger?)
             if e.list.size>1
@@ -412,7 +417,7 @@ class DependentEvents
             end
           end
         elsif facingTile && e.map.map_id==facingTile[0] &&
-              e.x==facingTile[1] && e.y==facingTile[2]
+              e.at_coordinate?(facingTile[1], facingTile[2])
           # On facing tile
           if not e.jumping? && (!e.respond_to?("over_trigger") || !e.over_trigger?)
             if e.list.size>1

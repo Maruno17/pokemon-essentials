@@ -26,7 +26,7 @@ class Game_Player < Game_Character
     input = ($PokemonSystem.runstyle == 1) ^ Input.press?(Input::SPECIAL)
     return input && $PokemonGlobal.runningShoes && !jumping? &&
        !$PokemonGlobal.diving && !$PokemonGlobal.surfing &&
-       !$PokemonGlobal.bicycle && !pbGetTerrainTag.must_walk
+       !$PokemonGlobal.bicycle && !$game_player.pbTerrainTag.must_walk
   end
 
   def pbIsRunning?
@@ -52,7 +52,7 @@ class Game_Player < Game_Character
   end
 
   def update_command
-    if pbGetTerrainTag.ice
+    if $game_player.pbTerrainTag.ice
       self.move_speed = 4     # Sliding on ice
     elsif !moving? && !@move_route_forcing && $PokemonGlobal
       if $PokemonGlobal.bicycle

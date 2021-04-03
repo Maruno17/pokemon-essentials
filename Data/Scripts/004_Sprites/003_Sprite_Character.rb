@@ -106,13 +106,14 @@ class Sprite_Character < RPG::Sprite
       @oldbushdepth   = @character.bush_depth
       if @tile_id>=384
         @charbitmap.dispose if @charbitmap
-        @charbitmap = pbGetTileBitmap(@character.map.tileset_name,@tile_id,@character_hue)
+        @charbitmap = pbGetTileBitmap(@character.map.tileset_name, @tile_id,
+                                      @character_hue, @character.width, @character.height)
         @charbitmapAnimated = false
         @bushbitmap.dispose if @bushbitmap
         @bushbitmap = nil
         @spriteoffset = false
-        @cw = Game_Map::TILE_WIDTH
-        @ch = Game_Map::TILE_HEIGHT
+        @cw = Game_Map::TILE_WIDTH * @character.width
+        @ch = Game_Map::TILE_HEIGHT * @character.height
         self.src_rect.set(0,0,@cw,@ch)
         self.ox = @cw/2
         self.oy = @ch

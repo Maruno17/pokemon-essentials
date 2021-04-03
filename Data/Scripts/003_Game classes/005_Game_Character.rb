@@ -6,6 +6,8 @@ class Game_Character
   attr_reader   :y
   attr_reader   :real_x
   attr_reader   :real_y
+  attr_accessor :width
+  attr_accessor :height
   attr_accessor :sprite_size
   attr_reader   :tile_id
   attr_accessor :character_name
@@ -33,6 +35,8 @@ class Game_Character
     @y                         = 0
     @real_x                    = 0
     @real_y                    = 0
+    @width                     = 1
+    @height                    = 1
     @sprite_size               = [Game_Map::TILE_WIDTH, Game_Map::TILE_HEIGHT]
     @tile_id                   = 0
     @character_name            = ""
@@ -71,6 +75,24 @@ class Game_Character
     @moved_this_frame          = false
     @locked                    = false
     @prelock_direction         = 0
+  end
+
+  def at_coordinate?(check_x, check_y)
+    return check_x >= @x && check_x < @x + @width &&
+           check_y > @y - @height && check_y <= @y
+  end
+
+  def in_line_with_coordinate?(check_x, check_y)
+    return (check_x >= @x && check_x < @x + @width) ||
+           (check_y > @y - @height && check_y <= @y)
+  end
+
+  def each_occupied_tile
+    for i in @x...(@x + @width)
+      for j in (@y - @height + 1)..@y
+        yield i, j
+      end
+    end
   end
 
   def move_speed=(val)
@@ -182,7 +204,7 @@ class Game_Character
   #=============================================================================
   # Passability
   #=============================================================================
-  def passableEx?(x, y, d, strict=false)
+  def passable?(x, y, d, strict = false)
     new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
     new_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)
     return false unless self.map.valid?(new_x, new_y)
@@ -195,7 +217,7 @@ class Game_Character
       return false unless self.map.passable?(new_x, new_y, 10 - d, self)
     end
     for event in self.map.events.values
-      next if event.x != new_x || event.y != new_y || event.through
+      next if self == event || !event.at_coordinate?(new_x, new_y) || event.through
       return false if self != $game_player || event.character_name != ""
     end
     if $game_player.x == new_x and $game_player.y == new_y
@@ -204,12 +226,49 @@ class Game_Character
     return true
   end
 
-  def passable?(x,y,d)
-    return passableEx?(x,y,d,false)
+  def can_move_from_coordinate?(start_x, start_y, dir, strict = false)
+    case dir
+    when 2, 8   # Down, up
+      y_diff = (dir == 8) ? @height - 1 : 0
+      for i in start_x...(start_x + @width)
+        return false if !passable?(i, start_y - y_diff, dir, strict)
+      end
+      return true
+    when 4, 6   # Left, right
+      x_diff = (dir == 6) ? @width - 1 : 0
+      for i in (start_y - @height + 1)..start_y
+        return false if !passable?(start_x + x_diff, i, dir, strict)
+      end
+      return true
+    when 1, 3   # Down diagonals
+      # Treated as moving down first and then horizontally, because that
+      # describes which tiles the character's feet touch
+      for i in start_x...(start_x + @width)
+        return false if !passable?(i, start_y, 2, strict)
+      end
+      x_diff = (dir == 3) ? @width - 1 : 0
+      for i in (start_y - @height + 1)..start_y
+        return false if !passable?(start_x + x_diff, i + 1, dir + 3, strict)
+      end
+      return true
+    when 7, 9   # Up diagonals
+      # Treated as moving horizontally first and then up, because that describes
+      # which tiles the character's feet touch
+      x_diff = (dir == 9) ? @width - 1 : 0
+      for i in (start_y - @height + 1)..start_y
+        return false if !passable?(start_x + x_diff, i, dir - 3, strict)
+      end
+      x_offset = (dir == 9) ? 1 : -1
+      for i in start_x...(start_x + @width)
+        return false if !passable?(i + x_offset, start_y - @height + 1, 8, strict)
+      end
+      return true
+    end
+    return false
   end
 
-  def passableStrict?(x,y,d)
-    return passableEx?(x,y,d,true)
+  def can_move_in_direction?(dir, strict = false)
+    return can_move_from_coordinate?(@x, @y, dir, strict)
   end
 
   #=============================================================================
@@ -217,7 +276,7 @@ class Game_Character
   #=============================================================================
   def screen_x
     ret = ((@real_x - self.map.display_x) / Game_Map::X_SUBPIXELS).round
-    ret += Game_Map::TILE_WIDTH/2
+    ret += @width * Game_Map::TILE_WIDTH / 2
     return ret
   end
 
@@ -321,8 +380,8 @@ class Game_Character
   end
 
   def move_type_toward_player
-    sx = @x - $game_player.x
-    sy = @y - $game_player.y
+    sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
+    sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
     if sx.abs + sy.abs >= 20
       move_random
       return
@@ -441,7 +500,7 @@ class Game_Character
     turn_generic(dir) if turn_enabled
     x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
     y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
-    if passable?(@x, @y, dir)
+    if can_move_in_direction?(dir)
       turn_generic(dir)
       @x += x_offset
       @y += y_offset
@@ -471,8 +530,7 @@ class Game_Character
     unless @direction_fix
       @direction = (@direction == 6 ? 4 : @direction == 2 ? 8 : @direction)
     end
-    if (passable?(@x, @y, 8) and passable?(@x, @y - 1, 4)) or
-       (passable?(@x, @y, 4) and passable?(@x - 1, @y, 8))
+    if can_move_in_direction?(7)
       @x -= 1
       @y -= 1
       increase_steps
@@ -483,8 +541,7 @@ class Game_Character
     unless @direction_fix
       @direction = (@direction == 4 ? 6 : @direction == 2 ? 8 : @direction)
     end
-    if (passable?(@x, @y, 8) and passable?(@x, @y - 1, 6)) or
-       (passable?(@x, @y, 6) and passable?(@x + 1, @y, 8))
+    if can_move_in_direction?(9)
       @x += 1
       @y -= 1
       increase_steps
@@ -495,8 +552,7 @@ class Game_Character
     unless @direction_fix
       @direction = (@direction == 6 ? 4 : @direction == 8 ? 2 : @direction)
     end
-    if (passable?(@x, @y, 2) and passable?(@x, @y + 1, 4)) or
-       (passable?(@x, @y, 4) and passable?(@x - 1, @y, 2))
+    if can_move_in_direction?(1)
       @x -= 1
       @y += 1
       increase_steps
@@ -507,8 +563,7 @@ class Game_Character
     unless @direction_fix
       @direction = (@direction == 4 ? 6 : @direction == 8 ? 2 : @direction)
     end
-    if (passable?(@x, @y, 2) and passable?(@x, @y + 1, 6)) or
-       (passable?(@x, @y, 6) and passable?(@x + 1, @y, 2))
+    if can_move_in_direction?(3)
       @x += 1
       @y += 1
       increase_steps
@@ -574,8 +629,8 @@ class Game_Character
   end
 
   def move_toward_player
-    sx = @x - $game_player.x
-    sy = @y - $game_player.y
+    sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
+    sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
     return if sx == 0 and sy == 0
     abs_sx = sx.abs
     abs_sy = sy.abs
@@ -596,8 +651,8 @@ class Game_Character
   end
 
   def move_away_from_player
-    sx = @x - $game_player.x
-    sy = @y - $game_player.y
+    sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
+    sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
     return if sx == 0 and sy == 0
     abs_sx = sx.abs
     abs_sy = sy.abs
@@ -639,35 +694,32 @@ class Game_Character
   end
 
   def jump(x_plus, y_plus)
-    if x_plus != 0 or y_plus != 0
+    if x_plus != 0 || y_plus != 0
       if x_plus.abs > y_plus.abs
         (x_plus < 0) ? turn_left : turn_right
       else
         (y_plus < 0) ? turn_up : turn_down
       end
+      each_occupied_tile { |i, j| return if !passable?(i + x_plus, j + y_plus, 0) }
     end
-    new_x = @x + x_plus
-    new_y = @y + y_plus
-    if (x_plus == 0 and y_plus == 0) || passable?(new_x, new_y, 0)
-      @x = new_x
-      @y = new_y
-      real_distance = Math::sqrt(x_plus * x_plus + y_plus * y_plus)
-      distance = [1, real_distance].max
-      @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 8   # 3/4 of tile for ledge jumping
-      @jump_distance = [x_plus.abs * Game_Map::REAL_RES_X, y_plus.abs * Game_Map::REAL_RES_Y].max
-      @jump_distance_left = 1   # Just needs to be non-zero
-      if real_distance > 0   # Jumping to somewhere else
-        @jump_count = 0
-      else   # Jumping on the spot
-        @jump_speed_real = nil   # Reset jump speed
-        @jump_count = Game_Map::REAL_RES_X / jump_speed_real   # Number of frames to jump one tile
-      end
-      @stop_count = 0
-      if self.is_a?(Game_Player)
-        $PokemonTemp.dependentEvents.pbMoveDependentEvents
-      end
-      triggerLeaveTile
+    @x = @x + x_plus
+    @y = @y + y_plus
+    real_distance = Math::sqrt(x_plus * x_plus + y_plus * y_plus)
+    distance = [1, real_distance].max
+    @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 8   # 3/4 of tile for ledge jumping
+    @jump_distance = [x_plus.abs * Game_Map::REAL_RES_X, y_plus.abs * Game_Map::REAL_RES_Y].max
+    @jump_distance_left = 1   # Just needs to be non-zero
+    if real_distance > 0   # Jumping to somewhere else
+      @jump_count = 0
+    else   # Jumping on the spot
+      @jump_speed_real = nil   # Reset jump speed
+      @jump_count = Game_Map::REAL_RES_X / jump_speed_real   # Number of frames to jump one tile
     end
+    @stop_count = 0
+    if self.is_a?(Game_Player)
+      $PokemonTemp.dependentEvents.pbMoveDependentEvents
+    end
+    triggerLeaveTile
   end
 
   def jumpForward
@@ -742,8 +794,8 @@ class Game_Character
   end
 
   def turn_toward_player
-    sx = @x - $game_player.x
-    sy = @y - $game_player.y
+    sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
+    sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
     return if sx == 0 and sy == 0
     if sx.abs > sy.abs
       (sx > 0) ? turn_left : turn_right
@@ -753,8 +805,8 @@ class Game_Character
   end
 
   def turn_away_from_player
-    sx = @x - $game_player.x
-    sy = @y - $game_player.y
+    sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
+    sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
     return if sx == 0 and sy == 0
     if sx.abs > sy.abs
       (sx > 0) ? turn_right : turn_left

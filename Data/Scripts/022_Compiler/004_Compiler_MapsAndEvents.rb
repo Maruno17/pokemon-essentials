@@ -1092,7 +1092,7 @@ module Compiler
               )
               changed = true
             end
-            if deletedRoute
+            if false   # deletedRoute
               insertMoveRouteAt.call(list,list.length-1,deletedRoute)
               changed = true
             end

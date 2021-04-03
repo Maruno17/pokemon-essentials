@@ -325,14 +325,17 @@ Events.onStepTakenFieldMovement += proc { |_sender,e|
 Events.onStepTakenFieldMovement += proc { |_sender, e|
   event = e[0]   # Get the event affected by field movement
   if $scene.is_a?(Scene_Map)
-    if pbGetTerrainTag(event, true).shows_grass_rustle   # Won't show if under bridge
-      $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, event.x, event.y, true, 1)
-    elsif event == $game_player
-      currentTag = pbGetTerrainTag(event)
+    event.each_occupied_tile do |x, y|
+      if $MapFactory.getTerrainTag(event.map.map_id, x, y, true).shows_grass_rustle
+        $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1)
+      end
+    end
+    if event == $game_player
+      currentTag = $game_player.pbTerrainTag
       if currentTag.waterfall_crest
-        pbDescendWaterfall(event)
+        pbDescendWaterfall
       elsif currentTag.ice && !$PokemonGlobal.sliding
-        pbSlideOnIce(event)
+        pbSlideOnIce
       end
     end
   end
@@ -483,129 +486,84 @@ Events.onMapSceneChange += proc { |_sender, e|
 #===============================================================================
 # Event locations, terrain tags
 #===============================================================================
-def pbEventFacesPlayer?(event,player,distance)
-  return false if distance<=0
-  # Event can't reach player if no coordinates coincide
-  return false if event.x!=player.x && event.y!=player.y
-  deltaX = (event.direction==6) ? 1 : (event.direction==4) ? -1 : 0
-  deltaY = (event.direction==2) ? 1 : (event.direction==8) ? -1 : 0
-  # Check for existence of player
-  curx = event.x
-  cury = event.y
-  found = false
-  distance.times do
-    curx += deltaX
-    cury += deltaY
-    if player.x==curx && player.y==cury
-      found = true
-      break
-    end
-  end
-  return found
-end
-
-def pbEventCanReachPlayer?(event,player,distance)
-  return false if distance<=0
-  # Event can't reach player if no coordinates coincide
-  return false if event.x!=player.x && event.y!=player.y
-  deltaX = (event.direction==6) ? 1 : (event.direction==4) ? -1 : 0
-  deltaY = (event.direction==2) ? 1 : (event.direction==8) ? -1 : 0
-  # Check for existence of player
-  curx = event.x
-  cury = event.y
-  found = false
-  realdist = 0
-  distance.times do
-    curx += deltaX
-    cury += deltaY
-    if player.x==curx && player.y==cury
-      found = true
-      break
-    end
-    realdist += 1
-  end
-  return false if !found
-  # Check passibility
-  curx = event.x
-  cury = event.y
-  realdist.times do
-    return false if !event.passable?(curx,cury,event.direction)
-    curx += deltaX
-    cury += deltaY
-  end
-  return true
-end
-
-def pbFacingTileRegular(direction=nil,event=nil)
-  event = $game_player if !event
-  return [0,0,0] if !event
-  x = event.x
-  y = event.y
-  direction = event.direction if !direction
-  case direction
-  when 1
-    y += 1
-    x -= 1
-  when 2
-    y += 1
-  when 3
-    y += 1
-    x += 1
-  when 4
-    x -= 1
-  when 6
-    x += 1
-  when 7
-    y -= 1
-    x -= 1
-  when 8
-    y -= 1
-  when 9
-    y -= 1
-    x += 1
-  end
-  return [$game_map.map_id,x,y]
-end
-
+# NOTE: Assumes the event is 1x1 tile in size. Only returns one tile.
 def pbFacingTile(direction=nil,event=nil)
   return $MapFactory.getFacingTile(direction,event) if $MapFactory
   return pbFacingTileRegular(direction,event)
 end
 
-def pbFacingEachOther(event1,event2)
-  return false if !event1 || !event2
-  if $MapFactory
-    tile1 = $MapFactory.getFacingTile(nil,event1)
-    tile2 = $MapFactory.getFacingTile(nil,event2)
-    return false if !tile1 || !tile2
-    return tile1[0]==event2.map.map_id &&
-           tile1[1]==event2.x && tile1[2]==event2.y &&
-           tile2[0]==event1.map.map_id &&
-           tile2[1]==event1.x && tile2[2]==event1.y
+# NOTE: Assumes the event is 1x1 tile in size. Only returns one tile.
+def pbFacingTileRegular(direction = nil, event = nil)
+  event = $game_player if !event
+  return [0, 0, 0] if !event
+  x = event.x
+  y = event.y
+  direction = event.direction if !direction
+  x_offset = [0, -1, 0, 1, -1, 0, 1, -1, 0, 1][direction]
+  y_offset = [0, 1, 1, 1, 0, 0, 0, -1, -1, -1][direction]
+  return [$game_map.map_id, x + x_offset, y + y_offset]
+end
+
+# Returns whether event is in line with the player, is facing the player and is
+# within distance tiles of the player.
+def pbEventFacesPlayer?(event, player, distance)
+  return false if !event || !player || distance <= 0
+  x_min = x_max = y_min = y_max = -1
+  case direction
+  when 2   # Down
+    x_min = event.x
+    x_max = event.x + event.width - 1
+    y_min = event.y + 1
+    y_max = event.y + distance
+  when 4   # Left
+    x_min = event.x - distance
+    x_max = event.x - 1
+    y_min = event.y - event.height + 1
+    y_max = event.y
+  when 6   # Right
+    x_min = event.x + event.width
+    x_max = event.x + event.width - 1 + distance
+    y_min = event.y - event.height + 1
+    y_max = event.y
+  when 8   # Up
+    x_min = event.x
+    x_max = event.x + event.width - 1
+    y_min = event.y - event.height + 1 - distance
+    y_max = event.y - event.height
   else
-    tile1 = pbFacingTile(nil,event1)
-    tile2 = pbFacingTile(nil,event2)
-    return false if !tile1 || !tile2
-    return tile1[1]==event2.x && tile1[2]==event2.y &&
-           tile2[1]==event1.x && tile2[2]==event1.y
+    return false
   end
+  return player.x >= x_min && player.x <= x_max &&
+         player.y >= y_min && player.y <= y_max
 end
 
-def pbGetTerrainTag(event=nil,countBridge=false)
-  event = $game_player if !event
-  return GameData::TerrainTag.get(:None) if !event
-  if $MapFactory
-    return $MapFactory.getTerrainTag(event.map.map_id,event.x,event.y,countBridge)
+# Returns whether event is able to walk up to the player.
+def pbEventCanReachPlayer?(event, player, distance)
+  return false if !pbEventFacesPlayer?(event, player, distance)
+  delta_x = (event.direction == 6) ? 1 : (event.direction == 4) ? -1 : 0
+  delta_y = (event.direction == 2) ? 1 : (event.direction == 8) ? -1 : 0
+  case event.direction
+  when 2   # Down
+    real_distance = player.y - event.y - 1
+  when 4   # Left
+    real_distance = event.x - player.x + 1
+  when 6   # Right
+    real_distance = player.x - event.x - event.width
+  when 8   # Up
+    real_distance = event.y - event.height - player.y
   end
-  return $game_map.terrain_tag(event.x,event.y,countBridge)
+  if real_distance > 0
+    real_distance.times do |i|
+      return false if !event.can_move_from_coordinate?(event.x + i * delta_x, event.y + i * delta_y, event.direction)
+    end
+  end
+  return true
 end
 
-def pbFacingTerrainTag(event=nil,dir=nil)
-  return $MapFactory.getFacingTerrainTag(dir,event) if $MapFactory
-  event = $game_player if !event
-  return GameData::TerrainTag.get(:None) if !event
-  facing = pbFacingTile(dir,event)
-  return $game_map.terrain_tag(facing[1],facing[2])
+# Returns whether the two events are standing next to each other and facing each
+# other.
+def pbFacingEachOther(event1, event2)
+  return pbEventFacesPlayer?(event1, event2, 1) && pbEventFacesPlayer?(event2, event1, 1)
 end
 
 
@@ -754,7 +712,7 @@ end
 # Player/event movement in the field
 #===============================================================================
 def pbLedge(_xOffset,_yOffset)
-  if pbFacingTerrainTag.ledge
+  if $game_player.pbFacingTerrainTag.ledge
     if pbJumpToward(2,true)
       $scene.spriteset.addUserAnimation(Settings::DUST_ANIMATION_ID,$game_player.x,$game_player.y,true,1)
       $game_player.increase_steps
@@ -765,33 +723,32 @@ def pbLedge(_xOffset,_yOffset)
   return false
 end
 
-def pbSlideOnIce(event=nil)
-  event = $game_player if !event
-  return if !event
-  return if !pbGetTerrainTag(event).ice
+def pbSlideOnIce
+  return if !$game_player.pbTerrainTag.ice
   $PokemonGlobal.sliding = true
-  direction    = event.direction
-  oldwalkanime = event.walk_anime
-  event.straighten
-  event.walk_anime = false
+  direction    = $game_player.direction
+  oldwalkanime = $game_player.walk_anime
+  $game_player.straighten
+  $game_player.walk_anime = false
   loop do
-    break if !event.passable?(event.x,event.y,direction)
-    break if !pbGetTerrainTag(event).ice
-    event.move_forward
-    while event.moving?
+    break if !$game_player.can_move_in_direction?(direction)
+    break if !$game_player.pbTerrainTag.ice
+    $game_player.move_forward
+    while $game_player.moving?
       pbUpdateSceneMap
       Graphics.update
       Input.update
     end
   end
-  event.center(event.x,event.y)
-  event.straighten
-  event.walk_anime = oldwalkanime
+  $game_player.center($game_player.x, $game_player.y)
+  $game_player.straighten
+  $game_player.walk_anime = oldwalkanime
   $PokemonGlobal.sliding = false
 end
 
 def pbTurnTowardEvent(event,otherEvent)
-  sx = 0; sy = 0
+  sx = 0
+  sy = 0
   if $MapFactory
     relativePos = $MapFactory.getThisAndOtherEventRelativePos(otherEvent,event)
     sx = relativePos[0]
@@ -800,6 +757,8 @@ def pbTurnTowardEvent(event,otherEvent)
     sx = event.x - otherEvent.x
     sy = event.y - otherEvent.y
   end
+  sx += (event.width - otherEvent.width) / 2.0
+  sy -= (event.height - otherEvent.height) / 2.0
   return if sx == 0 and sy == 0
   if sx.abs > sy.abs
     (sx > 0) ? event.turn_left : event.turn_right
@@ -809,13 +768,13 @@ def pbTurnTowardEvent(event,otherEvent)
 end
 
 def pbMoveTowardPlayer(event)
-  maxsize = [$game_map.width,$game_map.height].max
-  return if !pbEventCanReachPlayer?(event,$game_player,maxsize)
+  maxsize = [$game_map.width, $game_map.height].max
+  return if !pbEventCanReachPlayer?(event, $game_player, maxsize)
   loop do
     x = event.x
     y = event.y
     event.move_toward_player
-    break if event.x==x && event.y==y
+    break if event.x == x && event.y == y
     while event.moving?
       Graphics.update
       Input.update

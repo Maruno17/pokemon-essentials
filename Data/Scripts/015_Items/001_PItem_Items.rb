@@ -336,7 +336,7 @@ end
 #===============================================================================
 def pbBikeCheck
   if $PokemonGlobal.surfing || $PokemonGlobal.diving ||
-     (!$PokemonGlobal.bicycle && pbGetTerrainTag.must_walk)
+     (!$PokemonGlobal.bicycle && $game_player.pbTerrainTag.must_walk)
     pbMessage(_INTL("Can't use that here."))
     return false
   end
@@ -360,7 +360,7 @@ def pbBikeCheck
 end
 
 #===============================================================================
-# Find the closest hidden item (for Iremfinder)
+# Find the closest hidden item (for Itemfinder)
 #===============================================================================
 def pbClosestHiddenItem
   result = []

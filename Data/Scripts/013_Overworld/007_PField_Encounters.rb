@@ -203,7 +203,7 @@ class PokemonEncounters
     return false if pbInSafari?
     return true if $PokemonGlobal.partner
     return false if $Trainer.able_pokemon_count <= 1
-    return true if pbGetTerrainTag.double_wild_encounters && rand(100) < 30
+    return true if $game_player.pbTerrainTag.double_wild_encounters && rand(100) < 30
     return false
   end
 

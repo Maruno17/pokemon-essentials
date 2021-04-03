@@ -60,17 +60,17 @@ module RPG
       return ret2
     end
 
-    def self.tileEx(filename, tile_id, hue)
-      key = [filename, tile_id, hue]
+    def self.tileEx(filename, tile_id, hue, width = 1, height = 1)
+      key = [filename, tile_id, hue, width, height]
       ret = fromCache(key)
       if ret
         ret.addRef
       else
-        ret = BitmapWrapper.new(32, 32)
+        ret = BitmapWrapper.new(32 * width, 32 * height)
         x = (tile_id - 384) % 8 * 32
-        y = (tile_id - 384) / 8 * 32
+        y = (((tile_id - 384) / 8) - height + 1) * 32
         tileset = yield(filename)
-        ret.blt(0, 0, tileset, Rect.new(x, y, 32, 32))
+        ret.blt(0, 0, tileset, Rect.new(x, y, 32 * width, 32 * height))
         tileset.dispose
         ret.hue_change(hue) if hue != 0
         @cache[key] = ret

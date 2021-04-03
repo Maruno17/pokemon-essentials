@@ -62,6 +62,7 @@ class Game_Map
     for i in @map.events.keys
       @events[i]          = Game_Event.new(@map_id, @map.events[i],self)
     end
+    # TODO: These should be moved to Spriteset_Global as we only need one copy of them.
     @common_events        = {}
     for i in 1...$data_common_events.size
       @common_events[i]   = Game_CommonEvent.new(i)
@@ -147,10 +148,10 @@ class Game_Map
     bit = (1 << (d / 2 - 1)) & 0x0f
     for event in events.values
       next if event.tile_id <= 0
-      next if GameData::TerrainTag.try_get(@terrain_tags[event.tile_id]).ignore_passability
       next if event == self_event
-      next if event.x != x || event.y != y
+      next if !event.at_coordinate?(x, y)
       next if event.through
+      next if GameData::TerrainTag.try_get(@terrain_tags[event.tile_id]).ignore_passability
       passage = @passages[event.tile_id]
       return false if passage & bit != 0
       return false if passage & 0x0f == 0x0f
@@ -158,7 +159,8 @@ class Game_Map
     end
     return playerPassable?(x, y, d, self_event) if self_event==$game_player
     # All other events
-    newx = x; newy = y
+    newx = x
+    newy = y
     case d
     when 1
       newx -= 1
@@ -185,7 +187,6 @@ class Game_Map
     for i in [2, 1, 0]
       tile_id = data[x, y, i]
       terrain = GameData::TerrainTag.try_get(@terrain_tags[tile_id])
-      passage = @passages[tile_id]
       # If already on water, only allow movement to another water tile
       if self_event != nil && terrain.can_surf_freely
         for j in [2, 1, 0]
@@ -211,6 +212,7 @@ class Game_Map
       end
       # Regular passability checks
       if !terrain || !terrain.ignore_passability
+        passage = @passages[tile_id]
         return false if passage & bit != 0 || passage & 0x0f == 0x0f
         return true if @priorities[tile_id] == 0
       end
@@ -251,7 +253,7 @@ class Game_Map
     return false if !valid?(x, y)
     for event in events.values
       next if event == self_event || event.tile_id < 0 || event.through
-      next if event.x != x || event.y != y
+      next if !event.at_coordinate?(x, y)
       next if GameData::TerrainTag.try_get(@terrain_tags[event.tile_id]).ignore_passability
       return false if @passages[event.tile_id] & 0x0f != 0
       return true if @priorities[event.tile_id] == 0
@@ -307,9 +309,10 @@ class Game_Map
     return GameData::TerrainTag.get(:None)
   end
 
+  # Unused.
   def check_event(x,y)
     for event in self.events.values
-      return event.id if event.x == x and event.y == y
+      return event.id if event.at_coordinate?(x, y)
     end
   end
 

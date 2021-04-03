@@ -21,8 +21,8 @@ def pbWarpToMap
       next if !map.passableStrict?(x,y,0,$game_player)
       blocked = false
       for event in map.events.values
-        if event.x==x && event.y==y && !event.through
-          blocked = true if self!=$game_player || event.character_name!=""
+        if event.at_coordinate?(x, y) && !event.through
+          blocked = true if event.character_name != ""
         end
       end
       next if blocked

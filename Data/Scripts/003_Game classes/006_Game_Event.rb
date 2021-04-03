@@ -13,6 +13,10 @@ class Game_Event < Game_Character
     @id           = @event.id
     @original_x   = @event.x
     @original_y   = @event.y
+    if @event.name[/size\((\d+),(\d+)\)/i]
+      @width = $~[1].to_i
+      @height = $~[2].to_i
+    end
     @erased       = false
     @starting     = false
     @need_refresh = false
@@ -119,14 +123,16 @@ class Game_Event < Game_Character
   end
 
   def onEvent?
-    return @map_id == $game_map.map_id && $game_player.x == self.x && $game_player.y == self.y
+    return @map_id == $game_map.map_id && at_coordinate?($game_player.x, $game_player.y)
   end
 
   def over_trigger?
-    return false if @character_name!="" and not @through
+    return false if @character_name != "" && !@through
     return false if @event.name[/hiddenitem/i]
-    return false if !self.map.passable?(@x, @y, 0, $game_player)
-    return true
+    each_occupied_tile do |i, j|
+      return true if self.map.passable?(i, j, 0, $game_player)
+    end
+    return false
   end
 
   def pbCheckEventTriggerAfterTurning
@@ -141,15 +147,15 @@ class Game_Event < Game_Character
 
   def check_event_trigger_touch(x, y)
     return if $game_system.map_interpreter.running?
-    return if @trigger!=2
-    return if x != $game_player.x || y != $game_player.y
+    return if @trigger != 2   # Event touch
+    return if !at_coordinate?($game_player.xm $game_player.y)
     return if jumping? || over_trigger?
     start
   end
 
   def check_event_trigger_auto
     if @trigger == 2      # Event touch
-      if @x == $game_player.x and @y == $game_player.y
+      if at_coordinate?($game_player.x, $game_player.y)
         start if not jumping? and over_trigger?
       end
     elsif @trigger == 3   # Autorun

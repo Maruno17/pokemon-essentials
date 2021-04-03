@@ -350,8 +350,8 @@ end
 
 
 
-def pbGetTileBitmap(filename, tile_id, hue)
-  return RPG::Cache.tileEx(filename, tile_id, hue) { |f|
+def pbGetTileBitmap(filename, tile_id, hue, width = 1, height = 1)
+  return RPG::Cache.tileEx(filename, tile_id, hue, width, height) { |f|
     AnimatedBitmap.new("Graphics/Tilesets/"+filename).deanimate
   }
 end

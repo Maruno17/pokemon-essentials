@@ -183,7 +183,7 @@ class PokemonMapFactory
     end
     # Check passability of event(s) in that spot
     for event in map.events.values
-      next if event.x != x || event.y != y || event == thisEvent
+      next if event == thisEvent || !event.at_coordinate?(x, y)
       return false if !event.through && event.character_name != ""
     end
     # Check passability of player
@@ -210,7 +210,7 @@ class PokemonMapFactory
       return false if !map.passableStrict?(x,y,0,thisEvent)
     end
     for event in map.events.values
-      next if event == thisEvent || event.x != x || event.y != y
+      next if event == thisEvent || !event.at_coordinate?(x, y)
       return false if !event.through && event.character_name!=""
     end
     return true
@@ -221,6 +221,7 @@ class PokemonMapFactory
     return map.terrain_tag(x,y,countBridge)
   end
 
+  # NOTE: Assumes the event is 1x1 tile in size. Only returns one terrain tag.
   def getFacingTerrainTag(dir=nil,event=nil)
     tile = getFacingTile(dir,event)
     return GameData::TerrainTag.get(:None) if !tile
@@ -281,12 +282,14 @@ class PokemonMapFactory
        thisEvent.map.map_id,thisEvent.x,thisEvent.y,otherMapID,otherX,otherY)
   end
 
+  # Unused
   def getOffsetEventPos(event,xOffset,yOffset)
     event = $game_player if !event
     return nil if !event
     return getRealTilePos(event.map.map_id,event.x+xOffset,event.y+yOffset)
   end
 
+  # NOTE: Assumes the event is 1x1 tile in size. Only returns one tile.
   def getFacingTile(direction=nil,event=nil,steps=1)
     event = $game_player if event==nil
     return [0,0,0] if !event

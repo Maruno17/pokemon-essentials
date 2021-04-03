@@ -205,7 +205,7 @@ end
 HiddenMoveHandlers::CanUseMove.add(:CUT,proc { |move,pkmn,showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_CUT,showmsg)
   facingEvent = $game_player.pbFacingEvent
-  if !facingEvent || facingEvent.name.downcase!="tree"
+  if !facingEvent || !facingEvent.name[/tree/i]
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
@@ -225,8 +225,8 @@ HiddenMoveHandlers::UseMove.add(:CUT,proc { |move,pokemon|
 
 def pbSmashEvent(event)
   return if !event
-  if event.name.downcase=="tree";    pbSEPlay("Cut",80)
-  elsif event.name.downcase=="rock"; pbSEPlay("Rock Smash",80)
+  if event.name[/tree/i];    pbSEPlay("Cut",80)
+  elsif event.name[/rock/i]; pbSEPlay("Rock Smash",80)
   end
   pbMoveRoute(event,[
      PBMoveRoute::Wait,2,
@@ -294,6 +294,7 @@ HiddenMoveHandlers::UseMove.add(:DIG,proc { |move,pokemon|
 # Dive
 #===============================================================================
 def pbDive
+  return false if $game_player.pbFacingEvent
   map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
   return false if !map_metadata || !map_metadata.dive_map_id
   move = :DIVE
@@ -325,6 +326,7 @@ end
 
 def pbSurfacing
   return if !$PokemonGlobal.diving
+  return false if $game_player.pbFacingEvent
   surface_map_id = nil
   GameData::MapMetadata.each do |map_data|
     next if !map_data.dive_map_id || map_data.dive_map_id != $game_map.map_id
@@ -571,7 +573,7 @@ end
 
 HiddenMoveHandlers::CanUseMove.add(:HEADBUTT,proc { |move,pkmn,showmsg|
   facingEvent = $game_player.pbFacingEvent
-  if !facingEvent || facingEvent.name.downcase!="headbutttree"
+  if !facingEvent || !facingEvent.name[/headbutttree/i]
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
@@ -616,7 +618,7 @@ end
 HiddenMoveHandlers::CanUseMove.add(:ROCKSMASH,proc { |move,pkmn,showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_ROCKSMASH,showmsg)
   facingEvent = $game_player.pbFacingEvent
-  if !facingEvent || facingEvent.name.downcase!="rock"
+  if !facingEvent || !facingEvent.name[/rock/i]
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
@@ -665,7 +667,7 @@ end
 
 Events.onAction += proc { |_sender,_e|
   facingEvent = $game_player.pbFacingEvent
-  pbStrength if facingEvent && facingEvent.name.downcase=="boulder"
+  pbStrength if facingEvent && facingEvent.name[/boulder/i]
 }
 
 HiddenMoveHandlers::CanUseMove.add(:STRENGTH,proc { |move,pkmn,showmsg|
@@ -727,7 +729,7 @@ def pbEndSurf(_xOffset,_yOffset)
   return false if !$PokemonGlobal.surfing
   x = $game_player.x
   y = $game_player.y
-  if $game_map.terrain_tag(x,y).can_surf && !pbFacingTerrainTag.can_surf
+  if $game_map.terrain_tag(x,y).can_surf && !$game_player.pbFacingTerrainTag.can_surf
     $PokemonTemp.surfJump = [x,y]
     if pbJumpToward(1,false,true)
       $game_map.autoplayAsCue
@@ -757,7 +759,7 @@ Events.onAction += proc { |_sender,_e|
   next if $PokemonGlobal.surfing
   next if GameData::MapMetadata.exists?($game_map.map_id) &&
           GameData::MapMetadata.get($game_map.map_id).always_bicycle
-  next if !pbFacingTerrainTag.can_surf_freely
+  next if !$game_player.pbFacingTerrainTag.can_surf_freely
   next if !$game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
   pbSurf
 }
@@ -777,7 +779,7 @@ HiddenMoveHandlers::CanUseMove.add(:SURF,proc { |move,pkmn,showmsg|
     pbMessage(_INTL("Let's enjoy cycling!")) if showmsg
     next false
   end
-  if !pbFacingTerrainTag.can_surf_freely ||
+  if !$game_player.pbFacingTerrainTag.can_surf_freely ||
      !$game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
     pbMessage(_INTL("No surfing here!")) if showmsg
     next false
@@ -905,42 +907,38 @@ HiddenMoveHandlers::UseMove.add(:TELEPORT,proc { |move,pokemon|
 #===============================================================================
 # Waterfall
 #===============================================================================
-def pbAscendWaterfall(event=nil)
-  event = $game_player if !event
-  return if !event
-  return if event.direction!=8   # can't ascend if not facing up
-  oldthrough   = event.through
-  oldmovespeed = event.move_speed
-  terrain = pbFacingTerrainTag
+def pbAscendWaterfall
+  return if $game_player.direction != 8   # Can't ascend if not facing up
+  terrain = $game_player.pbFacingTerrainTag
   return if !terrain.waterfall && !terrain.waterfall_crest
-  event.through = true
-  event.move_speed = 2
+  oldthrough   = $game_player.through
+  oldmovespeed = $game_player.move_speed
+  $game_player.through    = true
+  $game_player.move_speed = 2
   loop do
-    event.move_up
-    terrain = pbGetTerrainTag(event)
+    $game_player.move_up
+    terrain = $game_player.pbTerrainTag
     break if !terrain.waterfall && !terrain.waterfall_crest
   end
-  event.through    = oldthrough
-  event.move_speed = oldmovespeed
+  $game_player.through    = oldthrough
+  $game_player.move_speed = oldmovespeed
 end
 
-def pbDescendWaterfall(event=nil)
-  event = $game_player if !event
-  return if !event
-  return if event.direction!=2   # Can't descend if not facing down
-  oldthrough   = event.through
-  oldmovespeed = event.move_speed
-  terrain = pbFacingTerrainTag
+def pbDescendWaterfall
+  return if $game_player.direction != 2   # Can't descend if not facing down
+  terrain = $game_player.pbFacingTerrainTag
   return if !terrain.waterfall && !terrain.waterfall_crest
-  event.through = true
-  event.move_speed = 2
+  oldthrough   = $game_player.through
+  oldmovespeed = $game_player.move_speed
+  $game_player.through    = true
+  $game_player.move_speed = 2
   loop do
-    event.move_down
-    terrain = pbGetTerrainTag(event)
+    $game_player.move_down
+    terrain = $game_player.pbTerrainTag
     break if !terrain.waterfall && !terrain.waterfall_crest
   end
-  event.through    = oldthrough
-  event.move_speed = oldmovespeed
+  $game_player.through    = oldthrough
+  $game_player.move_speed = oldmovespeed
 end
 
 def pbWaterfall
@@ -961,7 +959,7 @@ def pbWaterfall
 end
 
 Events.onAction += proc { |_sender,_e|
-  terrain = pbFacingTerrainTag
+  terrain = $game_player.pbFacingTerrainTag
   if terrain.waterfall
     pbWaterfall
   elsif terrain.waterfall_crest
@@ -971,7 +969,7 @@ Events.onAction += proc { |_sender,_e|
 
 HiddenMoveHandlers::CanUseMove.add(:WATERFALL,proc { |move,pkmn,showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_WATERFALL,showmsg)
-  if !pbFacingTerrainTag.waterfall
+  if !$game_player.pbFacingTerrainTag.waterfall
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
