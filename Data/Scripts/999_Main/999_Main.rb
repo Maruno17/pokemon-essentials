@@ -10,10 +10,7 @@ end
 
 def pbCallTitle
   return Scene_DebugIntro.new if $DEBUG
-  # First parameter is an array of images in the Titles directory without a file
-  # extension, to show before the actual title screen. Second parameter is the
-  # actual title screen filename, also in Titles with no extension.
-  return Scene_Intro.new(['intro1'], 'splash')
+  return Scene_Intro.new
 end
 
 def mainFunction

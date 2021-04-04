@@ -60,14 +60,14 @@ class LevelAdjustment
       exp=adjustments[0][i]
       if exp && team1[i].exp!=exp
         team1[i].exp=exp
-        team1[i].calcStats
+        team1[i].calc_stats
       end
     end
     for i in 0...team2.length
       exp=adjustments[1][i]
       if exp && team2[i].exp!=exp
         team2[i].exp=exp
-        team2[i].calcStats
+        team2[i].calc_stats
       end
     end
   end
@@ -90,7 +90,7 @@ class LevelAdjustment
       for i in 0...team1.length
         if team1[i].level!=adj1[i]
           team1[i].level=adj1[i]
-          team1[i].calcStats
+          team1[i].calc_stats
         end
       end
     end
@@ -98,7 +98,7 @@ class LevelAdjustment
       for i in 0...team2.length
         if team2[i].level!=adj2[i]
           team2[i].level=adj2[i]
-          team2[i].calcStats
+          team2[i].calc_stats
         end
       end
     end

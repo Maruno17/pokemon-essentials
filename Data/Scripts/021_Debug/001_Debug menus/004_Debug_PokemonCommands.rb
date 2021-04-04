@@ -208,7 +208,7 @@ PokemonDebugMenuCommands.register("setlevel", {
          _INTL("Set the Pokémon's level (max. {1}).", params.maxNumber), params) { screen.pbUpdate }
       if level != pkmn.level
         pkmn.level = level
-        pkmn.calcStats
+        pkmn.calc_stats
         screen.pbRefreshSingle(pkmnid)
       end
     end
@@ -236,7 +236,7 @@ PokemonDebugMenuCommands.register("setexp", {
            _INTL("Set the Pokémon's Exp (range {1}-{2}).", minxp, maxxp - 1), params) { screen.pbUpdate }
         if newexp != pkmn.exp
           pkmn.exp = newexp
-          pkmn.calcStats
+          pkmn.calc_stats
           screen.pbRefreshSingle(pkmnid)
         end
       end
@@ -290,7 +290,7 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
                GameData::Stat.get(ev_id[cmd2]).name, upperLimit), params) { screen.pbUpdate }
             if f != pkmn.ev[ev_id[cmd2]]
               pkmn.ev[ev_id[cmd2]] = f
-              pkmn.calcStats
+              pkmn.calc_stats
               screen.pbRefreshSingle(pkmnid)
             end
           else   # (Max) Randomise all
@@ -309,7 +309,7 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
               pkmn.ev[ev_id[r]] += addVal
               evTotalTarget -= addVal
             end
-            pkmn.calcStats
+            pkmn.calc_stats
             screen.pbRefreshSingle(pkmnid)
           end
         end
@@ -340,18 +340,18 @@ PokemonDebugMenuCommands.register("hiddenvalues", {
                GameData::Stat.get(iv_id[cmd2]).name), params) { screen.pbUpdate }
             if f != pkmn.iv[iv_id[cmd2]]
               pkmn.iv[iv_id[cmd2]] = f
-              pkmn.calcStats
+              pkmn.calc_stats
               screen.pbRefreshSingle(pkmnid)
             end
           else   # Randomise all
             GameData::Stat.each_main { |s| pkmn.iv[s.id] = rand(Pokemon::IV_STAT_LIMIT + 1) }
-            pkmn.calcStats
+            pkmn.calc_stats
             screen.pbRefreshSingle(pkmnid)
           end
         end
       when 2   # Randomise pID
         pkmn.personalID = rand(2 ** 16) | rand(2 ** 16) << 16
-        pkmn.calcStats
+        pkmn.calc_stats
         screen.pbRefreshSingle(pkmnid)
       end
     end
@@ -535,7 +535,7 @@ PokemonDebugMenuCommands.register("resetmoves", {
   "name"        => _INTL("Reset moves"),
   "always_show" => true,
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
-    pkmn.resetMoves
+    pkmn.reset_moves
     screen.pbDisplay(_INTL("{1}'s moves were reset.", pkmn.name))
     screen.pbRefreshSingle(pkmnid)
     next false
@@ -748,7 +748,7 @@ PokemonDebugMenuCommands.register("speciesform", {
         species = pbChooseSpeciesList(pkmn.species)
         if species && species != pkmn.species
           pkmn.species = species
-          pkmn.calcStats
+          pkmn.calc_stats
           pbSeenForm(pkmn) if !settingUpBattle
           screen.pbRefreshSingle(pkmnid)
         end
@@ -984,7 +984,7 @@ PokemonDebugMenuCommands.register("setegg", {
         if !pkmn.egg? && (pbHasEgg?(pkmn.species) ||
            screen.pbConfirm(_INTL("{1} cannot legally be an egg. Make egg anyway?", pkmn.speciesName)))
           pkmn.level          = Settings::EGG_LEVEL
-          pkmn.calcStats
+          pkmn.calc_stats
           pkmn.name           = _INTL("Egg")
           pkmn.steps_to_hatch = pkmn.species_data.hatch_steps
           pkmn.hatched_map    = 0

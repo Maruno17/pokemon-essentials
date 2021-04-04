@@ -174,6 +174,7 @@ class Pokemon
   deprecated_method_alias :setItem, :item=, removal_in: 'v20'
 
   deprecated_method_alias :healStatus, :heal_status, removal_in: 'v20'
+  deprecated_method_alias :resetMoves, :reset_moves, removal_in: 'v20'
   deprecated_method_alias :pbLearnMove, :learn_move, removal_in: 'v20'
   deprecated_method_alias :pbDeleteMove, :forget_move, removal_in: 'v20'
   deprecated_method_alias :pbDeleteMoveAtIndex, :forget_move_at_index, removal_in: 'v20'
@@ -182,6 +183,7 @@ class Pokemon
   deprecated_method_alias :pbRemoveFirstMove, :remove_first_move, removal_in: 'v20'
   deprecated_method_alias :pbClearFirstMoves, :clear_first_moves, removal_in: 'v20'
   deprecated_method_alias :pbUpdateShadowMoves, :update_shadow_moves, removal_in: 'v20'
+  deprecated_method_alias :calcStats, :calc_stats, removal_in: 'v20'
 end
 
 # (see Pokemon#initialize)

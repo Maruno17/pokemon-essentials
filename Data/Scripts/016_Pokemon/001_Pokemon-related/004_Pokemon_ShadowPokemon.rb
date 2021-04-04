@@ -43,7 +43,7 @@ def pbPurify(pkmn, scene)
     end
     if newlevel == curlevel
       pkmn.exp = newexp
-      pkmn.calcStats
+      pkmn.calc_stats
     else
       pbChangeLevel(pkmn, newlevel, scene)   # for convenience
       pkmn.exp = newexp

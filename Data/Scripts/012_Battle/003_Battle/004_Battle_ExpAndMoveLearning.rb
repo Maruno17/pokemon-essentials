@@ -94,7 +94,7 @@ class PokeBattle_Battle
     growth_rate = pkmn.growth_rate
     # Don't bother calculating if gainer is already at max Exp
     if pkmn.exp>=growth_rate.maximum_exp
-      pkmn.calcStats   # To ensure new EVs still have an effect
+      pkmn.calc_stats   # To ensure new EVs still have an effect
       return
     end
     isPartic    = defeatedBattler.participants.include?(idxParty)
@@ -188,7 +188,7 @@ class PokeBattle_Battle
       curLevel += 1
       if curLevel>newLevel
         # Gained all the Exp now, end the animation
-        pkmn.calcStats
+        pkmn.calc_stats
         battler.pbUpdate(false) if battler
         @scene.pbRefreshOne(battler.index) if battler
         break
@@ -204,7 +204,7 @@ class PokeBattle_Battle
       if battler && battler.pokemon
         battler.pokemon.changeHappiness("levelup")
       end
-      pkmn.calcStats
+      pkmn.calc_stats
       battler.pbUpdate(false) if battler
       @scene.pbRefreshOne(battler.index) if battler
       pbDisplayPaused(_INTL("{1} grew to Lv. {2}!",pkmn.name,curLevel))

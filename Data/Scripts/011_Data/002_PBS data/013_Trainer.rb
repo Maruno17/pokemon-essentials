@@ -125,7 +125,7 @@ module GameData
         if pkmn_data[:moves] && pkmn_data[:moves].length > 0
           pkmn_data[:moves].each { |move| pkmn.learn_move(move) }
         else
-          pkmn.resetMoves
+          pkmn.reset_moves
         end
         pkmn.ability_index = pkmn_data[:ability_flag]
         pkmn.gender = pkmn_data[:gender] || ((trainer.male?) ? 0 : 1)
@@ -156,7 +156,7 @@ module GameData
           pkmn.shiny = false
         end
         pkmn.poke_ball = pbBallTypeToItem(pkmn_data[:poke_ball]).id if pkmn_data[:poke_ball]
-        pkmn.calcStats
+        pkmn.calc_stats
       end
       return trainer
     end

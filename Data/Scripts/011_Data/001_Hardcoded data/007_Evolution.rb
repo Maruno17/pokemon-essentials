@@ -120,9 +120,7 @@ GameData::Evolution.register({
   :id            => :LevelNoWeather,
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
-    if pkmn.level >= parameter && $game_screen
-      next $game_screen.weather_type == :None
-    end
+    next pkmn.level >= parameter && $game_screen && $game_screen.weather_type == :None
   }
 })
 
@@ -130,9 +128,8 @@ GameData::Evolution.register({
   :id            => :LevelSun,
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
-    if pkmn.level >= parameter && $game_screen
-      next GameData::Weather.get($game_screen.weather_type).category == :Sun
-    end
+    next pkmn.level >= parameter && $game_screen &&
+         GameData::Weather.get($game_screen.weather_type).category == :Sun
   }
 })
 
@@ -140,9 +137,8 @@ GameData::Evolution.register({
   :id            => :LevelRain,
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
-    if pkmn.level >= parameter && $game_screen
-      next [:Rain, :Fog].include?(GameData::Weather.get($game_screen.weather_type).category)
-    end
+    next pkmn.level >= parameter && $game_screen &&
+         [:Rain, :Fog].include?(GameData::Weather.get($game_screen.weather_type).category)
   }
 })
 
@@ -150,9 +146,8 @@ GameData::Evolution.register({
   :id            => :LevelSnow,
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
-    if pkmn.level >= parameter && $game_screen
-      next GameData::Weather.get($game_screen.weather_type).category == :Hail
-    end
+    next pkmn.level >= parameter && $game_screen &&
+         GameData::Weather.get($game_screen.weather_type).category == :Hail
   }
 })
 
@@ -160,9 +155,8 @@ GameData::Evolution.register({
   :id            => :LevelSandstorm,
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
-    if pkmn.level >= parameter && $game_screen
-      next GameData::Weather.get($game_screen.weather_type).category == :Sandstorm
-    end
+    next pkmn.level >= parameter && $game_screen &&
+         GameData::Weather.get($game_screen.weather_type).category == :Sandstorm
   }
 })
 
@@ -203,7 +197,7 @@ GameData::Evolution.register({
   :id            => :LevelDarkInParty,
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
-    next $Trainer.has_pokemon_of_type?(:DARK) if pkmn.level >= parameter
+    next pkmn.level >= parameter && $Trainer.has_pokemon_of_type?(:DARK)
   }
 })
 

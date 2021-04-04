@@ -286,7 +286,7 @@ class PokeBattle_Battler
   #=============================================================================
   def pbUpdate(fullChange=false)
     return if !@pokemon
-    @pokemon.calcStats
+    @pokemon.calc_stats
     @level          = @pokemon.level
     @hp             = @pokemon.hp
     @totalhp        = @pokemon.totalhp

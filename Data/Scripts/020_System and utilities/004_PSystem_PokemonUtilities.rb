@@ -124,7 +124,7 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
   # Set nickname
   pkmn.name = nickname[0, Pokemon::MAX_NAME_SIZE]
   # Recalculate stats
-  pkmn.calcStats
+  pkmn.calc_stats
   if owner_name
     pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon from {2}.\1", $Trainer.name, owner_name))
   else
@@ -144,7 +144,7 @@ def pbGenerateEgg(pkmn, text = "")
   pkmn.name           = _INTL("Egg")
   pkmn.steps_to_hatch = pkmn.species_data.hatch_steps
   pkmn.obtain_text    = text
-  pkmn.calcStats
+  pkmn.calc_stats
   # Add egg to party
   $Trainer.party[$Trainer.party.length] = pkmn
   return true

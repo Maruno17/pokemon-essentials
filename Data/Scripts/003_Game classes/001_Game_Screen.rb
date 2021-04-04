@@ -134,3 +134,21 @@ class Game_Screen
     end
   end
 end
+
+#===============================================================================
+#
+#===============================================================================
+def pbToneChangeAll(tone,duration)
+  $game_screen.start_tone_change(tone,duration*Graphics.frame_rate/20)
+  for picture in $game_screen.pictures
+    picture.start_tone_change(tone,duration*Graphics.frame_rate/20) if picture
+  end
+end
+
+def pbShake(power,speed,frames)
+  $game_screen.start_shake(power,speed,frames*Graphics.frame_rate/20)
+end
+
+def pbFlash(color,frames)
+  $game_screen.start_flash(color,frames*Graphics.frame_rate/20)
+end

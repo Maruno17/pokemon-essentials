@@ -129,7 +129,7 @@ def pbChangeLevel(pkmn,newlevel,scene)
     spdefdiff   = pkmn.spdef
     totalhpdiff = pkmn.totalhp
     pkmn.level = newlevel
-    pkmn.calcStats
+    pkmn.calc_stats
     scene.pbRefresh
     pbMessage(_INTL("{1} dropped to Lv. {2}!",pkmn.name,pkmn.level))
     attackdiff  = pkmn.attack-attackdiff
@@ -151,7 +151,7 @@ def pbChangeLevel(pkmn,newlevel,scene)
     totalhpdiff = pkmn.totalhp
     pkmn.level = newlevel
     pkmn.changeHappiness("vitamin")
-    pkmn.calcStats
+    pkmn.calc_stats
     scene.pbRefresh
     if scene.is_a?(PokemonPartyScreen)
       scene.pbDisplay(_INTL("{1} grew to Lv. {2}!",pkmn.name,pkmn.level))
@@ -272,7 +272,7 @@ def pbJustRaiseEffortValues(pkmn, stat, evGain)
   evGain = evGain.clamp(0, Pokemon::EV_LIMIT - evTotal)
   if evGain > 0
     pkmn.ev[stat] += evGain
-    pkmn.calcStats
+    pkmn.calc_stats
   end
   return evGain
 end
@@ -287,7 +287,7 @@ def pbRaiseEffortValues(pkmn, stat, evGain = 10, ev_limit = true)
   evGain = evGain.clamp(0, Pokemon::EV_LIMIT - evTotal)
   if evGain > 0
     pkmn.ev[stat] += evGain
-    pkmn.calcStats
+    pkmn.calc_stats
   end
   return evGain
 end
@@ -305,7 +305,7 @@ def pbRaiseHappinessAndLowerEV(pkmn,scene,stat,messages)
   if e
     pkmn.ev[stat] -= 10
     pkmn.ev[stat] = 0 if pkmn.ev[stat]<0
-    pkmn.calcStats
+    pkmn.calc_stats
   end
   scene.pbRefresh
   scene.pbDisplay(messages[2-(h ? 0 : 2)-(e ? 0 : 1)])

@@ -20,21 +20,6 @@
     //
     // "rgssVersion": 1,
 
-
-    // Request an OpenGL 4.1 context. This
-    // introduces these minimum requirements
-    // for GPUs:
-    //
-    // +    NVIDIA 400 Series+
-    // +    AMD Radeon HD 5000+
-    // +    Intel HD Graphics 4000+
-    //
-    // If disabled, OpenGL 3.3 is used instead.
-    // (default: disabled)
-    //
-    // "openGL4": false,
-
-
     // Create a debug context and log
     // OpenGL debug information to the console
     // (default: disabled)
@@ -172,7 +157,7 @@
     // Set the base path of the game to '/path/to/game'
     // (default: executable directory)
     //
-    // "gameFolder": "/path/to/game",
+    // "gameFolder": ".",
 
 
     // Use either right or left Alt + Enter to toggle
@@ -188,20 +173,21 @@
     // "enableReset": true,
 
 
+    // Names of the input buttons in the F1 key bindings
+    // window. This only affects the names displayed
+    // there, and won't enable those names as Input
+    // constants in the scripts.
+    "bindingNames": {"c": "Use",
+                     "b": "Back",
+                     "a": "Special"},
+
+
     // Allow symlinks for game assets to be followed
     // (default: disabled)
     //
     // "allowSymlinks": false,
 
 
-    // Names of the input buttons in the F1 key bindings
-	// window. This only affects the names displayed
-	// there, and won't enable those names as Input
-	// constants in the scripts.
-    "bindingNames": {"c": "Use",
-	                 "b": "Back",
-	                 "a": "Special"},
-	
     // Organisation / company and application / game
     // name to build the directory path where mkxp
     // will store game specific data (eg. key bindings).
@@ -306,6 +292,32 @@
     //
     // "rubyLoadpath": ["/usr/lib64/ruby/",
     //                  "/usr/local/share/ruby/site_ruby"],
+
+    // Determines whether JIT is enabled. This probably
+    // won't work unless you also have the header file
+    // that it needs. Only works with Ruby 2.6 or higher.
+    // (default: false)
+    //
+    // "JITEnable": false,
+
+    // Determines what level of verbosity to use when
+    // logging JIT events. Starts at 0, which is next
+    // to nothing. Set it higher to see more.
+    // (default: 0)
+    //
+    // "JITVerboseLevel": 0,
+
+    // Determines how many compiled methods that Ruby
+    // will keep in its cache.
+    // (default: 100)
+    //
+    // "JITMaxCache": 100,
+
+    // Determines how many times a function has to be
+    // called before it is compiled.
+    // (default: 10000)
+    //
+    // "JITMinCalls": 10000,
 
 
     // SoundFont to use for midi playback (via fluidsynth)

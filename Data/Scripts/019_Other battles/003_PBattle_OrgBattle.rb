@@ -166,7 +166,7 @@ class PBPokemon
       ev.each { |stat| pokemon.ev[stat] = Pokemon::EV_LIMIT / ev.length }
     end
     GameData::Stat.each_main { |s| pokemon.iv[s.id] = iv }
-    pokemon.calcStats
+    pokemon.calc_stats
     return pokemon
   end
 end

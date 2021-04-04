@@ -110,7 +110,7 @@ class Pokemon
     @forced_form = nil
     @level       = nil   # In case growth rate is different for the new species
     @ability     = nil
-    calcStats
+    calc_stats
   end
 
   # @param check_species [Integer, Symbol, String] id of the species to check for
@@ -138,7 +138,7 @@ class Pokemon
     @ability = nil
     yield if block_given?
     MultipleForms.call("onSetForm", self, value, oldForm)
-    calcStats
+    calc_stats
     pbSeenForm(self)
   end
 
@@ -148,7 +148,7 @@ class Pokemon
 
   def form_simple=(value)
     @form = value
-    calcStats
+    calc_stats
   end
 
   #=============================================================================
@@ -220,6 +220,7 @@ class Pokemon
   # Sets this Pokémon's status. See {GameData::Status} for all possible status effects.
   # @param value [Integer, Symbol, String] status to set
   def status=(value)
+    return if !able?
     new_status = GameData::Status.try_get(value)
     if !new_status
       raise ArgumentError, _INTL('Attempted to set {1} as Pokémon status', value.class.name)
@@ -454,7 +455,7 @@ class Pokemon
   def nature=(value)
     return if value && !GameData::Nature.exists?(value)
     @nature = (value) ? GameData::Nature.get(value).id : value
-    calcStats if !@nature_for_stats
+    calc_stats if !@nature_for_stats
   end
 
   # Returns the calculated nature, taking into account things that change its
@@ -474,7 +475,7 @@ class Pokemon
   def nature_for_stats=(value)
     return if value && !GameData::Nature.exists?(value)
     @nature_for_stats = (value) ? GameData::Nature.get(value).id : value
-    calcStats
+    calc_stats
   end
 
   # Returns whether this Pokémon has a particular nature. If no value is given,
@@ -565,7 +566,7 @@ class Pokemon
   end
 
   # Sets this Pokémon's movelist to the default movelist it originally had.
-  def resetMoves
+  def reset_moves
     this_level = self.level
     # Find all level-up moves that self could have learned
     moveset = self.getMoveList
@@ -987,7 +988,7 @@ class Pokemon
   end
 
   # Recalculates this Pokémon's stats.
-  def calcStats
+  def calc_stats
     base_stats = self.baseStats
     this_level = self.level
     this_IV    = self.calcIV
@@ -1065,7 +1066,7 @@ class Pokemon
     @item             = nil
     @mail             = nil
     @moves            = []
-    resetMoves if withMoves
+    reset_moves if withMoves
     @first_moves      = []
     @ribbons          = []
     @cool             = 0
@@ -1105,12 +1106,12 @@ class Pokemon
     @personalID       = rand(2 ** 16) | rand(2 ** 16) << 16
     @hp               = 1
     @totalhp          = 1
-    calcStats
+    calc_stats
     if @form == 0 && recheck_form
       f = MultipleForms.call("getFormOnCreation", self)
       if f
         self.form = f
-        resetMoves if withMoves
+        reset_moves if withMoves
       end
     end
   end

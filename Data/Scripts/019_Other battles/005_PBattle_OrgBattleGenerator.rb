@@ -849,7 +849,7 @@ def pbRuledBattle(team1,team2,rule)
       next if !p
       if p.level!=level
         p.level=level
-        p.calcStats
+        p.calc_stats
       end
       items1[i]=p.item_id
       trainer1.party.push(p)
@@ -858,7 +858,7 @@ def pbRuledBattle(team1,team2,rule)
       next if !p
       if p.level!=level
         p.level=level
-        p.calcStats
+        p.calc_stats
       end
       items2[i]=p.item_id
       trainer2.party.push(p)
