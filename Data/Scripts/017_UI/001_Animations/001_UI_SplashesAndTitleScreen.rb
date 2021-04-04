@@ -1,119 +1,111 @@
 class IntroEventScene < EventScene
-  TICKS_PER_PIC         = 40   # 20 ticks per second, so 2 seconds
-  TICKS_PER_ENTER_FLASH = 40
-  FADE_TICKS            = 8
+  # Splash screen images that appear for a few seconds and then disappear.
+  SPLASH_IMAGES         = ['intro1']
+  # The main title screen background image.
+  TITLE_BG_IMAGE        = 'splash'
+  TITLE_START_IMAGE     = 'start'
+  TITLE_START_IMAGE_X   = 0
+  TITLE_START_IMAGE_Y   = 322
+  SECONDS_PER_SPLASH    = 2
+  TICKS_PER_ENTER_FLASH = 40   # 20 ticks per second
+  FADE_TICKS            = 8    # 20 ticks per second
 
-  def initialize(pics,splash,_viewport=nil)
-    super(nil)
-    @pics   = pics
-    @splash = splash
-    @pic = addImage(0,0,"")
-    @pic.setOpacity(0,0)    # set opacity to 0 after waiting 0 frames
-    @pic2 = addImage(0,0,"")   # flashing "Press Enter" picture
-    @pic2.setOpacity(0,0)
+  def initialize(viewport = nil)
+    super(viewport)
+    @pic = addImage(0, 0, "")
+    @pic.setOpacity(0, 0)        # set opacity to 0 after waiting 0 frames
+    @pic2 = addImage(0, 0, "")   # flashing "Press Enter" picture
+    @pic2.setOpacity(0, 0)       # set opacity to 0 after waiting 0 frames
     @index = 0
     pbBGMPlay($data_system.title_bgm)
-    openPic(self,nil)
+    open_splash(self, nil)
   end
 
-  def openPic(_scene,*args)
+  def open_splash(_scene, *args)
     onCTrigger.clear
-    @pic.name = "Graphics/Titles/"+@pics[@index]
+    @pic.name = "Graphics/Titles/" + SPLASH_IMAGES[@index]
     # fade to opacity 255 in FADE_TICKS ticks after waiting 0 frames
-    @pic.moveOpacity(0,FADE_TICKS,255)
+    @pic.moveOpacity(0, FADE_TICKS, 255)
     pictureWait
-    @timer = 0                          # reset the timer
-    onUpdate.set(method(:picUpdate))    # call picUpdate every frame
-    onCTrigger.set(method(:closePic))   # call closePic when C key is pressed
+    @timer = 0.0                            # reset the timer
+    onUpdate.set(method(:splash_update))    # called every frame
+    onCTrigger.set(method(:close_splash))   # called when C key is pressed
   end
 
-  def closePic(scene,args)
+  def close_splash(scene, args)
     onUpdate.clear
     onCTrigger.clear
-    @pic.moveOpacity(0,FADE_TICKS,0)
+    @pic.moveOpacity(0, FADE_TICKS, 0)
     pictureWait
     @index += 1   # Move to the next picture
-    if @index>=@pics.length
-      openSplash(scene,args)
+    if @index >= SPLASH_IMAGES.length
+      open_title_screen(scene, args)
     else
-      openPic(scene,args)
+      open_splash(scene, args)
     end
   end
 
-  def picUpdate(scene,args)
-    @timer += 1
-    if @timer>TICKS_PER_PIC*Graphics.frame_rate/20
-      @timer = 0
-      closePic(scene,args)   # Close the picture
-    end
+  def splash_update(scene, args)
+    @timer += Graphics.delta_s
+    close_splash(scene, args) if @timer > SECONDS_PER_SPLASH
   end
 
-  def openSplash(_scene,*args)
+  def open_title_screen(_scene, *args)
     onUpdate.clear
     onCTrigger.clear
-    @pic.name = "Graphics/Titles/"+@splash
-    @pic.moveOpacity(0,FADE_TICKS,255)
-    @pic2.name = "Graphics/Titles/start"
-    @pic2.setXY(0,0,322)
-    @pic2.setVisible(0,true)
-    @pic2.moveOpacity(0,FADE_TICKS,255)
+    @pic.name = "Graphics/Titles/" + TITLE_BG_IMAGE
+    @pic.moveOpacity(0, FADE_TICKS, 255)
+    @pic2.name = "Graphics/Titles/" + TITLE_START_IMAGE
+    @pic2.setXY(0, TITLE_START_IMAGE_X, TITLE_START_IMAGE_Y)
+    @pic2.setVisible(0, true)
+    @pic2.moveOpacity(0, FADE_TICKS, 255)
     pictureWait
-    onUpdate.set(method(:splashUpdate))    # call splashUpdate every frame
-    onCTrigger.set(method(:closeSplash))   # call closeSplash when C key is pressed
+    onUpdate.set(method(:title_screen_update))    # called every frame
+    onCTrigger.set(method(:close_title_screen))   # called when C key is pressed
   end
 
-  def closeSplash(scene,*args)
+  def fade_out_title_screen(scene)
     onUpdate.clear
     onCTrigger.clear
     # Play random cry
     species_keys = GameData::Species::DATA.keys
     species_data = GameData::Species.get(species_keys[rand(species_keys.length)])
     GameData::Species.play_cry_from_species(species_data.species, species_data.form)
-    @pic.moveXY(0,20,0,0)
+    @pic.moveXY(0, 20, 0, 0)   # Adds 20 ticks (1 second) pause
     pictureWait
     # Fade out
-    @pic.moveOpacity(0,FADE_TICKS,0)
+    @pic.moveOpacity(0, FADE_TICKS, 0)
     @pic2.clearProcesses
-    @pic2.moveOpacity(0,FADE_TICKS,0)
+    @pic2.moveOpacity(0, FADE_TICKS, 0)
     pbBGMStop(1.0)
     pictureWait
     scene.dispose   # Close the scene
+  end
+
+  def close_title_screen(scene, *args)
+    fade_out_title_screen(scene)
     sscene = PokemonLoad_Scene.new
     sscreen = PokemonLoadScreen.new(sscene)
     sscreen.pbStartLoadScreen
   end
 
-  def closeSplashDelete(scene,*args)
-    onUpdate.clear
-    onCTrigger.clear
-    # Play random cry
-    species_keys = GameData::Species::DATA.keys
-    species_data = GameData::Species.get(species_keys[rand(species_keys.length)])
-    GameData::Species.play_cry_from_species(species_data.species, species_data.form)
-    @pic.moveXY(0,20,0,0)
-    pictureWait
-    # Fade out
-    @pic.moveOpacity(0,FADE_TICKS,0)
-    @pic2.clearProcesses
-    @pic2.moveOpacity(0,FADE_TICKS,0)
-    pbBGMStop(1.0)
-    pictureWait
-    scene.dispose   # Close the scene
+  def close_title_screen_delete(scene, *args)
+    fade_out_title_screen(scene)
     sscene = PokemonLoad_Scene.new
     sscreen = PokemonLoadScreen.new(sscene)
     sscreen.pbStartDeleteScreen
   end
 
-  def splashUpdate(scene,args)
+  def title_screen_update(scene, args)
     # Flashing of "Press Enter" picture
     if !@pic2.running?
-      @pic2.moveOpacity(TICKS_PER_ENTER_FLASH*2/10,TICKS_PER_ENTER_FLASH*4/10,0)
-      @pic2.moveOpacity(TICKS_PER_ENTER_FLASH*6/10,TICKS_PER_ENTER_FLASH*4/10,255)
+      @pic2.moveOpacity(TICKS_PER_ENTER_FLASH * 2 / 10, TICKS_PER_ENTER_FLASH * 4 / 10, 0)
+      @pic2.moveOpacity(TICKS_PER_ENTER_FLASH * 6 / 10, TICKS_PER_ENTER_FLASH * 4 / 10, 255)
     end
     if Input.press?(Input::DOWN) &&
        Input.press?(Input::BACK) &&
        Input.press?(Input::CTRL)
-      closeSplashDelete(scene,args)
+      close_title_screen_delete(scene, args)
     end
   end
 end
@@ -121,14 +113,9 @@ end
 
 
 class Scene_Intro
-  # Splash screen images that appear for a few seconds and then disappear.
-  INTRO_SPLASHES = ['intro1']
-  # The main title screen background image.
-  TITLE_SCREEN   = 'splash'
-
   def main
     Graphics.transition(0)
-    @eventscene = IntroEventScene.new(INTRO_SPLASHES, TITLE_SCREEN)
+    @eventscene = IntroEventScene.new
     @eventscene.main
     Graphics.freeze
   end
