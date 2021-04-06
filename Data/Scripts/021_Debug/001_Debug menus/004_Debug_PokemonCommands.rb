@@ -619,6 +619,39 @@ PokemonDebugMenuCommands.register("setinitialmoves", {
 #===============================================================================
 # Other options
 #===============================================================================
+PokemonDebugMenuCommands.register("setitem", {
+  "parent"      => "main",
+  "name"        => _INTL("Set item"),
+  "always_show" => true,
+  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+    cmd = 0
+    commands = [
+      _INTL("Change item"),
+      _INTL("Remove item")
+    ]
+    loop do
+      msg = (pkmn.hasItem?) ? _INTL("Item is {1}.", pkmn.item.name) : _INTL("No item.")
+      cmd = screen.pbShowCommands(msg, commands, cmd)
+      break if cmd < 0
+      case cmd
+      when 0   # Change item
+        item = pbChooseItemList(pkmn.item_id)
+        if item && item != pkmn.item_id
+          pkmn.item = item
+          screen.pbRefreshSingle(pkmnid)
+        end
+      when 1   # Remove item
+        if pkmn.hasItem?
+          pkmn.item = nil
+          screen.pbRefreshSingle(pkmnid)
+        end
+      else
+        break
+      end
+    end
+  }
+})
+
 PokemonDebugMenuCommands.register("setability", {
   "parent"      => "main",
   "name"        => _INTL("Set ability"),
@@ -677,8 +710,8 @@ PokemonDebugMenuCommands.register("setnature", {
     commands.push(_INTL("[Reset]"))
     cmd = ids.index(pkmn.nature_id || ids[0])
     loop do
-      mag = _INTL("Nature is {1}.", pkmn.nature.name)
-      cmd = screen.pbShowCommands(mag, commands, cmd)
+      msg = _INTL("Nature is {1}.", pkmn.nature.name)
+      cmd = screen.pbShowCommands(msg, commands, cmd)
       break if cmd < 0
       if cmd >= 0 && cmd < commands.length - 1   # Set nature
         pkmn.nature = ids[cmd]

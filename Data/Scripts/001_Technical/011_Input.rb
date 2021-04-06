@@ -2,6 +2,19 @@ module Input
   USE     = C
   BACK    = B
   SPECIAL = A
+
+  unless defined?(update_KGC_ScreenCapture)
+    class << Input
+      alias update_KGC_ScreenCapture update
+    end
+  end
+
+  def self.update
+    update_KGC_ScreenCapture
+    if trigger?(Input::F8)
+      pbScreenCapture
+    end
+  end
 end
 
 module Mouse

@@ -624,3 +624,21 @@ def pbLoadRpgxpScene(scene)
   pbShowObjects(visibleObjects)
   Graphics.transition(20)
 end
+
+def pbChooseLanguage
+  commands=[]
+  for lang in Settings::LANGUAGES
+    commands.push(lang[0])
+  end
+  return pbShowCommands(nil,commands)
+end
+
+def pbScreenCapture
+  t = pbGetTimeNow
+  filestart = t.strftime("[%Y-%m-%d] %H_%M_%S.%L")
+#  capturefile = RTP.getSaveFileName(sprintf("%s.png", filestart))
+#  Graphics.snap_to_bitmap.save_to_png(capturefile)
+  capturefile = RTP.getSaveFileName(sprintf("%s.bmp", filestart))
+  Graphics.screenshot(capturefile)
+  pbSEPlay("Pkmn exp full") if FileTest.audio_exist?("Audio/SE/Pkmn exp full")
+end

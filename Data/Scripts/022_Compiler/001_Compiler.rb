@@ -681,6 +681,9 @@ module Compiler
       MessageTypes.loadMessageFile("Data/messages.dat")
     end
     if mustCompile
+      echoln ""
+      echoln _INTL("*** Starting full compile ***")
+      echoln ""
       yield(_INTL("Compiling town map data"))
       compile_town_map               # No dependencies
       yield(_INTL("Compiling map connection data"))
@@ -728,6 +731,9 @@ module Compiler
       MessageTypes.saveMessages
       yield(_INTL("Renaming sprites and cries"))
       convert_files
+      echoln ""
+      echoln _INTL("*** Finished full compile ***")
+      echoln ""
     end
     pbSetWindowText(nil)
     System.reload_cache
@@ -798,13 +804,13 @@ module Compiler
       if mustCompile
         for i in 0...dataFiles.length
           begin
-            File.delete("Data/#{dataFiles[i]}")
+            File.delete("Data/#{dataFiles[i]}") if File.exists?("Data/#{dataFiles[i]}")
           rescue SystemCallError
           end
         end
       end
       # Recompile all data
-      compile_all(mustCompile) { |msg| pbSetWindowText(msg) }
+      compile_all(mustCompile) { |msg| pbSetWindowText(msg); echoln(msg) }
     rescue Exception
       e = $!
       raise e if "#{e.class}"=="Reset" || e.is_a?(Reset) || e.is_a?(SystemExit)

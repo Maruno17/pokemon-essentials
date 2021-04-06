@@ -208,12 +208,12 @@ Events.onSpritesetCreate += proc { |_sender,e|
     if map.events[i].name[/^outdoorlight\((\w+)\)$/i]
       filename = $~[1].to_s
       spriteset.addUserSprite(LightEffect_DayNight.new(map.events[i],viewport,map,filename))
-    elsif map.events[i].name.downcase=="outdoorlight"
+    elsif map.events[i].name[/^outdoorlight$/i]
       spriteset.addUserSprite(LightEffect_DayNight.new(map.events[i],viewport,map))
     elsif map.events[i].name[/^light\((\w+)\)$/i]
       filename = $~[1].to_s
       spriteset.addUserSprite(LightEffect_Basic.new(map.events[i],viewport,map,filename))
-    elsif map.events[i].name.downcase=="light"
+    elsif map.events[i].name[/^light$/i]
       spriteset.addUserSprite(LightEffect_Basic.new(map.events[i],viewport,map))
     end
   end

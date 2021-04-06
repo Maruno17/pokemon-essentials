@@ -205,7 +205,7 @@ end
 HiddenMoveHandlers::CanUseMove.add(:CUT,proc { |move,pkmn,showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_CUT,showmsg)
   facingEvent = $game_player.pbFacingEvent
-  if !facingEvent || !facingEvent.name[/tree/i]
+  if !facingEvent || !facingEvent.name[/cuttree/i]
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
@@ -225,8 +225,10 @@ HiddenMoveHandlers::UseMove.add(:CUT,proc { |move,pokemon|
 
 def pbSmashEvent(event)
   return if !event
-  if event.name[/tree/i];    pbSEPlay("Cut",80)
-  elsif event.name[/rock/i]; pbSEPlay("Rock Smash",80)
+  if event.name[/cuttree/i]
+    pbSEPlay("Cut",80)
+  elsif event.name[/smashrock/i]
+    pbSEPlay("Rock Smash",80)
   end
   pbMoveRoute(event,[
      PBMoveRoute::Wait,2,
@@ -618,7 +620,7 @@ end
 HiddenMoveHandlers::CanUseMove.add(:ROCKSMASH,proc { |move,pkmn,showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_ROCKSMASH,showmsg)
   facingEvent = $game_player.pbFacingEvent
-  if !facingEvent || !facingEvent.name[/rock/i]
+  if !facingEvent || !facingEvent.name[/smashrock/i]
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
@@ -667,7 +669,7 @@ end
 
 Events.onAction += proc { |_sender,_e|
   facingEvent = $game_player.pbFacingEvent
-  pbStrength if facingEvent && facingEvent.name[/boulder/i]
+  pbStrength if facingEvent && facingEvent.name[/strengthboulder/i]
 }
 
 HiddenMoveHandlers::CanUseMove.add(:STRENGTH,proc { |move,pkmn,showmsg|

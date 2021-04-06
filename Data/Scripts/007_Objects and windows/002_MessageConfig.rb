@@ -40,31 +40,31 @@ module MessageConfig
   end
 
   def self.pbDefaultSystemFrame
-    begin
+    if $PokemonSystem
       return pbResolveBitmap("Graphics/Windowskins/" + Settings::MENU_WINDOWSKINS[$PokemonSystem.frame]) || ""
-    rescue
+    else
       return pbResolveBitmap("Graphics/Windowskins/" + Settings::MENU_WINDOWSKINS[0]) || ""
     end
   end
 
   def self.pbDefaultSpeechFrame
-    begin
+    if $PokemonSystem
       return pbResolveBitmap("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[$PokemonSystem.textskin]) || ""
-    rescue
+    else
       return pbResolveBitmap("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[0]) || ""
     end
   end
 
   def self.pbDefaultSystemFontName
-    begin
+    if $PokemonSystem
       return MessageConfig.pbTryFonts(Settings::FONT_OPTIONS[$PokemonSystem.font], "Arial Narrow", "Arial")
-    rescue
+    else
       return MessageConfig.pbTryFonts(Settings::FONT_OPTIONS[0], "Arial Narrow", "Arial")
     end
   end
 
   def self.pbDefaultTextSpeed
-    return pbSettingToTextSpeed(($PokemonSystem.textspeed rescue nil))
+    return ($PokemonSystem) ? pbSettingToTextSpeed($PokemonSystem.textspeed) : pbSettingToTextSpeed(nil)
   end
 
   def self.pbSettingToTextSpeed(speed)

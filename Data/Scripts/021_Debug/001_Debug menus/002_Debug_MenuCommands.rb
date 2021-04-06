@@ -433,6 +433,22 @@ DebugMenuCommands.register("roamers", {
   }
 })
 
+DebugMenuCommands.register("encounterversion", {
+  "parent"      => "battlemenu",
+  "name"        => _INTL("Set encounters version"),
+  "description" => _INTL("Choose which version of wild encounters should be used."),
+  "effect"      => proc {
+    params = ChooseNumberParams.new
+    params.setRange(0, 99)
+    params.setInitialValue($PokemonGlobal.encounter_version)
+    params.setCancelValue(-1)
+    value = pbMessageChooseNumber(_INTL("Set encounters version to which value?"), params)
+    if value >= 0
+      $PokemonGlobal.encounter_version = value
+    end
+  }
+})
+
 #===============================================================================
 # Item options
 #===============================================================================
@@ -1059,19 +1075,66 @@ DebugMenuCommands.register("compiledata", {
   "always_show" => true,
   "effect"      => proc {
     msgwindow = pbCreateMessageWindow
-    Compiler.compile_all(true) { |msg| pbMessageDisplay(msgwindow, msg, false) }
+    Compiler.compile_all(true) { |msg| pbMessageDisplay(msgwindow, msg, false); echoln(msg) }
     pbMessageDisplay(msgwindow, _INTL("All game data was compiled."))
     pbDisposeMessageWindow(msgwindow)
   }
 })
 
-DebugMenuCommands.register("debugconsole", {
+DebugMenuCommands.register("createpbs", {
   "parent"      => "othermenu",
-  "name"        => _INTL("Debug Console"),
-  "description" => _INTL("Open the Debug Console."),
+  "name"        => _INTL("Create PBS file(s)"),
+  "description" => _INTL("Choose one or all PBS files and create it."),
   "always_show" => true,
   "effect"      => proc {
-    Console::setup_console
+    cmd = 0
+    cmds = [
+      _INTL("[Create all]"),
+      "abilities.txt",
+      "berryplants.txt",
+      "connections.txt",
+      "encounters.txt",
+      "items.txt",
+      "metadata.txt",
+      "moves.txt",
+      "phone.txt",
+      "pokemon.txt",
+      "pokemonforms.txt",
+      "regionaldexes.txt",
+      "ribbons.txt",
+      "shadowmoves.txt",
+      "townmap.txt",
+      "trainerlists.txt",
+      "trainers.txt",
+      "trainertypes.txt",
+      "types.txt"
+    ]
+    loop do
+      cmd = pbShowCommands(nil, cmds, -1, cmd)
+      case cmd
+      when 0  then Compiler.write_all
+      when 1  then Compiler.write_abilities
+      when 2  then Compiler.write_berry_plants
+      when 3  then Compiler.write_connections
+      when 4  then Compiler.write_encounters
+      when 5  then Compiler.write_items
+      when 6  then Compiler.write_metadata
+      when 7  then Compiler.write_moves
+      when 8  then Compiler.write_phone
+      when 9  then Compiler.write_pokemon
+      when 10 then Compiler.write_pokemon_forms
+      when 11 then Compiler.write_regional_dexes
+      when 12 then Compiler.write_ribbons
+      when 13 then Compiler.write_shadow_movesets
+      when 14 then Compiler.write_town_map
+      when 15 then Compiler.write_trainer_lists
+      when 16 then Compiler.write_trainers
+      when 17 then Compiler.write_trainer_types
+      when 18 then Compiler.write_types
+      else break
+      end
+      pbMessage(_INTL("File written."))
+    end
   }
 })
 

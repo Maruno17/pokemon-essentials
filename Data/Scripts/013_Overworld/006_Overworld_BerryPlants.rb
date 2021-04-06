@@ -3,7 +3,7 @@ Events.onSpritesetCreate += proc { |_sender,e|
   viewport  = e[1]
   map = spriteset.map
   for i in map.events.keys
-    if map.events[i].name.downcase=="berryplant"
+    if map.events[i].name[/berryplant/i]
       spriteset.addUserSprite(BerryPlantMoistureSprite.new(map.events[i],map,viewport))
       spriteset.addUserSprite(BerryPlantSprite.new(map.events[i],map,viewport))
     end

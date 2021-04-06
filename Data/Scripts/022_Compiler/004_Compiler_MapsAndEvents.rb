@@ -447,7 +447,7 @@ module Compiler
     if isFirstCommand
       if !event.name[/trainer/i]
         ret.name = "Trainer(3)"
-      elsif event.name[/^\s*trainer\s+\((\d+)\)\s*$/i]
+      elsif event.name[/^\s*trainer\s*\((\d+)\)\s*$/i]
         ret.name = "Trainer(#{$1})"
       end
     end
@@ -680,12 +680,12 @@ module Compiler
     ret.pages = []
     itemName = ""
     hidden = false
-    if name[/^HiddenItem\:\s*(\w+)\s*$/]
+    if name[/^hiddenitem\:\s*(\w+)\s*$/i]
       itemName = $1
       return nil if !GameData::Item.exists?(itemName)
       ret.name = "HiddenItem"
       hidden = true
-    elsif name[/^Item\:\s*(\w+)\s*$/]
+    elsif name[/^item\:\s*(\w+)\s*$/i]
       itemName = $1
       return nil if !GameData::Item.exists?(itemName)
       ret.name = "Item"
@@ -833,6 +833,21 @@ module Compiler
     changed |= change_script(script,/\$game_variables\[(\d+)\](?!\s*(?:\=|\!|<|>))/) { |m| "pbGet("+m[1]+")" }
     changed |= change_script(script,/\$Trainer\.party\[\s*pbGet\((\d+)\)\s*\]/) { |m| "pbGetPokemon("+m[1]+")" }
     return changed
+  end
+
+  def fix_event_name(event)
+    return false if !event
+    case event.name.downcase
+    when "tree"
+      event.name = "CutTree"
+    when "rock"
+      event.name = "SmashRock"
+    when "boulder"
+      event.name = "StrengthBoulder"
+    else
+      return false
+    end
+    return true
   end
 
   def fix_event_use(event,_mapID,mapData)
@@ -1385,6 +1400,7 @@ module Compiler
           map.events[key] = newevent
           changed = true
         end
+        changed = true if fix_event_name(map.events[key])
         newevent = fix_event_use(map.events[key],id,mapData)
         if newevent
           map.events[key] = newevent
