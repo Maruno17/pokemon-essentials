@@ -251,18 +251,19 @@ end
 # Gets at least the first byte of a file. Doesn't check RTP, but does check
 # encrypted archives.
 def pbGetFileChar(file)
-  file = canonicalize(file)
+  canon_file = canonicalize(file)
   if !safeExists?("./Game.rgssad")
-    return nil if !safeExists?(file)
+    return nil if !safeExists?(canon_file)
+    return nil if file.last == '/'   # Is a directory
     begin
-      File.open(file,"rb") { |f| return f.read(1) }   # read one byte
+      File.open(canon_file, "rb") { |f| return f.read(1) }   # read one byte
     rescue Errno::ENOENT, Errno::EINVAL, Errno::EACCES, Errno::EISDIR
       return nil
     end
   end
   str = nil
   begin
-    str = load_data(file, true)
+    str = load_data(canon_file, true)
   rescue Errno::ENOENT, Errno::EINVAL, Errno::EACCES, Errno::EISDIR, RGSSError, MKXPError
     str = nil
   end
