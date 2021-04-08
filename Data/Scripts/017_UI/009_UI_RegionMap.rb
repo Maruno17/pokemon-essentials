@@ -333,7 +333,7 @@ class PokemonRegionMap_Scene
             return healspot
           end
         end
-      elsif Input.trigger?(Input::USE) && @editor   # Intentionally after other C input check
+      elsif Input.trigger?(Input::USE) && @editor   # Intentionally after other USE input check
         pbChangeMapLocation(@mapX,@mapY)
       end
     end

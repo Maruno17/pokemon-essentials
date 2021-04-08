@@ -1138,7 +1138,7 @@ def pbRegionalDexEditor(dex)
   viewport.z = 99999
   cmd_window = pbListWindow([])
   info = Window_AdvancedTextPokemon.newWithSize(
-     _INTL("Z+Up/Down: Rearrange entries\nZ+Right: Insert new entry\nZ+Left: Delete entry\nF: Clear entry"),
+     _INTL("Z+Up/Down: Rearrange entries\nZ+Right: Insert new entry\nZ+Left: Delete entry\nD: Clear entry"),
      Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport)
   info.z = 2
   dex.compact!

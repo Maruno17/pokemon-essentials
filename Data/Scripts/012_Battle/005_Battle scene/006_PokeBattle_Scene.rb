@@ -111,7 +111,7 @@ class PokeBattle_Scene
   end
 
   # NOTE: A regular message is displayed for 1 second after it fully appears (or
-  #       less if B/C is pressed) and disappears automatically after that time.
+  #       less if Back/Use is pressed). Disappears automatically after that time.
   def pbDisplayMessage(msg,brief=false)
     pbWaitMessage
     pbShowWindow(MESSAGE_BOX)

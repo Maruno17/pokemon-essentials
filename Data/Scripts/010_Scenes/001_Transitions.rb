@@ -86,7 +86,8 @@ module Graphics
     when "wavyspinball"     then @@transition = Transitions::WavySpinBall.new(duration)
     when "fourballburst"    then @@transition = Transitions::FourBallBurst.new(duration)
     # Graphic transitions
-    when ""                 then @@transition = Transitions::FadeTransition.new(duration)
+    when "fadetoblack"      then @@transition = Transitions::FadeToBlack.new(duration)
+    when ""                 then @@transition = Transitions::FadeFromBlack.new(duration)
     else                         ret = false
     end
     Graphics.frame_reset if ret
@@ -585,7 +586,46 @@ module Transitions
   #=============================================================================
   #
   #=============================================================================
-  class FadeTransition
+  class FadeToBlack
+    def initialize(numframes)
+      @duration = numframes
+      @numframes = numframes
+      @disposed = false
+      if @duration<=0
+        @disposed = true
+        return
+      end
+      @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
+      @viewport.z = 99999
+      @sprite = BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
+      @sprite.bitmap.fill_rect(0,0,Graphics.width,Graphics.height,Color.new(0,0,0))
+      @sprite.opacity = 0
+    end
+
+    def disposed?; @disposed; end
+
+    def dispose
+      return if disposed?
+      @sprite.dispose if @sprite
+      @viewport.dispose if @viewport
+      @disposed = true
+    end
+
+    def update
+      return if disposed?
+      if @duration==0
+        dispose
+      else
+        @sprite.opacity = (@numframes - @duration + 1) * 255 / @numframes
+        @duration -= 1
+      end
+    end
+  end
+
+  #=============================================================================
+  #
+  #=============================================================================
+  class FadeFromBlack
     def initialize(numframes)
       @duration = numframes
       @numframes = numframes

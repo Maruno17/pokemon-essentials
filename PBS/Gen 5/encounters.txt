@@ -33,6 +33,19 @@ LandNight,21
     1,HOOTHOOT,14
     1,RATTATA,15
 #-------------------------------
+[005,1] # Route 1
+Land,21
+    40,PIDGEY,15,18
+    40,RATTATA,14,18
+    10,SENTRET,13,17
+    5,PIDGEY,14,16
+    5,RATTATA,13,16
+LandNight,21
+    40,RATTATA,14,18
+    30,HOOTHOOT,14,17
+    20,SPINARAK,12,16
+    10,CLEFAIRY,11,15
+#-------------------------------
 [021] # Route 2
 Land,21
     50,RATTATA,12,15

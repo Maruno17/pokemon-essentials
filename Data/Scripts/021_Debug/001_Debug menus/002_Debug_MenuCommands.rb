@@ -435,7 +435,7 @@ DebugMenuCommands.register("roamers", {
 
 DebugMenuCommands.register("encounterversion", {
   "parent"      => "battlemenu",
-  "name"        => _INTL("Set encounters version"),
+  "name"        => _INTL("Set Encounters Version"),
   "description" => _INTL("Choose which version of wild encounters should be used."),
   "effect"      => proc {
     params = ChooseNumberParams.new
@@ -1083,7 +1083,7 @@ DebugMenuCommands.register("compiledata", {
 
 DebugMenuCommands.register("createpbs", {
   "parent"      => "othermenu",
-  "name"        => _INTL("Create PBS file(s)"),
+  "name"        => _INTL("Create PBS File(s)"),
   "description" => _INTL("Choose one or all PBS files and create it."),
   "always_show" => true,
   "effect"      => proc {
