@@ -179,7 +179,12 @@
     // constants in the scripts.
     "bindingNames": {"c": "Use",
                      "b": "Back",
-                     "a": "Special"},
+                     "a": "Action",
+					 "x": "(unused)",
+					 "y": "(unused)",
+					 "z": "Special",
+					 "l": "JumpUp",
+					 "r": "JumpDown"},
 
 
     // Allow symlinks for game assets to be followed

@@ -183,7 +183,7 @@ class Scene_Map
           $game_temp.menu_calling = true
           $game_temp.menu_beep = true
         end
-      elsif Input.trigger?(Input::Z)
+      elsif Input.trigger?(Input::SPECIAL)
         unless $game_player.moving?
           $PokemonTemp.keyItemCalling = true
         end

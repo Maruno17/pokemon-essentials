@@ -226,13 +226,13 @@ class Window_TextEntry < SpriteWindow_Base
     self.refresh if (@frame%10)==0
     return if !self.active
     # Moving cursor
-    if Input.repeat?(Input::LEFT) && Input.press?(Input::SPECIAL)
+    if Input.repeat?(Input::LEFT) && Input.press?(Input::ACTION)
       if @helper.cursor > 0
         @helper.cursor -= 1
         @frame = 0
         self.refresh
       end
-    elsif Input.repeat?(Input::RIGHT) && Input.press?(Input::SPECIAL)
+    elsif Input.repeat?(Input::RIGHT) && Input.press?(Input::ACTION)
       if @helper.cursor < self.text.scan(/./m).length
         @helper.cursor += 1
         @frame = 0
@@ -1311,9 +1311,9 @@ class PokemonEntryScene2
       Input.update
       pbUpdate
       next if pbMoveCursor
-      if Input.trigger?(Input::Z)
+      if Input.trigger?(Input::SPECIAL)
         pbChangeTab
-      elsif Input.trigger?(Input::SPECIAL)
+      elsif Input.trigger?(Input::ACTION)
         @cursorpos = OK
         @sprites["cursor"].setCursorPos(@cursorpos)
       elsif Input.trigger?(Input::BACK)

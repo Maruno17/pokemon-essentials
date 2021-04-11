@@ -453,7 +453,7 @@ class PokemonPokedexInfo_Scene
       Input.update
       pbUpdate
       dorefresh = false
-      if Input.trigger?(Input::SPECIAL)
+      if Input.trigger?(Input::ACTION)
         pbSEStop
         GameData::Species.play_cry_from_species(@species, @form) if @page == 1
       elsif Input.trigger?(Input::BACK)
@@ -521,7 +521,7 @@ class PokemonPokedexInfo_Scene
       Graphics.update
       Input.update
       pbUpdate
-      if Input.trigger?(Input::SPECIAL)
+      if Input.trigger?(Input::ACTION)
         pbSEStop
         GameData::Species.play_cry_from_species(@species, @form)
       elsif Input.trigger?(Input::BACK)

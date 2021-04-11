@@ -195,7 +195,7 @@ class SpritePositioner
         pbChangeSpecies(@species)
         refresh
       end
-      if Input.trigger?(Input::SPECIAL)   # Cycle to next option
+      if Input.trigger?(Input::ACTION)   # Cycle to next option
         pbPlayDecisionSE
         @metricsChanged = true if species_data.shadow_size != oldval
         ret = true
@@ -266,7 +266,7 @@ class SpritePositioner
         end
         refresh
       end
-      if Input.repeat?(Input::SPECIAL) && param != 3   # Cycle to next option
+      if Input.repeat?(Input::ACTION) && param != 3   # Cycle to next option
         @metricsChanged = true if xpos != oldxpos || ypos != oldypos
         ret = true
         pbPlayDecisionSE

@@ -88,8 +88,8 @@ def pbListScreenBlock(title,lister)
       lister.refresh(list.index)
       selectedmap = list.index
     end
-    if Input.trigger?(Input::SPECIAL)
-      yield(Input::SPECIAL, lister.value(selectedmap))
+    if Input.trigger?(Input::ACTION)
+      yield(Input::ACTION, lister.value(selectedmap))
       list.commands = lister.commands
       if list.index==list.commands.length
         list.index = list.commands.length

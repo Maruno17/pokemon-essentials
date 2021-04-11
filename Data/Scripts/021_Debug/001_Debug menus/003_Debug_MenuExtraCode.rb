@@ -173,7 +173,7 @@ def pbDebugVariables(mode)
       elsif Input.repeat?(Input::RIGHT)
         pbDebugSetVariable(current_id,1)
         right_window.refresh
-      elsif Input.trigger?(Input::SPECIAL)
+      elsif Input.trigger?(Input::ACTION)
         if $game_variables[current_id]==0
           $game_variables[current_id] = ""
         elsif $game_variables[current_id]==""
@@ -449,7 +449,7 @@ def pbDebugRoamers
     Graphics.update
     Input.update
     pbUpdateSpriteHash(sprites)
-    if Input.trigger?(Input::SPECIAL) && cmdwindow.index<cmdwindow.roamerCount &&
+    if Input.trigger?(Input::ACTION) && cmdwindow.index<cmdwindow.roamerCount &&
        (pkmn[2]<=0 || $game_switches[pkmn[2]]) &&
        $PokemonGlobal.roamPokemon[cmdwindow.index]!=true
       # Roam selected Pokémon

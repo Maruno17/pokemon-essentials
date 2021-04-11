@@ -16,7 +16,7 @@ class Game_Character
   attr_reader   :blend_type
   attr_reader   :direction
   attr_accessor :pattern
-  attr_reader   :pattern_surf
+  attr_accessor :pattern_surf
   attr_accessor :lock_pattern
   attr_reader   :move_route_forcing
   attr_accessor :through

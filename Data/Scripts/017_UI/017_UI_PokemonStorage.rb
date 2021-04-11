@@ -844,21 +844,21 @@ class PokemonStorageScene
         pbSetMosaic(selection)
       end
       self.update
-      if Input.trigger?(Input::L)
+      if Input.trigger?(Input::JUMPUP)
         pbPlayCursorSE
         nextbox = (@storage.currentBox+@storage.maxBoxes-1)%@storage.maxBoxes
         pbSwitchBoxToLeft(nextbox)
         @storage.currentBox = nextbox
         pbUpdateOverlay(selection)
         pbSetMosaic(selection)
-      elsif Input.trigger?(Input::R)
+      elsif Input.trigger?(Input::JUMPDOWN)
         pbPlayCursorSE
         nextbox = (@storage.currentBox+1)%@storage.maxBoxes
         pbSwitchBoxToRight(nextbox)
         @storage.currentBox = nextbox
         pbUpdateOverlay(selection)
         pbSetMosaic(selection)
-      elsif Input.trigger?(Input::Z)   # Jump to box name
+      elsif Input.trigger?(Input::SPECIAL)   # Jump to box name
         if selection!=-1
           pbPlayCursorSE
           selection = -1
@@ -866,7 +866,7 @@ class PokemonStorageScene
           pbUpdateOverlay(selection)
           pbSetMosaic(selection)
         end
-      elsif Input.trigger?(Input::SPECIAL) && @command==0   # Organize only
+      elsif Input.trigger?(Input::ACTION) && @command==0   # Organize only
         pbPlayDecisionSE
         pbSetQuickSwap(!@quickswap)
       elsif Input.trigger?(Input::BACK)
@@ -945,7 +945,7 @@ class PokemonStorageScene
         pbSetMosaic(selection)
       end
       self.update
-      if Input.trigger?(Input::SPECIAL) && @command == 0   # Organize only
+      if Input.trigger?(Input::ACTION) && @command == 0   # Organize only
         pbPlayDecisionSE
         pbSetQuickSwap(!@quickswap)
       elsif Input.trigger?(Input::BACK)

@@ -24,8 +24,8 @@ class ButtonEventScene < EventScene
     addLabelForScreen(2, 134, 84, 352, _INTL("Used to confirm a choice, interact with people and things, and move through text. (Default: C)"))
     addLabelForScreen(2, 134, 212, 352, _INTL("Used to exit, cancel a choice, and cancel a mode. Also used to open the Pause Menu. (Default: X)"))
 
-    addImageForScreen(3, 16, 90, "Graphics/Pictures/help_specialkey")
-    addImageForScreen(3, 16, 252, "Graphics/Pictures/help_zkey")
+    addImageForScreen(3, 16, 90, "Graphics/Pictures/help_actionkey")
+    addImageForScreen(3, 16, 252, "Graphics/Pictures/help_specialkey")
     addLabelForScreen(3, 134, 52, 352, _INTL("Has various functions depending on context. While moving around, hold to move at a different speed. (Default: Z)"))
     addLabelForScreen(3, 134, 212, 352, _INTL("Press to open the Ready Menu, where registered items and available field moves can be used. (Default: D)"))
 

@@ -62,7 +62,6 @@ class Game_Map
     for i in @map.events.keys
       @events[i]          = Game_Event.new(@map_id, @map.events[i],self)
     end
-    # TODO: These should be moved to Spriteset_Global as we only need one copy of them.
     @common_events        = {}
     for i in 1...$data_common_events.size
       @common_events[i]   = Game_CommonEvent.new(i)

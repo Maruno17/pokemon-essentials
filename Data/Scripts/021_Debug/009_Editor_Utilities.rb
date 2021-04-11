@@ -113,7 +113,7 @@ end
 #===============================================================================
 # Displays a list of all Pokémon species, and returns the ID of the species
 # selected (or nil if the selection was canceled). "default", if specified, is
-# the ID of the species to initially select. Pressing Input::SPECIAL will toggle
+# the ID of the species to initially select. Pressing Input::ACTION will toggle
 # the list sorting between numerical and alphabetical.
 def pbChooseSpeciesList(default = nil)
   commands = []
@@ -132,7 +132,7 @@ end
 
 # Displays a list of all moves, and returns the ID of the move selected (or nil
 # if the selection was canceled). "default", if specified, is the ID of the move
-# to initially select. Pressing Input::SPECIAL will toggle the list sorting
+# to initially select. Pressing Input::ACTION will toggle the list sorting
 # between numerical and alphabetical.
 def pbChooseMoveList(default = nil)
   commands = []
@@ -178,7 +178,7 @@ end
 
 # Displays a list of all types, and returns the ID of the type selected (or nil
 # if the selection was canceled). "default", if specified, is the ID of the type
-# to initially select. Pressing Input::SPECIAL will toggle the list sorting
+# to initially select. Pressing Input::ACTION will toggle the list sorting
 # between numerical and alphabetical.
 def pbChooseTypeList(default = nil)
   commands = []
@@ -188,7 +188,7 @@ end
 
 # Displays a list of all items, and returns the ID of the item selected (or nil
 # if the selection was canceled). "default", if specified, is the ID of the item
-# to initially select. Pressing Input::SPECIAL will toggle the list sorting
+# to initially select. Pressing Input::ACTION will toggle the list sorting
 # between numerical and alphabetical.
 def pbChooseItemList(default = nil)
   commands = []
@@ -198,7 +198,7 @@ end
 
 # Displays a list of all abilities, and returns the ID of the ability selected
 # (or nil if the selection was canceled). "default", if specified, is the ID of
-# the ability to initially select. Pressing Input::SPECIAL will toggle the list
+# the ability to initially select. Pressing Input::ACTION will toggle the list
 # sorting between numerical and alphabetical.
 def pbChooseAbilityList(default = nil)
   commands = []
@@ -290,10 +290,10 @@ def pbCommands3(cmdwindow,commands,cmdIfCancel,defaultindex=-1,noresize=false)
     Graphics.update
     Input.update
     cmdwindow.update
-    if Input.trigger?(Input::Z)
+    if Input.trigger?(Input::SPECIAL)
       command = [5,cmdwindow.index]
       break
-    elsif Input.press?(Input::SPECIAL)
+    elsif Input.press?(Input::ACTION)
       if Input.repeat?(Input::UP)
         command = [1,cmdwindow.index]
         break
@@ -381,7 +381,7 @@ def pbCommandsSortable(cmdwindow,commands,cmdIfCancel,defaultindex=-1,sortable=f
     Graphics.update
     Input.update
     cmdwindow.update
-    if Input.trigger?(Input::SPECIAL) && sortable
+    if Input.trigger?(Input::ACTION) && sortable
       command = [1,cmdwindow.index]
       break
     elsif Input.trigger?(Input::BACK)

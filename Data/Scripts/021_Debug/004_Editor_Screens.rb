@@ -356,7 +356,7 @@ def pbTrainerTypeEditor
   ]
   pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(0, true)) { |button, tr_type|
     if tr_type
-      if button == Input::SPECIAL
+      if button == Input::ACTION
         if tr_type.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this trainer type?")
             id_number = GameData::TrainerType.get(tr_type).id_number
@@ -504,7 +504,7 @@ def pbTrainerBattleEditor
   modified = false
   pbListScreenBlock(_INTL("Trainer Battles"), TrainerBattleLister.new(0, true)) { |button, trainer_id|
     if trainer_id
-      if button == Input::SPECIAL
+      if button == Input::ACTION
         if trainer_id.is_a?(Array)
           if pbConfirmMessageSerious("Delete this trainer battle?")
             tr_data = GameData::Trainer::DATA[trainer_id]
@@ -829,7 +829,7 @@ def pbItemEditor
   ]
   pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) { |button, item|
     if item
-      if button == Input::SPECIAL
+      if button == Input::ACTION
         if item.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this item?")
             id_number = GameData::Item.get(item).id_number
@@ -996,7 +996,7 @@ def pbPokemonEditor
   ]
   pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(0, false)) { |button, species|
     if species
-      if button == Input::SPECIAL
+      if button == Input::ACTION
         if species.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this species?")
             id_number = GameData::Species.get(species).id_number

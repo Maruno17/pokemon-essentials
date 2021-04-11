@@ -38,8 +38,9 @@ end
 #
 #===============================================================================
 class PurifyChamberSet
-  attr_reader :facing
-  attr_reader :shadow
+  attr_reader :shadow   # The Shadow Pokémon in the middle
+  attr_reader :list     # The other Pokémon placed around
+  attr_reader :facing   # Index in list of Pokémon the Shadow Pokémon is facing
 
   def partialSum(x)
     return (x*x+x)/2   # pattern: 1, 3, 6, 10, 15, 21, 28, ...
@@ -144,11 +145,12 @@ end
 #
 #===============================================================================
 class PurifyChamber
-  NUMSETS=9
-  SETSIZE=4
-  attr_reader :currentSet # German: das Forum
+  attr_reader :sets
+  attr_reader :currentSet
+  NUMSETS = 9
+  SETSIZE = 4
 
-  def self.maximumTempo() # Calculates the maximum possible tempo
+  def self.maximumTempo()   # Calculates the maximum possible tempo
     x=SETSIZE+1
     return ((x*x+x)/2)-1
   end
@@ -173,7 +175,7 @@ class PurifyChamber
     return @sets[set].list
   end
 
-  def chamberFlow(chamber) # for speeding up purification. German: Fluidum
+  def chamberFlow(chamber)   # for speeding up purification
     return 0 if chamber<0 || chamber>=NUMSETS
     return @sets[chamber].flow
   end
@@ -183,7 +185,7 @@ class PurifyChamber
     return @sets[chamber].shadow
   end
 
-  def setShadow(chamber,value)# allow only "shadow" Pokemon
+  def setShadow(chamber,value)   # allow only "shadow" Pokemon
     return if chamber<0 || chamber>=NUMSETS
     @sets[chamber].shadow=value
   end
@@ -1179,11 +1181,11 @@ class PurifyChamberScene
           pbPlayCursorSE()
           @sprites["setview"].moveCursor(btn)
         end
-        if Input.repeat?(Input::L)
+        if Input.repeat?(Input::JUMPUP)
           nextset=(@sprites["setview"].set==0) ? PurifyChamber::NUMSETS-1 : @sprites["setview"].set-1
           pbPlayCursorSE()
           return [1,nextset]
-        elsif Input.repeat?(Input::R)
+        elsif Input.repeat?(Input::JUMPDOWN)
           nextset=(@sprites["setview"].set==PurifyChamber::NUMSETS-1) ? 0 : @sprites["setview"].set+1
           pbPlayCursorSE()
           return [1,nextset]

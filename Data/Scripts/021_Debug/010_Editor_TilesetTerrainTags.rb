@@ -153,11 +153,11 @@ class PokemonTilesetScene
         update_cursor_position(-1, 0)
       elsif Input.repeat?(Input::RIGHT)
         update_cursor_position(1, 0)
-      elsif Input.repeat?(Input::L)
+      elsif Input.repeat?(Input::JUMPUP)
         update_cursor_position(0, -Graphics.height / TILE_SIZE)
-      elsif Input.repeat?(Input::R)
+      elsif Input.repeat?(Input::JUMPDOWN)
         update_cursor_position(0, Graphics.height / TILE_SIZE)
-      elsif Input.trigger?(Input::SPECIAL)
+      elsif Input.trigger?(Input::ACTION)
         commands = [
            _INTL("Go to bottom"),
            _INTL("Go to top"),

@@ -355,7 +355,7 @@ class PokemonBag_Scene
           pbRefresh
         end
         if itemwindow.sorting
-          if Input.trigger?(Input::SPECIAL) ||
+          if Input.trigger?(Input::ACTION) ||
              Input.trigger?(Input::USE)
             itemwindow.sorting = false
             pbPlayDecisionSE
@@ -405,7 +405,7 @@ class PokemonBag_Scene
               pbPlayCursorSE
               pbRefresh
             end
-#          elsif Input.trigger?(Input::Z)   # Register/unregister selected item
+#          elsif Input.trigger?(Input::SPECIAL)   # Register/unregister selected item
 #            if !@choosing && itemwindow.index<thispocket.length
 #              if @bag.pbIsRegistered?(itemwindow.item)
 #                @bag.pbUnregisterItem(itemwindow.item)
@@ -415,7 +415,7 @@ class PokemonBag_Scene
 #              pbPlayDecisionSE
 #              pbRefresh
 #            end
-          elsif Input.trigger?(Input::SPECIAL)   # Start switching the selected item
+          elsif Input.trigger?(Input::ACTION)   # Start switching the selected item
             if !@choosing
               if thispocket.length>1 && itemwindow.index<thispocket.length &&
                  !Settings::BAG_POCKET_AUTO_SORT[itemwindow.pocket]

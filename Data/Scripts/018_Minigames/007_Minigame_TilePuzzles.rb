@@ -537,8 +537,8 @@ class TilePuzzleScene
         end
       elsif (@game==1 || @game==2) && Input.trigger?(Input::USE)
         pbGrabTile(@sprites["cursor"].position)
-      elsif (@game==2 && Input.trigger?(Input::SPECIAL)) ||
-            (@game==5 && Input.trigger?(Input::SPECIAL)) ||
+      elsif (@game==2 && Input.trigger?(Input::ACTION)) ||
+            (@game==5 && Input.trigger?(Input::ACTION)) ||
             (@game==7 && Input.trigger?(Input::USE))
         pbRotateTile(@sprites["cursor"].position)
       elsif Input.trigger?(Input::BACK)

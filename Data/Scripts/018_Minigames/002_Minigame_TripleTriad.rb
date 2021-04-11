@@ -428,7 +428,7 @@ class TriadScene
       elsif Input.trigger?(Input::USE)
         pbPlayDecisionSE
         break
-      elsif Input.trigger?(Input::SPECIAL) && @battle.openHand
+      elsif Input.trigger?(Input::ACTION) && @battle.openHand
         pbPlayDecisionSE
         pbViewOpponentCards(numCards)
         @sprites["helpwindow"].text = _INTL("Choose a card, or check opponent with Z.")

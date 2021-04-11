@@ -561,7 +561,7 @@ class MiningGameScene
           pbSEPlay("Mining cursor")
           @sprites["cursor"].position+=1
         end
-      elsif Input.trigger?(Input::SPECIAL)   # Change tool mode
+      elsif Input.trigger?(Input::ACTION)   # Change tool mode
         pbSEPlay("Mining tool change")
         newmode=(@sprites["cursor"].mode+1)%2
         @sprites["cursor"].mode=newmode

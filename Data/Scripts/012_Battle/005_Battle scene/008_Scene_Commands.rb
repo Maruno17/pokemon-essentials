@@ -119,13 +119,13 @@ class PokeBattle_Scene
         pbPlayCancelSE
         break if yield -1
         needRefresh = true
-      elsif Input.trigger?(Input::SPECIAL)   # Toggle Mega Evolution
+      elsif Input.trigger?(Input::ACTION)   # Toggle Mega Evolution
         if megaEvoPossible
           pbPlayDecisionSE
           break if yield -2
           needRefresh = true
         end
-      elsif Input.trigger?(Input::Z)   # Shift
+      elsif Input.trigger?(Input::SPECIAL)   # Shift
         if cw.shiftMode>0
           pbPlayDecisionSE
           break if yield -3

@@ -953,7 +953,7 @@ class PokemonPokedex_Scene
           pbPlayCursorSE if index!=oldindex
         end
       end
-      if Input.trigger?(Input::SPECIAL)
+      if Input.trigger?(Input::ACTION)
         index = -2
         pbPlayCursorSE if index!=oldindex
       elsif Input.trigger?(Input::BACK)
@@ -1068,7 +1068,7 @@ class PokemonPokedex_Scene
         elsif index==7 || index==8; index += 1
         end
         pbPlayCursorSE if index!=oldindex
-      elsif Input.trigger?(Input::SPECIAL)
+      elsif Input.trigger?(Input::ACTION)
         index = 8
         pbPlayCursorSE if index!=oldindex
       elsif Input.trigger?(Input::BACK)
@@ -1161,7 +1161,7 @@ class PokemonPokedex_Scene
           $PokemonGlobal.pokedexIndex[pbGetSavePositionIndex] = @sprites["pokedex"].index if !@searchResults
           pbRefresh
         end
-        if Input.trigger?(Input::SPECIAL)
+        if Input.trigger?(Input::ACTION)
           pbPlayDecisionSE
           @sprites["pokedex"].active = false
           pbDexSearch

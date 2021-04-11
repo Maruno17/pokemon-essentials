@@ -47,7 +47,6 @@ def pbPrintException(e)
   errorlogline.sub!(pbGetUserName, "USERNAME")
   errorlogline = "\r\n" + errorlogline if errorlogline.length > 20
   errorlogline.gsub!("/", "\\") if System.platform[/Windows/]
-
   print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl after closing this message to copy it to the clipboard.")
   # Give a ~500ms coyote time to start holding Control
   t = System.delta

@@ -18,18 +18,18 @@ SaveData.register_conversion(:v19_convert_PokemonSystem) do
   display_title 'Updating PokemonSystem class'
   to_all do |save_data|
     new_system = PokemonSystem.new
-    new_system.textspeed = save_data[:pokemon_system].textspeed || new_system.textspeed
+    new_system.textspeed   = save_data[:pokemon_system].textspeed || new_system.textspeed
     new_system.battlescene = save_data[:pokemon_system].battlescene || new_system.battlescene
     new_system.battlestyle = save_data[:pokemon_system].battlestyle || new_system.battlestyle
-    new_system.frame = save_data[:pokemon_system].frame || new_system.frame
-    new_system.textskin = save_data[:pokemon_system].textskin || new_system.textskin
-    new_system.font = save_data[:pokemon_system].font || new_system.font
-    new_system.screensize = save_data[:pokemon_system].screensize || new_system.screensize
-    new_system.language = save_data[:pokemon_system].language || new_system.language
-    new_system.runstyle = save_data[:pokemon_system].runstyle || new_system.runstyle
-    new_system.bgmvolume = save_data[:pokemon_system].bgmvolume || new_system.bgmvolume
-    new_system.sevolume = save_data[:pokemon_system].sevolume || new_system.sevolume
-    new_system.textinput = save_data[:pokemon_system].textinput || new_system.textinput
+    new_system.frame       = save_data[:pokemon_system].frame || new_system.frame
+    new_system.textskin    = save_data[:pokemon_system].textskin || new_system.textskin
+    new_system.font        = save_data[:pokemon_system].font || new_system.font
+    new_system.screensize  = save_data[:pokemon_system].screensize || new_system.screensize
+    new_system.language    = save_data[:pokemon_system].language || new_system.language
+    new_system.runstyle    = save_data[:pokemon_system].runstyle || new_system.runstyle
+    new_system.bgmvolume   = save_data[:pokemon_system].bgmvolume || new_system.bgmvolume
+    new_system.sevolume    = save_data[:pokemon_system].sevolume || new_system.sevolume
+    new_system.textinput   = save_data[:pokemon_system].textinput || new_system.textinput
     save_data[:pokemon_system] = new_system
   end
 end
@@ -66,6 +66,9 @@ SaveData.register_conversion(:v19_convert_global_metadata) do
         global.mailbox[i] = PokemonMail.convert(mail) if mail
       end
     end
+    global.phoneNumbers.each do |contact|
+      contact[1] = GameData::TrainerType.get(contact[1]) if contact && contact.length == 8
+    end
     if global.partner
       global.partner[0] = GameData::TrainerType.get(global.partner[0]).id
       global.partner[3].each_with_index do |pkmn, i|
@@ -78,15 +81,21 @@ SaveData.register_conversion(:v19_convert_global_metadata) do
       end
     end
     if global.roamPokemon
-      global.roamPokemon.each_with_index do |p, i|
-        global.roamPokemon[i] = PokeBattle_Pokemon.convert(p) if p
+      global.roamPokemon.each_with_index do |pkmn, i|
+        global.roamPokemon[i] = PokeBattle_Pokemon.convert(pkmn) if pkmn && pkmn != true
+      end
+    end
+    global.purifyChamber.sets.each do |set|
+      set.shadow = PokeBattle_Pokemon.convert(set.shadow) if set.shadow
+      set.list.each_with_index do |pkmn, i|
+        set.list[i] = PokeBattle_Pokemon.convert(pkmn) if pkmn
       end
     end
     if global.hallOfFame
       global.hallOfFame.each do |team|
         next if !team
-        team.each_with_index do |p, i|
-          team[i] = PokeBattle_Pokemon.convert(p) if p
+        team.each_with_index do |pkmn, i|
+          team[i] = PokeBattle_Pokemon.convert(pkmn) if pkmn
         end
       end
     end
@@ -115,7 +124,7 @@ SaveData.register_conversion(:v19_convert_bag) do
         end
         pocket.compact!
       end
-      self.registeredIndex
+      self.registeredIndex   # Just to ensure this data exists
       self.registeredItems.each_with_index do |item, i|
         next if !item
         if item == 0
@@ -130,8 +139,8 @@ SaveData.register_conversion(:v19_convert_bag) do
         end
       end
       self.registeredItems.compact!
-    end # bag.instance_eval
-  end # to_value
+    end   # bag.instance_eval
+  end   # to_value
 end
 
 SaveData.register_conversion(:v19_convert_storage) do
@@ -141,20 +150,31 @@ SaveData.register_conversion(:v19_convert_storage) do
     storage.instance_eval do
       for box in 0...self.maxBoxes
         for i in 0...self.maxPokemon(box)
-          next unless self[box, i]
-          self[box, i] = PokeBattle_Pokemon.convert(self[box, i])
+          self[box, i] = PokeBattle_Pokemon.convert(self[box, i]) if self[box, i]
         end
       end
-    end # storage.instance_eval
-  end # to_value
+      self.unlockedWallpapers   # Just to ensure this data exists
+    end   # storage.instance_eval
+  end   # to_value
 end
 
-# TODO: See if there are more conversions needed for this. There may not be.
 SaveData.register_conversion(:v19_convert_game_player) do
   essentials_version 19
   display_title 'Converting game player character'
   to_value :game_player do |game_player|
     game_player.width = 1
     game_player.height = 1
+    game_player.sprite_size = [Game_Map::TILE_WIDTH, Game_Map::TILE_HEIGHT]
+    game_player.pattern_surf ||= 0
+    game_player.lock_pattern ||= false
+    game_player.move_speed = game_player.move_speed
+  end
+end
+
+SaveData.register_conversion(:v19_convert_game_screen) do
+  essentials_version 19
+  display_title 'Converting game screen'
+  to_value :game_screen do |game_screen|
+    game_screen.weather(game_screen.weather_type, game_screen.weather_max)
   end
 end

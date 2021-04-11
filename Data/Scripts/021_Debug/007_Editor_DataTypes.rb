@@ -1478,7 +1478,7 @@ def pbPropertyList(title,data,properties,saveprompt=false)
         desc.text = properties[list.index][2]
         selectedmap = list.index
       end
-      if Input.trigger?(Input::SPECIAL)
+      if Input.trigger?(Input::ACTION)
         propobj = properties[selectedmap][1]
         if propobj!=ReadOnlyProperty && !propobj.is_a?(ReadOnlyProperty) &&
            pbConfirmMessage(_INTL("Reset the setting {1}?",properties[selectedmap][0]))

@@ -309,7 +309,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
           pbMessage(_INTL("No trainers were chosen, cannot start battle."))
           next
         elsif size1 < trainers.length
-          pbMessage(_INTL("Opposing side size is invalid. It should be at least {1}", trainers.length))
+          pbMessage(_INTL("Opposing side size is invalid. It should be at least {1}.", trainers.length))
           next
         elsif size1 > trainers.length && trainers[0][1].party_count == 1
           pbMessage(

@@ -1256,7 +1256,7 @@ class PokemonSummary_Scene
       Input.update
       pbUpdate
       dorefresh = false
-      if Input.trigger?(Input::SPECIAL)
+      if Input.trigger?(Input::ACTION)
         pbSEStop
         GameData::Species.play_cry_from_pokemon(@pokemon)
       elsif Input.trigger?(Input::BACK)

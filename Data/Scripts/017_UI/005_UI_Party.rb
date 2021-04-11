@@ -706,10 +706,10 @@ class PokemonParty_Scene
         end
       end
       cancelsprite = Settings::MAX_PARTY_SIZE + ((@multiselect) ? 1 : 0)
-      if Input.trigger?(Input::SPECIAL) && canswitch==1 && @activecmd!=cancelsprite
+      if Input.trigger?(Input::ACTION) && canswitch==1 && @activecmd!=cancelsprite
         pbPlayDecisionSE
         return [1,@activecmd]
-      elsif Input.trigger?(Input::SPECIAL) && canswitch==2
+      elsif Input.trigger?(Input::ACTION) && canswitch==2
         return -1
       elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE if !switching

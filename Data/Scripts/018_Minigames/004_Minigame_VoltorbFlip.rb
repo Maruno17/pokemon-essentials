@@ -394,7 +394,7 @@ class VoltorbFlip
         pbDisposeSpriteHash(@sprites)
         pbNewGame
       end
-    elsif Input.trigger?(Input::CTRL)
+    elsif Input.trigger?(Input::ACTION)
       pbPlayDecisionSE
       @sprites["cursor"].bitmap.clear
       if @cursor[0][3]==0 # If in normal mode
