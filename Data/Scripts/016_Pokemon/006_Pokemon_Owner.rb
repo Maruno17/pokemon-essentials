@@ -25,10 +25,10 @@ class Pokemon
     end
 
     # Returns a new Owner object populated with values taken from +trainer+.
-    # @param trainer [PlayerTrainer, NPCTrainer] trainer object to read data from
+    # @param trainer [Player, NPCTrainer] trainer object to read data from
     # @return [Owner] new Owner object
     def self.new_from_trainer(trainer)
-      validate trainer => [PlayerTrainer, NPCTrainer]
+      validate trainer => [Player, NPCTrainer]
       return new(trainer.id, trainer.name, trainer.gender, trainer.language)
     end
 

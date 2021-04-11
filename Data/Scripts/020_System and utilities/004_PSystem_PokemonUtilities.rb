@@ -53,8 +53,8 @@ def pbNicknameAndStore(pkmn)
     pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
     return
   end
-  $Trainer.set_seen(pkmn.species)
-  $Trainer.set_owned(pkmn.species)
+  $Trainer.pokedex.set_seen(pkmn.species)
+  $Trainer.pokedex.set_owned(pkmn.species)
   pbNickname(pkmn)
   pbStorePokemon(pkmn)
 end
@@ -73,16 +73,15 @@ def pbAddPokemon(pkmn, level = 1, see_form = true)
   species_name = pkmn.speciesName
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $Trainer.name, species_name))
   pbNicknameAndStore(pkmn)
-  pbSeenForm(pkmn) if see_form
+  $Trainer.pokedex.register(pkmn) if see_form
   return true
 end
 
 def pbAddPokemonSilent(pkmn, level = 1, see_form = true)
   return false if !pkmn || pbBoxesFull?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  $Trainer.set_seen(pkmn.species)
-  $Trainer.set_owned(pkmn.species)
-  pbSeenForm(pkmn) if see_form
+  $Trainer.pokedex.register(pkmn) if see_form
+  $Trainer.pokedex.set_owned(pkmn.species)
   pkmn.record_first_moves
   if $Trainer.party_full?
     $PokemonStorage.pbStoreCaught(pkmn)
@@ -101,16 +100,15 @@ def pbAddToParty(pkmn, level = 1, see_form = true)
   species_name = pkmn.speciesName
   pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $Trainer.name, species_name))
   pbNicknameAndStore(pkmn)
-  pbSeenForm(pkmn) if see_form
+  $Trainer.pokedex.register(pkmn) if see_form
   return true
 end
 
 def pbAddToPartySilent(pkmn, level = nil, see_form = true)
   return false if !pkmn || $Trainer.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  $Trainer.set_seen(pkmn.species)
-  $Trainer.set_owned(pkmn.species)
-  pbSeenForm(pkmn) if see_form
+  $Trainer.pokedex.register(pkmn) if see_form
+  $Trainer.pokedex.set_owned(pkmn.species)
   pkmn.record_first_moves
   $Trainer.party[$Trainer.party.length] = pkmn
   return true
@@ -131,9 +129,8 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
     pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon.\1", $Trainer.name))
   end
   pbStorePokemon(pkmn)
-  $Trainer.set_seen(pkmn.species)
-  $Trainer.set_owned(pkmn.species)
-  pbSeenForm(pkmn) if see_form
+  $Trainer.pokedex.register(pkmn) if see_form
+  $Trainer.pokedex.set_owned(pkmn.species)
   return true
 end
 
@@ -151,41 +148,6 @@ def pbGenerateEgg(pkmn, text = "")
 end
 alias pbAddEgg pbGenerateEgg
 alias pbGenEgg pbGenerateEgg
-
-#===============================================================================
-# Recording Pokémon forms as seen
-#===============================================================================
-def pbSeenForm(species, gender = 0, form = 0)
-  $Trainer.seen_forms   = {} if !$Trainer.seen_forms
-  $Trainer.last_seen_forms = {} if !$Trainer.last_seen_forms
-  if species.is_a?(Pokemon)
-    species_data = species.species_data
-    gender = species.gender
-  else
-    species_data = GameData::Species.get_species_form(species, form)
-  end
-  return if !species_data
-  species = species_data.species
-  gender = 0 if gender >= 2
-  form = species_data.form
-  if form != species_data.pokedex_form
-    species_data = GameData::Species.get_species_form(species, species_data.pokedex_form)
-    form = species_data.form
-  end
-  form = 0 if species_data.form_name.nil? || species_data.form_name.empty?
-  $Trainer.seen_forms[species] = [[], []] if !$Trainer.seen_forms[species]
-  $Trainer.seen_forms[species][gender][form] = true
-  $Trainer.last_seen_forms[species] = [] if !$Trainer.last_seen_forms[species]
-  $Trainer.last_seen_forms[species] = [gender, form] if $Trainer.last_seen_forms[species] == []
-end
-
-def pbUpdateLastSeenForm(pkmn)
-  $Trainer.last_seen_forms = {} if !$Trainer.last_seen_forms
-  species_data = pkmn.species_data
-  form = species_data.pokedex_form
-  form = 0 if species_data.form_name.nil? || species_data.form_name.empty?
-  $Trainer.last_seen_forms[pkmn.species] = [pkmn.gender, form]
-end
 
 #===============================================================================
 # Analyse Pokémon in the party

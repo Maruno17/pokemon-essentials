@@ -1,7 +1,7 @@
 #===============================================================================
 # Pokédex Regional Dexes list menu screen
 # * For choosing which region list to view. Only appears when there is more
-#   than one viable region list to choose from, and if
+#   than one accessible region list to choose from, and if
 #   Settings::USE_CURRENT_REGION_DEX is false.
 #===============================================================================
 class Window_DexesList < Window_CommandPokemon
@@ -94,29 +94,24 @@ class PokemonPokedexMenuScreen
     commands  = []
     commands2 = []
     dexnames = Settings.pokedex_names
-    for i in 0...$PokemonGlobal.pokedexViable.length
-      index = $PokemonGlobal.pokedexViable[i]
-      if dexnames[index]==nil
-        commands[i] = _INTL("Pokédex")
+    $Trainer.pokedex.accessible_dexes.each do |dex|
+      if dexnames[dex].nil?
+        commands.push(_INTL("Pokédex"))
+      elsif dexnames[dex].is_a?(Array)
+        commands.push(dexnames[dex][0])
       else
-        if dexnames[index].is_a?(Array)
-          commands[i] = dexnames[index][0]
-        else
-          commands[i] = dexnames[index]
-        end
+        commands.push(dexnames[dex])
       end
-      index = -1 if index >= $PokemonGlobal.pokedexUnlocked.length - 1
-      commands2[i] = [$Trainer.seen_count(index),
-                      $Trainer.owned_count(index),
-                      pbGetRegionalDexLength(index)]
+      commands2.push([$Trainer.pokedex.seen_count(dex),
+                      $Trainer.pokedex.owned_count(dex),
+                      pbGetRegionalDexLength(dex)])
     end
     commands.push(_INTL("Exit"))
     @scene.pbStartScene(commands,commands2)
     loop do
       cmd = @scene.pbScene
       break if cmd<0 || cmd>=commands2.length   # Cancel/Exit
-      $PokemonGlobal.pokedexDex = $PokemonGlobal.pokedexViable[cmd]
-      $PokemonGlobal.pokedexDex = -1 if $PokemonGlobal.pokedexDex==$PokemonGlobal.pokedexUnlocked.length-1
+      $PokemonGlobal.pokedexDex = $Trainer.pokedex.accessible_dexes[cmd]
       pbFadeOutIn {
         scene = PokemonPokedex_Scene.new
         screen = PokemonPokedexScreen.new(scene)

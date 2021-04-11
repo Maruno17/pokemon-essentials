@@ -42,20 +42,17 @@ module PokeBattle_BattleCommon
   # Register all caught Pokémon in the Pokédex, and store them.
   def pbRecordAndStoreCaughtPokemon
     @caughtPokemon.each do |pkmn|
-      pbSeenForm(pkmn)   # In case the form changed upon leaving battle
+      pbPlayer.pokedex.register(pkmn)   # In case the form changed upon leaving battle
       # Record the Pokémon's species as owned in the Pokédex
       if !pbPlayer.hasOwned?(pkmn.species)
-        pbPlayer.set_owned(pkmn.species)
-        if $Trainer.pokedex
+        pbPlayer.pokedex.set_owned(pkmn.species)
+        if $Trainer.has_pokedex
           pbDisplayPaused(_INTL("{1}'s data was added to the Pokédex.",pkmn.name))
           @scene.pbShowPokedex(pkmn.species)
         end
       end
       # Record a Shadow Pokémon's species as having been caught
-      if pkmn.shadowPokemon?
-        pbPlayer.owned_shadow = {} if !pbPlayer.owned_shadow
-        pbPlayer.owned_shadow[pkmn.species] = true
-      end
+      pbPlayer.pokedex.set_shadow_pokemon_owned(pkmn.species) if pkmn.shadowPokemon?
       # Store caught Pokémon
       pbStorePokemon(pkmn)
     end
@@ -194,7 +191,7 @@ module PokeBattle_BattleCommon
     # Critical capture check
     if Settings::ENABLE_CRITICAL_CAPTURES
       c = 0
-      numOwned = $Trainer.owned_count
+      numOwned = $Trainer.pokedex.owned_count
       if numOwned>600;    c = x*5/12
       elsif numOwned>450; c = x*4/12
       elsif numOwned>300; c = x*3/12

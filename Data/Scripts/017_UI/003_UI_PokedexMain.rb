@@ -284,10 +284,10 @@ class PokemonPokedex_Scene
   def pbGetPokedexRegion
     if Settings::USE_CURRENT_REGION_DEX
       region = pbGetCurrentRegion
-      region = -1 if region>=$PokemonGlobal.pokedexUnlocked.length-1
+      region = -1 if region >= $Trainer.pokedex.dexes_count - 1
       return region
     else
-      return $PokemonGlobal.pokedexDex   # National Dex -1, regional dexes 0 etc.
+      return $PokemonGlobal.pokedexDex   # National Dex -1, regional Dexes 0, 1, etc.
     end
   end
 
@@ -297,8 +297,8 @@ class PokemonPokedex_Scene
   def pbGetSavePositionIndex
     index = pbGetPokedexRegion
     if index==-1   # National Dex
-      index = $PokemonGlobal.pokedexUnlocked.length-1   # National Dex index comes
-    end                                                 # after regional Dex indices
+      index = $Trainer.pokedex.dexes_count - 1   # National Dex index comes
+    end                                          # after regional Dex indices
     return index
   end
 
@@ -385,7 +385,7 @@ class PokemonPokedex_Scene
     iconspecies = nil if !$Trainer.seen?(iconspecies)
     # Write various bits of text
     dexname = _INTL("Pokédex")
-    if $PokemonGlobal.pokedexUnlocked.length>1
+    if $Trainer.pokedex.dexes_count > 1
       thisdex = Settings.pokedex_names[pbGetSavePositionIndex]
       if thisdex!=nil
         dexname = (thisdex.is_a?(Array)) ? thisdex[0] : thisdex
@@ -400,9 +400,9 @@ class PokemonPokedex_Scene
       textpos.push([@dexlist.length.to_s,112,334,2,base,shadow])
     else
       textpos.push([_INTL("Seen:"),42,302,0,base,shadow])
-      textpos.push([$Trainer.seen_count(pbGetPokedexRegion).to_s,182,302,1,base,shadow])
+      textpos.push([$Trainer.pokedex.seen_count(pbGetPokedexRegion).to_s,182,302,1,base,shadow])
       textpos.push([_INTL("Owned:"),42,334,0,base,shadow])
-      textpos.push([$Trainer.owned_count(pbGetPokedexRegion).to_s,182,334,1,base,shadow])
+      textpos.push([$Trainer.pokedex.owned_count(pbGetPokedexRegion).to_s,182,334,1,base,shadow])
     end
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
@@ -690,10 +690,7 @@ class PokemonPokedex_Scene
   end
 
   def setIconBitmap(species)
-    $Trainer.last_seen_forms = {} if !$Trainer.last_seen_forms
-    $Trainer.last_seen_forms[species] = [] if !$Trainer.last_seen_forms[species]
-    gender = $Trainer.last_seen_forms[species][0] || 0
-    form   = $Trainer.last_seen_forms[species][1] || 0
+    gender, form = $Trainer.pokedex.last_form_seen(species)
     @sprites["icon"].setSpeciesBitmap(species, gender, form)
   end
 

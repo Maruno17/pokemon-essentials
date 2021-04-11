@@ -38,9 +38,25 @@ SaveData.register_conversion(:v19_convert_player) do
   essentials_version 19
   display_title 'Converting player trainer class'
   to_all do |save_data|
-    next if save_data[:player].is_a?(PlayerTrainer)
+    next if save_data[:player].is_a?(Player)
     # Conversion of the party is handled in PokeBattle_Trainer.convert
     save_data[:player] = PokeBattle_Trainer.convert(save_data[:player])
+  end
+end
+
+SaveData.register_conversion(:v19_move_global_data_to_player) do
+  essentials_version 19
+  display_title 'Moving some Global Metadata data to Player class'
+  to_all do |save_data|
+    global = save_data[:global_metadata]
+    player = save_data[:player]
+    global.pokedexUnlocked.each_with_index do |value, i|
+      if value
+        player.pokedex.unlock(i)
+      else
+        player.pokedex.lock(i)
+      end
+    end
   end
 end
 
@@ -175,6 +191,6 @@ SaveData.register_conversion(:v19_convert_game_screen) do
   essentials_version 19
   display_title 'Converting game screen'
   to_value :game_screen do |game_screen|
-    game_screen.weather(game_screen.weather_type, game_screen.weather_max)
+    game_screen.weather(game_screen.weather_type, game_screen.weather_max, 0)
   end
 end

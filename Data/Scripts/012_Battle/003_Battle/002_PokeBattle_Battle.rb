@@ -115,7 +115,7 @@ class PokeBattle_Battle
     @caughtPokemon     = []
     player   = [player] if !player.nil? && !player.is_a?(Array)
     opponent = [opponent] if !opponent.nil? && !opponent.is_a?(Array)
-    @player            = player     # Array of PlayerTrainer/NPCTrainer objects, or nil
+    @player            = player     # Array of Player/NPCTrainer objects, or nil
     @opponent          = opponent   # Array of NPCTrainer objects, or nil
     @items             = nil
     @endSpeeches       = []
@@ -622,8 +622,7 @@ class PokeBattle_Battle
 
   def pbSetSeen(battler)
     return if !battler || !@internalBattle
-    pbPlayer.set_seen(battler.displaySpecies)
-    pbSeenForm(battler.displaySpecies,battler.displayGender,battler.displayForm)
+    pbPlayer.pokedex.register(battler.displaySpecies,battler.displayGender,battler.displayForm)
   end
 
   def nextPickupUse

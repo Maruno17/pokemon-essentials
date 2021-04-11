@@ -56,7 +56,7 @@ class PokemonTrainerCard_Scene
        [_INTL("Money"),34,106,0,baseColor,shadowColor],
        [_INTL("${1}",$Trainer.money.to_s_formatted),302,106,1,baseColor,shadowColor],
        [_INTL("Pokédex"),34,154,0,baseColor,shadowColor],
-       [sprintf("%d/%d",$Trainer.owned_count,$Trainer.seen_count),302,154,1,baseColor,shadowColor],
+       [sprintf("%d/%d",$Trainer.pokedex.owned_count,$Trainer.pokedex.seen_count),302,154,1,baseColor,shadowColor],
        [_INTL("Time"),34,202,0,baseColor,shadowColor],
        [time,302,202,1,baseColor,shadowColor],
        [_INTL("Started"),34,250,0,baseColor,shadowColor],

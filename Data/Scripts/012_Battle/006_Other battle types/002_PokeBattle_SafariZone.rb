@@ -421,8 +421,7 @@ class PokeBattle_SafariZone
   def pbStartBattle
     begin
       pkmn = @party2[0]
-      self.pbPlayer.set_seen(pkmn.species)
-      pbSeenForm(pkmn)
+      self.pbPlayer.pokedex.register(pkmn)
       @scene.pbStartBattle(self)
       pbDisplayPaused(_INTL("Wild {1} appeared!",pkmn.name))
       @scene.pbSafariStart

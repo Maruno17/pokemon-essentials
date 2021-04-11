@@ -146,15 +146,15 @@ module BattlePlayerHelper
     return nil if !trainer
     if trainer.length>1
       ret = []
-      ret[0]=PlayerTrainer.new(trainer[0][1],trainer[0][0])
+      ret[0]=Player.new(trainer[0][1],trainer[0][0])
       ret[0].id     = trainer[0][2]
       ret[0].badges = trainer[0][3]
-      ret[1] = PlayerTrainer.new(trainer[1][1],trainer[1][0])
+      ret[1] = Player.new(trainer[1][1],trainer[1][0])
       ret[1].id     = trainer[1][2]
       ret[1].badges = trainer[1][3]
       return ret
     else
-      ret = PlayerTrainer.new(trainer[0][1],trainer[0][0])
+      ret = Player.new(trainer[0][1],trainer[0][0])
       ret.id     = trainer[0][2]
       ret.badges = trainer[0][3]
       return ret

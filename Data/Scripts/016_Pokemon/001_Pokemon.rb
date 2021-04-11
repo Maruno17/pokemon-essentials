@@ -139,7 +139,7 @@ class Pokemon
     yield if block_given?
     MultipleForms.call("onSetForm", self, value, oldForm)
     calc_stats
-    pbSeenForm(self)
+    $Trainer.pokedex.register(self)
   end
 
   def setForm(value)
@@ -781,7 +781,7 @@ class Pokemon
     @owner = new_owner
   end
 
-  # @param trainer [PlayerTrainer, NPCTrainer] the trainer to compare to the original trainer
+  # @param trainer [Player, NPCTrainer] the trainer to compare to the original trainer
   # @return [Boolean] whether the given trainer is not this Pokémon's original trainer
   def foreign?(trainer)
     return @owner.id != trainer.id || @owner.name != trainer.name
@@ -1045,7 +1045,7 @@ class Pokemon
   # Creates a new Pokémon object.
   # @param species [Symbol, String, Integer] Pokémon species
   # @param level [Integer] Pokémon level
-  # @param owner [Owner, PlayerTrainer, NPCTrainer] Pokémon owner (the player by default)
+  # @param owner [Owner, Player, NPCTrainer] Pokémon owner (the player by default)
   # @param withMoves [TrueClass, FalseClass] whether the Pokémon should have moves
   # @param rechech_form [TrueClass, FalseClass] whether to auto-check the form
   def initialize(species, level, owner = $Trainer, withMoves = true, recheck_form = true)
@@ -1089,7 +1089,7 @@ class Pokemon
     end
     if owner.is_a?(Owner)
       @owner = owner
-    elsif owner.is_a?(PlayerTrainer) || owner.is_a?(NPCTrainer)
+    elsif owner.is_a?(Player) || owner.is_a?(NPCTrainer)
       @owner = Owner.new_from_trainer(owner)
     else
       @owner = Owner.new(0, '', 2, 2)

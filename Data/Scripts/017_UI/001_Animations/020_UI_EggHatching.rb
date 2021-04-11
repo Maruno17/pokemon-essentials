@@ -196,9 +196,8 @@ def pbHatch(pokemon)
   pokemon.timeEggHatched = pbGetTimeNow
   pokemon.obtain_method  = 1   # hatched from egg
   pokemon.hatched_map    = $game_map.map_id
-  $Trainer.set_seen(pokemon.species)
-  $Trainer.set_owned(pokemon.species)
-  pbSeenForm(pokemon)
+  $Trainer.pokedex.register(pokemon)
+  $Trainer.pokedex.set_owned(pokemon.species)
   pokemon.record_first_moves
   if !pbHatchAnimation(pokemon)
     pbMessage(_INTL("Huh?\1"))

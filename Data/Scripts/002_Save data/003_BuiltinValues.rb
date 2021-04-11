@@ -1,7 +1,7 @@
 # Contains the save values defined in Essentials by default.
 
 SaveData.register(:player) do
-  ensure_class :PlayerTrainer
+  ensure_class :Player
   save_value { $Trainer }
   load_value { |value| $Trainer = value }
   from_old_format { |old_format| old_format[0] }

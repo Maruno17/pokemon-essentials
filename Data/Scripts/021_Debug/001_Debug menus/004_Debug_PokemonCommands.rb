@@ -754,7 +754,7 @@ PokemonDebugMenuCommands.register("setgender", {
         when 2   # Reset
           pkmn.gender = nil
         end
-        pbSeenForm(pkmn) if !settingUpBattle
+        $Trainer.pokedex.register(pkmn) if !settingUpBattle
         screen.pbRefreshSingle(pkmnid)
       end
     end
@@ -782,7 +782,7 @@ PokemonDebugMenuCommands.register("speciesform", {
         if species && species != pkmn.species
           pkmn.species = species
           pkmn.calc_stats
-          pbSeenForm(pkmn) if !settingUpBattle
+          $Trainer.pokedex.register(pkmn) if !settingUpBattle
           screen.pbRefreshSingle(pkmnid)
         end
       when 1   # Set form
@@ -809,7 +809,7 @@ PokemonDebugMenuCommands.register("speciesform", {
               pkmn.forced_form = f
             end
             pkmn.form = f
-            pbSeenForm(pkmn) if !settingUpBattle
+            $Trainer.pokedex.register(pkmn) if !settingUpBattle
             screen.pbRefreshSingle(pkmnid)
           end
         end

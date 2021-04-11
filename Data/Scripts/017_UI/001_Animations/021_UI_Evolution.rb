@@ -588,9 +588,8 @@ class PokemonEvolutionScene
     @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
     @pokemon.calc_stats
     # See and own evolved species
-    $Trainer.set_seen(@newspecies)
-    $Trainer.set_owned(@newspecies)
-    pbSeenForm(@pokemon)
+    $Trainer.pokedex.register(@pokemon)
+    $Trainer.pokedex.set_owned(@newspecies)
     # Learn moves upon evolution for evolved species
     movelist = @pokemon.getMoveList
     for i in movelist
@@ -616,8 +615,7 @@ class PokemonEvolutionScene
     # Add duplicate Pokémon to party
     $Trainer.party.push(new_pkmn)
     # See and own duplicate Pokémon
-    $Trainer.set_seen(new_species)
-    $Trainer.set_owned(new_species)
-    pbSeenForm(new_pkmn)
+    $Trainer.pokedex.register(new_pkmn)
+    $Trainer.pokedex.set_owned(new_species)
   end
 end

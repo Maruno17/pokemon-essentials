@@ -281,7 +281,7 @@ class HallOfFame_Scene
     lefttext+=_INTL("IDNo.<r>{1}<br>",pubid)
     lefttext+=_ISPRINTF("Time<r>{1:02d}:{2:02d}<br>",hour,min)
     lefttext+=_INTL("Pokédex<r>{1}/{2}<br>",
-        $Trainer.owned_count,$Trainer.seen_count)
+        $Trainer.pokedex.owned_count,$Trainer.pokedex.seen_count)
     @sprites["messagebox"]=Window_AdvancedTextPokemon.new(lefttext)
     @sprites["messagebox"].viewport=@viewport
     @sprites["messagebox"].width=192 if @sprites["messagebox"].width<192

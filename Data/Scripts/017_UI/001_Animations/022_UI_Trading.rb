@@ -228,9 +228,8 @@ def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
   yourPokemon.obtain_method = 2   # traded
   yourPokemon.reset_moves if resetmoves
   yourPokemon.record_first_moves
-  $Trainer.set_seen(yourPokemon.species)
-  $Trainer.set_owned(yourPokemon.species)
-  pbSeenForm(yourPokemon)
+  $Trainer.pokedex.register(yourPokemon)
+  $Trainer.pokedex.set_owned(yourPokemon.species)
   pbFadeOutInWithMusic {
     evo = PokemonTrade_Scene.new
     evo.pbStartScreen(myPokemon,yourPokemon,$Trainer.name,opponent.name)

@@ -73,7 +73,7 @@ def pbPlayTrainerIntroME(trainer_type)
   pbMEPlay(bgm)
 end
 
-def pbGetTrainerBattleBGM(trainer)   # can be a PlayerTrainer, NPCTrainer or an array of them
+def pbGetTrainerBattleBGM(trainer)   # can be a Player, NPCTrainer or an array of them
   if $PokemonGlobal.nextBattleBGM
     return $PokemonGlobal.nextBattleBGM.clone
   end
@@ -123,7 +123,7 @@ def pbGetTrainerBattleBGMFromType(trainertype)
   return ret
 end
 
-def pbGetTrainerVictoryME(trainer)   # can be a PlayerTrainer, NPCTrainer or an array of them
+def pbGetTrainerVictoryME(trainer)   # can be a Player, NPCTrainer or an array of them
   if $PokemonGlobal.nextBattleME
     return $PokemonGlobal.nextBattleME.clone
   end
