@@ -36,10 +36,10 @@ module RPG
       cached = true
       ret = fromCache(path)
       if !ret
-        if filename != ""
-          ret = BitmapWrapper.new(path)
-        else
+        if filename == ""
           ret = BitmapWrapper.new(32, 32)
+        else
+          ret = BitmapWrapper.new(path)
         end
         @cache[path] = ret
         cached = false
@@ -84,6 +84,20 @@ module RPG
 
     def self.transition(filename)
       self.load_bitmap("Graphics/Transitions/", filename)
+    end
+
+    def self.addRef(folder_name, filename = "", hue = 0)
+      path = folder_name + filename
+      ret = fromCache(path)
+      if hue > 0
+        key = [path, hue]
+        ret2 = fromCache(key)
+        if ret2
+          ret2.addRef
+          return
+        end
+      end
+      ret.addRef if ret
     end
   end
 end

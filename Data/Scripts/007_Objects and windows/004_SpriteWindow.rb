@@ -837,6 +837,7 @@ class SpriteWindow_Base < SpriteWindow
     @curframe=MessageConfig.pbGetSystemFrame()
     @curfont=MessageConfig.pbGetSystemFontName()
     @sysframe=AnimatedBitmap.new(@curframe)
+    RPG::Cache.addRef(@curframe) if @curframe && !@curframe.empty?
     @customskin=nil
     __setWindowskin(@sysframe.bitmap)
     __resolveSystemFrame()
@@ -869,6 +870,7 @@ class SpriteWindow_Base < SpriteWindow
     resolvedName=pbResolveBitmap(skin)
     return if !resolvedName || resolvedName==""
     @customskin=AnimatedBitmap.new(resolvedName)
+    RPG::Cache.addRef(resolvedName)
     __setWindowskin(@customskin.bitmap)
     if self.skinformat==1
       skinbase=resolvedName.sub(/\.[^\.\/\\]+$/,"")
@@ -903,6 +905,7 @@ class SpriteWindow_Base < SpriteWindow
       if @sysframe && !@customskin
         @sysframe.dispose if @sysframe
         @sysframe=AnimatedBitmap.new(@curframe)
+        RPG::Cache.addRef(@curframe) if @curframe && !@curframe.empty?
         @resolvedFrame=nil
         __setWindowskin(@sysframe.bitmap)
         __resolveSystemFrame()

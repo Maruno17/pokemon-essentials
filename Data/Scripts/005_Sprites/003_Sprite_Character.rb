@@ -122,6 +122,7 @@ class Sprite_Character < RPG::Sprite
         @charbitmap.dispose if @charbitmap
         @charbitmap = AnimatedBitmap.new(
            "Graphics/Characters/"+@character_name,@character_hue)
+        RPG::Cache.addRef("Graphics/Characters/", @character_name, @character_hue) if @character == $game_player
         @charbitmapAnimated = true
         @bushbitmap.dispose if @bushbitmap
         @bushbitmap = nil
