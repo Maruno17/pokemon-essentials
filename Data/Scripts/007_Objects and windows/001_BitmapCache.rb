@@ -86,30 +86,31 @@ module RPG
       self.load_bitmap("Graphics/Transitions/", filename)
     end
 
-    def self.addRef(folder_name, filename = "", hue = 0)
+    def self.retain(folder_name, filename = "", hue = 0)
       path = folder_name + filename
       ret = fromCache(path)
       if hue > 0
         key = [path, hue]
         ret2 = fromCache(key)
         if ret2
-          ret2.addRef
+          ret2.never_dispose = true
           return
         end
       end
-      ret.addRef if ret
+      ret.never_dispose = true if ret
     end
   end
 end
 
 
 class BitmapWrapper < Bitmap
-  attr_reader :refcount
+  attr_reader   :refcount
+  attr_accessor :never_dispose
 
   def dispose
     return if self.disposed?
     @refcount -= 1
-    super if @refcount <= 0
+    super if @refcount <= 0 && !never_dispose
   end
 
   def initialize(*arg)

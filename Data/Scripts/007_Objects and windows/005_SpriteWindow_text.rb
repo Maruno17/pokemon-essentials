@@ -964,8 +964,8 @@ module UpDownArrowMixin
   def initUpDownArrow
     @uparrow   = AnimatedSprite.create("Graphics/Pictures/uparrow",8,2,self.viewport)
     @downarrow = AnimatedSprite.create("Graphics/Pictures/downarrow",8,2,self.viewport)
-    RPG::Cache.addRef("Graphics/Pictures/uparrow")
-    RPG::Cache.addRef("Graphics/Pictures/downarrow")
+    RPG::Cache.retain("Graphics/Pictures/uparrow")
+    RPG::Cache.retain("Graphics/Pictures/downarrow")
     @uparrow.z   = 99998
     @downarrow.z = 99998
     @uparrow.visible   = false
@@ -1048,10 +1048,10 @@ class Window_DrawableCommand < SpriteWindow_SelectableEx
     self.viewport = viewport if viewport
     if isDarkWindowskin(self.windowskin)
       @selarrow = AnimatedBitmap.new("Graphics/Pictures/selarrow_white")
-      RPG::Cache.addRef("Graphics/Pictures/selarrow_white")
+      RPG::Cache.retain("Graphics/Pictures/selarrow_white")
     else
       @selarrow = AnimatedBitmap.new("Graphics/Pictures/selarrow")
-      RPG::Cache.addRef("Graphics/Pictures/selarrow")
+      RPG::Cache.retain("Graphics/Pictures/selarrow")
     end
     @index = 0
     colors = getDefaultTextColors(self.windowskin)
