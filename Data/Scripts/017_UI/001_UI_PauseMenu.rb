@@ -113,11 +113,13 @@ class PokemonPauseMenu
     cmdDebug    = -1
     cmdQuit     = -1
     cmdEndGame  = -1
-    commands[cmdPokedex = commands.length]  = _INTL("Pokédex") if $Trainer.has_pokedex && $Trainer.pokedex.accessible_dexes_count > 0
-    commands[cmdPokemon = commands.length]  = _INTL("Pokémon") if $Trainer.party.length>0
-    commands[cmdBag = commands.length]      = _INTL("Bag") if !pbInBugContest?
-    commands[cmdPokegear = commands.length] = _INTL("Pokégear") if $Trainer.pokegear
-    commands[cmdTrainer = commands.length]  = $Trainer.name
+    if $Trainer.has_pokedex && $Trainer.pokedex.accessible_dexes.length > 0
+      commands[cmdPokedex = commands.length] = _INTL("Pokédex")
+    end
+    commands[cmdPokemon = commands.length]   = _INTL("Pokémon") if $Trainer.party_count > 0
+    commands[cmdBag = commands.length]       = _INTL("Bag") if !pbInBugContest?
+    commands[cmdPokegear = commands.length]  = _INTL("Pokégear") if $Trainer.has_pokegear
+    commands[cmdTrainer = commands.length]   = $Trainer.name
     if pbInSafari?
       if Settings::SAFARI_STEPS <= 0
         @scene.pbShowInfo(_INTL("Balls: {1}",pbSafariState.ballcount))
@@ -125,7 +127,7 @@ class PokemonPauseMenu
         @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}",
            pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
       end
-      commands[cmdQuit = commands.length]   = _INTL("Quit")
+      commands[cmdQuit = commands.length]    = _INTL("Quit")
     elsif pbInBugContest?
       if pbBugContestState.lastPokemon
         @scene.pbShowInfo(_INTL("Caught: {1}\nLevel: {2}\nBalls: {3}",
@@ -135,13 +137,13 @@ class PokemonPauseMenu
       else
         @scene.pbShowInfo(_INTL("Caught: None\nBalls: {1}",pbBugContestState.ballcount))
       end
-      commands[cmdQuit = commands.length]   = _INTL("Quit Contest")
+      commands[cmdQuit = commands.length]    = _INTL("Quit Contest")
     else
-      commands[cmdSave = commands.length]   = _INTL("Save") if $game_system && !$game_system.save_disabled
+      commands[cmdSave = commands.length]    = _INTL("Save") if $game_system && !$game_system.save_disabled
     end
-    commands[cmdOption = commands.length]   = _INTL("Options")
-    commands[cmdDebug = commands.length]    = _INTL("Debug") if $DEBUG
-    commands[cmdEndGame = commands.length]  = _INTL("Quit Game")
+    commands[cmdOption = commands.length]    = _INTL("Options")
+    commands[cmdDebug = commands.length]     = _INTL("Debug") if $DEBUG
+    commands[cmdEndGame = commands.length]   = _INTL("Quit Game")
     loop do
       command = @scene.pbShowCommands(commands)
       if cmdPokedex>=0 && command==cmdPokedex
@@ -154,7 +156,7 @@ class PokemonPauseMenu
             @scene.pbRefresh
           }
         else
-          if $Trainer.pokedex.accessible_dexes_count == 1
+          if $Trainer.pokedex.accessible_dexes.length == 1
             $PokemonGlobal.pokedexDex = $Trainer.pokedex.accessible_dexes[0]
             pbFadeOutIn {
               scene = PokemonPokedex_Scene.new

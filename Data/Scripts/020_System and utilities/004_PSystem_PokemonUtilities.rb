@@ -26,7 +26,7 @@ def pbStorePokemon(pkmn)
     curboxname = $PokemonStorage[oldcurbox].name
     boxname = $PokemonStorage[storedbox].name
     creator = nil
-    creator = pbGetStorageCreator if $PokemonGlobal.seenStorageCreator
+    creator = pbGetStorageCreator if $Trainer.seen_storage_creator
     if storedbox != oldcurbox
       if creator
         pbMessage(_INTL("Box \"{1}\" on {2}'s PC was full.\1", curboxname, creator))

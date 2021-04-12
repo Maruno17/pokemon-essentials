@@ -52,6 +52,10 @@ module Settings
   MAX_MONEY            = 999_999
   # The maximum number of Game Corner coins the player can have.
   MAX_COINS            = 99_999
+  # The maximum number of Battle Points the player can have.
+  MAX_BATTLE_POINTS    = 9_999
+  # The maximum amount of soot the player can have.
+  MAX_SOOT             = 9_999
   # The maximum length, in characters, that the player's name can be.
   MAX_PLAYER_NAME_SIZE = 10
   # The maximum number of Pokémon that can be in the party.

@@ -108,11 +108,11 @@ class VoltorbFlip
     @sprites["curtainL"].visible=false
     @sprites["curtainR"].visible=false
     @sprites["curtain"].opacity=100
-    if $PokemonGlobal.coins >= Settings::MAX_COINS
+    if $Trainer.coins >= Settings::MAX_COINS
       pbMessage(_INTL("You've gathered {1} Coins. You cannot gather any more.", Settings::MAX_COINS.to_s_formatted))
-      $PokemonGlobal.coins = Settings::MAX_COINS   # As a precaution
+      $Trainer.coins = Settings::MAX_COINS   # As a precaution
       @quit=true
-#    elsif !pbConfirmMessage(_INTL("Play Voltorb Flip Lv. {1}?",@level)) && $PokemonGlobal.coins<99999
+#    elsif !pbConfirmMessage(_INTL("Play Voltorb Flip Lv. {1}?",@level)) && $Trainer.coins<Settings::MAX_COINS
 #      @quit=true
     else
       @sprites["curtain"].opacity=0
@@ -370,7 +370,7 @@ class VoltorbFlip
         # Update level text
         @sprites["level"].bitmap.clear
         pbDrawShadowText(@sprites["level"].bitmap,8,150,118,28,_INTL("Level {1}",@level.to_s),Color.new(60,60,60),Color.new(150,190,170),1)
-        $PokemonGlobal.coins+=@points
+        $Trainer.coins+=@points
         @points=0
         pbUpdateCoins
         @sprites["curtain"].opacity=0
@@ -414,7 +414,7 @@ class VoltorbFlip
         end
       elsif pbConfirmMessage(_INTL("If you quit now, you will recieve {1} Coin(s). Will you quit?",@points.to_s_formatted))
         pbMessage(_INTL("{1} received {2} Coin(s)!",$Trainer.name,@points.to_s_formatted))
-        $PokemonGlobal.coins+=@points
+        $Trainer.coins+=@points
         @points=0
         pbUpdateCoins
         @sprites["curtain"].opacity=0
@@ -479,7 +479,7 @@ class VoltorbFlip
   def pbUpdateCoins
     # Update coins display
     @sprites["totalCoins"].bitmap.clear
-    pbCreateCoins($PokemonGlobal.coins,44)
+    pbCreateCoins($Trainer.coins,44)
     pbDrawImagePositions(@sprites["totalCoins"].bitmap,@coins)
     # Update points display
     @sprites["currentCoins"].bitmap.clear
@@ -616,7 +616,7 @@ end
 def pbVoltorbFlip
   if GameData::Item.exists?(:COINCASE) && !$PokemonBag.pbHasItem?(:COINCASE)
     pbMessage(_INTL("You can't play unless you have a Coin Case."))
-  elsif $PokemonGlobal.coins == Settings::MAX_COINS
+  elsif $Trainer.coins == Settings::MAX_COINS
     pbMessage(_INTL("Your Coin Case is full!"))
   else
     scene=VoltorbFlip.new

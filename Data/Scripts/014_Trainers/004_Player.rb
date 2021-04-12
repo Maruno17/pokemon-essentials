@@ -2,15 +2,32 @@
 # Trainer class for the player
 #===============================================================================
 class Player < Trainer
+  # @param value [Integer] new character ID
   attr_writer   :character_ID
+  # @return [Integer] the player's outfit
   attr_accessor :outfit
+  # @return [Array<Boolean>] the player's Gym Badges (true if owned)
   attr_accessor :badges
+  # @return [Integer] the player's money
   attr_reader   :money
+  # @return [Integer] the player's Game Corner coins
+  attr_reader   :coins
+  # @return [Integer] the player's battle points
+  attr_reader   :battle_points
+  # @return [Integer] the player's soot
+  attr_reader   :soot
+  # @return [Pokedex] the player's Pokédex
   attr_reader   :pokedex
+  # @return [Boolean] whether the Pokédex has been obtained
   attr_accessor :has_pokedex
-  attr_accessor :pokegear                # Whether the Pokégear was obtained
-  attr_accessor :mystery_gift_unlocked   # Whether MG can be used from load screen
-  attr_accessor :mystery_gifts           # Variable that stores downloaded MG data
+  # @return [Boolean] whether the Pokégear has been obtained
+  attr_accessor :has_pokegear
+  # @return [Boolean] whether the creator of the Pokémon Storage System has been seen
+  attr_accessor :seen_storage_creator
+  # @return [Boolean] whether Mystery Gift can be used from the load screen
+  attr_accessor :mystery_gift_unlocked
+  # @return [Array<Array>] downloaded Mystery Gift data
+  attr_accessor :mystery_gifts
 
   def inspect
     str = self.to_s.chop
@@ -19,32 +36,59 @@ class Player < Trainer
     return str
   end
 
+  # @return [Integer] the character ID of the player
   def character_ID
     @character_ID = $PokemonGlobal.playerID || 0 if !@character_ID
     return @character_ID
   end
 
+  # Sets the player's money. It can not exceed {Settings::MAX_MONEY}.
+  # @param value [Integer] new money value
   def money=(value)
+    validate value => Integer
     @money = value.clamp(0, Settings::MAX_MONEY)
   end
 
+  # Sets the player's coins amount. It can not exceed {Settings::MAX_COINS}.
+  # @param value [Integer] new coins value
+  def coins=(value)
+    validate value => Integer
+    @coins = value.clamp(0, Settings::MAX_COINS)
+  end
+
+  # Sets the player's Battle Points amount. It can not exceed
+  # {Settings::MAX_BATTLE_POINTS}.
+  # @param value [Integer] new Battle Points value
+  def battle_points=(value)
+    validate value => Integer
+    @battle_points = value.clamp(0, Settings::MAX_BATTLE_POINTS)
+  end
+
+  # Sets the player's soot amount. It can not exceed {Settings::MAX_SOOT}.
+  # @param value [Integer] new soot value
+  def soot=(value)
+    validate value => Integer
+    @soot = value.clamp(0, Settings::MAX_SOOT)
+  end
+
+  # @return [Integer] the number of Gym Badges owned by the player
   def badge_count
-    ret = 0
-    @badges.each { |b| ret += 1 if b }
-    return ret
+    return @badges.count { |badge| badge == true }
   end
 
   #=============================================================================
 
+  # (see Pokedex#seen?)
+  # Shorthand for +self.pokedex.seen?+.
   def seen?(species)
     return @pokedex.seen?(species)
   end
-  alias hasSeen? seen?
 
+  # (see Pokedex#owned?)
+  # Shorthand for +self.pokedex.owned?+.
   def owned?(species)
     return @pokedex.owned?(species)
   end
-  alias hasOwned? owned?
 
   #=============================================================================
 
@@ -54,9 +98,14 @@ class Player < Trainer
     @outfit                = 0
     @badges                = [false] * 8
     @money                 = Settings::INITIAL_MONEY
+    @coins                 = 0
+    @battle_points         = 0
+    @soot                  = 0
     @pokedex               = Pokedex.new
-    @pokegear              = false
     @has_pokedex           = false
+    @has_pokegear          = false
+    @has_running_shoes     = false
+    @seen_storage_creator  = false
     @mystery_gift_unlocked = false
     @mystery_gifts         = []
   end

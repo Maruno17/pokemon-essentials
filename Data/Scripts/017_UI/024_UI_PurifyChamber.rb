@@ -1,13 +1,56 @@
 #===============================================================================
 #
 #===============================================================================
+class Player < Trainer
+  attr_accessor :has_snag_machine
+  attr_accessor :seen_purify_chamber
+
+  alias __shadowPkmn__initialize initialize
+  def initialize(name, trainer_type)
+    __shadowPkmn__initialize(name, trainer_type)
+    @has_snag_machine    = false
+    @seen_purify_chamber = false
+  end
+end
+
 class PokemonGlobalMetadata
-  attr_writer   :purifyChamber
-  attr_accessor :seenPurifyChamber
+  attr_writer :purifyChamber
 
   def purifyChamber
     @purifyChamber = PurifyChamber.new() if !@purifyChamber
     return @purifyChamber
+  end
+
+  # @deprecated Use {Player#seen_purify_chamber} instead. This alias is slated to be removed in v20.
+  def seenPurifyChamber
+    Deprecation.warn_method('PokemonGlobalMetadata#seenPurifyChamber', 'v20', '$Trainer.seen_purify_chamber')
+    return (!@seenPurifyChamber.nil?) ? @seenPurifyChamber : $Trainer.seen_purify_chamber
+  end
+
+  # @deprecated Use {Player#seen_purify_chamber=} instead. This alias is slated to be removed in v20.
+  def seenPurifyChamber=(value)
+    Deprecation.warn_method('PokemonGlobalMetadata#seenPurifyChamber=', 'v20', '$Trainer.seen_purify_chamber=')
+    if value.nil?
+      @seenPurifyChamber = value   # For setting to nil by a save data conversion
+    else
+      $Trainer.seen_purify_chamber = value
+    end
+  end
+
+  # @deprecated Use {Player#has_snag_machine} instead. This alias is slated to be removed in v20.
+  def snagMachine
+    Deprecation.warn_method('PokemonGlobalMetadata#snagMachine', 'v20', '$Trainer.has_snag_machine')
+    return (!@snagMachine.nil?) ? @snagMachine : $Trainer.has_snag_machine
+  end
+
+  # @deprecated Use {Player#has_snag_machine=} instead. This alias is slated to be removed in v20.
+  def snagMachine=(value)
+    Deprecation.warn_method('PokemonGlobalMetadata#snagMachine=', 'v20', '$Trainer.has_snag_machine=')
+    if value.nil?
+      @snagMachine = value   # For setting to nil by a save data conversion
+    else
+      $Trainer.has_snag_machine = value
+    end
   end
 end
 
@@ -1285,7 +1328,7 @@ end
 #
 #===============================================================================
 def pbPurifyChamber
-  $PokemonGlobal.seenPurifyChamber = true
+  $Trainer.seen_purify_chamber = true
   pbFadeOutIn {
     scene = PurifyChamberScene.new
     screen = PurifyChamberScreen.new(scene)
@@ -1298,7 +1341,7 @@ end
 #===============================================================================
 class PurifyChamberPC
   def shouldShow?
-    return $PokemonGlobal.seenPurifyChamber
+    return $Trainer.seen_purify_chamber
   end
 
   def name

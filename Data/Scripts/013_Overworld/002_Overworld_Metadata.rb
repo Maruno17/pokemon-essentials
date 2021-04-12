@@ -9,20 +9,15 @@ class PokemonGlobalMetadata
   attr_accessor :diving
   attr_accessor :sliding
   attr_accessor :fishing
-  attr_accessor :runningShoes
   # Player data
   attr_accessor :startTime
   attr_accessor :stepcount
   attr_accessor :playerID
-  attr_accessor :coins
-  attr_accessor :sootsack
-  attr_accessor :seenStorageCreator
   attr_accessor :pcItemStorage
   attr_accessor :mailbox
   attr_accessor :phoneNumbers
   attr_accessor :phoneTime
   attr_accessor :partner
-  attr_accessor :snagMachine
   attr_accessor :creditsPlayed
   # Pokédex
   attr_accessor :pokedexUnlocked # Deprecated, replaced with Player::Pokedex#unlocked_dexes
@@ -68,20 +63,15 @@ class PokemonGlobalMetadata
     @diving               = false
     @sliding              = false
     @fishing              = false
-    @runningShoes         = false
     # Player data
     @startTime            = Time.now
     @stepcount            = 0
     @playerID             = -1
-    @coins                = 0
-    @sootsack             = 0
-    @seenStorageCreator   = false
     @pcItemStorage        = nil
     @mailbox              = nil
     @phoneNumbers         = []
     @phoneTime            = 0
     @partner              = nil
-    @snagMachine          = false
     @creditsPlayed        = false
     # Pokédex
     numRegions            = pbLoadRegionalDexes.length
@@ -122,6 +112,70 @@ class PokemonGlobalMetadata
     @pokerusTime          = nil
     # Save file
     @safesave             = false
+  end
+
+  # @deprecated Use {Player#coins} instead. This alias is slated to be removed in v20.
+  def coins
+    Deprecation.warn_method('PokemonGlobalMetadata#coins', 'v20', '$Trainer.coins')
+    return @coins || $Trainer.coins
+  end
+
+  # @deprecated Use {Player#coins=} instead. This alias is slated to be removed in v20.
+  def coins=(value)
+    Deprecation.warn_method('PokemonGlobalMetadata#coins=', 'v20', '$Trainer.coins=')
+    if value.nil?
+      @coins = value   # For setting to nil by a save data conversion
+    else
+      $Trainer.coins = value
+    end
+  end
+
+  # @deprecated Use {Player#soot} instead. This alias is slated to be removed in v20.
+  def sootsack
+    Deprecation.warn_method('PokemonGlobalMetadata#sootsack', 'v20', '$Trainer.soot')
+    return @sootsack || $Trainer.soot
+  end
+
+  # @deprecated Use {Player#soot=} instead. This alias is slated to be removed in v20.
+  def sootsack=(value)
+    Deprecation.warn_method('PokemonGlobalMetadata#sootsack=', 'v20', '$Trainer.soot=')
+    if value.nil?
+      @sootsack = value   # For setting to nil by a save data conversion
+    else
+      $Trainer.soot = value
+    end
+  end
+
+  # @deprecated Use {Player#has_running_shoes} instead. This alias is slated to be removed in v20.
+  def runningShoes
+    Deprecation.warn_method('PokemonGlobalMetadata#runningShoes', 'v20', '$Trainer.has_running_shoes')
+    return (!@runningShoes.nil?) ? @runningShoes : $Trainer.has_running_shoes
+  end
+
+  # @deprecated Use {Player#has_running_shoes=} instead. This alias is slated to be removed in v20.
+  def runningShoes=(value)
+    Deprecation.warn_method('PokemonGlobalMetadata#runningShoes=', 'v20', '$Trainer.has_running_shoes=')
+    if value.nil?
+      @runningShoes = value   # For setting to nil by a save data conversion
+    else
+      $Trainer.has_running_shoes = value
+    end
+  end
+
+  # @deprecated Use {Player#seen_storage_creator} instead. This alias is slated to be removed in v20.
+  def seenStorageCreator
+    Deprecation.warn_method('PokemonGlobalMetadata#seenStorageCreator', 'v20', '$Trainer.seen_storage_creator')
+    return (!@seenStorageCreator.nil?) ? @seenStorageCreator : $Trainer.seen_storage_creator
+  end
+
+  # @deprecated Use {Player#seen_storage_creator=} instead. This alias is slated to be removed in v20.
+  def seenStorageCreator=(value)
+    Deprecation.warn_method('PokemonGlobalMetadata#seenStorageCreator=', 'v20', '$Trainer.seen_storage_creator=')
+    if value.nil?
+      @seenStorageCreator = value   # For setting to nil by a save data conversion
+    else
+      $Trainer.seen_storage_creator = value
+    end
   end
 end
 

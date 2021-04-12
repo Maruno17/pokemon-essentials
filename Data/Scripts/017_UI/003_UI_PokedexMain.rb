@@ -296,9 +296,9 @@ class PokemonPokedex_Scene
   # National Dex at the end.
   def pbGetSavePositionIndex
     index = pbGetPokedexRegion
-    if index==-1   # National Dex
-      index = $Trainer.pokedex.dexes_count - 1   # National Dex index comes
-    end                                          # after regional Dex indices
+    if index==-1   # National Dex (comes after regional Dex indices)
+      index = $Trainer.pokedex.dexes_count - 1
+    end
     return index
   end
 

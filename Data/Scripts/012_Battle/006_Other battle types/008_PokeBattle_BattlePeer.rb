@@ -40,7 +40,7 @@ class PokeBattle_RealBattlePeer
   end
 
   def pbGetStorageCreatorName
-    return pbGetStorageCreator if $PokemonGlobal.seenStorageCreator
+    return pbGetStorageCreator if $Trainer.seen_storage_creator
     return nil
   end
 

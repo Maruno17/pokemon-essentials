@@ -89,7 +89,7 @@ module GameData
     def is_mail?;            return @type == 1 || @type == 2; end
     def is_icon_mail?;       return @type == 2; end
     def is_poke_ball?;       return @type == 3 || @type == 4; end
-    def is_snag_ball?;       return @type == 3 || (@type == 4 && $PokemonGlobal.snagMachine); end
+    def is_snag_ball?;       return @type == 3 || (@type == 4 && $Trainer.has_snag_machine); end
     def is_berry?;           return @type == 5; end
     def is_key_item?;        return @type == 6; end
     def is_evolution_stone?; return @type == 7; end

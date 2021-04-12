@@ -25,7 +25,7 @@ class StorageSystemPC
   end
 
   def name
-    if $PokemonGlobal.seenStorageCreator
+    if $Trainer.seen_storage_creator
       return _INTL("{1}'s PC",pbGetStorageCreator)
     else
       return _INTL("Someone's PC")

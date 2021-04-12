@@ -436,7 +436,7 @@ def pbDisplayGoldWindow(msgwindow)
 end
 
 def pbDisplayCoinsWindow(msgwindow,goldwindow)
-  coinString=($PokemonGlobal) ? $PokemonGlobal.coins.to_s_formatted : "0"
+  coinString=($Trainer) ? $Trainer.coins.to_s_formatted : "0"
   coinwindow=Window_AdvancedTextPokemon.new(_INTL("Coins:\n<ar>{1}</ar>",coinString))
   coinwindow.setSkin("Graphics/Windowskins/goldskin")
   coinwindow.resizeToFit(coinwindow.text,Graphics.width)

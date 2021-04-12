@@ -734,9 +734,9 @@ module Compiler
       echoln ""
       echoln _INTL("*** Finished full compile ***")
       echoln ""
+      System.reload_cache
     end
     pbSetWindowText(nil)
-    System.reload_cache
   end
 
   def main

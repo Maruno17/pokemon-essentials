@@ -46,7 +46,7 @@ end
 
 SaveData.register_conversion(:v19_move_global_data_to_player) do
   essentials_version 19
-  display_title 'Moving some Global Metadata data to Player class'
+  display_title 'Moving some global metadata data to player'
   to_all do |save_data|
     global = save_data[:global_metadata]
     player = save_data[:player]
@@ -57,6 +57,18 @@ SaveData.register_conversion(:v19_move_global_data_to_player) do
         player.pokedex.lock(i)
       end
     end
+    trainer.coins = global.coins
+    global.coins = nil
+    trainer.soot = global.sootsack
+    global.sootsack = nil
+    trainer.has_running_shoes = global.runningShoes
+    global.runningShoes = nil
+    trainer.seen_storage_creator = global.seenStorageCreator
+    global.seenStorageCreator = nil
+    trainer.has_snag_machine = global.snagMachine
+    global.snagMachine = nil
+    trainer.seen_purify_chamber = global.seenPurifyChamber
+    global.seenPurifyChamber = nil
   end
 end
 

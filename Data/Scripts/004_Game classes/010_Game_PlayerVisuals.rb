@@ -24,7 +24,7 @@ class Game_Player < Game_Character
                     @move_route_forcing || $game_temp.message_window_showing ||
                     pbMapInterpreterRunning?
     input = ($PokemonSystem.runstyle == 1) ^ Input.press?(Input::ACTION)
-    return input && $PokemonGlobal.runningShoes && !jumping? &&
+    return input && $Trainer.has_running_shoes && !jumping? &&
        !$PokemonGlobal.diving && !$PokemonGlobal.surfing &&
        !$PokemonGlobal.bicycle && !$game_player.pbTerrainTag.must_walk
   end

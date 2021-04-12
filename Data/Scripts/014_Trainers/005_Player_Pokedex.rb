@@ -1,4 +1,4 @@
-class Player
+class Player < Trainer
   # Represents the player's Pokédex.
   class Pokedex
     # @return [Array<Integer>] an array of accessible Dexes
@@ -105,6 +105,9 @@ class Player
       return @last_seen_forms[species][0] || 0, @last_seen_forms[species][1] || 0
     end
 
+    # @param species [Symbol, GameData::Species] Pokémon species
+    # @param gender [Integer] gender (0=male, 1=female, 2=genderless)
+    # @param form [Integer] form number
     def set_last_form_seen(species, gender = 0, form = 0)
       @last_seen_forms[species] = [gender, form]
     end
@@ -125,7 +128,7 @@ class Player
     def set_shadow_pokemon_owned(species)
       species_id = GameData::Species.try_get(species)&.species
       return if species_id.nil?
-      @owned[species_id] = true
+      @owned_shadow[species_id] = true
       self.refresh_accessible_dexes
     end
 
@@ -135,6 +138,14 @@ class Player
       species_id = GameData::Species.try_get(species)&.species
       return false if species_id.nil?
       return @owned[species_id] == true
+    end
+
+    # @param species [Symbol, GameData::Species] species to check
+    # @return [Boolean] whether a Shadow Pokémon of the species is owned
+    def owned_shadow_pokemon?(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return false if species_id.nil?
+      return @owned_shadow[species_id] == true
     end
 
     # Returns the amount of owned Pokémon.
@@ -215,12 +226,6 @@ class Player
     # @return [Integer] the number of defined Dexes (including the National Dex)
     def dexes_count
       return @unlocked_dexes.length
-    end
-
-    # Shorthand for +self.accessible_dexes.length+.
-    # @return [Integer] amount of accessible Dexes
-    def accessible_dexes_count
-      return @accessible_dexes.length
     end
 
     # Decides which Dex lists are able to be viewed (i.e. they are unlocked and

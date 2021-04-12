@@ -719,9 +719,22 @@ DebugMenuCommands.register("setcoins", {
   "effect"      => proc {
     params = ChooseNumberParams.new
     params.setRange(0, Settings::MAX_COINS)
-    params.setDefaultValue($PokemonGlobal.coins)
-    $PokemonGlobal.coins = pbMessageChooseNumber(_INTL("Set the player's Coin amount."), params)
-    pbMessage(_INTL("You now have {1} Coins.", $PokemonGlobal.coins.to_s_formatted))
+    params.setDefaultValue($Trainer.coins)
+    $Trainer.coins = pbMessageChooseNumber(_INTL("Set the player's Coin amount."), params)
+    pbMessage(_INTL("You now have {1} Coins.", $Trainer.coins.to_s_formatted))
+  }
+})
+
+DebugMenuCommands.register("setbp", {
+  "parent"      => "playermenu",
+  "name"        => _INTL("Set Battle Points"),
+  "description" => _INTL("Edit how many Battle Points you have."),
+  "effect"      => proc {
+    params = ChooseNumberParams.new
+    params.setRange(0, Settings::MAX_BATTLE_POINTS)
+    params.setDefaultValue($Trainer.battle_points)
+    $Trainer.battle_points = pbMessageChooseNumber(_INTL("Set the player's BP amount."), params)
+    pbMessage(_INTL("You now have {1} BP.", $Trainer.battle_points.to_s_formatted))
   }
 })
 
@@ -730,9 +743,9 @@ DebugMenuCommands.register("toggleshoes", {
   "name"        => _INTL("Toggle Running Shoes"),
   "description" => _INTL("Toggle possession of running shoes."),
   "effect"      => proc {
-    $PokemonGlobal.runningShoes = !$PokemonGlobal.runningShoes
-    pbMessage(_INTL("Gave Running Shoes.")) if $PokemonGlobal.runningShoes
-    pbMessage(_INTL("Lost Running Shoes.")) if !$PokemonGlobal.runningShoes
+    $Trainer.has_running_shoes = !$Trainer.has_running_shoes
+    pbMessage(_INTL("Gave Running Shoes.")) if $Trainer.has_running_shoes
+    pbMessage(_INTL("Lost Running Shoes.")) if !$Trainer.has_running_shoes
   }
 })
 
@@ -741,9 +754,9 @@ DebugMenuCommands.register("togglepokegear", {
   "name"        => _INTL("Toggle Pokégear"),
   "description" => _INTL("Toggle possession of the Pokégear."),
   "effect"      => proc {
-    $Trainer.pokegear = !$Trainer.pokegear
-    pbMessage(_INTL("Gave Pokégear.")) if $Trainer.pokegear
-    pbMessage(_INTL("Lost Pokégear.")) if !$Trainer.pokegear
+    $Trainer.has_pokegear = !$Trainer.has_pokegear
+    pbMessage(_INTL("Gave Pokégear.")) if $Trainer.has_pokegear
+    pbMessage(_INTL("Lost Pokégear.")) if !$Trainer.has_pokegear
   }
 })
 

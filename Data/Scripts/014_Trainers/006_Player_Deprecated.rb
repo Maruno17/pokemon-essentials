@@ -26,6 +26,7 @@ end
 
 class Player < Trainer
   class Pokedex
+    # @deprecated Use {seen?} or {set_seen} instead. This alias is slated to be removed in v20.
     attr_reader :seen_forms
   end
 
@@ -33,6 +34,9 @@ class Player < Trainer
   deprecated_method_alias :metaID, :character_ID, removal_in: 'v20'
   deprecated_method_alias :mysterygiftaccess, :mystery_gift_unlocked, removal_in: 'v20'
   deprecated_method_alias :mysterygift, :mystery_gifts, removal_in: 'v20'
+  deprecated_method_alias :hasSeen?, :seen?, removal_in: 'v20'
+  deprecated_method_alias :hasOwned?, :owned?, removal_in: 'v20'
+  deprecated_method_alias :pokegear, :has_pokegear, removal_in: 'v20'
 
   # @deprecated Use {Player::Pokedex#set_seen} instead. This alias is slated to be removed in v20.
   def setSeen(species)
@@ -91,10 +95,14 @@ class PokeBattle_Trainer
     trainer.seen.each_with_index { |value, i| ret.pokedex.set_seen(i) if value }
     trainer.owned.each_with_index { |value, i| ret.pokedex.set_owned(i) if value }
     trainer.formseen.each_with_index do |value, i|
-      ret.pokedex.seen_forms[GameData::Species.get(i).species] = [value[0].clone, value[1].clone] if value
+      species_id = GameData::Species.try_get(i)&.species
+      next if species_id.nil? || value.nil?
+      ret.pokedex.seen_forms[species_id] = [value[0].clone, value[1].clone] if value
     end
     trainer.formlastseen.each_with_index do |value, i|
-      ret.pokedex.set_last_form_seen(GameData::Species.get(i).species, value[0], value[1]) if value
+      species_id = GameData::Species.try_get(i)&.species
+      next if species_id.nil? || value.nil?
+      ret.pokedex.set_last_form_seen(species_id, value[0], value[1]) if value
     end
     if trainer.shadowcaught
       trainer.shadowcaught.each_with_index do |value, i|
@@ -102,7 +110,7 @@ class PokeBattle_Trainer
       end
     end
     ret.has_pokedex           = trainer.pokedex
-    ret.pokegear              = trainer.pokegear
+    ret.has_pokegear          = trainer.pokegear
     ret.mystery_gift_unlocked = trainer.mysterygiftaccess if trainer.mysterygiftaccess
     ret.mystery_gifts         = trainer.mysterygift.clone if trainer.mysterygift
     return ret

@@ -135,9 +135,8 @@ Events.onStepTakenFieldMovement += proc { |_sender,e|
     tile_id = map.data[thistile[1],thistile[2],i]
     next if tile_id == nil
     next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
-    if event == $game_player && GameData::Item.exists?(:SOOTSACK) && $PokemonBag.pbHasItem?(:SOOTSACK)
-      $PokemonGlobal.sootsack = 0 if !$PokemonGlobal.sootsack
-      $PokemonGlobal.sootsack += 1
+    if event == $game_player && GameData::Item.exists?(:SOOTSACK)
+      $Trainer.soot += 1 if $PokemonBag.pbHasItem?(:SOOTSACK)
     end
 #    map.data[thistile[1], thistile[2], i] = 0
 #    $scene.createSingleSpriteset(map.map_id)

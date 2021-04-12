@@ -311,7 +311,7 @@ ItemHandlers::UseInField.add(:TOWNMAP,proc { |item|
 })
 
 ItemHandlers::UseInField.add(:COINCASE,proc { |item|
-  pbMessage(_INTL("Coins: {1}",$PokemonGlobal.coins.to_s_formatted))
+  pbMessage(_INTL("Coins: {1}", $Trainer.coins.to_s_formatted))
   next 1
 })
 
