@@ -22,6 +22,8 @@ class Player < Trainer
   attr_accessor :has_pokedex
   # @return [Boolean] whether the Pokégear has been obtained
   attr_accessor :has_pokegear
+  # @return [Boolean] whether the player has running shoes (i.e. can run)
+  attr_accessor :has_running_shoes
   # @return [Boolean] whether the creator of the Pokémon Storage System has been seen
   attr_accessor :seen_storage_creator
   # @return [Boolean] whether Mystery Gift can be used from the load screen

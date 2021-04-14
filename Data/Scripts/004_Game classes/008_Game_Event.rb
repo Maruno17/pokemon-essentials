@@ -149,10 +149,10 @@ class Game_Event < Game_Character
     end
   end
 
-  def check_event_trigger_touch(x, y)
+  def check_event_trigger_touch(check_x, check_y)
     return if $game_system.map_interpreter.running?
     return if @trigger != 2   # Event touch
-    return if !at_coordinate?($game_player.x, $game_player.y)
+    return if !at_coordinate?(check_x, check_y)
     return if jumping? || over_trigger?
     start
   end

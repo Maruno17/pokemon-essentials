@@ -209,6 +209,7 @@ end
 
 
 
+# Unused
 class EnumProperty2
   def initialize(value)
     @module = value

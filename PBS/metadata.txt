@@ -362,7 +362,7 @@ BattleBack = underwater
 Environment = Underwater
 #-------------------------------
 [071]
-# Harbour
+# Harbor
 MapPosition = 0,13,13
 #-------------------------------
 [072]

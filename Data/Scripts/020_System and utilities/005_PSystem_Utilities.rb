@@ -93,11 +93,13 @@ def hasConst?(mod,constant)
   return mod.const_defined?(constant.to_sym) rescue false
 end
 
+# Unused
 def getConst(mod,constant)
   return nil if !mod || !constant || constant==""
   return mod.const_get(constant.to_sym) rescue nil
 end
 
+# Unused
 def getID(mod,constant)
   return nil if !mod || !constant || constant==""
   if constant.is_a?(Symbol) || constant.is_a?(String)

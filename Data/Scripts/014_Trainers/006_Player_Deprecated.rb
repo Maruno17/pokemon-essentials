@@ -143,7 +143,7 @@ end
 
 # @deprecated Use {Player#has_fateful_species?} instead. This alias is slated to be removed in v20.
 def pbHasFatefulSpecies?(species)
-  Deprecation.warn_method('pbHasSpecies?', 'v20', 'Player#has_fateful_species?')
+  Deprecation.warn_method('pbHasFatefulSpecies?', 'v20', 'Player#has_fateful_species?')
   return $Trainer.has_fateful_species?(species)
 end
 

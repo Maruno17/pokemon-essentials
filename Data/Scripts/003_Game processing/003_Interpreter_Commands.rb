@@ -363,7 +363,7 @@ class Interpreter
   # * Else
   #-----------------------------------------------------------------------------
   def command_411
-    if !@branch[@list[@index].indent]
+    if @branch[@list[@index].indent] == false   # Could be nil, so intentionally checks for false
       @branch.delete(@list[@index].indent)
       return true
     end
