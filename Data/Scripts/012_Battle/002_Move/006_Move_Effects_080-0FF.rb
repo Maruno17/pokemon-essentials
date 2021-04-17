@@ -470,27 +470,27 @@ class PokeBattle_Move_096 < PokeBattle_Move
               :ENIGMABERRY, :MICLEBERRY,  :CUSTAPBERRY, :JABOCABERRY, :ROWAPBERRY,
               :KEEBERRY,    :MARANGABERRY]
     }
-    @berry = nil
   end
 
   def pbMoveFailed?(user,targets)
     # NOTE: Unnerve does not stop a Pokémon using this move.
-    @berry = user.item
-    if !@berry || !@berry.is_berry? || !user.itemActive?
+    item = user.item
+    if !item || !item.is_berry? || !user.itemActive?
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     return false
   end
 
-  # NOTE: The AI calls this method via pbCalcType, but it involves @berry which
-  #       won't always be accurate (although it will always be defined). Since
-  #       the AI won't want to use it if the user has no item anyway, and
-  #       complex item movement is unlikely, perhaps this is good enough.
+  # NOTE: The AI calls this method via pbCalcType, but it involves user.item
+  #       which here is assumed to be not nil (because item.id is called). Since
+  #       the AI won't want to use it if the user has no item anyway, perhaps
+  #       this is good enough.
   def pbBaseType(user)
+    item = user.item
     ret = :NORMAL
     @typeArray.each do |type, items|
-      next if !items.include?(@berry.id)
+      next if !items.include?(item.id)
       ret = type if GameData::Type.exists?(type)
       break
     end
@@ -510,7 +510,7 @@ class PokeBattle_Move_096 < PokeBattle_Move
   end
 
   def pbBaseDamage(baseDmg,user,target)
-    return pbNaturalGiftBaseDamage(@berry.id)
+    return pbNaturalGiftBaseDamage(user.item.id)
   end
 
   def pbEndOfMoveUsageEffect(user,targets,numHits,switchedBattlers)
@@ -519,7 +519,6 @@ class PokeBattle_Move_096 < PokeBattle_Move
     #       an effect like a target's Red Card.
     # NOTE: There is no item consumption animation.
     user.pbConsumeItem(true,true,false) if user.item
-    @berry = nil
   end
 end
 

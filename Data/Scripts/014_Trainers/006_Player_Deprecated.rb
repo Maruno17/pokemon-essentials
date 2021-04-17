@@ -95,8 +95,8 @@ class PokeBattle_Trainer
     trainer.party.each { |p| ret.party.push(PokeBattle_Pokemon.convert(p)) }
     ret.badges                = trainer.badges.clone
     ret.money                 = trainer.money
-    trainer.seen.each_with_index { |value, i| ret.pokedex.set_seen(i) if value }
-    trainer.owned.each_with_index { |value, i| ret.pokedex.set_owned(i) if value }
+    trainer.seen.each_with_index { |value, i| ret.pokedex.set_seen(i, false) if value }
+    trainer.owned.each_with_index { |value, i| ret.pokedex.set_owned(i, false) if value }
     trainer.formseen.each_with_index do |value, i|
       species_id = GameData::Species.try_get(i)&.species
       next if species_id.nil? || value.nil?
@@ -112,6 +112,7 @@ class PokeBattle_Trainer
         ret.pokedex.set_shadow_pokemon_owned(i) if value
       end
     end
+    ret.pokedex.refresh_accessible_dexes
     ret.has_pokedex           = trainer.pokedex
     ret.has_pokegear          = trainer.pokegear
     ret.mystery_gift_unlocked = trainer.mysterygiftaccess if trainer.mysterygiftaccess
