@@ -24,7 +24,7 @@ class PokemonGlobalMetadata
   # @deprecated Use {Player#seen_purify_chamber} instead. This alias is slated to be removed in v20.
   def seenPurifyChamber
     Deprecation.warn_method('PokemonGlobalMetadata#seenPurifyChamber', 'v20', '$Trainer.seen_purify_chamber')
-    return (!@seenPurifyChamber.nil?) ? @seenPurifyChamber : $Trainer.seen_purify_chamber
+    return @seenPurifyChamber || false
   end
 
   # @deprecated Use {Player#seen_purify_chamber=} instead. This alias is slated to be removed in v20.
@@ -40,7 +40,7 @@ class PokemonGlobalMetadata
   # @deprecated Use {Player#has_snag_machine} instead. This alias is slated to be removed in v20.
   def snagMachine
     Deprecation.warn_method('PokemonGlobalMetadata#snagMachine', 'v20', '$Trainer.has_snag_machine')
-    return (!@snagMachine.nil?) ? @snagMachine : $Trainer.has_snag_machine
+    return @snagMachine || false
   end
 
   # @deprecated Use {Player#has_snag_machine=} instead. This alias is slated to be removed in v20.

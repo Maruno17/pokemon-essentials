@@ -178,7 +178,9 @@ SaveData.register_conversion(:v19_convert_game_variables) do
   display_title 'Converting classes of things in Game Variables'
   to_all do |save_data|
     variables = save_data[:variables]
-    variables.each_with_index do |value, i|
+    for i in 0..5000
+      value = variables[i]
+      next if value.nil?
       if value.is_a?(Array)
         value.each_with_index do |value2, j|
           if value2.is_a?(PokeBattle_Pokemon)
