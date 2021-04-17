@@ -750,7 +750,7 @@ class PokemonEntryScene
     addBackgroundPlane(@sprites,"background","Naming/bg_2",@viewport)
     case subject
     when 1   # Player
-      meta=GameData::Metadata.get_player($PokemonGlobal.playerID)
+      meta=GameData::Metadata.get_player($Trainer.character_ID)
       if meta
         @sprites["shadow"]=IconSprite.new(0,0,@viewport)
         @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
@@ -1028,7 +1028,7 @@ class PokemonEntryScene2
     @sprites["bg"].setBitmap("Graphics/Pictures/Naming/bg")
     case subject
     when 1   # Player
-      meta=GameData::Metadata.get_player($PokemonGlobal.playerID)
+      meta=GameData::Metadata.get_player($Trainer.character_ID)
       if meta
         @sprites["shadow"]=IconSprite.new(0,0,@viewport)
         @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")

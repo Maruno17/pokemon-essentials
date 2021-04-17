@@ -610,17 +610,17 @@ DebugMenuCommands.register("fillboxes", {
       if f == 0
         if [:AlwaysMale, :AlwaysFemale, :Genderless].include?(species_data.gender_ratio)
           g = (species_data.gender_ratio == :AlwaysFemale) ? 1 : 0
-          $Trainer.pokedex.register(sp, g, f)
+          $Trainer.pokedex.register(sp, g, f, false)
         else   # Both male and female
-          $Trainer.pokedex.register(sp, 0, f)
-          $Trainer.pokedex.register(sp, 1, f)
+          $Trainer.pokedex.register(sp, 0, f, false)
+          $Trainer.pokedex.register(sp, 1, f, false)
         end
-        $Trainer.pokedex.set_owned(sp)
+        $Trainer.pokedex.set_owned(sp, false)
       elsif species_data.real_form_name && !species_data.real_form_name.empty?
         g = (species_data.gender_ratio == :AlwaysFemale) ? 1 : 0
-        $Trainer.pokedex.register(sp, g, f)
+        $Trainer.pokedex.register(sp, g, f, false)
       end
-      # Add Pokémon (if form 0)
+      # Add Pokémon (if form 0, i.e. one of each species)
       next if f != 0
       if added >= Settings::NUM_STORAGE_BOXES * box_qty
         completed = false
@@ -629,6 +629,7 @@ DebugMenuCommands.register("fillboxes", {
       added += 1
       $PokemonStorage[(added - 1) / box_qty, (added - 1) % box_qty] = Pokemon.new(sp, 50)
     end
+    $Trainer.pokedex.refresh_accessible_dexes
     pbMessage(_INTL("Storage boxes were filled with one Pokémon of each species."))
     if !completed
       pbMessage(_INTL("Note: The number of storage spaces ({1} boxes of {2}) is less than the number of species.",
@@ -808,9 +809,9 @@ DebugMenuCommands.register("setplayer", {
     else
       params = ChooseNumberParams.new
       params.setRange(0, limit - 1)
-      params.setDefaultValue($PokemonGlobal.playerID)
+      params.setDefaultValue($Trainer.character_ID)
       newid = pbMessageChooseNumber(_INTL("Choose the new player character."), params)
-      if newid != $PokemonGlobal.playerID
+      if newid != $Trainer.character_ID
         pbChangePlayer(newid)
         pbMessage(_INTL("The player character was changed."))
       end

@@ -12,7 +12,6 @@ class PokemonGlobalMetadata
   # Player data
   attr_accessor :startTime
   attr_accessor :stepcount
-  attr_accessor :playerID
   attr_accessor :pcItemStorage
   attr_accessor :mailbox
   attr_accessor :phoneNumbers
@@ -66,7 +65,6 @@ class PokemonGlobalMetadata
     # Player data
     @startTime            = Time.now
     @stepcount            = 0
-    @playerID             = -1
     @pcItemStorage        = nil
     @mailbox              = nil
     @phoneNumbers         = []
@@ -112,6 +110,22 @@ class PokemonGlobalMetadata
     @pokerusTime          = nil
     # Save file
     @safesave             = false
+  end
+
+  # @deprecated Use {Player#character_ID} instead. This alias is slated to be removed in v20.
+  def playerID
+    Deprecation.warn_method('PokemonGlobalMetadata#playerID', 'v20', '$Trainer.character_ID')
+    return @playerID || $Trainer.character_ID
+  end
+
+  # @deprecated Use {Player#character_ID=} instead. This alias is slated to be removed in v20.
+  def playerID=(value)
+    Deprecation.warn_method('PokemonGlobalMetadata#playerID=', 'v20', '$Trainer.character_ID=')
+    if value.nil?
+      @playerID = value   # For setting to nil by a save data conversion
+    else
+      $Trainer.character_ID = value
+    end
   end
 
   # @deprecated Use {Player#coins} instead. This alias is slated to be removed in v20.

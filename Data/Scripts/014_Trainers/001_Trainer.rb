@@ -40,8 +40,6 @@ class Trainer
   def gender;            return GameData::TrainerType.get(@trainer_type).gender;      end
   def male?;             return GameData::TrainerType.get(@trainer_type).male?;       end
   def female?;           return GameData::TrainerType.get(@trainer_type).female?;     end
-  alias isMale? male?
-  alias isFemale? female?
   def skill_level;       return GameData::TrainerType.get(@trainer_type).skill_level; end
   def skill_code;        return GameData::TrainerType.get(@trainer_type).skill_code;  end
 

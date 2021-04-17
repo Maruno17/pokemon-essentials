@@ -131,10 +131,8 @@ module PokeBattle_BattleCommon
         battler.captured = false
       end
       battler.pbReset
-      if trainerBattle?
-        @decision = 1 if pbAllFainted?(battler.index)
-      else
-        @decision = 4 if pbAllFainted?(battler.index)   # Battle ended by capture
+      if pbAllFainted?(battler.index)
+        @decision = (trainerBattle?) ? 1 : 4   # Battle ended by win/capture
       end
       # Modify the Pokémon's properties because of the capture
       if GameData::Item.get(ball).is_snag_ball?

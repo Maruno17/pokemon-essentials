@@ -34,11 +34,12 @@ class Player < Trainer
 
     # Sets the given species as seen in the Pokédex.
     # @param species [Symbol, GameData::Species] species to set as seen
-    def set_seen(species)
+    # @param should_refresh_dexes [Boolean] whether Dex accessibility should be recalculated
+    def set_seen(species, should_refresh_dexes = true)
       species_id = GameData::Species.try_get(species)&.species
       return if species_id.nil?
       @seen[species_id] = true
-      self.refresh_accessible_dexes
+      self.refresh_accessible_dexes if should_refresh_dexes
     end
 
     # @param species [Symbol, GameData::Species] species to check
@@ -116,11 +117,12 @@ class Player < Trainer
 
     # Sets the given species as owned in the Pokédex.
     # @param species [Symbol, GameData::Species] species to set as owned
-    def set_owned(species)
+    # @param should_refresh_dexes [Boolean] whether Dex accessibility should be recalculated
+    def set_owned(species, should_refresh_dexes = true)
       species_id = GameData::Species.try_get(species)&.species
       return if species_id.nil?
       @owned[species_id] = true
-      self.refresh_accessible_dexes
+      self.refresh_accessible_dexes if should_refresh_dexes
     end
 
     # Sets the given species as owned in the Pokédex.
@@ -162,7 +164,7 @@ class Player < Trainer
     # @param pkmn [Pokemon, Symbol, GameData::Species] Pokemon to register as seen
     # @param gender [Integer] gender to register (0=male, 1=female, 2=genderless)
     # @param form [Integer] form to register
-    def register(species, gender = 0, form = 0)
+    def register(species, gender = 0, form = 0, should_refresh_dexes = true)
       if species.is_a?(Pokemon)
         species_data = species.species_data
         gender = species.gender
@@ -183,7 +185,7 @@ class Player < Trainer
       @seen_forms[species][gender][form] = true
       @last_seen_forms[species] ||= []
       @last_seen_forms[species] = [gender, form] if @last_seen_forms[species] == []
-      self.refresh_accessible_dexes
+      self.refresh_accessible_dexes if should_refresh_dexes
     end
 
     # @param pkmn [Pokemon] Pokemon to register as most recently seen

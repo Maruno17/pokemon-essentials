@@ -5,7 +5,7 @@ def pbFishingBegin
   $PokemonGlobal.fishing = true
   if !pbCommonEvent(Settings::FISHING_BEGIN_COMMON_EVENT)
     patternb = 2*$game_player.direction - 1
-    meta = GameData::Metadata.get_player($PokemonGlobal.playerID)
+    meta = GameData::Metadata.get_player($Trainer.character_ID)
     num = ($PokemonGlobal.surfing) ? 7 : 6
     if meta && meta[num] && meta[num]!=""
       charset = pbGetPlayerCharset(meta,num)
@@ -24,7 +24,7 @@ end
 def pbFishingEnd
   if !pbCommonEvent(Settings::FISHING_END_COMMON_EVENT)
     patternb = 2*($game_player.direction - 2)
-    meta = GameData::Metadata.get_player($PokemonGlobal.playerID)
+    meta = GameData::Metadata.get_player($Trainer.character_ID)
     num = ($PokemonGlobal.surfing) ? 7 : 6
     if meta && meta[num] && meta[num]!=""
       charset = pbGetPlayerCharset(meta,num)

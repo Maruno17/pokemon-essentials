@@ -36,8 +36,8 @@ class Game_Player < Game_Character
   def character_name
     @defaultCharacterName = "" if !@defaultCharacterName
     return @defaultCharacterName if @defaultCharacterName!=""
-    if !@move_route_forcing && $PokemonGlobal.playerID>=0
-      meta = GameData::Metadata.get_player($PokemonGlobal.playerID)
+    if !@move_route_forcing && $Trainer.character_ID>=0
+      meta = GameData::Metadata.get_player($Trainer.character_ID)
       if meta && !$PokemonGlobal.bicycle && !$PokemonGlobal.diving && !$PokemonGlobal.surfing
         charset = 1   # Display normal character sprite
         if pbCanRun? && (moving? || @wasmoving) && Input.dir4!=0 && meta[4] && meta[4]!=""

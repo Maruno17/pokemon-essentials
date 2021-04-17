@@ -3,8 +3,7 @@
 # These will be removed in a future Essentials version.
 #===============================================================================
 
-# @deprecated Use {Pokemon} instead. PokeBattle_Pokemon is slated to be removed
-#   in v20.
+# @deprecated Use {Pokemon} instead. PokeBattle_Pokemon is slated to be removed in v20.
 class PokeBattle_Pokemon
   attr_reader :name, :species, :form, :formTime, :forcedForm, :fused
   attr_reader :personalID, :exp, :hp, :status, :statusCount
@@ -42,7 +41,7 @@ class PokeBattle_Pokemon
     ret.nature_for_stats = pkmn.natureOverride
     ret.item             = pkmn.item
     ret.mail             = PokemonMail.convert(pkmn.mail) if pkmn.mail
-    pkmn.moves.each { |m| ret.moves.push(PBMove.copy(m)) if m && m.id > 0 }
+    pkmn.moves.each { |m| ret.moves.push(PBMove.convert(m)) if m && m.id > 0 }
     if pkmn.firstmoves
       pkmn.firstmoves.each { |m| ret.add_first_move(m) }
     end
@@ -168,12 +167,21 @@ class Pokemon
     self.shiny = false
   end
 
+  deprecated_method_alias :isEgg?, :egg?, removal_in: 'v20'
+  deprecated_method_alias :isAble?, :able?, removal_in: 'v20'
+  deprecated_method_alias :isFainted?, :fainted?, removal_in: 'v20'
+  deprecated_method_alias :isShiny?, :shiny?, removal_in: 'v20'
+  deprecated_method_alias :setForm, :form=, removal_in: 'v20'
   deprecated_method_alias :setGender, :gender=, removal_in: 'v20'
+  deprecated_method_alias :isMale?, :male?, removal_in: 'v20'
+  deprecated_method_alias :isFemale?, :female?, removal_in: 'v20'
+  deprecated_method_alias :isGenderless?, :genderless?, removal_in: 'v20'
+  deprecated_method_alias :isSingleGendered?, :singleGendered?, removal_in: 'v20'
   deprecated_method_alias :setAbility, :ability_index=, removal_in: 'v20'
   deprecated_method_alias :setNature, :nature=, removal_in: 'v20'
   deprecated_method_alias :setItem, :item=, removal_in: 'v20'
-
   deprecated_method_alias :healStatus, :heal_status, removal_in: 'v20'
+  deprecated_method_alias :knowsMove?, :hasMove?, removal_in: 'v20'
   deprecated_method_alias :resetMoves, :reset_moves, removal_in: 'v20'
   deprecated_method_alias :pbLearnMove, :learn_move, removal_in: 'v20'
   deprecated_method_alias :pbDeleteMove, :forget_move, removal_in: 'v20'
@@ -183,6 +191,7 @@ class Pokemon
   deprecated_method_alias :pbRemoveFirstMove, :remove_first_move, removal_in: 'v20'
   deprecated_method_alias :pbClearFirstMoves, :clear_first_moves, removal_in: 'v20'
   deprecated_method_alias :pbUpdateShadowMoves, :update_shadow_moves, removal_in: 'v20'
+  deprecated_method_alias :isForeign?, :foreign?, removal_in: 'v20'
   deprecated_method_alias :calcStats, :calc_stats, removal_in: 'v20'
 end
 

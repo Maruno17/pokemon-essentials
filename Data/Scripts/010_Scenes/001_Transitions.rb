@@ -780,7 +780,7 @@ module Transitions
           when 2 then k = @numtiles-1-(i*cx+(cx-1-j)) # Bottom left
           when 3 then k = @numtiles-1-k               # Bottom right
           end
-          @frame[k] = ((0.6*j*width+0.8*i*height)*(@numframes/50)/l).floor
+          @frame[k] = ((0.6*j*width+0.8*i*height)*(@numframes/50.0)/l).floor
         end
       end
       @addzoom  = 0.125*50/@numframes
@@ -876,7 +876,7 @@ module Transitions
       @bubblesuby = @height*2/@numframes
       @splashsuby = @bubblesuby*2
       @blacksuby  = @height/(@numframes*0.1).floor
-      @angmult = 2/(@numframes/50)
+      @angmult = 2/(@numframes/50.0)
     end
 
     def disposed?; @disposed; end
@@ -1384,7 +1384,7 @@ module Transitions
         @ballsprites[i].bitmap = @ballbitmap
       end
       @suby = (@height*3.5)/(@numframes*0.6)
-      @angmult = 4/(@numframes/50)
+      @angmult = 4/(@numframes/50.0)
     end
 
     def disposed?; @disposed; end
@@ -1484,7 +1484,7 @@ module Transitions
       @blacksprite.oy = @blackbitmap.height/2
       @blacksprite.visible = false
       @blacksprite.bitmap = @blackbitmap
-      @angmult = 4/(@numframes/50)
+      @angmult = 4/(@numframes/50.0)
     end
 
     def disposed?; @disposed; end

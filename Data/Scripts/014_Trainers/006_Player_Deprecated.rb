@@ -7,6 +7,8 @@ class Trainer
   deprecated_method_alias :secretID, :secret_ID, removal_in: 'v20'
   deprecated_method_alias :getForeignID, :make_foreign_ID, removal_in: 'v20'
   deprecated_method_alias :trainerTypeName, :trainer_type_name, removal_in: 'v20'
+  deprecated_method_alias :isMale?, :male?, removal_in: 'v20'
+  deprecated_method_alias :isFemale?, :female?, removal_in: 'v20'
   deprecated_method_alias :moneyEarned, :base_money, removal_in: 'v20'
   deprecated_method_alias :skill, :skill_level, removal_in: 'v20'
   deprecated_method_alias :skillCode, :skill_code, removal_in: 'v20'
@@ -75,6 +77,7 @@ class Player < Trainer
   end
 end
 
+# @deprecated Use {Player} instead. PokeBattle_Trainer is slated to be removed in v20.
 class PokeBattle_Trainer
   attr_reader :trainertype, :name, :id, :metaID, :outfit, :language
   attr_reader :party, :badges, :money

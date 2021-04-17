@@ -308,8 +308,8 @@ def pbDefinePath(canvas)
         for j in 0...4
           curve[j].mouseover
         end
-        mouse = Mouse::getMousePos(true)
-        newtext = (mouse) ? sprintf("(%d,%d)",mouse[0],mouse[1]) : "(??,??)"
+        mousepos = Mouse::getMousePos(true)
+        newtext = (mousepos) ? sprintf("(%d,%d)",mousepos[0],mousepos[1]) : "(??,??)"
         if window.text!=newtext
           window.text=newtext
         end
@@ -382,7 +382,7 @@ def pbDefinePath(canvas)
       end
       while !canceled
         mousepos=Mouse::getMousePos(true)
-        if mouse && !pointpath.isEndPoint?(mousepos[0],mousepos[1])
+        if mousepos && !pointpath.isEndPoint?(mousepos[0],mousepos[1])
           pointpath.addPoint(mousepos[0],mousepos[1])
           points.push(PointSprite.new(mousepos[0],mousepos[1],canvas.viewport))
         end

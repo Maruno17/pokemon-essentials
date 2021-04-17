@@ -142,10 +142,6 @@ class Pokemon
     $Trainer.pokedex.register(self)
   end
 
-  def setForm(value)
-    self.form = value
-  end
-
   def form_simple=(value)
     @form = value
     calc_stats
@@ -183,7 +179,6 @@ class Pokemon
   def egg?
     return @steps_to_hatch > 0
   end
-  alias isEgg? egg?
 
   # @return [GameData::GrowthRate] this Pokémon's growth rate
   def growth_rate
@@ -232,13 +227,11 @@ class Pokemon
   def able?
     return !egg? && @hp > 0
   end
-  alias isAble? able?
 
   # @return [Boolean] whether the Pokémon is fainted
   def fainted?
     return !egg? && @hp <= 0
   end
-  alias isFainted? fainted?
 
   # Heals all HP of this Pokémon.
   def heal_HP
@@ -339,15 +332,12 @@ class Pokemon
 
   # @return [Boolean] whether this Pokémon is male
   def male?; return self.gender == 0; end
-  alias isMale? male?
 
   # @return [Boolean] whether this Pokémon is female
   def female?; return self.gender == 1; end
-  alias isFemale? female?
 
   # @return [Boolean] whether this Pokémon is genderless
   def genderless?; return self.gender == 2; end
-  alias isGenderless? genderless?
 
   # @return [Boolean] whether this Pokémon species is restricted to only ever being one
   #   gender (or genderless)
@@ -355,7 +345,6 @@ class Pokemon
     gender_ratio = species_data.gender_ratio
     return [:AlwaysMale, :AlwaysFemale, :Genderless].include?(gender_ratio)
   end
-  alias isSingleGendered? singleGendered?
 
   #=============================================================================
   # Shininess
@@ -372,7 +361,6 @@ class Pokemon
     end
     return @shiny
   end
-  alias isShiny? shiny?
 
   #=============================================================================
   # Ability
@@ -516,7 +504,8 @@ class Pokemon
   #   an item at all
   def hasItem?(check_item = nil)
     return !@item.nil? if check_item.nil?
-    return self.item == check_item
+    held_item = self.item
+    return held_item && held_item == check_item
   end
 
   # @return [Array<Symbol>] the items this species can be found holding in the wild
@@ -557,7 +546,6 @@ class Pokemon
     return false if !move_data
     return @moves.any? { |m| m.id == move_data.id }
   end
-  alias knowsMove? hasMove?
 
   # Returns the list of moves this Pokémon can learn by levelling up.
   # @return [Array<Array<Integer,Symbol>>] this Pokémon's move list, where every element is [level, move ID]
@@ -786,7 +774,6 @@ class Pokemon
   def foreign?(trainer)
     return @owner.id != trainer.id || @owner.name != trainer.name
   end
-  alias isForeign? foreign?
 
   # @return [Time] the time when this Pokémon was obtained
   def timeReceived

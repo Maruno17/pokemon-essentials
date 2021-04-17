@@ -1649,7 +1649,8 @@ class PokeBattle_Move_14E < PokeBattle_TwoTurnMove
     @battle.pbDisplay(_INTL("{1} is absorbing power!",user.pbThis))
   end
 
-  def pbAttackingTurnEffect(user,target)
+  def pbEffectGeneral(user)
+    return if !@damagingTurn
     showAnim = true
     [:SPECIAL_ATTACK,:SPECIAL_DEFENSE,:SPEED].each do |s|
       next if !user.pbCanRaiseStatStage?(s,user,self)

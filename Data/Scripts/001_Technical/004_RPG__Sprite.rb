@@ -188,9 +188,9 @@ class SpriteAnimation
       end
     else
       sprite_x = self.x - self.ox + self.src_rect.width / 2
-      sprite_y = self.y - self.oy + self.src_rect.height / 2
-      sprite_y -= self.src_rect.height / 4 if position == 0
-      sprite_y += self.src_rect.height / 4 if position == 2
+      sprite_y = self.y - self.oy
+      sprite_y += self.src_rect.height / 2 if position == 1
+      sprite_y += self.src_rect.height if position == 2
     end
     for i in 0..15
       sprite = sprites[i]

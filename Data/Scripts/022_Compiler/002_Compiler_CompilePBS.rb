@@ -247,7 +247,7 @@ module Compiler
     move_descriptions = []
     # Read each line of moves.txt at a time and compile it into an move
     pbCompilerEachPreppedLine("PBS/moves.txt") { |line, line_no|
-      line = pbGetCsvRecord(line, line_no, [0, "vnssueeuuuyiss",
+      line = pbGetCsvRecord(line, line_no, [0, "vnssueeuuueiss",
          nil, nil, nil, nil, nil, :Type, ["Physical", "Special", "Status"],
          nil, nil, nil, :Target, nil, nil, nil
       ])

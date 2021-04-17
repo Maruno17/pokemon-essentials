@@ -2,8 +2,8 @@
 # Trainer class for the player
 #===============================================================================
 class Player < Trainer
-  # @param value [Integer] new character ID
-  attr_writer   :character_ID
+  # @return [Integer] the character ID of the player
+  attr_accessor :character_ID
   # @return [Integer] the player's outfit
   attr_accessor :outfit
   # @return [Array<Boolean>] the player's Gym Badges (true if owned)
@@ -36,12 +36,6 @@ class Player < Trainer
     party_str = @party.map { |p| p.species_data.species }.inspect
     str << format(' %s @party=%s>', self.full_name, party_str)
     return str
-  end
-
-  # @return [Integer] the character ID of the player
-  def character_ID
-    @character_ID = $PokemonGlobal.playerID || 0 if !@character_ID
-    return @character_ID
   end
 
   # Sets the player's money. It can not exceed {Settings::MAX_MONEY}.
@@ -96,7 +90,7 @@ class Player < Trainer
 
   def initialize(name, trainer_type)
     super
-    @character_ID          = nil
+    @character_ID          = -1
     @outfit                = 0
     @badges                = [false] * 8
     @money                 = Settings::INITIAL_MONEY

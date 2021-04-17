@@ -50,6 +50,8 @@ SaveData.register_conversion(:v19_move_global_data_to_player) do
   to_all do |save_data|
     global = save_data[:global_metadata]
     player = save_data[:player]
+    player.character_ID = global.playerID
+    global.playerID = nil
     global.pokedexUnlocked.each_with_index do |value, i|
       if value
         player.pokedex.unlock(i)
@@ -57,17 +59,17 @@ SaveData.register_conversion(:v19_move_global_data_to_player) do
         player.pokedex.lock(i)
       end
     end
-    trainer.coins = global.coins
+    player.coins = global.coins
     global.coins = nil
-    trainer.soot = global.sootsack
+    player.soot = global.sootsack
     global.sootsack = nil
-    trainer.has_running_shoes = global.runningShoes
+    player.has_running_shoes = global.runningShoes
     global.runningShoes = nil
-    trainer.seen_storage_creator = global.seenStorageCreator
+    player.seen_storage_creator = global.seenStorageCreator
     global.seenStorageCreator = nil
-    trainer.has_snag_machine = global.snagMachine
+    player.has_snag_machine = global.snagMachine
     global.snagMachine = nil
-    trainer.seen_purify_chamber = global.seenPurifyChamber
+    player.seen_purify_chamber = global.seenPurifyChamber
     global.seenPurifyChamber = nil
   end
 end

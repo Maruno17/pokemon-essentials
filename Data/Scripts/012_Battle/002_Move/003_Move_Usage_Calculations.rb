@@ -65,8 +65,16 @@ class PokeBattle_Move
     tTypes = target.pbTypes(true)
     # Get effectivenesses
     typeMods = [Effectiveness::NORMAL_EFFECTIVE_ONE] * 3   # 3 types max
-    tTypes.each_with_index do |type,i|
-      typeMods[i] = pbCalcTypeModSingle(moveType,type,user,target)
+    if moveType == :SHADOW
+      if target.shadowPokemon?
+        typeMods[0] = Effectiveness::NOT_VERY_EFFECTIVE_ONE
+      else
+        typeMods[0] = Effectiveness::SUPER_EFFECTIVE_ONE
+      end
+    else
+      tTypes.each_with_index do |type,i|
+        typeMods[i] = pbCalcTypeModSingle(moveType,type,user,target)
+      end
     end
     # Multiply all effectivenesses together
     ret = 1

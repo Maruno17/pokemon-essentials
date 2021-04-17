@@ -417,11 +417,11 @@ def pbGetPlayerCharset(meta,charset,trainer=nil,force=false)
   trainer = $Trainer if !trainer
   outfit = (trainer) ? trainer.outfit : 0
   if $game_player && $game_player.charsetData && !force
-    return nil if $game_player.charsetData[0]==$PokemonGlobal.playerID &&
+    return nil if $game_player.charsetData[0]==$Trainer.character_ID &&
                   $game_player.charsetData[1]==charset &&
                   $game_player.charsetData[2]==outfit
   end
-  $game_player.charsetData = [$PokemonGlobal.playerID,charset,outfit] if $game_player
+  $game_player.charsetData = [$Trainer.character_ID,charset,outfit] if $game_player
   ret = meta[charset]
   ret = meta[1] if !ret || ret==""
   if pbResolveBitmap("Graphics/Characters/"+ret+"_"+outfit.to_s)
@@ -431,7 +431,7 @@ def pbGetPlayerCharset(meta,charset,trainer=nil,force=false)
 end
 
 def pbUpdateVehicle
-  meta = GameData::Metadata.get_player($PokemonGlobal.playerID)
+  meta = GameData::Metadata.get_player($Trainer.character_ID)
   if meta
     charset = 1                                 # Regular graphic
     if $PokemonGlobal.diving;     charset = 5   # Diving graphic

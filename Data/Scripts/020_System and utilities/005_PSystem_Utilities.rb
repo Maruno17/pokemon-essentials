@@ -206,8 +206,9 @@ end
 #===============================================================================
 # Player-related utilities, random name generator
 #===============================================================================
+# Unused
 def pbGetPlayerGraphic
-  id = $PokemonGlobal.playerID
+  id = $Trainer.character_ID
   return "" if id < 0 || id >= 8
   meta = GameData::Metadata.get_player(id)
   return "" if !meta
@@ -222,28 +223,24 @@ def pbChangePlayer(id)
   return false if id < 0 || id >= 8
   meta = GameData::Metadata.get_player(id)
   return false if !meta
-  $Trainer.trainer_type = meta[0] if $Trainer
+  $Trainer.character_ID = id
+  $Trainer.trainer_type = meta[0]
   $game_player.character_name = meta[1]
-  $PokemonGlobal.playerID = id
-  $Trainer.character_ID = id if $Trainer
 end
 
 def pbTrainerName(name = nil, outfit = 0)
-  pbChangePlayer(0) if $PokemonGlobal.playerID < 0
-  player_metadata = GameData::Metadata.get_player($PokemonGlobal.playerID)
-  trainer_type = (player_metadata) ? player_metadata[0] : nil
-  $Trainer = Player.new(name, trainer_type)
-  $Trainer.outfit       = outfit
-  $Trainer.character_ID = $PokemonGlobal.playerID
+  pbChangePlayer(0) if $Trainer.character_ID < 0
   if name.nil?
     name = pbEnterPlayerName(_INTL("Your name?"), 0, Settings::MAX_PLAYER_NAME_SIZE)
     if name.nil? || name.empty?
+      player_metadata = GameData::Metadata.get_player($Trainer.character_ID)
+      trainer_type = (player_metadata) ? player_metadata[0] : nil
       gender = pbGetTrainerTypeGender(trainer_type)
       name = pbSuggestTrainerName(gender)
     end
   end
-  $Trainer.name = name
-  $PokemonBag = PokemonBag.new
+  $Trainer.name   = name
+  $Trainer.outfit = outfit
   $PokemonTemp.begunNewGame = true
 end
 
