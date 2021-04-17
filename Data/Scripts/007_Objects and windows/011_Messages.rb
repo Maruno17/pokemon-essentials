@@ -921,3 +921,43 @@ def pbMessageWaitForInput(msgwindow,frames,showPause=false)
   end
   msgwindow.stopPause if msgwindow && showPause
 end
+
+def pbFreeText(msgwindow,currenttext,passwordbox,maxlength,width=240)
+  window=Window_TextEntry_Keyboard.new(currenttext,0,0,width,64)
+  ret=""
+  window.maxlength=maxlength
+  window.visible=true
+  window.z=99999
+  pbPositionNearMsgWindow(window,msgwindow,:right)
+  window.text=currenttext
+  window.passwordChar="*" if passwordbox
+  Input.text_input = true
+  loop do
+    Graphics.update
+    Input.update
+    if Input.triggerex?(:ESCAPE)
+      ret=currenttext
+      break
+    elsif Input.triggerex?(:RETURN)
+      ret=window.text
+      break
+    end
+    window.update
+    msgwindow.update if msgwindow
+    yield if block_given?
+  end
+  Input.text_input = false
+  window.dispose
+  Input.update
+  return ret
+end
+
+def pbMessageFreeText(message,currenttext,passwordbox,maxlength,width=240,&block)
+  msgwindow=pbCreateMessageWindow
+  retval=pbMessageDisplay(msgwindow,message,true,
+     proc { |msgwindow|
+       next pbFreeText(msgwindow,currenttext,passwordbox,maxlength,width,&block)
+     },&block)
+  pbDisposeMessageWindow(msgwindow)
+  return retval
+end

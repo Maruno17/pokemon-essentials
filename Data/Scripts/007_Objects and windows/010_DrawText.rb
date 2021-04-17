@@ -887,6 +887,64 @@ end
 #===============================================================================
 # Draw text and images on a bitmap
 #===============================================================================
+def getLineBrokenText(bitmap,value,width,dims)
+  x=0
+  y=0
+  textheight=0
+  ret=[]
+  if dims
+    dims[0]=0
+    dims[1]=0
+  end
+  line=0
+  position=0
+  column=0
+  return ret if !bitmap || bitmap.disposed? || width<=0
+  textmsg=value.clone
+  ret.push(["",0,0,0,bitmap.text_size("X").height,0,0,0,0])
+  while ((c = textmsg.slice!(/\n|(\S*([ \r\t\f]?))/)) != nil)
+    break if c==""
+    length=c.scan(/./m).length
+    ccheck=c
+    if ccheck=="\n"
+      ret.push(["\n",x,y,0,textheight,line,position,column,0])
+      x=0
+      y+=(textheight==0) ? bitmap.text_size("X").height : textheight
+      line+=1
+      textheight=0
+      column=0
+      position+=length
+      ret.push(["",x,y,0,textheight,line,position,column,0])
+      next
+    end
+    words=[ccheck]
+    for i in 0...words.length
+      word=words[i]
+      if word && word!=""
+        textSize=bitmap.text_size(word)
+        textwidth=textSize.width
+        if x>0 && x+textwidth>=width-2
+          # Zero-length word break
+          ret.push(["",x,y,0,textheight,line,position,column,0])
+          x=0
+          column=0
+          y+=(textheight==0) ? bitmap.text_size("X").height : textheight
+          line+=1
+          textheight=0
+        end
+        textheight=[textheight,textSize.height].max
+        ret.push([word,x,y,textwidth,textheight,line,position,column,length])
+        x+=textwidth
+        dims[0]=x if dims && dims[0]<x
+      end
+    end
+    position+=length
+    column+=length
+  end
+  dims[1]=y+textheight if dims
+  return ret
+end
+
 def getLineBrokenChunks(bitmap,value,width,dims,plain=false)
   x=0
   y=4
