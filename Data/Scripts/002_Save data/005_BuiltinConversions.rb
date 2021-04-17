@@ -173,6 +173,27 @@ SaveData.register_conversion(:v19_convert_bag) do
   end   # to_value
 end
 
+SaveData.register_conversion(:v19_convert_game_variables) do
+  essentials_version 19
+  display_title 'Converting classes of things in Game Variables'
+  to_all do |save_data|
+    variables = save_data[:variables]
+    variables.each_with_index do |value, i|
+      if value.is_a?(Array)
+        value.each_with_index do |value2, j|
+          if value2.is_a?(PokeBattle_Pokemon)
+            value[j] = PokeBattle_Pokemon.convert(value2)
+          end
+        end
+      elsif value.is_a?(PokeBattle_Pokemon)
+        variables[i] = PokeBattle_Pokemon.convert(value)
+      elsif value.is_a?(PokemonBag)
+        SaveData.run_single_conversions(value, :bag, save_data)
+      end
+    end
+  end
+end
+
 SaveData.register_conversion(:v19_convert_storage) do
   essentials_version 19
   display_title 'Converting classes of Pokémon in storage'

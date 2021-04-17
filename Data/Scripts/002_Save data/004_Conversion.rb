@@ -64,6 +64,13 @@ module SaveData
       @all_proc.call(save_data) if @all_proc.is_a?(Proc)
     end
 
+    # Runs the conversion on the given object.
+    # @param object
+    # @param key [Symbol]
+    def run_single(object, key)
+      @value_procs[key].call(object) if @value_procs[key].is_a?(Proc)
+    end
+
     private
 
     # @!group Configuration
@@ -197,5 +204,17 @@ module SaveData
     save_data[:essentials_version] = Essentials::VERSION
     save_data[:game_version] = Settings::GAME_VERSION
     return true
+  end
+
+  # Runs all possible conversions on the given object.
+  # @param object [Hash] object to run conversions on
+  # @param key [Hash] object's key in save data
+  # @param save_data [Hash] save data to run conversions on
+  def self.run_single_conversions(object, key, save_data)
+    validate key => Symbol
+    conversions_to_run = self.get_conversions(save_data)
+    conversions_to_run.each do |conversion|
+      conversion.run_single(object, key)
+    end
   end
 end
