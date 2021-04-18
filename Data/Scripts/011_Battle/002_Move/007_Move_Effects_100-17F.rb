@@ -174,7 +174,7 @@ class PokeBattle_Move_10A < PokeBattle_Move
   def pbEffectGeneral(user)
     if user.pbOpposingSide.effects[PBEffects::LightScreen]>0
       user.pbOpposingSide.effects[PBEffects::LightScreen] = 0
-      @battle.pbDisplayP(_INTL("{1}'s Light Screen wore off!",user.pbOpposingTeam))
+      @battle.pbDisplay(_INTL("{1}'s Light Screen wore off!",user.pbOpposingTeam))
     end
     if user.pbOpposingSide.effects[PBEffects::Reflect]>0
       user.pbOpposingSide.effects[PBEffects::Reflect] = 0
@@ -2537,14 +2537,6 @@ class PokeBattle_Move_172 < PokeBattle_Move
     user.effects[PBEffects::BeakBlast] = true
     @battle.pbCommonAnimation("BeakBlast",user)
     @battle.pbDisplay(_INTL("{1} started heating up its beak!",user.pbThis))
-  end
-
-  def pbMoveFailed?(user,targets)
-    if !user.effects[PBEffects::BeakBlast]
-      @battle.pbDisplay(_INTL("But it failed!"))
-      return true
-    end
-    return false
   end
 end
 

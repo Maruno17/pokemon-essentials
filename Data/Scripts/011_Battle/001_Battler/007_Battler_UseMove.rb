@@ -76,7 +76,6 @@ class PokeBattle_Battler
     @effects[PBEffects::Grudge]              = false
     @effects[PBEffects::MoveNext]            = false
     @effects[PBEffects::Quash]               = 0
-    @effects[PBEffects::ShellTrap]           = false
     # Encore's effect ends if the encored move is no longer available
     if @effects[PBEffects::Encore]>0 && pbEncoredMoveIndex<0
       @effects[PBEffects::Encore]     = 0
@@ -116,8 +115,10 @@ class PokeBattle_Battler
         @effects[PBEffects::ChoiceBand] = @lastRegularMoveUsed
       end
     end
+    @effects[PBEffects::BeakBlast]   = false
     @effects[PBEffects::Charge]      = 0 if @effects[PBEffects::Charge]==1
     @effects[PBEffects::GemConsumed] = nil
+    @effects[PBEffects::ShellTrap]   = false
     @battle.eachBattler { |b| b.pbContinualAbilityChecks }   # Trace, end primordial weathers
   end
 
