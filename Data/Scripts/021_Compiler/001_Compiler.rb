@@ -797,6 +797,28 @@ module Compiler
         write_all
         mustCompile = true
       end
+      # Check data files and PBS files, and recompile if any PBS file was edited
+      # more recently than the data files were last created
+      dataFiles.each do |filename|
+        next if !safeExists?("Data/" + filename)
+        begin
+          File.open("Data/#{filename}") { |file|
+            latestDataTime = [latestDataTime, file.mtime.to_i].max
+          }
+        rescue SystemCallError
+          mustCompile = true
+        end
+      end
+      textFiles.each do |filename|
+        next if !safeExists?("PBS/" + filename)
+        begin
+          File.open("PBS/#{filename}") { |file|
+            latestTextTime = [latestTextTime, file.mtime.to_i].max
+          }
+        rescue SystemCallError
+        end
+      end
+      mustCompile |= (latestTextTime >= latestDataTime)
       # Should recompile if holding Ctrl
       Input.update
       mustCompile = true if Input.press?(Input::CTRL)
@@ -804,7 +826,7 @@ module Compiler
       if mustCompile
         for i in 0...dataFiles.length
           begin
-            File.delete("Data/#{dataFiles[i]}") if File.exists?("Data/#{dataFiles[i]}")
+            File.delete("Data/#{dataFiles[i]}") if safeExists?("Data/#{dataFiles[i]}")
           rescue SystemCallError
           end
         end

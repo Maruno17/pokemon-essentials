@@ -774,7 +774,7 @@ module Compiler
   #=============================================================================
   def compile_shadow_movesets
     sections = {}
-    if File.exists?("PBS/shadowmoves.txt")
+    if safeExists?("PBS/shadowmoves.txt")
       pbCompilerEachCommentedLine("PBS/shadowmoves.txt") { |line, _line_no|
         if line[/^\s*(\w+)\s*=\s*(.*)$/]
           key   = $1
