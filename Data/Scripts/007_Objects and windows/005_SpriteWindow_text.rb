@@ -64,14 +64,14 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
   def resizeToFit(text, maxwidth = -1)   # maxwidth is maximum acceptable window width
     dims = resizeToFitInternal(text,maxwidth)
     self.width = dims[0] + self.borderX + SpriteWindow_Base::TEXTPADDING
-    self.height = dims[1] + self.borderY - 4
+    self.height = dims[1] + self.borderY
     refresh
   end
 
   def resizeHeightToFit(text, width = -1)   # width is current window width
     dims = resizeToFitInternal(text,width)
     self.width  = (width < 0) ? Graphics.width : width
-    self.height = dims[1] + self.borderY - 4
+    self.height = dims[1] + self.borderY
     refresh
   end
 
@@ -101,7 +101,7 @@ class Window_UnformattedTextPokemon < SpriteWindow_Base
     self.contents=pbDoEnsureBitmap(self.contents,self.width-self.borderX,
        self.height-self.borderY)
     self.contents.clear
-    drawTextEx(self.contents,0,0,self.contents.width,0,
+    drawTextEx(self.contents,0,4,self.contents.width,0,
        @text.gsub(/\r/,""),@baseColor,@shadowColor)
   end
 end
@@ -215,7 +215,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     oldstarting = @starting
     @starting = true
     self.width  = dims[0]+self.borderX+SpriteWindow_Base::TEXTPADDING
-    self.height = dims[1]+self.borderY - 4
+    self.height = dims[1]+self.borderY
     @starting = oldstarting
     redrawText
   end
@@ -225,7 +225,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     oldstarting = @starting
     @starting = true
     self.width  = [dims[0]+self.borderX+SpriteWindow_Base::TEXTPADDING,maxwidth].min
-    self.height = [dims[1]+self.borderY - 4,maxheight].min
+    self.height = [dims[1]+self.borderY,maxheight].min
     @starting = oldstarting
     redrawText
   end
@@ -247,7 +247,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
     oldstarting = @starting
     @starting = true
     self.width  = (width < 0) ? Graphics.width : width
-    self.height = dims[1] + self.borderY - 4
+    self.height = dims[1] + self.borderY
     @starting = oldstarting
     redrawText
   end

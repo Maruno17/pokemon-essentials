@@ -168,7 +168,6 @@ end
 
 def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
                          newlineBreaks=true,explicitBreaksOnly=false)
-  yDst += 4
   x=y=0
   characters=[]
   textchunks=[]
@@ -225,7 +224,7 @@ def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
       havenl=true if isWaitChar(textchars[position])
       characters.push([
          textchars[position],
-         x+xStart,texty+yStart,width+2,lineheight,
+         x+xStart,texty,width+2,lineheight,
          false,bold,italic,colorclone,nil,false,false,
          defaultfontname,bitmap.font.size,position,nil,0])
     end
@@ -650,8 +649,8 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
       yStart=[(lineheight/2)-(graphicHeight/2),0].max
       graphicRect=Rect.new(graphicX,graphicY,graphicWidth,graphicHeight)
     else
-      yStart=0
       xStart=0
+      yStart=0
       width=isWaitChar(textchars[position]) ? 0 : bitmap.text_size(textchars[position]).width
       width+=2 if width>0 && outline2count>0
     end
@@ -665,9 +664,9 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
       characters.push(["\n",x,y*lineheight+yDst,0,lineheight,false,false,false,
          defaultcolors[0],defaultcolors[1],false,false,"",8,position,nil,0])
       charactersInternal.push([alignment,y,0])
-      y+=1;
-      x=0;
-      rightalign=0;
+      y+=1
+      x=0
+      rightalign=0
       lastword=[characters.length,x]
       hadspace=false
       hadnonspace=false
@@ -947,7 +946,7 @@ end
 
 def getLineBrokenChunks(bitmap,value,width,dims,plain=false)
   x=0
-  y=4
+  y=0
   ret=[]
   if dims
     dims[0]=0
@@ -1108,6 +1107,7 @@ def drawFormattedChars(bitmap,chars)
   bitmap.font=oldfont
 end
 
+# Unused
 def drawTextTable(bitmap,x,y,totalWidth,rowHeight,columnWidthPercents,table)
   yPos=y
   for i in 0...table.length
@@ -1138,6 +1138,7 @@ def drawFormattedTextEx(bitmap,x,y,width,text,baseColor=nil,shadowColor=nil,line
   drawFormattedChars(bitmap,chars)
 end
 
+# Unused
 def pbDrawShadow(bitmap,x,y,width,height,string)
   return if !bitmap || !string
   pbDrawShadowText(bitmap,x,y,width,height,string,nil,bitmap.font.color)

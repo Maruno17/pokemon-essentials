@@ -235,7 +235,7 @@ class PokemonPokedexInfo_Scene
         textpos.push([_ISPRINTF("{1:.1f} kg", weight / 10.0), 482, 184, 1, base, shadow])
       end
       # Draw the Pokédex entry text
-      drawTextEx(overlay, 40, 240, Graphics.width - (40 * 2), 4,   # overlay, x, y, width, num lines
+      drawTextEx(overlay, 40, 244, Graphics.width - (40 * 2), 4,   # overlay, x, y, width, num lines
                  species_data.pokedex_entry, base, shadow)
       # Draw the footprint
       footprintfile = GameData::Species.footprint_filename(@species, @form)

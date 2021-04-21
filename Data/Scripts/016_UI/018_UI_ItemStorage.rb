@@ -132,7 +132,7 @@ class ItemStorage_Scene
   def pbRefresh
     bm = @sprites["pocketwindow"].bitmap
     # Draw title at upper left corner ("Toss Item/Withdraw Item")
-    drawTextEx(bm,0,0,bm.width,2,@title,TITLEBASECOLOR,TITLESHADOWCOLOR)
+    drawTextEx(bm,0,4,bm.width,2,@title,TITLEBASECOLOR,TITLESHADOWCOLOR)
     itemwindow = @sprites["itemwindow"]
     # Draw item icon
     @sprites["icon"].item = itemwindow.item

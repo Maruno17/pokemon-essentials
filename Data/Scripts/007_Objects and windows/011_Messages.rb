@@ -451,6 +451,22 @@ def pbDisplayCoinsWindow(msgwindow,goldwindow)
   return coinwindow
 end
 
+def pbDisplayBattlePointsWindow(msgwindow)
+  pointsString = ($Trainer) ? $Trainer.battle_points.to_s_formatted : "0"
+  pointswindow=Window_AdvancedTextPokemon.new(_INTL("Battle Points:\n<ar>{1}</ar>", pointsString))
+  pointswindow.setSkin("Graphics/Windowskins/goldskin")
+  pointswindow.resizeToFit(pointswindow.text,Graphics.width)
+  pointswindow.width=160 if pointswindow.width<=160
+  if msgwindow.y==0
+    pointswindow.y=Graphics.height-pointswindow.height
+  else
+    pointswindow.y=0
+  end
+  pointswindow.viewport=msgwindow.viewport
+  pointswindow.z=msgwindow.z
+  return pointswindow
+end
+
 
 
 #===============================================================================
@@ -507,6 +523,7 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
   facewindow=nil
   goldwindow=nil
   coinwindow=nil
+  battlepointswindow=nil
   cmdvariable=0
   cmdIfCancel=0
   msgwindow.waitcount=0
@@ -576,7 +593,7 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
   ### Controls
   textchunks=[]
   controls=[]
-  while text[/(?:\\(f|ff|ts|cl|me|se|wt|wtnp|ch)\[([^\]]*)\]|\\(g|cn|wd|wm|op|cl|wu|\.|\||\!|\^))/i]
+  while text[/(?:\\(f|ff|ts|cl|me|se|wt|wtnp|ch)\[([^\]]*)\]|\\(g|cn|pt|wd|wm|op|cl|wu|\.|\||\!|\^))/i]
     textchunks.push($~.pre_match)
     if $~[1]
       controls.push([$~[1].downcase,$~[2],-1])
@@ -689,6 +706,9 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
       when "cn"     # Display coins window
         coinwindow.dispose if coinwindow
         coinwindow = pbDisplayCoinsWindow(msgwindow,goldwindow)
+      when "pt"     # Display battle points window
+        battlepointswindow.dispose if battlepointswindow
+        battlepointswindow = pbDisplayBattlePointsWindow(msgwindow)
       when "wu"
         msgwindow.y = 0
         atTop = true
@@ -761,6 +781,7 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
   msgback.dispose if msgback
   goldwindow.dispose if goldwindow
   coinwindow.dispose if coinwindow
+  battlepointswindow.dispose if battlepointswindow
   facewindow.dispose if facewindow
   if haveSpecialClose
     pbSEPlay(pbStringToAudioFile(specialCloseSE))

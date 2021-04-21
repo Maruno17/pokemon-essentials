@@ -663,7 +663,7 @@ class PokemonSummary_Scene
     ability = @pokemon.ability
     if ability
       textpos.push([ability.name,362,278,0,Color.new(64,64,64),Color.new(176,176,176)])
-      drawTextEx(overlay,224,316,282,2,ability.description,Color.new(64,64,64),Color.new(176,176,176))
+      drawTextEx(overlay,224,320,282,2,ability.description,Color.new(64,64,64),Color.new(176,176,176))
     end
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
@@ -830,7 +830,7 @@ class PokemonSummary_Scene
     imagepos = [["Graphics/Pictures/category", 166, 124, 0, selected_move.category * 28, 64, 28]]
     pbDrawImagePositions(overlay, imagepos)
     # Draw selected move's description
-    drawTextEx(overlay, 4, 218, 230, 5, selected_move.description, base, shadow)
+    drawTextEx(overlay, 4, 222, 230, 5, selected_move.description, base, shadow)
   end
 
   def drawPageFive
@@ -883,7 +883,7 @@ class PokemonSummary_Scene
     ]
     pbDrawTextPositions(overlay,textpos)
     # Draw selected ribbon's description
-    drawTextEx(overlay,18,318,480,2,desc,base,shadow)
+    drawTextEx(overlay,18,322,480,2,desc,base,shadow)
   end
 
   def pbGoToPrevious

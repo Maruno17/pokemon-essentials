@@ -40,7 +40,7 @@ end
 
 def pbStoreMail(pkmn,item,message,poke1=nil,poke2=nil,poke3=nil)
   raise _INTL("Pokémon already has mail") if pkmn.mail
-  pkmn.mail = Mail.new(item,message, $Trainer.name, poke1, poke2, poke3)
+  pkmn.mail = Mail.new(item, message, $Trainer.name, poke1, poke2, poke3)
 end
 
 def pbDisplayMail(mail,_bearer=nil)
@@ -82,13 +82,13 @@ def pbDisplayMail(mail,_bearer=nil)
   shadowForLightBG = Color.new(168,168,176)
   if mail.message && mail.message!=""
     isDark = isDarkBackground(sprites["card"].bitmap,Rect.new(48,48,Graphics.width-96,32*7))
-    drawTextEx(overlay,48,48,Graphics.width-(48*2),7,mail.message,
+    drawTextEx(overlay,48,52,Graphics.width-(48*2),7,mail.message,
        (isDark) ? baseForDarkBG : baseForLightBG,
        (isDark) ? shadowForDarkBG : shadowForLightBG)
   end
   if mail.sender && mail.sender!=""
     isDark = isDarkBackground(sprites["card"].bitmap,Rect.new(336,322,144,32*1))
-    drawTextEx(overlay,336,322,144,1,mail.sender,
+    drawTextEx(overlay,336,326,144,1,mail.sender,
        (isDark) ? baseForDarkBG : baseForLightBG,
        (isDark) ? shadowForDarkBG : shadowForLightBG)
   end

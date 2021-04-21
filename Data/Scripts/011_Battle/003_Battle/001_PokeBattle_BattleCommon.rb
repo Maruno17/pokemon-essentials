@@ -48,6 +48,7 @@ module PokeBattle_BattleCommon
         pbPlayer.pokedex.set_owned(pkmn.species)
         if $Trainer.has_pokedex
           pbDisplayPaused(_INTL("{1}'s data was added to the Pokédex.",pkmn.name))
+          pbPlayer.pokedex.register_last_seen(pkmn)
           @scene.pbShowPokedex(pkmn.species)
         end
       end

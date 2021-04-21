@@ -638,11 +638,15 @@ PokemonDebugMenuCommands.register("setitem", {
         item = pbChooseItemList(pkmn.item_id)
         if item && item != pkmn.item_id
           pkmn.item = item
+          if GameData::Item.get(item).is_mail?
+            pkmn.mail = Mail.new(item, _INTL("Text"), $Trainer.name)
+          end
           screen.pbRefreshSingle(pkmnid)
         end
       when 1   # Remove item
         if pkmn.hasItem?
           pkmn.item = nil
+          pkmn.mail = nil
           screen.pbRefreshSingle(pkmnid)
         end
       else

@@ -108,7 +108,7 @@ class MoveRelearner_Scene
       imagepos.push(["Graphics/Pictures/reminderButtons",134,350,76,0,76,32])
     end
     pbDrawImagePositions(overlay,imagepos)
-    drawTextEx(overlay,272,210,230,5,selMoveData.description,
+    drawTextEx(overlay,272,214,230,5,selMoveData.description,
        Color.new(64,64,64),Color.new(176,176,176))
   end
 
