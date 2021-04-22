@@ -856,7 +856,7 @@ BattleHandlers::AccuracyCalcTargetAbility.add(:UNAWARE,
 BattleHandlers::AccuracyCalcTargetAbility.add(:WONDERSKIN,
   proc { |ability,mods,user,target,move,type|
     if move.statusMove? && user.opposes?(target)
-      mods[:base_accuracy] = 0 if mods[:base_accuracy] > 50
+      mods[:base_accuracy] = 50 if mods[:base_accuracy] > 50
     end
   }
 )
