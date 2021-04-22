@@ -6,7 +6,7 @@ class Pokemon
   def getMegaForm(checkItemOnly = false)
     ret = 0
     GameData::Species.each do |data|
-      next if data.species != @species
+      next if data.species != @species || data.unmega_form != form_simple
       if data.mega_stone && hasItem?(data.mega_stone)
         ret = data.form
         break
@@ -31,7 +31,6 @@ class Pokemon
     megaForm = self.getMegaForm
     return megaForm > 0 && megaForm == form_simple
   end
-  alias isMega? mega?
 
   def makeMega
     megaForm = self.getMegaForm
@@ -57,24 +56,23 @@ class Pokemon
   # NOTE: These are treated as form changes in Essentials.
   #=============================================================================
   def hasPrimalForm?
-    v = MultipleForms.call("getPrimalForm",self)
-    return v!=nil
+    v = MultipleForms.call("getPrimalForm", self)
+    return !v.nil?
   end
 
   def primal?
-    v = MultipleForms.call("getPrimalForm",self)
-    return v!=nil && v==@form
+    v = MultipleForms.call("getPrimalForm", self)
+    return !v.nil? && v == @form
   end
-  alias isPrimal? primal?
 
   def makePrimal
-    v = MultipleForms.call("getPrimalForm",self)
-    self.form = v if v!=nil
+    v = MultipleForms.call("getPrimalForm", self)
+    self.form = v if !v.nil?
   end
 
   def makeUnprimal
-    v = MultipleForms.call("getUnprimalForm",self)
-    if v!=nil;     self.form = v
+    v = MultipleForms.call("getUnprimalForm", self)
+    if !v.nil?;    self.form = v
     elsif primal?; self.form = 0
     end
   end

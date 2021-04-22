@@ -426,7 +426,7 @@ def pbMoveTutorAnnotations(move, movelist = nil)
   return ret
 end
 
-def pbMoveTutorChoose(move,movelist=nil,bymachine=false)
+def pbMoveTutorChoose(move,movelist=nil,bymachine=false,oneusemachine=false)
   ret = false
   move = GameData::Move.get(move).id
   if movelist!=nil && movelist.is_a?(Array)
@@ -454,6 +454,7 @@ def pbMoveTutorChoose(move,movelist=nil,bymachine=false)
         pbMessage(_INTL("{1} can't learn {2}.",pokemon.name,movename)) { screen.pbUpdate }
       else
         if pbLearnMove(pokemon,move,false,bymachine) { screen.pbUpdate }
+          pkmn.add_first_move(move) if oneusemachine
           ret = true
           break
         end

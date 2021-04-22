@@ -450,7 +450,7 @@ end
 def pbUseItem(bag,item,bagscene=nil)
   itm = GameData::Item.get(item)
   useType = itm.field_use
-  if itm.is_machine?    # TM or HM
+  if itm.is_machine?    # TM or TR or HM
     if $Trainer.pokemon_count == 0
       pbMessage(_INTL("There is no Pokémon."))
       return 0
@@ -461,7 +461,7 @@ def pbUseItem(bag,item,bagscene=nil)
     pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",itm.name))
     if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?",movename))
       return 0
-    elsif pbMoveTutorChoose(machine,nil,true)
+    elsif pbMoveTutorChoose(machine,nil,true,itm.is_TR?)
       bag.pbDeleteItem(item) if itm.is_TR?
       return 1
     end

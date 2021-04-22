@@ -193,6 +193,8 @@ class Pokemon
   deprecated_method_alias :pbUpdateShadowMoves, :update_shadow_moves, removal_in: 'v20'
   deprecated_method_alias :isForeign?, :foreign?, removal_in: 'v20'
   deprecated_method_alias :calcStats, :calc_stats, removal_in: 'v20'
+  deprecated_method_alias :isMega?, :mega?, removal_in: 'v20'
+  deprecated_method_alias :isPrimal?, :primal?, removal_in: 'v20'
 end
 
 # (see Pokemon#initialize)

@@ -27,10 +27,20 @@ module GameData
       return ret if pbResolveBitmap(ret)
       # Check for TM/HM type icons
       if item_data.is_machine?
+        prefix = "machine"
+        if item.data_is_HM?
+          prefix = "machine_hm"
+        elsif item_data.is_TR?
+          prefix = "machine_tr"
+        end
         move_type = GameData::Move.get(item_data.move).type
         type_data = GameData::Type.get(move_type)
-        ret = sprintf("Graphics/Items/machine_%s", type_data.id)
+        ret = sprintf("Graphics/Items/%s_%s", prefix, type_data.id)
         return ret if pbResolveBitmap(ret)
+        if !item_data.is_TM?
+          ret = sprintf("Graphics/Items/machine_%s", type_data.id)
+          return ret if pbResolveBitmap(ret)
+        end
       end
       return "Graphics/Items/000"
     end

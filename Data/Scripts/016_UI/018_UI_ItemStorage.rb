@@ -38,7 +38,7 @@ class Window_PokemonItemStorage < Window_DrawableCommand
       itemname = @adapter.getDisplayName(item)
       baseColor = (index==@sortIndex) ? Color.new(248,24,24) : self.baseColor
       textpos.push([itemname,rect.x,rect.y-6,false,self.baseColor,self.shadowColor])
-      if !GameData::Item.get(item).is_important?   # Not a Key item or HM (or infinite TM)
+      if !GameData::Item.get(item).is_important?   # Not a Key item/HM/TM
         qty     = _ISPRINTF("x{1: 2d}",@bag[index][1])
         sizeQty = self.contents.text_size(qty).width
         xQty = rect.x+rect.width-sizeQty-2

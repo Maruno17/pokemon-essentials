@@ -200,3 +200,59 @@ def createMinimap(mapid)
   bitmap.fill_rect(bitmap.width-1,0,1,bitmap.height,black)
   return bitmap
 end
+
+def bltMinimapAutotile(dstBitmap,x,y,srcBitmap,id)
+  return if id>=48 || !srcBitmap || srcBitmap.disposed?
+  anim=0
+  cxTile=3
+  cyTile=3
+  tiles = TileDrawingHelper::Autotiles[id>>3][id&7]
+  src=Rect.new(0,0,0,0)
+  for i in 0...4
+    tile_position = tiles[i] - 1
+    src.set(
+      tile_position % 6 * cxTile + anim,
+      tile_position / 6 * cyTile, cxTile, cyTile)
+    dstBitmap.blt(i%2*cxTile+x,i/2*cyTile+y, srcBitmap, src)
+  end
+end
+
+def passable?(passages,tile_id)
+  return false if tile_id == nil
+  passage = passages[tile_id]
+  return (passage && passage<15)
+end
+
+# Unused
+def getPassabilityMinimap(mapid)
+  map = load_data(sprintf("Data/Map%03d.rxdata",mapid))
+  tileset = $data_tilesets[map.tileset_id]
+  minimap = AnimatedBitmap.new("Graphics/Pictures/minimap_tiles")
+  ret = Bitmap.new(map.width*6,map.height*6)
+  passtable = Table.new(map.width,map.height)
+  passages = tileset.passages
+  for i in 0...map.width
+    for j in 0...map.height
+      pass=true
+      for z in [2,1,0]
+        if !passable?(passages,map.data[i,j,z])
+          pass=false
+          break
+        end
+      end
+      passtable[i,j]=pass ? 1 : 0
+    end
+  end
+  neighbors=TileDrawingHelper::NeighborsToTiles
+  for i in 0...map.width
+    for j in 0...map.height
+      if passtable[i,j]==0
+        nb=TileDrawingHelper.tableNeighbors(passtable,i,j)
+        tile=neighbors[nb]
+        bltMinimapAutotile(ret,i*6,j*6,minimap.bitmap,tile)
+      end
+    end
+  end
+  minimap.disposes
+  return ret
+end
