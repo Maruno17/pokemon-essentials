@@ -135,11 +135,11 @@ class Game_Map
   end
 
   def valid?(x, y)
-     return (x>=0 and x<width and y>=0 and y<height)
+     return x>=0 && x<width && y>=0 && y<height
   end
 
   def validLax?(x, y)
-    return (x>=-10 and x<=width+10 and y>=-10 and y<=height+10)
+    return x>=-10 && x<=width+10 && y>=-10 && y<=height+10
   end
 
   def passable?(x, y, d, self_event = nil)

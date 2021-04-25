@@ -400,7 +400,7 @@ class DependentEvents
         next if !d[9]
         if e.at_coordinate?($game_player.x, $game_player.y)
           # On same position
-          if not e.jumping? && (!e.respond_to?("over_trigger") || e.over_trigger?)
+          if !e.jumping? && (!e.respond_to?("over_trigger") || e.over_trigger?)
             if e.list.size>1
               # Start event
               $game_map.refresh if $game_map.need_refresh
@@ -411,7 +411,7 @@ class DependentEvents
         elsif facingTile && e.map.map_id==facingTile[0] &&
               e.at_coordinate?(facingTile[1], facingTile[2])
           # On facing tile
-          if not e.jumping? && (!e.respond_to?("over_trigger") || !e.over_trigger?)
+          if !e.jumping? && (!e.respond_to?("over_trigger") || !e.over_trigger?)
             if e.list.size>1
               # Start event
               $game_map.refresh if $game_map.need_refresh

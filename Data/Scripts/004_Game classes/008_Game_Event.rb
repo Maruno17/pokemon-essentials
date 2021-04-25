@@ -160,7 +160,7 @@ class Game_Event < Game_Character
   def check_event_trigger_auto
     if @trigger == 2      # Event touch
       if at_coordinate?($game_player.x, $game_player.y)
-        start if not jumping? and over_trigger?
+        start if !jumping? && over_trigger?
       end
     elsif @trigger == 3   # Autorun
       start

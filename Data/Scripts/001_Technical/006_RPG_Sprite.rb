@@ -48,7 +48,7 @@ class SpriteAnimation
       @@_reference_count[bitmap] = 1
     end
     @_animation_sprites = []
-    if @_animation.position != 3 or not @@_animations.include?(animation)
+    if @_animation.position != 3 || !@@_animations.include?(animation)
       16.times do
         sprite = ::Sprite.new(self.viewport)
         sprite.bitmap = bitmap
@@ -195,7 +195,7 @@ class SpriteAnimation
     for i in 0..15
       sprite = sprites[i]
       pattern = cell_data[i, 0]
-      if sprite == nil or pattern == nil or pattern == -1
+      if sprite == nil || pattern == nil || pattern == -1
         sprite.visible = false if sprite != nil
         next
       end
@@ -223,9 +223,9 @@ class SpriteAnimation
   end
 
   def animation_process_timing(timing, hit)
-    if (timing.condition == 0) or
-       (timing.condition == 1 and hit == true) or
-       (timing.condition == 2 and hit == false)
+    if timing.condition == 0 ||
+       (timing.condition == 1 && hit == true) ||
+       (timing.condition == 2 && hit == false)
       if timing.se.name != ""
         se = timing.se
         pbSEPlay(se)
@@ -349,7 +349,7 @@ module RPG
       bitmap.draw_text(+1, 12-1, 160, 36, damage_string, 1)
       bitmap.draw_text(-1, 12+1, 160, 36, damage_string, 1)
       bitmap.draw_text(+1, 12+1, 160, 36, damage_string, 1)
-      if value.is_a?(Numeric) and value < 0
+      if value.is_a?(Numeric) && value < 0
         bitmap.font.color.set(176, 255, 144)
       else
         bitmap.font.color.set(255, 255, 255)

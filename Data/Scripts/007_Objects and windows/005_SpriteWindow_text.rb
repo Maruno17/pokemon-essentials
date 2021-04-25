@@ -678,7 +678,7 @@ class Window_InputNumberPokemon < SpriteWindow_Base
     digits=@digits_max+(@sign ? 1 : 0)
     refresh if @frame%15==0
     if self.active
-      if Input.repeat?(Input::UP) or Input.repeat?(Input::DOWN)
+      if Input.repeat?(Input::UP) || Input.repeat?(Input::DOWN)
         pbPlayCursorSE()
         if @index==0 && @sign
           @negative=!@negative
@@ -843,10 +843,10 @@ class SpriteWindow_Selectable < SpriteWindow_Base
 
   def update
     super
-    if self.active and @item_max > 0 and @index >= 0 and !@ignore_input
+    if self.active && @item_max > 0 && @index >= 0 && !@ignore_input
       if Input.repeat?(Input::UP)
-        if @index >= @column_max or
-           (Input.trigger?(Input::UP) && (@item_max%@column_max)==0)
+        if @index >= @column_max ||
+           (Input.trigger?(Input::UP) && (@item_max % @column_max)==0)
           oldindex = @index
           @index = (@index - @column_max + @item_max) % @item_max
           if @index!=oldindex
@@ -855,8 +855,8 @@ class SpriteWindow_Selectable < SpriteWindow_Base
           end
         end
       elsif Input.repeat?(Input::DOWN)
-        if @index < @item_max - @column_max or
-           (Input.trigger?(Input::DOWN) && (@item_max%@column_max)==0)
+        if @index < @item_max - @column_max ||
+           (Input.trigger?(Input::DOWN) && (@item_max % @column_max)==0)
           oldindex = @index
           @index = (@index + @column_max) % @item_max
           if @index!=oldindex
@@ -865,7 +865,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
           end
         end
       elsif Input.repeat?(Input::LEFT)
-        if @column_max >= 2 and @index > 0
+        if @column_max >= 2 && @index > 0
           oldindex = @index
           @index -= 1
           if @index!=oldindex
@@ -874,7 +874,7 @@ class SpriteWindow_Selectable < SpriteWindow_Base
           end
         end
       elsif Input.repeat?(Input::RIGHT)
-        if @column_max >= 2 and @index < @item_max - 1
+        if @column_max >= 2 && @index < @item_max - 1
           oldindex = @index
           @index += 1
           if @index!=oldindex

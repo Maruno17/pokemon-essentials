@@ -127,7 +127,7 @@ class Interpreter
   def command_end
     @list = nil
     # If main map event and event ID are valid, unlock event
-    if @main and @event_id > 0 && $game_map.events[@event_id]
+    if @main && @event_id > 0 && $game_map.events[@event_id]
       $game_map.events[@event_id].unlock
     end
   end
@@ -395,7 +395,7 @@ class Interpreter
       temp_index += 1
       return true if temp_index >= @list.size - 1   # Reached end of commands
       # Skip ahead to after the [Repeat Above] end of the current loop
-      if @list[temp_index].code == 413 and @list[temp_index].indent < indent
+      if @list[temp_index].code == 413 && @list[temp_index].indent < indent
         @index = temp_index
         return true
       end

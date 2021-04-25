@@ -28,7 +28,7 @@ module GameData
       # Check for TM/HM type icons
       if item_data.is_machine?
         prefix = "machine"
-        if item.data_is_HM?
+        if item.data.is_HM?
           prefix = "machine_hm"
         elsif item_data.is_TR?
           prefix = "machine_tr"

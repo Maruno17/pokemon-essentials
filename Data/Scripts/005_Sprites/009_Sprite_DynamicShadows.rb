@@ -29,8 +29,8 @@ class Sprite_Shadow < RPG::Sprite
       return
     end
     super
-    if @tile_id != @character.tile_id or
-       @character_name != @character.character_name or
+    if @tile_id != @character.tile_id ||
+       @character_name != @character.character_name ||
        @character_hue != @character.character_hue
       @tile_id        = @character.tile_id
       @character_name = @character.character_name
@@ -47,7 +47,7 @@ class Sprite_Shadow < RPG::Sprite
       else
         @chbitmap.dispose if @chbitmap
         @chbitmap = AnimatedBitmap.new(
-           "Graphics/Characters/"+@character.character_name,@character.character_hue)
+           'Graphics/Characters/'+@character.character_name,@character.character_hue)
         @cw = @chbitmap.width / 4
         @ch = @chbitmap.height / 4
         self.ox = @cw / 2
@@ -60,11 +60,11 @@ class Sprite_Shadow < RPG::Sprite
     else
       self.bitmap = @chbitmap
     end
-    self.visible = (not @character.transparent)
+    self.visible = !@character.transparent
     if @tile_id == 0
       sx = @character.pattern * @cw
       sy = (@character.direction - 2) / 2 * @ch
-      if self.angle > 90 or angle < -90
+      if self.angle > 90 || angle < -90
         case @character.direction
         when 2 then sy = (8- 2) / 2 * @ch
         when 4 then sy = (6- 2) / 2 * @ch
@@ -94,12 +94,12 @@ class Sprite_Shadow < RPG::Sprite
     self.angle = 57.3 * Math.atan2(@deltax, @deltay)
     @angle_trigo = self.angle+90
     @angle_trigo += 360 if @angle_trigo < 0
-    if @anglemin != 0 or @anglemax != 0
-      if (@angle_trigo < @anglemin or @angle_trigo > @anglemax) and @anglemin < @anglemax
+    if @anglemin != 0 || @anglemax != 0
+      if (@angle_trigo < @anglemin || @angle_trigo > @anglemax) && @anglemin < @anglemax
         self.opacity = 0
         return
       end
-      if (@angle_trigo < @anglemin and @angle_trigo > @anglemax) and @anglemin > @anglemax
+      if @angle_trigo < @anglemin && @angle_trigo > @anglemax && @anglemin > @anglemax
         self.opacity = 0
         return
       end
@@ -133,7 +133,7 @@ class Sprite_Character < RPG::Sprite
   end
 
   def setShadows(map,shadows)
-    if character.is_a?(Game_Event) and shadows.length > 0
+    if character.is_a?(Game_Event) && shadows.length > 0
       params = XPML_read(map,"Shadow",@character,4)
       if params != nil
         for i in 0...shadows.size
@@ -141,7 +141,7 @@ class Sprite_Character < RPG::Sprite
         end
       end
     end
-    if character.is_a?(Game_Player) and shadows.length > 0
+    if character.is_a?(Game_Player) && shadows.length > 0
       for i in 0...shadows.size
         @ombrelist.push(Sprite_Shadow.new(viewport, $game_player, shadows[i]))
       end
@@ -185,9 +185,9 @@ class Spriteset_Map
     map = $game_map if !map
     for k in map.events.keys.sort
       ev = map.events[k]
-      warn = true if (ev.list != nil and ev.list.length > 0 and
-         ev.list[0].code == 108 and
-         (ev.list[0].parameters == ["s"] or ev.list[0].parameters == ["o"]))
+      warn = true if (ev.list != nil && ev.list.length > 0 &&
+         ev.list[0].code == 108 &&
+         (ev.list[0].parameters == ["s"] || ev.list[0].parameters == ["o"]))
       params = XPML_read(map,"Shadow Source", ev, 4)
       @shadows.push([ev] + params) if params != nil
     end
@@ -227,14 +227,14 @@ def XPML_read(map,markup,event,max_param_number=0)
   parameter_list = nil
   return nil if !event || event.list == nil
     for i in 0...event.list.size
-      if event.list[i].code == 108 and
+      if event.list[i].code == 108 &&
          event.list[i].parameters[0].downcase == "begin " + markup.downcase
         parameter_list = [] if parameter_list == nil
         for j in i+1...event.list.size
           if event.list[j].code == 108
             parts = event.list[j].parameters[0].split
-            if parts.size != 1 and parts[0].downcase != "begin"
-              if parts[1].to_i != 0 or parts[1] == "0"
+            if parts.size != 1 && parts[0].downcase != "begin"
+              if parts[1].to_i != 0 || parts[1] == "0"
                 parameter_list.push(parts[1].to_i)
               else
                 parameter_list.push(parts[1])
@@ -245,7 +245,7 @@ def XPML_read(map,markup,event,max_param_number=0)
           else
             return parameter_list
           end
-          return parameter_list if max_param_number != 0 and j == i + max_param_number
+          return parameter_list if max_param_number != 0 && j == i + max_param_number
         end
       end
     end

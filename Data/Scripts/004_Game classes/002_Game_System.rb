@@ -62,7 +62,7 @@ class Game_System
   def bgm_play_internal(bgm,position) # :nodoc:
     @bgm_position = position if !@bgm_paused
     @playing_bgm = (bgm==nil) ? nil : bgm.clone
-    if bgm!=nil and bgm.name!=""
+    if bgm!=nil && bgm.name!=""
       if FileTest.audio_exist?("Audio/BGM/"+bgm.name)
         bgm_play_internal2("Audio/BGM/"+bgm.name,
            bgm.volume,bgm.pitch,@bgm_position) if !@defaultBGM
@@ -132,7 +132,7 @@ class Game_System
 
   def setDefaultBGM(bgm,volume=80,pitch=100)
     bgm = RPG::AudioFile.new(bgm,volume,pitch) if bgm.is_a?(String)
-    if bgm!=nil and bgm.name!=""
+    if bgm!=nil && bgm.name!=""
       @defaultBGM = nil
       self.bgm_play(bgm)
       @defaultBGM = bgm.clone
@@ -146,7 +146,7 @@ class Game_System
 
   def me_play(me)
     me = RPG::AudioFile.new(me) if me.is_a?(String)
-    if me!=nil and me.name!=""
+    if me!=nil && me.name!=""
       if FileTest.audio_exist?("Audio/ME/"+me.name)
         vol = me.volume
         vol *= $PokemonSystem.bgmvolume/100.0
@@ -163,7 +163,7 @@ class Game_System
 
   def bgs_play(bgs)
     @playing_bgs = (bgs==nil) ? nil : bgs.clone
-    if bgs!=nil and bgs.name!=""
+    if bgs!=nil && bgs.name!=""
       if FileTest.audio_exist?("Audio/BGS/"+bgs.name)
         vol = bgs.volume
         vol *= $PokemonSystem.sevolume/100.0
@@ -230,7 +230,7 @@ class Game_System
 
   def se_play(se)
     se = RPG::AudioFile.new(se) if se.is_a?(String)
-    if se!=nil and se.name!="" && FileTest.audio_exist?("Audio/SE/"+se.name)
+    if se!=nil && se.name!="" && FileTest.audio_exist?("Audio/SE/"+se.name)
       vol = se.volume
       vol *= $PokemonSystem.sevolume/100.0
       vol = vol.to_i
@@ -275,7 +275,7 @@ class Game_System
   end
 
   def update
-    @timer -= 1 if @timer_working and @timer>0
+    @timer -= 1 if @timer_working && @timer>0
     if Input.trigger?(Input::SPECIAL) && pbCurrentEventCommentInput(1,"Cut Scene")
       event = @map_interpreter.get_character(0)
       @map_interpreter.pbSetSelfSwitch(event.id,"A",true)

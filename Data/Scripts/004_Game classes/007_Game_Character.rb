@@ -178,7 +178,7 @@ class Game_Character
   def unlock
     return unless @locked
     @locked = false
-    @direction = @prelock_direction if !@direction_fix and @prelock_direction != 0
+    @direction = @prelock_direction if !@direction_fix && @prelock_direction != 0
   end
 
   #=============================================================================
@@ -193,11 +193,11 @@ class Game_Character
   end
 
   def bush_depth
-    return 0 if @tile_id > 0 || @always_on_top or jumping?
+    return 0 if @tile_id > 0 || @always_on_top || jumping?
     xbehind = @x + (@direction==4 ? 1 : @direction==6 ? -1 : 0)
     ybehind = @y + (@direction==8 ? 1 : @direction==2 ? -1 : 0)
-    return Game_Map::TILE_HEIGHT if self.map.deepBush?(@x, @y) and self.map.deepBush?(xbehind, ybehind)
-    return 12 if !moving? and self.map.bush?(@x, @y)
+    return Game_Map::TILE_HEIGHT if self.map.deepBush?(@x, @y) && self.map.deepBush?(xbehind, ybehind)
+    return 12 if !moving? && self.map.bush?(@x, @y)
     return 0
   end
 
@@ -220,7 +220,7 @@ class Game_Character
       next if self == event || !event.at_coordinate?(new_x, new_y) || event.through
       return false if self != $game_player || event.character_name != ""
     end
-    if $game_player.x == new_x and $game_player.y == new_y
+    if $game_player.x == new_x && $game_player.y == new_y
       return false if !$game_player.through && @character_name != ""
     end
     return true
@@ -326,7 +326,7 @@ class Game_Character
   end
 
   def straighten
-    @pattern = 0 if @walk_anime or @step_anime
+    @pattern = 0 if @walk_anime || @step_anime
     @anime_count = 0
     @prelock_direction = 0
   end
@@ -394,7 +394,7 @@ class Game_Character
   end
 
   def move_type_custom
-    return if jumping? or moving?
+    return if jumping? || moving?
     while @move_route_index < @move_route.list.size
       command = @move_route.list[@move_route_index]
       if command.code == 0
@@ -428,7 +428,7 @@ class Game_Character
         when 13 then move_backward
         when 14 then jump(command.parameters[0], command.parameters[1])
         end
-        @move_route_index += 1 if @move_route.skippable or moving? or jumping?
+        @move_route_index += 1 if @move_route.skippable || moving? || jumping?
         return
       end
       if command.code == 15   # Wait
@@ -436,7 +436,7 @@ class Game_Character
         @move_route_index += 1
         return
       end
-      if command.code >= 16 and command.code <= 26
+      if command.code >= 16 && command.code <= 26
         case command.code
         when 16 then turn_down
         when 17 then turn_left
@@ -631,7 +631,7 @@ class Game_Character
   def move_toward_player
     sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
     sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
-    return if sx == 0 and sy == 0
+    return if sx == 0 && sy == 0
     abs_sx = sx.abs
     abs_sy = sy.abs
     if abs_sx == abs_sy
@@ -639,12 +639,12 @@ class Game_Character
     end
     if abs_sx > abs_sy
       (sx > 0) ? move_left : move_right
-      if not moving? and sy != 0
+      if !moving? && sy != 0
         (sy > 0) ? move_up : move_down
       end
     else
       (sy > 0) ? move_up : move_down
-      if not moving? and sx != 0
+      if !moving? && sx != 0
         (sx > 0) ? move_left : move_right
       end
     end
@@ -653,7 +653,7 @@ class Game_Character
   def move_away_from_player
     sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
     sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
-    return if sx == 0 and sy == 0
+    return if sx == 0 && sy == 0
     abs_sx = sx.abs
     abs_sy = sy.abs
     if abs_sx == abs_sy
@@ -661,12 +661,12 @@ class Game_Character
     end
     if abs_sx > abs_sy
       (sx > 0) ? move_right : move_left
-      if not moving? and sy != 0
+      if !moving? && sy != 0
         (sy > 0) ? move_down : move_up
       end
     else
       (sy > 0) ? move_down : move_up
-      if not moving? and sx != 0
+      if !moving? && sx != 0
         (sx > 0) ? move_right : move_left
       end
     end
@@ -796,7 +796,7 @@ class Game_Character
   def turn_toward_player
     sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
     sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
-    return if sx == 0 and sy == 0
+    return if sx == 0 && sy == 0
     if sx.abs > sy.abs
       (sx > 0) ? turn_left : turn_right
     else
@@ -807,7 +807,7 @@ class Game_Character
   def turn_away_from_player
     sx = @x + @width / 2.0 - ($game_player.x + $game_player.width / 2.0)
     sy = @y - @height / 2.0 - ($game_player.y - $game_player.height / 2.0)
-    return if sx == 0 and sy == 0
+    return if sx == 0 && sy == 0
     if sx.abs > sy.abs
       (sx > 0) ? turn_right : turn_left
     else

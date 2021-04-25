@@ -112,9 +112,9 @@ class Game_Screen
       @flash_color.alpha = @flash_color.alpha*(d-1)/d
       @flash_duration -= 1
     end
-    if @shake_duration>=1 or @shake!=0
+    if @shake_duration>=1 || @shake!=0
       delta = (@shake_power*@shake_speed*@shake_direction)/10.0
-      if @shake_duration<=1 and @shake*(@shake+delta)<0
+      if @shake_duration<=1 && @shake*(@shake+delta)<0
         @shake = 0
       else
         @shake += delta

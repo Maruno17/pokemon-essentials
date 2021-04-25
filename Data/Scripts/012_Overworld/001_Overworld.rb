@@ -582,7 +582,7 @@ def pbTurnTowardEvent(event,otherEvent)
   end
   sx += (event.width - otherEvent.width) / 2.0
   sy -= (event.height - otherEvent.height) / 2.0
-  return if sx == 0 and sy == 0
+  return if sx == 0 && sy == 0
   if sx.abs > sy.abs
     (sx > 0) ? event.turn_left : event.turn_right
   else

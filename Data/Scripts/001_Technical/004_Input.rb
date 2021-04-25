@@ -2,11 +2,11 @@ module Input
   USE      = C
   BACK     = B
   ACTION   = A
-  AUX1     = X
-  AUX2     = Y
+  JUMPUP   = X
+  JUMPDOWN = Y
   SPECIAL  = Z
-  JUMPUP   = L
-  JUMPDOWN = R
+  AUX1     = L
+  AUX2     = R
 
   unless defined?(update_KGC_ScreenCapture)
     class << Input

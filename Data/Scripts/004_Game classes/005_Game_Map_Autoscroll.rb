@@ -80,10 +80,10 @@ class Interpreter
   def autoscroll(x,y,speed=SCROLL_SPEED_DEFAULT)
     if $game_map.scrolling?
       return false
-    elsif not $game_map.valid?(x,y)
+    elsif !$game_map.valid?(x,y)
       print 'Map Autoscroll: given x,y is invalid'
       return command_skip
-    elsif not (1..6).include?(speed)
+    elsif !(1..6).include?(speed)
       print 'Map Autoscroll: invalid speed (1-6 only)'
       return command_skip
     end
@@ -93,7 +93,7 @@ class Interpreter
     max_y = ($game_map.height - Graphics.height*1.0/Game_Map::TILE_HEIGHT) * 4 * Game_Map::TILE_HEIGHT
     count_x = ($game_map.display_x - [0,[x*Game_Map::REAL_RES_X-center_x,max_x].min].max)/Game_Map::REAL_RES_X
     count_y = ($game_map.display_y - [0,[y*Game_Map::REAL_RES_Y-center_y,max_y].min].max)/Game_Map::REAL_RES_Y
-    if not @diag
+    if !@diag
       @diag = true
       dir = nil
       if count_x > 0
@@ -113,7 +113,7 @@ class Interpreter
     else
       @diag = false
       dir = nil
-      if count_x != 0 and count_y != 0
+      if count_x != 0 && count_y != 0
         return false
       elsif count_x > 0
         dir = 4

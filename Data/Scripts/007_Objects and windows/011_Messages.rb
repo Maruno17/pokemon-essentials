@@ -43,7 +43,7 @@ class Scene_Battle
         $game_map.screen.update
       end
       # If timer has reached 0
-      if $game_system.timer_working and $game_system.timer == 0
+      if $game_system.timer_working && $game_system.timer == 0
         # Abort battle
         $game_temp.battle_abort = true
       end

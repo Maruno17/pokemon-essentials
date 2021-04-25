@@ -109,9 +109,9 @@ class Game_Player < Game_Character
       next if !event.name[/trainer\((\d+)\)/i]
       distance = $~[1].to_i
       # If event coordinates and triggers are consistent
-      if pbEventCanReachPlayer?(event,self,distance) and triggers.include?(event.trigger)
+      if pbEventCanReachPlayer?(event,self,distance) && triggers.include?(event.trigger)
         # If starting determinant is front event (other than jumping)
-        result.push(event) if not event.jumping? and not event.over_trigger?
+        result.push(event) if !event.jumping? && !event.over_trigger?
       end
     end
     return result
@@ -126,9 +126,9 @@ class Game_Player < Game_Character
       next if !event.name[/counter\((\d+)\)/i]
       distance = $~[1].to_i
       # If event coordinates and triggers are consistent
-      if pbEventFacesPlayer?(event,self,distance) and triggers.include?(event.trigger)
+      if pbEventFacesPlayer?(event,self,distance) && triggers.include?(event.trigger)
         # If starting determinant is front event (other than jumping)
-        result.push(event) if not event.jumping? and not event.over_trigger?
+        result.push(event) if !event.jumping? && !event.over_trigger?
       end
     end
     return result
@@ -200,7 +200,7 @@ class Game_Player < Game_Character
       return $MapFactory.isPassableFromEdge?(new_x, new_y)
     end
     # If debug mode is ON and Ctrl key was pressed
-    return true if $DEBUG and Input.press?(Input::CTRL)
+    return true if $DEBUG && Input.press?(Input::CTRL)
     return super
   end
 

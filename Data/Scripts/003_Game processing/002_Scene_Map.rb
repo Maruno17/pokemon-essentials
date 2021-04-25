@@ -179,7 +179,7 @@ class Scene_Map
       if Input.trigger?(Input::USE)
         $PokemonTemp.hiddenMoveEventCalling = true
       elsif Input.trigger?(Input::BACK)
-        unless $game_system.menu_disabled or $game_player.moving?
+        unless $game_system.menu_disabled || $game_player.moving?
           $game_temp.menu_calling = true
           $game_temp.menu_beep = true
         end

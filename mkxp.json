@@ -180,11 +180,11 @@
     "bindingNames": {"c": "Use",
                      "b": "Back",
                      "a": "Action",
-					 "x": "(unused)",
-					 "y": "(unused)",
+					 "x": "JumpUp",
+					 "y": "JumpDown",
 					 "z": "Special",
-					 "l": "JumpUp",
-					 "r": "JumpDown"},
+					 "l": "(unused)",
+					 "r": "(unused)"},
 
 
     // Allow symlinks for game assets to be followed
