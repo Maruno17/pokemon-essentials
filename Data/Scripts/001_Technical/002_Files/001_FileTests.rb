@@ -32,6 +32,7 @@ class Dir
   #  Checks for existing directory, gets around accents
   #-----------------------------------------------------------------------------
   def self.safe?(dir)
+    return false if !FileTest.directory?(dir)
     ret = false
     self.chdir(dir) { ret = true } rescue nil
     return ret

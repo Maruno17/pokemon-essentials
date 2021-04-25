@@ -350,7 +350,8 @@ module PluginManager
   def self.error(msg)
     Graphics.update
     t = Thread.new do
-      p "Plugin Error:\n#{msg}"
+      echoln "Plugin Error:\r\n#{msg}"
+      p "Plugin Error: #{msg}"
       Thread.exit
     end
     while t.status
@@ -505,14 +506,17 @@ module PluginManager
   def self.validateDependencies(name, meta, og = nil)
     # exit if no registered dependency
     return nil if !meta[name] || !meta[name][:dependencies]
+    og = [name] if !og
     # go through all dependencies
     for dname in meta[name][:dependencies]
       # clean the name to a simple string
       dname = dname[0] if dname.is_a?(Array) && dname.length == 2
       dname = dname[1] if dname.is_a?(Array) && dname.length == 3
-      # catch looping dependecy issue
-      self.error("Plugin '#{og}' has looping dependencies which cannot be resolved automatically.") if !og.nil? && og == dname
-      self.validateDependencies(dname, meta, name)
+      # catch looping dependency issue
+      self.error("Plugin '#{og[0]}' has looping dependencies which cannot be resolved automatically.") if !og.nil? && og.include?(dname)
+      new_og = og.clone
+      new_og.push(dname)
+      self.validateDependencies(dname, meta, new_og)
     end
     return name
   end
