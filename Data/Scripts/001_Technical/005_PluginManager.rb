@@ -428,6 +428,45 @@ module PluginManager
     return 0
   end
   #-----------------------------------------------------------------------------
+  #  formats the error message
+  #-----------------------------------------------------------------------------
+  def self.pluginErrorMsg(name, script)
+    # begin message formatting
+    msg  = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
+    msg += "#{Essentials::ERROR_TEXT}\r\n"   # For third party scripts to add to
+    msg += "Error in Plugin [#{name}]:\r\n"
+    msg += "#{$!.class} occurred.\r\n"
+    # go through message content
+    for line in $!.message.split("\r\n")
+      next if !line || line == ""
+      n = line[/\d+/]
+      err = line.split(":")[-1].strip
+      lms = line.split(":")[0].strip
+      err.gsub!(n, "") if n
+      err = err.capitalize if err.is_a?(String) && !err.empty?
+      linum = n ? "Line #{n}: " : ""
+      msg += "#{linum}#{err}: #{lms}\r\n"
+    end
+    # show trace
+    msg += "\r\nFull trace can be found below:\r\n"
+    for bck in $!.backtrace
+      msg += "#{bck}\r\n"
+    end
+    # output to log
+    errorlog = "errorlog.txt"
+    if (Object.const_defined?(:RTP) rescue false)
+      errorlog = RTP.getSaveFileName("errorlog.txt")
+    end
+    premessage = "\r\n=================\r\n\r\n[#{Time.now}]\r\n"
+    File.open(errorlog, "ab") { |f| f.write(premessage); f.write(msg) }
+    errorlogline = errorlog.gsub!("/", "\\")
+    errorlogline.sub!(Dir.pwd + "\\", "")
+    errorlogline.sub!(pbGetUserName, "USERNAME")
+    errorlogline = "\r\n" + errorlogline if errorlogline.length > 20
+    # output message
+    return "#{msg}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl after closing this message to copy it to the clipboard."
+  end
+  #-----------------------------------------------------------------------------
   # Used to read the metadata file
   #-----------------------------------------------------------------------------
   def self.readMeta(dir, file)
@@ -481,7 +520,7 @@ module PluginManager
     meta[:scripts] = [] if !meta[:scripts]
     # get all script files from plugin Dir
     for fl in Dir.all(dir)
-      next if !File.extname(fl).include?(".rb")
+      next if !fl.include?(".rb")
       meta[:scripts].push(fl.gsub("#{dir}/", ""))
     end
     # ensure no duplicate script files are queued
@@ -606,7 +645,9 @@ module PluginManager
       dat = [o, meta, []]
       # iterate through each file to deflate
       for file in plugins[o][:scripts]
-        File.open("#{plugins[o][:dir]}/#{file}", 'rb') { |f| dat[2].push(Zlib::Deflate.deflate(f.read)) }
+        File.open("#{plugins[o][:dir]}/#{file}", 'rb') do |f|
+          dat[2].push([file, Zlib::Deflate.deflate(f.read)])
+        end
       end
       # push to the main scripts array
       scripts.push(dat)
@@ -624,7 +665,6 @@ module PluginManager
     order, plugins = self.getPluginOrder
     # compile if necessary
     self.compilePlugins(order, plugins) if self.needCompiling?(order, plugins)
-    # run the plugins from compiled archive
     # load plugins
     scripts = load_data("Data/PluginScripts.rxdata")
     for plugin in scripts
@@ -635,38 +675,37 @@ module PluginManager
       # go through each script and interpret
       for scr in script
         # turn code into plaintext
-        code = Zlib::Inflate.inflate(scr)
+        code = Zlib::Inflate.inflate(scr[1])
         # get rid of tabs
         code.gsub!("\t", "  ")
         # construct filename
-        fname = "[Plugin] " + name
+        sname = scr[0].gsub("\\","/").split("/")[-1]
+        fname = "[#{name}] #{sname}"
         # try to run the code
         begin
           eval(code, TOPLEVEL_BINDING, fname)
         rescue Exception   # format error message to display
-          msg = "[Pokémon Essentials v#{Essentials::VERSION}] #{Essentials::ERROR_TEXT}\r\n\r\n"
-          msg += "#{$raise_msg}\r\n-------------------------------\r\n" if $raise_msg
-          msg += "Error in Plugin [#{name}]:\r\n"
-          msg += "#{$!.class} occurred.\r\n"
-          for line in $!.message.split("\r\n")
-            next if !line || line == ""
-            n = line[/\d+/]
-            err = line.split(":")[-1].strip
-            lms = line.split(":")[0].strip
-            err.gsub!(n, "") if n
-            err = err.capitalize if err.is_a?(String) && !err.empty?
-            linum = n ? "Line #{n}: " : ""
-            msg += "#{linum}#{err}: #{lms}\r\n"
+          Graphics.update
+          t = Thread.new do
+            print(self.pluginErrorMsg(name, sname))
+            # Give a ~500ms coyote time to start holding Control
+            tm = System.delta
+            until (System.delta - tm) >= 500000
+              Input.update
+              if Input.press?(Input::CTRL)
+                Input.clipboard = message
+                break
+              end
+            end
+            Thread.exit
           end
-          msg += "\r\nFull trace can be found below:\r\n"
-          for bck in $!.backtrace
-            msg += "#{bck}\r\n"
+          while t.status
+            Graphics.update
           end
-          msg += "\r\nEnd of Error."
-          $raise_msg = nil
-          raise msg
+          Kernel.exit! true
         end
       end
     end
   end
+  #-----------------------------------------------------------------------------
 end

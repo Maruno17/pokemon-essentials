@@ -21,12 +21,17 @@ class Dir
   def self.all(dir, filters = "*", full = true)
     # sets variables for starting
     files = []
+    subfolders = []
     for file in self.get(dir, filters, full)
       # engages in recursion to read the entire file tree
-      files += self.safe?(file) ? self.get(file, filters, full) : [file]
+      if self.safe?(file)   # Is a directory
+        subfolders += self.all(file, filters, full)
+      else   # Is a file
+        files += [file]
+      end
     end
     # returns all found files
-    return files
+    return files + subfolders
   end
   #-----------------------------------------------------------------------------
   #  Checks for existing directory, gets around accents
