@@ -76,6 +76,13 @@ class Array
   def ^(other)   # xor of two arrays
     return (self|other) - (self&other)
   end
+
+  def swap(val1, val2)
+    index1 = self.index(val1)
+    index2 = self.index(val2)
+    self[index1] = val2
+    self[index2] = val1
+  end
 end
 
 #===============================================================================

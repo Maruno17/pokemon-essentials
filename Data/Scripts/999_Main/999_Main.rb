@@ -24,6 +24,7 @@ end
 
 def mainFunctionDebug
   begin
+    PluginManager.runPlugins
     Compiler.main
     Game.initialize
     Game.set_up_system
