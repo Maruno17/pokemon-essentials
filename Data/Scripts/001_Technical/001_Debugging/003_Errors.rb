@@ -18,7 +18,6 @@ def pbGetExceptionMessage(e,_script="")
 end
 
 def pbPrintException(e)
-  premessage = "\r\n=================\r\n\r\n[#{Time.now}]\r\n"
   emessage = ""
   if $EVENTHANGUPMSG && $EVENTHANGUPMSG!=""
     emessage = $EVENTHANGUPMSG   # Message with map/event ID generated elsewhere
@@ -26,27 +25,34 @@ def pbPrintException(e)
   else
     emessage = pbGetExceptionMessage(e)
   end
-  btrace = ""
-  if e.backtrace
-    maxlength = ($INTERNAL) ? 25 : 10
-    e.backtrace[0,maxlength].each { |i| btrace += "#{i}\r\n" }
-  end
-  btrace.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] } rescue nil
+  # begin message formatting
   message = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
   message += "#{Essentials::ERROR_TEXT}\r\n"   # For third party scripts to add to
   message += "Exception: #{e.class}\r\n"
   message += "Message: #{emessage}\r\n"
-  message += "\r\nBacktrace:\r\n#{btrace}"
-  errorlog = "errorlog.txt"
-  if (Object.const_defined?(:RTP) rescue false)
-    errorlog = RTP.getSaveFileName("errorlog.txt")
+  # show last 10/25 lines of backtrace
+  message += "\r\nBacktrace:\r\n"
+  btrace = ""
+  if e.backtrace
+    maxlength = ($INTERNAL) ? 25 : 10
+    e.backtrace[0, maxlength].each { |i| btrace += "#{i}\r\n" }
   end
-  File.open(errorlog,"ab") { |f| f.write(premessage); f.write(message) }
-  errorlogline = errorlog.gsub!("/", "\\")
+  btrace.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] } rescue nil
+  message += btrace
+  # output to log
+  errorlog = "errorlog.txt"
+  errorlog = RTP.getSaveFileName("errorlog.txt") if (Object.const_defined?(:RTP) rescue false)
+  File.open(errorlog, "ab") do |f|
+    f.write("\r\n=================\r\n\r\n[#{Time.now}]\r\n")
+    f.write(message)
+  end
+  # format/censor the error log directory
+  errorlogline = errorlog.gsub("/", "\\")
   errorlogline.sub!(Dir.pwd + "\\", "")
   errorlogline.sub!(pbGetUserName, "USERNAME")
   errorlogline = "\r\n" + errorlogline if errorlogline.length > 20
-  print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl after closing this message to copy it to the clipboard.")
+  # output message
+  print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl when closing this message to copy it to the clipboard.")
   # Give a ~500ms coyote time to start holding Control
   t = System.delta
   until (System.delta - t) >= 500000

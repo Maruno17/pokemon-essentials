@@ -432,10 +432,10 @@ module PluginManager
   #-----------------------------------------------------------------------------
   def self.pluginErrorMsg(name, script)
     # begin message formatting
-    msg  = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
-    msg += "#{Essentials::ERROR_TEXT}\r\n"   # For third party scripts to add to
-    msg += "Error in Plugin [#{name}]:\r\n"
-    msg += "#{$!.class} occurred.\r\n"
+    message  = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
+    message += "#{Essentials::ERROR_TEXT}\r\n"   # For third party scripts to add to
+    message += "Error in Plugin [#{name}]:\r\n"
+    message += "#{$!.class} occurred.\r\n"
     # go through message content
     for line in $!.message.split("\r\n")
       next if !line || line == ""
@@ -445,26 +445,34 @@ module PluginManager
       err.gsub!(n, "") if n
       err = err.capitalize if err.is_a?(String) && !err.empty?
       linum = n ? "Line #{n}: " : ""
-      msg += "#{linum}#{err}: #{lms}\r\n"
+      message += "#{linum}#{err}: #{lms}\r\n"
     end
-    # show trace
-    msg += "\r\nFull trace can be found below:\r\n"
-    for bck in $!.backtrace
-      msg += "#{bck}\r\n"
-    end
+    # show last 10 lines of backtrace
+    message += "\r\nBacktrace:\r\n"
+    $!.backtrace[0, 10].each { |i| message += "#{i}\r\n" }
     # output to log
     errorlog = "errorlog.txt"
-    if (Object.const_defined?(:RTP) rescue false)
-      errorlog = RTP.getSaveFileName("errorlog.txt")
+    errorlog = RTP.getSaveFileName("errorlog.txt") if (Object.const_defined?(:RTP) rescue false)
+    File.open(errorlog, "ab") do |f|
+      f.write("\r\n=================\r\n\r\n[#{Time.now}]\r\n")
+      f.write(message)
     end
-    premessage = "\r\n=================\r\n\r\n[#{Time.now}]\r\n"
-    File.open(errorlog, "ab") { |f| f.write(premessage); f.write(msg) }
-    errorlogline = errorlog.gsub!("/", "\\")
+    # format/censor the error log directory
+    errorlogline = errorlog.gsub("/", "\\")
     errorlogline.sub!(Dir.pwd + "\\", "")
     errorlogline.sub!(pbGetUserName, "USERNAME")
     errorlogline = "\r\n" + errorlogline if errorlogline.length > 20
     # output message
-    return "#{msg}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl after closing this message to copy it to the clipboard."
+    print("#{message}\r\nThis exception was logged in #{errorlogline}.\r\nHold Ctrl when closing this message to copy it to the clipboard.")
+    # Give a ~500ms coyote time to start holding Control
+    t = System.delta
+    until (System.delta - t) >= 500000
+      Input.update
+      if Input.press?(Input::CTRL)
+        Input.clipboard = message
+        break
+      end
+    end
   end
   #-----------------------------------------------------------------------------
   # Used to read the metadata file
@@ -493,23 +501,23 @@ module PluginManager
         else   # Push dependency type, name and version of plugin dependency
           meta[:dependencies].push([data[2].downcase.to_sym, data[0], data[1]])
         end
-      when "EXACT"
+      when 'EXACT'
         next if data.length < 2   # Exact dependencies must have a version given; ignore if not
         meta[:dependencies] = [] if !meta[:dependencies]
         meta[:dependencies].push([:exact, data[0], data[1]])
-      when "OPTIONAL"
+      when 'OPTIONAL'
         next if data.length < 2   # Optional dependencies must have a version given; ignore if not
         meta[:dependencies] = [] if !meta[:dependencies]
         meta[:dependencies].push([:optional, data[0], data[1]])
       when 'CONFLICTS'
         meta[:incompatibilities] = [] if !meta[:incompatibilities]
         data.each { |value| meta[:incompatibilities].push(value) if value && !value.empty? }
-      when "SCRIPTS"
+      when 'SCRIPTS'
         meta[:scripts] = [] if !meta[:scripts]
         data.each { |scr| meta[:scripts].push(scr) }
-      when "CREDITS"
+      when 'CREDITS'
         meta[:credits] = data
-      when "LINK", "WEBSITE"
+      when 'LINK', 'WEBSITE'
         meta[:link] = data[0]
       else
         meta[property.downcase.to_sym] = data[0]
@@ -616,7 +624,6 @@ module PluginManager
     return false if !$DEBUG || safeExists?("Game.rgssad")
     return true if !safeExists?("Data/PluginScripts.rxdata")
     return true if Input.press?(Input::CTRL)
-    ret = false
     # analyze whether or not to push recompile
     mtime = File.mtime("Data/PluginScripts.rxdata")
     for o in order
@@ -624,17 +631,18 @@ module PluginManager
       scr = plugins[o][:scripts]
       dir = plugins[o][:dir]
       for sc in scr
-        ret = true if File.mtime("#{dir}/#{sc}") > mtime
+        return true if File.mtime("#{dir}/#{sc}") > mtime
       end
-      ret = true if File.mtime("#{dir}/meta.txt") > mtime
+      return true if File.mtime("#{dir}/meta.txt") > mtime
     end
-    # return result
-    return ret
+    return false
   end
   #-----------------------------------------------------------------------------
   # Check if plugins need compiling
   #-----------------------------------------------------------------------------
   def self.compilePlugins(order, plugins)
+    echoln ""
+    echo 'Compiling plugin scripts...'
     scripts = []
     # go through the entire order one by one
     for o in order
@@ -656,6 +664,8 @@ module PluginManager
     File.open("Data/PluginScripts.rxdata", 'wb') { |f| Marshal.dump(scripts, f) }
     # collect garbage
     GC.start
+    echoln ' done.'
+    echoln ""
   end
   #-----------------------------------------------------------------------------
   # Check if plugins need compiling
@@ -685,23 +695,7 @@ module PluginManager
         begin
           eval(code, TOPLEVEL_BINDING, fname)
         rescue Exception   # format error message to display
-          Graphics.update
-          t = Thread.new do
-            print(self.pluginErrorMsg(name, sname))
-            # Give a ~500ms coyote time to start holding Control
-            tm = System.delta
-            until (System.delta - tm) >= 500000
-              Input.update
-              if Input.press?(Input::CTRL)
-                Input.clipboard = message
-                break
-              end
-            end
-            Thread.exit
-          end
-          while t.status
-            Graphics.update
-          end
+          self.pluginErrorMsg(name, sname)
           Kernel.exit! true
         end
       end
