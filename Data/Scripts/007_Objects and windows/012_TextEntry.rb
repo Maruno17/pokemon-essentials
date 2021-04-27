@@ -210,13 +210,13 @@ class Window_TextEntry < SpriteWindow_Base
       pbDrawShadowText(bitmap,x,y, textwidth+4, 32, c,@baseColor,@shadowColor)
       # Draw cursor if necessary
       if ((@frame/10)&1) == 0 && i==@helper.cursor
-        bitmap.fill_rect(x,y-2,2,24,cursorcolor)
+        bitmap.fill_rect(x,y+4,2,24,cursorcolor)
       end
       # Add x to drawn text width
       x += textwidth
     end
     if ((@frame/10)&1) == 0 && textscan.length==@helper.cursor
-      bitmap.fill_rect(x,y-2,2,24,cursorcolor)
+      bitmap.fill_rect(x,y+4,2,24,cursorcolor)
     end
   end
 end
@@ -240,7 +240,7 @@ class Window_TextEntry_Keyboard < Window_TextEntry
         self.refresh
       end
       return
-    elsif Input.triggerex?(:LEFT) || Input.repeatex?(:RIGHT)
+    elsif Input.triggerex?(:RIGHT) || Input.repeatex?(:RIGHT)
       if @helper.cursor < self.text.scan(/./m).length
         @helper.cursor+=1
         @frame=0

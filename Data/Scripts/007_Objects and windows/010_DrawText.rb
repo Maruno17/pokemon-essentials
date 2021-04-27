@@ -507,7 +507,7 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
     nextline=0
     graphic=nil
     graphicX=0
-    graphicY=0
+    graphicY=4
     graphicWidth=nil
     graphicHeight=nil
     graphicRect=nil
@@ -1089,11 +1089,11 @@ def drawSingleFormattedChar(bitmap,ch)
       bitmap.font.color=ch[8] if bitmap.font.color!=ch[8]
     end
     if ch[10] # underline
-      bitmap.fill_rect(ch[1],ch[2]+ch[4]-[(ch[4]-bitmap.font.size)/2,0].max-2,
+      bitmap.fill_rect(ch[1],ch[2]+ch[4]-4-[(ch[4]-bitmap.font.size)/2,0].max-2,
          ch[3]-2,2,ch[8])
     end
     if ch[11] # strikeout
-      bitmap.fill_rect(ch[1],ch[2]+(ch[4]/2),ch[3]-2,2,ch[8])
+      bitmap.fill_rect(ch[1],ch[2]+(ch[4]/2)-4,ch[3]-2,2,ch[8])
     end
   end
 end

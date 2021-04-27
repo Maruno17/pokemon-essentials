@@ -162,7 +162,7 @@ SaveData.register_conversion(:v19_convert_bag) do
         else
           item_data = GameData::Item.try_get(item)
           if item_data
-            self.registeredItems = item_data.id
+            self.registeredItems[i] = item_data.id
           else
             self.registeredItems[i] = nil
           end

@@ -332,7 +332,7 @@ end
 def pbEventFacesPlayer?(event, player, distance)
   return false if !event || !player || distance <= 0
   x_min = x_max = y_min = y_max = -1
-  case direction
+  case event.direction
   when 2   # Down
     x_min = event.x
     x_max = event.x + event.width - 1
