@@ -21,7 +21,7 @@ module GameData
       tr_type_data = self.try_get(tr_type)
       return nil if tr_type_data.nil?
       # Check for files
-      if !optional_suffix.empty?
+      if optional_suffix && !optional_suffix.empty?
         ret = path + tr_type_data.id.to_s + optional_suffix + suffix
         return ret if pbResolveBitmap(ret)
       end
@@ -49,7 +49,7 @@ module GameData
     end
 
     def self.back_sprite_filename(tr_type)
-      return self.check_file(tr_type, "Graphics/Trainers/", nil, "_back")
+      return self.check_file(tr_type, "Graphics/Trainers/", "", "_back")
     end
 
     def self.player_back_sprite_filename(tr_type)
