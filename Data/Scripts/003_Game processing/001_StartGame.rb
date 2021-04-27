@@ -49,6 +49,8 @@ module Game
     $MapFactory = PokemonMapFactory.new($data_system.start_map_id)
     $game_player.moveto($data_system.start_x, $data_system.start_y)
     $game_player.refresh
+    $PokemonEncounters = PokemonEncounters.new
+    $PokemonEncounters.setup($game_map.map_id)
     $game_map.autoplay
     $game_map.update
   end
