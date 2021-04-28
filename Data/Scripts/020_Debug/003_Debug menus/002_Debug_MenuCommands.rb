@@ -543,6 +543,7 @@ DebugMenuCommands.register("demoparty", {
     for id in species
       party.push(id) if GameData::Species.exists?(id)
     end
+    $Trainer.party.clear
     # Generate Pokémon of each species at level 20
     party.each do |species|
       pkmn = Pokemon.new(species, 20)
