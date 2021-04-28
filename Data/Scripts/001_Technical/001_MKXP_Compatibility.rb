@@ -8,7 +8,7 @@ def pbSetWindowText(string)
 end
 
 class Bitmap
-  alias mkxp_draw_text draw_text
+  alias mkxp_draw_text draw_text unless method_defined?(:mkxp_draw_text)
 
   def draw_text(x, y, width, height, text, align = 0)
     height = text_size(text).height

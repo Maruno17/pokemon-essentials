@@ -757,7 +757,7 @@ module WeatherEffectProperty
       options.push(w.real_name)
       ids.push(w.id)
     end
-    cmd = pbMessage(_INTL("Choose a weather effect."), options, -1, default)
+    cmd = pbMessage(_INTL("Choose a weather effect."), options, -1, nil, default)
     return nil if cmd < 0 || ids[cmd] == :None
     params = ChooseNumberParams.new
     params.setRange(0, 100)
