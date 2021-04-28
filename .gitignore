@@ -9,7 +9,7 @@ Data/*
 !Data/Scripts/
 
 # Files in the main project folder
-# Game.ini
+Game.ini
 Game.rxproj
 RGSS*.dll
 
