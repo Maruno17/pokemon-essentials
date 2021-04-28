@@ -149,6 +149,11 @@ class Sprite_Character < RPG::Sprite
     update
   end
 
+  def clearShadows
+    @ombrelist.each { |s| s.dispose if s }
+    @ombrelist.clear
+  end
+
   alias shadow_update update
 
   def update

@@ -368,12 +368,12 @@ def pbTrainerBattleCore(*args)
   foePartyStarts = []
   for arg in args
     raise _INTL("Expected an array of trainer data, got {1}.",arg) if !arg.is_a?(Array)
-    if arg.is_a?(NPCTrainer)
-      foeTrainers.push(arg)
+    if arg[0].is_a?(NPCTrainer)
+      foeTrainers.push(arg[0])
       foePartyStarts.push(foeParty.length)
-      arg.party.each { |pkmn| foeParty.push(pkmn) }
-      foeEndSpeeches.push(arg.lose_text)
-      foeItems.push(arg.items)
+      arg[0].party.each { |pkmn| foeParty.push(pkmn) }
+      foeEndSpeeches.push(arg[0].lose_text)
+      foeItems.push(arg[0].items)
     else
       # [trainer type, trainer name, ID, speech (optional)]
       trainer = pbLoadTrainer(arg[0],arg[1],arg[2])

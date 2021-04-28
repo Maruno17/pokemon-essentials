@@ -369,7 +369,7 @@ def pbEventCanReachPlayer?(event, player, distance)
   when 2   # Down
     real_distance = player.y - event.y - 1
   when 4   # Left
-    real_distance = event.x - player.x + 1
+    real_distance = event.x - player.x - 1
   when 6   # Right
     real_distance = player.x - event.x - event.width
   when 8   # Up
