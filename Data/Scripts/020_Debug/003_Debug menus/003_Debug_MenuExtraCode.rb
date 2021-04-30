@@ -683,8 +683,8 @@ end
 def pbDebugFixInvalidTiles
   num_errors = 0
   num_error_maps = 0
-  @tilesets = $data_tilesets
-  mapData = MapData.new
+  tilesets = $data_tilesets
+  mapData = Compiler::MapData.new
   t = Time.now.to_i
   Graphics.update
   for id in mapData.mapinfos.keys.sort
@@ -702,7 +702,7 @@ def pbDebugFixInvalidTiles
       for y in 0...map.data.ysize
         for i in 0...map.data.zsize
           tile_id = map.data[x, y, i]
-          next if pbCheckTileValidity(tile_id, map, @tilesets, passages)
+          next if pbCheckTileValidity(tile_id, map, tilesets, passages)
           map.data[x, y, i] = 0
           changed = true
           num_errors += 1
@@ -714,7 +714,7 @@ def pbDebugFixInvalidTiles
       event = map.events[key]
       for page in event.pages
         next if page.graphic.tile_id <= 0
-        next if pbCheckTileValidity(page.graphic.tile_id, map, @tilesets, passages)
+        next if pbCheckTileValidity(page.graphic.tile_id, map, tilesets, passages)
         page.graphic.tile_id = 0
         changed = true
         num_errors += 1

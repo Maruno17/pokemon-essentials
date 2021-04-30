@@ -178,7 +178,7 @@ class PokemonTilesetScene
         end
       elsif Input.trigger?(Input::BACK)
         if pbConfirmMessage(_INTL("Save changes?"))
-          save_data("Data/Tilesets.rxdata", @tilesets_data)
+          save_data(@tilesets_data, "Data/Tilesets.rxdata")
           $data_tilesets = @tilesets_data
           if $game_map && $MapFactory
             $MapFactory.setup($game_map.map_id)

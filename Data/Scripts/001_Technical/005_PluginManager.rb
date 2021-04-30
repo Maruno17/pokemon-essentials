@@ -623,6 +623,7 @@ module PluginManager
     # fixed actions
     return false if !$DEBUG || safeExists?("Game.rgssad")
     return true if !safeExists?("Data/PluginScripts.rxdata")
+    Input.update
     return true if Input.press?(Input::CTRL)
     # analyze whether or not to push recompile
     mtime = File.mtime("Data/PluginScripts.rxdata")

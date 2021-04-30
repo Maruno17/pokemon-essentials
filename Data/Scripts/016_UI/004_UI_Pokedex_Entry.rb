@@ -70,9 +70,11 @@ class PokemonPokedexInfo_Scene
   def pbStartSceneBrief(species)  # For standalone access, shows first page only
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
-    dexnum = species
+    dexnum = 0
     dexnumshift = false
     if $Trainer.pokedex.unlocked?(-1)   # National Dex is unlocked
+      species_data = GameData::Species.try_get(species)
+      dexnum = species_data.id_number if species_data
       dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
     else
       dexnum = 0
