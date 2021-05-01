@@ -44,7 +44,7 @@ module PokeBattle_BattleCommon
     @caughtPokemon.each do |pkmn|
       pbPlayer.pokedex.register(pkmn)   # In case the form changed upon leaving battle
       # Record the Pokémon's species as owned in the Pokédex
-      if !pbPlayer.hasOwned?(pkmn.species)
+      if !pbPlayer.owned?(pkmn.species)
         pbPlayer.pokedex.set_owned(pkmn.species)
         if $Trainer.has_pokedex
           pbDisplayPaused(_INTL("{1}'s data was added to the Pokédex.",pkmn.name))
