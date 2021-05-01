@@ -8,6 +8,13 @@ class Trainer
   attr_accessor :language
   attr_accessor :party
 
+  def inspect
+    str = self.to_s.chop
+    party_str = @party.map { |p| p.species_data.species }.inspect
+    str << format(' %s @party=%s>', self.full_name, party_str)
+    return str
+  end
+
   def full_name
     return _INTL("{1} {2}", trainer_type_name, @name)
   end
