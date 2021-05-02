@@ -81,15 +81,15 @@ module MessageConfig
     if skin && skin!=""
       skin=pbResolveBitmap("Graphics/Windowskins/"+skin) || ""
     end
-    skin=pbResolveBitmap("Graphics/System/Window") if !skin || skin==""
-    skin=pbResolveBitmap("Graphics/Windowskins/001-Blue01") if !skin || skin==""
+    skin=pbResolveBitmap("Graphics/System/Window") if nil_or_empty?(skin)
+    skin=pbResolveBitmap("Graphics/Windowskins/001-Blue01") if nil_or_empty?(skin)
     return skin || ""
   end
 
   def self.pbGetSystemFrame
     if !@@systemFrame
       skin=MessageConfig.pbDefaultSystemFrame
-      skin=MessageConfig.pbDefaultWindowskin if !skin || skin==""
+      skin=MessageConfig.pbDefaultWindowskin if nil_or_empty?(skin)
       @@systemFrame=skin || ""
     end
     return @@systemFrame
@@ -98,7 +98,7 @@ module MessageConfig
   def self.pbGetSpeechFrame
     if !@@defaultTextSkin
       skin=MessageConfig.pbDefaultSpeechFrame
-      skin=MessageConfig.pbDefaultWindowskin if !skin || skin==""
+      skin=MessageConfig.pbDefaultWindowskin if nil_or_empty?(skin)
       @@defaultTextSkin=skin || ""
     end
     return @@defaultTextSkin

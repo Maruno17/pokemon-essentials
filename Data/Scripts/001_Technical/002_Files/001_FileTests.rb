@@ -181,7 +181,7 @@ module RTP
   @rtpPaths = nil
 
   def self.exists?(filename,extensions=[])
-    return false if !filename || filename==""
+    return false if nil_or_empty?(filename)
     eachPathFor(filename) { |path|
       return true if safeExists?(path)
       for ext in extensions
@@ -200,7 +200,7 @@ module RTP
   end
 
   def self.getPath(filename,extensions=[])
-    return filename if !filename || filename==""
+    return filename if nil_or_empty?(filename)
     eachPathFor(filename) { |path|
       return path if safeExists?(path)
       for ext in extensions
