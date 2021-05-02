@@ -6,7 +6,7 @@ class Pokemon
   def getMegaForm(checkItemOnly = false)
     ret = 0
     GameData::Species.each do |data|
-      next if data.species != @species || data.unmega_form != form_simple
+      next if data.species != @species
       if data.mega_stone && hasItem?(data.mega_stone)
         ret = data.form
         break
