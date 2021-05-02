@@ -31,13 +31,6 @@ class Player < Trainer
   # @return [Array<Array>] downloaded Mystery Gift data
   attr_accessor :mystery_gifts
 
-  def inspect
-    str = self.to_s.chop
-    party_str = @party.map { |p| p.species_data.species }.inspect
-    str << format(' %s @party=%s>', self.full_name, party_str)
-    return str
-  end
-
   # Sets the player's money. It can not exceed {Settings::MAX_MONEY}.
   # @param value [Integer] new money value
   def money=(value)

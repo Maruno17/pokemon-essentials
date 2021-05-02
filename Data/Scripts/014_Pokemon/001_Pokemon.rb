@@ -92,6 +92,12 @@ class Pokemon
   # Maximum number of moves a Pokémon can know at once
   MAX_MOVES     = 4
 
+  def inspect
+    str = self.to_s.chop
+    str << format(' %s Lv.%s>', @species, @level.to_s || '???')
+    return str
+  end
+
   def species_data
     return GameData::Species.get_species_form(@species, form_simple)
   end

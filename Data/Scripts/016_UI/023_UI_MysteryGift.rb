@@ -4,7 +4,6 @@
 #===============================================================================
 # This url is the location of an example Mystery Gift file.
 # You should change it to your file's url once you upload it.
-# NOTE: Essentials cannot handle https addresses. You must use a http address.
 #===============================================================================
 module MysteryGift
   URL = "https://pastebin.com/raw/w6BqqUsm"
