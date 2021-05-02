@@ -37,7 +37,7 @@ class PokeBattle_Battler
       @battle.pbHideAbilitySplash(target)
       pbItemHPHealCheck
     else
-      msg = _INTL("{1} had its energy drained!",target.pbThis) if !msg || msg==""
+      msg = _INTL("{1} had its energy drained!",target.pbThis) if nil_or_empty?(msg)
       @battle.pbDisplay(msg)
       if canHeal?
         amt = (amt*1.3).floor if hasActiveItem?(:BIGROOT)

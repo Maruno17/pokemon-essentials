@@ -120,7 +120,7 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
   # Set original trainer to a foreign one
   pkmn.owner = Pokemon::Owner.new_foreign(owner_name || "", owner_gender)
   # Set nickname
-  pkmn.name = nickname[0, Pokemon::MAX_NAME_SIZE]
+  pkmn.name = nickname[0, Pokemon::MAX_NAME_SIZE] if !nil_or_empty?(nickname)
   # Recalculate stats
   pkmn.calc_stats
   if owner_name

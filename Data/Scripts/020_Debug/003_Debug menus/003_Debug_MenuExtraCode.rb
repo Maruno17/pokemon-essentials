@@ -567,7 +567,7 @@ def pbExportAllAnimations
     if animations
       msgwindow = pbCreateMessageWindow
       for anim in animations
-        next if !anim || anim.length==0 || anim.name==""
+        next if nil_or_empty?(anim)
         pbMessageDisplay(msgwindow,anim.name,false)
         Graphics.update
         safename = anim.name.gsub(/\W/,"_")
