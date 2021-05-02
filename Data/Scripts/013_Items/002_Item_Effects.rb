@@ -878,7 +878,7 @@ ItemHandlers::UseOnPokemon.add(:PINKNECTAR,proc { |item,pkmn,scene|
   end
   pkmn.form = 2
   scene.pbRefresh
-  scene.pbDisplay(_INTL("{1} changed form!",pkmn.name))s
+  scene.pbDisplay(_INTL("{1} changed form!",pkmn.name))
   next true
 })
 
