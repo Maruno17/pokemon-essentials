@@ -868,7 +868,7 @@ class SpriteWindow_Base < SpriteWindow
     @customskin.dispose if @customskin
     @customskin=nil
     resolvedName=pbResolveBitmap(skin)
-    return if nil_or_empty?(resolvedName)
+    return if !resolvedName || resolvedName==""
     @customskin=AnimatedBitmap.new(resolvedName)
     RPG::Cache.retain(resolvedName)
     __setWindowskin(@customskin.bitmap)
