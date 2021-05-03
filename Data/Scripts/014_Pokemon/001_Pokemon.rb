@@ -142,6 +142,18 @@ class Pokemon
     oldForm = @form
     @form = value
     @ability = nil
+    MultipleForms.call("onSetForm", self, value, oldForm)
+    calc_stats
+    $Trainer.pokedex.register(self)
+  end
+
+  # The same as def form=, but yields to a given block in the middle so that a
+  # message about the form changing can be shown before calling "onSetForm"
+  # which may have its own messages, e.g. learning a move.
+  def setForm(value)
+    oldForm = @form
+    @form = value
+    @ability = nil
     yield if block_given?
     MultipleForms.call("onSetForm", self, value, oldForm)
     calc_stats
