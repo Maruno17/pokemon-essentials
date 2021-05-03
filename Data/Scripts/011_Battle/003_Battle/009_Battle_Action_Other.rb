@@ -147,7 +147,7 @@ class PokeBattle_Battle
     @scene.pbRefreshOne(idxBattler)
     pbCommonAnimation("MegaEvolution2",battler)
     megaName = battler.pokemon.megaName
-    megaName = _INTL("Mega {1}", battler.pokemon.speciesName) nil_or_empty?(megaName)
+    megaName = _INTL("Mega {1}", battler.pokemon.speciesName) if nil_or_empty?(megaName)
     pbDisplay(_INTL("{1} has Mega Evolved into {2}!",battler.pbThis,megaName))
     side  = battler.idxOwnSide
     owner = pbGetOwnerIndexFromBattlerIndex(idxBattler)

@@ -421,7 +421,15 @@ class PokeBattle_Battler
     return true if GameData::Item.get(check_item).is_mail?
     return false if @effects[PBEffects::Transform]
     # Items that change a Pokémon's form
-    return true if @pokemon && @pokemon.getMegaForm(true) > 0   # Mega Stone
+    if mega?   # Check if item was needed for this Mega Evolution
+      return true if @pokemon.species_data.mega_stone == check_item
+    else   # Check if item could cause a Mega Evolution
+      GameData::Species.each do |data|
+        next if data.species != @species || data.unmega_form != @form
+        return true if data.mega_stone == check_item
+      end
+    end
+    # Other unlosable items
     return GameData::Item.get(check_item).unlosable?(@species, self.ability)
   end
 
