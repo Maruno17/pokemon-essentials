@@ -80,7 +80,7 @@ class PBPokemon
     end
     for i in 1..maxconst
       val=mod.getName(i)
-      next if !val || val==""
+      next if nil_or_empty?(val)
       return i if val==str
     end
     return 0

@@ -68,7 +68,7 @@ end
 #===============================================================================
 def pbPlayTrainerIntroME(trainer_type)
   trainer_type_data = GameData::TrainerType.get(trainer_type)
-  return if !trainer_type_data.intro_ME || trainer_type_data.intro_ME == ""
+  return if nil_or_empty?(trainer_type_data.intro_ME)
   bgm = pbStringToAudioFile(trainer_type_data.intro_ME)
   pbMEPlay(bgm)
 end

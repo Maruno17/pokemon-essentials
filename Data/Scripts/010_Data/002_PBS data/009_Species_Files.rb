@@ -125,7 +125,7 @@ module GameData
     end
 
     def self.icon_bitmap(species, form = 0, gender = 0, shiny = false, shadow = false)
-      filename = self.icon_filename(species, form, gender,shiny, shadow)
+      filename = self.icon_filename(species, form, gender, shiny, shadow)
       return (filename) ? AnimatedBitmap.new(filename).deanimate : nil
     end
 

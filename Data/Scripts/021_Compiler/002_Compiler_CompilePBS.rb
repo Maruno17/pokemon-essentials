@@ -398,7 +398,7 @@ module Compiler
         for key in schema.keys
           # Skip empty properties, or raise an error if a required property is
           # empty
-          if contents[key].nil? || contents[key] == ""
+          if nil_or_empty?(contents[key])
             if ["Name", "InternalName"].include?(key)
               raise _INTL("The entry {1} is required in PBS/pokemon.txt section {2}.", key, species_number)
             end
@@ -583,7 +583,7 @@ module Compiler
         # Go through schema hash of compilable data and compile this section
         for key in schema.keys
           # Skip empty properties (none are required)
-          if contents[key].nil? || contents[key] == ""
+          if nil_or_empty?(contents[key])
             contents[key] = nil
             next
           end
@@ -922,7 +922,7 @@ module Compiler
         end
         new_format = true
         values = $~[1].split(',').collect! { |v| v.strip.to_i }
-        values[1] = 0 if !values[1] || values[1] == ""
+        values[1] = 0 if nil_or_empty?(values[1])
         map_number = values[0]
         map_version = values[1]
         # Add map encounter's data to records

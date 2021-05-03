@@ -416,7 +416,7 @@ def pbTrainerTypeEditorNew(default_name)
   # Choose a name
   name = pbMessageFreeText(_INTL("Please enter the trainer type's name."),
      (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
-  if name == ""
+  if nil_or_empty?(name)
     return nil if !default_name
     name = default_name
   end
@@ -585,7 +585,7 @@ def pbTrainerBattleEditor
           end
           next if !tr_type
           tr_name = pbMessageFreeText(_INTL("Now enter the trainer's name."), "", false, 30)
-          next if tr_name == ""
+          next if nil_or_empty?(tr_name)
           tr_version = pbGetFreeTrainerParty(tr_type, tr_name)
           if tr_version < 0
             pbMessage(_INTL("There is no room to create a trainer of that type and name."))
@@ -891,7 +891,7 @@ def pbItemEditorNew(default_name)
   # Choose a name
   name = pbMessageFreeText(_INTL("Please enter the item's name."),
      (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
-  if name == ""
+  if nil_or_empty?(name)
     return if !default_name
     name = default_name
   end

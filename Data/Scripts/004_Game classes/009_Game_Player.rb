@@ -423,7 +423,7 @@ def pbGetPlayerCharset(meta,charset,trainer=nil,force=false)
   end
   $game_player.charsetData = [$Trainer.character_ID,charset,outfit] if $game_player
   ret = meta[charset]
-  ret = meta[1] if !ret || ret==""
+  ret = meta[1] if nil_or_empty?(ret)
   if pbResolveBitmap("Graphics/Characters/"+ret+"_"+outfit.to_s)
     ret = ret+"_"+outfit.to_s
   end

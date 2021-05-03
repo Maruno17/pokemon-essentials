@@ -77,7 +77,7 @@ module Compiler
   end
 
   def csvQuote(str,always=false)
-    return "" if !str || str==""
+    return "" if nil_or_empty?(str)
     if always || str[/[,\"]/]   # || str[/^\s/] || str[/\s$/] || str[/^#/]
       str = str.gsub(/[\"]/,"\\\"")
       str = "\"#{str}\""
@@ -316,7 +316,7 @@ module Compiler
   def checkEnumField(ret,enumer)
     if enumer.is_a?(Module)
       begin
-        if ret=="" || !enumer.const_defined?(ret)
+        if nil_or_empty?(ret) || !enumer.const_defined?(ret)
           raise _INTL("Undefined value {1} in {2}\r\n{3}",ret,enumer.name,FileLineData.linereport)
         end
       rescue NameError
@@ -327,7 +327,7 @@ module Compiler
       if !Kernel.const_defined?(enumer.to_sym) && GameData.const_defined?(enumer.to_sym)
         enumer = GameData.const_get(enumer.to_sym)
         begin
-          if ret == "" || !enumer.exists?(ret.to_sym)
+          if nil_or_empty?(ret) || !enumer.exists?(ret.to_sym)
             raise _INTL("Undefined value {1} in {2}\r\n{3}", ret, enumer.name, FileLineData.linereport)
           end
         rescue NameError
@@ -337,7 +337,7 @@ module Compiler
       end
       enumer = Object.const_get(enumer.to_sym)
       begin
-        if ret=="" || !enumer.const_defined?(ret)
+        if nil_or_empty?(ret) || !enumer.const_defined?(ret)
           raise _INTL("Undefined value {1} in {2}\r\n{3}",ret,enumer.name,FileLineData.linereport)
         end
       rescue NameError
@@ -362,16 +362,16 @@ module Compiler
 
   def checkEnumFieldOrNil(ret,enumer)
     if enumer.is_a?(Module)
-      return nil if ret=="" || !(enumer.const_defined?(ret) rescue false)
+      return nil if nil_or_empty?(ret) || !(enumer.const_defined?(ret) rescue false)
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
       if GameData.const_defined?(enumer.to_sym)
         enumer = GameData.const_get(enumer.to_sym)
-        return nil if ret == "" || !enumer.exists?(ret.to_sym)
+        return nil if nil_or_empty?(re) || !enumer.exists?(ret.to_sym)
         return ret.to_sym
       end
       enumer = Object.const_get(enumer.to_sym)
-      return nil if ret=="" || !(enumer.const_defined?(ret) rescue false)
+      return nil if nil_or_empty?(ret) || !(enumer.const_defined?(ret) rescue false)
       return enumer.const_get(ret.to_sym)
     elsif enumer.is_a?(Array)
       idx = findIndex(enumer) { |item| ret==item }
@@ -402,7 +402,7 @@ module Compiler
           record.push(csvInt!(rec,lineno))
         when "I"   # Optional integer
           field = csvfield!(rec)
-          if field==""
+          if nil_or_empty?(field)
             record.push(nil)
           elsif !field[/^\-?\d+$/]
             raise _INTL("Field {1} is not an integer\r\n{2}",field,FileLineData.linereport)
@@ -413,7 +413,7 @@ module Compiler
           record.push(csvPosInt!(rec,lineno))
         when "U"   # Optional positive integer or zero
           field = csvfield!(rec)
-          if field==""
+          if nil_or_empty?(field)
             record.push(nil)
           elsif !field[/^\d+$/]
             raise _INTL("Field '{1}' must be 0 or greater\r\n{2}",field,FileLineData.linereport)
@@ -426,7 +426,7 @@ module Compiler
           record.push(field)
         when "V"   # Optional positive integer
           field = csvfield!(rec)
-          if field==""
+          if nil_or_empty?(field)
             record.push(nil)
           elsif !field[/^\d+$/]
             raise _INTL("Field '{1}' must be greater than 0\r\n{2}",field,FileLineData.linereport)
@@ -443,7 +443,7 @@ module Compiler
           record.push(field.hex)
         when "X"   # Optional hexadecimal number
           field = csvfield!(rec)
-          if field==""
+          if nil_or_empty?(field)
             record.push(nil)
           elsif !field[/^[A-Fa-f0-9]+$/]
             raise _INTL("Field '{1}' is not a hexadecimal number\r\n{2}",field,FileLineData.linereport)
@@ -454,7 +454,7 @@ module Compiler
           record.push(csvFloat!(rec,lineno))
         when "F"   # Optional floating point number
           field = csvfield!(rec)
-          if field==""
+          if nil_or_empty?(field)
             record.push(nil)
           elsif !field[/^\-?^\d*\.?\d*$/]
             raise _INTL("Field {1} is not a floating point number\r\n{2}",field,FileLineData.linereport)
@@ -465,7 +465,7 @@ module Compiler
           record.push(csvBoolean!(rec,lineno))
         when "B"   # Optional Boolean
           field = csvfield!(rec)
-          if field==""
+          if nil_or_empty?(field)
             record.push(nil)
           elsif field[/^1|[Tt][Rr][Uu][Ee]|[Yy][Ee][Ss]|[Tt]|[Yy]$/]
             record.push(true)
@@ -480,7 +480,7 @@ module Compiler
           record.push(field)
         when "N"   # Optional name
           field = csvfield!(rec)
-          if field==""
+          if nil_or_empty?(field)
             record.push(nil)
           elsif !field[/^(?![0-9])\w+$/]
             raise _INTL("Field '{1}' must contain only letters, digits, and\r\nunderscores and can't begin with a number.\r\n{2}",field,FileLineData.linereport)
@@ -491,12 +491,12 @@ module Compiler
           record.push(csvfield!(rec))
         when "S"   # Optional string
           field = csvfield!(rec)
-          record.push((field=="") ? nil : field)
+          record.push((nil_or_empty?(field)) ? nil : field)
         when "q"   # Unformatted text
           record.push(rec)
           rec = ""
         when "Q"   # Optional unformatted text
-          if !rec || rec==""
+          if nil_or_empty?(rec)
             record.push(nil)
           else
             record.push(rec)
@@ -512,7 +512,7 @@ module Compiler
           record.push(csvEnumFieldOrInt!(field,schema[2+i-start],"",FileLineData.linereport))
         when "Y"   # Optional enumerable or integer
           field = csvfield!(rec)
-          if field==""
+          if nil_or_empty?(field)
             record.push(nil)
           elsif field[/^\-?\d+$/]
             record.push(field.to_i)
@@ -521,7 +521,7 @@ module Compiler
           end
         end
       end
-      break if repeat && rec==""
+      break if repeat && nil_or_empty?(rec)
     end while repeat
     return (schema[1].length==1) ? record[0] : record
   end

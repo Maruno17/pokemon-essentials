@@ -170,7 +170,7 @@ class PokeBattle_Battle
             enemyParty = pbParty(idxBattler)
             if enemyParty[idxPartyNew].ability == :ILLUSION
               new_index = pbLastInTeam(idxBattler)
-              idxPartyForName = new_index if new_index >= 0
+              idxPartyForName = new_index if new_index >= 0 && new_index != idxPartyNew
             end
             if pbDisplayConfirm(_INTL("{1} is about to send in {2}. Will you switch your Pokémon?",
                opponent.full_name, enemyParty[idxPartyForName].name))
@@ -257,7 +257,7 @@ class PokeBattle_Battle
     newPkmnName = party[idxParty].name
     if party[idxParty].ability == :ILLUSION
       new_index = pbLastInTeam(idxBattler)
-      newPkmnName = party[new_index].name if new_index >= 0
+      newPkmnName = party[new_index].name if new_index >= 0 && new_index != idxParty
     end
     if pbOwnedByPlayer?(idxBattler)
       opposing = @battlers[idxBattler].pbDirectOpposing

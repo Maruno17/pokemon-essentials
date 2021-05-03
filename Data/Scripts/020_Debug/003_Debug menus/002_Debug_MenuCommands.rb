@@ -840,12 +840,12 @@ DebugMenuCommands.register("renameplayer", {
   "description" => _INTL("Rename the player."),
   "effect"      => proc {
     trname = pbEnterPlayerName("Your name?", 0, Settings::MAX_PLAYER_NAME_SIZE, $Trainer.name)
-    if trname == "" && pbConfirmMessage(_INTL("Give yourself a default name?"))
+    if nil_or_empty?(trname) && pbConfirmMessage(_INTL("Give yourself a default name?"))
       trainertype = $Trainer.trainer_type
       gender      = pbGetTrainerTypeGender(trainertype)
       trname      = pbSuggestTrainerName(gender)
     end
-    if trname == ""
+    if nil_or_empty?(trname)
       pbMessage(_INTL("The player's name remained {1}.", $Trainer.name))
     else
       $Trainer.name = trname
@@ -865,11 +865,11 @@ DebugMenuCommands.register("randomid", {
 })
 
 #===============================================================================
-# Information options
+# Information editors
 #===============================================================================
 DebugMenuCommands.register("editorsmenu", {
   "parent"      => "main",
-  "name"        => _INTL("Information options..."),
+  "name"        => _INTL("Information editors..."),
   "description" => _INTL("Edit information in the PBS files, terrain tags, battle animations, etc."),
   "always_show" => true
 })

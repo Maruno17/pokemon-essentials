@@ -344,7 +344,7 @@ class PokeBattle_Battler
   def hasActiveAbility?(check_ability, ignore_fainted = false)
     return false if !abilityActive?(ignore_fainted)
     return check_ability.include?(@ability_id) if check_ability.is_a?(Array)
-    return check_ability == self.ability
+    return self.ability == check_ability
   end
   alias hasWorkingAbility hasActiveAbility?
 
