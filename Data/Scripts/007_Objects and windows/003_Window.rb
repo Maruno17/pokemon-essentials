@@ -74,6 +74,10 @@ class Window
   attr_reader :openness
   attr_reader :stretch
 
+  def inspect
+    return self.to_s.chop + ">"
+  end
+
   def windowskin
     @_windowskin
   end

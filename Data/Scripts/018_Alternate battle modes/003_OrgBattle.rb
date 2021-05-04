@@ -159,9 +159,10 @@ class PBPokemon
     pokemon.nature = nature
     pokemon.happiness=0
     pokemon.moves[0] = Pokemon::Move.new(self.convertMove(@move1))
-    pokemon.moves[1] = Pokemon::Move.new(self.convertMove(@move2))
-    pokemon.moves[2] = Pokemon::Move.new(self.convertMove(@move3))
-    pokemon.moves[3] = Pokemon::Move.new(self.convertMove(@move4))
+    pokemon.moves[1] = (@move2) ? Pokemon::Move.new(self.convertMove(@move2)) : nil
+    pokemon.moves[2] = (@move3) ? Pokemon::Move.new(self.convertMove(@move3)) : nil
+    pokemon.moves[3] = (@move4) ? Pokemon::Move.new(self.convertMove(@move4)) : nil
+    pokemon.moves.compact!
     if ev.length > 0
       ev.each { |stat| pokemon.ev[stat] = Pokemon::EV_LIMIT / ev.length }
     end
