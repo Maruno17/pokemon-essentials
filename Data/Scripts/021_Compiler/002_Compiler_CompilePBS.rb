@@ -925,7 +925,7 @@ module Compiler
         end
         new_format = true
         values = $~[1].split(',').collect! { |v| v.strip.to_i }
-        values[1] = 0 if nil_or_empty?(values[1])
+        values[1] = 0 if !values[1]
         map_number = values[0]
         map_version = values[1]
         # Add map encounter's data to records

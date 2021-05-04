@@ -30,13 +30,17 @@ module PokeBattle_RecordedBattleModule
     if trainer.is_a?(Array)
       ret = []
       for i in 0...trainer.length
-        ret.push([trainer[i].trainer_type,trainer[i].name.clone,trainer[i].id,trainer[i].badges.clone])
+        if trainer[i].is_a?(Player)
+          ret.push([trainer[i].trainer_type,trainer[i].name.clone,trainer[i].id,trainer[i].badges.clone])
+        else   # NPCTrainer
+          ret.push([trainer[i].trainer_type,trainer[i].name.clone,trainer[i].id])
+        end
       end
       return ret
+    elsif trainer[i].is_a?(Player)
+      return [[trainer.trainer_type,trainer.name.clone,trainer.id,trainer.badges.clone]]
     else
-      return [
-         [trainer.trainer_type,trainer.name.clone,trainer.id,trainer.badges.clone]
-      ]
+      return [[trainer.trainer_type,trainer.name.clone,trainer.id]]
     end
   end
 
@@ -144,21 +148,20 @@ module BattlePlayerHelper
 
   def self.pbCreateTrainerInfo(trainer)
     return nil if !trainer
-    if trainer.length>1
-      ret = []
-      ret[0]=Player.new(trainer[0][1],trainer[0][0])
-      ret[0].id     = trainer[0][2]
-      ret[0].badges = trainer[0][3]
-      ret[1] = Player.new(trainer[1][1],trainer[1][0])
-      ret[1].id     = trainer[1][2]
-      ret[1].badges = trainer[1][3]
-      return ret
-    else
-      ret = Player.new(trainer[0][1],trainer[0][0])
-      ret.id     = trainer[0][2]
-      ret.badges = trainer[0][3]
-      return ret
+    ret = []
+    trainer.each do |tr|
+      if tr.length == 4   # Player
+        t = Player.new(tr[1], tr[0])
+        t.id     = tr[2]
+        t.badges = tr[3]
+        ret.push(t)
+      else   # NPCTrainer
+        t = NPCTrainer.new(tr[1], tr[0])
+        t.id = tr[2]
+        ret.push(t)
+      end
     end
+    return ret
   end
 end
 

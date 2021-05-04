@@ -22,10 +22,10 @@ class PBPokemon
     itm = GameData::Item.try_get(item)
     @item = itm ? itm.id : nil
     @nature = nature
-    @move1 = move1 ? move1 : 0
-    @move2 = move2 ? move2 : 0
-    @move3 = move3 ? move3 : 0
-    @move4 = move4 ? move4 : 0
+    @move1 = move1 ? move1 : nil
+    @move2 = move2 ? move2 : nil
+    @move3 = move3 ? move3 : nil
+    @move4 = move4 ? move4 : nil
     @ev = ev
   end
 
@@ -55,7 +55,9 @@ class PBPokemon
       move_data = GameData::Move.try_get(moves[i])
       moveid.push(move_data.id) if move_data
     end
-    moveid=[GameData::Move.get(1)] if moveid.length==0
+    if moveid.length==0
+      GameData::Move.each { |mov| moveid.push(mov.id); break }
+    end
     return self.new(species, item, nature, moveid[0], moveid[1], moveid[2], moveid[3], ev_array)
   end
 
@@ -154,9 +156,7 @@ class PBPokemon
     pokemon=Pokemon.new(@species,level,trainer,false)
     pokemon.item = @item
     pokemon.personalID = rand(2**16) | rand(2**16) << 16
-    pokemon.personalID -= pokemon.personalID % 25
-    pokemon.personalID += nature
-    pokemon.personalID &= 0xFFFFFFFF
+    pokemon.nature = nature
     pokemon.happiness=0
     pokemon.moves[0] = Pokemon::Move.new(self.convertMove(@move1))
     pokemon.moves[1] = Pokemon::Move.new(self.convertMove(@move2))
@@ -468,7 +468,7 @@ class BattleChallenge
   end
 
   def start(*args)
-    ensureType(@id)
+    t = ensureType(@id)
     @currentChallenge=@id   # must appear before pbStart
     @bc.pbStart(t,@numRounds)
   end
@@ -680,8 +680,9 @@ end
 def pbBattleChallengeGraphic(event)
   nextTrainer=pbBattleChallenge.nextTrainer
   bttrainers=pbGetBTTrainers(pbBattleChallenge.currentChallenge)
-  filename=GameData::TrainerType.charset_filename_brief((bttrainers[nextTrainer][0] rescue 0))
+  filename=GameData::TrainerType.charset_filename_brief((bttrainers[nextTrainer][0] rescue nil))
   begin
+    filename = "NPC 01" if nil_or_empty?(filename)
     bitmap=AnimatedBitmap.new("Graphics/Characters/"+filename)
     bitmap.dispose
     event.character_name=filename
