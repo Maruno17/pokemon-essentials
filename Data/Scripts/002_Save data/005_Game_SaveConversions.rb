@@ -97,7 +97,7 @@ SaveData.register_conversion(:v19_convert_global_metadata) do
       end
     end
     global.phoneNumbers.each do |contact|
-      contact[1] = GameData::TrainerType.get(contact[1]) if contact && contact.length == 8
+      contact[1] = GameData::TrainerType.get(contact[1]).id if contact && contact.length == 8
     end
     if global.partner
       global.partner[0] = GameData::TrainerType.get(global.partner[0]).id
@@ -133,6 +133,16 @@ SaveData.register_conversion(:v19_convert_global_metadata) do
       global.triads.items.each do |card|
         card[0] = GameData::Species.get(card[0]).id if card && card[0] && card[0] != 0
       end
+    end
+  end
+end
+
+SaveData.register_conversion(:v19_1_fix_phone_contacts) do
+  essentials_version 19.1
+  display_title 'Fixing phone contacts data'
+  to_value :global_metadata do |global|
+    global.phoneNumbers.each do |contact|
+      contact[1] = GameData::TrainerType.get(contact[1]).id if contact && contact.length == 8
     end
   end
 end

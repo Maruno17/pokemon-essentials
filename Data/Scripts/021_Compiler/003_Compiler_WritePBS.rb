@@ -694,9 +694,9 @@ module Compiler
   #=============================================================================
   def write_battle_tower_pokemon(btpokemon,filename)
     return if !btpokemon || !filename
-    species = { 0 => "" }
-    moves   = { 0 => "" }
-    items   = { 0 => "" }
+    species = {}
+    moves   = {}
+    items   = {}
     natures = {}
     evs = {
       :HP              => "HP",
@@ -710,20 +710,27 @@ module Compiler
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       for i in 0...btpokemon.length
-        Graphics.update if i%500==0
+        Graphics.update if i % 500 == 0
         pkmn = btpokemon[i]
         c1 = (species[pkmn.species]) ? species[pkmn.species] : (species[pkmn.species] = GameData::Species.get(pkmn.species).species.to_s)
         c2 = (items[pkmn.item]) ? items[pkmn.item] : (items[pkmn.item] = GameData::Item.get(pkmn.item).id.to_s)
         c3 = (natures[pkmn.nature]) ? natures[pkmn.nature] : (natures[pkmn.nature] = GameData::Nature.get(pkmn.nature).id.to_s)
         evlist = ""
-        pkmn.ev.each do |stat|
-          evlist += "," if evlist.length > 0
+        pkmn.ev.each_with_index do |stat, i|
+          evlist += "," if i > 0
           evlist += evs[stat]
         end
-        c4 = (moves[pkmn.move1]) ? moves[pkmn.move1] : (moves[pkmn.move1] = GameData::Move.get(pkmn.move1).id.to_s)
-        c5 = (moves[pkmn.move2]) ? moves[pkmn.move2] : (moves[pkmn.move2] = GameData::Move.get(pkmn.move2).id.to_s)
-        c6 = (moves[pkmn.move3]) ? moves[pkmn.move3] : (moves[pkmn.move3] = GameData::Move.get(pkmn.move3).id.to_s)
-        c7 = (moves[pkmn.move4]) ? moves[pkmn.move4] : (moves[pkmn.move4] = GameData::Move.get(pkmn.move4).id.to_s)
+        c4 = c5 = c6 = c7 = ""
+        [pkmn.move1, pkmn.move2, pkmn.move3, pkmn.move4].each_with_index do |move, i|
+          next if !move
+          text = (moves[move]) ? moves[move] : (moves[move] = GameData::Move.get(move).id.to_s)
+          case i
+          when 0 then c4 = text
+          when 1 then c5 = text
+          when 2 then c6 = text
+          when 3 then c7 = text
+          end
+        end
         f.write("#{c1};#{c2};#{c3};#{evlist};#{c4},#{c5},#{c6},#{c7}\r\n")
       end
     }

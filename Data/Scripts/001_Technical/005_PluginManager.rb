@@ -667,7 +667,7 @@ module PluginManager
     # collect garbage
     GC.start
     echoln ' done.'
-    echoln ""
+    echoln ''
   end
   #-----------------------------------------------------------------------------
   # Check if plugins need compiling
@@ -705,7 +705,7 @@ module PluginManager
         end
       end
     end
-    echoln "" if !echoed_plugins.empty?
+    echoln '' if !echoed_plugins.empty?
   end
   #-----------------------------------------------------------------------------
 end
