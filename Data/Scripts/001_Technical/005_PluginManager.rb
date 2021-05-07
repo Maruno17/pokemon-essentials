@@ -644,7 +644,6 @@ module PluginManager
   # Check if plugins need compiling
   #-----------------------------------------------------------------------------
   def self.compilePlugins(order, plugins)
-    echoln ""
     echo 'Compiling plugin scripts...'
     scripts = []
     # go through the entire order one by one
@@ -680,6 +679,7 @@ module PluginManager
     self.compilePlugins(order, plugins) if self.needCompiling?(order, plugins)
     # load plugins
     scripts = load_data("Data/PluginScripts.rxdata")
+    echoed_plugins = []
     for plugin in scripts
       # get the required data
       name, meta, script = plugin
@@ -688,7 +688,7 @@ module PluginManager
       # go through each script and interpret
       for scr in script
         # turn code into plaintext
-        code = Zlib::Inflate.inflate(scr[1])
+        code = Zlib::Inflate.inflate(scr[1]).force_encoding(Encoding::UTF_8)
         # get rid of tabs
         code.gsub!("\t", "  ")
         # construct filename
@@ -697,12 +697,15 @@ module PluginManager
         # try to run the code
         begin
           eval(code, TOPLEVEL_BINDING, fname)
+          echoln "Loaded plugin: #{name}" if !echoed_plugins.include?(name)
+          echoed_plugins.push(name)
         rescue Exception   # format error message to display
           self.pluginErrorMsg(name, sname)
           Kernel.exit! true
         end
       end
     end
+    echoln "" if !echoed_plugins.empty?
   end
   #-----------------------------------------------------------------------------
 end

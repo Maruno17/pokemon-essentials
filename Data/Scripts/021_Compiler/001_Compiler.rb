@@ -681,7 +681,6 @@ module Compiler
       MessageTypes.loadMessageFile("Data/messages.dat")
     end
     if mustCompile
-      echoln ""
       echoln _INTL("*** Starting full compile ***")
       echoln ""
       yield(_INTL("Compiling town map data"))
