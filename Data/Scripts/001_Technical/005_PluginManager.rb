@@ -579,6 +579,8 @@ module PluginManager
         # clean the name to a simple string
         dname = dname[0] if dname.is_a?(Array) && dname.length == 2
         dname = dname[1] if dname.is_a?(Array) && dname.length == 3
+        # catch missing dependency
+        self.error("Plugin '#{o}' requires plugin '#{dname}' to work properly.") if !order.include?(dname)
         # skip if already sorted
         next if order.index(dname) > order.index(o)
         # catch looping dependency issue

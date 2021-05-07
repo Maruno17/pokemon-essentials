@@ -479,7 +479,7 @@ end
 
 def pbConvertItemToPokemon(variable, array)
   item = GameData::Item.get(pbGet(variable))
-  pbSet(variable, 0)
+  pbSet(variable, nil)
   for i in 0...(array.length / 2)
     next if item != array[2 * i]
     pbSet(variable, GameData::Species.get(array[2 * i + 1]).id)

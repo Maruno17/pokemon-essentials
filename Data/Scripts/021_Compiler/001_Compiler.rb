@@ -367,7 +367,7 @@ module Compiler
     elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
       if GameData.const_defined?(enumer.to_sym)
         enumer = GameData.const_get(enumer.to_sym)
-        return nil if nil_or_empty?(re) || !enumer.exists?(ret.to_sym)
+        return nil if nil_or_empty?(ret) || !enumer.exists?(ret.to_sym)
         return ret.to_sym
       end
       enumer = Object.const_get(enumer.to_sym)
