@@ -14,7 +14,7 @@ class Game_Character
   attr_accessor :character_hue
   attr_reader   :opacity
   attr_reader   :blend_type
-  attr_reader   :direction
+  attr_accessor :direction
   attr_accessor :pattern
   attr_accessor :pattern_surf
   attr_accessor :lock_pattern
