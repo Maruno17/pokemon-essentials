@@ -70,9 +70,9 @@ class Game_Player < Game_Character
   def move_generic(dir, turn_enabled = true)
     turn_generic(dir, true) if turn_enabled
     if !$PokemonTemp.encounterTriggered
-      x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
-      y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
       if can_move_in_direction?(dir)
+        x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
+        y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
         return if pbLedge(x_offset, y_offset)
         return if pbEndSurf(x_offset, y_offset)
         turn_generic(dir, true)
@@ -82,10 +82,8 @@ class Game_Player < Game_Character
           $PokemonTemp.dependentEvents.pbMoveDependentEvents
           increase_steps
         end
-      else
-        if !check_event_trigger_touch(@x + x_offset, @y + y_offset)
-          bump_into_object
-        end
+      elsif !check_event_trigger_touch(dir)
+        bump_into_object
       end
     end
     $PokemonTemp.encounterTriggered = false
@@ -312,14 +310,16 @@ class Game_Player < Game_Character
   #-----------------------------------------------------------------------------
   # * Touch Event Starting Determinant
   #-----------------------------------------------------------------------------
-  def check_event_trigger_touch(x, y)
+  def check_event_trigger_touch(dir)
     result = false
-    # If event is running
     return result if $game_system.map_interpreter.running?
     # All event loops
+    x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
+    y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
     for event in $game_map.events.values
+      next if ![1, 2].include?(event.trigger)   # Player touch, event touch
       # If event coordinates and triggers are consistent
-      next if !event.at_coordinate?(x, y)
+      next if !event.at_coordinate?(@x + x_offset, @y + y_offset)
       if event.name[/trainer\((\d+)\)/i]
         distance = $~[1].to_i
         next if !pbEventCanReachPlayer?(event,self,distance)
@@ -327,7 +327,6 @@ class Game_Player < Game_Character
         distance = $~[1].to_i
         next if !pbEventFacesPlayer?(event,self,distance)
       end
-      next if ![1,2].include?(event.trigger)
       # If starting determinant is front event (other than jumping)
       next if event.jumping? || event.over_trigger?
       event.start

@@ -498,15 +498,13 @@ class Game_Character
 
   def move_generic(dir, turn_enabled = true)
     turn_generic(dir) if turn_enabled
-    x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
-    y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
     if can_move_in_direction?(dir)
       turn_generic(dir)
-      @x += x_offset
-      @y += y_offset
+      @x += (dir == 4) ? -1 : (dir == 6) ? 1 : 0
+      @y += (dir == 8) ? -1 : (dir == 2) ? 1 : 0
       increase_steps
     else
-      check_event_trigger_touch(@x + x_offset, @y + y_offset)
+      check_event_trigger_touch(dir)
     end
   end
 
