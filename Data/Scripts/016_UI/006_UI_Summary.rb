@@ -913,7 +913,7 @@ class PokemonSummary_Scene
     @sprites["pokemon"].setPokemonBitmap(@pokemon)
     @sprites["itemicon"].item = @pokemon.item_id
     pbSEStop
-    GameData::Species.play_cry_from_pokemon(@pokemon)
+    @pokemon.play_cry
   end
 
   def pbMoveSelection
@@ -1250,7 +1250,7 @@ class PokemonSummary_Scene
   end
 
   def pbScene
-    GameData::Species.play_cry_from_pokemon(@pokemon)
+    @pokemon.play_cry
     loop do
       Graphics.update
       Input.update
@@ -1258,7 +1258,7 @@ class PokemonSummary_Scene
       dorefresh = false
       if Input.trigger?(Input::ACTION)
         pbSEStop
-        GameData::Species.play_cry_from_pokemon(@pokemon)
+        @pokemon.play_cry
       elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
