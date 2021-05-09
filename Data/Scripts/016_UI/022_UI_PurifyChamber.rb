@@ -84,7 +84,6 @@ end
 #===============================================================================
 class PurifyChamberSet
   attr_reader :shadow   # The Shadow Pokémon in the middle
-  attr_reader :list     # The other Pokémon placed around
   attr_reader :facing   # Index in list of Pokémon the Shadow Pokémon is facing
 
   def partialSum(x)
@@ -596,8 +595,8 @@ class PurifyChamberScreen
       if @chamber.isPurifiable?(set) # if ready for purification
         purifiables.push(set)
       end
-      return purifiables.length>0
     end
+    return purifiables.length>0
   end
 
   def pbDoPurify

@@ -250,7 +250,6 @@ def pbGenerateChallenge(rule, tag)
       yield(nil)
       if gameCount / teams.length >= 12
         for team in teams
-          games = team.games
           team.updateRating
         end
         break

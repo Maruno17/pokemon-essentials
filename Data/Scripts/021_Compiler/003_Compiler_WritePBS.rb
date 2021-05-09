@@ -140,7 +140,7 @@ module Compiler
         f.write("\#-------------------------------\r\n")
         f.write("[#{type.id_number}]\r\n")
         f.write("Name = #{type.real_name}\r\n")
-        f.write("InternalName = #{type.id.to_s}\r\n")
+        f.write("InternalName = #{type.id}\r\n")
         f.write("IsPseudoType = true\r\n") if type.pseudo_type
         f.write("IsSpecialType = true\r\n") if type.special?
         f.write("Weaknesses = #{type.weaknesses.join(",")}\r\n") if type.weaknesses.length > 0

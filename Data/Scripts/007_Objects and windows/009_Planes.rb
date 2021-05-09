@@ -174,8 +174,6 @@ class ColoredPlane < LargePlane
     super
   end
 
-  def update; super; end
-
   def setPlaneColor(value)
     self.bitmap.fill_rect(0,0,self.bitmap.width,self.bitmap.height,value)
     self.refresh

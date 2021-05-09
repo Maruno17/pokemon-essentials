@@ -340,7 +340,7 @@ def pbRandomPokemonFromRule(rules, trainer)
         break
       end
     end
-    if item == :LIGHTCLAY && !moves.any? { |m| m == :LIGHTSCREEN || m = :REFLECT }
+    if item == :LIGHTCLAY && !moves.any? { |m| m == :LIGHTSCREEN || m == :REFLECT }
       item = :LEFTOVERS
     end
     if item == :BLACKSLUDGE

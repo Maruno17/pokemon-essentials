@@ -141,7 +141,7 @@ def pbTrackPopupMenu(commands)
     menuwindow.update
     hit=menuwindow.hittest
     menuwindow.index=hit if hit>=0
-    if Input.trigger?(Input::MOUSELEFT) || Input.trigger?(Input::MOUSELEFT) # Left or right button
+    if Input.trigger?(Input::MOUSELEFT) || Input.trigger?(Input::MOUSERIGHT) # Left or right button
       menuwindow.dispose
       return hit
     end
@@ -348,13 +348,6 @@ class InvalidatableSprite < Sprite
  # Redraws the sprite.  This method should not check whether
  # the sprite is invalid, to allow it to be explicitly called.
   def refresh
-  end
-
- # Updates the logic on the sprite, for example, in response
- # to user input, and invalidates it if necessary.  This should
- # be called only once per frame.
-  def update
-    super
   end
 end
 

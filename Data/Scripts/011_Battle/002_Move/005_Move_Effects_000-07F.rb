@@ -1752,7 +1752,7 @@ class PokeBattle_Move_05D < PokeBattle_Move
     if !lastMoveData ||
        user.pbHasMove?(target.lastRegularMoveUsed) ||
        @moveBlacklist.include?(lastMoveData.function_code) ||
-       lastMoveData.type = :SHADOW
+       lastMoveData.type == :SHADOW
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end

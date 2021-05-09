@@ -88,7 +88,6 @@ class PokeBattle_Battle
 
   def pbChoseMoveFunctionCode?(idxBattler,code)
     return false if @battlers[idxBattler].fainted?
-    idxMove = @choices[idxBattler][1]
     if @choices[idxBattler][0]==:UseMove && @choices[idxBattler][1]
       return @choices[idxBattler][2].function == code
     end

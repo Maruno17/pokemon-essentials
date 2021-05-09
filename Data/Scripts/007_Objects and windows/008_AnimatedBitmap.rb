@@ -226,9 +226,9 @@ class GifBitmap
       @gifbitmaps  = [bitmap]
       @gifdelays   = [1]
     else
+=begin
       tmpBase = File.basename(full_path) + "_tmp_"
       filestring = pbGetFileString(filestrName) if filestring
-=begin
       Dir.chdir(ENV["TEMP"]) {   # navigate to temp folder since game might be on a CD-ROM
         if filestring && filestring[0] == 0x47 && GifLibrary::PngDll
           result = GifLibrary::GifToPngFilesInMemory.call(filestring,
