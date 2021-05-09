@@ -9,7 +9,7 @@ class Trainer
   attr_accessor :party
 
   def inspect
-    str = self.to_s.chop
+    str = super.chop
     party_str = @party.map { |p| p.species_data.species }.inspect
     str << format(' %s @party=%s>', self.full_name, party_str)
     return str

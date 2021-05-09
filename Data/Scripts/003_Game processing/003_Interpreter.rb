@@ -21,8 +21,8 @@ class Interpreter
   end
 
   def inspect
-    str = self.to_s.chop
-    str << format(' event ID: %d>', @event_id)
+    str = super.chop
+    str << format(' @event_id: %d>', @event_id)
     return str
   end
 
