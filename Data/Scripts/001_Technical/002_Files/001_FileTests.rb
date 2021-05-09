@@ -280,10 +280,10 @@ end
 # Note: pbGetFileChar checks anything added in MKXP's RTP setting,
 # and matching mount points added through System.mount
 def pbRgssExists?(filename)
-  filename = canonicalize(filename)
   if safeExists?("./Game.rgssad")
     return pbGetFileChar(filename)!=nil
   else
+    filename = canonicalize(filename)
     return safeExists?(filename)
   end
 end
