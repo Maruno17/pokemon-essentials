@@ -520,7 +520,6 @@ module Compiler
     # Add prevolution "evolution" entry for all evolved species
     all_evos = {}
     GameData::Species.each do |species|   # Build a hash of prevolutions for each species
-      next if all_evos[species.species]
       species.evolutions.each do |evo|
         all_evos[evo[0]] = [species.species, evo[1], evo[2], true] if !all_evos[evo[0]]
       end
@@ -716,7 +715,6 @@ module Compiler
     # own evolution methods (and thus won't have a prevolution listed already)
     all_evos = {}
     GameData::Species.each do |species|   # Build a hash of prevolutions for each species
-      next if all_evos[species.species]
       species.evolutions.each do |evo|
         all_evos[evo[0]] = [species.species, evo[1], evo[2], true] if !evo[3] && !all_evos[evo[0]]
       end
