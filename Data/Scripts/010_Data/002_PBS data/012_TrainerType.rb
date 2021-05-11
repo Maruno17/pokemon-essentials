@@ -34,7 +34,7 @@ module GameData
     end
 
     def self.charset_filename(tr_type)
-      return self.check_file(tr_type, "Graphics/Characters/trchar")
+      return self.check_file(tr_type, "Graphics/Characters/trainer_")
     end
 
     def self.charset_filename_brief(tr_type)
