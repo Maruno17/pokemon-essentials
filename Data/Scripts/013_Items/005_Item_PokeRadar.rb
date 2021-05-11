@@ -135,7 +135,6 @@ def pbPokeRadarGetEncounter(rarity = 0)
     # If there are any exclusives, first have a chance of encountering those
     if array.length > 0
       rnd = rand(100)
-      chance = 0
       array.each do |enc|
         rnd -= enc[1]
         next if rnd >= 0

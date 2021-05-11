@@ -223,7 +223,7 @@ MultipleForms.register(:ROTOM,{
     ]
     move_index = -1
     pkmn.moves.each_with_index do |move, i|
-      next if !form_moves.any? { |m| move == m }
+      next if !form_moves.any? { |m| m == move.id }
       move_index = i
       break
     end
@@ -351,13 +351,13 @@ MultipleForms.register(:KYUREM,{
       end
     when 1   # White
       pkmn.moves.each do |move|
-        move.id = :ICEBURN if move == :GLACIATE && GameData::Move.exists?(:ICEBURN)
-        move.id = :FUSIONFLARE if move == :SCARYFACE && GameData::Move.exists?(:FUSIONFLARE)
+        move.id = :ICEBURN if move.id == :GLACIATE && GameData::Move.exists?(:ICEBURN)
+        move.id = :FUSIONFLARE if move.id == :SCARYFACE && GameData::Move.exists?(:FUSIONFLARE)
       end
     when 2   # Black
       pkmn.moves.each do |move|
-        move.id = :FREEZESHOCK if move == :GLACIATE && GameData::Move.exists?(:FREEZESHOCK)
-        move.id = :FUSIONBOLT if move == :SCARYFACE && GameData::Move.exists?(:FUSIONBOLT)
+        move.id = :FREEZESHOCK if move.id == :GLACIATE && GameData::Move.exists?(:FREEZESHOCK)
+        move.id = :FUSIONBOLT if move.id == :SCARYFACE && GameData::Move.exists?(:FUSIONBOLT)
       end
     end
   }
@@ -570,7 +570,7 @@ MultipleForms.register(:NECROZMA,{
       # Turned back into the base form; forget form-specific moves
       move_index = -1
       pkmn.moves.each_with_index do |move, i|
-        next if !form_moves.any? { |m| move == m }
+        next if !form_moves.any? { |m| m == move.id }
         move_index = i
         break
       end

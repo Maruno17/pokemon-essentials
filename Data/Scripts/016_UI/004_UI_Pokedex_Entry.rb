@@ -442,7 +442,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbScene
-    GameData::Species.play_cry_from_species(@species, @form)
+    Pokemon.play_cry(@species, @form)
     loop do
       Graphics.update
       Input.update
@@ -450,7 +450,7 @@ class PokemonPokedexInfo_Scene
       dorefresh = false
       if Input.trigger?(Input::ACTION)
         pbSEStop
-        GameData::Species.play_cry_from_species(@species, @form) if @page == 1
+        Pokemon.play_cry(@species, @form) if @page == 1
       elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
@@ -471,7 +471,7 @@ class PokemonPokedexInfo_Scene
           pbUpdateDummyPokemon
           @available = pbGetAvailableForms
           pbSEStop
-          (@page==1) ? GameData::Species.play_cry_from_species(@species, @form) : pbPlayCursorSE
+          (@page==1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
           dorefresh = true
         end
       elsif Input.trigger?(Input::DOWN)
@@ -481,7 +481,7 @@ class PokemonPokedexInfo_Scene
           pbUpdateDummyPokemon
           @available = pbGetAvailableForms
           pbSEStop
-          (@page==1) ? GameData::Species.play_cry_from_species(@species, @form) : pbPlayCursorSE
+          (@page==1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
           dorefresh = true
         end
       elsif Input.trigger?(Input::LEFT)
@@ -511,14 +511,14 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbSceneBrief
-    GameData::Species.play_cry_from_species(@species, @form)
+    Pokemon.play_cry(@species, @form)
     loop do
       Graphics.update
       Input.update
       pbUpdate
       if Input.trigger?(Input::ACTION)
         pbSEStop
-        GameData::Species.play_cry_from_species(@species, @form)
+        Pokemon.play_cry(@species, @form)
       elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break

@@ -398,7 +398,7 @@ module Compiler
         for key in schema.keys
           # Skip empty properties, or raise an error if a required property is
           # empty
-          if contents[key].nil? || contents[key] == ""
+          if nil_or_empty?(contents[key])
             if ["Name", "InternalName"].include?(key)
               raise _INTL("The entry {1} is required in PBS/pokemon.txt section {2}.", key, species_number)
             end
@@ -583,7 +583,7 @@ module Compiler
         # Go through schema hash of compilable data and compile this section
         for key in schema.keys
           # Skip empty properties (none are required)
-          if contents[key].nil? || contents[key] == ""
+          if nil_or_empty?(contents[key])
             contents[key] = nil
             next
           end
@@ -662,6 +662,8 @@ module Compiler
           :base_stats            => contents["BaseStats"] || base_data.base_stats,
           :evs                   => contents["EffortPoints"] || base_data.evs,
           :base_exp              => contents["BaseEXP"] || base_data.base_exp,
+          :growth_rate           => base_data.growth_rate,
+          :gender_ratio          => base_data.gender_ratio,
           :catch_rate            => contents["Rareness"] || base_data.catch_rate,
           :happiness             => contents["Happiness"] || base_data.happiness,
           :moves                 => moves,
@@ -674,6 +676,7 @@ module Compiler
           :wild_item_rare        => contents["WildItemRare"] || base_data.wild_item_rare,
           :egg_groups            => contents["Compatibility"] || base_data.egg_groups.clone,
           :hatch_steps           => contents["StepsToHatch"] || base_data.hatch_steps,
+          :incense               => base_data.incense,
           :evolutions            => evolutions,
           :height                => contents["Height"] || base_data.height,
           :weight                => contents["Weight"] || base_data.weight,
@@ -922,7 +925,7 @@ module Compiler
         end
         new_format = true
         values = $~[1].split(',').collect! { |v| v.strip.to_i }
-        values[1] = 0 if !values[1] || values[1] == ""
+        values[1] = 0 if !values[1]
         map_number = values[0]
         map_version = values[1]
         # Add map encounter's data to records

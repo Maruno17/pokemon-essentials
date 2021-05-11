@@ -748,9 +748,10 @@ class PokemonParty_Scene
       end
     when Input::UP
       if currentsel >= Settings::MAX_PARTY_SIZE
-        begin
+        currentsel -= 1
+        while currentsel > 0 && currentsel < Settings::MAX_PARTY_SIZE && !@party[currentsel]
           currentsel -= 1
-        end while currentsel > 0 && !@party[currentsel]
+        end 
       else
         begin
           currentsel -= 2

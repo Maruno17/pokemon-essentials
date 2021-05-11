@@ -184,7 +184,7 @@ class PokemonTrade_Scene
 
   def pbTrade
     pbBGMStop
-    GameData::Species.play_cry_from_pokemon(@pokemon)
+    @pokemon.play_cry
     speciesname1=GameData::Species.get(@pokemon.species).name
     speciesname2=GameData::Species.get(@pokemon2.species).name
     pbMessageDisplay(@sprites["msgwindow"],

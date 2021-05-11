@@ -485,7 +485,6 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
   setBattleRule("double") if doubleBattle || $PokemonTemp.waitingTrainer
   # Perform the battle
   if $PokemonTemp.waitingTrainer
-    waitingTrainer = $PokemonTemp.waitingTrainer
     decision = pbTrainerBattleCore($PokemonTemp.waitingTrainer,
        [trainerID,trainerName,trainerPartyID,endSpeech]
     )

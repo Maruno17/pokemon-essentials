@@ -38,9 +38,6 @@ def oggfiletime(file)
   fgetdw = proc { |file|
     (file.eof? ? 0 : (file.read(4).unpack("V")[0] || 0))
   }
-  fgetw = proc { |file|
-    (file.eof? ? 0 : (file.read(2).unpack("v")[0] || 0))
-  }
   pages = []
   page = nil
   loop do

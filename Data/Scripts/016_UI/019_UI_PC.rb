@@ -248,7 +248,7 @@ end
 
 def pbGetStorageCreator
   creator = Settings.storage_creator_name
-  creator = _INTL("Bill") if nil_or_empty(creator)
+  creator = _INTL("Bill") if nil_or_empty?(creator)
   return creator
 end
 

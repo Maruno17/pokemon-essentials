@@ -89,19 +89,19 @@ end
 
 # Unused
 def hasConst?(mod,constant)
-  return false if !mod || !constant
+  return false if !mod || constant.nil?
   return mod.const_defined?(constant.to_sym) rescue false
 end
 
 # Unused
 def getConst(mod,constant)
-  return nil if !mod || !constant
+  return nil if !mod || constant.nil?
   return mod.const_get(constant.to_sym) rescue nil
 end
 
 # Unused
 def getID(mod,constant)
-  return nil if !mod || !constant
+  return nil if !mod || constant.nil?
   if constant.is_a?(Symbol) || constant.is_a?(String)
     if (mod.const_defined?(constant.to_sym) rescue false)
       return mod.const_get(constant.to_sym) rescue 0
@@ -479,7 +479,7 @@ end
 
 def pbConvertItemToPokemon(variable, array)
   item = GameData::Item.get(pbGet(variable))
-  pbSet(variable, 0)
+  pbSet(variable, nil)
   for i in 0...(array.length / 2)
     next if item != array[2 * i]
     pbSet(variable, GameData::Species.get(array[2 * i + 1]).id)

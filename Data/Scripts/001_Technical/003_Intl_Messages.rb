@@ -405,7 +405,7 @@ class Messages
     if msgs.is_a?(Array)
       f.write("[#{secname}]\r\n")
       for j in 0...msgs.length
-        next if msgs[j]==nil || msgs[j]==""
+        next if nil_or_empty?(msgs[j])
         value=Messages.normalizeValue(msgs[j])
         origValue=""
         if origMessages
@@ -421,7 +421,7 @@ class Messages
       f.write("[#{secname}]\r\n")
       keys=msgs.keys
       for key in keys
-        next if msgs[key]==nil || msgs[key]==""
+        next if nil_or_empty?(msgs[key])
         value=Messages.normalizeValue(msgs[key])
         valkey=Messages.normalizeValue(key)
         # key is already serialized

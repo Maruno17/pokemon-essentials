@@ -92,8 +92,16 @@ class Pokemon
   # Maximum number of moves a Pokémon can know at once
   MAX_MOVES     = 4
 
+  def self.play_cry(species, form = 0, volume = 90, pitch = 100)
+    GameData::Species.play_cry_from_species(species, form, volume, pitch)
+  end
+
+  def play_cry(volume = 90, pitch = nil)
+    GameData::Species.play_cry_from_pokemon(self, volume, pitch)
+  end
+
   def inspect
-    str = self.to_s.chop
+    str = super.chop
     str << format(' %s Lv.%s>', @species, @level.to_s || '???')
     return str
   end
@@ -139,6 +147,18 @@ class Pokemon
   end
 
   def form=(value)
+    oldForm = @form
+    @form = value
+    @ability = nil
+    MultipleForms.call("onSetForm", self, value, oldForm)
+    calc_stats
+    $Trainer.pokedex.register(self)
+  end
+
+  # The same as def form=, but yields to a given block in the middle so that a
+  # message about the form changing can be shown before calling "onSetForm"
+  # which may have its own messages, e.g. learning a move.
+  def setForm(value)
     oldForm = @form
     @form = value
     @ability = nil

@@ -164,7 +164,7 @@ module GameData
       @height                = hash[:height]                || 1
       @weight                = hash[:weight]                || 1
       @color                 = hash[:color]                 || :Red
-      @shape                 = hash[:shape]                 || :Body
+      @shape                 = hash[:shape]                 || :Head
       @habitat               = hash[:habitat]               || :None
       @generation            = hash[:generation]            || 0
       @mega_stone            = hash[:mega_stone]

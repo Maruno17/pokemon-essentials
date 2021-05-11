@@ -686,7 +686,7 @@ def pbChooseItem(var = 0, *args)
     screen = PokemonBagScreen.new(scene,$PokemonBag)
     ret = screen.pbChooseItemScreen
   }
-  $game_variables[var] = ret if var > 0
+  $game_variables[var] = ret || :NONE if var > 0
   return ret
 end
 
@@ -697,7 +697,7 @@ def pbChooseApricorn(var = 0)
     screen = PokemonBagScreen.new(scene,$PokemonBag)
     ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_apricorn? })
   }
-  $game_variables[var] = ret if var > 0
+  $game_variables[var] = ret || :NONE if var > 0
   return ret
 end
 
@@ -708,7 +708,7 @@ def pbChooseFossil(var = 0)
     screen = PokemonBagScreen.new(scene,$PokemonBag)
     ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_fossil? })
   }
-  $game_variables[var] = ret if var > 0
+  $game_variables[var] = ret || :NONE if var > 0
   return ret
 end
 

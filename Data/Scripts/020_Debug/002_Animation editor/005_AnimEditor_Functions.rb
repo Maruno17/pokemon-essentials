@@ -1016,9 +1016,9 @@ def animationEditorMain(animation)
     if Input.trigger?(Input::BACK)
       if pbConfirmMessage(_INTL("Save changes?"))
         save_data(animation,"Data/PkmnAnimations.rxdata")
-        $PokemonTemp.battleAnims = nil
       end
       if pbConfirmMessage(_INTL("Exit from the editor?"))
+        $PokemonTemp.battleAnims = nil
         break
       end
     end
@@ -1113,6 +1113,10 @@ def animationEditorMain(animation)
     end
     if sliderwin.changed?(1) # Change frame count
       pbChangeMaximum(canvas)
+      if canvas.currentframe >= canvas.animation.length
+        canvas.currentframe = canvas.animation.length - 1
+        sliderwin.controls[0].curvalue = canvas.currentframe + 1
+      end
       sliderwin.refresh
     end
     if sliderwin.changed?(2) # Set Animation Sheet

@@ -138,7 +138,7 @@ def pbManageMysteryGifts
   pbMessageDisplay(msgwindow,_INTL("Searching for online gifts...\\wtnp[0]"))
   online = pbDownloadToString(MysteryGift::URL)
   pbDisposeMessageWindow(msgwindow)
-  if online==""
+  if nil_or_empty?(online)
     pbMessage(_INTL("No online Mystery Gifts found.\\wtnp[20]"))
     online=[]
   else
@@ -245,7 +245,7 @@ def pbDownloadMysteryGift(trainer)
   sprites["msgwindow"]=pbCreateMessageWindow
   pbMessageDisplay(sprites["msgwindow"],_INTL("Searching for a gift.\nPlease wait...\\wtnp[0]"))
   string = pbDownloadToString(MysteryGift::URL)
-  if string==""
+  if nil_or_empty?(string)
     pbMessageDisplay(sprites["msgwindow"],_INTL("No new gifts are available."))
   else
     online=pbMysteryGiftDecrypt(string)
@@ -334,7 +334,7 @@ def pbMysteryGiftEncrypt(gift)
 end
 
 def pbMysteryGiftDecrypt(gift)
-  return [] if gift==""
+  return [] if nil_or_empty?(gift)
   ret = Marshal.restore(Zlib::Inflate.inflate(gift.unpack("m")[0]))
   if ret
     ret.each do |gift|

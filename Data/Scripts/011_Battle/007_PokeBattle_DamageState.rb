@@ -48,37 +48,3 @@ class PokeBattle_DamageState
     @berryWeakened = false
   end
 end
-
-
-
-################################################################################
-# Success state (used for Battle Arena)
-################################################################################
-class PokeBattle_SuccessState
-  attr_accessor :typeMod
-  attr_accessor :useState    # 0 - not used, 1 - failed, 2 - succeeded
-  attr_accessor :protected
-  attr_accessor :skill
-
-  def initialize; clear; end
-
-  def clear(full=true)
-    @typeMod   = Effectiveness::NORMAL_EFFECTIVE
-    @useState  = 0
-    @protected = false
-    @skill     = 0 if full
-  end
-
-  def updateSkill
-    if @useState==1
-      @skill = -2 if !@protected
-    elsif @useState==2
-      if Effectiveness.super_effective?(@typeMod);       @skill = 2
-      elsif Effectiveness.normal?(@typeMod);             @skill = 1
-      elsif Effectiveness.not_very_effective?(@typeMod); @skill = -1
-      else;                                              @skill = -2   # Ineffective
-      end
-    end
-    clear(false)
-  end
-end

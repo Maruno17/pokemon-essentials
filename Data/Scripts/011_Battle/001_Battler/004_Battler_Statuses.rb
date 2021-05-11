@@ -484,7 +484,7 @@ class PokeBattle_Battler
   def pbConfuse(msg=nil)
     @effects[PBEffects::Confusion] = pbConfusionDuration
     @battle.pbCommonAnimation("Confusion",self)
-    msg = _INTL("{1} became confused!",pbThis) if nil_or_empty(msg)
+    msg = _INTL("{1} became confused!",pbThis) if nil_or_empty?(msg)
     @battle.pbDisplay(msg)
     PBDebug.log("[Lingering effect] #{pbThis}'s confusion count is #{@effects[PBEffects::Confusion]}")
     # Confusion cures

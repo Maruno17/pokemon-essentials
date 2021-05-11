@@ -24,8 +24,6 @@ class Game_Temp
   attr_accessor :to_title                 # return to title screen flag
   attr_accessor :fadestate                # for sprite hashes
   attr_accessor :background_bitmap
-  attr_accessor :message_window_showing
-  attr_accessor :transition_processing
   attr_accessor :mart_prices
   #-----------------------------------------------------------------------------
   # * Object Initialization

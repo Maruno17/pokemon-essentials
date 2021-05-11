@@ -4,7 +4,6 @@
 class Scene_Map
   def updatemini
     oldmws=$game_temp.message_window_showing
-    oldvis=false
     $game_temp.message_window_showing=true
     loop do
       $game_map.update
@@ -619,7 +618,6 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
     controls[i][2] = textlen
   end
   text = textchunks.join("")
-  unformattedText = toUnformattedText(text)
   signWaitCount = 0
   signWaitTime = Graphics.frame_rate/2
   haveSpecialClose = false

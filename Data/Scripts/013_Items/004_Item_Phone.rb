@@ -42,7 +42,7 @@ end
 def pbPhoneRegisterBattle(message,event,trainertype,trainername,maxbattles)
   return if !$Trainer.has_pokegear           # Can't register without a Pokégear
   return false if !GameData::TrainerType.exists?(trainertype)
-  trainertype = GameData::TrainerType.get(trainertype)
+  trainertype = GameData::TrainerType.get(trainertype).id
   contact = pbFindPhoneTrainer(trainertype,trainername)
   return if contact && contact[0]              # Existing contact and is visible
   message = _INTL("Let me register you.") if !message
@@ -82,7 +82,6 @@ end
 
 def pbFindPhoneTrainer(tr_type, tr_name)        # Ignores whether visible or not
   return nil if !$PokemonGlobal.phoneNumbers
-  tr_type = GameData::TrainerType.get(tr_type).id
   for num in $PokemonGlobal.phoneNumbers
     return num if num[1] == tr_type && num[2] == tr_name   # If a match
   end

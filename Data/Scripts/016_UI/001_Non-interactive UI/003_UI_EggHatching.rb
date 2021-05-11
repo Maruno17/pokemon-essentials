@@ -97,7 +97,7 @@ class PokemonEggHatch_Scene
     @sprites["overlay"].opacity=0
     # Finish scene
     frames = GameData::Species.cry_length(@pokemon)
-    GameData::Species.play_cry_from_pokemon(@pokemon)
+    @pokemon.play_cry
     updateScene(frames)
     pbBGMStop()
     pbMEPlay("Evolution success")

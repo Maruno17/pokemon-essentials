@@ -6,7 +6,7 @@ class Player < Trainer
     attr_reader :accessible_dexes
 
     def inspect
-      str = self.to_s.chop
+      str = super.chop
       str << format(' seen: %d, owned: %d>', self.seen_count, self.owned_count)
       return str
     end
