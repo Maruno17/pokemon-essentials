@@ -28,7 +28,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-module Compiler
+module SpriteRenamer
   module_function
 
   def readDirectoryFiles(directory, formats)
@@ -217,7 +217,7 @@ module Compiler
   end
 
   def convert_files
-    return if !pbConfirmMessage("Check for Pokémon/item/trainer files that need renaming?")
+    return if !pbConfirmMessage("Check for Pokémon/item/trainer files in their old folders that need renaming and moving?")
     # Rename and move Pokémon sprites/icons
     dest_dir = "Graphics/Pokemon/"
     Dir.mkdir(dest_dir) if !FileTest.directory?(dest_dir)
@@ -237,5 +237,6 @@ module Compiler
     # Rename trainer sprites
     convert_trainer_sprites("Graphics/Trainers/")
     pbSetWindowText(nil)
+    pbMessage(_INTL("All found sprites and icons were renamed and moved."))
   end
 end

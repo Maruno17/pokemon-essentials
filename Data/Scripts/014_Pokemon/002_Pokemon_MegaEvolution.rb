@@ -47,7 +47,9 @@ class Pokemon
   end
 
   def megaMessage   # 0=default message, 1=Rayquaza message
-    return species_data.mega_message
+    megaForm = self.getMegaForm
+    message_number = GameData::Species.get_species_form(@species, megaForm)&.mega_message
+    return message_number || 0
   end
 
   #=============================================================================

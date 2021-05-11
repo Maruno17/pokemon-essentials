@@ -728,8 +728,6 @@ module Compiler
       yield(_INTL("Saving messages"))
       pbSetTextMessages
       MessageTypes.saveMessages
-      yield(_INTL("Renaming sprites and cries"))
-      convert_files
       echoln ""
       echoln _INTL("*** Finished full compile ***")
       echoln ""
