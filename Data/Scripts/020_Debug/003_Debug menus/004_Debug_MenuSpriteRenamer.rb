@@ -285,5 +285,6 @@ module SpriteRenamer
     end
     pbMessage(_INTL("All found sprites and icons were renamed and moved."))
     pbMessage(_INTL("Some map data was edited. Close and reopen RPG Maker XP to see the changes.")) if any_changed
+    pbUpdateVehicle if $game_player
   end
 end
