@@ -193,12 +193,25 @@ class Game_Character
   end
 
   def bush_depth
-    return 0 if @tile_id > 0 || @always_on_top || jumping?
-    xbehind = @x + (@direction==4 ? 1 : @direction==6 ? -1 : 0)
-    ybehind = @y + (@direction==8 ? 1 : @direction==2 ? -1 : 0)
-    return Game_Map::TILE_HEIGHT if self.map.deepBush?(@x, @y) && self.map.deepBush?(xbehind, ybehind)
-    return 12 if !moving? && self.map.bush?(@x, @y)
-    return 0
+    return @bush_depth || 0
+  end
+
+  def calculate_bush_depth
+    if @tile_id > 0 || @always_on_top || jumping?
+      @bush_depth = 0
+    else
+      deep_bush = regular_bush = false
+      xbehind = @x + (@direction == 4 ? 1 : @direction == 6 ? -1 : 0)
+      ybehind = @y + (@direction == 8 ? 1 : @direction == 2 ? -1 : 0)
+      this_map = (self.map.valid?(@x, @y)) ? [self.map, @x, @y] : $MapFactory.getNewMap(@x, @y)
+      if this_map[0].deepBush?(this_map[1], this_map[2]) && self.map.deepBush?(xbehind, ybehind)
+        @bush_depth = Game_Map::TILE_HEIGHT
+      elsif !moving? && this_map[0].bush?(this_map[1], this_map[2])
+        @bush_depth = 12
+      else
+        @bush_depth = 0
+      end
+    end
   end
 
   #=============================================================================
@@ -818,6 +831,7 @@ class Game_Character
   #=============================================================================
   def update
     @moved_last_frame = @moved_this_frame
+    @stopped_last_frame = @stopped_this_frame
     if !$game_temp.in_menu
       # Update command
       update_command
@@ -881,7 +895,14 @@ class Game_Character
       @jump_distance_left = [(dest_x - @real_x).abs, (dest_y - @real_y).abs].max
     end
     # End of a step, so perform events that happen at this time
-    Events.onStepTakenFieldMovement.trigger(self, self) if !jumping? && !moving?
+    if !jumping? && !moving?
+      Events.onStepTakenFieldMovement.trigger(self, self)
+      calculate_bush_depth
+      @stopped_this_frame = true
+    elsif !@moved_last_frame || @stopped_last_frame   # Started a new step
+      calculate_bush_depth
+      @stopped_this_frame = false
+    end
     # Increment animation counter
     @anime_count += 1 if @walk_anime || @step_anime
     @moved_this_frame = true
@@ -891,6 +912,7 @@ class Game_Character
     @anime_count += 1 if @step_anime
     @stop_count  += 1 if !@starting && !lock?
     @moved_this_frame = false
+    @stopped_this_frame = false
   end
 
   def update_pattern
