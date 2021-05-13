@@ -232,6 +232,7 @@ class Game_Event < Game_Character
     @direction_fix        = @page.direction_fix
     @through              = @page.through
     @always_on_top        = @page.always_on_top
+    calculate_bush_depth
     @trigger              = @page.trigger
     @list                 = @page.list
     @interpreter          = nil

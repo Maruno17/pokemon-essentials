@@ -484,9 +484,16 @@ class Game_Character
         when 36 then @direction_fix = false
         when 37 then @through = true
         when 38 then @through = false
-        when 39 then @always_on_top = true
-        when 40 then @always_on_top = false
+        when 39
+          old_always_on_top = @always_on_top
+          @always_on_top = true
+          calculate_bush_depth if @always_on_top != old_always_on_top
+        when 40
+          old_always_on_top = @always_on_top
+          @always_on_top = false
+          calculate_bush_depth if @always_on_top != old_always_on_top
         when 41
+          old_tile_id = @tile_id
           @tile_id = 0
           @character_name = command.parameters[0]
           @character_hue = command.parameters[1]
@@ -499,6 +506,7 @@ class Game_Character
             @pattern = command.parameters[3]
             @original_pattern = @pattern
           end
+          calculate_bush_depth if @tile_id != old_tile_id
         when 42 then @opacity = command.parameters[0]
         when 43 then @blend_type = command.parameters[0]
         when 44 then pbSEPlay(command.parameters[0])
