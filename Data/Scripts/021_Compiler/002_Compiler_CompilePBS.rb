@@ -1222,6 +1222,15 @@ module Compiler
               value_hash[s.id] = property_value[s.pbs_order] || property_value[0]
             end
             current_pkmn[line_schema[0]] = value_hash
+          when "Ball"
+            if property_value[/^\d+$/]
+              current_pkmn[line_schema[0]] = pbBallTypeToItem(property_value.to_i).id
+            elsif !GameData::Item.exists?(property_value.to_sym) ||
+               !GameData::Item.get(property_value.to_sym).is_poke_ball?
+              raise _INTL("Value {1} isn't a defined Poké Ball.\r\n{2}", property_value, FileLineData.linereport)
+            else
+              current_pkmn[line_schema[0]] = property_value.to_sym
+            end
           else
             current_pkmn[line_schema[0]] = property_value
           end

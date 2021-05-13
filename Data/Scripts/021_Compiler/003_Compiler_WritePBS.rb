@@ -622,7 +622,7 @@ module Compiler
           f.write(sprintf("    IV = %s\r\n", ivs_array.join(","))) if pkmn[:iv]
           f.write(sprintf("    EV = %s\r\n", evs_array.join(","))) if pkmn[:ev]
           f.write(sprintf("    Happiness = %d\r\n", pkmn[:happiness])) if pkmn[:happiness]
-          f.write(sprintf("    Ball = %d\r\n", pkmn[:poke_ball])) if pkmn[:poke_ball]
+          f.write(sprintf("    Ball = %s\r\n", pkmn[:poke_ball])) if pkmn[:poke_ball]
         end
       end
     }
