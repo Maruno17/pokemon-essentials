@@ -13,23 +13,24 @@ module GameData
     DATA_FILENAME = "trainers.dat"
 
     SCHEMA = {
-      "Items"     => [:items,        "*e", :Item],
-      "LoseText"  => [:lose_text,    "s"],
-      "Pokemon"   => [:pokemon,      "ev", :Species],   # Species, level
-      "Form"      => [:form,         "u"],
-      "Name"      => [:name,         "s"],
-      "Moves"     => [:moves,        "*e", :Move],
-      "Ability"   => [:ability_flag, "u"],
-      "Item"      => [:item,         "e", :Item],
-      "Gender"    => [:gender,       "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
-                                            "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
-      "Nature"    => [:nature,       "e", :Nature],
-      "IV"        => [:iv,           "uUUUUU"],
-      "EV"        => [:ev,           "uUUUUU"],
-      "Happiness" => [:happiness,    "u"],
-      "Shiny"     => [:shininess,    "b"],
-      "Shadow"    => [:shadowness,   "b"],
-      "Ball"      => [:poke_ball,    "s"],
+      "Items"        => [:items,         "*e", :Item],
+      "LoseText"     => [:lose_text,     "s"],
+      "Pokemon"      => [:pokemon,       "ev", :Species],   # Species, level
+      "Form"         => [:form,          "u"],
+      "Name"         => [:name,          "s"],
+      "Moves"        => [:moves,         "*e", :Move],
+      "Ability"      => [:ability,       "s"],
+      "AbilityIndex" => [:ability_index, "u"],
+      "Item"         => [:item,          "e", :Item],
+      "Gender"       => [:gender,        "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
+                                                "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
+      "Nature"       => [:nature,        "e", :Nature],
+      "IV"           => [:iv,            "uUUUUU"],
+      "EV"           => [:ev,            "uUUUUU"],
+      "Happiness"    => [:happiness,     "u"],
+      "Shiny"        => [:shininess,     "b"],
+      "Shadow"       => [:shadowness,    "b"],
+      "Ball"         => [:poke_ball,     "s"],
     }
 
     extend ClassMethods
@@ -127,7 +128,8 @@ module GameData
         else
           pkmn.reset_moves
         end
-        pkmn.ability_index = pkmn_data[:ability_flag]
+        pkmn.ability_index = pkmn_data[:ability_index]
+        pkmn.ability = pkmn_data[:ability]
         pkmn.gender = pkmn_data[:gender] || ((trainer.male?) ? 0 : 1)
         pkmn.shiny = (pkmn_data[:shininess]) ? true : false
         if pkmn_data[:nature]

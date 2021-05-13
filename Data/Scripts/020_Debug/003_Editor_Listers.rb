@@ -574,7 +574,11 @@ class TrainerBattleLister
     @sprite.bitmap.dispose if @sprite.bitmap
     return if index < 0
     begin
-      @sprite.setBitmap(GameData::TrainerType.front_sprite_filename(@ids[index][0]), 0)
+      if @ids[index].is_a?(Array)
+        @sprite.setBitmap(GameData::TrainerType.front_sprite_filename(@ids[index][0]), 0)
+      else
+        @sprite.setBitmap(nil)
+      end
     rescue
       @sprite.setBitmap(nil)
     end

@@ -1215,6 +1215,14 @@ module Compiler
             raise _INTL("Pokémon hasn't been defined yet!\r\n{1}", FileLineData.linereport)
           end
           case property_name
+          when "Ability"
+            if property_value[/^\d+$/]
+              current_pkmn[:ability_index] = property_value.to_i
+            elsif !GameData::Ability.exists?(property_value.to_sym)
+              raise _INTL("Value {1} isn't a defined Ability.\r\n{2}", property_value, FileLineData.linereport)
+            else
+              current_pkmn[line_schema[0]] = property_value.to_sym
+            end
           when "IV", "EV"
             value_hash = {}
             GameData::Stat.each_main do |s|
@@ -1319,19 +1327,19 @@ module Compiler
               ivs[s.id] = line_data[12] if s.pbs_order >= 0
             end
           end
-          current_pkmn[:level]        = line_data[1]
-          current_pkmn[:item]         = line_data[2] if line_data[2]
-          current_pkmn[:moves]        = moves if moves.length > 0
-          current_pkmn[:ability_flag] = line_data[7] if line_data[7]
-          current_pkmn[:gender]       = line_data[8] if line_data[8]
-          current_pkmn[:form]         = line_data[9] if line_data[9]
-          current_pkmn[:shininess]    = line_data[10] if line_data[10]
-          current_pkmn[:nature]       = line_data[11] if line_data[11]
-          current_pkmn[:iv]           = ivs if ivs.length > 0
-          current_pkmn[:happiness]    = line_data[13] if line_data[13]
-          current_pkmn[:name]         = line_data[14] if line_data[14] && !line_data[14].empty?
-          current_pkmn[:shadowness]   = line_data[15] if line_data[15]
-          current_pkmn[:poke_ball]    = line_data[16] if line_data[16]
+          current_pkmn[:level]         = line_data[1]
+          current_pkmn[:item]          = line_data[2] if line_data[2]
+          current_pkmn[:moves]         = moves if moves.length > 0
+          current_pkmn[:ability_index] = line_data[7] if line_data[7]
+          current_pkmn[:gender]        = line_data[8] if line_data[8]
+          current_pkmn[:form]          = line_data[9] if line_data[9]
+          current_pkmn[:shininess]     = line_data[10] if line_data[10]
+          current_pkmn[:nature]        = line_data[11] if line_data[11]
+          current_pkmn[:iv]            = ivs if ivs.length > 0
+          current_pkmn[:happiness]     = line_data[13] if line_data[13]
+          current_pkmn[:name]          = line_data[14] if line_data[14] && !line_data[14].empty?
+          current_pkmn[:shadowness]    = line_data[15] if line_data[15]
+          current_pkmn[:poke_ball]     = line_data[16] if line_data[16]
           # Check if this is the last expected Pokémon
           old_format_current_line = 0 if old_format_current_line >= old_format_expected_lines
         end
