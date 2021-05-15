@@ -609,7 +609,8 @@ module Compiler
           f.write("    Shiny = yes\r\n") if pkmn[:shininess]
           f.write("    Shadow = yes\r\n") if pkmn[:shadowness]
           f.write(sprintf("    Moves = %s\r\n", pkmn[:moves].join(","))) if pkmn[:moves] && pkmn[:moves].length > 0
-          f.write(sprintf("    Ability = %d\r\n", pkmn[:ability_flag])) if pkmn[:ability_flag]
+          f.write(sprintf("    Ability = %s\r\n", pkmn[:ability])) if pkmn[:ability]
+          f.write(sprintf("    AbilityIndex = %d\r\n", pkmn[:ability_index])) if pkmn[:ability_index]
           f.write(sprintf("    Item = %s\r\n", pkmn[:item])) if pkmn[:item]
           f.write(sprintf("    Nature = %s\r\n", pkmn[:nature])) if pkmn[:nature]
           ivs_array = []
@@ -622,7 +623,7 @@ module Compiler
           f.write(sprintf("    IV = %s\r\n", ivs_array.join(","))) if pkmn[:iv]
           f.write(sprintf("    EV = %s\r\n", evs_array.join(","))) if pkmn[:ev]
           f.write(sprintf("    Happiness = %d\r\n", pkmn[:happiness])) if pkmn[:happiness]
-          f.write(sprintf("    Ball = %d\r\n", pkmn[:poke_ball])) if pkmn[:poke_ball]
+          f.write(sprintf("    Ball = %s\r\n", pkmn[:poke_ball])) if pkmn[:poke_ball]
         end
       end
     }

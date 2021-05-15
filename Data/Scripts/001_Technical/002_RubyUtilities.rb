@@ -71,6 +71,17 @@ class Numeric
   def to_s_formatted
     return self.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\1,').reverse
   end
+
+  def to_word
+    ret = [_INTL("zero"), _INTL("one"), _INTL("two"), _INTL("three"),
+           _INTL("four"), _INTL("five"), _INTL("six"), _INTL("seven"),
+           _INTL("eight"), _INTL("nine"), _INTL("ten"), _INTL("eleven"),
+           _INTL("twelve"), _INTL("thirteen"), _INTL("fourteen"), _INTL("fifteen"),
+           _INTL("sixteen"), _INTL("seventeen"), _INTL("eighteen"), _INTL("nineteen"),
+           _INTL("twenty")]
+    return ret[self] if self.is_a?(Integer) && self >= 0 && self <= ret.length
+    return self.to_s
+  end
 end
 
 #===============================================================================

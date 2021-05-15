@@ -1353,39 +1353,61 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "060"
-      if user.ability == :MULTITYPE || user.ability == :RKSSYSTEM
+      if !user.canChangeType?
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
-        envtypes = [
-           :NORMAL, # None
-           :GRASS,  # Grass
-           :GRASS,  # Tall grass
-           :WATER,  # Moving water
-           :WATER,  # Still water
-           :WATER,  # Underwater
-           :ROCK,   # Rock
-           :ROCK,   # Cave
-           :GROUND  # Sand
-        ]
-        type = envtypes[@battle.environment]
-        score -= 90 if user.pbHasType?(type)
+        new_type = nil
+        case @battle.field.terrain
+        when :Electric
+          new_type = :ELECTRIC if GameData::Type.exists?(:ELECTRIC)
+        when :Grassy
+          new_type = :GRASS if GameData::Type.exists?(:GRASS)
+        when :Misty
+          new_type = :FAIRY if GameData::Type.exists?(:FAIRY)
+        when :Psychic
+          new_type = :PSYCHIC if GameData::Type.exists?(:PSYCHIC)
+        end
+        if !new_type
+          envtypes = {
+             :None        => :NORMAL,
+             :Grass       => :GRASS,
+             :TallGrass   => :GRASS,
+             :MovingWater => :WATER,
+             :StillWater  => :WATER,
+             :Puddle      => :WATER,
+             :Underwater  => :WATER,
+             :Cave        => :ROCK,
+             :Rock        => :GROUND,
+             :Sand        => :GROUND,
+             :Forest      => :BUG,
+             :ForestGrass => :BUG,
+             :Snow        => :ICE,
+             :Ice         => :ICE,
+             :Volcano     => :FIRE,
+             :Graveyard   => :GHOST,
+             :Sky         => :FLYING,
+             :Space       => :DRAGON,
+             :UltraSpace  => :PSYCHIC
+          }
+          new_type = envtypes[@battle.environment]
+          new_type = nil if !GameData::Type.exists?(new_type)
+          new_type ||= :NORMAL
+        end
+        score -= 90 if !user.pbHasOtherType?(new_type)
       end
     #---------------------------------------------------------------------------
     when "061"
-      if target.effects[PBEffects::Substitute]>0 ||
-         target.ability == :MULTITYPE || target.ability == :RKSSYSTEM
+      if target.effects[PBEffects::Substitute]>0 || !target.canChangeType?
         score -= 90
-      elsif target.pbHasType?(:WATER)
+      elsif !target.pbHasOtherType?(:WATER)
         score -= 90
       end
     #---------------------------------------------------------------------------
     when "062"
-      if user.ability == :MULTITYPE || user.ability == :RKSSYSTEM
+      if !user.canChangeType? || target.pbTypes(true).length == 0
         score -= 90
-      elsif user.pbHasType?(target.type1) &&
-         user.pbHasType?(target.type2) &&
-         target.pbHasType?(user.type1) &&
-         target.pbHasType?(user.type2)
+      elsif user.pbTypes == target.pbTypes &&
+         user.effects[PBEffects::Type3] == target.effects[PBEffects::Type3]
         score -= 90
       end
     #---------------------------------------------------------------------------
@@ -1393,7 +1415,7 @@ class PokeBattle_AI
       if target.effects[PBEffects::Substitute]>0
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
-        if [:MULTITYPE, :RKSSYSTEM, :SIMPLE, :TRUANT].include?(target.ability_id)
+        if target.unstoppableAbility? || [:TRUANT, :SIMPLE].include?(target.ability)
           score -= 90
         end
       end
@@ -1402,7 +1424,7 @@ class PokeBattle_AI
       if target.effects[PBEffects::Substitute]>0
         score -= 90
       elsif skill>=PBTrainerAI.mediumSkill
-        if [:INSOMNIA, :MULTITYPE, :RKSSYSTEM, :TRUANT].include?(target.ability_id)
+        if target.unstoppableAbility? || [:TRUANT, :INSOMNIA].include?(target.ability_id)
           score -= 90
         end
       end

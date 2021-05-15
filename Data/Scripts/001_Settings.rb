@@ -403,6 +403,6 @@ end
 
 # DO NOT EDIT THESE!
 module Essentials
-  VERSION = "19.1"
+  VERSION = "19.0.dev"
   ERROR_TEXT = ""
 end

@@ -557,8 +557,7 @@ class BallProperty
   end
 
   def set(_settingname,oldsetting)
-    ret = pbChooseBallList((oldsetting) ? oldsetting : -1)
-    return (ret>=0) ? ret : (oldsetting) ? oldsetting : nil
+    return pbChooseBallList(oldsetting)
   end
 
   def defaultValue
@@ -566,7 +565,7 @@ class BallProperty
   end
 
   def format(value)
-    return (value) ? pbBallTypeToItem(value).name : "-"
+    return (value) ? GameData::Item.get(value).name : "-"
   end
 end
 

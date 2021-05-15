@@ -25,38 +25,6 @@ class Game_Player < Game_Character
     return $game_map
   end
 
-  def bush_depth
-    return 0 if @tile_id > 0 || @always_on_top
-    xbehind = (@direction==4) ? @x+1 : (@direction==6) ? @x-1 : @x
-    ybehind = (@direction==8) ? @y+1 : (@direction==2) ? @y-1 : @y
-    # Both current tile and previous tile are on the same map; just return super
-    return super if $game_map.valid?(@x,@y) && $game_map.valid?(xbehind,ybehind)
-    # The current or the previous tile is on a different map; consult MapFactory
-    return 0 if !$MapFactory
-    # Get map and coordinates of the current tile
-    if $game_map.valid?(@x,@y)
-      heremap = self.map; herex = @x; herey = @y
-    else
-      newhere = $MapFactory.getNewMap(@x,@y)
-      return 0 unless newhere && newhere[0]   # Map not found
-      heremap = newhere[0]; herex = newhere[1]; herey = newhere[2]
-    end
-    # Get map and coordinates of the previous tile
-    newbehind = $MapFactory.getNewMap(xbehind,ybehind)
-    if $game_map.valid?(xbehind,ybehind)
-      behindmap = self.map; behindx = xbehind; behindy = ybehind
-    else
-      return 0 unless newbehind && newbehind[0]   # Map not found
-      behindmap = newbehind[0]; behindx = newbehind[1]; behindy = newbehind[2]
-    end
-    # Return bush depth
-    if !jumping?
-      return 32 if heremap.deepBush?(herex, herey) && behindmap.deepBush?(behindx, behindy)
-      return 12 if heremap.bush?(herex, herey) && !moving?
-    end
-    return 0
-  end
-
   def pbHasDependentEvents?
     return $PokemonGlobal.dependentEvents.length>0
   end
