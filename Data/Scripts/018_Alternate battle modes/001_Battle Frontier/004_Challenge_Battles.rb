@@ -109,7 +109,7 @@ def pbPlayBattle(battledata)
   return if !battledata
   scene = pbNewBattleScene
   scene.abortable = true
-  lastbattle = Marshal.restore(StringInput.new(battledata))
+  lastbattle = Marshal.restore(battledata)
   case lastbattle[0]
   when BattleChallenge::BattleTowerID
     battleplayer = PokeBattle_BattlePlayer.new(scene, lastbattle)
