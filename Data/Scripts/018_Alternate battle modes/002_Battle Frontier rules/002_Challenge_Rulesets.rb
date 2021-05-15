@@ -29,7 +29,7 @@ class PokemonRuleSet
   end
 
   def maxLength
-    return (@number < 0) ? 6 : @number
+    return (@number < 0) ? Settings::MAX_PARTY_SIZE : @number
   end
   alias number maxLength
 
@@ -38,7 +38,7 @@ class PokemonRuleSet
   end
 
   def maxTeamLength
-    return [6, self.maxLength].max
+    return [Settings::MAX_PARTY_SIZE, self.maxLength].max
   end
 
   # Returns the length of a valid subset of a Pokemon team.
@@ -68,7 +68,7 @@ class PokemonRuleSet
 
   def setNumberRange(minValue, maxValue)
     @minLength = [1, minValue].max
-    @number = [maxValue, 6].min
+    @number = [1, maxValue].max
     return self
   end
 
@@ -139,10 +139,11 @@ class PokemonRuleSet
     return false
   end
 
-  # Returns true if the team's length is greater or equal to the suggested number
-  # and is 6 or less, the team as a whole meets the requirements of any team
-  # rules, and at least one subset of the team meets the requirements of any
-  # subset rules. Each Pokemon in the team must be valid.
+  # Returns true if the team's length is greater or equal to the suggested
+  # number and is Settings::MAX_PARTY_SIZE or less, the team as a whole meets
+  # the requirements of any team rules, and at least one subset of the team
+  # meets the requirements of any subset rules. Each Pokemon in the team must be
+  # valid.
   def canRegisterTeam?(team)
     return false if !team || team.length < self.minTeamLength
     return false if team.length > self.maxTeamLength
@@ -168,9 +169,9 @@ class PokemonRuleSet
     return true
   end
 
-  # Returns true if the team's length is greater or equal to the suggested number
-  # and at least one subset of the team meets the requirements of any team rules
-  # and subset rules. Not all Pokemon in the team have to be valid.
+  # Returns true if the team's length is greater or equal to the suggested
+  # number and at least one subset of the team meets the requirements of any
+  # team rules and subset rules. Not all Pokemon in the team have to be valid.
   def hasValidTeam?(team)
     return false if !team || team.length < self.minTeamLength
     teamNumber = [self.maxLength, team.length].min
@@ -201,9 +202,9 @@ class PokemonRuleSet
     for pkmn in team
       next if isPokemonValid?(pkmn)
       if pkmn
-        error.push(_INTL("This team is not allowed.", pkmn.name)) if error
-      else
         error.push(_INTL("{1} is not allowed.", pkmn.name)) if error
+      else
+        error.push(_INTL("This team is not allowed.")) if error
       end
       return false
     end
@@ -230,8 +231,8 @@ class StandardRules < PokemonRuleSet
   def initialize(number, level = nil)
     super(number)
     addPokemonRule(StandardRestriction.new)
-    addPokemonRule(SpeciesClause.new)
-    addPokemonRule(ItemClause.new)
+    addTeamRule(SpeciesClause.new)
+    addTeamRule(ItemClause.new)
     addPokemonRule(MaximumLevelRestriction.new(level)) if level
   end
 end
@@ -277,8 +278,8 @@ class FancyCup < PokemonRuleSet
     addPokemonRule(HeightRestriction.new(2))
     addPokemonRule(WeightRestriction.new(20))
     addPokemonRule(BabyRestriction.new)
-    addPokemonRule(SpeciesClause.new)
-    addPokemonRule(ItemClause.new)
+    addTeamRule(SpeciesClause.new)
+    addTeamRule(ItemClause.new)
   end
 
   def name
@@ -295,8 +296,8 @@ class LittleCup < PokemonRuleSet
     addPokemonRule(StandardRestriction.new)
     addPokemonRule(MaximumLevelRestriction.new(5))
     addPokemonRule(BabyRestriction.new)
-    addPokemonRule(SpeciesClause.new)
-    addPokemonRule(ItemClause.new)
+    addTeamRule(SpeciesClause.new)
+    addTeamRule(ItemClause.new)
   end
 
   def name
@@ -314,8 +315,8 @@ class LightCup < PokemonRuleSet
     addPokemonRule(MaximumLevelRestriction.new(50))
     addPokemonRule(WeightRestriction.new(99))
     addPokemonRule(BabyRestriction.new)
-    addPokemonRule(SpeciesClause.new)
-    addPokemonRule(ItemClause.new)
+    addTeamRule(SpeciesClause.new)
+    addTeamRule(ItemClause.new)
   end
 
   def name

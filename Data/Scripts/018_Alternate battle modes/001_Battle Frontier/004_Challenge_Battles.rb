@@ -42,7 +42,7 @@ def pbOrganizedBattleEx(opponent, challengedata, endspeech, endspeechwin)
   if Input.press?(Input::CTRL) && $DEBUG
     pbMessage(_INTL("SKIPPING BATTLE..."))
     pbMessage(_INTL("AFTER WINNING..."))
-    endspeech.each { |msg| pbMessage(msg || "...") }
+    pbMessage(endspeech || "...")
     $PokemonTemp.lastbattle = nil
     return true
   end

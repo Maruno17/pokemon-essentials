@@ -24,7 +24,7 @@ def pbBattleChallengeTrainer(win_count, bttrainers)
      [49, 200, 100]    # 200-300 - This line is used for all higher win_counts
   ]
   slot = nil
-  table.each { |val| slot = val if val[0] <= win_count && slot[0] < val[0] }
+  table.each { |val| slot = val if val[0] <= win_count && (!slot || slot[0] < val[0]) }
   return 0 if !slot
   # Scale the start point and length based on how many trainers are in bttrainers
   offset = slot[1] * bttrainers.length / 300
@@ -84,7 +84,7 @@ end
 #===============================================================================
 # Generate a full team's worth of Pokémon which obey the given rules.
 #===============================================================================
-def pbBattleFactoryPokemon(rules, win_count, swap_count, _rentals)
+def pbBattleFactoryPokemon(rules, win_count, swap_count, rentals)
   btpokemon = pbGetBTPokemon(pbBattleChallenge.currentChallenge)
   level = rules.ruleset.suggestedLevel
   pokemonNumbers = [0, 0]   # Start and end indices in btpokemon
@@ -94,32 +94,33 @@ def pbBattleFactoryPokemon(rules, win_count, swap_count, _rentals)
   # Choose a range of Pokémon in btpokemon to randomly select from. The higher
   # the set number, the later the range lies within btpokemon (typically).
   # This table's start point and end point values are based on a btpokemon size
-  # of 882. They are scaled based on the actual size of btpokemon.
+  # of 881. They are scaled based on the actual size of btpokemon.
+  # Group 1 is 0 - 173. Group 2 is 174 - 371. Group 3 is 372 - 881.
   if level == GameData::GrowthRate.max_level   # Open Level (Level 100)
     table = [
-       [372, 467],
-       [468, 563],
-       [564, 659],
-       [660, 755],
-       [372, 881],
-       [372, 881],
-       [372, 881],
-       [372, 881]   # This line is used for all higher sets
+       [372, 491],   # Group 3 (first quarter)
+       [492, 610],   # Group 3 (second quarter)
+       [611, 729],   # Group 3 (third quarter)
+       [730, 849],   # Group 3 (fourth quarter)
+       [372, 881],   # All of Group 3
+       [372, 881],   # All of Group 3
+       [372, 881],   # All of Group 3
+       [372, 881]    # This line is used for all higher sets (all of Group 3)
     ]
   else
     table = [
-       [110, 199],
-       [162, 266],
-       [267, 371],
-       [372, 467],
-       [468, 563],
-       [564, 659],
-       [660, 755],
-       [372, 849]   # This line is used for all higher sets
+       [  0, 173],   # Group 1
+       [174, 272],   # Group 2 (first half)
+       [273, 371],   # Group 2 (second half)
+       [372, 491],   # Group 3 (first quarter)
+       [492, 610],   # Group 3 (second quarter)
+       [611, 729],   # Group 3 (third quarter)
+       [730, 849],   # Group 3 (fourth quarter)
+       [372, 881]    # This line is used for all higher sets (all of Group 3)
     ]
   end
-  pokemonNumbers[0] = table[set][0] * btpokemon.length / 882
-  pokemonNumbers[1] = table[set][1] * btpokemon.length / 882
+  pokemonNumbers[0] = table[set][0] * btpokemon.length / 881
+  pokemonNumbers[1] = table[set][1] * btpokemon.length / 881
   # Choose two IV values for Pokémon to use (the one for the current set, and
   # the one for the next set). The iv_threshold below determines which of these
   # two values a given Pokémon uses. The higher the set number, the higher these
@@ -139,16 +140,24 @@ def pbBattleFactoryPokemon(rules, win_count, swap_count, _rentals)
   ]
   thresholds.each { |val| iv_threshold = val[1] if swap_count >= val[0] }
   # Randomly choose Pokémon from the range to fill the party with
+  old_min = rules.ruleset.minLength
+  old_max = rules.ruleset.maxLength
+  if rentals.length == 0
+    rules.ruleset.setNumber(6)   # Rentals
+  else
+    rules.ruleset.setNumber(old_max + rentals.length)   # Opponent
+  end
   party = []
   loop do
     party.clear
-    while party.length < Settings::MAX_PARTY_SIZE
+    while party.length < ((rentals.length == 0) ? 6 : old_max)
       rnd = pokemonNumbers[0] + rand(pokemonNumbers[1] - pokemonNumbers[0] + 1)
       rndpoke = btpokemon[rnd]
       indvalue = (party.length < iv_threshold) ? ivs[0] : ivs[1]
       party.push(rndpoke.createPokemon(level, indvalue, nil))
     end
-    break if rules.ruleset.isValid?(party)
+    break if rules.ruleset.isValid?(party.concat(rentals))
   end
+  rules.ruleset.setNumberRange(old_min, old_max)
   return party
 end
