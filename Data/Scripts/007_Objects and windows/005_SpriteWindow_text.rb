@@ -119,7 +119,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
   attr_reader   :waitcount
 
   def initialize(text="")
-    @cursorMode       = MessageConfig::CURSORMODE
+    @cursorMode       = MessageConfig::CURSOR_POSITION
     @endOfText        = nil
     @scrollstate      = 0
     @realframes       = 0
