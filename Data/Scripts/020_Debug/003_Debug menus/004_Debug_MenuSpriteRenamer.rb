@@ -231,6 +231,46 @@ module SpriteRenamer
     end
   end
 
+  def convert_player_metadata_charsets
+    newPlayerMeta = []
+    for i in 0...8
+      metadata = GameData::Metadata.get_player(i)
+      next if !metadata
+      id = GameData::TrainerType.get(metadata[0]).id_number
+      newMeta = metadata.clone
+      # Check for player charsets which need renaming
+      if metadata[1] == sprintf("trchar%03d",id)
+        newMeta[1] = "trainer_#{metadata[0]}"
+      end
+      newPlayerMeta.push(newMeta)
+    end
+    metadata = GameData::Metadata.get
+    # Construct new hash to register
+    metadata_hash = {
+      :id                 => 0,
+      :home               => metadata.home,
+      :wild_battle_BGM    => metadata.wild_battle_BGM,
+      :trainer_battle_BGM => metadata.trainer_battle_BGM,
+      :wild_victory_ME    => metadata.wild_victory_ME,
+      :trainer_victory_ME => metadata.trainer_victory_ME,
+      :wild_capture_ME    => metadata.wild_capture_ME,
+      :surf_BGM           => metadata.surf_BGM,
+      :bicycle_BGM        => metadata.bicycle_BGM,
+      :player_A           => newPlayerMeta[0],
+      :player_B           => newPlayerMeta[1],
+      :player_C           => newPlayerMeta[2],
+      :player_D           => newPlayerMeta[3],
+      :player_E           => newPlayerMeta[4],
+      :player_F           => newPlayerMeta[5],
+      :player_G           => newPlayerMeta[6],
+      :player_H           => newPlayerMeta[7]
+    }
+    # Register edited metadata and save PBS
+    GameData::Metadata.register(metadata_hash)
+    GameData::Metadata.save
+    Compiler.write_metadata
+  end
+
   def convert_files
     return if !pbConfirmMessage("Check for Pokémon/item/trainer files in their old folders that need renaming and moving?")
     any_changed = false
@@ -254,7 +294,12 @@ module SpriteRenamer
     convert_trainer_sprites("Graphics/Trainers/")
     pbSetWindowText(nil)
     if pbConfirmMessage("Rename all trainer charsets? This will also edit map data to change events' charsets accordingly.")
+      # Rename Trainer Charsets
       convert_trainer_sprites("Graphics/Characters/")
+      pbSetWindowText(nil)
+      # Rename Trainer Charsets in metadata.txt
+      convert_player_metadata_charsets
+      pbSetWindowText(nil)
       # Edit all maps to replace used charsets
       mapData = Compiler::MapData.new
       t = Time.now.to_i
