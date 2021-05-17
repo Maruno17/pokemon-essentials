@@ -368,11 +368,11 @@ def pbTrainerBattleCore(*args)
   foePartyStarts = []
   for arg in args
     if arg.is_a?(NPCTrainer)
-      foeTrainers.push(arg[0])
+      foeTrainers.push(arg)
       foePartyStarts.push(foeParty.length)
-      arg[0].party.each { |pkmn| foeParty.push(pkmn) }
-      foeEndSpeeches.push(arg[0].lose_text)
-      foeItems.push(arg[0].items)
+      arg.party.each { |pkmn| foeParty.push(pkmn) }
+      foeEndSpeeches.push(arg.lose_text)
+      foeItems.push(arg.items)
     elsif arg.is_a?(Array)   # [trainer type, trainer name, ID, speech (optional)]
       trainer = pbLoadTrainer(arg[0],arg[1],arg[2])
       pbMissingTrainer(arg[0],arg[1],arg[2]) if !trainer
