@@ -298,8 +298,8 @@ def pbEncounterTypeEditor(enc_data, enc_type)
         enc_data.types[new_type] = enc_data.types[enc_type]
         enc_data.types.delete(enc_type)
         enc_type = new_type
-        need_refresh = true
       end
+      need_refresh = true
     elsif ret == commands.length - 1   # Add new encounter slot
       new_slot_data = EncounterSlotProperty.set(enc_type_name, nil)
       if new_slot_data
