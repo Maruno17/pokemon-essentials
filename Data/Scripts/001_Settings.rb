@@ -391,14 +391,6 @@ module Settings
     "choice 27",
     "choice 28"
   ]
-
-  # Available fonts, as selectable in the Options Screen.
-  FONT_OPTIONS = [
-    "Power Green",
-    "Power Red and Blue",
-    "Power Red and Green",
-    "Power Clear"
-  ]
 end
 
 # DO NOT EDIT THESE!

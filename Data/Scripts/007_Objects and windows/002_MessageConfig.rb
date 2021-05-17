@@ -1,43 +1,27 @@
 module MessageConfig
-  WindowOpacity   = 255
-  TextSpeed       = nil   # can be positive to wait frames or negative to
-                          # show multiple characters in a single frame
+  LIGHT_TEXT_MAIN_COLOR   = Color.new(248, 248, 248)
+  LIGHT_TEXT_SHADOW_COLOR = Color.new(72, 80, 88)
+  DARK_TEXT_MAIN_COLOR    = Color.new(80, 80, 88)
+  DARK_TEXT_SHADOW_COLOR  = Color.new(160, 160, 168)
+  FONT_NAME               = "Power Green"
+  FONT_SIZE               = 29
+  SMALL_FONT_NAME         = "Power Green Small"
+  SMALL_FONT_SIZE         = 25
+  NARROW_FONT_NAME        = "Power Green Narrow"
+  NARROW_FONT_SIZE        = 29
   # 0 = Pause cursor is displayed at end of text
   # 1 = Pause cursor is displayed at bottom right
   # 2 = Pause cursor is displayed at lower middle side
-  CURSORMODE      = 1
-  LIGHTTEXTBASE   = Color.new(248,248,248)
-  LIGHTTEXTSHADOW = Color.new(72,80,88)
-  DARKTEXTBASE    = Color.new(80,80,88)
-  DARKTEXTSHADOW  = Color.new(160,160,168)
-  FontSubstitutes = {
-     "Power Red and Blue"  => "Pokemon RS",
-     "Power Red and Green" => "Pokemon FireLeaf",
-     "Power Green"         => "Pokemon Emerald",
-     "Power Green Narrow"  => "Pokemon Emerald Narrow",
-     "Power Green Small"   => "Pokemon Emerald Small",
-     "Power Clear"         => "Pokemon DP"
-  }
+  CURSOR_POSITION         = 1
+  WINDOW_OPACITY          = 255
+  TEXT_SPEED              = nil   # can be positive to wait frames or negative to
+                                  # show multiple characters in a single frame
   @@systemFrame     = nil
   @@defaultTextSkin = nil
-  @@systemFont      = nil
   @@textSpeed       = nil
-
-  def self.pbTryFonts(*args)
-    for a in args
-      if a && a.is_a?(String)
-        return a if Font.exist?(a)
-        a=MessageConfig::FontSubstitutes[a] || a
-        return a if Font.exist?(a)
-      elsif a && a.is_a?(Array)
-        for aa in a
-          ret=MessageConfig.pbTryFonts(aa)
-          return ret if ret!=""
-        end
-      end
-    end
-    return ""
-  end
+  @@systemFont      = nil
+  @@smallFont       = nil
+  @@narrowFont      = nil
 
   def self.pbDefaultSystemFrame
     if $PokemonSystem
@@ -53,27 +37,6 @@ module MessageConfig
     else
       return pbResolveBitmap("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[0]) || ""
     end
-  end
-
-  def self.pbDefaultSystemFontName
-    if $PokemonSystem
-      return MessageConfig.pbTryFonts(Settings::FONT_OPTIONS[$PokemonSystem.font], "Arial Narrow", "Arial")
-    else
-      return MessageConfig.pbTryFonts(Settings::FONT_OPTIONS[0], "Arial Narrow", "Arial")
-    end
-  end
-
-  def self.pbDefaultTextSpeed
-    return ($PokemonSystem) ? pbSettingToTextSpeed($PokemonSystem.textspeed) : pbSettingToTextSpeed(nil)
-  end
-
-  def self.pbSettingToTextSpeed(speed)
-    case speed
-    when 0 then return 2
-    when 1 then return 1
-    when 2 then return -2
-    end
-    return TextSpeed || 1
   end
 
   def self.pbDefaultWindowskin
@@ -104,16 +67,6 @@ module MessageConfig
     return @@defaultTextSkin
   end
 
-  def self.pbGetSystemFontName
-    @@systemFont=pbDefaultSystemFontName if !@@systemFont
-    return @@systemFont
-  end
-
-  def self.pbGetTextSpeed
-    @@textSpeed=pbDefaultTextSpeed if !@@textSpeed
-    return @@textSpeed
-  end
-
   def self.pbSetSystemFrame(value)
     @@systemFrame=pbResolveBitmap(value) || ""
   end
@@ -122,12 +75,87 @@ module MessageConfig
     @@defaultTextSkin=pbResolveBitmap(value) || ""
   end
 
-  def self.pbSetSystemFontName(value)
-    @@systemFont=MessageConfig.pbTryFonts([value],"Arial Narrow","Arial")
+  #-----------------------------------------------------------------------------
+
+  def self.pbDefaultTextSpeed
+    return ($PokemonSystem) ? pbSettingToTextSpeed($PokemonSystem.textspeed) : pbSettingToTextSpeed(nil)
+  end
+
+  def self.pbGetTextSpeed
+    @@textSpeed=pbDefaultTextSpeed if !@@textSpeed
+    return @@textSpeed
   end
 
   def self.pbSetTextSpeed(value)
     @@textSpeed=value
+  end
+
+  def self.pbSettingToTextSpeed(speed)
+    case speed
+    when 0 then return 2
+    when 1 then return 1
+    when 2 then return -2
+    end
+    return TEXT_SPEED || 1
+  end
+
+  #-----------------------------------------------------------------------------
+
+  def self.pbDefaultSystemFontName
+    return MessageConfig.pbTryFonts(FONT_NAME, "Arial Narrow", "Arial")
+  end
+
+  def self.pbDefaultSmallFontName
+    return MessageConfig.pbTryFonts(SMALL_FONT_NAME, "Arial Narrow", "Arial")
+  end
+
+  def self.pbDefaultNarrowFontName
+    return MessageConfig.pbTryFonts(NARROW_FONT_NAME, "Arial Narrow", "Arial")
+  end
+
+  def self.pbGetSystemFontName
+    @@systemFont = pbDefaultSystemFontName if !@@systemFont
+    return @@systemFont
+  end
+
+  def self.pbGetSmallFontName
+    @@smallFont = pbDefaultSmallFontName if !@@smallFont
+    return @@smallFont
+  end
+
+  def self.pbGetNarrowFontName
+    @@narrowFont = pbDefaultNarrowFontName if !@@narrowFont
+    return @@narrowFont
+  end
+
+  def self.pbSetSystemFontName(value)
+    @@systemFont = MessageConfig.pbTryFonts(value)
+    @@systemFont = MessageConfig.pbDefaultSystemFontName if @@systemFont == ""
+  end
+
+  def self.pbSetSmallFontName(value)
+    @@smallFont = MessageConfig.pbTryFonts(value)
+    @@smallFont = MessageConfig.pbDefaultSmallFontName if @@smallFont == ""
+  end
+
+  def self.pbSetNarrowFontName(value)
+    @@narrowFont = MessageConfig.pbTryFonts(value)
+    @@narrowFont = MessageConfig.pbDefaultNarrowFontName if @@narrowFont == ""
+  end
+
+  def self.pbTryFonts(*args)
+    for a in args
+      next if !a
+      if a.is_a?(String)
+        return a if Font.exist?(a)
+      elsif a.is_a?(Array)
+        for aa in a
+          ret = MessageConfig.pbTryFonts(aa)
+          return ret if ret != ""
+        end
+      end
+    end
+    return ""
   end
 end
 
@@ -314,17 +342,17 @@ def getSkinColor(windowskin,color,isDarkSkin)
        "F0F0F8","C8C8D0",   # 8  White
        "9040E8","B8A8E0",   # 9  Purple
        "F89818","F8C898",   # 10 Orange
-       colorToRgb32(MessageConfig::DARKTEXTBASE),
-          colorToRgb32(MessageConfig::DARKTEXTSHADOW),   # 11 Dark default
-       colorToRgb32(MessageConfig::LIGHTTEXTBASE),
-          colorToRgb32(MessageConfig::LIGHTTEXTSHADOW)   # 12 Light default
+       colorToRgb32(MessageConfig::DARK_TEXT_MAIN_COLOR),
+          colorToRgb32(MessageConfig::DARK_TEXT_SHADOW_COLOR),   # 11 Dark default
+       colorToRgb32(MessageConfig::LIGHT_TEXT_MAIN_COLOR),
+          colorToRgb32(MessageConfig::LIGHT_TEXT_SHADOW_COLOR)   # 12 Light default
     ]
     if color==0 || color>textcolors.length/2   # No special colour, use default
       if isDarkSkin   # Dark background, light text
-        return shadowc3tag(MessageConfig::LIGHTTEXTBASE,MessageConfig::LIGHTTEXTSHADOW)
+        return shadowc3tag(MessageConfig::LIGHT_TEXT_MAIN_COLOR, MessageConfig::LIGHT_TEXT_SHADOW_COLOR)
       end
       # Light background, dark text
-      return shadowc3tag(MessageConfig::DARKTEXTBASE,MessageConfig::DARKTEXTSHADOW)
+      return shadowc3tag(MessageConfig::DARK_TEXT_MAIN_COLOR, MessageConfig::DARK_TEXT_SHADOW_COLOR)
     end
     # Special colour as listed above
     if isDarkSkin && color!=12   # Dark background, light text
@@ -345,9 +373,9 @@ def getDefaultTextColors(windowskin)
   if !windowskin || windowskin.disposed? ||
      windowskin.width!=128 || windowskin.height!=128
     if isDarkWindowskin(windowskin)
-      return [MessageConfig::LIGHTTEXTBASE,MessageConfig::LIGHTTEXTSHADOW]   # White
+      return [MessageConfig::LIGHT_TEXT_MAIN_COLOR, MessageConfig::LIGHT_TEXT_SHADOW_COLOR]   # White
     else
-      return [MessageConfig::DARKTEXTBASE,MessageConfig::DARKTEXTSHADOW]   # Dark gray
+      return [MessageConfig::DARK_TEXT_MAIN_COLOR, MessageConfig::DARK_TEXT_SHADOW_COLOR]   # Dark gray
     end
   else   # VX windowskin
     color = windowskin.get_pixel(64, 96)
@@ -379,41 +407,22 @@ end
 #===============================================================================
 # Set a bitmap's font
 #===============================================================================
-# Gets the name of the system small font.
-def pbSmallFontName
-  return MessageConfig.pbTryFonts("Power Green Small","Pokemon Emerald Small",
-     "Arial Narrow","Arial")
-end
-
-# Gets the name of the system narrow font.
-def pbNarrowFontName
-  return MessageConfig.pbTryFonts("Power Green Narrow","Pokemon Emerald Narrow",
-     "Arial Narrow","Arial")
-end
-
 # Sets a bitmap's font to the system font.
 def pbSetSystemFont(bitmap)
-  fontname = MessageConfig.pbGetSystemFontName
-  bitmap.font.name = fontname
-  if fontname == "Pokemon FireLeaf" || fontname == "Power Red and Green"
-    bitmap.font.size = 27
-  elsif fontname == "Pokemon Emerald Small" || fontname == "Power Green Small"
-    bitmap.font.size = 29
-  else
-    bitmap.font.size = 29
-  end
+  bitmap.font.name = MessageConfig.pbGetSystemFontName
+  bitmap.font.size = MessageConfig::FONT_SIZE
 end
 
 # Sets a bitmap's font to the system small font.
 def pbSetSmallFont(bitmap)
-  bitmap.font.name = pbSmallFontName
-  bitmap.font.size = 25
+  bitmap.font.name = MessageConfig.pbGetSmallFontName
+  bitmap.font.size = MessageConfig::SMALL_FONT_SIZE
 end
 
 # Sets a bitmap's font to the system narrow font.
 def pbSetNarrowFont(bitmap)
-  bitmap.font.name = pbNarrowFontName
-  bitmap.font.size = 29
+  bitmap.font.name = MessageConfig.pbGetNarrowFontName
+  bitmap.font.size = MessageConfig::NARROW_FONT_SIZE
 end
 
 #===============================================================================

@@ -119,7 +119,7 @@ class Window_AdvancedTextPokemon < SpriteWindow_Base
   attr_reader   :waitcount
 
   def initialize(text="")
-    @cursorMode       = MessageConfig::CURSORMODE
+    @cursorMode       = MessageConfig::CURSOR_POSITION
     @endOfText        = nil
     @scrollstate      = 0
     @realframes       = 0
@@ -1349,7 +1349,7 @@ class Window_AdvancedCommandPokemon < Window_DrawableCommand
          @commands[index],self.baseColor,self.shadowColor)
     else
       chars=getFormattedText(
-         self.contents,rect.x,rect.y,rect.width,rect.height,
+         self.contents,rect.x,rect.y+4,rect.width,rect.height,
          @commands[index],rect.height,true,true)
       drawFormattedChars(self.contents,chars)
     end

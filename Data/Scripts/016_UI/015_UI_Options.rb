@@ -7,7 +7,6 @@ class PokemonSystem
   attr_accessor :battlestyle
   attr_accessor :frame
   attr_accessor :textskin
-  attr_accessor :font
   attr_accessor :screensize
   attr_accessor :language
   attr_accessor :runstyle
@@ -21,7 +20,6 @@ class PokemonSystem
     @battlestyle = 0     # Battle style (0=switch, 1=set)
     @frame       = 0     # Default window frame (see also Settings::MENU_WINDOWSKINS)
     @textskin    = 0     # Speech frame
-    @font        = 0     # Font (see also Settings::FONT_OPTIONS)
     @screensize  = (Settings::SCREEN_SCALE * 2).floor - 1   # 0=half size, 1=full size, 2=full-and-a-half size, 3=double size
     @language    = 0     # Language (see also Settings::LANGUAGES in script PokemonSystem)
     @runstyle    = 0     # Default movement speed (0=walk, 1=run)
@@ -365,13 +363,6 @@ class PokemonOption_Scene
            MessageConfig.pbSetSystemFrame("Graphics/Windowskins/" + Settings::MENU_WINDOWSKINS[value])
          }
        ),
-       EnumOption.new(_INTL("Font Style"),[_INTL("Em"),_INTL("R/S"),_INTL("FRLG"),_INTL("DP")],
-         proc { $PokemonSystem.font },
-         proc { |value|
-           $PokemonSystem.font = value
-           MessageConfig.pbSetSystemFontName(Settings::FONT_OPTIONS[value])
-         }
-       ),
        EnumOption.new(_INTL("Text Entry"),[_INTL("Cursor"),_INTL("Keyboard")],
          proc { $PokemonSystem.textinput },
          proc { |value| $PokemonSystem.textinput = value }
@@ -408,7 +399,6 @@ class PokemonOption_Scene
   def pbOptions
     oldSystemSkin = $PokemonSystem.frame      # Menu
     oldTextSkin   = $PokemonSystem.textskin   # Speech
-    oldFont       = $PokemonSystem.font
     pbActivateWindow(@sprites,"option") {
       loop do
         Graphics.update
@@ -428,11 +418,6 @@ class PokemonOption_Scene
             @sprites["title"].setSkin(MessageConfig.pbGetSystemFrame())
             @sprites["option"].setSkin(MessageConfig.pbGetSystemFrame())
             oldSystemSkin = $PokemonSystem.frame
-          end
-          if $PokemonSystem.font!=oldFont
-            pbSetSystemFont(@sprites["textbox"].contents)
-            @sprites["textbox"].text = _INTL("Speech frame {1}.",1+$PokemonSystem.textskin)
-            oldFont = $PokemonSystem.font
           end
         end
         if Input.trigger?(Input::BACK)

@@ -172,7 +172,7 @@ def pbDayCareGenerateEgg
     babyspecies = (ditto1) ? father.species : mother.species
   end
   # Determine the egg's species
-  babyspecies = GameData::Species.get(babyspecies).get_bably_species(true, mother.item_id, father.item_id)
+  babyspecies = GameData::Species.get(babyspecies).get_baby_species(true, mother.item_id, father.item_id)
   case babyspecies
   when :MANAPHY
     babyspecies = :PHIONE if GameData::Species.exists?(:PHIONE)

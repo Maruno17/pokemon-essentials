@@ -23,7 +23,6 @@ SaveData.register_conversion(:v19_convert_PokemonSystem) do
     new_system.battlestyle = save_data[:pokemon_system].battlestyle || new_system.battlestyle
     new_system.frame       = save_data[:pokemon_system].frame || new_system.frame
     new_system.textskin    = save_data[:pokemon_system].textskin || new_system.textskin
-    new_system.font        = save_data[:pokemon_system].font || new_system.font
     new_system.screensize  = save_data[:pokemon_system].screensize || new_system.screensize
     new_system.language    = save_data[:pokemon_system].language || new_system.language
     new_system.runstyle    = save_data[:pokemon_system].runstyle || new_system.runstyle
