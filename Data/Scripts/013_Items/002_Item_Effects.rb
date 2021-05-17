@@ -834,9 +834,10 @@ ItemHandlers::UseOnPokemon.add(:GRACIDEA,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
   end
-  pkmn.form = 1
-  scene.pbRefresh
-  scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+  pkmn.setForm(1) {
+    scene.pbRefresh
+    scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+  }
   next true
 })
 
@@ -848,9 +849,10 @@ ItemHandlers::UseOnPokemon.add(:REDNECTAR,proc { |item,pkmn,scene|
   if pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
   end
-  pkmn.form = 0
-  scene.pbRefresh
-  scene.pbDisplay(_INTL("{1} changed form!",pkmn.name))
+  pkmn.setForm(0) {
+    scene.pbRefresh
+    scene.pbDisplay(_INTL("{1} changed form!",pkmn.name))
+  }
   next true
 })
 
@@ -862,9 +864,10 @@ ItemHandlers::UseOnPokemon.add(:YELLOWNECTAR,proc { |item,pkmn,scene|
   if pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
   end
-  pkmn.form = 1
-  scene.pbRefresh
-  scene.pbDisplay(_INTL("{1} changed form!",pkmn.name))
+  pkmn.setForm(1) {
+    scene.pbRefresh
+    scene.pbDisplay(_INTL("{1} changed form!",pkmn.name))
+  }
   next true
 })
 
@@ -876,9 +879,10 @@ ItemHandlers::UseOnPokemon.add(:PINKNECTAR,proc { |item,pkmn,scene|
   if pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
   end
-  pkmn.form = 2
-  scene.pbRefresh
-  scene.pbDisplay(_INTL("{1} changed form!",pkmn.name))
+  pkmn.setForm(2) {
+    scene.pbRefresh
+    scene.pbDisplay(_INTL("{1} changed form!",pkmn.name))
+  }
   next true
 })
 
@@ -890,9 +894,10 @@ ItemHandlers::UseOnPokemon.add(:PURPLENECTAR,proc { |item,pkmn,scene|
   if pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
   end
-  pkmn.form = 3
-  scene.pbRefresh
-  scene.pbDisplay(_INTL("{1} changed form!",pkmn.name))
+  pkmn.setForm(3) {
+    scene.pbRefresh
+    scene.pbDisplay(_INTL("{1} changed form!",pkmn.name))
+  }
   next true
 })
 
@@ -908,9 +913,10 @@ ItemHandlers::UseOnPokemon.add(:REVEALGLASS,proc { |item,pkmn,scene|
     next false
   end
   newForm = (pkmn.form==0) ? 1 : 0
-  pkmn.form = newForm
-  scene.pbRefresh
-  scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+  pkmn.setForm(newForm) {
+    scene.pbRefresh
+    scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+  }
   next true
 })
 
@@ -923,9 +929,10 @@ ItemHandlers::UseOnPokemon.add(:PRISONBOTTLE,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
   end
   newForm = (pkmn.form==0) ? 1 : 0
-  pkmn.form = newForm
-  scene.pbRefresh
-  scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+  pkmn.setForm(newForm) {
+    scene.pbRefresh
+    scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+  }
   next true
 })
 
@@ -960,11 +967,12 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
     newForm = 0
     newForm = 1 if poke2.isSpecies?(:RESHIRAM)
     newForm = 2 if poke2.isSpecies?(:ZEKROM)
-    pkmn.form = newForm
-    pkmn.fused = poke2
-    $Trainer.remove_pokemon_at_index(chosen)
-    scene.pbHardRefresh
-    scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+    pkmn.setForm(newForm) {
+      pkmn.fused = poke2
+      $Trainer.remove_pokemon_at_index(chosen)
+      scene.pbHardRefresh
+      scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+    }
     next true
   end
   # Unfusing
@@ -972,11 +980,12 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
-  pkmn.form = 0
-  $Trainer.party[$Trainer.party.length] = pkmn.fused
-  pkmn.fused = nil
-  scene.pbHardRefresh
-  scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+  pkmn.setForm(0) {
+    $Trainer.party[$Trainer.party.length] = pkmn.fused
+    pkmn.fused = nil
+    scene.pbHardRefresh
+    scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+  }
   next true
 })
 
@@ -994,7 +1003,7 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
     chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
     next false if chosen<0
     poke2 = $Trainer.party[chosen]
-    if pkmn == poke2
+    if pkmn==poke2
       scene.pbDisplay(_INTL("It cannot be fused with itself."))
       next false
     elsif poke2.egg?
@@ -1007,11 +1016,12 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
       scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
       next false
     end
-    pkmn.form = 1
-    pkmn.fused = poke2
-    $Trainer.remove_pokemon_at_index(chosen)
-    scene.pbHardRefresh
-    scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+    pkmn.setForm(1) {
+      pkmn.fused = poke2
+      $Trainer.remove_pokemon_at_index(chosen)
+      scene.pbHardRefresh
+      scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+    }
     next true
   end
   # Unfusing
@@ -1019,11 +1029,12 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
-  pkmn.form = 0
-  $Trainer.party[$Trainer.party.length] = pkmn.fused
-  pkmn.fused = nil
-  scene.pbHardRefresh
-  scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+  pkmn.setForm(0) {
+    $Trainer.party[$Trainer.party.length] = pkmn.fused
+    pkmn.fused = nil
+    scene.pbHardRefresh
+    scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+  }
   next true
 })
 
@@ -1054,11 +1065,12 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
       scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
       next false
     end
-    pkmn.form = 2
-    pkmn.fused = poke2
-    $Trainer.remove_pokemon_at_index(chosen)
-    scene.pbHardRefresh
-    scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+    pkmn.setForm(2) {
+      pkmn.fused = poke2
+      $Trainer.remove_pokemon_at_index(chosen)
+      scene.pbHardRefresh
+      scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+    }
     next true
   end
   # Unfusing
@@ -1066,11 +1078,12 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
-  pkmn.form = 0
-  $Trainer.party[$Trainer.party.length] = pkmn.fused
-  pkmn.fused = nil
-  scene.pbHardRefresh
-  scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+  pkmn.setForm(0) {
+    $Trainer.party[$Trainer.party.length] = pkmn.fused
+    pkmn.fused = nil
+    scene.pbHardRefresh
+    scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+  }
   next true
 })
 
