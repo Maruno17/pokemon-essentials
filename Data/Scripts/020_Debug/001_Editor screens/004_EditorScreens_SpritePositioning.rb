@@ -168,8 +168,8 @@ class SpritePositioner
     species_data = GameData::Species.get(@species)
     if pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%s_%d", species_data.species, species_data.form)) ||
        pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%s", species_data.species))
-       pbMessage("A shadow sprite exists for this species in Graphics/Pokemon/Shadow/. The size of the shadow cannot be edited.")
-       return false
+      pbMessage("This species has its own shadow sprite in Graphics/Pokemon/Shadow/. The shadow size metric cannot be edited.")
+      return false
     end
     oldval = species_data.shadow_size
     cmdvals = [0]
