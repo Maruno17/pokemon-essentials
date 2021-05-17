@@ -232,41 +232,20 @@ module SpriteRenamer
   end
 
   def convert_player_metadata_charsets
-    newPlayerMeta = []
+    changed = false
     for i in 0...8
       metadata = GameData::Metadata.get_player(i)
       next if !metadata
-      id = GameData::TrainerType.get(metadata[0]).id_number
-      newMeta = metadata.clone
-      # Check for player charsets which need renaming
-      if metadata[1] == sprintf("trchar%03d",id)
-        newMeta[1] = "trainer_#{metadata[0]}"
+      if metadata[1][/^trchar(\d{3})$/]
+        tr_type_number = $~[1].to_i
+        tr_type_data = GameData::TrainerType.try_get(tr_type_number)
+        raise _INTL("Trainer type {1} is not defined (trying to rename player metadata filename {2}).", tr_type_number, metadata[1]) if !tr_type_data
+        metadata[1] = "trainer_" + tr_type_data.id.to_s
+        changed = true
       end
-      newPlayerMeta.push(newMeta)
     end
-    metadata = GameData::Metadata.get
-    # Construct new hash to register
-    metadata_hash = {
-      :id                 => 0,
-      :home               => metadata.home,
-      :wild_battle_BGM    => metadata.wild_battle_BGM,
-      :trainer_battle_BGM => metadata.trainer_battle_BGM,
-      :wild_victory_ME    => metadata.wild_victory_ME,
-      :trainer_victory_ME => metadata.trainer_victory_ME,
-      :wild_capture_ME    => metadata.wild_capture_ME,
-      :surf_BGM           => metadata.surf_BGM,
-      :bicycle_BGM        => metadata.bicycle_BGM,
-      :player_A           => newPlayerMeta[0],
-      :player_B           => newPlayerMeta[1],
-      :player_C           => newPlayerMeta[2],
-      :player_D           => newPlayerMeta[3],
-      :player_E           => newPlayerMeta[4],
-      :player_F           => newPlayerMeta[5],
-      :player_G           => newPlayerMeta[6],
-      :player_H           => newPlayerMeta[7]
-    }
-    # Register edited metadata and save PBS
-    GameData::Metadata.register(metadata_hash)
+    return if !changed
+    # Save changes to metadata and rewrite PBS file
     GameData::Metadata.save
     Compiler.write_metadata
   end
@@ -294,10 +273,7 @@ module SpriteRenamer
     convert_trainer_sprites("Graphics/Trainers/")
     pbSetWindowText(nil)
     if pbConfirmMessage("Rename all trainer charsets? This will also edit map data to change events' charsets accordingly.")
-      # Rename Trainer Charsets
       convert_trainer_sprites("Graphics/Characters/")
-      pbSetWindowText(nil)
-      # Rename Trainer Charsets in metadata.txt
       convert_player_metadata_charsets
       pbSetWindowText(nil)
       # Edit all maps to replace used charsets
