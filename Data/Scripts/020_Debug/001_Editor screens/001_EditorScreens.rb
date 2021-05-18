@@ -386,14 +386,14 @@ def pbTrainerTypeEditor
             type_hash = {
               :id_number   => t_data.id_number,
               :id          => t_data.id,
-              :name        => line[1],
-              :base_money  => line[2],
-              :battle_BGM  => line[3],
-              :victory_ME  => line[4],
-              :intro_ME    => line[5],
-              :gender      => line[6],
-              :skill_level => line[7],
-              :skill_code  => line[8]
+              :name        => data[1],
+              :base_money  => data[2],
+              :battle_BGM  => data[3],
+              :victory_ME  => data[4],
+              :intro_ME    => data[5],
+              :gender      => data[6],
+              :skill_level => data[7],
+              :skill_code  => data[8]
             }
             # Add trainer type's data to records
             GameData::TrainerType.register(type_hash)

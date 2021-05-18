@@ -456,7 +456,7 @@ def pbMoveTutorChoose(move,movelist=nil,bymachine=false,oneusemachine=false)
         pbMessage(_INTL("{1} can't learn {2}.",pokemon.name,movename)) { screen.pbUpdate }
       else
         if pbLearnMove(pokemon,move,false,bymachine) { screen.pbUpdate }
-          pkmn.add_first_move(move) if oneusemachine
+          pokemon.add_first_move(move) if oneusemachine
           ret = true
           break
         end

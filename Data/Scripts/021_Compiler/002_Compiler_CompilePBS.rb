@@ -1277,7 +1277,7 @@ module Compiler
           line_data = [line_data] if !line_data.is_a?(Array)
           trainer_hash[:name]    = line_data[0]
           trainer_hash[:version] = line_data[1] if line_data[1]
-          trainer_names[trainer_hash[:id]] = line_data[0]
+          trainer_names[trainer_hash[:id_number]] = line_data[0]
         when 3   # Number of Pokémon, items
           line_data = pbGetCsvRecord(line, line_no,
              [0, "vEEEEEEEE", nil, :Item, :Item, :Item, :Item, :Item, :Item, :Item, :Item])
