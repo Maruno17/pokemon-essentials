@@ -44,6 +44,7 @@ def pbOrganizedBattleEx(opponent, challengedata, endspeech, endspeechwin)
     pbMessage(_INTL("AFTER WINNING..."))
     pbMessage(endspeech || "...")
     $PokemonTemp.lastbattle = nil
+    pbMEStop
     return true
   end
   $Trainer.heal_party

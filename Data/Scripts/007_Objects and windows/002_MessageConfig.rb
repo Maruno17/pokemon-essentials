@@ -102,15 +102,15 @@ module MessageConfig
   #-----------------------------------------------------------------------------
 
   def self.pbDefaultSystemFontName
-    return MessageConfig.pbTryFonts(FONT_NAME, "Arial Narrow", "Arial")
+    return MessageConfig.pbTryFonts(FONT_NAME)
   end
 
   def self.pbDefaultSmallFontName
-    return MessageConfig.pbTryFonts(SMALL_FONT_NAME, "Arial Narrow", "Arial")
+    return MessageConfig.pbTryFonts(SMALL_FONT_NAME)
   end
 
   def self.pbDefaultNarrowFontName
-    return MessageConfig.pbTryFonts(NARROW_FONT_NAME, "Arial Narrow", "Arial")
+    return MessageConfig.pbTryFonts(NARROW_FONT_NAME)
   end
 
   def self.pbGetSystemFontName

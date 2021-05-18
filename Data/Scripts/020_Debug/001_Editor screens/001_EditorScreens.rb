@@ -256,6 +256,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
   help_window = Window_UnformattedTextPokemon.newWithSize(_INTL("Edit encounter slots"),
      Graphics.width / 2, 0, Graphics.width / 2, 96)
   help_window.z = 99999
+  enc_type_name = ""
   ret = 0
   need_refresh = true
   loop do
@@ -316,7 +317,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
           need_refresh = true
         end
       when 1   # Copy
-        enc_data.types[enc_type].insert(ret, enc_data.types[enc_type][ret - 2].clone)
+        enc_data.types[enc_type].insert(ret - 1, enc_data.types[enc_type][ret - 2].clone)
         ret += 1
         need_refresh = true
       when 2   # Delete
