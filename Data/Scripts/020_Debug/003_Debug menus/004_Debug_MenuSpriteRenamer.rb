@@ -75,7 +75,7 @@ module SpriteRenamer
         crack = "_cracks" if name[/eggCracks/]
       end
     end
-    return prefix + species + form + female + shadow + crack + extension)
+    return prefix + species + form + female + shadow + crack + extension
   end
 
   def convert_pokemon_sprites(src_dir, dest_dir)
