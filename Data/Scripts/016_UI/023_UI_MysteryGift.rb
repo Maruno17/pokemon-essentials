@@ -195,6 +195,10 @@ def pbManageMysteryGifts
           newgift=pbEditMysteryGift(gift[1],gift[2],gift[0],gift[3])
           master[command]=newgift if newgift
         elsif cmd==2   # Receive
+          if !$Trainer
+            pbMessage(_INTL("There is no save file loaded. Cannot receive any gifts."))
+            next
+          end
           replaced=false
           for i in 0...$Trainer.mystery_gifts.length
             if $Trainer.mystery_gifts[i][0]==gift[0]
