@@ -244,7 +244,6 @@ class Game_Event < Game_Character
 
   def should_update?(recalc=false)
     return @to_update if !recalc
-    return true if $PokemonSystem.tilemap==2
     return true if @trigger && (@trigger == 3 || @trigger == 4)
     return true if @move_route_forcing
     return true if @event.name[/update/i]

@@ -27,8 +27,6 @@ class PokemonSystem
     @sevolume    = 100   # Volume of sound effects
     @textinput   = 0     # Text input mode (0=cursor, 1=keyboard)
   end
-
-  def tilemap; return Settings::MAP_VIEW_MODE; end
 end
 
 #===============================================================================

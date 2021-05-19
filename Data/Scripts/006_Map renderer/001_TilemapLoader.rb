@@ -8,18 +8,7 @@ class TilemapLoader
   end
 
   def updateClass
-    case $PokemonSystem.tilemap
-    when 1   # Custom (recommended)
-      setClass(CustomTilemap)
-    when 2   # Perspective
-      setClass(Draw_Tilemap)
-    else     # Original (SynchronizedTilemap) or custom (CustomTilemap)
-      if Tilemap.method_defined?(:passages)
-        setClass(CustomTilemap)
-      else
-        setClass(SynchronizedTilemap)
-      end
-    end
+    setClass(CustomTilemap)
   end
 
   def setClass(cls)
@@ -38,7 +27,7 @@ class TilemapLoader
       end
       @tilemap.dispose
       @tilemap = newtilemap
-      newtilemap.update if cls!=SynchronizedTilemap
+      newtilemap.update
     else
       @tilemap = newtilemap
     end
