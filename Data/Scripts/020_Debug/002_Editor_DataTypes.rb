@@ -336,17 +336,21 @@ end
 
 
 
-module SpeciesFormProperty
-  def self.set(_settingname,oldsetting)
+class SpeciesFormProperty
+  def initialize(default_value)
+    @default_value = default_value
+  end
+
+  def set(_settingname,oldsetting)
     ret = pbChooseSpeciesFormList(oldsetting || nil)
     return ret || oldsetting
   end
 
-  def self.defaultValue
-    return nil
+  def defaultValue
+    return @default_value
   end
 
-  def self.format(value)
+  def format(value)
     if value && GameData::Species.exists?(value)
       species_data = GameData::Species.get(value)
       if species_data.form > 0
@@ -462,21 +466,15 @@ class IVsProperty
     data = []
     stat_ids = []
     GameData::Stat.each_main do |s|
-      oldsetting[s.pbs_order] = 0 if !oldsetting[s.pbs_order]
+      oldsetting[s.pbs_order] = defaultValue if !oldsetting[s.pbs_order]
       properties[s.pbs_order] = [s.name, LimitProperty2.new(@limit),
                                  _INTL("Individual values for the Pokémon's {1} stat (0-{2}).", s.name, @limit)]
       data[s.pbs_order] = oldsetting[s.id]
       stat_ids[s.pbs_order] = s.id
     end
     pbPropertyList(settingname, data, properties, false)
-    allZeroes = true
-    data.each_with_index do |value, i|
-      data[i] ||= 0
-      allZeroes = false if value && value != 0
-    end
-    return nil if allZeroes
     ret = {}
-    stat_ids.each_with_index { |s, i| ret[s] = data[i] }
+    stat_ids.each_with_index { |s, i| ret[s] = data[i] || defaultValue }
     return ret
   end
 
@@ -486,13 +484,12 @@ class IVsProperty
 
   def format(value)
     return "-" if !value
-    return value[0].to_s if value.uniq.length == 1
-    ret = ""
-    for i in 0...value.length
-      ret.concat(",") if i > 0
-      ret.concat((value[i] || 0).to_s)
+    array = []
+    GameData::Stat.each_main do |s|
+      next if s.pbs_order < 0
+      array[s.pbs_order] = value[s.id] || defaultValue
     end
-    return ret
+    return array.join(',')
   end
 end
 
@@ -509,27 +506,21 @@ class EVsProperty
     data = []
     stat_ids = []
     GameData::Stat.each_main do |s|
-      oldsetting[s.pbs_order] = 0 if !oldsetting[s.pbs_order]
+      oldsetting[s.pbs_order] = defaultValue if !oldsetting[s.pbs_order]
       properties[s.pbs_order] = [s.name, LimitProperty2.new(@limit),
                                  _INTL("Effort values for the Pokémon's {1} stat (0-{2}).", s.name, @limit)]
       data[s.pbs_order] = oldsetting[s.id]
       stat_ids[s.pbs_order] = s.id
     end
     loop do
-      pbPropertyList(settingname,data,properties,true)
+      pbPropertyList(settingname, data, properties, false)
       evtotal = 0
       data.each { |value| evtotal += value if value }
       break if evtotal <= Pokemon::EV_LIMIT
       pbMessage(_INTL("Total EVs ({1}) are greater than allowed ({2}). Please reduce them.", evtotal, Pokemon::EV_LIMIT))
     end
-    allZeroes = true
-    data.each_with_index do |value, i|
-      data[i] ||= 0
-      allZeroes = false if value && value != 0
-    end
-    return nil if allZeroes
     ret = {}
-    stat_ids.each_with_index { |s, i| ret[s] = data[i] }
+    stat_ids.each_with_index { |s, i| ret[s] = data[i] || defaultValue }
     return ret
   end
 
@@ -539,13 +530,12 @@ class EVsProperty
 
   def format(value)
     return "-" if !value
-    return value[0].to_s if value.uniq.length == 1
-    ret = ""
-    for i in 0...value.length
-      ret.concat(",") if i > 0
-      ret.concat((value[i] || 0).to_s)
+    array = []
+    GameData::Stat.each_main do |s|
+      next if s.pbs_order < 0
+      array[s.pbs_order] = value[s.id] || defaultValue
     end
-    return ret
+    return array.join(',')
   end
 end
 
@@ -586,7 +576,7 @@ end
 
 module PlayerProperty
   def self.set(settingname,oldsetting)
-    oldsetting = [0,"xxx","xxx","xxx","xxx","xxx","xxx","xxx"] if !oldsetting
+    oldsetting = [nil,"xxx","xxx","xxx","xxx","xxx","xxx","xxx"] if !oldsetting
     properties = [
        [_INTL("Trainer Type"), TrainerTypeProperty, _INTL("Trainer type of this player.")],
        [_INTL("Sprite"),       CharacterProperty,   _INTL("Walking character sprite.")],
@@ -840,7 +830,7 @@ module BaseStatsProperty
     end
     if pbPropertyList(settingname,data,properties,true)
       ret = {}
-      stat_ids.each_with_index { |s, i| ret[s] = data[i] }
+      stat_ids.each_with_index { |s, i| ret[s] = data[i] || defaultValue }
       oldsetting = ret
     end
     return oldsetting
@@ -871,7 +861,7 @@ module EffortValuesProperty
     end
     if pbPropertyList(settingname,oldsetting,properties,true)
       ret = {}
-      stat_ids.each_with_index { |s, i| ret[s] = data[i] }
+      stat_ids.each_with_index { |s, i| ret[s] = data[i] || defaultValue }
       oldsetting = ret
     end
     return oldsetting
@@ -1409,7 +1399,7 @@ module EncounterSlotProperty
     data[3] = data[2] if !data[3]
     properties = [
       [_INTL("Probability"),   NonzeroLimitProperty.new(999),       _INTL("Relative probability of choosing this slot.")],
-      [_INTL("Species"),       SpeciesFormProperty,                 _INTL("A Pokémon species/form.")],
+      [_INTL("Species"),       SpeciesFormProperty.new(data[1]),    _INTL("A Pokémon species/form.")],
       [_INTL("Minimum level"), NonzeroLimitProperty.new(max_level), _INTL("Minimum level of this species (1-{1}).", max_level)],
       [_INTL("Maximum level"), NonzeroLimitProperty.new(max_level), _INTL("Maximum level of this species (1-{1}).", max_level)]
     ]
