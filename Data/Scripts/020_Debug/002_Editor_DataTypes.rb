@@ -466,7 +466,7 @@ class IVsProperty
     data = []
     stat_ids = []
     GameData::Stat.each_main do |s|
-      oldsetting[s.pbs_order] = defaultValue if !oldsetting[s.pbs_order]
+      oldsetting[s.pbs_order] = 0 if !oldsetting[s.pbs_order]
       properties[s.pbs_order] = [s.name, LimitProperty2.new(@limit),
                                  _INTL("Individual values for the Pokémon's {1} stat (0-{2}).", s.name, @limit)]
       data[s.pbs_order] = oldsetting[s.id]
@@ -474,12 +474,12 @@ class IVsProperty
     end
     pbPropertyList(settingname, data, properties, false)
     ret = {}
-    stat_ids.each_with_index { |s, i| ret[s] = data[i] || defaultValue }
+    stat_ids.each_with_index { |s, i| ret[s] = data[i] || 0 }
     return ret
   end
 
   def defaultValue
-    return 0
+    return nil
   end
 
   def format(value)
@@ -487,7 +487,7 @@ class IVsProperty
     array = []
     GameData::Stat.each_main do |s|
       next if s.pbs_order < 0
-      array[s.pbs_order] = value[s.id] || defaultValue
+      array[s.pbs_order] = value[s.id] || 0
     end
     return array.join(',')
   end
@@ -506,7 +506,7 @@ class EVsProperty
     data = []
     stat_ids = []
     GameData::Stat.each_main do |s|
-      oldsetting[s.pbs_order] = defaultValue if !oldsetting[s.pbs_order]
+      oldsetting[s.pbs_order] = 0 if !oldsetting[s.pbs_order]
       properties[s.pbs_order] = [s.name, LimitProperty2.new(@limit),
                                  _INTL("Effort values for the Pokémon's {1} stat (0-{2}).", s.name, @limit)]
       data[s.pbs_order] = oldsetting[s.id]
@@ -520,12 +520,12 @@ class EVsProperty
       pbMessage(_INTL("Total EVs ({1}) are greater than allowed ({2}). Please reduce them.", evtotal, Pokemon::EV_LIMIT))
     end
     ret = {}
-    stat_ids.each_with_index { |s, i| ret[s] = data[i] || defaultValue }
+    stat_ids.each_with_index { |s, i| ret[s] = data[i] || 0 }
     return ret
   end
 
   def defaultValue
-    return 0
+    return nil
   end
 
   def format(value)
@@ -533,7 +533,7 @@ class EVsProperty
     array = []
     GameData::Stat.each_main do |s|
       next if s.pbs_order < 0
-      array[s.pbs_order] = value[s.id] || defaultValue
+      array[s.pbs_order] = value[s.id] || 0
     end
     return array.join(',')
   end
@@ -823,25 +823,33 @@ module BaseStatsProperty
     data = []
     stat_ids = []
     GameData::Stat.each_main do |s|
+      next if s.pbs_order < 0
       properties[s.pbs_order] = [_INTL("Base {1}", s.name), NonzeroLimitProperty.new(255),
                                  _INTL("Base {1} stat of the Pokémon.", s.name)]
-      data[s.pbs_order] = oldsetting[s.id]
+      data[s.pbs_order] = oldsetting[s.id] || 10
       stat_ids[s.pbs_order] = s.id
     end
-    if pbPropertyList(settingname,data,properties,true)
+    if pbPropertyList(settingname, data, properties, true)
       ret = {}
-      stat_ids.each_with_index { |s, i| ret[s] = data[i] || defaultValue }
+      stat_ids.each_with_index { |s, i| ret[s] = data[i] || 10 }
       oldsetting = ret
     end
     return oldsetting
   end
 
   def self.defaultValue
-    return 10
+    ret = {}
+    GameData::Stat.each_main { |s| ret[s.id] = 10 if s.pbs_order >= 0 }
+    return ret
   end
 
   def self.format(value)
-    return value.inspect
+    array = []
+    GameData::Stat.each_main do |s|
+      next if s.pbs_order < 0
+      array[s.pbs_order] = value[s.id] || 0
+    end
+    return array.join(',')
   end
 end
 
@@ -854,25 +862,33 @@ module EffortValuesProperty
     data = []
     stat_ids = []
     GameData::Stat.each_main do |s|
+      next if s.pbs_order < 0
       properties[s.pbs_order] = [_INTL("{1} EVs", s.name), LimitProperty.new(255),
                                  _INTL("Number of {1} Effort Value points gained from the Pokémon.", s.name)]
-      data[s.pbs_order] = oldsetting[s.id]
+      data[s.pbs_order] = oldsetting[s.id] || 0
       stat_ids[s.pbs_order] = s.id
     end
-    if pbPropertyList(settingname,oldsetting,properties,true)
+    if pbPropertyList(settingname, data, properties, true)
       ret = {}
-      stat_ids.each_with_index { |s, i| ret[s] = data[i] || defaultValue }
+      stat_ids.each_with_index { |s, i| ret[s] = data[i] || 0 }
       oldsetting = ret
     end
     return oldsetting
   end
 
   def self.defaultValue
-    return 0
+    ret = {}
+    GameData::Stat.each_main { |s| ret[s.id] = 0 if s.pbs_order >= 0 }
+    return ret
   end
 
   def self.format(value)
-    return value.inspect
+    array = []
+    GameData::Stat.each_main do |s|
+      next if s.pbs_order < 0
+      array[s.pbs_order] = value[s.id] || 0
+    end
+    return array.join(',')
   end
 end
 
