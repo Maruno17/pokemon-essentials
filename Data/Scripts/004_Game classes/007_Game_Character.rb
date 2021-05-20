@@ -943,7 +943,7 @@ class Game_Character
     # game uses square tiles.
     real_speed = (jumping?) ? jump_speed_real : move_speed_real
     frames_per_pattern = Game_Map::REAL_RES_X / (real_speed * 2.0)
-    frames_per_pattern *= 2 if move_speed == 6   # Cycling/fastest speed
+    frames_per_pattern *= 2 if move_speed >= 5   # Cycling speed or faster
     return if @anime_count < frames_per_pattern
     # Advance to the next animation frame
     @pattern = (@pattern + 1) % 4
