@@ -4,7 +4,7 @@ module Compiler
   #=============================================================================
   # Compile Town Map data
   #=============================================================================
-  def compile_town_map
+  def compile_town_map(path = "PBS/townmap.txt")
     nonglobaltypes = {
       "Name"     => [0, "s"],
       "Filename" => [1, "s"],
@@ -15,7 +15,7 @@ module Compiler
     placenames = []
     placedescs = []
     sections   = []
-    pbCompilerEachCommentedLine("PBS/townmap.txt") { |line,lineno|
+    pbCompilerEachCommentedLine(path) { |line,lineno|
       if line[/^\s*\[\s*(\d+)\s*\]\s*$/]
         currentmap = $~[1].to_i
         sections[currentmap] = []
@@ -52,9 +52,9 @@ module Compiler
   #=============================================================================
   # Compile map connections
   #=============================================================================
-  def compile_connections
+  def compile_connections(path = "PBS/connections.txt")
     records   = []
-    pbCompilerEachPreppedLine("PBS/connections.txt") { |line,lineno|
+    pbCompilerEachPreppedLine(path) { |line,lineno|
       hashenum = {
         "N" => "N","North" => "N",
         "E" => "E","East"  => "E",
@@ -94,11 +94,11 @@ module Compiler
   #=============================================================================
   # Compile phone messages
   #=============================================================================
-  def compile_phone
-    return if !safeExists?("PBS/phone.txt")
+  def compile_phone(path = "PBS/phone.txt")
+    return if !safeExists?(path)
     database = PhoneDatabase.new
     sections = []
-    File.open("PBS/phone.txt","rb") { |f|
+    File.open(path, "rb") { |f|
       pbEachSection(f) { |section,name|
         case name
         when "<Generics>"
@@ -132,12 +132,12 @@ module Compiler
   #=============================================================================
   # Compile type data
   #=============================================================================
-  def compile_types
+  def compile_types(path = "PBS/types.txt")
     GameData::Type::DATA.clear
     type_names = []
     # Read from PBS file
-    File.open("PBS/types.txt", "rb") { |f|
-      FileLineData.file = "PBS/types.txt"   # For error reporting
+    File.open(path, "rb") { |f|
+      FileLineData.file = path   # For error reporting
       # Read a whole section's lines at once, then run through this code.
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
@@ -150,7 +150,7 @@ module Compiler
           # empty
           if contents[key].nil?
             if ["Name", "InternalName"].include?(key)
-              raise _INTL("The entry {1} is required in PBS/types.txt section {2}.", key, type_id)
+              raise _INTL("The entry {1} is required in {2} section {3}.", key, path, type_id)
             end
             next
           end
@@ -186,15 +186,15 @@ module Compiler
     GameData::Type.each do |type|
       type.weaknesses.each do |other_type|
         next if GameData::Type.exists?(other_type)
-        raise _INTL("'{1}' is not a defined type (PBS/types.txt, section {2}, Weaknesses).", other_type.to_s, type.id_number)
+        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Weaknesses).", other_type.to_s, path, type.id_number)
       end
       type.resistances.each do |other_type|
         next if GameData::Type.exists?(other_type)
-        raise _INTL("'{1}' is not a defined type (PBS/types.txt, section {2}, Resistances).", other_type.to_s, type.id_number)
+        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Resistances).", other_type.to_s, path, type.id_number)
       end
       type.immunities.each do |other_type|
         next if GameData::Type.exists?(other_type)
-        raise _INTL("'{1}' is not a defined type (PBS/types.txt, section {2}, Immunities).", other_type.to_s, type.id_number)
+        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Immunities).", other_type.to_s, path, type.id_number)
       end
     end
     # Save all data
@@ -206,11 +206,11 @@ module Compiler
   #=============================================================================
   # Compile ability data
   #=============================================================================
-  def compile_abilities
+  def compile_abilities(path = "PBS/abilities.txt")
     GameData::Ability::DATA.clear
     ability_names        = []
     ability_descriptions = []
-    pbCompilerEachPreppedLine("PBS/abilities.txt") { |line, line_no|
+    pbCompilerEachPreppedLine(path) { |line, line_no|
       line = pbGetCsvRecord(line, line_no, [0, "vnss"])
       ability_number = line[0]
       ability_symbol = line[1].to_sym
@@ -241,12 +241,12 @@ module Compiler
   #=============================================================================
   # Compile move data
   #=============================================================================
-  def compile_moves
+  def compile_moves(path = "PBS/moves.txt")
     GameData::Move::DATA.clear
     move_names        = []
     move_descriptions = []
     # Read each line of moves.txt at a time and compile it into an move
-    pbCompilerEachPreppedLine("PBS/moves.txt") { |line, line_no|
+    pbCompilerEachPreppedLine(path) { |line, line_no|
       line = pbGetCsvRecord(line, line_no, [0, "vnssueeuuueiss",
          nil, nil, nil, nil, nil, :Type, ["Physical", "Special", "Status"],
          nil, nil, nil, :Target, nil, nil, nil
@@ -297,13 +297,13 @@ module Compiler
   #=============================================================================
   # Compile item data
   #=============================================================================
-  def compile_items
+  def compile_items(path = "PBS/items.txt")
     GameData::Item::DATA.clear
     item_names        = []
     item_names_plural = []
     item_descriptions = []
     # Read each line of items.txt at a time and compile it into an item
-    pbCompilerEachCommentedLine("PBS/items.txt") { |line, line_no|
+    pbCompilerEachCommentedLine(path) { |line, line_no|
       line = pbGetCsvRecord(line, line_no, [0, "vnssuusuuUN"])
       item_number = line[0]
       item_symbol = line[1].to_sym
@@ -343,9 +343,9 @@ module Compiler
   #=============================================================================
   # Compile berry plant data
   #=============================================================================
-  def compile_berry_plants
+  def compile_berry_plants(path = "PBS/berryplants.txt")
     GameData::BerryPlant::DATA.clear
-    pbCompilerEachCommentedLine("PBS/berryplants.txt") { |line, line_no|
+    pbCompilerEachCommentedLine(path) { |line, line_no|
       if line[/^\s*(\w+)\s*=\s*(.*)$/]   # Of the format XXX = YYY
         key   = $1
         value = $2
@@ -373,15 +373,15 @@ module Compiler
   #=============================================================================
   # Compile Pokémon data
   #=============================================================================
-  def compile_pokemon
+  def compile_pokemon(path = "PBS/pokemon.txt")
     GameData::Species::DATA.clear
     species_names           = []
     species_form_names      = []
     species_categories      = []
     species_pokedex_entries = []
     # Read from PBS file
-    File.open("PBS/pokemon.txt", "rb") { |f|
-      FileLineData.file = "PBS/pokemon.txt"   # For error reporting
+    File.open(path, "rb") { |f|
+      FileLineData.file = path   # For error reporting
       # Read a whole section's lines at once, then run through this code.
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
@@ -390,7 +390,7 @@ module Compiler
         FileLineData.setSection(species_number, "header", nil)   # For error reporting
         # Raise an error if a species number is invalid or used twice
         if species_number == 0
-          raise _INTL("A Pokémon species can't be numbered 0 (PBS/pokemon.txt).")
+          raise _INTL("A Pokémon species can't be numbered 0 ({1}).", path)
         elsif GameData::Species::DATA[species_number]
           raise _INTL("Species ID number '{1}' is used twice.\r\n{2}", species_number, FileLineData.linereport)
         end
@@ -400,7 +400,7 @@ module Compiler
           # empty
           if nil_or_empty?(contents[key])
             if ["Name", "InternalName"].include?(key)
-              raise _INTL("The entry {1} is required in PBS/pokemon.txt section {2}.", key, species_number)
+              raise _INTL("The entry {1} is required in {2} section {3}.", key, path, species_number)
             end
             contents[key] = nil
             next
@@ -426,7 +426,7 @@ module Compiler
             # Convert height/weight to 1 decimal place and multiply by 10
             value = (value * 10).round
             if value <= 0
-              raise _INTL("Value for '{1}' can't be less than or close to 0 (section {2}, PBS/pokemon.txt)", key, species_number)
+              raise _INTL("Value for '{1}' can't be less than or close to 0 (section {2}, {3})", key, species_number, path)
             end
             contents[key] = value
           when "Moves"
@@ -539,7 +539,7 @@ module Compiler
   #=============================================================================
   # Compile Pokémon forms data
   #=============================================================================
-  def compile_pokemon_forms
+  def compile_pokemon_forms(path = "PBS/pokemonforms.txt")
     species_names           = []
     species_form_names      = []
     species_categories      = []
@@ -551,8 +551,8 @@ module Compiler
       form_number = species.id_number if form_number < species.id_number
     end
     # Read from PBS file
-    File.open("PBS/pokemonforms.txt", "rb") { |f|
-      FileLineData.file = "PBS/pokemonforms.txt"   # For error reporting
+    File.open(path, "rb") { |f|
+      FileLineData.file = path   # For error reporting
       # Read a whole section's lines at once, then run through this code.
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
@@ -562,14 +562,14 @@ module Compiler
         # Split section_name into a species number and form number
         split_section_name = section_name.split(/[-,\s]/)
         if split_section_name.length != 2
-          raise _INTL("Section name {1} is invalid (PBS/pokemonforms.txt). Expected syntax like [XXX,Y] (XXX=internal name, Y=form number).", sectionName)
+          raise _INTL("Section name {1} is invalid ({2}). Expected syntax like [XXX,Y] (XXX=internal name, Y=form number).", sectionName, path)
         end
         species_symbol = csvEnumField!(split_section_name[0], :Species, nil, nil)
         form           = csvPosInt!(split_section_name[1])
         # Raise an error if a species is undefined, the form number is invalid or
         # a species/form combo is used twice
         if !GameData::Species.exists?(species_symbol)
-          raise _INTL("Species ID '{1}' is not defined in pokemon.txt.\r\n{2}", species_symbol, FileLineData.linereport)
+          raise _INTL("Species ID '{1}' is not defined in {2}.\r\n{3}", species_symbol, path, FileLineData.linereport)
         elsif form == 0
           raise _INTL("A form cannot be defined with a form number of 0.\r\n{1}", FileLineData.linereport)
         elsif used_forms[species_symbol] && used_forms[species_symbol].include?(form)
@@ -603,7 +603,7 @@ module Compiler
             # Convert height/weight to 1 decimal place and multiply by 10
             value = (value * 10).round
             if value <= 0
-              raise _INTL("Value for '{1}' can't be less than or close to 0 (section {2}, PBS/pokemonforms.txt)", key, section_name)
+              raise _INTL("Value for '{1}' can't be less than or close to 0 (section {2}, {3})", key, section_name, path)
             end
             contents[key] = value
           when "Moves"
@@ -736,11 +736,11 @@ module Compiler
   #=============================================================================
   # Compile TM/TM/Move Tutor compatibilities
   #=============================================================================
-  def compile_move_compatibilities
-    return if !safeExists?("PBS/tm.txt")
+  def compile_move_compatibilities(path = "PBS/tm.txt")
+    return if !safeExists?(path)
     species_hash = {}
     move = nil
-    pbCompilerEachCommentedLine("PBS/tm.txt") { |line, line_no|
+    pbCompilerEachCommentedLine(path) { |line, line_no|
       Graphics.update if line_no % 50 == 0
       if line[/^\s*\[\s*(\S+)\s*\]\s*$/]
         move = parseMove($~[1])
@@ -765,7 +765,7 @@ module Compiler
     Compiler.write_pokemon
     Compiler.write_pokemon_forms
     begin
-      File.delete("PBS/tm.txt")
+      File.delete(path) if path == "PBS/tm.txt"
     rescue SystemCallError
     end
   end
@@ -773,10 +773,10 @@ module Compiler
   #=============================================================================
   # Compile Shadow movesets
   #=============================================================================
-  def compile_shadow_movesets
+  def compile_shadow_movesets(path = "PBS/shadowmoves.txt")
     sections = {}
-    if safeExists?("PBS/shadowmoves.txt")
-      pbCompilerEachCommentedLine("PBS/shadowmoves.txt") { |line, _line_no|
+    if safeExists?(path)
+      pbCompilerEachCommentedLine(path) { |line, _line_no|
         if line[/^\s*(\w+)\s*=\s*(.*)$/]
           key   = $1
           value = $2
@@ -798,10 +798,10 @@ module Compiler
   #=============================================================================
   # Compile Regional Dexes
   #=============================================================================
-  def compile_regional_dexes
+  def compile_regional_dexes(path = "PBS/regionaldexes.txt")
     dex_lists = []
     section = nil
-    pbCompilerEachPreppedLine("PBS/regionaldexes.txt") { |line, line_no|
+    pbCompilerEachPreppedLine(path) { |line, line_no|
       Graphics.update if line_no % 200 == 0
       if line[/^\s*\[\s*(\d+)\s*\]\s*$/]
         section = $~[1].to_i
@@ -837,11 +837,11 @@ module Compiler
   #=============================================================================
   # Compile ribbon data
   #=============================================================================
-  def compile_ribbons
+  def compile_ribbons(path = "PBS/ribbons.txt")
     GameData::Ribbon::DATA.clear
     ribbon_names        = []
     ribbon_descriptions = []
-    pbCompilerEachPreppedLine("PBS/ribbons.txt") { |line, line_no|
+    pbCompilerEachPreppedLine(path) { |line, line_no|
       line = pbGetCsvRecord(line, line_no, [0, "vnss"])
       ribbon_number = line[0]
       ribbon_symbol = line[1].to_sym
@@ -872,7 +872,7 @@ module Compiler
   #=============================================================================
   # Compile wild encounter data
   #=============================================================================
-  def compile_encounters
+  def compile_encounters(path = "PBS/encounters.txt")
     new_format        = nil
     encounter_hash    = nil
     step_chances      = nil
@@ -881,7 +881,7 @@ module Compiler
     current_type      = nil
     expected_lines    = 0
     max_level = GameData::GrowthRate.max_level
-    pbCompilerEachPreppedLine("PBS/encounters.txt") { |line, line_no|
+    pbCompilerEachPreppedLine(path) { |line, line_no|
       next if line.length == 0
       if expected_lines > 0 && line[/^\d+,/] && new_format   # Species line (new format)
         values = line.split(',').collect! { |v| v.strip }
@@ -1064,11 +1064,11 @@ module Compiler
   #=============================================================================
   # Compile trainer type data
   #=============================================================================
-  def compile_trainer_types
+  def compile_trainer_types(path = "PBS/trainertypes.txt")
     GameData::TrainerType::DATA.clear
     tr_type_names = []
     # Read each line of trainertypes.txt at a time and compile it into a trainer type
-    pbCompilerEachCommentedLine("PBS/trainertypes.txt") { |line, line_no|
+    pbCompilerEachCommentedLine(path) { |line, line_no|
       line = pbGetCsvRecord(line, line_no, [0, "unsUSSSeUS",
         nil, nil, nil, nil, nil, nil, nil, {
         "Male"   => 0, "M" => 0, "0" => 0,
@@ -1109,7 +1109,7 @@ module Compiler
   #=============================================================================
   # Compile individual trainer data
   #=============================================================================
-  def compile_trainers
+  def compile_trainers(path = "PBS/trainers.txt")
     schema = GameData::Trainer::SCHEMA
     max_level = GameData::GrowthRate.max_level
     trainer_names             = []
@@ -1120,7 +1120,7 @@ module Compiler
     old_format_current_line   = 0
     old_format_expected_lines = 0
     # Read each line of trainers.txt at a time and compile it as a trainer property
-    pbCompilerEachPreppedLine("PBS/trainers.txt") { |line, line_no|
+    pbCompilerEachPreppedLine(path) { |line, line_no|
       if line[/^\s*\[\s*(.+)\s*\]\s*$/]
         # New section [trainer_type, name] or [trainer_type, name, version]
         if trainer_hash
@@ -1363,14 +1363,14 @@ module Compiler
   #=============================================================================
   # Compile Battle Tower and other Cups trainers/Pokémon
   #=============================================================================
-  def compile_trainer_lists
+  def compile_trainer_lists(path = "PBS/trainerlists.txt")
     btTrainersRequiredTypes = {
       "Trainers"   => [0, "s"],
       "Pokemon"    => [1, "s"],
       "Challenges" => [2, "*s"]
     }
-    if !safeExists?("PBS/trainerlists.txt")
-      File.open("PBS/trainerlists.txt","wb") { |f|
+    if !safeExists?(path)
+      File.open(path, "wb") { |f|
         f.write(0xEF.chr)
         f.write(0xBB.chr)
         f.write(0xBF.chr)
@@ -1383,8 +1383,8 @@ module Compiler
     MessageTypes.setMessagesAsHash(MessageTypes::BeginSpeech,[])
     MessageTypes.setMessagesAsHash(MessageTypes::EndSpeechWin,[])
     MessageTypes.setMessagesAsHash(MessageTypes::EndSpeechLose,[])
-    File.open("PBS/trainerlists.txt","rb") { |f|
-      FileLineData.file = "PBS/trainerlists.txt"
+    File.open(path, "rb") { |f|
+      FileLineData.file = path
       pbEachFileSectionEx(f) { |section,name|
         next if name!="DefaultTrainerList" && name!="TrainerList"
         rsection = []
@@ -1474,12 +1474,12 @@ module Compiler
   #=============================================================================
   # Compile metadata
   #=============================================================================
-  def compile_metadata
+  def compile_metadata(path = "PBS/metadata.txt")
     GameData::Metadata::DATA.clear
     GameData::MapMetadata::DATA.clear
     # Read from PBS file
-    File.open("PBS/metadata.txt", "rb") { |f|
-      FileLineData.file = "PBS/metadata.txt"   # For error reporting
+    File.open(path, "rb") { |f|
+      FileLineData.file = path   # For error reporting
       # Read a whole section's lines at once, then run through this code.
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
@@ -1492,7 +1492,7 @@ module Compiler
           # empty
           if contents[key].nil?
             if map_id == 0 && ["Home", "PlayerA"].include?(key)
-              raise _INTL("The entry {1} is required in PBS/metadata.txt section 0.", key)
+              raise _INTL("The entry {1} is required in {2} section 0.", key, path)
             end
             next
           end
