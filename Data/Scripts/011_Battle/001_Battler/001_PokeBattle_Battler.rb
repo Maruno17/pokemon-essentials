@@ -411,7 +411,7 @@ class PokeBattle_Battler
   def hasActiveItem?(check_item, ignore_fainted = false)
     return false if !itemActive?(ignore_fainted)
     return check_item.include?(@item_id) if check_item.is_a?(Array)
-    return check_item == self.item
+    return self.item == check_item
   end
   alias hasWorkingItem hasActiveItem?
 
