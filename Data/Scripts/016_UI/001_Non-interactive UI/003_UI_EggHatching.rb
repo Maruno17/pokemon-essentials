@@ -2,7 +2,7 @@
 # * Egg Hatch Animation - by FL (Credits will be apreciated)
 #                         Tweaked by Maruno
 #===============================================================================
-# This script is for Pokemon Essentials. It's an egg hatch animation that
+# This script is for Pokémon Essentials. It's an egg hatch animation that
 # works even with special eggs like Manaphy egg.
 #===============================================================================
 # To this script works, put it above Main and put a picture (a 5 frames
@@ -19,7 +19,7 @@ class PokemonEggHatch_Scene
     # Create background image
     addBackgroundOrColoredPlane(@sprites,"background","hatchbg",
        Color.new(248,248,248),@viewport)
-    # Create egg sprite/Pokemon sprite
+    # Create egg sprite/Pokémon sprite
     @sprites["pokemon"]=PokemonSprite.new(@viewport)
     @sprites["pokemon"].setOffset(PictureOrigin::Bottom)
     @sprites["pokemon"].x = Graphics.width/2
@@ -83,7 +83,7 @@ class PokemonEggHatch_Scene
       updateScene
     end
     updateScene(Graphics.frame_rate*3/4)
-    @sprites["pokemon"].setPokemonBitmap(@pokemon) # Pokemon sprite
+    @sprites["pokemon"].setPokemonBitmap(@pokemon) # Pokémon sprite
     @sprites["pokemon"].x = Graphics.width/2
     @sprites["pokemon"].y = 264
     @pokemon.species_data.apply_metrics_to_sprite(@sprites["pokemon"], 1)
@@ -97,7 +97,7 @@ class PokemonEggHatch_Scene
     @sprites["overlay"].opacity=0
     # Finish scene
     frames = GameData::Species.cry_length(@pokemon)
-    GameData::Species.play_cry_from_pokemon(@pokemon)
+    @pokemon.play_cry
     updateScene(frames)
     pbBGMStop()
     pbMEPlay("Evolution success")

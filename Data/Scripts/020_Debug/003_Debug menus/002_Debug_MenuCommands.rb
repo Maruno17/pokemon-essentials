@@ -108,7 +108,7 @@ DebugMenuCommands.register("variables", {
 DebugMenuCommands.register("usepc", {
   "parent"      => "fieldmenu",
   "name"        => _INTL("Use PC"),
-  "description" => _INTL("Use a PC to access Pokemon storage and player's PC."),
+  "description" => _INTL("Use a PC to access Pokémon storage and player's PC."),
   "effect"      => proc {
     pbPokeCenterPC
   }
@@ -117,7 +117,7 @@ DebugMenuCommands.register("usepc", {
 DebugMenuCommands.register("togglewallpapers", {
   "parent"      => "fieldmenu",
   "name"        => _INTL("Toggle Storage Wallpapers"),
-  "description" => _INTL("Unlock and lock special wallpapers used in Pokemon storage."),
+  "description" => _INTL("Unlock and lock special wallpapers used in Pokémon storage."),
   "effect"      => proc {
     w = $PokemonStorage.allWallpapers
     if w.length <= PokemonStorage::BASICWALLPAPERQTY
@@ -154,7 +154,7 @@ DebugMenuCommands.register("togglewallpapers", {
 DebugMenuCommands.register("daycare", {
   "parent"      => "fieldmenu",
   "name"        => _INTL("Day Care"),
-  "description" => _INTL("View Pokemon in the Day Care and edit them."),
+  "description" => _INTL("View Pokémon in the Day Care and edit them."),
   "effect"      => proc {
     pbDebugDayCare
   }
@@ -163,7 +163,7 @@ DebugMenuCommands.register("daycare", {
 DebugMenuCommands.register("relicstone", {
   "parent"      => "fieldmenu",
   "name"        => _INTL("Use Relic Stone"),
-  "description" => _INTL("Shadow Pokemon. Choose a Pokemon to show to the Relic Stone for purification."),
+  "description" => _INTL("Shadow Pokémon. Choose a Pokémon to show to the Relic Stone for purification."),
   "effect"      => proc {
     pbRelicStone
   }
@@ -172,7 +172,7 @@ DebugMenuCommands.register("relicstone", {
 DebugMenuCommands.register("purifychamber", {
   "parent"      => "fieldmenu",
   "name"        => _INTL("Use Purify Chamber"),
-  "description" => _INTL("Shadow Pokemon. Open the Purify Chamber for purification."),
+  "description" => _INTL("Shadow Pokémon. Open the Purify Chamber for purification."),
   "effect"      => proc {
     pbPurifyChamber
   }
@@ -190,7 +190,7 @@ DebugMenuCommands.register("battlemenu", {
 DebugMenuCommands.register("testwildbattle", {
   "parent"      => "battlemenu",
   "name"        => _INTL("Test Wild Battle"),
-  "description" => _INTL("Start a single battle against a wild Pokemon. You choose the species/level."),
+  "description" => _INTL("Start a single battle against a wild Pokémon. You choose the species/level."),
   "effect"      => proc {
     species = pbChooseSpeciesList
     if species
@@ -212,7 +212,7 @@ DebugMenuCommands.register("testwildbattle", {
 DebugMenuCommands.register("testwildbattleadvanced", {
   "parent"      => "battlemenu",
   "name"        => _INTL("Test Wild Battle Advanced"),
-  "description" => _INTL("Start a battle against 1 or more wild Pokemon. Battle size is your choice."),
+  "description" => _INTL("Start a battle against 1 or more wild Pokémon. Battle size is your choice."),
   "effect"      => proc {
     pkmn = []
     size0 = 1
@@ -220,14 +220,14 @@ DebugMenuCommands.register("testwildbattleadvanced", {
     loop do
       pkmnCmds = []
       pkmn.each { |p| pkmnCmds.push(sprintf("%s Lv.%d", p.name, p.level)) }
-      pkmnCmds.push(_INTL("[Add Pokemon]"))
+      pkmnCmds.push(_INTL("[Add Pokémon]"))
       pkmnCmds.push(_INTL("[Set player side size]"))
       pkmnCmds.push(_INTL("[Start {1}v{2} battle]", size0, pkmn.length))
       pkmnCmd = pbShowCommands(nil, pkmnCmds, -1, pkmnCmd)
       break if pkmnCmd < 0
       if pkmnCmd == pkmnCmds.length - 1      # Start battle
         if pkmn.length == 0
-          pbMessage(_INTL("No Pokemon were chosen, cannot start battle."))
+          pbMessage(_INTL("No Pokémon were chosen, cannot start battle."))
           next
         end
         setBattleRule(sprintf("%dv%d", size0, pkmn.length))
@@ -236,7 +236,7 @@ DebugMenuCommands.register("testwildbattleadvanced", {
         break
       elsif pkmnCmd == pkmnCmds.length - 2   # Set player side size
         if !pbCanDoubleBattle?
-          pbMessage(_INTL("You only have one Pokemon."))
+          pbMessage(_INTL("You only have one Pokémon."))
           next
         end
         maxVal = (pbCanTripleBattle?) ? 3 : 2
@@ -247,7 +247,7 @@ DebugMenuCommands.register("testwildbattleadvanced", {
         newSize = pbMessageChooseNumber(
            _INTL("Choose the number of battlers on the player's side (max. {1}).", maxVal), params)
         size0 = newSize if newSize > 0
-      elsif pkmnCmd == pkmnCmds.length - 3   # Add Pokemon
+      elsif pkmnCmd == pkmnCmds.length - 3   # Add Pokémon
         species = pbChooseSpeciesList
         if species
           params = ChooseNumberParams.new
@@ -258,12 +258,12 @@ DebugMenuCommands.register("testwildbattleadvanced", {
              GameData::Species.get(species).name), params)
           pkmn.push(Pokemon.new(species, level)) if level > 0
         end
-      else                                   # Edit a Pokemon
-        if pbConfirmMessage(_INTL("Change this Pokemon?"))
+      else                                   # Edit a Pokémon
+        if pbConfirmMessage(_INTL("Change this Pokémon?"))
           scr = PokemonDebugPartyScreen.new
           scr.pbPokemonDebug(pkmn[pkmnCmd], -1, nil, true)
           scr.pbEndScreen
-        elsif pbConfirmMessage(_INTL("Delete this Pokemon?"))
+        elsif pbConfirmMessage(_INTL("Delete this Pokémon?"))
           pkmn[pkmnCmd] = nil
           pkmn.compact!
         end
@@ -313,7 +313,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
           next
         elsif size1 > trainers.length && trainers[0][1].party_count == 1
           pbMessage(
-             _INTL("Opposing side size cannot be {1}, as that requires the first trainer to have 2 or more Pokemon, which they don't.",
+             _INTL("Opposing side size cannot be {1}, as that requires the first trainer to have 2 or more Pokémon, which they don't.",
              size1))
           next
         end
@@ -324,7 +324,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
         break
       elsif trainerCmd == trainerCmds.length - 2   # Set opponent side size
         if trainers.length == 0 || (trainers.length == 1 && trainers[0][1].party_count == 1)
-          pbMessage(_INTL("No trainers were chosen or trainer only has one Pokemon."))
+          pbMessage(_INTL("No trainers were chosen or trainer only has one Pokémon."))
           next
         end
         maxVal = 2
@@ -340,7 +340,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
         size1 = newSize if newSize > 0
       elsif trainerCmd == trainerCmds.length - 3   # Set player side size
         if !pbCanDoubleBattle?
-          pbMessage(_INTL("You only have one Pokemon."))
+          pbMessage(_INTL("You only have one Pokémon."))
           next
         end
         maxVal = (pbCanTripleBattle?) ? 3 : 2
@@ -426,8 +426,8 @@ DebugMenuCommands.register("readyrematches", {
 
 DebugMenuCommands.register("roamers", {
   "parent"      => "battlemenu",
-  "name"        => _INTL("Roaming Pokemon"),
-  "description" => _INTL("Toggle and edit all roaming Pokemon."),
+  "name"        => _INTL("Roaming Pokémon"),
+  "description" => _INTL("Toggle and edit all roaming Pokémon."),
   "effect"      => proc {
     pbDebugRoamers
   }
@@ -508,18 +508,18 @@ DebugMenuCommands.register("emptybag", {
 })
 
 #===============================================================================
-# Pokemon options
+# Pokémon options
 #===============================================================================
 DebugMenuCommands.register("pokemonmenu", {
   "parent"      => "main",
-  "name"        => _INTL("Pokemon options..."),
-  "description" => _INTL("Give Pokemon, heal party, fill/empty PC storage, etc.")
+  "name"        => _INTL("Pokémon options..."),
+  "description" => _INTL("Give Pokémon, heal party, fill/empty PC storage, etc.")
 })
 
 DebugMenuCommands.register("addpokemon", {
   "parent"      => "pokemonmenu",
-  "name"        => _INTL("Add Pokemon"),
-  "description" => _INTL("Give yourself a Pokemon of a chosen species/level. Goes to PC if party is full."),
+  "name"        => _INTL("Add Pokémon"),
+  "description" => _INTL("Give yourself a Pokémon of a chosen species/level. Goes to PC if party is full."),
   "effect"      => proc {
     species = pbChooseSpeciesList
     if species
@@ -527,7 +527,7 @@ DebugMenuCommands.register("addpokemon", {
       params.setRange(1, GameData::GrowthRate.max_level)
       params.setInitialValue(5)
       params.setCancelValue(0)
-      level = pbMessageChooseNumber(_INTL("Set the Pokemon's level."), params)
+      level = pbMessageChooseNumber(_INTL("Set the Pokémon's level."), params)
       pbAddPokemon(species, level) if level > 0
     end
   }
@@ -536,14 +536,15 @@ DebugMenuCommands.register("addpokemon", {
 DebugMenuCommands.register("demoparty", {
   "parent"      => "pokemonmenu",
   "name"        => _INTL("Give Demo Party"),
-  "description" => _INTL("Give yourself 6 preset Pokemon. They overwrite the current party."),
+  "description" => _INTL("Give yourself 6 preset Pokémon. They overwrite the current party."),
   "effect"      => proc {
     party = []
     species = [:PIKACHU, :PIDGEOTTO, :KADABRA, :GYARADOS, :DIGLETT, :CHANSEY]
     for id in species
       party.push(id) if GameData::Species.exists?(id)
     end
-    # Generate Pokemon of each species at level 20
+    $Trainer.party.clear
+    # Generate Pokémon of each species at level 20
     party.each do |species|
       pkmn = Pokemon.new(species, 20)
       $Trainer.party.push(pkmn)
@@ -571,17 +572,17 @@ DebugMenuCommands.register("demoparty", {
       end
       pkmn.record_first_moves
     end
-    pbMessage(_INTL("Filled party with demo Pokemon."))
+    pbMessage(_INTL("Filled party with demo Pokémon."))
   }
 })
 
 DebugMenuCommands.register("healparty", {
   "parent"      => "pokemonmenu",
   "name"        => _INTL("Heal Party"),
-  "description" => _INTL("Fully heal the HP/status/PP of all Pokemon in the party."),
+  "description" => _INTL("Fully heal the HP/status/PP of all Pokémon in the party."),
   "effect"      => proc {
     $Trainer.party.each { |pkmn| pkmn.heal }
-    pbMessage(_INTL("Your Pokemon were fully healed."))
+    pbMessage(_INTL("Your Pokémon were fully healed."))
   }
 })
 
@@ -598,7 +599,7 @@ DebugMenuCommands.register("quickhatch", {
 DebugMenuCommands.register("fillboxes", {
   "parent"      => "pokemonmenu",
   "name"        => _INTL("Fill Storage Boxes"),
-  "description" => _INTL("Add one Pokemon of each species (at Level 50) to storage."),
+  "description" => _INTL("Add one Pokémon of each species (at Level 50) to storage."),
   "effect"      => proc {
     added = 0
     box_qty = $PokemonStorage.maxPokemon(0)
@@ -620,7 +621,7 @@ DebugMenuCommands.register("fillboxes", {
         g = (species_data.gender_ratio == :AlwaysFemale) ? 1 : 0
         $Trainer.pokedex.register(sp, g, f, false)
       end
-      # Add Pokemon (if form 0, i.e. one of each species)
+      # Add Pokémon (if form 0, i.e. one of each species)
       next if f != 0
       if added >= Settings::NUM_STORAGE_BOXES * box_qty
         completed = false
@@ -630,7 +631,7 @@ DebugMenuCommands.register("fillboxes", {
       $PokemonStorage[(added - 1) / box_qty, (added - 1) % box_qty] = Pokemon.new(sp, 50)
     end
     $Trainer.pokedex.refresh_accessible_dexes
-    pbMessage(_INTL("Storage boxes were filled with one Pokemon of each species."))
+    pbMessage(_INTL("Storage boxes were filled with one Pokémon of each species."))
     if !completed
       pbMessage(_INTL("Note: The number of storage spaces ({1} boxes of {2}) is less than the number of species.",
          Settings::NUM_STORAGE_BOXES, box_qty))
@@ -641,7 +642,7 @@ DebugMenuCommands.register("fillboxes", {
 DebugMenuCommands.register("clearboxes", {
   "parent"      => "pokemonmenu",
   "name"        => _INTL("Clear Storage Boxes"),
-  "description" => _INTL("Remove all Pokemon in storage."),
+  "description" => _INTL("Remove all Pokémon in storage."),
   "effect"      => proc {
     for i in 0...$PokemonStorage.maxBoxes
       for j in 0...$PokemonStorage.maxPokemon(i)
@@ -654,8 +655,8 @@ DebugMenuCommands.register("clearboxes", {
 
 DebugMenuCommands.register("openstorage", {
   "parent"      => "pokemonmenu",
-  "name"        => _INTL("Access Pokemon Storage"),
-  "description" => _INTL("Opens the Pokemon storage boxes in Organize Boxes mode."),
+  "name"        => _INTL("Access Pokémon Storage"),
+  "description" => _INTL("Opens the Pokémon storage boxes in Organize Boxes mode."),
   "effect"      => proc {
     pbFadeOutIn {
       scene = PokemonStorageScene.new
@@ -839,12 +840,12 @@ DebugMenuCommands.register("renameplayer", {
   "description" => _INTL("Rename the player."),
   "effect"      => proc {
     trname = pbEnterPlayerName("Your name?", 0, Settings::MAX_PLAYER_NAME_SIZE, $Trainer.name)
-    if trname == "" && pbConfirmMessage(_INTL("Give yourself a default name?"))
+    if nil_or_empty?(trname) && pbConfirmMessage(_INTL("Give yourself a default name?"))
       trainertype = $Trainer.trainer_type
       gender      = pbGetTrainerTypeGender(trainertype)
       trname      = pbSuggestTrainerName(gender)
     end
-    if trname == ""
+    if nil_or_empty?(trname)
       pbMessage(_INTL("The player's name remained {1}.", $Trainer.name))
     else
       $Trainer.name = trname
@@ -864,11 +865,11 @@ DebugMenuCommands.register("randomid", {
 })
 
 #===============================================================================
-# Information options
+# Information editors
 #===============================================================================
 DebugMenuCommands.register("editorsmenu", {
   "parent"      => "main",
-  "name"        => _INTL("Information options..."),
+  "name"        => _INTL("Information editors..."),
   "description" => _INTL("Edit information in the PBS files, terrain tags, battle animations, etc."),
   "always_show" => true
 })
@@ -906,7 +907,7 @@ DebugMenuCommands.register("terraintags", {
 DebugMenuCommands.register("setencounters", {
   "parent"      => "editorsmenu",
   "name"        => _INTL("Edit Wild Encounters"),
-  "description" => _INTL("Edit the wild Pokemon that can be found on maps, and how they are encountered."),
+  "description" => _INTL("Edit the wild Pokémon that can be found on maps, and how they are encountered."),
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbEncountersEditor }
@@ -926,7 +927,7 @@ DebugMenuCommands.register("trainertypes", {
 DebugMenuCommands.register("edittrainers", {
   "parent"      => "editorsmenu",
   "name"        => _INTL("Edit Individual Trainers"),
-  "description" => _INTL("Edit individual trainers, their Pokemon and items."),
+  "description" => _INTL("Edit individual trainers, their Pokémon and items."),
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbTrainerBattleEditor }
@@ -945,8 +946,8 @@ DebugMenuCommands.register("edititems", {
 
 DebugMenuCommands.register("editpokemon", {
   "parent"      => "editorsmenu",
-  "name"        => _INTL("Edit Pokemon"),
-  "description" => _INTL("Edit Pokemon species data."),
+  "name"        => _INTL("Edit Pokémon"),
+  "description" => _INTL("Edit Pokémon species data."),
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn { pbPokemonEditor }
@@ -965,8 +966,8 @@ DebugMenuCommands.register("editdexes", {
 
 DebugMenuCommands.register("positionsprites", {
   "parent"      => "editorsmenu",
-  "name"        => _INTL("Edit Pokemon Sprite Positions"),
-  "description" => _INTL("Reposition Pokemon sprites in battle."),
+  "name"        => _INTL("Edit Pokémon Sprite Positions"),
+  "description" => _INTL("Reposition Pokémon sprites in battle."),
   "always_show" => true,
   "effect"      => proc {
     pbFadeOutIn {
@@ -980,7 +981,7 @@ DebugMenuCommands.register("positionsprites", {
 DebugMenuCommands.register("autopositionsprites", {
   "parent"      => "editorsmenu",
   "name"        => _INTL("Auto-Position All Sprites"),
-  "description" => _INTL("Automatically reposition all Pokemon sprites in battle. Don't use lightly."),
+  "description" => _INTL("Automatically reposition all Pokémon sprites in battle. Don't use lightly."),
   "always_show" => true,
   "effect"      => proc {
     if pbConfirmMessage(_INTL("Are you sure you want to reposition all sprites?"))
@@ -1140,6 +1141,16 @@ DebugMenuCommands.register("createpbs", {
       end
       pbMessage(_INTL("File written."))
     end
+  }
+})
+
+DebugMenuCommands.register("renamesprites", {
+  "parent"      => "othermenu",
+  "name"        => _INTL("Rename Old Sprites"),
+  "description" => _INTL("Renames and moves Pokémon/item/trainer sprites from their old places."),
+  "always_show" => true,
+  "effect"      => proc {
+    SpriteRenamer.convert_files
   }
 })
 

@@ -574,7 +574,11 @@ class TrainerBattleLister
     @sprite.bitmap.dispose if @sprite.bitmap
     return if index < 0
     begin
-      @sprite.setBitmap(GameData::TrainerType.front_sprite_filename(@ids[index][0]), 0)
+      if @ids[index].is_a?(Array)
+        @sprite.setBitmap(GameData::TrainerType.front_sprite_filename(@ids[index][0]), 0)
+      else
+        @sprite.setBitmap(nil)
+      end
     rescue
       @sprite.setBitmap(nil)
     end
@@ -582,7 +586,7 @@ class TrainerBattleLister
       @sprite.ox = @sprite.bitmap.width / 2
       @sprite.oy = @sprite.bitmap.height
     end
-    # Refresh list of Pokemon
+    # Refresh list of Pokémon
     text = ""
     if !@includeNew || index > 0
       tr_data = GameData::Trainer.get(@ids[index][0], @ids[index][1], @ids[index][2])

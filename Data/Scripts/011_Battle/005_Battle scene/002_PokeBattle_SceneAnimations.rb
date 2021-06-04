@@ -21,7 +21,7 @@ class BattleIntroAnimation < PokeBattle_Animation
     @battle.player.each_with_index do |_p,i|
       makeSlideSprite("player_#{i+1}",1,appearTime,PictureOrigin::Bottom)
     end
-    # Opposing trainer sprite(s) or wild Pokemon sprite(s)
+    # Opposing trainer sprite(s) or wild Pokémon sprite(s)
     if @battle.trainerBattle?
       @battle.opponent.each_with_index do |_p,i|
         makeSlideSprite("trainer_#{i+1}",-1,appearTime,PictureOrigin::Bottom)
@@ -60,7 +60,7 @@ end
 
 
 #===============================================================================
-# Shows wild Pokemon fading back to their normal color, and triggers their intro
+# Shows wild Pokémon fading back to their normal color, and triggers their intro
 # animations
 #===============================================================================
 class BattleIntroAnimation2 < PokeBattle_Animation
@@ -184,7 +184,7 @@ end
 
 
 #===============================================================================
-# Makes a Pokemon's data box appear
+# Makes a Pokémon's data box appear
 #===============================================================================
 class DataBoxAppearAnimation < PokeBattle_Animation
   def initialize(sprites,viewport,idxBox)
@@ -205,7 +205,7 @@ end
 
 
 #===============================================================================
-# Makes a Pokemon's data box disappear
+# Makes a Pokémon's data box disappear
 #===============================================================================
 class DataBoxDisappearAnimation < PokeBattle_Animation
   def initialize(sprites,viewport,idxBox)
@@ -225,7 +225,7 @@ end
 
 
 #===============================================================================
-# Makes a Pokemon's ability bar appear
+# Makes a Pokémon's ability bar appear
 #===============================================================================
 class AbilitySplashAppearAnimation < PokeBattle_Animation
   def initialize(sprites,viewport,side)
@@ -245,7 +245,7 @@ end
 
 
 #===============================================================================
-# Makes a Pokemon's ability bar disappear
+# Makes a Pokémon's ability bar disappear
 #===============================================================================
 class AbilitySplashDisappearAnimation < PokeBattle_Animation
   def initialize(sprites,viewport,side)
@@ -301,7 +301,7 @@ end
 #===============================================================================
 # Shows the player (and partner) and the player party lineup sliding off screen.
 # Shows the player's/partner's throwing animation (if they have one).
-# Doesn't show the ball thrown or the Pokemon.
+# Doesn't show the ball thrown or the Pokémon.
 #===============================================================================
 class PlayerFadeAnimation < PokeBattle_Animation
   def initialize(sprites,viewport,fullAnim=false)
@@ -354,7 +354,7 @@ end
 
 #===============================================================================
 # Shows the enemy trainer(s) and the enemy party lineup sliding off screen.
-# Doesn't show the ball thrown or the Pokemon.
+# Doesn't show the ball thrown or the Pokémon.
 #===============================================================================
 class TrainerFadeAnimation < PokeBattle_Animation
   def initialize(sprites,viewport,fullAnim=false)
@@ -398,7 +398,7 @@ end
 
 
 #===============================================================================
-# Shows a Pokemon being sent out on the player's side (including by a partner).
+# Shows a Pokémon being sent out on the player's side (including by a partner).
 # Includes the Poké Ball being thrown.
 #===============================================================================
 class PokeballPlayerSendOutAnimation < PokeBattle_Animation
@@ -451,7 +451,7 @@ class PokeballPlayerSendOutAnimation < PokeBattle_Animation
        ballStartX,ballStartY,ballMidX,ballMidY,battlerStartX,battlerStartY-18)
     ball.setZ(9,batSprite.z-1)
     delay = ball.totalDuration+4
-    delay += 10*@idxOrder   # Stagger appearances if multiple Pokemon are sent out at once
+    delay += 10*@idxOrder   # Stagger appearances if multiple Pokémon are sent out at once
     ballOpenUp(ball,delay-2,poke_ball)
     ballBurst(delay,battlerStartX,battlerStartY-18,poke_ball)
     ball.moveOpacity(delay+2,2,0)
@@ -476,7 +476,7 @@ end
 
 
 #===============================================================================
-# Shows a Pokemon being sent out on the opposing side.
+# Shows a Pokémon being sent out on the opposing side.
 # Includes the Poké Ball being "thrown" (although here the Poké Ball just
 # appears in the spot where it opens up rather than being thrown to there).
 #===============================================================================
@@ -515,7 +515,7 @@ class PokeballTrainerSendOutAnimation < PokeBattle_Animation
     createBallTrajectory(ball,battlerStartX,battlerStartY)
     delay = ball.totalDuration+6
     delay += 10 if @showingTrainer   # Give time for trainer to slide off screen
-    delay += 10*@idxOrder   # Stagger appearances if multiple Pokemon are sent out at once
+    delay += 10*@idxOrder   # Stagger appearances if multiple Pokémon are sent out at once
     ballOpenUp(ball,delay-2,poke_ball)
     ballBurst(delay,battlerStartX,battlerStartY-18,poke_ball)
     ball.moveOpacity(delay+2,2,0)
@@ -538,8 +538,8 @@ class PokeballTrainerSendOutAnimation < PokeBattle_Animation
 
   def createBallTrajectory(ball,destX,destY)
     # NOTE: In HGSS, there isn't a Poké Ball arc under any circumstance (neither
-    #       when throwing out the first Pokemon nor when switching/replacing a
-    #       fainted Pokemon). This is probably worth changing.
+    #       when throwing out the first Pokémon nor when switching/replacing a
+    #       fainted Pokémon). This is probably worth changing.
     ball.setXY(0,destX,destY-4)
   end
 end
@@ -547,7 +547,7 @@ end
 
 
 #===============================================================================
-# Shows a Pokemon being recalled into its Poké Ball
+# Shows a Pokémon being recalled into its Poké Ball
 #===============================================================================
 class BattlerRecallAnimation < PokeBattle_Animation
   include PokeBattle_BallAnimationMixin
@@ -596,7 +596,7 @@ end
 
 
 #===============================================================================
-# Shows a Pokemon flashing after taking damage
+# Shows a Pokémon flashing after taking damage
 #===============================================================================
 class BattlerDamageAnimation < PokeBattle_Animation
   def initialize(sprites,viewport,idxBattler,effectiveness)
@@ -634,7 +634,7 @@ end
 
 
 #===============================================================================
-# Shows a Pokemon fainting
+# Shows a Pokémon fainting
 #===============================================================================
 class BattlerFaintAnimation < PokeBattle_Animation
   def initialize(sprites,viewport,idxBattler,battle)
@@ -678,7 +678,7 @@ end
 
 
 #===============================================================================
-# Shows the player's Poké Ball being thrown to capture a Pokemon
+# Shows the player's Poké Ball being thrown to capture a Pokémon
 #===============================================================================
 class PokeballThrowCaptureAnimation < PokeBattle_Animation
   include PokeBattle_BallAnimationMixin
@@ -738,7 +738,7 @@ class PokeballThrowCaptureAnimation < PokeBattle_Animation
     delay = ball.totalDuration
     ballBurstCapture(delay,ballEndX,ballEndY,@poke_ball)
     delay = ball.totalDuration+4
-    # NOTE: The Pokemon does not change color while being absorbed into a Poké
+    # NOTE: The Pokémon does not change color while being absorbed into a Poké
     #       Ball during a capture attempt. This may be an oversight in HGSS.
     battler.setSE(delay,"Battle jump to ball")
     battler.moveXY(delay,5,ballEndX,ballEndY)
@@ -813,7 +813,7 @@ class PokeballThrowCaptureAnimation < PokeBattle_Animation
         shadow.moveOpacity(delay+5,10,255)
       end
     else
-      # Pokemon was caught
+      # Pokémon was caught
       ballCaptureSuccess(ball,delay,ballEndX,ballGroundY)
     end
   end

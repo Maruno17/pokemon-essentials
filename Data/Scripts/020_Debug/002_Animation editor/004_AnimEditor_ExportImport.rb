@@ -18,7 +18,7 @@ def dumpBase64Anim(s)
 end
 
 def loadBase64Anim(s)
-  return Marshal.restore(StringInput.new(Zlib::Inflate.inflate(s.unpack("m")[0])))
+  return Marshal.restore(Zlib::Inflate.inflate(s.unpack("m")[0]))
 end
 
 def pbExportAnim(animations)

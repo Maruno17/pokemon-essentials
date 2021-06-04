@@ -20,6 +20,12 @@ class Interpreter
     clear
   end
 
+  def inspect
+    str = super.chop
+    str << format(' @event_id: %d>', @event_id)
+    return str
+  end
+
   def clear
     @map_id             = 0       # map ID when starting up
     @event_id           = 0       # event ID

@@ -8,8 +8,8 @@ class Window_Pokedex < Window_DrawableCommand
     @selarrow     = AnimatedBitmap.new("Graphics/Pictures/Pokedex/cursor_list")
     @pokeballOwn  = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_own")
     @pokeballSeen = AnimatedBitmap.new("Graphics/Pictures/Pokedex/icon_seen")
-    self.baseColor   = Color.new(255,255,255)
-    self.shadowColor = Color.new(72,72,72)
+    self.baseColor   = Color.new(88,88,80)
+    self.shadowColor = Color.new(168,184,184)
     self.windowskin  = nil
   end
 
@@ -379,8 +379,8 @@ class PokemonPokedex_Scene
   def pbRefresh
     overlay = @sprites["overlay"].bitmap
     overlay.clear
-    base   = Color.new(255,255,255)
-    shadow = Color.new(72,72,72)
+    base   = Color.new(88,88,80)
+    shadow = Color.new(168,184,184)
     iconspecies = @sprites["pokedex"].species
     iconspecies = nil if !$Trainer.seen?(iconspecies)
     # Write various bits of text
@@ -392,7 +392,7 @@ class PokemonPokedex_Scene
       end
     end
     textpos = [
-       [dexname,Graphics.width/2,-2,2,Color.new(255,255,255),Color.new(72,72,72)]
+       [dexname,Graphics.width/2,-2,2,Color.new(248,248,248),Color.new(0,0,0)]
     ]
     textpos.push([GameData::Species.get(iconspecies).name,112,46,2,base,shadow]) if iconspecies
     if @searchResults
@@ -406,7 +406,7 @@ class PokemonPokedex_Scene
     end
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
-    # Set Pokemon sprite
+    # Set Pokémon sprite
     setIconBitmap(iconspecies)
     # Draw slider arrows
     itemlist = @sprites["pokedex"]
@@ -441,7 +441,7 @@ class PokemonPokedex_Scene
   def pbRefreshDexSearch(params,_index)
     overlay = @sprites["overlay"].bitmap
     overlay.clear
-    base   = Color.new(255,255,255)
+    base   = Color.new(248,248,248)
     shadow = Color.new(72,72,72)
     # Write various bits of text
     textpos = [
@@ -513,7 +513,7 @@ class PokemonPokedex_Scene
   def pbRefreshDexSearchParam(mode,cmds,sel,_index)
     overlay = @sprites["overlay"].bitmap
     overlay.clear
-    base   = Color.new(255,255,255)
+    base   = Color.new(248,248,248)
     shadow = Color.new(72,72,72)
     # Write various bits of text
     textpos = [
@@ -1119,7 +1119,7 @@ class PokemonPokedex_Scene
         when 8   # Start search (filter)
           dexlist = pbSearchDexList(params)
           if dexlist.length==0
-            pbMessage(_INTL("No matching Pokemon were found."))
+            pbMessage(_INTL("No matching Pokémon were found."))
           else
             @dexlist = dexlist
             @sprites["pokedex"].commands = @dexlist

@@ -1,7 +1,7 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
 [<Generics>]
-How are your Pokemon doing?\mMy \TP's really energetic.  It's a handful!\mOh yeah, I managed to beat a tough \TE.\mI need to make my party stronger.
+How are your Pokémon doing?\mMy \TP's really energetic.  It's a handful!\mOh yeah, I managed to beat a tough \TE.\mI need to make my party stronger.
 My \TP's looking really awesome.\mI wish I could show you.\mHey, listen!  I almost caught a \TE the other day.\mOh, it was sooooooo close, too!
 #-------------------------------
 [<BattleRequests>]
@@ -22,8 +22,8 @@ How are you doing? \PN, howdy!  This is \TN.  Isn't it nice out?
 Hello, \PN.  This is \TN.  How are things?
 #-------------------------------
 [<Bodies1>]
-How are your Pokemon doing?\mMy \TP's really energetic.  It's a handful!
-How are your Pokemon doing?\mI always keep my \TP in top shape by going to Pokemon Centers.
+How are your Pokémon doing?\mMy \TP's really energetic.  It's a handful!
+How are your Pokémon doing?\mI always keep my \TP in top shape by going to Pokémon Centers.
 My \TP's looking really awesome.  I wish I could show you.
 I dressed my \TP and it looks even cuter than before.
 #-------------------------------

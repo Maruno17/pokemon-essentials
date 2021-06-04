@@ -31,8 +31,8 @@ class PokeBattle_Battle
     return false
   end
 
-  # Called when the Pokemon is Encored, or if it can't use any of its moves.
-  # Makes the Pokemon use the Encored move (if Encored), or Struggle.
+  # Called when the Pokémon is Encored, or if it can't use any of its moves.
+  # Makes the Pokémon use the Encored move (if Encored), or Struggle.
   def pbAutoChooseMove(idxBattler,showMessages=true)
     battler = @battlers[idxBattler]
     if battler.fainted?
@@ -88,7 +88,6 @@ class PokeBattle_Battle
 
   def pbChoseMoveFunctionCode?(idxBattler,code)
     return false if @battlers[idxBattler].fainted?
-    idxMove = @choices[idxBattler][1]
     if @choices[idxBattler][0]==:UseMove && @choices[idxBattler][1]
       return @choices[idxBattler][2].function == code
     end
@@ -159,7 +158,7 @@ class PokeBattle_Battle
             @choices[b.index][4] = pri
           end
           # Calculate sub-priority (first/last within priority bracket)
-          # NOTE: Going fast beats going slow. A Pokemon with Stall and Quick
+          # NOTE: Going fast beats going slow. A Pokémon with Stall and Quick
           #       Claw will go first in its priority bracket if Quick Claw
           #       triggers, regardless of Stall.
           subPri = 0

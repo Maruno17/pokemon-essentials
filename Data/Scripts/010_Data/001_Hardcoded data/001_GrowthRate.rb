@@ -13,13 +13,13 @@ module GameData
     def self.load; end
     def self.save; end
 
-    # Calculates the maximum level a Pokemon can attain. This can vary during a
+    # Calculates the maximum level a Pokémon can attain. This can vary during a
     # game, and here is where you would make it do so. Note that this method is
     # called by the Compiler, which happens before anything (e.g. Game Switches/
     # Variables, the player's data) is loaded, so code in this method should
     # check whether the needed variables exist before using them; if they don't,
     # this method should return the maximum possible level ever.
-    # @return [Integer] the maximum level attainable by a Pokemon
+    # @return [Integer] the maximum level attainable by a Pokémon
     def self.max_level
       return Settings::MAXIMUM_LEVEL
     end
@@ -46,7 +46,7 @@ module GameData
       return @exp_formula.call(level)
     end
 
-    # @return [Integer] the maximum Exp a Pokemon with this growth rate can have
+    # @return [Integer] the maximum Exp a Pokémon with this growth rate can have
     def maximum_exp
       return minimum_exp_for_level(GrowthRate.max_level)
     end
@@ -59,7 +59,7 @@ module GameData
     end
 
     # @param exp [Integer] an Exp amount
-    # @return [Integer] the level of a Pokemon that has the given Exp amount
+    # @return [Integer] the level of a Pokémon that has the given Exp amount
     def level_from_exp(exp)
       return ArgumentError.new("Exp amount #{level} is invalid.") if !exp || exp < 0
       max = GrowthRate.max_level

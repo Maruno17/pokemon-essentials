@@ -45,7 +45,7 @@ class PokeBattle_AI
       ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING &&
                                                    Effectiveness.super_effective_type?(moveType, defType)
     end
-    # Grounded Flying-type Pokemon become susceptible to Ground moves
+    # Grounded Flying-type Pokémon become susceptible to Ground moves
     if !target.airborne?
       ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING && moveType == :GROUND
     end
@@ -350,7 +350,7 @@ class PokeBattle_AI
     if skill>=PBTrainerAI.bestSkill && target.itemActive?
       # NOTE: Type-weakening berries aren't suitable for checking at the start
       #       of the round.
-      if !target.item.is_berry?
+      if target.item && !target.item.is_berry?
         BattleHandlers.triggerDamageCalcTargetItem(target.item,
            user,target,move,multipliers,baseDmg,type)
       end
@@ -419,7 +419,7 @@ class PokeBattle_AI
     if skill>=PBTrainerAI.highSkill
       if @battle.internalBattle
         # Don't need to check the Atk/Sp Atk-boosting badges because the AI
-        # won't control the player's Pokemon.
+        # won't control the player's Pokémon.
         if target.pbOwnedByPlayer?
           if move.physicalMove?(type) && @battle.pbPlayer.badge_count >= Settings::NUM_BADGES_BOOST_DEFENSE
             multipliers[:defense_multiplier] *= 1.1

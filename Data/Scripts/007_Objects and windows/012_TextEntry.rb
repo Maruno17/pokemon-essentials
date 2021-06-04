@@ -97,8 +97,8 @@ class Window_TextEntry < SpriteWindow_Base
     @baseColor=colors[0]
     @shadowColor=colors[1]
     if usedarkercolor
-      @baseColor=Color.new(255,255,255)
-      @shadowColor=Color.new(72,72,72)
+      @baseColor=Color.new(16,24,32)
+      @shadowColor=Color.new(168,184,184)
     end
     @helper=CharacterEntryHelper.new(text)
     @heading=heading

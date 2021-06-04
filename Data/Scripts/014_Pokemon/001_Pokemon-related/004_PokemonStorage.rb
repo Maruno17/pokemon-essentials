@@ -57,7 +57,7 @@ class PokemonStorage
   attr_reader   :boxes
   attr_accessor :currentBox
   attr_writer   :unlockedWallpapers
-  BASICWALLPAPERQTY = 10
+  BASICWALLPAPERQTY = 16
 
   def initialize(maxBoxes = Settings::NUM_STORAGE_BOXES, maxPokemon = PokemonBox::BOX_SIZE)
     @boxes = []
@@ -76,9 +76,17 @@ class PokemonStorage
   def allWallpapers
     return [
        # Basic wallpapers
-       _INTL("Sky"),_INTL("Essence"),_INTL("Star"),_INTL("Town"),
-       _INTL("Wisp"),_INTL("Set"),_INTL("Shimmer"),_INTL("Wish"),
-       _INTL("Space"),_INTL("Field")
+       _INTL("Forest"),_INTL("City"),_INTL("Desert"),_INTL("Savanna"),
+       _INTL("Crag"),_INTL("Volcano"),_INTL("Snow"),_INTL("Cave"),
+       _INTL("Beach"),_INTL("Seafloor"),_INTL("River"),_INTL("Sky"),
+       _INTL("Poké Center"),_INTL("Machine"),_INTL("Checks"),_INTL("Simple"),
+       # Special wallpapers
+       _INTL("Space"),_INTL("Backyard"),_INTL("Nostalgic 1"),_INTL("Torchic"),
+       _INTL("Trio 1"),_INTL("PikaPika 1"),_INTL("Legend 1"),_INTL("Team Galactic 1"),
+       _INTL("Distortion"),_INTL("Contest"),_INTL("Nostalgic 2"),_INTL("Croagunk"),
+       _INTL("Trio 2"),_INTL("PikaPika 2"),_INTL("Legend 2"),_INTL("Team Galactic 2"),
+       _INTL("Heart"),_INTL("Soul"),_INTL("Big Brother"),_INTL("Pokéathlon"),
+       _INTL("Trio 3"),_INTL("Spiky Pika"),_INTL("Kimono Girl"),_INTL("Revival")
     ]
   end
 
@@ -149,7 +157,7 @@ class PokemonStorage
       return (x==-1) ? self.party : @boxes[x]
     else
       for i in @boxes
-        raise "Box is a Pokemon, not a box" if i.is_a?(Pokemon)
+        raise "Box is a Pokémon, not a box" if i.is_a?(Pokemon)
       end
       return (x==-1) ? self.party[y] : @boxes[x][y]
     end
@@ -377,9 +385,9 @@ def pbLockWallpaper(index)   # Don't know why you'd want to do this
 end
 
 #===============================================================================
-# Look through Pokemon in storage
+# Look through Pokémon in storage
 #===============================================================================
-# Yields every Pokemon/egg in storage in turn.
+# Yields every Pokémon/egg in storage in turn.
 def pbEachPokemon
   for i in -1...$PokemonStorage.maxBoxes
     for j in 0...$PokemonStorage.maxPokemon(i)
@@ -389,7 +397,7 @@ def pbEachPokemon
   end
 end
 
-# Yields every Pokemon in storage in turn.
+# Yields every Pokémon in storage in turn.
 def pbEachNonEggPokemon
   pbEachPokemon { |pkmn,box| yield(pkmn,box) if !pkmn.egg? }
 end

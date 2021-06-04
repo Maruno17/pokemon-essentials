@@ -131,7 +131,7 @@ class PokeBattle_Move
   def tramplesMinimize?(_param=1); return false; end
   def nonLethal?(_user,_target); return false; end   # For False Swipe
 
-  def ignoresSubstitute?(user)   # user is the Pokemon using this move
+  def ignoresSubstitute?(user)   # user is the Pokémon using this move
     if Settings::MECHANICS_GENERATION >= 6
       return true if soundMove?
       return true if user && user.hasActiveAbility?(:INFILTRATOR)

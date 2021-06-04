@@ -1,6 +1,6 @@
 class PokeBattle_AI
   #=============================================================================
-  # Decide whether the opponent should switch Pokemon
+  # Decide whether the opponent should switch Pokémon
   #=============================================================================
   def pbEnemyShouldWithdraw?(idxBattler)
     return pbEnemyShouldWithdrawEx?(idxBattler,false)
@@ -10,10 +10,10 @@ class PokeBattle_AI
     return false if @battle.wildBattle?
     shouldSwitch = forceSwitch
     batonPass = -1
-    moveType = -1
+    moveType = nil
     skill = @battle.pbGetOwnerFromBattlerIndex(idxBattler).skill_level || 0
     battler = @battle.battlers[idxBattler]
-    # If Pokemon is within 6 levels of the foe, and foe's last move was
+    # If Pokémon is within 6 levels of the foe, and foe's last move was
     # super-effective and powerful
     if !shouldSwitch && battler.turnCount>0 && skill>=PBTrainerAI.highSkill
       target = battler.pbDirectOpposing(true)
@@ -28,12 +28,12 @@ class PokeBattle_AI
         end
       end
     end
-    # Pokemon can't do anything (must have been in battle for at least 5 rounds)
+    # Pokémon can't do anything (must have been in battle for at least 5 rounds)
     if !@battle.pbCanChooseAnyMove?(idxBattler) &&
        battler.turnCount && battler.turnCount>=5
       shouldSwitch = true
     end
-    # Pokemon is Perish Songed and has Baton Pass
+    # Pokémon is Perish Songed and has Baton Pass
     if skill>=PBTrainerAI.highSkill && battler.effects[PBEffects::PerishSong]==1
       battler.eachMoveWithIndex do |m,i|
         next if m.function!="0ED"   # Baton Pass
@@ -42,7 +42,7 @@ class PokeBattle_AI
         break
       end
     end
-    # Pokemon will faint because of bad poisoning at the end of this round, but
+    # Pokémon will faint because of bad poisoning at the end of this round, but
     # would survive at least one more round if it were regular poisoning instead
     if battler.status == :POISON && battler.statusCount > 0 &&
        skill>=PBTrainerAI.highSkill
@@ -52,7 +52,7 @@ class PokeBattle_AI
         shouldSwitch = true if pbAIRandom(100)<80
       end
     end
-    # Pokemon is Encored into an unfavourable move
+    # Pokémon is Encored into an unfavourable move
     if battler.effects[PBEffects::Encore]>0 && skill>=PBTrainerAI.mediumSkill
       idxEncoredMove = battler.pbEncoredMoveIndex
       if idxEncoredMove>=0
@@ -85,7 +85,7 @@ class PokeBattle_AI
         shouldSwitch = true
       end
     end
-    # Pokemon is about to faint because of Perish Song
+    # Pokémon is about to faint because of Perish Song
     if battler.effects[PBEffects::PerishSong]==1
       shouldSwitch = true
     end
@@ -107,7 +107,7 @@ class PokeBattle_AI
           end
         end
         # moveType is the type of the target's last used move
-        if moveType>=0 && Effectiveness.ineffective?(pbCalcTypeMod(moveType,battler,battler))
+        if moveType && Effectiveness.ineffective?(pbCalcTypeMod(moveType,battler,battler))
           weight = 65
           typeMod = pbCalcTypeModPokemon(pkmn,battler.pbDirectOpposing(true))
           if Effectiveness.super_effective?(typeMod)
@@ -115,7 +115,7 @@ class PokeBattle_AI
             weight = 85
           end
           list.unshift(i) if pbAIRandom(100)<weight   # Put this Pokemon first
-        elsif moveType>=0 && Effectiveness.resistant?(pbCalcTypeMod(moveType,battler,battler))
+        elsif moveType && Effectiveness.resistant?(pbCalcTypeMod(moveType,battler,battler))
           weight = 40
           typeMod = pbCalcTypeModPokemon(pkmn,battler.pbDirectOpposing(true))
           if Effectiveness.super_effective?(typeMod)
@@ -143,7 +143,7 @@ class PokeBattle_AI
   end
 
   #=============================================================================
-  # Choose a replacement Pokemon
+  # Choose a replacement Pokémon
   #=============================================================================
   def pbDefaultChooseNewEnemy(idxBattler,party)
     enemies = []

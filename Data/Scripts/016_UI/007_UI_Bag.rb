@@ -123,12 +123,12 @@ end
 # Bag visuals
 #===============================================================================
 class PokemonBag_Scene
-  ITEMLISTBASECOLOR     = Color.new(255,255,255)
-  ITEMLISTSHADOWCOLOR   = Color.new(72,72,72)
+  ITEMLISTBASECOLOR     = Color.new(88,88,80)
+  ITEMLISTSHADOWCOLOR   = Color.new(168,184,184)
   ITEMTEXTBASECOLOR     = Color.new(248,248,248)
   ITEMTEXTSHADOWCOLOR   = Color.new(0,0,0)
-  POCKETNAMEBASECOLOR   = Color.new(255,255,255)
-  POCKETNAMESHADOWCOLOR = Color.new(72,72,72)
+  POCKETNAMEBASECOLOR   = Color.new(88,88,80)
+  POCKETNAMESHADOWCOLOR = Color.new(168,184,184)
   ITEMSVISIBLE          = 7
 
   def pbUpdate
@@ -249,7 +249,7 @@ class PokemonBag_Scene
 
   def pbRefresh
     # Set the background image
-    @sprites["background"].setBitmap(sprintf("Graphics/Pictures/Bag/bg_1"))
+    @sprites["background"].setBitmap(sprintf("Graphics/Pictures/Bag/bg_#{@bag.lastpocket}"))
     # Set the bag sprite
     fbagexists = pbResolveBitmap(sprintf("Graphics/Pictures/Bag/bag_#{@bag.lastpocket}_f"))
     if $Trainer.female? && fbagexists
@@ -492,9 +492,9 @@ class PokemonBagScreen
         break if ret==2   # End screen
         @scene.pbRefresh
         next
-      elsif cmdGive>=0 && command==cmdGive   # Give item to Pokemon
+      elsif cmdGive>=0 && command==cmdGive   # Give item to Pokémon
         if $Trainer.pokemon_count == 0
-          @scene.pbDisplay(_INTL("There is no Pokemon."))
+          @scene.pbDisplay(_INTL("There is no Pokémon."))
         elsif itm.is_important?
           @scene.pbDisplay(_INTL("The {1} can't be held.",itemname))
         else

@@ -8,6 +8,13 @@ class Trainer
   attr_accessor :language
   attr_accessor :party
 
+  def inspect
+    str = super.chop
+    party_str = @party.map { |p| p.species_data.species }.inspect
+    str << format(' %s @party=%s>', self.full_name, party_str)
+    return str
+  end
+
   def full_name
     return _INTL("{1} {2}", trainer_type_name, @name)
   end
@@ -78,7 +85,7 @@ class Trainer
     return party_count >= Settings::MAX_PARTY_SIZE
   end
 
-  # Returns true if there are no usable Pokemon in the player's party.
+  # Returns true if there are no usable Pokémon in the player's party.
   def all_fainted?
     return able_pokemon_count == 0
   end
@@ -121,26 +128,26 @@ class Trainer
     return true
   end
 
-  # Checks whether the trainer would still have an unfainted Pokemon if the
-  # Pokemon given by _index_ were removed from the party.
+  # Checks whether the trainer would still have an unfainted Pokémon if the
+  # Pokémon given by _index_ were removed from the party.
   def has_other_able_pokemon?(index)
     @party.each_with_index { |pkmn, i| return true if i != index && pkmn.able? }
     return false
   end
 
-  # Returns true if there is a Pokemon of the given species in the trainer's
+  # Returns true if there is a Pokémon of the given species in the trainer's
   # party. You may also specify a particular form it should be.
   def has_species?(species, form = -1)
     return pokemon_party.any? { |p| p && p.isSpecies?(species) && (form < 0 || p.form == form) }
   end
 
-  # Returns whether there is a fatefully met Pokemon of the given species in the
+  # Returns whether there is a fatefully met Pokémon of the given species in the
   # trainer's party.
   def has_fateful_species?(species)
     return pokemon_party.any? { |p| p && p.isSpecies?(species) && p.obtain_method == 4 }
   end
 
-  # Returns whether there is a Pokemon with the given type in the trainer's
+  # Returns whether there is a Pokémon with the given type in the trainer's
   # party.
   def has_pokemon_of_type?(type)
     return false if !GameData::Type.exists?(type)
@@ -148,14 +155,14 @@ class Trainer
     return pokemon_party.any? { |p| p && p.hasType(type) }
   end
 
-  # Checks whether any Pokemon in the party knows the given move, and returns
-  # the first Pokemon it finds with that move, or nil if no Pokemon has that move.
+  # Checks whether any Pokémon in the party knows the given move, and returns
+  # the first Pokémon it finds with that move, or nil if no Pokémon has that move.
   def get_pokemon_with_move(move)
     pokemon_party.each { |pkmn| return pkmn if pkmn.hasMove?(move) }
     return nil
   end
 
-  # Fully heal all Pokemon in the party.
+  # Fully heal all Pokémon in the party.
   def heal_party
     @party.each { |pkmn| pkmn.heal }
   end

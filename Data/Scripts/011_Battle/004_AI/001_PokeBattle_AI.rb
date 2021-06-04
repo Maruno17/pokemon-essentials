@@ -1,5 +1,5 @@
 # AI skill levels:
-#     0:     Wild Pokemon
+#     0:     Wild Pokémon
 #     1-31:  Basic trainer (young/inexperienced)
 #     32-47: Some skill
 #     48-99: High skill
@@ -45,7 +45,7 @@ class PokeBattle_AI
   end
 
   #=============================================================================
-  # Decide whether the opponent should Mega Evolve their Pokemon
+  # Decide whether the opponent should Mega Evolve their Pokémon
   #=============================================================================
   def pbEnemyShouldMegaEvolve?(idxBattler)
     battler = @battle.battlers[idxBattler]

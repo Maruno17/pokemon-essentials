@@ -16,15 +16,15 @@ class PokeBattle_Scene
     # on-screen by a separate animation)
     if @battle.trainerBattle?
       # NOTE: Here is where you'd make trainer sprites animate if they had an
-      #       entrance animation. Be sure to set it up like a Pokemon entrance
+      #       entrance animation. Be sure to set it up like a Pokémon entrance
       #       animation, i.e. add them to @animations so that they can play out
       #       while party lineups appear and messages show.
       pbShowPartyLineup(0,true)
       pbShowPartyLineup(1,true)
       return
     end
-    # Wild battle: play wild Pokemon's intro animations (including cry), show
-    # data box(es), return the wild Pokemon's sprite(s) to normal colour, show
+    # Wild battle: play wild Pokémon's intro animations (including cry), show
+    # data box(es), return the wild Pokémon's sprite(s) to normal colour, show
     # shiny animation(s)
     # Set up data box animation
     for i in 0...@battle.sideSizes[1]
@@ -33,12 +33,12 @@ class PokeBattle_Scene
       dataBoxAnim = DataBoxAppearAnimation.new(@sprites,@viewport,idxBattler)
       @animations.push(dataBoxAnim)
     end
-    # Set up wild Pokemon returning to normal colour and playing intro
+    # Set up wild Pokémon returning to normal colour and playing intro
     # animations (including cry)
     @animations.push(BattleIntroAnimation2.new(@sprites,@viewport,@battle.sideSizes[1]))
     # Play all the animations
     while inPartyAnimation?; pbUpdate; end
-    # Show shiny animation for wild Pokemon
+    # Show shiny animation for wild Pokémon
     if @battle.showAnims
       for i in 0...@battle.sideSizes[1]
         idxBattler = 2*i+1
@@ -74,7 +74,7 @@ class PokeBattle_Scene
 
   #=============================================================================
   # Animates a trainer's sprite and party lineup hiding (if they are visible).
-  # Animates a Pokemon being sent out into battle, then plays the shiny
+  # Animates a Pokémon being sent out into battle, then plays the shiny
   # animation for it if relevant.
   # sendOuts is an array; each element is itself an array: [idxBattler,pkmn]
   #=============================================================================
@@ -127,7 +127,7 @@ class PokeBattle_Scene
     end
     fadeAnim.dispose
     sendOutAnims.each { |a| a[0].dispose; a[1].dispose }
-    # Play shininess animations for shiny Pokemon
+    # Play shininess animations for shiny Pokémon
     sendOuts.each do |b|
       next if !@battle.showAnims || !@battle.battlers[b[0]].shiny?
       pbCommonAnimation("Shiny",@battle.battlers[b[0]])
@@ -135,7 +135,7 @@ class PokeBattle_Scene
   end
 
   #=============================================================================
-  # Animates a Pokemon being recalled into its Poké Ball and its data box hiding
+  # Animates a Pokémon being recalled into its Poké Ball and its data box hiding
   #=============================================================================
   def pbRecall(idxBattler)
     @briefMessage = false
@@ -270,7 +270,7 @@ class PokeBattle_Scene
   end
 
   #=============================================================================
-  # Shows stats windows upon a Pokemon levelling up
+  # Shows stats windows upon a Pokémon levelling up
   #=============================================================================
   def pbLevelUp(pkmn,_battler,oldTotalHP,oldAttack,oldDefense,oldSpAtk,oldSpDef,oldSpeed)
     pbTopRightWindow(
@@ -283,11 +283,11 @@ class PokeBattle_Scene
   end
 
   #=============================================================================
-  # Animates a Pokemon fainting
+  # Animates a Pokémon fainting
   #=============================================================================
   def pbFaintBattler(battler)
     @briefMessage = false
-    # Pokemon plays cry and drops down, data box disappears
+    # Pokémon plays cry and drops down, data box disappears
     faintAnim   = BattlerFaintAnimation.new(@sprites,@viewport,battler.index,@battle)
     dataBoxAnim = DataBoxDisappearAnimation.new(@sprites,@viewport,battler.index)
     loop do
@@ -301,7 +301,7 @@ class PokeBattle_Scene
   end
 
   #=============================================================================
-  # Animates throwing a Poké Ball at a Pokemon in an attempt to catch it
+  # Animates throwing a Poké Ball at a Pokémon in an attempt to catch it
   #=============================================================================
   def pbThrow(ball,shakes,critical,targetBattler,showPlayer=false)
     @briefMessage = false
@@ -480,7 +480,7 @@ class PokeBattle_Scene
 
   # Plays a common animation.
   def pbCommonAnimation(animName,user=nil,target=nil)
-    return if !animName || animName==""
+    return if nil_or_empty?(animName)
     target = target[0] if target && target.is_a?(Array)
     animations = pbLoadBattleAnimations
     return if !animations
@@ -496,7 +496,7 @@ class PokeBattle_Scene
     @briefMessage = false
     userSprite   = (user) ? @sprites["pokemon_#{user.index}"] : nil
     targetSprite = (target) ? @sprites["pokemon_#{target.index}"] : nil
-    # Remember the original positions of Pokemon sprites
+    # Remember the original positions of Pokémon sprites
     oldUserX = (userSprite) ? userSprite.x : 0
     oldUserY = (userSprite) ? userSprite.y : 0
     oldTargetX = (targetSprite) ? targetSprite.x : oldUserX
@@ -524,7 +524,7 @@ class PokeBattle_Scene
       break if animPlayer.animDone?
     end
     animPlayer.dispose
-    # Return Pokemon sprites to their original positions
+    # Return Pokémon sprites to their original positions
     if userSprite
       userSprite.x = oldUserX
       userSprite.y = oldUserY

@@ -26,7 +26,7 @@ class PokeBattle_Confusion < PokeBattle_Move
     @name       = ""
     @function   = "000"
     @baseDamage = 40
-    @type       = -1
+    @type       = nil
     @category   = 0
     @accuracy   = 100
     @pp         = -1
@@ -58,7 +58,7 @@ class PokeBattle_Struggle < PokeBattle_Move
     @name       = (move) ? move.name : _INTL("Struggle")
     @function   = "002"
     @baseDamage = 50
-    @type       = -1
+    @type       = nil
     @category   = 0
     @accuracy   = 0
     @pp         = -1

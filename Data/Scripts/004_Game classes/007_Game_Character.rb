@@ -14,7 +14,7 @@ class Game_Character
   attr_accessor :character_hue
   attr_reader   :opacity
   attr_reader   :blend_type
-  attr_reader   :direction
+  attr_accessor :direction
   attr_accessor :pattern
   attr_accessor :pattern_surf
   attr_accessor :lock_pattern
@@ -193,12 +193,25 @@ class Game_Character
   end
 
   def bush_depth
-    return 0 if @tile_id > 0 || @always_on_top || jumping?
-    xbehind = @x + (@direction==4 ? 1 : @direction==6 ? -1 : 0)
-    ybehind = @y + (@direction==8 ? 1 : @direction==2 ? -1 : 0)
-    return Game_Map::TILE_HEIGHT if self.map.deepBush?(@x, @y) && self.map.deepBush?(xbehind, ybehind)
-    return 12 if !moving? && self.map.bush?(@x, @y)
-    return 0
+    return @bush_depth || 0
+  end
+
+  def calculate_bush_depth
+    if @tile_id > 0 || @always_on_top || jumping?
+      @bush_depth = 0
+    else
+      deep_bush = regular_bush = false
+      xbehind = @x + (@direction == 4 ? 1 : @direction == 6 ? -1 : 0)
+      ybehind = @y + (@direction == 8 ? 1 : @direction == 2 ? -1 : 0)
+      this_map = (self.map.valid?(@x, @y)) ? [self.map, @x, @y] : $MapFactory.getNewMap(@x, @y)
+      if this_map[0].deepBush?(this_map[1], this_map[2]) && self.map.deepBush?(xbehind, ybehind)
+        @bush_depth = Game_Map::TILE_HEIGHT
+      elsif !moving? && this_map[0].bush?(this_map[1], this_map[2])
+        @bush_depth = 12
+      else
+        @bush_depth = 0
+      end
+    end
   end
 
   #=============================================================================
@@ -471,9 +484,16 @@ class Game_Character
         when 36 then @direction_fix = false
         when 37 then @through = true
         when 38 then @through = false
-        when 39 then @always_on_top = true
-        when 40 then @always_on_top = false
+        when 39
+          old_always_on_top = @always_on_top
+          @always_on_top = true
+          calculate_bush_depth if @always_on_top != old_always_on_top
+        when 40
+          old_always_on_top = @always_on_top
+          @always_on_top = false
+          calculate_bush_depth if @always_on_top != old_always_on_top
         when 41
+          old_tile_id = @tile_id
           @tile_id = 0
           @character_name = command.parameters[0]
           @character_hue = command.parameters[1]
@@ -486,6 +506,7 @@ class Game_Character
             @pattern = command.parameters[3]
             @original_pattern = @pattern
           end
+          calculate_bush_depth if @tile_id != old_tile_id
         when 42 then @opacity = command.parameters[0]
         when 43 then @blend_type = command.parameters[0]
         when 44 then pbSEPlay(command.parameters[0])
@@ -498,15 +519,13 @@ class Game_Character
 
   def move_generic(dir, turn_enabled = true)
     turn_generic(dir) if turn_enabled
-    x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
-    y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
     if can_move_in_direction?(dir)
       turn_generic(dir)
-      @x += x_offset
-      @y += y_offset
+      @x += (dir == 4) ? -1 : (dir == 6) ? 1 : 0
+      @y += (dir == 8) ? -1 : (dir == 2) ? 1 : 0
       increase_steps
     else
-      check_event_trigger_touch(@x + x_offset, @y + y_offset)
+      check_event_trigger_touch(dir)
     end
   end
 
@@ -820,6 +839,7 @@ class Game_Character
   #=============================================================================
   def update
     @moved_last_frame = @moved_this_frame
+    @stopped_last_frame = @stopped_this_frame
     if !$game_temp.in_menu
       # Update command
       update_command
@@ -883,7 +903,14 @@ class Game_Character
       @jump_distance_left = [(dest_x - @real_x).abs, (dest_y - @real_y).abs].max
     end
     # End of a step, so perform events that happen at this time
-    Events.onStepTakenFieldMovement.trigger(self, self) if !jumping? && !moving?
+    if !jumping? && !moving?
+      Events.onStepTakenFieldMovement.trigger(self, self)
+      calculate_bush_depth
+      @stopped_this_frame = true
+    elsif !@moved_last_frame || @stopped_last_frame   # Started a new step
+      calculate_bush_depth
+      @stopped_this_frame = false
+    end
     # Increment animation counter
     @anime_count += 1 if @walk_anime || @step_anime
     @moved_this_frame = true
@@ -893,6 +920,7 @@ class Game_Character
     @anime_count += 1 if @step_anime
     @stop_count  += 1 if !@starting && !lock?
     @moved_this_frame = false
+    @stopped_this_frame = false
   end
 
   def update_pattern
@@ -915,7 +943,7 @@ class Game_Character
     # game uses square tiles.
     real_speed = (jumping?) ? jump_speed_real : move_speed_real
     frames_per_pattern = Game_Map::REAL_RES_X / (real_speed * 2.0)
-    frames_per_pattern *= 2 if move_speed == 6   # Cycling/fastest speed
+    frames_per_pattern *= 2 if move_speed >= 5   # Cycling speed or faster
     return if @anime_count < frames_per_pattern
     # Advance to the next animation frame
     @pattern = (@pattern + 1) % 4

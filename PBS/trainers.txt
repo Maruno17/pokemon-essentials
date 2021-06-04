@@ -1,196 +1,118 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
-#      First Rival Battle      #
+[CAMPER,Liam]
+LoseText = "A very good battle, indeed!"
+Pokemon = DIGLETT,10
+Pokemon = BONSLY,11
 #-------------------------------
-[RIVAL1,Alex]
-LoseText = "Aww man!"
-Pokemon = CYNDAQUIL,10
-#-------------------------------
-[RIVAL1,Alex,1]
-LoseText = "Aww man!"
-Pokemon = SQUIRTLE,10
-#-------------------------------
-[RIVAL1,Alex,2]
-LoseText = "Aww man!"
-Pokemon = TREECKO,10
-#-------------------------------
-[RIVAL2,Alex]
-LoseText = "Aww man!"
-Pokemon = CYNDAQUIL,10
-#-------------------------------
-[RIVAL2,Alex,1]
-LoseText = "Aww man!"
-Pokemon = SQUIRTLE,10
-#-------------------------------
-[RIVAL2,Alex,2]
-LoseText = "Aww man!"
-Pokemon = TREECKO,10
-#-------------------------------
-#           Route 1            #
-#-------------------------------
-[PAINTER,Cameron]
-LoseText = "Back to the drawing board, I guess..."
-Pokemon = ZIGZAGOON,9
-#-------------------------------
-[JUGGLER,James]
-LoseText = "I did not expect to lose this battle."
-Pokemon = TAILLOW,8
-Pokemon = SENTRET,9
-#-------------------------------
-#      Route 2 / Prim Cave     #
-#-------------------------------
-[YOUNGSTER,Daniel]
-LoseText = "Ugh, why do I always keep losing these battles?"
-Pokemon = RATTATA,10
-Pokemon = SPEAROW,10
-#-------------------------------
-[BUGCATCHER,Flynn]
-LoseText = "Ugh, why do I always keep losing these battles?"
-Pokemon = METAPOD,11
-Pokemon = KAKUNA,10
-#-------------------------------
-[HIKER,Blake]
-LoseText = "No way!"
+[LEADER_Brock,Brock]
+Items = FULLRESTORE,FULLRESTORE
+LoseText = "Very good."
 Pokemon = GEODUDE,12
+    Gender = male
+    Moves = DEFENSECURL,HEADSMASH,ROCKPOLISH,ROCKTHROW
+    AbilityIndex = 0
+    IV = 20,20,20,20,20,20
+Pokemon = ONIX,14
+    Name = Rocky
+    Gender = male
+    Shiny = yes
+    Moves = HEADSMASH,ROCKTHROW,RAGE,ROCKTOMB
+    AbilityIndex = 0
+    Item = SITRUSBERRY
+    IV = 20,20,20,20,20,20
+    Ball = HEAVYBALL
 #-------------------------------
-[FISHERMAN,Joel]
-LoseText = "I need to get out of this cave..."
-Pokemon = TENTACOOL,13
-Pokemon = MAGIKARP,11
+[TEAMROCKET_M,Grunt,1]
+LoseText = "You're too good for me!"
+Pokemon = WEEPINBELL,21
+    Shadow = yes
 #-------------------------------
-#      Second Rival Battle     #
+[TEAMROCKET_F,Grunt,1]
+LoseText = "You're too good for me!"
+Pokemon = BURMY,19
+Pokemon = WINGULL,19
+Pokemon = ELECTABUZZ,20
+    Shadow = yes
 #-------------------------------
-[RIVAL2_1,Alex]
-LoseText = "How did you do that!?"
-Pokemon = QUILAVA,17
-Pokemon = SPEAROW,14
+[YOUNGSTER,Ben]
+LoseText = "Aww, I lost."
+Pokemon = RATTATA,11
+Pokemon = EKANS,11
 #-------------------------------
-[RIVAL2_1,Alex,1]
-LoseText = "How did you do that!?"
-Pokemon = WARTORTLE,17
-Pokemon = SPEAROW,14
+[CAMPER,Jeff]
+LoseText = "A very good battle, indeed!"
+Pokemon = SPEAROW,16
+Pokemon = SENTRET,16
 #-------------------------------
-[RIVAL2_1,Alex,2]
-LoseText = "How did you do that!?"
-Pokemon = GROVYLE,17
-Pokemon = SPEAROW,14
+[CAMPER,Jeff,1]
+LoseText = "You beat me again!"
+Pokemon = FEAROW,29
+Pokemon = FURRET,29
 #-------------------------------
-[RIVAL2_2,Alex]
-LoseText = "How did you do that!?"
-Pokemon = QUILAVA,17
-Pokemon = SPEAROW,14
+[PICNICKER,Susie]
+LoseText = "Defeated! Oh my!"
+Pokemon = MEOWTH,18
 #-------------------------------
-[RIVAL2_2,Alex,1]
-LoseText = "How did you do that!?"
-Pokemon = WARTORTLE,17
-Pokemon = SPEAROW,14
+[PICNICKER,Susie,1]
+LoseText = "Defeated! Oh my!"
+Pokemon = PERSIAN,32
 #-------------------------------
-[RIVAL2_2,Alex,2]
-LoseText = "How did you do that!?"
-Pokemon = GROVYLE,17
-Pokemon = SPEAROW,14
+[HIKER,Ford]
+LoseText = "You're too good for me!"
+Pokemon = MACHOP,19
 #-------------------------------
-#           Route 3            #
+[FISHERMAN,Andrew]
+LoseText = "Washed out!"
+Pokemon = MAGIKARP,14
+Pokemon = MAGIKARP,18
 #-------------------------------
-[LASS,Emily]
-LoseText = "Aww, darn it!"
-Pokemon = SHROOMISH,16
-Pokemon = SPHEAL,15
+[BEAUTY,Bridget]
+LoseText = "My Skitty!"
+Pokemon = SKITTY,18
 #-------------------------------
-[COOLTRAINER_M,Alex]
-LoseText = "You cheated! It's that simple."
-Pokemon = SNEASEL,17
-Pokemon = ESPEON,15
+[LASS,Crissy]
+LoseText = "You didn't have to win so convincingly!"
+Pokemon = PLUSLE,17
+Pokemon = MINUN,17
 #-------------------------------
-[COOLTRAINER_F,Blaire]
-LoseText = "I should've guessed you would cheat."
-Pokemon = ELECTRIKE,17
-Pokemon = SWINUB,16
-Pokemon = HOOTHOOT,15
+[COOLCOUPLE,Alice & Bob]
+LoseText = "Our teamwork failed!"
+Pokemon = TURTWIG,19
+Pokemon = CHIMCHAR,19
 #-------------------------------
-#      Third Rival Battle      #
+[POKEMONTRAINER_Brendan,Brendan]
+LoseText = "..."
+Pokemon = MARSHTOMP,19
 #-------------------------------
-[RIVAL3_1,Alex]
-LoseText = "Wow, you've improved a lot!"
-Pokemon = QUILAVA,23
-Pokemon = FEAROW,20
-Pokemon = ONIX,19
-Pokemon = BUTTERFREE,19
+[SWIMMER2_F,Ariel]
+LoseText = "Washed out!"
+Pokemon = STARYU,15
+Pokemon = GOLDEEN,11
 #-------------------------------
-[RIVAL3_1,Alex,1]
-LoseText = "Wow, you've improved a lot!"
-Pokemon = WARTORTLE,23
-Pokemon = SPEAROW,14
+[RIVAL1,Blue]
+LoseText = "Not too shabby."
+Pokemon = PIDGEOTTO,17
+Pokemon = RATTATA,15
+Pokemon = BULBASAUR,18
 #-------------------------------
-[RIVAL3_1,Alex,2]
-LoseText = "Wow, you've improved a lot!"
-Pokemon = GROVYLE,23
-Pokemon = SPEAROW,14
+[RIVAL1,Blue,1]
+LoseText = "Not too shabby."
+Pokemon = PIDGEOTTO,17
+Pokemon = RATTATA,15
+Pokemon = CHARMANDER,18
 #-------------------------------
-[RIVAL3_2,Alex]
-LoseText = "Wow, you've improved a lot!"
-Pokemon = QUILAVA,23
-Pokemon = SPEAROW,14
+[RIVAL1,Blue,2]
+LoseText = "Not too shabby."
+Pokemon = PIDGEOTTO,17
+Pokemon = RATTATA,15
+Pokemon = SQUIRTLE,18
 #-------------------------------
-[RIVAL3_2,Alex,1]
-LoseText = "Wow, you've improved a lot!"
-Pokemon = WARTORTLE,23
-Pokemon = SPEAROW,14
-#-------------------------------
-[RIVAL3_2,Alex,2]
-LoseText = "Wow, you've improved a lot!"
-Pokemon = GROVYLE,23
-Pokemon = SPEAROW,14
-#-------------------------------
-#         Anakiwa Cave         #
-#-------------------------------
-[EXPLORER,Alyssa]
-LoseText = "I thought I was prepared for anything!"
-Pokemon = MAWILE,20
-Pokemon = GEODUDE,19
-#-------------------------------
-[BLACKBELT,Ben]
-LoseText = "I can't accept defeat like this..."
-Pokemon = SHROOMISH,20
-Pokemon = POLIWRATH,19
-Pokemon = GEODUDE,19
-#-------------------------------
-[PSYCHIC_F,Janice]
-LoseText = "I knew you would win."
-Pokemon = GASTLY,20
-Pokemon = NATU,19
-Pokemon = SABLEYE,19
-#-------------------------------
-[COOLCOUPLE,Lena & Sean]
-LoseText = "Wow, you're too good!"
-Pokemon = ELECTRIKE,21
-Pokemon = HOUNDOUR,20
-Pokemon = TENTACOOL,20
-Pokemon = SNEASEL,21
-#-------------------------------
-[HIKER,Keane]
-LoseText = "This can't be happening."
-Pokemon = GEODUDE,21
-Pokemon = MISDREAVUS,20
-#-------------------------------
-[CRUSHGIRL,Rey]
-LoseText = "Wow! You're super impressive."
-Pokemon = BRELOOM,23
-Pokemon = FLAREON,21
-#-------------------------------
-[BUGCATCHER,Elias]
-LoseText = "Hang on, this makes no sense..."
-Pokemon = BUTTERFREE,22
-Pokemon = BEEDRILL,22
-#-------------------------------
-[BIRDKEEPER,Andrew]
-LoseText = "Can't really fly away from this one, can I?"
-Pokemon = FEAROW,23
-Pokemon = SWELLOW,22
-#-------------------------------
-[RUINMANIAC,Jared]
-LoseText = "I'm looking for anc"
-Pokemon = ONIX,24
-Pokemon = GEODUDE,23
-Pokemon = MAWILE,22
-#-------------------------------
+[CHAMPION,Blue]
+LoseText = "A good battle indeed!"
+Pokemon = VENUSAUR,63
+    Item = SITRUSBERRY
+Pokemon = CHARIZARD,63
+    Item = SITRUSBERRY
+Pokemon = BLASTOISE,63
+    Item = SITRUSBERRY

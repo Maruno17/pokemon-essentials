@@ -290,7 +290,6 @@ class PokemonLoadScreen
         commands[cmd_mystery_gift = commands.length] = _INTL('Mystery Gift')
       end
     end
-    pbBGMStop(1.0)
     commands[cmd_new_game = commands.length]  = _INTL('New Game')
     commands[cmd_options = commands.length]   = _INTL('Options')
     commands[cmd_language = commands.length]  = _INTL('Language') if Settings::LANGUAGES.length >= 2
@@ -306,7 +305,6 @@ class PokemonLoadScreen
       pbPlayDecisionSE if command != cmd_quit
       case command
       when cmd_continue
-        pbBGMStop(1.0)
         @scene.pbEndScene
         Game.load(@save_data)
         return

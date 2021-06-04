@@ -25,9 +25,9 @@ def getOggPage(file)
   return nil if dw != 0x5367674F
   header = file.read(22)
   bodysize = 0
-  hdrbodysize = (file.read(1)[0] rescue 0)
+  hdrbodysize = (file.read(1)[0].ord rescue 0)
   hdrbodysize.times do
-    bodysize += (file.read(1)[0] rescue 0)
+    bodysize += (file.read(1)[0].ord rescue 0)
   end
   ret = [header, file.pos, bodysize, file.pos + bodysize]
   return ret
@@ -37,9 +37,6 @@ end
 def oggfiletime(file)
   fgetdw = proc { |file|
     (file.eof? ? 0 : (file.read(4).unpack("V")[0] || 0))
-  }
-  fgetw = proc { |file|
-    (file.eof? ? 0 : (file.read(2).unpack("v")[0] || 0))
   }
   pages = []
   page = nil
@@ -69,7 +66,7 @@ def oggfiletime(file)
     if serial != curserial
       curserial = serial
       file.pos = page[1]
-      packtype = (file.read(1)[0] rescue 0)
+      packtype = (file.read(1)[0].ord rescue 0)
       string = file.read(6)
       return -1 if string != "vorbis"
       return -1 if packtype != 1
@@ -82,9 +79,9 @@ def oggfiletime(file)
   end
   ret = 0.0
   for i in 0...pcmlengths.length
-    ret += pcmlengths[i].to_f / rates[i]
+    ret += pcmlengths[i].to_f / rates[i].to_f
   end
-  return ret
+  return ret * 256.0
 end
 
 # Gets the length of an audio file in seconds. Supports WAV, MP3, and OGG files.

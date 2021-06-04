@@ -50,7 +50,7 @@ class PokeBattle_Battle
   def pbAttackPhaseSwitch
     pbPriority.each do |b|
       next unless @choices[b.index][0]==:SwitchOut && !b.fainted?
-      idxNewPkmn = @choices[b.index][1]   # Party index of Pokemon to switch to
+      idxNewPkmn = @choices[b.index][1]   # Party index of Pokémon to switch to
       b.lastMoveFailed = false   # Counts as a successful move for Stomping Tantrum
       @lastMoveUser = b.index
       # Switching message
@@ -58,7 +58,7 @@ class PokeBattle_Battle
       # Pursuit interrupts switching
       pbPursuit(b.index)
       return if @decision>0
-      # Switch Pokemon
+      # Switch Pokémon
       pbRecallAndReplace(b.index,idxNewPkmn)
       b.pbEffectsOnSwitchIn(true)
     end
@@ -71,7 +71,7 @@ class PokeBattle_Battle
       item = @choices[b.index][1]
       next if !item
       case GameData::Item.get(item).battle_use
-      when 1, 2, 6, 7   # Use on Pokemon/Pokemon's move
+      when 1, 2, 6, 7   # Use on Pokémon/Pokémon's move
         pbUseItemOnPokemon(item, @choices[b.index][2], b) if @choices[b.index][2] >= 0
       when 3, 8         # Use on battler
         pbUseItemOnBattler(item, @choices[b.index][2], b)
@@ -153,7 +153,7 @@ class PokeBattle_Battle
         break if advance
       end
       next if advance
-      # All Pokemon have moved; end the loop
+      # All Pokémon have moved; end the loop
       break
     end
   end

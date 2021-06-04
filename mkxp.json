@@ -20,6 +20,7 @@
     //
     // "rgssVersion": 1,
 
+
     // Create a debug context and log
     // OpenGL debug information to the console
     // (default: disabled)
@@ -89,7 +90,7 @@
     // Override the game window title
     // (default: none)
     //
-     "windowTitle": "Pokémon and the Last Wish",
+    // "windowTitle": "Custom Title",
 
 
     // Enforce a static frame rate
@@ -180,11 +181,11 @@
     "bindingNames": {"c": "Use",
                      "b": "Back",
                      "a": "Action",
-					 "x": "JumpUp",
-					 "y": "JumpDown",
-					 "z": "Special",
-					 "l": "(unused)",
-					 "r": "(unused)"},
+                     "x": "JumpUp",
+                     "y": "JumpDown",
+                     "z": "Special",
+                     "l": "(unused)",
+                     "r": "(unused)"},
 
 
     // Allow symlinks for game assets to be followed

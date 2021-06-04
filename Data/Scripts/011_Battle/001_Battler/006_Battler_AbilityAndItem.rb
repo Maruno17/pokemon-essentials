@@ -1,6 +1,6 @@
 class PokeBattle_Battler
   #=============================================================================
-  # Called when a Pokemon (self) is sent into battle or its ability changes.
+  # Called when a Pokémon (self) is sent into battle or its ability changes.
   #=============================================================================
   def pbEffectsOnSwitchIn(switchIn=false)
     # Healing Wish/Lunar Dance/entry hazards
@@ -61,7 +61,7 @@ class PokeBattle_Battler
     return ret   # Whether self has switched out
   end
 
-  # Called when a Pokemon (self) enters battle, at the end of each move used,
+  # Called when a Pokémon (self) enters battle, at the end of each move used,
   # and at the end of each round.
   def pbContinualAbilityChecks(onSwitchIn=false)
     # Check for end of primordial weather
@@ -203,8 +203,8 @@ class PokeBattle_Battler
   #=============================================================================
   # Held item trigger checks
   #=============================================================================
-  # NOTE: A Pokemon using Bug Bite/Pluck, and a Pokemon having an item thrown at
-  #       it via Fling, will gain the effect of the item even if the Pokemon is
+  # NOTE: A Pokémon using Bug Bite/Pluck, and a Pokémon having an item thrown at
+  #       it via Fling, will gain the effect of the item even if the Pokémon is
   #       affected by item-negating effects.
   # item_to_use is an item ID for Bug Bite/Pluck and Fling, and nil otherwise.
   # fling is for Fling only.
@@ -277,7 +277,7 @@ class PokeBattle_Battler
     end
   end
 
-  # Called when the battle terrain changes and when a Pokemon loses HP.
+  # Called when the battle terrain changes and when a Pokémon loses HP.
   def pbItemTerrainStatBoostCheck
     return if !itemActive?
     if BattleHandlers.triggerTerrainStatBoostItem(self.item, self, @battle)
@@ -286,7 +286,7 @@ class PokeBattle_Battler
   end
 
   # Used for Adrenaline Orb. Called when Intimidate is triggered (even if
-  # Intimidate has no effect on the Pokemon).
+  # Intimidate has no effect on the Pokémon).
   def pbItemOnIntimidatedCheck
     return if !itemActive?
     if BattleHandlers.triggerItemOnIntimidated(self.item, self, @battle)

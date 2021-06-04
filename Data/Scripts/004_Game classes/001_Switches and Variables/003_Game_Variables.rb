@@ -4,7 +4,6 @@
 #  This class handles variables. It's a wrapper for the built-in class "Array."
 #  Refer to "$game_variables" for the instance of this class.
 #===============================================================================
-
 class Game_Variables
   #-----------------------------------------------------------------------------
   # * Object Initialization
@@ -17,11 +16,8 @@ class Game_Variables
   #     variable_id : variable ID
   #-----------------------------------------------------------------------------
   def [](variable_id)
-    if variable_id<=5000 && @data[variable_id]!=nil
-      return @data[variable_id]
-    else
-      return 0
-    end
+    return @data[variable_id] if variable_id <= 5000 && !@data[variable_id].nil?
+    return 0
   end
   #-----------------------------------------------------------------------------
   # * Set Variable
@@ -29,8 +25,6 @@ class Game_Variables
   #     value       : the variable's value
   #-----------------------------------------------------------------------------
   def []=(variable_id, value)
-    if variable_id<=5000
-      @data[variable_id] = value
-    end
+    @data[variable_id] = value if variable_id <= 5000
   end
 end

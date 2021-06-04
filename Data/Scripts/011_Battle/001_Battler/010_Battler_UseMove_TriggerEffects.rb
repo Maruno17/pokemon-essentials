@@ -115,7 +115,7 @@ class PokeBattle_Battler
       #       after the move's animation, but the item is only consumed now.
       user.pbConsumeItem
     end
-    # Pokemon switching caused by Roar, Whirlwind, Circle Throw, Dragon Tail
+    # Pokémon switching caused by Roar, Whirlwind, Circle Throw, Dragon Tail
     switchedBattlers = []
     move.pbSwitchOutTargetsEffect(user,targets,numHits,switchedBattlers)
     # Target's item, user's item, target's ability (all negated by Sheer Force)

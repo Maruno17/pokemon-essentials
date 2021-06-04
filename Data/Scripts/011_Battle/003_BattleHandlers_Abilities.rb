@@ -87,7 +87,7 @@ BattleHandlers::AbilityOnHPDroppedBelowHalf.add(:EMERGENCYEXIT,
     # In trainer battles
     next false if battle.pbAllFainted?(battler.idxOpposingSide)
     next false if !battle.pbCanSwitch?(battler.index)   # Battler can't switch out
-    next false if !battle.pbCanChooseNonActive?(battler.index)   # No Pokemon can switch in
+    next false if !battle.pbCanChooseNonActive?(battler.index)   # No Pokémon can switch in
     battle.pbShowAbilitySplash(battler,true)
     battle.pbHideAbilitySplash(battler)
     if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
@@ -103,7 +103,7 @@ BattleHandlers::AbilityOnHPDroppedBelowHalf.add(:EMERGENCYEXIT,
     newPkmn = battle.pbGetReplacementPokemonIndex(battler.index)   # Owner chooses
     next false if newPkmn<0   # Shouldn't ever do this
     battle.pbRecallAndReplace(battler.index,newPkmn)
-    battle.pbClearChoice(battler.index)   # Replacement Pokemon does nothing this round
+    battle.pbClearChoice(battler.index)   # Replacement Pokémon does nothing this round
     next true
   }
 )
@@ -668,9 +668,9 @@ BattleHandlers::MoveImmunityTargetAbility.add(:TELEPATHY,
     next false if user.index==target.index || target.opposes?(user)
     battle.pbShowAbilitySplash(target)
     if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-      battle.pbDisplay(_INTL("{1} avoids attacks by its ally Pokemon!",target.pbThis(true)))
+      battle.pbDisplay(_INTL("{1} avoids attacks by its ally Pokémon!",target.pbThis(true)))
     else
-      battle.pbDisplay(_INTL("{1} avoids attacks by its ally Pokemon with {2}!",
+      battle.pbDisplay(_INTL("{1} avoids attacks by its ally Pokémon with {2}!",
          target.pbThis,target.abilityName))
     end
     battle.pbHideAbilitySplash(target)
@@ -1961,7 +1961,7 @@ BattleHandlers::EOREffectAbility.add(:MOODY,
 
 BattleHandlers::EOREffectAbility.add(:SPEEDBOOST,
   proc { |ability,battler,battle|
-    # A Pokemon's turnCount is 0 if it became active after the beginning of a
+    # A Pokémon's turnCount is 0 if it became active after the beginning of a
     # round
     if battler.turnCount>0 && battler.pbCanRaiseStatStage?(:SPEED,battler)
       battler.pbRaiseStatStageByAbility(:SPEED,1,battler)
@@ -2100,7 +2100,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
 BattleHandlers::AbilityOnSwitchIn.add(:AURABREAK,
   proc { |ability,battler,battle|
     battle.pbShowAbilitySplash(battler)
-    battle.pbDisplay(_INTL("{1} reversed all other Pokemon's auras!",battler.pbThis))
+    battle.pbDisplay(_INTL("{1} reversed all other Pokémon's auras!",battler.pbThis))
     battle.pbHideAbilitySplash(battler)
   }
 )

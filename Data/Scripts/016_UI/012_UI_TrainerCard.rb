@@ -27,8 +27,8 @@ class PokemonTrainerCard_Scene
     pbSetSystemFont(@sprites["overlay"].bitmap)
     @sprites["trainer"] = IconSprite.new(336,112,@viewport)
     @sprites["trainer"].setBitmap(GameData::TrainerType.player_front_sprite_filename($Trainer.trainer_type))
-    @sprites["trainer"].x -= (@sprites["trainer"].bitmap.width-128)/4
-    @sprites["trainer"].y -= (@sprites["trainer"].bitmap.height-148)
+    @sprites["trainer"].x -= (@sprites["trainer"].bitmap.width-128)/2
+    @sprites["trainer"].y -= (@sprites["trainer"].bitmap.height-128)
     @sprites["trainer"].z = 2
     pbDrawTrainerCardFront
     pbFadeInAndShow(@sprites) { pbUpdate }
@@ -37,8 +37,8 @@ class PokemonTrainerCard_Scene
   def pbDrawTrainerCardFront
     overlay = @sprites["overlay"].bitmap
     overlay.clear
-    baseColor   = Color.new(255,255,255)
-    shadowColor = Color.new(72,72,72)
+    baseColor   = Color.new(72,72,72)
+    shadowColor = Color.new(160,160,160)
     totalsec = Graphics.frame_count / Graphics.frame_rate
     hour = totalsec / 60 / 60
     min = totalsec / 60 % 60

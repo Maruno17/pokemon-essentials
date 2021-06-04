@@ -4,7 +4,6 @@
 #===============================================================================
 # This url is the location of an example Mystery Gift file.
 # You should change it to your file's url once you upload it.
-# NOTE: Essentials cannot handle https addresses. You must use a http address.
 #===============================================================================
 module MysteryGift
   URL = "https://pastebin.com/raw/w6BqqUsm"
@@ -13,18 +12,18 @@ end
 #===============================================================================
 # Creating a new Mystery Gift for the Master file, and editing an existing one.
 #===============================================================================
-# type: 0=Pokemon; 1 or higher=item (is the item's quantity).
-# item: The thing being turned into a Mystery Gift (Pokemon object or item ID).
+# type: 0=Pokémon; 1 or higher=item (is the item's quantity).
+# item: The thing being turned into a Mystery Gift (Pokémon object or item ID).
 def pbEditMysteryGift(type,item,id=0,giftname="")
   begin
-    if type==0   # Pokemon
+    if type==0   # Pokémon
       commands=[_INTL("Mystery Gift"),
                 _INTL("Faraway place")]
       commands.push(item.obtain_text) if item.obtain_text && !item.obtain_text.empty?
       commands.push(_INTL("[Custom]"))
       loop do
         command=pbMessage(
-           _INTL("Choose a phrase to be where the gift Pokemon was obtained from."),commands,-1)
+           _INTL("Choose a phrase to be where the gift Pokémon was obtained from."),commands,-1)
         if command<0
           return nil if pbConfirmMessage(_INTL("Stop editing this gift?"))
         elsif command<commands.length-1
@@ -139,7 +138,7 @@ def pbManageMysteryGifts
   pbMessageDisplay(msgwindow,_INTL("Searching for online gifts...\\wtnp[0]"))
   online = pbDownloadToString(MysteryGift::URL)
   pbDisposeMessageWindow(msgwindow)
-  if online==""
+  if nil_or_empty?(online)
     pbMessage(_INTL("No online Mystery Gifts found.\\wtnp[20]"))
     online=[]
   else
@@ -196,6 +195,10 @@ def pbManageMysteryGifts
           newgift=pbEditMysteryGift(gift[1],gift[2],gift[0],gift[3])
           master[command]=newgift if newgift
         elsif cmd==2   # Receive
+          if !$Trainer
+            pbMessage(_INTL("There is no save file loaded. Cannot receive any gifts."))
+            next
+          end
           replaced=false
           for i in 0...$Trainer.mystery_gifts.length
             if $Trainer.mystery_gifts[i][0]==gift[0]
@@ -246,7 +249,7 @@ def pbDownloadMysteryGift(trainer)
   sprites["msgwindow"]=pbCreateMessageWindow
   pbMessageDisplay(sprites["msgwindow"],_INTL("Searching for a gift.\nPlease wait...\\wtnp[0]"))
   string = pbDownloadToString(MysteryGift::URL)
-  if string==""
+  if nil_or_empty?(string)
     pbMessageDisplay(sprites["msgwindow"],_INTL("No new gifts are available."))
   else
     online=pbMysteryGiftDecrypt(string)
@@ -335,11 +338,11 @@ def pbMysteryGiftEncrypt(gift)
 end
 
 def pbMysteryGiftDecrypt(gift)
-  return [] if gift==""
+  return [] if nil_or_empty?(gift)
   ret = Marshal.restore(Zlib::Inflate.inflate(gift.unpack("m")[0]))
   if ret
     ret.each do |gift|
-      if gift[1] == 0   # Pokemon
+      if gift[1] == 0   # Pokémon
         gift[2] = PokeBattle_Pokemon.convert(gift[2])
       else   # Item
         gift[2] = GameData::Item.get(gift[2]).id
@@ -372,7 +375,7 @@ def pbReceiveMysteryGift(id)
     return false
   end
   gift=$Trainer.mystery_gifts[index]
-  if gift[1]==0   # Pokemon
+  if gift[1]==0   # Pokémon
     gift[2].personalID = rand(2**16) | rand(2**16) << 16
     gift[2].calc_stats
     time=pbGetTimeNow

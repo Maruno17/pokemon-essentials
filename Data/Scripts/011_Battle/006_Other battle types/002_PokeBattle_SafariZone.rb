@@ -1,5 +1,5 @@
 #===============================================================================
-# Simple battler class for the wild Pokemon in a Safari Zone battle
+# Simple battler class for the wild Pokémon in a Safari Zone battle
 #===============================================================================
 class PokeBattle_FakeBattler
   attr_reader :battle
@@ -100,7 +100,7 @@ end
 
 
 #===============================================================================
-# Shows the player throwing bait at a wild Pokemon in a Safari battle.
+# Shows the player throwing bait at a wild Pokémon in a Safari battle.
 #===============================================================================
 class ThrowBaitAnimation < PokeBattle_Animation
   include PokeBattle_BallAnimationMixin
@@ -143,7 +143,7 @@ class ThrowBaitAnimation < PokeBattle_Animation
     ball.setVisible(delay+10,false)
     # Set up battler sprite
     battler = addSprite(batSprite,PictureOrigin::Bottom)
-    # Show Pokemon jumping before eating the bait
+    # Show Pokémon jumping before eating the bait
     delay = ball.totalDuration+3
     2.times do
       battler.setSE(delay,"player jump")
@@ -151,7 +151,7 @@ class ThrowBaitAnimation < PokeBattle_Animation
       battler.moveDelta(delay+4,3,0,16)
       delay = battler.totalDuration+1
     end
-    # Show Pokemon eating the bait
+    # Show Pokémon eating the bait
     delay = battler.totalDuration+3
     2.times do
       battler.moveAngle(delay,7,5)
@@ -166,7 +166,7 @@ end
 
 
 #===============================================================================
-# Shows the player throwing a rock at a wild Pokemon in a Safari battle.
+# Shows the player throwing a rock at a wild Pokémon in a Safari battle.
 #===============================================================================
 class ThrowRockAnimation < PokeBattle_Animation
   include PokeBattle_BallAnimationMixin
@@ -303,7 +303,7 @@ class PokeBattle_SafariZone
   attr_accessor :canLose          # True if player won't black out if they lose
   attr_accessor :switchStyle      # Switch/Set "battle style" option
   attr_accessor :showAnims        # "Battle scene" option (show anims)
-  attr_accessor :expGain          # Whether Pokemon can gain Exp/EVs
+  attr_accessor :expGain          # Whether Pokémon can gain Exp/EVs
   attr_accessor :moneyGain        # Whether the player can gain/lose money
   attr_accessor :rules
   attr_accessor :ballCount
@@ -438,7 +438,7 @@ class PokeBattle_SafariZone
         case cmd
         when 0   # Ball
           if pbBoxesFull?
-            pbDisplay(_INTL("The boxes are full! You can't catch any more Pokemon!"))
+            pbDisplay(_INTL("The boxes are full! You can't catch any more Pokémon!"))
             next
           end
           @ballCount -= 1

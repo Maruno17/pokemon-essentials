@@ -1,6 +1,6 @@
 #==============================================================================#
-#                              Pokemon Essentials                              #
-#                                  Version 19                                  #
+#                              Pokémon Essentials                              #
+#                                 Version 19.1                                 #
 #                https://github.com/Maruno17/pokemon-essentials                #
 #==============================================================================#
 
@@ -24,30 +24,28 @@ module Settings
   SCREEN_HEIGHT = 384
   # The default screen scale factor. Possible values are 0.5, 1.0, 1.5 and 2.0.
   SCREEN_SCALE  = 1.0
-  # Map view mode (0=original, 1=custom, 2=perspective).
-  MAP_VIEW_MODE = 1
 
   #=============================================================================
 
-  # The maximum level Pokemon can reach.
+  # The maximum level Pokémon can reach.
   MAXIMUM_LEVEL        = 100
-  # The level of newly hatched Pokemon.
+  # The level of newly hatched Pokémon.
   EGG_LEVEL            = 1
-  # The odds of a newly generated Pokemon being shiny (out of 65536).
-  SHINY_POKEMON_CHANCE = 420
-  # The odds of a wild Pokemon/bred egg having Pokérus (out of 65536).
+  # The odds of a newly generated Pokémon being shiny (out of 65536).
+  SHINY_POKEMON_CHANCE = (MECHANICS_GENERATION >= 6) ? 16 : 8
+  # The odds of a wild Pokémon/bred egg having Pokérus (out of 65536).
   POKERUS_CHANCE       = 3
-  # Whether a bred baby Pokemon can inherit any TM/HM moves from its father. It
+  # Whether a bred baby Pokémon can inherit any TM/HM moves from its father. It
   # can never inherit TM/HM moves from its mother.
   BREEDING_CAN_INHERIT_MACHINE_MOVES         = (MECHANICS_GENERATION <= 5)
-  # Whether a bred baby Pokemon can inherit egg moves from its mother. It can
+  # Whether a bred baby Pokémon can inherit egg moves from its mother. It can
   # always inherit egg moves from its father.
   BREEDING_CAN_INHERIT_EGG_MOVES_FROM_MOTHER = (MECHANICS_GENERATION >= 6)
 
   #=============================================================================
 
   # The amount of money the player starts the game with.
-  INITIAL_MONEY        = 5000
+  INITIAL_MONEY        = 3000
   # The maximum amount of money the player can have.
   MAX_MONEY            = 999_999
   # The maximum number of Game Corner coins the player can have.
@@ -58,7 +56,7 @@ module Settings
   MAX_SOOT             = 9_999
   # The maximum length, in characters, that the player's name can be.
   MAX_PLAYER_NAME_SIZE = 10
-  # The maximum number of Pokemon that can be in the party.
+  # The maximum number of Pokémon that can be in the party.
   MAX_PARTY_SIZE       = 6
 
   #=============================================================================
@@ -69,27 +67,25 @@ module Settings
   RIVAL_NAMES = [
     [:RIVAL1,   12],
     [:RIVAL2,   12],
-    [:RIVAL2_1, 12],
-    [:RIVAL2_2, 12],
     [:CHAMPION, 12]
   ]
 
   #=============================================================================
 
   # Whether outdoor maps should be shaded according to the time of day.
-  TIME_SHADING = false
+  TIME_SHADING = true
 
   #=============================================================================
 
-  # Whether poisoned Pokemon will lose HP while walking around in the field.
+  # Whether poisoned Pokémon will lose HP while walking around in the field.
   POISON_IN_FIELD       = (MECHANICS_GENERATION <= 4)
-  # Whether poisoned Pokemon will faint while walking around in the field
+  # Whether poisoned Pokémon will faint while walking around in the field
   # (true), or survive the poisoning with 1 HP (false).
   POISON_FAINT_IN_FIELD = (MECHANICS_GENERATION <= 3)
   # Whether planted berries grow according to Gen 4 mechanics (true) or Gen 3
   # mechanics (false).
   NEW_BERRY_PLANTS      = (MECHANICS_GENERATION >= 4)
-  # Whether fishing automatically hooks the Pokemon (true), or whether there is
+  # Whether fishing automatically hooks the Pokémon (true), or whether there is
   # a reaction test first (false).
   FISHING_AUTO_HOOK     = false
   # The ID of the common event that runs when the player starts fishing (runs
@@ -143,24 +139,24 @@ module Settings
   # whether the machine's move retains the replaced move's PP (true), or whether
   # the machine's move has full PP (false).
   TAUGHT_MACHINES_KEEP_OLD_PP          = (MECHANICS_GENERATION == 5)
-  # Whether the Black/White Flutes will raise/lower the levels of wild Pokemon
+  # Whether the Black/White Flutes will raise/lower the levels of wild Pokémon
   # respectively (true), or will lower/raise the wild encounter rate
   # respectively (false).
   FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS  = (MECHANICS_GENERATION >= 6)
-  # Whether Repel uses the level of the first Pokemon in the party regardless of
-  # its HP (true), or it uses the level of the first unfainted Pokemon (false).
+  # Whether Repel uses the level of the first Pokémon in the party regardless of
+  # its HP (true), or it uses the level of the first unfainted Pokémon (false).
   REPEL_COUNTS_FAINTED_POKEMON         = (MECHANICS_GENERATION >= 6)
   # Whether Rage Candy Bar acts as a Full Heal (true) or a Potion (false).
   RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS = (MECHANICS_GENERATION >= 7)
 
   #=============================================================================
 
-  # The name of the person who created the Pokemon storage system.
+  # The name of the person who created the Pokémon storage system.
   def self.storage_creator_name
     return _INTL("Bill")
   end
-  # The number of boxes in Pokemon storage.
-  NUM_STORAGE_BOXES = 10
+  # The number of boxes in Pokémon storage.
+  NUM_STORAGE_BOXES = 30
 
   #=============================================================================
 
@@ -205,7 +201,8 @@ module Settings
   # Dex list, no matter which region the player is currently in.
   def self.pokedex_names
     return [
-      [_INTL("South Peskan Pokédex"), 0],
+      [_INTL("Kanto Pokédex"), 0],
+      [_INTL("Johto Pokédex"), 1],
       _INTL("National Pokédex")
     ]
   end
@@ -236,7 +233,7 @@ module Settings
 
   #=============================================================================
 
-  # A list of maps used by roaming Pokemon. Each map has an array of other maps
+  # A list of maps used by roaming Pokémon. Each map has an array of other maps
   # it can lead to.
   ROAMING_AREAS = {
     5  => [   21, 28, 31, 39, 41, 44, 47, 66, 69],
@@ -250,15 +247,15 @@ module Settings
     66 => [5, 21, 28, 31, 39, 41, 44, 47,     69],
     69 => [5, 21, 28, 31, 39, 41, 44, 47, 66    ]
   }
-  # A set of arrays, each containing the details of a roaming Pokemon. The
+  # A set of arrays, each containing the details of a roaming Pokémon. The
   # information within each array is as follows:
   #   * Species.
   #   * Level.
-  #   * Game Switch; the Pokemon roams while this is ON.
+  #   * Game Switch; the Pokémon roams while this is ON.
   #   * Encounter type (0=any, 1=grass/walking in cave, 2=surfing, 3=fishing,
   #     4=surfing/fishing). See the bottom of PField_RoamingPokemon for lists.
   #   * Name of BGM to play for that encounter (optional).
-  #   * Roaming areas specifically for this Pokemon (optional).
+  #   * Roaming areas specifically for this Pokémon (optional).
   ROAMING_SPECIES = [
     [:LATIAS, 30, 53, 0, "Battle roaming"],
     [:LATIOS, 30, 53, 0, "Battle roaming"],
@@ -295,9 +292,9 @@ module Settings
   # The Game Switch that is set to ON when the player has seen Pokérus in the
   # Poké Center (and doesn't need to be told about it again).
   SEEN_POKERUS_SWITCH       = 2
-  # The Game Switch which, while ON, makes all wild Pokemon created be shiny.
+  # The Game Switch which, while ON, makes all wild Pokémon created be shiny.
   SHINY_WILD_POKEMON_SWITCH = 31
-  # The Game Switch which, while ON, makes all Pokemon created considered to be
+  # The Game Switch which, while ON, makes all Pokémon created considered to be
   # met via a fateful encounter.
   FATEFUL_ENCOUNTER_SWITCH  = 32
 
@@ -392,18 +389,10 @@ module Settings
     "choice 27",
     "choice 28"
   ]
-
-  # Available fonts, as selectable in the Options Screen.
-  FONT_OPTIONS = [
-    "Power Green",
-    "Power Red and Blue",
-    "Power Red and Green",
-    "Power Clear"
-  ]
 end
 
 # DO NOT EDIT THESE!
 module Essentials
-  VERSION = "19"
+  VERSION = "19.1"
   ERROR_TEXT = ""
 end

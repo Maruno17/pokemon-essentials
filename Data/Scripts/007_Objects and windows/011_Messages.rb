@@ -4,7 +4,6 @@
 class Scene_Map
   def updatemini
     oldmws=$game_temp.message_window_showing
-    oldvis=false
     $game_temp.message_window_showing=true
     loop do
       $game_map.update
@@ -496,7 +495,7 @@ def pbCreateMessageWindow(viewport=nil,skin=nil)
   end
   msgwindow.visible=true
   msgwindow.letterbyletter=true
-  msgwindow.back_opacity=MessageConfig::WindowOpacity
+  msgwindow.back_opacity=MessageConfig::WINDOW_OPACITY
   pbBottomLeftLines(msgwindow,2)
   $game_temp.message_window_showing=true if $game_temp
   skin=MessageConfig.pbGetSpeechFrame() if !skin
@@ -619,7 +618,6 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
     controls[i][2] = textlen
   end
   text = textchunks.join("")
-  unformattedText = toUnformattedText(text)
   signWaitCount = 0
   signWaitTime = Graphics.frame_rate/2
   haveSpecialClose = false

@@ -37,7 +37,7 @@ class PokeBattle_Battler
       @battle.pbHideAbilitySplash(target)
       pbItemHPHealCheck
     else
-      msg = _INTL("{1} had its energy drained!",target.pbThis) if !msg || msg==""
+      msg = _INTL("{1} had its energy drained!",target.pbThis) if nil_or_empty?(msg)
       @battle.pbDisplay(msg)
       if canHeal?
         amt = (amt*1.3).floor if hasActiveItem?(:BIGROOT)
@@ -53,7 +53,7 @@ class PokeBattle_Battler
     end
     return if @fainted   # Has already fainted properly
     @battle.pbDisplayBrief(_INTL("{1} fainted!",pbThis)) if showMessage
-    PBDebug.log("[Pokemon fainted] #{pbThis} (#{@index})") if !showMessage
+    PBDebug.log("[Pokémon fainted] #{pbThis} (#{@index})") if !showMessage
     @battle.scene.pbFaintBattler(self)
     pbInitEffects(false)
     # Reset status
@@ -118,7 +118,7 @@ class PokeBattle_Battler
       @type2 = (newTypes.length == 1) ? newTypes[0] : newTypes[1]
       @effects[PBEffects::Type3] = newType3
     else
-      newType = GameData::Item.get(newType).id
+      newType = GameData::Type.get(newType).id
       @type1 = newType
       @type2 = newType
       @effects[PBEffects::Type3] = nil
@@ -199,8 +199,8 @@ class PokeBattle_Battler
     end
   end
 
-  # Checks the Pokemon's form and updates it if necessary. Used for when a
-  # Pokemon enters battle (endOfRound=false) and at the end of each round
+  # Checks the Pokémon's form and updates it if necessary. Used for when a
+  # Pokémon enters battle (endOfRound=false) and at the end of each round
   # (endOfRound=true).
   def pbCheckForm(endOfRound=false)
     return if fainted? || @effects[PBEffects::Transform]

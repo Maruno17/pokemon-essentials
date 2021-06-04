@@ -6,9 +6,9 @@ class PokeBattle_Battle
   end
 
   #=============================================================================
-  # Makes sure all Pokemon exist that need to. Alter the type of battle if
+  # Makes sure all Pokémon exist that need to. Alter the type of battle if
   # necessary. Will never try to create battler positions, only delete them
-  # (except for wild Pokemon whose number of positions are fixed). Reduces the
+  # (except for wild Pokémon whose number of positions are fixed). Reduces the
   # size of each side by 1 and tries again. If the side sizes are uneven, only
   # the larger side's size will be reduced by 1 each time, until both sides are
   # an equal size (then both sides will be reduced equally).
@@ -26,10 +26,10 @@ class PokeBattle_Battle
        @player.length>1 && @opponent.length>1
       raise _INTL("Can't have battles larger than 2v2 where both sides have multiple trainers")
     end
-    # Find out how many Pokemon each trainer has
+    # Find out how many Pokémon each trainer has
     side1counts = pbAbleTeamCounts(0)
     side2counts = pbAbleTeamCounts(1)
-    # Change the size of the battle depending on how many wild Pokemon there are
+    # Change the size of the battle depending on how many wild Pokémon there are
     if wildBattle? && side2counts[0]!=@sideSizes[1]
       if @sideSizes[0]==@sideSizes[1]
         # Even number of battlers per side, change both equally
@@ -47,7 +47,7 @@ class PokeBattle_Battle
         next if side==1 && wildBattle?   # Wild side's size already checked above
         sideCounts = (side==0) ? side1counts : side2counts
         requireds = []
-        # Find out how many Pokemon each trainer on side needs to have
+        # Find out how many Pokémon each trainer on side needs to have
         for i in 0...@sideSizes[side]
           idxTrainer = pbGetOwnerIndexFromBattlerIndex(i*2+side)
           requireds[idxTrainer] = 0 if requireds[idxTrainer].nil?
@@ -60,17 +60,17 @@ class PokeBattle_Battle
         end
         sideCounts.each_with_index do |_count,i|
           if !requireds[i] || requireds[i]==0
-            raise _INTL("Player-side trainer {1} has no battler position for their Pokemon to go (trying {2}v{3} battle)",
+            raise _INTL("Player-side trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
                i+1,@sideSizes[0],@sideSizes[1]) if side==0
-            raise _INTL("Opposing trainer {1} has no battler position for their Pokemon to go (trying {2}v{3} battle)",
+            raise _INTL("Opposing trainer {1} has no battler position for their Pokémon to go (trying {2}v{3} battle)",
                i+1,@sideSizes[0],@sideSizes[1]) if side==1
           end
-          next if requireds[i]<=sideCounts[i]   # Trainer has enough Pokemon to fill their positions
+          next if requireds[i]<=sideCounts[i]   # Trainer has enough Pokémon to fill their positions
           if requireds[i]==1
-            raise _INTL("Player-side trainer {1} has no able Pokemon",i+1) if side==0
-            raise _INTL("Opposing trainer {1} has no able Pokemon",i+1) if side==1
+            raise _INTL("Player-side trainer {1} has no able Pokémon",i+1) if side==0
+            raise _INTL("Opposing trainer {1} has no able Pokémon",i+1) if side==1
           end
-          # Not enough Pokemon, try lowering the number of battler positions
+          # Not enough Pokémon, try lowering the number of battler positions
           needsChanging = true
           break
         end
@@ -80,7 +80,7 @@ class PokeBattle_Battle
       # Reduce one or both side's sizes by 1 and try again
       if wildBattle?
         PBDebug.log("#{@sideSizes[0]}v#{@sideSizes[1]} battle isn't possible " +
-                    "(#{side1counts} player-side teams versus #{side2counts[0]} wild Pokemon)")
+                    "(#{side1counts} player-side teams versus #{side2counts[0]} wild Pokémon)")
         newSize = @sideSizes[0]-1
       else
         PBDebug.log("#{@sideSizes[0]}v#{@sideSizes[1]} battle isn't possible " +
@@ -91,7 +91,7 @@ class PokeBattle_Battle
         raise _INTL("Couldn't lower either side's size any further, battle isn't possible")
       end
       for side in 0...2
-        next if side==1 && wildBattle?   # Wild Pokemon's side size is fixed
+        next if side==1 && wildBattle?   # Wild Pokémon's side size is fixed
         next if @sideSizes[side]==1 || newSize>@sideSizes[side]
         @sideSizes[side] = newSize
       end
@@ -116,27 +116,27 @@ class PokeBattle_Battle
   def pbSetUpSides
     ret = [[],[]]
     for side in 0...2
-      # Set up wild Pokemon
+      # Set up wild Pokémon
       if side==1 && wildBattle?
         pbParty(1).each_with_index do |pkmn,idxPkmn|
           pbCreateBattler(2*idxPkmn+side,pkmn,idxPkmn)
-          # Changes the Pokemon's form upon entering battle (if it should)
+          # Changes the Pokémon's form upon entering battle (if it should)
           @peer.pbOnEnteringBattle(self,pkmn,true)
           pbSetSeen(@battlers[2*idxPkmn+side])
           @usedInBattle[side][idxPkmn] = true
         end
         next
       end
-      # Set up player's Pokemon and trainers' Pokemon
+      # Set up player's Pokémon and trainers' Pokémon
       trainer = (side==0) ? @player : @opponent
       requireds = []
-      # Find out how many Pokemon each trainer on side needs to have
+      # Find out how many Pokémon each trainer on side needs to have
       for i in 0...@sideSizes[side]
         idxTrainer = pbGetOwnerIndexFromBattlerIndex(i*2+side)
         requireds[idxTrainer] = 0 if requireds[idxTrainer].nil?
         requireds[idxTrainer] += 1
       end
-      # For each trainer in turn, find the needed number of Pokemon for them to
+      # For each trainer in turn, find the needed number of Pokémon for them to
       # send out, and initialize them
       battlerNumber = 0
       trainer.each_with_index do |_t,idxTrainer|
@@ -183,13 +183,13 @@ class PokeBattle_Battle
            @opponent[0].full_name,@opponent[1].full_name,@opponent[2].full_name))
       end
     end
-    # Send out Pokemon (opposing trainers first)
+    # Send out Pokémon (opposing trainers first)
     for side in [1,0]
       next if side==1 && wildBattle?
       msg = ""
       toSendOut = []
       trainers = (side==0) ? @player : @opponent
-      # Opposing trainers and partner trainers's messages about sending out Pokemon
+      # Opposing trainers and partner trainers's messages about sending out Pokémon
       trainers.each_with_index do |t,i|
         next if side==0 && i==0   # The player's message is shown last
         msg += "\r\n" if msg.length>0
@@ -206,7 +206,7 @@ class PokeBattle_Battle
         end
         toSendOut.concat(sent)
       end
-      # The player's message about sending out Pokemon
+      # The player's message about sending out Pokémon
       if side==0
         msg += "\r\n" if msg.length>0
         sent = sendOuts[side][0]
@@ -222,7 +222,7 @@ class PokeBattle_Battle
         toSendOut.concat(sent)
       end
       pbDisplayBrief(msg) if msg.length>0
-      # The actual sending out of Pokemon
+      # The actual sending out of Pokémon
       animSendOuts = []
       toSendOut.each do |idxBattler|
         animSendOuts.push([idxBattler,@battlers[idxBattler].pokemon])
@@ -250,7 +250,7 @@ class PokeBattle_Battle
     logMsg += "wild " if wildBattle?
     logMsg += "trainer " if trainerBattle?
     logMsg += "battle (#{@player.length} trainer(s) vs. "
-    logMsg += "#{pbParty(1).length} wild Pokemon)" if wildBattle?
+    logMsg += "#{pbParty(1).length} wild Pokémon)" if wildBattle?
     logMsg += "#{@opponent.length} trainer(s))" if trainerBattle?
     PBDebug.log(logMsg)
     pbEnsureParticipants
@@ -268,7 +268,7 @@ class PokeBattle_Battle
     sendOuts = pbSetUpSides
     # Create all the sprites and play the battle intro animation
     @scene.pbStartBattle(self)
-    # Show trainers on both sides sending out Pokemon
+    # Show trainers on both sides sending out Pokémon
     pbStartBattleSendOut(sendOuts)
     # Weather announcement
     weather_data = GameData::BattleWeather.try_get(@field.weather)
@@ -368,7 +368,7 @@ class PokeBattle_Battle
   def pbLoseMoney
     return if !@internalBattle || !@moneyGain
     return if $game_switches[Settings::NO_MONEY_LOSS]
-    maxLevel = pbMaxLevelInTeam(0,0)   # Player's Pokemon only, not partner's
+    maxLevel = pbMaxLevelInTeam(0,0)   # Player's Pokémon only, not partner's
     multiplier = [8,16,24,36,48,64,80,100,120]
     idxMultiplier = [pbPlayer.badge_count, multiplier.length - 1].min
     tMoney = maxLevel*multiplier[idxMultiplier]
@@ -421,7 +421,7 @@ class PokeBattle_Battle
       PBDebug.log("***Player lost***") if @decision==2
       PBDebug.log("***Player drew with opponent***") if @decision==5
       if @internalBattle
-        pbDisplayPaused(_INTL("You have no more Pokemon that can fight!"))
+        pbDisplayPaused(_INTL("You have no more Pokémon that can fight!"))
         if trainerBattle?
           case @opponent.length
           when 1
@@ -446,11 +446,11 @@ class PokeBattle_Battle
           end
         end
       end
-    ##### CAUGHT WILD Pokemon #####
+    ##### CAUGHT WILD POKÉMON #####
     when 4
       @scene.pbWildBattleSuccess if !Settings::GAIN_EXP_FOR_CAPTURE
     end
-    # Register captured Pokemon in the Pokédex, and store them
+    # Register captured Pokémon in the Pokédex, and store them
     pbRecordAndStoreCaughtPokemon
     # Collect Pay Day money in a wild battle that ended in a capture
     pbGainMoney if @decision==4
@@ -500,8 +500,8 @@ class PokeBattle_Battle
         hpTotals[side] += pkmn.hp
       end
     end
-    return 1 if counts[0]>counts[1]       # Win (player has more able Pokemon)
-    return 2 if counts[0]<counts[1]       # Loss (foe has more able Pokemon)
+    return 1 if counts[0]>counts[1]       # Win (player has more able Pokémon)
+    return 2 if counts[0]<counts[1]       # Loss (foe has more able Pokémon)
     return 1 if hpTotals[0]>hpTotals[1]   # Win (player has more HP in total)
     return 2 if hpTotals[0]<hpTotals[1]   # Loss (foe has more HP in total)
     return 5                              # Draw
@@ -519,8 +519,8 @@ class PokeBattle_Battle
       end
       hpTotals[side] /= counts[side] if counts[side]>1
     end
-    return 1 if counts[0]>counts[1]       # Win (player has more able Pokemon)
-    return 2 if counts[0]<counts[1]       # Loss (foe has more able Pokemon)
+    return 1 if counts[0]>counts[1]       # Win (player has more able Pokémon)
+    return 2 if counts[0]<counts[1]       # Loss (foe has more able Pokémon)
     return 1 if hpTotals[0]>hpTotals[1]   # Win (player has a bigger average HP %)
     return 2 if hpTotals[0]<hpTotals[1]   # Loss (foe has a bigger average HP %)
     return 5                              # Draw

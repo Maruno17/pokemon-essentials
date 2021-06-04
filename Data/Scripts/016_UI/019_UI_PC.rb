@@ -33,17 +33,17 @@ class StorageSystemPC
   end
 
   def access
-    pbMessage(_INTL("\\se[PC access]The Pokemon Storage System was opened."))
+    pbMessage(_INTL("\\se[PC access]The Pokémon Storage System was opened."))
     command = 0
     loop do
       command = pbShowCommandsWithHelp(nil,
          [_INTL("Organize Boxes"),
-         _INTL("Withdraw Pokemon"),
-         _INTL("Deposit Pokemon"),
+         _INTL("Withdraw Pokémon"),
+         _INTL("Deposit Pokémon"),
          _INTL("See ya!")],
-         [_INTL("Organize the Pokemon in Boxes and in your party."),
-         _INTL("Move Pokemon stored in Boxes to your party."),
-         _INTL("Store Pokemon in your party in Boxes."),
+         [_INTL("Organize the Pokémon in Boxes and in your party."),
+         _INTL("Move Pokémon stored in Boxes to your party."),
+         _INTL("Store Pokémon in your party in Boxes."),
          _INTL("Return to the previous menu.")],-1,command
       )
       if command>=0 && command<3
@@ -58,7 +58,7 @@ class StorageSystemPC
             count += 1 if p && !p.egg? && p.hp>0
           end
           if count<=1
-            pbMessage(_INTL("Can't deposit the last Pokemon!"))
+            pbMessage(_INTL("Can't deposit the last Pokémon!"))
             next
           end
         end
@@ -218,13 +218,11 @@ def pbTrainerPCMenu
     command = pbMessage(_INTL("What do you want to do?"),[
        _INTL("Item Storage"),
        _INTL("Mailbox"),
-       _INTL("Change Theme"),
        _INTL("Turn Off")
        ],-1,nil,command)
     case command
     when 0 then pbPCItemStorage
     when 1 then pbPCMailbox
-    when 2 then pbChooseTheme
     else        break
     end
   end
@@ -250,7 +248,7 @@ end
 
 def pbGetStorageCreator
   creator = Settings.storage_creator_name
-  creator = _INTL("Bill") if !creator || creator==""
+  creator = _INTL("Bill") if nil_or_empty?(creator)
   return creator
 end
 

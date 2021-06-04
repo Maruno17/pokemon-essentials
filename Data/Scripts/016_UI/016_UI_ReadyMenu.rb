@@ -57,7 +57,7 @@ class ReadyMenuButton < SpriteWrapper
   def refresh
     sel = (@selected==@index && (@side==0)==@command[2])
     self.y = (Graphics.height-@button.height/2)/2 - (@selected-@index)*(@button.height/2+4)
-    if @command[2]   # Pokemon
+    if @command[2]   # Pokémon
       self.x = (sel) ? 0 : -16
       @icon.x = self.x+52
       @icon.y = self.y+32

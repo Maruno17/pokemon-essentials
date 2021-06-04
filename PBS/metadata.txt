@@ -1,15 +1,15 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
 [000]
-Home = 33,6,6,4
-WildBattleBGM = DPPT 011 Battle! Wild Pokemon.ogg
-TrainerBattleBGM = DPPT 023 Battle! Trainer.ogg
-WildVictoryME = DPPT 012 Victory Against Wild Pokemon!.ogg
-TrainerVictoryME = DPPT 024 Victory Against Trainer!.ogg
-SurfBGM = DPPT 137 Super Contest Cool Category.ogg
-BicycleBGM = DPPT 052 Bicycle.ogg
-PlayerA = POKEMONTRAINER_Red,trchar000,boy_bike,boy_surf,boy_run,boy_surf,boy_fish_offset,boy_fish_offset
-PlayerB = POKEMONTRAINER_Leaf,trchar001,girl_bike,girl_surf,girl_run,girl_surf,girl_fish_offset,girl_fish_offset
+Home = 3,7,5,8
+WildBattleBGM = Battle wild.mid
+TrainerBattleBGM = Battle trainer.mid
+WildVictoryME = Battle victory wild.ogg
+TrainerVictoryME = Battle victory trainer.ogg
+SurfBGM = Surfing.mid
+BicycleBGM = Bicycle.mid
+PlayerA = POKEMONTRAINER_Red,trainer_POKEMONTRAINER_Red,boy_bike,boy_surf,boy_run,boy_surf,boy_fish_offset,boy_fish_offset
+PlayerB = POKEMONTRAINER_Leaf,trainer_POKEMONTRAINER_Leaf,girl_bike,girl_surf,girl_run,girl_surf,girl_fish_offset,girl_fish_offset
 #-------------------------------
 [001]
 # Intro
@@ -109,7 +109,9 @@ MapPosition = 0,13,10
 Outdoor = true
 ShowArea = true
 Weather = Rain,100
+MapPosition = 0,14,8
 BattleBack = field
+MapSize = 1,11
 #-------------------------------
 [023]
 # Lerucean Town
@@ -157,18 +159,6 @@ ShowArea = true
 MapPosition = 0,14,6
 BattleBack = field
 MapSize = 2,1101
-#-------------------------------
-[032]
-# Celtic Town
-Outdoor = true
-ShowArea = true
-MapPosition = 0,14,16
-#-------------------------------
-[033]
-# \PN's House
-Outdoor = false
-ShowArea = false
-MapPosition = 0,14,16
 #-------------------------------
 [034]
 # Ice Cave
@@ -220,18 +210,6 @@ BicycleAlways = true
 MapPosition = 0,11,7
 MapSize = 1,111
 #-------------------------------
-[042]
-# Celtic Town
-Outdoor = false
-ShowArea = false
-MapPosition = 0,14,16
-#-------------------------------
-[043]
-# Professor Plum's Lab
-Outdoor = false
-ShowArea = false
-MapPosition = 0,14,16
-#-------------------------------
 [044]
 # Route 6
 Outdoor = true
@@ -261,13 +239,6 @@ MapPosition = 0,15,10
 BattleBack = rocky
 MapSize = 2,11
 Environment = Rock
-#-------------------------------
-[048]
-# Route 1
-Outdoor = true
-ShowArea = true
-MapPosition = 0,14,11
-BattleBack = Rocky
 #-------------------------------
 [049]
 # Rock Cave
@@ -419,96 +390,3 @@ MapPosition = 0,12,10
 Outdoor = true
 MapPosition = 1,13,16
 BattleBack = city
-#-------------------------------
-[076]
-# Twine City
-Outdoor = true
-ShowArea = true
-MapPosition = 0,13,7
-#-------------------------------
-[077]
-# Twine City Poké Center
-Outdoor = false
-ShowArea = false
-HealingSpot = 76,22,20
-MapPosition = 0,13,6
-#-------------------------------
-[078]
-# Route 2
-Outdoor = true
-ShowArea = true
-MapPosition = 0,15,6
-BattleBack = field
-#-------------------------------
-[079]
-# Prim Cave
-Outdoor = false
-ShowArea = true
-MapPosition = 0,17,6
-BattleBack = cave1
-#-------------------------------
-[080]
-# Toledo Village
-Outdoor = true
-ShowArea = true
-MapPosition = 0,21,6
-BattleBack = field
-#-------------------------------
-[081]
-# Toledo Village Poké Center
-Outdoor = false
-ShowArea = false
-HealingSpot = 80,15,14
-MapPosition = 0,21,6
-#-------------------------------
-[082]
-# Toledo Village
-Outdoor = false
-ShowArea = false
-MapPosition = 0,21,6
-#-------------------------------
-[083]
-# Pokémon Day Care
-Outdoor = false
-ShowArea = false
-MapPosition = 0,21,6
-#-------------------------------
-[084]
-# Route 3
-Outdoor = true
-ShowArea = true
-Weather = Snow,100
-MapPosition = 0,10,1
-BattleBack = snow
-#-------------------------------
-[086]
-# Twine City
-Outdoor = false
-ShowArea = false
-MapPosition = 0,14,6
-#-------------------------------
-[089]
-# Anakiwa City
-Outdoor = true
-ShowArea = true
-Bicycle = true
-Weather = Snow,50
-MapPosition = 0,5,1
-#-------------------------------
-[090]
-# Deep in Anakiwa Cave
-Outdoor = false
-ShowArea = true
-BattleBack = Cave2
-#-------------------------------
-[091]
-# Anakiwa Cave
-Outdoor = false
-ShowArea = false
-#-------------------------------
-[092]
-# Anakiwa City Poké Center
-Outdoor = false
-ShowArea = false
-HealingSpot = 89,19,10
-MapPosition = 0,4,1

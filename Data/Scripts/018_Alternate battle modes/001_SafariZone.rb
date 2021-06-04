@@ -98,7 +98,7 @@ Events.onWildBattleOverride += proc { |_sender,e|
 }
 
 def pbSafariBattle(species,level)
-  # Generate a wild Pokemon based on the species and level
+  # Generate a wild Pokémon based on the species and level
   pkmn = pbGenerateWildPokemon(species,level)
   foeParty = [pkmn]
   # Calculate who the trainer is
@@ -120,7 +120,7 @@ def pbSafariBattle(species,level)
   # Update Safari game data based on result of battle
   pbSafariState.ballcount = battle.ballCount
   if pbSafariState.ballcount<=0
-    if decision!=2   # Last Safari Ball was used to catch the wild Pokemon
+    if decision!=2   # Last Safari Ball was used to catch the wild Pokémon
       pbMessage(_INTL("Announcer: You're out of Safari Balls! Game over!"))
     end
     pbSafariState.decision = 1
@@ -129,8 +129,8 @@ def pbSafariBattle(species,level)
   # Save the result of the battle in Game Variable 1
   #    0 - Undecided or aborted
   #    2 - Player ran out of Safari Balls
-  #    3 - Player or wild Pokemon ran from battle, or player forfeited the match
-  #    4 - Wild Pokemon was caught
+  #    3 - Player or wild Pokémon ran from battle, or player forfeited the match
+  #    4 - Wild Pokémon was caught
   pbSet(1,decision)
   # Used by the Poké Radar to update/break the chain
   Events.onWildBattleEnd.trigger(nil,species,level,decision)

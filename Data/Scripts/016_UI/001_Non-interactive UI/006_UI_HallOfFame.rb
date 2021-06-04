@@ -2,7 +2,7 @@
 # * Hall of Fame - by FL (Credits will be apreciated)
 #===============================================================================
 #
-# This script is for Pokemon Essentials. It makes a recordable Hall of Fame
+# This script is for Pokémon Essentials. It makes a recordable Hall of Fame
 # like the Gen 3 games.
 #
 #===============================================================================
@@ -15,14 +15,14 @@
 #
 #===============================================================================
 class HallOfFame_Scene
-  # When true, all Pokemon will be in one line
-  # When false, all Pokemon will be in two lines
+  # When true, all pokémon will be in one line
+  # When false, all pokémon will be in two lines
   SINGLEROW = false
-  # Make the Pokemon movement ON in hall entry
+  # Make the pokémon movement ON in hall entry
   ANIMATION = true
-  # Speed in Pokemon movement in hall entry. Don't use less than 2!
+  # Speed in pokémon movement in hall entry. Don't use less than 2!
   ANIMATIONSPEED = 32
-  # Entry wait time (in 1/20 seconds) between showing each Pokemon (and trainer)
+  # Entry wait time (in 1/20 seconds) between showing each Pokémon (and trainer)
   ENTRYWAITTIME = 64
   # Maximum number limit of simultaneous hall entries saved.
   # 0 = Doesn't save any hall. -1 = no limit
@@ -113,7 +113,7 @@ class HallOfFame_Scene
     sprites[spritename]=nil
   end
 
-  # Change the Pokemon sprites opacity except the index one
+  # Change the pokémon sprites opacity except the index one
   def setPokemonSpritesOpacity(index,opacity=255)
     for n in 0...@hallEntry.size
       @sprites["pokemon#{n}"].opacity=(n==index) ? 255 : opacity if @sprites["pokemon#{n}"]
@@ -122,7 +122,7 @@ class HallOfFame_Scene
 
   def saveHallEntry
     for i in 0...$Trainer.party.length
-      # Clones every Pokemon object
+      # Clones every pokémon object
       @hallEntry.push($Trainer.party[i].clone) if !$Trainer.party[i].egg? || ALLOWEGGS
     end
     # Update the global variables
@@ -200,7 +200,7 @@ class HallOfFame_Scene
   def createBattlers(hide=true)
     # Movement in animation
     for i in 0...6
-      # Clear all 6 Pokemon sprites and dispose the ones that exists every time
+      # Clear all 6 pokémon sprites and dispose the ones that exists every time
       # that this method is call
       restartSpritePosition(@sprites,"pokemon#{i}")
       next if i>=@hallEntry.size
@@ -327,7 +327,7 @@ class HallOfFame_Scene
     overlay=@sprites["overlay"].bitmap
     overlay.clear
     pbDrawTextPositions(overlay,[[_INTL("Welcome to the Hall of Fame!"),
-        Graphics.width/2,Graphics.height-80,-4,BASECOLOR,SHADOWCOLOR]])
+       Graphics.width/2,Graphics.height-80,2,BASECOLOR,SHADOWCOLOR]])
   end
 
   def pbAnimationLoop
@@ -351,11 +351,11 @@ class HallOfFame_Scene
         @battlerIndex+=10
         continueScene=pbUpdatePC
       end
-      if Input.trigger?(Input::LEFT)   # Moves the selection one Pokemon forward
+      if Input.trigger?(Input::LEFT)   # Moves the selection one pokémon forward
         @battlerIndex-=1
         continueScene=pbUpdatePC
       end
-      if Input.trigger?(Input::RIGHT)   # Moves the selection one Pokemon backward
+      if Input.trigger?(Input::RIGHT)   # Moves the selection one pokémon backward
         @battlerIndex+=1
         continueScene=pbUpdatePC
       end
@@ -375,9 +375,9 @@ class HallOfFame_Scene
       else
         @battlerIndex+=1
         if @battlerIndex<=@hallEntry.size
-          # If it is a Pokemon, write the Pokemon text, wait the
+          # If it is a pokémon, write the pokémon text, wait the
           # ENTRYWAITTIME and goes to the next battler
-          GameData::Species.play_cry_from_pokemon(@hallEntry[@battlerIndex - 1])
+          @hallEntry[@battlerIndex - 1].play_cry
           writePokemonData(@hallEntry[@battlerIndex-1])
           (ENTRYWAITTIME*Graphics.frame_rate/20).times do
             Graphics.update
@@ -432,7 +432,7 @@ class HallOfFame_Scene
       createBattlers(false)
     end
     # Change the pokemon
-    GameData::Species.play_cry_from_pokemon(@hallEntry[@battlerIndex])
+    @hallEntry[@battlerIndex].play_cry
     setPokemonSpritesOpacity(@battlerIndex,OPACITY)
     hallNumber=$PokemonGlobal.hallOfFameLastNumber + @hallIndex -
                $PokemonGlobal.hallOfFame.size + 1

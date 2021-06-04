@@ -1,5 +1,5 @@
 #===============================================================================
-# Pokemon sprite (used out of battle)
+# Pokémon sprite (used out of battle)
 #===============================================================================
 class PokemonSprite < SpriteWrapper
   def initialize(viewport=nil)
@@ -80,7 +80,7 @@ end
 
 
 #===============================================================================
-# Pokemon icon (for defined Pokemon)
+# Pokémon icon (for defined Pokémon)
 #===============================================================================
 class PokemonIconSprite < SpriteWrapper
   attr_accessor :selected
@@ -213,7 +213,7 @@ end
 
 
 #===============================================================================
-# Pokemon icon (for species)
+# Pokémon icon (for species)
 #===============================================================================
 class PokemonSpeciesIconSprite < SpriteWrapper
   attr_reader :species

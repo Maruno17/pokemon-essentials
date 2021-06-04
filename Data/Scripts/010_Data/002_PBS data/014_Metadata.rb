@@ -45,12 +45,12 @@ module GameData
 
     def self.editor_properties
       return [
-         ["Home",             MapCoordsFacingProperty, _INTL("Map ID and X and Y coordinates of where the player goes if no Pokemon Center was entered after a loss.")],
-         ["WildBattleBGM",    BGMProperty,             _INTL("Default BGM for wild Pokemon battles.")],
+         ["Home",             MapCoordsFacingProperty, _INTL("Map ID and X and Y coordinates of where the player goes if no Pokémon Center was entered after a loss.")],
+         ["WildBattleBGM",    BGMProperty,             _INTL("Default BGM for wild Pokémon battles.")],
          ["TrainerBattleBGM", BGMProperty,             _INTL("Default BGM for Trainer battles.")],
-         ["WildVictoryME",    MEProperty,              _INTL("Default ME played after winning a wild Pokemon battle.")],
+         ["WildVictoryME",    MEProperty,              _INTL("Default ME played after winning a wild Pokémon battle.")],
          ["TrainerVictoryME", MEProperty,              _INTL("Default ME played after winning a Trainer battle.")],
-         ["WildCaptureME",    MEProperty,              _INTL("Default ME played after catching a Pokemon.")],
+         ["WildCaptureME",    MEProperty,              _INTL("Default ME played after catching a Pokémon.")],
          ["SurfBGM",          BGMProperty,             _INTL("BGM played while surfing.")],
          ["BicycleBGM",       BGMProperty,             _INTL("BGM played while on a bicycle.")],
          ["PlayerA",          PlayerProperty,          _INTL("Specifies player A.")],

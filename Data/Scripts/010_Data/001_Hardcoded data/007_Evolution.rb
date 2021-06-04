@@ -489,7 +489,7 @@ GameData::Evolution.register({
 })
 
 #===============================================================================
-# Evolution methods that trigger when using an item on the Pokemon
+# Evolution methods that trigger when using an item on the Pokémon
 #===============================================================================
 GameData::Evolution.register({
   :id            => :Item,
@@ -540,7 +540,7 @@ GameData::Evolution.register({
 })
 
 #===============================================================================
-# Evolution methods that trigger when the Pokemon is obtained in a trade
+# Evolution methods that trigger when the Pokémon is obtained in a trade
 #===============================================================================
 GameData::Evolution.register({
   :id            => :Trade,

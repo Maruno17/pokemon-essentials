@@ -13,7 +13,7 @@ end
 
 
 #===============================================================================
-# Making roaming Pokemon roam around.
+# Making roaming Pokémon roam around.
 #===============================================================================
 # Resets all roaming Pokemon that were defeated without having been caught.
 def pbResetAllRoamers
@@ -24,7 +24,7 @@ def pbResetAllRoamers
   end
 end
 
-# Gets the roaming areas for a particular Pokemon.
+# Gets the roaming areas for a particular Pokémon.
 def pbRoamingAreas(idxRoamer)
   # [species ID, level, Game Switch, encounter type, battle BGM, area maps hash]
   roamData = Settings::ROAMING_SPECIES[idxRoamer]
@@ -39,7 +39,7 @@ def pbRandomRoam(index)
   $PokemonGlobal.roamPosition[index] = keys[rand(keys.length)]
 end
 
-# Makes all roaming Pokemon roam to another map.
+# Makes all roaming Pokémon roam to another map.
 def pbRoamPokemon
   $PokemonGlobal.roamPokemon = [] if !$PokemonGlobal.roamPokemon
   # Start all roamers off in random maps
@@ -51,29 +51,29 @@ def pbRoamPokemon
       $PokemonGlobal.roamPosition[i] = keys[rand(keys.length)]
     end
   end
-  # Roam each Pokemon in turn
+  # Roam each Pokémon in turn
   for i in 0...Settings::ROAMING_SPECIES.length
     pbRoamPokemonOne(i)
   end
 end
 
-# Makes a single roaming Pokemon roam to another map. Doesn't roam if it isn't
+# Makes a single roaming Pokémon roam to another map. Doesn't roam if it isn't
 # currently possible to encounter it (i.e. its Game Switch is off).
 def pbRoamPokemonOne(idxRoamer)
   # [species ID, level, Game Switch, encounter type, battle BGM, area maps hash]
   roamData = Settings::ROAMING_SPECIES[idxRoamer]
   return if roamData[2]>0 && !$game_switches[roamData[2]]   # Game Switch is off
   return if !GameData::Species.exists?(roamData[0])
-  # Get hash of area patrolled by the roaming Pokemon
+  # Get hash of area patrolled by the roaming Pokémon
   mapIDs = pbRoamingAreas(idxRoamer).keys
   return if !mapIDs || mapIDs.length==0   # No roaming area defined somehow
-  # Get the roaming Pokemon's current map
+  # Get the roaming Pokémon's current map
   currentMap = $PokemonGlobal.roamPosition[idxRoamer]
   if !currentMap
     currentMap = mapIDs[rand(mapIDs.length)]
     $PokemonGlobal.roamPosition[idxRoamer] = currentMap
   end
-  # Make an array of all possible maps the roaming Pokemon could roam to
+  # Make an array of all possible maps the roaming Pokémon could roam to
   newMapChoices = []
   nextMaps = pbRoamingAreas(idxRoamer)[currentMap]
   return if !nextMaps
@@ -92,14 +92,14 @@ def pbRoamPokemonOne(idxRoamer)
 end
 
 # When the player moves to a new map (with a different name), make all roaming
-# Pokemon roam.
+# Pokémon roam.
 Events.onMapChange += proc { |_sender,e|
   oldMapID = e[0]
   # Get and compare map names
   mapInfos = pbLoadMapInfos
   next if mapInfos && oldMapID>0 && mapInfos[oldMapID] &&
      mapInfos[oldMapID].name && $game_map.name==mapInfos[oldMapID].name
-  # Make roaming Pokemon roam
+  # Make roaming Pokémon roam
   pbRoamPokemon
   $PokemonGlobal.roamedAlready = false
 }
@@ -107,10 +107,10 @@ Events.onMapChange += proc { |_sender,e|
 
 
 #===============================================================================
-# Encountering a roaming Pokemon in a wild battle.
+# Encountering a roaming Pokémon in a wild battle.
 #===============================================================================
 class PokemonTemp
-  attr_accessor :roamerIndex   # Index of roaming Pokemon to encounter next
+  attr_accessor :roamerIndex   # Index of roaming Pokémon to encounter next
 end
 
 
@@ -138,12 +138,12 @@ end
 EncounterModifier.register(proc { |encounter|
   $PokemonTemp.roamerIndex = nil
   next nil if !encounter
-  # Give the regular encounter if encountering a roaming Pokemon isn't possible
+  # Give the regular encounter if encountering a roaming Pokémon isn't possible
   next encounter if $PokemonGlobal.roamedAlready
   next encounter if $PokemonGlobal.partner
   next encounter if $PokemonTemp.pokeradar
-  next encounter if rand(100) < 75   # 25% chance of encountering a roaming Pokemon
-  # Look at each roaming Pokemon in turn and decide whether it's possible to
+  next encounter if rand(100) < 75   # 25% chance of encountering a roaming Pokémon
+  # Look at each roaming Pokémon in turn and decide whether it's possible to
   # encounter it
   currentRegion = pbGetCurrentRegion
   currentMapName = pbGetMessage(MessageTypes::MapNames, $game_map.map_id)
@@ -152,11 +152,11 @@ EncounterModifier.register(proc { |encounter|
     # data = [species, level, Game Switch, roamer method, battle BGM, area maps hash]
     next if !GameData::Species.exists?(data[0])
     next if data[2] > 0 && !$game_switches[data[2]]   # Isn't roaming
-    next if $PokemonGlobal.roamPokemon[i] == true   # Roaming Pokemon has been caught
+    next if $PokemonGlobal.roamPokemon[i] == true   # Roaming Pokémon has been caught
     # Get the roamer's current map
     roamerMap = $PokemonGlobal.roamPosition[i]
     if !roamerMap
-      mapIDs = pbRoamingAreas(i).keys   # Hash of area patrolled by the roaming Pokemon
+      mapIDs = pbRoamingAreas(i).keys   # Hash of area patrolled by the roaming Pokémon
       next if !mapIDs || mapIDs.length == 0   # No roaming area defined somehow
       roamerMap = mapIDs[rand(mapIDs.length)]
       $PokemonGlobal.roamPosition[i] = roamerMap
@@ -171,12 +171,12 @@ EncounterModifier.register(proc { |encounter|
     end
     # Check whether the roamer's roamer method is currently possible
     next if !pbRoamingMethodAllowed(data[3])
-    # Add this roaming Pokemon to the list of possible roaming Pokemon to encounter
+    # Add this roaming Pokémon to the list of possible roaming Pokémon to encounter
     possible_roamers.push([i, data[0], data[1], data[4]])   # [i, species, level, BGM]
   end
-  # No encounterable roaming Pokemon were found, just have the regular encounter
+  # No encounterable roaming Pokémon were found, just have the regular encounter
   next encounter if possible_roamers.length == 0
-  # Pick a roaming Pokemon to encounter out of those available
+  # Pick a roaming Pokémon to encounter out of those available
   roamer = possible_roamers[rand(possible_roamers.length)]
   $PokemonGlobal.roamEncounter = roamer
   $PokemonTemp.roamerIndex     = roamer[0]
@@ -195,7 +195,7 @@ Events.onWildBattleOverride += proc { |_sender,e|
 }
 
 def pbRoamingPokemonBattle(species, level)
-  # Get the roaming Pokemon to encounter; generate it based on the species and
+  # Get the roaming Pokémon to encounter; generate it based on the species and
   # level if it doesn't already exist
   idxRoamer = $PokemonTemp.roamerIndex
   if !$PokemonGlobal.roamPokemon[idxRoamer] ||
@@ -207,7 +207,7 @@ def pbRoamingPokemonBattle(species, level)
   setBattleRule("roamerFlees")
   # Perform the battle
   decision = pbWildBattleCore($PokemonGlobal.roamPokemon[idxRoamer])
-  # Update Roaming Pokemon data based on result of battle
+  # Update Roaming Pokémon data based on result of battle
   if decision==1 || decision==4   # Defeated or caught
     $PokemonGlobal.roamPokemon[idxRoamer]       = true
     $PokemonGlobal.roamPokemonCaught[idxRoamer] = (decision==4)

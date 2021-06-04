@@ -2,7 +2,7 @@
 # Sprite_Shadow (Sprite_Ombre )
 # Based on Genzai Kawakami's shadows, dynamisme & features by Rataime, extra
 # features Boushy
-# Modified by Peter O. to be compatible with Pokemon Essentials
+# Modified by Peter O. to be compatible with Pokémon Essentials
 #===============================================================================
 class Sprite_Shadow < RPG::Sprite
   attr_accessor :character
@@ -66,10 +66,10 @@ class Sprite_Shadow < RPG::Sprite
       sy = (@character.direction - 2) / 2 * @ch
       if self.angle > 90 || angle < -90
         case @character.direction
-        when 2 then sy = (8- 2) / 2 * @ch
-        when 4 then sy = (6- 2) / 2 * @ch
-        when 6 then sy = (4- 2) / 2 * @ch
-        when 8 then sy = (2- 2) / 2 * @ch
+        when 2 then sy = @ch * 3
+        when 4 then sy = @ch * 2
+        when 6 then sy = @ch
+        when 8 then sy = 0
         end
       end
       self.src_rect.set(sx, sy, @cw, @ch)
@@ -147,6 +147,11 @@ class Sprite_Character < RPG::Sprite
       end
     end
     update
+  end
+
+  def clearShadows
+    @ombrelist.each { |s| s.dispose if s }
+    @ombrelist.clear
   end
 
   alias shadow_update update

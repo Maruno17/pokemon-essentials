@@ -3,6 +3,10 @@
 #===============================================================================
 class Object
   alias full_inspect inspect
+
+  def inspect
+    return "#<#{self.class}>"
+  end
 end
 
 #===============================================================================
@@ -67,6 +71,17 @@ class Numeric
   def to_s_formatted
     return self.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\1,').reverse
   end
+
+  def to_word
+    ret = [_INTL("zero"), _INTL("one"), _INTL("two"), _INTL("three"),
+           _INTL("four"), _INTL("five"), _INTL("six"), _INTL("seven"),
+           _INTL("eight"), _INTL("nine"), _INTL("ten"), _INTL("eleven"),
+           _INTL("twelve"), _INTL("thirteen"), _INTL("fourteen"), _INTL("fifteen"),
+           _INTL("sixteen"), _INTL("seventeen"), _INTL("eighteen"), _INTL("nineteen"),
+           _INTL("twenty")]
+    return ret[self] if self.is_a?(Integer) && self >= 0 && self <= ret.length
+    return self.to_s
+  end
 end
 
 #===============================================================================
@@ -93,106 +108,6 @@ module Enumerable
     ret = []
     self.each { |item| ret.push(yield(item)) }
     return ret
-  end
-end
-
-#===============================================================================
-# class ByteWriter (used by def save_to_png below)
-#===============================================================================
-class ByteWriter
-  def initialize(filename)
-    @file = File.new(filename, "wb")
-  end
-
-  def <<(*data)
-    write(*data)
-  end
-
-  def write(*data)
-    data.each do |e|
-      if e.is_a?(Array)
-        e.each { |item| write(item) }
-      elsif e.is_a?(Numeric)
-        @file.putc e
-      else
-        raise "Invalid data for writing."
-      end
-    end
-  end
-
-  def write_int(int)
-    self << ByteWriter.to_bytes(int)
-  end
-
-  def close
-    @file.close
-    @file = nil
-  end
-
-  def self.to_bytes(int)
-    return [
-      (int >> 24) & 0xFF,
-      (int >> 16) & 0xFF,
-      (int >> 8) & 0xFF,
-       int & 0xFF
-    ]
-  end
-end
-
-#===============================================================================
-# class Bitmap
-#===============================================================================
-class Bitmap
-  def save_to_png(filename)
-    f = ByteWriter.new(filename)
-    #============================= Writing header =============================#
-    # PNG signature
-    f << [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]
-    # Header length
-    f << [0x00, 0x00, 0x00, 0x0D]
-    # IHDR
-    headertype = [0x49, 0x48, 0x44, 0x52]
-    f << headertype
-    # Width, height, compression, filter, interlacing
-    headerdata = ByteWriter.to_bytes(self.width).
-      concat(ByteWriter.to_bytes(self.height)).
-      concat([0x08, 0x06, 0x00, 0x00, 0x00])
-    f << headerdata
-    # CRC32 checksum
-    sum = headertype.concat(headerdata)
-    f.write_int Zlib::crc32(sum.pack("C*"))
-    #============================== Writing data ==============================#
-    data = []
-    for y in 0...self.height
-      # Start scanline
-      data << 0x00   # Filter: None
-      for x in 0...self.width
-        px = self.get_pixel(x, y)
-        # Write raw RGBA pixels
-        data << px.red
-        data << px.green
-        data << px.blue
-        data << px.alpha
-      end
-    end
-    # Zlib deflation
-    smoldata = Zlib::Deflate.deflate(data.pack("C*")).bytes
-    # data chunk length
-    f.write_int smoldata.size
-    # IDAT
-    f << [0x49, 0x44, 0x41, 0x54]
-    f << smoldata
-    # CRC32 checksum
-    f.write_int Zlib::crc32([0x49, 0x44, 0x41, 0x54].concat(smoldata).pack("C*"))
-    #============================== End Of File ===============================#
-    # Empty chunk
-    f << [0x00, 0x00, 0x00, 0x00]
-    # IEND
-    f << [0x49, 0x45, 0x4E, 0x44]
-    # CRC32 checksum
-    f.write_int Zlib::crc32([0x49, 0x45, 0x4E, 0x44].pack("C*"))
-    f.close
-    return nil
   end
 end
 

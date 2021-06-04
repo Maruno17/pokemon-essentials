@@ -151,7 +151,7 @@ Moves = 1,POWDERSNOW,4,TAILWHIP,7,ROAR,9,BABYDOLLEYES,10,ICESHARD,12,CONFUSERAY,
 TutorMoves = AQUATAIL,ATTRACT,AURORAVEIL,BLIZZARD,CONFIDE,COVET,DARKPULSE,DOUBLETEAM,FACADE,FOULPLAY,FROSTBREATH,FRUSTRATION,HAIL,HEALBELL,HIDDENPOWER,ICEBEAM,ICYWIND,IRONTAIL,PAINSPLIT,PAYBACK,PROTECT,PSYCHUP,RAINDANCE,REST,RETURN,ROAR,ROLEPLAY,ROUND,SAFEGUARD,SLEEPTALK,SNORE,SPITE,SUBSTITUTE,SWAGGER,TOXIC,ZENHEADBUTT
 EggMoves = AGILITY,CHARM,DISABLE,ENCORE,EXTRASENSORY,FLAIL,FREEZEDRY,HOWL,HYPNOSIS,MOONBLAST,POWERSWAP,SECRETPOWER,SPITE,TAILSLAP
 Color = White
-Pokedex = In hot weather, this Pokemon makes ice shards with its six tails and sprays them around to cool itself off.
+Pokedex = In hot weather, this Pokémon makes ice shards with its six tails and sprays them around to cool itself off.
 Generation = 7
 WildItemUncommon = SNOWBALL
 Evolutions = NINETALES,Item,ICESTONE
@@ -580,7 +580,7 @@ BaseStats = 100,164,150,71,95,120
 HiddenAbility = SANDSTREAM
 Height = 2.5
 Weight = 255.0
-Pokedex = Due to the colossal power poured into it, this Pokemon's back split right open. Its destructive instincts are the only thing keeping it moving.
+Pokedex = Due to the colossal power poured into it, this Pokémon's back split right open. Its destructive instincts are the only thing keeping it moving.
 Generation = 6
 #-------------------------------
 [SCEPTILE,1]
@@ -618,6 +618,27 @@ MegaStone = GARDEVOIRITE
 BaseStats = 68,85,65,100,165,135
 Abilities = PIXILATE
 HiddenAbility = PIXILATE
+Generation = 6
+#-------------------------------
+[SABLEYE,1]
+FormName = Mega Sableye
+MegaStone = SABLENITE
+BaseStats = 50,85,125,20,85,115
+Abilities = MAGICBOUNCE
+HiddenAbility = MAGICBOUNCE
+Weight = 161.0
+Pokedex = Supporting a giant heavy jewel, it can't change direction very nimbly and is vulnerable to attack from behind.
+Generation = 6
+#-------------------------------
+[MAWILE,1]
+FormName = Mega Mawile
+MegaStone = MAWILITE
+BaseStats = 50,105,125,50,55,95
+Abilities = HUGEPOWER
+HiddenAbility = HUGEPOWER
+Height = 1.0
+Weight = 23.5
+Pokedex = Its two sets of jaws thrash about violently as if they each had a will of their own. One gnash from them can turn a boulder to dust.
 Generation = 6
 #-------------------------------
 [AGGRON,1]
@@ -724,7 +745,7 @@ BaseStats = 65,150,60,115,115,60
 Abilities = MAGICBOUNCE
 HiddenAbility = MAGICBOUNCE
 Weight = 49.0
-Pokedex = When this Pokemon whips the winglike fur on its back as though beating its wings, it sends an intimidating aura flying at its opponents.
+Pokedex = When this Pokémon whips the winglike fur on its back as though beating its wings, it sends an intimidating aura flying at its opponents.
 Generation = 6
 #-------------------------------
 [GLALIE,1]
@@ -1181,7 +1202,7 @@ EffortPoints = 0,0,0,0,3,0
 Abilities = TURBOBLAZE
 Moves = 1,ICYWIND,1,DRAGONRAGE,8,IMPRISON,15,ANCIENTPOWER,22,ICEBEAM,29,DRAGONBREATH,36,SLASH,43,FUSIONFLARE,50,ICEBURN,57,DRAGONPULSE,64,NOBLEROAR,71,ENDEAVOR,78,BLIZZARD,85,OUTRAGE,92,HYPERVOICE
 Height = 3.6
-Pokedex = It has foreseen that a world of truth will arrive for people and Pokemon. It strives to protect that future.
+Pokedex = It has foreseen that a world of truth will arrive for people and Pokémon. It strives to protect that future.
 BattlerPlayerX = 0
 BattlerEnemyX = 9
 BattlerEnemyY = 7
@@ -1193,7 +1214,7 @@ EffortPoints = 0,3,0,0,0,0
 Abilities = TERAVOLT
 Moves = 1,ICYWIND,1,DRAGONRAGE,8,IMPRISON,15,ANCIENTPOWER,22,ICEBEAM,29,DRAGONBREATH,36,SLASH,43,FUSIONBOLT,50,FREEZESHOCK,57,DRAGONPULSE,64,NOBLEROAR,71,ENDEAVOR,78,BLIZZARD,85,OUTRAGE,92,HYPERVOICE
 Height = 3.3
-Pokedex = It's said that this Pokemon battles in order to protect the ideal world that will exist in the future for people and Pokemon.
+Pokedex = It's said that this Pokémon battles in order to protect the ideal world that will exist in the future for people and Pokémon.
 BattlerEnemyX = 5
 BattlerEnemyY = 4
 #-------------------------------
@@ -1733,36 +1754,3 @@ Color = Yellow
 FormName = Original Color
 Color = Red
 Pokedex = This gorgeous Magearna looks as it did at the time of its invention. Its luxurious decoration pleased the king's daughter.
-#-------------------------------
-[JIRACHI,1]
-FormName = Awakened
-BaseStats = 120,120,120,120,120,120
-Abilities = MAGICBOUNCE
-#-------------------------------
-[MAWILE,1]
-FormName = Peskan Mawile
-Type1 = GRASS
-Type2 = FAIRY
-BaseStats = 50,55,55,50,85,85
-Abilities = ROUGHSKIN,STALL
-HiddenAbility = WATERABSORB
-Moves = 1,PLAYROUGH,1,MEGADRAIN,1,TAUNT,1,GROWL,1,FAIRYWIND,1,ASTONISH,5,FAKETEARS,9,BITE,13,SWEETSCENT,17,NEEDLEARM,21,CRUNCH,25,INGRAIN,29,GIGADRAIN,33,SYNTHESIS,37,LEAFTORNADO,41,STOCKPILE,41,SWALLOW,41,SPITUP,45,LIFEDRAIN,49,DRAININGKISS
-TutorMoves = ATTRACT,BIND,BUGBITE,CONFIDE,CUT,DEFOG,DOUBLETEAM,ENERGYBALL,FACADE,FLING,FRUSTRATION,GASTROACID,GIGADRAIN,GIGAIMPACT,GRASSKNOT,HIDDENPOWER,HYPERBEAM,INFESTATION,KNOCKOFF,NATUREPOWER,PAYBACK,PROTECT,REST,RETURN,ROUND,SEEDBOMB,SLEEPTALK,SLUDGEBOMB,SNORE,SOLARBEAM,SUBSTITUTE,SUNNYDAY,SWAGGER,SWORDSDANCE,SYNTHESIS,THIEF,THROATCHOP,TOXIC,WORRYSEED
-Height = 0.5
-Weight = 6.5
-Color = Green
-Pokedex = During the day it sits still with its mouth open, waiting for prey to land on its open mouth and snaps it shut.
-#-------------------------------
-[SABLEYE,1]
-FormName = Peskan Sableye
-Type1 = DARK
-Type2 = FIRE
-BaseStats = 50,65,65,50,75,75
-Abilities = FLAMEBODY,FLASHFIRE
-HiddenAbility = PRANKSTER
-Moves = 1,ROCKPOLISH,1,SCRATCH,4,FORESIGHT,6,NIGHTSHADE,9,EMBER,11,FURYSWIPES,14,DETECT,16,FLAREDASH,19,FEINTATTACK,21,FAKEOUT,24,PUNISHMENT,26,KNOCKOFF,29,FIREPUNCH,31,WILLOWISP,34,POWERGEM,36,FLAMECHARGE,39,FOULPLAY,41,LAVAPLUME,44,QUASH,46,OVERHEAT
-TutorMoves = ATTRACT,BUGBITE,BULLDOZE,CONFIDE,DARKPULSE,DOUBLETEAM,DRAGONPULSE,EARTHPOWER,EARTHQUAKE,EXPLOSION,FACADE,FIREBLAST,FLAMECHARGE,FLAMETHROWER,FLASHCANNON,FRUSTRATION,GIGAIMPACT,HEATWAVE,HIDDENPOWER,HYPERBEAM,IRONDEFENSE,IRONHEAD,NATUREPOWER,OVERHEAT,PAYBACK,PROTECT,REST,RETURN,ROAR,ROCKSLIDE,ROCKSMASH,ROCKTOMB,ROUND,SLEEPTALK,SNORE,SOLARBEAM,STEALTHROCK,STOMPINGTANTRUM,STONEEDGE,STRENGTH,SUBSTITUTE,SUNNYDAY,SWAGGER,TAUNT,TORMENT,TOXIC,UPROAR,WILLOWISP
-Height = 0.6
-Weight = 16.0
-Color = Black
-Pokedex = Peskan Sableye has the ability melt rocks Hoennian Sableye otherwise wouldn't be able to eat. It is often found in volcanoes.

@@ -303,8 +303,6 @@ class DependentEvents
           newFollower.moveto(mapTile[1],mapTile[2])
           newEventData[3]=mapTile[1]
           newEventData[4]=mapTile[2]
-          if mapTile[0]==leader.map.map_id
-          end
         end
       end
     end

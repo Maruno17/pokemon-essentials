@@ -1,9 +1,9 @@
 class PokeBattle_Battler
   #=============================================================================
-  # Decide whether the trainer is allowed to tell the Pokemon to use the given
+  # Decide whether the trainer is allowed to tell the Pokémon to use the given
   # move. Called when choosing a command for the round.
-  # Also called when processing the Pokemon's action, because these effects also
-  # prevent Pokemon action. Relevant because these effects can become active
+  # Also called when processing the Pokémon's action, because these effects also
+  # prevent Pokémon action. Relevant because these effects can become active
   # earlier in the same round (after choosing the command but before using the
   # move) or an unusable move may be called by another move such as Metronome.
   #=============================================================================
@@ -100,7 +100,7 @@ class PokeBattle_Battler
   #=============================================================================
   # Obedience check
   #=============================================================================
-  # Return true if Pokemon continues attacking (although it may have chosen to
+  # Return true if Pokémon continues attacking (although it may have chosen to
   # use a different move in disobedience), or false if attack stops.
   def pbObedienceCheck?(choice)
     return true if usingMultiTurnAttack?
@@ -108,7 +108,7 @@ class PokeBattle_Battler
     return true if !@battle.internalBattle
     return true if !@battle.pbOwnedByPlayer?(@index)
     disobedient = false
-    # Pokemon may be disobedient; calculate if it is
+    # Pokémon may be disobedient; calculate if it is
     badgeLevel = 10 * (@battle.pbPlayer.badge_count + 1)
     badgeLevel = GameData::GrowthRate.max_level if @battle.pbPlayer.badge_count >= 8
     if @pokemon.foreign?(@battle.pbPlayer) && @level>badgeLevel
@@ -117,7 +117,7 @@ class PokeBattle_Battler
     end
     disobedient |= !pbHyperModeObedience(choice[2])
     return true if !disobedient
-    # Pokemon is disobedient; make it do something else
+    # Pokémon is disobedient; make it do something else
     return pbDisobey(choice,badgeLevel)
   end
 

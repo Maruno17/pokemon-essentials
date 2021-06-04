@@ -26,7 +26,7 @@ def pbPrintException(e)
     emessage = pbGetExceptionMessage(e)
   end
   # begin message formatting
-  message = "[Pokemon Essentials version #{Essentials::VERSION}]\r\n"
+  message = "[Pokémon Essentials version #{Essentials::VERSION}]\r\n"
   message += "#{Essentials::ERROR_TEXT}\r\n"   # For third party scripts to add to
   message += "Exception: #{e.class}\r\n"
   message += "Message: #{emessage}\r\n"

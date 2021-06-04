@@ -25,38 +25,6 @@ class Game_Player < Game_Character
     return $game_map
   end
 
-  def bush_depth
-    return 0 if @tile_id > 0 || @always_on_top
-    xbehind = (@direction==4) ? @x+1 : (@direction==6) ? @x-1 : @x
-    ybehind = (@direction==8) ? @y+1 : (@direction==2) ? @y-1 : @y
-    # Both current tile and previous tile are on the same map; just return super
-    return super if $game_map.valid?(@x,@y) && $game_map.valid?(xbehind,ybehind)
-    # The current or the previous tile is on a different map; consult MapFactory
-    return 0 if !$MapFactory
-    # Get map and coordinates of the current tile
-    if $game_map.valid?(@x,@y)
-      heremap = self.map; herex = @x; herey = @y
-    else
-      newhere = $MapFactory.getNewMap(@x,@y)
-      return 0 unless newhere && newhere[0]   # Map not found
-      heremap = newhere[0]; herex = newhere[1]; herey = newhere[2]
-    end
-    # Get map and coordinates of the previous tile
-    newbehind = $MapFactory.getNewMap(xbehind,ybehind)
-    if $game_map.valid?(xbehind,ybehind)
-      behindmap = self.map; behindx = xbehind; behindy = ybehind
-    else
-      return 0 unless newbehind && newbehind[0]   # Map not found
-      behindmap = newbehind[0]; behindx = newbehind[1]; behindy = newbehind[2]
-    end
-    # Return bush depth
-    if !jumping?
-      return 32 if heremap.deepBush?(herex, herey) && behindmap.deepBush?(behindx, behindy)
-      return 12 if heremap.bush?(herex, herey) && !moving?
-    end
-    return 0
-  end
-
   def pbHasDependentEvents?
     return $PokemonGlobal.dependentEvents.length>0
   end
@@ -70,9 +38,9 @@ class Game_Player < Game_Character
   def move_generic(dir, turn_enabled = true)
     turn_generic(dir, true) if turn_enabled
     if !$PokemonTemp.encounterTriggered
-      x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
-      y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
       if can_move_in_direction?(dir)
+        x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
+        y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
         return if pbLedge(x_offset, y_offset)
         return if pbEndSurf(x_offset, y_offset)
         turn_generic(dir, true)
@@ -82,10 +50,8 @@ class Game_Player < Game_Character
           $PokemonTemp.dependentEvents.pbMoveDependentEvents
           increase_steps
         end
-      else
-        if !check_event_trigger_touch(@x + x_offset, @y + y_offset)
-          bump_into_object
-        end
+      elsif !check_event_trigger_touch(dir)
+        bump_into_object
       end
     end
     $PokemonTemp.encounterTriggered = false
@@ -312,14 +278,16 @@ class Game_Player < Game_Character
   #-----------------------------------------------------------------------------
   # * Touch Event Starting Determinant
   #-----------------------------------------------------------------------------
-  def check_event_trigger_touch(x, y)
+  def check_event_trigger_touch(dir)
     result = false
-    # If event is running
     return result if $game_system.map_interpreter.running?
     # All event loops
+    x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
+    y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
     for event in $game_map.events.values
+      next if ![1, 2].include?(event.trigger)   # Player touch, event touch
       # If event coordinates and triggers are consistent
-      next if !event.at_coordinate?(x, y)
+      next if !event.at_coordinate?(@x + x_offset, @y + y_offset)
       if event.name[/trainer\((\d+)\)/i]
         distance = $~[1].to_i
         next if !pbEventCanReachPlayer?(event,self,distance)
@@ -327,7 +295,6 @@ class Game_Player < Game_Character
         distance = $~[1].to_i
         next if !pbEventFacesPlayer?(event,self,distance)
       end
-      next if ![1,2].include?(event.trigger)
       # If starting determinant is front event (other than jumping)
       next if event.jumping? || event.over_trigger?
       event.start
@@ -417,13 +384,13 @@ def pbGetPlayerCharset(meta,charset,trainer=nil,force=false)
   trainer = $Trainer if !trainer
   outfit = (trainer) ? trainer.outfit : 0
   if $game_player && $game_player.charsetData && !force
-    return nil if $game_player.charsetData[0]==$Trainer.character_ID &&
-                  $game_player.charsetData[1]==charset &&
-                  $game_player.charsetData[2]==outfit
+    return nil if $game_player.charsetData[0] == $Trainer.character_ID &&
+                  $game_player.charsetData[1] == charset &&
+                  $game_player.charsetData[2] == outfit
   end
   $game_player.charsetData = [$Trainer.character_ID,charset,outfit] if $game_player
   ret = meta[charset]
-  ret = meta[1] if !ret || ret==""
+  ret = meta[1] if nil_or_empty?(ret)
   if pbResolveBitmap("Graphics/Characters/"+ret+"_"+outfit.to_s)
     ret = ret+"_"+outfit.to_s
   end

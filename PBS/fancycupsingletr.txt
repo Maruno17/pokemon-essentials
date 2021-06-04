@@ -60,7 +60,7 @@ EndSpeechWin = YOU DON'T STUDY ENOUGH ...
 EndSpeechLose = WE WERE LIKE TOYS TO YOU
 Name = GRAYSON
 PokemonNos = 18,65,112,120,127,128,129,130,134,141,142,145,149,150,158,159,163,164,166,174,176,220
-BeginSpeech = A Pokemon BATTLE ISN'T CHILD'S PLAY !
+BeginSpeech = A POKéMON BATTLE ISN'T CHILD'S PLAY !
 Type = CAMPER
 EndSpeechWin = YOU'RE DONE AREN'T YOU ?
 #-------------------------------
@@ -108,15 +108,15 @@ EndSpeechWin = NATURALLY I WIN
 EndSpeechLose = HOW COULD YOU DO THAT ?
 Name = RUSS
 PokemonNos = 21,22,23,24,40,46,47,48,72,73,84,99,144,171,191
-BeginSpeech = THEY ALL WANT MY FABULOUS Pokemon
+BeginSpeech = THEY ALL WANT MY FABULOUS POKéMON
 Type = SUPERNERD
-EndSpeechWin = I WILL HAVE A Pokemon PARTY
+EndSpeechWin = I WILL HAVE A POKéMON PARTY
 #-------------------------------
 [014]
 EndSpeechLose = I LIKE MYSELF IF I LOSE TOO
 Name = DUSTIN
 PokemonNos = 9,21,22,24,25,39,40,41,47,48,71,72,73,86,96,171,193,250
-BeginSpeech = I REALLY LIKE COOL Pokemon
+BeginSpeech = I REALLY LIKE COOL POKéMON
 Type = SUPERNERD
 EndSpeechWin = I LIKE MYSELF WHEN I WIN !
 #-------------------------------
@@ -134,10 +134,10 @@ Name = GILLIAN
 PokemonNos = 21,22,23,24,39,40,41,46,47,73,83,84,85,96,97,98,126,177
 BeginSpeech = THE GOURMET THING IS SO YESTERDAY
 Type = LADY
-EndSpeechWin = Pokemon NEVER GO OUT OF FASHION
+EndSpeechWin = POKéMON NEVER GO OUT OF FASHION
 #-------------------------------
 [017]
-EndSpeechLose = I WORRY ABOUT MY Pokemon SKILL
+EndSpeechLose = I WORRY ABOUT MY POKéMON SKILL
 Name = ZOE
 PokemonNos = 21,23,24,40,41,46,47,71,72,96,97,99,101,126,136,137,163,164,203,251
 BeginSpeech = I HAVEN'T A WORRY AT ALL
@@ -236,7 +236,7 @@ EndSpeechWin = SO THIS IS AN ADULT FEELING
 EndSpeechLose = I CAN'T WIN LIKE THIS ...
 Name = CARLIE
 PokemonNos = 10,11,12,26,27,65,69,70,84,138,171,176,182,197,215,218,219,250
-BeginSpeech = MY SUMMER VACATION IS FOR Pokemon
+BeginSpeech = MY SUMMER VACATION IS FOR POKéMON
 Type = TUBER_F
 EndSpeechWin = MY SUMMER VACATION WILL BE AWESOME
 #-------------------------------
@@ -270,7 +270,7 @@ Name = CIERRA
 PokemonNos = 4,6,12,14,16,20,35,37,42,44,50,55,56,66,116,120,141,152,153,156,176,181,182,184,189,197,209,217,218,219,221
 BeginSpeech = I LIKE TO SYNCHRONIZE MY SWIFT SWIM
 Type = SWIMMER_F
-EndSpeechWin = MY Pokemon SYNCHRONIZE WITH ME
+EndSpeechWin = MY POKéMON SYNCHRONIZE WITH ME
 #-------------------------------
 [034]
 EndSpeechLose = THAT'S NOT THE KNOCKOUT I MEAN
@@ -289,18 +289,18 @@ Type = SWIMMER_F
 EndSpeechWin = IT'S SO GREAT TO WIN !
 #-------------------------------
 [036]
-EndSpeechLose = I ADORE MY Pokemon MORE IF I LOSE
+EndSpeechLose = I ADORE MY POKéMON MORE IF I LOSE
 Name = PEYTON
 PokemonNos = 50,56,108,133,137,142,159,177,181,202,219,226,237
-BeginSpeech = I AM NEVER DISAPPOINTED WITH MY Pokemon
+BeginSpeech = I AM NEVER DISAPPOINTED WITH MY POKéMON
 Type = POKEMANIAC
 EndSpeechWin = I AM HAPPY IF WE WIN TOGETHER
 #-------------------------------
 [037]
-EndSpeechLose = YOU DO ADORE YOUR Pokemon !
+EndSpeechLose = YOU DO ADORE YOUR POKéMON !
 Name = JULIAN
 PokemonNos = 10,11,53,139,140,142,151,152,156,157,163,165,170,171,178,216,217,227,236
-BeginSpeech = YOU ADORE YOUR Pokemon RIGHT ?
+BeginSpeech = YOU ADORE YOUR POKéMON RIGHT ?
 Type = POKEMANIAC
 EndSpeechWin = YOU'RE TOTALLY OUT OF THE QUESTION
 #-------------------------------
@@ -308,7 +308,7 @@ EndSpeechWin = YOU'RE TOTALLY OUT OF THE QUESTION
 EndSpeechLose = THIS IS AN AWFUL NIGHTMARE !
 Name = QUINN
 PokemonNos = 20,65,109,138,141,142,156,161,172,178,196,198
-BeginSpeech = MY Pokemon ARE BUT A DREAM
+BeginSpeech = MY POKéMON ARE BUT A DREAM
 Type = POKEMANIAC
 EndSpeechWin = THIS IS A BEAUTIFUL DREAM !
 #-------------------------------
@@ -329,10 +329,10 @@ Type = BEAUTY
 EndSpeechWin = I WILL TREASURE THIS WIN
 #-------------------------------
 [041]
-EndSpeechLose = SHOULD I NOT ADORE Pokemon ?
+EndSpeechLose = SHOULD I NOT ADORE POKéMON ?
 Name = STACY
 PokemonNos = 4,5,6,10,11,12,13,14,15,16,18,19,21,23,26,27,28,33,34,36,42,43,49,52,54,56,65,66,67,69,70,71,73,76,77,78,105,106,110,115,118,178
-BeginSpeech = ALL Pokemon HAVE THEIR OWN CUTE CHARM
+BeginSpeech = ALL POKéMON HAVE THEIR OWN CUTE CHARM
 Type = BEAUTY
 EndSpeechWin = YOU SEE WHAT I MEAN ?
 #-------------------------------
@@ -364,7 +364,7 @@ EndSpeechWin = WELL DONE !
 EndSpeechLose = YOU'RE KIND AND YOU'RE ALSO STRONG
 Name = PAMELA
 PokemonNos = 1,2,3,4,5,6,8,10,11,12,13,15,16,17,18,19,21,22,23,24,25,26,27,28,33,35,36,37,39,40,41,42,43,44,45,46,47,48,49,51,52,54,56,57,59,61,62,63,65,66,67,68,69,70,71,72,73,75,76,77,78,79,80,81,82,87,98,103,115,117,171,212
-BeginSpeech = ALL Pokemon ADORE A KIND TRAINER
+BeginSpeech = ALL POKéMON ADORE A KIND TRAINER
 Type = POKEMONBREEDER
 EndSpeechWin = IT'S TOO BAD YOU LOST
 #-------------------------------
@@ -372,9 +372,9 @@ EndSpeechWin = IT'S TOO BAD YOU LOST
 EndSpeechLose = OH
 Name = ELIZA
 PokemonNos = 13,48,65,105,108,110,112,123,129,133,148,170,171,174,181,222
-BeginSpeech = I ADORE Pokemon LIKE MY CHILDREN
+BeginSpeech = I ADORE POKéMON LIKE MY CHILDREN
 Type = POKEMONBREEDER
-EndSpeechWin = I AM SO HAPPY FOR MY Pokemon
+EndSpeechWin = I AM SO HAPPY FOR MY POKéMON
 #-------------------------------
 [047]
 EndSpeechLose = PROMISE ME ANOTHER BATTLE PLEASE !
@@ -393,12 +393,12 @@ Type = BUGCATCHER
 EndSpeechWin = LOOK LOOK ! A SCARY BUG
 #-------------------------------
 [049]
-EndSpeechLose = YOU'RE IGNORANT ABOUT BUG Pokemon
+EndSpeechLose = YOU'RE IGNORANT ABOUT BUG POKéMON
 Name = YOSHI
 PokemonNos = 9,32,39,46,47,48,60,62,64,65,66,67,79,80,81,82,89,224
-BeginSpeech = BUG Pokemon MAKE ME FEELING LOVEY-DOVEY
+BeginSpeech = BUG POKéMON MAKE ME FEELING LOVEY-DOVEY
 Type = BUGCATCHER
-EndSpeechWin = BUG Pokemon ARE THE BEST !
+EndSpeechWin = BUG POKéMON ARE THE BEST !
 #-------------------------------
 [050]
 EndSpeechLose = PLEASE I NEED SOME WATER
@@ -468,9 +468,9 @@ EndSpeechWin = MMM DO YOU WANT SOME ?
 EndSpeechLose = I AM THE TRAINER WHO IS FEELING DOWNCAST
 Name = JENSON
 PokemonNos = 11,12,13,65,110,121,122,123,183,184,215,218,219,228
-BeginSpeech = MY Pokemon WILL MAKE YOU DOWNCAST
+BeginSpeech = MY POKéMON WILL MAKE YOU DOWNCAST
 Type = FISHERMAN
-EndSpeechWin = YOUR Pokemon DON'T MAKE THE CUT
+EndSpeechWin = YOUR POKéMON DON'T MAKE THE CUT
 #-------------------------------
 [059]
 EndSpeechLose = MEW MEW ! MEW !!
@@ -529,12 +529,12 @@ Type = SUPERNERD
 EndSpeechWin = SEE ? I AM A GENIUS
 #-------------------------------
 [066]
-EndSpeechLose = I SO WANT ANOTHER Pokemon PLUSH DOLL
+EndSpeechLose = I SO WANT ANOTHER POKéMON PLUSH DOLL
 Name = JULIANA
 PokemonNos = 1,2,3,18,26,27,66,91,108,109,111,196
 BeginSpeech = I THINK I AM SHOPPING TOO MUCH
 Type = LADY
-EndSpeechWin = BUT I WANT A Pokemon PLUSH DOLL
+EndSpeechWin = BUT I WANT A POKéMON PLUSH DOLL
 #-------------------------------
 [067]
 EndSpeechLose = THAT WAS GUTSY ... YOU'RE QUITE SUPER
@@ -980,7 +980,7 @@ EndSpeechWin = YOUR ROCK HEAD EXISTS TO SHINE !
 EndSpeechLose = I AM ANGRY LIKE A MANKEY !
 Name = ZACH
 PokemonNos = 4,5,6,116,232,234
-BeginSpeech = I AM AN EXCELLENT MIMIC OF Pokemon
+BeginSpeech = I AM AN EXCELLENT MIMIC OF POKéMON
 Type = PSYCHIC_M
 EndSpeechWin = I AM HAPPY LIKE A LITTLE TOGEPI !
 #-------------------------------
@@ -996,7 +996,7 @@ EndSpeechWin = MY VICTORY WILL MAKE THE NEWS
 EndSpeechLose = YOU HAVE GUTS AND SKILL
 Name = BREANNA
 PokemonNos = 4,5,6,232,234,253
-BeginSpeech = MY Pokemon WILL CRUSH YOU !
+BeginSpeech = MY POKéMON WILL CRUSH YOU !
 Type = PSYCHIC_F
 EndSpeechWin = HAVE SOME MORE OF THIS !
 #-------------------------------
@@ -1014,7 +1014,7 @@ Name = MOLLY
 PokemonNos = 9,21,22,85,86,177
 BeginSpeech = WILL MY CUTE CHARM ATTRACT YOU ?
 Type = CHANELLER
-EndSpeechWin = YOUR Pokemon ARE MY TOYS NOW
+EndSpeechWin = YOUR POKéMON ARE MY TOYS NOW
 #-------------------------------
 [127]
 EndSpeechLose = MY FORESIGHT DIDN'T SHOW ME THIS
@@ -1036,7 +1036,7 @@ EndSpeechWin = MY SLEEP WILL BE EXCELLENT NOW
 EndSpeechLose = WHY IS THIS SO HARD ?
 Name = JALEN
 PokemonNos = 4,5,6,14,87,90
-BeginSpeech = I DON'T ALLOW Pokemon TO THRASH
+BeginSpeech = I DON'T ALLOW POKéMON TO THRASH
 Type = POKEMANIAC
 EndSpeechWin = HAHAHA ! ARE YOU ANGRY ?
 #-------------------------------
@@ -1049,12 +1049,12 @@ Type = POKEMANIAC
 EndSpeechWin = I HAVE A GROWTH OF ACID ARMOR
 #-------------------------------
 [131]
-EndSpeechLose = RENTAL Pokemon AREN'T UP TO SCRATCH
+EndSpeechLose = RENTAL POKéMON AREN'T UP TO SCRATCH
 Name = XANDER
 PokemonNos = 4,5,6,14,15,117
-BeginSpeech = I GOT MY Pokemon ON RENTAL
+BeginSpeech = I GOT MY POKéMON ON RENTAL
 Type = POKEMANIAC
-EndSpeechWin = IT'S INCREDIBLE MY RENTAL Pokemon WON
+EndSpeechWin = IT'S INCREDIBLE MY RENTAL POKéMON WON
 #-------------------------------
 [132]
 EndSpeechLose = I AM FEELING PERFECT THANK YOU SO MUCH
@@ -1188,7 +1188,7 @@ EndSpeechWin = MY CAMERA WAS AWFULLY EXPENSIVE
 EndSpeechLose = IF I LOSE I PRETEND I AM A MILTANK
 Name = NIKOLAS
 PokemonNos = 4,5,6,14,36,116
-BeginSpeech = I MIMIC Pokemon AFTER EVERY BATTLE
+BeginSpeech = I MIMIC POKéMON AFTER EVERY BATTLE
 Type = POKEMONRANGER_M
 EndSpeechWin = IF I WIN I PRETEND I AM A TAUROS
 #-------------------------------
@@ -1220,7 +1220,7 @@ EndSpeechWin = MY BOY FRIEND LIKES COMICS
 EndSpeechLose = AREN'T YOU SATISFIED YET ?
 Name = ROBERTO
 PokemonNos = 38,39,40,41,45,54
-BeginSpeech = DRAGON Pokemon ARE INVINCIBLE !
+BeginSpeech = DRAGON POKéMON ARE INVINCIBLE !
 Type = TAMER
 EndSpeechWin = YOU WEREN'T BAD I WAS JUST BETTER
 #-------------------------------
@@ -1257,12 +1257,12 @@ Type = POKEMANIAC
 EndSpeechWin = YES I AM ON FIRE !
 #-------------------------------
 [157]
-EndSpeechLose = YOUR Pokemon LOOK QUITE CUTE
+EndSpeechLose = YOUR POKéMON LOOK QUITE CUTE
 Name = JAREN
 PokemonNos = 4,5,6,14,15,115
 BeginSpeech = FIGHTING SPIRIT ? ME ?
 Type = BEAUTY
-EndSpeechWin = I WANT MORE CUTE Pokemon
+EndSpeechWin = I WANT MORE CUTE POKéMON
 #-------------------------------
 [158]
 EndSpeechLose = I WILL BE ON MY WAY
@@ -1396,7 +1396,7 @@ EndSpeechWin = I WON IN A COOL WAY
 EndSpeechLose = I WILL USE SMOKESCREEN TO ESCAPE
 Name = JAMISON
 PokemonNos = 48,125,126,138,145,146,154
-BeginSpeech = MY SECRET POWER IS OVERWHELMING TO Pokemon
+BeginSpeech = MY SECRET POWER IS OVERWHELMING TO POKéMON
 Type = YOUNGSTER
 EndSpeechWin = DID YOU SEE THAT ?
 #-------------------------------
@@ -1441,7 +1441,7 @@ Type = TUBER_F
 EndSpeechWin = HOW TO BUG YOUR TEACHER ?
 #-------------------------------
 [180]
-EndSpeechLose = DON'T YOU LIKE BUG Pokemon ?
+EndSpeechLose = DON'T YOU LIKE BUG POKéMON ?
 Name = HANK
 PokemonNos = 7,8,29,30,31,32
 BeginSpeech = THERE IS A BUG EVENT SOON
@@ -1628,17 +1628,17 @@ EndSpeechWin = LET'S GO FOR AN ICY WIND SURF
 EndSpeechLose = YOU'RE TOTALLY LACKING IN FASHION SENSE
 Name = JOSIE
 PokemonNos = 18,49,59,64,83,243
-BeginSpeech = A Pokemon FASHION CONTEST IS PRETTY
+BeginSpeech = A POKéMON FASHION CONTEST IS PRETTY
 Type = LASS
 EndSpeechWin = I REALLY LIKE MODE FASHION THINGS
 #-------------------------------
 [204]
-EndSpeechLose = THERE AREN'T ENOUGH GRASS TYPE Pokemon
+EndSpeechLose = THERE AREN'T ENOUGH GRASS TYPE POKéMON
 Name = ARMANDO
 PokemonNos = 4,5,6,14,15,207
-BeginSpeech = I NEED MORE GRASS TYPE Pokemon
+BeginSpeech = I NEED MORE GRASS TYPE POKéMON
 Type = CAMPER
-EndSpeechWin = TRADE ME A GRASS Pokemon PLEASE
+EndSpeechWin = TRADE ME A GRASS POKéMON PLEASE
 #-------------------------------
 [205]
 EndSpeechLose = YOU CUT ME DOWN ...
@@ -1713,10 +1713,10 @@ Type = POKEMANIAC
 EndSpeechWin = IT'S OVER SO SOON ?
 #-------------------------------
 [214]
-EndSpeechLose = TCH YOUR Pokemon AREN'T VERY NICE
+EndSpeechLose = TCH YOUR POKéMON AREN'T VERY NICE
 Name = MALORY
 PokemonNos = 5,44,178,211,239,243
-BeginSpeech = PROMISE TO SHOW ME CUTE Pokemon
+BeginSpeech = PROMISE TO SHOW ME CUTE POKéMON
 Type = BEAUTY
 EndSpeechWin = GIGGLE ... THANK YOU SO MUCH
 #-------------------------------
@@ -1726,7 +1726,7 @@ Name = ESTHER
 PokemonNos = 5,17,37,87,118,209,226,227,239,240,243,250
 BeginSpeech = I WANT A NICE PRESENT ...
 Type = BEAUTY
-EndSpeechWin = PLEASE GET ME A Pokemon GAME
+EndSpeechWin = PLEASE GET ME A POKéMON GAME
 #-------------------------------
 [216]
 EndSpeechLose = NOT FUNNY ... YOU'RE TOO STRONG
@@ -1758,7 +1758,7 @@ Name = TESS
 PokemonNos = 10,11,12,13,65,66,107
 BeginSpeech = WANT SOME HUNTAIL DESIGN SWEETS ?
 Type = POKEMONBREEDER
-EndSpeechWin = THEY'RE A SECRET Pokemon GOURMET ITEM
+EndSpeechWin = THEY'RE A SECRET POKéMON GOURMET ITEM
 #-------------------------------
 [220]
 EndSpeechLose = BACK HOME I WILL GO ...
@@ -1836,7 +1836,7 @@ EndSpeechWin = YO ! I WON YO
 EndSpeechLose = YEAH TAKE DOWN THEIR POWER A TINY BIT PLEASE
 Name = CHAZ
 PokemonNos = 34,43,50,56,59,62,116,136,177,178,189,209,211,212,217,221,243,249,253
-BeginSpeech = MY Pokemon HAVE TOO MUCH POWER
+BeginSpeech = MY POKéMON HAVE TOO MUCH POWER
 Type = POKEMONRANGER_M
 EndSpeechWin = THEY HAVE MORE POWER NOW !
 #-------------------------------
@@ -1849,18 +1849,18 @@ Type = POKEMONRANGER_M
 EndSpeechWin = I SEE THAT IT WAS TOO STRONG
 #-------------------------------
 [231]
-EndSpeechLose = YOU'RE SO MEAN TO CUTE Pokemon
+EndSpeechLose = YOU'RE SO MEAN TO CUTE POKéMON
 Name = SHANIA
 PokemonNos = 6,38,40,56,62,90,105,136,153,176,177,181,186,197,207,209,220,222,243,253
-BeginSpeech = ALL MY Pokemon ABSOLUTELY ADORE ME
+BeginSpeech = ALL MY POKéMON ABSOLUTELY ADORE ME
 Type = POKEMONRANGER_F
-EndSpeechWin = HAPPINESS IS A Pokemon WITH CUTE CHARM
+EndSpeechWin = HAPPINESS IS A POKéMON WITH CUTE CHARM
 #-------------------------------
 [232]
-EndSpeechLose = YOUR Pokemon ARE SOMETHING ELSE ALL RIGHT
+EndSpeechLose = YOUR POKéMON ARE SOMETHING ELSE ALL RIGHT
 Name = STELLA
 PokemonNos = 4,19,63,153,172,180,189,217,243,249,250
-BeginSpeech = I WANT TO SEE YOUR Pokemon
+BeginSpeech = I WANT TO SEE YOUR POKéMON
 Type = POKEMONRANGER_F
 EndSpeechWin = WELL AREN'T THEY BORING ? AHAHA
 #-------------------------------
@@ -1873,12 +1873,12 @@ Type = POKEMONRANGER_F
 EndSpeechWin = SEE ? AREN'T I GOOD ?
 #-------------------------------
 [234]
-EndSpeechLose = DRAGON Pokemon SHOULD NOT LOSE !
+EndSpeechLose = DRAGON POKéMON SHOULD NOT LOSE !
 Name = MADDOX
 PokemonNos = 23,38,39,41,57,60,61,67,69,70,83,85,171,185,204,205,212,213,214,228,238,249,251,252
-BeginSpeech = DRAGON Pokemon ARE MY NO. 1 CHOICE
+BeginSpeech = DRAGON POKéMON ARE MY NO. 1 CHOICE
 Type = TAMER
-EndSpeechWin = IT'S NO SECRET DRAGON Pokemon WIN
+EndSpeechWin = IT'S NO SECRET DRAGON POKéMON WIN
 #-------------------------------
 [235]
 EndSpeechLose = WROOOAAR! WHY ?!
@@ -1892,7 +1892,7 @@ EndSpeechWin = WROOOAAR! VICTORY !!
 EndSpeechLose = YOU'VE DESTROYED THE WAY I AM LIVING
 Name = TREVON
 PokemonNos = 25,39,41,45,57,63,68,69,136,137,154,171,172,177,204,212,213,214,238,249,251,252,253
-BeginSpeech = I AM LIVING ONLY WITH DRAGON Pokemon
+BeginSpeech = I AM LIVING ONLY WITH DRAGON POKéMON
 Type = TAMER
 EndSpeechWin = THE WAY I AM LIVING IS PERFECT
 #-------------------------------
@@ -1908,7 +1908,7 @@ EndSpeechWin = WELL THAT DIDN'T TAKE VERY MUCH
 EndSpeechLose = I ALSO HAVE A PLUSH DOLL COLLECTION
 Name = BRET
 PokemonNos = 104,129,130,190,192,193
-BeginSpeech = I LIKE ROCK-SOLID Pokemon THE BEST
+BeginSpeech = I LIKE ROCK-SOLID POKéMON THE BEST
 Type = BLACKBELT
 EndSpeechWin = TOUGHNESS IS THE WAY TO GO
 #-------------------------------
@@ -1996,7 +1996,7 @@ EndSpeechWin = I THINK I'VE MISHEARD THINGS
 EndSpeechLose = YOU SHOULD NOT BEAT A HERO
 Name = ROLANDO
 PokemonNos = 38,70,83,84,136,154,172,177,204,213,250,251,252,253
-BeginSpeech = I AM A SUPER Pokemon HERO !
+BeginSpeech = I AM A SUPER POKéMON HERO !
 Type = PSYCHIC_M
 EndSpeechWin = WAS THAT ENOUGH FOR YOU ?
 #-------------------------------
@@ -2049,7 +2049,7 @@ Type = CHANELLER
 EndSpeechWin = I AM SORRY TO SEE YOU ANGRY
 #-------------------------------
 [256]
-EndSpeechLose = I DISLIKE YOU AND YOUR Pokemon
+EndSpeechLose = I DISLIKE YOU AND YOUR POKéMON
 Name = CARLY
 PokemonNos = 48,86,97,100,103,112,125,128,144,147,159,163,203,229,234,243
 BeginSpeech = I WILL SCATTER SOME POISONPOWDER ABOUT
@@ -2057,10 +2057,10 @@ Type = CHANELLER
 EndSpeechWin = IT'S SCARY HOW MY STRATEGY WORKS
 #-------------------------------
 [257]
-EndSpeechLose = YOU'RE MORE SCARY THAN MY Pokemon
+EndSpeechLose = YOU'RE MORE SCARY THAN MY POKéMON
 Name = LEXIE
 PokemonNos = 46,47,64,71,73,91,125,126,127,146,159,165,203
-BeginSpeech = WANT TO SEE SCARY Pokemon ?
+BeginSpeech = WANT TO SEE SCARY POKéMON ?
 Type = CHANELLER
 EndSpeechWin = WASN'T THAT SCARY EH?
 #-------------------------------
@@ -2132,7 +2132,7 @@ EndSpeechWin = I AM A GENIUS OR WHAT ?
 EndSpeechLose = THANK YOU ! THAT LOSS WAS REFRESHING
 Name = DOROTHY
 PokemonNos = 14,67,70,113,181,187,189,226,227,243,253
-BeginSpeech = THE SPORTS WORLD SHOULD ACCEPT Pokemon
+BeginSpeech = THE SPORTS WORLD SHOULD ACCEPT POKéMON
 Type = COOLTRAINER_F
 EndSpeechWin = THANK YOU ! THAT WIN WAS REFRESHING
 #-------------------------------
@@ -2188,7 +2188,7 @@ EndSpeechWin = SORRY TO MAKE YOU SO DOWNCAST
 EndSpeechLose = WHAT I DREAM ISN'T HAPPENING ...
 Name = JEREMY
 PokemonNos = 17,19,36,43,49,117,203,210,227,243
-BeginSpeech = A Pokemon MASTER THAT'S MY DREAM
+BeginSpeech = A POKéMON MASTER THAT'S MY DREAM
 Type = BIKER
 EndSpeechWin = MY DREAM ISN'T FAR OFF !
 #-------------------------------
@@ -2209,12 +2209,12 @@ Type = PAINTER
 EndSpeechWin = OH YAY ! YAHOO FOR ME
 #-------------------------------
 [276]
-EndSpeechLose = MY BUG Pokemon ARE ALL UPSIDE DOWN
+EndSpeechLose = MY BUG POKéMON ARE ALL UPSIDE DOWN
 Name = AVERY
 PokemonNos = 7,8,29,199,235,236
-BeginSpeech = I'VE GOT A LOT OF BUG Pokemon
+BeginSpeech = I'VE GOT A LOT OF BUG POKéMON
 Type = BUGCATCHER
-EndSpeechWin = MY BUG Pokemon ARE ALL UNBELIEVABLE
+EndSpeechWin = MY BUG POKéMON ARE ALL UNBELIEVABLE
 #-------------------------------
 [277]
 EndSpeechLose = YOU KNOW WHAT WE DISLIKE HEY?
@@ -2222,7 +2222,7 @@ Name = LIAM
 PokemonNos = 7,8,29,30,31,225
 BeginSpeech = WE REALLY DISLIKE FIRE AND FLYING
 Type = BUGCATCHER
-EndSpeechWin = BUG Pokemon AREN'T BAD HEY?
+EndSpeechWin = BUG POKéMON AREN'T BAD HEY?
 #-------------------------------
 [278]
 EndSpeechLose = DON'T COUNT ON THAT HAPPENING ANOTHER TIME
@@ -2230,7 +2230,7 @@ Name = THEO
 PokemonNos = 110,123,184,198,251,252
 BeginSpeech = FISHING IS MY CHOICE IN LIFE
 Type = FISHERMAN
-EndSpeechWin = WATER Pokemon ATTRACT ME WITHOUT END
+EndSpeechWin = WATER POKéMON ATTRACT ME WITHOUT END
 #-------------------------------
 [279]
 EndSpeechLose = I AM AN ADULT I SWALLOW FRUSTRATION
@@ -2268,7 +2268,7 @@ EndSpeechWin = I AM COOL BUT NOT SCARY !
 EndSpeechLose = SEE ? I ALWAYS LOSE
 Name = TRISTON
 PokemonNos = 27,66,74,79,80,110,134,175,196,198,215,241
-BeginSpeech = I WOULD RATHER LOOK AT Pokemon
+BeginSpeech = I WOULD RATHER LOOK AT POKéMON
 Type = SUPERNERD
 EndSpeechWin = HUH? YOU MEAN I WON ?!
 #-------------------------------
@@ -2289,20 +2289,20 @@ Type = ROCKER
 EndSpeechWin = SATISFIED THAT'S WHAT I AM !
 #-------------------------------
 [286]
-EndSpeechLose = AREN'T THERE MORE FLYING Pokemon ?
+EndSpeechLose = AREN'T THERE MORE FLYING POKéMON ?
 Name = DIRK
 PokemonNos = 41,45,57,62,67,68,69,70,171,172,204,205,212,213,214,238,249
-BeginSpeech = FLYING Pokemon ARE ABOVE THE REST
+BeginSpeech = FLYING POKéMON ARE ABOVE THE REST
 Type = BIRDKEEPER
-EndSpeechWin = YOU CAN'T WIN ! FLYING Pokemon RULE
+EndSpeechWin = YOU CAN'T WIN ! FLYING POKéMON RULE
 #-------------------------------
 [287]
-EndSpeechLose = SO YOU DISLIKE MY Pokemon ?
+EndSpeechLose = SO YOU DISLIKE MY POKéMON ?
 Name = HAROLD
 PokemonNos = 38,39,40,41,54,57,60,67,171,172,204,205,212,213,214,238,249
-BeginSpeech = MY Pokemon APPEAL TO YOU ?
+BeginSpeech = MY POKéMON APPEAL TO YOU ?
 Type = BIRDKEEPER
-EndSpeechWin = YOU DO LIKE MY Pokemon ?
+EndSpeechWin = YOU DO LIKE MY POKéMON ?
 #-------------------------------
 [288]
 EndSpeechLose = YOUR PRESENT ? WHAT FOR ?!

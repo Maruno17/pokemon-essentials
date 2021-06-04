@@ -1,6 +1,6 @@
 # @deprecated Use {Game.save} instead. pbSave is slated to be removed in v20.
 def pbSave(safesave = false)
-  Deprecation.warn_method('pbSave', 'Game.save', 'v20')
+  Deprecation.warn_method('pbSave', 'v20', 'Game.save')
   Game.save(safe: safesave)
 end
 
@@ -38,8 +38,8 @@ class PokemonSave_Scene
     hour = totalsec / 60 / 60
     min = totalsec / 60 % 60
     mapname=$game_map.name
-    textColor = ["4890F8,484848","FF354D,484848","4890F8,484848"][$Trainer.gender]
-    locationColor = "59AF34,484848"   # green
+    textColor = ["0070F8,78B8E8","E82010,F8A8B8","0070F8,78B8E8"][$Trainer.gender]
+    locationColor = "209808,90F090"   # green
     loctext=_INTL("<ac><c3={1}>{2}</c3></ac>",locationColor,mapname)
     loctext+=_INTL("Player<r><c3={1}>{2}</c3><br>",textColor,$Trainer.name)
     if hour>0
@@ -92,7 +92,7 @@ class PokemonSaveScreen
       if SaveData.exists? && $PokemonTemp.begunNewGame
         pbMessage(_INTL('WARNING!'))
         pbMessage(_INTL('There is a different game file that is already saved.'))
-        pbMessage(_INTL("If you save now, the other file's adventure, including items and Pokemon, will be entirely lost."))
+        pbMessage(_INTL("If you save now, the other file's adventure, including items and Pokémon, will be entirely lost."))
         if !pbConfirmMessageSerious(
             _INTL('Are you sure you want to save now and overwrite the other save file?'))
           pbSEPlay('GUI save choice')

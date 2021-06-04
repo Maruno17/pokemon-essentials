@@ -149,10 +149,20 @@ class Game_Event < Game_Character
     end
   end
 
-  def check_event_trigger_touch(check_x, check_y)
+  def check_event_trigger_touch(dir)
     return if $game_system.map_interpreter.running?
     return if @trigger != 2   # Event touch
-    return if !at_coordinate?(check_x, check_y)
+    case dir
+    when 2
+      return if $game_player.y != @y + 1
+    when 4
+      return if $game_player.x != @x - 1
+    when 6
+      return if $game_player.x != @x + @width
+    when 8
+      return if $game_player.y != @y - @height
+    end
+    return if !in_line_with_coordinate?($game_player.x, $game_player.y)
     return if jumping? || over_trigger?
     start
   end
@@ -222,6 +232,7 @@ class Game_Event < Game_Character
     @direction_fix        = @page.direction_fix
     @through              = @page.through
     @always_on_top        = @page.always_on_top
+    calculate_bush_depth
     @trigger              = @page.trigger
     @list                 = @page.list
     @interpreter          = nil
@@ -233,7 +244,6 @@ class Game_Event < Game_Character
 
   def should_update?(recalc=false)
     return @to_update if !recalc
-    return true if $PokemonSystem.tilemap==2
     return true if @trigger && (@trigger == 3 || @trigger == 4)
     return true if @move_route_forcing
     return true if @event.name[/update/i]

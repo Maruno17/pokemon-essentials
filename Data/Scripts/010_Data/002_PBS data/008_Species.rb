@@ -164,7 +164,7 @@ module GameData
       @height                = hash[:height]                || 1
       @weight                = hash[:weight]                || 1
       @color                 = hash[:color]                 || :Red
-      @shape                 = hash[:shape]                 || :Body
+      @shape                 = hash[:shape]                 || :Head
       @habitat               = hash[:habitat]               || :None
       @generation            = hash[:generation]            || 0
       @mega_stone            = hash[:mega_stone]
@@ -202,14 +202,14 @@ module GameData
 
     def apply_metrics_to_sprite(sprite, index, shadow = false)
       if shadow
-        if (index & 1) == 1   # Foe Pokemon
+        if (index & 1) == 1   # Foe Pokémon
           sprite.x += @shadow_x * 2
         end
       else
-        if (index & 1) == 0   # Player's Pokemon
+        if (index & 1) == 0   # Player's Pokémon
           sprite.x += @back_sprite_x * 2
           sprite.y += @back_sprite_y * 2
-        else                  # Foe Pokemon
+        else                  # Foe Pokémon
           sprite.x += @front_sprite_x * 2
           sprite.y += @front_sprite_y * 2
           sprite.y -= @front_sprite_altitude * 2
@@ -289,7 +289,7 @@ module GameData
       return false
     end
 
-    # Used by the Moon Ball when checking if a Pokemon's evolution family
+    # Used by the Moon Ball when checking if a Pokémon's evolution family
     # includes an evolution that uses the Moon Stone.
     def family_item_evolutions_use_item?(check_item = nil)
       sp = self.get_baby_species

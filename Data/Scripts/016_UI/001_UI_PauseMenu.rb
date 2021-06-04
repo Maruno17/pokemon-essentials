@@ -116,7 +116,7 @@ class PokemonPauseMenu
     if $Trainer.has_pokedex && $Trainer.pokedex.accessible_dexes.length > 0
       commands[cmdPokedex = commands.length] = _INTL("Pokédex")
     end
-    commands[cmdPokemon = commands.length]   = _INTL("Pokemon") if $Trainer.party_count > 0
+    commands[cmdPokemon = commands.length]   = _INTL("Pokémon") if $Trainer.party_count > 0
     commands[cmdBag = commands.length]       = _INTL("Bag") if !pbInBugContest?
     commands[cmdPokegear = commands.length]  = _INTL("Pokégear") if $Trainer.has_pokegear
     commands[cmdTrainer = commands.length]   = $Trainer.name

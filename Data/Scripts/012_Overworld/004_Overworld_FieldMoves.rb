@@ -112,14 +112,14 @@ def pbHiddenMoveAnimation(pokemon)
            Graphics.width/2,bg.bitmap.height/2,
            Graphics.frame_rate*4/10)
       end
-    when 2   # Slide Pokemon sprite in from right to centre
+    when 2   # Slide Pokémon sprite in from right to centre
       ptinterp.update
       sprite.x=ptinterp.x
       sprite.y=ptinterp.y
       sprite.visible=true
       if ptinterp.done?
         phase=3
-        GameData::Species.play_cry_from_pokemon(pokemon)
+        pokemon.play_cry
         frames=0
       end
     when 3   # Wait
@@ -132,7 +132,7 @@ def pbHiddenMoveAnimation(pokemon)
            Graphics.frame_rate*4/10)
         frames=0
       end
-    when 4   # Slide Pokemon sprite off from centre to left
+    when 4   # Slide Pokémon sprite off from centre to left
       ptinterp.update
       sprite.x=ptinterp.x
       sprite.y=ptinterp.y
@@ -302,7 +302,7 @@ def pbDive
   move = :DIVE
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE,false) || (!$DEBUG && !movefinder)
-    pbMessage(_INTL("The sea is deep here. A Pokemon may be able to go underwater."))
+    pbMessage(_INTL("The sea is deep here. A Pokémon may be able to go underwater."))
     return false
   end
   if pbConfirmMessage(_INTL("The sea is deep here. Would you like to use Dive?"))
@@ -339,7 +339,7 @@ def pbSurfacing
   move = :DIVE
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE,false) || (!$DEBUG && !movefinder)
-    pbMessage(_INTL("Light is filtering down from above. A Pokemon may be able to surface here."))
+    pbMessage(_INTL("Light is filtering down from above. A Pokémon may be able to surface here."))
     return false
   end
   if pbConfirmMessage(_INTL("Light is filtering down from above. Would you like to use Dive?"))
@@ -560,10 +560,10 @@ def pbHeadbutt(event=nil)
   move = :HEADBUTT
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !$DEBUG && !movefinder
-    pbMessage(_INTL("A Pokemon could be in this tree. Maybe a Pokemon could shake it."))
+    pbMessage(_INTL("A Pokémon could be in this tree. Maybe a Pokémon could shake it."))
     return false
   end
-  if pbConfirmMessage(_INTL("A Pokemon could be in this tree. Would you like to use Headbutt?"))
+  if pbConfirmMessage(_INTL("A Pokémon could be in this tree. Would you like to use Headbutt?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
@@ -605,7 +605,7 @@ def pbRockSmash
   move = :ROCKSMASH
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_ROCKSMASH,false) || (!$DEBUG && !movefinder)
-    pbMessage(_INTL("It's a rugged rock, but a Pokemon may be able to smash it."))
+    pbMessage(_INTL("It's a rugged rock, but a Pokémon may be able to smash it."))
     return false
   end
   if pbConfirmMessage(_INTL("This rock appears to be breakable. Would you like to use Rock Smash?"))
@@ -652,10 +652,10 @@ def pbStrength
   move = :STRENGTH
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_STRENGTH,false) || (!$DEBUG && !movefinder)
-    pbMessage(_INTL("It's a big boulder, but a Pokemon may be able to push it aside."))
+    pbMessage(_INTL("It's a big boulder, but a Pokémon may be able to push it aside."))
     return false
   end
-  pbMessage(_INTL("It's a big boulder, but a Pokemon may be able to push it aside.\1"))
+  pbMessage(_INTL("It's a big boulder, but a Pokémon may be able to push it aside.\1"))
   if pbConfirmMessage(_INTL("Would you like to use Strength?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
@@ -696,22 +696,21 @@ HiddenMoveHandlers::UseMove.add(:STRENGTH,proc { |move,pokemon|
 # Surf
 #===============================================================================
 def pbSurf
-  encounter = $PokemonEncounters.has_encounter_type?(:SuperRod)
   return false if $game_player.pbFacingEvent
   return false if $game_player.pbHasDependentEvents?
   move = :SURF
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF,false) || (!$DEBUG && !movefinder) || (!encounter)
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF,false) || (!$DEBUG && !movefinder)
     return false
   end
-  if pbConfirmMessage(_INTL("The water seems to have Pokemon swimming...\nWould you like to watch them?"))
+  if pbConfirmMessage(_INTL("The water is a deep blue...\nWould you like to surf on it?"))
+    speciesname = (movefinder) ? movefinder.name : $Trainer.name
+    pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbCancelVehicles
+    pbHiddenMoveAnimation(movefinder)
     surfbgm = GameData::Metadata.get.surf_BGM
     pbCueBGM(surfbgm,0.5) if surfbgm
-    if pbFishing(encounter,3)
-      pbEncounter(:SuperRod)
-    end
-    $game_map.autoplayAsCue
+    pbStartSurfing
     return true
   end
   return false
@@ -835,7 +834,7 @@ def pbSweetScent
   end
   viewport.dispose
   enctype = $PokemonEncounters.encounter_type
-  if enctype < 0 || !$PokemonEncounters.encounter_possible_here? ||
+  if enctype || !$PokemonEncounters.encounter_possible_here? ||
      !pbEncounter(enctype)
     pbMessage(_INTL("There appears to be nothing here..."))
   end

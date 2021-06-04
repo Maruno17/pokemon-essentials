@@ -325,7 +325,7 @@ class PokeBattle_Battle
       b.pbFaint if b.fainted?
       recipient.pbFaint if recipient.fainted?
     end
-    # Damage from Hyper Mode (Shadow Pokemon)
+    # Damage from Hyper Mode (Shadow Pokémon)
     priority.each do |b|
       next if !b.inHyperMode? || @choices[b.index][0]!=:UseMove
       hpLoss = b.totalhp/24
@@ -556,7 +556,7 @@ class PokeBattle_Battle
     pbEORTerrain
     priority.each do |b|
       next if b.fainted?
-      # Hyper Mode (Shadow Pokemon)
+      # Hyper Mode (Shadow Pokémon)
       if b.inHyperMode?
         if pbRandom(100)<10
           b.pokemon.hyper_mode = false
@@ -593,7 +593,7 @@ class PokeBattle_Battle
     return if @decision>0
     # Form checks
     priority.each { |b| b.pbCheckForm(true) }
-    # Switch Pokemon in if possible
+    # Switch Pokémon in if possible
     pbEORSwitch
     return if @decision>0
     # In battles with at least one side of size 3+, move battlers around if none

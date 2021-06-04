@@ -79,7 +79,7 @@ class PokemonTrade_Scene
     picturePoke.setXY(0,@sprites["rsprite1"].x,@sprites["rsprite1"].y)
     picturePoke.setOrigin(0,PictureOrigin::Bottom)
     picturePoke.setVisible(0,true)
-    # Change Pokemon color
+    # Change Pokémon color
     picturePoke.moveColor(2,5,Color.new(31*8,22*8,30*8,255))
     # Recall
     delay = picturePoke.totalDuration
@@ -151,11 +151,11 @@ class PokemonTrade_Scene
     pictureBall.setName(delay,ballopenimage)
     pictureBall.setSrcSize(delay,32,64)
     pictureBall.setVisible(delay+5,false)
-    # Pokemon appears and enlarges
+    # Pokémon appears and enlarges
     picturePoke.setVisible(delay,true)
     picturePoke.moveZoom(delay,8,100)
     picturePoke.moveXY(delay,8,Graphics.width/2,@sprites["rsprite2"].y)
-    # Return Pokemon's color to normal and play cry
+    # Return Pokémon's color to normal and play cry
     delay = picturePoke.totalDuration
     picturePoke.moveColor(delay,5,Color.new(31*8,22*8,30*8,0))
     cry = GameData::Species.cry_filename_from_pokemon(@pokemon2)
@@ -184,7 +184,7 @@ class PokemonTrade_Scene
 
   def pbTrade
     pbBGMStop
-    GameData::Species.play_cry_from_pokemon(@pokemon)
+    @pokemon.play_cry
     speciesname1=GameData::Species.get(@pokemon.species).name
     speciesname2=GameData::Species.get(@pokemon2.species).name
     pbMessageDisplay(@sprites["msgwindow"],

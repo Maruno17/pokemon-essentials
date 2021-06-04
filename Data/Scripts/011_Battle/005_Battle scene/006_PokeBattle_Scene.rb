@@ -333,7 +333,7 @@ class PokeBattle_Scene
   #=============================================================================
   #
   #=============================================================================
-  # This method is called when the player wins a wild Pokemon battle.
+  # This method is called when the player wins a wild Pokémon battle.
   # This method can change the battle's music for example.
   def pbWildBattleSuccess
     @battleEnd = true

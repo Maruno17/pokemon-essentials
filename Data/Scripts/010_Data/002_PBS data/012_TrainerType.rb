@@ -24,13 +24,17 @@ module GameData
       if optional_suffix && !optional_suffix.empty?
         ret = path + tr_type_data.id.to_s + optional_suffix + suffix
         return ret if pbResolveBitmap(ret)
+        ret = path + sprintf("%03d", tr_type_data.id_number) + optional_suffix + suffix
+        return ret if pbResolveBitmap(ret)
       end
       ret = path + tr_type_data.id.to_s + suffix
+      return ret if pbResolveBitmap(ret)
+      ret = path + sprintf("%03d", tr_type_data.id_number) + suffix
       return (pbResolveBitmap(ret)) ? ret : nil
     end
 
     def self.charset_filename(tr_type)
-      return self.check_file(tr_type, "Graphics/Characters/trchar")
+      return self.check_file(tr_type, "Graphics/Characters/trainer_")
     end
 
     def self.charset_filename_brief(tr_type)

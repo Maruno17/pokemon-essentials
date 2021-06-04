@@ -93,7 +93,7 @@ end
 
 
 #===============================================================================
-# Command menu (Fight/Pokemon/Bag/Run)
+# Command menu (Fight/Pokémon/Bag/Run)
 #===============================================================================
 class CommandMenuDisplay < BattleMenuBase
   # If true, displays graphics from Graphics/Pictures/Battle/overlay_command.png
@@ -144,7 +144,7 @@ class CommandMenuDisplay < BattleMenuBase
         next button
       end
     else
-      # Create command window (shows Fight/Bag/Pokemon/Run)
+      # Create command window (shows Fight/Bag/Pokémon/Run)
       @cmdWindow = Window_CommandPokemon.newWithSize([],
          self.x+Graphics.width-240,self.y,240,Graphics.height-self.y,viewport)
       @cmdWindow.columns       = 2
@@ -349,8 +349,7 @@ class FightMenuDisplay < BattleMenuBase
       next if !@visibility["button_#{i}"]
       x = button.x-self.x+button.src_rect.width/2
       y = button.y-self.y+2
-      moveNameBase = PokeBattle_SceneConstants::MESSAGE_BASE_COLOR
-=begin
+      moveNameBase = TEXT_BASE_COLOR
       if moves[i].type
         # NOTE: This takes a colour from a particular pixel in the button
         #       graphic and makes the move name's base colour that same colour.
@@ -359,7 +358,6 @@ class FightMenuDisplay < BattleMenuBase
         #       of code to ensure the font is an appropriate colour.
         moveNameBase = button.bitmap.get_pixel(10,button.src_rect.y+34)
       end
-=end
       textPos.push([moves[i].name,x,y,2,moveNameBase,TEXT_SHADOW_COLOR])
     end
     pbDrawTextPositions(@overlay.bitmap,textPos)
@@ -540,7 +538,7 @@ class TargetMenuDisplay < BattleMenuBase
     @overlay.bitmap.clear
     textpos = []
     @buttons.each_with_index do |button,i|
-      next if !button || @texts[i].nil? || @texts[i]==""
+      next if !button || nil_or_empty?(@texts[i])
       x = button.x-self.x+button.src_rect.width/2
       y = button.y-self.y+2
       textpos.push([@texts[i],x,y,2,TEXT_BASE_COLOR,TEXT_SHADOW_COLOR])

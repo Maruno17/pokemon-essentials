@@ -25,10 +25,10 @@ class PokeBattle_Battle
   end
 
   def pbRegisterItem(idxBattler,item,idxTarget=nil,idxMove=nil)
-    # Register for use of item on a Pokemon in the party
+    # Register for use of item on a Pokémon in the party
     @choices[idxBattler][0] = :UseItem
     @choices[idxBattler][1] = item        # ID of item to be used
-    @choices[idxBattler][2] = idxTarget   # Party index of Pokemon to use item on
+    @choices[idxBattler][2] = idxTarget   # Party index of Pokémon to use item on
     @choices[idxBattler][3] = idxMove     # Index of move to recharge (Ethers)
     # Delete the item from the Bag. If it turns out it will have no effect, it
     # will be re-added to the Bag later.
@@ -83,7 +83,7 @@ class PokeBattle_Battle
     end
   end
 
-  # Uses an item on a Pokemon in the trainer's party.
+  # Uses an item on a Pokémon in the trainer's party.
   def pbUseItemOnPokemon(item,idxParty,userBattler)
     trainerName = pbGetOwnerName(userBattler.index)
     pbUseItemMessage(item,trainerName)
@@ -100,7 +100,7 @@ class PokeBattle_Battle
     pbReturnUnusedItemToBag(item,userBattler.index)
   end
 
-  # Uses an item on a Pokemon in battle that belongs to the trainer.
+  # Uses an item on a Pokémon in battle that belongs to the trainer.
   def pbUseItemOnBattler(item,idxParty,userBattler)
     trainerName = pbGetOwnerName(userBattler.index)
     pbUseItemMessage(item,trainerName)

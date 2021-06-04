@@ -61,7 +61,7 @@ end
 
 
 module PokeBattle_BallAnimationMixin
-  # Returns the color that the Pokemon turns when it goes into or out of its
+  # Returns the color that the Pokémon turns when it goes into or out of its
   # Poké Ball.
   def getBattlerColorFromPokeBall(poke_ball)
     case poke_ball
@@ -260,7 +260,7 @@ module PokeBattle_BallAnimationMixin
   def ballBurst(delay, ballX, ballY, poke_ball)
   end
 
-  # The Poké Ball burst animation used when absorbing a wild Pokemon during a
+  # The Poké Ball burst animation used when absorbing a wild Pokémon during a
   # capture attempt.
   def ballBurstCapture(delay, ballX, ballY, poke_ball)
   end
@@ -270,7 +270,7 @@ module PokeBattle_BallAnimationMixin
     ball.moveTone(delay, 4, Tone.new(-64, -64, -64, 128))
   end
 
-  # The Poké Ball burst animation used when recalling a Pokemon.
+  # The Poké Ball burst animation used when recalling a Pokémon.
   def ballBurstRecall(delay, ballX, ballY, poke_ball)
   end
 end

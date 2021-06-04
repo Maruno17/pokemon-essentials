@@ -2,7 +2,7 @@ class PokeBattle_Battler
   # Fundamental to this object
   attr_reader   :battle
   attr_accessor :index
-  # The Pokemon and its properties
+  # The Pokémon and its properties
   attr_reader   :pokemon
   attr_accessor :pokemonIndex
   attr_accessor :species
@@ -123,14 +123,14 @@ class PokeBattle_Battler
   end
 
   #=============================================================================
-  # Properties from Pokemon
+  # Properties from Pokémon
   #=============================================================================
   def happiness;    return @pokemon ? @pokemon.happiness : 0;    end
   def nature;       return @pokemon ? @pokemon.nature : 0;       end
   def pokerusStage; return @pokemon ? @pokemon.pokerusStage : 0; end
 
   #=============================================================================
-  # Mega Evolution, Primal Reversion, Shadow Pokemon
+  # Mega Evolution, Primal Reversion, Shadow Pokémon
   #=============================================================================
   def hasMega?
     return false if @effects[PBEffects::Transform]
@@ -296,7 +296,7 @@ class PokeBattle_Battler
     return @pokemon && @pokemon.isSpecies?(species)
   end
 
-  # Returns the active types of this Pokemon. The array should not include the
+  # Returns the active types of this Pokémon. The array should not include the
   # same type more than once, and should not include any invalid type numbers
   # (e.g. -1).
   def pbTypes(withType3=false)
@@ -330,10 +330,10 @@ class PokeBattle_Battler
     return activeTypes.length > 0
   end
 
-  # NOTE: Do not create any held item which affects whether a Pokemon's ability
-  #       is active. The ability Klutz affects whether a Pokemon's item is
+  # NOTE: Do not create any held item which affects whether a Pokémon's ability
+  #       is active. The ability Klutz affects whether a Pokémon's item is
   #       active, and the code for the two combined would cause an infinite loop
-  #       (regardless of whether any Pokemon actualy has either the ability or
+  #       (regardless of whether any Pokémon actualy has either the ability or
   #       the item - the code existing is enough to cause the loop).
   def abilityActive?(ignore_fainted = false)
     return false if fainted? && !ignore_fainted
@@ -344,7 +344,7 @@ class PokeBattle_Battler
   def hasActiveAbility?(check_ability, ignore_fainted = false)
     return false if !abilityActive?(ignore_fainted)
     return check_ability.include?(@ability_id) if check_ability.is_a?(Array)
-    return check_ability == self.ability
+    return self.ability == check_ability
   end
   alias hasWorkingAbility hasActiveAbility?
 
@@ -415,13 +415,21 @@ class PokeBattle_Battler
   end
   alias hasWorkingItem hasActiveItem?
 
-  # Returns whether the specified item will be unlosable for this Pokemon.
+  # Returns whether the specified item will be unlosable for this Pokémon.
   def unlosableItem?(check_item)
     return false if !check_item
     return true if GameData::Item.get(check_item).is_mail?
     return false if @effects[PBEffects::Transform]
-    # Items that change a Pokemon's form
-    return true if @pokemon && @pokemon.getMegaForm(true) > 0   # Mega Stone
+    # Items that change a Pokémon's form
+    if mega?   # Check if item was needed for this Mega Evolution
+      return true if @pokemon.species_data.mega_stone == check_item
+    else   # Check if item could cause a Mega Evolution
+      GameData::Species.each do |data|
+        next if data.species != @species || data.unmega_form != @form
+        return true if data.mega_stone == check_item
+      end
+    end
+    # Other unlosable items
     return GameData::Item.get(check_item).unlosable?(@species, self.ability)
   end
 
@@ -629,7 +637,7 @@ class PokeBattle_Battler
   #=============================================================================
   # Methods relating to this battler's position on the battlefield
   #=============================================================================
-  # Returns whether the given position belongs to the opposing Pokemon's side.
+  # Returns whether the given position belongs to the opposing Pokémon's side.
   def opposes?(i=0)
     i = i.index if i.respond_to?("index")
     return (@index&1)!=(i&1)
@@ -663,19 +671,19 @@ class PokeBattle_Battler
     return @battle.sides[idxOwnSide]
   end
 
-  # Returns the data structure for the opposing Pokemon's side.
+  # Returns the data structure for the opposing Pokémon's side.
   def pbOpposingSide
     return @battle.sides[idxOpposingSide]
   end
 
-  # Yields each unfainted ally Pokemon.
+  # Yields each unfainted ally Pokémon.
   def eachAlly
     @battle.battlers.each do |b|
       yield b if b && !b.fainted? && !b.opposes?(@index) && b.index!=@index
     end
   end
 
-  # Yields each unfainted opposing Pokemon.
+  # Yields each unfainted opposing Pokémon.
   def eachOpposing
     @battle.battlers.each { |b| yield b if b && !b.fainted? && b.opposes?(@index) }
   end

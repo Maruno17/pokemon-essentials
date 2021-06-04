@@ -110,12 +110,12 @@ class PokeBattle_AI
   #=============================================================================
   # Get scores for the given move against each possible target
   #=============================================================================
-  # Wild Pokemon choose their moves randomly.
+  # Wild Pokémon choose their moves randomly.
   def pbRegisterMoveWild(_user,idxMove,choices)
     choices.push([idxMove,100,-1])   # Move index, score, target
   end
 
-  # Trainer Pokemon calculate how much they want to use each of their moves.
+  # Trainer Pokémon calculate how much they want to use each of their moves.
   def pbRegisterMoveTrainer(user,idxMove,choices,skill)
     move = user.moves[idxMove]
     target_data = move.pbTarget(user)
@@ -159,7 +159,7 @@ class PokeBattle_AI
     # A score of 0 here means it absolutely should not be used
     return 0 if score<=0
     if skill>=PBTrainerAI.mediumSkill
-      # Prefer damaging moves if AI has no more Pokemon or AI is less clever
+      # Prefer damaging moves if AI has no more Pokémon or AI is less clever
       if @battle.pbAbleNonActiveCount(user.idxOwnSide)==0
         if !(skill>=PBTrainerAI.highSkill && @battle.pbAbleNonActiveCount(target.idxOwnSide)>0)
           if move.statusMove?

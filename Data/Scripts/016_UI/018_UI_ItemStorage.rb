@@ -53,12 +53,12 @@ end
 #
 #===============================================================================
 class ItemStorage_Scene
-  ITEMLISTBASECOLOR   = Color.new(255,255,255)
-  ITEMLISTSHADOWCOLOR = Color.new(72,72,72)
-  ITEMTEXTBASECOLOR   = Color.new(255,255,255)
-  ITEMTEXTSHADOWCOLOR = Color.new(72,72,72)
-  TITLEBASECOLOR      = Color.new(255,255,255)
-  TITLESHADOWCOLOR    = Color.new(72,72,72)
+  ITEMLISTBASECOLOR   = Color.new(88,88,80)
+  ITEMLISTSHADOWCOLOR = Color.new(168,184,184)
+  ITEMTEXTBASECOLOR   = Color.new(248,248,248)
+  ITEMTEXTSHADOWCOLOR = Color.new(0,0,0)
+  TITLEBASECOLOR      = Color.new(248,248,248)
+  TITLESHADOWCOLOR    = Color.new(0,0,0)
   ITEMSVISIBLE        = 7
 
   def initialize(title)

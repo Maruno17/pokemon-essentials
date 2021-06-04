@@ -6,8 +6,8 @@ class PokeBattle_Scene
 
   def pbInitSprites
     _bugContest_pbInitSprites
-    # "helpwindow" shows the currently caught Pokemon's details when asking if
-    # you want to replace it with a newly caught Pokemon.
+    # "helpwindow" shows the currently caught Pokémon's details when asking if
+    # you want to replace it with a newly caught Pokémon.
     @sprites["helpwindow"] = Window_UnformattedTextPokemon.newWithSize("",0,0,32,32,@viewport)
     @sprites["helpwindow"].z       = 90
     @sprites["helpwindow"].visible = false
@@ -49,7 +49,7 @@ class PokeBattle_BugContestBattle < PokeBattle_Battle
        _INTL("Sport Balls: {1}",@ballCount),
        _INTL("Fight"),
        _INTL("Ball"),
-       _INTL("Pokemon"),
+       _INTL("Pokémon"),
        _INTL("Run")
     ],4)
   end
@@ -62,12 +62,12 @@ class PokeBattle_BugContestBattle < PokeBattle_Battle
     if pbBugContestState.lastPokemon
       lastPokemon = pbBugContestState.lastPokemon
       pbDisplayPaused(_INTL("You already caught a {1}.",lastPokemon.name))
-      helptext = _INTL("STOCK Pokemon:\n {1} Lv.{2} MaxHP: {3}\nTHIS Pokemon:\n {4} Lv.{5} MaxHP: {6}",
+      helptext = _INTL("STOCK POKéMON:\n {1} Lv.{2} MaxHP: {3}\nTHIS POKéMON:\n {4} Lv.{5} MaxHP: {6}",
          lastPokemon.name,lastPokemon.level,lastPokemon.totalhp,
          pkmn.name,pkmn.level,pkmn.totalhp
       )
       @scene.pbShowHelp(helptext)
-      if pbDisplayConfirm(_INTL("Switch Pokemon?"))
+      if pbDisplayConfirm(_INTL("Switch Pokémon?"))
         pbBugContestState.lastPokemon = pkmn
         @scene.pbHideHelp
       else
