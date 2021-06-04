@@ -205,9 +205,8 @@ class Game_Map
         for j in [2, 1, 0]
           facing_tile_id = data[newx, newy, j]
           return false if facing_tile_id == nil
-          facing_terrain = GameData::TerrainTag.try_get(@terrain_tags[facing_tile_id])
-          return false if facing_terrain.ledge
-          break if facing_terrain.id != :None && !facing_terrain.ignore_passability
+          return false if GameData::TerrainTag.try_get(@terrain_tags[facing_tile_id]).ledge
+          break
         end
       end
       # Regular passability checks

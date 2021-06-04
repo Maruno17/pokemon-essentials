@@ -148,7 +148,8 @@ class Sprite_Character < RPG::Sprite
       self.oy -= @character.bob_height
     end
     if self.visible
-      if @character.is_a?(Game_Event) && @character.name[/regulartone/i]
+      if $PokemonSystem.tilemap == 0 ||
+         (@character.is_a?(Game_Event) && @character.name[/regulartone/i])
         self.tone.set(0, 0, 0, 0)
       else
         pbDayNightTint(self)

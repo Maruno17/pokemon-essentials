@@ -151,7 +151,7 @@ Moves = 1,POWDERSNOW,4,TAILWHIP,7,ROAR,9,BABYDOLLEYES,10,ICESHARD,12,CONFUSERAY,
 TutorMoves = AQUATAIL,ATTRACT,AURORAVEIL,BLIZZARD,CONFIDE,COVET,DARKPULSE,DOUBLETEAM,FACADE,FOULPLAY,FROSTBREATH,FRUSTRATION,HAIL,HEALBELL,HIDDENPOWER,ICEBEAM,ICYWIND,IRONTAIL,PAINSPLIT,PAYBACK,PROTECT,PSYCHUP,RAINDANCE,REST,RETURN,ROAR,ROLEPLAY,ROUND,SAFEGUARD,SLEEPTALK,SNORE,SPITE,SUBSTITUTE,SWAGGER,TOXIC,ZENHEADBUTT
 EggMoves = AGILITY,CHARM,DISABLE,ENCORE,EXTRASENSORY,FLAIL,FREEZEDRY,HOWL,HYPNOSIS,MOONBLAST,POWERSWAP,SECRETPOWER,SPITE,TAILSLAP
 Color = White
-Pokedex = In hot weather, this Pokémon makes ice shards with its six tails and sprays them around to cool itself off.
+Pokedex = In hot weather, this Pokemon makes ice shards with its six tails and sprays them around to cool itself off.
 Generation = 7
 WildItemUncommon = SNOWBALL
 Evolutions = NINETALES,Item,ICESTONE
@@ -580,7 +580,7 @@ BaseStats = 100,164,150,71,95,120
 HiddenAbility = SANDSTREAM
 Height = 2.5
 Weight = 255.0
-Pokedex = Due to the colossal power poured into it, this Pokémon's back split right open. Its destructive instincts are the only thing keeping it moving.
+Pokedex = Due to the colossal power poured into it, this Pokemon's back split right open. Its destructive instincts are the only thing keeping it moving.
 Generation = 6
 #-------------------------------
 [SCEPTILE,1]
@@ -745,7 +745,7 @@ BaseStats = 65,150,60,115,115,60
 Abilities = MAGICBOUNCE
 HiddenAbility = MAGICBOUNCE
 Weight = 49.0
-Pokedex = When this Pokémon whips the winglike fur on its back as though beating its wings, it sends an intimidating aura flying at its opponents.
+Pokedex = When this Pokemon whips the winglike fur on its back as though beating its wings, it sends an intimidating aura flying at its opponents.
 Generation = 6
 #-------------------------------
 [GLALIE,1]
@@ -1202,7 +1202,7 @@ EffortPoints = 0,0,0,0,3,0
 Abilities = TURBOBLAZE
 Moves = 1,ICYWIND,1,DRAGONRAGE,8,IMPRISON,15,ANCIENTPOWER,22,ICEBEAM,29,DRAGONBREATH,36,SLASH,43,FUSIONFLARE,50,ICEBURN,57,DRAGONPULSE,64,NOBLEROAR,71,ENDEAVOR,78,BLIZZARD,85,OUTRAGE,92,HYPERVOICE
 Height = 3.6
-Pokedex = It has foreseen that a world of truth will arrive for people and Pokémon. It strives to protect that future.
+Pokedex = It has foreseen that a world of truth will arrive for people and Pokemon. It strives to protect that future.
 BattlerPlayerX = 0
 BattlerEnemyX = 9
 BattlerEnemyY = 7
@@ -1214,7 +1214,7 @@ EffortPoints = 0,3,0,0,0,0
 Abilities = TERAVOLT
 Moves = 1,ICYWIND,1,DRAGONRAGE,8,IMPRISON,15,ANCIENTPOWER,22,ICEBEAM,29,DRAGONBREATH,36,SLASH,43,FUSIONBOLT,50,FREEZESHOCK,57,DRAGONPULSE,64,NOBLEROAR,71,ENDEAVOR,78,BLIZZARD,85,OUTRAGE,92,HYPERVOICE
 Height = 3.3
-Pokedex = It's said that this Pokémon battles in order to protect the ideal world that will exist in the future for people and Pokémon.
+Pokedex = It's said that this Pokemon battles in order to protect the ideal world that will exist in the future for people and Pokemon.
 BattlerEnemyX = 5
 BattlerEnemyY = 4
 #-------------------------------

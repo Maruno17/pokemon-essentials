@@ -1,7 +1,7 @@
 #===============================================================================
-# Query information about Pokémon in the Day Care.
+# Query information about Pokemon in the Day Care.
 #===============================================================================
-# Returns the number of Pokémon in the Day Care.
+# Returns the number of Pokemon in the Day Care.
 def pbDayCareDeposited
   ret = 0
   for i in 0...2
@@ -10,7 +10,7 @@ def pbDayCareDeposited
   return ret
 end
 
-# Get name/cost info of a particular Pokémon in the Day Care.
+# Get name/cost info of a particular Pokemon in the Day Care.
 def pbDayCareGetDeposited(index,nameVariable,costVariable)
   pkmn = $PokemonGlobal.daycare[index][0]
   return false if !pkmn
@@ -19,7 +19,7 @@ def pbDayCareGetDeposited(index,nameVariable,costVariable)
   $game_variables[costVariable] = cost if costVariable>=0
 end
 
-# Get name/levels gained info of a particular Pokémon in the Day Care.
+# Get name/levels gained info of a particular Pokemon in the Day Care.
 def pbDayCareGetLevelGain(index,nameVariable,levelVariable)
   pkmn = $PokemonGlobal.daycare[index][0]
   return false if !pkmn
@@ -45,7 +45,7 @@ end
 
 
 #===============================================================================
-# Manipulate Pokémon in the Day Care.
+# Manipulate Pokemon in the Day Care.
 #===============================================================================
 def pbDayCareDeposit(index)
   for i in 0...2
@@ -59,14 +59,14 @@ def pbDayCareDeposit(index)
     $PokemonGlobal.daycareEggSteps = 0
     return
   end
-  raise _INTL("No room to deposit a Pokémon")
+  raise _INTL("No room to deposit a Pokemon")
 end
 
 def pbDayCareWithdraw(index)
   if !$PokemonGlobal.daycare[index][0]
-    raise _INTL("There's no Pokémon here...")
+    raise _INTL("There's no Pokemon here...")
   elsif $Trainer.party_full?
-    raise _INTL("Can't store the Pokémon...")
+    raise _INTL("Can't store the Pokemon...")
   else
     $Trainer.party[$Trainer.party.length] = $PokemonGlobal.daycare[index][0]
     $PokemonGlobal.daycare[index][0] = nil
@@ -78,7 +78,7 @@ end
 def pbDayCareChoose(text,variable)
   count = pbDayCareDeposited
   if count==0
-    raise _INTL("There's no Pokémon here...")
+    raise _INTL("There's no Pokemon here...")
   elsif count==1
     $game_variables[variable] = ($PokemonGlobal.daycare[0][0]) ? 0 : 1
   else
@@ -102,7 +102,7 @@ end
 
 
 #===============================================================================
-# Check compatibility of Pokémon in the Day Care.
+# Check compatibility of Pokemon in the Day Care.
 #===============================================================================
 def pbIsDitto?(pkmn)
   return pkmn.species_data.egg_groups.include?(:Ditto)
@@ -122,21 +122,21 @@ def pbDayCareGetCompat
   return 0 if pbDayCareDeposited != 2
   pkmn1 = $PokemonGlobal.daycare[0][0]
   pkmn2 = $PokemonGlobal.daycare[1][0]
-  # Shadow Pokémon cannot breed
+  # Shadow Pokemon cannot breed
   return 0 if pkmn1.shadowPokemon? || pkmn2.shadowPokemon?
-  # Pokémon in the Undiscovered egg group cannot breed
+  # Pokemon in the Undiscovered egg group cannot breed
   egg_groups1 = pkmn1.species_data.egg_groups
   egg_groups2 = pkmn2.species_data.egg_groups
   return 0 if egg_groups1.include?(:Undiscovered) ||
               egg_groups2.include?(:Undiscovered)
-  # Pokémon that don't share an egg group (and neither is in the Ditto group)
+  # Pokemon that don't share an egg group (and neither is in the Ditto group)
   # cannot breed
   return 0 if !egg_groups1.include?(:Ditto) &&
               !egg_groups2.include?(:Ditto) &&
               (egg_groups1 & egg_groups2).length == 0
-  # Pokémon with incompatible genders cannot breed
+  # Pokemon with incompatible genders cannot breed
   return 0 if !pbDayCareCompatibleGender(pkmn1, pkmn2)
-  # Pokémon can breed; calculate a compatibility factor
+  # Pokemon can breed; calculate a compatibility factor
   ret = 1
   ret += 1 if pkmn1.species == pkmn2.species
   ret += 1 if pkmn1.owner.id != pkmn2.owner.id
@@ -150,7 +150,7 @@ end
 
 
 #===============================================================================
-# Generate an Egg based on Pokémon in the Day Care.
+# Generate an Egg based on Pokemon in the Day Care.
 #===============================================================================
 def pbDayCareGenerateEgg
   return if pbDayCareDeposited != 2
@@ -172,7 +172,7 @@ def pbDayCareGenerateEgg
     babyspecies = (ditto1) ? father.species : mother.species
   end
   # Determine the egg's species
-  babyspecies = GameData::Species.get(babyspecies).get_baby_species(true, mother.item_id, father.item_id)
+  babyspecies = GameData::Species.get(babyspecies).get_bably_species(true, mother.item_id, father.item_id)
   case babyspecies
   when :MANAPHY
     babyspecies = :PHIONE if GameData::Species.exists?(:PHIONE)
@@ -385,7 +385,7 @@ Events.onStepTaken += proc { |_sender,_e|
       $PokemonGlobal.daycareEgg = 1 if rand(100)<compatval   # Egg is generated
     end
   end
-  # Day Care Pokémon gain Exp/moves
+  # Day Care Pokemon gain Exp/moves
   for i in 0...2
     pkmn = $PokemonGlobal.daycare[i][0]
     next if !pkmn

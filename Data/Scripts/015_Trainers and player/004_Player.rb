@@ -24,12 +24,19 @@ class Player < Trainer
   attr_accessor :has_pokegear
   # @return [Boolean] whether the player has running shoes (i.e. can run)
   attr_accessor :has_running_shoes
-  # @return [Boolean] whether the creator of the Pokémon Storage System has been seen
+  # @return [Boolean] whether the creator of the Pokemon Storage System has been seen
   attr_accessor :seen_storage_creator
   # @return [Boolean] whether Mystery Gift can be used from the load screen
   attr_accessor :mystery_gift_unlocked
   # @return [Array<Array>] downloaded Mystery Gift data
   attr_accessor :mystery_gifts
+
+  def inspect
+    str = self.to_s.chop
+    party_str = @party.map { |p| p.species_data.species }.inspect
+    str << format(' %s @party=%s>', self.full_name, party_str)
+    return str
+  end
 
   # Sets the player's money. It can not exceed {Settings::MAX_MONEY}.
   # @param value [Integer] new money value

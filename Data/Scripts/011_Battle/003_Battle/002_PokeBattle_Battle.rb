@@ -2,8 +2,8 @@
 #    0 - Undecided or aborted
 #    1 - Player won
 #    2 - Player lost
-#    3 - Player or wild Pokémon ran from battle, or player forfeited the match
-#    4 - Wild Pokémon was caught
+#    3 - Player or wild Pokemon ran from battle, or player forfeited the match
+#    4 - Wild Pokemon was caught
 #    5 - Draw
 # Possible actions a battler can take in a round:
 #    :None
@@ -13,9 +13,9 @@
 #    :Call
 #    :Run
 #    :Shift
-# NOTE: If you want to have more than 3 Pokémon on a side at once, you will need
+# NOTE: If you want to have more than 3 Pokemon on a side at once, you will need
 #       to edit some code. Mainly this is to change/add coordinates for the
-#       sprites, describe the relationships between Pokémon and trainers, and to
+#       sprites, describe the relationships between Pokemon and trainers, and to
 #       change messages. The methods that will need editing are as follows:
 #           class PokeBattle_Battle
 #             def setBattleMode
@@ -43,7 +43,7 @@ class PokeBattle_Battle
   attr_reader   :field            # Effects common to the whole of a battle
   attr_reader   :sides            # Effects common to each side of a battle
   attr_reader   :positions        # Effects that apply to a battler position
-  attr_reader   :battlers         # Currently active Pokémon
+  attr_reader   :battlers         # Currently active Pokemon
   attr_reader   :sideSizes        # Array of number of battlers per side
   attr_accessor :backdrop         # Filename fragment used for background graphics
   attr_accessor :backdropBase     # Filename fragment used for base graphics
@@ -64,17 +64,17 @@ class PokeBattle_Battle
   attr_accessor :canLose          # True if player won't black out if they lose
   attr_accessor :switchStyle      # Switch/Set "battle style" option
   attr_accessor :showAnims        # "Battle Effects" option
-  attr_accessor :controlPlayer    # Whether player's Pokémon are AI controlled
-  attr_accessor :expGain          # Whether Pokémon can gain Exp/EVs
+  attr_accessor :controlPlayer    # Whether player's Pokemon are AI controlled
+  attr_accessor :expGain          # Whether Pokemon can gain Exp/EVs
   attr_accessor :moneyGain        # Whether the player can gain/lose money
   attr_accessor :rules
-  attr_accessor :choices          # Choices made by each Pokémon this round
-  attr_accessor :megaEvolution    # Battle index of each trainer's Pokémon to Mega Evolve
+  attr_accessor :choices          # Choices made by each Pokemon this round
+  attr_accessor :megaEvolution    # Battle index of each trainer's Pokemon to Mega Evolve
   attr_reader   :initialItems
   attr_reader   :recycleItems
   attr_reader   :belch
   attr_reader   :battleBond
-  attr_reader   :usedInBattle     # Whether each Pokémon was used in battle (for Burmy)
+  attr_reader   :usedInBattle     # Whether each Pokemon was used in battle (for Burmy)
   attr_reader   :successStates    # Success states
   attr_accessor :lastMoveUsed     # Last move used
   attr_accessor :lastMoveUser     # Last move user
@@ -93,9 +93,9 @@ class PokeBattle_Battle
   #=============================================================================
   def initialize(scene,p1,p2,player,opponent)
     if p1.length==0
-      raise ArgumentError.new(_INTL("Party 1 has no Pokémon."))
+      raise ArgumentError.new(_INTL("Party 1 has no Pokemon."))
     elsif p2.length==0
-      raise ArgumentError.new(_INTL("Party 2 has no Pokémon."))
+      raise ArgumentError.new(_INTL("Party 2 has no Pokemon."))
     end
     @scene             = scene
     @peer              = PokeBattle_BattlePeer.create
@@ -241,7 +241,7 @@ class PokeBattle_Battle
   end
 
   # Only used for the purpose of an error message when one trainer tries to
-  # switch another trainer's Pokémon.
+  # switch another trainer's Pokemon.
   def pbGetOwnerFromPartyIndex(idxBattler,idxParty)
     idxTrainer = pbGetOwnerIndexFromPartyIndex(idxBattler,idxParty)
     return (opposes?(idxBattler)) ? @opponent[idxTrainer] : @player[idxTrainer]
@@ -260,7 +260,7 @@ class PokeBattle_Battle
   end
 
   # Returns whether the battler in position idxBattler is owned by the same
-  # trainer that owns the Pokémon in party slot idxParty. This assumes that
+  # trainer that owns the Pokemon in party slot idxParty. This assumes that
   # both the battler position and the party slot are from the same side.
   def pbIsOwner?(idxBattler,idxParty)
     idxTrainer1 = pbGetOwnerIndexFromBattlerIndex(idxBattler)
@@ -273,7 +273,7 @@ class PokeBattle_Battle
     return pbGetOwnerIndexFromBattlerIndex(idxBattler)==0
   end
 
-  # Returns the number of Pokémon positions controlled by the given trainerIndex
+  # Returns the number of Pokemon positions controlled by the given trainerIndex
   # on the given side of battle.
   def pbNumPositions(side,idxTrainer)
     ret = 0
@@ -339,7 +339,7 @@ class PokeBattle_Battle
   end
 
   # For the given side of the field (0=player's, 1=opponent's), returns an array
-  # containing the number of able Pokémon in each team.
+  # containing the number of able Pokemon in each team.
   def pbAbleTeamCounts(side)
     party = pbParty(side)
     partyStarts = pbPartyStarts(side)
@@ -359,7 +359,7 @@ class PokeBattle_Battle
   end
 
   #=============================================================================
-  # Get team information (a team is only the Pokémon owned by a particular
+  # Get team information (a team is only the Pokemon owned by a particular
   # trainer)
   #=============================================================================
   def pbTeamIndexRangeFromBattlerIndex(idxBattler)
@@ -391,8 +391,8 @@ class PokeBattle_Battle
 
   # Used for Illusion.
   # NOTE: This cares about the temporary rearranged order of the team. That is,
-  #       if you do some switching, the last Pokémon in the team could change
-  #       and the Illusion could be a different Pokémon.
+  #       if you do some switching, the last Pokemon in the team could change
+  #       and the Illusion could be a different Pokemon.
   def pbLastInTeam(idxBattler)
     party       = pbParty(idxBattler)
     partyOrders = pbPartyOrder(idxBattler)
@@ -400,8 +400,8 @@ class PokeBattle_Battle
     ret = -1
     party.each_with_index do |pkmn,i|
       next if i<idxPartyStart || i>=idxPartyEnd   # Check the team only
-      next if !pkmn || !pkmn.able?   # Can't copy a non-fainted Pokémon or egg
-      ret = i if ret < 0 || partyOrders[i] > partyOrders[ret]
+      next if !pkmn || !pkmn.able?   # Can't copy a non-fainted Pokemon or egg
+      ret = i if partyOrders[i]>partyOrders[ret]
     end
     return ret
   end
@@ -444,7 +444,7 @@ class PokeBattle_Battle
     return ret
   end
 
-  # This method only counts the player's Pokémon, not a partner trainer's.
+  # This method only counts the player's Pokemon, not a partner trainer's.
   def pbPlayerBattlerCount
     ret = 0
     eachSameSideBattler { |b| ret += 1 if b.pbOwnedByPlayer? }
@@ -548,21 +548,21 @@ class PokeBattle_Battle
   #=============================================================================
   def pbRemoveFromParty(idxBattler,idxParty)
     party = pbParty(idxBattler)
-    # Erase the Pokémon from the party
+    # Erase the Pokemon from the party
     party[idxParty] = nil
-    # Rearrange the display order of the team to place the erased Pokémon last
+    # Rearrange the display order of the team to place the erased Pokemon last
     # in it (to avoid gaps)
     partyOrders = pbPartyOrder(idxBattler)
     partyStarts = pbPartyStarts(idxBattler)
     idxTrainer = pbGetOwnerIndexFromPartyIndex(idxBattler,idxParty)
     idxPartyStart = partyStarts[idxTrainer]
     idxPartyEnd   = (idxTrainer<partyStarts.length-1) ? partyStarts[idxTrainer+1] : party.length
-    origPartyPos = partyOrders[idxParty]   # Position of erased Pokémon initially
-    partyOrders[idxParty] = idxPartyEnd   # Put erased Pokémon last in the team
+    origPartyPos = partyOrders[idxParty]   # Position of erased Pokemon initially
+    partyOrders[idxParty] = idxPartyEnd   # Put erased Pokemon last in the team
     party.each_with_index do |_pkmn,i|
       next if i<idxPartyStart || i>=idxPartyEnd   # Only check the team
-      next if partyOrders[i]<origPartyPos   # Appeared before erased Pokémon
-      partyOrders[i] -= 1   # Appeared after erased Pokémon; bump it up by 1
+      next if partyOrders[i]<origPartyPos   # Appeared before erased Pokemon
+      partyOrders[i] -= 1   # Appeared after erased Pokemon; bump it up by 1
     end
   end
 
@@ -578,7 +578,7 @@ class PokeBattle_Battle
     # Swap the target of any battlers' effects that point at either of the
     # swapped battlers, to ensure they still point at the correct target
     # NOTE: LeechSeed is not swapped, because drained HP goes to whichever
-    #       Pokémon is in the position that Leech Seed was used from.
+    #       Pokemon is in the position that Leech Seed was used from.
     # NOTE: PerishSongUser doesn't need to change, as it's only used to
     #       determine which side the Perish Song user was on, and a battler
     #       can't change sides.
@@ -602,14 +602,14 @@ class PokeBattle_Battle
   #=============================================================================
   #
   #=============================================================================
-  # Returns the battler representing the Pokémon at index idxParty in its party,
+  # Returns the battler representing the Pokemon at index idxParty in its party,
   # on the same side as a battler with battler index of idxBattlerOther.
   def pbFindBattler(idxParty,idxBattlerOther=0)
     eachSameSideBattler(idxBattlerOther) { |b| return b if b.pokemonIndex==idxParty }
     return nil
   end
 
-  # Only used for Wish, as the Wishing Pokémon will no longer be in battle.
+  # Only used for Wish, as the Wishing Pokemon will no longer be in battle.
   def pbThisEx(idxBattler,idxParty)
     party = pbParty(idxBattler)
     if opposes?(idxBattler)
@@ -665,7 +665,7 @@ class PokeBattle_Battle
     when :Hail        then pbDisplay(_INTL("It started to hail!"))
     when :HarshSun    then pbDisplay(_INTL("The sunlight turned extremely harsh!"))
     when :HeavyRain   then pbDisplay(_INTL("A heavy rain began to fall!"))
-    when :StrongWinds then pbDisplay(_INTL("Mysterious strong winds are protecting Flying-type Pokémon!"))
+    when :StrongWinds then pbDisplay(_INTL("Mysterious strong winds are protecting Flying-type Pokemon!"))
     when :ShadowSky   then pbDisplay(_INTL("A shadow sky appeared!"))
     end
     # Check for end of primordial weather, and weather-triggered form changes

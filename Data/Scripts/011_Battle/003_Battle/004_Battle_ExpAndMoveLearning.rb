@@ -6,8 +6,8 @@ class PokeBattle_Battle
     # Play wild victory music if it's the end of the battle (has to be here)
     @scene.pbWildBattleSuccess if wildBattle? && pbAllFainted?(1) && !pbAllFainted?(0)
     return if !@internalBattle || !@expGain
-    # Go through each battler in turn to find the Pokémon that participated in
-    # battle against it, and award those Pokémon Exp/EVs
+    # Go through each battler in turn to find the Pokemon that participated in
+    # battle against it, and award those Pokemon Exp/EVs
     expAll = (GameData::Item.exists?(:EXPALL) && $PokemonBag.pbHasItem?(:EXPALL))
     p1 = pbParty(0)
     @battlers.each do |b|
@@ -20,7 +20,7 @@ class PokeBattle_Battle
         next unless p1[partic] && p1[partic].able? && pbIsOwner?(0,partic)
         numPartic += 1
       end
-      # Find which Pokémon have an Exp Share
+      # Find which Pokemon have an Exp Share
       expShare = []
       if !expAll
         eachInTeam(0,0) do |pkmn,i|
@@ -38,13 +38,13 @@ class PokeBattle_Battle
           pbGainEVsOne(i,b)
           pbGainExpOne(i,b,numPartic,expShare,expAll)
         end
-        # Gain EVs and Exp for all other Pokémon because of Exp All
+        # Gain EVs and Exp for all other Pokemon because of Exp All
         if expAll
           showMessage = true
           eachInTeam(0,0) do |pkmn,i|
             next if !pkmn.able?
             next if b.participants.include?(i) || expShare.include?(i)
-            pbDisplayPaused(_INTL("Your party Pokémon in waiting also got Exp. Points!")) if showMessage
+            pbDisplayPaused(_INTL("Your party Pokemon in waiting also got Exp. Points!")) if showMessage
             showMessage = false
             pbGainEVsOne(i,b)
             pbGainExpOne(i,b,numPartic,expShare,expAll,false)
@@ -57,7 +57,7 @@ class PokeBattle_Battle
   end
 
   def pbGainEVsOne(idxParty,defeatedBattler)
-    pkmn = pbParty(0)[idxParty]   # The Pokémon gaining EVs from defeatedBattler
+    pkmn = pbParty(0)[idxParty]   # The Pokemon gaining EVs from defeatedBattler
     evYield = defeatedBattler.pokemon.evYield
     # Num of effort points pkmn already has
     evTotal = 0
@@ -90,7 +90,7 @@ class PokeBattle_Battle
   end
 
   def pbGainExpOne(idxParty,defeatedBattler,numPartic,expShare,expAll,showMessages=true)
-    pkmn = pbParty(0)[idxParty]   # The Pokémon gaining EVs from defeatedBattler
+    pkmn = pbParty(0)[idxParty]   # The Pokemon gaining EVs from defeatedBattler
     growth_rate = pkmn.growth_rate
     # Don't bother calculating if gainer is already at max Exp
     if pkmn.exp>=growth_rate.maximum_exp
@@ -116,11 +116,11 @@ class PokeBattle_Battle
       exp = a / (Settings::SPLIT_EXP_BETWEEN_GAINERS ? numPartic : 1)
     elsif expAll   # Didn't participate in battle, gaining Exp due to Exp All
       # NOTE: Exp All works like the Exp Share from Gen 6+, not like the Exp All
-      #       from Gen 1, i.e. Exp isn't split between all Pokémon gaining it.
+      #       from Gen 1, i.e. Exp isn't split between all Pokemon gaining it.
       exp = a/2
     end
     return if exp<=0
-    # Pokémon gain more Exp from trainer battles
+    # Pokemon gain more Exp from trainer battles
     exp = (exp*1.5).floor if trainerBattle?
     # Scale the gained Exp based on the gainer's level (or not)
     if Settings::SCALED_EXP_FORMULA
@@ -134,7 +134,7 @@ class PokeBattle_Battle
     else
       exp /= 7
     end
-    # Foreign Pokémon gain more Exp
+    # Foreign Pokemon gain more Exp
     isOutsider = (pkmn.owner.id != pbPlayer.id ||
                  (pkmn.owner.language != 0 && pkmn.owner.language != pbPlayer.language))
     if isOutsider
@@ -144,6 +144,12 @@ class PokeBattle_Battle
         exp = (exp*1.5).floor
       end
     end
+
+    # EXP Charm
+    if $PokemonBag.pbHasItem?(:EXPCHARM)
+      exp = (exp*2).floor
+    end
+
     # Modify Exp gain based on pkmn's held item
     i = BattleHandlers.triggerExpGainModifierItem(pkmn.item,pkmn,exp)
     if i<0
@@ -225,22 +231,19 @@ class PokeBattle_Battle
     pkmnName = pkmn.name
     battler = pbFindBattler(idxParty)
     moveName = GameData::Move.get(newMove).name
-    # Pokémon already knows the move
-    return if pkmn.moves.any? { |m| m && m.id == newMove }
-    # Pokémon has space for the new move; just learn it
-    if pkmn.moves.length < Pokemon::MAX_MOVES
-      pkmn.moves.push(Pokemon::Move.new(newMove))
+    # Find a space for the new move in pkmn's moveset and learn it
+    for i in 0...Pokemon::MAX_MOVES
+      m = pkmn.moves[i]
+      return if m && m.id==newMove   # Already knows the new move
+      pkmn.moves[i] = Pokemon::Move.new(newMove)
+      battler.moves[i] = PokeBattle_Move.from_pokemon_move(self, pkmn.moves[i]) if battler
       pbDisplay(_INTL("{1} learned {2}!",pkmnName,moveName)) { pbSEPlay("Pkmn move learnt") }
-      if battler
-        battler.moves.push(PokeBattle_Move.from_pokemon_move(self, pkmn.moves.last))
-        battler.pbCheckFormOnMovesetChange
-      end
+      battler.pbCheckFormOnMovesetChange if battler
       return
     end
-    # Pokémon already knows the maximum number of moves; try to forget one to learn the new move
+    # pkmn already knows four moves, need to forget one to learn newMove
     loop do
-      pbDisplayPaused(_INTL("{1} wants to learn {2}, but it already knows {3} moves.",
-        pkmnName, moveName, pkmn.moves.length.to_word))
+      pbDisplayPaused(_INTL("{1} wants to learn {2}, but it already knows four moves.",pkmnName,moveName))
       if pbDisplayConfirm(_INTL("Forget a move to learn {1}?",moveName))
         pbDisplayPaused(_INTL("Which move should be forgotten?"))
         forgetMove = @scene.pbForgetMove(pkmn,newMove)

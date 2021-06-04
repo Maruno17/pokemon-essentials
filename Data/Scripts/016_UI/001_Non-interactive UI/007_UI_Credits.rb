@@ -37,8 +37,8 @@ class Scene_Credits
   # Backgrounds to show in credits. Found in Graphics/Titles/ folder
   BACKGROUNDS_LIST       = ["credits1", "credits2", "credits3", "credits4", "credits5"]
   BGM                    = "Credits"
-  SCROLL_SPEED           = 40   # Pixels per second
-  SECONDS_PER_BACKGROUND = 11
+  SCROLL_SPEED           = 2
+  SECONDS_PER_BACKGROUND = 9
   TEXT_OUTLINE_COLOR     = Color.new(0, 0, 128, 255)
   TEXT_BASE_COLOR        = Color.new(255, 255, 255, 255)
   TEXT_SHADOW_COLOR      = Color.new(0, 0, 0, 100)
@@ -47,19 +47,47 @@ class Scene_Credits
   # Start Editing
   CREDIT = <<_END_
 
-Your credits go here.
+Pokemon and the Last Wish
 
-Your credits go here.
+Made by
+Voltseon & ENLS
 
-Your credits go here.
 
-Your credits go here.
+Public Credits:
 
-Your credits go here.
+Gen 4 Character Overworlds by:
+VanillaSunshine
+Neo-Spriteman
+PurpleZaffre
+Maicerochico
+Atomic Reactor
+
+Gen 4 Character Customization by:
+Poltergeist
+
+Gen 4 Outside Tileset by:
+Magiscarf<s>WesleyFG
+SailorVicious (Formerly known as Heavy-Metal-Lover)
+Shawn Frost<s>NSora-96
+PeekyChew<s>Kyle-Dove
+Claisprojects.com
+Minorthreat0987
+The-Red-Ex<s>UltimoSpriter
+TyranitarDark<s>DarkDragonn
+rafa-cac<s>Phyromatical
+Alucus<s>Newtiteuf
+ChaoticCherryCake<s>moca
+
+HGSS Front Battler Sprites by:
+PokeTester9000
+BiggusWeeabus
+
+Looped music from:
+ENLS's Pre-Looped Music Library
 
 {INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE}
 
-"Pokémon Essentials" was created by:
+"Pokemon Essentials" was created by:
 Flameguru
 Poccil (Peter O.)
 Maruno
@@ -70,13 +98,12 @@ Boushy<s>MiDas Mike
 Brother1440<s>Near Fantastica
 FL.<s>PinkMan
 Genzai Kawakami<s>Popper
-Golisopod User<s>Rataime
-help-14<s>Savordez
-IceGod64<s>SoundSpawn
-Jacob O. Wobbrock<s>the__end
-KitsuneKouta<s>Venom12
-Lisa Anthony<s>Wachunga
-Luka S.J.<s> 
+help-14<s>Rataime
+IceGod64<s>Savordez
+Jacob O. Wobbrock<s>SoundSpawn
+KitsuneKouta<s>the__end
+Lisa Anthony<s>Venom12
+Luka S.J.<s>Wachunga
 and everyone else who helped out
 
 "mkxp-z" by:
@@ -86,16 +113,17 @@ Based on MKXP by Ancurio et al.
 "RPG Maker XP" by:
 Enterbrain
 
-Pokémon is owned by:
-The Pokémon Company
+Pokemon is owned by:
+The Pokemon Company
 Nintendo
 Affiliated with Game Freak
-
-
 
 This is a non-profit fan-made game.
 No copyright infringements intended.
 Please support the official games!
+
+
+Thank you so much for playing our game :D
 
 _END_
 # Stop Editing
@@ -104,19 +132,19 @@ _END_
     #-------------------------------
     # Animated Background Setup
     #-------------------------------
-    @counter = 0.0   # Counts time elapsed since the background image changed
-    @bg_index = 0
-    @bitmap_height = Graphics.height   # For a single credits text bitmap
-    @trim = Graphics.height / 10
+    @sprite = IconSprite.new(0,0)
+    @backgroundList = BACKGROUNDS_LIST
+    @frameCounter = 0
     # Number of game frames per background frame
-    @realOY = -(Graphics.height - @trim)
-    #-------------------------------
+    @framesPerBackground = SECONDS_PER_BACKGROUND * Graphics.frame_rate
+    @sprite.setBitmap("Graphics/Titles/"+@backgroundList[0])
+    #------------------
     # Credits text Setup
-    #-------------------------------
+    #------------------
     plugin_credits = ""
     PluginManager.plugins.each do |plugin|
       pcred = PluginManager.credits(plugin)
-      plugin_credits << "\"#{plugin}\" v.#{PluginManager.version(plugin)} by:\n"
+      plugin_credits << "\"#{plugin}\" version #{PluginManager.version(plugin)}\n"
       if pcred.size >= 5
         plugin_credits << pcred[0] + "\n"
         i = 1
@@ -125,63 +153,56 @@ _END_
           i += 2
         end
       else
-        pcred.each { |name| plugin_credits << name + "\n" }
+        pcred.each do |name|
+          plugin_credits << name + "\n"
+        end
       end
       plugin_credits << "\n"
     end
     CREDIT.gsub!(/\{INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE\}/, plugin_credits)
     credit_lines = CREDIT.split(/\n/)
-    #-------------------------------
-    # Make background and text sprites
-    #-------------------------------
-    text_viewport = Viewport.new(0, @trim, Graphics.width, Graphics.height - (@trim * 2))
-    text_viewport.z = 99999
-    @background_sprite = IconSprite.new(0, 0)
-    @background_sprite.setBitmap("Graphics/Titles/" + BACKGROUNDS_LIST[0])
-    @credit_sprites = []
-    @total_height = credit_lines.size * 32
-    lines_per_bitmap = @bitmap_height / 32
-    num_bitmaps = (credit_lines.size.to_f / lines_per_bitmap).ceil
-    for i in 0...num_bitmaps
-      credit_bitmap = Bitmap.new(Graphics.width, @bitmap_height)
-      pbSetSystemFont(credit_bitmap)
-      for j in 0...lines_per_bitmap
-        line = credit_lines[i * lines_per_bitmap + j]
-        next if !line
-        line = line.split("<s>")
-        xpos = 0
-        align = 1   # Centre align
-        linewidth = Graphics.width
-        for k in 0...line.length
-          if line.length > 1
-            xpos = (k == 0) ? 0 : 20 + Graphics.width / 2
-            align = (k == 0) ? 2 : 0   # Right align : left align
-            linewidth = Graphics.width / 2 - 20
-          end
-          credit_bitmap.font.color = TEXT_SHADOW_COLOR
-          credit_bitmap.draw_text(xpos,     j * 32 + 8, linewidth, 32, line[k], align)
-          credit_bitmap.font.color = TEXT_OUTLINE_COLOR
-          credit_bitmap.draw_text(xpos + 2, j * 32 - 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos,     j * 32 - 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos - 2, j * 32 - 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos + 2, j * 32,     linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos - 2, j * 32,     linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos + 2, j * 32 + 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos,     j * 32 + 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos - 2, j * 32 + 2, linewidth, 32, line[k], align)
-          credit_bitmap.font.color = TEXT_BASE_COLOR
-          credit_bitmap.draw_text(xpos,     j * 32,     linewidth, 32, line[k], align)
+    credit_bitmap = Bitmap.new(Graphics.width,32 * credit_lines.size)
+    credit_lines.each_index do |i|
+      line = credit_lines[i]
+      line = line.split("<s>")
+      # LINE ADDED: If you use in your own game, you should remove this line
+      pbSetSystemFont(credit_bitmap) # <--- This line was added
+      xpos = 0
+      align = 1 # Centre align
+      linewidth = Graphics.width
+      for j in 0...line.length
+        if line.length>1
+          xpos = (j==0) ? 0 : 20 + Graphics.width/2
+          align = (j==0) ? 2 : 0 # Right align : left align
+          linewidth = Graphics.width/2 - 20
         end
+        credit_bitmap.font.color = TEXT_SHADOW_COLOR
+        credit_bitmap.draw_text(xpos,i * 32 + 8,linewidth,32,line[j],align)
+        credit_bitmap.font.color = TEXT_OUTLINE_COLOR
+        credit_bitmap.draw_text(xpos + 2,i * 32 - 2,linewidth,32,line[j],align)
+        credit_bitmap.draw_text(xpos,i * 32 - 2,linewidth,32,line[j],align)
+        credit_bitmap.draw_text(xpos - 2,i * 32 - 2,linewidth,32,line[j],align)
+        credit_bitmap.draw_text(xpos + 2,i * 32,linewidth,32,line[j],align)
+        credit_bitmap.draw_text(xpos - 2,i * 32,linewidth,32,line[j],align)
+        credit_bitmap.draw_text(xpos + 2,i * 32 + 2,linewidth,32,line[j],align)
+        credit_bitmap.draw_text(xpos,i * 32 + 2,linewidth,32,line[j],align)
+        credit_bitmap.draw_text(xpos - 2,i * 32 + 2,linewidth,32,line[j],align)
+        credit_bitmap.font.color = TEXT_BASE_COLOR
+        credit_bitmap.draw_text(xpos,i * 32,linewidth,32,line[j],align)
       end
-      credit_sprite = Sprite.new(text_viewport)
-      credit_sprite.bitmap = credit_bitmap
-      credit_sprite.z      = 9998
-      credit_sprite.oy     = @realOY - @bitmap_height * i
-      @credit_sprites[i] = credit_sprite
     end
-    #-------------------------------
+    @trim = Graphics.height/10
+    @realOY = -(Graphics.height-@trim)   # -430
+    @oyChangePerFrame = SCROLL_SPEED*20.0/Graphics.frame_rate
+    @credit_sprite = Sprite.new(Viewport.new(0,@trim,Graphics.width,Graphics.height-(@trim*2)))
+    @credit_sprite.bitmap = credit_bitmap
+    @credit_sprite.z      = 9998
+    @credit_sprite.oy     = @realOY
+    @bg_index = 0
+    @last_flag = false
+    #--------
     # Setup
-    #-------------------------------
+    #--------
     # Stops all audio but background music
     previousBGM = $game_system.getPlayingBGM
     pbMEStop
@@ -196,12 +217,9 @@ _END_
       update
       break if $scene != self
     end
-    pbBGMFade(2.0)
     Graphics.freeze
-    Graphics.transition(20, "fadetoblack")
-    @background_sprite.dispose
-    @credit_sprites.each { |s| s.dispose if s }
-    text_viewport.dispose
+    @sprite.dispose
+    @credit_sprite.dispose
     $PokemonGlobal.creditsPlayed = true
     pbBGMPlay(previousBGM)
   end
@@ -218,7 +236,7 @@ _END_
 
   # Checks if credits bitmap has reached its ending point
   def last?
-    if @realOY > @total_height + @trim
+    if @realOY > @credit_sprite.bitmap.height + @trim
       $scene = ($game_map) ? Scene_Map.new : nil
       pbBGMFade(2.0)
       return true
@@ -227,18 +245,17 @@ _END_
   end
 
   def update
-    delta = Graphics.delta_s
-    @counter += delta
+    @frameCounter += 1
     # Go to next slide
-    if @counter >= SECONDS_PER_BACKGROUND
-      @counter -= SECONDS_PER_BACKGROUND
+    if @frameCounter >= @framesPerBackground
+      @frameCounter -= @framesPerBackground
       @bg_index += 1
-      @bg_index = 0 if @bg_index >= BACKGROUNDS_LIST.length
-      @background_sprite.setBitmap("Graphics/Titles/" + BACKGROUNDS_LIST[@bg_index])
+      @bg_index = 0 if @bg_index >= @backgroundList.length
+      @sprite.setBitmap("Graphics/Titles/"+@backgroundList[@bg_index])
     end
     return if cancel?
     return if last?
-    @realOY += SCROLL_SPEED * delta
-    @credit_sprites.each_with_index { |s, i| s.oy = @realOY - @bitmap_height * i }
+    @realOY += @oyChangePerFrame
+    @credit_sprite.oy = @realOY
   end
 end

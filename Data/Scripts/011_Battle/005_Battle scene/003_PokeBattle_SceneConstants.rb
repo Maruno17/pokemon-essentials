@@ -1,8 +1,8 @@
 module PokeBattle_SceneConstants
   USE_ABILITY_SPLASH = true
   # Text colors
-  MESSAGE_BASE_COLOR   = Color.new(80, 80, 88)
-  MESSAGE_SHADOW_COLOR = Color.new(160, 160, 168)
+  MESSAGE_BASE_COLOR   = Color.new(255, 255, 255)
+  MESSAGE_SHADOW_COLOR = Color.new(72, 72, 72)
 
   # The number of party balls to show in each side's lineup.
   NUM_BALLS = Settings::MAX_PARTY_SIZE

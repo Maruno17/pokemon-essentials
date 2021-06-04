@@ -101,9 +101,9 @@ module Events
   def self.onEndBattle;     @@OnEndBattle;     end
   def self.onEndBattle=(v); @@OnEndBattle = v; end
 
-  # Triggers whenever a wild Pokémon is created
+  # Triggers whenever a wild Pokemon is created
   # Parameters:
-  # e[0] - Pokémon being created
+  # e[0] - Pokemon being created
   def self.onWildPokemonCreate;     @@OnWildPokemonCreate;     end
   def self.onWildPokemonCreate=(v); @@OnWildPokemonCreate = v; end
 
@@ -112,15 +112,15 @@ module Events
   def self.onWildBattleOverride;     @@OnWildBattleOverride;     end
   def self.onWildBattleOverride=(v); @@OnWildBattleOverride = v; end
 
-  # Triggers whenever a wild Pokémon battle ends
+  # Triggers whenever a wild Pokemon battle ends
   # Parameters:
-  # e[0] - Pokémon species
-  # e[1] - Pokémon level
+  # e[0] - Pokemon species
+  # e[1] - Pokemon level
   # e[2] - Battle result (1-win, 2-loss, 3-escaped, 4-caught, 5-draw)
   def self.onWildBattleEnd;     @@OnWildBattleEnd;     end
   def self.onWildBattleEnd=(v); @@OnWildBattleEnd = v; end
 
-  # Triggers whenever an NPC trainer's Pokémon party is loaded
+  # Triggers whenever an NPC trainer's Pokemon party is loaded
   # Parameters:
   # e[0] - Trainer
   # e[1] - Items possessed by the trainer

@@ -347,10 +347,10 @@ Events.onWildBattleOverride += proc { |_sender,e|
 }
 
 def pbBugContestBattle(species,level)
-  # Record information about party Pokémon to be used at the end of battle (e.g.
+  # Record information about party Pokemon to be used at the end of battle (e.g.
   # comparing levels for an evolution check)
   Events.onStartBattle.trigger(nil)
-  # Generate a wild Pokémon based on the species and level
+  # Generate a wild Pokemon based on the species and level
   pkmn = pbGenerateWildPokemon(species,level)
   foeParty = [pkmn]
   # Calculate who the trainers and their party are
@@ -387,8 +387,8 @@ def pbBugContestBattle(species,level)
   #    0 - Undecided or aborted
   #    1 - Player won
   #    2 - Player lost
-  #    3 - Player or wild Pokémon ran from battle, or player forfeited the match
-  #    4 - Wild Pokémon was caught
+  #    3 - Player or wild Pokemon ran from battle, or player forfeited the match
+  #    4 - Wild Pokemon was caught
   #    5 - Draw
   pbSet(1,decision)
   # Used by the Poké Radar to update/break the chain

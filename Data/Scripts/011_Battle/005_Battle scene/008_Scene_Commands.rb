@@ -1,7 +1,7 @@
 class PokeBattle_Scene
   #=============================================================================
-  # The player chooses a main command for a Pokémon
-  # Return values: -1=Cancel, 0=Fight, 1=Bag, 2=Pokémon, 3=Run, 4=Call
+  # The player chooses a main command for a Pokemon
+  # Return values: -1=Cancel, 0=Fight, 1=Bag, 2=Pokemon, 3=Run, 4=Call
   #=============================================================================
   def pbCommandMenu(idxBattler,firstAction)
     shadowTrainer = (GameData::Type.exists?(:SHADOW) && @battle.trainerBattle?)
@@ -9,7 +9,7 @@ class PokeBattle_Scene
        _INTL("What will\n{1} do?",@battle.battlers[idxBattler].name),
        _INTL("Fight"),
        _INTL("Bag"),
-       _INTL("Pokémon"),
+       _INTL("Pokemon"),
        (shadowTrainer) ? _INTL("Call") : (firstAction) ? _INTL("Run") : _INTL("Cancel")
     ]
     ret = pbCommandMenuEx(idxBattler,cmds,(shadowTrainer) ? 2 : (firstAction) ? 0 : 1)
@@ -20,7 +20,7 @@ class PokeBattle_Scene
 
   # Mode: 0 = regular battle with "Run" (first choosable action in the round only)
   #       1 = regular battle with "Cancel"
-  #       2 = regular battle with "Call" (for Shadow Pokémon battles)
+  #       2 = regular battle with "Call" (for Shadow Pokemon battles)
   #       3 = Safari Zone
   #       4 = Bug Catching Contest
   def pbCommandMenuEx(idxBattler,texts,mode=0)
@@ -63,7 +63,7 @@ class PokeBattle_Scene
   end
 
   #=============================================================================
-  # The player chooses a move for a Pokémon to use
+  # The player chooses a move for a Pokemon to use
   #=============================================================================
   def pbFightMenu(idxBattler,megaEvoPossible=false)
     battler = @battle.battlers[idxBattler]
@@ -137,7 +137,7 @@ class PokeBattle_Scene
   end
 
   #=============================================================================
-  # Opens the party screen to choose a Pokémon to switch in (or just view its
+  # Opens the party screen to choose a Pokemon to switch in (or just view its
   # summary screens)
   #=============================================================================
   def pbPartyScreen(idxBattler,canCancel=false)
@@ -150,17 +150,17 @@ class PokeBattle_Scene
     # Start party screen
     scene = PokemonParty_Scene.new
     switchScreen = PokemonPartyScreen.new(scene,modParty)
-    switchScreen.pbStartScene(_INTL("Choose a Pokémon."),@battle.pbNumPositions(0,0))
+    switchScreen.pbStartScene(_INTL("Choose a Pokemon."),@battle.pbNumPositions(0,0))
     # Loop while in party screen
     loop do
-      # Select a Pokémon
-      scene.pbSetHelpText(_INTL("Choose a Pokémon."))
+      # Select a Pokemon
+      scene.pbSetHelpText(_INTL("Choose a Pokemon."))
       idxParty = switchScreen.pbChoosePokemon
       if idxParty<0
         next if !canCancel
         break
       end
-      # Choose a command for the selected Pokémon
+      # Choose a command for the selected Pokemon
       cmdSwitch  = -1
       cmdSummary = -1
       commands = []
@@ -221,22 +221,22 @@ class PokeBattle_Scene
       next unless cmdUse>=0 && command==cmdUse   # Use
       # Use types:
       # 0 = not usable in battle
-      # 1 = use on Pokémon (lots of items), consumed
-      # 2 = use on Pokémon's move (Ethers), consumed
+      # 1 = use on Pokemon (lots of items), consumed
+      # 2 = use on Pokemon's move (Ethers), consumed
       # 3 = use on battler (X items, Persim Berry), consumed
       # 4 = use on opposing battler (Poké Balls), consumed
       # 5 = use no target (Poké Doll, Guard Spec., Launcher items), consumed
-      # 6 = use on Pokémon (Blue Flute), not consumed
-      # 7 = use on Pokémon's move, not consumed
+      # 6 = use on Pokemon (Blue Flute), not consumed
+      # 7 = use on Pokemon's move, not consumed
       # 8 = use on battler (Red/Yellow Flutes), not consumed
       # 9 = use on opposing battler, not consumed
       # 10 = use no target (Poké Flute), not consumed
       case useType
-      when 1, 2, 3, 6, 7, 8   # Use on Pokémon/Pokémon's move/battler
-        # Auto-choose the Pokémon/battler whose action is being decided if they
-        # are the only available Pokémon/battler to use the item on
+      when 1, 2, 3, 6, 7, 8   # Use on Pokemon/Pokemon's move/battler
+        # Auto-choose the Pokemon/battler whose action is being decided if they
+        # are the only available Pokemon/battler to use the item on
         case useType
-        when 1, 6   # Use on Pokémon
+        when 1, 6   # Use on Pokemon
           if @battle.pbTeamLengthFromBattlerIndex(idxBattler)==1
             break if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
           end
@@ -255,12 +255,12 @@ class PokeBattle_Scene
         # Start party screen
         pkmnScene = PokemonParty_Scene.new
         pkmnScreen = PokemonPartyScreen.new(pkmnScene,modParty)
-        pkmnScreen.pbStartScene(_INTL("Use on which Pokémon?"),@battle.pbNumPositions(0,0))
+        pkmnScreen.pbStartScene(_INTL("Use on which Pokemon?"),@battle.pbNumPositions(0,0))
         idxParty = -1
         # Loop while in party screen
         loop do
-          # Select a Pokémon
-          pkmnScene.pbSetHelpText(_INTL("Use on which Pokémon?"))
+          # Select a Pokemon
+          pkmnScene.pbSetHelpText(_INTL("Use on which Pokemon?"))
           idxParty = pkmnScreen.pbChoosePokemon
           break if idxParty<0
           idxPartyRet = -1
@@ -273,7 +273,7 @@ class PokeBattle_Scene
           pkmn = party[idxPartyRet]
           next if !pkmn || pkmn.egg?
           idxMove = -1
-          if useType==2 || useType==7   # Use on Pokémon's move
+          if useType==2 || useType==7   # Use on Pokemon's move
             idxMove = pkmnScreen.pbChooseMove(pkmn,_INTL("Restore which move?"))
             next if idxMove<0
           end
@@ -281,7 +281,7 @@ class PokeBattle_Scene
         end
         pkmnScene.pbEndScene
         break if idxParty>=0
-        # Cancelled choosing a Pokémon; show the Bag screen again
+        # Cancelled choosing a Pokemon; show the Bag screen again
         itemScene.pbFadeInScene
       when 4, 9   # Use on opposing battler (Poké Balls)
         idxTarget = -1
@@ -435,9 +435,9 @@ class PokeBattle_Scene
   end
 
   #=============================================================================
-  # Opens a Pokémon's summary screen to try to learn a new move
+  # Opens a Pokemon's summary screen to try to learn a new move
   #=============================================================================
-  # Called whenever a Pokémon should forget a move. It should return -1 if the
+  # Called whenever a Pokemon should forget a move. It should return -1 if the
   # selection is canceled, or 0 to 3 to indicate the move to forget. It should
   # not allow HM moves to be forgotten.
   def pbForgetMove(pkmn,moveToLearn)
@@ -451,14 +451,14 @@ class PokeBattle_Scene
   end
 
   #=============================================================================
-  # Opens the nicknaming screen for a newly caught Pokémon
+  # Opens the nicknaming screen for a newly caught Pokemon
   #=============================================================================
   def pbNameEntry(helpText,pkmn)
     return pbEnterPokemonName(helpText, 0, Pokemon::MAX_NAME_SIZE, "", pkmn)
   end
 
   #=============================================================================
-  # Shows the Pokédex entry screen for a newly caught Pokémon
+  # Shows the Pokédex entry screen for a newly caught Pokemon
   #=============================================================================
   def pbShowPokedex(species)
     pbFadeOutIn {

@@ -4,7 +4,7 @@ class PokeBattle_Battler
   #=============================================================================
   def pbProcessTurn(choice,tryFlee=true)
     return false if fainted?
-    # Wild roaming Pokémon always flee if possible
+    # Wild roaming Pokemon always flee if possible
     if tryFlee && @battle.wildBattle? && opposes? &&
        @battle.rules["alwaysflee"] && @battle.pbCanRun?(@index)
       pbBeginTurn(choice)
@@ -88,10 +88,10 @@ class PokeBattle_Battler
   # Pursuit was used specially to intercept a switching foe.
   # Cancels the use of multi-turn moves and counters thereof. Note that Hyper
   # Beam's effect is NOT cancelled.
-  def pbCancelMoves(full_cancel = false)
+  def pbCancelMoves
     # Outragers get confused anyway if they are disrupted during their final
     # turn of using the move
-    if @effects[PBEffects::Outrage]==1 && pbCanConfuseSelf?(false) && !full_cancel
+    if @effects[PBEffects::Outrage]==1 && pbCanConfuseSelf?(false)
       pbConfuse(_INTL("{1} became confused due to fatigue!",pbThis))
     end
     # Cancel usage of most multi-turn moves
@@ -322,7 +322,7 @@ class PokeBattle_Battler
     # Powder
     if user.effects[PBEffects::Powder] && move.calcType == :FIRE
       @battle.pbCommonAnimation("Powder",user)
-      @battle.pbDisplay(_INTL("When the flame touched the powder on the Pokémon, it exploded!"))
+      @battle.pbDisplay(_INTL("When the flame touched the powder on the Pokemon, it exploded!"))
       user.lastMoveFailed = true
       if ![:Rain, :HeavyRain].include?(@battle.pbWeather) && user.takesIndirectDamage?
         oldHP = user.hp
@@ -368,7 +368,7 @@ class PokeBattle_Battler
         @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))
         @battle.pbHideAbilitySplash(user)
         # NOTE: The GF games say that if Curse is used by a non-Ghost-type
-        #       Pokémon which becomes Ghost-type because of Protean, it should
+        #       Pokemon which becomes Ghost-type because of Protean, it should
         #       target and curse itself. I think this is silly, so I'm making it
         #       choose a random opponent to curse instead.
         if move.function=="10D" && targets.length==0   # Curse
@@ -396,7 +396,7 @@ class PokeBattle_Battler
           b.damageState.unaffected = true
         end
       end
-      # Magic Coat/Magic Bounce checks (for moves which don't target Pokémon)
+      # Magic Coat/Magic Bounce checks (for moves which don't target Pokemon)
       if targets.length==0 && move.canMagicCoat?
         @battle.pbPriority(true).each do |b|
           next if b.fainted? || !b.opposes?(user)
@@ -509,7 +509,7 @@ class PokeBattle_Battler
     @battle.pbGainExp
     # Battle Arena only - update skills
     @battle.eachBattler { |b| @battle.successStates[b.index].updateSkill }
-    # Shadow Pokémon triggering Hyper Mode
+    # Shadow Pokemon triggering Hyper Mode
     pbHyperMode if @battle.choices[@index][0]!=:None   # Not if self is replaced
     # End of move usage
     pbEndTurn(choice)

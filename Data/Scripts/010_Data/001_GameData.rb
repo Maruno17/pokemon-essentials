@@ -46,12 +46,6 @@ module GameData
       return (self::DATA.has_key?(other)) ? self::DATA[other] : nil
     end
 
-    # Returns the array of keys for the data.
-    # @return [Array]
-    def keys
-      return self::DATA.keys
-    end
-
     # Yields all data in order of their id_number.
     def each
       keys = self::DATA.keys.sort { |a, b| self::DATA[a].id_number <=> self::DATA[b].id_number }
@@ -108,12 +102,6 @@ module GameData
       return (self::DATA.has_key?(other)) ? self::DATA[other] : nil
     end
 
-    # Returns the array of keys for the data.
-    # @return [Array]
-    def keys
-      return self::DATA.keys
-    end
-
     # Yields all data in alphabetical order.
     def each
       keys = self::DATA.keys.sort { |a, b| self::DATA[a].real_name <=> self::DATA[b].real_name }
@@ -163,12 +151,6 @@ module GameData
       validate other => [self, Integer]
       return other if other.is_a?(self)
       return (self::DATA.has_key?(other)) ? self::DATA[other] : nil
-    end
-
-    # Returns the array of keys for the data.
-    # @return [Array]
-    def keys
-      return self::DATA.keys
     end
 
     # Yields all data in numberical order.

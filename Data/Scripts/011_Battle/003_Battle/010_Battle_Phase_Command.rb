@@ -23,7 +23,7 @@ class PokeBattle_Battle
   end
 
   #=============================================================================
-  # Use main command menu (Fight/Pokémon/Bag/Run)
+  # Use main command menu (Fight/Pokemon/Bag/Run)
   #=============================================================================
   def pbCommandMenu(idxBattler,firstAction)
     return @scene.pbCommandMenu(idxBattler,firstAction)
@@ -107,7 +107,7 @@ class PokeBattle_Battle
       next false if !item
       battler = pkmn = nil
       case useType
-      when 1, 2, 6, 7   # Use on Pokémon/Pokémon's move
+      when 1, 2, 6, 7   # Use on Pokemon/Pokemon's move
         next false if !ItemHandlers.hasBattleUseOnPokemon(item)
         battler = pbFindBattler(idxPkmn,idxBattler)
         pkmn    = pbParty(idxBattler)[idxPkmn]
@@ -218,7 +218,7 @@ class PokeBattle_Battle
             commandsEnd = true if pbItemUsesAllActions?(@choices[idxBattler][1])
             break
           end
-        when 2    # Pokémon
+        when 2    # Pokemon
           break if pbPartyMenu(idxBattler)
         when 3    # Run
           # NOTE: "Run" is only an available option for the first battler the

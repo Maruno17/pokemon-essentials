@@ -1,16 +1,16 @@
 module PokeBattle_BattleCommon
   #=============================================================================
-  # Store caught Pokémon
+  # Store caught Pokemon
   #=============================================================================
   def pbStorePokemon(pkmn)
-    # Nickname the Pokémon (unless it's a Shadow Pokémon)
+    # Nickname the Pokemon (unless it's a Shadow Pokemon)
     if !pkmn.shadowPokemon?
       if pbDisplayConfirm(_INTL("Would you like to give a nickname to {1}?", pkmn.name))
         nickname = @scene.pbNameEntry(_INTL("{1}'s nickname?", pkmn.speciesName), pkmn)
         pkmn.name = nickname
       end
     end
-    # Store the Pokémon
+    # Store the Pokemon
     currentBox = @peer.pbCurrentBox
     storedBox  = @peer.pbStorePokemon(pbPlayer,pkmn)
     if storedBox<0
@@ -18,7 +18,7 @@ module PokeBattle_BattleCommon
       @initialItems[0][pbPlayer.party.length-1] = pkmn.item_id if @initialItems
       return
     end
-    # Messages saying the Pokémon was stored in a PC box
+    # Messages saying the Pokemon was stored in a PC box
     creator    = @peer.pbGetStorageCreatorName
     curBoxName = @peer.pbBoxName(currentBox)
     boxName    = @peer.pbBoxName(storedBox)
@@ -39,12 +39,12 @@ module PokeBattle_BattleCommon
     end
   end
 
-  # Register all caught Pokémon in the Pokédex, and store them.
+  # Register all caught Pokemon in the Pokédex, and store them.
   def pbRecordAndStoreCaughtPokemon
     @caughtPokemon.each do |pkmn|
       pbPlayer.pokedex.register(pkmn)   # In case the form changed upon leaving battle
-      # Record the Pokémon's species as owned in the Pokédex
-      if !pbPlayer.owned?(pkmn.species)
+      # Record the Pokemon's species as owned in the Pokédex
+      if !pbPlayer.hasOwned?(pkmn.species)
         pbPlayer.pokedex.set_owned(pkmn.species)
         if $Trainer.has_pokedex
           pbDisplayPaused(_INTL("{1}'s data was added to the Pokédex.",pkmn.name))
@@ -52,9 +52,9 @@ module PokeBattle_BattleCommon
           @scene.pbShowPokedex(pkmn.species)
         end
       end
-      # Record a Shadow Pokémon's species as having been caught
+      # Record a Shadow Pokemon's species as having been caught
       pbPlayer.pokedex.set_shadow_pokemon_owned(pkmn.species) if pkmn.shadowPokemon?
-      # Store caught Pokémon
+      # Store caught Pokemon
       pbStorePokemon(pkmn)
     end
     @caughtPokemon.clear
@@ -64,7 +64,7 @@ module PokeBattle_BattleCommon
   # Throw a Poké Ball
   #=============================================================================
   def pbThrowPokeBall(idxBattler,ball,catch_rate=nil,showPlayer=false)
-    # Determine which Pokémon you're throwing the Poké Ball at
+    # Determine which Pokemon you're throwing the Poké Ball at
     battler = nil
     if opposes?(idxBattler)
       battler = @battlers[idxBattler]
@@ -94,7 +94,7 @@ module PokeBattle_BattleCommon
       pbDisplayBrief(_INTL("{1} threw a {2}!",pbPlayer.name,itemName))
     end
     # Animation of opposing trainer blocking Poké Balls (unless it's a Snag Ball
-    # at a Shadow Pokémon)
+    # at a Shadow Pokemon)
     if trainerBattle? && !(GameData::Item.get(ball).is_snag_ball? && battler.shadowPokemon?)
       @scene.pbThrowAndDeflect(ball,1)
       pbDisplay(_INTL("The Trainer blocked your Poké Ball! Don't be a thief!"))
@@ -110,7 +110,7 @@ module PokeBattle_BattleCommon
     # Outcome message
     case numShakes
     when 0
-      pbDisplay(_INTL("Oh no! The Pokémon broke free!"))
+      pbDisplay(_INTL("Oh no! The Pokemon broke free!"))
       BallHandlers.onFailCatch(ball,self,battler)
     when 1
       pbDisplay(_INTL("Aww! It appeared to be caught!"))
@@ -135,7 +135,7 @@ module PokeBattle_BattleCommon
       if pbAllFainted?(battler.index)
         @decision = (trainerBattle?) ? 1 : 4   # Battle ended by win/capture
       end
-      # Modify the Pokémon's properties because of the capture
+      # Modify the Pokemon's properties because of the capture
       if GameData::Item.get(ball).is_snag_ball?
         pkmn.owner = Pokemon::Owner.new_from_trainer(pbPlayer)
       end
@@ -150,7 +150,7 @@ module PokeBattle_BattleCommon
       @peer.pbOnLeavingBattle(self,pkmn,true,true)
       # Make the Poké Ball and data box disappear
       @scene.pbHideCaptureBall(idxBattler)
-      # Save the Pokémon for storage at the end of battle
+      # Save the Pokemon for storage at the end of battle
       @caughtPokemon.push(pkmn)
     end
   end

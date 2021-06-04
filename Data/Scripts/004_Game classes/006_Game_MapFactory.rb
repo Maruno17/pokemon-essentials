@@ -30,11 +30,13 @@ class PokemonMapFactory
     @mapIndex = 0 if !@mapIndex || @mapIndex<0
     return @maps[@mapIndex] if @maps[@mapIndex]
     raise "No maps in save file... (mapIndex=#{@mapIndex})" if @maps.length==0
-    if @maps[0]
-      echoln("Using next map, may be incorrect (mapIndex=#{@mapIndex}, length=#{@maps.length})")
-      return @maps[0]
+    for i in 0...@maps.length
+      if @maps[i]
+        echoln("Using next map, may be incorrect (mapIndex=#{@mapIndex}, length=#{@maps.length})")
+        return @maps[i]
+      end
+      raise "No maps in save file... (all maps empty; mapIndex=#{@mapIndex})"
     end
-    raise "No maps in save file... (all maps empty; mapIndex=#{@mapIndex})"
   end
 
   def hasMap?(id)
@@ -254,7 +256,7 @@ class PokemonMapFactory
           posX = thisX + conn[1] - conn[4] + otherX
           posY = thisY + conn[2] - conn[5] + otherY
           return [posX, posY]
-        elsif conn[1] == otherMapID
+        else
           posX = thisX + conn[4] - conn[1] + otherX
           posY = thisY + conn[5] - conn[2] + otherY
           return [posX, posY]

@@ -1,7 +1,7 @@
 #===============================================================================
 # Load various wild battle music
 #===============================================================================
-def pbGetWildBattleBGM(_wildParty)   # wildParty is an array of Pokémon objects
+def pbGetWildBattleBGM(_wildParty)   # wildParty is an array of Pokemon objects
   if $PokemonGlobal.nextBattleBGM
     return $PokemonGlobal.nextBattleBGM.clone
   end
@@ -68,7 +68,7 @@ end
 #===============================================================================
 def pbPlayTrainerIntroME(trainer_type)
   trainer_type_data = GameData::TrainerType.get(trainer_type)
-  return if nil_or_empty?(trainer_type_data.intro_ME)
+  return if !trainer_type_data.intro_ME || trainer_type_data.intro_ME == ""
   bgm = pbStringToAudioFile(trainer_type_data.intro_ME)
   pbMEPlay(bgm)
 end

@@ -39,18 +39,18 @@ ItemHandlers::CanUseInBattle.addIf(proc { |item| GameData::Item.get(item).is_pok
       next false
     end
     if battler.semiInvulnerable?
-      scene.pbDisplay(_INTL("It's no good! It's impossible to aim at a Pokémon that's not in sight!")) if showMessages
+      scene.pbDisplay(_INTL("It's no good! It's impossible to aim at a Pokemon that's not in sight!")) if showMessages
       next false
     end
     # NOTE: The code below stops you from throwing a Poké Ball if there is more
-    #       than one unfainted opposing Pokémon. (Snag Balls can be thrown in
+    #       than one unfainted opposing Pokemon. (Snag Balls can be thrown in
     #       this case, but only in trainer battles, and the trainer will deflect
-    #       them if they are trying to catch a non-Shadow Pokémon.)
+    #       them if they are trying to catch a non-Shadow Pokemon.)
     if battle.pbOpposingBattlerCount>1 && !(GameData::Item.get(item).is_snag_ball? && battle.trainerBattle?)
       if battle.pbOpposingBattlerCount==2
-        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are two Pokémon!")) if showMessages
+        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are two Pokemon!")) if showMessages
       else
-        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are more than one Pokémon!")) if showMessages
+        scene.pbDisplay(_INTL("It's no good! It's impossible to aim when there are more than one Pokemon!")) if showMessages
       end
       next false
     end
@@ -302,7 +302,8 @@ ItemHandlers::UseInBattle.add(:POKEFLUTE,proc { |item,battler,battle|
     next if b.status != :SLEEP || b.hasActiveAbility?(:SOUNDPROOF)
     b.pbCureStatus(false)
   end
-  battle.pbDisplay(_INTL("All Pokémon were roused by the tune!"))
+  scene.pbRefresh
+  scene.pbDisplay(_INTL("All Pokemon were roused by the tune!"))
 })
 
 ItemHandlers::UseInBattle.addIf(proc { |item| GameData::Item.get(item).is_poke_ball? },   # Poké Balls
@@ -313,7 +314,7 @@ ItemHandlers::UseInBattle.addIf(proc { |item| GameData::Item.get(item).is_poke_b
 
 #===============================================================================
 # BattleUseOnPokemon handlers
-# For items used on Pokémon or on a Pokémon's move
+# For items used on Pokemon or on a Pokemon's move
 #===============================================================================
 ItemHandlers::BattleUseOnPokemon.add(:POTION,proc { |item,pokemon,battler,choices,scene|
   pbBattleHPItem(pokemon,battler,20,scene)
@@ -510,7 +511,7 @@ ItemHandlers::BattleUseOnPokemon.add(:MAXELIXIR,proc { |item,pokemon,battler,cho
 
 #===============================================================================
 # BattleUseOnBattler handlers
-# For items used on a Pokémon in battle
+# For items used on a Pokemon in battle
 #===============================================================================
 
 ItemHandlers::BattleUseOnBattler.add(:REDFLUTE,proc { |item,battler,scene|

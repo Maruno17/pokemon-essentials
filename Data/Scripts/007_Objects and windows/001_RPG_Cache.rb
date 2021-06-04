@@ -103,7 +103,6 @@ module RPG
 end
 
 
-
 class BitmapWrapper < Bitmap
   attr_reader   :refcount
   attr_accessor :never_dispose

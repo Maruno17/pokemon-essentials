@@ -111,7 +111,7 @@ end
 #===============================================================================
 # List all members of a class
 #===============================================================================
-# Displays a list of all Pokémon species, and returns the ID of the species
+# Displays a list of all Pokemon species, and returns the ID of the species
 # selected (or nil if the selection was canceled). "default", if specified, is
 # the ID of the species to initially select. Pressing Input::ACTION will toggle
 # the list sorting between numerical and alphabetical.
@@ -206,16 +206,16 @@ def pbChooseAbilityList(default = nil)
   return pbChooseList(commands, default, nil, -1)
 end
 
-def pbChooseBallList(defaultMoveID = nil)
+def pbChooseBallList(defaultMoveID = -1)
   cmdwin = pbListWindow([], 200)
   commands = []
   moveDefault = 0
   for key in $BallTypes.keys
     item = GameData::Item.try_get($BallTypes[key])
-    commands.push([$BallTypes[key], item.name]) if item
+    commands.push([key.to_i, item.name]) if item
   end
   commands.sort! { |a, b| a[1] <=> b[1] }
-  if defaultMoveID
+  if defaultMoveID >= 0
     for i in 0...commands.length
       moveDefault = i if commands[i][0] == defaultMoveID
     end

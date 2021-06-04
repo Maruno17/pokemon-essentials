@@ -82,21 +82,21 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
       name = $data_system.switches[index+1]
       codeswitch = (name[/^s\:/])
       val = (codeswitch) ? (eval($~.post_match) rescue nil) : $game_switches[index+1]
-      if val.nil?
+      if val==nil
         status = "[-]"
         colors = 0
         codeswitch = true
-      elsif val   # true
+      elsif val
         status = "[ON]"
         colors = 2
-      else   # false
+      else
         status = "[OFF]"
         colors = 1
       end
     else
       name = $data_system.variables[index+1]
       status = $game_variables[index+1].to_s
-      status = "\"__\"" if nil_or_empty?(status)
+      status = "\"__\"" if !status || status==""
     end
     name = '' if name==nil
     id_text = sprintf("%04d:",index+1)
@@ -200,9 +200,9 @@ end
 # Debug Day Care screen
 #===============================================================================
 def pbDebugDayCare
-  commands = [_INTL("Withdraw Pokémon 1"),
-              _INTL("Withdraw Pokémon 2"),
-              _INTL("Deposit Pokémon"),
+  commands = [_INTL("Withdraw Pokemon 1"),
+              _INTL("Withdraw Pokemon 2"),
+              _INTL("Deposit Pokemon"),
               _INTL("Generate egg"),
               _INTL("Collect egg")]
   viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
@@ -233,7 +233,7 @@ def pbDebugDayCare
       sprites["overlay"].bitmap.clear
       textpos = []
       for i in 0...2
-        textpos.push([_INTL("Pokémon {1}",i+1),Graphics.width/4+i*Graphics.width/2,2,2,base,shadow])
+        textpos.push([_INTL("Pokemon {1}",i+1),Graphics.width/4+i*Graphics.width/2,2,2,base,shadow])
       end
       for i in 0...pbDayCareDeposited
         next if !$PokemonGlobal.daycare[i][0]
@@ -272,9 +272,9 @@ def pbDebugDayCare
         textpos.push(["Egg waiting for collection",Graphics.width/2,210,2,Color.new(248,248,0),shadow])
       elsif pbDayCareDeposited==2
         if pbDayCareGetCompat==0
-          textpos.push(["Pokémon cannot breed",Graphics.width/2,210,2,Color.new(248,96,96),shadow])
+          textpos.push(["Pokemon cannot breed",Graphics.width/2,210,2,Color.new(248,96,96),shadow])
         else
-          textpos.push(["Pokémon can breed",Graphics.width/2,210,2,Color.new(64,248,64),shadow])
+          textpos.push(["Pokemon can breed",Graphics.width/2,210,2,Color.new(64,248,64),shadow])
         end
       end
       pbDrawTextPositions(sprites["overlay"].bitmap,textpos)
@@ -287,36 +287,36 @@ def pbDebugDayCare
       break
     elsif Input.trigger?(Input::USE)
       case cmdwindow.index
-      when 0   # Withdraw Pokémon 1
+      when 0   # Withdraw Pokemon 1
         if !$PokemonGlobal.daycare[0][0]
           pbPlayBuzzerSE
         elsif $Trainer.party_full?
           pbPlayBuzzerSE
-          pbMessage(_INTL("Party is full, can't withdraw Pokémon."))
+          pbMessage(_INTL("Party is full, can't withdraw Pokemon."))
         else
           pbPlayDecisionSE
           pbDayCareGetDeposited(0,3,4)
           pbDayCareWithdraw(0)
           refresh = true
         end
-      when 1  # Withdraw Pokémon 2
+      when 1  # Withdraw Pokemon 2
         if !$PokemonGlobal.daycare[1][0]
           pbPlayBuzzerSE
         elsif $Trainer.party_full?
           pbPlayBuzzerSE
-          pbMessage(_INTL("Party is full, can't withdraw Pokémon."))
+          pbMessage(_INTL("Party is full, can't withdraw Pokemon."))
         else
           pbPlayDecisionSE
           pbDayCareGetDeposited(1,3,4)
           pbDayCareWithdraw(1)
           refresh = true
         end
-      when 2   # Deposit Pokémon
+      when 2   # Deposit Pokemon
         if pbDayCareDeposited==2
           pbPlayBuzzerSE
         elsif $Trainer.party.length==0
           pbPlayBuzzerSE
-          pbMessage(_INTL("Party is empty, can't deposit Pokémon."))
+          pbMessage(_INTL("Party is empty, can't deposit Pokemon."))
         else
           pbPlayDecisionSE
           pbChooseNonEggPokemon(1,3)
@@ -364,7 +364,7 @@ end
 
 
 #===============================================================================
-# Debug roaming Pokémon screen
+# Debug roaming Pokemon screen
 #===============================================================================
 class SpriteWindow_DebugRoamers < Window_DrawableCommand
   def initialize(viewport)
@@ -452,7 +452,7 @@ def pbDebugRoamers
     if Input.trigger?(Input::ACTION) && cmdwindow.index<cmdwindow.roamerCount &&
        (pkmn[2]<=0 || $game_switches[pkmn[2]]) &&
        $PokemonGlobal.roamPokemon[cmdwindow.index]!=true
-      # Roam selected Pokémon
+      # Roam selected Pokemon
       pbPlayDecisionSE
       if Input.press?(Input::CTRL)   # Roam to current map
         if $PokemonGlobal.roamPosition[cmdwindow.index]==pbDefaultMap
@@ -683,8 +683,8 @@ end
 def pbDebugFixInvalidTiles
   num_errors = 0
   num_error_maps = 0
-  tilesets = $data_tilesets
-  mapData = Compiler::MapData.new
+  @tilesets = $data_tilesets
+  mapData = MapData.new
   t = Time.now.to_i
   Graphics.update
   for id in mapData.mapinfos.keys.sort
@@ -702,7 +702,7 @@ def pbDebugFixInvalidTiles
       for y in 0...map.data.ysize
         for i in 0...map.data.zsize
           tile_id = map.data[x, y, i]
-          next if pbCheckTileValidity(tile_id, map, tilesets, passages)
+          next if pbCheckTileValidity(tile_id, map, @tilesets, passages)
           map.data[x, y, i] = 0
           changed = true
           num_errors += 1
@@ -714,7 +714,7 @@ def pbDebugFixInvalidTiles
       event = map.events[key]
       for page in event.pages
         next if page.graphic.tile_id <= 0
-        next if pbCheckTileValidity(page.graphic.tile_id, map, tilesets, passages)
+        next if pbCheckTileValidity(page.graphic.tile_id, map, @tilesets, passages)
         page.graphic.tile_id = 0
         changed = true
         num_errors += 1
@@ -750,7 +750,7 @@ end
 
 
 #===============================================================================
-# Pseudo-party screen for editing Pokémon being set up for a wild battle
+# Pseudo-party screen for editing Pokemon being set up for a wild battle
 #===============================================================================
 class PokemonDebugPartyScreen
   def initialize

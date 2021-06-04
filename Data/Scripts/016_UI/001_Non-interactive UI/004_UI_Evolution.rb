@@ -412,7 +412,7 @@ class PokemonEvolutionScene
   public
 
   def pbUpdate(animating=false)
-    if animating      # Pokémon shouldn't animate during the evolution animation
+    if animating      # Pokemon shouldn't animate during the evolution animation
       @sprites["background"].update
     else
       pbUpdateSpriteHash(@sprites)
@@ -532,7 +532,7 @@ class PokemonEvolutionScene
     metaplayer1.play
     metaplayer2.play
     pbBGMStop
-    @pokemon.play_cry
+    GameData::Species.play_cry_from_pokemon(@pokemon)
     pbMessageDisplay(@sprites["msgwindow"],
        _INTL("\\se[]What? {1} is evolving!\\^",@pokemon.name)) { pbUpdate }
     pbMessageWaitForInput(@sprites["msgwindow"],50,true) { pbUpdate }
@@ -569,7 +569,7 @@ class PokemonEvolutionScene
     # Play cry of evolved species
     frames = GameData::Species.cry_length(@newspecies, @pokemon.form)
     pbBGMStop
-    Pokemon.play_cry(@newspecies, @pokemon.form)
+    GameData::Species.play_cry_from_species(@newspecies, @pokemon.form)
     frames.times do
       Graphics.update
       pbUpdate
@@ -581,9 +581,9 @@ class PokemonEvolutionScene
        _INTL("\\se[]Congratulations! Your {1} evolved into {2}!\\wt[80]",
        @pokemon.name,newspeciesname)) { pbUpdate }
     @sprites["msgwindow"].text = ""
-    # Check for consumed item and check if Pokémon should be duplicated
+    # Check for consumed item and check if Pokemon should be duplicated
     pbEvolutionMethodAfterEvolution
-    # Modify Pokémon to make it evolved
+    # Modify Pokemon to make it evolved
     @pokemon.species = @newspecies
     @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
     @pokemon.calc_stats
@@ -612,9 +612,9 @@ class PokemonEvolutionScene
     new_pkmn.clearAllRibbons
     new_pkmn.calc_stats
     new_pkmn.heal
-    # Add duplicate Pokémon to party
+    # Add duplicate Pokemon to party
     $Trainer.party.push(new_pkmn)
-    # See and own duplicate Pokémon
+    # See and own duplicate Pokemon
     $Trainer.pokedex.register(new_pkmn)
     $Trainer.pokedex.set_owned(new_species)
   end

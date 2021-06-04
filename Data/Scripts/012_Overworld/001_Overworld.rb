@@ -15,7 +15,7 @@ Events.onMapUpdate += proc { |_sender,_e|
 }
 
 # Returns whether the Poké Center should explain Pokérus to the player, if a
-# healed Pokémon has it.
+# healed Pokemon has it.
 def pbPokerus?
   return false if $game_switches[Settings::SEEN_POKERUS_SWITCH]
   for i in $Trainer.party
@@ -73,7 +73,7 @@ Events.onMapUpdate += proc { |_sender,_e|
 #===============================================================================
 # Checks per step
 #===============================================================================
-# Party Pokémon gain happiness from walking
+# Party Pokemon gain happiness from walking
 Events.onStepTaken += proc {
   $PokemonGlobal.happinessSteps = 0 if !$PokemonGlobal.happinessSteps
   $PokemonGlobal.happinessSteps += 1
@@ -85,7 +85,7 @@ Events.onStepTaken += proc {
   end
 }
 
-# Poison party Pokémon
+# Poison party Pokemon
 Events.onStepTakenTransferPossible += proc { |_sender,e|
   handled = e[0]
   next if handled[0]
@@ -94,7 +94,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
     for i in $Trainer.able_party
       if i.status == :POISON && !i.hasAbility?(:IMMUNITY)
         if !flashed
-          pbFlash(Color.new(255, 0, 0, 128), 8)
+          $game_screen.start_flash(Color.new(255,0,0,128), 4)
           flashed = true
         end
         i.hp -= 1 if i.hp>1 || Settings::POISON_FAINT_IN_FIELD
@@ -118,7 +118,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
 
 def pbCheckAllFainted
   if $Trainer.able_pokemon_count == 0
-    pbMessage(_INTL("You have no more Pokémon that can fight!\1"))
+    pbMessage(_INTL("You have no more Pokemon that can fight!\1"))
     pbMessage(_INTL("You blacked out!"))
     pbBGMFade(1.0)
     pbBGSFade(1.0)
@@ -369,7 +369,7 @@ def pbEventCanReachPlayer?(event, player, distance)
   when 2   # Down
     real_distance = player.y - event.y - 1
   when 4   # Left
-    real_distance = event.x - player.x - 1
+    real_distance = event.x - player.x + 1
   when 6   # Right
     real_distance = player.x - event.x - event.width
   when 8   # Up
@@ -607,7 +607,7 @@ def pbMoveTowardPlayer(event)
   $PokemonMap.addMovedEvent(event.id) if $PokemonMap
 end
 
-def pbJumpToward(dist=1,playSound=false,cancelSurf=false)
+def pbJumpToward(dist=1,playSound=true,cancelSurf=false)
   x = $game_player.x
   y = $game_player.y
   case $game_player.direction

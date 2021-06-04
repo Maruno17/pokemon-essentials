@@ -4,6 +4,7 @@
 #  This class handles self switches. It's a wrapper for the built-in class
 #  "Hash." Refer to "$game_self_switches" for the instance of this class.
 #===============================================================================
+
 class Game_SelfSwitches
   #-----------------------------------------------------------------------------
   # * Object Initialization

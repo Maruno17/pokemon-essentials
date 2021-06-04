@@ -326,7 +326,7 @@ class PictureEx
     @processes.push([Processes::SrcSize,delay,0,0,cb,srcWidth,srcHeight])
   end
 
-  # Used to cut Pokémon sprites off when they faint and sink into the ground.
+  # Used to cut Pokemon sprites off when they faint and sink into the ground.
   def setCropBottom(delay, y, cb=nil)
     delay = ensureDelay(delay)
     @processes.push([Processes::CropBottom,delay,0,0,cb,y])

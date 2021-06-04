@@ -9,7 +9,7 @@ module GameData
     DATA = {}
     DATA_FILENAME = "encounters.dat"
 
-    extend ClassMethodsSymbols
+    extend ClassMethods
     include InstanceMethods
 
     # @param map_id [Integer]

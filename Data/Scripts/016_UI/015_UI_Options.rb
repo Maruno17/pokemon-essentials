@@ -7,6 +7,7 @@ class PokemonSystem
   attr_accessor :battlestyle
   attr_accessor :frame
   attr_accessor :textskin
+  attr_accessor :font
   attr_accessor :screensize
   attr_accessor :language
   attr_accessor :runstyle
@@ -15,18 +16,21 @@ class PokemonSystem
   attr_accessor :textinput
 
   def initialize
-    @textspeed   = 1     # Text speed (0=slow, 1=normal, 2=fast)
+    @textspeed   = 2     # Text speed (0=slow, 1=normal, 2=fast)
     @battlescene = 0     # Battle effects (animations) (0=on, 1=off)
     @battlestyle = 0     # Battle style (0=switch, 1=set)
     @frame       = 0     # Default window frame (see also Settings::MENU_WINDOWSKINS)
     @textskin    = 0     # Speech frame
-    @screensize  = (Settings::SCREEN_SCALE * 2).floor - 1   # 0=half size, 1=full size, 2=full-and-a-half size, 3=double size
+    @font        = 0     # Font (see also Settings::FONT_OPTIONS)
+    @screensize  = (Settings::SCREEN_SCALE * 2).floor - 2   # 0=half size, 1=full size, 2=full-and-a-half size, 3=double size
     @language    = 0     # Language (see also Settings::LANGUAGES in script PokemonSystem)
     @runstyle    = 0     # Default movement speed (0=walk, 1=run)
     @bgmvolume   = 100   # Volume of background music and ME
     @sevolume    = 100   # Volume of sound effects
-    @textinput   = 0     # Text input mode (0=cursor, 1=keyboard)
+    @textinput   = 1     # Text input mode (0=cursor, 1=keyboard)
   end
+
+  def tilemap; return Settings::MAP_VIEW_MODE; end
 end
 
 #===============================================================================
@@ -171,10 +175,10 @@ class Window_PokemonOption < Window_DrawableCommand
 
   def initialize(options,x,y,width,height)
     @options = options
-    @nameBaseColor   = Color.new(24*8,15*8,0)
-    @nameShadowColor = Color.new(31*8,22*8,10*8)
-    @selBaseColor    = Color.new(31*8,6*8,3*8)
-    @selShadowColor  = Color.new(31*8,17*8,16*8)
+    @nameBaseColor   = Color.new(193,64,60)
+    @nameShadowColor = Color.new(72,72,72)
+    @selBaseColor    = Color.new(255,127,0)
+    @selShadowColor  = Color.new(72,72,72)
     @optvalues = []
     @mustUpdateOptions = false
     for i in 0...@options.length
@@ -306,6 +310,7 @@ class PokemonOption_Scene
            if $PokemonSystem.bgmvolume!=value
              $PokemonSystem.bgmvolume = value
              if $game_system.playing_bgm!=nil && !inloadscreen
+               $game_system.playing_bgm.volume = value
                playingBGM = $game_system.getPlayingBGM
                $game_system.bgm_pause
                $game_system.bgm_resume(playingBGM)
@@ -361,12 +366,19 @@ class PokemonOption_Scene
            MessageConfig.pbSetSystemFrame("Graphics/Windowskins/" + Settings::MENU_WINDOWSKINS[value])
          }
        ),
+       EnumOption.new(_INTL("Font Style"),[_INTL("Em"),_INTL("R/S"),_INTL("FRLG"),_INTL("DP")],
+         proc { $PokemonSystem.font },
+         proc { |value|
+           $PokemonSystem.font = value
+           MessageConfig.pbSetSystemFontName(Settings::FONT_OPTIONS[value])
+         }
+       ),
        EnumOption.new(_INTL("Text Entry"),[_INTL("Cursor"),_INTL("Keyboard")],
          proc { $PokemonSystem.textinput },
          proc { |value| $PokemonSystem.textinput = value }
        ),
-       EnumOption.new(_INTL("Screen Size"),[_INTL("S"),_INTL("M"),_INTL("L"),_INTL("XL"),_INTL("Full")],
-         proc { [$PokemonSystem.screensize, 4].min },
+       EnumOption.new(_INTL("Screen Size"),[_INTL("M"),_INTL("L"),_INTL("XL"),_INTL("Full")],
+         proc { [$PokemonSystem.screensize, 3].min },
          proc { |value|
            if $PokemonSystem.screensize != value
              $PokemonSystem.screensize = value
@@ -397,6 +409,7 @@ class PokemonOption_Scene
   def pbOptions
     oldSystemSkin = $PokemonSystem.frame      # Menu
     oldTextSkin   = $PokemonSystem.textskin   # Speech
+    oldFont       = $PokemonSystem.font
     pbActivateWindow(@sprites,"option") {
       loop do
         Graphics.update
@@ -416,6 +429,11 @@ class PokemonOption_Scene
             @sprites["title"].setSkin(MessageConfig.pbGetSystemFrame())
             @sprites["option"].setSkin(MessageConfig.pbGetSystemFrame())
             oldSystemSkin = $PokemonSystem.frame
+          end
+          if $PokemonSystem.font!=oldFont
+            pbSetSystemFont(@sprites["textbox"].contents)
+            @sprites["textbox"].text = _INTL("Speech frame {1}.",1+$PokemonSystem.textskin)
+            oldFont = $PokemonSystem.font
           end
         end
         if Input.trigger?(Input::BACK)

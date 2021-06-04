@@ -1,5 +1,5 @@
 #===============================================================================
-# Stores information about a Pokémon's owner.
+# Stores information about a Pokemon's owner.
 #===============================================================================
 class Pokemon
   class Owner

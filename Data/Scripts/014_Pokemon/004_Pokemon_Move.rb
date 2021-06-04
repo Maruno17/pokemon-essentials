@@ -1,5 +1,5 @@
 #===============================================================================
-# Move objects known by Pokémon.
+# Move objects known by Pokemon.
 #===============================================================================
 class Pokemon
   class Move
@@ -63,7 +63,7 @@ class Pokemon
 end
 
 #===============================================================================
-# Legacy move object known by Pokémon.
+# Legacy move object known by Pokemon.
 #===============================================================================
 # @deprecated Use {Pokemon#Move} instead. PBMove is slated to be removed in v20.
 class PBMove

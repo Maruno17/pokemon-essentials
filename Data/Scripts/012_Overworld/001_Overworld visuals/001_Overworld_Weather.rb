@@ -322,8 +322,12 @@ module RPG
 
     def update_tile_position(sprite, index)
       return if !sprite || !sprite.bitmap || !sprite.visible
-      sprite.x = (@ox + @tile_x + (index % @tiles_wide) * sprite.bitmap.width).round
-      sprite.y = (@oy + @tile_y + (index / @tiles_wide) * sprite.bitmap.height).round
+      weather_type = @type
+      if @fading && @fade_time >= [FADE_OLD_TONE_END - @time_shift, 0].max
+        weather_type = @target_type
+      end
+      sprite.x = @ox + @tile_x + (index % @tiles_wide) * sprite.bitmap.width
+      sprite.y = @oy + @tile_y + (index / @tiles_wide) * sprite.bitmap.height
       sprite.x += @tiles_wide * sprite.bitmap.width if sprite.x - @ox < -sprite.bitmap.width
       sprite.y -= @tiles_tall * sprite.bitmap.height if sprite.y - @oy > Graphics.height
       sprite.visible = true

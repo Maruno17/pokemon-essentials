@@ -14,7 +14,7 @@ critical hit.
 =end
 
 #===============================================================================
-# Purify a Shadow Pokémon.
+# Purify a Shadow Pokemon.
 #===============================================================================
 def pbPurify(pkmn, scene)
   return if !pkmn.shadowPokemon? || pkmn.heart_gauge != 0
@@ -148,10 +148,10 @@ end
 #===============================================================================
 def pbRelicStone
   if !$Trainer.party.any? { |pkmn| pkmn.purifiable? }
-    pbMessage(_INTL("You have no Pokémon that can be purified."))
+    pbMessage(_INTL("You have no Pokemon that can be purified."))
     return
   end
-  pbMessage(_INTL("There's a Pokémon that may open the door to its heart!"))
+  pbMessage(_INTL("There's a Pokemon that may open the door to its heart!"))
   # Choose a purifiable Pokemon
   pbChoosePokemon(1, 2,proc { |pkmn|
     pkmn.able? && pkmn.shadowPokemon? && pkmn.heart_gauge == 0
@@ -164,7 +164,7 @@ end
 
 
 #===============================================================================
-# Shadow Pokémon in battle.
+# Shadow Pokemon in battle.
 #===============================================================================
 class PokeBattle_Battle
   alias __shadow__pbCanUseItemOnPokemon? pbCanUseItemOnPokemon?
@@ -172,7 +172,7 @@ class PokeBattle_Battle
   def pbCanUseItemOnPokemon?(item,pkmn,battler,scene,showMessages=true)
     ret = __shadow__pbCanUseItemOnPokemon?(item,pkmn,battler,scene,showMessages)
     if ret && pkmn.hyper_mode && ![:JOYSCENT, :EXCITESCENT, :VIVIDSCENT].include?(item)
-      scene.pbDisplay(_INTL("This item can't be used on that Pokémon."))
+      scene.pbDisplay(_INTL("This item can't be used on that Pokemon."))
       return false
     end
     return ret
@@ -382,7 +382,7 @@ end
 
 
 #===============================================================================
-# Two turn attack. On first turn, halves the HP of all active Pokémon.
+# Two turn attack. On first turn, halves the HP of all active Pokemon.
 # Skips second turn (if successful). (Shadow Half)
 #===============================================================================
 class PokeBattle_Move_12E < PokeBattle_Move
@@ -405,7 +405,7 @@ class PokeBattle_Move_12E < PokeBattle_Move
       next if b.hp==1
       b.pbReduceHP(i.hp/2,false)
     end
-    @battle.pbDisplay(_INTL("Each Pokémon's HP was halved!"))
+    @battle.pbDisplay(_INTL("Each Pokemon's HP was halved!"))
     @battle.eachBattler { |b| b.pbItemHPHealCheck }
     user.effects[PBEffects::HyperBeam] = 2
     user.currentMove = @id
@@ -483,7 +483,7 @@ end
 
 
 
-# Record current heart gauges of Pokémon in party, to see if they drop to zero
+# Record current heart gauges of Pokemon in party, to see if they drop to zero
 # during battle and need to say they're ready to be purified afterwards
 Events.onStartBattle += proc { |_sender|
   $PokemonTemp.heart_gauges = []

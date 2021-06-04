@@ -1,38 +1,4 @@
 #===============================================================================
-# Success state
-#===============================================================================
-class PokeBattle_SuccessState
-  attr_accessor :typeMod
-  attr_accessor :useState    # 0 - not used, 1 - failed, 2 - succeeded
-  attr_accessor :protected
-  attr_accessor :skill
-
-  def initialize; clear; end
-
-  def clear(full=true)
-    @typeMod   = Effectiveness::NORMAL_EFFECTIVE
-    @useState  = 0
-    @protected = false
-    @skill     = 0 if full
-  end
-
-  def updateSkill
-    if @useState==1
-      @skill = -2 if !@protected
-    elsif @useState==2
-      if Effectiveness.super_effective?(@typeMod);       @skill = 2
-      elsif Effectiveness.normal?(@typeMod);             @skill = 1
-      elsif Effectiveness.not_very_effective?(@typeMod); @skill = -1
-      else;                                              @skill = -2   # Ineffective
-      end
-    end
-    clear(false)
-  end
-end
-
-
-
-#===============================================================================
 #
 #===============================================================================
 class PokeBattle_BattleArena < PokeBattle_Battle
@@ -99,7 +65,7 @@ class PokeBattle_BattleArena < PokeBattle_Battle
        move.function=="012"      # Fake Out
       return -1
     end
-    if move.function=="071" ||   # Counter
+    if move.function=="071" ||  # Counter
        move.function=="072" ||   # Mirror Coat
        move.function=="0D4"      # Bide
       return 0
@@ -117,7 +83,7 @@ class PokeBattle_BattleArena < PokeBattle_Battle
     super
     return if @decision!=0
     # Update mind rating (asserting that a move was chosen)
-    # TODO: Actually done at Pokémon's turn
+    # TODO: Actually done at Pokemon's turn
     for side in 0...2
       if @choices[side][2] && @choices[side][0]==:UseMove
         @mind[side] += pbMindScore(@choices[side][2])
@@ -127,77 +93,74 @@ class PokeBattle_BattleArena < PokeBattle_Battle
 
   def pbEndOfRoundPhase
     super
-    return if @decision != 0
+    return if @decision!=0
+    @count += 1
     # Update skill rating
     for side in 0...2
-      @skill[side] += self.successStates[side].skill
+      @skill[side] += self.successStates[side].skill_level
     end
 #    PBDebug.log("[Mind: #{@mind.inspect}, Skill: #{@skill.inspect}]")
-    # Increment turn counter
-    @count += 1
-    return if @count < 3
-    # Half all multi-turn moves
-    @battlers[0].pbCancelMoves(true)
-    @battlers[1].pbCancelMoves(true)
-    # Calculate scores in each category
-    ratings1 = [0, 0, 0]
-    ratings2 = [0, 0, 0]
-    if @mind[0] == @mind[1]
-      ratings1[0] = 1
-      ratings2[0] = 1
-    elsif @mind[0] > @mind[1]
-      ratings1[0] = 2
-    else
-      ratings2[0] = 2
+    if @count==3
+      @battlers[0].pbCancelMoves
+      @battlers[1].pbCancelMoves
+      ratings1 = [0,0,0]
+      ratings2 = [0,0,0]
+      if @mind[0]==@mind[1]
+        ratings1[0] = 1
+        ratings2[0] = 1
+      elsif @mind[0]>@mind[1]
+        ratings1[0] = 2
+      else
+        ratings2[0] = 2
+      end
+      if @skill[0]==@skill[1]
+        ratings1[1] = 1
+        ratings2[1] = 1
+      elsif @skill[0]>@skill[1]
+        ratings1[1] = 2
+      else
+        ratings2[1] = 2
+      end
+      body = [0,0]
+      body[0] = ((@battlers[0].hp*100)/[@starthp[0],1].max).floor
+      body[1] = ((@battlers[1].hp*100)/[@starthp[1],1].max).floor
+      if body[0]==body[1]
+        ratings1[2] = 1
+        ratings2[2] = 1
+      elsif body[0]>body[1]
+        ratings1[2] = 2
+      else
+        ratings2[2] = 2
+      end
+      @scene.pbBattleArenaJudgment(@battlers[0],@battlers[1],ratings1.clone,ratings2.clone)
+      points = [0,0]
+      for i in 0...ratings1.length
+        points[0] += ratings1[i]
+        points[1] += ratings2[i]
+      end
+      if points[0]==points[1]
+        pbDisplay(_INTL("{1} tied the opponent\n{2} in a referee's decision!",
+           @battlers[0].name,@battlers[1].name))
+        # NOTE: Pokemon doesn't really lose HP, but the effect is mostly the
+        #       same.
+        @battlers[0].hp = 0
+        @battlers[0].pbFaint(false)
+        @battlers[1].hp = 0
+        @battlers[1].pbFaint(false)
+      elsif points[0]>points[1]
+        pbDisplay(_INTL("{1} defeated the opponent\n{2} in a referee's decision!",
+           @battlers[0].name,@battlers[1].name))
+        @battlers[1].hp = 0
+        @battlers[1].pbFaint(false)
+      else
+        pbDisplay(_INTL("{1} lost to the opponent\n{2} in a referee's decision!",
+           @battlers[0].name,@battlers[1].name))
+        @battlers[0].hp = 0
+        @battlers[0].pbFaint(false)
+      end
+      pbGainExp
+      pbEORSwitch
     end
-    if @skill[0] == @skill[1]
-      ratings1[1] = 1
-      ratings2[1] = 1
-    elsif @skill[0] > @skill[1]
-      ratings1[1] = 2
-    else
-      ratings2[1] = 2
-    end
-    body = [0, 0]
-    body[0] = ((@battlers[0].hp * 100) / [@starthp[0], 1].max).floor
-    body[1] = ((@battlers[1].hp * 100) / [@starthp[1], 1].max).floor
-    if body[0] == body[1]
-      ratings1[2] = 1
-      ratings2[2] = 1
-    elsif body[0] > body[1]
-      ratings1[2] = 2
-    else
-      ratings2[2] = 2
-    end
-    # Show scores
-    @scene.pbBattleArenaJudgment(@battlers[0], @battlers[1], ratings1.clone, ratings2.clone)
-    # Calculate total scores
-    points = [0, 0]
-    ratings1.each { |val| points[0] += val }
-    ratings2.each { |val| points[1] += val }
-    # Make judgment
-    if points[0] == points[1]
-      pbDisplay(_INTL("{1} tied the opponent\n{2} in a referee's decision!",
-         @battlers[0].name, @battlers[1].name))
-      # NOTE: Pokémon doesn't really lose HP, but the effect is mostly the
-      #       same.
-      @battlers[0].hp = 0
-      @battlers[0].pbFaint(false)
-      @battlers[1].hp = 0
-      @battlers[1].pbFaint(false)
-    elsif points[0] > points[1]
-      pbDisplay(_INTL("{1} defeated the opponent\n{2} in a referee's decision!",
-         @battlers[0].name, @battlers[1].name))
-      @battlers[1].hp = 0
-      @battlers[1].pbFaint(false)
-    else
-      pbDisplay(_INTL("{1} lost to the opponent\n{2} in a referee's decision!",
-         @battlers[0].name, @battlers[1].name))
-      @battlers[0].hp = 0
-      @battlers[0].pbFaint(false)
-    end
-    pbGainExp
-    pbEORSwitch
   end
 end
 
@@ -299,15 +262,15 @@ class PokeBattle_Scene
       end
       updateJudgment(infowindow,1,battler1,battler2,ratings1,ratings2)
       pbMessageDisplay(msgwindow,
-         _INTL("REFEREE: Judging category 1, Mind!\nThe Pokémon showing the most guts!\\wtnp[40]")) {
+         _INTL("REFEREE: Judging category 1, Mind!\nThe Pokemon showing the most guts!\\wtnp[40]")) {
          pbBattleArenaUpdate; dimmingvp.update; infowindow.update }
       updateJudgment(infowindow,2,battler1,battler2,ratings1,ratings2)
       pbMessageDisplay(msgwindow,
-         _INTL("REFEREE: Judging category 2, Skill!\nThe Pokémon using moves the best!\\wtnp[40]")) {
+         _INTL("REFEREE: Judging category 2, Skill!\nThe Pokemon using moves the best!\\wtnp[40]")) {
          pbBattleArenaUpdate; dimmingvp.update; infowindow.update }
       updateJudgment(infowindow,3,battler1,battler2,ratings1,ratings2)
       pbMessageDisplay(msgwindow,
-         _INTL("REFEREE: Judging category 3, Body!\nThe Pokémon with the most vitality!\\wtnp[40]")) {
+         _INTL("REFEREE: Judging category 3, Body!\nThe Pokemon with the most vitality!\\wtnp[40]")) {
          pbBattleArenaUpdate; dimmingvp.update; infowindow.update }
       total1 = 0
       total2 = 0
@@ -342,8 +305,8 @@ class PokeBattle_Scene
     ensure
       pbDisposeMessageWindow(msgwindow)
       dimmingvp.dispose
-      infowindow.contents.dispose if infowindow && infowindow.contents
-      infowindow.dispose if infowindow
+      infowindow.contents.dispose
+      infowindow.dispose
     end
   end
 end

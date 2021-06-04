@@ -3,14 +3,14 @@ class Pokemon
   # Mega Evolution
   # NOTE: These are treated as form changes in Essentials.
   #=============================================================================
-  def getMegaForm
+  def getMegaForm(checkItemOnly = false)
     ret = 0
     GameData::Species.each do |data|
       next if data.species != @species || data.unmega_form != form_simple
       if data.mega_stone && hasItem?(data.mega_stone)
         ret = data.form
         break
-      elsif data.mega_move && hasMove?(data.mega_move)
+      elsif !checkItemOnly && data.mega_move && hasMove?(data.mega_move)
         ret = data.form
         break
       end
@@ -28,7 +28,8 @@ class Pokemon
   end
 
   def mega?
-    return (species_data.mega_stone || species_data.mega_move) ? true : false
+    megaForm = self.getMegaForm
+    return megaForm > 0 && megaForm == form_simple
   end
 
   def makeMega
@@ -47,9 +48,7 @@ class Pokemon
   end
 
   def megaMessage   # 0=default message, 1=Rayquaza message
-    megaForm = self.getMegaForm
-    message_number = GameData::Species.get_species_form(@species, megaForm)&.mega_message
-    return message_number || 0
+    return species_data.mega_message
   end
 
   #=============================================================================

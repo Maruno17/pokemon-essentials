@@ -50,7 +50,7 @@ class PokeBattle_Move
       ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING &&
                                                    Effectiveness.super_effective_type?(moveType, defType)
     end
-    # Grounded Flying-type Pokémon become susceptible to Ground moves
+    # Grounded Flying-type Pokemon become susceptible to Ground moves
     if !target.airborne?
       ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING && moveType == :GROUND
     end

@@ -128,7 +128,7 @@ class SellAdapter
 end
 
 #===============================================================================
-# Pokémon Mart
+# Pokemon Mart
 #===============================================================================
 class Window_PokemonMart < Window_DrawableCommand
   def initialize(stock, adapter, x, y, width, height, viewport = nil)
@@ -136,8 +136,8 @@ class Window_PokemonMart < Window_DrawableCommand
     @adapter     = adapter
     super(x, y, width, height, viewport)
     @selarrow    = AnimatedBitmap.new("Graphics/Pictures/martSel")
-    @baseColor   = Color.new(88,88,80)
-    @shadowColor = Color.new(168,184,184)
+    @baseColor   = Color.new(255,255,255)
+    @shadowColor = Color.new(72,72,72)
     self.windowskin = nil
   end
 
@@ -413,9 +413,9 @@ class PokemonMart_Scene
     itemprice = @adapter.getPrice(item, !@buying)
     itemprice /= 2 if !@buying
     pbDisplay(helptext, true)
-    using(numwindow = Window_AdvancedTextPokemon.new("")) {   # Showing number of items
+    using (numwindow = Window_AdvancedTextPokemon.new("")) {   # Showing number of items
       qty = @adapter.getQuantity(item)
-      using(inbagwindow = Window_AdvancedTextPokemon.new("")) {   # Showing quantity in bag
+      using (inbagwindow = Window_AdvancedTextPokemon.new("")) {   # Showing quantity in bag
         pbPrepareWindow(numwindow)
         pbPrepareWindow(inbagwindow)
         numwindow.viewport = @viewport

@@ -857,8 +857,8 @@ BattleHandlers::DamageCalcTargetItem.add(:DEEPSEASCALE,
 
 BattleHandlers::DamageCalcTargetItem.add(:EVIOLITE,
   proc { |item,user,target,move,mults,baseDmg,type|
-    # NOTE: Eviolite cares about whether the Pokémon itself can evolve, which
-    #       means it also cares about the Pokémon's form. Some forms cannot
+    # NOTE: Eviolite cares about whether the Pokemon itself can evolve, which
+    #       means it also cares about the Pokemon's form. Some forms cannot
     #       evolve even if the species generally can, and such forms are not
     #       affected by Eviolite.
     if target.pokemon.species_data.get_evolutions(true).length > 0
@@ -1218,7 +1218,7 @@ BattleHandlers::TargetItemAfterMoveUse.add(:EJECTBUTTON,
     newPkmn = battle.pbGetReplacementPokemonIndex(battler.index)   # Owner chooses
     next if newPkmn<0
     battle.pbRecallAndReplace(battler.index,newPkmn)
-    battle.pbClearChoice(battler.index)   # Replacement Pokémon does nothing this round
+    battle.pbClearChoice(battler.index)   # Replacement Pokemon does nothing this round
     switched.push(battler.index)
   }
 )
@@ -1234,7 +1234,7 @@ BattleHandlers::TargetItemAfterMoveUse.add(:REDCARD,
     battler.pbConsumeItem
     battle.pbRecallAndReplace(user.index, newPkmn, true)
     battle.pbDisplay(_INTL("{1} was dragged out!",user.pbThis))
-    battle.pbClearChoice(user.index)   # Replacement Pokémon does nothing this round
+    battle.pbClearChoice(user.index)   # Replacement Pokemon does nothing this round
     switched.push(user.index)
   }
 )

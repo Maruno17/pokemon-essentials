@@ -53,7 +53,7 @@ def pbLoadPhoneData
 end
 
 #===============================================================================
-# Method to get Shadow Pokémon moveset data.
+# Method to get Shadow Pokemon moveset data.
 #===============================================================================
 def pbLoadShadowMovesets
   $PokemonTemp = PokemonTemp.new if !$PokemonTemp

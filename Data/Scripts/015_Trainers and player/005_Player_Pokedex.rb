@@ -6,7 +6,7 @@ class Player < Trainer
     attr_reader :accessible_dexes
 
     def inspect
-      str = super.chop
+      str = self.to_s.chop
       str << format(' seen: %d, owned: %d>', self.seen_count, self.owned_count)
       return str
     end
@@ -61,8 +61,8 @@ class Player < Trainer
       return @seen_forms[species_id][gender][form] == true
     end
 
-    # Returns the amount of seen Pokémon.
-    # If a region ID is given, returns the amount of seen Pokémon
+    # Returns the amount of seen Pokemon.
+    # If a region ID is given, returns the amount of seen Pokemon
     # in that region.
     # @param dex [Integer] region ID
     def seen_count(dex = -1)
@@ -70,11 +70,11 @@ class Player < Trainer
       return self.count_species(@seen, dex)
     end
 
-    # Returns whether there are any seen Pokémon.
-    # If a region is given, returns whether there are seen Pokémon
+    # Returns whether there are any seen Pokemon.
+    # If a region is given, returns whether there are seen Pokemon
     # in that region.
     # @param region [Integer] region ID
-    # @return [Boolean] whether there are any seen Pokémon
+    # @return [Boolean] whether there are any seen Pokemon
     def seen_any?(dex = -1)
       validate dex => Integer
       if dex == -1
@@ -86,7 +86,7 @@ class Player < Trainer
     end
 
     # Returns the amount of seen forms for the given species.
-    # @param species [Symbol, GameData::Species] Pokémon species
+    # @param species [Symbol, GameData::Species] Pokemon species
     # @return [Integer] amount of seen forms
     def seen_forms_count(species)
       species_id = GameData::Species.try_get(species)&.species
@@ -100,13 +100,13 @@ class Player < Trainer
       return ret
     end
 
-    # @param species [Symbol, GameData::Species] Pokémon species
+    # @param species [Symbol, GameData::Species] Pokemon species
     def last_form_seen(species)
       @last_seen_forms[species] ||= []
       return @last_seen_forms[species][0] || 0, @last_seen_forms[species][1] || 0
     end
 
-    # @param species [Symbol, GameData::Species] Pokémon species
+    # @param species [Symbol, GameData::Species] Pokemon species
     # @param gender [Integer] gender (0=male, 1=female, 2=genderless)
     # @param form [Integer] form number
     def set_last_form_seen(species, gender = 0, form = 0)
@@ -143,15 +143,15 @@ class Player < Trainer
     end
 
     # @param species [Symbol, GameData::Species] species to check
-    # @return [Boolean] whether a Shadow Pokémon of the species is owned
+    # @return [Boolean] whether a Shadow Pokemon of the species is owned
     def owned_shadow_pokemon?(species)
       species_id = GameData::Species.try_get(species)&.species
       return false if species_id.nil?
       return @owned_shadow[species_id] == true
     end
 
-    # Returns the amount of owned Pokémon.
-    # If a region ID is given, returns the amount of owned Pokémon
+    # Returns the amount of owned Pokemon.
+    # If a region ID is given, returns the amount of owned Pokemon
     # in that region.
     # @param region [Integer] region ID
     def owned_count(dex = -1)

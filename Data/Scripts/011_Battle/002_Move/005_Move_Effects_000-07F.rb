@@ -390,11 +390,11 @@ end
 
 
 #===============================================================================
-# Cures all party Pokémon of permanent status problems. (Aromatherapy, Heal Bell)
+# Cures all party Pokemon of permanent status problems. (Aromatherapy, Heal Bell)
 #===============================================================================
 # NOTE: In Gen 5, this move should have a target of UserSide, while in Gen 6+ it
 #       should have a target of UserAndAllies. This is because, in Gen 5, this
-#       move shouldn't call def pbSuccessCheckAgainstTarget for each Pokémon
+#       move shouldn't call def pbSuccessCheckAgainstTarget for each Pokemon
 #       currently in battle that will be affected by this move (i.e. allies
 #       aren't protected by their substitute/ability/etc., but they are in Gen
 #       6+). We achieve this by not targeting any battlers in Gen 5, since
@@ -451,25 +451,25 @@ class PokeBattle_Move_019 < PokeBattle_Move
   end
 
   def pbEffectAgainstTarget(user,target)
-    # Cure all Pokémon in battle on the user's side.
+    # Cure all Pokemon in battle on the user's side.
     pbAromatherapyHeal(target.pokemon,target)
   end
 
   def pbEffectGeneral(user)
-    # Cure all Pokémon in battle on the user's side. For the benefit of the Gen
-    # 5 version of this move, to make Pokémon out in battle get cured first.
+    # Cure all Pokemon in battle on the user's side. For the benefit of the Gen
+    # 5 version of this move, to make Pokemon out in battle get cured first.
     if pbTarget(user) == :UserSide
       @battle.eachSameSideBattler(user) do |b|
         next if b.status == :NONE
         pbAromatherapyHeal(b.pokemon,b)
       end
     end
-    # Cure all Pokémon in the user's and partner trainer's party.
-    # NOTE: This intentionally affects the partner trainer's inactive Pokémon
+    # Cure all Pokemon in the user's and partner trainer's party.
+    # NOTE: This intentionally affects the partner trainer's inactive Pokemon
     #       too.
     @battle.pbParty(user.index).each_with_index do |pkmn,i|
       next if !pkmn || !pkmn.able? || pkmn.status == :NONE
-      next if @battle.pbFindBattler(i,user)   # Skip Pokémon in battle
+      next if @battle.pbFindBattler(i,user)   # Skip Pokemon in battle
       pbAromatherapyHeal(pkmn)
     end
   end
@@ -1752,7 +1752,7 @@ class PokeBattle_Move_05D < PokeBattle_Move
     if !lastMoveData ||
        user.pbHasMove?(target.lastRegularMoveUsed) ||
        @moveBlacklist.include?(lastMoveData.function_code) ||
-       lastMoveData.type == :SHADOW
+       lastMoveData.type = :SHADOW
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end

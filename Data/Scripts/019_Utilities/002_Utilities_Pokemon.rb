@@ -1,5 +1,5 @@
 #===============================================================================
-# Nicknaming and storing Pokémon
+# Nicknaming and storing Pokemon
 #===============================================================================
 def pbBoxesFull?
   return ($Trainer.party_full? && $PokemonStorage.full?)
@@ -15,8 +15,8 @@ end
 
 def pbStorePokemon(pkmn)
   if pbBoxesFull?
-    pbMessage(_INTL("There's no more room for Pokémon!\1"))
-    pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
+    pbMessage(_INTL("There's no more room for Pokemon!\1"))
+    pbMessage(_INTL("The Pokemon Boxes are full and can't accept any more!"))
     return
   end
   pkmn.record_first_moves
@@ -49,8 +49,8 @@ end
 
 def pbNicknameAndStore(pkmn)
   if pbBoxesFull?
-    pbMessage(_INTL("There's no more room for Pokémon!\1"))
-    pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
+    pbMessage(_INTL("There's no more room for Pokemon!\1"))
+    pbMessage(_INTL("The Pokemon Boxes are full and can't accept any more!"))
     return
   end
   $Trainer.pokedex.set_seen(pkmn.species)
@@ -60,13 +60,13 @@ def pbNicknameAndStore(pkmn)
 end
 
 #===============================================================================
-# Giving Pokémon to the player (will send to storage if party is full)
+# Giving Pokemon to the player (will send to storage if party is full)
 #===============================================================================
 def pbAddPokemon(pkmn, level = 1, see_form = true)
   return false if !pkmn
   if pbBoxesFull?
-    pbMessage(_INTL("There's no more room for Pokémon!\1"))
-    pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
+    pbMessage(_INTL("There's no more room for Pokemon!\1"))
+    pbMessage(_INTL("The Pokemon Boxes are full and can't accept any more!"))
     return false
   end
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
@@ -92,7 +92,7 @@ def pbAddPokemonSilent(pkmn, level = 1, see_form = true)
 end
 
 #===============================================================================
-# Giving Pokémon/eggs to the player (can only add to party)
+# Giving Pokemon/eggs to the player (can only add to party)
 #===============================================================================
 def pbAddToParty(pkmn, level = 1, see_form = true)
   return false if !pkmn || $Trainer.party_full?
@@ -120,13 +120,13 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
   # Set original trainer to a foreign one
   pkmn.owner = Pokemon::Owner.new_foreign(owner_name || "", owner_gender)
   # Set nickname
-  pkmn.name = nickname[0, Pokemon::MAX_NAME_SIZE] if !nil_or_empty?(nickname)
+  pkmn.name = nickname[0, Pokemon::MAX_NAME_SIZE]
   # Recalculate stats
   pkmn.calc_stats
   if owner_name
-    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon from {2}.\1", $Trainer.name, owner_name))
+    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokemon from {2}.\1", $Trainer.name, owner_name))
   else
-    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon.\1", $Trainer.name))
+    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokemon.\1", $Trainer.name))
   end
   pbStorePokemon(pkmn)
   $Trainer.pokedex.register(pkmn) if see_form
@@ -150,9 +150,9 @@ alias pbAddEgg pbGenerateEgg
 alias pbGenEgg pbGenerateEgg
 
 #===============================================================================
-# Analyse Pokémon in the party
+# Analyse Pokemon in the party
 #===============================================================================
-# Returns the first unfainted, non-egg Pokémon in the player's party.
+# Returns the first unfainted, non-egg Pokemon in the player's party.
 def pbFirstAblePokemon(variable_ID)
   $Trainer.party.each_with_index do |pkmn, i|
     next if !pkmn.able?
@@ -164,7 +164,7 @@ def pbFirstAblePokemon(variable_ID)
 end
 
 #===============================================================================
-# Return a level value based on Pokémon in a party
+# Return a level value based on Pokemon in a party
 #===============================================================================
 def pbBalancedLevel(party)
   return 1 if party.length == 0
@@ -213,7 +213,7 @@ def pbBalancedLevel(party)
 end
 
 #===============================================================================
-# Calculates a Pokémon's size (in millimeters)
+# Calculates a Pokemon's size (in millimeters)
 #===============================================================================
 def pbSize(pkmn)
   baseheight = pkmn.height

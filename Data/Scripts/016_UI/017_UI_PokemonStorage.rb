@@ -1,5 +1,5 @@
 #===============================================================================
-# Pokémon icons
+# Pokemon icons
 #===============================================================================
 class PokemonBoxIcon < IconSprite
   def initialize(pokemon,viewport=nil)
@@ -42,7 +42,7 @@ class PokemonBoxIcon < IconSprite
 end
 
 #===============================================================================
-# Pokémon sprite
+# Pokemon sprite
 #===============================================================================
 class MosaicPokemonSprite < PokemonSprite
   attr_reader :mosaic
@@ -563,7 +563,7 @@ class PokemonBoxPartySprite < SpriteWrapper
 end
 
 #===============================================================================
-# Pokémon storage visuals
+# Pokemon storage visuals
 #===============================================================================
 class PokemonStorageScene
   attr_reader :quickswap
@@ -699,7 +699,7 @@ class PokemonStorageScene
     when -1, -4, -5 # Box name, move left, move right
       arrow.x = 157*2
       arrow.y = -12*2
-    when -2 # Party Pokémon
+    when -2 # Party Pokemon
       arrow.x = 119*2
       arrow.y = 139*2
     when -3 # Close Box
@@ -878,7 +878,7 @@ class PokemonStorageScene
           return [@storage.currentBox,selection]
         elsif selection==-1   # Box name
           return [-4,-1]
-        elsif selection==-2   # Party Pokémon
+        elsif selection==-2   # Party Pokemon
           return [-2,-1]
         elsif selection==-3   # Close Box
           return [-3,-1]
@@ -894,7 +894,7 @@ class PokemonStorageScene
       if !@choseFromParty
         ret = pbSelectBoxInternal(party)
       end
-      if @choseFromParty || (ret && ret[0]==-2)   # Party Pokémon
+      if @choseFromParty || (ret && ret[0]==-2)   # Party Pokemon
         if !@choseFromParty
           pbShowPartyTab
           @selection = 0
@@ -1284,7 +1284,7 @@ class PokemonStorageScene
   def pbMark(selected,heldpoke)
     @sprites["markingbg"].visible      = true
     @sprites["markingoverlay"].visible = true
-    msg = _INTL("Mark your Pokémon.")
+    msg = _INTL("Mark your Pokemon.")
     msgwindow = Window_UnformattedTextPokemon.newWithSize("",180,0,Graphics.width-180,32)
     msgwindow.viewport       = @viewport
     msgwindow.visible        = true
@@ -1406,10 +1406,10 @@ class PokemonStorageScene
       return
     end
     @sprites["pokemon"].visible = true
-    base   = Color.new(88,88,80)
-    shadow = Color.new(168,184,184)
-    nonbase   = Color.new(208,208,208)
-    nonshadow = Color.new(224,224,224)
+    base   = Color.new(248,248,248)
+    shadow = Color.new(80,80,80)
+    nonbase   = Color.new(248,248,248)
+    nonshadow = Color.new(80,80,80)
     pokename = pokemon.name
     textstrings = [
        [pokename,10,2,false,base,shadow]
@@ -1417,9 +1417,9 @@ class PokemonStorageScene
     if !pokemon.egg?
       imagepos = []
       if pokemon.male?
-        textstrings.push([_INTL("♂"),148,2,false,Color.new(24,112,216),Color.new(136,168,208)])
+        textstrings.push([_INTL("♂"),148,2,false,Color.new(24,112,216),Color.new(80,80,80)])
       elsif pokemon.female?
-        textstrings.push([_INTL("♀"),148,2,false,Color.new(248,56,32),Color.new(224,152,144)])
+        textstrings.push([_INTL("♀"),148,2,false,Color.new(248,56,32),Color.new(80,80,80)])
       end
       imagepos.push(["Graphics/Pictures/Storage/overlay_lv",6,246])
       textstrings.push([pokemon.level.to_s,28,228,false,base,shadow])
@@ -1460,7 +1460,7 @@ class PokemonStorageScene
 end
 
 #===============================================================================
-# Pokémon storage mechanics
+# Pokemon storage mechanics
 #===============================================================================
 class PokemonStorageScreen
   attr_reader :scene
@@ -1481,14 +1481,14 @@ class PokemonStorageScreen
         selected = @scene.pbSelectBox(@storage.party)
         if selected==nil
           if pbHeldPokemon
-            pbDisplay(_INTL("You're holding a Pokémon!"))
+            pbDisplay(_INTL("You're holding a Pokemon!"))
             next
           end
           next if pbConfirm(_INTL("Continue Box operations?"))
           break
         elsif selected[0]==-3   # Close box
           if pbHeldPokemon
-            pbDisplay(_INTL("You're holding a Pokémon!"))
+            pbDisplay(_INTL("You're holding a Pokemon!"))
             next
           end
           if pbConfirm(_INTL("Exit from the Box?"))
@@ -1565,7 +1565,7 @@ class PokemonStorageScreen
           break
         else
           case selected[0]
-          when -2   # Party Pokémon
+          when -2   # Party Pokemon
             pbDisplay(_INTL("Which one will you take?"))
             next
           when -3   # Close box
@@ -1704,7 +1704,7 @@ class PokemonStorageScreen
     end
     if pbAbleCount<=1 && pbAble?(@storage[box,index]) && !heldpoke
       pbPlayBuzzerSE
-      pbDisplay(_INTL("That's your last Pokémon!"))
+      pbDisplay(_INTL("That's your last Pokemon!"))
     elsif heldpoke && heldpoke.mail
       pbDisplay(_INTL("Please remove the Mail."))
     elsif !heldpoke && @storage[box,index].mail
@@ -1743,7 +1743,7 @@ class PokemonStorageScreen
     index = selected[1]
     if box==-1 && pbAble?(@storage[box,index]) && pbAbleCount<=1
       pbPlayBuzzerSE
-      pbDisplay(_INTL("That's your last Pokémon!"))
+      pbDisplay(_INTL("That's your last Pokemon!"))
       return
     end
     @scene.pbHold(selected)
@@ -1788,7 +1788,7 @@ class PokemonStorageScreen
     end
     if box==-1 && pbAble?(@storage[box,index]) && pbAbleCount<=1 && !pbAble?(@heldpkmn)
       pbPlayBuzzerSE
-      pbDisplay(_INTL("That's your last Pokémon!"))
+      pbDisplay(_INTL("That's your last Pokemon!"))
       return false
     end
     if box!=-1 && @heldpkmn.mail
@@ -1822,10 +1822,10 @@ class PokemonStorageScreen
     end
     if box==-1 && pbAbleCount<=1 && pbAble?(pokemon) && !heldpoke
       pbPlayBuzzerSE
-      pbDisplay(_INTL("That's your last Pokémon!"))
+      pbDisplay(_INTL("That's your last Pokemon!"))
       return
     end
-    command = pbShowCommands(_INTL("Release this Pokémon?"),[_INTL("No"),_INTL("Yes")])
+    command = pbShowCommands(_INTL("Release this Pokemon?"),[_INTL("No"),_INTL("Yes")])
     if command==1
       pkmnname = pokemon.name
       @scene.pbRelease(selected,heldpoke)

@@ -37,7 +37,7 @@ class PokeBattle_Battler
 
   # Used by Future Sight only, when Future Sight's user is no longer in battle.
   def pbInitDummyPokemon(pkmn,idxParty)
-    raise _INTL("An egg can't be an active Pokémon.") if pkmn.egg?
+    raise _INTL("An egg can't be an active Pokemon.") if pkmn.egg?
     @name         = pkmn.name
     @species      = pkmn.species
     @form         = pkmn.form
@@ -71,7 +71,7 @@ class PokeBattle_Battler
   end
 
   def pbInitPokemon(pkmn,idxParty)
-    raise _INTL("An egg can't be an active Pokémon.") if pkmn.egg?
+    raise _INTL("An egg can't be an active Pokemon.") if pkmn.egg?
     @name         = pkmn.name
     @species      = pkmn.species
     @form         = pkmn.form
@@ -304,7 +304,7 @@ class PokeBattle_Battler
     end
   end
 
-  # Used to erase the battler of a Pokémon that has been caught.
+  # Used to erase the battler of a Pokemon that has been caught.
   def pbReset
     @pokemon      = nil
     @pokemonIndex = -1
@@ -318,7 +318,7 @@ class PokeBattle_Battler
     @battle.pbClearChoice(@index)
   end
 
-  # Update which Pokémon will gain Exp if this battler is defeated.
+  # Update which Pokemon will gain Exp if this battler is defeated.
   def pbUpdateParticipants
     return if fainted? || !@battle.opposes?(@index)
     eachOpposing do |b|

@@ -311,7 +311,7 @@ end
 
 #===============================================================================
 # Power is multiplied by the number of consecutive rounds in which this move was
-# used by any Pokémon on the user's side. (Echoed Voice)
+# used by any Pokemon on the user's side. (Echoed Voice)
 #===============================================================================
 class PokeBattle_Move_092 < PokeBattle_Move
   def pbChangeUsageCounters(user,specialUsage)
@@ -473,7 +473,7 @@ class PokeBattle_Move_096 < PokeBattle_Move
   end
 
   def pbMoveFailed?(user,targets)
-    # NOTE: Unnerve does not stop a Pokémon using this move.
+    # NOTE: Unnerve does not stop a Pokemon using this move.
     item = user.item
     if !item || !item.is_berry? || !user.itemActive?
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1299,7 +1299,7 @@ end
 # Uses a different move depending on the environment. (Nature Power)
 # NOTE: This code does not support the Gen 5 and older definition of the move
 #       where it targets the user. It makes more sense for it to target another
-#       Pokémon.
+#       Pokemon.
 #===============================================================================
 class PokeBattle_Move_0B3 < PokeBattle_Move
   def callsAnotherMove?; return true; end
@@ -1451,7 +1451,7 @@ end
 
 
 #===============================================================================
-# Uses a random move known by any non-user Pokémon in the user's party. (Assist)
+# Uses a random move known by any non-user Pokemon in the user's party. (Assist)
 #===============================================================================
 class PokeBattle_Move_0B5 < PokeBattle_Move
   def callsAnotherMove?; return true; end
@@ -1543,7 +1543,7 @@ class PokeBattle_Move_0B5 < PokeBattle_Move
 
   def pbMoveFailed?(user,targets)
     @assistMoves = []
-    # NOTE: This includes the Pokémon of ally trainers in multi battles.
+    # NOTE: This includes the Pokemon of ally trainers in multi battles.
     @battle.pbParty(user.index).each_with_index do |pkmn,i|
       next if !pkmn || i==user.pokemonIndex
       next if Settings::MECHANICS_GENERATION >= 6 && pkmn.egg?
@@ -1660,7 +1660,7 @@ class PokeBattle_Move_0B6 < PokeBattle_Move
 
   def pbMoveFailed?(user,targets)
     @metronomeMove = nil
-    move_keys = GameData::Move::DATA.keys
+    move_keys = GameData::Move::DATA.keys.sort
     # NOTE: You could be really unlucky and roll blacklisted moves 1000 times in
     #       a row. This is too unlikely to care about, though.
     1000.times do
@@ -1969,7 +1969,7 @@ end
 
 
 #===============================================================================
-# Hits X times, where X is the number of non-user unfainted status-free Pokémon
+# Hits X times, where X is the number of non-user unfainted status-free Pokemon
 # in the user's party (not including partner trainers). Fails if X is 0.
 # Base power of each hit depends on the base Attack stat for the species of that
 # hit's participant. (Beat Up)
@@ -2212,7 +2212,7 @@ end
 # Two turn attack. Skips first turn, attacks second turn. (Sky Drop)
 # (Handled in Battler's pbSuccessCheckPerHit): Is semi-invulnerable during use.
 # Target is also semi-invulnerable during use, and can't take any action.
-# Doesn't damage airborne Pokémon (but still makes them unable to move during).
+# Doesn't damage airborne Pokemon (but still makes them unable to move during).
 #===============================================================================
 class PokeBattle_Move_0CE < PokeBattle_TwoTurnMove
   def unusableInGravity?; return true; end
@@ -2276,7 +2276,7 @@ end
 
 
 #===============================================================================
-# Trapping move. Traps for 5 or 6 rounds. Trapped Pokémon lose 1/16 of max HP
+# Trapping move. Traps for 5 or 6 rounds. Trapped Pokemon lose 1/16 of max HP
 # at end of each round.
 #===============================================================================
 class PokeBattle_Move_0CF < PokeBattle_Move
@@ -2318,7 +2318,7 @@ end
 
 
 #===============================================================================
-# Trapping move. Traps for 5 or 6 rounds. Trapped Pokémon lose 1/16 of max HP
+# Trapping move. Traps for 5 or 6 rounds. Trapped Pokemon lose 1/16 of max HP
 # at end of each round. (Whirlpool)
 # Power is doubled if target is using Dive. Hits some semi-invulnerable targets.
 #===============================================================================
@@ -2335,9 +2335,9 @@ end
 
 #===============================================================================
 # User must use this move for 2 more rounds. No battlers can sleep. (Uproar)
-# NOTE: Bulbapedia claims that an uproar will wake up Pokémon even if they have
-#       Soundproof, and will not allow Pokémon to fall asleep even if they have
-#       Soundproof. I think this is an oversight, so I've let Soundproof Pokémon
+# NOTE: Bulbapedia claims that an uproar will wake up Pokemon even if they have
+#       Soundproof, and will not allow Pokemon to fall asleep even if they have
+#       Soundproof. I think this is an oversight, so I've let Soundproof Pokemon
 #       be unaffected by Uproar waking/non-sleeping effects.
 #===============================================================================
 class PokeBattle_Move_0D1 < PokeBattle_Move
@@ -2573,7 +2573,7 @@ end
 
 
 #===============================================================================
-# Rings the user. Ringed Pokémon gain 1/16 of max HP at the end of each round.
+# Rings the user. Ringed Pokemon gain 1/16 of max HP at the end of each round.
 # (Aqua Ring)
 #===============================================================================
 class PokeBattle_Move_0DA < PokeBattle_Move
@@ -2594,7 +2594,7 @@ end
 
 
 #===============================================================================
-# Ingrains the user. Ingrained Pokémon gain 1/16 of max HP at the end of each
+# Ingrains the user. Ingrained Pokemon gain 1/16 of max HP at the end of each
 # round, and cannot flee or switch out. (Ingrain)
 #===============================================================================
 class PokeBattle_Move_0DB < PokeBattle_Move
@@ -2615,8 +2615,8 @@ end
 
 
 #===============================================================================
-# Seeds the target. Seeded Pokémon lose 1/8 of max HP at the end of each round,
-# and the Pokémon in the user's position gains the same amount. (Leech Seed)
+# Seeds the target. Seeded Pokemon lose 1/8 of max HP at the end of each round,
+# and the Pokemon in the user's position gains the same amount. (Leech Seed)
 #===============================================================================
 class PokeBattle_Move_0DC < PokeBattle_Move
   def pbFailsAgainstTarget?(user,target)
@@ -2796,7 +2796,7 @@ end
 
 
 #===============================================================================
-# User faints. The Pokémon that replaces the user is fully healed (HP and
+# User faints. The Pokemon that replaces the user is fully healed (HP and
 # status). Fails if user won't be replaced. (Healing Wish)
 #===============================================================================
 class PokeBattle_Move_0E3 < PokeBattle_Move
@@ -2821,7 +2821,7 @@ end
 
 
 #===============================================================================
-# User faints. The Pokémon that replaces the user is fully healed (HP, PP and
+# User faints. The Pokemon that replaces the user is fully healed (HP, PP and
 # status). Fails if user won't be replaced. (Lunar Dance)
 #===============================================================================
 class PokeBattle_Move_0E4 < PokeBattle_Move
@@ -2874,7 +2874,7 @@ class PokeBattle_Move_0E5 < PokeBattle_Move
 
   def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
     super
-    @battle.pbDisplay(_INTL("All Pokémon that hear the song will faint in three turns!"))
+    @battle.pbDisplay(_INTL("All Pokemon that hear the song will faint in three turns!"))
   end
 end
 
@@ -3021,7 +3021,7 @@ class PokeBattle_Move_0EB < PokeBattle_Move
       next if newPkmn<0
       @battle.pbRecallAndReplace(b.index, newPkmn, true)
       @battle.pbDisplay(_INTL("{1} was dragged out!",b.pbThis))
-      @battle.pbClearChoice(b.index)   # Replacement Pokémon does nothing this round
+      @battle.pbClearChoice(b.index)   # Replacement Pokemon does nothing this round
       switchedBattlers.push(b.index)
       roarSwitched.push(b.index)
     end
@@ -3063,7 +3063,7 @@ class PokeBattle_Move_0EC < PokeBattle_Move
       next if newPkmn<0
       @battle.pbRecallAndReplace(b.index, newPkmn, true)
       @battle.pbDisplay(_INTL("{1} was dragged out!",b.pbThis))
-      @battle.pbClearChoice(b.index)   # Replacement Pokémon does nothing this round
+      @battle.pbClearChoice(b.index)   # Replacement Pokemon does nothing this round
       switchedBattlers.push(b.index)
       roarSwitched.push(b.index)
     end
@@ -3099,7 +3099,7 @@ class PokeBattle_Move_0ED < PokeBattle_Move
     newPkmn = @battle.pbGetReplacementPokemonIndex(user.index)   # Owner chooses
     return if newPkmn<0
     @battle.pbRecallAndReplace(user.index, newPkmn, false, true)
-    @battle.pbClearChoice(user.index)   # Replacement Pokémon does nothing this round
+    @battle.pbClearChoice(user.index)   # Replacement Pokemon does nothing this round
     @battle.moldBreaker = false
     switchedBattlers.push(user.index)
     user.pbEffectsOnSwitchIn(true)
@@ -3128,7 +3128,7 @@ class PokeBattle_Move_0EE < PokeBattle_Move
     newPkmn = @battle.pbGetReplacementPokemonIndex(user.index)   # Owner chooses
     return if newPkmn<0
     @battle.pbRecallAndReplace(user.index,newPkmn)
-    @battle.pbClearChoice(user.index)   # Replacement Pokémon does nothing this round
+    @battle.pbClearChoice(user.index)   # Replacement Pokemon does nothing this round
     @battle.moldBreaker = false
     switchedBattlers.push(user.index)
     user.pbEffectsOnSwitchIn(true)
@@ -3188,7 +3188,7 @@ class PokeBattle_Move_0F0 < PokeBattle_Move
   end
 
   def pbEffectAfterAllHits(user,target)
-    return if @battle.wildBattle? && user.opposes?   # Wild Pokémon can't knock off
+    return if @battle.wildBattle? && user.opposes?   # Wild Pokemon can't knock off
     return if user.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
     return if !target.item || target.unlosableItem?(target.item)
@@ -3203,11 +3203,11 @@ end
 
 #===============================================================================
 # User steals the target's item, if the user has none itself. (Covet, Thief)
-# Items stolen from wild Pokémon are kept after the battle.
+# Items stolen from wild Pokemon are kept after the battle.
 #===============================================================================
 class PokeBattle_Move_0F1 < PokeBattle_Move
   def pbEffectAfterAllHits(user,target)
-    return if @battle.wildBattle? && user.opposes?   # Wild Pokémon can't thieve
+    return if @battle.wildBattle? && user.opposes?   # Wild Pokemon can't thieve
     return if user.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
     return if !target.item || user.item
@@ -3216,7 +3216,7 @@ class PokeBattle_Move_0F1 < PokeBattle_Move
     return if target.hasActiveAbility?(:STICKYHOLD) && !@battle.moldBreaker
     itemName = target.itemName
     user.item = target.item
-    # Permanently steal the item from wild Pokémon
+    # Permanently steal the item from wild Pokemon
     if @battle.wildBattle? && target.opposes? &&
        target.initialItem==target.item && !user.initialItem
       user.setInitialItem(target.item)
@@ -3279,7 +3279,7 @@ class PokeBattle_Move_0F2 < PokeBattle_Move
     target.item                           = oldUserItem
     target.effects[PBEffects::ChoiceBand] = nil
     target.effects[PBEffects::Unburden]   = (!target.item && oldTargetItem)
-    # Permanently steal the item from wild Pokémon
+    # Permanently steal the item from wild Pokemon
     if @battle.wildBattle? && target.opposes? &&
        target.initialItem==oldTargetItem && !user.initialItem
       user.setInitialItem(oldTargetItem)
@@ -3323,7 +3323,7 @@ class PokeBattle_Move_0F3 < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     itemName = user.itemName
     target.item = user.item
-    # Permanently steal the item from wild Pokémon
+    # Permanently steal the item from wild Pokemon
     if @battle.wildBattle? && user.opposes? &&
        user.initialItem==user.item && !target.initialItem
       target.setInitialItem(user.item)
@@ -3628,7 +3628,7 @@ class PokeBattle_Move_0F9 < PokeBattle_Move
       @battle.pbDisplay(_INTL("The area returned to normal!"))
     else
       @battle.field.effects[PBEffects::MagicRoom] = 5
-      @battle.pbDisplay(_INTL("It created a bizarre area in which Pokémon's held items lose their effects!"))
+      @battle.pbDisplay(_INTL("It created a bizarre area in which Pokemon's held items lose their effects!"))
     end
   end
 

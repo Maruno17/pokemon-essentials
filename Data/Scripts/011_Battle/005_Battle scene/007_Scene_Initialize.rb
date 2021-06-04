@@ -73,13 +73,13 @@ class PokeBattle_Scene
         pbCreateTrainerFrontSprite(i,p.trainer_type,@battle.opponent.length)
       end
     end
-    # Data boxes and Pokémon sprites
+    # Data boxes and Pokemon sprites
     @battle.battlers.each_with_index do |b,i|
       next if !b
       @sprites["dataBox_#{i}"] = PokemonDataBox.new(b,@battle.pbSideSize(i),@viewport)
       pbCreatePokemonSprite(i)
     end
-    # Wild battle, so set up the Pokémon sprite(s) accordingly
+    # Wild battle, so set up the Pokemon sprite(s) accordingly
     if @battle.wildBattle?
       @battle.pbParty(1).each_with_index do |pkmn,i|
         index = i*2+1
@@ -183,9 +183,11 @@ class PokeBattle_Scene
   def pbCreatePokemonSprite(idxBattler)
     sideSize = @battle.pbSideSize(idxBattler)
     batSprite = PokemonBattlerSprite.new(@viewport,sideSize,idxBattler,@animations)
+    batSprite.z=5
     @sprites["pokemon_#{idxBattler}"] = batSprite
     shaSprite = PokemonBattlerShadowSprite.new(@viewport,sideSize,idxBattler)
     shaSprite.visible = false
+    shaSprite.z=4
     @sprites["shadow_#{idxBattler}"] = shaSprite
   end
 end

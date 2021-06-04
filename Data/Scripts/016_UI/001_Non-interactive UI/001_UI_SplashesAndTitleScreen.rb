@@ -1,11 +1,12 @@
 class IntroEventScene < EventScene
   # Splash screen images that appear for a few seconds and then disappear.
-  SPLASH_IMAGES         = ['splash1']
+  SPLASH_IMAGES         = ['splash1','splash2']
   # The main title screen background image.
   TITLE_BG_IMAGE        = 'title'
   TITLE_START_IMAGE     = 'start'
+  TITLE_COVER_IMAGE     = 'gametitle'
   TITLE_START_IMAGE_X   = 0
-  TITLE_START_IMAGE_Y   = 322
+  TITLE_START_IMAGE_Y   = 317
   SECONDS_PER_SPLASH    = 2
   TICKS_PER_ENTER_FLASH = 40   # 20 ticks per second
   FADE_TICKS            = 8    # 20 ticks per second
@@ -16,6 +17,8 @@ class IntroEventScene < EventScene
     @pic.setOpacity(0, 0)        # set opacity to 0 after waiting 0 frames
     @pic2 = addImage(0, 0, "")   # flashing "Press Enter" picture
     @pic2.setOpacity(0, 0)       # set opacity to 0 after waiting 0 frames
+    @pic3 = addImage(0, 0, "")
+    @pic3.setOpacity(0, 0)
     @index = 0
     pbBGMPlay($data_system.title_bgm)
     open_splash(self, nil)
@@ -59,6 +62,8 @@ class IntroEventScene < EventScene
     @pic2.setXY(0, TITLE_START_IMAGE_X, TITLE_START_IMAGE_Y)
     @pic2.setVisible(0, true)
     @pic2.moveOpacity(0, FADE_TICKS, 255)
+    @pic3.name = "Graphics/Titles/" + TITLE_COVER_IMAGE
+    @pic3.moveOpacity(0, FADE_TICKS, 255)
     pictureWait
     onUpdate.set(method(:title_screen_update))    # called every frame
     onCTrigger.set(method(:close_title_screen))   # called when C key is pressed
@@ -67,17 +72,14 @@ class IntroEventScene < EventScene
   def fade_out_title_screen(scene)
     onUpdate.clear
     onCTrigger.clear
-    # Play random cry
-    species_keys = GameData::Species::DATA.keys
-    species_data = GameData::Species.get(species_keys[rand(species_keys.length)])
-    Pokemon.play_cry(species_data.species, species_data.form)
+    GameData::Species.play_cry_from_species(:JIRACHI)
     @pic.moveXY(0, 20, 0, 0)   # Adds 20 ticks (1 second) pause
     pictureWait
     # Fade out
     @pic.moveOpacity(0, FADE_TICKS, 0)
     @pic2.clearProcesses
     @pic2.moveOpacity(0, FADE_TICKS, 0)
-    pbBGMStop(1.0)
+    @pic3.moveOpacity(0, FADE_TICKS, 0)
     pictureWait
     scene.dispose   # Close the scene
   end

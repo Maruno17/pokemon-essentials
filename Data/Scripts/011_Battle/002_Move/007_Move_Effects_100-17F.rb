@@ -253,7 +253,7 @@ end
 
 #===============================================================================
 # User is Ghost: User loses 1/2 of max HP, and curses the target.
-# Cursed Pokémon lose 1/4 of their max HP at the end of each round.
+# Cursed Pokemon lose 1/4 of their max HP at the end of each round.
 # User is not Ghost: Decreases the user's Speed by 1 stage, and increases the
 # user's Attack and Defense by 1 stage each. (Curse)
 #===============================================================================
@@ -657,7 +657,7 @@ end
 
 
 #===============================================================================
-# For 5 rounds, increases gravity on the field. Pokémon cannot become airborne.
+# For 5 rounds, increases gravity on the field. Pokemon cannot become airborne.
 # (Gravity)
 #===============================================================================
 class PokeBattle_Move_118 < PokeBattle_Move
@@ -867,7 +867,7 @@ end
 
 
 #===============================================================================
-# For 5 rounds, for each priority bracket, slow Pokémon move before fast ones.
+# For 5 rounds, for each priority bracket, slow Pokemon move before fast ones.
 # (Trick Room)
 #===============================================================================
 class PokeBattle_Move_11F < PokeBattle_Move
@@ -950,7 +950,7 @@ end
 
 
 #===============================================================================
-# Only damages Pokémon that share a type with the user. (Synchronoise)
+# Only damages Pokemon that share a type with the user. (Synchronoise)
 #===============================================================================
 class PokeBattle_Move_123 < PokeBattle_Move
   def pbFailsAgainstTarget?(user,target)
@@ -1088,7 +1088,7 @@ end
 #===============================================================================
 # NOTE: In Gen 5, this move should have a target of UserSide, while in Gen 6+ it
 #       should have a target of UserAndAllies. This is because, in Gen 5, this
-#       move shouldn't call def pbSuccessCheckAgainstTarget for each Pokémon
+#       move shouldn't call def pbSuccessCheckAgainstTarget for each Pokemon
 #       currently in battle that will be affected by this move (i.e. allies
 #       aren't protected by their substitute/ability/etc., but they are in Gen
 #       6+). We achieve this by not targeting any battlers in Gen 5, since
@@ -1258,8 +1258,8 @@ end
 
 
 #===============================================================================
-# Increases the Attack and Special Attack of all Grass-type Pokémon in battle by
-# 1 stage each. Doesn't affect airborne Pokémon. (Rototiller)
+# Increases the Attack and Special Attack of all Grass-type Pokemon in battle by
+# 1 stage each. Doesn't affect airborne Pokemon. (Rototiller)
 #===============================================================================
 class PokeBattle_Move_13E < PokeBattle_Move
   def pbMoveFailed?(user,targets)
@@ -1302,7 +1302,7 @@ end
 
 
 #===============================================================================
-# Increases the Defense of all Grass-type Pokémon on the field by 1 stage each.
+# Increases the Defense of all Grass-type Pokemon on the field by 1 stage each.
 # (Flower Shield)
 #===============================================================================
 class PokeBattle_Move_13F < PokeBattle_Move
@@ -1717,7 +1717,7 @@ class PokeBattle_Move_151 < PokeBattle_TargetMultiStatDownMove
     newPkmn = @battle.pbGetReplacementPokemonIndex(switcher.index)   # Owner chooses
     return if newPkmn<0
     @battle.pbRecallAndReplace(switcher.index,newPkmn)
-    @battle.pbClearChoice(switcher.index)   # Replacement Pokémon does nothing this round
+    @battle.pbClearChoice(switcher.index)   # Replacement Pokemon does nothing this round
     @battle.moldBreaker = false if switcher.index==user.index
     switchedBattlers.push(switcher.index)
     switcher.pbEffectsOnSwitchIn(true)
@@ -1727,7 +1727,7 @@ end
 
 
 #===============================================================================
-# No Pokémon can switch out or flee until the end of the next round, as long as
+# No Pokemon can switch out or flee until the end of the next round, as long as
 # the user remains active. (Fairy Lock)
 #===============================================================================
 class PokeBattle_Move_152 < PokeBattle_Move
@@ -1770,7 +1770,7 @@ end
 
 #===============================================================================
 # For 5 rounds, creates an electric terrain which boosts Electric-type moves and
-# prevents Pokémon from falling asleep. Affects non-airborne Pokémon only.
+# prevents Pokemon from falling asleep. Affects non-airborne Pokemon only.
 # (Electric Terrain)
 #===============================================================================
 class PokeBattle_Move_154 < PokeBattle_Move
@@ -1791,7 +1791,7 @@ end
 
 #===============================================================================
 # For 5 rounds, creates a grassy terrain which boosts Grass-type moves and heals
-# Pokémon at the end of each round. Affects non-airborne Pokémon only.
+# Pokemon at the end of each round. Affects non-airborne Pokemon only.
 # (Grassy Terrain)
 #===============================================================================
 class PokeBattle_Move_155 < PokeBattle_Move
@@ -1812,7 +1812,7 @@ end
 
 #===============================================================================
 # For 5 rounds, creates a misty terrain which weakens Dragon-type moves and
-# protects Pokémon from status problems. Affects non-airborne Pokémon only.
+# protects Pokemon from status problems. Affects non-airborne Pokemon only.
 # (Misty Terrain)
 #===============================================================================
 class PokeBattle_Move_156 < PokeBattle_Move
@@ -1936,7 +1936,7 @@ end
 #===============================================================================
 # NOTE: In Gen 5, this move should have a target of UserSide, while in Gen 6+ it
 #       should have a target of UserAndAllies. This is because, in Gen 5, this
-#       move shouldn't call def pbSuccessCheckAgainstTarget for each Pokémon
+#       move shouldn't call def pbSuccessCheckAgainstTarget for each Pokemon
 #       currently in battle that will be affected by this move (i.e. allies
 #       aren't protected by their substitute/ability/etc., but they are in Gen
 #       6+). We achieve this by not targeting any battlers in Gen 5, since
@@ -2233,8 +2233,8 @@ end
 
 
 #===============================================================================
-# User is protected against moves with the "B" flag this round. If a Pokémon
-# makes contact with the user while this effect applies, that Pokémon is
+# User is protected against moves with the "B" flag this round. If a Pokemon
+# makes contact with the user while this effect applies, that Pokemon is
 # poisoned. (Baneful Bunker)
 #===============================================================================
 class PokeBattle_Move_168 < PokeBattle_ProtectMove
@@ -2529,7 +2529,7 @@ end
 
 
 #===============================================================================
-# If a Pokémon makes contact with the user before it uses this move, the
+# If a Pokemon makes contact with the user before it uses this move, the
 # attacker is burned. (Beak Blast)
 #===============================================================================
 class PokeBattle_Move_172 < PokeBattle_Move
@@ -2544,8 +2544,8 @@ end
 
 #===============================================================================
 # For 5 rounds, creates a psychic terrain which boosts Psychic-type moves and
-# prevents Pokémon from being hit by >0 priority moves. Affects non-airborne
-# Pokémon only. (Psychic Terrain)
+# prevents Pokemon from being hit by >0 priority moves. Affects non-airborne
+# Pokemon only. (Psychic Terrain)
 #===============================================================================
 class PokeBattle_Move_173 < PokeBattle_Move
   def pbMoveFailed?(user,targets)

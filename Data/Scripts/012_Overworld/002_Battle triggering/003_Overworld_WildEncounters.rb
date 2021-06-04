@@ -37,7 +37,7 @@ class PokemonEncounters
 
   # Returns whether encounters for the given encounter type have been defined
   # for the given map. Only called by Bug Catching Contest to see if it can use
-  # the map's BugContest encounter type to generate caught Pokémon for the other
+  # the map's BugContest encounter type to generate caught Pokemon for the other
   # contestants.
   def map_has_encounter_type?(map_ID, enc_type)
     return false if !enc_type
@@ -172,7 +172,7 @@ class PokemonEncounters
     return false
   end
 
-  # Returns whether an encounter with the given Pokémon should be allowed after
+  # Returns whether an encounter with the given Pokemon should be allowed after
   # taking into account Repels and ability effects.
   def allow_encounter?(enc_data, repel_active = false)
     return false if !enc_data
@@ -184,8 +184,8 @@ class PokemonEncounters
         return false
       end
     end
-    # Some abilities make wild encounters less likely if the wild Pokémon is
-    # sufficiently weaker than the Pokémon with the ability
+    # Some abilities make wild encounters less likely if the wild Pokemon is
+    # sufficiently weaker than the Pokemon with the ability
     first_pkmn = $Trainer.first_pokemon
     if first_pkmn
       case first_pkmn.ability_id
@@ -265,7 +265,7 @@ class PokemonEncounters
     enc_list = @encounter_tables[enc_type]
     return nil if !enc_list || enc_list.length == 0
     # Static/Magnet Pull prefer wild encounters of certain types, if possible.
-    # If they activate, they remove all Pokémon from the encounter table that do
+    # If they activate, they remove all Pokemon from the encounter table that do
     # not have the type they favor. If none have that type, nothing is changed.
     first_pkmn = $Trainer.first_pokemon
     if first_pkmn
@@ -306,14 +306,14 @@ class PokemonEncounters
     end
     # Get the chosen species and level
     level = rand(encounter[2]..encounter[3])
-    # Some abilities alter the level of the wild Pokémon
+    # Some abilities alter the level of the wild Pokemon
     if first_pkmn
       case first_pkmn.ability_id
       when :HUSTLE, :PRESSURE, :VITALSPIRIT
         level = encounter[3] if rand(100) < 50   # Highest possible level
       end
     end
-    # Black Flute and White Flute alter the level of the wild Pokémon
+    # Black Flute and White Flute alter the level of the wild Pokemon
     if Settings::FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS
       if $PokemonMap.blackFluteUsed
         level = [level + rand(1..4), GameData::GrowthRate.max_level].min
@@ -365,12 +365,12 @@ end
 #===============================================================================
 #
 #===============================================================================
-# Creates and returns a Pokémon based on the given species and level.
-# Applies wild Pokémon modifiers (wild held item, shiny chance modifiers,
-# Pokérus, gender/nature forcing because of player's lead Pokémon).
+# Creates and returns a Pokemon based on the given species and level.
+# Applies wild Pokemon modifiers (wild held item, shiny chance modifiers,
+# Pokérus, gender/nature forcing because of player's lead Pokemon).
 def pbGenerateWildPokemon(species,level,isRoamer=false)
   genwildpoke = Pokemon.new(species,level)
-  # Give the wild Pokémon a held item
+  # Give the wild Pokemon a held item
   items = genwildpoke.wildHoldItems
   first_pkmn = $Trainer.first_pokemon
   chances = [50,5,1]
@@ -383,7 +383,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   elsif itemrnd<(chances[0]+chances[1]+chances[2])
     genwildpoke.item = items[2]
   end
-  # Shiny Charm makes shiny Pokémon more likely to generate
+  # Shiny Charm makes shiny Pokemon more likely to generate
   if GameData::Item.exists?(:SHINYCHARM) && $PokemonBag.pbHasItem?(:SHINYCHARM)
     2.times do   # 3 times as likely
       break if genwildpoke.shiny?
@@ -392,7 +392,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   end
   # Give Pokérus
   genwildpoke.givePokerus if rand(65536) < Settings::POKERUS_CHANCE
-  # Change wild Pokémon's gender/nature depending on the lead party Pokémon's
+  # Change wild Pokemon's gender/nature depending on the lead party Pokemon's
   # ability
   if first_pkmn
     if first_pkmn.hasAbility?(:CUTECHARM) && !genwildpoke.singleGendered?
@@ -405,13 +405,13 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
       genwildpoke.nature = first_pkmn.nature if !isRoamer && rand(100)<50
     end
   end
-  # Trigger events that may alter the generated Pokémon further
+  # Trigger events that may alter the generated Pokemon further
   Events.onWildPokemonCreate.trigger(nil,genwildpoke)
   return genwildpoke
 end
 
 # Used by fishing rods and Headbutt/Rock Smash/Sweet Scent to generate a wild
-# Pokémon (or two) for a triggered wild encounter.
+# Pokemon (or two) for a triggered wild encounter.
 def pbEncounter(enc_type)
   $PokemonTemp.encounterType = enc_type
   encounter1 = $PokemonEncounters.choose_wild_pokemon(enc_type)

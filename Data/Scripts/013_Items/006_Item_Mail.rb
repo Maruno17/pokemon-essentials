@@ -1,4 +1,4 @@
-# Data structure representing mail that the Pokémon can hold
+# Data structure representing mail that the Pokemon can hold
 class Mail
   attr_accessor :item, :message, :sender, :poke1, :poke2, :poke3
 
@@ -39,7 +39,7 @@ def pbMoveToMailbox(pokemon)
 end
 
 def pbStoreMail(pkmn,item,message,poke1=nil,poke2=nil,poke3=nil)
-  raise _INTL("Pokémon already has mail") if pkmn.mail
+  raise _INTL("Pokemon already has mail") if pkmn.mail
   pkmn.mail = Mail.new(item, message, $Trainer.name, poke1, poke2, poke3)
 end
 
@@ -129,6 +129,6 @@ def pbWriteMail(item,pkmn,pkmnid,scene)
       pbStoreMail(pkmn,item,message,poke1,poke2,poke3)
       return true
     end
-    return false if scene.pbConfirm(_INTL("Stop giving the Pokémon Mail?"))
+    return false if scene.pbConfirm(_INTL("Stop giving the Pokemon Mail?"))
   end
 end

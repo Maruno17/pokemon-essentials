@@ -1099,7 +1099,7 @@ module Compiler
               indent = list[i].indent
               (list.length-1).times { list.delete_at(0) }
               list.insert(0,
-                 RPG::EventCommand.new(250,indent,[RPG::AudioFile.new("Exit Door",80,100)]),   # Play SE
+                 RPG::EventCommand.new(250,indent,[RPG::AudioFile.new("Door exit",80,100)]),   # Play SE
                  RPG::EventCommand.new(223,indent,[Tone.new(-255,-255,-255),6]),               # Fade to black
                  RPG::EventCommand.new(106,indent,[8]),                                        # Wait
                  fullTransfer,                                                                 # Transfer event

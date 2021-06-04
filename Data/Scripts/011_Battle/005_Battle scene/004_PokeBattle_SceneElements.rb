@@ -12,11 +12,11 @@ class PokemonDataBox < SpriteWrapper
   # Maximum time in seconds to make a change to the HP bar.
   HP_BAR_CHANGE_TIME = 1.0
   STATUS_ICON_HEIGHT = 16
-  NAME_BASE_COLOR         = Color.new(72,72,72)
-  NAME_SHADOW_COLOR       = Color.new(184,184,184)
-  MALE_BASE_COLOR         = Color.new(48,96,216)
+  NAME_BASE_COLOR         = Color.new(255, 255, 255)
+  NAME_SHADOW_COLOR       = Color.new(137, 137, 137)
+  MALE_BASE_COLOR         = Color.new(145, 198, 247)
   MALE_SHADOW_COLOR       = NAME_SHADOW_COLOR
-  FEMALE_BASE_COLOR       = Color.new(248,88,40)
+  FEMALE_BASE_COLOR       = Color.new(244,168,224)
   FEMALE_SHADOW_COLOR     = NAME_SHADOW_COLOR
 
   def initialize(battler,sideSize,viewport=nil)
@@ -41,14 +41,14 @@ class PokemonDataBox < SpriteWrapper
   def initializeDataBoxGraphic(sideSize)
     onPlayerSide = ((@battler.index%2)==0)
     # Get the data box graphic and set whether the HP numbers/Exp bar are shown
-    if sideSize==1   # One Pokémon on side, use the regular dara box BG
+    if sideSize==1   # One Pokemon on side, use the regular dara box BG
       bgFilename = ["Graphics/Pictures/Battle/databox_normal",
                     "Graphics/Pictures/Battle/databox_normal_foe"][@battler.index%2]
       if onPlayerSide
         @showHP  = true
         @showExp = true
       end
-    else   # Multiple Pokémon on side, use the thin dara box BG
+    else   # Multiple Pokemon on side, use the thin dara box BG
       bgFilename = ["Graphics/Pictures/Battle/databox_thin",
                     "Graphics/Pictures/Battle/databox_thin_foe"][@battler.index%2]
     end
@@ -112,14 +112,14 @@ class PokemonDataBox < SpriteWrapper
   def x=(value)
     super
     @hpBar.x     = value+@spriteBaseX+102
-    @expBar.x    = value+@spriteBaseX+6
-    @hpNumbers.x = value+@spriteBaseX+80
+    @expBar.x    = value+@spriteBaseX-27
+    @hpNumbers.x = value+@spriteBaseX+60
   end
 
   def y=(value)
     super
     @hpBar.y     = value+40
-    @expBar.y    = value+74
+    @expBar.y    = value+43
     @hpNumbers.y = value+52
   end
 
@@ -209,12 +209,12 @@ class PokemonDataBox < SpriteWrapper
     imagePos = []
     # Draw background panel
     self.bitmap.blt(0,0,@databoxBitmap.bitmap,Rect.new(0,0,@databoxBitmap.width,@databoxBitmap.height))
-    # Draw Pokémon's name
+    # Draw Pokemon's name
     nameWidth = self.bitmap.text_size(@battler.name).width
     nameOffset = 0
     nameOffset = nameWidth-116 if nameWidth>116
     textPos.push([@battler.name,@spriteBaseX+8-nameOffset,0,false,NAME_BASE_COLOR,NAME_SHADOW_COLOR])
-    # Draw Pokémon's gender symbol
+    # Draw Pokemon's gender symbol
     case @battler.displayGender
     when 0   # Male
       textPos.push([_INTL("♂"),@spriteBaseX+126,0,false,MALE_BASE_COLOR,MALE_SHADOW_COLOR])
@@ -222,13 +222,14 @@ class PokemonDataBox < SpriteWrapper
       textPos.push([_INTL("♀"),@spriteBaseX+126,0,false,FEMALE_BASE_COLOR,FEMALE_SHADOW_COLOR])
     end
     pbDrawTextPositions(self.bitmap,textPos)
-    # Draw Pokémon's level
+    # Draw Pokemon's level
     imagePos.push(["Graphics/Pictures/Battle/overlay_lv",@spriteBaseX+140,16])
     pbDrawNumber(@battler.level,self.bitmap,@spriteBaseX+162,16)
     # Draw shiny icon
     if @battler.shiny?
-      shinyX = (@battler.opposes?(0)) ? 206 : -6   # Foe's/player's
-      imagePos.push(["Graphics/Pictures/shiny",@spriteBaseX+shinyX,36])
+      shinyX = (@battler.opposes?(0)) ? 196 : 8   # Foe's/player's
+      shinyY = (@battler.opposes?(0)) ? 16 : 36   # Foe's/player's
+      imagePos.push(["Graphics/Pictures/shiny",@spriteBaseX+shinyX,shinyY])
     end
     # Draw Mega Evolution/Primal Reversion icon
     if @battler.mega?
@@ -241,7 +242,7 @@ class PokemonDataBox < SpriteWrapper
         imagePos.push(["Graphics/Pictures/Battle/icon_primal_Groudon",@spriteBaseX+primalX,4])
       end
     end
-    # Draw owned icon (foe Pokémon only)
+    # Draw owned icon (foe Pokemon only)
     if @battler.owned? && @battler.opposes?(0)
       imagePos.push(["Graphics/Pictures/Battle/icon_own",@spriteBaseX+8,36])
     end
@@ -350,7 +351,7 @@ class PokemonDataBox < SpriteWrapper
   def updatePositions(frameCounter)
     self.x = @spriteX
     self.y = @spriteY
-    # Data box bobbing while Pokémon is selected
+    # Data box bobbing while Pokemon is selected
     if @selected==1 || @selected==2   # Choosing commands/targeted or damaged
       case (frameCounter/QUARTER_ANIM_PERIOD).floor
       when 1 then self.y = @spriteY-2
@@ -450,10 +451,10 @@ class AbilitySplashBar < SpriteWrapper
     return if !@battler
     textPos = []
     textX = (@side==0) ? 10 : self.bitmap.width-8
-    # Draw Pokémon's name
+    # Draw Pokemon's name
     textPos.push([_INTL("{1}'s",@battler.name),textX,-4,@side==1,
        TEXT_BASE_COLOR,TEXT_SHADOW_COLOR,true])
-    # Draw Pokémon's ability
+    # Draw Pokemon's ability
     textPos.push([@battler.abilityName,textX,26,@side==1,
        TEXT_BASE_COLOR,TEXT_SHADOW_COLOR,true])
     pbDrawTextPositions(self.bitmap,textPos)
@@ -468,7 +469,7 @@ end
 
 
 #===============================================================================
-# Pokémon sprite (used in battle)
+# Pokemon sprite (used in battle)
 #===============================================================================
 class PokemonBattlerSprite < RPG::Sprite
   attr_reader   :pkmn
@@ -482,7 +483,7 @@ class PokemonBattlerSprite < RPG::Sprite
     @sideSize         = sideSize
     @index            = index
     @battleAnimations = battleAnimations
-    # @selected: 0 = not selected, 1 = choosing action bobbing for this Pokémon,
+    # @selected: 0 = not selected, 1 = choosing action bobbing for this Pokemon,
     #            2 = flashing when targeted
     @selected         = 0
     @frame            = 0
@@ -554,12 +555,13 @@ class PokemonBattlerSprite < RPG::Sprite
     pbSetPosition
   end
 
-  # This method plays the battle entrance animation of a Pokémon. By default
-  # this is just playing the Pokémon's cry, but you can expand on it. The
+  # This method plays the battle entrance animation of a Pokemon. By default
+  # this is just playing the Pokemon's cry, but you can expand on it. The
   # recommendation is to create a PictureEx animation and push it into
   # the @battleAnimations array.
   def pbPlayIntroAnimation(pictureEx=nil)
-    @pkmn.play_cry if @pkmn
+    return if !@pkmn
+    GameData::Species.play_cry_from_pokemon(@pkmn)
   end
 
   QUARTER_ANIM_PERIOD = Graphics.frame_rate*3/20
@@ -571,9 +573,9 @@ class PokemonBattlerSprite < RPG::Sprite
     # Update bitmap
     @_iconBitmap.update
     self.bitmap = @_iconBitmap.bitmap
-    # Pokémon sprite bobbing while Pokémon is selected
+    # Pokemon sprite bobbing while Pokemon is selected
     @spriteYExtra = 0
-    if @selected==1    # When choosing commands for this Pokémon
+    if @selected==1    # When choosing commands for this Pokemon
       case (frameCounter/QUARTER_ANIM_PERIOD).floor
       when 1 then @spriteYExtra = 2
       when 3 then @spriteYExtra = -2
@@ -582,7 +584,7 @@ class PokemonBattlerSprite < RPG::Sprite
     self.x       = self.x
     self.y       = self.y
     self.visible = @spriteVisible
-    # Pokémon sprite blinking when targeted
+    # Pokemon sprite blinking when targeted
     if @selected==2 && @spriteVisible
       case (frameCounter/SIXTH_ANIM_PERIOD).floor
       when 2, 5 then self.visible = false
@@ -596,7 +598,7 @@ end
 
 
 #===============================================================================
-# Shadow sprite for Pokémon (used in battle)
+# Shadow sprite for Pokemon (used in battle)
 #===============================================================================
 class PokemonBattlerShadowSprite < RPG::Sprite
   attr_reader   :pkmn

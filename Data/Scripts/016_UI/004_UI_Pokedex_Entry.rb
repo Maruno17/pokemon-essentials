@@ -70,11 +70,9 @@ class PokemonPokedexInfo_Scene
   def pbStartSceneBrief(species)  # For standalone access, shows first page only
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
-    dexnum = 0
+    dexnum = species
     dexnumshift = false
     if $Trainer.pokedex.unlocked?(-1)   # National Dex is unlocked
-      species_data = GameData::Species.try_get(species)
-      dexnum = species_data.id_number if species_data
       dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
     else
       dexnum = 0
@@ -201,8 +199,8 @@ class PokemonPokedexInfo_Scene
   def drawPageInfo
     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_info"))
     overlay = @sprites["overlay"].bitmap
-    base   = Color.new(88, 88, 80)
-    shadow = Color.new(168, 184, 184)
+    base   = Color.new(255,255,255)
+    shadow = Color.new(72,72,72)
     imagepos = []
     if @brief
       imagepos.push([_INTL("Graphics/Pictures/Pokedex/overlay_info"), 0, 0])
@@ -223,7 +221,7 @@ class PokemonPokedexInfo_Scene
     ]
     if $Trainer.owned?(@species)
       # Write the category
-      textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 68, 0, base, shadow])
+      textpos.push([_INTL("{1} Pokemon", species_data.category), 246, 68, 0, base, shadow])
       # Write the height and weight
       height = species_data.height
       weight = species_data.weight
@@ -259,7 +257,7 @@ class PokemonPokedexInfo_Scene
       overlay.blt(396, 120, @typebitmap.bitmap, type2rect) if type1 != type2
     else
       # Write the category
-      textpos.push([_INTL("????? Pokémon"), 246, 68, 0, base, shadow])
+      textpos.push([_INTL("????? Pokemon"), 246, 68, 0, base, shadow])
       # Write the height and weight
       if System.user_language[3..4] == "US"   # If the user is in the United States
         textpos.push([_INTL("???'??\""), 460, 152, 1, base, shadow])
@@ -287,8 +285,8 @@ class PokemonPokedexInfo_Scene
   def drawPageArea
     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_area"))
     overlay = @sprites["overlay"].bitmap
-    base   = Color.new(88,88,80)
-    shadow = Color.new(168,184,184)
+    base   = Color.new(255,255,255)
+    shadow = Color.new(72,72,72)
     @sprites["areahighlight"].bitmap.clear
     # Fill the array "points" with all squares of the region map in which the
     # species can be found
@@ -321,8 +319,8 @@ class PokemonPokedexInfo_Scene
       end
     end
     # Draw coloured squares on each square of the region map with a nest
-    pointcolor   = Color.new(0,248,248)
-    pointcolorhl = Color.new(192,248,248)
+    pointcolor   = Color.new(255,255,255)
+    pointcolorhl = Color.new(72,72,72)
     sqwidth = PokemonRegionMap_Scene::SQUAREWIDTH
     sqheight = PokemonRegionMap_Scene::SQUAREHEIGHT
     for j in 0...points.length
@@ -363,8 +361,8 @@ class PokemonPokedexInfo_Scene
   def drawPageForms
     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_forms"))
     overlay = @sprites["overlay"].bitmap
-    base   = Color.new(88,88,80)
-    shadow = Color.new(168,184,184)
+    base   = Color.new(255,255,255)
+    shadow = Color.new(72,72,72)
     # Write species and form name
     formname = ""
     for i in @available
@@ -442,7 +440,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbScene
-    Pokemon.play_cry(@species, @form)
+    GameData::Species.play_cry_from_species(@species, @form)
     loop do
       Graphics.update
       Input.update
@@ -450,7 +448,7 @@ class PokemonPokedexInfo_Scene
       dorefresh = false
       if Input.trigger?(Input::ACTION)
         pbSEStop
-        Pokemon.play_cry(@species, @form) if @page == 1
+        GameData::Species.play_cry_from_species(@species, @form) if @page == 1
       elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
@@ -471,7 +469,7 @@ class PokemonPokedexInfo_Scene
           pbUpdateDummyPokemon
           @available = pbGetAvailableForms
           pbSEStop
-          (@page==1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
+          (@page==1) ? GameData::Species.play_cry_from_species(@species, @form) : pbPlayCursorSE
           dorefresh = true
         end
       elsif Input.trigger?(Input::DOWN)
@@ -481,7 +479,7 @@ class PokemonPokedexInfo_Scene
           pbUpdateDummyPokemon
           @available = pbGetAvailableForms
           pbSEStop
-          (@page==1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
+          (@page==1) ? GameData::Species.play_cry_from_species(@species, @form) : pbPlayCursorSE
           dorefresh = true
         end
       elsif Input.trigger?(Input::LEFT)
@@ -511,14 +509,14 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbSceneBrief
-    Pokemon.play_cry(@species, @form)
+    GameData::Species.play_cry_from_species(@species, @form)
     loop do
       Graphics.update
       Input.update
       pbUpdate
       if Input.trigger?(Input::ACTION)
         pbSEStop
-        Pokemon.play_cry(@species, @form)
+        GameData::Species.play_cry_from_species(@species, @form)
       elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
@@ -545,7 +543,7 @@ class PokemonPokedexInfoScreen
     return ret   # Index of last species viewed in dexlist
   end
 
-  def pbStartSceneSingle(species)   # For use from a Pokémon's summary screen
+  def pbStartSceneSingle(species)   # For use from a Pokemon's summary screen
     region = -1
     if Settings::USE_CURRENT_REGION_DEX
       region = pbGetCurrentRegion

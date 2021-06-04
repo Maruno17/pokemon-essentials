@@ -1,5 +1,5 @@
 #===============================================================================
-# Deprecated classes, methods and constants for Pokémon.
+# Deprecated classes, methods and constants for Pokemon.
 # These will be removed in a future Essentials version.
 #===============================================================================
 
@@ -171,6 +171,7 @@ class Pokemon
   deprecated_method_alias :isAble?, :able?, removal_in: 'v20'
   deprecated_method_alias :isFainted?, :fainted?, removal_in: 'v20'
   deprecated_method_alias :isShiny?, :shiny?, removal_in: 'v20'
+  deprecated_method_alias :setForm, :form=, removal_in: 'v20'
   deprecated_method_alias :setGender, :gender=, removal_in: 'v20'
   deprecated_method_alias :isMale?, :male?, removal_in: 'v20'
   deprecated_method_alias :isFemale?, :female?, removal_in: 'v20'

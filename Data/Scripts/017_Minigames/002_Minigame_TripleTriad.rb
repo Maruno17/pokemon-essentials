@@ -110,7 +110,7 @@ class TriadCard
     type_number = GameData::Type.get(@type).id_number
     typerect = Rect.new(0, type_number * 28, 64, 28)
     bitmap.blt(8, 50, typebitmap.bitmap, typerect, 192)
-    # Draw Pokémon icon
+    # Draw Pokemon icon
     bitmap.blt(8, 24, iconbitmap.bitmap, Rect.new(0, 0, 64, 64))
     # Draw numbers
     bitmap.blt(8, 16, numbersbitmap.bitmap, Rect.new(@west * 16, 0, 16, 16))
@@ -659,7 +659,7 @@ class TriadScreen
           # a bonus of 1 (only for original attacker, not combos)
           attack += 1 if !recurse && attacker.type==attacker.card.type
         else
-          # Modifier depends on opponent's Pokémon type:
+          # Modifier depends on opponent's Pokemon type:
           # +1 - Super effective
           # -1 - Not very effective
           # -2 - Immune

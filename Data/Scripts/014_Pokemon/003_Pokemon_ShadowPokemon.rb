@@ -1,5 +1,5 @@
 #===============================================================================
-# Pokémon class.
+# Pokemon class.
 #===============================================================================
 class Pokemon
   attr_accessor :shadow
@@ -57,10 +57,10 @@ class Pokemon
     @saved_ev     = {}
     GameData::Stat.each_main { |s| @saved_ev[s.id] = 0 }
     @shadow_moves = []
-    # Retrieve Shadow moveset for this Pokémon
+    # Retrieve Shadow moveset for this Pokemon
     shadow_moveset = pbLoadShadowMovesets[species_data.id]
     shadow_moveset = pbLoadShadowMovesets[@species] if !shadow_moveset || shadow_moveset.length == 0
-    # Record this Pokémon's Shadow moves
+    # Record this Pokemon's Shadow moves
     if shadow_moveset && shadow_moveset.length > 0
       for i in 0...[shadow_moveset.length, MAX_MOVES].min
         @shadow_moves[i] = shadow_moveset[i]
@@ -71,7 +71,7 @@ class Pokemon
     else
       raise _INTL("Expected Shadow moves or Shadow Rush to be defined, but they weren't.")
     end
-    # Record this Pokémon's original moves
+    # Record this Pokemon's original moves
     @moves.each_with_index { |m, i| @shadow_moves[MAX_MOVES + i] = m.id }
     # Update moves
     update_shadow_moves
@@ -79,7 +79,7 @@ class Pokemon
 
   def update_shadow_moves(relearn_all_moves = false)
     return if !@shadow_moves
-    # Not a Shadow Pokémon (any more); relearn all its original moves
+    # Not a Shadow Pokemon (any more); relearn all its original moves
     if !shadowPokemon?
       if @shadow_moves.length > MAX_MOVES
         new_moves = []
@@ -89,7 +89,7 @@ class Pokemon
       @shadow_moves = nil
       return
     end
-    # Is a Shadow Pokémon; ensure it knows the appropriate moves depending on its heart stage
+    # Is a Shadow Pokemon; ensure it knows the appropriate moves depending on its heart stage
     # Start with all Shadow moves
     new_moves = []
     @shadow_moves.each_with_index { |m, i| new_moves.push(m) if m && i < MAX_MOVES }
@@ -119,7 +119,6 @@ class Pokemon
       @moves.each do |m|
         next if new_moves.include?(m.id)
         m.id = GameData::Move.get(move).id
-        break
       end
     end
   end

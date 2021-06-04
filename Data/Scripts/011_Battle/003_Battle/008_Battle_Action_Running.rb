@@ -28,7 +28,7 @@ class PokeBattle_Battle
   # -1: Failed fleeing
   #  0: Wasn't possible to attempt fleeing, continue choosing action for the round
   #  1: Succeeded at fleeing, battle will end
-  # duringBattle is true for replacing a fainted Pokémon during the End Of Round
+  # duringBattle is true for replacing a fainted Pokemon during the End Of Round
   # phase, and false for choosing the Run command.
   def pbRun(idxBattler,duringBattle=false)
     battler = @battlers[idxBattler]
@@ -123,7 +123,7 @@ class PokeBattle_Battle
       end
     end
     # Fleeing calculation
-    # Get the speeds of the Pokémon fleeing and the fastest opponent
+    # Get the speeds of the Pokemon fleeing and the fastest opponent
     # NOTE: Not pbSpeed, because using unmodified Speed.
     @runCommand += 1 if !duringBattle   # Make it easier to flee next time
     speedPlayer = @battlers[idxBattler].speed

@@ -76,8 +76,16 @@ class Spriteset_Map
 
   def update
     return if @tilemap.disposed?
-    pbDayNightTint(@tilemap)
-    @@viewport3.tone.set(0,0,0,0)
+    if $PokemonSystem.tilemap==0
+      if self.map==$game_map
+        pbDayNightTint(@@viewport3)
+      else
+        @@viewport3.tone.set(0,0,0,0)
+      end
+    else
+      pbDayNightTint(@tilemap)
+      @@viewport3.tone.set(0,0,0,0)
+    end
     _animationSprite_update
     for i in 0...@usersprites.length
       @usersprites[i].update if !@usersprites[i].disposed?
