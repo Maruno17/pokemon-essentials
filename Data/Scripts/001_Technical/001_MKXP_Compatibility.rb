@@ -12,6 +12,7 @@ class Bitmap
 
   def draw_text(x, y, width, height, text, align = 0)
     height = text_size(text).height
+    text.force_encoding(Encoding::UTF_8)
     mkxp_draw_text(x, y, width, height, text, align)
   end
 end
