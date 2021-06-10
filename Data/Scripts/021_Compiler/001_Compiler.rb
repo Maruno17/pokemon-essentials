@@ -677,9 +677,6 @@ module Compiler
   #=============================================================================
   def compile_all(mustCompile)
     FileLineData.clear
-    if (!$INEDITOR || Settings::LANGUAGES.length < 2) && safeExists?("Data/messages.dat")
-      MessageTypes.loadMessageFile("Data/messages.dat")
-    end
     if mustCompile
       echoln _INTL("*** Starting full compile ***")
       echoln ""
@@ -732,8 +729,11 @@ module Compiler
       echoln _INTL("*** Finished full compile ***")
       echoln ""
       System.reload_cache
-      MessageTypes.loadMessageFile("Data/messages.dat")
+      if (!$INEDITOR || Settings::LANGUAGES.length < 2) && safeExists?("Data/messages.dat")
+        MessageTypes.loadMessageFile("Data/messages.dat")
+      end
     end
+
     pbSetWindowText(nil)
   end
 
