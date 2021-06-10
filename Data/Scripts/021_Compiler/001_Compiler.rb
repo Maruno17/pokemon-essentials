@@ -733,7 +733,6 @@ module Compiler
         MessageTypes.loadMessageFile("Data/messages.dat")
       end
     end
-
     pbSetWindowText(nil)
   end
 
