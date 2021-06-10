@@ -732,6 +732,7 @@ module Compiler
       echoln _INTL("*** Finished full compile ***")
       echoln ""
       System.reload_cache
+      MessageTypes.loadMessageFile("Data/messages.dat")
     end
     pbSetWindowText(nil)
   end
