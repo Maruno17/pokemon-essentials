@@ -676,63 +676,60 @@ module Compiler
   # Compile all data
   #=============================================================================
   def compile_all(mustCompile)
+    return if !mustCompile
     FileLineData.clear
-    if (!$INEDITOR || Settings::LANGUAGES.length < 2) && safeExists?("Data/messages.dat")
-      MessageTypes.loadMessageFile("Data/messages.dat")
-    end
-    if mustCompile
-      echoln _INTL("*** Starting full compile ***")
-      echoln ""
-      yield(_INTL("Compiling town map data"))
-      compile_town_map               # No dependencies
-      yield(_INTL("Compiling map connection data"))
-      compile_connections            # No dependencies
-      yield(_INTL("Compiling phone data"))
-      compile_phone
-      yield(_INTL("Compiling type data"))
-      compile_types                  # No dependencies
-      yield(_INTL("Compiling ability data"))
-      compile_abilities              # No dependencies
-      yield(_INTL("Compiling move data"))
-      compile_moves                  # Depends on Type
-      yield(_INTL("Compiling item data"))
-      compile_items                  # Depends on Move
-      yield(_INTL("Compiling berry plant data"))
-      compile_berry_plants           # Depends on Item
-      yield(_INTL("Compiling Pokémon data"))
-      compile_pokemon                # Depends on Move, Item, Type, Ability
-      yield(_INTL("Compiling Pokémon forms data"))
-      compile_pokemon_forms          # Depends on Species, Move, Item, Type, Ability
-      yield(_INTL("Compiling machine data"))
-      compile_move_compatibilities   # Depends on Species, Move
-      yield(_INTL("Compiling shadow moveset data"))
-      compile_shadow_movesets        # Depends on Species, Move
-      yield(_INTL("Compiling Regional Dexes"))
-      compile_regional_dexes         # Depends on Species
-      yield(_INTL("Compiling ribbon data"))
-      compile_ribbons                # No dependencies
-      yield(_INTL("Compiling encounter data"))
-      compile_encounters             # Depends on Species
-      yield(_INTL("Compiling Trainer type data"))
-      compile_trainer_types          # No dependencies
-      yield(_INTL("Compiling Trainer data"))
-      compile_trainers               # Depends on Species, Item, Move
-      yield(_INTL("Compiling battle Trainer data"))
-      compile_trainer_lists          # Depends on TrainerType
-      yield(_INTL("Compiling metadata"))
-      compile_metadata               # Depends on TrainerType
-      yield(_INTL("Compiling animations"))
-      compile_animations
-      yield(_INTL("Converting events"))
-      compile_trainer_events(mustCompile)
-      yield(_INTL("Saving messages"))
-      pbSetTextMessages
-      MessageTypes.saveMessages
-      echoln ""
-      echoln _INTL("*** Finished full compile ***")
-      echoln ""
-      System.reload_cache
-    end
+    echoln _INTL("*** Starting full compile ***")
+    echoln ""
+    yield(_INTL("Compiling town map data"))
+    compile_town_map               # No dependencies
+    yield(_INTL("Compiling map connection data"))
+    compile_connections            # No dependencies
+    yield(_INTL("Compiling phone data"))
+    compile_phone                  # No dependencies
+    yield(_INTL("Compiling type data"))
+    compile_types                  # No dependencies
+    yield(_INTL("Compiling ability data"))
+    compile_abilities              # No dependencies
+    yield(_INTL("Compiling move data"))
+    compile_moves                  # Depends on Type
+    yield(_INTL("Compiling item data"))
+    compile_items                  # Depends on Move
+    yield(_INTL("Compiling berry plant data"))
+    compile_berry_plants           # Depends on Item
+    yield(_INTL("Compiling Pokémon data"))
+    compile_pokemon                # Depends on Move, Item, Type, Ability
+    yield(_INTL("Compiling Pokémon forms data"))
+    compile_pokemon_forms          # Depends on Species, Move, Item, Type, Ability
+    yield(_INTL("Compiling machine data"))
+    compile_move_compatibilities   # Depends on Species, Move
+    yield(_INTL("Compiling shadow moveset data"))
+    compile_shadow_movesets        # Depends on Species, Move
+    yield(_INTL("Compiling Regional Dexes"))
+    compile_regional_dexes         # Depends on Species
+    yield(_INTL("Compiling ribbon data"))
+    compile_ribbons                # No dependencies
+    yield(_INTL("Compiling encounter data"))
+    compile_encounters             # Depends on Species
+    yield(_INTL("Compiling Trainer type data"))
+    compile_trainer_types          # No dependencies
+    yield(_INTL("Compiling Trainer data"))
+    compile_trainers               # Depends on Species, Item, Move
+    yield(_INTL("Compiling battle Trainer data"))
+    compile_trainer_lists          # Depends on TrainerType
+    yield(_INTL("Compiling metadata"))
+    compile_metadata               # Depends on TrainerType
+    yield(_INTL("Compiling animations"))
+    compile_animations
+    yield(_INTL("Converting events"))
+    compile_trainer_events(mustCompile)
+    yield(_INTL("Saving messages"))
+    pbSetTextMessages
+    MessageTypes.saveMessages
+    MessageTypes.loadMessageFile("Data/messages.dat") if safeExists?("Data/messages.dat")
+    System.reload_cache
+    echoln ""
+    echoln _INTL("*** Finished full compile ***")
+    echoln ""
     pbSetWindowText(nil)
   end
 
