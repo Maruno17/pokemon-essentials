@@ -672,7 +672,7 @@ class Pokemon
     return false if egg? || shadowPokemon?
     this_level = self.level
     getMoveList.each { |m| return true if m[0] <= this_level && !hasMove?(m[1]) }
-    @first_moves.each { |m| return true if !pkmn.hasMove?(m) }
+    @first_moves.each { |m| return true if !hasMove?(m) }
     return false
   end
 
