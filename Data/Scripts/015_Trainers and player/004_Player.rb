@@ -31,6 +31,13 @@ class Player < Trainer
   # @return [Array<Array>] downloaded Mystery Gift data
   attr_accessor :mystery_gifts
 
+  def trainer_type
+    if @trainer_type.is_a?(Integer)
+      @trainer_type = GameData::Metadata.get_player(@character_ID || 0)[0]
+    end
+    return @trainer_type
+  end
+
   # Sets the player's money. It can not exceed {Settings::MAX_MONEY}.
   # @param value [Integer] new money value
   def money=(value)

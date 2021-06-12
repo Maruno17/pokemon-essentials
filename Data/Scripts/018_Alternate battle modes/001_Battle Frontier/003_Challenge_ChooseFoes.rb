@@ -156,7 +156,7 @@ def pbBattleFactoryPokemon(rules, win_count, swap_count, rentals)
       indvalue = (party.length < iv_threshold) ? ivs[0] : ivs[1]
       party.push(rndpoke.createPokemon(level, indvalue, nil))
     end
-    break if rules.ruleset.isValid?(party.concat(rentals))
+    break if rules.ruleset.isValid?([].concat(party).concat(rentals))
   end
   rules.ruleset.setNumberRange(old_min, old_max)
   return party

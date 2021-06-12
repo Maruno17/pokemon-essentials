@@ -873,6 +873,7 @@ module Compiler
   # Compile wild encounter data
   #=============================================================================
   def compile_encounters(path = "PBS/encounters.txt")
+    GameData::Encounter::DATA.clear
     new_format        = nil
     encounter_hash    = nil
     step_chances      = nil
@@ -1110,6 +1111,7 @@ module Compiler
   # Compile individual trainer data
   #=============================================================================
   def compile_trainers(path = "PBS/trainers.txt")
+    GameData::Trainer::DATA.clear
     schema = GameData::Trainer::SCHEMA
     max_level = GameData::GrowthRate.max_level
     trainer_names             = []

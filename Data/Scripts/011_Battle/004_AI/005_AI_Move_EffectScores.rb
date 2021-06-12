@@ -3022,7 +3022,7 @@ class PokeBattle_AI
       elsif skill>=PBTrainerAI.highSkill && reserves==0 && foes==0
         score += 80   # want to draw
       else
-        score -= (user.total.hp-user.hp)*75/user.totalhp
+        score -= (user.totalhp-user.hp)*75/user.totalhp
       end
     #---------------------------------------------------------------------------
     when "171"

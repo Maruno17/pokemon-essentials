@@ -251,7 +251,7 @@ def pbBattleFactoryRules(double, openlevel)
   ret.addPokemonRule(BannedSpeciesRestriction.new(:UNOWN))
   ret.addTeamRule(ItemClause.new)
   ret.addBattleRule(SoulDewBattleClause.new)
-  ret.setDoubleBattle(double).setNumber(0)
+  ret.setDoubleBattle(double)
   return ret
 end
 

@@ -170,7 +170,7 @@ class Trainer
   #=============================================================================
 
   def initialize(name, trainer_type)
-    @trainer_type = trainer_type
+    @trainer_type = GameData::TrainerType.get(trainer_type).id
     @name         = name
     @id           = rand(2 ** 16) | rand(2 ** 16) << 16
     @language     = pbGetLanguage
