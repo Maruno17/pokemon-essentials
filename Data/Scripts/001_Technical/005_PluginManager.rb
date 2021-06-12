@@ -260,7 +260,7 @@ module PluginManager
               dep_version = dep[2]
               optional    = false
               exact       = false
-              case def_arg
+              case dep_arg
               when :optional
                 optional = true
               when :exact

@@ -433,9 +433,9 @@ class DependentEvents
         @realEvents[i]=nil
         @lastUpdate+=1
       end
-      events.compact!
-      @realEvents.compact!
     end
+    events.compact!
+    @realEvents.compact!
   end
 
   def getEventByName(name)
@@ -463,9 +463,9 @@ class DependentEvents
         @realEvents[i]=nil
         @lastUpdate+=1
       end
-      events.compact!
-      @realEvents.compact!
     end
+    events.compact!
+    @realEvents.compact!
   end
 
   def addEvent(event,eventName=nil,commonEvent=nil)
