@@ -1509,7 +1509,7 @@ BattleHandlers::TargetAbilityOnHit.add(:MUMMY,
     next if !move.pbContactMove?(user)
     next if user.fainted?
     next if user.unstoppableAbility? || user.ability == ability
-    oldAbil = -1
+    oldAbil = nil
     battle.pbShowAbilitySplash(target) if user.opposes?(target)
     if user.affectedByContactEffect?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
       oldAbil = user.ability
@@ -1525,7 +1525,7 @@ BattleHandlers::TargetAbilityOnHit.add(:MUMMY,
       battle.pbHideAbilitySplash(user) if user.opposes?(target)
     end
     battle.pbHideAbilitySplash(target) if user.opposes?(target)
-    user.pbOnAbilityChanged(oldAbil) if oldAbil>=0
+    user.pbOnAbilityChanged(oldAbil) if oldAbil != nil
   }
 )
 
