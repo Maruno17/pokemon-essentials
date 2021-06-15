@@ -152,7 +152,7 @@ class Trainer
   def has_pokemon_of_type?(type)
     return false if !GameData::Type.exists?(type)
     type = GameData::Type.get(type).id
-    return pokemon_party.any? { |p| p && p.hasType(type) }
+    return pokemon_party.any? { |p| p && p.hasType?(type) }
   end
 
   # Checks whether any Pokémon in the party knows the given move, and returns

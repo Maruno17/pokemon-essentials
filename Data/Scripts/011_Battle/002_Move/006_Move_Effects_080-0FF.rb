@@ -489,10 +489,12 @@ class PokeBattle_Move_096 < PokeBattle_Move
   def pbBaseType(user)
     item = user.item
     ret = :NORMAL
-    @typeArray.each do |type, items|
-      next if !items.include?(item.id)
-      ret = type if GameData::Type.exists?(type)
-      break
+    if item
+      @typeArray.each do |type, items|
+        next if !items.include?(item.id)
+        ret = type if GameData::Type.exists?(type)
+        break
+      end
     end
     return ret
   end
