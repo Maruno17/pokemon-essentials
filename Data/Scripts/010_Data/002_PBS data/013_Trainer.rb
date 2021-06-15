@@ -19,7 +19,7 @@ module GameData
       "Form"         => [:form,          "u"],
       "Name"         => [:name,          "s"],
       "Moves"        => [:moves,         "*e", :Move],
-      "Ability"      => [:ability,       "s"],
+      "Ability"      => [:ability,       "e", :Ability],
       "AbilityIndex" => [:ability_index, "u"],
       "Item"         => [:item,          "e", :Item],
       "Gender"       => [:gender,        "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
@@ -30,7 +30,7 @@ module GameData
       "Happiness"    => [:happiness,     "u"],
       "Shiny"        => [:shininess,     "b"],
       "Shadow"       => [:shadowness,    "b"],
-      "Ball"         => [:poke_ball,     "s"],
+      "Ball"         => [:poke_ball,     "e", :Item],
     }
 
     extend ClassMethods

@@ -890,9 +890,8 @@ PokemonDebugMenuCommands.register("setpokeball", {
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     commands = []
     balls = []
-    for key in $BallTypes.keys
-      item = GameData::Item.try_get($BallTypes[key])
-      balls.push([item.id, item.name]) if item
+    GameData::Item.each do |item_data|
+      balls.push([item_data.id, item_data.name]) if item_data.is_poke_ball?
     end
     balls.sort! { |a, b| a[1] <=> b[1] }
     cmd = 0

@@ -62,13 +62,7 @@ class PokemonTrade_Scene
     pictureBall = PictureEx.new(0)
     picturePoke = PictureEx.new(0)
     ballimage = sprintf("Graphics/Battle animations/ball_%s", @pokemon.poke_ball)
-    if !pbResolveBitmap(ballimage)
-      ballimage = sprintf("Graphics/Battle animations/ball_%02d", pbGetBallType(@pokemon.poke_ball))
-    end
     ballopenimage = sprintf("Graphics/Battle animations/ball_%s_open", @pokemon.poke_ball)
-    if !pbResolveBitmap(ballimage)
-      ballopenimage = sprintf("Graphics/Battle animations/ball_%02d_open", pbGetBallType(@pokemon.poke_ball))
-    end
     # Starting position of ball
     pictureBall.setXY(0,Graphics.width/2,48)
     pictureBall.setName(0,ballimage)
@@ -110,13 +104,7 @@ class PokemonTrade_Scene
     pictureBall = PictureEx.new(0)
     picturePoke = PictureEx.new(0)
     ballimage = sprintf("Graphics/Battle animations/ball_%s", @pokemon2.poke_ball)
-    if !pbResolveBitmap(ballimage)
-      ballimage = sprintf("Graphics/Battle animations/ball_%02d", pbGetBallType(@pokemon2.poke_ball))
-    end
     ballopenimage = sprintf("Graphics/Battle animations/ball_%s_open", @pokemon2.poke_ball)
-    if !pbResolveBitmap(ballimage)
-      ballopenimage = sprintf("Graphics/Battle animations/ball_%02d_open", pbGetBallType(@pokemon2.poke_ball))
-    end
     # Starting position of ball
     pictureBall.setXY(0,Graphics.width/2,-32)
     pictureBall.setName(0,ballimage)

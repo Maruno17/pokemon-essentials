@@ -700,8 +700,6 @@ module Compiler
     compile_pokemon                # Depends on Move, Item, Type, Ability
     yield(_INTL("Compiling Pokémon forms data"))
     compile_pokemon_forms          # Depends on Species, Move, Item, Type, Ability
-    yield(_INTL("Compiling machine data"))
-    compile_move_compatibilities   # Depends on Species, Move
     yield(_INTL("Compiling shadow moveset data"))
     compile_shadow_movesets        # Depends on Species, Move
     yield(_INTL("Compiling Regional Dexes"))

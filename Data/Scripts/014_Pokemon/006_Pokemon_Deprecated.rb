@@ -57,7 +57,7 @@ class PokeBattle_Pokemon
     ret.pokerus          = pkmn.pokerus if pkmn.pokerus
     ret.name             = pkmn.name if pkmn.name != ret.speciesName
     ret.happiness        = pkmn.happiness
-    ret.poke_ball        = pbBallTypeToItem(pkmn.ballused).id
+    ret.poke_ball        = :POKEBALL   # pbBallTypeToItem(pkmn.ballused).id
     ret.markings         = pkmn.markings if pkmn.markings
     GameData::Stat.each_main do |s|
       ret.iv[s.id]       = pkmn.iv[s.id_number]

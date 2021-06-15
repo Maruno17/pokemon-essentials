@@ -304,9 +304,6 @@ class PokemonSummary_Scene
     imagepos=[]
     # Show the Poké Ball containing the Pokémon
     ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%s", @pokemon.poke_ball)
-    if !pbResolveBitmap(ballimage)
-      ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%02d", pbGetBallType(@pokemon.poke_ball))
-    end
     imagepos.push([ballimage,14,60])
     # Show status/fainted/Pokérus infected icon
     status = 0
@@ -485,9 +482,6 @@ class PokemonSummary_Scene
     imagepos = []
     # Show the Poké Ball containing the Pokémon
     ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%s", @pokemon.poke_ball)
-    if !pbResolveBitmap(ballimage)
-      ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%02d", pbGetBallType(@pokemon.poke_ball))
-    end
     imagepos.push([ballimage,14,60])
     # Draw all images
     pbDrawImagePositions(overlay,imagepos)

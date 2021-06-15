@@ -210,9 +210,8 @@ def pbChooseBallList(defaultMoveID = nil)
   cmdwin = pbListWindow([], 200)
   commands = []
   moveDefault = 0
-  for key in $BallTypes.keys
-    item = GameData::Item.try_get($BallTypes[key])
-    commands.push([$BallTypes[key], item.name]) if item
+  GameData::Item.each do |item_data|
+    commands.push([item_data.id, item_data.name]) if item_data.is_poke_ball?
   end
   commands.sort! { |a, b| a[1] <=> b[1] }
   if defaultMoveID

@@ -734,43 +734,6 @@ module Compiler
   end
 
   #=============================================================================
-  # Compile TM/TM/Move Tutor compatibilities
-  #=============================================================================
-  def compile_move_compatibilities(path = "PBS/tm.txt")
-    return if !safeExists?(path)
-    species_hash = {}
-    move = nil
-    pbCompilerEachCommentedLine(path) { |line, line_no|
-      Graphics.update if line_no % 50 == 0
-      if line[/^\s*\[\s*(\S+)\s*\]\s*$/]
-        move = parseMove($~[1])
-        pbSetWindowText(_INTL("Processing {1} section [{2}]", FileLineData.file, move))
-      else
-        raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport) if !move
-        species_list = line.split(",")
-        for species in species_list
-          next if !species || species.empty?
-          s = parseSpecies(species)
-          species_hash[s] = [] if !species_hash[s]
-          species_hash[s].push(move)
-        end
-      end
-    }
-    GameData::Species.each do |species_data|
-      next if !species_hash[species_data.id]
-      species_hash[species_data.id].sort! { |a, b| a.to_s <=> b.to_s }
-      species_hash[species_data.id].each { |move| species_data.tutor_moves.push(move) }
-    end
-    GameData::Species.save
-    Compiler.write_pokemon
-    Compiler.write_pokemon_forms
-    begin
-      File.delete(path) if path == "PBS/tm.txt"
-    rescue SystemCallError
-    end
-  end
-
-  #=============================================================================
   # Compile Shadow movesets
   #=============================================================================
   def compile_shadow_movesets(path = "PBS/shadowmoves.txt")
@@ -1200,6 +1163,10 @@ module Compiler
           if property_value > 255
             raise _INTL("Bad happiness: {1} (must be 0-255).\r\n{2}", property_value, FileLineData.linereport)
           end
+        when "Ball"
+          if !GameData::Item.get(property_value).is_poke_ball?
+            raise _INTL("Value {1} isn't a defined Poké Ball.\r\n{2}", property_value, FileLineData.linereport)
+          end
         end
         # Record XXX=YYY setting
         case property_name
@@ -1217,14 +1184,6 @@ module Compiler
             raise _INTL("Pokémon hasn't been defined yet!\r\n{1}", FileLineData.linereport)
           end
           case property_name
-          when "Ability"
-            if property_value[/^\d+$/]
-              current_pkmn[:ability_index] = property_value.to_i
-            elsif !GameData::Ability.exists?(property_value.to_sym)
-              raise _INTL("Value {1} isn't a defined Ability.\r\n{2}", property_value, FileLineData.linereport)
-            else
-              current_pkmn[line_schema[0]] = property_value.to_sym
-            end
           when "IV", "EV"
             value_hash = {}
             GameData::Stat.each_main do |s|
@@ -1232,15 +1191,6 @@ module Compiler
               value_hash[s.id] = property_value[s.pbs_order] || property_value[0]
             end
             current_pkmn[line_schema[0]] = value_hash
-          when "Ball"
-            if property_value[/^\d+$/]
-              current_pkmn[line_schema[0]] = pbBallTypeToItem(property_value.to_i).id
-            elsif !GameData::Item.exists?(property_value.to_sym) ||
-               !GameData::Item.get(property_value.to_sym).is_poke_ball?
-              raise _INTL("Value {1} isn't a defined Poké Ball.\r\n{2}", property_value, FileLineData.linereport)
-            else
-              current_pkmn[line_schema[0]] = property_value.to_sym
-            end
           else
             current_pkmn[line_schema[0]] = property_value
           end
@@ -1377,8 +1327,8 @@ module Compiler
         f.write(0xBB.chr)
         f.write(0xBF.chr)
         f.write("[DefaultTrainerList]\r\n")
-        f.write("Trainers = bttrainers.txt\r\n")
-        f.write("Pokemon = btpokemon.txt\r\n")
+        f.write("Trainers = battle_tower_trainers.txt\r\n")
+        f.write("Pokemon = battle_tower_pokemon.txt\r\n")
       }
     end
     sections = []
