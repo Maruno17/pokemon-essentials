@@ -12,8 +12,12 @@ def findBottom(bitmap)
 end
 
 def pbAutoPositionAll
+  t = Time.now.to_i
   GameData::Species.each do |sp|
-    Graphics.update if sp.id_number % 50 == 0
+    if Time.now.to_i - t >= 5
+      t = Time.now.to_i
+      Graphics.update
+    end
     bitmap1 = GameData::Species.sprite_bitmap(sp.species, sp.form, nil, nil, nil, true)
     bitmap2 = GameData::Species.sprite_bitmap(sp.species, sp.form)
     if bitmap1 && bitmap1.bitmap   # Player's y

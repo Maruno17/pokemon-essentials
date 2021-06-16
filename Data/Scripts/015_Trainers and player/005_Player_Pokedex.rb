@@ -78,7 +78,7 @@ class Player < Trainer
     def seen_any?(dex = -1)
       validate dex => Integer
       if dex == -1
-        GameData::Species.each { |s| return true if s.form == 0 && @seen[s.species] }
+        GameData::Species.each_species { |s| return true if @seen[s.species] }
       else
         pbAllRegionalSpecies(dex).each { |s| return true if s && @seen[s] }
       end
@@ -269,7 +269,7 @@ class Player < Trainer
     def count_species(hash, region = -1)
       ret = 0
       if region == -1
-        GameData::Species.each { |s| ret += 1 if s.form == 0 && hash[s.species] }
+        GameData::Species.each_species { |s| ret += 1 if hash[s.species] }
       else
         pbAllRegionalSpecies(region).each { |s| ret += 1 if s && hash[s] }
       end

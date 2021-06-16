@@ -184,7 +184,7 @@ def pbEncounterMapVersionEditor(enc_data)
     elsif ret == commands.length - 1   # Add new encounter type
       new_type_commands = []
       new_types = []
-      GameData::EncounterType.each do |enc|
+      GameData::EncounterType.each_alphabetically do |enc|
         next if enc_data.types[enc.id]
         new_type_commands.push(enc.real_name)
         new_types.push(enc.id)
@@ -212,7 +212,7 @@ def pbEncounterMapVersionEditor(enc_data)
       when 1   # Copy
         new_type_commands = []
         new_types = []
-        GameData::EncounterType.each do |enc|
+        GameData::EncounterType.each_alphabetically do |enc|
           next if enc_data.types[enc.id]
           new_type_commands.push(enc.real_name)
           new_types.push(enc.id)
@@ -285,7 +285,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
       new_type_commands = []
       new_types = []
       chosen_type_cmd = 0
-      GameData::EncounterType.each do |enc|
+      GameData::EncounterType.each_alphabetically do |enc|
         next if enc_data.types[enc.id] && enc.id != enc_type
         new_type_commands.push(enc.real_name)
         new_types.push(enc.id)
@@ -954,7 +954,7 @@ end
 #===============================================================================
 def pbPokemonEditor
   species_properties = [
-     [_INTL("InternalName"),      ReadOnlyProperty,                   _INTL("Internal name of the Pokémon.")],
+     [_INTL("ID"),                ReadOnlyProperty,                   _INTL("The ID of the Pokémon.")],
      [_INTL("Name"),              LimitStringProperty.new(Pokemon::MAX_NAME_SIZE), _INTL("Name of the Pokémon.")],
      [_INTL("FormName"),          StringProperty,                     _INTL("Name of this form of the Pokémon.")],
      [_INTL("Kind"),              StringProperty,                     _INTL("Kind of Pokémon species.")],
@@ -1004,9 +1004,7 @@ def pbPokemonEditor
       if button == Input::ACTION
         if species.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this species?")
-            id_number = GameData::Species.get(species).id_number
             GameData::Species::DATA.delete(species)
-            GameData::Species::DATA.delete(id_number)
             GameData::Species.save
             Compiler.write_pokemon
             pbMessage(_INTL("The species was deleted."))
@@ -1079,7 +1077,6 @@ def pbPokemonEditor
             # Construct species hash
             species_hash = {
               :id                    => spec.id,
-              :id_number             => spec.id_number,
               :name                  => data[1],
               :form_name             => data[2],
               :category              => data[3],
@@ -1292,14 +1289,14 @@ def pbRegionalDexEditorMain
           refresh_list = true
         when 1   # Fill with National Dex
           new_dex = []
-          GameData::Species.each { |s| new_dex.push(s.species) if s.form == 0 }
+          GameData::Species.each_species { |s| new_dex.push(s.species) }
           dex_lists.push(new_dex)
           refresh_list = true
         when 2   # Fill with National Dex (grouped families)
           new_dex = []
           seen = []
-          GameData::Species.each do |s|
-            next if s.form != 0 || seen.include?(s.species)
+          GameData::Species.each_species do |s|
+            next if seen.include?(s.species)
             family = s.get_related_species
             new_dex.concat(family)
             seen.concat(family)
@@ -1350,7 +1347,6 @@ def pbAppendEvoToFamilyArray(species, array, seenarray)
   seenarray[species] = true
   evos = GameData::Species.get(species).get_evolutions
   if evos.length > 0
-    evos.sort! { |a, b| GameData::Species.get(a[0]).id_number <=> GameData::Species.get(b[0]).id_number }
     subarray = []
     for i in evos
       pbAppendEvoToFamilyArray(i[0], subarray, seenarray)
@@ -1362,8 +1358,7 @@ end
 def pbGetEvoFamilies
   seen = []
   ret = []
-  GameData::Species.each do |sp|
-    next if sp.form > 0
+  GameData::Species.each_species do |sp|
     species = sp.get_baby_species
     next if seen[species]
     subret = []

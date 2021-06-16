@@ -337,9 +337,10 @@ class SpeciesLister
     @commands.clear
     @ids.clear
     cmds = []
-    GameData::Species.each do |species|
-      next if species.form != 0
-      cmds.push([species.id_number, species.id, species.real_name])
+    idx = 1
+    GameData::Species.each_species do |species|
+      cmds.push([idx, species.id, species.real_name])
+      idx += 1
     end
     cmds.sort! { |a, b| a[2].downcase <=> b[2].downcase }
     if @includeNew
@@ -395,8 +396,10 @@ class ItemLister
     @commands.clear
     @ids.clear
     cmds = []
+    idx = 1
     GameData::Item.each do |item|
-      cmds.push([item.id_number, item.id, item.real_name])
+      cmds.push([idx, item.id, item.real_name])
+      idx += 1
     end
     cmds.sort! { |a, b| a[2].downcase <=> b[2].downcase }
     if @includeNew
@@ -454,8 +457,10 @@ class TrainerTypeLister
     @commands.clear
     @ids.clear
     cmds = []
+    idx = 1
     GameData::TrainerType.each do |tr_type|
-      cmds.push([tr_type.id_number, tr_type.id, tr_type.real_name])
+      cmds.push([idx, tr_type.id, tr_type.real_name])
+      idx += 1
     end
     cmds.sort! { |a, b| a[2] == b[2] ? a[0] <=> b[0] : a[2].downcase <=> b[2].downcase }
     if @includeNew
@@ -532,8 +537,10 @@ class TrainerBattleLister
     @commands.clear
     @ids.clear
     cmds = []
+    idx = 1
     GameData::Trainer.each do |trainer|
-      cmds.push([trainer.id_number, trainer.trainer_type, trainer.real_name, trainer.version])
+      cmds.push([idx, trainer.trainer_type, trainer.real_name, trainer.version])
+      idx += 1
     end
     cmds.sort! { |a, b|
       if a[1] == b[1]

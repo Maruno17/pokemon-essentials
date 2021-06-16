@@ -1,7 +1,6 @@
 module GameData
   class Type
     attr_reader :id
-    attr_reader :id_number
     attr_reader :real_name
     attr_reader :special_type
     attr_reader :pseudo_type
@@ -26,10 +25,6 @@ module GameData
 
     extend ClassMethodsSymbols
     include InstanceMethods
-
-    def self.each
-      DATA.each_value { |type| yield type }
-    end
 
     def initialize(hash)
       @id            = hash[:id]

@@ -318,7 +318,7 @@ class PokemonPokedex_Scene
     if !regionalSpecies || regionalSpecies.length == 0
       # If no Regional Dex defined for the given region, use the National Pokédex
       regionalSpecies = []
-      GameData::Species.each { |s| regionalSpecies.push(s.id) if s.form == 0 }
+      GameData::Species.each_species { |s| regionalSpecies.push(s.id) }
     end
     shift = Settings::DEXES_WITH_OFFSETS.include?(region)
     ret = []

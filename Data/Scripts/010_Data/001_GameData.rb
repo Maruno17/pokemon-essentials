@@ -114,8 +114,13 @@ module GameData
       return self::DATA.keys
     end
 
-    # Yields all data in alphabetical order.
+    # Yields all data in the order they were defined.
     def each
+      self::DATA.each_value { |value| yield value }
+    end
+
+    # Yields all data in alphabetical order.
+    def each_alphabetically
       keys = self::DATA.keys.sort { |a, b| self::DATA[a].real_name <=> self::DATA[b].real_name }
       keys.each { |key| yield self::DATA[key] }
     end

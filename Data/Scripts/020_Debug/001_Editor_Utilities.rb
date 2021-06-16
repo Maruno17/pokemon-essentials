@@ -117,15 +117,21 @@ end
 # the list sorting between numerical and alphabetical.
 def pbChooseSpeciesList(default = nil)
   commands = []
-  GameData::Species.each { |s| commands.push([s.id_number, s.real_name, s.id]) if s.form == 0 }
+  index = 1
+  GameData::Species.each_species do |s|
+    commands.push([index, s.real_name, s.id])
+    index += 1
+  end
   return pbChooseList(commands, default, nil, -1)
 end
 
 def pbChooseSpeciesFormList(default = nil)
   commands = []
+  index = 1
   GameData::Species.each do |s|
     name = (s.form == 0) ? s.real_name : sprintf("%s_%d", s.real_name, s.form)
-    commands.push([s.id_number, name, s.id])
+    commands.push([index, name, s.id])
+    index += 1
   end
   return pbChooseList(commands, default, nil, -1)
 end
@@ -136,18 +142,24 @@ end
 # between numerical and alphabetical.
 def pbChooseMoveList(default = nil)
   commands = []
-  GameData::Move.each { |i| commands.push([i.id_number, i.real_name, i.id]) }
+  index = 1
+  GameData::Move.each do |m|
+    commands.push([index, m.real_name, m.id])
+    index += 1
+  end
   return pbChooseList(commands, default, nil, -1)
 end
 
 def pbChooseMoveListForSpecies(species, defaultMoveID = nil)
   cmdwin = pbListWindow([], 200)
   commands = []
+  index = 1
   # Get all legal moves
   legalMoves = pbGetLegalMoves(species)
   legalMoves.each do |move|
     move_data = GameData::Move.get(move)
-    commands.push([move_data.id_number, move_data.name, move_data.id])
+    commands.push([index, move_data.name, move_data.id])
+    index += 1
   end
   commands.sort! { |a, b| a[1] <=> b[1] }
   moveDefault = 0
@@ -159,7 +171,8 @@ def pbChooseMoveListForSpecies(species, defaultMoveID = nil)
   # Get all moves
   commands2 = []
   GameData::Move.each do |move_data|
-    commands2.push([move_data.id_number, move_data.name, move_data.id])
+    commands2.push([index, move_data.name, move_data.id])
+    index += 1
   end
   commands2.sort! { |a, b| a[1] <=> b[1] }
   if defaultMoveID
@@ -197,7 +210,11 @@ end
 # between numerical and alphabetical.
 def pbChooseItemList(default = nil)
   commands = []
-  GameData::Item.each { |i| commands.push([i.id_number, i.name, i.id]) }
+  index = 1
+  GameData::Item.each do |i|
+    commands.push([index, i.name, i.id])
+    index += 1
+  end
   return pbChooseList(commands, default, nil, -1)
 end
 
@@ -207,7 +224,11 @@ end
 # sorting between numerical and alphabetical.
 def pbChooseAbilityList(default = nil)
   commands = []
-  GameData::Ability.each { |a| commands.push([a.id_number, a.name, a.id]) }
+  index = 1
+  GameData::Ability.each do |a|
+    commands.push([index, a.name, a.id])
+    index += 1
+  end
   return pbChooseList(commands, default, nil, -1)
 end
 

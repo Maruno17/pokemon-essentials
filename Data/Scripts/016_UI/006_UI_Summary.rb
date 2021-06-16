@@ -167,6 +167,8 @@ class PokemonSummary_Scene
     @sprites["messagebox"].visible        = false
     @sprites["messagebox"].letterbyletter = true
     pbBottomLeftLines(@sprites["messagebox"],2)
+    @nationalDexList = [:NONE]
+    GameData::Species.each_species { |s| @nationalDexList.push(s.species) }
     drawPage(@page)
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
@@ -391,12 +393,12 @@ class PokemonSummary_Scene
        [_INTL("ID No."),238,202,0,base,shadow],
     ]
     # Write the Regional/National Dex number
-    dexnum = GameData::Species.get(@pokemon.species).id_number
+    dexnum = 0
     dexnumshift = false
     if $Trainer.pokedex.unlocked?(-1)   # National Dex is unlocked
+      dexnum = @nationalDexList.index(@pokemon.species_data.species) || 0
       dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
     else
-      dexnum = 0
       for i in 0...$Trainer.pokedex.dexes_count - 1
         next if !$Trainer.pokedex.unlocked?(i)
         num = pbGetRegionalNumber(i,@pokemon.species)

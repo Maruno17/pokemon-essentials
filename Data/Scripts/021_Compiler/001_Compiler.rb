@@ -122,8 +122,8 @@ module Compiler
         end
       end
       lineno += 1
-      Graphics.update if lineno%200==0
-      pbSetWindowText(_INTL("Processing {1} line {2}",FileLineData.file,lineno)) if lineno%50==0
+      Graphics.update if lineno%1000==0
+      pbSetWindowText(_INTL("Processing {1} line {2}",FileLineData.file,lineno)) if lineno%200==0
     }
     yield lastsection,sectionname if havesection
   end

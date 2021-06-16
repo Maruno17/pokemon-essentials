@@ -42,7 +42,7 @@ def pbRandomMove
   loop do
     move_id = keys[rand(keys.length)]
     move = GameData::Move.get(move_id)
-    next if move.id_number > 384 || move.id == :SKETCH || move.id == :STRUGGLE
+    next if move.id == :SKETCH || move.id == :STRUGGLE
     return move.id
   end
 end

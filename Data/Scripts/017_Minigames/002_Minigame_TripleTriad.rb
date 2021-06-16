@@ -1050,8 +1050,7 @@ end
 def pbBuyTriads
   commands = []
   realcommands = []
-  GameData::Species.each do |s|
-    next if s.form != 0
+  GameData::Species.each_species do |s|
     next if !$Trainer.owned?(s.species)
     price = TriadCard.new(s.id).price
     commands.push([price, s.name, _INTL("{1} - ${2}", s.name, price.to_s_formatted), s.id])

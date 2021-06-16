@@ -58,6 +58,8 @@ class HallOfFame_Scene
     @useMusic=false
     @battlerIndex=0
     @hallEntry=[]
+    @nationalDexList = [:NONE]
+    GameData::Species.each_species { |s| @nationalDexList.push(s.species) }
   end
 
   def pbStartSceneEntry
@@ -305,8 +307,8 @@ class HallOfFame_Scene
     idno=(pokemon.owner.name.empty? || pokemon.egg?) ? "?????" : sprintf("%05d",pokemon.owner.public_id)
     dexnumber = _INTL("No. ???")
     if !pokemon.egg?
-      species_data = GameData::Species.get(pokemon.species)
-      dexnumber = _ISPRINTF("No. {1:03d}",species_data.id_number)
+      number = @nationalDexList.index(pokemon.species) || 0
+      dexnumber = _ISPRINTF("No. {1:03d}", number)
     end
     textPositions=[
        [dexnumber,32,Graphics.height-86,0,BASECOLOR,SHADOWCOLOR],

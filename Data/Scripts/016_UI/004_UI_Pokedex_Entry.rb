@@ -74,10 +74,13 @@ class PokemonPokedexInfo_Scene
     dexnumshift = false
     if $Trainer.pokedex.unlocked?(-1)   # National Dex is unlocked
       species_data = GameData::Species.try_get(species)
-      dexnum = species_data.id_number if species_data
-      dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
+      if species_data
+        nationalDexList = [:NONE]
+        GameData::Species.each_species { |s| nationalDexList.push(s.species) }
+        dexnum = nationalDexList.index(species_data.species) || 0
+        dexnumshift = true if dexnum > 0 && Settings::DEXES_WITH_OFFSETS.include?(-1)
+      end
     else
-      dexnum = 0
       for i in 0...$Trainer.pokedex.dexes_count - 1   # Regional Dexes
         next if !$Trainer.pokedex.unlocked?(i)
         num = pbGetRegionalNumber(i,species)

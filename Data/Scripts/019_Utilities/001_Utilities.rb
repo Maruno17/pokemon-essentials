@@ -388,7 +388,7 @@ end
 def pbGetRegionalDexLength(region_dex)
   if region_dex < 0
     ret = 0
-    GameData::Species.each { |s| ret += 1 if s.form == 0 }
+    GameData::Species.each_species { |s| ret += 1 }
     return ret
   end
   dex_list = pbLoadRegionalDexes[region_dex]

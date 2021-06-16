@@ -187,15 +187,15 @@ module Compiler
     GameData::Type.each do |type|
       type.weaknesses.each do |other_type|
         next if GameData::Type.exists?(other_type)
-        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Weaknesses).", other_type.to_s, path, type.id_number)
+        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Weaknesses).", other_type.to_s, path, type.id)
       end
       type.resistances.each do |other_type|
         next if GameData::Type.exists?(other_type)
-        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Resistances).", other_type.to_s, path, type.id_number)
+        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Resistances).", other_type.to_s, path, type.id)
       end
       type.immunities.each do |other_type|
         next if GameData::Type.exists?(other_type)
-        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Immunities).", other_type.to_s, path, type.id_number)
+        raise _INTL("'{1}' is not a defined type ({2}, section {3}, Immunities).", other_type.to_s, path, type.id)
       end
     end
     # Save all data
@@ -387,30 +387,26 @@ module Compiler
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
       schema = GameData::Species.schema
-      pbEachFileSection(f) { |contents, species_number|
-        FileLineData.setSection(species_number, "header", nil)   # For error reporting
-        # Raise an error if a species number is invalid or used twice
-        if species_number == 0
-          raise _INTL("A Pokémon species can't be numbered 0 ({1}).", path)
-        elsif GameData::Species::DATA[species_number]
-          raise _INTL("Species ID number '{1}' is used twice.\r\n{2}", species_number, FileLineData.linereport)
+      pbEachFileSection3(f) { |contents, species_id|
+        FileLineData.setSection(species_id, "header", nil)   # For error reporting
+        contents["InternalName"] = species_id if !species_id[/^\d+/]
+        # Ensure all required properties have been defined, and raise an error
+        # if not
+        for key in schema.keys
+          next if !nil_or_empty?(contents[key])
+          if ["Name", "InternalName"].include?(key)
+            raise _INTL("The entry {1} is required in {2} section {3}.", key, path, species_id)
+          end
+          contents[key] = nil
+        end
+        # Raise an error if a species ID is used twice
+        if GameData::Species::DATA[contents["InternalName"].to_sym]
+          raise _INTL("Species ID '{1}' is used twice.\r\n{2}", contents["InternalName"], FileLineData.linereport)
         end
         # Go through schema hash of compilable data and compile this section
         for key in schema.keys
-          # Skip empty properties, or raise an error if a required property is
-          # empty
-          if nil_or_empty?(contents[key])
-            if ["Name", "InternalName"].include?(key)
-              raise _INTL("The entry {1} is required in {2} section {3}.", key, path, species_number)
-            end
-            contents[key] = nil
-            next
-          end
-          # Raise an error if a species internal name is used twice
-          FileLineData.setSection(species_number, key, contents[key])   # For error reporting
-          if GameData::Species::DATA[contents["InternalName"].to_sym]
-            raise _INTL("Species ID '{1}' is used twice.\r\n{2}", contents["InternalName"], FileLineData.linereport)
-          end
+          next if nil_or_empty?(contents[key])
+          FileLineData.setSection(species_id, key, contents[key])   # For error reporting
           # Compile value for key
           value = pbGetCsvRecord(contents[key], key, schema[key])
           value = nil if value.is_a?(Array) && value.length == 0
@@ -427,7 +423,7 @@ module Compiler
             # Convert height/weight to 1 decimal place and multiply by 10
             value = (value * 10).round
             if value <= 0
-              raise _INTL("Value for '{1}' can't be less than or close to 0 (section {2}, {3})", key, species_number, path)
+              raise _INTL("Value for '{1}' can't be less than or close to 0 (section {2}, {3})", key, species_id, path)
             end
             contents[key] = value
           when "Moves"
@@ -450,10 +446,8 @@ module Compiler
           end
         end
         # Construct species hash
-        species_symbol = contents["InternalName"].to_sym
         species_hash = {
-          :id                    => species_symbol,
-          :id_number             => species_number,
+          :id                    => contents["InternalName"].to_sym,
           :name                  => contents["Name"],
           :form_name             => contents["FormName"],
           :category              => contents["Kind"],
@@ -495,26 +489,24 @@ module Compiler
         }
         # Add species' data to records
         GameData::Species.register(species_hash)
-        species_names[species_number]           = species_hash[:name]
-        species_form_names[species_number]      = species_hash[:form_name]
-        species_categories[species_number]      = species_hash[:category]
-        species_pokedex_entries[species_number] = species_hash[:pokedex_entry]
+        species_names.push(species_hash[:name])
+        species_form_names.push(species_hash[:form_name])
+        species_categories.push(species_hash[:category])
+        species_pokedex_entries.push(species_hash[:pokedex_entry])
       }
     }
     # Enumerate all evolution species and parameters (this couldn't be done earlier)
     GameData::Species.each do |species|
-      FileLineData.setSection(species.id_number, "Evolutions", nil)   # For error reporting
-      Graphics.update if species.id_number % 200 == 0
-      pbSetWindowText(_INTL("Processing {1} evolution line {2}", FileLineData.file, species.id_number)) if species.id_number % 50 == 0
+      FileLineData.setSection(species.id.to_s, "Evolutions", nil)   # For error reporting
       species.evolutions.each do |evo|
-        evo[0] = csvEnumField!(evo[0], :Species, "Evolutions", species.id_number)
+        evo[0] = csvEnumField!(evo[0], :Species, "Evolutions", species.id)
         param_type = GameData::Evolution.get(evo[1]).parameter
         if param_type.nil?
           evo[2] = nil
         elsif param_type == Integer
           evo[2] = csvPosInt!(evo[2])
         else
-          evo[2] = csvEnumField!(evo[2], param_type, "Evolutions", species.id_number)
+          evo[2] = csvEnumField!(evo[2], param_type, "Evolutions", species.id)
         end
       end
     end
@@ -530,10 +522,10 @@ module Compiler
     end
     # Save all data
     GameData::Species.save
-    MessageTypes.setMessages(MessageTypes::Species, species_names)
-    MessageTypes.setMessages(MessageTypes::FormNames, species_form_names)
-    MessageTypes.setMessages(MessageTypes::Kinds, species_categories)
-    MessageTypes.setMessages(MessageTypes::Entries, species_pokedex_entries)
+    MessageTypes.setMessagesAsHash(MessageTypes::Species, species_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::FormNames, species_form_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::Kinds, species_categories)
+    MessageTypes.setMessagesAsHash(MessageTypes::Entries, species_pokedex_entries)
     Graphics.update
   end
 
@@ -546,11 +538,6 @@ module Compiler
     species_categories      = []
     species_pokedex_entries = []
     used_forms = {}
-    # Get maximum species ID number
-    form_number = 0
-    GameData::Species.each do |species|
-      form_number = species.id_number if form_number < species.id_number
-    end
     # Read from PBS file
     File.open(path, "rb") { |f|
       FileLineData.file = path   # For error reporting
@@ -578,7 +565,6 @@ module Compiler
         end
         used_forms[species_symbol] = [] if !used_forms[species_symbol]
         used_forms[species_symbol].push(form)
-        form_number += 1
         base_data = GameData::Species.get(species_symbol)
         # Go through schema hash of compilable data and compile this section
         for key in schema.keys
@@ -649,7 +635,6 @@ module Compiler
         end
         species_hash = {
           :id                    => form_symbol,
-          :id_number             => form_number,
           :species               => species_symbol,
           :form                  => form,
           :name                  => base_data.real_name,
@@ -681,7 +666,7 @@ module Compiler
           :height                => contents["Height"] || base_data.height,
           :weight                => contents["Weight"] || base_data.weight,
           :color                 => contents["Color"] || base_data.color,
-          :shape                 => (contents["Shape"]) ? GameData::BodyShape.get(contents["Shape"]).id : base_data.shape,
+          :shape                 => contents["Shape"] || base_data.shape,
           :habitat               => contents["Habitat"] || base_data.habitat,
           :generation            => contents["Generation"] || base_data.generation,
           :mega_stone            => contents["MegaStone"],
@@ -706,10 +691,10 @@ module Compiler
         end
         # Add form's data to records
         GameData::Species.register(species_hash)
-        species_names[form_number]           = species_hash[:name]
-        species_form_names[form_number]      = species_hash[:form_name]
-        species_categories[form_number]      = species_hash[:category]
-        species_pokedex_entries[form_number] = species_hash[:pokedex_entry]
+        species_names.push(species_hash[:name])
+        species_form_names.push(species_hash[:form_name])
+        species_categories.push(species_hash[:category])
+        species_pokedex_entries.push(species_hash[:pokedex_entry])
       }
     }
     # Add prevolution "evolution" entry for all evolved forms that define their
@@ -727,10 +712,10 @@ module Compiler
     end
     # Save all data
     GameData::Species.save
-    MessageTypes.addMessages(MessageTypes::Species, species_names)
-    MessageTypes.addMessages(MessageTypes::FormNames, species_form_names)
-    MessageTypes.addMessages(MessageTypes::Kinds, species_categories)
-    MessageTypes.addMessages(MessageTypes::Entries, species_pokedex_entries)
+    MessageTypes.addMessagesAsHash(MessageTypes::Species, species_names)
+    MessageTypes.addMessagesAsHash(MessageTypes::FormNames, species_form_names)
+    MessageTypes.addMessagesAsHash(MessageTypes::Kinds, species_categories)
+    MessageTypes.addMessagesAsHash(MessageTypes::Entries, species_pokedex_entries)
     Graphics.update
   end
 
@@ -975,7 +960,7 @@ module Compiler
         end
         need_step_chances = false
         values = pbGetCsvRecord(line, line_no, [0, "vvv"])
-        GameData::EncounterType.each do |enc_type|
+        GameData::EncounterType.each_alphabetically do |enc_type|
           case enc_type.id
           when :land, :contest then step_chances[enc_type.id] = values[0]
           when :cave           then step_chances[enc_type.id] = values[1]

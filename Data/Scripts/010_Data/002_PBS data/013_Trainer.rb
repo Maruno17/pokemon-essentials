@@ -134,9 +134,10 @@ module GameData
         pkmn.shiny = (pkmn_data[:shininess]) ? true : false
         if pkmn_data[:nature]
           pkmn.nature = pkmn_data[:nature]
-        else
-          nature = pkmn.species_data.id_number + GameData::TrainerType.get(trainer.trainer_type).id_number
-          pkmn.nature = nature % (GameData::Nature::DATA.length / 2)
+        else   # Make the nature random but consistent for the same species used by the same trainer type
+          species_num = GameData::Species.keys.index(species) || 1
+          tr_type_num = GameData::TrainerType.keys.index(@trainer_type) || 1
+          pkmn.nature = (species_num + tr_type_num) % (GameData::Nature::DATA.length / 2)
         end
         GameData::Stat.each_main do |s|
           if pkmn_data[:iv]

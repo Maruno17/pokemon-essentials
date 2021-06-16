@@ -1165,7 +1165,7 @@ class EvolutionsProperty
   def initialize
     @methods = []
     @evo_ids = []
-    GameData::Evolution.each do |e|
+    GameData::Evolution.each_alphabetically do |e|
       @methods.push(e.real_name)
       @evo_ids.push(e.id)
     end

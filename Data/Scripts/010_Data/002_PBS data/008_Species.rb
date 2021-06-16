@@ -1,7 +1,6 @@
 module GameData
   class Species
     attr_reader :id
-    attr_reader :id_number
     attr_reader :species
     attr_reader :form
     attr_reader :real_name
@@ -51,8 +50,12 @@ module GameData
     DATA = {}
     DATA_FILENAME = "species.dat"
 
-    extend ClassMethods
+    extend ClassMethodsSymbols
     include InstanceMethods
+
+    def self.each_species
+      DATA.each_value { |species| yield species if species.form == 0 }
+    end
 
     # @param species [Symbol, self, String, Integer]
     # @param form [Integer]
@@ -128,7 +131,6 @@ module GameData
 
     def initialize(hash)
       @id                    = hash[:id]
-      @id_number             = hash[:id_number]             || -1
       @species               = hash[:species]               || @id
       @form                  = hash[:form]                  || 0
       @real_name             = hash[:name]                  || "Unnamed"
@@ -182,22 +184,22 @@ module GameData
 
     # @return [String] the translated name of this species
     def name
-      return pbGetMessage(MessageTypes::Species, @id_number)
+      return pbGetMessageFromHash(MessageTypes::Species, @real_name)
     end
 
     # @return [String] the translated name of this form of this species
     def form_name
-      return pbGetMessage(MessageTypes::FormNames, @id_number)
+      return pbGetMessageFromHash(MessageTypes::FormNames, @real_form_name)
     end
 
     # @return [String] the translated Pokédex category of this species
     def category
-      return pbGetMessage(MessageTypes::Kinds, @id_number)
+      return pbGetMessageFromHash(MessageTypes::Kinds, @real_category)
     end
 
     # @return [String] the translated Pokédex entry of this species
     def pokedex_entry
-      return pbGetMessage(MessageTypes::Entries, @id_number)
+      return pbGetMessageFromHash(MessageTypes::Entries, @real_pokedex_entry)
     end
 
     def apply_metrics_to_sprite(sprite, index, shadow = false)
@@ -234,7 +236,7 @@ module GameData
 
     def get_family_evolutions(exclude_invalid = true)
       evos = self.get_evolutions(exclude_invalid)
-      evos = evos.sort { |a, b| GameData::Species.get(a[0]).id_number <=> GameData::Species.get(b[0]).id_number }
+      evos = evos.sort { |a, b| GameData::Species.keys.index(a[0]) <=> GameData::Species.keys.index(b[0]) }
       ret = []
       evos.each do |evo|
         ret.push([@species].concat(evo))   # [Prevo species, evo species, method, parameter]

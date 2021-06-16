@@ -261,15 +261,15 @@ module Compiler
   #=============================================================================
   def write_pokemon
     File.open("PBS/pokemon.txt", "wb") { |f|
+      idx = 0
       add_PBS_header_to_file(f)
-      GameData::Species.each do |species|
-        next if species.form != 0
-        pbSetWindowText(_INTL("Writing species {1}...", species.id_number))
-        Graphics.update if species.id_number % 50 == 0
+      GameData::Species.each_species do |species|
+        idx += 1
+        pbSetWindowText(_INTL("Writing species {1}...", idx))
+        Graphics.update if idx % 100 == 0
         f.write("\#-------------------------------\r\n")
-        f.write(sprintf("[%d]\r\n", species.id_number))
+        f.write(sprintf("[%s]\r\n", species.id))
         f.write(sprintf("Name = %s\r\n", species.real_name))
-        f.write(sprintf("InternalName = %s\r\n", species.species))
         f.write(sprintf("Type1 = %s\r\n", species.type1))
         f.write(sprintf("Type2 = %s\r\n", species.type2)) if species.type2 != species.type1
         stats_array = []
@@ -356,12 +356,14 @@ module Compiler
   #=============================================================================
   def write_pokemon_forms
     File.open("PBS/pokemonforms.txt", "wb") { |f|
+      idx = 0
       add_PBS_header_to_file(f)
       GameData::Species.each do |species|
         next if species.form == 0
         base_species = GameData::Species.get(species.species)
-        pbSetWindowText(_INTL("Writing species {1}...", species.id_number))
-        Graphics.update if species.id_number % 50 == 0
+        idx += 1
+        pbSetWindowText(_INTL("Writing form {1}...", idx))
+        Graphics.update if idx % 100 == 0
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%s,%d]\r\n", species.species, species.form))
         f.write(sprintf("FormName = %s\r\n", species.real_form_name)) if species.real_form_name && !species.real_form_name.empty?
@@ -587,10 +589,12 @@ module Compiler
   #=============================================================================
   def write_trainers
     File.open("PBS/trainers.txt", "wb") { |f|
+      idx = 0
       add_PBS_header_to_file(f)
       GameData::Trainer.each do |trainer|
-        pbSetWindowText(_INTL("Writing trainer {1}...", trainer.id_number))
-        Graphics.update if trainer.id_number % 50 == 0
+        idx += 1
+        pbSetWindowText(_INTL("Writing trainer {1}...", idx))
+        Graphics.update if idx % 50 == 0
         f.write("\#-------------------------------\r\n")
         if trainer.version > 0
           f.write(sprintf("[%s,%s,%d]\r\n", trainer.trainer_type, trainer.real_name, trainer.version))
