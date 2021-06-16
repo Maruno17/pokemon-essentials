@@ -262,8 +262,11 @@ def pbHiddenPower(pkmn)
   iv = pkmn.iv
   idxType = 0; power = 60
   types = []
-  GameData::Type.each { |t| types.push(t.id) if !t.pseudo_type && ![:NORMAL, :SHADOW].include?(t.id)}
-  types.sort! { |a, b| GameData::Type.get(a).id_number <=> GameData::Type.get(b).id_number }
+  GameData::Type.each do |t|
+    types[t.icon_position] ||= []
+    types[t.icon_position].push(t.id) if !t.pseudo_type && ![:NORMAL, :SHADOW].include?(t.id)
+  end
+  types.flatten!.compact!
   idxType |= (iv[:HP]&1)
   idxType |= (iv[:ATTACK]&1)<<1
   idxType |= (iv[:DEFENSE]&1)<<2

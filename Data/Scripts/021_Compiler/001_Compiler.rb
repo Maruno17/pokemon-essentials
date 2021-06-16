@@ -128,7 +128,7 @@ module Compiler
     yield lastsection,sectionname if havesection
   end
 
-  # Used for types.txt, pokemon.txt, metadata.txt
+  # Used for pokemon.txt, metadata.txt
   def pbEachFileSection(f)
     pbEachFileSectionEx(f) { |section,name|
       yield section,name.to_i if block_given? && name[/^\d+$/]
@@ -139,6 +139,13 @@ module Compiler
   def pbEachFileSection2(f)
     pbEachFileSectionEx(f) { |section,name|
       yield section,name if block_given? && name[/^\w+[-,\s]{1}\d+$/]
+    }
+  end
+
+  # Used for types.txt
+  def pbEachFileSection3(f)
+    pbEachFileSectionEx(f) { |section,name|
+      yield section,name if block_given? && name[/^.+$/]
     }
   end
 
@@ -600,6 +607,7 @@ module Compiler
   # Parse string into a likely constant name and return its ID number (if any).
   # Last ditch attempt to figure out whether a constant is defined.
   #=============================================================================
+  # Unused
   def pbGetConst(mod,item,err)
     isDef = false
     begin
@@ -735,11 +743,12 @@ module Compiler
     return if !$DEBUG
     begin
       dataFiles = [
+         "abilities.dat",
          "berry_plants.dat",
          "encounters.dat",
-         "form2species.dat",
          "items.dat",
          "map_connections.dat",
+         "map_metadata.dat",
          "metadata.dat",
          "moves.dat",
          "phone.dat",
@@ -747,11 +756,6 @@ module Compiler
          "ribbons.dat",
          "shadow_movesets.dat",
          "species.dat",
-         "species_eggmoves.dat",
-         "species_evolutions.dat",
-         "species_metrics.dat",
-         "species_movesets.dat",
-         "tm.dat",
          "town_map.dat",
          "trainer_lists.dat",
          "trainer_types.dat",

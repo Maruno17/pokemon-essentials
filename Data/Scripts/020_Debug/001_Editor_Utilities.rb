@@ -182,7 +182,12 @@ end
 # between numerical and alphabetical.
 def pbChooseTypeList(default = nil)
   commands = []
-  GameData::Type.each { |t| commands.push([t.id_number, t.name, t.id]) if !t.pseudo_type }
+  index = 0
+  GameData::Type.each do |t|
+    next if t.pseudo_type
+    commands.push([index, t.name, t.id])
+    index += 1
+  end
   return pbChooseList(commands, default, nil, -1)
 end
 

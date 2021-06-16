@@ -97,7 +97,7 @@ module GameData
         "Height"            => [0, "f"],
         "Weight"            => [0, "f"],
         "Color"             => [0, "e", :BodyColor],
-        "Shape"             => [0, "y", :BodyShape],
+        "Shape"             => [0, "e", :BodyShape],
         "Habitat"           => [0, "e", :Habitat],
         "Generation"        => [0, "i"],
         "BattlerPlayerX"    => [0, "i"],

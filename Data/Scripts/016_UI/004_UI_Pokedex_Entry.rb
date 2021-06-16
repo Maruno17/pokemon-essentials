@@ -251,8 +251,8 @@ class PokemonPokedexInfo_Scene
       # Draw the type icon(s)
       type1 = species_data.type1
       type2 = species_data.type2
-      type1_number = GameData::Type.get(type1).id_number
-      type2_number = GameData::Type.get(type2).id_number
+      type1_number = GameData::Type.get(type1).icon_position
+      type2_number = GameData::Type.get(type2).icon_position
       type1rect = Rect.new(0, type1_number * 32, 96, 32)
       type2rect = Rect.new(0, type2_number * 32, 96, 32)
       overlay.blt(296, 120, @typebitmap.bitmap, type1rect)

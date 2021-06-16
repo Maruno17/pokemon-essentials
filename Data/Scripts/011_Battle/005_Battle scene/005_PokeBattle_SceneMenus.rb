@@ -374,7 +374,7 @@ class FightMenuDisplay < BattleMenuBase
         end
         @visibility["button_#{i}"] = true
         button.src_rect.x = (i==@index) ? @buttonBitmap.width/2 : 0
-        button.src_rect.y = GameData::Type.get(moves[i].type).id_number * BUTTON_HEIGHT
+        button.src_rect.y = GameData::Type.get(moves[i].type).icon_position * BUTTON_HEIGHT
         button.z          = self.z + ((i==@index) ? 4 : 3)
       end
     end
@@ -400,7 +400,7 @@ class FightMenuDisplay < BattleMenuBase
     end
     @visibility["typeIcon"] = true
     # Type icon
-    type_number = GameData::Type.get(move.type).id_number
+    type_number = GameData::Type.get(move.type).icon_position
     @typeIcon.src_rect.y = type_number * TYPE_ICON_HEIGHT
     # PP text
     if move.total_pp>0

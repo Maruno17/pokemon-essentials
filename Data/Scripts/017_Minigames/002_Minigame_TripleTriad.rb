@@ -85,7 +85,7 @@ class TriadCard
     end
     if type
       typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
-      type_number = GameData::Type.get(type).id_number
+      type_number = GameData::Type.get(type).icon_position
       typerect = Rect.new(0, type_number * 28, 64, 28)
       bitmap.blt(8, 50, typebitmap.bitmap, typerect, 192)
       typebitmap.dispose
@@ -107,7 +107,7 @@ class TriadCard
     # Draw card background
     bitmap.blt(0, 0, cardbitmap.bitmap, Rect.new(0, 0, cardbitmap.width, cardbitmap.height))
     # Draw type icon
-    type_number = GameData::Type.get(@type).id_number
+    type_number = GameData::Type.get(@type).icon_position
     typerect = Rect.new(0, type_number * 28, 64, 28)
     bitmap.blt(8, 50, typebitmap.bitmap, typerect, 192)
     # Draw Pokémon icon

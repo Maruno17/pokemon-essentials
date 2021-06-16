@@ -1437,8 +1437,8 @@ class PokemonStorageScene
         imagepos.push(["Graphics/Pictures/shiny",156,198])
       end
       typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
-      type1_number = GameData::Type.get(pokemon.type1).id_number
-      type2_number = GameData::Type.get(pokemon.type2).id_number
+      type1_number = GameData::Type.get(pokemon.type1).icon_position
+      type2_number = GameData::Type.get(pokemon.type2).icon_position
       type1rect = Rect.new(0, type1_number * 28, 64, 28)
       type2rect = Rect.new(0, type2_number * 28, 64, 28)
       if pokemon.type1==pokemon.type2

@@ -52,8 +52,8 @@ class MoveRelearner_Scene
   def pbDrawMoveList
     overlay=@sprites["overlay"].bitmap
     overlay.clear
-    type1_number = GameData::Type.get(@pokemon.type1).id_number
-    type2_number = GameData::Type.get(@pokemon.type2).id_number
+    type1_number = GameData::Type.get(@pokemon.type1).icon_position
+    type2_number = GameData::Type.get(@pokemon.type2).icon_position
     type1rect=Rect.new(0, type1_number * 28, 64, 28)
     type2rect=Rect.new(0, type2_number * 28, 64, 28)
     if @pokemon.type1==@pokemon.type2
@@ -71,7 +71,7 @@ class MoveRelearner_Scene
       moveobject=@moves[@sprites["commands"].top_item+i]
       if moveobject
         moveData=GameData::Move.get(moveobject)
-        type_number = GameData::Type.get(moveData.type).id_number
+        type_number = GameData::Type.get(moveData.type).icon_position
         imagepos.push(["Graphics/Pictures/types", 12, yPos + 8, 0, type_number * 28, 64, 28])
         textpos.push([moveData.name,80,yPos,0,Color.new(248,248,248),Color.new(0,0,0)])
         if moveData.total_pp>0

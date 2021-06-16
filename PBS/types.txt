@@ -1,128 +1,128 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
-[0]
+[NORMAL]
 Name = Normal
-InternalName = NORMAL
+IconPosition = 0
 Weaknesses = FIGHTING
 Immunities = GHOST
 #-------------------------------
-[1]
+[FIGHTING]
 Name = Fighting
-InternalName = FIGHTING
+IconPosition = 1
 Weaknesses = FLYING,PSYCHIC,FAIRY
 Resistances = ROCK,BUG,DARK
 #-------------------------------
-[2]
+[FLYING]
 Name = Flying
-InternalName = FLYING
+IconPosition = 2
 Weaknesses = ROCK,ELECTRIC,ICE
 Resistances = FIGHTING,BUG,GRASS
 Immunities = GROUND
 #-------------------------------
-[3]
+[POISON]
 Name = Poison
-InternalName = POISON
+IconPosition = 3
 Weaknesses = GROUND,PSYCHIC
 Resistances = FIGHTING,POISON,BUG,GRASS,FAIRY
 #-------------------------------
-[4]
+[GROUND]
 Name = Ground
-InternalName = GROUND
+IconPosition = 4
 Weaknesses = WATER,GRASS,ICE
 Resistances = POISON,ROCK
 Immunities = ELECTRIC
 #-------------------------------
-[5]
+[ROCK]
 Name = Rock
-InternalName = ROCK
+IconPosition = 5
 Weaknesses = FIGHTING,GROUND,STEEL,WATER,GRASS
 Resistances = NORMAL,FLYING,POISON,FIRE
 #-------------------------------
-[6]
+[BUG]
 Name = Bug
-InternalName = BUG
+IconPosition = 6
 Weaknesses = FLYING,ROCK,FIRE
 Resistances = FIGHTING,GROUND,GRASS
 #-------------------------------
-[7]
+[GHOST]
 Name = Ghost
-InternalName = GHOST
+IconPosition = 7
 Weaknesses = GHOST,DARK
 Resistances = POISON,BUG
 Immunities = NORMAL,FIGHTING
 #-------------------------------
-[8]
+[STEEL]
 Name = Steel
-InternalName = STEEL
+IconPosition = 8
 Weaknesses = FIGHTING,GROUND,FIRE
 Resistances = NORMAL,FLYING,ROCK,BUG,STEEL,GRASS,PSYCHIC,ICE,DRAGON,FAIRY
 Immunities = POISON
 #-------------------------------
-[9]
+[QMARKS]
 Name = ???
-InternalName = QMARKS
+IconPosition = 9
 IsPseudoType = true
 #-------------------------------
-[10]
+[FIRE]
 Name = Fire
-InternalName = FIRE
+IconPosition = 10
 IsSpecialType = true
 Weaknesses = GROUND,ROCK,WATER
 Resistances = BUG,STEEL,FIRE,GRASS,ICE,FAIRY
 #-------------------------------
-[11]
+[WATER]
 Name = Water
-InternalName = WATER
+IconPosition = 11
 IsSpecialType = true
 Weaknesses = GRASS,ELECTRIC
 Resistances = STEEL,FIRE,WATER,ICE
 #-------------------------------
-[12]
+[GRASS]
 Name = Grass
-InternalName = GRASS
+IconPosition = 12
 IsSpecialType = true
 Weaknesses = FLYING,POISON,BUG,FIRE,ICE
 Resistances = GROUND,WATER,GRASS,ELECTRIC
 #-------------------------------
-[13]
+[ELECTRIC]
 Name = Electric
-InternalName = ELECTRIC
+IconPosition = 13
 IsSpecialType = true
 Weaknesses = GROUND
 Resistances = FLYING,STEEL,ELECTRIC
 #-------------------------------
-[14]
+[PSYCHIC]
 Name = Psychic
-InternalName = PSYCHIC
+IconPosition = 14
 IsSpecialType = true
 Weaknesses = BUG,GHOST,DARK
 Resistances = FIGHTING,PSYCHIC
 #-------------------------------
-[15]
+[ICE]
 Name = Ice
-InternalName = ICE
+IconPosition = 15
 IsSpecialType = true
 Weaknesses = FIGHTING,ROCK,STEEL,FIRE
 Resistances = ICE
 #-------------------------------
-[16]
+[DRAGON]
 Name = Dragon
-InternalName = DRAGON
+IconPosition = 16
 IsSpecialType = true
 Weaknesses = ICE,DRAGON,FAIRY
 Resistances = FIRE,WATER,GRASS,ELECTRIC
 #-------------------------------
-[17]
+[DARK]
 Name = Dark
-InternalName = DARK
+IconPosition = 17
 IsSpecialType = true
 Weaknesses = FIGHTING,BUG,FAIRY
 Resistances = GHOST,DARK
 Immunities = PSYCHIC
 #-------------------------------
-[18]
+[FAIRY]
 Name = Fairy
-InternalName = FAIRY
+IconPosition = 18
 IsSpecialType = true
 Weaknesses = POISON,STEEL
 Resistances = FIGHTING,BUG,DARK

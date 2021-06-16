@@ -463,14 +463,14 @@ class PokemonPokedex_Scene
     textpos.push([(params[8]<0) ? "----" : @colorCommands[params[8]].name,444,116,2,base,shadow,1])
     # Draw type icons
     if params[2]>=0
-      type_number = @typeCommands[params[2]].id_number
+      type_number = @typeCommands[params[2]].icon_position
       typerect = Rect.new(0,type_number*32,96,32)
       overlay.blt(128,168,@typebitmap.bitmap,typerect)
     else
       textpos.push(["----",176,168,2,base,shadow,1])
     end
     if params[3]>=0
-      type_number = @typeCommands[params[3]].id_number
+      type_number = @typeCommands[params[3]].icon_position
       typerect = Rect.new(0,type_number*32,96,32)
       overlay.blt(256,168,@typebitmap.bitmap,typerect)
     else
@@ -562,7 +562,7 @@ class PokemonPokedex_Scene
         if !sel[i] || sel[i]<0
           textpos.push(["----",298+128*i,58,2,base,shadow,1])
         else
-          type_number = @typeCommands[sel[i]].id_number
+          type_number = @typeCommands[sel[i]].icon_position
           typerect = Rect.new(0,type_number*32,96,32)
           overlay.blt(250+128*i,58,@typebitmap.bitmap,typerect)
         end
@@ -665,7 +665,7 @@ class PokemonPokedex_Scene
     when 2   # Type
       typerect = Rect.new(0,0,96,32)
       for i in 0...cmds.length
-        typerect.y = @typeCommands[i].id_number*32
+        typerect.y = @typeCommands[i].icon_position*32
         overlay.blt(xstart+14+(i%cols)*xgap,ystart+6+(i/cols).floor*ygap,@typebitmap.bitmap,typerect)
       end
       textpos.push(["----",
@@ -1012,7 +1012,6 @@ class PokemonPokedex_Scene
                     _INTL("Z")]
     @typeCommands = []
     GameData::Type.each { |t| @typeCommands.push(t) if !t.pseudo_type }
-    @typeCommands.sort! { |a, b| a.id_number <=> b.id_number }
     @heightCommands = [1,2,3,4,5,6,7,8,9,10,
                        11,12,13,14,15,16,17,18,19,20,
                        21,22,23,24,25,30,35,40,45,50,

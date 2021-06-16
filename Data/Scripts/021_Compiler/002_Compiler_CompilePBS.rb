@@ -142,10 +142,12 @@ module Compiler
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
       schema = GameData::Type::SCHEMA
-      pbEachFileSection(f) { |contents, type_number|
+      pbEachFileSection3(f) { |contents, type_id|
+        contents["InternalName"] = type_id if !type_id[/^\d+/]
+        id_number = (type_id[/^\d+/]) ? type_id.to_i : nil
         # Go through schema hash of compilable data and compile this section
         for key in schema.keys
-          FileLineData.setSection(type_number, key, contents[key])   # For error reporting
+          FileLineData.setSection(type_id, key, contents[key])   # For error reporting
           # Skip empty properties, or raise an error if a required property is
           # empty
           if contents[key].nil?
@@ -166,20 +168,19 @@ module Compiler
           end
         end
         # Construct type hash
-        type_symbol = contents["InternalName"].to_sym
         type_hash = {
-          :id           => type_symbol,
-          :id_number    => type_number,
-          :name         => contents["Name"],
-          :pseudo_type  => contents["IsPseudoType"],
-          :special_type => contents["IsSpecialType"],
-          :weaknesses   => contents["Weaknesses"],
-          :resistances  => contents["Resistances"],
-          :immunities   => contents["Immunities"]
+          :id            => contents["InternalName"].to_sym,
+          :name          => contents["Name"],
+          :pseudo_type   => contents["IsPseudoType"],
+          :special_type  => contents["IsSpecialType"],
+          :weaknesses    => contents["Weaknesses"],
+          :resistances   => contents["Resistances"],
+          :immunities    => contents["Immunities"],
+          :icon_position => contents["IconPosition"] || id_number
         }
         # Add type's data to records
         GameData::Type.register(type_hash)
-        type_names[type_number] = type_hash[:name]
+        type_names.push(type_hash[:name])
       }
     }
     # Ensure all weaknesses/resistances/immunities are valid types
@@ -199,7 +200,7 @@ module Compiler
     end
     # Save all data
     GameData::Type.save
-    MessageTypes.setMessages(MessageTypes::Types, type_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::Types, type_names)
     Graphics.update
   end
 
@@ -481,7 +482,7 @@ module Compiler
           :height                => contents["Height"],
           :weight                => contents["Weight"],
           :color                 => contents["Color"],
-          :shape                 => GameData::BodyShape.get(contents["Shape"]).id,
+          :shape                 => contents["Shape"],
           :habitat               => contents["Habitat"],
           :generation            => contents["Generation"],
           :back_sprite_x         => contents["BattlerPlayerX"],

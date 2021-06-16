@@ -451,8 +451,8 @@ class PokemonSummary_Scene
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
     # Draw Pokémon type(s)
-    type1_number = GameData::Type.get(@pokemon.type1).id_number
-    type2_number = GameData::Type.get(@pokemon.type2).id_number
+    type1_number = GameData::Type.get(@pokemon.type1).icon_position
+    type2_number = GameData::Type.get(@pokemon.type2).icon_position
     type1rect = Rect.new(0, type1_number * 28, 64, 28)
     type2rect = Rect.new(0, type2_number * 28, 64, 28)
     if @pokemon.type1==@pokemon.type2
@@ -698,7 +698,7 @@ class PokemonSummary_Scene
     for i in 0...Pokemon::MAX_MOVES
       move=@pokemon.moves[i]
       if move
-        type_number = GameData::Type.get(move.type).id_number
+        type_number = GameData::Type.get(move.type).icon_position
         imagepos.push(["Graphics/Pictures/types", 248, yPos + 8, 0, type_number * 28, 64, 28])
         textpos.push([move.name,316,yPos,0,moveBase,moveShadow])
         if move.total_pp>0
@@ -761,7 +761,7 @@ class PokemonSummary_Scene
         yPos += 20
       end
       if move
-        type_number = GameData::Type.get(move.type).id_number
+        type_number = GameData::Type.get(move.type).icon_position
         imagepos.push(["Graphics/Pictures/types", 248, yPos + 8, 0, type_number * 28, 64, 28])
         textpos.push([move.name,316,yPos,0,moveBase,moveShadow])
         if move.total_pp>0
@@ -783,8 +783,8 @@ class PokemonSummary_Scene
     pbDrawTextPositions(overlay,textpos)
     pbDrawImagePositions(overlay,imagepos)
     # Draw Pokémon's type icon(s)
-    type1_number = GameData::Type.get(@pokemon.type1).id_number
-    type2_number = GameData::Type.get(@pokemon.type2).id_number
+    type1_number = GameData::Type.get(@pokemon.type1).icon_position
+    type2_number = GameData::Type.get(@pokemon.type2).icon_position
     type1rect = Rect.new(0, type1_number * 28, 64, 28)
     type2rect = Rect.new(0, type2_number * 28, 64, 28)
     if @pokemon.type1==@pokemon.type2
