@@ -374,15 +374,14 @@ class PokemonPartyPanel < SpriteWrapper
             @overlaysprite.bitmap.blt(128,52,@hpbar.bitmap,hprect)
           end
           # Draw status
-          status = 0
+          status = -1
           if @pokemon.fainted?
-            status = GameData::Status::DATA.keys.length / 2
+            status = GameData::Status.count
           elsif @pokemon.status != :NONE
-            status = GameData::Status.get(@pokemon.status).id_number
+            status = GameData::Status.get(@pokemon.status).icon_position
           elsif @pokemon.pokerusStage == 1
-            status = GameData::Status::DATA.keys.length / 2 + 1
+            status = GameData::Status.count + 1
           end
-          status -= 1
           if status >= 0
             statusrect = Rect.new(0,16*status,44,16)
             @overlaysprite.bitmap.blt(78,68,@statuses.bitmap,statusrect)
@@ -751,7 +750,7 @@ class PokemonParty_Scene
         currentsel -= 1
         while currentsel > 0 && currentsel < Settings::MAX_PARTY_SIZE && !@party[currentsel]
           currentsel -= 1
-        end 
+        end
       else
         begin
           currentsel -= 2

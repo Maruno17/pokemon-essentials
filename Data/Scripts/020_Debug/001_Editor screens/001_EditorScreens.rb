@@ -595,7 +595,7 @@ def pbTrainerBattleEditor
           t = pbNewTrainer(tr_type, tr_name, tr_version, false)
           if t
             trainer_hash = {
-              :id_number    => GameData::Trainer::DATA.keys.length / 2,
+              :id_number    => GameData::Trainer.count,
               :trainer_type => tr_type,
               :name         => tr_name,
               :version      => tr_version,

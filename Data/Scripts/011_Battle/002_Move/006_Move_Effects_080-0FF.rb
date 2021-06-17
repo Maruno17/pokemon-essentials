@@ -1665,7 +1665,7 @@ class PokeBattle_Move_0B6 < PokeBattle_Move
 
   def pbMoveFailed?(user,targets)
     @metronomeMove = nil
-    move_keys = GameData::Move::DATA.keys
+    move_keys = GameData::Move.keys
     # NOTE: You could be really unlucky and roll blacklisted moves 1000 times in
     #       a row. This is too unlikely to care about, though.
     1000.times do

@@ -25,9 +25,9 @@ def pbTrainerInfo(pokemonlist, trfile, rules)
       if GameData::TrainerType.exists?(:YOUNGSTER) && rand(30) == 0
         trainerid = :YOUNGSTER
       else
-        tr_typekeys = GameData::TrainerType::DATA.keys
+        tr_typekeys = GameData::TrainerType.keys
         loop do
-          tr_type = tr_typekeys[rand(tr_typekeys.length)]
+          tr_type = tr_typekeys[tr_typekeys.sample]
           tr_type_data = GameData::TrainerType.get(tr_type)
           next if tr_type_data.base_money >= 100
           trainerid = tr_type_data.id

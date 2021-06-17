@@ -58,6 +58,10 @@ module GameData
       keys.each { |key| yield self::DATA[key] if !key.is_a?(Integer) }
     end
 
+    def count
+      return self::DATA.length / 2
+    end
+
     def load
       const_set(:DATA, load_data("Data/#{self::DATA_FILENAME}"))
     end
@@ -125,6 +129,10 @@ module GameData
       keys.each { |key| yield self::DATA[key] }
     end
 
+    def count
+      return self::DATA.length
+    end
+
     def load
       const_set(:DATA, load_data("Data/#{self::DATA_FILENAME}"))
     end
@@ -180,6 +188,10 @@ module GameData
     def each
       keys = self::DATA.keys.sort
       keys.each { |key| yield self::DATA[key] }
+    end
+
+    def count
+      return self::DATA.length
     end
 
     def load

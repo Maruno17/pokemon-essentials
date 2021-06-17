@@ -137,7 +137,7 @@ module GameData
         else   # Make the nature random but consistent for the same species used by the same trainer type
           species_num = GameData::Species.keys.index(species) || 1
           tr_type_num = GameData::TrainerType.keys.index(@trainer_type) || 1
-          pkmn.nature = (species_num + tr_type_num) % (GameData::Nature::DATA.length / 2)
+          pkmn.nature = (species_num + tr_type_num) % GameData::Nature.count
         end
         GameData::Stat.each_main do |s|
           if pkmn_data[:iv]

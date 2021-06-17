@@ -38,9 +38,9 @@ end
 #===============================================================================
 # Used to replace Sketch with any other move.
 def pbRandomMove
-  keys = GameData::Move::DATA.keys
+  keys = GameData::Move.keys
   loop do
-    move_id = keys[rand(keys.length)]
+    move_id = keys[keys.sample]
     move = GameData::Move.get(move_id)
     next if move.id == :SKETCH || move.id == :STRUGGLE
     return move.id
@@ -151,10 +151,10 @@ def pbRandomPokemonFromRule(rules, trainer)
     iteration += 1
     species = nil
     level = rules.ruleset.suggestedLevel
-    keys = GameData::Species::DATA.keys
+    keys = GameData::Species.keys
     loop do
       loop do
-        species = keys[rand(keys.length)]
+        species = keys[keys.sample]
         break if GameData::Species.get(species).form == 0
       end
       r = rand(20)
@@ -174,9 +174,9 @@ def pbRandomPokemonFromRule(rules, trainer)
     ev = []
     GameData::Stat.each_main { |s| ev.push(s.id) if rand(100) < 50 }
     nature = nil
-    keys = GameData::Nature::DATA.keys
+    keys = GameData::Nature.keys
     loop do
-      nature = keys[rand(keys.length)]
+      nature = keys[keys.sample]
       nature_data = GameData::Nature.get(nature)
       if [:LAX, :GENTLE].include?(nature_data.id) || nature_data.stat_changes.length == 0
         next if rand(20) < 19

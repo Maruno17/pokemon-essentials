@@ -308,15 +308,14 @@ class PokemonSummary_Scene
     ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%s", @pokemon.poke_ball)
     imagepos.push([ballimage,14,60])
     # Show status/fainted/Pokérus infected icon
-    status = 0
+    status = -1
     if @pokemon.fainted?
-      status = GameData::Status::DATA.keys.length / 2
+      status = GameData::Status.count
     elsif @pokemon.status != :NONE
-      status = GameData::Status.get(@pokemon.status).id_number
+      status = GameData::Status.get(@pokemon.status).icon_position
     elsif @pokemon.pokerusStage == 1
-      status = GameData::Status::DATA.keys.length / 2 + 1
+      status = GameData::Status.count + 1
     end
-    status -= 1
     if status >= 0
       imagepos.push(["Graphics/Pictures/statuses",124,100,0,16*status,44,16])
     end

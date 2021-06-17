@@ -53,10 +53,6 @@ module GameData
     extend ClassMethodsSymbols
     include InstanceMethods
 
-    def self.each_species
-      DATA.each_value { |species| yield species if species.form == 0 }
-    end
-
     # @param species [Symbol, self, String, Integer]
     # @param form [Integer]
     # @return [self, nil]
@@ -73,6 +69,16 @@ module GameData
       trial = sprintf("%s_%d", species, form).to_sym
       species_form = (DATA[trial].nil?) ? species : trial
       return (DATA.has_key?(species_form)) ? DATA[species_form] : nil
+    end
+
+    def self.each_species
+      DATA.each_value { |species| yield species if species.form == 0 }
+    end
+
+    def self.species_count
+      ret = 0
+      self.species_count { |species| ret += 1 }
+      return ret
     end
 
     def self.schema(compiling_forms = false)

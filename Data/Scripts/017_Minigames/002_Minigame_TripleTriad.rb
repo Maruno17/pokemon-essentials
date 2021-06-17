@@ -720,12 +720,12 @@ class TriadScreen
     @board = []
     @playerName   = $Trainer ? $Trainer.name : "Trainer"
     @opponentName = opponentName
-    type_keys = GameData::Type::DATA.keys
+    type_keys = GameData::Type.keys
     for i in 0...@width*@height
       square = TriadSquare.new
       if @elements
         loop do
-          trial_type = type_keys[rand(type_keys.length)]
+          trial_type = type_keys[type_keys.sample]
           type_data = GameData::Type.get(trial_type)
           next if type_data.pseudo_type
           square.type = type_data.id
@@ -766,10 +766,10 @@ class TriadScreen
         opponentCards.push(species_data.id)
       end
     else
-      species_keys = GameData::Species::DATA.keys
+      species_keys = GameData::Species.keys
       candidates = []
       while candidates.length < 200
-        card = species_keys[rand(species_keys.length)]
+        card = species_keys[species_keys.sample]
         card_data = GameData::Species.get(card)
         card = card_data.id   # Make sure it's a symbol
         triad = TriadCard.new(card)
