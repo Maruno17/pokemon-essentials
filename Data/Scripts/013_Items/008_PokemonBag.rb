@@ -310,7 +310,7 @@ module ItemStorageHelper
         items[i] = [item, [qty, maxPerSlot].min]
         qty -= items[i][1]
         if itemPocket > 0 && sorting && Settings::BAG_POCKET_AUTO_SORT[itemPocket]
-          items.sort! { |a, b| GameData::Item.get(a[0]).id_number <=> GameData::Item.get(b[0]).id_number }
+          items.sort! { |a, b| GameData::Item.keys.index(a[0]) <=> GameData::Item.keys.index(b[0]) }
         end
         return true if qty == 0
       elsif itemslot[0] == item && itemslot[1] < maxPerSlot

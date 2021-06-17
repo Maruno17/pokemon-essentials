@@ -278,7 +278,7 @@ module Compiler
         :accuracy      => line[7],
         :total_pp      => line[8],
         :effect_chance => line[9],
-        :target        => GameData::Target.get(line[10]).id,
+        :target        => line[10],
         :priority      => line[11],
         :flags         => line[12],
         :description   => line[13]

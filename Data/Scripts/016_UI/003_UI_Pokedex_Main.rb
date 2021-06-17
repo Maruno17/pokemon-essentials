@@ -502,8 +502,8 @@ class PokemonPokedex_Scene
     overlay.blt(344,266,@hwbitmap.bitmap,Rect.new(32,(hwoffset) ? 44 : 0,32,44))
     # Draw shape icon
     if params[9] >= 0
-      shape_number = @shapeCommands[params[9]].id_number
-      shaperect = Rect.new(0, (shape_number - 1) * 60, 60, 60)
+      shape_number = @shapeCommands[params[9]].icon_position
+      shaperect = Rect.new(0, shape_number * 60, 60, 60)
       overlay.blt(424, 218, @shapebitmap.bitmap, shaperect)
     end
     # Draw all text
@@ -609,7 +609,7 @@ class PokemonPokedex_Scene
       end
     when 6   # Shape icon
       if sel[0] >= 0
-        shaperect = Rect.new(0, (@shapeCommands[sel[0]].id_number - 1) * 60, 60, 60)
+        shaperect = Rect.new(0, @shapeCommands[sel[0]].icon_position * 60, 60, 60)
         overlay.blt(332, 50, @shapebitmap.bitmap, shaperect)
       end
     else
@@ -681,7 +681,7 @@ class PokemonPokedex_Scene
     when 6   # Shape
       shaperect = Rect.new(0, 0, 60, 60)
       for i in 0...cmds.length
-        shaperect.y = (@shapeCommands[i].id_number - 1) * 60
+        shaperect.y = @shapeCommands[i].icon_position * 60
         overlay.blt(xstart + 4 + (i % cols) * xgap, ystart + 4 + (i / cols).floor * ygap, @shapebitmap.bitmap, shaperect)
       end
     end
@@ -1021,9 +1021,9 @@ class PokemonPokedex_Scene
                        180,200,250,300,350,400,500,600,700,800,
                        900,1000,1250,1500,2000,3000,5000]
     @colorCommands = []
-    GameData::BodyColor.each { |c| @colorCommands.push(c) }
+    GameData::BodyColor.each { |c| @colorCommands.push(c) if c.id != :None }
     @shapeCommands = []
-    GameData::BodyShape.each { |c| @shapeCommands.push(c) if c.id != :None }
+    GameData::BodyShape.each { |s| @shapeCommands.push(s) if s.id != :None }
     @sprites["searchbg"].visible     = true
     @sprites["overlay"].visible      = true
     @sprites["searchcursor"].visible = true
