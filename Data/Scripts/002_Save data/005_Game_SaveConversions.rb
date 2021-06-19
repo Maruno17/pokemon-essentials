@@ -147,7 +147,7 @@ SaveData.register_conversion(:v19_1_fix_phone_contacts) do
 end
 
 SaveData.register_conversion(:v19_1_1_fix_berry_plants) do
-  essentials_version 19.1.1
+  essentials_version "19.1.1"
   display_title 'Fixing berry plant data'
   to_value :global_metadata do |global|
     berry_conversion = {

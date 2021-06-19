@@ -2,8 +2,8 @@
 #-------------------------------
 [PICHU,1]
 FormName = Spiky-Eared
-BattlerEnemyX = 3
 Generation = 4
+BattlerEnemyX = 3
 Evolutions = PIKACHU,None,
 #-------------------------------
 [UNOWN,1]
