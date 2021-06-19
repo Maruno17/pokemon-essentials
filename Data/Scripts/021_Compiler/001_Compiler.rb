@@ -128,24 +128,24 @@ module Compiler
     yield lastsection,sectionname if havesection
   end
 
-  # Used for pokemon.txt, metadata.txt
+  # Used for types.txt, pokemon.txt, trainerlists.txt and Battle Tower trainers PBS files
   def pbEachFileSection(f)
+    pbEachFileSectionEx(f) { |section,name|
+      yield section,name if block_given? && name[/^.+$/]
+    }
+  end
+
+  # Used for metadata.txt
+  def pbEachFileSectionNumbered(f)
     pbEachFileSectionEx(f) { |section,name|
       yield section,name.to_i if block_given? && name[/^\d+$/]
     }
   end
 
   # Used for pokemonforms.txt
-  def pbEachFileSection2(f)
+  def pbEachFileSectionPokemonForms(f)
     pbEachFileSectionEx(f) { |section,name|
       yield section,name if block_given? && name[/^\w+[-,\s]{1}\d+$/]
-    }
-  end
-
-  # Used for types.txt
-  def pbEachFileSection3(f)
-    pbEachFileSectionEx(f) { |section,name|
-      yield section,name if block_given? && name[/^.+$/]
     }
   end
 

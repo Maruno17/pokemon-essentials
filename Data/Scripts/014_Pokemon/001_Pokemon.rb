@@ -239,7 +239,7 @@ class Pokemon
   end
 
   # Sets this Pokémon's status. See {GameData::Status} for all possible status effects.
-  # @param value [Symbol, String, GameData::Status, Integer] status to set
+  # @param value [Symbol, String, GameData::Status] status to set
   def status=(value)
     return if !able?
     new_status = GameData::Status.try_get(value)

@@ -142,7 +142,7 @@ module Compiler
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
       schema = GameData::Type::SCHEMA
-      pbEachFileSection3(f) { |contents, type_id|
+      pbEachFileSection(f) { |contents, type_id|
         contents["InternalName"] = type_id if !type_id[/^\d+/]
         icon_pos = (type_id[/^\d+/]) ? type_id.to_i : nil
         # Go through schema hash of compilable data and compile this section
@@ -373,7 +373,7 @@ module Compiler
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
       schema = GameData::Species.schema
-      pbEachFileSection3(f) { |contents, species_id|
+      pbEachFileSection(f) { |contents, species_id|
         FileLineData.setSection(species_id, "header", nil)   # For error reporting
         contents["InternalName"] = species_id if !species_id[/^\d+/]
         # Ensure all required properties have been defined, and raise an error
@@ -531,7 +531,7 @@ module Compiler
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
       schema = GameData::Species.schema(true)
-      pbEachFileSection2(f) { |contents, section_name|
+      pbEachFileSectionPokemonForms(f) { |contents, section_name|
         FileLineData.setSection(section_name, "header", nil)   # For error reporting
         # Split section_name into a species number and form number
         split_section_name = section_name.split(/[-,\s]/)
@@ -1208,7 +1208,7 @@ module Compiler
     MessageTypes.setMessagesAsHash(MessageTypes::EndSpeechLose,[])
     File.open(path, "rb") { |f|
       FileLineData.file = path
-      pbEachFileSectionEx(f) { |section,name|
+      pbEachFileSection(f) { |section,name|
         next if name!="DefaultTrainerList" && name!="TrainerList"
         rsection = []
         for key in section.keys
@@ -1270,7 +1270,7 @@ module Compiler
     if safeExists?(filename)
       File.open(filename,"rb") { |f|
         FileLineData.file = filename
-        pbEachFileSectionEx(f) { |section,name|
+        pbEachFileSection(f) { |section,name|
           rsection = []
           for key in section.keys
             FileLineData.setSection(name,key,section[key])
@@ -1306,7 +1306,7 @@ module Compiler
       # Read a whole section's lines at once, then run through this code.
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
-      pbEachFileSection(f) { |contents, map_id|
+      pbEachFileSectionNumbered(f) { |contents, map_id|
         schema = (map_id == 0) ? GameData::Metadata::SCHEMA : GameData::MapMetadata::SCHEMA
         # Go through schema hash of compilable data and compile this section
         for key in schema.keys

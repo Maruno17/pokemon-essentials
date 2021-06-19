@@ -11,7 +11,7 @@ class Pokemon
     attr_reader :ppup
 
     # Creates a new Move object.
-    # @param move_id [Symbol, String, Integer] move ID
+    # @param move_id [Symbol, String, GameData::Move] move ID
     def initialize(move_id)
       @id   = GameData::Move.get(move_id).id
       @ppup = 0
@@ -20,7 +20,7 @@ class Pokemon
 
     # Sets this move's ID, and caps the PP amount if it is now greater than this
     # move's total PP.
-    # @param value [Symbol, String, Integer] the new move ID
+    # @param value [Symbol, String, GameData::Move] the new move ID
     def id=(value)
       @id = GameData::Move.get(value).id
       @pp = @pp.clamp(0, total_pp)
