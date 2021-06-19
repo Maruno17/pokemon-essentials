@@ -360,9 +360,7 @@ def pbTrainerTypeEditor
       if button == Input::ACTION
         if tr_type.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this trainer type?")
-            id_number = GameData::TrainerType.get(tr_type).id_number
             GameData::TrainerType::DATA.delete(tr_type)
-            GameData::TrainerType::DATA.delete(id_number)
             GameData::TrainerType.save
             pbConvertTrainerData
             pbMessage(_INTL("The Trainer type was deleted."))
@@ -385,7 +383,6 @@ def pbTrainerTypeEditor
           if pbPropertyList(t_data.id.to_s, data, trainer_type_properties, true)
             # Construct trainer type hash
             type_hash = {
-              :id_number   => t_data.id_number,
               :id          => t_data.id,
               :name        => data[1],
               :base_money  => data[2],
@@ -410,10 +407,6 @@ def pbTrainerTypeEditor
 end
 
 def pbTrainerTypeEditorNew(default_name)
-  # Get an unused ID number for the new item
-  max_id = 0
-  GameData::TrainerType.each { |t| max_id = t.id_number if max_id < t.id_number }
-  id_number = max_id + 1
   # Choose a name
   name = pbMessageFreeText(_INTL("Please enter the trainer type's name."),
      (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
@@ -426,7 +419,7 @@ def pbTrainerTypeEditorNew(default_name)
   id = id.gsub(/[^A-Za-z0-9_]/, "")
   id = id.upcase
   if id.length == 0
-    id = sprintf("T_%03d", id_number)
+    id = sprintf("T_%03d", GameData::TrainerType.count)
   elsif !id[0, 1][/[A-Z]/]
     id = "T_" + id
   end
@@ -452,7 +445,6 @@ def pbTrainerTypeEditorNew(default_name)
   base_money = pbMessageChooseNumber(_INTL("Set the money per level won for defeating the Trainer."), params)
   # Construct trainer type hash
   tr_type_hash = {
-    :id_number   => id_number,
     :id          => id.to_sym,
     :name        => name,
     :base_money  => base_money,
@@ -510,7 +502,6 @@ def pbTrainerBattleEditor
           if pbConfirmMessageSerious("Delete this trainer battle?")
             tr_data = GameData::Trainer::DATA[trainer_id]
             GameData::Trainer::DATA.delete(trainer_id)
-            GameData::Trainer::DATA.delete(tr_data.id_number)
             modified = true
             pbMessage(_INTL("The Trainer battle was deleted."))
           end
@@ -552,7 +543,6 @@ def pbTrainerBattleEditor
               pbMessage(_INTL("Can't save. The Pokémon list is empty."))
             else
               trainer_hash = {
-                :id_number    => tr_data.id_number,
                 :trainer_type => data[0],
                 :name         => data[1],
                 :version      => data[2],
@@ -595,7 +585,6 @@ def pbTrainerBattleEditor
           t = pbNewTrainer(tr_type, tr_name, tr_version, false)
           if t
             trainer_hash = {
-              :id_number    => GameData::Trainer.count,
               :trainer_type => tr_type,
               :name         => tr_name,
               :version      => tr_version,
@@ -837,9 +826,7 @@ def pbItemEditor
       if button == Input::ACTION
         if item.is_a?(Symbol)
           if pbConfirmMessageSerious("Delete this item?")
-            id_number = GameData::Item.get(item).id_number
             GameData::Item::DATA.delete(item)
-            GameData::Item::DATA.delete(id_number)
             GameData::Item.save
             Compiler.write_items
             pbMessage(_INTL("The item was deleted."))
@@ -863,7 +850,6 @@ def pbItemEditor
           if pbPropertyList(itm.id.to_s, data, item_properties, true)
             # Construct item hash
             item_hash = {
-              :id_number   => itm.id_number,
               :id          => itm.id,
               :name        => data[1],
               :name_plural => data[2],
@@ -889,10 +875,6 @@ def pbItemEditor
 end
 
 def pbItemEditorNew(default_name)
-  # Get an unused ID number for the new item
-  max_id = 0
-  GameData::Item.each { |i| max_id = i.id_number if max_id < i.id_number }
-  id_number = max_id + 1
   # Choose a name
   name = pbMessageFreeText(_INTL("Please enter the item's name."),
      (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
@@ -905,7 +887,7 @@ def pbItemEditorNew(default_name)
   id = id.gsub(/[^A-Za-z0-9_]/, "")
   id = id.upcase
   if id.length == 0
-    id = sprintf("ITEM_%03d", id_number)
+    id = sprintf("ITEM_%03d", GameData::Item.count)
   elsif !id[0, 1][/[A-Z]/]
     id = "ITEM_" + id
   end
@@ -931,7 +913,6 @@ def pbItemEditorNew(default_name)
   description = StringProperty.set(_INTL("Description"), "")
   # Construct item hash
   item_hash = {
-    :id_number   => id_number,
     :id          => id.to_sym,
     :name        => name,
     :name_plural => name + "s",

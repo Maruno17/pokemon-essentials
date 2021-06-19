@@ -1,7 +1,6 @@
 module GameData
   class TrainerType
     attr_reader :id
-    attr_reader :id_number
     attr_reader :real_name
     attr_reader :base_money
     attr_reader :battle_BGM
@@ -14,7 +13,7 @@ module GameData
     DATA = {}
     DATA_FILENAME = "trainer_types.dat"
 
-    extend ClassMethods
+    extend ClassMethodsSymbols
     include InstanceMethods
 
     def self.check_file(tr_type, path, optional_suffix = "", suffix = "")
@@ -68,7 +67,6 @@ module GameData
 
     def initialize(hash)
       @id          = hash[:id]
-      @id_number   = hash[:id_number]   || -1
       @real_name   = hash[:name]        || "Unnamed"
       @base_money  = hash[:base_money]  || 30
       @battle_BGM  = hash[:battle_BGM]
@@ -81,7 +79,7 @@ module GameData
 
     # @return [String] the translated name of this trainer type
     def name
-      return pbGetMessage(MessageTypes::TrainerTypes, @id_number)
+      return pbGetMessageFromHash(MessageTypes::TrainerTypes, @real_name)
     end
 
     def male?;   return @gender == 0; end

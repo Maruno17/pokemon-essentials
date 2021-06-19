@@ -1,7 +1,6 @@
 module GameData
   class Item
     attr_reader :id
-    attr_reader :id_number
     attr_reader :real_name
     attr_reader :real_name_plural
     attr_reader :pocket
@@ -15,7 +14,7 @@ module GameData
     DATA = {}
     DATA_FILENAME = "items.dat"
 
-    extend ClassMethods
+    extend ClassMethodsSymbols
     include InstanceMethods
 
     def self.icon_filename(item)
@@ -65,7 +64,6 @@ module GameData
 
     def initialize(hash)
       @id               = hash[:id]
-      @id_number        = hash[:id_number]   || -1
       @real_name        = hash[:name]        || "Unnamed"
       @real_name_plural = hash[:name_plural] || "Unnamed"
       @pocket           = hash[:pocket]      || 1
@@ -79,17 +77,17 @@ module GameData
 
     # @return [String] the translated name of this item
     def name
-      return pbGetMessage(MessageTypes::Items, @id_number)
+      return pbGetMessageFromHash(MessageTypes::Items, @real_name)
     end
 
     # @return [String] the translated plural version of the name of this item
     def name_plural
-      return pbGetMessage(MessageTypes::ItemPlurals, @id_number)
+      return pbGetMessageFromHash(MessageTypes::ItemPlurals, @real_name_plural)
     end
 
     # @return [String] the translated description of this item
     def description
-      return pbGetMessage(MessageTypes::ItemDescriptions, @id_number)
+      return pbGetMessageFromHash(MessageTypes::ItemDescriptions, @real_description)
     end
 
     def is_TM?;              return @field_use == 3; end

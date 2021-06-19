@@ -33,7 +33,7 @@ class Pokemon
   attr_writer   :ability_index
   # @return [Array<Pokemon::Move>] the moves known by this Pokémon
   attr_accessor :moves
-  # @return [Array<Integer>] the IDs of moves known by this Pokémon when it was obtained
+  # @return [Array<Symbol>] the IDs of moves known by this Pokémon when it was obtained
   attr_accessor :first_moves
   # @return [Array<Symbol>] an array of ribbons owned by this Pokémon
   attr_accessor :ribbons
@@ -115,7 +115,7 @@ class Pokemon
   #=============================================================================
 
   # Changes the Pokémon's species and re-calculates its statistics.
-  # @param species_id [Integer] id of the species to change this Pokémon to
+  # @param species_id [Symbol, String, GameData::Species] ID of the species to change this Pokémon to
   def species=(species_id)
     new_species_data = GameData::Species.get(species_id)
     return if @species == new_species_data.species
@@ -127,7 +127,7 @@ class Pokemon
     calc_stats
   end
 
-  # @param check_species [Integer, Symbol, String] id of the species to check for
+  # @param check_species [Symbol, String, GameData::Species] ID of the species to check for
   # @return [Boolean] whether this Pokémon is of the specified species
   def isSpecies?(check_species)
     return @species == check_species || (GameData::Species.exists?(check_species) &&
@@ -239,7 +239,7 @@ class Pokemon
   end
 
   # Sets this Pokémon's status. See {GameData::Status} for all possible status effects.
-  # @param value [Integer, Symbol, String] status to set
+  # @param value [Symbol, String, GameData::Status, Integer] status to set
   def status=(value)
     return if !able?
     new_status = GameData::Status.try_get(value)
@@ -316,7 +316,7 @@ class Pokemon
     return ret
   end
 
-  # @param type [Symbol, String, Integer] type to check
+  # @param type [Symbol, String, GameData::Type] type to check
   # @return [Boolean] whether this Pokémon has the specified type
   def hasType?(type)
     type = GameData::Type.get(type).id
@@ -419,6 +419,7 @@ class Pokemon
     return @ability
   end
 
+  # @param value [Symbol, String, GameData::Ability, nil] ability to set
   def ability=(value)
     return if value && !GameData::Ability.exists?(value)
     @ability = (value) ? GameData::Ability.get(value).id : value
@@ -426,7 +427,7 @@ class Pokemon
 
   # Returns whether this Pokémon has a particular ability. If no value
   # is given, returns whether this Pokémon has an ability set.
-  # @param check_ability [Symbol, GameData::Ability, Integer, nil] ability ID to check
+  # @param check_ability [Symbol, String, GameData::Ability, nil] ability ID to check
   # @return [Boolean] whether this Pokémon has a particular ability or
   #   an ability at all
   def hasAbility?(check_ability = nil)
@@ -468,7 +469,7 @@ class Pokemon
   end
 
   # Sets this Pokémon's nature to a particular nature.
-  # @param value [Symbol, String, Integer, nil] nature to change to
+  # @param value [Symbol, String, GameData::Nature, nil] nature to change to
   def nature=(value)
     return if value && !GameData::Nature.exists?(value)
     @nature = (value) ? GameData::Nature.get(value).id : value
@@ -488,7 +489,7 @@ class Pokemon
   end
 
   # If defined, this Pokémon's nature is considered to be this when calculating stats.
-  # @param value [Integer, nil] ID of the nature to use for calculating stats
+  # @param value [Symbol, String, GameData::Nature, nil] ID of the nature to use for calculating stats
   def nature_for_stats=(value)
     return if value && !GameData::Nature.exists?(value)
     @nature_for_stats = (value) ? GameData::Nature.get(value).id : value
@@ -497,7 +498,7 @@ class Pokemon
 
   # Returns whether this Pokémon has a particular nature. If no value is given,
   # returns whether this Pokémon has a nature set.
-  # @param check_nature [Integer] nature ID to check
+  # @param check_nature [Symbol, String, GameData::Nature, nil] nature ID to check
   # @return [Boolean] whether this Pokémon has a particular nature or a nature
   #   at all
   def hasNature?(check_nature = nil)
@@ -519,7 +520,7 @@ class Pokemon
   end
 
   # Gives an item to this Pokémon to hold.
-  # @param value [Symbol, GameData::Item, Integer, nil] ID of the item to give
+  # @param value [Symbol, String, GameData::Item, nil] ID of the item to give
   #   to this Pokémon
   def item=(value)
     return if value && !GameData::Item.exists?(value)
@@ -528,7 +529,7 @@ class Pokemon
 
   # Returns whether this Pokémon is holding an item. If an item id is passed,
   # returns whether the Pokémon is holding that item.
-  # @param check_item [Symbol, GameData::Item, Integer] item ID to check
+  # @param check_item [Symbol, String, GameData::Item, nil] item ID to check
   # @return [Boolean] whether the Pokémon is holding the specified item or
   #   an item at all
   def hasItem?(check_item = nil)
@@ -568,7 +569,7 @@ class Pokemon
     return @moves.length
   end
 
-  # @param move_id [Symbol, String, Integer] ID of the move to check
+  # @param move_id [Symbol, String, GameData::Move] ID of the move to check
   # @return [Boolean] whether the Pokémon knows the given move
   def hasMove?(move_id)
     move_data = GameData::Move.try_get(move_id)
@@ -603,7 +604,7 @@ class Pokemon
   end
 
   # Silently learns the given move. Will erase the first known move if it has to.
-  # @param move_id [Symbol, String, Integer] ID of the move to learn
+  # @param move_id [Symbol, String, GameData::Move] ID of the move to learn
   def learn_move(move_id)
     move_data = GameData::Move.try_get(move_id)
     return if !move_data
@@ -621,7 +622,7 @@ class Pokemon
   end
 
   # Deletes the given move from the Pokémon.
-  # @param move_id [Symbol, String, Integer] ID of the move to delete
+  # @param move_id [Symbol, String, GameData::Move] ID of the move to delete
   def forget_move(move_id)
     move_data = GameData::Move.try_get(move_id)
     return if !move_data
@@ -646,14 +647,14 @@ class Pokemon
   end
 
   # Adds a move to this Pokémon's first moves.
-  # @param move_id [Symbol, String, Integer] ID of the move to add
+  # @param move_id [Symbol, String, GameData::Move] ID of the move to add
   def add_first_move(move_id)
     move_data = GameData::Move.try_get(move_id)
     @first_moves.push(move_data.id) if move_data && !@first_moves.include?(move_data.id)
   end
 
   # Removes a move from this Pokémon's first moves.
-  # @param move_id [Symbol, String, Integer] ID of the move to remove
+  # @param move_id [Symbol, String, GameData::Move] ID of the move to remove
   def remove_first_move(move_id)
     move_data = GameData::Move.try_get(move_id)
     @first_moves.delete(move_data.id) if move_data
@@ -664,7 +665,7 @@ class Pokemon
     @first_moves.clear
   end
 
-  # @param move_id [Symbol, String, Integer] ID of the move to check
+  # @param move_id [Symbol, String, GameData::Move] ID of the move to check
   # @return [Boolean] whether the Pokémon is compatible with the given move
   def compatible_with_move?(move_id)
     move_data = GameData::Move.try_get(move_id)
@@ -688,7 +689,7 @@ class Pokemon
     return @ribbons.length
   end
 
-  # @param ribbon [Symbol, String, GameData::Ribbon, Integer] ribbon ID to check for
+  # @param ribbon [Symbol, String, GameData::Ribbon] ribbon ID to check for
   # @return [Boolean] whether this Pokémon has the specified ribbon
   def hasRibbon?(ribbon)
     ribbon_data = GameData::Ribbon.try_get(ribbon)
@@ -696,7 +697,7 @@ class Pokemon
   end
 
   # Gives a ribbon to this Pokémon.
-  # @param ribbon [Symbol, String, GameData::Ribbon, Integer] ID of the ribbon to give
+  # @param ribbon [Symbol, String, GameData::Ribbon] ID of the ribbon to give
   def giveRibbon(ribbon)
     ribbon_data = GameData::Ribbon.try_get(ribbon)
     return if !ribbon_data || @ribbons.include?(ribbon_data.id)
@@ -705,7 +706,7 @@ class Pokemon
 
   # Replaces one ribbon with the next one along, if possible. If none of the
   # given ribbons are owned, give the first one.
-  # @return [Symbol, nil] ID of the ribbon that was gained
+  # @return [Symbol, String, GameData::Ribbon] ID of the ribbon that was gained
   def upgradeRibbon(*arg)
     for i in 0...arg.length - 1
       this_ribbon_data = GameData::Ribbon.try_get(i)
@@ -728,7 +729,7 @@ class Pokemon
   end
 
   # Removes the specified ribbon from this Pokémon.
-  # @param ribbon [Symbol, String, GameData::Ribbon, Integer] ID of the ribbon to remove
+  # @param ribbon [Symbol, String, GameData::Ribbon] ID of the ribbon to remove
   def takeRibbon(ribbon)
     ribbon_data = GameData::Ribbon.try_get(ribbon)
     return if !ribbon_data
@@ -944,7 +945,7 @@ class Pokemon
 
   # Called after this Pokémon evolves, to remove its held item (if the evolution
   # required it to have a held item) or duplicate this Pokémon (Shedinja only).
-  # @param new_species [Pokemon] the species that this Pokémon evolved into
+  # @param new_species [Symbol] the species that this Pokémon evolved into
   def action_after_evolution(new_species)
     species_data.get_evolutions(true).each do |evo|   # [new_species, method, parameter]
       break if GameData::Evolution.get(evo[1]).call_after_evolution(self, evo[0], evo[2], new_species)
@@ -1058,7 +1059,7 @@ class Pokemon
   end
 
   # Creates a new Pokémon object.
-  # @param species [Symbol, String, Integer] Pokémon species
+  # @param species [Symbol, String, GameData::Species] Pokémon species
   # @param level [Integer] Pokémon level
   # @param owner [Owner, Player, NPCTrainer] Pokémon owner (the player by default)
   # @param withMoves [TrueClass, FalseClass] whether the Pokémon should have moves

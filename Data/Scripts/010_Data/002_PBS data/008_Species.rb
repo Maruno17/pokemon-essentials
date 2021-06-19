@@ -53,18 +53,14 @@ module GameData
     extend ClassMethodsSymbols
     include InstanceMethods
 
-    # @param species [Symbol, self, String, Integer]
+    # @param species [Symbol, self, String]
     # @param form [Integer]
     # @return [self, nil]
     def self.get_species_form(species, form)
       return nil if !species || !form
-      validate species => [Symbol, self, String, Integer]
+      validate species => [Symbol, self, String]
       validate form => Integer
-#      if other.is_a?(Integer)
-#        p "Please switch to symbols, thanks."
-#      end
       species = species.species if species.is_a?(self)
-      species = DATA[species].species if species.is_a?(Integer)
       species = species.to_sym if species.is_a?(String)
       trial = sprintf("%s_%d", species, form).to_sym
       species_form = (DATA[trial].nil?) ? species : trial

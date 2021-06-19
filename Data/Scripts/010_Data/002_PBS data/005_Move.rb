@@ -1,7 +1,6 @@
 module GameData
   class Move
     attr_reader :id
-    attr_reader :id_number
     attr_reader :real_name
     attr_reader :function_code
     attr_reader :base_damage
@@ -18,12 +17,11 @@ module GameData
     DATA = {}
     DATA_FILENAME = "moves.dat"
 
-    extend ClassMethods
+    extend ClassMethodsSymbols
     include InstanceMethods
 
     def initialize(hash)
       @id               = hash[:id]
-      @id_number        = hash[:id_number]   || -1
       @real_name        = hash[:name]        || "Unnamed"
       @function_code    = hash[:function_code]
       @base_damage      = hash[:base_damage]
@@ -40,12 +38,12 @@ module GameData
 
     # @return [String] the translated name of this move
     def name
-      return pbGetMessage(MessageTypes::Moves, @id_number)
+      return pbGetMessage(MessageTypes::Moves, @real_name)
     end
 
     # @return [String] the translated description of this move
     def description
-      return pbGetMessage(MessageTypes::MoveDescriptions, @id_number)
+      return pbGetMessage(MessageTypes::MoveDescriptions, @real_description)
     end
 
     def physical?

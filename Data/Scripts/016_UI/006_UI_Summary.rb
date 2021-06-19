@@ -845,7 +845,7 @@ class PokemonSummary_Scene
     for i in @ribbonOffset*4...@ribbonOffset*4+12
       break if !@pokemon.ribbons[i]
       ribbon_data = GameData::Ribbon.get(@pokemon.ribbons[i])
-      ribn = ribbon_data.id_number - 1
+      ribn = ribbon_data.icon_position
       imagepos.push(["Graphics/Pictures/ribbons",
          230 + 68 * (coord % 4), 78 + 68 * (coord / 4).floor,
          64 * (ribn % 8), 64 * (ribn / 8).floor, 64, 64])

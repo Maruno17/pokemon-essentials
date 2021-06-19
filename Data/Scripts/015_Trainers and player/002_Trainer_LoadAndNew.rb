@@ -36,7 +36,6 @@ def pbNewTrainer(tr_type, tr_name, tr_version, save_changes = true)
   trainer = [tr_type, tr_name, [], party, tr_version]
   if save_changes
     trainer_hash = {
-      :id_number    => GameData::Trainer.count,
       :trainer_type => tr_type,
       :name         => tr_name,
       :version      => tr_version,
@@ -60,8 +59,8 @@ end
 
 def pbConvertTrainerData
   tr_type_names = []
-  GameData::TrainerType.each { |t| tr_type_names[t.id_number] = t.real_name }
-  MessageTypes.setMessages(MessageTypes::TrainerTypes, tr_type_names)
+  GameData::TrainerType.each { |t| tr_type_names.push(t.real_name) }
+  MessageTypes.setMessagesAsHash(MessageTypes::TrainerTypes, tr_type_names)
   Compiler.write_trainer_types
   Compiler.write_trainers
 end

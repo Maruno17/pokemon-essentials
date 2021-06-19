@@ -144,7 +144,7 @@ module Compiler
       schema = GameData::Type::SCHEMA
       pbEachFileSection3(f) { |contents, type_id|
         contents["InternalName"] = type_id if !type_id[/^\d+/]
-        id_number = (type_id[/^\d+/]) ? type_id.to_i : nil
+        icon_pos = (type_id[/^\d+/]) ? type_id.to_i : nil
         # Go through schema hash of compilable data and compile this section
         for key in schema.keys
           FileLineData.setSection(type_id, key, contents[key])   # For error reporting
@@ -176,7 +176,7 @@ module Compiler
           :weaknesses    => contents["Weaknesses"],
           :resistances   => contents["Resistances"],
           :immunities    => contents["Immunities"],
-          :icon_position => contents["IconPosition"] || id_number
+          :icon_position => contents["IconPosition"] || icon_pos
         }
         # Add type's data to records
         GameData::Type.register(type_hash)
@@ -244,15 +244,12 @@ module Compiler
     move_descriptions = []
     # Read each line of moves.txt at a time and compile it into an move
     pbCompilerEachPreppedLine(path) { |line, line_no|
-      line = pbGetCsvRecord(line, line_no, [0, "vnssueeuuueiss",
+      line = pbGetCsvRecord(line, line_no, [0, "snssueeuuueiss",
          nil, nil, nil, nil, nil, :Type, ["Physical", "Special", "Status"],
          nil, nil, nil, :Target, nil, nil, nil
       ])
-      move_number = line[0]
       move_symbol = line[1].to_sym
-      if GameData::Move::DATA[move_number]
-        raise _INTL("Move ID number '{1}' is used twice.\r\n{2}", move_number, FileLineData.linereport)
-      elsif GameData::Move::DATA[move_symbol]
+      if GameData::Move::DATA[move_symbol]
         raise _INTL("Move ID '{1}' is used twice.\r\n{2}", move_symbol, FileLineData.linereport)
       end
       # Sanitise data
@@ -264,7 +261,6 @@ module Compiler
       end
       # Construct move hash
       move_hash = {
-        :id_number     => move_number,
         :id            => move_symbol,
         :name          => line[2],
         :function_code => line[3],
@@ -281,13 +277,13 @@ module Compiler
       }
       # Add move's data to records
       GameData::Move.register(move_hash)
-      move_names[move_number]        = move_hash[:name]
-      move_descriptions[move_number] = move_hash[:description]
+      move_names.push(move_hash[:name])
+      move_descriptions.push(move_hash[:description])
     }
     # Save all data
     GameData::Move.save
-    MessageTypes.setMessages(MessageTypes::Moves, move_names)
-    MessageTypes.setMessages(MessageTypes::MoveDescriptions, move_descriptions)
+    MessageTypes.setMessagesAsHash(MessageTypes::Moves, move_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::MoveDescriptions, move_descriptions)
     Graphics.update
   end
 
@@ -301,17 +297,13 @@ module Compiler
     item_descriptions = []
     # Read each line of items.txt at a time and compile it into an item
     pbCompilerEachCommentedLine(path) { |line, line_no|
-      line = pbGetCsvRecord(line, line_no, [0, "vnssuusuuUN"])
-      item_number = line[0]
+      line = pbGetCsvRecord(line, line_no, [0, "snssuusuuUN"])
       item_symbol = line[1].to_sym
-      if GameData::Item::DATA[item_number]
-        raise _INTL("Item ID number '{1}' is used twice.\r\n{2}", item_number, FileLineData.linereport)
-      elsif GameData::Item::DATA[item_symbol]
+      if GameData::Item::DATA[item_symbol]
         raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_symbol, FileLineData.linereport)
       end
       # Construct item hash
       item_hash = {
-        :id_number   => item_number,
         :id          => item_symbol,
         :name        => line[2],
         :name_plural => line[3],
@@ -325,15 +317,15 @@ module Compiler
       item_hash[:move] = parseMove(line[10]) if !nil_or_empty?(line[10])
       # Add item's data to records
       GameData::Item.register(item_hash)
-      item_names[item_number]        = item_hash[:name]
-      item_names_plural[item_number] = item_hash[:name_plural]
-      item_descriptions[item_number] = item_hash[:description]
+      item_names.push(item_hash[:name])
+      item_names_plural.push(item_hash[:name_plural])
+      item_descriptions.push(item_hash[:description])
     }
     # Save all data
     GameData::Item.save
-    MessageTypes.setMessages(MessageTypes::Items, item_names)
-    MessageTypes.setMessages(MessageTypes::ItemPlurals, item_names_plural)
-    MessageTypes.setMessages(MessageTypes::ItemDescriptions, item_descriptions)
+    MessageTypes.setMessagesAsHash(MessageTypes::Items, item_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::ItemPlurals, item_names_plural)
+    MessageTypes.setMessagesAsHash(MessageTypes::ItemDescriptions, item_descriptions)
     Graphics.update
   end
 
@@ -785,30 +777,27 @@ module Compiler
     ribbon_names        = []
     ribbon_descriptions = []
     pbCompilerEachPreppedLine(path) { |line, line_no|
-      line = pbGetCsvRecord(line, line_no, [0, "vnss"])
-      ribbon_number = line[0]
+      line = pbGetCsvRecord(line, line_no, [0, "unss"])
       ribbon_symbol = line[1].to_sym
-      if GameData::Ribbon::DATA[ribbon_number]
-        raise _INTL("Ribbon ID number '{1}' is used twice.\r\n{2}", ribbon_number, FileLineData.linereport)
-      elsif GameData::Ribbon::DATA[ribbon_symbol]
+      if GameData::Ribbon::DATA[ribbon_symbol]
         raise _INTL("Ribbon ID '{1}' is used twice.\r\n{2}", ribbon_symbol, FileLineData.linereport)
       end
       # Construct ribbon hash
       ribbon_hash = {
-        :id          => ribbon_symbol,
-        :id_number   => ribbon_number,
-        :name        => line[2],
-        :description => line[3]
+        :id            => ribbon_symbol,
+        :name          => line[2],
+        :description   => line[3],
+        :icon_position => line[0] - 1
       }
       # Add ribbon's data to records
       GameData::Ribbon.register(ribbon_hash)
-      ribbon_names[ribbon_number]        = ribbon_hash[:name]
-      ribbon_descriptions[ribbon_number] = ribbon_hash[:description]
+      ribbon_names.push(ribbon_hash[:name])
+      ribbon_descriptions.push(ribbon_hash[:description])
     }
     # Save all data
     GameData::Ribbon.save
-    MessageTypes.setMessages(MessageTypes::RibbonNames, ribbon_names)
-    MessageTypes.setMessages(MessageTypes::RibbonDescriptions, ribbon_descriptions)
+    MessageTypes.setMessagesAsHash(MessageTypes::RibbonNames, ribbon_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::RibbonDescriptions, ribbon_descriptions)
     Graphics.update
   end
 
@@ -924,23 +913,19 @@ module Compiler
     tr_type_names = []
     # Read each line of trainertypes.txt at a time and compile it into a trainer type
     pbCompilerEachCommentedLine(path) { |line, line_no|
-      line = pbGetCsvRecord(line, line_no, [0, "unsUSSSeUS",
+      line = pbGetCsvRecord(line, line_no, [0, "snsUSSSeUS",
         nil, nil, nil, nil, nil, nil, nil, {
         "Male"   => 0, "M" => 0, "0" => 0,
         "Female" => 1, "F" => 1, "1" => 1,
         "Mixed"  => 2, "X" => 2, "2" => 2, "" => 2
         }, nil, nil]
       )
-      type_number = line[0]
       type_symbol = line[1].to_sym
-      if GameData::TrainerType::DATA[type_number]
-        raise _INTL("Trainer type ID number '{1}' is used twice.\r\n{2}", type_number, FileLineData.linereport)
-      elsif GameData::TrainerType::DATA[type_symbol]
+      if GameData::TrainerType::DATA[type_symbol]
         raise _INTL("Trainer type ID '{1}' is used twice.\r\n{2}", type_symbol, FileLineData.linereport)
       end
       # Construct trainer type hash
       type_hash = {
-        :id_number   => type_number,
         :id          => type_symbol,
         :name        => line[2],
         :base_money  => line[3],
@@ -953,11 +938,11 @@ module Compiler
       }
       # Add trainer type's data to records
       GameData::TrainerType.register(type_hash)
-      tr_type_names[type_number] = type_hash[:name]
+      tr_type_names.push(type_hash[:name])
     }
     # Save all data
     GameData::TrainerType.save
-    MessageTypes.setMessages(MessageTypes::TrainerTypes, tr_type_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::TrainerTypes, tr_type_names)
     Graphics.update
   end
 
@@ -971,7 +956,6 @@ module Compiler
     trainer_names             = []
     trainer_lose_texts        = []
     trainer_hash              = nil
-    trainer_id                = -1
     current_pkmn              = nil
     old_format_current_line   = 0
     old_format_expected_lines = 0
@@ -990,18 +974,16 @@ module Compiler
           trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
           GameData::Trainer.register(trainer_hash)
         end
-        trainer_id += 1
         line_data = pbGetCsvRecord($~[1], line_no, [0, "esU", :TrainerType])
         # Construct trainer hash
         trainer_hash = {
-          :id_number    => trainer_id,
           :trainer_type => line_data[0],
           :name         => line_data[1],
           :version      => line_data[2] || 0,
           :pokemon      => []
         }
         current_pkmn = nil
-        trainer_names[trainer_id] = trainer_hash[:name]
+        trainer_names.push(trainer_hash[:name])
       elsif line[/^\s*(\w+)\s*=\s*(.*)$/]
         # XXX=YYY lines
         if !trainer_hash
@@ -1063,7 +1045,7 @@ module Compiler
         case property_name
         when "Items", "LoseText"
           trainer_hash[line_schema[0]] = property_value
-          trainer_lose_texts[trainer_id] = property_value if property_name == "LoseText"
+          trainer_lose_texts.push(property_value) if property_name == "LoseText"
         when "Pokemon"
           current_pkmn = {
             :species => property_value[0],
@@ -1097,11 +1079,9 @@ module Compiler
             trainer_hash[:id] = [trainer_hash[:trainer_type], trainer_hash[:name], trainer_hash[:version]]
             GameData::Trainer.register(trainer_hash)
           end
-          trainer_id += 1
           old_format_expected_lines = 3
           # Construct trainer hash
           trainer_hash = {
-            :id_number    => trainer_id,
             :trainer_type => nil,
             :name         => nil,
             :version      => 0,
@@ -1120,7 +1100,7 @@ module Compiler
           line_data = [line_data] if !line_data.is_a?(Array)
           trainer_hash[:name]    = line_data[0]
           trainer_hash[:version] = line_data[1] if line_data[1]
-          trainer_names[trainer_hash[:id_number]] = line_data[0]
+          trainer_names.push(trainer_hash[:name])
         when 3   # Number of Pokémon, items
           line_data = pbGetCsvRecord(line, line_no,
              [0, "vEEEEEEEE", nil, :Item, :Item, :Item, :Item, :Item, :Item, :Item, :Item])

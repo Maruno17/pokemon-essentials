@@ -158,15 +158,12 @@ module Compiler
     File.open("PBS/abilities.txt", "wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
-      idx = 1
       GameData::Ability.each do |a|
-        f.write(sprintf("%s,%s,%s,%s\r\n",
-          idx,
+        f.write(sprintf("0,%s,%s,%s\r\n",
           csvQuote(a.id.to_s),
           csvQuote(a.real_name),
           csvQuoteAlways(a.real_description)
         ))
-        idx += 1
       end
     }
     Graphics.update
@@ -184,8 +181,7 @@ module Compiler
           current_type = m.type
           f.write("\#-------------------------------\r\n")
         end
-        f.write(sprintf("%d,%s,%s,%s,%d,%s,%s,%d,%d,%d,%s,%d,%s,%s\r\n",
-          m.id_number,
+        f.write(sprintf("0,%s,%s,%s,%d,%s,%s,%d,%d,%d,%s,%d,%s,%s\r\n",
           csvQuote(m.id.to_s),
           csvQuote(m.real_name),
           csvQuote(m.function_code),
@@ -218,10 +214,9 @@ module Compiler
           f.write("\#-------------------------------\r\n")
         end
         move_name = (i.move) ? GameData::Move.get(i.move).id.to_s : ""
-        sprintf_text = "%d,%s,%s,%s,%d,%d,%s,%d,%d,%d\r\n"
-        sprintf_text = "%d,%s,%s,%s,%d,%d,%s,%d,%d,%d,%s\r\n" if move_name != ""
+        sprintf_text = "0,%s,%s,%s,%d,%d,%s,%d,%d,%d\r\n"
+        sprintf_text = "0,%s,%s,%s,%d,%d,%s,%d,%d,%d,%s\r\n" if move_name != ""
         f.write(sprintf(sprintf_text,
-          i.id_number,
           csvQuote(i.id.to_s),
           csvQuote(i.real_name),
           csvQuote(i.real_name_plural),
@@ -516,7 +511,7 @@ module Compiler
       f.write("\#-------------------------------\r\n")
       GameData::Ribbon.each do |r|
         f.write(sprintf("%d,%s,%s,%s\r\n",
-          r.id_number,
+          r.icon_position + 1,
           csvQuote(r.id.to_s),
           csvQuote(r.real_name),
           csvQuoteAlways(r.real_description)
@@ -569,8 +564,7 @@ module Compiler
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       GameData::TrainerType.each do |t|
-        f.write(sprintf("%d,%s,%s,%d,%s,%s,%s,%s,%s,%s\r\n",
-          t.id_number,
+        f.write(sprintf("0,%s,%s,%d,%s,%s,%s,%s,%s,%s\r\n",
           csvQuote(t.id.to_s),
           csvQuote(t.real_name),
           t.base_money,

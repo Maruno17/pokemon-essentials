@@ -1,7 +1,6 @@
 module GameData
   class Trainer
     attr_reader :id
-    attr_reader :id_number
     attr_reader :trainer_type
     attr_reader :real_name
     attr_reader :version
@@ -33,7 +32,7 @@ module GameData
       "Ball"         => [:poke_ball,     "e", :Item],
     }
 
-    extend ClassMethods
+    extend ClassMethodsSymbols
     include InstanceMethods
 
     # @param tr_type [Symbol, String]
@@ -72,7 +71,6 @@ module GameData
 
     def initialize(hash)
       @id             = hash[:id]
-      @id_number      = hash[:id_number]
       @trainer_type   = hash[:trainer_type]
       @real_name      = hash[:name]         || "Unnamed"
       @version        = hash[:version]      || 0
