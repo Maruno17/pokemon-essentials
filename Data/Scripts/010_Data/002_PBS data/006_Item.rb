@@ -14,6 +14,25 @@ module GameData
     DATA = {}
     DATA_FILENAME = "items.dat"
 
+    SCHEMA = {
+      "Name"        => [:name,        "s"],
+      "NamePlural"  => [:name_plural, "s"],
+      "Pocket"      => [:pocket,      "v"],
+      "Price"       => [:price,       "u"],
+      "Description" => [:description, "q"],
+      "FieldUse"    => [:field_use,   "e", {"OnPokemon" => 1, "Direct" => 2, "TM" => 3,
+                                            "HM" => 4, "OnPokemonReusable" => 5, "TR" => 6}],
+      "BattleUse"   => [:battle_use,  "e", {"OnPokemon" => 1, "OnMove" => 2, "OnBattler" => 3,
+                                            "OnFoe" => 4, "Direct" => 5, "OnPokemonReusable" => 6,
+                                            "OnMoveReusable" => 7, "OnBattlerReusable" => 8,
+                                            "OnFoeReusable" => 9, "DirectReusable" => 10}],
+      "Type"        => [:type,        "e", {"Mail" => 1, "IconMail" => 2, "SnagBall" => 3,
+                                            "PokeBall" => 4, "Berry" => 5, "KeyItem" => 6,
+                                            "EvolutionStone" => 7, "Fossil" => 8, "Apricorn" => 9,
+                                            "TypeGem" => 10, "Mulch" => 11, "MegaStone" => 12}],
+      "Move"        => [:move,        "e", :Move]
+    }
+
     extend ClassMethodsSymbols
     include InstanceMethods
 

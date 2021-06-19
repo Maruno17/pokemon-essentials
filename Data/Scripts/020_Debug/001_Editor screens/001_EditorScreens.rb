@@ -796,30 +796,23 @@ end
 # Item editor
 #===============================================================================
 def pbItemEditor
+  field_use_array = [_INTL("Can't use in field")]
+  GameData::Item::SCHEMA["FieldUse"][2].each { |key, value| field_use_array[value] = key }
+  battle_use_array = [_INTL("Can't use in battle")]
+  GameData::Item::SCHEMA["BattleUse"][2].each { |key, value| battle_use_array[value] = key }
+  type_array = [_INTL("No special type")]
+  GameData::Item::SCHEMA["Type"][2].each { |key, value| type_array[value] = key }
   item_properties = [
-     [_INTL("Internal Name"),     ReadOnlyProperty,          _INTL("Internal name that is used as a symbol like :XXX.")],
-     [_INTL("Item Name"),         ItemNameProperty,          _INTL("Name of the item as displayed by the game.")],
-     [_INTL("Item Name Plural"),  ItemNameProperty,          _INTL("Plural name of the item as displayed by the game.")],
-     [_INTL("Pocket"),            PocketProperty,            _INTL("Pocket in the bag where the item is stored.")],
-     [_INTL("Purchase price"),    LimitProperty.new(999999), _INTL("Purchase price of the item.")],
-     [_INTL("Description"),       StringProperty,            _INTL("Description of the item")],
-     [_INTL("Use Out of Battle"), EnumProperty.new([
-        _INTL("Can't Use"), _INTL("On a Pokémon"), _INTL("Use directly"),
-        _INTL("TM"), _INTL("HM"), _INTL("On a Pokémon reusable"),
-       _INTL("TR")]),                                        _INTL("Specifies how this item can be used outside of battle.")],
-     [_INTL("Use In Battle"),     EnumProperty.new([
-        _INTL("Can't Use"), _INTL("On a Pokémon"), _INTL("On Pokémon's move"),
-        _INTL("On battler"), _INTL("On foe battler"), _INTL("Use directly"),
-        _INTL("On a Pokémon reusable"), _INTL("On Pokémon's move reusable"),
-        _INTL("On battler reusable"), _INTL("On foe battler reusable"),
-        _INTL("Use directly reusable")]),                    _INTL("Specifies how this item can be used within a battle.")],
-     [_INTL("Special Items"),     EnumProperty.new([
-        _INTL("None of below"), _INTL("Mail"), _INTL("Mail with Pictures"),
-        _INTL("Snag Ball"), _INTL("Poké Ball"), _INTL("Plantable Berry"),
-        _INTL("Key Item"), _INTL("Evolution Stone"), _INTL("Fossil"),
-        _INTL("Apricorn"), _INTL("Type-boosting Gem"), _INTL("Mulch"),
-        _INTL("Mega Stone")]),                               _INTL("For special kinds of items.")],
-     [_INTL("Machine"),           MoveProperty,              _INTL("Move taught by this TM or HM.")]
+     [_INTL("ID"),          ReadOnlyProperty,                   _INTL("ID of this item (used as a symbol like :XXX).")],
+     [_INTL("Name"),        ItemNameProperty,                   _INTL("Name of this item as displayed by the game.")],
+     [_INTL("NamePlural"),  ItemNameProperty,                   _INTL("Plural name of this item as displayed by the game.")],
+     [_INTL("Pocket"),      PocketProperty,                     _INTL("Pocket in the Bag where this item is stored.")],
+     [_INTL("Price"),       LimitProperty.new(999999),          _INTL("Purchase price of this item.")],
+     [_INTL("Description"), StringProperty,                     _INTL("Description of this item")],
+     [_INTL("FieldUse"),    EnumProperty.new(field_use_array),  _INTL("How this item can be used outside of battle.")],
+     [_INTL("BattleUse"),   EnumProperty.new(battle_use_array), _INTL("How this item can be used within a battle.")],
+     [_INTL("Type"),        EnumProperty.new(type_array),       _INTL("For special kinds of items.")],
+     [_INTL("Move"),        MoveProperty,                       _INTL("Move taught by this HM, TM or TR.")]
   ]
   pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) { |button, item|
     if item

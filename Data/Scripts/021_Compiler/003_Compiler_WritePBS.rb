@@ -207,27 +207,21 @@ module Compiler
   def write_items
     File.open("PBS/items.txt", "wb") { |f|
       add_PBS_header_to_file(f)
-      current_pocket = 0
-      GameData::Item.each do |i|
-        if current_pocket != i.pocket
-          current_pocket = i.pocket
-          f.write("\#-------------------------------\r\n")
-        end
-        move_name = (i.move) ? GameData::Move.get(i.move).id.to_s : ""
-        sprintf_text = "0,%s,%s,%s,%d,%d,%s,%d,%d,%d\r\n"
-        sprintf_text = "0,%s,%s,%s,%d,%d,%s,%d,%d,%d,%s\r\n" if move_name != ""
-        f.write(sprintf(sprintf_text,
-          csvQuote(i.id.to_s),
-          csvQuote(i.real_name),
-          csvQuote(i.real_name_plural),
-          i.pocket,
-          i.price,
-          csvQuoteAlways(i.real_description),
-          i.field_use,
-          i.battle_use,
-          i.type,
-          csvQuote(move_name)
-        ))
+      GameData::Item.each do |item|
+        f.write("\#-------------------------------\r\n")
+        f.write(sprintf("[%s]\r\n", item.id))
+        f.write(sprintf("Name = %s\r\n", item.real_name))
+        f.write(sprintf("NamePlural = %s\r\n", item.real_name_plural))
+        f.write(sprintf("Pocket = %d\r\n", item.pocket))
+        f.write(sprintf("Price = %d\r\n", item.price))
+        field_use = GameData::Item::SCHEMA["FieldUse"][2].key(item.field_use)
+        f.write(sprintf("FieldUse = %s\r\n", field_use)) if field_use
+        battle_use = GameData::Item::SCHEMA["BattleUse"][2].key(item.battle_use)
+        f.write(sprintf("BattleUse = %s\r\n", battle_use)) if battle_use
+        type = GameData::Item::SCHEMA["Type"][2].key(item.type)
+        f.write(sprintf("Type = %s\r\n", type)) if type
+        f.write(sprintf("Move = %s\r\n", item.move)) if item.move
+        f.write(sprintf("Description = %s\r\n", item.real_description))
       end
     }
     Graphics.update

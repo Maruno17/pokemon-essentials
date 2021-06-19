@@ -292,35 +292,77 @@ module Compiler
   #=============================================================================
   def compile_items(path = "PBS/items.txt")
     GameData::Item::DATA.clear
+    schema = GameData::Item::SCHEMA
     item_names        = []
     item_names_plural = []
     item_descriptions = []
+    item_hash         = nil
     # Read each line of items.txt at a time and compile it into an item
-    pbCompilerEachCommentedLine(path) { |line, line_no|
-      line = pbGetCsvRecord(line, line_no, [0, "snssuusuuUN"])
-      item_symbol = line[1].to_sym
-      if GameData::Item::DATA[item_symbol]
-        raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_symbol, FileLineData.linereport)
+    pbCompilerEachPreppedLine(path) { |line, line_no|
+      if line[/^\s*\[\s*(.+)\s*\]\s*$/]   # New section [item_id]
+        # Add previous item's data to records
+        GameData::Item.register(item_hash) if item_hash
+        # Parse item ID
+        item_id = $~[1].to_sym
+        if GameData::Item.exists?(item_id)
+          raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_id, FileLineData.linereport)
+        end
+        # Construct item hash
+        item_hash = {
+          :id => item_id
+        }
+      elsif line[/^\s*(\w+)\s*=\s*(.*)\s*$/]   # XXX=YYY lines
+        if !item_hash
+          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
+        end
+        # Parse property and value
+        property_name = $~[1]
+        line_schema = schema[property_name]
+        next if !line_schema
+        property_value = pbGetCsvRecord($~[2], line_no, line_schema)
+        # Record XXX=YYY setting
+        item_hash[line_schema[0]] = property_value
+        case property_name
+        when "Name"
+          item_names.push(item_hash[:name])
+        when "NamePlural"
+          item_names_plural.push(item_hash[:name_plural])
+        when "Description"
+          item_descriptions.push(item_hash[:description])
+        end
+      else   # Old format
+        # Add previous item's data to records
+        GameData::Item.register(item_hash) if item_hash
+        # Parse item
+        line = pbGetCsvRecord(line, line_no, [0, "snssvusuuUE", nil, nil, nil,
+           nil, nil, nil, nil, nil, nil, nil, :Move])
+        item_id = line[1].to_sym
+        if GameData::Item.exists?(item_id)
+          raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_id, FileLineData.linereport)
+        end
+        # Construct item hash
+        item_hash = {
+          :id          => item_id,
+          :name        => line[2],
+          :name_plural => line[3],
+          :pocket      => line[4],
+          :price       => line[5],
+          :description => line[6],
+          :field_use   => line[7],
+          :battle_use  => line[8],
+          :type        => line[9],
+          :move        => line[10]
+        }
+        # Add item's data to records
+        GameData::Item.register(item_hash)
+        item_names.push(item_hash[:name])
+        item_names_plural.push(item_hash[:name_plural])
+        item_descriptions.push(item_hash[:description])
+        item_hash = nil
       end
-      # Construct item hash
-      item_hash = {
-        :id          => item_symbol,
-        :name        => line[2],
-        :name_plural => line[3],
-        :pocket      => line[4],
-        :price       => line[5],
-        :description => line[6],
-        :field_use   => line[7],
-        :battle_use  => line[8],
-        :type        => line[9]
-      }
-      item_hash[:move] = parseMove(line[10]) if !nil_or_empty?(line[10])
-      # Add item's data to records
-      GameData::Item.register(item_hash)
-      item_names.push(item_hash[:name])
-      item_names_plural.push(item_hash[:name_plural])
-      item_descriptions.push(item_hash[:description])
     }
+    # Add last item's data to records
+    GameData::Item.register(item_hash) if item_hash
     # Save all data
     GameData::Item.save
     MessageTypes.setMessagesAsHash(MessageTypes::Items, item_names)
