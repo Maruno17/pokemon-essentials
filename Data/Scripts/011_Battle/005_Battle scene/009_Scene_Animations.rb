@@ -383,14 +383,14 @@ class PokeBattle_Scene
   # Returns the animation ID to use for a given move/user. Returns nil if that
   # move has no animations defined for it.
   def pbFindMoveAnimDetails(move2anim,moveID,idxUser,hitNum=0)
-    id_number = GameData::Move.get(moveID).id_number
+    real_move_id = GameData::Move.get(moveID).id
     noFlip = false
     if (idxUser&1)==0   # On player's side
-      anim = move2anim[0][id_number]
+      anim = move2anim[0][real_move_id]
     else                # On opposing side
-      anim = move2anim[1][id_number]
+      anim = move2anim[1][real_move_id]
       noFlip = true if anim
-      anim = move2anim[0][id_number] if !anim
+      anim = move2anim[0][real_move_id] if !anim
     end
     return [anim+hitNum,noFlip] if anim
     return nil

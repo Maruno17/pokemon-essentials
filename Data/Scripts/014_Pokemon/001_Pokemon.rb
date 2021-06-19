@@ -456,7 +456,10 @@ class Pokemon
 
   # @return [GameData::Nature, nil] a Nature object corresponding to this Pokémon's nature
   def nature
-    @nature = GameData::Nature.get(@personalID % GameData::Nature.count).id if !@nature
+    if !@nature
+      idx = @personalID % GameData::Nature.count
+      @nature = GameData::Nature.get(GameData::Nature.keys[idx]).id
+    end
     return GameData::Nature.try_get(@nature)
   end
 

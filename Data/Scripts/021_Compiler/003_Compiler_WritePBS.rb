@@ -158,13 +158,15 @@ module Compiler
     File.open("PBS/abilities.txt", "wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
+      idx = 1
       GameData::Ability.each do |a|
-        f.write(sprintf("%d,%s,%s,%s\r\n",
-          a.id_number,
+        f.write(sprintf("%s,%s,%s,%s\r\n",
+          idx,
           csvQuote(a.id.to_s),
           csvQuote(a.real_name),
           csvQuoteAlways(a.real_description)
         ))
+        idx += 1
       end
     }
     Graphics.update

@@ -142,7 +142,7 @@ class BerryPlantSprite
         if secondsalive+timeDiff>=timeperstage*numlifestages
           # Should replant
           if berryData[5]>=maxreplants   # Too many replants
-            return [0,0,0,0,0,0,0,0]
+            return [0,nil,0,0,0,0,0,nil]
           end
           # Replant
           berryData[0]=2   # replants start in sprouting stage
@@ -215,7 +215,7 @@ class BerryPlantSprite
             berryData[4]=0                      # reset total waterings count
             berryData[5]+=1                     # add to replanted count
             if berryData[5] > GameData::BerryPlant::NUMBER_OF_REPLANTS   # Too many replants
-              berryData = [0,0,false,0,0,0]
+              berryData = [0,nil,false,0,0,0]
               break
             end
           else
@@ -272,18 +272,18 @@ def pbBerryPlant
   berryData=interp.getVariable
   if !berryData
     if Settings::NEW_BERRY_PLANTS
-      berryData=[0,nil,0,0,0,0,0,0]
+      berryData=[0,nil,0,0,0,0,0,nil]
     else
       berryData=[0,nil,false,0,0,0]
     end
   end
   # Stop the event turning towards the player
   case berryData[0]
-  when 1 then thisEvent.turn_down  # X planted
-  when 2 then thisEvent.turn_down  # X sprouted
-  when 3 then thisEvent.turn_left  # X taller
-  when 4 then thisEvent.turn_right  # X flowering
-  when 5 then thisEvent.turn_up  # X berries
+  when 1 then thisEvent.turn_down    # X planted
+  when 2 then thisEvent.turn_down    # X sprouted
+  when 3 then thisEvent.turn_left    # X taller
+  when 4 then thisEvent.turn_right   # X flowering
+  when 5 then thisEvent.turn_up      # X berries
   end
   watering = [:SPRAYDUCK, :SQUIRTBOTTLE, :WAILMERPAIL, :SPRINKLOTAD]
   berry=berryData[1]
@@ -291,13 +291,13 @@ def pbBerryPlant
   when 0  # empty
     if Settings::NEW_BERRY_PLANTS
       # Gen 4 planting mechanics
-      if !berryData[7] || berryData[7]==0 # No mulch used yet
+      if !berryData[7]   # No mulch used yet
         cmd=pbMessage(_INTL("It's soft, earthy soil."),[
                             _INTL("Fertilize"),
                             _INTL("Plant Berry"),
                             _INTL("Exit")],-1)
         if cmd==0 # Fertilize
-          ret=0
+          ret=nil
           pbFadeOutIn {
             scene = PokemonBag_Scene.new
             screen = PokemonBagScreen.new(scene,$PokemonBag)
@@ -306,6 +306,7 @@ def pbBerryPlant
           if ret
             if GameData::Item.get(ret).is_mulch?
               berryData[7]=ret
+              $PokemonBag.pbDeleteItem(ret, 1)
               pbMessage(_INTL("The {1} was scattered on the soil.\1",GameData::Item.get(ret).name))
               if pbConfirmMessage(_INTL("Want to plant a Berry?"))
                 pbFadeOutIn {
@@ -468,7 +469,7 @@ def pbBerryPlant
          $Trainer.name,itemname,pocket,PokemonBag.pocketNames()[pocket]))
       if Settings::NEW_BERRY_PLANTS
         pbMessage(_INTL("The soil returned to its soft and earthy state."))
-        berryData=[0,nil,0,0,0,0,0,0]
+        berryData=[0,nil,0,0,0,0,0,nil]
       else
         pbMessage(_INTL("The soil returned to its soft and loamy state."))
         berryData=[0,nil,false,0,0,0]
@@ -531,7 +532,7 @@ def pbPickBerry(berry, qty = 1)
        $Trainer.name,itemname,pocket,PokemonBag.pocketNames()[pocket]))
     if Settings::NEW_BERRY_PLANTS
       pbMessage(_INTL("The soil returned to its soft and earthy state."))
-      berryData=[0,nil,0,0,0,0,0,0]
+      berryData=[0,nil,0,0,0,0,0,nil]
     else
       pbMessage(_INTL("The soil returned to its soft and loamy state."))
       berryData=[0,nil,false,0,0,0]

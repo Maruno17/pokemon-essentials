@@ -212,30 +212,26 @@ module Compiler
     ability_names        = []
     ability_descriptions = []
     pbCompilerEachPreppedLine(path) { |line, line_no|
-      line = pbGetCsvRecord(line, line_no, [0, "vnss"])
-      ability_number = line[0]
+      line = pbGetCsvRecord(line, line_no, [0, "snss"])
       ability_symbol = line[1].to_sym
-      if GameData::Ability::DATA[ability_number]
-        raise _INTL("Ability ID number '{1}' is used twice.\r\n{2}", ability_number, FileLineData.linereport)
-      elsif GameData::Ability::DATA[ability_symbol]
+      if GameData::Ability::DATA[ability_symbol]
         raise _INTL("Ability ID '{1}' is used twice.\r\n{2}", ability_symbol, FileLineData.linereport)
       end
       # Construct ability hash
       ability_hash = {
         :id          => ability_symbol,
-        :id_number   => ability_number,
         :name        => line[2],
         :description => line[3]
       }
       # Add ability's data to records
       GameData::Ability.register(ability_hash)
-      ability_names[ability_number]        = ability_hash[:name]
-      ability_descriptions[ability_number] = ability_hash[:description]
+      ability_names.push(ability_hash[:name])
+      ability_descriptions.push(ability_hash[:description])
     }
     # Save all data
     GameData::Ability.save
-    MessageTypes.setMessages(MessageTypes::Abilities, ability_names)
-    MessageTypes.setMessages(MessageTypes::AbilityDescs, ability_descriptions)
+    MessageTypes.setMessagesAsHash(MessageTypes::Abilities, ability_names)
+    MessageTypes.setMessagesAsHash(MessageTypes::AbilityDescs, ability_descriptions)
     Graphics.update
   end
 
@@ -350,13 +346,11 @@ module Compiler
       if line[/^\s*(\w+)\s*=\s*(.*)$/]   # Of the format XXX = YYY
         key   = $1
         value = $2
-        item_symbol = parseItem(key)
-        item_number = GameData::Item.get(item_symbol).id_number
+        item_id = parseItem(key)
         line = pbGetCsvRecord(value, line_no, [0, "vuuv"])
         # Construct berry plant hash
         berry_plant_hash = {
-          :id              => item_symbol,
-          :id_number       => item_number,
+          :id              => item_id,
           :hours_per_stage => line[0],
           :drying_per_hour => line[1],
           :minimum_yield   => line[2],
@@ -1419,7 +1413,7 @@ module Compiler
       pbanims = PBAnimations.new
     end
     changed = false
-    move2anim = [[],[]]
+    move2anim = [{}, {}]
 =begin
     anims = load_data("Data/Animations.rxdata")
     for anim in anims
@@ -1438,13 +1432,13 @@ module Compiler
       next if !pbanims[i]
       if pbanims[i].name[/^OppMove\:\s*(.*)$/]
         if GameData::Move.exists?($~[1])
-          moveid = GameData::Move.get($~[1]).id_number
+          moveid = GameData::Move.get($~[1]).id
           changed = true if !move2anim[0][moveid] || move2anim[1][moveid] != i
           move2anim[1][moveid] = i
         end
       elsif pbanims[i].name[/^Move\:\s*(.*)$/]
         if GameData::Move.exists?($~[1])
-          moveid = GameData::Move.get($~[1]).id_number
+          moveid = GameData::Move.get($~[1]).id
           changed = true if !move2anim[0][moveid] || move2anim[0][moveid] != i
           move2anim[0][moveid] = i
         end

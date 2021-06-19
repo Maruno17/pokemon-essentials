@@ -128,7 +128,7 @@ module GameData
         else
           pkmn.reset_moves
         end
-        pkmn.ability_index = pkmn_data[:ability_index]
+        pkmn.ability_index = pkmn_data[:ability_index] || 0
         pkmn.ability = pkmn_data[:ability]
         pkmn.gender = pkmn_data[:gender] || ((trainer.male?) ? 0 : 1)
         pkmn.shiny = (pkmn_data[:shininess]) ? true : false
@@ -137,7 +137,8 @@ module GameData
         else   # Make the nature random but consistent for the same species used by the same trainer type
           species_num = GameData::Species.keys.index(species) || 1
           tr_type_num = GameData::TrainerType.keys.index(@trainer_type) || 1
-          pkmn.nature = (species_num + tr_type_num) % GameData::Nature.count
+          idx = (species_num + tr_type_num) % GameData::Nature.count
+          pkmn.nature = GameData::Nature.get(GameData::Nature.keys[idx]).id
         end
         GameData::Stat.each_main do |s|
           if pkmn_data[:iv]
