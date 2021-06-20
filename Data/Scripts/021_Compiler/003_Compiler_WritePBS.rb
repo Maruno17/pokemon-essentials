@@ -497,14 +497,13 @@ module Compiler
   def write_ribbons
     File.open("PBS/ribbons.txt", "wb") { |f|
       add_PBS_header_to_file(f)
-      f.write("\#-------------------------------\r\n")
-      GameData::Ribbon.each do |r|
-        f.write(sprintf("%d,%s,%s,%s\r\n",
-          r.icon_position + 1,
-          csvQuote(r.id.to_s),
-          csvQuote(r.real_name),
-          csvQuoteAlways(r.real_description)
-        ))
+      # Write each ability in turn
+      GameData::Ribbon.each do |ribbon|
+        f.write("\#-------------------------------\r\n")
+        f.write("[#{ribbon.id}]\r\n")
+        f.write("Name = #{ribbon.real_name}\r\n")
+        f.write("IconPosition = #{ribbon.icon_position}\r\n")
+        f.write("Description = #{ribbon.real_description}\r\n")
       end
     }
     Graphics.update

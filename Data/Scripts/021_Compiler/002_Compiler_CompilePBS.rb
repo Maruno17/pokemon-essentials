@@ -921,26 +921,65 @@ module Compiler
   #=============================================================================
   def compile_ribbons(path = "PBS/ribbons.txt")
     GameData::Ribbon::DATA.clear
+    schema = GameData::Ribbon::SCHEMA
     ribbon_names        = []
     ribbon_descriptions = []
+    ribbon_hash         = nil
     pbCompilerEachPreppedLine(path) { |line, line_no|
-      line = pbGetCsvRecord(line, line_no, [0, "unss"])
-      ribbon_symbol = line[1].to_sym
-      if GameData::Ribbon::DATA[ribbon_symbol]
-        raise _INTL("Ribbon ID '{1}' is used twice.\r\n{2}", ribbon_symbol, FileLineData.linereport)
+      if line[/^\s*\[\s*(.+)\s*\]\s*$/]   # New section [ribbon_id]
+        # Add previous ribbon's data to records
+        GameData::Ribbon.register(ribbon_hash) if ribbon_hash
+        # Parse ribbon ID
+        ribbon_id = $~[1].to_sym
+        if GameData::Ribbon.exists?(ribbon_id)
+          raise _INTL("Ribbon ID '{1}' is used twice.\r\n{2}", ribbon_id, FileLineData.linereport)
+        end
+        # Construct ribbon hash
+        ribbon_hash = {
+          :id => ribbon_id
+        }
+      elsif line[/^\s*(\w+)\s*=\s*(.*)\s*$/]   # XXX=YYY lines
+        if !ribbon_hash
+          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
+        end
+        # Parse property and value
+        property_name = $~[1]
+        line_schema = schema[property_name]
+        next if !line_schema
+        property_value = pbGetCsvRecord($~[2], line_no, line_schema)
+        # Record XXX=YYY setting
+        ribbon_hash[line_schema[0]] = property_value
+        case property_name
+        when "Name"
+          ribbon_names.push(ribbon_hash[:name])
+        when "Description"
+          ribbon_descriptions.push(ribbon_hash[:description])
+        end
+      else   # Old format
+        # Add previous ribbon's data to records
+        GameData::Ribbon.register(ribbon_hash) if ribbon_hash
+        # Parse ribbon
+        line = pbGetCsvRecord(line, line_no, [0, "unss"])
+        ribbon_id = line[1].to_sym
+        if GameData::Ribbon::DATA[ribbon_id]
+          raise _INTL("Ribbon ID '{1}' is used twice.\r\n{2}", ribbon_id, FileLineData.linereport)
+        end
+        # Construct ribbon hash
+        ribbon_hash = {
+          :id            => ribbon_id,
+          :name          => line[2],
+          :description   => line[3],
+          :icon_position => line[0] - 1
+        }
+        # Add ribbon's data to records
+        GameData::Ribbon.register(ribbon_hash)
+        ribbon_names.push(ribbon_hash[:name])
+        ribbon_descriptions.push(ribbon_hash[:description])
+        ribbon_hash = nil
       end
-      # Construct ribbon hash
-      ribbon_hash = {
-        :id            => ribbon_symbol,
-        :name          => line[2],
-        :description   => line[3],
-        :icon_position => line[0] - 1
-      }
-      # Add ribbon's data to records
-      GameData::Ribbon.register(ribbon_hash)
-      ribbon_names.push(ribbon_hash[:name])
-      ribbon_descriptions.push(ribbon_hash[:description])
     }
+    # Add last ribbon's data to records
+    GameData::Ribbon.register(ribbon_hash) if ribbon_hash
     # Save all data
     GameData::Ribbon.save
     MessageTypes.setMessagesAsHash(MessageTypes::RibbonNames, ribbon_names)

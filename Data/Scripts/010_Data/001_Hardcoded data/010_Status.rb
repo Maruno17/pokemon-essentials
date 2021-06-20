@@ -23,7 +23,7 @@ module GameData
       @id            = hash[:id]
       @real_name     = hash[:name]          || "Unnamed"
       @animation     = hash[:animation]
-      @icon_position = hash[:icon_position] || -1   # -1 means "no icon"
+      @icon_position = hash[:icon_position] || 0
     end
 
     # @return [String] the translated name of this status condition

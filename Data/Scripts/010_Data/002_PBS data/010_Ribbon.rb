@@ -2,11 +2,17 @@ module GameData
   class Ribbon
     attr_reader :id
     attr_reader :real_name
-    attr_reader :real_description
     attr_reader :icon_position   # Where this ribbon's graphic is within ribbons.png
+    attr_reader :real_description
 
     DATA = {}
     DATA_FILENAME = "ribbons.dat"
+
+    SCHEMA = {
+      "Name"         => [:name,          "s"],
+      "IconPosition" => [:icon_position, "u"],
+      "Description"  => [:description,   "q"]
+    }
 
     extend ClassMethodsSymbols
     include InstanceMethods
@@ -14,8 +20,8 @@ module GameData
     def initialize(hash)
       @id               = hash[:id]
       @real_name        = hash[:name]          || "Unnamed"
+      @icon_position    = hash[:icon_position] || 0
       @real_description = hash[:description]   || "???"
-      @icon_position    = hash[:icon_position] || -1
     end
 
     # @return [String] the translated name of this ribbon

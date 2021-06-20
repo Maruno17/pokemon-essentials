@@ -19,7 +19,7 @@ module GameData
     def initialize(hash)
       @id            = hash[:id]
       @real_name     = hash[:name]          || "Unnamed"
-      @icon_position = hash[:icon_position] || -1   # -1 means "no icon"
+      @icon_position = hash[:icon_position] || 0
     end
 
     # @return [String] the translated name of this body shape
