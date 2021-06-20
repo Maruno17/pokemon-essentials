@@ -80,25 +80,25 @@ module GameData
     def self.schema(compiling_forms = false)
       ret = {
         "FormName"          => [0, "q"],
-        "Kind"              => [0, "s"],
+        "Category"          => [0, "s"],
         "Pokedex"           => [0, "q"],
         "Type1"             => [0, "e", :Type],
         "Type2"             => [0, "e", :Type],
         "BaseStats"         => [0, "vvvvvv"],
-        "EffortPoints"      => [0, "uuuuuu"],
-        "BaseEXP"           => [0, "v"],
-        "Rareness"          => [0, "u"],
+        "EVs"               => [0, "uuuuuu"],
+        "BaseExp"           => [0, "v"],
+        "CatchRate"         => [0, "u"],
         "Happiness"         => [0, "u"],
         "Moves"             => [0, "*ue", nil, :Move],
         "TutorMoves"        => [0, "*e", :Move],
         "EggMoves"          => [0, "*e", :Move],
         "Abilities"         => [0, "*e", :Ability],
-        "HiddenAbility"     => [0, "*e", :Ability],
+        "HiddenAbilities"   => [0, "*e", :Ability],
         "WildItemCommon"    => [0, "e", :Item],
         "WildItemUncommon"  => [0, "e", :Item],
         "WildItemRare"      => [0, "e", :Item],
-        "Compatibility"     => [0, "*e", :EggGroup],
-        "StepsToHatch"      => [0, "v"],
+        "EggGroups"         => [0, "*e", :EggGroup],
+        "HatchSteps"        => [0, "v"],
         "Height"            => [0, "f"],
         "Weight"            => [0, "f"],
         "Color"             => [0, "e", :BodyColor],
@@ -111,7 +111,16 @@ module GameData
         "BattlerEnemyY"     => [0, "i"],
         "BattlerAltitude"   => [0, "i"],
         "BattlerShadowX"    => [0, "i"],
-        "BattlerShadowSize" => [0, "u"]
+        "BattlerShadowSize" => [0, "u"],
+        # All properties below here are old names for some properties above.
+        # They will be removed in v21.
+        "Rareness"          => [0, "u"],
+        "Compatibility"     => [0, "*e", :EggGroup],
+        "Kind"              => [0, "s"],
+        "BaseEXP"           => [0, "v"],
+        "EffortPoints"      => [0, "uuuuuu"],
+        "HiddenAbility"     => [0, "*e", :Ability],
+        "StepsToHatch"      => [0, "v"],
       }
       if compiling_forms
         ret["PokedexForm"]  = [0, "u"]
@@ -124,9 +133,12 @@ module GameData
         ret["InternalName"] = [0, "n"]
         ret["Name"]         = [0, "s"]
         ret["GrowthRate"]   = [0, "e", :GrowthRate]
-        ret["GenderRate"]   = [0, "e", :GenderRatio]
+        ret["GenderRatio"]  = [0, "e", :GenderRatio]
         ret["Incense"]      = [0, "e", :Item]
         ret["Evolutions"]   = [0, "*ses", nil, :Evolution, nil]
+        # All properties below here are old names for some properties above.
+        # They will be removed in v21.
+        ret["GenderRate"]   = [0, "e", :GenderRatio]
       end
       return ret
     end

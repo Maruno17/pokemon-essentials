@@ -546,7 +546,7 @@ module Compiler
           contents[key] = value
           # Sanitise data
           case key
-          when "BaseStats", "EffortPoints"
+          when "BaseStats", "EVs", "EffortPoints"
             value_hash = {}
             GameData::Stat.each_main do |s|
               value_hash[s.id] = value[s.pbs_order] if s.pbs_order >= 0
@@ -567,7 +567,7 @@ module Compiler
             move_array.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=>b [0] }
             move_array.each { |arr| arr.pop }
             contents[key] = move_array
-          when "TutorMoves", "EggMoves", "Abilities", "HiddenAbility", "Compatibility"
+          when "TutorMoves", "EggMoves", "Abilities", "HiddenAbilities", "HiddenAbility", "EggGroups", "Compatibility"
             contents[key] = [contents[key]] if !contents[key].is_a?(Array)
             contents[key].compact!
           when "Evolutions"
@@ -583,27 +583,27 @@ module Compiler
           :id                    => contents["InternalName"].to_sym,
           :name                  => contents["Name"],
           :form_name             => contents["FormName"],
-          :category              => contents["Kind"],
+          :category              => contents["Category"] || contents["Kind"],
           :pokedex_entry         => contents["Pokedex"],
           :type1                 => contents["Type1"],
           :type2                 => contents["Type2"],
           :base_stats            => contents["BaseStats"],
-          :evs                   => contents["EffortPoints"],
-          :base_exp              => contents["BaseEXP"],
+          :evs                   => contents["EVs"] || contents["EffortPoints"],
+          :base_exp              => contents["BaseExp"] || contents["BaseEXP"],
           :growth_rate           => contents["GrowthRate"],
-          :gender_ratio          => contents["GenderRate"],
-          :catch_rate            => contents["Rareness"],
+          :gender_ratio          => contents["GenderRatio"] || contents["GenderRate"],
+          :catch_rate            => contents["CatchRate"] || contents["Rareness"],
           :happiness             => contents["Happiness"],
           :moves                 => contents["Moves"],
           :tutor_moves           => contents["TutorMoves"],
           :egg_moves             => contents["EggMoves"],
           :abilities             => contents["Abilities"],
-          :hidden_abilities      => contents["HiddenAbility"],
+          :hidden_abilities      => contents["HiddenAbilities"] || contents["HiddenAbility"],
           :wild_item_common      => contents["WildItemCommon"],
           :wild_item_uncommon    => contents["WildItemUncommon"],
           :wild_item_rare        => contents["WildItemRare"],
-          :egg_groups            => contents["Compatibility"],
-          :hatch_steps           => contents["StepsToHatch"],
+          :egg_groups            => contents["EggGroups"] || contents["Compatibility"],
+          :hatch_steps           => contents["HatchSteps"] || contents["StepsToHatch"],
           :incense               => contents["Incense"],
           :evolutions            => contents["Evolutions"],
           :height                => contents["Height"],
@@ -683,7 +683,7 @@ module Compiler
         # Split section_name into a species number and form number
         split_section_name = section_name.split(/[-,\s]/)
         if split_section_name.length != 2
-          raise _INTL("Section name {1} is invalid ({2}). Expected syntax like [XXX,Y] (XXX=internal name, Y=form number).", sectionName, path)
+          raise _INTL("Section name {1} is invalid ({2}). Expected syntax like [XXX,Y] (XXX=species ID, Y=form number).", sectionName, path)
         end
         species_symbol = csvEnumField!(split_section_name[0], :Species, nil, nil)
         form           = csvPosInt!(split_section_name[1])
@@ -713,7 +713,7 @@ module Compiler
           contents[key] = value
           # Sanitise data
           case key
-          when "BaseStats", "EffortPoints"
+          when "BaseStats", "EVs", "EffortPoints"
             value_hash = {}
             GameData::Stat.each_main do |s|
               value_hash[s.id] = value[s.pbs_order] if s.pbs_order >= 0
@@ -734,7 +734,7 @@ module Compiler
             move_array.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=>b [0] }
             move_array.each { |arr| arr.pop }
             contents[key] = move_array
-          when "TutorMoves", "EggMoves", "Abilities", "HiddenAbility", "Compatibility"
+          when "TutorMoves", "EggMoves", "Abilities", "HiddenAbilities", "HiddenAbility", "EggGroups", "Compatibility"
             contents[key] = [contents[key]] if !contents[key].is_a?(Array)
             contents[key].compact!
           when "Evolutions"
@@ -772,28 +772,28 @@ module Compiler
           :form                  => form,
           :name                  => base_data.real_name,
           :form_name             => contents["FormName"],
-          :category              => contents["Kind"] || base_data.real_category,
+          :category              => contents["Category"] || contents["Kind"] || base_data.real_category,
           :pokedex_entry         => contents["Pokedex"] || base_data.real_pokedex_entry,
           :pokedex_form          => contents["PokedexForm"],
           :type1                 => contents["Type1"] || base_data.type1,
           :type2                 => contents["Type2"] || base_data.type2,
           :base_stats            => contents["BaseStats"] || base_data.base_stats,
-          :evs                   => contents["EffortPoints"] || base_data.evs,
-          :base_exp              => contents["BaseEXP"] || base_data.base_exp,
+          :evs                   => contents["EVs"] || contents["EffortPoints"] || base_data.evs,
+          :base_exp              => contents["BaseExp"] || contents["BaseEXP"] || base_data.base_exp,
           :growth_rate           => base_data.growth_rate,
           :gender_ratio          => base_data.gender_ratio,
-          :catch_rate            => contents["Rareness"] || base_data.catch_rate,
+          :catch_rate            => contents["CatchRate"] || contents["Rareness"] || base_data.catch_rate,
           :happiness             => contents["Happiness"] || base_data.happiness,
           :moves                 => moves,
           :tutor_moves           => contents["TutorMoves"] || base_data.tutor_moves.clone,
           :egg_moves             => contents["EggMoves"] || base_data.egg_moves.clone,
           :abilities             => contents["Abilities"] || base_data.abilities.clone,
-          :hidden_abilities      => contents["HiddenAbility"] || base_data.hidden_abilities.clone,
+          :hidden_abilities      => contents["HiddenAbilities"] || contents["HiddenAbility"] || base_data.hidden_abilities.clone,
           :wild_item_common      => contents["WildItemCommon"] || base_data.wild_item_common,
           :wild_item_uncommon    => contents["WildItemUncommon"] || base_data.wild_item_uncommon,
           :wild_item_rare        => contents["WildItemRare"] || base_data.wild_item_rare,
-          :egg_groups            => contents["Compatibility"] || base_data.egg_groups.clone,
-          :hatch_steps           => contents["StepsToHatch"] || base_data.hatch_steps,
+          :egg_groups            => contents["EggGroups"] || contents["Compatibility"] || base_data.egg_groups.clone,
+          :hatch_steps           => contents["HatchSteps"] || contents["StepsToHatch"] || base_data.hatch_steps,
           :incense               => base_data.incense,
           :evolutions            => evolutions,
           :height                => contents["Height"] || base_data.height,
@@ -1302,7 +1302,7 @@ module Compiler
   #=============================================================================
   # Compile Battle Tower and other Cups trainers/Pokémon
   #=============================================================================
-  def compile_trainer_lists(path = "PBS/trainerlists.txt")
+  def compile_trainer_lists(path = "PBS/battle_facility_lists.txt")
     btTrainersRequiredTypes = {
       "Trainers"   => [0, "s"],
       "Pokemon"    => [1, "s"],

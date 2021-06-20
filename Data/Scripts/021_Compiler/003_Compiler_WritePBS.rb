@@ -266,17 +266,17 @@ module Compiler
           evs_array[s.pbs_order] = species.evs[s.id]
         end
         f.write(sprintf("BaseStats = %s\r\n", stats_array.join(",")))
-        f.write(sprintf("GenderRate = %s\r\n", species.gender_ratio))
+        f.write(sprintf("GenderRatio = %s\r\n", species.gender_ratio))
         f.write(sprintf("GrowthRate = %s\r\n", species.growth_rate))
-        f.write(sprintf("BaseEXP = %d\r\n", species.base_exp))
-        f.write(sprintf("EffortPoints = %s\r\n", evs_array.join(",")))
-        f.write(sprintf("Rareness = %d\r\n", species.catch_rate))
+        f.write(sprintf("BaseExp = %d\r\n", species.base_exp))
+        f.write(sprintf("EVs = %s\r\n", evs_array.join(",")))
+        f.write(sprintf("CatchRate = %d\r\n", species.catch_rate))
         f.write(sprintf("Happiness = %d\r\n", species.happiness))
         if species.abilities.length > 0
           f.write(sprintf("Abilities = %s\r\n", species.abilities.join(",")))
         end
         if species.hidden_abilities.length > 0
-          f.write(sprintf("HiddenAbility = %s\r\n", species.hidden_abilities.join(",")))
+          f.write(sprintf("HiddenAbilities = %s\r\n", species.hidden_abilities.join(",")))
         end
         if species.moves.length > 0
           f.write(sprintf("Moves = %s\r\n", species.moves.join(",")))
@@ -288,15 +288,15 @@ module Compiler
           f.write(sprintf("EggMoves = %s\r\n", species.egg_moves.join(",")))
         end
         if species.egg_groups.length > 0
-          f.write(sprintf("Compatibility = %s\r\n", species.egg_groups.join(",")))
+          f.write(sprintf("EggGroups = %s\r\n", species.egg_groups.join(",")))
         end
-        f.write(sprintf("StepsToHatch = %d\r\n", species.hatch_steps))
+        f.write(sprintf("HatchSteps = %d\r\n", species.hatch_steps))
         f.write(sprintf("Height = %.1f\r\n", species.height / 10.0))
         f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0))
         f.write(sprintf("Color = %s\r\n", species.color))
         f.write(sprintf("Shape = %s\r\n", species.shape))
         f.write(sprintf("Habitat = %s\r\n", species.habitat)) if species.habitat != :None
-        f.write(sprintf("Kind = %s\r\n", species.real_category))
+        f.write(sprintf("Category = %s\r\n", species.real_category))
         f.write(sprintf("Pokedex = %s\r\n", species.real_pokedex_entry))
         f.write(sprintf("FormName = %s\r\n", species.real_form_name)) if species.real_form_name && !species.real_form_name.empty?
         f.write(sprintf("Generation = %d\r\n", species.generation)) if species.generation != 0
@@ -370,15 +370,15 @@ module Compiler
           evs_array[s.pbs_order] = species.evs[s.id]
         end
         f.write(sprintf("BaseStats = %s\r\n", stats_array.join(","))) if species.base_stats != base_species.base_stats
-        f.write(sprintf("BaseEXP = %d\r\n", species.base_exp)) if species.base_exp != base_species.base_exp
-        f.write(sprintf("EffortPoints = %s\r\n", evs_array.join(","))) if species.evs != base_species.evs
-        f.write(sprintf("Rareness = %d\r\n", species.catch_rate)) if species.catch_rate != base_species.catch_rate
+        f.write(sprintf("BaseExp = %d\r\n", species.base_exp)) if species.base_exp != base_species.base_exp
+        f.write(sprintf("EVs = %s\r\n", evs_array.join(","))) if species.evs != base_species.evs
+        f.write(sprintf("CatchRate = %d\r\n", species.catch_rate)) if species.catch_rate != base_species.catch_rate
         f.write(sprintf("Happiness = %d\r\n", species.happiness)) if species.happiness != base_species.happiness
         if species.abilities.length > 0 && species.abilities != base_species.abilities
           f.write(sprintf("Abilities = %s\r\n", species.abilities.join(",")))
         end
         if species.hidden_abilities.length > 0 && species.hidden_abilities != base_species.hidden_abilities
-          f.write(sprintf("HiddenAbility = %s\r\n", species.hidden_abilities.join(",")))
+          f.write(sprintf("HiddenAbilities = %s\r\n", species.hidden_abilities.join(",")))
         end
         if species.moves.length > 0 && species.moves != base_species.moves
           f.write(sprintf("Moves = %s\r\n", species.moves.join(",")))
@@ -390,9 +390,9 @@ module Compiler
           f.write(sprintf("EggMoves = %s\r\n", species.egg_moves.join(",")))
         end
         if species.egg_groups.length > 0 && species.egg_groups != base_species.egg_groups
-          f.write(sprintf("Compatibility = %s\r\n", species.egg_groups.join(",")))
+          f.write(sprintf("EggGroups = %s\r\n", species.egg_groups.join(",")))
         end
-        f.write(sprintf("StepsToHatch = %d\r\n", species.hatch_steps)) if species.hatch_steps != base_species.hatch_steps
+        f.write(sprintf("HatchSteps = %d\r\n", species.hatch_steps)) if species.hatch_steps != base_species.hatch_steps
         f.write(sprintf("Height = %.1f\r\n", species.height / 10.0)) if species.height != base_species.height
         f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0)) if species.weight != base_species.weight
         f.write(sprintf("Color = %s\r\n", species.color)) if species.color != base_species.color
@@ -400,7 +400,7 @@ module Compiler
         if species.habitat != :None && species.habitat != base_species.habitat
           f.write(sprintf("Habitat = %s\r\n", species.habitat))
         end
-        f.write(sprintf("Kind = %s\r\n", species.real_category)) if species.real_category != base_species.real_category
+        f.write(sprintf("Category = %s\r\n", species.real_category)) if species.real_category != base_species.real_category
         f.write(sprintf("Pokedex = %s\r\n", species.real_pokedex_entry)) if species.real_pokedex_entry != base_species.real_pokedex_entry
         f.write(sprintf("Generation = %d\r\n", species.generation)) if species.generation != base_species.generation
         if species.wild_item_common != base_species.wild_item_common ||
