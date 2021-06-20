@@ -175,27 +175,23 @@ module Compiler
   def write_moves
     File.open("PBS/moves.txt", "wb") { |f|
       add_PBS_header_to_file(f)
-      current_type = -1
-      GameData::Move.each do |m|
-        if current_type != m.type
-          current_type = m.type
-          f.write("\#-------------------------------\r\n")
-        end
-        f.write(sprintf("0,%s,%s,%s,%d,%s,%s,%d,%d,%d,%s,%d,%s,%s\r\n",
-          csvQuote(m.id.to_s),
-          csvQuote(m.real_name),
-          csvQuote(m.function_code),
-          m.base_damage,
-          m.type.to_s,
-          ["Physical", "Special", "Status"][m.category],
-          m.accuracy,
-          m.total_pp,
-          m.effect_chance,
-          m.target,
-          m.priority,
-          csvQuote(m.flags),
-          csvQuoteAlways(m.real_description)
-        ))
+      # Write each move in turn
+      GameData::Move.each do |move|
+        f.write("\#-------------------------------\r\n")
+        f.write("[#{move.id}]\r\n")
+        f.write("Name = #{move.real_name}\r\n")
+        f.write("Type = #{move.type}\r\n")
+        category = GameData::Move::SCHEMA["Category"][2][move.category]
+        f.write("Category = #{category}\r\n")
+        f.write("BaseDamage = #{move.base_damage}\r\n") if move.base_damage > 0
+        f.write("Accuracy = #{move.accuracy}\r\n")
+        f.write("TotalPP = #{move.total_pp}\r\n")
+        f.write("Target = #{move.target}\r\n")
+        f.write("Priority = #{move.priority}\r\n") if move.priority != 0
+        f.write("FunctionCode = #{move.function_code}\r\n")
+        f.write("Flags = #{move.flags}\r\n") if !nil_or_empty?(move.flags)
+        f.write("EffectChance = #{move.effect_chance}\r\n") if move.effect_chance > 0
+        f.write("Description = #{move.real_description}\r\n")
       end
     }
     Graphics.update

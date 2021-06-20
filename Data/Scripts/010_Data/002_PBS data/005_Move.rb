@@ -2,38 +2,53 @@ module GameData
   class Move
     attr_reader :id
     attr_reader :real_name
-    attr_reader :function_code
-    attr_reader :base_damage
     attr_reader :type
     attr_reader :category
+    attr_reader :base_damage
     attr_reader :accuracy
     attr_reader :total_pp
-    attr_reader :effect_chance
     attr_reader :target
     attr_reader :priority
+    attr_reader :function_code
     attr_reader :flags
+    attr_reader :effect_chance
     attr_reader :real_description
 
     DATA = {}
     DATA_FILENAME = "moves.dat"
+
+    SCHEMA = {
+      "Name"         => [:name,          "s"],
+      "Type"         => [:type,          "e", :Type],
+      "Category"     => [:category,      "e", ["Physical", "Special", "Status"]],
+      "BaseDamage"   => [:base_damage,   "u"],
+      "Accuracy"     => [:accuracy,      "u"],
+      "TotalPP"      => [:total_pp,      "u"],
+      "Target"       => [:target,        "e", :Target],
+      "Priority"     => [:priority,      "i"],
+      "FunctionCode" => [:function_code, "s"],
+      "Flags"        => [:flags,         "s"],
+      "EffectChance" => [:effect_chance, "u"],
+      "Description"  => [:description,   "q"]
+    }
 
     extend ClassMethodsSymbols
     include InstanceMethods
 
     def initialize(hash)
       @id               = hash[:id]
-      @real_name        = hash[:name]        || "Unnamed"
-      @function_code    = hash[:function_code]
-      @base_damage      = hash[:base_damage]
-      @type             = hash[:type]
-      @category         = hash[:category]
-      @accuracy         = hash[:accuracy]
-      @total_pp         = hash[:total_pp]
-      @effect_chance    = hash[:effect_chance]
-      @target           = hash[:target]
-      @priority         = hash[:priority]
-      @flags            = hash[:flags]
-      @real_description = hash[:description] || "???"
+      @real_name        = hash[:name]          || "Unnamed"
+      @type             = hash[:type]          || :NONE
+      @category         = hash[:category]      || 2
+      @base_damage      = hash[:base_damage]   || 0
+      @accuracy         = hash[:accuracy]      || 100
+      @total_pp         = hash[:total_pp]      || 5
+      @target           = hash[:target]        || :None
+      @priority         = hash[:priority]      || 0
+      @function_code    = hash[:function_code] || "000"
+      @flags            = hash[:flags]         || ""
+      @effect_chance    = hash[:effect_chance] || 0
+      @real_description = hash[:description]   || "???"
     end
 
     # @return [String] the translated name of this move

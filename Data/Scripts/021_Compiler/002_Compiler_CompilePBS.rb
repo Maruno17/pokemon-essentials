@@ -240,46 +240,112 @@ module Compiler
   #=============================================================================
   def compile_moves(path = "PBS/moves.txt")
     GameData::Move::DATA.clear
+    schema = GameData::Move::SCHEMA
     move_names        = []
     move_descriptions = []
+    move_hash         = nil
     # Read each line of moves.txt at a time and compile it into an move
     pbCompilerEachPreppedLine(path) { |line, line_no|
-      line = pbGetCsvRecord(line, line_no, [0, "snssueeuuueiss",
-         nil, nil, nil, nil, nil, :Type, ["Physical", "Special", "Status"],
-         nil, nil, nil, :Target, nil, nil, nil
-      ])
-      move_symbol = line[1].to_sym
-      if GameData::Move::DATA[move_symbol]
-        raise _INTL("Move ID '{1}' is used twice.\r\n{2}", move_symbol, FileLineData.linereport)
+      if line[/^\s*\[\s*(.+)\s*\]\s*$/]   # New section [move_id]
+        # Add previous move's data to records
+        if move_hash
+          # Sanitise data
+          if (move_hash[:category] || 2) == 2 && (move_hash[:base_damage] || 0) != 0
+            raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}", line[2], FileLineData.linereport)
+          elsif (move_hash[:category] || 2) != 2 && (move_hash[:base_damage] || 0) == 0
+            print _INTL("Warning: Move {1} was defined as Physical or Special but had a base damage of 0. Changing it to a Status move.\r\n{2}", line[2], FileLineData.linereport)
+            move_hash[:category] = 2
+          end
+          GameData::Move.register(move_hash)
+        end
+        # Parse move ID
+        move_id = $~[1].to_sym
+        if GameData::Move.exists?(move_id)
+          raise _INTL("Move ID '{1}' is used twice.\r\n{2}", move_id, FileLineData.linereport)
+        end
+        # Construct move hash
+        move_hash = {
+          :id => move_id
+        }
+      elsif line[/^\s*(\w+)\s*=\s*(.*)\s*$/]   # XXX=YYY lines
+        if !move_hash
+          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
+        end
+        # Parse property and value
+        property_name = $~[1]
+        line_schema = schema[property_name]
+        next if !line_schema
+        property_value = pbGetCsvRecord($~[2], line_no, line_schema)
+        # Record XXX=YYY setting
+        move_hash[line_schema[0]] = property_value
+        case property_name
+        when "Name"
+          move_names.push(move_hash[:name])
+        when "Description"
+          move_descriptions.push(move_hash[:description])
+        end
+      else   # Old format
+        # Add previous move's data to records
+        if move_hash
+          # Sanitise data
+          if (move_hash[:category] || 2) == 2 && (move_hash[:base_damage] || 0) != 0
+            raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}", line[2], FileLineData.linereport)
+          elsif (move_hash[:category] || 2) != 2 && (move_hash[:base_damage] || 0) == 0
+            print _INTL("Warning: Move {1} was defined as Physical or Special but had a base damage of 0. Changing it to a Status move.\r\n{2}", line[2], FileLineData.linereport)
+            move_hash[:category] = 2
+          end
+          GameData::Move.register(move_hash)
+        end
+        # Parse move
+        line = pbGetCsvRecord(line, line_no, [0, "snssueeuuueiss",
+           nil, nil, nil, nil, nil, :Type, ["Physical", "Special", "Status"],
+           nil, nil, nil, :Target, nil, nil, nil
+        ])
+        move_id = line[1].to_sym
+        if GameData::Move::DATA[move_id]
+          raise _INTL("Move ID '{1}' is used twice.\r\n{2}", move_id, FileLineData.linereport)
+        end
+        # Sanitise data
+        if line[6] == 2 && line[4] != 0
+          raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}", line[2], FileLineData.linereport)
+        elsif line[6] != 2 && line[4] == 0
+          print _INTL("Warning: Move {1} was defined as Physical or Special but had a base damage of 0. Changing it to a Status move.\r\n{2}", line[2], FileLineData.linereport)
+          line[6] = 2
+        end
+        # Construct move hash
+        move_hash = {
+          :id            => move_id,
+          :name          => line[2],
+          :function_code => line[3],
+          :base_damage   => line[4],
+          :type          => line[5],
+          :category      => line[6],
+          :accuracy      => line[7],
+          :total_pp      => line[8],
+          :effect_chance => line[9],
+          :target        => line[10],
+          :priority      => line[11],
+          :flags         => line[12],
+          :description   => line[13]
+        }
+        # Add move's data to records
+        GameData::Move.register(move_hash)
+        move_names.push(move_hash[:name])
+        move_descriptions.push(move_hash[:description])
+        move_hash = nil
       end
-      # Sanitise data
-      if line[6] == 2 && line[4] != 0
-        raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}", line[2], FileLineData.linereport)
-      elsif line[6] != 2 && line[4] == 0
-        print _INTL("Warning: Move {1} was defined as Physical or Special but had a base damage of 0. Changing it to a Status move.\r\n{2}", line[2], FileLineData.linereport)
-        line[6] = 2
-      end
-      # Construct move hash
-      move_hash = {
-        :id            => move_symbol,
-        :name          => line[2],
-        :function_code => line[3],
-        :base_damage   => line[4],
-        :type          => line[5],
-        :category      => line[6],
-        :accuracy      => line[7],
-        :total_pp      => line[8],
-        :effect_chance => line[9],
-        :target        => line[10],
-        :priority      => line[11],
-        :flags         => line[12],
-        :description   => line[13]
-      }
-      # Add move's data to records
-      GameData::Move.register(move_hash)
-      move_names.push(move_hash[:name])
-      move_descriptions.push(move_hash[:description])
     }
+    # Add last move's data to records
+    if move_hash
+      # Sanitise data
+      if (move_hash[:category] || 2) == 2 && (move_hash[:base_damage] || 0) != 0
+        raise _INTL("Move {1} is defined as a Status move with a non-zero base damage.\r\n{2}", line[2], FileLineData.linereport)
+      elsif (move_hash[:category] || 2) != 2 && (move_hash[:base_damage] || 0) == 0
+        print _INTL("Warning: Move {1} was defined as Physical or Special but had a base damage of 0. Changing it to a Status move.\r\n{2}", line[2], FileLineData.linereport)
+        move_hash[:category] = 2
+      end
+      GameData::Move.register(move_hash)
+    end
     # Save all data
     GameData::Move.save
     MessageTypes.setMessagesAsHash(MessageTypes::Moves, move_names)
