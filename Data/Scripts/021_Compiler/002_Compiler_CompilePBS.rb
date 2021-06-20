@@ -209,25 +209,64 @@ module Compiler
   #=============================================================================
   def compile_abilities(path = "PBS/abilities.txt")
     GameData::Ability::DATA.clear
+    schema = GameData::Ability::SCHEMA
     ability_names        = []
     ability_descriptions = []
+    ability_hash         = nil
     pbCompilerEachPreppedLine(path) { |line, line_no|
-      line = pbGetCsvRecord(line, line_no, [0, "snss"])
-      ability_symbol = line[1].to_sym
-      if GameData::Ability::DATA[ability_symbol]
-        raise _INTL("Ability ID '{1}' is used twice.\r\n{2}", ability_symbol, FileLineData.linereport)
+      if line[/^\s*\[\s*(.+)\s*\]\s*$/]   # New section [ability_id]
+        # Add previous ability's data to records
+        GameData::Ability.register(ability_hash) if ability_hash
+        # Parse ability ID
+        ability_id = $~[1].to_sym
+        if GameData::Ability.exists?(ability_id)
+          raise _INTL("Ability ID '{1}' is used twice.\r\n{2}", ability_id, FileLineData.linereport)
+        end
+        # Construct ability hash
+        ability_hash = {
+          :id => ability_id
+        }
+      elsif line[/^\s*(\w+)\s*=\s*(.*)\s*$/]   # XXX=YYY lines
+        if !ability_hash
+          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
+        end
+        # Parse property and value
+        property_name = $~[1]
+        line_schema = schema[property_name]
+        next if !line_schema
+        property_value = pbGetCsvRecord($~[2], line_no, line_schema)
+        # Record XXX=YYY setting
+        ability_hash[line_schema[0]] = property_value
+        case property_name
+        when "Name"
+          ability_names.push(ability_hash[:name])
+        when "Description"
+          ability_descriptions.push(ability_hash[:description])
+        end
+      else   # Old format
+        # Add previous ability's data to records
+        GameData::Ability.register(ability_hash) if ability_hash
+        # Parse ability
+        line = pbGetCsvRecord(line, line_no, [0, "snss"])
+        ability_id = line[1].to_sym
+        if GameData::Ability::DATA[ability_id]
+          raise _INTL("Ability ID '{1}' is used twice.\r\n{2}", ability_id, FileLineData.linereport)
+        end
+        # Construct ability hash
+        ability_hash = {
+          :id          => ability_id,
+          :name        => line[2],
+          :description => line[3]
+        }
+        # Add ability's data to records
+        GameData::Ability.register(ability_hash)
+        ability_names.push(ability_hash[:name])
+        ability_descriptions.push(ability_hash[:description])
+        ability_hash = nil
       end
-      # Construct ability hash
-      ability_hash = {
-        :id          => ability_symbol,
-        :name        => line[2],
-        :description => line[3]
-      }
-      # Add ability's data to records
-      GameData::Ability.register(ability_hash)
-      ability_names.push(ability_hash[:name])
-      ability_descriptions.push(ability_hash[:description])
     }
+    # Add last ability's data to records
+    GameData::Ability.register(ability_hash) if ability_hash
     # Save all data
     GameData::Ability.save
     MessageTypes.setMessagesAsHash(MessageTypes::Abilities, ability_names)

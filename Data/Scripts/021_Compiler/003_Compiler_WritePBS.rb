@@ -157,13 +157,12 @@ module Compiler
   def write_abilities
     File.open("PBS/abilities.txt", "wb") { |f|
       add_PBS_header_to_file(f)
-      f.write("\#-------------------------------\r\n")
-      GameData::Ability.each do |a|
-        f.write(sprintf("0,%s,%s,%s\r\n",
-          csvQuote(a.id.to_s),
-          csvQuote(a.real_name),
-          csvQuoteAlways(a.real_description)
-        ))
+      # Write each ability in turn
+      GameData::Ability.each do |ability|
+        f.write("\#-------------------------------\r\n")
+        f.write("[#{ability.id}]\r\n")
+        f.write("Name = #{ability.real_name}\r\n")
+        f.write("Description = #{ability.real_description}\r\n")
       end
     }
     Graphics.update

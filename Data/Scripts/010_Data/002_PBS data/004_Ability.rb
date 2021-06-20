@@ -10,6 +10,11 @@ module GameData
     extend ClassMethodsSymbols
     include InstanceMethods
 
+    SCHEMA = {
+      "Name"         => [:name,        "s"],
+      "Description"  => [:description, "q"]
+    }
+
     def initialize(hash)
       @id               = hash[:id]
       @real_name        = hash[:name]        || "Unnamed"
