@@ -66,12 +66,3 @@ module GameData
     end
   end
 end
-
-#===============================================================================
-# Deprecated methods
-#===============================================================================
-# @deprecated This alias is slated to be removed in v20.
-def pbLoadEncountersData
-  Deprecation.warn_method('pbLoadEncountersData', 'v20', 'GameData::Encounter.get(map_id, version)')
-  return nil
-end

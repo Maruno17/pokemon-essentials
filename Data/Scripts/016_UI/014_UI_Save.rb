@@ -1,9 +1,3 @@
-# @deprecated Use {Game.save} instead. pbSave is slated to be removed in v20.
-def pbSave(safesave = false)
-  Deprecation.warn_method('pbSave', 'v20', 'Game.save')
-  Game.save(safe: safesave)
-end
-
 def pbEmergencySave
   oldscene = $scene
   $scene = nil

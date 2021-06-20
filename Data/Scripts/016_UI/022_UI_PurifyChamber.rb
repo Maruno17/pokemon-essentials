@@ -20,40 +20,6 @@ class PokemonGlobalMetadata
     @purifyChamber = PurifyChamber.new() if !@purifyChamber
     return @purifyChamber
   end
-
-  # @deprecated Use {Player#seen_purify_chamber} instead. This alias is slated to be removed in v20.
-  def seenPurifyChamber
-    Deprecation.warn_method('PokemonGlobalMetadata#seenPurifyChamber', 'v20', '$Trainer.seen_purify_chamber')
-    return @seenPurifyChamber if !@seenPurifyChamber.nil?
-    return ($Trainer) ? $Trainer.seen_purify_chamber : false
-  end
-
-  # @deprecated Use {Player#seen_purify_chamber=} instead. This alias is slated to be removed in v20.
-  def seenPurifyChamber=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#seenPurifyChamber=', 'v20', '$Trainer.seen_purify_chamber=')
-    if value.nil?
-      @seenPurifyChamber = value   # For setting to nil by a save data conversion
-    else
-      $Trainer.seen_purify_chamber = value
-    end
-  end
-
-  # @deprecated Use {Player#has_snag_machine} instead. This alias is slated to be removed in v20.
-  def snagMachine
-    Deprecation.warn_method('PokemonGlobalMetadata#snagMachine', 'v20', '$Trainer.has_snag_machine')
-    return @snagMachine if !@snagMachine.nil?
-    return ($Trainer) ? $Trainer.has_snag_machine : false
-  end
-
-  # @deprecated Use {Player#has_snag_machine=} instead. This alias is slated to be removed in v20.
-  def snagMachine=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#snagMachine=', 'v20', '$Trainer.has_snag_machine=')
-    if value.nil?
-      @snagMachine = value   # For setting to nil by a save data conversion
-    else
-      $Trainer.has_snag_machine = value
-    end
-  end
 end
 
 #===============================================================================

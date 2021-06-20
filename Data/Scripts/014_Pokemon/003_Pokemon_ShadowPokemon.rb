@@ -43,7 +43,6 @@ class Pokemon
   def shadowPokemon?
     return @shadow && @heart_gauge && @heart_gauge >= 0
   end
-  alias isShadow? shadowPokemon?
 
   def hyper_mode
     return (self.heart_gauge == 0 || @hp == 0) ? false : @hyper_mode

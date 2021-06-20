@@ -23,22 +23,17 @@ class PokeBattle_FakeBattler
   def totalhp;        return @pokemon.totalhp; end
   def displayGender;  return @pokemon.gender;  end
   def shiny?;         return @pokemon.shiny?;  end
-  alias isShiny? shiny?
 
   def isSpecies?(check_species)
     return @pokemon && @pokemon.isSpecies?(check_species)
   end
 
   def fainted?;       return false; end
-  alias isFainted? fainted?
   def shadowPokemon?; return false; end
-  alias isShadow? shadowPokemon?
   def hasMega?;       return false; end
   def mega?;          return false; end
-  alias isMega? mega?
   def hasPrimal?;     return false; end
   def primal?;        return false; end
-  alias isPrimal? primal?
   def captured;       return false; end
   def captured=(value); end
 

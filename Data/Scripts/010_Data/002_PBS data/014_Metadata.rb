@@ -125,22 +125,3 @@ module GameData
     end
   end
 end
-
-#===============================================================================
-# Deprecated methods
-#===============================================================================
-# @deprecated This alias is slated to be removed in v20.
-def pbLoadMetadata
-  Deprecation.warn_method('pbLoadMetadata', 'v20', 'GameData::Metadata.get or GameData::MapMetadata.get(map_id)')
-  return nil
-end
-
-# @deprecated This alias is slated to be removed in v20.
-def pbGetMetadata(map_id, metadata_type)
-  if map_id == 0   # Global metadata
-    Deprecation.warn_method('pbGetMetadata', 'v20', 'GameData::Metadata.get.something')
-  else   # Map metadata
-    Deprecation.warn_method('pbGetMetadata', 'v20', 'GameData::MapMetadata.get(map_id).something')
-  end
-  return nil
-end

@@ -343,7 +343,7 @@ def pbMysteryGiftDecrypt(gift)
   if ret
     ret.each do |gift|
       if gift[1] == 0   # Pokémon
-        gift[2] = PokeBattle_Pokemon.convert(gift[2])
+        gift[2] = gift[2]
       else   # Item
         gift[2] = GameData::Item.get(gift[2]).id
       end

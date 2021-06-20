@@ -1144,16 +1144,6 @@ DebugMenuCommands.register("createpbs", {
   }
 })
 
-DebugMenuCommands.register("renamesprites", {
-  "parent"      => "othermenu",
-  "name"        => _INTL("Rename Old Sprites"),
-  "description" => _INTL("Renames and moves Pokémon/item/trainer sprites from their old places."),
-  "always_show" => true,
-  "effect"      => proc {
-    SpriteRenamer.convert_files
-  }
-})
-
 DebugMenuCommands.register("invalidtiles", {
   "parent"      => "othermenu",
   "name"        => _INTL("Fix Invalid Tiles"),

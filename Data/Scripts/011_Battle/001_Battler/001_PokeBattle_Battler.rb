@@ -101,7 +101,6 @@ class PokeBattle_Battler
   end
 
   def fainted?; return @hp<=0; end
-  alias isFainted? fainted?
 
   attr_reader :status
 
@@ -138,7 +137,6 @@ class PokeBattle_Battler
   end
 
   def mega?; return @pokemon && @pokemon.mega?; end
-  alias isMega? mega?
 
   def hasPrimal?
     return false if @effects[PBEffects::Transform]
@@ -146,10 +144,8 @@ class PokeBattle_Battler
   end
 
   def primal?; return @pokemon && @pokemon.primal?; end
-  alias isPrimal? primal?
 
   def shadowPokemon?; return false; end
-  alias isShadow? shadowPokemon?
 
   def inHyperMode?; return false; end
 
@@ -187,7 +183,6 @@ class PokeBattle_Battler
     return @effects[PBEffects::Illusion].shiny? if @effects[PBEffects::Illusion]
     return @pokemon && @pokemon.shiny?
   end
-  alias isShiny? shiny?
 
   def owned?
     return false if !@battle.wildBattle?

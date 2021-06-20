@@ -61,18 +61,3 @@ class Pokemon
     def hidden_move?;  return GameData::Move.get(@id).hidden_move?;  end
   end
 end
-
-#===============================================================================
-# Legacy move object known by Pokémon.
-#===============================================================================
-# @deprecated Use {Pokemon#Move} instead. PBMove is slated to be removed in v20.
-class PBMove
-  attr_reader :id, :pp, :ppup
-
-  def self.convert(move)
-    ret = Pokemon::Move.new(move.id)
-    ret.ppup = move.ppup
-    ret.pp = move.pp
-    return ret
-  end
-end

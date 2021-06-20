@@ -205,7 +205,6 @@ class PokeBattle_Battler
     p = self.pokemon
     return p && p.shadowPokemon?
   end
-  alias isShadow? shadowPokemon?
 
   def inHyperMode?
     return false if fainted?
