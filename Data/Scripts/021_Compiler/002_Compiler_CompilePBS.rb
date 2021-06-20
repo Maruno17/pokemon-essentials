@@ -952,36 +952,69 @@ module Compiler
   #=============================================================================
   def compile_trainer_types(path = "PBS/trainertypes.txt")
     GameData::TrainerType::DATA.clear
+    schema = GameData::TrainerType::SCHEMA
     tr_type_names = []
+    tr_type_hash  = nil
     # Read each line of trainertypes.txt at a time and compile it into a trainer type
-    pbCompilerEachCommentedLine(path) { |line, line_no|
-      line = pbGetCsvRecord(line, line_no, [0, "snsUSSSeUS",
-        nil, nil, nil, nil, nil, nil, nil, {
-        "Male"   => 0, "M" => 0, "0" => 0,
-        "Female" => 1, "F" => 1, "1" => 1,
-        "Mixed"  => 2, "X" => 2, "2" => 2, "" => 2
-        }, nil, nil]
-      )
-      type_symbol = line[1].to_sym
-      if GameData::TrainerType::DATA[type_symbol]
-        raise _INTL("Trainer type ID '{1}' is used twice.\r\n{2}", type_symbol, FileLineData.linereport)
+    pbCompilerEachPreppedLine(path) { |line, line_no|
+      if line[/^\s*\[\s*(.+)\s*\]\s*$/]   # New section [tr_type_id]
+        # Add previous trainer type's data to records
+        GameData::TrainerType.register(tr_type_hash) if tr_type_hash
+        # Parse trainer type ID
+        tr_type_id = $~[1].to_sym
+        if GameData::TrainerType.exists?(tr_type_id)
+          raise _INTL("Trainer Type ID '{1}' is used twice.\r\n{2}", tr_type_id, FileLineData.linereport)
+        end
+        # Construct trainer type hash
+        tr_type_hash = {
+          :id => tr_type_id
+        }
+      elsif line[/^\s*(\w+)\s*=\s*(.*)\s*$/]   # XXX=YYY lines
+        if !tr_type_hash
+          raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
+        end
+        # Parse property and value
+        property_name = $~[1]
+        line_schema = schema[property_name]
+        next if !line_schema
+        property_value = pbGetCsvRecord($~[2], line_no, line_schema)
+        # Record XXX=YYY setting
+        tr_type_hash[line_schema[0]] = property_value
+        tr_type_names.push(tr_type_hash[:name]) if property_name == "Name"
+      else   # Old format
+        # Add previous trainer type's data to records
+        GameData::TrainerType.register(tr_type_hash) if tr_type_hash
+        # Parse trainer type
+        line = pbGetCsvRecord(line, line_no, [0, "snsUSSSeUS",
+           nil, nil, nil, nil, nil, nil, nil, {
+           "Male"   => 0, "M" => 0, "0" => 0,
+           "Female" => 1, "F" => 1, "1" => 1,
+           "Mixed"  => 2, "X" => 2, "2" => 2, "" => 2
+           }, nil, nil])
+        tr_type_id = line[1].to_sym
+        if GameData::TrainerType.exists?(tr_type_id)
+          raise _INTL("Trainer Type ID '{1}' is used twice.\r\n{2}", tr_type_id, FileLineData.linereport)
+        end
+        # Construct trainer type hash
+        tr_type_hash = {
+          :id          => tr_type_id,
+          :name        => line[2],
+          :base_money  => line[3],
+          :battle_BGM  => line[4],
+          :victory_ME  => line[5],
+          :intro_ME    => line[6],
+          :gender      => line[7],
+          :skill_level => line[8],
+          :skill_code  => line[9]
+        }
+        # Add trainer type's data to records
+        GameData::TrainerType.register(tr_type_hash)
+        tr_type_names.push(tr_type_hash[:name])
+        tr_type_hash = nil
       end
-      # Construct trainer type hash
-      type_hash = {
-        :id          => type_symbol,
-        :name        => line[2],
-        :base_money  => line[3],
-        :battle_BGM  => line[4],
-        :victory_ME  => line[5],
-        :intro_ME    => line[6],
-        :gender      => line[7],
-        :skill_level => line[8],
-        :skill_code  => line[9]
-      }
-      # Add trainer type's data to records
-      GameData::TrainerType.register(type_hash)
-      tr_type_names.push(type_hash[:name])
     }
+    # Add last trainer type's data to records
+    GameData::TrainerType.register(tr_type_hash) if tr_type_hash
     # Save all data
     GameData::TrainerType.save
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerTypes, tr_type_names)

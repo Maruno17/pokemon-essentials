@@ -342,18 +342,18 @@ end
 # Trainer type editor
 #===============================================================================
 def pbTrainerTypeEditor
+  gender_array = []
+  GameData::TrainerType::SCHEMA["Gender"][2].each { |key, value| gender_array[value] = key if !gender_array[value] }
   trainer_type_properties = [
-    [_INTL("Internal Name"),   ReadOnlyProperty,        _INTL("Internal name that is used as a symbol like :XXX.")],
-    [_INTL("Trainer Name"),    StringProperty,          _INTL("Name of the trainer type as displayed by the game.")],
-    [_INTL("Base Money"),      LimitProperty.new(9999), _INTL("Player earns this much money times the highest level among the trainer's Pokémon.")],
-    [_INTL("Battle BGM"),      BGMProperty,             _INTL("BGM played in battles against trainers of this type.")],
-    [_INTL("Battle End ME"),   MEProperty,              _INTL("ME played when player wins battles against trainers of this type.")],
-    [_INTL("Battle Intro ME"), MEProperty,              _INTL("ME played before battles against trainers of this type.")],
-    [_INTL("Gender"),          EnumProperty.new([
-       _INTL("Male"), _INTL("Female"), _INTL("Undefined")]),
-                                                        _INTL("Gender of this Trainer type.")],
-    [_INTL("Skill Level"),     LimitProperty.new(9999), _INTL("Skill level of this Trainer type.")],
-    [_INTL("Skill Code"),      StringProperty,          _INTL("Letters/phrases representing AI modifications of trainers of this type.")],
+    [_INTL("ID"),         ReadOnlyProperty,               _INTL("ID of this Trainer Type (used as a symbol like :XXX).")],
+    [_INTL("Name"),       StringProperty,                 _INTL("Name of this Trainer Type as displayed by the game.")],
+    [_INTL("Gender"),     EnumProperty.new(gender_array), _INTL("Gender of this Trainer Type.")],
+    [_INTL("BaseMoney"),  LimitProperty.new(9999),        _INTL("Player earns this much money times the highest level among the trainer's Pokémon.")],
+    [_INTL("SkillLevel"), LimitProperty.new(9999),        _INTL("Skill level of this Trainer Type.")],
+    [_INTL("SkillCode"),  StringProperty,                 _INTL("Letters/phrases representing AI modifications of trainers of this type.")],
+    [_INTL("IntroME"),    MEProperty,                     _INTL("ME played before battles against trainers of this type.")],
+    [_INTL("BattleBGM"),  BGMProperty,                    _INTL("BGM played in battles against trainers of this type.")],
+    [_INTL("VictoryME"),  MEProperty,                     _INTL("ME played when player wins battles against trainers of this type.")]
   ]
   pbListScreenBlock(_INTL("Trainer Types"), TrainerTypeLister.new(0, true)) { |button, tr_type|
     if tr_type
@@ -372,26 +372,26 @@ def pbTrainerTypeEditor
           data = [
             t_data.id.to_s,
             t_data.real_name,
-            t_data.base_money,
-            t_data.battle_BGM,
-            t_data.victory_ME,
-            t_data.intro_ME,
             t_data.gender,
+            t_data.base_money,
             t_data.skill_level,
-            t_data.skill_code
+            t_data.skill_code,
+            t_data.intro_ME,
+            t_data.battle_BGM,
+            t_data.victory_ME
           ]
           if pbPropertyList(t_data.id.to_s, data, trainer_type_properties, true)
             # Construct trainer type hash
             type_hash = {
               :id          => t_data.id,
               :name        => data[1],
-              :base_money  => data[2],
-              :battle_BGM  => data[3],
-              :victory_ME  => data[4],
-              :intro_ME    => data[5],
-              :gender      => data[6],
-              :skill_level => data[7],
-              :skill_code  => data[8]
+              :gender      => data[2],
+              :base_money  => data[3],
+              :skill_level => data[4],
+              :skill_code  => data[5],
+              :intro_ME    => data[6],
+              :battle_BGM  => data[7],
+              :victory_ME  => data[8]
             }
             # Add trainer type's data to records
             GameData::TrainerType.register(type_hash)
@@ -436,8 +436,8 @@ def pbTrainerTypeEditorNew(default_name)
     return nil
   end
   # Choose a gender
-  gender = pbMessage(_INTL("Is the Trainer male, female or undefined?"), [
-     _INTL("Male"), _INTL("Female"), _INTL("Undefined")], 0)
+  gender = pbMessage(_INTL("Is the Trainer male, female or unknown?"), [
+     _INTL("Male"), _INTL("Female"), _INTL("Unknown")], 0)
   # Choose a base money value
   params = ChooseNumberParams.new
   params.setRange(0, 255)
@@ -445,10 +445,10 @@ def pbTrainerTypeEditorNew(default_name)
   base_money = pbMessageChooseNumber(_INTL("Set the money per level won for defeating the Trainer."), params)
   # Construct trainer type hash
   tr_type_hash = {
-    :id          => id.to_sym,
-    :name        => name,
-    :base_money  => base_money,
-    :gender      => gender
+    :id         => id.to_sym,
+    :name       => name,
+    :gender     => gender,
+    :base_money => base_money
   }
   # Add trainer type's data to records
   GameData::TrainerType.register(tr_type_hash)

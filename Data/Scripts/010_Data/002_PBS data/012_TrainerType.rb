@@ -2,16 +2,30 @@ module GameData
   class TrainerType
     attr_reader :id
     attr_reader :real_name
-    attr_reader :base_money
-    attr_reader :battle_BGM
-    attr_reader :victory_ME
-    attr_reader :intro_ME
     attr_reader :gender
+    attr_reader :base_money
     attr_reader :skill_level
     attr_reader :skill_code
+    attr_reader :intro_ME
+    attr_reader :battle_BGM
+    attr_reader :victory_ME
 
     DATA = {}
     DATA_FILENAME = "trainer_types.dat"
+
+    SCHEMA = {
+      "Name"       => [:name,        "s"],
+      "Gender"     => [:gender,      "e", {"Male" => 0, "male" => 0, "M" => 0, "m" => 0, "0" => 0,
+                                           "Female" => 1, "female" => 1, "F" => 1, "f" => 1, "1" => 1,
+                                           "Unknown" => 2, "unknown" => 2, "Other" => 2, "other" => 2,
+                                           "Mixed" => 2, "mixed" => 2, "X" => 2, "x" => 2, "2" => 2}],
+      "BaseMoney"  => [:base_money,  "u"],
+      "SkillLevel" => [:skill_level, "u"],
+      "SkillCode"  => [:skill_code,  "s"],
+      "IntroME"    => [:intro_ME,    "s"],
+      "BattleBGM"  => [:battle_BGM,  "s"],
+      "VictoryME"  => [:victory_ME,  "s"]
+    }
 
     extend ClassMethodsSymbols
     include InstanceMethods
@@ -68,13 +82,13 @@ module GameData
     def initialize(hash)
       @id          = hash[:id]
       @real_name   = hash[:name]        || "Unnamed"
-      @base_money  = hash[:base_money]  || 30
-      @battle_BGM  = hash[:battle_BGM]
-      @victory_ME  = hash[:victory_ME]
-      @intro_ME    = hash[:intro_ME]
       @gender      = hash[:gender]      || 2
+      @base_money  = hash[:base_money]  || 30
       @skill_level = hash[:skill_level] || @base_money
       @skill_code  = hash[:skill_code]
+      @intro_ME    = hash[:intro_ME]
+      @battle_BGM  = hash[:battle_BGM]
+      @victory_ME  = hash[:victory_ME]
     end
 
     # @return [String] the translated name of this trainer type

@@ -1,74 +1,401 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
-0,POKEMONTRAINER_Red,Pokémon Trainer,60,,,,Male,,
-0,POKEMONTRAINER_Leaf,Pokémon Trainer,60,,,,Female,,
-0,POKEMONTRAINER_Brendan,Pokémon Trainer,60,,,,Male,,
-0,POKEMONTRAINER_May,Pokémon Trainer,60,,,,Female,,
-0,RIVAL1,Rival,16,,,,Male,,
-0,RIVAL2,Rival,36,,,,Male,,
-0,AROMALADY,Aroma Lady,32,,,,Female,,
-0,BEAUTY,Beauty,56,,,,Female,,
-0,BIKER,Biker,32,,,,Male,,
-0,BIRDKEEPER,Bird Keeper,32,,,,Male,,
-0,BUGCATCHER,Bug Catcher,16,,,,Male,,
-0,BURGLAR,Burglar,88,,,,Male,32,
-0,CHANELLER,Channeler,32,,,,Female,,
-0,CUEBALL,Cue Ball,24,,,,Male,,
-0,ENGINEER,Engineer,48,,,,Male,,
-0,FISHERMAN,Fisherman,32,,,,Male,,
-0,GAMBLER,Gambler,72,,,,Male,32,
-0,GENTLEMAN,Gentleman,72,,,,Male,,
-0,HIKER,Hiker,32,,,,Male,,
-0,JUGGLER,Juggler,32,,,,Male,,
-0,LADY,Lady,160,,,,Female,72,
-0,PAINTER,Painter,16,,,,Female,,
-0,POKEMANIAC,Poké Maniac,64,,,,Male,,
-0,POKEMONBREEDER,Pokémon Breeder,48,,,,Female,,
-0,PROFESSOR,Professor,100,,,,Male,,
-0,ROCKER,Rocker,24,,,,Male,,
-0,RUINMANIAC,Ruin Maniac,48,,,,Male,,
-0,SAILOR,Sailor,32,,,,Male,,
-0,SCIENTIST,Scientist,48,,,,Male,,
-0,SUPERNERD,Super Nerd,48,,,,Male,,
-0,TAMER,Tamer,40,,,,Male,,
-0,BLACKBELT,Black Belt,32,,,,Male,,
-0,CRUSHGIRL,Crush Girl,24,,,,Female,,
-0,CAMPER,Camper,16,,,,Male,,
-0,PICNICKER,Picnicker,16,,,,Female,,
-0,COOLTRAINER_M,Cool Trainer,60,,,,Male,,
-0,COOLTRAINER_F,Cool Trainer,60,,,,Female,,
-0,YOUNGSTER,Youngster,16,,,,Male,,
-0,LASS,Lass,16,,,,Female,,
-0,POKEMONRANGER_M,Pokémon Ranger,60,,,,Male,,
-0,POKEMONRANGER_F,Pokémon Ranger,60,,,,Female,,
-0,PSYCHIC_M,Psychic,32,,,,Male,,
-0,PSYCHIC_F,Psychic,32,,,,Female,,
-0,SWIMMER_M,Swimmer,16,,,,Male,32,
-0,SWIMMER_F,Swimmer,16,,,,Female,32,
-0,SWIMMER2_M,Swimmer,16,,,,Male,32,
-0,SWIMMER2_F,Swimmer,16,,,,Female,32,
-0,TUBER_M,Tuber,4,,,,Male,16,
-0,TUBER_F,Tuber,4,,,,Female,16,
-0,TUBER2_M,Tuber,4,,,,Male,16,
-0,TUBER2_F,Tuber,4,,,,Female,16,
-0,COOLCOUPLE,Cool Couple,72,,,,Mixed,48,
-0,CRUSHKIN,Crush Kin,48,,,,Mixed,,
-0,SISANDBRO,Sis and Bro,16,,,,Mixed,48,
-0,TWINS,Twins,24,,,,Mixed,,
-0,YOUNGCOUPLE,Young Couple,60,,,,Mixed,32,
-0,TEAMROCKET_M,Team Rocket,32,,,,Male,,
-0,TEAMROCKET_F,Team Rocket,32,,,,Female,,
-0,ROCKETBOSS,Rocket Boss,100,,,,Male,,
-0,LEADER_Brock,Gym Leader,100,Battle Gym Leader,Battle victory leader,,Male,,
-0,LEADER_Misty,Gym Leader,100,Battle Gym Leader,Battle victory leader,,Female,,
-0,LEADER_Surge,Gym Leader,100,Battle Gym Leader,Battle victory leader,,Male,,
-0,LEADER_Erika,Gym Leader,100,Battle Gym Leader,Battle victory leader,,Female,,
-0,LEADER_Koga,Gym Leader,100,Battle Gym Leader,Battle victory leader,,Male,,
-0,LEADER_Sabrina,Gym Leader,100,Battle Gym Leader,Battle victory leader,,Female,,
-0,LEADER_Blaine,Gym Leader,100,Battle Gym Leader,Battle victory leader,,Male,,
-0,LEADER_Giovanni,Gym Leader,100,Battle Gym Leader,Battle victory leader,,Male,,
-0,ELITEFOUR_Lorelei,Elite Four,100,Battle Elite,Battle victory leader,,Female,,
-0,ELITEFOUR_Bruno,Elite Four,100,Battle Elite,Battle victory leader,,Male,,
-0,ELITEFOUR_Agatha,Elite Four,100,Battle Elite,Battle victory leader,,Female,,
-0,ELITEFOUR_Lance,Elite Four,100,Battle Elite,Battle victory leader,,Male,,
-0,CHAMPION,Champion,100,Battle Elite,Battle victory leader,,Male,,
+[POKEMONTRAINER_Red]
+Name = Pokémon Trainer
+Gender = Male
+BaseMoney = 60
+#-------------------------------
+[POKEMONTRAINER_Leaf]
+Name = Pokémon Trainer
+Gender = Female
+BaseMoney = 60
+#-------------------------------
+[POKEMONTRAINER_Brendan]
+Name = Pokémon Trainer
+Gender = Male
+BaseMoney = 60
+#-------------------------------
+[POKEMONTRAINER_May]
+Name = Pokémon Trainer
+Gender = Female
+BaseMoney = 60
+#-------------------------------
+[RIVAL1]
+Name = Rival
+Gender = Male
+BaseMoney = 16
+#-------------------------------
+[RIVAL2]
+Name = Rival
+Gender = Male
+BaseMoney = 36
+#-------------------------------
+[AROMALADY]
+Name = Aroma Lady
+Gender = Female
+BaseMoney = 32
+#-------------------------------
+[BEAUTY]
+Name = Beauty
+Gender = Female
+BaseMoney = 56
+#-------------------------------
+[BIKER]
+Name = Biker
+Gender = Male
+BaseMoney = 32
+#-------------------------------
+[BIRDKEEPER]
+Name = Bird Keeper
+Gender = Male
+BaseMoney = 32
+#-------------------------------
+[BUGCATCHER]
+Name = Bug Catcher
+Gender = Male
+BaseMoney = 16
+#-------------------------------
+[BURGLAR]
+Name = Burglar
+Gender = Male
+BaseMoney = 88
+SkillLevel = 32
+#-------------------------------
+[CHANELLER]
+Name = Channeler
+Gender = Female
+BaseMoney = 32
+#-------------------------------
+[CUEBALL]
+Name = Cue Ball
+Gender = Male
+BaseMoney = 24
+#-------------------------------
+[ENGINEER]
+Name = Engineer
+Gender = Male
+BaseMoney = 48
+#-------------------------------
+[FISHERMAN]
+Name = Fisherman
+Gender = Male
+BaseMoney = 32
+#-------------------------------
+[GAMBLER]
+Name = Gambler
+Gender = Male
+BaseMoney = 72
+SkillLevel = 32
+#-------------------------------
+[GENTLEMAN]
+Name = Gentleman
+Gender = Male
+BaseMoney = 72
+#-------------------------------
+[HIKER]
+Name = Hiker
+Gender = Male
+BaseMoney = 32
+#-------------------------------
+[JUGGLER]
+Name = Juggler
+Gender = Male
+BaseMoney = 32
+#-------------------------------
+[LADY]
+Name = Lady
+Gender = Female
+BaseMoney = 160
+SkillLevel = 72
+#-------------------------------
+[PAINTER]
+Name = Painter
+Gender = Female
+BaseMoney = 16
+#-------------------------------
+[POKEMANIAC]
+Name = Poké Maniac
+Gender = Male
+BaseMoney = 64
+#-------------------------------
+[POKEMONBREEDER]
+Name = Pokémon Breeder
+Gender = Female
+BaseMoney = 48
+#-------------------------------
+[PROFESSOR]
+Name = Professor
+Gender = Male
+BaseMoney = 100
+#-------------------------------
+[ROCKER]
+Name = Rocker
+Gender = Male
+BaseMoney = 24
+#-------------------------------
+[RUINMANIAC]
+Name = Ruin Maniac
+Gender = Male
+BaseMoney = 48
+#-------------------------------
+[SAILOR]
+Name = Sailor
+Gender = Male
+BaseMoney = 32
+#-------------------------------
+[SCIENTIST]
+Name = Scientist
+Gender = Male
+BaseMoney = 48
+#-------------------------------
+[SUPERNERD]
+Name = Super Nerd
+Gender = Male
+BaseMoney = 48
+#-------------------------------
+[TAMER]
+Name = Tamer
+Gender = Male
+BaseMoney = 40
+#-------------------------------
+[BLACKBELT]
+Name = Black Belt
+Gender = Male
+BaseMoney = 32
+#-------------------------------
+[CRUSHGIRL]
+Name = Crush Girl
+Gender = Female
+BaseMoney = 24
+#-------------------------------
+[CAMPER]
+Name = Camper
+Gender = Male
+BaseMoney = 16
+#-------------------------------
+[PICNICKER]
+Name = Picnicker
+Gender = Female
+BaseMoney = 16
+#-------------------------------
+[COOLTRAINER_M]
+Name = Cool Trainer
+Gender = Male
+BaseMoney = 60
+#-------------------------------
+[COOLTRAINER_F]
+Name = Cool Trainer
+Gender = Female
+BaseMoney = 60
+#-------------------------------
+[YOUNGSTER]
+Name = Youngster
+Gender = Male
+BaseMoney = 16
+#-------------------------------
+[LASS]
+Name = Lass
+Gender = Female
+BaseMoney = 16
+#-------------------------------
+[POKEMONRANGER_M]
+Name = Pokémon Ranger
+Gender = Male
+BaseMoney = 60
+#-------------------------------
+[POKEMONRANGER_F]
+Name = Pokémon Ranger
+Gender = Female
+BaseMoney = 60
+#-------------------------------
+[PSYCHIC_M]
+Name = Psychic
+Gender = Male
+BaseMoney = 32
+#-------------------------------
+[PSYCHIC_F]
+Name = Psychic
+Gender = Female
+BaseMoney = 32
+#-------------------------------
+[SWIMMER_M]
+Name = Swimmer
+Gender = Male
+BaseMoney = 16
+SkillLevel = 32
+#-------------------------------
+[SWIMMER_F]
+Name = Swimmer
+Gender = Female
+BaseMoney = 16
+SkillLevel = 32
+#-------------------------------
+[SWIMMER2_M]
+Name = Swimmer
+Gender = Male
+BaseMoney = 16
+SkillLevel = 32
+#-------------------------------
+[SWIMMER2_F]
+Name = Swimmer
+Gender = Female
+BaseMoney = 16
+SkillLevel = 32
+#-------------------------------
+[TUBER_M]
+Name = Tuber
+Gender = Male
+BaseMoney = 4
+SkillLevel = 16
+#-------------------------------
+[TUBER_F]
+Name = Tuber
+Gender = Female
+BaseMoney = 4
+SkillLevel = 16
+#-------------------------------
+[TUBER2_M]
+Name = Tuber
+Gender = Male
+BaseMoney = 4
+SkillLevel = 16
+#-------------------------------
+[TUBER2_F]
+Name = Tuber
+Gender = Female
+BaseMoney = 4
+SkillLevel = 16
+#-------------------------------
+[COOLCOUPLE]
+Name = Cool Couple
+Gender = Unknown
+BaseMoney = 72
+SkillLevel = 48
+#-------------------------------
+[CRUSHKIN]
+Name = Crush Kin
+Gender = Unknown
+BaseMoney = 48
+#-------------------------------
+[SISANDBRO]
+Name = Sis and Bro
+Gender = Unknown
+BaseMoney = 16
+SkillLevel = 48
+#-------------------------------
+[TWINS]
+Name = Twins
+Gender = Unknown
+BaseMoney = 24
+#-------------------------------
+[YOUNGCOUPLE]
+Name = Young Couple
+Gender = Unknown
+BaseMoney = 60
+SkillLevel = 32
+#-------------------------------
+[TEAMROCKET_M]
+Name = Team Rocket
+Gender = Male
+BaseMoney = 32
+#-------------------------------
+[TEAMROCKET_F]
+Name = Team Rocket
+Gender = Female
+BaseMoney = 32
+#-------------------------------
+[ROCKETBOSS]
+Name = Rocket Boss
+Gender = Male
+BaseMoney = 100
+#-------------------------------
+[LEADER_Brock]
+Name = Gym Leader
+Gender = Male
+BaseMoney = 100
+BattleBGM = Battle Gym Leader
+VictoryME = Battle victory leader
+#-------------------------------
+[LEADER_Misty]
+Name = Gym Leader
+Gender = Female
+BaseMoney = 100
+BattleBGM = Battle Gym Leader
+VictoryME = Battle victory leader
+#-------------------------------
+[LEADER_Surge]
+Name = Gym Leader
+Gender = Male
+BaseMoney = 100
+BattleBGM = Battle Gym Leader
+VictoryME = Battle victory leader
+#-------------------------------
+[LEADER_Erika]
+Name = Gym Leader
+Gender = Female
+BaseMoney = 100
+BattleBGM = Battle Gym Leader
+VictoryME = Battle victory leader
+#-------------------------------
+[LEADER_Koga]
+Name = Gym Leader
+Gender = Male
+BaseMoney = 100
+BattleBGM = Battle Gym Leader
+VictoryME = Battle victory leader
+#-------------------------------
+[LEADER_Sabrina]
+Name = Gym Leader
+Gender = Female
+BaseMoney = 100
+BattleBGM = Battle Gym Leader
+VictoryME = Battle victory leader
+#-------------------------------
+[LEADER_Blaine]
+Name = Gym Leader
+Gender = Male
+BaseMoney = 100
+BattleBGM = Battle Gym Leader
+VictoryME = Battle victory leader
+#-------------------------------
+[LEADER_Giovanni]
+Name = Gym Leader
+Gender = Male
+BaseMoney = 100
+BattleBGM = Battle Gym Leader
+VictoryME = Battle victory leader
+#-------------------------------
+[ELITEFOUR_Lorelei]
+Name = Elite Four
+Gender = Female
+BaseMoney = 100
+BattleBGM = Battle Elite
+VictoryME = Battle victory leader
+#-------------------------------
+[ELITEFOUR_Bruno]
+Name = Elite Four
+Gender = Male
+BaseMoney = 100
+BattleBGM = Battle Elite
+VictoryME = Battle victory leader
+#-------------------------------
+[ELITEFOUR_Agatha]
+Name = Elite Four
+Gender = Female
+BaseMoney = 100
+BattleBGM = Battle Elite
+VictoryME = Battle victory leader
+#-------------------------------
+[ELITEFOUR_Lance]
+Name = Elite Four
+Gender = Male
+BaseMoney = 100
+BattleBGM = Battle Elite
+VictoryME = Battle victory leader
+#-------------------------------
+[CHAMPION]
+Name = Champion
+Gender = Male
+BaseMoney = 100
+BattleBGM = Battle Elite
+VictoryME = Battle victory leader

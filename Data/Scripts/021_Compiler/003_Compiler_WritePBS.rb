@@ -556,19 +556,18 @@ module Compiler
   def write_trainer_types
     File.open("PBS/trainertypes.txt", "wb") { |f|
       add_PBS_header_to_file(f)
-      f.write("\#-------------------------------\r\n")
       GameData::TrainerType.each do |t|
-        f.write(sprintf("0,%s,%s,%d,%s,%s,%s,%s,%s,%s\r\n",
-          csvQuote(t.id.to_s),
-          csvQuote(t.real_name),
-          t.base_money,
-          csvQuote(t.battle_BGM),
-          csvQuote(t.victory_ME),
-          csvQuote(t.intro_ME),
-          ["Male", "Female", "Mixed"][t.gender],
-          (t.skill_level == t.base_money) ? "" : t.skill_level.to_s,
-          csvQuote(t.skill_code)
-        ))
+        f.write("\#-------------------------------\r\n")
+        f.write(sprintf("[%s]\r\n", t.id))
+        f.write(sprintf("Name = %s\r\n", t.real_name))
+        gender = GameData::TrainerType::SCHEMA["Gender"][2].key(t.gender)
+        f.write(sprintf("Gender = %s\r\n", gender))
+        f.write(sprintf("BaseMoney = %d\r\n", t.base_money))
+        f.write(sprintf("SkillLevel = %d\r\n", t.skill_level)) if t.skill_level != t.base_money
+        f.write(sprintf("SkillCode = %s\r\n", t.skill_code)) if !nil_or_empty?(t.skill_code)
+        f.write(sprintf("IntroME = %s\r\n", t.intro_ME)) if !nil_or_empty?(t.intro_ME)
+        f.write(sprintf("BattleBGM = %s\r\n", t.battle_BGM)) if !nil_or_empty?(t.battle_BGM)
+        f.write(sprintf("VictoryME = %s\r\n", t.victory_ME)) if !nil_or_empty?(t.victory_ME)
       end
     }
     Graphics.update
