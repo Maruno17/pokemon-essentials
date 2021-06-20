@@ -576,11 +576,17 @@ module PluginManager
       next if !plugins[o] || !plugins[o][:dependencies]
       # go through all dependencies
       for dname in plugins[o][:dependencies]
+        optional = false
         # clean the name to a simple string
-        dname = dname[0] if dname.is_a?(Array) && dname.length == 2
-        dname = dname[1] if dname.is_a?(Array) && dname.length == 3
+        if dname.is_a?(Array)
+          optional = [:optional,:optional_exact].include?(dname[0])
+          dname = dname[dname.length - 2]
+        end
         # catch missing dependency
-        self.error("Plugin '#{o}' requires plugin '#{dname}' to work properly.") if !order.include?(dname)
+        if !order.include?(dname)
+          next if optional
+          self.error("Plugin '#{o}' requires plugin '#{dname}' to work properly.")
+        end
         # skip if already sorted
         next if order.index(dname) > order.index(o)
         # catch looping dependency issue
