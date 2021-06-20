@@ -1097,22 +1097,22 @@ DebugMenuCommands.register("createpbs", {
     cmds = [
       _INTL("[Create all]"),
       "abilities.txt",
-      "berryplants.txt",
-      "connections.txt",
+      "battle_facility_lists.txt",
+      "berry_plants.txt",
       "encounters.txt",
       "items.txt",
+      "map_connections.txt",
       "metadata.txt",
       "moves.txt",
       "phone.txt",
       "pokemon.txt",
-      "pokemonforms.txt",
-      "regionaldexes.txt",
+      "pokemon_forms.txt",
+      "regional_dexes.txt",
       "ribbons.txt",
-      "shadowmoves.txt",
-      "townmap.txt",
-      "trainerlists.txt",
+      "shadow_movesets.txt",
+      "town_map.txt",
+      "trainer_types.txt",
       "trainers.txt",
-      "trainertypes.txt",
       "types.txt"
     ]
     loop do
@@ -1120,22 +1120,22 @@ DebugMenuCommands.register("createpbs", {
       case cmd
       when 0  then Compiler.write_all
       when 1  then Compiler.write_abilities
-      when 2  then Compiler.write_berry_plants
-      when 3  then Compiler.write_connections
+      when 2  then Compiler.write_trainer_lists
+      when 3  then Compiler.write_berry_plants
       when 4  then Compiler.write_encounters
       when 5  then Compiler.write_items
-      when 6  then Compiler.write_metadata
-      when 7  then Compiler.write_moves
-      when 8  then Compiler.write_phone
-      when 9  then Compiler.write_pokemon
-      when 10 then Compiler.write_pokemon_forms
-      when 11 then Compiler.write_regional_dexes
-      when 12 then Compiler.write_ribbons
-      when 13 then Compiler.write_shadow_movesets
-      when 14 then Compiler.write_town_map
-      when 15 then Compiler.write_trainer_lists
-      when 16 then Compiler.write_trainers
-      when 17 then Compiler.write_trainer_types
+      when 6  then Compiler.write_connections
+      when 7  then Compiler.write_metadata
+      when 8  then Compiler.write_moves
+      when 9  then Compiler.write_phone
+      when 10 then Compiler.write_pokemon
+      when 11 then Compiler.write_pokemon_forms
+      when 12 then Compiler.write_regional_dexes
+      when 13 then Compiler.write_ribbons
+      when 14 then Compiler.write_shadow_movesets
+      when 15 then Compiler.write_town_map
+      when 16 then Compiler.write_trainer_types
+      when 17 then Compiler.write_trainers
       when 18 then Compiler.write_types
       else break
       end

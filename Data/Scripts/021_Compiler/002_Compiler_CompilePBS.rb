@@ -4,7 +4,7 @@ module Compiler
   #=============================================================================
   # Compile Town Map data
   #=============================================================================
-  def compile_town_map(path = "PBS/townmap.txt")
+  def compile_town_map(path = "PBS/town_map.txt")
     nonglobaltypes = {
       "Name"     => [0, "s"],
       "Filename" => [1, "s"],
@@ -52,7 +52,7 @@ module Compiler
   #=============================================================================
   # Compile map connections
   #=============================================================================
-  def compile_connections(path = "PBS/connections.txt")
+  def compile_connections(path = "PBS/map_connections.txt")
     records   = []
     pbCompilerEachPreppedLine(path) { |line,lineno|
       hashenum = {
@@ -479,7 +479,7 @@ module Compiler
   #=============================================================================
   # Compile berry plant data
   #=============================================================================
-  def compile_berry_plants(path = "PBS/berryplants.txt")
+  def compile_berry_plants(path = "PBS/berry_plants.txt")
     GameData::BerryPlant::DATA.clear
     pbCompilerEachCommentedLine(path) { |line, line_no|
       if line[/^\s*(\w+)\s*=\s*(.*)$/]   # Of the format XXX = YYY
@@ -665,7 +665,7 @@ module Compiler
   #=============================================================================
   # Compile Pokémon forms data
   #=============================================================================
-  def compile_pokemon_forms(path = "PBS/pokemonforms.txt")
+  def compile_pokemon_forms(path = "PBS/pokemon_forms.txt")
     species_names           = []
     species_form_names      = []
     species_categories      = []
@@ -855,7 +855,7 @@ module Compiler
   #=============================================================================
   # Compile Shadow movesets
   #=============================================================================
-  def compile_shadow_movesets(path = "PBS/shadowmoves.txt")
+  def compile_shadow_movesets(path = "PBS/shadow_movesets.txt")
     sections = {}
     if safeExists?(path)
       pbCompilerEachCommentedLine(path) { |line, _line_no|
@@ -880,7 +880,7 @@ module Compiler
   #=============================================================================
   # Compile Regional Dexes
   #=============================================================================
-  def compile_regional_dexes(path = "PBS/regionaldexes.txt")
+  def compile_regional_dexes(path = "PBS/regional_dexes.txt")
     dex_lists = []
     section = nil
     pbCompilerEachPreppedLine(path) { |line, line_no|
@@ -1094,12 +1094,12 @@ module Compiler
   #=============================================================================
   # Compile trainer type data
   #=============================================================================
-  def compile_trainer_types(path = "PBS/trainertypes.txt")
+  def compile_trainer_types(path = "PBS/trainer_types.txt")
     GameData::TrainerType::DATA.clear
     schema = GameData::TrainerType::SCHEMA
     tr_type_names = []
     tr_type_hash  = nil
-    # Read each line of trainertypes.txt at a time and compile it into a trainer type
+    # Read each line of trainer_types.txt at a time and compile it into a trainer type
     pbCompilerEachPreppedLine(path) { |line, line_no|
       if line[/^\s*\[\s*(.+)\s*\]\s*$/]   # New section [tr_type_id]
         # Add previous trainer type's data to records

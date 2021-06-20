@@ -128,7 +128,7 @@ module Compiler
     yield lastsection,sectionname if havesection
   end
 
-  # Used for types.txt, pokemon.txt, trainerlists.txt and Battle Tower trainers PBS files
+  # Used for types.txt, pokemon.txt, battle_facility_lists.txt and Battle Tower trainers PBS files
   def pbEachFileSection(f)
     pbEachFileSectionEx(f) { |section,name|
       yield section,name if block_given? && name[/^.+$/]
@@ -142,7 +142,7 @@ module Compiler
     }
   end
 
-  # Used for pokemonforms.txt
+  # Used for pokemon_forms.txt
   def pbEachFileSectionPokemonForms(f)
     pbEachFileSectionEx(f) { |section,name|
       yield section,name if block_given? && name[/^\w+[-,\s]{1}\d+$/]
@@ -221,7 +221,7 @@ module Compiler
     }
   end
 
-  # Used for connections.txt, abilities.txt, moves.txt, regionaldexes.txt
+  # Used for map_connections.txt, abilities.txt, moves.txt, regional_dexes.txt
   def pbCompilerEachPreppedLine(filename)
     File.open(filename,"rb") { |f|
       FileLineData.file = filename
@@ -675,7 +675,7 @@ module Compiler
     clontype.sub!(/\s*$/, "")
     typ = GameData::TrainerType.try_get(clontype)
     if !typ
-      raise _INTL("Undefined Trainer type constant name: {1}\r\nMake sure the trainer type is defined in PBS/trainertypes.txt.\r\n{2}", type, FileLineData.linereport)
+      raise _INTL("Undefined Trainer type constant name: {1}\r\nMake sure the trainer type is defined in PBS/trainer_types.txt.\r\n{2}", type, FileLineData.linereport)
     end
     return typ.id
   end
@@ -764,22 +764,22 @@ module Compiler
       ]
       textFiles = [
          "abilities.txt",
-         "berryplants.txt",
-         "connections.txt",
+         "battle_facility_lists.txt",
+         "berry_plants.txt",
          "encounters.txt",
          "items.txt",
+         "map_connections.txt",
          "metadata.txt",
          "moves.txt",
          "phone.txt",
          "pokemon.txt",
-         "pokemonforms.txt",
-         "regionaldexes.txt",
+         "pokemon_forms.txt",
+         "regional_dexes.txt",
          "ribbons.txt",
-         "shadowmoves.txt",
-         "townmap.txt",
-         "trainerlists.txt",
+         "shadow_movesets.txt",
+         "town_map.txt",
+         "trainer_types.txt",
          "trainers.txt",
-         "trainertypes.txt",
          "types.txt"
       ]
       latestDataTime = 0

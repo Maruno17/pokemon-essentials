@@ -14,7 +14,7 @@ module Compiler
   def write_town_map
     mapdata = pbLoadTownMapData
     return if !mapdata
-    File.open("PBS/townmap.txt","wb") { |f|
+    File.open("PBS/town_map.txt","wb") { |f|
       add_PBS_header_to_file(f)
       for i in 0...mapdata.length
         map = mapdata[i]
@@ -72,7 +72,7 @@ module Compiler
     conndata = load_data("Data/map_connections.dat")
     return if !conndata
     mapinfos = pbLoadMapInfos
-    File.open("PBS/connections.txt","wb") { |f|
+    File.open("PBS/map_connections.txt","wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       for conn in conndata
@@ -226,7 +226,7 @@ module Compiler
   # Save berry plant data to PBS file
   #=============================================================================
   def write_berry_plants
-    File.open("PBS/berryplants.txt", "wb") { |f|
+    File.open("PBS/berry_plants.txt", "wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       GameData::BerryPlant.each do |bp|
@@ -341,7 +341,7 @@ module Compiler
   # Save Pokémon forms data to PBS file
   #=============================================================================
   def write_pokemon_forms
-    File.open("PBS/pokemonforms.txt", "wb") { |f|
+    File.open("PBS/pokemon_forms.txt", "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       GameData::Species.each do |species|
@@ -448,7 +448,7 @@ module Compiler
   #=============================================================================
   def write_shadow_movesets
     shadow_movesets = pbLoadShadowMovesets
-    File.open("PBS/shadowmoves.txt", "wb") { |f|
+    File.open("PBS/shadow_movesets.txt", "wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       GameData::Species.each do |species_data|
@@ -465,7 +465,7 @@ module Compiler
   #=============================================================================
   def write_regional_dexes
     dex_lists = pbLoadRegionalDexes
-    File.open("PBS/regionaldexes.txt", "wb") { |f|
+    File.open("PBS/regional_dexes.txt", "wb") { |f|
       add_PBS_header_to_file(f)
       # Write each Dex list in turn
       dex_lists.each_with_index do |list, index|
@@ -548,7 +548,7 @@ module Compiler
   # Save trainer type data to PBS file
   #=============================================================================
   def write_trainer_types
-    File.open("PBS/trainertypes.txt", "wb") { |f|
+    File.open("PBS/trainer_types.txt", "wb") { |f|
       add_PBS_header_to_file(f)
       GameData::TrainerType.each do |t|
         f.write("\#-------------------------------\r\n")
@@ -624,7 +624,7 @@ module Compiler
   def write_trainer_lists
     trainerlists = load_data("Data/trainer_lists.dat") rescue nil
     return if !trainerlists
-    File.open("PBS/trainerlists.txt","wb") { |f|
+    File.open("PBS/battle_facility_lists.txt","wb") { |f|
       add_PBS_header_to_file(f)
       for tr in trainerlists
         f.write("\#-------------------------------\r\n")
