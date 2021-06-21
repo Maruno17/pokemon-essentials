@@ -955,7 +955,13 @@ class Interpreter
   # * Recover All
   #-----------------------------------------------------------------------------
   def command_314
-    $Trainer.heal_party if @parameters[0] == 0
+    if @parameters[0] == 0
+      if Settings::HEAL_STORED_POKEMON   # No need to heal stored Pokémon
+        $Trainer.heal_party
+      else
+        pbEachPokemon { |pkmn, box| pkmn.heal }   # Includes party Pokémon
+      end
+    end
     return true
   end
 

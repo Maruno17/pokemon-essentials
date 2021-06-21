@@ -3,27 +3,22 @@
 Marks, which are symbols randomly given to wild Pokémon which append a title to
 its name when sent out in battle. A Pokémon can only have 0 or 1 marks. The
 title can be toggled. Ribbons also provide a title, and can similarly be
-toggled.
+toggled. (Probably don't bother implementing.)
 
-Super shininess (only difference is an alternate shiny common animation with
+Super shininess. Only difference is an alternate shiny common animation with
 square sparkles; a mon is super shiny if the calculated number that is compared
-to SHINY_POKEMON_CHANCE is exactly 0)
+to Settings::SHINY_POKEMON_CHANCE is exactly 0.
 
-Look at methods of increasing shiny chance.
+The game records, for each species, how many have been caught or defeated
+(counts both wild and trainer battles), and the shiny chance increases for that
+species because of this. This value is also shown in the Pokédex entry screen.
 
-Form differences.
+"Pokémon no longer lose access to moves by evolving." I'm not sure what this
+means. Maybe evolving causes the first_moves to be cleared (in the GF games; it
+isn't cleared in Essentials)? In Gen 8+, a taught TR should be added to the
+first_moves array.
 
-Changes to evolutions due to removal of moss rock/ice rock/magnetic field.
-
-Some (12) existing species changed egg groups.
-
-Aegislash's stats changed.
-
-2 existing Pokémon gained new abilities.
-
-Pokémon no longer lose access to moves by evolving.
-
-Move moves have changed properties/effects. Vice Grip becomes Vise Grip.
+Some moves have changed properties/effects.
 
 Can now give a Rare Candy to a max level Pokémon, which will trigger its
 evolution (presumably the item isn't consumed if it can't at least try to evolve
@@ -31,9 +26,26 @@ it).
 
 Bicycle that can work on water.
 
-Town Map added to the pause menu. Can use Fly from within the Town Map if
-possible.
+Town Map added to the pause menu (don't bother adding). Can use Fly from within
+the Town Map if possible (good QoL, add if possible).
 
-Remote access to storage boxes, and Pokémon sent to storage aren't healed.
+Remote access to storage boxes. Add an option to the pause screen for this
+unless Settings::HEAL_STORED_POKEMON?
+
+# PBS file data:
+# - Form differences.
+# - Moveset changes.
+# - Changes to evolutions due to removal of moss rock/ice rock/magnetic field.
+# - Some (12) existing species changed egg groups.
+# - Aegislash's stats changed.
+# - 2 existing Pokémon gained new abilities.
+# - Vice Grip becomes Vise Grip.
+# - Some items change names (Stick -> Leek, etc.).
+
+#===============================================================================
+# Implemented
+#===============================================================================
+
+Pokémon sent to storage aren't healed - see Settings::HEAL_STORED_POKEMON.
 
 =end
