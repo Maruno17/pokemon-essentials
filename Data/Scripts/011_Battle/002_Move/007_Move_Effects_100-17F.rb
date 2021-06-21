@@ -324,30 +324,21 @@ end
 class PokeBattle_Move_10E < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
-  def pbFailsAgainstTarget?(user,target)
-    failed = true
-    if target.lastRegularMoveUsed
-      target.eachMove do |m|
-        next if m.id!=target.lastRegularMoveUsed || m.pp==0 || m.total_pp<=0
-        failed = false; break
-      end
-    end
-    if failed
+  def pbFailsAgainstTarget?(user, target)
+    last_move = target.pbGetMoveWithID(target.lastRegularMoveUsed)
+    if !last_move || last_move.pp == 0 || last_move.total_pp <= 0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
-    target.eachMove do |m|
-      next if m.id!=target.lastRegularMoveUsed
-      reduction = [4,m.pp].min
-      target.pbSetPP(m,m.pp-reduction)
-      @battle.pbDisplay(_INTL("It reduced the PP of {1}'s {2} by {3}!",
-         target.pbThis(true),m.name,reduction))
-      break
-    end
+  def pbEffectAgainstTarget(user, target)
+    last_move = target.pbGetMoveWithID(target.lastRegularMoveUsed)
+    reduction = [4, last_move.pp].min
+    target.pbSetPP(last_move, last_move.pp - reduction)
+    @battle.pbDisplay(_INTL("It reduced the PP of {1}'s {2} by {3}!",
+       target.pbThis(true), last_move.name, reduction))
   end
 end
 

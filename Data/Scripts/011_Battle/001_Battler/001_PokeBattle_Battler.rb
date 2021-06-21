@@ -457,6 +457,12 @@ class PokeBattle_Battler
     return false
   end
 
+  def pbGetMoveWithID(move_id)
+    return nil if !move_id
+    eachMove { |m| return m if m.id == move_id }
+    return nil
+  end
+
   def hasMoldBreaker?
     return hasActiveAbility?([:MOLDBREAKER, :TERAVOLT, :TURBOBLAZE])
   end
