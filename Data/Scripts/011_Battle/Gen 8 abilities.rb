@@ -1,17 +1,271 @@
+BattleHandlers::AbilityOnSwitchIn.add(:INTREPIDSWORD,
+  proc { |ability, battler, battle|
+    battler.pbRaiseStatStageByAbility(:ATTACK, 1, battler)
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:DAUNTLESSSHIELD,
+  proc { |ability, battler, battle|
+    battler.pbRaiseStatStageByAbility(:ATTACK, 1, battler)
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:CURIOUSMEDICINE,
+  proc { |ability, battler, battle|
+    has_effect = false
+    battler.eachAlly do |b|
+      next if !b.hasAlteredStatStages?
+      has_effect = true
+      break
+    end
+    next if !has_effect
+    battle.pbShowAbilitySplash(battler)
+    battler.eachAlly do |b|
+      next if !b.hasAlteredStatStages?
+      b.pbResetStatStages
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1}'s stat changes were removed!", b.pbThis))
+      else
+        battle.pbDisplay(_INTL("{1}'s stat changes were removed by {2}'s {3}!",
+           b.pbThis, battler.pbThis(true), battler.abilityName))
+      end
+    end
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:SCREENCLEANER,
+  proc { |ability, battler, battle|
+    next if target.pbOwnSide.effects[PBEffects::AuroraVeil] == 0 &&
+            target.pbOwnSide.effects[PBEffects::LightScreen] == 0 &&
+            target.pbOwnSide.effects[PBEffects::Reflect] == 0 &&
+            target.pbOpposingSide.effects[PBEffects::AuroraVeil] == 0 &&
+            target.pbOpposingSide.effects[PBEffects::LightScreen] == 0 &&
+            target.pbOpposingSide.effects[PBEffects::Reflect] == 0
+    battle.pbShowAbilitySplash(battler)
+    if battler.pbOpposingSide.effects[PBEffects::AuroraVeil] > 0
+      battler.pbOpposingSide.effects[PBEffects::AuroraVeil] = 0
+      battle.pbDisplay(_INTL("{1}'s Aurora Veil wore off!", battler.pbOpposingTeam))
+    end
+    if battler.pbOpposingSide.effects[PBEffects::LightScreen] > 0
+      battler.pbOpposingSide.effects[PBEffects::LightScreen] = 0
+      battle.pbDisplay(_INTL("{1}'s Light Screen wore off!", battler.pbOpposingTeam))
+    end
+    if battler.pbOpposingSide.effects[PBEffects::Reflect] > 0
+      battler.pbOpposingSide.effects[PBEffects::Reflect] = 0
+      battle.pbDisplay(_INTL("{1}'s Reflect wore off!", battler.pbOpposingTeam))
+    end
+    if battler.pbOwnSide.effects[PBEffects::AuroraVeil] > 0
+      battler.pbOwnSide.effects[PBEffects::AuroraVeil] = 0
+      battle.pbDisplay(_INTL("{1}'s Aurora Veil wore off!", battler.pbTeam))
+    end
+    if battler.pbOwnSide.effects[PBEffects::LightScreen] > 0
+      battler.pbOwnSide.effects[PBEffects::LightScreen] = 0
+      battle.pbDisplay(_INTL("{1}'s Light Screen wore off!", battler.pbTeam))
+    end
+    if battler.pbOwnSide.effects[PBEffects::Reflect] > 0
+      battler.pbOwnSide.effects[PBEffects::Reflect] = 0
+      battle.pbDisplay(_INTL("{1}'s Reflect wore off!", battler.pbTeam))
+    end
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
+BattleHandlers::TargetAbilityOnHit.add(:SANDSPIT,
+  proc { |ability, user, target, move, battle|
+    pbBattleWeatherAbility(:Sandstorm, battler, battle)
+  }
+)
+
+BattleHandlers::TargetAbilityOnHit.add(:COTTONDOWN,
+  proc { |ability, user, target, move, battle|
+    has_effect = false
+    battle.eachBattler do |b|
+      next if !b.pbCanLowerStatStage?(:DEFENSE, target)
+      has_effect = true
+      break
+    end
+    next if !has_effect
+    battle.pbShowAbilitySplash(battler)
+    battle.eachBattler do |b|
+      b.pbLowerStatStageByAbility(:SPEED, 1, target, false)
+    end
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
+BattleHandlers::TargetAbilityOnHit.add(:PERISHBODY,
+  proc { |ability, user, target, move, battle|
+    next if !move.pbContactMove?(user)
+    next if user.fainted?
+    next if user.effects[PBEffects::PerishSong] > 0 || target.effects[PBEffects::PerishSong] > 0
+    battle.pbShowAbilitySplash(target)
+    if user.affectedByContactEffect?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
+      user.effects[PBEffects::PerishSong] = 4
+      user.effects[PBEffects::PerishSongUser] = target.index
+      target.effects[PBEffects::PerishSong] = 4
+      target.effects[PBEffects::PerishSongUser] = target.index
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("Both Pokémon will faint in three turns!"))
+      else
+        battle.pbDisplay(_INTL("Both Pokémon will faint in three turns because of {1}'s {2}!",
+           target.pbThis(true), target.abilityName))
+      end
+    end
+    battle.pbHideAbilitySplash(target)
+  }
+)
+
+BattleHandlers::TargetAbilityOnHit.add(:WANDERINGSPIRIT,
+  proc { |ability, user, target, move, battle|
+    next if !move.pbContactMove?(user)
+    next if user.ungainableAbility? || [:RECEIVER, :WONDERGUARD].include?(user.ability_id)
+    oldUserAbil   = nil
+    oldTargetAbil = nil
+    battle.pbShowAbilitySplash(target) if user.opposes?(target)
+    if user.affectedByContactEffect?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
+      battle.pbShowAbilitySplash(user, true, false) if user.opposes?(target)
+      oldUserAbil   = user.ability
+      oldTargetAbil = target.ability
+      user.ability   = oldTargetAbil
+      target.ability = oldUserAbil
+      if user.opposes?(target)
+        battle.pbReplaceAbilitySplash(user)
+        battle.pbReplaceAbilitySplash(target)
+      end
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1} swapped Abilities with {2}!", target.pbThis, user.pbThis(true)))
+      else
+        battle.pbDisplay(_INTL("{1} swapped its {2} Ability with {3}'s {4} Ability!",
+           target.pbThis, user.abilityName, user.pbThis(true), target.abilityName))
+      end
+      if user.opposes?(target)
+        battle.pbHideAbilitySplash(user)
+        battle.pbHideAbilitySplash(target)
+      end
+    end
+    battle.pbHideAbilitySplash(target) if user.opposes?(target)
+    user.pbOnAbilityChanged(oldUserAbil) if oldUserAbil != nil
+    target.pbOnAbilityChanged(oldTargetAbil) if oldTargetAbil != nil
+    target.pbEffectsOnSwitchIn
+  }
+)
+
+BattleHandlers::UserAbilityEndOfMove.add(:CHILLINGNEIGH,
+  proc { |ability, user, targets, move, battle|
+    next if battle.pbAllFainted?(user.idxOpposingSide)
+    numFainted = 0
+    targets.each { |b| numFainted += 1 if b.damageState.fainted }
+    next if numFainted == 0 || !user.pbCanRaiseStatStage?(:ATTACK, user)
+    user.pbRaiseStatStageByAbility(:ATTACK, 1, user)
+  }
+)
+
+BattleHandlers::UserAbilityEndOfMove.add(:GRIMNEIGH,
+  proc { |ability, user, targets, move, battle|
+    next if battle.pbAllFainted?(user.idxOpposingSide)
+    numFainted = 0
+    targets.each { |b| numFainted += 1 if b.damageState.fainted }
+    next if numFainted == 0 || !user.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user)
+    user.pbRaiseStatStageByAbility(:SPECIAL_ATTACK, 1, user)
+  }
+)
+
+BattleHandlers::DamageCalcUserAbility.add(:TRANSISTOR ,
+  proc { |ability, user, target, move, mults, baseDmg, type|
+    mults[:attack_multiplier] *= 1.5 if type == :ELECTRIC
+  }
+)
+
+BattleHandlers::DamageCalcUserAbility.add(:DRAGONSMAW ,
+  proc { |ability, user, target, move, mults, baseDmg, type|
+    mults[:attack_multiplier] *= 1.5 if type == :DRAGON
+  }
+)
+
+BattleHandlers::DamageCalcUserAbility.add(:PUNKROCK ,
+  proc { |ability, user, target, move, mults, baseDmg, type|
+    mults[:attack_multiplier] *= 1.3 if move.soundMove?
+  }
+)
+
+BattleHandlers::DamageCalcTargetAbility.add(:PUNKROCK,
+  proc { |ability, user, target, move, mults, baseDmg, type|
+    mults[:final_damage_multiplier] /= 2 if move.soundMove?
+  }
+)
+
+BattleHandlers::DamageCalcUserAbility.add(:STEELYSPIRIT ,
+  proc { |ability, user, target, move, mults, baseDmg, type|
+    mults[:final_damage_multiplier] *= 1.5 if type == :STEEL
+  }
+)
+
+BattleHandlers::DamageCalcUserAllyAbility.add(:STEELYSPIRIT,
+  proc { |ability, user, target, move, mults, baseDmg, type|
+    mults[:final_damage_multiplier] *= 1.5 if type == :STEEL
+  }
+)
+
+BattleHandlers::DamageCalcUserAllyAbility.add(:POWERSPOT,
+  proc { |ability, user, target, move, mults, baseDmg, type|
+    mults[:final_damage_multiplier] *= 1.3
+  }
+)
+
+BattleHandlers::DamageCalcTargetAbility.add(:ICESCALES,
+  proc { |ability, user, target, move, mults, baseDmg, type|
+    mults[:final_damage_multiplier] /= 2 if move.specialMove?
+  }
+)
+
+BattleHandlers::StatusImmunityAbility.copy(:IMMUNITY, :PASTELVEIL)
+
+BattleHandlers::StatusImmunityAbility.add(:PASTELVEIL,
+  proc { |ability, battler, status|
+    next true if status == :POISON
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:PASTELVEIL,
+  proc { |ability, battler, battle|
+    has_effect = false
+    battler.eachAlly do |b|
+      next if b.status != :POISON
+      has_effect = true
+      break
+    end
+    next if !has_effect
+    battle.pbShowAbilitySplash(battler)
+    battler.eachAlly do |b|
+      next if b.status != :POISON
+      b.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
+      if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1}'s {2} cured {3}'s poisoning!",
+           battler.pbThis, battler.abilityName, b.pbThis(true)))
+      end
+    end
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
+BattleHandlers::PriorityBracketChangeAbility.add(:QUICKDRAW,
+  proc { |ability, battler, subPri, battle|
+    next 1 if subPri == 0 && battle.pbRandom(100) < 30
+  }
+)
+
+BattleHandlers::PriorityBracketUseAbility.add(:QUICKDRAW,
+  proc { |ability, battler, battle|
+    battle.pbShowAbilitySplash(battler)
+    battle.pbDisplay(_INTL("{1} made {2} move faster!", battler.abilityName, battler.pbThis(true)))
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
 =begin
 
-Intrepid Sword
-Upon entering battle, bearer gets +1 Attack.
-
-Dauntless Shield
-Upon entering battle, bearer gets +1 Defense.
-
-Curious Medicine
-Upon entering battle, resets the stat stages of all allies to 0.
-
-Screen Cleaner
-Upon entering battle, ends the effects of Light Screen, Reflect and Aurora Veil
-on both sides.
+#===============================================================================
 
 Hunger Switch
 At the end of each round, switches the bearer's form (if it is Morpeko).
@@ -20,13 +274,6 @@ Ball Fetch
 At the end of a round in which a thrown Poké Ball fails to catch a Pokémon,
 bearer picks up that Poké Ball. Applies only to the first thrown Poké Ball, and
 only triggers once.
-
-Cotton Down
-When bearer is hit by a damaging move, all other Pokémon get -1 Speed per hit.
-
-Sand Spit
-When bearer is hit by a damaging move, starts sandstorm weather for 5 rounds (or
-8 with Smooth Rock).
 
 Steam Engine
 When bearer is hit by a Fire- or Water-type move, bearer gets +6 Speed (after
@@ -38,22 +285,6 @@ When bearer is hit by a physical move while in its initial form, it takes no
 damage and its form changes. At he end of a round in which hail weather started,
 the bearer regains its initial form.
 
-Perish Body
-When bearer is hit by a move that makes contact, both bearer and attacker will
-faint in 3 turns. Does nothing if attacker already has a perish count.
-
-Wandering Spirit
-When bearer is hit by a move that makes contact, it swaps abilities with the
-attacker (even if bearer faints from that move).
-
-Chilling Neigh
-When bearer causes another Pokémon to faint with a damaging move, bearer gets +1
-Attack.
-
-Grim Neigh
-When bearer causes another Pokémon to faint with a damaging move, bearer gets +1
-Special Attack.
-
 As One (Chilling)
 Combination of Unnerve and Chilling Neigh. Message upon entering battle says it
 has two abilities; other triggers use the name of the appropriate ability rather
@@ -64,32 +295,9 @@ Combination of Unnerve and Grim Neigh. Message upon entering battle says it has
 two abilities; other triggers use the name of the appropriate ability rather
 than "As One".
 
-Transistor
-Boosts bearer's Electric-type moves by 50%.
-
-Dragon's Maw
-Boosts bearer's Dragon-type moves by 50%.
-
-Punk Rock
-Boosts bearer's sound-based moves by 30%. Bearer takes half damage from
-sound-based moves.
-
-Steely Spirit
-Boosts the power of Steel-type moves used by the bearer and its allies by 50%.
-
-Power Spot
-Boosts the power of moves used by allies by 30%.
-
 Gorilla Tactics
 Boosts bearer's Attack by 50%, but restricts bearer to one move (cf. Choice
 Band). Power boost stacks with Choice Band.
-
-Ice Scales
-Bearer takes half damage from special moves.
-
-Pastel Veil
-The bearer and its allies are immune to poisoning. If bearer is sent into
-battle, cures allies of poisoning.
 
 Unseen Fist
 The bearer's moves will do damage with contact moves even if the target is
@@ -106,13 +314,6 @@ Neutralizing Gas
 Suppresses all other abilities. Once this ability stops applying, triggers all
 abilities that activate when gained (if this happens because bearer switches
 out, abilities trigger before the replacement switches in).
-
-Quick Draw
-Bearer has 30% chance of going first in its priority bracket, regardless of
-Speed. If it does, a message announces it.
-
-Libero
-User changes type to match the move it's about to use (like Protean).
 
 Propellor Tail, Stalwart
 Bearer's moves cannot be redirected.
