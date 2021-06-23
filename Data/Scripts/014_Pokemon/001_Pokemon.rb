@@ -388,6 +388,24 @@ class Pokemon
     return @shiny
   end
 
+  # @return [Boolean] whether this Pokémon is super shiny (differently colored,
+  #   square sparkles)
+  def super_shiny?
+    if @super_shiny.nil?
+      a = @personalID ^ @owner.id
+      b = a & 0xFFFF
+      c = (a >> 16) & 0xFFFF
+      d = b ^ c
+      @super_shiny = (d == 0)
+    end
+    return @super_shiny
+  end
+
+  def super_shiny=(value)
+    @super_shiny = value
+    @shiny = true if @super_shiny
+  end
+
   #=============================================================================
   # Ability
   #=============================================================================

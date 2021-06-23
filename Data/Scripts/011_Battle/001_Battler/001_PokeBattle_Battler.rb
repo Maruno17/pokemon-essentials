@@ -184,6 +184,10 @@ class PokeBattle_Battler
     return @pokemon && @pokemon.shiny?
   end
 
+  def super_shiny?
+    return @pokemon && @pokemon.super_shiny?
+  end
+
   def owned?
     return false if !@battle.wildBattle?
     return $Trainer.owned?(displaySpecies)

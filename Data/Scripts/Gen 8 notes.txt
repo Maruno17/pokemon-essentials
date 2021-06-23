@@ -5,18 +5,11 @@ its name when sent out in battle. A Pokémon can only have 0 or 1 marks. The
 title can be toggled. Ribbons also provide a title, and can similarly be
 toggled. (Probably don't bother implementing.)
 
-Super shininess. Only difference is an alternate shiny common animation with
-square sparkles; a mon is super shiny if the calculated number that is compared
-to Settings::SHINY_POKEMON_CHANCE is exactly 0.
-
 The game records, for each species, how many have been caught or defeated
 (counts both wild and trainer battles), and the shiny chance increases for that
 species because of this. This value is also shown in the Pokédex entry screen.
 
-"Pokémon no longer lose access to moves by evolving." I'm not sure what this
-means. Maybe evolving causes the first_moves to be cleared (in the GF games; it
-isn't cleared in Essentials)? In Gen 8+, a taught TR should be added to the
-first_moves array.
+In Gen 8+, a taught TR should be added to the Pokémon's first_moves array.
 
 Some moves have changed properties/effects.
 
@@ -32,6 +25,17 @@ the Town Map if possible (good QoL, add if possible).
 Remote access to storage boxes. Add an option to the pause screen for this
 unless Settings::HEAL_STORED_POKEMON?
 
+Example event that combines the Gen 8 fossils.
+
+New evolution methods:
+- Milcery (spinning while holding an item)
+- Galarian Farfetch'd (performing 3 critical hits in a single battle)
+- Galarian Yamask (going to a particular spot after a battle in which it lost
+  49+ HP from a single attack and hasn't fainted since then; healing doesn't
+  affect this)
+- Kubfu (triggered by an event; Kubfu's form can be set beforehand by the event,
+  so don't worry about the multiple forms it can evolve into)
+
 # PBS file data:
 # - Form differences.
 # - Moveset changes.
@@ -42,10 +46,16 @@ unless Settings::HEAL_STORED_POKEMON?
 # - Vice Grip becomes Vise Grip.
 # - Some items change names (Stick -> Leek, etc.).
 
+Add AI for new moves/items/abilities.
+
 #===============================================================================
 # Implemented
 #===============================================================================
 
 Pokémon sent to storage aren't healed - see Settings::HEAL_STORED_POKEMON.
+
+Super shininess. Only difference is an alternate shiny common animation with
+square sparkles; a mon is super shiny if the calculated number that is compared
+to Settings::SHINY_POKEMON_CHANCE is exactly 0 - see Settings::SUPER_SHINY.
 
 =end

@@ -117,69 +117,73 @@ end
 #===============================================================================
 # Change a Pokémon's level
 #===============================================================================
-def pbChangeLevel(pkmn,newlevel,scene)
-  newlevel = newlevel.clamp(1, GameData::GrowthRate.max_level)
-  if pkmn.level==newlevel
-    pbMessage(_INTL("{1}'s level remained unchanged.",pkmn.name))
-  elsif pkmn.level>newlevel
-    attackdiff  = pkmn.attack
-    defensediff = pkmn.defense
-    speeddiff   = pkmn.speed
-    spatkdiff   = pkmn.spatk
-    spdefdiff   = pkmn.spdef
-    totalhpdiff = pkmn.totalhp
-    pkmn.level = newlevel
+def pbChangeLevel(pkmn, new_level, scene)
+  new_level = new_level.clamp(1, GameData::GrowthRate.max_level)
+  if pkmn.level == new_level
+    if scene.is_a?(PokemonPartyScreen)
+      scene.pbDisplay(_INTL("{1}'s level remained unchanged.", pkmn.name))
+    else
+      pbMessage(_INTL("{1}'s level remained unchanged.", pkmn.name))
+    end
+    return
+  end
+  old_total_hp        = pkmn.totalhp
+  old_attack          = pkmn.attack
+  old_defense         = pkmn.defense
+  old_special_attack  = pkmn.spatk
+  old_special_defense = pkmn.spdef
+  old_speed           = pkmn.speed
+  if pkmn.level > new_level
+    pkmn.level = new_level
     pkmn.calc_stats
     scene.pbRefresh
-    pbMessage(_INTL("{1} dropped to Lv. {2}!",pkmn.name,pkmn.level))
-    attackdiff  = pkmn.attack-attackdiff
-    defensediff = pkmn.defense-defensediff
-    speeddiff   = pkmn.speed-speeddiff
-    spatkdiff   = pkmn.spatk-spatkdiff
-    spdefdiff   = pkmn.spdef-spdefdiff
-    totalhpdiff = pkmn.totalhp-totalhpdiff
+    if scene.is_a?(PokemonPartyScreen)
+      scene.pbDisplay(_INTL("{1} dropped to Lv. {2}!", pkmn.name, pkmn.level))
+    else
+      pbMessage(_INTL("{1} dropped to Lv. {2}!", pkmn.name, pkmn.level))
+    end
+    total_hp_diff        = pkmn.totalhp - old_total_hp
+    attack_diff          = pkmn.attack - old_attack
+    defense_diff         = pkmn.defense - old_defense
+    special_attack_diff  = pkmn.spatk - old_special_attack
+    special_defense_diff = pkmn.spdef - old_special_defense
+    speed_diff           = pkmn.speed - old_speed
     pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
-       totalhpdiff,attackdiff,defensediff,spatkdiff,spdefdiff,speeddiff))
+       total_hp_diff, attack_diff, defense_diff, special_attack_diff, special_defense_diff, speed_diff), scene)
     pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
-       pkmn.totalhp,pkmn.attack,pkmn.defense,pkmn.spatk,pkmn.spdef,pkmn.speed))
+       pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
   else
-    attackdiff  = pkmn.attack
-    defensediff = pkmn.defense
-    speeddiff   = pkmn.speed
-    spatkdiff   = pkmn.spatk
-    spdefdiff   = pkmn.spdef
-    totalhpdiff = pkmn.totalhp
-    pkmn.level = newlevel
+    pkmn.level = new_level
     pkmn.changeHappiness("vitamin")
     pkmn.calc_stats
     scene.pbRefresh
     if scene.is_a?(PokemonPartyScreen)
-      scene.pbDisplay(_INTL("{1} grew to Lv. {2}!",pkmn.name,pkmn.level))
+      scene.pbDisplay(_INTL("{1} grew to Lv. {2}!", pkmn.name, pkmn.level))
     else
-      pbMessage(_INTL("{1} grew to Lv. {2}!",pkmn.name,pkmn.level))
+      pbMessage(_INTL("{1} grew to Lv. {2}!", pkmn.name, pkmn.level))
     end
-    attackdiff  = pkmn.attack-attackdiff
-    defensediff = pkmn.defense-defensediff
-    speeddiff   = pkmn.speed-speeddiff
-    spatkdiff   = pkmn.spatk-spatkdiff
-    spdefdiff   = pkmn.spdef-spdefdiff
-    totalhpdiff = pkmn.totalhp-totalhpdiff
+    total_hp_diff        = pkmn.totalhp - old_total_hp
+    attack_diff          = pkmn.attack - old_attack
+    defense_diff         = pkmn.defense - old_defense
+    special_attack_diff  = pkmn.spatk - old_special_attack
+    special_defense_diff = pkmn.spdef - old_special_defense
+    speed_diff           = pkmn.speed - old_speed
     pbTopRightWindow(_INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
-       totalhpdiff,attackdiff,defensediff,spatkdiff,spdefdiff,speeddiff),scene)
+       total_hp_diff, attack_diff, defense_diff, special_attack_diff, special_defense_diff, speed_diff), scene)
     pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
-       pkmn.totalhp,pkmn.attack,pkmn.defense,pkmn.spatk,pkmn.spdef,pkmn.speed),scene)
+       pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
     # Learn new moves upon level up
     movelist = pkmn.getMoveList
     for i in movelist
-      next if i[0]!=pkmn.level
-      pbLearnMove(pkmn,i[1],true) { scene.pbUpdate }
+      next if i[0] != pkmn.level
+      pbLearnMove(pkmn, i[1], true) { scene.pbUpdate }
     end
     # Check for evolution
-    newspecies = pkmn.check_evolution_on_level_up
-    if newspecies
+    new_species = pkmn.check_evolution_on_level_up
+    if new_species
       pbFadeOutInWithMusic {
         evo = PokemonEvolutionScene.new
-        evo.pbStartScreen(pkmn,newspecies)
+        evo.pbStartScreen(pkmn, new_species)
         evo.pbEvolution
         evo.pbEndScreen
         scene.pbRefresh if scene.is_a?(PokemonPartyScreen)
@@ -191,7 +195,7 @@ end
 def pbTopRightWindow(text, scene = nil)
   window = Window_AdvancedTextPokemon.new(text)
   window.width = 198
-  window.x     = Graphics.width-window.width
+  window.x     = Graphics.width - window.width
   window.y     = 0
   window.z     = 99999
   pbPlayDecisionSE
@@ -203,6 +207,98 @@ def pbTopRightWindow(text, scene = nil)
     break if Input.trigger?(Input::USE)
   end
   window.dispose
+end
+
+def pbChangeExp(pkmn, new_exp, scene)
+  new_exp = new_exp.clamp(0, pkmn.growth_rate.maximum_exp)
+  if pkmn.exp == new_exp
+    if scene.is_a?(PokemonPartyScreen)
+      scene.pbDisplay(_INTL("{1}'s Exp. Points remained unchanged.", pkmn.name))
+    else
+      pbMessage(_INTL("{1}'s Exp. Points remained unchanged.", pkmn.name))
+    end
+    return
+  end
+  old_level           = pkmn.level
+  old_total_hp        = pkmn.totalhp
+  old_attack          = pkmn.attack
+  old_defense         = pkmn.defense
+  old_special_attack  = pkmn.spatk
+  old_special_defense = pkmn.spdef
+  old_speed           = pkmn.speed
+  if pkmn.exp > new_exp   # Loses Exp
+    difference  = pkmn.exp - new_exp
+    if scene.is_a?(PokemonPartyScreen)
+      scene.pbDisplay(_INTL("{1} lost {2} Exp. Points!", pkmn.name, difference))
+    else
+      pbMessage(_INTL("{1} lost {2} Exp. Points!", pkmn.name, difference))
+    end
+    pkmn.exp = new_exp
+    pkmn.calc_stats
+    scene.pbRefresh
+    return if pkmn.level == old_level
+    # Level changed
+    if scene.is_a?(PokemonPartyScreen)
+      scene.pbDisplay(_INTL("{1} dropped to Lv. {2}!", pkmn.name, pkmn.level))
+    else
+      pbMessage(_INTL("{1} dropped to Lv. {2}!", pkmn.name, pkmn.level))
+    end
+    total_hp_diff        = pkmn.totalhp - old_total_hp
+    attack_diff          = pkmn.attack - old_attack
+    defense_diff         = pkmn.defense - old_defense
+    special_attack_diff  = pkmn.spatk - old_special_attack
+    special_defense_diff = pkmn.spdef - old_special_defense
+    speed_diff           = pkmn.speed - old_speed
+    pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
+       total_hp_diff, attack_diff, defense_diff, special_attack_diff, special_defense_diff, speed_diff), scene)
+    pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
+       pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
+  else   # Gains Exp
+    difference  = new_exp - pkmn.exp
+    if scene.is_a?(PokemonPartyScreen)
+      scene.pbDisplay(_INTL("{1} gained {2} Exp. Points!", pkmn.name, difference))
+    else
+      pbMessage(_INTL("{1} gained {2} Exp. Points!", pkmn.name, difference))
+    end
+    pkmn.exp = new_exp
+    pkmn.changeHappiness("vitamin")
+    pkmn.calc_stats
+    scene.pbRefresh
+    return if pkmn.level == old_level
+    # Level changed
+    if scene.is_a?(PokemonPartyScreen)
+      scene.pbDisplay(_INTL("{1} grew to Lv. {2}!", pkmn.name, pkmn.level))
+    else
+      pbMessage(_INTL("{1} grew to Lv. {2}!", pkmn.name, pkmn.level))
+    end
+    total_hp_diff        = pkmn.totalhp - old_total_hp
+    attack_diff          = pkmn.attack - old_attack
+    defense_diff         = pkmn.defense - old_defense
+    special_attack_diff  = pkmn.spatk - old_special_attack
+    special_defense_diff = pkmn.spdef - old_special_defense
+    speed_diff           = pkmn.speed - old_speed
+    pbTopRightWindow(_INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
+       total_hp_diff, attack_diff, defense_diff, special_attack_diff, special_defense_diff, speed_diff), scene)
+    pbTopRightWindow(_INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
+       pkmn.totalhp, pkmn.attack, pkmn.defense, pkmn.spatk, pkmn.spdef, pkmn.speed), scene)
+    # Learn new moves upon level up
+    movelist = pkmn.getMoveList
+    for i in movelist
+      next if i[0] <= old_level || i[0] > pkmn.level
+      pbLearnMove(pkmn, i[1], true) { scene.pbUpdate }
+    end
+    # Check for evolution
+    new_species = pkmn.check_evolution_on_level_up
+    if new_species
+      pbFadeOutInWithMusic {
+        evo = PokemonEvolutionScene.new
+        evo.pbStartScreen(pkmn, new_species)
+        evo.pbEvolution
+        evo.pbEndScreen
+        scene.pbRefresh if scene.is_a?(PokemonPartyScreen)
+      }
+    end
+  end
 end
 
 #===============================================================================

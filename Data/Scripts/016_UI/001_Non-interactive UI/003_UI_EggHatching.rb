@@ -217,7 +217,7 @@ Events.onStepTaken += proc { |_sender,_e|
     next if egg.steps_to_hatch <= 0
     egg.steps_to_hatch -= 1
     for i in $Trainer.pokemon_party
-      next if !i.hasAbility?(:FLAMEBODY) && !i.hasAbility?(:MAGMAARMOR)
+      next if ![:FLAMEBODY, :MAGMAARMOR, :STEAMENGINE].include?(i.ability_id)
       egg.steps_to_hatch -= 1
       break
     end

@@ -975,11 +975,13 @@ BattleHandlers::CriticalCalcUserItem.add(:RAZORCLAW,
 
 BattleHandlers::CriticalCalcUserItem.copy(:RAZORCLAW,:SCOPELENS)
 
-BattleHandlers::CriticalCalcUserItem.add(:STICK,
+BattleHandlers::CriticalCalcUserItem.add(:LEEK,
   proc { |item,user,target,c|
-    next c+2 if user.isSpecies?(:FARFETCHD)
+    next c+2 if user.isSpecies?(:FARFETCHD) || user.isSpecies?(:SIRFETCHD)
   }
 )
+
+BattleHandlers::CriticalCalcUserItem.copy(:LEEK, :STICK)
 
 #===============================================================================
 # CriticalCalcTargetItem handlers

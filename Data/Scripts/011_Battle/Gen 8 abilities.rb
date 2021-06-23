@@ -270,6 +270,16 @@ BattleHandlers::PriorityBracketUseAbility.add(:QUICKDRAW,
 Hunger Switch
 At the end of each round, switches the bearer's form (if it is Morpeko).
 
+Ice Face
+When bearer is hit by a physical move while in its initial form, it takes no
+damage and its form changes. At he end of a round in which hail weather started,
+the bearer regains its initial form.
+
+Gulp Missile
+After using Surf/Dive, changes the bearer's form depending on its HP. If hit by
+an attack while in one of these forms, damages the attacker and causes an effect
+depending on the form.
+
 Ball Fetch
 At the end of a round in which a thrown Poké Ball fails to catch a Pokémon,
 bearer picks up that Poké Ball. Applies only to the first thrown Poké Ball, and
@@ -279,11 +289,6 @@ Steam Engine
 When bearer is hit by a Fire- or Water-type move, bearer gets +6 Speed (after
 the effect of that move is applied). Outside of battle, makes eggs hatch twice
 as fast (doesn't stack with other such abilities).
-
-Ice Face
-When bearer is hit by a physical move while in its initial form, it takes no
-damage and its form changes. At he end of a round in which hail weather started,
-the bearer regains its initial form.
 
 As One (Chilling)
 Combination of Unnerve and Chilling Neigh. Message upon entering battle says it
@@ -322,10 +327,5 @@ Mimicry
 The bearer's type changes depending on the terrain. Triggers upon entering
 battle and when terrain changes (and not when bearer's type is changed, e.g.
 with Soak).
-
-Gulp Missile
-After using Surf/Dive, changes the bearer's form depending on its HP. If hit by
-an attack while in one of these forms, damages the attacker and causes an effect
-depending on the form.
 
 =end

@@ -479,7 +479,7 @@ ItemHandlers::UseOnPokemon.add(:FULLHEAL,proc { |item,pkmn,scene|
 
 ItemHandlers::UseOnPokemon.copy(:FULLHEAL,
    :LAVACOOKIE,:OLDGATEAU,:CASTELIACONE,:LUMIOSEGALETTE,:SHALOURSABLE,
-   :BIGMALASADA,:LUMBERRY)
+   :BIGMALASADA,:PEWTERCRUNCHIES,:LUMBERRY)
 ItemHandlers::UseOnPokemon.copy(:FULLHEAL,:RAGECANDYBAR) if Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::UseOnPokemon.add(:FULLRESTORE,proc { |item,pkmn,scene|
@@ -705,7 +705,7 @@ ItemHandlers::UseOnPokemon.add(:CARBOS,proc { |item,pkmn,scene|
   next true
 })
 
-ItemHandlers::UseOnPokemon.add(:HEALTHWING,proc { |item,pkmn,scene|
+ItemHandlers::UseOnPokemon.add(:HEALTHFEATHER,proc { |item,pkmn,scene|
   if pbRaiseEffortValues(pkmn,:HP,1,false)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
@@ -716,7 +716,9 @@ ItemHandlers::UseOnPokemon.add(:HEALTHWING,proc { |item,pkmn,scene|
   next true
 })
 
-ItemHandlers::UseOnPokemon.add(:MUSCLEWING,proc { |item,pkmn,scene|
+ItemHandlers::UseOnPokemon.copy(:HEALTHFEATHER,:HEALTHWING)
+
+ItemHandlers::UseOnPokemon.add(:MUSCLEFEATHER,proc { |item,pkmn,scene|
   if pbRaiseEffortValues(pkmn,:ATTACK,1,false)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
@@ -726,7 +728,9 @@ ItemHandlers::UseOnPokemon.add(:MUSCLEWING,proc { |item,pkmn,scene|
   next true
 })
 
-ItemHandlers::UseOnPokemon.add(:RESISTWING,proc { |item,pkmn,scene|
+ItemHandlers::UseOnPokemon.copy(:MUSCLEFEATHER,:MUSCLEWING)
+
+ItemHandlers::UseOnPokemon.add(:RESISTFEATHER,proc { |item,pkmn,scene|
   if pbRaiseEffortValues(pkmn,:DEFENSE,1,false)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
@@ -736,7 +740,9 @@ ItemHandlers::UseOnPokemon.add(:RESISTWING,proc { |item,pkmn,scene|
   next true
 })
 
-ItemHandlers::UseOnPokemon.add(:GENIUSWING,proc { |item,pkmn,scene|
+ItemHandlers::UseOnPokemon.copy(:RESISTFEATHER,:RESISTWING)
+
+ItemHandlers::UseOnPokemon.add(:GENIUSFEATHER,proc { |item,pkmn,scene|
   if pbRaiseEffortValues(pkmn,:SPECIAL_ATTACK,1,false)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
@@ -746,7 +752,9 @@ ItemHandlers::UseOnPokemon.add(:GENIUSWING,proc { |item,pkmn,scene|
   next true
 })
 
-ItemHandlers::UseOnPokemon.add(:CLEVERWING,proc { |item,pkmn,scene|
+ItemHandlers::UseOnPokemon.copy(:GENIUSFEATHER,:GENIUSWING)
+
+ItemHandlers::UseOnPokemon.add(:CLEVERFEATHER,proc { |item,pkmn,scene|
   if pbRaiseEffortValues(pkmn,:SPECIAL_DEFENSE,1,false)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
@@ -756,7 +764,9 @@ ItemHandlers::UseOnPokemon.add(:CLEVERWING,proc { |item,pkmn,scene|
   next true
 })
 
-ItemHandlers::UseOnPokemon.add(:SWIFTWING,proc { |item,pkmn,scene|
+ItemHandlers::UseOnPokemon.copy(:CLEVERFEATHER,:CLEVERWING)
+
+ItemHandlers::UseOnPokemon.add(:SWIFTFEATHER,proc { |item,pkmn,scene|
   if pbRaiseEffortValues(pkmn,:SPEED,1,false)==0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
@@ -765,6 +775,8 @@ ItemHandlers::UseOnPokemon.add(:SWIFTWING,proc { |item,pkmn,scene|
   pkmn.changeHappiness("wing")
   next true
 })
+
+ItemHandlers::UseOnPokemon.copy(:SWIFTFEATHER,:SWIFTWING)
 
 ItemHandlers::UseOnPokemon.add(:RARECANDY,proc { |item,pkmn,scene|
   if pkmn.level>=GameData::GrowthRate.max_level || pkmn.shadowPokemon?
@@ -1088,23 +1100,23 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE,proc { |item,pkmn,scene|
-  abils = pkmn.getAbilityList
-  abil1 = nil; abil2 = nil
-  for i in abils
-    abil1 = i[0] if i[1]==0
-    abil2 = i[0] if i[1]==1
-  end
-  if abil1.nil? || abil2.nil? || pkmn.hasHiddenAbility? || pkmn.isSpecies?(:ZYGARDE)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newabil = (pkmn.ability_index + 1) % 2
-  newabilname = GameData::Ability.get((newabil==0) ? abil1 : abil2).name
-  if scene.pbConfirm(_INTL("Would you like to change {1}'s Ability to {2}?",
-     pkmn.name,newabilname))
+  if scene.pbConfirm(_INTL("Do you want to change {1}'s Ability?", pkmn.name))
+    abils = pkmn.getAbilityList
+    abil1 = nil
+    abil2 = nil
+    for i in abils
+      abil1 = i[0] if i[1] == 0
+      abil2 = i[0] if i[1] == 1
+    end
+    if abil1.nil? || abil2.nil? || pkmn.hasHiddenAbility? || pkmn.isSpecies?(:ZYGARDE)
+      scene.pbDisplay(_INTL("It won't have any effect."))
+      next false
+    end
+    newabil = (pkmn.ability_index + 1) % 2
+    newabilname = GameData::Ability.get((newabil == 0) ? abil1 : abil2).name
     pkmn.ability_index = newabil
     scene.pbRefresh
-    scene.pbDisplay(_INTL("{1}'s Ability changed to {2}!",pkmn.name,newabilname))
+    scene.pbDisplay(_INTL("{1}'s Ability changed! Its Ability is now {2}!", pkmn.name, newabilname))
     next true
   end
   next false

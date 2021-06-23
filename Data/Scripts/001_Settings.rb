@@ -33,6 +33,8 @@ module Settings
   EGG_LEVEL            = 1
   # The odds of a newly generated Pokémon being shiny (out of 65536).
   SHINY_POKEMON_CHANCE = (MECHANICS_GENERATION >= 6) ? 16 : 8
+  # Whether super shininess is enabled (uses a different shiny animation).
+  SUPER_SHINY          = (MECHANICS_GENERATION >= 8)
   # The odds of a wild Pokémon/bred egg having Pokérus (out of 65536).
   POKERUS_CHANCE       = 3
   # Whether a bred baby Pokémon can inherit any TM/HM moves from its father. It

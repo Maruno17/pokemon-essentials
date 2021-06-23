@@ -13,16 +13,17 @@ class PokeBattle_FakeBattler
     @index   = index
   end
 
-  def pokemonIndex;   return 0;                end
-  def species;        return @pokemon.species; end
-  def gender;         return @pokemon.gender;  end
-  def status;         return @pokemon.status;  end
-  def hp;             return @pokemon.hp;      end
-  def level;          return @pokemon.level;   end
-  def name;           return @pokemon.name;    end
-  def totalhp;        return @pokemon.totalhp; end
-  def displayGender;  return @pokemon.gender;  end
-  def shiny?;         return @pokemon.shiny?;  end
+  def pokemonIndex;   return 0;                     end
+  def species;        return @pokemon.species;      end
+  def gender;         return @pokemon.gender;       end
+  def status;         return @pokemon.status;       end
+  def hp;             return @pokemon.hp;           end
+  def level;          return @pokemon.level;        end
+  def name;           return @pokemon.name;         end
+  def totalhp;        return @pokemon.totalhp;      end
+  def displayGender;  return @pokemon.gender;       end
+  def shiny?;         return @pokemon.shiny?;       end
+  def super_shiny?;   return @pokemon.super_shiny?; end
 
   def isSpecies?(check_species)
     return @pokemon && @pokemon.isSpecies?(check_species)
