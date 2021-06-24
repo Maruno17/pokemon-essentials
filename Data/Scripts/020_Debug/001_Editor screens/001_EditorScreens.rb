@@ -629,6 +629,7 @@ module TrainerPokemonProperty
       initsetting[:form],
       initsetting[:gender],
       initsetting[:shininess],
+      initsetting[:super_shininess],
       initsetting[:shadowness]
     ]
     Pokemon::MAX_MOVES.times do |i|
@@ -652,6 +653,7 @@ module TrainerPokemonProperty
        [_INTL("Form"),          LimitProperty2.new(999),                 _INTL("Form of the Pokémon.")],
        [_INTL("Gender"),        GenderProperty,                          _INTL("Gender of the Pokémon.")],
        [_INTL("Shiny"),         BooleanProperty2,                        _INTL("If set to true, the Pokémon is a different-colored Pokémon.")],
+       [_INTL("SuperShiny"),    BooleanProperty2,                        _INTL("Whether the Pokémon is super shiny (shiny with a special shininess animation).")],
        [_INTL("Shadow"),        BooleanProperty2,                        _INTL("If set to true, the Pokémon is a Shadow Pokémon.")]
     ]
     Pokemon::MAX_MOVES.times do |i|
@@ -671,21 +673,22 @@ module TrainerPokemonProperty
     pbPropertyList(settingname, oldsetting, pkmn_properties, false)
     return nil if !oldsetting[0]   # Species is nil
     ret = {
-      :species       => oldsetting[0],
-      :level         => oldsetting[1],
-      :name          => oldsetting[2],
-      :form          => oldsetting[3],
-      :gender        => oldsetting[4],
-      :shininess     => oldsetting[5],
-      :shadowness    => oldsetting[6],
-      :ability       => oldsetting[7 + Pokemon::MAX_MOVES],
-      :ability_index => oldsetting[8 + Pokemon::MAX_MOVES],
-      :item          => oldsetting[9 + Pokemon::MAX_MOVES],
-      :nature        => oldsetting[10 + Pokemon::MAX_MOVES],
-      :iv            => oldsetting[11 + Pokemon::MAX_MOVES],
-      :ev            => oldsetting[12 + Pokemon::MAX_MOVES],
-      :happiness     => oldsetting[13 + Pokemon::MAX_MOVES],
-      :poke_ball     => oldsetting[14 + Pokemon::MAX_MOVES],
+      :species         => oldsetting[0],
+      :level           => oldsetting[1],
+      :name            => oldsetting[2],
+      :form            => oldsetting[3],
+      :gender          => oldsetting[4],
+      :shininess       => oldsetting[5],
+      :super_shininess => oldsetting[6],
+      :shadowness      => oldsetting[7],
+      :ability         => oldsetting[8 + Pokemon::MAX_MOVES],
+      :ability_index   => oldsetting[9 + Pokemon::MAX_MOVES],
+      :item            => oldsetting[10 + Pokemon::MAX_MOVES],
+      :nature          => oldsetting[11 + Pokemon::MAX_MOVES],
+      :iv              => oldsetting[12 + Pokemon::MAX_MOVES],
+      :ev              => oldsetting[13 + Pokemon::MAX_MOVES],
+      :happiness       => oldsetting[14 + Pokemon::MAX_MOVES],
+      :poke_ball       => oldsetting[15 + Pokemon::MAX_MOVES],
     }
     moves = []
     Pokemon::MAX_MOVES.times do |i|

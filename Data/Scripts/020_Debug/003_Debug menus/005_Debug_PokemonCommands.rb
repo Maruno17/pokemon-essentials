@@ -863,19 +863,26 @@ PokemonDebugMenuCommands.register("setshininess", {
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
-      msg = [_INTL("Is shiny."), _INTL("Is normal (not shiny).")][pkmn.shiny? ? 0 : 1]
+      msg_idx = pkmn.shiny? ? (pkmn.super_shiny? ? 1 : 0) : 2
+      msg = [_INTL("Is shiny."), _INTL("Is super shiny."), _INTL("Is normal (not shiny).")][msg_idx]
       cmd = screen.pbShowCommands(msg, [
            _INTL("Make shiny"),
+           _INTL("Make super shiny"),
            _INTL("Make normal"),
            _INTL("Reset")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Make shiny
         pkmn.shiny = true
-      when 1   # Make normal
+        pkmn.super_shiny = false
+      when 1   # Make super shiny
+        pkmn.super_shiny = true
+      when 2   # Make normal
         pkmn.shiny = false
-      when 2   # Reset
+        pkmn.super_shiny = false
+      when 3   # Reset
         pkmn.shiny = nil
+        pkmn.super_shiny = nil
       end
       screen.pbRefreshSingle(pkmnid)
     end

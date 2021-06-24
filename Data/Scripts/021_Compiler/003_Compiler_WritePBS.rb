@@ -593,7 +593,8 @@ module Compiler
           f.write(sprintf("    Name = %s\r\n", pkmn[:name])) if pkmn[:name] && !pkmn[:name].empty?
           f.write(sprintf("    Form = %d\r\n", pkmn[:form])) if pkmn[:form] && pkmn[:form] > 0
           f.write(sprintf("    Gender = %s\r\n", (pkmn[:gender] == 1) ? "female" : "male")) if pkmn[:gender]
-          f.write("    Shiny = yes\r\n") if pkmn[:shininess]
+          f.write("    Shiny = yes\r\n") if pkmn[:shininess] && !pkmn[:super_shininess]
+          f.write("    SuperShiny = yes\r\n") if pkmn[:super_shininess]
           f.write("    Shadow = yes\r\n") if pkmn[:shadowness]
           f.write(sprintf("    Moves = %s\r\n", pkmn[:moves].join(","))) if pkmn[:moves] && pkmn[:moves].length > 0
           f.write(sprintf("    Ability = %s\r\n", pkmn[:ability])) if pkmn[:ability]

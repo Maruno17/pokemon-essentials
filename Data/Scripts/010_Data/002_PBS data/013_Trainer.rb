@@ -12,24 +12,25 @@ module GameData
     DATA_FILENAME = "trainers.dat"
 
     SCHEMA = {
-      "Items"        => [:items,         "*e", :Item],
-      "LoseText"     => [:lose_text,     "s"],
-      "Pokemon"      => [:pokemon,       "ev", :Species],   # Species, level
-      "Form"         => [:form,          "u"],
-      "Name"         => [:name,          "s"],
-      "Moves"        => [:moves,         "*e", :Move],
-      "Ability"      => [:ability,       "e", :Ability],
-      "AbilityIndex" => [:ability_index, "u"],
-      "Item"         => [:item,          "e", :Item],
-      "Gender"       => [:gender,        "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
-                                                "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
-      "Nature"       => [:nature,        "e", :Nature],
-      "IV"           => [:iv,            "uUUUUU"],
-      "EV"           => [:ev,            "uUUUUU"],
-      "Happiness"    => [:happiness,     "u"],
-      "Shiny"        => [:shininess,     "b"],
-      "Shadow"       => [:shadowness,    "b"],
-      "Ball"         => [:poke_ball,     "e", :Item],
+      "Items"        => [:items,           "*e", :Item],
+      "LoseText"     => [:lose_text,       "s"],
+      "Pokemon"      => [:pokemon,         "ev", :Species],   # Species, level
+      "Form"         => [:form,            "u"],
+      "Name"         => [:name,            "s"],
+      "Moves"        => [:moves,           "*e", :Move],
+      "Ability"      => [:ability,         "e", :Ability],
+      "AbilityIndex" => [:ability_index,   "u"],
+      "Item"         => [:item,            "e", :Item],
+      "Gender"       => [:gender,          "e", { "M" => 0, "m" => 0, "Male" => 0, "male" => 0, "0" => 0,
+                                                  "F" => 1, "f" => 1, "Female" => 1, "female" => 1, "1" => 1 }],
+      "Nature"       => [:nature,          "e", :Nature],
+      "IV"           => [:iv,              "uUUUUU"],
+      "EV"           => [:ev,              "uUUUUU"],
+      "Happiness"    => [:happiness,       "u"],
+      "Shiny"        => [:shininess,       "b"],
+      "SuperShiny"   => [:super_shininess, "b"],
+      "Shadow"       => [:shadowness,      "b"],
+      "Ball"         => [:poke_ball,       "e", :Item],
     }
 
     extend ClassMethodsSymbols
@@ -130,7 +131,7 @@ module GameData
         pkmn.ability = pkmn_data[:ability]
         pkmn.gender = pkmn_data[:gender] || ((trainer.male?) ? 0 : 1)
         pkmn.shiny = (pkmn_data[:shininess]) ? true : false
-        pkmn.super_shiny = false
+        pkmn.super_shiny = (pkmn_data[:super_shininess]) ? true : false
         if pkmn_data[:nature]
           pkmn.nature = pkmn_data[:nature]
         else   # Make the nature random but consistent for the same species used by the same trainer type
