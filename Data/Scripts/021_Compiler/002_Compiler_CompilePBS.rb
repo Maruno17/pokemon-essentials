@@ -481,7 +481,7 @@ module Compiler
           :height                => contents["Height"],
           :weight                => contents["Weight"],
           :color                 => contents["Color"],
-          :shape                 => GameData::BodyShape.get(contents["Shape"]).id,
+          #:shape                 => GameData::BodyShape.get(contents["Shape"]).id,
           :habitat               => contents["Habitat"],
           :generation            => contents["Generation"],
           :back_sprite_x         => contents["BattlerPlayerX"],

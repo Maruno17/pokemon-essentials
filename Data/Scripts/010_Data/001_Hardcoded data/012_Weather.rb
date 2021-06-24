@@ -145,7 +145,7 @@ GameData::Weather.register({
 
 # NOTE: This alters the screen tone in RPG::Weather#update_screen_tone.
 GameData::Weather.register({
-  :id               => :Sun,
+  :id               => :Sunny,
   :id_number        => 7,
   :category         => :Sun,
   :tone_proc        => proc { |strength|

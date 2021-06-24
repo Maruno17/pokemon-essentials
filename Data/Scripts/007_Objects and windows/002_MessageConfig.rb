@@ -9,6 +9,10 @@ module MessageConfig
   SMALL_FONT_SIZE         = 25
   NARROW_FONT_NAME        = "Power Green Narrow"
   NARROW_FONT_SIZE        = 29
+
+  BUBBLE_TEXT_BASE   =  Color.new(248,248,248)#(72,80,88)#DIALOG
+  BUBBLE_TEXT_SHADOW= Color.new(166,160,151)
+
   # 0 = Pause cursor is displayed at end of text
   # 1 = Pause cursor is displayed at bottom right
   # 2 = Pause cursor is displayed at lower middle side
@@ -92,9 +96,9 @@ module MessageConfig
 
   def self.pbSettingToTextSpeed(speed)
     case speed
-    when 0 then return 2
-    when 1 then return 1
-    when 2 then return -2
+    when 0 then return 1
+    when 1 then return -2
+    when 2 then return -999
     end
     return TEXT_SPEED || 1
   end
