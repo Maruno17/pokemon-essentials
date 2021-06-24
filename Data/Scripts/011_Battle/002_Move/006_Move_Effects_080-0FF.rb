@@ -1957,7 +1957,12 @@ class PokeBattle_Move_0C0 < PokeBattle_Move
     if @id == :WATERSHURIKEN && user.isSpecies?(:GRENINJA) && user.form == 2
       return 3
     end
-    hitChances = [2,2,3,3,4,5]
+    hitChances = [
+      2, 2, 2, 2, 2, 2, 2,
+      3, 3, 3, 3, 3, 3, 3,
+      4, 4, 4,
+      5, 5, 5
+    ]
     r = @battle.pbRandom(hitChances.length)
     r = hitChances.length-1 if user.hasActiveAbility?(:SKILLLINK)
     return hitChances[r]
