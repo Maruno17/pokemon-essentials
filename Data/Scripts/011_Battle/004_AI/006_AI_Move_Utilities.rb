@@ -216,7 +216,7 @@ class PokeBattle_AI
       if user.hasActiveAbility?(:SKILLLINK)
         baseDmg *= 5
       else
-        baseDmg = (baseDmg*19/6).floor   # Average damage dealt
+        baseDmg = (baseDmg * 31 / 10).floor   # Average damage dealt
       end
     when "0C1"   # Beat Up
       mult = 0
