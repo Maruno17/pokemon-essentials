@@ -375,6 +375,19 @@ class PokeBattle_Battler
         end
         return false
       end
+      # Obstruct
+      if target.effects[PBEffects::Obstruct] && move.damagingMove?
+        @battle.pbCommonAnimation("Obstruct",target)
+        @battle.pbDisplay(_INTL("{1} protected itself!", target.pbThis))
+        target.damageState.protected = true
+        @battle.successStates[user.index].protected = true
+        if move.pbContactMove?(user) && user.affectedByContactEffect?
+          if user.pbCanLowerStatStage?(:DEFENSE)
+            user.pbLowerStatStage(:DEFENSE, 2, nil)
+          end
+        end
+        return false
+      end
       # Mat Block
       if target.pbOwnSide.effects[PBEffects::MatBlock] && move.damagingMove?
         # NOTE: Confirmed no common animation for this effect.

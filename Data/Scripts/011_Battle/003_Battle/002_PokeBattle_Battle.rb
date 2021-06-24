@@ -588,6 +588,7 @@ class PokeBattle_Battle
                      PBEffects::LockOnPos,
                      PBEffects::MeanLook,
                      PBEffects::MirrorCoatTarget,
+                     PBEffects::Octolock,
                      PBEffects::SkyDrop,
                      PBEffects::TrappingUser]
     eachBattler do |b|

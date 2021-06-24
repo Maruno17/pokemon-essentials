@@ -91,7 +91,7 @@ class PokeBattle_Battler
   def pbChangeTargets(move,user,targets)
     target_data = move.pbTarget(user)
     return targets if @battle.switching   # For Pursuit interrupting a switch
-    return targets if move.cannotRedirect?
+    return targets if move.cannotRedirect? || move.targetsPosition?
     return targets if !target_data.can_target_one_foe? || targets.length != 1
     priority = @battle.pbPriority(true)
     nearOnly = !target_data.can_choose_distant_target?
@@ -162,7 +162,7 @@ class PokeBattle_Battler
   # Register target
   #=============================================================================
   def pbAddTarget(targets,user,target,move,nearOnly=true,allowUser=false)
-    return false if !target || (target.fainted? && !move.cannotRedirect?)
+    return false if !target || (target.fainted? && !move.targetsPosition?)
     return false if !(allowUser && user==target) && nearOnly && !user.near?(target)
     targets.each { |b| return true if b.index==target.index }   # Already added
     targets.push(target)

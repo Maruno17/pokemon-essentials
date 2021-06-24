@@ -79,6 +79,7 @@ class PokeBattle_Move
     # Multiply all effectivenesses together
     ret = 1
     typeMods.each { |m| ret *= m }
+    ret *= 2 if target.effects[PBEffects::TarShot] && moveType == :FIRE
     return ret
   end
 

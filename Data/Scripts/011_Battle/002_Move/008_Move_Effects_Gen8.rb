@@ -35,7 +35,45 @@ Flip Turn - 0EE
 # if it is a physical move. Has a different animation depending on the move's
 # category. (Shell Side Arm)
 #===============================================================================
-class PokeBattle_Move_176 < PokeBattle_UnimplementedMove
+class PokeBattle_Move_176 < PokeBattle_PoisonMove
+  def initialize(battle, move)
+    super
+    @calcCategory = 1
+  end
+
+  def physicalMove?(thisType = nil); return (@calcCategory == 0); end
+  def specialMove?(thisType = nil);  return (@calcCategory == 1); end
+  def contactMove?;                  return physicalMove?;        end
+
+  def pbOnStartUse(user, targets)
+    target = targets[0]
+    stageMul = [2,2,2,2,2,2, 2, 3,4,5,6,7,8]
+    stageDiv = [8,7,6,5,4,3, 2, 2,2,2,2,2,2]
+    # Calculate user's effective attacking values
+    attack_stage         = user.stages[:ATTACK] + 6
+    real_attack          = (user.attack.to_f * stageMul[attack_stage] / stageDiv[attack_stage]).floor
+    special_attack_stage = user.stages[:SPECIAL_ATTACK] + 6
+    real_special_attack  = (user.spatk.to_f * stageMul[special_attack_stage] / stageDiv[special_attack_stage]).floor
+    # Calculate target's effective defending values
+    defense_stage         = target.stages[:DEFENSE] + 6
+    real_defense          = (target.defense.to_f * stageMul[defense_stage] / stageDiv[defense_stage]).floor
+    special_defense_stage = target.stages[:SPECIAL_DEFENSE] + 6
+    real_special_defense  = (target.spdef.to_f * stageMul[special_defense_stage] / stageDiv[special_defense_stage]).floor
+    # Perform simple damage calculation
+    physical_damage = real_attack.to_f / real_defense
+    special_damage = real_special_attack.to_f / real_special_defense
+    # Determine move's category
+    if physical_damage == special_damage
+      @calcCategry = @battle.pbRandom(2)
+    else
+      @calcCategory = (physical_damage > special_damage) ? 0 : 1
+    end
+  end
+
+  def pbShowAnimation(id, user, targets, hitNum = 0, showAnimation = true)
+    hitNum = 1 if physicalMove?
+    super
+  end
 end
 
 #===============================================================================
@@ -74,7 +112,25 @@ end
 # still switch out if holding Shed Shell or Eject Button, or if affected by a
 # Red Card. (No Retreat)
 #===============================================================================
-class PokeBattle_Move_179 < PokeBattle_UnimplementedMove
+class PokeBattle_Move_179 < PokeBattle_Move_02D
+  def pbMoveFailed?(user, targets)
+    if user.effects[PBEffects::NoRetreat]
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return super
+  end
+
+  def pbEffectGeneral(user)
+    super
+    if battler.effects[PBEffects::Trapping] == 0 &&
+       battler.effects[PBEffects::MeanLook] < 0 &&
+       !battler.effects[PBEffects::Ingrain] &&
+       @field.effects[PBEffects::FairyLock] == 0
+      user.effects[PBEffects::NoRetreat] = true
+      @battle.pbDisplay(_INTL("{1} can no longer escape because it used {2}!", user.pbThis, @name))
+    end
+  end
 end
 
 #===============================================================================
@@ -114,13 +170,36 @@ end
 # protections, including Crafty Shield. Fails if there is no ally. (Coaching)
 #===============================================================================
 class PokeBattle_Move_17B < PokeBattle_UnimplementedMove
+  # TODO: Needs a new targeting option. Otherwise, see Magnetic Flux.
 end
 
 #===============================================================================
-# Increases the target's Attack and Special Attack by 2 stages each. Bypasses
-# some protections. (Decorate)
+# Increases the target's Attack and Special Attack by 2 stages each. (Decorate)
 #===============================================================================
-class PokeBattle_Move_17C < PokeBattle_UnimplementedMove
+class PokeBattle_Move_17C < PokeBattle_Move
+  def pbMoveFailed?(user, targets)
+    failed = true
+    targets.each do |b|
+      next if !b.pbCanRaiseStatStage?(:ATTACK, user, self) &&
+              !b.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self)
+      failed = false
+      break
+    end
+    if failed
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return false
+  end
+
+  def pbEffectAgainstTarget(user, target)
+    if target.pbCanRaiseStatStage?(:ATTACK, user, self)
+      target.pbRaiseStatStage(:ATTACK, 2, user)
+    end
+    if target.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user, self)
+      target.pbRaiseStatStage(:SPECIAL_ATTACK, 2, user)
+    end
+  end
 end
 
 #===============================================================================
@@ -139,7 +218,19 @@ end
 # Fire moves used against the target (this effect does not stack). Fails if
 # neither of these effects can be applied. (Tar Shot)
 #===============================================================================
-class PokeBattle_Move_17E < PokeBattle_UnimplementedMove
+class PokeBattle_Move_17E < PokeBattle_Move_044
+  def pbFailsAgainstTarget?(user, target)
+    return super if target.effects[PBEffects::TarShot]
+    return false
+  end
+
+  def pbEffectAgainstTarget(user, target)
+    super
+    if !target.effects[PBEffects::TarShot]
+      target.effects[PBEffects::TarShot] = true
+      @battle.pbDisplay(_INTL("{1} became weaker to fire!", target.pbThis))
+    end
+  end
 end
 
 #===============================================================================
@@ -264,15 +355,20 @@ end
 # For the rest of this round, the user avoids all damaging moves that would hit
 # it. If a move that makes contact is stopped by this effect, decreases the
 # Defense of the Pokémon using that move by 2 stages. Contributes to Protect's
-# counter. (Very similar to King's Shield.) (Obstruct)
+# counter. (Obstruct)
 #===============================================================================
-class PokeBattle_Move_186 < PokeBattle_UnimplementedMove
+class PokeBattle_Move_186 < PokeBattle_ProtectMove
+  def initialize(battle,move)
+    super
+    @effect = PBEffects::Obstruct
+  end
 end
 
 #===============================================================================
 # Unaffected by moves and abilities that would redirect this move. (Snipe Shot)
 #===============================================================================
-class PokeBattle_Move_187 < PokeBattle_UnimplementedMove
+class PokeBattle_Move_187 < PokeBattle_Move
+  def cannotRedirect?; return true; end
 end
 
 #===============================================================================
@@ -309,7 +405,29 @@ end
 # Hits 2-5 times in a row. If the move does not fail, increases the user's Speed
 # by 1 stage and decreases the user's Defense by 1 stage. (Scale Shot)
 #===============================================================================
-class PokeBattle_Move_18A < PokeBattle_UnimplementedMove
+class PokeBattle_Move_18A < PokeBattle_Move
+  def multiHitMove?; return true; end
+
+  def pbNumHits(user, targets)
+    hitChances = [
+      2, 2, 2, 2, 2, 2, 2,
+      3, 3, 3, 3, 3, 3, 3,
+      4, 4, 4,
+      5, 5, 5]
+    r = @battle.pbRandom(hitChances.length)
+    r = hitChances.length - 1 if user.hasActiveAbility?(:SKILLLINK)
+    return hitChances[r]
+  end
+
+  def pbEffectAfterAllHits(user, target)
+    return if target.damageState.unaffected
+    if user.pbCanLowerStatStage?(:DEFENSE, user, self)
+      user.pbLowerStatStage(:DEFENSE, 1, user)
+    end
+    if user.pbCanRaiseStatStage?(:SPEED, user, self)
+      user.pbRaiseStatStage(:SPEED, 1, user)
+    end
+  end
 end
 
 #===============================================================================
@@ -419,11 +537,29 @@ class PokeBattle_Move_18E < PokeBattle_Move_0E0
 end
 
 #===============================================================================
-# The target can no longer switch out or flee. At the end of each round, the
-# target's Defense and Special Defense are lowered by 1 stage each. (Does this
-# only apply while the user remains in battle?) (Octolock)
+# The target can no longer switch out or flee, while the user remains in battle.
+# At the end of each round, the target's Defense and Special Defense are lowered
+# by 1 stage each. (Octolock)
+# TODO: Can the user lock multiple other Pokémon at once?
 #===============================================================================
-class PokeBattle_Move_18F < PokeBattle_UnimplementedMove
+class PokeBattle_Move_18F < PokeBattle_Move
+  def pbFailsAgainstTarget?(user, target)
+    return false if damagingMove?
+    if target.effects[PBEffects::Octolock] >= 0
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    if Settings::MORE_TYPE_EFFECTS && target.pbHasType?(:GHOST)
+      @battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true)))
+      return true
+    end
+    return false
+  end
+
+  def pbEffectAgainstTarget(user, target)
+    target.effects[PBEffects::Octolock] = user.index
+    @battle.pbDisplay(_INTL("{1} can no longer escape because of {2}!", target.pbThis, @name))
+  end
 end
 
 #===============================================================================

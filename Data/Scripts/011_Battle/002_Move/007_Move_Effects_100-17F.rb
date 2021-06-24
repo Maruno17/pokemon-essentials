@@ -408,7 +408,7 @@ end
 # Attacks 2 rounds in the future. (Doom Desire, Future Sight)
 #===============================================================================
 class PokeBattle_Move_111 < PokeBattle_Move
-  def cannotRedirect?; return true; end
+  def targetsPosition?; return true; end
 
   def pbDamagingMove?   # Stops damage being dealt in the setting-up turn
     return false if !@battle.futureSight

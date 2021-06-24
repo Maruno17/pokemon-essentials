@@ -67,6 +67,9 @@ begin
     MoveNext            = 61
     MudSport            = 62
     Nightmare           = 63
+    NoRetreat           = 990
+    Obstruct            = 992
+    Octolock            = 993
     Outrage             = 64
     ParentalBond        = 65
     PerishSong          = 66
@@ -98,6 +101,7 @@ begin
     StockpileDef        = 92
     StockpileSpDef      = 93
     Substitute          = 94
+    TarShot             = 991
     Taunt               = 95
     Telekinesis         = 96
     ThroatChop          = 97

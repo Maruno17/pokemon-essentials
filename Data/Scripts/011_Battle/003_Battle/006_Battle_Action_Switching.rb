@@ -68,7 +68,9 @@ class PokeBattle_Battle
     # Other certain trapping effects
     if battler.effects[PBEffects::Trapping]>0 ||
        battler.effects[PBEffects::MeanLook]>=0 ||
+       battler.effects[PBEffects::Octolock]>=0 ||
        battler.effects[PBEffects::Ingrain] ||
+       battler.effects[PBEffects::NoRetreat] ||
        @field.effects[PBEffects::FairyLock]>0
       partyScene.pbDisplay(_INTL("{1} can't be switched out!",battler.pbThis)) if partyScene
       return false

@@ -428,6 +428,13 @@ class PokeBattle_Battle
         end
       end
     end
+    # Octolock
+    priority.each do |b|
+      next if b.fainted? || b.effects[PBEffects::Octolock] < 0
+      pbCommonAnimation("Octolock", b)
+      b.pbLowerStatStage(:DEFENSE, 1, nil) if b.pbCanLowerStatStage?(:DEFENSE)
+      b.pbLowerStatStage(:SPECIAL_DEFENSE, 1, nil) if b.pbCanLowerStatStage?(:SPECIAL_DEFENSE)
+    end
     # Taunt
     pbEORCountDownBattlerEffect(priority,PBEffects::Taunt) { |battler|
       pbDisplay(_INTL("{1}'s taunt wore off!",battler.pbThis))
@@ -625,6 +632,7 @@ class PokeBattle_Battle
       b.effects[PBEffects::MagicCoat]        = false
       b.effects[PBEffects::MirrorCoat]       = -1
       b.effects[PBEffects::MirrorCoatTarget] = -1
+      b.effects[PBEffects::Obstruct]         = false
       b.effects[PBEffects::Powder]           = false
       b.effects[PBEffects::Prankster]        = false
       b.effects[PBEffects::PriorityAbility]  = false

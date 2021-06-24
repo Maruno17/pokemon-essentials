@@ -106,7 +106,8 @@ class PokeBattle_Move
   def hitsDiggingTargets?;     return false; end
   def hitsDivingTargets?;      return false; end
   def ignoresReflect?;         return false; end   # For Brick Break
-  def cannotRedirect?;         return false; end   # For Future Sight/Doom Desire
+  def targetsPosition?;        return false; end   # For Future Sight/Doom Desire
+  def cannotRedirect?;         return false; end   # For Snipe Shot
   def worksWithNoTargets?;     return false; end   # For Explosion
   def damageReducedByBurn?;    return true;  end   # For Facade
   def triggersHyperMode?;      return false; end

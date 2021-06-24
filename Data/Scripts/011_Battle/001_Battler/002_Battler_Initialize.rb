@@ -228,6 +228,12 @@ class PokeBattle_Battler
     @effects[PBEffects::MoveNext]            = false
     @effects[PBEffects::MudSport]            = false
     @effects[PBEffects::Nightmare]           = false
+    @effects[PBEffects::NoRetreat]           = false
+    @effects[PBEffects::Obstruct]            = false
+    @effects[PBEffects::Octolock]            = -1
+    @battle.eachBattler do |b|   # Other battlers no longer locked by self
+      b.effects[PBEffects::Octolock] = -1 if b.effects[PBEffects::Octolock] == @index
+    end
     @effects[PBEffects::Outrage]             = 0
     @effects[PBEffects::ParentalBond]        = 0
     @effects[PBEffects::PickupItem]          = nil
@@ -257,6 +263,7 @@ class PokeBattle_Battler
     @effects[PBEffects::Stockpile]           = 0
     @effects[PBEffects::StockpileDef]        = 0
     @effects[PBEffects::StockpileSpDef]      = 0
+    @effects[PBEffects::TarShot]             = false
     @effects[PBEffects::Taunt]               = 0
     @effects[PBEffects::ThroatChop]          = 0
     @effects[PBEffects::Torment]             = false
