@@ -4,33 +4,85 @@
 class AnimatedBitmap
   def initialize(file, hue = 0)
     raise "Filename is nil (missing graphic)." if file.nil?
-    path     = file
+    path = file
     filename = ""
-    if file.last != '/'   # Isn't just a directory
+    if file.last != '/' # Isn't just a directory
       split_file = file.split(/[\\\/]/)
       filename = split_file.pop
       path = split_file.join('/') + '/'
     end
-    if filename[/^\[\d+(?:,\d+)?\]/]   # Starts with 1 or 2 numbers in square brackets
+    if filename[/^\[\d+(?:,\d+)?\]/] # Starts with 1 or 2 numbers in square brackets
       @bitmap = PngAnimatedBitmap.new(path, filename, hue)
     else
       @bitmap = GifBitmap.new(path, filename, hue)
     end
   end
 
-  def [](index);    @bitmap[index];                     end
-  def width;        @bitmap.bitmap.width;               end
-  def height;       @bitmap.bitmap.height;              end
-  def length;       @bitmap.length;                     end
-  def each;         @bitmap.each { |item| yield item }; end
-  def bitmap;       @bitmap.bitmap;                     end
-  def currentIndex; @bitmap.currentIndex;               end
-  def totalFrames;  @bitmap.totalFrames;                end
-  def disposed?;    @bitmap.disposed?;                  end
-  def update;       @bitmap.update;                     end
-  def dispose;      @bitmap.dispose;                    end
-  def deanimate;    @bitmap.deanimate;                  end
-  def copy;         @bitmap.copy;                       end
+  def [](index)
+    ; @bitmap[index];
+  end
+
+  def width
+    @bitmap.bitmap.width;
+  end
+
+  def height
+    @bitmap.bitmap.height;
+  end
+
+  def length
+    @bitmap.length;
+  end
+
+  def each
+    @bitmap.each { |item| yield item };
+  end
+
+  def bitmap
+    @bitmap.bitmap;
+  end
+
+  def currentIndex
+    @bitmap.currentIndex;
+  end
+
+  def totalFrames
+    @bitmap.totalFrames;
+  end
+
+  def disposed?
+    @bitmap.disposed?;
+  end
+
+  def update
+    @bitmap.update;
+  end
+
+  def dispose
+    @bitmap.dispose;
+  end
+
+  def deanimate
+    @bitmap.deanimate;
+  end
+
+  def copy
+    @bitmap.copy;
+  end
+
+  def mirror
+    for x in 0..@bitmap.bitmap.width / 2
+      for y in 0..@bitmap.bitmap.height - 2
+        temp = @bitmap.bitmap.get_pixel(x, y)
+        newPix = @bitmap.bitmap.get_pixel((@bitmap.bitmap.width - x), y)
+
+        @bitmap.bitmap.set_pixel(x, y, newPix)
+        @bitmap.bitmap.set_pixel((@bitmap.bitmap.width - x), y, temp)
+      end
+    end
+  end
+
+
 end
 
 #===============================================================================
@@ -41,15 +93,15 @@ class PngAnimatedBitmap
 
   # Creates an animated bitmap from a PNG file.
   def initialize(dir, filename, hue = 0)
-    @frames       = []
+    @frames = []
     @currentFrame = 0
-    @framecount   = 0
+    @framecount = 0
     panorama = RPG::Cache.load_bitmap(dir, filename, hue)
-    if filename[/^\[(\d+)(?:,(\d+))?\]/]   # Starts with 1 or 2 numbers in brackets
+    if filename[/^\[(\d+)(?:,(\d+))?\]/] # Starts with 1 or 2 numbers in brackets
       # File has a frame count
       numFrames = $1.to_i
-      delay     = $2.to_i
-      delay     = 10 if delay == 0
+      delay = $2.to_i
+      delay = 10 if delay == 0
       raise "Invalid frame count in #{filename}" if numFrames <= 0
       raise "Invalid frame delay in #{filename}" if delay <= 0
       if panorama.width % numFrames != 0
@@ -72,8 +124,13 @@ class PngAnimatedBitmap
     return @frames[index]
   end
 
-  def width;  self.bitmap.width;  end
-  def height; self.bitmap.height; end
+  def width
+    self.bitmap.width;
+  end
+
+  def height
+    self.bitmap.height;
+  end
 
   def deanimate
     for i in 1...@frames.length
@@ -149,9 +206,9 @@ class GifBitmap
 
   # Creates a bitmap from a GIF file. Can also load non-animated bitmaps.
   def initialize(dir, filename, hue = 0)
-    @bitmap   = nil
+    @bitmap = nil
     @disposed = false
-    filename  = "" if !filename
+    filename = "" if !filename
     begin
       @bitmap = RPG::Cache.load_bitmap(dir, filename, hue)
     rescue
@@ -225,14 +282,14 @@ def pbGetTileBitmap(filename, tile_id, hue, width = 1, height = 1)
   }
 end
 
-def pbGetTileset(name,hue=0)
+def pbGetTileset(name, hue = 0)
   return AnimatedBitmap.new("Graphics/Tilesets/" + name, hue).deanimate
 end
 
-def pbGetAutotile(name,hue=0)
+def pbGetAutotile(name, hue = 0)
   return AnimatedBitmap.new("Graphics/Autotiles/" + name, hue).deanimate
 end
 
-def pbGetAnimation(name,hue=0)
+def pbGetAnimation(name, hue = 0)
   return AnimatedBitmap.new("Graphics/Animations/" + name, hue).deanimate
 end

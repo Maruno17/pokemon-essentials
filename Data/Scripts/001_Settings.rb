@@ -6,15 +6,21 @@
 
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
-  GAME_VERSION = '1.0.0'
+  GAME_VERSION = '5.0.0'
 
+  #Infinite fusion settings
+  NB_POKEMON = 420
+  CUSTOM_BATTLERS_FOLDER="Graphics/CustomBattlers/"
+  BATTLERS_FOLDER="Graphics/Battlers/"
+  FRONTSPRITE_POSITION_OFFSET = 75
+  BACKSPRITE_POSITION_OFFSET = 60
   # The generation that the battle system follows. Used throughout the battle
   # scripts, and also by some other settings which are used in and out of battle
   # (you can of course change those settings to suit your game).
   # Note that this isn't perfect. Essentials doesn't accurately replicate every
   # single generation's mechanics. It's considered to be good enough. Only
   # generations 5 and later are reasonably supported.
-  MECHANICS_GENERATION = 7
+  MECHANICS_GENERATION = 5
 
   #=============================================================================
 

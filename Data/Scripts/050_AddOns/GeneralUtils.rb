@@ -103,3 +103,11 @@ def CanLearnMove(pokemon, move)
   return false if !data[move]
   return data[move].any? { |item| item == species }
 end
+
+def getBodyID(species)
+  return (species / NB_POKEMON).round
+end
+
+def getHeadID(species, bodyId)
+  return (species - (bodyId * NB_POKEMON)).round
+end

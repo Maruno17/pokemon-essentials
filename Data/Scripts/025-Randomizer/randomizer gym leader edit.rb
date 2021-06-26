@@ -521,112 +521,113 @@ def addHealingItem(items)
 end
 
    #####Overload de pbLoadTrainer
- def pbLoadTrainer(trainerid,trainername,partyid=0)
-  if trainerid.is_a?(String) || trainerid.is_a?(Symbol)
-    if !hasConst?(PBTrainers,trainerid)
-      raise _INTL("Trainer type does not exist ({1}, {2}, ID {3})",trainerid,trainername,partyid)
-    end
-    trainerid=getID(PBTrainers,trainerid)
-  end
-  success=false
-  items=[]
-  party=[]
-  opponent=nil
-  trainers=load_data("Data/trainers.dat")
-  trainerIndex=-1
-  
-  for trainer in trainers
-    trainerIndex+=1
-    name=trainer[1]
-    thistrainerid=trainer[0]
-    thispartyid=trainer[4]
-    next if trainerid!=thistrainerid || name!=trainername || partyid!=thispartyid
-    items=trainer[2].clone   
-    
-    if $game_switches[666]  #hard mode
-      items = addHealingItem(items)
-    end
-  
-    
-    name=pbGetMessageFromHash(MessageTypes::TrainerNames,name)
-    for i in RIVALNAMES
-      if isConst?(trainerid,PBTrainers,i[0]) && $game_variables[i[1]]!=0
-        name=$game_variables[i[1]]
-      end
-    end
-    opponent=PokeBattle_Trainer.new(name,thistrainerid)
-    opponent.setForeignID($Trainer) if $Trainer
-
-      
-    #use le random Array si randomized starters (et pas 1ere rival battle)
-    isPlayingRandomized =  $game_switches[987] && !$game_switches[46]
-    if isPlayingRandomized && $PokemonGlobal.randomTrainersHash[trainerIndex] == nil
-      Kernel.pbMessage(_INTL("The trainers need to be re-shuffled."))
-      Kernel.pbShuffleTrainers()
-    end
-    trainerParty = isPlayingRandomized ? $PokemonGlobal.randomTrainersHash[trainerIndex][3] : getTrainerParty(trainer)
-
-    
-    isRematch = $game_switches[200]
-    rematchId = getRematchId(trainername,trainerid)
-    for poke in trainerParty
-      ##
-      species=poke[TPSPECIES]
-      species = replaceRivalStarterIfNecessary(species)
-      
-      
-      level= $game_switches[666] ? (poke[TPLEVEL]*1.1).ceil : poke[TPLEVEL]
-     
-      if isRematch
-         nbRematch = getNumberRematch(rematchId)
-         level = getRematchLevel(level,nbRematch)
-         species = evolveRematchPokemon(nbRematch,species)
-       end
-
-      pokemon=PokeBattle_Pokemon.new(species,level,opponent)
-      #pokemon.form=poke[TPFORM]
-      pokemon.resetMoves
-      
-      
-      pokemon.setItem( $game_switches[843] ? rand(PBItems.maxValue) : poke[TPITEM])
-      
-      if poke[TPMOVE1]>0 || poke[TPMOVE2]>0 || poke[TPMOVE3]>0 || poke[TPMOVE4]>0
-        k=0
-        for move in [TPMOVE1,TPMOVE2,TPMOVE3,TPMOVE4]
-          pokemon.moves[k]=PBMove.new(poke[move])
-          k+=1
-        end
-        pokemon.moves.compact!
-      end
-      pokemon.setAbility(poke[TPABILITY])
-      pokemon.setGender(poke[TPGENDER])
-      if poke[TPSHINY]   # if this is a shiny Pokémon
-        pokemon.makeShiny
-      else
-        pokemon.makeNotShiny
-      end
-      pokemon.setNature(poke[TPNATURE])
-      iv=poke[TPIV]
-      for i in 0...6
-        pokemon.iv[i]=iv&0x1F
-        pokemon.ev[i]=[85,level*3/2].min
-      end
-      pokemon.happiness=poke[TPHAPPINESS]
-      pokemon.name=poke[TPNAME] if poke[TPNAME] && poke[TPNAME]!=""
-      if poke[TPSHADOW]   # if this is a Shadow Pokémon
-        pokemon.makeShadow rescue nil
-        pokemon.pbUpdateShadowMoves(true) rescue nil
-        pokemon.makeNotShiny
-      end
-      pokemon.ballused=poke[TPBALL]
-      pokemon.calcStats
-      party.push(pokemon)
-    end
-    success=true
-    break
-  end
-  return success ? [opponent,items,party] : nil
-end
+#
+#  def pbLoadTrainer(trainerid,trainername,partyid=0)
+#   if trainerid.is_a?(String) || trainerid.is_a?(Symbol)
+#     if !hasConst?(PBTrainers,trainerid)
+#       raise _INTL("Trainer type does not exist ({1}, {2}, ID {3})",trainerid,trainername,partyid)
+#     end
+#     trainerid=getID(PBTrainers,trainerid)
+#   end
+#   success=false
+#   items=[]
+#   party=[]
+#   opponent=nil
+#   trainers=load_data("Data/trainers.dat")
+#   trainerIndex=-1
+#
+#   for trainer in trainers
+#     trainerIndex+=1
+#     name=trainer[1]
+#     thistrainerid=trainer[0]
+#     thispartyid=trainer[4]
+#     next if trainerid!=thistrainerid || name!=trainername || partyid!=thispartyid
+#     items=trainer[2].clone
+#
+#     if $game_switches[666]  #hard mode
+#       items = addHealingItem(items)
+#     end
+#
+#
+#     name=pbGetMessageFromHash(MessageTypes::TrainerNames,name)
+#     for i in RIVALNAMES
+#       if isConst?(trainerid,PBTrainers,i[0]) && $game_variables[i[1]]!=0
+#         name=$game_variables[i[1]]
+#       end
+#     end
+#     opponent=PokeBattle_Trainer.new(name,thistrainerid)
+#     opponent.setForeignID($Trainer) if $Trainer
+#
+#
+#     #use le random Array si randomized starters (et pas 1ere rival battle)
+#     isPlayingRandomized =  $game_switches[987] && !$game_switches[46]
+#     if isPlayingRandomized && $PokemonGlobal.randomTrainersHash[trainerIndex] == nil
+#       Kernel.pbMessage(_INTL("The trainers need to be re-shuffled."))
+#       Kernel.pbShuffleTrainers()
+#     end
+#     trainerParty = isPlayingRandomized ? $PokemonGlobal.randomTrainersHash[trainerIndex][3] : getTrainerParty(trainer)
+#
+#
+#     isRematch = $game_switches[200]
+#     rematchId = getRematchId(trainername,trainerid)
+#     for poke in trainerParty
+#       ##
+#       species=poke[TPSPECIES]
+#       species = replaceRivalStarterIfNecessary(species)
+#
+#
+#       level= $game_switches[666] ? (poke[TPLEVEL]*1.1).ceil : poke[TPLEVEL]
+#
+#       if isRematch
+#          nbRematch = getNumberRematch(rematchId)
+#          level = getRematchLevel(level,nbRematch)
+#          species = evolveRematchPokemon(nbRematch,species)
+#        end
+#
+#       pokemon=PokeBattle_Pokemon.new(species,level,opponent)
+#       #pokemon.form=poke[TPFORM]
+#       pokemon.resetMoves
+#
+#
+#       pokemon.setItem( $game_switches[843] ? rand(PBItems.maxValue) : poke[TPITEM])
+#
+#       if poke[TPMOVE1]>0 || poke[TPMOVE2]>0 || poke[TPMOVE3]>0 || poke[TPMOVE4]>0
+#         k=0
+#         for move in [TPMOVE1,TPMOVE2,TPMOVE3,TPMOVE4]
+#           pokemon.moves[k]=PBMove.new(poke[move])
+#           k+=1
+#         end
+#         pokemon.moves.compact!
+#       end
+#       pokemon.setAbility(poke[TPABILITY])
+#       pokemon.setGender(poke[TPGENDER])
+#       if poke[TPSHINY]   # if this is a shiny Pokémon
+#         pokemon.makeShiny
+#       else
+#         pokemon.makeNotShiny
+#       end
+#       pokemon.setNature(poke[TPNATURE])
+#       iv=poke[TPIV]
+#       for i in 0...6
+#         pokemon.iv[i]=iv&0x1F
+#         pokemon.ev[i]=[85,level*3/2].min
+#       end
+#       pokemon.happiness=poke[TPHAPPINESS]
+#       pokemon.name=poke[TPNAME] if poke[TPNAME] && poke[TPNAME]!=""
+#       if poke[TPSHADOW]   # if this is a Shadow Pokémon
+#         pokemon.makeShadow rescue nil
+#         pokemon.pbUpdateShadowMoves(true) rescue nil
+#         pokemon.makeNotShiny
+#       end
+#       pokemon.ballused=poke[TPBALL]
+#       pokemon.calcStats
+#       party.push(pokemon)
+#     end
+#     success=true
+#     break
+#   end
+#   return success ? [opponent,items,party] : nil
+# end
 
 def getRematchId(trainername, trainerid)
       return trainername + trainerid.to_s

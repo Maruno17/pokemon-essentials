@@ -44,7 +44,11 @@ module GameData
     end
 
     def self.front_sprite_filename(tr_type)
-      return self.check_file(tr_type, "Graphics/Trainers/")
+      tr_type_data = self.try_get(tr_type)
+      path = "Graphics/Trainers/"
+      file = sprintf("trainer%03d", tr_type_data.id_number)
+      ret = path + file
+      return ret if pbResolveBitmap(ret)
     end
 
     def self.player_front_sprite_filename(tr_type)

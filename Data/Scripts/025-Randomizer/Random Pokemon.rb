@@ -21,69 +21,69 @@
 ################################################################################
 
 ########################## You may edit any settings below this freely.
-module RandomizedChallenge
-  Switch = 36 # switch ID to randomize a pokemon, if it's on then ALL
-  # pokemon will be randomized. No exceptions.
-
-  BlackListedPokemon = [] #[PBSpecies::MEW, PBSpecies::ARCEUS]
-  # Pokemon to Black List. Any pokemon in here will NEVER appear.
-
-  WhiteListedPokemon = []
-  # Leave this empty if all pokemon are allowed, otherwise only pokemon listed
-  # above will be selected.
-end
-
-######################### Do not edit anything below here.
-class PokeBattle_Pokemon
-
-  alias randomized_init initialize
-
-  def initialize(species, level, player = nil, withMoves = true)
-
-    if $game_switches && $game_switches[RandomizedChallenge::Switch]
-      if $game_switches[991]
-        species = rand(PBSpecies.maxValue - 1) + 1
-        basestatsum = $pkmn_dex[species][5][0] # HP
-        basestatsum += $pkmn_dex[species][5][1] # Attack
-        basestatsum += $pkmn_dex[species][5][2] # Defense
-        basestatsum += $pkmn_dex[species][5][3] # Speed
-        basestatsum += $pkmn_dex[species][5][4] # Special Attack
-        basestatsum += $pkmn_dex[species][5][5] # Special Defense
-
-        while basestatsum > $game_variables[53] || basestatsum < $game_variables[87]
-          species = rand(PBSpecies.maxValue - 1) + 1
-          basestatsum = $pkmn_dex[species][5][0] # HP
-          basestatsum += $pkmn_dex[species][5][1] # Attack
-          basestatsum += $pkmn_dex[species][5][2] # Defense
-          basestatsum += $pkmn_dex[species][5][3] # Speed
-          basestatsum += $pkmn_dex[species][5][4] # Special Attack
-          basestatsum += $pkmn_dex[species][5][5] # Special Defense
-        end
-        #Kernel.pbMessage(_INTL("total = {1}, {2}",basestatsum, PBSpecies.getName(species)))
-      else
-        if $game_switches[841]
-          species = getRandomCustomSprite()
-        else
-          species = rand(PBSpecies.maxValue - 1) + 1
-        end
-      end
-    end
-
-    randomized_init(species, level, player, withMoves)
-  end
-end
-
-
-def getRandomCustomSprite()
-  filesList = Dir["./Graphics/CustomBattlers/*"]
-  i = rand(filesList.length - 1)
-  path = filesList[i]
-  file = File.basename(path, ".*")
-  splitPoke = file.split(".")
-  head = splitPoke[0].to_i
-  body = splitPoke[1].to_i
-  return (body * NB_POKEMON) + head
-end
+# module RandomizedChallenge
+#   Switch = 36 # switch ID to randomize a pokemon, if it's on then ALL
+#   # pokemon will be randomized. No exceptions.
+#
+#   BlackListedPokemon = [] #[PBSpecies::MEW, PBSpecies::ARCEUS]
+#   # Pokemon to Black List. Any pokemon in here will NEVER appear.
+#
+#   WhiteListedPokemon = []
+#   # Leave this empty if all pokemon are allowed, otherwise only pokemon listed
+#   # above will be selected.
+# end
+#
+# ######################### Do not edit anything below here.
+# class PokeBattle_Pokemon
+#
+#   alias randomized_init initialize
+#
+#   def initialize(species, level, player = nil, withMoves = true)
+#
+#     if $game_switches && $game_switches[RandomizedChallenge::Switch]
+#       if $game_switches[991]
+#         species = rand(PBSpecies.maxValue - 1) + 1
+#         basestatsum = $pkmn_dex[species][5][0] # HP
+#         basestatsum += $pkmn_dex[species][5][1] # Attack
+#         basestatsum += $pkmn_dex[species][5][2] # Defense
+#         basestatsum += $pkmn_dex[species][5][3] # Speed
+#         basestatsum += $pkmn_dex[species][5][4] # Special Attack
+#         basestatsum += $pkmn_dex[species][5][5] # Special Defense
+#
+#         while basestatsum > $game_variables[53] || basestatsum < $game_variables[87]
+#           species = rand(PBSpecies.maxValue - 1) + 1
+#           basestatsum = $pkmn_dex[species][5][0] # HP
+#           basestatsum += $pkmn_dex[species][5][1] # Attack
+#           basestatsum += $pkmn_dex[species][5][2] # Defense
+#           basestatsum += $pkmn_dex[species][5][3] # Speed
+#           basestatsum += $pkmn_dex[species][5][4] # Special Attack
+#           basestatsum += $pkmn_dex[species][5][5] # Special Defense
+#         end
+#         #Kernel.pbMessage(_INTL("total = {1}, {2}",basestatsum, PBSpecies.getName(species)))
+#       else
+#         if $game_switches[841]
+#           species = getRandomCustomSprite()
+#         else
+#           species = rand(PBSpecies.maxValue - 1) + 1
+#         end
+#       end
+#     end
+#
+#     randomized_init(species, level, player, withMoves)
+#   end
+# end
+#
+#
+# def getRandomCustomSprite()
+#   filesList = Dir["./Graphics/CustomBattlers/*"]
+#   i = rand(filesList.length - 1)
+#   path = filesList[i]
+#   file = File.basename(path, ".*")
+#   splitPoke = file.split(".")
+#   head = splitPoke[0].to_i
+#   body = splitPoke[1].to_i
+#   return (body * NB_POKEMON) + head
+# end
 
 =begin
 

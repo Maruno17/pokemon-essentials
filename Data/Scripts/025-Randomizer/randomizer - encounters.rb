@@ -59,66 +59,66 @@ def displayProgress(current,total,bst)
   Kernel.pbMessageNoSound(_INTL("\\ts[]Generating encounters file...\\n Map {1}/{2}\\^",current,total))
 end
 
-
-class PokemonEncounters
-  
-    def setup(mapID)
-    @density=nil
-    @stepcount=0
-    @enctypes=[]
-    begin
-
-      data=load_data(getEncountersFilePath())
-      if data.is_a?(Hash) && data[mapID]
-        @density=data[mapID][0]
-        @enctypes=data[mapID][1]
-      else
-        @density=nil
-        @enctypes=[]
-      end
-      rescue
-      @density=nil
-      @enctypes=[]
-    end
-  end
-  
-  def getEncountersFilePath()
-    if $game_switches[777] && $game_switches[778]   #[777] = random-by-area  [778] = wildpokerandom activated
-      return "Data/encounters_randomized.dat"
-    else
-      return "Data/encounters.dat"
-    end
-  end
-  
-  def pbMapEncounter(mapID,enctype)
-    if enctype<0 || enctype>EncounterTypes::EnctypeChances.length
-      raise ArgumentError.new(_INTL("Encounter type out of range"))
-    end
-    data=load_data(getEncountersFilePath())
-    if data.is_a?(Hash) && data[mapID]
-      enctypes=data[mapID][1]
-    else
-      return nil
-    end
-    return nil if enctypes[enctype]==nil
-    chances=EncounterTypes::EnctypeChances[enctype]
-    chancetotal=0
-    chances.each {|a| chancetotal+=a}
-    rnd=rand(chancetotal)
-    chosenpkmn=0
-    chance=0
-    for i in 0...chances.length
-      chance+=chances[i]
-      if rnd<chance
-        chosenpkmn=i
-        break
-      end
-    end
-    encounter=enctypes[enctype][chosenpkmn]
-    level=encounter[1]+rand(1+encounter[2]-encounter[1])
-    return [encounter[0],level]
-  end
-end
+#
+# class PokemonEncounters
+#
+#     def setup(mapID)
+#     @density=nil
+#     @stepcount=0
+#     @enctypes=[]
+#     begin
+#
+#       data=load_data(getEncountersFilePath())
+#       if data.is_a?(Hash) && data[mapID]
+#         @density=data[mapID][0]
+#         @enctypes=data[mapID][1]
+#       else
+#         @density=nil
+#         @enctypes=[]
+#       end
+#       rescue
+#       @density=nil
+#       @enctypes=[]
+#     end
+#   end
+#
+#   def getEncountersFilePath()
+#     if $game_switches[777] && $game_switches[778]   #[777] = random-by-area  [778] = wildpokerandom activated
+#       return "Data/encounters_randomized.dat"
+#     else
+#       return "Data/encounters.dat"
+#     end
+#   end
+#
+#   def pbMapEncounter(mapID,enctype)
+#     if enctype<0 || enctype>EncounterTypes::EnctypeChances.length
+#       raise ArgumentError.new(_INTL("Encounter type out of range"))
+#     end
+#     data=load_data(getEncountersFilePath())
+#     if data.is_a?(Hash) && data[mapID]
+#       enctypes=data[mapID][1]
+#     else
+#       return nil
+#     end
+#     return nil if enctypes[enctype]==nil
+#     chances=EncounterTypes::EnctypeChances[enctype]
+#     chancetotal=0
+#     chances.each {|a| chancetotal+=a}
+#     rnd=rand(chancetotal)
+#     chosenpkmn=0
+#     chance=0
+#     for i in 0...chances.length
+#       chance+=chances[i]
+#       if rnd<chance
+#         chosenpkmn=i
+#         break
+#       end
+#     end
+#     encounter=enctypes[enctype][chosenpkmn]
+#     level=encounter[1]+rand(1+encounter[2]-encounter[1])
+#     return [encounter[0],level]
+#   end
+# end
 
 
 

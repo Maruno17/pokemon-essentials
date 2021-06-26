@@ -208,10 +208,10 @@ module GameData
       else
         if (index & 1) == 0   # Player's Pokémon
           sprite.x += @back_sprite_x * 2
-          sprite.y += @back_sprite_y * 2
+          sprite.y += (@back_sprite_y * 2)  + Settings::BACKSPRITE_POSITION_OFFSET
         else                  # Foe Pokémon
           sprite.x += @front_sprite_x * 2
-          sprite.y += @front_sprite_y * 2
+          sprite.y += (@front_sprite_y * 2) + Settings::FRONTSPRITE_POSITION_OFFSET
           sprite.y -= @front_sprite_altitude * 2
         end
       end
