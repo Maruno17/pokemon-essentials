@@ -29,14 +29,17 @@ module GameData
 
     def self.sprite_filename(dex_number)
       if dex_number <= Settings::NB_POKEMON
-        filename = sprintf("%s/%s.png", dex_number, dex_number)
+        folder = dex_number.to_s
+        filename = sprintf("%s.png", dex_number)
       else
         body_id = getBodyID(dex_number)
         head_id = getHeadID(dex_number, body_id)
-        filename = sprintf("%s/%s.%s.png", head_id, head_id, body_id)
+        folder = head_id.to_s
+        filename = sprintf("%s.%s.png", head_id, body_id)
       end
       customPath = pbResolveBitmap(Settings::CUSTOM_BATTLERS_FOLDER + filename)
-      return customPath ? customPath : pbResolveBitmap(Settings::BATTLERS_FOLDER + filename)
+      regularPath = Settings::BATTLERS_FOLDER + folder + "/" + filename
+      return customPath ? customPath : pbResolveBitmap(regularPath)
     end
 
   end
