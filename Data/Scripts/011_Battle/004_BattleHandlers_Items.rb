@@ -1317,6 +1317,7 @@ BattleHandlers::EndOfMoveStatRestoreItem.add(:WHITEHERB,
     GameData::Stat.each_battle do |s|
       next if battler.stages[s.id] >= 0
       battler.stages[s.id] = 0
+      battler.statsRaised = true
       reducedStats = true
     end
     next false if !reducedStats

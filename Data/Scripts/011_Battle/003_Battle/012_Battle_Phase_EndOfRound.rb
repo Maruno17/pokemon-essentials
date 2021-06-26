@@ -648,6 +648,8 @@ class PokeBattle_Battle
       b.lastHPLostFromFoe                    = 0
       b.tookDamage                           = false
       b.tookPhysicalHit                      = false
+      b.statsRaised                          = false
+      b.statsLowered                         = false
       b.lastRoundMoveFailed                  = b.lastMoveFailed
       b.lastAttacker.clear
       b.lastFoeAttacker.clear

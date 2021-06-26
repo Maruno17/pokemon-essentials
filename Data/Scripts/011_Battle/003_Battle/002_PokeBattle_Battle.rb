@@ -74,6 +74,7 @@ class PokeBattle_Battle
   attr_reader   :recycleItems
   attr_reader   :belch
   attr_reader   :battleBond
+  attr_reader   :corrosiveGas
   attr_reader   :usedInBattle     # Whether each Pokémon was used in battle (for Burmy)
   attr_reader   :successStates    # Success states
   attr_accessor :lastMoveUsed     # Last move used
@@ -150,6 +151,7 @@ class PokeBattle_Battle
     @recycleItems      = [Array.new(@party1.length, nil),   Array.new(@party2.length, nil)]
     @belch             = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
     @battleBond        = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
+    @corrosiveGas      = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
     @usedInBattle      = [Array.new(@party1.length, false), Array.new(@party2.length, false)]
     @successStates     = []
     @lastMoveUsed      = nil
@@ -585,6 +587,7 @@ class PokeBattle_Battle
     effectsToSwap = [PBEffects::Attract,
                      PBEffects::BideTarget,
                      PBEffects::CounterTarget,
+                     PBEffects::JawLock,
                      PBEffects::LockOnPos,
                      PBEffects::MeanLook,
                      PBEffects::MirrorCoatTarget,

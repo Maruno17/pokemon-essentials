@@ -150,6 +150,8 @@ class PokeBattle_Battler
     @lastHPLostFromFoe     = 0
     @tookDamage            = false
     @tookPhysicalHit       = false
+    @statsRaised           = false
+    @statsLowered          = false
     @lastMoveUsed          = nil
     @lastMoveUsedType      = nil
     @lastRegularMoveUsed   = nil
@@ -205,6 +207,10 @@ class PokeBattle_Battler
     @effects[PBEffects::Imprison]            = false
     @effects[PBEffects::Instruct]            = false
     @effects[PBEffects::Instructed]          = false
+    @effects[PBEffects::JawLock]             = -1
+    @battle.eachBattler do |b|   # Other battlers no longer blocked by self
+      b.effects[PBEffects::JawLock] = -1 if b.effects[PBEffects::JawLock] == @index
+    end
     @effects[PBEffects::KingsShield]         = false
     @battle.eachBattler do |b|   # Other battlers lose their lock-on against self
       next if b.effects[PBEffects::LockOn]==0

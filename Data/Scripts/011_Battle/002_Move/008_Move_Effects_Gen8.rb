@@ -80,7 +80,10 @@ end
 # Burns the target if any of its stats were increased this round.
 # (Burning Jealousy)
 #===============================================================================
-class PokeBattle_Move_177 < PokeBattle_UnimplementedMove
+class PokeBattle_Move_177 < PokeBattle_BurnMove
+  def pbEffectAgainstTarget(user, target)
+    super if target.statsRaised
+  end
 end
 
 #===============================================================================
@@ -123,10 +126,7 @@ class PokeBattle_Move_179 < PokeBattle_Move_02D
 
   def pbEffectGeneral(user)
     super
-    if battler.effects[PBEffects::Trapping] == 0 &&
-       battler.effects[PBEffects::MeanLook] < 0 &&
-       !battler.effects[PBEffects::Ingrain] &&
-       @field.effects[PBEffects::FairyLock] == 0
+    if !user.trappedInBattle?
       user.effects[PBEffects::NoRetreat] = true
       @battle.pbDisplay(_INTL("{1} can no longer escape because it used {2}!", user.pbThis, @name))
     end
@@ -337,7 +337,11 @@ end
 #===============================================================================
 # Power is doubled if any of the user's stats were lowered this round. (Lash Out)
 #===============================================================================
-class PokeBattle_Move_184 < PokeBattle_UnimplementedMove
+class PokeBattle_Move_184 < PokeBattle_Move
+  def pbBaseDamage(baseDmg, user, target)
+    baseDmg *= 2 if user.statsLowered
+    return baseDmg
+  end
 end
 
 #===============================================================================
@@ -567,7 +571,14 @@ end
 # isn't applied if either Pokémon is already prevented from switching out or
 # fleeing. (Jaw Lock)
 #===============================================================================
-class PokeBattle_Move_190 < PokeBattle_UnimplementedMove
+class PokeBattle_Move_190 < PokeBattle_Move
+  def pbAdditionalEffect(user,target)
+    return if user.fainted? || target.fainted? || target.damageState.substitute
+    return if Settings::MORE_TYPE_EFFECTS && target.pbHasType?(:GHOST)
+    return if user.trappedInBattle? || target.trappedInBattle?
+    target.effects[PBEffects::JawLock] = user.index
+    @battle.pbDisplay(_INTL("Neither Pokémon can run away!"))
+  end
 end
 
 #===============================================================================
@@ -576,7 +587,41 @@ end
 # Room apply. Fails if the user is not holding a berry. This move cannot be
 # chosen to be used if the user is not holding a berry. (Stuff Cheeks)
 #===============================================================================
-class PokeBattle_Move_191 < PokeBattle_UnimplementedMove
+class PokeBattle_Move_191 < PokeBattle_StatUpMove
+  def initialize(battle, move)
+    super
+    @statUp = [:DEFENSE, 2]
+  end
+
+  def pbCanChooseMove?(user, commandPhase, showMessages)
+    item = user.item
+    if !item || !item.is_berry? || !user.itemActive?
+      if showMessages
+        msg = _INTL("{1} can't use that move because it doesn't have a Berry!", user.pbThis)
+        (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
+      end
+      return false
+    end
+    return true
+  end
+
+  def pbMoveFailed?(user, targets)
+    # NOTE: Unnerve does not stop a Pokémon using this move.
+    item = user.item
+    if !item || !item.is_berry? || !user.itemActive?
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return super
+  end
+
+  def pbEffectGeneral(user)
+    super
+    @battle.pbDisplay(_INTL("{1} ate its {2}!", user.pbThis, user.itemName))
+    item = user.item
+    user.pbConsumeItem(true, false)   # Don't trigger Symbiosis yet
+    user.pbHeldItemTriggerCheck(item, false)
+  end
 end
 
 #===============================================================================
@@ -585,10 +630,40 @@ end
 # Fails if no Pokémon have a held berry. If this move would trigger an ability
 # that negates the move, e.g. Lightning Rod, the bearer of that ability will
 # have their ability triggered regardless of whether they are holding a berry,
-# and they will not consume their berry (how does this interact with the move
-# failing?). (Teatime)
+# and they will not consume their berry. (Teatime)
+# TODO: This isn't quite right for the messages shown when a berry is consumed.
 #===============================================================================
-class PokeBattle_Move_192 < PokeBattle_UnimplementedMove
+class PokeBattle_Move_192 < PokeBattle_Move
+  def pbMoveFailed?(user, targets)
+    failed = true
+    targets.each do |b|
+      next if !b.item || !b.item.is_berry?
+      next if b.semiInvulnerable?
+      failed = false
+      break
+    end
+    if failed
+      @battle.pbDisplay(_INTL("But nothing happened!"))
+      return true
+    end
+    return false
+  end
+
+  def pbOnStartUse(user,targets)
+    @battle.pbDisplay(_INTL("It's teatime! Everyone dug in to their Berries!"))
+  end
+
+  def pbFailsAgainstTarget?(user, target)
+    return true if !target.item || !target.item.is_berry? || target.semiInvulnerable?
+    return false
+  end
+
+  def pbEffectAgainstTarget(user, target)
+    @battle.pbCommonAnimation("EatBerry", target)
+    item = target.item
+    target.pbConsumeItem(true, false)   # Don't trigger Symbiosis yet
+    target.pbHeldItemTriggerCheck(item, false)
+  end
 end
 
 #===============================================================================
@@ -597,7 +672,36 @@ end
 # item, the item is unlosable, the target has Sticky Hold, or the target is
 # behind a substitute. (Corrosive Gas)
 #===============================================================================
-class PokeBattle_Move_193 < PokeBattle_UnimplementedMove
+class PokeBattle_Move_193 < PokeBattle_Move
+  def pbFailsAgainstTarget?(user, target)
+    if !target.item || target.unlosableItem?(target.item) ||
+       target.effects[PBEffects::Substitute] > 0
+      @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
+      return true
+    end
+    if target.hasActiveAbility?(:STICKYHOLD) && !@battle.moldBreaker
+      @battle.pbShowAbilitySplash(target)
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
+      else
+        @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",
+           target.pbThis(true), target.abilityName))
+      end
+      @battle.pbHideAbilitySplash(target)
+      return true
+    end
+    if @battle.corrosiveGas[target.index % 2][target.pokemonIndex]
+      @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
+      return true
+    end
+    return false
+  end
+
+  def pbEffectAgainstTarget(user, target)
+    @battle.corrosiveGas[target.index % 2][target.pokemonIndex] = true
+    @battle.pbDisplay(_INTL("{1} corroded {2}'s {3}!",
+       user.pbThis, target.pbThis(true), target.itemName))
+  end
 end
 
 #===============================================================================

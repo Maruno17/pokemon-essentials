@@ -1030,10 +1030,12 @@ class PokeBattle_Move_03A < PokeBattle_Move
     user.pbReduceHP(hpLoss,false)
     if user.hasActiveAbility?(:CONTRARY)
       user.stages[:ATTACK] = -6
+      user.statsLowered = true
       @battle.pbCommonAnimation("StatDown",user)
       @battle.pbDisplay(_INTL("{1} cut its own HP and minimized its Attack!",user.pbThis))
     else
       user.stages[:ATTACK] = 6
+      user.statsRaised = true
       @battle.pbCommonAnimation("StatUp",user)
       @battle.pbDisplay(_INTL("{1} cut its own HP and maximized its Attack!",user.pbThis))
     end
@@ -1505,6 +1507,13 @@ class PokeBattle_Move_052 < PokeBattle_Move
 
   def pbEffectAgainstTarget(user,target)
     [:ATTACK,:SPECIAL_ATTACK].each do |s|
+      if user.stages[s] > target.stages[s]
+        user.statsLowered = true
+        target.statsRaised = true
+      elsif user.stages[s] < target.stages[s]
+        user.statsRaised = true
+        target.statsLowered = true
+      end
       user.stages[s],target.stages[s] = target.stages[s],user.stages[s]
     end
     @battle.pbDisplay(_INTL("{1} switched all changes to its Attack and Sp. Atk with the target!",user.pbThis))
@@ -1521,6 +1530,13 @@ class PokeBattle_Move_053 < PokeBattle_Move
 
   def pbEffectAgainstTarget(user,target)
     [:DEFENSE,:SPECIAL_DEFENSE].each do |s|
+      if user.stages[s] > target.stages[s]
+        user.statsLowered = true
+        target.statsRaised = true
+      elsif user.stages[s] < target.stages[s]
+        user.statsRaised = true
+        target.statsLowered = true
+      end
       user.stages[s],target.stages[s] = target.stages[s],user.stages[s]
     end
     @battle.pbDisplay(_INTL("{1} switched all changes to its Defense and Sp. Def with the target!",user.pbThis))
@@ -1537,6 +1553,13 @@ class PokeBattle_Move_054 < PokeBattle_Move
 
   def pbEffectAgainstTarget(user,target)
     GameData::Stat.each_battle do |s|
+      if user.stages[s.id] > target.stages[s.id]
+        user.statsLowered = true
+        target.statsRaised = true
+      elsif user.stages[s.id] < target.stages[s.id]
+        user.statsRaised = true
+        target.statsLowered = true
+      end
       user.stages[s.id],target.stages[s.id] = target.stages[s.id],user.stages[s.id]
     end
     @battle.pbDisplay(_INTL("{1} switched stat changes with the target!",user.pbThis))
@@ -1552,7 +1575,14 @@ class PokeBattle_Move_055 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
   def pbEffectAgainstTarget(user,target)
-    GameData::Stat.each_battle { |s| user.stages[s.id] = target.stages[s.id] }
+    GameData::Stat.each_battle do |s|
+      if user.stages[s.id] > target.stages[s.id]
+        user.statsLowered = true
+      elsif user.stages[s.id] < target.stages[s.id]
+        user.statsRaised = true
+      end
+      user.stages[s.id] = target.stages[s.id]
+    end
     if Settings::NEW_CRITICAL_HIT_RATE_MECHANICS
       user.effects[PBEffects::FocusEnergy] = target.effects[PBEffects::FocusEnergy]
       user.effects[PBEffects::LaserFocus]  = target.effects[PBEffects::LaserFocus]

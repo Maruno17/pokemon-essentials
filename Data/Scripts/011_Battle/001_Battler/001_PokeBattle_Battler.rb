@@ -40,6 +40,8 @@ class PokeBattle_Battler
   attr_accessor :currentMove   # ID of multi-turn move currently being used
   attr_accessor :tookDamage    # Boolean for whether self took damage this round
   attr_accessor :tookPhysicalHit
+  attr_accessor :statsRaised   # Boolean for whether self's stat(s) raised this round
+  attr_accessor :statsLowered   # Boolean for whether self's stat(s) lowered this round
   attr_accessor :damageState
   attr_accessor :initialHP     # Set at the start of each move's usage
 
@@ -577,6 +579,18 @@ class PokeBattle_Battler
       return false
     end
     return true
+  end
+
+  def trappedInBattle?
+    return true if battler.effects[PBEffects::Trapping] > 0
+    return true if battler.effects[PBEffects::MeanLook] >= 0
+    return true if battler.effects[PBEffects::JawLock] >= 0
+    @battle.eachBattler { |b| return true if b.effects[PBEffects::JawLock] == @index }
+    return true if battler.effects[PBEffects::Octolock] >= 0
+    return true if battler.effects[PBEffects::Ingrain]
+    return true if battler.effects[PBEffects::NoRetreat]
+    return true if @field.effects[PBEffects::FairyLock] > 0
+    return false
   end
 
   def movedThisRound?
