@@ -1,173 +1,173 @@
 
 [LASS,Mimi]
-Pokemon = MAGNEMITE,4 
+Pokemon = PIDGEY,4 
 ###########################
 
 [YOUNGSTER,Pat]
-Pokemon = MAGNEMITE,7 #Speargey,
+Pokemon = B16H21,7 #Speargey,
 ##########################
 
 [YOUNGSTER,Sean]
-Pokemon = MAGNEMITE,8 #METAUNA,
+Pokemon = B14H11,8 #METAUNA,
 	Moves = HARDEN
 #########################
 
 [YOUNGSTER,Mustafa]
-Pokemon = MAGNEMITE,4 #pidran,
-Pokemon = MAGNEMITE,4 #Ratpie,
+Pokemon = PIDGEY,4 #pidran,
+Pokemon = B10H19,4 #Ratpie,
 #########################
 ### Lavender Tower 	######
 #######################
 
 [TEAMROCKET_M,Walter]
-Pokemon = MAGNEMITE,22 #Arbmer,
+Pokemon = GRIMER,22 #Arbmer,
 	Item = 	POISONBARB
-Pokemon = MAGNEMITE,26 #Hauntung,
+Pokemon = B108H93,26 #Hauntung,
 #######################
 
 [TEAMROCKET_M,Jared]
-Pokemon = MAGNEMITE,22 #DitCate,
+Pokemon = RATICATE,22 #DitCate,
 	Moves = TRANSFORM,HYPERFANG,CRUNCH,SCARYFACE
-Pokemon = MAGNEMITE,26 #Golwhirl,
+Pokemon = B61H42,26 #Golwhirl,
 
 ######F3##############
 #####################
 
 [CHANNELER,Hope]
-Pokemon = MAGNEMITE,33 #Bulbtly,
+Pokemon = B92H1,33 #Bulbtly,
 #####################
 
 [CHANNELER,Margaret]
-Pokemon = MAGNEMITE,33 #Chartly,
+Pokemon = B92H4,33 #Chartly,
 ##########################
 
 [CHANNELER,Deborah]
-Pokemon = MAGNEMITE,33 #Squirtltly,
+Pokemon = B92H7,33 #Squirtltly,
 ##############################
 ###########F4###########
 
 [HAUNTEDGIRL,Laurel]
-Pokemon = MAGNEMITE,32 #Gasbra,
-Pokemon = MAGNEMITE,32 #Gasbra,
+Pokemon = GASTLY,32 #Gasbra,
+Pokemon = B64H92,32 #Gasbra,
 #########################
 
 [CHANNELER,Carrietta]
-Pokemon = MAGNEMITE,32 #Politly,
+Pokemon = B92H61,32 #Politly,
 #########################
 
 [CHANNELER,Morgan]
-Pokemon = MAGNEMITE,34 #kabutly,
+Pokemon = B92H140,34 #kabutly,
 ############F5############
 #########################
 
 [CHANNELER,Ruth]
-Pokemon = MAGNEMITE,33 #Gastuf,
+Pokemon = B40H92,33 #Gastuf,
 #########################
 
 [HAUNTEDGIRL_YOUNG,Regan]
-Pokemon = MAGNEMITE,33 #Raiter,
+Pokemon = B93H26,33 #Raiter,
 #########################
 
 [CHANNELER,Karina]
-Pokemon = MAGNEMITE,32 #Tentatly,
+Pokemon = B92H73,32 #Tentatly,
 #########################
 
 [HAUNTEDGIRL,Carol Anne]
-Pokemon = MAGNEMITE,34 #Hauntslash,
+Pokemon = B28H93,34 #Hauntslash,
 #########################
 ######	f6##############
 
 [CHANNELER,Angelica]
-Pokemon = MAGNEMITE,32 #Pertly,
-Pokemon = MAGNEMITE,33 #Genkarp,
-Pokemon = MAGNEMITE,33 #Gendle,
+Pokemon = GASTLY,32 #Pertly,
+Pokemon = GASTLY,33 #Genkarp,
+Pokemon = B13H94,33 #Gendle,
 #########################
 
 [HAUNTEDGIRL_YOUNG,Jennifer]
-Pokemon = MAGNEMITE,34 #Hauntode,
+Pokemon = B101H93,34 #Hauntode,
 #########################
 
 [CHANNELER,Emilia]
-Pokemon = MAGNEMITE,34 #Hauntros,
+Pokemon = B128H93,34 #Hauntros,
 #########################
 
 [HAUNTEDGIRL,Samara]
-Pokemon = MAGNEMITE,40 #Hauntwak,
+Pokemon = B105H93,40 #Hauntwak,
 
 ############################
 #### ROUTE 8 #############
 ############################
 
 [LASS,Julia]
-Pokemon = MAGNEMITE,23 #,TRANSFORM,METRONOME,MINIMIZE,ENCORE,		#Ditfairy,
-Pokemon = MAGNEMITE,23 #Wigglyfairy,
+Pokemon = DITTO,23 #,TRANSFORM,METRONOME,MINIMIZE,ENCORE,		#Ditfairy,
+Pokemon = B35H40,23 #Wigglyfairy,
 #############################
 
 [GAMBLER,Rich]
-Pokemon = MAGNEMITE,25 
-Pokemon = MAGNEMITE,25 #Jigglylithe,
+Pokemon = VULPIX,25 
+Pokemon = B58H39,25 #Jigglylithe,
 ################################
 
 [SUPERNERD,Glenn]
-Pokemon = MAGNEMITE,23 
-Pokemon = MAGNEMITE,23 
-Pokemon = MAGNEMITE,23 #poryorb,
+Pokemon = GRIMER,23 
+Pokemon = GRIMER,23 
+Pokemon = B100H137,23 #poryorb,
 #################################
 
 [TWINS,Eli & Anne]
-Pokemon = MAGNEMITE,23 #Psyfairy,
-Pokemon = MAGNEMITE,23 #Slowpuff,
+Pokemon = B35H54,23 #Psyfairy,
+Pokemon = B39H79,23 #Slowpuff,
 #################################
 
 [POKEMONBREEDER,Megan]
-Pokemon = MAGNEMITE,20 #Vulgey,
-Pokemon = MAGNEMITE,20 #Magnetata,
-Pokemon = MAGNEMITE,20 #Shellran,
-Pokemon = MAGNEMITE,20 #Cuth,
-Pokemon = MAGNEMITE,20 #Kadachu,
+Pokemon = B16H37,20 #Vulgey,
+Pokemon = B19H81,20 #Magnetata,
+Pokemon = B32H90,20 #Shellran,
+Pokemon = B52H104,20 #Cuth,
+Pokemon = B25H64,20 #Kadachu,
 ################################
 
 [BEAUTY,Andrea]
-Pokemon = MAGNEMITE,23 #Magth,
-Pokemon = MAGNEMITE,23 #Electath,
-Pokemon = MAGNEMITE,23 #Jynth,
+Pokemon = B52H126,23 #Magth,
+Pokemon = B52H125,23 #Electath,
+Pokemon = B52H124,23 #Jynth,
 ###############################
 
 [SUPERNERD,Leslie]
-Pokemon = MAGNEMITE,27 #Snorfing,
+Pokemon = B109H143,27 #Snorfing,
 ##############################
 
 [LASS,Paige]
-Pokemon = MAGNEMITE,24 #Charoran,
-Pokemon = MAGNEMITE,24 #Charina,
+Pokemon = NIDORINO,24 #Charoran,
+Pokemon = B30H5,24 #Charina,
 ###############################
 
 [BIKER,Jaren]
-Pokemon = MAGNEMITE,25 #Mamer,
-Pokemon = MAGNEMITE,25 #Manmer,
+Pokemon = B88H66,25 #Mamer,
+Pokemon = B88H56,25 #Manmer,
 ###############################
 
 [BIKER,Johnny]
-Pokemon = MAGNEMITE,28 #Culithe,
+Pokemon = B58H104,28 #Culithe,
 #############################
 
 
 [ROUGHNECK,Ricardo]
-Pokemon = MAGNEMITE,23 #Farfing,
-Pokemon = MAGNEMITE,23 #Spearfing,
-Pokemon = MAGNEMITE,24 #Warmer,
+Pokemon = FARFETCHD,23 #Farfing,
+Pokemon = KOFFING,23 #Spearfing,
+Pokemon = B88H8,24 #Warmer,
 ################################
 
 [SUPERNERD,Aidan]
-Pokemon = MAGNEMITE,23 #Paraorb,
-Pokemon = MAGNEMITE,23 #Parafing,
-Pokemon = MAGNEMITE,23 #Paramite,
+Pokemon = B100H47,23 #Paraorb,
+Pokemon = B109H47,23 #Parafing,
+Pokemon = B81H47,23 #Paramite,
 ################################
 
 [GAMBLER,Stan]
-Pokemon = MAGNEMITE,23 #Caterwag,
-Pokemon = MAGNEMITE,23 #Metawag,
-Pokemon = MAGNEMITE,25 #Polifree,
+Pokemon = POLIWAG,23 #Caterwag,
+Pokemon = POLIWAG,23 #Metawag,
+Pokemon = B12H61,25 #Polifree,
 ################################
 
 
@@ -177,38 +177,38 @@ Pokemon = MAGNEMITE,25 #Polifree,
 ############################
 
 [SOCIALITE,Edna]
-Pokemon = MAGNEMITE,29 #Glooeon,
+Pokemon = B136H44,29 #Glooeon,
 ###########################
 
 
 [PAINTER,Frederique]
-Pokemon = MAGNEMITE,25 #Goldsey,
-Pokemon = MAGNEMITE,25 #Sandysaur,
+Pokemon = GOLDEEN,25 #Goldsey,
+Pokemon = B2H27,25 #Sandysaur,
 ############################
 
 [LASS,Lina]
-Pokemon = MAGNEMITE,28 #Dota,
+Pokemon = B77H84,28 #Dota,
 ##############################
 
 [TEACHER,France]
-Pokemon = MAGNEMITE,26 
-Pokemon = MAGNEMITE,26 #Meowmime,
+Pokemon = CLEFAIRY,26 
+Pokemon = B122H52,26 #Meowmime,
 ############################
 
 [PRESCHOOLER_M,Max]
-Pokemon = MAGNEMITE,25 #Catervee,
-Pokemon = MAGNEMITE,26 #Pato,
+Pokemon = EEVEE,25 #Catervee,
+Pokemon = B132H46,26 #Pato,
 	Moves = TRANSFORM
 ###############################
 
 [PRESCHOOLER_M,William]
-Pokemon = MAGNEMITE,28 #Seasee,
+Pokemon = B116H86,28 #Seasee,
 #############################
 
 [PRESCHOOLER_F,Lea]
-Pokemon = MAGNEMITE,23 #Horsish,
-Pokemon = MAGNEMITE,23 #Jigglymander,
-Pokemon = MAGNEMITE,23 #Pikagon,
+Pokemon = HORSEA,23 #Horsish,
+Pokemon = JIGGLYPUFF,23 #Jigglymander,
+Pokemon = B137H25,23 #Pikagon,
 ##############################
 
 
@@ -218,150 +218,150 @@ Pokemon = MAGNEMITE,23 #Pikagon,
 ############################
 
 [FISHERMAN,Ned]
-Pokemon = MAGNEMITE,22 #Venodeen,
-Pokemon = MAGNEMITE,22 #Clefwag,
-Pokemon = MAGNEMITE,22 #Voltdeen,
+Pokemon = GOLDEEN,22 #Venodeen,
+Pokemon = POLIWAG,22 #Clefwag,
+Pokemon = B118H100,22 #Voltdeen,
 #############################
 
 [FISHERMAN,Hank]
-Pokemon = MAGNEMITE,27 #Gyarakarp,
+Pokemon = B129H130,27 #Gyarakarp,
 #############################
 
 [FISHERMAN,Chip]
-Pokemon = MAGNEMITE,24 #Weepincool,
-Pokemon = MAGNEMITE,24 #Cudeen,
+Pokemon = TENTACOOL,24 #Weepincool,
+Pokemon = B118H104,24 #Cudeen,
 ##############################
 
 [FISHERMAN,Elliot]
-Pokemon = MAGNEMITE,26 #,
-Pokemon = MAGNEMITE,28 #Slowder,
+Pokemon = SHELLDER,26 #,
+Pokemon = B90H80,28 #Slowder,
 ###############################
 
 [YOUNGCOUPLE,Gia & Jes]
-Pokemon = MAGNEMITE,29 #Kraboran f,
-Pokemon = MAGNEMITE,29 #Krabran m,
-Pokemon = MAGNEMITE,31 #Kingrina f,
-Pokemon = MAGNEMITE,31 #Kingrino m,
+Pokemon = KRABBY,29 #Kraboran f,
+Pokemon = KRABBY,29 #Krabran m,
+Pokemon = B30H99,31 #Kingrina f,
+Pokemon = B33H99,31 #Kingrino m,
 
 ###############################
 
 [ENGINEER,Luca]
-Pokemon = MAGNEMITE,31 #Electrorb,
-Pokemon = MAGNEMITE,31 #Shellchu,
+Pokemon = VOLTORB,31 #Electrorb,
+Pokemon = B26H90,31 #Shellchu,
 ################################
 
 [FISHERMAN,Andrew]
-Pokemon = MAGNEMITE,25 
-Pokemon = MAGNEMITE,25 #Metakarp,
-Pokemon = MAGNEMITE,25 #Kakarp,
-Pokemon = MAGNEMITE,25 #Ditkarp,
-Pokemon = MAGNEMITE,25 #Caterkarp,
-Pokemon = MAGNEMITE,25 #Weekarp,
+Pokemon = MAGIKARP,25 
+Pokemon = B129H11,25 #Metakarp,
+Pokemon = B129H14,25 #Kakarp,
+Pokemon = B129H132,25 #Ditkarp,
+Pokemon = B129H10,25 #Caterkarp,
+Pokemon = B129H13,25 #Weekarp,
 
 #################################
 
 [CAMPER,Justin]
-Pokemon = MAGNEMITE,29 #Nidoran,
-Pokemon = MAGNEMITE,29 #Nidorina,
+Pokemon = B29H33,29 #Nidoran,
+Pokemon = B30H32,29 #Nidorina,
 ################################
 ################################
 ##### 	ROUTE 13	#####
 ################################
 
 [TUBER_F,Emily]
-Pokemon = MAGNEMITE,36 #WOOFISH
+Pokemon = B211H194,36 #WOOFISH
 	Moves = MINIMIZE,DIVE,AQUAJET,YAWN
 #################################
 
 [PICNICKER,Alma]
-Pokemon = MAGNEMITE,33 #Goldlithe,
-Pokemon = MAGNEMITE,33 #Policool,
-Pokemon = MAGNEMITE,33 #Horsvee,
+Pokemon = GROWLITHE,33 #Goldlithe,
+Pokemon = POLIWHIRL,33 #Policool,
+Pokemon = B133H116,33 #Horsvee,
 ##############################
 
 [BIRDKEEPER,Sebastian]
-Pokemon = MAGNEMITE,34 #Seagey,
-Pokemon = MAGNEMITE,34 #Fareotto,
+Pokemon = PIDGEY,34 #Seagey,
+Pokemon = B17H83,34 #Fareotto,
 ###########################
 
 [SWIMMER_F,Susie]
-Pokemon = MAGNEMITE,26 #Pidkarp,
-Pokemon = MAGNEMITE,26 #Meowyu,
-Pokemon = MAGNEMITE,26 #Pikawhirl,
+Pokemon = HORSEA,26 #Pidkarp,
+Pokemon = STARYU,26 #Meowyu,
+Pokemon = B61H25,26 #Pikawhirl,
 ############################
 
 [BEAUTY,Lola]
-Pokemon = MAGNEMITE,34 #Clefto,
-Pokemon = MAGNEMITE,34 #Meowto (Kabuto),
+Pokemon = CLEFAIRY,34 #Clefto,
+Pokemon = B140H52,34 #Meowto (Kabuto),
 ###########################
 
 [SWIMMER_F,Valerie]
-Pokemon = MAGNEMITE,35 #Manwag,
-Pokemon = MAGNEMITE,34 #Lickiwag,
+Pokemon = POLIWAG,35 #Manwag,
+Pokemon = B60H108,34 #Lickiwag,
 ##########################
 
 [PICNICKER,Gwen]
-Pokemon = MAGNEMITE,32 #Pidbra,
-Pokemon = MAGNEMITE,32 #Meowras,
-Pokemon = MAGNEMITE,32 #Nidoeotto,
+Pokemon = ABRA,32 #Pidbra,
+Pokemon = MEOWTH,32 #Meowras,
+Pokemon = B17H30,32 #Nidoeotto,
 ##########################
 
 [BIRDKEEPER,Perry]
-Pokemon = MAGNEMITE,30 #Pagey,
-Pokemon = MAGNEMITE,30 #Changey,
-Pokemon = MAGNEMITE,30 #Omarow,
-Pokemon = MAGNEMITE,30 #Pikarow,
+Pokemon = PIDGEY,30 #Pagey,
+Pokemon = PIDGEY,30 #Changey,
+Pokemon = SPEAROW,30 #Omarow,
+Pokemon = B21H25,30 #Pikarow,
 #######################
 
 [BEAUTY,Pamela]
-Pokemon = MAGNEMITE,37 #Jigglybra,
+Pokemon = B64H39,37 #Jigglybra,
 ########################
 
 [BLACKBELT,Joshua]
-Pokemon = MAGNEMITE,28 #Pikato,
+Pokemon = B132H25,28 #Pikato,
 	Moves = TRANSFORM
-Pokemon = MAGNEMITE,28 #Bulbto,
+Pokemon = B132H1,28 #Bulbto,
 	Moves = TRANSFORM
-Pokemon = MAGNEMITE,28 #Charto,
+Pokemon = B132H4,28 #Charto,
 	Moves = TRANSFORM
-Pokemon = MAGNEMITE,28 #Squirto,
+Pokemon = B132H7,28 #Squirto,
 	Moves = TRANSFORM
 #B132H113,25,,TRANSFORM,	#Chanto,
 #B132H132,25,,TRANSFORM,	#Dito,
 #########################
 
 [BLACKBELT,Henry]
-Pokemon = MAGNEMITE,31 #Mr. King,
-Pokemon = MAGNEMITE,31 #Kingqueen,
-Pokemon = MAGNEMITE,31 #Kingking,
+Pokemon = B34H122,31 #Mr. King,
+Pokemon = B31H99,31 #Kingqueen,
+Pokemon = B119H99,31 #Kingking,
 ########################
 
 [BIKER,Jared]
-Pokemon = MAGNEMITE,32 #Weelee,
-Pokemon = MAGNEMITE,32 #Weelee
+Pokemon = B106H13,32 #Weelee,
+Pokemon = B106H110,32 #Weelee
 ############################
 
 [BIRDKEEPER,James]
-Pokemon = MAGNEMITE,34 #Ivyeotto,
-Pokemon = MAGNEMITE,34 #Charrow,
+Pokemon = B17H2,34 #Ivyeotto,
+Pokemon = B22H5,34 #Charrow,
 ############################
 
 [FISHERMAN,Wallace]
-Pokemon = MAGNEMITE,32 #Shellyu,
-Pokemon = MAGNEMITE,32 #Starster,
-Pokemon = MAGNEMITE,32 #Raipoke,
+Pokemon = SHELLDER,32 #Shellyu,
+Pokemon = STARYU,32 #Starster,
+Pokemon = B79H26,32 #Raipoke,
 
 ########################
 
 [CLOWN,Pagliacci]
-Pokemon = MAGNEMITE,31 #Mr. Sir,
-Pokemon = MAGNEMITE,31 #Scyduck,
+Pokemon = B127H122,31 #Mr. Sir,
+Pokemon = B55H123,31 #Scyduck,
 ######################
 
 [NURSE,Maria]
-Pokemon = MAGNEMITE,31 #Clefix,
-Pokemon = MAGNEMITE,31 #Manfairy,
-Pokemon = MAGNEMITE,34 #Wigglysey,
+Pokemon = CLEFAIRY,31 #Clefix,
+Pokemon = JIGGLYPUFF,31 #Manfairy,
+Pokemon = B113H40,34 #Wigglysey,
 
 
 ################################
@@ -369,122 +369,122 @@ Pokemon = MAGNEMITE,34 #Wigglysey,
 ###############################
 
 [BIRDKEEPER,Carter]
-Pokemon = MAGNEMITE,33 #HYPGEY,
-Pokemon = MAGNEMITE,33 #MR. DUO,
-Pokemon = MAGNEMITE,33 #LICKIEOTTO,
+Pokemon = PIDGEOTTO,33 #HYPGEY,
+Pokemon = DODUO,33 #MR. DUO,
+Pokemon = B17H108,33 #LICKIEOTTO,
 #####################
 
 [BIRDKEEPER,Mitch]
-Pokemon = MAGNEMITE,31 #GROWGEY,
-Pokemon = MAGNEMITE,31 #VULROW,
-Pokemon = MAGNEMITE,31 #PONYGEY,
-Pokemon = MAGNEMITE,31 #FLAREROW,
+Pokemon = PIDGEY,31 #GROWGEY,
+Pokemon = SPEAROW,31 #VULROW,
+Pokemon = B16H77,31 #PONYGEY,
+Pokemon = B22H136,31 #FLAREROW,
 ############################
 
 [BIRDKEEPER,Marlon]
-Pokemon = MAGNEMITE,33 #Golrow,
-Pokemon = MAGNEMITE,33 #Poliduo,
-Pokemon = MAGNEMITE,33 #Squirtrow,
+Pokemon = SPEAROW,33 #Golrow,
+Pokemon = DODUO,33 #Poliduo,
+Pokemon = B22H7,33 #Squirtrow,
 ###############################
 
 [BIRDKEEPER,Beck]
-Pokemon = MAGNEMITE,34 #Pidrow,
-Pokemon = MAGNEMITE,34 #Speareotto,
+Pokemon = B22H16,34 #Pidrow,
+Pokemon = B17H21,34 #Speareotto,
 ##############################
 
 [BIRDKEEPER,Donald]
-Pokemon = MAGNEMITE,38 #Farchamp,
+Pokemon = B68H83,38 #Farchamp,
 ##############################
 
 [BIRDKEEPER,Benny]
-Pokemon = MAGNEMITE,32 
-Pokemon = MAGNEMITE,32 #Spearcruel,
+Pokemon = SPEAROW,32 
+Pokemon = B73H21,32 #Spearcruel,
 ###############################
 
 [BIKER,Gerald]
-Pokemon = MAGNEMITE,33 #Koffth,
-Pokemon = MAGNEMITE,33 #Weepinuk,
+Pokemon = KOFFING,33 #Koffth,
+Pokemon = B89H70,33 #Weepinuk,
 ###############################
 
 [BIKER,Malik]
-Pokemon = MAGNEMITE,33 #Gravmer,
-Pokemon = MAGNEMITE,33 #Koffix,
+Pokemon = GRIMER,33 #Gravmer,
+Pokemon = B95H109,33 #Koffix,
 ########################
 
 [BIKER,Isaac]
-Pokemon = MAGNEMITE,32 #Grideen,
-Pokemon = MAGNEMITE,32 
-Pokemon = MAGNEMITE,32 #Seemer,
+Pokemon = GRIMER,32 #Grideen,
+Pokemon = KOFFING,32 
+Pokemon = B88H86,32 #Seemer,
 ##############################
 
 [BIKER,Lukas]
-Pokemon = MAGNEMITE,31 #Gloofing,
-Pokemon = MAGNEMITE,31 #Oddfing,
-Pokemon = MAGNEMITE,33 #Vilefing,
+Pokemon = B109H44,31 #Gloofing,
+Pokemon = B109H43,31 #Oddfing,
+Pokemon = B109H45,33 #Vilefing,
 ################################
 
 [TWINS,Kiri & Jan]
-Pokemon = MAGNEMITE,34 #Chartle,
-Pokemon = MAGNEMITE,34 #Squirtbasaur,
-Pokemon = MAGNEMITE,34 #Bulbmander,
+Pokemon = B7H4,34 #Chartle,
+Pokemon = B1H7,34 #Squirtbasaur,
+Pokemon = B4H1,34 #Bulbmander,
 
 ################################
 ######### ROUTE 15############
 ###############################
 
 [CLOWN,Sol]
-Pokemon = MAGNEMITE,34 #Pikather,
-Pokemon = MAGNEMITE,34 #Raimime,
+Pokemon = B123H25,34 #Pikather,
+Pokemon = B122H26,34 #Raimime,
 ##############################
 
 [CRUSHKIN,Ron & Mya]
-Pokemon = MAGNEMITE,34 #Warchan,
-Pokemon = MAGNEMITE,34 #Charlee,
+Pokemon = B107H8,34 #Warchan,
+Pokemon = B106H5,34 #Charlee,
 #############################
 
 [NURSE,Celia]
-Pokemon = MAGNEMITE,38 #Clefutor,
+Pokemon = B103H35,38 #Clefutor,
 #############################
 
 [ROUGHNECK,Ernest]
-Pokemon = MAGNEMITE,30 
-Pokemon = MAGNEMITE,30 
-Pokemon = MAGNEMITE,30 #Magnefing,
+Pokemon = GRIMER,30 
+Pokemon = WEEZING,30 
+Pokemon = B109H82,30 #Magnefing,
 ########################
 
 [BIKER,Alex]
-Pokemon = MAGNEMITE,33 #Omamer,
-Pokemon = MAGNEMITE,33 #Omazing,
+Pokemon = GRIMER,33 #Omamer,
+Pokemon = B110H139,33 #Omazing,
 ########################
 
 [BEAUTY,Grace]
-Pokemon = MAGNEMITE,34 
-Pokemon = MAGNEMITE,34 #Snoreotto,
+Pokemon = WIGGLYTUFF,34 
+Pokemon = B17H143,34 #Snoreotto,
 ########################
 
 [BEAUTY,Olivia]
-Pokemon = MAGNEMITE,34 #Koffbasaur,
-Pokemon = MAGNEMITE,34 #Weeysaur,
+Pokemon = BULBASAUR,34 #Koffbasaur,
+Pokemon = B2H110,34 #Weeysaur,
 ##########################
 
 [PICNICKER,Kindra]
-Pokemon = MAGNEMITE,33 #KADATLER
+Pokemon = B234H64,33 #KADATLER
 #############################
 
 [BIRDKEEPER,Chester]
-Pokemon = MAGNEMITE,30 #Dotini,
-Pokemon = MAGNEMITE,34 #Dragondrio,
-Pokemon = MAGNEMITE,30 #FARTINI
+Pokemon = B147H85,30 #Dotini,
+Pokemon = B85H148,34 #Dragondrio,
+Pokemon = B147H83,30 #FARTINI
 #############################
 
 [AROMALADY,Yazmin]
-Pokemon = MAGNEMITE,33 #Bellslash,
-Pokemon = MAGNEMITE,33 #Oddslash,
-Pokemon = MAGNEMITE,33 #BELLOSLASH,
+Pokemon = BELLSPROUT,33 #Bellslash,
+Pokemon = GLOOM,33 #Oddslash,
+Pokemon = B114H182,33 #BELLOSLASH,
 ############################
 
 [CRUSHGIRL,Tania]
-Pokemon = MAGNEMITE,38 #Golwrath,
+Pokemon = B62H42,38 #Golwrath,
 
 ############################
 ######TRAINER HOUSE######
@@ -493,143 +493,143 @@ Pokemon = MAGNEMITE,38 #Golwrath,
 #######SINGLE######	
 
 [COOLTRAINER_F2,Jessica]
-Pokemon = MAGNEMITE,25 
-Pokemon = MAGNEMITE,25 
-Pokemon = MAGNEMITE,25 
+Pokemon = BULBASAUR,25 
+Pokemon = BULBASAUR,25 
+Pokemon = BULBASAUR,25 
 #########################
 
 [COOLTRAINER_M2,Matthew]
-Pokemon = MAGNEMITE,25 
-Pokemon = MAGNEMITE,25 
-Pokemon = MAGNEMITE,25 
+Pokemon = BULBASAUR,25 
+Pokemon = BULBASAUR,25 
+Pokemon = BULBASAUR,25 
 
 #######DOUBLE############
 
 [COOLTRAINER_F2,Laurie]
-Pokemon = MAGNEMITE,25 
-Pokemon = MAGNEMITE,25 
-Pokemon = MAGNEMITE,25 
-Pokemon = MAGNEMITE,25 
+Pokemon = BULBASAUR,25 
+Pokemon = BULBASAUR,25 
+Pokemon = BULBASAUR,25 
+Pokemon = BULBASAUR,25 
 #########################
 
 [COOLTRAINER_M2,Alex]
-Pokemon = MAGNEMITE,25 
-Pokemon = MAGNEMITE,25 
-Pokemon = MAGNEMITE,25 
-Pokemon = MAGNEMITE,25 
+Pokemon = BULBASAUR,25 
+Pokemon = BULBASAUR,25 
+Pokemon = BULBASAUR,25 
+Pokemon = BULBASAUR,25 
 
 
 ####Level 50 challenge ###
 #######SINGLE######	
 
 [COOLTRAINER_F2,Skyler]
-Pokemon = MAGNEMITE,50 
-Pokemon = MAGNEMITE,50 
-Pokemon = MAGNEMITE,50 
+Pokemon = BULBASAUR,50 
+Pokemon = BULBASAUR,50 
+Pokemon = BULBASAUR,50 
 #########################
 
 [COOLTRAINER_M2,Alberto]
-Pokemon = MAGNEMITE,50 
-Pokemon = MAGNEMITE,50 
-Pokemon = MAGNEMITE,50 
+Pokemon = BULBASAUR,50 
+Pokemon = BULBASAUR,50 
+Pokemon = BULBASAUR,50 
 
 #######DOUBLE############
 
 [COOLTRAINER_F2,Heather]
-Pokemon = MAGNEMITE,50 
-Pokemon = MAGNEMITE,50 
-Pokemon = MAGNEMITE,50 
-Pokemon = MAGNEMITE,50 
+Pokemon = BULBASAUR,50 
+Pokemon = BULBASAUR,50 
+Pokemon = BULBASAUR,50 
+Pokemon = BULBASAUR,50 
 #########################
 
 [COOLTRAINER_M2,Patrick]
-Pokemon = MAGNEMITE,50 
-Pokemon = MAGNEMITE,50 
-Pokemon = MAGNEMITE,50 
-Pokemon = MAGNEMITE,50 
+Pokemon = BULBASAUR,50 
+Pokemon = BULBASAUR,50 
+Pokemon = BULBASAUR,50 
+Pokemon = BULBASAUR,50 
 
 ####Level 100 challenge ###
 #######SINGLE######	
 
 [COOLTRAINER_F2,Melissa]
-Pokemon = MAGNEMITE,100 
-Pokemon = MAGNEMITE,100 
-Pokemon = MAGNEMITE,100 
+Pokemon = BULBASAUR,100 
+Pokemon = BULBASAUR,100 
+Pokemon = BULBASAUR,100 
 #########################
 
 [COOLTRAINER_M2,Joe]
-Pokemon = MAGNEMITE,100 
-Pokemon = MAGNEMITE,100 
-Pokemon = MAGNEMITE,100 
+Pokemon = BULBASAUR,100 
+Pokemon = BULBASAUR,100 
+Pokemon = BULBASAUR,100 
 
 #######DOUBLE############
 
 [COOLTRAINER_F2,Kim]
-Pokemon = MAGNEMITE,100 
-Pokemon = MAGNEMITE,100 
-Pokemon = MAGNEMITE,100 
-Pokemon = MAGNEMITE,100 
+Pokemon = BULBASAUR,100 
+Pokemon = BULBASAUR,100 
+Pokemon = BULBASAUR,100 
+Pokemon = BULBASAUR,100 
 #########################
 
 [COOLTRAINER_M2,Stephen]
-Pokemon = MAGNEMITE,100 
-Pokemon = MAGNEMITE,100 
-Pokemon = MAGNEMITE,100 
-Pokemon = MAGNEMITE,100 
+Pokemon = BULBASAUR,100 
+Pokemon = BULBASAUR,100 
+Pokemon = BULBASAUR,100 
+Pokemon = BULBASAUR,100 
 ############################
 #########PEWTER GYM	##########
 ############################
 
 [CAMPER,Liam]
-Pokemon = MAGNEMITE,7 #GEOPIE
-Pokemon = MAGNEMITE,7 
+Pokemon = B10H74,7 #GEOPIE
+Pokemon = B74H27,7 
 	Moves = POISONSTING,SANDATTACK,DEFENSECURL,ROCKPOLISH
 ############################
 
 [LASS,Myriam]
-Pokemon = MAGNEMITE,9 #Georan
+Pokemon = B29H74,9 #Georan
 ##############
 ############################
 #########ROUTE 3	##########
 ############################
 
 [LASS,Janice]
-Pokemon = MAGNEMITE,10 
-Pokemon = MAGNEMITE,12 #pikaoran
+Pokemon = SPEAROW,10 
+Pokemon = B29H25,12 #pikaoran
 #############
 
 [BUGCATCHER,Colton]
-Pokemon = MAGNEMITE,10 
-Pokemon = MAGNEMITE,10 
-Pokemon = MAGNEMITE,10 
+Pokemon = METAPOD,10 
+Pokemon = B23H10,10 
+Pokemon = B23H13,10 
 #############
 
 [BUGCATCHER,Greg]
-Pokemon = MAGNEMITE,9 
-Pokemon = MAGNEMITE,9 
-Pokemon = MAGNEMITE,9 
+Pokemon = CATERPIE,9 
+Pokemon = B10H21,9 
+Pokemon = B13H21,9 
 #############
 
 [BUGCATCHER_F,Sally]
-Pokemon = MAGNEMITE,10 #weeoth
+Pokemon = B13H52,10 #weeoth
 #############
 
 [BUGCATCHER,James]
-Pokemon = MAGNEMITE,8 
-Pokemon = MAGNEMITE,11 
+Pokemon = CATERPIE,8 
+Pokemon = B46H10,11 
 #############
 
 [YOUNGSTER,Calvin]
-Pokemon = MAGNEMITE,12 #POLYHOOT
+Pokemon = B163H60,12 #POLYHOOT
 #############
 
 [LASS,Robin]
-Pokemon = MAGNEMITE,11 
+Pokemon = B39H25,11 
 
 ############
 
 [YOUNGSTER,Ben]
-Pokemon = MAGNEMITE,11 
+Pokemon = B19H16,11 
 
 
 ################################
@@ -637,50 +637,50 @@ Pokemon = MAGNEMITE,11
 ###############################
 
 [BURGLAR,Jamal]
-Pokemon = MAGNEMITE,34 #SCYPIX
-Pokemon = MAGNEMITE,34 #Meowchu
+Pokemon = VULPIX,34 #SCYPIX
+Pokemon = B26H52,34 #Meowchu
 
 ###############################
 
 [CUEBALL,Isaiah]
-Pokemon = MAGNEMITE,34 #GEOCHOP
-Pokemon = MAGNEMITE,34 #GOLCHAMP
+Pokemon = MACHOP,34 #GEOCHOP
+Pokemon = B68H76,34 #GOLCHAMP
 ##############################
 
 [BIKER,Virgil]
-Pokemon = MAGNEMITE,33 #KOFFCOOL
-Pokemon = MAGNEMITE,33 #KOFFCOOL
-Pokemon = MAGNEMITE,33 #WEECRUEL
+Pokemon = KOFFING,33 #KOFFCOOL
+Pokemon = B72H109,33 #KOFFCOOL
+Pokemon = B73H110,33 #WEECRUEL
 ############################
 
 [BIKER,Charles]
-Pokemon = MAGNEMITE,33 
-Pokemon = MAGNEMITE,35 #WEEMELEON
+Pokemon = KOFFING,33 
+Pokemon = B5H110,35 #WEEMELEON
 ###########################
 
 [CUEBALL,Raul]
-Pokemon = MAGNEMITE,34 #MANRA
-Pokemon = MAGNEMITE,34 #WOBBAPE
+Pokemon = MANKEY,34 #MANRA
+Pokemon = B57H202,34 #WOBBAPE
 #######################
 
 [BIKER,Billy]
-Pokemon = MAGNEMITE,37 #CLEFUK
+Pokemon = B89H36,37 #CLEFUK
 #######################
 
 [CUEBALL,Zeek]
-Pokemon = MAGNEMITE,37 #SLOWCHOKE
+Pokemon = B67H80,37 #SLOWCHOKE
 #######################
 
 [CUEBALL,Corey]
-Pokemon = MAGNEMITE,33 
-Pokemon = MAGNEMITE,33 #STARAPE
+Pokemon = MACHOKE,33 
+Pokemon = B57H121,33 #STARAPE
 
 
 #######################
 
 [BIKER,Jaxon]
-Pokemon = MAGNEMITE,34 
-Pokemon = MAGNEMITE,34 #GLOOZING
+Pokemon = GRIMER,34 
+Pokemon = B110H44,34 #GLOOZING
 #######################
 
 ##########################
@@ -688,83 +688,83 @@ Pokemon = MAGNEMITE,34 #GLOOZING
 #########################
 
 [BIKER,Maurice]
-Pokemon = MAGNEMITE,35 #Lanslash
+Pokemon = B28H171,35 #Lanslash
 ########################
 
 [AROMALADY,Miranda]
-Pokemon = MAGNEMITE,36 #WEEPINSTER
+Pokemon = WEEPINBELL,36 #WEEPINSTER
 	Item = SITRUSBERRY
-Pokemon = MAGNEMITE,36 #SCYSECT
+Pokemon = B47H123,36 #SCYSECT
 	Item = OCCABERRY
 ##########################
 
 [FARMER,Craig]
-Pokemon = MAGNEMITE,54 #FARMER
+Pokemon = B88H83,54 #FARMER
 #########################
 
 [FARMER,Dwight]
-Pokemon = MAGNEMITE,34 #GLOOAPE
-Pokemon = MAGNEMITE,38 #PARAROS
+Pokemon = EXEGGCUTE,34 #GLOOAPE
+Pokemon = B128H241,38 #PARAROS
 ########################
 
 [CAMPER,Michael]
-Pokemon = MAGNEMITE,36 #DOLITHE
-Pokemon = MAGNEMITE,36 #LICKIPOM
+Pokemon = DODUO,36 #DOLITHE
+Pokemon = B190H108,36 #LICKIPOM
 
 ##############################
 #####ROUTE 19/20########
 ##############################
 
 [SWIMMER_M,Richard]
-Pokemon = MAGNEMITE,36 #PSYDER
-Pokemon = MAGNEMITE,36 #SHELLCOOL
+Pokemon = CHINCHOU,36 #PSYDER
+Pokemon = B72H90,36 #SHELLCOOL
 ##########################
 
 [SWIMMER_M,Reece]
-Pokemon = MAGNEMITE,34 
-Pokemon = MAGNEMITE,34 #WIGGLYSEA
-Pokemon = MAGNEMITE,34 #STARSOLA
+Pokemon = GOLDEEN,34 
+Pokemon = HORSEA,34 #WIGGLYSEA
+Pokemon = B222H120,34 #STARSOLA
 ##########################
 
 [SWIMMER_M,Tony]
-Pokemon = MAGNEMITE,39 #VOLTYU
+Pokemon = B120H100,39 #VOLTYU
 ##########################
 
 [SWIMMER_M,David]
-Pokemon = MAGNEMITE,34 #MAGNEDEEN
-Pokemon = MAGNEMITE,34 #GOLDER
-Pokemon = MAGNEMITE,34 #SHELLKING
+Pokemon = GOLDEEN,34 #MAGNEDEEN
+Pokemon = GOLDEEN,34 #GOLDER
+Pokemon = B119H90,34 #SHELLKING
 ##########################
 
 [SWIMMER_M,Matthew]
-Pokemon = MAGNEMITE,39 #POLISTER
+Pokemon = B91H61,39 #POLISTER
 ##########################
 
 [SWIMMER_M,Axel]
-Pokemon = MAGNEMITE,34 #WEEPINYU
-Pokemon = MAGNEMITE,34 #HORSFETCHD
-Pokemon = MAGNEMITE,34 #STARCRUEL
+Pokemon = STARYU,34 #WEEPINYU
+Pokemon = HORSEA,34 #HORSFETCHD
+Pokemon = B73H120,34 #STARCRUEL
 ##########################
 
 [SWIMMER_F,Alice]
-Pokemon = MAGNEMITE,36 #SEADEEN
-Pokemon = MAGNEMITE,36 #KINGELER
+Pokemon = KRABBY,36 #SEADEEN
+Pokemon = B75H230,36 #KINGELER
 ##########################
 
 [SWIMMER_F,Anya]
-Pokemon = MAGNEMITE,39 #seabro
+Pokemon = B80H117,39 #seabro
 ##########################
 
 [SWIMMER_F,Connie]
-Pokemon = MAGNEMITE,35 #IVYU
-Pokemon = MAGNEMITE,35 #CHARYU
-Pokemon = MAGNEMITE,35 #WARYU
+Pokemon = B120H2,35 #IVYU
+Pokemon = B120H5,35 #CHARYU
+Pokemon = B120H8,35 #WARYU
 
 ##########################
 
 [SWIMMER_F,Ariel]
-Pokemon = MAGNEMITE,36 
-Pokemon = MAGNEMITE,38 #PIKAKING
+Pokemon = KRABBY,36 
+Pokemon = B119H25,38 #PIKAKING
 ##########################
 
 #########################
@@ -772,295 +772,295 @@ Pokemon = MAGNEMITE,38 #PIKAKING
 #########################
 
 [FISHERMAN,Wade]
-Pokemon = MAGNEMITE,41 #RHYDRA
-Pokemon = MAGNEMITE,41 
+Pokemon = B117H111,41 #RHYDRA
+Pokemon = B30H121,41 
 ########################
 
 [FISHERMAN,Ronald]
-Pokemon = MAGNEMITE,36 #MAGIDEEN
-Pokemon = MAGNEMITE,36 
-Pokemon = MAGNEMITE,42 #OCSTER
+Pokemon = SHELLDER,36 #MAGIDEEN
+Pokemon = SHELLDER,36 
+Pokemon = B91H224,42 #OCSTER
 #########################
 
 [SWIMMER_M,Spencer]
-Pokemon = MAGNEMITE,41 #TANGKING
-Pokemon = MAGNEMITE,41 #QWILTINE
+Pokemon = STARYU,41 #TANGKING
+Pokemon = B226H211,41 #QWILTINE
 #######################
 
 [FISHERMAN,Claude]
-Pokemon = MAGNEMITE,41 #SHELLCOOL
-Pokemon = MAGNEMITE,41 #TENTASTER
+Pokemon = TENTACOOL,41 #SHELLCOOL
+Pokemon = B91H73,41 #TENTASTER
 ########################
 
 [SWIMMER_F,Sammie]
-Pokemon = MAGNEMITE,45 #STARSTAR
+Pokemon = B139H121,45 #STARSTAR
 #########################
 
 [SWIMMER_M,Jerome]
-Pokemon = MAGNEMITE,39 
-Pokemon = MAGNEMITE,42 #STARLER
+Pokemon = WARTORTLE,39 
+Pokemon = B99H121,42 #STARLER
 
 ##########################
 ###  CINNABAR MANSION ####
 ##########################
 
 [PYROMANIAC,Julio]
-Pokemon = MAGNEMITE,41 
+Pokemon = B109H101,41 
 	Moves = SELFDESTRUCT
-Pokemon = MAGNEMITE,41 
+Pokemon = B109H101,41 
 	Moves = SELFDESTRUCT
-Pokemon = MAGNEMITE,41 
+Pokemon = B109H101,41 
 	Moves = SELFDESTRUCT
-Pokemon = MAGNEMITE,43 
+Pokemon = B101H82,43 
 	Moves = EXPLOSION
 ##########################
 
 [SCIENTIST,Frisk]
-Pokemon = MAGNEMITE,51 #CHARA
-Pokemon = MAGNEMITE,46 #GASTER
+Pokemon = B63H4,51 #CHARA
+Pokemon = B91H92,46 #GASTER
 ##########################
 
 [SCIENTIST,Johnson]
-Pokemon = MAGNEMITE,43 #ELECWHIRL
-Pokemon = MAGNEMITE,44 #WEEWHIRL
+Pokemon = B61H101,43 #ELECWHIRL
+Pokemon = B61H110,44 #WEEWHIRL
 ##########################
 
 [BURGLAR,Arnie]
-Pokemon = MAGNEMITE,45 
-Pokemon = MAGNEMITE,42 #LICKIMELEON
+Pokemon = CHARMANDER,45 
+Pokemon = B5H108,42 #LICKIMELEON
 ##########################
 
 [BURGLAR,Simon]
-Pokemon = MAGNEMITE,45 #Growton,
+Pokemon = B82H58,45 #Growton,
 	Moves = THUNDERBOLT,MAGNETRISE,HEATWAVE,ROAR
 	Item = CHARCOAL
 ###########################
 
 [SCIENTIST,Braydon]
-Pokemon = MAGNEMITE,38 #MAGNEDISH
-Pokemon = MAGNEMITE,41 #MAGNEOOM
-Pokemon = MAGNEMITE,44 #MAGNEPLUME
+Pokemon = B43H81,38 #MAGNEDISH
+Pokemon = B44H82,41 #MAGNEOOM
+Pokemon = B45H82,44 #MAGNEPLUME
 ##########################
 
 [BURGLAR,Lewis]
-Pokemon = MAGNEMITE,43 #GROWRINO
-Pokemon = MAGNEMITE,43 #NIDOTA
+Pokemon = GROWLITHE,43 #GROWRINO
+Pokemon = B77H30,43 #NIDOTA
 ##########################
 
 [SCIENTIST,Ivan]
 Pokemon = MAGNEMITE,37 #
-Pokemon = MAGNEMITE,43 #ELECTER
+Pokemon = B93H101,43 #ELECTER
 ##########################
 
 [SCIENTIST,Jimi]
-Pokemon = MAGNEMITE,46 #electrduck
+Pokemon = B55H101,46 #electrduck
 ##################################
 ##########################
 ###  CINNABAR GYM####
 ##########################
 
 [BURGLAR,Quinn]
-Pokemon = MAGNEMITE,42 #GROWKEY
-Pokemon = MAGNEMITE,42 #GROWKEY
-Pokemon = MAGNEMITE,42 #PRIMETALES
+Pokemon = VULPIX,42 #GROWKEY
+Pokemon = VULPIX,42 #GROWKEY
+Pokemon = B38H57,42 #PRIMETALES
 ##########################
 
 [SUPERNERD,Erik]
-Pokemon = MAGNEMITE,42 #PARAPIX
-Pokemon = MAGNEMITE,42 #PARAPIX
-Pokemon = MAGNEMITE,42 #PARATALES
+Pokemon = B37H47,42 #PARAPIX
+Pokemon = B37H47,42 #PARAPIX
+Pokemon = B38H47,42 #PARATALES
 ###########################
 
 [SUPERNERD,Avery]
-Pokemon = MAGNEMITE,41 #PIKAMANDER
-Pokemon = MAGNEMITE,41 #PIKAMELEON
-Pokemon = MAGNEMITE,45 #PIKAIZARD
+Pokemon = B4H25,41 #PIKAMANDER
+Pokemon = B5H25,41 #PIKAMELEON
+Pokemon = B6H25,45 #PIKAIZARD
 ###########################
 
 [BURGLAR,Ramon]
-Pokemon = MAGNEMITE,49 #IVYMELEON
+Pokemon = B5H2,49 #IVYMELEON
 ###########################
 
 [SUPERNERD,Derek]
-Pokemon = MAGNEMITE,49 #DDUGTRIO
+Pokemon = B51H51,49 #DDUGTRIO
 ###########################
 
 [BURGLAR,Dusty]
-Pokemon = MAGNEMITE,44 #VULITHE
-Pokemon = MAGNEMITE,44 #CHARPIX
+Pokemon = B58H37,44 #VULITHE
+Pokemon = B37H4,44 #CHARPIX
 ###########################
 
 [SUPERNERD,Zac]
-Pokemon = MAGNEMITE,44 #GROWPIX
-Pokemon = MAGNEMITE,44 #CHARLITHE
+Pokemon = B37H58,44 #GROWPIX
+Pokemon = B58H4,44 #CHARLITHE
 
 ##############################
 #####VIRIDIAN FOREST########
 ##############################
 
 [BUGCATCHER,Rick]
-Pokemon = MAGNEMITE,6 
-Pokemon = MAGNEMITE,6 
+Pokemon = B41H13,6 
+Pokemon = B41H10,6 
 #-------------------
 
 [BUGCATCHER_F,Lana]
-Pokemon = MAGNEMITE,8 
+Pokemon = B16H10,8 
 #-------------------
 
 [BUGCATCHER,Jim]
-Pokemon = MAGNEMITE,7 
-Pokemon = MAGNEMITE,7 # Nidopie male,
-Pokemon = MAGNEMITE,7 #weeoran female,
+Pokemon = CATERPIE,7 
+Pokemon = CATERPIE,7 # Nidopie male,
+Pokemon = B29H13,7 #weeoran female,
 
 #################
 ###Route 4#######
 #################
 
 [LASS,Crissy]
-Pokemon = MAGNEMITE,31 
-Pokemon = MAGNEMITE,31 
-Pokemon = MAGNEMITE,31 #SCISLASH
+Pokemon = SANDSHREW,31 
+Pokemon = B208H46,31 
+Pokemon = B28H212,31 #SCISLASH
 ##############################
 #### ROUTE 26			  ####
 ##############################
 
 [COOLTRAINER_F,Jasper]
-Pokemon = MAGNEMITE,35 
-Pokemon = MAGNEMITE,35 
-Pokemon = MAGNEMITE,35 
+Pokemon = SEEL,35 
+Pokemon = SEEL,35 
+Pokemon = SEADRA,35 
 ##############################
 
 [FISHERMAN,Hermes]
-Pokemon = MAGNEMITE,38 #Goldcruel
+Pokemon = B73H55,38 #Goldcruel
 #############################
 
 [CRUSHGIRL,Penelope]
-Pokemon = MAGNEMITE,34 #DEWLEE
-Pokemon = MAGNEMITE,34 #DEWCHAN
+Pokemon = B106H87,34 #DEWLEE
+Pokemon = B107H87,34 #DEWCHAN
 #############################
 
 [CRUSHGIRL,Trinity]
-Pokemon = MAGNEMITE,33 #SHELLKEY
-Pokemon = MAGNEMITE,33 #SHELLWHIRL
-Pokemon = MAGNEMITE,33 #MASTER
+Pokemon = SHELLDER,33 #SHELLKEY
+Pokemon = POLIWHIRL,33 #SHELLWHIRL
+Pokemon = B91H68,33 #MASTER
 ############################
 
 [BLACKBELT,Mitch]
-Pokemon = MAGNEMITE,34 #KINGAPE
-Pokemon = MAGNEMITE,34 #PRIMEPHAN
+Pokemon = MACHOKE,34 #KINGAPE
+Pokemon = B232H57,34 #PRIMEPHAN
 ###########################
 
 [SWIMMER_M,Larry]
-Pokemon = MAGNEMITE,34 #KRABSEA
-Pokemon = MAGNEMITE,34 #SEADRA
+Pokemon = SEADRA,34 #KRABSEA
+Pokemon = B119H117,34 #SEADRA
 ###########################
 
 [SWIMMER_F,Britney]
-Pokemon = MAGNEMITE,34 #NIDOCOOL
-Pokemon = MAGNEMITE,34 #WARFETCHD
+Pokemon = TENTACOOL,34 #NIDOCOOL
+Pokemon = B83H8,34 #WARFETCHD
 ###########################
 
 [SWIMMER_F,Melissa]
-Pokemon = MAGNEMITE,38 #Mr. Cruel
+Pokemon = B73H122,38 #Mr. Cruel
 
 ###################################
 #######	ROCK TUNNEL 	########
 ###################################
 
 [HIKER,Lenny]
-Pokemon = MAGNEMITE,23 #ONLIX
+Pokemon = B95H208,23 #ONLIX
 ##############################
 
 [HIKER,Oliver]
-Pokemon = MAGNEMITE,20 
-Pokemon = MAGNEMITE,20 #GEOVELER,
-Pokemon = MAGNEMITE,20 #ONIX+RATICATE
+Pokemon = GEODUDE,20 
+Pokemon = B75H74,20 #GEOVELER,
+Pokemon = B95H20,20 #ONIX+RATICATE
 ###############################
 
 [HIKER,Lucas]
-Pokemon = MAGNEMITE,21 #Voltdude,
-Pokemon = MAGNEMITE,21 
+Pokemon = GEODUDE,21 #Voltdude,
+Pokemon = B75H111,21 
 ##################################
 
 [PICNICKER,Leah]
-Pokemon = MAGNEMITE,24 
-Pokemon = MAGNEMITE,22 
+Pokemon = ZUBAT,24 
+Pokemon = B109H35,22 
 ####################################
 
 [PICNICKER,Ariana]
-Pokemon = MAGNEMITE,19 
-Pokemon = MAGNEMITE,19 #Koffgey,
-Pokemon = MAGNEMITE,19 
-Pokemon = MAGNEMITE,19 
+Pokemon = RATTATA,19 
+Pokemon = B16H109,19 #Koffgey,
+Pokemon = RATTATA,19 
+Pokemon = B69H100,19 
 #########################################
 
 [PICNICKER,Dana]
-Pokemon = MAGNEMITE,20 
-Pokemon = MAGNEMITE,20 
-Pokemon = MAGNEMITE,20 #HAUNTISH
+Pokemon = MEOWTH,20 
+Pokemon = PIDGEOTTO,20 
+Pokemon = B43H93,20 #HAUNTISH
 ######################################
 
 [COOLTRAINER_F,Laura]
-Pokemon = MAGNEMITE,24 
-Pokemon = MAGNEMITE,24 
+Pokemon = B108H90,24 
+Pokemon = B67H127,24 
 #####################
 
 [COOLTRAINER_F,Laura,1]
-Pokemon = MAGNEMITE,24 #Shelltung,
-Pokemon = MAGNEMITE,24 #Pinchoke,
-Pokemon = MAGNEMITE,22 #Polikhan,
-Pokemon = MAGNEMITE,22 #Gasther,
-Pokemon = MAGNEMITE,22 #Growros,
-Pokemon = MAGNEMITE,22 #Rhyrhorn,
+Pokemon = B108H90,24 #Shelltung,
+Pokemon = B67H127,24 #Pinchoke,
+Pokemon = B115H61,22 #Polikhan,
+Pokemon = B123H92,22 #Gasther,
+Pokemon = B128H58,22 #Growros,
+Pokemon = B33H111,22 #Rhyrhorn,
 
 ##############################################
 ##############   ROCK TUNNEL B2 ##############
 
 [POKEMANIAC,Ashton]
-Pokemon = MAGNEMITE,23 #Gripoke,
-Pokemon = MAGNEMITE,23 #Mabone,
+Pokemon = SLOWPOKE,23 #Gripoke,
+Pokemon = B104H67,23 #Mabone,
 #########################################
 
 [POKEMANIAC,Winston]
-Pokemon = MAGNEMITE,25 
+Pokemon = B79H126,25 
 ###########################################
 
 [PAINTER,Maya]
-Pokemon = MAGNEMITE,21 
-Pokemon = MAGNEMITE,21 #GLOOBASAUR
-Pokemon = MAGNEMITE,21 #JIGGLYTH
+Pokemon = ODDISH,21 
+Pokemon = B1H44,21 #GLOOBASAUR
+Pokemon = B52H39,21 #JIGGLYTH
 #########################################
 
 [POKEMANIAC,Steve]
-Pokemon = MAGNEMITE,22 
-Pokemon = MAGNEMITE,22 #CUMELEON
+Pokemon = MANKEY,22 
+Pokemon = B5H104,22 #CUMELEON
 ########################################
 
 [HIKER,Allen]
-Pokemon = MAGNEMITE,25 #feardude,
+Pokemon = B74H22,25 #feardude,
 ########################################
 
 [HIKER,Pat]
-Pokemon = MAGNEMITE,20 
-Pokemon = MAGNEMITE,20 #Koffchop,
+Pokemon = MANKEY,20 
+Pokemon = B66H109,20 #Koffchop,
 #########################################
 
 [PICNICKER,Sofia]
-Pokemon = MAGNEMITE,21 
-Pokemon = MAGNEMITE,21 
-Pokemon = MAGNEMITE,21 #FARTH
+Pokemon = JIGGLYPUFF,21 
+Pokemon = SQUIRTLE,21 
+Pokemon = B52H83,21 #FARTH
 #######################################
 
 [HIKER,Dudley]
-Pokemon = MAGNEMITE,21 
-Pokemon = MAGNEMITE,21 
-Pokemon = MAGNEMITE,21 #SANDVELER
+Pokemon = GEODUDE,21 
+Pokemon = GEODUDE,21 
+Pokemon = B75H28,21 #SANDVELER
 ##########################################
 
 [POKEMANIAC,Cooper]
-Pokemon = MAGNEMITE,20 
-Pokemon = MAGNEMITE,20 #POLIELER
-Pokemon = MAGNEMITE,20 #EXEGGPOKE
+Pokemon = SLOWPOKE,20 
+Pokemon = B75H61,20 #POLIELER
+Pokemon = B79H102,20 #EXEGGPOKE
 ###########################################
 
 
@@ -1071,43 +1071,43 @@ Pokemon = MAGNEMITE,20 #EXEGGPOKE
 #-------------------
 
 [BUGCATCHER,Cale]
-Pokemon = MAGNEMITE,10 
-Pokemon = MAGNEMITE,10 
-Pokemon = MAGNEMITE,10 #ZUPOD
-Pokemon = MAGNEMITE,10 #GEORAS
+Pokemon = WEEDLE,10 
+Pokemon = KAKUNA,10 
+Pokemon = B41H11,10 #ZUPOD
+Pokemon = B46H74,10 #GEORAS
 
 
 #-------------------
 
 [LASS,Ali]
-Pokemon = MAGNEMITE,12 
-Pokemon = MAGNEMITE,12 #PIROW
-Pokemon = MAGNEMITE,12 #MANISH
+Pokemon = ABRA,12 
+Pokemon = B21H16,12 #PIROW
+Pokemon = B43H56,12 #MANISH
 
 #-------------------
 
 [YOUNGSTER,Timmy]
-Pokemon = MAGNEMITE,14 
-Pokemon = MAGNEMITE,14 #MEOWSHREW
+Pokemon = EKANS,14 
+Pokemon = B27H52,14 #MEOWSHREW
 #-------------------
 
 [LASS,Reli]
-Pokemon = MAGNEMITE,14 
-Pokemon = MAGNEMITE,14 
+Pokemon = RATTATA,14 
+Pokemon = B100H109,14 
 #-------------------
 
 [CAMPER,Ethan]
-Pokemon = MAGNEMITE,18 
+Pokemon = B56H41,18 
 #-------------------
 
 [CAMPER,Shane]
-Pokemon = MAGNEMITE,16 #ABRANm
-Pokemon = MAGNEMITE,16 #ABRANf
+Pokemon = B29H63,16 #ABRANm
+Pokemon = B32H63,16 #ABRANf
 #-----------------
 
 [TEAMROCKET_M,Elvis]
-Pokemon = MAGNEMITE,15 
-Pokemon = MAGNEMITE,15 
+Pokemon = EKANS,15 
+Pokemon = B41H109,15 
 
 ###################
 #### S.S. ANNE ####
@@ -1115,83 +1115,83 @@ Pokemon = MAGNEMITE,15
 ###########DECK########
 
 [SAILOR,Trevor]
-Pokemon = MAGNEMITE,16 
-Pokemon = MAGNEMITE,17 #horschop,
+Pokemon = TENTACOOL,16 
+Pokemon = B66H116,17 #horschop,
 #--------------------------------------
 
 [SAILOR,Edmond]
-Pokemon = MAGNEMITE,18 #Tentachop,
-Pokemon = MAGNEMITE,18 #Meowder,
+Pokemon = MACHOP,18 #Tentachop,
+Pokemon = B90H52,18 #Meowder,
 ##############FLOOR 1##############
 
 [GENTLEMAN,Thomas]
-Pokemon = MAGNEMITE,20 #Meowlithe,
+Pokemon = B58H52,20 #Meowlithe,
 #-------------------------------
 
 [GENTLEMAN,Arthur]
-Pokemon = MAGNEMITE,18 
-Pokemon = MAGNEMITE,19 #Groworan,
+Pokemon = VULPIX,18 
+Pokemon = B29H58,19 #Groworan,
 #--------------------------------
 
 [LASS,Ann]
-Pokemon = MAGNEMITE,17 #Tentaoran,
-Pokemon = MAGNEMITE,18 #Golgeotto,
+Pokemon = NIDORANfE,17 #Tentaoran,
+Pokemon = B17H118,18 #Golgeotto,
 #----------------------------------
 
 [YOUNGSTER,Tyler]
-Pokemon = MAGNEMITE,21 #Maran,
+Pokemon = B32H66,21 #Maran,
 ####################FLOOR 2#######
 
 [FISHERMAN,Dale]
-Pokemon = MAGNEMITE,16 
-Pokemon = MAGNEMITE,17 #Golkarp,
-Pokemon = MAGNEMITE,17 #Magicool,
+Pokemon = GOLDEEN,16 
+Pokemon = B129H118,17 #Golkarp,
+Pokemon = B72H129,17 #Magicool,
 #----------------------------------------
 
 [GENTLEMAN,Brooks]
-Pokemon = MAGNEMITE,23 #Seechu,
+Pokemon = B25H86,23 #Seechu,
 #------------------------------------------
 
 [LASS,Dawn]
-Pokemon = MAGNEMITE,18 #Shelltata,
-Pokemon = MAGNEMITE,18 #Magnechu,
+Pokemon = RATTATA,18 #Shelltata,
+Pokemon = B25H81,18 #Magnechu,
 #-----------------------------------------
 
 [GENTLEMAN,Lamar]
-Pokemon = MAGNEMITE,17 #Growlithe,
-Pokemon = MAGNEMITE,17		 #Volta,
+Pokemon = B79H58,17 #Growlithe,
+Pokemon = B77H100,17		 #Volta,
 #---------------------------------------
 #################BASEMENT###################
 
 [SAILOR,Duncan]
-Pokemon = MAGNEMITE,17 #Magnesea,
-Pokemon = MAGNEMITE,17 #Growcool,
-Pokemon = MAGNEMITE,17 #Zuder,
+Pokemon = HORSEA,17 #Magnesea,
+Pokemon = TENTACOOL,17 #Growcool,
+Pokemon = B90H41,17 #Zuder,
 #------------------------------------------
 
 [SAILOR,Leonard]
-Pokemon = MAGNEMITE,21 #Shellmer,
+Pokemon = B88H90,21 #Shellmer,
 #-------------------------------------
 
 [SAILOR,Dylan]
-Pokemon = MAGNEMITE,17 #Slowsea,
-Pokemon = MAGNEMITE,17 #Farsey,
-Pokemon = MAGNEMITE,17 #Horskans,
+Pokemon = HORSEA,17 #Slowsea,
+Pokemon = HORSEA,17 #Farsey,
+Pokemon = B23H116,17 #Horskans,
 #----------------------------------------
 
 [SAILOR,Huey]
-Pokemon = MAGNEMITE,18 #Geoyu,
-Pokemon = MAGNEMITE,18 #Voltcool,
+Pokemon = STARYU,18 #Geoyu,
+Pokemon = B72H100,18 #Voltcool,
 #------------------------------------------
 
 [FISHERMAN,Barny]
-Pokemon = MAGNEMITE,17 #Kakby,¸
-Pokemon = MAGNEMITE,17 #Venoder,
-Pokemon = MAGNEMITE,17 #Payu,
+Pokemon = KRABBY,17 #Kakby,¸
+Pokemon = SHELLDER,17 #Venoder,
+Pokemon = B120H46,17 #Payu,
 #---------------------------------------
 
 [SAILOR,Philip]
-Pokemon = MAGNEMITE,21 #Polichop,
+Pokemon = B66H61,21 #Polichop,
 
 
 #####################
@@ -1199,339 +1199,339 @@ Pokemon = MAGNEMITE,21 #Polichop,
 #####################
 
 [HIPSTER,Jerry,0]
-Pokemon = MAGNEMITE,25 #Starbok
+Pokemon = B24H120,25 #Starbok
 ######################
 
 [HIPSTER,Jerry,1]
-Pokemon = MAGNEMITE,32 #Starbok
-Pokemon = MAGNEMITE,32 #Hypster
+Pokemon = B24H121,32 #Starbok
+Pokemon = B91H97,32 #Hypster
 ###################
 ###ROUTE 25#######
 ####################
 
 [HIKER,Franklin]
-Pokemon = MAGNEMITE,15 
-Pokemon = MAGNEMITE,15 
+Pokemon = SANDSHREW,15 
+Pokemon = B23H74,15 
 #------------------
 
 [HIKER,Wayne]
-Pokemon = MAGNEMITE,17 
+Pokemon = B95H43,17 
 #------------------
 
 [YOUNGSTER,Joey]
-Pokemon = MAGNEMITE,17 
+Pokemon = B19H20,17 
 #----------------
 
 [YOUNGSTER,Dan]
-Pokemon = MAGNEMITE,15 
-Pokemon = MAGNEMITE,15 
+Pokemon = B79H46,15 
+Pokemon = B21H60,15 
 #----------------
 
 [PICNICKER,Kelsey]
-Pokemon = MAGNEMITE,15 
-Pokemon = MAGNEMITE,15 
+Pokemon = B29H32,15 
+Pokemon = B32H29,15 
 #---------------
 
 [HIKER,Nob]
-Pokemon = MAGNEMITE,13 
-Pokemon = MAGNEMITE,13 
-Pokemon = MAGNEMITE,13 
-Pokemon = MAGNEMITE,13 
+Pokemon = GEODUDE,13 
+Pokemon = GEODUDE,13 
+Pokemon = GEODUDE,13 
+Pokemon = B66H25,13 
 #------------------
 
 [CAMPER,Flint]
-Pokemon = MAGNEMITE,14 
-Pokemon = MAGNEMITE,14 
+Pokemon = B23H48,14 
+Pokemon = B27H48,14 
 
 #------------------
 
 [YOUNGSTER,Chad]
-Pokemon = MAGNEMITE,14 
-Pokemon = MAGNEMITE,14 
+Pokemon = B19H1,14 
+Pokemon = B23H96,14 
 #------------------
 
 [LASS,Haley]
-Pokemon = MAGNEMITE,13 
-Pokemon = MAGNEMITE,13 
-Pokemon = MAGNEMITE,15 #ODDRAS
+Pokemon = ODDISH,13 
+Pokemon = PIDGEY,13 
+Pokemon = B46H43,15 #ODDRAS
 
 ##########Fighting Dojo###########
 
 [BLACKBELT,Hitoshi]
-Pokemon = MAGNEMITE,34 
-Pokemon = MAGNEMITE,34 
-Pokemon = MAGNEMITE,34 
+Pokemon = B56H52,34 
+Pokemon = B127H56,34 
+Pokemon = B67H56,34 
 #-------------------
 
 [CRUSHGIRL,Yoshimi]
-Pokemon = MAGNEMITE,39 
+Pokemon = B67H81,39 
 #-----------------
 
 [BLACKBELT,Hideki]
-Pokemon = MAGNEMITE,38 
-Pokemon = MAGNEMITE,38 
+Pokemon = B66H83,38 
+Pokemon = B67H111,38 
 #-----------------
 
 [CRUSHGIRL,Lucy]
-Pokemon = MAGNEMITE,35 
-Pokemon = MAGNEMITE,38 
+Pokemon = B57H214,35 
+Pokemon = B62H75,38 
 #-----------------
 
 [BLACKBELT,Mike]
-Pokemon = MAGNEMITE,35 
-Pokemon = MAGNEMITE,38 
+Pokemon = B236H75,35 
+Pokemon = B68H75,38 
 #-----------------
 
 [BLACKBELT,Koichi]
-Pokemon = MAGNEMITE,45 
-Pokemon = MAGNEMITE,45 
-Pokemon = MAGNEMITE,45 
+Pokemon = B107H106,45 
+Pokemon = B106H237,45 
+Pokemon = B237H107,45 
 ############Route 5##############
 
 [POKEMONBREEDER,Maude]
-Pokemon = MAGNEMITE,12 
-Pokemon = MAGNEMITE,12 
-Pokemon = MAGNEMITE,15 #magkid
+Pokemon = TOGEPI,12 
+Pokemon = TOGEPI,12 
+Pokemon = B239H240,15 #magkid
 #--------------------------
 
 [SOCIALITE,Mathilda]
-Pokemon = MAGNEMITE,16 
+Pokemon = B37H54,16 
 #############Route 9#####################
 
 [PICNICKER,Alicia]
-Pokemon = MAGNEMITE,18 
-Pokemon = MAGNEMITE,18 
-Pokemon = MAGNEMITE,18 #WEEPINSPROUT
+Pokemon = ODDISH,18 
+Pokemon = ODDISH,18 
+Pokemon = B69H70,18 #WEEPINSPROUT
 #---------------------------
 
 [HIKER,Jeremy]
-Pokemon = MAGNEMITE,20 #,
-Pokemon = MAGNEMITE,20 #Manix,
+Pokemon = GEODUDE,20 #,
+Pokemon = B95H56,20 #Manix,
 #----------------------------
 
 [CAMPER,Chris]
-Pokemon = MAGNEMITE,21 #Slowlithe,
-Pokemon = MAGNEMITE,21 #Psymander,
+Pokemon = B58H79,21 #Slowlithe,
+Pokemon = B4H54,21 #Psymander,
 #----------------------------
 
 [BUGCATCHER,Brent]
-Pokemon = MAGNEMITE,19 #Butterdrill,
-Pokemon = MAGNEMITE,19 #Beefree,
+Pokemon = B15H12,19 #Butterdrill,
+Pokemon = B12H15,19 #Beefree,
 #----------------------------
 
 [BUGCATCHER,Conner]
-Pokemon = MAGNEMITE,20 #Venopie,
-Pokemon = MAGNEMITE,20 #Venodle,
-Pokemon = MAGNEMITE,22 #drownat,
+Pokemon = VENONAT,20 #Venopie,
+Pokemon = VENONAT,20 #Venodle,
+Pokemon = B48H96,22 #drownat,
 #---------------------------
 
 [CAMPER,Drew]
-Pokemon = MAGNEMITE,19 #Pikatata,
-Pokemon = MAGNEMITE,19 #Digey,
-Pokemon = MAGNEMITE,19 #Farkans,
-Pokemon = MAGNEMITE,19 #Sandra,
+Pokemon = PIKACHU,19 #Pikatata,
+Pokemon = PIDGEY,19 #Digey,
+Pokemon = PIDGEY,19 #Farkans,
+Pokemon = B63H27,19 #Sandra,
 #--------------------------
 
 [HIKER,Alan]
-Pokemon = MAGNEMITE,21 #Meowdude,
-Pokemon = MAGNEMITE,21 #Ekix,
+Pokemon = GEODUDE,21 #Meowdude,
+Pokemon = B95H23,21 #Ekix,
 #-------------------------
 
 [HIKER,Brice]
-Pokemon = MAGNEMITE,18 #Geokarp,
-Pokemon = MAGNEMITE,18 #Digchop,
-Pokemon = MAGNEMITE,20 #MagiLEM,
+Pokemon = GEODUDE,18 #Geokarp,
+Pokemon = DIGLETT,18 #Digchop,
+Pokemon = B76H129,20 #MagiLEM,
 #-------------------------
 
 [PICNICKER,Caitlin]
-Pokemon = MAGNEMITE,23 #Math,
+Pokemon = B52H66,23 #Math,
 ##############Route 10#############
 ###North###
 
 [BEAUTY,Heidi]
-Pokemon = MAGNEMITE,20 
-Pokemon = MAGNEMITE,20 #JIGGLYCKLE
+Pokemon = PIKACHU,20 
+Pokemon = B213H39,20 #JIGGLYCKLE
 ###########
 
 ###########Mt. Moon#############
 
 [BUGCATCHER,Kent]
-Pokemon = MAGNEMITE,11 
-Pokemon = MAGNEMITE,11 
+Pokemon = WEEDLE,11 
+Pokemon = B14H41,11 
 #-----------------------
 
 [LASS,Iris]
-Pokemon = MAGNEMITE,14 
+Pokemon = B35H39,14 
 #-----------------------
 
 [SUPERNERD,Jovan]
-Pokemon = MAGNEMITE,11 
-Pokemon = MAGNEMITE,11 
+Pokemon = B100H81,11 
+Pokemon = B74H100,11 
 #----------------------
 
 [BUGCATCHER,Robby]
-Pokemon = MAGNEMITE,12 
-Pokemon = MAGNEMITE,12 
+Pokemon = B10H41,12 
+Pokemon = B11H41,12 
 #---------------------
 
 [LASS,Miriam]
-Pokemon = MAGNEMITE,14 
+Pokemon = B43H44,14 
 #--------------------
 
 [YOUNGSTER,Josh]
-Pokemon = MAGNEMITE,10 
-Pokemon = MAGNEMITE,10 
-Pokemon = MAGNEMITE,10 #NIDOSHREW
+Pokemon = RATTATA,10 
+Pokemon = RATTATA,10 
+Pokemon = B27H29,10 #NIDOSHREW
 #-----------------
 
 [HIKER,Marcos]
-Pokemon = MAGNEMITE,10 
-Pokemon = MAGNEMITE,10 
-Pokemon = MAGNEMITE,12 
+Pokemon = GEODUDE,10 
+Pokemon = GEODUDE,10 
+Pokemon = B95H10,12 
 #----------------
 
 [TEAMROCKET_M,Jerry]
-Pokemon = MAGNEMITE,11 
-Pokemon = MAGNEMITE,11 
-Pokemon = MAGNEMITE,11 
+Pokemon = ZUBAT,11 
+Pokemon = ZUBAT,11 
+Pokemon = B23H41,11 
 #----------------
 
 [TEAMROCKET_M,Francis]
-Pokemon = MAGNEMITE,11 
-Pokemon = MAGNEMITE,11 
+Pokemon = ZUBAT,11 
+Pokemon = B41H88,11 
 #----------------
 
 [TEAMROCKET_F,Samantha]
-Pokemon = MAGNEMITE,13 
-Pokemon = MAGNEMITE,13 
+Pokemon = RATTATA,13 
+Pokemon = B29H23,13 
 #-----------------
 
 [TEAMROCKET_M,Giorgio]
-Pokemon = MAGNEMITE,13 
-Pokemon = MAGNEMITE,13 
+Pokemon = EKANS,13 
+Pokemon = B19H46,13 
 
 #------------------
 
 [SUPERNERD,Miguel]
-Pokemon = MAGNEMITE,12 
-Pokemon = MAGNEMITE,12 
-Pokemon = MAGNEMITE,12 
+Pokemon = B88H109,12 
+Pokemon = B109H41,12 
+Pokemon = B100H43,12 
 #########Route 6 ############
 
 [TWINS,Day & Dani]
-Pokemon = MAGNEMITE,16 
-Pokemon = MAGNEMITE,16 
+Pokemon = B79H25,16 
+Pokemon = B54H25,16 
 #-----------------------------------
 
 [CAMPER,Ricky]
-Pokemon = MAGNEMITE,20 
+Pokemon = B7H21,20 
 #-----------------------------------
 
 [PICNICKER,Nancy]
-Pokemon = MAGNEMITE,16 
-Pokemon = MAGNEMITE,16 
+Pokemon = RATTATA,16 
+Pokemon = B23H25,16 
 #--------------------------------
 
 [BUGCATCHER,Elijah]
-Pokemon = MAGNEMITE,20 
+Pokemon = B12H35,20 
 #---------------------------------
 
 [PICNICKER,Isabelle]
-Pokemon = MAGNEMITE,16 
-Pokemon = MAGNEMITE,16 
-Pokemon = MAGNEMITE,16 #SANDGEY
+Pokemon = PIDGEY,16 
+Pokemon = PIDGEY,16 
+Pokemon = B16H27,16 #SANDGEY
 #--------------------------------
 
 [CAMPER,Jeff]
-Pokemon = MAGNEMITE,16 
-Pokemon = MAGNEMITE,16 
+Pokemon = SPEAROW,16 
+Pokemon = B20H43,16 
 
 ############Route 11###############
 
 [YOUNGSTER,Eddie]
-Pokemon = MAGNEMITE,21 #Exelett,
+Pokemon = B50H102,21 #Exelett,
 #--------------------------
 
 [GAMBLER,Hugo]
-Pokemon = MAGNEMITE,17 
-Pokemon = MAGNEMITE,18 #Oddwag,
+Pokemon = POLIWAG,17 
+Pokemon = B60H43,18 #Oddwag,
 #------------------------------
 
 [ENGINEER,Bernie]
-Pokemon = MAGNEMITE,21	 #Magnefing,
+Pokemon = B109H81,21	 #Magnefing,
 #----------------------------
 
 [YOUNGSTER,Dave]
-Pokemon = MAGNEMITE,18 #Nidokans,
-Pokemon = MAGNEMITE,18 #Marino,
+Pokemon = EKANS,18 #Nidokans,
+Pokemon = B33H66,18 #Marino,
 #---------------------------
 
 [GAMBLER,Darian]
-Pokemon = MAGNEMITE,21 #Growpix,
+Pokemon = B37H58,21 #Growpix,
 #-----------------------
 
 [ENGINEER,Braxton]
 Pokemon = MAGNEMITE,18 #Magnesprout,
 Pokemon = MAGNEMITE,18 #Drowton,
-Pokemon = MAGNEMITE,20 #Magnelett,
+Pokemon = B50H81,20 #Magnelett,
 
 #-------------------------
 
 [GAMBLER,Jasper]
-Pokemon = MAGNEMITE,18 #Bellkey,
-Pokemon = MAGNEMITE,18 #Venoish,
+Pokemon = MANKEY,18 #Bellkey,
+Pokemon = B43H48,18 #Venoish,
 #------------------------
 
 [GAMBLER,Dirk]
-Pokemon = MAGNEMITE,18 #Oddmite,
-Pokemon = MAGNEMITE,18 #Jigglyorb,
+Pokemon = ODDISH,18 #Oddmite,
+Pokemon = B100H39,18 #Jigglyorb,
 
 ######################
 ###  Celadon Gym ######
 ######################
 
 [BEAUTY,Tamia]
-Pokemon = MAGNEMITE,34 # Belcute,
-Pokemon = MAGNEMITE,34 # Bellbat,
+Pokemon = B102H69,34 # Belcute,
+Pokemon = B69H41,34 # Bellbat,
 #######################
 
 [LASS,Kay]
-Pokemon = MAGNEMITE,36 #Weepinduo,
+Pokemon = B84H70,36 #Weepinduo,
 ######################
 
 [BEAUTY,Bridget]
-Pokemon = MAGNEMITE,31 #EXEGGISH,
-Pokemon = MAGNEMITE,31 #ODDTLY,
-Pokemon = MAGNEMITE,31 #Horsprout,
-Pokemon = MAGNEMITE,31 #Farsprout,
+Pokemon = B43H102,31 #EXEGGISH,
+Pokemon = B92H43,31 #ODDTLY,
+Pokemon = B69H116,31 #Horsprout,
+Pokemon = B69H83,31 #Farsprout,
 ##########################
 
 [PICNICKER,Tina]
-Pokemon = MAGNEMITE,34 #Rhysaur,
-Pokemon = MAGNEMITE,34 #Cuysaur,
+Pokemon = B1H111,34 #Rhysaur,
+Pokemon = B2H104,34 #Cuysaur,
 ##########################
 
 [BEAUTY,Lori]
-Pokemon = MAGNEMITE,36 #Oddcute,
+Pokemon = B102H43,36 #Oddcute,
 ###########################
 
 [LASS,Lisa]
-Pokemon = MAGNEMITE,33 #Oddyu,
-Pokemon = MAGNEMITE,33 #Digoom,
+Pokemon = ODDISH,33 #Oddyu,
+Pokemon = B44H50,33 #Digoom,
 ############################
 
 [COOLTRAINER_F,Mary]
-Pokemon = MAGNEMITE,32 #Lickisprout,
-Pokemon = MAGNEMITE,32 #Oddcool,
-Pokemon = MAGNEMITE,32 #Weepineotto,
-Pokemon = MAGNEMITE,32 #Glootuff,
-Pokemon = MAGNEMITE,32 #Growysaur,
+Pokemon = B69H108,32 #Lickisprout,
+Pokemon = B72H43,32 #Oddcool,
+Pokemon = B17H70,32 #Weepineotto,
+Pokemon = B40H44,32 #Glootuff,
+Pokemon = B2H58,32 #Growysaur,
 
 ###########################
 
 [PICNICKER,Martine]
-Pokemon = MAGNEMITE,34 #Oddtle,
-Pokemon = MAGNEMITE,34 #bulbaleef,
+Pokemon = B7H43,34 #Oddtle,
+Pokemon = B153H1,34 #bulbaleef,
 ###########################
 
 #####################
@@ -1539,18 +1539,18 @@ Pokemon = MAGNEMITE,34 #bulbaleef,
 #####################
 
 [SAILOR,Dwayne]
-Pokemon = MAGNEMITE,20 #Bulbchu,
-Pokemon = MAGNEMITE,20 #Charchu,
-Pokemon = MAGNEMITE,20 #Squirtchu,
+Pokemon = B25H1,20 #Bulbchu,
+Pokemon = B25H4,20 #Charchu,
+Pokemon = B25H7,20 #Squirtchu,
 #----------------------------------------
 
 [ENGINEER,Baily]
-Pokemon = MAGNEMITE,21 #Kakorb,
-Pokemon = MAGNEMITE,21 #Metamite,
+Pokemon = B100H14,21 #Kakorb,
+Pokemon = B81H11,21 #Metamite,
 #--------------------------------------
 
 [GENTLEMAN,Tucker]
-Pokemon = MAGNEMITE,23 #Magnechu,
+Pokemon = B25H81,23 #Magnechu,
 
 
 #######################
@@ -1558,35 +1558,35 @@ Pokemon = MAGNEMITE,23 #Magnechu,
 ######################
 
 [JUGGLER,Kayden]
-Pokemon = MAGNEMITE,39 #Geno,
+Pokemon = B97H94,39 #Geno,
 #-------------------------------------
 
 [JUGGLER,Nate]
-Pokemon = MAGNEMITE,36 #Golzee,
-Pokemon = MAGNEMITE,36 #Tentabra,
+Pokemon = B96H42,36 #Golzee,
+Pokemon = B64H73,36 #Tentabra,
 #--------------------------------------
 
 [JUGGLER,Kirk]
-Pokemon = MAGNEMITE,32 #Beezee,
-Pokemon = MAGNEMITE,32 #Drowfing,
-Pokemon = MAGNEMITE,32 #Arbra,
-Pokemon = MAGNEMITE,32	 #Kadater,
+Pokemon = B96H15,32 #Beezee,
+Pokemon = B109H96,32 #Drowfing,
+Pokemon = B64H24,32 #Arbra,
+Pokemon = B93H64,32	 #Kadater,
 #-----------------------------------------
 
 [TAMER,Edgar]
-Pokemon = MAGNEMITE,34 #Chanbok,
-Pokemon = MAGNEMITE,34 #Magnebok,
-Pokemon = MAGNEMITE,34 #Venoslash,
+Pokemon = B24H113,34 #Chanbok,
+Pokemon = B24H82,34 #Magnebok,
+Pokemon = B28H48,34 #Venoslash,
 #----------------------------------------
 
 [TAMER,Phil]
-Pokemon = MAGNEMITE,35 #Nidoslash,
-Pokemon = MAGNEMITE,35 #Weebok,
+Pokemon = B28H33,35 #Nidoslash,
+Pokemon = B24H110,35 #Weebok,
 #---------------------------------------
 
 [JUGGLER,Shawn]
-Pokemon = MAGNEMITE,35 #Vilezee,
-Pokemon = MAGNEMITE,35 #Hypfree,
+Pokemon = B96H45,35 #Vilezee,
+Pokemon = B12H97,35 #Hypfree,
 #------------------------------------------------
 
 #################
@@ -1594,107 +1594,107 @@ Pokemon = MAGNEMITE,35 #Hypfree,
 ##################
 
 [ENGINEER,Cole]
-Pokemon = MAGNEMITE,46 #SANDBOK
-Pokemon = MAGNEMITE,46 #RHYROS
+Pokemon = B24H28,46 #SANDBOK
+Pokemon = B128H111,46 #RHYROS
 ###################
 
 [BLACKBELT,Kiyo]
-Pokemon = MAGNEMITE,50 #MAROCHOKE
+Pokemon = B67H105,50 #MAROCHOKE
 	Item = BLACKBELT		
 ####################
 
 [ENGINEER,Jason]
-Pokemon = MAGNEMITE,50 #PERHORN
+Pokemon = B111H53,50 #PERHORN
 #####################
 
 [BLACKBELT,Atsushi]
-Pokemon = MAGNEMITE,47 #CUCHOP
-Pokemon = MAGNEMITE,47 
+Pokemon = B66H104,47 #CUCHOP
+Pokemon = B221H121,47 
 #####################
 
 [COOLTRAINER_M,Samuel]
-Pokemon = MAGNEMITE,45 #NIDOSLASH
-Pokemon = MAGNEMITE,45 #SANDHORN
-Pokemon = MAGNEMITE,45 #CUKING
+Pokemon = B28H33,45 #NIDOSLASH
+Pokemon = B111H28,45 #SANDHORN
+Pokemon = B34H104,45 #CUKING
 #####################
 
 [BLACKBELT,Takashi]
-Pokemon = MAGNEMITE,45 
-Pokemon = MAGNEMITE,45 #ONCHOKE
-Pokemon = MAGNEMITE,45 #MAKING
+Pokemon = MACHOP,45 
+Pokemon = B67H55,45 #ONCHOKE
+Pokemon = B34H67,45 #MAKING
 ####################
 
 [COOLTRAINER_M,Yuji]
-Pokemon = MAGNEMITE,44 #GOLSLASH
-Pokemon = MAGNEMITE,44 #JOLTIX
-Pokemon = MAGNEMITE,44 #LICKIWAK
-Pokemon = MAGNEMITE,44 #PINELER
+Pokemon = B28H55,44 #GOLSLASH
+Pokemon = B95H135,44 #JOLTIX
+Pokemon = B105H108,44 #LICKIWAK
+Pokemon = B75H127,44 #PINELER
 #####################
 
 [COOLTRAINER_F,Justine]
-Pokemon = MAGNEMITE,45 #WEEPINHORN
-Pokemon = MAGNEMITE,45 #DMAROWAK
-Pokemon = MAGNEMITE,45 #RATQUEEN
+Pokemon = B111H70,45 #WEEPINHORN
+Pokemon = B105H105,45 #DMAROWAK
+Pokemon = B31H20,45 #RATQUEEN
 
 #################
 ###Cerulean Gym###
 ##################
 
 [SWIMMER_M,Luis]
-Pokemon = MAGNEMITE,16 
-Pokemon = MAGNEMITE,16 
+Pokemon = B98H90,16 
+Pokemon = B116H23,16 
 #---------------
 
 [PICNICKER,Diana]
-Pokemon = MAGNEMITE,19	 #Starlett
+Pokemon = B50H120,19	 #Starlett
 #######################
 # ECRUTEAK GYM  ##
 #######################
 
 [SAGE,Ping]
-Pokemon = MAGNEMITE,56 #ramparskull
-Pokemon = MAGNEMITE,56 #CRADISKULL
+Pokemon = B309H311,56 #ramparskull
+Pokemon = B302H311,56 #CRADISKULL
 #######################
 
 [CHANNELER,Grace]
-Pokemon = MAGNEMITE,54 
-Pokemon = MAGNEMITE,57 
+Pokemon = B93H200,54 
+Pokemon = B97H255,57 
 #######################
 
 [CHANNELER,Martha]
-Pokemon = MAGNEMITE,62 
+Pokemon = B312H300,62 
 #######################
 
 [SAGE,Takao]
-Pokemon = MAGNEMITE,63 #BAYBLADE
+Pokemon = B328H153,63 #BAYBLADE
 #######################
 
 [SAGE,Jeffrey]
-Pokemon = MAGNEMITE,53 #DOUTLY
-Pokemon = MAGNEMITE,53 #DOUTLY
-Pokemon = MAGNEMITE,57 #DOUTLER
+Pokemon = B92H328,53 #DOUTLY
+Pokemon = B92H328,53 #DOUTLY
+Pokemon = B93H328,57 #DOUTLER
 #################
 ###Mahogany Gym###
 ##################
 
 [PLAYER,Martin]
-Pokemon = MAGNEMITE,56 
-Pokemon = MAGNEMITE,59 
+Pokemon = B37H272,56 
+Pokemon = B38H272,59 
 	Moves = AURORABEAM,FAIRYWIND,WILLOWISP,CONFUSERAY
 	AbilityIndex = 0
 #########################
 
 [PLAYER,Sidney]
-Pokemon = MAGNEMITE,62 #pilolix
+Pokemon = B208H221,62 #pilolix
 #########################
 
 [PLAYER,Maurice]
-Pokemon = MAGNEMITE,57 #MILNX
-Pokemon = MAGNEMITE,57 #TAUNX
+Pokemon = B241H124,57 #MILNX
+Pokemon = B128H124,57 #TAUNX
 #########################
 
 [PLAYER,Wayne]
-Pokemon = MAGNEMITE,62 #MILNX
+Pokemon = B332H272,62 #MILNX
 #########################
 
 #################
@@ -1702,99 +1702,99 @@ Pokemon = MAGNEMITE,62 #MILNX
 ##################
 
 [BIRDKEEPER,Abe]
-Pokemon = MAGNEMITE,53 #misrow
-Pokemon = MAGNEMITE,53 #airow
+Pokemon = B22H200,53 #misrow
+Pokemon = B22H190,53 #airow
 #####################
 
 [BIRDKEEPER,Rod]
-Pokemon = MAGNEMITE,51 #HITMONOTTO	-lee
-Pokemon = MAGNEMITE,51 #HITMONOTTO	-chan
-Pokemon = MAGNEMITE,51 #HITMONOTTO	-top
+Pokemon = B17H106,51 #HITMONOTTO	-lee
+Pokemon = B17H107,51 #HITMONOTTO	-chan
+Pokemon = B17H237,51 #HITMONOTTO	-top
 ##################
 
 [BIRDKEEPER,Carl]
-Pokemon = MAGNEMITE,53 #chanfree
-Pokemon = MAGNEMITE,53 #BEEBAT
+Pokemon = B12H113,53 #chanfree
+Pokemon = B169H15,53 #BEEBAT
 ####################
 ###Goldenrod Gym ###
 ####################
 
 [BEAUTY,Victoria]
-Pokemon = MAGNEMITE,44 #PIDGECATE
-Pokemon = MAGNEMITE,44 #FURCATE
-Pokemon = MAGNEMITE,44 #LEDICATE
+Pokemon = B20H17,44 #PIDGECATE
+Pokemon = B20H169,44 #FURCATE
+Pokemon = B20H166,44 #LEDICATE
 #######################
 
 [LASS,Samantha]
-Pokemon = MAGNEMITE,46 #NINESIAN
-Pokemon = MAGNEMITE,46 #ARCASIAN
+Pokemon = B53H38,46 #NINESIAN
+Pokemon = B53H59,46 #ARCASIAN
 #######################
 
 [BEAUTY,Jane]
-Pokemon = MAGNEMITE,49	 #GRANROS
+Pokemon = B128H210,49	 #GRANROS
 #######################
 
 [LASS,Bridget]
-Pokemon = MAGNEMITE,45 #CLEFATUFF
-Pokemon = MAGNEMITE,41 #WIGGLYSEY
-Pokemon = MAGNEMITE,45 #TOGETUFF
+Pokemon = B40H35,45 #CLEFATUFF
+Pokemon = B113H40,41 #WIGGLYSEY
+Pokemon = B40H176,45 #TOGETUFF
 #######################
 ####################
 ###Azalea Gym ###
 ####################
 
 [BUGCATCHER_F,Charlotte]
-Pokemon = MAGNEMITE,47 #ARIAFREE
-Pokemon = MAGNEMITE,47 #Swindos
+Pokemon = B168H12,47 #ARIAFREE
+Pokemon = B168H220,47 #Swindos
 ##################
 
 [BUGCATCHER,Nelson]
-Pokemon = MAGNEMITE,51 #SCYTOPS
+Pokemon = B141H123,51 #SCYTOPS
 #################
 
 [BUGCATCHER,Josh]
-Pokemon = MAGNEMITE,49 #BELLOSECT
-Pokemon = MAGNEMITE,49 #VICTREESECT
+Pokemon = B47H182,49 #BELLOSECT
+Pokemon = B47H152,49 #VICTREESECT
 #################
 
 [BUGCATCHER,Albert]
-Pokemon = MAGNEMITE,49 #PRIMEDIAN
-Pokemon = MAGNEMITE,49 #LEDICHOKE
+Pokemon = B166H57,49 #PRIMEDIAN
+Pokemon = B67H166,49 #LEDICHOKE
 ###########################
 ####### Blackthorn gym 	###
 ###########################
 
 [COOLTRAINER_M,Paul]
-Pokemon = MAGNEMITE,54 #BAYTINI
-Pokemon = MAGNEMITE,54 #QUITINI
-Pokemon = MAGNEMITE,54 #CROCOTINI
+Pokemon = B147H153,54 #BAYTINI
+Pokemon = B147H156,54 #QUITINI
+Pokemon = B147H159,54 #CROCOTINI
 ###########################
 
 [COOLTRAINER_F,Francine]
-Pokemon = MAGNEMITE,59 #SEANAIR
+Pokemon = B148H117,59 #SEANAIR
 ##########################
 
 [COOLTRAINER_M,Cody]
-Pokemon = MAGNEMITE,57	 #CHARDRA
-Pokemon = MAGNEMITE,57	 #QUIDRA
+Pokemon = B117H5,57	 #CHARDRA
+Pokemon = B117H156,57	 #QUIDRA
 #######################
 
 [COOLTRAINER_M,Mike]
-Pokemon = MAGNEMITE,62 #METANITE
+Pokemon = B149H11,62 #METANITE
 	Moves = IRONDEFENSE,ROOST,THUNDERWAVE,WRAP
 	Item = EVIOLITE
 ##########################
 
 [COOLTRAINER_F,Lola]
-Pokemon = MAGNEMITE,55	 #DRAFFY
-Pokemon = MAGNEMITE,57	 #AMPHANAIR
+Pokemon = B180H147,55	 #DRAFFY
+Pokemon = B148H181,57	 #AMPHANAIR
 #####################################
 ####### CRIMSON CITY 	#############
 ######################################
 
 [COOLTRAINER_F2,Jeanette]
-Pokemon = MAGNEMITE,45 #Beether
-Pokemon = MAGNEMITE,77 
+Pokemon = B123H15,45 #Beether
+Pokemon = BELLSPROUT,77 
 	Moves = WRINGOUT,MAGICALLEAF,DOUBLETEAM,SYNTHESIS
 
 ##########################################
@@ -1802,44 +1802,44 @@ Pokemon = MAGNEMITE,77
 ######################################
 
 [TEAMROCKET_M,Phillip]
-Pokemon = MAGNEMITE,28 #Golmer,
+Pokemon = B88H42,28 #Golmer,
 ######################
 
 [TEAMROCKET_M,Paul]
-Pokemon = MAGNEMITE,28 #Nidofing,
+Pokemon = B109H33,28 #Nidofing,
 ########################
 
 [TEAMROCKET_M,Joffrey]
-Pokemon = MAGNEMITE,21 #Tentata,
-Pokemon = MAGNEMITE,25 #Tentaicate,
+Pokemon = KOFFING,21 #Tentata,
+Pokemon = B20H73,25 #Tentaicate,
 ########################
 
 [TEAMROCKET_F,Virginia]
-Pokemon = MAGNEMITE,28 #Koffduo,
+Pokemon = KOFFING,28 #Koffduo,
 #######################
 
 [TEAMROCKET_M,Lionel]
-Pokemon = MAGNEMITE,24 #Weepinicate,
-Pokemon = MAGNEMITE,24 #Gloomer,
+Pokemon = B20H70,24 #Weepinicate,
+Pokemon = B88H44,24 #Gloomer,
 ######################
 
 [TEAMROCKET_M,Ritchie]
-Pokemon = MAGNEMITE,25 #Koffcruel,
+Pokemon = B73H109,25 #Koffcruel,
 #####################
 
 [TEAMROCKET_F,Kaitlin]
-Pokemon = MAGNEMITE,28 #Ditorb,
+Pokemon = B100H132,28 #Ditorb,
 	Moves = TRANSFORM,CHARGEBEAM,LIGHTSCREEN,SONICBOOM
 	AbilityIndex = 0
-Pokemon = MAGNEMITE,29 #Gritini,
+Pokemon = B147H88,29 #Gritini,
 #######################
 
 [TEAMROCKET_M,Omar]
-Pokemon = MAGNEMITE,28 #Koffeoto,
+Pokemon = B17H109,28 #Koffeoto,
 ###################
 
 [TEAMROCKET_M,Max]
-Pokemon = MAGNEMITE,27 #Voltzing,
+Pokemon = B110H100,27 #Voltzing,
 ####################
 
 #####################################
@@ -1847,77 +1847,77 @@ Pokemon = MAGNEMITE,27 #Voltzing,
 ####################################
 
 [ELITEFOUR_Lance,Lance,0]
-Pokemon = MAGNEMITE,50 
+Pokemon = DRAGONITE,50 
 
 [ELITEFOUR_Lance,Lance,1]
-Pokemon = MAGNEMITE,40 
-Pokemon = MAGNEMITE,40 
-Pokemon = MAGNEMITE,40 
+Pokemon = DRAGONITE,40 
+Pokemon = AERODACTYL,40 
+Pokemon = GYARADOS,40 
 ##########################
 #Rocket blocking Saffron
 
 [TEAMROCKET_M,Dennis]
-Pokemon = MAGNEMITE,38 
+Pokemon = B84H20,38 
 ##########################
 #Rocket bully
 
 [TEAMROCKET_M,Cyrus]
-Pokemon = MAGNEMITE,39 
+Pokemon = B141H105,39 
 #########################
 
 [TEAMROCKET_F,Sam]
-Pokemon = MAGNEMITE,39 
+Pokemon = B139H97,39 
 ########################
 
 ##########################
 
 [WORKER,Jay]
-Pokemon = MAGNEMITE,18 #Mandude,
-Pokemon = MAGNEMITE,22 #Beeler,
+Pokemon = B74H56,18 #Mandude,
+Pokemon = B75H15,22 #Beeler,
 ###################
 
 [WORKER,Dave]
-Pokemon = MAGNEMITE,18 #Manchop,
-Pokemon = MAGNEMITE,22 #Digchoke,
+Pokemon = B66H56,18 #Manchop,
+Pokemon = B67H50,22 #Digchoke,
 
 #### fossils guy ### (todo)
 ############enc 2 (ss. anne)
 
 [SUPERNERD,Miguel,1]
-Pokemon = MAGNEMITE,18 
-Pokemon = MAGNEMITE,20 
+Pokemon = B88H109,18 
+Pokemon = OMANYTE,20 
 ###
 
 [SUPERNERD,Miguel,2]
-Pokemon = MAGNEMITE,18 
-Pokemon = MAGNEMITE,20 
+Pokemon = B88H109,18 
+Pokemon = KABUTO,20 
 ##############enc 3 (celadon)
 
 [SUPERNERD,Miguel,3]
-Pokemon = MAGNEMITE,24 
-Pokemon = MAGNEMITE,26 #lileep kabuto		chose anorith omanyte
+Pokemon = B89H110,24 
+Pokemon = B301H140,26 #lileep kabuto		chose anorith omanyte
 ##
 
 [SUPERNERD,Miguel,4]
-Pokemon = MAGNEMITE,24 
-Pokemon = MAGNEMITE,26 #anorith kabuto		chose lileep, omanyte
+Pokemon = B89H110,24 
+Pokemon = B303H140,26 #anorith kabuto		chose lileep, omanyte
 ##
 
 [SUPERNERD,Miguel,5]
-Pokemon = MAGNEMITE,24 
-Pokemon = MAGNEMITE,26 #lileep omanyte		chose anorith kabuto
+Pokemon = B89H110,24 
+Pokemon = B301H138,26 #lileep omanyte		chose anorith kabuto
 ##
 
 [SUPERNERD,Miguel,6]
-Pokemon = MAGNEMITE,24 
-Pokemon = MAGNEMITE,26 #anorith omanyte	chose lileep kabuto
+Pokemon = B89H110,24 
+Pokemon = B303H138,26 #anorith omanyte	chose lileep kabuto
 ##############enc 4 (postgame) genre ruins of alph, il a decouvert qu'on peut trouver des fossils en rock smash
 
 [SUPERNERD,Miguel,7]
-Pokemon = MAGNEMITE,51		 #kabutops omanyte
-Pokemon = MAGNEMITE,53 #cradily armaldo
-Pokemon = MAGNEMITE,53 #bastiodon rampardos
-Pokemon = MAGNEMITE,55 #mega aerodactyl
+Pokemon = B139H141,51		 #kabutops omanyte
+Pokemon = B302H304,53 #cradily armaldo
+Pokemon = B308H306,53 #bastiodon rampardos
+Pokemon = B142H142,55 #mega aerodactyl
 
 #######################################
 #### TEAMROCKET HIDEOUT ####
@@ -1925,23 +1925,23 @@ Pokemon = MAGNEMITE,55 #mega aerodactyl
 ###################
 
 [TEAMROCKET_M,Doug]
-Pokemon = MAGNEMITE,30 #Magnedrill,
+Pokemon = B15H81,30 #Magnedrill,
 ###################
 
 [TEAMROCKET_M,Chad]
-Pokemon = MAGNEMITE,30 #Goleotto,
-Pokemon = MAGNEMITE,30 #Ratkans,
-Pokemon = MAGNEMITE,30 #horsmer,
+Pokemon = GOLBAT,30 #Goleotto,
+Pokemon = EKANS,30 #Ratkans,
+Pokemon = B88H116,30 #horsmer,
 ###################
 
 [TEAMROCKET_M,Stephan]
-Pokemon = MAGNEMITE,35 #Perbok,
+Pokemon = B24H53,35 #Perbok,
 ###################
 
 [TEAMROCKET_M,Romeo]
-Pokemon = MAGNEMITE,31 #Drowicate,
-Pokemon = MAGNEMITE,31 #Psyfing,
-Pokemon = MAGNEMITE,33 #Tentachoke,
+Pokemon = DROWZEE,31 #Drowicate,
+Pokemon = KOFFING,31 #Psyfing,
+Pokemon = B67H72,33 #Tentachoke,
 
 #####################################
 ####
@@ -1949,9 +1949,9 @@ Pokemon = MAGNEMITE,33 #Tentachoke,
 
 [ROCKETBOSS,Giovanni,0]
 Items = MAXPOTION
-Pokemon = MAGNEMITE,34 #Arbix,
-Pokemon = MAGNEMITE,34 #Rhyras,
-Pokemon = MAGNEMITE,37 #Hauntkan,
+Pokemon = B95H24,34 #Arbix,
+Pokemon = B131H111,34 #Rhyras,
+Pokemon = B115H93,37 #Hauntkan,
 ##############################
 
 ##################
@@ -1959,274 +1959,274 @@ Pokemon = MAGNEMITE,37 #Hauntkan,
 ###################
 
 [LEADER_Brock,Brock]
-Pokemon = MAGNEMITE,9 #geogey
+Pokemon = B16H74,9 #geogey
 	Moves = GUST,SANDATTACK,ROCKTOMB,ROCKPOLISH
 	AbilityIndex = 0	
-Pokemon = MAGNEMITE,12 #digix
+Pokemon = B95H50,12 #digix
 	Moves = ROCKTOMB,BIND,DIG,RAGE
 #####P11195,12,FOCUSSASH,SANDATTACK,ROCKPOLISH,ROCKSLIDE,GUST,0		#Speardude
 #####P14405,14,ORANBERRY,ROCKSLIDE,BIND,WATERGUN,HYPNOSIS,1		#Polinix
 
 [LEADER_Brock,Brock,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,68 #goleot
+Pokemon = B76H18,68 #goleot
 	Item = HARDSTONE
-Pokemon = MAGNEMITE,70 #onilix
+Pokemon = B208H95,70 #onilix
 	Item = HARDSTONE
-Pokemon = MAGNEMITE,71 #MAMALDO
+Pokemon = B304H300,71 #MAMALDO
 	Item = HARDSTONE
-Pokemon = MAGNEMITE,68 #YANSTAR
+Pokemon = B139H270,68 #YANSTAR
 	Item = HARDSTONE
-Pokemon = MAGNEMITE,71 #SCITOPS
+Pokemon = B141H212,71 #SCITOPS
 	Item = HARDSTONE
-Pokemon = MAGNEMITE,70 #AERODON
+Pokemon = B308H142,70 #AERODON
 	Item = HARDSTONE
 ###################
 
 [LEADER_Misty,Misty]
 Items = SUPERPOTION
-Pokemon = MAGNEMITE,19 #jigglydeen
+Pokemon = B118H39,19 #jigglydeen
 	Moves = WATERPULSE,DISARMINGVOICE,SING,HORNATTACK
 	AbilityIndex = 1	
 	Item = MYSTICWATER
-Pokemon = MAGNEMITE,22 #Staryu-oddish,
+Pokemon = B120H43,22 #Staryu-oddish,
 	Moves = WATERPULSE,RECOVER,MEGADRAIN,STUNSPORE
 	AbilityIndex = 3	
 	Item = MYSTICWATER
 
 [LEADER_Misty,Misty,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,68 #WIGGLYKING
+Pokemon = B119H40,68 #WIGGLYKING
 	Item = MYSTICWATER
-Pokemon = MAGNEMITE,68 #KINGSIRE
+Pokemon = B195H99,68 #KINGSIRE
 	Item = MYSTICWATER
-Pokemon = MAGNEMITE,71 #STARMTOMB
+Pokemon = B295H121,71 #STARMTOMB
 	Item = MYSTICWATER
-Pokemon = MAGNEMITE,70 #FERALIRAS
+Pokemon = B131H160,70 #FERALIRAS
 	Item = MYSTICWATER
-Pokemon = MAGNEMITE,68 #GOLTURN
+Pokemon = B171H55,68 #GOLTURN
 	Item = MYSTICWATER
-Pokemon = MAGNEMITE,71 #GARDOS
+Pokemon = B130H299,71 #GARDOS
 	Item = MYSTICWATER
 ###################
 
 [LEADER_Surge,Lt. Surge]
 Items = SUPERPOTION,SUPERPOTION
-Pokemon = MAGNEMITE,24 #voltby,
+Pokemon = B98H100,24 #voltby,
 	Moves = METALCLAW,BUBBLEBEAM,LIGHTSCREEN,SPARK
 	AbilityIndex = 1 
 	Item = MAGNET
-Pokemon = MAGNEMITE,24 #Pikeotto,
+Pokemon = B17H25,24 #Pikeotto,
 	Moves = GUST,SANDATTACK,QUICKATTACK,ELECTROBALL
 	AbilityIndex = 1 
 	Item = MAGNET
-Pokemon = MAGNEMITE,26 #raibuzz,
+Pokemon = B125H26,26 #raibuzz,
 	Moves = THUNDERPUNCH,THUNDERWAVE,QUICKATTACK,DOUBLETEAM
 	AbilityIndex = 0 
 	Item = SITRUSBERRY
 
 [LEADER_Surge,Lt. Surge,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,68 #JOLTCHU
+Pokemon = B26H135,68 #JOLTCHU
 	Item = MAGNET
-Pokemon = MAGNEMITE,68 #ELECGLER
+Pokemon = B99H101,68 #ELECGLER
 	Item = MAGNET
-Pokemon = MAGNEMITE,70 #RAIEOT
+Pokemon = B18H26,70 #RAIEOT
 	Item = MAGNET
-Pokemon = MAGNEMITE,71 #PORYZONE
+Pokemon = B263H275,71 #PORYZONE
 	Item = MAGNET
-Pokemon = MAGNEMITE,71 #RHYPERVIRE
+Pokemon = B267H265,71 #RHYPERVIRE
 	Item = MAGNET
-Pokemon = MAGNEMITE,70 #AMPHAPOM
+Pokemon = B254H181,70 #AMPHAPOM
 	Item = MAGNET
 ###################
 
 [LEADER_Erika,Erika,0]
 Items = HYPERPOTION
-Pokemon = MAGNEMITE,33 #Tangeler,
+Pokemon = B75H114,33 #Tangeler,
 	Moves = INGRAIN,GROWTH,SMACKDOWN,CONSTRICT
 	AbilityIndex = 0
 	Item = MIRACLESEED
-Pokemon = MAGNEMITE,33 #Goldbel,
+Pokemon = B55H71,33 #Goldbel,
 	Moves = AQUAJET,GIGADRAIN,SUNNYDAY,SLEEPPOWDER
 	AbilityIndex = 1	
 	Item = MIRACLESEED
-Pokemon = MAGNEMITE,35 #rapissom,
+Pokemon = B182H78,35 #rapissom,
 	Moves = SUNNYDAY,FLAMECHARGE,SPORE,GIGADRAIN
 	AbilityIndex = 1
 	Item = 	MIRACLESEED
 
 [LEADER_Erika,Erika,2]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,68 #BELLOSPUFF
+Pokemon = B189H182,68 #BELLOSPUFF
 	Item = MIRACLESEED
-Pokemon = MAGNEMITE,70 #VICTREECRUEL
+Pokemon = B73H71,70 #VICTREECRUEL
 	Item = MIRACLESEED
-Pokemon = MAGNEMITE,68 #EXEGROWTH
+Pokemon = B266H103,68 #EXEGROWTH
 	Item = MIRACLESEED
-Pokemon = MAGNEMITE,71 #STEESAUR
+Pokemon = B3H208,71 #STEESAUR
 	Item = MIRACLESEED
-Pokemon = MAGNEMITE,71 #GIRANIUM
+Pokemon = B154H203,71 #GIRANIUM
 	Item = MIRACLESEED
-Pokemon = MAGNEMITE,70 #SUNPLUME
+Pokemon = B45H192,70 #SUNPLUME
 	Item = 	MIRACLESEED
 ###################
 
 [LEADER_Erika,Erika,1]
-Pokemon = MAGNEMITE,30 #Weepingella,
+Pokemon = B114H70,30 #Weepingella,
 	Moves = RAZORLEAF,SLEEPPOWDER,POISONPOWDER,CONSTRICT
-Pokemon = MAGNEMITE,30 #GLOOCUTE,
+Pokemon = B102H44,30 #GLOOCUTE,
 	Moves = LEECHSEED,REFLECT,BARRAGE,MEGADRAIN
-Pokemon = MAGNEMITE,30 
+Pokemon = IVYSAUR,30 
 ###################
 
 [LEADER_Koga,Koga]
 Items = HYPERPOTION,HYPERPOTION
-Pokemon = MAGNEMITE,37 #koffmer
+Pokemon = B109H88,37 #koffmer
 	Moves = SELFDESTRUCT,SLUDGEBOMB,DESTINYBOND,FLING
 	AbilityIndex = 0
 	Item = 	POISONBARB
-Pokemon = MAGNEMITE,37 #umbfing,
+Pokemon = B197H169,37 #umbfing,
 	Moves = POWERGEM,FAINTATTACK,TOXIC,SLUDGEBOMB
 	AbilityIndex = 0
 	Item = BLACKGLASSES
-Pokemon = MAGNEMITE,39 # Weeking,
+Pokemon = B119H110,39 # Weeking,
 	Moves = AQUARING,WATERFALL,SLUDGE,HORNATTACK
 	AbilityIndex = 0		
 	Item = POISONBARB
-Pokemon = MAGNEMITE,40 #Musect,
+Pokemon = B47H89,40 #Musect,
 	Moves = POISONPOWDER,SPORE,SLUDGEBOMB,DISABLE
 	AbilityIndex = 0 		
 	Item = BLACKSLUDGE
 
 [LEADER_Koga,Koga,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,68 #GENZING
+Pokemon = B110H94,68 #GENZING
 	Item = POISONBARB
-Pokemon = MAGNEMITE,70 #TENTABAT
+Pokemon = B169H73,70 #TENTABAT
 	Item = POISONBARB
-Pokemon = MAGNEMITE,70 #BEEMOTH
+Pokemon = B49H15,70 #BEEMOTH
 	Item = POISONBARB
-Pokemon = MAGNEMITE,71 #SWAMUK
+Pokemon = B89H287,71 #SWAMUK
 	Item = POISONBARB
-Pokemon = MAGNEMITE,70 #ARIAKING
+Pokemon = B34H168,70 #ARIAKING
 	Item = POISONBARB
-Pokemon = MAGNEMITE,68 #ESPBOK
+Pokemon = B24H195,68 #ESPBOK
 	Item = POISONBARB
 ###################
 
 [LEADER_Sabrina,Sabrina]
 Items = MAXPOTION,MAXPOTION
-Pokemon = MAGNEMITE,43 #HYPMIME		psych/fairy
+Pokemon = B122H97,43 #HYPMIME		psych/fairy
 	Moves = NASTYPLOT,BATONPASS,HYPNOSIS,PSYCHIC
 	AbilityIndex = 0
 	Item = TWISTEDSPOON
-Pokemon = MAGNEMITE,43 #ESREON		psych/DARK
+Pokemon = B197H196,43 #ESREON		psych/DARK
 	Moves = MOONLIGHT,FUTURESIGHT,DARKPULSE,LIGHTSCREEN
 	AbilityIndex = 0	
 	Item = TWISTEDSPOON
-Pokemon = MAGNEMITE,45 #AlaBRO,			psych/water
+Pokemon = B80H65,45 #AlaBRO,			psych/water
 	Moves = PSYCHOCUT,SURF,RECOVER,AMNESIA
 	AbilityIndex = 0			
 	Item = TWISTEDSPOON
-Pokemon = MAGNEMITE,45 #GENKAZAM		psych/ghost
+Pokemon = B65H94,45 #GENKAZAM		psych/ghost
 	Moves = DESTINYBOND,SHADOWBALL,PSYCHOCUT,CALMMIND
 	AbilityIndex = 1	
 	Item = TWISTEDSPOON
 
 [LEADER_Sabrina,Sabrina,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,68 #HYPMIME
+Pokemon = B97H122,68 #HYPMIME
 	Item = TWISTEDSPOON
-Pokemon = MAGNEMITE,68 #ALAKAFREE
+Pokemon = B12H65,68 #ALAKAFREE
 	Item = TWISTEDSPOON
-Pokemon = MAGNEMITE,71 #GALSOL
+Pokemon = B310H288,71 #GALSOL
 	Item = TWISTEDSPOON
-Pokemon = MAGNEMITE,70 #MAGNEGROSS
+Pokemon = B293H263,70 #MAGNEGROSS
 	Item = TWISTEDSPOON
-Pokemon = MAGNEMITE,71 #GENKAZAM
+Pokemon = B65H94,71 #GENKAZAM
 	Item = TWISTEDSPOON
-Pokemon = MAGNEMITE,70 #ESPRIO
+Pokemon = B296H196,70 #ESPRIO
 	Item = TWISTEDSPOON
 
 ###################
 
 [LEADER_Blaine,Blaine]
 Items = FULLRESTORE
-Pokemon = MAGNEMITE,49 #Gloodash,
+Pokemon = B78H44,49 #Gloodash,
 	Moves = SUNNYDAY,SOLARBEAM,FLAMETHROWER,TOXIC
 	AbilityIndex = 1
 	Item = CHARCOAL
-Pokemon = MAGNEMITE,49 #NINENINE
+Pokemon = B59H38,49 #NINENINE
 	Moves = ROAR,FIREFANG,CONFUSERAY,THUNDERFANG
 	AbilityIndex = 0			
 	Item = CHARCOAL
-Pokemon = MAGNEMITE,51 #Rhymar,
+Pokemon = B126H112,51 #Rhymar,
 	Moves = FIREPUNCH,DRILLRUN,CONFUSERAY,HAMMERARM
 	AbilityIndex = 0	
 	Item = PASSHOBERRY
-Pokemon = MAGNEMITE,53 #Chardactyl,
+Pokemon = B142H6,53 #Chardactyl,
 	Moves = CRUNCH,SKYDROP,FIREBLAST,HYPERBEAM
 	AbilityIndex = 0
 	Item = CHARCOAL
 
 [LEADER_Blaine,Blaine,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,68 #MAGUK
+Pokemon = B89H219,68 #MAGUK
 	Item = CHARCOAL
-Pokemon = MAGNEMITE,68 #SEADASH
+Pokemon = B78H119,68 #SEADASH
 	Item = CHARCOAL
-Pokemon = MAGNEMITE,71 #CHARDACTYL
+Pokemon = B142H6,71 #CHARDACTYL
 	Item = CHARCOAL
-Pokemon = MAGNEMITE,70 #HOUNDNINE
+Pokemon = B59H229,70 #HOUNDNINE
 	Item = CHARCOAL
-Pokemon = MAGNEMITE,70 #TYPHLOSIZKEN
+Pokemon = B281H157,70 #TYPHLOSIZKEN
 	Item = CHARCOAL
-Pokemon = MAGNEMITE,71 #CRAMORTAR
+Pokemon = B268H302,71 #CRAMORTAR
 	Item = CHARCOAL
 ###################
 
 [LEADER_Giovanni,Giovanni,0]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,52 #Rhyras,
+Pokemon = B131H265,52 #Rhyras,
 	Moves = SURF,BULLDOZE,SANDSTORM,SING
 	AbilityIndex = 1
 	Item = 	SOFTSAND
-Pokemon = MAGNEMITE,52 #Electatrio,
+Pokemon = B51H125,52 #Electatrio,
 	Moves = BULLDOZE,LIGHTSCREEN,THUNDERWAVE,DISCHARGE
 	AbilityIndex = 0
 	Item = 	SOFTSAND
-Pokemon = MAGNEMITE,54 #GOLCHAMP,
+Pokemon = B68H76,54 #GOLCHAMP,
 	Moves = EARTHQUAKE,DYNAMICPUNCH,COUNTER,SCARYFACE
 	AbilityIndex = 0
 	Item = 	SOFTSAND
-Pokemon = MAGNEMITE,56 #DNIDOKING,
+Pokemon = B248H273,56 #DNIDOKING,
 	Moves = EARTHQUAKE,THRASH,MEGAHORN,POISONJAB
 	AbilityIndex = 1
 	Item = 	SOFTSAND
-Pokemon = MAGNEMITE,56 #snordon,
+Pokemon = B143H112,56 #snordon,
 	Moves = EARTHQUAKE,REST,SNORE,HORNDRILL
 	AbilityIndex = 0
 	Item = 	SOFTSAND
 
 [LEADER_Giovanni,Giovanni,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,72 #Rhyras,
+Pokemon = B131H265,72 #Rhyras,
 	Moves = SURF,BULLDOZE,SANDSTORM,SING
 	Item = 	SOFTSAND
-Pokemon = MAGNEMITE,73 #Electatrio,
+Pokemon = B51H125,73 #Electatrio,
 	Moves = BULLDOZE,LIGHTSCREEN,THUNDERWAVE,DISCHARGE
 	Item = 	SOFTSAND
-Pokemon = MAGNEMITE,74 #GOLCHAMP,
+Pokemon = B68H76,74 #GOLCHAMP,
 	Moves = EARTHQUAKE,DYNAMICPUNCH,COUNTER,SCARYFACE
 	Item = 	SOFTSAND
-Pokemon = MAGNEMITE,72 #DNIDOKING,
+Pokemon = B248H273,72 #DNIDOKING,
 	Moves = EARTHQUAKE,THRASH,MEGAHORN,POISONJAB
 	Item = 	SOFTSAND
-Pokemon = MAGNEMITE,75 #Nidon,
+Pokemon = B143H112,75 #Nidon,
 	Moves = EARTHQUAKE,REST,SNORE,HORNDRILL
 	Item = 	SOFTSAND
-Pokemon = MAGNEMITE,75 #TYRANCHOMP
+Pokemon = B299H248,75 #TYRANCHOMP
 	Item = SOFTSAND
 #######################
 #### E4 ###############
@@ -2234,69 +2234,69 @@ Pokemon = MAGNEMITE,75 #TYRANCHOMP
 
 [ELITEFOUR_Lorelei,Lorelei,0]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,54 #Maggong,
+Pokemon = B87H268,54 #Maggong,
 	Moves = BUBBLEBEAM,FLAMETHROWER,HAIL,PROTECT
 	AbilityIndex = 1
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,54 #Mambro,
+Pokemon = B80H274,54 #Mambro,
 	Moves = HAIL,SLACKOFF,TAKEDOWN,ICEFANG
 	AbilityIndex = 1
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,53 #Tentaster,
+Pokemon = B91H73,53 #Tentaster,
 	Moves = SPIKES,STEALTHROCK,WATERPULSE,ICICLECRASH
 	AbilityIndex = 0
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,57 #Jyngrowth,
+Pokemon = B266H124,57 #Jyngrowth,
 	Moves = LEECHSEED,DRAININGKISS,SLEEPPOWDER,ICEPUNCH
 	AbilityIndex = 1
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,57 #Wearas,
+Pokemon = B131H262,57 #Wearas,
 	Moves = PERISHSONG,NIGHTSLASH,SURF,EMBARGO
 	AbilityIndex = 1
 	Item = NEVERMELTICE
 
 [ELITEFOUR_Lorelei,Lorelei,1]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,72 #Maggong,
+Pokemon = B87H268,72 #Maggong,
 	Moves = BUBBLEBEAM,FLAMETHROWER,HAIL,PROTECT
 	AbilityIndex = 1
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,72 #Mambro,
+Pokemon = B80H274,72 #Mambro,
 	Moves = HAIL,SLACKOFF,TAKEDOWN,ICEFANG
 	AbilityIndex = 1
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,71 #Tentaster,
+Pokemon = B91H73,71 #Tentaster,
 	Moves = SPIKES,STEALTHROCK,WATERPULSE,ICICLECRASH
 	AbilityIndex = 0
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,74 #Jyngrowth,
+Pokemon = B266H124,74 #Jyngrowth,
 	Moves = LEECHSEED,DRAININGKISS,SLEEPPOWDER,ICEPUNCH
 	AbilityIndex = 1
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,74 #Wearas,
+Pokemon = B131H262,74 #Wearas,
 	Moves = PERISHSONG,NIGHTSLASH,SURF,EMBARGO
 	AbilityIndex = 1
 	Item = NEVERMELTICE
 
 [ELITEFOUR_Lorelei,Lorelei,2]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,82 #Maggong,
+Pokemon = B87H268,82 #Maggong,
 	Moves = BUBBLEBEAM,FLAMETHROWER,HAIL,PROTECT
 	AbilityIndex = 1
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,82 #Mambro,
+Pokemon = B80H274,82 #Mambro,
 	Moves = HAIL,SLACKOFF,TAKEDOWN,ICEFANG
 	AbilityIndex = 1
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,81 #Tentaster,
+Pokemon = B91H73,81 #Tentaster,
 	Moves = SPIKES,STEALTHROCK,WATERPULSE,ICICLECRASH
 	AbilityIndex = 0
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,84 #Jyngrowth,
+Pokemon = B266H124,84 #Jyngrowth,
 	Moves = LEECHSEED,DRAININGKISS,SLEEPPOWDER,ICEPUNCH
 	AbilityIndex = 1
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,84 #Wearas,
+Pokemon = B131H262,84 #Wearas,
 	Moves = PERISHSONG,NIGHTSLASH,SURF,EMBARGO
 	AbilityIndex = 1
 	Item = NEVERMELTICE
@@ -2304,69 +2304,69 @@ Pokemon = MAGNEMITE,84 #Wearas,
 
 [ELITEFOUR_Bruno,Bruno,0]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,53 #Mavire,
+Pokemon = B267H68,53 #Mavire,
 	Moves = THUNDERPUNCH,CROSSCHOP,DISCHARGE,FOCUSENERGY
 	AbilityIndex = 1
 	Item = BLACKBELT
-Pokemon = MAGNEMITE,57 #Scicross,
+Pokemon = B214H212,57 #Scicross,
 	Moves = XSCISSOR,SWORDSDANCE,CLOSECOMBAT,AGILITY
 	AbilityIndex = 1
 	Item = BLACKBELT
-Pokemon = MAGNEMITE,54 #MAROCHAN,
+Pokemon = B107H105,54 #MAROCHAN,
 	Moves = DYNAMICPUNCH,BONEMERANG,DOUBLETEAM,COUNTER
 	AbilityIndex = 0
 	Item = BLACKBELT
-Pokemon = MAGNEMITE,53 #Malix,
+Pokemon = B68H208,53 #Malix,
 	Moves = SANDSTORM,IRONTAIL,SUBMISSION,CRUNCH
 	AbilityIndex = 1
 	Item = BLACKBELT
-Pokemon = MAGNEMITE,57 #Magneix,
+Pokemon = B95H263,57 #Magneix,
 	Moves = ZAPCANNON,MAGNETRISE,LOCKON,IRONTAIL
 	AbilityIndex = 1
 	Item = BLACKBELT
 
 [ELITEFOUR_Bruno,Bruno,1]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,72 #Mavire,
+Pokemon = B267H68,72 #Mavire,
 	Moves = THUNDERPUNCH,CROSSCHOP,DISCHARGE,FOCUSENERGY
 	AbilityIndex = 1
 	Item = BLACKBELT
-Pokemon = MAGNEMITE,74 #Scicross,
+Pokemon = B214H212,74 #Scicross,
 	Moves = XSCISSOR,SWORDSDANCE,CLOSECOMBAT,AGILITY
 	AbilityIndex = 1
 	Item = BLACKBELT
-Pokemon = MAGNEMITE,72 #MAROCHAN,
+Pokemon = B107H105,72 #MAROCHAN,
 	Moves = DYNAMICPUNCH,BONEMERANG,DOUBLETEAM,COUNTER
 	AbilityIndex = 0
 	Item = BLACKBELT
-Pokemon = MAGNEMITE,73 #Malix,
+Pokemon = B68H208,73 #Malix,
 	Moves = SANDSTORM,IRONTAIL,SUBMISSION,CRUNCH
 	AbilityIndex = 1
 	Item = BLACKBELT
-Pokemon = MAGNEMITE,75 #Magneix,
+Pokemon = B95H263,75 #Magneix,
 	Moves = ZAPCANNON,MAGNETRISE,LOCKON,IRONTAIL
 	AbilityIndex = 1
 	Item = BLACKBELT
 
 [ELITEFOUR_Bruno,Bruno,2]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,82 #Mavire,
+Pokemon = B267H68,82 #Mavire,
 	Moves = THUNDERPUNCH,CROSSCHOP,DISCHARGE,FOCUSENERGY
 	AbilityIndex = 1
 	Item = BLACKBELT
-Pokemon = MAGNEMITE,84 #Scicross,
+Pokemon = B214H212,84 #Scicross,
 	Moves = XSCISSOR,SWORDSDANCE,CLOSECOMBAT,AGILITY
 	AbilityIndex = 1
 	Item = BLACKBELT
-Pokemon = MAGNEMITE,82 #MAROCHAN,
+Pokemon = B107H105,82 #MAROCHAN,
 	Moves = DYNAMICPUNCH,BONEMERANG,DOUBLETEAM,COUNTER
 	AbilityIndex = 0
 	Item = BLACKBELT
-Pokemon = MAGNEMITE,83 #Malix,
+Pokemon = B68H208,83 #Malix,
 	Moves = SANDSTORM,IRONTAIL,SUBMISSION,CRUNCH
 	AbilityIndex = 1
 	Item = BLACKBELT
-Pokemon = MAGNEMITE,85 #Magneix,
+Pokemon = B95H263,85 #Magneix,
 	Moves = ZAPCANNON,MAGNETRISE,LOCKON,IRONTAIL
 	AbilityIndex = 1
 	Item = BLACKBELT
@@ -2374,69 +2374,69 @@ Pokemon = MAGNEMITE,85 #Magneix,
 
 [ELITEFOUR_Agatha,Agatha,0]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,57 #Mismabat,
+Pokemon = B169H255,57 #Mismabat,
 	Moves = WINGATTACK,SHADOWBALL,CONFUSERAY,MEANLOOK
 	AbilityIndex = 1
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,55 #Gendoom,
+Pokemon = B229H94,55 #Gendoom,
 	Moves = INFERNO,SPITE,DESTINYBOND,SHADOWBALL
 	AbilityIndex = 0
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,55 #Umbter,
+Pokemon = B93H197,55 #Umbter,
 	Moves = GUARDSWAP,DARKPULSE,MOONLIGHT,NIGHTSHADE
 	AbilityIndex = 0
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,58 #Snorgar,
+Pokemon = B94H143,58 #Snorgar,
 	Moves = REST,CURSE,BODYSLAM,SHADOWPUNCH
 	AbilityIndex = 2
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,55 #Wobbgar,
+Pokemon = B94H202,55 #Wobbgar,
 	Moves = DESTINYBOND,COUNTER,MIRRORCOAT,CURSE
 	AbilityIndex = 1
 	Item = SPELLTAG
 
 [ELITEFOUR_Agatha,Agatha,1]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,72 #Mismabat,
+Pokemon = B169H255,72 #Mismabat,
 	Moves = WINGATTACK,SHADOWBALL,CONFUSERAY,MEANLOOK
 	AbilityIndex = 1
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,74 #Gendoom,
+Pokemon = B229H94,74 #Gendoom,
 	Moves = INFERNO,SPITE,DESTINYBOND,SHADOWBALL
 	AbilityIndex = 0
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,75 #Umbter,
+Pokemon = B93H197,75 #Umbter,
 	Moves = GUARDSWAP,DARKPULSE,MOONLIGHT,NIGHTSHADE
 	AbilityIndex = 0
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,74 #Snorgar,
+Pokemon = B94H143,74 #Snorgar,
 	Moves = REST,CURSE,BODYSLAM,SHADOWPUNCH
 	AbilityIndex = 2
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,72 #Wobbgar,
+Pokemon = B94H202,72 #Wobbgar,
 	Moves = DESTINYBOND,COUNTER,MIRRORCOAT,CURSE
 	AbilityIndex = 1
 	Item = SPELLTAG
 
 [ELITEFOUR_Agatha,Agatha,2]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,82 #Mismabat,
+Pokemon = B169H255,82 #Mismabat,
 	Moves = WINGATTACK,SHADOWBALL,CONFUSERAY,MEANLOOK
 	AbilityIndex = 1
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,84 #Gendoom,
+Pokemon = B229H94,84 #Gendoom,
 	Moves = INFERNO,SPITE,DESTINYBOND,SHADOWBALL
 	AbilityIndex = 0
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,85 #Umbter,
+Pokemon = B93H197,85 #Umbter,
 	Moves = GUARDSWAP,DARKPULSE,MOONLIGHT,NIGHTSHADE
 	AbilityIndex = 0
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,84 #Snorgar,
+Pokemon = B94H143,84 #Snorgar,
 	Moves = REST,CURSE,BODYSLAM,SHADOWPUNCH
 	AbilityIndex = 2
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,82 #Wobbgar,
+Pokemon = B94H202,82 #Wobbgar,
 	Moves = DESTINYBOND,COUNTER,MIRRORCOAT,CURSE
 	AbilityIndex = 1
 	Item = SPELLTAG
@@ -2444,23 +2444,23 @@ Pokemon = MAGNEMITE,82 #Wobbgar,
 
 [ELITEFOUR_Lance,Lance,2]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,55 #Dragodos,
+Pokemon = B130H148,55 #Dragodos,
 	Moves = OUTRAGE,THUNDERWAVE,HYDROPUMP,RAINDANCE
 	AbilityIndex = 1
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,54 #Porydra,
+Pokemon = B230H233,54 #Porydra,
 	Moves = TRIATTACK,DRAGONDANCE,DRAGONPULSE,RECOVER
 	AbilityIndex = 1
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,59 #Tyrandactyl,
+Pokemon = B142H248,59 #Tyrandactyl,
 	Moves = BRAVEBIRD,HEADSMASH,AGILITY,DRAGONRUSH
 	AbilityIndex = 0
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,57 #Lapnair,
+Pokemon = B148H157,57 #Lapnair,
 	Moves = FIREBLAST,DRAGONTAIL,DRAGONDANCE,WILLOWISP
 	AbilityIndex = 1
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,58 #Togenite,
+Pokemon = B149H269,58 #Togenite,
 	Moves = MOONBLAST,OUTRAGE,ANCIENTPOWER,AIRSLASH
 	AbilityIndex = 1
 	Item = DRAGONFANG
@@ -2468,23 +2468,23 @@ Pokemon = MAGNEMITE,58 #Togenite,
 
 [ELITEFOUR_Lance,Lance,3]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,72 #Dragodos,
+Pokemon = B130H148,72 #Dragodos,
 	Moves = OUTRAGE,THUNDERWAVE,HYDROPUMP,RAINDANCE
 	AbilityIndex = 1
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,72 #Porydra,
+Pokemon = B230H233,72 #Porydra,
 	Moves = TRIATTACK,DRAGONDANCE,DRAGONPULSE,RECOVER
 	AbilityIndex = 1
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,76 #Tyrandactyl,
+Pokemon = B142H248,76 #Tyrandactyl,
 	Moves = BRAVEBIRD,HEADSMASH,AGILITY,DRAGONRUSH
 	AbilityIndex = 0
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,74 #Lapnair,
+Pokemon = B148H157,74 #Lapnair,
 	Moves = FIREBLAST,DRAGONTAIL,DRAGONDANCE,WILLOWISP
 	AbilityIndex = 1
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,74 #Togenite,
+Pokemon = B149H269,74 #Togenite,
 	Moves = MOONBLAST,OUTRAGE,ANCIENTPOWER,AIRSLASH
 	AbilityIndex = 1
 	Item = DRAGONFANG
@@ -2492,23 +2492,23 @@ Pokemon = MAGNEMITE,74 #Togenite,
 
 [ELITEFOUR_Lance,Lance,4]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,82 #Dragodos,
+Pokemon = B130H148,82 #Dragodos,
 	Moves = OUTRAGE,THUNDERWAVE,HYDROPUMP,RAINDANCE
 	AbilityIndex = 1
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,82 #Porydra,
+Pokemon = B230H233,82 #Porydra,
 	Moves = TRIATTACK,DRAGONDANCE,DRAGONPULSE,RECOVER
 	AbilityIndex = 1
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,86 #Tyrandactyl,
+Pokemon = B142H248,86 #Tyrandactyl,
 	Moves = BRAVEBIRD,HEADSMASH,AGILITY,DRAGONRUSH
 	AbilityIndex = 0
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,84 #Lapnair,
+Pokemon = B148H157,84 #Lapnair,
 	Moves = FIREBLAST,DRAGONTAIL,DRAGONDANCE,WILLOWISP
 	AbilityIndex = 1
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,84 #Togenite,
+Pokemon = B149H269,84 #Togenite,
 	Moves = MOONBLAST,OUTRAGE,ANCIENTPOWER,AIRSLASH
 	AbilityIndex = 1
 	Item = DRAGONFANG
@@ -2518,81 +2518,81 @@ Pokemon = MAGNEMITE,84 #Togenite,
 
 [CHAMPION,Blue,0]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,59 #Maroeot,
+Pokemon = B18H105,59 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
-Pokemon = MAGNEMITE,59 #Taucutor,
+Pokemon = B103H128,59 #Taucutor,
 	Moves = ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER
 	AbilityIndex = 2
 	Item = KINGSROCK
-Pokemon = MAGNEMITE,60 #Rhypemortar,
+Pokemon = B268H265,60 #Rhypemortar,
 	Moves = FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE
 	AbilityIndex = 1
 	Item = ABSORBBULB
-Pokemon = MAGNEMITE,61 #Electados
+Pokemon = B130H267,61 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = MAGNEMITE,58 #Starkazam
+Pokemon = B65H121,58 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
-Pokemon = MAGNEMITE,64 #Blastizard,
+Pokemon = MEW,64 #Blastizard,
 	Moves = HYDROCANNON,FLAREBLITZ,PROTECT,FLY
 	AbilityIndex = 0
 	Item = LEFTOVERS
 
 [CHAMPION,Blue,3]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,75 #Maroeot,
+Pokemon = B18H105,75 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
-Pokemon = MAGNEMITE,75 #Taucutor,
+Pokemon = B103H128,75 #Taucutor,
 	Moves = ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER
 	AbilityIndex = 2
 	Item = KINGSROCK
-Pokemon = MAGNEMITE,76 #Rhypemortar,
+Pokemon = B268H265,76 #Rhypemortar,
 	Moves = FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE
 	AbilityIndex = 1
 	Item = ABSORBBULB
-Pokemon = MAGNEMITE,75 #Electados
+Pokemon = B130H267,75 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = MAGNEMITE,76 #Starkazam
+Pokemon = B65H121,76 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
-Pokemon = MAGNEMITE,82 #Blastizard,
+Pokemon = MEW,82 #Blastizard,
 	Moves = HYDROCANNON,FLAREBLITZ,PROTECT,FLY
 	AbilityIndex = 0
 	Item = LEFTOVERS
 
 [CHAMPION,Blue,6]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,85 #Maroeot,
+Pokemon = B18H105,85 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
-Pokemon = MAGNEMITE,85 #Taucutor,
+Pokemon = B103H128,85 #Taucutor,
 	Moves = ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER
 	AbilityIndex = 2
 	Item = KINGSROCK
-Pokemon = MAGNEMITE,86 #Rhypemortar,
+Pokemon = B268H265,86 #Rhypemortar,
 	Moves = FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE
 	AbilityIndex = 1
 	Item = ABSORBBULB
-Pokemon = MAGNEMITE,85 #Electados
+Pokemon = B130H267,85 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = MAGNEMITE,86 #Starkazam
+Pokemon = B65H121,86 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
-Pokemon = MAGNEMITE,92 #Blastizard,
+Pokemon = MEW,92 #Blastizard,
 	Moves = HYDROCANNON,FLAREBLITZ,PROTECT,FLY
 	AbilityIndex = 0
 	Item = LEFTOVERS
@@ -2600,81 +2600,81 @@ Pokemon = MAGNEMITE,92 #Blastizard,
 
 [CHAMPION,Blue,1]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,64 #Maroeot,
+Pokemon = B18H105,64 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
-Pokemon = MAGNEMITE,64 #Taucutor,
+Pokemon = B103H128,64 #Taucutor,
 	Moves = ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER
 	AbilityIndex = 2
 	Item = KINGSROCK
-Pokemon = MAGNEMITE,65 #Rhypemortar,
+Pokemon = B268H265,65 #Rhypemortar,
 	Moves = FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE
 	AbilityIndex = 1
 	Item = ABSORBBULB
-Pokemon = MAGNEMITE,66 #Electados
+Pokemon = B130H267,66 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = MAGNEMITE,63 #Starkazam
+Pokemon = B65H120,63 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
-Pokemon = MAGNEMITE,69 #Venutoise,
+Pokemon = MEW,69 #Venutoise,
 	Moves = POWERWHIP,HYDROCANNON,SLEEPPOWDER,PROTECT
 	AbilityIndex = 0
 	Item = LEFTOVERS
 
 [CHAMPION,Blue,4]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,75 #Maroeot,
+Pokemon = B18H105,75 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
-Pokemon = MAGNEMITE,75 #Taucutor,
+Pokemon = B103H128,75 #Taucutor,
 	Moves = ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER
 	AbilityIndex = 2
 	Item = KINGSROCK
-Pokemon = MAGNEMITE,76 #Rhypemortar,
+Pokemon = B268H265,76 #Rhypemortar,
 	Moves = FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE
 	AbilityIndex = 1
 	Item = ABSORBBULB
-Pokemon = MAGNEMITE,75 #Electados
+Pokemon = B130H267,75 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = MAGNEMITE,76 #Starkazam
+Pokemon = B65H120,76 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
-Pokemon = MAGNEMITE,82 #Venutoise,
+Pokemon = MEW,82 #Venutoise,
 	Moves = POWERWHIP,HYDROCANNON,SLEEPPOWDER,PROTECT
 	AbilityIndex = 0
 	Item = LEFTOVERS
 
 [CHAMPION,Blue,7]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,85 #Maroeot,
+Pokemon = B18H105,85 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
-Pokemon = MAGNEMITE,85 #Taucutor,
+Pokemon = B103H128,85 #Taucutor,
 	Moves = ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER
 	AbilityIndex = 2
 	Item = KINGSROCK
-Pokemon = MAGNEMITE,86 #Rhypemortar,
+Pokemon = B268H265,86 #Rhypemortar,
 	Moves = FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE
 	AbilityIndex = 1
 	Item = ABSORBBULB
-Pokemon = MAGNEMITE,85 #Electados
+Pokemon = B130H267,85 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = MAGNEMITE,86 #Starkazam
+Pokemon = B65H120,86 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
-Pokemon = MAGNEMITE,92 #Venutoise,
+Pokemon = MEW,92 #Venutoise,
 	Moves = POWERWHIP,HYDROCANNON,SLEEPPOWDER,PROTECT
 	AbilityIndex = 0
 	Item = LEFTOVERS
@@ -2683,81 +2683,81 @@ Pokemon = MAGNEMITE,92 #Venutoise,
 
 [CHAMPION,Blue,2]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,64 #Maroeot,
+Pokemon = B18H105,64 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
-Pokemon = MAGNEMITE,64 #Taucutor,
+Pokemon = B103H128,64 #Taucutor,
 	Moves = ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER
 	AbilityIndex = 2
 	Item = KINGSROCK
-Pokemon = MAGNEMITE,65 #Rhypemortar,
+Pokemon = B268H265,65 #Rhypemortar,
 	Moves = FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE
 	AbilityIndex = 1
 	Item = ABSORBBULB
-Pokemon = MAGNEMITE,66 #Electados
+Pokemon = B130H267,66 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = MAGNEMITE,63 #Starkazam
+Pokemon = B65H120,63 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
-Pokemon = MAGNEMITE,69 #Charusaur,
+Pokemon = MEW,69 #Charusaur,
 	Moves = SLEEPPOWDER,POWERWHIP,FLAREBLITZ,FLY
 	AbilityIndex = 0
 	Item = LEFTOVERS
 
 [CHAMPION,Blue,5]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,75 #Maroeot,
+Pokemon = B18H105,75 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
-Pokemon = MAGNEMITE,75 #Taucutor,
+Pokemon = B103H128,75 #Taucutor,
 	Moves = ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER
 	AbilityIndex = 2
 	Item = KINGSROCK
-Pokemon = MAGNEMITE,76 #Rhypemortar,
+Pokemon = B268H265,76 #Rhypemortar,
 	Moves = FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE
 	AbilityIndex = 1
 	Item = ABSORBBULB
-Pokemon = MAGNEMITE,75 #Electados
+Pokemon = B130H267,75 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = MAGNEMITE,76 #Starkazam
+Pokemon = B65H120,76 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
-Pokemon = MAGNEMITE,82 #Charusaur,
+Pokemon = MEW,82 #Charusaur,
 	Moves = SLEEPPOWDER,POWERWHIP,FLAREBLITZ,FLY
 	AbilityIndex = 0
 	Item = LEFTOVERS
 
 [CHAMPION,Blue,8]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,85 #Maroeot,
+Pokemon = B18H105,85 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
-Pokemon = MAGNEMITE,85 #Taucutor,
+Pokemon = B103H128,85 #Taucutor,
 	Moves = ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER
 	AbilityIndex = 2
 	Item = KINGSROCK
-Pokemon = MAGNEMITE,86 #Rhypemortar,
+Pokemon = B268H265,86 #Rhypemortar,
 	Moves = FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE
 	AbilityIndex = 1
 	Item = ABSORBBULB
-Pokemon = MAGNEMITE,85 #Electados
+Pokemon = B130H267,85 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = MAGNEMITE,86 #Starkazam
+Pokemon = B65H120,86 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
-Pokemon = MAGNEMITE,92 #Charusaur,
+Pokemon = MEW,92 #Charusaur,
 	Moves = SLEEPPOWDER,POWERWHIP,FLAREBLITZ,FLY
 	AbilityIndex = 0
 	Item = LEFTOVERS
@@ -2768,206 +2768,206 @@ Pokemon = MAGNEMITE,92 #Charusaur,
 
 [LEADER_Whitney,Whitney]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,55 #LICKIBULL,
+Pokemon = B210H108,55 #LICKIBULL,
 	Moves = PLAYROUGH,LICK,CHIPAWAY,CHARM
 	Item = SILKSCARF
-Pokemon = MAGNEMITE,55 #GIRATURN,
+Pokemon = B171H203,55 #GIRATURN,
 	Moves = SPARK,DOUBLEHIT,POWERSWAP,AQUARING
 	AbilityIndex = 0	
 	Item = SILKSCARF
-Pokemon = MAGNEMITE,56 #DUNSKHAN
+Pokemon = B115H206,56 #DUNSKHAN
 	Moves = DOUBLEHIT,COIL,DIG,DIZZYPUNCH
 	AbilityIndex = 2	
 	Item = SILKSCARF
-Pokemon = MAGNEMITE,56 #AIROS
+Pokemon = B128H190,56 #AIROS
 	Moves = TICKLE,TAKEDOWN,WORKUP,REST
 	Item = LUMBERRY
-Pokemon = MAGNEMITE,58 #CHANTANK
+Pokemon = B241H113,58 #CHANTANK
 	Moves = METRONOME,REFRESH,ROLLOUT,MILKDRINK
 	Item = EVIOLITE
 
 [LEADER_Whitney,Whitney,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,82 #LICKIBULL,
+Pokemon = B210H108,82 #LICKIBULL,
 	Moves = PLAYROUGH,LICK,CHIPAWAY,CHARM
 	Item = SILKSCARF
-Pokemon = MAGNEMITE,82 #GIRATURN,
+Pokemon = B171H203,82 #GIRATURN,
 	Moves = SPARK,DOUBLEHIT,POWERSWAP,AQUARING
 	AbilityIndex = 0	
 	Item = SILKSCARF
-Pokemon = MAGNEMITE,84 #DUNSKHAN
+Pokemon = B115H206,84 #DUNSKHAN
 	Moves = DOUBLEHIT,COIL,DIG,DIZZYPUNCH
 	AbilityIndex = 2	
 	Item = SILKSCARF
-Pokemon = MAGNEMITE,84 #AMBIROS
+Pokemon = B128H254,84 #AMBIROS
 	Moves = TICKLE,DOUBLEHIT,WORKUP,REST
 	Item = LUMBERRY
-Pokemon = MAGNEMITE,85 #CHANTANK
+Pokemon = B241H113,85 #CHANTANK
 	Moves = METRONOME,REFRESH,ROLLOUT,MILKDRINK
 	Item = EVIOLITE
-Pokemon = MAGNEMITE,85 #GARKING
+Pokemon = B309H299,85 #GARKING
 	AbilityIndex = 1						
 	Item = SILKSCARF
 ###################
 
 [LEADER_Kurt,Kurt]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,56 #BEEDOS,
+Pokemon = B168H15,56 #BEEDOS,
 	Moves = SPIDERWEB,TWINEEDLE,SHADOWSNEAK,QUIVERDANCE
 	Item = SILVERPOWDER
-Pokemon = MAGNEMITE,56 #Cloytress,
+Pokemon = B91H205,56 #Cloytress,
 	Moves = IRONDEFENSE,SPIKECANNON,EXPLOSION,BUGBITE
 	AbilityIndex = 0	
 	Item = SILVERPOWDER
-Pokemon = MAGNEMITE,58 #Slowzor
+Pokemon = B212H80,58 #Slowzor
 	Moves = RECOVER,PSYCHUP,XSCISSOR,IRONDEFENSE
 	Item = SILVERPOWDER
-Pokemon = MAGNEMITE,58 #YANDRA
+Pokemon = B230H270,58 #YANDRA
 	Moves = DRAGONPULSE,SUPERSONIC,UTURN,DOUBLETEAM
 	Item = SILVERPOWDER
-Pokemon = MAGNEMITE,62 #Blissckle,
+Pokemon = B213H242,62 #Blissckle,
 	Moves = POWERTRICK,MINIMIZE,BUGBITE,SOFTBOILED
 	Item = LEFTOVERS
 
 [LEADER_Kurt,Kurt,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,82 #BEEDOS,
+Pokemon = B168H15,82 #BEEDOS,
 	Moves = SPIDERWEB,TWINEEDLE,SHADOWSNEAK,QUIVERDANCE
 	Item = SILVERPOWDER
-Pokemon = MAGNEMITE,85 #Cloytress,
+Pokemon = B91H205,85 #Cloytress,
 	Moves = IRONDEFENSE,SPIKECANNON,EXPLOSION,BUGBITE
 	AbilityIndex = 0	
 	Item = SILVERPOWDER
-Pokemon = MAGNEMITE,84 #Slowzor
+Pokemon = B212H80,84 #Slowzor
 	Moves = RECOVER,PSYCHUP,XSCISSOR,IRONDEFENSE
 	Item = SILVERPOWDER
-Pokemon = MAGNEMITE,82 #YANDRA
+Pokemon = B230H270,82 #YANDRA
 	Moves = DRAGONPULSE,SUPERSONIC,UTURN,DOUBLETEAM
 	Item = SILVERPOWDER
-Pokemon = MAGNEMITE,85 #Blissckle,
+Pokemon = B213H242,85 #Blissckle,
 	Moves = POWERTRICK,MINIMIZE,BUGBITE,SOFTBOILED
 	Item = SILVERPOWDER
-Pokemon = MAGNEMITE,84 
+Pokemon = B300H304,84 
 	Item = SILVERPOWDER
 #####################
 
 [LEADER_Falkner,Falkner]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,58 #XATOWL
+Pokemon = B164H178,58 #XATOWL
 	Moves = LUCKYCHANT,PSYCHIC,REFLECT,AIRSLASH
 	AbilityIndex = 0		
 	Item = SHARPBEAK
-Pokemon = MAGNEMITE,58 #GRANKROW
+Pokemon = B256H210,58 #GRANKROW
 	Moves = ROAR,FAIRYWIND,NIGHTSLASH,FEATHERDANCE
 	AbilityIndex = 3		
 	Item = SHARPBEAK
-Pokemon = MAGNEMITE,60 #HOUNDMORY
+Pokemon = B229H227,60 #HOUNDMORY
 	Moves = FLAMETHROWER,FAINTATTACK,STEELWING,DEFOG
 	AbilityIndex = 1	
 	Item = AIRBALLOON
-Pokemon = MAGNEMITE,61 #markoiss
+Pokemon = B269H105,61 #markoiss
 	Moves = BONERUSH,FOCUSENERGY,AIRSLASH,PROTECT
 	AbilityIndex = 3		
 	Item = SHARPBEAK
-Pokemon = MAGNEMITE,63 #URSAm	ory
+Pokemon = B18H217,63 #URSAm	ory
 	Moves = WINGATTACK,FURYSWIPES,REST,SCARYFACE
 	AbilityIndex = 1	
 	Item = SHARPBEAK
 
 [LEADER_Falkner,Falkner,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,82 #XATOWL
+Pokemon = B164H178,82 #XATOWL
 	Moves = LUCKYCHANT,PSYCHIC,REFLECT,AIRSLASH
 	AbilityIndex = 0		
 	Item = SHARPBEAK
-Pokemon = MAGNEMITE,82 #GRANKROW
+Pokemon = B256H210,82 #GRANKROW
 	Moves = ROAR,FAIRYWIND,NIGHTSLASH,FEATHERDANCE
 	AbilityIndex = 3		
 	Item = SHARPBEAK
-Pokemon = MAGNEMITE,84 #HOUNDMORY
+Pokemon = B229H227,84 #HOUNDMORY
 	Moves = FLAMETHROWER,FAINTATTACK,STEELWING,DEFOG
 	AbilityIndex = 1	
 	Item = SHARPBEAK
-Pokemon = MAGNEMITE,84 #markoiss
+Pokemon = B269H105,84 #markoiss
 	Moves = BONERUSH,FOCUSENERGY,AIRSLASH,PROTECT
 	AbilityIndex = 3		
 	Item = SHARPBEAK
-Pokemon = MAGNEMITE,85 #URSAm	ory
+Pokemon = B18H217,85 #URSAm	ory
 	Moves = WINGATTACK,FURYSWIPES,REST,SCARYFACE
 	AbilityIndex = 1	
 	Item = SHARPBEAK
-Pokemon = MAGNEMITE,85 #DUSKDACTYL
+Pokemon = B142H313,85 #DUSKDACTYL
 	Item = SHARPBEAK
 #####################
 
 [LEADER_Clair,Clair]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,62 #FERALIDOS
+Pokemon = B130H160,62 #FERALIDOS
 	Moves = CRUNCH,FIREFANG,SCREECH,AQUATAIL
 	AbilityIndex = 0				
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,62 #MAGNANAIR
+Pokemon = B148H232,62 #MAGNANAIR
 	Moves = THUNDERWAVE,DRAGONPULSE,MAGNITUDE,AQUARING
 	AbilityIndex = 0		
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,63 #GLADRA
+Pokemon = B230H272,63 #GLADRA
 	Moves = ICEBEAM,MIRRORCOAT,SMOKESCREEN,TWISTER
 	AbilityIndex = 3		
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,63 #ARIAZARD
+Pokemon = B6H168,63 #ARIAZARD
 	Moves = SPIDERWEB,FLAREBLITZ,PINMISSILE,OUTRAGE
 	AbilityIndex = 2		
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,66 #GARDACTYL
+Pokemon = B142H299,66 #GARDACTYL
 	Moves = DUALCHOP,DRAGONDANCE,IRONHEAD,CRUNCH
 	AbilityIndex = 0		
 	Item = DRAGONFANG
 
 [LEADER_Clair,Clair,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,82 #FERALIDOS
+Pokemon = B130H160,82 #FERALIDOS
 	Moves = CRUNCH,FIREFANG,SCREECH,AQUATAIL
 	AbilityIndex = 0				
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,82 #MAGNANAIR
+Pokemon = B148H232,82 #MAGNANAIR
 	Moves = THUNDERWAVE,DRAGONPULSE,MAGNITUDE,AQUARING
 	AbilityIndex = 0		
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,84 #GLADRA
+Pokemon = B230H272,84 #GLADRA
 	Moves = ICEBEAM,MIRRORCOAT,SMOKESCREEN,TWISTER
 	AbilityIndex = 3		
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,84 #ARIAZARD
+Pokemon = B6H168,84 #ARIAZARD
 	Moves = SPIDERWEB,FLAREBLITZ,PINMISSILE,OUTRAGE
 	AbilityIndex = 2		
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,85 #GARDACTYL
+Pokemon = B142H299,85 #GARDACTYL
 	Moves = DUALCHOP,DRAGONDANCE,IRONHEAD,CRUNCH
 	AbilityIndex = 0		
 	Item = DRAGONFANG
-Pokemon = MAGNEMITE,85 #DRAGONPTILE
+Pokemon = B278H149,85 #DRAGONPTILE
 	Item = DRAGONFANG
 #####################
 
 [LEADER_Morty,Morty]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,65 #Genroark
+Pokemon = B338H94,65 #Genroark
 	Moves = MEANLOOK,PURSUIT,SHADOWBALL,CURSE
 	AbilityIndex = 0					
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,63 #Weainja
+Pokemon = B289H262,63 #Weainja
 	Moves = GRUDGE,NIGHTSLASH,HEALBLOCK,SHADOWSNEAK
 	AbilityIndex = 0			
 	Item = FOCUSSASH
-Pokemon = MAGNEMITE,65 #Cleftomb
+Pokemon = B295H36,65 #Cleftomb
 	Moves = CURSE,ATTRACT,MINIMIZE,OMINOUSWIND
 	AbilityIndex = 1				
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,64 #Snorslash
+Pokemon = B329H143,64 #Snorslash
 	Moves = SWORDSDANCE,KINGSSHIELD,BODYSLAM,SHADOWPUNCH
 	AbilityIndex = 1	
 	Item = LEFTOVERS
-Pokemon = MAGNEMITE,67 #Hitnoir
+Pokemon = B313H107,67 #Hitnoir
 	Moves = DRAINPUNCH,SHADOWCLAW,BULKUP,THUNDERPUNCH
 	AbilityIndex = 1			
 	Item = BIGROOT
@@ -2975,27 +2975,27 @@ Pokemon = MAGNEMITE,67 #Hitnoir
 
 [LEADER_Morty,Morty,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,84 #Genroark
+Pokemon = B338H94,84 #Genroark
 	Moves = MEANLOOK,PURSUIT,SHADOWBALL,CURSE
 	AbilityIndex = 0					
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,82 #Weainja
+Pokemon = B289H262,82 #Weainja
 	Moves = GRUDGE,NIGHTSLASH,HEALBLOCK,SHADOWSNEAK
 	AbilityIndex = 0			
 	Item = FOCUSSASH
-Pokemon = MAGNEMITE,84 #Cleftomb
+Pokemon = B295H36,84 #Cleftomb
 	Moves = CURSE,ATTRACT,MINIMIZE,OMINOUSWIND
 	AbilityIndex = 1				
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,84 #Aeginoir
+Pokemon = B313H329,84 #Aeginoir
 	Moves = SWORDSDANCE,KINGSSHIELD,MEANLOOK,SHADOWPUNCH
 	AbilityIndex = 1		
 	Item = SPELLTAG
-Pokemon = MAGNEMITE,84 #Hitnoir
+Pokemon = B313H107,84 #Hitnoir
 	Moves = DRAINPUNCH,SHADOWCLAW,BULKUP,THUNDERPUNCH
 	AbilityIndex = 1			
 	Item = BIGROOT
-Pokemon = MAGNEMITE,85 #Gengar (mega)
+Pokemon = B94H94,85 #Gengar (mega)
 	Moves = SHADOWBALL,ENERGYBALL,DESTINYBOND,SUCKERPUNCH
 	AbilityIndex = 0		
 	Item = SPELLTAG
@@ -3003,23 +3003,23 @@ Pokemon = MAGNEMITE,85 #Gengar (mega)
 
 [LEADER_Pryce,Pryce]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,65 #Dewking
+Pokemon = B199H87,65 #Dewking
 	Moves = NASTYPLOT,BATONPASS,SAFEGUARD,ICESHARD
 	AbilityIndex = 0 			
 	Item = LEFTOVERS
-Pokemon = MAGNEMITE,64 #Mamodon
+Pokemon = B308H274,64 #Mamodon
 	Moves = HAIL,PROTECT,IRONDEFENSE,EARTHQUAKE
 	AbilityIndex = 1				
 	Item = ICYROCK
-Pokemon = MAGNEMITE,65 #Infervile
+Pokemon = B262H321,65 #Infervile
 	Moves = CLOSECOMBAT,FLAREBLITZ,ICEPUNCH,NIGHTSLASH
 	AbilityIndex = 0	
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,65 #Proboster
+Pokemon = B91H326,65 #Proboster
 	Moves = ICICLESPEAR,SPIKECANNON,IRONDEFENSE,REST
 	AbilityIndex = 3		
 	Item = ROCKYHELMET
-Pokemon = MAGNEMITE,65 #Jynlord
+Pokemon = B314H124,65 #Jynlord
 	Moves = PSYCHIC,BLIZZARD,SURF,FAKETEARS
 	AbilityIndex = 0				
 	Item = WISEGLASSES
@@ -3027,27 +3027,27 @@ Pokemon = MAGNEMITE,65 #Jynlord
 
 [LEADER_Pryce,Pryce,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,84 #Dewking
+Pokemon = B199H87,84 #Dewking
 	Moves = NASTYPLOT,BATONPASS,SAFEGUARD,ICESHARD
 	AbilityIndex = 0 			
 	Item = LEFTOVERS
-Pokemon = MAGNEMITE,84 #Mamodon
+Pokemon = B308H274,84 #Mamodon
 	Moves = HAIL,PROTECT,IRONDEFENSE,EARTHQUAKE
 	AbilityIndex = 1				
 	Item = ICYROCK
-Pokemon = MAGNEMITE,85 #Infervile
+Pokemon = B262H321,85 #Infervile
 	Moves = CLOSECOMBAT,FLAREBLITZ,ICEPUNCH,NIGHTSLASH
 	AbilityIndex = 0	
 	Item = NEVERMELTICE
-Pokemon = MAGNEMITE,85 #Proboster
+Pokemon = B91H326,85 #Proboster
 	Moves = ICICLESPEAR,SPIKECANNON,IRONDEFENSE,REST
 	AbilityIndex = 3		
 	Item = ROCKYHELMET
-Pokemon = MAGNEMITE,85 #Jynlord
+Pokemon = B314H124,85 #Jynlord
 	Moves = PSYCHIC,BLIZZARD,SURF,FAKETEARS
 	AbilityIndex = 0				
 	Item = WISEGLASSES
-Pokemon = MAGNEMITE,86 #Lapode
+Pokemon = B101H131,86 #Lapode
 	Moves = PERISHSONG,SHEERCOLD,MIRRORCOAT,PROTECT
 	AbilityIndex = 0		
 	Item = AIRBALLOON
@@ -3055,23 +3055,23 @@ Pokemon = MAGNEMITE,86 #Lapode
 
 [LEADER_Jasmine,Jasmine]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,66 #SKARDRIO
+Pokemon = B85H227,66 #SKARDRIO
 	Moves = STEELWING,WHIRLWIND,AIRSLASH,SPIKES
 	AbilityIndex = 1
 	Item = METALCOAT
-Pokemon = MAGNEMITE,67 #METADON
+Pokemon = B112H293,67 #METADON
 	Moves = STONEEDGE,MAGNETRISE,METEORMASH,IRONDEFENSE
 	AbilityIndex = 1	
 	Item = EVIOLITE
-Pokemon = MAGNEMITE,66 #MAGNETOISE
+Pokemon = B9H263,66 #MAGNETOISE
 	Moves = IRONDEFENSE,HYDROCANNON,LOCKON,MIRRORSHOT
 	AbilityIndex = 1		
 	Item = ZOOMLENS
-Pokemon = MAGNEMITE,67 #SCISHARP
+Pokemon = B331H212,67 #SCISHARP
 	Moves = SWORDSDANCE,NIGHTSLASH,XSCISSOR,FOCUSENERGY
 	AbilityIndex = 0	
 	Item = RAZORCLAW
-Pokemon = MAGNEMITE,68 #AGLIX
+Pokemon = B208H333,68 #AGLIX
 	Moves = EARTHQUAKE,DOUBLEEDGE,HEAVYSLAM,HEADSMASH
 	AbilityIndex = 0	
 	Item = METALCOAT
@@ -3079,27 +3079,27 @@ Pokemon = MAGNEMITE,68 #AGLIX
 
 [LEADER_Jasmine,Jasmine,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,84 #SKARDRIO
+Pokemon = B85H227,84 #SKARDRIO
 	Moves = STEELWING,WHIRLWIND,AIRSLASH,SPIKES
 	AbilityIndex = 1
 	Item = METALCOAT
-Pokemon = MAGNEMITE,84 #METADON
+Pokemon = B112H293,84 #METADON
 	Moves = STONEEDGE,MAGNETRISE,METEORMASH,IRONDEFENSE
 	AbilityIndex = 1	
 	Item = EVIOLITE
-Pokemon = MAGNEMITE,85 #MAGNETOISE
+Pokemon = B9H263,85 #MAGNETOISE
 	Moves = IRONDEFENSE,HYDROCANNON,LOCKON,MIRRORSHOT
 	AbilityIndex = 1		
 	Item = ZOOMLENS
-Pokemon = MAGNEMITE,84 #SCISHARP
+Pokemon = B331H212,84 #SCISHARP
 	Moves = SWORDSDANCE,NIGHTSLASH,XSCISSOR,FOCUSENERGY
 	AbilityIndex = 0	
 	Item = RAZORCLAW
-Pokemon = MAGNEMITE,86 #AGLIX
+Pokemon = B208H333,86 #AGLIX
 	Moves = EARTHQUAKE,DOUBLEEDGE,HEAVYSLAM,HEADSMASH
 	AbilityIndex = 0	
 	Item = METALCOAT
-Pokemon = MAGNEMITE,85 #AEGIMORTAR
+Pokemon = B268H329,85 #AEGIMORTAR
 	Moves = FIREPUNCH,SACREDSWORD,AERIALACE,THUNDERPUNCH
 	AbilityIndex = 1
 	Item = METALCOAT
@@ -3107,23 +3107,23 @@ Pokemon = MAGNEMITE,85 #AEGIMORTAR
 
 [LEADER_Chuck,Chuck]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,62 #KABUCHAMP
+Pokemon = B68H141,62 #KABUCHAMP
 	Moves = DYNAMICPUNCH,WATERFALL,STONEEDGE,SLASH
 	AbilityIndex = 3		
 	Item = MUSCLEBAND
-Pokemon = MAGNEMITE,62 #BLAZNAPE
+Pokemon = B321H281,62 #BLAZNAPE
 	Moves = CLOSECOMBAT,BLAZEKICK,BRAVEBIRD,TAUNT
 	AbilityIndex = 0		
 	Item = EXPERTBELT
-Pokemon = MAGNEMITE,64 #POLIAPE			#POLIAPE
+Pokemon = B57H62,64 #POLIAPE			#POLIAPE
 	Moves = CIRCLETHROW,BELLYDRUM,CLOSECOMBAT,THRASH
 	AbilityIndex = 3		
 	Item = EXPERTBELT
-Pokemon = MAGNEMITE,63 #LUCAGON
+Pokemon = B334H296,63 #LUCAGON
 	Moves = AURASPHERE,DRAGONPULSE,DETECT,EARTHPOWER
 	AbilityIndex = 1	
 	Item = WISEGLASSES
-Pokemon = MAGNEMITE,64 #HITMONLAX
+Pokemon = B143H107,64 #HITMONLAX
 	Moves = REST,DIZZYPUNCH,SKYUPPERCUT,COUNTER
 	AbilityIndex = 1			
 	Item = LEFTOVERS
@@ -3131,27 +3131,27 @@ Pokemon = MAGNEMITE,64 #HITMONLAX
 
 [LEADER_Chuck,Chuck,1]
 Items = FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,82 #KABUCHAMP
+Pokemon = B68H141,82 #KABUCHAMP
 	Moves = DYNAMICPUNCH,WATERFALL,STONEEDGE,SLASH
 	AbilityIndex = 3		
 	Item = MUSCLEBAND
-Pokemon = MAGNEMITE,82 #BLAZNAPE
+Pokemon = B321H281,82 #BLAZNAPE
 	Moves = CLOSECOMBAT,BLAZEKICK,BRAVEBIRD,TAUNT
 	AbilityIndex = 0		
 	Item = EXPERTBELT
-Pokemon = MAGNEMITE,84 #POLIAPE			#POLIAPE
+Pokemon = B57H62,84 #POLIAPE			#POLIAPE
 	Moves = CIRCLETHROW,BELLYDRUM,CLOSECOMBAT,THRASH
 	AbilityIndex = 3		
 	Item = EXPERTBELT
-Pokemon = MAGNEMITE,83 #LUCAGON
+Pokemon = B334H296,83 #LUCAGON
 	Moves = AURASPHERE,DRAGONPULSE,DETECT,EARTHPOWER
 	AbilityIndex = 1	
 	Item = WISEGLASSES
-Pokemon = MAGNEMITE,84 #HITMONLAX
+Pokemon = B143H107,84 #HITMONLAX
 	Moves = REST,DIZZYPUNCH,SKYUPPERCUT,COUNTER
 	AbilityIndex = 1			
 	Item = LEFTOVERS
-Pokemon = MAGNEMITE,83 #GLISLADE
+Pokemon = B288H273,83 #GLISLADE
 	Moves = SWORDSDANCE,LEAFBLADE,SKYUPPERCUT,DOUBLETEAM
 	AbilityIndex = 2
 	Item = RAZORCLAW
@@ -3162,58 +3162,58 @@ Pokemon = MAGNEMITE,83 #GLISLADE
 #Blue encounter 1	starter=bulbasaur
 
 [RIVAL1,Blue,0]
-Pokemon = MAGNEMITE,5 #squirtmander,
+Pokemon = MEW,5 #squirtmander,
 
 #Blue encounter 1	starter=charmander
 
 [RIVAL1,Blue,1]
-Pokemon = MAGNEMITE,5 #bulbtle,
+Pokemon = MEW,5 #bulbtle,
 
 #Blue encounter 1	starter=squirtle
 
 [RIVAL1,Blue,2]
-Pokemon = MAGNEMITE,5 #bulbmander,
+Pokemon = MEW,5 #bulbmander,
 #################################
 
 #Blue encounter 2 (Viridian)	starter=bulbasaur
 
 [RIVAL1,Blue,3]
-Pokemon = MAGNEMITE,7 
-Pokemon = MAGNEMITE,8	 #squirtmander,
+Pokemon = PIDGEY,7 
+Pokemon = MEW,8	 #squirtmander,
 
 
 #Blue encounter 2 (Viridian)	#starter=charmander
 
 [RIVAL1,Blue,4]
-Pokemon = MAGNEMITE,7 
-Pokemon = MAGNEMITE,8	 #bulbtle,
+Pokemon = PIDGEY,7 
+Pokemon = MEW,8	 #bulbtle,
 
 
 #Blue encounter 2 (Viridian)	#starter=squirtle
 
 [RIVAL1,Blue,5]
-Pokemon = MAGNEMITE,7 
-Pokemon = MAGNEMITE,8	 #bulbmander,
+Pokemon = PIDGEY,7 
+Pokemon = MEW,8	 #bulbmander,
 
 ######################
 #Blue encounter 3 (Cerulean)	#starter=bulbasaur
 
 [RIVAL1,Blue,6]
 Items = SUPERPOTION
-Pokemon = MAGNEMITE,18 
-Pokemon = MAGNEMITE,15 
-Pokemon = MAGNEMITE,16 
-Pokemon = MAGNEMITE,19 #squirtmeleon,
+Pokemon = PIDGEOTTO,18 
+Pokemon = ABRA,15 
+Pokemon = B19H56,16 
+Pokemon = MEW,19 #squirtmeleon,
 	Moves = SCARYFACE,WATERGUN,EMBER,SLASH
 
 #Blue encounter 3 (Cerulean)	#starter=charmander
 
 [RIVAL1,Blue,7]
 Items = SUPERPOTION
-Pokemon = MAGNEMITE,18 
-Pokemon = MAGNEMITE,15 
-Pokemon = MAGNEMITE,16 
-Pokemon = MAGNEMITE,19 #bulborttle,
+Pokemon = PIDGEOTTO,18 
+Pokemon = ABRA,15 
+Pokemon = B19H56,16 
+Pokemon = MEW,19 #bulborttle,
 	Moves = WITHDRAW,WATERGUN,RAZORLEAF,TAKEDOWN
 
 
@@ -3221,10 +3221,10 @@ Pokemon = MAGNEMITE,19 #bulborttle,
 
 [RIVAL1,Blue,8]
 Items = SUPERPOTION
-Pokemon = MAGNEMITE,18 
-Pokemon = MAGNEMITE,15 
-Pokemon = MAGNEMITE,16 
-Pokemon = MAGNEMITE,19 #CHARYSAUR,
+Pokemon = PIDGEOTTO,18 
+Pokemon = ABRA,15 
+Pokemon = B19H56,16 
+Pokemon = MEW,19 #CHARYSAUR,
 	Moves = RAZORLEAF,EMBER,BITE,SLEEPPOWDER
 
 ###########Blue encounter 4 (SS Anne)####
@@ -3232,30 +3232,30 @@ Pokemon = MAGNEMITE,19 #CHARYSAUR,
 
 [RIVAL1,Blue,9]
 Items = SUPERPOTION
-Pokemon = MAGNEMITE,22 
-Pokemon = MAGNEMITE,20 #Manicate,
-Pokemon = MAGNEMITE,18 #Starbra,
-Pokemon = MAGNEMITE,22 #Warmeleon,
+Pokemon = PIDGEOTTO,22 
+Pokemon = B20H56,20 #Manicate,
+Pokemon = B64H120,18 #Starbra,
+Pokemon = MEW,22 #Warmeleon,
 
 
 #starter=charmander
 
 [RIVAL1,Blue,10]
 Items = SUPERPOTION
-Pokemon = MAGNEMITE,22 
-Pokemon = MAGNEMITE,20 #Manicate,
-Pokemon = MAGNEMITE,18 #Starbra,
-Pokemon = MAGNEMITE,22 #Ivytortle,
+Pokemon = PIDGEOTTO,22 
+Pokemon = B20H56,20 #Manicate,
+Pokemon = B64H120,18 #Starbra,
+Pokemon = MEW,22 #Ivytortle,
 
 
 #starter=squirtle
 
 [RIVAL1,Blue,11]
 Items = SUPERPOTION
-Pokemon = MAGNEMITE,22 
-Pokemon = MAGNEMITE,20 #Manicate,
-Pokemon = MAGNEMITE,18 #Starbra,
-Pokemon = MAGNEMITE,22 #Charysaur,
+Pokemon = PIDGEOTTO,22 
+Pokemon = B20H56,20 #Manicate,
+Pokemon = B64H120,18 #Starbra,
+Pokemon = MEW,22 #Charysaur,
 
 
 ######Encounter 5 - Pokemon Tower#####
@@ -3263,169 +3263,169 @@ Pokemon = MAGNEMITE,22 #Charysaur,
 
 [RIVAL1,Blue,12]
 Items = SUPERPOTION,SUPERPOTION
-Pokemon = MAGNEMITE,25 #Cueotto,
-Pokemon = MAGNEMITE,24 
-Pokemon = MAGNEMITE,23 
-Pokemon = MAGNEMITE,22 #Starbra,
-Pokemon = MAGNEMITE,25 #Warmeleon,
+Pokemon = B17H104,25 #Cueotto,
+Pokemon = EXEGGCUTE,24 
+Pokemon = GYARADOS,23 
+Pokemon = B64H120,22 #Starbra,
+Pokemon = MEW,25 #Warmeleon,
 
 #starter=charmander
 
 [RIVAL1,Blue,13]
 Items = SUPERPOTION,SUPERPOTION
-Pokemon = MAGNEMITE,25 #Cueotto,
-Pokemon = MAGNEMITE,24 
-Pokemon = MAGNEMITE,23 
-Pokemon = MAGNEMITE,22 #Starbra,
-Pokemon = MAGNEMITE,25 #Ivytortle,
+Pokemon = B17H104,25 #Cueotto,
+Pokemon = EXEGGCUTE,24 
+Pokemon = GYARADOS,23 
+Pokemon = B64H120,22 #Starbra,
+Pokemon = MEW,25 #Ivytortle,
 
 #starter=squirtle
 
 [RIVAL1,Blue,14]
 Items = SUPERPOTION,SUPERPOTION
-Pokemon = MAGNEMITE,25 #Cueotto,
-Pokemon = MAGNEMITE,24 
-Pokemon = MAGNEMITE,23 
-Pokemon = MAGNEMITE,22 #Starbra,
-Pokemon = MAGNEMITE,25 #Charysaur,
+Pokemon = B17H104,25 #Cueotto,
+Pokemon = EXEGGCUTE,24 
+Pokemon = GYARADOS,23 
+Pokemon = B64H120,22 #Starbra,
+Pokemon = MEW,25 #Charysaur,
 
 #########Encounter 6 - Fuschia #####
 #starter=bulbasaur
 
 [RIVAL1,Blue,15]
 Items = SUPERPOTION,SUPERPOTION
-Pokemon = MAGNEMITE,36 #Cueot,
-Pokemon = MAGNEMITE,39 #Taucute,
-Pokemon = MAGNEMITE,37 #Electados,
-Pokemon = MAGNEMITE,36 #Starkazam,
-Pokemon = MAGNEMITE,41 #Warizard,
+Pokemon = B18H104,36 #Cueot,
+Pokemon = TAUROS,39 #Taucute,
+Pokemon = B130H125,37 #Electados,
+Pokemon = B65H121,36 #Starkazam,
+Pokemon = MEW,41 #Warizard,
 
 #starter=charmander
 
 [RIVAL1,Blue,16]
 Items = SUPERPOTION,SUPERPOTION
-Pokemon = MAGNEMITE,36 #Cueot,
-Pokemon = MAGNEMITE,39 #Taucute,
-Pokemon = MAGNEMITE,37 #Electados,
-Pokemon = MAGNEMITE,36 #Starkazam,
-Pokemon = MAGNEMITE,41 #Warizard,
+Pokemon = B18H104,36 #Cueot,
+Pokemon = TAUROS,39 #Taucute,
+Pokemon = B130H125,37 #Electados,
+Pokemon = B65H121,36 #Starkazam,
+Pokemon = MEW,41 #Warizard,
 
 #starter=squirtle
 
 [RIVAL1,Blue,17]
 Items = SUPERPOTION,SUPERPOTION
-Pokemon = MAGNEMITE,36 #Cueot,
-Pokemon = MAGNEMITE,39 #Taucute,
-Pokemon = MAGNEMITE,37 #Electados,
-Pokemon = MAGNEMITE,36 #Starkazam,
-Pokemon = MAGNEMITE,41 #Warizard,
+Pokemon = B18H104,36 #Cueot,
+Pokemon = TAUROS,39 #Taucute,
+Pokemon = B130H125,37 #Electados,
+Pokemon = B65H121,36 #Starkazam,
+Pokemon = MEW,41 #Warizard,
 
 ############Encounter 7 - silph co.#######
 #starter=bulbasaur
 
 [RIVAL1,Blue,18]
-Pokemon = MAGNEMITE,44 #Cueot,
-Pokemon = MAGNEMITE,45 #Taucute,
-Pokemon = MAGNEMITE,42 #Electados,
-Pokemon = MAGNEMITE,42 #Starkazam,
-Pokemon = MAGNEMITE,45 #Warizard,
+Pokemon = B18H104,44 #Cueot,
+Pokemon = TAUROS,45 #Taucute,
+Pokemon = B130H125,42 #Electados,
+Pokemon = B64H121,42 #Starkazam,
+Pokemon = MEW,45 #Warizard,
 
 #starter=charmander
 
 [RIVAL1,Blue,19]
-Pokemon = MAGNEMITE,44 #Cueot,
-Pokemon = MAGNEMITE,45 #Taucute,
-Pokemon = MAGNEMITE,42 #Electados,
-Pokemon = MAGNEMITE,42 #Starkazam,
-Pokemon = MAGNEMITE,45 #Ivytoise,
+Pokemon = B18H104,44 #Cueot,
+Pokemon = TAUROS,45 #Taucute,
+Pokemon = B130H125,42 #Electados,
+Pokemon = B65H120,42 #Starkazam,
+Pokemon = MEW,45 #Ivytoise,
 
 
 #starter=squirtle
 
 [RIVAL1,Blue,20]
-Pokemon = MAGNEMITE,44 #Cueot,
-Pokemon = MAGNEMITE,45 #Taucute,
-Pokemon = MAGNEMITE,42 #Electados,
-Pokemon = MAGNEMITE,42 #Starkazam,
-Pokemon = MAGNEMITE,45 #Charusaur,
+Pokemon = B18H104,44 #Cueot,
+Pokemon = TAUROS,45 #Taucute,
+Pokemon = B130H125,42 #Electados,
+Pokemon = B65H120,42 #Starkazam,
+Pokemon = MEW,45 #Charusaur,
 
 ############Encounter 8 - route 22#######
 #starter=bulbasaur
 
 [RIVAL1,Blue,21]
-Pokemon = MAGNEMITE,47 #Maroeot,
-Pokemon = MAGNEMITE,45 #Taucute,
-Pokemon = MAGNEMITE,45 #Maghorn,
-Pokemon = MAGNEMITE,47 #Electados,
-Pokemon = MAGNEMITE,50 #Starkazam,
-Pokemon = MAGNEMITE,53 #Blastizard,
+Pokemon = B18H105,47 #Maroeot,
+Pokemon = B102H128,45 #Taucute,
+Pokemon = B111H126,45 #Maghorn,
+Pokemon = B130H125,47 #Electados,
+Pokemon = B65H120,50 #Starkazam,
+Pokemon = MEW,53 #Blastizard,
 
 #starter=charmander
 
 [RIVAL1,Blue,22]
-Pokemon = MAGNEMITE,47 #Maroeot,
-Pokemon = MAGNEMITE,45 #Taucute,
-Pokemon = MAGNEMITE,45 #Maghorn,
-Pokemon = MAGNEMITE,47 #Electados,
-Pokemon = MAGNEMITE,50 #Starkazam,
-Pokemon = MAGNEMITE,53 #Venutoise,
+Pokemon = B18H105,47 #Maroeot,
+Pokemon = B102H128,45 #Taucute,
+Pokemon = B111H126,45 #Maghorn,
+Pokemon = B130H125,47 #Electados,
+Pokemon = B65H120,50 #Starkazam,
+Pokemon = MEW,53 #Venutoise,
 
 #starter=squirtle
 
 [RIVAL1,Blue,23]
-Pokemon = MAGNEMITE,47 #Maroeot,
-Pokemon = MAGNEMITE,45 #Taucute,
-Pokemon = MAGNEMITE,45 #Maghorn,
-Pokemon = MAGNEMITE,47 #Electados,
-Pokemon = MAGNEMITE,50 #Starkazam,
-Pokemon = MAGNEMITE,53 #Charusaur,
+Pokemon = B18H105,47 #Maroeot,
+Pokemon = B102H128,45 #Taucute,
+Pokemon = B111H126,45 #Maghorn,
+Pokemon = B130H125,47 #Electados,
+Pokemon = B65H120,50 #Starkazam,
+Pokemon = MEW,53 #Charusaur,
 
 
 ###################
 ###### Intro ########
 
 [MR_FUJI,Fuji]
-Pokemon = MAGNEMITE,20 
-Pokemon = MAGNEMITE,20 
+Pokemon = DODUO,20 
+Pokemon = NIDORINO,20 
 #################
 
 [TEAMROCKET_M,Sergio]
-Pokemon = MAGNEMITE,17 #Zuvee,
-Pokemon = MAGNEMITE,18 #Rattini,
+Pokemon = ZUBAT,17 #Zuvee,
+Pokemon = B147H19,18 #Rattini,
 ##################
 
 [TEAMROCKET_M,Marcel]
-Pokemon = MAGNEMITE,15 #Geoffing,
-Pokemon = MAGNEMITE,15 #Lickikans,
+Pokemon = KOFFING,15 #Geoffing,
+Pokemon = B23H108,15 #Lickikans,
 ##################
 
 [TEAMROCKET_M,Achraf]
-Pokemon = MAGNEMITE,20 #Magneto,
+Pokemon = B140H81,20 #Magneto,
 ###################
 
 [ROCKETBOSS,Giovanni,1]
-Pokemon = MAGNEMITE,70 
+Pokemon = MEWTWO,70 
 	Moves = PSYCHIC,SHADOWBALL,AURASPHERE,RECOVER
 	AbilityIndex = 2
 
 ####################
 
 [ROBOT,RED]
-Pokemon = MAGNEMITE,100 
+Pokemon = B132H242,100 
 	Moves = TOXIC,COSMICPOWER,SOFTBOILED,TRANSFORM
 	AbilityIndex = 0
 	Item = LEFTOVERS
 ####################
 
 [ROBOT,RED_2]
-Pokemon = MAGNEMITE,1 
+Pokemon = B232H235,1 
 	Moves = ENDEAVOR,BULLETPUNCH
 	AbilityIndex = 0
 	Item = SHELLBELL
 ####################
 
 [ROBOT,RED_3]
-Pokemon = MAGNEMITE,50 
+Pokemon = B208H113,50 
 	Moves = IRONTAIL,MINIMIZE,SOFTBOILED,SHELLSMASH
 	AbilityIndex = 1
 	Item = EVIOLITE
@@ -3436,33 +3436,33 @@ Pokemon = MAGNEMITE,50
 ##################
 
 [PSYCHIC_M,Cameron]
-Pokemon = MAGNEMITE,38 
-Pokemon = MAGNEMITE,38 
-Pokemon = MAGNEMITE,38 
+Pokemon = B79H96,38 
+Pokemon = B79H64,38 
+Pokemon = B80H67,38 
 ###############
 
 [PSYCHIC_F,Enya]
-Pokemon = MAGNEMITE,43 
+Pokemon = B64H122,43 
 ###############
 
 [CHANNELER,Stacy]
-Pokemon = MAGNEMITE,39 
-Pokemon = MAGNEMITE,39 
+Pokemon = B93H67,39 
+Pokemon = B93H57,39 
 ###############
 
 [PSYCHIC_M,Preston]
-Pokemon = MAGNEMITE,43	 #DEWBRO
+Pokemon = B80H87,43	 #DEWBRO
 ###############
 
 [CHANNELER,Amanda]
-Pokemon = MAGNEMITE,39 #ALATLY
-Pokemon = MAGNEMITE,39 #GENRA
+Pokemon = B92H65,39 #ALATLY
+Pokemon = B63H94,39 #GENRA
 ###############
 
 [PSYCHIC_M,Johan]
-Pokemon = MAGNEMITE,38 #WEEPINBRA
-Pokemon = MAGNEMITE,38 #POLIMIME
-Pokemon = MAGNEMITE,38 #SLOWTA
+Pokemon = B64H70,38 #WEEPINBRA
+Pokemon = B122H61,38 #POLIMIME
+Pokemon = B77H79,38 #SLOWTA
 
 
 ############################
@@ -3470,18 +3470,19 @@ Pokemon = MAGNEMITE,38 #SLOWTA
 ############################ 
 
 [ROCKETBOSS,Giovanni,2]
-Pokemon = MAGNEMITE,45 #Mewuno,
+Pokemon = B144H150,45 #Mewuno,
 	Moves = ICEBEAM,PSYCHIC,GUARDSWAP,LIGHTSCREEN
-Pokemon = MAGNEMITE,45 #Mewtres
+Pokemon = B146H150,45 #Mewtres
 	Moves = FLAMETHROWER,PSYCHIC,SKYATTACK,POWERSWAP
-Pokemon = MAGNEMITE,45 #Mewdos
+Pokemon = B145H150,45 #Mewdos
 	Moves = THUNDERBOLT,PSYCHIC,DRILLPECK,AGILITY
 ########################
 
 [ROCKETBOSS,Giovanni,3]
 Items = FULLHEAL
-Pokemon = MAGNEMITE,50 #
+Pokemon = BIRDBOSS,50 #
 	Moves = TRIATTACK2,DRILLPECK,SKYATTACK,HAZE
+	Ball = MASTERBALL
 	AbilityIndex = 2
 	Item = ZOOMLENS
 #########################
@@ -3491,226 +3492,230 @@ Pokemon = MAGNEMITE,50 #
 #####
 
 [TEAMROCKET_M,Greg]
-Pokemon = MAGNEMITE,30 #VOLTBAT
+Pokemon = ZUBAT,30 #VOLTBAT
 Pokemon = MAGNEMITE,30 #MAGNEBAT
-Pokemon = MAGNEMITE,30 #PIKABAT
+Pokemon = B42H25,30 #PIKABAT
 #######################
 
 [SCIENTIST,Jerry]
-Pokemon = MAGNEMITE,30 #GROWMITE
-Pokemon = MAGNEMITE,30 #VULORB
-Pokemon = MAGNEMITE,30 #GRITON
+Pokemon = B81H58,30 #GROWMITE
+Pokemon = B100H37,30 #VULORB
+Pokemon = B82H88,30 #GRITON
 ######################
 
 [TEAMROCKET_M,Sebastian]
-Pokemon = MAGNEMITE,34 #DROWBONE
-Pokemon = MAGNEMITE,34 #WEEBAT
+Pokemon = DROWZEE,34 #DROWBONE
+Pokemon = B41H110,34 #WEEBAT
 ######################
 
 [SCIENTIST,Connor]
-Pokemon = MAGNEMITE,31 #GEOMER
-Pokemon = MAGNEMITE,31 #GRAVFING
-Pokemon = MAGNEMITE,31 #WEEIX
+Pokemon = B88H74,31 #GEOMER
+Pokemon = B109H75,31 #GRAVFING
+Pokemon = B95H110,31 #WEEIX
 ######################
 #####
 #3F #
 #####
 
 [TEAMROCKET_F,Madison]
-Pokemon = MAGNEMITE,33 #ELECTRICATE
-Pokemon = MAGNEMITE,33 #NIDOICATE
-Pokemon = MAGNEMITE,33 #HYPEOTTO
+Pokemon = RATICATE,33 #ELECTRICATE
+Pokemon = RATICATE,33 #NIDOICATE
+Pokemon = B17H97,33 #HYPEOTTO
 #######################
 
 [SCIENTIST,Jose]
-Pokemon = MAGNEMITE,34 #KOFFZING
-Pokemon = MAGNEMITE,34 #GOLODE
+Pokemon = B110H109,34 #KOFFZING
+Pokemon = B101H42,34 #GOLODE
 ######################
 #####
 #4F #
 #####
 
 [TEAMROCKET_M,Jimi]
-Pokemon = MAGNEMITE,33 
-Pokemon = MAGNEMITE,33 #GLOOBAT
-Pokemon = MAGNEMITE,33 #CUROW
+Pokemon = EKANS,33 
+Pokemon = GOLBAT,33 #GLOOBAT
+Pokemon = B22H104,33 #CUROW
 #######################
 
 [TEAMROCKET_F,Sylvia]
-Pokemon = MAGNEMITE,34 #HORSZEE
-Pokemon = MAGNEMITE,34 #MR. CHOP
+Pokemon = DROWZEE,34 #HORSZEE
+Pokemon = B66H122,34 #MR. CHOP
 #######################
 
 [SCIENTIST,Rodney]
-Pokemon = MAGNEMITE,38 #HYPODE
+Pokemon = B101H97,38 #HYPODE
 #######################
 #####
 #5F #
 #####
 
 [TEAMROCKET_M,Ricky]
-Pokemon = MAGNEMITE,38 #DONO
+Pokemon = B97H85,38 #DONO
 #######################
 
 [TEAMROCKET_M,Julian]
-Pokemon = MAGNEMITE,38 #ARBCHOKE
+Pokemon = B67H24,38 #ARBCHOKE
 #######################
 
 [JUGGLER,Jim]
-Pokemon = MAGNEMITE,34 #FARBRA
-Pokemon = MAGNEMITE,34 #WEEPINMIME
+Pokemon = FARFETCHD,34 #FARBRA
+Pokemon = B122H70,34 #WEEPINMIME
 #######################
 
 [SCIENTIST,Beau]
-Pokemon = MAGNEMITE,34 #MAGNETH
-Pokemon = MAGNEMITE,34 #MAGNESIAN
+Pokemon = B52H81,34 #MAGNETH
+Pokemon = B82H53,34 #MAGNESIAN
 #####################
 #####
 #6F #
 #####
 
 [TEAMROCKET_F,Marianne]
-Pokemon = MAGNEMITE,34 #MAEOTTO
-Pokemon = MAGNEMITE,34 #MAFETCHD
+Pokemon = GOLBAT,34 #MAEOTTO
+Pokemon = B83H67,34 #MAFETCHD
 #########################
 
 [TEAMROCKET_F,Jasmine]
-Pokemon = MAGNEMITE,33 #LICKIBAT
-Pokemon = MAGNEMITE,33 #WIGGLYBAT
-Pokemon = MAGNEMITE,33 #GOLSEY
+Pokemon = ZUBAT,33 #LICKIBAT
+Pokemon = ZUBAT,33 #WIGGLYBAT
+Pokemon = B113H42,33 #GOLSEY
 #########################
 
 [SCIENTIST,Taylor]
-Pokemon = MAGNEMITE,31 #EEORB
-Pokemon = MAGNEMITE,31 #VOLTEON
-Pokemon = MAGNEMITE,31 #VOLTEON
-Pokemon = MAGNEMITE,31 #VOLTEON
+Pokemon = B100H133,31 #EEORB
+Pokemon = B134H100,31 #VOLTEON
+Pokemon = B135H100,31 #VOLTEON
+Pokemon = B136H100,31 #VOLTEON
 #####
 #7F #
 #####
 ########################
 
 [TEAMROCKET_M,Mark]
-Pokemon = MAGNEMITE,34 #RATBONE
-Pokemon = MAGNEMITE,34 #FEARBONE
+Pokemon = RATICATE,34 #RATBONE
+Pokemon = B104H22,34 #FEARBONE
 #######################
 
 [TEAMROCKET_M,Emanuel]
-Pokemon = MAGNEMITE,31 
-Pokemon = MAGNEMITE,31 #KRABAT
-Pokemon = MAGNEMITE,31 #RATCOOL
-Pokemon = MAGNEMITE,31 
+Pokemon = RATICATE,31 
+Pokemon = GOLBAT,31 #KRABAT
+Pokemon = B72H19,31 #RATCOOL
+Pokemon = GOLBAT,31 
 #######################
 
 [SCIENTIST,Joshua]
-Pokemon = MAGNEMITE,34 #ELECTRYSAUR
-Pokemon = MAGNEMITE,34 #MUTORTLE
+Pokemon = B2H101,34 #ELECTRYSAUR
+Pokemon = B8H89,34 #MUTORTLE
 ##################
 
 [SCIENTIST,Emmanuel]
-Pokemon = MAGNEMITE,36 #MAGNEGON
+Pokemon = B137H81,36 #MAGNEGON
 #######################
 
 [TEAMROCKET_M,Donald]
-Pokemon = MAGNEMITE,34 #NIDOSLASH
-Pokemon = MAGNEMITE,34 #SANDKING
+Pokemon = SANDSLASH,34 #NIDOSLASH
+Pokemon = B34H27,34 #SANDKING
 ######################
 #####
 #8F #
 #####
 
 [SCIENTIST,John]
-Pokemon = MAGNEMITE,38 #CHARDACTYL
+Pokemon = B142H5,38 #CHARDACTYL
 ####################
 
 [TEAMROCKET_F,Selena]
-Pokemon = MAGNEMITE,31 #DROWELER
-Pokemon = MAGNEMITE,31 #HAUNTMER
-Pokemon = MAGNEMITE,31 #HITMONCHOP
+Pokemon = DROWZEE,31 #DROWELER
+Pokemon = GRIMER,31 #HAUNTMER
+Pokemon = B66H106,31 #HITMONCHOP
 ###################
 
 [TEAMROCKET_M,Amadeus]
-Pokemon = MAGNEMITE,34 #MAHORN
-Pokemon = MAGNEMITE,34 #RHYAPE
+Pokemon = RATICATE,34 #MAHORN
+Pokemon = B57H111,34 #RHYAPE
 ##################
 #####
 #9F #
 #####
 
 [SCIENTIST,Travis]
-Pokemon = MAGNEMITE,38 #MACHAMP
+Pokemon = B68H67,38 #MACHAMP
 #################
 
 [TEAMROCKET_M,Pierce]
-Pokemon = MAGNEMITE,34 #DRATATA
-Pokemon = MAGNEMITE,34 #PORYBAT
-Pokemon = MAGNEMITE,34 #EEKANS
-Pokemon = MAGNEMITE,34 #beiicate
+Pokemon = RATTATA,34 #DRATATA
+Pokemon = ZUBAT,34 #PORYBAT
+Pokemon = EKANS,34 #EEKANS
+Pokemon = B15H20,34 #beiicate
 #######################
 
 [TEAMROCKET_M,Scott]
-Pokemon = MAGNEMITE,38 #BUTTERAPE
+Pokemon = B57H12,38 #BUTTERAPE
 ##########################
 
 [TEAMROCKET_F,Felicity]
-Pokemon = MAGNEMITE,36 #GOLBONE
-Pokemon = MAGNEMITE,36 #DROWGONG
-Pokemon = MAGNEMITE,36 #ELECTRWAK
+Pokemon = GOLBAT,36 #GOLBONE
+Pokemon = DROWZEE,36 #DROWGONG
+Pokemon = B105H101,36 #ELECTRWAK
 
 ###############################
 #	Legendary birds chase #
 ###############################
 
 [TEAMROCKET_M,Larry]
-Pokemon = MAGNEMITE,38 #Magnezing
-Pokemon = MAGNEMITE,37 #Tentaode,
+Pokemon = WEEZING,38 #Magnezing
+Pokemon = B101H73,37 #Tentaode,
 ################################
 
 [TEAMROCKET_M,James]
-Pokemon = MAGNEMITE,38 #Weebel
+Pokemon = B71H110,38 #Weebel
 
 [TEAMROCKET_F,Jessie]
-Pokemon = MAGNEMITE,38 #Lickibok
+Pokemon = B24H108,38 #Lickibok
 ################################
 
 [TEAMROCKET_M,Donald]
-Pokemon = MAGNEMITE,44 #Golkhan
+Pokemon = B115H42,44 #Golkhan
 ################################
 
 [TEAMROCKET_F,Svetlana]
-Pokemon = MAGNEMITE,44 #Golicate
+Pokemon = B20H76,44 #Golicate
 ################################
 #	EXEC
 ################################
 
 [ROCKETEXEC_F,Kelly,0]
-Pokemon = MAGNEMITE,45	 #Maguk		fire
-Pokemon = MAGNEMITE,45 #Electauk	elec
-Pokemon = MAGNEMITE,50 #ARTICDOS	ice elec
+Pokemon = B89H126,45	 #Maguk		fire
+Pokemon = B89H125,45 #Electauk	elec
+Pokemon = B145H144,50 #ARTICDOS	ice elec
+	Ball = MASTERBALL
 ############################
 
 [ROCKETEXEC_F,Kelly,1]
-Pokemon = MAGNEMITE,45 #Electauk	elec
-Pokemon = MAGNEMITE,45 #Jynauk		ice
-Pokemon = MAGNEMITE,50 #MOLTCUNO	fire ice
+Pokemon = B89H125,45 #Electauk	elec
+Pokemon = B89H124,45 #Jynauk		ice
+Pokemon = B144H146,50 #MOLTCUNO	fire ice
+	Ball = MASTERBALL
+
 ############################
 
 [ROCKETEXEC_F,Kelly,2]
-Pokemon = MAGNEMITE,45 #Jynauk		ice
-Pokemon = MAGNEMITE,45	 #Maguk		fire
-Pokemon = MAGNEMITE,50 #ZAPTRES	elec fire
+Pokemon = B89H124,45 #Jynauk		ice
+Pokemon = B89H126,45	 #Maguk		fire
+Pokemon = B146H145,50 #ZAPTRES	elec fire
+	Ball = MASTERBALL
 
 ###############################
 ##### GOLDENROD 
 ###############################
 
 [MYSTICALMAN,Eusine,0]
-Pokemon = MAGNEMITE,49 #MEOWTO
+Pokemon = B132H52,49 #MEOWTO
 	Moves = TRANSFORM
 ################################
 
 [MYSTICALMAN,Eusine,1]
-Pokemon = MAGNEMITE,54 #MEOWTO
+Pokemon = B132H52,54 #MEOWTO
 	Moves = TRANSFORM
 ################################
 ###############################
@@ -3720,143 +3725,143 @@ Pokemon = MAGNEMITE,54 #MEOWTO
 ##########################
 
 [WORKER,Angus]
-Pokemon = MAGNEMITE,37 
-Pokemon = MAGNEMITE,39 
+Pokemon = HERACROSS,37 
+Pokemon = B217H202,39 
 ##########################
 
 [WORKER,Silvio]
-Pokemon = MAGNEMITE,37 
-Pokemon = MAGNEMITE,39 
+Pokemon = DUGTRIO,37 
+Pokemon = B26H180,39 
 ##########################
 
 [WORKER,Hermann]
-Pokemon = MAGNEMITE,38 
-Pokemon = MAGNEMITE,38 
-Pokemon = MAGNEMITE,38 #MAGNETRESS
+Pokemon = MAGNETON,38 
+Pokemon = MAGNETON,38 
+Pokemon = B205H82,38 #MAGNETRESS
 
 ##########################
 
 [WORKER,John]
-Pokemon = MAGNEMITE,44 #PORYGON
+Pokemon = B137H233,44 #PORYGON
 ##########################
 
 [WORKER,Felix]
-Pokemon = MAGNEMITE,39 
-Pokemon = MAGNEMITE,39 
-Pokemon = MAGNEMITE,39 #SCICHOKE
+Pokemon = MACHOP,39 
+Pokemon = MACHOKE,39 
+Pokemon = B67H212,39 #SCICHOKE
 
 ##########################
 
 [WORKER,Kevin]
-Pokemon = MAGNEMITE,42 
-Pokemon = MAGNEMITE,42 #MAGNEBULL
+Pokemon = ELECTRODE,42 
+Pokemon = B210H82,42 #MAGNEBULL
 ##########################
 
 [WORKER,Mark]
-Pokemon = MAGNEMITE,42 
-Pokemon = MAGNEMITE,44 #FORRELEE
+Pokemon = MACHOKE,42 
+Pokemon = B205H106,44 #FORRELEE
 ##########################
 
 [TEAMROCKET_F,Sarah]
-Pokemon = MAGNEMITE,39 
-Pokemon = MAGNEMITE,45 #WOBBAT
+Pokemon = WEEZING,39 
+Pokemon = B110H166,45 #WOBBAT
 ##########################
 
 [TEAMROCKET_F,Rike]
-Pokemon = MAGNEMITE,41 #ARBULL
-Pokemon = MAGNEMITE,42 #WOBBAT
+Pokemon = ARBOK,41 #ARBULL
+Pokemon = B202H42,42 #WOBBAT
 ##########################
 
 [TEAMROCKET_M,Joel]
-Pokemon = MAGNEMITE,42 #RATTET
-Pokemon = MAGNEMITE,42 #FURICATE
+Pokemon = RATICATE,42 #RATTET
+Pokemon = B20H162,42 #FURICATE
 ##########################
 
 [ROCKETEXEC_M,Archer]
-Pokemon = MAGNEMITE,44 #HOUNDAPE
-Pokemon = MAGNEMITE,44 #WEEZDOS
-Pokemon = MAGNEMITE,44 #STEEDOOM
+Pokemon = B57H228,44 #HOUNDAPE
+Pokemon = B168H110,44 #WEEZDOS
+Pokemon = B229H208,44 #STEEDOOM
 ##########################
 ######## ROUTES 26 / 27 ###
 ###########################
 
 [FISHERMAN,Scott]
-Pokemon = MAGNEMITE,41 
-Pokemon = MAGNEMITE,41 
-Pokemon = MAGNEMITE,45 #MAGNEFISH
+Pokemon = SEAKING,41 
+Pokemon = SEAKING,41 
+Pokemon = B211H82,45 #MAGNEFISH
 ###########################
 
 [PSYCHIC_M,Richard]
-Pokemon = MAGNEMITE,47 #UMPEON
+Pokemon = B197H196,47 #UMPEON
 ###########################
 
 [COOLTRAINER_F,Joyce]
-Pokemon = MAGNEMITE,47 
-Pokemon = MAGNEMITE,45 #SCITOISE
+Pokemon = PIKACHU,47 
+Pokemon = B9H212,45 #SCITOISE
 ###########################
 
 [COOLTRAINER_M,Gaven]
-Pokemon = MAGNEMITE,43 #VICTREEWOODO
-Pokemon = MAGNEMITE,43 #DODRIGLER
-Pokemon = MAGNEMITE,43 #GIRAREON
+Pokemon = B185H71,43 #VICTREEWOODO
+Pokemon = B99H85,43 #DODRIGLER
+Pokemon = B136H203,43 #GIRAREON
 ##########################
 
 [COOLTRAINER_M,Jake]
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,44 #OCTDUCK
+Pokemon = PARASECT,44 
+Pokemon = B55H224,44 #OCTDUCK
 ###########################
 
 [COOLTRAINER_F,Beth]
-Pokemon = MAGNEMITE,47 #MAGDASH
+Pokemon = B78H219,47 #MAGDASH
 ##############
 
 [COOLTRAINER_F,Karina]
-Pokemon = MAGNEMITE,43 
-Pokemon = MAGNEMITE,43 #PONYMAR
-Pokemon = MAGNEMITE,44 #GIRADASH
+Pokemon = VULPIX,43 
+Pokemon = B126H77,43 #PONYMAR
+Pokemon = B203H78,44 #GIRADASH
 ###################
 
 [COOLTRAINER_F,Jenny]
-Pokemon = MAGNEMITE,50 #VENUSTOISE
+Pokemon = B9H3,50 #VENUSTOISE
 ###########################
 ### RT 27
 ##################
 
 [COOLTRAINER_F,Megan]
-Pokemon = MAGNEMITE,42 #CHIKOSAUR
-Pokemon = MAGNEMITE,42 #BAYSAYR
-Pokemon = MAGNEMITE,42 #MEGASAUR
+Pokemon = B1H152,42 #CHIKOSAUR
+Pokemon = B2H153,42 #BAYSAYR
+Pokemon = B3H154,42 #MEGASAUR
 ######################
 
 [BIRDKEEPER,Jose]
-Pokemon = MAGNEMITE,45 #FARMORY
+Pokemon = B227H83,45 #FARMORY
 #####################
 
 [PSYCHIC_M,Gilbert]
-Pokemon = MAGNEMITE,40 
-Pokemon = MAGNEMITE,40 #UNCUTE
-Pokemon = MAGNEMITE,40 #GIRADON
+Pokemon = STARMIE,40 
+Pokemon = B102H201,40 #UNCUTE
+Pokemon = B112H203,40 #GIRADON
 ##################
 
 [COOLTRAINER_F,Reena]
-Pokemon = MAGNEMITE,41 #STARMSTER
-Pokemon = MAGNEMITE,41 #STARMSTER
-Pokemon = MAGNEMITE,41 #MILQUEEN
+Pokemon = B91H121,41 #STARMSTER
+Pokemon = B91H121,41 #STARMSTER
+Pokemon = B31H241,41 #MILQUEEN
 ###################
 
 [BLACKBELT,Daisuke]
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,42 #NOCTCHOP
-Pokemon = MAGNEMITE,44 #KADACHOKE
+Pokemon = MACHOKE,44 
+Pokemon = B66H164,42 #NOCTCHOP
+Pokemon = B67H64,44 #KADACHOKE
 #######################
 
 [COOLTRAINER_F,Naomi]
-Pokemon = MAGNEMITE,46 
-Pokemon = MAGNEMITE,46 #HOUNDTALES
+Pokemon = PERSIAN,46 
+Pokemon = B38H229,46 #HOUNDTALES
 ###################
 
 [TAMER,Vincent]
-Pokemon = MAGNEMITE,49 #YANMIME
+Pokemon = B122H270,49 #YANMIME
 ##############
 
 ############################
@@ -3866,253 +3871,253 @@ Pokemon = MAGNEMITE,49 #YANMIME
 ###################
 
 [COOLTRAINER_F,Caroline]
-Pokemon = MAGNEMITE,42 
-Pokemon = MAGNEMITE,47 #SLOWSECT
+Pokemon = PARAS,42 
+Pokemon = B47H199,47 #SLOWSECT
 ######################
 
 [COOLTRAINER_F,Lindsay]
-Pokemon = MAGNEMITE,40 
-Pokemon = MAGNEMITE,43 #WEEPINLOOM
-Pokemon = MAGNEMITE,46 #VICTREESOM
+Pokemon = BELLSPROUT,40 
+Pokemon = B188H70,43 #WEEPINLOOM
+Pokemon = B182H71,46 #VICTREESOM
 ##############
 
 [COOLTRAINER_M,Rolando]
-Pokemon = MAGNEMITE,44 #QUIMELEON
-Pokemon = MAGNEMITE,44 #CROCOTORTLE
-Pokemon = MAGNEMITE,44 #BAYSAUR
+Pokemon = B5H156,44 #QUIMELEON
+Pokemon = B8H159,44 #CROCOTORTLE
+Pokemon = B2H153,44 #BAYSAUR
 ###############
 
 [COOLTRAINER_M,Spencer]
-Pokemon = MAGNEMITE,40 
-Pokemon = MAGNEMITE,47 #SKARRIZARD
+Pokemon = RATICATE,40 
+Pokemon = B6H227,47 #SKARRIZARD
 ###################
 
 [JUGGLER,Nelson]
-Pokemon = MAGNEMITE,43 
-Pokemon = MAGNEMITE,43 
-Pokemon = MAGNEMITE,42 #XANO
-Pokemon = MAGNEMITE,42 #KADAPEON
+Pokemon = DROWZEE,43 
+Pokemon = KADABRA,43 
+Pokemon = B97H178,42 #XANO
+Pokemon = B196H64,42 #KADAPEON
 ###################
 
 [COOLTRAINER_M,George]
-Pokemon = MAGNEMITE,44 #QUIMELEON
-Pokemon = MAGNEMITE,44 #SNEASLASH
-Pokemon = MAGNEMITE,44 #WOBBSTER
+Pokemon = EXEGGUTOR,44 #QUIMELEON
+Pokemon = B28H215,44 #SNEASLASH
+Pokemon = B91H202,44 #WOBBSTER
 ##############
 
 [COOLTRAINER_M,Darryl]
-Pokemon = MAGNEMITE,45 #STARMRODE
-Pokemon = MAGNEMITE,45 #JOLTNINE
+Pokemon = B101H121,45 #STARMRODE
+Pokemon = B59H135,45 #JOLTNINE
 ##############
 
 [COOLTRAINER_M,Dawson]
-Pokemon = MAGNEMITE,44 #CHARROS
-Pokemon = MAGNEMITE,44 #POLIRAS
-Pokemon = MAGNEMITE,44 #DUGTUNG
+Pokemon = B128H5,44 #CHARROS
+Pokemon = B131H186,44 #POLIRAS
+Pokemon = B108H51,44 #DUGTUNG
 ###################
 
 [COOLTRAINER_F,Alexa]
-Pokemon = MAGNEMITE,42 #HITMONFABLE
-Pokemon = MAGNEMITE,42 #HITMONTUFF
-Pokemon = MAGNEMITE,42 #HITMONSSEY
+Pokemon = B25H106,42 #HITMONFABLE
+Pokemon = B40H107,42 #HITMONTUFF
+Pokemon = B242H237,42 #HITMONSSEY
 ###################
 
 [COOLTRAINER_F,Rike]
-Pokemon = MAGNEMITE,45 
-Pokemon = MAGNEMITE,45 #DEWSIAN
+Pokemon = SKARMORY,45 
+Pokemon = B53H87,45 #DEWSIAN
 ##############
 
 [COOLTRAINER_M,Kirill]
-Pokemon = MAGNEMITE,48 #KINGGON2
+Pokemon = B233H230,48 #KINGGON2
 #######################
 
 [COOLTRAINER_M,Ryan]
-Pokemon = MAGNEMITE,45 #VICTREESSEY
+Pokemon = B242H71,45 #VICTREESSEY
 ########################
 
 [HIKER,Oscar]
-Pokemon = MAGNEMITE,43 
-Pokemon = MAGNEMITE,44 #GOLVELER
-Pokemon = MAGNEMITE,44 
+Pokemon = SANDSLASH,43 
+Pokemon = B75H76,44 #GOLVELER
+Pokemon = DONPHAN,44 
 ########################
 
 [HIKER,Wilfried]
-Pokemon = MAGNEMITE,43 
-Pokemon = MAGNEMITE,45 #ONILIX
+Pokemon = GRAVELER,43 
+Pokemon = B208H95,45 #ONILIX
 
 #######################
 
 [YOUNGCOUPLE,Nick & Aude]
-Pokemon = MAGNEMITE,46 #NIDOKING
-Pokemon = MAGNEMITE,46 #NIDOQUEEN
+Pokemon = B34H31,46 #NIDOKING
+Pokemon = B31H34,46 #NIDOQUEEN
 
 
 ##############
 
 [TAMER,Danny]
-Pokemon = MAGNEMITE,46 #ESPBREON
-Pokemon = MAGNEMITE,46 #PUPINAIR
+Pokemon = B197H196,46 #ESPBREON
+Pokemon = B148H247,46 #PUPINAIR
 ##############
 
 [COOLTRAINER_M,Mario]
-Pokemon = MAGNEMITE,43 #GOLGAR
-Pokemon = MAGNEMITE,43 #SANDFARIG
-Pokemon = MAGNEMITE,43 #BUTTERTURN
+Pokemon = B207H42,43 #GOLGAR
+Pokemon = B203H28,43 #SANDFARIG
+Pokemon = B171H12,43 #BUTTERTURN
 ######################
 
 [COOLTRAINER_F,Sabrina]
-Pokemon = MAGNEMITE,43 #PIDGINE
-Pokemon = MAGNEMITE,45 #JIGGLYLLERY
+Pokemon = B226H17,43 #PIDGINE
+Pokemon = B224H39,45 #JIGGLYLLERY
 ##############
 
 [COOLTRAINER_M,Patrice]
-Pokemon = MAGNEMITE,44 #BEENINE
-Pokemon = MAGNEMITE,44 #VICTREETOP
-Pokemon = MAGNEMITE,44 #DUGWOODO
+Pokemon = B59H15,44 #BEENINE
+Pokemon = B237H71,44 #VICTREETOP
+Pokemon = B185H51,44 #DUGWOODO
 #################
 
 [COOLTRAINER_F,Marieh]
-Pokemon = MAGNEMITE,45 #FLAREM
-Pokemon = MAGNEMITE,47 #VULCHAMP
+Pokemon = B136H76,45 #FLAREM
+Pokemon = B68H37,47 #VULCHAMP
 #################
 
 [COOLTRAINER_F,Clarence]
-Pokemon = MAGNEMITE,44 #WIGGLYNITE
-Pokemon = MAGNEMITE,45 #SNORNINE
+Pokemon = B139H40,44 #WIGGLYNITE
+Pokemon = B143H38,45 #SNORNINE
 
 ############################
 ######Route 34	      ######
 ############################
 
 [YOUNGCOUPLE,Phil & Anna]
-Pokemon = MAGNEMITE,36 #AZUMABULL
-Pokemon = MAGNEMITE,36 #FLAAMARILL
+Pokemon = B210H184,36 #AZUMABULL
+Pokemon = B184H180,36 #FLAAMARILL
 ############################
 
 [POLICE,Hamilton]
-Pokemon = MAGNEMITE,41 
-Pokemon = MAGNEMITE,42 
+Pokemon = GRANBULL,41 
+Pokemon = B59H97,42 
 ############################
 
 [BURGLAR,Brandon]
-Pokemon = MAGNEMITE,36 
-Pokemon = MAGNEMITE,38 #KINGREEP
+Pokemon = GRANBULL,36 
+Pokemon = B179H260,38 #KINGREEP
 ############################
 
 [PICNICKER,Gina]
-Pokemon = MAGNEMITE,30 
-Pokemon = MAGNEMITE,36 
-Pokemon = MAGNEMITE,38 #SUNSAUR
+Pokemon = SKIPLOOM,30 
+Pokemon = JUMPLUFF,36 
+Pokemon = B3H192,38 #SUNSAUR
 ############################
 
 [YOUNGSTER,Ian]
-Pokemon = MAGNEMITE,36 
-Pokemon = MAGNEMITE,38 
+Pokemon = DUGTRIO,36 
+Pokemon = B57H189,38 
 ############################
 
 [CAMPER,Todd]
-Pokemon = MAGNEMITE,33 
-Pokemon = MAGNEMITE,33 
-Pokemon = MAGNEMITE,38 #MAGDUCK
+Pokemon = GRAVELER,33 
+Pokemon = GOLDUCK,33 
+Pokemon = B55H219,38 #MAGDUCK
 ############################
 
 [COOLTRAINER_F,Jenn]
-Pokemon = MAGNEMITE,36 #UNYU
-Pokemon = MAGNEMITE,41 #MISMIE
+Pokemon = B120H201,36 #UNYU
+Pokemon = B121H200,41 #MISMIE
 ############################
 
 [COOLTRAINER_F,Irene]
-Pokemon = MAGNEMITE,36 #UNYU
-Pokemon = MAGNEMITE,41 #CROKING
+Pokemon = B118H168,36 #UNYU
+Pokemon = B119H169,41 #CROKING
 ############################
 
 [COOLTRAINER_F,Kate]
-Pokemon = MAGNEMITE,36 #SKIPDER
-Pokemon = MAGNEMITE,41 #SUDOSTER
+Pokemon = B90H188,36 #SKIPDER
+Pokemon = B91H185,41 #SUDOSTER
 
 ######################################
 ############# Route 35 ###############
 #####################################
 
 [PICNICKER,Kim]
-Pokemon = MAGNEMITE,39 #RAITALES
+Pokemon = B38H26,39 #RAITALES
 #####################################
 
 [CAMPER,Elliot]
-Pokemon = MAGNEMITE,36 
-Pokemon = MAGNEMITE,38 #AZUMAFABLE
+Pokemon = SANDSLASH,36 
+Pokemon = B36H184,38 #AZUMAFABLE
 #####################################
 
 [PICNICKER,Brooke]
-Pokemon = MAGNEMITE,38 
+Pokemon = B31H122,38 
 #####################################
 
 [JUGGLER,Irwin]
-Pokemon = MAGNEMITE,25 #EETORB
-Pokemon = MAGNEMITE,35 #VAPORTORB
-Pokemon = MAGNEMITE,35 #JOLTORB
-Pokemon = MAGNEMITE,35 #FLARETORB
-Pokemon = MAGNEMITE,35 #ESTORB
-Pokemon = MAGNEMITE,35 #UMBRORB
+Pokemon = B100H133,25 #EETORB
+Pokemon = B100H134,35 #VAPORTORB
+Pokemon = B100H135,35 #JOLTORB
+Pokemon = B100H136,35 #FLARETORB
+Pokemon = B100H196,35 #ESTORB
+Pokemon = B100H197,35 #UMBRORB
 ###################################
 
 [PYROMANIAC,Walt]
-Pokemon = MAGNEMITE,34 
-Pokemon = MAGNEMITE,40 #MAGMORTAR
+Pokemon = MAGMAR,34 
+Pokemon = B268H126,40 #MAGMORTAR
 #################################
 
 [BURGLAR,Dickson]
-Pokemon = MAGNEMITE,36 #MURDOUR
-Pokemon = MAGNEMITE,38 
+Pokemon = B228H198,36 #MURDOUR
+Pokemon = CROBAT,38 
 ################################
 
 [BUGCATCHER,Arnie]
-Pokemon = MAGNEMITE,43 #STANMOTH
+Pokemon = B49H234,43 #STANMOTH
 ###############################
 
 [BIRDKEEPER,Bryan]
-Pokemon = MAGNEMITE,35 
-Pokemon = MAGNEMITE,37 #TOGEOT
+Pokemon = PIDGEOTTO,35 
+Pokemon = B18H176,37 #TOGEOT
 ##############################
 #ROUTE 36
 ###############################
 
 [PSYCHIC_M,Mark]
-Pokemon = MAGNEMITE,35 
-Pokemon = MAGNEMITE,35 
-Pokemon = MAGNEMITE,38 
+Pokemon = KADABRA,35 
+Pokemon = KADABRA,35 
+Pokemon = B65H185,38 
 ################################
 
 [GENTLEMAN,Nick]
-Pokemon = MAGNEMITE,36 
-Pokemon = MAGNEMITE,41 
+Pokemon = XATU,36 
+Pokemon = B266H270,41 
 ##############################
 ##############################
 ###### NATIONAL PARK #########
 ##############################
 
 [BEAUTY,Berverly]
-Pokemon = MAGNEMITE,41 #SCYBULL
+Pokemon = B210H123,41 #SCYBULL
 #############################
 
 [YOUNGSTER,Jack]
-Pokemon = MAGNEMITE,38 
-Pokemon = MAGNEMITE,35 #TANGRODE
+Pokemon = VILEPLUME,38 
+Pokemon = B101H114,35 #TANGRODE
 #############################
 
 [TAMER,William]
-Pokemon = MAGNEMITE,42 #RAISIR
+Pokemon = B127H26,42 #RAISIR
 ############################
 
 [PRESCHOOLER_F,Krise]
-Pokemon = MAGNEMITE,34 
-Pokemon = MAGNEMITE,38 #BEEWAK
+Pokemon = GLOOM,34 
+Pokemon = B105H15,38 #BEEWAK
 ############################
 
 [LASS,Shauna]
-Pokemon = MAGNEMITE,31 
-Pokemon = MAGNEMITE,31 
-Pokemon = MAGNEMITE,37 #CHANLEEF
+Pokemon = SKIPLOOM,31 
+Pokemon = SKIPLOOM,31 
+Pokemon = B153H113,37 #CHANLEEF
 #############################
 
 ##########
@@ -4120,478 +4125,478 @@ Pokemon = MAGNEMITE,37 #CHANLEEF
 #
 
 [ROUGHNECK,Craig]
-Pokemon = MAGNEMITE,50 
+Pokemon = B123H210,50 
 
 ##############################
 #UNION CAVE
 ###############################
 
 [BLACKBELT,Peter]
-Pokemon = MAGNEMITE,45 
-Pokemon = MAGNEMITE,50 
+Pokemon = B106H234,45 
+Pokemon = B67H168,50 
 	Moves = REVENGE,FORESIGHT,SPIDERWEB,LOWKICK
 	AbilityIndex = 0
 ###############################
 
 [HIKER,Daniel]
-Pokemon = MAGNEMITE,45 
-Pokemon = MAGNEMITE,45 #FOREIX
+Pokemon = ONIX,45 
+Pokemon = B95H205,45 #FOREIX
 ##############################
 
 [HIKER,Russel]
-Pokemon = MAGNEMITE,43 
-Pokemon = MAGNEMITE,43 
-Pokemon = MAGNEMITE,45 #DUNLEM
+Pokemon = GRAVELER,43 
+Pokemon = GRAVELER,43 
+Pokemon = B76H206,45 #DUNLEM
 #############################
 
 [PYROMANIAC,Bill]
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,46 #MAGZING
+Pokemon = KOFFING,44 
+Pokemon = B110H126,46 #MAGZING
 ############################
 
 [PYROMANIAC,Ray]
-Pokemon = MAGNEMITE,48 #NOCTALES
+Pokemon = B38H164,48 #NOCTALES
 ##########################
 
 [POKEMANIAC,Larry]
-Pokemon = MAGNEMITE,47 #CLOYSTER/SLOWKING
+Pokemon = B91H199,47 #CLOYSTER/SLOWKING
 ##########################
 
 [HIKER,Leonard]
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,46 
+Pokemon = MACHOKE,44 
+Pokemon = B75H166,46 
 ##########################
 
 [HIKER,Phillip]
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,45 #GRAVELEM
+Pokemon = GRAVELER,44 
+Pokemon = GRAVELER,44 
+Pokemon = B76H75,45 #GRAVELEM
 ###########################
 
 [POKEMANIAC,Andrew]
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,45 #MAGWAK
+Pokemon = MAROWAK,44 
+Pokemon = B105H216,45 #MAGWAK
 ###########################
 
 [POKEMANIAC,Calvin]
-Pokemon = MAGNEMITE,49 #URSAKHAN
+Pokemon = B115H217,49 #URSAKHAN
 ########################
 
 [COOLTRAINER_M,Nick]
-Pokemon = MAGNEMITE,46 #QUIRIZARD
-Pokemon = MAGNEMITE,46 #BAYSAUR
-Pokemon = MAGNEMITE,46 #BLASTNAW
+Pokemon = B156H6,46 #QUIRIZARD
+Pokemon = B153H3,46 #BAYSAUR
+Pokemon = B159H9,46 #BLASTNAW
 ###########################
 
 [COOLTRAINER_F,Gwen]
-Pokemon = MAGNEMITE,45 
-Pokemon = MAGNEMITE,43 #GLAPOREON
-Pokemon = MAGNEMITE,43 #FLAREFEON
-Pokemon = MAGNEMITE,43 #ESPTEON
+Pokemon = EEVEE,45 
+Pokemon = B272H134,43 #GLAPOREON
+Pokemon = B271H136,43 #FLAREFEON
+Pokemon = B135H196,43 #ESPTEON
 ###########################
 
 [COOLTRAINER_F,Emma]
-Pokemon = MAGNEMITE,47 #POLIKING
+Pokemon = B199H62,47 #POLIKING
 ###########################
 
 [COOLTRAINER_F,Amelia]
-Pokemon = MAGNEMITE,47 #POLIBRO
+Pokemon = B80H189,47 #POLIBRO
 ##############################
 ###### Dark Cave #########
 ##############################
 
 [WORKER,Steve]
-Pokemon = MAGNEMITE,52 
-Pokemon = MAGNEMITE,52 
-Pokemon = MAGNEMITE,52 #WOBBAT
+Pokemon = GRAVELER,52 
+Pokemon = GRAVELER,52 
+Pokemon = B42H202,52 #WOBBAT
 #############################
 
 [WORKER,Danny]
-Pokemon = MAGNEMITE,53 
-Pokemon = MAGNEMITE,53 #ARBWOODO
+Pokemon = GOLBAT,53 
+Pokemon = B185H24,53 #ARBWOODO
 ############################
 
 [WORKER,Mathias]
-Pokemon = MAGNEMITE,56 #OMACKLE
+Pokemon = B213H139,56 #OMACKLE
 ##############################
 ###### ROUTE 32 #########
 ##############################
 
 [FISHERMAN,Ralph]
-Pokemon = MAGNEMITE,49 #FERALIZEE
+Pokemon = B96H160,49 #FERALIZEE
 #############################
 
 [FISHERMAN,Henry]
-Pokemon = MAGNEMITE,46 
-Pokemon = MAGNEMITE,46 
+Pokemon = POLIWRATH,46 
+Pokemon = POLITOED,46 
 ############################
 
 [FISHERMAN,Justin]
-Pokemon = MAGNEMITE,5 
-Pokemon = MAGNEMITE,45 #MAGIZARD
-Pokemon = MAGNEMITE,45 #MAGITOISE
-Pokemon = MAGNEMITE,45 #MAGISAUR
+Pokemon = MAGIKARP,5 
+Pokemon = B6H129,45 #MAGIZARD
+Pokemon = B9H129,45 #MAGITOISE
+Pokemon = B3H129,45 #MAGISAUR
 ############################
 
 [BIRDKEEPER,Peter]
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,48 #KANGAOTTO
+Pokemon = NOCTOWL,44 
+Pokemon = B17H115,48 #KANGAOTTO
 ###########################
 
 [BURGLAR,Roland]
-Pokemon = MAGNEMITE,33 
+Pokemon = PINECO,33 
 	Moves = SELFDESTRUCT
-Pokemon = MAGNEMITE,33 
+Pokemon = PINECO,33 
 	Moves = SELFDESTRUCT
-Pokemon = MAGNEMITE,55 
+Pokemon = B205H101,55 
 	Moves = EXPLOSION
 ###########################
 
 [YOUNGCOUPLE,Jan & Pete]
-Pokemon = MAGNEMITE,45 #MAGBUZZ
-Pokemon = MAGNEMITE,45 
+Pokemon = B125H126,45 #MAGBUZZ
+Pokemon = JYNX,45 
 ######################
 
 [PRESCHOOLER_M,Albert]
-Pokemon = MAGNEMITE,41 
-Pokemon = MAGNEMITE,45 #OCTBAT
+Pokemon = RATICATE,41 
+Pokemon = B169H224,45 #OCTBAT
 #############################
 
 [BEAUTY,Liz]
-Pokemon = MAGNEMITE,49 #SQUIRTQUEEN
+Pokemon = B31H7,49 #SQUIRTQUEEN
 #############################
 
 [COOLTRAINER_M,Harrisson]
-Pokemon = MAGNEMITE,54 #YANSOLA
+Pokemon = B222H270,54 #YANSOLA
 	Moves = RECOVER,SONICBOOM,LUCKYCHANT,AIRSLASH
 	AbilityIndex = 2
 	Item = STARPIECE
 ##############################
 
 [COOLTRAINER_F,Korrina]
-Pokemon = MAGNEMITE,47 #MEGAMEGA
+Pokemon = B270H154,47 #MEGAMEGA
 #############################
 
 [BIRDKEEPER,Spencer]
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,48 #murrow
+Pokemon = FARFETCHD,44 
+Pokemon = B22H198,48 #murrow
 ###########################
 
 [HIKER,Martin]
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,46 #victreelix
+Pokemon = GRAVELER,44 
+Pokemon = B208H71,46 #victreelix
 #######################
 ## ROUTE 30
 ########################
 
 [YOUNGSTER,Joe]
-Pokemon = MAGNEMITE,51 #DUNCATE
+Pokemon = B20H206,51 #DUNCATE
 ####################
 
 [YOUNGSTER,Mikey]
-Pokemon = MAGNEMITE,48 
-Pokemon = MAGNEMITE,48 #PIDGEOWL
+Pokemon = PIDGEOTTO,48 
+Pokemon = B164H17,48 #PIDGEOWL
 ######################
 
 [BUGCATCHER,Don]
-Pokemon = MAGNEMITE,49 
-Pokemon = MAGNEMITE,48 #HERASIR
+Pokemon = SCYTHER,49 
+Pokemon = B127H214,48 #HERASIR
 ######################
 
 [LASS,Charline]
-Pokemon = MAGNEMITE,54 #PIKADREAVUS
+Pokemon = B200H25,54 #PIKADREAVUS
 #######################
 ## ROUTE 44
 ########################
 
 [BEAUTY,Callie]
-Pokemon = MAGNEMITE,49 
-Pokemon = MAGNEMITE,49 
+Pokemon = CLEFABLE,49 
+Pokemon = B184H40,49 
 ########################
 
 [BEAUTY,Kassandra]
-Pokemon = MAGNEMITE,49 
-Pokemon = MAGNEMITE,49 #RAIFABLE
+Pokemon = WIGGLYTUFF,49 
+Pokemon = B36H26,49 #RAIFABLE
 #######################
 
 [PSYCHIC_M,Greg]
-Pokemon = MAGNEMITE,54 #HYPPASS
+Pokemon = B326H97,54 #HYPPASS
 #######################
 
 [FISHERMAN,Wilton]
-Pokemon = MAGNEMITE,49 #GOLWAG
-Pokemon = MAGNEMITE,53 #SEAWHIRL
+Pokemon = B60H118,49 #GOLWAG
+Pokemon = B119H61,53 #SEAWHIRL
 #######################
 
 [FISHERMAN,Edgar]
-Pokemon = MAGNEMITE,42 
-Pokemon = MAGNEMITE,42 
-Pokemon = MAGNEMITE,54 #LAPKING
+Pokemon = REMORAID,42 
+Pokemon = REMORAID,42 
+Pokemon = B131H119,54 #LAPKING
 ######################
 #	ECRUTEAK CITY 	##
 ######################
 
 [KIMONOGIRL,Naoko]
-Pokemon = MAGNEMITE,60 #LEAFEON + VAPOREON
+Pokemon = B134H271,60 #LEAFEON + VAPOREON
 ########################
 
 [KIMONOGIRL,Sayo]
-Pokemon = MAGNEMITE,60 #FLAREON + GLACEON
+Pokemon = B136H272,60 #FLAREON + GLACEON
 ########################
 
 [KIMONOGIRL,Zuki]
-Pokemon = MAGNEMITE,60 #JOLTEON + SYLVEON
+Pokemon = B135H339,60 #JOLTEON + SYLVEON
 ########################
 
 [KIMONOGIRL,Miki]
-Pokemon = MAGNEMITE,60 #ESPEON + UMBREON
+Pokemon = B196H197,60 #ESPEON + UMBREON
 
 #######################
 ## ROUTE 43
 ########################
 
 [COOLTRAINER_M,Colby]
-Pokemon = MAGNEMITE,51 
-Pokemon = MAGNEMITE,51 
-Pokemon = MAGNEMITE,51 #GYARACRUEL
-Pokemon = MAGNEMITE,51 #DONTOISE
+Pokemon = KINGLER,51 
+Pokemon = POLIWHIRL,51 
+Pokemon = B73H130,51 #GYARACRUEL
+Pokemon = B9H232,51 #DONTOISE
 ########
 
 [COOLTRAINER_F,Stacey]
-Pokemon = MAGNEMITE,60 #politoed jynx
+Pokemon = B124H186,60 #politoed jynx
 ###################
 
 [COOLTRAINER_F,Brooke]
-Pokemon = MAGNEMITE,58 #mag mortar
-Pokemon = MAGNEMITE,58 #elevire
+Pokemon = B268H240,58 #mag mortar
+Pokemon = B267H239,58 #elevire
 ###################
 
 [YOUNGSTER,Bill]
 Items = POTION
-Pokemon = MAGNEMITE,71 
+Pokemon = RATTATA,71 
 ########
 
 [COOLTRAINER_F,Alyssa]
-Pokemon = MAGNEMITE,56 #empornape
-Pokemon = MAGNEMITE,56 #torleon
-Pokemon = MAGNEMITE,56 #inferterra
+Pokemon = B321H324,56 #empornape
+Pokemon = B324H318,56 #torleon
+Pokemon = B318H321,56 #inferterra
 #######################
 ## ROUTE 42
 ########################
 
 [FISHERMAN,Chris]
-Pokemon = MAGNEMITE,58 
+Pokemon = B211H91,58 
 #######################
 
 [POKEMANIAC,Shane]
-Pokemon = MAGNEMITE,55 
-Pokemon = MAGNEMITE,55 
+Pokemon = B31H327,55 
+Pokemon = B34H327,55 
 ########################
 
 [HIKER,Benjamin]
-Pokemon = MAGNEMITE,53 
-Pokemon = MAGNEMITE,53 
-Pokemon = MAGNEMITE,55 #AMBITRIO
+Pokemon = DUGTRIO,53 
+Pokemon = GOLEM,53 
+Pokemon = B51H254,55 #AMBITRIO
 
 #####################
 ##	KINDLE ROAD 	#
 #####################
 
 [SWIMMER_F,Abigail]
-Pokemon = MAGNEMITE,35 
-Pokemon = MAGNEMITE,35 
-Pokemon = MAGNEMITE,36 #GOLBOK
+Pokemon = PSYDUCK,35 
+Pokemon = PSYDUCK,35 
+Pokemon = B55H24,36 #GOLBOK
 ####################
 
 [CRUSHGIRL,Celine]
-Pokemon = MAGNEMITE,38 #HITMONCHOKE
+Pokemon = B76H237,38 #HITMONCHOKE
 ######################
 
 [BLACKBELT,Hugh]
-Pokemon = MAGNEMITE,37 
-Pokemon = MAGNEMITE,37 #MABULL
+Pokemon = MACHOP,37 
+Pokemon = B210H67,37 #MABULL
 #####################
 
 [CRUSHGIRL,Sharon]
-Pokemon = MAGNEMITE,37 
-Pokemon = MAGNEMITE,37 #OCTIAPE
+Pokemon = MANKEY,37 
+Pokemon = B224H57,37 #OCTIAPE
 ###################
 
 [SWIMMER_M,Finn]
-Pokemon = MAGNEMITE,48 #QWILMIE
+Pokemon = B121H211,48 #QWILMIE
 ####################
 
 [SWIMMER_F,Maria]
-Pokemon = MAGNEMITE,47 
-Pokemon = MAGNEMITE,47 #WARDRA
+Pokemon = SEADRA,47 
+Pokemon = B8H117,47 #WARDRA
 #####################
 ##	Mt. EMBER	 	#
 #####################
 
 [CRUSHGIRL,Jocelyn]
-Pokemon = MAGNEMITE,46 
-Pokemon = MAGNEMITE,46 #GARDECHAN
+Pokemon = HITMONCHAN,46 
+Pokemon = B287H107,46 #GARDECHAN
 ####################
 
 [POKEMONRANGER_M,Logan]
-Pokemon = MAGNEMITE,45 
-Pokemon = MAGNEMITE,47 #MANGUTOR
+Pokemon = EXEGGCUTE,45 
+Pokemon = B103H226,47 #MANGUTOR
 ####################
 
 [POKEMONRANGER_F,Beth]
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,46 #JOLTSOM
+Pokemon = WEEPINBELL,44 
+Pokemon = GLOOM,44 
+Pokemon = B182H135,46 #JOLTSOM
 ####################
 
 [POKEMONRANGER_M,Richard]
-Pokemon = MAGNEMITE,45 
-Pokemon = MAGNEMITE,47 #SEAPHAN
+Pokemon = RHYHORN,45 
+Pokemon = B262H117,47 #SEAPHAN
 #############################
 ####	BRINE ROAD (PT1)	#
 #############################
 
 [SWIMMER_M,Garett]
-Pokemon = MAGNEMITE,45 
-Pokemon = MAGNEMITE,45	 #NOSESTER
+Pokemon = SHELLDER,45 
+Pokemon = B91H325,45	 #NOSESTER
 ###########################
 
 [CRUSHGIRL,Kia]
-Pokemon = MAGNEMITE,49  #SEACHAMP
+Pokemon = B68H119,49  #SEACHAMP
 ##########################
 
 [BLACKBELT,Mike]
-Pokemon = MAGNEMITE,46 
-Pokemon = MAGNEMITE,47 #PRIMEGLER
+Pokemon = MACHOKE,46 
+Pokemon = B99H57,47 #PRIMEGLER
 #############################
 ####	BRINE ROAD (PT2)	#
 #############################
 
 [SWIMMER_F,Sandra]
-Pokemon = MAGNEMITE,52 
-Pokemon = MAGNEMITE,54 #OCTITERRA
+Pokemon = TENTACOOL,52 
+Pokemon = B318H224,54 #OCTITERRA
 ###########################
 
 [SWIMMER_M,Raphael]
-Pokemon = MAGNEMITE,49 
-Pokemon = MAGNEMITE,49 
-Pokemon = MAGNEMITE,53 #SKARTIC
+Pokemon = GRAVELER,49 
+Pokemon = TENTACRUEL,49 
+Pokemon = B176H127,53 #SKARTIC
 ##########################
 
 [SWIMMER_F,Eva]
-Pokemon = MAGNEMITE,51 
-Pokemon = MAGNEMITE,55 #SEALORD
+Pokemon = CORSOLA,51 
+Pokemon = B119H314,55 #SEALORD
 ############################
 
 [FISHERMAN,Tommy]
-Pokemon = MAGNEMITE,51 
-Pokemon = MAGNEMITE,51 
-Pokemon = MAGNEMITE,54 
+Pokemon = GOLDEEN,51 
+Pokemon = GOLDEEN,51 
+Pokemon = B86H298,54 
 #############################
 ####	BOND Bridge		#
 #############################
 
 [POKEMONRANGER_M,Steve]
-Pokemon = MAGNEMITE,54 #TURTLE
-Pokemon = MAGNEMITE,53 #LIZARD
-Pokemon = MAGNEMITE,53 #SALAMANDER
-Pokemon = MAGNEMITE,57 #CROCODILE
+Pokemon = B7H316,54 #TURTLE
+Pokemon = B6H301,53 #LIZARD
+Pokemon = B4H336,53 #SALAMANDER
+Pokemon = B158H159,57 #CROCODILE
 #############################
 
 [POKEMONRANGER_F,Jane]
-Pokemon = MAGNEMITE,54 #MONKEY
-Pokemon = MAGNEMITE,54 #DONKEY
-Pokemon = MAGNEMITE,54 #WEASEL
+Pokemon = B56H320,54 #MONKEY
+Pokemon = B56H232,54 #DONKEY
+Pokemon = B215H262,54 #WEASEL
 ############################
 
 [POKEMONRANGER_M,Osman]
-Pokemon = MAGNEMITE,58 #TURKEY
+Pokemon = B56H316,58 #TURKEY
 ###########################
 
 [POKEMONRANGER_F,Selena]
-Pokemon = MAGNEMITE,56 #STARFISH
-Pokemon = MAGNEMITE,56 #BEETLE
+Pokemon = B211H121,56 #STARFISH
+Pokemon = B317H15,56 #BEETLE
 #####################
 ##	ROCKET WAREHOUSE #
 ######################
 
 [TEAMROCKET_M,Teddy]
-Pokemon = MAGNEMITE,56 
-Pokemon = MAGNEMITE,56 
-Pokemon = MAGNEMITE,56 
+Pokemon = MACHOP,56 
+Pokemon = MACHOP,56 
+Pokemon = B67H312,56 
 ######################
 
 [TEAMROCKET_M,Brad]
-Pokemon = MAGNEMITE,61 #HYPCRUEL
+Pokemon = B73H97,61 #HYPCRUEL
 ########################
 
 [TEAMROCKET_F,Cass]
-Pokemon = MAGNEMITE,59 
-Pokemon = MAGNEMITE,59 #SNEADOUR
+Pokemon = HOUNDOUR,59 
+Pokemon = B228H215,59 #SNEADOUR
 ######################
 
 [TEAMROCKET_F,Cindy]
-Pokemon = MAGNEMITE,61 
+Pokemon = B64H49,61 
 ######################
 
 [TEAMROCKET_M,Freddy]
-Pokemon = MAGNEMITE,61 #glisnx
+Pokemon = B124H272,61 #glisnx
 ######################
 
 [ROCKETEXEC_F,Ariana]
 Items = MAXPOTION
-Pokemon = MAGNEMITE,65 #VILEGROWTH
-Pokemon = MAGNEMITE,65 #SKARKROW
-Pokemon = MAGNEMITE,65 #ARDOOM
+Pokemon = B45H266,65 #VILEGROWTH
+Pokemon = B256H227,65 #SKARKROW
+Pokemon = B229H24,65 #ARDOOM
 #####################
 ##	P2 Lab 			#
 #####################
 
 [TEAMPLASMA_F,Lara]
-Pokemon = MAGNEMITE,60 
-Pokemon = MAGNEMITE,63 #KLINKUK
+Pokemon = MAGNETON,60 
+Pokemon = B89H337,63 #KLINKUK
 #####################
 
 [TEAMPLASMA_M,Terry]
-Pokemon = MAGNEMITE,59 
-Pokemon = MAGNEMITE,59 
-Pokemon = MAGNEMITE,62 #BISOL
+Pokemon = PAWNIARD,59 
+Pokemon = PAWNIARD,59 
+Pokemon = B310H331,62 #BISOL
 #####################
 
 [TEAMPLASMA_M,Adrian]
 Items = FULLRESTORE
-Pokemon = MAGNEMITE,67 #BICHAMP
+Pokemon = B68H331,67 #BICHAMP
 ###########################
 ##	ICE MOUNTAINS   #######
 ###########################
 
 [SKIER_F,Roxanne]
-Pokemon = MAGNEMITE,56 #MISMAJYNX
+Pokemon = B124H255,56 #MISMAJYNX
 ###########################
 
 [SKIER_F,Clarissa]
-Pokemon = MAGNEMITE,51 
-Pokemon = MAGNEMITE,53 #DEWSWINE
+Pokemon = SEEL,51 
+Pokemon = B221H87,53 #DEWSWINE
 ###########################
 
 [SKIER_F,Jill]
-Pokemon = MAGNEMITE,49 
-Pokemon = MAGNEMITE,54 #SANDVILE
+Pokemon = SNEASEL,49 
+Pokemon = B28H262,54 #SANDVILE
 ###########################
 
 [HIKER,Bjorn]
-Pokemon = MAGNEMITE,55 #PROBOSWINE
+Pokemon = B274H326,55 #PROBOSWINE
 ###########################
 
 [HIKER,Douglas]
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,44 
-Pokemon = MAGNEMITE,52 #PILLODON
+Pokemon = SWINUB,44 
+Pokemon = SWINUB,44 
+Pokemon = B308H221,52 #PILLODON
 ##########################
 
 [SKIER_F,Lexie]
-Pokemon = MAGNEMITE,47 #VULBIRD
-Pokemon = MAGNEMITE,54 #NINEBIRD
+Pokemon = B37H225,47 #VULBIRD
+Pokemon = B38H225,54 #NINEBIRD
 
 
 ##################
@@ -4602,27 +4607,27 @@ Pokemon = MAGNEMITE,54 #NINEBIRD
 
 [POKEMONTRAINER_Gold,Gold]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = MAGNEMITE,76 #SUDOCKLE
+Pokemon = B213H185,76 #SUDOCKLE
 	Moves = POWERSPLIT,COUNTER,ROLLOUT,TOXIC
 	AbilityIndex = 0
 	Item = ROCKYHELMET
-Pokemon = MAGNEMITE,78 #TOGEREON
+Pokemon = B197H269,78 #TOGEREON
 	Moves = MOONLIGHT,BITE,MOONBLAST,BODYSLAM
 	AbilityIndex = 1
 	Item = LEFTOVERS
-Pokemon = MAGNEMITE,77 #FERALIKOU
+Pokemon = B243H160,77 #FERALIKOU
 	Moves = THUNDER,WATERPULSE,RAINDANCE,CALMMIND
 	AbilityIndex = 1
 	Item = MAGNET
-Pokemon = MAGNEMITE,77 #SUIPHLOSION
+Pokemon = B245H157,77 #SUIPHLOSION
 	Moves = HYDROPUMP,FLAMETHROWER,AURORABEAM,MIST
 	AbilityIndex = 1
 	Item = MYSTICWATER
-Pokemon = MAGNEMITE,77 #ENTNIUM
+Pokemon = B244H154,77 #ENTNIUM
 	Moves = FIREBLAST,SUNNYDAY,SOLARBEAM,SYNTHESIS
 	AbilityIndex = 1
 	Item = CHARCOAL
-Pokemon = MAGNEMITE,79 #DRAGONDOS (w/extremespeed)
+Pokemon = B130H149,79 #DRAGONDOS (w/extremespeed)
 	Moves = EXTREMESPEED,WATERFALL,DRAGONTAIL,TWISTER
 	AbilityIndex = 0
 	Item = LUSTROUSORB

@@ -18,14 +18,14 @@
     // If this fails, the version defaults to 1.
     // (default: 0)
     //
-    // "rgssVersion": 1,
+     "rgssVersion": 1,
 
 
     // Create a debug context and log
     // OpenGL debug information to the console
     // (default: disabled)
     //
-    // "debugMode": false,
+     "debugMode": false,
 
 
     // Continuously print average FPS to console.
@@ -33,40 +33,40 @@
     // FPS display toggled via F2
     // (default: disabled)
     //
-    // "printFPS": false,
+     "printFPS": false,
 
 
     // Game window is resizable
     // (default: enabled)
     //
-    // "winResizable": true,
+    "winResizable": true,
 
 
     // Start game in fullscreen (this can
     // always be toggled with Alt-Enter at runtime)
     // (default: disabled)
     //
-    // "fullscreen": false,
+    "fullscreen": false,
 
 
     // Preserve game screen aspect ratio,
     // as opposed to stretch-to-fill
     // (default: enabled)
     //
-    // "fixedAspectRatio": true,
+    "fixedAspectRatio": true,
 
 
     // Apply linear interpolation when game screen
     // is upscaled
     // (default: disabled)
     //
-    // "smoothScaling": false,
+    "smoothScaling": false,
 
 
     // Sync screen redraws to the monitor refresh rate
     // (default: disabled)
     //
-    // "vsync": false,
+    "vsync": false,
 
 
     // Specify the window width on startup. If set to 0,
@@ -90,14 +90,14 @@
     // Override the game window title
     // (default: none)
     //
-    // "windowTitle": "Custom Title",
+    "windowTitle": "Pokémon Infinite Fusion",
 
 
     // Enforce a static frame rate
     // This option may be force-disabled at build time.
     // (0 = disabled)
     //
-    // "fixedFramerate": 0,
+    "fixedFramerate": 0,
 
 
     // Skip (don't draw) frames when behind.
@@ -105,7 +105,7 @@
     // default value when the game starts.
     // (default: disabled)
     //
-    // "frameSkip": false,
+     "frameSkip": false,
 
 
     // Use a fixed framerate that is approx. equal to the
@@ -117,13 +117,13 @@
     // This option may be force-disabled at build time.
     // (default: disabled)
     //
-    // "syncToRefreshrate": false,
+    "syncToRefreshrate": false,
 
 
     // Don't use alpha blending when rendering text
     // (default: disabled)
     //
-    // "solidFonts": false,
+    "solidFonts": false,
 
 
     // Work around buggy graphics drivers which don't
@@ -132,7 +132,7 @@
     // tileset doesn't render at all
     // (default: disabled)
     //
-    // "subImageFix": false,
+    "subImageFix": false,
 
 
     // Enable framebuffer blitting if the driver is
@@ -141,7 +141,7 @@
     // disabling it can be used as a workaround
     // (default: enabled)
     //
-    // "enableBlitting": true,
+    "enableBlitting": true,
 
 
     // Limit the maximum size (width, height) of
@@ -152,26 +152,26 @@
     // be played back on machines with lower specs.
     // (default: 0)
     //
-    // "maxTextureSize": 0,
+    "maxTextureSize": 0,
 
 
     // Set the base path of the game to '/path/to/game'
     // (default: executable directory)
     //
-    // "gameFolder": ".",
+    "gameFolder": ".",
 
 
     // Use either right or left Alt + Enter to toggle
     // fullscreen
     // (default: disabled)
     //
-    // "anyAltToggleFS": false,
+    "anyAltToggleFS": false,
 
 
     // Enable F12 game reset
     // (default: enabled)
     //
-    // "enableReset": true,
+    "enableReset": true,
 
 
     // Names of the input buttons in the F1 key bindings
@@ -191,7 +191,7 @@
     // Allow symlinks for game assets to be followed
     // (default: disabled)
     //
-    // "allowSymlinks": false,
+    "allowSymlinks": false,
 
 
     // Organisation / company and application / game
@@ -233,7 +233,7 @@
     // (emulates windows case insensitivity)
     // (default: enabled)
     //
-    // "pathCache": true,
+    "pathCache": true,
 
     // In some versions of Essentials, overworld code
     // requests the player's sprite texture from disk
@@ -255,7 +255,7 @@
     // loose and disable this option.
     // (default: false)
     //
-    // "compressedGraphics": false,
+     "compressedGraphics": false,
 
 
     // Add 'rtp1', 'rtp2.zip' and 'game.rgssad' to the
@@ -270,7 +270,7 @@
     // Use the script's name as filename in warnings and error messages
     // (default: enabled)
     //
-    // "useScriptNames": true,
+    "useScriptNames": true,
 
 
     // Font substitutions allow drop-in replacements of fonts
@@ -304,26 +304,26 @@
     // that it needs. Only works with Ruby 2.6 or higher.
     // (default: false)
     //
-    // "JITEnable": false,
+    "JITEnable": false,
 
     // Determines what level of verbosity to use when
     // logging JIT events. Starts at 0, which is next
     // to nothing. Set it higher to see more.
     // (default: 0)
     //
-    // "JITVerboseLevel": 0,
+     "JITVerboseLevel": 0,
 
     // Determines how many compiled methods that Ruby
     // will keep in its cache.
     // (default: 100)
     //
-    // "JITMaxCache": 100,
+    "JITMaxCache": 100,
 
     // Determines how many times a function has to be
     // called before it is compiled.
     // (default: 10000)
     //
-    // "JITMinCalls": 10000,
+    "JITMinCalls": 10000,
 
 
     // SoundFont to use for midi playback (via fluidsynth)
@@ -334,12 +334,12 @@
 
     // Activate "chorus" effect for midi playback
     //
-    // "midiChorus": false,
+    "midiChorus": false,
 
 
     // Activate "reverb" effect for midi playback
     //
-    // "midiReverb": false,
+    "midiReverb": false,
 
 
     // Number of OpenAL sources to allocate for SE playback.
@@ -347,7 +347,7 @@
     // and audibly cutting each other off, try increasing
     // this number. Maximum: 64.
     //
-    // "SESourceCount": 6
+    "SESourceCount": 6
 
 
     // The Windows game executable name minus ".exe". By default
@@ -360,6 +360,6 @@
     // "Game.rgssad", but specifying the executable name here
     // is a tiny bit less intrusive.
     //
-    // "execName": "Game"
+    "execName": "Game"
 
 }

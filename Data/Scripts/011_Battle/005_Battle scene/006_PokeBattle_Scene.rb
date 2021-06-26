@@ -10,7 +10,7 @@ class PokeBattle_Scene
   FIGHT_BOX   = 3
   TARGET_BOX  = 4
 
-  MESSAGE_PAUSE_TIME = (Graphics.frame_rate*1.0).floor   # 1 second
+  MESSAGE_PAUSE_TIME = (Graphics.frame_rate*0.25).floor   # 1 second
 
   #=============================================================================
   # Updating and refreshing
