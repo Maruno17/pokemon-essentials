@@ -18,6 +18,17 @@ class AnimatedBitmap
     end
   end
 
+  def pbSetColor(r = 0, g = 0, b = 0, a = 255)
+    for i in 0..@bitmap.bitmap.width
+      for j in 0..@bitmap.bitmap.height
+        if @bitmap.bitmap.get_pixel(i, j).alpha != 0
+          color = Color.new(r, g, b, a)
+          @bitmap.bitmap.set_pixel(i, j, color)
+        end
+      end
+    end
+  end
+
   def [](index)
     ; @bitmap[index];
   end
@@ -81,7 +92,6 @@ class AnimatedBitmap
       end
     end
   end
-
 
 end
 

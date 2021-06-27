@@ -66,6 +66,8 @@ class PictureWindow < SpriteWindow_Base
     setBitmap(pathOrBitmap)
   end
 
+  def picture; @_iconbitmap; end
+
   def dispose
     clearBitmaps()
     super

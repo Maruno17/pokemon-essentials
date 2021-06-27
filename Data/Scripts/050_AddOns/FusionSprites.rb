@@ -12,6 +12,15 @@ module GameData
       return ret
     end
 
+    def self.sprite_bitmap_from_pokemon_id(id, back = false)
+      if back
+        ret = self.back_sprite_bitmap(id)
+      else
+        ret = self.front_sprite_bitmap(id)
+      end
+      return ret
+    end
+
     def self.front_sprite_bitmap(dex_number)
       filename = self.sprite_filename(dex_number)
       return (filename) ? AnimatedBitmap.new(filename) : nil
