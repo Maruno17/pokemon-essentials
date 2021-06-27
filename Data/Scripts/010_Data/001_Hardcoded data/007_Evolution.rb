@@ -7,6 +7,7 @@ module GameData
     attr_reader :level_up_proc
     attr_reader :use_item_proc
     attr_reader :on_trade_proc
+    attr_reader :event_proc
     attr_reader :after_evolution_proc
 
     DATA = {}
@@ -25,6 +26,7 @@ module GameData
       @level_up_proc        = hash[:level_up_proc]
       @use_item_proc        = hash[:use_item_proc]
       @on_trade_proc        = hash[:on_trade_proc]
+      @event_proc           = hash[:event_proc]
       @after_evolution_proc = hash[:after_evolution_proc]
     end
 
@@ -38,6 +40,10 @@ module GameData
 
     def call_on_trade(*args)
       return (@on_trade_proc) ? @on_trade_proc.call(*args) : nil
+    end
+
+    def call_event(*args)
+      return (@event_proc) ? @event_proc.call(*args) : nil
     end
 
     def call_after_evolution(*args)
@@ -595,5 +601,73 @@ GameData::Evolution.register({
   :parameter     => :Species,
   :on_trade_proc => proc { |pkmn, parameter, other_pkmn|
     next pkmn.species == parameter && !other_pkmn.hasItem?(:EVERSTONE)
+  }
+})
+
+#===============================================================================
+# Evolution methods that are triggered by an event
+#===============================================================================
+GameData::Evolution.register({
+  :id         => :Event,
+  :parameter  => Integer,
+  :event_proc => proc { |pkmn, parameter, value|
+    next true
+  }
+})
+
+GameData::Evolution.register({
+  :id         => :EventValue,
+  :parameter  => Integer,
+  :event_proc => proc { |pkmn, parameter, value|
+    next value == parameter
+  }
+})
+
+GameData::Evolution.register({
+  :id         => :EventLevel,
+  :parameter  => Integer,
+  :event_proc => proc { |pkmn, parameter, value|
+    next pkmn.level >= parameter
+  }
+})
+
+GameData::Evolution.register({
+  :id         => :EventMale,
+  :event_proc => proc { |pkmn, parameter, value|
+    next pkmn.male?
+  }
+})
+
+GameData::Evolution.register({
+  :id         => :EventFemale,
+  :event_proc => proc { |pkmn, parameter, value|
+    next pkmn.female?
+  }
+})
+
+GameData::Evolution.register({
+  :id         => :EventDay,
+  :event_proc => proc { |pkmn, parameter, value|
+    next PBDayNight.isDay?
+  }
+})
+
+GameData::Evolution.register({
+  :id         => :EventNight,
+  :event_proc => proc { |pkmn, parameter, value|
+    next PBDayNight.isNight?
+  }
+})
+
+GameData::Evolution.register({
+  :id                   => :EventItem,
+  :parameter            => :Item,
+  :event_proc           => proc { |pkmn, parameter, value|
+    next pkmn.item == parameter
+  },
+  :after_evolution_proc => proc { |pkmn, new_species, parameter, evo_species|
+    next false if evo_species != new_species || !pkmn.hasItem?(parameter)
+    pkmn.item = nil   # Item is now consumed
+    next true
   }
 })

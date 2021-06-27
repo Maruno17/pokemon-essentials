@@ -961,6 +961,16 @@ class Pokemon
     }
   end
 
+  # Checks whether this Pokemon can evolve by a triggered event.
+  # @param value [Integer] a value that may be used by the evolution method
+  # @return [Symbol, nil] the ID of the species to evolve into
+  def check_evolution_by_event(value = 0)
+    return check_evolution_internal { |pkmn, new_species, method, parameter, value|
+      success = GameData::Evolution.get(method).call_event(pkmn, parameter, value)
+      next (success) ? new_species : nil
+    }
+  end
+
   # Called after this Pokémon evolves, to remove its held item (if the evolution
   # required it to have a held item) or duplicate this Pokémon (Shedinja only).
   # @param new_species [Symbol] the species that this Pokémon evolved into
@@ -984,6 +994,20 @@ class Pokemon
       return ret if ret
     end
     return nil
+  end
+
+  def trigger_event_evolution(value = 0)
+    new_species = check_evolution_by_event(value)
+    if new_species
+      pbFadeOutInWithMusic {
+        evo = PokemonEvolutionScene.new
+        evo.pbStartScreen(self, new_species)
+        evo.pbEvolution
+        evo.pbEndScreen
+      }
+      return true
+    end
+    return false
   end
 
   #=============================================================================

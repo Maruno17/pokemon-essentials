@@ -405,6 +405,7 @@ class PokeBattle_Battler
     return false if fainted? && !ignoreFainted
     return false if @effects[PBEffects::Embargo]>0
     return false if @battle.field.effects[PBEffects::MagicRoom]>0
+    return false if @battle.corrosiveGas[@index % 2][@pokemonIndex]
     return false if hasActiveAbility?(:KLUTZ,ignoreFainted)
     return true
   end
