@@ -643,7 +643,7 @@ class BattlerFaintAnimation < PokeBattle_Animation
     super(sprites,viewport)
   end
 
-  def createProcesses
+  def createProcessesPB
     batSprite = @sprites["pokemon_#{@idxBattler}"]
     shaSprite = @sprites["shadow_#{@idxBattler}"]
     # Set up battler/shadow sprite
