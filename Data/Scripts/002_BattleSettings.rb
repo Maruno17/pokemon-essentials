@@ -24,6 +24,9 @@ module Settings
   # Whether X items (X Attack, etc.) raise their stat by 2 stages (true) or 1
   # (false).
   X_STAT_ITEMS_RAISE_BY_TWO_STAGES = (MECHANICS_GENERATION >= 7)
+  # Whether a Pokémon holding a Power item gains 8 (true) or 4 (false) EVs in
+  # the relevant stat.
+  MORE_EVS_FROM_POWER_ITEMS        = (MECHANICS_GENERATION >= 7)
   # Whether some Poké Balls have catch rate multipliers from Gen 7 (true) or
   # from earlier generations (false).
   NEW_POKE_BALL_CATCH_RATES        = (MECHANICS_GENERATION >= 7)

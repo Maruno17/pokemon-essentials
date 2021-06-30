@@ -137,6 +137,11 @@ class PokemonEncounters
         when :STENCH, :WHITESMOKE, :QUICKFEET
           encounter_chance /= 2
           min_steps_needed *= 2
+        when :INFILTRATOR
+          if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS
+            encounter_chance /= 2
+            min_steps_needed *= 2
+          end
         when :SNOWCLOAK
           if GameData::Weather.get($game_screen.weather_type).category == :Hail
             encounter_chance /= 2
@@ -271,10 +276,26 @@ class PokemonEncounters
     if first_pkmn
       favored_type = nil
       case first_pkmn.ability_id
-      when :STATIC
-        favored_type = :ELECTRIC if GameData::Type.exists?(:ELECTRIC) && rand(100) < 50
+      when :FLASHFIRE
+        if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS
+          favored_type = :FIRE if GameData::Type.exists?(:FIRE) && rand(100) < 50
+        end
+      when :HARVEST
+        if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS
+          favored_type = :GRASS if GameData::Type.exists?(:GRASS) && rand(100) < 50
+        end
+      when :LIGHTNINGROD
+        if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS
+          favored_type = :ELECTRIC if GameData::Type.exists?(:ELECTRIC) && rand(100) < 50
+        end
       when :MAGNETPULL
         favored_type = :STEEL if GameData::Type.exists?(:STEEL) && rand(100) < 50
+      when :STATIC
+        favored_type = :ELECTRIC if GameData::Type.exists?(:ELECTRIC) && rand(100) < 50
+      when :STORMDRAIN
+        if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS
+          favored_type = :WATER if GameData::Type.exists?(:WATER) && rand(100) < 50
+        end
       end
       if favored_type
         new_enc_list = []
@@ -374,7 +395,14 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   items = genwildpoke.wildHoldItems
   first_pkmn = $Trainer.first_pokemon
   chances = [50,5,1]
-  chances = [60,20,5] if first_pkmn && first_pkmn.hasAbility?(:COMPOUNDEYES)
+  if first_pkmn
+    case first_pkmn.ability_id
+    when :COMPOUNDEYES
+      chances = [60, 20, 5]
+    when :SUPERLUCK
+      chances = [60, 20, 5] if Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS
+    end
+  end
   itemrnd = rand(100)
   if (items[0]==items[1] && items[1]==items[2]) || itemrnd<chances[0]
     genwildpoke.item = items[0]
@@ -402,7 +430,9 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
         (rand(3)<2) ? genwildpoke.makeMale : genwildpoke.makeFemale
       end
     elsif first_pkmn.hasAbility?(:SYNCHRONIZE)
-      genwildpoke.nature = first_pkmn.nature if !isRoamer && rand(100)<50
+      if !isRoamer && (Settings::MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS || (rand(100) < 50))
+        genwildpoke.nature = first_pkmn.nature
+      end
     end
   end
   # Trigger events that may alter the generated Pokémon further

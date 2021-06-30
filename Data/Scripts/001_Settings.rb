@@ -140,19 +140,31 @@ module Settings
   # If a move taught by a TM/HM/TR replaces another move, this setting is
   # whether the machine's move retains the replaced move's PP (true), or whether
   # the machine's move has full PP (false).
-  TAUGHT_MACHINES_KEEP_OLD_PP          = (MECHANICS_GENERATION == 5)
+  TAUGHT_MACHINES_KEEP_OLD_PP           = (MECHANICS_GENERATION == 5)
   # Whether the Black/White Flutes will raise/lower the levels of wild Pokémon
   # respectively (true), or will lower/raise the wild encounter rate
   # respectively (false).
-  FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS  = (MECHANICS_GENERATION >= 6)
+  FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS   = (MECHANICS_GENERATION >= 6)
   # Whether Repel uses the level of the first Pokémon in the party regardless of
   # its HP (true), or it uses the level of the first unfainted Pokémon (false).
-  REPEL_COUNTS_FAINTED_POKEMON         = (MECHANICS_GENERATION >= 6)
+  REPEL_COUNTS_FAINTED_POKEMON          = (MECHANICS_GENERATION >= 6)
+  # Whether various HP-healing items heal the amounts they do in Gen 7+ (true)
+  # or in earlier Generations (false).
+  REBALANCED_HEALING_ITEM_AMOUNTS       = (MECHANICS_GENERATION >= 7)
   # Whether Rage Candy Bar acts as a Full Heal (true) or a Potion (false).
-  RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS = (MECHANICS_GENERATION >= 7)
+  RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS  = (MECHANICS_GENERATION >= 7)
+  # Whether vitamins can add EVs no matter how many that stat already has in it
+  # (true), or whether they can't make that stat's EVs greater than 100 (false).
+  NO_VITAMIN_EV_CAP                     = (MECHANICS_GENERATION >= 8)
   # Whether Rare Candy can be used on a Pokémon that is already at its maximum
   # level if it is able to evolve by level-up (if so, triggers that evolution).
-  RARE_CANDY_USABLE_AT_MAX_LEVEL       = (MECHANICS_GENERATION >= 8)
+  RARE_CANDY_USABLE_AT_MAX_LEVEL        = (MECHANICS_GENERATION >= 8)
+  # Whether you get 1 Premier Ball for every 10 of any kind of Poké Ball bought
+  # at once (true), or 1 Premier Ball for buying 10+ Poké Balls (false).
+  MORE_BONUS_PREMIER_BALLS              = (MECHANICS_GENERATION >= 8)
+  # Whether more abilities affect whether wild Pokémon appear, which Pokémon
+  # they are, etc.
+  MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS = (MECHANICS_GENERATION >= 8)
 
   #=============================================================================
 

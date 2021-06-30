@@ -28,7 +28,7 @@ ItemHandlers::UseFromBag.add(:ESCAPEROPE,proc { |item|
     next 0
   end
   if ($PokemonGlobal.escapePoint rescue false) && $PokemonGlobal.escapePoint.length>0
-    next 4   # End screen and consume item
+    next (GameData::Item.get(item).is_key_item?) ? 2 : 4   # End screen and use item
   end
   pbMessage(_INTL("Can't use that here."))
   next 0
@@ -177,7 +177,7 @@ ItemHandlers::UseInField.add(:ESCAPEROPE,proc { |item|
     $game_map.refresh
   }
   pbEraseEscapePoint
-  next 3
+  next (GameData::Item.get(item).is_key_item?) ? 1 : 3
 })
 
 ItemHandlers::UseInField.add(:SACREDASH,proc { |item|
@@ -366,11 +366,11 @@ ItemHandlers::UseOnPokemon.copy(:POTION,:BERRYJUICE,:SWEETHEART)
 ItemHandlers::UseOnPokemon.copy(:POTION,:RAGECANDYBAR) if !Settings::RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS
 
 ItemHandlers::UseOnPokemon.add(:SUPERPOTION,proc { |item,pkmn,scene|
-  next pbHPItem(pkmn,50,scene)
+  next pbHPItem(pkmn, (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 60 : 50, scene)
 })
 
 ItemHandlers::UseOnPokemon.add(:HYPERPOTION,proc { |item,pkmn,scene|
-  next pbHPItem(pkmn,200,scene)
+  next pbHPItem(pkmn, (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 120 : 200, scene)
 })
 
 ItemHandlers::UseOnPokemon.add(:MAXPOTION,proc { |item,pkmn,scene|
@@ -378,15 +378,15 @@ ItemHandlers::UseOnPokemon.add(:MAXPOTION,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:FRESHWATER,proc { |item,pkmn,scene|
-  next pbHPItem(pkmn,50,scene)
+  next pbHPItem(pkmn, (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 30 : 50, scene)
 })
 
 ItemHandlers::UseOnPokemon.add(:SODAPOP,proc { |item,pkmn,scene|
-  next pbHPItem(pkmn,60,scene)
+  next pbHPItem(pkmn, (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 50 : 60, scene)
 })
 
 ItemHandlers::UseOnPokemon.add(:LEMONADE,proc { |item,pkmn,scene|
-  next pbHPItem(pkmn,80,scene)
+  next pbHPItem(pkmn, (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 70 : 80, scene)
 })
 
 ItemHandlers::UseOnPokemon.add(:MOOMOOMILK,proc { |item,pkmn,scene|
@@ -524,7 +524,7 @@ ItemHandlers::UseOnPokemon.add(:MAXREVIVE,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:ENERGYPOWDER,proc { |item,pkmn,scene|
-  if pbHPItem(pkmn,50,scene)
+  if pbHPItem(pkmn, (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 60 : 50, scene)
     pkmn.changeHappiness("powder")
     next true
   end
@@ -532,7 +532,7 @@ ItemHandlers::UseOnPokemon.add(:ENERGYPOWDER,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:ENERGYROOT,proc { |item,pkmn,scene|
-  if pbHPItem(pkmn,200,scene)
+  if pbHPItem(pkmn, (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 120 : 200, scene)
     pkmn.changeHappiness("energyroot")
     next true
   end
@@ -645,7 +645,7 @@ ItemHandlers::UseOnPokemon.add(:PPMAX,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:HPUP,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,:HP)==0
+  if pbRaiseEffortValues(pkmn, :HP, 10, Settings::NO_VITAMIN_EV_CAP) == 0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -656,7 +656,7 @@ ItemHandlers::UseOnPokemon.add(:HPUP,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:PROTEIN,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,:ATTACK)==0
+  if pbRaiseEffortValues(pkmn, :ATTACK, 10, Settings::NO_VITAMIN_EV_CAP) == 0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -666,7 +666,7 @@ ItemHandlers::UseOnPokemon.add(:PROTEIN,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:IRON,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,:DEFENSE)==0
+  if pbRaiseEffortValues(pkmn, :DEFENSE, 10, Settings::NO_VITAMIN_EV_CAP) == 0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -676,7 +676,7 @@ ItemHandlers::UseOnPokemon.add(:IRON,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:CALCIUM,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,:SPECIAL_ATTACK)==0
+  if pbRaiseEffortValues(pkmn, :SPECIAL_ATTACK, 10, Settings::NO_VITAMIN_EV_CAP) == 0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -686,7 +686,7 @@ ItemHandlers::UseOnPokemon.add(:CALCIUM,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:ZINC,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,:SPECIAL_DEFENSE)==0
+  if pbRaiseEffortValues(pkmn, :SPECIAL_DEFENSE, 10, Settings::NO_VITAMIN_EV_CAP) == 0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
@@ -696,7 +696,7 @@ ItemHandlers::UseOnPokemon.add(:ZINC,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:CARBOS,proc { |item,pkmn,scene|
-  if pbRaiseEffortValues(pkmn,:SPEED)==0
+  if pbRaiseEffortValues(pkmn, :SPEED, 10, Settings::NO_VITAMIN_EV_CAP) == 0
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end

@@ -121,7 +121,7 @@ BallHandlers::ModifyCatchRate.add(:LUREBALL,proc { |ball,catchRate,battle,battle
 
 BallHandlers::ModifyCatchRate.add(:HEAVYBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
   next 0 if catchRate==0
-  weight = battler.pbWeight
+  weight = battler.pokemon.species_data.base_stats[:SPEED]
   if Settings::NEW_POKE_BALL_CATCH_RATES
     if weight>=3000;    catchRate += 30
     elsif weight>=2000; catchRate += 20
@@ -164,7 +164,7 @@ BallHandlers::ModifyCatchRate.add(:SPORTBALL,proc { |ball,catchRate,battle,battl
 })
 
 BallHandlers::ModifyCatchRate.add(:DREAMBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
-  catchRate *= 4 if battler.status == :SLEEP
+  catchRate *= 4 if battler.asleep?
   next catchRate
 })
 

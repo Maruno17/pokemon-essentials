@@ -594,8 +594,19 @@ class PokemonMartScreen
         end
         @stock.compact!
         pbDisplayPaused(_INTL("Here you are! Thank you!")) { pbSEPlay("Mart buy item") }
-        if $PokemonBag
-          if quantity>=10 && GameData::Item.get(item).is_poke_ball? && GameData::Item.exists?(:PREMIERBALL)
+        if quantity >= 10 && $PokemonBag && GameData::Item.exists?(:PREMIERBALL)
+          if Settings::MORE_BONUS_PREMIER_BALLS && GameData::Item.get(item).is_poke_ball?
+            premier_balls_added = 0
+            (quantity / 10).times do
+              break if !@adapter.addItem(:PREMIERBALL)
+              premier_balls_added += 1
+            end
+            if premier_balls_added > 1
+              pbDisplayPaused(_INTL("I'll throw in some {1}, too.", GameData::Item.get(:PREMIERBALL).name_plural))
+            elsif premier_balls_added > 0
+              pbDisplayPaused(_INTL("I'll throw in a {1}, too.", GameData::Item.get(:PREMIERBALL).name))
+            end
+          elsif !Settings::MORE_BONUS_PREMIER_BALLS && GameData::Item.get(item) == :POKEBALL
             if @adapter.addItem(GameData::Item.get(:PREMIERBALL))
               pbDisplayPaused(_INTL("I'll throw in a Premier Ball, too."))
             end

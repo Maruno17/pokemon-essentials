@@ -48,6 +48,7 @@ begin
     Ingrain             = 42
     Instruct            = 43
     Instructed          = 44
+    JawLock             = 994
     KingsShield         = 45
     LaserFocus          = 46
     LeechSeed           = 47

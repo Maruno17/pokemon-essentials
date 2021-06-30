@@ -1356,37 +1356,37 @@ BattleHandlers::EVGainModifierItem.add(:MACHOBRACE,
 
 BattleHandlers::EVGainModifierItem.add(:POWERANKLET,
   proc { |item,battler,evYield|
-    evYield[:SPEED] += 4
+    evYield[:SPEED] += (Settings::MORE_EVS_FROM_POWER_ITEMS) ? 8 : 4
   }
 )
 
 BattleHandlers::EVGainModifierItem.add(:POWERBAND,
   proc { |item,battler,evYield|
-    evYield[:SPECIAL_DEFENSE] += 4
+    evYield[:SPECIAL_DEFENSE] += (Settings::MORE_EVS_FROM_POWER_ITEMS) ? 8 : 4
   }
 )
 
 BattleHandlers::EVGainModifierItem.add(:POWERBELT,
   proc { |item,battler,evYield|
-    evYield[:DEFENSE] += 4
+    evYield[:DEFENSE] += (Settings::MORE_EVS_FROM_POWER_ITEMS) ? 8 : 4
   }
 )
 
 BattleHandlers::EVGainModifierItem.add(:POWERBRACER,
   proc { |item,battler,evYield|
-    evYield[:ATTACK] += 4
+    evYield[:ATTACK] += (Settings::MORE_EVS_FROM_POWER_ITEMS) ? 8 : 4
   }
 )
 
 BattleHandlers::EVGainModifierItem.add(:POWERLENS,
   proc { |item,battler,evYield|
-    evYield[:SPECIAL_ATTACK] += 4
+    evYield[:SPECIAL_ATTACK] += (Settings::MORE_EVS_FROM_POWER_ITEMS) ? 8 : 4
   }
 )
 
 BattleHandlers::EVGainModifierItem.add(:POWERWEIGHT,
   proc { |item,battler,evYield|
-    evYield[:HP] += 4
+    evYield[:HP] += (Settings::MORE_EVS_FROM_POWER_ITEMS) ? 8 : 4
   }
 )
 
