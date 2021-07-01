@@ -1742,7 +1742,7 @@ class PokeBattle_AI
       score -= 40
       if skill>=PBTrainerAI.highSkill
         score -= 100 if !target.lastRegularMoveUsed ||
-           !GameData::Move.get(target.lastRegularMoveUsed).flags[/e/]   # Not copyable by Mirror Move
+           !GameData::Move.get(target.lastRegularMoveUsed).flags.any? { |f| f[/^CanMirrorMove$/i] }
       end
     #---------------------------------------------------------------------------
     when "0AF"

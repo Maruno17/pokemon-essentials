@@ -351,6 +351,19 @@ module Compiler
           print _INTL("Warning: Move {1} was defined as Physical or Special but had a base damage of 0. Changing it to a Status move.\r\n{2}", line[2], FileLineData.linereport)
           line[6] = 2
         end
+        flags = []
+        flags.push("Contact") if line[12][/a/]
+        flags.push("CanProtect") if line[12][/b/]
+        flags.push("CanMirrorMove") if line[12][/e/]
+        flags.push("ThawsUser") if line[12][/g/]
+        flags.push("HighCriticalHitRate") if line[12][/h/]
+        flags.push("Bite") if line[12][/i/]
+        flags.push("Punch") if line[12][/j/]
+        flags.push("Sound") if line[12][/k/]
+        flags.push("Powder") if line[12][/l/]
+        flags.push("Pulse") if line[12][/m/]
+        flags.push("Bomb") if line[12][/n/]
+        flags.push("Dance") if line[12][/o/]
         # Construct move hash
         move_hash = {
           :id            => move_id,
@@ -364,7 +377,7 @@ module Compiler
           :effect_chance => line[9],
           :target        => line[10],
           :priority      => line[11],
-          :flags         => line[12],
+          :flags         => flags,
           :description   => line[13]
         }
         # Add move's data to records

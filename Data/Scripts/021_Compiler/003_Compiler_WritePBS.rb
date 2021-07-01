@@ -188,7 +188,7 @@ module Compiler
         f.write("Target = #{move.target}\r\n")
         f.write("Priority = #{move.priority}\r\n") if move.priority != 0
         f.write("FunctionCode = #{move.function_code}\r\n")
-        f.write("Flags = #{move.flags}\r\n") if !nil_or_empty?(move.flags)
+        f.write("Flags = #{move.flags.join(",")}\r\n") if move.flags && move.flags.length > 0
         f.write("EffectChance = #{move.effect_chance}\r\n") if move.effect_chance > 0
         f.write("Description = #{move.real_description}\r\n")
       end

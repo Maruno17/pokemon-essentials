@@ -38,7 +38,7 @@ class PokeBattle_Move
     @addlEffect = move.effect_chance
     @target     = move.target
     @priority   = move.priority
-    @flags      = move.flags
+    @flags      = move.flags.clone
     @calcType   = nil
     @powerBoost = false   # For Aerilate, Pixilate, Refrigerate, Galvanize
     @snatched   = false
@@ -113,18 +113,18 @@ class PokeBattle_Move
   def canSnatch?;           return false; end
   def canMagicCoat?;        return false; end
 
-  def contactMove?;       return @flags[/a/]; end
-  def canProtectAgainst?; return @flags[/b/]; end
-  def canMirrorMove?;     return @flags[/e/]; end
-  def thawsUser?;         return @flags[/g/]; end
-  def highCriticalRate?;  return @flags[/h/]; end
-  def bitingMove?;        return @flags[/i/]; end
-  def punchingMove?;      return @flags[/j/]; end
-  def soundMove?;         return @flags[/k/]; end
-  def powderMove?;        return @flags[/l/]; end
-  def pulseMove?;         return @flags[/m/]; end
-  def bombMove?;          return @flags[/n/]; end
-  def danceMove?;         return @flags[/o/]; end
+  def contactMove?;       return @flags.any? { |f| f[/^Contact$/i] };             end
+  def canProtectAgainst?; return @flags.any? { |f| f[/^CanProtect$/i] };          end
+  def canMirrorMove?;     return @flags.any? { |f| f[/^CanMirrorMove$/i] };       end
+  def thawsUser?;         return @flags.any? { |f| f[/^ThawsUser$/i] };           end
+  def highCriticalRate?;  return @flags.any? { |f| f[/^HighCriticalHitRate$/i] }; end
+  def bitingMove?;        return @flags.any? { |f| f[/^Biting$/i] };              end
+  def punchingMove?;      return @flags.any? { |f| f[/^Punching$/i] };            end
+  def soundMove?;         return @flags.any? { |f| f[/^Sound$/i] };               end
+  def powderMove?;        return @flags.any? { |f| f[/^Powder$/i] };              end
+  def pulseMove?;         return @flags.any? { |f| f[/^Pulse$/i] };               end
+  def bombMove?;          return @flags.any? { |f| f[/^Bomb$/i] };                end
+  def danceMove?;         return @flags.any? { |f| f[/^Dance$/i] };               end
 
   # Causes perfect accuracy (param=1) and double damage (param=2).
   def tramplesMinimize?(_param=1); return false; end
