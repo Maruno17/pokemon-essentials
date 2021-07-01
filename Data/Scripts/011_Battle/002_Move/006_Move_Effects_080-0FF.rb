@@ -805,6 +805,8 @@ end
 # For 5 rounds, foes' attacks cannot become critical hits. (Lucky Chant)
 #===============================================================================
 class PokeBattle_Move_0A1 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.pbOwnSide.effects[PBEffects::LuckyChant]>0
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -826,6 +828,8 @@ end
 # (Reflect)
 #===============================================================================
 class PokeBattle_Move_0A2 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.pbOwnSide.effects[PBEffects::Reflect]>0
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -847,6 +851,8 @@ end
 # For 5 rounds, lowers power of special attacks against the user's side. (Light Screen)
 #===============================================================================
 class PokeBattle_Move_0A3 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.pbOwnSide.effects[PBEffects::LightScreen]>0
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1006,6 +1012,7 @@ end
 #===============================================================================
 class PokeBattle_Move_0A7 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
+  def canMagicCoat?;            return true; end
 
   def pbEffectAgainstTarget(user,target)
     target.effects[PBEffects::Foresight] = true
@@ -1021,6 +1028,7 @@ end
 #===============================================================================
 class PokeBattle_Move_0A8 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
+  def canMagicCoat?;            return true; end
 
   def pbEffectAgainstTarget(user,target)
     target.effects[PBEffects::MiracleEye] = true
@@ -1065,6 +1073,8 @@ end
 # (Quick Guard)
 #===============================================================================
 class PokeBattle_Move_0AB < PokeBattle_ProtectMove
+  def canSnatch?; return true; end
+
   def initialize(battle,move)
     super
     @effect      = PBEffects::QuickGuard
@@ -1079,6 +1089,8 @@ end
 # (Wide Guard)
 #===============================================================================
 class PokeBattle_Move_0AC < PokeBattle_ProtectMove
+  def canSnatch?; return true; end
+
   def initialize(battle,move)
     super
     @effect      = PBEffects::WideGuard
@@ -1696,6 +1708,7 @@ end
 #===============================================================================
 class PokeBattle_Move_0B7 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
+  def canMagicCoat?;            return true; end
 
   def pbFailsAgainstTarget?(user,target)
     if target.effects[PBEffects::Torment]
@@ -1719,6 +1732,8 @@ end
 # Disables all target's moves that the user also knows. (Imprison)
 #===============================================================================
 class PokeBattle_Move_0B8 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.effects[PBEffects::Imprison]
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1740,6 +1755,7 @@ end
 #===============================================================================
 class PokeBattle_Move_0B9 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
+  def canMagicCoat?;            return true; end
 
   def pbFailsAgainstTarget?(user,target)
     if target.effects[PBEffects::Disable]>0 || !target.lastRegularMoveUsed
@@ -1777,6 +1793,7 @@ end
 #===============================================================================
 class PokeBattle_Move_0BA < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
+  def canMagicCoat?;            return true; end
 
   def pbFailsAgainstTarget?(user,target)
     if target.effects[PBEffects::Taunt]>0
@@ -1812,6 +1829,8 @@ end
 # For 5 rounds, disables the target's healing moves. (Heal Block)
 #===============================================================================
 class PokeBattle_Move_0BB < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     if target.effects[PBEffects::HealBlock]>0
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1835,6 +1854,7 @@ end
 #===============================================================================
 class PokeBattle_Move_0BC < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
+  def canMagicCoat?;            return true; end
 
   def initialize(battle,move)
     super
@@ -2515,6 +2535,7 @@ end
 #===============================================================================
 class PokeBattle_Move_0D7 < PokeBattle_Move
   def healingMove?; return true; end
+  def canSnatch?;   return true; end
 
   def pbMoveFailed?(user,targets)
     if @battle.positions[user.index].effects[PBEffects::Wish]>0
@@ -2587,6 +2608,8 @@ end
 # (Aqua Ring)
 #===============================================================================
 class PokeBattle_Move_0DA < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.effects[PBEffects::AquaRing]
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -2608,6 +2631,8 @@ end
 # round, and cannot flee or switch out. (Ingrain)
 #===============================================================================
 class PokeBattle_Move_0DB < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.effects[PBEffects::Ingrain]
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -2629,6 +2654,8 @@ end
 # and the Pokémon in the user's position gains the same amount. (Leech Seed)
 #===============================================================================
 class PokeBattle_Move_0DC < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     if target.effects[PBEffects::LeechSeed]>=0
       @battle.pbDisplay(_INTL("{1} evaded the attack!",target.pbThis))
@@ -2697,7 +2724,8 @@ end
 # Heals target by 1/2 of its max HP. (Heal Pulse)
 #===============================================================================
 class PokeBattle_Move_0DF < PokeBattle_Move
-  def healingMove?; return true; end
+  def healingMove?;  return true; end
+  def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user,target)
     if target.hp==target.totalhp
@@ -2785,6 +2813,8 @@ end
 # User faints (if successful).
 #===============================================================================
 class PokeBattle_Move_0E2 < PokeBattle_TargetMultiStatDownMove
+  def canMagicCoat?; return false; end
+
   def initialize(battle,move)
     super
     @statDown = [:ATTACK,2,:SPECIAL_ATTACK,2]
@@ -2811,6 +2841,7 @@ end
 #===============================================================================
 class PokeBattle_Move_0E3 < PokeBattle_Move
   def healingMove?; return true; end
+  def canSnatch?;   return true; end
 
   def pbMoveFailed?(user,targets)
     if !@battle.pbCanChooseNonActive?(user.index)
@@ -2836,6 +2867,7 @@ end
 #===============================================================================
 class PokeBattle_Move_0E4 < PokeBattle_Move
   def healingMove?; return true; end
+  def canSnatch?;   return true; end
 
   def pbMoveFailed?(user,targets)
     if !@battle.pbCanChooseNonActive?(user.index)
@@ -2978,6 +3010,7 @@ end
 #===============================================================================
 class PokeBattle_Move_0EB < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
+  def canMagicCoat?;            return true; end
 
   def pbFailsAgainstTarget?(user,target)
     if target.hasActiveAbility?(:SUCTIONCUPS) && !@battle.moldBreaker
@@ -3152,6 +3185,8 @@ end
 # (Anchor Shot, Block, Mean Look, Spider Web, Spirit Shackle, Thousand Waves)
 #===============================================================================
 class PokeBattle_Move_0EF < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     return false if damagingMove?
     if target.effects[PBEffects::MeanLook]>=0
@@ -3386,6 +3421,8 @@ end
 # User recovers the last item it held and consumed. (Recycle)
 #===============================================================================
 class PokeBattle_Move_0F6 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if !user.recycleItem
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -3631,6 +3668,8 @@ end
 # effect, and no items can be used on it. (Embargo)
 #===============================================================================
 class PokeBattle_Move_0F8 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     if target.effects[PBEffects::Embargo]>0
       @battle.pbDisplay(_INTL("But it failed!"))

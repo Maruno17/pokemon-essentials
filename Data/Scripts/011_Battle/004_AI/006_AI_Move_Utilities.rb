@@ -115,7 +115,7 @@ class PokeBattle_AI
                      target.hasActiveAbility?(:WONDERGUARD)
       return true if move.damagingMove? && user.index!=target.index && !target.opposes?(user) &&
                      target.hasActiveAbility?(:TELEPATHY)
-      return true if move.canMagicCoat? && target.hasActiveAbility?(:MAGICBOUNCE) &&
+      return true if move.statusMove? && move.canMagicCoat? && target.hasActiveAbility?(:MAGICBOUNCE) &&
                      target.opposes?(user)
       return true if move.soundMove? && target.hasActiveAbility?(:SOUNDPROOF)
       return true if move.bombMove? && target.hasActiveAbility?(:BULLETPROOF)

@@ -88,6 +88,8 @@ end
 # Generic status problem-inflicting classes.
 #===============================================================================
 class PokeBattle_SleepMove < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     return false if damagingMove?
     return !target.pbCanSleep?(user,true,self)
@@ -107,6 +109,8 @@ end
 
 
 class PokeBattle_PoisonMove < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def initialize(battle,move)
     super
     @toxic = false
@@ -131,6 +135,8 @@ end
 
 
 class PokeBattle_ParalysisMove < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     return false if damagingMove?
     return !target.pbCanParalyze?(user,true,self)
@@ -150,6 +156,8 @@ end
 
 
 class PokeBattle_BurnMove < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     return false if damagingMove?
     return !target.pbCanBurn?(user,true,self)
@@ -169,6 +177,8 @@ end
 
 
 class PokeBattle_FreezeMove < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     return false if damagingMove?
     return !target.pbCanFreeze?(user,true,self)
@@ -207,6 +217,8 @@ end
 
 
 class PokeBattle_ConfuseMove < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     return false if damagingMove?
     return !target.pbCanConfuse?(user,true,self)
@@ -230,6 +242,8 @@ end
 # Generic user's stat increase/decrease classes.
 #===============================================================================
 class PokeBattle_StatUpMove < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     return false if damagingMove?
     return !user.pbCanRaiseStatStage?(@statUp[0],user,self,true)
@@ -250,6 +264,8 @@ end
 
 
 class PokeBattle_MultiStatUpMove < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     return false if damagingMove?
     failed = true
@@ -308,6 +324,8 @@ end
 # Generic target's stat increase/decrease classes.
 #===============================================================================
 class PokeBattle_TargetStatDownMove < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     return false if damagingMove?
     return !target.pbCanLowerStatStage?(@statDown[0],user,self,true)
@@ -328,6 +346,8 @@ end
 
 
 class PokeBattle_TargetMultiStatDownMove < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     return false if damagingMove?
     failed = true
@@ -489,6 +509,7 @@ end
 class PokeBattle_HealingMove < PokeBattle_Move
   def healingMove?;       return true; end
   def pbHealAmount(user); return 1;    end
+  def canSnatch?;         return true; end
 
   def pbMoveFailed?(user,targets)
     if user.hp==user.totalhp

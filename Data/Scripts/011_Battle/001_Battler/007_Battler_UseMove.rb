@@ -397,7 +397,7 @@ class PokeBattle_Battler
         end
       end
       # Magic Coat/Magic Bounce checks (for moves which don't target Pokémon)
-      if targets.length==0 && move.canMagicCoat?
+      if targets.length==0 && move.statusMove? && move.canMagicCoat?
         @battle.pbPriority(true).each do |b|
           next if b.fainted? || !b.opposes?(user)
           next if b.semiInvulnerable?
