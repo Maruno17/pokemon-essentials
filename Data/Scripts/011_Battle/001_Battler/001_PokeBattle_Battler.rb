@@ -583,14 +583,14 @@ class PokeBattle_Battler
   end
 
   def trappedInBattle?
-    return true if battler.effects[PBEffects::Trapping] > 0
-    return true if battler.effects[PBEffects::MeanLook] >= 0
-    return true if battler.effects[PBEffects::JawLock] >= 0
+    return true if @effects[PBEffects::Trapping] > 0
+    return true if @effects[PBEffects::MeanLook] >= 0
+    return true if @effects[PBEffects::JawLock] >= 0
     @battle.eachBattler { |b| return true if b.effects[PBEffects::JawLock] == @index }
-    return true if battler.effects[PBEffects::Octolock] >= 0
-    return true if battler.effects[PBEffects::Ingrain]
-    return true if battler.effects[PBEffects::NoRetreat]
-    return true if @field.effects[PBEffects::FairyLock] > 0
+    return true if @effects[PBEffects::Octolock] >= 0
+    return true if @effects[PBEffects::Ingrain]
+    return true if @effects[PBEffects::NoRetreat]
+    return true if @battle.field.effects[PBEffects::FairyLock] > 0
     return false
   end
 
