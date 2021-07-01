@@ -1127,7 +1127,7 @@ class PokeBattle_Move_0AE < PokeBattle_Move
 
   def pbFailsAgainstTarget?(user,target)
     if !target.lastRegularMoveUsed ||
-       !GameData::Move.get(target.lastRegularMoveUsed).flags[/e/]   # Not copyable by Mirror Move
+       !GameData::Move.get(target.lastRegularMoveUsed).flags.any? { |f| f[/^CanMirrorMove$/i] }
       @battle.pbDisplay(_INTL("The mirror move failed!"))
       return true
     end

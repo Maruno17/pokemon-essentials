@@ -27,7 +27,7 @@ module GameData
       "Target"       => [:target,        "e", :Target],
       "Priority"     => [:priority,      "i"],
       "FunctionCode" => [:function_code, "s"],
-      "Flags"        => [:flags,         "s"],
+      "Flags"        => [:flags,         "*s"],
       "EffectChance" => [:effect_chance, "u"],
       "Description"  => [:description,   "q"]
     }
@@ -46,7 +46,8 @@ module GameData
       @target           = hash[:target]        || :None
       @priority         = hash[:priority]      || 0
       @function_code    = hash[:function_code] || "000"
-      @flags            = hash[:flags]         || ""
+      @flags            = hash[:flags]         || []
+      @flags            = [@flags] if !@flags.is_a?(Array)
       @effect_chance    = hash[:effect_chance] || 0
       @real_description = hash[:description]   || "???"
     end
