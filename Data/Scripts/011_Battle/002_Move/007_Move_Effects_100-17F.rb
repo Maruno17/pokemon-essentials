@@ -38,6 +38,8 @@ end
 # Entry hazard. Lays spikes on the opposing side (max. 3 layers). (Spikes)
 #===============================================================================
 class PokeBattle_Move_103 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.pbOpposingSide.effects[PBEffects::Spikes]>=3
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -60,6 +62,8 @@ end
 # (Toxic Spikes)
 #===============================================================================
 class PokeBattle_Move_104 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.pbOpposingSide.effects[PBEffects::ToxicSpikes]>=2
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -81,6 +85,8 @@ end
 # Entry hazard. Lays stealth rocks on the opposing side. (Stealth Rock)
 #===============================================================================
 class PokeBattle_Move_105 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.pbOpposingSide.effects[PBEffects::StealthRock]
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -222,6 +228,8 @@ end
 # User turns 1/4 of max HP into a substitute. (Substitute)
 #===============================================================================
 class PokeBattle_Move_10C < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.effects[PBEffects::Substitute]>0
       @battle.pbDisplay(_INTL("{1} already has a substitute!",user.pbThis))
@@ -323,6 +331,7 @@ end
 #===============================================================================
 class PokeBattle_Move_10E < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
+  def canMagicCoat?;            return true; end
 
   def pbFailsAgainstTarget?(user,target)
     failed = true
@@ -469,6 +478,8 @@ end
 # user's stockpile by 1 (max. 3). (Stockpile)
 #===============================================================================
 class PokeBattle_Move_112 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.effects[PBEffects::Stockpile]>=3
       @battle.pbDisplay(_INTL("{1} can't stockpile any more!",user.pbThis))
@@ -545,6 +556,7 @@ end
 #===============================================================================
 class PokeBattle_Move_114 < PokeBattle_Move
   def healingMove?; return true; end
+  def canSnatch?;   return true; end
 
   def pbMoveFailed?(user,targets)
     if user.effects[PBEffects::Stockpile]==0
@@ -700,6 +712,7 @@ end
 #===============================================================================
 class PokeBattle_Move_119 < PokeBattle_Move
   def unusableInGravity?; return true; end
+  def canSnatch?;         return true; end
 
   def pbMoveFailed?(user,targets)
     if user.effects[PBEffects::Ingrain] ||
@@ -724,6 +737,7 @@ end
 #===============================================================================
 class PokeBattle_Move_11A < PokeBattle_Move
   def unusableInGravity?; return true; end
+  def canMagicCoat?;      return true; end
 
   def pbFailsAgainstTarget?(user,target)
     if target.effects[PBEffects::Ingrain] ||
@@ -1095,6 +1109,7 @@ end
 #       pbSuccessCheckAgainstTarget is only called for targeted battlers.
 class PokeBattle_Move_137 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
+  def canSnatch?; return true; end
 
   def pbMoveFailed?(user,targets)
     @validTargets = []
@@ -1339,6 +1354,8 @@ end
 # stage each. (Venom Drench)
 #===============================================================================
 class PokeBattle_Move_140 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbMoveFailed?(user,targets)
     @validTargets = []
     targets.each do |b|
@@ -1374,6 +1391,8 @@ end
 # Reverses all stat changes of the target. (Topsy-Turvy)
 #===============================================================================
 class PokeBattle_Move_141 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     failed = true
     GameData::Stat.each_battle do |s|
@@ -1400,6 +1419,8 @@ end
 # Gives target the Ghost type. (Trick-or-Treat)
 #===============================================================================
 class PokeBattle_Move_142 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     if !GameData::Type.exists?(:GHOST) || target.pbHasType?(:GHOST) || !target.canChangeType?
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1421,6 +1442,8 @@ end
 # Gives target the Grass type. (Forest's Curse)
 #===============================================================================
 class PokeBattle_Move_143 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     if !GameData::Type.exists?(:GRASS) || target.pbHasType?(:GRASS) || !target.canChangeType?
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1534,6 +1557,7 @@ end
 #===============================================================================
 class PokeBattle_Move_148 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
+  def canMagicCoat?;            return true; end
 
   def pbFailsAgainstTarget?(user,target)
     if target.effects[PBEffects::Powder]
@@ -1555,6 +1579,8 @@ end
 # This round, the user's side is unaffected by damaging moves. (Mat Block)
 #===============================================================================
 class PokeBattle_Move_149 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.turnCount > 1
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1751,6 +1777,8 @@ end
 # Entry hazard. Lays stealth rocks on the opposing side. (Sticky Web)
 #===============================================================================
 class PokeBattle_Move_153 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.pbOpposingSide.effects[PBEffects::StickyWeb]
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1873,6 +1901,8 @@ end
 # Poisons the target and decreases its Speed by 1 stage. (Toxic Thread)
 #===============================================================================
 class PokeBattle_Move_159 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     if !target.pbCanPoison?(user,false,self) &&
        !target.pbCanLowerStatStage?(:SPEED,user,self)
@@ -1910,6 +1940,9 @@ end
 # (Purify)
 #===============================================================================
 class PokeBattle_Move_15B < PokeBattle_HealingMove
+  def canSnatch?;    return false; end   # Because it affects a target
+  def canMagicCoat?; return true;  end
+
   def pbFailsAgainstTarget?(user,target)
     if target.status == :NONE
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1943,6 +1976,7 @@ end
 #       pbSuccessCheckAgainstTarget is only called for targeted battlers.
 class PokeBattle_Move_15C < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
+  def canSnatch?;               return true; end
 
   def pbMoveFailed?(user,targets)
     @validTargets = []
@@ -2020,6 +2054,8 @@ end
 # (Laser Focus)
 #===============================================================================
 class PokeBattle_Move_15E < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbEffectGeneral(user)
     user.effects[PBEffects::LaserFocus] = 2
     @battle.pbDisplay(_INTL("{1} concentrated intensely!",user.pbThis))
@@ -2046,7 +2082,8 @@ end
 # it). (Strength Sap)
 #===============================================================================
 class PokeBattle_Move_160 < PokeBattle_Move
-  def healingMove?; return true; end
+  def healingMove?;  return true; end
+  def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user,target)
     # NOTE: The official games appear to just check whether the target's Attack
@@ -2210,6 +2247,8 @@ end
 # weather is not hail. (Aurora Veil)
 #===============================================================================
 class PokeBattle_Move_167 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if @battle.pbWeather != :Hail
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -2263,6 +2302,8 @@ end
 # (Spotlight)
 #===============================================================================
 class PokeBattle_Move_16A < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbEffectAgainstTarget(user,target)
     target.effects[PBEffects::Spotlight] = 1
     target.eachAlly do |b|
@@ -2395,7 +2436,8 @@ end
 # (Floral Healing)
 #===============================================================================
 class PokeBattle_Move_16E < PokeBattle_Move
-  def healingMove?; return true; end
+  def healingMove?;  return true; end
+  def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user,target)
     if target.hp==target.totalhp

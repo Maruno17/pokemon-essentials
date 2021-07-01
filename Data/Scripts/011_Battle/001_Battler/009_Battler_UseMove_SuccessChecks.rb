@@ -385,7 +385,7 @@ class PokeBattle_Battler
       end
     end
     # Magic Coat/Magic Bounce
-    if move.canMagicCoat? && !target.semiInvulnerable? && target.opposes?(user)
+    if move.statusMove? && move.canMagicCoat? && !target.semiInvulnerable? && target.opposes?(user)
       if target.effects[PBEffects::MagicCoat]
         target.damageState.magicCoat = true
         target.effects[PBEffects::MagicCoat] = false

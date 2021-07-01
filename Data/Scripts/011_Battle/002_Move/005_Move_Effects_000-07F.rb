@@ -58,6 +58,8 @@ end
 # Makes the target drowsy; it falls asleep at the end of the next turn. (Yawn)
 #===============================================================================
 class PokeBattle_Move_004 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     if target.effects[PBEffects::Yawn]>0
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -324,6 +326,7 @@ end
 #===============================================================================
 class PokeBattle_Move_016 < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
+  def canMagicCoat?; return true; end
 
   def pbFailsAgainstTarget?(user,target)
     return false if damagingMove?
@@ -365,6 +368,8 @@ end
 # Cures user of burn, poison and paralysis. (Refresh)
 #===============================================================================
 class PokeBattle_Move_018 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if ![:BURN, :POISON, :PARALYSIS].include?(user.status)
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -400,6 +405,7 @@ end
 #       6+). We achieve this by not targeting any battlers in Gen 5, since
 #       pbSuccessCheckAgainstTarget is only called for targeted battlers.
 class PokeBattle_Move_019 < PokeBattle_Move
+  def canSnatch?;          return true; end
   def worksWithNoTargets?; return true; end
 
   def pbMoveFailed?(user,targets)
@@ -491,6 +497,8 @@ end
 # (Safeguard)
 #===============================================================================
 class PokeBattle_Move_01A < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.pbOwnSide.effects[PBEffects::Safeguard]>0
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -655,6 +663,8 @@ end
 # Increases the user's critical hit rate. (Focus Energy)
 #===============================================================================
 class PokeBattle_Move_023 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.effects[PBEffects::FocusEnergy]>=2
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -905,6 +915,8 @@ end
 # (Shell Smash)
 #===============================================================================
 class PokeBattle_Move_035 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def initialize(battle,move)
     super
     @statUp   = [:ATTACK,2,:SPECIAL_ATTACK,2,:SPEED,2]
@@ -1015,6 +1027,8 @@ end
 # (Belly Drum)
 #===============================================================================
 class PokeBattle_Move_03A < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     hpLoss = [user.totalhp/2,1].max
     if user.hp<=hpLoss
@@ -1109,6 +1123,8 @@ end
 # Increases the target's Special Attack by 1 stage. Confuses the target. (Flatter)
 #===============================================================================
 class PokeBattle_Move_040 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbMoveFailed?(user,targets)
     failed = true
     targets.each do |b|
@@ -1138,6 +1154,8 @@ end
 # Increases the target's Attack by 2 stages. Confuses the target. (Swagger)
 #===============================================================================
 class PokeBattle_Move_041 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbMoveFailed?(user,targets)
     failed = true
     targets.each do |b|
@@ -1567,6 +1585,8 @@ end
 # For 5 rounds, user's and ally's stat stages cannot be lowered by foes. (Mist)
 #===============================================================================
 class PokeBattle_Move_056 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.pbOwnSide.effects[PBEffects::Mist]>0
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1587,6 +1607,8 @@ end
 # Swaps the user's Attack and Defense stats. (Power Trick)
 #===============================================================================
 class PokeBattle_Move_057 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbEffectGeneral(user)
     user.attack,user.defense = user.defense,user.attack
     user.effects[PBEffects::PowerTrick] = !user.effects[PBEffects::PowerTrick]
@@ -1652,6 +1674,8 @@ end
 # For 4 rounds, doubles the Speed of all battlers on the user's side. (Tailwind)
 #===============================================================================
 class PokeBattle_Move_05B < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if user.pbOwnSide.effects[PBEffects::Tailwind]>0
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1780,6 +1804,8 @@ end
 # (Conversion)
 #===============================================================================
 class PokeBattle_Move_05E < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if !user.canChangeType?
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1858,6 +1884,8 @@ end
 # Changes user's type depending on the environment. (Camouflage)
 #===============================================================================
 class PokeBattle_Move_060 < PokeBattle_Move
+  def canSnatch?; return true; end
+
   def pbMoveFailed?(user,targets)
     if !user.canChangeType?
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -1934,6 +1962,8 @@ end
 # Target becomes Water type. (Soak)
 #===============================================================================
 class PokeBattle_Move_061 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     if !target.canChangeType? || !GameData::Type.exists?(:WATER) ||
        !target.pbHasOtherType?(:WATER)
@@ -1993,6 +2023,8 @@ end
 # Target's ability becomes Simple. (Simple Beam)
 #===============================================================================
 class PokeBattle_Move_063 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbMoveFailed?(user,targets)
     if !GameData::Ability.exists?(:SIMPLE)
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -2026,6 +2058,8 @@ end
 # Target's ability becomes Insomnia. (Worry Seed)
 #===============================================================================
 class PokeBattle_Move_064 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbMoveFailed?(user,targets)
     if !GameData::Ability.exists?(:INSOMNIA)
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -2101,6 +2135,8 @@ end
 # Target copies user's ability. (Entrainment)
 #===============================================================================
 class PokeBattle_Move_066 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbMoveFailed?(user,targets)
     if !user.ability
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -2211,6 +2247,8 @@ end
 # Target's ability is negated. (Gastro Acid)
 #===============================================================================
 class PokeBattle_Move_068 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user,target)
     if target.unstoppableAbility?
       @battle.pbDisplay(_INTL("But it failed!"))

@@ -9,7 +9,7 @@ class PokeBattle_Battler
   def pbChangeUser(choice,move,user)
     # Snatch
     move.snatched = false
-    if move.canSnatch?
+    if move.statusMove? && move.canSnatch?
       newUser = nil; strength = 100
       @battle.eachBattler do |b|
         next if b.effects[PBEffects::Snatch]==0 ||
