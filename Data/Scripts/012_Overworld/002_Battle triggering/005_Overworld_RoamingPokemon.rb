@@ -46,7 +46,7 @@ def pbRoamPokemon
   if !$PokemonGlobal.roamPosition
     $PokemonGlobal.roamPosition = {}
     for i in 0...Settings::ROAMING_SPECIES.length
-      next if !GameData::Species.exists?(i[0])
+      next if !GameData::Species.exists?(Settings::ROAMING_SPECIES[i][0])
       keys = pbRoamingAreas(i).keys
       $PokemonGlobal.roamPosition[i] = keys[rand(keys.length)]
     end
