@@ -238,6 +238,8 @@ end
 # Multitype/RKS System or has a substitute. (Magic Powder)
 #===============================================================================
 class PokeBattle_Move_17F < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user, target)
     if !target.canChangeType? || !GameData::Type.exists?(:PSYCHIC) ||
        !target.pbHasOtherType?(:PSYCHIC) || !target.affectedByPowder?
