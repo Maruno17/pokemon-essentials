@@ -183,6 +183,15 @@ class PokeBattle_Battle
       levelMaxExp = growth_rate.minimum_exp_for_level(curLevel + 1)
       tempExp2 = (levelMaxExp<expFinal) ? levelMaxExp : expFinal
       pkmn.exp = tempExp2
+
+    if pkmn.isFusion?
+      if pkmn.exp_gained_since_fused == nil
+        pkmn.exp_gained_since_fused = expGained
+      else
+        pkmn.exp_gained_since_fused +=  expGained
+      end
+
+    end
       @scene.pbEXPBar(battler,levelMinExp,levelMaxExp,tempExp1,tempExp2)
       tempExp1 = tempExp2
       curLevel += 1

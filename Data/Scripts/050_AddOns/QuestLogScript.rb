@@ -198,7 +198,9 @@ def pbCompletedQuest?(id)
 end
 
 def pbQuestlog
-  Questlog.new
+  pbMessage(_INTL("The quest log has been temporarily removed from the game and is planned to be added back in a future update"))
+  return
+  #Questlog.new
 end
 
 def pbAddQuest(id)

@@ -174,7 +174,15 @@ end
 #param2 = true pour body, false pour head
 #return int du pokemon de base
 def getBasePokemonID(pokemon, body = true)
-  cname = getConstantName(PBSpecies, pokemon) rescue nil
+  if pokemon.is_a?(Symbol)
+    dex_number = GameData::Species.get(pokemon).id_number
+    pokemon = dex_number
+  end
+
+  # cname = getConstantName(PBSpecies, pokemon) rescue nil
+  cname = GameData::Species.get(pokemon).id.to_s
+
+
   return pokemon if pokemon <= NB_POKEMON
   return pokemon if cname == nil
 

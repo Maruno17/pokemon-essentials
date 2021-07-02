@@ -7,6 +7,7 @@ class Trainer
   attr_accessor :id
   attr_accessor :language
   attr_accessor :party
+  attr_accessor :quests
 
   def inspect
     str = super.chop

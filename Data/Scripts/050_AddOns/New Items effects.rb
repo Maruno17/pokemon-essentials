@@ -435,15 +435,22 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS, proc { |item, pokemon, scene|
   next false
 })
 
+
 ItemHandlers::UseOnPokemon.add(:DNAREVERSER, proc { |item, pokemon, scene|
-  if pokemon.species <= CONST_NB_POKE
+  if !pokemon.isFusion?
     scene.pbDisplay(_INTL("It won't have any effect."))
     next false
   end
   if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be reversed?", pokemon.name))
     body = getBasePokemonID(pokemon.species, true)
     head = getBasePokemonID(pokemon.species, false)
-    newspecies = (head) * CONST_NB_POKE + body
+    newspecies = (head) * Settings::NB_POKEMON + body
+
+    body_exp = pokemon.exp_when_fused_body
+    head_exp = pokemon.exp_when_fused_head
+
+    pokemon.exp_when_fused_body = head_exp
+    pokemon.exp_when_fused_head = body_exp
 
     #play animation
     pbFadeOutInWithMusic(99999) {
@@ -451,7 +458,6 @@ ItemHandlers::UseOnPokemon.add(:DNAREVERSER, proc { |item, pokemon, scene|
       fus.pbStartScreen(pokemon, newspecies, true)
       fus.pbEvolution(false, true)
       fus.pbEndScreen
-      #fus.pbStartScreen(pokemon,newspecies,1)
       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
       scene.pbRefresh
     }
@@ -461,119 +467,170 @@ ItemHandlers::UseOnPokemon.add(:DNAREVERSER, proc { |item, pokemon, scene|
   next false
 })
 
-def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
-  if (pokemon.species <= NB_POKEMON)
-    if pokemon.fused != nil
-      if $Trainer.party.length >= 6
-        scene.pbDisplay(_INTL("Your party is full! You can't unfuse {1}.", pokemon.name))
-        return false
-      else
-        $Trainer.party[$Trainer.party.length] = pokemon.fused
-        pokemon.fused = nil
-        pokemon.form = 0
-        scene.pbHardRefresh
-        scene.pbDisplay(_INTL("{1} changed Forme!", pokemon.name))
-        return true
-      end
+ItemHandlers::UseOnPokemon.add(:INFINITEREVERSERS, proc { |item, pokemon, scene|
+  if !pokemon.isFusion?
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    next false
+  end
+  if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be reversed?", pokemon.name))
+    body = getBasePokemonID(pokemon.species, true)
+    head = getBasePokemonID(pokemon.species, false)
+    newspecies = (head) * Settings::NB_POKEMON + body
+
+    body_exp = pokemon.exp_when_fused_body
+    head_exp = pokemon.exp_when_fused_head
+
+    pokemon.exp_when_fused_body = head_exp
+    pokemon.exp_when_fused_head = body_exp
+
+    #play animation
+    pbFadeOutInWithMusic(99999) {
+      fus = PokemonEvolutionScene.new
+      fus.pbStartScreen(pokemon, newspecies, true)
+      fus.pbEvolution(false, true)
+      fus.pbEndScreen
+      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+      scene.pbRefresh
+    }
+    next true
+  end
+
+  next false
+})
+
+
+#
+# def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
+#   if (pokemon.species <= NB_POKEMON)
+#     if pokemon.fused != nil
+#       if $Trainer.party.length >= 6
+#         scene.pbDisplay(_INTL("Your party is full! You can't unfuse {1}.", pokemon.name))
+#         return false
+#       else
+#         $Trainer.party[$Trainer.party.length] = pokemon.fused
+#         pokemon.fused = nil
+#         pokemon.form = 0
+#         scene.pbHardRefresh
+#         scene.pbDisplay(_INTL("{1} changed Forme!", pokemon.name))
+#         return true
+#       end
+#     else
+#       chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
+#       if chosen >= 0
+#         poke2 = $Trainer.party[chosen]
+#         if (poke2.species <= NB_POKEMON) && poke2 != pokemon
+#           #check if fainted
+#           if pokemon.hp == 0 || poke2.hp == 0
+#             scene.pbDisplay(_INTL("A fainted Pokémon cannot be fused!"))
+#             return false
+#           end
+#           if pbFuse(pokemon, poke2, supersplicers)
+#             pbRemovePokemonAt(chosen)
+#           end
+#         elsif pokemon == poke2
+#           scene.pbDisplay(_INTL("{1} can't be fused with itself!", pokemon.name))
+#           return false
+#         else
+#           scene.pbDisplay(_INTL("{1} can't be fused with {2}.", poke2.name, pokemon.name))
+#           return false
+#
+#         end
+#
+#       else
+#         return false
+#       end
+#     end
+#   else
+#     return true if pbUnfuse(pokemon, scene, supersplicers)
+#
+#     #unfuse
+#   end
+# end
+#
+# def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
+#   #pcPosition nil   : unfusing from party
+#   #pcPosition [x,x] : unfusing from pc
+#   #
+#
+#   if (pokemon.obtain_method == 2 || pokemon.ot != $Trainer.name) # && !canunfuse
+#     scene.pbDisplay(_INTL("You can't unfuse a Pokémon obtained in a trade!"))
+#     return false
+#   else
+#     if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be unfused?", pokemon.name))
+#       if pokemon.species > (NB_POKEMON * NB_POKEMON) + NB_POKEMON #triple fusion
+#         scene.pbDisplay(_INTL("{1} cannot be unfused.", pokemon.name))
+#         return false
+#       elsif $Trainer.party.length >= 6 && !pcPosition
+#         scene.pbDisplay(_INTL("Your party is full! You can't unfuse {1}.", pokemon.name))
+#         return false
+#       else
+#         scene.pbDisplay(_INTL("Unfusing ... "))
+#         scene.pbDisplay(_INTL(" ... "))
+#         scene.pbDisplay(_INTL(" ... "))
+#
+#         bodyPoke = getBasePokemonID(pokemon.species, true)
+#         headPoke = getBasePokemonID(pokemon.species, false)
+#
+#
+#         if pokemon.exp_when_fused_head == nil || pokemon.exp_when_fused_body == nil
+#           new_level = calculateUnfuseLevelOldMethod(pokemon, supersplicers)
+#           body_level = new_level
+#           head_level = new_level
+#           poke1 = Pokemon.new(bodyPoke, body_level)
+#           poke2 = Pokemon.new(headPoke, head_level)
+#         else
+#           exp_body = pokemon.exp_when_fused_body + pokemon.exp_gained_since_fused
+#           exp_head = pokemon.exp_when_fused_head + pokemon.exp_gained_since_fused
+#
+#           poke1 = Pokemon.new(bodyPoke, pokemon.level)
+#           poke2 = Pokemon.new(headPoke, pokemon.level)
+#           poke1.exp = exp_body
+#           poke2.exp = exp_head
+#         end
+#
+#         #poke1 = PokeBattle_Pokemon.new(bodyPoke, lev, $Trainer)
+#         #poke2 = PokeBattle_Pokemon.new(headPoke, lev, $Trainer)
+#
+#         if pcPosition == nil
+#           box = pcPosition[0]
+#           index = pcPosition[1]
+#           $PokemonStorage.pbStoreToBox(poke2, box, index)
+#         else
+#           Kernel.pbAddPokemonSilent(poke2, poke2.level)
+#         end
+#         #On ajoute l'autre dans le pokedex aussi
+#         $Trainer.seen[poke1.species] = true
+#         $Trainer.owned[poke1.species] = true
+#         $Trainer.seen[poke2.species] = true
+#         $Trainer.owned[poke2.species] = true
+#
+#         pokemon.species = poke1.species
+#         pokemon.level = poke1.level
+#         pokemon.name = poke1.name
+#         pokemon.moves = poke1.moves
+#         pokemon.obtain_method = 0
+#         poke1.obtain_method = 0
+#
+#         #scene.pbDisplay(_INTL(p1.to_s + " " + p2.to_s))
+#         scene.pbHardRefresh
+#         scene.pbDisplay(_INTL("Your Pokémon were successfully unfused! "))
+#         return true
+#       end
+#     end
+#   end
+# end
+
+def calculateUnfuseLevelOldMethod(pokemon, supersplicers)
+  if pokemon.level > 1
+    if supersplicers
+      lev = pokemon.level * 0.9
     else
-      chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
-      if chosen >= 0
-        poke2 = $Trainer.party[chosen]
-        if (poke2.species <= NB_POKEMON) && poke2 != pokemon
-          #check if fainted
-          if pokemon.hp == 0 || poke2.hp == 0
-            scene.pbDisplay(_INTL("A fainted Pokémon cannot be fused!"))
-            return false
-          end
-          if pbFuse(pokemon, poke2, supersplicers)
-            pbRemovePokemonAt(chosen)
-          end
-        elsif pokemon == poke2
-          scene.pbDisplay(_INTL("{1} can't be fused with itself!", pokemon.name))
-          return false
-        else
-          scene.pbDisplay(_INTL("{1} can't be fused with {2}.", poke2.name, pokemon.name))
-          return false
-
-        end
-
-      else
-        return false
-      end
+      lev = pokemon.obtain_method == 2 ? pokemon.level * 0.65 : pokemon.level * 0.75
     end
   else
-    return true if pbUnfuse(pokemon, scene, supersplicers)
-
-    #unfuse
+    lev = 1
   end
-end
-
-def pbUnfuse(pokemon, scene, supersplicers, pcPosition = nil)
-  #pcPosition nil   : unfusing from party
-  #pcPosition [x,x] : unfusing from pc
-  #
-
-  if (pokemon.obtainMode == 2 || pokemon.ot != $Trainer.name) # && !canunfuse
-    scene.pbDisplay(_INTL("You can't unfuse a Pokémon obtained in a trade!"))
-    return false
-  else
-    if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be unfused?", pokemon.name))
-      if pokemon.species > (NB_POKEMON * NB_POKEMON) + NB_POKEMON #triple fusion
-        scene.pbDisplay(_INTL("{1} cannot be unfused.", pokemon.name))
-        return false
-      elsif $Trainer.party.length >= 6 && !pcPosition
-        scene.pbDisplay(_INTL("Your party is full! You can't unfuse {1}.", pokemon.name))
-        return false
-      else
-        scene.pbDisplay(_INTL("Unfusing ... "))
-        scene.pbDisplay(_INTL(" ... "))
-        scene.pbDisplay(_INTL(" ... "))
-
-        bodyPoke = getBasePokemonID(pokemon.species, true)
-        headPoke = getBasePokemonID(pokemon.species, false)
-        # pf = pokemon.species
-        # p1 = (pf/NB_POKEMON).round
-        # p2 = pf - (NB_POKEMON*p1)
-
-        if pokemon.level > 1
-          if supersplicers
-            lev = pokemon.level * 0.9
-          else
-            lev = pokemon.obtainMode == 2 ? pokemon.level * 0.65 : pokemon.level * 0.75
-          end
-        else
-          lev = 1
-        end
-        poke1 = PokeBattle_Pokemon.new(bodyPoke, lev, $Trainer)
-        poke2 = PokeBattle_Pokemon.new(headPoke, lev, $Trainer)
-
-        if pcPosition == nil
-          box = pcPosition[0]
-          index = pcPosition[1]
-          $PokemonStorage.pbStoreToBox(poke2, box, index)
-        else
-          Kernel.pbAddPokemonSilent(poke2, poke2.level)
-        end
-        #On ajoute l'autre dans le pokedex aussi
-        $Trainer.seen[poke1.species] = true
-        $Trainer.owned[poke1.species] = true
-        $Trainer.seen[poke2.species] = true
-        $Trainer.owned[poke2.species] = true
-
-        pokemon.species = poke1.species
-        pokemon.level = poke1.level
-        pokemon.name = poke1.name
-        pokemon.moves = poke1.moves
-        pokemon.obtainMode = 0
-        poke1.obtainMode = 0
-
-        #scene.pbDisplay(_INTL(p1.to_s + " " + p2.to_s))
-        scene.pbHardRefresh
-        scene.pbDisplay(_INTL("Your Pokémon were successfully unfused! "))
-        return true
-      end
-    end
-  end
+  return lev.floor
 end
 
 def pbFuse(pokemon, poke2, supersplicers = false)
@@ -1159,56 +1216,8 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS, proc { |item, pokemon, scene|
   next false
 })
 
-ItemHandlers::UseOnPokemon.add(:DNAREVERSER, proc { |item, pokemon, scene|
-  if pokemon.species <= CONST_NB_POKE
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be reversed?", pokemon.name))
-    body = getBasePokemonID(pokemon.species, true)
-    head = getBasePokemonID(pokemon.species, false)
-    newspecies = (head) * CONST_NB_POKE + body
 
-    #play animation
-    pbFadeOutInWithMusic(99999) {
-      fus = PokemonEvolutionScene.new
-      fus.pbStartScreen(pokemon, newspecies, true)
-      fus.pbEvolution(false, true)
-      fus.pbEndScreen
-      #fus.pbStartScreen(pokemon,newspecies,1)
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
 
-  next false
-})
-
-ItemHandlers::UseOnPokemon.add(:INFINITEREVERSERS, proc { |item, pokemon, scene|
-  if pokemon.species <= CONST_NB_POKE
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  if Kernel.pbConfirmMessageSerious(_INTL("Should {1} be reversed?", pokemon.name))
-    body = getBasePokemonID(pokemon.species, true)
-    head = getBasePokemonID(pokemon.species, false)
-    newspecies = (head) * CONST_NB_POKE + body
-
-    #play animation
-    pbFadeOutInWithMusic(99999) {
-      fus = PokemonEvolutionScene.new
-      fus.pbStartScreen(pokemon, newspecies, true)
-      fus.pbEvolution(false, true)
-      fus.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-
-  next false
-})
 
 def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
   playingBGM = $game_system.getPlayingBGM
@@ -1297,7 +1306,7 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
     bodyPoke = getBasePokemonID(pokemon.species_data.id_number, true)
     headPoke = getBasePokemonID(pokemon.species_data.id_number, false)
 
-    if (pokemon.obtainMode == 2 || pokemon.ot != $Trainer.name) # && !canunfuse
+    if (pokemon.obtain_method == 2 || pokemon.ot != $Trainer.name) # && !canunfuse
       scene.pbDisplay(_INTL("You can't unfuse a Pokémon obtained in a trade!"))
       return false
     else
@@ -1322,21 +1331,23 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
         scene.pbDisplay(_INTL(" ... "))
         scene.pbDisplay(_INTL(" ... "))
 
-        # pf = pokemon.species
-        # p1 = (pf/NB_POKEMON).round
-        # p2 = pf - (NB_POKEMON*p1)
 
-        if pokemon.level > 1
-          if supersplicers
-            lev = pokemon.level * 0.9
-          else
-            lev = pokemon.obtainMode == 2 ? pokemon.level * 0.65 : pokemon.level * 0.80
-          end
+        if pokemon.exp_when_fused_head == nil || pokemon.exp_when_fused_body == nil
+          new_level = calculateUnfuseLevelOldMethod(pokemon, supersplicers)
+          body_level = new_level
+          head_level = new_level
+          poke1 = Pokemon.new(bodyPoke, body_level)
+          poke2 = Pokemon.new(headPoke, head_level)
         else
-          lev = 1
+          exp_body = pokemon.exp_when_fused_body + pokemon.exp_gained_since_fused
+          exp_head = pokemon.exp_when_fused_head + pokemon.exp_gained_since_fused
+
+          poke1 = Pokemon.new(bodyPoke, pokemon.level)
+          poke2 = Pokemon.new(headPoke, pokemon.level)
+          poke1.exp = exp_body
+          poke2.exp = exp_head
         end
-        poke1 = PokeBattle_Pokemon.new(bodyPoke, lev, $Trainer)
-        poke2 = PokeBattle_Pokemon.new(headPoke, lev, $Trainer)
+
 
         if $Trainer.party.length >= 6
           if (keepInParty == 0)
@@ -1354,15 +1365,15 @@ def pbDNASplicing(pokemon, scene, supersplicers = false, superSplicer = false)
         end
 
         #On ajoute l'autre dans le pokedex aussi
-        $Trainer.seen[poke1.species] = true
-        $Trainer.owned[poke1.species] = true
+        $Trainer.pokedex.set_seen(poke1.species)
+        $Trainer.pokedex.set_owned(poke1.species)
 
         pokemon.species = poke1.species
         pokemon.level = poke1.level
         pokemon.name = poke1.name
         pokemon.moves = poke1.moves
-        pokemon.obtainMode = 0
-        poke1.obtainMode = 0
+        pokemon.obtain_method = 0
+        poke1.obtain_method = 0
 
         #scene.pbDisplay(_INTL(p1.to_s + " " + p2.to_s))
         scene.pbHardRefresh

@@ -14,6 +14,11 @@ class Pokemon
   attr_accessor :time_form_set
   # @return [Integer] the current experience points
   attr_reader   :exp
+
+  attr_accessor   :exp_when_fused_head
+  attr_accessor   :exp_when_fused_body
+  attr_accessor   :exp_gained_since_fused
+
   # @return [Integer] the number of steps until this Pokémon hatches, 0 if this Pokémon is not an egg
   attr_accessor :steps_to_hatch
   # @return [Integer] the current HP
@@ -132,6 +137,10 @@ class Pokemon
   def isSpecies?(check_species)
     return @species == check_species || (GameData::Species.exists?(check_species) &&
                                         @species == GameData::Species.get(check_species).species)
+  end
+
+  def isFusion?
+    return species_data.id_number > NB_POKEMON
   end
 
   def form
@@ -1053,6 +1062,7 @@ class Pokemon
     ret.ribbons     = @ribbons.clone
     return ret
   end
+
 
   # Creates a new Pokémon object.
   # @param species [Symbol, String, Integer] Pokémon species

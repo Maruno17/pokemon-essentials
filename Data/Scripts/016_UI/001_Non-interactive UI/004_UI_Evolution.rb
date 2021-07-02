@@ -485,7 +485,7 @@ class PokemonEvolutionScene
     end
   end
 
-  def pbStartScreen(pokemon,newspecies)
+  def pbStartScreen(pokemon,newspecies,reversing=false)
     @pokemon = pokemon
     @newspecies = newspecies
     @sprites = {}
@@ -495,7 +495,9 @@ class PokemonEvolutionScene
     @viewport.z = 99999
     @msgviewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @msgviewport.z = 99999
-    addBackgroundOrColoredPlane(@sprites,"background","evolutionbg",
+    background_file = reversing ? "DNAbg": "evolutionbg"
+
+    addBackgroundOrColoredPlane(@sprites,"background",background_file,
        Color.new(248,248,248),@bgviewport)
     rsprite1 = PokemonSprite.new(@viewport)
     rsprite1.setOffset(PictureOrigin::Center)
@@ -526,16 +528,18 @@ class PokemonEvolutionScene
   end
 
   # Opens the evolution screen
-  def pbEvolution(cancancel=true)
+  def pbEvolution(cancancel=true,reversing=false)
     metaplayer1 = SpriteMetafilePlayer.new(@metafile1,@sprites["rsprite1"])
     metaplayer2 = SpriteMetafilePlayer.new(@metafile2,@sprites["rsprite2"])
     metaplayer1.play
     metaplayer2.play
     pbBGMStop
     @pokemon.play_cry
-    pbMessageDisplay(@sprites["msgwindow"],
-       _INTL("\\se[]What? {1} is evolving!\\^",@pokemon.name)) { pbUpdate }
-    pbMessageWaitForInput(@sprites["msgwindow"],50,true) { pbUpdate }
+    if !reversing
+      pbMessageDisplay(@sprites["msgwindow"],
+         _INTL("\\se[]What? {1} is evolving!\\^",@pokemon.name)) { pbUpdate }
+      pbMessageWaitForInput(@sprites["msgwindow"],50,true) { pbUpdate }
+    end
     pbPlayDecisionSE
     oldstate  = pbSaveSpriteState(@sprites["rsprite1"])
     oldstate2 = pbSaveSpriteState(@sprites["rsprite2"])
@@ -561,11 +565,11 @@ class PokemonEvolutionScene
       pbMessageDisplay(@sprites["msgwindow"],
          _INTL("Huh? {1} stopped evolving!",@pokemon.name)) { pbUpdate }
     else
-      pbEvolutionSuccess
+      pbEvolutionSuccess(reversing)
     end
   end
 
-  def pbEvolutionSuccess
+  def pbEvolutionSuccess(reversing=false)
     # Play cry of evolved species
     frames = GameData::Species.cry_length(@newspecies, @pokemon.form)
     pbBGMStop
@@ -577,9 +581,16 @@ class PokemonEvolutionScene
     # Success jingle/message
     pbMEPlay("Evolution success")
     newspeciesname = GameData::Species.get(@newspecies).name
-    pbMessageDisplay(@sprites["msgwindow"],
-       _INTL("\\se[]Congratulations! Your {1} evolved into {2}!\\wt[80]",
-       @pokemon.name,newspeciesname)) { pbUpdate }
+    if !reversing
+      pbMessageDisplay(@sprites["msgwindow"],
+                       _INTL("\\se[]Congratulations! Your {1} evolved into {2}!\\wt[80]",
+                             @pokemon.name,newspeciesname)) { pbUpdate }
+    else
+      pbMessageDisplay(@sprites["msgwindow"],
+                       _INTL("\\se[]{1} has been turned into {2}!\\wt[80]",
+                             @pokemon.name,newspeciesname)) { pbUpdate }
+    end
+
     @sprites["msgwindow"].text = ""
     # Check for consumed item and check if Pokémon should be duplicated
     pbEvolutionMethodAfterEvolution

@@ -1,4 +1,4 @@
-# Le eul but de cette clae et de pouvoir continuer à utilier le format PBTrainer::TRAINER quand on call la méthode de combat de dreeur
+# Le seul but de cette clae et de pouvoir continuer à utilier le format PBTrainer::TRAINER quand on call la méthode de combat de dreeur
 # pour ne pa à avoir à modifier tou le événement
 #
 module PBItems

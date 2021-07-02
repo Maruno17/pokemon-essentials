@@ -525,7 +525,7 @@ class PokemonFusionScene
     @pokemon2 = pokemon2
 
     @newspecies = newspecies
-    addBackgroundOrColoredPlane(@sprites, "background", "evolutionbg",
+    addBackgroundOrColoredPlane(@sprites, "background", "DNAbg",
                                 Color.new(248, 248, 248), @viewport)
 
     poke1_number = GameData::Species.get(@pokemon1.species).id_number
@@ -681,6 +681,11 @@ class PokemonFusionScene
 
       Kernel.pbMessageDisplay(@sprites["msgwindow"],
                               _INTL("\\se[]Congratulations! Your Pokémon were fused into {2}!\\wt[80]", @pokemon1.name, newspeciesname))
+
+      #exp
+      @pokemon1.exp_when_fused_head = @pokemon2.exp   #peut-être l'inverse
+      @pokemon1.exp_when_fused_body = @pokemon1.exp   #peut-être l'inverse
+      @pokemon1.exp_gained_since_fused=0
 
       averageFusionIvs()
       #add to pokedex 
