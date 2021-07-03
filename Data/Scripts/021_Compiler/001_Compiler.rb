@@ -734,6 +734,7 @@ module Compiler
   end
 
   def main
+    return
     return if !$DEBUG
     begin
       dataFiles = [

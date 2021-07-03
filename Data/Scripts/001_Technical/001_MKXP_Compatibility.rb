@@ -8,6 +8,8 @@ def pbSetWindowText(string)
 end
 
 class Bitmap
+  attr_accessor :storedPath
+
   alias mkxp_draw_text draw_text unless method_defined?(:mkxp_draw_text)
 
   def draw_text(x, y, width, height, text, align = 0)

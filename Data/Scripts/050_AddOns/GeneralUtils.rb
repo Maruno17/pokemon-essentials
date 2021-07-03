@@ -253,3 +253,14 @@ def isHoennPokemon(species)
         391,392,393,394,395,396,401,404,405]
   return list.include?(species)
 end
+
+def pbBitmap(path)
+  if !pbResolveBitmap(path).nil?
+    bmp = RPG::Cache.load_bitmap_path(path)
+    bmp.storedPath = path
+  else
+    p "Image located at '#{path}' was not found!" if $DEBUG
+    bmp = Bitmap.new(1, 1)
+  end
+  return bmp
+end
