@@ -793,14 +793,14 @@ def pbChooseAbility(poke, hidden1 = false, hidden2 = false)
   return hidden2 ? 5 : 1
 end
 
-#pas au point. renvoie tjrs la mm nature
-def pbChooseNature(species1, species2)
-  nature1 = PBNatures.getName(species1)
-  nature2 = PBNatures.getName(species2)
-  if (Kernel.pbMessage("Choose a nature.", [_INTL("{1}", nature1), _INTL("{1}", nature2)], 2)) == 0
-    return PBNatures.getNum(nature1)
+def pbChooseNature(species1_nature, species2_nature)
+  nature1 = GameData::Nature.get(species1_nature)
+  nature2 = GameData::Nature.get(species2_nature)
+
+  if (Kernel.pbMessage("Choose a nature.", [_INTL("{1}", nature1.real_name), _INTL("{1}", nature2.real_name)], 2)) == 0
+    return nature1.id_number
   else
-    return PBNatures.getNum(nature2)
+    return nature2.id_number
   end
 end
 
