@@ -165,6 +165,15 @@ FieldUse = OnPokemon
 Type = EvolutionStone
 Description = A peculiar stone that makes certain species of Pokémon evolve. It shines with a dazzling light.
 #-------------------------------
+[ICESTONE]
+Name = Ice Stone
+NamePlural = Ice Stones
+Pocket = 1
+Price = 3000
+FieldUse = OnPokemon
+Type = EvolutionStone
+Description = A peculiar stone that makes certain species of Pokémon evolve. It has a snowflake pattern.
+#-------------------------------
 [REDAPRICORN]
 Name = Red Apricorn
 NamePlural = Red Apricorns
@@ -292,6 +301,22 @@ Pocket = 1
 Price = 7000
 Type = Fossil
 Description = A fossil of an ancient Pokémon that flew in the sky in ancient times. It appears to be part of its wing.
+#-------------------------------
+[JAWFOSSIL]
+Name = Jaw Fossil
+NamePlural = Jaw Fossils
+Pocket = 1
+Price = 7000
+Type = Fossil
+Description = A fossil from a prehistoric Pokémon that once lived on the land. It appears to be part of a large jaw.
+#-------------------------------
+[SAILFOSSIL]
+Name = Sail Fossil
+NamePlural = Sail Fossils
+Pocket = 1
+Price = 7000
+Type = Fossil
+Description = A fossil from a prehistoric Pokémon that once lived on the land. It looks like the impression from a skin sail.
 #-------------------------------
 [PRETTYWING]
 Name = Pretty Wing
@@ -500,6 +525,38 @@ Pocket = 1
 Price = 2100
 Description = A vital item that is needed to keep a stone tower from collapsing. Voices can be heard from it occasionally.
 #-------------------------------
+[REDNECTAR]
+Name = Red Nectar
+NamePlural = Red Nectars
+Pocket = 1
+Price = 300
+FieldUse = OnPokemon
+Description = A flower nectar obtained at Ula'ula Meadow. It changes the form of certain species of Pokémon.
+#-------------------------------
+[YELLOWNECTAR]
+Name = Yellow Nectar
+NamePlural = Yellow Nectars
+Pocket = 1
+Price = 300
+FieldUse = OnPokemon
+Description = A flower nectar obtained at Melemele Meadow. It changes the form of certain species of Pokémon.
+#-------------------------------
+[PINKNECTAR]
+Name = Pink Nectar
+NamePlural = Pink Nectars
+Pocket = 1
+Price = 300
+FieldUse = OnPokemon
+Description = A flower nectar obtained from shrubs on Royal Avenue. It changes the form of certain species of Pokémon.
+#-------------------------------
+[PURPLENECTAR]
+Name = Purple Nectar
+NamePlural = Purple Nectars
+Pocket = 1
+Price = 300
+FieldUse = OnPokemon
+Description = A flower nectar obtained at Poni Meadow. It changes the form of certain species of Pokémon.
+#-------------------------------
 [AIRBALLOON]
 Name = Air Balloon
 NamePlural = Air Balloons
@@ -541,6 +598,27 @@ NamePlural = Rocky Helmets
 Pocket = 1
 Price = 4000
 Description = If the holder of this item takes damage, the attacker will also be damaged upon contact.
+#-------------------------------
+[ASSAULTVEST]
+Name = Assault Vest
+NamePlural = Assault Vests
+Pocket = 1
+Price = 1000
+Description = An item to be held by a Pokémon. This offensive vest raises Sp. Def but prevents the use of status moves.
+#-------------------------------
+[SAFETYGOGGLES]
+Name = Safety Goggles
+NamePlural = Safety Goggles
+Pocket = 1
+Price = 4000
+Description = An item to be held by a Pokémon. They protect the holder from weather-related damage and powder.
+#-------------------------------
+[PROTECTIVEPADS]
+Name = Protective Pads
+NamePlural = Protective Pads
+Pocket = 1
+Price = 4000
+Description = An item to be held by a Pokémon. They protect the holder from effects caused by making contact.
 #-------------------------------
 [EJECTBUTTON]
 Name = Eject Button
@@ -654,6 +732,13 @@ Pocket = 1
 Price = 4000
 Description = A Pokémon held item that extends the duration of the move Hail used by the holder.
 #-------------------------------
+[TERRAINEXTENDER]
+Name = Terrain Extender
+NamePlural = Terrain Extenders
+Pocket = 1
+Price = 4000
+Description = An item to be held by a Pokémon. It extends the duration of the terrain caused by the holder.
+#-------------------------------
 [LIGHTCLAY]
 Name = Light Clay
 NamePlural = Light Clays
@@ -737,6 +822,62 @@ NamePlural = Cell Batteries
 Pocket = 1
 Price = 4000
 Description = A consumable battery. If the holder is hit by an Electric-type move, its Attack will rise.
+#-------------------------------
+[LUMINOUSMOSS]
+Name = Luminous Moss
+NamePlural = Luminous Mosses
+Pocket = 1
+Price = 4000
+Description = An item to be held by a Pokémon. It boosts Sp. Def if hit by a Water-type attack. It can only be used once.
+#-------------------------------
+[SNOWBALL]
+Name = Snowball
+NamePlural = Snowballs
+Pocket = 1
+Price = 4000
+Description = An item to be held by a Pokémon. It boosts Attack if hit by an Ice-type attack. It can only be used once.
+#-------------------------------
+[WEAKNESSPOLICY]
+Name = Weakness Policy
+NamePlural = Weakness Policies
+Pocket = 1
+Price = 1000
+Description = An item to be held by a Pokémon. The holder's Attack and Sp. Atk sharply increase if hit by a move it's weak to.
+#-------------------------------
+[ADRENALINEORB]
+Name = Adrenaline Orb
+NamePlural = Adrenaline Orbs
+Pocket = 1
+Price = 300
+Description = An item to be held by a Pokémon. It boosts Speed when intimidated. It can be used only once.
+#-------------------------------
+[ELECTRICSEED]
+Name = Electric Seed
+NamePlural = Electric Seeds
+Pocket = 1
+Price = 4000
+Description = An item to be held by a Pokémon. It boosts Defense on Electric Terrain. It can only be used once.
+#-------------------------------
+[GRASSYSEED]
+Name = Grassy Seed
+NamePlural = Grassy Seeds
+Pocket = 1
+Price = 4000
+Description = An item to be held by a Pokémon. It boosts Defense on Grassy Terrain. It can only be used once.
+#-------------------------------
+[MISTYSEED]
+Name = Misty Seed
+NamePlural = Misty Seeds
+Pocket = 1
+Price = 4000
+Description = An item to be held by a Pokémon. It boosts Sp. Def on Misty Terrain. It can only be used once.
+#-------------------------------
+[PSYCHICSEED]
+Name = Psychic Seed
+NamePlural = Psychic Seeds
+Pocket = 1
+Price = 4000
+Description = An item to be held by a Pokémon. It boosts Sp. Def on Psychic Terrain. It can only be used once.
 #-------------------------------
 [LIFEORB]
 Name = Life Orb
@@ -1221,6 +1362,13 @@ Pocket = 1
 Price = 1000
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Steel-type moves.
 #-------------------------------
+[PIXIEPLATE]
+Name = Pixie Plate
+NamePlural = Pixie Plates
+Pocket = 1
+Price = 1000
+Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Fairy-type moves.
+#-------------------------------
 [FIREGEM]
 Name = Fire Gem
 NamePlural = Fire Gems
@@ -1349,6 +1497,14 @@ Price = 200
 Type = TypeGem
 Description = A gem with an essence of steel. When held, it strengthens the power of a Steel-type move only once.
 #-------------------------------
+[FAIRYGEM]
+Name = Fairy Gem
+NamePlural = Fairy Gems
+Pocket = 1
+Price = 200
+Type = TypeGem
+Description = A gem with an essence of the fey. When held, it strengthens the power of a Fairy-type move only once.
+#-------------------------------
 [NORMALGEM]
 Name = Normal Gem
 NamePlural = Normal Gems
@@ -1469,6 +1625,125 @@ Pocket = 1
 Price = 1000
 Description = A cassette to be held by Genesect. It changes Techno Blast to an Ice-type move.
 #-------------------------------
+[FIREMEMORY]
+Name = Fire Memory
+NamePlural = Fire Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Fire-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[WATERMEMORY]
+Name = Water Memory
+NamePlural = Water Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Water-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[ELECTRICMEMORY]
+Name = Electric Memory
+NamePlural = Electric Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Electric-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[GRASSMEMORY]
+Name = Grass Memory
+NamePlural = Grass Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Grass-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[ICEMEMORY]
+Name = Ice Memory
+NamePlural = Ice Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Ice-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[FIGHTINGMEMORY]
+Name = Fighting Memory
+NamePlural = Fighting Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Fighting-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[POISONMEMORY]
+Name = Poison Memory
+NamePlural = Poison Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Poison-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[GROUNDMEMORY]
+Name = Ground Memory
+NamePlural = Ground Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Ground-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[FLYINGMEMORY]
+Name = Flying Memory
+NamePlural = Flying Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Flying-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[PSYCHICMEMORY]
+Name = Psychic Memory
+NamePlural = Psychic Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Psychic-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[BUGMEMORY]
+Name = Bug Memory
+NamePlural = Bug Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Bug-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[ROCKMEMORY]
+Name = Rock Memory
+NamePlural = Rock Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Rock-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[GHOSTMEMORY]
+Name = Ghost Memory
+NamePlural = Ghost Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Ghost-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[DRAGONMEMORY]
+Name = Dragon Memory
+NamePlural = Dragon Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Dragon-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[DARKMEMORY]
+Name = Dark Memory
+NamePlural = Dark Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Dark-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[STEELMEMORY]
+Name = Steel Memory
+NamePlural = Steel Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Steel-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
+[FAIRYMEMORY]
+Name = Fairy Memory
+NamePlural = Fairy Memories
+Pocket = 1
+Price = 1000
+Description = A memory disc containing Fairy-type data. It changes the holder's type if held by a certain Pokémon.
+#-------------------------------
 [EVERSTONE]
 Name = Everstone
 NamePlural = Everstones
@@ -1539,6 +1814,20 @@ Pocket = 1
 Price = 2000
 Description = A peculiar stone that makes certain species of Pokémon evolve. It is shaped like an egg.
 #-------------------------------
+[WHIPPEDDREAM]
+Name = Whipped Dream
+NamePlural = Whipped Dreams
+Pocket = 1
+Price = 2000
+Description = A soft and sweet treat made of fluffy, puffy and whirled cream. It's loved by a certain Pokémon.
+#-------------------------------
+[SACHET]
+Name = Sachet
+NamePlural = Sachets
+Pocket = 1
+Price = 2000
+Description = A sachet filled with slightly overwhelming fragrant perfumes. Yet it's loved by a certain Pokémon.
+#-------------------------------
 [REDSCARF]
 Name = Red Scarf
 NamePlural = Red Scarves
@@ -1573,6 +1862,396 @@ NamePlural = Yellow Scarves
 Pocket = 1
 Price = 100
 Description = An item to be held by a Pokémon. It boosts the Tough aspect of the holder in a Contest.
+#-------------------------------
+[VENUSAURITE]
+Name = Venusaurite
+NamePlural = Venusaurites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Venusaur hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[CHARIZARDITEX]
+Name = Charizardite X
+NamePlural = Charizardite Xs
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Charizard hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[CHARIZARDITEY]
+Name = Charizardite Y
+NamePlural = Charizardite Ys
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Charizard hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[BLASTOISINITE]
+Name = Blastoisinite
+NamePlural = Blastoisinites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Blastoise hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[BEEDRILLITE]
+Name = Beedrillite
+NamePlural = Beedrillites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Beedrill hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[PIDGEOTITE]
+Name = Pidgeotite
+NamePlural = Pidgeotites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Pidgeot hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[ALAKAZITE]
+Name = Alakazite
+NamePlural = Alakazites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Alakazam hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[SLOWBRONITE]
+Name = Slowbronite
+NamePlural = Slowbronites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Slowbro hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[GENGARITE]
+Name = Gengarite
+NamePlural = Gengarites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Gengar hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[KANGASKHANITE]
+Name = Kangaskhanite
+NamePlural = Kangaskhanites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Kangaskhan hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[PINSIRITE]
+Name = Pinsirite
+NamePlural = Pinsirites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Pinsir hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[GYARADOSITE]
+Name = Gyaradosite
+NamePlural = Gyaradosites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Gyarados hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[AERODACTYLITE]
+Name = Aerodactylite
+NamePlural = Aerodactylites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Aerodactyl hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[MEWTWONITEX]
+Name = Mewtwonite X
+NamePlural = Mewtwonite Xs
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Mewtwo hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[MEWTWONITEY]
+Name = Mewtwonite Y
+NamePlural = Mewtwonite Ys
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Mewtwo hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[AMPHAROSITE]
+Name = Ampharosite
+NamePlural = Ampharosites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Ampharos hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[STEELIXITE]
+Name = Steelixite
+NamePlural = Steelixites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Steelix hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[SCIZORITE]
+Name = Scizorite
+NamePlural = Scizorites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Scizor hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[HERACRONITE]
+Name = Heracronite
+NamePlural = Heracronites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Heracross hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[HOUNDOOMINITE]
+Name = Houndoominite
+NamePlural = Houndoominites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Houndoom hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[TYRANITARITE]
+Name = Tyranitarite
+NamePlural = Tyranitarites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Tyranitar hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[SCEPTILITE]
+Name = Sceptilite
+NamePlural = Sceptilites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Sceptile hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[BLAZIKENITE]
+Name = Blazikenite
+NamePlural = Blazikenites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Blaziken hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[SWAMPERTITE]
+Name = Swampertite
+NamePlural = Swampertites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Swampert hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[GARDEVOIRITE]
+Name = Gardevoirite
+NamePlural = Gardevoirites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Gardevoir hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[SABLENITE]
+Name = Sablenite
+NamePlural = Sablenites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Sableye hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[MAWILITE]
+Name = Mawilite
+NamePlural = Mawilites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Mawile hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[AGGRONITE]
+Name = Aggronite
+NamePlural = Aggronites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Aggron hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[MEDICHAMITE]
+Name = Medichamite
+NamePlural = Medichamites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Medicham hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[MANECTITE]
+Name = Manectite
+NamePlural = Manectites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Manectric hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[SHARPEDONITE]
+Name = Sharpedonite
+NamePlural = Sharpedonites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Sharpedo hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[CAMERUPTITE]
+Name = Cameruptite
+NamePlural = Cameruptites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Camerupt hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[ALTARIANITE]
+Name = Altarianite
+NamePlural = Altarianites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Altaria hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[BANETTITE]
+Name = Banettite
+NamePlural = Banettites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Banette hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[ABSOLITE]
+Name = Absolite
+NamePlural = Absolites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Absol hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[GLALITITE]
+Name = Glalitite
+NamePlural = Glalitites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Glalie hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[SALAMENCITE]
+Name = Salamencite
+NamePlural = Salamencites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Salamence hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[METAGROSSITE]
+Name = Metagrossite
+NamePlural = Metagrossites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Metagross hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[LATIASITE]
+Name = Latiasite
+NamePlural = Latiasites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Latias hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[LATIOSITE]
+Name = Latiosite
+NamePlural = Latiosites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Latios hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[LOPUNNITE]
+Name = Lopunnite
+NamePlural = Lopunnites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Lopunny hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[GARCHOMPITE]
+Name = Garchompite
+NamePlural = Garchompites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Garchomp hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[LUCARIONITE]
+Name = Lucarionite
+NamePlural = Lucarionites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Lucario hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[ABOMASITE]
+Name = Abomasite
+NamePlural = Abomasites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Abomasnow hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[GALLADITE]
+Name = Galladite
+NamePlural = Galladites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Gallade hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[AUDINITE]
+Name = Audinite
+NamePlural = Audinites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Audino hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[DIANCITE]
+Name = Diancite
+NamePlural = Diancites
+Pocket = 1
+Price = 0
+Type = MegaStone
+Description = One of a variety of mysterious Mega Stones. Have Diancie hold it, and it will be able to Mega Evolve.
+#-------------------------------
+[REDORB]
+Name = Red Orb
+NamePlural = Red Orbs
+Pocket = 1
+Price = 0
+Description = A shiny red orb that is said to have a legend tied to it. It's known to be connected with the Hoenn region.
+#-------------------------------
+[BLUEORB]
+Name = Blue Orb
+NamePlural = Blue Orbs
+Pocket = 1
+Price = 0
+Description = A shiny blue orb that is said to have a legend tied to it. It's known to be connected with the Hoenn region.
 #-------------------------------
 [POTION]
 Name = Potion
@@ -1681,6 +2360,15 @@ FieldUse = OnPokemon
 BattleUse = OnPokemon
 Description = A spray-type medicine. It heals all the status problems of a single Pokémon.
 #-------------------------------
+[RAGECANDYBAR]
+Name = Rage Candy Bar
+NamePlural = Rage Candy Bars
+Pocket = 2
+Price = 350
+FieldUse = OnPokemon
+BattleUse = OnPokemon
+Description = Mahogany Town's famous candy. It can be used once to heal all the status conditions of a Pokémon.
+#-------------------------------
 [LAVACOOKIE]
 Name = Lava Cookie
 NamePlural = Lava Cookies
@@ -1708,6 +2396,33 @@ FieldUse = OnPokemon
 BattleUse = OnPokemon
 Description = Castelia City's specialty, soft-serve ice cream. It heals all the status problems of a single Pokémon.
 #-------------------------------
+[LUMIOSEGALETTE]
+Name = Lumiose Galette
+NamePlural = Lumiose Galettes
+Pocket = 2
+Price = 350
+FieldUse = OnPokemon
+BattleUse = OnPokemon
+Description = A popular treat in Lumiose City. It can be used once to heal all the status conditions of a Pokémon.
+#-------------------------------
+[SHALOURSABLE]
+Name = Shalour Sable
+NamePlural = Shalour Sables
+Pocket = 2
+Price = 350
+FieldUse = OnPokemon
+BattleUse = OnPokemon
+Description = Shalour City's famous shortbread. It can be used once to heal all the status conditions of a Pokémon.
+#-------------------------------
+[BIGMALASADA]
+Name = Big Malasada
+NamePlural = Big Malasadas
+Pocket = 2
+Price = 350
+FieldUse = OnPokemon
+BattleUse = OnPokemon
+Description = The Alola region's specialty--fried bread. It can be used once to heal all the status conditions of a Pokémon.
+#-------------------------------
 [REVIVE]
 Name = Revive
 NamePlural = Revives
@@ -1734,15 +2449,6 @@ Price = 100
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Description = A 100% pure juice made of Berries. It restores the HP of one Pokémon by just 20 points.
-#-------------------------------
-[RAGECANDYBAR]
-Name = Rage Candy Bar
-NamePlural = Rage Candy Bars
-Pocket = 2
-Price = 350
-FieldUse = OnPokemon
-BattleUse = OnPokemon
-Description = Mahogany Town's famous candy. It can be used once to heal all the status conditions of a Pokémon.
 #-------------------------------
 [SWEETHEART]
 Name = Sweet Heart
@@ -1973,6 +2679,14 @@ Price = 300
 FieldUse = OnPokemon
 Description = An item for use on a Pokémon. It slightly increases the base Speed stat of a single Pokémon.
 #-------------------------------
+[ABILITYCAPSULE]
+Name = Ability Capsule
+NamePlural = Ability Capsule
+Pocket = 2
+Price = 10000
+FieldUse = OnPokemon
+Description = A capsule that allows a Pokémon with two Abilities to switch between these Abilities when it is used.
+#-------------------------------
 [RARECANDY]
 Name = Rare Candy
 NamePlural = Rare Candies
@@ -2196,6 +2910,24 @@ Price = 300
 BattleUse = OnFoe
 Type = PokeBall
 Description = A Poké Ball for catching Pokémon that evolve using the Moon Stone.
+#-------------------------------
+[DREAMBALL]
+Name = Dream Ball
+NamePlural = Dream Balls
+Pocket = 3
+Price = 0
+BattleUse = OnFoe
+Type = PokeBall
+Description = A somewhat different Poké Ball that makes it easier to catch wild Pokémon while they're asleep.
+#-------------------------------
+[BEASTBALL]
+Name = Beast Ball
+NamePlural = Beast Balls
+Pocket = 3
+Price = 1000
+BattleUse = OnFoe
+Type = PokeBall
+Description = A special Poké Ball designed to catch Ultra Beasts. It has a low success rate for catching others.
 #-------------------------------
 [TM01]
 Name = TM01
@@ -3052,6 +3784,51 @@ FieldUse = TM
 Move = SNARL
 Description = The user yells as if it is ranting about something, making the target's Sp. Atk stat decrease.
 #-------------------------------
+[TM96]
+Name = TM96
+NamePlural = TM96s
+Pocket = 4
+Price = 10000
+FieldUse = TM
+Move = NATUREPOWER
+Description = This attack makes use of nature's power. Its effects vary depending on the user's environment.
+#-------------------------------
+[TM97]
+Name = TM97
+NamePlural = TM97s
+Pocket = 4
+Price = 10000
+FieldUse = TM
+Move = DARKPULSE
+Description = The user releases a horrible aura imbued with dark thoughts. This may also make the target flinch.
+#-------------------------------
+[TM98]
+Name = TM98
+NamePlural = TM98s
+Pocket = 4
+Price = 10000
+FieldUse = TM
+Move = POWERUPPUNCH
+Description = Striking opponents repeatedly makes the user's fists harder. Hitting a target raises the Attack stat.
+#-------------------------------
+[TM99]
+Name = TM99
+NamePlural = TM99s
+Pocket = 4
+Price = 10000
+FieldUse = TM
+Move = DAZZLINGGLEAM
+Description = The user damages opposing Pokémon by emitting a powerful flash.
+#-------------------------------
+[TM100]
+Name = TM100
+NamePlural = TM100s
+Pocket = 4
+Price = 5000
+FieldUse = TM
+Move = CONFIDE
+Description = The user tells the target a secret. The target loses concentration and its Sp. Atk stat is lowered.
+#-------------------------------
 [HM01]
 Name = HM01
 NamePlural = HM01s
@@ -3539,6 +4316,14 @@ Price = 20
 Type = Berry
 Description = Weakens a supereffective Steel-type attack against the holding Pokémon.
 #-------------------------------
+[ROSELIBERRY]
+Name = Roseli Berry
+NamePlural = Roseli Berries
+Pocket = 5
+Price = 20
+Type = Berry
+Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Fairy-type attack.
+#-------------------------------
 [CHILANBERRY]
 Name = Chilan Berry
 NamePlural = Chilan Berries
@@ -3642,6 +4427,22 @@ Pocket = 5
 Price = 20
 Type = Berry
 Description = If held by a Pokémon and a special attack lands, the attacker also takes damage.
+#-------------------------------
+[KEEBERRY]
+Name = Kee Berry
+NamePlural = Kee Berries
+Pocket = 5
+Price = 20
+Type = Berry
+Description = If held by a Pokémon, this Berry will increase the holder's Defense if it's hit with a physical move.
+#-------------------------------
+[MARANGABERRY]
+Name = Maranga Berry
+NamePlural = Maranga Berries
+Pocket = 5
+Price = 20
+Type = Berry
+Description = If held by a Pokémon, this Berry will increase the holder's Sp. Def if it's hit with a special move.
 #-------------------------------
 [GRASSMAIL]
 Name = Grass Mail
@@ -4179,6 +4980,14 @@ Price = 0
 Type = KeyItem
 Description = A nifty watering pail. Use it to promote strong growth in Berries planted in soft soil.
 #-------------------------------
+[SPRINKLOTAD]
+Name = Sprinklotad
+NamePlural = Sprinklotads
+Pocket = 8
+Price = 0
+Type = KeyItem
+Description = A watering can shaped like a Lotad. It helps promote the healthy growth of any Berries planted in soft soil.
+#-------------------------------
 [GRACIDEA]
 Name = Gracidea
 NamePlural = Gracideas
@@ -4187,31 +4996,6 @@ Price = 0
 FieldUse = OnPokemonReusable
 Type = KeyItem
 Description = A flower sometimes bundled in bouquets to convey gratitude on special occasions like birthdays.
-#-------------------------------
-[AURORATICKET]
-Name = Aurora Ticket
-NamePlural = Aurora Tickets
-Pocket = 8
-Price = 0
-Type = KeyItem
-Description = A ticket required to board the ship to Doxy Island. It glows beautifully.
-#-------------------------------
-[OLDSEAMAP]
-Name = Old Sea Map
-NamePlural = Old Sea Maps
-Pocket = 8
-Price = 0
-Type = KeyItem
-Description = A faded sea chart that shows the way to a certain island.
-#-------------------------------
-[DNASPLICERS]
-Name = DNA Splicers
-NamePlural = DNA Splicers
-Pocket = 8
-Price = 0
-FieldUse = OnPokemonReusable
-Type = KeyItem
-Description = A splicer that fuses Kyurem and a certain Pokémon. They are said to have been one in the beginning.
 #-------------------------------
 [REVEALGLASS]
 Name = Reveal Glass
@@ -4222,831 +5006,6 @@ FieldUse = OnPokemonReusable
 Type = KeyItem
 Description = A glass that reveals the truth. It is a mysterious glass that returns a Pokémon back to its original shape.
 #-------------------------------
-[OVALCHARM]
-Name = Oval Charm
-NamePlural = Oval Charms
-Pocket = 8
-Price = 0
-Type = KeyItem
-Description = An oval charm said to increase the chance of Eggs being found at the Day Care.
-#-------------------------------
-[SHINYCHARM]
-Name = Shiny Charm
-NamePlural = Shiny Charms
-Pocket = 8
-Price = 0
-Type = KeyItem
-Description = A shiny charm said to increase the chance of finding a Shiny Pokémon.
-#-------------------------------
-[ICESTONE]
-Name = Ice Stone
-NamePlural = Ice Stones
-Pocket = 1
-Price = 3000
-FieldUse = OnPokemon
-Type = EvolutionStone
-Description = A peculiar stone that makes certain species of Pokémon evolve. It has a snowflake pattern.
-#-------------------------------
-[JAWFOSSIL]
-Name = Jaw Fossil
-NamePlural = Jaw Fossils
-Pocket = 1
-Price = 7000
-Type = Fossil
-Description = A fossil from a prehistoric Pokémon that once lived on the land. It appears to be part of a large jaw.
-#-------------------------------
-[SAILFOSSIL]
-Name = Sail Fossil
-NamePlural = Sail Fossils
-Pocket = 1
-Price = 7000
-Type = Fossil
-Description = A fossil from a prehistoric Pokémon that once lived on the land. It looks like the impression from a skin sail.
-#-------------------------------
-[REDNECTAR]
-Name = Red Nectar
-NamePlural = Red Nectars
-Pocket = 1
-Price = 300
-FieldUse = OnPokemon
-Description = A flower nectar obtained at Ula'ula Meadow. It changes the form of certain species of Pokémon.
-#-------------------------------
-[YELLOWNECTAR]
-Name = Yellow Nectar
-NamePlural = Yellow Nectars
-Pocket = 1
-Price = 300
-FieldUse = OnPokemon
-Description = A flower nectar obtained at Melemele Meadow. It changes the form of certain species of Pokémon.
-#-------------------------------
-[PINKNECTAR]
-Name = Pink Nectar
-NamePlural = Pink Nectars
-Pocket = 1
-Price = 300
-FieldUse = OnPokemon
-Description = A flower nectar obtained from shrubs on Royal Avenue. It changes the form of certain species of Pokémon.
-#-------------------------------
-[PURPLENECTAR]
-Name = Purple Nectar
-NamePlural = Purple Nectars
-Pocket = 1
-Price = 300
-FieldUse = OnPokemon
-Description = A flower nectar obtained at Poni Meadow. It changes the form of certain species of Pokémon.
-#-------------------------------
-[ASSAULTVEST]
-Name = Assault Vest
-NamePlural = Assault Vests
-Pocket = 1
-Price = 1000
-Description = An item to be held by a Pokémon. This offensive vest raises Sp. Def but prevents the use of status moves.
-#-------------------------------
-[SAFETYGOGGLES]
-Name = Safety Goggles
-NamePlural = Safety Goggles
-Pocket = 1
-Price = 4000
-Description = An item to be held by a Pokémon. They protect the holder from weather-related damage and powder.
-#-------------------------------
-[PROTECTIVEPADS]
-Name = Protective Pads
-NamePlural = Protective Pads
-Pocket = 1
-Price = 4000
-Description = An item to be held by a Pokémon. They protect the holder from effects caused by making contact.
-#-------------------------------
-[TERRAINEXTENDER]
-Name = Terrain Extender
-NamePlural = Terrain Extenders
-Pocket = 1
-Price = 4000
-Description = An item to be held by a Pokémon. It extends the duration of the terrain caused by the holder.
-#-------------------------------
-[ELECTRICSEED]
-Name = Electric Seed
-NamePlural = Electric Seeds
-Pocket = 1
-Price = 4000
-Description = An item to be held by a Pokémon. It boosts Defense on Electric Terrain. It can only be used once.
-#-------------------------------
-[PSYCHICSEED]
-Name = Psychic Seed
-NamePlural = Psychic Seeds
-Pocket = 1
-Price = 4000
-Description = An item to be held by a Pokémon. It boosts Sp. Def on Psychic Terrain. It can only be used once.
-#-------------------------------
-[MISTYSEED]
-Name = Misty Seed
-NamePlural = Misty Seeds
-Pocket = 1
-Price = 4000
-Description = An item to be held by a Pokémon. It boosts Sp. Def on Misty Terrain. It can only be used once.
-#-------------------------------
-[GRASSYSEED]
-Name = Grassy Seed
-NamePlural = Grassy Seeds
-Pocket = 1
-Price = 4000
-Description = An item to be held by a Pokémon. It boosts Defense on Grassy Terrain. It can only be used once.
-#-------------------------------
-[LUMINOUSMOSS]
-Name = Luminous Moss
-NamePlural = Luminous Mosses
-Pocket = 1
-Price = 4000
-Description = An item to be held by a Pokémon. It boosts Sp. Def if hit by a Water-type attack. It can only be used once.
-#-------------------------------
-[SNOWBALL]
-Name = Snowball
-NamePlural = Snowballs
-Pocket = 1
-Price = 4000
-Description = An item to be held by a Pokémon. It boosts Attack if hit by an Ice-type attack. It can only be used once.
-#-------------------------------
-[WEAKNESSPOLICY]
-Name = Weakness Policy
-NamePlural = Weakness Policies
-Pocket = 1
-Price = 1000
-Description = An item to be held by a Pokémon. The holder's Attack and Sp. Atk sharply increase if hit by a move it's weak to.
-#-------------------------------
-[ADRENALINEORB]
-Name = Adrenaline Orb
-NamePlural = Adrenaline Orbs
-Pocket = 1
-Price = 300
-Description = An item to be held by a Pokémon. It boosts Speed when intimidated. It can be used only once.
-#-------------------------------
-[PIXIEPLATE]
-Name = Pixie Plate
-NamePlural = Pixie Plates
-Pocket = 1
-Price = 1000
-Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Fairy-type moves.
-#-------------------------------
-[FAIRYGEM]
-Name = Fairy Gem
-NamePlural = Fairy Gems
-Pocket = 1
-Price = 200
-Type = TypeGem
-Description = A gem with an essence of the fey. When held, it strengthens the power of a Fairy-type move only once.
-#-------------------------------
-[FIREMEMORY]
-Name = Fire Memory
-NamePlural = Fire Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Fire-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[WATERMEMORY]
-Name = Water Memory
-NamePlural = Water Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Water-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[ELECTRICMEMORY]
-Name = Electric Memory
-NamePlural = Electric Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Electric-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[GRASSMEMORY]
-Name = Grass Memory
-NamePlural = Grass Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Grass-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[ICEMEMORY]
-Name = Ice Memory
-NamePlural = Ice Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Ice-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[FIGHTINGMEMORY]
-Name = Fighting Memory
-NamePlural = Fighting Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Fighting-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[POISONMEMORY]
-Name = Poison Memory
-NamePlural = Poison Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Poison-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[GROUNDMEMORY]
-Name = Ground Memory
-NamePlural = Ground Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Ground-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[FLYINGMEMORY]
-Name = Flying Memory
-NamePlural = Flying Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Flying-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[PSYCHICMEMORY]
-Name = Psychic Memory
-NamePlural = Psychic Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Psychic-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[BUGMEMORY]
-Name = Bug Memory
-NamePlural = Bug Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Bug-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[ROCKMEMORY]
-Name = Rock Memory
-NamePlural = Rock Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Rock-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[GHOSTMEMORY]
-Name = Ghost Memory
-NamePlural = Ghost Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Ghost-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[DRAGONMEMORY]
-Name = Dragon Memory
-NamePlural = Dragon Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Dragon-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[DARKMEMORY]
-Name = Dark Memory
-NamePlural = Dark Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Dark-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[STEELMEMORY]
-Name = Steel Memory
-NamePlural = Steel Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Steel-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[FAIRYMEMORY]
-Name = Fairy Memory
-NamePlural = Fairy Memories
-Pocket = 1
-Price = 1000
-Description = A memory disc containing Fairy-type data. It changes the holder's type if held by a certain Pokémon.
-#-------------------------------
-[VENUSAURITE]
-Name = Venusaurite
-NamePlural = Venusaurites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Venusaur hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[CHARIZARDITEX]
-Name = Charizardite X
-NamePlural = Charizardite Xs
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Charizard hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[CHARIZARDITEY]
-Name = Charizardite Y
-NamePlural = Charizardite Ys
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Charizard hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[BLASTOISINITE]
-Name = Blastoisinite
-NamePlural = Blastoisinites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Blastoise hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[BEEDRILLITE]
-Name = Beedrillite
-NamePlural = Beedrillites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Beedrill hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[PIDGEOTITE]
-Name = Pidgeotite
-NamePlural = Pidgeotites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Pidgeot hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[ALAKAZITE]
-Name = Alakazite
-NamePlural = Alakazites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Alakazam hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[SLOWBRONITE]
-Name = Slowbronite
-NamePlural = Slowbronites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Slowbro hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[GENGARITE]
-Name = Gengarite
-NamePlural = Gengarites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Gengar hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[KANGASKHANITE]
-Name = Kangaskhanite
-NamePlural = Kangaskhanites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Kangaskhan hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[PINSIRITE]
-Name = Pinsirite
-NamePlural = Pinsirites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Pinsir hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[GYARADOSITE]
-Name = Gyaradosite
-NamePlural = Gyaradosites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Gyarados hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[AERODACTYLITE]
-Name = Aerodactylite
-NamePlural = Aerodactylites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Aerodactyl hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[MEWTWONITEX]
-Name = Mewtwonite X
-NamePlural = Mewtwonite Xs
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Mewtwo hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[MEWTWONITEY]
-Name = Mewtwonite Y
-NamePlural = Mewtwonite Ys
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Mewtwo hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[AMPHAROSITE]
-Name = Ampharosite
-NamePlural = Ampharosites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Ampharos hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[STEELIXITE]
-Name = Steelixite
-NamePlural = Steelixites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Steelix hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[SCIZORITE]
-Name = Scizorite
-NamePlural = Scizorites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Scizor hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[HERACRONITE]
-Name = Heracronite
-NamePlural = Heracronites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Heracross hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[HOUNDOOMINITE]
-Name = Houndoominite
-NamePlural = Houndoominites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Houndoom hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[TYRANITARITE]
-Name = Tyranitarite
-NamePlural = Tyranitarites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Tyranitar hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[SCEPTILITE]
-Name = Sceptilite
-NamePlural = Sceptilites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Sceptile hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[BLAZIKENITE]
-Name = Blazikenite
-NamePlural = Blazikenites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Blaziken hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[SWAMPERTITE]
-Name = Swampertite
-NamePlural = Swampertites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Swampert hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[GARDEVOIRITE]
-Name = Gardevoirite
-NamePlural = Gardevoirites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Gardevoir hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[SABLENITE]
-Name = Sablenite
-NamePlural = Sablenites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Sableye hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[MAWILITE]
-Name = Mawilite
-NamePlural = Mawilites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Mawile hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[AGGRONITE]
-Name = Aggronite
-NamePlural = Aggronites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Aggron hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[MEDICHAMITE]
-Name = Medichamite
-NamePlural = Medichamites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Medicham hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[MANECTITE]
-Name = Manectite
-NamePlural = Manectites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Manectric hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[SHARPEDONITE]
-Name = Sharpedonite
-NamePlural = Sharpedonites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Sharpedo hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[CAMERUPTITE]
-Name = Cameruptite
-NamePlural = Cameruptites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Camerupt hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[ALTARIANITE]
-Name = Altarianite
-NamePlural = Altarianites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Altaria hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[BANETTITE]
-Name = Banettite
-NamePlural = Banettites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Banette hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[ABSOLITE]
-Name = Absolite
-NamePlural = Absolites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Absol hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[GLALITITE]
-Name = Glalitite
-NamePlural = Glalitites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Glalie hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[SALAMENCITE]
-Name = Salamencite
-NamePlural = Salamencites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Salamence hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[METAGROSSITE]
-Name = Metagrossite
-NamePlural = Metagrossites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Metagross hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[LATIASITE]
-Name = Latiasite
-NamePlural = Latiasites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Latias hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[LATIOSITE]
-Name = Latiosite
-NamePlural = Latiosites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Latios hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[LOPUNNITE]
-Name = Lopunnite
-NamePlural = Lopunnites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Lopunny hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[GARCHOMPITE]
-Name = Garchompite
-NamePlural = Garchompites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Garchomp hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[LUCARIONITE]
-Name = Lucarionite
-NamePlural = Lucarionites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Lucario hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[ABOMASITE]
-Name = Abomasite
-NamePlural = Abomasites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Abomasnow hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[GALLADITE]
-Name = Galladite
-NamePlural = Galladites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Gallade hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[AUDINITE]
-Name = Audinite
-NamePlural = Audinites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Audino hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[DIANCITE]
-Name = Diancite
-NamePlural = Diancites
-Pocket = 1
-Price = 0
-Type = MegaStone
-Description = One of a variety of mysterious Mega Stones. Have Diancie hold it, and it will be able to Mega Evolve.
-#-------------------------------
-[REDORB]
-Name = Red Orb
-NamePlural = Red Orbs
-Pocket = 1
-Price = 0
-Description = A shiny red orb that is said to have a legend tied to it. It's known to be connected with the Hoenn region.
-#-------------------------------
-[BLUEORB]
-Name = Blue Orb
-NamePlural = Blue Orbs
-Pocket = 1
-Price = 0
-Description = A shiny blue orb that is said to have a legend tied to it. It's known to be connected with the Hoenn region.
-#-------------------------------
-[WHIPPEDDREAM]
-Name = Whipped Dream
-NamePlural = Whipped Dreams
-Pocket = 1
-Price = 2000
-Description = A soft and sweet treat made of fluffy, puffy and whirled cream. It's loved by a certain Pokémon.
-#-------------------------------
-[SACHET]
-Name = Sachet
-NamePlural = Sachets
-Pocket = 1
-Price = 2000
-Description = A sachet filled with slightly overwhelming fragrant perfumes. Yet it's loved by a certain Pokémon.
-#-------------------------------
-[LUMIOSEGALETTE]
-Name = Lumiose Galette
-NamePlural = Lumiose Galettes
-Pocket = 2
-Price = 350
-FieldUse = OnPokemon
-BattleUse = OnPokemon
-Description = A popular treat in Lumiose City. It can be used once to heal all the status conditions of a Pokémon.
-#-------------------------------
-[SHALOURSABLE]
-Name = Shalour Sable
-NamePlural = Shalour Sables
-Pocket = 2
-Price = 350
-FieldUse = OnPokemon
-BattleUse = OnPokemon
-Description = Shalour City's famous shortbread. It can be used once to heal all the status conditions of a Pokémon.
-#-------------------------------
-[BIGMALASADA]
-Name = Big Malasada
-NamePlural = Big Malasadas
-Pocket = 2
-Price = 350
-FieldUse = OnPokemon
-BattleUse = OnPokemon
-Description = The Alola region's specialty--fried bread. It can be used once to heal all the status conditions of a Pokémon.
-#-------------------------------
-[ABILITYCAPSULE]
-Name = Ability Capsule
-NamePlural = Ability Capsule
-Pocket = 2
-Price = 10000
-FieldUse = OnPokemon
-Description = A capsule that allows a Pokémon with two Abilities to switch between these Abilities when it is used.
-#-------------------------------
-[DREAMBALL]
-Name = Dream Ball
-NamePlural = Dream Balls
-Pocket = 3
-Price = 0
-BattleUse = OnFoe
-Type = PokeBall
-Description = A somewhat different Poké Ball that makes it easier to catch wild Pokémon while they're asleep.
-#-------------------------------
-[BEASTBALL]
-Name = Beast Ball
-NamePlural = Beast Balls
-Pocket = 3
-Price = 1000
-BattleUse = OnFoe
-Type = PokeBall
-Description = A special Poké Ball designed to catch Ultra Beasts. It has a low success rate for catching others.
-#-------------------------------
-[TM96]
-Name = TM96
-NamePlural = TM96s
-Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = NATUREPOWER
-Description = This attack makes use of nature's power. Its effects vary depending on the user's environment.
-#-------------------------------
-[TM97]
-Name = TM97
-NamePlural = TM97s
-Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = DARKPULSE
-Description = The user releases a horrible aura imbued with dark thoughts. This may also make the target flinch.
-#-------------------------------
-[TM98]
-Name = TM98
-NamePlural = TM98s
-Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = POWERUPPUNCH
-Description = Striking opponents repeatedly makes the user's fists harder. Hitting a target raises the Attack stat.
-#-------------------------------
-[TM99]
-Name = TM99
-NamePlural = TM99s
-Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = DAZZLINGGLEAM
-Description = The user damages opposing Pokémon by emitting a powerful flash.
-#-------------------------------
-[TM100]
-Name = TM100
-NamePlural = TM100s
-Pocket = 4
-Price = 5000
-FieldUse = TM
-Move = CONFIDE
-Description = The user tells the target a secret. The target loses concentration and its Sp. Atk stat is lowered.
-#-------------------------------
-[ROSELIBERRY]
-Name = Roseli Berry
-NamePlural = Roseli Berries
-Pocket = 5
-Price = 20
-Type = Berry
-Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Fairy-type attack.
-#-------------------------------
-[KEEBERRY]
-Name = Kee Berry
-NamePlural = Kee Berries
-Pocket = 5
-Price = 20
-Type = Berry
-Description = If held by a Pokémon, this Berry will increase the holder's Defense if it's hit with a physical move.
-#-------------------------------
-[MARANGABERRY]
-Name = Maranga Berry
-NamePlural = Maranga Berries
-Pocket = 5
-Price = 20
-Type = Berry
-Description = If held by a Pokémon, this Berry will increase the holder's Sp. Def if it's hit with a special move.
-#-------------------------------
-[SPRINKLOTAD]
-Name = Sprinklotad
-NamePlural = Sprinklotads
-Pocket = 8
-Price = 0
-Type = KeyItem
-Description = A watering can shaped like a Lotad. It helps promote the healthy growth of any Berries planted in soft soil.
-#-------------------------------
 [PRISONBOTTLE]
 Name = Prison Bottle
 NamePlural = Prison Bottles
@@ -5055,6 +5014,15 @@ Price = 0
 FieldUse = OnPokemonReusable
 Type = KeyItem
 Description = A bottle believed to have been used to seal away the power of a certain Pokémon long, long ago.
+#-------------------------------
+[DNASPLICERS]
+Name = DNA Splicers
+NamePlural = DNA Splicers
+Pocket = 8
+Price = 0
+FieldUse = OnPokemonReusable
+Type = KeyItem
+Description = A splicer that fuses Kyurem and a certain Pokémon. They are said to have been one in the beginning.
 #-------------------------------
 [NSOLARIZER]
 Name = N-Solarizer
@@ -5074,6 +5042,22 @@ FieldUse = OnPokemonReusable
 Type = KeyItem
 Description = A machine to fuse Necrozma, which needs light, and Lunala.
 #-------------------------------
+[OVALCHARM]
+Name = Oval Charm
+NamePlural = Oval Charms
+Pocket = 8
+Price = 0
+Type = KeyItem
+Description = An oval charm said to increase the chance of Eggs being found at the Day Care.
+#-------------------------------
+[SHINYCHARM]
+Name = Shiny Charm
+NamePlural = Shiny Charms
+Pocket = 8
+Price = 0
+Type = KeyItem
+Description = A shiny charm said to increase the chance of finding a Shiny Pokémon.
+#-------------------------------
 [MEGARING]
 Name = Mega Ring
 NamePlural = Mega Rings
@@ -5081,3 +5065,19 @@ Pocket = 8
 Price = 0
 Type = KeyItem
 Description = This ring contains an untold power that somehow enables Pokémon carrying Mega Stones to Mega Evolve.
+#-------------------------------
+[AURORATICKET]
+Name = Aurora Ticket
+NamePlural = Aurora Tickets
+Pocket = 8
+Price = 0
+Type = KeyItem
+Description = A ticket required to board the ship to Doxy Island. It glows beautifully.
+#-------------------------------
+[OLDSEAMAP]
+Name = Old Sea Map
+NamePlural = Old Sea Maps
+Pocket = 8
+Price = 0
+Type = KeyItem
+Description = A faded sea chart that shows the way to a certain island.

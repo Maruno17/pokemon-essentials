@@ -73,7 +73,7 @@ module GameData
 
     def self.species_count
       ret = 0
-      self.species_count { |species| ret += 1 }
+      self.each_species { |species| ret += 1 }
       return ret
     end
 

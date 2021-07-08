@@ -609,7 +609,6 @@ GameData::Evolution.register({
 #===============================================================================
 GameData::Evolution.register({
   :id         => :Event,
-  :parameter  => Integer,
   :event_proc => proc { |pkmn, parameter, value|
     next true
   }

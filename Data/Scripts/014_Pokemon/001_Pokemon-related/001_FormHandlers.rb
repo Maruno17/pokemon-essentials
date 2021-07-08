@@ -319,7 +319,7 @@ MultipleForms.register(:BASCULIN,{
 
 MultipleForms.register(:DARMANITAN,{
   "getFormOnLeavingBattle" => proc { |pkmn,battle,usedInBattle,endBattle|
-    next 0
+    next 2 * (pkmn.form / 2)
   }
 })
 
@@ -589,10 +589,10 @@ MultipleForms.register(:NECROZMA,{
 })
 
 #===============================================================================
-# Alolan forms
+# Regional forms
 #===============================================================================
 
-# These species don't have visually different Alolan forms, but they need to
+# These species don't have visually different regional forms, but they need to
 # evolve into different forms depending on the location where they evolved.
 MultipleForms.register(:PIKACHU, {
   "getForm" => proc { |pkmn|

@@ -9,14 +9,13 @@ The game records, for each species, how many have been caught or defeated
 species because of this. This value is also shown in the Pokédex entry screen.
 
 Some moves have changed properties/effects:
-- Multi-Attack's power changed to 120.
-- Rapid Spin's power changed to 50, and it now raises the user's Speed by 1
-  stage (100% additional effect chance).
+- Rapid Spin now raises the user's Speed by 1 stage (100% additional effect
+  chance).
 - Howl's target changed to UserAndAllies, and is now a sound move. It is now
   blocked by Soundproof (I don't know if it should be checking the allies for
   pbImmunityByAbility, but leaning towards yes; will Volt Absorb block an
-  Electrified Howl?).
-- Vice Grip renamed to Vise Grip.
+  Electrified Howl?). Needs a new function code, since it now affects targets
+  rather than the user.
 - Teleport switches the user out. If the user is a wild Pokémon, ends the battle
   instead.
 - Curse's Ghost effect now targets a random foe (don't know if it can be non-
@@ -46,7 +45,7 @@ Some abilities have changed effects:
 
 Some items have changed properties/effects:
 - Zygarde Cube now changes a Zygarde's ability.
-- Ability Capsule/Ability Patch fail if used on Zygarde.
+- Ability Capsule/Ability Patch should fail if used on Zygarde.
 - If Leppa Berry is forced to be consumed, it will first try to work on a move
   with 0 PP left (preferring the earliest such move in the list of moves), and
   failing that, the earliest move in the list of moves which has any PP missing
@@ -63,12 +62,9 @@ Other notes:
 - Look at Sweet Scent's out of battle effect, namely whether it should try to
   cause a horde battle (and what does that mean in Essentials?).
 - Maybe have multiple sets of Pickup items for multiple Gens.
-- Dive Ball should have an increased catch rate if surfing or fishing(?).
+- Dive Ball should have an increased catch rate if surfing or fishing(?). Nah.
 - Add a newer type of berry tree mechanics? Have a separate setting that
   prevents deterioration?
-- King's Rock/Razor Fang should probably stop using a flag to determine if a
-  move is boosted by it, and instead check def flinchingMove?.
-- Skipped looking at TMs and HMs.
 - If a battle ends because of Rocky Helmet damage, the side that the Rocky
   Helmet holder is on should lose (Gen 7+) or win (Gen 6-).
 - Maybe the N-Solarizer/N-Lunarizer/that other fusion item that changes
@@ -82,19 +78,31 @@ Can use Fly from within the Town Map if possible. (Good QoL, add if possible.)
 Make example event that combines the Gen 8 fossils.
 
 New evolution methods:
-- Galarian Farfetch'd: performing 3 critical hits in a single battle
-
-PBS file data:
-- Form differences.
-- Moveset changes.
-- Changes to evolutions due to removal of moss rock/ice rock/magnetic field.
-- Some (12) existing species changed egg groups.
-- Aegislash's stats changed.
-- 2 existing Pokémon gained new abilities.
-- Vice Grip becomes Vise Grip.
-- Some items change names (Stick -> Leek, Bicycle -> Bike in Gen 6+, etc.).
+- Galarian Farfetch'd: performing 3 critical hits in a single battle.
 
 Add AI for new moves/items/abilities.
+
+Code for the form differences:
+- Cramorant (in battle only)
+- Toxel/Toxtricity (depends on nature)
+- Sinistea/Polteageist (form 1 is rare and not inheritable by breeding)
+- Milcery (depends on held item and random number)
+- Alcremie (random)
+- Eiscue (in battle only)
+- Indeedee (gender)
+- Morpeko (in battle only)
+- Zacian
+- Zamazenta
+- Kubfu (no code needed; form is manually set just before evolution)
+- Urshifu
+- Calyrex (fising, learns move upon fusion/defusion)
+- Galarian forms (make sure breeding inherits them)(Koffing and Mime Jr. are the
+  same)
+
+I think there are some alternate forms which don't have a hidden ability while
+their base forms do. I don't think the compiler supports this, and instead
+treats Abilities and HiddenAbilities separately. Can work around this by setting
+HiddenAbilities to be the same as Abilities. I'm not too happy with this.
 
 #===============================================================================
 # Low priority or ignorable
@@ -144,5 +152,25 @@ New evolution methods:
 Escape Rope's code now supports both consumable and non-consumable versions,
 depending on whether it is a key item. All it needs is a proper definition in
 items.txt.
+
+- Multi-Attack's power changed to 120.
+- Rapid Spin's power changed to 50.
+- Vice Grip renamed to Vise Grip.
+- King's Rock/Razor Fang should probably stop using a flag to determine if a
+  move is boosted by it, and instead check def flinchingMove?.
+- Moveset changes.
+- Some (12) existing species changed egg groups:
+      Ralts, Kirlia, Gardevoir, and Gallade: Amorphous to Humanlike/Amorphous
+      Trapinch, Vibrava, and Flygon: Bug to Bug/Dragon
+      Hawlucha: Human-Like to Flying/Humanlike
+      Bergmite and Avalugg: Monster to Monster/Mineral
+      Noibat and Noivern: Flying to Flying/Dragon
+- Aegislash's stats changed.
+- Koffing/Weezing gained new abilities.
+- Vice Grip becomes Vise Grip.
+- Some items change names (Stick -> Leek, Bicycle -> Bike in Gen 6+, etc.). Only
+  Stick changed.
+- Changes to evolutions due to removal of moss rock/ice rock/magnetic field.
+- Form differences.
 
 =end

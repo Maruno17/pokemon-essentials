@@ -209,15 +209,15 @@ class PokeBattle_Battler
     # Darmanitan - Zen Mode
     if isSpecies?(:DARMANITAN) && self.ability == :ZENMODE
       if @hp<=@totalhp/2
-        if @form!=1
+        if (@form % 2) == 0
           @battle.pbShowAbilitySplash(self,true)
           @battle.pbHideAbilitySplash(self)
-          pbChangeForm(1,_INTL("{1} triggered!",abilityName))
+          pbChangeForm(@form + 1, _INTL("{1} triggered!", abilityName))
         end
-      elsif @form!=0
+      elsif (@form % 2) != 0
         @battle.pbShowAbilitySplash(self,true)
         @battle.pbHideAbilitySplash(self)
-        pbChangeForm(0,_INTL("{1} triggered!",abilityName))
+        pbChangeForm(@form - 1, _INTL("{1} triggered!", abilityName))
       end
     end
     # Minior - Shields Down

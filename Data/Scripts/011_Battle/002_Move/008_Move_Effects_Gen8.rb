@@ -79,6 +79,8 @@ end
 #===============================================================================
 # Burns the target if any of its stats were increased this round.
 # (Burning Jealousy)
+# TODO: Is the burn an effect or an additional effect? Regardless, I think this
+#       code is wrong as it's a damaging move.
 #===============================================================================
 class PokeBattle_Move_177 < PokeBattle_BurnMove
   def pbEffectAgainstTarget(user, target)
@@ -675,6 +677,8 @@ end
 # behind a substitute. (Corrosive Gas)
 #===============================================================================
 class PokeBattle_Move_193 < PokeBattle_Move
+  def canMagicCoat?; return true; end
+
   def pbFailsAgainstTarget?(user, target)
     if !target.item || target.unlosableItem?(target.item) ||
        target.effects[PBEffects::Substitute] > 0
@@ -709,6 +713,8 @@ end
 #===============================================================================
 # The user takes recoil damage equal to 1/2 of its total HP (rounded up, min. 1
 # damage). (Steel Beam)
+# TODO: This recoil is not affected by Rock Head/Reckless. Damage is taken even
+#       if the move is protected against/misses.
 #===============================================================================
 class PokeBattle_Move_194 < PokeBattle_RecoilMove
   def pbRecoilDamage(user, target)
