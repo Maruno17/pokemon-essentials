@@ -588,12 +588,125 @@ MultipleForms.register(:NECROZMA,{
   }
 })
 
+MultipleForms.register(:CRAMORANT, {
+  "getFormOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
+    next 0
+  }
+})
+
+MultipleForms.register(:TOXEL, {
+  "getFormOnCreation" => proc { |pkmn|
+    next 1 if [:LONELY, :BOLD, :RELAXED, :TIMID, :SERIOUS, :MODEST, :MILD,
+               :QUIET, :BASHFUL, :CALM, :GENTLE, :CAREFUL].include?(pkmn.nature_id)
+    next 0
+  }
+})
+
+MultipleForms.copy(:TOXEL, :TOXTRICITY)
+
+MultipleForms.register(:SINISTEA, {
+  "getFormOnCreation" => proc { |pkmn|
+    next 1 if rand(100) == 0
+    next 0
+  }
+})
+
+MultipleForms.copy(:SINISTEA, :POLTEAGEIST)
+
+# A Milcery will always have the same flavor, but it is randomly chosen.
+MultipleForms.register(:MILCERY, {
+  "getForm" => proc { |pkmn|
+    num_flavors = 9
+    sweets = [:STRAWBERRYSWEET, :BERRYSWEET, :LOVESWEET, :STARSWEET,
+              :CLOVERSWEET, :FLOWERSWEET, :RIBBONSWEET]
+    if sweets.include?(pkmn.item_id)
+      next sweets.index(pkmn.item_id) + (pkmn.personalID % num_flavors) * sweets.length
+    end
+    next 0
+  }
+})
+
+MultipleForms.register(:ALCREMIE, {
+  "getFormOnCreation" => proc { |pkmn|
+    num_flavors = 9
+    num_sweets = 7
+    next rand(num_flavors * num_sweets)
+  }
+})
+
+MultipleForms.register(:EISCUE, {
+  "getFormOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
+    next 0 if pkmn.fainted? || endBattle
+  }
+})
+
+MultipleForms.register(:INDEEDEE, {
+  "getForm" => proc { |pkmn|
+    next pkmn.gender
+  }
+})
+
+MultipleForms.register(:MORPEKO, {
+  "getFormOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
+    next 0 if pkmn.fainted? || endBattle
+  }
+})
+
+MultipleForms.register(:ZACIAN, {
+  "getFormOnEnteringBattle" => proc { |pkmn, wild|
+    next 1 if pkmn.hasItem?(:RUSTEDSWORD)
+    next 0
+  },
+  "getFormOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
+    next 0
+  }
+})
+
+MultipleForms.register(:ZAMAZENTA, {
+  "getFormOnEnteringBattle" => proc { |pkmn, wild|
+    next 1 if pkmn.hasItem?(:RUSTEDSHIELD)
+    next 0
+  },
+  "getFormOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
+    next 0
+  }
+})
+
+MultipleForms.register(:URSHIFU, {
+  "getForm" => proc { |pkmn|
+    next rand(2)
+  }
+})
+
+MultipleForms.register(:CALYREX, {
+  "onSetForm" => proc { |pkmn, form, oldForm|
+    case form
+    when 0   # Normal
+      if pkmn.hasMove?(:GLACIALLANCE)
+        pkmn.forget_move(:GLACIALLANCE)
+        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, GameData::Move.get(:GLACIALLANCE).name))
+      end
+      if pkmn.hasMove?(:ASTRALBARRAGE)
+        pkmn.forget_move(:ASTRALBARRAGE)
+        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, GameData::Move.get(:ASTRALBARRAGE).name))
+      end
+      pbLearnMove(pkmn, :CONFUSION) if pkmn.numMoves == 0
+    when 1   # Ice Rider
+      pbLearnMove(pkmn, :GLACIALLANCE, true)
+    when 2   # Shadow Rider
+      pbLearnMove(pkmn, :ASTRALBARRAGE, true)
+    end
+  }
+})
+
+
 #===============================================================================
 # Regional forms
-#===============================================================================
-
 # These species don't have visually different regional forms, but they need to
 # evolve into different forms depending on the location where they evolved.
+#===============================================================================
+
+# Alolan forms
 MultipleForms.register(:PIKACHU, {
   "getForm" => proc { |pkmn|
     next if pkmn.form_simple >= 2
@@ -607,3 +720,18 @@ MultipleForms.register(:PIKACHU, {
 })
 
 MultipleForms.copy(:PIKACHU, :EXEGGCUTE, :CUBONE)
+
+# Galarian forms
+MultipleForms.register(:KOFFING, {
+  "getForm" => proc { |pkmn|
+    next if pkmn.form_simple >= 2
+    if $game_map
+      map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+      next 1 if map_metadata && map_metadata.town_map_position &&
+                map_metadata.town_map_position[0] == 2   # Galar region
+    end
+    next 0
+  }
+})
+
+MultipleForms.copy(:KOFFING, :MIMEJR)

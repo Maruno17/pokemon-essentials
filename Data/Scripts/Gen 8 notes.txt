@@ -82,27 +82,10 @@ New evolution methods:
 
 Add AI for new moves/items/abilities.
 
-Code for the form differences:
-- Cramorant (in battle only)
-- Toxel/Toxtricity (depends on nature)
-- Sinistea/Polteageist (form 1 is rare and not inheritable by breeding)
-- Milcery (depends on held item and random number)
-- Alcremie (random)
-- Eiscue (in battle only)
-- Indeedee (gender)
-- Morpeko (in battle only)
-- Zacian
-- Zamazenta
-- Kubfu (no code needed; form is manually set just before evolution)
-- Urshifu
-- Calyrex (fising, learns move upon fusion/defusion)
-- Galarian forms (make sure breeding inherits them)(Koffing and Mime Jr. are the
-  same)
-
-I think there are some alternate forms which don't have a hidden ability while
-their base forms do. I don't think the compiler supports this, and instead
-treats Abilities and HiddenAbilities separately. Can work around this by setting
-HiddenAbilities to be the same as Abilities. I'm not too happy with this.
+Zacian/Zamazenta need code that changes their movesets upon entering/leaving
+battle. Can't use "onSetForm" since that's called after the battler is
+initialized and pbOnEnteringBattle doesn't have access to the battler (could
+change this).
 
 #===============================================================================
 # Low priority or ignorable
@@ -120,13 +103,18 @@ Town Map added to the pause menu. (Don't bother adding.)
 Remote access to storage boxes. See the Pokémon Box Link item.
 
 New evolution methods:
-- Milcery: spinning while holding an item. (Doesn't suit our control scheme,
-           we're not adding a way to easily spin on the spot just for this, cf.
+- Milcery: spinning while holding an item. (Doesn't suit our control scheme.
+           We're not adding a way to easily spin on the spot just for this, cf.
            not having to turn your computer upside-down to evolve Inkay.)
 - Galarian Yamask: going to a particular spot after a battle in which it lost
                    49+ HP from a single attack and hasn't fainted since then;
                    healing doesn't affect this. (Utter nonsense, find a better
                    way.)
+
+I think there are some alternate forms which don't have a hidden ability while
+their base forms do. I don't think the compiler supports this, and instead
+treats Abilities and HiddenAbilities separately. Can work around this by setting
+HiddenAbilities to be the same as Abilities. I'm not too happy with this.
 
 #===============================================================================
 # Implemented

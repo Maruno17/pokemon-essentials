@@ -271,9 +271,10 @@ Hunger Switch
 At the end of each round, switches the bearer's form (if it is Morpeko).
 
 Ice Face
-When bearer is hit by a physical move while in its initial form, it takes no
-damage and its form changes. At he end of a round in which hail weather started,
-the bearer regains its initial form.
+When bearer is hit by a physical move while in its initial form (including
+hitting itself in confusion), it takes no damage and its form changes. At the
+end of a round in which hail weather started, and immediately upon switching in
+while hail weather exists, the bearer regains its initial form.
 
 Gulp Missile
 After using Surf/Dive, changes the bearer's form depending on its HP. If hit by
