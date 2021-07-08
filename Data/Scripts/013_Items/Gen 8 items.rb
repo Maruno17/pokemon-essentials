@@ -5,9 +5,11 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYXS, proc { |item, pkmn, scene|
   end
   gain_amount = 100
   maximum = ((pkmn.growth_rate.maximum_exp - pkmn.exp) / gain_amount.to_f).ceil
+  maximum = [maximum, $PokemonBag.pbQuantity(item)].min
   qty = scene.scene.pbChooseNumber(
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
-  next false if qty = 0
+  next false if qty == 0
+  scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
   $PokemonBag.pbDeleteItem(item, qty - 1)
   scene.pbHardRefresh
@@ -21,9 +23,11 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYS, proc { |item, pkmn, scene|
   end
   gain_amount = 800
   maximum = ((pkmn.growth_rate.maximum_exp - pkmn.exp) / gain_amount.to_f).ceil
+  maximum = [maximum, $PokemonBag.pbQuantity(item)].min
   qty = scene.scene.pbChooseNumber(
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
-  next false if qty = 0
+  next false if qty == 0
+  scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
   $PokemonBag.pbDeleteItem(item, qty - 1)
   scene.pbHardRefresh
@@ -37,9 +41,11 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYM, proc { |item, pkmn, scene|
   end
   gain_amount = 3_000
   maximum = ((pkmn.growth_rate.maximum_exp - pkmn.exp) / gain_amount.to_f).ceil
+  maximum = [maximum, $PokemonBag.pbQuantity(item)].min
   qty = scene.scene.pbChooseNumber(
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
-  next false if qty = 0
+  next false if qty == 0
+  scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
   $PokemonBag.pbDeleteItem(item, qty - 1)
   scene.pbHardRefresh
@@ -53,9 +59,11 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYL, proc { |item, pkmn, scene|
   end
   gain_amount = 10_000
   maximum = ((pkmn.growth_rate.maximum_exp - pkmn.exp) / gain_amount.to_f).ceil
+  maximum = [maximum, $PokemonBag.pbQuantity(item)].min
   qty = scene.scene.pbChooseNumber(
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
-  next false if qty = 0
+  next false if qty == 0
+  scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
   $PokemonBag.pbDeleteItem(item, qty - 1)
   scene.pbHardRefresh
@@ -69,9 +77,11 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYXL, proc { |item, pkmn, scene|
   end
   gain_amount = 30_000
   maximum = ((pkmn.growth_rate.maximum_exp - pkmn.exp) / gain_amount.to_f).ceil
+  maximum = [maximum, $PokemonBag.pbQuantity(item)].min
   qty = scene.scene.pbChooseNumber(
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
-  next false if qty = 0
+  next false if qty == 0
+  scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
   $PokemonBag.pbDeleteItem(item, qty - 1)
   scene.pbHardRefresh

@@ -2880,6 +2880,7 @@ Name = Lonely Mint
 NamePlural = Lonely Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Attack will grow more easily, but its Defense will grow more slowly.
 #-------------------------------
 [ADAMANTMINT]
@@ -2887,6 +2888,7 @@ Name = Adamant Mint
 NamePlural = Adamant Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Attack will grow more easily, but its Sp. Atk will grow more slowly.
 #-------------------------------
 [NAUGHTYMINT]
@@ -2894,6 +2896,7 @@ Name = Naughty Mint
 NamePlural = Naughty Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Attack will grow more easily, but its Sp. Def will grow more slowly.
 #-------------------------------
 [BRAVEMINT]
@@ -2901,6 +2904,7 @@ Name = Brave Mint
 NamePlural = Brave Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Attack will grow more easily, but its Speed will grow more slowly.
 #-------------------------------
 [BOLDMINT]
@@ -2908,6 +2912,7 @@ Name = Bold Mint
 NamePlural = Bold Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Defense will grow more easily, but its Attack will grow more slowly.
 #-------------------------------
 [IMPISHMINT]
@@ -2915,6 +2920,7 @@ Name = Impish Mint
 NamePlural = Impish Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Defense will grow more easily, but its Sp. Atk will grow more slowly.
 #-------------------------------
 [LAXMINT]
@@ -2922,6 +2928,7 @@ Name = Lax Mint
 NamePlural = Lax Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Defense will grow more easily, but its Sp. Def will grow more slowly.
 #-------------------------------
 [RELAXEDMINT]
@@ -2929,6 +2936,7 @@ Name = Relaxed Mint
 NamePlural = Relaxed Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Defense will grow more easily, but its Speed will grow more slowly.
 #-------------------------------
 [MODESTMINT]
@@ -2936,6 +2944,7 @@ Name = Modest Mint
 NamePlural = Modest Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Sp. Atk will grow more easily, but its Attack will grow more slowly.
 #-------------------------------
 [MILDMINT]
@@ -2943,6 +2952,7 @@ Name = Mild Mint
 NamePlural = Mild Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Sp. Atk will grow more easily, but its Defense will grow more slowly.
 #-------------------------------
 [RASHMINT]
@@ -2950,6 +2960,7 @@ Name = Rash Mint
 NamePlural = Rash Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Sp. Atk will grow more easily, but its Sp. Def will grow more slowly.
 #-------------------------------
 [QUIETMINT]
@@ -2957,6 +2968,7 @@ Name = Quiet Mint
 NamePlural = Quiet Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Sp. Atk will grow more easily, but its Speed will grow more slowly.
 #-------------------------------
 [CALMMINT]
@@ -2964,6 +2976,7 @@ Name = Calm Mint
 NamePlural = Calm Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Sp. Def will grow more easily, but its Attack will grow more slowly.
 #-------------------------------
 [GENTLEMINT]
@@ -2971,6 +2984,7 @@ Name = Gentle Mint
 NamePlural = Gentle Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Sp. Def will grow more easily, but its Defense will grow more slowly.
 #-------------------------------
 [CAREFULMINT]
@@ -2978,6 +2992,7 @@ Name = Careful Mint
 NamePlural = Careful Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Sp. Def will grow more easily, but its Sp. Atk will grow more slowly.
 #-------------------------------
 [SASSYMINT]
@@ -2985,6 +3000,7 @@ Name = Sassy Mint
 NamePlural = Sassy Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Sp. Def will grow more easily, but its Speed will grow more slowly.
 #-------------------------------
 [TIMIDMINT]
@@ -2992,6 +3008,7 @@ Name = Timid Mint
 NamePlural = Timid Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Speed will grow more easily, but its Attack will grow more slowly.
 #-------------------------------
 [HASTYMINT]
@@ -2999,6 +3016,7 @@ Name = Hasty Mint
 NamePlural = Hasty Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Speed will grow more easily, but its Defense will grow more slowly.
 #-------------------------------
 [JOLLYMINT]
@@ -3006,6 +3024,7 @@ Name = Jolly Mint
 NamePlural = Jolly Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Speed will grow more easily, but its Sp. Atk will grow more slowly.
 #-------------------------------
 [NAIVEMINT]
@@ -3013,6 +3032,7 @@ Name = Naive Mint
 NamePlural = Naive Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, its Speed will grow more easily, but its Sp. Def will grow more slowly.
 #-------------------------------
 [SERIOUSMINT]
@@ -3020,6 +3040,7 @@ Name = Serious Mint
 NamePlural = Serious Mints
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = When a Pokémon smells this mint, all of its stats will grow at an equal rate.
 #-------------------------------
 [ABILITYCAPSULE]
@@ -3043,6 +3064,7 @@ Name = Exp. Candy XS
 NamePlural = Exp. Candy XSs
 Pocket = 2
 Price = 20
+FieldUse = OnPokemon
 Description = A candy that is packed with energy. When consumed, it will grant a single Pokémon a very small amount of Exp. Points.
 #-------------------------------
 [EXPCANDYS]
@@ -3050,6 +3072,7 @@ Name = Exp. Candy S
 NamePlural = Exp. Candy Ss
 Pocket = 2
 Price = 240
+FieldUse = OnPokemon
 Description = A candy that is packed with energy. When consumed, it will grant a single Pokémon a small amount of Exp. Points.
 #-------------------------------
 [EXPCANDYM]
@@ -3057,6 +3080,7 @@ Name = Exp. Candy M
 NamePlural = Exp. Candy Ms
 Pocket = 2
 Price = 1000
+FieldUse = OnPokemon
 Description = A candy that is packed with energy. When consumed, it will grant a single Pokémon a moderate amount of Exp. Points.
 #-------------------------------
 [EXPCANDYL]
@@ -3064,6 +3088,7 @@ Name = Exp. Candy L
 NamePlural = Exp. Candy Ls
 Pocket = 2
 Price = 3000
+FieldUse = OnPokemon
 Description = A candy that is packed with energy. When consumed, it will grant a single Pokémon a large amount of Exp. Points.
 #-------------------------------
 [EXPCANDYXL]
@@ -3071,6 +3096,7 @@ Name = Exp. Candy XL
 NamePlural = Exp. Candy XLs
 Pocket = 2
 Price = 10000
+FieldUse = OnPokemon
 Description = A candy that is packed with energy. When consumed, it will grant a single Pokémon a very large amount of Exp. Points.
 #-------------------------------
 [RARECANDY]
@@ -6303,7 +6329,7 @@ Description = A bottle believed to have been used to seal away the power of a ce
 [ROTOMCATALOG]
 Name = Rotom Catalog
 NamePlural = Rotom Catalogs
-Pocket = 1
+Pocket = 8
 Price = 0
 FieldUse = OnPokemon
 Description = A catalog of devices that Rotom like. Use the catalog to have Rotom hop in and out of the various devices listed within.

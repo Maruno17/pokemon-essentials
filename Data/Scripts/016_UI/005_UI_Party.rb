@@ -565,7 +565,7 @@ class PokemonParty_Scene
   end
 
   def pbChooseNumber(helptext, maximum, initnum = 1)
-    return UIHelper.pbChooseNumber(@sprites["helpwindow"], helptext, maximum, initnum) { pbUpdate }
+    return UIHelper.pbChooseNumber(@sprites["helpwindow"], helptext, maximum, initnum) { update }
   end
 
   def pbSetHelpText(helptext)
