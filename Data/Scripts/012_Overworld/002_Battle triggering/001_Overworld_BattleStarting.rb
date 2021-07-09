@@ -13,7 +13,8 @@ end
 class PokemonTemp
   attr_accessor :encounterTriggered
   attr_accessor :encounterType
-  attr_accessor :evolutionLevels
+  attr_accessor :party_levels_before_battle
+  attr_accessor :party_critical_hits_dealt
 
   def battleRules
     @battleRules = {} if !@battleRules
@@ -187,9 +188,11 @@ end
 Events.onStartBattle += proc { |_sender|
   # Record current levels of Pokémon in party, to see if they gain a level
   # during battle and may need to evolve afterwards
-  $PokemonTemp.evolutionLevels = []
+  $PokemonTemp.party_levels_before_battle = []
+  $PokemonTemp.party_critical_hits_dealt = []
   for i in 0...$Trainer.party.length
-    $PokemonTemp.evolutionLevels[i] = $Trainer.party[i].level
+    $PokemonTemp.party_levels_before_battle[i] = $Trainer.party[i].level
+    $PokemonTemp.party_critical_hits_dealt = 0
   end
 }
 
@@ -566,12 +569,12 @@ end
 Events.onEndBattle += proc { |_sender,e|
   decision = e[0]
   canLose  = e[1]
-  if Settings::CHECK_EVOLUTION_AFTER_ALL_BATTLES || (decision!=2 && decision!=5)   # not a loss or a draw
-    if $PokemonTemp.evolutionLevels
-      pbEvolutionCheck($PokemonTemp.evolutionLevels)
-      $PokemonTemp.evolutionLevels = nil
-    end
-  end
+  # Check for evolutions
+  pbEvolutionCheck if Settings::CHECK_EVOLUTION_AFTER_ALL_BATTLES ||
+                      (decision!=2 && decision!=5)   # not a loss or a draw
+  $PokemonTemp.party_levels_before_battle = nil
+  $PokemonTemp.party_critical_hits_dealt = nil
+  # Check for blacking out or gaining Pickup/Huney Gather items
   case decision
   when 1, 4   # Win, capture
     $Trainer.pokemon_party.each do |pkmn|
@@ -587,17 +590,25 @@ Events.onEndBattle += proc { |_sender,e|
   end
 }
 
-def pbEvolutionCheck(currentLevels)
-  for i in 0...currentLevels.length
-    pkmn = $Trainer.party[i]
-    next if !pkmn || (pkmn.hp==0 && !Settings::CHECK_EVOLUTION_FOR_FAINTED_POKEMON)
-    next if currentLevels[i] && pkmn.level==currentLevels[i]
-    newSpecies = pkmn.check_evolution_on_level_up
-    next if !newSpecies
-    evo = PokemonEvolutionScene.new
-    evo.pbStartScreen(pkmn,newSpecies)
-    evo.pbEvolution
-    evo.pbEndScreen
+def pbEvolutionCheck
+  $Trainer.party.each_with_index do |pkmn, i|
+    next if !pkmn || pkmn.egg?
+    next if pkmn.fainted? && !Settings::CHECK_EVOLUTION_FOR_FAINTED_POKEMON
+    # Find an evolution
+    new_species = nil
+    if new_species.nil? && $PokemonTemp.party_levels_before_battle &&
+       $PokemonTemp.party_levels_before_battle[i] &&
+       $PokemonTemp.party_levels_before_battle[i] < pkmn.level
+      new_species = pkmn.check_evolution_on_level_up
+    end
+    new_species = pkmn.check_evolution_after_battle(i) if new_species.nil?
+    # Evolve Pokémon if possible
+    if !new_species.nil?
+      evo = PokemonEvolutionScene.new
+      evo.pbStartScreen(pkmn, new_species)
+      evo.pbEvolution
+      evo.pbEndScreen
+    end
   end
 end
 

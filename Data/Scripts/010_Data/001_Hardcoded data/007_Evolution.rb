@@ -7,6 +7,7 @@ module GameData
     attr_reader :level_up_proc
     attr_reader :use_item_proc
     attr_reader :on_trade_proc
+    attr_reader :after_battle_proc
     attr_reader :event_proc
     attr_reader :after_evolution_proc
 
@@ -26,6 +27,7 @@ module GameData
       @level_up_proc        = hash[:level_up_proc]
       @use_item_proc        = hash[:use_item_proc]
       @on_trade_proc        = hash[:on_trade_proc]
+      @after_battle_proc    = hash[:after_battle_proc]
       @event_proc           = hash[:event_proc]
       @after_evolution_proc = hash[:after_evolution_proc]
     end
@@ -40,6 +42,10 @@ module GameData
 
     def call_on_trade(*args)
       return (@on_trade_proc) ? @on_trade_proc.call(*args) : nil
+    end
+
+    def call_after_battle(*args)
+      return (@after_battle_proc) ? @after_battle_proc.call(*args) : nil
     end
 
     def call_event(*args)
@@ -601,6 +607,19 @@ GameData::Evolution.register({
   :parameter     => :Species,
   :on_trade_proc => proc { |pkmn, parameter, other_pkmn|
     next pkmn.species == parameter && !other_pkmn.hasItem?(:EVERSTONE)
+  }
+})
+
+#===============================================================================
+# Evolution methods that are triggered after any battle
+#===============================================================================
+GameData::Evolution.register({
+  :id                => :BattleDealCriticalHit,
+  :parameter         => Integer,
+  :after_battle_proc => proc { |pkmn, party_index, parameter|
+    next $PokemonTemp.party_critical_hits_dealt &&
+         $PokemonTemp.party_critical_hits_dealt[party_index] &&
+         $PokemonTemp.party_critical_hits_dealt[party_index] >= parameter
   }
 })
 

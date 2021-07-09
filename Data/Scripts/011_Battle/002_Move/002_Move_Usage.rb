@@ -272,6 +272,7 @@ class PokeBattle_Move
       @battle.pbDisplay(_INTL("The substitute took damage for {1}!",target.pbThis(true)))
     end
     if target.damageState.critical
+      $PokemonTemp.party_critical_hits_dealt[user.pokemonIndex] += 1 if user.pbOwnedByPlayer?
       if numTargets>1
         @battle.pbDisplay(_INTL("A critical hit on {1}!",target.pbThis(true)))
       else

@@ -77,9 +77,6 @@ Can use Fly from within the Town Map if possible. (Good QoL, add if possible.)
 
 Make example event that combines the Gen 8 fossils.
 
-New evolution methods:
-- Galarian Farfetch'd: performing 3 critical hits in a single battle.
-
 Add AI for new moves/items/abilities.
 
 Zacian/Zamazenta need code that changes their movesets upon entering/leaving
@@ -136,6 +133,7 @@ is done regardless of Generation, and doesn't need to be limited to Gen 8+.
 New evolution methods:
 - Kubfu (triggered by an event; Kubfu's form can be set beforehand by the event,
   so don't worry about the multiple forms it can evolve into)
+- Galarian Farfetch'd (performing 3 critical hits in a single battle)
 
 Escape Rope's code now supports both consumable and non-consumable versions,
 depending on whether it is a key item. All it needs is a proper definition in

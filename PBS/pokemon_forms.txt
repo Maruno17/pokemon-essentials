@@ -368,7 +368,7 @@ Weight = 42.0
 Pokedex = The stalks of leeks are thicker and longer in the Galar region. Farfetch'd that adapted to these stalks took on a unique form.
 Generation = 8
 WildItemCommon = LEEK
-Evolutions = SIRFETCHD,HoldItem,DIREHIT
+Evolutions = SIRFETCHD,BattleDealCriticalHit,3
 #-------------------------------
 [GRIMER,1]
 FormName = Alolan

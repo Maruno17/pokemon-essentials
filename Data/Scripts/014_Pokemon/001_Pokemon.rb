@@ -961,6 +961,15 @@ class Pokemon
     }
   end
 
+  # Checks whether this Pokemon can evolve after a battle.
+  # @return [Symbol, nil] the ID of the species to evolve into
+  def check_evolution_after_battle(party_index)
+    return check_evolution_internal { |pkmn, new_species, method, parameter|
+      success = GameData::Evolution.get(method).call_after_battle(pkmn, party_index, parameter)
+      next (success) ? new_species : nil
+    }
+  end
+
   # Checks whether this Pokemon can evolve by a triggered event.
   # @param value [Integer] a value that may be used by the evolution method
   # @return [Symbol, nil] the ID of the species to evolve into
