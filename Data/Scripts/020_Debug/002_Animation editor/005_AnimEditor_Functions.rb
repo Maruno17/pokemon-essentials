@@ -47,8 +47,9 @@ def pbSelectAnim(canvas,animwin)
     ctlwin.update
     bmpwin.hue=ctlwin.value(0) if ctlwin.changed?(0)
     if Input.trigger?(Input::USE) && animfiles.length>0
-      bitmap=AnimatedBitmap.new("Graphics/Animations/"+cmdwin.commands[cmdwin.index],ctlwin.value(0)).deanimate
-      canvas.animation.graphic=cmdwin.commands[cmdwin.index]
+      filename = cmdwin.commands[cmdwin.index]
+      bitmap=AnimatedBitmap.new("Graphics/Animations/" + filename, ctlwin.value(0)).deanimate
+      canvas.animation.graphic = File.basename(filename, ".png")
       canvas.animation.hue=ctlwin.value(0)
       canvas.animbitmap=bitmap
       animwin.animbitmap=bitmap
