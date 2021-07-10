@@ -1153,3 +1153,14 @@ DebugMenuCommands.register("invalidtiles", {
     pbDebugFixInvalidTiles
   }
 })
+
+DebugMenuCommands.register("reloadsystemcache", {
+  "parent"      => "othermenu",
+  "name"        => _INTL("Reload System Cache"),
+  "description" => _INTL("Refreshes the system's file cache. Use if you change a file while playing."),
+  "always_show" => true,
+  "effect"      => proc {
+    System.reload_cache
+    pbMessage(_INTL("Done."))
+  }
+})

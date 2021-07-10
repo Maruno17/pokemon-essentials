@@ -132,7 +132,7 @@
     // tileset doesn't render at all
     // (default: disabled)
     //
-    // "subImageFix": false,
+    "subImageFix": true,
 
 
     // Enable framebuffer blitting if the driver is
@@ -141,7 +141,7 @@
     // disabling it can be used as a workaround
     // (default: enabled)
     //
-    // "enableBlitting": true,
+    "enableBlitting": false,
 
 
     // Limit the maximum size (width, height) of
