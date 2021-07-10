@@ -811,6 +811,7 @@ def pbItemEditor
      [_INTL("NamePlural"),  ItemNameProperty,                   _INTL("Plural name of this item as displayed by the game.")],
      [_INTL("Pocket"),      PocketProperty,                     _INTL("Pocket in the Bag where this item is stored.")],
      [_INTL("Price"),       LimitProperty.new(999999),          _INTL("Purchase price of this item.")],
+     [_INTL("SellPrice"),   LimitProperty.new(999999),          _INTL("Sell price of this item. If blank, is half the purchase price.")],
      [_INTL("Description"), StringProperty,                     _INTL("Description of this item")],
      [_INTL("FieldUse"),    EnumProperty.new(field_use_array),  _INTL("How this item can be used outside of battle.")],
      [_INTL("BattleUse"),   EnumProperty.new(battle_use_array), _INTL("How this item can be used within a battle.")],
@@ -837,6 +838,7 @@ def pbItemEditor
             itm.real_name_plural,
             itm.pocket,
             itm.price,
+            itm.sell_price,
             itm.real_description,
             itm.field_use,
             itm.battle_use,
@@ -851,11 +853,12 @@ def pbItemEditor
               :name_plural => data[2],
               :pocket      => data[3],
               :price       => data[4],
-              :description => data[5],
-              :field_use   => data[6],
-              :battle_use  => data[7],
-              :type        => data[8],
-              :move        => data[9]
+              :sell_price  => data[5],
+              :description => data[6],
+              :field_use   => data[7],
+              :battle_use  => data[8],
+              :type        => data[9],
+              :move        => data[10]
             }
             # Add item's data to records
             GameData::Item.register(item_hash)

@@ -484,50 +484,52 @@ end
 #===============================================================================
 # Teach and forget a move
 #===============================================================================
-def pbLearnMove(pkmn,move,ignoreifknown=false,bymachine=false,&block)
+def pbLearnMove(pkmn, move, ignore_if_known = false, by_machine = false, &block)
   return false if !pkmn
   move = GameData::Move.get(move).id
   if pkmn.egg? && !$DEBUG
-    pbMessage(_INTL("Eggs can't be taught any moves."),&block)
+    pbMessage(_INTL("Eggs can't be taught any moves."), &block)
+    return false
+  elsif pkmn.shadowPokemon?
+    pbMessage(_INTL("Shadow Pokémon can't be taught any moves."), &block)
     return false
   end
-  if pkmn.shadowPokemon?
-    pbMessage(_INTL("Shadow Pokémon can't be taught any moves."),&block)
-    return false
-  end
-  pkmnname = pkmn.name
-  movename = GameData::Move.get(move).name
+  pkmn_name = pkmn.name
+  move_name = GameData::Move.get(move).name
   if pkmn.hasMove?(move)
-    pbMessage(_INTL("{1} already knows {2}.",pkmnname,movename),&block) if !ignoreifknown
+    pbMessage(_INTL("{1} already knows {2}.", pkmn_name, move_name), &block) if !ignore_if_known
     return false
-  end
-  if pkmn.numMoves<Pokemon::MAX_MOVES
+  elsif pkmn.numMoves < Pokemon::MAX_MOVES
     pkmn.learn_move(move)
-    pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]",pkmnname,movename),&block)
+    pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]", pkmn_name, move_name), &block)
     return true
   end
-  loop do
-    pbMessage(_INTL("{1} wants to learn {2}, but it already knows {3} moves.\1",
-      pkmnname, movename, pkmn.numMoves.to_word), &block) if !bymachine
-    pbMessage(_INTL("Please choose a move that will be replaced with {1}.",movename),&block)
-    forgetmove = pbForgetMove(pkmn,move)
-    if forgetmove>=0
-      oldmovename = pkmn.moves[forgetmove].name
-      oldmovepp   = pkmn.moves[forgetmove].pp
-      pkmn.moves[forgetmove] = Pokemon::Move.new(move)   # Replaces current/total PP
-      if bymachine && Settings::TAUGHT_MACHINES_KEEP_OLD_PP
-        pkmn.moves[forgetmove].pp = [oldmovepp,pkmn.moves[forgetmove].total_pp].min
+  pbMessage(_INTL("{1} wants to learn {2}, but it already knows {3} moves.\1",
+     pkmn_name, move_name, pkmn.numMoves.to_word), &block)
+  if pbConfirmMessage(_INTL("Should {1} forget a move to learn {2}?", pkmn_name, move_name), &block)
+    loop do
+      move_index = pbForgetMove(pkmn, move)
+      if move_index >= 0
+        old_move_name = pkmn.moves[move_index].name
+        oldmovepp   = pkmn.moves[move_index].pp
+        pkmn.moves[move_index] = Pokemon::Move.new(move)   # Replaces current/total PP
+        if by_machine && Settings::TAUGHT_MACHINES_KEEP_OLD_PP
+          pkmn.moves[move_index].pp = [oldmovepp,pkmn.moves[move_index].total_pp].min
+        end
+        pbMessage(_INTL("1, 2, and...\\wt[16] ...\\wt[16] ...\\wt[16] Ta-da!\\se[Battle ball drop]\1"), &block)
+        pbMessage(_INTL("{1} forgot how to use {2}.\\nAnd...\1", pkmn_name, old_move_name), &block)
+        pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]", pkmn_name, move_name), &block)
+        pkmn.changeHappiness("machine") if by_machine
+        return true
+      elsif pbConfirmMessage(_INTL("Give up on learning {1}?", move_name), &block)
+        pbMessage(_INTL("{1} did not learn {2}.", pkmn_name, move_name), &block)
+        return false
       end
-      pbMessage(_INTL("1, 2, and...\\wt[16] ...\\wt[16] ... Ta-da!\\se[Battle ball drop]\1"),&block)
-      pbMessage(_INTL("{1} forgot how to use {2}.\\nAnd...\1",pkmnname,oldmovename),&block)
-      pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]",pkmnname,movename),&block)
-      pkmn.changeHappiness("machine") if bymachine
-      return true
-    elsif pbConfirmMessage(_INTL("Give up on learning {1}?",movename),&block)
-      pbMessage(_INTL("{1} did not learn {2}.",pkmnname,movename),&block)
-      return false
     end
+  else
+    pbMessage(_INTL("{1} did not learn {2}.", pkmn_name, move_name), &block)
   end
+  return false
 end
 
 def pbForgetMove(pkmn,moveToLearn)

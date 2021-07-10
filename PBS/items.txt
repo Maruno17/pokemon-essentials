@@ -28,7 +28,7 @@ Description = An item that prevents weak wild Pokémon from appearing for 250 st
 Name = Black Flute
 NamePlural = Black Flutes
 Pocket = 1
-Price = 400
+Price = 20
 FieldUse = Direct
 Description = A black flute made from blown glass. Its melody makes wild Pokémon less likely to appear.
 #-------------------------------
@@ -36,7 +36,7 @@ Description = A black flute made from blown glass. Its melody makes wild Pokémo
 Name = White Flute
 NamePlural = White Flutes
 Pocket = 1
-Price = 500
+Price = 20
 FieldUse = Direct
 Description = A white flute made from blown glass. Its melody makes wild Pokémon more likely to appear.
 #-------------------------------
@@ -44,17 +44,9 @@ Description = A white flute made from blown glass. Its melody makes wild Pokémo
 Name = Honey
 NamePlural = Honey
 Pocket = 1
-Price = 300
+Price = 900
 FieldUse = Direct
-Description = A sweet honey with an aroma that attracts wild Pokémon when used in grass, caves or on special trees.
-#-------------------------------
-[ESCAPEROPE]
-Name = Escape Rope
-NamePlural = Escape Ropes
-Pocket = 1
-Price = 1000
-FieldUse = Direct
-Description = A long, durable rope. Use it to escape instantly from a cave or a dungeon.
+Description = A sweet honey with a lush aroma that attracts wild Pokémon when used in tall grass, in caves, or elsewhere.
 #-------------------------------
 [REDSHARD]
 Name = Red Shard
@@ -197,6 +189,7 @@ Name = Cracked Pot
 NamePlural = Cracked Pots
 Pocket = 1
 Price = 3000
+SellPrice = 800
 FieldUse = OnPokemon
 Type = EvolutionStone
 Description = A peculiar teapot that can make a certain species of Pokémon evolve. It may be cracked, but tea poured from it is delicious.
@@ -206,6 +199,7 @@ Name = Chipped Pot
 NamePlural = Chipped Pots
 Pocket = 1
 Price = 3000
+SellPrice = 19000
 FieldUse = OnPokemon
 Type = EvolutionStone
 Description = A peculiar teapot that can make a certain species of Pokémon evolve. It may be chipped, but tea poured from it is delicious.
@@ -232,7 +226,7 @@ Description = A wreath made from woven-together Galarica Twigs. Placing it on th
 Name = Red Apricorn
 NamePlural = Red Apricorns
 Pocket = 1
-Price = 20
+Price = 200
 Type = Apricorn
 Description = A red Apricorn. It assails your nostrils.
 #-------------------------------
@@ -240,7 +234,7 @@ Description = A red Apricorn. It assails your nostrils.
 Name = Yellow Apricorn
 NamePlural = Yellow Apricorns
 Pocket = 1
-Price = 20
+Price = 200
 Type = Apricorn
 Description = A yellow Apricorn. It has an invigorating scent.
 #-------------------------------
@@ -248,7 +242,7 @@ Description = A yellow Apricorn. It has an invigorating scent.
 Name = Blue Apricorn
 NamePlural = Blue Apricorns
 Pocket = 1
-Price = 20
+Price = 200
 Type = Apricorn
 Description = A blue Apricorn. It smells a bit like grass.
 #-------------------------------
@@ -256,7 +250,7 @@ Description = A blue Apricorn. It smells a bit like grass.
 Name = Green Apricorn
 NamePlural = Green Apricorns
 Pocket = 1
-Price = 20
+Price = 200
 Type = Apricorn
 Description = A green Apricorn. It has a mysterious, aromatic scent.
 #-------------------------------
@@ -264,7 +258,7 @@ Description = A green Apricorn. It has a mysterious, aromatic scent.
 Name = Pink Apricorn
 NamePlural = Pink Apricorns
 Pocket = 1
-Price = 20
+Price = 200
 Type = Apricorn
 Description = A pink Apricorn. It has a nice, sweet scent.
 #-------------------------------
@@ -272,7 +266,7 @@ Description = A pink Apricorn. It has a nice, sweet scent.
 Name = White Apricorn
 NamePlural = White Apricorns
 Pocket = 1
-Price = 20
+Price = 200
 Type = Apricorn
 Description = A white Apricorn. It doesn't smell like anything.
 #-------------------------------
@@ -280,7 +274,7 @@ Description = A white Apricorn. It doesn't smell like anything.
 Name = Black Apricorn
 NamePlural = Black Apricorns
 Pocket = 1
-Price = 20
+Price = 200
 Type = Apricorn
 Description = A black Apricorn. It has an indescribable scent.
 #-------------------------------
@@ -446,7 +440,7 @@ Description = A quite-large pearl that sparkles in a pretty silver color. It can
 Name = Pearl String
 NamePlural = Pearl Strings
 Pocket = 1
-Price = 30000
+Price = 20000
 Description = Very large pearls that sparkle in a pretty silver color. A maniac will buy them for a high price.
 #-------------------------------
 [STARDUST]
@@ -467,7 +461,7 @@ Description = A shard of a pretty gem that sparkles in a red color. It can be so
 Name = Comet Shard
 NamePlural = Comet Shards
 Pocket = 1
-Price = 60000
+Price = 25000
 Description = A shard which fell to the ground when a comet approached. A maniac will buy it for a high price.
 #-------------------------------
 [NUGGET]
@@ -523,7 +517,7 @@ Description = A silver coin used in a civilization about 3,000 years ago. A mani
 Name = Relic Gold
 NamePlural = Relic Golds
 Pocket = 1
-Price = 0
+Price = 60000
 Description = A gold coin used in a civilization about 3,000 years ago. A maniac will buy it for a high price.
 #-------------------------------
 [RELICVASE]
@@ -643,42 +637,48 @@ Description = A flower nectar obtained at Poni Meadow. It changes the form of ce
 Name = Air Balloon
 NamePlural = Air Balloons
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. The holder will float in the air until hit. Once hit, this item will burst.
 #-------------------------------
 [BRIGHTPOWDER]
 Name = Bright Powder
 NamePlural = Bright Powders
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. It casts a tricky glare that lowers the opponent's accuracy.
 #-------------------------------
 [EVIOLITE]
 Name = Eviolite
 NamePlural = Eviolites
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = A mysterious evolutionary lump. When held, it raises the Defense and Sp. Def if the holder can still evolve.
 #-------------------------------
 [FLOATSTONE]
 Name = Float Stone
 NamePlural = Float Stones
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = A very light stone. It reduces the weight of a Pokémon when held.
 #-------------------------------
 [DESTINYKNOT]
 Name = Destiny Knot
 NamePlural = Destiny Knots
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = A long, thin, bright-red string to be held by a Pokémon. If the holder becomes infatuated, so does the foe.
 #-------------------------------
 [ROCKYHELMET]
 Name = Rocky Helmet
 NamePlural = Rocky Helmets
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = If the holder of this item takes damage, the attacker will also be damaged upon contact.
 #-------------------------------
 [ASSAULTVEST]
@@ -692,63 +692,72 @@ Description = An item to be held by a Pokémon. This offensive vest raises Sp. D
 Name = Safety Goggles
 NamePlural = Safety Goggles
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. They protect the holder from weather-related damage and powder.
 #-------------------------------
 [PROTECTIVEPADS]
 Name = Protective Pads
 NamePlural = Protective Pads
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. They protect the holder from effects caused by making contact.
 #-------------------------------
 [HEAVYDUTYBOOTS]
 Name = Heavy-Duty Boots
 NamePlural = pairs of Heavy-Duty Boots
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = These boots prevent the effects of traps set on the battlefield.
 #-------------------------------
 [UTILITYUMBRELLA]
 Name = Utility Umbrella
 NamePlural = Utility Umbrellas
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of rain and harsh sunlight.
 #-------------------------------
 [EJECTBUTTON]
 Name = Eject Button
 NamePlural = Eject Buttons
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = If the holder is hit by an attack, it will switch with another Pokémon in your party.
 #-------------------------------
 [EJECTPACK]
 Name = Eject Pack
 NamePlural = Eject Packs
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. When the holder's stats are lowered, it will be switched out of battle.
 #-------------------------------
 [REDCARD]
 Name = Red Card
 NamePlural = Red Cards
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = A card with a mysterious power. When the holder is struck by a foe, the attacker is removed from battle.
 #-------------------------------
 [SHEDSHELL]
 Name = Shed Shell
 NamePlural = Shed Shells
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. This discarded carapace lets the holder switch out of battle without fail.
 #-------------------------------
 [SMOKEBALL]
 Name = Smoke Ball
 NamePlural = Smoke Balls
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. It enables the holder to flee from any wild Pokémon without fail.
 #-------------------------------
 [LUCKYEGG]
@@ -860,7 +869,8 @@ Description = A Pokémon held item that extends the duration of multiturn attack
 Name = Binding Band
 NamePlural = Binding Bands
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = A band that increases the power of binding moves when held.
 #-------------------------------
 [BIGROOT]
@@ -874,7 +884,8 @@ Description = A Pokémon held item that boosts the power of HP-stealing moves to
 Name = Black Sludge
 NamePlural = Black Sludges
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = A held item that gradually restores the HP of Poison-type Pokémon. It inflicts damage on all other types.
 #-------------------------------
 [LEFTOVERS]
@@ -979,28 +990,32 @@ Description = An item to be held by a Pokémon. Lowers Speed when Trick Room tak
 Name = Electric Seed
 NamePlural = Electric Seeds
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. It boosts Defense on Electric Terrain. It can only be used once.
 #-------------------------------
 [GRASSYSEED]
 Name = Grassy Seed
 NamePlural = Grassy Seeds
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. It boosts Defense on Grassy Terrain. It can only be used once.
 #-------------------------------
 [MISTYSEED]
 Name = Misty Seed
 NamePlural = Misty Seeds
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. It boosts Sp. Def on Misty Terrain. It can only be used once.
 #-------------------------------
 [PSYCHICSEED]
 Name = Psychic Seed
 NamePlural = Psychic Seeds
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. It boosts Sp. Def on Psychic Terrain. It can only be used once.
 #-------------------------------
 [LIFEORB]
@@ -1021,7 +1036,8 @@ Description = An item to be held by a Pokémon. It is a well-worn belt that slig
 Name = Metronome
 NamePlural = Metronomes
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = A Pokémon held item that boosts a move used consecutively. Its effect is reset if another move is used.
 #-------------------------------
 [MUSCLEBAND]
@@ -1042,7 +1058,8 @@ Description = An item to be held by a Pokémon. It is a thick pair of glasses th
 Name = Razor Claw
 NamePlural = Razor Claws
 Pocket = 1
-Price = 5000
+Price = 3000
+SellPrice = 2500
 Description = An item to be held by a Pokémon. It is a sharply hooked claw that ups the holder's critical-hit ratio.
 #-------------------------------
 [SCOPELENS]
@@ -1091,21 +1108,24 @@ Description = An item to be held by a Pokémon. It is tremendously heavy and mak
 Name = Quick Claw
 NamePlural = Quick Claws
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. A light, sharp claw that lets the bearer move first occasionally.
 #-------------------------------
 [FOCUSBAND]
 Name = Focus Band
 NamePlural = Focus Bands
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. The holder may endure a potential KO attack, leaving it with just 1 HP.
 #-------------------------------
 [FOCUSSASH]
 Name = Focus Sash
 NamePlural = Focus Sashes
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = An item to be held by a Pokémon. If it has full HP, the holder will endure one potential KO attack, leaving 1 HP.
 #-------------------------------
 [FLAMEORB]
@@ -1140,7 +1160,8 @@ Description = A Pokémon held item that cuts Speed. It makes Flying-type and lev
 Name = Ring Target
 NamePlural = Ring Targets
 Pocket = 1
-Price = 4000
+Price = 3000
+SellPrice = 2000
 Description = Moves that would otherwise have no effect will land on the Pokémon that holds it.
 #-------------------------------
 [MACHOBRACE]
@@ -1259,245 +1280,279 @@ Description = An item to be held by a Pokémon. This exotic-smelling incense boo
 Name = Charcoal
 NamePlural = Charcoals
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a combustible fuel that boosts the power of Fire-type moves.
 #-------------------------------
 [MYSTICWATER]
 Name = Mystic Water
 NamePlural = Mystic Waters
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a teardrop-shaped gem that ups the power of Water-type moves.
 #-------------------------------
 [MAGNET]
 Name = Magnet
 NamePlural = Magnets
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a powerful magnet that boosts the power of Electric-type moves.
 #-------------------------------
 [MIRACLESEED]
 Name = Miracle Seed
 NamePlural = Miracle Seeds
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a seed imbued with life that ups the power of Grass-type moves.
 #-------------------------------
 [NEVERMELTICE]
 Name = Never-Melt Ice
 NamePlural = Never-Melt Ices
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a piece of ice that repels heat and boosts Ice-type moves.
 #-------------------------------
 [BLACKBELT]
 Name = Black Belt
 NamePlural = Black Belts
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a belt that boosts determination and Fighting-type moves.
 #-------------------------------
 [POISONBARB]
 Name = Poison Barb
 NamePlural = Poison Barbs
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a small, poisonous barb that ups the power of Poison-type moves.
 #-------------------------------
 [SOFTSAND]
 Name = Soft Sand
 NamePlural = Soft Sand
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a loose, silky sand that boosts the power of Ground-type moves.
 #-------------------------------
 [SHARPBEAK]
 Name = Sharp Beak
 NamePlural = Sharp Beaks
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a long, sharp beak that boosts the power of Flying-type moves.
 #-------------------------------
 [TWISTEDSPOON]
 Name = Twisted Spoon
 NamePlural = Twisted Spoons
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a spoon imbued with telekinetic power that boosts Psychic-type moves.
 #-------------------------------
 [SILVERPOWDER]
 Name = Silver Powder
 NamePlural = Silver Powders
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a shiny, silver powder that ups the power of Bug-type moves.
 #-------------------------------
 [HARDSTONE]
 Name = Hard Stone
 NamePlural = Hard Stones
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is an unbreakable stone that ups the power of Rock-type moves.
 #-------------------------------
 [SPELLTAG]
 Name = Spell Tag
 NamePlural = Spell Tags
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a sinister, eerie tag that boosts the power of Ghost-type moves.
 #-------------------------------
 [DRAGONFANG]
 Name = Dragon Fang
 NamePlural = Dragon Fangs
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a hard and sharp fang that ups the power of Dragon-type moves.
 #-------------------------------
 [BLACKGLASSES]
 Name = Black Glasses
 NamePlural = Black Glasses
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a shady-looking pair of glasses that boosts Dark-type moves.
 #-------------------------------
 [METALCOAT]
 Name = Metal Coat
 NamePlural = Metal Coats
 Pocket = 1
-Price = 2000
+Price = 3000
+SellPrice = 1000
 Description = An item to be held by a Pokémon. It is a special metallic film that ups the power of Steel-type moves.
 #-------------------------------
 [SILKSCARF]
 Name = Silk Scarf
 NamePlural = Silk Scarves
 Pocket = 1
-Price = 1000
+Price = 3000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a sumptuous scarf that boosts the power of Normal-type moves.
 #-------------------------------
 [FLAMEPLATE]
 Name = Flame Plate
 NamePlural = Flame Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Fire-type moves.
 #-------------------------------
 [SPLASHPLATE]
 Name = Splash Plate
 NamePlural = Splash Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Water-type moves.
 #-------------------------------
 [ZAPPLATE]
 Name = Zap Plate
 NamePlural = Zap Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Electric-type moves.
 #-------------------------------
 [MEADOWPLATE]
 Name = Meadow Plate
 NamePlural = Meadow Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Grass-type moves.
 #-------------------------------
 [ICICLEPLATE]
 Name = Icicle Plate
 NamePlural = Icicle Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Ice-type moves.
 #-------------------------------
 [FISTPLATE]
 Name = Fist Plate
 NamePlural = Fist Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Fighting-type moves.
 #-------------------------------
 [TOXICPLATE]
 Name = Toxic Plate
 NamePlural = Toxic Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Poison-type moves.
 #-------------------------------
 [EARTHPLATE]
 Name = Earth Plate
 NamePlural = Earth Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Ground-type moves.
 #-------------------------------
 [SKYPLATE]
 Name = Sky Plate
 NamePlural = Sky Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Flying-type moves.
 #-------------------------------
 [MINDPLATE]
 Name = Mind Plate
 NamePlural = Mind Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Psychic-type moves.
 #-------------------------------
 [INSECTPLATE]
 Name = Insect Plate
 NamePlural = Insect Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Bug-type moves.
 #-------------------------------
 [STONEPLATE]
 Name = Stone Plate
 NamePlural = Stone Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Rock-type moves.
 #-------------------------------
 [SPOOKYPLATE]
 Name = Spooky Plate
 NamePlural = Spooky Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Ghost-type moves.
 #-------------------------------
 [DRACOPLATE]
 Name = Draco Plate
 NamePlural = Draco Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Dragon-type moves.
 #-------------------------------
 [DREADPLATE]
 Name = Dread Plate
 NamePlural = Dread Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Dark-type moves.
 #-------------------------------
 [IRONPLATE]
 Name = Iron Plate
 NamePlural = Iron Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Steel-type moves.
 #-------------------------------
 [PIXIEPLATE]
 Name = Pixie Plate
 NamePlural = Pixie Plates
 Pocket = 1
-Price = 1000
+Price = 10000
+SellPrice = 500
 Description = An item to be held by a Pokémon. It is a stone tablet that boosts the power of Fairy-type moves.
 #-------------------------------
 [FIREGEM]
 Name = Fire Gem
 NamePlural = Fire Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of fire. When held, it strengthens the power of a Fire-type move only once.
 #-------------------------------
@@ -1505,7 +1560,7 @@ Description = A gem with an essence of fire. When held, it strengthens the power
 Name = Water Gem
 NamePlural = Water Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of water. When held, it strengthens the power of a Water-type move only once.
 #-------------------------------
@@ -1513,7 +1568,7 @@ Description = A gem with an essence of water. When held, it strengthens the powe
 Name = Electric Gem
 NamePlural = Electric Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of electricity. When held, it strengthens the power of an Electric-type move only once.
 #-------------------------------
@@ -1521,7 +1576,7 @@ Description = A gem with an essence of electricity. When held, it strengthens th
 Name = Grass Gem
 NamePlural = Grass Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of nature. When held, it strengthens the power of a Grass-type move only once.
 #-------------------------------
@@ -1529,7 +1584,7 @@ Description = A gem with an essence of nature. When held, it strengthens the pow
 Name = Ice Gem
 NamePlural = Ice Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once.
 #-------------------------------
@@ -1537,7 +1592,7 @@ Description = A gem with an essence of ice. When held, it strengthens the power 
 Name = Fighting Gem
 NamePlural = Fighting Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of combat. When held, it strengthens the power of a Fighting-type move only once.
 #-------------------------------
@@ -1545,7 +1600,7 @@ Description = A gem with an essence of combat. When held, it strengthens the pow
 Name = Poison Gem
 NamePlural = Poison Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of poison. When held, it strengthens the power of a Poison-type move only once.
 #-------------------------------
@@ -1553,7 +1608,7 @@ Description = A gem with an essence of poison. When held, it strengthens the pow
 Name = Ground Gem
 NamePlural = Ground Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of land. When held, it strengthens the power of a Ground-type move only once.
 #-------------------------------
@@ -1561,7 +1616,7 @@ Description = A gem with an essence of land. When held, it strengthens the power
 Name = Flying Gem
 NamePlural = Flying Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of air. When held, it strengthens the power of a Flying-type move only once.
 #-------------------------------
@@ -1569,7 +1624,7 @@ Description = A gem with an essence of air. When held, it strengthens the power 
 Name = Psychic Gem
 NamePlural = Psychic Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of the mind. When held, it strengthens the power of a Psychic-type move only once.
 #-------------------------------
@@ -1577,7 +1632,7 @@ Description = A gem with an essence of the mind. When held, it strengthens the p
 Name = Bug Gem
 NamePlural = Bug Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an insect-like essence. When held, it strengthens the power of a Bug-type move only once.
 #-------------------------------
@@ -1585,7 +1640,7 @@ Description = A gem with an insect-like essence. When held, it strengthens the p
 Name = Rock Gem
 NamePlural = Rock Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of rock. When held, it strengthens the power of a Rock-type move only once.
 #-------------------------------
@@ -1593,7 +1648,7 @@ Description = A gem with an essence of rock. When held, it strengthens the power
 Name = Ghost Gem
 NamePlural = Ghost Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with a spectral essence. When held, it strengthens the power of a Ghost-type move only once.
 #-------------------------------
@@ -1601,7 +1656,7 @@ Description = A gem with a spectral essence. When held, it strengthens the power
 Name = Dragon Gem
 NamePlural = Dragon Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with a draconic essence. When held, it strengthens the power of a Dragon-type move only once.
 #-------------------------------
@@ -1609,7 +1664,7 @@ Description = A gem with a draconic essence. When held, it strengthens the power
 Name = Dark Gem
 NamePlural = Dark Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of darkness. When held, it strengthens the power of a Dark-type move only once.
 #-------------------------------
@@ -1617,7 +1672,7 @@ Description = A gem with an essence of darkness. When held, it strengthens the p
 Name = Steel Gem
 NamePlural = Steel Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of steel. When held, it strengthens the power of a Steel-type move only once.
 #-------------------------------
@@ -1625,7 +1680,7 @@ Description = A gem with an essence of steel. When held, it strengthens the powe
 Name = Fairy Gem
 NamePlural = Fairy Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an essence of the fey. When held, it strengthens the power of a Fairy-type move only once.
 #-------------------------------
@@ -1633,7 +1688,7 @@ Description = A gem with an essence of the fey. When held, it strengthens the po
 Name = Normal Gem
 NamePlural = Normal Gems
 Pocket = 1
-Price = 200
+Price = 4000
 Type = TypeGem
 Description = A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move only once.
 #-------------------------------
@@ -1705,6 +1760,7 @@ Name = Adamant Orb
 NamePlural = Adamant Orbs
 Pocket = 1
 Price = 10000
+SellPrice = 0
 Description = A brightly gleaming orb to be held by Dialga. It boosts the power of Dragon- and Steel-type moves.
 #-------------------------------
 [LUSTROUSORB]
@@ -1712,6 +1768,7 @@ Name = Lustrous Orb
 NamePlural = Lustrous Orbs
 Pocket = 1
 Price = 10000
+SellPrice = 0
 Description = A beautifully glowing orb to be held by Palkia. It boosts the power of Dragon- and Water-type moves.
 #-------------------------------
 [GRISEOUSORB]
@@ -1719,6 +1776,7 @@ Name = Griseous Orb
 NamePlural = Griseous Orbs
 Pocket = 1
 Price = 10000
+SellPrice = 0
 Description = A glowing orb to be held by Giratina. It boosts the power of Dragon- and Ghost-type moves.
 #-------------------------------
 [RUSTEDSWORD]
@@ -1739,28 +1797,28 @@ Description = It is said that a hero used this shield to halt a terrible disaste
 Name = Douse Drive
 NamePlural = Douse Drives
 Pocket = 1
-Price = 1000
+Price = 0
 Description = A cassette to be held by Genesect. It changes Techno Blast to a Water-type move.
 #-------------------------------
 [SHOCKDRIVE]
 Name = Shock Drive
 NamePlural = Shock Drives
 Pocket = 1
-Price = 1000
+Price = 0
 Description = A cassette to be held by Genesect. It changes Techno Blast to an Electric-type move.
 #-------------------------------
 [BURNDRIVE]
 Name = Burn Drive
 NamePlural = Burn Drives
 Pocket = 1
-Price = 1000
+Price = 0
 Description = A cassette to be held by Genesect. It changes Techno Blast to a Fire-type move.
 #-------------------------------
 [CHILLDRIVE]
 Name = Chill Drive
 NamePlural = Chill Drives
 Pocket = 1
-Price = 1000
+Price = 0
 Description = A cassette to be held by Genesect. It changes Techno Blast to an Ice-type move.
 #-------------------------------
 [FIREMEMORY]
@@ -1893,77 +1951,88 @@ Description = An item to be held by a Pokémon. The Pokémon holding this peculi
 Name = Dragon Scale
 NamePlural = Dragon Scales
 Pocket = 1
-Price = 2000
+Price = 3000
+SellPrice = 1000
 Description = A thick and tough scale. Dragon-type Pokémon may be holding this item when caught.
 #-------------------------------
 [UPGRADE]
 Name = Upgrade
 NamePlural = Upgrades
 Pocket = 1
-Price = 2000
+Price = 3000
+SellPrice = 1000
 Description = A transparent device filled with all sorts of data. It was produced by Silph Co.
 #-------------------------------
 [DUBIOUSDISC]
 Name = Dubious Disc
 NamePlural = Dubious Discs
 Pocket = 1
-Price = 2000
+Price = 3000
+SellPrice = 1000
 Description = A transparent device overflowing with dubious data.  Its producer is unknown.
 #-------------------------------
 [PROTECTOR]
 Name = Protector
 NamePlural = Protectors
 Pocket = 1
-Price = 2000
+Price = 3000
+SellPrice = 1000
 Description = A protective item of some sort. It is extremely stiff and heavy. It is loved by a certain Pokémon.
 #-------------------------------
 [ELECTIRIZER]
 Name = Electirizer
 NamePlural = Electirizers
 Pocket = 1
-Price = 2000
+Price = 3000
+SellPrice = 1000
 Description = A box packed with a tremendous amount of electric energy. It is loved by a certain Pokémon.
 #-------------------------------
 [MAGMARIZER]
 Name = Magmarizer
 NamePlural = Magmarizers
 Pocket = 1
-Price = 2000
+Price = 3000
+SellPrice = 1000
 Description = A box packed with a tremendous amount of magma energy. It is loved by a certain Pokémon.
 #-------------------------------
 [REAPERCLOTH]
 Name = Reaper Cloth
 NamePlural = Reaper Cloths
 Pocket = 1
-Price = 2000
+Price = 3000
+SellPrice = 1000
 Description = A cloth imbued with horrifyingly strong spiritual energy. It is loved by a certain Pokémon.
 #-------------------------------
 [PRISMSCALE]
 Name = Prism Scale
 NamePlural = Prism Scales
 Pocket = 1
-Price = 2000
+Price = 3000
+SellPrice = 1000
 Description = A mysterious scale that evolves certain Pokémon. It shines in rainbow colors.
 #-------------------------------
 [OVALSTONE]
 Name = Oval Stone
 NamePlural = Oval Stones
 Pocket = 1
-Price = 2000
+Price = 3000
+SellPrice = 1000
 Description = A peculiar stone that makes certain species of Pokémon evolve. It is shaped like an egg.
 #-------------------------------
 [WHIPPEDDREAM]
 Name = Whipped Dream
 NamePlural = Whipped Dreams
 Pocket = 1
-Price = 2000
+Price = 3000
+SellPrice = 1000
 Description = A soft and sweet treat made of fluffy, puffy and whirled cream. It's loved by a certain Pokémon.
 #-------------------------------
 [SACHET]
 Name = Sachet
 NamePlural = Sachets
 Pocket = 1
-Price = 2000
+Price = 3000
+SellPrice = 1000
 Description = A sachet filled with slightly overwhelming fragrant perfumes. Yet it's loved by a certain Pokémon.
 #-------------------------------
 [STRAWBERRYSWEET]
@@ -2014,41 +2083,6 @@ NamePlural = Ribbon Sweets
 Pocket = 1
 Price = 500
 Description = A ribbon-shaped sweet. When a Milcery holds this, it spins around happily.
-#-------------------------------
-[REDSCARF]
-Name = Red Scarf
-NamePlural = Red Scarves
-Pocket = 1
-Price = 100
-Description = An item to be held by a Pokémon. It boosts the Cool aspect of the holder in a Contest.
-#-------------------------------
-[BLUESCARF]
-Name = Blue Scarf
-NamePlural = Blue Scarves
-Pocket = 1
-Price = 100
-Description = An item to be held by a Pokémon. It boosts the Beauty aspect of the holder in a Contest.
-#-------------------------------
-[PINKSCARF]
-Name = Pink Scarf
-NamePlural = Pink Scarves
-Pocket = 1
-Price = 100
-Description = An item to be held by a Pokémon. It boosts the Cute aspect of the holder in a Contest.
-#-------------------------------
-[GREENSCARF]
-Name = Green Scarf
-NamePlural = Green Scarves
-Pocket = 1
-Price = 100
-Description = An item to be held by a Pokémon. It boosts the Smart aspect of the holder in a Contest.
-#-------------------------------
-[YELLOWSCARF]
-Name = Yellow Scarf
-NamePlural = Yellow Scarves
-Pocket = 1
-Price = 100
-Description = An item to be held by a Pokémon. It boosts the Tough aspect of the holder in a Contest.
 #-------------------------------
 [VENUSAURITE]
 Name = Venusaurite
@@ -2430,14 +2464,16 @@ Description = One of a variety of mysterious Mega Stones. Have Diancie hold it, 
 Name = Red Orb
 NamePlural = Red Orbs
 Pocket = 1
-Price = 0
+Price = 10000
+SellPrice = 0
 Description = A shiny red orb that is said to have a legend tied to it. It's known to be connected with the Hoenn region.
 #-------------------------------
 [BLUEORB]
 Name = Blue Orb
 NamePlural = Blue Orbs
 Pocket = 1
-Price = 0
+Price = 10000
+SellPrice = 0
 Description = A shiny blue orb that is said to have a legend tied to it. It's known to be connected with the Hoenn region.
 #-------------------------------
 [POTION]
@@ -2497,7 +2533,7 @@ Description = It revives all fainted Pokémon. In doing so, it also fully restor
 Name = Awakening
 NamePlural = Awakenings
 Pocket = 2
-Price = 100
+Price = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Description = A spray-type medicine. It awakens a Pokémon from the clutches of sleep.
@@ -2515,7 +2551,7 @@ Description = A spray-type medicine. It lifts the effect of poison from one Pok�
 Name = Burn Heal
 NamePlural = Burn Heals
 Pocket = 2
-Price = 300
+Price = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Description = A spray-type medicine. It heals a single Pokémon that is suffering from a burn.
@@ -2524,7 +2560,7 @@ Description = A spray-type medicine. It heals a single Pokémon that is sufferin
 Name = Paralyze Heal
 NamePlural = Paralyze Heals
 Pocket = 2
-Price = 300
+Price = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Description = A spray-type medicine. It eliminates paralysis from a single Pokémon.
@@ -2533,7 +2569,7 @@ Description = A spray-type medicine. It eliminates paralysis from a single Poké
 Name = Ice Heal
 NamePlural = Ice Heals
 Pocket = 2
-Price = 100
+Price = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Description = A spray-type medicine. It defrosts a Pokémon that has been frozen solid.
@@ -2546,6 +2582,15 @@ Price = 400
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Description = A spray-type medicine. It heals all the status problems of a single Pokémon.
+#-------------------------------
+[PEWTERCRUNCHIES]
+Name = Pewter Crunchies
+NamePlural = Pewter Crunchies
+Pocket = 2
+Price = 250
+FieldUse = OnPokemon
+BattleUse = OnPokemon
+Description = Pewter City's famous crunchy snack. They can be used to heal all status conditions of a single Pokémon.
 #-------------------------------
 [RAGECANDYBAR]
 Name = Rage Candy Bar
@@ -2669,6 +2714,7 @@ Name = Lemonade
 NamePlural = Lemonades
 Pocket = 2
 Price = 350
+SellPrice = 200
 FieldUse = OnPokemon
 BattleUse = OnPokemon
 Description = A very sweet and refreshing drink. It can be used to restore 70 HP to a single Pokémon.
@@ -3210,7 +3256,7 @@ Description = A somewhat different Ball that becomes progressively better the mo
 Name = Luxury Ball
 NamePlural = Luxury Balls
 Pocket = 3
-Price = 1000
+Price = 3000
 BattleUse = OnFoe
 Type = PokeBall
 Description = A comfortable Poké Ball that makes a caught wild Pokémon quickly grow friendly.
@@ -3219,7 +3265,8 @@ Description = A comfortable Poké Ball that makes a caught wild Pokémon quickly
 Name = Premier Ball
 NamePlural = Premier Balls
 Pocket = 3
-Price = 20
+Price = 200
+SellPrice = 10
 BattleUse = OnFoe
 Type = PokeBall
 Description = A somewhat rare Poké Ball that has been specially made to commemorate an event of some sort.
@@ -3327,7 +3374,7 @@ Description = A Poké Ball for catching Pokémon that evolve using the Moon Ston
 Name = Dream Ball
 NamePlural = Dream Balls
 Pocket = 3
-Price = 0
+Price = 300
 BattleUse = OnFoe
 Type = PokeBall
 Description = A somewhat different Poké Ball that makes it easier to catch wild Pokémon while they're asleep.
@@ -6107,7 +6154,7 @@ Description = When used, it causes an ally Pokémon to drop a held item.
 Name = Blue Flute
 NamePlural = Blue Flutes
 Pocket = 7
-Price = 100
+Price = 20
 FieldUse = OnPokemonReusable
 BattleUse = OnPokemonReusable
 Description = A blue flute made from blown glass. Its melody awakens a single Pokémon from sleep.
@@ -6116,7 +6163,7 @@ Description = A blue flute made from blown glass. Its melody awakens a single Po
 Name = Yellow Flute
 NamePlural = Yellow Flutes
 Pocket = 7
-Price = 300
+Price = 20
 BattleUse = OnBattlerReusable
 Description = A yellow flute made from blown glass. Its melody snaps a single Pokémon out of confusion.
 #-------------------------------
@@ -6124,7 +6171,7 @@ Description = A yellow flute made from blown glass. Its melody snaps a single Po
 Name = Red Flute
 NamePlural = Red Flutes
 Pocket = 7
-Price = 200
+Price = 20
 BattleUse = OnBattlerReusable
 Description = A red flute made from blown glass. Its melody snaps a single Pokémon out of infatuation.
 #-------------------------------
@@ -6132,7 +6179,7 @@ Description = A red flute made from blown glass. Its melody snaps a single Poké
 Name = Poké Doll
 NamePlural = Poké Dolls
 Pocket = 7
-Price = 100
+Price = 300
 BattleUse = Direct
 Description = A doll that attracts Pokémon. Use it to flee from any battle with a wild Pokémon.
 #-------------------------------
@@ -6140,7 +6187,7 @@ Description = A doll that attracts Pokémon. Use it to flee from any battle with
 Name = Fluffy Tail
 NamePlural = Fluffy Tails
 Pocket = 7
-Price = 100
+Price = 300
 BattleUse = Direct
 Description = An item that attracts Pokémon. Use it to flee from any battle with a wild Pokémon.
 #-------------------------------
@@ -6148,7 +6195,7 @@ Description = An item that attracts Pokémon. Use it to flee from any battle wit
 Name = Poké Toy
 NamePlural = Poké Toys
 Pocket = 7
-Price = 100
+Price = 300
 BattleUse = Direct
 Description = An item that attracts Pokémon. Use it to flee from any battle with a wild Pokémon.
 #-------------------------------
@@ -6223,6 +6270,15 @@ Price = 0
 FieldUse = Direct
 Type = KeyItem
 Description = A very convenient map that can be viewed anytime. It even shows your present location.
+#-------------------------------
+[ESCAPEROPE]
+Name = Escape Rope
+NamePlural = Escape Ropes
+Pocket = 8
+Price = 0
+FieldUse = Direct
+Type = KeyItem
+Description = A long, durable rope. Use it to escape instantly from a cave or a dungeon.
 #-------------------------------
 [POKEFLUTE]
 Name = Poké Flute

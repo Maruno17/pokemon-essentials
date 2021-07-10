@@ -209,6 +209,7 @@ module Compiler
         f.write(sprintf("NamePlural = %s\r\n", item.real_name_plural))
         f.write(sprintf("Pocket = %d\r\n", item.pocket))
         f.write(sprintf("Price = %d\r\n", item.price))
+        f.write(sprintf("SellPrice = %d\r\n", item.sell_price)) if item.sell_price != item.price / 2
         field_use = GameData::Item::SCHEMA["FieldUse"][2].key(item.field_use)
         f.write(sprintf("FieldUse = %s\r\n", field_use)) if field_use
         battle_use = GameData::Item::SCHEMA["BattleUse"][2].key(item.battle_use)

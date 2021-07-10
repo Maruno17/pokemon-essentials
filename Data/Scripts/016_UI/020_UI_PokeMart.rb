@@ -60,6 +60,7 @@ class PokemonMartAdapter
         return $game_temp.mart_prices[item][0] if $game_temp.mart_prices[item][0] > 0
       end
     end
+    return GameData::Item.get(item).sell_price if selling
     return GameData::Item.get(item).price
   end
 
@@ -623,11 +624,11 @@ class PokemonMartScreen
       item=@scene.pbChooseSellItem
       break if !item
       itemname=@adapter.getDisplayName(item)
-      price=@adapter.getPrice(item,true)
       if !@adapter.canSell?(item)
         pbDisplayPaused(_INTL("{1}? Oh, no. I can't buy that.",itemname))
         next
       end
+      price=@adapter.getPrice(item,true)
       qty=@adapter.getQuantity(item)
       next if qty==0
       @scene.pbShowMoney

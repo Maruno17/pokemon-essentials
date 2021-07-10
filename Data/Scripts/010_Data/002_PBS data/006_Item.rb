@@ -5,6 +5,7 @@ module GameData
     attr_reader :real_name_plural
     attr_reader :pocket
     attr_reader :price
+    attr_reader :sell_price
     attr_reader :real_description
     attr_reader :field_use
     attr_reader :battle_use
@@ -19,6 +20,7 @@ module GameData
       "NamePlural"  => [:name_plural, "s"],
       "Pocket"      => [:pocket,      "v"],
       "Price"       => [:price,       "u"],
+      "SellPrice"   => [:sell_price,  "u"],
       "Description" => [:description, "q"],
       "FieldUse"    => [:field_use,   "e", {"OnPokemon" => 1, "Direct" => 2, "TM" => 3,
                                             "HM" => 4, "OnPokemonReusable" => 5, "TR" => 6}],
@@ -87,6 +89,7 @@ module GameData
       @real_name_plural = hash[:name_plural] || "Unnamed"
       @pocket           = hash[:pocket]      || 1
       @price            = hash[:price]       || 0
+      @sell_price       = hash[:sell_price]  || (@price / 2)
       @real_description = hash[:description] || "???"
       @field_use        = hash[:field_use]   || 0
       @battle_use       = hash[:battle_use]  || 0
