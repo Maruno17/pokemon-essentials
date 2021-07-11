@@ -192,7 +192,7 @@ Price = 3000
 SellPrice = 800
 FieldUse = OnPokemon
 Type = EvolutionStone
-Description = A peculiar teapot that can make a certain species of Pokémon evolve. It may be cracked, but tea poured from it is delicious.
+Description = A peculiar cracked teapot that can make a certain species of Pokémon evolve. It makes delicious tea.
 #-------------------------------
 [CHIPPEDPOT]
 Name = Chipped Pot
@@ -202,7 +202,7 @@ Price = 3000
 SellPrice = 19000
 FieldUse = OnPokemon
 Type = EvolutionStone
-Description = A peculiar teapot that can make a certain species of Pokémon evolve. It may be chipped, but tea poured from it is delicious.
+Description = A peculiar chipped teapot that can make a certain species of Pokémon evolve. It makes delicious tea.
 #-------------------------------
 [GALARICACUFF]
 Name = Galarica Cuff
@@ -211,7 +211,7 @@ Pocket = 1
 Price = 6000
 FieldUse = OnPokemon
 Type = EvolutionStone
-Description = A cuff made from woven-together Galarica Twigs. Giving it to Galarian Slowpoke makes the Pokémon very happy.
+Description = A cuff made from woven-together Galarica Twigs. Giving it to a Galarian Slowpoke would make it very happy.
 #-------------------------------
 [GALARICAWREATH]
 Name = Galarica Wreath
@@ -220,7 +220,7 @@ Pocket = 1
 Price = 6000
 FieldUse = OnPokemon
 Type = EvolutionStone
-Description = A wreath made from woven-together Galarica Twigs. Placing it on the head of a Galarian Slowpoke makes the Pokémon very happy.
+Description = A wreath made from woven-together Galarica Twigs. A Galarian Slowpoke wearing this would be very happy.
 #-------------------------------
 [REDAPRICORN]
 Name = Red Apricorn
@@ -718,7 +718,7 @@ NamePlural = Utility Umbrellas
 Pocket = 1
 Price = 3000
 SellPrice = 2000
-Description = An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of rain and harsh sunlight.
+Description = An item to be held by a Pokémon. This sturdy umbrella protects the holder from the effects of rain and sun.
 #-------------------------------
 [EJECTBUTTON]
 Name = Eject Button
@@ -1784,14 +1784,14 @@ Name = Rusted Sword
 NamePlural = Rusted Swords
 Pocket = 1
 Price = 0
-Description = It is said that a hero used this sword to halt a terrible disaster in ancient times. But it's grown rusty and worn.
+Description = It is said that a hero used this sword to halt a disaster in ancient times. But it's grown rusty and worn.
 #-------------------------------
 [RUSTEDSHIELD]
 Name = Rusted Shield
 NamePlural = Rusted Shields
 Pocket = 1
 Price = 0
-Description = It is said that a hero used this shield to halt a terrible disaster in ancient times. But it's grown rusty and worn.
+Description = It is said that a hero used this shield to halt a disaster in ancient times. But it's grown rusty and worn.
 #-------------------------------
 [DOUSEDRIVE]
 Name = Douse Drive
@@ -2510,7 +2510,7 @@ Pocket = 2
 Price = 2500
 FieldUse = OnPokemon
 BattleUse = OnPokemon
-Description = A spray-type medicine for treating wounds. It can be used to completely restore the max HP of a single Pokémon.
+Description = A spray-type medicine for treating wounds. It can completely restore the max HP of a single Pokémon.
 #-------------------------------
 [FULLRESTORE]
 Name = Full Restore
@@ -3111,7 +3111,7 @@ NamePlural = Exp. Candy XSs
 Pocket = 2
 Price = 20
 FieldUse = OnPokemon
-Description = A candy that is packed with energy. When consumed, it will grant a single Pokémon a very small amount of Exp. Points.
+Description = A candy packed with energy. When consumed, it will grant a Pokémon a very small amount of Exp. Points.
 #-------------------------------
 [EXPCANDYS]
 Name = Exp. Candy S
@@ -3119,7 +3119,7 @@ NamePlural = Exp. Candy Ss
 Pocket = 2
 Price = 240
 FieldUse = OnPokemon
-Description = A candy that is packed with energy. When consumed, it will grant a single Pokémon a small amount of Exp. Points.
+Description = A candy packed with energy. When consumed, it will grant a Pokémon a small amount of Exp. Points.
 #-------------------------------
 [EXPCANDYM]
 Name = Exp. Candy M
@@ -3127,7 +3127,7 @@ NamePlural = Exp. Candy Ms
 Pocket = 2
 Price = 1000
 FieldUse = OnPokemon
-Description = A candy that is packed with energy. When consumed, it will grant a single Pokémon a moderate amount of Exp. Points.
+Description = A candy packed with energy. When consumed, it will grant a Pokémon a moderate amount of Exp. Points.
 #-------------------------------
 [EXPCANDYL]
 Name = Exp. Candy L
@@ -3135,7 +3135,7 @@ NamePlural = Exp. Candy Ls
 Pocket = 2
 Price = 3000
 FieldUse = OnPokemon
-Description = A candy that is packed with energy. When consumed, it will grant a single Pokémon a large amount of Exp. Points.
+Description = A candy packed with energy. When consumed, it will grant a Pokémon a large amount of Exp. Points.
 #-------------------------------
 [EXPCANDYXL]
 Name = Exp. Candy XL
@@ -3143,7 +3143,7 @@ NamePlural = Exp. Candy XLs
 Pocket = 2
 Price = 10000
 FieldUse = OnPokemon
-Description = A candy that is packed with energy. When consumed, it will grant a single Pokémon a very large amount of Exp. Points.
+Description = A candy packed with energy. When consumed, it will grant a Pokémon a very large amount of Exp. Points.
 #-------------------------------
 [RARECANDY]
 Name = Rare Candy
@@ -3503,7 +3503,7 @@ Pocket = 4
 Price = 50000
 FieldUse = TM
 Move = SOLARBLADE
-Description = In this two-turn attack, the user gathers light and fills a blade with the light's energy, attacking the target on the next turn.
+Description = In this two-turn attack, the user gathers light evergy into a blade, attacking on the next turn.
 #-------------------------------
 [TM13]
 Name = TM13
@@ -3593,7 +3593,7 @@ Pocket = 4
 Price = 0
 FieldUse = TM
 Move = ROCKSLIDE
-Description = Large boulders are hurled at opposing Pokémon to inflict damage. This may also make the opposing Pokémon flinch.
+Description = Large boulders are hurled at opposing Pokémon to inflict damage. This may also make them flinch.
 #-------------------------------
 [TM23]
 Name = TM23
@@ -3602,7 +3602,7 @@ Pocket = 4
 Price = 10000
 FieldUse = TM
 Move = THIEF
-Description = The user attacks and steals the target's held item simultaneously. The user can't steal anything if it already holds an item.
+Description = The user attacks and steals the target's held item simultaneously, if it isn't already holding an item.
 #-------------------------------
 [TM24]
 Name = TM24
@@ -3620,7 +3620,7 @@ Pocket = 4
 Price = 10000
 FieldUse = TM
 Move = PROTECT
-Description = This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession.
+Description = This move enables the user to protect itself from all attacks. More likely to fail if used in succession.
 #-------------------------------
 [TM26]
 Name = TM26
@@ -3656,7 +3656,7 @@ Pocket = 4
 Price = 0
 FieldUse = TM
 Move = CHARM
-Description = The user gazes at the target rather charmingly, making it less wary. This harshly lowers the target's Attack stat.
+Description = The user gazes at the target rather charmingly, making it less wary and harshly lowering its Attack stat.
 #-------------------------------
 [TM30]
 Name = TM30
@@ -3683,7 +3683,7 @@ Pocket = 4
 Price = 10000
 FieldUse = TM
 Move = SANDSTORM
-Description = A five-turn sandstorm is summoned to hurt all combatants except Rock, Ground, and Steel types. It raises the Sp. Def stat of Rock types.
+Description = A five-turn sandstorm is summoned to hurt all combatants except Rock, Ground, and Steel types.
 #-------------------------------
 [TM33]
 Name = TM33
@@ -3692,7 +3692,7 @@ Pocket = 4
 Price = 10000
 FieldUse = TM
 Move = RAINDANCE
-Description = The user summons a heavy rain that falls for five turns, powering up Water-type moves. It lowers the power of Fire-type moves.
+Description = Summons a heavy rain that falls for five turns. Powers up Water-type moves and weakens Fire-type moves.
 #-------------------------------
 [TM34]
 Name = TM34
@@ -3701,7 +3701,7 @@ Pocket = 4
 Price = 10000
 FieldUse = TM
 Move = SUNNYDAY
-Description = The user intensifies the sun for five turns, powering up Fire-type moves. It lowers the power of Water-type moves.
+Description = Intensifies the sun for five turns, powering up Fire-type moves and weakening Water-type moves.
 #-------------------------------
 [TM35]
 Name = TM35
@@ -3728,7 +3728,7 @@ Pocket = 4
 Price = 0
 FieldUse = TM
 Move = BEATUP
-Description = The user gets all party Pokémon to attack the target. The more party Pokémon, the greater the number of attacks.
+Description = The user gets all party Pokémon to attack the target. The more party Pokémon, the more hits it deals.
 #-------------------------------
 [TM38]
 Name = TM38
@@ -3863,7 +3863,7 @@ Pocket = 4
 Price = 100000
 FieldUse = TM
 Move = BOUNCE
-Description = The user bounces up high, then drops on the target on the second turn. This may also leave the target with paralysis.
+Description = The user bounces up high, then drops on the target on the second turn. This may also paralyze the target.
 #-------------------------------
 [TM53]
 Name = TM53
@@ -4061,7 +4061,7 @@ Pocket = 4
 Price = 0
 FieldUse = TM
 Move = VENOSHOCK
-Description = The user drenches the target in a special poisonous liquid. This move's power is doubled if the target is poisoned.
+Description = The user drenches the target in a special poisonous liquid. This move is stronger if the target is poisoned.
 #-------------------------------
 [TM75]
 Name = TM75
@@ -4106,7 +4106,7 @@ Pocket = 4
 Price = 0
 FieldUse = TM
 Move = RETALIATE
-Description = The user gets revenge for a fainted ally. If an ally fainted in the previous turn, this move's power is increased.
+Description = The user gets revenge for a fainted ally. If an ally fainted the previous turn, this move gets stronger.
 #-------------------------------
 [TM80]
 Name = TM80
@@ -4124,7 +4124,7 @@ Pocket = 4
 Price = 0
 FieldUse = TM
 Move = BULLDOZE
-Description = The user strikes everything around it by stomping down on the ground. This lowers the Speed stats of those hit.
+Description = The user strikes everything around it by stomping down on the ground. Lowers the Speed stats of those hit.
 #-------------------------------
 [TM82]
 Name = TM82
@@ -4169,7 +4169,7 @@ Pocket = 4
 Price = 0
 FieldUse = TM
 Move = PHANTOMFORCE
-Description = The user vanishes somewhere, then strikes the target on the next turn. This move hits even if the target protects itself.
+Description = The user vanishes somewhere, then strikes the target on the next turn. This move hits through protections.
 #-------------------------------
 [TM87]
 Name = TM87
@@ -4178,7 +4178,7 @@ Pocket = 4
 Price = 0
 FieldUse = TM
 Move = DRAININGKISS
-Description = The user steals the target's HP with a kiss. The user's HP is restored by over half of the damage taken by the target.
+Description = The user steals the target's HP with a kiss. The user's HP is restored by most of the damage dealt.
 #-------------------------------
 [TM88]
 Name = TM88
@@ -4187,7 +4187,7 @@ Pocket = 4
 Price = 20000
 FieldUse = TM
 Move = GRASSYTERRAIN
-Description = The user turns the ground to grass for five turns. This restores the HP of Pokémon on the ground a little every turn and powers up Grass-type moves.
+Description = Turns the ground to grass for five turns. Grounded Pokémon gain HP each turn. Powers up Grass moves.
 #-------------------------------
 [TM89]
 Name = TM89
@@ -4196,7 +4196,7 @@ Pocket = 4
 Price = 20000
 FieldUse = TM
 Move = MISTYTERRAIN
-Description = This protects Pokémon on the ground from status conditions and halves damage from Dragon-type moves for five turns.
+Description = Protects Pokémon on the ground from status conditions and weakens Dragon-type moves for five turns.
 #-------------------------------
 [TM90]
 Name = TM90
@@ -4205,7 +4205,7 @@ Pocket = 4
 Price = 20000
 FieldUse = TM
 Move = ELECTRICTERRAIN
-Description = The user electrifies the ground for five turns, powering up Electric-type moves. Pokémon on the ground no longer fall asleep.
+Description = Electrifies the ground for five turns. Powers up Electric-type moves. Grounded Pokémon can't sleep.
 #-------------------------------
 [TM91]
 Name = TM91
@@ -4232,7 +4232,7 @@ Pocket = 4
 Price = 0
 FieldUse = TM
 Move = EERIEIMPULSE
-Description = The user's body generates an eerie impulse. Exposing the target to it harshly lowers the target's Sp. Atk stat.
+Description = The user's body generates an eerie impulse. Exposure to it harshly lowers the target's Sp. Atk stat.
 #-------------------------------
 [TM94]
 Name = TM94
@@ -4277,7 +4277,7 @@ Pocket = 4
 Price = 0
 FieldUse = TM
 Move = STOMPINGTANTRUM
-Description = Driven by frustration, the user attacks the target. If the user's previous move has failed, the power of this move doubles.
+Description = Driven by frustration, the user attacks the target. Power doubles if the user's previous move has failed.
 #-------------------------------
 [TR00]
 Name = TR00
@@ -4340,7 +4340,7 @@ Pocket = 4
 Price = 16000
 FieldUse = TR
 Move = BLIZZARD
-Description = A howling blizzard is summoned to strike opposing Pokémon. This may also leave the opposing Pokémon frozen.
+Description = A howling blizzard is summoned to strike opposing Pokémon. This may also freeze the opposing Pokémon.
 #-------------------------------
 [TR07]
 Name = TR07
@@ -4349,7 +4349,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = LOWKICK
-Description = A powerful low kick that makes the target fall over. The heavier the target, the greater the move's power.
+Description = A powerful low kick that makes the target fall over. The heavier the target, the stronger the move is.
 #-------------------------------
 [TR08]
 Name = TR08
@@ -4367,7 +4367,7 @@ Pocket = 4
 Price = 16000
 FieldUse = TR
 Move = THUNDER
-Description = A wicked thunderbolt is dropped on the target to inflict damage. This may also leave the target with paralysis.
+Description = A wicked thunderbolt is dropped on the target to inflict damage. This may also paralyze the target.
 #-------------------------------
 [TR10]
 Name = TR10
@@ -4421,7 +4421,7 @@ Pocket = 4
 Price = 16000
 FieldUse = TR
 Move = FIREBLAST
-Description = The target is attacked with an intense blast of all-consuming fire. This may also leave the target with a burn.
+Description = The target is attacked with an intense blast of all-consuming fire. This may also burn the target.
 #-------------------------------
 [TR16]
 Name = TR16
@@ -4466,7 +4466,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = SUBSTITUTE
-Description = The user creates a substitute for itself using some of its HP. The substitute serves as the user's decoy.
+Description = The user creates a substitute for itself using some of its HP. The substitute acts as the user's decoy.
 #-------------------------------
 [TR21]
 Name = TR21
@@ -4637,7 +4637,7 @@ Pocket = 4
 Price = 16000
 FieldUse = TR
 Move = SUPERPOWER
-Description = The user attacks the target with great power. However, this also lowers the user's Attack and Defense stats.
+Description = The user attacks the target with great power. This also lowers the user's Attack and Defense stats.
 #-------------------------------
 [TR40]
 Name = TR40
@@ -4754,7 +4754,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = GYROBALL
-Description = The user tackles the target with a high-speed spin. The slower the user compared to the target, the greater the move's power.
+Description = The user tackles the target with a high-speed spin. Does more damage the slower the user is than the foe.
 #-------------------------------
 [TR53]
 Name = TR53
@@ -4763,7 +4763,7 @@ Pocket = 4
 Price = 16000
 FieldUse = TR
 Move = CLOSECOMBAT
-Description = The user fights the target up close without guarding itself. This also lowers the user's Defense and Sp. Def stats.
+Description = The user fights the target up close without guarding itself. Lowers the user's Defense and Sp. Def stats.
 #-------------------------------
 [TR54]
 Name = TR54
@@ -4772,7 +4772,7 @@ Pocket = 4
 Price = 4000
 FieldUse = TR
 Move = TOXICSPIKES
-Description = The user lays a trap of poison spikes at the feet of the opposing team. The spikes will poison opposing Pokémon that switch into battle.
+Description = Lays a trap of poison spikes beneath the opposing team. The spikes poison their Pokémon that switch in.
 #-------------------------------
 [TR55]
 Name = TR55
@@ -4781,7 +4781,7 @@ Pocket = 4
 Price = 16000
 FieldUse = TR
 Move = FLAREBLITZ
-Description = The user cloaks itself in fire and charges the target. This also damages the user quite a lot. This attack may leave the target with a burn.
+Description = The user cloaks itself in fire and charges the target. May burn the target. Damages the user quite a lot.
 #-------------------------------
 [TR56]
 Name = TR56
@@ -4790,7 +4790,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = AURASPHERE
-Description = The user lets loose a blast of aura power from deep within its body at the target. This attack never misses.
+Description = The user lets loose a blast of aura power from deep within its body at the target. Never misses.
 #-------------------------------
 [TR57]
 Name = TR57
@@ -4799,7 +4799,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = POISONJAB
-Description = The target is stabbed with a tentacle, arm, or the like steeped in poison. This may also poison the target.
+Description = The target is stabbed with a tentacle, arm, or the like steeped in poison. May also poison the target.
 #-------------------------------
 [TR58]
 Name = TR58
@@ -4925,7 +4925,7 @@ Pocket = 4
 Price = 16000
 FieldUse = TR
 Move = LEAFSTORM
-Description = The user whips up a storm of leaves around the target. The attack's recoil harshly lowers the user's Sp. Atk stat.
+Description = The user whips up a storm of leaves around the target. This harshly lowers the user's Sp. Atk stat.
 #-------------------------------
 [TR72]
 Name = TR72
@@ -4970,7 +4970,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = STEALTHROCK
-Description = The user lays a trap of levitating stones around the opposing team. The trap hurts opposing Pokémon that switch into battle.
+Description = Lays a trap of levitating stones around the opposing team. The trap hurts their Pokémon that switch in.
 #-------------------------------
 [TR77]
 Name = TR77
@@ -4979,7 +4979,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = GRASSKNOT
-Description = The user snares the target with grass and trips it. The heavier the target, the greater the move's power.
+Description = The user snares the target with grass and trips it. The heavier the target, the stronger the move is.
 #-------------------------------
 [TR78]
 Name = TR78
@@ -4988,7 +4988,7 @@ Pocket = 4
 Price = 10000
 FieldUse = TR
 Move = SLUDGEWAVE
-Description = The user strikes everything around it by swamping the area with a giant sludge wave. This may also poison those hit.
+Description = Strikes everything around by swamping the area with a giant sludge wave. May also poison those hit.
 #-------------------------------
 [TR79]
 Name = TR79
@@ -4997,7 +4997,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = HEAVYSLAM
-Description = The user slams into the target with its heavy body. The more the user outweighs the target, the greater the move's power.
+Description = The user slams into the target with its heavy body. Damage increases the more the user outweighs the target.
 #-------------------------------
 [TR80]
 Name = TR80
@@ -5006,7 +5006,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = ELECTROBALL
-Description = The user hurls an electric orb at the target. The faster the user is than the target, the greater the move's power.
+Description = The user hurls an electric orb at the target. The faster the user is than the target, the stronger the move.
 #-------------------------------
 [TR81]
 Name = TR81
@@ -5015,7 +5015,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = FOULPLAY
-Description = The user turns the target's power against it. The higher the target's Attack stat, the greater the damage it deals.
+Description = The user turns the target's power against it. The higher the target's Attack stat, the stronger the move.
 #-------------------------------
 [TR82]
 Name = TR82
@@ -5024,7 +5024,7 @@ Pocket = 4
 Price = 4000
 FieldUse = TR
 Move = STOREDPOWER
-Description = The user attacks the target with stored power. The more the user's stats are raised, the greater the move's power.
+Description = The user attacks the target with stored power. Does more damage the more the user's stats are raised.
 #-------------------------------
 [TR83]
 Name = TR83
@@ -5078,7 +5078,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = HEATCRASH
-Description = The user slams its target with its flame-covered body. The more the user outweighs the target, the greater the move's power.
+Description = The user slams its target with its flame-covered body. Power increases the more the user outweighs the foe.
 #-------------------------------
 [TR89]
 Name = TR89
@@ -5087,7 +5087,7 @@ Pocket = 4
 Price = 16000
 FieldUse = TR
 Move = HURRICANE
-Description = The user attacks by wrapping its opponent in a fierce wind that flies up into the sky. This may also confuse the target.
+Description = Attacks by wrapping the opponent in a fierce wind that flies up into the sky. May also confuse the target.
 #-------------------------------
 [TR90]
 Name = TR90
@@ -5105,7 +5105,7 @@ Pocket = 4
 Price = 4000
 FieldUse = TR
 Move = VENOMDRENCH
-Description = Opposing Pokémon are drenched in an odd poisonous liquid. This lowers the Attack, Sp. Atk, and Speed stats of a poisoned target.
+Description = All foes are drenched in a poisonous liquid. Lowers the Attack, Sp. Atk, and Speed stats of poisoned foes.
 #-------------------------------
 [TR92]
 Name = TR92
@@ -5123,7 +5123,7 @@ Pocket = 4
 Price = 10000
 FieldUse = TR
 Move = DARKESTLARIAT
-Description = The user swings both arms and hits the target. The target's stat changes don't affect this attack's damage.
+Description = The user swings both arms and hits the target. The damage dealt ignores the target's stat changes.
 #-------------------------------
 [TR94]
 Name = TR94
@@ -5141,7 +5141,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = THROATCHOP
-Description = The user attacks the target's throat, and the resultant suffering prevents the target from using moves that emit sound for two turns.
+Description = The user attacks the target's throat, preventing them from using moves that emit sound for two turns.
 #-------------------------------
 [TR96]
 Name = TR96
@@ -5150,7 +5150,7 @@ Pocket = 4
 Price = 10000
 FieldUse = TR
 Move = POLLENPUFF
-Description = The user attacks the enemy with a pollen puff that explodes. If the target is an ally, it gives the ally a pollen puff that restores its HP instead.
+Description = Attacks with an exploding pollen puff. If the target is an ally, it restores HP instead.
 #-------------------------------
 [TR97]
 Name = TR97
@@ -5168,7 +5168,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = LIQUIDATION
-Description = The user slams into the target using a full-force blast of water. This may also lower the target's Defense stat.
+Description = The user slams into the target using a full-force blast of water. May also lower the target's Defense stat.
 #-------------------------------
 [TR99]
 Name = TR99
@@ -5177,7 +5177,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = BODYPRESS
-Description = The user attacks by slamming its body into the target. The higher the user's Defense, the more damage it can inflict on the target.
+Description = The user attacks by slamming its body into the target. Damages more the higher the user's Defense.
 #-------------------------------
 [HM01]
 Name = HM01
@@ -5195,7 +5195,7 @@ Pocket = 4
 Price = 0
 FieldUse = HM
 Move = FLY
-Description = The user soars and then strikes its target on the next turn. This can also be used to fly to any familiar town.
+Description = The user soars and then strikes on the next turn. This can also be used to fly to any familiar town.
 #-------------------------------
 [HM03]
 Name = HM03
@@ -5204,7 +5204,7 @@ Pocket = 4
 Price = 0
 FieldUse = HM
 Move = SURF
-Description = The user attacks everything around it by swamping its surroundings with a giant wave. This can also be used for crossing water.
+Description = Attacks everything by swamping the surroundings with a giant wave. This can also be used to cross water.
 #-------------------------------
 [HM04]
 Name = HM04
@@ -5231,7 +5231,7 @@ Pocket = 4
 Price = 0
 FieldUse = HM
 Move = DIVE
-Description = Diving on the first turn, the user floats up and attacks on the next turn. It can be used to dive deep in the ocean.
+Description = Diving on the first turn, the user floats up and attacks on the second. It can be used to dive underwater.
 #-------------------------------
 [CHERIBERRY]
 Name = Cheri Berry
@@ -6280,6 +6280,15 @@ FieldUse = Direct
 Type = KeyItem
 Description = A long, durable rope. Use it to escape instantly from a cave or a dungeon.
 #-------------------------------
+[COINCASE]
+Name = Coin Case
+NamePlural = Coin Cases
+Pocket = 8
+Price = 0
+FieldUse = Direct
+Type = KeyItem
+Description = A case for holding coins obtained at the Game Corner. It holds up to 99,999 coins.
+#-------------------------------
 [POKEFLUTE]
 Name = Poké Flute
 NamePlural = Poké Flutes
@@ -6289,15 +6298,6 @@ FieldUse = OnPokemonReusable
 BattleUse = DirectReusable
 Type = KeyItem
 Description = A flute that is said to instantly awaken any Pokémon. It has a lovely tone.
-#-------------------------------
-[COINCASE]
-Name = Coin Case
-NamePlural = Coin Cases
-Pocket = 8
-Price = 0
-FieldUse = Direct
-Type = KeyItem
-Description = A case for holding coins obtained at the Game Corner. It holds up to 50,000 coins.
 #-------------------------------
 [SOOTSACK]
 Name = Soot Sack
@@ -6388,7 +6388,8 @@ NamePlural = Rotom Catalogs
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Description = A catalog of devices that Rotom like. Use the catalog to have Rotom hop in and out of the various devices listed within.
+Type = KeyItem
+Description = A catalog of devices that Rotom like. Use the catalog to have Rotom hop in and out of the devices listed within.
 #-------------------------------
 [DNASPLICERS]
 Name = DNA Splicers
@@ -6418,13 +6419,13 @@ Type = KeyItem
 Description = A machine to fuse Necrozma, which needs light, and Lunala.
 #-------------------------------
 [REINSOFUNITY]
-Name = Reins Of Unity
-NamePlural = Reins Of Unity
+Name = Reins of Unity
+NamePlural = Reins of Unity
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
 Type = KeyItem
-Description = Reins that people presented to the king. They enhance Calyrex’s power over bountiful harvests and unite Calyrex with its beloved steed.
+Description = Reins that people presented to the king. They unite Calyrex with its beloved steed.
 #-------------------------------
 [OVALCHARM]
 Name = Oval Charm
@@ -6448,7 +6449,7 @@ NamePlural = Catching Charms
 Pocket = 8
 Price = 0
 Type = KeyItem
-Description = Holding it is said to increase the chance of getting a critical catch. Curiously, the charm doesn't shake much.
+Description = A charm said to increase the chance of getting a critical catch. The charm doesn't shake much.
 #-------------------------------
 [EXPCHARM]
 Name = Exp. Charm
@@ -6456,7 +6457,7 @@ NamePlural = Exp. Charms
 Pocket = 8
 Price = 0
 Type = KeyItem
-Description = A charm that increases the Exp. Points that Pokémon can get. A machine-like object is inside the charm.
+Description = A charm that increases the Exp. Points that Pokémon can get. A machine-like object is inside it.
 #-------------------------------
 [MEGARING]
 Name = Mega Ring

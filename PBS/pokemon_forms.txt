@@ -76,7 +76,7 @@ TutorMoves = ATTRACT,BLIZZARD,CONFIDE,COVET,DARKPULSE,DOUBLETEAM,EMBARGO,ENDEAVO
 EggMoves = COUNTER,FINALGAMBIT,FURYSWIPES,MEFIRST,REVENGE,REVERSAL,SNATCH,STOCKPILE,SWALLOW,SWITCHEROO,UPROAR
 Weight = 3.8
 Color = Black
-Pokedex = With its incisors, it gnaws through doors and infiltrates people’s homes. Then, with a twitch of its whiskers, it steals whatever food it finds.
+Pokedex = With its incisors, it gnaws through doors and infiltrates people's homes. Then, with a twitch of its whiskers, it steals whatever food it finds.
 Generation = 7
 WildItemUncommon = PECHABERRY
 Evolutions = RATICATE,LevelNight,20
@@ -1100,6 +1100,7 @@ Color = Red
 [CHERRIM,1]
 FormName = Sunshine Form
 Color = Pink
+Pokedex = After absorbing plenty of sunlight, Cherrim takes this form. It's full of energy while it's like this, and its liveliness will go on until sundown.
 BattlerPlayerX = 2
 BattlerEnemyX = 2
 BattlerEnemyY = 21
@@ -1107,10 +1108,12 @@ BattlerEnemyY = 21
 [SHELLOS,1]
 FormName = East Sea
 Color = Blue
+Pokedex = Its appearance changes depending on the environment. One theory suggests that living in cold seas causes Shellos to take on this form.
 #-------------------------------
 [GASTRODON,1]
 FormName = East Sea
 Color = Blue
+Pokedex = Its body is covered in a sticky slime. It's very susceptible to dehydration, so it can't spend too much time on land.
 #-------------------------------
 [LOPUNNY,1]
 FormName = Mega Lopunny
@@ -1359,7 +1362,7 @@ BattlerEnemyY = 30
 BattlerShadowSize = 2
 #-------------------------------
 [DARMANITAN,2]
-FormName = Galarian
+FormName = Galarian Standard Mode
 Type1 = ICE
 Abilities = GORILLATACTICS
 Moves = 0,ICICLECRASH,1,ICICLECRASH,1,POWDERSNOW,1,TACKLE,1,TAUNT,1,BITE,12,AVALANCHE,16,WORKUP,20,ICEFANG,24,HEADBUTT,28,ICEPUNCH,32,UPROAR,38,BELLYDRUM,44,BLIZZARD,50,THRASH,56,SUPERPOWER
@@ -1372,7 +1375,7 @@ Pokedex = On days when blizzards blow through, it comes down to where people liv
 Generation = 8
 #-------------------------------
 [DARMANITAN,3]
-FormName = Galarian
+FormName = Galarian Zen Mode
 Type1 = ICE
 Type2 = FIRE
 BaseStats = 105,160,55,135,30,55
@@ -1691,11 +1694,13 @@ FormName = Female
 HiddenAbilities = COMPETITIVE
 Moves = 1,STOREDPOWER,1,MEFIRST,1,MAGICALLEAF,1,SCRATCH,1,LEER,1,COVET,1,CONFUSION,5,COVET,9,CONFUSION,13,LIGHTSCREEN,17,PSYBEAM,19,FAKEOUT,22,DISARMINGVOICE,25,PSYSHOCK,28,CHARGEBEAM,31,SHADOWBALL,35,EXTRASENSORY,40,PSYCHIC,43,ROLEPLAY,45,SIGNALBEAM,48,SUCKERPUNCH,50,FUTURESIGHT,53,STOREDPOWER
 Color = White
+Pokedex = Females are a bit more selfish and aggressive than males. If they don't get what they want, they will torment you with their psychic abilities.
 #-------------------------------
 [AEGISLASH,1]
 FormName = Blade Forme
 BaseStats = 60,140,50,60,140,50
 EVs = 0,2,0,0,1,0
+Pokedex = Once upon a time, a king with an Aegislash reigned over the land. His Pokémon eventually drained him of life, and his kingdom fell with him.
 #-------------------------------
 [PUMPKABOO,1]
 FormName = Average Size
@@ -1703,12 +1708,14 @@ BaseStats = 49,66,70,51,44,55
 HiddenAbilities = INSOMNIA
 Height = 0.4
 Weight = 5.0
+Pokedex = Spirits that wander this world are placed into Pumpkaboo's body. They're then moved on to the afterlife.
 #-------------------------------
 [PUMPKABOO,2]
 FormName = Large Size
 BaseStats = 54,66,70,46,44,55
 Height = 0.5
 Weight = 7.5
+Pokedex = When taking spirits to the afterlife, large Pumpkaboo prefer the spirits of adults to those of children.
 #-------------------------------
 [PUMPKABOO,3]
 FormName = Super Size
@@ -1719,6 +1726,7 @@ Weight = 15.0
 WildItemCommon = MIRACLESEED
 WildItemUncommon = MIRACLESEED
 WildItemRare = MIRACLESEED
+Pokedex = Massive Pumpkaboo are said to be the product of areas where a great number of lost souls lingered.
 #-------------------------------
 [GOURGEIST,1]
 FormName = Average Size
@@ -1726,12 +1734,14 @@ BaseStats = 65,90,122,84,58,75
 HiddenAbilities = INSOMNIA
 Height = 0.9
 Weight = 12.5
+Pokedex = Eerie cries emanate from its body in the dead of night. The sounds are said to be the wails of spirits who are suffering in the afterlife.
 #-------------------------------
 [GOURGEIST,2]
 FormName = Large Size
 BaseStats = 75,95,122,69,58,75
 Height = 1.1
 Weight = 14.0
+Pokedex = Large Gourgeist put on the guise of adults, taking the hands of children to lead them to the afterlife.
 #-------------------------------
 [GOURGEIST,3]
 FormName = Super Size
@@ -1742,6 +1752,7 @@ Weight = 39.0
 WildItemCommon = MIRACLESEED
 WildItemUncommon = MIRACLESEED
 WildItemRare = MIRACLESEED
+Pokedex = Supersized Gourgeist aren't picky. They will forcefully drag anyone off to the afterlife.
 #-------------------------------
 [XERNEAS,1]
 FormName = Active Mode
