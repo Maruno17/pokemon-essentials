@@ -1124,7 +1124,6 @@ class PokeBattle_Move_137 < PokeBattle_Move
     return true
   end
 
-
   def pbEffectAgainstTarget(user,target)
     showAnim = true
     if target.pbCanRaiseStatStage?(:DEFENSE,user,self)

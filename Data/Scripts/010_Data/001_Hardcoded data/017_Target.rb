@@ -75,6 +75,15 @@ GameData::Target.register({
   :num_targets      => 1
 })
 
+# Coaching
+GameData::Target.register({
+  :id               => :AllAllies,
+  :name             => _INTL("All Allies"),
+  :num_targets      => 2,
+  :targets_all      => true,
+  :long_range       => true
+})
+
 # Aromatherapy, Gear Up, Heal Bell, Life Dew, Magnetic Flux, Howl (in Gen 8+)
 GameData::Target.register({
   :id               => :UserAndAllies,

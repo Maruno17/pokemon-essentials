@@ -152,6 +152,7 @@ class PokeBattle_Battler
     @tookPhysicalHit       = false
     @statsRaised           = false
     @statsLowered          = false
+    @canRestoreIceFace     = false
     @lastMoveUsed          = nil
     @lastMoveUsedType      = nil
     @lastRegularMoveUsed   = nil

@@ -17,6 +17,7 @@ class PokeBattle_DamageState
   attr_accessor :focusSash       # Focus Sash used
   attr_accessor :sturdy          # Sturdy ability used
   attr_accessor :disguise        # Disguise ability used
+  attr_accessor :iceFace         # Ice Face ability used
   attr_accessor :endured         # Damage was endured
   attr_accessor :berryWeakened   # Whether a type-resisting berry was used
 
@@ -44,6 +45,7 @@ class PokeBattle_DamageState
     @focusSash     = false
     @sturdy        = false
     @disguise      = false
+    @iceFace       = false
     @endured       = false
     @berryWeakened = false
   end

@@ -42,6 +42,7 @@ class PokeBattle_Battler
   attr_accessor :tookPhysicalHit
   attr_accessor :statsRaised   # Boolean for whether self's stat(s) raised this round
   attr_accessor :statsLowered   # Boolean for whether self's stat(s) lowered this round
+  attr_accessor :canRestoreIceFace   # Whether Hail started in the round
   attr_accessor :damageState
   attr_accessor :initialHP     # Set at the start of each move's usage
 
@@ -361,6 +362,7 @@ class PokeBattle_Battler
       :DISGUISE,
 #      :FLOWERGIFT,                                        # This can be stopped
 #      :FORECAST,                                          # This can be stopped
+      :ICEFACE,
       :MULTITYPE,
       :POWERCONSTRUCT,
       :SCHOOLING,
@@ -385,6 +387,7 @@ class PokeBattle_Battler
       :DISGUISE,
       :FLOWERGIFT,
       :FORECAST,
+      :ICEFACE,
       :MULTITYPE,
       :POWERCONSTRUCT,
       :SCHOOLING,

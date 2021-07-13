@@ -163,6 +163,12 @@ class PokeBattle_Move
       target.damageState.substitute = true
       return
     end
+    # Ice Face will take the damage
+    if !@battle.moldBreaker && target.isSpecies?(:EISCUE) &&
+       target.form == 0 && target.ability == :ICEFACE && physicalMove?
+      target.damageState.iceFace = true
+      return
+    end
     # Disguise will take the damage
     if !@battle.moldBreaker && target.isSpecies?(:MIMIKYU) &&
        target.form==0 && target.ability == :DISGUISE
@@ -181,7 +187,7 @@ class PokeBattle_Move
       return
     end
     # Disguise takes the damage
-    return if target.damageState.disguise
+    return if target.damageState.disguise || target.damageState.iceFace
     # Target takes the damage
     if damage>=target.hp
       damage = target.hp
@@ -250,7 +256,7 @@ class PokeBattle_Move
   # Messages upon being hit
   #=============================================================================
   def pbEffectivenessMessage(user,target,numTargets=1)
-    return if target.damageState.disguise
+    return if target.damageState.disguise || target.damageState.iceFace
     if Effectiveness.super_effective?(target.damageState.typeMod)
       if numTargets>1
         @battle.pbDisplay(_INTL("It's super effective on {1}!",target.pbThis(true)))
@@ -267,7 +273,7 @@ class PokeBattle_Move
   end
 
   def pbHitEffectivenessMessages(user,target,numTargets=1)
-    return if target.damageState.disguise
+    return if target.damageState.disguise || target.damageState.iceFace
     if target.damageState.substitute
       @battle.pbDisplay(_INTL("The substitute took damage for {1}!",target.pbThis(true)))
     end
@@ -299,6 +305,13 @@ class PokeBattle_Move
       end
       @battle.pbHideAbilitySplash(target)
       target.pbChangeForm(1,_INTL("{1}'s disguise was busted!",target.pbThis))
+    elsif target.damageState.iceFace
+      @battle.pbShowAbilitySplash(target)
+      if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        @battle.pbDisplay(_INTL("{1}'s {2} activated!", target.pbThis, target.abilityName))
+      end
+      target.pbChangeForm(1, _INTL("{1} transformed!", target.pbThis))
+      @battle.pbHideAbilitySplash(target)
     elsif target.damageState.endured
       @battle.pbDisplay(_INTL("{1} endured the hit!",target.pbThis))
     elsif target.damageState.sturdy

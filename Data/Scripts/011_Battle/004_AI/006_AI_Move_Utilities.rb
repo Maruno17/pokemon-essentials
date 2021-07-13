@@ -7,6 +7,8 @@ class PokeBattle_AI
     return false if target_data.num_targets <= 1
     num_targets = 0
     case target_data.id
+    when :AllAllies
+      @battle.eachSameSideBattler(user) { |b| num_targets += 1 if b.index != user.index }
     when :UserAndAllies
       @battle.eachSameSideBattler(user) { |_b| num_targets += 1 }
     when :AllNearFoes

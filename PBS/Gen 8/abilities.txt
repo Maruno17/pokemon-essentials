@@ -1060,6 +1060,10 @@ Description = When the Pokémon knocks out a target, it utters a chilling neigh,
 Name = Grim Neigh
 Description = When the Pokémon knocks out a target, it utters a terrifying neigh, which boosts its Sp. Atk stat.
 #-------------------------------
-[ASONE]
+[ASONECHILLINGNEIGH]
 Name = As One
-Description = This Ability combines the effects of both Calyrex's Unnerve Ability and Glastrier's Chilling Neigh Ability/Spectrier's Grim Neigh Ability.
+Description = This Ability combines the effects of both Calyrex's Unnerve Ability and Glastrier's Chilling Neigh Ability.
+#-------------------------------
+[ASONEGRIMNEIGH]
+Name = As One
+Description = This Ability combines the effects of both Calyrex's Unnerve Ability and Spectrier's Grim Neigh Ability.

@@ -116,7 +116,7 @@ class PokeBattle_Battler
     @effects[PBEffects::GastroAcid] = false if unstoppableAbility?
     @effects[PBEffects::SlowStart]  = 0 if self.ability != :SLOWSTART
     # Revert form if Flower Gift/Forecast was lost
-    pbCheckFormOnWeatherChange
+    pbCheckFormOnWeatherChange(true)
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
   end

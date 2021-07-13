@@ -163,7 +163,7 @@ class PokeBattle_Battler
     end
   end
 
-  def pbCheckFormOnWeatherChange
+  def pbCheckFormOnWeatherChange(ability_changed = false)
     return if fainted? || @effects[PBEffects::Transform]
     # Castform - Forecast
     if isSpecies?(:CASTFORM)
@@ -196,6 +196,11 @@ class PokeBattle_Battler
       else
         pbChangeForm(0,_INTL("{1} transformed!",pbThis))
       end
+    end
+    # Eiscue - Ice Face
+    if !ability_changed && isSpecies?(:EISCUE) && self.ability = :ICEFACE &&
+       @form == 1 && @battle.pbWeather == :Hail
+      @canRestoreIceFace = true   # Changed form at end of round
     end
   end
 
@@ -260,6 +265,12 @@ class PokeBattle_Battler
         @battle.pbHideAbilitySplash(self)
         pbChangeForm(newForm,_INTL("{1} transformed into its Complete Forme!",pbThis))
       end
+    end
+    # Morpeko - Hunger Switch
+    if isSpecies?(:MORPEKO) && hasActiveAbility?(:HUNGERSWITCH) && endOfRound
+      # Intentionally doesn't show the ability splash or a message
+      newForm = (@form + 1) % 2
+      pbChangeForm(newForm, nil)
     end
   end
 

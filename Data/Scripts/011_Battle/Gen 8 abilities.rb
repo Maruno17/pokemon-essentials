@@ -157,7 +157,9 @@ BattleHandlers::UserAbilityEndOfMove.add(:CHILLINGNEIGH,
     numFainted = 0
     targets.each { |b| numFainted += 1 if b.damageState.fainted }
     next if numFainted == 0 || !user.pbCanRaiseStatStage?(:ATTACK, user)
+    user.ability_id = :CHILLINGNEIGH   # So the As One abilities can just copy this
     user.pbRaiseStatStageByAbility(:ATTACK, 1, user)
+    user.ability_id = ability
   }
 )
 
@@ -167,7 +169,9 @@ BattleHandlers::UserAbilityEndOfMove.add(:GRIMNEIGH,
     numFainted = 0
     targets.each { |b| numFainted += 1 if b.damageState.fainted }
     next if numFainted == 0 || !user.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user)
+    user.ability_id = :GRIMNEIGH   # So the As One abilities can just copy this
     user.pbRaiseStatStageByAbility(:SPECIAL_ATTACK, 1, user)
+    user.ability_id = ability
   }
 )
 
@@ -263,43 +267,77 @@ BattleHandlers::PriorityBracketUseAbility.add(:QUICKDRAW,
   }
 )
 
+BattleHandlers::EORGainItemAbility.add(:BALLFETCH,
+  proc { |ability, battler, battle|
+    next if battler.item
+    next if battle.first_poke_ball.nil?
+    battle.pbShowAbilitySplash(battler)
+    battler.item = battle.first_poke_ball
+    battler.setInitialItem(battler.item) if !battler.initialItem
+    battle.first_poke_ball = nil
+    battle.pbDisplay(_INTL("{1} retrieved the thrown {2}!", battler.pbThis, battler.itemName))
+    battle.pbHideAbilitySplash(battler)
+    battler.pbHeldItemTriggerCheck
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:ASONECHILLINGNEIGH,
+  proc { |ability, battler, battle|
+    battle.pbShowAbilitySplash(battler)
+    battle.pbDisplay(_INTL("{1} has two Abilities!", battler.pbThis))
+    battle.pbHideAbilitySplash(battler)
+    battler.ability_id = :UNNERVE
+    battle.pbShowAbilitySplash(battler)
+    battle.pbDisplay(_INTL("{1} is too nervous to eat Berries!", battler.pbOpposingTeam))
+    battle.pbHideAbilitySplash(battler)
+    battler.ability_id = ability
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.copy(:ASONECHILLINGNEIGH, :ASONEGRIMNEIGH)
+BattleHandlers::UserAbilityEndOfMove.copy(:CHILLINGNEIGH, :ASONECHILLINGNEIGH)
+BattleHandlers::UserAbilityEndOfMove.copy(:GRIMNEIGH, :ASONEGRIMNEIGH)
+
+BattleHandlers::AbilityOnSwitchIn.add(:ICEFACE,
+  proc { |ability, battler, battle|
+    next if !battler.isSpecies?(:EISCUE) || battler.form != 1
+    next if battle.pbWeather != :Hail
+    battle.pbShowAbilitySplash(battler)
+    if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+      battle.pbDisplay(_INTL("{1}'s {2} activated!", battler.pbThis, battler.abilityName))
+    end
+    battler.pbChangeForm(0, _INTL("{1} transformed!", battler.pbThis))
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
+BattleHandlers::EORWeatherAbility.add(:ICEFACE,
+  proc { |ability, weather, battler, battle|
+    next if weather != :Hail
+    next if !battler.canRestoreIceFace || battler.form != 1
+    battle.pbShowAbilitySplash(battler)
+    if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+      battle.pbDisplay(_INTL("{1}'s {2} activated!", battler.pbThis, battler.abilityName))
+    end
+    battler.pbChangeForm(0, _INTL("{1} transformed!", battler.pbThis))
+    battle.pbHideAbilitySplash(battler)
+  }
+)
+
+
 =begin
 
 #===============================================================================
-
-Hunger Switch
-At the end of each round, switches the bearer's form (if it is Morpeko).
-
-Ice Face
-When bearer is hit by a physical move while in its initial form (including
-hitting itself in confusion), it takes no damage and its form changes. At the
-end of a round in which hail weather started, and immediately upon switching in
-while hail weather exists, the bearer regains its initial form.
 
 Gulp Missile
 After using Surf/Dive, changes the bearer's form depending on its HP. If hit by
 an attack while in one of these forms, damages the attacker and causes an effect
 depending on the form.
 
-Ball Fetch
-At the end of a round in which a thrown Poké Ball fails to catch a Pokémon,
-bearer picks up that Poké Ball. Applies only to the first thrown Poké Ball, and
-only triggers once.
-
 Steam Engine
 When bearer is hit by a Fire- or Water-type move, bearer gets +6 Speed (after
 the effect of that move is applied). Outside of battle, makes eggs hatch twice
 as fast (doesn't stack with other such abilities).
-
-As One (Chilling)
-Combination of Unnerve and Chilling Neigh. Message upon entering battle says it
-has two abilities; other triggers use the name of the appropriate ability rather
-than "As One".
-
-As One (Grim)
-Combination of Unnerve and Grim Neigh. Message upon entering battle says it has
-two abilities; other triggers use the name of the appropriate ability rather
-than "As One".
 
 Gorilla Tactics
 Boosts bearer's Attack by 50%, but restricts bearer to one move (cf. Choice
@@ -320,9 +358,6 @@ Neutralizing Gas
 Suppresses all other abilities. Once this ability stops applying, triggers all
 abilities that activate when gained (if this happens because bearer switches
 out, abilities trigger before the replacement switches in).
-
-Propellor Tail, Stalwart
-Bearer's moves cannot be redirected.
 
 Mimicry
 The bearer's type changes depending on the terrain. Triggers upon entering

@@ -153,6 +153,10 @@ module PokeBattle_BattleCommon
       # Save the Pokémon for storage at the end of battle
       @caughtPokemon.push(pkmn)
     end
+    if numShakes != 4
+      @first_poke_ball = ball if !@poke_ball_failed
+      @poke_ball_failed = true
+    end
   end
 
   #=============================================================================

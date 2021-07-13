@@ -47,6 +47,10 @@ class PokeBattle_Battler
       if !pbAddTarget(targets,user,targetBattler,move,true,true)
         pbAddTarget(targets,user,user,move,true,true)
       end
+    when :AllAllies
+      @battle.eachSameSideBattler(user.index) do |b|
+        pbAddTarget(targets,user,b,move,false,true) if b.index != user.index
+      end
     when :UserAndAllies
       pbAddTarget(targets,user,user,move,true,true)
       @battle.eachSameSideBattler(user.index) { |b| pbAddTarget(targets,user,b,move,false,true) }
@@ -93,6 +97,7 @@ class PokeBattle_Battler
     return targets if @battle.switching   # For Pursuit interrupting a switch
     return targets if move.cannotRedirect? || move.targetsPosition?
     return targets if !target_data.can_target_one_foe? || targets.length != 1
+    return targets if user.hasActiveAbility?([:PROPELLERTAIL, :STALWART])
     priority = @battle.pbPriority(true)
     nearOnly = !target_data.can_choose_distant_target?
     # Spotlight (takes priority over Follow Me/Rage Powder/Lightning Rod/Storm Drain)

@@ -1,34 +1,3 @@
-=begin
-Dynamax Cannon - 000
-Behemoth Blade - 000
-Behemoth Bash - 000
-Branch Poke - 000
-Overdrive - 000
-Glacial Lance - 000
-Astral Barrage - 000
-Pyro Ball - 00A
-Scorching Sands - 00A
-Freezing Glare - 00C
-Fiery Wrath - 00F
-Strange Steam - 013
-Breaking Swipe - 042
-Thunderous Kick - 043
-Drum Beating - 044
-Skitter Smack - 045
-Spirit Break - 045
-Apple Acid - 046
-Dragon Energy - 08B
-Wicked Blow - 0A0
-False Surrender - 0A5
-Dual Wingbeat - 0BD
-Triple Axel - 0BF
-Meteor Assault - 0C2
-Eternabeam - 0C2
-Snap Trap - 0CF
-Thunder Cage - 0CF
-Flip Turn - 0EE
-=end
-
 #===============================================================================
 # Poisons the target. This move becomes physical or special, whichever will deal
 # more damage (only considers stats, stat stages and Wonder Room). Makes contact
@@ -47,8 +16,8 @@ class PokeBattle_Move_176 < PokeBattle_PoisonMove
 
   def pbOnStartUse(user, targets)
     target = targets[0]
-    stageMul = [2,2,2,2,2,2, 2, 3,4,5,6,7,8]
-    stageDiv = [8,7,6,5,4,3, 2, 2,2,2,2,2,2]
+    stageMul = [2, 2, 2, 2, 2, 2, 2, 3, 4, 5, 6, 7, 8]
+    stageDiv = [8, 7, 6, 5, 4, 3, 2, 2, 2, 2, 2, 2, 2]
     # Calculate user's effective attacking values
     attack_stage         = user.stages[:ATTACK] + 6
     real_attack          = (user.attack.to_f * stageMul[attack_stage] / stageDiv[attack_stage]).floor
@@ -79,11 +48,9 @@ end
 #===============================================================================
 # Burns the target if any of its stats were increased this round.
 # (Burning Jealousy)
-# TODO: Is the burn an effect or an additional effect? Regardless, I think this
-#       code is wrong as it's a damaging move.
 #===============================================================================
 class PokeBattle_Move_177 < PokeBattle_BurnMove
-  def pbEffectAgainstTarget(user, target)
+  def pbAdditionalEffect(user, target)
     super if target.statsRaised
   end
 end
@@ -171,8 +138,42 @@ end
 # Raises the Attack and Defense of all user's allies by 1 stage each. Bypasses
 # protections, including Crafty Shield. Fails if there is no ally. (Coaching)
 #===============================================================================
-class PokeBattle_Move_17B < PokeBattle_UnimplementedMove
-  # TODO: Needs a new targeting option. Otherwise, see Magnetic Flux.
+class PokeBattle_Move_17B < PokeBattle_Move
+  def ignoresSubstitute?(user); return true; end
+  def canSnatch?; return true; end
+
+  def pbMoveFailed?(user, targets)
+    @validTargets = []
+    @battle.eachSameSideBattler(user) do |b|
+      next if b.index == user.index
+      next if !b.pbCanRaiseStatStage?(:ATTACK, user, self) &&
+              !b.pbCanRaiseStatStage?(:DEFENSE, user, self)
+      @validTargets.push(b)
+    end
+    if @validTargets.length == 0
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return false
+  end
+
+  def pbFailsAgainstTarget?(user, target)
+    return false if @validTargets.any? { |b| b.index == target.index }
+    @battle.pbDisplay(_INTL("{1}'s stats can't be raised further!", target.pbThis))
+    return true
+  end
+
+  def pbEffectAgainstTarget(user, target)
+    showAnim = true
+    if target.pbCanRaiseStatStage?(:ATTACK, user, self)
+      if target.pbRaiseStatStage(:ATTACK, 1, user, showAnim)
+        showAnim = false
+      end
+    end
+    if target.pbCanRaiseStatStage?(:DEFENSE, user, self)
+      target.pbRaiseStatStage(:DEFENSE, 1, user, showAnim)
+    end
+  end
 end
 
 #===============================================================================
@@ -366,7 +367,7 @@ end
 # counter. (Obstruct)
 #===============================================================================
 class PokeBattle_Move_186 < PokeBattle_ProtectMove
-  def initialize(battle,move)
+  def initialize(battle, move)
     super
     @effect = PBEffects::Obstruct
   end
@@ -548,7 +549,6 @@ end
 # The target can no longer switch out or flee, while the user remains in battle.
 # At the end of each round, the target's Defense and Special Defense are lowered
 # by 1 stage each. (Octolock)
-# TODO: Can the user lock multiple other Pokémon at once?
 #===============================================================================
 class PokeBattle_Move_18F < PokeBattle_Move
   def pbFailsAgainstTarget?(user, target)
@@ -576,7 +576,7 @@ end
 # fleeing. (Jaw Lock)
 #===============================================================================
 class PokeBattle_Move_190 < PokeBattle_Move
-  def pbAdditionalEffect(user,target)
+  def pbAdditionalEffect(user, target)
     return if user.fainted? || target.fainted? || target.damageState.substitute
     return if Settings::MORE_TYPE_EFFECTS && target.pbHasType?(:GHOST)
     return if user.trappedInBattle? || target.trappedInBattle?
@@ -653,7 +653,7 @@ class PokeBattle_Move_192 < PokeBattle_Move
     return false
   end
 
-  def pbOnStartUse(user,targets)
+  def pbOnStartUse(user, targets)
     @battle.pbDisplay(_INTL("It's teatime! Everyone dug in to their Berries!"))
   end
 
@@ -711,14 +711,17 @@ class PokeBattle_Move_193 < PokeBattle_Move
 end
 
 #===============================================================================
-# The user takes recoil damage equal to 1/2 of its total HP (rounded up, min. 1
-# damage). (Steel Beam)
-# TODO: This recoil is not affected by Rock Head/Reckless. Damage is taken even
-#       if the move is protected against/misses.
+# The user takes damage equal to 1/2 of its total HP, even if the target is
+# unaffected (this is not recoil damage). (Steel Beam)
 #===============================================================================
-class PokeBattle_Move_194 < PokeBattle_RecoilMove
-  def pbRecoilDamage(user, target)
-    return (user.totalhp / 2.0).ceil
+class PokeBattle_Move_194 < PokeBattle_Move
+  def pbEffectAfterAllHits(user, target)
+    return if !user.takesIndirectDamage?
+    amt = (user.totalhp / 2.0).ceil
+    amt = 1 if amt < 1
+    user.pbReduceHP(amt, false)
+    @battle.pbDisplay(_INTL("{1} is damaged by recoil!", user.pbThis))
+    user.pbItemHPHealCheck
   end
 end
 

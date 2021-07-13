@@ -1,5 +1,5 @@
 module PokeBattle_SceneConstants
-  USE_ABILITY_SPLASH = true
+  USE_ABILITY_SPLASH = (Settings::MECHANICS_GENERATION >= 5)
   # Text colors
   MESSAGE_BASE_COLOR   = Color.new(80, 80, 88)
   MESSAGE_SHADOW_COLOR = Color.new(160, 160, 168)
