@@ -18,6 +18,15 @@ class AnimatedBitmap
     end
   end
 
+  # def initialize(file,hue=0)
+  #   raise "filename is nil" if file==nil
+  #   if file[/^\[(\d+)\]/]
+  #     @bitmap=PngAnimatedBitmap.new(file,hue)
+  #   else
+  #     @bitmap=GifBitmap.new(file,hue)
+  #   end
+  # end
+
   def pbSetColor(r = 0, g = 0, b = 0, a = 255)
     for i in 0..@bitmap.bitmap.width
       for j in 0..@bitmap.bitmap.height

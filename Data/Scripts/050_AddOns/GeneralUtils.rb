@@ -24,7 +24,6 @@ def pbAddPokemonID(pokemon, level = nil, seeform = true, dontRandomize = false)
   return true
 end
 
-
 def pbAddPokemonID(pokemon_id, level = 1, see_form = true, skip_randomize = false)
   return false if !pokemon_id
   if pbBoxesFull?
@@ -37,7 +36,6 @@ def pbAddPokemonID(pokemon_id, level = 1, see_form = true, skip_randomize = fals
     species_name = pokemon.speciesName
   end
 
-
   #random species if randomized gift pokemon &  wild poke
   if $game_switches[780] && $game_switches[778] && !skip_randomize
     oldSpecies = pokemon.species
@@ -49,7 +47,6 @@ def pbAddPokemonID(pokemon_id, level = 1, see_form = true, skip_randomize = fals
   $Trainer.pokedex.register(pokemon) if see_form
   return true
 end
-
 
 def pbGenerateEgg(pokemon, text = "")
   return false if !pokemon || !$Trainer # || $Trainer.party.length>=6
@@ -79,9 +76,6 @@ def pbGenerateEgg(pokemon, text = "")
   return true
 end
 
-
-
-
 def pbHasSpecies?(species)
   if species.is_a?(String) || species.is_a?(Symbol)
     species = getID(PBSpecies, species)
@@ -93,27 +87,59 @@ def pbHasSpecies?(species)
   return false
 end
 
-
 #Check if the Pokemon can learn a TM
 def CanLearnMove(pokemon, move)
   species = getID(PBSpecies, pokemon)
-  ret = false
   return false if species <= 0
   data = load_data("Data/tm.dat")
   return false if !data[move]
   return data[move].any? { |item| item == species }
 end
 
+def pbPokemonIconFile(pokemon)
+  bitmapFileName=pbCheckPokemonIconFiles(pokemon.species, pokemon.isEgg?)
+  return bitmapFileName
+end
+
+def pbCheckPokemonIconFiles(speciesNum,egg=false, dna=false)
+  if egg
+    bitmapFileName=sprintf("Graphics/Icons/iconEgg")
+    return pbResolveBitmap(bitmapFileName)
+  else
+    bitmapFileName=sprintf("Graphics/Icons/icon%03d",speciesNum)
+    ret=pbResolveBitmap(bitmapFileName)
+    return ret if ret
+  end
+  ret=pbResolveBitmap("Graphics/Icons/iconDNA.png")
+  return ret if ret
+  return pbResolveBitmap("Graphics/Icons/iconDNA.png")
+end
+
+
+def getDexNumberFromSpecies(species)
+  if species.is_a?(Symbol)
+    dexNum = GameData::Species.get(species).id_number
+  elsif species.is_a?(Pokemon)
+    dexNum = GameData::Species.get(species.species).id_number
+  else
+    dexNum = species
+  end
+  return dexNum
+end
+
 def getBodyID(species)
-  return (species / NB_POKEMON).round
+  dexNum = getDexNumberFromSpecies(species)
+  return (dexNum / NB_POKEMON).round
 end
 
 def getHeadID(species, bodyId)
-  return (species - (bodyId * NB_POKEMON)).round
+  head_dexNum = getDexNumberFromSpecies(species)
+  body_dexNum = getDexNumberFromSpecies(bodyId)
+  return (head_dexNum - (body_dexNum * NB_POKEMON)).round
 end
 
 def getAllNonLegendaryPokemon()
-  list= []
+  list = []
   for i in 1..143
     list.push(i)
   end
@@ -144,8 +170,8 @@ end
 def getPokemonEggGroups(species)
   groups = []
 
-  compat10=$pkmn_dex[species][13][0]
-  compat11=$pkmn_dex[species][13][1]
+  compat10 = $pkmn_dex[species][13][0]
+  compat11 = $pkmn_dex[species][13][1]
 
   groups << compat10
   groups << compat11
@@ -165,14 +191,13 @@ def generateEggGroupTeam(eggGroup)
   return generatedTeam
 end
 
-def pbGetSelfSwitch(eventId,switch)
-  return $game_self_switches[[@map_id,eventId,switch]]
+def pbGetSelfSwitch(eventId, switch)
+  return $game_self_switches[[@map_id, eventId, switch]]
 end
 
 def obtainBadgeMessage(badgeName)
-  Kernel.pbMessage(_INTL("\\me[Badge get]{1} obtained the {2}!",$Trainer.name,badgeName))
+  Kernel.pbMessage(_INTL("\\me[Badge get]{1} obtained the {2}!", $Trainer.name, badgeName))
 end
-
 
 def generateSameEggGroupFusionsTeam(eggGroup)
   teamComplete = false
@@ -185,7 +210,7 @@ def generateSameEggGroupFusionsTeam(eggGroup)
       while !foundFusionPartner
         species2 = rand(NB_POKEMON)
         if getPokemonEggGroups(species2).include?(eggGroup)
-          generatedTeam << getFusionSpecies(species1,species2)
+          generatedTeam << getFusionSpecies(species1, species2)
           foundFusionPartner = true
         end
       end
@@ -196,7 +221,7 @@ def generateSameEggGroupFusionsTeam(eggGroup)
 end
 
 def getAllNonLegendaryPokemon()
-  list= []
+  list = []
   for i in 1..143
     list.push(i)
   end
@@ -224,7 +249,7 @@ def getAllNonLegendaryPokemon()
   return list
 end
 
-def generateSimpleTrainerParty(teamSpecies,level)
+def generateSimpleTrainerParty(teamSpecies, level)
   team = []
   for species in teamSpecies
     poke = Pokemon.new(species, level)
@@ -233,24 +258,22 @@ def generateSimpleTrainerParty(teamSpecies,level)
   return team
 end
 
-
 def isSinnohPokemon(species)
   list =
-    [254,255,256,257,258,259,260,261,262,263,264,265,
-     266,267,268,269,270,271,272,273,274,275,288,294,
-     295,296,297,298,299,305,306,307,308,315,316,317,
-     318,319,320,321,322,323,324,326,332,343,344,345,
-     346,347,352,353,354,358,383,384,388,389,400,402,403]
+    [254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265,
+     266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 288, 294,
+     295, 296, 297, 298, 299, 305, 306, 307, 308, 315, 316, 317,
+     318, 319, 320, 321, 322, 323, 324, 326, 332, 343, 344, 345,
+     346, 347, 352, 353, 354, 358, 383, 384, 388, 389, 400, 402, 403]
   return list.include?(species)
 end
 
-
 def isHoennPokemon(species)
-  list=[252,253,276,277,278,279,280,281,282,283,284,
-        285,286,287,289,290,291,292,293,300,301,302,303,
-        304,309,310,311,312,313,314,333,334,335,336,340,
-        341,342,355,356,357,378,379,380,381,382,385,386,387,390,
-        391,392,393,394,395,396,401,404,405]
+  list = [252, 253, 276, 277, 278, 279, 280, 281, 282, 283, 284,
+          285, 286, 287, 289, 290, 291, 292, 293, 300, 301, 302, 303,
+          304, 309, 310, 311, 312, 313, 314, 333, 334, 335, 336, 340,
+          341, 342, 355, 356, 357, 378, 379, 380, 381, 382, 385, 386, 387, 390,
+          391, 392, 393, 394, 395, 396, 401, 404, 405]
   return list.include?(species)
 end
 

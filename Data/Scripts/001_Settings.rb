@@ -9,6 +9,9 @@ module Settings
   GAME_VERSION = '5.0.0'
   GAME_VERSION_NUMBER = "5.0 - beta"
 
+  #
+  FUSION_ICON_SPRITE_OFFSET = 10
+
   #Infinite fusion settings
   NB_POKEMON = 420
   CUSTOM_BATTLERS_FOLDER="Graphics/CustomBattlers/"

@@ -14,6 +14,35 @@ class PokemonBoxIcon < IconSprite
     return @release.tweening?
   end
 
+  def useRegularIcon(species)
+    dexNum = getDexNumberFromSpecies(species)
+    return true if dexNum <= Settings::NB_POKEMON
+    return false if $game_variables == nil
+    return true if $game_variables[220] != 0
+    bitmapFileName = sprintf("Graphics/Icons/icon%03d", dexNum)
+    return true if pbResolveBitmap(bitmapFileName)
+    return false
+  end
+
+  def createFusionIcon(species)
+    bodyPoke_number = getBodyID(species)
+    headPoke_number = getHeadID(species, bodyPoke_number)
+
+    bodyPoke = GameData::Species.get(bodyPoke_number).species
+    headPoke = GameData::Species.get(headPoke_number).species
+
+    icon1 = AnimatedBitmap.new(GameData::Species.icon_filename(headPoke))
+    icon2 = AnimatedBitmap.new(GameData::Species.icon_filename(bodyPoke))
+
+    for i in 0..icon1.width-1
+      for j in ((icon1.height / 2) + Settings::FUSION_ICON_SPRITE_OFFSET)..icon1.height-1
+        temp = icon2.bitmap.get_pixel(i, j)
+        icon1.bitmap.set_pixel(i, j, temp)
+      end
+    end
+    return icon1
+  end
+
   def release
     self.ox = self.src_rect.width/2   # 32
     self.oy = self.src_rect.height/2   # 32
@@ -27,9 +56,14 @@ class PokemonBoxIcon < IconSprite
     @startRelease = true
   end
 
+
   def refresh
     return if !@pokemon
-    self.setBitmap(GameData::Species.icon_filename_from_pokemon(@pokemon))
+    if useRegularIcon(@pokemon.species) || @pokemon.egg?
+      self.setBitmap(GameData::Species.icon_filename_from_pokemon(@pokemon))
+    else
+      self.setBitmapDirectly(createFusionIcon(@pokemon.species))
+    end
     self.src_rect = Rect.new(0,0,self.bitmap.height,self.bitmap.height)
   end
 
