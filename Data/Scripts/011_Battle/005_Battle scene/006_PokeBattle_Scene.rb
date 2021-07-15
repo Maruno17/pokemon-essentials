@@ -320,8 +320,8 @@ class PokeBattle_Scene
     pkmnSprite   = @sprites["pokemon_#{idxBattler}"]
     shadowSprite = @sprites["shadow_#{idxBattler}"]
     back = !@battle.opposes?(idxBattler)
-    pkmnSprite.setPokemonBitmap(pkmn,back)
     shadowSprite.setPokemonBitmap(pkmn)
+    pkmnSprite.setPokemonBitmap(pkmn,back)
     # Set visibility of battler's shadow
     shadowSprite.visible = pkmn.species_data.shows_shadow? if shadowSprite && !back
   end

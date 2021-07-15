@@ -551,6 +551,12 @@ class PokemonBattlerSprite < RPG::Sprite
     @_iconBitmap.dispose if @_iconBitmap
     @_iconBitmap = GameData::Species.sprite_bitmap_from_pokemon(@pkmn, back)
     @_iconBitmap.mirror if back
+    if back
+      @_iconBitmap.scale_bitmap(Settings::BACKRPSPRITE_SCALE)
+    else
+      @_iconBitmap.scale_bitmap(Settings::FRONTSPRITE_SCALE)
+    end
+
     self.bitmap = (@_iconBitmap) ? @_iconBitmap.bitmap : nil
     pbSetPosition
   end

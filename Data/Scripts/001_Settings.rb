@@ -16,8 +16,13 @@ module Settings
   NB_POKEMON = 420
   CUSTOM_BATTLERS_FOLDER="Graphics/CustomBattlers/"
   BATTLERS_FOLDER="Graphics/Battlers/"
-  FRONTSPRITE_POSITION_OFFSET = 75
-  BACKSPRITE_POSITION_OFFSET = 60
+  FRONTSPRITE_POSITION_OFFSET = 15
+  FRONTSPRITE_SCALE = 0.6666666
+  BACKRPSPRITE_SCALE = 1
+
+  BACKSPRITE_POSITION_OFFSET = 20
+
+
   # The generation that the battle system follows. Used throughout the battle
   # scripts, and also by some other settings which are used in and out of battle
   # (you can of course change those settings to suit your game).

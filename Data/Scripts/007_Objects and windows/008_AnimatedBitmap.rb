@@ -18,15 +18,6 @@ class AnimatedBitmap
     end
   end
 
-  # def initialize(file,hue=0)
-  #   raise "filename is nil" if file==nil
-  #   if file[/^\[(\d+)\]/]
-  #     @bitmap=PngAnimatedBitmap.new(file,hue)
-  #   else
-  #     @bitmap=GifBitmap.new(file,hue)
-  #   end
-  # end
-
   def pbSetColor(r = 0, g = 0, b = 0, a = 255)
     for i in 0..@bitmap.bitmap.width
       for j in 0..@bitmap.bitmap.height
@@ -88,6 +79,22 @@ class AnimatedBitmap
 
   def copy
     @bitmap.copy;
+  end
+
+  def scale_bitmap(scale)
+    return if scale == 1
+    new_width = @bitmap.bitmap.width * scale
+    new_height = @bitmap.bitmap.height * scale
+
+    destination_rect = Rect.new(0, 0, new_width, new_height)
+    source_rect = Rect.new(0, 0, @bitmap.bitmap.width, @bitmap.bitmap.height)
+    new_bitmap = Bitmap.new(new_width,new_height)
+    new_bitmap.stretch_blt(
+      destination_rect,
+      @bitmap.bitmap,
+      source_rect
+    )
+    @bitmap.bitmap = new_bitmap
   end
 
   def mirror
