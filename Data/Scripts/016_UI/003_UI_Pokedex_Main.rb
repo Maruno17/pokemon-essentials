@@ -312,29 +312,46 @@ class PokemonPokedex_Scene
     return true   # For MODENUMERICAL
   end
 
-  def pbGetDexList
-    region = pbGetPokedexRegion
-    regionalSpecies = pbAllRegionalSpecies(region)
-    if !regionalSpecies || regionalSpecies.length == 0
-      # If no Regional Dex defined for the given region, use the National Pokédex
-      regionalSpecies = []
-      GameData::Species.each { |s| regionalSpecies.push(s.id) if s.form == 0 }
+  # def pbGetDexList
+  #   region = pbGetPokedexRegion
+  #   regionalSpecies = pbAllRegionalSpecies(region)
+  #   if !regionalSpecies || regionalSpecies.length == 0
+  #     # If no Regional Dex defined for the given region, use the National Pokédex
+  #     regionalSpecies = []
+  #     GameData::Species.each { |s| regionalSpecies.push(s.id) if s.form == 0 }
+  #   end
+  #   shift = Settings::DEXES_WITH_OFFSETS.include?(region)
+  #   ret = []
+  #   regionalSpecies.each_with_index do |species, i|
+  #     next if !species
+  #     next if !pbCanAddForModeList?($PokemonGlobal.pokedexMode, species)
+  #     species_data = GameData::Species.get(species)
+  #     color  = species_data.color
+  #     type1  = species_data.type1
+  #     type2  = species_data.type2 || type1
+  #     shape  = species_data.shape
+  #     height = species_data.height
+  #     weight = species_data.weight
+  #     ret.push([species, species_data.name, height, weight, i + 1, shift, type1, type2, color, shape])
+  #   end
+  #   return ret
+  # end
+
+
+  def pbGetDexList()
+    dexlist=[]
+    regionalSpecies=[]
+    for i in 1..PBSpecies.maxValue
+      regionalSpecies.push(i)
     end
-    shift = Settings::DEXES_WITH_OFFSETS.include?(region)
-    ret = []
-    regionalSpecies.each_with_index do |species, i|
-      next if !species
-      next if !pbCanAddForModeList?($PokemonGlobal.pokedexMode, species)
-      species_data = GameData::Species.get(species)
-      color  = species_data.color
-      type1  = species_data.type1
-      type2  = species_data.type2 || type1
-      shape  = species_data.shape
-      height = species_data.height
-      weight = species_data.weight
-      ret.push([species, species_data.name, height, weight, i + 1, shift, type1, type2, color, shape])
+    for i in 1...PBSpecies.maxValue
+      nationalSpecies=i
+      if $Trainer.seen?(nationalSpecies)
+        species = GameData::Species.get(nationalSpecies)
+        dexlist.push([species.id_number,species.real_name,0,0,i+1,0])
+      end
     end
-    return ret
+    return dexlist
   end
 
   def pbRefreshDexList(index=0)

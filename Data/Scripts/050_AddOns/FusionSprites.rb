@@ -21,7 +21,10 @@ module GameData
       return ret
     end
 
-    def self.front_sprite_bitmap(dex_number)
+    def self.front_sprite_bitmap(dex_number,a=0,b=0,c=0,d=0)  #la méthode est utilisé ailleurs avec d'autres arguments (gender, form, etc.) mais on les veut pas
+      if dex_number.is_a?(Symbol)
+        dex_number = GameData::Species.get(dex_number).id_number
+      end
       filename = self.sprite_filename(dex_number)
       return (filename) ? AnimatedBitmap.new(filename) : nil
     end
@@ -37,6 +40,7 @@ module GameData
     end
 
     def self.sprite_filename(dex_number)
+      return nil if dex_number == nil
       if dex_number <= Settings::NB_POKEMON
         folder = dex_number.to_s
         filename = sprintf("%s.png", dex_number)

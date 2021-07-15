@@ -216,9 +216,7 @@ module Settings
   # Dex list, no matter which region the player is currently in.
   def self.pokedex_names
     return [
-      [_INTL("Kanto Pokédex"), 0],
-      [_INTL("Johto Pokédex"), 1],
-      _INTL("National Pokédex")
+      [_INTL("Kanto Pokédex"), 0]
     ]
   end
   # Whether all forms of a given species will be immediately available to view

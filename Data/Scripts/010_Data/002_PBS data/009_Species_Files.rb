@@ -64,7 +64,8 @@ module GameData
     end
 
     def self.front_sprite_bitmap(species, form = 0, gender = 0, shiny = false, shadow = false)
-      filename = self.front_sprite_filename(species, form, gender, shiny, shadow)
+      #filename = self.front_sprite_filename(species, form, gender, shiny, shadow)
+      filename = self.front_sprite_filename(GameData::Species.get(species).id_number)
       return (filename) ? AnimatedBitmap.new(filename) : nil
     end
 
