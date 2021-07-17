@@ -192,7 +192,7 @@ Events.onStartBattle += proc { |_sender|
   $PokemonTemp.party_critical_hits_dealt = []
   for i in 0...$Trainer.party.length
     $PokemonTemp.party_levels_before_battle[i] = $Trainer.party[i].level
-    $PokemonTemp.party_critical_hits_dealt = 0
+    $PokemonTemp.party_critical_hits_dealt[i] = 0
   end
 }
 
