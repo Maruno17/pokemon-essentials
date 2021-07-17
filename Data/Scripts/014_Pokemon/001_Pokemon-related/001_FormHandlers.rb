@@ -212,50 +212,47 @@ MultipleForms.register(:CHERRIM,{
   }
 })
 
-MultipleForms.register(:ROTOM,{
+MultipleForms.register(:ROTOM, {
   "onSetForm" => proc { |pkmn, form, oldForm|
     form_moves = [
-       :OVERHEAT,    # Heat, Microwave
-       :HYDROPUMP,   # Wash, Washing Machine
-       :BLIZZARD,    # Frost, Refrigerator
-       :AIRSLASH,    # Fan
-       :LEAFSTORM    # Mow, Lawnmower
+       :OVERHEAT,    # Heat (microwave oven)
+       :HYDROPUMP,   # Wash (washing machine)
+       :BLIZZARD,    # Frost (refrigerator)
+       :AIRSLASH,    # Fan (electric fan)
+       :LEAFSTORM    # Mow (lawn mower)
     ]
-    move_index = -1
+    # Find a known move that should be forgotten
+    old_move_index = -1
     pkmn.moves.each_with_index do |move, i|
-      next if !form_moves.any? { |m| m == move.id }
-      move_index = i
+      next if !form_moves.include?(move.id)
+      old_move_index = i
       break
     end
-    if form == 0
-      # Turned back into the base form; forget form-specific moves
-      if move_index >= 0
-        move_name = pkmn.moves[move_index].name
-        pkmn.forget_move_at_index(move_index)
-        pbMessage(_INTL("{1} forgot {2}...", pkmn.name, move_name))
-        pbLearnMove(pkmn, :THUNDERSHOCK) if pkmn.numMoves == 0
-      end
-    else
-      # Turned into an alternate form; try learning that form's unique move
-      new_move_id = form_moves[form - 1]
-      if move_index >= 0
-        # Knows another form's unique move; replace it
-        old_move_name = pkmn.moves[move_index].name
-        if GameData::Move.exists?(new_move_id)
-          pkmn.moves[move_index].id = new_move_id
-          new_move_name = pkmn.moves[move_index].name
-          pbMessage(_INTL("1,\\wt[16] 2, and\\wt[16]...\\wt[16] ...\\wt[16] ... Ta-da!\\se[Battle ball drop]\1"))
-          pbMessage(_INTL("{1} forgot how to use {2}.\\nAnd...\1", pkmn.name, old_move_name))
-          pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]", pkmn.name, new_move_name))
-        else
-          pkmn.forget_move_at_index(move_index)
-          pbMessage(_INTL("{1} forgot {2}...", pkmn.name, old_move_name))
-          pbLearnMove(pkmn, :THUNDERSHOCK) if pkmn.numMoves == 0
-        end
+    # Determine which new move to learn (if any)
+    new_move_id = (form > 0) ? form_moves[form - 1] : nil
+    new_move_id = nil if !GameData::Move.exists?(new_move_id)
+    if new_move_id.nil? && old_move_index >= 0 && pkmn.numMoves == 1
+      new_move_id = :THUNDERSHOCK
+      new_move_id = nil if !GameData::Move.exists?(new_move_id)
+      raise _INTL("Rotom is trying to forget its last move, but there isn't another move to replace it with.") if new_move_id.nil?
+    end
+    # Forget a known move (if relevant) and learn a new move (if relevant)
+    if old_move_index >= 0
+      old_move_name = pkmn.moves[old_move_index].name
+      if new_move_id.nil?
+        # Just forget the old move
+        pkmn.forget_move_at_index(old_move_index)
+        pbMessage(_INTL("{1} forgot {2}...\1", pkmn.name, old_move_name))
       else
-        # Just try to learn this form's unique move
-        pbLearnMove(pkmn, new_move_id, true)
+        # Replace the old move with the new move (keeps the same index)
+        pkmn.moves[old_move_index].id = new_move_id
+        new_move_name = pkmn.moves[old_move_index].name
+        pbMessage(_INTL("{1} forgot {2}...\1", pkmn.name, old_move_name))
+        pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]\1", pkmn.name, new_move_name))
       end
+    elsif !new_move_id.nil?
+      # Just learn the new move
+      pbLearnMove(pkmn, new_move_id, true)
     end
   }
 })
@@ -657,8 +654,23 @@ MultipleForms.register(:ZACIAN, {
     next 1 if pkmn.hasItem?(:RUSTEDSWORD)
     next 0
   },
+  "changePokemonOnEnteringBattle" => proc { |battler, pkmn, battle|
+    if GameData::Move.exists?(:BEHEMOTHBLADE) && pkmn.hasItem?(:RUSTEDSWORD)
+      pkmn.moves.each do |move|
+        next if move.id != :IRONHEAD
+        move.id = :BEHEMOTHBLADE
+        battler.moves.each_with_index do |b_move, i|
+          next if b_move.id != :IRONHEAD
+          battler.moves[i] = PokeBattle_Move.from_pokemon_move(battle, move)
+        end
+      end
+    end
+  },
   "getFormOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
     next 0
+  },
+  "changePokemonOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
+    pkmn.moves.each { |move| move.id = :IRONHEAD if move.id == :BEHEMOTHBLADE }
   }
 })
 
@@ -667,8 +679,23 @@ MultipleForms.register(:ZAMAZENTA, {
     next 1 if pkmn.hasItem?(:RUSTEDSHIELD)
     next 0
   },
+  "changePokemonOnEnteringBattle" => proc { |battler, pkmn, battle|
+    if GameData::Move.exists?(:BEHEMOTHBASH) && pkmn.hasItem?(:RUSTEDSHIELD)
+      pkmn.moves.each do |move|
+        next if move.id != :IRONHEAD
+        move.id = :BEHEMOTHBASH
+        battler.moves.each_with_index do |b_move, i|
+          next if b_move.id != :IRONHEAD
+          battler.moves[i] = PokeBattle_Move.from_pokemon_move(battle, move)
+        end
+      end
+    end
+  },
   "getFormOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
     next 0
+  },
+  "changePokemonOnLeavingBattle" => proc { |pkmn, battle, usedInBattle, endBattle|
+    pkmn.moves.each { |move| move.id = :IRONHEAD if move.id == :BEHEMOTHBASH }
   }
 })
 

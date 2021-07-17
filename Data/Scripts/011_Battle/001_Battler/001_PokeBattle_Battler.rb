@@ -541,6 +541,12 @@ class PokeBattle_Battler
     return true
   end
 
+  def effectiveWeather
+    ret = @battle.pbWeather
+    ret = :None if [:Sun, :Rain, :HarshSun, :HeavyRain].include?(ret) && hasActiveItem?(:UTILITYUMBRELLA)
+    return ret
+  end
+
   def affectedByPowder?(showMsg=false)
     return false if fainted?
     if pbHasType?(:GRASS) && Settings::MORE_TYPE_EFFECTS

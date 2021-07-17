@@ -291,7 +291,7 @@ class PokeBattle_Battle
   # Called from def pbReplace above and at the start of battle.
   # sendOuts is an array; each element is itself an array: [idxBattler,pkmn]
   def pbSendOut(sendOuts,startBattle=false)
-    sendOuts.each { |b| @peer.pbOnEnteringBattle(self,b[1]) }
+    sendOuts.each { |b| @peer.pbOnEnteringBattle(self, @battlers[b[0]], b[1]) }
     @scene.pbSendOutBattlers(sendOuts,startBattle)
     sendOuts.each do |b|
       @scene.pbResetMoveIndex(b[0])

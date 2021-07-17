@@ -169,7 +169,7 @@ class PokeBattle_Battler
     if isSpecies?(:CASTFORM)
       if hasActiveAbility?(:FORECAST)
         newForm = 0
-        case @battle.pbWeather
+        case effectiveWeather
         when :Sun, :HarshSun   then newForm = 1
         when :Rain, :HeavyRain then newForm = 2
         when :Hail             then newForm = 3
@@ -187,7 +187,7 @@ class PokeBattle_Battler
     if isSpecies?(:CHERRIM)
       if hasActiveAbility?(:FLOWERGIFT)
         newForm = 0
-        newForm = 1 if [:Sun, :HarshSun].include?(@battle.pbWeather)
+        newForm = 1 if [:Sun, :HarshSun].include?(effectiveWeather)
         if @form!=newForm
           @battle.pbShowAbilitySplash(self,true)
           @battle.pbHideAbilitySplash(self)
@@ -199,7 +199,7 @@ class PokeBattle_Battler
     end
     # Eiscue - Ice Face
     if !ability_changed && isSpecies?(:EISCUE) && self.ability = :ICEFACE &&
-       @form == 1 && @battle.pbWeather == :Hail
+       @form == 1 && effectiveWeather == :Hail
       @canRestoreIceFace = true   # Changed form at end of round
     end
   end

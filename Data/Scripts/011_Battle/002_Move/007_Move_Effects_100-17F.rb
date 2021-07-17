@@ -2242,7 +2242,7 @@ class PokeBattle_Move_167 < PokeBattle_Move
   def canSnatch?; return true; end
 
   def pbMoveFailed?(user,targets)
-    if @battle.pbWeather != :Hail
+    if user.effectiveWeather != :Hail
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -2416,8 +2416,8 @@ end
 #===============================================================================
 class PokeBattle_Move_16D < PokeBattle_HealingMove
   def pbHealAmount(user)
-    return (user.totalhp*2/3.0).round if @battle.pbWeather == :Sandstorm
-    return (user.totalhp/2.0).round
+    return (user.totalhp * 2 / 3.0).round if user.effectiveWeather == :Sandstorm
+    return (user.totalhp / 2.0).round
   end
 end
 

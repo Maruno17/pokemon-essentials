@@ -46,7 +46,7 @@ class PokeBattle_Move
                                                    Effectiveness.ineffective_type?(moveType, defType)
     end
     # Delta Stream's weather
-    if @battle.pbWeather == :StrongWinds
+    if target.effectiveWeather == :StrongWinds
       ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING &&
                                                    Effectiveness.super_effective_type?(moveType, defType)
     end
@@ -349,13 +349,14 @@ class PokeBattle_Move
       end
     end
     # Terrain moves
+    terrain_multiplier = (Settings::MECHANICS_GENERATION >= 8) ? 1.3 : 1.5
     case @battle.field.terrain
     when :Electric
-      multipliers[:base_damage_multiplier] *= 1.5 if type == :ELECTRIC && user.affectedByTerrain?
+      multipliers[:base_damage_multiplier] *= terrain_multiplier if type == :ELECTRIC && user.affectedByTerrain?
     when :Grassy
-      multipliers[:base_damage_multiplier] *= 1.5 if type == :GRASS && user.affectedByTerrain?
+      multipliers[:base_damage_multiplier] *= terrain_multiplier if type == :GRASS && user.affectedByTerrain?
     when :Psychic
-      multipliers[:base_damage_multiplier] *= 1.5 if type == :PSYCHIC && user.affectedByTerrain?
+      multipliers[:base_damage_multiplier] *= terrain_multiplier if type == :PSYCHIC && user.affectedByTerrain?
     when :Misty
       multipliers[:base_damage_multiplier] /= 2 if type == :DRAGON && target.affectedByTerrain?
     end
@@ -381,7 +382,7 @@ class PokeBattle_Move
       multipliers[:final_damage_multiplier] *= 0.75
     end
     # Weather
-    case @battle.pbWeather
+    case user.effectiveWeather
     when :Sun, :HarshSun
       if type == :FIRE
         multipliers[:final_damage_multiplier] *= 1.5

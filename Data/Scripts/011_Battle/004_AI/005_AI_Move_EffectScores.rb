@@ -455,7 +455,7 @@ class PokeBattle_AI
           end
         end
         if move.function=="028"   # Growth
-          score += 20 if [:Sun, :HarshSun].include?(@battle.pbWeather)
+          score += 20 if [:Sun, :HarshSun].include?(user.effectiveWeather)
         end
       end
     #---------------------------------------------------------------------------
@@ -1869,7 +1869,7 @@ class PokeBattle_AI
       if user.hp==user.totalhp || (skill>=PBTrainerAI.mediumSkill && !user.canHeal?)
         score -= 90
       else
-        case @battle.pbWeather
+        case user.effectiveWeather
         when :Sun, :HarshSun
           score += 30
         when :None
@@ -2159,7 +2159,7 @@ class PokeBattle_AI
       if @battle.pbCheckGlobalAbility(:AIRLOCK) ||
          @battle.pbCheckGlobalAbility(:CLOUDNINE)
         score -= 90
-      elsif @battle.pbWeather == :Sun
+      elsif @battle.field.weather == :Sun
         score -= 90
       else
         user.eachMove do |m|
@@ -2172,7 +2172,7 @@ class PokeBattle_AI
       if @battle.pbCheckGlobalAbility(:AIRLOCK) ||
          @battle.pbCheckGlobalAbility(:CLOUDNINE)
         score -= 90
-      elsif @battle.pbWeather == :Rain
+      elsif @battle.field.weather == :Rain
         score -= 90
       else
         user.eachMove do |m|
@@ -2185,7 +2185,7 @@ class PokeBattle_AI
       if @battle.pbCheckGlobalAbility(:AIRLOCK) ||
          @battle.pbCheckGlobalAbility(:CLOUDNINE)
         score -= 90
-      elsif @battle.pbWeather == :Sandstorm
+      elsif @battle.field.weather == :Sandstorm
         score -= 90
       end
     #---------------------------------------------------------------------------
@@ -2193,7 +2193,7 @@ class PokeBattle_AI
       if @battle.pbCheckGlobalAbility(:AIRLOCK) ||
          @battle.pbCheckGlobalAbility(:CLOUDNINE)
         score -= 90
-      elsif @battle.pbWeather == :Hail
+      elsif @battle.field.weather == :Hail
         score -= 90
       end
     #---------------------------------------------------------------------------
@@ -2522,7 +2522,7 @@ class PokeBattle_AI
       if @battle.pbCheckGlobalAbility(:AIRLOCK) ||
          @battle.pbCheckGlobalAbility(:CLOUDNINE)
         score -= 90
-      elsif @battle.pbWeather == :ShadowSky
+      elsif @battle.field.weather == :ShadowSky
         score -= 90
       end
     #---------------------------------------------------------------------------
@@ -2929,7 +2929,7 @@ class PokeBattle_AI
     when "166"
     #---------------------------------------------------------------------------
     when "167"
-      if user.pbOwnSide.effects[PBEffects::AuroraVeil]>0 || @battle.pbWeather != :Hail
+      if user.pbOwnSide.effects[PBEffects::AuroraVeil]>0 || user.effectiveWeather != :Hail
         score -= 90
       else
         score += 40
@@ -2988,7 +2988,7 @@ class PokeBattle_AI
       else
         score += 50
         score -= user.hp*100/user.totalhp
-        score += 30 if @battle.pbWeather == :Sandstorm
+        score += 30 if user.effectiveWeather == :Sandstorm
       end
     #---------------------------------------------------------------------------
     when "16E"

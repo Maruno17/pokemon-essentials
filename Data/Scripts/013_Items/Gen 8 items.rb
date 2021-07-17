@@ -219,8 +219,7 @@ ItemHandlers::UseOnPokemon.add(:REINSOFUNITY, proc { |item, pkmn, scene|
   if !pkmn.isSpecies?(:CALYREX)
     scene.pbDisplay(_INTL("It had no effect."))
     next false
-  end
-  if pkmn.fainted?
+  elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
   end
@@ -287,26 +286,53 @@ ItemHandlers::UseOnPokemon.add(:ABILITYPATCH, proc { |item, pkmn, scene|
   next false
 })
 
+ItemHandlers::UseOnPokemon.add(:ROTOMCATALOG, proc { |item, pkmn, scene|
+  if !pkmn.isSpecies?(:ROTOM)
+    scene.pbDisplay(_INTL("It had no effect."))
+    next false
+  elsif pkmn.fainted?
+    scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
+  end
+  choices = [
+    _INTL("Light bulb"),
+    _INTL("Microwave oven"),
+    _INTL("Washing machine"),
+    _INTL("Refrigerator"),
+    _INTL("Electric fan"),
+    _INTL("Lawn mower"),
+    _INTL("Cancel")
+  ]
+  new_form = scene.pbShowCommands(_INTL("Which appliance would you like to order?"),
+     commands, pkmn.form)
+  if new_form == pkmn.form
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    next false
+  elsif new_form > 0 && new_form < choices.length - 1
+    pkmn.setForm(new_form) {
+      scene.pbRefresh
+      scene.pbDisplay(_INTL("{1} transformed!", pkmn.name))
+    }
+    next true
+  end
+  next false
+})
+
+BattleHandlers::UserItemAfterMoveUse.add(:THROATSPRAY,
+  proc { |item, user, targets, move, numHits, battle|
+    next if battle.pbAllFainted?(user.idxOwnSide) ||
+            battle.pbAllFainted?(user.idxOpposingSide)
+    next if !move.soundMove? || numHits == 0
+    next if !user.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user)
+    user.pbRaiseStatStage(:SPECIAL_ATTACK, 1, user)
+    user.pbConsumeItem
+  }
+)
+
+
 =begin
 
 #===============================================================================
-
-Pokémon Box Link
-Key item, unusable. Enables pressing a button while in the party screen to open
-the "Organise Boxes" mode of Pokémon storage. This is disabled at certain times,
-perhaps when a Game Switch is on.
-
-Rusted Sword
-Changes form of Zacian holding it. In battle, changes Zacian's Iron Head to
-Behemoth Blade.
-
-Rusted Shield
-Changes form of Zamazenta holding it. In battle, changes Zamazenta's Iron Head
-to Behemoth Bash.
-
-Throat Spray
-After holder uses a sound-based move, consume item and holder gets +1 Special
-Attack (unless battle ends).
 
 Eject Pack
 When holder's stat(s) is lowered, consume item and holder switches out. Not
@@ -322,16 +348,12 @@ Room Service
 If Trick Room is used, or if holder switches in while Trick Room applies,
 consume item and holder gets -1 Speed.
 
-Utility Umbrella
-Holder is unaffected by sun and rain weathers.
+Pokémon Box Link
+Key item, unusable. Enables pressing a button while in the party screen to open
+the "Organise Boxes" mode of Pokémon storage. This is disabled at certain times,
+perhaps when a Game Switch is on.
 
 Catching Charm
 Increases the chance of a critical catch. By how much?
-
-Rotom Catalog
-Changes Rotom's form (choosable).
-
-Mark Charm
-Increases the chance of a wild Pokémon having a mark.
 
 =end

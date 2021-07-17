@@ -80,7 +80,7 @@ class PokeBattle_Battle
   attr_accessor :lastMoveUsed     # Last move used
   attr_accessor :lastMoveUser     # Last move user
   attr_accessor :first_poke_ball  # ID of the first thrown Poké Ball that failed
-  attr_Accessor :poke_ball_failed # Set after first_poke_ball to prevent it being set again
+  attr_accessor :poke_ball_failed # Set after first_poke_ball to prevent it being set again
   attr_reader   :switching        # True if during the switching phase of the round
   attr_reader   :futureSight      # True if Future Sight is hitting
   attr_reader   :endOfRound       # True during the end of round

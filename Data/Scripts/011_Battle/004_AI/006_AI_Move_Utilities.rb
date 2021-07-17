@@ -43,7 +43,7 @@ class PokeBattle_AI
                                                    Effectiveness.ineffective_type?(moveType, defType)
     end
     # Delta Stream's weather
-    if @battle.pbWeather == :StrongWinds
+    if target.effectiveWeather == :StrongWinds
       ret = Effectiveness::NORMAL_EFFECTIVE_ONE if defType == :FLYING &&
                                                    Effectiveness.super_effective_type?(moveType, defType)
     end
@@ -439,7 +439,7 @@ class PokeBattle_AI
     end
     # Weather
     if skill>=PBTrainerAI.mediumSkill
-      case @battle.pbWeather
+      case user.effectiveWeather
       when :Sun, :HarshSun
         if type == :FIRE
           multipliers[:final_damage_multiplier] *= 1.5

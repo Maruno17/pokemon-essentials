@@ -253,6 +253,17 @@ class PokeBattle_Battler
       end
       return false
     end
+    if Settings::MECHANICS_GENERATION >= 8 && hasActiveAbility?([:OBLIVIOUS, :OWNTEMPO, :INNERFOCUS, :SCRAPPY])
+      @battle.pbShowAbilitySplash(self)
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        @battle.pbDisplay(_INTL("{1}'s {2} cannot be lowered!", pbThis, GameData::Stat.get(:ATTACK).name))
+      else
+        @battle.pbDisplay(_INTL("{1}'s {2} prevents {3} loss!", pbThis, abilityName,
+           GameData::Stat.get(:ATTACK).name))
+      end
+      @battle.pbHideAbilitySplash(self)
+      return false
+    end
     if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
       return pbLowerStatStageByAbility(:ATTACK,1,user,false)
     end

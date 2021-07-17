@@ -3,7 +3,7 @@
 #===============================================================================
 # Unused class.
 class PokeBattle_NullBattlePeer
-  def pbOnEnteringBattle(battle,pkmn,wild=false); end
+  def pbOnEnteringBattle(battle, battler, pkmn, wild = false); end
   def pbOnLeavingBattle(battle,pkmn,usedInBattle,endBattle=false); end
 
   def pbStorePokemon(player,pkmn)
@@ -52,9 +52,11 @@ class PokeBattle_RealBattlePeer
     return (box<0) ? "" : $PokemonStorage[box].name
   end
 
-  def pbOnEnteringBattle(_battle,pkmn,wild=false)
+  def pbOnEnteringBattle(battle, battler, pkmn, wild = false)
     f = MultipleForms.call("getFormOnEnteringBattle",pkmn,wild)
     pkmn.form = f if f
+    battler.form = pkmn.form if battler.form != pkmn.form
+    MultipleForms.call("changePokemonOnEnteringBattle", battler, pkmn, battle)
   end
 
   # For switching out, including due to fainting, and for the end of battle
@@ -63,6 +65,7 @@ class PokeBattle_RealBattlePeer
     f = MultipleForms.call("getFormOnLeavingBattle",pkmn,battle,usedInBattle,endBattle)
     pkmn.form = f if f && pkmn.form!=f
     pkmn.hp = pkmn.totalhp if pkmn.hp>pkmn.totalhp
+    MultipleForms.call("changePokemonOnLeavingBattle", pkmn, battle, usedInBattle, endBattle)
   end
 end
 

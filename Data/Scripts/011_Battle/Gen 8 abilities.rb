@@ -301,7 +301,7 @@ BattleHandlers::UserAbilityEndOfMove.copy(:GRIMNEIGH, :ASONEGRIMNEIGH)
 BattleHandlers::AbilityOnSwitchIn.add(:ICEFACE,
   proc { |ability, battler, battle|
     next if !battler.isSpecies?(:EISCUE) || battler.form != 1
-    next if battle.pbWeather != :Hail
+    next if battler.effectiveWeather != :Hail
     battle.pbShowAbilitySplash(battler)
     if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
       battle.pbDisplay(_INTL("{1}'s {2} activated!", battler.pbThis, battler.abilityName))

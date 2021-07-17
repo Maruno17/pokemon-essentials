@@ -4,7 +4,7 @@
 
 BattleHandlers::SpeedCalcAbility.add(:CHLOROPHYLL,
   proc { |ability,battler,mult|
-    next mult * 2 if [:Sun, :HarshSun].include?(battler.battle.pbWeather)
+    next mult * 2 if [:Sun, :HarshSun].include?(battler.effectiveWeather)
   }
 )
 
@@ -16,7 +16,7 @@ BattleHandlers::SpeedCalcAbility.add(:QUICKFEET,
 
 BattleHandlers::SpeedCalcAbility.add(:SANDRUSH,
   proc { |ability,battler,mult|
-    next mult * 2 if [:Sandstorm].include?(battler.battle.pbWeather)
+    next mult * 2 if [:Sandstorm].include?(battler.effectiveWeather)
   }
 )
 
@@ -28,7 +28,7 @@ BattleHandlers::SpeedCalcAbility.add(:SLOWSTART,
 
 BattleHandlers::SpeedCalcAbility.add(:SLUSHRUSH,
   proc { |ability,battler,mult|
-    next mult * 2 if [:Hail].include?(battler.battle.pbWeather)
+    next mult * 2 if [:Hail].include?(battler.effectiveWeather)
   }
 )
 
@@ -40,7 +40,7 @@ BattleHandlers::SpeedCalcAbility.add(:SURGESURFER,
 
 BattleHandlers::SpeedCalcAbility.add(:SWIFTSWIM,
   proc { |ability,battler,mult|
-    next mult * 2 if [:Rain, :HeavyRain].include?(battler.battle.pbWeather)
+    next mult * 2 if [:Rain, :HeavyRain].include?(battler.effectiveWeather)
   }
 )
 
@@ -147,7 +147,7 @@ BattleHandlers::StatusImmunityAbility.copy(:INSOMNIA,:SWEETVEIL,:VITALSPIRIT)
 
 BattleHandlers::StatusImmunityAbility.add(:LEAFGUARD,
   proc { |ability,battler,status|
-    next true if [:Sun, :HarshSun].include?(battler.battle.pbWeather)
+    next true if [:Sun, :HarshSun].include?(battler.effectiveWeather)
   }
 )
 
@@ -826,13 +826,13 @@ BattleHandlers::AccuracyCalcTargetAbility.add(:NOGUARD,
 
 BattleHandlers::AccuracyCalcTargetAbility.add(:SANDVEIL,
   proc { |ability,mods,user,target,move,type|
-    mods[:evasion_multiplier] *= 1.25 if target.battle.pbWeather == :Sandstorm
+    mods[:evasion_multiplier] *= 1.25 if target.effectiveWeather == :Sandstorm
   }
 )
 
 BattleHandlers::AccuracyCalcTargetAbility.add(:SNOWCLOAK,
   proc { |ability,mods,user,target,move,type|
-    mods[:evasion_multiplier] *= 1.25 if target.battle.pbWeather == :Hail
+    mods[:evasion_multiplier] *= 1.25 if target.effectiveWeather == :Hail
   }
 )
 
@@ -916,7 +916,7 @@ BattleHandlers::DamageCalcUserAbility.add(:FLASHFIRE,
 
 BattleHandlers::DamageCalcUserAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if move.physicalMove? && [:Sun, :HarshSun].include?(user.battle.pbWeather)
+    if move.physicalMove? && [:Sun, :HarshSun].include?(user.effectiveWeather)
       mults[:attack_multiplier] *= 1.5
     end
   }
@@ -1005,7 +1005,7 @@ BattleHandlers::DamageCalcUserAbility.add(:RIVALRY,
 
 BattleHandlers::DamageCalcUserAbility.add(:SANDFORCE,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if user.battle.pbWeather == :Sandstorm &&
+    if user.effectiveWeather == :Sandstorm &&
        [:ROCK, :GROUND, :STEEL].include?(type)
       mults[:base_damage_multiplier] *= 1.3
     end
@@ -1026,7 +1026,7 @@ BattleHandlers::DamageCalcUserAbility.add(:SLOWSTART,
 
 BattleHandlers::DamageCalcUserAbility.add(:SOLARPOWER,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if move.specialMove? && [:Sun, :HarshSun].include?(user.battle.pbWeather)
+    if move.specialMove? && [:Sun, :HarshSun].include?(user.effectiveWeather)
       mults[:attack_multiplier] *= 1.5
     end
   }
@@ -1122,7 +1122,7 @@ BattleHandlers::DamageCalcUserAllyAbility.add(:BATTERY,
 
 BattleHandlers::DamageCalcUserAllyAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if move.physicalMove? && [:Sun, :HarshSun].include?(user.battle.pbWeather)
+    if move.physicalMove? && [:Sun, :HarshSun].include?(user.effectiveWeather)
       mults[:attack_multiplier] *= 1.5
     end
   }
@@ -1150,7 +1150,7 @@ BattleHandlers::DamageCalcTargetAbility.copy(:FILTER,:SOLIDROCK)
 
 BattleHandlers::DamageCalcTargetAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if move.specialMove? && [:Sun, :HarshSun].include?(user.battle.pbWeather)
+    if move.specialMove? && [:Sun, :HarshSun].include?(target.effectiveWeather)
       mults[:defense_multiplier] *= 1.5
     end
   }
@@ -1235,7 +1235,7 @@ BattleHandlers::DamageCalcTargetAbilityNonIgnorable.add(:SHADOWSHIELD,
 
 BattleHandlers::DamageCalcTargetAllyAbility.add(:FLOWERGIFT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    if move.specialMove? && [:Sun, :HarshSun].include?(user.battle.pbWeather)
+    if move.specialMove? && [:Sun, :HarshSun].include?(target.effectiveWeather)
       mults[:defense_multiplier] *= 1.5
     end
   }
@@ -1864,7 +1864,7 @@ BattleHandlers::EORHealingAbility.add(:HEALER,
 BattleHandlers::EORHealingAbility.add(:HYDRATION,
   proc { |ability,battler,battle|
     next if battler.status == :NONE
-    next if ![:Rain, :HeavyRain].include?(battle.pbWeather)
+    next if ![:Rain, :HeavyRain].include?(battler.effectiveWeather)
     battle.pbShowAbilitySplash(battler)
     oldStatus = battler.status
     battler.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
@@ -1987,7 +1987,7 @@ BattleHandlers::EORGainItemAbility.add(:HARVEST,
   proc { |ability,battler,battle|
     next if battler.item
     next if !battler.recycleItem || !GameData::Item.get(battler.recycleItem).is_berry?
-    if ![:Sun, :HarshSun].include?(battle.pbWeather)
+    if ![:Sun, :HarshSun].include?(battler.effectiveWeather)
       next unless battle.pbRandom(100)<50
     end
     battle.pbShowAbilitySplash(battler)

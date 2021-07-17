@@ -29,14 +29,10 @@ Some moves have changed properties/effects:
   than the order in which they were Quashed.
 - Parting Shot is able to make the user switch out if its effect is redirected
   by Mirror Armor. Throat Spray is triggered and applies before the switch.
-- Terrains have altered/additional effects.
 - Double Iron Bash no longer has a different effect if the target is Minimized.
 
 Some abilities have changed effects:
-- Oblivious, Own Tempo, Inner Focus and Scrappy now block Intimidate.
 - Intimidate now triggers Rattled.
-- If Unburden is negated by Neutralizing Gas, Unburden's effect stops applying.
-  If Neutralizing Gas then leaves the field, Unburden's boost returns.
 - If another Pokémon faints before a Pokémon with Analytic makes its move,
   Analytic calculates whether it would have moved before or after the fainted
   Pokémon. In Gen 8, speed- and priority-modifying effects aren't considered,
@@ -62,7 +58,6 @@ Other notes:
 - Look at Sweet Scent's out of battle effect, namely whether it should try to
   cause a horde battle (and what does that mean in Essentials?).
 - Maybe have multiple sets of Pickup items for multiple Gens.
-- Dive Ball should have an increased catch rate if surfing or fishing(?). Nah.
 - Add a newer type of berry tree mechanics? Have a separate setting that
   prevents deterioration?
 - If a battle ends because of Rocky Helmet damage, the side that the Rocky
@@ -79,10 +74,8 @@ Make example event that combines the Gen 8 fossils.
 
 Add AI for new moves/items/abilities.
 
-Zacian/Zamazenta need code that changes their movesets upon entering/leaving
-battle. Can't use "onSetForm" since that's called after the battler is
-initialized and pbOnEnteringBattle doesn't have access to the battler (could
-change this).
+What happens to the PP of Iron Head when turned into/from Behemoth Blade/Bash
+for Zacian/Zamazenta?
 
 #===============================================================================
 # Low priority or ignorable

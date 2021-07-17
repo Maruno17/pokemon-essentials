@@ -67,16 +67,14 @@ class PokeBattle_Battle
     when :ShadowSky   then pbDisplay(_INTL("The shadow sky continues."))
     end
     # Effects due to weather
-    curWeather = pbWeather
     priority.each do |b|
       # Weather-related abilities
       if b.abilityActive?
-        BattleHandlers.triggerEORWeatherAbility(b.ability,curWeather,b,self)
+        BattleHandlers.triggerEORWeatherAbility(b.ability, b.effectiveWeather, b, self)
         b.pbFaint if b.fainted?
       end
       # Weather damage
-      # NOTE:
-      case curWeather
+      case b.effectiveWeather
       when :Sandstorm
         next if !b.takesSandstormDamage?
         pbDisplay(_INTL("{1} is buffeted by the sandstorm!",b.pbThis))
@@ -257,10 +255,8 @@ class PokeBattle_Battle
       pbDisplay(_INTL("{1}'s wish came true!",wishMaker))
     end
     # Sea of Fire damage (Fire Pledge + Grass Pledge combination)
-    curWeather = pbWeather
     for side in 0...2
       next if sides[side].effects[PBEffects::SeaOfFire]==0
-      next if [:Rain, :HeavyRain].include?(curWeather)
       @battle.pbCommonAnimation("SeaOfFire") if side==0
       @battle.pbCommonAnimation("SeaOfFireOpp") if side==1
       priority.each do |b|

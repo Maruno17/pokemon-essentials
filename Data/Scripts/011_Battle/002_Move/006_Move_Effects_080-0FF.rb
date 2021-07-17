@@ -105,13 +105,13 @@ end
 #===============================================================================
 class PokeBattle_Move_087 < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
-    baseDmg *= 2 if @battle.pbWeather != :None
+    baseDmg *= 2 if user.effectiveWeather != :None
     return baseDmg
   end
 
   def pbBaseType(user)
     ret = :NORMAL
-    case @battle.pbWeather
+    case user.effectiveWeather
     when :Sun, :HarshSun
       ret = :FIRE if GameData::Type.exists?(:FIRE)
     when :Rain, :HeavyRain
@@ -2064,7 +2064,7 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
   def pbIsChargingTurn?(user)
     ret = super
     if !user.effects[PBEffects::TwoTurnAttack]
-      if [:Sun, :HarshSun].include?(@battle.pbWeather)
+      if [:Sun, :HarshSun].include?(user.effectiveWeather)
         @powerHerb = false
         @chargingTurn = true
         @damagingTurn = true
@@ -2079,7 +2079,7 @@ class PokeBattle_Move_0C4 < PokeBattle_TwoTurnMove
   end
 
   def pbBaseDamageMultiplier(damageMult,user,target)
-    damageMult /= 2 if ![:None, :Sun, :HarshSun].include?(@battle.pbWeather)
+    damageMult /= 2 if ![:None, :Sun, :HarshSun].include?(user.effectiveWeather)
     return damageMult
   end
 end
@@ -2560,7 +2560,7 @@ end
 #===============================================================================
 class PokeBattle_Move_0D8 < PokeBattle_HealingMove
   def pbOnStartUse(user,targets)
-    case @battle.pbWeather
+    case user.effectiveWeather
     when :Sun, :HarshSun
       @healAmount = (user.totalhp*2/3.0).round
     when :None, :StrongWinds

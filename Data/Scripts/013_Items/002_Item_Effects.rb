@@ -858,8 +858,7 @@ ItemHandlers::UseOnPokemon.add(:GRACIDEA,proc { |item,pkmn,scene|
      pkmn.status == :FROZEN || PBDayNight.isNight?
     scene.pbDisplay(_INTL("It had no effect."))
     next false
-  end
-  if pkmn.fainted?
+  elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
   end
@@ -874,9 +873,9 @@ ItemHandlers::UseOnPokemon.add(:REDNECTAR,proc { |item,pkmn,scene|
   if !pkmn.isSpecies?(:ORICORIO) || pkmn.form==0
     scene.pbDisplay(_INTL("It had no effect."))
     next false
-  end
-  if pkmn.fainted?
+  elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
   end
   pkmn.setForm(0) {
     scene.pbRefresh
@@ -889,9 +888,9 @@ ItemHandlers::UseOnPokemon.add(:YELLOWNECTAR,proc { |item,pkmn,scene|
   if !pkmn.isSpecies?(:ORICORIO) || pkmn.form==1
     scene.pbDisplay(_INTL("It had no effect."))
     next false
-  end
-  if pkmn.fainted?
+  elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
   end
   pkmn.setForm(1) {
     scene.pbRefresh
@@ -904,9 +903,9 @@ ItemHandlers::UseOnPokemon.add(:PINKNECTAR,proc { |item,pkmn,scene|
   if !pkmn.isSpecies?(:ORICORIO) || pkmn.form==2
     scene.pbDisplay(_INTL("It had no effect."))
     next false
-  end
-  if pkmn.fainted?
+  elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
   end
   pkmn.setForm(2) {
     scene.pbRefresh
@@ -919,9 +918,9 @@ ItemHandlers::UseOnPokemon.add(:PURPLENECTAR,proc { |item,pkmn,scene|
   if !pkmn.isSpecies?(:ORICORIO) || pkmn.form==3
     scene.pbDisplay(_INTL("It had no effect."))
     next false
-  end
-  if pkmn.fainted?
+  elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
   end
   pkmn.setForm(3) {
     scene.pbRefresh
@@ -936,8 +935,7 @@ ItemHandlers::UseOnPokemon.add(:REVEALGLASS,proc { |item,pkmn,scene|
      !pkmn.isSpecies?(:LANDORUS)
     scene.pbDisplay(_INTL("It had no effect."))
     next false
-  end
-  if pkmn.fainted?
+  elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
   end
@@ -953,9 +951,9 @@ ItemHandlers::UseOnPokemon.add(:PRISONBOTTLE,proc { |item,pkmn,scene|
   if !pkmn.isSpecies?(:HOOPA)
     scene.pbDisplay(_INTL("It had no effect."))
     next false
-  end
-  if pkmn.fainted?
+  elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
   end
   newForm = (pkmn.form==0) ? 1 : 0
   pkmn.setForm(newForm) {
@@ -969,8 +967,7 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
   if !pkmn.isSpecies?(:KYUREM)
     scene.pbDisplay(_INTL("It had no effect."))
     next false
-  end
-  if pkmn.fainted?
+  elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
   end
@@ -1022,8 +1019,7 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
   if !pkmn.isSpecies?(:NECROZMA) || pkmn.form == 2
     scene.pbDisplay(_INTL("It had no effect."))
     next false
-  end
-  if pkmn.fainted?
+  elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
   end
@@ -1071,8 +1067,7 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
   if !pkmn.isSpecies?(:NECROZMA) || pkmn.form == 1
     scene.pbDisplay(_INTL("It had no effect."))
     next false
-  end
-  if pkmn.fainted?
+  elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
   end

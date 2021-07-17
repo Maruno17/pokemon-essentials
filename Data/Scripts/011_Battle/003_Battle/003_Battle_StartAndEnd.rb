@@ -121,7 +121,7 @@ class PokeBattle_Battle
         pbParty(1).each_with_index do |pkmn,idxPkmn|
           pbCreateBattler(2*idxPkmn+side,pkmn,idxPkmn)
           # Changes the Pokémon's form upon entering battle (if it should)
-          @peer.pbOnEnteringBattle(self,pkmn,true)
+          @peer.pbOnEnteringBattle(self, @battlers[2 * idxPkmn + side], pkmn, true)
           pbSetSeen(@battlers[2*idxPkmn+side])
           @usedInBattle[side][idxPkmn] = true
         end
