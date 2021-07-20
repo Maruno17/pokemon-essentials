@@ -7,7 +7,27 @@ def pbDefaultMap
   return 0
 end
 
+def pbWarpToMapId
+  params = ChooseNumberParams.new
+  params.setRange(1,pbMapTree().length)
+  map_id = pbMessageChooseNumber("map id?",params)
+  return [map_id,0,0]
+end
+
 def pbWarpToMap
+  choice = pbMessage("type", [_INTL("List"),_INTL("Map id"), _INTL("Town map")], 0)
+  if choice == 0
+    map = pbWarpToMapList
+  elsif choice == 1
+    map = pbWarpToMapId
+  elsif choice == 2
+    Kernel.pbMessage("Not currently supported")
+    map = pbWarpToMapList
+  end
+  return map
+end
+
+def pbWarpToMapList
   mapid = pbListScreen(_INTL("WARP TO MAP"),MapLister.new(pbDefaultMap))
   if mapid>0
     map = Game_Map.new

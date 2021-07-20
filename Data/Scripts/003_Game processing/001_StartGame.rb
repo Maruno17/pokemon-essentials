@@ -81,7 +81,7 @@ module Game
       rescue Errno::ENOENT
         if $DEBUG
           pbMessage(_INTL('Map {1} was not found.', $game_map.map_id))
-          map = pbWarpToMap
+          map = pbWarpToMapList
           exit unless map
           $MapFactory.setup(map[0])
           $game_player.moveto(map[1], map[2])

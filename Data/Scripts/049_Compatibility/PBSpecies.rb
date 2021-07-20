@@ -3,5 +3,9 @@ module PBSpecies
   def PBSpecies.maxValue
     return 176832
   end
+
+  def PBSpecies.getName(species)
+    return GameData::Species.get(species).real_name
+  end
 end
 

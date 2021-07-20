@@ -116,7 +116,8 @@ def pbCheckPokemonIconFiles(speciesNum,egg=false, dna=false)
 end
 
 
-def getDexNumberFromSpecies(species)
+def convertSpeciesSymbolToDexNumber(species)
+  return species if species.is_a?(Integer)
   if species.is_a?(Symbol)
     dexNum = GameData::Species.get(species).id_number
   elsif species.is_a?(Pokemon)
@@ -127,14 +128,43 @@ def getDexNumberFromSpecies(species)
   return dexNum
 end
 
+def getRandomCustomFusion(returnRandomPokemonIfNoneFound=true,customPokeList=[],maxPoke=-1,recursionLimit=3)
+  if customPokeList.length==0
+    customPokeList = getCustomSpeciesList()
+  end
+  randPoke = []
+  if customPokeList.length >= 5000
+    chosen=false
+    i=0 #loop pas plus que 3 fois pour pas lag
+    while chosen == false
+      fusedPoke =  customPokeList[rand(customPokeList.length)]
+      poke1 = getBasePokemonID(fusedPoke,false)
+      poke2 = getBasePokemonID(fusedPoke,true)
+
+      if ((poke1 <= maxPoke && poke2 <= maxPoke) || i >= recursionLimit) || maxPoke == -1
+        randPoke << getBasePokemonID(fusedPoke,false)
+        randPoke << getBasePokemonID(fusedPoke,true)
+        chosen = true
+      end
+    end
+  else
+    if returnRandomPokemonIfNoneFound
+      randPoke << rand(maxPoke)+1
+      randPoke << rand(maxPoke)+1
+    end
+  end
+
+  return randPoke
+end
+
 def getBodyID(species)
-  dexNum = getDexNumberFromSpecies(species)
+  dexNum = convertSpeciesSymbolToDexNumber(species)
   return (dexNum / NB_POKEMON).round
 end
 
 def getHeadID(species, bodyId)
-  head_dexNum = getDexNumberFromSpecies(species)
-  body_dexNum = getDexNumberFromSpecies(bodyId)
+  head_dexNum = convertSpeciesSymbolToDexNumber(species)
+  body_dexNum = convertSpeciesSymbolToDexNumber(bodyId)
   return (head_dexNum - (body_dexNum * NB_POKEMON)).round
 end
 

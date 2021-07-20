@@ -161,6 +161,8 @@ end
 
 #in: pokemon number
 def Kernel.isPartPokemon(src, target)
+  src = convertSpeciesSymbolToDexNumber(src)
+  target = convertSpeciesSymbolToDexNumber(target)
   return true if src == target
   return false if src <= NB_POKEMON
   bod = getBasePokemonID(src, true)

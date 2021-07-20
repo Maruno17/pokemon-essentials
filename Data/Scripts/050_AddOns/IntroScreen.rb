@@ -113,30 +113,6 @@ end
 #===============================================================================
 class GenOneStyle
 
-  #currently unused
-  def getRandomCustomFusion()
-    randPoke = []
-    if @customPokeList.length >= 5000
-      chosen=false
-      i=0 #loop pas plus que 3 fois pour pas lag
-      while chosen == false
-        fusedPoke =  @customPokeList[rand(@customPokeList.length)]
-        poke1 = getBasePokemonID(fusedPoke,false)
-        poke2 = getBasePokemonID(fusedPoke,true)
-
-        if ((poke1 <= @maxPoke && poke2 <= @maxPoke) || i >= 3)
-          randPoke << getBasePokemonID(fusedPoke,false)
-          randPoke << getBasePokemonID(fusedPoke,true)
-          chosen = true
-        end
-      end
-    else
-      randPoke << rand(@maxPoke)+1
-      randPoke << rand(@maxPoke)+1
-    end
-
-    return randPoke
-  end
 
 
 
@@ -146,7 +122,7 @@ class GenOneStyle
     @customPokeList = getCustomSpeciesList()
     #Get random Pokemon (1st gen orandPokenly, pas de legend la prmeiere fois)
 
-    randPoke = getRandomCustomFusion()
+    randPoke = getRandomCustomFusion(true,@customPokeList,@maxPoke)
     randpoke1 = randPoke[0]   #rand(@maxPoke)+1
     randpoke2 = randPoke[1]             #rand(@maxPoke)+1
 
@@ -364,7 +340,7 @@ class GenOneStyle
       if @maxPoke < NB_POKEMON-1
         @maxPoke += 5 #-1 pour que ca arrive pile. tant pis pour kyurem
       end
-      randPoke = getRandomCustomFusion()
+      randPoke = getRandomCustomFusion(true,@customPokeList,@maxPoke)
       randpoke1 = randPoke[0]   #rand(@maxPoke)+1
       randpoke2 = randPoke[1]             #rand(@maxPoke)+1
 

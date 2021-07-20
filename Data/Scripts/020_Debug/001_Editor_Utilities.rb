@@ -116,9 +116,13 @@ end
 # the ID of the species to initially select. Pressing Input::ACTION will toggle
 # the list sorting between numerical and alphabetical.
 def pbChooseSpeciesList(default = nil)
-  commands = []
-  GameData::Species.each { |s| commands.push([s.id_number, s.real_name, s.id]) if s.form == 0 }
-  return pbChooseList(commands, default, nil, -1)
+  # commands = []
+  # GameData::Species.each { |s| commands.push([s.id_number, s.real_name, s.id]) if s.form == 0 }
+  # return pbChooseList(commands, default, nil, -1)
+  params = ChooseNumberParams.new
+  params.setRange(1,PBSpecies.maxValue)
+  dexNum = pbMessageChooseNumber("dex number?",params)
+  return GameData::Species.get(dexNum)
 end
 
 def pbChooseSpeciesFormList(default = nil)
