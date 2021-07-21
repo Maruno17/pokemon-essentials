@@ -97,9 +97,26 @@ module GameData
       return pbGetMessageFromHash(MessageTypes::TrainerLoseText, @real_lose_text)
     end
 
+    def replace_species_with_placeholder(species)
+      case species
+      when Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES
+        return pbGet(Settings::RIVAL_STARTER_PLACEHOLDER_VARIABLE)
+      when Settings::VAR_1_PLACEHOLDER_SPECIES
+        return pbGet(1)
+      when Settings::VAR_2_PLACEHOLDER_SPECIES
+        return pbGet(2)
+      when Settings::VAR_3_PLACEHOLDER_SPECIES
+        return pbGet(3)
+      end
+    end
+
     # Creates a battle-ready version of a trainer's data.
     # @return [Array] all information about a trainer in a usable form
     def to_trainer
+      placeholder_species = [Settings::RIVAL_STARTER_PLACEHOLDER_SPECIES,
+                             Settings::VAR_1_PLACEHOLDER_SPECIES,
+                             Settings::VAR_2_PLACEHOLDER_SPECIES,
+                             Settings::VAR_3_PLACEHOLDER_SPECIES]
       # Determine trainer's name
       tr_name = self.name
       Settings::RIVAL_NAMES.each do |rival|
@@ -114,8 +131,22 @@ module GameData
       trainer.lose_text = self.lose_text
       # Create each Pokémon owned by the trainer
       @pokemon.each do |pkmn_data|
+
+        #infinite fusion edit
         species = GameData::Species.get(pkmn_data[:species]).species
-        pkmn = Pokemon.new(species, pkmn_data[:level], trainer, false)
+        if placeholder_species.include?(species)
+          species = replace_species_with_placeholder(species)
+        end
+        level =pkmn_data[:level]
+        if $game_switches[Settings::OVERRIDE_BATTLE_LEVEL_SWITCH]
+          override_level = $game_variables[Settings::OVERRIDE_BATTLE_LEVEL_VALUE_VAR]
+          if override_level.is_a?(Integer)
+            level =override_level
+          end
+        end
+        ####
+        pkmn = Pokemon.new(species, level, trainer, false)
+
         trainer.party.push(pkmn)
         # Set Pokémon's properties if defined
         if pkmn_data[:form]

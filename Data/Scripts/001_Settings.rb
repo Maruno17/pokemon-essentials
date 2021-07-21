@@ -22,6 +22,15 @@ module Settings
 
   BACKSPRITE_POSITION_OFFSET = 20
 
+  RIVAL_STARTER_PLACEHOLDER_SPECIES = :MEW #(MEW)
+  VAR_1_PLACEHOLDER_SPECIES = :DIALGA
+  VAR_2_PLACEHOLDER_SPECIES = :PALKIA
+  VAR_3_PLACEHOLDER_SPECIES = :GIRATINA
+
+  RIVAL_STARTER_PLACEHOLDER_VARIABLE = 250
+
+  OVERRIDE_BATTLE_LEVEL_SWITCH = 785
+  OVERRIDE_BATTLE_LEVEL_VALUE_VAR =240
 
   # The generation that the battle system follows. Used throughout the battle
   # scripts, and also by some other settings which are used in and out of battle

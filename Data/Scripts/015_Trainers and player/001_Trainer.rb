@@ -43,13 +43,33 @@ class Trainer
 
   #=============================================================================
 
-  def trainer_type_name; return GameData::TrainerType.get(@trainer_type).name;        end
-  def base_money;        return GameData::TrainerType.get(@trainer_type).base_money;  end
-  def gender;            return GameData::TrainerType.get(@trainer_type).gender;      end
-  def male?;             return GameData::TrainerType.get(@trainer_type).male?;       end
-  def female?;           return GameData::TrainerType.get(@trainer_type).female?;     end
-  def skill_level;       return GameData::TrainerType.get(@trainer_type).skill_level; end
-  def skill_code;        return GameData::TrainerType.get(@trainer_type).skill_code;  end
+  def trainer_type_name
+    return GameData::TrainerType.get(@trainer_type).name;
+  end
+
+  def base_money
+    return GameData::TrainerType.get(@trainer_type).base_money;
+  end
+
+  def gender
+    return GameData::TrainerType.get(@trainer_type).gender;
+  end
+
+  def male?
+    return GameData::TrainerType.get(@trainer_type).male?;
+  end
+
+  def female?
+    return GameData::TrainerType.get(@trainer_type).female?;
+  end
+
+  def skill_level
+    return GameData::TrainerType.get(@trainer_type).skill_level;
+  end
+
+  def skill_code
+    return GameData::TrainerType.get(@trainer_type).skill_code;
+  end
 
   def has_skill_code?(code)
     c = skill_code
@@ -80,6 +100,17 @@ class Trainer
     ret = 0
     @party.each { |p| ret += 1 if p && !p.egg? && !p.fainted? }
     return ret
+  end
+
+  def
+  highest_level_pokemon_in_party
+    max_level = 0
+    for pokemon in @party
+      if pokemon.level > max_level
+        max_level = pokemon.level
+      end
+    end
+    return max_level
   end
 
   def party_full?
@@ -172,10 +203,10 @@ class Trainer
 
   def initialize(name, trainer_type)
     @trainer_type = GameData::TrainerType.get(trainer_type).id
-    @name         = name
-    @id           = rand(2 ** 16) | rand(2 ** 16) << 16
-    @language     = pbGetLanguage
-    @party        = []
+    @name = name
+    @id = rand(2 ** 16) | rand(2 ** 16) << 16
+    @language = pbGetLanguage
+    @party = []
   end
 end
 
@@ -188,7 +219,7 @@ class NPCTrainer < Trainer
 
   def initialize(name, trainer_type)
     super
-    @items     = []
+    @items = []
     @lose_text = nil
   end
 end

@@ -198,14 +198,7 @@ def getAllNonLegendaryPokemon()
 end
 
 def getPokemonEggGroups(species)
-  groups = []
-
-  compat10 = $pkmn_dex[species][13][0]
-  compat11 = $pkmn_dex[species][13][1]
-
-  groups << compat10
-  groups << compat11
-  return groups
+  return  GameData::Species.get(species).egg_groups
 end
 
 def generateEggGroupTeam(eggGroup)
@@ -229,26 +222,7 @@ def obtainBadgeMessage(badgeName)
   Kernel.pbMessage(_INTL("\\me[Badge get]{1} obtained the {2}!", $Trainer.name, badgeName))
 end
 
-def generateSameEggGroupFusionsTeam(eggGroup)
-  teamComplete = false
-  generatedTeam = []
-  while !teamComplete
-    foundFusionPartner = false
-    species1 = rand(NB_POKEMON)
-    if getPokemonEggGroups(species1).include?(eggGroup)
-      foundFusionPartner = false
-      while !foundFusionPartner
-        species2 = rand(NB_POKEMON)
-        if getPokemonEggGroups(species2).include?(eggGroup)
-          generatedTeam << getFusionSpecies(species1, species2)
-          foundFusionPartner = true
-        end
-      end
-    end
-    teamComplete = generatedTeam.length == 3
-  end
-  return generatedTeam
-end
+
 
 def getAllNonLegendaryPokemon()
   list = []

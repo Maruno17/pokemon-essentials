@@ -379,6 +379,17 @@ def pbTrainerBattleCore(*args)
       trainer = pbLoadTrainer(arg[0],arg[1],arg[2])
       pbMissingTrainer(arg[0],arg[1],arg[2]) if !trainer
       return 0 if !trainer
+
+      #infinite fusion edit
+      name_override = arg[4]
+      type_override = arg[5]
+      if type_override != nil
+        trainer.trainer_type = type_override
+      end
+      if name_override != nil
+        trainer.name = name_override
+      end
+      #####
       Events.onTrainerPartyLoad.trigger(nil,trainer)
       foeTrainers.push(trainer)
       foePartyStarts.push(foeParty.length)
@@ -448,7 +459,10 @@ end
 # multiple trainer events spot the player at once. The extra code in this method
 # deals with that case and can cause a double trainer battle instead.
 def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
-                    doubleBattle=false, trainerPartyID=0, canLose=false, outcomeVar=1)
+                    doubleBattle=false, trainerPartyID=0, canLose=false, outcomeVar=1,
+                    name_override=nil,trainer_type_overide=nil)
+  #level override applies to every pokemon
+
   # If there is another NPC trainer who spotted the player at the same time, and
   # it is possible to have a double battle (the player has 2+ able Pokémon or
   # has a partner trainer), then record this first NPC trainer into
@@ -491,7 +505,7 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
        [trainerID,trainerName,trainerPartyID,endSpeech]
     )
   else
-    decision = pbTrainerBattleCore([trainerID,trainerName,trainerPartyID,endSpeech])
+    decision = pbTrainerBattleCore([trainerID,trainerName,trainerPartyID,endSpeech,name_override,trainer_type_overide])
   end
   # Finish off the recorded waiting trainer, because they have now been battled
   if decision==1 && $PokemonTemp.waitingTrainer   # Win
