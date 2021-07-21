@@ -221,26 +221,21 @@ class PokeBattle_Scene
       next unless cmdUse>=0 && command==cmdUse   # Use
       # Use types:
       # 0 = not usable in battle
-      # 1 = use on Pokémon (lots of items), consumed
-      # 2 = use on Pokémon's move (Ethers), consumed
-      # 3 = use on battler (X items, Persim Berry), consumed
-      # 4 = use on opposing battler (Poké Balls), consumed
-      # 5 = use no target (Poké Doll, Guard Spec., Launcher items), consumed
-      # 6 = use on Pokémon (Blue Flute), not consumed
-      # 7 = use on Pokémon's move, not consumed
-      # 8 = use on battler (Red/Yellow Flutes), not consumed
-      # 9 = use on opposing battler, not consumed
-      # 10 = use no target (Poké Flute), not consumed
+      # 1 = use on Pokémon (lots of items, Blue Flute)
+      # 2 = use on Pokémon's move (Ethers)
+      # 3 = use on battler (X items, Persim Berry, Red/Yellow Flutes)
+      # 4 = use on opposing battler (Poké Balls)
+      # 5 = use no target (Poké Doll, Guard Spec., Poké Flute, Launcher items)
       case useType
-      when 1, 2, 3, 6, 7, 8   # Use on Pokémon/Pokémon's move/battler
+      when 1, 2, 3   # Use on Pokémon/Pokémon's move/battler
         # Auto-choose the Pokémon/battler whose action is being decided if they
         # are the only available Pokémon/battler to use the item on
         case useType
-        when 1, 6   # Use on Pokémon
+        when 1   # Use on Pokémon
           if @battle.pbTeamLengthFromBattlerIndex(idxBattler)==1
             break if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
           end
-        when 3, 8   # Use on battler
+        when 3   # Use on battler
           if @battle.pbPlayerBattlerCount==1
             break if yield item.id, useType, @battle.battlers[idxBattler].pokemonIndex, -1, itemScene
           end
@@ -273,7 +268,7 @@ class PokeBattle_Scene
           pkmn = party[idxPartyRet]
           next if !pkmn || pkmn.egg?
           idxMove = -1
-          if useType==2 || useType==7   # Use on Pokémon's move
+          if useType==2   # Use on Pokémon's move
             idxMove = pkmnScreen.pbChooseMove(pkmn,_INTL("Restore which move?"))
             next if idxMove<0
           end
@@ -283,7 +278,7 @@ class PokeBattle_Scene
         break if idxParty>=0
         # Cancelled choosing a Pokémon; show the Bag screen again
         itemScene.pbFadeInScene
-      when 4, 9   # Use on opposing battler (Poké Balls)
+      when 4   # Use on opposing battler (Poké Balls)
         idxTarget = -1
         if @battle.pbOpposingBattlerCount(idxBattler)==1
           @battle.eachOtherSideBattler(idxBattler) { |b| idxTarget = b.index }
@@ -305,7 +300,7 @@ class PokeBattle_Scene
           pbFadeOutAndHide(@sprites)
           itemScene.pbFadeInScene
         end
-      when 5, 10   # Use with no target
+      when 5   # Use with no target
         break if yield item.id, useType, idxBattler, -1, itemScene
       end
     end

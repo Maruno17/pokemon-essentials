@@ -71,13 +71,13 @@ class PokeBattle_Battle
       item = @choices[b.index][1]
       next if !item
       case GameData::Item.get(item).battle_use
-      when 1, 2, 6, 7   # Use on Pokémon/Pokémon's move
+      when 1, 2   # Use on Pokémon/Pokémon's move
         pbUseItemOnPokemon(item, @choices[b.index][2], b) if @choices[b.index][2] >= 0
-      when 3, 8         # Use on battler
+      when 3      # Use on battler
         pbUseItemOnBattler(item, @choices[b.index][2], b)
-      when 4, 9         # Use Poké Ball
+      when 4      # Use Poké Ball
         pbUsePokeBallInBattle(item, @choices[b.index][2], b)
-      when 5, 10        # Use directly
+      when 5      # Use directly
         pbUseItemInBattle(item, @choices[b.index][2], b)
       else
         next

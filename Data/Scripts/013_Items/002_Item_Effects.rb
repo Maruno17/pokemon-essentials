@@ -10,16 +10,14 @@ ItemHandlers::UseText.copy(:BICYCLE,:MACHBIKE,:ACROBIKE)
 #===============================================================================
 # UseFromBag handlers
 # Return values: 0 = not used
-#                1 = used, item not consumed
-#                2 = close the Bag to use, item not consumed
-#                3 = used, item consumed
-#                4 = close the Bag to use, item consumed
+#                1 = used
+#                2 = close the Bag to use
 # If there is no UseFromBag handler for an item being used from the Bag (not on
 # a Pokémon and not a TM/HM), calls the UseInField handler for it instead.
 #===============================================================================
 
 ItemHandlers::UseFromBag.add(:HONEY,proc { |item|
-  next 4
+  next 2
 })
 
 ItemHandlers::UseFromBag.add(:ESCAPEROPE,proc { |item|
@@ -28,7 +26,7 @@ ItemHandlers::UseFromBag.add(:ESCAPEROPE,proc { |item|
     next 0
   end
   if ($PokemonGlobal.escapePoint rescue false) && $PokemonGlobal.escapePoint.length>0
-    next (GameData::Item.get(item).is_key_item?) ? 2 : 4   # End screen and use item
+    next 2   # End screen and use item
   end
   pbMessage(_INTL("Can't use that here."))
   next 0
@@ -78,9 +76,8 @@ ItemHandlers::ConfirmUseInField.add(:ESCAPEROPE,proc { |item|
 
 #===============================================================================
 # UseInField handlers
-# Return values: 0 = not used
-#                1 = used, item not consumed
-#                3 = used, item consumed
+# Return values: false = not used
+#                true = used
 # Called if an item is used from the Bag (not on a Pokémon and not a TM/HM) and
 # there is no UseFromBag handler above.
 # If an item has this handler, it can be registered to the Ready Menu.
@@ -89,11 +86,11 @@ ItemHandlers::ConfirmUseInField.add(:ESCAPEROPE,proc { |item|
 def pbRepel(item,steps)
   if $PokemonGlobal.repel>0
     pbMessage(_INTL("But a repellent's effect still lingers from earlier."))
-    return 0
+    return false
   end
   pbUseItemMessage(item)
   $PokemonGlobal.repel = steps
-  return 3
+  return true
 end
 
 ItemHandlers::UseInField.add(:REPEL,proc { |item|
@@ -138,7 +135,7 @@ ItemHandlers::UseInField.add(:BLACKFLUTE,proc { |item|
   pbMessage(_INTL("Wild Pokémon will be repelled."))
   $PokemonMap.blackFluteUsed = true
   $PokemonMap.whiteFluteUsed = false
-  next 1
+  next true
 })
 
 ItemHandlers::UseInField.add(:WHITEFLUTE,proc { |item|
@@ -146,24 +143,24 @@ ItemHandlers::UseInField.add(:WHITEFLUTE,proc { |item|
   pbMessage(_INTL("Wild Pokémon will be lured."))
   $PokemonMap.blackFluteUsed = false
   $PokemonMap.whiteFluteUsed = true
-  next 1
+  next true
 })
 
 ItemHandlers::UseInField.add(:HONEY,proc { |item|
   pbUseItemMessage(item)
   pbSweetScent
-  next 3
+  next true
 })
 
 ItemHandlers::UseInField.add(:ESCAPEROPE,proc { |item|
   escape = ($PokemonGlobal.escapePoint rescue nil)
   if !escape || escape==[]
     pbMessage(_INTL("Can't use that here."))
-    next 0
+    next false
   end
   if $game_player.pbHasDependentEvents?
     pbMessage(_INTL("It can't be used when you have someone with you."))
-    next 0
+    next false
   end
   pbUseItemMessage(item)
   pbFadeOutIn {
@@ -177,13 +174,13 @@ ItemHandlers::UseInField.add(:ESCAPEROPE,proc { |item|
     $game_map.refresh
   }
   pbEraseEscapePoint
-  next (GameData::Item.get(item).is_key_item?) ? 1 : 3
+  next true
 })
 
 ItemHandlers::UseInField.add(:SACREDASH,proc { |item|
   if $Trainer.pokemon_count == 0
     pbMessage(_INTL("There is no Pokémon."))
-    next 0
+    next false
   end
   canrevive = false
   for i in $Trainer.pokemon_party
@@ -192,7 +189,7 @@ ItemHandlers::UseInField.add(:SACREDASH,proc { |item|
   end
   if !canrevive
     pbMessage(_INTL("It won't have any effect."))
-    next 0
+    next false
   end
   revived = 0
   pbFadeOutIn {
@@ -212,7 +209,7 @@ ItemHandlers::UseInField.add(:SACREDASH,proc { |item|
     end
     screen.pbEndScene
   }
-  next (revived==0) ? 0 : 3
+  next (revived > 0)
 })
 
 ItemHandlers::UseInField.add(:BICYCLE,proc { |item|
@@ -222,9 +219,9 @@ ItemHandlers::UseInField.add(:BICYCLE,proc { |item|
     else
       pbMountBike
     end
-    next 1
+    next true
   end
-  next 0
+  next false
 })
 
 ItemHandlers::UseInField.copy(:BICYCLE,:MACHBIKE,:ACROBIKE)
@@ -233,39 +230,39 @@ ItemHandlers::UseInField.add(:OLDROD,proc { |item|
   notCliff = $game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
   if !$game_player.pbFacingTerrainTag.can_fish || (!$PokemonGlobal.surfing && !notCliff)
     pbMessage(_INTL("Can't use that here."))
-    next 0
+    next false
   end
   encounter = $PokemonEncounters.has_encounter_type?(:OldRod)
   if pbFishing(encounter,1)
     pbEncounter(:OldRod)
   end
-  next 1
+  next true
 })
 
 ItemHandlers::UseInField.add(:GOODROD,proc { |item|
   notCliff = $game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
   if !$game_player.pbFacingTerrainTag.can_fish || (!$PokemonGlobal.surfing && !notCliff)
     pbMessage(_INTL("Can't use that here."))
-    next 0
+    next false
   end
   encounter = $PokemonEncounters.has_encounter_type?(:GoodRod)
   if pbFishing(encounter,2)
     pbEncounter(:GoodRod)
   end
-  next 1
+  next true
 })
 
 ItemHandlers::UseInField.add(:SUPERROD,proc { |item|
   notCliff = $game_map.passable?($game_player.x,$game_player.y,$game_player.direction,$game_player)
   if !$game_player.pbFacingTerrainTag.can_fish || (!$PokemonGlobal.surfing && !notCliff)
     pbMessage(_INTL("Can't use that here."))
-    next 0
+    next false
   end
   encounter = $PokemonEncounters.has_encounter_type?(:SuperRod)
   if pbFishing(encounter,3)
     pbEncounter(:SuperRod)
   end
-  next 1
+  next true
 })
 
 ItemHandlers::UseInField.add(:ITEMFINDER,proc { |item|
@@ -300,31 +297,31 @@ ItemHandlers::UseInField.add(:ITEMFINDER,proc { |item|
       pbMessage(_INTL("There's an item buried around here!"))
     end
   end
-  next 1
+  next true
 })
 
 ItemHandlers::UseInField.copy(:ITEMFINDER,:DOWSINGMCHN,:DOWSINGMACHINE)
 
 ItemHandlers::UseInField.add(:TOWNMAP,proc { |item|
   pbShowMap(-1,false)
-  next 1
+  next true
 })
 
 ItemHandlers::UseInField.add(:COINCASE,proc { |item|
   pbMessage(_INTL("Coins: {1}", $Trainer.coins.to_s_formatted))
-  next 1
+  next true
 })
 
 ItemHandlers::UseInField.add(:EXPALL,proc { |item|
   $PokemonBag.pbChangeItem(:EXPALL,:EXPALLOFF)
   pbMessage(_INTL("The Exp Share was turned off."))
-  next 1
+  next true
 })
 
 ItemHandlers::UseInField.add(:EXPALLOFF,proc { |item|
   $PokemonBag.pbChangeItem(:EXPALLOFF,:EXPALL)
   pbMessage(_INTL("The Exp Share was turned on."))
-  next 1
+  next true
 })
 
 #===============================================================================

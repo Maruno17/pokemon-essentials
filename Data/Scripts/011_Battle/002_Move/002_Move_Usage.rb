@@ -186,7 +186,7 @@ class PokeBattle_Move
       target.damageState.totalHPLost += damage
       return
     end
-    # Disguise takes the damage
+    # Disguise/Ice Face takes the damage
     return if target.damageState.disguise || target.damageState.iceFace
     # Target takes the damage
     if damage>=target.hp
@@ -305,6 +305,7 @@ class PokeBattle_Move
       end
       @battle.pbHideAbilitySplash(target)
       target.pbChangeForm(1,_INTL("{1}'s disguise was busted!",target.pbThis))
+      target.pbReduceHP(target.totalhp / 8, false) if Settings::MECHANICS_GENERATION >= 8
     elsif target.damageState.iceFace
       @battle.pbShowAbilitySplash(target)
       if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH

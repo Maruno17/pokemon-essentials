@@ -9,6 +9,7 @@ module GameData
     attr_reader :real_description
     attr_reader :field_use
     attr_reader :battle_use
+    attr_reader :consumable
     attr_reader :type
     attr_reader :move
 
@@ -23,11 +24,12 @@ module GameData
       "SellPrice"   => [:sell_price,  "u"],
       "Description" => [:description, "q"],
       "FieldUse"    => [:field_use,   "e", {"OnPokemon" => 1, "Direct" => 2, "TM" => 3,
-                                            "HM" => 4, "OnPokemonReusable" => 5, "TR" => 6}],
+                                            "HM" => 4, "OnPokemonReusable" => 1, "TR" => 6}],
       "BattleUse"   => [:battle_use,  "e", {"OnPokemon" => 1, "OnMove" => 2, "OnBattler" => 3,
-                                            "OnFoe" => 4, "Direct" => 5, "OnPokemonReusable" => 6,
-                                            "OnMoveReusable" => 7, "OnBattlerReusable" => 8,
-                                            "OnFoeReusable" => 9, "DirectReusable" => 10}],
+                                            "OnFoe" => 4, "Direct" => 5, "OnPokemonReusable" => 1,
+                                            "OnMoveReusable" => 2, "OnBattlerReusable" => 3,
+                                            "OnFoeReusable" => 4, "DirectReusable" => 5}],
+      "Consumable"  => [:consumable,  "b"],
       "Type"        => [:type,        "e", {"Mail" => 1, "IconMail" => 2, "SnagBall" => 3,
                                             "PokeBall" => 4, "Berry" => 5, "KeyItem" => 6,
                                             "EvolutionStone" => 7, "Fossil" => 8, "Apricorn" => 9,
@@ -94,6 +96,8 @@ module GameData
       @field_use        = hash[:field_use]   || 0
       @battle_use       = hash[:battle_use]  || 0
       @type             = hash[:type]        || 0
+      @consumable       = hash[:consumable]
+      @consumable       = !is_important? if @consumable.nil?
       @move             = hash[:move]
     end
 
@@ -135,6 +139,10 @@ module GameData
     end
 
     def can_hold?;           return !is_important?; end
+
+    def consumed_after_use?
+      return !is_important? && @consumable
+    end
 
     def unlosable?(species, ability)
       return false if species == :ARCEUS && ability != :MULTITYPE

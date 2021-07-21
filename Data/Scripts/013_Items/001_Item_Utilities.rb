@@ -49,12 +49,12 @@ module ItemHandlers
   # 0 - Item not used
   # 1 - Item used, don't end screen
   # 2 - Item used, end screen
-  # 3 - Item used, don't end screen, consume item
-  # 4 - Item used, end screen, consume item
   def self.triggerUseFromBag(item)
     return UseFromBag.trigger(item) if UseFromBag[item]
     # No UseFromBag handler exists; check the UseInField handler if present
-    return UseInField.trigger(item) if UseInField[item]
+    if UseInField[item]
+      return (UseInField.trigger(item)) ? 1 : 0
+    end
     return 0
   end
 
@@ -68,10 +68,9 @@ module ItemHandlers
   # -1 - Item effect not found
   # 0  - Item not used
   # 1  - Item used
-  # 3  - Item used, consume item
   def self.triggerUseInField(item)
     return -1 if !UseInField[item]
-    return UseInField.trigger(item)
+    return (UseInField.trigger(item)) ? 1 : 0
   end
 
   # Returns whether item was used
@@ -561,11 +560,11 @@ def pbUseItem(bag,item,bagscene=nil)
     if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?",movename))
       return 0
     elsif pbMoveTutorChoose(machine,nil,true,itm.is_TR?)
-      bag.pbDeleteItem(item) if itm.is_TR?
+      bag.pbDeleteItem(item) if itm.consumed_after_use?
       return 1
     end
     return 0
-  elsif useType==1 || useType==5   # Item is usable on a Pokémon
+  elsif useType==1   # Item is usable on a Pokémon
     if $Trainer.pokemon_count == 0
       pbMessage(_INTL("There is no Pokémon."))
       return 0
@@ -593,7 +592,7 @@ def pbUseItem(bag,item,bagscene=nil)
         pkmn = $Trainer.party[chosen]
         if pbCheckUseOnPokemon(item,pkmn,screen)
           ret = ItemHandlers.triggerUseOnPokemon(item,pkmn,screen)
-          if ret && useType==1   # Usable on Pokémon, consumed
+          if ret && itm.consumed_after_use?
             bag.pbDeleteItem(item)
             if !bag.pbHasItem?(item)
               pbMessage(_INTL("You used your last {1}.",itm.name)) { screen.pbUpdate }
@@ -608,16 +607,9 @@ def pbUseItem(bag,item,bagscene=nil)
     return (ret) ? 1 : 0
   elsif useType==2   # Item is usable from Bag
     intret = ItemHandlers.triggerUseFromBag(item)
-    case intret
-    when 0 then return 0
-    when 1 then return 1   # Item used
-    when 2 then return 2   # Item used, end screen
-    when 3                 # Item used, consume item
-      bag.pbDeleteItem(item)
-      return 1
-    when 4                 # Item used, end screen and consume item
-      bag.pbDeleteItem(item)
-      return 2
+    if intret >= 0
+      bag.pbDeleteItem(item) if intret == 1 && itm.consumed_after_use?
+      return intret
     end
     pbMessage(_INTL("Can't use that here."))
     return 0
@@ -643,7 +635,7 @@ def pbUseItemOnPokemon(item,pkmn,scene)
       pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",itm.name)) { scene.pbUpdate }
       if pbConfirmMessage(_INTL("Do you want to teach {1} to {2}?",movename,pkmn.name)) { scene.pbUpdate }
         if pbLearnMove(pkmn,machine,false,true) { scene.pbUpdate }
-          $PokemonBag.pbDeleteItem(item) if itm.is_TR?
+          $PokemonBag.pbDeleteItem(item) if itm.consumed_after_use?
           return true
         end
       end
@@ -654,8 +646,7 @@ def pbUseItemOnPokemon(item,pkmn,scene)
   ret = ItemHandlers.triggerUseOnPokemon(item,pkmn,scene)
   scene.pbClearAnnotations
   scene.pbHardRefresh
-  useType = itm.field_use
-  if ret && useType==1   # Usable on Pokémon, consumed
+  if ret && itm.consumed_after_use?
     $PokemonBag.pbDeleteItem(item)
     if !$PokemonBag.pbHasItem?(item)
       pbMessage(_INTL("You used your last {1}.",itm.name)) { scene.pbUpdate }
@@ -668,10 +659,10 @@ def pbUseKeyItemInField(item)
   ret = ItemHandlers.triggerUseInField(item)
   if ret==-1   # Item effect not found
     pbMessage(_INTL("Can't use that here."))
-  elsif ret==3   # Item was used and consumed
+  elsif ret > 0 && GameData::Item.get(item).consumed_after_use?
     $PokemonBag.pbDeleteItem(item)
   end
-  return ret!=-1 && ret!=0
+  return ret > 0
 end
 
 def pbUseItemMessage(item)

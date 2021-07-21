@@ -29,15 +29,14 @@ Some moves have changed properties/effects:
   than the order in which they were Quashed.
 - Parting Shot is able to make the user switch out if its effect is redirected
   by Mirror Armor. Throat Spray is triggered and applies before the switch.
-- Double Iron Bash no longer has a different effect if the target is Minimized.
 
 Some abilities have changed effects:
-- Intimidate now triggers Rattled.
+- Intimidate now triggers Rattled. Rattled needs a new ability handler just for
+  triggering this way.
 - If another Pokémon faints before a Pokémon with Analytic makes its move,
   Analytic calculates whether it would have moved before or after the fainted
   Pokémon. In Gen 8, speed- and priority-modifying effects aren't considered,
   but in earlier Gens they are.
-- Disguise now reduces the damage taken to 1/8, rather than to 0.
 
 Some items have changed properties/effects:
 - Zygarde Cube now changes a Zygarde's ability.

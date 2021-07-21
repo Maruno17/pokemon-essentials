@@ -238,7 +238,7 @@ Events.onMapChange += proc { |_sender,_e|
 # Item handlers
 ################################################################################
 ItemHandlers::UseInField.add(:POKERADAR,proc { |item|
-  next (pbUsePokeRadar) ? 1 : 0
+  next pbUsePokeRadar
 })
 
 ItemHandlers::UseFromBag.add(:POKERADAR,proc { |item|

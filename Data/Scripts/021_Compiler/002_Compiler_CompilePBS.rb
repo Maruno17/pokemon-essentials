@@ -458,6 +458,9 @@ module Compiler
         if GameData::Item.exists?(item_id)
           raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_id, FileLineData.linereport)
         end
+        consumable = !([3, 4, 5].include?(line[7]) || line[8] >= 6)
+        line[7] = 1 if line[7] == 5
+        line[8] -= 5 if line[8] > 5
         # Construct item hash
         item_hash = {
           :id          => item_id,
@@ -468,6 +471,7 @@ module Compiler
           :description => line[6],
           :field_use   => line[7],
           :battle_use  => line[8],
+          :consumable  => consumable,
           :type        => line[9],
           :move        => line[10]
         }

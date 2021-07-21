@@ -30,6 +30,7 @@ NamePlural = Black Flutes
 Pocket = 1
 Price = 400
 FieldUse = Direct
+Consumable = false
 Description = A black flute made from blown glass. Its melody makes wild Pokémon less likely to appear.
 #-------------------------------
 [WHITEFLUTE]
@@ -38,6 +39,7 @@ NamePlural = White Flutes
 Pocket = 1
 Price = 500
 FieldUse = Direct
+Consumable = false
 Description = A white flute made from blown glass. Its melody makes wild Pokémon more likely to appear.
 #-------------------------------
 [HONEY]
@@ -3996,8 +3998,9 @@ Name = Blue Flute
 NamePlural = Blue Flutes
 Pocket = 7
 Price = 100
-FieldUse = OnPokemonReusable
-BattleUse = OnPokemonReusable
+FieldUse = OnPokemon
+BattleUse = OnPokemon
+Consumable = false
 Description = A blue flute made from blown glass. Its melody awakens a single Pokémon from sleep.
 #-------------------------------
 [YELLOWFLUTE]
@@ -4005,7 +4008,8 @@ Name = Yellow Flute
 NamePlural = Yellow Flutes
 Pocket = 7
 Price = 300
-BattleUse = OnBattlerReusable
+BattleUse = OnBattler
+Consumable = false
 Description = A yellow flute made from blown glass. Its melody snaps a single Pokémon out of confusion.
 #-------------------------------
 [REDFLUTE]
@@ -4013,7 +4017,8 @@ Name = Red Flute
 NamePlural = Red Flutes
 Pocket = 7
 Price = 200
-BattleUse = OnBattlerReusable
+BattleUse = OnBattler
+Consumable = false
 Description = A red flute made from blown glass. Its melody snaps a single Pokémon out of infatuation.
 #-------------------------------
 [POKEDOLL]
@@ -4117,8 +4122,8 @@ Name = Poké Flute
 NamePlural = Poké Flutes
 Pocket = 8
 Price = 0
-FieldUse = OnPokemonReusable
-BattleUse = DirectReusable
+FieldUse = OnPokemon
+BattleUse = Direct
 Type = KeyItem
 Description = A flute that is said to instantly awaken any Pokémon. It has a lovely tone.
 #-------------------------------
@@ -4184,7 +4189,7 @@ Name = Gracidea
 NamePlural = Gracideas
 Pocket = 8
 Price = 0
-FieldUse = OnPokemonReusable
+FieldUse = OnPokemon
 Type = KeyItem
 Description = A flower sometimes bundled in bouquets to convey gratitude on special occasions like birthdays.
 #-------------------------------
@@ -4209,7 +4214,7 @@ Name = DNA Splicers
 NamePlural = DNA Splicers
 Pocket = 8
 Price = 0
-FieldUse = OnPokemonReusable
+FieldUse = OnPokemon
 Type = KeyItem
 Description = A splicer that fuses Kyurem and a certain Pokémon. They are said to have been one in the beginning.
 #-------------------------------
@@ -4218,7 +4223,7 @@ Name = Reveal Glass
 NamePlural = Reveal Glasses
 Pocket = 8
 Price = 0
-FieldUse = OnPokemonReusable
+FieldUse = OnPokemon
 Type = KeyItem
 Description = A glass that reveals the truth. It is a mysterious glass that returns a Pokémon back to its original shape.
 #-------------------------------

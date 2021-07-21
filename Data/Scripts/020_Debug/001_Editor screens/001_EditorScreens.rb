@@ -800,9 +800,9 @@ end
 #===============================================================================
 def pbItemEditor
   field_use_array = [_INTL("Can't use in field")]
-  GameData::Item::SCHEMA["FieldUse"][2].each { |key, value| field_use_array[value] = key }
+  GameData::Item::SCHEMA["FieldUse"][2].each { |key, value| field_use_array[value] = key if !field_use_array[value] }
   battle_use_array = [_INTL("Can't use in battle")]
-  GameData::Item::SCHEMA["BattleUse"][2].each { |key, value| battle_use_array[value] = key }
+  GameData::Item::SCHEMA["BattleUse"][2].each { |key, value| battle_use_array[value] = key if !battle_use_array[value] }
   type_array = [_INTL("No special type")]
   GameData::Item::SCHEMA["Type"][2].each { |key, value| type_array[value] = key }
   item_properties = [
@@ -815,6 +815,7 @@ def pbItemEditor
      [_INTL("Description"), StringProperty,                     _INTL("Description of this item")],
      [_INTL("FieldUse"),    EnumProperty.new(field_use_array),  _INTL("How this item can be used outside of battle.")],
      [_INTL("BattleUse"),   EnumProperty.new(battle_use_array), _INTL("How this item can be used within a battle.")],
+     [_INTL("Consumable"),  BooleanProperty,                    _INTL("Whether this item is consumed after use.")],
      [_INTL("Type"),        EnumProperty.new(type_array),       _INTL("For special kinds of items.")],
      [_INTL("Move"),        MoveProperty,                       _INTL("Move taught by this HM, TM or TR.")]
   ]
@@ -842,6 +843,7 @@ def pbItemEditor
             itm.real_description,
             itm.field_use,
             itm.battle_use,
+            itm.consumable,
             itm.type,
             itm.move
           ]
@@ -857,8 +859,9 @@ def pbItemEditor
               :description => data[6],
               :field_use   => data[7],
               :battle_use  => data[8],
-              :type        => data[9],
-              :move        => data[10]
+              :consumable  => data[9],
+              :type        => data[10],
+              :move        => data[11]
             }
             # Add item's data to records
             GameData::Item.register(item_hash)

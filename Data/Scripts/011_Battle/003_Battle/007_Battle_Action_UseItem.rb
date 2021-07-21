@@ -41,8 +41,7 @@ class PokeBattle_Battle
   #=============================================================================
   def pbConsumeItemInBag(item,idxBattler)
     return if !item
-    useType = GameData::Item.get(item).battle_use
-    return if useType==0 || (useType>=6 && useType<=10)   # Not consumed upon use
+    return if !GameData::Item.get(item).consumed_after_use?
     if pbOwnedByPlayer?(idxBattler)
       if !$PokemonBag.pbDeleteItem(item)
         raise _INTL("Tried to consume item that wasn't in the Bag somehow.")
@@ -60,8 +59,7 @@ class PokeBattle_Battle
 
   def pbReturnUnusedItemToBag(item,idxBattler)
     return if !item
-    useType = GameData::Item.get(item).battle_use
-    return if useType==0 || (useType>=6 && useType<=10)   # Not consumed upon use
+    return if !GameData::Item.get(item).consumed_after_use?
     if pbOwnedByPlayer?(idxBattler)
       if $PokemonBag && $PokemonBag.pbCanStore?(item)
         $PokemonBag.pbStoreItem(item)

@@ -107,21 +107,21 @@ class PokeBattle_Battle
       next false if !item
       battler = pkmn = nil
       case useType
-      when 1, 2, 6, 7   # Use on Pokémon/Pokémon's move
+      when 1, 2   # Use on Pokémon/Pokémon's move
         next false if !ItemHandlers.hasBattleUseOnPokemon(item)
         battler = pbFindBattler(idxPkmn,idxBattler)
         pkmn    = pbParty(idxBattler)[idxPkmn]
         next false if !pbCanUseItemOnPokemon?(item,pkmn,battler,itemScene)
-      when 3, 8   # Use on battler
+      when 3   # Use on battler
         next false if !ItemHandlers.hasBattleUseOnBattler(item)
         battler = pbFindBattler(idxPkmn,idxBattler)
         pkmn    = battler.pokemon if battler
         next false if !pbCanUseItemOnPokemon?(item,pkmn,battler,itemScene)
-      when 4, 9   # Poké Balls
+      when 4   # Poké Balls
         next false if idxPkmn<0
         battler = @battlers[idxPkmn]
         pkmn    = battler.pokemon if battler
-      when 5, 10   # No target (Poké Doll, Guard Spec., Launcher items)
+      when 5   # No target (Poké Doll, Guard Spec., Launcher items)
         battler = @battlers[idxBattler]
         pkmn    = battler.pokemon if battler
       else

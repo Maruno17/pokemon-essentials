@@ -215,6 +215,7 @@ module Compiler
         battle_use = GameData::Item::SCHEMA["BattleUse"][2].key(item.battle_use)
         f.write(sprintf("BattleUse = %s\r\n", battle_use)) if battle_use
         type = GameData::Item::SCHEMA["Type"][2].key(item.type)
+        f.write(sprintf("Consumable = false\r\n")) if !item.is_important? && !item.consumable
         f.write(sprintf("Type = %s\r\n", type)) if type
         f.write(sprintf("Move = %s\r\n", item.move)) if item.move
         f.write(sprintf("Description = %s\r\n", item.real_description))

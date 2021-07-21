@@ -2617,9 +2617,9 @@ end
 # accuracy if the target is Minimized. (Double Iron Bash)
 #===============================================================================
 class PokeBattle_Move_175 < PokeBattle_FlinchMove
-  def multiHitMove?;              return true; end
-  def pbNumHits(user,targets);    return 2;    end
-  def tramplesMinimize?(param=1); return true; end
+  def multiHitMove?;              return true;                                end
+  def pbNumHits(user,targets);    return 2;                                   end
+  def tramplesMinimize?(param=1); return Settings::MECHANICS_GENERATION <= 7; end
 end
 
 
