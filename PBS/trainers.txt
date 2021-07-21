@@ -4631,3 +4631,9 @@ Pokemon = B130H149,79 #DRAGONDOS (w/extremespeed)
 	Moves = EXTREMESPEED,WATERFALL,DRAGONTAIL,TWISTER
 	AbilityIndex = 0
 	Item = LUSTROUSORB
+
+####### TRIPLE BATTLE LOUNGE ####
+[COOLTRAINER_F,lounge_member]
+Pokemon = DIALGA,25 
+Pokemon = PALKIA,25 
+Pokemon = GIRATINA,25 
