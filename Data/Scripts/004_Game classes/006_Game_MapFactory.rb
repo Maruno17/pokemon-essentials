@@ -31,7 +31,7 @@ class PokemonMapFactory
     return @maps[@mapIndex] if @maps[@mapIndex]
     raise "No maps in save file... (mapIndex=#{@mapIndex})" if @maps.length==0
     if @maps[0]
-      echoln("Using next map, may be incorrect (mapIndex=#{@mapIndex}, length=#{@maps.length})")
+      echoln "Using next map, may be incorrect (mapIndex=#{@mapIndex}, length=#{@maps.length})"
       return @maps[0]
     end
     raise "No maps in save file... (all maps empty; mapIndex=#{@mapIndex})"

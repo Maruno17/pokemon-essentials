@@ -483,7 +483,7 @@ DebugMenuCommands.register("additem", {
 DebugMenuCommands.register("fillbag", {
   "parent"      => "itemsmenu",
   "name"        => _INTL("Fill Bag"),
-  "description" => _INTL("Add a certain number of every item to the Bag."),
+  "description" => _INTL("Empties the Bag and then fills it with a certain number of every item."),
   "effect"      => proc {
     params = ChooseNumberParams.new
     params.setRange(1, Settings::BAG_MAX_PER_SLOT)
@@ -491,7 +491,19 @@ DebugMenuCommands.register("fillbag", {
     params.setCancelValue(0)
     qty = pbMessageChooseNumber(_INTL("Choose the number of items."), params)
     if qty > 0
-      GameData::Item.each { |i| $PokemonBag.pbStoreItem(i.id, qty) }
+      $PokemonBag.clear
+      # NOTE: This doesn't simply use $PokemonBag.pbStoreItem for every item in
+      #       turn, because that's really slow when done in bulk.
+      pocket_sizes = Settings::BAG_MAX_POCKET_SIZE
+      bag = $PokemonBag.pockets   # Called here so that it only rearranges itself once
+      GameData::Item.each do |i|
+        next if !pocket_sizes[i.pocket] || pocket_sizes[i.pocket] == 0
+        next if bag[i.pocket].length >= pocket_sizes[i.pocket]
+        item_qty = (i.is_important?) ? 1 : qty
+        bag[i.pocket].push([i.id, item_qty])
+      end
+      # NOTE: Auto-sorting pockets don't need to be sorted afterwards, because
+      #       items are added in the same order they would be sorted into.
       pbMessage(_INTL("The Bag was filled with {1} of each item.", qty))
     end
   }
@@ -1081,7 +1093,7 @@ DebugMenuCommands.register("compiledata", {
   "always_show" => true,
   "effect"      => proc {
     msgwindow = pbCreateMessageWindow
-    Compiler.compile_all(true) { |msg| pbMessageDisplay(msgwindow, msg, false); echoln(msg) }
+    Compiler.compile_all(true) { |msg| echoln msg }
     pbMessageDisplay(msgwindow, _INTL("All game data was compiled."))
     pbDisposeMessageWindow(msgwindow)
   }

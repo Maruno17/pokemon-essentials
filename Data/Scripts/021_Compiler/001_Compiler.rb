@@ -123,7 +123,6 @@ module Compiler
       end
       lineno += 1
       Graphics.update if lineno%1000==0
-      pbSetWindowText(_INTL("Processing {1} line {2}",FileLineData.file,lineno)) if lineno%200==0
     }
     yield lastsection,sectionname if havesection
   end
@@ -726,7 +725,7 @@ module Compiler
     compile_metadata               # Depends on TrainerType
     yield(_INTL("Compiling animations"))
     compile_animations
-    yield(_INTL("Converting events"))
+    yield("")
     compile_trainer_events(mustCompile)
     yield(_INTL("Saving messages"))
     pbSetTextMessages
@@ -736,7 +735,6 @@ module Compiler
     echoln ""
     echoln _INTL("*** Finished full compile ***")
     echoln ""
-    pbSetWindowText(nil)
   end
 
   def main
@@ -828,7 +826,7 @@ module Compiler
         end
       end
       # Recompile all data
-      compile_all(mustCompile) { |msg| pbSetWindowText(msg); echoln(msg) }
+      compile_all(mustCompile) { |msg| echoln msg }
     rescue Exception
       e = $!
       raise e if "#{e.class}"=="Reset" || e.is_a?(Reset) || e.is_a?(SystemExit)

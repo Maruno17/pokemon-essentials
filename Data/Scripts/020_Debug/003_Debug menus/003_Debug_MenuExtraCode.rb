@@ -681,21 +681,22 @@ end
 # Properly erases all non-existent tiles in maps (including event graphics)
 #===============================================================================
 def pbDebugFixInvalidTiles
-  num_errors = 0
+  total_errors = 0
   num_error_maps = 0
   tilesets = $data_tilesets
   mapData = Compiler::MapData.new
   t = Time.now.to_i
   Graphics.update
+  total_maps = mapData.mapinfos.keys.length
+  echoln _INTL("Checking {1} maps for invalid tiles...", total_maps)
   for id in mapData.mapinfos.keys.sort
     if Time.now.to_i - t >= 5
       Graphics.update
       t = Time.now.to_i
     end
-    changed = false
+    map_errors = 0
     map = mapData.getMap(id)
     next if !map || !mapData.mapinfos[id]
-    pbSetWindowText(_INTL("Processing map {1} ({2})", id, mapData.mapinfos[id].name))
     passages = mapData.getTilesetPassages(map, id)
     # Check all tiles in map for non-existent tiles
     for x in 0...map.data.xsize
@@ -704,8 +705,7 @@ def pbDebugFixInvalidTiles
           tile_id = map.data[x, y, i]
           next if pbCheckTileValidity(tile_id, map, tilesets, passages)
           map.data[x, y, i] = 0
-          changed = true
-          num_errors += 1
+          map_errors += 1
         end
       end
     end
@@ -716,19 +716,22 @@ def pbDebugFixInvalidTiles
         next if page.graphic.tile_id <= 0
         next if pbCheckTileValidity(page.graphic.tile_id, map, tilesets, passages)
         page.graphic.tile_id = 0
-        changed = true
-        num_errors += 1
+        map_errors += 1
       end
     end
-    next if !changed
+    next if map_errors == 0
     # Map was changed; save it
+    echoln _INTL("{1} error tile(s) found on map {2}: {3}.", map_errors, id, mapData.mapinfos[id].name)
+    total_errors += map_errors
     num_error_maps += 1
     mapData.saveMap(id)
   end
   if num_error_maps == 0
+    echoln _INTL("Done. No errors found.")
     pbMessage(_INTL("No invalid tiles were found."))
   else
-    pbMessage(_INTL("{1} error(s) were found across {2} map(s) and fixed.", num_errors, num_error_maps))
+    echoln _INTL("Done. {1} errors found and fixed. Close RPG Maker XP to ensure fixes are applied.", total_errors)
+    pbMessage(_INTL("{1} error(s) were found across {2} map(s) and fixed.", total_errors, num_error_maps))
     pbMessage(_INTL("Close RPG Maker XP to ensure the changes are applied properly."))
   end
 end

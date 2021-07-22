@@ -21,7 +21,7 @@ class PokemonBag
       @choices[i] = 0
     end
     @registeredItems = []
-    @registeredIndex = [0, 0, 1]
+    @registeredIndex = [0, 0, 1]   # Used by the Ready Menu to remember cursor positions
   end
 
   def rearrange
@@ -44,6 +44,9 @@ class PokemonBag
 
   def clear
     @pockets.each { |pocket| pocket.clear }
+    for i in 0..PokemonBag.numPockets
+      @choices[i] = 0
+    end
   end
 
   def pockets

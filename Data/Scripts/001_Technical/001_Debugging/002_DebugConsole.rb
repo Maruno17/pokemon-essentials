@@ -43,8 +43,8 @@ module Kernel
   end
 
   def echoln(string)
-    echo(string)
-    echo("\r\n")
+    echo string
+    echo "\r\n"
   end
 end
 

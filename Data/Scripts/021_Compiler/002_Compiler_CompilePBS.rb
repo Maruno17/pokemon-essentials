@@ -908,7 +908,6 @@ module Compiler
           raise _INTL("Dex list number {1} is defined at least twice.\r\n{2}", section, FileLineData.linereport)
         end
         dex_lists[section] = []
-        pbSetWindowText(_INTL("Processing {1} section [{2}]", FileLineData.file, section))
       else
         raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport) if !section
         species_list = line.split(",")
@@ -1031,7 +1030,7 @@ module Compiler
           raise _INTL("Minimum level is greater than maximum level: {1}\r\n{2}", line, FileLineData.linereport)
         end
         encounter_hash[:types][current_type].push(values)
-      elsif line[/^\[\s*(.+)\s*\]$/]   # Map ID line (new format)
+      elsif line[/^\[\s*(.+)\s*\]$/]   # Map ID line
         values = $~[1].split(',').collect! { |v| v.strip.to_i }
         values[1] = 0 if !values[1]
         map_number = values[0]

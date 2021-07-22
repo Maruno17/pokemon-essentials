@@ -248,12 +248,13 @@ module Compiler
   # Save Pokémon data to PBS file
   #=============================================================================
   def write_pokemon
+    echo _INTL("Writing species")
     File.open("PBS/pokemon.txt", "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       GameData::Species.each_species do |species|
+        echo "." if idx % 50 == 0
         idx += 1
-        pbSetWindowText(_INTL("Writing species {1}...", idx))
         Graphics.update if idx % 100 == 0
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%s]\r\n", species.id))
@@ -335,7 +336,7 @@ module Compiler
         f.write(sprintf("Incense = %s\r\n", species.incense)) if species.incense
       end
     }
-    pbSetWindowText(nil)
+    echoln _INTL("done")
     Graphics.update
   end
 
@@ -350,7 +351,6 @@ module Compiler
         next if species.form == 0
         base_species = GameData::Species.get(species.species)
         idx += 1
-        pbSetWindowText(_INTL("Writing form {1}...", idx))
         Graphics.update if idx % 100 == 0
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%s,%d]\r\n", species.species, species.form))
@@ -441,7 +441,6 @@ module Compiler
         end
       end
     }
-    pbSetWindowText(nil)
     Graphics.update
   end
 
@@ -573,12 +572,13 @@ module Compiler
   # Save individual trainer data to PBS file
   #=============================================================================
   def write_trainers
+    echo _INTL("Writing trainers")
     File.open("PBS/trainers.txt", "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       GameData::Trainer.each do |trainer|
+        echo "." if idx % 50 == 0
         idx += 1
-        pbSetWindowText(_INTL("Writing trainer {1}...", idx))
         Graphics.update if idx % 50 == 0
         f.write("\#-------------------------------\r\n")
         if trainer.version > 0
@@ -617,7 +617,7 @@ module Compiler
         end
       end
     }
-    pbSetWindowText(nil)
+    echoln _INTL("done")
     Graphics.update
   end
 

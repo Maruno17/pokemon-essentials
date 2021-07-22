@@ -419,24 +419,24 @@ class MapScreenScene
   end
 
   def onRightClick(mapid,x,y)
-#   echoln("rightclick (#{mapid})")
+#   echoln "rightclick (#{mapid})"
   end
 
   def onMouseUp(mapid)
-#   echoln("mouseup (#{mapid})")
+#   echoln "mouseup (#{mapid})"
     @dragging=false if @dragging
   end
 
   def onRightMouseUp(mapid)
-#   echoln("rightmouseup (#{mapid})")
+#   echoln "rightmouseup (#{mapid})"
   end
 
   def onMouseOver(mapid,x,y)
-#   echoln("mouseover (#{mapid},#{x},#{y})")
+#   echoln "mouseover (#{mapid},#{x},#{y})"
   end
 
   def onMouseMove(mapid,x,y)
-#   echoln("mousemove (#{mapid},#{x},#{y})")
+#   echoln "mousemove (#{mapid},#{x},#{y})"
     if @dragging
       if @dragmapid>=0
         sprite=getMapSprite(@dragmapid)

@@ -1380,11 +1380,11 @@ module Compiler
     t = Time.now.to_i
     Graphics.update
     trainerChecker = TrainerChecker.new
+    echo _INTL("Processing {1} maps...", mapData.mapinfos.keys.length)
     for id in mapData.mapinfos.keys.sort
       changed = false
       map = mapData.getMap(id)
       next if !map || !mapData.mapinfos[id]
-      pbSetWindowText(_INTL("Processing map {1} ({2})",id,mapData.mapinfos[id].name))
       for key in map.events.keys
         if Time.now.to_i-t>=5
           Graphics.update
@@ -1415,12 +1415,15 @@ module Compiler
       if changed
         mapData.saveMap(id)
         mapData.saveTilesets
+        echoln ""
+        echo _INTL("Map {1}: '{2}' modified and saved.", id, mapData.mapinfos[id].name)
       end
     end
+    echoln ""
     changed = false
     Graphics.update
     commonEvents = load_data("Data/CommonEvents.rxdata")
-    pbSetWindowText(_INTL("Processing common events"))
+    echoln _INTL("Processing common events")
     for key in 0...commonEvents.length
       newevent = fix_event_use(commonEvents[key],0,mapData)
       if newevent

@@ -650,7 +650,7 @@ module PluginManager
   # Check if plugins need compiling
   #-----------------------------------------------------------------------------
   def self.compilePlugins(order, plugins)
-    echo 'Compiling plugin scripts...'
+    echo "Compiling plugin scripts..."
     scripts = []
     # go through the entire order one by one
     for o in order
@@ -672,8 +672,8 @@ module PluginManager
     File.open("Data/PluginScripts.rxdata", 'wb') { |f| Marshal.dump(scripts, f) }
     # collect garbage
     GC.start
-    echoln ' done.'
-    echoln ''
+    echoln " done."
+    echoln ""
   end
   #-----------------------------------------------------------------------------
   # Check if plugins need compiling
@@ -711,7 +711,7 @@ module PluginManager
         end
       end
     end
-    echoln '' if !echoed_plugins.empty?
+    echoln "" if !echoed_plugins.empty?
   end
   #-----------------------------------------------------------------------------
 end

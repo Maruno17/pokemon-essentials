@@ -38,7 +38,7 @@ module Graphics
     if Graphics.frame_count % 40 == 0
       count = 0
       ObjectSpace.each_object(Object) { |o| count += 1 }
-      echoln("Objects: #{count}")
+      echoln "Objects: #{count}"
     end
 =end
     @@transition.update if @@transition && !@@transition.disposed?
