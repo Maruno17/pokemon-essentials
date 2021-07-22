@@ -315,6 +315,9 @@ def isDarkBackground(background,rect=nil)
 end
 
 def isDarkWindowskin(windowskin)
+  if $PokemonTemp.speechbubble_bubble
+    return false if $PokemonTemp.speechbubble_bubble > 0
+  end
   return true if !windowskin || windowskin.disposed?
   if windowskin.width==192 && windowskin.height==128
     return isDarkBackground(windowskin,Rect.new(0,0,128,128))
