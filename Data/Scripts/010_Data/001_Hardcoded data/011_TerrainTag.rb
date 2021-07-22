@@ -95,7 +95,7 @@ GameData::TerrainTag.register({
 
 GameData::TerrainTag.register({
   :id                     => :Rock,
-  :id_number              => 4,
+  :id_number              => 15,
   :battle_environment     => :Rock
 })
 
@@ -109,12 +109,20 @@ GameData::TerrainTag.register({
 })
 
 GameData::TerrainTag.register({
-  :id                     => :StillWater,
+  :id                     => :WaterCurrent,
   :id_number              => 6,
   :can_surf               => true,
   :can_fish               => true,
-  :battle_environment     => :StillWater,
-  :shows_reflections      => true
+  :battle_environment     => :MovingWater
+})
+
+GameData::TerrainTag.register({
+  :id                     => :StillWater,
+  :id_number              => 17,
+  :can_surf               => true,
+  :can_fish               => true,
+  :battle_environment     => :StillWater
+  #:shows_reflections      => true
 })
 
 GameData::TerrainTag.register({
@@ -182,7 +190,7 @@ GameData::TerrainTag.register({
 
 GameData::TerrainTag.register({
   :id                     => :Bridge,
-  :id_number              => 15,
+  :id_number              => 4,
   :bridge                 => true
 })
 
@@ -190,5 +198,5 @@ GameData::TerrainTag.register({
   :id                     => :Puddle,
   :id_number              => 16,
   :battle_environment     => :Puddle,
-  :shows_reflections      => true
+  :shows_reflections      => false
 })
