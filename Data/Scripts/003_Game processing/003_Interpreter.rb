@@ -140,53 +140,40 @@ class Interpreter
       e = $!
       raise if e.is_a?(SystemExit) || "#{e.class}" == "Reset"
       event = get_self
-      s = "Backtrace:\r\n"
+      # Gather text for error message
       message = pbGetExceptionMessage(e)
+      backtrace_text = ""
       if e.is_a?(SyntaxError)
         script.each_line { |line|
           line.gsub!(/\s+$/, "")
           if line[/^\s*\(/]
-            message += "\r\n***Line '#{line}' shouldn't begin with '('. Try\r\n"
-            message += "putting the '(' at the end of the previous line instead,\r\n"
-            message += "or using 'extendtext.exe'."
-          end
-          if line[/\:\:\s*$/]
-            message += "\r\n***Line '#{line}' can't end with '::'. Try putting\r\n"
-            message += "the next word on the same line, e.g. 'PBSpecies:" + ":MEW'"
+            message += "\r\n***Line '#{line}' shouldn't begin with '('. Try putting the '('\r\n"
+            message += "at the end of the previous line instead, or using 'extendtext.exe'."
           end
         }
       else
-        for bt in e.backtrace[0, 10]
-          s += bt + "\r\n"
-        end
-        s.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] }
+        backtrace_text += "\r\n"
+        backtrace_text += "Backtrace:"
+        e.backtrace[0, 10].each { |i| backtrace_text += "\r\n#{i}" }
+        backtrace_text.gsub!(/Section(\d+)/) { $RGSS_SCRIPTS[$1.to_i][1] } rescue nil
+        backtrace_text += "\r\n"
       end
-      message = "Exception: #{e.class}\r\nMessage: " + message + "\r\n"
-      message += "\r\n***Full script:\r\n#{script}\r\n"
-      if event && $game_map
+      # Assemble error message
+      err = "Script error in Interpreter\r\n"
+      if $game_map
         map_name = ($game_map.name rescue nil) || "???"
-        err  = "Script error in event #{event.id} (coords #{event.x},#{event.y}), map #{$game_map.map_id} (#{map_name}):\r\n"
-        err += "#{message}\r\n#{s}"
-        if e.is_a?(Hangup)
-          $EVENTHANGUPMSG = err
-          raise
-        end
-      elsif $game_map
-        map_name = ($game_map.name rescue nil) || "???"
-        err = "Script error in map #{$game_map.map_id} (#{map_name}):\r\n"
-        err += "#{message}\r\n#{s}"
-        if e.is_a?(Hangup)
-          $EVENTHANGUPMSG = err
-          raise
-        end
-      else
-        err = "Script error in interpreter:\r\n#{message}\r\n#{s}"
-        if e.is_a?(Hangup)
-          $EVENTHANGUPMSG = err
-          raise
+        if event
+          err = "Script error in event #{event.id} (coords #{event.x},#{event.y}), map #{$game_map.map_id} (#{map_name})\r\n"
+        else
+          err = "Script error in Common Event, map #{$game_map.map_id} (#{map_name})\r\n"
         end
       end
-      raise err
+      err += "Exception: #{e.class}\r\n"
+      err += "Message: #{message}\r\n\r\n"
+      err += "***Full script:\r\n#{script}"   # \r\n"
+      err += backtrace_text
+      # Raise error
+      raise EventScriptError.new(err)
     end
   end
   #-----------------------------------------------------------------------------
