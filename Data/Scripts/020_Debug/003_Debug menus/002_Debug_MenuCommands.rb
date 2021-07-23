@@ -498,7 +498,7 @@ DebugMenuCommands.register("fillbag", {
       bag = $PokemonBag.pockets   # Called here so that it only rearranges itself once
       GameData::Item.each do |i|
         next if !pocket_sizes[i.pocket] || pocket_sizes[i.pocket] == 0
-        next if bag[i.pocket].length >= pocket_sizes[i.pocket]
+        next if pocket_sizes[i.pocket] > 0 && bag[i.pocket].length >= pocket_sizes[i.pocket]
         item_qty = (i.is_important?) ? 1 : qty
         bag[i.pocket].push([i.id, item_qty])
       end
