@@ -329,11 +329,6 @@ BattleHandlers::EORWeatherAbility.add(:ICEFACE,
 
 #===============================================================================
 
-Gulp Missile
-After using Surf/Dive, changes the bearer's form depending on its HP. If hit by
-an attack while in one of these forms, damages the attacker and causes an effect
-depending on the form.
-
 Steam Engine
 When bearer is hit by a Fire- or Water-type move, bearer gets +6 Speed (after
 the effect of that move is applied). Outside of battle, makes eggs hatch twice
@@ -342,10 +337,6 @@ as fast (doesn't stack with other such abilities).
 Gorilla Tactics
 Boosts bearer's Attack by 50%, but restricts bearer to one move (cf. Choice
 Band). Power boost stacks with Choice Band.
-
-Unseen Fist
-The bearer's moves will do damage with contact moves even if the target is
-protected from it. (Does this mean it just bypasses the protection?)
 
 Mirror Armor
 If a move/ability tries to lower the bearer's stat(s), the effect is reflected

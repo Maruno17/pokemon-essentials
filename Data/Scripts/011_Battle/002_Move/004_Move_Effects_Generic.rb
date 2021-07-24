@@ -427,6 +427,8 @@ end
 # Two turn move.
 #===============================================================================
 class PokeBattle_TwoTurnMove < PokeBattle_Move
+  attr_reader :chargingTurn
+
   def chargingTurnMove?; return true; end
 
   # user.effects[PBEffects::TwoTurnAttack] is set to the move's ID if this
@@ -436,7 +438,7 @@ class PokeBattle_TwoTurnMove < PokeBattle_Move
     @powerHerb = false
     @chargingTurn = false   # Assume damaging turn by default
     @damagingTurn = true
-    # 0 at start of charging turn, move's ID at start of damaging turn
+    # nil at start of charging turn, move's ID at start of damaging turn
     if !user.effects[PBEffects::TwoTurnAttack]
       @powerHerb = user.hasActiveItem?(:POWERHERB)
       @chargingTurn = true

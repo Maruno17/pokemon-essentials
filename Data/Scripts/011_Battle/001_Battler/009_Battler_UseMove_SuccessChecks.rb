@@ -309,92 +309,94 @@ class PokeBattle_Battler
       @battle.successStates[user.index].protected = true
       return false
     end
-    # Wide Guard
-    if target.pbOwnSide.effects[PBEffects::WideGuard] && user.index!=target.index &&
-       move.pbTarget(user).num_targets > 1 &&
-       (Settings::MECHANICS_GENERATION >= 7 || move.damagingMove?)
-      @battle.pbCommonAnimation("WideGuard",target)
-      @battle.pbDisplay(_INTL("Wide Guard protected {1}!",target.pbThis(true)))
-      target.damageState.protected = true
-      @battle.successStates[user.index].protected = true
-      return false
-    end
-    if move.canProtectAgainst?
-      # Quick Guard
-      if target.pbOwnSide.effects[PBEffects::QuickGuard] &&
-         @battle.choices[user.index][4]>0   # Move priority saved from pbCalculatePriority
-        @battle.pbCommonAnimation("QuickGuard",target)
-        @battle.pbDisplay(_INTL("Quick Guard protected {1}!",target.pbThis(true)))
+    if !(user.hasActiveAbility?(:UNSEENFIST) && move.contactMove?)
+      # Wide Guard
+      if target.pbOwnSide.effects[PBEffects::WideGuard] && user.index!=target.index &&
+         move.pbTarget(user).num_targets > 1 &&
+         (Settings::MECHANICS_GENERATION >= 7 || move.damagingMove?)
+        @battle.pbCommonAnimation("WideGuard",target)
+        @battle.pbDisplay(_INTL("Wide Guard protected {1}!",target.pbThis(true)))
         target.damageState.protected = true
         @battle.successStates[user.index].protected = true
         return false
       end
-      # Protect
-      if target.effects[PBEffects::Protect]
-        @battle.pbCommonAnimation("Protect",target)
-        @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
-        target.damageState.protected = true
-        @battle.successStates[user.index].protected = true
-        return false
-      end
-      # King's Shield
-      if target.effects[PBEffects::KingsShield] && move.damagingMove?
-        @battle.pbCommonAnimation("KingsShield",target)
-        @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
-        target.damageState.protected = true
-        @battle.successStates[user.index].protected = true
-        if move.pbContactMove?(user) && user.affectedByContactEffect?
-          if user.pbCanLowerStatStage?(:ATTACK)
-            user.pbLowerStatStage(:ATTACK, (Settings::MECHANICS_GENERATION >= 8) ? 1 : 2, nil)
+      if move.canProtectAgainst?
+        # Quick Guard
+        if target.pbOwnSide.effects[PBEffects::QuickGuard] &&
+           @battle.choices[user.index][4]>0   # Move priority saved from pbCalculatePriority
+          @battle.pbCommonAnimation("QuickGuard",target)
+          @battle.pbDisplay(_INTL("Quick Guard protected {1}!",target.pbThis(true)))
+          target.damageState.protected = true
+          @battle.successStates[user.index].protected = true
+          return false
+        end
+        # Protect
+        if target.effects[PBEffects::Protect]
+          @battle.pbCommonAnimation("Protect",target)
+          @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
+          target.damageState.protected = true
+          @battle.successStates[user.index].protected = true
+          return false
+        end
+        # King's Shield
+        if target.effects[PBEffects::KingsShield] && move.damagingMove?
+          @battle.pbCommonAnimation("KingsShield",target)
+          @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
+          target.damageState.protected = true
+          @battle.successStates[user.index].protected = true
+          if move.pbContactMove?(user) && user.affectedByContactEffect?
+            if user.pbCanLowerStatStage?(:ATTACK)
+              user.pbLowerStatStage(:ATTACK, (Settings::MECHANICS_GENERATION >= 8) ? 1 : 2, nil)
+            end
           end
+          return false
         end
-        return false
-      end
-      # Spiky Shield
-      if target.effects[PBEffects::SpikyShield]
-        @battle.pbCommonAnimation("SpikyShield",target)
-        @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
-        target.damageState.protected = true
-        @battle.successStates[user.index].protected = true
-        if move.pbContactMove?(user) && user.affectedByContactEffect?
-          @battle.scene.pbDamageAnimation(user)
-          user.pbReduceHP(user.totalhp/8,false)
-          @battle.pbDisplay(_INTL("{1} was hurt!",user.pbThis))
-          user.pbItemHPHealCheck
-        end
-        return false
-      end
-      # Baneful Bunker
-      if target.effects[PBEffects::BanefulBunker]
-        @battle.pbCommonAnimation("BanefulBunker",target)
-        @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
-        target.damageState.protected = true
-        @battle.successStates[user.index].protected = true
-        if move.pbContactMove?(user) && user.affectedByContactEffect?
-          user.pbPoison(target) if user.pbCanPoison?(target,false)
-        end
-        return false
-      end
-      # Obstruct
-      if target.effects[PBEffects::Obstruct] && move.damagingMove?
-        @battle.pbCommonAnimation("Obstruct",target)
-        @battle.pbDisplay(_INTL("{1} protected itself!", target.pbThis))
-        target.damageState.protected = true
-        @battle.successStates[user.index].protected = true
-        if move.pbContactMove?(user) && user.affectedByContactEffect?
-          if user.pbCanLowerStatStage?(:DEFENSE)
-            user.pbLowerStatStage(:DEFENSE, 2, nil)
+        # Spiky Shield
+        if target.effects[PBEffects::SpikyShield]
+          @battle.pbCommonAnimation("SpikyShield",target)
+          @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
+          target.damageState.protected = true
+          @battle.successStates[user.index].protected = true
+          if move.pbContactMove?(user) && user.affectedByContactEffect?
+            @battle.scene.pbDamageAnimation(user)
+            user.pbReduceHP(user.totalhp/8,false)
+            @battle.pbDisplay(_INTL("{1} was hurt!",user.pbThis))
+            user.pbItemHPHealCheck
           end
+          return false
         end
-        return false
-      end
-      # Mat Block
-      if target.pbOwnSide.effects[PBEffects::MatBlock] && move.damagingMove?
-        # NOTE: Confirmed no common animation for this effect.
-        @battle.pbDisplay(_INTL("{1} was blocked by the kicked-up mat!",move.name))
-        target.damageState.protected = true
-        @battle.successStates[user.index].protected = true
-        return false
+        # Baneful Bunker
+        if target.effects[PBEffects::BanefulBunker]
+          @battle.pbCommonAnimation("BanefulBunker",target)
+          @battle.pbDisplay(_INTL("{1} protected itself!",target.pbThis))
+          target.damageState.protected = true
+          @battle.successStates[user.index].protected = true
+          if move.pbContactMove?(user) && user.affectedByContactEffect?
+            user.pbPoison(target) if user.pbCanPoison?(target,false)
+          end
+          return false
+        end
+        # Obstruct
+        if target.effects[PBEffects::Obstruct] && move.damagingMove?
+          @battle.pbCommonAnimation("Obstruct",target)
+          @battle.pbDisplay(_INTL("{1} protected itself!", target.pbThis))
+          target.damageState.protected = true
+          @battle.successStates[user.index].protected = true
+          if move.pbContactMove?(user) && user.affectedByContactEffect?
+            if user.pbCanLowerStatStage?(:DEFENSE)
+              user.pbLowerStatStage(:DEFENSE, 2, nil)
+            end
+          end
+          return false
+        end
+        # Mat Block
+        if target.pbOwnSide.effects[PBEffects::MatBlock] && move.damagingMove?
+          # NOTE: Confirmed no common animation for this effect.
+          @battle.pbDisplay(_INTL("{1} was blocked by the kicked-up mat!",move.name))
+          target.damageState.protected = true
+          @battle.successStates[user.index].protected = true
+          return false
+        end
       end
     end
     # Magic Coat/Magic Bounce

@@ -362,6 +362,7 @@ class PokeBattle_Battler
       :DISGUISE,
 #      :FLOWERGIFT,                                        # This can be stopped
 #      :FORECAST,                                          # This can be stopped
+      :GULPMISSILE,
       :ICEFACE,
       :MULTITYPE,
       :POWERCONSTRUCT,
@@ -387,6 +388,7 @@ class PokeBattle_Battler
       :DISGUISE,
       :FLOWERGIFT,
       :FORECAST,
+      :GULPMISSILE,
       :ICEFACE,
       :MULTITYPE,
       :POWERCONSTRUCT,

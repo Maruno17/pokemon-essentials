@@ -10,6 +10,26 @@ class PokeBattle_Battler
         BattleHandlers.triggerTargetAbilityOnHit(target.ability,user,target,move,@battle)
         user.pbItemHPHealCheck if user.hp<oldHP
       end
+      # Cramorant - Gulp Missile
+      if target.isSpecies?(:CRAMORANT) && target.ability == :GULPMISSILE &&
+         target.form > 0 && !target.effects[PBEffects::Transform]
+        oldHP = user.hp
+        # NOTE: Strictly speaking, an attack animation should be shown (the
+        #       target Cramorant attacking the user) and the ability splash
+        #       shouldn't be shown.
+        @battle.pbShowAbilitySplash(target)
+        if user.takesIndirectDamage?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
+          @battle.scene.pbDamageAnimation(user)
+          user.pbReduceHP(user.totalhp / 4, false)
+        end
+        if target.form == 1   # Gulping Form
+          user.pbLowerStatStageByAbility(:DEFENSE, 1, target, false)
+        elsif target.form == 2   # Gorging Form
+          target.pbParalyze(user) if target.pbCanParalyze?(user, false)
+        end
+        @battle.pbHideAbilitySplash(target)
+        user.pbItemHPHealCheck if user.hp < oldHP
+      end
       # User's ability
       if user.abilityActive?(true)
         BattleHandlers.triggerUserAbilityOnHit(user.ability,user,target,move,@battle)
@@ -107,6 +127,15 @@ class PokeBattle_Battler
           @battle.pbHideAbilitySplash(user)
           user.pbChangeForm(2,_INTL("{1} became Ash-Greninja!",user.pbThis))
         end
+      end
+    end
+    # Cramorant = Gulp Missile
+    if !user.fainted? && !user.effects[PBEffects::Transform] &&
+       user.isSpecies?(:CRAMORANT) && user.ability == :GULPMISSILE && user.form == 0
+      if !@battle.pbAllFainted?(user.idxOpposingSide) &&
+         ((move.id == :SURF && numHits > 0) || (move.id == :DIVE && move.chargingTurn))
+        # NOTE: Intentionally no ability splash or message here.
+        user.pbChangeForm((user.hp > user.totalhp / 2) ? 1 : 2, nil)
       end
     end
     # Consume user's Gem

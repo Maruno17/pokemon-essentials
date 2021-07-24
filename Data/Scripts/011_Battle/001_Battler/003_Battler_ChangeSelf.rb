@@ -198,7 +198,7 @@ class PokeBattle_Battler
       end
     end
     # Eiscue - Ice Face
-    if !ability_changed && isSpecies?(:EISCUE) && self.ability = :ICEFACE &&
+    if !ability_changed && isSpecies?(:EISCUE) && self.ability == :ICEFACE &&
        @form == 1 && effectiveWeather == :Hail
       @canRestoreIceFace = true   # Changed form at end of round
     end
