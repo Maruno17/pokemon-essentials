@@ -105,7 +105,7 @@ module Settings
   POISON_IN_FIELD       = (MECHANICS_GENERATION <= 4)
   # Whether poisoned Pokémon will faint while walking around in the field
   # (true), or survive the poisoning with 1 HP (false).
-  POISON_FAINT_IN_FIELD = (MECHANICS_GENERATION <= 3)
+  POISON_FAINT_IN_FIELD = (MECHANICS_GENERATION >= 3)
   # Whether planted berries grow according to Gen 4 mechanics (true) or Gen 3
   # mechanics (false).
   NEW_BERRY_PLANTS      = (MECHANICS_GENERATION >= 4)
@@ -150,13 +150,15 @@ module Settings
   #        To require at least 2 badges, put true and 2.
   BADGE_FOR_CUT       = 1
   BADGE_FOR_FLASH     = 2
-  BADGE_FOR_ROCKSMASH = 3
-  BADGE_FOR_SURF      = 4
-  BADGE_FOR_FLY       = 5
-  BADGE_FOR_STRENGTH  = 6
-  BADGE_FOR_DIVE      = 7
+  BADGE_FOR_ROCKSMASH = 0
+  BADGE_FOR_SURF      = 5
+  BADGE_FOR_FLY       = 3
+  BADGE_FOR_STRENGTH  = 5
+  BADGE_FOR_DIVE      = 9
   BADGE_FOR_WATERFALL = 8
-
+  BADGE_FOR_TELEPORT       = 3
+  BADGE_FOR_BOUNCE         = 8
+  BADGE_FOR_ROCKCLIMB      = 16
   #=============================================================================
 
   # If a move taught by a TM/HM/TR replaces another move, this setting is

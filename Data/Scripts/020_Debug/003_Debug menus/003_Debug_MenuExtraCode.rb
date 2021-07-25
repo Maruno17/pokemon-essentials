@@ -14,6 +14,10 @@ def pbWarpToMapId
   return [map_id,0,0]
 end
 
+def pbWarpToMapFly
+  pbBetterRegionMap(0,true,true,false,nil,true)
+end
+
 def pbWarpToMap
   choice = pbMessage("type", [_INTL("List"),_INTL("Map id"), _INTL("Town map")], 0)
   if choice == 0
@@ -21,8 +25,7 @@ def pbWarpToMap
   elsif choice == 1
     map = pbWarpToMapId
   elsif choice == 2
-    Kernel.pbMessage("Not currently supported")
-    map = pbWarpToMapList
+    map = pbWarpToMapFly
   end
   return map
 end
