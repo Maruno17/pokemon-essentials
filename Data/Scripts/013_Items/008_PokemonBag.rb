@@ -25,21 +25,26 @@ class PokemonBag
   end
 
   def rearrange
-    if (@pockets.length - 1) != PokemonBag.numPockets
-      newpockets = []
-      for i in 0..PokemonBag.numPockets
-        newpockets[i] = []
-        @choices[i] = 0 if !@choices[i]
-      end
-      num_pockets = PokemonBag.numPockets
-      for i in 0...[@pockets.length, num_pockets].min
-        for item in @pockets[i]
-          p = GameData::Item.get(item[0]).pocket
-          newpockets[p].push(item)
-        end
-      end
-      @pockets = newpockets
+    return if @pockets.length == PokemonBag.numPockets + 1
+    @lastpocket = 1
+    new_pockets = []
+    @choices    = []
+    for i in 0..PokemonBag.numPockets
+      new_pockets[i] = []
+      @choices[i] = 0
     end
+    @pockets.each do |pocket|
+      next if !pocket
+      pocket.each do |item|
+        p = GameData::Item.get(item[0]).pocket
+        new_pockets[p].push(item)
+      end
+    end
+    new_pockets.each_with_index do |pocket, i|
+      next if i == 0 || !Settings::BAG_POCKET_AUTO_SORT[i]
+      pocket.sort! { |a, b| GameData::Item.keys.index(a[0]) <=> GameData::Item.keys.index(b[0]) }
+    end
+    @pockets = new_pockets
   end
 
   def clear

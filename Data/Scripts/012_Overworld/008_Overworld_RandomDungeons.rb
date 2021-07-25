@@ -5,7 +5,6 @@
 class AntiRandom
   def initialize(size)
     @old = []
-    @new = []
     @new = Array.new(size) { |i| i }
   end
 
@@ -26,121 +25,155 @@ class AntiRandom
   end
 end
 
+#===============================================================================
+#
+#===============================================================================
+module DungeonTile
+  VOID     = 0
+  ROOM     = 1
+  WALL     = 2
+  CORRIDOR = 3
 
+  # Which autotile each type of tile uses
+  TILE_IDS = {
+    VOID     => 1,
+    ROOM     => 2,
+    WALL     => 3,
+    CORRIDOR => 2
+  }
+  # Used for debugging when printing out an ASCII image of the dungeon
+  TEXT_SYMBOLS = {
+    VOID     => "#",
+    ROOM     => " ",
+    WALL     => "-",
+    CORRIDOR => "."
+  }
+
+  module_function
+
+  def to_tile_id(value)
+    return TILE_IDS[value] || TILE_IDS[VOID]
+  end
+
+  def to_text(value)
+    return TEXT_SYMBOLS[value] || TEXT_SYMBOLS[VOID]
+  end
+end
+
+#===============================================================================
+# Helper functions that sets tiles in the map to a particular type.
+#===============================================================================
+module DungeonMaze
+  CELL_WIDTH      = 13                # Should be at least 7
+  CELL_HEIGHT     = 13                # Should be at least 7
+  ROOM_MIN_WIDTH  = 5
+  ROOM_MAX_WIDTH  = CELL_WIDTH - 2    # Should be at most CELL_WIDTH - 2
+  ROOM_MIN_HEIGHT = 4
+  ROOM_MAX_HEIGHT = CELL_HEIGHT - 3   # Should be at most CELL_HEIGHT - 3
+  CORRIDOR_WIDTH  = 3
+  None      = 0
+  TurnLeft  = 1
+  TurnRight = 2
+  Turn180   = 3
+  @@corridor_layouts = nil
+
+  module_function
+
+  # Generates sets of tiles depicting corridors coming out of a room, for all
+  # combinations of the sides that they can come out of.
+  def generate_corridor_patterns
+    if !@@corridor_layouts
+      tiles = []
+      x_offset = (CELL_WIDTH - CORRIDOR_WIDTH) / 2
+      y_offset = (CELL_HEIGHT - CORRIDOR_WIDTH) / 2
+      for combo in 0...16
+        tiles[combo] = []
+        for i in 0...CELL_WIDTH * CELL_HEIGHT
+          tiles[combo][i] = DungeonTile::VOID
+        end
+        if (combo & EdgeMasks::North) == 0
+          paint_corridor(tiles[combo], x_offset, 0, CORRIDOR_WIDTH, y_offset + CORRIDOR_WIDTH)
+        end
+        if (combo & EdgeMasks::South) == 0
+          paint_corridor(tiles[combo], x_offset, y_offset, CORRIDOR_WIDTH, CELL_HEIGHT - y_offset)
+        end
+        if (combo & EdgeMasks::East) == 0
+          paint_corridor(tiles[combo], x_offset, y_offset, CELL_WIDTH - x_offset, CORRIDOR_WIDTH)
+        end
+        if (combo & EdgeMasks::West) == 0
+          paint_corridor(tiles[combo], 0, y_offset, x_offset + CORRIDOR_WIDTH, CORRIDOR_WIDTH)
+        end
+      end
+      @@corridor_layouts = tiles
+    end
+    return @@corridor_layouts
+  end
+
+  # Makes all tiles in a particular area corridor tiles
+  def paint_corridor(tile, x, y, width, height)
+    for j in 0...height
+      for i in 0...width
+        tile[(y + j) * CELL_WIDTH + (x + i)] = DungeonTile::CORRIDOR
+      end
+    end
+  end
+
+  # Used to draw tiles from the given tile_layout and rotation (for corridors)
+  def paint_tile_layout(dungeon, dstX, dstY, tile_layout, rotation)
+    case rotation
+    when None
+      for y in 0...CELL_HEIGHT
+        for x in 0...CELL_WIDTH
+          dungeon[x + dstX, y + dstY] = tile_layout[y * CELL_WIDTH + x]
+        end
+      end
+    when TurnLeft
+      for y in 0...CELL_HEIGHT
+        for x in 0...CELL_WIDTH
+          dungeon[y + dstX , CELL_WIDTH - 1 - x + dstY] = tile_layout[y * CELL_WIDTH + x]
+        end
+      end
+    when TurnRight
+      for y in 0...CELL_HEIGHT
+        for x in 0...CELL_WIDTH
+          dungeon[CELL_HEIGHT - 1 - y + dstX, x + dstY] = tile_layout[y * CELL_WIDTH + x]
+        end
+      end
+    when Turn180
+      for y in 0...CELL_HEIGHT
+        for x in 0...CELL_WIDTH
+          dungeon[CELL_WIDTH - 1 - x + dstX, CELL_HEIGHT - 1 - y + dstY] = tile_layout[y * CELL_WIDTH + x]
+        end
+      end
+    end
+  end
+
+  # Draws a cell's contents, which is an underlying pattern based on tile_layout
+  # and a rotation, and possibly a room on top of that
+  def paint_cell_contents(dungeon, xDst, yDst, tile_layout, rotation)
+    return false if !tile_layout
+    # Draw the corridors
+    paint_tile_layout(dungeon, xDst, yDst, tile_layout, rotation)
+    return false if rand(100) < 30
+    # Generate a randomly placed room
+    width = rand(ROOM_MIN_WIDTH..ROOM_MAX_WIDTH)
+    height = rand(ROOM_MIN_HEIGHT..ROOM_MAX_HEIGHT)
+    return false if width <= 0 || height <= 0
+    centerX = CELL_WIDTH / 2 + rand(5) - 2
+    centerY = CELL_HEIGHT / 2 + rand(5) - 2
+    x = centerX - (width / 2)
+    y = centerY - (height / 2)
+    rect = [x, y, width, height]
+    rect[0] = rect[0].clamp(1, CELL_WIDTH - 1 - width)
+    rect[1] = rect[1].clamp(2, CELL_HEIGHT - 1 - height)   # 2 because walls are 2 tiles tall
+    dungeon.paint_room(rect, xDst, yDst)
+    return true
+  end
+end
 
 #===============================================================================
 #
 #===============================================================================
-module DungeonMaze
-  TILE_WIDTH  = 13
-  TILE_HEIGHT = 13
-  MINWIDTH    = 5
-  MINHEIGHT   = 4
-  MAXWIDTH    = 11
-  MAXHEIGHT   = 10
-  None        = 0
-  TurnLeft    = 1
-  TurnRight   = 2
-  Turn180     = 3
-
-  def self.paintRect(tile, x, y, width, height)   # paints a room
-    for j in 0...height
-      for i in 0...width
-        tile[(y + j) * TILE_WIDTH + (x + i)] = 3
-      end
-    end
-  end
-
-  def self.paintTile(dungeon, dstX, dstY, tile, rotation)   # paints a tile
-    case rotation
-    when None
-      for y in 0...TILE_HEIGHT
-        for x in 0...TILE_WIDTH
-          dungeon[x + dstX, y + dstY] = tile[y * TILE_WIDTH + x]
-        end
-      end
-    when TurnLeft
-      for y in 0...TILE_HEIGHT
-        for x in 0...TILE_WIDTH
-          dungeon[y + dstX , TILE_WIDTH - 1 - x + dstY] = tile[y * TILE_WIDTH + x]
-        end
-      end
-    when TurnRight
-      for y in 0...TILE_HEIGHT
-        for x in 0...TILE_WIDTH
-          dungeon[TILE_HEIGHT - 1 - y + dstX, x + dstY] = tile[y * TILE_WIDTH + x]
-        end
-      end
-    when Turn180
-      for y in 0...TILE_HEIGHT
-        for x in 0...TILE_WIDTH
-          dungeon[TILE_WIDTH - 1 - x + dstX, TILE_HEIGHT - 1 - y + dstY] = tile[y * TILE_WIDTH + x]
-        end
-      end
-    end
-  end
-
-  def self.paintCell(dungeon, xDst, yDst, tile, rotation)
-    return false if !tile
-    paintTile(dungeon, xDst, yDst, tile, rotation)
-    return false if rand(100) < 30
-    # Generate a randomly placed room
-    width = rand(MINWIDTH..MAXWIDTH)
-    height = rand(MINHEIGHT..MAXHEIGHT)
-    return false if width <= 0 || height <= 0
-    centerX = TILE_WIDTH / 2 + rand(5) - 2
-    centerY = TILE_HEIGHT / 2 + rand(5) - 2
-    x = centerX - (width / 2)
-    y = centerY - (height / 2)
-    rect = [x, y, width, height]
-    rect[0] = 1 if rect[0] < 1
-    rect[1] = 2 if rect[1] < 2
-    rect[0] = TILE_WIDTH - 1 - width if rect[0] + width > TILE_WIDTH - 1
-    rect[1] = TILE_HEIGHT - 1 - height if rect[0] + height > TILE_HEIGHT - 1
-    dungeon.paint(rect, xDst, yDst)
-    return true
-  end
-
-  def self.generateTiles
-    tiles = []
-    for i in 0...6
-      tiles[i] = []
-      for j in 0...TILE_WIDTH * TILE_HEIGHT
-        tiles[i][j] = 0
-      end
-    end
-    paintRect(tiles[0], 5, 0, 3, 10)   # N
-    paintRect(tiles[1], 5, 0, 3, 8)    # N E
-    paintRect(tiles[1], 5, 5, 8, 3)
-    paintRect(tiles[2], 5, 0, 3, 8)    # N W E
-    paintRect(tiles[2], 0, 5, 13, 3)
-    paintRect(tiles[3], 5, 0, 3, 13)   # N S
-    paintRect(tiles[4], 5, 0, 3, 13)
-    paintRect(tiles[4], 0, 5, 13, 3)
-    realtiles = [
-       [tiles[4], None],          # N W E S
-       [tiles[2], Turn180],       # W E S
-       [tiles[2], TurnRight],     # N E S
-       [tiles[1], TurnRight],     # E S
-       [tiles[2], TurnLeft],      # N W S
-       [tiles[1], Turn180],       # W S
-       [tiles[3], None],          # N S
-       [tiles[0], Turn180],       # S
-       [tiles[2], None],          # N W E
-       [tiles[3], TurnLeft],      # W E
-       [tiles[1], None],          # N E
-       [tiles[0], TurnRight],     # E
-       [tiles[1], TurnLeft],      # N W
-       [tiles[0], TurnLeft],      # W
-       [tiles[0], None],          # N
-       [nil, None]
-    ]
-    return realtiles
-  end
-end
-
-
-
 module EdgeMasks
   North   = 1
   West    = 2
@@ -149,8 +182,9 @@ module EdgeMasks
   Visited = 16
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class MazeNode
   def initialize
     @edges = 0
@@ -164,8 +198,9 @@ class MazeNode
   def isBlocked?;   return @edges != 0;       end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class NodeListElement
   attr_accessor :x, :y
 
@@ -175,65 +210,77 @@ class NodeListElement
   end
 end
 
-
-
+#===============================================================================
+# Maze generator. Given the number of cells horizontally and vertically in a
+# map, connects all the cells together.
+# A node is the boundary between two adjacent cells, which may or may not be a
+# connection.
+#===============================================================================
 class Maze
   attr_accessor :cellWidth, :cellHeight, :nodeWidth, :nodeHeight
 
   @@dirs = [EdgeMasks::North, EdgeMasks::South, EdgeMasks::East, EdgeMasks::West]
 
   def initialize(cw, ch)
-    @nodes = []
-    @cells = []
     raise ArgumentError.new if cw == 0 || ch == 0
-    @cellWidth = cw
+    @cellWidth  = cw
     @cellHeight = ch
-    @nodeWidth = cw + 1
+    @nodeWidth  = cw + 1
     @nodeHeight = ch + 1
-    for i in 0...@nodeWidth * @nodeHeight
-      @nodes[i] = MazeNode.new
-    end
-    for i in 0...cw * ch
-      @cells[i] = 0
-    end
-    clearAllEdges()
-    clearAllCells()
+    @cells = []
+    clearAllCells
+    @nodes = Array.new(@nodeWidth * @nodeHeight) { |i| MazeNode.new }
   end
 
-  def buildNodeList
-    list = []
-    for x in 0...nodeWidth
-      for y in 0...nodeHeight
-        list.push(NodeListElement.new(x, y))
-      end
+  def randomDir
+    return @@dirs[rand(4)]
+  end
+
+  def getVisited(x, y)
+    return false if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
+    return (@cells[y * cellWidth + x] & EdgeMasks::Visited) != 0
+  end
+
+  def setVisited(x, y)
+    return if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
+    @cells[y * cellWidth + x] |= EdgeMasks::Visited
+  end
+
+  def clearVisited(x, y)
+    return if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
+    @cells[y * cellWidth + x] &=~EdgeMasks::Visited
+  end
+
+  def clearAllCells
+    for c in 0...cellWidth * cellHeight
+      @cells[c] = 0
     end
-    list.shuffle!
-    return list
+  end
+
+  def getEdgeNode(x, y, edge)
+    return false if x < 0 || y < 0 || x >= nodeWidth || y >= nodeHeight
+    return @nodes[y * nodeWidth + x].getEdge(edge)
   end
 
   def setEdgeNode(x, y, edge)
     return if x < 0 || x >= nodeWidth || y < 0 || y >= nodeHeight
     @nodes[y * nodeWidth + x].setEdge(edge)
     e = 0
-    nx = 0
-    ny = 0
+    nx = x
+    ny = y
     case edge
     when EdgeMasks::North
       e = EdgeMasks::South
-      nx = x
       ny = y - 1
     when EdgeMasks::South
       e = EdgeMasks::North
-      nx = x
       ny = y + 1
     when EdgeMasks::East
       e = EdgeMasks::West
       nx = x + 1
-      ny = y
     when EdgeMasks::West
       e = EdgeMasks::East
       nx = x - 1
-      ny = y
     else
       return
     end
@@ -241,29 +288,31 @@ class Maze
     @nodes[ny * nodeWidth + nx].setEdge(e)
   end
 
+  def setAllEdges
+    for c in 0...nodeWidth * nodeHeight
+      @nodes[c].set
+    end
+  end
+
   def clearEdgeNode(x, y, edge)
     return if x < 0 || x >= nodeWidth || y < 0 || y >= nodeHeight
     @nodes[y * nodeWidth + x].clearEdge(edge)
     e = 0
-    nx = 0
-    ny = 0
+    nx = x
+    ny = y
     case edge
     when EdgeMasks::North
       e = EdgeMasks::South
-      nx = x
-      ny = y - 1
+      ny -= 1
     when EdgeMasks::South
       e = EdgeMasks::North
-      nx = x
-      ny = y + 1
+      ny += 1
     when EdgeMasks::East
       e = EdgeMasks::West
-      nx = x + 1
-      ny = y
+      nx += 1
     when EdgeMasks::West
       e = EdgeMasks::East
-      nx = x - 1
-      ny = y
+      nx -= 1
     else
       raise ArgumentError.new
     end
@@ -271,14 +320,15 @@ class Maze
     @nodes[ny * nodeWidth + nx].clearEdge(e)
   end
 
+  def clearAllEdges
+    for c in 0...nodeWidth * nodeHeight
+      @nodes[c].clear
+    end
+  end
+
   def isBlockedNode?(x, y)
     return false if x < 0 || y < 0 || x >= nodeWidth || y >= nodeHeight
     return @nodes[y * nodeWidth + x].isBlocked?
-  end
-
-  def getEdgeNode(x, y, edge)
-    return false if x < 0 || y < 0 || x >= nodeWidth || y >= nodeHeight
-    return @nodes[y * nodeWidth + x].getEdge(edge)
   end
 
   def getEdgePattern(x, y)
@@ -290,43 +340,6 @@ class Maze
     return pattern
   end
 
-  def setAllEdges
-    for c in 0...nodeWidth * nodeHeight
-      @nodes[c].set
-    end
-  end
-
-  def clearAllEdges
-    for c in 0...nodeWidth * nodeHeight
-      @nodes[c].clear
-    end
-  end
-
-  def clearAllCells
-    for c in 0...cellWidth * cellHeight
-      @cells[c] = 0
-    end
-  end
-
-  def setVisited(x, y)
-    return if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-    @cells[y * cellWidth + x] |= EdgeMasks::Visited
-  end
-
-  def getVisited(x, y)
-    return false if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-    return (@cells[y * cellWidth + x] & EdgeMasks::Visited) != 0
-  end
-
-  def clearVisited(x, y)
-    return if x < 0 || y < 0 || x >= cellWidth || x >= cellHeight
-    @cells[y * cellWidth + x] &=~EdgeMasks::Visited
-  end
-
-  def randomDir
-    return @@dirs[rand(4)]
-  end
-
   def buildMazeWall(x, y, dir, len)
     return if isBlockedNode?(x, y)
     wx = x
@@ -334,16 +347,33 @@ class Maze
     len.times do
       ox = wx
       oy = wy
-      wy -= 1 if dir == EdgeMasks::North
-      wx -= 1 if dir == EdgeMasks::West
-      wx += 1 if dir == EdgeMasks::East
-      wy += 1 if dir == EdgeMasks::South
+      case dir
+      when EdgeMasks::North
+        wy -= 1
+      when EdgeMasks::West
+        wx -= 1
+      when EdgeMasks::East
+        wx += 1
+      when EdgeMasks::South
+        wy += 1
+      end
       if isBlockedNode?(wx, wy)
         setEdgeNode(ox, oy, dir)
         return
       end
       setEdgeNode(ox,oy,dir)
     end
+  end
+
+  def buildNodeList
+    list = []
+    for x in 0...nodeWidth
+      for y in 0...nodeHeight
+        list.push(NodeListElement.new(x, y))
+      end
+    end
+    list.shuffle!
+    return list
   end
 
   def generateWallGrowthMaze(minWall = 0, maxWall = nil)
@@ -361,24 +391,20 @@ class Maze
 
   def recurseDepthFirst(x, y, depth)
     setVisited(x, y)
-    dirs = @@dirs.shuffle!
+    dirs = @@dirs.shuffle
     for c in 0...4
       d = dirs[c]
-      cx = 0
-      cy = 0
+      cx = x
+      cy = y
       case d
       when EdgeMasks::North
-        cx = x
-        cy = y - 1
+        cy -= 1
       when EdgeMasks::South
-        cx = x
-        cy = y + 1
+        cy += 1
       when EdgeMasks::East
-        cx = x + 1
-        cy = y
+        cx += 1
       when EdgeMasks::West
-        cx = x - 1
-        cy = y
+        cx -= 1
       end
       if cx >= 0 && cy >= 0 && cx < cellWidth && cy < cellHeight
         if !getVisited(cx, cy)
@@ -390,32 +416,23 @@ class Maze
   end
 
   def generateDepthFirstMaze
+    # Pick a cell to start in
     sx = rand(cellWidth)
     sy = rand(cellHeight)
-    setAllEdges()
+    # Set up all nodes
+    setAllEdges
+    # Generate a maze
     recurseDepthFirst(sx, sy, 0)
   end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 class Dungeon
   attr_accessor :width, :height
-  XBUFFER = 8
-  YBUFFER = 6
-
-  class DungeonTable
-    def initialize(dungeon)
-	    @dungeon = dungeon
-    end
-
-    def xsize; @dungeon.width;  end
-    def ysize; @dungeon.height; end
-
-    def [](x, y)
-      [1, 2, 3, 2][@dungeon[x, y]]   # Void, room floor, wall, corridor floor
-    end
-  end
+  BUFFER_X = 8
+  BUFFER_Y = 6
 
   def initialize(width, height)
     @width  = width
@@ -425,7 +442,7 @@ class Dungeon
 
   def clear
     for i in 0...width * height
-      @array[i] = 0
+      @array[i] = DungeonTile::VOID
     end
   end
 
@@ -434,7 +451,7 @@ class Dungeon
     i = 0
     for y in 0...@height
       for x in 0...@width
-        ret += [" ", ".", "~", ","][value(x, y)]   # Void, room floor, wall, corridor floor
+        ret += DungeonTile.to_text(value(x, y))
         i += 1
       end
       ret += "\r\n"
@@ -443,7 +460,7 @@ class Dungeon
   end
 
   def [](x, y)
-    @array[y * @width + x]
+    return @array[y * @width + x]
   end
 
   def []=(x, y, value)
@@ -451,86 +468,129 @@ class Dungeon
   end
 
   def value(x, y)
-    return 0 if x < 0 || y < 0 || x >= @width || y >= @height
-    @array[y * @width + x]
+    return DungeonTile::VOID if x < 0 || y < 0 || x >= @width || y >= @height
+    return @array[y * @width + x]
   end
 
+  # Unused
   def get(x, y)
     return false if x < 0 || y < 0 || x >= @width || y >= @height
-    @array[y * @width + x] != 0
+    return @array[y * @width + x] != DungeonTile::VOID
   end
 
-  def isWall?(x, y)
-    if value(x, y) == 0   # This tile is void
-      v1 = value(x, y + 1)
-      return true if v1 == 1 || v1 == 3   # The tile below is room floor/corridor floor
-      if v1 == 0   # The tile below is void
-        v1 = value(x, y + 2)
-        return true if v1 == 1 || v1 == 3   # The tile below that is room floor/corridor floor
-      end
-    end
-    return false
+  # Unused
+  def intersects?(r1, r2)
+  	return !(((r2[0] + r2[2] <= r1[0]) ||
+	   	 (r2[0] >= r1[0] + r1[2]) ||
+		   (r2[1] + r2[3] <= r1[1]) ||
+		   (r2[1] >= r1[1] + r1[3])) &&
+		   ((r1[0] <= r2[0] + r2[2])||
+		   (r1[0] >= r2[0] + r2[2]) ||
+		   (r1[1] + r1[3] <= r2[1]) ||
+	   	 (r1[1] >= r2[1] + r2[3]))
+		)
   end
 
+  # Returns whether the given coordinates are a room floor that isn't too close
+  # to a corridor
   def isRoom?(x, y)
-    if value(x, y) == 1   # This tile is a room floor
-      return false if value(x - 1, y - 1) == 3
-      return false if value(    x, y - 1) == 3
-      return false if value(x + 1, y - 1) == 3
-      return false if value(x - 1,     y) == 3
-      return false if value(x + 1,     y) == 3
-      return false if value(x - 1, y + 1) == 3
-      return false if value(    x, y + 1) == 3
-      return false if value(x + 1, y + 1) == 3
+    if value(x, y) == DungeonTile::ROOM
+      return false if value(x - 1, y - 1) == DungeonTile::CORRIDOR
+      return false if value(    x, y - 1) == DungeonTile::CORRIDOR
+      return false if value(x + 1, y - 1) == DungeonTile::CORRIDOR
+      return false if value(x - 1,     y) == DungeonTile::CORRIDOR
+      return false if value(x + 1,     y) == DungeonTile::CORRIDOR
+      return false if value(x - 1, y + 1) == DungeonTile::CORRIDOR
+      return false if value(    x, y + 1) == DungeonTile::CORRIDOR
+      return false if value(x + 1, y + 1) == DungeonTile::CORRIDOR
       return true   # No surrounding tiles are corridor floor
     end
     return false
   end
 
+  def isWall?(x, y)
+    if value(x, y) == DungeonTile::VOID
+      v1 = value(x, y + 1)
+      return true if v1 == DungeonTile::ROOM || v1 == DungeonTile::CORRIDOR
+      if v1 == DungeonTile::VOID   # The tile below is void
+        v1 = value(x, y + 2)
+        return true if v1 == DungeonTile::ROOM || v1 == DungeonTile::CORRIDOR
+      end
+    end
+    return false
+  end
+
+  def paint_room(rect,offsetX,offsetY)
+    for y in (rect[1] + offsetY)...(rect[1] + offsetY + rect[3])
+      for x in (rect[0] + offsetX)...(rect[0] + offsetX + rect[2])
+        self[x, y] = DungeonTile::ROOM
+      end
+    end
+  end
+
   def generate
     self.clear
-    maxWidth = @width - XBUFFER * 2
-    maxHeight = @height - YBUFFER * 2
-    cellWidth = DungeonMaze::TILE_WIDTH
-    cellHeight = DungeonMaze::TILE_HEIGHT
+    maxWidth = @width - BUFFER_X * 2
+    maxHeight = @height - BUFFER_Y * 2
+    cellWidth = DungeonMaze::CELL_WIDTH
+    cellHeight = DungeonMaze::CELL_HEIGHT
     return if maxWidth < 0 || maxHeight < 0
     if maxWidth < cellWidth || maxHeight < cellHeight   # Map is too small
       for x in 0...maxWidth
         for y in 0...maxHeight
-          self[x + XBUFFER, y + YBUFFER] = 1   # Make all tiles room floor
+          self[x + BUFFER_X, y + BUFFER_Y] = DungeonTile::ROOM
         end
       end
       return
     end
+    # Generate connections between cells
     maze = Maze.new(maxWidth / cellWidth, maxHeight / cellHeight)
     maze.generateDepthFirstMaze()
-    tiles = DungeonMaze.generateTiles()
+    # Draw each cell's contents in turn (room and corridors)
+    corridor_patterns = DungeonMaze.generate_corridor_patterns
     roomcount = 0
     for y in 0...maxHeight / cellHeight
       for x in 0...maxWidth / cellWidth
-        tile = maze.getEdgePattern(x, y)
-        if DungeonMaze.paintCell(self, XBUFFER + x * cellWidth, YBUFFER + y * cellHeight,
-           tiles[tile][0], tiles[tile][1])
+        pattern = maze.getEdgePattern(x, y)
+        if DungeonMaze.paint_cell_contents(
+           self, BUFFER_X + x * cellWidth, BUFFER_Y + y * cellHeight,
+           corridor_patterns[pattern], DungeonMaze::None)
           roomcount += 1
         end
       end
     end
+    # If no rooms were generated, make the whole map a room
     if roomcount == 0
-      # Handle situation where no rooms were generated
       for x in 0...maxWidth
         for y in 0...maxHeight
-          self[x + XBUFFER, y + YBUFFER] = 1   # Make all tiles room floor
+          self[x + BUFFER_X, y + BUFFER_Y] = DungeonTile::ROOM
         end
       end
     end
     # Generate walls
     for y in 0...@height
       for x in 0...@width
-        self[x, y] = 2 if isWall?(x, y)   # Make appropriate tiles wall tiles
+        self[x, y] = DungeonTile::WALL if isWall?(x, y)   # Make appropriate tiles wall tiles
       end
     end
   end
 
+  class DungeonTable
+    def initialize(dungeon)
+	    @dungeon = dungeon
+    end
+
+    def xsize; @dungeon.width;  end
+    def ysize; @dungeon.height; end
+
+    # Returns which tile in the tileset corresponds to the type of tile is at
+    # the given coordinates
+    def [](x, y)
+      return DungeonTile.to_tile_id(@dungeon[x, y])
+    end
+  end
+
+  # Convert dungeon layout into proper map tiles
   def generateMapInPlace(map)
     tbl = DungeonTable.new(self)
     for i in 0...map.width
@@ -543,30 +603,11 @@ class Dungeon
       end
     end
   end
-
-  def paint(rect,offsetX,offsetY)
-    for y in (rect[1] + offsetY)...(rect[1] + offsetY + rect[3])
-      for x in (rect[0] + offsetX)...(rect[0] + offsetX + rect[2])
-        self[x, y] = 1   # room tile
-      end
-    end
-  end
-
-  def intersects?(r1, r2)
-  	return !(((r2[0] + r2[2] <= r1[0]) ||
-	   	 (r2[0] >= r1[0] + r1[2]) ||
-		   (r2[1] + r2[3] <= r1[1]) ||
-		   (r2[1] >= r1[1] + r1[3])) &&
-		   ((r1[0] <= r2[0] + r2[2])||
-		   (r1[0] >= r2[0] + r2[2]) ||
-		   (r1[1] + r1[3] <= r2[1]) ||
-	   	 (r1[1] >= r2[1] + r2[3]))
-		);
-  end
 end
 
-
-
+#===============================================================================
+#
+#===============================================================================
 # Get a random room tile that isn't too close to a corridor (to avoid blocking
 # a room's entrance)
 def pbRandomRoomTile(dungeon, tiles)
@@ -610,3 +651,10 @@ Events.onMapCreate += proc { |_sender, e|
     $game_temp.player_new_y = tile[1]
   end
 }
+
+def generate_test_dungeon(x_cells = 4, y_cells = 4)
+  dungeon = Dungeon.new(Dungeon::BUFFER_X * 2 + DungeonMaze::CELL_WIDTH * x_cells,
+                        Dungeon::BUFFER_Y * 2 + DungeonMaze::CELL_HEIGHT * y_cells)
+  dungeon.generate
+  echoln dungeon.write
+end
