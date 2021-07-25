@@ -366,6 +366,7 @@ end
 # Battle Factory data
 #===============================================================================
 class BattleFactoryData
+  INITIAL_BST=350
   def initialize(bcdata)
     @bcdata = bcdata
   end

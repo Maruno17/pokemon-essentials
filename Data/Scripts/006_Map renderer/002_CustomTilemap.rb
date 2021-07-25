@@ -507,11 +507,19 @@ class CustomTilemap
     elsif $PokemonGlobal.bridge > 0 && terrain_tag_data.bridge
       spriteZ = 1
     else
-      spriteZ = (priority==0) ? 0 : ypos+priority*32+32
+      spriteZ = calculate_sprite_priority(priority,ypos)
     end
     sprite.z = spriteZ
     count += 2
     return count
+  end
+
+  def calculate_sprite_priority(priority,ypos)
+    begin
+      return (priority==0) ? 0 : ypos+priority*32+32
+    rescue
+      return 0
+    end
   end
 
   def refresh_flash

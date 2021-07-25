@@ -25,11 +25,30 @@ def pbGetBTTrainers(challengeID)
   return []
 end
 
-def pbGetBTPokemon(challengeID)
-  trlists = (load_data("Data/trainer_lists.dat") rescue [])
-  trlists.each { |tr| return tr[1] if !tr[5] && tr[2].include?(challengeID) }
-  trlists.each { |tr| return tr[1] if tr[5] }   # is default list
-  return []
+def pbGetBTPokemon(challenge_id)
+  list=[]
+  for i in 0..PBSpecies.maxValue
+    list << i
+  end
+  return list
+  # list=[]
+  # while list.length <= target_size
+  #   list << generate_random_species(max_bst)
+  # end
+  # return list
+end
+
+def generate_random_species(max_bst)
+  additional_bst = $game_variables[120]
+  species=0
+  bonus = 0
+  while (species==0) # Loop Start
+    bonus+= 5 #+ de chance de pogner un bon poke a chaque loop (permet d'eviter infinite loop)
+    species=rand(PBSpecies.maxValue)+1
+    bst = calcBaseStats(species)
+    species=0 if bst > max_bst+additional_bst
+  end
+  return species
 end
 
 #===============================================================================

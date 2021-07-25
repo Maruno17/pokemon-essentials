@@ -15,7 +15,7 @@
 # Vermillion City (19) - Route 11 (155)
 19,East,0,155,West,5
 # Secluded Path (65) - Vermillion City (19)
-65,East,21,19,West,0
+#65,East,21,19,West,0
 # Route 17 (146) - Route 18 (517)
 146,East,56,517,West,0
 # Fuchsia City (472) - Route 18 (517)

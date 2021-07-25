@@ -154,10 +154,19 @@ def pbBattleFactoryPokemon(rules, win_count, swap_count, rentals)
       rnd = pokemonNumbers[0] + rand(pokemonNumbers[1] - pokemonNumbers[0] + 1)
       rndpoke = btpokemon[rnd]
       indvalue = (party.length < iv_threshold) ? ivs[0] : ivs[1]
-      party.push(rndpoke.createPokemon(level, indvalue, nil))
+      party.push(createPokemon(rndpoke,level, indvalue, nil))
     end
     break if rules.ruleset.isValid?([].concat(party).concat(rentals))
   end
   rules.ruleset.setNumberRange(old_min, old_max)
   return party
+end
+
+
+def createPokemon(species, level, iv, trainer)
+  pkmn = Pokemon.new(species, level, trainer)
+  pkmn.personalID = rand(2 ** 16) | rand(2 ** 16) << 16
+  GameData::Stat.each_main { |s| pkmn.iv[s.id] = iv }
+  pkmn.calc_stats
+  return pkmn
 end
