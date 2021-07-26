@@ -67,8 +67,6 @@ Can use Fly from within the Town Map if possible. (Good QoL, add if possible.)
 
 Make example event that combines the Gen 8 fossils.
 
-Add AI for new moves/items/abilities.
-
 What happens to the PP of Iron Head when turned into/from Behemoth Blade/Bash
 for Zacian/Zamazenta?
 
@@ -126,6 +124,8 @@ New evolution methods:
 Escape Rope's code now supports both consumable and non-consumable versions,
 depending on whether it is a key item. All it needs is a proper definition in
 items.txt.
+
+Add AI for new moves/items/abilities.
 
 Ability Effect Changes
 - Intimidate now triggers Rattled. Rattled needs a new ability handler just for
