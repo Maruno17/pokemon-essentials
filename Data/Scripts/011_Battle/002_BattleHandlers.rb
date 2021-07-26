@@ -90,6 +90,7 @@ module BattleHandlers
   AbilityOnSwitchOut                  = AbilityHandlerHash.new
   AbilityChangeOnBattlerFainting      = AbilityHandlerHash.new
   AbilityOnBattlerFainting            = AbilityHandlerHash.new   # Soul-Heart
+  AbilityOnIntimidated                = AbilityHandlerHash.new   # Rattled (Gen 8)
   # Running from battle
   RunFromBattleAbility                = AbilityHandlerHash.new   # Run Away
   RunFromBattleItem                   = ItemHandlerHash.new   # Smoke Ball
@@ -461,6 +462,10 @@ module BattleHandlers
 
   def self.triggerAbilityOnBattlerFainting(ability,battler,fainted,battle)
     AbilityOnBattlerFainting.trigger(ability,battler,fainted,battle)
+  end
+
+  def self.triggerAbilityOnIntimidated(ability,battler,battle)
+    AbilityOnIntimidated.trigger(ability,battler,battle)
   end
 
   #=============================================================================

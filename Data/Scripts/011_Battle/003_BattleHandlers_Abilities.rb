@@ -2279,14 +2279,15 @@ BattleHandlers::AbilityOnSwitchIn.add(:INTIMIDATE,
     battle.pbShowAbilitySplash(battler)
     battle.eachOtherSideBattler(battler.index) do |b|
       next if !b.near?(battler)
-      check_item = true
+      check_item = true; check_abil = false
       if b.hasActiveAbility?(:CONTRARY)
         check_item = false if b.statStageAtMax?(:ATTACK)
       else
         check_item = false if b.statStageAtMin?(:ATTACK)
       end
-      b.pbLowerAttackStatStageIntimidate(battler)
+      check_abil = b.pbLowerAttackStatStageIntimidate(battler)
       b.pbItemOnIntimidatedCheck if check_item
+      b.pbAbilitiesOnIntimidated if check_abil
     end
     battle.pbHideAbilitySplash(battler)
   }
@@ -2471,6 +2472,16 @@ BattleHandlers::AbilityChangeOnBattlerFainting.copy(:POWEROFALCHEMY,:RECEIVER)
 BattleHandlers::AbilityOnBattlerFainting.add(:SOULHEART,
   proc { |ability,battler,fainted,battle|
     battler.pbRaiseStatStageByAbility(:SPECIAL_ATTACK,1,battler)
+  }
+)
+
+#===============================================================================
+# AbilityOnIntimidated handlers
+#===============================================================================
+
+BattleHandlers::AbilityOnIntimidated.add(:RATTLED,
+  proc { |ability,battler,battle|
+    battler.pbRaiseStatStageByAbility(:SPEED, 1, battler)
   }
 )
 

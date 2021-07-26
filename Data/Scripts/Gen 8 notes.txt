@@ -31,8 +31,6 @@ Some moves have changed properties/effects:
   by Mirror Armor. Throat Spray is triggered and applies before the switch.
 
 Some abilities have changed effects:
-- Intimidate now triggers Rattled. Rattled needs a new ability handler just for
-  triggering this way.
 - If another Pokémon faints before a Pokémon with Analytic makes its move,
   Analytic calculates whether it would have moved before or after the fainted
   Pokémon. In Gen 8, speed- and priority-modifying effects aren't considered,
@@ -131,6 +129,11 @@ Escape Rope's code now supports both consumable and non-consumable versions,
 depending on whether it is a key item. All it needs is a proper definition in
 items.txt.
 
+Ability Effect Changes
+- Intimidate now triggers Rattled. Rattled needs a new ability handler just for
+  triggering this way.
+- Rapid Spin now raises the user's Speed by 1 stage (100% additional effect
+  chance).
 - Multi-Attack's power changed to 120.
 - Rapid Spin's power changed to 50.
 - Vice Grip renamed to Vise Grip.
