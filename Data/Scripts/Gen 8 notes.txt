@@ -38,8 +38,6 @@ Some items have changed properties/effects:
 - Zygarde Cube now changes a Zygarde's ability.
 - Ensure that Choice items cause different moves to fail (without subtracting
   PP) if they were forced to be used by Instruct/Dancer.
-- Iron Ball shouldn't modify the effectiveness of Ground moves against a Flying
-  holder if the holder is grounded by another effect that isn't Iron Ball.
 
 Other notes:
 - In Gen 7+, Shaymin/Hoopa revert their form when withdrawn from storage rather
@@ -136,6 +134,9 @@ Item Effect Changes
   failing that, the earliest move in the list of moves which has any PP missing
   (no matter how much).
 - Ability Capsule/Ability Patch should fail if used on Zygarde.
+- Iron Ball shouldn't modify the effectiveness of Ground moves against a Flying
+  holder if the holder is grounded by another effect that isn't Iron Ball.
+
 - Multi-Attack's power changed to 120.
 - Rapid Spin's power changed to 50.
 - Vice Grip renamed to Vise Grip.
