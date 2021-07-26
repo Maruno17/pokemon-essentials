@@ -7684,6 +7684,7 @@ Category = Status
 Accuracy = 0
 TotalPP = 20
 Target = User
+Priority = -6
 FunctionCode = 0EA
 Description = Use it to flee from any wild Pokémon. It can also warp to the last Pokémon Center visited.
 #-------------------------------

@@ -2983,20 +2983,45 @@ end
 
 
 #===============================================================================
-# User flees from battle. Fails in trainer battles. (Teleport)
+# User flees from battle when the battle is a wild battle.
+# Switches out Pokemon when in trainer battles. (Teleport)
 #===============================================================================
 class PokeBattle_Move_0EA < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if !@battle.pbCanRun?(user.index)
+    if @battle.wildBattle? && user.opposes? && !@battle.pbCanRun?(user.index)
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    elsif !@battle.wildBattle? && (!@battle.pbCanChooseNonActive?(user.index) || user.fainted?)
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
     return false
   end
 
+  def pbEndOfMoveUsageEffect(user,targets,numHits,switchedBattlers)
+    if Settings::MECHANICS_GENERATION >= 8
+      return if @battle.wildBattle? && user.opposes?
+      return if user.fainted? || numHits==0 || @battle.pbAllFainted?(user.idxOpposingSide)
+      return if !@battle.pbCanChooseNonActive?(user.index)
+      @battle.pbDisplay(_INTL("{1} went back to {2}!",user.pbThis,
+         @battle.pbGetOwnerName(user.index)))
+      @battle.pbPursuit(user.index)
+      return if user.fainted?
+      newPkmn = @battle.pbGetReplacementPokemonIndex(user.index)   # Owner chooses
+      return if newPkmn<0
+      @battle.pbRecallAndReplace(user.index,newPkmn)
+      @battle.pbClearChoice(user.index)   # Replacement Pokémon does nothing this round
+      @battle.moldBreaker = false
+      switchedBattlers.push(user.index)
+      user.pbEffectsOnSwitchIn(true)
+    end
+  end
+
   def pbEffectGeneral(user)
-    @battle.pbDisplay(_INTL("{1} fled from battle!",user.pbThis))
-    @battle.decision = 3   # Escaped
+    if @battle.wildBattle? && user.opposes?
+      @battle.pbDisplay(_INTL("{1} fled from battle!",user.pbThis))
+      @battle.decision = 3   # Escaped
+    end
   end
 end
 
