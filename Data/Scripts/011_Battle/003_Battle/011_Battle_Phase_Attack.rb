@@ -129,19 +129,29 @@ class PokeBattle_Battle
       return if @decision>0
       next if advance
       # Quashed
-      quashLevel = 0
-      loop do
-        quashLevel += 1
-        moreQuash = false
+      if Settings::MECHANICS_GENERATION >= 8
         priority.each do |b|
-          moreQuash = true if b.effects[PBEffects::Quash]>quashLevel
-          next unless b.effects[PBEffects::Quash]==quashLevel && !b.fainted?
+          next unless b.effects[PBEffects::Quash] > 0 && !b.fainted?
           next unless @choices[b.index][0]==:UseMove || @choices[b.index][0]==:Shift
           next if b.movedThisRound?
           advance = b.pbProcessTurn(@choices[b.index])
-          break
+          break if advance
         end
-        break if advance || !moreQuash
+      else
+        quashLevel = 0
+        loop do
+          quashLevel += 1
+          moreQuash = false
+          priority.each do |b|
+            moreQuash = true if b.effects[PBEffects::Quash]>quashLevel
+            next unless b.effects[PBEffects::Quash]==quashLevel && !b.fainted?
+            next unless @choices[b.index][0]==:UseMove || @choices[b.index][0]==:Shift
+            next if b.movedThisRound?
+            advance = b.pbProcessTurn(@choices[b.index])
+            break
+          end
+          break if advance || !moreQuash
+        end
       end
       return if @decision>0
       next if advance

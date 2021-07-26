@@ -18,8 +18,6 @@ Some moves have changed properties/effects:
 - Healing Wish's effect and Lunar Dance's effect are no longer used up if a
   Pokémon that switches to the targeted position can't make use of it. Each
   position can only have one of each effect applied at once.
-- Multiple Quashed Pokémon now move in order from fastest to slowest, rather
-  than the order in which they were Quashed.
 - Parting Shot is able to make the user switch out if its effect is redirected
   by Mirror Armor. Throat Spray is triggered and applies before the switch.
 
@@ -123,6 +121,8 @@ Move Effect Changes
 - Curse's Ghost effect now targets a random foe (don't know if it can be non-
   adjacent); the target cannot be chosen by the player (it appears to target the
   user).
+- Multiple Quashed Pokémon now move in order from fastest to slowest, rather
+  than the order in which they were Quashed.
 - Ensure that Choice items cause different moves to fail (without subtracting
   PP) if they were forced to be used by Instruct/Dancer.
 - Rapid Spin now raises the user's Speed by 1 stage (100% additional effect
