@@ -269,7 +269,10 @@ class PokeBattle_Move_10D < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
   def pbTarget(user)
-    return GameData::Target.get(:NearFoe) if user.pbHasType?(:GHOST)
+    if user.pbHasType?(:GHOST)
+      ghost_target = (Settings::MECHANICS_GENERATION >= 8) ? :RandomNearFoe : :NearFoe
+      return GameData::Target.get(ghost_target)
+    end
     return super
   end
 
