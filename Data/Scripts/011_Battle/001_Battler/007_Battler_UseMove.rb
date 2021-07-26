@@ -522,6 +522,7 @@ class PokeBattle_Battler
       next if idxMove<0
       oldLastRoundMoved = b.lastRoundMoved
       @battle.pbDisplay(_INTL("{1} used the move instructed by {2}!",b.pbThis,user.pbThis(true)))
+      next if !pbCanChooseMove?(@moves[idxMove], false, true)
       PBDebug.logonerr{
         b.effects[PBEffects::Instructed] = true
         b.pbUseMoveSimple(b.lastMoveUsed,b.lastRegularMoveTarget,idxMove,false)
@@ -556,6 +557,7 @@ class PokeBattle_Battler
           @battle.pbDisplay(_INTL("{1} kept the dance going with {2}!",
              nextUser.pbThis,nextUser.abilityName))
         end
+        next if !nextUser.pbCanChooseMove?(move, false, true)
         PBDebug.logonerr{
           nextUser.effects[PBEffects::Dancer] = true
           nextUser.pbUseMoveSimple(move.id,preTarget)

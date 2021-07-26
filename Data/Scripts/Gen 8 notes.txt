@@ -31,8 +31,6 @@ Some abilities have changed effects:
 
 Some items have changed properties/effects:
 - Zygarde Cube now changes a Zygarde's ability.
-- Ensure that Choice items cause different moves to fail (without subtracting
-  PP) if they were forced to be used by Instruct/Dancer.
 
 Other notes:
 - In Gen 7+, Shaymin/Hoopa revert their form when withdrawn from storage rather
@@ -125,6 +123,8 @@ Move Effect Changes
 - Curse's Ghost effect now targets a random foe (don't know if it can be non-
   adjacent); the target cannot be chosen by the player (it appears to target the
   user).
+- Ensure that Choice items cause different moves to fail (without subtracting
+  PP) if they were forced to be used by Instruct/Dancer.
 - Rapid Spin now raises the user's Speed by 1 stage (100% additional effect
   chance).
 
