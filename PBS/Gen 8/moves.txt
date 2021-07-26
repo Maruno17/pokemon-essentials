@@ -5389,6 +5389,7 @@ TotalPP = 40
 Target = NearOther
 FunctionCode = 110
 Flags = Contact,CanProtect,CanMirrorMove
+EffectChance = 100
 Description = A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.
 #-------------------------------
 [SPIKECANNON]

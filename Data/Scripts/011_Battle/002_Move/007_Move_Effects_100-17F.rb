@@ -377,7 +377,12 @@ end
 # Removes trapping moves, entry hazards and Leech Seed on user/user's side.
 # (Rapid Spin)
 #===============================================================================
-class PokeBattle_Move_110 < PokeBattle_Move
+class PokeBattle_Move_110 < PokeBattle_StatUpMove
+  def initialize(battle,move)
+    super
+    @statUp = [:SPEED, 1]
+  end
+
   def pbEffectAfterAllHits(user,target)
     return if user.fainted? || target.damageState.unaffected
     if user.effects[PBEffects::Trapping]>0
@@ -408,6 +413,11 @@ class PokeBattle_Move_110 < PokeBattle_Move
       user.pbOwnSide.effects[PBEffects::StickyWeb] = false
       @battle.pbDisplay(_INTL("{1} blew away sticky webs!",user.pbThis))
     end
+  end
+
+  def pbAdditionalEffect(user,target)
+    return if Settings::MECHANICS_GENERATION < 8
+    super(user,target)
   end
 end
 
