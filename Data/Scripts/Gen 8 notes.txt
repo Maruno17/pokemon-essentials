@@ -36,7 +36,6 @@ Some abilities have changed effects:
 
 Some items have changed properties/effects:
 - Zygarde Cube now changes a Zygarde's ability.
-- Ability Capsule/Ability Patch should fail if used on Zygarde.
 - Ensure that Choice items cause different moves to fail (without subtracting
   PP) if they were forced to be used by Instruct/Dancer.
 - Iron Ball shouldn't modify the effectiveness of Ground moves against a Flying
@@ -130,11 +129,13 @@ Ability Effect Changes
 Move Effect Changes
 - Rapid Spin now raises the user's Speed by 1 stage (100% additional effect
   chance).
+
 Item Effect Changes
 - If Leppa Berry is forced to be consumed, it will first try to work on a move
   with 0 PP left (preferring the earliest such move in the list of moves), and
   failing that, the earliest move in the list of moves which has any PP missing
   (no matter how much).
+- Ability Capsule/Ability Patch should fail if used on Zygarde.
 - Multi-Attack's power changed to 120.
 - Rapid Spin's power changed to 50.
 - Vice Grip renamed to Vise Grip.

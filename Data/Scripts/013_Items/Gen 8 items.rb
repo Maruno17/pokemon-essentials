@@ -272,7 +272,7 @@ ItemHandlers::UseOnPokemon.add(:ABILITYPATCH, proc { |item, pkmn, scene|
     abils = pkmn.getAbilityList
     new_ability_id = nil
     abils.each { |a| new_ability_id = a[0] if a[1] == 2 }
-    if !new_ability_id || pkmn.hasHiddenAbility?
+    if !new_ability_id || pkmn.hasHiddenAbility? || pkmn.isSpecies?(:ZYGARDE)
       scene.pbDisplay(_INTL("It won't have any effect."))
       next false
     end
