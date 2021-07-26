@@ -7,6 +7,7 @@
 The game records, for each species, how many have been caught or defeated
 (counts both wild and trainer battles), and the shiny chance increases for that
 species because of this. This value is also shown in the Pokédex entry screen.
+(Will be implemented by me in the next PR)
 
 Some moves have changed properties/effects:
 - Howl's target changed to UserAndAllies, and is now a sound move. It is now
@@ -14,12 +15,12 @@ Some moves have changed properties/effects:
   pbImmunityByAbility, but leaning towards yes; will Volt Absorb block an
   Electrified Howl?). Needs a new function code, since it now affects targets
   rather than the user.
-- Look at the moves Nature Power turns into.
 - Healing Wish's effect and Lunar Dance's effect are no longer used up if a
   Pokémon that switches to the targeted position can't make use of it. Each
-  position can only have one of each effect applied at once.
+  position can only have one of each effect applied at once. (Will be implemented by me in the next PR)
 - Parting Shot is able to make the user switch out if its effect is redirected
   by Mirror Armor. Throat Spray is triggered and applies before the switch.
+  (The Throat Spray part is done by default)
 
 Some abilities have changed effects:
 - If another Pokémon faints before a Pokémon with Analytic makes its move,
@@ -36,7 +37,14 @@ Other notes:
   reverts its form when deposited in the Day Care (all Gens).
 - Look at Sweet Scent's out of battle effect, namely whether it should try to
   cause a horde battle (and what does that mean in Essentials?).
+  (Possibly a 3v1 battle with all 3 opponents of the same species?
+  This doesn't seem to work with base Essentials mechanics really)
+
 - Maybe have multiple sets of Pickup items for multiple Gens.
+  (pbDynamicItemList already filters out undefined items so is this really needed?
+  Maybe the Pickup Item table could be moved into Settings so the item definitions
+  could be left upto the user.)
+
 - Add a newer type of berry tree mechanics? Have a separate setting that
   prevents deterioration?
 - If a battle ends because of Rocky Helmet damage, the side that the Rocky
@@ -48,11 +56,14 @@ Other notes:
   is probably fine.
 
 Can use Fly from within the Town Map if possible. (Good QoL, add if possible.)
+(Will be implemented by me in the next PR)
 
 Make example event that combines the Gen 8 fossils.
 
 What happens to the PP of Iron Head when turned into/from Behemoth Blade/Bash
 for Zacian/Zamazenta?
+(PP is scaled accordingly. Eg: If a PP Max is used on Iron Head to give it
+24 PP, then the Behemoth move will have 8 PP)
 
 #===============================================================================
 # Low priority or ignorable
@@ -118,6 +129,7 @@ Ability Effect Changes
 Move Effect Changes
 - Teleport switches the user out. If the user is a wild Pokémon, ends the battle
   instead.
+- Look at the moves Nature Power turns into. (Unchanged since Gen 7)
 - Curse's Ghost effect now targets a random foe (don't know if it can be non-
   adjacent); the target cannot be chosen by the player (it appears to target the
   user).
