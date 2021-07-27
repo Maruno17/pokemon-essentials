@@ -1283,21 +1283,26 @@ BattleHandlers::UserItemAfterMoveUse.add(:SHELLBELL,
 BattleHandlers::EndOfMoveItem.add(:LEPPABERRY,
   proc { |item,battler,battle,forced|
     next false if !forced && !battler.canConsumeBerry?
-    found = []
-    foundMoves = []
+    found       = []
+    found_moves = []
     battler.pokemon.moves.each_with_index do |m,i|
       next if m.total_pp<=0 || m.pp==m.total_pp
       next if !forced && m.pp>0
       found.push(i)
-      foundMoves.push(m)
+      found_moves.push(m)
     end
     next false if found.length==0
     itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
     battle.pbCommonAnimation("EatBerry",battler) if !forced
     if Settings::MECHANICS_GENERATION >= 8
-      newFound = foundMoves.sort { |a,b| a.pp <=> b.pp }
-      choice = battler.pokemon.moves.index(newFound.first)
+      found_zero = found_moves.select { |m| m.pp == 0 }
+      if !found_zero.empty?
+        choice = battler.pokemon.moves.index(found_zero.first)
+      else
+        found_moves.select! { |m| m.pp != 0 }
+        choice = battler.pokemon.moves.index(found_moves.first)
+      end
     else
       choice = found[battle.pbRandom(found.length)]
     end
