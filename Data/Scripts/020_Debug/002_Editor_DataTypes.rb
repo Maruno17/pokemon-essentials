@@ -1004,7 +1004,7 @@ module MovePoolProperty
               end
             when 1   # Change move
               newmove = pbChooseMoveList(entry[1])
-              if newmove
+              if newmove && newmove != entry[1]
                 havemove = -1
                 realcmds.each do |e|
                   havemove = e[2] if e[0] == entry[0] && e[1] == newmove
@@ -1012,6 +1012,7 @@ module MovePoolProperty
                 if havemove >= 0   # New move already known at level; delete this move
                   realcmds[cmd[1]] = nil
                   realcmds.compact!
+                  cmd[1] = [cmd[1], realcmds.length - 1].min
                   oldsel = havemove
                 else   # Apply the new move
                   entry[1] = newmove
