@@ -1,0 +1,186 @@
+##########		CREDITS	         ###############
+Game made by Schrroms
+
+*This is NOT an official Pokemon game. The author of this game is not 
+affiliated with Nintendo in any way 
+
+##################################
+##	Programming  / Events  ##
+#################################
+Schrroms
+
+##############################
+##	Maps		    ##
+##############################	
+Schrroms
+
+Some of the maps were based on work by:
+BenGames,Films, and More! (Pokemon Adventures in Kanto) http://www.pokecommunity.com/showthread.php?t=303850
+Zeak6464 (Kanto Map pack) http://www.pokecommunity.com/showthread.php?t=345591
+
+#################################
+#	Story / Dialogies	#
+#################################
+Schrroms 
+The story and dialogues were based off Pokémon Red and Blue, as well as
+Pokémon Gold and Silver. Both games are made by Game Freak.
+
+###########################################################
+###	Fused Pokemon Sprites				 ###
+##########################################################
+Pokefusion 2 (version 4.5+)
+http://japeal.com/pkm
+
+Pokefusion (version 4.0-4.4)
+http://pokefusion.japeal.com/
+
+Alexonsager (version 3.x and below) 
+http://pokemon.alexonsager.net/
+
+Legendary birds fusion sprite by Universez
+Legendary beasts fusion sprite by Milchik
+Weather trio fusion sprite by magnuzone
+Creation and Tao trio trio fusion sprite by mammuth89
+
+Special thanks to Aegide for helping to rip the sprites from the website
+and to the owners of the respective fusion websites for accepting to share
+their sprites.
+###########################################################
+####		Pokemon Essentials			 ###
+###########################################################
+Maruno (http://pokemonessentials.wikia.com/wiki/Pok%C3%A9mon_Essentials_Wiki)
+
+###########################################################
+###		Postgame add-ons				###
+###########################################################
+Endgame Challenge:
+	DemICE (https://www.rebornevo.com/forum/index.php?/profile/62307-demice/)
+	Adapted from the infinity fusion endgame challenge mod
+	https://www.rebornevo.com/forum/index.php?/messenger/30070/&tab=comments#comment-297286
+
+Bill's Battletower:
+	barafanatic
+###########################################################
+###			Playtesting			###
+###########################################################
+Playtesting was done by various members of the Discord channel. 
+Special thanks to all of you!
+###########################################################
+###			Social media 			###
+###########################################################
+ChippyYYZ (Discord. reddit)
+qt314xxx (Discord)
+###########################################################
+###			Graphics			  #
+###########################################################
+Title screen background and logo by Doctor Miawoo
+
+Gen 4 Legendary trio eggs by calicorn
+
+###########################################################
+###	General graphics / Music / Intellectual property  #
+###########################################################
+Nintendo
+GameFreak
+
+
+#######################################################################
+The following ressources were also used 
+with their respective authors' consent
+#######################################################################
+### Sprites ###
+	Mega evolution sprites
+		The Smogon XY Sprite Project:
+		Nosciu, Layell, Branflakes325, , Sleet, TrainerSplash, Noscium, Wobblebuns,
+		Bynine, Arkeis, Legitimate Username, Mos_Quitoxe, Wyverii, ThatGuyYouKnow,
+		aXl, RedRooster, TeraVolt, Dleep, CoolStoryBoat,, TheCynicalPoet,
+		Brylark, Kyuzeth, Quanyails, princess-phoenix
+
+		Smogon Sun/Moon Sprite Project:
+		https://www.smogon.com/forums/threads/sun-moon-sprite-project.3577711/
+		leParagon, aXl, Layell, fishbowlsoul
+	
+	Overworld Sprites:
+		Rick1234 (BW overworld sprites)
+		Hankiro (Oak backsprite) 		http://s296.photobucket.com/user/Hankiro/media/ProfOakBackSprite.png.html
+		SailorVicious (Prof. Elm OW sprite) 	https://www.deviantart.com/sailorvicious
+		OceansLugiaSpirit (Koga OW sprite)  	http://oceanslugiaspirit.deviantart.com/
+		Knuckles (Kurt OW sprite)
+	Battle sprites: 
+		luckygirl88  (Misty VS sprite) 		http://luckygirl88.deviantart.com/art/Pokemon-BW-Misty-Sprite-Sheet-268364830
+		Lorelei VS sprite by Nalty 		http://nalty.deviantart.com/art/Lorelei-VS-Sprite-177184960
+		Kiwi (Kurt battle sprite)
+### Tileset graphics ### 
+	Jorginho (OutsideEmerald)
+	ThatsSoWitty (Cave) http://thatssowitty.deviantart.com/art/The-Public-Pokemon-Tileset-281342410
+	DirtyWiggles (Gen 5 tileset) http://dirtywiggles.deviantart.com/art/RPG-Maker-Friendly-Tileset-5-0-generation-5-tiles-683576419
+
+	The Public Pokemon Tileset (Assembled by ThatsSoWitty) http://thatssowitty.deviantart.com/art/The-Public-Pokemon-Tileset-281342410
+	Includes tiles by the following DeviantArt users (in no specific order):
+   		kyle-dove, rayd12smitty, Speedialga, Spacemotion, Alucus ,Pokemon-Diamond, kizemaru-kurunosuke, EpicDay,
+   		Thurpok, UltimoSpriter, iametrine, Minorthreat0987 , TyranitarDark,  Heavy-Metal-Lover, KKKaito,
+   		WesleyFG, BoOmxBiG, EternalTakai, Hek-el-grande
+
+	It is assumed that these people were contacted by ThatsSoWitty and gave him their consent to use their
+	tiles to be used in this pack.
+
+	Other tiles:
+		Schrroms, chimcharsfireworkd, Rossay, Shiney570,
+		Phyromatical, Gallanty (deviantart)
+
+### Music ###				
+	Pokeli 			https://www.youtube.com/channel/UC2ccJMFWSbjklOQESSBP_dw
+				https://www.youtube.com/watch?v=0ohkADYWCYE
+				https://www.youtube.com/watch?v=6EWYYzRSpMM
+	TailDoll666100 (Lavender Tower) 	https://www.youtube.com/watch?v=9cijOh7i7KI
+	Team Rocket hideout: Kazune Sawatari 	http://kazune8390.g.ribbon.to/
+						https://www.youtube.com/watch?v=frcGm7DRWX8
+	Silph Co. : sentsinkantéun	https://soundcloud.com/sentsinkanteun/silph-co-remix
+	S.S. Anne			https://soundcloud.com/sentsinkanteun
+
+	Pokémon Infernal Red Natural Green OST - Vermilion City  : Nanashima 	https://www.youtube.com/user/nanashimagalaxy
+										https://www.youtube.com/watch?v=m9XKnGRmB18
+
+	Pokemon Powerplant & Pokemon mansion remix: CharizardTheMaster		https://www.youtube.com/watch?v=K3G73gGCabs
+
+	Surfing theme: The Zame Jack 	https://soundcloud.com/user-272720300/surfing-kanto-remastered
+
+
+### Other graphics			
+Region map: Pokemon-Diamond (http://www.deviantart.com/art/Kanto-BW-styled-map-275298527)
+Move animations:
+	Dig:  WolfPP (Pokecommunity)
+	Bone Club, Bonemerang, Bone Rush: rekman (Pokecommunity)
+###########################################################
+###			RPG Maker Scripts		###
+###########################################################
+
+andracass (Pokémon Reborn)	Compiler optimization
+Luka S.J.			Elite Battle System
+				Animated Title Screen (modified):
+shiney570 			BW2 Summary script (+ graphics)	http://reliccastle.com/forums/showthread.php?tid=1090
+mej71 				Randomizer mode (adapted from)	(https://www.pokecommunity.com/showthread.php?t=360904)
+Erasus 				BW Bag (Pokecommunity)
+Umbreon 			Randomized Pokemon Script
+FL				Set controls screen
+				Unreal time system
+KleinStudio 			Water bubble script 	http://kleinstudio.deviantart.com/art/SCRIPT-Water-Bubbles-add-on-for-Essentials-535907963)
+				Graphics ripped by Zenionith (http://zenionith.deviantart.com/)
+				Footprints script	http://pokemonfangames.com/script.php?id=6
+carmaniac			Speech Bubbles script	http://www.pokecommunity.com/showthread.php?t=295277
+Wootius				Turbo Speed		https://www.pokecommunity.com/showthread.php?t=306037
+Marin				Better maps script	https://www.pokecommunity.com/showthread.php?t=411299
+barafanatic			Safari Zone improvements
+M3rein				Easy Questing System 
+
+
+#### Data sources ###			  
+Bulbapedia (Movesets)
+Project: Generation 6 for Pokémon Essentials (PBS files)
+	Project Organization:WorldSlayer
+	PBS file editing:
+	mej71,karstictrainer, WorldSlayer, TheDeKay, viperk1, SunakazeKun,Radical Raptr, RPD490, Takyon!, Pokegod7020
+	Research:Drakath569,Florio, MrDeepDarkMind, snooper117
+
+
+

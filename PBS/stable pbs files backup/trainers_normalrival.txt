@@ -1,0 +1,4434 @@
+LASS
+Mimi
+1
+PIDGEY,4,
+###########################
+YOUNGSTER
+Pat
+1
+B16H21,7,		#Speargey,
+##########################
+YOUNGSTER
+Sean
+1
+B14H11,8,,,HARDEN		#METAUNA,
+#########################
+YOUNGSTER
+Mustafa
+2
+PIDGEY,4,		#pidran,
+B10H19,4,	#Ratpie,
+#########################
+### Lavender Tower 	######
+#######################
+TEAMROCKET_M
+Walter
+2
+GRIMER,22,	POISONBARB,	#Arbmer,
+B108H93,26,		#Hauntung,
+#######################
+TEAMROCKET_M
+Jared
+2
+RATICATE,22,,TRANSFORM,HYPERFANG,CRUNCH,SCARYFACE,		#DitCate,
+B61H42,26,		#Golwhirl,
+
+######F3##############
+#####################
+CHANNELER
+Hope
+1
+B92H1,33,		#Bulbtly,
+#####################
+CHANNELER
+Margaret
+1
+B92H4,33,		#Chartly,
+##########################
+CHANNELER
+Deborah
+1
+B92H7,33,		#Squirtltly,
+##############################
+###########F4###########
+HAUNTEDGIRL
+Laurel
+2
+GASTLY,32,		#Gasbra,
+B64H92,32,		#Gasbra,
+#########################
+CHANNELER
+Carrietta
+1
+B92H61,32,		#Politly,
+#########################
+CHANNELER
+Morgan
+1
+B92H140,34,		#kabutly,
+############F5############
+#########################
+CHANNELER
+Ruth
+1
+B40H92,33,		#Gastuf,
+#########################
+HAUNTEDGIRL_YOUNG
+Regan
+1
+B93H26,33,		#Raiter,
+#########################
+CHANNELER
+Karina
+1
+B92H73,32,		#Tentatly,
+#########################
+HAUNTEDGIRL
+Carol Anne
+1
+B28H93,34,		#Hauntslash,
+#########################
+######	f6##############
+CHANNELER
+Angelica
+3
+GASTLY,32,		#Pertly,
+GASTLY,33,		#Genkarp,
+B13H94,33,		#Gendle,
+#########################
+HAUNTEDGIRL_YOUNG
+Jennifer
+1
+B101H93,34,		#Hauntode,
+#########################
+CHANNELER
+Emilia
+1
+B128H93,34,		#Hauntros,
+#########################
+HAUNTEDGIRL
+Samara
+1
+B105H93,40,		#Hauntwak,
+
+############################
+#### ROUTE 8 #############
+############################
+LASS
+Julia
+2
+DITTO,23,   #,TRANSFORM,METRONOME,MINIMIZE,ENCORE,		#Ditfairy,
+B35H40,23,							#Wigglyfairy,
+#############################
+GAMBLER
+Rich
+2
+VULPIX,25,
+B58H39,25,			#Jigglylithe,
+################################
+SUPERNERD
+Glenn
+3
+GRIMER,23,		#Grith,
+GRIMER,23,		#Tentamer,
+B233H201,23,		#ungon2,
+#################################
+TWINS
+Eli & Anne
+2
+B35H54,23,		#Psyfairy,
+B39H79,23,		#Slowpuff,
+#################################
+POKEMONBREEDER
+Megan
+5
+B16H37,20,		#Vulgey,
+B19H81,20,		#Magnetata,
+B32H90,20,		#Shellran,
+B52H104,20,		#Cuth,
+B25H64,20,		#Kadachu,
+################################
+BEAUTY
+Andrea
+3
+B52H126,23,		#Magth,
+B52H125,23,		#Electath,
+B52H124,23,		#Jynth,
+###############################
+SUPERNERD
+Leslie
+1
+B109H143,27,		#Snorfing,
+##############################
+LASS
+Paige
+2
+NIDORINO,24,		#Charoran,
+B30H5,24,		#Charina,
+###############################
+BIKER
+Jaren
+2
+B88H66,25,		#Mamer,
+B88H56,25,		#Manmer,
+###############################
+BIKER
+Johnny
+1
+B58H104,28,		#Culithe,
+#############################
+
+ROUGHNECK
+Ricardo
+3
+FARFETCHD,23,		#Farfing,
+KOFFING,23,		#Spearfing,
+B88H8,24,		#Warmer,
+################################
+SUPERNERD
+Aidan
+3
+B100H47,23,		#Paraorb,
+B109H47,23,		#Parafing,
+B81H47,23,		#Paramite,
+################################
+GAMBLER
+Stan
+3
+POLIWAG,23,		#Caterwag,
+POLIWAG,23,		#Metawag,
+B12H61,25,		#Polifree,
+################################
+
+
+################################
+############################
+#### ROUTE 7 #############
+############################
+SOCIALITE
+Edna
+1
+B136H44,29,		#Glooeon,
+###########################
+
+PAINTER
+Frederique
+2
+GOLDEEN,25,		#Goldsey,
+B2H27,25,		#Sandysaur,
+############################
+LASS
+Marina
+3
+FARFETCHD,24,		#Faruna,
+KADABRA,24,		#Aby,
+B77H84,24,		#Dota,
+##############################
+TEACHER
+France
+2
+CLEFAIRY,26,
+B122H52,26,		#Meowmime,
+############################
+PRESCHOOLER_M
+Max
+2
+EEVEE,25,		#Catervee,
+B132H46,26,,TRANSFORM,	#Pato,
+###############################
+PRESCHOOLER_M
+William
+1
+B116H86,28,		#Seasee,
+#############################
+PRESCHOOLER_F
+Lea
+3
+HORSEA,23,		#Horsish,
+JIGGLYPUFF,23,		#Jigglymander,
+B137H25,23,		#Pikagon,
+##############################
+
+
+################################
+############################
+#### ROUTE 12 #############
+############################
+FISHERMAN
+Ned
+3
+GOLDEEN,22,		#Venodeen,
+POLIWAG,22,		#Clefwag,
+B118H100,22,		#Voltdeen,
+#############################
+FISHERMAN
+Hank
+1
+B129H130,27,		#Gyarakarp,
+#############################
+FISHERMAN
+Chip
+2
+TENTACOOL,24,		#Weepincool,
+B118H104,24,		#Cudeen,
+##############################
+FISHERMAN
+Elliot
+4
+POLIWAG,26,		#Gaswag,
+KRABBY,26,		#Kabuder,
+HORSEA,26,		#Beesea,
+B118H96,26,		#Drowdeen,
+###############################
+YOUNGCOUPLE
+Gia & Jes
+4
+KRABBY,29,		#Kraboran f,
+KRABBY,29,		#Krabran m,
+B30H99,31,		#Kingrina f,
+B33H99,31,		#Kingrino m,
+
+###############################
+ENGINEER
+Luca
+2
+VOLTORB,31,		#Electrorb,
+B26H90,31,		#Shellchu,
+################################
+FISHERMAN
+Andrew
+6
+MAGIKARP,25,
+B129H11,25,		#Metakarp,
+B129H14,25,		#Kakarp,
+B129H132,25,	#Ditkarp,
+B129H10,25,		#Caterkarp,
+B129H13,25,		#Weekarp,
+
+#################################
+CAMPER
+Justin
+2
+B29H33,29,		#Nidoran,
+B30H32,29,		#Nidorina,
+################################
+################################
+##### 	ROUTE 13	#####
+################################
+TUBER_F
+Emily
+1
+B211H194,36,,,DIVE,AQUAJET,YAWN,MINIMIZE,	#WOOFISH
+#################################
+PICNICKER
+Alma
+3
+GROWLITHE,33,		#Goldlithe,
+POLIWHIRL,33,		#Policool,
+B133H116,33,		#Horsvee,
+##############################
+BIRDKEEPER
+Sebastian
+2
+PIDGEY,34,		#Seagey,
+B17H83,34,		#Fareotto,
+###########################
+SWIMMER_F
+Susie
+3
+HORSEA,26,		#Pidkarp,
+STARYU,26,		#Meowyu,
+B61H25,26,		#Pikawhirl,
+############################
+BEAUTY
+Lola
+2
+CLEFAIRY,34,		#Clefto,
+B140H52,34,		#Meowto (Kabuto),
+###########################
+SWIMMER_F
+Valerie
+2
+POLIWAG,35,		#Manwag,
+B60H108,34,		#Lickiwag,
+##########################
+PICNICKER
+Gwen
+3
+ABRA,32,		#Pidbra,
+MEOWTH,32,		#Meowras,
+B17H30,32,		#Nidoeotto,
+##########################
+BIRDKEEPER
+Perry
+4
+PIDGEY,30,		#Pagey,
+PIDGEY,30,		#Changey,
+SPEAROW,30,		#Omarow,
+B21H25,30,		#Pikarow,
+#######################
+BEAUTY
+Pamela
+1
+B64H39,37,		#Jigglybra,
+########################
+BLACKBELT
+Joshua
+4
+B132H25,28,,,TRANSFORM,	#Pikato,
+B132H1,28,,,TRANSFORM,	#Bulbto,
+B132H4,28,,,TRANSFORM,	#Charto,
+B132H7,28,,,TRANSFORM,	#Squirto,
+#B132H113,25,,,TRANSFORM,	#Chanto,
+#B132H132,25,,,TRANSFORM,	#Dito,
+#########################
+BLACKBELT
+Henry
+3
+B34H122,31,		#Mr. King,
+B31H99,31,		#Kingqueen,
+B119H99,31,		#Kingking,
+########################
+BIKER
+Jared
+2
+B106H13,32,		#Weelee,
+B106H110,32,		#Weelee
+############################
+BIRDKEEPER
+James
+2
+B17H2,34,		#Ivyeotto,
+B22H5,34,		#Charrow,
+############################
+FISHERMAN
+Wallace
+3
+SHELLDER,32,		#Shellyu,
+STARYU,32,		#Starster,
+B79H26,32,		#Raipoke,
+
+########################
+CLOWN
+Pagliacci
+2
+B127H122,31,		#Mr. Sir,
+B55H123,31,		#Scyduck,
+######################
+NURSE
+Maria
+3
+CLEFAIRY,31,		#Clefix,
+JIGGLYPUFF,31,		#Manfairy,
+B113H40,34,		#Wigglysey,
+
+
+################################
+######### ROUTE 14 ############
+###############################
+BIRDKEEPER
+Carter
+3
+PIDGEOTTO,33,		#HYPGEY,
+DODUO,33,		#MR. DUO,
+B17H108,33,		#LICKIEOTTO,
+#####################
+BIRDKEEPER
+Mitch
+4
+PIDGEY,31,		#GROWGEY,
+SPEAROW,31,		#VULROW,
+B16H77,31,		#PONYGEY,
+B22H136,31,		#FLAREROW,
+############################
+BIRDKEEPER
+Marlon
+3
+SPEAROW,33,		#Golrow,
+DODUO,33,		#Poliduo,
+B22H7,33,		#Squirtrow,
+###############################
+BIRDKEEPER
+Beck
+2
+B22H16,34,		#Pidrow,
+B17H21,34,		#Speareotto,
+##############################
+BIRDKEEPER
+Donald
+1
+B68H83,38,		#Farchamp,
+##############################
+BIRDKEEPER
+Benny
+2
+SPEAROW,32,
+B73H21,32,		#Spearcruel,
+###############################
+BIKER
+Gerald
+2
+KOFFING,33,		#Koffth,
+B89H70,33,		#Weepinuk,
+###############################
+BIKER
+Malik
+2
+GRIMER,33,		#Gravmer,
+B95H109,33,		#Koffix,
+########################
+BIKER
+Isaac
+3
+GRIMER,32,		#Grideen,
+KOFFING,32,
+B88H86,32,		#Seemer,
+##############################
+BIKER
+Lukas
+3
+B109H44,31,		#Gloofing,
+B109H43,31,		#Oddfing,
+B109H45,33,		#Vilefing,
+################################
+TWINS
+Kiri & Jan
+3
+B7H4,34,		#Chartle,
+B1H7,34,		#Squirtbasaur,
+B4H1,34,		#Bulbmander,
+
+################################
+######### ROUTE 15############
+###############################
+CLOWN
+Sol
+2
+B123H25,34,		#Pikather,
+B122H26,34,		#Raimime,
+##############################
+CRUSHKIN
+Ron & Mya
+2
+B107H8,34,		#Warchan,
+B106H5,34,		#Charlee,
+#############################
+NURSE
+Celia
+1
+B103H35,38,		#Clefutor,
+#############################
+ROUGHNECK
+Ernest
+3
+GRIMER,30,
+WEEZING,30,
+B109H82,30,		#Magnefing,
+
+########################
+BIKER
+Alex
+2
+GRIMER,33,		#Omamer,
+B110H139,33,		#Omazing,
+########################
+BEAUTY
+Grace
+2
+WIGGLYTUFF,34,
+B17H143,34,		#Snoreotto,
+########################
+BEAUTY
+Olivia
+2
+BULBASAUR,34,	#Koffbasaur,
+B2H110,34,		#Weeysaur,
+##########################
+PICNICKER
+Kindra
+1
+B234H64,33,		#KADATLER
+#############################
+BIRDKEEPER
+Chester
+3
+B147H85,30,		#Dotini,
+B85H148,34,		#Dragondrio,
+B147H83,30,     #FARTINI
+#############################
+AROMALADY
+Yazmin
+3
+BELLSPROUT,33,		#Bellslash,
+GLOOM,33,	    	#Oddslash,
+B114H182,33,		#BELLOSLASH,
+############################
+CRUSHGIRL
+Tania
+1
+B62H42,38,		#Golwrath,
+
+############################
+######TRAINER HOUSE######
+############################ 
+####Level 25 challenge ###
+#######SINGLE######	
+COOLTRAINER_F2
+Jessica
+3
+BULBASAUR,25,
+BULBASAUR,25,
+BULBASAUR,25,
+#########################
+COOLTRAINER_M2
+Matthew
+3
+BULBASAUR,25,
+BULBASAUR,25,
+BULBASAUR,25,
+
+#######DOUBLE############
+COOLTRAINER_F2
+Laurie
+4
+BULBASAUR,25,
+BULBASAUR,25,
+BULBASAUR,25,
+BULBASAUR,25,
+#########################
+COOLTRAINER_M2
+Alex
+4
+BULBASAUR,25,
+BULBASAUR,25,
+BULBASAUR,25,
+BULBASAUR,25,
+
+
+####Level 50 challenge ###
+#######SINGLE######	
+COOLTRAINER_F2
+Skyler
+3
+BULBASAUR,50,
+BULBASAUR,50,
+BULBASAUR,50,
+#########################
+COOLTRAINER_M2
+Alberto
+3
+BULBASAUR,50,
+BULBASAUR,50,
+BULBASAUR,50,
+
+#######DOUBLE############
+COOLTRAINER_F2
+Heather
+4
+BULBASAUR,50,
+BULBASAUR,50,
+BULBASAUR,50,
+BULBASAUR,50,
+#########################
+COOLTRAINER_M2
+Patrick
+4
+BULBASAUR,50,
+BULBASAUR,50,
+BULBASAUR,50,
+BULBASAUR,50,
+
+####Level 100 challenge ###
+#######SINGLE######	
+COOLTRAINER_F2
+Melissa
+3
+BULBASAUR,100,
+BULBASAUR,100,
+BULBASAUR,100,
+#########################
+COOLTRAINER_M2
+Joe
+3
+BULBASAUR,100,
+BULBASAUR,100,
+BULBASAUR,100,
+
+#######DOUBLE############
+COOLTRAINER_F2
+Kim
+4
+BULBASAUR,100,
+BULBASAUR,100,
+BULBASAUR,100,
+BULBASAUR,100,
+#########################
+COOLTRAINER_M2
+Stephen
+4
+BULBASAUR,100,
+BULBASAUR,100,
+BULBASAUR,100,
+BULBASAUR,100,
+############################
+#########PEWTER GYM	##########
+############################
+CAMPER
+Liam
+2
+B74H27,7,,POISONSTING,SANDATTACK,DEFENSECURL,ROCKPOLISH,
+B27H74,7,,TACKLE,ROCKPOLISH,ROCKTHROW,SCRATCH,
+############################
+LASS
+Myriam
+1
+B29H74,9,	#Georan
+##############
+############################
+#########ROUTE 3	##########
+############################
+LASS
+Janice
+2
+SPEAROW,10,
+B27H41,12,
+#############
+BUGCATCHER
+Colton
+3
+METAPOD,10,
+B23H10,10,
+B23H13,10,
+#############
+BUGCATCHER
+Greg
+3
+CATERPIE,9,
+B10H21,9,
+B13H21,9,
+#############
+BUGCATCHER_F
+Sally
+2
+SPINARAK,10,
+B29H25,10,ORANBERRY,	#pikaoran,
+#############
+BUGCATCHER
+James
+2
+B46H10,11,
+B46H11,11,
+#############
+YOUNGSTER
+Calvin
+1
+B163H60,14,	#POLYHOOT
+#############
+LASS
+Robin
+1
+B39H25,14,
+
+############
+YOUNGSTER
+Ben 
+1
+B19H79,14,
+
+
+################################
+######### ROUTE 17/ CYCLING ROAD############
+###############################
+BURGLAR
+Jamal
+2
+VULPIX,34,	#SCYPIX
+B26h52,34,	#Meowchu
+
+###############################
+CUEBALL
+Isaiah
+2
+MACHOP,34,	#GEOCHOP
+B68H76,34,	#GOLCHAMP
+##############################
+BIKER
+Virgil
+3
+KOFFING,33,	#KOFFCOOL
+B72H109,33,	#KOFFCOOL
+B73H110,33,	#WEECRUEL
+############################
+BIKER
+Charles
+2
+KOFFING,33,
+B5H110,35,	#WEEMELEON
+###########################
+CUEBALL
+Raul
+2
+MANKEY,34,	#MANRA
+B57H202,34,	#WOBBAPE	
+#######################
+BIKER
+Billy
+1
+B89H36,37,	#CLEFUK
+#######################
+CUEBALL
+Zeek
+1
+B67H80,37,	#SLOWCHOKE
+#######################
+CUEBALL
+Corey
+2
+MACHOKE,33,
+B57H121,33,	#STARAPE
+
+
+#######################
+BIKER
+Jaxon
+2
+GRIMER,34,
+B110H44,34,	#GLOOZING
+#######################
+
+##########################
+###### ROUTE 18 #########
+#########################
+BIKER
+Maurice
+1
+B28H171,35,	#Lanslash
+########################
+AROMALADY
+Miranda
+2
+WEEPINBELL,36,SITRUSBERRY,	#WEEPINSTER
+B47H123,36,OCCABERRY,	#SCYSECT
+##########################
+FARMER
+Craig
+1
+B88H83,54,	#FARMER
+#########################
+FARMER
+Dwight
+2
+EXEGGCUTE,34,	    #GLOOAPE
+B128H241,38,	#PARAROS
+########################
+CAMPER
+Michael
+2
+DODUO,36,	#DOLITHE
+B190H108,36,	#LICKIPOM
+
+##############################
+#####ROUTE 19/20########
+##############################
+SWIMMER_M
+Richard
+2
+CHINCHOU,36,	#PSYDER
+B72H90,36,	#SHELLCOOL
+##########################
+SWIMMER_M
+Reece
+3
+GOLDEEN,34,
+HORSEA,34,	#WIGGLYSEA
+B222H120,34,	#STARSOLA
+##########################
+SWIMMER_M
+Tony
+1
+B120H100,39,	#VOLTYU
+##########################
+SWIMMER_M
+David
+3
+GOLDEEN,34,	#MAGNEDEEN
+GOLDEEN,34,	#GOLDER
+B119H90,34,	#SHELLKING
+##########################
+SWIMMER_M	#"My swimsuit is made of the finest polyester!"
+Matthew
+1
+B91H61,39,	#POLISTER
+##########################
+SWIMMER_M
+Axel
+3
+STARYU,34,	#WEEPINYU
+HORSEA,34,	#HORSFETCHD
+B73H120,34,	#STARCRUEL
+##########################
+SWIMMER_F
+Alice
+2
+KRABBY,36,	#SEADEEN
+B75H230,36,	#KINGELER
+##########################
+SWIMMER_F
+Anya
+1
+B80H117,39,	#seabro
+##########################
+SWIMMER_F
+Connie
+3
+B120H5,35,	#CHARYU
+B120H2,35,	#IVYU
+B120H8,35,	#WARYU
+
+##########################
+SWIMMER_F
+Ariel
+2
+KRABBY,36,
+B119H25,38,	#PIKAKING
+##########################
+
+#########################
+# 	ROUTE 21	#
+#########################
+FISHERMAN
+Wade
+2
+B117H111,41, #RHYDRA
+B30H121,41,
+########################
+FISHERMAN
+Ronald
+3
+SHELLDER,36,	#MAGIDEEN
+SHELLDER,36,
+B91H224,42,	#OCSTER
+#########################
+SWIMMER_M
+Spencer
+2
+STARYU,41,	#TANGKING
+B226H211,41,	#QWILTINE
+#######################
+FISHERMAN
+Claude
+2
+TENTACOOL,41,	#SHELLCOOL
+B91H73,41,	#TENTASTER
+########################
+SWIMMER_F
+Sammie
+1
+B139H121,45,	#STARSTAR
+#########################
+SWIMMER_M
+Jerome
+2
+WARTORTLE,39,
+B99H121,42,	#STARLER
+
+##########################
+###  CINNABAR MANSION ####
+##########################
+PYROMANIAC
+Julio
+4
+B109H101,41,,SELFDESTRUCT,	
+B109H101,41,,SELFDESTRUCT,
+B109H101,41,,SELFDESTRUCT,
+B101H82,43,,EXPLOSION,
+##########################
+SCIENTIST
+Frisk
+2
+B63H4,51,	#CHARA
+B91H92,46,	#GASTER
+##########################
+SCIENTIST
+Johnson
+2
+B61H101,43,	#ELECWHIRL
+B61H110,44,	#WEEWHIRL
+##########################
+BURGLAR
+Arnie
+2
+CHARMANDER,45,	
+B5H108,42,	#LICKIMELEON
+##########################
+BURGLAR
+Simon
+1
+B82H58,45,CHARCOAL,THUNDERBOLT,MAGNETRISE,HEATWAVE,ROAR,		#Growton,
+###########################
+SCIENTIST
+Braydon
+3
+B43H81,38,	#MAGNEDISH
+B44H82,41,	#MAGNEOOM
+B45H82,44,	#MAGNEPLUME
+##########################
+BURGLAR
+Lewis
+2
+GROWLITHE,43,	#GROWRINO
+B77H30,43,	#NIDOTA
+##########################
+SCIENTIST
+Ivan
+2
+B80H81,43,		#MAGNEBRO
+B93H101,43,		#ELECTER
+##########################
+SCIENTIST
+Jimi
+1
+B55H101,46,		#electrduck
+##################################
+##########################
+###  CINNABAR GYM####
+##########################
+BURGLAR
+Quinn
+3
+VULPIX,42,	#GROWKEY
+VULPIX,42,	#GROWKEY
+B38H57,42,	#PRIMETALES
+##########################
+SUPERNERD
+Erik
+3
+B37H47,42,	#PARAPIX
+B37H47,42,	#PARAPIX
+B38H47,42,	#PARATALES
+###########################
+SUPERNERD
+Avery
+3
+B4H25,41,	#PIKAMANDER
+B5H25,41,	#PIKAMELEON
+B6H25,45,	#PIKAIZARD
+###########################
+BURGLAR
+Ramon
+1
+B77H5,49,	#CHARTA
+###########################
+SUPERNERD
+Derek
+1
+B51H51,49,	#DDUGTRIO
+###########################
+BURGLAR
+Dusty
+2
+B58H37,44,	#VULITHE
+B37H4,44,	#CHARPIX
+###########################
+SUPERNERD
+Zac
+2
+B37H58,44,	#GROWPIX
+B58H4,44,	#CHARLITHE
+
+##############################
+#####VIRIDIAN FOREST########
+##############################
+BUGCATCHER
+Rick
+2
+B41H13,6,
+B41H10,6,
+#-------------------
+BUGCATCHER_F
+Lana
+1
+B16H10,8,
+#-------------------
+BUGCATCHER
+Jim
+3
+CATERPIE,7,
+CATERPIE,7,# Nidopie male,
+B29H13,7,#weeoran female,
+
+#################
+###Route 4#######
+#################
+LASS
+Crissy
+3
+SANDSHREW,31,
+B208H46,31,
+B28H212,31, #SCISLASH
+##############################
+#### NORTHERN KANTO COAST ####
+##############################
+COOLTRAINER_F
+Jasper
+3
+SEEL,35,	
+SEEL,35,
+SEADRA,35,	
+##############################
+FISHERMAN
+Hermes
+1
+B73H55,38,	#Goldcruel
+#############################
+CRUSHGIRL
+Penelope
+2
+B106H87,34,	#DEWLEE
+B107H87,34,	#DEWCHAN
+#############################
+CRUSHGIRL
+Trinity
+3
+SHELLDER,33,	#SHELLKEY
+POLIWHIRL,33,	#SHELLWHIRL
+B91H68,33,	#MASTER
+############################
+BLACKBELT
+Mitch
+2
+MACHOKE,34,	#KINGAPE
+B232H57,34,	#PRIMEPHAN
+###########################
+SWIMMER_M
+Larry
+2
+SEADRA,34,	#KRABSEA
+B119H117,34,	#SEADRA
+###########################
+SWIMMER_F
+Britney
+2
+TENTACOOL,34,	#NIDOCOOL
+B83H8,34,	#WARFETCHD
+###########################
+SWIMMER_F
+Melissa
+1
+B73H122,38,	#Mr. Cruel
+
+###################################
+#######	ROCK TUNNEL 	########
+###################################
+HIKER
+Lenny
+1
+B95H208,23, #ONLIX
+##############################
+HIKER
+Oliver
+3
+GEODUDE,20,
+B75H74,20,		#GEOVELER,
+B95H20,20,      #ONIX+RATICATE
+###############################
+HIKER
+Lucas
+2
+GEODUDE,21,		#Voltdude,
+B75H111,21,
+##################################
+PICNICKER
+Leah
+2
+ZUBAT,24,
+B109H35,22,
+####################################
+PICNICKER
+Ariana
+4
+RATTATA,19,
+B16H109,19,		#Koffgey,
+RATTATA,19,
+B69H100,19,
+#########################################
+PICNICKER
+Dana
+3
+MEOWTH,20,
+PIDGEOTTO,20,
+B43H93,20,  #HAUNTISH
+######################################
+COOLTRAINER_F
+Laura
+2
+B108H90,24,
+B67H127,24,
+#####################
+COOLTRAINER_F
+Laura,1
+6
+B108H90,24,		#Shelltung,
+B67H127,24,		#Pinchoke,
+B115H61,22,		#Polikhan,
+B123H92,22,		#Gasther,
+B128H58,22,		#Growros,
+B33H111,22,		#Rhyrhorn,
+
+##############################################
+##############   ROCK TUNNEL B2 ##############
+POKEMANIAC
+Ashton
+2
+SLOWPOKE,23,		#Gripoke,
+B104H67,23,		#Mabone,
+#########################################
+POKEMANIAC
+Winston
+1
+B79H126,25,
+###########################################
+PAINTER
+Maya
+3
+ODDISH,21,
+B1H44,21,   #GLOOBASAUR
+B52H39,21,  #JIGGLYTH
+#########################################
+POKEMANIAC
+Steve
+2
+MANKEY,22,
+B5H104,22,  #CUMELEON
+########################################
+HIKER
+Allen
+1
+B74H22,25,		#feardude,
+########################################
+HIKER
+Pat
+2
+MANKEY,20,
+B66H109,20,		#Koffchop,
+#########################################
+PICNICKER
+Sofia
+3
+JIGGLYPUFF,21,
+SQUIRTLE,21,
+B52H83,21,  #FARTH
+#######################################
+HIKER
+Dudley
+3
+GEODUDE,21,
+GEODUDE,21,
+B75H28,21,  #SANDVELER
+##########################################
+POKEMANIAC
+Cooper
+3
+SLOWPOKE,20,
+B75H61,20,  #POLIELER
+B79H102,20, #EXEGGPOKE
+###########################################
+
+
+#############################
+#####NUGGET BRIDGE##########
+###############################
+
+#-------------------
+BUGCATCHER
+Cale
+4
+WEEDLE,10,
+KAKUNA,10,
+B41H11,10,  #ZUPOD
+B10H74,10,  #GEOPIE
+
+
+#-------------------
+LASS
+Ali
+3
+ABRA,12,
+B21H16,12,  #PIROW
+B43H56,12,  #MANISH
+
+#-------------------
+YOUNGSTER
+Timmy
+2
+EKANS,14,
+B27H52,14,  #MEOWSHREW
+#-------------------
+LASS
+Reli
+2
+RATTATA,14,
+B100H109,14,
+#-------------------
+CAMPER
+Ethan
+1
+B56H41,18,
+#-------------------
+CAMPER
+Shane
+2
+B29H63,16,  #ABRANm
+B32H63,16,  #ABRANf
+#-----------------
+TEAMROCKET_M
+Elvis
+2
+EKANS,15,
+B41H109,15,
+
+###################
+#### S.S. ANNE ####
+###################
+###########DECK########
+SAILOR
+Trevor
+2
+TENTACOOL,16,
+B66H116,17,		#horschop,
+#--------------------------------------
+SAILOR
+Edmond
+2
+MACHOP,18,		#Tentachop,
+B90H52,18,		#Meowder,
+##############FLOOR 1##############
+GENTLEMAN
+Thomas
+1
+B58H52,20,	#Meowlithe,
+#-------------------------------
+GENTLEMAN
+Arthur
+2
+VULPIX,18,
+B29H58,19,	#Groworan,
+#--------------------------------
+LASS
+Ann
+2
+NIDORANfE,17,	#Tentaoran,
+B17H118,18,	#Golgeotto,
+#----------------------------------
+YOUNGSTER
+Tyler
+1
+B32H66,21,	#Maran,
+####################FLOOR 2#######
+FISHERMAN
+Dale
+3
+GOLDEEN,16,
+B129H118,17,		#Golkarp,
+B72H129,17,		#Magicool,
+#----------------------------------------
+GENTLEMAN
+Brooks
+1
+B25H86,23,		#Seechu,
+#------------------------------------------
+LASS
+Dawn
+2
+RATTATA,18,		#Shelltata,
+B25H81,18,		#Magnechu,
+#-----------------------------------------
+GENTLEMAN
+Lamar
+2
+B79H58,17,		#Growlithe,
+B77H100,17		#Volta,
+#---------------------------------------
+#################BASEMENT###################
+SAILOR
+Duncan
+3
+HORSEA,17,		#Magnesea,
+TENTACOOL,17,		#Growcool,
+B90H41,17,		#Zuder,
+#------------------------------------------
+SAILOR
+Leonard
+1
+B88H90,21,		#Shellmer,
+#-------------------------------------
+SAILOR
+Dylan
+3
+HORSEA,17,		#Slowsea,
+HORSEA,17,		#Farsey,
+B23H116,17,		#Horskans,
+#----------------------------------------
+SAILOR
+Huey
+2
+STARYU,18,		#Geoyu,
+B72H100,18,		#Voltcool,
+#------------------------------------------
+FISHERMAN
+Barny
+3
+KRABBY,17,		#Kakby,¸
+SHELLDER,17,	#Venoder,
+B120H46,17,		#Payu,
+#---------------------------------------
+SAILOR
+Philip
+1
+B66H61,21,		#Polichop,
+
+
+#####################
+##  Celadon Café ######
+#####################
+HIPSTER
+Jerry,0
+1
+B24H120,25,		#Starbok,SKINNYLATTE,
+######################
+HIPSTER
+Jerry,1
+2
+B24H121,32,		#Starbok,SKINNYLATTE,
+B91H97,32,		#Hypster,SKINNYLATTE,
+###################
+###ROUTE 25#######
+####################
+HIKER
+Franklin
+2
+SANDSHREW,15,
+B23H74,15,
+#------------------
+HIKER
+Wayne	#(trade)
+1
+B95H43,17,
+#------------------
+YOUNGSTER
+Joey
+1
+B19H20,17,
+#----------------
+YOUNGSTER	#(trade)
+Dan
+2
+B79H46,15,
+B21H60,15,
+#----------------
+PICNICKER
+Kelsey
+2
+B29H32,15,
+B32H29,15,
+#---------------
+HIKER
+Nob
+4
+GEODUDE,13,
+GEODUDE,13,
+GEODUDE,13,
+B66H25,13,
+#------------------
+CAMPER	#(trade)
+Flint
+2
+B23H48,14,
+B27H48,14,
+
+#------------------
+YOUNGSTER	#trade
+Chad
+2
+B19H1,14,
+B23H96,14, ,
+#------------------
+LASS
+Haley
+3
+ODDISH,13,
+PIDGEY,13,
+B46H43,15,  #ODDRAS
+
+##########Fighting Dojo###########
+BLACKBELT
+Hitoshi
+3
+B56H52,34,
+B127H56,34,
+B67H56,34,
+#-------------------
+CRUSHGIRL
+Yoshimi
+1
+B67H81,39,
+#-----------------
+BLACKBELT
+Hideki
+2
+B66H83,38,
+B67H111,38,
+#-----------------
+CRUSHGIRL
+Lucy
+2
+B57H214,35,
+B62H75,38,
+#-----------------
+BLACKBELT
+Mike
+2
+B236H75,35,
+B68H75,38,
+#-----------------
+BLACKBELT
+Koichi
+3
+B107H106,45,
+B106H237,45,
+B237H107,45,
+############Route 5##############
+POKEMONBREEDER
+Maude
+4
+TOGEPI,14,
+B173H172,14,    #IGGLYFFA
+B257H260,14,        #MUCHSLY
+B239H240,14,
+#--------------------------
+SOCIALITE
+Mathilda
+1
+B37H54,16,
+#############Route 9#####################
+PICNICKER
+Alicia
+3
+ODDISH,18,
+ODDISH,18,
+B69H70,18,  #WEEPINSPROUT
+#---------------------------
+HIKER
+Jeremy
+2
+GEODUDE,20,#,
+B95H56,20,	#Manix,
+#----------------------------
+CAMPER
+Chris
+2
+B58H79,21,	#Slowlithe,
+B4H54,21,	#Psymander,
+#----------------------------
+BUGCATCHER
+Brent
+2
+B15H12,19,	#Butterdrill,
+B12H15,19,	#Beefree,
+#----------------------------
+BUGCATCHER
+Conner
+3
+VENONAT,20,	#Venopie,
+VENONAT,20,	#Venodle,
+B218H10,25,	#CATERMA,
+#---------------------------
+CAMPER
+Drew
+4
+PIKACHU,19,	#Pikatata,
+PIDGEY,19,	#Digey,
+PIDGEY,19,	#Farkans,
+B63H27,19,,,,,,,F,	#Sandra,
+#--------------------------
+HIKER
+Alan
+2
+GEODUDE,21,	 #Meowdude,
+B95H23,21,	 #Ekix,
+#-------------------------
+HIKER
+Brice
+3
+GEODUDE,18,		#Geokarp,
+DIGLETT,18,		#Digchop,
+B76H129,20,		#MagiLEM,
+#-------------------------
+PICNICKER
+Caitlin
+1
+B52H66,23,		#Math,
+##############Route 10#############
+###North###
+BEAUTY
+Heidi
+2,
+PIKACHU,20,
+B213H39,20, #JIGGLYCKLE
+###########
+
+###########Mt. Moon#############
+BUGCATCHER
+Kent
+2
+WEEDLE,11,
+B14H41,11,
+#-----------------------
+LASS
+Iris
+1
+B35H39,14,
+#-----------------------
+SUPERNERD
+Jovan
+2
+B100H81,11,
+B74H100,11,
+#----------------------
+BUGCATCHER
+Robby
+2
+B10H41,12,
+B11H41,12,
+#---------------------
+LASS
+Miriam
+1
+B43H44,14,
+#--------------------
+YOUNGSTER
+Josh
+3
+RATTATA,10,
+RATTATA,10,
+B27H29,10,	#NIDOSHREW
+#-----------------
+HIKER
+Marcos
+3
+GEODUDE,10,
+GEODUDE,10,
+B95H10,12,
+#----------------
+TEAMROCKET_M
+Jerry
+3
+ZUBAT,11,
+ZUBAT,11,
+B23H41,11,
+#----------------
+TEAMROCKET_M
+Francis
+2
+ZUBAT,11,
+B41H88,11,
+#----------------
+TEAMROCKET_F
+Samantha
+2
+RATTATA,13,
+B29H23,13,
+#-----------------
+TEAMROCKET_M
+Giorgio
+2,
+EKANS,13,
+B19H46,13,
+
+#------------------
+SUPERNERD
+Miguel
+3,
+B88H109,12,
+B109H41,12,
+B100H43,12,
+#########Route 6 ############
+TWINS
+Day & Dani
+2
+B79H25,16,
+B54H25,16,
+#-----------------------------------
+CAMPER
+Ricky
+1
+B7H21,20,
+#-----------------------------------
+PICNICKER
+Nancy
+2
+RATTATA,16,
+B23H25,16,
+#--------------------------------
+BUGCATCHER
+Elijah
+1
+B12H35,20,
+#---------------------------------
+PICNICKER
+Isabelle
+3
+PIDGEY,16,
+PIDGEY,16,
+B16H27,16,  #SANDGEY
+#--------------------------------
+CAMPER
+Jeff
+2
+SPEAROW,16,
+B20H43,16,
+
+############Route 11###############
+YOUNGSTER
+Eddie
+1
+B50H102,21,	#Exelett,
+#--------------------------
+GAMBLER	#gamble
+Hugo
+2
+POLIWAG,17,
+B60H43,18,	#Oddwag,
+#------------------------------
+ENGINEER	#trade
+Bernie
+1
+B109H81,21	#Magnefing,
+#----------------------------
+YOUNGSTER
+Dave
+2
+EKANS,18,	#Nidokans,
+B33H66,18,	#Marino,
+#---------------------------
+GAMBLER
+Darian
+1
+B37H58,21,	#Growpix,
+#-----------------------
+ENGINEER
+Braxton
+3
+MAGNEMITE,18,#Magnesprout,
+MAGNEMITE,18,	#Drowton,
+B50H81,20,	#Magnelett,
+
+#-------------------------
+GAMBLER
+Jasper
+2
+MANKEY,18,	#Bellkey,
+B43H48,18,	#Venoish,
+#------------------------
+GAMBLER
+Dirk
+2
+ODDISH,18,		#Oddmite,
+B100H39,18,		#Jigglyorb,
+
+######################
+###  Celadon Gym ######
+######################
+BEAUTY
+Tamia
+2
+B102H69,34,		# Belcute,
+B69H41,34,		# Bellbat,
+#######################
+LASS
+Kay
+1
+B84H70,36,		#Weepinduo,
+######################
+BEAUTY
+Bridget
+4
+B43H102,31,		#EXEGGISH,
+B92H43,31,		#ODDTLY,
+B69H116,31,		#Horsprout,
+B69H83,31,		#Farsprout,
+##########################
+PICNICKER
+Tina
+2
+B1H111,34,		#Rhysaur,
+B2H104,34,		#Cuysaur,
+##########################
+BEAUTY
+Lori
+1
+B102H43,36,		#Oddcute,
+###########################
+LASS
+Lisa
+2
+B120H43,33,		#Oddyu,
+B44H50,33,		#Digoom,
+############################
+COOLTRAINER_F
+Mary
+5
+B69H108,32,		#Lickisprout,
+B72H43,32,		#Oddcool,
+B17H70,32,		#Weepineotto,
+B40H44,32,		#Glootuff,
+B2H58,32,		#Growysaur,
+
+###########################
+PICNICKER
+Martine
+2
+B7H43,34,		#Oddtle,
+B153H1,34,		#bulbaleef,
+###########################
+
+#####################
+### Vermillion Gym	###
+#####################
+SAILOR
+Dwayne
+3
+B25H1,20,		#Bulbchu,
+B25H4,20,		#Charchu,
+B25H7,20,		#Squirtchu,
+#----------------------------------------
+ENGINEER
+Baily
+2
+B100H14,21,		#Kakorb,
+B81H11,21,		#Metamite,
+#--------------------------------------
+GENTLEMAN
+Tucker
+1
+B25H81,23,		#Magnechu,
+
+
+   #######################
+####Fuschia Gym ###########
+  ######################
+JUGGLER
+Kayden
+1
+B97H94,39,#Geno,
+#-------------------------------------
+JUGGLER
+Nate
+2
+B96H42,36,		#Golzee,
+B64H73,36,		#Tentabra,
+#--------------------------------------
+JUGGLER
+Kirk
+4
+B96H15,32,		#Beezee,
+B109H96,32,		#Drowfing,
+B64H24,32,		#Arbra,
+B93H64,32	,	#Kadater,
+#-----------------------------------------
+TAMER
+Edgar
+3
+B24H113,34,		#Chanbok,
+B24H82,34,		#Magnebok,
+B28H48,34,		#Venoslash,
+#----------------------------------------
+TAMER
+Phil
+2
+B28H33,35,		#Nidoslash,
+B24H110,35,		#Weebok,
+#---------------------------------------
+JUGGLER
+Shawn
+2
+B96H45,35,		#Vilezee,
+B12H97,35,		#Hypfree,
+#------------------------------------------------
+
+#################
+###Viridian Gym###
+##################
+ENGINEER
+Cole
+2
+B24H28,46,		#SANDBOK
+B128H111,46,		#RHYROS
+###################
+BLACKBELT
+Kiyo
+1
+B67H105,50,BLACKBELT		#MAROCHOKE
+####################
+ENGINEER
+Jason
+1
+B111H53,50,			#PERHORN
+#####################
+BLACKBELT
+Atsushi
+2
+B66H104,47,			#CUCHOP
+B221H121,47,			
+#####################
+COOLTRAINER_M
+Samuel
+3
+B28H33,45,			#NIDOSLASH
+B111H28,45,			#SANDHORN
+B34H104,45,			#CUKING
+#####################
+BLACKBELT
+Takashi
+3
+MACHOP,45,
+B67H55,45,			#ONCHOKE
+B34H67,45,			#MAKING
+####################
+COOLTRAINER_M
+Yuji
+4
+B28H55,44,			#GOLSLASH
+B95H135,44,			#JOLTIX
+B105H108,44,			#LICKIWAK
+B75H127,44,			#PINELER
+#####################
+COOLTRAINER_F
+Justine
+3
+B111H70,45,			#WEEPINHORN
+B105H105,45,			#DMAROWAK
+B31H20,45,			#RATQUEEN
+
+#################
+###Cerulean Gym###
+##################
+SWIMMER_M
+Luis
+2
+B98H90,16,
+B116H23,16,
+#---------------
+PICNICKER
+Diana
+1
+B50H120,19	#Starlett
+#######################
+# ECRUTEAK GYM  ##
+#######################
+SAGE
+Ping
+2
+B309H311,56,	#ramparskull
+B302H311,56,	#CRADISKULL
+#######################
+CHANNELER
+Grace
+2
+B93H200,54,
+B97H255,57,
+#######################
+CHANNELER
+Martha
+1
+B312H300,62,
+#######################
+SAGE
+Takao
+1
+B328H153,63,	#BAYBLADE
+#######################
+SAGE
+Jeffrey
+3
+B92H328,53,	#DOUTLY
+B92H328,53,	#DOUTLY
+B93H328,57,	#DOUTLER
+#################
+###Mahogany Gym###
+##################
+PLAYER
+Martin
+2
+B28H28,56,,ICESHARD,DIG,FURYSWIPES,SANDATTACK,
+B38H38,59,,AURORABEAM,FAIRYWIND,WILLOWISP,CONFUSERAY,0
+#########################
+PLAYER
+Sidney
+1
+B208H221,62,	#pilolix
+#########################
+PLAYER
+Maurice
+2
+B241H124,57,	#MILNX
+B128H124,57,	#TAUNX
+#########################
+PLAYER
+Wayne
+1
+B332H272,62,	#MILNX
+#########################
+
+#################
+###Violet Gym###
+##################
+BIRDKEEPER
+Abe
+2
+B22H200,53,		#misrow
+B22H190,53,		#airow
+#####################
+BIRDKEEPER	
+Rod
+3
+B17H106,51,	#HITMONOTTO	-lee
+B17H107,51,	#HITMONOTTO	-chan
+B17H237,51,	#HITMONOTTO	-top
+##################
+BIRDKEEPER
+Carl
+2
+B12H113,53,		#chanfree
+B169H15,53,		#BEEBAT
+####################
+###Goldenrod Gym ###
+####################
+BEAUTY
+Victoria
+3
+B20H17,44,	#PIDGECATE
+B20H169,44,	#FURCATE
+B20H166,44,	#LEDICATE
+#######################
+LASS
+Samantha
+2
+B53H38,46,	#NINESIAN
+B53H59,46,	#ARCASIAN
+#######################
+BEAUTY
+Jane
+1
+B128H210,49	#GRANROS
+#######################
+LASS
+Bridget
+3
+B40H35,45,	#CLEFATUFF
+B113H40,41,	#WIGGLYSEY
+B40H176,45,	#TOGETUFF
+#######################
+####################
+###Azalea Gym ###
+####################
+BUGCATCHER_F
+Charlotte
+2
+B168H12,47,		#ARIAFREE
+B168H220,47,		#Swindos
+##################
+BUGCATCHER
+Nelson
+1
+B141H123,51,		#SCYTOPS
+#################
+BUGCATCHER
+Josh
+2
+B47H182,49,	#BELLOSECT
+B47H152,49,	#VICTREESECT
+#################
+BUGCATCHER
+Albert
+2
+B166H57,49,	#PRIMEDIAN
+B67H166,49,	#LEDICHOKE
+###########################
+####### Blackthorn gym 	###
+###########################
+COOLTRAINER_M
+Paul
+3
+B147H153,54,	#BAYTINI
+B147H156,54,	#QUITINI
+B147H159,54,	#CROCOTINI
+###########################
+COOLTRAINER_F
+Francine
+1
+B148H117,59,	#SEANAIR
+##########################
+COOLTRAINER_M
+Cody
+2
+B117H5,57	#CHARDRA
+B117H156,57	#QUIDRA
+#######################
+COOLTRAINER_M
+Mike
+1
+B149H11,62,EVIOLITE,IRONDEFENSE,ROOST,THUNDERWAVE,WRAP,	#METANITE
+##########################
+COOLTRAINER_F
+Lola
+2
+B180H147,55	#DRAFFY
+B148H181,57	#AMPHANAIR
+#####################################
+####### CRIMSON CITY 	#############
+######################################
+COOLTRAINER_F2
+Jeanette
+2
+B123H15,45,	#Beether
+BELLSPROUT,77,,,WRINGOUT,MAGICALLEAF,COUNTER,SYNTHESIS,
+
+##########################################
+####### CELADON SEWERS 	#############
+######################################
+TEAMROCKET_M	#(double battle w/ Paul)
+Phillip
+2
+B20H96,28,	#Drowicate,
+B88H42,28,#Golmer,
+######################
+TEAMROCKET_M
+Paul
+2
+B20H66,28, #Maicate,
+B109H33,28,#Nidofing,
+########################
+TEAMROCKET_M
+Joffrey
+4
+KOFFING,21,#Tentata,
+KOFFING,21,#Gastata,
+RATICATE,25,#Haunticate,
+B20H73,25,#Tentaicate,
+########################
+TEAMROCKET_F
+Virginia
+3
+GRIMER,28,#Gritung,
+KOFFING,28,#Koffduo,
+B109H101,28,#Electrfying,
+#######################
+TEAMROCKET_M
+Lionel
+2
+B20H70,24,#Weepinicate,
+B88H44,24,	#Gloomer,
+######################
+TEAMROCKET_M
+Ritchie
+2
+B73H109,25,#Koffcruel,
+B89H11,25#Metauk,
+#####################
+TEAMROCKET_F
+Kaitlin
+2
+B100H132,28,,,TRANSFORM,CHARGEBEAM,LIGHTSCREEN,SONICBOOM,0#Ditorb,
+B147H88,29,#Gritini,
+#######################
+TEAMROCKET_M
+Omar
+2
+B17H109,28,#Koffeoto,
+B137H42,29,#Golgon,
+###################
+TEAMROCKET_M
+Max
+2
+KOFFING,24,#Koffton,
+B110H100,27,#Voltzing,
+####################
+
+#####################################
+#### Quests/Others  ###################
+####################################
+ELITEFOUR_Lance
+Lance,0
+1
+DRAGONITE,50,
+ELITEFOUR_Lance
+Lance,1
+3
+DRAGONITE,40,
+AERODACTYL,40,
+GYARADOS,40,
+##########################
+#Rocket blocking Saffron
+TEAMROCKET_M
+Dennis
+2
+B126H42,38,
+B135H20,38,
+##########################
+#Rocket bully
+TEAMROCKET_M
+Cyrus
+1
+B141H105,39,
+#########################
+TEAMROCKET_F
+Sam
+1
+B139H97,39,
+########################
+
+##########################
+WORKER
+Jay
+2
+B74H56,18,#Mandude,
+B75H15,22,	#Beeler,
+###################
+WORKER
+Dave
+2
+B66H56,18,#Manchop,
+B67H50,22,	#Digchoke,
+
+#### fossils guy ### (todo)
+############enc 2 (ss. anne)
+SUPERNERD
+Miguel,1		#chose kabuto
+2,
+B88H109,18,
+OMANYTE,20,
+###
+SUPERNERD
+Miguel,2		#chose omanyte
+2,
+B88H109,18,
+KABUTO,20,
+##############enc 3 (celadon)
+SUPERNERD
+Miguel,3
+2,
+B89H110,24,
+B301H140,26,	#lileep kabuto		chose anorith omanyte
+##
+SUPERNERD
+Miguel,4
+2,
+B89H110,24,
+B303H140,26,	#anorith kabuto		chose lileep, omanyte
+##
+SUPERNERD
+Miguel,5
+2,
+B89H110,24,
+B301H138,26,	#lileep omanyte		chose anorith kabuto
+##
+SUPERNERD
+Miguel,6
+2,
+B89H110,24,
+B303H138,26,	#anorith omanyte	chose lileep kabuto
+##############enc 4 (postgame) genre ruins of alph, il a decouvert qu'on peut trouver des fossils en rock smash
+SUPERNERD
+Miguel,7
+4,
+B139H141,51		#kabutops omanyte
+B302H304,53,	#cradily armaldo
+B308H306,53,	#bastiodon rampardos
+B142H142,55,	#mega aerodactyl
+
+#######################################
+#### TEAMROCKET HIDEOUT ####
+#######################################
+###################
+TEAMROCKET_M
+Doug
+1
+B15H81,30,	#Magnedrill,
+###################
+TEAMROCKET_M
+Chad
+3
+GOLBAT,30,#Goleotto,
+EKANS,30,#Ratkans,
+B88H116,30,#horsmer,
+###################
+TEAMROCKET_M
+Stephan
+1
+B24H53,35,#Perbok,
+###################
+TEAMROCKET_M
+Romeo
+3
+DROWZEE,31,#Drowicate,
+KOFFING,31,#Psyfing,
+B67H72,33,#Tentachoke,
+
+#####################################
+####
+###########################
+ROCKETBOSS
+Giovanni,0
+3,MAXPOTION
+B95H24,34,#Arbix,
+B131H111,34,#Rhyras,
+B115H93,37,	#Hauntkan,
+##############################
+
+##################
+#######GYMS#####
+###################
+LEADER_Brock
+Brock
+2,POTION
+B16H74,9,,GUST,SANDATTACK,ROCKTOMB,ROCKPOLISH,
+B95H56,12,,ROCKTOMB,BIND,KARATECHOP,RAGE,
+#####P11195,12,FOCUSSASH,SANDATTACK,ROCKPOLISH,ROCKSLIDE,GUST,0		#Speardude
+#####P14405,14,ORANBERRY,ROCKSLIDE,BIND,WATERGUN,HYPNOSIS,1		#Polinix
+LEADER_Brock
+Brock,1
+6,FULLRESTORE,FULLRESTORE
+B76H18,68,HARDSTONE,	#goleot
+B208H95,70,HARDSTONE,	#onilix
+B304H300,71,HARDSTONE,#MAMALDO
+B139H270,68,HARDSTONE,#YANSTAR
+B141H212,71,HARDSTONE,#SCITOPS
+B308H142,70,HARDSTONE,#AERODON
+###################
+LEADER_Misty
+Misty
+2,SUPERPOTION
+B118H39,19,MYSTICWATER,WATERPULSE,DISARMINGVOICE,SING,HORNATTACK	#jigglydeen
+B121H120,22,MYSTICWATER,WATERPULSE,RECOVER,SWIFT,RAPIDSPIN,1	#Starmie,
+LEADER_Misty
+Misty,1
+6,FULLRESTORE,FULLRESTORE
+B119H40,68,MYSTICWATER,		#WIGGLYKING
+B195H99,68,MYSTICWATER,		#KINGSIRE
+B295H121,71,MYSTICWATER,	#STARMTOMB
+B131H160,70,MYSTICWATER,	#FERALIRAS
+B171H55,68,MYSTICWATER,		#GOLTURN
+B130H299,71,MYSTICWATER,	#GARDOS
+###################
+LEADER_Surge
+Lt. Surge
+3,SUPERPOTION,SUPERPOTION
+B98H100,24,MAGNET,METALCLAW,BUBBLEBEAM, LIGHTSCREEN,SPARK,1 #voltby,
+B17H25,24,MAGNET,GUST,SANDATTACK,QUICKATTACK,ELECTROBALL,1 #Pikeotto,
+B125H26,26,SITRUSBERRY,THUNDERPUNCH,THUNDERWAVE,QUICKATTACK,DOUBLETEAM,0 #raibuzz,
+LEADER_Surge
+Lt. Surge,1
+6,FULLRESTORE,FULLRESTORE
+B26H135,68,MAGNET,	#JOLTCHU
+B99H101,68,MAGNET,	#ELECGLER
+B18H26,70,MAGNET,	#RAIEOT
+B263H275,71,MAGNET,	#PORYZONE
+B267H265,71,MAGNET,	#RHYPERVIRE
+B254H181,70,MAGNET,	#AMPHAPOM
+###################
+LEADER_Erika
+Erika,0
+3,HYPERPOTION
+B71H55,35,MIRACLESEED,AQUAJET,GIGADRAIN,SUNNYDAY,SLEEPPOWDER,1	#Goldbel,
+B75H114,35,MIRACLESEED,INGRAIN,GROWTH,SMACKDOWN,CONSTRICT,0#Tangeler,
+B182H78,37,	MIRACLESEED,SUNNYDAY,FLAMECHARGE,SPORE,GIGADRAIN,1#rapissom,
+LEADER_Erika
+Erika,2
+6,FULLRESTORE,FULLRESTORE
+B189H182,68,MIRACLESEED,	#BELLOSPUFF
+B73H71,70,MIRACLESEED,		#VICTREECRUEL
+B266H103,68,MIRACLESEED,	#EXEGROWTH
+B3H208,71,MIRACLESEED,		#STEESAUR
+B154H203,71,MIRACLESEED,	#GIRANIUM
+B45H192,70,	MIRACLESEED,	#SUNPLUME
+###################
+LEADER_Erika
+Erika,1
+3
+B114H70,30,,RAZORLEAF,SLEEPPOWDER,POISONPOWDER,CONSTRICT		#Weepingella,
+B102H44,30,,LEECHSEED,REFLECT,BARRAGE,MEGADRAIN				#GLOOCUTE,
+IVYSAUR,30,		
+###################
+LEADER_Koga
+Koga
+4,HYPERPOTION,HYPERPOTION
+B193H109,39,	POISONBARB,SELFDESTRUCT,DESTINYBOND,SUCKERPUNCH,SHADOWBALL		#Hauntfing,
+B197H169,39,BLACKGLASSES,POWERGEM,FAINTATTACK,TOXIC,SLUDGEBOMB,0,		#umbfing,
+B119H110,41,POISONBARB,AQUARING,WATERFALL,SLUDGE,HORNATTACK,0		# Weeking,
+B47H89,42,BLACKSLUDGE,POISONPOWDER,SPORE,SLUDGEBOMB,DISABLE,0 		#Musect,
+LEADER_Koga
+Koga,1
+6,FULLRESTORE,FULLRESTORE
+B110H94,68,POISONBARB,	#GENZING
+B169H73,70,POISONBARB,	#TENTABAT
+B49H15,70,POISONBARB,	#BEEMOTH
+B89H287,71,POISONBARB,	#SWAMUK
+B34H168,70,POISONBARB,	#ARIAKING
+B24H195,68,POISONBARB,	#ESPBOK
+###################
+LEADER_Sabrina
+Sabrina
+4,MAXPOTION,MAXPOTION
+B122H97,43,TWISTEDSPOON,NASTYPLOT,BATONPASS,HYPNOSIS,PSYCHIC,		#HYPMIME		psych/fairy
+B197H196,43,TWISTEDSPOON,MOONLIGHT,FUTURESIGHT,DARKPULSE,LIGHTSCREEN,	#ESREON		psych/DARK
+B80H65,45,TWISTEDSPOON,PSYCHOCUT,SURF,RECOVER,AMNESIA,			#AlaBRO,			psych/water
+B65H94,45,TWISTEDSPOON,DESTINYBOND,SHADOWBALL,PSYCHOCUT,CALMMIND,	#GENKAZAM		psych/ghost
+LEADER_Sabrina
+Sabrina,1
+6,FULLRESTORE,FULLRESTORE
+B97H122,68,TWISTEDSPOON,	#HYPMIME
+B12H65,68,TWISTEDSPOON,	#ALAKAFREE
+B310H288,71,TWISTEDSPOON,	#GALSOL
+B293H263,70,TWISTEDSPOON,	#MAGNEGROSS
+B65H94,71,TWISTEDSPOON,		#GENKAZAM
+B296H196,70,TWISTEDSPOON,	#ESPRIO
+
+###################
+LEADER_Blaine
+Blaine
+4,FULLRESTORE
+B78H44,49,CHARCOAL,SUNNYDAY,SOLARBEAM,FLAMETHROWER,TOXIC,		#Gloodash,
+B59H38,49,CHARCOAL,ROAR,FIREFANG,CONFUSERAY,THUNDERFANG,0				#NINENINE
+B38H73,51,CHARCOAL,BUBBLEBEAM,FLAMETHROWER,WILLOWISP,PROTECT,	#Tentales,
+B142H6,53,CHARCOAL,CRUNCH,SKYDROP,FIREBLAST,HYPERBEAM,			#Chardactyl,
+LEADER_Blaine
+Blaine,1
+6,FULLRESTORE,FULLRESTORE
+B89H219,68,CHARCOAL,	#MAGUK
+B78H119,68,CHARCOAL,	#SEADASH
+B142H6,71,CHARCOAL,	#CHARDACTYL
+B59H229,70,CHARCOAL,	#HOUNDNINE
+B281H157,70,CHARCOAL,	#TYPHLOSIZKEN
+B268H302,71,CHARCOAL,	#CRAMORTAR
+###################
+LEADER_Giovanni
+Giovanni,0
+5,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B131H265,55,	SOFTSAND,SURF,BULLDOZE,SANDSTORM,SING,			#Rhyras,
+B51H125,53,	SOFTSAND,BULLDOZE,LIGHTSCREEN,THUNDERWAVE,DISCHARGE,	#Electatrio,
+B68H76,56,	SOFTSAND,EARTHQUAKE,DYNAMICPUNCH,COUNTER,SCARYFACE,	#GOLCHAMP,
+B248H273,59,	SOFTSAND,EARTHQUAKE,THRASH,MEGAHORN,POISONJAB,		#DNIDOKING,
+B143H112,61,	SOFTSAND,EARTHQUAKE,REST,SNORE,HORNDRILL,		#snordon,
+LEADER_Giovanni
+Giovanni,1
+6,FULLRESTORE,FULLRESTORE
+B131H265,72,	SOFTSAND,SURF,BULLDOZE,SANDSTORM,SING,			#Rhyras,
+B51H125,73,	SOFTSAND,BULLDOZE,LIGHTSCREEN,THUNDERWAVE,DISCHARGE,	#Electatrio,
+B68H76,74,	SOFTSAND,EARTHQUAKE,DYNAMICPUNCH,COUNTER,SCARYFACE,	#GOLCHAMP,
+B248H273,72,	SOFTSAND,EARTHQUAKE,THRASH,MEGAHORN,POISONJAB,		#DNIDOKING,
+B143H112,75,	SOFTSAND,EARTHQUAKE,REST,SNORE,HORNDRILL,		#Nidon,
+B299H248,75,SOFTSAND,		#TYRANCHOMP
+#######################
+#### E4 ###############
+###################
+ELITEFOUR_Lorelei
+Lorelei,0
+5,FULLRESTORE,FULLRESTORE
+B87H268,59,NEVERMELTICE,BUBBLEBEAM,FLAMETHROWER,HAIL,PROTECT,1,	#Maggong,
+B80H274,59,NEVERMELTICE,HAIL,SLACKOFF,TAKEDOWN,ICEFANG,1,				#Mambro,
+B91H73,58,NEVERMELTICE,SPIKES,STEALTHROCK,WATERPULSE,ICICLECRASH,0,		#Tentaster,
+B266H124,61,NEVERMELTICE,LEECHSEED,DRAININGKISS,SLEEPPOWDER,ICEPUNCH,1,	#Jyngrowth,
+B131H262,61,NEVERMELTICE,PERISHSONG,NIGHTSLASH,SURF,EMBARGO,1,			#Wearas,
+ELITEFOUR_Lorelei
+Lorelei,1
+5,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B87H268,72,NEVERMELTICE,BUBBLEBEAM,FLAMETHROWER,HAIL,PROTECT,1,	#Maggong,
+B80H274,72,NEVERMELTICE,HAIL,SLACKOFF,TAKEDOWN,ICEFANG,1,				#Mambro,
+B91H73,71,NEVERMELTICE,SPIKES,STEALTHROCK,WATERPULSE,ICICLECRASH,0,		#Tentaster,
+B266H124,74,NEVERMELTICE,LEECHSEED,DRAININGKISS,SLEEPPOWDER,ICEPUNCH,1,	#Jyngrowth,
+B131H262,74,NEVERMELTICE,PERISHSONG,NIGHTSLASH,SURF,EMBARGO,1,			#Wearas,
+ELITEFOUR_Lorelei
+Lorelei,2
+5,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B87H268,82,NEVERMELTICE,BUBBLEBEAM,FLAMETHROWER,HAIL,PROTECT,1,	#Maggong,
+B80H274,82,NEVERMELTICE,HAIL,SLACKOFF,TAKEDOWN,ICEFANG,1,				#Mambro,
+B91H73,81,NEVERMELTICE,SPIKES,STEALTHROCK,WATERPULSE,ICICLECRASH,0,		#Tentaster,
+B266H124,84,NEVERMELTICE,LEECHSEED,DRAININGKISS,SLEEPPOWDER,ICEPUNCH,1,	#Jyngrowth,
+B131H262,84,NEVERMELTICE,PERISHSONG,NIGHTSLASH,SURF,EMBARGO,1,			#Wearas,
+###################
+ELITEFOUR_Bruno
+Bruno,0
+5,FULLRESTORE,FULLRESTORE
+B267H68,58,BLACKBELT,THUNDERPUNCH,CROSSCHOP,DISCHARGE,FOCUSENERGY,1,	#Mavire,
+B214H212,61,BLACKBELT,XSCISSOR,SWORDSDANCE,CLOSECOMBAT,AGILITY,1,		#Scicross,
+B107H105,59,BLACKBELT,DYNAMICPUNCH,BONEMERANG,DOUBLETEAM,COUNTER,0,		#MAROCHAN,
+B68H208,58,BLACKBELT,SANDSTORM,IRONTAIL,SUBMISSION,CRUNCH,1,			#Malix,
+B95H263,61,BLACKBELT,ZAPCANNON,MAGNETRISE,LOCKON,IRONTAIL,1,			#Magneix,
+ELITEFOUR_Bruno
+Bruno,1
+5,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B267H68,72,BLACKBELT,THUNDERPUNCH,CROSSCHOP,DISCHARGE,FOCUSENERGY,1,	#Mavire,
+B214H212,74,BLACKBELT,XSCISSOR,SWORDSDANCE,CLOSECOMBAT,AGILITY,1,		#Scicross,
+B107H105,72,BLACKBELT,DYNAMICPUNCH,BONEMERANG,DOUBLETEAM,COUNTER,0,		#MAROCHAN,
+B68H208,73,BLACKBELT,SANDSTORM,IRONTAIL,SUBMISSION,CRUNCH,1,			#Malix,
+B95H263,75,BLACKBELT,ZAPCANNON,MAGNETRISE,LOCKON,IRONTAIL,1,			#Magneix,
+ELITEFOUR_Bruno
+Bruno,2
+5,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B267H68,82,BLACKBELT,THUNDERPUNCH,CROSSCHOP,DISCHARGE,FOCUSENERGY,1,	#Mavire,
+B214H212,84,BLACKBELT,XSCISSOR,SWORDSDANCE,CLOSECOMBAT,AGILITY,1,		#Scicross,
+B107H105,82,BLACKBELT,DYNAMICPUNCH,BONEMERANG,DOUBLETEAM,COUNTER,0,		#MAROCHAN,
+B68H208,83,BLACKBELT,SANDSTORM,IRONTAIL,SUBMISSION,CRUNCH,1,			#Malix,
+B95H263,85,BLACKBELT,ZAPCANNON,MAGNETRISE,LOCKON,IRONTAIL,1,			#Magneix,
+###################
+ELITEFOUR_Agatha
+Agatha,0
+5,FULLRESTORE,FULLRESTORE
+B169H255,61,SPELLTAG,WINGATTACK,SHADOWBALL,CONFUSERAY,MEANLOOK,1,	#Mismabat,
+B229H94,60,SPELLTAG,INFERNO,SPITE,DESTINYBOND,SHADOWBALL,0,			#Gendoom,
+B93H197,60,SPELLTAG,GUARDSWAP,DARKPULSE,MOONLIGHT,NIGHTSHADE,0,		#Umbter,
+B94H143,63,SPELLTAG,REST,CURSE,BODYSLAM,SHADOWPUNCH,2,				#Snorgar,
+B94H202,58,SPELLTAG,DESTINYBOND,COUNTER,MIRRORCOAT,CURSE,1,			#Wobbgar,
+ELITEFOUR_Agatha
+Agatha,1
+5,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B169H255,72,SPELLTAG,WINGATTACK,SHADOWBALL,CONFUSERAY,MEANLOOK,1,	#Mismabat,
+B229H94,74,SPELLTAG,INFERNO,SPITE,DESTINYBOND,SHADOWBALL,0,			#Gendoom,
+B93H197,75,SPELLTAG,GUARDSWAP,DARKPULSE,MOONLIGHT,NIGHTSHADE,0,		#Umbter,
+B94H143,74,SPELLTAG,REST,CURSE,BODYSLAM,SHADOWPUNCH,2,				#Snorgar,
+B94H202,72,SPELLTAG,DESTINYBOND,COUNTER,MIRRORCOAT,CURSE,1,			#Wobbgar,
+ELITEFOUR_Agatha
+Agatha,2
+5,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B169H255,82,SPELLTAG,WINGATTACK,SHADOWBALL,CONFUSERAY,MEANLOOK,1,	#Mismabat,
+B229H94,84,SPELLTAG,INFERNO,SPITE,DESTINYBOND,SHADOWBALL,0,			#Gendoom,
+B93H197,85,SPELLTAG,GUARDSWAP,DARKPULSE,MOONLIGHT,NIGHTSHADE,0,		#Umbter,
+B94H143,84,SPELLTAG,REST,CURSE,BODYSLAM,SHADOWPUNCH,2,				#Snorgar,
+B94H202,82,SPELLTAG,DESTINYBOND,COUNTER,MIRRORCOAT,CURSE,1,			#Wobbgar,
+###################
+ELITEFOUR_Lance
+Lance,2
+5,FULLRESTORE,FULLRESTORE
+B130H148,60,DRAGONFANG,OUTRAGE,THUNDERWAVE,HYDROPUMP,RAINDANCE,1,		#Dragodos,
+B230H233,58,DRAGONFANG,TRIATTACK,DRAGONDANCE,DRAGONPULSE,RECOVER,1,		#Porydra,
+B142H248,64,DRAGONFANG,BRAVEBIRD,HEADSMASH,AGILITY,DRAGONRUSH,0,		#Tyrandactyl,
+B148H157,61,DRAGONFANG,FIREBLAST,DRAGONTAIL,DRAGONDANCE,WILLOWISP,1,	#Lapnair,
+B149H269,62,DRAGONFANG,MOONBLAST,OUTRAGE,ANCIENTPOWER,AIRSLASH,1,		#Togenite,
+###################
+ELITEFOUR_Lance
+Lance,3
+5,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B130H148,72,DRAGONFANG,OUTRAGE,THUNDERWAVE,HYDROPUMP,RAINDANCE,1,		#Dragodos,
+B230H233,72,DRAGONFANG,TRIATTACK,DRAGONDANCE,DRAGONPULSE,RECOVER,1,		#Porydra,
+B142H248,76,DRAGONFANG,BRAVEBIRD,HEADSMASH,AGILITY,DRAGONRUSH,0,		#Tyrandactyl,
+B148H157,74,DRAGONFANG,FIREBLAST,DRAGONTAIL,DRAGONDANCE,WILLOWISP,1,	#Lapnair,
+B149H269,74,DRAGONFANG,MOONBLAST,OUTRAGE,ANCIENTPOWER,AIRSLASH,1,		#Togenite,
+###################
+ELITEFOUR_Lance
+Lance,4
+5,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B130H148,82,DRAGONFANG,OUTRAGE,THUNDERWAVE,HYDROPUMP,RAINDANCE,1,		#Dragodos,
+B230H233,82,DRAGONFANG,TRIATTACK,DRAGONDANCE,DRAGONPULSE,RECOVER,1,		#Porydra,
+B142H248,86,DRAGONFANG,BRAVEBIRD,HEADSMASH,AGILITY,DRAGONRUSH,0,		#Tyrandactyl,
+B148H157,84,DRAGONFANG,FIREBLAST,DRAGONTAIL,DRAGONDANCE,WILLOWISP,1,	#Lapnair,
+B149H269,84,DRAGONFANG,MOONBLAST,OUTRAGE,ANCIENTPOWER,AIRSLASH,1,		#Togenite,
+#########################
+############Encounter 8 - route 22#######
+#starter=bulbasaur
+CHAMPION
+Blue,0
+6,FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B18H105,64,LAXINCENSE,EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE,1,	#Maroeot,
+B103H128,64,KINGSROCK,ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER,2,	#Taucutor,
+B268H265,65,ABSORBBULB,FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE,1,	#Rhypemortar,
+B130H267,66,DAMPROCK,RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE,2, 	#Electados
+B65H121,63,WISEGLASSES,PSYCHIC,REFLECT,SURF,COSMICPOWER,1,		#Starkazam
+B6H9,69,LEFTOVERS,HYDROCANNON,FLAREBLITZ,PROTECT,FLY,0,			#Blastizard,
+CHAMPION
+Blue,3
+6,FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B18H105,75,LAXINCENSE,EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE,1,	#Maroeot,
+B103H128,75,KINGSROCK,ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER,2,	#Taucutor,
+B268H265,76,ABSORBBULB,FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE,1,	#Rhypemortar,
+B130H267,75,DAMPROCK,RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE,2, 	#Electados
+B65H121,76,WISEGLASSES,PSYCHIC,REFLECT,SURF,COSMICPOWER,1,		#Starkazam
+B6H9,82,LEFTOVERS,HYDROCANNON,FLAREBLITZ,PROTECT,FLY,0,			#Blastizard,
+CHAMPION
+Blue,6
+6,FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B18H105,85,LAXINCENSE,EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE,1,	#Maroeot,
+B103H128,85,KINGSROCK,ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER,2,	#Taucutor,
+B268H265,86,ABSORBBULB,FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE,1,	#Rhypemortar,
+B130H267,85,DAMPROCK,RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE,2, 	#Electados
+B65H121,86,WISEGLASSES,PSYCHIC,REFLECT,SURF,COSMICPOWER,1,		#Starkazam
+B6H9,92,LEFTOVERS,HYDROCANNON,FLAREBLITZ,PROTECT,FLY,0,			#Blastizard,
+#starter=charmander	###############################
+CHAMPION
+Blue,1
+6,FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B18H105,64,LAXINCENSE,EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE,1,	#Maroeot,
+B103H128,64,KINGSROCK,ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER,2,	#Taucutor,
+B268H265,65,ABSORBBULB,FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE,1,	#Rhypemortar,
+B130H267,66,DAMPROCK,RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE,2, 	#Electados
+B65H120,63,WISEGLASSES,PSYCHIC,REFLECT,SURF,COSMICPOWER,1,		#Starkazam
+B9H3,69,LEFTOVERS,POWERWHIP,HYDROCANNON,SLEEPPOWDER,PROTECT,0,	#Venutoise,
+CHAMPION
+Blue,4
+6,FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B18H105,75,LAXINCENSE,EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE,1,	#Maroeot,
+B103H128,75,KINGSROCK,ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER,2,	#Taucutor,
+B268H265,76,ABSORBBULB,FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE,1,	#Rhypemortar,
+B130H267,75,DAMPROCK,RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE,2, 	#Electados
+B65H120,76,WISEGLASSES,PSYCHIC,REFLECT,SURF,COSMICPOWER,1,		#Starkazam
+B9H3,82,LEFTOVERS,POWERWHIP,HYDROCANNON,SLEEPPOWDER,PROTECT,0,	#Venutoise,
+CHAMPION
+Blue,7
+6,FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B18H105,85,LAXINCENSE,EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE,1,	#Maroeot,
+B103H128,85,KINGSROCK,ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER,2,	#Taucutor,
+B268H265,86,ABSORBBULB,FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE,1,	#Rhypemortar,
+B130H267,85,DAMPROCK,RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE,2, 	#Electados
+B65H120,86,WISEGLASSES,PSYCHIC,REFLECT,SURF,COSMICPOWER,1,		#Starkazam
+B9H3,92,LEFTOVERS,POWERWHIP,HYDROCANNON,SLEEPPOWDER,PROTECT,0,	#Venutoise,
+
+#starter=squirtle	############################
+CHAMPION
+Blue,2
+6,FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B18H105,64,LAXINCENSE,EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE,1,	#Maroeot,
+B103H128,64,KINGSROCK,ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER,2,	#Taucutor,
+B268H265,65,ABSORBBULB,FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE,1,	#Rhypemortar,
+B130H267,66,DAMPROCK,RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE,2, 	#Electados
+B65H120,63,WISEGLASSES,PSYCHIC,REFLECT,SURF,COSMICPOWER,1,		#Starkazam
+B3H6,69,LEFTOVERS,SLEEPPOWDER,POWERWHIP,FLAREBLITZ,FLY,0,	#Charusaur,
+CHAMPION
+Blue,5
+6,FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B18H105,75,LAXINCENSE,EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE,1,	#Maroeot,
+B103H128,75,KINGSROCK,ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER,2,	#Taucutor,
+B268H265,76,ABSORBBULB,FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE,1,	#Rhypemortar,
+B130H267,75,DAMPROCK,RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE,2, 	#Electados
+B65H120,76,WISEGLASSES,PSYCHIC,REFLECT,SURF,COSMICPOWER,1,		#Starkazam
+B3H6,82,LEFTOVERS,SLEEPPOWDER,POWERWHIP,FLAREBLITZ,FLY,0,	#Charusaur,
+CHAMPION
+Blue,8
+6,FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B18H105,85,LAXINCENSE,EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE,1,	#Maroeot,
+B103H128,85,KINGSROCK,ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER,2,	#Taucutor,
+B268H265,86,ABSORBBULB,FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE,1,	#Rhypemortar,
+B130H267,85,DAMPROCK,RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE,2, 	#Electados
+B65H120,86,WISEGLASSES,PSYCHIC,REFLECT,SURF,COSMICPOWER,1,		#Starkazam
+B3H6,92,LEFTOVERS,SLEEPPOWDER,POWERWHIP,FLAREBLITZ,FLY,0,	#Charusaur,
+######### JOHTO leaders ##
+##########################
+
+###################
+LEADER_Whitney
+Whitney
+5,FULLRESTORE,FULLRESTORE
+B210H108,55,SILKSCARF,PLAYROUGH,LICK,CHIPAWAY,CHARM,	#LICKIBULL,
+B171H203,55,SILKSCARF,SPARK,DOUBLEHIT,POWERSWAP,AQUARING,0	#GIRATURN,
+B115H206,56,SILKSCARF,DOUBLEHIT,COIL,DIG,DIZZYPUNCH,2	#DUNSKHAN
+B128H190,56,LUMBERRY,TICKLE,TAKEDOWN,WORKUP,REST,		#AIROS
+B241H113,58,EVIOLITE,METRONOME,REFRESH,ROLLOUT,MILKDRINK,	#CHANTANK
+LEADER_Whitney
+Whitney,1
+6,FULLRESTORE,FULLRESTORE
+B210H108,82,SILKSCARF,PLAYROUGH,LICK,CHIPAWAY,CHARM,	#LICKIBULL,
+B171H203,82,SILKSCARF,SPARK,DOUBLEHIT,POWERSWAP,AQUARING,0	#GIRATURN,
+B115H206,84,SILKSCARF,DOUBLEHIT,COIL,DIG,DIZZYPUNCH,2	#DUNSKHAN
+B128H254,84,LUMBERRY,TICKLE,DOUBLEHIT,WORKUP,REST,		#AMBIROS
+B241H113,85,EVIOLITE,METRONOME,REFRESH,ROLLOUT,MILKDRINK,	#CHANTANK
+B309H299,85,SILKSCARF,,,,,1						#GARKING
+###################
+LEADER_Kurt
+Kurt
+5,FULLRESTORE,FULLRESTORE
+B168H15,56,SILVERPOWDER,SPIDERWEB,TWINEEDLE,SHADOWSNEAK,QUIVERDANCE,	#BEEDOS,
+B91H205,56,SILVERPOWDER,IRONDEFENSE,SPIKECANNON,EXPLOSION,BUGBITE,0	#Cloytress,
+B212H80,58,SILVERPOWDER,RECOVER,PSYCHUP,XSCISSOR,IRONDEFENSE,	#Slowzor
+B230H270,58,SILVERPOWDER,DRAGONPULSE,SUPERSONIC,UTURN,DOUBLETEAM,		#YANDRA
+B213H242,62,LEFTOVERS,POWERTRICK,MINIMIZE,BUGBITE,SOFTBOILED,		#Blissckle,
+LEADER_Kurt
+Kurt,1
+6,FULLRESTORE,FULLRESTORE
+B168H15,82,SILVERPOWDER,SPIDERWEB,TWINEEDLE,SHADOWSNEAK,QUIVERDANCE,	#BEEDOS,
+B91H205,85,SILVERPOWDER,IRONDEFENSE,SPIKECANNON,EXPLOSION,BUGBITE,0	#Cloytress,
+B212H80,84,SILVERPOWDER,RECOVER,PSYCHUP,XSCISSOR,IRONDEFENSE,	#Slowzor
+B230H270,82,SILVERPOWDER,DRAGONPULSE,SUPERSONIC,UTURN,DOUBLETEAM,		#YANDRA
+B213H242,85,SILVERPOWDER,POWERTRICK,MINIMIZE,BUGBITE,SOFTBOILED,		#Blissckle,
+B300H304,84,SILVERPOWDER,
+#####################
+LEADER_Falkner
+Falkner
+5,FULLRESTORE,FULLRESTORE	#Skarmory, xatu, honchrow, tokekiss, pidgeot
+B164H178,58,SHARPBEAK,LUCKYCHANT,PSYCHIC,REFLECT,AIRSLASH,0		#XATOWL
+B256H210,58,SHARPBEAK,ROAR,FAIRYWIND,NIGHTSLASH,FEATHERDANCE,3		#GRANKROW
+B229H227,60,AIRBALLOON,FLAMETHROWER,FAINTATTACK,STEELWING,DEFOG,1	#HOUNDMORY
+B269H105,61,SHARPBEAK,BONERUSH,FOCUSENERGY,AIRSLASH,PROTECT,3		#markoiss
+B18H217,63,SHARPBEAK,WINGATTACK,FURYSWIPES,REST,SCARYFACE,1	#URSAm	ory
+LEADER_Falkner
+Falkner,1
+6,FULLRESTORE,FULLRESTORE	#Skarmory, xatu, honchrow, tokekiss, pidgeot
+B164H178,82,SHARPBEAK,LUCKYCHANT,PSYCHIC,REFLECT,AIRSLASH,0		#XATOWL
+B256H210,82,SHARPBEAK,ROAR,FAIRYWIND,NIGHTSLASH,FEATHERDANCE,3		#GRANKROW
+B229H227,84,SHARPBEAK,FLAMETHROWER,FAINTATTACK,STEELWING,DEFOG,1	#HOUNDMORY
+B269H105,84,SHARPBEAK,BONERUSH,FOCUSENERGY,AIRSLASH,PROTECT,3		#markoiss
+B18H217,85,SHARPBEAK,WINGATTACK,FURYSWIPES,REST,SCARYFACE,1	#URSAm	ory
+B142H313,85,SHARPBEAK,		#DUSKDACTYL
+#####################
+LEADER_Clair
+Clair
+5,FULLRESTORE,FULLRESTORE
+B130H160,62,DRAGONFANG,CRUNCH,FIREFANG,SCREECH,AQUATAIL,0				#FERALIDOS
+B148H232,62,DRAGONFANG,THUNDERWAVE,DRAGONPULSE,MAGNITUDE,AQUARING,0		#MAGNANAIR	
+B230H272,63,DRAGONFANG,ICEBEAM,MIRRORCOAT,SMOKESCREEN,TWISTER,3		#GLADRA
+B6H168,63,DRAGONFANG,SPIDERWEB,FLAREBLITZ,PINMISSILE,OUTRAGE,2		#ARIAZARD
+B142H299,66,DRAGONFANG,DUALCHOP,DRAGONDANCE,IRONHEAD,CRUNCH,0		#GARDACTYL
+LEADER_Clair
+Clair,1
+6,FULLRESTORE,FULLRESTORE
+B130H160,82,DRAGONFANG,CRUNCH,FIREFANG,SCREECH,AQUATAIL,0				#FERALIDOS
+B148H232,82,DRAGONFANG,THUNDERWAVE,DRAGONPULSE,MAGNITUDE,AQUARING,0		#MAGNANAIR	
+B230H272,84,DRAGONFANG,ICEBEAM,MIRRORCOAT,SMOKESCREEN,TWISTER,3		#GLADRA
+B6H168,84,DRAGONFANG,SPIDERWEB,FLAREBLITZ,PINMISSILE,OUTRAGE,2		#ARIAZARD
+B142H299,85,DRAGONFANG,DUALCHOP,DRAGONDANCE,IRONHEAD,CRUNCH,0		#GARDACTYL
+B278H149,85,DRAGONFANG,				#DRAGONPTILE
+#####################
+LEADER_Morty
+Morty
+5,FULLRESTORE,FULLRESTORE
+B338H94,65,SPELLTAG,MEANLOOK,PURSUIT,SHADOWBALL,CURSE,0					#Genroark
+B289H262,63,FOCUSSASH,GRUDGE,NIGHTSLASH,HEALBLOCK,SHADOWSNEAK,0			#Weainja
+B295H36,65,SPELLTAG,CURSE,ATTRACT,MINIMIZE,OMINOUSWIND,1				#Cleftomb
+B329H143,64,LEFTOVERS,SWORDSDANCE,KINGSSHIELD,BODYSLAM,SHADOWPUNCH,1	#Snorslash
+B313H107,67,BIGROOT,DRAINPUNCH,SHADOWCLAW,BULKUP,THUNDERPUNCH,1			#Hitnoir
+####################
+LEADER_Morty
+Morty,1
+6,FULLRESTORE,FULLRESTORE
+B338H94,84,SPELLTAG,MEANLOOK,PURSUIT,SHADOWBALL,CURSE,0					#Genroark
+B289H262,82,FOCUSSASH,GRUDGE,NIGHTSLASH,HEALBLOCK,SHADOWSNEAK,0			#Weainja
+B295H36,84,SPELLTAG,CURSE,ATTRACT,MINIMIZE,OMINOUSWIND,1				#Cleftomb
+B313H329,84,SPELLTAG,SWORDSDANCE,KINGSSHIELD,MEANLOOK,SHADOWPUNCH,1		#Aeginoir
+B313H107,84,BIGROOT,DRAINPUNCH,SHADOWCLAW,BULKUP,THUNDERPUNCH,1			#Hitnoir
+B94H94,85,SPELLTAG,SHADOWBALL,ENERGYBALL,DESTINYBOND,SUCKERPUNCH,0		#Gengar (mega)
+#####################
+LEADER_Pryce
+Pryce
+5,FULLRESTORE,FULLRESTORE
+B199H87,65,LEFTOVERS,NASTYPLOT,BATONPASS,SAFEGUARD,ICESHARD,0 			#Dewking
+B308H274,64,ICYROCK,HAIL,PROTECT,IRONDEFENSE,EARTHQUAKE,1				#Mamodon
+B262H321,65,NEVERMELTICE,CLOSECOMBAT,FLAREBLITZ,ICEPUNCH,NIGHTSLASH,0	#Infervile
+B91H326,65,ROCKYHELMET,ICICLESPEAR,SPIKECANNON,IRONDEFENSE,REST,3		#Proboster
+B314H124,65,WISEGLASSES,PSYCHIC,BLIZZARD,SURF,FAKETEARS,0				#Jynlord
+#####################
+LEADER_Pryce
+Pryce,1
+6,FULLRESTORE,FULLRESTORE
+B199H87,84,LEFTOVERS,NASTYPLOT,BATONPASS,SAFEGUARD,ICESHARD,0 			#Dewking
+B308H274,84,ICYROCK,HAIL,PROTECT,IRONDEFENSE,EARTHQUAKE,1				#Mamodon
+B262H321,85,NEVERMELTICE,CLOSECOMBAT,FLAREBLITZ,ICEPUNCH,NIGHTSLASH,0	#Infervile
+B91H326,85,ROCKYHELMET,ICICLESPEAR,SPIKECANNON,IRONDEFENSE,REST,3		#Proboster
+B314H124,85,WISEGLASSES,PSYCHIC,BLIZZARD,SURF,FAKETEARS,0				#Jynlord
+B101H131,86,AIRBALLOON,PERISHSONG,SHEERCOLD,MIRRORCOAT,PROTECT,0		#Lapode
+#####################
+LEADER_Jasmine
+Jasmine
+5,FULLRESTORE,FULLRESTORE
+B85H227,66,METALCOAT,STEELWING,WHIRLWIND,AIRSLASH,SPIKES,1,			#SKARDRIO
+B112H293,67,EVIOLITE,STONEEDGE,MAGNETRISE,METEORMASH,IRONDEFENSE,1	#METADON
+B9H263,66,ZOOMLENS,IRONDEFENSE,HYDROCANNON,LOCKON,MIRRORSHOT,1		#MAGNETOISE
+B331H212,67,RAZORCLAW,SWORDSDANCE,NIGHTSLASH,XSCISSOR,FOCUSENERGY,0	#SCISHARP
+B208H333,68,METALCOAT,EARTHQUAKE,DOUBLEEDGE,HEAVYSLAM,HEADSMASH,0	#AGLIX
+#####################
+LEADER_Jasmine
+Jasmine,1
+6,FULLRESTORE,FULLRESTORE
+B85H227,84,METALCOAT,STEELWING,WHIRLWIND,AIRSLASH,SPIKES,1,			#SKARDRIO
+B112H293,84,EVIOLITE,STONEEDGE,MAGNETRISE,METEORMASH,IRONDEFENSE,1	#METADON
+B9H263,85,ZOOMLENS,IRONDEFENSE,HYDROCANNON,LOCKON,MIRRORSHOT,1		#MAGNETOISE
+B331H212,84,RAZORCLAW,SWORDSDANCE,NIGHTSLASH,XSCISSOR,FOCUSENERGY,0	#SCISHARP
+B208H333,86,METALCOAT,EARTHQUAKE,DOUBLEEDGE,HEAVYSLAM,HEADSMASH,0	#AGLIX
+B268H329,85,METALCOAT,FIREPUNCH,SACREDSWORD,AERIALACE,THUNDERPUNCH,1#AEGIMORTAR
+#####################
+LEADER_Chuck
+Chuck
+5,FULLRESTORE,FULLRESTORE
+B68H141,62,MUSCLEBAND,DYNAMICPUNCH,WATERFALL,STONEEDGE,SLASH,3		#KABUCHAMP
+B321H281,62,EXPERTBELT,CLOSECOMBAT,BLAZEKICK,BRAVEBIRD,TAUNT,0		#BLAZNAPE
+B57H62,64,EXPERTBELT,CIRCLETHROW,BELLYDRUM,CLOSECOMBAT,THRASH,3		#POLIAPE			#POLIAPE
+B334H296,63,WISEGLASSES,AURASPHERE,DRAGONPULSE,DETECT,EARTHPOWER,1	#LUCAGON
+B143H107,64,LEFTOVERS,REST,DIZZYPUNCH,SKYUPPERCUT,COUNTER,1			#HITMONLAX
+#####################
+LEADER_Chuck
+Chuck,1
+6,FULLRESTORE,FULLRESTORE
+B68H141,82,MUSCLEBAND,DYNAMICPUNCH,WATERFALL,STONEEDGE,SLASH,3		#KABUCHAMP
+B321H281,82,EXPERTBELT,CLOSECOMBAT,BLAZEKICK,BRAVEBIRD,TAUNT,0		#BLAZNAPE
+B57H62,84,EXPERTBELT,CIRCLETHROW,BELLYDRUM,CLOSECOMBAT,THRASH,3		#POLIAPE			#POLIAPE
+B334H296,83,WISEGLASSES,AURASPHERE,DRAGONPULSE,DETECT,EARTHPOWER,1	#LUCAGON
+B143H107,84,LEFTOVERS,REST,DIZZYPUNCH,SKYUPPERCUT,COUNTER,1			#HITMONLAX
+B288H273,83,RAZORCLAW,SWORDSDANCE,LEAFBLADE,SKYUPPERCUT,DOUBLETEAM,2#GLISLADE
+##############
+### RIVAL
+#############
+###########Blue###############
+#Blue encounter 1	starter=bulbasaur
+RIVAL1
+Blue, 0
+1
+B4H7,5,	#squirtmander,
+
+#Blue encounter 1	starter=charmander
+RIVAL1
+Blue, 1
+1
+B7H1,5,	#bulbtle,
+
+#Blue encounter 1	starter=squirtle
+RIVAL1
+Blue, 2
+1
+B1H4,5,	#bulbmander,
+#################################
+
+#Blue encounter 2 (Viridian)	starter=bulbasaur
+RIVAL1
+Blue, 3
+2
+PIDGEY,7,
+B4H7,8	#squirtmander,
+
+
+#Blue encounter 2 (Viridian)	#starter=charmander
+RIVAL1
+Blue,4
+2
+PIDGEY,7,
+B7H1,8	#bulbtle,
+
+
+#Blue encounter 2 (Viridian)	#starter=squirtle
+RIVAL1
+Blue, 5
+2
+PIDGEY,7,
+B1H4,8	#bulbmander,
+
+######################
+#Blue encounter 3 (Cerulean)	#starter=bulbasaur
+RIVAL1
+Blue, 6
+4,SUPERPOTION
+PIDGEOTTO,18,
+ABRA,15,
+B19H56,16,
+B5H7,19,,SCARYFACE,WATERGUN,EMBER,SLASH,	#squirtmeleon,
+
+#Blue encounter 3 (Cerulean)	#starter=charmander
+RIVAL1
+Blue, 7
+4,SUPERPOTION
+PIDGEOTTO,18,
+ABRA,15,
+B19H56,16,
+B8H1,19,,WITHDRAW,WATERGUN,RAZORLEAF,TAKEDOWN,	#bulborttle,
+
+
+#Blue encounter 3 (Cerulean)	#starter=squirtle
+RIVAL1
+Blue, 8
+4,SUPERPOTION
+PIDGEOTTO,18,
+ABRA,15,
+B19H56,16,
+B2H4,19,,RAZORLEAF,EMBER,BITE,SLEEPPOWDER,	#CHARYSAUR,
+
+###########Blue encounter 4 (SS Anne)####
+#starter=bulbasaur
+RIVAL1
+Blue, 9
+4,SUPERPOTION
+PIDGEOTTO,22,
+B20H56,20,	#Manicate,
+B64H120,18,	#Starbra,
+B5H8,22,	#Warmeleon,
+
+
+#starter=charmander
+RIVAL1
+Blue, 10
+4,SUPERPOTION
+PIDGEOTTO,22,
+B20H56,20,	#Manicate,
+B64H120,18,	#Starbra,
+B8H2,22,	#Ivytortle,
+
+
+#starter=squirtle
+RIVAL1
+Blue, 11
+4,SUPERPOTION
+PIDGEOTTO,22,
+B20H56,20,	#Manicate,
+B64H120,18,	#Starbra,
+B2H5,22,	#Charysaur,
+
+
+######Encounter 5 - Pokemon Tower#####
+#starter=bulbasaur
+RIVAL1
+Blue, 12
+5,SUPERPOTION,SUPERPOTION
+B17H104,25,	#Cueotto,
+EXEGGCUTE,24,
+GYARADOS,23,
+B64H120,22,	#Starbra,
+B5H8,25,	#Warmeleon,
+
+#starter=charmander
+RIVAL1
+Blue, 13
+5,SUPERPOTION,SUPERPOTION
+B17H104,25,	#Cueotto,
+EXEGGCUTE,24,
+GYARADOS,23,
+B64H120,22,	#Starbra,
+B8H2,25,	#Ivytortle,
+
+#starter=squirtle
+RIVAL1
+Blue, 14
+5,SUPERPOTION,SUPERPOTION
+B17H104,25,	#Cueotto,
+EXEGGCUTE,24,
+GYARADOS,23,
+B64H120,22,	#Starbra,
+B2H5,25,	#Charysaur,
+
+#########Encounter 6 - Fuschia #####
+#starter=bulbasaur
+RIVAL1
+Blue, 15
+5,SUPERPOTION,SUPERPOTION
+B18H104,42,	#Cueot,
+TAUROS,43,	#Taucute,
+B130H125,40,	#Electados,
+B65H120,40,	#Starkazam,
+B6H8,44,	#Warizard,
+
+#starter=charmander
+RIVAL1
+Blue, 16
+5,SUPERPOTION,SUPERPOTION
+B18H104,42,	#Cueot,
+TAUROS,43,	#Taucute,
+B130H125,40,	#Electados,
+B65H120,40,	#Starkazam,
+B9H2,44,	#Ivytoise,
+
+#starter=squirtle
+RIVAL1
+Blue, 17
+5,SUPERPOTION,SUPERPOTION
+B18H104,42,	#Cueot,
+TAUROS,43,	#Taucute,
+B130H125,40,	#Electados,
+B65H120,40,	#Starkazam,
+B3H5,44,#Charusaur,
+
+############Encounter 7 - silph co.#######
+#starter=bulbasaur
+RIVAL1
+Blue, 18
+5
+B18H104,44,	#Cueot,
+TAUROS,45,	#Taucute,
+B130H125,42,	#Electados,
+B65H120,42,	#Starkazam,
+B6H9,45,	#Warizard,
+
+#starter=charmander
+RIVAL1
+Blue, 19
+5
+B18H104,44,	#Cueot,
+TAUROS,45,	#Taucute,
+B130H125,42,	#Electados,
+B65H120,42,	#Starkazam,
+B9H3,45,	#Ivytoise,
+
+
+#starter=squirtle
+RIVAL1
+Blue, 20
+5
+B18H104,44,	#Cueot,
+TAUROS,45,	#Taucute,
+B130H125,42,	#Electados,
+B65H120,42,	#Starkazam,
+B3H6,45,#Charusaur,
+
+############Encounter 8 - route 22#######
+#starter=bulbasaur
+RIVAL1
+Blue, 21
+6
+B18H105,47,	#Maroeot,
+B102H128,45,	#Taucute,
+B111H126,45,#Maghorn,
+B130H125,47,	#Electados,
+B65H120,50,	#Starkazam,
+B6H9,53,	#Blastizard,
+
+#starter=charmander
+RIVAL1
+Blue, 22
+6
+B18H105,47,	#Maroeot,
+B102H128,45,	#Taucute,
+B111H126,45,#Maghorn,
+B130H125,47,	#Electados,
+B65H120,50,	#Starkazam,
+B9H3,53,	#Venutoise,
+
+#starter=squirtle
+RIVAL1
+Blue, 23
+6
+B18H105,47,	#Maroeot,
+B102H128,45,	#Taucute,
+B111H126,45,#Maghorn,
+B130H125,47,	#Electados,
+B65H120,50,	#Starkazam,
+B3H6,53,	#Charusaur,
+
+
+###################
+###### Intro ########
+MR_FUJI
+Fuji
+2
+DODUO,20,
+NIDORINO,20,
+#################
+TEAMROCKET_M
+Sergio
+2
+ZUBAT,17,		#Zuvee,
+B147H19,18,		#Rattini,
+##################
+TEAMROCKET_M
+Marcel
+2
+KOFFING,15,		#Geoffing,
+B23H108,15,		#Lickikans,
+##################
+TEAMROCKET_M
+Achraf
+1
+B140H81,20,,,,,,,,,,,,,,,,39		#Magneto,
+###################
+ROCKETBOSS
+Giovanni,1
+1
+MEWTWO,70,,PSYCHIC,SHADOWBALL,AURASPHERE,RECOVER,2
+
+
+#####################
+POKEMANIAC
+Guy
+6
+B57H12,50,	#BUTTERAPE
+B99H106,50,	#HITLER
+B44H84,50,	#DOOM
+B93H83,50,	#FARTER
+B88H104,50,	#CUMER
+B31H7,50,	#SQUIRTQUEEN
+####################
+ROBOT
+KILLBOT
+3
+B131H49,50,	#VENORAS
+B18H34,50,	#NIDOEOT
+B145H139,50,	#OMADOS
+####################
+ROBOT
+RED
+1
+B132H242,100,LEFTOVERS,TOXIC,COSMICPOWER,SOFTBOILED,TRANSFORM,0,,,shiny,IMPISH,31,,,,4
+####################
+ROBOT
+RED_2
+1
+B232H235,1,SHELLBELL,ENDEAVOR,BULLETPUNCH,,,0,,,shiny,IMPISH,31,,,,4
+####################
+ROBOT
+RED_3
+1
+B208H113,50,EVIOLITE,IRONTAIL,MINIMIZE,SOFTBOILED,SHELLSMASH,1,,,shiny,ADAMANT,31,,,,4
+
+
+#################
+###Saffron Gym###
+##################
+PSYCHIC_M
+Cameron
+3
+B79H96,38
+B79H64,38
+B80H67,38
+###############
+PSYCHIC_F
+Enya
+1
+B64H122,43
+###############
+CHANNELER
+Stacy
+2
+B93H67,39
+B93H57,39
+###############
+PSYCHIC_M
+Preston
+1
+B80H87,43	#DEWBRO
+###############
+CHANNELER
+Amanda
+2
+B92H65,39,	#ALATLY
+B63H94,39, 	#GENRA
+###############
+PSYCHIC_M
+Johan
+3
+B64H70,38,	#WEEPINBRA
+B122H61,38,	#POLIMIME
+B77H79,38,	#SLOWTA
+
+
+############################
+######Silph Co.		######
+############################ 
+ROCKETBOSS
+Giovanni,2	#(Unused)
+3
+B144H150,45,,ICEBEAM,PSYCHIC,GUARDSWAP,LIGHTSCREEN,,,,,,,,,,4,#Mewuno,
+B146H150,45,,FLAMETHROWER,PSYCHIC,SKYATTACK,POWERSWAP,,,,,,,,,,4,#Mewtres
+B145H150,45,,THUNDERBOLT,PSYCHIC,DRILLPECK,AGILITY,,,,,,,,,,4,#Mewdos
+########################
+ROCKETBOSS
+Giovanni,3	#
+1,FULLRESTORE
+BIRDBOSS,50,ZOOMLENS,TRIATTACK2,DRILLPECK,SKYATTACK,HAZE,2#
+#########################
+
+#####
+#2F #
+#####
+TEAMROCKET_M
+Greg
+3
+ZUBAT,30,	#VOLTBAT
+MAGNEMITE,30,	#MAGNEBAT
+B42H25,30,	#PIKABAT
+#######################
+SCIENTIST
+Jerry
+3
+B81H58,30,	#GROWMITE
+B100H37,30,	#VULORB
+B82H88,30,	#GRITON
+######################
+TEAMROCKET_M
+Sebastian
+2
+DROWZEE,34,	#DROWBONE
+B41H110,34,	#WEEBAT
+######################
+SCIENTIST
+Connor
+3
+B88H74,31,	#GEOMER
+B109H75,31,	#GRAVFING
+B95H110,31,	#WEEIX
+######################
+#####
+#3F #
+#####
+TEAMROCKET_F
+Madison
+3
+RATICATE,33,	#ELECTRICATE
+RATICATE,33,	#NIDOICATE
+B17H97,33,	#HYPEOTTO
+#######################
+SCIENTIST
+Jose
+2
+B110H109,34,	#KOFFZING
+B101H42,34,	#GOLODE
+######################
+#####
+#4F #
+#####
+TEAMROCKET_M
+Jimi
+3
+EKANS,33,
+GOLBAT,33,	#GLOOBAT
+B22H104,33,	#CUROW
+#######################
+TEAMROCKET_F
+Sylvia
+2
+DROWZEE,34,	#HORSZEE
+B66H122,34,	#MR. CHOP
+#######################
+SCIENTIST
+Rodney
+1
+B101H97,38,	#HYPODE
+#######################
+#####
+#5F #
+#####
+TEAMROCKET_M
+Ricky
+1
+B97H85,38,	#DONO
+#######################
+TEAMROCKET_M
+Julian
+1
+B67H24,38,	#ARBCHOKE
+#######################
+JUGGLER
+Jim
+2
+FARFETCHD,34,	#FARBRA
+B122H70,34,	#WEEPINMIME
+#######################
+SCIENTIST
+Beau
+2
+B52H81,34,	#MAGNETH
+B82H53,34,	#MAGNESIAN
+#####################
+#####
+#6F #
+#####
+TEAMROCKET_F
+Marianne
+2
+GOLBAT,34,	#MAEOTTO
+B83H67,34,	#MAFETCHD
+#########################
+TEAMROCKET_F
+Jasmine
+3
+ZUBAT,33,	#LICKIBAT
+ZUBAT,33,	#WIGGLYBAT
+B113H42,33,	#GOLSEY
+#########################
+SCIENTIST
+Taylor
+4
+B100H133,31,	#EEORB
+B134H100,31,	#VOLTEON
+B135H100,31,	#VOLTEON
+B136H100,31,	#VOLTEON
+#####
+#7F #
+#####
+########################
+TEAMROCKET_M
+Mark
+2
+RATICATE,34,	#RATBONE
+B104H22,34,	#FEARBONE
+#######################
+TEAMROCKET_M
+Emanuel
+4
+RATICATE,31,
+GOLBAT,31,	#KRABAT
+B72H19,31,	#RATCOOL
+GOLBAT,31,
+#######################
+SCIENTIST
+Joshua
+2
+B2H101,34,	#ELECTRYSAUR
+B8H89,34,	#MUTORTLE
+##################
+SCIENTIST
+Emmanuel
+1
+B137H81,36,	#MAGNEGON
+#######################
+TEAMROCKET_M
+Donald
+2
+SANDSLASH,34,	#NIDOSLASH
+B34H27,34,	#SANDKING
+######################
+#####
+#8F #
+#####
+SCIENTIST
+John
+1
+B142H5,38,	#CHARDACTYL
+####################
+TEAMROCKET_F
+Selena
+3
+DROWZEE,31,	#DROWELER
+GRIMER,31,	#HAUNTMER
+B66H106,31,	#HITMONCHOP
+###################
+TEAMROCKET_M
+Amadeus
+2
+RATICATE,34,	#MAHORN
+B57H111,34,	#RHYAPE
+##################
+#####
+#9F #
+#####
+SCIENTIST
+Travis
+1
+B68H67,38,	#MACHAMP
+#################
+TEAMROCKET_M
+Pierce
+4
+RATTATA,34,	#DRATATA
+ZUBAT,34,	#PORYBAT
+EKANS,34,	#EEKANS
+B15H20,34,	#beiicate
+#######################
+TEAMROCKET_M
+Scott
+1
+B57H12,38,	#BUTTERAPE
+##########################
+TEAMROCKET_F
+Felicity
+3
+GOLBAT,36,	#GOLBONE
+DROWZEE,36,	#DROWGONG
+B105H101,36,	#ELECTRWAK
+
+###############################
+#	Legendary birds chase #
+###############################
+TEAMROCKET_M
+Larry
+2
+WEEZING,38,	#Magnezing
+B101H73,37,	#Tentaode,
+################################
+TEAMROCKET_M
+James
+1
+B71H110,38,	#Weebel
+TEAMROCKET_F
+Jessie
+1
+B24H108,38,	#Lickibok
+################################
+TEAMROCKET_M
+Donald
+1
+B115H42,44,	#Golkhan
+################################
+TEAMROCKET_F
+Svetlana
+1
+B20H76,44,	#Golicate
+################################
+#	EXEC
+################################
+ROCKETEXEC_F	#MOLTRES
+Kelly,0
+3
+B89H126,45	#Maguk		fire
+B89H125,45,	#Electauk	elec
+B145H144,50,	#ARTICDOS	ice elec
+############################
+ROCKETEXEC_F	#ZAPDOS
+Kelly,1
+3
+B89H125,45,	#Electauk	elec
+B89H124,45,	#Jynauk		ice
+B144H146,50,	#MOLTCUNO	fire ice
+############################
+ROCKETEXEC_F	#ARTICUNO
+Kelly,2
+3
+B89H124,45,	#Jynauk		ice
+B89H126,45	#Maguk		fire
+B146H145,50,	#ZAPTRES	elec fire
+
+###############################
+##### GOLDENROD 
+###############################
+MYSTICALMAN
+Eusine,0
+1
+B132H52,49,,,TRANSFORM,	#MEOWTO
+################################
+MYSTICALMAN
+Eusine,1
+1
+B132H52,54,,,TRANSFORM,	#MEOWTO
+################################
+###############################
+##### GOLDENROD DEPT STORE ####
+###############################
+
+##########################
+WORKER
+Angus
+2
+HERACROSS,37,
+B217H202,39,	
+##########################
+WORKER
+Silvio
+2
+DUGTRIO,37,
+B26H180,39,	
+##########################
+WORKER
+Hermann
+3
+MAGNETON,38,
+MAGNETON,38,
+B205H82,38, 	#MAGNETRESS
+
+##########################
+WORKER
+John
+1
+B137H233,44, 	#PORYGON
+##########################
+WORKER
+Felix
+3
+MACHOP,39,
+MACHOKE,39,
+B67H212,39, 	#SCICHOKE
+
+##########################
+WORKER
+Kevin
+2
+ELECTRODE,42,
+B210H82,42, 	#MAGNEBULL
+##########################
+WORKER
+Mark
+2
+MACHOKE,42,
+B205H106,44, 	#FORRELEE
+##########################
+TEAMROCKET_F
+Sarah
+2
+WEEZING,39,	
+B110H166,45,	#WOBBAT
+##########################
+TEAMROCKET_F
+Rike
+2
+ARBOK,41,	#ARBULL
+B202H42,42,	#WOBBAT
+##########################
+TEAMROCKET_M
+Joel
+2
+RATICATE,42,	#RATTET
+B20H162,42,	#FURICATE
+##########################
+ROCKETEXEC_M
+Archer
+3
+B57H228,44,	#HOUNDAPE
+B168H110,44,	#WEEZDOS
+B229H208,44,	#STEEDOOM
+##########################
+######## ROUTES 26 / 27 ###
+###########################
+FISHERMAN
+Scott
+3
+SEAKING,41,
+SEAKING,41,
+B211H82,45,	#MAGNEFISH
+###########################
+PSYCHIC_M
+Richard
+1
+B197H196,47,	#UMPEON
+###########################
+COOLTRAINER_F
+Joyce
+2
+PIKACHU,47,
+B9H212,45,	#SCITOISE
+###########################
+COOLTRAINER_M
+Gaven
+3
+B185H71,43,	#VICTREEWOODO
+B99H85,43,	#DODRIGLER
+B136H203,43,	#GIRAREON
+##########################
+COOLTRAINER_M
+Jake
+2
+PARASECT,44,
+B55H224,44,	#OCTDUCK
+###########################
+COOLTRAINER_F
+Beth
+1	
+B78H219,47,	#MAGDASH
+##############
+COOLTRAINER_F
+Karina
+3
+VULPIX,43,
+B126H77,43,	#PONYMAR
+B203H78,44,	#GIRADASH
+###################
+COOLTRAINER_F
+Jenny
+1
+B9H3,50,	#VENUSTOISE
+###########################
+### RT 27
+##################
+COOLTRAINER_F
+Megan
+3	
+B1H152,42,	#CHIKOSAUR
+B2H153,42,	#BAYSAYR
+B3H154,42,	#MEGASAUR
+######################
+BIRDKEEPER
+Jose
+1
+B227H83,45,		#FARMORY
+#####################
+PSYCHIC_M
+Gilbert
+3
+STARMIE,40,
+B102H201,40,	#UNCUTE
+B112H203,40,	#GIRADON
+##################
+COOLTRAINER_F
+Reena
+3	
+B91H121,41,	#STARMSTER
+B91H121,41,	#STARMSTER
+B31H241,41,	#MILQUEEN
+###################
+BLACKBELT
+Daisuke
+3
+MACHOKE,44,
+B66H164,42,	#NOCTCHOP
+B67H64,44,	#KADACHOKE
+#######################
+COOLTRAINER_F
+Naomi
+2
+PERSIAN,46,
+B38H229,46,	#HOUNDTALES
+###################
+TAMER
+Vincent
+1
+B122H270,49,	#YANMIME
+##############
+
+############################
+######Victory Road.		######
+############################ 
+###################
+###################
+COOLTRAINER_F
+Caroline
+2
+PARAS,42,	
+B47H199,47,	#SLOWSECT
+######################
+COOLTRAINER_F
+Lindsay
+3
+BELLSPROUT,40,	
+B188H70,43,	#WEEPINLOOM
+B182H71,46,	#VICTREESOM
+##############
+COOLTRAINER_M
+Rolando
+3
+B5H156,44,	#QUIMELEON
+B8H159,44,	#CROCOTORTLE
+B2H153,44,	#BAYSAUR
+###############
+COOLTRAINER_M
+Spencer
+2
+RATICATE,40,
+B6H227,47,	#SKARRIZARD
+###################
+JUGGLER
+Nelson
+4
+DROWZEE,43,
+KADABRA,43,
+B97H178,42,	#XANO
+B196H64,42,	#KADAPEON
+###################
+COOLTRAINER_M
+George
+3
+EXEGGUTOR,44,	#QUIMELEON
+B28H215,44,	#SNEASLASH
+B91H202,44,	#WOBBSTER
+##############
+COOLTRAINER_M
+Darryl
+2
+B101H121,45,	#STARMRODE
+B59H135,45,	#JOLTNINE
+##############
+COOLTRAINER_M
+Dawson
+3
+B128H5,44,	#CHARROS
+B131H186,44,	#POLIRAS
+B108H51,44,		#DUGTUNG
+###################
+COOLTRAINER_F
+Alexa
+3
+B25H106,42,	#HITMONFABLE
+B40H107,42,	#HITMONTUFF
+B242H237,42,	#HITMONSSEY
+###################
+COOLTRAINER_F
+Rike
+2
+SKARMORY,45,	
+B53H87,45,	#DEWSIAN
+##############
+COOLTRAINER_M
+Kirill
+1
+B233H230,48,	#KINGGON2
+#######################
+COOLTRAINER_M
+Ryan
+1
+B242H71,45,	#VICTREESSEY
+########################
+HIKER
+Oscar
+3
+SANDSLASH,43,
+B75H76,44,	#GOLVELER
+DONPHAN,44,
+########################
+HIKER
+Wilfried
+2
+GRAVELER,43,
+B208H95,45,	#ONILIX
+
+#######################
+YOUNGCOUPLE
+Nick & Aude
+2
+B34H31,46,	#NIDOKING
+B31H34,46,	#NIDOQUEEN
+
+
+##############
+TAMER
+Danny
+2
+B197H196,46,	#ESPBREON
+B148H247,46,	#PUPINAIR
+##############
+COOLTRAINER_M
+Mario
+3
+B207H42,43,	#GOLGAR
+B203H28,43,	#SANDFARIG
+B171H12,43,	#BUTTERTURN
+######################
+COOLTRAINER_F
+Sabrina
+2
+B226H17,43,	#PIDGINE
+B224H39,45,	#JIGGLYLLERY
+##############
+COOLTRAINER_M
+Patrice
+3
+B59H15,44,	#BEENINE
+B237H71,44,	#VICTREETOP
+B185H51,44,	#DUGWOODO
+#################
+COOLTRAINER_F
+Marieh
+2
+B136H76,45,	#FLAREM
+B68H37,47,	#VULCHAMP
+#################
+COOLTRAINER_F
+Clarence
+2
+B139H40,44,	#WIGGLYNITE
+B143H38,45,	#SNORNINE
+
+############################
+######Route 34	      ######
+############################
+YOUNGCOUPLE
+Phil & Anna
+2
+B210H184,36,	#AZUMABULL
+B184H180,36,	#FLAAMARILL
+############################
+POLICE
+Hamilton
+2
+GRANBULL,41,
+B59H97,42,
+############################
+BURGLAR
+Brandon
+2
+GRANBULL,36,
+B179H260,38,	#KINGREEP
+############################
+PICNICKER
+Gina
+3
+SKIPLOOM,30,
+JUMPLUFF,36,
+B3H192,38,	#SUNSAUR
+############################
+YOUNGSTER
+Ian
+2
+DUGTRIO,36,
+B57H189,38,
+############################
+CAMPER
+Todd
+3
+GRAVELER,33,
+GOLDUCK,33,
+B55H219,38,	#MAGDUCK
+############################
+COOLTRAINER_F
+Jenn
+2
+B120H201,36,	#UNYU
+B121H200,41,	#MISMIE
+############################
+COOLTRAINER_F
+Irene
+2
+B118H168,36,	#UNYU
+B119H169,41,	#CROKING
+############################
+COOLTRAINER_F
+Kate
+2
+B90H188,36,	#SKIPDER
+B91H185,41,	#SUDOSTER
+
+######################################
+############# Route 35 ###############
+#####################################
+PICNICKER
+Kim
+1
+B38H26,39,	#RAITALES
+#####################################
+CAMPER
+Elliot
+2
+SANDSLASH,36,
+B36H184,38,	#AZUMAFABLE
+#####################################
+PICNICKER
+Brooke
+1
+B31H122,38,
+#####################################
+JUGGLER
+Irwin
+6
+B100H133,25,	#EETORB
+B100H134,35,	#VAPORTORB
+B100H135,35,	#JOLTORB
+B100H136,35,	#FLARETORB
+B100H196,35,	#ESTORB
+B100H197,35,	#UMBRORB
+###################################
+PYROMANIAC
+Walt
+2
+MAGMAR,34,
+B268H126,40,	#MAGMORTAR
+#################################
+BURGLAR
+Dickson
+2
+B228H198,36,	#MURDOUR
+CROBAT,38,
+################################
+BUGCATCHER
+Arnie
+1
+B49H234,43,	#STANMOTH
+###############################
+BIRDKEEPER
+Bryan
+2
+PIDGEOTTO,35,
+B18H176,37,	#TOGEOT
+##############################
+#ROUTE 36
+###############################
+PSYCHIC_M
+Mark
+3
+KADABRA,35,
+KADABRA,35,
+B65H185,38,
+################################
+GENTLEMAN
+Nick
+2
+XATU,36,
+B266H270,41,
+##############################
+##############################
+###### NATIONAL PARK #########
+##############################
+BEAUTY
+Berverly
+1
+B210H123,41,	#SCYBULL
+#############################
+YOUNGSTER
+Jack
+2
+VILEPLUME,38,
+B101H114,35,	#TANGRODE
+#############################
+TAMER
+William
+1
+B127H26,42,	#RAISIR
+############################
+PRESCHOOLER_F
+Krise
+2
+GLOOM,34,
+B105H15,38,	#BEEWAK
+############################
+LASS
+Shauna
+3
+SKIPLOOM,31,
+SKIPLOOM,31,
+B153H113,37,	#CHANLEEF
+#############################
+
+##########
+#Azalea
+#
+ROUGHNECK
+Craig
+1
+B123H210,50,
+
+##############################
+#UNION CAVE
+###############################
+BLACKBELT
+Peter
+2
+B106H234,45,
+B67H168,50,,REVENGE,FORESIGHT,SPIDERWEB,LOWKICK,0
+###############################
+HIKER
+Daniel
+2
+ONIX,45,
+B95H205,45,	#FOREIX
+##############################
+HIKER
+Russel
+3
+GRAVELER,43,
+GRAVELER,43,
+B76H206,45,	#DUNLEM
+#############################
+PYROMANIAC
+Bill
+2
+KOFFING,44,
+B110H126,46,	#MAGZING
+############################
+PYROMANIAC
+Ray
+1
+B38H164,48,	#NOCTALES
+##########################
+POKEMANIAC
+Larry
+1
+SLOWKING,47,
+##########################
+HIKER
+Leonard
+2
+MACHOKE,44,
+B75H166,46,
+##########################
+HIKER
+Phillip
+3
+GRAVELER,44,
+GRAVELER,44
+B76H75,45,	#GRAVELEM
+###########################
+POKEMANIAC
+Andrew
+2
+MAROWAK,44,
+B105H216,45,	#MAGWAK
+###########################
+POKEMANIAC
+Calvin
+1
+B115H217,49,	#URSAKHAN
+########################
+COOLTRAINER_M
+Nick
+3
+B156H6,46,	#QUIRIZARD
+B153H3,46,	#BAYSAUR
+B159H9,46,	#BLASTNAW
+###########################
+COOLTRAINER_F
+Gwen
+4
+EEVEE,45,
+B272H134,43,	#GLAPOREON
+B271H136,43,	#FLAREFEON
+B135H196,43,	#ESPTEON
+###########################
+COOLTRAINER_F
+Emma
+1
+B199H62,47,		#POLIKING
+###########################
+COOLTRAINER_F
+Amelia
+1
+B80H189,47,		#POLIBRO
+##############################
+###### Dark Cave #########
+##############################
+WORKER
+Steve
+3
+GRAVELER,52,
+GRAVELER,52,
+B42H202,52,		#WOBBAT
+#############################
+WORKER
+Danny
+2
+GOLBAT,53,
+B185H24,53,		#ARBWOODO
+############################
+WORKER
+Mathias
+1
+B213H139,56,	#OMACKLE
+##############################
+###### ROUTE 32 #########
+##############################
+FISHERMAN
+Ralph
+1
+B96H160,49,	#FERALIZEE
+#############################
+FISHERMAN
+Henry
+2
+POLIWRATH,46,
+POLITOED,46,
+############################
+FISHERMAN
+Justin
+4
+MAGIKARP,5,
+B6H129,45,	#MAGIZARD
+B9H129,45,	#MAGITOISE
+B3H129,45,	#MAGISAUR
+############################
+BIRDKEEPER
+Peter
+2
+NOCTOWL,44,
+B17H115,48,	#KANGAOTTO
+###########################
+BURGLAR
+Roland
+3
+PINECO,33,,SELFDESTRUCT,
+PINECO,33,,SELFDESTRUCT,
+B205H101,55,,EXPLOSION,
+###########################
+YOUNGCOUPLE
+Jan & Pete
+2
+B125H126,45,	#MAGBUZZ
+JYNX,45,
+######################
+PRESCHOOLER_M
+Albert
+2
+RATICATE,41,
+B169H224,45,	#OCTBAT
+#############################
+BEAUTY
+Liz
+1
+B31H7,49,	#SQUIRTQUEEN
+#############################
+COOLTRAINER_M
+Harrisson
+1
+B222H270,54,STARPIECE,RECOVER,SONICBOOM,LUCKYCHANT,AIRSLASH,2,	#YANSOLA
+##############################
+COOLTRAINER_F
+Korrina
+1
+B270H154,47,	#MEGAMEGA
+#############################
+BIRDKEEPER
+Spencer
+2
+FARFETCHD,44,
+B22H198,48,	#murrow
+###########################
+HIKER
+Martin
+2
+GRAVELER,44,
+B208H71,46,	#victreelix
+#######################
+## ROUTE 30
+########################
+YOUNGSTER
+Joe
+1
+B20H206,51,    #DUNCATE
+####################
+YOUNGSTER
+Mikey
+2
+PIDGEOTTO,48,
+B164H17,48,    #PIDGEOWL
+######################
+BUGCATCHER
+Don
+2
+SCYTHER,49,
+B127H214,48,    #HERASIR
+######################
+LASS
+Charline
+1
+B200H25,54,        #PIKADREAVUS
+#######################
+## ROUTE 44
+########################
+BEAUTY
+Callie
+2
+CLEFABLE,49,
+B184H40,49,
+########################
+BEAUTY
+Kassandra
+2
+WIGGLYTUFF,49,
+B36H26,49,	#RAIFABLE
+#######################
+PSYCHIC_M
+Greg
+1
+B326H97,54,	#HYPPASS
+#######################
+FISHERMAN
+Wilton
+2
+B60H118,49,	#GOLWAG
+B119H61,53,	#SEAWHIRL
+#######################
+FISHERMAN
+Edgar
+3
+REMORAID,42,
+REMORAID,42,
+B131H119,54,	#LAPKING
+######################
+#	ECRUTEAK CITY 	##
+######################
+KIMONOGIRL
+Naoko
+1
+B134H271,60,	#LEAFEON + VAPOREON
+########################
+KIMONOGIRL
+Sayo
+1
+B136H272,60,	#FLAREON + GLACEON
+########################
+KIMONOGIRL
+Zuki
+1
+B135H339,60,	#JOLTEON + SYLVEON	
+########################
+KIMONOGIRL
+Miki
+1
+B196H197,60,	#ESPEON + UMBREON	
+
+#######################
+## ROUTE 43
+########################
+COOLTRAINER_M
+Colby
+4
+KINGLER,51,	
+POLIWHIRL,51,
+B73H130,51,	#GYARACRUEL
+B9H232,51,	#DONTOISE
+########
+COOLTRAINER_F
+Stacey
+1
+B124H186,60,	#politoed jynx
+###################
+COOLTRAINER_F
+Brooke
+2
+B268H240,58,	#mag mortar
+B267H239,58,	#elevire
+###################
+YOUNGSTER
+Bill
+1
+RATTATA,71,
+########
+COOLTRAINER_F
+Alyssa
+3
+B321H324,56,	#empornape	
+B324H318,56,	#torleon
+B318H321,56,	#inferterra
+#######################
+## ROUTE 42
+########################
+FISHERMAN
+Chris
+1
+B211H91,58,
+#######################
+POKEMANIAC
+Shane
+2
+B31H327,55,
+B34H327,55,
+########################
+HIKER
+Benjamin
+3
+DUGTRIO,53,
+GOLEM,53,
+B51H254,55, #AMBITRIO
+
+#####################
+##	KINDLE ROAD 	#
+#####################
+SWIMMER_F
+Abigail
+3
+PSYDUCK,35,
+PSYDUCK,35,
+B55H24,36,	#GOLBOK
+####################
+CRUSHGIRL
+Celine
+1
+B76H237,38,		#HITMONCHOKE
+######################
+BLACKBELT
+Hugh
+2
+MACHOP,37,
+B210H67,37,	#MABULL
+#####################
+CRUSHGIRL
+Sharon
+2
+MANKEY,37,
+B224H57,37,	#OCTIAPE
+###################
+SWIMMER_M
+Finn
+1
+B121H211,48,	#QWILMIE
+####################
+SWIMMER_F
+Maria
+2
+SEADRA,47,
+B8H117,47, #WARDRA
+#####################
+##	Mt. EMBER	 	#
+#####################
+CRUSHGIRL
+Jocelyn
+2
+HITMONCHAN,46,
+B287H107,46,	#GARDECHAN
+####################
+POKEMONRANGER_M
+Logan
+2
+EXEGGCUTE,45,
+B103H226,47,	#MANGUTOR
+####################
+POKEMONRANGER_F
+Beth
+3
+WEEPINBELL,44,
+GLOOM,44,	
+B182H135,46,	#JOLTSOM
+####################
+POKEMONRANGER_M
+Richard
+2
+RHYHORN,45,
+B262H117,47,	#SEAPHAN
+#############################
+####	BRINE ROAD (PT1)	#
+#############################
+SWIMMER_M
+Garett
+2
+SHELLDER,45,
+B91H325,45	#NOSESTER
+###########################
+CRUSHGIRL
+Kia
+1
+B68H119,49 #SEACHAMP
+##########################
+BLACKBELT
+Mike
+2
+MACHOKE,46,
+B99H57,47, #PRIMEGLER
+#############################
+####	BRINE ROAD (PT2)	#
+#############################
+SWIMMER_F
+Sandra
+2
+TENTACOOL,52,
+B318H224,54, #OCTITERRA
+###########################
+SWIMMER_M
+Raphael
+3
+GRAVELER,49,
+TENTACRUEL,49,
+B176H127,53,	#SKARTIC
+##########################
+SWIMMER_F
+Eva
+2
+CORSOLA,51,
+B119H314,55, #SEALORD
+############################
+FISHERMAN
+Tommy
+3
+GOLDEEN,51,
+GOLDEEN,51,
+B86H298,54,
+#############################
+####	BOND Bridge		#
+#############################
+POKEMONRANGER_M
+Steve
+4
+B7H316,54,		#TURTLE
+B6H301,53,		#LIZARD
+B4H336,53,		#SALAMANDER
+B158H159,57,	#CROCODILE
+#############################
+POKEMONRANGER_F
+Jane
+3
+B56H320,54,		#MONKEY
+B56H232,54,		#DONKEY
+B215H262,54,	#WEASEL
+############################
+POKEMONRANGER_M
+Osman
+1
+B56H316,58,	#TURKEY
+###########################
+POKEMONRANGER_F
+Selena
+2
+B211H121,56,	#STARFISH
+B317H15,56,		#BEETLE
+#####################
+##	ROCKET WAREHOUSE #
+######################
+TEAMROCKET_M
+Teddy
+3
+MACHOP,56,
+MACHOP,56,
+B67H312,56,
+######################
+TEAMROCKET_M
+Brad
+1
+B73H97,61,	#HYPCRUEL
+########################
+TEAMROCKET_F
+Cass
+2
+HOUNDOUR,59,
+B228H215,59,	#SNEADOUR
+######################
+TEAMROCKET_F
+Cindy
+1
+B64H49,61,
+######################
+TEAMROCKET_M
+Freddy
+1
+B124H272,61,	#glisnx
+######################
+ROCKETEXEC_F
+Ariana
+3,MAXPOTION
+B45H266,65,		#VILEGROWTH
+B256H227,65, 	#SKARKROW
+B229H24,65,		#ARDOOM
+#####################
+##	P2 Lab 			#
+#####################
+TEAMPLASMA_F
+Lara
+2
+MAGNETON,60,
+B89H337,63,		#KLINKUK
+#####################
+TEAMPLASMA_M
+Terry
+3
+PAWNIARD,59,
+PAWNIARD,59,		
+B310H331,62,		#BISOL
+#####################
+TEAMPLASMA_M
+Adrian
+1,FULLRESTORE
+B68H331,67,#BICHAMP
+###########################
+##	ICE MOUNTAINS   #######
+###########################
+SKIER_F
+Roxanne
+1
+B124H255,56,	#MISMAJYNX
+###########################
+SKIER_F
+Clarissa
+2
+SEEL,51,
+B221H87,53,	#DEWSWINE
+###########################
+SKIER_F
+Jill
+2
+SNEASEL,49,
+B28H262,54,	#SANDVILE
+###########################
+HIKER
+Bjorn
+1
+B274H326,55,	#PROBOSWINE
+###########################
+HIKER
+Douglas
+3
+SWINUB,44,
+SWINUB,44,
+B308H221,52,		#PILLODON
+##########################
+SKIER_F
+Lexie
+2
+B37H225,47,	#VULBIRD
+B38H225,54,	#NINEBIRD
+
+
+##################
+###################
+### MT. SILVER  ###
+###################
+####################
+POKEMONTRAINER_Gold
+Gold
+6,FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
+B213H185,76,ROCKYHELMET,POWERSPLIT,COUNTER,ROLLOUT,TOXIC,0,		#SUDOCKLE	
+B197H269,78,LEFTOVERS,MOONLIGHT,BITE,MOONBLAST,BODYSLAM,1, 		#TOGEREON		
+B243H160,77,MAGNET,THUNDER,WATERPULSE,RAINDANCE,CALMMIND,1,		#FERALIKOU
+B245H157,77,MYSTICWATER,HYDROPUMP,FLAMETHROWER,AURORABEAM,MIST,1,		#SUIPHLOSION
+B244H154,77,CHARCOAL,FIREBLAST,SUNNYDAY,SOLARBEAM,SYNTHESIS,1,		#ENTNIUM
+B130H149,79,LUSTROUSORB,EXTREMESPEED,WATERFALL,DRAGONTAIL,TWISTER,0,	#DRAGONDOS (w/extremespeed)

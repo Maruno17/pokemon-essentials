@@ -4,9 +4,9 @@ Graphics/
 Plugins/
 PBS/pokemon.txt
 # Data folder, but not Data/Scripts folder
-Data/*
-!Data/Scripts.rxdata
-!Data/Scripts/
+#Data/*
+#!Data/Scripts.rxdata
+#!Data/Scripts/
 
 # Files in the main project folder
 Game.ini

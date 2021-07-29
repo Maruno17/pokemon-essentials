@@ -1,0 +1,245 @@
+﻿[0]
+Filename=mapRegion0.png
+Name="Map"
+Point=26,12,"Pallet Town",,42,12,10,
+Point=26,9,"Viridian City",,79,24,38,
+Point=26,11,"Route 1",,,,,
+Point=26,10,"Route 1",,,,,
+Point=26,8,"Route 2",,,,,
+Point=26,7,"Route 2",,,,,
+Point=26,6,"Route 2",,,,,
+Point=25,6,"Viridian Forest",,,,,
+Point=26,4,"Pewter City",,380,33,27,
+Point=28,5,"Route 3",,,,,
+Point=28,4,"Route 3",,,,,
+Point=29,5,"Route 3",,,,,
+Point=29,4,"Route 3",,,,,
+Point=30,4,"Mt. Moon",,490,60,7,
+Point=33,4,"Route 4",,,,,
+Point=34,4,"Route 4",,,,,
+Point=32,4,"Route 4",,,,,
+Point=35,4,"Cerulean City",,1,18,15,
+Point=36,3,"Route 24",,,,,
+Point=38,2,"Route 25",,,,,
+Point=39,1,"Cerulean Cape",,,,,
+Point=37,4,"Route 9",,,,,
+Point=38,4,"Route 9",,,,,
+Point=39,3,"Rock Tunnel",,154,28,11,
+Point=39,4,"Route 10",,,,,
+Point=40,5,"Route 10",,,,,
+Point=40,6,"Lavender Town",,50,19,15,
+Point=35,7,"Saffron City",,108,35,48,
+Point=30,7,"Celadon City",,95,56,11,
+Point=35,10,"Vermillion City",,19,22,7,
+Point=33,14,"Fuschia City",,472,27,30,
+Point=34,12,"Safari Zone",,,,,
+Point=39,8,"Route 12",,,,,
+Point=38,9,"Route 12",,,,,
+Point=37,10,"Route 12",,,,,
+Point=37,7,"Route 7",,,,,
+Point=38,7,"Route 7",,,,,
+Point=39,7,"Route 7",,,,,
+
+Point=31,9,"Cycling Road",,,,,
+Point=32,10,"Cycling Road",,,,,
+Point=32,11,"Cycling Road",,,,,
+Point=33,11,"Cycling Road",,,,,
+
+Point=26,15,"Cinnabar Island",,98,40,32,
+Point=30,15,"Seafoam Islands",,,,,
+Point=36,11,"Route 13",,,,,
+Point=36,12,"Route 14",,,,,
+Point=35,12,"Route 14",,,,,
+Point=35,13,"Route 15",,,,,
+
+
+Point=31,8,"Route 16",,,,,
+
+Point=25,9,"Route 22",,,,,
+Point=24,9,"Route 22",,,,,
+
+Point=21,3,"Pokémon League",,303,15,7,
+Point=21,7,"Victory Road",,260,13,20,
+Point=17,7,"Mt. Silver",,529,41,8,
+Point=11,9,"Diglett's Cave",,,,,
+Point=37,5,"Route 5",,,,,
+Point=37,6,"Route 5",,,,,
+
+Point=18,12,"Tohjo Falls",,,,,
+Point=0,31,"Debug Island",,356,31,23,842
+
+Point=37,9,"Route 6",,,,,
+Point=37,8,"Route 6",,,,,
+
+Point=33,14,"Route 19",,,,,
+Point=32,15,"Route 19",,,,,
+Point=31,15,"Route 19",,,,,
+
+Point=29,15,"Route 20",,,,,
+Point=28,15,"Route 20",,,,,
+Point=27,15,"Route 20",,,,,
+
+Point=36,10,"Route 11",,,,,
+Point=40,2,"Northern Kanto Coast",,,,,
+Point=41,2,"Northern Kanto Coast",,,,,
+
+Point=40,0,"Crimson City",,167,34,32,
+Point=40,1,"Crimson City",,,,,
+Point=41,0,"Crimson City",,,,,
+Point=41,1,"Crimson City",,,,,
+Point=33,2,"Cerulean Cave",,,,,
+
+
+Point=3,11,"Goldenrod City",,237,24,38,
+Point=4,15,"Azalea Town",,278,24,19,
+Point=7,7,"Violet City",,230,49,43,
+Point=9,12,"Cherrygrove City",,310,41,9,
+Point=14,12,"New Bark Town","Professor Elm",137,11,12,
+Point=14,5,"Blackthorn City",,329,29,40,
+
+Point=3,7,"National Park",,,,,
+Point=2,15,"Ilex Forest",,,,,
+Point=7,15,"Union Cave",,,,,
+Point=6,8,"Ruins of Alph",,,,,
+Point=11,7,"Dark Cave",,,,,
+Point=10,7,"Dark Cave",,,,,
+Point=12,7,"Dark Cave",,,,,
+Point=13,6,"Dark Cave",,,,,
+
+Point=13,4,"Ice Mountains",,,,,
+Point=10,4,"Mahogany Town",,631,29,26,
+Point=10,1,"Lake of Rage",,638,35,38,
+Point=7,3,"Mt. Mortar",,,,,
+Point=4,4,"Ecruteak City",,359,38,38,
+Point=3,3,"Burnt Tower",,,,,
+Point=5,2,"Bell Tower",,,,,
+
+Point=10,3,"Route 43",,,,,
+Point=10,2,"Route 43",,,,,
+
+Point=5,4,"Route 42",,,,,
+Point=7,4,"Route 42",,,,,
+Point=8,4,"Route 42",,,,,
+Point=9,4,"Route 42",,,,,
+
+Point=3,7,"Route 36",,,,,
+Point=4,7,"Route 36",,,,,
+Point=5,7,"Route 36",,,,,
+Point=6,7,"Route 36",,,,,
+
+
+Point=2,10,"Route 35",,,,,
+Point=2,9,"Route 35",,,,,
+Point=2,8,"Route 35",,,,,
+
+
+Point=2,14,"Route 34",,,,,
+Point=2,13,"Route 34",,,,,
+Point=2,12,"Route 34",,,,,
+
+
+Point=8,9,"Route 31",,,,,
+Point=8,8,"Route 31",,,,,
+
+Point=8,10,"Route 30",,,,,
+Point=9,11,"Route 30",,,,,
+
+Point=10,12,"Route 29",,,,,
+Point=11,12,"Route 29",,,,,
+Point=12,12,"Route 29",,,,,
+Point=13,12,"Route 29",,,,,
+
+
+Point=14,11,"Route 46",,,,,
+Point=14,10,"Route 46",,,,,
+Point=14,9,"Route 46",,,,,
+Point=14,8,"Route 46",,,,,
+Point=14,7,"Route 46",,,,,
+Point=14,6,"Route 46",,,,,
+
+
+Point=7,9,"Route 32",,,,,
+Point=7,10,"Route 32",,,,,
+Point=7,11,"Route 32",,,,,
+Point=7,12,"Route 32",,,,,
+Point=7,13,"Route 32",,,,,
+Point=7,14,"Route 32",,,,,
+
+
+Point=7,15,"Union Cave",,,,,
+Point=7,16,"Union Cave",,,,,
+
+Point=6,15,"Route 33",,,,,
+Point=5,15,"Route 33",,,,,
+
+#sevii islands
+
+Point=22,24,KnotIsland,,526,27,12,
+Point=21,27,"Treasure Beach",,,,,
+
+Point=22,23,"Kindle Road",,,,,
+Point=22,22,"Kindle Road",,,,,
+Point=23,22,"Kindle Road",,,,,
+Point=22,21,"Ember Spa",,,,,
+Point=23,21,"Kindle Road",,,,,
+Point=23,20,"Kindle Road",,,,,
+Point=23,19,"Kindle Road",,,,,
+Point=23,18,"Kindle Road",,,,,
+
+Point=23,17,"Mt. Ember",,,,,
+
+
+Point=23,21,"Brine Road",,,,,
+Point=23,22,"Brine Road",,,,,
+Point=24,22,"Brine Road",,,,,
+Point=25,22,"Brine Road",,,,,
+Point=26,22,"Brine Road",,,,,
+Point=27,22,"Brine Road",,,,,
+Point=27,23,"Brine Road",,,,,
+Point=28,23,"Brine Road",,,,,
+Point=29,23,"Brine Road",,,,,
+Point=30,23,"Brine Road",,,,,
+Point=30,24,"Brine Road",,,,,
+
+Point=31,24,"Sunken Ship",,,,,
+
+Point=32,23,"Brine Road",,,,,
+Point=33,23,"Brine Road",,,,,
+Point=33,24,"Brine Road",,,,,
+Point=33,22,"Brine Road",,,,,
+Point=34,22,"Brine Road",,,,,
+Point=35,22,"Brine Road",,,,,
+
+Point=32,24,"Brine Road",,,,,
+Point=33,24,"Brine Road",,,,,
+Point=33,25,"Brine Road",,,,,
+Point=34,25,"Brine Road",,,,,
+Point=34,26,"Brine Road",,,,,
+Point=35,26,"Brine Road",,,,,
+
+
+Point=27,24,"Deep Ocean",,,,,
+Point=27,25,"Deep Ocean",,,,,
+
+Point=28,21,"Boon Island",,562,26,46,
+Point=28,22,"Boon Island",,,,,
+
+Point=35,21,"Kin Island",,563,31,36,
+
+Point=34,20,"Bond Bridge",,,,,
+Point=33,20,"Bond Bridge",,,,,
+Point=33,19,"Bond Bridge",,,,,
+
+Point=32,19,"Berry Forest",,,,,
+
+Point=36,27,"Water Labyrinth",,,,,
+Point=37,26,"Water Labyrinth",,,,,
+Point=38,26,"Water Labyrinth",,,,,
+Point=37,27,"Water Labyrinth",,,,,
+Point=38,28,"Water Labyrinth",,,,,
+
+
+Point=39,25,"Resort Gorgeous",,566,26,16,
+
+Point=39,29,"Chrono Island",,603,36,14,
+Point=41,30,"Rocket Warehouse",,,,,

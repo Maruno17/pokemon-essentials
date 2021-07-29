@@ -1,0 +1,116 @@
+﻿# See the documentation on the wiki to learn how to edit this file.
+0,POKEMONTRAINER_Red,Pokémon Trainer,60,,,,Male,
+1,POKEMONTRAINER_Leaf,Pokémon Trainer,60,,,,Female,
+2,POKEMONTRAINER_Gold,Pokémon Trainer,60,,,,Male,
+3,POKEMONTRAINER_May,Pokémon Trainer,60,,,,Female,
+4,RIVAL1,Rival,16,,,,Male,
+5,RIVAL2,Rival,36,,,,Male,
+6,AROMALADY,Aroma Lady,32,,,,Female,
+7,BEAUTY,Beauty,56,,,,Female,
+8,BIKER,Biker,32,,,,Male,
+9,BIRDKEEPER,Bird Keeper,32,,,,Male,
+10,BUGCATCHER,Bug Catcher,16,,,,Male,
+11,BURGLAR,Burglar,88,,,,Male,32
+12,CHANNELER,Channeler,32,,,,Female,
+13,CUEBALL,Cue Ball,24,,,,Male,
+14,ENGINEER,Engineer,48,,,,Male,
+15,FISHERMAN,Fisherman,32,,,,Male,
+16,GAMBLER,Gambler,72,,,,Male,32
+17,GENTLEMAN,Gentleman,72,,,,Male,
+18,HIKER,Hiker,32,,,,Male,
+19,JUGGLER,Juggler,32,,,,Male,
+20,LADY,Lady,160,,,,Female,72
+21,PAINTER,Painter,16,,,,Female,
+22,POKEMANIAC,Poké Maniac,64,,,,Male,
+23,POKEMONBREEDER,Pokémon Breeder,48,,,,Female,
+24,PROFESSOR,Professor,100,,,,Male,
+25,ROCKER,Rocker,24,,,,Male,
+26,RUINMANIAC,Ruin Maniac,48,,,,Male,
+27,SAILOR,Sailor,32,,,,Male,
+28,SCIENTIST,Scientist,48,,,,Male,
+29,SUPERNERD,Super Nerd,48,,,,Male,
+30,TAMER,Tamer,40,,,,Male,
+31,BLACKBELT,Black Belt,32,,,,Male,
+32,CRUSHGIRL,Crush Girl,24,,,,Female,
+33,CAMPER,Camper,16,,,,Male,
+34,PICNICKER,Picnicker,16,,,,Female,
+35,COOLTRAINER_M,Cool Trainer,60,,,,Male,
+36,COOLTRAINER_F,Cool Trainer,60,,,,Female,
+37,YOUNGSTER,Youngster,16,,,,Male,
+38,LASS,Lass,16,,,,Female,
+39,POKEMONRANGER_M,Pokémon Ranger,60,,,,Male,
+40,POKEMONRANGER_F,Pokémon Ranger,60,,,,Female,
+41,PSYCHIC_M,Psychic,32,,,,Male,
+42,PSYCHIC_F,Psychic,32,,,,Female,
+43,SWIMMER_M,Swimmer,16,,,,Male,32
+44,SWIMMER_F,Swimmer,16,,,,Female,32
+45,SWIMMER2_M,Swimmer,16,,,,Male,32
+46,SWIMMER2_F,Swimmer,16,,,,Female,32
+47,TUBER_M,Tuber,4,,,,Male,16
+48,TUBER_F,Tuber,4,,,,Female,16
+49,TUBER2_M,Tuber,4,,,,Male,16
+50,TUBER2_F,Tuber,4,,,,Female,16
+51,COOLCOUPLE,Cool Couple,72,,,,Mixed,48
+52,CRUSHKIN,Crush Kin,48,,,,Mixed,
+53,SISANDBRO,Sis and Bro,16,,,,Mixed,48
+54,TWINS,Twins,24,,,,Mixed,
+55,YOUNGCOUPLE,Young Couple,60,,,,Mixed,32
+56,TEAMROCKET_M,Team Rocket,32,,,,Male,
+57,TEAMROCKET_F,Team Rocket,32,,,,Female,
+58,ROCKETBOSS,Team Rocket Boss,100,,,,Male,
+59,LEADER_Brock,Gym Leader,100,gymleader,,,Male,
+60,LEADER_Misty,Gym Leader,100,gymleader,,,Female,
+61,LEADER_Surge,Gym Leader,100,gymleader,,,Male,
+62,LEADER_Erika,Gym Leader,100,gymleader,,,Female,
+63,LEADER_Koga,Gym Leader,100,gymleader,,,Male,
+64,LEADER_Sabrina,Gym Leader,100,gymleader,,,Female,
+65,LEADER_Blaine,Gym Leader,100,gymleader,,,Male,
+66,LEADER_Giovanni,Gym Leader,100,gymleader,,,Male,
+67,ELITEFOUR_Lorelei,Elite Four,100,elite,,,Female,
+68,ELITEFOUR_Bruno,Elite Four,100,elite,,,Male,
+69,ELITEFOUR_Agatha,Elite Four,100,elite,,,Female,
+70,ELITEFOUR_Lance,Elite Four,100,elite,,,Male,
+71,CHAMPION,Champion,100,elite,,,Male,
+72,SOCIALITE,Socialite,160,,,,Female,
+73,BUGCATCHER_F,Bug Catcher,16,,,,Female,
+74,MR_FUJI,Mr.,16,,,,Male,
+75,ROUGHNECK,Roughneck,24,,,,Male,
+76,TEACHER,Teacher,32,,,,Female,
+77,PRESCHOOLER_M,Preschooler,4,,,,Male,16
+78,PRESCHOOLER_F,Preschooler,4,,,,Female,16
+79,HIPSTER,Hipster,32,,,,Male,
+80,HAUNTEDGIRL_YOUNG,Haunted Girl,4,,,,Female,
+81,HAUNTEDGIRL,Haunted Girl,32,,,,Female,
+82,CLOWN,Clown,32,,,,Male,
+83,NURSE,Nurse,32,,,,Female,
+84,WORKER,Worker,88,,,,Male,32
+85,POKEMONTRAINER_RedB,Pokémon Trainer,60,,,,Male,
+86,POKEMONTRAINER_RedG,Pokémon Trainer,60,,,,Male,
+87,POKEMONTRAINER_RedY,Pokémon Trainer,60,,,,Male,
+88,POKEMONTRAINER_LeafB,Pokémon Trainer,60,,,,Female,
+89,POKEMONTRAINER_LeafG,Pokémon Trainer,60,,,,Female,
+90,POKEMONTRAINER_LeafY,Pokémon Trainer,60,,,,Female,
+91,COOLTRAINER_M2,Cool Trainer,0,,,,Male,255
+92,COOLTRAINER_F2,Cool Trainer,0,,,,Female,255
+93,ROBOT,Robot,0,,,,Mixed,255
+94,FARMER,Farmer,12,,,,Male,
+95,PYROMANIAC,Pyromaniac,88,,,,Male,32
+96,ROCKETEXEC_F,Team Rocket Executive,100,,,,Female,
+97,ROCKETEXEC_M,Team Rocket Executive,100,,,,Male,
+98,LEADER_Whitney,Gym Leader,100,gymleader,,,Female,
+99,LEADER_Kurt,Gym Leader,100,gymleader,,,Male,
+100,LEADER_Falkner,Gym Leader,100,gymleader,,,Male,
+101,LEADER_Clair,Gym Leader,100,gymleader,,,Female,
+102,MYSTICALMAN,Tamer,40,,,,Male,
+103,LEADER_Morty,Gym Leader,100,gymleader,,,Male,
+104,TEAMPLASMA_M,Team Plasma,32,,,,Male,
+105,TEAMPLASMA_F,Team Plasma,32,,,,Female,
+106,SCIENTIST_Colress,Scientist,100,,,,Male,
+107,LEADER_Pryce,Gym Leader,100,gymleader,,,Male,
+108,KIMONOGIRL,Kimono Girl,0,,,,Female,255
+109,SAGE,Sage,32,,,,Male,
+110,PLAYER,Player,32,,,,Male,
+111,LEADER_Chuck,Gym Leader,100,gymleader,,,Male,
+112,LEADER_Jasmine,Gym Leader,100,gymleader,,,Female,
+113,POLICE,Officer,32,,,,Male,
+114,SKIER_F,Skier,16,,,,Female,32

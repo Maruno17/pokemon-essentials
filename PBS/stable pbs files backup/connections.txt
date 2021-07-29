@@ -1,0 +1,166 @@
+# Pewter City (91) - Pewter City (93)
+91,West,0,93,East,0
+# Route 13 (437) - Route 12 (159)
+437,North,27,159,South,0
+# Route 13 (437) - Route 14 (440)
+437,South,0,440,North,11
+# Route 15 (444) - Route 14 (440)
+444,East,0,440,West,6
+# Area 5 (487) - Secret Area (489)
+487,West,0,489,East,0
+# Secret Area (489) - Area 1 (445)
+489,65,85,445,0,0
+# Vermillion City (19) - Route 6 (16)
+19,North,1,16,South,0
+# Vermillion City (19) - Route 11 (155)
+19,East,0,155,West,5
+# Secluded Path (65) - Vermillion City (19)
+65,East,21,19,West,0
+# Route 17 (146) - Route 18 (517)
+146,East,56,517,West,0
+# Fuchsia City (472) - Route 18 (517)
+472,West,9,517,East,0
+# Celadon City (95) - Route 7 (413)
+95,East,0,413,West,1
+# Route 16 (438) - Celadon City (95)
+438,East,0,95,West,7
+# Celadon University (428) - Celadon City (95)
+428,South,0,95,North,19
+# Route 16 (438) - Route 17 (146)
+438,West,12,146,East,0
+# Celadon Sewers (446) - Celadon Sewers (72)
+446,East,25,72,West,0
+# Underwater (162) - Underwater (220)
+162,South,0,220,North,27
+# Underwater (228) - Underwater (227)
+228,East,0,227,West,11
+# Route 34 (265) - Goldenrod City (237)
+265,North,0,237,South,17
+# Route 33 (284) - Azalea Town (278)
+284,West,0,278,East,17
+# Route 29 (311) - New Bark Town (137)
+311,East,0,137,West,16
+# Route 27 (147) - New Bark Town (137)
+147,West,0,137,East,1
+# Route 27 (147) - Route 26 (145)
+147,East,0,145,West,62
+# Route 29 (311) - Cherrygrove City (310)
+311,West,4,310,East,0
+# Route 30 (262) - Cherrygrove City (310)
+262,South,0,310,North,8
+# Route 30 (262) - Route 31 (261)
+262,North,0,261,South,33
+# Route 36 (267) - Route 35 (254)
+267,South,0,254,North,11
+# Violet City (230) - Route 32 (288)
+230,South,0,288,North,3
+# Route 37 (586) - Route 36 (267)
+586,South,0,267,North,11
+# Violet City (230) - Route 36 (267)
+230,West,0,267,East,2
+# Water Labyrinth (594) - Resort Gorgeous (566)
+594,North,62,566,South,0
+# Deep Sea (570) - Resort Gorgeous (566)
+570,North,148,566,South,0
+# Knot Island (526) - Treasure Beach (528)
+526,South,0,528,North,2
+# Kindle Road (559) - Treasure Beach (528)
+559,South,0,528,North,52
+# Brine Road (564) - Mt. Ember (561)
+564,North,0,561,South,45
+# Kindle Road (559) - Mt. Ember (561)
+559,North,0,561,South,10
+# Brine Road (564) - Water Labyrinth (594)
+564,South,86,594,North,0
+# Chrono Island (603) - Water Labyrinth (594)
+603,North,0,594,South,56
+# Kin Island (563) - Bond bridge (600)
+563,North,0,600,South,96
+# Kin Island (563) - Boon Island (562)
+563,West,10,562,East,0
+# Brine Road (564) - Boon Island (562)
+564,North,20,562,South,0
+# Kindle Road (559) - Boon Island (562)
+559,North,55,562,South,0
+# Brine Road (564) - Kin Island (563)
+564,North,85,563,South,0
+# Kindle Road (559) - Kin Island (563)
+559,North,120,563,South,0
+# Kindle Road (559) - Brine Road (564)
+559,East,0,564,West,0
+# Deep Sea (570) - Brine Road (564)
+570,North,0,564,South,0
+# Kindle Road (559) - Knot Island (526)
+559,West,80,526,East,0
+# Deep Sea (570) - Kindle Road (559)
+570,West,0,559,East,45
+# Route 43 (635) - Lake of Rage (638)
+635,North,0,638,South,8
+# Mahogany Town (631) - Route 42 (580)
+631,West,9,580,East,0
+# Route 44 (692) - Mahogany Town (631)
+692,West,0,631,East,0
+# Route 5 (12) - connection (390)
+12,North,0,390,South,15
+# Cerulean City (1) - connection (390)
+1,West,14,390,East,0
+# Route 24 (8) - connection (390)
+8,West,59,390,East,0
+# Lavender Town (50) - Route 10 (154)
+50,North,0,154,South,11
+# Route 9 (351) - Route 10 (154)
+351,South,0,154,North,10
+# Crimson City (167) - Route 23 (143)
+167,East,31,143,West,0
+# Cerulean Cape (10) - Route 23 (143)
+10,North,0,143,South,9
+# Route 5 (12) - Route 9 (495)
+12,East,0,495,West,31
+# Route 24 (8) - Route 9 (495)
+8,East,44,495,West,0
+# Route 9 (351) - Route 9 (495)
+351,West,8,495,East,0
+# Cerulean City (1) - Route 5 (12)
+1,South,0,12,North,5
+# Route 25 (9) - Route 5 (12)
+9,West,73,12,East,0
+# Route 4 (106) - Cerulean City (1)
+106,East,27,1,West,0
+# Route 24 (8) - Cerulean City (1)
+8,South,0,1,North,0
+# Route 24 (8) - Route 4 (106)
+8,West,18,106,East,0
+# Route 25 (9) - Route 24 (8)
+9,West,0,8,East,2
+# Cerulean Cape (10) - Route 25 (9)
+10,West,1,9,East,0
+# Cerulean Cape (10) - Route 9 (351)
+10,South,6,351,North,0
+# Viridian City (79) - Route 22 (171)
+79,West,19,171,East,0
+# Pewter City (380) - Route 3 (490)
+380,East,14,490,West,0
+# Route 2 (90) - Pewter City (380)
+90,North,0,380,South,25
+# Viridian River (40) - Route 1 (78)
+40,West,41,78,East,0
+# Viridian City (79) - Route 1 (78)
+79,South,7,78,North,0
+# Pallet Town (42) - Route 1 (78)
+42,North,0,78,South,0
+# Viridian City (79) - Viridian River (40)
+79,East,9,40,West,0
+# Ruins of Abet (41) - Viridian River (40)
+41,South,0,40,North,35
+# Route 20 (58) - Route 19 (57)
+58,East,0,57,West,19
+# Route 2 (86) - Viridian City (79)
+86,South,3,79,North,0
+# Route 2 (86) - Route 2 (90)
+86,North,1,90,South,0
+# Cinnabar Island (98) - Route 20 (58)
+98,East,8,58,West,0
+# Route 21 (59) - Pallet Town (42)
+59,North,0,42,South,1
+# Cinnabar Island (98) - Route 21 (59)
+98,North,14,59,South,0

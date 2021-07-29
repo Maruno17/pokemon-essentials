@@ -1,0 +1,87 @@
+5.0
+##########################
+The 5.0 update brings Infinite Fusion to a new engine, which makes the game run better and allows
+for a variety of improvements. 
+However, there are also a handful features that were in previous versions of the game which are not 
+compatible with this new version of Pokemon Essentials and that have been removed. Some of them will
+be added back progressively in future updates and some of them will likely be gone for good.
+
+#############
+Added Features
+#############
+
+New features added by upgrading to Pokemon essentials 19 / MKXP
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+MKXP: https://github.com/Ancurio/mkxp
+Full Essentials changelog: https://essentialsdocs.fandom.com/wiki/Change_log
+
+## Technical ###
+- Fullscreen & resizable screen
+- Linux and Mac support
+- Performance improvements
+- Native controller support
+- The game now continues running when it's in the background
+- Savefiles are now located in the appdata folder (Windows)
+- New debug options:
+	- Default movement
+	- Text entry type
+	-
+- New options in in-game menu:
+- Fixes random memory crashes (unconfirmed, but I haven't encountered one so far)
+
+## Gameplay ##
+- Fixes several moves and abilities which were previously broken (Crafty Shield, Fairy Lock, Purify,
+Gale Wings, Moxie, Innards Out, Magician, Pickpocket, Protean, Disguise)
+- Fixes double battles
+- Exp. gain when catching Pokémon
+- Now possible to register multiple items at once
+
+
+
+Other changes
+‾‾‾‾‾
+- Added Instant text speed option
+- Changed how levels are calculated when unfusing: 
+	- Level when originally fused + experience obtained while fused
+	- Levels gained via Rare Candies are NOT taken into account
+	-NB: Pokemon that were fused in previous versions still use the old method
+- Reduced DNA Splicers price to $300
+- Resort Gorgeous now prioritizes Pokemon with custom sprites
+- Added back double battles
+- Added triple battles lounge in Knot Island
+- Added Battle Factory
+- Added visual indicator for selecting fusion order on the title screen
+- Changed some tiles in Vermillion City
+- Added Dive section to Kindle Road
+
+
+#################
+Removed Features
+#################
+
+Removed features that will be coming back eventually
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+- Randomizer
+- Speed up button
+- Wild fusions	//TODO: pas oublier de init exp_gained_since_fused=0 && exp_when_fused = self.exp
+- Autosave (except in Pokemon centers)
+- Fusing from PC
+- Nicknaming from the party screen
+- Modern Mode compatibility
+- Quest log
+- Hidden abilities routes
+- In-game clock
+
+Removed features that probably won't be coming back
+‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+- Elite Battle System (includes EBS and NxtGen UI battle UIs, battle motion, etc.)
+- Autorun button toggle
+- Gen 5 style bag
+- Demice's endgame challenge
+- Bill's battletower mod
+- French pack compatibility
+
+
+
+
+
