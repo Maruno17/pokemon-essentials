@@ -319,7 +319,8 @@ class Game_Character
       begin
         return z + self.map.priorities[@tile_id] * 32
       rescue
-        raise "Event's graphic is an out-of-range tile (event #{@id}, map #{self.map.map_id})"
+        return 0
+        #raise "Event's graphic is an out-of-range tile (event #{@id}, map #{self.map.map_id})"
       end
     end
     # Add z if height exceeds 32

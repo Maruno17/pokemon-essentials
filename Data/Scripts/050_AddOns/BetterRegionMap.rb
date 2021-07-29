@@ -54,7 +54,9 @@ class BetterRegionMap
   def initialize(region = -1, show_player = true, can_fly = false, wallmap = false, species = nil,fly_anywhere=false)
     showBlk
     map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    playerpos = $game_map ? map_metadata.town_map_position : nil#pbGetMetadata($game_map.map_id, MetadataMapPosition) : nil
+    if map_metadata
+      playerpos = $game_map ? map_metadata.town_map_position : nil#pbGetMetadata($game_map.map_id, MetadataMapPosition) : nil
+    end
     if playerpos == nil
       playerpos = [0,0]
     end
