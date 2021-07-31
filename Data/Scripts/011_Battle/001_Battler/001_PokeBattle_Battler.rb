@@ -502,13 +502,6 @@ class PokeBattle_Battler
     return true
   end
 
-  def affectedByIronBall?
-    return false if @effects[PBEffects::Ingrain]
-    return false if @effects[PBEffects::SmackDown]
-    return false if @battle.field.effects[PBEffects::Gravity] > 0
-    return true
-  end
-
   def takesIndirectDamage?(showMsg=false)
     return false if fainted?
     if hasActiveAbility?(:MAGICGUARD)
