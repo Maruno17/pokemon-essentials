@@ -36,15 +36,9 @@ Other notes:
   than when deposited. It still also reverts under other conditions. Shaymin
   reverts its form when deposited in the Day Care (all Gens).
 - Look at Sweet Scent's out of battle effect, namely whether it should try to
-  cause a horde battle (and what does that mean in Essentials?).
-  (Possibly a 3v1 battle with all 3 opponents of the same species?
-  This doesn't seem to work with base Essentials mechanics really)
-
-- Maybe have multiple sets of Pickup items for multiple Gens.
-  (pbDynamicItemList already filters out undefined items so is this really needed?
-  Maybe the Pickup Item table could be moved into Settings so the item definitions
-  could be left upto the user.)
-
+  cause a horde battle (and what does that mean in Essentials? Maybe 1v3).
+- Maybe have multiple sets of Pickup items for multiple Gens. Probably not.
+  Gens 7+ seem to have different item probability calculations - investigate.
 - Add a newer type of berry tree mechanics? Have a separate setting that
   prevents deterioration?
 - If a battle ends because of Rocky Helmet damage, the side that the Rocky
@@ -59,11 +53,6 @@ Can use Fly from within the Town Map if possible. (Good QoL, add if possible.)
 (Will be implemented by me in the next PR)
 
 Make example event that combines the Gen 8 fossils.
-
-What happens to the PP of Iron Head when turned into/from Behemoth Blade/Bash
-for Zacian/Zamazenta?
-(PP is scaled accordingly. Eg: If a PP Max is used on Iron Head to give it
-24 PP, then the Behemoth move will have 8 PP)
 
 #===============================================================================
 # Low priority or ignorable
@@ -148,6 +137,8 @@ Item Effect Changes
 - Ability Capsule/Ability Patch should fail if used on Zygarde.
 - Iron Ball shouldn't modify the effectiveness of Ground moves against a Flying
   holder if the holder is grounded by another effect that isn't Iron Ball.
+  Opted to ignore this effect, and to modify the holder's effectiveness no matter
+  what.
 
 - Multi-Attack's power changed to 120.
 - Rapid Spin's power changed to 50.
@@ -168,5 +159,9 @@ Item Effect Changes
   Stick changed.
 - Changes to evolutions due to removal of moss rock/ice rock/magnetic field.
 - Form differences.
+
+What happens to the PP of Iron Head when turned into/from Behemoth Blade/Bash
+for Zacian/Zamazenta? It gets decreased to the total PP if it is higher than the
+total PP of the new move, but cannot increase. This is already what happens.
 
 =end
