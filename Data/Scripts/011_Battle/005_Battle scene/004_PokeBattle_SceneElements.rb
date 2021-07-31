@@ -12,12 +12,19 @@ class PokemonDataBox < SpriteWrapper
   # Maximum time in seconds to make a change to the HP bar.
   HP_BAR_CHANGE_TIME = 1.0
   STATUS_ICON_HEIGHT = 16
-  NAME_BASE_COLOR         = Color.new(72,72,72)
-  NAME_SHADOW_COLOR       = Color.new(184,184,184)
+  # NAME_BASE_COLOR         = Color.new(72,72,72)
+  # NAME_SHADOW_COLOR       = Color.new(184,184,184)
+  # MALE_BASE_COLOR         = Color.new(48,96,216)
+  # MALE_SHADOW_COLOR       = NAME_SHADOW_COLOR
+  # FEMALE_BASE_COLOR       = Color.new(248,88,40)
+  # FEMALE_SHADOW_COLOR     = NAME_SHADOW_COLOR
+  NAME_BASE_COLOR         = Color.new(255,255,255)
+  NAME_SHADOW_COLOR       = Color.new(32,32,32)
   MALE_BASE_COLOR         = Color.new(48,96,216)
   MALE_SHADOW_COLOR       = NAME_SHADOW_COLOR
   FEMALE_BASE_COLOR       = Color.new(248,88,40)
   FEMALE_SHADOW_COLOR     = NAME_SHADOW_COLOR
+
 
   def initialize(battler,sideSize,viewport=nil)
     super(viewport)
@@ -59,9 +66,9 @@ class PokemonDataBox < SpriteWrapper
       @spriteY = Graphics.height - 192
       @spriteBaseX = 34
     else
-      @spriteX = -16
+      @spriteX = 8 #-16
       @spriteY = 36
-      @spriteBaseX = 16
+      @spriteBaseX = 8 #16
     end
     case sideSize
     when 2
@@ -111,15 +118,15 @@ class PokemonDataBox < SpriteWrapper
 
   def x=(value)
     super
-    @hpBar.x     = value+@spriteBaseX+102
-    @expBar.x    = value+@spriteBaseX+6
+    @hpBar.x     = value+@spriteBaseX+12#102
+    @expBar.x    = value+@spriteBaseX+24
     @hpNumbers.x = value+@spriteBaseX+80
   end
 
   def y=(value)
     super
     @hpBar.y     = value+40
-    @expBar.y    = value+74
+    @expBar.y    = value+64
     @hpNumbers.y = value+52
   end
 
@@ -243,7 +250,7 @@ class PokemonDataBox < SpriteWrapper
     end
     # Draw owned icon (foe Pokémon only)
     if @battler.owned? && @battler.opposes?(0)
-      imagePos.push(["Graphics/Pictures/Battle/icon_own",@spriteBaseX+8,36])
+      imagePos.push(["Graphics/Pictures/Battle/icon_own",@spriteBaseX-8,42])
     end
     # Draw status icon
     if @battler.status != :NONE
@@ -251,8 +258,8 @@ class PokemonDataBox < SpriteWrapper
       if s == :POISON && @battler.statusCount > 0   # Badly poisoned
         s = GameData::Status::DATA.keys.length / 2
       end
-      imagePos.push(["Graphics/Pictures/Battle/icon_statuses",@spriteBaseX+24,36,
-         0,(s-1)*STATUS_ICON_HEIGHT,-1,STATUS_ICON_HEIGHT])
+      imagePos.push(["Graphics/Pictures/Battle/icon_statuses",@spriteBaseX+24,56,
+                     0,(s-1)*STATUS_ICON_HEIGHT,-1,STATUS_ICON_HEIGHT])
     end
     pbDrawImagePositions(self.bitmap,imagePos)
     refreshHP

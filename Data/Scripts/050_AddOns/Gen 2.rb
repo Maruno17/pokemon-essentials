@@ -96,37 +96,6 @@ def pbLoadPokemonBitmapSpecies(pokemon, species, back = false, scale = POKEMONSP
   return ret
 end
 
-def getSpecialSpriteName(dexNum)
-  base_path = "Graphics/Battlers/special/"
-  case dexNum
-  when NUM_ZAPMOLCUNO..NUM_ZAPMOLCUNO + 1
-    path = sprintf(base_path + "144.145.146")
-  when NUM_ZAPMOLCUNO + 2
-    path = sprintf(base_path + "243.244.245")
-  when NUM_ZAPMOLCUNO + 3
-    path = sprintf(base_path +"340.341.342")
-  when NUM_ZAPMOLCUNO + 4
-    path = sprintf(base_path +"343.344.345")
-  when NUM_ZAPMOLCUNO + 5
-    path = sprintf(base_path +"349.350.351")
-  when NUM_ZAPMOLCUNO + 6
-    path = sprintf(base_path +"151.251.381")
-
-    #starters
-  when NUM_ZAPMOLCUNO + 7
-    path = sprintf(base_path +"3.6.9")
-  when NUM_ZAPMOLCUNO + 8
-    path = sprintf(base_path +"154.157.160")
-  when NUM_ZAPMOLCUNO + 9
-    path = sprintf(base_path +"278.281.284")
-  when NUM_ZAPMOLCUNO + 10
-    path = sprintf(base_path +"318.321.324")
-
-  else
-    path = sprintf(base_path + "000")
-  end
-end
-
 #######################
 #   NEW CODE SECTION  #
 #######################

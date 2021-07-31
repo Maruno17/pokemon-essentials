@@ -140,7 +140,13 @@ def pbPrepareBattle(battle)
     back = GameData::MapMetadata.get($game_map.map_id).battle_background
     backdrop = back if back && back != ""
   end
-  backdrop = "indoor1" if !backdrop
+  if !backdrop
+    isOutdoor = GameData::MapMetadata.get($game_map.map_id).outdoor_map rescue false
+    backdrop = "indoorA" if !isOutdoor
+    backdrop = "Field" if isOutdoor
+  end
+
+  backdrop = "indoorA" if !backdrop
   battle.backdrop = backdrop
   # Choose a name for bases depending on environment
   if battleRules["base"].nil?

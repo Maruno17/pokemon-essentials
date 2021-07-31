@@ -53,7 +53,7 @@ Other changes
 - Added visual indicator for selecting fusion order on the title screen
 - Changed some tiles in Vermillion City
 - Added Dive section to Kindle Road
-
+- Made Giovanni boss battle in Saffron 2vs1
 
 #################
 Removed Features
@@ -71,6 +71,7 @@ Removed features that will be coming back eventually
 - Quest log
 - Hidden abilities routes
 - In-game clock
+- Hard mode, Easy mode
 
 Removed features that probably won't be coming back
 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾

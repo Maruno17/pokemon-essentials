@@ -63,13 +63,16 @@
 #   # (e.g. 4   -> to_digits -> "004")
 #   # (e.g. 19  -> to_digits -> "019")
 #   # (e.g. 123 -> to_digits -> "123")
-#   def to_digits(n = 3)
-#     str = self.to_s
-#     return str if str.size >= n
-#     ret = ""
-#     (n - str.size).times { ret += "0" }
-#     return ret + str
-#   end
+class Numeric
+  def to_digits(n = 3)
+    str = self.to_s
+    return str if str.size >= n
+    ret = ""
+    (n - str.size).times { ret += "0" }
+    return ret + str
+  end
+end
+
 #
 #   # n root of self. Defaults to 2 => square root.
 #   def root(n = 2)
@@ -692,7 +695,7 @@ class Sprite
 
   # Returns the x, y, and z coordinates in the xyz=(args) format, [x,y,z]
   def xyz
-    return [self.x,self.y,self.z]
+    return [self.x, self.y, self.z]
   end
 
   # Centers the sprite by setting the origin points to half the width and height
@@ -712,6 +715,7 @@ class Sprite
     return self.bitmap.height.to_f * self.zoom_y
   end
 end
+
 #
 class TextSprite < Sprite
   # Sets up the sprite and bitmap. You can also pass text to draw
@@ -726,9 +730,9 @@ class TextSprite < Sprite
     pbSetSystemFont(self.bmp)
     if text.is_a?(Array)
       if text[0].is_a?(Array)
-        pbDrawTextPositions(self.bmp,text)
+        pbDrawTextPositions(self.bmp, text)
       else
-        pbDrawTextPositions(self.bmp,[text])
+        pbDrawTextPositions(self.bmp, [text])
       end
     end
   end
@@ -745,9 +749,9 @@ class TextSprite < Sprite
   def draw(text, clear = false)
     self.clear if clear
     if text[0].is_a?(Array)
-      pbDrawTextPositions(self.bmp,text)
+      pbDrawTextPositions(self.bmp, text)
     else
-      pbDrawTextPositions(self.bmp,[text])
+      pbDrawTextPositions(self.bmp, [text])
     end
   end
 
@@ -758,12 +762,12 @@ class TextSprite < Sprite
     if text[0].is_a?(Array)
       for e in text
         e[2] -= 224
-        pbDrawOutlineText(self.bmp,e[1],e[2],640,480,e[0],e[4],e[5],e[3])
+        pbDrawOutlineText(self.bmp, e[1], e[2], 640, 480, e[0], e[4], e[5], e[3])
       end
     else
       e = text
       e[2] -= 224
-      pbDrawOutlineText(self.bmp,e[1],e[2],640,480,e[0],e[4],e[5],e[3])
+      pbDrawOutlineText(self.bmp, e[1], e[2], 640, 480, e[0], e[4], e[5], e[3])
     end
   end
 
@@ -773,11 +777,11 @@ class TextSprite < Sprite
     self.clear if clear
     if text[0].is_a?(Array)
       for e in text
-        drawTextEx(self.bmp,e[1],e[2],e[3],e[4],e[0],e[5],e[6])
+        drawTextEx(self.bmp, e[1], e[2], e[3], e[4], e[0], e[5], e[6])
       end
     else
       e = text
-      drawTextEx(self.bmp,e[1],e[2],e[3],e[4],e[0],e[5],e[6])
+      drawTextEx(self.bmp, e[1], e[2], e[3], e[4], e[0], e[5], e[6])
     end
   end
 
@@ -827,8 +831,13 @@ class SpriteHash
     return @hash.keys
   end
 
-  def length; return self.size; end
-  def count; return self.size; end
+  def length
+    return self.size;
+  end
+
+  def count
+    return self.size;
+  end
 
   # Returns the amount of keys in the hash
   def size
@@ -925,7 +934,7 @@ class SpriteHash
     for key in @hash.keys
       @hash[key].opacity += value - @opacity
     end
-    @opacity = [0,value,255].sort[1]
+    @opacity = [0, value, 255].sort[1]
   end
 
   # Fades out all sprites
@@ -1070,17 +1079,16 @@ end
 #   end
 # end
 
-
 # Stand-alone methods
 
 # Fades in a black overlay
 def showBlk(n = 16)
   return if $blkVp || $blk
-  $blkVp = Viewport.new(0,0,Settings::SCREEN_WIDTH,Settings::SCREEN_HEIGHT)
+  $blkVp = Viewport.new(0, 0, Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
   $blkVp.z = 9999999
   $blk = Sprite.new($blkVp)
-  $blk.bmp(-1,-1)
-  $blk.bitmap.fill_rect(0,0,Settings::SCREEN_WIDTH,Settings::SCREEN_HEIGHT,Color.new(0,0,0))
+  $blk.bmp(-1, -1)
+  $blk.bitmap.fill_rect(0, 0, Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT, Color.new(0, 0, 0))
   $blk.opacity = 0
   for i in 0...(n + 1)
     Graphics.update
@@ -1153,9 +1161,6 @@ end
 #     return false
 #   end
 # end
-
-
-
 
 #
 # if SPECIAL_ERRORS
@@ -1265,7 +1270,6 @@ end
 #   end
 #
 # end # if SPECIAL_ERRORS
-
 
 # def pbGetActiveEventPage(event, mapid = nil)
 #   mapid ||= event.map.map_id if event.respond_to?(:map)

@@ -126,10 +126,15 @@ class PokeBattle_Scene
       end
     end
     # Finalise filenames
-    battleBG   = "Graphics/Battlebacks/"+backdropFilename+"_bg"
-    playerBase = "Graphics/Battlebacks/"+baseFilename+"_base0"
-    enemyBase  = "Graphics/Battlebacks/"+baseFilename+"_base1"
+    # battleBG   = "Graphics/Battlebacks/"+backdropFilename+"_bg"
+    # playerBase = "Graphics/Battlebacks/"+baseFilename+"_base0"
+    # enemyBase  = "Graphics/Battlebacks/"+baseFilename+"_base1"
+    # messageBG  = "Graphics/Battlebacks/"+messageFilename+"_message"
+    battleBG   = "Graphics/Battlebacks/battlebg/"+backdropFilename
+    playerBase = "Graphics/Battlebacks/playerbase/"+baseFilename
+    enemyBase  = "Graphics/Battlebacks/enemybase/"+baseFilename
     messageBG  = "Graphics/Battlebacks/"+messageFilename+"_message"
+
     # Apply graphics
     bg = pbAddSprite("battle_bg",0,0,battleBG,@viewport)
     bg.z = 0

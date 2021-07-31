@@ -4,7 +4,7 @@ Graphics/
 Plugins/
 PBS/pokemon.txt
 # Data folder, but not Data/Scripts folder
-#Data/*
+Data/species.dat
 #!Data/Scripts.rxdata
 #!Data/Scripts/
 

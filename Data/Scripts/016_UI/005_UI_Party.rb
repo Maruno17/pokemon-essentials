@@ -1200,12 +1200,10 @@ class PokemonPartyScreen
           if pbConfirmUseHiddenMove(pkmn,pkmn.moves[i].id)
             @scene.pbEndScene
             if pkmn.moves[i].id == :FLY
-              scene = PokemonRegionMap_Scene.new(-1,false)
-              screen = PokemonRegionMapScreen.new(scene)
-              ret = screen.pbStartFlyScreen
+              ret = pbBetterRegionMap(-1, true, true)
               if ret
-                $PokemonTemp.flydata=ret
-                return [pkmn,pkmn.moves[i].id]
+                $PokemonTemp.flydata = ret
+                return [pkmn, pkmn.moves[i].id]
               end
               @scene.pbStartScene(@party,
                  (@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
