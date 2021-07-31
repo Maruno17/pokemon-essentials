@@ -2481,6 +2481,7 @@ BattleHandlers::AbilityOnBattlerFainting.add(:SOULHEART,
 
 BattleHandlers::AbilityOnIntimidated.add(:RATTLED,
   proc { |ability,battler,battle|
+    next if Settings::MECHANICS_GENERATION < 8
     battler.pbRaiseStatStageByAbility(:SPEED, 1, battler)
   }
 )
