@@ -2279,15 +2279,15 @@ BattleHandlers::AbilityOnSwitchIn.add(:INTIMIDATE,
     battle.pbShowAbilitySplash(battler)
     battle.eachOtherSideBattler(battler.index) do |b|
       next if !b.near?(battler)
-      check_item = true; check_abil = false
+      check_item = true
       if b.hasActiveAbility?(:CONTRARY)
         check_item = false if b.statStageAtMax?(:ATTACK)
       else
         check_item = false if b.statStageAtMin?(:ATTACK)
       end
-      check_abil = b.pbLowerAttackStatStageIntimidate(battler)
+      check_ability = b.pbLowerAttackStatStageIntimidate(battler)
+      b.pbAbilitiesOnIntimidated if check_ability
       b.pbItemOnIntimidatedCheck if check_item
-      b.pbAbilitiesOnIntimidated if check_abil
     end
     battle.pbHideAbilitySplash(battler)
   }
