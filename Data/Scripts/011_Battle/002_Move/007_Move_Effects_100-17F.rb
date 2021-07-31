@@ -378,7 +378,7 @@ end
 
 #===============================================================================
 # Removes trapping moves, entry hazards and Leech Seed on user/user's side.
-# (Rapid Spin)
+# Raises user's Speed by 1 stage (Gen 8+). (Rapid Spin)
 #===============================================================================
 class PokeBattle_Move_110 < PokeBattle_StatUpMove
   def initialize(battle,move)
@@ -419,8 +419,7 @@ class PokeBattle_Move_110 < PokeBattle_StatUpMove
   end
 
   def pbAdditionalEffect(user,target)
-    return if Settings::MECHANICS_GENERATION < 8
-    super(user,target)
+    super if Settings::MECHANICS_GENERATION >= 8
   end
 end
 
