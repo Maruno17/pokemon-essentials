@@ -267,13 +267,14 @@ class Player < Trainer
     # @param region [Integer]
     # @return [Integer]
     def count_species(hash, region = -1)
-      ret = 0
-      if region == -1
-        GameData::Species.each { |s| ret += 1 if s.form == 0 && hash[s.species] }
-      else
-        pbAllRegionalSpecies(region).each { |s| ret += 1 if s && hash[s] }
-      end
-      return ret
+      return hash.size()
+      # ret = 0
+      # if region == -1
+      #   GameData::Species.each { |s| ret += 1 if s.form == 0 && hash[s.species] }
+      # else
+      #   pbAllRegionalSpecies(region).each { |s| ret += 1 if s && hash[s] }
+      # end
+      # return ret
     end
   end
 end

@@ -51,6 +51,7 @@ class PokemonSave_Scene
     if $Trainer.has_pokedex
       loctext+=_INTL("Pokédex<r><c3={1}>{2}/{3}</c3>",textColor,$Trainer.pokedex.owned_count,$Trainer.pokedex.seen_count)
     end
+
     @sprites["locwindow"]=Window_AdvancedTextPokemon.new(loctext)
     @sprites["locwindow"].viewport=@viewport
     @sprites["locwindow"].x=0
