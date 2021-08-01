@@ -236,7 +236,11 @@ def pbTrainerName(name = nil, outfit = 0)
       player_metadata = GameData::Metadata.get_player($Trainer.character_ID)
       trainer_type = (player_metadata) ? player_metadata[0] : nil
       gender = pbGetTrainerTypeGender(trainer_type)
-      name = pbSuggestTrainerName(gender)
+      if(gender == 0)
+        return "Red"
+      else
+        return "Leaf"
+      end
     end
   end
   $Trainer.name   = name

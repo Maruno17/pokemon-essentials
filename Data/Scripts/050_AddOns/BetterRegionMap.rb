@@ -613,163 +613,164 @@ class PokemonReadyMenu
   end
 end
 
-class PokemonPokedexInfo_Scene
-  def drawPageArea
-    @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_area"))
-    overlay = @sprites["overlay"].bitmap
-    base   = Color.new(88,88,80)
-    shadow = Color.new(168,184,184)
-    @sprites["areahighlight"].bitmap.clear
-
-    mapwidth = @sprites["areamap"].bitmap.width/BetterRegionMap::TileWidth
-    data = calculatePointsAndCenter(mapwidth)
-
-    points = data[0]
-    minxy = data[1]
-    maxxy = data[2]
-
-    # Draw coloured squares on each square of the region map with a nest
-    pointcolor   = Color.new(0,248,248)
-    pointcolorhl = Color.new(192,248,248)
-    sqwidth = PokemonRegionMap_Scene::SQUAREWIDTH
-    sqheight = PokemonRegionMap_Scene::SQUAREHEIGHT
-
-
-    # Center the window on the center of visible areas
-    if minxy[0] != nil && maxxy[0] != nil
-      center_x = ((minxy[0]+maxxy[0])/2).round * sqwidth
-      center_y = ((minxy[1]+maxxy[1])/2).round * sqheight - 40
-    else
-      center_x = Settings::SCREEN_WIDTH/2
-      center_y = Settings::SCREEN_HEIGHT/2 - 40
-    end
-
-    windowminx = -1 * (@sprites["areamap"].bmp.width - Settings::SCREEN_WIDTH + 16)
-    windowminy = -1 * (@sprites["areamap"].bmp.height - Settings::SCREEN_HEIGHT + 16)
-
-    if center_x > (Settings::SCREEN_WIDTH / 2)
-      @sprites["areamap"].x = (480 / 2 ) - center_x
-      if (@sprites["areamap"].x < windowminx)
-        @sprites["areamap"].x = windowminx
-      end
-    else
-      @sprites["areamap"].x = windowminx
-    end
-    if center_y > (Settings::SCREEN_HEIGHT / 2)
-      @sprites["areamap"].y = (320 / 2 ) - center_y
-      if @sprites["areamap"].y < windowminy
-        @sprites["areamap"].y = windowminy
-      end
-    else
-      @sprites["areamap"].y = windowminy
-    end
-
-    for j in 0...points.length
-      if points[j]
-        x = (j%mapwidth)*sqwidth
-        x += @sprites["areamap"].x
-        y = (j/mapwidth)*sqheight
-        y += @sprites["areamap"].y - 8
-        @sprites["areahighlight"].bitmap.fill_rect(x,y,sqwidth,sqheight,pointcolor)
-        if j-mapwidth<0 || !points[j-mapwidth]
-          @sprites["areahighlight"].bitmap.fill_rect(x,y-2,sqwidth,2,pointcolorhl)
-        end
-        if j+mapwidth>=points.length || !points[j+mapwidth]
-          @sprites["areahighlight"].bitmap.fill_rect(x,y+sqheight,sqwidth,2,pointcolorhl)
-        end
-        if j%mapwidth==0 || !points[j-1]
-          @sprites["areahighlight"].bitmap.fill_rect(x-2,y,2,sqheight,pointcolorhl)
-        end
-        if (j+1)%mapwidth==0 || !points[j+1]
-          @sprites["areahighlight"].bitmap.fill_rect(x+sqwidth,y,2,sqheight,pointcolorhl)
-        end
-      end
-    end
-
-    # Set the text
-    textpos = []
-    if points.length==0
-      pbDrawImagePositions(overlay,[
-        [sprintf("Graphics/Pictures/Pokedex/overlay_areanone"),108,188]
-      ])
-      textpos.push([_INTL("Area unknown"),Graphics.width/2,Graphics.height/2,2,base,shadow])
-    end
-    textpos.push([pbGetMessage(MessageTypes::RegionNames,@region),414,44,2,base,shadow])
-    textpos.push([_INTL("{1}'s area",PBSpecies.getName(@species)),
-                  Graphics.width/2,352,2,base,shadow])
-
-    textpos.push([_INTL("Full view"),Graphics.width/2,306,2,base,shadow])
-    pbDrawTextPositions(overlay,textpos)
-  end
-end
-
-class PokemonPokedexInfo_Scene
-  def pbScene
-    pbPlayCrySpecies(@species,@form)
-    loop do
-      Graphics.update
-      Input.update
-      pbUpdate
-      dorefresh = false
-      if Input.trigger?(Input::A)
-        pbSEStop
-        pbPlayCrySpecies(@species,@form) if @page==1
-      elsif Input.trigger?(Input::B)
-        pbPlayCloseMenuSE
-        break
-      elsif Input.trigger?(Input::C)
-        if @page==2   # Area
-          pbBetterRegionMap(@region,false,false,false,@species)
-        elsif @page==3   # Forms
-          if @available.length>1
-            pbPlayDecisionSE
-            pbChooseForm
-            dorefresh = true
-          end
-        end
-      elsif Input.trigger?(Input::UP)
-        oldindex = @index
-        pbGoToPrevious
-        if @index!=oldindex
-          pbUpdateDummyPokemon
-          @available = pbGetAvailableForms
-          pbSEStop
-          (@page==1) ? pbPlayCrySpecies(@species,@form) : pbPlayCursorSE
-          dorefresh = true
-        end
-      elsif Input.trigger?(Input::DOWN)
-        oldindex = @index
-        pbGoToNext
-        if @index!=oldindex
-          pbUpdateDummyPokemon
-          @available = pbGetAvailableForms
-          pbSEStop
-          (@page==1) ? pbPlayCrySpecies(@species,@form) : pbPlayCursorSE
-          dorefresh = true
-        end
-      elsif Input.trigger?(Input::LEFT)
-        oldpage = @page
-        @page -= 1
-        @page = 1 if @page<1
-        @page = 3 if @page>3
-        if @page!=oldpage
-          pbPlayCursorSE
-          dorefresh = true
-        end
-      elsif Input.trigger?(Input::RIGHT)
-        oldpage = @page
-        @page += 1
-        @page = 1 if @page<1
-        @page = 3 if @page>3
-        if @page!=oldpage
-          pbPlayCursorSE
-          dorefresh = true
-        end
-      end
-      if dorefresh
-        drawPage(@page)
-      end
-    end
-    return @index
-  end
-end
+#
+# class PokemonPokedexInfo_Scene
+#   def drawPageArea
+#     @sprites["background"].setBitmap(_INTL("Graphics/Pictures/Pokedex/bg_area"))
+#     overlay = @sprites["overlay"].bitmap
+#     base   = Color.new(88,88,80)
+#     shadow = Color.new(168,184,184)
+#     @sprites["areahighlight"].bitmap.clear
+#
+#     mapwidth = @sprites["areamap"].bitmap.width/BetterRegionMap::TileWidth
+#     data = calculatePointsAndCenter(mapwidth)
+#
+#     points = data[0]
+#     minxy = data[1]
+#     maxxy = data[2]
+#
+#     # Draw coloured squares on each square of the region map with a nest
+#     pointcolor   = Color.new(0,248,248)
+#     pointcolorhl = Color.new(192,248,248)
+#     sqwidth = PokemonRegionMap_Scene::SQUAREWIDTH
+#     sqheight = PokemonRegionMap_Scene::SQUAREHEIGHT
+#
+#
+#     # Center the window on the center of visible areas
+#     if minxy[0] != nil && maxxy[0] != nil
+#       center_x = ((minxy[0]+maxxy[0])/2).round * sqwidth
+#       center_y = ((minxy[1]+maxxy[1])/2).round * sqheight - 40
+#     else
+#       center_x = Settings::SCREEN_WIDTH/2
+#       center_y = Settings::SCREEN_HEIGHT/2 - 40
+#     end
+#
+#     windowminx = -1 * (@sprites["areamap"].bmp.width - Settings::SCREEN_WIDTH + 16)
+#     windowminy = -1 * (@sprites["areamap"].bmp.height - Settings::SCREEN_HEIGHT + 16)
+#
+#     if center_x > (Settings::SCREEN_WIDTH / 2)
+#       @sprites["areamap"].x = (480 / 2 ) - center_x
+#       if (@sprites["areamap"].x < windowminx)
+#         @sprites["areamap"].x = windowminx
+#       end
+#     else
+#       @sprites["areamap"].x = windowminx
+#     end
+#     if center_y > (Settings::SCREEN_HEIGHT / 2)
+#       @sprites["areamap"].y = (320 / 2 ) - center_y
+#       if @sprites["areamap"].y < windowminy
+#         @sprites["areamap"].y = windowminy
+#       end
+#     else
+#       @sprites["areamap"].y = windowminy
+#     end
+#
+#     for j in 0...points.length
+#       if points[j]
+#         x = (j%mapwidth)*sqwidth
+#         x += @sprites["areamap"].x
+#         y = (j/mapwidth)*sqheight
+#         y += @sprites["areamap"].y - 8
+#         @sprites["areahighlight"].bitmap.fill_rect(x,y,sqwidth,sqheight,pointcolor)
+#         if j-mapwidth<0 || !points[j-mapwidth]
+#           @sprites["areahighlight"].bitmap.fill_rect(x,y-2,sqwidth,2,pointcolorhl)
+#         end
+#         if j+mapwidth>=points.length || !points[j+mapwidth]
+#           @sprites["areahighlight"].bitmap.fill_rect(x,y+sqheight,sqwidth,2,pointcolorhl)
+#         end
+#         if j%mapwidth==0 || !points[j-1]
+#           @sprites["areahighlight"].bitmap.fill_rect(x-2,y,2,sqheight,pointcolorhl)
+#         end
+#         if (j+1)%mapwidth==0 || !points[j+1]
+#           @sprites["areahighlight"].bitmap.fill_rect(x+sqwidth,y,2,sqheight,pointcolorhl)
+#         end
+#       end
+#     end
+#
+#     # Set the text
+#     textpos = []
+#     if points.length==0
+#       pbDrawImagePositions(overlay,[
+#         [sprintf("Graphics/Pictures/Pokedex/overlay_areanone"),108,188]
+#       ])
+#       textpos.push([_INTL("Area unknown"),Graphics.width/2,Graphics.height/2,2,base,shadow])
+#     end
+#     textpos.push([pbGetMessage(MessageTypes::RegionNames,@region),414,44,2,base,shadow])
+#     textpos.push([_INTL("{1}'s area",PBSpecies.getName(@species)),
+#                   Graphics.width/2,352,2,base,shadow])
+#
+#     textpos.push([_INTL("Full view"),Graphics.width/2,306,2,base,shadow])
+#     pbDrawTextPositions(overlay,textpos)
+#   end
+# end
+#
+# class PokemonPokedexInfo_Scene
+#   def pbScene
+#     pbPlayCrySpecies(@species,@form)
+#     loop do
+#       Graphics.update
+#       Input.update
+#       pbUpdate
+#       dorefresh = false
+#       if Input.trigger?(Input::A)
+#         pbSEStop
+#         pbPlayCrySpecies(@species,@form) if @page==1
+#       elsif Input.trigger?(Input::B)
+#         pbPlayCloseMenuSE
+#         break
+#       elsif Input.trigger?(Input::C)
+#         if @page==2   # Area
+#           pbBetterRegionMap(@region,false,false,false,@species)
+#         elsif @page==3   # Forms
+#           if @available.length>1
+#             pbPlayDecisionSE
+#             pbChooseForm
+#             dorefresh = true
+#           end
+#         end
+#       elsif Input.trigger?(Input::UP)
+#         oldindex = @index
+#         pbGoToPrevious
+#         if @index!=oldindex
+#           pbUpdateDummyPokemon
+#           @available = pbGetAvailableForms
+#           pbSEStop
+#           (@page==1) ? pbPlayCrySpecies(@species,@form) : pbPlayCursorSE
+#           dorefresh = true
+#         end
+#       elsif Input.trigger?(Input::DOWN)
+#         oldindex = @index
+#         pbGoToNext
+#         if @index!=oldindex
+#           pbUpdateDummyPokemon
+#           @available = pbGetAvailableForms
+#           pbSEStop
+#           (@page==1) ? pbPlayCrySpecies(@species,@form) : pbPlayCursorSE
+#           dorefresh = true
+#         end
+#       elsif Input.trigger?(Input::LEFT)
+#         oldpage = @page
+#         @page -= 1
+#         @page = 1 if @page<1
+#         @page = 3 if @page>3
+#         if @page!=oldpage
+#           pbPlayCursorSE
+#           dorefresh = true
+#         end
+#       elsif Input.trigger?(Input::RIGHT)
+#         oldpage = @page
+#         @page += 1
+#         @page = 1 if @page<1
+#         @page = 3 if @page>3
+#         if @page!=oldpage
+#           pbPlayCursorSE
+#           dorefresh = true
+#         end
+#       end
+#       if dorefresh
+#         drawPage(@page)
+#       end
+#     end
+#     return @index
+#   end
+# end

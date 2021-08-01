@@ -29,7 +29,7 @@ module GameData
       return (filename) ? AnimatedBitmap.new(filename) : nil
     end
 
-    def self.back_sprite_bitmap(dex_number)
+    def self.back_sprite_bitmap(dex_number,species=0, form = 0, gender = 0, shiny = false, shadow = false)
       filename = self.sprite_filename(dex_number)
       return (filename) ? AnimatedBitmap.new(filename) : nil
     end
