@@ -121,7 +121,7 @@ class PokeBattle_AI
           score += 50 if aspeed < ospeed && aspeed * 2 > ospeed
         end
       end
-      score += 20 if user.moves.any? { |m| .damagingMove? && m.pbCalcType(user) == :FIRE }
+      score += 20 if user.moves.any? { |m| m.damagingMove? && m.pbCalcType(user) == :FIRE }
     #---------------------------------------------------------------------------
     when "17F"
       if target.pbHasOtherType?(:PSYCHIC)
