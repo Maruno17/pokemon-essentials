@@ -54,6 +54,8 @@ class PokemonGlobalMetadata
   attr_accessor :pokerusTime
   # Save file
   attr_accessor :safesave
+  #Trainers rematch
+  attr_accessor :rematchedTrainers
 
   def initialize
     # Movement

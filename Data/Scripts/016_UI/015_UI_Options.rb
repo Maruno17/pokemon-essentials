@@ -354,13 +354,13 @@ class PokemonOption_Scene
            MessageConfig.pbSetSpeechFrame("Graphics/Windowskins/" + Settings::SPEECH_WINDOWSKINS[value])
          }
        ),
-       NumberOption.new(_INTL("Menu Frame"),1,Settings::MENU_WINDOWSKINS.length,
-         proc { $PokemonSystem.frame },
-         proc { |value|
-           $PokemonSystem.frame = value
-           MessageConfig.pbSetSystemFrame("Graphics/Windowskins/" + Settings::MENU_WINDOWSKINS[value])
-         }
-       ),
+       # NumberOption.new(_INTL("Menu Frame"),1,Settings::MENU_WINDOWSKINS.length,
+       #   proc { $PokemonSystem.frame },
+       #   proc { |value|
+       #     $PokemonSystem.frame = value
+       #     MessageConfig.pbSetSystemFrame("Graphics/Windowskins/" + Settings::MENU_WINDOWSKINS[value])
+       #   }
+       # ),
        EnumOption.new(_INTL("Text Entry"),[_INTL("Cursor"),_INTL("Keyboard")],
          proc { $PokemonSystem.textinput },
          proc { |value| $PokemonSystem.textinput = value }

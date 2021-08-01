@@ -94,7 +94,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
     for i in $Trainer.able_party
       if i.status == :POISON && !i.hasAbility?(:IMMUNITY)
         if !flashed
-          pbFlash(Color.new(255, 0, 0, 128), 8)
+          pbFlash(Color.new(163, 73, 164, 128), 8)
           flashed = true
         end
         i.hp -= 1 if i.hp>1 || Settings::POISON_FAINT_IN_FIELD

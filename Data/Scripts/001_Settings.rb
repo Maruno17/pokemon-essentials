@@ -104,7 +104,7 @@ module Settings
   #=============================================================================
 
   # Whether poisoned Pokémon will lose HP while walking around in the field.
-  POISON_IN_FIELD       = (MECHANICS_GENERATION <= 4)
+  POISON_IN_FIELD       = true#(MECHANICS_GENERATION <= 4)
   # Whether poisoned Pokémon will faint while walking around in the field
   # (true), or survive the poisoning with 1 HP (false).
   POISON_FAINT_IN_FIELD = (MECHANICS_GENERATION >= 3)

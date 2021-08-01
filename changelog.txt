@@ -70,8 +70,10 @@ Removed features that will be coming back eventually
 - Modern Mode compatibility
 - Quest log
 - Hidden abilities routes
+- Pokeradar special encounters
 - In-game clock
 - Hard mode, Easy mode
+- Some quests probably don't work
 
 Removed features that probably won't be coming back
 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾

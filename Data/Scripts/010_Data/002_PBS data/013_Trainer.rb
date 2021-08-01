@@ -129,10 +129,13 @@ module GameData
       trainer.id        = $Trainer.make_foreign_ID
       trainer.items     = @items.clone
       trainer.lose_text = self.lose_text
+
+      isRematch = $game_switches[200]
+      rematchId = getRematchId(trainer.name,trainer.trainer_type)
+
       # Create each Pokémon owned by the trainer
       @pokemon.each do |pkmn_data|
-
-        #infinite fusion edit
+        #replace placeholder species infinite fusion edit
         species = GameData::Species.get(pkmn_data[:species]).species
         if placeholder_species.include?(species)
           species = replace_species_with_placeholder(species)
@@ -145,6 +148,14 @@ module GameData
           end
         end
         ####
+
+        #trainer rematch infinite fusion edit
+        if isRematch
+          nbRematch = getNumberRematch(rematchId)
+          level = getRematchLevel(level,nbRematch)
+          species = evolveRematchPokemon(nbRematch,species)
+        end
+        #
         pkmn = Pokemon.new(species, level, trainer, false)
 
         trainer.party.push(pkmn)

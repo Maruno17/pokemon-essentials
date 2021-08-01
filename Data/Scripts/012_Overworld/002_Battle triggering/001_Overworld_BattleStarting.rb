@@ -85,6 +85,37 @@ def pbNewBattleScene
   return PokeBattle_Scene.new
 end
 
+def getBattleBackgroundFromMetadata(metadata)
+  #if battle bg specified, return that
+  battle_bg = metadata.battle_background
+  return battle_bg if battle_bg
+
+  #if no battle bg specified, dedude from environment
+  battle_env = metadata.battle_environment
+  case battle_env
+  when :Cave
+    return "Cave1"
+  when :Grass
+    return "Field"
+  when :Rock
+    return "Mountain"
+  when :Underwater
+    return "Underwater"
+  when :StillWater
+    return "Water"
+  when :MovingWater
+    return "Water"
+  when :Forest
+    return "Forest"
+  end
+
+  #if is city
+  if metadata.teleport_destination && metadata.announce_location && metadata.outdoor_map
+    return "City"
+  end
+
+end
+
 # Sets up various battle parameters and applies special rules.
 def pbPrepareBattle(battle)
   battleRules = $PokemonTemp.battleRules
@@ -137,7 +168,7 @@ def pbPrepareBattle(battle)
   elsif $PokemonGlobal.surfing
     backdrop = "water"   # This applies wherever you are, including in caves
   elsif GameData::MapMetadata.exists?($game_map.map_id)
-    back = GameData::MapMetadata.get($game_map.map_id).battle_background
+    back = getBattleBackgroundFromMetadata(GameData::MapMetadata.get($game_map.map_id))
     backdrop = back if back && back != ""
   end
   if !backdrop
@@ -145,8 +176,6 @@ def pbPrepareBattle(battle)
     backdrop = "indoorA" if !isOutdoor
     backdrop = "Field" if isOutdoor
   end
-
-  backdrop = "indoorA" if !backdrop
   battle.backdrop = backdrop
   # Choose a name for bases depending on environment
   if battleRules["base"].nil?

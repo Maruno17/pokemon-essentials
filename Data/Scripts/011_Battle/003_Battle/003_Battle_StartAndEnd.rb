@@ -336,6 +336,7 @@ class PokeBattle_Battle
   # End of battle
   #=============================================================================
   def pbGainMoney
+    return if $game_switches[200] #is rematch
     return if !@internalBattle || !@moneyGain
     # Money rewarded from opposing trainers
     if trainerBattle?
@@ -452,6 +453,21 @@ class PokeBattle_Battle
     end
     # Register captured Pokémon in the Pokédex, and store them
     pbRecordAndStoreCaughtPokemon
+
+    isRematch = $game_switches[200]
+    if isRematch
+      if @opponent.is_a?(Array)
+        for trainer in @opponent
+          rematchId = getRematchId(trainer.name,trainer.trainer_type)
+          incrNbRematches(rematchId)
+        end
+      else
+        rematchId = getRematchId(@opponent.name,@opponent.trainer_type)
+        incrNbRematches(rematchId)
+      end
+    end
+
+
     # Collect Pay Day money in a wild battle that ended in a capture
     pbGainMoney if @decision==4
     # Pass on Pokérus within the party
