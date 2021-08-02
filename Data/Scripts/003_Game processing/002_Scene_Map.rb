@@ -209,6 +209,23 @@ class Scene_Map
     end
   end
 
+  def reset_map(fadeout=false)
+    $MapFactory.setup($game_map.map_id)
+    $game_player.moveto($game_player.x, $game_player.y)
+    $game_player.straighten
+    $game_map.update
+    disposeSpritesets
+    GC.start
+    createSpritesets
+    if fadeout
+      $game_temp.transition_processing = false
+      Graphics.transition(20)
+    end
+    $game_map.autoplay
+    Graphics.frame_reset
+    Input.update
+  end
+
   def main
     createSpritesets
     Graphics.transition(20)

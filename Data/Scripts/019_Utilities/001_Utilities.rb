@@ -231,15 +231,15 @@ end
 def pbTrainerName(name = nil, outfit = 0)
   pbChangePlayer(0) if $Trainer.character_ID < 0
   if name.nil?
-    name = pbEnterPlayerName(_INTL("Your name?"), 0, Settings::MAX_PLAYER_NAME_SIZE)
+    name = pbEnterPlayerName(_INTL("Enter your name"), 0, Settings::MAX_PLAYER_NAME_SIZE)
     if name.nil? || name.empty?
-      player_metadata = GameData::Metadata.get_player($Trainer.character_ID)
-      trainer_type = (player_metadata) ? player_metadata[0] : nil
-      gender = pbGetTrainerTypeGender(trainer_type)
-      if(gender == 0)
-        return "Red"
+      # player_metadata = GameData::Metadata.get_player($Trainer.character_ID)
+      # trainer_type = (player_metadata) ? player_metadata[0] : nil
+      #  gender = pbGetTrainerTypeGender(trainer_type)
+      if $game_variables[52] == 0
+        name = "Green"
       else
-        return "Leaf"
+        name = "Red"
       end
     end
   end
