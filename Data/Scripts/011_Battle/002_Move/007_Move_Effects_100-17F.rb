@@ -269,7 +269,10 @@ class PokeBattle_Move_10D < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
   def pbTarget(user)
-    return GameData::Target.get(:NearFoe) if user.pbHasType?(:GHOST)
+    if user.pbHasType?(:GHOST)
+      ghost_target = (Settings::MECHANICS_GENERATION >= 8) ? :RandomNearFoe : :NearFoe
+      return GameData::Target.get(ghost_target)
+    end
     return super
   end
 
@@ -375,9 +378,14 @@ end
 
 #===============================================================================
 # Removes trapping moves, entry hazards and Leech Seed on user/user's side.
-# (Rapid Spin)
+# Raises user's Speed by 1 stage (Gen 8+). (Rapid Spin)
 #===============================================================================
-class PokeBattle_Move_110 < PokeBattle_Move
+class PokeBattle_Move_110 < PokeBattle_StatUpMove
+  def initialize(battle,move)
+    super
+    @statUp = [:SPEED, 1]
+  end
+
   def pbEffectAfterAllHits(user,target)
     return if user.fainted? || target.damageState.unaffected
     if user.effects[PBEffects::Trapping]>0
@@ -408,6 +416,10 @@ class PokeBattle_Move_110 < PokeBattle_Move
       user.pbOwnSide.effects[PBEffects::StickyWeb] = false
       @battle.pbDisplay(_INTL("{1} blew away sticky webs!",user.pbThis))
     end
+  end
+
+  def pbAdditionalEffect(user,target)
+    super if Settings::MECHANICS_GENERATION >= 8
   end
 end
 

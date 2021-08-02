@@ -191,7 +191,8 @@ class PokeBattle_AI
         score -= 80 if miss
       end
       # Pick a good move for the Choice items
-      if user.hasActiveItem?([:CHOICEBAND,:CHOICESPECS,:CHOICESCARF])
+      if user.hasActiveItem?([:CHOICEBAND,:CHOICESPECS,:CHOICESCARF]) ||
+         user.hasActiveAbility?(:GORILLATACTICS)
         if move.baseDamage>=60;     score += 60
         elsif move.damagingMove?;   score += 30
         elsif move.function=="0F2"; score += 70   # Trick

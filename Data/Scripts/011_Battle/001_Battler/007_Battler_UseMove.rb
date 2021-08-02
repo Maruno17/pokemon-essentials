@@ -522,14 +522,16 @@ class PokeBattle_Battler
       next if idxMove<0
       oldLastRoundMoved = b.lastRoundMoved
       @battle.pbDisplay(_INTL("{1} used the move instructed by {2}!",b.pbThis,user.pbThis(true)))
-      PBDebug.logonerr{
-        b.effects[PBEffects::Instructed] = true
-        b.pbUseMoveSimple(b.lastMoveUsed,b.lastRegularMoveTarget,idxMove,false)
-        b.effects[PBEffects::Instructed] = false
-      }
-      b.lastRoundMoved = oldLastRoundMoved
-      @battle.pbJudge
-      return if @battle.decision>0
+      b.effects[PBEffects::Instructed] = true
+      if b.pbCanChooseMove?(@moves[idxMove], false)
+        PBDebug.logonerr{
+          b.pbUseMoveSimple(b.lastMoveUsed,b.lastRegularMoveTarget,idxMove,false)
+        }
+        b.lastRoundMoved = oldLastRoundMoved
+        @battle.pbJudge
+        return if @battle.decision>0
+      end
+      b.effects[PBEffects::Instructed] = false
     end
     # Dancer
     if !@effects[PBEffects::Dancer] && !user.lastMoveFailed && realNumHits>0 &&
@@ -556,16 +558,18 @@ class PokeBattle_Battler
           @battle.pbDisplay(_INTL("{1} kept the dance going with {2}!",
              nextUser.pbThis,nextUser.abilityName))
         end
-        PBDebug.logonerr{
-          nextUser.effects[PBEffects::Dancer] = true
-          nextUser.pbUseMoveSimple(move.id,preTarget)
-          nextUser.effects[PBEffects::Dancer] = false
-        }
-        nextUser.lastRoundMoved = oldLastRoundMoved
-        nextUser.effects[PBEffects::Outrage] = oldOutrage
-        nextUser.currentMove = oldCurrentMove
-        @battle.pbJudge
-        return if @battle.decision>0
+        nextUser.effects[PBEffects::Dancer] = true
+        if nextUser.pbCanChooseMove?(move, false)
+          PBDebug.logonerr{
+            nextUser.pbUseMoveSimple(move.id,preTarget)
+          }
+          nextUser.lastRoundMoved = oldLastRoundMoved
+          nextUser.effects[PBEffects::Outrage] = oldOutrage
+          nextUser.currentMove = oldCurrentMove
+          @battle.pbJudge
+          return if @battle.decision>0
+        end
+        nextUser.effects[PBEffects::Dancer] = false
       end
     end
   end

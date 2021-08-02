@@ -1283,26 +1283,27 @@ BattleHandlers::UserItemAfterMoveUse.add(:SHELLBELL,
 BattleHandlers::EndOfMoveItem.add(:LEPPABERRY,
   proc { |item,battler,battle,forced|
     next false if !forced && !battler.canConsumeBerry?
-    found = []
-    battler.pokemon.moves.each_with_index do |m,i|
-      next if m.total_pp<=0 || m.pp==m.total_pp
-      next if !forced && m.pp>0
-      found.push(i)
+    found_empty_moves = []
+    found_partial_moves = []
+    battler.pokemon.moves.each_with_index do |move, i|
+      next if move.total_pp <= 0 || move.pp == move.total_pp
+      (move.pp == 0) ? found_empty_moves.push(i) : found_partial_moves.push(i)
     end
-    next false if found.length==0
+    next false if found_empty_moves.empty? && (!forced || found_partial_moves.empty?)
     itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
-    battle.pbCommonAnimation("EatBerry",battler) if !forced
-    choice = found[battle.pbRandom(found.length)]
+    battle.pbCommonAnimation("EatBerry", battler) if !forced
+    choice = found_empty_moves.first
+    choice = found_partial_moves.first if forced && choice.nil?
     pkmnMove = battler.pokemon.moves[choice]
     pkmnMove.pp += 10
-    pkmnMove.pp = pkmnMove.total_pp if pkmnMove.pp>pkmnMove.total_pp
+    pkmnMove.pp = pkmnMove.total_pp if pkmnMove.pp > pkmnMove.total_pp
     battler.moves[choice].pp = pkmnMove.pp
     moveName = pkmnMove.name
     if forced
-      battle.pbDisplay(_INTL("{1} restored its {2}'s PP.",battler.pbThis,moveName))
+      battle.pbDisplay(_INTL("{1} restored its {2}'s PP.", battler.pbThis, moveName))
     else
-      battle.pbDisplay(_INTL("{1}'s {2} restored its {3}'s PP!",battler.pbThis,itemName,moveName))
+      battle.pbDisplay(_INTL("{1}'s {2} restored its {3}'s PP!", battler.pbThis, itemName, moveName))
     end
     next true
   }

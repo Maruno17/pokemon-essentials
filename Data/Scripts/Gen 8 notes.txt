@@ -7,32 +7,22 @@
 The game records, for each species, how many have been caught or defeated
 (counts both wild and trainer battles), and the shiny chance increases for that
 species because of this. This value is also shown in the Pokédex entry screen.
+(Will be implemented by me in the next PR)
 
 Some moves have changed properties/effects:
-- Rapid Spin now raises the user's Speed by 1 stage (100% additional effect
-  chance).
 - Howl's target changed to UserAndAllies, and is now a sound move. It is now
   blocked by Soundproof (I don't know if it should be checking the allies for
   pbImmunityByAbility, but leaning towards yes; will Volt Absorb block an
   Electrified Howl?). Needs a new function code, since it now affects targets
   rather than the user.
-- Teleport switches the user out. If the user is a wild Pokémon, ends the battle
-  instead.
-- Curse's Ghost effect now targets a random foe (don't know if it can be non-
-  adjacent); the target cannot be chosen by the player (it appears to target the
-  user).
-- Look at the moves Nature Power turns into.
 - Healing Wish's effect and Lunar Dance's effect are no longer used up if a
   Pokémon that switches to the targeted position can't make use of it. Each
-  position can only have one of each effect applied at once.
-- Multiple Quashed Pokémon now move in order from fastest to slowest, rather
-  than the order in which they were Quashed.
+  position can only have one of each effect applied at once. (Will be implemented by me in the next PR)
 - Parting Shot is able to make the user switch out if its effect is redirected
   by Mirror Armor. Throat Spray is triggered and applies before the switch.
+  (The Throat Spray part is done by default)
 
 Some abilities have changed effects:
-- Intimidate now triggers Rattled. Rattled needs a new ability handler just for
-  triggering this way.
 - If another Pokémon faints before a Pokémon with Analytic makes its move,
   Analytic calculates whether it would have moved before or after the fainted
   Pokémon. In Gen 8, speed- and priority-modifying effects aren't considered,
@@ -40,23 +30,15 @@ Some abilities have changed effects:
 
 Some items have changed properties/effects:
 - Zygarde Cube now changes a Zygarde's ability.
-- Ability Capsule/Ability Patch should fail if used on Zygarde.
-- If Leppa Berry is forced to be consumed, it will first try to work on a move
-  with 0 PP left (preferring the earliest such move in the list of moves), and
-  failing that, the earliest move in the list of moves which has any PP missing
-  (no matter how much).
-- Ensure that Choice items cause different moves to fail (without subtracting
-  PP) if they were forced to be used by Instruct/Dancer.
-- Iron Ball shouldn't modify the effectiveness of Ground moves against a Flying
-  holder if the holder is grounded by another effect that isn't Iron Ball.
 
 Other notes:
 - In Gen 7+, Shaymin/Hoopa revert their form when withdrawn from storage rather
   than when deposited. It still also reverts under other conditions. Shaymin
   reverts its form when deposited in the Day Care (all Gens).
 - Look at Sweet Scent's out of battle effect, namely whether it should try to
-  cause a horde battle (and what does that mean in Essentials?).
-- Maybe have multiple sets of Pickup items for multiple Gens.
+  cause a horde battle (and what does that mean in Essentials? Maybe 1v3).
+- Maybe have multiple sets of Pickup items for multiple Gens. Probably not.
+  Gens 7+ seem to have different item probability calculations - investigate.
 - Add a newer type of berry tree mechanics? Have a separate setting that
   prevents deterioration?
 - If a battle ends because of Rocky Helmet damage, the side that the Rocky
@@ -68,13 +50,9 @@ Other notes:
   is probably fine.
 
 Can use Fly from within the Town Map if possible. (Good QoL, add if possible.)
+(Will be implemented by me in the next PR)
 
 Make example event that combines the Gen 8 fossils.
-
-Add AI for new moves/items/abilities.
-
-What happens to the PP of Iron Head when turned into/from Behemoth Blade/Bash
-for Zacian/Zamazenta?
 
 #===============================================================================
 # Low priority or ignorable
@@ -131,6 +109,37 @@ Escape Rope's code now supports both consumable and non-consumable versions,
 depending on whether it is a key item. All it needs is a proper definition in
 items.txt.
 
+Add AI for new moves/items/abilities.
+
+Ability Effect Changes
+- Intimidate now triggers Rattled. Rattled needs a new ability handler just for
+  triggering this way.
+
+Move Effect Changes
+- Teleport switches the user out. If the user is a wild Pokémon, ends the battle
+  instead.
+- Look at the moves Nature Power turns into. (Unchanged since Gen 7)
+- Curse's Ghost effect now targets a random foe (don't know if it can be non-
+  adjacent); the target cannot be chosen by the player (it appears to target the
+  user).
+- Multiple Quashed Pokémon now move in order from fastest to slowest, rather
+  than the order in which they were Quashed.
+- Ensure that Choice items cause different moves to fail (without subtracting
+  PP) if they were forced to be used by Instruct/Dancer.
+- Rapid Spin now raises the user's Speed by 1 stage (100% additional effect
+  chance).
+
+Item Effect Changes
+- If Leppa Berry is forced to be consumed, it will first try to work on a move
+  with 0 PP left (preferring the earliest such move in the list of moves), and
+  failing that, the earliest move in the list of moves which has any PP missing
+  (no matter how much).
+- Ability Capsule/Ability Patch should fail if used on Zygarde.
+- Iron Ball shouldn't modify the effectiveness of Ground moves against a Flying
+  holder if the holder is grounded by another effect that isn't Iron Ball.
+  Opted to ignore this effect, and to modify the holder's effectiveness no matter
+  what.
+
 - Multi-Attack's power changed to 120.
 - Rapid Spin's power changed to 50.
 - Vice Grip renamed to Vise Grip.
@@ -150,5 +159,9 @@ items.txt.
   Stick changed.
 - Changes to evolutions due to removal of moss rock/ice rock/magnetic field.
 - Form differences.
+
+What happens to the PP of Iron Head when turned into/from Behemoth Blade/Bash
+for Zacian/Zamazenta? It gets decreased to the total PP if it is higher than the
+total PP of the new move, but cannot increase. This is already what happens.
 
 =end

@@ -5389,6 +5389,7 @@ TotalPP = 40
 Target = NearOther
 FunctionCode = 110
 Flags = Contact,CanProtect,CanMirrorMove
+EffectChance = 100
 Description = A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.
 #-------------------------------
 [SPIKECANNON]
@@ -7682,6 +7683,7 @@ Type = PSYCHIC
 Category = Status
 Accuracy = 0
 TotalPP = 20
+Priority = -6
 Target = User
 FunctionCode = 0EA
 Description = Use it to flee from any wild Pokémon. It can also warp to the last Pokémon Center visited.

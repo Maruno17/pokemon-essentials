@@ -269,6 +269,8 @@ class PokeBattle_AI
     atk = pbRoughStat(user,:ATTACK,skill)
     if move.function=="121"   # Foul Play
       atk = pbRoughStat(target,:ATTACK,skill)
+    elsif move.function=="197"   # Body Press
+      atk = pbRoughStat(user,:DEFENSE,skill)
     elsif move.specialMove?(type)
       if move.function=="121"   # Foul Play
         atk = pbRoughStat(target,:SPECIAL_ATTACK,skill)

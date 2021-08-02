@@ -91,6 +91,12 @@ class PokeBattle_Battler
     end
   end
 
+  # Used for Rattled's Gen 8 effect. Called when Intimidate is triggered.
+  def pbAbilitiesOnIntimidated
+    return if !abilityActive?
+    BattleHandlers.triggerAbilityOnIntimidated(self.ability, self, @battle)
+  end
+
   #=============================================================================
   # Ability curing
   #=============================================================================

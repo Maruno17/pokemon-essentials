@@ -2285,7 +2285,8 @@ BattleHandlers::AbilityOnSwitchIn.add(:INTIMIDATE,
       else
         check_item = false if b.statStageAtMin?(:ATTACK)
       end
-      b.pbLowerAttackStatStageIntimidate(battler)
+      check_ability = b.pbLowerAttackStatStageIntimidate(battler)
+      b.pbAbilitiesOnIntimidated if check_ability
       b.pbItemOnIntimidatedCheck if check_item
     end
     battle.pbHideAbilitySplash(battler)
@@ -2471,6 +2472,17 @@ BattleHandlers::AbilityChangeOnBattlerFainting.copy(:POWEROFALCHEMY,:RECEIVER)
 BattleHandlers::AbilityOnBattlerFainting.add(:SOULHEART,
   proc { |ability,battler,fainted,battle|
     battler.pbRaiseStatStageByAbility(:SPECIAL_ATTACK,1,battler)
+  }
+)
+
+#===============================================================================
+# AbilityOnIntimidated handlers
+#===============================================================================
+
+BattleHandlers::AbilityOnIntimidated.add(:RATTLED,
+  proc { |ability,battler,battle|
+    next if Settings::MECHANICS_GENERATION < 8
+    battler.pbRaiseStatStageByAbility(:SPEED, 1, battler)
   }
 )
 
