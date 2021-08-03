@@ -645,16 +645,20 @@ class PokeBattle_Battler
     return @battle.initialItems[@index&1][@pokemonIndex]
   end
 
-  def setInitialItem(newItem)
-    @battle.initialItems[@index&1][@pokemonIndex] = newItem
+  def setInitialItem(value)
+    item_data = GameData::Item.try_get(value)
+    new_item = (item_data) ? item_data.id : nil
+    @battle.initialItems[@index&1][@pokemonIndex] = new_item
   end
 
   def recycleItem
     return @battle.recycleItems[@index&1][@pokemonIndex]
   end
 
-  def setRecycleItem(newItem)
-    @battle.recycleItems[@index&1][@pokemonIndex] = newItem
+  def setRecycleItem(value)
+    item_data = GameData::Item.try_get(value)
+    new_item = (item_data) ? item_data.id : nil
+    @battle.recycleItems[@index&1][@pokemonIndex] = new_item
   end
 
   def belched?

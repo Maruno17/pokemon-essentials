@@ -132,8 +132,9 @@ class << Kernel
         return oldRand(a)
       end
     elsif a.nil?
-      return (b) ? oldRand(b) : oldRand(2)
+      return oldRand(b)
     end
+    return oldRand
   end
 end
 
