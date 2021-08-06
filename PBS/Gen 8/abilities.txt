@@ -934,55 +934,55 @@ Description = Powers up moves that are super-effective.
 #-------------------------------
 [INTREPIDSWORD]
 Name = Intrepid Sword
-Description = Boosts the Pokémon's Attack stat when the Pokémon enters a battle.
+Description = Boosts Attack when entering a battle.
 #-------------------------------
 [DAUNTLESSSHIELD]
 Name = Dauntless Shield
-Description = Boosts the Pokémon's Defense stat when the Pokémon enters a battle.
+Description = Boosts Defense when entering a battle.
 #-------------------------------
 [LIBERO]
 Name = Libero
-Description = Changes the Pokémon's type to the type of the move it's about to use.
+Description = It changes type to that of the move it's about to use.
 #-------------------------------
 [BALLFETCH]
 Name = Ball Fetch
-Description = If the Pokémon is not holding an item, it will fetch the Poké Ball from the first failed throw of the battle.
+Description = Retrieves the first thrown Poké Ball if it failed.
 #-------------------------------
 [COTTONDOWN]
 Name = Cotton Down
-Description = When the Pokémon is hit by an attack, it scatters cotton fluff around and lowers the Speed stat of all Pokémon except itself.
+Description = Scatters Speed-lowering cotton fluff when hit.
 #-------------------------------
 [PROPELLERTAIL]
 Name = Propeller Tail
-Description = Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves.
+Description = This Pokémon's moves cannot be redirected.
 #-------------------------------
 [MIRRORARMOR]
 Name = Mirror Armor
-Description = Bounces back only the stat-lowering effects that the Pokémon receives.
+Description = Bounces back stat-lowering effects.
 #-------------------------------
 [GULPMISSILE]
 Name = Gulp Missile
-Description = When the Pokémon uses Surf or Dive, it will come back with prey. When it takes damage, it will spit out the prey to attack.
+Description = Catches prey via Surf or Dive, spits it out when hit.
 #-------------------------------
 [STALWART]
 Name = Stalwart
-Description = Ignores the effects of opposing Pokémon's Abilities and moves that draw in moves.
+Description = This Pokémon's moves cannot be redirected.
 #-------------------------------
 [STEAMENGINE]
 Name = Steam Engine
-Description = Boosts the Pokémon's Speed stat drastically if hit by a Fire- or Water-type move.
+Description = Boosts Speed drastically if hit by a Fire or Water move.
 #-------------------------------
 [PUNKROCK]
 Name = Punk Rock
-Description = Boosts the power of sound-based moves. The Pokémon also takes half the damage from these kinds of moves.
+Description = Powers up own sound moves. Resists other sound moves.
 #-------------------------------
 [SANDSPIT]
 Name = Sand Spit
-Description = The Pokémon creates a sandstorm when it's hit by an attack.
+Description = Creates a sandstorm when hit by an attack.
 #-------------------------------
 [ICESCALES]
 Name = Ice Scales
-Description = The Pokémon is protected by ice scales, which halve the damage taken from special moves.
+Description = Halves the damage taken from special moves.
 #-------------------------------
 [RIPEN]
 Name = Ripen
@@ -990,7 +990,7 @@ Description = Ripens Berries and doubles their effect.
 #-------------------------------
 [ICEFACE]
 Name = Ice Face
-Description = The Pokémon's ice head can take a physical attack as a substitute, but the attack also changes the Pokémon's appearance. The ice will be restored when it hails.
+Description = Blocks a physical hit, but the ice head breaks.
 #-------------------------------
 [POWERSPOT]
 Name = Power Spot
@@ -998,11 +998,11 @@ Description = Just being next to the Pokémon powers up moves.
 #-------------------------------
 [MIMICRY]
 Name = Mimicry
-Description = Changes the Pokémon's type depending on the terrain.
+Description = Changes type depending on the terrain.
 #-------------------------------
 [SCREENCLEANER]
 Name = Screen Cleaner
-Description = When the Pokémon enters a battle, the effects of Light Screen, Reflect, and Aurora Veil are nullified for both opposing and ally Pokémon.
+Description = On entering battle, clears effects of Reflect, etc.
 #-------------------------------
 [STEELYSPIRIT]
 Name = Steely Spirit
@@ -1010,27 +1010,27 @@ Description = Powers up ally Pokémon's Steel-type moves.
 #-------------------------------
 [PERISHBODY]
 Name = Perish Body
-Description = When hit by a move that makes direct contact, the Pokémon and the attacker will faint after three turns unless they switch out of battle.
+Description = Both Pokémon faint 3 turns after taking a contact hit.
 #-------------------------------
 [WANDERINGSPIRIT]
 Name = Wandering Spirit
-Description = The Pokémon exchanges Abilities with a Pokémon that hits it with a move that makes direct contact.
+Description = Swaps Abilities with contact-making Pokémon.
 #-------------------------------
 [GORILLATACTICS]
 Name = Gorilla Tactics
-Description = Boosts the Pokémon's Attack stat but only allows the use of the first selected move.
+Description = Boosts Attack, but allows only one move to be used.
 #-------------------------------
 [NEUTRALIZINGGAS]
 Name = Neutralizing Gas
-Description = If the Pokémon with Neutralizing Gas is in the battle, the effects of all Pokémon's Abilities will be nullified or will not be triggered.
+Description = Nullifies the effects of all other Abilities.
 #-------------------------------
 [PASTELVEIL]
 Name = Pastel Veil
-Description = Protects the Pokémon and its ally Pokémon from being poisoned.
+Description = Protects the Pokémon and its allies from poisoning.
 #-------------------------------
 [HUNGERSWITCH]
 Name = Hunger Switch
-Description = The Pokémon changes its form, alternating between its Full Belly Mode and Hangry Mode after the end of each turn.
+Description = Changes between Full Belly and Hangry Mode each turn.
 #-------------------------------
 [QUICKDRAW]
 Name = Quick Draw
@@ -1038,11 +1038,11 @@ Description = Enables the Pokémon to move first occasionally.
 #-------------------------------
 [UNSEENFIST]
 Name = Unseen Fist
-Description = If the Pokémon uses moves that make direct contact, it can attack the target even if the target protects itself.
+Description = The Pokémon's contact moves ignore protections.
 #-------------------------------
 [CURIOUSMEDICINE]
 Name = Curious Medicine
-Description = When the Pokémon enters a battle, it scatters medicine from its shell, which removes all stat changes from allies.
+Description = Removes all allies' stat changes on joining battle.
 #-------------------------------
 [TRANSISTOR]
 Name = Transistor
@@ -1054,16 +1054,16 @@ Description = Powers up Dragon-type moves.
 #-------------------------------
 [CHILLINGNEIGH]
 Name = Chilling Neigh
-Description = When the Pokémon knocks out a target, it utters a chilling neigh, which boosts its Attack stat.
+Description = When knocking out a target, raises Attack.
 #-------------------------------
 [GRIMNEIGH]
 Name = Grim Neigh
-Description = When the Pokémon knocks out a target, it utters a terrifying neigh, which boosts its Sp. Atk stat.
+Description = When knocking out a target, raises Sp. Atk.
 #-------------------------------
 [ASONECHILLINGNEIGH]
 Name = As One
-Description = This Ability combines the effects of both Calyrex's Unnerve Ability and Glastrier's Chilling Neigh Ability.
+Description = Combines Unnerve and Chilling Neigh Abilities.
 #-------------------------------
 [ASONEGRIMNEIGH]
 Name = As One
-Description = This Ability combines the effects of both Calyrex's Unnerve Ability and Spectrier's Grim Neigh Ability.
+Description = Combines Unnerve and Grim Neigh Abilities.

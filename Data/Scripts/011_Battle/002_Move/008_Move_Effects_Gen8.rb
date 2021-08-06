@@ -865,3 +865,40 @@ class PokeBattle_Move_199 < PokeBattle_Move
     @battle.field.terrain = :None
   end
 end
+
+#===============================================================================
+# Increases the user's and allies' Attack by 1 stage. (Howl in Gen 8+)
+#===============================================================================
+class PokeBattle_Move_19A < PokeBattle_Move
+  def canSnatch?; return true; end
+
+  def pbMoveFailed?(user, targets)
+    return false if damagingMove?
+    failed = true
+    targets.each do |b|
+      next if b.pbCanRaiseStatStage?(:ATTACK, user, self)
+      failed = false
+      break
+    end
+    if failed
+      @battle.pbDisplay(_INTL("But it failed!"))
+      return true
+    end
+    return false
+  end
+
+  def pbFailsAgainstTarget?(user, target)
+    return false if damagingMove?
+    return !target.pbCanRaiseStatStage?(:ATTACK, user, self, true)
+  end
+
+  def pbEffectAgainstTarget(user, target)
+    return if damagingMove?
+    target.pbRaiseStatStage(:ATTACK, 1, user)
+  end
+
+  def pbAdditionalEffect(user, target)
+    return if !target.pbCanRaiseStatStage?(:ATTACK, user, self)
+    target.pbRaiseStatStage(:ATTACK, 1, user)
+  end
+end

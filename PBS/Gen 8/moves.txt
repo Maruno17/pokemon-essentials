@@ -380,7 +380,7 @@ Target = AllNearFoes
 FunctionCode = 00F
 Flags = CanProtect,CanMirrorMove
 EffectChance = 20
-Description = The user transforms its wrath into a fire-like aura to attack. This may also make opposing Pokémon flinch.
+Description = The user transforms its wrath into a fire-like aura to attack. This may also make foes flinch.
 #-------------------------------
 [DARKESTLARIAT]
 Name = Darkest Lariat
@@ -443,7 +443,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = 0A5
 Flags = Contact,CanProtect,CanMirrorMove
-Description = The user pretends to bow its head, but then it stabs the target with its disheveled hair. This attack never misses.
+Description = The user pretends to bow its head, but then it stabs the target with its disheveled hair. Never misses.
 #-------------------------------
 [JAWLOCK]
 Name = Jaw Lock
@@ -455,7 +455,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = 190
 Flags = Contact,CanProtect,CanMirrorMove
-Description = This move prevents the user and the target from switching out until either of them faints. The effect goes away if either of the Pokémon leaves the field.
+Description = This move prevents the user and the target from switching out until either of them faints.
 #-------------------------------
 [THROATCHOP]
 Name = Throat Chop
@@ -470,18 +470,6 @@ Flags = Contact,CanProtect,CanMirrorMove
 EffectChance = 100
 Description = The user attacks the target's throat. The target cannot use sound-based moves for two turns.
 #-------------------------------
-[LASHOUT]
-Name = Lash Out
-Type = DARK
-Category = Physical
-BaseDamage = 75
-Accuracy = 100
-TotalPP = 5
-Target = NearOther
-FunctionCode = 184
-Flags = Contact,CanProtect,CanMirrorMove
-Description = The user lashes out to vent its frustration toward the target. If its stats were lowered during the turn, the power of this move is doubled.
-#-------------------------------
 [WICKEDBLOW]
 Name = Wicked Blow
 Type = DARK
@@ -492,7 +480,19 @@ TotalPP = 5
 Target = NearOther
 FunctionCode = 0A0
 Flags = Contact,CanProtect,CanMirrorMove
-Description = The user, having mastered the Dark style, strikes the target with a fierce blow. This attack always results in a critical hit.
+Description = Strikes with a fierce blow through mastery of the Dark style. Always results in a critical hit.
+#-------------------------------
+[LASHOUT]
+Name = Lash Out
+Type = DARK
+Category = Physical
+BaseDamage = 75
+Accuracy = 100
+TotalPP = 5
+Target = NearOther
+FunctionCode = 184
+Flags = Contact,CanProtect,CanMirrorMove
+Description = The user lashes out to vent its frustration. Power is doubled if its stats dropped this turn.
 #-------------------------------
 [NIGHTSLASH]
 Name = Night Slash
@@ -761,7 +761,7 @@ TotalPP = 10
 Target = User
 Priority = 4
 FunctionCode = 186
-Description = This move enables the user to protect itself from all attacks. Its chance of failing rises if it is used in succession. Direct contact harshly lowers the attacker's Defense stat.
+Description = The user protects itself from all attacks. Direct contact lowers the attacker's Defense.
 #-------------------------------
 [PARTINGSHOT]
 Name = Parting Shot
@@ -862,7 +862,7 @@ TotalPP = 5
 Target = AllNearFoes
 FunctionCode = 08B
 Flags = CanProtect,CanMirrorMove
-Description = Converting its life-force into power, the user attacks opposing Pokémon. The lower the user's HP, the lower the move's power.
+Description = Converts life-force into power to attack. The lower the user's HP, the lower the move's power.
 #-------------------------------
 [ROAROFTIME]
 Name = Roar of Time
@@ -1008,7 +1008,7 @@ Target = AllNearFoes
 FunctionCode = 042
 Flags = Contact,CanProtect,CanMirrorMove
 EffectChance = 100
-Description = The user swings its tough tail wildly and attacks opposing Pokémon. This also lowers their Attack stats.
+Description = The user swings its tough tail wildly and attacks all foes. This also lowers their Attack stats.
 #-------------------------------
 [DRAGONBREATH]
 Name = Dragon Breath
@@ -1046,7 +1046,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = 188
 Flags = CanProtect,CanMirrorMove
-Description = The user attacks twice using Dreepy. If there are two targets, this move hits each target once.
+Description = The user attacks twice using Dreepy. If there are two targets, this move hits each one once.
 #-------------------------------
 [DUALCHOP]
 Name = Dual Chop
@@ -1083,7 +1083,7 @@ TotalPP = 20
 Target = NearOther
 FunctionCode = 18A
 Flags = CanProtect,CanMirrorMove
-Description = The user attacks by shooting scales two to five times in a row. This move boosts the user's Speed stat but lowers its Defense stat.
+Description = Attacks by shooting scales two to five times in a row. Boosts the user's Speed but lowers its Defense.
 #-------------------------------
 [DRAGONRAGE]
 Name = Dragon Rage
@@ -1169,7 +1169,7 @@ Target = NearOther
 FunctionCode = 178
 Flags = CanProtect,CanMirrorMove
 EffectChance = 100
-Description = Morpeko attacks and raises its Speed with the energy stored in its cheeks. This move's type changes depending on the user's form.
+Description = Morpeko attacks and raises its Speed with energy stored in its cheeks. Type changes with the user's form.
 #-------------------------------
 [THUNDER]
 Name = Thunder
@@ -1243,7 +1243,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = 183
 Flags = Contact,CanProtect,CanMirrorMove
-Description = The user stabs the target with its electrified beak. If the user attacks before the target, the power of this move is doubled.
+Description = Stabs the target with an electrified beak. Power is doubled if the user attacks first.
 #-------------------------------
 [DISCHARGE]
 Name = Discharge
@@ -1257,6 +1257,18 @@ FunctionCode = 007
 Flags = CanProtect,CanMirrorMove
 EffectChance = 30
 Description = A flare of electricity is loosed to strike the area around the user. It may also cause paralysis.
+#-------------------------------
+[OVERDRIVE]
+Name = Overdrive
+Type = ELECTRIC
+Category = Special
+BaseDamage = 80
+Accuracy = 100
+TotalPP = 10
+Target = AllNearFoes
+FunctionCode = 000
+Flags = CanProtect,CanMirrorMove,Sound
+Description = The user attacks all foes by twanging a guitar or bass guitar, causing a huge echo and strong vibration.
 #-------------------------------
 [THUNDERCAGE]
 Name = Thunder Cage
@@ -1306,7 +1318,7 @@ TotalPP = 20
 Target = NearOther
 FunctionCode = 180
 Flags = CanProtect,CanMirrorMove
-Description = The user attacks with electric voltage rising from the ground. This move's power doubles when the target is on Electric Terrain.
+Description = The user attacks with electric voltage rising from the ground. Power is doubled on Electric Terrain.
 #-------------------------------
 [VOLTSWITCH]
 Name = Volt Switch
@@ -1507,18 +1519,6 @@ Target = UserAndAllies
 FunctionCode = 137
 Description = Manipulates magnetic fields to raise the Defense and Sp. Def stats of allies with Plus or Minus Abilities.
 #-------------------------------
-[OVERDRIVE]
-Name = Overdrive
-Type = ELECTRIC
-Category = Special
-BaseDamage = 80
-Accuracy = 100
-TotalPP = 10
-Target = AllNearFoes
-FunctionCode = 000
-Flags = CanProtect,CanMirrorMove,Sound
-Description = The user attacks opposing Pokémon by twanging a guitar or bass guitar, causing a huge echo and strong vibration.
-#-------------------------------
 [THUNDERWAVE]
 Name = Thunder Wave
 Type = ELECTRIC
@@ -1564,7 +1564,7 @@ TotalPP = 5
 Target = AllNearOthers
 FunctionCode = 18E
 Flags = CanProtect,CanMirrorMove
-Description = The user attacks everything around it and faints upon using this move. This move's power is increased on Misty Terrain.
+Description = The user attacks everything around and faints upon using this move. Power increases on Misty Terrain.
 #-------------------------------
 [MOONBLAST]
 Name = Moonblast
@@ -1628,7 +1628,7 @@ Target = NearOther
 FunctionCode = 045
 Flags = Contact,CanProtect,CanMirrorMove
 EffectChance = 100
-Description = The user attacks the target with so much force that it could break the target's spirit. This also lowers the target's Sp. Atk stat.
+Description = The user attacks the target with immense force. This also lowers the target's Sp. Atk stat.
 #-------------------------------
 [DRAININGKISS]
 Name = Draining Kiss
@@ -1828,7 +1828,7 @@ TotalPP = 5
 Target = NearOther
 FunctionCode = 0C2
 Flags = CanProtect,CanMirrorMove
-Description = The user attacks wildly with its thick leek. The user can't move on the next turn, because the force of this move makes it stagger.
+Description = The user attacks wildly with its thick leek. The user can't move on the next turn.
 #-------------------------------
 [HIGHJUMPKICK]
 Name = High Jump Kick
@@ -1963,7 +1963,7 @@ Target = NearOther
 FunctionCode = 043
 Flags = Contact,CanProtect,CanMirrorMove
 EffectChance = 100
-Description = The user overwhelms the target with lightning-like movement before delivering a kick. This also lowers the target's Defense stat.
+Description = Overwhelms the target with lightning-like movement, then kicks. Lowers the target's Defense stat.
 #-------------------------------
 [SECRETSWORD]
 Name = Secret Sword
@@ -2011,7 +2011,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = 197
 Flags = Contact,CanProtect,CanMirrorMove
-Description = The user attacks by slamming its body into the target. The higher the user's Defense, the more damage it can inflict on the target.
+Description = The user attacks by slamming its body into the target. Power increases the higher the user's Defense is.
 #-------------------------------
 [SUBMISSION]
 Name = Submission
@@ -2373,7 +2373,7 @@ TotalPP = 15
 Target = NearOther
 FunctionCode = 18F
 Flags = CanProtect,CanMirrorMove
-Description = The user locks the target in and prevents it from fleeing. This move also lowers the target's Defense and Sp. Def every turn.
+Description = Locks the target in and prevents it from fleeing. Also lowers the target's Defense and Sp. Def each turn.
 #-------------------------------
 [QUICKGUARD]
 Name = Quick Guard
@@ -2484,19 +2484,6 @@ FunctionCode = 03F
 Flags = CanProtect,CanMirrorMove
 Description = The user attacks the target at full power. The attack's recoil sharply reduces the user's Sp. Atk stat.
 #-------------------------------
-[PYROBALL]
-Name = Pyro Ball
-Type = FIRE
-Category = Physical
-BaseDamage = 120
-Accuracy = 90
-TotalPP = 5
-Target = NearOther
-FunctionCode = 00A
-Flags = CanProtect,CanMirrorMove,ThawsUser,Bomb
-EffectChance = 10
-Description = The user attacks by igniting a small stone and launching it as a fiery ball at the target. This may also leave the target with a burn.
-#-------------------------------
 [FLAREBLITZ]
 Name = Flare Blitz
 Type = FIRE
@@ -2509,6 +2496,19 @@ FunctionCode = 0FE
 Flags = Contact,CanProtect,CanMirrorMove,ThawsUser
 EffectChance = 10
 Description = The user cloaks itself in fire and charges at the foe. The user also takes damage and may burn the target.
+#-------------------------------
+[PYROBALL]
+Name = Pyro Ball
+Type = FIRE
+Category = Physical
+BaseDamage = 120
+Accuracy = 90
+TotalPP = 5
+Target = NearOther
+FunctionCode = 00A
+Flags = CanProtect,CanMirrorMove,ThawsUser,Bomb
+EffectChance = 10
+Description = Attacks by igniting a small stone and launching it as a fiery ball. May also burn the target.
 #-------------------------------
 [FIREBLAST]
 Name = Fire Blast
@@ -2712,7 +2712,7 @@ TotalPP = 5
 Target = AllNearFoes
 FunctionCode = 177
 Flags = CanProtect,CanMirrorMove
-Description = The user attacks with energy from jealousy. This leaves all opposing Pokémon that have had their stats boosted during the turn with a burn.
+Description = The user attacks with energy from jealousy. This burns all foes that had their stats boosted this turn.
 #-------------------------------
 [FLAMEBURST]
 Name = Flame Burst
@@ -3178,7 +3178,7 @@ TotalPP = 5
 Target = NearOther
 FunctionCode = 196
 Flags = CanProtect,CanMirrorMove
-Description = The user attacks the target by controlling the target's item. The move fails if the target doesn't have an item.
+Description = Attacks the target by controlling its item. The move fails if the target doesn't have an item.
 #-------------------------------
 [MOONGEISTBEAM]
 Name = Moongeist Beam
@@ -3574,7 +3574,7 @@ Target = NearOther
 FunctionCode = 046
 Flags = CanProtect,CanMirrorMove
 EffectChance = 100
-Description = The user attacks the target with an acidic liquid created from tart apples. This also lowers the target's Sp. Def stat.
+Description = Attacks with an acidic liquid created from tart apples. This also lowers the target's Sp. Def.
 #-------------------------------
 [DRUMBEATING]
 Name = Drum Beating
@@ -3587,7 +3587,7 @@ Target = NearOther
 FunctionCode = 044
 Flags = CanProtect,CanMirrorMove
 EffectChance = 100
-Description = The user plays its drum, controlling the drum's roots to attack the target. This also lowers the target's Speed stat.
+Description = The user plays its drum, controlling roots to attack. This also lowers the target's Speed stat.
 #-------------------------------
 [GRASSPLEDGE]
 Name = Grass Pledge
@@ -3612,7 +3612,7 @@ Target = NearOther
 FunctionCode = 17D
 Flags = CanProtect,CanMirrorMove
 EffectChance = 100
-Description = The user inflicts damage by dropping an apple from high above. This also lowers the target's Defense stat.
+Description = The user inflicts damage by dropping an apple from high above. This also lowers the target's Defense.
 #-------------------------------
 [SEEDBOMB]
 Name = Seed Bomb
@@ -3902,7 +3902,7 @@ Accuracy = 0
 TotalPP = 10
 Target = UserAndAllies
 FunctionCode = 18D
-Description = The user becomes one with the jungle, restoring HP and healing any status conditions of itself and its ally Pokémon in battle.
+Description = The user becomes one with the jungle, and restores HP and cures status conditions of itself and allies.
 #-------------------------------
 [LEECHSEED]
 Name = Leech Seed
@@ -4123,7 +4123,7 @@ Target = NearOther
 FunctionCode = 00A
 Flags = CanProtect,CanMirrorMove,ThawsUser
 EffectChance = 30
-Description = The user throws scorching sand at the target to attack. This may also leave the target with a burn.
+Description = The user throws scorching sand at the target to attack. This may also burn the target.
 #-------------------------------
 [BONECLUB]
 Name = Bone Club
@@ -4727,6 +4727,18 @@ FunctionCode = 000
 Flags = Contact,CanProtect,CanMirrorMove
 Description = The target is attacked by a kick launched with muscle-packed power.
 #-------------------------------
+[MULTIATTACK]
+Name = Multi-Attack
+Type = NORMAL
+Category = Physical
+BaseDamage = 120
+Accuracy = 100
+TotalPP = 10
+Target = NearOther
+FunctionCode = 09F
+Flags = Contact,CanProtect,CanMirrorMove
+Description = Cloaking itself in high energy, the user slams into the target. This move's type depends on the held memory.
+#-------------------------------
 [TECHNOBLAST]
 Name = Techno Blast
 Type = NORMAL
@@ -4786,18 +4798,6 @@ Target = AllNearFoes
 FunctionCode = 000
 Flags = CanProtect,CanMirrorMove,Sound
 Description = The user lets loose a horribly echoing shout with the power to inflict damage.
-#-------------------------------
-[MULTIATTACK]
-Name = Multi-Attack
-Type = NORMAL
-Category = Physical
-BaseDamage = 120
-Accuracy = 100
-TotalPP = 10
-Target = NearOther
-FunctionCode = 09F
-Flags = Contact,CanProtect,CanMirrorMove
-Description = Cloaking itself in high energy, the user slams into the target. This move's type depends on the held memory.
 #-------------------------------
 [REVELATIONDANCE]
 Name = Revelation Dance
@@ -5170,6 +5170,19 @@ FunctionCode = 000
 Flags = Contact,CanProtect,CanMirrorMove
 Description = The target is cut with a scythe or a claw. It can also be used to cut down thin trees.
 #-------------------------------
+[RAPIDSPIN]
+Name = Rapid Spin
+Type = NORMAL
+Category = Physical
+BaseDamage = 50
+Accuracy = 100
+TotalPP = 40
+Target = NearOther
+FunctionCode = 110
+Flags = Contact,CanProtect,CanMirrorMove
+EffectChance = 100
+Description = A spin attack that raises the user's Speed and eliminates the effects of Bind, Spikes, etc.
+#-------------------------------
 [SNORE]
 Name = Snore
 Type = NORMAL
@@ -5205,7 +5218,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = 182
 Flags = CanProtect,CanMirrorMove,Pulse
-Description = The user utilizes the power of the terrain to attack. This move's type and power changes depending on the terrain when it's used.
+Description = Utilizes the power of the terrain to attack. This move's type and power vary with the terrain.
 #-------------------------------
 [WEATHERBALL]
 Name = Weather Ball
@@ -5378,19 +5391,6 @@ Target = NearOther
 FunctionCode = 093
 Flags = Contact,CanProtect,CanMirrorMove
 Description = As long as this move is in use, the user's Attack rises each time the user is hit in battle.
-#-------------------------------
-[RAPIDSPIN]
-Name = Rapid Spin
-Type = NORMAL
-Category = Physical
-BaseDamage = 50
-Accuracy = 100
-TotalPP = 40
-Target = NearOther
-FunctionCode = 110
-Flags = Contact,CanProtect,CanMirrorMove
-EffectChance = 100
-Description = A spin attack that can also eliminate such moves as Bind, Wrap, Leech Seed, and Spikes.
 #-------------------------------
 [SPIKECANNON]
 Name = Spike Cannon
@@ -6046,9 +6046,9 @@ Category = Status
 Accuracy = 0
 TotalPP = 40
 Target = UserAndAllies
-FunctionCode = 01C
+FunctionCode = 19A
 Flags = Sound
-Description = The user howls loudly to raise its spirit, boosting its Attack stat.
+Description = The user howls loudly to raise the spirit of itself and allies, boosting their Attack stats.
 #-------------------------------
 [LASERFOCUS]
 Name = Laser Focus
@@ -6577,7 +6577,7 @@ TotalPP = 20
 Target = NearOther
 FunctionCode = 13A
 Flags = CanMirrorMove
-Description = The user gets teary eyed to make the target lose its combative spirit. This lowers the target's Attack and Sp. Atk stats.
+Description = Gets teary eyed to make the target lose its will to fight. Lowers the target's Attack and Sp. Atk.
 #-------------------------------
 [TEATIME]
 Name = Teatime
@@ -6713,7 +6713,7 @@ Target = NearOther
 FunctionCode = 176
 Flags = CanProtect,CanMirrorMove
 EffectChance = 20
-Description = This move inflicts physical or special damage, whichever will be more effective. This may also poison the target.
+Description = Inflicts physical or special damage, whichever will be more effective. May also poison the target.
 #-------------------------------
 [SLUDGEBOMB]
 Name = Sludge Bomb
@@ -7129,7 +7129,7 @@ TotalPP = 5
 Target = NearOther
 FunctionCode = 195
 Flags = CanProtect,CanMirrorMove,Sound
-Description = The user attacks with its tremendous psychic power. This also removes 3 PP from the target's last move.
+Description = The user attacks with tremendous psychic power. This also removes 3 PP from the target's last move.
 #-------------------------------
 [EXPANDINGFORCE]
 Name = Expanding Force
@@ -7141,7 +7141,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = 181
 Flags = CanProtect,CanMirrorMove
-Description = The user attacks the target with its psychic power. This move's power goes up and damages all opposing Pokémon on Psychic Terrain.
+Description = The user attacks the target with psychic power. Powers up and hits all foes on Psychic Terrain.
 #-------------------------------
 [EXTRASENSORY]
 Name = Extrasensory
@@ -7683,10 +7683,10 @@ Type = PSYCHIC
 Category = Status
 Accuracy = 0
 TotalPP = 20
-Priority = -6
 Target = User
+Priority = -6
 FunctionCode = 0EA
-Description = Use it to flee from any wild Pokémon. It can also warp to the last Pokémon Center visited.
+Description = The user switches place with a party Pokémon. Also warps to the last Pokémon Center visited.
 #-------------------------------
 [TRICK]
 Name = Trick
@@ -7757,7 +7757,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = 18B
 Flags = CanProtect,CanMirrorMove
-Description = In this two-turn attack, the user gathers space power and boosts its Sp. Atk stat, then attacks the target on the next turn.
+Description = Gathers space power and boosts its Sp. Atk stat on the first turn, attacks on the next turn.
 #-------------------------------
 [DIAMONDSTORM]
 Name = Diamond Storm
@@ -7935,7 +7935,7 @@ TotalPP = 15
 Target = NearOther
 FunctionCode = 17E
 Flags = CanProtect,CanMirrorMove
-Description = The user pours sticky tar over the target, lowering the target's Speed stat. The target becomes weaker to Fire-type moves.
+Description = Pours sticky tar over the target, lowering its Speed and making it weaker to Fire-type moves.
 #-------------------------------
 [WIDEGUARD]
 Name = Wide Guard
@@ -7981,7 +7981,7 @@ TotalPP = 5
 Target = NearOther
 FunctionCode = 199
 Flags = Contact,CanProtect,CanMirrorMove
-Description = The user attacks while destroying the terrain. This move fails when the ground hasn't turned into a terrain.
+Description = The user attacks while destroying the terrain. This move fails when the ground isn't a terrain.
 #-------------------------------
 [BEHEMOTHBASH]
 Name = Behemoth Bash
@@ -8416,7 +8416,7 @@ TotalPP = 10
 Target = NearOther
 FunctionCode = 183
 Flags = Contact,CanProtect,CanMirrorMove
-Description = The user rends the target with its hard gills. If the user attacks before the target, the power of this move is doubled.
+Description = The user rends the target with its hard gills. Power doubles if the user moves first.
 #-------------------------------
 [LIQUIDATION]
 Name = Liquidation
@@ -8466,7 +8466,7 @@ TotalPP = 15
 Target = NearOther
 FunctionCode = 187
 Flags = CanProtect,CanMirrorMove,HighCriticalHitRate
-Description = The user ignores the effects of opposing Pokémon's moves and Abilities that draw in moves, allowing this move to hit the chosen target.
+Description = The user ignores any effects that redirect moves, allowing this move to hit the chosen target.
 #-------------------------------
 [WATERPLEDGE]
 Name = Water Pledge
@@ -8641,7 +8641,7 @@ TotalPP = 5
 Target = NearOther
 FunctionCode = 189
 Flags = Contact,CanProtect,CanMirrorMove
-Description = The user, having mastered the Water style, strikes the target with a flowing motion three times in a row. This attack always results in a critical hit.
+Description = Hits three times in a row with mastery of the Water style. This attack always deals critical hits.
 #-------------------------------
 [WATERSHURIKEN]
 Name = Water Shuriken
@@ -8674,7 +8674,7 @@ Accuracy = 0
 TotalPP = 10
 Target = UserAndAllies
 FunctionCode = 18C
-Description = The user scatters mysterious water around and restores the HP of itself and its ally Pokémon in the battle.
+Description = The user scatters mysterious water around and restores the HP of itself and its allies.
 #-------------------------------
 [RAINDANCE]
 Name = Rain Dance

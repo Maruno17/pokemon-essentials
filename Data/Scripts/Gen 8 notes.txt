@@ -10,11 +10,6 @@ species because of this. This value is also shown in the Pokédex entry screen.
 (Will be implemented by me in the next PR)
 
 Some moves have changed properties/effects:
-- Howl's target changed to UserAndAllies, and is now a sound move. It is now
-  blocked by Soundproof (I don't know if it should be checking the allies for
-  pbImmunityByAbility, but leaning towards yes; will Volt Absorb block an
-  Electrified Howl?). Needs a new function code, since it now affects targets
-  rather than the user.
 - Healing Wish's effect and Lunar Dance's effect are no longer used up if a
   Pokémon that switches to the targeted position can't make use of it. Each
   position can only have one of each effect applied at once. (Will be implemented by me in the next PR)
@@ -37,11 +32,10 @@ Other notes:
   reverts its form when deposited in the Day Care (all Gens).
 - If a battle ends because of Rocky Helmet damage, the side that the Rocky
   Helmet holder is on should lose (Gen 7+) or win (Gen 6-).
-- Maybe the N-Solarizer/N-Lunarizer/that other fusion item that changes
-  descriptions should actually be two items each (one that combines, one that
-  splits) and they alternate upon use. No reasonable game would have multiple
-  sets of Pokémon to fuse at once, so allowing just one of each fusion at a time
-  is probably fine.
+- Maybe the DNA Splicers/N-Solarizer/N-Lunarizer/Reins of Unity should actually
+  be two items each (one that combines, one that splits) and they alternate upon
+  use. No reasonable game would have multiple sets of Pokémon to fuse at once,
+  so allowing just one of each fusion at a time is probably fine.
 
 Can use Fly from within the Town Map if possible. (Good QoL, add if possible.)
 (Will be implemented by me in the next PR)
@@ -129,6 +123,11 @@ Move Effect Changes
   PP) if they were forced to be used by Instruct/Dancer.
 - Rapid Spin now raises the user's Speed by 1 stage (100% additional effect
   chance).
+- Howl's target changed to UserAndAllies, and is now a sound move. It is now
+  blocked by Soundproof (I don't know if it should be checking the allies for
+  pbImmunityByAbility, but leaning towards yes; will Volt Absorb block an
+  Electrified Howl?). Needs a new function code, since it now affects targets
+  rather than the user.
 
 Item Effect Changes
 - Escape Rope's code now supports both consumable and non-consumable versions,
@@ -158,7 +157,6 @@ Other changes:
       Noibat and Noivern: Flying to Flying/Dragon
 - Aegislash's stats changed.
 - Koffing/Weezing gained new abilities.
-- Vice Grip becomes Vise Grip.
 - Some items change names (Stick -> Leek, Bicycle -> Bike in Gen 6+, etc.). Only
   Stick changed.
 - Changes to evolutions due to removal of moss rock/ice rock/magnetic field.
