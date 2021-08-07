@@ -324,26 +324,19 @@ BattleHandlers::EORWeatherAbility.add(:ICEFACE,
   }
 )
 
+BattleHandlers::DamageCalcUserAbility.add(:GORILLATACTICS,
+  proc { |ability, user, target, move, mults, baseDmg, type|
+    mults[:attack_multiplier] *= 1.5
+  }
+)
 
 =begin
 
 #===============================================================================
 
-Steam Engine
-When bearer is hit by a Fire- or Water-type move, bearer gets +6 Speed (after
-the effect of that move is applied). Outside of battle, makes eggs hatch twice
-as fast (doesn't stack with other such abilities).
-
-Gorilla Tactics
-Boosts bearer's Attack by 50%, but restricts bearer to one move (cf. Choice
-Band). Power boost stacks with Choice Band.
-
 Mirror Armor
 If a move/ability tries to lower the bearer's stat(s), the effect is reflected
 back at the causer.
-
-Ripen
-Doubles the effects of the bearer's held berries.
 
 Neutralizing Gas
 Suppresses all other abilities. Once this ability stops applying, triggers all

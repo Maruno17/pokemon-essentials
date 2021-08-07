@@ -146,8 +146,16 @@ BattleHandlers::HPHealItem.add(:ORANBERRY,
   proc { |item,battler,battle,forced|
     next false if !battler.canHeal?
     next false if !forced && !battler.canConsumePinchBerry?(false)
+    amt = 10
+    ripening = false
+    if battler.hasActiveAbility?(:RIPEN)
+      battle.pbShowAbilitySplash(battler, forced)
+      amt *= 2
+      ripening = true
+    end
     battle.pbCommonAnimation("EatBerry",battler) if !forced
-    battler.pbRecoverHP(10)
+    battle.pbHideAbilitySplash(battler) if ripening
+    battler.pbRecoverHP(amt)
     itemName = GameData::Item.get(item).name
     if forced
       PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
@@ -175,8 +183,16 @@ BattleHandlers::HPHealItem.add(:SITRUSBERRY,
   proc { |item,battler,battle,forced|
     next false if !battler.canHeal?
     next false if !forced && !battler.canConsumePinchBerry?(false)
+    amt = battler.totalhp / 4
+    ripening = false
+    if battler.hasActiveAbility?(:RIPEN)
+      battle.pbShowAbilitySplash(battler, forced)
+      amt *= 2
+      ripening = true
+    end
     battle.pbCommonAnimation("EatBerry",battler) if !forced
-    battler.pbRecoverHP(battler.totalhp/4)
+    battle.pbHideAbilitySplash(battler) if ripening
+    battler.pbRecoverHP(amt)
     itemName = GameData::Item.get(item).name
     if forced
       PBDebug.log("[Item triggered] Forced consuming of #{itemName}")
@@ -1037,9 +1053,17 @@ BattleHandlers::TargetItemOnHit.add(:JABOCABERRY,
     next if !target.canConsumeBerry?
     next if !move.physicalMove?
     next if !user.takesIndirectDamage?
-    battle.pbCommonAnimation("EatBerry",target)
+    amt = user.totalhp / 8
+    ripening = false
+    if battler.hasActiveAbility?(:RIPEN)
+      battle.pbShowAbilitySplash(battler)
+      amt *= 2
+      ripening = true
+    end
+    battle.pbCommonAnimation("EatBerry", target)
+    battle.pbHideAbilitySplash(battler) if ripening
     battle.scene.pbDamageAnimation(user)
-    user.pbReduceHP(user.totalhp/8,false)
+    user.pbReduceHP(amt, false)
     battle.pbDisplay(_INTL("{1} consumed its {2} and hurt {3}!",target.pbThis,
        target.itemName,user.pbThis(true)))
     target.pbHeldItemTriggered(item)
@@ -1099,9 +1123,17 @@ BattleHandlers::TargetItemOnHit.add(:ROWAPBERRY,
     next if !target.canConsumeBerry?
     next if !move.specialMove?
     next if !user.takesIndirectDamage?
-    battle.pbCommonAnimation("EatBerry",target)
+    amt = user.totalhp / 8
+    ripening = false
+    if battler.hasActiveAbility?(:RIPEN)
+      battle.pbShowAbilitySplash(battler)
+      amt *= 2
+      ripening = true
+    end
+    battle.pbCommonAnimation("EatBerry", target)
+    battle.pbHideAbilitySplash(battler) if ripening
     battle.scene.pbDamageAnimation(user)
-    user.pbReduceHP(user.totalhp/8,false)
+    user.pbReduceHP(amt, false)
     battle.pbDisplay(_INTL("{1} consumed its {2} and hurt {3}!",target.pbThis,
        target.itemName,user.pbThis(true)))
     target.pbHeldItemTriggered(item)
@@ -1167,8 +1199,16 @@ BattleHandlers::TargetItemOnHitPositiveBerry.add(:ENIGMABERRY,
     next false if !forced && !battler.canConsumeBerry?
     itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
+    amt = battler.totalhp / 4
+    ripening = false
+    if battler.hasActiveAbility?(:RIPEN)
+      battle.pbShowAbilitySplash(battler, forced)
+      amt *= 2
+      ripening = true
+    end
     battle.pbCommonAnimation("EatBerry",battler) if !forced
-    battler.pbRecoverHP(battler.totalhp/4)
+    battle.pbHideAbilitySplash(battler) if ripening
+    battler.pbRecoverHP(amt)
     if forced
       battle.pbDisplay(_INTL("{1}'s HP was restored.",battler.pbThis))
     else
@@ -1184,12 +1224,18 @@ BattleHandlers::TargetItemOnHitPositiveBerry.add(:KEEBERRY,
     next false if !forced && !battler.canConsumeBerry?
     next false if !battler.pbCanRaiseStatStage?(:DEFENSE,battler)
     itemName = GameData::Item.get(item).name
-    if !forced
-      battle.pbCommonAnimation("EatBerry",battler)
-      next battler.pbRaiseStatStageByCause(:DEFENSE,1,battler,itemName)
+    amt = 1
+    ripening = false
+    if battler.hasActiveAbility?(:RIPEN)
+      battle.pbShowAbilitySplash(battler, forced)
+      amt *= 2
+      ripening = true
     end
+    battle.pbCommonAnimation("EatBerry", battler) if !forced
+    battle.pbHideAbilitySplash(battler) if ripening
+    next battler.pbRaiseStatStageByCause(:DEFENSE, amt, battler, itemName) if !forced
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}")
-    next battler.pbRaiseStatStage(:DEFENSE,1,battler)
+    next battler.pbRaiseStatStage(:DEFENSE, amt, battler)
   }
 )
 
@@ -1198,12 +1244,18 @@ BattleHandlers::TargetItemOnHitPositiveBerry.add(:MARANGABERRY,
     next false if !forced && !battler.canConsumeBerry?
     next false if !battler.pbCanRaiseStatStage?(:SPECIAL_DEFENSE,battler)
     itemName = GameData::Item.get(item).name
-    if !forced
-      battle.pbCommonAnimation("EatBerry",battler)
-      next battler.pbRaiseStatStageByCause(:SPECIAL_DEFENSE,1,battler,itemName)
+    amt = 1
+    ripening = false
+    if battler.hasActiveAbility?(:RIPEN)
+      battle.pbShowAbilitySplash(battler, forced)
+      amt *= 2
+      ripening = true
     end
+    battle.pbCommonAnimation("EatBerry", battler) if !forced
+    battle.pbHideAbilitySplash(battler) if ripening
+    next battler.pbRaiseStatStageByCause(:SPECIAL_DEFENSE, amt, battler, itemName) if !forced
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}")
-    next battler.pbRaiseStatStage(:SPECIAL_DEFENSE,1,battler)
+    next battler.pbRaiseStatStage(:SPECIAL_DEFENSE, amt, battler)
   }
 )
 
@@ -1292,11 +1344,19 @@ BattleHandlers::EndOfMoveItem.add(:LEPPABERRY,
     next false if found_empty_moves.empty? && (!forced || found_partial_moves.empty?)
     itemName = GameData::Item.get(item).name
     PBDebug.log("[Item triggered] #{battler.pbThis}'s #{itemName}") if forced
+    amt = 10
+    ripening = false
+    if battler.hasActiveAbility?(:RIPEN)
+      battle.pbShowAbilitySplash(battler, forced)
+      amt *= 2
+      ripening = true
+    end
     battle.pbCommonAnimation("EatBerry", battler) if !forced
+    battle.pbHideAbilitySplash(battler) if ripening
     choice = found_empty_moves.first
     choice = found_partial_moves.first if forced && choice.nil?
     pkmnMove = battler.pokemon.moves[choice]
-    pkmnMove.pp += 10
+    pkmnMove.pp += amt
     pkmnMove.pp = pkmnMove.total_pp if pkmnMove.pp > pkmnMove.total_pp
     battler.moves[choice].pp = pkmnMove.pp
     moveName = pkmnMove.name

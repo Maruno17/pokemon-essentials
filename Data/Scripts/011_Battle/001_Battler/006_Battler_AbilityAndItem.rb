@@ -145,7 +145,7 @@ class PokeBattle_Battler
   # permanent is whether the item is lost even after battle. Is false for Knock
   # Off.
   def pbRemoveItem(permanent = true)
-    @effects[PBEffects::ChoiceBand] = nil
+    @effects[PBEffects::ChoiceBand] = nil if ability_id != :GORILLATACTICS
     @effects[PBEffects::Unburden]   = true if self.item
     setInitialItem(nil) if permanent && self.item == self.initialItem
     self.item = nil

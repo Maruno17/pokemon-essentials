@@ -108,7 +108,8 @@ class PokeBattle_Battler
   def pbEndTurn(_choice)
     @lastRoundMoved = @battle.turnCount   # Done something this round
     if !@effects[PBEffects::ChoiceBand] &&
-       hasActiveItem?([:CHOICEBAND,:CHOICESPECS,:CHOICESCARF])
+       (hasActiveItem?([:CHOICEBAND,:CHOICESPECS,:CHOICESCARF]) ||
+       hasActiveAbility?(:GORILLATACTICS))
       if @lastMoveUsed && pbHasMove?(@lastMoveUsed)
         @effects[PBEffects::ChoiceBand] = @lastMoveUsed
       elsif @lastRegularMoveUsed && pbHasMove?(@lastRegularMoveUsed)
@@ -726,6 +727,17 @@ class PokeBattle_Battler
       @battle.pbDisplay(_INTL("The {1} weakened the damage to {2}!",b.itemName,b.pbThis(true)))
       b.pbConsumeItem
     end
+    # Steam Engine (goes here because it should be after stat changes caused by
+    # the move)
+    if [:FIRE, :WATER].include?(move.calcType)
+      targets.each do |b|
+        next if b.damageState.unaffected
+        next if b.damageState.calcDamage == 0 || b.damageState.substitute
+        next if !b.hasActiveAbility?(:STEAMENGINE)
+        b.pbRaiseStatStageByAbility(:SPEED, 6, b) if b.pbCanRaiseStatStage?(:SPEED, b)
+      end
+    end
+    # Fainting
     targets.each { |b| b.pbFaint if b && b.fainted? }
     user.pbFaint if user.fainted?
     return true

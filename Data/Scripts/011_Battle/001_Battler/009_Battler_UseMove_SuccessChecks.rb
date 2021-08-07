@@ -40,20 +40,22 @@ class PokeBattle_Battler
       end
       return false
     end
-    # Choice Band
-    if @effects[PBEffects::ChoiceBand]
-      if hasActiveItem?([:CHOICEBAND,:CHOICESPECS,:CHOICESCARF]) &&
-         pbHasMove?(@effects[PBEffects::ChoiceBand])
-        if move.id!=@effects[PBEffects::ChoiceBand]
-          if showMessages
-            msg = _INTL("{1} allows the use of only {2}!",itemName,
-               GameData::Move.get(@effects[PBEffects::ChoiceBand]).name)
-            (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
-          end
-          return false
+    # Choice Band/Gorilla Tactics
+    @effects[PBEffects::ChoiceBand] = nil if !pbHasMove?(@effects[PBEffects::ChoiceBand])
+    if @effects[PBEffects::ChoiceBand] && move.id != @effects[PBEffects::ChoiceBand]
+      choiced_move_name = GameData::Move.get(@effects[PBEffects::ChoiceBand]).name
+      if hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF])
+        if showMessages
+          msg = _INTL("The {1} only allows the use of {2}!",itemName, choiced_move_name)
+          (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
         end
-      else
-        @effects[PBEffects::ChoiceBand] = nil
+        return false
+      elsif hasActiveAbility?(:GORILLATACTICS)
+        if showMessages
+          msg = _INTL("{1} can only use {2}!", pbThis, choiced_move_name)
+          (commandPhase) ? @battle.pbDisplayPaused(msg) : @battle.pbDisplay(msg)
+        end
+        return false
       end
     end
     # Taunt
