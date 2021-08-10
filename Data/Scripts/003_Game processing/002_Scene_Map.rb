@@ -164,6 +164,10 @@ class Scene_Map
     end
     updateSpritesets
     if $game_temp.to_title
+      $game_temp.to_title = false
+      if SaveData.exists?
+        SaveData.mark_values_as_unloaded(SaveData.read_from_file(SaveData::FILE_PATH))
+      end
       $scene = pbCallTitle
       return
     end
