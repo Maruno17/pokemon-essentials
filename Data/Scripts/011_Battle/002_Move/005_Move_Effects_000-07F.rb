@@ -47,7 +47,7 @@ class PokeBattle_Move_003 < PokeBattle_SleepMove
     return if @id != :RELICSONG
     return if !user.isSpecies?(:MELOETTA)
     return if user.hasActiveAbility?(:SHEERFORCE) && @addlEffect>0
-    newForm = (user.Form+1)%2
+    newForm = (user.form+1)%2
     user.pbChangeForm(newForm,_INTL("{1} transformed!",user.pbThis))
   end
 end
@@ -1752,7 +1752,7 @@ class PokeBattle_Move_05D < PokeBattle_Move
     if !lastMoveData ||
        user.pbHasMove?(target.lastRegularMoveUsed) ||
        @moveBlacklist.include?(lastMoveData.function_code) ||
-       lastMoveData.type = :SHADOW
+       lastMoveData.type == :SHADOW
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1803,7 +1803,7 @@ class PokeBattle_Move_05E < PokeBattle_Move
   def pbEffectGeneral(user)
     newType = @newTypes[@battle.pbRandom(@newTypes.length)]
     user.pbChangeTypes(newType)
-    typeName = GameData::Item.get(newType).name
+    typeName = GameData::Type.get(newType).name
     @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))
   end
 end

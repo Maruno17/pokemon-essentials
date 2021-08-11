@@ -1162,7 +1162,7 @@ PokemonDebugMenuCommands.register("delete", {
         screen.pbHardRefresh
       elsif screen.is_a?(PokemonStorageScreen)
         screen.scene.pbRelease(pkmnid, heldpoke)
-        (heldpoke) ? screen.heldpkmn = nil : screen.storage.pbDelete(pkmnid[0],pkmnid[1])
+        (heldpoke) ? screen.heldpkmn = nil : screen.storage.pbDelete(pkmnid[0], pkmnid[1])
         screen.scene.pbRefresh
       end
       next true

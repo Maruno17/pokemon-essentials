@@ -543,6 +543,7 @@ DebugMenuCommands.register("demoparty", {
     for id in species
       party.push(id) if GameData::Species.exists?(id)
     end
+    $Trainer.party.clear
     # Generate Pokémon of each species at level 20
     party.each do |species|
       pkmn = Pokemon.new(species, 20)
@@ -839,12 +840,12 @@ DebugMenuCommands.register("renameplayer", {
   "description" => _INTL("Rename the player."),
   "effect"      => proc {
     trname = pbEnterPlayerName("Your name?", 0, Settings::MAX_PLAYER_NAME_SIZE, $Trainer.name)
-    if trname == "" && pbConfirmMessage(_INTL("Give yourself a default name?"))
+    if nil_or_empty?(trname) && pbConfirmMessage(_INTL("Give yourself a default name?"))
       trainertype = $Trainer.trainer_type
       gender      = pbGetTrainerTypeGender(trainertype)
       trname      = pbSuggestTrainerName(gender)
     end
-    if trname == ""
+    if nil_or_empty?(trname)
       pbMessage(_INTL("The player's name remained {1}.", $Trainer.name))
     else
       $Trainer.name = trname
@@ -864,11 +865,11 @@ DebugMenuCommands.register("randomid", {
 })
 
 #===============================================================================
-# Information options
+# Information editors
 #===============================================================================
 DebugMenuCommands.register("editorsmenu", {
   "parent"      => "main",
-  "name"        => _INTL("Information options..."),
+  "name"        => _INTL("Information editors..."),
   "description" => _INTL("Edit information in the PBS files, terrain tags, battle animations, etc."),
   "always_show" => true
 })
@@ -1140,6 +1141,16 @@ DebugMenuCommands.register("createpbs", {
       end
       pbMessage(_INTL("File written."))
     end
+  }
+})
+
+DebugMenuCommands.register("renamesprites", {
+  "parent"      => "othermenu",
+  "name"        => _INTL("Rename Old Sprites"),
+  "description" => _INTL("Renames and moves Pokémon/item/trainer sprites from their old places."),
+  "always_show" => true,
+  "effect"      => proc {
+    SpriteRenamer.convert_files
   }
 })
 

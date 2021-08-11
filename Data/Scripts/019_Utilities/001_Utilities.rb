@@ -89,19 +89,19 @@ end
 
 # Unused
 def hasConst?(mod,constant)
-  return false if !mod || !constant || constant==""
+  return false if !mod || constant.nil?
   return mod.const_defined?(constant.to_sym) rescue false
 end
 
 # Unused
 def getConst(mod,constant)
-  return nil if !mod || !constant || constant==""
+  return nil if !mod || constant.nil?
   return mod.const_get(constant.to_sym) rescue nil
 end
 
 # Unused
 def getID(mod,constant)
-  return nil if !mod || !constant || constant==""
+  return nil if !mod || constant.nil?
   if constant.is_a?(Symbol) || constant.is_a?(String)
     if (mod.const_defined?(constant.to_sym) rescue false)
       return mod.const_get(constant.to_sym) rescue 0
@@ -456,7 +456,7 @@ def pbMoveTutorChoose(move,movelist=nil,bymachine=false,oneusemachine=false)
         pbMessage(_INTL("{1} can't learn {2}.",pokemon.name,movename)) { screen.pbUpdate }
       else
         if pbLearnMove(pokemon,move,false,bymachine) { screen.pbUpdate }
-          pkmn.add_first_move(move) if oneusemachine
+          pokemon.add_first_move(move) if oneusemachine
           ret = true
           break
         end
@@ -479,7 +479,7 @@ end
 
 def pbConvertItemToPokemon(variable, array)
   item = GameData::Item.get(pbGet(variable))
-  pbSet(variable, 0)
+  pbSet(variable, nil)
   for i in 0...(array.length / 2)
     next if item != array[2 * i]
     pbSet(variable, GameData::Species.get(array[2 * i + 1]).id)
@@ -591,9 +591,7 @@ end
 def pbScreenCapture
   t = pbGetTimeNow
   filestart = t.strftime("[%Y-%m-%d] %H_%M_%S.%L")
-#  capturefile = RTP.getSaveFileName(sprintf("%s.png", filestart))
-#  Graphics.snap_to_bitmap.save_to_png(capturefile)
-  capturefile = RTP.getSaveFileName(sprintf("%s.bmp", filestart))
+  capturefile = RTP.getSaveFileName(sprintf("%s.png", filestart))
   Graphics.screenshot(capturefile)
   pbSEPlay("Pkmn exp full") if FileTest.audio_exist?("Audio/SE/Pkmn exp full")
 end

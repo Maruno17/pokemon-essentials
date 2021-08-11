@@ -484,7 +484,7 @@ class PokeBattle_Battler
   def pbConfuse(msg=nil)
     @effects[PBEffects::Confusion] = pbConfusionDuration
     @battle.pbCommonAnimation("Confusion",self)
-    msg = _INTL("{1} became confused!",pbThis) if !msg || msg==""
+    msg = _INTL("{1} became confused!",pbThis) if nil_or_empty?(msg)
     @battle.pbDisplay(msg)
     PBDebug.log("[Lingering effect] #{pbThis}'s confusion count is #{@effects[PBEffects::Confusion]}")
     # Confusion cures
@@ -551,7 +551,7 @@ class PokeBattle_Battler
   def pbAttract(user,msg=nil)
     @effects[PBEffects::Attract] = user.index
     @battle.pbCommonAnimation("Attract",self)
-    msg = _INTL("{1} fell in love!",pbThis) if !msg || msg==""
+    msg = _INTL("{1} fell in love!",pbThis) if nil_or_empty?(msg)
     @battle.pbDisplay(msg)
     # Destiny Knot
     if hasActiveItem?(:DESTINYKNOT) && user.pbCanAttract?(self,false)

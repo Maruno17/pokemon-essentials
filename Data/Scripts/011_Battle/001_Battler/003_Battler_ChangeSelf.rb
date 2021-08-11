@@ -37,7 +37,7 @@ class PokeBattle_Battler
       @battle.pbHideAbilitySplash(target)
       pbItemHPHealCheck
     else
-      msg = _INTL("{1} had its energy drained!",target.pbThis) if !msg || msg==""
+      msg = _INTL("{1} had its energy drained!",target.pbThis) if nil_or_empty?(msg)
       @battle.pbDisplay(msg)
       if canHeal?
         amt = (amt*1.3).floor if hasActiveItem?(:BIGROOT)
@@ -118,7 +118,7 @@ class PokeBattle_Battler
       @type2 = (newTypes.length == 1) ? newTypes[0] : newTypes[1]
       @effects[PBEffects::Type3] = newType3
     else
-      newType = GameData::Item.get(newType).id
+      newType = GameData::Type.get(newType).id
       @type1 = newType
       @type2 = newType
       @effects[PBEffects::Type3] = nil

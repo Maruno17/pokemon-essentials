@@ -136,7 +136,7 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
     if tr_type
       tbargraphic = sprintf("vsBar_%s", tr_type.to_s) rescue nil
       tgraphic    = sprintf("vsTrainer_%s", tr_type.to_s) rescue nil
-      if pbResolveBitmap(tbargraphic) && pbResolveBitmap(tgraphic)
+      if pbResolveBitmap("Graphics/Transitions/" + tbargraphic) && pbResolveBitmap("Graphics/Transitions/" + tgraphic)
         player_tr_type = $Trainer.trainer_type
         outfit = $Trainer.outfit
         # Set up
@@ -154,7 +154,7 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
         overlay.bitmap = Bitmap.new(Graphics.width,Graphics.height)
         pbSetSystemFont(overlay.bitmap)
         pbargraphic = sprintf("vsBar_%s_%d", player_tr_type.to_s, outfit) rescue nil
-        if !pbResolveBitmap(pbargraphic)
+        if !pbResolveBitmap("Graphics/Transitions/" + pbargraphic)
           pbargraphic = sprintf("vsBar_%s", player_tr_type.to_s) rescue nil
         end
         xoffset = ((Graphics.width/2)/10)*10
@@ -193,7 +193,7 @@ def pbBattleAnimationOverride(viewport,battletype=0,foe=nil)
         bar2 = AnimatedPlane.new(viewopp)
         bar2.bitmap = RPG::Cache.transition(tbargraphic)
         pgraphic = sprintf("vsTrainer_%s_%d", player_tr_type.to_s, outfit) rescue nil
-        if !pbResolveBitmap(pgraphic)
+        if !pbResolveBitmap("Graphics/Transitions/" + pgraphic)
           pgraphic = sprintf("vsTrainer_%s", player_tr_type.to_s) rescue nil
         end
         player = Sprite.new(viewplayer)

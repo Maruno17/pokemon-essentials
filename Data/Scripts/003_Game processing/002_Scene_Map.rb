@@ -67,6 +67,7 @@ class Scene_Map
     pbCancelVehicles($game_temp.player_new_map_id) if cancelVehicles
     autofade($game_temp.player_new_map_id)
     pbBridgeOff
+    @spritesetGlobal.playersprite.clearShadows
     if $game_map.map_id!=$game_temp.player_new_map_id
       $MapFactory.setup($game_temp.player_new_map_id)
     end

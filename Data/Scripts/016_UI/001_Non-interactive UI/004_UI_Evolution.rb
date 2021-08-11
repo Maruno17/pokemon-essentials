@@ -532,7 +532,7 @@ class PokemonEvolutionScene
     metaplayer1.play
     metaplayer2.play
     pbBGMStop
-    GameData::Species.play_cry_from_pokemon(@pokemon)
+    @pokemon.play_cry
     pbMessageDisplay(@sprites["msgwindow"],
        _INTL("\\se[]What? {1} is evolving!\\^",@pokemon.name)) { pbUpdate }
     pbMessageWaitForInput(@sprites["msgwindow"],50,true) { pbUpdate }
@@ -569,7 +569,7 @@ class PokemonEvolutionScene
     # Play cry of evolved species
     frames = GameData::Species.cry_length(@newspecies, @pokemon.form)
     pbBGMStop
-    GameData::Species.play_cry_from_species(@newspecies, @pokemon.form)
+    Pokemon.play_cry(@newspecies, @pokemon.form)
     frames.times do
       Graphics.update
       pbUpdate

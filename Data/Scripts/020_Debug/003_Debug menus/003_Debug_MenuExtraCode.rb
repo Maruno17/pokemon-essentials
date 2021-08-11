@@ -82,21 +82,21 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
       name = $data_system.switches[index+1]
       codeswitch = (name[/^s\:/])
       val = (codeswitch) ? (eval($~.post_match) rescue nil) : $game_switches[index+1]
-      if val==nil
+      if val.nil?
         status = "[-]"
         colors = 0
         codeswitch = true
-      elsif val
+      elsif val   # true
         status = "[ON]"
         colors = 2
-      else
+      else   # false
         status = "[OFF]"
         colors = 1
       end
     else
       name = $data_system.variables[index+1]
       status = $game_variables[index+1].to_s
-      status = "\"__\"" if !status || status==""
+      status = "\"__\"" if nil_or_empty?(status)
     end
     name = '' if name==nil
     id_text = sprintf("%04d:",index+1)
@@ -683,8 +683,8 @@ end
 def pbDebugFixInvalidTiles
   num_errors = 0
   num_error_maps = 0
-  @tilesets = $data_tilesets
-  mapData = MapData.new
+  tilesets = $data_tilesets
+  mapData = Compiler::MapData.new
   t = Time.now.to_i
   Graphics.update
   for id in mapData.mapinfos.keys.sort
@@ -702,7 +702,7 @@ def pbDebugFixInvalidTiles
       for y in 0...map.data.ysize
         for i in 0...map.data.zsize
           tile_id = map.data[x, y, i]
-          next if pbCheckTileValidity(tile_id, map, @tilesets, passages)
+          next if pbCheckTileValidity(tile_id, map, tilesets, passages)
           map.data[x, y, i] = 0
           changed = true
           num_errors += 1
@@ -714,7 +714,7 @@ def pbDebugFixInvalidTiles
       event = map.events[key]
       for page in event.pages
         next if page.graphic.tile_id <= 0
-        next if pbCheckTileValidity(page.graphic.tile_id, map, @tilesets, passages)
+        next if pbCheckTileValidity(page.graphic.tile_id, map, tilesets, passages)
         page.graphic.tile_id = 0
         changed = true
         num_errors += 1

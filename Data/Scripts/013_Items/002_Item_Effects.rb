@@ -946,7 +946,7 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
     next false
   end
   # Fusing
-  if pkmn.fused==nil
+  if pkmn.fused.nil?
     chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
     next false if chosen<0
     poke2 = $Trainer.party[chosen]
@@ -999,7 +999,7 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
     next false
   end
   # Fusing
-  if pkmn.fused==nil
+  if pkmn.fused.nil?
     chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
     next false if chosen<0
     poke2 = $Trainer.party[chosen]
@@ -1048,7 +1048,7 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
     next false
   end
   # Fusing
-  if pkmn.fused==nil
+  if pkmn.fused.nil?
     chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
     next false if chosen<0
     poke2 = $Trainer.party[chosen]

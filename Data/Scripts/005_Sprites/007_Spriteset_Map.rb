@@ -114,18 +114,9 @@ class Spriteset_Map
     tmoy = (@map.display_y/Game_Map::Y_SUBPIXELS).round
     @tilemap.ox = tmox
     @tilemap.oy = tmoy
-    if $PokemonSystem.tilemap==0   # Original Map View only, to prevent wrapping
-      @@viewport1.rect.x      = [-tmox,0].max
-      @@viewport1.rect.y      = [-tmoy,0].max
-      @@viewport1.rect.width  = [@tilemap.map_data.xsize*Game_Map::TILE_WIDTH-tmox,Graphics.width].min
-      @@viewport1.rect.height = [@tilemap.map_data.ysize*Game_Map::TILE_HEIGHT-tmoy,Graphics.height].min
-      @@viewport1.ox = [-tmox,0].max
-      @@viewport1.oy = [-tmoy,0].max
-    else
-      @@viewport1.rect.set(0,0,Graphics.width,Graphics.height)
-      @@viewport1.ox = 0
-      @@viewport1.oy = 0
-    end
+    @@viewport1.rect.set(0,0,Graphics.width,Graphics.height)
+    @@viewport1.ox = 0
+    @@viewport1.oy = 0
     @@viewport1.ox += $game_screen.shake
     @tilemap.update
     @panorama.ox = tmox/2

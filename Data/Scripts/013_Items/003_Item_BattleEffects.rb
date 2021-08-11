@@ -302,8 +302,7 @@ ItemHandlers::UseInBattle.add(:POKEFLUTE,proc { |item,battler,battle|
     next if b.status != :SLEEP || b.hasActiveAbility?(:SOUNDPROOF)
     b.pbCureStatus(false)
   end
-  scene.pbRefresh
-  scene.pbDisplay(_INTL("All Pokémon were roused by the tune!"))
+  battle.pbDisplay(_INTL("All Pokémon were roused by the tune!"))
 })
 
 ItemHandlers::UseInBattle.addIf(proc { |item| GameData::Item.get(item).is_poke_ball? },   # Poké Balls

@@ -181,7 +181,7 @@ module RTP
   @rtpPaths = nil
 
   def self.exists?(filename,extensions=[])
-    return false if !filename || filename==""
+    return false if nil_or_empty?(filename)
     eachPathFor(filename) { |path|
       return true if safeExists?(path)
       for ext in extensions
@@ -200,7 +200,7 @@ module RTP
   end
 
   def self.getPath(filename,extensions=[])
-    return filename if !filename || filename==""
+    return filename if nil_or_empty?(filename)
     eachPathFor(filename) { |path|
       return path if safeExists?(path)
       for ext in extensions
@@ -280,10 +280,10 @@ end
 # Note: pbGetFileChar checks anything added in MKXP's RTP setting,
 # and matching mount points added through System.mount
 def pbRgssExists?(filename)
-  filename = canonicalize(filename)
   if safeExists?("./Game.rgssad")
     return pbGetFileChar(filename)!=nil
   else
+    filename = canonicalize(filename)
     return safeExists?(filename)
   end
 end

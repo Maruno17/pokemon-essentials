@@ -4,7 +4,6 @@
 #===============================================================================
 # This url is the location of an example Mystery Gift file.
 # You should change it to your file's url once you upload it.
-# NOTE: Essentials cannot handle https addresses. You must use a http address.
 #===============================================================================
 module MysteryGift
   URL = "https://pastebin.com/raw/w6BqqUsm"
@@ -139,7 +138,7 @@ def pbManageMysteryGifts
   pbMessageDisplay(msgwindow,_INTL("Searching for online gifts...\\wtnp[0]"))
   online = pbDownloadToString(MysteryGift::URL)
   pbDisposeMessageWindow(msgwindow)
-  if online==""
+  if nil_or_empty?(online)
     pbMessage(_INTL("No online Mystery Gifts found.\\wtnp[20]"))
     online=[]
   else
@@ -196,6 +195,10 @@ def pbManageMysteryGifts
           newgift=pbEditMysteryGift(gift[1],gift[2],gift[0],gift[3])
           master[command]=newgift if newgift
         elsif cmd==2   # Receive
+          if !$Trainer
+            pbMessage(_INTL("There is no save file loaded. Cannot receive any gifts."))
+            next
+          end
           replaced=false
           for i in 0...$Trainer.mystery_gifts.length
             if $Trainer.mystery_gifts[i][0]==gift[0]
@@ -246,7 +249,7 @@ def pbDownloadMysteryGift(trainer)
   sprites["msgwindow"]=pbCreateMessageWindow
   pbMessageDisplay(sprites["msgwindow"],_INTL("Searching for a gift.\nPlease wait...\\wtnp[0]"))
   string = pbDownloadToString(MysteryGift::URL)
-  if string==""
+  if nil_or_empty?(string)
     pbMessageDisplay(sprites["msgwindow"],_INTL("No new gifts are available."))
   else
     online=pbMysteryGiftDecrypt(string)
@@ -335,7 +338,7 @@ def pbMysteryGiftEncrypt(gift)
 end
 
 def pbMysteryGiftDecrypt(gift)
-  return [] if gift==""
+  return [] if nil_or_empty?(gift)
   ret = Marshal.restore(Zlib::Inflate.inflate(gift.unpack("m")[0]))
   if ret
     ret.each do |gift|

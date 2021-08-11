@@ -8,6 +8,13 @@ class Trainer
   attr_accessor :language
   attr_accessor :party
 
+  def inspect
+    str = super.chop
+    party_str = @party.map { |p| p.species_data.species }.inspect
+    str << format(' %s @party=%s>', self.full_name, party_str)
+    return str
+  end
+
   def full_name
     return _INTL("{1} {2}", trainer_type_name, @name)
   end
@@ -145,7 +152,7 @@ class Trainer
   def has_pokemon_of_type?(type)
     return false if !GameData::Type.exists?(type)
     type = GameData::Type.get(type).id
-    return pokemon_party.any? { |p| p && p.hasType(type) }
+    return pokemon_party.any? { |p| p && p.hasType?(type) }
   end
 
   # Checks whether any Pokémon in the party knows the given move, and returns
@@ -163,7 +170,7 @@ class Trainer
   #=============================================================================
 
   def initialize(name, trainer_type)
-    @trainer_type = trainer_type
+    @trainer_type = GameData::TrainerType.get(trainer_type).id
     @name         = name
     @id           = rand(2 ** 16) | rand(2 ** 16) << 16
     @language     = pbGetLanguage

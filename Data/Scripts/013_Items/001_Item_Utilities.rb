@@ -411,7 +411,8 @@ def pbLearnMove(pkmn,move,ignoreifknown=false,bymachine=false,&block)
     return true
   end
   loop do
-    pbMessage(_INTL("{1} wants to learn {2}, but it already knows four moves.\1",pkmnname,movename),&block) if !bymachine
+    pbMessage(_INTL("{1} wants to learn {2}, but it already knows {3} moves.\1",
+      pkmnname, movename, pkmn.numMoves.to_word), &block) if !bymachine
     pbMessage(_INTL("Please choose a move that will be replaced with {1}.",movename),&block)
     forgetmove = pbForgetMove(pkmn,move)
     if forgetmove>=0
@@ -421,7 +422,7 @@ def pbLearnMove(pkmn,move,ignoreifknown=false,bymachine=false,&block)
       if bymachine && Settings::TAUGHT_MACHINES_KEEP_OLD_PP
         pkmn.moves[forgetmove].pp = [oldmovepp,pkmn.moves[forgetmove].total_pp].min
       end
-      pbMessage(_INTL("1,\\wt[16] 2, and\\wt[16]...\\wt[16] ...\\wt[16] ... Ta-da!\\se[Battle ball drop]\1"),&block)
+      pbMessage(_INTL("1, 2, and...\\wt[16] ...\\wt[16] ... Ta-da!\\se[Battle ball drop]\1"),&block)
       pbMessage(_INTL("{1} forgot how to use {2}.\\nAnd...\1",pkmnname,oldmovename),&block)
       pbMessage(_INTL("\\se[]{1} learned {2}!\\se[Pkmn move learnt]",pkmnname,movename),&block)
       pkmn.changeHappiness("machine") if bymachine
@@ -686,7 +687,7 @@ def pbChooseItem(var = 0, *args)
     screen = PokemonBagScreen.new(scene,$PokemonBag)
     ret = screen.pbChooseItemScreen
   }
-  $game_variables[var] = ret if var > 0
+  $game_variables[var] = ret || :NONE if var > 0
   return ret
 end
 
@@ -697,7 +698,7 @@ def pbChooseApricorn(var = 0)
     screen = PokemonBagScreen.new(scene,$PokemonBag)
     ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_apricorn? })
   }
-  $game_variables[var] = ret if var > 0
+  $game_variables[var] = ret || :NONE if var > 0
   return ret
 end
 
@@ -708,7 +709,7 @@ def pbChooseFossil(var = 0)
     screen = PokemonBagScreen.new(scene,$PokemonBag)
     ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_fossil? })
   }
-  $game_variables[var] = ret if var > 0
+  $game_variables[var] = ret || :NONE if var > 0
   return ret
 end
 

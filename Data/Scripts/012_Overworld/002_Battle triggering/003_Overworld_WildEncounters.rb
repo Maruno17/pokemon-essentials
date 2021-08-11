@@ -109,6 +109,9 @@ class PokemonEncounters
     # Check if enc_type has a defined step chance/encounter table
     return false if !@step_chances[enc_type] || @step_chances[enc_type] == 0
     return false if !has_encounter_type?(enc_type)
+    # Poké Radar encounters always happen, ignoring the minimum step period and
+    # trigger probabilities
+    return true if pbPokeRadarOnShakingGrass
     # Get base encounter chance and minimum steps grace period
     encounter_chance = @step_chances[enc_type].to_f
     min_steps_needed = (8 - encounter_chance / 10).clamp(0, 8).to_f
@@ -176,8 +179,9 @@ class PokemonEncounters
   # taking into account Repels and ability effects.
   def allow_encounter?(enc_data, repel_active = false)
     return false if !enc_data
+    return true if pbPokeRadarOnShakingGrass
     # Repel
-    if repel_active && !pbPokeRadarOnShakingGrass
+    if repel_active
       first_pkmn = (Settings::REPEL_COUNTS_FAINTED_POKEMON) ? $Trainer.first_pokemon : $Trainer.first_able_pokemon
       if first_pkmn && enc_data[1] < first_pkmn.level
         @chance_accumulator = 0
@@ -279,7 +283,7 @@ class PokemonEncounters
       if favored_type
         new_enc_list = []
         enc_list.each do |enc|
-          species_data = GameData::Species.get(enc[0])
+          species_data = GameData::Species.get(enc[1])
           t1 = species_data.type1
           t2 = species_data.type2
           new_enc_list.push(enc) if t1 == favored_type || t2 == favored_type

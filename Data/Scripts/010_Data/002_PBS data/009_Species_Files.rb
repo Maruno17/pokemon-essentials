@@ -125,7 +125,7 @@ module GameData
     end
 
     def self.icon_bitmap(species, form = 0, gender = 0, shiny = false, shadow = false)
-      filename = self.icon_filename(species, form, gender,shiny, shadow)
+      filename = self.icon_filename(species, form, gender, shiny, shadow)
       return (filename) ? AnimatedBitmap.new(filename).deanimate : nil
     end
 
@@ -302,14 +302,14 @@ end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbPlayCrySpecies(species, form = 0, volume = 90, pitch = nil)
-  Deprecation.warn_method('pbPlayCrySpecies', 'v20', 'GameData::Species.play_cry_from_species(species, form)')
-  GameData::Species.play_cry_from_species(species, form, volume, pitch)
+  Deprecation.warn_method('pbPlayCrySpecies', 'v20', 'Pokemon.play_cry(species, form)')
+  Pokemon.play_cry(species, form, volume, pitch)
 end
 
 # @deprecated This alias is slated to be removed in v20.
 def pbPlayCryPokemon(pkmn, volume = 90, pitch = nil)
-  Deprecation.warn_method('pbPlayCryPokemon', 'v20', 'GameData::Species.play_cry_from_pokemon(pkmn)')
-  GameData::Species.play_cry_from_pokemon(pkmn, volume, pitch)
+  Deprecation.warn_method('pbPlayCryPokemon', 'v20', 'pkmn.play_cry')
+  pkmn.play_cry(volume, pitch)
 end
 
 # @deprecated This alias is slated to be removed in v20.

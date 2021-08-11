@@ -1123,7 +1123,7 @@ BattleHandlers::TargetItemOnHit.add(:STICKYBARB,
     target.item = nil
     target.effects[PBEffects::Unburden] = true
     if battle.wildBattle? && !user.opposes?
-      if !user.initialItem && target.initialItem==user.item
+      if !user.initialItem && user.item == target.initialItem
         user.setInitialItem(user.item)
         target.setInitialItem(nil)
       end

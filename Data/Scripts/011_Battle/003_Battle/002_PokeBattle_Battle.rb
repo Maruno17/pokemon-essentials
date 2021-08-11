@@ -401,7 +401,7 @@ class PokeBattle_Battle
     party.each_with_index do |pkmn,i|
       next if i<idxPartyStart || i>=idxPartyEnd   # Check the team only
       next if !pkmn || !pkmn.able?   # Can't copy a non-fainted Pokémon or egg
-      ret = i if partyOrders[i]>partyOrders[ret]
+      ret = i if ret < 0 || partyOrders[i] > partyOrders[ret]
     end
     return ret
   end

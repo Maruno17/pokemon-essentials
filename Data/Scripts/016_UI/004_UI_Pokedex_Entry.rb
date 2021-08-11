@@ -70,9 +70,11 @@ class PokemonPokedexInfo_Scene
   def pbStartSceneBrief(species)  # For standalone access, shows first page only
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
-    dexnum = species
+    dexnum = 0
     dexnumshift = false
     if $Trainer.pokedex.unlocked?(-1)   # National Dex is unlocked
+      species_data = GameData::Species.try_get(species)
+      dexnum = species_data.id_number if species_data
       dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
     else
       dexnum = 0
@@ -440,7 +442,7 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbScene
-    GameData::Species.play_cry_from_species(@species, @form)
+    Pokemon.play_cry(@species, @form)
     loop do
       Graphics.update
       Input.update
@@ -448,7 +450,7 @@ class PokemonPokedexInfo_Scene
       dorefresh = false
       if Input.trigger?(Input::ACTION)
         pbSEStop
-        GameData::Species.play_cry_from_species(@species, @form) if @page == 1
+        Pokemon.play_cry(@species, @form) if @page == 1
       elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break
@@ -469,7 +471,7 @@ class PokemonPokedexInfo_Scene
           pbUpdateDummyPokemon
           @available = pbGetAvailableForms
           pbSEStop
-          (@page==1) ? GameData::Species.play_cry_from_species(@species, @form) : pbPlayCursorSE
+          (@page==1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
           dorefresh = true
         end
       elsif Input.trigger?(Input::DOWN)
@@ -479,7 +481,7 @@ class PokemonPokedexInfo_Scene
           pbUpdateDummyPokemon
           @available = pbGetAvailableForms
           pbSEStop
-          (@page==1) ? GameData::Species.play_cry_from_species(@species, @form) : pbPlayCursorSE
+          (@page==1) ? Pokemon.play_cry(@species, @form) : pbPlayCursorSE
           dorefresh = true
         end
       elsif Input.trigger?(Input::LEFT)
@@ -509,14 +511,14 @@ class PokemonPokedexInfo_Scene
   end
 
   def pbSceneBrief
-    GameData::Species.play_cry_from_species(@species, @form)
+    Pokemon.play_cry(@species, @form)
     loop do
       Graphics.update
       Input.update
       pbUpdate
       if Input.trigger?(Input::ACTION)
         pbSEStop
-        GameData::Species.play_cry_from_species(@species, @form)
+        Pokemon.play_cry(@species, @form)
       elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break

@@ -88,10 +88,10 @@ class PokeBattle_Battler
   # Pursuit was used specially to intercept a switching foe.
   # Cancels the use of multi-turn moves and counters thereof. Note that Hyper
   # Beam's effect is NOT cancelled.
-  def pbCancelMoves
+  def pbCancelMoves(full_cancel = false)
     # Outragers get confused anyway if they are disrupted during their final
     # turn of using the move
-    if @effects[PBEffects::Outrage]==1 && pbCanConfuseSelf?(false)
+    if @effects[PBEffects::Outrage]==1 && pbCanConfuseSelf?(false) && !full_cancel
       pbConfuse(_INTL("{1} became confused due to fatigue!",pbThis))
     end
     # Cancel usage of most multi-turn moves

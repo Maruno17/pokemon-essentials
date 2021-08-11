@@ -225,19 +225,22 @@ class PokeBattle_Battle
     pkmnName = pkmn.name
     battler = pbFindBattler(idxParty)
     moveName = GameData::Move.get(newMove).name
-    # Find a space for the new move in pkmn's moveset and learn it
-    for i in 0...Pokemon::MAX_MOVES
-      m = pkmn.moves[i]
-      return if m && m.id==newMove   # Already knows the new move
-      pkmn.moves[i] = Pokemon::Move.new(newMove)
-      battler.moves[i] = PokeBattle_Move.from_pokemon_move(self, pkmn.moves[i]) if battler
+    # Pokémon already knows the move
+    return if pkmn.moves.any? { |m| m && m.id == newMove }
+    # Pokémon has space for the new move; just learn it
+    if pkmn.moves.length < Pokemon::MAX_MOVES
+      pkmn.moves.push(Pokemon::Move.new(newMove))
       pbDisplay(_INTL("{1} learned {2}!",pkmnName,moveName)) { pbSEPlay("Pkmn move learnt") }
-      battler.pbCheckFormOnMovesetChange if battler
+      if battler
+        battler.moves.push(PokeBattle_Move.from_pokemon_move(self, pkmn.moves.last))
+        battler.pbCheckFormOnMovesetChange
+      end
       return
     end
-    # pkmn already knows four moves, need to forget one to learn newMove
+    # Pokémon already knows the maximum number of moves; try to forget one to learn the new move
     loop do
-      pbDisplayPaused(_INTL("{1} wants to learn {2}, but it already knows four moves.",pkmnName,moveName))
+      pbDisplayPaused(_INTL("{1} wants to learn {2}, but it already knows {3} moves.",
+        pkmnName, moveName, pkmn.moves.length.to_word))
       if pbDisplayConfirm(_INTL("Forget a move to learn {1}?",moveName))
         pbDisplayPaused(_INTL("Which move should be forgotten?"))
         forgetMove = @scene.pbForgetMove(pkmn,newMove)

@@ -32,6 +32,19 @@ def pbSetTextMessages
       scr=Zlib::Inflate.inflate(script[2])
       pbAddRgssScriptTexts(texts,scr)
     end
+    if safeExists?("Data/PluginScripts.rxdata")
+      plugin_scripts = load_data("Data/PluginScripts.rxdata")
+      for plugin in plugin_scripts
+        for script in plugin[2]
+          if Time.now.to_i - t >= 5
+            t = Time.now.to_i
+            Graphics.update
+          end
+          scr = Zlib::Inflate.inflate(script[1]).force_encoding(Encoding::UTF_8)
+          pbAddRgssScriptTexts(texts,scr)
+        end
+      end
+    end
     # Must add messages because this code is used by both game system and Editor
     MessageTypes.addMessagesAsHash(MessageTypes::ScriptTexts,texts)
     commonevents = load_data("Data/CommonEvents.rxdata")
@@ -250,7 +263,8 @@ def pbGetText(infile)
           raise _INTL("Section {1} has an odd number of entries (section was recognized as a hash because its first line is not a number)",name)
         end
       end
-      i=0;loop do break unless i<section.length
+      i=0
+      loop do break unless i<section.length
         if itemlength==3
           if !section[i][/^\d+$/]
             raise _INTL("Expected a number in section {1}, got {2} instead",name,section[i])
@@ -405,7 +419,7 @@ class Messages
     if msgs.is_a?(Array)
       f.write("[#{secname}]\r\n")
       for j in 0...msgs.length
-        next if msgs[j]==nil || msgs[j]==""
+        next if nil_or_empty?(msgs[j])
         value=Messages.normalizeValue(msgs[j])
         origValue=""
         if origMessages
@@ -421,7 +435,7 @@ class Messages
       f.write("[#{secname}]\r\n")
       keys=msgs.keys
       for key in keys
-        next if msgs[key]==nil || msgs[key]==""
+        next if nil_or_empty?(msgs[key])
         value=Messages.normalizeValue(msgs[key])
         valkey=Messages.normalizeValue(key)
         # key is already serialized

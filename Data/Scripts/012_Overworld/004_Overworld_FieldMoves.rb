@@ -119,7 +119,7 @@ def pbHiddenMoveAnimation(pokemon)
       sprite.visible=true
       if ptinterp.done?
         phase=3
-        GameData::Species.play_cry_from_pokemon(pokemon)
+        pokemon.play_cry
         frames=0
       end
     when 3   # Wait
@@ -834,7 +834,7 @@ def pbSweetScent
   end
   viewport.dispose
   enctype = $PokemonEncounters.encounter_type
-  if enctype < 0 || !$PokemonEncounters.encounter_possible_here? ||
+  if enctype || !$PokemonEncounters.encounter_possible_here? ||
      !pbEncounter(enctype)
     pbMessage(_INTL("There appears to be nothing here..."))
   end

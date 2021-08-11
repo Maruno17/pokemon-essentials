@@ -92,6 +92,20 @@ class Pokemon
   # Maximum number of moves a Pokémon can know at once
   MAX_MOVES     = 4
 
+  def self.play_cry(species, form = 0, volume = 90, pitch = 100)
+    GameData::Species.play_cry_from_species(species, form, volume, pitch)
+  end
+
+  def play_cry(volume = 90, pitch = nil)
+    GameData::Species.play_cry_from_pokemon(self, volume, pitch)
+  end
+
+  def inspect
+    str = super.chop
+    str << format(' %s Lv.%s>', @species, @level.to_s || '???')
+    return str
+  end
+
   def species_data
     return GameData::Species.get_species_form(@species, form_simple)
   end
@@ -133,6 +147,18 @@ class Pokemon
   end
 
   def form=(value)
+    oldForm = @form
+    @form = value
+    @ability = nil
+    MultipleForms.call("onSetForm", self, value, oldForm)
+    calc_stats
+    $Trainer.pokedex.register(self)
+  end
+
+  # The same as def form=, but yields to a given block in the middle so that a
+  # message about the form changing can be shown before calling "onSetForm"
+  # which may have its own messages, e.g. learning a move.
+  def setForm(value)
     oldForm = @form
     @form = value
     @ability = nil
@@ -646,7 +672,7 @@ class Pokemon
     return false if egg? || shadowPokemon?
     this_level = self.level
     getMoveList.each { |m| return true if m[0] <= this_level && !hasMove?(m[1]) }
-    @first_moves.each { |m| return true if !pkmn.hasMove?(m) }
+    @first_moves.each { |m| return true if !hasMove?(m) }
     return false
   end
 
@@ -917,9 +943,8 @@ class Pokemon
   # required it to have a held item) or duplicate this Pokémon (Shedinja only).
   # @param new_species [Pokemon] the species that this Pokémon evolved into
   def action_after_evolution(new_species)
-    species_data.get_evolutions(true).each do |evo|   # [new_species, method, parameter, boolean]
-      next if evo[3]   # Prevolution
-      break if GameData::Evolution.get(method).call_after_evolution(self, evo[0], evo[2], new_species)
+    species_data.get_evolutions(true).each do |evo|   # [new_species, method, parameter]
+      break if GameData::Evolution.get(evo[1]).call_after_evolution(self, evo[0], evo[2], new_species)
     end
   end
 

@@ -256,6 +256,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
   help_window = Window_UnformattedTextPokemon.newWithSize(_INTL("Edit encounter slots"),
      Graphics.width / 2, 0, Graphics.width / 2, 96)
   help_window.z = 99999
+  enc_type_name = ""
   ret = 0
   need_refresh = true
   loop do
@@ -316,7 +317,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
           need_refresh = true
         end
       when 1   # Copy
-        enc_data.types[enc_type].insert(ret, enc_data.types[enc_type][ret - 2].clone)
+        enc_data.types[enc_type].insert(ret - 1, enc_data.types[enc_type][ret - 2].clone)
         ret += 1
         need_refresh = true
       when 2   # Delete
@@ -386,14 +387,14 @@ def pbTrainerTypeEditor
             type_hash = {
               :id_number   => t_data.id_number,
               :id          => t_data.id,
-              :name        => line[1],
-              :base_money  => line[2],
-              :battle_BGM  => line[3],
-              :victory_ME  => line[4],
-              :intro_ME    => line[5],
-              :gender      => line[6],
-              :skill_level => line[7],
-              :skill_code  => line[8]
+              :name        => data[1],
+              :base_money  => data[2],
+              :battle_BGM  => data[3],
+              :victory_ME  => data[4],
+              :intro_ME    => data[5],
+              :gender      => data[6],
+              :skill_level => data[7],
+              :skill_code  => data[8]
             }
             # Add trainer type's data to records
             GameData::TrainerType.register(type_hash)
@@ -416,7 +417,7 @@ def pbTrainerTypeEditorNew(default_name)
   # Choose a name
   name = pbMessageFreeText(_INTL("Please enter the trainer type's name."),
      (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
-  if name == ""
+  if nil_or_empty?(name)
     return nil if !default_name
     name = default_name
   end
@@ -585,7 +586,7 @@ def pbTrainerBattleEditor
           end
           next if !tr_type
           tr_name = pbMessageFreeText(_INTL("Now enter the trainer's name."), "", false, 30)
-          next if tr_name == ""
+          next if nil_or_empty?(tr_name)
           tr_version = pbGetFreeTrainerParty(tr_type, tr_name)
           if tr_version < 0
             pbMessage(_INTL("There is no room to create a trainer of that type and name."))
@@ -645,7 +646,8 @@ module TrainerPokemonProperty
       oldsetting.push((initsetting[:moves]) ? initsetting[:moves][i] : nil)
     end
     oldsetting.concat([
-      initsetting[:ability_flag],
+      initsetting[:ability],
+      initsetting[:ability_index],
       initsetting[:item],
       initsetting[:nature],
       initsetting[:iv],
@@ -655,43 +657,46 @@ module TrainerPokemonProperty
     ])
     max_level = GameData::GrowthRate.max_level
     pkmn_properties = [
-       [_INTL("Species"),   SpeciesProperty,                         _INTL("Species of the Pokémon.")],
-       [_INTL("Level"),     NonzeroLimitProperty.new(max_level),     _INTL("Level of the Pokémon (1-{1}).", max_level)],
-       [_INTL("Name"),      StringProperty,                          _INTL("Name of the Pokémon.")],
-       [_INTL("Form"),      LimitProperty2.new(999),                 _INTL("Form of the Pokémon.")],
-       [_INTL("Gender"),    GenderProperty,                          _INTL("Gender of the Pokémon.")],
-       [_INTL("Shiny"),     BooleanProperty2,                        _INTL("If set to true, the Pokémon is a different-colored Pokémon.")],
-       [_INTL("Shadow"),    BooleanProperty2,                        _INTL("If set to true, the Pokémon is a Shadow Pokémon.")]
+       [_INTL("Species"),       SpeciesProperty,                         _INTL("Species of the Pokémon.")],
+       [_INTL("Level"),         NonzeroLimitProperty.new(max_level),     _INTL("Level of the Pokémon (1-{1}).", max_level)],
+       [_INTL("Name"),          StringProperty,                          _INTL("Name of the Pokémon.")],
+       [_INTL("Form"),          LimitProperty2.new(999),                 _INTL("Form of the Pokémon.")],
+       [_INTL("Gender"),        GenderProperty,                          _INTL("Gender of the Pokémon.")],
+       [_INTL("Shiny"),         BooleanProperty2,                        _INTL("If set to true, the Pokémon is a different-colored Pokémon.")],
+       [_INTL("Shadow"),        BooleanProperty2,                        _INTL("If set to true, the Pokémon is a Shadow Pokémon.")]
     ]
     Pokemon::MAX_MOVES.times do |i|
-      pkmn_properties.push([_INTL("Move {1}", i + 1), MovePropertyForSpecies.new(oldsetting), _INTL("A move known by the Pokémon. Leave all moves blank (use Z key to delete) for a wild moveset.")])
+      pkmn_properties.push([_INTL("Move {1}", i + 1),
+         MovePropertyForSpecies.new(oldsetting), _INTL("A move known by the Pokémon. Leave all moves blank (use Z key to delete) for a wild moveset.")])
     end
     pkmn_properties.concat([
-       [_INTL("Ability"),   LimitProperty2.new(99),                  _INTL("Ability flag. 0=first ability, 1=second ability, 2-5=hidden ability.")],
-       [_INTL("Held item"), ItemProperty,                            _INTL("Item held by the Pokémon.")],
-       [_INTL("Nature"),    GameDataProperty.new(:Nature),           _INTL("Nature of the Pokémon.")],
-       [_INTL("IVs"),       IVsProperty.new(Pokemon::IV_STAT_LIMIT), _INTL("Individual values for each of the Pokémon's stats.")],
-       [_INTL("EVs"),       EVsProperty.new(Pokemon::EV_STAT_LIMIT), _INTL("Effort values for each of the Pokémon's stats.")],
-       [_INTL("Happiness"), LimitProperty2.new(255),                 _INTL("Happiness of the Pokémon (0-255).")],
-       [_INTL("Poké Ball"), BallProperty.new(oldsetting),            _INTL("The kind of Poké Ball the Pokémon is kept in.")]
+       [_INTL("Ability"),       AbilityProperty,                         _INTL("Ability of the Pokémon. Overrides the ability index.")],
+       [_INTL("Ability index"), LimitProperty2.new(99),                  _INTL("Ability index. 0=first ability, 1=second ability, 2+=hidden ability.")],
+       [_INTL("Held item"),     ItemProperty,                            _INTL("Item held by the Pokémon.")],
+       [_INTL("Nature"),        GameDataProperty.new(:Nature),           _INTL("Nature of the Pokémon.")],
+       [_INTL("IVs"),           IVsProperty.new(Pokemon::IV_STAT_LIMIT), _INTL("Individual values for each of the Pokémon's stats.")],
+       [_INTL("EVs"),           EVsProperty.new(Pokemon::EV_STAT_LIMIT), _INTL("Effort values for each of the Pokémon's stats.")],
+       [_INTL("Happiness"),     LimitProperty2.new(255),                 _INTL("Happiness of the Pokémon (0-255).")],
+       [_INTL("Poké Ball"),     BallProperty.new(oldsetting),            _INTL("The kind of Poké Ball the Pokémon is kept in.")]
     ])
     pbPropertyList(settingname, oldsetting, pkmn_properties, false)
     return nil if !oldsetting[0]   # Species is nil
     ret = {
-      :species      => oldsetting[0],
-      :level        => oldsetting[1],
-      :name         => oldsetting[2],
-      :form         => oldsetting[3],
-      :gender       => oldsetting[4],
-      :shininess    => oldsetting[5],
-      :shadowness   => oldsetting[6],
-      :ability_flag => oldsetting[7 + Pokemon::MAX_MOVES],
-      :item         => oldsetting[8 + Pokemon::MAX_MOVES],
-      :nature       => oldsetting[9 + Pokemon::MAX_MOVES],
-      :iv           => oldsetting[10 + Pokemon::MAX_MOVES],
-      :ev           => oldsetting[11 + Pokemon::MAX_MOVES],
-      :happiness    => oldsetting[12 + Pokemon::MAX_MOVES],
-      :poke_ball    => oldsetting[13 + Pokemon::MAX_MOVES],
+      :species       => oldsetting[0],
+      :level         => oldsetting[1],
+      :name          => oldsetting[2],
+      :form          => oldsetting[3],
+      :gender        => oldsetting[4],
+      :shininess     => oldsetting[5],
+      :shadowness    => oldsetting[6],
+      :ability       => oldsetting[7 + Pokemon::MAX_MOVES],
+      :ability_index => oldsetting[8 + Pokemon::MAX_MOVES],
+      :item          => oldsetting[9 + Pokemon::MAX_MOVES],
+      :nature        => oldsetting[10 + Pokemon::MAX_MOVES],
+      :iv            => oldsetting[11 + Pokemon::MAX_MOVES],
+      :ev            => oldsetting[12 + Pokemon::MAX_MOVES],
+      :happiness     => oldsetting[13 + Pokemon::MAX_MOVES],
+      :poke_ball     => oldsetting[14 + Pokemon::MAX_MOVES],
     }
     moves = []
     Pokemon::MAX_MOVES.times do |i|
@@ -891,7 +896,7 @@ def pbItemEditorNew(default_name)
   # Choose a name
   name = pbMessageFreeText(_INTL("Please enter the item's name."),
      (default_name) ? default_name.gsub(/_+/, " ") : "", false, 30)
-  if name == ""
+  if nil_or_empty?(name)
     return if !default_name
     name = default_name
   end

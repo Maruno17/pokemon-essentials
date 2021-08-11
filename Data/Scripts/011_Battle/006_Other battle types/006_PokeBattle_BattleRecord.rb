@@ -30,13 +30,17 @@ module PokeBattle_RecordedBattleModule
     if trainer.is_a?(Array)
       ret = []
       for i in 0...trainer.length
-        ret.push([trainer[i].trainer_type,trainer[i].name.clone,trainer[i].id,trainer[i].badges.clone])
+        if trainer[i].is_a?(Player)
+          ret.push([trainer[i].trainer_type,trainer[i].name.clone,trainer[i].id,trainer[i].badges.clone])
+        else   # NPCTrainer
+          ret.push([trainer[i].trainer_type,trainer[i].name.clone,trainer[i].id])
+        end
       end
       return ret
+    elsif trainer[i].is_a?(Player)
+      return [[trainer.trainer_type,trainer.name.clone,trainer.id,trainer.badges.clone]]
     else
-      return [
-         [trainer.trainer_type,trainer.name.clone,trainer.id,trainer.badges.clone]
-      ]
+      return [[trainer.trainer_type,trainer.name.clone,trainer.id]]
     end
   end
 
@@ -57,6 +61,9 @@ module PokeBattle_RecordedBattleModule
     @properties["switchStyle"]     = @switchStyle
     @properties["showAnims"]       = @showAnims
     @properties["items"]           = Marshal.dump(@items)
+    @properties["backdrop"]        = @backdrop
+    @properties["backdropBase"]    = @backdropBase
+    @properties["time"]            = @time
     @properties["environment"]     = @environment
     @properties["rules"]           = Marshal.dump(@rules)
     super
@@ -144,21 +151,20 @@ module BattlePlayerHelper
 
   def self.pbCreateTrainerInfo(trainer)
     return nil if !trainer
-    if trainer.length>1
-      ret = []
-      ret[0]=Player.new(trainer[0][1],trainer[0][0])
-      ret[0].id     = trainer[0][2]
-      ret[0].badges = trainer[0][3]
-      ret[1] = Player.new(trainer[1][1],trainer[1][0])
-      ret[1].id     = trainer[1][2]
-      ret[1].badges = trainer[1][3]
-      return ret
-    else
-      ret = Player.new(trainer[0][1],trainer[0][0])
-      ret.id     = trainer[0][2]
-      ret.badges = trainer[0][3]
-      return ret
+    ret = []
+    trainer.each do |tr|
+      if tr.length == 4   # Player
+        t = Player.new(tr[1], tr[0])
+        t.id     = tr[2]
+        t.badges = tr[3]
+        ret.push(t)
+      else   # NPCTrainer
+        t = NPCTrainer.new(tr[1], tr[0])
+        t.id = tr[2]
+        ret.push(t)
+      end
     end
+    return ret
   end
 end
 
@@ -185,16 +191,16 @@ module PokeBattle_BattlePlayerModule
     @randomindex = 0
     @switchindex = 0
     super(scene,
-       Marshal.restore(StringInput.new(@properties["party1"])),
-       Marshal.restore(StringInput.new(@properties["party2"])),
+       Marshal.restore(@properties["party1"]),
+       Marshal.restore(@properties["party2"]),
        BattlePlayerHelper.pbCreateTrainerInfo(@properties["player"]),
        BattlePlayerHelper.pbCreateTrainerInfo(@properties["opponent"])
     )
   end
 
   def pbStartBattle
-    @party1starts          = @properties["party1starts"]
-    @party2starts          = @properties["party2starts"]
+    @party1starts          = Marshal.restore(@properties["party1starts"])
+    @party2starts          = Marshal.restore(@properties["party2starts"])
     @internalBattle        = @properties["internalBattle"]
     @endSpeeches           = @properties["endSpeeches"]
     @endSpeechesWin        = @properties["endSpeechesWin"]
@@ -203,9 +209,12 @@ module PokeBattle_BattlePlayerModule
     @canRun                = @properties["canRun"]
     @switchStyle           = @properties["switchStyle"]
     @showAnims             = @properties["showAnims"]
+    @backdrop              = @properties["backdrop"]
+    @backdropBase          = @properties["backdropBase"]
+    @time                  = @properties["time"]
     @environment           = @properties["environment"]
-    @items                 = Marshal.restore(StringInput.new(@properties["items"]))
-    @rules                 = Marshal.restore(StringInput.new(@properties["rules"]))
+    @items                 = Marshal.restore(@properties["items"])
+    @rules                 = Marshal.restore(@properties["rules"])
     super
   end
 
@@ -225,7 +234,8 @@ module PokeBattle_BattlePlayerModule
     pbDisplay(str)
   end
 
-  def pbCommandPhaseCore
+  def pbCommandPhaseLoop(isPlayer)
+    return if !isPlayer
     @roundindex += 1
     for i in 0...4
       next if @rounds[@roundindex][i].length==0

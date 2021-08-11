@@ -119,6 +119,7 @@ class Pokemon
       @moves.each do |m|
         next if new_moves.include?(m.id)
         m.id = GameData::Move.get(move).id
+        break
       end
     end
   end

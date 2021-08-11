@@ -346,8 +346,7 @@ class Maze
     end
   end
 
-  def generateWallGrowthMaze(minWall = nil, maxWall = nil)
-    minWall = 0 if !minWall
+  def generateWallGrowthMaze(minWall = 0, maxWall = nil)
     maxWall = cellWidth if !maxWall
     nlist = buildNodeList()
     return if nlist.length == 0

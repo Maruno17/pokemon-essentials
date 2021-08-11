@@ -413,9 +413,9 @@ class PokemonMart_Scene
     itemprice = @adapter.getPrice(item, !@buying)
     itemprice /= 2 if !@buying
     pbDisplay(helptext, true)
-    using (numwindow = Window_AdvancedTextPokemon.new("")) {   # Showing number of items
+    using(numwindow = Window_AdvancedTextPokemon.new("")) {   # Showing number of items
       qty = @adapter.getQuantity(item)
-      using (inbagwindow = Window_AdvancedTextPokemon.new("")) {   # Showing quantity in bag
+      using(inbagwindow = Window_AdvancedTextPokemon.new("")) {   # Showing quantity in bag
         pbPrepareWindow(numwindow)
         pbPrepareWindow(inbagwindow)
         numwindow.viewport = @viewport

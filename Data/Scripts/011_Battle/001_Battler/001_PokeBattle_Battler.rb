@@ -344,7 +344,7 @@ class PokeBattle_Battler
   def hasActiveAbility?(check_ability, ignore_fainted = false)
     return false if !abilityActive?(ignore_fainted)
     return check_ability.include?(@ability_id) if check_ability.is_a?(Array)
-    return check_ability == self.ability
+    return self.ability == check_ability
   end
   alias hasWorkingAbility hasActiveAbility?
 
@@ -411,7 +411,7 @@ class PokeBattle_Battler
   def hasActiveItem?(check_item, ignore_fainted = false)
     return false if !itemActive?(ignore_fainted)
     return check_item.include?(@item_id) if check_item.is_a?(Array)
-    return check_item == self.item
+    return self.item == check_item
   end
   alias hasWorkingItem hasActiveItem?
 
@@ -421,7 +421,15 @@ class PokeBattle_Battler
     return true if GameData::Item.get(check_item).is_mail?
     return false if @effects[PBEffects::Transform]
     # Items that change a Pokémon's form
-    return true if @pokemon && @pokemon.getMegaForm(true) > 0   # Mega Stone
+    if mega?   # Check if item was needed for this Mega Evolution
+      return true if @pokemon.species_data.mega_stone == check_item
+    else   # Check if item could cause a Mega Evolution
+      GameData::Species.each do |data|
+        next if data.species != @species || data.unmega_form != @form
+        return true if data.mega_stone == check_item
+      end
+    end
+    # Other unlosable items
     return GameData::Item.get(check_item).unlosable?(@species, self.ability)
   end
 
@@ -606,16 +614,20 @@ class PokeBattle_Battler
     return @battle.initialItems[@index&1][@pokemonIndex]
   end
 
-  def setInitialItem(newItem)
-    @battle.initialItems[@index&1][@pokemonIndex] = newItem
+  def setInitialItem(value)
+    item_data = GameData::Item.try_get(value)
+    new_item = (item_data) ? item_data.id : nil
+    @battle.initialItems[@index&1][@pokemonIndex] = new_item
   end
 
   def recycleItem
     return @battle.recycleItems[@index&1][@pokemonIndex]
   end
 
-  def setRecycleItem(newItem)
-    @battle.recycleItems[@index&1][@pokemonIndex] = newItem
+  def setRecycleItem(value)
+    item_data = GameData::Item.try_get(value)
+    new_item = (item_data) ? item_data.id : nil
+    @battle.recycleItems[@index&1][@pokemonIndex] = new_item
   end
 
   def belched?

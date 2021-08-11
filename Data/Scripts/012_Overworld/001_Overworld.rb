@@ -94,7 +94,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
     for i in $Trainer.able_party
       if i.status == :POISON && !i.hasAbility?(:IMMUNITY)
         if !flashed
-          $game_screen.start_flash(Color.new(255,0,0,128), 4)
+          pbFlash(Color.new(255, 0, 0, 128), 8)
           flashed = true
         end
         i.hp -= 1 if i.hp>1 || Settings::POISON_FAINT_IN_FIELD
@@ -369,7 +369,7 @@ def pbEventCanReachPlayer?(event, player, distance)
   when 2   # Down
     real_distance = player.y - event.y - 1
   when 4   # Left
-    real_distance = event.x - player.x + 1
+    real_distance = event.x - player.x - 1
   when 6   # Right
     real_distance = player.x - event.x - event.width
   when 8   # Up

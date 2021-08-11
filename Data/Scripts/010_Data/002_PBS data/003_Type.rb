@@ -89,27 +89,27 @@ module Effectiveness
   end
 
   def ineffective_type?(attack_type, defend_type1, defend_type2 = nil, defend_type3 = nil)
-    value = calculate(attack_type, target_type1, target_type2, target_type3)
+    value = calculate(attack_type, defend_type1, defend_type2, defend_type3)
     return ineffective?(value)
   end
 
   def not_very_effective_type?(attack_type, defend_type1, defend_type2 = nil, defend_type3 = nil)
-    value = calculate(attack_type, target_type1, target_type2, target_type3)
+    value = calculate(attack_type, defend_type1, defend_type2, defend_type3)
     return not_very_effective?(value)
   end
 
   def resistant_type?(attack_type, defend_type1, defend_type2 = nil, defend_type3 = nil)
-    value = calculate(attack_type, target_type1, target_type2, target_type3)
+    value = calculate(attack_type, defend_type1, defend_type2, defend_type3)
     return resistant?(value)
   end
 
   def normal_type?(attack_type, defend_type1, defend_type2 = nil, defend_type3 = nil)
-    value = calculate(attack_type, target_type1, target_type2, target_type3)
+    value = calculate(attack_type, defend_type1, defend_type2, defend_type3)
     return normal?(value)
   end
 
   def super_effective_type?(attack_type, defend_type1, defend_type2 = nil, defend_type3 = nil)
-    value = calculate(attack_type, target_type1, target_type2, target_type3)
+    value = calculate(attack_type, defend_type1, defend_type2, defend_type3)
     return super_effective?(value)
   end
 

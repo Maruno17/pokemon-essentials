@@ -489,10 +489,12 @@ class PokeBattle_Move_096 < PokeBattle_Move
   def pbBaseType(user)
     item = user.item
     ret = :NORMAL
-    @typeArray.each do |type, items|
-      next if !items.include?(item.id)
-      ret = type if GameData::Type.exists?(type)
-      break
+    if item
+      @typeArray.each do |type, items|
+        next if !items.include?(item.id)
+        ret = type if GameData::Type.exists?(type)
+        break
+      end
     end
     return ret
   end
@@ -1660,7 +1662,7 @@ class PokeBattle_Move_0B6 < PokeBattle_Move
 
   def pbMoveFailed?(user,targets)
     @metronomeMove = nil
-    move_keys = GameData::Move::DATA.keys.sort
+    move_keys = GameData::Move::DATA.keys
     # NOTE: You could be really unlucky and roll blacklisted moves 1000 times in
     #       a row. This is too unlikely to care about, though.
     1000.times do
@@ -3217,8 +3219,8 @@ class PokeBattle_Move_0F1 < PokeBattle_Move
     itemName = target.itemName
     user.item = target.item
     # Permanently steal the item from wild Pokémon
-    if @battle.wildBattle? && target.opposes? &&
-       target.initialItem==target.item && !user.initialItem
+    if @battle.wildBattle? && target.opposes? && !user.initialItem &&
+       target.item == target.initialItem
       user.setInitialItem(target.item)
       target.pbRemoveItem
     else
@@ -3280,8 +3282,8 @@ class PokeBattle_Move_0F2 < PokeBattle_Move
     target.effects[PBEffects::ChoiceBand] = nil
     target.effects[PBEffects::Unburden]   = (!target.item && oldTargetItem)
     # Permanently steal the item from wild Pokémon
-    if @battle.wildBattle? && target.opposes? &&
-       target.initialItem==oldTargetItem && !user.initialItem
+    if @battle.wildBattle? && target.opposes? && !user.initialItem &&
+       oldTargetItem == target.initialItem
       user.setInitialItem(oldTargetItem)
     end
     @battle.pbDisplay(_INTL("{1} switched items with its opponent!",user.pbThis))
@@ -3324,8 +3326,8 @@ class PokeBattle_Move_0F3 < PokeBattle_Move
     itemName = user.itemName
     target.item = user.item
     # Permanently steal the item from wild Pokémon
-    if @battle.wildBattle? && user.opposes? &&
-       user.initialItem==user.item && !target.initialItem
+    if @battle.wildBattle? && user.opposes? && !target.initialItem &&
+       user.item == user.initialItem
       target.setInitialItem(user.item)
       user.pbRemoveItem
     else

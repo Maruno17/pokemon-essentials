@@ -98,6 +98,7 @@ module Game
     end
     $PokemonEncounters = PokemonEncounters.new
     $PokemonEncounters.setup($game_map.map_id)
+    pbUpdateVehicle
   end
 
   # Saves the game. Returns whether the operation was successful.

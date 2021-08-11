@@ -480,7 +480,7 @@ class PokeBattle_Scene
 
   # Plays a common animation.
   def pbCommonAnimation(animName,user=nil,target=nil)
-    return if !animName || animName==""
+    return if nil_or_empty?(animName)
     target = target[0] if target && target.is_a?(Array)
     animations = pbLoadBattleAnimations
     return if !animations

@@ -554,7 +554,7 @@ class PokemonSummary_Scene
     # Write map name Pokémon was received on
     mapname = pbGetMapNameFromId(@pokemon.obtain_map)
     mapname = @pokemon.obtain_text if @pokemon.obtain_text && !@pokemon.obtain_text.empty?
-    mapname = _INTL("Faraway place") if !mapname || mapname==""
+    mapname = _INTL("Faraway place") if nil_or_empty?(mapname)
     memo += sprintf("<c3=F83820,E09890>%s\n",mapname)
     # Write how Pokémon was obtained
     mettext = [_INTL("Met at Lv. {1}.",@pokemon.obtain_level),
@@ -573,7 +573,7 @@ class PokemonSummary_Scene
         memo += _INTL("<c3=404040,B0B0B0>{1} {2}, {3}\n",date,month,year)
       end
       mapname = pbGetMapNameFromId(@pokemon.hatched_map)
-      mapname = _INTL("Faraway place") if !mapname || mapname==""
+      mapname = _INTL("Faraway place") if nil_or_empty?(mapname)
       memo += sprintf("<c3=F83820,E09890>%s\n",mapname)
       memo += _INTL("<c3=404040,B0B0B0>Egg hatched.\n")
     else
@@ -913,7 +913,7 @@ class PokemonSummary_Scene
     @sprites["pokemon"].setPokemonBitmap(@pokemon)
     @sprites["itemicon"].item = @pokemon.item_id
     pbSEStop
-    GameData::Species.play_cry_from_pokemon(@pokemon)
+    @pokemon.play_cry
   end
 
   def pbMoveSelection
@@ -1250,7 +1250,7 @@ class PokemonSummary_Scene
   end
 
   def pbScene
-    GameData::Species.play_cry_from_pokemon(@pokemon)
+    @pokemon.play_cry
     loop do
       Graphics.update
       Input.update
@@ -1258,7 +1258,7 @@ class PokemonSummary_Scene
       dorefresh = false
       if Input.trigger?(Input::ACTION)
         pbSEStop
-        GameData::Species.play_cry_from_pokemon(@pokemon)
+        @pokemon.play_cry
       elsif Input.trigger?(Input::BACK)
         pbPlayCloseMenuSE
         break

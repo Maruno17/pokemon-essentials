@@ -1509,7 +1509,7 @@ BattleHandlers::TargetAbilityOnHit.add(:MUMMY,
     next if !move.pbContactMove?(user)
     next if user.fainted?
     next if user.unstoppableAbility? || user.ability == ability
-    oldAbil = -1
+    oldAbil = nil
     battle.pbShowAbilitySplash(target) if user.opposes?(target)
     if user.affectedByContactEffect?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
       oldAbil = user.ability
@@ -1525,7 +1525,7 @@ BattleHandlers::TargetAbilityOnHit.add(:MUMMY,
       battle.pbHideAbilitySplash(user) if user.opposes?(target)
     end
     battle.pbHideAbilitySplash(target) if user.opposes?(target)
-    user.pbOnAbilityChanged(oldAbil) if oldAbil>=0
+    user.pbOnAbilityChanged(oldAbil) if oldAbil != nil
   }
 )
 
@@ -1668,7 +1668,7 @@ BattleHandlers::UserAbilityEndOfMove.add(:MAGICIAN,
       user.item = b.item
       b.item = nil
       b.effects[PBEffects::Unburden] = true
-      if battle.wildBattle? && !user.initialItem && b.initialItem==user.item
+      if battle.wildBattle? && !user.initialItem && user.item == b.initialItem
         user.setInitialItem(user.item)
         b.setInitialItem(nil)
       end
@@ -1747,7 +1747,7 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:PICKPOCKET,
     target.item = user.item
     user.item = nil
     user.effects[PBEffects::Unburden] = true
-    if battle.wildBattle? && !target.initialItem && user.initialItem==target.item
+    if battle.wildBattle? && !target.initialItem && target.item == user.initialItem
       target.setInitialItem(target.item)
       user.setInitialItem(nil)
     end

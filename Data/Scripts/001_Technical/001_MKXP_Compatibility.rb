@@ -1,4 +1,4 @@
-# Using mkxp-z v2.1.1 - https://gitlab.com/mkxp-z/mkxp-z/-/releases/v2.1.1
+# Using mkxp-z v2.2.0 - https://gitlab.com/mkxp-z/mkxp-z/-/releases/v2.2.0
 $VERBOSE = nil
 Font.default_shadow = false if Font.respond_to?(:default_shadow)
 Graphics.frame_rate = 40
@@ -8,7 +8,7 @@ def pbSetWindowText(string)
 end
 
 class Bitmap
-  alias mkxp_draw_text draw_text
+  alias mkxp_draw_text draw_text unless method_defined?(:mkxp_draw_text)
 
   def draw_text(x, y, width, height, text, align = 0)
     height = text_size(text).height

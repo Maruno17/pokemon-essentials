@@ -327,7 +327,7 @@ class HallOfFame_Scene
     overlay=@sprites["overlay"].bitmap
     overlay.clear
     pbDrawTextPositions(overlay,[[_INTL("Welcome to the Hall of Fame!"),
-        Graphics.width/2,Graphics.height-80,-4,BASECOLOR,SHADOWCOLOR]])
+       Graphics.width/2,Graphics.height-80,2,BASECOLOR,SHADOWCOLOR]])
   end
 
   def pbAnimationLoop
@@ -377,7 +377,7 @@ class HallOfFame_Scene
         if @battlerIndex<=@hallEntry.size
           # If it is a pokémon, write the pokémon text, wait the
           # ENTRYWAITTIME and goes to the next battler
-          GameData::Species.play_cry_from_pokemon(@hallEntry[@battlerIndex - 1])
+          @hallEntry[@battlerIndex - 1].play_cry
           writePokemonData(@hallEntry[@battlerIndex-1])
           (ENTRYWAITTIME*Graphics.frame_rate/20).times do
             Graphics.update
@@ -432,7 +432,7 @@ class HallOfFame_Scene
       createBattlers(false)
     end
     # Change the pokemon
-    GameData::Species.play_cry_from_pokemon(@hallEntry[@battlerIndex])
+    @hallEntry[@battlerIndex].play_cry
     setPokemonSpritesOpacity(@battlerIndex,OPACITY)
     hallNumber=$PokemonGlobal.hallOfFameLastNumber + @hallIndex -
                $PokemonGlobal.hallOfFame.size + 1

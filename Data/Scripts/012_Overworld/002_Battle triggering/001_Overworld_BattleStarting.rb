@@ -217,6 +217,7 @@ def pbWildBattleCore(*args)
     $PokemonGlobal.nextBattleME        = nil
     $PokemonGlobal.nextBattleCaptureME = nil
     $PokemonGlobal.nextBattleBack      = nil
+    pbMEStop
     return 1   # Treat it as a win
   end
   # Record information about party Pokémon to be used at the end of battle (e.g.
@@ -355,6 +356,7 @@ def pbTrainerBattleCore(*args)
     $PokemonGlobal.nextBattleME        = nil
     $PokemonGlobal.nextBattleCaptureME = nil
     $PokemonGlobal.nextBattleBack      = nil
+    pbMEStop
     return ($Trainer.able_pokemon_count == 0) ? 0 : 1   # Treat it as undecided/a win
   end
   # Record information about party Pokémon to be used at the end of battle (e.g.
@@ -367,15 +369,13 @@ def pbTrainerBattleCore(*args)
   foeParty       = []
   foePartyStarts = []
   for arg in args
-    raise _INTL("Expected an array of trainer data, got {1}.",arg) if !arg.is_a?(Array)
     if arg.is_a?(NPCTrainer)
       foeTrainers.push(arg)
       foePartyStarts.push(foeParty.length)
       arg.party.each { |pkmn| foeParty.push(pkmn) }
       foeEndSpeeches.push(arg.lose_text)
       foeItems.push(arg.items)
-    else
-      # [trainer type, trainer name, ID, speech (optional)]
+    elsif arg.is_a?(Array)   # [trainer type, trainer name, ID, speech (optional)]
       trainer = pbLoadTrainer(arg[0],arg[1],arg[2])
       pbMissingTrainer(arg[0],arg[1],arg[2]) if !trainer
       return 0 if !trainer
@@ -385,6 +385,8 @@ def pbTrainerBattleCore(*args)
       trainer.party.each { |pkmn| foeParty.push(pkmn) }
       foeEndSpeeches.push(arg[3] || trainer.lose_text)
       foeItems.push(trainer.items)
+    else
+      raise _INTL("Expected NPCTrainer or array of trainer data, got {1}.", arg)
     end
   end
   # Calculate who the player trainer(s) and their party are
@@ -485,8 +487,7 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
   setBattleRule("double") if doubleBattle || $PokemonTemp.waitingTrainer
   # Perform the battle
   if $PokemonTemp.waitingTrainer
-    waitingTrainer = $PokemonTemp.waitingTrainer
-    decision = pbTrainerBattleCore($PokemonTemp.waitingTrainer,
+    decision = pbTrainerBattleCore($PokemonTemp.waitingTrainer[0],
        [trainerID,trainerName,trainerPartyID,endSpeech]
     )
   else
@@ -603,7 +604,7 @@ end
 def pbDynamicItemList(*args)
   ret = []
   for i in 0...args.length
-    ret.push(i) if GameData::Item.exists?(args[i])
+    ret.push(args[i]) if GameData::Item.exists?(args[i])
   end
   return ret
 end
