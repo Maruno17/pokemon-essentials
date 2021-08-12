@@ -269,7 +269,6 @@ class PokemonPauseMenu
           scene = PokemonSave_Scene.new
           screen = PokemonSaveScreen.new(scene)
           screen.pbSaveScreen
-          resetPlayerPosition
           $game_temp.to_title = true
           return
         else
