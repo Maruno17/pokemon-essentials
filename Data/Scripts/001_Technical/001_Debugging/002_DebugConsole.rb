@@ -4,6 +4,7 @@
 module Console
   def self.setup_console
     return unless $DEBUG
+    echoln "GPU Cache Max: #{Bitmap.max_size}"
     echoln "--------------------------------"
     echoln "#{System.game_title} Output Window"
     echoln "--------------------------------"
