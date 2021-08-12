@@ -164,6 +164,8 @@ class Scene_Map
     end
     updateSpritesets
     if $game_temp.to_title
+      $game_temp.to_title = false
+      SaveData.mark_values_as_unloaded
       $scene = pbCallTitle
       return
     end
@@ -221,8 +223,6 @@ class Scene_Map
     Graphics.freeze
     disposeSpritesets
     if $game_temp.to_title
-      $game_temp.to_title = false
-      SaveData.mark_values_as_unloaded
       Graphics.transition(20)
       Graphics.freeze
     end
