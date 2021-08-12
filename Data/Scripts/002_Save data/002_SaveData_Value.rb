@@ -227,13 +227,9 @@ module SaveData
   end
 
   # Marks all values that aren't loaded on bootup as unloaded.
-  # @param save_data [Hash] save data to mark as unloaded
-  def self.mark_values_as_unloaded(save_data)
-    validate save_data => Hash
+  def self.mark_values_as_unloaded
     @values.each do |value|
-      if save_data.has_key?(value.id) && value.loaded?
-        value.mark_as_unloaded
-      end
+      value.mark_as_unloaded unless value.load_in_bootup?
     end
   end
 
