@@ -165,7 +165,7 @@ class PokeBattle_Battler
 
   def pbSymbiosis
     return if fainted?
-    return if !self.item
+    return if self.item
     @battle.pbPriority(true).each do |b|
       next if b.opposes?
       next if !b.hasActiveAbility?(:SYMBIOSIS)

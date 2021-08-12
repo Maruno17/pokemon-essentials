@@ -367,11 +367,7 @@ class PokemonEncounters
     chance_total = 0
     enc_list.each { |a| chance_total += a[0] }
     # Choose a random entry in the encounter table based on entry probabilities
-    rnd = 0
-    chance_rolls.times do
-      r = rand(chance_total)
-      rnd = r if r > rnd   # Prefer rarer entries if rolling repeatedly
-    end
+    rnd = rand(chance_total)
     encounter = nil
     enc_list.each do |enc|
       rnd -= enc[0]
