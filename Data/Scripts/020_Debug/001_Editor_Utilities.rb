@@ -396,15 +396,3 @@ def pbCommandsSortable(cmdwindow,commands,cmdIfCancel,defaultindex=-1,sortable=f
   cmdwindow.active = false
   return ret
 end
-
-#===============================================================================
-# Common Utilities For Debug Menus
-#===============================================================================
-def getNumericValue(msg,currentValue,min=-1,max=99,allowNegative=true)
-    params  = ChooseNumberParams.new
-    params.setRange(min,max)
-    params.setNegativesAllowed(allowNegative)
-    params.setInitialValue(currentValue)
-    params.setCancelValue(currentValue)
-    return pbMessageChooseNumber(_INTL("{1}",msg),params)
-end

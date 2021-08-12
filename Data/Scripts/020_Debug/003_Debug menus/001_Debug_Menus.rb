@@ -174,10 +174,14 @@ end
 #===============================================================================
 module BattleDebugMixin
   def pbBattleDebug(battle,show_all = true)
-   commands = CommandMenuList.new
-  BattleDebugMenuCommands.each do |option, hash|
-    commands.add(option, hash) if show_all || hash["always_show"]
-  end
+    registerBattlerCommands(battle)
+    commands = CommandMenuList.new
+    BattleDebugMenuCommands.each do |option, hash|
+      commands.add(option, hash) if show_all || hash["always_show"]
+    end
+
+  
+
   viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
   viewport.z = 99999
   sprites = {}
@@ -238,6 +242,7 @@ module BattleDebugMixin
   pbDisposeSpriteHash(sprites)
   viewport.dispose
   end
+
 end
 
 #===============================================================================

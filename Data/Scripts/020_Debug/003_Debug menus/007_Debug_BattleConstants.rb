@@ -136,8 +136,8 @@ FIELD_EFFECTS = {
 
   
 BATTLE_METADATA = {
-    :time           => { :name => "Time of day"},
-    :environment    => { :name => "Battle surrounding"},
+    :time           => { :name => "Time of day (mechanic only)"},
+    :environment    => { :name => "Battle surrounding (mechanic only)"},
     :turnCount      => { :name => "Turn count"},
     :items          => { :name => "Opponent items"},
     :internalBattle => { :name => "Internal Battle"},
@@ -146,20 +146,11 @@ BATTLE_METADATA = {
   }
 
 BATTLE_STATS = {
-  # PBStats::ATTACK   => {:name => "Attack"},
-  # PBStats::DEFENSE  => {:name => "Defense"},
-  # PBStats::SPATK    => {:name => "Sp. Attack"},
-  # PBStats::SPDEF    => {:name => "Sp. Defense"},
-  # PBStats::SPEED    => {:name => "Speed"},
-  # PBStats::ACCURACY => {:name => "Accuracy"},
-  # PBStats::EVASION  => {:name => "Evasion"},
+  :ATTACK           => {:name => "Attack"},
+  :DEFENSE          => {:name => "Defense"},
+  :SPECIAL_ATTACK   => {:name => "Sp. Attack"},
+  :SPECIAL_DEFENSE  => {:name => "Sp. Defense"},
+  :SPEED            => {:name => "Speed"},
+  :ACCURACY         => {:name => "Accuracy"},
+  :EVASION          => {:name => "Evasion"},
 }
-
-  
-TERRAINS = {
-  # PBBattleTerrains::None     => "None",
-  # PBBattleTerrains::Electric => "Electric Terrain",
-  # PBBattleTerrains::Misty    => "Misty Terrain",
-  # PBBattleTerrains::Grassy   => "Grassy Terrain"
-}
- 
