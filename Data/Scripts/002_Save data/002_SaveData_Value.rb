@@ -75,6 +75,11 @@ module SaveData
       return @loaded
     end
 
+    # Marks value as unloaded.
+    def mark_as_unloaded
+      @loaded = false
+    end
+
     # Uses the {#from_old_format} proc to select the correct data from
     # +old_format+ and return it.
     # Returns nil if the proc is undefined.
@@ -219,6 +224,13 @@ module SaveData
   def self.load_all_values(save_data)
     validate save_data => Hash
     load_values(save_data) { |value| !value.loaded? }
+  end
+
+  # Marks all values that aren't loaded on bootup as unloaded.
+  def self.mark_values_as_unloaded
+    @values.each do |value|
+      value.mark_as_unloaded unless value.load_in_bootup?
+    end
   end
 
   # Loads each value from the given save data that has
