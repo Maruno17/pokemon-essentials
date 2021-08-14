@@ -735,7 +735,8 @@ class PokeBattle_Battle
     when :Psychic
       pbDisplay(_INTL("The battlefield got weird!"))
     end
-    # Check for terrain seeds that boost stats in a terrain
+    # Check for abilities/items that trigger upon the terrain changing
+    eachBattler { |b| b.pbAbilityOnTerrainChange }
     eachBattler { |b| b.pbItemTerrainStatBoostCheck }
   end
 

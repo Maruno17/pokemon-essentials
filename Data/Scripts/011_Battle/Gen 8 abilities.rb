@@ -330,6 +330,14 @@ BattleHandlers::DamageCalcUserAbility.add(:GORILLATACTICS,
   }
 )
 
+BattleHandlers::AbilityOnSwitchIn.add(:MIMICRY,
+  proc { |ability, battler, battle|
+    next if battle.field.terrain == :None
+    BattleHandlers.triggerAbilityOnTerrainChange(ability, battler, battle, false)
+  }
+)
+
+
 =begin
 
 #===============================================================================
@@ -342,10 +350,5 @@ Neutralizing Gas
 Suppresses all other abilities. Once this ability stops applying, triggers all
 abilities that activate when gained (if this happens because bearer switches
 out, abilities trigger before the replacement switches in).
-
-Mimicry
-The bearer's type changes depending on the terrain. Triggers upon entering
-battle and when terrain changes (and not when bearer's type is changed, e.g.
-with Soak).
 
 =end

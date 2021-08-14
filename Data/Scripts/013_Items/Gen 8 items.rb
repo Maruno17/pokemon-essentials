@@ -324,8 +324,19 @@ BattleHandlers::UserItemAfterMoveUse.add(:THROATSPRAY,
             battle.pbAllFainted?(user.idxOpposingSide)
     next if !move.soundMove? || numHits == 0
     next if !user.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user)
+    battle.pbCommonAnimation("UseItem", user)
     user.pbRaiseStatStage(:SPECIAL_ATTACK, 1, user)
     user.pbConsumeItem
+  }
+)
+
+BattleHandlers::ItemOnSwitchIn.add(:ROOMSERVICE,
+  proc { |item, battler, battle|
+    next if battle.field.effects[PBEffects::TrickRoom] == 0
+    next if !battler.pbCanLowerStatStage?(:SPEED, battler)
+    battle.pbCommonAnimation("UseItem", battler)
+    battler.pbLowerStatStage(:SPEED, 1, battler)
+    battler.pbConsumeItem
   }
 )
 
@@ -344,16 +355,9 @@ If holder's move fails its accuracy check, consume item and holder gets +2
 Speed. Doesn't trigger if move was an OHKO move, or Triple Kick that hit at
 least once.
 
-Room Service
-If Trick Room is used, or if holder switches in while Trick Room applies,
-consume item and holder gets -1 Speed.
-
 Pokémon Box Link
 Key item, unusable. Enables pressing a button while in the party screen to open
 the "Organise Boxes" mode of Pokémon storage. This is disabled at certain times,
 perhaps when a Game Switch is on.
-
-Catching Charm
-Increases the chance of a critical catch. By how much?
 
 =end

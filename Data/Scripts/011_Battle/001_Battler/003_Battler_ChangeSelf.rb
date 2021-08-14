@@ -127,6 +127,14 @@ class PokeBattle_Battler
     @effects[PBEffects::Roost]  = false
   end
 
+  def pbResetTypes
+    @type1 = @pokemon.type1
+    @type2 = @pokemon.type2
+    @effects[PBEffects::Type3]  = nil
+    @effects[PBEffects::BurnUp] = false
+    @effects[PBEffects::Roost]  = false
+  end
+
   #=============================================================================
   # Forms
   #=============================================================================

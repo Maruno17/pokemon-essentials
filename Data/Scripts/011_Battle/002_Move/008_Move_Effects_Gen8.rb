@@ -255,7 +255,7 @@ class PokeBattle_Move_17F < PokeBattle_Move
   def pbEffectAgainstTarget(user, target)
     target.pbChangeTypes(:PSYCHIC)
     typeName = GameData::Type.get(:PSYCHIC).name
-    @battle.pbDisplay(_INTL("{1} transformed into the {2} type!", target.pbThis, typeName))
+    @battle.pbDisplay(_INTL("{1}'s type changed to {2}!", target.pbThis, typeName))
   end
 end
 

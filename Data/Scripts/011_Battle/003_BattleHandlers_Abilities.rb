@@ -1719,8 +1719,8 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:COLORCHANGE,
     typeName = GameData::Type.get(move.calcType).name
     battle.pbShowAbilitySplash(target)
     target.pbChangeTypes(move.calcType)
-    battle.pbDisplay(_INTL("{1}'s {2} made it the {3} type!",target.pbThis,
-       target.abilityName,typeName))
+    battle.pbDisplay(_INTL("{1}'s type changed to {2} because of its {3}!",
+       target.pbThis, typeName, target.abilityName))
     battle.pbHideAbilitySplash(target)
   }
 )
@@ -2472,6 +2472,43 @@ BattleHandlers::AbilityChangeOnBattlerFainting.copy(:POWEROFALCHEMY,:RECEIVER)
 BattleHandlers::AbilityOnBattlerFainting.add(:SOULHEART,
   proc { |ability,battler,fainted,battle|
     battler.pbRaiseStatStageByAbility(:SPECIAL_ATTACK,1,battler)
+  }
+)
+
+#===============================================================================
+# AbilityOnTerrainChange handlers
+#===============================================================================
+
+BattleHandlers::AbilityOnTerrainChange.add(:MIMICRY,
+  proc { |ability, battler, battle, ability_changed|
+    if battle.field.terrain == :None
+      # Revert to original typing
+      battle.pbShowAbilitySplash(battler)
+      battler.pbResetTypes
+      battle.pbDisplay(_INTL("{1} changed back to its regular type!", battler.pbThis))
+      battle.pbHideAbilitySplash(battler)
+    else
+      # Change to new typing
+      terrain_hash = {
+        :Electric => :ELECTRIC,
+        :Grassy   => :GRASS,
+        :Misty    => :FAIRY,
+        :Psychic  => :PSYCHIC
+      }
+      new_type = terrain_hash[battle.field.terrain]
+      new_type_name = nil
+      if new_type
+        type_data = GameData::Type.try_get(new_type)
+        new_type = nil if !type_data
+        new_type_name = type_data.name if type_data
+      end
+      if new_type
+        battle.pbShowAbilitySplash(battler)
+        battler.pbChangeTypes(new_type)
+        battle.pbDisplay(_INTL("{1}'s type changed to {2}!", battler.pbThis, new_type_name))
+        battle.pbHideAbilitySplash(battler)
+      end
+    end
   }
 )
 

@@ -366,7 +366,7 @@ class PokeBattle_Battler
         @battle.pbShowAbilitySplash(user)
         user.pbChangeTypes(move.calcType)
         typeName = GameData::Type.get(move.calcType).name
-        @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))
+        @battle.pbDisplay(_INTL("{1}'s type changed to {2}!",user.pbThis,typeName))
         @battle.pbHideAbilitySplash(user)
         # NOTE: The GF games say that if Curse is used by a non-Ghost-type
         #       Pokémon which becomes Ghost-type because of Protean, it should

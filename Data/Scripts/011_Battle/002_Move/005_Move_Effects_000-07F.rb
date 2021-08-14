@@ -1860,7 +1860,7 @@ class PokeBattle_Move_05E < PokeBattle_Move
     newType = @newTypes[@battle.pbRandom(@newTypes.length)]
     user.pbChangeTypes(newType)
     typeName = GameData::Type.get(newType).name
-    @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))
+    @battle.pbDisplay(_INTL("{1}'s type changed to {2}!",user.pbThis,typeName))
   end
 end
 
@@ -1904,7 +1904,7 @@ class PokeBattle_Move_05F < PokeBattle_Move
     newType = @newTypes[@battle.pbRandom(@newTypes.length)]
     user.pbChangeTypes(newType)
     typeName = GameData::Type.get(newType).name
-    @battle.pbDisplay(_INTL("{1} transformed into the {2} type!", user.pbThis, typeName))
+    @battle.pbDisplay(_INTL("{1}'s type changed to {2}!", user.pbThis, typeName))
   end
 end
 
@@ -1982,7 +1982,7 @@ class PokeBattle_Move_060 < PokeBattle_Move
   def pbEffectGeneral(user)
     user.pbChangeTypes(@newType)
     typeName = GameData::Type.get(@newType).name
-    @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",user.pbThis,typeName))
+    @battle.pbDisplay(_INTL("{1}'s type changed to {2}!",user.pbThis,typeName))
   end
 end
 
@@ -2006,7 +2006,7 @@ class PokeBattle_Move_061 < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     target.pbChangeTypes(:WATER)
     typeName = GameData::Type.get(:WATER).name
-    @battle.pbDisplay(_INTL("{1} transformed into the {2} type!",target.pbThis,typeName))
+    @battle.pbDisplay(_INTL("{1}'s type changed to {2}!",target.pbThis,typeName))
   end
 end
 

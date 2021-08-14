@@ -61,6 +61,17 @@ class PokeBattle_Battler
     return ret   # Whether self has switched out
   end
 
+  def pbAbilityOnTerrainChange(ability_changed = false)
+    return if !abilityActive?
+    BattleHandlers.triggerAbilityOnTerrainChange(self.ability, self, @battle, ability_changed)
+  end
+
+  # Used for Rattled's Gen 8 effect. Called when Intimidate is triggered.
+  def pbAbilitiesOnIntimidated
+    return if !abilityActive?
+    BattleHandlers.triggerAbilityOnIntimidated(self.ability, self, @battle)
+  end
+
   # Called when a Pokémon (self) enters battle, at the end of each move used,
   # and at the end of each round.
   def pbContinualAbilityChecks(onSwitchIn=false)
@@ -91,12 +102,6 @@ class PokeBattle_Battler
     end
   end
 
-  # Used for Rattled's Gen 8 effect. Called when Intimidate is triggered.
-  def pbAbilitiesOnIntimidated
-    return if !abilityActive?
-    BattleHandlers.triggerAbilityOnIntimidated(self.ability, self, @battle)
-  end
-
   #=============================================================================
   # Ability curing
   #=============================================================================
@@ -123,6 +128,8 @@ class PokeBattle_Battler
     @effects[PBEffects::SlowStart]  = 0 if self.ability != :SLOWSTART
     # Revert form if Flower Gift/Forecast was lost
     pbCheckFormOnWeatherChange(true)
+    # Abilities that trigger when the terrain changes
+    pbAbilityOnTerrainChange(true)
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
   end

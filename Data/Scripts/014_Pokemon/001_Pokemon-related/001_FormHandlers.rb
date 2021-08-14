@@ -603,7 +603,7 @@ MultipleForms.copy(:TOXEL, :TOXTRICITY)
 
 MultipleForms.register(:SINISTEA, {
   "getFormOnCreation" => proc { |pkmn|
-    next 1 if rand(100) == 0
+    next 1 if rand(100) < 50
     next 0
   }
 })

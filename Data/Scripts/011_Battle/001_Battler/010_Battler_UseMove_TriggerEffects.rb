@@ -144,6 +144,16 @@ class PokeBattle_Battler
       #       after the move's animation, but the item is only consumed now.
       user.pbConsumeItem
     end
+    # Room Service
+    if move.function == "11F" && @battle.field.effects[PBEffects::TrickRoom] > 0   # Trick Room
+      @battle.battlers.each do |b|
+        next if !b.hasActiveItem?(:ROOMSERVICE)
+        next if !b.pbCanLowerStatStage?(:SPEED, b)
+        @battle.pbCommonAnimation("UseItem", b)
+        b.pbLowerStatStage(:SPEED, 1, b)
+        b.pbConsumeItem
+      end
+    end
     # Pokémon switching caused by Roar, Whirlwind, Circle Throw, Dragon Tail
     switchedBattlers = []
     move.pbSwitchOutTargetsEffect(user,targets,numHits,switchedBattlers)

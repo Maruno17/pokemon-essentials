@@ -119,8 +119,13 @@ class PokeBattle_Battle
         pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
       end
       @field.terrain = :None
+      eachBattler { |b| b.pbAbilityOnTerrainChange }
       # Start up the default terrain
-      pbStartTerrain(nil, @field.defaultTerrain, false) if @field.defaultTerrain != :None
+      if @field.defaultTerrain != :None
+        pbStartTerrain(nil, @field.defaultTerrain, false)
+        eachBattler { |b| b.pbAbilityOnTerrainChange }
+        eachBattler { |b| b.pbItemTerrainStatBoostCheck }
+      end
       return if @field.terrain == :None
     end
     # Terrain continues

@@ -3644,8 +3644,9 @@ class PokeBattle_Move_0F7 < PokeBattle_Move
   def pbNumHits(user,targets); return 1; end
 
   def pbBaseDamage(baseDmg,user,target)
-    return 10 if user.item && user.item.is_berry?
-    return 80 if user.item && user.item.is_mega_stone?
+    return 0 if !user.item
+    return 10 if user.item.is_berry?
+    return 80 if user.item.is_mega_stone?
     if user.item.is_TR?
       ret = GameData::Move.get(user.item.move).base_damage
       ret = 10 if ret < 10

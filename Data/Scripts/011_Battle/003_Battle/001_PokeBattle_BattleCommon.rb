@@ -193,14 +193,16 @@ module PokeBattle_BattleCommon
     y = ( 65536 / ((255.0/x)**0.1875) ).floor
     # Critical capture check
     if Settings::ENABLE_CRITICAL_CAPTURES
-      c = 0
+      dex_modifier = 0
       numOwned = $Trainer.pokedex.owned_count
-      if numOwned>600;    c = x*5/12
-      elsif numOwned>450; c = x*4/12
-      elsif numOwned>300; c = x*3/12
-      elsif numOwned>150; c = x*2/12
-      elsif numOwned>30;  c = x/12
+      if numOwned>600;    dex_modifier = 5
+      elsif numOwned>450; dex_modifier = 4
+      elsif numOwned>300; dex_modifier = 3
+      elsif numOwned>150; dex_modifier = 2
+      elsif numOwned>30;  dex_modifier = 1
       end
+      dex_modifier *= 2 if $PokemonBag.pbHasItem?(:CATCHINGCHARM)
+      c = x * dex_modifier / 12
       # Calculate the number of shakes
       if c>0 && pbRandom(256)<c
         @criticalCapture = true
