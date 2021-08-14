@@ -274,6 +274,7 @@ class PokemonDataBox < SpriteWrapper
     if self.hp>0
       w = @hpBarBitmap.width.to_f*self.hp/@battler.totalhp
       w = 1 if w<1
+      w = 1 if w.is_a?(Float) && w.nan?
       # NOTE: The line below snaps the bar's width to the nearest 2 pixels, to
       #       fit in with the rest of the graphics which are doubled in size.
       w = ((w/2.0).round)*2
@@ -288,6 +289,7 @@ class PokemonDataBox < SpriteWrapper
   def refreshExp
     return if !@showExp
     w = exp_fraction * @expBarBitmap.width
+    w = 0 if w.is_a?(Float) && w.nan?
     # NOTE: The line below snaps the bar's width to the nearest 2 pixels, to
     #       fit in with the rest of the graphics which are doubled in size.
     w = ((w/2).round)*2
