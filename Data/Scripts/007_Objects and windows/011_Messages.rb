@@ -111,9 +111,9 @@ def pbEventCommentInput(*args)
   return nil unless list.is_a?(Array)
   for item in list
     next unless item.code == 108 || item.code == 408
-    if item.parameters[0] == trigger
+    if item.parameters[0] == trigger[0]
       start = list.index(item) + 1
-      finish = start + elements
+      finish = start + elements[0]
       for id in start...finish
         next if !list[id]
         parameters.push(list[id].parameters[0])
