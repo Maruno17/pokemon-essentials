@@ -534,7 +534,7 @@ class PokemonSummary_Scene
     overlay = @sprites["overlay"].bitmap
     memo = ""
     # Write nature
-    showNature = !@pokemon.shadowPokemon? || @pokemon.heartStage>3
+    showNature = !@pokemon.shadowPokemon? || @pokemon.heartStage <= 3
     if showNature
       natureName = @pokemon.nature.name
       memo += _INTL("<c3=F83820,E09890>{1}<c3=404040,B0B0B0> nature.\n",natureName)

@@ -213,7 +213,7 @@ class PokeBattle_Battler
   end
 
   def pbHyperMode
-    return if fainted? || !shadowPokemon? || inHyperMode?
+    return if fainted? || !shadowPokemon? || inHyperMode? || !pbOwnedByPlayer?
     p = self.pokemon
     if @battle.pbRandom(p.heart_gauge) <= Pokemon::HEART_GAUGE_SIZE / 4
       p.hyper_mode = true

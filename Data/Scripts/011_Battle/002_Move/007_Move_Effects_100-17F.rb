@@ -1235,6 +1235,7 @@ class PokeBattle_Move_13B < PokeBattle_StatDownMove
   def pbEffectAgainstTarget(user,target)
     target.effects[PBEffects::BanefulBunker]          = false
     target.effects[PBEffects::KingsShield]            = false
+    target.effects[PBEffects::Obstruct]               = false
     target.effects[PBEffects::Protect]                = false
     target.effects[PBEffects::SpikyShield]            = false
     target.pbOwnSide.effects[PBEffects::CraftyShield] = false
@@ -1543,6 +1544,7 @@ class PokeBattle_Move_147 < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     target.effects[PBEffects::BanefulBunker]          = false
     target.effects[PBEffects::KingsShield]            = false
+    target.effects[PBEffects::Obstruct]               = false
     target.effects[PBEffects::Protect]                = false
     target.effects[PBEffects::SpikyShield]            = false
     target.pbOwnSide.effects[PBEffects::CraftyShield] = false

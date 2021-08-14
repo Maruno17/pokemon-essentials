@@ -93,7 +93,7 @@ end
 #===============================================================================
 class PokeBattle_Move_086 < PokeBattle_Move
   def pbBaseDamageMultiplier(damageMult,user,target)
-    damageMult *= 2 if !user.item
+    damageMult *= 2 if !user.item || user.effects[PBEffects::GemConsumed]
     return damageMult
   end
 end
@@ -1107,6 +1107,7 @@ class PokeBattle_Move_0AD < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     target.effects[PBEffects::BanefulBunker]          = false
     target.effects[PBEffects::KingsShield]            = false
+    target.effects[PBEffects::Obstruct]               = false
     target.effects[PBEffects::Protect]                = false
     target.effects[PBEffects::SpikyShield]            = false
     target.pbOwnSide.effects[PBEffects::CraftyShield] = false
@@ -1336,54 +1337,36 @@ class PokeBattle_Move_0B3 < PokeBattle_Move
     when :Psychic
       @npMove = :PSYCHIC if GameData::Move.exists?(:PSYCHIC)
     else
+      try_move = nil
       case @battle.environment
       when :Grass, :TallGrass, :Forest, :ForestGrass
-        if Settings::MECHANICS_GENERATION >= 6
-          @npMove = :ENERGYBALL if GameData::Move.exists?(:ENERGYBALL)
-        else
-          @npMove = :SEEDBOMB if GameData::Move.exists?(:SEEDBOMB)
-        end
+        try_move = (Settings::MECHANICS_GENERATION >= 6) ? :ENERGYBALL : :SEEDBOMB
       when :MovingWater, :StillWater, :Underwater
-        @npMove = :HYDROPUMP if GameData::Move.exists?(:HYDROPUMP)
+        try_move = :HYDROPUMP
       when :Puddle
-        @npMove = :MUDBOMB if GameData::Move.exists?(:MUDBOMB)
+        try_move = :MUDBOMB
       when :Cave
-        if Settings::MECHANICS_GENERATION >= 6
-          @npMove = :POWERGEM if GameData::Move.exists?(:POWERGEM)
-        else
-          @npMove = :ROCKSLIDE if GameData::Move.exists?(:ROCKSLIDE)
-        end
-      when :Rock
-        if Settings::MECHANICS_GENERATION >= 6
-          @npMove = :EARTHPOWER if GameData::Move.exists?(:EARTHPOWER)
-        else
-          @npMove = :ROCKSLIDE if GameData::Move.exists?(:ROCKSLIDE)
-        end
-      when :Sand
-        if Settings::MECHANICS_GENERATION >= 6
-          @npMove = :EARTHPOWER if GameData::Move.exists?(:EARTHPOWER)
-        else
-          @npMove = :EARTHQUAKE if GameData::Move.exists?(:EARTHQUAKE)
-        end
+        try_move = (Settings::MECHANICS_GENERATION >= 6) ? :POWERGEM : :ROCKSLIDE
+      when :Rock, :Sand
+        try_move = (Settings::MECHANICS_GENERATION >= 6) ? :EARTHPOWER : :EARTHQUAKE
       when :Snow
-        if Settings::MECHANICS_GENERATION >= 6
-          @npMove = :FROSTBREATH if GameData::Move.exists?(:FROSTBREATH)
-        else
-          @npMove = :BLIZZARD if GameData::Move.exists?(:BLIZZARD)
-        end
+        try_move = :BLIZZARD
+        try_move = :FROSTBREATH if Settings::MECHANICS_GENERATION == 6
+        try_move = :ICEBEAM if Settings::MECHANICS_GENERATION >= 7
       when :Ice
-        @npMove = :ICEBEAM if GameData::Move.exists?(:ICEBEAM)
+        try_move = :ICEBEAM
       when :Volcano
-        @npMove = :LAVAPLUME if GameData::Move.exists?(:LAVAPLUME)
+        try_move = :LAVAPLUME
       when :Graveyard
-        @npMove = :SHADOWBALL if GameData::Move.exists?(:SHADOWBALL)
+        try_move = :SHADOWBALL
       when :Sky
-        @npMove = :AIRSLASH if GameData::Move.exists?(:AIRSLASH)
+        try_move = :AIRSLASH
       when :Space
-        @npMove = :DRACOMETEOR if GameData::Move.exists?(:DRACOMETEOR)
+        try_move = :DRACOMETEOR
       when :UltraSpace
-        @npMove = :PSYSHOCK if GameData::Move.exists?(:PSYSHOCK)
+        try_move = :PSYSHOCK
       end
+      @npMove = try_move if GameData::Move.exists?(try_move)
     end
   end
 
@@ -2227,6 +2210,7 @@ class PokeBattle_Move_0CD < PokeBattle_TwoTurnMove
   def pbAttackingTurnEffect(user,target)
     target.effects[PBEffects::BanefulBunker]          = false
     target.effects[PBEffects::KingsShield]            = false
+    target.effects[PBEffects::Obstruct]               = false
     target.effects[PBEffects::Protect]                = false
     target.effects[PBEffects::SpikyShield]            = false
     target.pbOwnSide.effects[PBEffects::CraftyShield] = false

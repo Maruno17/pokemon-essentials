@@ -264,7 +264,7 @@ end
 #===============================================================================
 class PokeBattle_Move_180 < PokeBattle_Move
   def pbBaseDamage(baseDmg, user, target)
-    baseDmg *= 2 if @battle.field.terrain == :Electric
+    baseDmg *= 2 if @battle.field.terrain == :Electric && target.affectedByTerrain?
     return baseDmg
   end
 end
@@ -353,9 +353,9 @@ end
 # If Grassy Terrain applies, priority is increased by 1. (Grassy Glide)
 #===============================================================================
 class PokeBattle_Move_185 < PokeBattle_Move
-  def priority
+  def pbPriority(user)
     ret = super
-    ret += 1 if @battle.field.terrain == :Electric
+    ret += 1 if @battle.field.terrain == :Grass && user.affectedByTerrain?
     return ret
   end
 end

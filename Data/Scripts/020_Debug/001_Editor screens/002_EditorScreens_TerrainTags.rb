@@ -204,11 +204,20 @@ class PokemonTilesetScene
         break if pbConfirmMessage(_INTL("Exit from the editor?"))
       elsif Input.trigger?(Input::USE)
         selected = tile_ID_from_coordinates(@x, @y)
-        params = ChooseNumberParams.new
-        params.setRange(0, 99)
-        params.setDefaultValue(@tileset.terrain_tags[selected])
-        set_terrain_tag_for_tile_ID(selected, pbMessageChooseNumber(_INTL("Set the terrain tag."), params))
-        draw_overlay
+        old_tag = @tileset.terrain_tags[selected]
+        cmds = []
+        ids = []
+        old_idx = 0
+        GameData::TerrainTag.each do |tag|
+          old_idx = cmds.length if tag.id_number == old_tag
+          cmds.push("#{tag.id_number}: #{tag.real_name}")
+          ids.push(tag.id_number)
+        end
+        val = pbMessage(_INTL("\\l[1]\\ts[]Set the terrain tag."), cmds, -1, nil, old_idx)
+        if val >= 0 && val != old_tag
+          set_terrain_tag_for_tile_ID(selected, val)
+          draw_overlay
+        end
       end
     end
     close_screen
@@ -220,7 +229,11 @@ end
 #===============================================================================
 def pbTilesetScreen
   pbFadeOutIn {
+    Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT * 2)
+    pbSetResizeFactor(1)
     scene = PokemonTilesetScene.new
     scene.pbStartScene
+    Graphics.resize_screen(Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
+    pbSetResizeFactor($PokemonSystem.screensize)
   }
 end

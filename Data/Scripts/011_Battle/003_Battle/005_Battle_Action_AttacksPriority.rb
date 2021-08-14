@@ -153,7 +153,7 @@ class PokeBattle_Battle
           # Calculate move's priority
           if @choices[b.index][0]==:UseMove
             move = @choices[b.index][2]
-            pri = move.priority
+            pri = move.pbPriority(b)
             if b.abilityActive?
               pri = BattleHandlers.triggerPriorityChangeAbility(b.ability,b,move,pri)
             end
