@@ -548,6 +548,7 @@ class Game_Character
   end
 
   def move_upper_left
+    @through=true
     unless @direction_fix
       @direction = (@direction == 6 ? 4 : @direction == 2 ? 8 : @direction)
     end
@@ -556,9 +557,11 @@ class Game_Character
       @y -= 1
       increase_steps
     end
+    @through=false
   end
 
   def move_upper_right
+    @through=true
     unless @direction_fix
       @direction = (@direction == 4 ? 6 : @direction == 2 ? 8 : @direction)
     end
@@ -567,9 +570,11 @@ class Game_Character
       @y -= 1
       increase_steps
     end
+    @through=false
   end
 
   def move_lower_left
+    @through=true
     unless @direction_fix
       @direction = (@direction == 6 ? 4 : @direction == 8 ? 2 : @direction)
     end
@@ -578,9 +583,11 @@ class Game_Character
       @y += 1
       increase_steps
     end
+    @through=false
   end
 
   def move_lower_right
+    @through=true
     unless @direction_fix
       @direction = (@direction == 4 ? 6 : @direction == 8 ? 2 : @direction)
     end
@@ -589,6 +596,7 @@ class Game_Character
       @y += 1
       increase_steps
     end
+    @through=false
   end
 
   def moveLeft90   # anticlockwise

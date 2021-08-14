@@ -63,6 +63,7 @@ Removed features that will be coming back eventually
 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 - Randomizer
 - Speed up button
+- Pokedex seen/caught
 - Wild fusions	//TODO: pas oublier de init exp_gained_since_fused=0 && exp_when_fused = self.exp
 - Autosave (except in Pokemon centers)
 - Fusing from PC
@@ -86,5 +87,7 @@ Removed features that probably won't be coming back
 
 
 
-
+############ KNOWN ISSUES ##############
+- Some areas might have abnormal lag (please tell me in the discord if you find one that's unreasonably laggy)
+- Some side-stairs might act strange
 

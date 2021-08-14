@@ -165,36 +165,26 @@ class Player < Trainer
     # @param gender [Integer] gender to register (0=male, 1=female, 2=genderless)
     # @param form [Integer] form to register
     def register(species, gender = 0, form = 0, should_refresh_dexes = true)
+      return
       if species.is_a?(Pokemon)
         species_data = species.species_data
-        gender = species.gender
+        #gender = species.gender
       else
-        species_data = GameData::Species.get_species_form(species, form)
+        species_data = GameData::Species.get(species)
       end
       species = species_data.species
-      gender = 0 if gender >= 2
-      form = species_data.form
-      if form != species_data.pokedex_form
-        species_data = GameData::Species.get_species_form(species, species_data.pokedex_form)
-        form = species_data.form
-      end
-      form = 0 if species_data.form_name.nil? || species_data.form_name.empty?
-      # Register as seen
       @seen[species] = true
-      @seen_forms[species] ||= [[], []]
-      @seen_forms[species][gender][form] = true
-      @last_seen_forms[species] ||= []
-      @last_seen_forms[species] = [gender, form] if @last_seen_forms[species] == []
       self.refresh_accessible_dexes if should_refresh_dexes
     end
 
     # @param pkmn [Pokemon] Pokemon to register as most recently seen
     def register_last_seen(pkmn)
-      validate pkmn => Pokemon
-      species_data = pkmn.species_data
-      form = species_data.pokedex_form
-      form = 0 if species_data.form_name.nil? || species_data.form_name.empty?
-      @last_seen_forms[pkmn.species] = [pkmn.gender, form]
+      return
+      # validate pkmn => Pokemon
+      # species_data = pkmn.species_data
+      # form = species_data.pokedex_form
+      # form = 0 if species_data.form_name.nil? || species_data.form_name.empty?
+      # @last_seen_forms[pkmn.species] = [pkmn.gender, form]
     end
 
     #===========================================================================

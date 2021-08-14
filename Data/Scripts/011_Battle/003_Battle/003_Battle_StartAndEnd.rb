@@ -7,6 +7,7 @@ class PokeBattle_Battle
 
   #=============================================================================
   # Makes sure all Pokémon exist that need to. Alter the type of battle if
+  # Makes sure all Pokémon exist that need to. Alter the type of battle if
   # necessary. Will never try to create battler positions, only delete them
   # (except for wild Pokémon whose number of positions are fixed). Reduces the
   # size of each side by 1 and tries again. If the side sizes are uneven, only

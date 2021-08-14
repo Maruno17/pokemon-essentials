@@ -4,7 +4,7 @@
 #===============================================================================
 class Pokemon
   # @return [Symbol] this Pokémon's species
-  attr_reader   :species
+  attr_reader :species
   # If defined, this Pokémon's form will be this value even if a MultipleForms
   # handler tries to say otherwise.
   # @return [Integer, nil] this Pokémon's form
@@ -13,29 +13,29 @@ class Pokemon
   # @return [Integer, nil] the time this Pokémon's form was set
   attr_accessor :time_form_set
   # @return [Integer] the current experience points
-  attr_reader   :exp
+  attr_reader :exp
 
-  attr_accessor   :exp_when_fused_head
-  attr_accessor   :exp_when_fused_body
-  attr_accessor   :exp_gained_since_fused
+  attr_accessor :exp_when_fused_head
+  attr_accessor :exp_when_fused_body
+  attr_accessor :exp_gained_since_fused
 
   # @return [Integer] the number of steps until this Pokémon hatches, 0 if this Pokémon is not an egg
   attr_accessor :steps_to_hatch
   # @return [Integer] the current HP
-  attr_reader   :hp
+  attr_reader :hp
   # @return [Symbol] this Pokémon's current status (see GameData::Status)
-  attr_reader   :status
+  attr_reader :status
   # @return [Integer] sleep count / toxic flag / 0:
   #   sleep (number of rounds before waking up), toxic (0 = regular poison, 1 = toxic)
   attr_accessor :statusCount
   # This Pokémon's shininess (true, false, nil). Is recalculated if made nil.
   # @param value [Boolean, nil] whether this Pokémon is shiny
-  attr_writer   :shiny
+  attr_writer :shiny
   # The index of this Pokémon's ability (0, 1 are natural abilities, 2+ are
   # hidden abilities)as defined for its species/form. An ability may not be
   # defined at this index. Is recalculated (as 0 or 1) if made nil.
   # @param value [Integer, nil] forced ability index (nil if none is set)
-  attr_writer   :ability_index
+  attr_writer :ability_index
   # @return [Array<Pokemon::Move>] the moves known by this Pokémon
   attr_accessor :moves
   # @return [Array<Integer>] the IDs of moves known by this Pokémon when it was obtained
@@ -61,9 +61,9 @@ class Pokemon
   # @return [Hash<Integer>] this Pokémon's effort values
   attr_accessor :ev
   # @return [Integer] calculated stats
-  attr_reader   :totalhp, :attack, :defense, :spatk, :spdef, :speed
+  attr_reader :totalhp, :attack, :defense, :spatk, :spdef, :speed
   # @return [Owner] this Pokémon's owner
-  attr_reader   :owner
+  attr_reader :owner
   # @return [Integer] the manner this Pokémon was obtained:
   #   0 (met), 1 (as egg), 2 (traded), 4 (fateful encounter)
   attr_accessor :obtain_method
@@ -89,13 +89,13 @@ class Pokemon
   # Max total IVs
   IV_STAT_LIMIT = 31
   # Max total EVs
-  EV_LIMIT      = 510
+  EV_LIMIT = 510
   # Max EVs that a single stat can have
   EV_STAT_LIMIT = 252
   # Maximum length a Pokémon's nickname can be
   MAX_NAME_SIZE = 10
   # Maximum number of moves a Pokémon can know at once
-  MAX_MOVES     = 4
+  MAX_MOVES = 4
 
   def self.play_cry(species, form = 0, volume = 90, pitch = 100)
     GameData::Species.play_cry_from_species(species, form, volume, pitch)
@@ -124,11 +124,11 @@ class Pokemon
   def species=(species_id)
     new_species_data = GameData::Species.get(species_id)
     return if @species == new_species_data.species
-    @species     = new_species_data.species
-    @form        = new_species_data.form if new_species_data.form != 0
+    @species = new_species_data.species
+    @form = new_species_data.form if new_species_data.form != 0
     @forced_form = nil
-    @level       = nil   # In case growth rate is different for the new species
-    @ability     = nil
+    @level = nil # In case growth rate is different for the new species
+    @ability = nil
     calc_stats
   end
 
@@ -136,7 +136,7 @@ class Pokemon
   # @return [Boolean] whether this Pokémon is of the specified species
   def isSpecies?(check_species)
     return @species == check_species || (GameData::Species.exists?(check_species) &&
-                                        @species == GameData::Species.get(check_species).species)
+      @species == GameData::Species.get(check_species).species)
   end
 
   def isFusion?
@@ -232,7 +232,7 @@ class Pokemon
     return 0.0 if lvl >= GameData::GrowthRate.max_level
     g_rate = growth_rate
     start_exp = g_rate.minimum_exp_for_level(lvl)
-    end_exp   = g_rate.minimum_exp_for_level(lvl + 1)
+    end_exp = g_rate.minimum_exp_for_level(lvl + 1)
     return (@exp - start_exp).to_f / (end_exp - start_exp)
   end
 
@@ -277,7 +277,7 @@ class Pokemon
   # Heals the status problem of this Pokémon.
   def heal_status
     return if egg?
-    @status      = :NONE
+    @status = :NONE
     @statusCount = 0
   end
 
@@ -341,9 +341,12 @@ class Pokemon
     if !@gender
       gender_ratio = species_data.gender_ratio
       case gender_ratio
-      when :AlwaysMale   then @gender = 0
-      when :AlwaysFemale then @gender = 1
-      when :Genderless   then @gender = 2
+      when :AlwaysMale then
+        @gender = 0
+      when :AlwaysFemale then
+        @gender = 1
+      when :Genderless then
+        @gender = 2
       else
         female_chance = GameData::GenderRatio.get(gender_ratio).female_chance
         @gender = ((@personalID & 0xFF) < female_chance) ? 1 : 0
@@ -360,19 +363,29 @@ class Pokemon
   end
 
   # Makes this Pokémon male.
-  def makeMale; self.gender = 0; end
+  def makeMale
+    self.gender = 0;
+  end
 
   # Makes this Pokémon female.
-  def makeFemale; self.gender = 1; end
+  def makeFemale
+    self.gender = 1;
+  end
 
   # @return [Boolean] whether this Pokémon is male
-  def male?; return self.gender == 0; end
+  def male?
+    return self.gender == 0;
+  end
 
   # @return [Boolean] whether this Pokémon is female
-  def female?; return self.gender == 1; end
+  def female?
+    return self.gender == 1;
+  end
 
   # @return [Boolean] whether this Pokémon is genderless
-  def genderless?; return self.gender == 2; end
+  def genderless?
+    return self.gender == 2;
+  end
 
   # @return [Boolean] whether this Pokémon species is restricted to only ever being one
   #   gender (or genderless)
@@ -417,11 +430,11 @@ class Pokemon
     if !@ability
       sp_data = species_data
       abil_index = ability_index
-      if abil_index >= 2   # Hidden ability
+      if abil_index >= 2 # Hidden ability
         @ability = sp_data.hidden_abilities[abil_index - 2]
         abil_index = (@personalID & 1) if !@ability
       end
-      if !@ability   # Natural ability or no hidden ability defined
+      if !@ability # Natural ability or no hidden ability defined
         @ability = sp_data.abilities[abil_index] || sp_data.abilities[0]
       end
     end
@@ -674,7 +687,15 @@ class Pokemon
   # @return [Boolean] whether the Pokémon is compatible with the given move
   def compatible_with_move?(move_id)
     move_data = GameData::Move.try_get(move_id)
-    return move_data && species_data.tutor_moves.include?(move_data.id)
+    if isFusion?()
+      head_species_id = getBasePokemonID(species, false)
+      body_species_id = getBasePokemonID(species)
+      head_species = GameData::Species.get(head_species_id)
+      body_species = GameData::Species.get(body_species_id)
+      return move_data && (head_species.tutor_moves.include?(move_data.id) || body_species.tutor_moves.include?(move_data.id))
+    else
+      return move_data && species_data.tutor_moves.include?(move_data.id)
+    end
   end
 
   def can_relearn_move?
@@ -771,7 +792,7 @@ class Pokemon
   # Gives this Pokémon Pokérus (either the specified strain or a random one).
   # @param strain [Integer] Pokérus strain to give
   def givePokerus(strain = 0)
-    return if self.pokerusStage == 2   # Can't re-infect a cured Pokémon
+    return if self.pokerusStage == 2 # Can't re-infect a cured Pokémon
     strain = rand(1..16) if strain <= 0 || strain >= 16
     time = 1 + (strain % 4)
     @pokerus = time
@@ -897,7 +918,7 @@ class Pokemon
       gain = [1, 1, 0][happiness_range]
     when "faint"
       gain = -1
-    when "faintbad"   # Fainted against an opponent that is 30+ levels higher
+    when "faintbad" # Fainted against an opponent that is 30+ levels higher
       gain = [-5, -5, -10][happiness_range]
     when "powder"
       gain = [-5, -5, -10][happiness_range]
@@ -952,7 +973,8 @@ class Pokemon
   # required it to have a held item) or duplicate this Pokémon (Shedinja only).
   # @param new_species [Pokemon] the species that this Pokémon evolved into
   def action_after_evolution(new_species)
-    species_data.get_evolutions(true).each do |evo|   # [new_species, method, parameter]
+    species_data.get_evolutions(true).each do |evo|
+      # [new_species, method, parameter]
       break if GameData::Evolution.get(evo[1]).call_after_evolution(self, evo[0], evo[2], new_species)
     end
   end
@@ -965,9 +987,10 @@ class Pokemon
     return nil if egg? || shadowPokemon?
     return nil if hasItem?(:EVERSTONE)
     return nil if hasAbility?(:BATTLEBOND)
-    species_data.get_evolutions(true).each do |evo|   # [new_species, method, parameter, boolean]
-      next if evo[3]   # Prevolution
-      ret = yield self, evo[0], evo[1], evo[2]   # pkmn, new_species, method, parameter
+    species_data.get_evolutions(true).each do |evo|
+      # [new_species, method, parameter, boolean]
+      next if evo[3] # Prevolution
+      ret = yield self, evo[0], evo[1], evo[2] # pkmn, new_species, method, parameter
       return ret if ret
     end
     return nil
@@ -999,7 +1022,7 @@ class Pokemon
 
   # @return [Integer] the maximum HP of this Pokémon
   def calcHP(base, level, iv, ev)
-    return 1 if base == 1   # For Shedinja
+    return 1 if base == 1 # For Shedinja
     return ((base * 2 + iv + (ev / 4)) * level / 100).floor + level + 10
   end
 
@@ -1012,7 +1035,7 @@ class Pokemon
   def calc_stats
     base_stats = self.baseStats
     this_level = self.level
-    this_IV    = self.calcIV
+    this_IV = self.calcIV
     # Format stat multipliers due to nature
     nature_mod = {}
     GameData::Stat.each_main { |s| nature_mod[s.id] = 100 }
@@ -1031,12 +1054,12 @@ class Pokemon
     end
     hpDiff = @totalhp - @hp
     @totalhp = stats[:HP]
-    @hp      = @totalhp - hpDiff
-    @attack  = stats[:ATTACK]
+    @hp = @totalhp - hpDiff
+    @attack = stats[:ATTACK]
     @defense = stats[:DEFENSE]
-    @spatk   = stats[:SPECIAL_ATTACK]
-    @spdef   = stats[:SPECIAL_DEFENSE]
-    @speed   = stats[:SPEED]
+    @spatk = stats[:SPECIAL_ATTACK]
+    @spdef = stats[:SPECIAL_DEFENSE]
+    @speed = stats[:SPEED]
   end
 
   #=============================================================================
@@ -1047,22 +1070,21 @@ class Pokemon
   # @return [Pokemon] a copy of this Pokémon
   def clone
     ret = super
-    ret.iv          = {}
-    ret.ivMaxed     = {}
-    ret.ev          = {}
+    ret.iv = {}
+    ret.ivMaxed = {}
+    ret.ev = {}
     GameData::Stat.each_main do |s|
-      ret.iv[s.id]      = @iv[s.id]
+      ret.iv[s.id] = @iv[s.id]
       ret.ivMaxed[s.id] = @ivMaxed[s.id]
-      ret.ev[s.id]      = @ev[s.id]
+      ret.ev[s.id] = @ev[s.id]
     end
-    ret.moves       = []
+    ret.moves = []
     @moves.each_with_index { |m, i| ret.moves[i] = m.clone }
     ret.first_moves = @first_moves.clone
-    ret.owner       = @owner.clone
-    ret.ribbons     = @ribbons.clone
+    ret.owner = @owner.clone
+    ret.ribbons = @ribbons.clone
     return ret
   end
-
 
   # Creates a new Pokémon object.
   # @param species [Symbol, String, Integer] Pokémon species
@@ -1072,42 +1094,42 @@ class Pokemon
   # @param rechech_form [TrueClass, FalseClass] whether to auto-check the form
   def initialize(species, level, owner = $Trainer, withMoves = true, recheck_form = true)
     species_data = GameData::Species.get(species)
-    @species          = species_data.species
-    @form             = species_data.form
-    @forced_form      = nil
-    @time_form_set    = nil
-    self.level        = level
-    @steps_to_hatch   = 0
+    @species = species_data.species
+    @form = species_data.form
+    @forced_form = nil
+    @time_form_set = nil
+    self.level = level
+    @steps_to_hatch = 0
     heal_status
-    @gender           = nil
-    @shiny            = nil
-    @ability_index    = nil
-    @ability          = nil
-    @nature           = nil
+    @gender = nil
+    @shiny = nil
+    @ability_index = nil
+    @ability = nil
+    @nature = nil
     @nature_for_stats = nil
-    @item             = nil
-    @mail             = nil
-    @moves            = []
+    @item = nil
+    @mail = nil
+    @moves = []
     reset_moves if withMoves
-    @first_moves      = []
-    @ribbons          = []
-    @cool             = 0
-    @beauty           = 0
-    @cute             = 0
-    @smart            = 0
-    @tough            = 0
-    @sheen            = 0
-    @pokerus          = 0
-    @name             = nil
-    @happiness        = species_data.happiness
-    @poke_ball        = :POKEBALL
-    @markings         = 0
-    @iv               = {}
-    @ivMaxed          = {}
-    @ev               = {}
+    @first_moves = []
+    @ribbons = []
+    @cool = 0
+    @beauty = 0
+    @cute = 0
+    @smart = 0
+    @tough = 0
+    @sheen = 0
+    @pokerus = 0
+    @name = nil
+    @happiness = species_data.happiness
+    @poke_ball = :POKEBALL
+    @markings = 0
+    @iv = {}
+    @ivMaxed = {}
+    @ev = {}
     GameData::Stat.each_main do |s|
-      @iv[s.id]       = rand(IV_STAT_LIMIT + 1)
-      @ev[s.id]       = 0
+      @iv[s.id] = rand(IV_STAT_LIMIT + 1)
+      @ev[s.id] = 0
     end
     if owner.is_a?(Owner)
       @owner = owner
@@ -1116,18 +1138,18 @@ class Pokemon
     else
       @owner = Owner.new(0, '', 2, 2)
     end
-    @obtain_method    = 0   # Met
-    @obtain_method    = 4 if $game_switches && $game_switches[Settings::FATEFUL_ENCOUNTER_SWITCH]
-    @obtain_map       = ($game_map) ? $game_map.map_id : 0
-    @obtain_text      = nil
-    @obtain_level     = level
-    @hatched_map      = 0
-    @timeReceived     = pbGetTimeNow.to_i
-    @timeEggHatched   = nil
-    @fused            = nil
-    @personalID       = rand(2 ** 16) | rand(2 ** 16) << 16
-    @hp               = 1
-    @totalhp          = 1
+    @obtain_method = 0 # Met
+    @obtain_method = 4 if $game_switches && $game_switches[Settings::FATEFUL_ENCOUNTER_SWITCH]
+    @obtain_map = ($game_map) ? $game_map.map_id : 0
+    @obtain_text = nil
+    @obtain_level = level
+    @hatched_map = 0
+    @timeReceived = pbGetTimeNow.to_i
+    @timeEggHatched = nil
+    @fused = nil
+    @personalID = rand(2 ** 16) | rand(2 ** 16) << 16
+    @hp = 1
+    @totalhp = 1
     calc_stats
     if @form == 0 && recheck_form
       f = MultipleForms.call("getFormOnCreation", self)
