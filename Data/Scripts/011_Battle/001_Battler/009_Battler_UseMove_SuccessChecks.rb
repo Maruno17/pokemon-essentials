@@ -111,11 +111,14 @@ class PokeBattle_Battler
     return true if !@battle.pbOwnedByPlayer?(@index)
     disobedient = false
     # Pokémon may be disobedient; calculate if it is
-    badgeLevel = 10 * (@battle.pbPlayer.badge_count + 1)
-    badgeLevel = GameData::GrowthRate.max_level if @battle.pbPlayer.badge_count >= 8
-    if @pokemon.foreign?(@battle.pbPlayer) && @level>badgeLevel
-      a = ((@level+badgeLevel)*@battle.pbRandom(256)/256).floor
-      disobedient |= (a>=badgeLevel)
+    if Settings::ANY_HIGH_LEVEL_POKEMON_CAN_DISOBEY ||
+       (Settings::FOREIGN_HIGH_LEVEL_POKEMON_CAN_DISOBEY && @pokemon.foreign?(@battle.pbPlayer))
+      badgeLevel = 10 * (@battle.pbPlayer.badge_count + 1)
+      badgeLevel = GameData::GrowthRate.max_level if @battle.pbPlayer.badge_count >= 8
+      if @level > badgeLevel
+        a = ((@level+badgeLevel)*@battle.pbRandom(256)/256).floor
+        disobedient |= (a>=badgeLevel)
+      end
     end
     disobedient |= !pbHyperModeObedience(choice[2])
     return true if !disobedient

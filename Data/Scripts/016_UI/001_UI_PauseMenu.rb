@@ -59,7 +59,7 @@ class PokemonPauseMenu_Scene
       Graphics.update
       Input.update
       pbUpdateSceneMap
-      if Input.trigger?(Input::BACK)
+      if Input.trigger?(Input::BACK) || Input.trigger?(Input::ACTION)
         ret = -1
         break
       elsif Input.trigger?(Input::USE)

@@ -18,6 +18,13 @@ module Settings
   MORE_TYPE_EFFECTS                           = (MECHANICS_GENERATION >= 6)
   # Whether weather caused by an ability lasts 5 rounds (true) or forever (false).
   FIXED_DURATION_WEATHER_FROM_ABILITY         = (MECHANICS_GENERATION >= 6)
+  # Whether any Pokémon (originally owned by the player or foreign) can disobey
+  # the player's commands if the Pokémon is too high a level compared to the
+  # number of Gym Badges the player has.
+  ANY_HIGH_LEVEL_POKEMON_CAN_DISOBEY          = false
+  # Whether foreign Pokémon can disobey the player's commands if the Pokémon is
+  # too high a level compared to the number of Gym Badges the player has.
+  FOREIGN_HIGH_LEVEL_POKEMON_CAN_DISOBEY      = true
 
   #=============================================================================
 

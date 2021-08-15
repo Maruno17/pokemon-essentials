@@ -268,7 +268,7 @@ class PokeBattle_Scene
   # Animates a data box's Exp bar
   #=============================================================================
   def pbEXPBar(battler,startExp,endExp,tempExp1,tempExp2)
-    return if !battler
+    return if !battler || endExp == startExp
     startExpLevel = tempExp1-startExp
     endExpLevel   = tempExp2-startExp
     expRange      = endExp-startExp

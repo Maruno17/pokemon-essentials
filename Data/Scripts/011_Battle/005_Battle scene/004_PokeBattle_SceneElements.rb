@@ -162,6 +162,7 @@ class PokemonDataBox < SpriteWrapper
   end
 
   def exp_fraction
+    return 0.0 if @rangeExp == 0
     return (@animatingExp) ? @currentExp.to_f/@rangeExp : @battler.pokemon.exp_fraction
   end
 
@@ -180,6 +181,7 @@ class PokemonDataBox < SpriteWrapper
   end
 
   def animateExp(oldExp,newExp,rangeExp)
+    return if rangeExp == 0
     @currentExp     = oldExp
     @endExp         = newExp
     @rangeExp       = rangeExp

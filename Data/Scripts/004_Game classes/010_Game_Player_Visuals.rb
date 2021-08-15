@@ -23,7 +23,7 @@ class Game_Player < Game_Character
     return false if $game_temp.in_menu || $game_temp.in_battle ||
                     @move_route_forcing || $game_temp.message_window_showing ||
                     pbMapInterpreterRunning?
-    input = ($PokemonSystem.runstyle == 1) ^ Input.press?(Input::ACTION)
+    input = ($PokemonSystem.runstyle == 1) ^ Input.press?(Input::BACK)
     return input && $Trainer.has_running_shoes && !jumping? &&
        !$PokemonGlobal.diving && !$PokemonGlobal.surfing &&
        !$PokemonGlobal.bicycle && !$game_player.pbTerrainTag.must_walk
