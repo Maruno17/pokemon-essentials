@@ -515,8 +515,7 @@ class PokemonBoxPartySprite < SpriteWrapper
     sprite = @pokemonsprites[index]
     if sprite
       arrow.grab(sprite)
-      @pokemonsprites[index] = nil
-      @pokemonsprites.compact!
+      @pokemonsprites.delete_at(index)
       refresh
     end
   end
@@ -539,10 +538,7 @@ class PokemonBoxPartySprite < SpriteWrapper
       xvalues.push(18 + 72 * (i % 2))
       yvalues.push(2 + 16 * (i % 2) + 64 * (i / 2))
     end
-    for j in 0...Settings::MAX_PARTY_SIZE
-      @pokemonsprites[j] = nil if @pokemonsprites[j] && @pokemonsprites[j].disposed?
-    end
-    @pokemonsprites.compact!
+    @pokemonsprites.delete_if { |sprite| sprite && sprite.disposed? }
     for j in 0...Settings::MAX_PARTY_SIZE
       sprite = @pokemonsprites[j]
       if sprite && !sprite.disposed?

@@ -178,12 +178,7 @@ class PokemonBag
   def pbUnregisterItem(item)
     item = GameData::Item.get(item).id
     registeredlist = self.registeredItems
-    for i in 0...registeredlist.length
-      next if registeredlist[i] != item
-      registeredlist[i] = nil
-      break
-    end
-    registeredlist.compact!
+    registeredlist.delete_at(registeredlist.index(item))
   end
 
   def registeredIndex

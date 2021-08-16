@@ -48,12 +48,7 @@ class PokeBattle_Battle
       end
     else
       items = pbGetOwnerItems(idxBattler)
-      items.each_with_index do |thisItem,i|
-        next if thisItem!=item
-        items[i] = nil
-        break
-      end
-      items.compact!
+      items.delete_at(items.index(item))
     end
   end
 

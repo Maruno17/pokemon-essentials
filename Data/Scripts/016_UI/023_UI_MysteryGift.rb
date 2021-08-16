@@ -184,10 +184,7 @@ def pbManageMysteryGifts
           break
         elsif cmd==0   # Toggle on/offline
           if online.include?(gift[0])
-            for i in 0...online.length
-              online[i]=nil if online[i]==gift[0]
-            end
-            online.compact!
+            online.delete(gift[0])
           else
             online.push(gift[0])
           end
@@ -208,10 +205,7 @@ def pbManageMysteryGifts
           $Trainer.mystery_gifts.push(gift) if !replaced
           pbReceiveMysteryGift(gift[0])
         elsif cmd==3   # Delete
-          if pbConfirmMessage(_INTL("Are you sure you want to delete this gift?"))
-            master[command]=nil
-            master.compact!
-          end
+          master.delete_at(command) if pbConfirmMessage(_INTL("Are you sure you want to delete this gift?"))
           break
         end
       end
@@ -305,7 +299,7 @@ def pbDownloadMysteryGift(trainer)
           pbMessageDisplay(sprites["msgwindow"],_INTL("The gift has been received!")) { sprite.update }
           pbMessageDisplay(sprites["msgwindow"],_INTL("Please pick up your gift from the deliveryman in any Poké Mart.")) { sprite.update }
           trainer.mystery_gifts.push(gift)
-          pending[command]=nil; pending.compact!
+          pending.delete_at(command)
           opacityDiff = 16*20/Graphics.frame_rate
           loop do
             Graphics.update

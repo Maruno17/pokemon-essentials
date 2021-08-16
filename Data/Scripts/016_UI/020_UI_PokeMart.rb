@@ -588,12 +588,7 @@ class PokemonMartScreen
         pbDisplayPaused(_INTL("You have no more room in the Bag."))
       else
         @adapter.setMoney(@adapter.getMoney-price)
-        for i in 0...@stock.length
-          if GameData::Item.get(@stock[i]).is_important? && $PokemonBag.pbHasItem?(@stock[i])
-            @stock[i]=nil
-          end
-        end
-        @stock.compact!
+        @stock.delete_if { |item| GameData::Item.get(item).is_important? && $PokemonBag.pbHasItem?(item) }
         pbDisplayPaused(_INTL("Here you are! Thank you!")) { pbSEPlay("Mart buy item") }
         if quantity >= 10 && $PokemonBag && GameData::Item.exists?(:PREMIERBALL)
           if Settings::MORE_BONUS_PREMIER_BALLS && GameData::Item.get(item).is_poke_ball?
@@ -660,11 +655,7 @@ end
 #
 #===============================================================================
 def pbPokemonMart(stock,speech=nil,cantsell=false)
-  for i in 0...stock.length
-    stock[i] = GameData::Item.get(stock[i]).id
-    stock[i] = nil if GameData::Item.get(stock[i]).is_important? && $PokemonBag.pbHasItem?(stock[i])
-  end
-  stock.compact!
+  stock.delete_if { |item| GameData::Item.get(item).is_important? && $PokemonBag.pbHasItem?(item) }
   commands = []
   cmdBuy  = -1
   cmdSell = -1

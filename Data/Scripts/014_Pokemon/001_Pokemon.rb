@@ -751,12 +751,7 @@ class Pokemon
   def takeRibbon(ribbon)
     ribbon_data = GameData::Ribbon.try_get(ribbon)
     return if !ribbon_data
-    for i in 0...@ribbons.length
-      next if @ribbons[i] != ribbon_data.id
-      @ribbons[i] = nil
-      @ribbons.compact!
-      break
-    end
+    @ribbons.delete_at(@ribbons.index(ribbon_data.id))
   end
 
   # Removes all ribbons from this Pokémon.
