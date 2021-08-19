@@ -235,7 +235,7 @@ def pbDebugDayCare
       for i in 0...2
         textpos.push([_INTL("Pokémon {1}",i+1),Graphics.width/4+i*Graphics.width/2,2,2,base,shadow])
       end
-      for i in 0...pbDayCareDeposited
+      for i in 0...2
         next if !$PokemonGlobal.daycare[i][0]
         y = 34
         pkmn      = $PokemonGlobal.daycare[i][0]
