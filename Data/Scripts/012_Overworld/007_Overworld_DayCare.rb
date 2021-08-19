@@ -199,12 +199,13 @@ def pbDayCareGenerateEgg
   end
   # Inheriting regional form
   if [:RATTATA, :SANDSHREW, :VULPIX, :DIGLETT, :MEOWTH, :GEODUDE, :GRIMER,
-      :PONYTA, :SLOWPOKE, :FARFETCHD, :ARTICUNO, :ZAPDOS, :MOLTRES, :CORSOLA,
-      :ZIGZAGOON, :DARUMAKA, :YAMASK, :STUNFISK].include?(babyspecies)
-    if mother.form==1
-      egg.form = 1 if mother.hasItem?(:EVERSTONE)
-    elsif father.species_data.get_baby_species(true, mother.item_id, father.item_id) == babyspecies
-      egg.form = 1 if father.form==1 && father.hasItem?(:EVERSTONE)
+      :PONYTA, :SLOWPOKE, :FARFETCHD, :MRMINE, :ARTICUNO, :ZAPDOS, :MOLTRES,
+      :CORSOLA, :ZIGZAGOON, :DARUMAKA, :YAMASK, :STUNFISK].include?(babyspecies)
+    if mother.form > 0
+      egg.form = mother.form if mother.hasItem?(:EVERSTONE)
+    elsif father.form > 0 &&
+       father.species_data.get_baby_species(true, mother.item_id, father.item_id) == babyspecies
+      egg.form = father.form if father.hasItem?(:EVERSTONE)
     end
   end
   # Inheriting Moves
