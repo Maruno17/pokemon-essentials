@@ -193,8 +193,9 @@ def pbDayCareGenerateEgg
   egg.personalID = pid
   # Inheriting form
   if [:BURMY, :SHELLOS, :BASCULIN, :FLABEBE, :PUMPKABOO, :ORICORIO, :ROCKRUFF, :MINIOR].include?(babyspecies)
-    newForm = mother.form
-    newForm = 0 if mother.isSpecies?(:MOTHIM)
+    parent = mother.species_data.get_baby_species(true, mother.item_id, father.item_id) == babyspecies ? mother : father
+    newForm = parent.form
+    newForm = 0 if parent.isSpecies?(:MOTHIM)
     egg.form = newForm
   end
   # Inheriting Alolan form
