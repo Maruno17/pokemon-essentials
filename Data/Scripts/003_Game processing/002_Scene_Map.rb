@@ -85,7 +85,7 @@ class Scene_Map
     createSpritesets
     if $game_temp.transition_processing
       $game_temp.transition_processing = false
-      Graphics.transition(20)
+      Graphics.transition
     end
     $game_map.autoplay
     Graphics.frame_reset
@@ -172,7 +172,7 @@ class Scene_Map
     if $game_temp.transition_processing
       $game_temp.transition_processing = false
       if $game_temp.transition_name == ""
-        Graphics.transition(20)
+        Graphics.transition
       else
         Graphics.transition(40, "Graphics/Transitions/" + $game_temp.transition_name)
       end
@@ -213,7 +213,7 @@ class Scene_Map
 
   def main
     createSpritesets
-    Graphics.transition(20)
+    Graphics.transition
     loop do
       Graphics.update
       Input.update
@@ -223,7 +223,7 @@ class Scene_Map
     Graphics.freeze
     disposeSpritesets
     if $game_temp.to_title
-      Graphics.transition(20)
+      Graphics.transition
       Graphics.freeze
     end
   end

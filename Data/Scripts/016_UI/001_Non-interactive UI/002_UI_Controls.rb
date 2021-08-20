@@ -35,7 +35,7 @@ class ButtonEventScene < EventScene
     addLabelForScreen(4, 134, 196, 352, _INTL("Press to open the Ready Menu, where registered items and available field moves can be used. (Default: D)"))
 
     set_up_screen(@current_screen)
-    Graphics.transition(20)
+    Graphics.transition
     # Go to next screen when user presses USE
     onCTrigger.set(method(:pbOnScreenEnd))
   end
@@ -67,7 +67,7 @@ class ButtonEventScene < EventScene
     if @current_screen >= last_screen
       # End scene
       Graphics.freeze
-      Graphics.transition(20, "fadetoblack")
+      Graphics.transition(8, "fadetoblack")
       scene.dispose
     else
       # Next screen

@@ -567,17 +567,17 @@ def pbLoadRpgxpScene(scene)
   Graphics.freeze
   oldscene.disposeSpritesets
   visibleObjects = pbHideVisibleObjects
-  Graphics.transition(20)
+  Graphics.transition
   Graphics.freeze
   while $scene && !$scene.is_a?(Scene_Map)
     $scene.main
   end
-  Graphics.transition(20)
+  Graphics.transition
   Graphics.freeze
   $scene = oldscene
   $scene.createSpritesets
   pbShowObjects(visibleObjects)
-  Graphics.transition(20)
+  Graphics.transition
 end
 
 def pbChooseLanguage
