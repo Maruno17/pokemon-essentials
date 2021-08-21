@@ -213,10 +213,13 @@ class TriadScene
 
   def pbDisplay(text)
     @sprites["helpwindow"].text = text
-    (Graphics.frame_rate*1.5).floor.times do
+    timer = 0.0
+    loop do
       Graphics.update
       Input.update
       pbUpdate
+      timer += Graphics.delta_s
+      break if timer >= 1.5
     end
   end
 

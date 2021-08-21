@@ -5020,6 +5020,15 @@ FieldUse = OnPokemon
 Type = KeyItem
 Description = A bottle believed to have been used to seal away the power of a certain Pokémon long, long ago.
 #-------------------------------
+[ZYGARDECUBE]
+Name = Zygarde Cube
+NamePlural = Zygarde Cubes
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Type = KeyItem
+Description = An item in which Zygarde Cores and Cells are gathered. You can also use it to change Zygarde's forms.
+#-------------------------------
 [DNASPLICERS]
 Name = DNA Splicers
 NamePlural = DNA Splicers
@@ -5028,6 +5037,15 @@ Price = 0
 FieldUse = OnPokemon
 Type = KeyItem
 Description = A splicer that fuses Kyurem and a certain Pokémon. They are said to have been one in the beginning.
+#-------------------------------
+[DNASPLICERSUSED]
+Name = DNA Splicers
+NamePlural = DNA Splicers
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Type = KeyItem
+Description = A splicer that separates Kyurem and a certain Pokémon when they have been fused.
 #-------------------------------
 [NSOLARIZER]
 Name = N-Solarizer
@@ -5038,6 +5056,15 @@ FieldUse = OnPokemon
 Type = KeyItem
 Description = A machine to fuse Necrozma, which needs light, and Solgaleo.
 #-------------------------------
+[NSOLARIZERUSED]
+Name = N-Solarizer
+NamePlural = N-Solarizers
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Type = KeyItem
+Description = A machine to separate Necrozma, which needed light, from Solgaleo.
+#-------------------------------
 [NLUNARIZER]
 Name = N-Lunarizer
 NamePlural = N-Lunarizers
@@ -5046,6 +5073,15 @@ Price = 0
 FieldUse = OnPokemon
 Type = KeyItem
 Description = A machine to fuse Necrozma, which needs light, and Lunala.
+#-------------------------------
+[NLUNARIZERUSED]
+Name = N-Lunarizer
+NamePlural = N-Lunarizers
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Type = KeyItem
+Description = A machine to separate Necrozma, which needed light, from Lunala.
 #-------------------------------
 [OVALCHARM]
 Name = Oval Charm

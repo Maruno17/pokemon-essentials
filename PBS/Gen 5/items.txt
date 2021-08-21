@@ -4218,6 +4218,15 @@ FieldUse = OnPokemon
 Type = KeyItem
 Description = A splicer that fuses Kyurem and a certain Pokémon. They are said to have been one in the beginning.
 #-------------------------------
+[DNASPLICERSUSED]
+Name = DNA Splicers
+NamePlural = DNA Splicers
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Type = KeyItem
+Description = A splicer that separates Kyurem and a certain Pokémon when they have been fused.
+#-------------------------------
 [REVEALGLASS]
 Name = Reveal Glass
 NamePlural = Reveal Glasses

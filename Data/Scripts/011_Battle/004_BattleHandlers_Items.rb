@@ -1183,6 +1183,7 @@ BattleHandlers::TargetItemOnHit.add(:WEAKNESSPOLICY,
     if target.pbCanRaiseStatStage?(:SPECIAL_ATTACK,target)
       target.pbRaiseStatStageByCause(:SPECIAL_ATTACK,2,target,target.itemName,showAnim)
     end
+    battle.pbDisplay(_INTL("The {1} was used up...", target.itemName))
     target.pbHeldItemTriggered(item)
   }
 )
