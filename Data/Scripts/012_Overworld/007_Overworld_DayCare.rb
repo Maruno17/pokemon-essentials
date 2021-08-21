@@ -193,8 +193,9 @@ def pbDayCareGenerateEgg
   egg.personalID = pid
   # Inheriting form
   if [:BURMY, :SHELLOS, :BASCULIN, :FLABEBE, :PUMPKABOO, :ORICORIO, :ROCKRUFF, :MINIOR].include?(babyspecies)
-    newForm = mother.form
-    newForm = 0 if mother.isSpecies?(:MOTHIM)
+    parent = (ditto0 || (!pkmn0.female? && ditto1)) ? father : mother
+    newForm = parent.form
+    newForm = 0 if parent.isSpecies?(:MOTHIM)
     egg.form = newForm
   end
   # Inheriting regional form
