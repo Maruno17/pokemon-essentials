@@ -258,7 +258,7 @@ def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
         for j in firstspace...i
           characters[j]=nil
         end
-        firstspace =- 1
+        firstspace = -1
       elsif characters[i][0][/[ \r\t]/]
         firstspace = i if firstspace < 0
       else
