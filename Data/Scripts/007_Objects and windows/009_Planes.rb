@@ -46,13 +46,13 @@ class LargePlane < Plane
   def ox; @__ox; end
   def oy; @__oy; end
 
-  def ox=(value);
+  def ox=(value)
     return if @__ox==value
     @__ox = value
     refresh
   end
 
-  def oy=(value);
+  def oy=(value)
     return if @__oy==value
     @__oy = value
     refresh
@@ -89,13 +89,13 @@ class LargePlane < Plane
   def color; @__sprite.color; end
   def tone; @__sprite.tone; end
 
-  def zoom_x=(v);
+  def zoom_x=(v)
     return if @__sprite.zoom_x==v
     @__sprite.zoom_x = v
     refresh
   end
 
-  def zoom_y=(v);
+  def zoom_y=(v)
     return if @__sprite.zoom_y==v
     @__sprite.zoom_y = v
     refresh
@@ -107,7 +107,7 @@ class LargePlane < Plane
   def z=(v); @__sprite.z=(v); end
   def color=(v); @__sprite.color=(v); end
   def tone=(v); @__sprite.tone=(v); end
-  def update; ;end
+  def update; end
 
   def refresh
     @__sprite.visible = (@__visible && !@__bitmap.nil?)

@@ -100,7 +100,8 @@ class PokeBattle_Battler
       return false
     end
     # Ability immunity
-    immuneByAbility = false; immAlly = nil
+    immuneByAbility = false
+    immAlly = nil
     if BattleHandlers.triggerStatusImmunityAbilityNonIgnorable(self.ability,self,newStatus)
       immuneByAbility = true
     elsif selfInflicted || !@battle.moldBreaker

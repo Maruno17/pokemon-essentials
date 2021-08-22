@@ -1262,16 +1262,24 @@ class PokemonStorageScene
         selection -= 3 if selection%3==0
       end
     when Input::UP
-      if selection==7; selection = 6
-      elsif selection==6; selection = 4
-      elsif selection<3; selection = 7
-      else; selection -= 3
+      if selection==7
+        selection = 6
+      elsif selection==6
+        selection = 4
+      elsif selection<3
+        selection = 7
+      else
+        selection -= 3
       end
     when Input::DOWN
-      if selection==7; selection = 1
-      elsif selection==6; selection = 7
-      elsif selection>=3; selection = 6
-      else; selection += 3
+      if selection==7
+        selection = 1
+      elsif selection==6
+        selection = 7
+      elsif selection>=3
+        selection = 6
+      else
+        selection += 3
       end
     end
     return selection
@@ -1675,7 +1683,7 @@ class PokemonStorageScreen
     box = selected[0]
     index = selected[1]
     if box==-1
-      raise _INTL("Can't withdraw from party...");
+      raise _INTL("Can't withdraw from party...")
     end
     if @storage.party_full?
       pbDisplay(_INTL("Your party's full!"))
@@ -1912,7 +1920,8 @@ class PokemonStorageScreen
       index = 0
       for i in 0...papers[1].length
         if papers[1][i]==@storage[@storage.currentBox].background
-          index = i; break
+          index = i
+          break
         end
       end
       wpaper = pbShowCommands(_INTL("Pick the wallpaper."),papers[0],index)

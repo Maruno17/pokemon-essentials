@@ -288,7 +288,7 @@ def isDarkBackground(background,rect=nil)
   yStart = (ySeg==0) ? rect.y+(rect.height/2) : rect.y+ySeg/2
   count = 0
   y = yStart
-  r = 0; g = 0; b = 0
+  r = g = b = 0
   yLoop.times do
     x = xStart
     xLoop.times do

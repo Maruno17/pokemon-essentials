@@ -620,13 +620,15 @@ class Game_Character
   def move_random_range(xrange=-1,yrange=-1)
     dirs = []   # 0=down, 1=left, 2=right, 3=up
     if xrange<0
-      dirs.push(1); dirs.push(2)
+      dirs.push(1)
+      dirs.push(2)
     elsif xrange>0
       dirs.push(1) if @x > @original_x - xrange
       dirs.push(2) if @x < @original_x + xrange
     end
     if yrange<0
-      dirs.push(0); dirs.push(3)
+      dirs.push(0)
+      dirs.push(3)
     elsif yrange>0
       dirs.push(0) if @y < @original_y + yrange
       dirs.push(3) if @y > @original_y - yrange

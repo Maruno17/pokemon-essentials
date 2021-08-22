@@ -541,10 +541,13 @@ def pbHeadbuttEffect(event=nil)
   a = (event.x+(event.x/24).floor+1)*(event.y+(event.y/24).floor+1)
   a = (a*2/5)%10   # Even 2x as likely as odd, 0 is 1.5x as likely as odd
   b = $Trainer.public_ID % 10   # Practically equal odds of each value
-  chance = 1                             # ~50%
-  if a==b;                  chance = 8   # 10%
-  elsif a>b && (a-b).abs<5; chance = 5   # ~30.3%
-  elsif a<b && (a-b).abs>5; chance = 5   # ~9.7%
+  chance = 1                 # ~50%
+  if a==b                    # 10%
+    chance = 8
+  elsif a>b && (a-b).abs<5   # ~30.3%
+    chance = 5
+  elsif a<b && (a-b).abs>5   # ~9.7%
+    chance = 5
   end
   if rand(10)>=chance
     pbMessage(_INTL("Nope. Nothing..."))

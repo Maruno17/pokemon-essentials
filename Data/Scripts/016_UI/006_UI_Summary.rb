@@ -705,9 +705,12 @@ class PokemonSummary_Scene
         if move.total_pp>0
           textpos.push([_INTL("PP"),342,yPos+32,0,moveBase,moveShadow])
           ppfraction = 0
-          if move.pp==0;                  ppfraction = 3
-          elsif move.pp*4<=move.total_pp; ppfraction = 2
-          elsif move.pp*2<=move.total_pp; ppfraction = 1
+          if move.pp==0
+            ppfraction = 3
+          elsif move.pp*4<=move.total_pp
+            ppfraction = 2
+          elsif move.pp*2<=move.total_pp
+            ppfraction = 1
           end
           textpos.push([sprintf("%d/%d",move.pp,move.total_pp),460,yPos+32,1,ppBase[ppfraction],ppShadow[ppfraction]])
         end
@@ -768,9 +771,12 @@ class PokemonSummary_Scene
         if move.total_pp>0
           textpos.push([_INTL("PP"),342,yPos+32,0,moveBase,moveShadow])
           ppfraction = 0
-          if move.pp==0;                  ppfraction = 3
-          elsif move.pp*4<=move.total_pp; ppfraction = 2
-          elsif move.pp*2<=move.total_pp; ppfraction = 1
+          if move.pp==0
+            ppfraction = 3
+          elsif move.pp*4<=move.total_pp
+            ppfraction = 2
+          elsif move.pp*2<=move.total_pp
+            ppfraction = 1
           end
           textpos.push([sprintf("%d/%d",move.pp,move.total_pp),460,yPos+32,1,ppBase[ppfraction],ppShadow[ppfraction]])
         end
@@ -1128,17 +1134,25 @@ class PokemonSummary_Scene
           redraw = true
         end
       elsif Input.trigger?(Input::UP)
-        if index==7;    index = 6
-        elsif index==6; index = 4
-        elsif index<3;  index = 7
-        else;           index -= 3
+        if index==7
+          index = 6
+        elsif index==6
+          index = 4
+        elsif index<3
+          index = 7
+        else
+          index -= 3
         end
         pbPlayCursorSE
       elsif Input.trigger?(Input::DOWN)
-        if index==7;    index = 1
-        elsif index==6; index = 7
-        elsif index>=3; index = 6
-        else;           index += 3
+        if index==7
+          index = 1
+        elsif index==6
+          index = 7
+        elsif index>=3
+          index = 6
+        else
+          index += 3
         end
         pbPlayCursorSE
       elsif Input.trigger?(Input::LEFT)

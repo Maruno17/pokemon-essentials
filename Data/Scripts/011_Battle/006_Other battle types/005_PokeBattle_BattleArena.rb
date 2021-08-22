@@ -20,10 +20,14 @@ class PokeBattle_SuccessState
     if @useState==1
       @skill = -2 if !@protected
     elsif @useState==2
-      if Effectiveness.super_effective?(@typeMod);       @skill = 2
-      elsif Effectiveness.normal?(@typeMod);             @skill = 1
-      elsif Effectiveness.not_very_effective?(@typeMod); @skill = -1
-      else;                                              @skill = -2   # Ineffective
+      if Effectiveness.super_effective?(@typeMod)
+        @skill = 2
+      elsif Effectiveness.normal?(@typeMod)
+        @skill = 1
+      elsif Effectiveness.not_very_effective?(@typeMod)
+        @skill = -1
+      else   # Ineffective
+        @skill = -2
       end
     end
     clear(false)

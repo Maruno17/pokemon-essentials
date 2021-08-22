@@ -492,8 +492,10 @@ class PokeBattle_TwoTurnMove < PokeBattle_Move
   end
 
   def pbEffectAgainstTarget(user,target)
-    if @damagingTurn;    pbAttackingTurnEffect(user,target)
-    elsif @chargingTurn; pbChargingTurnEffect(user,target)
+    if @damagingTurn
+      pbAttackingTurnEffect(user,target)
+    elsif @chargingTurn
+      pbChargingTurnEffect(user,target)
     end
   end
 
@@ -652,14 +654,20 @@ end
 #===============================================================================
 class PokeBattle_PledgeMove < PokeBattle_Move
   def pbOnStartUse(user,targets)
-    @pledgeSetup = false; @pledgeCombo = false; @pledgeOtherUser = nil
-    @comboEffect = nil; @overrideType = nil; @overrideAnim = nil
+    @pledgeSetup = false
+    @pledgeCombo = false
+    @pledgeOtherUser = nil
+    @comboEffect = nil
+    @overrideType = nil
+    @overrideAnim = nil
     # Check whether this is the use of a combo move
     @combos.each do |i|
       next if i[0]!=user.effects[PBEffects::FirstPledge]
       @battle.pbDisplay(_INTL("The two moves have become one! It's a combined move!"))
       @pledgeCombo = true
-      @comboEffect = i[1]; @overrideType = i[2]; @overrideAnim = i[3]
+      @comboEffect = i[1]
+      @overrideType = i[2]
+      @overrideAnim = i[3]
       @overrideType = nil if !GameData::Type.exists?(@overrideType)
       break
     end
@@ -706,7 +714,8 @@ class PokeBattle_PledgeMove < PokeBattle_Move
 
   def pbEffectAfterAllHits(user,target)
     return if !@pledgeCombo
-    msg = nil; animName = nil
+    msg = nil
+    animName = nil
     case @comboEffect
     when :SeaOfFire   # Grass + Fire
       if user.pbOpposingSide.effects[PBEffects::SeaOfFire]==0

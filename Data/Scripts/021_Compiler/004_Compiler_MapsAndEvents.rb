@@ -1002,10 +1002,12 @@ module Compiler
               deleteMoveRouteAt = proc { |list,i|
                 arr = []
                 if list[i] && list[i].code==209   # Set Move Route
-                  arr.push(list[i]); list.delete_at(i)
+                  arr.push(list[i])
+                  list.delete_at(i)
                   while i<list.length
                     break if !list[i] || list[i].code!=509   # Set Move Route (continuation line)
-                    arr.push(list[i]); list.delete_at(i)
+                    arr.push(list[i])
+                    list.delete_at(i)
                   end
                 end
                 next arr
@@ -1028,17 +1030,26 @@ module Compiler
                 if route && route.list.length<=2
                   # Delete superfluous move route command if necessary
                   if route.list[0].code==16      # Player Turn Down
-                    deleteMoveRouteAt.call(list,i+1); params[4] = 2; changed = true
+                    deleteMoveRouteAt.call(list,i+1)
+                    params[4] = 2
+                    changed = true
                   elsif route.list[0].code==17   # Player Turn Left
-                    deleteMoveRouteAt.call(list,i+1); params[4] = 4; changed = true
+                    deleteMoveRouteAt.call(list,i+1)
+                    params[4] = 4
+                    changed = true
                   elsif route.list[0].code==18   # Player Turn Right
-                    deleteMoveRouteAt.call(list,i+1); params[4] = 6; changed = true
+                    deleteMoveRouteAt.call(list,i+1)
+                    params[4] = 6
+                    changed = true
                   elsif route.list[0].code==19   # Player Turn Up
-                    deleteMoveRouteAt.call(list,i+1); params[4] = 8; changed = true
+                    deleteMoveRouteAt.call(list,i+1)
+                    params[4] = 8
+                    changed = true
                   elsif (route.list[0].code==1 || route.list[0].code==2 ||   # Player Move (4-dir)
                      route.list[0].code==3 || route.list[0].code==4) && list.length==4
                     params[4] = [0,2,4,6,8][route.list[0].code]
-                    deletedRoute = deleteMoveRouteAt.call(list,i+1); changed = true
+                    deletedRoute = deleteMoveRouteAt.call(list,i+1)
+                    changed = true
                   end
                 end
               # If an event command before this one is a Move Route that just
@@ -1055,13 +1066,25 @@ module Compiler
 #                      oldlistlength = list.length
 #                      # Delete superfluous move route command if necessary
 #                      if route.list[0].code==16      # Player Turn Down
-#                        deleteMoveRouteAt.call(list,j); params[4] = 2; changed = true; i -= (oldlistlength-list.length)
+#                        deleteMoveRouteAt.call(list,j)
+#                        params[4] = 2
+#                        changed = true
+#                        i -= (oldlistlength-list.length)
 #                      elsif route.list[0].code==17   # Player Turn Left
-#                        deleteMoveRouteAt.call(list,j); params[4] = 4; changed = true; i -= (oldlistlength-list.length)
+#                        deleteMoveRouteAt.call(list,j)
+#                        params[4] = 4
+#                        changed = true
+#                        i -= (oldlistlength-list.length)
 #                      elsif route.list[0].code==18   # Player Turn Right
-#                        deleteMoveRouteAt.call(list,j); params[4] = 6; changed = true; i -= (oldlistlength-list.length)
+#                        deleteMoveRouteAt.call(list,j)
+#                        params[4] = 6
+#                        changed = true
+#                        i -= (oldlistlength-list.length)
 #                      elsif route.list[0].code==19   # Player Turn Up
-#                        deleteMoveRouteAt.call(list,j); params[4] = 8; changed = true; i -= (oldlistlength-list.length)
+#                        deleteMoveRouteAt.call(list,j)
+#                        params[4] = 8
+#                        changed = true
+#                        i -= (oldlistlength-list.length)
 #                      end
 #                    end
 #                  end
@@ -1080,13 +1103,21 @@ module Compiler
                 if route && route.list.length<=2
                   # Delete superfluous move route command if necessary
                   if route.list[0].code==16      # Player Turn Down
-                    deleteMoveRouteAt.call(list,i+2); params[4] = 2; changed = true
+                    deleteMoveRouteAt.call(list,i+2)
+                    params[4] = 2
+                    changed = true
                   elsif route.list[0].code==17   # Player Turn Left
-                    deleteMoveRouteAt.call(list,i+2); params[4] = 4; changed = true
+                    deleteMoveRouteAt.call(list,i+2)
+                    params[4] = 4
+                    changed = true
                   elsif route.list[0].code==18   # Player Turn Right
-                    deleteMoveRouteAt.call(list,i+2); params[4] = 6; changed = true
+                    deleteMoveRouteAt.call(list,i+2)
+                    params[4] = 6
+                    changed = true
                   elsif route.list[0].code==19   # Player Turn Up
-                    deleteMoveRouteAt.call(list,i+2); params[4] = 8; changed = true
+                    deleteMoveRouteAt.call(list,i+2)
+                    params[4] = 8
+                    changed = true
                   end
                 end
               end

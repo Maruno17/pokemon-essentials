@@ -1390,7 +1390,8 @@ def pbAnimationsOrganiser
      Graphics.width / 2, 64, Graphics.width / 2, Graphics.height - 64, viewport)
   info.z = 2
   commands = []
-  refreshlist = true; oldsel = -1
+  refreshlist = true
+  oldsel = -1
   cmd = [0,0]
   loop do
     if refreshlist
@@ -1399,7 +1400,8 @@ def pbAnimationsOrganiser
         commands.push(sprintf("%d: %s",i,(list[i]) ? list[i].name : "???"))
       end
     end
-    refreshlist = false; oldsel = -1
+    refreshlist = false
+    oldsel = -1
     cmd = pbCommands3(cmdwin,commands,-1,cmd[1],true)
     if cmd[0]==1   # Swap animation up
       if cmd[1]>=0 && cmd[1]<commands.length-1

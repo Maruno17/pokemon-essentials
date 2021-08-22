@@ -77,7 +77,8 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
 
   def drawItem(index,_count,rect)
     pbSetNarrowFont(self.contents)
-    colors = 0; codeswitch = false
+    colors = 0
+    codeswitch = false
     if @mode==0
       name = $data_system.switches[index+1]
       codeswitch = (name[/^s\:/])
@@ -235,7 +236,7 @@ def pbDebugDayCare
       for i in 0...2
         textpos.push([_INTL("Pokémon {1}",i+1),Graphics.width/4+i*Graphics.width/2,2,2,base,shadow])
       end
-      for i in 0...pbDayCareDeposited
+      for i in 0...2
         next if !$PokemonGlobal.daycare[i][0]
         y = 34
         pkmn      = $PokemonGlobal.daycare[i][0]
@@ -381,12 +382,16 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
 
   def shadowtext(t,x,y,w,h,align=0,colors=0)
     width = self.contents.text_size(t).width
-    if align==1 ;   x += (w-width)         # Right aligned
-    elsif align==2; x += (w/2)-(width/2)   # Centre aligned
+    if align==1
+      x += (w-width)         # Right aligned
+    elsif align==2
+      x += (w/2)-(width/2)   # Centre aligned
     end
     base = Color.new(12*8,12*8,12*8)
-    if colors==1;    base = Color.new(168,48,56)   # Red
-    elsif colors==2; base = Color.new(0,144,0)     # Green
+    if colors==1
+      base = Color.new(168,48,56)   # Red
+    elsif colors==2
+      base = Color.new(0,144,0)     # Green
     end
     pbDrawShadowText(self.contents,x,y,[width,w].max,h,t,base,Color.new(26*8,26*8,25*8))
   end

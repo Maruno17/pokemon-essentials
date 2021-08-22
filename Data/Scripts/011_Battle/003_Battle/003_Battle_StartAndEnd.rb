@@ -531,9 +531,12 @@ class PokeBattle_Battle
   def pbJudge
     fainted1 = pbAllFainted?(0)
     fainted2 = pbAllFainted?(1)
-    if fainted1 && fainted2; @decision = pbDecisionOnDraw   # Draw
-    elsif fainted1;          @decision = 2                  # Loss
-    elsif fainted2;          @decision = 1                  # Win
+    if fainted1 && fainted2
+      @decision = pbDecisionOnDraw   # Draw
+    elsif fainted1
+      @decision = 2                  # Loss
+    elsif fainted2
+      @decision = 1                  # Win
     end
   end
 end

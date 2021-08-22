@@ -108,7 +108,8 @@ class PokemonStorage
     @unlockedWallpapers = [] if !@unlockedWallpapers
     for i in 0...papers.length
       next if !isAvailableWallpaper?(i)
-      ret[0].push(papers[i]); ret[1].push(i)
+      ret[0].push(papers[i])
+      ret[1].push(i)
     end
     return ret
   end

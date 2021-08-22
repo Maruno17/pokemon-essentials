@@ -2003,7 +2003,9 @@ BattleHandlers::EORGainItemAbility.add(:HARVEST,
 BattleHandlers::EORGainItemAbility.add(:PICKUP,
   proc { |ability,battler,battle|
     next if battler.item
-    foundItem = nil; fromBattler = nil; use = 0
+    foundItem = nil
+    fromBattler = nil
+    use = 0
     battle.eachBattler do |b|
       next if b.index==battler.index
       next if b.effects[PBEffects::PickupUse]<=use

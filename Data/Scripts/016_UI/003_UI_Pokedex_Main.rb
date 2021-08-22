@@ -103,27 +103,39 @@ class PokedexSearchSelectionSprite < SpriteWrapper
     @mode = value
     case @mode
     when 0     # Order
-      @xstart = 46; @ystart = 128
-      @xgap = 236; @ygap = 64
+      @xstart = 46
+      @ystart = 128
+      @xgap = 236
+      @ygap = 64
       @cols = 2
     when 1     # Name
-      @xstart = 78; @ystart = 114
-      @xgap = 52; @ygap = 52
+      @xstart = 78
+      @ystart = 114
+      @xgap = 52
+      @ygap = 52
       @cols = 7
     when 2     # Type
-      @xstart = 8; @ystart = 104
-      @xgap = 124; @ygap = 44
+      @xstart = 8
+      @ystart = 104
+      @xgap = 124
+      @ygap = 44
       @cols = 4
     when 3,4   # Height, weight
-      @xstart = 44; @ystart = 110
-      @xgap = 8; @ygap = 112
+      @xstart = 44
+      @ystart = 110
+      @xgap = 8
+      @ygap = 112
     when 5     # Color
-      @xstart = 62; @ystart = 114
-      @xgap = 132; @ygap = 52
+      @xstart = 62
+      @ystart = 114
+      @xgap = 132
+      @ygap = 52
       @cols = 3
     when 6     # Shape
-      @xstart = 82; @ystart = 116
-      @xgap = 70; @ygap = 70
+      @xstart = 82
+      @ystart = 116
+      @xgap = 70
+      @ygap = 70
       @cols = 5
     end
   end
@@ -133,46 +145,63 @@ class PokedexSearchSelectionSprite < SpriteWrapper
     if @mode==-1   # Main search screen
       case @index
       when 0     # Order
-        self.src_rect.y = 0; self.src_rect.height = 44
+        self.src_rect.y = 0
+        self.src_rect.height = 44
       when 1,5   # Name, color
-        self.src_rect.y = 44; self.src_rect.height = 44
+        self.src_rect.y = 44
+        self.src_rect.height = 44
       when 2     # Type
-        self.src_rect.y = 88; self.src_rect.height = 44
+        self.src_rect.y = 88
+        self.src_rect.height = 44
       when 3,4   # Height, weight
-        self.src_rect.y = 132; self.src_rect.height = 44
+        self.src_rect.y = 132
+        self.src_rect.height = 44
       when 6     # Shape
-        self.src_rect.y = 176; self.src_rect.height = 68
+        self.src_rect.y = 176
+        self.src_rect.height = 68
       else       # Reset/start/cancel
-        self.src_rect.y = 244; self.src_rect.height = 40
+        self.src_rect.y = 244
+        self.src_rect.height = 40
       end
       case @index
       when 0         # Order
-        self.x = 252; self.y = 52
+        self.x = 252
+        self.y = 52
       when 1,2,3,4   # Name, type, height, weight
-        self.x = 114; self.y = 110+(@index-1)*52
+        self.x = 114
+        self.y = 110 + (@index - 1) * 52
       when 5         # Color
-        self.x = 382; self.y = 110
+        self.x = 382
+        self.y = 110
       when 6         # Shape
-        self.x = 420; self.y = 214
+        self.x = 420
+        self.y = 214
       when 7,8,9     # Reset, start, cancel
-        self.x = 4+(@index-7)*176; self.y = 334
+        self.x = 4 + (@index - 7) * 176
+        self.y = 334
       end
     else   # Parameter screen
       case @index
       when -2,-3   # OK, Cancel
-        self.src_rect.y = 244; self.src_rect.height = 40
+        self.src_rect.y = 244
+        self.src_rect.height = 40
       else
         case @mode
         when 0     # Order
-          self.src_rect.y = 0; self.src_rect.height = 44
+          self.src_rect.y = 0
+          self.src_rect.height = 44
         when 1     # Name
-          self.src_rect.y = 284; self.src_rect.height = 44
+          self.src_rect.y = 284
+          self.src_rect.height = 44
         when 2,5   # Type, color
-          self.src_rect.y = 44; self.src_rect.height = 44
+          self.src_rect.y = 44
+          self.src_rect.height = 44
         when 3,4   # Height, weight
-          self.src_rect.y = (@minmax==1) ? 328 : 424; self.src_rect.height = 96
+          self.src_rect.y = (@minmax == 1) ? 328 : 424
+          self.src_rect.height = 96
         when 6     # Shape
-          self.src_rect.y = 176; self.src_rect.height = 68
+          self.src_rect.y = 176
+          self.src_rect.height = 68
         end
       end
       case @index
@@ -185,9 +214,11 @@ class PokedexSearchSelectionSprite < SpriteWrapper
           self.y = @ystart+(@cmds/@cols).floor*@ygap
         end
       when -2   # OK
-        self.x = 4; self.y = 334
+        self.x = 4
+        self.y = 334
       when -3   # Cancel
-        self.x = 356; self.y = 334
+        self.x = 356
+        self.y = 334
       else
         case @mode
         when 0,1,2,5,6   # Order, name, type, color, shape
@@ -527,34 +558,57 @@ class PokemonPokedex_Scene
     textpos.push([title,102,(mode==6) ? 58 : 52,0,base,shadow])
     case mode
     when 0   # Order
-      xstart = 46; ystart = 128
-      xgap = 236; ygap = 64
-      halfwidth = 92; cols = 2
-      selbuttony = 0; selbuttonheight = 44
+      xstart = 46
+      ystart = 128
+      xgap = 236
+      ygap = 64
+      halfwidth = 92
+      cols = 2
+      selbuttony = 0
+      selbuttonheight = 44
     when 1   # Name
-      xstart = 78; ystart = 114
-      xgap = 52; ygap = 52
-      halfwidth = 22; cols = 7
-      selbuttony = 156; selbuttonheight = 44
+      xstart = 78
+      ystart = 114
+      xgap = 52
+      ygap = 52
+      halfwidth = 22
+      cols = 7
+      selbuttony = 156
+      selbuttonheight = 44
     when 2   # Type
-      xstart = 8; ystart = 104
-      xgap = 124; ygap = 44
-      halfwidth = 62; cols = 4
-      selbuttony = 44; selbuttonheight = 44
+      xstart = 8
+      ystart = 104
+      xgap = 124
+      ygap = 44
+      halfwidth = 62
+      cols = 4
+      selbuttony = 44
+      selbuttonheight = 44
     when 3,4   # Height, weight
-      xstart = 44; ystart = 110
-      xgap = 304/(cmds.length+1); ygap = 112
-      halfwidth = 60; cols = cmds.length+1
+      xstart = 44
+      ystart = 110
+      xgap = 304 / (cmds.length + 1)
+      ygap = 112
+      halfwidth = 60
+      cols = cmds.length + 1
     when 5   # Color
-      xstart = 62; ystart = 114
-      xgap = 132; ygap = 52
-      halfwidth = 62; cols = 3
-      selbuttony = 44; selbuttonheight = 44
+      xstart = 62
+      ystart = 114
+      xgap = 132
+      ygap = 52
+      halfwidth = 62
+      cols = 3
+      selbuttony = 44
+      selbuttonheight = 44
     when 6   # Shape
-      xstart = 82; ystart = 116
-      xgap = 70; ygap = 70
-      halfwidth = 0; cols = 5
-      selbuttony = 88; selbuttonheight = 68
+      xstart = 82
+      ystart = 116
+      xgap = 70
+      ygap = 70
+      halfwidth = 0
+      cols = 5
+      selbuttony = 88
+      selbuttonheight = 68
     end
     # Draw selected option(s) text in top bar
     case mode
@@ -870,23 +924,32 @@ class PokemonPokedex_Scene
       Input.update
       if mode==3 || mode==4
         if Input.trigger?(Input::UP)
-          if index<-1; minmax = 0; index = selindex[minmax]   # From OK/Cancel
-          elsif minmax==0; minmax = 1; index = selindex[minmax]
+          if index<-1   # From OK/Cancel
+            minmax = 0
+            index = selindex[minmax]
+          elsif minmax==0
+            minmax = 1
+            index = selindex[minmax]
           end
           if index!=oldindex || minmax!=oldminmax
             pbPlayCursorSE
             pbRefreshDexSearchParam(mode,cmds,selindex,index)
           end
         elsif Input.trigger?(Input::DOWN)
-          if minmax==1; minmax = 0; index = selindex[minmax]
-          elsif minmax==0; minmax = -1; index = -2
+          if minmax==1
+            minmax = 0
+            index = selindex[minmax]
+          elsif minmax==0
+            minmax = -1
+            index = -2
           end
           if index!=oldindex || minmax!=oldminmax
             pbPlayCursorSE
             pbRefreshDexSearchParam(mode,cmds,selindex,index)
           end
         elsif Input.repeat?(Input::LEFT)
-          if index==-3; index = -2
+          if index==-3
+            index = -2
           elsif index>=-1
             if minmax==1 && index==-1
               index = cmds.length-1 if selindex[0]<cmds.length-1
@@ -902,10 +965,13 @@ class PokemonPokedex_Scene
             pbRefreshDexSearchParam(mode,cmds,selindex,index)
           end
         elsif Input.repeat?(Input::RIGHT)
-          if index==-2; index = -3
+          if index==-2
+            index = -3
           elsif index>=-1
-            if minmax==1 && index>=cmds.length; index = 0
-            elsif minmax==1 && index==cmds.length-1; index = -1
+            if minmax==1 && index>=cmds.length
+              index = 0
+            elsif minmax==1 && index==cmds.length-1
+              index = -1
             elsif index<cmds.length && !(minmax==1 && index<0)
               index += 1 if minmax==1 || selindex[1]==-1 ||
                             (selindex[1]<cmds.length && selindex[1]>=index+1)
@@ -919,17 +985,24 @@ class PokemonPokedex_Scene
         end
       else
         if Input.trigger?(Input::UP)
-          if index==-1; index = cmds.length-1-(cmds.length-1)%cols-1   # From blank
-          elsif index==-2; index = ((cmds.length-1)/cols).floor*cols   # From OK
-          elsif index==-3 && mode==0; index = cmds.length-1   # From Cancel
-          elsif index==-3; index = -1   # From Cancel
-          elsif index>=cols; index -= cols
+          if index==-1   # From blank
+            index = cmds.length-1-(cmds.length-1)%cols-1
+          elsif index==-2   # From OK
+            index = ((cmds.length-1)/cols).floor*cols
+          elsif index==-3 && mode==0   # From Cancel
+            index = cmds.length-1
+          elsif index==-3   # From Cancel
+            index = -1
+          elsif index>=cols
+            index -= cols
           end
           pbPlayCursorSE if index!=oldindex
         elsif Input.trigger?(Input::DOWN)
-          if index==-1; index = -3   # From blank
+          if index==-1   # From blank
+            index = -3
           elsif index>=0
-            if index+cols<cmds.length; index += cols
+            if index+cols<cmds.length
+              index += cols
             elsif (index/cols).floor<((cmds.length-1)/cols).floor
               index = (index%cols<cols/2.0) ? cmds.length-1 : -1
             else
@@ -938,15 +1011,21 @@ class PokemonPokedex_Scene
           end
           pbPlayCursorSE if index!=oldindex
         elsif Input.trigger?(Input::LEFT)
-          if index==-3; index = -2
-          elsif index==-1; index = cmds.length-1
-          elsif index>0 && index%cols!=0; index -= 1
+          if index==-3
+            index = -2
+          elsif index==-1
+            index = cmds.length-1
+          elsif index>0 && index%cols!=0
+            index -= 1
           end
           pbPlayCursorSE if index!=oldindex
         elsif Input.trigger?(Input::RIGHT)
-          if index==-2; index = -3
-          elsif index==cmds.length-1 && mode!=0; index = -1
-          elsif index>=0 && index%cols!=cols-1; index += 1
+          if index==-2
+            index = -3
+          elsif index==cmds.length-1 && mode!=0
+            index = -1
+          elsif index>=0 && index%cols!=cols-1
+            index += 1
           end
           pbPlayCursorSE if index!=oldindex
         end
@@ -1043,26 +1122,37 @@ class PokemonPokedex_Scene
         oldindex = index
       end
       if Input.trigger?(Input::UP)
-        if index>=7; index = 4
-        elsif index==5; index = 0
-        elsif index>0; index -= 1
+        if index>=7
+          index = 4
+        elsif index==5
+          index = 0
+        elsif index>0
+          index -= 1
         end
         pbPlayCursorSE if index!=oldindex
       elsif Input.trigger?(Input::DOWN)
-        if index==4 || index==6; index = 8
-        elsif index<7; index += 1
+        if index==4 || index==6
+          index = 8
+        elsif index<7
+          index += 1
         end
         pbPlayCursorSE if index!=oldindex
       elsif Input.trigger?(Input::LEFT)
-        if index==5; index = 1
-        elsif index==6; index = 3
-        elsif index>7; index -= 1
+        if index==5
+          index = 1
+        elsif index==6
+          index = 3
+        elsif index>7
+          index -= 1
         end
         pbPlayCursorSE if index!=oldindex
       elsif Input.trigger?(Input::RIGHT)
-        if index==1; index = 5
-        elsif index>=2 && index<=4; index = 6
-        elsif index==7 || index==8; index += 1
+        if index==1
+          index = 5
+        elsif index>=2 && index<=4
+          index = 6
+        elsif index==7 || index==8
+          index += 1
         end
         pbPlayCursorSE if index!=oldindex
       elsif Input.trigger?(Input::ACTION)

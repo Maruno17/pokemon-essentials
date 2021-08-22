@@ -195,11 +195,16 @@ module PokeBattle_BattleCommon
     if Settings::ENABLE_CRITICAL_CAPTURES
       dex_modifier = 0
       numOwned = $Trainer.pokedex.owned_count
-      if numOwned>600;    dex_modifier = 5
-      elsif numOwned>450; dex_modifier = 4
-      elsif numOwned>300; dex_modifier = 3
-      elsif numOwned>150; dex_modifier = 2
-      elsif numOwned>30;  dex_modifier = 1
+      if numOwned>600
+        dex_modifier = 5
+      elsif numOwned>450
+        dex_modifier = 4
+      elsif numOwned>300
+        dex_modifier = 3
+      elsif numOwned>150
+        dex_modifier = 2
+      elsif numOwned>30
+        dex_modifier = 1
       end
       dex_modifier *= 2 if $PokemonBag.pbHasItem?(:CATCHINGCHARM)
       c = x * dex_modifier / 12

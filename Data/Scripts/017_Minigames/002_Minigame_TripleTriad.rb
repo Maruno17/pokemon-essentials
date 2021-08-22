@@ -67,11 +67,16 @@ class TriadCard
     ret *= (@north + @east + @south + @west)
     ret /= 10   # Ranges from 2 to 24,000
     # Quantize prices to the next highest "unit"
-    if ret > 10000;   ret = (1 + ret / 1000) * 1000
-    elsif ret > 5000; ret = (1 + ret / 500) * 500
-    elsif ret > 1000; ret = (1 + ret / 100) * 100
-    elsif ret > 500;  ret = (1 + ret / 50) * 50
-    else;             ret = (1 + ret / 10) * 10
+    if ret > 10000
+      ret = (1 + ret / 1000) * 1000
+    elsif ret > 5000
+      ret = (1 + ret / 500) * 500
+    elsif ret > 1000
+      ret = (1 + ret / 100) * 100
+    elsif ret > 500
+      ret = (1 + ret / 50) * 50
+    else
+      ret = (1 + ret / 10) * 10
     end
     return ret
   end

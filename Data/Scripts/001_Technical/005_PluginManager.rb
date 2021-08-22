@@ -409,11 +409,15 @@ module PluginManager
   #-----------------------------------------------------------------------------
   def self.compare_versions(v1, v2)
     d1 = v1.split("")
-    d1.insert(0, "0") if d1[0] == "."          # Turn ".123" into "0.123"
-    while d1[-1] == "."; d1 = d1[0..-2]; end   # Turn "123." into "123"
+    d1.insert(0, "0") if d1[0] == "."   # Turn ".123" into "0.123"
+    while d1[-1] == "."                 # Turn "123." into "123"
+      d1 = d1[0..-2]
+    end
     d2 = v2.split("")
-    d2.insert(0, "0") if d2[0] == "."          # Turn ".123" into "0.123"
-    while d2[-1] == "."; d2 = d2[0..-2]; end   # Turn "123." into "123"
+    d2.insert(0, "0") if d2[0] == "."   # Turn ".123" into "0.123"
+    while d2[-1] == "."                 # Turn "123." into "123"
+      d2 = d2[0..-2]
+    end
     for i in 0...[d1.size, d2.size].max   # Compare each digit in turn
       c1 = d1[i]
       c2 = d2[i]

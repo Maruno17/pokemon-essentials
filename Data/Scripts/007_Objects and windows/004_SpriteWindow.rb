@@ -455,8 +455,10 @@ class SpriteWindow < Window
     return if !srcbitmap || srcbitmap.disposed?
     left=dstrect.x
     top=dstrect.y
-    y=0;loop do break unless y<dstrect.height
-      x=0;loop do break unless x<dstrect.width
+    y = 0
+    loop do break unless y < dstrect.height
+      x = 0
+      loop do break unless x < dstrect.width
         dstbitmap.blt(x+left,y+top,srcbitmap,srcrect)
         x+=srcrect.width
       end
@@ -567,10 +569,10 @@ class SpriteWindow < Window
         blindsRect=nil
       end
       if @_windowskin && !@_windowskin.disposed?
-        @sprites["corner0"].src_rect.set(trimX,trimY+0,16,16);
-        @sprites["corner1"].src_rect.set(trimX+48,trimY+0,16,16);
-        @sprites["corner2"].src_rect.set(trimX,trimY+48,16,16);
-        @sprites["corner3"].src_rect.set(trimX+48,trimY+48,16,16);
+        @sprites["corner0"].src_rect.set(trimX,trimY+0,16,16)
+        @sprites["corner1"].src_rect.set(trimX+48,trimY+0,16,16)
+        @sprites["corner2"].src_rect.set(trimX,trimY+48,16,16)
+        @sprites["corner3"].src_rect.set(trimX+48,trimY+48,16,16)
         @sprites["scroll0"].src_rect.set(trimX+24, trimY+16, 16, 8) # up
         @sprites["scroll3"].src_rect.set(trimX+24, trimY+40, 16, 8) # down
         @sprites["scroll1"].src_rect.set(trimX+16, trimY+24, 8, 16) # left
@@ -613,12 +615,12 @@ class SpriteWindow < Window
         endX=(!@_windowskin || @_windowskin.disposed?) ? @skinrect.x : @_windowskin.width-cx
         # height of bottom end of window
         endY=(!@_windowskin || @_windowskin.disposed?) ? @skinrect.y : @_windowskin.height-cy
-        @sprites["corner0"].src_rect.set(0,0,startX,startY);
-        @sprites["corner1"].src_rect.set(cx,0,endX,startY);
-        @sprites["corner2"].src_rect.set(0,cy,startX,endY);
-        @sprites["corner3"].src_rect.set(cx,cy,endX,endY);
+        @sprites["corner0"].src_rect.set(0,0,startX,startY)
+        @sprites["corner1"].src_rect.set(cx,0,endX,startY)
+        @sprites["corner2"].src_rect.set(0,cy,startX,endY)
+        @sprites["corner3"].src_rect.set(cx,cy,endX,endY)
         backRect=Rect.new(@skinrect.x,@skinrect.y,
-           @skinrect.width,@skinrect.height);
+           @skinrect.width,@skinrect.height)
         blindsRect=nil
         sideRects=[
            Rect.new(startX,0,@skinrect.width,startY),  # side0 (top)

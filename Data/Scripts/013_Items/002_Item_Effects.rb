@@ -185,7 +185,8 @@ ItemHandlers::UseInField.add(:SACREDASH,proc { |item|
   canrevive = false
   for i in $Trainer.pokemon_party
     next if !i.fainted?
-    canrevive = true; break
+    canrevive = true
+    break
   end
   if !canrevive
     pbMessage(_INTL("It won't have any effect."))

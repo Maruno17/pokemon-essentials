@@ -440,7 +440,7 @@ class PBAnimation < Array
     @position = 4             # 1=target, 2=user, 3=user and target, 4=screen
     @array    = []
     size      = 1 if size<1   # Always create at least one frame
-    size.times do; addFrame; end
+    size.times { addFrame }
     @timing   = []
     @scope    = 0
   end

@@ -233,7 +233,8 @@ class CustomTilemap
     return if disposed?
     @help.dispose if @help
     @help = nil
-    i = 0; len = @autotileInfo.length
+    i = 0
+    len = @autotileInfo.length
     while i<len
       if @autotileInfo[i]
         @autotileInfo[i].dispose
@@ -241,7 +242,8 @@ class CustomTilemap
       end
       i += 1
     end
-    i = 0; len = @regularTileInfo.length
+    i = 0
+    len = @regularTileInfo.length
     while i<len
       if @regularTileInfo[i]
         @regularTileInfo[i].dispose
@@ -249,13 +251,15 @@ class CustomTilemap
       end
       i += 1
     end
-    i = 0; len = @tiles.length
+    i = 0
+    len = @tiles.length
     while i<len
       @tiles[i].dispose
       @tiles[i] = nil
       i += 2
     end
-    i = 0; len = @autosprites.length
+    i = 0
+    len = @autosprites.length
     while i<len
       @autosprites[i].dispose
       @autosprites[i] = nil

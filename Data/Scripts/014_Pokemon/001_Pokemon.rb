@@ -1110,7 +1110,7 @@ class Pokemon
   # @param level [Integer] Pokémon level
   # @param owner [Owner, Player, NPCTrainer] Pokémon owner (the player by default)
   # @param withMoves [TrueClass, FalseClass] whether the Pokémon should have moves
-  # @param rechech_form [TrueClass, FalseClass] whether to auto-check the form
+  # @param recheck_form [TrueClass, FalseClass] whether to auto-check the form
   def initialize(species, level, owner = $Trainer, withMoves = true, recheck_form = true)
     species_data = GameData::Species.get(species)
     @species          = species_data.species

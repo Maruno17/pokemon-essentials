@@ -157,9 +157,12 @@ def pbPrepareBattle(battle)
     battle.time = 2   # This makes Dusk Balls work properly in caves
   elsif Settings::TIME_SHADING
     timeNow = pbGetTimeNow
-    if PBDayNight.isNight?(timeNow);      battle.time = 2
-    elsif PBDayNight.isEvening?(timeNow); battle.time = 1
-    else;                                 battle.time = 0
+    if PBDayNight.isNight?(timeNow)
+      battle.time = 2
+    elsif PBDayNight.isEvening?(timeNow)
+      battle.time = 1
+    else
+      battle.time = 0
     end
   end
 end

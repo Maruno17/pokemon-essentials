@@ -93,7 +93,9 @@ end
 
 def getContrastColor(color)
   raise "No color given" if !color
-  r=color.red; g=color.green; b=color.blue
+  r=color.red
+  g=color.green
+  b=color.blue
   yuv=[
      r *   0.299 + g * 0.587 + b *  0.114,
      r * -0.1687 + g * -0.3313 + b *  0.500 + 0.5,
@@ -593,7 +595,8 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
         elsif control=="r" # Right align this line
           if !endtag
             x=0
-            rightalign=1; lastword=[characters.length,x]
+            rightalign=1
+            lastword=[characters.length,x]
           end
         end
         controls[i]=nil
@@ -719,13 +722,15 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
     leftSearch  = 0
     rightSearch = 0
     # Search left for a space
-    i = half; while i>=0
+    i = half
+    while i>=0
       break if realtext[i,1][/\s/]||isWaitChar(realtext[i,1])   # found a space
       leftSearch += 1
       i -= 1
     end
     # Search right for a space
-    i = half; while i<realtext.length
+    i = half
+    while i<realtext.length
       break if realtext[i,1][/\s/]||isWaitChar(realtext[i,1])   # found a space
       rightSearch += 1
       i += 1

@@ -73,7 +73,7 @@ class Player < Trainer
     # Returns whether there are any seen Pokémon.
     # If a region is given, returns whether there are seen Pokémon
     # in that region.
-    # @param region [Integer] region ID
+    # @param dex [Integer] region ID
     # @return [Boolean] whether there are any seen Pokémon
     def seen_any?(dex = -1)
       validate dex => Integer
@@ -153,7 +153,7 @@ class Player < Trainer
     # Returns the amount of owned Pokémon.
     # If a region ID is given, returns the amount of owned Pokémon
     # in that region.
-    # @param region [Integer] region ID
+    # @param dex [Integer] region ID
     def owned_count(dex = -1)
       validate dex => Integer
       return self.count_species(@owned, dex)
@@ -161,7 +161,7 @@ class Player < Trainer
 
     #===========================================================================
 
-    # @param pkmn [Pokemon, Symbol, GameData::Species] Pokemon to register as seen
+    # @param species [Pokemon, Symbol, GameData::Species] Pokemon to register as seen
     # @param gender [Integer] gender to register (0=male, 1=female, 2=genderless)
     # @param form [Integer] form to register
     def register(species, gender = 0, form = 0, should_refresh_dexes = true)

@@ -15,7 +15,9 @@ class MiniBattle
 
   def initialize
     @battlers=[]
-    for i in 0...4; @battlers[i]=MiniBattler.new(i); end
+    for i in 0...4
+      @battlers[i] = MiniBattler.new(i)
+    end
   end
 end
 
@@ -950,8 +952,8 @@ def pbAnimEditorHelpWindow
   helptext=""+
      "To add a cel to the scene, click on the canvas. The selected cel will have a black "+
      "frame. After a cel is selected, you can modify its properties using the keyboard:\n"+
-     "E, R - Rotate left/right;\nP - Open properties screen;\nArrow keys - Move cel 8 pixels "+
-     "(hold ALT for 2 pixels);\n+/- : Zoom in/out;\nL - Lock a cel. Locking a cel prevents it "+
+     "E, R - Rotate left/right.\nP - Open properties screen.\nArrow keys - Move cel 8 pixels "+
+     "(hold ALT for 2 pixels).\n+/- : Zoom in/out.\nL - Lock a cel. Locking a cel prevents it "+
      "from being moved or deleted.\nDEL - Deletes the cel.\nAlso press TAB to switch the selected cel."
   cmdwin=Window_UnformattedTextPokemon.newWithSize("",0,0,640,512)
   cmdwin.opacity=224

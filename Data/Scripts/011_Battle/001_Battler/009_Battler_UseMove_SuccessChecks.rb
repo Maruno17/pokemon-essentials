@@ -506,7 +506,8 @@ class PokeBattle_Battler
                    user.effects[PBEffects::LockOnPos]==target.index
     # Toxic
     return true if move.pbOverrideSuccessCheckPerHit(user,target)
-    miss = false; hitsInvul = false
+    miss = false
+    hitsInvul = false
     # No Guard
     hitsInvul = true if user.hasActiveAbility?(:NOGUARD) ||
                         target.hasActiveAbility?(:NOGUARD)

@@ -1181,7 +1181,9 @@ class PurifyChamberScene
   def pbSetScreen
     pbDeactivateWindows(@sprites) {
       loop do
-        Graphics.update; Input.update; pbUpdate
+        Graphics.update
+        Input.update
+        pbUpdate
         btn=0
         btn=Input::DOWN if Input.repeat?(Input::DOWN)
         btn=Input::UP if Input.repeat?(Input::UP)
@@ -1218,7 +1220,9 @@ class PurifyChamberScene
           oldindex=@sprites["setwindow"].index
           @sprites["setview"].set=oldindex
         end
-        Graphics.update; Input.update; pbUpdate
+        Graphics.update
+        Input.update
+        pbUpdate
         if Input.trigger?(Input::USE)
           pbPlayDecisionSE()
           return @sprites["setwindow"].index

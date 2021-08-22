@@ -193,10 +193,14 @@ class PokeBattle_AI
       # Pick a good move for the Choice items
       if user.hasActiveItem?([:CHOICEBAND,:CHOICESPECS,:CHOICESCARF]) ||
          user.hasActiveAbility?(:GORILLATACTICS)
-        if move.baseDamage>=60;     score += 60
-        elsif move.damagingMove?;   score += 30
-        elsif move.function=="0F2"; score += 70   # Trick
-        else;                       score -= 60
+        if move.baseDamage>=60
+          score += 60
+        elsif move.damagingMove?
+          score += 30
+        elsif move.function=="0F2"
+          score += 70   # Trick
+        else
+          score -= 60
         end
       end
       # If user is asleep, prefer moves that are usable while asleep

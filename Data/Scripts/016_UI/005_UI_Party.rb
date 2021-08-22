@@ -298,15 +298,22 @@ class PokemonPartyPanel < SpriteWrapper
     @refreshing = true
     if @panelbgsprite && !@panelbgsprite.disposed?
       if self.selected
-        if self.preselected;     @panelbgsprite.changeBitmap("swapsel2")
-        elsif @switching;        @panelbgsprite.changeBitmap("swapsel")
-        elsif @pokemon.fainted?; @panelbgsprite.changeBitmap("faintedsel")
-        else;                    @panelbgsprite.changeBitmap("ablesel")
+        if self.preselected
+          @panelbgsprite.changeBitmap("swapsel2")
+        elsif @switching
+          @panelbgsprite.changeBitmap("swapsel")
+        elsif @pokemon.fainted?
+          @panelbgsprite.changeBitmap("faintedsel")
+        else
+          @panelbgsprite.changeBitmap("ablesel")
         end
       else
-        if self.preselected;     @panelbgsprite.changeBitmap("swap")
-        elsif @pokemon.fainted?; @panelbgsprite.changeBitmap("fainted")
-        else;                    @panelbgsprite.changeBitmap("able")
+        if self.preselected
+          @panelbgsprite.changeBitmap("swap")
+        elsif @pokemon.fainted?
+          @panelbgsprite.changeBitmap("fainted")
+        else
+          @panelbgsprite.changeBitmap("able")
         end
       end
       @panelbgsprite.x     = self.x
@@ -316,9 +323,12 @@ class PokemonPartyPanel < SpriteWrapper
     if @hpbgsprite && !@hpbgsprite.disposed?
       @hpbgsprite.visible = (!@pokemon.egg? && !(@text && @text.length>0))
       if @hpbgsprite.visible
-        if self.preselected || (self.selected && @switching); @hpbgsprite.changeBitmap("swap")
-        elsif @pokemon.fainted?;                              @hpbgsprite.changeBitmap("fainted")
-        else;                                                 @hpbgsprite.changeBitmap("able")
+        if self.preselected || (self.selected && @switching)
+          @hpbgsprite.changeBitmap("swap")
+        elsif @pokemon.fainted?
+          @hpbgsprite.changeBitmap("fainted")
+        else
+          @hpbgsprite.changeBitmap("able")
         end
         @hpbgsprite.x     = self.x+96
         @hpbgsprite.y     = self.y+50
@@ -1022,7 +1032,9 @@ class PokemonPartyScreen
       addedEntry = false
       if pkmnid == Settings::MAX_PARTY_SIZE   # Confirm was chosen
         ret = []
-        for i in realorder; ret.push(@party[i]); end
+        for i in realorder
+          ret.push(@party[i])
+        end
         error = []
         break if ruleset.isValid?(ret,error)
         pbDisplay(error[0])

@@ -68,7 +68,7 @@ def pbBGMPlay(param,volume=nil,pitch=nil)
 end
 
 # Fades out or stops BGM playback. 'x' is the time in seconds to fade out.
-def pbBGMFade(x=0.0); pbBGMStop(x);end
+def pbBGMFade(x=0.0); pbBGMStop(x); end
 
 # Fades out or stops BGM playback. 'x' is the time in seconds to fade out.
 def pbBGMStop(timeInSeconds=0.0)
@@ -109,7 +109,8 @@ def pbMEPlay(param,volume=nil,pitch=nil)
     elsif (RPG.const_defined?(:ME) rescue false)
       b=RPG::ME.new(param.name,param.volume,param.pitch)
       if b && b.respond_to?("play")
-        b.play; return
+        b.play
+        return
       end
     end
     Audio.me_play(canonicalize("Audio/ME/"+param.name),param.volume,param.pitch)
@@ -117,7 +118,7 @@ def pbMEPlay(param,volume=nil,pitch=nil)
 end
 
 # Fades out or stops ME playback. 'x' is the time in seconds to fade out.
-def pbMEFade(x=0.0); pbMEStop(x);end
+def pbMEFade(x=0.0); pbMEStop(x); end
 
 # Fades out or stops ME playback. 'x' is the time in seconds to fade out.
 def pbMEStop(timeInSeconds=0.0)
@@ -158,7 +159,8 @@ def pbBGSPlay(param,volume=nil,pitch=nil)
     elsif (RPG.const_defined?(:BGS) rescue false)
       b=RPG::BGS.new(param.name,param.volume,param.pitch)
       if b && b.respond_to?("play")
-        b.play; return
+        b.play
+        return
       end
     end
     Audio.bgs_play(canonicalize("Audio/BGS/"+param.name),param.volume,param.pitch)
@@ -166,7 +168,7 @@ def pbBGSPlay(param,volume=nil,pitch=nil)
 end
 
 # Fades out or stops BGS playback. 'x' is the time in seconds to fade out.
-def pbBGSFade(x=0.0); pbBGSStop(x);end
+def pbBGSFade(x=0.0); pbBGSStop(x); end
 
 # Fades out or stops BGS playback. 'x' is the time in seconds to fade out.
 def pbBGSStop(timeInSeconds=0.0)
@@ -217,7 +219,7 @@ def pbSEPlay(param,volume=nil,pitch=nil)
 end
 
 # Stops SE playback.
-def pbSEFade(x=0.0); pbSEStop(x);end
+def pbSEFade(x=0.0); pbSEStop(x); end
 
 # Stops SE playback.
 def pbSEStop(_timeInSeconds=0.0)

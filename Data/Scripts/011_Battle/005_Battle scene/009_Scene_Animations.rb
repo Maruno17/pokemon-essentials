@@ -37,7 +37,9 @@ class PokeBattle_Scene
     # animations (including cry)
     @animations.push(BattleIntroAnimation2.new(@sprites,@viewport,@battle.sideSizes[1]))
     # Play all the animations
-    while inPartyAnimation?; pbUpdate; end
+    while inPartyAnimation?
+      pbUpdate
+    end
     # Show shiny animation for wild Pokémon
     if @battle.showAnims
       for i in 0...@battle.sideSizes[1]
@@ -59,7 +61,9 @@ class PokeBattle_Scene
     @animations.push(LineupAppearAnimation.new(@sprites,@viewport,
        side,@battle.pbParty(side),@battle.pbPartyStarts(side),fullAnim))
     if !fullAnim
-      while inPartyAnimation?; pbUpdate; end
+      while inPartyAnimation?
+        pbUpdate
+      end
     end
   end
 
@@ -73,7 +77,9 @@ class PokeBattle_Scene
     appearAnim = TrainerAppearAnimation.new(@sprites,@viewport,idxTrainer)
     @animations.push(appearAnim)
     # Play the animation
-    while inPartyAnimation?; pbUpdate; end
+    while inPartyAnimation?
+      pbUpdate
+    end
   end
 
   #=============================================================================
@@ -86,7 +92,9 @@ class PokeBattle_Scene
     return if sendOuts.length==0
     # If party balls are still appearing, wait for them to finish showing up, as
     # the FadeAnimation will make them disappear.
-    while inPartyAnimation?; pbUpdate; end
+    while inPartyAnimation?
+      pbUpdate
+    end
     @briefMessage = false
     # Make all trainers and party lineups disappear (player-side trainers may
     # animate throwing a Poké Ball)
@@ -130,7 +138,10 @@ class PokeBattle_Scene
       end
     end
     fadeAnim.dispose
-    sendOutAnims.each { |a| a[0].dispose; a[1].dispose }
+    sendOutAnims.each do |a|
+       a[0].dispose
+       a[1].dispose
+     end
     # Play shininess animations for shiny Pokémon
     sendOuts.each do |b|
       next if !@battle.showAnims || !@battle.battlers[b[0]].shiny?
@@ -274,7 +285,9 @@ class PokeBattle_Scene
     expRange      = endExp-startExp
     dataBox = @sprites["dataBox_#{battler.index}"]
     dataBox.animateExp(startExpLevel,endExpLevel,expRange)
-    while dataBox.animatingExp; pbUpdate; end
+    while dataBox.animatingExp
+      pbUpdate
+    end
   end
 
   #=============================================================================

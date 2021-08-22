@@ -434,11 +434,10 @@ MultipleForms.register(:AEGISLASH,{
 MultipleForms.register(:PUMPKABOO,{
   "getFormOnCreation" => proc { |pkmn|
     r = rand(100)
-    if r<5;     next 3   # Super Size (5%)
-    elsif r<20; next 2   # Large (15%)
-    elsif r<65; next 1   # Average (45%)
-    end
-    next 0               # Small (35%)
+    next 3 if r < 5    # Super Size (5%)
+    next 2 if r < 20   # Large (15%)
+    next 1 if r < 65   # Average (45%)
+    next 0             # Small (35%)
   }
 })
 

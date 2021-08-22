@@ -400,10 +400,13 @@ end
 def pbUpdateVehicle
   meta = GameData::Metadata.get_player($Trainer.character_ID)
   if meta
-    charset = 1                                 # Regular graphic
-    if $PokemonGlobal.diving;     charset = 5   # Diving graphic
-    elsif $PokemonGlobal.surfing; charset = 3   # Surfing graphic
-    elsif $PokemonGlobal.bicycle; charset = 2   # Bicycle graphic
+    charset = 1     # Regular graphic
+    if $PokemonGlobal.diving
+      charset = 5   # Diving graphic
+    elsif $PokemonGlobal.surfing
+      charset = 3   # Surfing graphic
+    elsif $PokemonGlobal.bicycle
+      charset = 2   # Bicycle graphic
     end
     newCharName = pbGetPlayerCharset(meta,charset)
     $game_player.character_name = newCharName if newCharName

@@ -79,8 +79,10 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
     2.times do
       viewport.color.alpha = 0
       for i in 0...halfFlashTime*2
-        if i<halfFlashTime; viewport.color.alpha += alphaDiff
-        else;               viewport.color.alpha -= alphaDiff
+        if i<halfFlashTime
+          viewport.color.alpha += alphaDiff
+        else
+          viewport.color.alpha -= alphaDiff
         end
         Graphics.update
         pbUpdateSceneMap

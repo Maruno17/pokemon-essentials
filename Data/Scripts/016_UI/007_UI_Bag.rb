@@ -160,9 +160,11 @@ class PokemonBag_Scene
          (!@filterlist && @bag.pockets[lastpocket].length==0)
         for i in 1...@bag.pockets.length
           if @filterlist && @filterlist[i].length>0
-            lastpocket = i; break
+            lastpocket = i
+            break
           elsif !@filterlist && @bag.pockets[i].length>0
-            lastpocket = i; break
+            lastpocket = i
+            break
           end
         end
       end

@@ -335,8 +335,10 @@ class Window
     return if !srcbitmap || srcbitmap.disposed?
     left=dstrect.x
     top=dstrect.y
-    y=0;loop do break unless y<dstrect.height
-      x=0;loop do break unless x<dstrect.width
+    y = 0
+    loop do break unless y < dstrect.height
+      x = 0
+      loop do break unless x < dstrect.width
         dstbitmap.blt(x+left,y+top,srcbitmap,srcrect)
         x+=srcrect.width
       end
@@ -432,10 +434,10 @@ class Window
       backRect=Rect.new(0,0,128,128)
       blindsRect=nil
     end
-    @sprites["corner0"].src_rect.set(trimX,trimY+0,16,16);
-    @sprites["corner1"].src_rect.set(trimX+48,trimY+0,16,16);
-    @sprites["corner2"].src_rect.set(trimX,trimY+48,16,16);
-    @sprites["corner3"].src_rect.set(trimX+48,trimY+48,16,16);
+    @sprites["corner0"].src_rect.set(trimX,trimY+0,16,16)
+    @sprites["corner1"].src_rect.set(trimX+48,trimY+0,16,16)
+    @sprites["corner2"].src_rect.set(trimX,trimY+48,16,16)
+    @sprites["corner3"].src_rect.set(trimX+48,trimY+48,16,16)
     @sprites["scroll0"].src_rect.set(trimX+24, trimY+16, 16, 8) # up
     @sprites["scroll3"].src_rect.set(trimX+24, trimY+40, 16, 8) # down
     @sprites["scroll1"].src_rect.set(trimX+16, trimY+24, 8, 16) # left

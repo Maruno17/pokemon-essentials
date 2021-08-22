@@ -493,8 +493,10 @@ def pbBattleConfusionBerry(battler,battle,item,forced,flavor,confuseMsg)
   return false if !forced && !battler.canConsumePinchBerry?(Settings::MECHANICS_GENERATION >= 7)
   itemName = GameData::Item.get(item).name
   fraction_to_heal = 8   # Gens 6 and lower
-  if Settings::MECHANICS_GENERATION == 7;    fraction_to_heal = 2
-  elsif Settings::MECHANICS_GENERATION >= 8; fraction_to_heal = 3
+  if Settings::MECHANICS_GENERATION == 7
+    fraction_to_heal = 2
+  elsif Settings::MECHANICS_GENERATION >= 8
+    fraction_to_heal = 3
   end
   amt = battler.totalhp / fraction_to_heal
   ripening = false

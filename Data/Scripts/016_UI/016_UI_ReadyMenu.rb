@@ -117,8 +117,10 @@ class PokemonReadyMenu_Scene
     if @index[1]>=@itemcommands.length && @itemcommands.length>0
       @index[1] = @itemcommands.length-1
     end
-    if @index[2]==0 && @movecommands.length==0; @index[2] = 1
-    elsif @index[2]==1 && @itemcommands.length==0; @index[2] = 0
+    if @index[2]==0 && @movecommands.length==0
+      @index[2] = 1
+    elsif @index[2]==1 && @itemcommands.length==0
+      @index[2] = 0
     end
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999

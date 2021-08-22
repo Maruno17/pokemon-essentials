@@ -166,11 +166,14 @@ class PokeBattle_AI
       agender = user.gender
       ogender = target.gender
       if agender==2 || ogender==2 || agender==ogender
-        score -= 90; canattract = false
+        score -= 90
+        canattract = false
       elsif target.effects[PBEffects::Attract]>=0
-        score -= 80; canattract = false
+        score -= 80
+        canattract = false
       elsif skill>=PBTrainerAI.bestSkill && target.hasActiveAbility?(:OBLIVIOUS)
-        score -= 80; canattract = false
+        score -= 80
+        canattract = false
       end
       if skill>=PBTrainerAI.highSkill
         if canattract && target.hasActiveItem?(:DESTINYKNOT) &&
@@ -727,7 +730,8 @@ class PokeBattle_AI
       end
     #---------------------------------------------------------------------------
     when "037"
-      avgStat = 0; canChangeStat = false
+      avgStat = 0
+      canChangeStat = false
       GameData::Stat.each_battle do |s|
         next if target.statStageAtMax?(s.id)
         avgStat -= target.stages[s.id]
@@ -1116,7 +1120,8 @@ class PokeBattle_AI
       if target.effects[PBEffects::Substitute]>0
         score -= 90
       else
-        avg = 0; anyChange = false
+        avg = 0
+        anyChange = false
         GameData::Stat.each_battle do |s|
           next if target.stages[s.id]==0
           avg += target.stages[s.id]
@@ -1178,7 +1183,8 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "054"
       if skill>=PBTrainerAI.mediumSkill
-        userStages = 0; targetStages = 0
+        userStages = 0
+        targetStages = 0
         GameData::Stat.each_battle do |s|
           userStages   += user.stages[s.id]
           targetStages += target.stages[s.id]
@@ -2675,7 +2681,8 @@ class PokeBattle_AI
       if target.effects[PBEffects::Substitute]>0
         score -= 90
       else
-        numpos = 0; numneg = 0
+        numpos = 0
+        numneg = 0
         GameData::Stat.each_battle do |s|
           numpos += target.stages[s.id] if target.stages[s.id] > 0
           numneg += target.stages[s.id] if target.stages[s.id] < 0

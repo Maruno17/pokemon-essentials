@@ -240,8 +240,10 @@ class PokeBattle_Move
         oldHP = b.hp+b.damageState.hpLost
         PBDebug.log("[Move damage] #{b.pbThis} lost #{b.damageState.hpLost} HP (#{oldHP}=>#{b.hp})")
         effectiveness = 0
-        if Effectiveness.resistant?(b.damageState.typeMod);          effectiveness = 1
-        elsif Effectiveness.super_effective?(b.damageState.typeMod); effectiveness = 2
+        if Effectiveness.resistant?(b.damageState.typeMod)
+          effectiveness = 1
+        elsif Effectiveness.super_effective?(b.damageState.typeMod)
+          effectiveness = 2
         end
         animArray.push([b,oldHP,effectiveness])
       end

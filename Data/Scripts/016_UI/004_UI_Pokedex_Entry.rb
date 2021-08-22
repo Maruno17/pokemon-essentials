@@ -372,7 +372,8 @@ class PokemonPokedexInfo_Scene
     formname = ""
     for i in @available
       if i[1]==@gender && i[2]==@form
-        formname = i[0]; break
+        formname = i[0]
+        break
       end
     end
     textpos = [

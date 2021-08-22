@@ -260,7 +260,8 @@ def pbHiddenPower(pkmn)
   # NOTE: This allows Hidden Power to be Fairy-type (if you have that type in
   #       your game). I don't care that the official games don't work like that.
   iv = pkmn.iv
-  idxType = 0; power = 60
+  idxType = 0
+  power = 60
   types = []
   GameData::Type.each do |t|
     types[t.icon_position] ||= []
@@ -355,9 +356,12 @@ class PokeBattle_Move_094 < PokeBattle_Move
   def pbOnStartUse(user,targets)
     @presentDmg = 0   # 0 = heal, >0 = damage
     r = @battle.pbRandom(100)
-    if r<40;    @presentDmg = 40
-    elsif r<70; @presentDmg = 80
-    elsif r<80; @presentDmg = 120
+    if r<40
+      @presentDmg = 40
+    elsif r<70
+      @presentDmg = 80
+    elsif r<80
+      @presentDmg = 120
     end
   end
 
@@ -549,11 +553,16 @@ class PokeBattle_Move_098 < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
     ret = 20
     n = 48*user.hp/user.totalhp
-    if n<2;     ret = 200
-    elsif n<5;  ret = 150
-    elsif n<10; ret = 100
-    elsif n<17; ret = 80
-    elsif n<33; ret = 40
+    if n<2
+      ret = 200
+    elsif n<5
+      ret = 150
+    elsif n<10
+      ret = 100
+    elsif n<17
+      ret = 80
+    elsif n<33
+      ret = 40
     end
     return ret
   end
@@ -568,10 +577,14 @@ class PokeBattle_Move_099 < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
     ret = 40
     n = user.pbSpeed/target.pbSpeed
-    if n>=4;    ret = 150
-    elsif n>=3; ret = 120
-    elsif n>=2; ret = 80
-    elsif n>=1; ret = 60
+    if n>=4
+      ret = 150
+    elsif n>=3
+      ret = 120
+    elsif n>=2
+      ret = 80
+    elsif n>=1
+      ret = 60
     end
     return ret
   end
@@ -586,11 +599,16 @@ class PokeBattle_Move_09A < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
     ret = 20
     weight = target.pbWeight
-    if weight>=2000;    ret = 120
-    elsif weight>=1000; ret = 100
-    elsif weight>=500;  ret = 80
-    elsif weight>=250;  ret = 60
-    elsif weight>=100;  ret = 40
+    if weight>=2000
+      ret = 120
+    elsif weight>=1000
+      ret = 100
+    elsif weight>=500
+      ret = 80
+    elsif weight>=250
+      ret = 60
+    elsif weight>=100
+      ret = 40
     end
     return ret
   end
@@ -611,10 +629,14 @@ class PokeBattle_Move_09B < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
     ret = 40
     n = (user.pbWeight/target.pbWeight).floor
-    if n>=5;    ret = 120
-    elsif n>=4; ret = 100
-    elsif n>=3; ret = 80
-    elsif n>=2; ret = 60
+    if n>=5
+      ret = 120
+    elsif n>=4
+      ret = 100
+    elsif n>=3
+      ret = 80
+    elsif n>=2
+      ret = 60
     end
     return ret
   end
@@ -3324,8 +3346,10 @@ class PokeBattle_Move_0F2 < PokeBattle_Move
   end
 
   def pbEffectAgainstTarget(user,target)
-    oldUserItem = user.item;     oldUserItemName = user.itemName
-    oldTargetItem = target.item; oldTargetItemName = target.itemName
+    oldUserItem = user.item
+    oldUserItemName = user.itemName
+    oldTargetItem = target.item
+    oldTargetItemName = target.itemName
     user.item                             = oldTargetItem
     user.effects[PBEffects::ChoiceBand]   = nil if user.ability_id != :GORILLATACTICS
     user.effects[PBEffects::Unburden]     = (!user.item && oldUserItem)

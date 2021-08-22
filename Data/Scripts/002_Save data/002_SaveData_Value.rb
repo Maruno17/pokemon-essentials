@@ -181,7 +181,7 @@ module SaveData
   #     new_game_value { Bar.new }
   #   end
   # @param id [Symbol] value id
-  # @yieldself [Value]
+  # @yield the block of code to be saved as a Value
   def self.register(id, &block)
     validate id => Symbol
     unless block_given?

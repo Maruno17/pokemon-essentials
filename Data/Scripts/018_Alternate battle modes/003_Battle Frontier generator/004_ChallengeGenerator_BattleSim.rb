@@ -379,8 +379,7 @@ def pbRuledBattle(team1, team2, rule)
     decision = pbDecideWinner(party1, party2, team1.rating, team2.rating)
   else
     level = rule.ruleset.suggestedLevel
-    t_type = nil
-    GameData::TrainerType.each { |t| t_type = t.id; break }
+    t_type = GameData::TrainerType.keys.first
     trainer1 = NPCTrainer.new("PLAYER1", t_type)
     trainer2 = NPCTrainer.new("PLAYER2", t_type)
     items1 = []

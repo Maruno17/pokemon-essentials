@@ -106,9 +106,12 @@ BallHandlers::ModifyCatchRate.add(:LEVELBALL,proc { |ball,catchRate,battle,battl
   battle.eachSameSideBattler do |b|
     maxlevel = b.level if b.level>maxlevel
   end
-  if maxlevel>=battler.level*4;    catchRate *= 8
-  elsif maxlevel>=battler.level*2; catchRate *= 4
-  elsif maxlevel>battler.level;    catchRate *= 2
+  if maxlevel >= battler.level * 4
+    catchRate *= 8
+  elsif maxlevel >= battler.level * 2
+    catchRate *= 4
+  elsif maxlevel > battler.level
+    catchRate *= 2
   end
   next [catchRate,255].min
 })
@@ -123,15 +126,22 @@ BallHandlers::ModifyCatchRate.add(:HEAVYBALL,proc { |ball,catchRate,battle,battl
   next 0 if catchRate==0
   weight = battler.pokemon.species_data.base_stats[:SPEED]
   if Settings::NEW_POKE_BALL_CATCH_RATES
-    if weight>=3000;    catchRate += 30
-    elsif weight>=2000; catchRate += 20
-    elsif weight<1000;  catchRate -= 20
+    if weight >= 3000
+      catchRate += 30
+    elsif weight >= 2000
+      catchRate += 20
+    elsif weight < 1000
+      catchRate -= 20
     end
   else
-    if weight>=4096;    catchRate += 40
-    elsif weight>=3072; catchRate += 30
-    elsif weight>=2048; catchRate += 20
-    else;               catchRate -= 20
+    if weight >= 4096
+      catchRate += 40
+    elsif weight >= 3072
+      catchRate += 30
+    elsif weight >= 2048
+      catchRate += 20
+    else
+      catchRate -= 20
     end
   end
   catchRate = [catchRate,1].max

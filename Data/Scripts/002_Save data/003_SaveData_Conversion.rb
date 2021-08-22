@@ -152,7 +152,7 @@ module SaveData
   #       save_data[:new_value] = Foo.new
   #     end
   #   end
-  # @yield self [Conversion]
+  # @yield the block of code to be saved as a Conversion
   def self.register_conversion(id, &block)
     validate id => Symbol
     unless block_given?

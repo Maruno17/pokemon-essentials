@@ -41,8 +41,10 @@ class PokeBattle_Battle
     if @rules["suddendeath"] && @decision==0
       p1able = pbAbleCount(0)
       p2able = pbAbleCount(1)
-      if p1able>p2able;    @decision = 1   # loss
-      elsif p1able<p2able; @decision = 2   # win
+      if p1able>p2able
+        @decision = 1   # loss
+      elsif p1able<p2able
+        @decision = 2   # win
       end
     end
   end

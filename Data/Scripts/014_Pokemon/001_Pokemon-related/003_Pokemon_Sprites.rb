@@ -171,9 +171,11 @@ class PokemonIconSprite < SpriteWrapper
     return 0 if @pokemon.fainted?    # Fainted - no animation
     # ret is initially the time a whole animation cycle lasts. It is divided by
     # the number of frames in that cycle at the end.
-    ret = Graphics.frame_rate/4                       # Green HP - 0.25 seconds
-    if @pokemon.hp<=@pokemon.totalhp/4;    ret *= 4   # Red HP - 1 second
-    elsif @pokemon.hp<=@pokemon.totalhp/2; ret *= 2   # Yellow HP - 0.5 seconds
+    ret = Graphics.frame_rate/4             # Green HP - 0.25 seconds
+    if @pokemon.hp<=@pokemon.totalhp/4      # Red HP - 1 second
+      ret *= 4
+    elsif @pokemon.hp<=@pokemon.totalhp/2   # Yellow HP - 0.5 seconds
+      ret *= 2
     end
     ret /= @numFrames
     ret = 1 if ret<1

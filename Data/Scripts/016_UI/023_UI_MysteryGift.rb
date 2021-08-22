@@ -61,7 +61,9 @@ def pbEditMysteryGift(type,item,id=0,giftname="")
         master=IO.read("MysteryGiftMaster.txt")
         master=pbMysteryGiftDecrypt(master)
       end
-      for i in master; idlist.push(i[0]); end
+      for i in master
+        idlist.push(i[0])
+      end
       params=ChooseNumberParams.new
       params.setRange(0,99999)
       params.setDefaultValue(id)
@@ -199,7 +201,8 @@ def pbManageMysteryGifts
           replaced=false
           for i in 0...$Trainer.mystery_gifts.length
             if $Trainer.mystery_gifts[i][0]==gift[0]
-              $Trainer.mystery_gifts[i]=gift; replaced=true
+              $Trainer.mystery_gifts[i]=gift
+              replaced=true
             end
           end
           $Trainer.mystery_gifts.push(gift) if !replaced
@@ -260,7 +263,9 @@ def pbDownloadMysteryGift(trainer)
     else
       loop do
         commands=[]
-        for gift in pending; commands.push(gift[3]); end
+        for gift in pending
+          commands.push(gift[3])
+        end
         commands.push(_INTL("Cancel"))
         pbMessageDisplay(sprites["msgwindow"],_INTL("Choose the gift you want to receive.\\wtnp[0]"))
         command=pbShowCommands(sprites["msgwindow"],commands,-1)

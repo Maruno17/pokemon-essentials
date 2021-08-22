@@ -10,7 +10,8 @@ class PokeBattle_Battler
     # Snatch
     move.snatched = false
     if move.statusMove? && move.canSnatch?
-      newUser = nil; strength = 100
+      newUser = nil
+      strength = 100
       @battle.eachBattler do |b|
         next if b.effects[PBEffects::Snatch]==0 ||
                 b.effects[PBEffects::Snatch]>=strength
@@ -101,7 +102,8 @@ class PokeBattle_Battler
     priority = @battle.pbPriority(true)
     nearOnly = !target_data.can_choose_distant_target?
     # Spotlight (takes priority over Follow Me/Rage Powder/Lightning Rod/Storm Drain)
-    newTarget = nil; strength = 100   # Lower strength takes priority
+    newTarget = nil
+    strength = 100   # Lower strength takes priority
     priority.each do |b|
       next if b.fainted? || b.effects[PBEffects::SkyDrop]>=0
       next if b.effects[PBEffects::Spotlight]==0 ||
@@ -118,7 +120,8 @@ class PokeBattle_Battler
       return targets
     end
     # Follow Me/Rage Powder (takes priority over Lightning Rod/Storm Drain)
-    newTarget = nil; strength = 100   # Lower strength takes priority
+    newTarget = nil
+    strength = 100   # Lower strength takes priority
     priority.each do |b|
       next if b.fainted? || b.effects[PBEffects::SkyDrop]>=0
       next if b.effects[PBEffects::RagePowder] && !user.affectedByPowder?

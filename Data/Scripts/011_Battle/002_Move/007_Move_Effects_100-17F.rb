@@ -1017,7 +1017,9 @@ end
 #===============================================================================
 class PokeBattle_Move_125 < PokeBattle_Move
   def pbFailsAgainstTarget?(user,target)
-    hasThisMove = false; hasOtherMoves = false; hasUnusedMoves = false
+    hasThisMove = false
+    hasOtherMoves = false
+    hasUnusedMoves = false
     user.eachMove do |m|
       hasThisMove    = true if m.id==@id
       hasOtherMoves  = true if m.id!=@id

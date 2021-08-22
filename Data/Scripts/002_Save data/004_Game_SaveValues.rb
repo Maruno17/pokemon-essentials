@@ -5,8 +5,8 @@ SaveData.register(:player) do
   save_value { $Trainer }
   load_value { |value| $Trainer = value }
   new_game_value {
-    trainer_type = nil   # Get the first defined trainer type as a placeholder
-    GameData::TrainerType.each { |t| trainer_type = t.id; break }
+    # Get the first defined trainer type as a placeholder
+    trainer_type = GameData::TrainerType.keys.first
     Player.new("Unnamed", trainer_type)
   }
   from_old_format { |old_format| old_format[0] }

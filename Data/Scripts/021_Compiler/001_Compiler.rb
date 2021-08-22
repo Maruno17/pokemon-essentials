@@ -587,7 +587,8 @@ module Compiler
             for key in enumer.keys
               if enumer[key]==rec[i]
                 file.write(key)
-                hasenum = true; break
+                hasenum = true
+                break
               end
             end
             file.write(rec[i]) unless hasenum
