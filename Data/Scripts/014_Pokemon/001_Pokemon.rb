@@ -152,7 +152,7 @@ class Pokemon
     @ability = nil
     MultipleForms.call("onSetForm", self, value, oldForm)
     calc_stats
-    $Trainer.pokedex.register(self)
+    $Trainer.pokedex.register(self) if $Trainer
   end
 
   # The same as def form=, but yields to a given block in the middle so that a
