@@ -961,7 +961,7 @@ ItemHandlers::UseOnPokemon.add(:PRISONBOTTLE,proc { |item,pkmn,scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
-  if !pkmn.isSpecies?(:KYUREM)
+  if !pkmn.isSpecies?(:KYUREM) || !pkmn.fused.nil?
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   elsif pkmn.fainted?
@@ -969,51 +969,59 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
     next false
   end
   # Fusing
-  if pkmn.fused.nil?
-    chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
-    next false if chosen<0
-    poke2 = $Trainer.party[chosen]
-    if pkmn==poke2
-      scene.pbDisplay(_INTL("It cannot be fused with itself."))
-      next false
-    elsif poke2.egg?
-      scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
-      next false
-    elsif poke2.fainted?
-      scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
-      next false
-    elsif !poke2.isSpecies?(:RESHIRAM) &&
-          !poke2.isSpecies?(:ZEKROM)
-      scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
-      next false
-    end
-    newForm = 0
-    newForm = 1 if poke2.isSpecies?(:RESHIRAM)
-    newForm = 2 if poke2.isSpecies?(:ZEKROM)
-    pkmn.setForm(newForm) {
-      pkmn.fused = poke2
-      $Trainer.remove_pokemon_at_index(chosen)
-      scene.pbHardRefresh
-      scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
-    }
-    next true
+  chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
+  next false if chosen < 0
+  other_pkmn = $Trainer.party[chosen]
+  if pkmn == other_pkmn
+    scene.pbDisplay(_INTL("It cannot be fused with itself."))
+    next false
+  elsif other_pkmn.egg?
+    scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
+    next false
+  elsif other_pkmn.fainted?
+    scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
+    next false
+  elsif !other_pkmn.isSpecies?(:RESHIRAM) && !other_pkmn.isSpecies?(:ZEKROM)
+    scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
+    next false
   end
-  # Unfusing
-  if $Trainer.party_full?
+  newForm = 0
+  newForm = 1 if other_pkmn.isSpecies?(:RESHIRAM)
+  newForm = 2 if other_pkmn.isSpecies?(:ZEKROM)
+  pkmn.setForm(newForm) {
+    pkmn.fused = other_pkmn
+    $Trainer.remove_pokemon_at_index(chosen)
+    scene.pbHardRefresh
+    scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
+  }
+  $PokemonBag.pbChangeItem(:DNASPLICERS, :DNASPLICERSUSED)
+  next true
+})
+
+ItemHandlers::UseOnPokemon.add(:DNASPLICERSUSED,proc { |item,pkmn,scene|
+  if !pkmn.isSpecies?(:KYUREM) || pkmn.fused.nil?
+    scene.pbDisplay(_INTL("It had no effect."))
+    next false
+  elsif pkmn.fainted?
+    scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
+  elsif $Trainer.party_full?
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
+  # Unfusing
   pkmn.setForm(0) {
     $Trainer.party[$Trainer.party.length] = pkmn.fused
     pkmn.fused = nil
     scene.pbHardRefresh
-    scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+    scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
+  $PokemonBag.pbChangeItem(:DNASPLICERSUSED, :DNASPLICERS)
   next true
 })
 
 ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
-  if !pkmn.isSpecies?(:NECROZMA) || pkmn.form == 2
+  if !pkmn.isSpecies?(:NECROZMA) || !pkmn.fused.nil?
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   elsif pkmn.fainted?
@@ -1021,47 +1029,56 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
     next false
   end
   # Fusing
-  if pkmn.fused.nil?
-    chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
-    next false if chosen<0
-    poke2 = $Trainer.party[chosen]
-    if pkmn==poke2
-      scene.pbDisplay(_INTL("It cannot be fused with itself."))
-      next false
-    elsif poke2.egg?
-      scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
-      next false
-    elsif poke2.fainted?
-      scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
-      next false
-    elsif !poke2.isSpecies?(:SOLGALEO)
-      scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
-      next false
-    end
-    pkmn.setForm(1) {
-      pkmn.fused = poke2
-      $Trainer.remove_pokemon_at_index(chosen)
-      scene.pbHardRefresh
-      scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
-    }
-    next true
+  chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
+  next false if chosen < 0
+  other_pkmn = $Trainer.party[chosen]
+  if pkmn == other_pkmn
+    scene.pbDisplay(_INTL("It cannot be fused with itself."))
+    next false
+  elsif other_pkmn.egg?
+    scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
+    next false
+  elsif other_pkmn.fainted?
+    scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
+    next false
+  elsif !other_pkmn.isSpecies?(:SOLGALEO)
+    scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
+    next false
   end
-  # Unfusing
-  if $Trainer.party_full?
+  pkmn.setForm(1) {
+    pkmn.fused = other_pkmn
+    $Trainer.remove_pokemon_at_index(chosen)
+    scene.pbHardRefresh
+    scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
+  }
+  $PokemonBag.pbChangeItem(:NSOLARIZER, :NSOLARIZERUSED)
+  next true
+})
+
+ItemHandlers::UseOnPokemon.add(:NSOLARIZERUSED,proc { |item,pkmn,scene|
+  if !pkmn.isSpecies?(:NECROZMA) || pkmn.form != 1 || pkmn.fused.nil?
+    scene.pbDisplay(_INTL("It had no effect."))
+    next false
+  elsif pkmn.fainted?
+    scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
+  elsif $Trainer.party_full?
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
+  # Unfusing
   pkmn.setForm(0) {
     $Trainer.party[$Trainer.party.length] = pkmn.fused
     pkmn.fused = nil
     scene.pbHardRefresh
-    scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+    scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
+  $PokemonBag.pbChangeItem(:NSOLARIZERUSED, :NSOLARIZER)
   next true
 })
 
 ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
-  if !pkmn.isSpecies?(:NECROZMA) || pkmn.form == 1
+  if !pkmn.isSpecies?(:NECROZMA) || !pkmn.fused.nil?
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   elsif pkmn.fainted?
@@ -1069,42 +1086,51 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
     next false
   end
   # Fusing
-  if pkmn.fused.nil?
-    chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
-    next false if chosen<0
-    poke2 = $Trainer.party[chosen]
-    if pkmn==poke2
-      scene.pbDisplay(_INTL("It cannot be fused with itself."))
-      next false
-    elsif poke2.egg?
-      scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
-      next false
-    elsif poke2.fainted?
-      scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
-      next false
-    elsif !poke2.isSpecies?(:LUNALA)
-      scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
-      next false
-    end
-    pkmn.setForm(2) {
-      pkmn.fused = poke2
-      $Trainer.remove_pokemon_at_index(chosen)
-      scene.pbHardRefresh
-      scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
-    }
-    next true
+  chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
+  next false if chosen < 0
+  other_pkmn = $Trainer.party[chosen]
+  if pkmn == other_pkmn
+    scene.pbDisplay(_INTL("It cannot be fused with itself."))
+    next false
+  elsif other_pkmn.egg?
+    scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
+    next false
+  elsif other_pkmn.fainted?
+    scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
+    next false
+  elsif !other_pkmn.isSpecies?(:LUNALA)
+    scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
+    next false
   end
-  # Unfusing
-  if $Trainer.party_full?
+  pkmn.setForm(2) {
+    pkmn.fused = other_pkmn
+    $Trainer.remove_pokemon_at_index(chosen)
+    scene.pbHardRefresh
+    scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
+  }
+  $PokemonBag.pbChangeItem(:NLUNARIZER, :NLUNARIZERUSED)
+  next true
+})
+
+ItemHandlers::UseOnPokemon.add(:NLUNARIZERUSED,proc { |item,pkmn,scene|
+  if !pkmn.isSpecies?(:NECROZMA) || pkmn.form != 2 || pkmn.fused.nil?
+    scene.pbDisplay(_INTL("It had no effect."))
+    next false
+  elsif pkmn.fainted?
+    scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
+  elsif $Trainer.party_full?
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
+  # Unfusing
   pkmn.setForm(0) {
     $Trainer.party[$Trainer.party.length] = pkmn.fused
     pkmn.fused = nil
     scene.pbHardRefresh
-    scene.pbDisplay(_INTL("{1} changed Forme!",pkmn.name))
+    scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
+  $PokemonBag.pbChangeItem(:NLUNARIZERUSED, :NLUNARIZER)
   next true
 })
 
@@ -1124,6 +1150,7 @@ ItemHandlers::UseOnPokemon.add(:ABILITYCAPSULE,proc { |item,pkmn,scene|
     newabil = (pkmn.ability_index + 1) % 2
     newabilname = GameData::Ability.get((newabil == 0) ? abil1 : abil2).name
     pkmn.ability_index = newabil
+    pkmn.ability = nil
     scene.pbRefresh
     scene.pbDisplay(_INTL("{1}'s Ability changed! Its Ability is now {2}!", pkmn.name, newabilname))
     next true

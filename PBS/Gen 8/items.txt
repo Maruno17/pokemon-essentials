@@ -6396,6 +6396,15 @@ FieldUse = OnPokemon
 Type = KeyItem
 Description = A catalog of devices that Rotom like. Use the catalog to have Rotom hop in and out of the devices listed within.
 #-------------------------------
+[ZYGARDECUBE]
+Name = Zygarde Cube
+NamePlural = Zygarde Cubes
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Type = KeyItem
+Description = An item in which Zygarde Cores and Cells are gathered. You can also use it to change Zygarde's forms.
+#-------------------------------
 [DNASPLICERS]
 Name = DNA Splicers
 NamePlural = DNA Splicers
@@ -6404,6 +6413,15 @@ Price = 0
 FieldUse = OnPokemon
 Type = KeyItem
 Description = A splicer that fuses Kyurem and a certain Pokémon. They are said to have been one in the beginning.
+#-------------------------------
+[DNASPLICERSUSED]
+Name = DNA Splicers
+NamePlural = DNA Splicers
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Type = KeyItem
+Description = A splicer that separates Kyurem and a certain Pokémon when they have been fused.
 #-------------------------------
 [NSOLARIZER]
 Name = N-Solarizer
@@ -6414,6 +6432,15 @@ FieldUse = OnPokemon
 Type = KeyItem
 Description = A machine to fuse Necrozma, which needs light, and Solgaleo.
 #-------------------------------
+[NSOLARIZERUSED]
+Name = N-Solarizer
+NamePlural = N-Solarizers
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Type = KeyItem
+Description = A machine to separate Necrozma, which needed light, from Solgaleo.
+#-------------------------------
 [NLUNARIZER]
 Name = N-Lunarizer
 NamePlural = N-Lunarizers
@@ -6423,6 +6450,15 @@ FieldUse = OnPokemon
 Type = KeyItem
 Description = A machine to fuse Necrozma, which needs light, and Lunala.
 #-------------------------------
+[NLUNARIZERUSED]
+Name = N-Lunarizer
+NamePlural = N-Lunarizers
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Type = KeyItem
+Description = A machine to separate Necrozma, which needed light, from Lunala.
+#-------------------------------
 [REINSOFUNITY]
 Name = Reins of Unity
 NamePlural = Reins of Unity
@@ -6431,6 +6467,15 @@ Price = 0
 FieldUse = OnPokemon
 Type = KeyItem
 Description = Reins that people presented to the king. They unite Calyrex with its beloved steed.
+#-------------------------------
+[REINSOFUNITYUSED]
+Name = Reins of Unity
+NamePlural = Reins of Unity
+Pocket = 8
+Price = 0
+FieldUse = OnPokemon
+Type = KeyItem
+Description = Reins that people presented to the king. They separate Calyrex and its beloved steed.
 #-------------------------------
 [OVALCHARM]
 Name = Oval Charm

@@ -89,7 +89,7 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
     # Play main animation
     Graphics.freeze
     viewport.color = Color.new(0,0,0,255)   # Ensure screen is black
-    Graphics.transition(Graphics.frame_rate*1.25,sprintf("Graphics/Transitions/%s",anim))
+    Graphics.transition(25, sprintf("Graphics/Transitions/%s", anim))
     # Slight pause after animation before starting up the battle scene
     (Graphics.frame_rate/10).times do
       Graphics.update

@@ -2469,7 +2469,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = 162
-Flags = CanProtect,CanMirrorMove
+Flags = CanProtect,CanMirrorMove,ThawsUser
 Description = To inflict massive damage, the user burns itself out. The user will no longer be Fire type.
 #-------------------------------
 [OVERHEAT]
@@ -8118,7 +8118,7 @@ Accuracy = 100
 TotalPP = 5
 Target = NearOther
 FunctionCode = 175
-Flags = Contact,CanProtect
+Flags = Contact,CanProtect,Punching
 EffectChance = 30
 Description = The user rotates, centering the hex nut in its chest, and then strikes twice. May cause flinching.
 #-------------------------------

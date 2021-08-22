@@ -76,7 +76,7 @@ IceGod64<s>SoundSpawn
 Jacob O. Wobbrock<s>the__end
 KitsuneKouta<s>Venom12
 Lisa Anthony<s>Wachunga
-Luka S.J.<s> 
+Luka S.J.<s>
 and everyone else who helped out
 
 "mkxp-z" by:
@@ -189,7 +189,7 @@ _END_
     pbSEStop
     pbBGMFade(2.0)
     pbBGMPlay(BGM)
-    Graphics.transition(20)
+    Graphics.transition
     loop do
       Graphics.update
       Input.update
@@ -198,7 +198,7 @@ _END_
     end
     pbBGMFade(2.0)
     Graphics.freeze
-    Graphics.transition(20, "fadetoblack")
+    Graphics.transition(8, "fadetoblack")
     @background_sprite.dispose
     @credit_sprites.each { |s| s.dispose if s }
     text_viewport.dispose

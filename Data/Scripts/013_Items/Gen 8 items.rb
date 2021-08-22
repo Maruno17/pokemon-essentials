@@ -216,7 +216,7 @@ ItemHandlers::BattleUseOnBattler.add(:MAXMUSHROOMS,proc { |item, battler, scene|
 })
 
 ItemHandlers::UseOnPokemon.add(:REINSOFUNITY, proc { |item, pkmn, scene|
-  if !pkmn.isSpecies?(:CALYREX)
+  if !pkmn.isSpecies?(:CALYREX) || !pkmn.fused.nil?
     scene.pbDisplay(_INTL("It had no effect."))
     next false
   elsif pkmn.fainted?
@@ -224,46 +224,55 @@ ItemHandlers::UseOnPokemon.add(:REINSOFUNITY, proc { |item, pkmn, scene|
     next false
   end
   # Fusing
-  if pkmn.fused.nil?
-    chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
-    next false if chosen < 0
-    other_pkmn = $Trainer.party[chosen]
-    if pkmn == other_pkmn
-      scene.pbDisplay(_INTL("It cannot be fused with itself."))
-      next false
-    elsif other_pkmn.egg?
-      scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
-      next false
-    elsif other_pkmn.fainted?
-      scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
-      next false
-    elsif !other_pkmn.isSpecies?(:GLASTRIER) &&
-          !other_pkmn.isSpecies?(:SPECTRIER)
-      scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
-      next false
-    end
-    newForm = 0
-    newForm = 1 if other_pkmn.isSpecies?(:GLASTRIER)
-    newForm = 2 if other_pkmn.isSpecies?(:SPECTRIER)
-    pkmn.setForm(newForm) {
-      pkmn.fused = other_pkmn
-      $Trainer.remove_pokemon_at_index(chosen)
-      scene.pbHardRefresh
-      scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
-    }
-    next true
+  chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
+  next false if chosen < 0
+  other_pkmn = $Trainer.party[chosen]
+  if pkmn == other_pkmn
+    scene.pbDisplay(_INTL("It cannot be fused with itself."))
+    next false
+  elsif other_pkmn.egg?
+    scene.pbDisplay(_INTL("It cannot be fused with an Egg."))
+    next false
+  elsif other_pkmn.fainted?
+    scene.pbDisplay(_INTL("It cannot be fused with that fainted Pokémon."))
+    next false
+  elsif !other_pkmn.isSpecies?(:GLASTRIER) &&
+        !other_pkmn.isSpecies?(:SPECTRIER)
+    scene.pbDisplay(_INTL("It cannot be fused with that Pokémon."))
+    next false
   end
-  # Unfusing
-  if $Trainer.party_full?
+  newForm = 0
+  newForm = 1 if other_pkmn.isSpecies?(:GLASTRIER)
+  newForm = 2 if other_pkmn.isSpecies?(:SPECTRIER)
+  pkmn.setForm(newForm) {
+    pkmn.fused = other_pkmn
+    $Trainer.remove_pokemon_at_index(chosen)
+    scene.pbHardRefresh
+    scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
+  }
+  $PokemonBag.pbChangeItem(:REINSOFUNITY, :REINSOFUNITYUSED)
+  next true
+})
+
+ItemHandlers::UseOnPokemon.add(:REINSOFUNITYUSED, proc { |item, pkmn, scene|
+  if !pkmn.isSpecies?(:CALYREX) || pkmn.fused.nil?
+    scene.pbDisplay(_INTL("It had no effect."))
+    next false
+  elsif pkmn.fainted?
+    scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
+  elsif $Trainer.party_full?
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
+  # Unfusing
   pkmn.setForm(0) {
     $Trainer.party[$Trainer.party.length] = pkmn.fused
     pkmn.fused = nil
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
+  $PokemonBag.pbChangeItem(:REINSOFUNITYUSED, :REINSOFUNITY)
   next true
 })
 
@@ -278,6 +287,7 @@ ItemHandlers::UseOnPokemon.add(:ABILITYPATCH, proc { |item, pkmn, scene|
     end
     new_ability_name = GameData::Ability.get(new_ability_id).name
     pkmn.ability_index = 2
+    pkmn.ability = nil
     scene.pbRefresh
     scene.pbDisplay(_INTL("{1}'s Ability changed! Its Ability is now {2}!",
        pkmn.name, new_ability_name))
@@ -339,6 +349,34 @@ BattleHandlers::ItemOnSwitchIn.add(:ROOMSERVICE,
     battler.pbConsumeItem
   }
 )
+
+ItemHandlers::UseOnPokemon.add(:ZYGARDECUBE, proc { |item, pkmn, scene|
+  if !pkmn.isSpecies?(:ZYGARDE)
+    scene.pbDisplay(_INTL("It had no effect."))
+    next false
+  elsif pkmn.fainted?
+    scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
+    next false
+  end
+  case scene.pbShowCommands(_INTL("What will you do with {1}?", pkmn.name),
+     [_INTL("Change form"), _INTL("Change Ability"), _INTL("Cancel")])
+  when 0   # Change form
+    newForm = (pkmn.form == 0) ? 1 : 0
+    pkmn.setForm(newForm) {
+      scene.pbRefresh
+      scene.pbDisplay(_INTL("{1} transformed!", pkmn.name))
+    }
+    next true
+  when 1   # Change ability
+    new_abil = (pkmn.ability_index + 1) % 2
+    pkmn.ability_index = new_abil
+    pkmn.ability = nil
+    scene.pbRefresh
+    scene.pbDisplay(_INTL("{1}'s Ability changed! Its Ability is now {2}!", pkmn.name, pkmn.ability.name))
+    next true
+  end
+  next false
+})
 
 
 =begin

@@ -23,19 +23,12 @@ Some abilities have changed effects:
   Pokémon. In Gen 8, speed- and priority-modifying effects aren't considered,
   but in earlier Gens they are.
 
-Some items have changed properties/effects:
-- Zygarde Cube now changes a Zygarde's ability.
-
 Other notes:
 - In Gen 7+, Shaymin/Hoopa revert their form when withdrawn from storage rather
   than when deposited. It still also reverts under other conditions. Shaymin
   reverts its form when deposited in the Day Care (all Gens).
 - If a battle ends because of Rocky Helmet damage, the side that the Rocky
   Helmet holder is on should lose (Gen 7+) or win (Gen 6-).
-- Maybe the DNA Splicers/N-Solarizer/N-Lunarizer/Reins of Unity should actually
-  be two items each (one that combines, one that splits) and they alternate upon
-  use. No reasonable game would have multiple sets of Pokémon to fuse at once,
-  so allowing just one of each fusion at a time is probably fine.
 
 Can use Fly from within the Town Map if possible. (Good QoL, add if possible.)
 (Will be implemented by me in the next PR)
@@ -161,6 +154,11 @@ Other changes:
   Stick changed.
 - Changes to evolutions due to removal of moss rock/ice rock/magnetic field.
 - Form differences.
+- Maybe the DNA Splicers/N-Solarizer/N-Lunarizer/Reins of Unity should actually
+  be two items each (one that combines, one that splits) and they alternate upon
+  use. No reasonable game would have multiple sets of Pokémon to fuse at once,
+  so allowing just one of each fusion at a time is probably fine.
+- Zygarde Cube now changes a Zygarde's form/ability.
 
 What happens to the PP of Iron Head when turned into/from Behemoth Blade/Bash
 for Zacian/Zamazenta? It gets decreased to the total PP if it is higher than the

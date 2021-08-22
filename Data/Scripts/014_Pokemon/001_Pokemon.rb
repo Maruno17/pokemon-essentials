@@ -122,6 +122,7 @@ class Pokemon
     @species     = new_species_data.species
     @form        = new_species_data.form if new_species_data.form != 0
     @forced_form = nil
+    @gender      = nil if singleGendered?
     @level       = nil   # In case growth rate is different for the new species
     @ability     = nil
     calc_stats
