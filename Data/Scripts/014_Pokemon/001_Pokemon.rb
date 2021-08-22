@@ -153,7 +153,7 @@ class Pokemon
     @ability = nil
     MultipleForms.call("onSetForm", self, value, oldForm)
     calc_stats
-    $Trainer.pokedex.register(self)
+    $Trainer.pokedex.register(self) if $Trainer
   end
 
   # The same as def form=, but yields to a given block in the middle so that a
@@ -752,12 +752,7 @@ class Pokemon
   def takeRibbon(ribbon)
     ribbon_data = GameData::Ribbon.try_get(ribbon)
     return if !ribbon_data
-    for i in 0...@ribbons.length
-      next if @ribbons[i] != ribbon_data.id
-      @ribbons[i] = nil
-      @ribbons.compact!
-      break
-    end
+    @ribbons.delete_at(@ribbons.index(ribbon_data.id))
   end
 
   # Removes all ribbons from this Pokémon.

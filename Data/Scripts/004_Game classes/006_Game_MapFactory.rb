@@ -387,25 +387,15 @@ class PokemonMapFactory
   def updateMapsInternal
     return if $game_player.moving?
     if !MapFactoryHelper.hasConnections?($game_map.map_id)
-      return if @maps.length==1
-      for i in 0...@maps.length
-        @maps[i] = nil if $game_map.map_id!=@maps[i].map_id
-      end
-      @maps.compact!
+      return if @maps.length == 1
+      @maps.delete_if { |map| $game_map.map_id != map.map_id }
       @mapIndex = getMapIndex($game_map.map_id)
       return
     end
     setMapsInRange
     deleted = false
-    for i in 0...@maps.length
-      next if MapFactoryHelper.mapInRange?(@maps[i])
-      @maps[i] = nil
-      deleted = true
-    end
-    if deleted
-      @maps.compact!
-      @mapIndex = getMapIndex($game_map.map_id)
-    end
+    deleted = @maps.delete_if { |map| !MapFactoryHelper.mapInRange?(map) }
+    @mapIndex = getMapIndex($game_map.map_id) if deleted
   end
 end
 

@@ -78,25 +78,3 @@ class Game_Player < Game_Character
     end
   end
 end
-
-
-=begin
-class Game_Character
-  alias update_old2 update
-
-  def update
-    if self.is_a?(Game_Event)
-      if @dependentEvents
-        for i in 0...@dependentEvents.length
-          if @dependentEvents[i][0]==$game_map.map_id &&
-             @dependentEvents[i][1]==self.id
-            self.move_speed_real = $game_player.move_speed_real
-            break
-          end
-        end
-      end
-    end
-    update_old2
-  end
-end
-=end

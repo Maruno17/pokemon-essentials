@@ -53,8 +53,7 @@ def pbDayCareDeposit(index)
     $PokemonGlobal.daycare[i][0] = $Trainer.party[index]
     $PokemonGlobal.daycare[i][1] = $Trainer.party[index].level
     $PokemonGlobal.daycare[i][0].heal
-    $Trainer.party[index] = nil
-    $Trainer.party.compact!
+    $Trainer.party.delete_at(index)
     $PokemonGlobal.daycareEgg      = 0
     $PokemonGlobal.daycareEggSteps = 0
     return

@@ -993,8 +993,7 @@ module MovePoolProperty
                   havemove = e[2] if e[0] == newlevel && e[1] == entry[1]
                 end
                 if havemove >= 0   # Move already known at new level; delete this move
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
+                  realcmds.delete_at(cmd[1])
                   oldsel = havemove
                 else   # Apply the new level
                   entry[0] = newlevel
@@ -1010,8 +1009,7 @@ module MovePoolProperty
                   havemove = e[2] if e[0] == entry[0] && e[1] == newmove
                 end
                 if havemove >= 0   # New move already known at level; delete this move
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
+                  realcmds.delete_at(cmd[1])
                   cmd[1] = [cmd[1], realcmds.length - 1].min
                   oldsel = havemove
                 else   # Apply the new move
@@ -1022,8 +1020,7 @@ module MovePoolProperty
                 refreshlist = true
               end
             when 2   # Delete
-              realcmds[cmd[1]] = nil
-              realcmds.compact!
+              realcmds.delete_at(cmd[1])
               cmd[1] = [cmd[1], realcmds.length - 1].min
               refreshlist = true
             end
@@ -1111,8 +1108,7 @@ module EggMovesProperty
             newmove = pbChooseMoveList(entry[0])
             if newmove
               if realcmds.any? { |e| e[0] == newmove }   # Already have move; delete this one
-                realcmds[cmd] = nil
-                realcmds.compact!
+                realcmds.delete_at(cmd)
                 cmd = [cmd, realcmds.length - 1].min
               else   # Change move
                 realcmds[cmd] = [newmove, GameData::Move.get(newmove).name, 0]
@@ -1121,8 +1117,7 @@ module EggMovesProperty
               refreshlist = true
             end
           when 1   # Delete
-            realcmds[cmd] = nil
-            realcmds.compact!
+            realcmds.delete_at(cmd)
             cmd = [cmd, realcmds.length - 1].min
             refreshlist = true
           end
@@ -1293,8 +1288,7 @@ class EvolutionsProperty
                                                    realcmds[i][2]==entry[2]
                 end
                 if existing_evo >= 0
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
+                  realcmds.delete_at(cmd[1])
                   oldsel = existing_evo
                 else
                   entry[0] = newspecies
@@ -1315,8 +1309,7 @@ class EvolutionsProperty
                                                    realcmds[i][2]==entry[2]
                 end
                 if existing_evo >= 0
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
+                  realcmds.delete_at(cmd[1])
                   oldsel = existing_evo
                 elsif newmethod != entry[1]
                   entry[1] = newmethod
@@ -1338,8 +1331,7 @@ class EvolutionsProperty
                                                      realcmds[i][2]==newparam
                   end
                   if existing_evo >= 0
-                    realcmds[cmd[1]] = nil
-                    realcmds.compact!
+                    realcmds.delete_at(cmd[1])
                     oldsel = existing_evo
                   else
                     entry[2] = newparam
@@ -1349,8 +1341,7 @@ class EvolutionsProperty
                 end
               end
             when 3   # Delete
-              realcmds[cmd[1]] = nil
-              realcmds.compact!
+              realcmds.delete_at(cmd[1])
               cmd[1] = [cmd[1],realcmds.length-1].min
               refreshlist = true
             end

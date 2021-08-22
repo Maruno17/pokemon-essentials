@@ -264,8 +264,7 @@ DebugMenuCommands.register("testwildbattleadvanced", {
           scr.pbPokemonDebug(pkmn[pkmnCmd], -1, nil, true)
           scr.pbEndScreen
         elsif pbConfirmMessage(_INTL("Delete this Pokémon?"))
-          pkmn[pkmnCmd] = nil
-          pkmn.compact!
+          pkmn.delete_at(pkmnCmd)
         end
       end
     end
@@ -366,8 +365,7 @@ DebugMenuCommands.register("testtrainerbattleadvanced", {
             trainers[trainerCmd] = [0, tr]
           end
         elsif pbConfirmMessage(_INTL("Delete this trainer?"))
-          trainers[trainerCmd] = nil
-          trainers.compact!
+          trainers.delete_at(trainerCmd)
         end
       end
     end

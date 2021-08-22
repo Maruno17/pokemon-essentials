@@ -218,11 +218,8 @@ class MapScreenScene
     return false
   end
 
-  def removeOldConnections(ret,mapid)
-    for i in 0...ret.length
-      ret[i]=nil if ret[i][0]==mapid || ret[i][3]==mapid
-    end
-    ret.compact!
+  def removeOldConnections(ret, mapid)
+    ret.delete_if { |conn| conn[0] == mapid || conn[3] == mapid} 
   end
 
   # Returns the maps within _keys_ that are directly connected to this map, _map_.

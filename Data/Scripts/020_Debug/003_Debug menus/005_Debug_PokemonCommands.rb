@@ -1167,8 +1167,7 @@ PokemonDebugMenuCommands.register("delete", {
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if screen.pbConfirm(_INTL("Are you sure you want to delete this Pokémon?"))
       if screen.is_a?(PokemonPartyScreen)
-        screen.party[pkmnid] = nil
-        screen.party.compact!
+        screen.party.delete_at(pkmnid)
         screen.pbHardRefresh
       elsif screen.is_a?(PokemonStorageScreen)
         screen.scene.pbRelease(pkmnid, heldpoke)

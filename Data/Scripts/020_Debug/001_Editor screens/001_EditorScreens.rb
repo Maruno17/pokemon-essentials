@@ -322,8 +322,7 @@ def pbEncounterTypeEditor(enc_data, enc_type)
         need_refresh = true
       when 2   # Delete
         if pbConfirmMessage(_INTL("Delete this encounter slot?"))
-          enc_data.types[enc_type][ret - 2] = nil
-          enc_data.types[enc_type].compact!
+          enc_data.types[enc_type].delete_at(ret - 2)
           need_refresh = true
         end
       end
@@ -1298,8 +1297,7 @@ def pbRegionalDexEditorMain
           cmd[1] = dex_lists.length
           refresh_list = true
         when 2   # Delete
-          dex_lists[cmd[1] - 1] = nil
-          dex_lists.compact!
+          dex_lists.delete_at(cmd[1] - 1)
           cmd[1] = [cmd[1], dex_lists.length].min
           refresh_list = true
         end

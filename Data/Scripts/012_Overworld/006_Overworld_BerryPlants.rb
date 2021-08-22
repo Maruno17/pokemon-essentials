@@ -397,7 +397,8 @@ def pbBerryPlant
           berryData[3]=timenow.to_i  # time planted
           berryData[4]=0             # total waterings
           berryData[5]=0             # number of replants
-          berryData[6]=nil; berryData[7]=nil; berryData.compact! # for compatibility
+          berryData.delete_at(6)   # for compatibility
+          berryData.delete_at(6)   # for compatibility
           $PokemonBag.pbDeleteItem(berry,1)
           pbMessage(_INTL("{1} planted a {2} in the soft loamy soil.",
              $Trainer.name,GameData::Item.get(berry).name))
