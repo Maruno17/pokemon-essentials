@@ -271,7 +271,7 @@ class TextField < UIControl
       end
       return
     end
-    if Input.triggerex?(:LEFT) || Input.repeatex?(:RIGHT)
+    if Input.triggerex?(:RIGHT) || Input.repeatex?(:RIGHT)
       if @cursor < self.text.scan(/./m).length
         @cursor+=1
         @frame=0
