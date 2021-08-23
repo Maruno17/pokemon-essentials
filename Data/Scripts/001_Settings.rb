@@ -235,6 +235,9 @@ module Settings
   # order as above, except the National Dex is -1). All Dex lists included here
   # will begin their numbering at 0 rather than 1 (e.g. Victini in Unova's Dex).
   DEXES_WITH_OFFSETS  = []
+  # Whether the amount of Pokemon of a particular species caught or defeated in
+  # battle by the player boosts shiny odds.
+  NUMBER_BATTLED_BOOSTS_SHINY_ODDS  = true
 
   #=============================================================================
 

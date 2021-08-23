@@ -88,3 +88,15 @@ SaveData.register_conversion(:v19_2_fix_berry_plants) do
     end
   end
 end
+
+SaveData.register_conversion(:v20_add_pokedex_number_battled) do
+  essentials_version 20
+  display_title 'Adding number battled to Pokedex'
+  to_value :player do |player|
+    if !player.pokedex.instance_variable_defined?(:@number_battled)
+      num_battled = {}
+      GameData::Species.each { |sp| num_battled[sp.id] = 0 }
+      player.pokedex.instance_variable_set(:@number_battled, num_battled)
+    end
+  end
+end

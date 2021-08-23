@@ -404,6 +404,14 @@ class PokeBattle_SafariZone
   end
 
   #=============================================================================
+  # Number Battled
+  #=============================================================================
+  def pbSetBattled(battler)
+    return if !battler
+    pbPlayer.pokedex.register_battled(battler.species)
+  end
+
+  #=============================================================================
   # Safari battle-specific methods
   #=============================================================================
   def pbEscapeRate(catch_rate)

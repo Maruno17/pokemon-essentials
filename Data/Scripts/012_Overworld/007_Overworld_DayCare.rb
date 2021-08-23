@@ -322,6 +322,7 @@ def pbDayCareGenerateEgg
   if shinyretries>0
     shinyretries.times do
       break if egg.shiny?
+      genwildpoke.shiny = nil
       egg.personalID = rand(2**16) | rand(2**16) << 16
     end
   end

@@ -631,6 +631,11 @@ class PokeBattle_Battle
     pbPlayer.pokedex.register(battler.displaySpecies,battler.displayGender,battler.displayForm)
   end
 
+  def pbSetBattled(battler)
+    return if !battler || !@internalBattle || !battler.opposes?
+    pbPlayer.pokedex.register_battled(battler.displaySpecies)
+  end
+
   def nextPickupUse
     @nextPickupUse += 1
     return @nextPickupUse

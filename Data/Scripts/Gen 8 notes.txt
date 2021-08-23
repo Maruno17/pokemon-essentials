@@ -4,11 +4,6 @@
 # To do
 #===============================================================================
 
-The game records, for each species, how many have been caught or defeated
-(counts both wild and trainer battles), and the shiny chance increases for that
-species because of this. This value is also shown in the Pokédex entry screen.
-(Will be implemented by me in the next PR)
-
 Some moves have changed properties/effects:
 - Healing Wish's effect and Lunar Dance's effect are no longer used up if a
   Pokémon that switches to the targeted position can't make use of it. Each
@@ -84,6 +79,10 @@ Pokémon sent to storage aren't healed - see Settings::HEAL_STORED_POKEMON.
 Super shininess. Only difference is an alternate shiny common animation with
 square sparkles; a mon is super shiny if the calculated number that is compared
 to Settings::SHINY_POKEMON_CHANCE is exactly 0 - see Settings::SUPER_SHINY.
+
+The game records, for each species, how many have been caught or defeated
+(counts both wild and trainer battles), and the shiny chance increases for that
+species because of this. This value is also shown in the Pokédex entry screen.
 
 Can now give a Rare Candy to a max level Pokémon, which will trigger its
 evolution (presumably the item isn't consumed if it can't at least try to evolve

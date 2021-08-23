@@ -150,6 +150,8 @@ module PokeBattle_BattleCommon
       @peer.pbOnLeavingBattle(self,pkmn,true,true)
       # Make the Poké Ball and data box disappear
       @scene.pbHideCaptureBall(idxBattler)
+      # Record Number Battled
+      pbSetBattled(battler)
       # Save the Pokémon for storage at the end of battle
       @caughtPokemon.push(pkmn)
     end
