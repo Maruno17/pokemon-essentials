@@ -83,7 +83,7 @@ module Graphics
     when "fourballburst"    then @@transition = Transitions::FourBallBurst.new(duration)
     # Graphic transitions
     when "fadetoblack"      then @@transition = Transitions::FadeToBlack.new(duration)
-    when ""                 then @@transition = Transitions::FadeFromBlack.new(duration)
+    when "fadefromblack"    then @@transition = Transitions::FadeFromBlack.new(duration)
     else                         ret = false
     end
     Graphics.frame_reset if ret
@@ -110,11 +110,14 @@ module Transitions
       @duration = self.class::DURATION || duration
       @parameters = args
       @timer = 0.0
+      @overworld_bitmap = $game_temp.background_bitmap
       initialize_bitmaps
       return if disposed?
       @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
       @viewport.z = 99999
       @sprites = []
+      @overworld_sprite = new_sprite(0, 0, @overworld_bitmap)
+      @overworld_sprite.z = -1
       initialize_sprites
       @timings = []
       set_up_timings
@@ -135,6 +138,8 @@ module Transitions
       dispose_all
       @sprites.each { |s| s.dispose if s }
       @sprites.clear
+      @overworld_sprite.dispose
+      @overworld_bitmap.dispose if @overworld_bitmap
       @viewport.dispose if @viewport
       @disposed = true
     end
@@ -165,22 +170,15 @@ module Transitions
     NUM_SPRITES_X = 8
     NUM_SPRITES_Y = 6
 
-    def initialize_bitmaps
-      @buffer = Graphics.snap_to_bitmap
-      dispose if !@buffer
-    end
-
     def initialize_sprites
-      # Black background
-      @black_sprite = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-      @black_sprite.bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
+      @overworld_sprite.visible = false
       # Overworld sprites
-      sprite_width = @buffer.width / NUM_SPRITES_X
-      sprite_height = @buffer.height / NUM_SPRITES_Y
+      sprite_width = @overworld_bitmap.width / NUM_SPRITES_X
+      sprite_height = @overworld_bitmap.height / NUM_SPRITES_Y
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
           idx_sprite = j * NUM_SPRITES_X + i
-          @sprites[idx_sprite] = new_sprite(i * sprite_width, j * sprite_height, @buffer)
+          @sprites[idx_sprite] = new_sprite(i * sprite_width, j * sprite_height, @overworld_bitmap)
           @sprites[idx_sprite].src_rect.set(i * sprite_width, j * sprite_height, sprite_width, sprite_height)
         end
       end
@@ -195,11 +193,6 @@ module Transitions
           @timings[idx_sprite] = 0.5 + rand
         end
       end
-    end
-
-    def dispose_all
-      @black_sprite.dispose if @black_sprite
-      @buffer.dispose if @buffer
     end
 
     def update_anim
@@ -218,31 +211,19 @@ module Transitions
     NUM_SPRITES_X = 8
     NUM_SPRITES_Y = 6
 
-    def initialize_bitmaps
-      @buffer = Graphics.snap_to_bitmap
-      dispose if !@buffer
-    end
-
     def initialize_sprites
-      # Black background
-      @black_sprite = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-      @black_sprite.bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
+      @overworld_sprite.visible = false
       # Overworld sprites
-      sprite_width = @buffer.width / NUM_SPRITES_X
-      sprite_height = @buffer.height / NUM_SPRITES_Y
+      sprite_width = @overworld_bitmap.width / NUM_SPRITES_X
+      sprite_height = @overworld_bitmap.height / NUM_SPRITES_Y
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
           idx_sprite = j * NUM_SPRITES_X + i
           @sprites[idx_sprite] = new_sprite((i + 0.5) * sprite_width, (j + 0.5) * sprite_height,
-                                            @buffer, sprite_width / 2, sprite_height / 2)
+                                            @overworld_bitmap, sprite_width / 2, sprite_height / 2)
           @sprites[idx_sprite].src_rect.set(i * sprite_width, j * sprite_height, sprite_width, sprite_height)
         end
       end
-    end
-
-    def dispose_all
-      @black_sprite.dispose if @black_sprite
-      @buffer.dispose if @buffer
     end
 
     def update_anim
@@ -266,23 +247,19 @@ module Transitions
     NUM_SPRITES_Y = 12
     SPEED         = 40
 
-    def initialize_bitmaps
-      @buffer = Graphics.snap_to_bitmap
-      dispose if !@buffer
-    end
-
     def initialize_sprites
+      @overworld_sprite.visible = false
       # Black background
       @black_sprite = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
       @black_sprite.bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
       # Overworld sprites
-      sprite_width = @buffer.width / NUM_SPRITES_X
-      sprite_height = @buffer.height / NUM_SPRITES_Y
+      sprite_width = @overworld_bitmap.width / NUM_SPRITES_X
+      sprite_height = @overworld_bitmap.height / NUM_SPRITES_Y
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
           idx_sprite = j * NUM_SPRITES_X + i
           @sprites[idx_sprite] = new_sprite((i + 0.5) * sprite_width, (j + 0.5) * sprite_height,
-                                            @buffer, sprite_width / 2, sprite_height / 2)
+                                            @overworld_bitmap, sprite_width / 2, sprite_height / 2)
           @sprites[idx_sprite].src_rect.set(i * sprite_width, j * sprite_height, sprite_width, sprite_height)
         end
       end
@@ -315,11 +292,6 @@ module Transitions
       end
     end
 
-    def dispose_all
-      @black_sprite.dispose if @black_sprite
-      @buffer.dispose if @buffer
-    end
-
     def update_anim
       proportion = @timer / @duration
       @sprites.each_with_index do |sprite, i|
@@ -342,31 +314,24 @@ module Transitions
   class RandomStripeTransition < Transition_Base
     STRIPE_WIDTH = 2
 
-    def initialize_bitmaps
-      @buffer = Graphics.snap_to_bitmap
-      dispose if !@buffer
-    end
-
     def initialize_sprites
-      # Black background
-      @black_sprite = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-      @black_sprite.bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
+      @overworld_sprite.visible = false
       # Overworld sprites
       if @parameters[0] == 0   # Vertical stripes
         sprite_width = STRIPE_WIDTH
-        sprite_height = @buffer.height
-        num_stripes_x = @buffer.width / STRIPE_WIDTH
+        sprite_height = @overworld_bitmap.height
+        num_stripes_x = @overworld_bitmap.width / STRIPE_WIDTH
         num_stripes_y = 1
       else   # Horizontal stripes
-        sprite_width = @buffer.width
+        sprite_width = @overworld_bitmap.width
         sprite_height = STRIPE_WIDTH
         num_stripes_x = 1
-        num_stripes_y = @buffer.height / STRIPE_WIDTH
+        num_stripes_y = @overworld_bitmap.height / STRIPE_WIDTH
       end
       for j in 0...num_stripes_y
         for i in 0...num_stripes_x
           idx_sprite = j * num_stripes_x + i
-          @sprites[idx_sprite] = new_sprite(i * sprite_width, j * sprite_height, @buffer)
+          @sprites[idx_sprite] = new_sprite(i * sprite_width, j * sprite_height, @overworld_bitmap)
           @sprites[idx_sprite].src_rect.set(i * sprite_width, j * sprite_height, sprite_width, sprite_height)
         end
       end
@@ -377,11 +342,6 @@ module Transitions
         @timings[i] = @duration * i / @sprites.length
       end
       @timings.shuffle!
-    end
-
-    def dispose_all
-      @black_sprite.dispose if @black_sprite
-      @buffer.dispose if @buffer
     end
 
     def update_anim
@@ -397,34 +357,18 @@ module Transitions
   #
   #=============================================================================
   class ZoomInTransition < Transition_Base
-    def initialize_bitmaps
-      @buffer = Graphics.snap_to_bitmap
-      @disposed = true if !@buffer
-    end
-
     def initialize_sprites
-      # Black background
-      @black_sprite = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-      @black_sprite.bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
-      # Overworld sprite
-      @sprite = new_sprite(Graphics.width / 2, Graphics.height / 2, @buffer,
-                           @buffer.width / 2, @buffer.height / 2)
-      @sprite.z = 1
-    end
-
-    def dispose_all
-      # Dispose sprites
-      @sprite.dispose if @sprite
-      @black_sprite.dispose if @black_sprite
-      # Dispose bitmaps
-      @buffer.dispose if @buffer
+      @overworld_sprite.x = Graphics.width / 2
+      @overworld_sprite.y = Graphics.height / 2
+      @overworld_sprite.ox = @overworld_bitmap.width / 2
+      @overworld_sprite.oy = @overworld_bitmap.height / 2
     end
 
     def update_anim
       proportion = @timer / @duration
-      @sprite.zoom_x = 1.0 + 7.0 * proportion
-      @sprite.zoom_y = @sprite.zoom_x
-      @sprite.opacity = 255 * (1 - proportion)
+      @overworld_sprite.zoom_x = 1.0 + 7.0 * proportion
+      @overworld_sprite.zoom_y = @overworld_sprite.zoom_x
+      @overworld_sprite.opacity = 255 * (1 - proportion)
     end
   end
 
@@ -432,27 +376,6 @@ module Transitions
   #
   #=============================================================================
   class ScrollScreen < Transition_Base
-    def initialize_bitmaps
-      @buffer = Graphics.snap_to_bitmap
-      dispose if !@buffer
-    end
-
-    def initialize_sprites
-      # Black background
-      @black_sprite = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-      @black_sprite.bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
-      # Overworld sprite
-      @overworld_sprite = new_sprite(0, 0, @buffer)
-    end
-
-    def dispose_all
-      # Dispose sprites
-      @black_sprite.dispose if @black_sprite
-      @overworld_sprite.dispose if @overworld_sprite
-      # Dispose bitmaps
-      @buffer.dispose if @buffer
-    end
-
     def update_anim
       proportion = @timer / @duration
       if (@parameters[0] % 3) != 2
@@ -471,31 +394,15 @@ module Transitions
     MAX_PIXELLATION_FACTOR = 16
 
     def initialize_bitmaps
-      @buffer = Graphics.snap_to_bitmap   # Used by the overworld sprite
-      dispose if !@buffer
-      @buffer_original = @buffer.clone    # Copy of original, never changes
-      @buffer_temp = @buffer.clone        # "Clipboard" holding shrunken overworld
-    end
-
-    def initialize_sprites
-      @overworld_sprite = new_sprite(0, 0, @buffer)
-      # Black sprite (fades in at end)
-      @black_sprite = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-      @black_sprite.bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
-      @black_sprite.z = 1
-      @black_sprite.opacity = 0
+      @buffer_original = @overworld_bitmap.clone   # Copy of original, never changes
+      @buffer_temp = @overworld_bitmap.clone       # "Clipboard" holding shrunken overworld
     end
 
     def set_up_timings
-      @start_black_fade = @duration * 0.9
+      @start_black_fade = @duration * 0.8
     end
 
     def dispose_all
-      # Dispose sprites
-      @overworld_sprite.dispose if @overworld_sprite
-      @black_sprite.dispose if @black_sprite
-      # Dispose bitmaps
-      @buffer.dispose if @buffer
       @buffer_original.dispose if @buffer_original
       @buffer_temp.dispose if @buffer_temp
     end
@@ -503,15 +410,16 @@ module Transitions
     def update_anim
       proportion = @timer / @duration
       inv_proportion = 1 / (1 + proportion * (MAX_PIXELLATION_FACTOR - 1))
-      new_size_rect = Rect.new(0, 0, @buffer.width * inv_proportion, @buffer.height * inv_proportion)
+      new_size_rect = Rect.new(0, 0, @overworld_bitmap.width * inv_proportion,
+                               @overworld_bitmap.height * inv_proportion)
       # Take all of buffer_original, shrink it and put it into buffer_temp
       @buffer_temp.stretch_blt(new_size_rect,
-         @buffer_original, Rect.new(0, 0, @buffer.width, @buffer.height))
+         @buffer_original, Rect.new(0, 0, @overworld_bitmap.width, @overworld_bitmap.height))
       # Take shrunken area from buffer_temp and stretch it into buffer
-      @buffer.stretch_blt(Rect.new(0, 0, @buffer.width, @buffer.height),
+      @overworld_bitmap.stretch_blt(Rect.new(0, 0, @overworld_bitmap.width, @overworld_bitmap.height),
          @buffer_temp, new_size_rect)
       if @timer >= @start_black_fade
-        @black_sprite.opacity = 255 * (@timer - @start_black_fade) / (@duration - @start_black_fade)
+        @overworld_sprite.opacity = 255 * (1 - (@timer - @start_black_fade) / (@duration - @start_black_fade))
       end
     end
   end
@@ -520,18 +428,8 @@ module Transitions
   #
   #=============================================================================
   class FadeToBlack < Transition_Base
-    def initialize_sprites
-      @sprite = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-      @sprite.bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
-      @sprite.opacity = 0
-    end
-
-    def dispose_all
-      @sprite.dispose if @sprite
-    end
-
     def update_anim
-      @sprite.opacity = (@timer / @duration) * 255
+      @overworld_sprite.opacity = 255 * (1 - (@timer / @duration))
     end
   end
 
@@ -539,18 +437,8 @@ module Transitions
   #
   #=============================================================================
   class FadeFromBlack < Transition_Base
-    def initialize_sprites
-      @sprite = BitmapSprite.new(Graphics.width, Graphics.height, @viewport)
-      @sprite.bitmap.fill_rect(0, 0, Graphics.width, Graphics.height, Color.new(0, 0, 0))
-      @sprite.opacity = 255
-    end
-
-    def dispose_all
-      @sprite.dispose if @sprite
-    end
-
     def update_anim
-      @sprite.opacity = (@duration - @timer) * 255 / @duration
+      @overworld_sprite.opacity = 255 * @timer / @duration
     end
   end
 
@@ -579,6 +467,7 @@ module Transitions
         for i in 0...NUM_SPRITES_X
           idx_sprite = j * NUM_SPRITES_X + i
           sprite_x = ((j.even?) ? i : (NUM_SPRITES_X - i - 1)) * @black_bitmap.width
+          sprite_x += @black_bitmap.width / 2
           @sprites[idx_sprite] = new_sprite(sprite_x, j * @black_bitmap.height * @zoom_y_target,
                                             @black_bitmap, @black_bitmap.width / 2)
           @sprites[idx_sprite].zoom_y  = @zoom_y_target
@@ -675,7 +564,7 @@ module Transitions
     def update_anim
       @sprites.each_with_index do |sprite, i|
         next if @timings[i] < 0 || @timer < @timings[i]
-        sprite[i].visible = true
+        sprite.visible = true
         size = (@timer - @timings[i]) / TIME_TO_ZOOM
         sprite.zoom_x = @zoom_x_target * size
         sprite.zoom_y = @zoom_y_target * size
@@ -703,19 +592,15 @@ module Transitions
       @bubble_bitmap = RPG::Cache.transition("water_1")
       @splash_bitmap = RPG::Cache.transition("water_2")
       @black_bitmap  = RPG::Cache.transition("black_half")
-      @buffer        = Graphics.snap_to_bitmap
-      dispose if !@bubble_bitmap || !@splash_bitmap || !@black_bitmap || !@buffer
+      dispose if !@bubble_bitmap || !@splash_bitmap || !@black_bitmap
     end
 
     def initialize_sprites
-      # Black background
-      @black_bg_sprite = new_sprite(0, 0, @black_bitmap)
-      @black_bg_sprite.z      = 1
-      @black_bg_sprite.zoom_y = 2.0
+      @overworld_sprite.visible = false
       # Overworld strips (they go all wavy)
       rect = Rect.new(0, 0, Graphics.width, 2)
       for i in 0...Graphics.height / 2
-        @sprites[i] = new_sprite(0, i * 2, @buffer)
+        @sprites[i] = new_sprite(0, i * 2, @overworld_bitmap)
         @sprites[i].z = 2
         rect.y = i * 2
         @sprites[i].src_rect = rect
@@ -739,7 +624,6 @@ module Transitions
 
     def dispose_all
       # Dispose sprites
-      @black_bg_sprite.dispose if @black_bg_sprite
       @bubbles_sprite.dispose if @bubbles_sprite
       @splash_sprite.dispose if @splash_sprite
       @black_sprite.dispose if @black_sprite
@@ -747,7 +631,6 @@ module Transitions
       @bubble_bitmap.dispose if @bubble_bitmap
       @splash_bitmap.dispose if @splash_bitmap
       @black_bitmap.dispose if @black_bitmap
-      @buffer.dispose if @buffer
     end
 
     def update_anim
@@ -782,14 +665,14 @@ module Transitions
     def initialize_bitmaps
       @black_bitmap = RPG::Cache.transition("black_half")
       @ball_bitmap  = RPG::Cache.transition("ball_small")
-      @buffer       = Graphics.snap_to_bitmap
-      dispose if !@black_bitmap || !@ball_bitmap || !@buffer
+      dispose if !@black_bitmap || !@ball_bitmap
     end
 
     def initialize_sprites
-      # Sprite showing the overworld (it zooms in)
-      @overworld_sprite = new_sprite(Graphics.width / 2, Graphics.height / 2, @buffer,
-                                     @buffer.width / 2, @buffer.height / 2)
+      @overworld_sprite.x = Graphics.width / 2
+      @overworld_sprite.y = Graphics.height / 2
+      @overworld_sprite.ox = @overworld_bitmap.width / 2
+      @overworld_sprite.oy = @overworld_bitmap.height / 2
       # Balls that roll across the screen
       @ball_sprites = []
       for i in 0...2
@@ -816,7 +699,6 @@ module Transitions
 
     def dispose_all
       # Dispose sprites
-      @overworld_sprite.dispose if @overworld_sprite
       if @ball_sprites
         @ball_sprites.each { |s| s.dispose if s }
         @ball_sprites.clear
@@ -824,7 +706,6 @@ module Transitions
       # Dispose bitmaps
       @black_bitmap.dispose if @black_bitmap
       @ball_bitmap.dispose if @ball_bitmap
-      @buffer.dispose if @buffer
     end
 
     def update_anim
@@ -863,17 +744,17 @@ module Transitions
     def initialize_bitmaps
       @black_bitmap = RPG::Cache.transition("black_half")
       @ball_bitmap  = RPG::Cache.transition("ball_large")
-      @buffer       = Graphics.snap_to_bitmap
-      dispose if !@black_bitmap || !@ball_bitmap || !@buffer
+      dispose if !@black_bitmap || !@ball_bitmap
     end
 
     def initialize_sprites
+      @overworld_sprite.visible = false
       @overworld_sprites = []
       @black_sprites = []
       @ball_sprites = []
       for i in 0...2
         # Overworld sprites (they split apart)
-        @overworld_sprites[i] = new_sprite(Graphics.width / 2, Graphics.height / 2, @buffer,
+        @overworld_sprites[i] = new_sprite(Graphics.width / 2, Graphics.height / 2, @overworld_bitmap,
                                            Graphics.width / 2, (1 - i) * Graphics.height / 2)
         @overworld_sprites[i].src_rect.set(0, i * Graphics.height / 2, Graphics.width, Graphics.height / 2)
         # Black sprites
@@ -911,7 +792,6 @@ module Transitions
       # Dispose bitmaps
       @black_bitmap.dispose if @black_bitmap
       @ball_bitmap.dispose if @ball_bitmap
-      @buffer.dispose if @buffer
     end
 
     def update_anim
@@ -959,8 +839,7 @@ module Transitions
     def initialize_bitmaps
       @black_bitmap = RPG::Cache.transition("black_square")
       @ball_bitmap  = RPG::Cache.transition("ball_small")
-      @buffer       = Graphics.snap_to_bitmap
-      if !@black_bitmap || !@ball_bitmap || !@buffer
+      if !@black_bitmap || !@ball_bitmap
         dispose
         return
       end
@@ -969,9 +848,10 @@ module Transitions
     end
 
     def initialize_sprites
-      # Sprite showing the overworld (it zooms in)
-      @overworld_sprite = new_sprite(Graphics.width / 2, Graphics.height / 2, @buffer,
-                                     Graphics.width / 2, Graphics.height / 2)
+      @overworld_sprite.x = Graphics.width / 2
+      @overworld_sprite.y = Graphics.height / 2
+      @overworld_sprite.ox = @overworld_bitmap.width / 2
+      @overworld_sprite.oy = @overworld_bitmap.height / 2
       # Black squares
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
@@ -1007,7 +887,6 @@ module Transitions
 
     def dispose_all
       # Dispose sprites
-      @overworld_sprite.dispose if @overworld_sprite
       if @ball_sprites
         @ball_sprites.each { |s| s.dispose if s }
         @ball_sprites.clear
@@ -1015,7 +894,6 @@ module Transitions
       # Dispose bitmaps
       @black_bitmap.dispose if @black_bitmap
       @ball_bitmap.dispose if @ball_bitmap
-      @buffer.dispose if @buffer
     end
 
     def update_anim
@@ -1028,6 +906,9 @@ module Transitions
           sprite.angle = 1.5 * 360 * proportion * ([1, -1][(i == 2) ? 0 : 1])
         end
       else
+        if @ball_sprites[0].visible
+          @ball_sprites.each { |s| s.visible = false }
+        end
         # Black squares appear
         @timings.each_with_index do |timing, i|
           next if timing < 0 || @timer < timing
@@ -1053,14 +934,14 @@ module Transitions
       @black_bitmap = RPG::Cache.transition("black_half")
       @curve_bitmap = RPG::Cache.transition("black_curve")
       @ball_bitmap  = RPG::Cache.transition("ball_small")
-      @buffer       = Graphics.snap_to_bitmap
-      dispose if !@black_bitmap || !@curve_bitmap || !@ball_bitmap || !@buffer
+      dispose if !@black_bitmap || !@curve_bitmap || !@ball_bitmap
     end
 
     def initialize_sprites
-      # Sprite showing the overworld (it zooms in)
-      @overworld_sprite = new_sprite(Graphics.width / 2, Graphics.height / 2, @buffer,
-                                     @buffer.width / 2, @buffer.height / 2)
+      @overworld_sprite.x = Graphics.width / 2
+      @overworld_sprite.y = Graphics.height / 2
+      @overworld_sprite.ox = @overworld_bitmap.width / 2
+      @overworld_sprite.oy = @overworld_bitmap.height / 2
       # Black sprites
       @sprites[0] = new_sprite(0, -@curve_bitmap.height, @black_bitmap, 0, @black_bitmap.height)
       @sprites[0].z = 1
@@ -1081,13 +962,11 @@ module Transitions
 
     def dispose_all
       # Dispose sprites
-      @overworld_sprite.dispose if @overworld_sprite
       @ball_sprite.dispose if @ball_sprite
       # Dispose bitmaps
       @black_bitmap.dispose if @black_bitmap
       @curve_bitmap.dispose if @curve_bitmap
       @ball_bitmap.dispose if @ball_bitmap
-      @buffer.dispose if @buffer
     end
 
     def update_anim
@@ -1099,6 +978,7 @@ module Transitions
         @ball_sprite.zoom_x = 3 * proportion * proportion
         @ball_sprite.zoom_y = @ball_sprite.zoom_x
       else
+        @ball_sprite.visible = false
         # Black curve and blackness descends
         proportion = (@timer - @ball_appear_end) / (@duration - @ball_appear_end)
         @sprites.each do |sprite|
@@ -1124,19 +1004,15 @@ module Transitions
     def initialize_bitmaps
       @black_bitmap = RPG::Cache.transition("black_half")
       @ball_bitmap  = RPG::Cache.transition("ball_small")
-      @buffer       = Graphics.snap_to_bitmap
-      dispose if !@black_bitmap || !@ball_bitmap || !@buffer
+      dispose if !@black_bitmap || !@ball_bitmap
     end
 
     def initialize_sprites
-      # Black background
-      @black_bg_sprite = new_sprite(0, 0, @black_bitmap)
-      @black_bg_sprite.z      = 1
-      @black_bg_sprite.zoom_y = 2.0
+      @overworld_sprite.visible = false
       # Overworld strips (they go all wavy)
       rect = Rect.new(0, 0, Graphics.width, 4)
       for i in 0...Graphics.height / 4
-        @sprites[i] = new_sprite(0, i * 4, @buffer)
+        @sprites[i] = new_sprite(0, i * 4, @overworld_bitmap)
         @sprites[i].z = 2
         rect.y = i * 4
         @sprites[i].src_rect = rect
@@ -1165,15 +1041,17 @@ module Transitions
 
     def dispose_all
       # Dispose sprites
-      @black_bg_sprite.dispose if @black_bg_sprite
-      @ball_sprites.each { |s| s.dispose if s }
-      @ball_sprites.clear
-      @black_trail_sprites.each { |s| s.dispose if s }
-      @black_trail_sprites.clear
+      if @ball_sprites
+        @ball_sprites.each { |s| s.dispose if s }
+        @ball_sprites.clear
+      end
+      if @black_trail_sprites
+        @black_trail_sprites.each { |s| s.dispose if s }
+        @black_trail_sprites.clear
+      end
       # Dispose bitmaps
       @black_bitmap.dispose if @black_bitmap
       @ball_bitmap.dispose if @ball_bitmap
-      @buffer.dispose if @buffer
     end
 
     def update_anim
@@ -1207,19 +1085,15 @@ module Transitions
     def initialize_bitmaps
       @black_bitmap = RPG::Cache.transition("black_half")
       @ball_bitmap  = RPG::Cache.transition("ball_large")
-      @buffer       = Graphics.snap_to_bitmap
-      dispose if !@black_bitmap || !@ball_bitmap || !@buffer
+      dispose if !@black_bitmap || !@ball_bitmap
     end
 
     def initialize_sprites
-      # Black background
-      @black_bg_sprite = new_sprite(0, 0, @black_bitmap)
-      @black_bg_sprite.z      = 1
-      @black_bg_sprite.zoom_y = 2.0
+      @overworld_sprite.visible = false
       # Overworld strips (they go all wavy)
       rect = Rect.new(0, 0, Graphics.width, 4)
       for i in 0...Graphics.height / 4
-        @sprites[i] = new_sprite(0, i * 4, @buffer)
+        @sprites[i] = new_sprite(0, i * 4, @overworld_bitmap)
         @sprites[i].z = 2
         rect.y = i * 4
         @sprites[i].src_rect = rect
@@ -1244,13 +1118,11 @@ module Transitions
 
     def dispose_all
       # Dispose sprites
-      @black_bg_sprite.dispose if @black_bg_sprite
       @ball_sprite.dispose if @ball_sprite
       @black_sprite.dispose if @black_sprite
       # Dispose bitmaps
       @black_bitmap.dispose if @black_bitmap
       @ball_bitmap.dispose if @ball_bitmap
-      @buffer.dispose if @buffer
     end
 
     def update_anim
