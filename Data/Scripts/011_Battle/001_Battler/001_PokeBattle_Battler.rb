@@ -584,6 +584,11 @@ class PokeBattle_Battler
     return true
   end
 
+  def canTakeHealingWish?
+    # Also works with Lunar Dance.
+    return canHeal? || pbHasAnyStatus?
+  end
+
   def affectedByContactEffect?(showMsg=false)
     return false if fainted?
     if hasActiveItem?(:PROTECTIVEPADS)

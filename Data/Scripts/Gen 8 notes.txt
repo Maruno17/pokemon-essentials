@@ -5,9 +5,6 @@
 #===============================================================================
 
 Some moves have changed properties/effects:
-- Healing Wish's effect and Lunar Dance's effect are no longer used up if a
-  Pokémon that switches to the targeted position can't make use of it. Each
-  position can only have one of each effect applied at once. (Will be implemented by me in the next PR)
 - Parting Shot is able to make the user switch out if its effect is redirected
   by Mirror Armor. Throat Spray is triggered and applies before the switch.
   (The Throat Spray part is done by default)
@@ -100,6 +97,9 @@ Ability Effect Changes
   triggering this way.
 
 Move Effect Changes
+- Healing Wish's effect and Lunar Dance's effect are no longer used up if a
+  Pokémon that switches to the targeted position can't make use of it. Each
+  position can only have one of each effect applied at once.
 - Teleport switches the user out. If the user is a wild Pokémon, ends the battle
   instead.
 - Look at the moves Nature Power turns into. (Unchanged since Gen 7)
