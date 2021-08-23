@@ -19,9 +19,6 @@ Other notes:
 - If a battle ends because of Rocky Helmet damage, the side that the Rocky
   Helmet holder is on should lose (Gen 7+) or win (Gen 6-).
 
-Can use Fly from within the Town Map if possible. (Good QoL, add if possible.)
-(Will be implemented by me in the next PR)
-
 Make example event that combines the Gen 8 fossils.
 
 #===============================================================================
@@ -35,11 +32,9 @@ toggled. (Probably don't bother implementing.)
 
 Bicycle that can work on water.
 
-Town Map added to the pause menu. (Don't bother adding.)
-
 Remote access to storage boxes via the party screen if you have the Pokémon Box
 Link item (and it's allowed to be used - in Gyms and some other places it's
-forbidden).
+forbidden). (I could Implement this if needed.)
 
 New evolution methods:
 - Milcery: spinning while holding an item. (Doesn't suit our control scheme.
@@ -84,6 +79,10 @@ it) - see Settings::RARE_CANDY_USABLE_AT_MAX_LEVEL.
 
 In Gen 8+, a taught TR should be added to the Pokémon's first_moves array. This
 is done regardless of Generation, and doesn't need to be limited to Gen 8+.
+
+Can use Fly from within the Town Map if possible.
+
+Town Map added to the pause menu.
 
 New evolution methods:
 - Kubfu (triggered by an event; Kubfu's form can be set beforehand by the event,

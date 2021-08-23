@@ -357,6 +357,19 @@ class PokemonRegionMapScreen
     return ret
   end
 
+  def pbStartFlyingTaxiScreen
+    @scene.pbStartScene(false,1)
+    ret = nil
+    loop do
+      ret = @scene.pbMapScene(1)
+      break if !ret
+      break if pbConfirmMessage(_INTL("Would you like to call a Flying Taxi to take you to {1}?",
+                                       pbGetMapNameFromId(ret[0])))
+    end
+    @scene.pbEndScene
+    return ret
+  end
+
   def pbStartScreen
     @scene.pbStartScene($DEBUG)
     @scene.pbMapScene
@@ -367,10 +380,15 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbShowMap(region=-1,wallmap=true)
+def pbShowMap(region =- 1, wallmap = true)
   pbFadeOutIn {
-    scene = PokemonRegionMap_Scene.new(region,wallmap)
+    scene = PokemonRegionMap_Scene.new(region, wallmap)
     screen = PokemonRegionMapScreen.new(scene)
-    screen.pbStartScreen
+    if $Trainer.can_use_flying_taxi?
+      ret = screen.pbStartFlyingTaxiScreen
+      $PokemonTemp.flydata = ret if ret
+    else
+      screen.pbStartScreen
+    end
   }
 end

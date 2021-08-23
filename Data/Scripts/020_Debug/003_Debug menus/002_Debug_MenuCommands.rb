@@ -772,6 +772,17 @@ DebugMenuCommands.register("togglepokegear", {
   }
 })
 
+DebugMenuCommands.register("toggleflyingtaxi", {
+  "parent"      => "playermenu",
+  "name"        => _INTL("Toggle Flying Taxi"),
+  "description" => _INTL("Toggle ability to fly to known locations from the Town Map."),
+  "effect"      => proc {
+    $Trainer.has_flying_taxi = !$Trainer.has_flying_taxi
+    str = $Trainer.has_flying_taxi ? "Gained" : "Lost"
+    pbMessage(_INTL("{1} access to Flying Taxi.", str))
+  }
+})
+
 DebugMenuCommands.register("dexlists", {
   "parent"      => "playermenu",
   "name"        => _INTL("Toggle Pokédex and Dexes"),

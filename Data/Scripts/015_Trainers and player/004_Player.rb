@@ -26,6 +26,8 @@ class Player < Trainer
   attr_accessor :has_running_shoes
   # @return [Boolean] whether the creator of the Pokémon Storage System has been seen
   attr_accessor :seen_storage_creator
+  # @return [Boolean] whether the Player has access to the Flying Taxi
+  attr_accessor :has_flying_taxi
   # @return [Boolean] whether Mystery Gift can be used from the load screen
   attr_accessor :mystery_gift_unlocked
   # @return [Array<Array>] downloaded Mystery Gift data
@@ -70,6 +72,15 @@ class Player < Trainer
   # @return [Integer] the number of Gym Badges owned by the player
   def badge_count
     return @badges.count { |badge| badge == true }
+  end
+
+  # @return [Boolean] whether the player can fly using the Flying Taxi
+  def can_use_flying_taxi?
+    return false if !@has_flying_taxi
+    # return false if !$game_player || $game_player.pbHasDependentEvents?
+    return false if !$game_map || !GameData::MapMetadata.exists?($game_map.map_id) ||
+                    !GameData::MapMetadata.get($game_map.map_id).outdoor_map
+    return true
   end
 
   #=============================================================================

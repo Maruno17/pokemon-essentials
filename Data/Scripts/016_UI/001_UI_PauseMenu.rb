@@ -107,6 +107,7 @@ class PokemonPauseMenu
     cmdPokemon  = -1
     cmdBag      = -1
     cmdTrainer  = -1
+    cmdTownMap  = -1
     cmdSave     = -1
     cmdOption   = -1
     cmdPokegear = -1
@@ -120,6 +121,7 @@ class PokemonPauseMenu
     commands[cmdBag = commands.length]       = _INTL("Bag") if !pbInBugContest?
     commands[cmdPokegear = commands.length]  = _INTL("Pokégear") if $Trainer.has_pokegear
     commands[cmdTrainer = commands.length]   = $Trainer.name
+    commands[cmdTownMap = commands.length]   = _INTL("Town Map") if $Trainer.has_flying_taxi && !$Trainer.has_pokegear
     if pbInSafari?
       if Settings::SAFARI_STEPS <= 0
         @scene.pbShowInfo(_INTL("Balls: {1}",pbSafariState.ballcount))
@@ -207,8 +209,12 @@ class PokemonPauseMenu
           scene = PokemonPokegear_Scene.new
           screen = PokemonPokegearScreen.new(scene)
           screen.pbStartScreen
-          @scene.pbRefresh
+          ($PokemonTemp.flydata) ? @scene.pbEndScene : @scene.pbRefresh
         }
+        if pbFlyToNewLocation
+          $game_temp.in_menu = false
+          return
+        end
       elsif cmdTrainer>=0 && command==cmdTrainer
         pbPlayDecisionSE
         pbFadeOutIn {
@@ -217,6 +223,13 @@ class PokemonPauseMenu
           screen.pbStartScreen
           @scene.pbRefresh
         }
+      elsif cmdTownMap>=0 && command==cmdTownMap
+        pbShowMap(-1, false)
+        ($PokemonTemp.flydata) ? @scene.pbEndScene : @scene.pbRefresh
+        if pbFlyToNewLocation
+          $game_temp.in_menu = false
+          return
+        end
       elsif cmdQuit>=0 && command==cmdQuit
         @scene.pbHideMenu
         if pbInSafari?

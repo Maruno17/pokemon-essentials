@@ -517,7 +517,15 @@ HiddenMoveHandlers::UseMove.add(:FLY,proc { |move,pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!",pokemon.name,GameData::Move.get(move).name))
   end
+  pbFlyToNewLocation
+  pbEraseEscapePoint
+  next true
+})
+
+def pbFlyToNewLocation
+  return false if !$PokemonTemp.flydata
   pbFadeOutIn {
+    pbSEPlay("Anim/Wind1")
     $game_temp.player_new_map_id    = $PokemonTemp.flydata[0]
     $game_temp.player_new_x         = $PokemonTemp.flydata[1]
     $game_temp.player_new_y         = $PokemonTemp.flydata[2]
@@ -526,10 +534,11 @@ HiddenMoveHandlers::UseMove.add(:FLY,proc { |move,pokemon|
     $scene.transfer_player
     $game_map.autoplay
     $game_map.refresh
+    yield if block_given?
+    pbWait(Graphics.frame_rate/4)
   }
-  pbEraseEscapePoint
-  next true
-})
+  return true
+end
 
 
 
