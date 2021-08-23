@@ -166,7 +166,7 @@ class Pokemon
     yield if block_given?
     MultipleForms.call("onSetForm", self, value, oldForm)
     calc_stats
-    $Trainer.pokedex.register(self)
+    $Trainer.pokedex.register(self) if $Trainer
   end
 
   def form_simple=(value)
