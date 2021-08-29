@@ -24,9 +24,6 @@ Some abilities have changed effects:
   but in earlier Gens they are.
 
 Other notes:
-- In Gen 7+, Shaymin/Hoopa revert their form when withdrawn from storage rather
-  than when deposited. It still also reverts under other conditions. Shaymin
-  reverts its form when deposited in the Day Care (all Gens).
 - If a battle ends because of Rocky Helmet damage, the side that the Rocky
   Helmet holder is on should lose (Gen 7+) or win (Gen 6-).
 
@@ -163,5 +160,9 @@ Other changes:
 What happens to the PP of Iron Head when turned into/from Behemoth Blade/Bash
 for Zacian/Zamazenta? It gets decreased to the total PP if it is higher than the
 total PP of the new move, but cannot increase. This is already what happens.
+
+In Gen 7+, Shaymin/Hoopa revert their form when withdrawn from storage rather
+than when deposited. It still also reverts under other conditions. Shaymin
+reverts its form when deposited in the Day Care (all Gens).
 
 =end

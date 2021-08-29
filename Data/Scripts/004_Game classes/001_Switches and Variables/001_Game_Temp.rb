@@ -8,6 +8,7 @@ class Game_Temp
   attr_accessor :message_window_showing   # message window showing
   attr_accessor :common_event_id          # common event ID
   attr_accessor :in_battle                # in-battle flag
+  attr_accessor :in_storage               # in-Pokémon storage flag
   attr_accessor :battle_abort             # battle flag: interrupt
   attr_accessor :battleback_name          # battleback file name
   attr_accessor :in_menu                  # menu is open
@@ -32,6 +33,7 @@ class Game_Temp
     @message_window_showing = false
     @common_event_id        = 0
     @in_battle              = false
+    @in_storage             = false
     @battle_abort           = false
     @battleback_name        = ''
     @in_menu                = false

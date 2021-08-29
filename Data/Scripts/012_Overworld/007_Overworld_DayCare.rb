@@ -50,9 +50,11 @@ end
 def pbDayCareDeposit(index)
   for i in 0...2
     next if $PokemonGlobal.daycare[i][0]
-    $PokemonGlobal.daycare[i][0] = $Trainer.party[index]
-    $PokemonGlobal.daycare[i][1] = $Trainer.party[index].level
-    $PokemonGlobal.daycare[i][0].heal
+    pkmn = $Trainer.party[index]
+    pkmn.heal
+    pkmn.form = 0 if pkmn.isSpecies?(:SHAYMIN)
+    $PokemonGlobal.daycare[i][0] = pkmn
+    $PokemonGlobal.daycare[i][1] = pkmn.level
     $Trainer.party.delete_at(index)
     $PokemonGlobal.daycareEgg      = 0
     $PokemonGlobal.daycareEggSteps = 0

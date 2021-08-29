@@ -137,7 +137,7 @@ class Pokemon
 
   def form
     return @forced_form if !@forced_form.nil?
-    return @form if $game_temp.in_battle
+    return @form if $game_temp.in_battle || $game_temp.in_storage
     calc_form = MultipleForms.call("getForm", self)
     self.form = calc_form if calc_form != nil && calc_form != @form
     return @form
