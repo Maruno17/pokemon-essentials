@@ -10,9 +10,6 @@ species because of this. This value is also shown in the Pokédex entry screen.
 (Will be implemented by me in the next PR)
 
 Some moves have changed properties/effects:
-- Healing Wish's effect and Lunar Dance's effect are no longer used up if a
-  Pokémon that switches to the targeted position can't make use of it. Each
-  position can only have one of each effect applied at once. (Will be implemented by me in the next PR)
 - Parting Shot is able to make the user switch out if its effect is redirected
   by Mirror Armor. Throat Spray is triggered and applies before the switch.
   (The Throat Spray part is done by default)
@@ -118,6 +115,9 @@ Move Effect Changes
   pbImmunityByAbility, but leaning towards yes; will Volt Absorb block an
   Electrified Howl?). Needs a new function code, since it now affects targets
   rather than the user.
+- Healing Wish's effect and Lunar Dance's effect are no longer used up if a
+  Pokémon that switches to the targeted position can't make use of it. Each
+  position can only have one of each effect applied at once.
 
 Item Effect Changes
 - Escape Rope's code now supports both consumable and non-consumable versions,

@@ -933,6 +933,7 @@ class PokeBattle_Move_120 < PokeBattle_Move
     if @battle.pbSwapBattlers(idxA,idxB)
       @battle.pbDisplay(_INTL("{1} and {2} switched places!",
          @battle.battlers[idxB].pbThis,@battle.battlers[idxA].pbThis(true)))
+      [idxA, idxB].each { |idx| @battle.battlers[idx].pbEffectsOnEnteringPosition }
     end
   end
 end

@@ -327,23 +327,8 @@ class PokeBattle_Battle
     end
     # Update battlers' participants (who will gain Exp/EVs when a battler faints)
     eachBattler { |b| b.pbUpdateParticipants }
-    # Healing Wish
-    if @positions[battler.index].effects[PBEffects::HealingWish]
-      pbCommonAnimation("HealingWish",battler)
-      pbDisplay(_INTL("The healing wish came true for {1}!",battler.pbThis(true)))
-      battler.pbRecoverHP(battler.totalhp)
-      battler.pbCureStatus(false)
-      @positions[battler.index].effects[PBEffects::HealingWish] = false
-    end
-    # Lunar Dance
-    if @positions[battler.index].effects[PBEffects::LunarDance]
-      pbCommonAnimation("LunarDance",battler)
-      pbDisplay(_INTL("{1} became cloaked in mystical moonlight!",battler.pbThis))
-      battler.pbRecoverHP(battler.totalhp)
-      battler.pbCureStatus(false)
-      battler.eachMove { |m| m.pp = m.total_pp }
-      @positions[battler.index].effects[PBEffects::LunarDance] = false
-    end
+    # Healing Wish/Lunar Dance
+    battler.pbEffectsOnEnteringPosition
     # Entry hazards
     # Stealth Rock
     if battler.pbOwnSide.effects[PBEffects::StealthRock] && battler.takesIndirectDamage? &&
