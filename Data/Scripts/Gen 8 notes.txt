@@ -69,6 +69,14 @@ Maybe have multiple sets of Pickup items for multiple Gens. Probably not. Gens
 Add a newer type of berry tree mechanics? Have a separate setting that prevents
 deterioration?
 
+The happiness evolution threshold value has lowered from 220 to 160. This is
+because, in Gen 8, you have to use Pokémon Camp or berries to raise a Pokémon's
+happiness above 179, which in turn is because affection effects have been added
+(chance of resisting a KO, chance of shaking off a status problem, etc.) that
+apply above 179 happiness. Pokémon Camp will not be added. Affection effects and
+the 179 soft cap/160 evolution threshold may be added (the latter two should be
+treated as related rather than separate settings).
+
 #===============================================================================
 # Implemented
 #===============================================================================

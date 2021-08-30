@@ -216,6 +216,10 @@ module GameData
       return pbGetMessageFromHash(MessageTypes::Entries, @real_pokedex_entry)
     end
 
+    def single_gendered?
+      return GameData::GenderRatio.get(@gender_ratio).single_gendered?
+    end
+
     def apply_metrics_to_sprite(sprite, index, shadow = false)
       if shadow
         if (index & 1) == 1   # Foe Pokémon

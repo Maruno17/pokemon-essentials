@@ -151,8 +151,7 @@ class PokemonPokedexInfo_Scene
       next if sp.form != 0 && (!sp.real_form_name || sp.real_form_name.empty?)
       next if sp.pokedex_form != sp.form
       multiple_forms = true if sp.form > 0
-      case sp.gender_ratio
-      when :AlwaysMale, :AlwaysFemale, :Genderless
+      if sp.single_gendered?
         real_gender = (sp.gender_ratio == :AlwaysFemale) ? 1 : 0
         next if !$Trainer.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
         real_gender = 2 if sp.gender_ratio == :Genderless
