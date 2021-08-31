@@ -1165,7 +1165,7 @@ module Compiler
           :intro_ME    => line[6],
           :gender      => line[7],
           :skill_level => line[8],
-          :skill_code  => line[9]
+          :skill_flags => line[9]
         }
         # Add trainer type's data to records
         GameData::TrainerType.register(tr_type_hash)

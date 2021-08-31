@@ -48,11 +48,10 @@ class Trainer
   def male?;             return GameData::TrainerType.get(self.trainer_type).male?;       end
   def female?;           return GameData::TrainerType.get(self.trainer_type).female?;     end
   def skill_level;       return GameData::TrainerType.get(self.trainer_type).skill_level; end
-  def skill_code;        return GameData::TrainerType.get(self.trainer_type).skill_code;  end
+  def skill_flags;       return GameData::TrainerType.get(self.trainer_type).skill_flags; end
 
-  def has_skill_code?(code)
-    c = skill_code
-    return c && c != "" && c[/#{code}/]
+  def has_skill_flag?(code)
+    return skill_flags.any? { |c| c.downcase == code.downcase }
   end
 
   #=============================================================================

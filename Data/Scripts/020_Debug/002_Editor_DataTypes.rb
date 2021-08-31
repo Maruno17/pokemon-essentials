@@ -236,6 +236,95 @@ end
 
 
 
+class StringListProperty
+  def self.set(_setting_name, old_setting)
+    real_cmds = []
+    real_cmds.push([_INTL("[ADD VALUE]"), -1])
+    old_setting.length.times do
+      real_cmds.push([old_setting[i], 0])
+    end
+    # Edit list
+    cmdwin = pbListWindow([], 200)
+    oldsel = nil
+    ret = old_setting
+    cmd = 0
+    commands = []
+    do_refresh = true
+    loop do
+      if do_refresh
+        commands = []
+        real_cmds.each_with_index do |entry, i|
+          commands.push(entry[0])
+          cmd = i if oldsel && entry[0] == oldsel
+        end
+      end
+      do_refresh = false
+      oldsel = nil
+      cmd = pbCommands2(cmdwin, commands, -1, cmd, true)
+      if cmd >= 0   # Chose a value
+        entry = real_cmds[cmd]
+        if entry[1] == -1   # Add new value
+          new_value = pbMessageFreeText(_INTL("Enter the new value."),
+             "", false, 250, Graphics.width)
+          if !nil_or_empty?(new_value)
+            if real_cmds.any? { |e| e[0] == new_value }
+              oldsel = new_value   # Already have value; just move cursor to it
+            else
+              real_cmds.push([new_value, 0])
+            end
+            do_refresh = true
+          end
+        else   # Edit value
+          case pbMessage(_INTL("\\ts[]Do what with this value?"),
+             [_INTL("Edit"), _INTL("Delete"), _INTL("Cancel")], 3)
+          when 0   # Edit
+            new_value = pbMessageFreeText(_INTL("Enter the new value."),
+               entry[0], false, 250, Graphics.width)
+            if !nil_or_empty?(new_value)
+              if real_cmds.any? { |e| e[0] == new_value }   # Already have value; delete this one
+                real_cmds.delete_at(cmd)
+                cmd = [cmd, real_cmds.length - 1].min
+              else   # Change value
+                entry[0] = new_value
+              end
+              oldsel = new_value
+              do_refresh = true
+            end
+          when 1   # Delete
+            real_cmds.delete_at(cmd)
+            cmd = [cmd, real_cmds.length - 1].min
+            do_refresh = true
+          end
+        end
+      else   # Cancel/quit
+        case pbMessage(_INTL("Keep changes?"), [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+        when 0
+          for i in 0...real_cmds.length
+            real_cmds[i] = (real_cmds[i][1] == -1) ? nil : real_cmds[i][0]
+          end
+          real_cmds.compact!
+          ret = real_cmds
+          break
+        when 1
+          break
+        end
+      end
+    end
+    cmdwin.dispose
+    return ret
+  end
+
+  def self.defaultValue
+    return []
+  end
+
+  def self.format(value)
+    return value.join(",")
+  end
+end
+
+
+
 class GameDataProperty
   def initialize(value)
     raise _INTL("Couldn't find class {1} in module GameData.", value.to_s) if !GameData.const_defined?(value.to_sym)

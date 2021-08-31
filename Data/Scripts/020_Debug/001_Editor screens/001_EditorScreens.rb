@@ -349,7 +349,7 @@ def pbTrainerTypeEditor
     [_INTL("Gender"),     EnumProperty.new(gender_array), _INTL("Gender of this Trainer Type.")],
     [_INTL("BaseMoney"),  LimitProperty.new(9999),        _INTL("Player earns this much money times the highest level among the trainer's Pokémon.")],
     [_INTL("SkillLevel"), LimitProperty.new(9999),        _INTL("Skill level of this Trainer Type.")],
-    [_INTL("SkillCode"),  StringProperty,                 _INTL("Letters/phrases representing AI modifications of trainers of this type.")],
+    [_INTL("SkillFlags"), StringListProperty,             _INTL("Words/phrases representing AI modifications of trainers of this type.")],
     [_INTL("IntroME"),    MEProperty,                     _INTL("ME played before battles against trainers of this type.")],
     [_INTL("BattleBGM"),  BGMProperty,                    _INTL("BGM played in battles against trainers of this type.")],
     [_INTL("VictoryME"),  MEProperty,                     _INTL("ME played when player wins battles against trainers of this type.")]
@@ -374,7 +374,7 @@ def pbTrainerTypeEditor
             t_data.gender,
             t_data.base_money,
             t_data.skill_level,
-            t_data.skill_code,
+            t_data.skill_flags,
             t_data.intro_ME,
             t_data.battle_BGM,
             t_data.victory_ME
@@ -387,7 +387,7 @@ def pbTrainerTypeEditor
               :gender      => data[2],
               :base_money  => data[3],
               :skill_level => data[4],
-              :skill_code  => data[5],
+              :skill_flags => data[5],
               :intro_ME    => data[6],
               :battle_BGM  => data[7],
               :victory_ME  => data[8]
