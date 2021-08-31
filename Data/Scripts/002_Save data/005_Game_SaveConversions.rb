@@ -88,3 +88,14 @@ SaveData.register_conversion(:v19_2_fix_berry_plants) do
     end
   end
 end
+
+SaveData.register_conversion(:v20_add_battled_counts) do
+  essentials_version 20
+  display_title 'Adding Pokédex battle counts'
+  to_value :player do |player|
+    player.pokedex.instance_eval do
+      @caught_counts   = {} if @caught_counts.nil?
+      @defeated_counts = {} if @defeated_counts.nil?
+    end
+  end
+end

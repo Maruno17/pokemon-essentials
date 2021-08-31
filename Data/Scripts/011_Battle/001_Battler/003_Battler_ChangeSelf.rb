@@ -55,6 +55,7 @@ class PokeBattle_Battler
     @battle.pbDisplayBrief(_INTL("{1} fainted!",pbThis)) if showMessage
     PBDebug.log("[Pokémon fainted] #{pbThis} (#{@index})") if !showMessage
     @battle.scene.pbFaintBattler(self)
+    @battle.pbSetDefeated(self) if opposes?
     pbInitEffects(false)
     # Reset status
     self.status      = :NONE

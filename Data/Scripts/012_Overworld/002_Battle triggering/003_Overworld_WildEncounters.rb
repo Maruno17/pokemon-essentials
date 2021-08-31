@@ -411,10 +411,26 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   elsif itemrnd<(chances[0]+chances[1]+chances[2])
     genwildpoke.item = items[2]
   end
-  # Shiny Charm makes shiny Pokémon more likely to generate
-  if GameData::Item.exists?(:SHINYCHARM) && $PokemonBag.pbHasItem?(:SHINYCHARM)
-    2.times do   # 3 times as likely
+  # Improve chances of shiny Pokémon with Shiny Charm and battling more of the
+  # same species
+  shiny_retries = 0
+  shiny_retries += 2 if GameData::Item.exists?(:SHINYCHARM) && $PokemonBag.pbHasItem?(:SHINYCHARM)
+  if Settings::HIGHER_SHINY_CHANCES_WITH_NUMBER_BATTLED
+    values = [0, 0]
+    case $Trainer.pokedex.battled_count(species)
+    when 0...50    then values = [0, 0]
+    when 50...100  then values = [1, 15]
+    when 100...200 then values = [2, 20]
+    when 200...300 then values = [3, 25]
+    when 300...500 then values = [4, 30]
+    else                values = [5, 30]
+    end
+    shiny_retries += values[0] if values[1] > 0 && rand(1000) < values[1]
+  end
+  if shiny_retries > 0
+    shiny_retries.times do
       break if genwildpoke.shiny?
+      genwildpoke.shiny = nil   # Make it recalculate shininess
       genwildpoke.personalID = rand(2**16) | rand(2**16) << 16
     end
   end

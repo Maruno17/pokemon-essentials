@@ -9,6 +9,7 @@ class PokemonPokedexInfo_Scene
     @index   = index
     @region  = region
     @page = 1
+    @show_battled_count = false
     @typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/Pokedex/icon_types"))
     @sprites = {}
     @sprites["background"] = IconSprite.new(0,0,@viewport)
@@ -219,24 +220,31 @@ class PokemonPokedexInfo_Scene
     end
     textpos = [
        [_INTL("{1}{2} {3}", indexText, " ", species_data.name),
-          246, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)],
-       [_INTL("Height"), 314, 152, 0, base, shadow],
-       [_INTL("Weight"), 314, 184, 0, base, shadow]
+          246, 36, 0, Color.new(248, 248, 248), Color.new(0, 0, 0)]
     ]
+    if @show_battled_count
+      textpos.push([_INTL("Number Battled"), 314, 152, 0, base, shadow])
+      textpos.push([$Trainer.pokedex.battled_count(@species).to_s, 452, 184, 1, base, shadow])
+    else
+      textpos.push([_INTL("Height"), 314, 152, 0, base, shadow])
+      textpos.push([_INTL("Weight"), 314, 184, 0, base, shadow])
+    end
     if $Trainer.owned?(@species)
       # Write the category
       textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 68, 0, base, shadow])
       # Write the height and weight
-      height = species_data.height
-      weight = species_data.weight
-      if System.user_language[3..4] == "US"   # If the user is in the United States
-        inches = (height / 0.254).round
-        pounds = (weight / 0.45359).round
-        textpos.push([_ISPRINTF("{1:d}'{2:02d}\"", inches / 12, inches % 12), 460, 152, 1, base, shadow])
-        textpos.push([_ISPRINTF("{1:4.1f} lbs.", pounds / 10.0), 494, 184, 1, base, shadow])
-      else
-        textpos.push([_ISPRINTF("{1:.1f} m", height / 10.0), 470, 152, 1, base, shadow])
-        textpos.push([_ISPRINTF("{1:.1f} kg", weight / 10.0), 482, 184, 1, base, shadow])
+      if !@show_battled_count
+        height = species_data.height
+        weight = species_data.weight
+        if System.user_language[3..4] == "US"   # If the user is in the United States
+          inches = (height / 0.254).round
+          pounds = (weight / 0.45359).round
+          textpos.push([_ISPRINTF("{1:d}'{2:02d}\"", inches / 12, inches % 12), 460, 152, 1, base, shadow])
+          textpos.push([_ISPRINTF("{1:4.1f} lbs.", pounds / 10.0), 494, 184, 1, base, shadow])
+        else
+          textpos.push([_ISPRINTF("{1:.1f} m", height / 10.0), 470, 152, 1, base, shadow])
+          textpos.push([_ISPRINTF("{1:.1f} kg", weight / 10.0), 482, 184, 1, base, shadow])
+        end
       end
       # Draw the Pokédex entry text
       drawTextEx(overlay, 40, 244, Graphics.width - (40 * 2), 4,   # overlay, x, y, width, num lines
@@ -263,12 +271,14 @@ class PokemonPokedexInfo_Scene
       # Write the category
       textpos.push([_INTL("????? Pokémon"), 246, 68, 0, base, shadow])
       # Write the height and weight
-      if System.user_language[3..4] == "US"   # If the user is in the United States
-        textpos.push([_INTL("???'??\""), 460, 152, 1, base, shadow])
-        textpos.push([_INTL("????.? lbs."), 494, 184, 1, base, shadow])
-      else
-        textpos.push([_INTL("????.? m"), 470, 152, 1, base, shadow])
-        textpos.push([_INTL("????.? kg"), 482, 184, 1, base, shadow])
+      if !@show_battled_count
+        if System.user_language[3..4] == "US"   # If the user is in the United States
+          textpos.push([_INTL("???'??\""), 460, 152, 1, base, shadow])
+          textpos.push([_INTL("????.? lbs."), 494, 184, 1, base, shadow])
+        else
+          textpos.push([_INTL("????.? m"), 470, 152, 1, base, shadow])
+          textpos.push([_INTL("????.? kg"), 482, 184, 1, base, shadow])
+        end
       end
     end
     # Draw all text
@@ -458,9 +468,12 @@ class PokemonPokedexInfo_Scene
         pbPlayCloseMenuSE
         break
       elsif Input.trigger?(Input::USE)
-        if @page==2   # Area
+        if @page == 1   # Info
+          @show_battled_count = !@show_battled_count
+          dorefresh = true
+        elsif @page == 2   # Area
 #          dorefresh = true
-        elsif @page==3   # Forms
+        elsif @page == 3   # Forms
           if @available.length>1
             pbPlayDecisionSE
             pbChooseForm

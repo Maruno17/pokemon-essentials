@@ -628,7 +628,29 @@ class PokeBattle_Battle
 
   def pbSetSeen(battler)
     return if !battler || !@internalBattle
-    pbPlayer.pokedex.register(battler.displaySpecies,battler.displayGender,battler.displayForm)
+    if battler.is_a?(PokeBattle_Battler)
+      pbPlayer.pokedex.register(battler.displaySpecies,battler.displayGender,battler.displayForm)
+    else
+      pbPlayer.pokedex.register(battler)
+    end
+  end
+
+  def pbSetCaught(battler)
+    return if !battler || !@internalBattle
+    if battler.is_a?(PokeBattle_Battler)
+      pbPlayer.pokedex.register_caught(battler.displaySpecies)
+    else
+      pbPlayer.pokedex.register_caught(battler.species)
+    end
+  end
+
+  def pbSetDefeated(battler)
+    return if !battler || !@internalBattle
+    if battler.is_a?(PokeBattle_Battler)
+      pbPlayer.pokedex.register_defeated(battler.displaySpecies)
+    else
+      pbPlayer.pokedex.register_defeated(battler.species)
+    end
   end
 
   def nextPickupUse

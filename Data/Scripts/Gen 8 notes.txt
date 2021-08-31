@@ -4,11 +4,6 @@
 # To do
 #===============================================================================
 
-The game records, for each species, how many have been caught or defeated
-(counts both wild and trainer battles), and the shiny chance increases for that
-species because of this. This value is also shown in the Pokédex entry screen.
-(Will be implemented by me in the next PR)
-
 Some moves have changed properties/effects:
 - Parting Shot is able to make the user switch out if its effect is redirected
   by Mirror Armor. Throat Spray is triggered and applies before the switch.
@@ -172,5 +167,9 @@ total PP of the new move, but cannot increase. This is already what happens.
 In Gen 7+, Shaymin/Hoopa revert their form when withdrawn from storage rather
 than when deposited. It still also reverts under other conditions. Shaymin
 reverts its form when deposited in the Day Care (all Gens).
+
+The game records, for each species, how many have been caught or defeated
+(counts both wild and trainer battles), and the shiny chance increases for that
+species because of this. This value is also shown in the Pokédex entry screen.
 
 =end

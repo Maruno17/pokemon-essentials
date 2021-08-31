@@ -42,7 +42,8 @@ module PokeBattle_BattleCommon
   # Register all caught Pokémon in the Pokédex, and store them.
   def pbRecordAndStoreCaughtPokemon
     @caughtPokemon.each do |pkmn|
-      pbPlayer.pokedex.register(pkmn)   # In case the form changed upon leaving battle
+      pbSetCaught(pkmn)
+      pbSetSeen(pkmn)   # In case the form changed upon leaving battle
       # Record the Pokémon's species as owned in the Pokédex
       if !pbPlayer.owned?(pkmn.species)
         pbPlayer.pokedex.set_owned(pkmn.species)

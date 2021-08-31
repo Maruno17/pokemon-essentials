@@ -338,7 +338,7 @@ class Pokemon
         else                    @gender = 2
         end
       else
-        female_chance = GameData::GenderRatio.get(gender_ratio).female_chance
+        female_chance = GameData::GenderRatio.get(species_data.gender_ratio).female_chance
         @gender = ((@personalID & 0xFF) < female_chance) ? 1 : 0
       end
     end

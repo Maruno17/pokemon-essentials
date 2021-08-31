@@ -355,6 +355,24 @@ class PokeBattle_SafariZone
 
   def pbGetOwnerFromBattlerIndex(idxBattler); return pbPlayer; end
 
+  def pbSetSeen(battler)
+    return if !battler || !@internalBattle
+    if battler.is_a?(PokeBattle_Battler)
+      pbPlayer.pokedex.register(battler.displaySpecies,battler.displayGender,battler.displayForm)
+    else
+      pbPlayer.pokedex.register(battler)
+    end
+  end
+
+  def pbSetCaught(battler)
+    return if !battler || !@internalBattle
+    if battler.is_a?(PokeBattle_Battler)
+      pbPlayer.pokedex.register_caught(battler.displaySpecies)
+    else
+      pbPlayer.pokedex.register_caught(battler.species)
+    end
+  end
+
   #=============================================================================
   # Get party info (counts all teams on the same side)
   #=============================================================================
@@ -417,7 +435,7 @@ class PokeBattle_SafariZone
   def pbStartBattle
     begin
       pkmn = @party2[0]
-      self.pbPlayer.pokedex.register(pkmn)
+      pbSetSeen(pkmn)
       @scene.pbStartBattle(self)
       pbDisplayPaused(_INTL("Wild {1} appeared!",pkmn.name))
       @scene.pbSafariStart

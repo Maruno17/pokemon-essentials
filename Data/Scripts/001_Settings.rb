@@ -28,17 +28,20 @@ module Settings
   #=============================================================================
 
   # The maximum level Pokémon can reach.
-  MAXIMUM_LEVEL        = 100
+  MAXIMUM_LEVEL                              = 100
   # The level of newly hatched Pokémon.
-  EGG_LEVEL            = 1
+  EGG_LEVEL                                  = 1
   # The odds of a newly generated Pokémon being shiny (out of 65536).
-  SHINY_POKEMON_CHANCE = (MECHANICS_GENERATION >= 6) ? 16 : 8
+  SHINY_POKEMON_CHANCE                       = (MECHANICS_GENERATION >= 6) ? 16 : 8
   # Whether super shininess is enabled (uses a different shiny animation).
-  SUPER_SHINY          = (MECHANICS_GENERATION >= 8)
+  SUPER_SHINY                                = (MECHANICS_GENERATION >= 8)
+  # Whether shiny wild Pokémon are more likely to appear if the player has
+  # previously defeated/caught lots of other Pokémon of the same species.
+  HIGHER_SHINY_CHANCES_WITH_NUMBER_BATTLED   = (MECHANICS_GENERATION >= 8)
   # The odds of a wild Pokémon/bred egg having Pokérus (out of 65536).
-  POKERUS_CHANCE       = 3
-  # Whether a bred baby Pokémon can inherit any TM/HM moves from its father. It
-  # can never inherit TM/HM moves from its mother.
+  POKERUS_CHANCE                             = 3
+  # Whether a bred baby Pokémon can inherit any TM/TR/HM moves from its father.
+  # It can never inherit TM/TR/HM moves from its mother.
   BREEDING_CAN_INHERIT_MACHINE_MOVES         = (MECHANICS_GENERATION <= 5)
   # Whether a bred baby Pokémon can inherit egg moves from its mother. It can
   # always inherit egg moves from its father.

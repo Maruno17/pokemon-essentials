@@ -27,6 +27,8 @@ class Player < Trainer
       @seen_forms      = {}
       @last_seen_forms = {}
       @owned_shadow    = {}
+      @caught_counts   = {}
+      @defeated_counts = {}
       self.refresh_accessible_dexes
     end
 
@@ -195,6 +197,51 @@ class Player < Trainer
       form = species_data.pokedex_form
       form = 0 if species_data.form_name.nil? || species_data.form_name.empty?
       @last_seen_forms[pkmn.species] = [pkmn.gender, form]
+    end
+
+    #===========================================================================
+
+    # @param species [Symbol, GameData::Species] species to check
+    # @return [Integer] the number of Pokémon of the given species that have
+    #   been caught by the player
+    def caught_count(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return 0 if species_id.nil?
+      return @caught_counts[species] || 0
+    end
+
+    # @param species [Symbol, GameData::Species] species to check
+    # @return [Integer] the number of Pokémon of the given species that have
+    #   been defeated by the player
+    def defeated_count(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return 0 if species_id.nil?
+      return @defeated_counts[species] || 0
+    end
+
+    # @param species [Symbol, GameData::Species] species to check
+    # @return [Integer] the number of Pokémon of the given species that have
+    #   been defeated or caught by the player
+    def battled_count(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return 0 if species_id.nil?
+      return (@defeated_counts[species] || 0) + (@caught_counts[species] || 0)
+    end
+
+    # @param species [Symbol, GameData::Species] species to count as caught
+    def register_caught(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return if species_id.nil?
+      @caught_counts[species] = 0 if @caught_counts[species].nil?
+      @caught_counts[species] += 1
+    end
+
+    # @param species [Symbol, GameData::Species] species to count as defeated
+    def register_defeated(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return if species_id.nil?
+      @defeated_counts[species] = 0 if @defeated_counts[species].nil?
+      @defeated_counts[species] += 1
     end
 
     #===========================================================================
