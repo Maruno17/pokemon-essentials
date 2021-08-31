@@ -466,7 +466,11 @@ module Transitions
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
           idx_sprite = j * NUM_SPRITES_X + i
-          sprite_x = ((j.even?) ? i : (NUM_SPRITES_X - i - 1)) * @black_bitmap.width
+          if idx_sprite >= TOTAL_SPRITES / 2
+            sprite_x = ((j.odd?) ? i : (NUM_SPRITES_X - i - 1)) * @black_bitmap.width
+          else
+            sprite_x = ((j.even?) ? i : (NUM_SPRITES_X - i - 1)) * @black_bitmap.width
+          end
           sprite_x += @black_bitmap.width / 2
           @sprites[idx_sprite] = new_sprite(sprite_x, j * @black_bitmap.height * @zoom_y_target,
                                             @black_bitmap, @black_bitmap.width / 2)
