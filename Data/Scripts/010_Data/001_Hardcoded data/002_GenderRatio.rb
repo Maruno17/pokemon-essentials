@@ -26,6 +26,12 @@ module GameData
     def name
       return _INTL(@real_name)
     end
+
+    # @return [Boolean] whether a Pokémon with this gender ratio can only ever
+    #   be a single gender
+    def single_gendered?
+      return @female_chance.nil?
+    end
   end
 end
 

@@ -933,10 +933,7 @@ class PokeBattle_Move_120 < PokeBattle_Move
     if @battle.pbSwapBattlers(idxA,idxB)
       @battle.pbDisplay(_INTL("{1} and {2} switched places!",
          @battle.battlers[idxB].pbThis,@battle.battlers[idxA].pbThis(true)))
-      if Settings::MECHANICS_GENERATION >= 8
-        @battle.pbActivateHealingWish(@battle.battlers[idxA])
-        @battle.pbActivateHealingWish(@battle.battlers[idxB])
-      end
+      [idxA, idxB].each { |idx| @battle.battlers[idx].pbEffectsOnEnteringPosition }
     end
   end
 end

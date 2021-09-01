@@ -25,6 +25,40 @@ class PokeBattle_Battler
   end
 
   #=============================================================================
+  # Called when a Pokémon enters battle, and when Ally Switch is used.
+  #=============================================================================
+  def pbEffectsOnEnteringPosition
+    position = @battle.positions[@index]
+    # Healing Wish
+    if position.effects[PBEffects::HealingWish]
+      if canHeal? || self.status != :NONE
+        @battle.pbCommonAnimation("HealingWish", self)
+        @battle.pbDisplay(_INTL("The healing wish came true for {1}!", pbThis(true)))
+        pbRecoverHP(@totalhp)
+        pbCureStatus(false)
+        position.effects[PBEffects::HealingWish] = false
+      elsif Settings::MECHANICS_GENERATION < 8
+        position.effects[PBEffects::HealingWish] = false
+      end
+    end
+    # Lunar Dance
+    if position.effects[PBEffects::LunarDance]
+      full_pp = true
+      eachMove { |m| full_pp = false if m.pp < m.total_pp }
+      if canHeal? || self.status != :NONE || !full_pp
+        @battle.pbCommonAnimation("LunarDance", self)
+        @battle.pbDisplay(_INTL("{1} became cloaked in mystical moonlight!", pbThis))
+        pbRecoverHP(@totalhp)
+        pbCureStatus(false)
+        eachMove { |m| m.pp = m.total_pp }
+        position.effects[PBEffects::LunarDance] = false
+      elsif Settings::MECHANICS_GENERATION < 8
+        position.effects[PBEffects::LunarDance] = false
+      end
+    end
+  end
+
+  #=============================================================================
   # Ability effects
   #=============================================================================
   def pbAbilitiesOnSwitchOut

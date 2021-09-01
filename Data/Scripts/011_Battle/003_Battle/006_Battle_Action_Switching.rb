@@ -327,8 +327,8 @@ class PokeBattle_Battle
     end
     # Update battlers' participants (who will gain Exp/EVs when a battler faints)
     eachBattler { |b| b.pbUpdateParticipants }
-    # Healing Wish / Lunar Dance
-    pbActivateHealingWish(battler)
+    # Healing Wish/Lunar Dance
+    battler.pbEffectsOnEnteringPosition
     # Entry hazards
     # Stealth Rock
     if battler.pbOwnSide.effects[PBEffects::StealthRock] && battler.takesIndirectDamage? &&

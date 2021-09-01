@@ -28,9 +28,6 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
   # Play battle music
   bgm = pbGetWildBattleBGM([]) if !bgm
   pbBGMPlay(bgm)
-  # Take screenshot of game, for use in some animations
-  $game_temp.background_bitmap.dispose if $game_temp.background_bitmap
-  $game_temp.background_bitmap = Graphics.snap_to_bitmap
   # Check for custom battle intro animations
   handled = pbBattleAnimationOverride(viewport,battletype,foe)
   # Default battle intro animation
@@ -88,10 +85,13 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
         pbUpdateSceneMap
       end
     end
+    # Take screenshot of game, for use in some animations
+    $game_temp.background_bitmap.dispose if $game_temp.background_bitmap
+    $game_temp.background_bitmap = Graphics.snap_to_bitmap
     # Play main animation
     Graphics.freeze
     viewport.color = Color.new(0,0,0,255)   # Ensure screen is black
-    Graphics.transition(25, sprintf("Graphics/Transitions/%s", anim))
+    Graphics.transition(25, "Graphics/Transitions/" + anim)
     # Slight pause after animation before starting up the battle scene
     (Graphics.frame_rate/10).times do
       Graphics.update
@@ -113,15 +113,16 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
   $PokemonGlobal.nextBattleCaptureME = nil
   $PokemonGlobal.nextBattleBack      = nil
   $PokemonEncounters.reset_step_count
-  # Fade back to the overworld
+  # Fade back to the overworld in 0.4 seconds
   viewport.color = Color.new(0,0,0,255)
-  numFrames = Graphics.frame_rate*4/10   # 0.4 seconds, 16 frames
-  alphaDiff = (255.0/numFrames).ceil
-  numFrames.times do
-    viewport.color.alpha -= alphaDiff
+  timer = 0.0
+  loop do
     Graphics.update
     Input.update
     pbUpdateSceneMap
+    timer += Graphics.delta_s
+    viewport.color.alpha = 255 * (1 - timer / 0.4)
+    break if viewport.color.alpha <= 0
   end
   viewport.dispose
   $game_temp.in_battle = false
@@ -290,8 +291,8 @@ end
 # line and method into a new script section. Change the name of the alias part
 # ("__over1__") in your copied code in both places. Then add in your custom
 # transition code in the place shown.
-# Note that $game_temp.background_bitmap contains an image of the current game
-# screen.
+# Note that you can get an image of the current game screen with
+# Graphics.snap_to_bitmap.
 # When the custom animation has finished, the screen should have faded to black
 # somehow.
 

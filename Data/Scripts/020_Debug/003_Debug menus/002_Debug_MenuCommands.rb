@@ -619,7 +619,7 @@ DebugMenuCommands.register("fillboxes", {
       f = species_data.form
       # Record each form of each species as seen and owned
       if f == 0
-        if [:AlwaysMale, :AlwaysFemale, :Genderless].include?(species_data.gender_ratio)
+        if species_data.single_gendered?
           g = (species_data.gender_ratio == :AlwaysFemale) ? 1 : 0
           $Trainer.pokedex.register(sp, g, f, false)
         else   # Both male and female

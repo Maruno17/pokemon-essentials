@@ -248,7 +248,7 @@ module Compiler
   # Save Pokémon data to PBS file
   #=============================================================================
   def write_pokemon
-    echo _INTL("Writing species")
+    echo _INTL("Writing species...")
     File.open("PBS/pokemon.txt", "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
@@ -559,7 +559,7 @@ module Compiler
         f.write(sprintf("Gender = %s\r\n", gender))
         f.write(sprintf("BaseMoney = %d\r\n", t.base_money))
         f.write(sprintf("SkillLevel = %d\r\n", t.skill_level)) if t.skill_level != t.base_money
-        f.write(sprintf("SkillCode = %s\r\n", t.skill_code)) if !nil_or_empty?(t.skill_code)
+        f.write(sprintf("SkillFlags = %s\r\n", t.skill_flags.join(","))) if t.skill_flags.length > 0
         f.write(sprintf("IntroME = %s\r\n", t.intro_ME)) if !nil_or_empty?(t.intro_ME)
         f.write(sprintf("BattleBGM = %s\r\n", t.battle_BGM)) if !nil_or_empty?(t.battle_BGM)
         f.write(sprintf("VictoryME = %s\r\n", t.victory_ME)) if !nil_or_empty?(t.victory_ME)
@@ -572,7 +572,7 @@ module Compiler
   # Save individual trainer data to PBS file
   #=============================================================================
   def write_trainers
-    echo _INTL("Writing trainers")
+    echo _INTL("Writing trainers...")
     File.open("PBS/trainers.txt", "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)

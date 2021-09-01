@@ -137,7 +137,7 @@ class Pokemon
 
   def form
     return @forced_form if !@forced_form.nil?
-    return @form if $game_temp.in_battle
+    return @form if $game_temp.in_battle || $game_temp.in_storage
     calc_form = MultipleForms.call("getForm", self)
     self.form = calc_form if calc_form != nil && calc_form != @form
     return @form
@@ -331,13 +331,14 @@ class Pokemon
   # @return [0, 1, 2] this Pokémon's gender (0 = male, 1 = female, 2 = genderless)
   def gender
     if !@gender
-      gender_ratio = species_data.gender_ratio
-      case gender_ratio
-      when :AlwaysMale   then @gender = 0
-      when :AlwaysFemale then @gender = 1
-      when :Genderless   then @gender = 2
+      if species_data.single_gendered?
+        case species_data.gender_ratio
+        when :AlwaysMale   then @gender = 0
+        when :AlwaysFemale then @gender = 1
+        else                    @gender = 2
+        end
       else
-        female_chance = GameData::GenderRatio.get(gender_ratio).female_chance
+        female_chance = GameData::GenderRatio.get(species_data.gender_ratio).female_chance
         @gender = ((@personalID & 0xFF) < female_chance) ? 1 : 0
       end
     end
@@ -369,8 +370,7 @@ class Pokemon
   # @return [Boolean] whether this Pokémon species is restricted to only ever being one
   #   gender (or genderless)
   def singleGendered?
-    gender_ratio = species_data.gender_ratio
-    return [:AlwaysMale, :AlwaysFemale, :Genderless].include?(gender_ratio)
+    return species_data.single_gendered?
   end
 
   #=============================================================================
@@ -1109,8 +1109,8 @@ class Pokemon
   # @param species [Symbol, String, GameData::Species] Pokémon species
   # @param level [Integer] Pokémon level
   # @param owner [Owner, Player, NPCTrainer] Pokémon owner (the player by default)
-  # @param withMoves [TrueClass, FalseClass] whether the Pokémon should have moves
-  # @param recheck_form [TrueClass, FalseClass] whether to auto-check the form
+  # @param withMoves [Boolean] whether the Pokémon should have moves
+  # @param recheck_form [Boolean] whether to auto-check the form
   def initialize(species, level, owner = $Trainer, withMoves = true, recheck_form = true)
     species_data = GameData::Species.get(species)
     @species          = species_data.species

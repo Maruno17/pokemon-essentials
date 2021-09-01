@@ -50,11 +50,11 @@ end
 def pbDayCareDeposit(index)
   for i in 0...2
     next if $PokemonGlobal.daycare[i][0]
-    $PokemonGlobal.daycare[i][0] = $Trainer.party[index]
-    $PokemonGlobal.daycare[i][0].time_form_set = nil
-    $PokemonGlobal.daycare[i][0].form = 0 if $Trainer.party[index].isSpecies?(:SHAYMIN)
-    $PokemonGlobal.daycare[i][1] = $Trainer.party[index].level
-    $PokemonGlobal.daycare[i][0].heal
+    pkmn = $Trainer.party[index]
+    pkmn.heal
+    pkmn.form = 0 if pkmn.isSpecies?(:SHAYMIN)
+    $PokemonGlobal.daycare[i][0] = pkmn
+    $PokemonGlobal.daycare[i][1] = pkmn.level
     $Trainer.party.delete_at(index)
     $PokemonGlobal.daycareEgg      = 0
     $PokemonGlobal.daycareEggSteps = 0
@@ -324,7 +324,7 @@ def pbDayCareGenerateEgg
   if shinyretries>0
     shinyretries.times do
       break if egg.shiny?
-      genwildpoke.shiny = nil
+      egg.shiny = nil   # Make it recalculate shininess
       egg.personalID = rand(2**16) | rand(2**16) << 16
     end
   end

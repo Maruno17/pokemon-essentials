@@ -59,6 +59,14 @@ Maybe have multiple sets of Pickup items for multiple Gens. Probably not. Gens
 Add a newer type of berry tree mechanics? Have a separate setting that prevents
 deterioration?
 
+The happiness evolution threshold value has lowered from 220 to 160. This is
+because, in Gen 8, you have to use Pokémon Camp or berries to raise a Pokémon's
+happiness above 179, which in turn is because affection effects have been added
+(chance of resisting a KO, chance of shaking off a status problem, etc.) that
+apply above 179 happiness. Pokémon Camp will not be added. Affection effects and
+the 179 soft cap/160 evolution threshold may be added (the latter two should be
+treated as related rather than separate settings).
+
 #===============================================================================
 # Implemented
 #===============================================================================
@@ -116,6 +124,9 @@ Move Effect Changes
   pbImmunityByAbility, but leaning towards yes; will Volt Absorb block an
   Electrified Howl?). Needs a new function code, since it now affects targets
   rather than the user.
+- Healing Wish's effect and Lunar Dance's effect are no longer used up if a
+  Pokémon that switches to the targeted position can't make use of it. Each
+  position can only have one of each effect applied at once.
 
 Item Effect Changes
 - Escape Rope's code now supports both consumable and non-consumable versions,
@@ -161,5 +172,13 @@ Other changes:
 What happens to the PP of Iron Head when turned into/from Behemoth Blade/Bash
 for Zacian/Zamazenta? It gets decreased to the total PP if it is higher than the
 total PP of the new move, but cannot increase. This is already what happens.
+
+In Gen 7+, Shaymin/Hoopa revert their form when withdrawn from storage rather
+than when deposited. It still also reverts under other conditions. Shaymin
+reverts its form when deposited in the Day Care (all Gens).
+
+The game records, for each species, how many have been caught or defeated
+(counts both wild and trainer battles), and the shiny chance increases for that
+species because of this. This value is also shown in the Pokédex entry screen.
 
 =end
