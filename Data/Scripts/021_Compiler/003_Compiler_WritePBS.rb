@@ -508,6 +508,7 @@ module Compiler
         f.write("Name = #{ribbon.real_name}\r\n")
         f.write("IconPosition = #{ribbon.icon_position}\r\n")
         f.write("Description = #{ribbon.real_description}\r\n")
+        f.write(sprintf("Flags = %s\r\n", ribbon.flags.join(","))) if ribbon.flags.length > 0
       end
     }
     Graphics.update
