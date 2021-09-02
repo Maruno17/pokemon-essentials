@@ -423,9 +423,7 @@ end
 def pbCanUseBike?(map_id)
   map_metadata = GameData::MapMetadata.try_get(map_id)
   return false if !map_metadata
-  return true if map_metadata.always_bicycle
-  val = map_metadata.can_bicycle || map_metadata.outdoor_map
-  return (val) ? true : false
+  return map_metadata.always_bicycle || map_metadata.can_bicycle || map_metadata.outdoor_map
 end
 
 def pbMountBike

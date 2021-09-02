@@ -21,6 +21,7 @@ module GameData
     attr_reader :wild_capture_ME
     attr_reader :town_map_size
     attr_reader :battle_environment
+    attr_reader :flags
 
     DATA = {}
     DATA_FILENAME = "map_metadata.dat"
@@ -45,7 +46,8 @@ module GameData
        "TrainerVictoryME" => [17, "s"],
        "WildCaptureME"    => [18, "s"],
        "MapSize"          => [19, "us"],
-       "Environment"      => [20, "e", :Environment]
+       "Environment"      => [20, "e", :Environment],
+       "Flags"            => [21, "*s"]
     }
 
     extend ClassMethodsIDNumbers
@@ -72,7 +74,8 @@ module GameData
          ["TrainerVictoryME", MEProperty,                         _INTL("Default ME played after winning a Trainer battle on this map.")],
          ["WildCaptureME",    MEProperty,                         _INTL("Default ME played after catching a wild Pokémon on this map.")],
          ["MapSize",          MapSizeProperty,                    _INTL("The width of the map in Town Map squares, and a string indicating which squares are part of this map.")],
-         ["Environment",      GameDataProperty.new(:Environment), _INTL("The default battle environment for battles on this map.")]
+         ["Environment",      GameDataProperty.new(:Environment), _INTL("The default battle environment for battles on this map.")],
+         ["Flags",            StringListProperty,                 _INTL("Words/phrases that distinguish this map from others.")]
       ]
     end
 
@@ -98,6 +101,7 @@ module GameData
       @wild_capture_ME      = hash[:wild_capture_ME]
       @town_map_size        = hash[:town_map_size]
       @battle_environment   = hash[:battle_environment]
+      @flags                = hash[:flags] || []
     end
 
     def property_from_string(str)
@@ -122,8 +126,13 @@ module GameData
       when "WildCaptureME"    then return @wild_capture_ME
       when "MapSize"          then return @town_map_size
       when "Environment"      then return @battle_environment
+      when "Flags"            then return @flags
       end
       return nil
+    end
+
+    def has_flag?(flag)
+      return @flags.any? { |f| f.downcase == flag.downcase }
     end
   end
 end

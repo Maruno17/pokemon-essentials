@@ -137,8 +137,8 @@ def pbPrepareBattle(battle)
     backdrop = $PokemonGlobal.nextBattleBack
   elsif $PokemonGlobal.surfing
     backdrop = "water"   # This applies wherever you are, including in caves
-  elsif GameData::MapMetadata.exists?($game_map.map_id)
-    back = GameData::MapMetadata.get($game_map.map_id).battle_background
+  elsif $game_map.metadata
+    back = $game_map.metadata.battle_background
     backdrop = back if back && back != ""
   end
   backdrop = "indoor1" if !backdrop
@@ -152,8 +152,7 @@ def pbPrepareBattle(battle)
   end
   battle.backdropBase = base if base
   # Time of day
-  if GameData::MapMetadata.exists?($game_map.map_id) &&
-     GameData::MapMetadata.get($game_map.map_id).battle_environment == :Cave
+  if $game_map.metadata&.battle_environment == :Cave
     battle.time = 2   # This makes Dusk Balls work properly in caves
   elsif Settings::TIME_SHADING
     timeNow = pbGetTimeNow
@@ -171,8 +170,8 @@ end
 # Wormadam.
 def pbGetEnvironment
   ret = :None
-  map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-  ret = map_metadata.battle_environment if map_metadata && map_metadata.battle_environment
+  map_env = $game_map.metadata&.battle_environment
+  ret = map_env if map_env
   if $PokemonTemp.encounterType &&
      GameData::EncounterType.get($PokemonTemp.encounterType).type == :fishing
     terrainTag = $game_player.pbFacingTerrainTag

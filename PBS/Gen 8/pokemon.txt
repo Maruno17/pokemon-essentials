@@ -23808,7 +23808,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 0
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions = CRABOMINABLE,Location,34
+Evolutions = CRABOMINABLE,LocationFlag,IceRock
 #-------------------------------
 [CRABOMINABLE]
 Name = Crabominable

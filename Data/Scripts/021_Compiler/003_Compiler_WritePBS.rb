@@ -141,8 +141,9 @@ module Compiler
         f.write("[#{type.id}]\r\n")
         f.write("Name = #{type.real_name}\r\n")
         f.write("IconPosition = #{type.icon_position}\r\n")
-        f.write("IsPseudoType = true\r\n") if type.pseudo_type
         f.write("IsSpecialType = true\r\n") if type.special?
+        f.write("IsPseudoType = true\r\n") if type.pseudo_type
+        f.write(sprintf("Flags = %s\r\n", type.flags.join(","))) if type.flags.length > 0
         f.write("Weaknesses = #{type.weaknesses.join(",")}\r\n") if type.weaknesses.length > 0
         f.write("Resistances = #{type.resistances.join(",")}\r\n") if type.resistances.length > 0
         f.write("Immunities = #{type.immunities.join(",")}\r\n") if type.immunities.length > 0
@@ -163,6 +164,7 @@ module Compiler
         f.write("[#{ability.id}]\r\n")
         f.write("Name = #{ability.real_name}\r\n")
         f.write("Description = #{ability.real_description}\r\n")
+        f.write(sprintf("Flags = %s\r\n", ability.flags.join(","))) if ability.flags.length > 0
       end
     }
     Graphics.update
@@ -188,7 +190,7 @@ module Compiler
         f.write("Target = #{move.target}\r\n")
         f.write("Priority = #{move.priority}\r\n") if move.priority != 0
         f.write("FunctionCode = #{move.function_code}\r\n")
-        f.write("Flags = #{move.flags.join(",")}\r\n") if move.flags && move.flags.length > 0
+        f.write("Flags = #{move.flags.join(",")}\r\n") if move.flags.length > 0
         f.write("EffectChance = #{move.effect_chance}\r\n") if move.effect_chance > 0
         f.write("Description = #{move.real_description}\r\n")
       end
@@ -214,9 +216,8 @@ module Compiler
         f.write(sprintf("FieldUse = %s\r\n", field_use)) if field_use
         battle_use = GameData::Item::SCHEMA["BattleUse"][2].key(item.battle_use)
         f.write(sprintf("BattleUse = %s\r\n", battle_use)) if battle_use
-        type = GameData::Item::SCHEMA["Type"][2].key(item.type)
         f.write(sprintf("Consumable = false\r\n")) if !item.is_important? && !item.consumable
-        f.write(sprintf("Type = %s\r\n", type)) if type
+        f.write(sprintf("Flags = %s\r\n", item.flags.join(","))) if item.flags.length > 0
         f.write(sprintf("Move = %s\r\n", item.move)) if item.move
         f.write(sprintf("Description = %s\r\n", item.real_description))
       end
@@ -303,6 +304,7 @@ module Compiler
         f.write(sprintf("Pokedex = %s\r\n", species.real_pokedex_entry))
         f.write(sprintf("FormName = %s\r\n", species.real_form_name)) if species.real_form_name && !species.real_form_name.empty?
         f.write(sprintf("Generation = %d\r\n", species.generation)) if species.generation != 0
+        f.write(sprintf("Flags = %s\r\n", species.flags.join(","))) if species.flags.length > 0
         f.write(sprintf("WildItemCommon = %s\r\n", species.wild_item_common)) if species.wild_item_common
         f.write(sprintf("WildItemUncommon = %s\r\n", species.wild_item_uncommon)) if species.wild_item_uncommon
         f.write(sprintf("WildItemRare = %s\r\n", species.wild_item_rare)) if species.wild_item_rare
@@ -324,7 +326,7 @@ module Compiler
             param_type = evo_type_data.parameter
             f.write(sprintf("%s,%s,", evo[0], evo_type_data.id.to_s))
             if !param_type.nil?
-              if !GameData.const_defined?(param_type.to_sym) && param_type.is_a?(Symbol)
+              if param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
                 f.write(getConstantName(param_type, evo[2]))
               else
                 f.write(evo[2].to_s)
@@ -405,6 +407,7 @@ module Compiler
         f.write(sprintf("Category = %s\r\n", species.real_category)) if species.real_category != base_species.real_category
         f.write(sprintf("Pokedex = %s\r\n", species.real_pokedex_entry)) if species.real_pokedex_entry != base_species.real_pokedex_entry
         f.write(sprintf("Generation = %d\r\n", species.generation)) if species.generation != base_species.generation
+        f.write(sprintf("Flags = %s\r\n", species.flags.join(","))) if species.flags.length > 0 && species.flags != base_species.flags
         if species.wild_item_common != base_species.wild_item_common ||
            species.wild_item_uncommon != base_species.wild_item_uncommon ||
            species.wild_item_rare != base_species.wild_item_rare
@@ -430,7 +433,7 @@ module Compiler
             param_type = evo_type_data.parameter
             f.write(sprintf("%s,%s,", evo[0], evo_type_data.id.to_s))
             if !param_type.nil?
-              if !GameData.const_defined?(param_type.to_sym) && param_type.is_a?(Symbol)
+              if param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
                 f.write(getConstantName(param_type, evo[2]))
               else
                 f.write(evo[2].to_s)
@@ -559,7 +562,7 @@ module Compiler
         f.write(sprintf("Gender = %s\r\n", gender))
         f.write(sprintf("BaseMoney = %d\r\n", t.base_money))
         f.write(sprintf("SkillLevel = %d\r\n", t.skill_level)) if t.skill_level != t.base_money
-        f.write(sprintf("SkillFlags = %s\r\n", t.skill_flags.join(","))) if t.skill_flags.length > 0
+        f.write(sprintf("Flags = %s\r\n", t.flags.join(","))) if t.flags.length > 0
         f.write(sprintf("IntroME = %s\r\n", t.intro_ME)) if !nil_or_empty?(t.intro_ME)
         f.write(sprintf("BattleBGM = %s\r\n", t.battle_BGM)) if !nil_or_empty?(t.battle_BGM)
         f.write(sprintf("VictoryME = %s\r\n", t.victory_ME)) if !nil_or_empty?(t.victory_ME)

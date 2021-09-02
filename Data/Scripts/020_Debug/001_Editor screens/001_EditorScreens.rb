@@ -349,7 +349,7 @@ def pbTrainerTypeEditor
     [_INTL("Gender"),     EnumProperty.new(gender_array), _INTL("Gender of this Trainer Type.")],
     [_INTL("BaseMoney"),  LimitProperty.new(9999),        _INTL("Player earns this much money times the highest level among the trainer's Pokémon.")],
     [_INTL("SkillLevel"), LimitProperty.new(9999),        _INTL("Skill level of this Trainer Type.")],
-    [_INTL("SkillFlags"), StringListProperty,             _INTL("Words/phrases representing AI modifications of trainers of this type.")],
+    [_INTL("Flags"),      StringListProperty,             _INTL("Words/phrases that can be used to make trainers of this type behave differently to others.")],
     [_INTL("IntroME"),    MEProperty,                     _INTL("ME played before battles against trainers of this type.")],
     [_INTL("BattleBGM"),  BGMProperty,                    _INTL("BGM played in battles against trainers of this type.")],
     [_INTL("VictoryME"),  MEProperty,                     _INTL("ME played when player wins battles against trainers of this type.")]
@@ -374,7 +374,7 @@ def pbTrainerTypeEditor
             t_data.gender,
             t_data.base_money,
             t_data.skill_level,
-            t_data.skill_flags,
+            t_data.flags,
             t_data.intro_ME,
             t_data.battle_BGM,
             t_data.victory_ME
@@ -387,7 +387,7 @@ def pbTrainerTypeEditor
               :gender      => data[2],
               :base_money  => data[3],
               :skill_level => data[4],
-              :skill_flags => data[5],
+              :flags       => data[5],
               :intro_ME    => data[6],
               :battle_BGM  => data[7],
               :victory_ME  => data[8]
@@ -782,7 +782,8 @@ def pbEditMetadata(map_id = 0)
         :trainer_victory_ME   => data[16],
         :wild_capture_ME      => data[17],
         :town_map_size        => data[18],
-        :battle_environment   => data[19]
+        :battle_environment   => data[19],
+        :flags                => data[20]
       }
       # Add metadata's data to records
       GameData::MapMetadata.register(metadata_hash)
@@ -815,7 +816,7 @@ def pbItemEditor
      [_INTL("FieldUse"),    EnumProperty.new(field_use_array),  _INTL("How this item can be used outside of battle.")],
      [_INTL("BattleUse"),   EnumProperty.new(battle_use_array), _INTL("How this item can be used within a battle.")],
      [_INTL("Consumable"),  BooleanProperty,                    _INTL("Whether this item is consumed after use.")],
-     [_INTL("Type"),        EnumProperty.new(type_array),       _INTL("For special kinds of items.")],
+     [_INTL("Flags"),       StringListProperty,                 _INTL("Words/phrases that group certain kinds of items.")],
      [_INTL("Move"),        MoveProperty,                       _INTL("Move taught by this HM, TM or TR.")]
   ]
   pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) { |button, item|
@@ -843,7 +844,7 @@ def pbItemEditor
             itm.field_use,
             itm.battle_use,
             itm.consumable,
-            itm.type,
+            itm.flags,
             itm.move
           ]
           if pbPropertyList(itm.id.to_s, data, item_properties, true)
@@ -859,7 +860,7 @@ def pbItemEditor
               :field_use   => data[7],
               :battle_use  => data[8],
               :consumable  => data[9],
-              :type        => data[10],
+              :flags       => data[10],
               :move        => data[11]
             }
             # Add item's data to records
@@ -973,6 +974,7 @@ def pbPokemonEditor
      [_INTL("Shape"),             GameDataProperty.new(:BodyShape),   _INTL("Body shape of this species.")],
      [_INTL("Habitat"),           GameDataProperty.new(:Habitat),     _INTL("The habitat of this species.")],
      [_INTL("Generation"),        LimitProperty.new(99999),           _INTL("The number of the generation the Pokémon debuted in.")],
+     [_INTL("Flags"),             StringListProperty,                 _INTL("Words/phrases that distinguish this species from others.")],
      [_INTL("BattlerPlayerX"),    ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
      [_INTL("BattlerPlayerY"),    ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
      [_INTL("BattlerEnemyX"),     ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
@@ -1039,6 +1041,7 @@ def pbPokemonEditor
             spec.shape,
             spec.habitat,
             spec.generation,
+            spec.flags.clone,
             spec.back_sprite_x,
             spec.back_sprite_y,
             spec.front_sprite_x,
@@ -1090,13 +1093,14 @@ def pbPokemonEditor
               :shape                 => data[34],
               :habitat               => data[35],
               :generation            => data[36],
-              :back_sprite_x         => data[37],
-              :back_sprite_y         => data[38],
-              :front_sprite_x        => data[39],
-              :front_sprite_y        => data[40],
-              :front_sprite_altitude => data[41],
-              :shadow_x              => data[42],
-              :shadow_size           => data[43]
+              :flags                 => data[37],
+              :back_sprite_x         => data[38],
+              :back_sprite_y         => data[39],
+              :front_sprite_x        => data[40],
+              :front_sprite_y        => data[41],
+              :front_sprite_altitude => data[42],
+              :shadow_x              => data[43],
+              :shadow_size           => data[44]
             }
             # Add species' data to records
             GameData::Species.register(species_hash)

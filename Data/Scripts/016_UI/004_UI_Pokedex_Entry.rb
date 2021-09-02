@@ -18,8 +18,7 @@ class PokemonPokedexInfo_Scene
     @sprites["infosprite"].x = 104
     @sprites["infosprite"].y = 136
     @mapdata = pbLoadTownMapData
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    mappos = (map_metadata) ? map_metadata.town_map_position : nil
+    mappos = $game_map.metadata&.town_map_position
     if @region < 0                                 # Use player's current region
       @region = (mappos) ? mappos[0] : 0                      # Region 0 default
     end

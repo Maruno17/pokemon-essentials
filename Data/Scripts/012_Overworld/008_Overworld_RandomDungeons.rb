@@ -646,8 +646,7 @@ end
 Events.onMapCreate += proc { |_sender, e|
   mapID = e[0]
   map   = e[1]
-  next if !GameData::MapMetadata.exists?(mapID) ||
-          !GameData::MapMetadata.get(mapID).random_dungeon
+  next if !GameData::MapMetadata.try_get(mapID)&.random_dungeon
   # this map is a randomly generated dungeon
   dungeon = RandomDungeonGenerator::Dungeon.new(map.width, map.height)
   dungeon.generate

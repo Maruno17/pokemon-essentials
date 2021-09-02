@@ -2699,7 +2699,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = -2
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions = MAGNEZONE,Location,49,MAGNEZONE,Location,50,MAGNEZONE,Location,51
+Evolutions = MAGNEZONE,LocationFlag,Magnetic
 #-------------------------------
 [FARFETCHD]
 Name = Farfetch'd
@@ -4375,7 +4375,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 20
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions = VAPOREON,Item,WATERSTONE,JOLTEON,Item,THUNDERSTONE,FLAREON,Item,FIRESTONE,LEAFEON,Location,28,GLACEON,Location,34,SYLVEON,HappinessMoveType,FAIRY,ESPEON,HappinessDay,,UMBREON,HappinessNight,
+Evolutions = VAPOREON,Item,WATERSTONE,JOLTEON,Item,THUNDERSTONE,FLAREON,Item,FIRESTONE,LEAFEON,LocationFlag,MossRock,GLACEON,LocationFlag,IceRock,SYLVEON,HappinessMoveType,FAIRY,ESPEON,HappinessDay,,UMBREON,HappinessNight,
 #-------------------------------
 [VAPOREON]
 Name = Vaporeon
@@ -9811,7 +9811,7 @@ BattlerEnemyX = -2
 BattlerEnemyY = 17
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions = PROBOPASS,Location,49,PROBOPASS,Location,50,PROBOPASS,Location,51
+Evolutions = PROBOPASS,LocationFlag,Magnetic
 #-------------------------------
 [SKITTY]
 Name = Skitty
@@ -23743,7 +23743,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 0
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions = VIKAVOLT,Location,49,VIKAVOLT,Location,50,VIKAVOLT,Location,51
+Evolutions = VIKAVOLT,LocationFlag,Magnetic
 #-------------------------------
 [VIKAVOLT]
 Name = Vikavolt
@@ -23806,7 +23806,7 @@ BattlerEnemyX = 0
 BattlerEnemyY = 0
 BattlerShadowX = 0
 BattlerShadowSize = 2
-Evolutions = CRABOMINABLE,Location,34
+Evolutions = CRABOMINABLE,LocationFlag,IceRock
 #-------------------------------
 [CRABOMINABLE]
 Name = Crabominable

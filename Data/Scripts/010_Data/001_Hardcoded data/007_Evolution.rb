@@ -200,8 +200,7 @@ GameData::Evolution.register({
   :id            => :LevelDarkness,
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    next pkmn.level >= parameter && map_metadata && map_metadata.dark_map
+    next pkmn.level >= parameter && $game_map.metadata&.dark_map
   }
 })
 
@@ -490,11 +489,20 @@ GameData::Evolution.register({
 })
 
 GameData::Evolution.register({
+  :id            => :LocationFlag,
+  :parameter     => String,
+  :minimum_level => 1,   # Needs any level up
+  :level_up_proc => proc { |pkmn, parameter|
+    next $game_map.metadata&.has_flag?(parameter)
+  }
+})
+
+GameData::Evolution.register({
   :id            => :Region,
   :parameter     => Integer,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+    map_metadata = $game_map.metadata
     next map_metadata && map_metadata.town_map_position &&
          map_metadata.town_map_position[0] == parameter
   }

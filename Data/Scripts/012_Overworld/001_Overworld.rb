@@ -223,7 +223,7 @@ end
 Events.onMapChanging += proc { |_sender, e|
   new_map_ID = e[0]
   next if new_map_ID == 0
-  old_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  old_map_metadata = $game_map.metadata
   next if !old_map_metadata || !old_map_metadata.weather
   map_infos = pbLoadMapInfos
   if $game_map.name == map_infos[new_map_ID].name
@@ -236,7 +236,7 @@ Events.onMapChanging += proc { |_sender, e|
 # Set up various data related to the new map
 Events.onMapChange += proc { |_sender, e|
   old_map_ID = e[0]   # previous map ID, is 0 if no map ID
-  new_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  new_map_metadata = $game_map.metadata
   if new_map_metadata && new_map_metadata.teleport_destination
     $PokemonGlobal.healingSpot = new_map_metadata.teleport_destination
   end
@@ -267,7 +267,7 @@ Events.onMapSceneChange += proc { |_sender, e|
     $PokemonGlobal.mapTrail = [$game_map.map_id] + $PokemonGlobal.mapTrail
   end
   # Display darkness circle on dark maps
-  map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  map_metadata = $game_map.metadata
   if map_metadata && map_metadata.dark_map
     $PokemonTemp.darknessSprite = DarknessSprite.new
     scene.spriteset.addUserSprite($PokemonTemp.darknessSprite)

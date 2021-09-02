@@ -10,7 +10,7 @@ module GameData
     attr_reader :field_use
     attr_reader :battle_use
     attr_reader :consumable
-    attr_reader :type
+    attr_reader :flags
     attr_reader :move
 
     DATA = {}
@@ -30,10 +30,7 @@ module GameData
                                             "OnMoveReusable" => 2, "OnBattlerReusable" => 3,
                                             "OnFoeReusable" => 4, "DirectReusable" => 5}],
       "Consumable"  => [:consumable,  "b"],
-      "Type"        => [:type,        "e", {"Mail" => 1, "IconMail" => 2, "SnagBall" => 3,
-                                            "PokeBall" => 4, "Berry" => 5, "KeyItem" => 6,
-                                            "EvolutionStone" => 7, "Fossil" => 8, "Apricorn" => 9,
-                                            "TypeGem" => 10, "Mulch" => 11, "MegaStone" => 12}],
+      "Flags"       => [:flags,       "*s"],
       "Move"        => [:move,        "e", :Move]
     }
 
@@ -95,7 +92,7 @@ module GameData
       @real_description = hash[:description] || "???"
       @field_use        = hash[:field_use]   || 0
       @battle_use       = hash[:battle_use]  || 0
-      @type             = hash[:type]        || 0
+      @flags            = hash[:flags]       || []
       @consumable       = hash[:consumable]
       @consumable       = !is_important? if @consumable.nil?
       @move             = hash[:move]
@@ -116,22 +113,26 @@ module GameData
       return pbGetMessageFromHash(MessageTypes::ItemDescriptions, @real_description)
     end
 
+    def has_flag?(flag)
+      return @flags.any? { |f| f.downcase == flag.downcase }
+    end
+
     def is_TM?;              return @field_use == 3; end
     def is_HM?;              return @field_use == 4; end
     def is_TR?;              return @field_use == 6; end
     def is_machine?;         return is_TM? || is_HM? || is_TR?; end
-    def is_mail?;            return @type == 1 || @type == 2; end
-    def is_icon_mail?;       return @type == 2; end
-    def is_poke_ball?;       return @type == 3 || @type == 4; end
-    def is_snag_ball?;       return @type == 3 || (@type == 4 && $Trainer.has_snag_machine); end
-    def is_berry?;           return @type == 5; end
-    def is_key_item?;        return @type == 6; end
-    def is_evolution_stone?; return @type == 7; end
-    def is_fossil?;          return @type == 8; end
-    def is_apricorn?;        return @type == 9; end
-    def is_gem?;             return @type == 10; end
-    def is_mulch?;           return @type == 11; end
-    def is_mega_stone?;      return @type == 12; end   # Does NOT include Red Orb/Blue Orb
+    def is_mail?;            return has_flag?("Mail") || has_flag?("IconMail"); end
+    def is_icon_mail?;       return has_flag?("IconMail"); end
+    def is_poke_ball?;       return has_flag?("PokeBall") || has_flag?("SnagBall"); end
+    def is_snag_ball?;       return has_flag?("SnagBall") || (is_poke_ball? && $Trainer.has_snag_machine); end
+    def is_berry?;           return has_flag?("Berry"); end
+    def is_key_item?;        return has_flag?("KeyItem"); end
+    def is_evolution_stone?; return has_flag?("EvolutionStone"); end
+    def is_fossil?;          return has_flag?("Fossil"); end
+    def is_apricorn?;        return has_flag?("Apricorn"); end
+    def is_gem?;             return has_flag?("TypeGem"); end
+    def is_mulch?;           return has_flag?("Mulch"); end
+    def is_mega_stone?;      return has_flag?("MegaStone"); end   # Does NOT include Red Orb/Blue Orb
 
     def is_important?
       return true if is_key_item? || is_HM? || is_TM?

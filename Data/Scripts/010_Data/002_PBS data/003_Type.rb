@@ -4,6 +4,7 @@ module GameData
     attr_reader :real_name
     attr_reader :special_type
     attr_reader :pseudo_type
+    attr_reader :flags
     attr_reader :weaknesses
     attr_reader :resistances
     attr_reader :immunities
@@ -13,14 +14,15 @@ module GameData
     DATA_FILENAME = "types.dat"
 
     SCHEMA = {
-      "Name"          => [1, "s"],
-      "InternalName"  => [2, "s"],
-      "IsPseudoType"  => [3, "b"],
-      "IsSpecialType" => [4, "b"],
-      "Weaknesses"    => [5, "*s"],
-      "Resistances"   => [6, "*s"],
-      "Immunities"    => [7, "*s"],
-      "IconPosition"  => [8, "u"]
+      "Name"          => [0, "s"],
+      "InternalName"  => [0, "s"],
+      "IsSpecialType" => [0, "b"],
+      "IsPseudoType"  => [0, "b"],
+      "Flags"         => [0, "*s"],
+      "Weaknesses"    => [0, "*s"],
+      "Resistances"   => [0, "*s"],
+      "Immunities"    => [0, "*s"],
+      "IconPosition"  => [0, "u"]
     }
 
     extend ClassMethodsSymbols
@@ -29,8 +31,9 @@ module GameData
     def initialize(hash)
       @id            = hash[:id]
       @real_name     = hash[:name]          || "Unnamed"
-      @pseudo_type   = hash[:pseudo_type]   || false
       @special_type  = hash[:special_type]  || false
+      @pseudo_type   = hash[:pseudo_type]   || false
+      @flags         = hash[:flags]         || []
       @weaknesses    = hash[:weaknesses]    || []
       @weaknesses    = [@weaknesses] if !@weaknesses.is_a?(Array)
       @resistances   = hash[:resistances]   || []
@@ -47,6 +50,10 @@ module GameData
 
     def physical?; return !@special_type; end
     def special?;  return @special_type; end
+
+    def has_flag?(flag)
+      return @flags.any? { |f| f.downcase == flag.downcase }
+    end
 
     def effectiveness(other_type)
       return Effectiveness::NORMAL_EFFECTIVE_ONE if !other_type

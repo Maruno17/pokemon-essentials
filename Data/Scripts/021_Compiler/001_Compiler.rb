@@ -400,206 +400,221 @@ module Compiler
       repeat = true
       start = 1
     end
+    subarrays = repeat && schema[1].length > 2
     begin
+      subrecord = []
       for i in start...schema[1].length
         chr = schema[1][i,1]
         case chr
         when "i"   # Integer
-          record.push(csvInt!(rec,lineno))
+          subrecord.push(csvInt!(rec,lineno))
         when "I"   # Optional integer
           field = csvfield!(rec)
           if nil_or_empty?(field)
-            record.push(nil)
+            subrecord.push(nil)
           elsif !field[/^\-?\d+$/]
             raise _INTL("Field {1} is not an integer\r\n{2}",field,FileLineData.linereport)
           else
-            record.push(field.to_i)
+            subrecord.push(field.to_i)
           end
         when "u"   # Positive integer or zero
-          record.push(csvPosInt!(rec,lineno))
+          subrecord.push(csvPosInt!(rec,lineno))
         when "U"   # Optional positive integer or zero
           field = csvfield!(rec)
           if nil_or_empty?(field)
-            record.push(nil)
+            subrecord.push(nil)
           elsif !field[/^\d+$/]
             raise _INTL("Field '{1}' must be 0 or greater\r\n{2}",field,FileLineData.linereport)
           else
-            record.push(field.to_i)
+            subrecord.push(field.to_i)
           end
         when "v"   # Positive integer
           field = csvPosInt!(rec,lineno)
           raise _INTL("Field '{1}' must be greater than 0\r\n{2}",field,FileLineData.linereport) if field==0
-          record.push(field)
+          subrecord.push(field)
         when "V"   # Optional positive integer
           field = csvfield!(rec)
           if nil_or_empty?(field)
-            record.push(nil)
+            subrecord.push(nil)
           elsif !field[/^\d+$/]
             raise _INTL("Field '{1}' must be greater than 0\r\n{2}",field,FileLineData.linereport)
           elsif field.to_i==0
             raise _INTL("Field '{1}' must be greater than 0\r\n{2}",field,FileLineData.linereport)
           else
-            record.push(field.to_i)
+            subrecord.push(field.to_i)
           end
         when "x"   # Hexadecimal number
           field = csvfield!(rec)
           if !field[/^[A-Fa-f0-9]+$/]
             raise _INTL("Field '{1}' is not a hexadecimal number\r\n{2}",field,FileLineData.linereport)
           end
-          record.push(field.hex)
+          subrecord.push(field.hex)
         when "X"   # Optional hexadecimal number
           field = csvfield!(rec)
           if nil_or_empty?(field)
-            record.push(nil)
+            subrecord.push(nil)
           elsif !field[/^[A-Fa-f0-9]+$/]
             raise _INTL("Field '{1}' is not a hexadecimal number\r\n{2}",field,FileLineData.linereport)
           else
-            record.push(field.hex)
+            subrecord.push(field.hex)
           end
         when "f"   # Floating point number
-          record.push(csvFloat!(rec,lineno))
+          subrecord.push(csvFloat!(rec,lineno))
         when "F"   # Optional floating point number
           field = csvfield!(rec)
           if nil_or_empty?(field)
-            record.push(nil)
+            subrecord.push(nil)
           elsif !field[/^\-?^\d*\.?\d*$/]
             raise _INTL("Field {1} is not a floating point number\r\n{2}",field,FileLineData.linereport)
           else
-            record.push(field.to_f)
+            subrecord.push(field.to_f)
           end
         when "b"   # Boolean
-          record.push(csvBoolean!(rec,lineno))
+          subrecord.push(csvBoolean!(rec,lineno))
         when "B"   # Optional Boolean
           field = csvfield!(rec)
           if nil_or_empty?(field)
-            record.push(nil)
+            subrecord.push(nil)
           elsif field[/^1|[Tt][Rr][Uu][Ee]|[Yy][Ee][Ss]|[Tt]|[Yy]$/]
-            record.push(true)
+            subrecord.push(true)
           else
-            record.push(false)
+            subrecord.push(false)
           end
         when "n"   # Name
           field = csvfield!(rec)
           if !field[/^(?![0-9])\w+$/]
             raise _INTL("Field '{1}' must contain only letters, digits, and\r\nunderscores and can't begin with a number.\r\n{2}",field,FileLineData.linereport)
           end
-          record.push(field)
+          subrecord.push(field)
         when "N"   # Optional name
           field = csvfield!(rec)
           if nil_or_empty?(field)
-            record.push(nil)
+            subrecord.push(nil)
           elsif !field[/^(?![0-9])\w+$/]
             raise _INTL("Field '{1}' must contain only letters, digits, and\r\nunderscores and can't begin with a number.\r\n{2}",field,FileLineData.linereport)
           else
-            record.push(field)
+            subrecord.push(field)
           end
         when "s"   # String
-          record.push(csvfield!(rec))
+          subrecord.push(csvfield!(rec))
         when "S"   # Optional string
           field = csvfield!(rec)
-          record.push((nil_or_empty?(field)) ? nil : field)
+          subrecord.push((nil_or_empty?(field)) ? nil : field)
         when "q"   # Unformatted text
-          record.push(rec)
+          subrecord.push(rec)
           rec = ""
         when "Q"   # Optional unformatted text
           if nil_or_empty?(rec)
-            record.push(nil)
+            subrecord.push(nil)
           else
-            record.push(rec)
+            subrecord.push(rec)
             rec = ""
           end
         when "e"   # Enumerable
-          record.push(csvEnumField!(rec,schema[2+i-start],"",FileLineData.linereport))
+          subrecord.push(csvEnumField!(rec,schema[2+i-start],"",FileLineData.linereport))
         when "E"   # Optional enumerable
           field = csvfield!(rec)
-          record.push(checkEnumFieldOrNil(field,schema[2+i-start]))
+          subrecord.push(checkEnumFieldOrNil(field,schema[2+i-start]))
         when "y"   # Enumerable or integer
           field = csvfield!(rec)
-          record.push(csvEnumFieldOrInt!(field,schema[2+i-start],"",FileLineData.linereport))
+          subrecord.push(csvEnumFieldOrInt!(field,schema[2+i-start],"",FileLineData.linereport))
         when "Y"   # Optional enumerable or integer
           field = csvfield!(rec)
           if nil_or_empty?(field)
-            record.push(nil)
+            subrecord.push(nil)
           elsif field[/^\-?\d+$/]
-            record.push(field.to_i)
+            subrecord.push(field.to_i)
           else
-            record.push(checkEnumFieldOrNil(field,schema[2+i-start]))
+            subrecord.push(checkEnumFieldOrNil(field,schema[2+i-start]))
           end
+        end
+      end
+      if !subrecord.empty?
+        if subarrays
+          record.push(subrecord)
+        else
+          record.concat(subrecord)
         end
       end
       break if repeat && nil_or_empty?(rec)
     end while repeat
-    return (schema[1].length==1) ? record[0] : record
+    return (schema[1].length == 1) ? record[0] : record
   end
 
   #=============================================================================
   # Write values to a file using a schema
   #=============================================================================
   def pbWriteCsvRecord(record,file,schema)
-    rec = (record.is_a?(Array)) ? record.clone : [record]
-    for i in 0...schema[1].length
-      chr = schema[1][i,1]
-      file.write(",") if i>0
-      if rec[i].nil?
-        # do nothing
-      elsif rec[i].is_a?(String)
-        file.write(csvQuote(rec[i]))
-      elsif rec[i].is_a?(Symbol)
-        file.write(csvQuote(rec[i].to_s))
-      elsif rec[i]==true
-        file.write("true")
-      elsif rec[i]==false
-        file.write("false")
-      elsif rec[i].is_a?(Numeric)
-        case chr
-        when "e", "E"   # Enumerable
-          enumer = schema[2+i]
-          if enumer.is_a?(Array)
-            file.write(enumer[rec[i]])
-          elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
-            mod = Object.const_get(enumer.to_sym)
-            file.write(getConstantName(mod,rec[i]))
-          elsif enumer.is_a?(Module)
-            file.write(getConstantName(enumer,rec[i]))
-          elsif enumer.is_a?(Hash)
-            for key in enumer.keys
-              if enumer[key]==rec[i]
-                file.write(key)
-                break
+    rec = (record.is_a?(Array)) ? record.flatten : [record]
+    start = (schema[1][0, 1] == "*") ? 1 : 0
+    index = 0
+    begin
+      for i in start...schema[1].length
+        index += 1
+        file.write(",") if index > 1
+        value = rec[index]
+        if value.nil?
+          # do nothing
+        elsif value.is_a?(String)
+          file.write(csvQuote(value))
+        elsif value.is_a?(Symbol)
+          file.write(csvQuote(value.to_s))
+        elsif value==true
+          file.write("true")
+        elsif value==false
+          file.write("false")
+        elsif value.is_a?(Numeric)
+          case schema[1][i, 1]
+          when "e", "E"   # Enumerable
+            enumer = schema[2+i]
+            if enumer.is_a?(Array)
+              file.write(enumer[value])
+            elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
+              mod = Object.const_get(enumer.to_sym)
+              file.write(getConstantName(mod,value))
+            elsif enumer.is_a?(Module)
+              file.write(getConstantName(enumer,value))
+            elsif enumer.is_a?(Hash)
+              for key in enumer.keys
+                if enumer[key]==value
+                  file.write(key)
+                  break
+                end
               end
             end
-          end
-        when "y", "Y"   # Enumerable or integer
-          enumer = schema[2+i]
-          if enumer.is_a?(Array)
-            if enumer[rec[i]]!=nil
-              file.write(enumer[rec[i]])
-            else
-              file.write(rec[i])
-            end
-          elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
-            mod = Object.const_get(enumer.to_sym)
-            file.write(getConstantNameOrValue(mod,rec[i]))
-          elsif enumer.is_a?(Module)
-            file.write(getConstantNameOrValue(enumer,rec[i]))
-          elsif enumer.is_a?(Hash)
-            hasenum = false
-            for key in enumer.keys
-              if enumer[key]==rec[i]
-                file.write(key)
-                hasenum = true
-                break
+          when "y", "Y"   # Enumerable or integer
+            enumer = schema[2+i]
+            if enumer.is_a?(Array)
+              if enumer[value]!=nil
+                file.write(enumer[value])
+              else
+                file.write(value)
               end
+            elsif enumer.is_a?(Symbol) || enumer.is_a?(String)
+              mod = Object.const_get(enumer.to_sym)
+              file.write(getConstantNameOrValue(mod,value))
+            elsif enumer.is_a?(Module)
+              file.write(getConstantNameOrValue(enumer,value))
+            elsif enumer.is_a?(Hash)
+              hasenum = false
+              for key in enumer.keys
+                if enumer[key]==value
+                  file.write(key)
+                  hasenum = true
+                  break
+                end
+              end
+              file.write(value) unless hasenum
             end
-            file.write(rec[i]) unless hasenum
+          else   # Any other record type
+            file.write(value.inspect)
           end
-        else   # Any other record type
-          file.write(rec[i].inspect)
+        else
+          file.write(value.inspect)
         end
-      else
-        file.write(rec[i].inspect)
       end
-    end
+      break if start > 0 && index >= rec.length
+    end while start > 0
     return record
   end
 

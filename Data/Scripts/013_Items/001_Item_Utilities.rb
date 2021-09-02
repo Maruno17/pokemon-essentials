@@ -439,9 +439,9 @@ def pbBikeCheck
     pbMessage(_INTL("It can't be used when you have someone with you."))
     return false
   end
-  map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  map_metadata = $game_map.metadata
   if $PokemonGlobal.bicycle
-    if map_metadata && map_metadata.always_bicycle
+    if map_metadata&.always_bicycle
       pbMessage(_INTL("You can't dismount your Bike here."))
       return false
     end

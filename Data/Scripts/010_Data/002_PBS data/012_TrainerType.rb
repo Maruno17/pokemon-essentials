@@ -5,7 +5,7 @@ module GameData
     attr_reader :gender
     attr_reader :base_money
     attr_reader :skill_level
-    attr_reader :skill_flags
+    attr_reader :flags
     attr_reader :intro_ME
     attr_reader :battle_BGM
     attr_reader :victory_ME
@@ -21,7 +21,7 @@ module GameData
                                            "Mixed" => 2, "mixed" => 2, "X" => 2, "x" => 2, "2" => 2}],
       "BaseMoney"  => [:base_money,  "u"],
       "SkillLevel" => [:skill_level, "u"],
-      "SkillFlags" => [:skill_flags, "*s"],
+      "Flags"      => [:flags,       "*s"],
       "IntroME"    => [:intro_ME,    "s"],
       "BattleBGM"  => [:battle_BGM,  "s"],
       "VictoryME"  => [:victory_ME,  "s"]
@@ -85,7 +85,7 @@ module GameData
       @gender      = hash[:gender]      || 2
       @base_money  = hash[:base_money]  || 30
       @skill_level = hash[:skill_level] || @base_money
-      @skill_flags = hash[:skill_flags] || []
+      @flags       = hash[:flags]       || []
       @intro_ME    = hash[:intro_ME]
       @battle_BGM  = hash[:battle_BGM]
       @victory_ME  = hash[:victory_ME]
@@ -98,5 +98,9 @@ module GameData
 
     def male?;   return @gender == 0; end
     def female?; return @gender == 1; end
+
+    def has_flag?(flag)
+      return @flags.any? { |f| f.downcase == flag.downcase }
+    end
   end
 end

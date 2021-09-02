@@ -84,7 +84,7 @@ NamePlural = Fire Stones
 Pocket = 1
 Price = 3000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar stone that makes certain species of Pokémon evolve. It is colored orange.
 #-------------------------------
 [THUNDERSTONE]
@@ -93,7 +93,7 @@ NamePlural = Thunder Stones
 Pocket = 1
 Price = 3000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar stone that makes certain species of Pokémon evolve. It has a thunderbolt pattern.
 #-------------------------------
 [WATERSTONE]
@@ -102,7 +102,7 @@ NamePlural = Water Stones
 Pocket = 1
 Price = 3000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar stone that makes certain species of Pokémon evolve. It is a clear, light blue.
 #-------------------------------
 [LEAFSTONE]
@@ -111,7 +111,7 @@ NamePlural = Leaf Stones
 Pocket = 1
 Price = 3000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar stone that makes certain species of Pokémon evolve. It has a leaf pattern.
 #-------------------------------
 [MOONSTONE]
@@ -120,7 +120,7 @@ NamePlural = Moon Stones
 Pocket = 1
 Price = 3000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar stone that makes certain species of Pokémon evolve. It is as black as the night sky.
 #-------------------------------
 [SUNSTONE]
@@ -129,7 +129,7 @@ NamePlural = Sun Stones
 Pocket = 1
 Price = 3000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar stone that makes certain species of Pokémon evolve. It is as red as the sun.
 #-------------------------------
 [DUSKSTONE]
@@ -138,7 +138,7 @@ NamePlural = Dusk Stones
 Pocket = 1
 Price = 3000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar stone that makes certain species of Pokémon evolve. It is as dark as dark can be.
 #-------------------------------
 [DAWNSTONE]
@@ -147,7 +147,7 @@ NamePlural = Dawn Stones
 Pocket = 1
 Price = 3000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar stone that makes certain species of Pokémon evolve. It sparkles like eyes.
 #-------------------------------
 [SHINYSTONE]
@@ -156,7 +156,7 @@ NamePlural = Shiny Stones
 Pocket = 1
 Price = 3000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar stone that makes certain species of Pokémon evolve. It shines with a dazzling light.
 #-------------------------------
 [ICESTONE]
@@ -165,7 +165,7 @@ NamePlural = Ice Stones
 Pocket = 1
 Price = 3000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar stone that makes certain species of Pokémon evolve. It has a snowflake pattern.
 #-------------------------------
 [SWEETAPPLE]
@@ -174,7 +174,7 @@ NamePlural = Sweet Apples
 Pocket = 1
 Price = 2200
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally sweet.
 #-------------------------------
 [TARTAPPLE]
@@ -183,7 +183,7 @@ NamePlural = Tart Apples
 Pocket = 1
 Price = 2200
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar apple that can make a certain species of Pokémon evolve. It's exceptionally tart.
 #-------------------------------
 [CRACKEDPOT]
@@ -193,7 +193,7 @@ Pocket = 1
 Price = 3000
 SellPrice = 800
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar cracked teapot that can make a certain species of Pokémon evolve. It makes delicious tea.
 #-------------------------------
 [CHIPPEDPOT]
@@ -203,7 +203,7 @@ Pocket = 1
 Price = 3000
 SellPrice = 19000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A peculiar chipped teapot that can make a certain species of Pokémon evolve. It makes delicious tea.
 #-------------------------------
 [GALARICACUFF]
@@ -212,7 +212,7 @@ NamePlural = Galarica Cuffs
 Pocket = 1
 Price = 6000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A cuff made from woven-together Galarica Twigs. Giving it to a Galarian Slowpoke would make it very happy.
 #-------------------------------
 [GALARICAWREATH]
@@ -221,7 +221,7 @@ NamePlural = Galarica Wreaths
 Pocket = 1
 Price = 6000
 FieldUse = OnPokemon
-Type = EvolutionStone
+Flags = EvolutionStone
 Description = A wreath made from woven-together Galarica Twigs. A Galarian Slowpoke wearing this would be very happy.
 #-------------------------------
 [REDAPRICORN]
@@ -229,7 +229,7 @@ Name = Red Apricorn
 NamePlural = Red Apricorns
 Pocket = 1
 Price = 200
-Type = Apricorn
+Flags = Apricorn
 Description = A red Apricorn. It assails your nostrils.
 #-------------------------------
 [YELLOWAPRICORN]
@@ -237,7 +237,7 @@ Name = Yellow Apricorn
 NamePlural = Yellow Apricorns
 Pocket = 1
 Price = 200
-Type = Apricorn
+Flags = Apricorn
 Description = A yellow Apricorn. It has an invigorating scent.
 #-------------------------------
 [BLUEAPRICORN]
@@ -245,7 +245,7 @@ Name = Blue Apricorn
 NamePlural = Blue Apricorns
 Pocket = 1
 Price = 200
-Type = Apricorn
+Flags = Apricorn
 Description = A blue Apricorn. It smells a bit like grass.
 #-------------------------------
 [GREENAPRICORN]
@@ -253,7 +253,7 @@ Name = Green Apricorn
 NamePlural = Green Apricorns
 Pocket = 1
 Price = 200
-Type = Apricorn
+Flags = Apricorn
 Description = A green Apricorn. It has a mysterious, aromatic scent.
 #-------------------------------
 [PINKAPRICORN]
@@ -261,7 +261,7 @@ Name = Pink Apricorn
 NamePlural = Pink Apricorns
 Pocket = 1
 Price = 200
-Type = Apricorn
+Flags = Apricorn
 Description = A pink Apricorn. It has a nice, sweet scent.
 #-------------------------------
 [WHITEAPRICORN]
@@ -269,7 +269,7 @@ Name = White Apricorn
 NamePlural = White Apricorns
 Pocket = 1
 Price = 200
-Type = Apricorn
+Flags = Apricorn
 Description = A white Apricorn. It doesn't smell like anything.
 #-------------------------------
 [BLACKAPRICORN]
@@ -277,7 +277,7 @@ Name = Black Apricorn
 NamePlural = Black Apricorns
 Pocket = 1
 Price = 200
-Type = Apricorn
+Flags = Apricorn
 Description = A black Apricorn. It has an indescribable scent.
 #-------------------------------
 [HELIXFOSSIL]
@@ -285,7 +285,7 @@ Name = Helix Fossil
 NamePlural = Helix Fossils
 Pocket = 1
 Price = 7000
-Type = Fossil
+Flags = Fossil
 Description = A fossil of an ancient Pokémon that lived in the sea. It appears to be part of a seashell.
 #-------------------------------
 [DOMEFOSSIL]
@@ -293,7 +293,7 @@ Name = Dome Fossil
 NamePlural = Dome Fossils
 Pocket = 1
 Price = 7000
-Type = Fossil
+Flags = Fossil
 Description = A fossil of an ancient Pokémon that lived in the sea. It appears to be part of a shell.
 #-------------------------------
 [OLDAMBER]
@@ -301,7 +301,7 @@ Name = Old Amber
 NamePlural = Old Ambers
 Pocket = 1
 Price = 1000
-Type = Fossil
+Flags = Fossil
 Description = A piece of amber that contains the genes of an ancient Pokémon. It is clear with a reddish tint.
 #-------------------------------
 [ROOTFOSSIL]
@@ -309,7 +309,7 @@ Name = Root Fossil
 NamePlural = Root Fossils
 Pocket = 1
 Price = 7000
-Type = Fossil
+Flags = Fossil
 Description = A fossil of an ancient Pokémon that lived in the sea. It appears to be part of a plant root.
 #-------------------------------
 [CLAWFOSSIL]
@@ -317,7 +317,7 @@ Name = Claw Fossil
 NamePlural = Claw Fossils
 Pocket = 1
 Price = 7000
-Type = Fossil
+Flags = Fossil
 Description = A fossil of an ancient Pokémon that lived in the sea. It appears to be part of a claw.
 #-------------------------------
 [SKULLFOSSIL]
@@ -325,7 +325,7 @@ Name = Skull Fossil
 NamePlural = Skull Fossils
 Pocket = 1
 Price = 7000
-Type = Fossil
+Flags = Fossil
 Description = A fossil from a prehistoric Pokémon that lived on the land. It appears to be part of a head.
 #-------------------------------
 [ARMORFOSSIL]
@@ -333,7 +333,7 @@ Name = Armor Fossil
 NamePlural = Armor Fossils
 Pocket = 1
 Price = 7000
-Type = Fossil
+Flags = Fossil
 Description = A fossil from a prehistoric Pokémon that lived on the land. It appears to be part of a collar.
 #-------------------------------
 [COVERFOSSIL]
@@ -341,7 +341,7 @@ Name = Cover Fossil
 NamePlural = Cover Fossils
 Pocket = 1
 Price = 7000
-Type = Fossil
+Flags = Fossil
 Description = A fossil of an ancient Pokémon that lived in the sea in ancient times. It appears to be part of its back.
 #-------------------------------
 [PLUMEFOSSIL]
@@ -349,7 +349,7 @@ Name = Plume Fossil
 NamePlural = Plume Fossils
 Pocket = 1
 Price = 7000
-Type = Fossil
+Flags = Fossil
 Description = A fossil of an ancient Pokémon that flew in the sky in ancient times. It appears to be part of its wing.
 #-------------------------------
 [JAWFOSSIL]
@@ -357,7 +357,7 @@ Name = Jaw Fossil
 NamePlural = Jaw Fossils
 Pocket = 1
 Price = 7000
-Type = Fossil
+Flags = Fossil
 Description = A fossil from a prehistoric Pokémon that once lived on the land. It appears to be part of a large jaw.
 #-------------------------------
 [SAILFOSSIL]
@@ -365,7 +365,7 @@ Name = Sail Fossil
 NamePlural = Sail Fossils
 Pocket = 1
 Price = 7000
-Type = Fossil
+Flags = Fossil
 Description = A fossil from a prehistoric Pokémon that once lived on the land. It looks like the impression from a skin sail.
 #-------------------------------
 [FOSSILIZEDBIRD]
@@ -555,7 +555,7 @@ Name = Growth Mulch
 NamePlural = Growth Mulch
 Pocket = 1
 Price = 200
-Type = Mulch
+Flags = Mulch
 Description = A fertilizer to be spread on soft soil in regions where Berries are grown. A maniac will buy it for a high price.
 #-------------------------------
 [DAMPMULCH]
@@ -563,7 +563,7 @@ Name = Damp Mulch
 NamePlural = Damp Mulch
 Pocket = 1
 Price = 200
-Type = Mulch
+Flags = Mulch
 Description = A fertilizer to be spread on soft soil in regions where Berries are grown. A maniac will buy it for a high price.
 #-------------------------------
 [STABLEMULCH]
@@ -571,7 +571,7 @@ Name = Stable Mulch
 NamePlural = Stable Mulch
 Pocket = 1
 Price = 200
-Type = Mulch
+Flags = Mulch
 Description = A fertilizer to be spread on soft soil in regions where Berries are grown. A maniac will buy it for a high price.
 #-------------------------------
 [GOOEYMULCH]
@@ -579,7 +579,7 @@ Name = Gooey Mulch
 NamePlural = Gooey Mulch
 Pocket = 1
 Price = 200
-Type = Mulch
+Flags = Mulch
 Description = A fertilizer to be spread on soft soil in regions where Berries are grown. A maniac will buy it for a high price.
 #-------------------------------
 [SHOALSALT]
@@ -1555,7 +1555,7 @@ Name = Fire Gem
 NamePlural = Fire Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of fire. When held, it strengthens the power of a Fire-type move only once.
 #-------------------------------
 [WATERGEM]
@@ -1563,7 +1563,7 @@ Name = Water Gem
 NamePlural = Water Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of water. When held, it strengthens the power of a Water-type move only once.
 #-------------------------------
 [ELECTRICGEM]
@@ -1571,7 +1571,7 @@ Name = Electric Gem
 NamePlural = Electric Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of electricity. When held, it strengthens the power of an Electric-type move only once.
 #-------------------------------
 [GRASSGEM]
@@ -1579,7 +1579,7 @@ Name = Grass Gem
 NamePlural = Grass Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of nature. When held, it strengthens the power of a Grass-type move only once.
 #-------------------------------
 [ICEGEM]
@@ -1587,7 +1587,7 @@ Name = Ice Gem
 NamePlural = Ice Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of ice. When held, it strengthens the power of an Ice-type move only once.
 #-------------------------------
 [FIGHTINGGEM]
@@ -1595,7 +1595,7 @@ Name = Fighting Gem
 NamePlural = Fighting Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of combat. When held, it strengthens the power of a Fighting-type move only once.
 #-------------------------------
 [POISONGEM]
@@ -1603,7 +1603,7 @@ Name = Poison Gem
 NamePlural = Poison Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of poison. When held, it strengthens the power of a Poison-type move only once.
 #-------------------------------
 [GROUNDGEM]
@@ -1611,7 +1611,7 @@ Name = Ground Gem
 NamePlural = Ground Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of land. When held, it strengthens the power of a Ground-type move only once.
 #-------------------------------
 [FLYINGGEM]
@@ -1619,7 +1619,7 @@ Name = Flying Gem
 NamePlural = Flying Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of air. When held, it strengthens the power of a Flying-type move only once.
 #-------------------------------
 [PSYCHICGEM]
@@ -1627,7 +1627,7 @@ Name = Psychic Gem
 NamePlural = Psychic Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of the mind. When held, it strengthens the power of a Psychic-type move only once.
 #-------------------------------
 [BUGGEM]
@@ -1635,7 +1635,7 @@ Name = Bug Gem
 NamePlural = Bug Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an insect-like essence. When held, it strengthens the power of a Bug-type move only once.
 #-------------------------------
 [ROCKGEM]
@@ -1643,7 +1643,7 @@ Name = Rock Gem
 NamePlural = Rock Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of rock. When held, it strengthens the power of a Rock-type move only once.
 #-------------------------------
 [GHOSTGEM]
@@ -1651,7 +1651,7 @@ Name = Ghost Gem
 NamePlural = Ghost Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with a spectral essence. When held, it strengthens the power of a Ghost-type move only once.
 #-------------------------------
 [DRAGONGEM]
@@ -1659,7 +1659,7 @@ Name = Dragon Gem
 NamePlural = Dragon Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with a draconic essence. When held, it strengthens the power of a Dragon-type move only once.
 #-------------------------------
 [DARKGEM]
@@ -1667,7 +1667,7 @@ Name = Dark Gem
 NamePlural = Dark Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of darkness. When held, it strengthens the power of a Dark-type move only once.
 #-------------------------------
 [STEELGEM]
@@ -1675,7 +1675,7 @@ Name = Steel Gem
 NamePlural = Steel Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of steel. When held, it strengthens the power of a Steel-type move only once.
 #-------------------------------
 [FAIRYGEM]
@@ -1683,7 +1683,7 @@ Name = Fairy Gem
 NamePlural = Fairy Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an essence of the fey. When held, it strengthens the power of a Fairy-type move only once.
 #-------------------------------
 [NORMALGEM]
@@ -1691,7 +1691,7 @@ Name = Normal Gem
 NamePlural = Normal Gems
 Pocket = 1
 Price = 4000
-Type = TypeGem
+Flags = TypeGem
 Description = A gem with an ordinary essence. When held, it strengthens the power of a Normal-type move only once.
 #-------------------------------
 [LIGHTBALL]
@@ -2091,7 +2091,7 @@ Name = Venusaurite
 NamePlural = Venusaurites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Venusaur hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [CHARIZARDITEX]
@@ -2099,7 +2099,7 @@ Name = Charizardite X
 NamePlural = Charizardite Xs
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Charizard hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [CHARIZARDITEY]
@@ -2107,7 +2107,7 @@ Name = Charizardite Y
 NamePlural = Charizardite Ys
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Charizard hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [BLASTOISINITE]
@@ -2115,7 +2115,7 @@ Name = Blastoisinite
 NamePlural = Blastoisinites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Blastoise hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [BEEDRILLITE]
@@ -2123,7 +2123,7 @@ Name = Beedrillite
 NamePlural = Beedrillites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Beedrill hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [PIDGEOTITE]
@@ -2131,7 +2131,7 @@ Name = Pidgeotite
 NamePlural = Pidgeotites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Pidgeot hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [ALAKAZITE]
@@ -2139,7 +2139,7 @@ Name = Alakazite
 NamePlural = Alakazites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Alakazam hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [SLOWBRONITE]
@@ -2147,7 +2147,7 @@ Name = Slowbronite
 NamePlural = Slowbronites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Slowbro hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [GENGARITE]
@@ -2155,7 +2155,7 @@ Name = Gengarite
 NamePlural = Gengarites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Gengar hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [KANGASKHANITE]
@@ -2163,7 +2163,7 @@ Name = Kangaskhanite
 NamePlural = Kangaskhanites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Kangaskhan hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [PINSIRITE]
@@ -2171,7 +2171,7 @@ Name = Pinsirite
 NamePlural = Pinsirites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Pinsir hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [GYARADOSITE]
@@ -2179,7 +2179,7 @@ Name = Gyaradosite
 NamePlural = Gyaradosites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Gyarados hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [AERODACTYLITE]
@@ -2187,7 +2187,7 @@ Name = Aerodactylite
 NamePlural = Aerodactylites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Aerodactyl hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [MEWTWONITEX]
@@ -2195,7 +2195,7 @@ Name = Mewtwonite X
 NamePlural = Mewtwonite Xs
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Mewtwo hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [MEWTWONITEY]
@@ -2203,7 +2203,7 @@ Name = Mewtwonite Y
 NamePlural = Mewtwonite Ys
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Mewtwo hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [AMPHAROSITE]
@@ -2211,7 +2211,7 @@ Name = Ampharosite
 NamePlural = Ampharosites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Ampharos hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [STEELIXITE]
@@ -2219,7 +2219,7 @@ Name = Steelixite
 NamePlural = Steelixites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Steelix hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [SCIZORITE]
@@ -2227,7 +2227,7 @@ Name = Scizorite
 NamePlural = Scizorites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Scizor hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [HERACRONITE]
@@ -2235,7 +2235,7 @@ Name = Heracronite
 NamePlural = Heracronites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Heracross hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [HOUNDOOMINITE]
@@ -2243,7 +2243,7 @@ Name = Houndoominite
 NamePlural = Houndoominites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Houndoom hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [TYRANITARITE]
@@ -2251,7 +2251,7 @@ Name = Tyranitarite
 NamePlural = Tyranitarites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Tyranitar hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [SCEPTILITE]
@@ -2259,7 +2259,7 @@ Name = Sceptilite
 NamePlural = Sceptilites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Sceptile hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [BLAZIKENITE]
@@ -2267,7 +2267,7 @@ Name = Blazikenite
 NamePlural = Blazikenites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Blaziken hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [SWAMPERTITE]
@@ -2275,7 +2275,7 @@ Name = Swampertite
 NamePlural = Swampertites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Swampert hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [GARDEVOIRITE]
@@ -2283,7 +2283,7 @@ Name = Gardevoirite
 NamePlural = Gardevoirites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Gardevoir hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [SABLENITE]
@@ -2291,7 +2291,7 @@ Name = Sablenite
 NamePlural = Sablenites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Sableye hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [MAWILITE]
@@ -2299,7 +2299,7 @@ Name = Mawilite
 NamePlural = Mawilites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Mawile hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [AGGRONITE]
@@ -2307,7 +2307,7 @@ Name = Aggronite
 NamePlural = Aggronites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Aggron hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [MEDICHAMITE]
@@ -2315,7 +2315,7 @@ Name = Medichamite
 NamePlural = Medichamites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Medicham hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [MANECTITE]
@@ -2323,7 +2323,7 @@ Name = Manectite
 NamePlural = Manectites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Manectric hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [SHARPEDONITE]
@@ -2331,7 +2331,7 @@ Name = Sharpedonite
 NamePlural = Sharpedonites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Sharpedo hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [CAMERUPTITE]
@@ -2339,7 +2339,7 @@ Name = Cameruptite
 NamePlural = Cameruptites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Camerupt hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [ALTARIANITE]
@@ -2347,7 +2347,7 @@ Name = Altarianite
 NamePlural = Altarianites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Altaria hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [BANETTITE]
@@ -2355,7 +2355,7 @@ Name = Banettite
 NamePlural = Banettites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Banette hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [ABSOLITE]
@@ -2363,7 +2363,7 @@ Name = Absolite
 NamePlural = Absolites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Absol hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [GLALITITE]
@@ -2371,7 +2371,7 @@ Name = Glalitite
 NamePlural = Glalitites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Glalie hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [SALAMENCITE]
@@ -2379,7 +2379,7 @@ Name = Salamencite
 NamePlural = Salamencites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Salamence hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [METAGROSSITE]
@@ -2387,7 +2387,7 @@ Name = Metagrossite
 NamePlural = Metagrossites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Metagross hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [LATIASITE]
@@ -2395,7 +2395,7 @@ Name = Latiasite
 NamePlural = Latiasites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Latias hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [LATIOSITE]
@@ -2403,7 +2403,7 @@ Name = Latiosite
 NamePlural = Latiosites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Latios hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [LOPUNNITE]
@@ -2411,7 +2411,7 @@ Name = Lopunnite
 NamePlural = Lopunnites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Lopunny hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [GARCHOMPITE]
@@ -2419,7 +2419,7 @@ Name = Garchompite
 NamePlural = Garchompites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Garchomp hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [LUCARIONITE]
@@ -2427,7 +2427,7 @@ Name = Lucarionite
 NamePlural = Lucarionites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Lucario hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [ABOMASITE]
@@ -2435,7 +2435,7 @@ Name = Abomasite
 NamePlural = Abomasites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Abomasnow hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [GALLADITE]
@@ -2443,7 +2443,7 @@ Name = Galladite
 NamePlural = Galladites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Gallade hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [AUDINITE]
@@ -2451,7 +2451,7 @@ Name = Audinite
 NamePlural = Audinites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Audino hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [DIANCITE]
@@ -2459,7 +2459,7 @@ Name = Diancite
 NamePlural = Diancites
 Pocket = 1
 Price = 0
-Type = MegaStone
+Flags = MegaStone
 Description = One of a variety of mysterious Mega Stones. Have Diancie hold it, and it will be able to Mega Evolve.
 #-------------------------------
 [REDORB]
@@ -3161,7 +3161,7 @@ NamePlural = Master Balls
 Pocket = 3
 Price = 0
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = The best Ball with the ultimate level of performance. It will catch any wild Pokémon without fail.
 #-------------------------------
 [ULTRABALL]
@@ -3170,7 +3170,7 @@ NamePlural = Ultra Balls
 Pocket = 3
 Price = 800
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = An ultra-performance Ball that provides a higher Pokémon catch rate than a Great Ball.
 #-------------------------------
 [GREATBALL]
@@ -3179,7 +3179,7 @@ NamePlural = Great Balls
 Pocket = 3
 Price = 600
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A good, high-performance Ball that provides a higher Pokémon catch rate than a standard Poké Ball.
 #-------------------------------
 [POKEBALL]
@@ -3188,7 +3188,7 @@ NamePlural = Poké Balls
 Pocket = 3
 Price = 200
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A device for catching wild Pokémon. It is thrown like a ball at the target. It is designed as a capsule system.
 #-------------------------------
 [SAFARIBALL]
@@ -3197,7 +3197,7 @@ NamePlural = Safari Balls
 Pocket = 3
 Price = 0
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A special Poké Ball that is used only in the Safari Zone. It is decorated in a camouflage pattern.
 #-------------------------------
 [SPORTBALL]
@@ -3206,7 +3206,7 @@ NamePlural = Sport Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A special Poké Ball for the Bug-Catching Contest.
 #-------------------------------
 [NETBALL]
@@ -3215,7 +3215,7 @@ NamePlural = Net Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A somewhat different Poké Ball that works especially well on Water- and Bug-type Pokémon.
 #-------------------------------
 [DIVEBALL]
@@ -3224,7 +3224,7 @@ NamePlural = Dive Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A somewhat different Poké Ball that works especially well on Pokémon that live underwater.
 #-------------------------------
 [NESTBALL]
@@ -3233,7 +3233,7 @@ NamePlural = Nest Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A somewhat different Poké Ball that works especially well on weaker Pokémon in the wild.
 #-------------------------------
 [REPEATBALL]
@@ -3242,7 +3242,7 @@ NamePlural = Repeat Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A somewhat different Poké Ball that works especially well on Pokémon species that were previously caught.
 #-------------------------------
 [TIMERBALL]
@@ -3251,7 +3251,7 @@ NamePlural = Timer Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A somewhat different Ball that becomes progressively better the more turns there are in a battle.
 #-------------------------------
 [LUXURYBALL]
@@ -3260,7 +3260,7 @@ NamePlural = Luxury Balls
 Pocket = 3
 Price = 3000
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A comfortable Poké Ball that makes a caught wild Pokémon quickly grow friendly.
 #-------------------------------
 [PREMIERBALL]
@@ -3270,7 +3270,7 @@ Pocket = 3
 Price = 200
 SellPrice = 10
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A somewhat rare Poké Ball that has been specially made to commemorate an event of some sort.
 #-------------------------------
 [DUSKBALL]
@@ -3279,7 +3279,7 @@ NamePlural = Dusk Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A somewhat different Poké Ball that makes it easier to catch wild Pokémon at night or in dark places like caves.
 #-------------------------------
 [HEALBALL]
@@ -3288,7 +3288,7 @@ NamePlural = Heal Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A remedial Poké Ball that restores the caught Pokémon's HP and eliminates any status problem.
 #-------------------------------
 [QUICKBALL]
@@ -3297,7 +3297,7 @@ NamePlural = Quick Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A somewhat different Poké Ball that provides a better catch rate if used at the start of a wild encounter.
 #-------------------------------
 [CHERISHBALL]
@@ -3306,7 +3306,7 @@ NamePlural = Cherish Balls
 Pocket = 3
 Price = 0
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A quite rare Poké Ball that has been specially crafted to commemorate an occasion of some sort.
 #-------------------------------
 [FASTBALL]
@@ -3315,7 +3315,7 @@ NamePlural = Fast Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A Poké Ball that makes it easier to catch fast Pokémon.
 #-------------------------------
 [LEVELBALL]
@@ -3324,7 +3324,7 @@ NamePlural = Level Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A Poké Ball for catching Pokémon that are a lower level than your own.
 #-------------------------------
 [LUREBALL]
@@ -3333,7 +3333,7 @@ NamePlural = Lure Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A Poké Ball for catching Pokémon hooked by a Rod when fishing.
 #-------------------------------
 [HEAVYBALL]
@@ -3342,7 +3342,7 @@ NamePlural = Heavy Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A Poké Ball for catching very heavy Pokémon.
 #-------------------------------
 [LOVEBALL]
@@ -3351,7 +3351,7 @@ NamePlural = Love Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A Poké Ball for catching Pokémon that are the opposite gender of your Pokémon.
 #-------------------------------
 [FRIENDBALL]
@@ -3360,7 +3360,7 @@ NamePlural = Friend Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A Poké Ball that makes caught Pokémon more friendly.
 #-------------------------------
 [MOONBALL]
@@ -3369,7 +3369,7 @@ NamePlural = Moon Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A Poké Ball for catching Pokémon that evolve using the Moon Stone.
 #-------------------------------
 [DREAMBALL]
@@ -3378,7 +3378,7 @@ NamePlural = Dream Balls
 Pocket = 3
 Price = 300
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A somewhat different Poké Ball that makes it easier to catch wild Pokémon while they're asleep.
 #-------------------------------
 [BEASTBALL]
@@ -3387,7 +3387,7 @@ NamePlural = Beast Balls
 Pocket = 3
 Price = 1000
 BattleUse = OnFoe
-Type = PokeBall
+Flags = PokeBall
 Description = A special Poké Ball designed to catch Ultra Beasts. It has a low success rate for catching others.
 #-------------------------------
 [TM00]
@@ -4657,7 +4657,7 @@ Pocket = 4
 Price = 6000
 FieldUse = TR
 Move = BLAZEKICK
-Description = The user launches a kick that lands a critical hit more easily. This may also leave the target with a burn. 
+Description = The user launches a kick that lands a critical hit more easily. This may also leave the target with a burn.
 #-------------------------------
 [TR42]
 Name = TR42
@@ -5242,7 +5242,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = It may be used or held by a Pokémon to recover from paralysis.
 #-------------------------------
 [CHESTOBERRY]
@@ -5252,7 +5252,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = It may be used or held by a Pokémon to recover from sleep.
 #-------------------------------
 [PECHABERRY]
@@ -5262,7 +5262,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = It may be used or held by a Pokémon to recover from poison.
 #-------------------------------
 [RAWSTBERRY]
@@ -5272,7 +5272,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = It may be used or held by a Pokémon to recover from a burn.
 #-------------------------------
 [ASPEARBERRY]
@@ -5282,7 +5282,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = It may be used or held by a Pokémon to defrost it.
 #-------------------------------
 [LEPPABERRY]
@@ -5292,7 +5292,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnMove
-Type = Berry
+Flags = Berry
 Description = It may be used or held by a Pokémon to restore a move's PP by 10.
 #-------------------------------
 [ORANBERRY]
@@ -5302,7 +5302,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = It may be used or held by a Pokémon to heal the user by just 10 HP.
 #-------------------------------
 [PERSIMBERRY]
@@ -5311,7 +5311,7 @@ NamePlural = Persim Berries
 Pocket = 5
 Price = 20
 BattleUse = OnBattler
-Type = Berry
+Flags = Berry
 Description = It may be used or held by a Pokémon to recover from confusion.
 #-------------------------------
 [LUMBERRY]
@@ -5321,7 +5321,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = It may be used or held by a Pokémon to recover from any status problem.
 #-------------------------------
 [SITRUSBERRY]
@@ -5331,7 +5331,7 @@ Pocket = 5
 Price = 20
 FieldUse = OnPokemon
 BattleUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = It may be used or held by a Pokémon to heal the user's HP a little.
 #-------------------------------
 [FIGYBERRY]
@@ -5339,7 +5339,7 @@ Name = Figy Berry
 NamePlural = Figy Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it restores the user's HP in a pinch, but will cause confusion if it hates the taste.
 #-------------------------------
 [WIKIBERRY]
@@ -5347,7 +5347,7 @@ Name = Wiki Berry
 NamePlural = Wiki Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it restores the user's HP in a pinch, but will cause confusion if it hates the taste.
 #-------------------------------
 [MAGOBERRY]
@@ -5355,7 +5355,7 @@ Name = Mago Berry
 NamePlural = Mago Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it restores the user's HP in a pinch, but will cause confusion if it hates the taste.
 #-------------------------------
 [AGUAVBERRY]
@@ -5363,7 +5363,7 @@ Name = Aguav Berry
 NamePlural = Aguav Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it restores the user's HP in a pinch, but will cause confusion if it hates the taste.
 #-------------------------------
 [IAPAPABERRY]
@@ -5371,7 +5371,7 @@ Name = Iapapa Berry
 NamePlural = Iapapa Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it restores the user's HP in a pinch, but will cause confusion if it hates the taste.
 #-------------------------------
 [RAZZBERRY]
@@ -5379,7 +5379,7 @@ Name = Razz Berry
 NamePlural = Razz Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [BLUKBERRY]
@@ -5387,7 +5387,7 @@ Name = Bluk Berry
 NamePlural = Bluk Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [NANABBERRY]
@@ -5395,7 +5395,7 @@ Name = Nanab Berry
 NamePlural = Nanab Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [WEPEARBERRY]
@@ -5403,7 +5403,7 @@ Name = Wepear Berry
 NamePlural = Wepear Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [PINAPBERRY]
@@ -5411,7 +5411,7 @@ Name = Pinap Berry
 NamePlural = Pinap Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [POMEGBERRY]
@@ -5420,7 +5420,7 @@ NamePlural = Pomeg Berries
 Pocket = 5
 Price = 20
 FieldUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = Using it on a Pokémon makes it more friendly, but it also lowers its base HP.
 #-------------------------------
 [KELPSYBERRY]
@@ -5429,7 +5429,7 @@ NamePlural = Kelpsy Berries
 Pocket = 5
 Price = 20
 FieldUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = Using it on a Pokémon makes it more friendly, but it also lowers its base Attack stat.
 #-------------------------------
 [QUALOTBERRY]
@@ -5438,7 +5438,7 @@ NamePlural = Qualot Berries
 Pocket = 5
 Price = 20
 FieldUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = Using it on a Pokémon makes it more friendly, but it also lowers its base Defense stat.
 #-------------------------------
 [HONDEWBERRY]
@@ -5447,7 +5447,7 @@ NamePlural = Hondew Berries
 Pocket = 5
 Price = 20
 FieldUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = Using it on a Pokémon makes it more friendly, but it also lowers its base Sp. Atk stat.
 #-------------------------------
 [GREPABERRY]
@@ -5456,7 +5456,7 @@ NamePlural = Grepa Berries
 Pocket = 5
 Price = 20
 FieldUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = Using it on a Pokémon makes it more friendly, but it also lowers its base Sp. Def stat.
 #-------------------------------
 [TAMATOBERRY]
@@ -5465,7 +5465,7 @@ NamePlural = Tamato Berries
 Pocket = 5
 Price = 20
 FieldUse = OnPokemon
-Type = Berry
+Flags = Berry
 Description = Using it on a Pokémon makes it more friendly, but it also lowers its base Speed stat.
 #-------------------------------
 [CORNNBERRY]
@@ -5473,7 +5473,7 @@ Name = Cornn Berry
 NamePlural = Cornn Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [MAGOSTBERRY]
@@ -5481,7 +5481,7 @@ Name = Magost Berry
 NamePlural = Magost Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [RABUTABERRY]
@@ -5489,7 +5489,7 @@ Name = Rabuta Berry
 NamePlural = Rabuta Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [NOMELBERRY]
@@ -5497,7 +5497,7 @@ Name = Nomel Berry
 NamePlural = Nomel Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [SPELONBERRY]
@@ -5505,7 +5505,7 @@ Name = Spelon Berry
 NamePlural = Spelon Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [PAMTREBERRY]
@@ -5513,7 +5513,7 @@ Name = Pamtre Berry
 NamePlural = Pamtre Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [WATMELBERRY]
@@ -5521,7 +5521,7 @@ Name = Watmel Berry
 NamePlural = Watmel Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [DURINBERRY]
@@ -5529,7 +5529,7 @@ Name = Durin Berry
 NamePlural = Durin Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [BELUEBERRY]
@@ -5537,7 +5537,7 @@ Name = Belue Berry
 NamePlural = Belue Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = In the Sinnoh region, they like to make sweets known as Poffins with this Berry.
 #-------------------------------
 [OCCABERRY]
@@ -5545,7 +5545,7 @@ Name = Occa Berry
 NamePlural = Occa Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Fire-type attack against the holding Pokémon.
 #-------------------------------
 [PASSHOBERRY]
@@ -5553,7 +5553,7 @@ Name = Passho Berry
 NamePlural = Passho Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Water-type attack against the holding Pokémon.
 #-------------------------------
 [WACANBERRY]
@@ -5561,7 +5561,7 @@ Name = Wacan Berry
 NamePlural = Wacan Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Electric-type attack against the holding Pokémon.
 #-------------------------------
 [RINDOBERRY]
@@ -5569,7 +5569,7 @@ Name = Rindo Berry
 NamePlural = Rindo Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Grass-type attack against the holding Pokémon.
 #-------------------------------
 [YACHEBERRY]
@@ -5577,7 +5577,7 @@ Name = Yache Berry
 NamePlural = Yache Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Ice-type attack against the holding Pokémon.
 #-------------------------------
 [CHOPLEBERRY]
@@ -5585,7 +5585,7 @@ Name = Chople Berry
 NamePlural = Chople Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Fighting-type attack against the holding Pokémon.
 #-------------------------------
 [KEBIABERRY]
@@ -5593,7 +5593,7 @@ Name = Kebia Berry
 NamePlural = Kebia Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Poison-type attack against the holding Pokémon.
 #-------------------------------
 [SHUCABERRY]
@@ -5601,7 +5601,7 @@ Name = Shuca Berry
 NamePlural = Shuca Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Ground-type attack against the holding Pokémon.
 #-------------------------------
 [COBABERRY]
@@ -5609,7 +5609,7 @@ Name = Coba Berry
 NamePlural = Coba Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Flying-type attack against the holding Pokémon.
 #-------------------------------
 [PAYAPABERRY]
@@ -5617,7 +5617,7 @@ Name = Payapa Berry
 NamePlural = Payapa Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Psychic-type attack against the holding Pokémon.
 #-------------------------------
 [TANGABERRY]
@@ -5625,7 +5625,7 @@ Name = Tanga Berry
 NamePlural = Tanga Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Bug-type attack against the holding Pokémon.
 #-------------------------------
 [CHARTIBERRY]
@@ -5633,7 +5633,7 @@ Name = Charti Berry
 NamePlural = Charti Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Rock-type attack against the holding Pokémon.
 #-------------------------------
 [KASIBBERRY]
@@ -5641,7 +5641,7 @@ Name = Kasib Berry
 NamePlural = Kasib Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Ghost-type attack against the holding Pokémon.
 #-------------------------------
 [HABANBERRY]
@@ -5649,7 +5649,7 @@ Name = Haban Berry
 NamePlural = Haban Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Dragon-type attack against the holding Pokémon.
 #-------------------------------
 [COLBURBERRY]
@@ -5657,7 +5657,7 @@ Name = Colbur Berry
 NamePlural = Colbur Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Dark-type attack against the holding Pokémon.
 #-------------------------------
 [BABIRIBERRY]
@@ -5665,7 +5665,7 @@ Name = Babiri Berry
 NamePlural = Babiri Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a supereffective Steel-type attack against the holding Pokémon.
 #-------------------------------
 [ROSELIBERRY]
@@ -5673,7 +5673,7 @@ Name = Roseli Berry
 NamePlural = Roseli Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, this Berry will lessen the damage taken from one supereffective Fairy-type attack.
 #-------------------------------
 [CHILANBERRY]
@@ -5681,7 +5681,7 @@ Name = Chilan Berry
 NamePlural = Chilan Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = Weakens a Normal-type attack against the Pokémon holding this berry.
 #-------------------------------
 [LIECHIBERRY]
@@ -5689,7 +5689,7 @@ Name = Liechi Berry
 NamePlural = Liechi Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it raises its Attack stat in a pinch.
 #-------------------------------
 [GANLONBERRY]
@@ -5697,7 +5697,7 @@ Name = Ganlon Berry
 NamePlural = Ganlon Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it raises its Defense stat in a pinch.
 #-------------------------------
 [SALACBERRY]
@@ -5705,7 +5705,7 @@ Name = Salac Berry
 NamePlural = Salac Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it raises its Speed stat in a pinch.
 #-------------------------------
 [PETAYABERRY]
@@ -5713,7 +5713,7 @@ Name = Petaya Berry
 NamePlural = Petaya Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it raises its Sp. Atk stat in a pinch.
 #-------------------------------
 [APICOTBERRY]
@@ -5721,7 +5721,7 @@ Name = Apicot Berry
 NamePlural = Apicot Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it raises its Sp. Def stat in a pinch.
 #-------------------------------
 [LANSATBERRY]
@@ -5729,7 +5729,7 @@ Name = Lansat Berry
 NamePlural = Lansat Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it raises its critical-hit ratio in a pinch.
 #-------------------------------
 [STARFBERRY]
@@ -5737,7 +5737,7 @@ Name = Starf Berry
 NamePlural = Starf Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it sharply raises one of its stats in a pinch.
 #-------------------------------
 [ENIGMABERRY]
@@ -5745,7 +5745,7 @@ Name = Enigma Berry
 NamePlural = Enigma Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it restores its HP if it is hit by any supereffective attack.
 #-------------------------------
 [MICLEBERRY]
@@ -5753,7 +5753,7 @@ Name = Micle Berry
 NamePlural = Micle Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it raises the accuracy of a move just once in a pinch.
 #-------------------------------
 [CUSTAPBERRY]
@@ -5761,7 +5761,7 @@ Name = Custap Berry
 NamePlural = Custap Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, it gets to move first just once in a pinch.
 #-------------------------------
 [JABOCABERRY]
@@ -5769,7 +5769,7 @@ Name = Jaboca Berry
 NamePlural = Jaboca Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon and a physical attack lands, the attacker also takes damage.
 #-------------------------------
 [ROWAPBERRY]
@@ -5777,7 +5777,7 @@ Name = Rowap Berry
 NamePlural = Rowap Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon and a special attack lands, the attacker also takes damage.
 #-------------------------------
 [KEEBERRY]
@@ -5785,7 +5785,7 @@ Name = Kee Berry
 NamePlural = Kee Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, this Berry will increase the holder's Defense if it's hit with a physical move.
 #-------------------------------
 [MARANGABERRY]
@@ -5793,7 +5793,7 @@ Name = Maranga Berry
 NamePlural = Maranga Berries
 Pocket = 5
 Price = 20
-Type = Berry
+Flags = Berry
 Description = If held by a Pokémon, this Berry will increase the holder's Sp. Def if it's hit with a special move.
 #-------------------------------
 [GRASSMAIL]
@@ -5801,7 +5801,7 @@ Name = Grass Mail
 NamePlural = Grass Mail
 Pocket = 6
 Price = 50
-Type = IconMail
+Flags = IconMail
 Description = Stationery featuring a print of a refreshingly green field. Let a Pokémon hold it for delivery.
 #-------------------------------
 [FLAMEMAIL]
@@ -5809,7 +5809,7 @@ Name = Flame Mail
 NamePlural = Flame Mail
 Pocket = 6
 Price = 50
-Type = IconMail
+Flags = IconMail
 Description = Stationery featuring a print of flames in blazing red. Let a Pokémon hold it for delivery.
 #-------------------------------
 [BUBBLEMAIL]
@@ -5817,7 +5817,7 @@ Name = Bubble Mail
 NamePlural = Bubble Mail
 Pocket = 6
 Price = 50
-Type = IconMail
+Flags = IconMail
 Description = Stationery featuring a print of a blue world underwater. Let a Pokémon hold it for delivery.
 #-------------------------------
 [BLOOMMAIL]
@@ -5825,7 +5825,7 @@ Name = Bloom Mail
 NamePlural = Bloom Mail
 Pocket = 6
 Price = 50
-Type = IconMail
+Flags = IconMail
 Description = Stationery featuring a print of pretty floral patterns. Let a Pokémon hold it for delivery.
 #-------------------------------
 [TUNNELMAIL]
@@ -5833,7 +5833,7 @@ Name = Tunnel Mail
 NamePlural = Tunnel Mail
 Pocket = 6
 Price = 50
-Type = IconMail
+Flags = IconMail
 Description = Stationery featuring a print of a dimly lit coal mine. Let a Pokémon hold it for delivery.
 #-------------------------------
 [STEELMAIL]
@@ -5841,7 +5841,7 @@ Name = Steel Mail
 NamePlural = Steel Mail
 Pocket = 6
 Price = 50
-Type = IconMail
+Flags = IconMail
 Description = Stationery featuring a print of cool mechanical designs. Let a Pokémon hold it for delivery.
 #-------------------------------
 [HEARTMAIL]
@@ -5849,7 +5849,7 @@ Name = Heart Mail
 NamePlural = Heart Mail
 Pocket = 6
 Price = 50
-Type = IconMail
+Flags = IconMail
 Description = Stationery featuring a print of giant heart patterns. Let a Pokémon hold it for delivery.
 #-------------------------------
 [SNOWMAIL]
@@ -5857,7 +5857,7 @@ Name = Snow Mail
 NamePlural = Snow Mail
 Pocket = 6
 Price = 50
-Type = IconMail
+Flags = IconMail
 Description = Stationery featuring a print of a chilly, snow-covered world. Let a Pokémon hold it for delivery.
 #-------------------------------
 [SPACEMAIL]
@@ -5865,7 +5865,7 @@ Name = Space Mail
 NamePlural = Space Mail
 Pocket = 6
 Price = 50
-Type = IconMail
+Flags = IconMail
 Description = Stationery featuring a print depicting the huge expanse of space. Let a Pokémon hold it for delivery.
 #-------------------------------
 [AIRMAIL]
@@ -5873,7 +5873,7 @@ Name = Air Mail
 NamePlural = Air Mail
 Pocket = 6
 Price = 50
-Type = IconMail
+Flags = IconMail
 Description = Stationery featuring a print of colorful letter sets. Let a Pokémon hold it for delivery.
 #-------------------------------
 [MOSAICMAIL]
@@ -5881,7 +5881,7 @@ Name = Mosaic Mail
 NamePlural = Mosaic Mail
 Pocket = 6
 Price = 50
-Type = IconMail
+Flags = IconMail
 Description = Stationery featuring a print of a vivid rainbow pattern. Let a Pokémon hold it for delivery.
 #-------------------------------
 [BRICKMAIL]
@@ -5889,7 +5889,7 @@ Name = Brick Mail
 NamePlural = Brick Mail
 Pocket = 6
 Price = 50
-Type = IconMail
+Flags = IconMail
 Description = Stationery featuring a print of a tough-looking brick pattern. Let a Pokémon hold it for delivery.
 #-------------------------------
 [XATTACK]
@@ -6210,7 +6210,7 @@ NamePlural = Bicycles
 Pocket = 8
 Price = 0
 FieldUse = Direct
-Type = KeyItem
+Flags = KeyItem
 Description = A folding Bicycle that enables much faster movement than the Running Shoes.
 #-------------------------------
 [OLDROD]
@@ -6219,7 +6219,7 @@ NamePlural = Old Rods
 Pocket = 8
 Price = 0
 FieldUse = Direct
-Type = KeyItem
+Flags = KeyItem
 Description = An old and beat-up fishing rod. Use it by any body of water to fish for wild aquatic Pokémon.
 #-------------------------------
 [GOODROD]
@@ -6228,7 +6228,7 @@ NamePlural = Good Rods
 Pocket = 8
 Price = 0
 FieldUse = Direct
-Type = KeyItem
+Flags = KeyItem
 Description = A new, good-quality fishing rod. Use it by any body of water to fish for wild aquatic Pokémon.
 #-------------------------------
 [SUPERROD]
@@ -6237,7 +6237,7 @@ NamePlural = Super Rods
 Pocket = 8
 Price = 0
 FieldUse = Direct
-Type = KeyItem
+Flags = KeyItem
 Description = An awesome, high-tech fishing rod. Use it by any body of water to fish for wild aquatic Pokémon.
 #-------------------------------
 [ITEMFINDER]
@@ -6246,7 +6246,7 @@ NamePlural = Itemfinders
 Pocket = 8
 Price = 0
 FieldUse = Direct
-Type = KeyItem
+Flags = KeyItem
 Description = A device used for finding items. If there is a hidden item nearby when it is used, it emits a signal.
 #-------------------------------
 [DOWSINGMACHINE]
@@ -6255,7 +6255,7 @@ NamePlural = Dowsing Machines
 Pocket = 8
 Price = 0
 FieldUse = Direct
-Type = KeyItem
+Flags = KeyItem
 Description = It checks for unseen items in the area and makes noise and lights when it finds something.
 #-------------------------------
 [POKERADAR]
@@ -6264,7 +6264,7 @@ NamePlural = Poké Radars
 Pocket = 8
 Price = 0
 FieldUse = Direct
-Type = KeyItem
+Flags = KeyItem
 Description = A tool that can search out Pokémon that are hiding in grass. Its battery is recharged as you walk.
 #-------------------------------
 [TOWNMAP]
@@ -6273,7 +6273,7 @@ NamePlural = Town Maps
 Pocket = 8
 Price = 0
 FieldUse = Direct
-Type = KeyItem
+Flags = KeyItem
 Description = A very convenient map that can be viewed anytime. It even shows your present location.
 #-------------------------------
 [ESCAPEROPE]
@@ -6282,7 +6282,7 @@ NamePlural = Escape Ropes
 Pocket = 8
 Price = 0
 FieldUse = Direct
-Type = KeyItem
+Flags = KeyItem
 Description = A long, durable rope. Use it to escape instantly from a cave or a dungeon.
 #-------------------------------
 [COINCASE]
@@ -6291,7 +6291,7 @@ NamePlural = Coin Cases
 Pocket = 8
 Price = 0
 FieldUse = Direct
-Type = KeyItem
+Flags = KeyItem
 Description = A case for holding coins obtained at the Game Corner. It holds up to 99,999 coins.
 #-------------------------------
 [POKEFLUTE]
@@ -6301,7 +6301,7 @@ Pocket = 8
 Price = 0
 FieldUse = OnPokemon
 BattleUse = Direct
-Type = KeyItem
+Flags = KeyItem
 Description = A flute that is said to instantly awaken any Pokémon. It has a lovely tone.
 #-------------------------------
 [SOOTSACK]
@@ -6309,7 +6309,7 @@ Name = Soot Sack
 NamePlural = Soot Sacks
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = A sack used to gather and hold volcanic ash.
 #-------------------------------
 [SILPHSCOPE]
@@ -6317,7 +6317,7 @@ Name = Silph Scope
 NamePlural = Silph Scopes
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = A scope that makes unseeable Pokémon visible. It is made by Silph Co.
 #-------------------------------
 [DEVONSCOPE]
@@ -6325,7 +6325,7 @@ Name = Devon Scope
 NamePlural = Devon Scopes
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = A device by Devon that signals any unseeable Pokémon.
 #-------------------------------
 [SQUIRTBOTTLE]
@@ -6333,7 +6333,7 @@ Name = Squirt Bottle
 NamePlural = Squirt Bottles
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = A watering can shaped like a Squirtle. It helps promote healthy growth of Berries planted in soft soil.
 #-------------------------------
 [SPRAYDUCK]
@@ -6341,7 +6341,7 @@ Name = Sprayduck
 NamePlural = Sprayducks
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = A watering can shaped like a Psyduck. It helps promote healthy growth of Berries planted in soft soil.
 #-------------------------------
 [WAILMERPAIL]
@@ -6349,7 +6349,7 @@ Name = Wailmer Pail
 NamePlural = Wailmer Pails
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = A nifty watering pail. Use it to promote strong growth in Berries planted in soft soil.
 #-------------------------------
 [SPRINKLOTAD]
@@ -6357,7 +6357,7 @@ Name = Sprinklotad
 NamePlural = Sprinklotads
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = A watering can shaped like a Lotad. It helps promote the healthy growth of any Berries planted in soft soil.
 #-------------------------------
 [GRACIDEA]
@@ -6366,7 +6366,7 @@ NamePlural = Gracideas
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = A flower sometimes bundled in bouquets to convey gratitude on special occasions like birthdays.
 #-------------------------------
 [REVEALGLASS]
@@ -6375,7 +6375,7 @@ NamePlural = Reveal Glasses
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = A glass that reveals the truth. It is a mysterious glass that returns a Pokémon back to its original shape.
 #-------------------------------
 [PRISONBOTTLE]
@@ -6384,7 +6384,7 @@ NamePlural = Prison Bottles
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = A bottle believed to have been used to seal away the power of a certain Pokémon long, long ago.
 #-------------------------------
 [ROTOMCATALOG]
@@ -6393,7 +6393,7 @@ NamePlural = Rotom Catalogs
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = A catalog of devices that Rotom like. Use the catalog to have Rotom hop in and out of the devices listed within.
 #-------------------------------
 [ZYGARDECUBE]
@@ -6402,7 +6402,7 @@ NamePlural = Zygarde Cubes
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = An item in which Zygarde Cores and Cells are gathered. You can also use it to change Zygarde's forms.
 #-------------------------------
 [DNASPLICERS]
@@ -6411,7 +6411,7 @@ NamePlural = DNA Splicers
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = A splicer that fuses Kyurem and a certain Pokémon. They are said to have been one in the beginning.
 #-------------------------------
 [DNASPLICERSUSED]
@@ -6420,7 +6420,7 @@ NamePlural = DNA Splicers
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = A splicer that separates Kyurem and a certain Pokémon when they have been fused.
 #-------------------------------
 [NSOLARIZER]
@@ -6429,7 +6429,7 @@ NamePlural = N-Solarizers
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = A machine to fuse Necrozma, which needs light, and Solgaleo.
 #-------------------------------
 [NSOLARIZERUSED]
@@ -6438,7 +6438,7 @@ NamePlural = N-Solarizers
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = A machine to separate Necrozma, which needed light, from Solgaleo.
 #-------------------------------
 [NLUNARIZER]
@@ -6447,7 +6447,7 @@ NamePlural = N-Lunarizers
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = A machine to fuse Necrozma, which needs light, and Lunala.
 #-------------------------------
 [NLUNARIZERUSED]
@@ -6456,7 +6456,7 @@ NamePlural = N-Lunarizers
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = A machine to separate Necrozma, which needed light, from Lunala.
 #-------------------------------
 [REINSOFUNITY]
@@ -6465,7 +6465,7 @@ NamePlural = Reins of Unity
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = Reins that people presented to the king. They unite Calyrex with its beloved steed.
 #-------------------------------
 [REINSOFUNITYUSED]
@@ -6474,7 +6474,7 @@ NamePlural = Reins of Unity
 Pocket = 8
 Price = 0
 FieldUse = OnPokemon
-Type = KeyItem
+Flags = KeyItem
 Description = Reins that people presented to the king. They separate Calyrex and its beloved steed.
 #-------------------------------
 [OVALCHARM]
@@ -6482,7 +6482,7 @@ Name = Oval Charm
 NamePlural = Oval Charms
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = An oval charm said to increase the chance of Eggs being found at the Day Care.
 #-------------------------------
 [SHINYCHARM]
@@ -6490,7 +6490,7 @@ Name = Shiny Charm
 NamePlural = Shiny Charms
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = A shiny charm said to increase the chance of finding a Shiny Pokémon.
 #-------------------------------
 [CATCHINGCHARM]
@@ -6498,7 +6498,7 @@ Name = Catching Charm
 NamePlural = Catching Charms
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = A charm said to increase the chance of getting a critical catch. The charm doesn't shake much.
 #-------------------------------
 [EXPCHARM]
@@ -6506,7 +6506,7 @@ Name = Exp. Charm
 NamePlural = Exp. Charms
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = A charm that increases the Exp. Points that Pokémon can get. A machine-like object is inside it.
 #-------------------------------
 [MEGARING]
@@ -6514,7 +6514,7 @@ Name = Mega Ring
 NamePlural = Mega Rings
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = This ring contains an untold power that somehow enables Pokémon carrying Mega Stones to Mega Evolve.
 #-------------------------------
 [AURORATICKET]
@@ -6522,7 +6522,7 @@ Name = Aurora Ticket
 NamePlural = Aurora Tickets
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = A ticket required to board the ship to Doxy Island. It glows beautifully.
 #-------------------------------
 [OLDSEAMAP]
@@ -6530,5 +6530,5 @@ Name = Old Sea Map
 NamePlural = Old Sea Maps
 Pocket = 8
 Price = 0
-Type = KeyItem
+Flags = KeyItem
 Description = A faded sea chart that shows the way to a certain island.

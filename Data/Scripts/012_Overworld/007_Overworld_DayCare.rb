@@ -201,7 +201,7 @@ def pbDayCareGenerateEgg
   end
   # Inheriting regional form
   if [:RATTATA, :SANDSHREW, :VULPIX, :DIGLETT, :MEOWTH, :GEODUDE, :GRIMER,
-      :PONYTA, :SLOWPOKE, :FARFETCHD, :MRMINE, :ARTICUNO, :ZAPDOS, :MOLTRES,
+      :PONYTA, :SLOWPOKE, :FARFETCHD, :MRMIME, :ARTICUNO, :ZAPDOS, :MOLTRES,
       :CORSOLA, :ZIGZAGOON, :DARUMAKA, :YAMASK, :STUNFISK].include?(babyspecies)
     if mother.form > 0
       egg.form = mother.form if mother.hasItem?(:EVERSTONE)

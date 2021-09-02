@@ -35,6 +35,7 @@ module GameData
     attr_reader :shape
     attr_reader :habitat
     attr_reader :generation
+    attr_reader :flags
     attr_reader :mega_stone
     attr_reader :mega_move
     attr_reader :unmega_form
@@ -105,6 +106,7 @@ module GameData
         "Shape"             => [0, "e", :BodyShape],
         "Habitat"           => [0, "e", :Habitat],
         "Generation"        => [0, "i"],
+        "Flags"             => [0, "*s"],
         "BattlerPlayerX"    => [0, "i"],
         "BattlerPlayerY"    => [0, "i"],
         "BattlerEnemyX"     => [0, "i"],
@@ -183,6 +185,7 @@ module GameData
       @shape                 = hash[:shape]                 || :Head
       @habitat               = hash[:habitat]               || :None
       @generation            = hash[:generation]            || 0
+      @flags                 = hash[:flags]                 || []
       @mega_stone            = hash[:mega_stone]
       @mega_move             = hash[:mega_move]
       @unmega_form           = hash[:unmega_form]           || 0
@@ -218,6 +221,10 @@ module GameData
 
     def single_gendered?
       return GameData::GenderRatio.get(@gender_ratio).single_gendered?
+    end
+
+    def has_flag?(flag)
+      return @flags.any? { |f| f.downcase == flag.downcase }
     end
 
     def apply_metrics_to_sprite(sprite, index, shadow = false)

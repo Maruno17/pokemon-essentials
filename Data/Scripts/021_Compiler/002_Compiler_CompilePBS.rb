@@ -158,11 +158,10 @@ module Compiler
           end
           # Compile value for key
           value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.length == 0
+          value = nil if value.is_a?(Array) && value.empty?
           contents[key] = value
           # Ensure weaknesses/resistances/immunities are in arrays and are symbols
           if value && ["Weaknesses", "Resistances", "Immunities"].include?(key)
-            contents[key] = [contents[key]] if !contents[key].is_a?(Array)
             contents[key].map! { |x| x.to_sym }
             contents[key].uniq!
           end
@@ -173,6 +172,7 @@ module Compiler
           :name          => contents["Name"],
           :pseudo_type   => contents["IsPseudoType"],
           :special_type  => contents["IsSpecialType"],
+          :flags         => contents["Flags"],
           :weaknesses    => contents["Weaknesses"],
           :resistances   => contents["Resistances"],
           :immunities    => contents["Immunities"],
@@ -461,6 +461,8 @@ module Compiler
         consumable = !([3, 4, 5].include?(line[7]) || line[8] >= 6)
         line[7] = 1 if line[7] == 5
         line[8] -= 5 if line[8] > 5
+        flags = []
+        flags.push(line[9]) if !nil_or_empty?(line[9])
         # Construct item hash
         item_hash = {
           :id          => item_id,
@@ -472,7 +474,7 @@ module Compiler
           :field_use   => line[7],
           :battle_use  => line[8],
           :consumable  => consumable,
-          :type        => line[9],
+          :flags       => flags,
           :move        => line[10]
         }
         # Add item's data to records
@@ -559,7 +561,7 @@ module Compiler
           FileLineData.setSection(species_id, key, contents[key])   # For error reporting
           # Compile value for key
           value = pbGetCsvRecord(contents[key], key, schema[key])
-          value = nil if value.is_a?(Array) && value.length == 0
+          value = nil if value.is_a?(Array) && value.empty?
           contents[key] = value
           # Sanitise data
           case key
@@ -576,23 +578,8 @@ module Compiler
               raise _INTL("Value for '{1}' can't be less than or close to 0 (section {2}, {3})", key, species_id, path)
             end
             contents[key] = value
-          when "Moves"
-            move_array = []
-            for i in 0...value.length / 2
-              move_array.push([value[i * 2], value[i * 2 + 1], i])
-            end
-            move_array.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=>b [0] }
-            move_array.each { |arr| arr.pop }
-            contents[key] = move_array
-          when "TutorMoves", "EggMoves", "Abilities", "HiddenAbilities", "HiddenAbility", "EggGroups", "Compatibility"
-            contents[key] = [contents[key]] if !contents[key].is_a?(Array)
-            contents[key].compact!
           when "Evolutions"
-            evo_array = []
-            for i in 0...value.length / 3
-              evo_array.push([value[i * 3], value[i * 3 + 1], value[i * 3 + 2], false])
-            end
-            contents[key] = evo_array
+            contents[key].each { |evo| evo[3] = false }
           end
         end
         # Construct species hash
@@ -629,6 +616,7 @@ module Compiler
           :shape                 => contents["Shape"],
           :habitat               => contents["Habitat"],
           :generation            => contents["Generation"],
+          :flags                 => contents["Flags"],
           :back_sprite_x         => contents["BattlerPlayerX"],
           :back_sprite_y         => contents["BattlerPlayerY"],
           :front_sprite_x        => contents["BattlerEnemyX"],
@@ -655,7 +643,7 @@ module Compiler
           evo[2] = nil
         elsif param_type == Integer
           evo[2] = csvPosInt!(evo[2])
-        else
+        elsif param_type != String
           evo[2] = csvEnumField!(evo[2], param_type, "Evolutions", species.id)
         end
       end
@@ -743,32 +731,18 @@ module Compiler
               raise _INTL("Value for '{1}' can't be less than or close to 0 (section {2}, {3})", key, section_name, path)
             end
             contents[key] = value
-          when "Moves"
-            move_array = []
-            for i in 0...value.length / 2
-              move_array.push([value[i * 2], value[i * 2 + 1], i])
-            end
-            move_array.sort! { |a, b| (a[0] == b[0]) ? a[2] <=> b[2] : a[0] <=>b [0] }
-            move_array.each { |arr| arr.pop }
-            contents[key] = move_array
-          when "TutorMoves", "EggMoves", "Abilities", "HiddenAbilities", "HiddenAbility", "EggGroups", "Compatibility"
-            contents[key] = [contents[key]] if !contents[key].is_a?(Array)
-            contents[key].compact!
           when "Evolutions"
-            evo_array = []
-            for i in 0...value.length / 3
-              param_type = GameData::Evolution.get(value[i * 3 + 1]).parameter
-              param = value[i * 3 + 2]
+            contents[key].each do |evo|
+              evo[3] = false
+              param_type = GameData::Evolution.get(evo[1]).parameter
               if param_type.nil?
-                param = nil
+                evo[2] = nil
               elsif param_type == Integer
-                param = csvPosInt!(param)
-              else
-                param = csvEnumField!(param, param_type, "Evolutions", section_name)
+                evo[2] = csvPosInt!(evo[2])
+              elsif param_type != String
+                evo[2] = csvEnumField!(evo[2], param_type, "Evolutions", section_name)
               end
-              evo_array.push([value[i * 3], value[i * 3 + 1], param, false])
             end
-            contents[key] = evo_array
           end
         end
         # Construct species hash
@@ -819,6 +793,7 @@ module Compiler
           :shape                 => contents["Shape"] || base_data.shape,
           :habitat               => contents["Habitat"] || base_data.habitat,
           :generation            => contents["Generation"] || base_data.generation,
+          :flags                 => contents["Flags"] || base_data.flags.clone,
           :mega_stone            => contents["MegaStone"],
           :mega_move             => contents["MegaMove"],
           :unmega_form           => contents["UnmegaForm"],
@@ -1165,7 +1140,7 @@ module Compiler
           :intro_ME    => line[6],
           :gender      => line[7],
           :skill_level => line[8],
-          :skill_flags => line[9]
+          :flags       => line[9]
         }
         # Add trainer type's data to records
         GameData::TrainerType.register(tr_type_hash)
@@ -1225,9 +1200,6 @@ module Compiler
         property_value = pbGetCsvRecord($~[2], line_no, line_schema)
         # Error checking in XXX=YYY lines
         case property_name
-        when "Items"
-          property_value = [property_value] if !property_value.is_a?(Array)
-          property_value.compact!
         when "Pokemon"
           if property_value[1] > max_level
             raise _INTL("Bad level: {1} (must be 1-{2}).\r\n{3}", property_value[1], max_level, FileLineData.linereport)
@@ -1237,19 +1209,13 @@ module Compiler
             raise _INTL("Bad nickname: {1} (must be 1-{2} characters).\r\n{3}", property_value, Pokemon::MAX_NAME_SIZE, FileLineData.linereport)
           end
         when "Moves"
-          property_value = [property_value] if !property_value.is_a?(Array)
           property_value.uniq!
-          property_value.compact!
         when "IV"
-          property_value = [property_value] if !property_value.is_a?(Array)
-          property_value.compact!
           property_value.each do |iv|
             next if iv <= Pokemon::IV_STAT_LIMIT
             raise _INTL("Bad IV: {1} (must be 0-{2}).\r\n{3}", iv, Pokemon::IV_STAT_LIMIT, FileLineData.linereport)
           end
         when "EV"
-          property_value = [property_value] if !property_value.is_a?(Array)
-          property_value.compact!
           property_value.each do |ev|
             next if ev <= Pokemon::EV_STAT_LIMIT
             raise _INTL("Bad EV: {1} (must be 0-{2}).\r\n{3}", ev, Pokemon::EV_STAT_LIMIT, FileLineData.linereport)
@@ -1502,7 +1468,8 @@ module Compiler
             :trainer_victory_ME   => contents["TrainerVictoryME"],
             :wild_capture_ME      => contents["WildCaptureME"],
             :town_map_size        => contents["MapSize"],
-            :battle_environment   => contents["Environment"]
+            :battle_environment   => contents["Environment"],
+            :flags                => contents["Flags"]
           }
           # Add metadata's data to records
           GameData::MapMetadata.register(metadata_hash)

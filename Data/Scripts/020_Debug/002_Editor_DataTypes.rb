@@ -1271,6 +1271,10 @@ class EvolutionsProperty
       ret = pbChooseTypeList(value)
     when :Ability
       ret = pbChooseAbilityList(value)
+    when String
+      ret = pbMessageFreeText(_INTL("Enter a value."), ret || "", false, 250, Graphics.width)
+      ret.strip!
+      ret = nil if ret.empty?
     else
       params = ChooseNumberParams.new
       params.setRange(0, 65535)
@@ -1309,7 +1313,7 @@ class EvolutionsProperty
               commands.push(_INTL("{1}: {2}",
                  GameData::Species.get(realcmds[i][0]).name, evo_method_data.real_name))
             else
-              if !GameData.const_defined?(param_type.to_sym) && param_type.is_a?(Symbol)
+              if param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
                 level = getConstantName(param_type, level)
               end
               level = "???" if !level || (level.is_a?(String) && level.empty?)
@@ -1469,7 +1473,7 @@ class EvolutionsProperty
       param_type = evo_method_data.parameter
       if param_type.nil?
         param = ""
-      elsif !GameData.const_defined?(param_type.to_sym) && param_type.is_a?(Symbol)
+      elsif param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
         param = getConstantName(param_type, param)
       else
         param = param.to_s

@@ -64,7 +64,7 @@ end
 def pbRandomPhoneTrainer
   $PokemonGlobal.phoneNumbers = [] if !$PokemonGlobal.phoneNumbers
   temparray = []
-  this_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  this_map_metadata = $game_map.metadata
   return nil if !this_map_metadata || !this_map_metadata.town_map_position
   currentRegion = this_map_metadata.town_map_position[0]
   for num in $PokemonGlobal.phoneNumbers
@@ -192,7 +192,7 @@ def pbCallTrainer(trtype,trname)
     return
   end
   caller_map_metadata = GameData::MapMetadata.try_get(trainer[6])
-  this_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  this_map_metadata = $game_map.metadata
   if !caller_map_metadata || !caller_map_metadata.town_map_position ||
      !this_map_metadata || !this_map_metadata.town_map_position ||
      caller_map_metadata.town_map_position[0] != this_map_metadata.town_map_position[0]

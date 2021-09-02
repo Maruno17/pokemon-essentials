@@ -602,8 +602,7 @@ MultipleForms.copy(:TOXEL, :TOXTRICITY)
 
 MultipleForms.register(:SINISTEA, {
   "getFormOnCreation" => proc { |pkmn|
-    next 1 if rand(100) < 50
-    next 0
+    next rand(2)
   }
 })
 
@@ -737,9 +736,8 @@ MultipleForms.register(:PIKACHU, {
   "getForm" => proc { |pkmn|
     next if pkmn.form_simple >= 2
     if $game_map
-      map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-      next 1 if map_metadata && map_metadata.town_map_position &&
-                map_metadata.town_map_position[0] == 1   # Tiall region
+      map_pos = $game_map.metadata&.town_map_position
+      next 1 if map_pos && map_pos[0] == 1   # Tiall region
     end
     next 0
   }
@@ -752,9 +750,8 @@ MultipleForms.register(:KOFFING, {
   "getForm" => proc { |pkmn|
     next if pkmn.form_simple >= 2
     if $game_map
-      map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-      next 1 if map_metadata && map_metadata.town_map_position &&
-                map_metadata.town_map_position[0] == 2   # Galar region
+      map_pos = $game_map.metadata&.town_map_position
+      next 1 if map_pos && map_pos[0] == 2   # Galar region
     end
     next 0
   }

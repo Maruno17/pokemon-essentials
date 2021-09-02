@@ -142,6 +142,7 @@ Outdoor = true
 ShowArea = true
 MapPosition = 0,16,8
 BattleBack = field
+Flags = MossRock
 #-------------------------------
 [029]
 # Natural Park Entrance
@@ -166,6 +167,7 @@ Bicycle = true
 MapPosition = 0,15,6
 BattleBack = cave1
 Environment = Cave
+Flags = IceRock
 #-------------------------------
 [035]
 # Ingido Plateau
@@ -246,6 +248,7 @@ Bicycle = true
 MapPosition = 0,16,10
 BattleBack = cave1
 Environment = Cave
+Flags = Magnetic
 #-------------------------------
 [050]
 # Rock Cave
@@ -254,6 +257,7 @@ MapPosition = 0,16,10
 DarkMap = true
 BattleBack = cave3
 Environment = Cave
+Flags = Magnetic
 #-------------------------------
 [051]
 # Dungeon
@@ -262,6 +266,7 @@ MapPosition = 0,16,10
 Dungeon = true
 BattleBack = cave2
 Environment = Cave
+Flags = Magnetic
 #-------------------------------
 [052]
 # Battle Frontier

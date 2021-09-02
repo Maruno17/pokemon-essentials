@@ -41,8 +41,7 @@ def pbBattleAnimation(bgm=nil,battletype=0,foe=nil)
       location = 3
     elsif $PokemonEncounters.has_cave_encounters?
       location = 2
-    elsif !GameData::MapMetadata.exists?($game_map.map_id) ||
-          !GameData::MapMetadata.get($game_map.map_id).outdoor_map
+    elsif !$game_map.metadata&.outdoor_map
       location = 1
     end
     anim = ""
