@@ -205,6 +205,7 @@ def pbDayCareGenerateEgg
     egg.form = parent.form
     break
   end
+  egg.form = 0 if babyspecies == :SINISTEA
   # Inheriting Moves
   moves = []
   othermoves = []
