@@ -1114,7 +1114,7 @@ class Pokemon
   def initialize(species, level, owner = $Trainer, withMoves = true, recheck_form = true)
     species_data = GameData::Species.get(species)
     @species          = species_data.species
-    @form             = species_data.form
+    @form             = species_data.base_form
     @forced_form      = nil
     @time_form_set    = nil
     self.level        = level

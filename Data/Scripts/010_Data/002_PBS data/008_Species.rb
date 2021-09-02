@@ -223,6 +223,13 @@ module GameData
       return GameData::GenderRatio.get(@gender_ratio).single_gendered?
     end
 
+    def base_form
+      @flags.each do |flag|
+        return $~[1].to_i if flag[/^DefaultForm(\d+)$/i]
+      end
+      return @form
+    end
+
     def has_flag?(flag)
       return @flags.any? { |f| f.downcase == flag.downcase }
     end

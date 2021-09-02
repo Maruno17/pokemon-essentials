@@ -192,23 +192,18 @@ def pbDayCareGenerateEgg
   pid = rand(65536)
   pid |= (rand(65536)<<16)
   egg.personalID = pid
-  # Inheriting form
-  if [:BURMY, :SHELLOS, :BASCULIN, :FLABEBE, :PUMPKABOO, :ORICORIO, :ROCKRUFF, :MINIOR].include?(babyspecies)
-    parent = (ditto0 || (!pkmn0.female? && ditto1)) ? father : mother
-    newForm = parent.form
-    newForm = 0 if parent.isSpecies?(:MOTHIM)
-    egg.form = newForm
+  # Inherit form from mother
+  parent = (ditto0 || (!pkmn0.female? && ditto1)) ? father : mother
+  if parent.species_data.has_flag?("InheritFormFromMother")
+    egg.form = parent.form
   end
-  # Inheriting regional form
-  if [:RATTATA, :SANDSHREW, :VULPIX, :DIGLETT, :MEOWTH, :GEODUDE, :GRIMER,
-      :PONYTA, :SLOWPOKE, :FARFETCHD, :MRMIME, :ARTICUNO, :ZAPDOS, :MOLTRES,
-      :CORSOLA, :ZIGZAGOON, :DARUMAKA, :YAMASK, :STUNFISK].include?(babyspecies)
-    if mother.form > 0
-      egg.form = mother.form if mother.hasItem?(:EVERSTONE)
-    elsif father.form > 0 &&
-       father.species_data.get_baby_species(true, mother.item_id, father.item_id) == babyspecies
-      egg.form = father.form if father.hasItem?(:EVERSTONE)
-    end
+  # Inherit form from parent holding an Ever Stone
+  [mother, father].each do |parent|
+    next if !parent.species_data.get_baby_species(true, mother.item_id, father.item_id) == babyspecies
+    next if !parent.species_data.has_flag?("InheritFormWithEverStone")
+    next if !parent.hasItem?(:EVERSTONE)
+    egg.form = parent.form
+    break
   end
   # Inheriting Moves
   moves = []

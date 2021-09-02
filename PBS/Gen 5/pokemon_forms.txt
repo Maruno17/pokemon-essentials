@@ -1,6 +1,6 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
-[PICHU,1]
+[PICHU,2]
 FormName = Spiky-Eared
 Generation = 4
 BattlerEnemyX = 3
@@ -146,9 +146,11 @@ BattlerShadowSize = 3
 #-------------------------------
 [BURMY,1]
 FormName = Sandy Cloak
+Flags = InheritFormFromMother
 #-------------------------------
 [BURMY,2]
 FormName = Trash Cloak
+Flags = InheritFormFromMother
 #-------------------------------
 [WORMADAM,1]
 FormName = Sandy Cloak
@@ -159,6 +161,7 @@ EVs = 0,0,2,0,0,0
 Moves = 1,TACKLE,10,PROTECT,15,BUGBITE,20,HIDDENPOWER,23,CONFUSION,26,ROCKBLAST,29,HARDEN,32,PSYBEAM,35,CAPTIVATE,38,FLAIL,41,ATTRACT,44,PSYCHIC,47,FISSURE
 TutorMoves = ATTRACT,BUGBITE,BULLDOZE,DIG,DOUBLETEAM,DREAMEATER,EARTHPOWER,EARTHQUAKE,ELECTROWEB,ENDEAVOR,FACADE,FLASH,FRUSTRATION,GIGAIMPACT,HIDDENPOWER,HYPERBEAM,PROTECT,PSYCHIC,PSYCHUP,RAINDANCE,REST,RETURN,ROCKTOMB,ROUND,SAFEGUARD,SANDSTORM,SHADOWBALL,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNORE,STEALTHROCK,STRINGSHOT,STRUGGLEBUG,SUBSTITUTE,SUCKERPUNCH,SUNNYDAY,SWAGGER,THIEF,TOXIC,UPROAR,VENOSHOCK
 Color = Brown
+Flags = InheritFormFromMother
 #-------------------------------
 [WORMADAM,2]
 FormName = Trash Cloak
@@ -169,6 +172,7 @@ EVs = 0,0,1,0,0,1
 Moves = 1,TACKLE,10,PROTECT,15,BUGBITE,20,HIDDENPOWER,23,CONFUSION,26,MIRRORSHOT,29,METALSOUND,32,PSYBEAM,35,CAPTIVATE,38,FLAIL,41,ATTRACT,44,PSYCHIC,47,IRONHEAD
 TutorMoves = ATTRACT,BUGBITE,DOUBLETEAM,DREAMEATER,ELECTROWEB,ENDEAVOR,FACADE,FLASH,FLASHCANNON,FRUSTRATION,GIGAIMPACT,GUNKSHOT,GYROBALL,HIDDENPOWER,HYPERBEAM,IRONDEFENSE,IRONHEAD,MAGNETRISE,PROTECT,PSYCHIC,PSYCHUP,RAINDANCE,REST,RETURN,ROUND,SAFEGUARD,SHADOWBALL,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNORE,STEALTHROCK,STRINGSHOT,STRUGGLEBUG,SUBSTITUTE,SUCKERPUNCH,SUNNYDAY,SWAGGER,THIEF,TOXIC,UPROAR,VENOSHOCK
 Color = Red
+Flags = InheritFormFromMother
 #-------------------------------
 [CHERRIM,1]
 FormName = Sunshine Form
@@ -180,10 +184,12 @@ BattlerEnemyY = 21
 [SHELLOS,1]
 FormName = East Sea
 Color = Blue
+Flags = InheritFormFromMother
 #-------------------------------
 [GASTRODON,1]
 FormName = East Sea
 Color = Blue
+Flags = InheritFormFromMother
 #-------------------------------
 [ROTOM,1]
 FormName = Heat Rotom
@@ -325,6 +331,7 @@ Type1 = DARK
 FormName = Blue-Striped
 Abilities = ROCKHEAD,ADAPTABILITY
 WildItemUncommon = DEEPSEASCALE
+Flags = InheritFormFromMother
 #-------------------------------
 [DARMANITAN,1]
 FormName = Zen Mode

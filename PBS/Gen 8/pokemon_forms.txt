@@ -84,6 +84,7 @@ Weight = 3.8
 Color = Black
 Pokedex = With its incisors, it gnaws through doors and infiltrates people's homes. Then, with a twitch of its whiskers, it steals whatever food it finds.
 Generation = 7
+Flags = InheritFormWithEverStone
 WildItemUncommon = PECHABERRY
 Evolutions = RATICATE,LevelNight,20
 #-------------------------------
@@ -99,6 +100,7 @@ Weight = 25.5
 Color = Black
 Pokedex = It forms a group of Rattata, which it assumes command of. Each group has its own territory, and disputes over food happen often.
 Generation = 7
+Flags = InheritFormWithEverStone
 WildItemUncommon = PECHABERRY
 #-------------------------------
 [RAICHU,1]
@@ -131,6 +133,7 @@ Weight = 40.0
 Color = White
 Pokedex = The skin on its back is as hard as steel. Predators go after its soft belly, so it clings to the ground desperately.
 Generation = 7
+Flags = InheritFormWithEverStone
 Evolutions = SANDSLASH,Item,ICESTONE
 #-------------------------------
 [SANDSLASH,1]
@@ -147,6 +150,7 @@ Weight = 55.0
 Color = Blue
 Pokedex = It runs across snow-covered plains at high speeds. It developed thick, sharp claws to plow through the snow.
 Generation = 7
+Flags = InheritFormWithEverStone
 #-------------------------------
 [VULPIX,1]
 FormName = Alolan
@@ -159,6 +163,7 @@ EggMoves = AGILITY,CHARM,DISABLE,ENCORE,EXTRASENSORY,FLAIL,FREEZEDRY,HOWL,HYPNOS
 Color = White
 Pokedex = In hot weather, this Pokémon makes ice shards with its six tails and sprays them around to cool itself off.
 Generation = 7
+Flags = InheritFormWithEverStone
 WildItemUncommon = SNOWBALL
 Evolutions = NINETALES,Item,ICESTONE
 #-------------------------------
@@ -175,6 +180,7 @@ TutorMoves = AQUATAIL,ATTRACT,AURORAVEIL,BLIZZARD,CALMMIND,CONFIDE,COVET,DARKPUL
 Color = Blue
 Pokedex = It lives on mountains perpetually covered in snow and is revered as a deity incarnate. It appears draped in a blizzard.
 Generation = 7
+Flags = InheritFormWithEverStone
 WildItemUncommon = SNOWBALL
 #-------------------------------
 [DIGLETT,1]
@@ -189,6 +195,7 @@ EggMoves = ANCIENTPOWER,BEATUP,ENDURE,FEINTATTACK,FINALGAMBIT,HEADBUTT,MEMENTO,M
 Weight = 1.0
 Pokedex = Its head sports an altered form of whiskers made of metal. When in communication with its comrades, its whiskers wobble to and fro.
 Generation = 7
+Flags = InheritFormWithEverStone
 #-------------------------------
 [DUGTRIO,1]
 FormName = Alolan
@@ -202,6 +209,7 @@ TutorMoves = AERIALACE,ATTRACT,BULLDOZE,CONFIDE,DOUBLETEAM,EARTHPOWER,EARTHQUAKE
 Weight = 66.6
 Pokedex = Its shining gold hair provides it with protection. It's reputed that keeping any of its fallen hairs will bring bad luck.
 Generation = 7
+Flags = InheritFormWithEverStone
 #-------------------------------
 [MEOWTH,1]
 FormName = Alolan
@@ -214,6 +222,7 @@ EggMoves = AMNESIA,ASSIST,CHARM,COVET,FLAIL,FLATTER,FOULPLAY,HYPNOSIS,PARTINGSHO
 Color = Blue
 Pokedex = It's impulsive, selfish, and fickle. It's very popular with some Trainers who like giving it the attention it needs.
 Generation = 7
+Flags = InheritFormWithEverStone
 Evolutions = PERSIAN,Happiness,
 #-------------------------------
 [MEOWTH,2]
@@ -229,6 +238,7 @@ Color = Brown
 Shape = BipedalTail
 Pokedex = Living with a savage, seafaring people has toughened this Pokémon's body so much that parts of it have turned to iron.
 Generation = 8
+Flags = InheritFormWithEverStone
 Evolutions = PERRSERKER,Level,28
 #-------------------------------
 [PERSIAN,1]
@@ -244,6 +254,7 @@ Weight = 33.0
 Color = Blue
 Pokedex = Its round face is a symbol of wealth. Persian that have bigger, plumper faces are considered more beautiful.
 Generation = 7
+Flags = InheritFormWithEverStone
 #-------------------------------
 [ALAKAZAM,1]
 FormName = Mega Alakazam
@@ -269,6 +280,7 @@ Weight = 20.3
 Color = Gray
 Pokedex = Geodude compete against each other with headbutts. The iron sand on their heads will stick to whichever one has stronger magnetism.
 Generation = 7
+Flags = InheritFormWithEverStone
 WildItemUncommon = CELLBATTERY
 #-------------------------------
 [GRAVELER,1]
@@ -283,6 +295,7 @@ Weight = 110.0
 Color = Gray
 Pokedex = They eat rocks and often get into a scrap over them. The shock of Graveler smashing together causes a flash of light and a booming noise.
 Generation = 7
+Flags = InheritFormWithEverStone
 WildItemUncommon = CELLBATTERY
 #-------------------------------
 [GOLEM,1]
@@ -298,6 +311,7 @@ Weight = 316.0
 Color = Gray
 Pokedex = It fires rocks charged with electricity. Even if the rock isn't fired that accurately, just grazing an opponent will cause numbness and fainting.
 Generation = 7
+Flags = InheritFormWithEverStone
 WildItemCommon = CELLBATTERY
 #-------------------------------
 [PONYTA,1]
@@ -313,6 +327,7 @@ Color = White
 Category = Unique Horn
 Pokedex = Its small horn hides a healing power. With a few rubs from this Pokémon's horn, any slight wound you have will be healed.
 Generation = 8
+Flags = InheritFormWithEverStone
 #-------------------------------
 [RAPIDASH,1]
 FormName = Galarian
@@ -327,6 +342,7 @@ Color = White
 Category = Unique Horn
 Pokedex = Little can stand up to its psycho cut. Unleashed from this Pokémon's horn, the move will punch a hole right through a thick metal sheet.
 Generation = 8
+Flags = InheritFormWithEverStone
 #-------------------------------
 [SLOWPOKE,1]
 FormName = Galarian
@@ -336,6 +352,7 @@ Moves = 1,TACKLE,1,CURSE,3,GROWL,6,ACID,9,YAWN,12,CONFUSION,15,DISABLE,18,WATERP
 TutorMoves = AMNESIA,ATTRACT,BLIZZARD,BODYSLAM,BRINE,BULLDOZE,CALMMIND,DIG,DIVE,EARTHQUAKE,ENDURE,EXPANDINGFORCE,FACADE,FIREBLAST,FLAMETHROWER,FOULPLAY,FUTURESIGHT,GRASSKNOT,HAIL,HYDROPUMP,ICEBEAM,ICYWIND,IMPRISON,IRONTAIL,LIGHTSCREEN,LIQUIDATION,MUDSHOT,PAYDAY,PROTECT,PSYCHIC,PSYCHICTERRAIN,PSYSHOCK,RAINDANCE,REST,ROUND,SAFEGUARD,SCALD,SHADOWBALL,SKILLSWAP,SLEEPTALK,SNORE,STOREDPOWER,SUBSTITUTE,SUNNYDAY,SURF,SWIFT,THUNDERWAVE,TRIATTACK,TRICK,TRICKROOM,WEATHERBALL,WHIRLPOOL,WONDERROOM,ZENHEADBUTT
 Pokedex = Although this Pokémon is normally zoned out, its expression abruptly sharpens on occasion. The cause for this seems to lie in Slowpoke's diet.
 Generation = 8
+Flags = InheritFormWithEverStone
 Evolutions = SLOWBRO,Item,GALARICACUFF,SLOWKING,Item,GALARICAWREATH
 #-------------------------------
 [SLOWBRO,1]
@@ -349,6 +366,7 @@ TutorMoves = AMNESIA,ATTRACT,AVALANCHE,BLIZZARD,BODYSLAM,BRICKBREAK,BRINE,BRUTAL
 Weight = 70.5
 Pokedex = If this Pokémon squeezes the tongue of the Shellder biting it, the Shellder will launch a toxic liquid from the tip of its shell.
 Generation = 8
+Flags = InheritFormWithEverStone
 #-------------------------------
 [SLOWBRO,2]
 FormName = Mega Slowbro
@@ -375,6 +393,7 @@ EggMoves = COUNTER,COVET,CURSE,DOUBLEEDGE,FEINT,FLAIL,NIGHTSLASH,QUICKATTACK,QUI
 Weight = 42.0
 Pokedex = The stalks of leeks are thicker and longer in the Galar region. Farfetch'd that adapted to these stalks took on a unique form.
 Generation = 8
+Flags = InheritFormWithEverStone
 WildItemCommon = LEEK
 Evolutions = SIRFETCHD,BattleDealCriticalHit,3
 #-------------------------------
@@ -392,6 +411,7 @@ Weight = 42.0
 Color = Green
 Pokedex = A Grimer, which had been brought in to solve a problem with garbage, developed over time into this form.
 Generation = 7
+Flags = InheritFormWithEverStone
 #-------------------------------
 [MUK,1]
 FormName = Alolan
@@ -406,6 +426,7 @@ Weight = 52.0
 Color = Green
 Pokedex = The garbage it eats causes continuous chemical changes in its body, which produce its exceedingly vivid coloration.
 Generation = 7
+Flags = InheritFormWithEverStone
 #-------------------------------
 [GENGAR,1]
 FormName = Mega Gengar
@@ -489,6 +510,7 @@ Color = White
 Category = Dancing
 Pokedex = Its talent is tap-dancing. It can also manipulate temperatures to create a floor of ice, which this Pokémon can kick up to use as a barrier.
 Generation = 8
+Flags = InheritFormWithEverStone
 Evolutions = MRRIME,Level,42
 #-------------------------------
 [PINSIR,1]
@@ -604,7 +626,7 @@ Weight = 33.0
 Pokedex = Despite its diminished size, its mental power has grown phenomenally. With a mere thought, it can smash a skyscraper to smithereens.
 Generation = 6
 #-------------------------------
-[PICHU,1]
+[PICHU,2]
 FormName = Spiky-Eared
 Generation = 4
 BattlerEnemyX = 3
@@ -634,6 +656,7 @@ Height = 1.8
 Category = Hexpert
 Pokedex = While chanting strange spells, this Pokémon combines its internal toxins with what it's eaten, creating strange potions.
 Generation = 8
+Flags = InheritFormWithEverStone
 #-------------------------------
 [UNOWN,1]
 FormName = B
@@ -766,6 +789,7 @@ Weight = 0.5
 Color = White
 Pokedex = Sudden climate change wiped out this ancient kind of Corsola. This Pokémon absorbs others' life-force through its branches.
 Generation = 8
+Flags = InheritFormWithEverStone
 Evolutions = CURSOLA,Level,38
 #-------------------------------
 [HOUNDOOM,1]
@@ -833,6 +857,7 @@ EggMoves = KNOCKOFF,PARTINGSHOT,QUICKGUARD
 Color = White
 Pokedex = Its restlessness has it constantly running around. If it sees another Pokémon, it will purposely run into them in order to start a fight.
 Generation = 8
+Flags = InheritFormWithEverStone
 #-------------------------------
 [LINOONE,1]
 FormName = Galarian
@@ -842,6 +867,7 @@ Moves = 0,NIGHTSLASH,1,NIGHTSLASH,1,SWITCHEROO,1,PINMISSILE,1,BABYDOLLEYES,1,TAC
 TutorMoves = ASSURANCE,ATTRACT,BLIZZARD,BODYPRESS,BODYSLAM,DIG,ENDURE,FACADE,FAKETEARS,FLING,GIGAIMPACT,GRASSKNOT,GUNKSHOT,HELPINGHAND,HYPERBEAM,HYPERVOICE,ICEBEAM,ICYWIND,IRONTAIL,LASHOUT,MUDSHOT,PAYBACK,PINMISSILE,PROTECT,RAINDANCE,REST,RETALIATE,ROUND,SCARYFACE,SCREECH,SEEDBOMB,SHADOWBALL,SHADOWCLAW,SLEEPTALK,SNARL,SNORE,STOMPINGTANTRUM,SUBSTITUTE,SUNNYDAY,SURF,SWIFT,TAUNT,THIEF,THROATCHOP,THUNDER,THUNDERBOLT,THUNDERWAVE,TRICK,WHIRLPOOL,WORKUP
 Pokedex = It uses its long tongue to taunt opponents. Once the opposition is enraged, this Pokémon hurls itself at the opponent, tackling them forcefully.
 Generation = 8
+Flags = InheritFormWithEverStone
 Evolutions = OBSTAGOON,LevelNight,35
 #-------------------------------
 [GARDEVOIR,1]
@@ -1114,10 +1140,12 @@ BattlerShadowSize = 3
 [BURMY,1]
 FormName = Sandy Cloak
 Color = Brown
+Flags = InheritFormFromMother
 #-------------------------------
 [BURMY,2]
 FormName = Trash Cloak
 Color = Red
+Flags = InheritFormFromMother
 #-------------------------------
 [WORMADAM,1]
 FormName = Sandy Cloak
@@ -1128,6 +1156,7 @@ EVs = 0,0,2,0,0,0
 Moves = 0,QUIVERDANCE,1,QUIVERDANCE,1,SUCKERPUNCH,1,TACKLE,1,PROTECT,1,BUGBITE,10,PROTECT,15,BUGBITE,20,HIDDENPOWER,23,CONFUSION,26,ROCKBLAST,29,HARDEN,32,PSYBEAM,35,CAPTIVATE,38,FLAIL,41,ATTRACT,44,PSYCHIC,47,FISSURE,50,BUGBUZZ
 TutorMoves = ALLYSWITCH,ATTRACT,BUGBITE,BULLDOZE,CONFIDE,DOUBLETEAM,DREAMEATER,EARTHPOWER,EARTHQUAKE,ELECTROWEB,ENDEAVOR,FACADE,FRUSTRATION,GIGAIMPACT,HIDDENPOWER,HYPERBEAM,INFESTATION,PROTECT,PSYCHIC,PSYCHUP,RAINDANCE,REST,RETURN,ROCKTOMB,ROUND,SAFEGUARD,SANDSTORM,SHADOWBALL,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNORE,STEALTHROCK,SUBSTITUTE,SUNNYDAY,SWAGGER,TELEKINESIS,THIEF,TOXIC,UPROAR,VENOSHOCK
 Color = Brown
+Flags = InheritFormFromMother
 #-------------------------------
 [WORMADAM,2]
 FormName = Trash Cloak
@@ -1138,6 +1167,7 @@ EVs = 0,0,1,0,0,1
 Moves = 0,QUIVERDANCE,1,QUIVERDANCE,1,METALBURST,1,SUCKERPUNCH,1,TACKLE,1,PROTECT,1,BUGBITE,10,PROTECT,15,BUGBITE,20,HIDDENPOWER,23,CONFUSION,26,MIRRORSHOT,29,METALSOUND,32,PSYBEAM,35,CAPTIVATE,38,FLAIL,41,ATTRACT,44,PSYCHIC,47,IRONHEAD,50,BUGBUZZ
 TutorMoves = ALLYSWITCH,ATTRACT,BUGBITE,CONFIDE,DOUBLETEAM,DREAMEATER,ELECTROWEB,ENDEAVOR,FACADE,FLASHCANNON,FRUSTRATION,GIGAIMPACT,GUNKSHOT,GYROBALL,HIDDENPOWER,HYPERBEAM,INFESTATION,IRONDEFENSE,IRONHEAD,MAGNETRISE,PROTECT,PSYCHIC,PSYCHUP,RAINDANCE,REST,RETURN,ROUND,SAFEGUARD,SHADOWBALL,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNORE,STEALTHROCK,SUBSTITUTE,SUNNYDAY,SWAGGER,TELEKINESIS,THIEF,TOXIC,UPROAR,VENOSHOCK
 Color = Red
+Flags = InheritFormFromMother
 #-------------------------------
 [CHERRIM,1]
 FormName = Sunshine Form
@@ -1151,11 +1181,13 @@ BattlerEnemyY = 21
 FormName = East Sea
 Color = Blue
 Pokedex = Its appearance changes depending on the environment. One theory suggests that living in cold seas causes Shellos to take on this form.
+Flags = InheritFormFromMother
 #-------------------------------
 [GASTRODON,1]
 FormName = East Sea
 Color = Blue
 Pokedex = Its body is covered in a sticky slime. It's very susceptible to dehydration, so it can't spend too much time on land.
+Flags = InheritFormFromMother
 #-------------------------------
 [LOPUNNY,1]
 FormName = Mega Lopunny
@@ -1388,6 +1420,7 @@ FormName = Blue-Striped
 Abilities = ROCKHEAD,ADAPTABILITY
 Pokedex = Even Basculin, which devours everything it can with its huge jaws, is nothing more than food to organisms stronger than itself.
 WildItemUncommon = DEEPSEASCALE
+Flags = InheritFormFromMother
 #-------------------------------
 [DARUMAKA,2]
 FormName = Galarian
@@ -1400,6 +1433,7 @@ Weight = 40.0
 Color = White
 Pokedex = The colder they get, the more energetic they are. They freeze their breath to make snowballs, using them as ammo for playful snowball fights.
 Generation = 8
+Flags = InheritFormWithEverStone
 Evolutions = DARMANITAN,Item,ICESTONE
 #-------------------------------
 [DARMANITAN,1]
@@ -1427,6 +1461,7 @@ Color = White
 Category = Zen Charm
 Pokedex = On days when blizzards blow through, it comes down to where people live. It stashes food in the snowball on its head, taking it home for later.
 Generation = 8
+Flags = InheritFormWithEverStone
 #-------------------------------
 [DARMANITAN,3]
 FormName = Galarian Zen Mode
@@ -1455,6 +1490,7 @@ Moves = 1,ASTONISH,1,PROTECT,4,HAZE,8,NIGHTSHADE,12,DISABLE,16,BRUTALSWING,20,CR
 TutorMoves = ALLYSWITCH,ATTRACT,BRUTALSWING,CALMMIND,DARKPULSE,EARTHPOWER,EARTHQUAKE,ENDURE,ENERGYBALL,FACADE,FAKETEARS,HEX,IMPRISON,IRONDEFENSE,NASTYPLOT,PAYBACK,POLTERGEIST,PROTECT,PSYCHIC,RAINDANCE,REST,ROCKSLIDE,ROCKTOMB,ROUND,SAFEGUARD,SANDSTORM,SHADOWBALL,SLEEPTALK,SNORE,SUBSTITUTE,THIEF,TOXICSPIKES,TRICKROOM,WILLOWISP,WONDERROOM,ZENHEADBUTT
 Pokedex = A clay slab with cursed engravings took possession of a Yamask. The slab is said to be absorbing the Yamask's dark power.
 Generation = 8
+Flags = InheritFormWithEverStone
 Evolutions = RUNERIGUS,Level,34
 #-------------------------------
 [DEERLING,1]
@@ -1492,6 +1528,7 @@ Weight = 20.5
 Color = Green
 Pokedex = Its conspicuous lips lure prey in as it lies in wait in the mud. When prey gets close, Stunfisk clamps its jagged steel fins down on them.
 Generation = 8
+Flags = InheritFormWithEverStone
 #-------------------------------
 [TORNADUS,1]
 FormName = Therian Forme
@@ -1679,27 +1716,35 @@ FormName = Poké Ball Pattern
 #-------------------------------
 [FLABEBE,1]
 FormName = Yellow Flower
+Flags = InheritFormFromMother
 #-------------------------------
 [FLABEBE,2]
 FormName = Orange Flower
+Flags = InheritFormFromMother
 #-------------------------------
 [FLABEBE,3]
 FormName = Blue Flower
+Flags = InheritFormFromMother
 #-------------------------------
 [FLABEBE,4]
 FormName = White Flower
+Flags = InheritFormFromMother
 #-------------------------------
 [FLOETTE,1]
 FormName = Yellow Flower
+Flags = InheritFormFromMother
 #-------------------------------
 [FLOETTE,2]
 FormName = Orange Flower
+Flags = InheritFormFromMother
 #-------------------------------
 [FLOETTE,3]
 FormName = Blue Flower
+Flags = InheritFormFromMother
 #-------------------------------
 [FLOETTE,4]
 FormName = White Flower
+Flags = InheritFormFromMother
 #-------------------------------
 [FLOETTE,5]
 FormName = Eternal Flower
@@ -1712,15 +1757,19 @@ Evolutions = FLORGES,None,
 #-------------------------------
 [FLORGES,1]
 FormName = Yellow Flower
+Flags = InheritFormFromMother
 #-------------------------------
 [FLORGES,2]
 FormName = Orange Flower
+Flags = InheritFormFromMother
 #-------------------------------
 [FLORGES,3]
 FormName = Blue Flower
+Flags = InheritFormFromMother
 #-------------------------------
 [FLORGES,4]
 FormName = White Flower
+Flags = InheritFormFromMother
 #-------------------------------
 [FURFROU,1]
 FormName = Heart Trim
@@ -1769,6 +1818,7 @@ HiddenAbilities = INSOMNIA
 Height = 0.4
 Weight = 5.0
 Pokedex = Spirits that wander this world are placed into Pumpkaboo's body. They're then moved on to the afterlife.
+Flags = InheritFormFromMother
 #-------------------------------
 [PUMPKABOO,2]
 FormName = Large Size
@@ -1776,6 +1826,7 @@ BaseStats = 54,66,70,46,44,55
 Height = 0.5
 Weight = 7.5
 Pokedex = When taking spirits to the afterlife, large Pumpkaboo prefer the spirits of adults to those of children.
+Flags = InheritFormFromMother
 #-------------------------------
 [PUMPKABOO,3]
 FormName = Super Size
@@ -1787,6 +1838,7 @@ Pokedex = Massive Pumpkaboo are said to be the product of areas where a great nu
 WildItemCommon = MIRACLESEED
 WildItemUncommon = MIRACLESEED
 WildItemRare = MIRACLESEED
+Flags = InheritFormFromMother
 #-------------------------------
 [GOURGEIST,1]
 FormName = Average Size
@@ -1795,6 +1847,7 @@ HiddenAbilities = INSOMNIA
 Height = 0.9
 Weight = 12.5
 Pokedex = Eerie cries emanate from its body in the dead of night. The sounds are said to be the wails of spirits who are suffering in the afterlife.
+Flags = InheritFormFromMother
 #-------------------------------
 [GOURGEIST,2]
 FormName = Large Size
@@ -1802,6 +1855,7 @@ BaseStats = 75,95,122,69,58,75
 Height = 1.1
 Weight = 14.0
 Pokedex = Large Gourgeist put on the guise of adults, taking the hands of children to lead them to the afterlife.
+Flags = InheritFormFromMother
 #-------------------------------
 [GOURGEIST,3]
 FormName = Super Size
@@ -1813,6 +1867,7 @@ Pokedex = Supersized Gourgeist aren't picky. They will forcefully drag anyone of
 WildItemCommon = MIRACLESEED
 WildItemUncommon = MIRACLESEED
 WildItemRare = MIRACLESEED
+Flags = InheritFormFromMother
 #-------------------------------
 [XERNEAS,1]
 FormName = Active Mode
@@ -1879,6 +1934,7 @@ Type1 = ELECTRIC
 Type2 = FLYING
 Color = Yellow
 Pokedex = It creates an electric charge by rubbing its feathers together. It dances over to its enemies and delivers shocking electrical punches.
+Flags = InheritFormFromMother
 #-------------------------------
 [ORICORIO,2]
 FormName = Pa'u Style
@@ -1886,6 +1942,7 @@ Type1 = PSYCHIC
 Type2 = FLYING
 Color = Pink
 Pokedex = This Oricorio relaxes by swaying gently. This increases its psychic energy, which it then fires at its enemies.
+Flags = InheritFormFromMother
 #-------------------------------
 [ORICORIO,3]
 FormName = Sensu Style
@@ -1893,10 +1950,12 @@ Type1 = GHOST
 Type2 = FLYING
 Color = Purple
 Pokedex = It summons the dead with its dreamy dancing. From their malice, it draws power with which to curse its enemies.
+Flags = InheritFormFromMother
 #-------------------------------
 [ROCKRUFF,2]
 Abilities = OWNTEMPO
 HiddenAbilities = OWNTEMPO
+Flags = InheritFormFromMother
 Evolutions = LYCANROC,LevelEvening,25
 #-------------------------------
 [LYCANROC,1]
@@ -1919,6 +1978,7 @@ HiddenAbilities = TOUGHCLAWS
 Moves = 0,THRASH,1,THRASH,1,ACCELEROCK,1,COUNTER,1,TACKLE,1,LEER,1,SANDATTACK,1,BITE,4,SANDATTACK,7,BITE,12,HOWL,15,ROCKTHROW,18,ODORSLEUTH,23,ROCKTOMB,26,ROAR,29,STEALTHROCK,34,ROCKSLIDE,37,SCARYFACE,40,CRUNCH,45,ROCKCLIMB,48,STONEEDGE
 TutorMoves = ATTRACT,BRICKBREAK,BULKUP,CONFIDE,COVET,DOUBLETEAM,DRILLRUN,EARTHPOWER,ECHOEDVOICE,ENDEAVOR,FACADE,FRUSTRATION,HIDDENPOWER,HYPERVOICE,IRONDEFENSE,IRONHEAD,IRONTAIL,LASTRESORT,OUTRAGE,PROTECT,REST,RETURN,ROAR,ROCKPOLISH,ROCKSLIDE,ROCKTOMB,ROUND,SLEEPTALK,SNARL,SNORE,STEALTHROCK,STOMPINGTANTRUM,STONEEDGE,SUBSTITUTE,SWAGGER,SWORDSDANCE,TAUNT,TOXIC,ZENHEADBUTT
 Pokedex = Bathed in the setting sun of evening, Lycanroc has undergone a special kind of evolution. An intense fighting spirit underlies its calmness.
+Flags = InheritFormFromMother
 #-------------------------------
 [WISHIWASHI,1]
 FormName = School Form
@@ -2010,6 +2070,7 @@ EVs = 0,1,0,0,1,0
 Weight = 0.3
 Color = Red
 Pokedex = If its core stays exposed, it will soon die off. It's possible that it may survive if it's put into a Poké Ball quickly enough.
+Flags = InheritFormFromMother
 #-------------------------------
 [MINIOR,8]
 FormName = Orange Core
@@ -2019,6 +2080,7 @@ EVs = 0,1,0,0,1,0
 Weight = 0.3
 Color = Red
 Pokedex = If its core stays exposed, it will soon die off. It's possible that it may survive if it's put into a Poké Ball quickly enough.
+Flags = InheritFormFromMother
 #-------------------------------
 [MINIOR,9]
 FormName = Yellow Core
@@ -2028,6 +2090,7 @@ EVs = 0,1,0,0,1,0
 Weight = 0.3
 Color = Yellow
 Pokedex = If its core stays exposed, it will soon die off. It's possible that it may survive if it's put into a Poké Ball quickly enough.
+Flags = InheritFormFromMother
 #-------------------------------
 [MINIOR,10]
 FormName = Green Core
@@ -2037,6 +2100,7 @@ EVs = 0,1,0,0,1,0
 Weight = 0.3
 Color = Green
 Pokedex = If its core stays exposed, it will soon die off. It's possible that it may survive if it's put into a Poké Ball quickly enough.
+Flags = InheritFormFromMother
 #-------------------------------
 [MINIOR,11]
 FormName = Blue Core
@@ -2046,6 +2110,7 @@ EVs = 0,1,0,0,1,0
 Weight = 0.3
 Color = Blue
 Pokedex = If its core stays exposed, it will soon die off. It's possible that it may survive if it's put into a Poké Ball quickly enough.
+Flags = InheritFormFromMother
 #-------------------------------
 [MINIOR,12]
 FormName = Indigo Core
@@ -2055,6 +2120,7 @@ EVs = 0,1,0,0,1,0
 Weight = 0.3
 Color = Blue
 Pokedex = If its core stays exposed, it will soon die off. It's possible that it may survive if it's put into a Poké Ball quickly enough.
+Flags = InheritFormFromMother
 #-------------------------------
 [MINIOR,13]
 FormName = Violet Core
@@ -2064,6 +2130,7 @@ EVs = 0,1,0,0,1,0
 Weight = 0.3
 Color = Purple
 Pokedex = If its core stays exposed, it will soon die off. It's possible that it may survive if it's put into a Poké Ball quickly enough.
+Flags = InheritFormFromMother
 #-------------------------------
 [MIMIKYU,1]
 FormName = Busted Form
