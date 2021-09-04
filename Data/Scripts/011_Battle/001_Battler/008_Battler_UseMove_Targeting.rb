@@ -98,6 +98,7 @@ class PokeBattle_Battler
     return targets if @battle.switching   # For Pursuit interrupting a switch
     return targets if move.cannotRedirect? || move.targetsPosition?
     return targets if !target_data.can_target_one_foe? || targets.length != 1
+    move.pbModifyTargets(targets, user)   # For Dragon Darts
     return targets if user.hasActiveAbility?([:PROPELLERTAIL, :STALWART])
     priority = @battle.pbPriority(true)
     nearOnly = !target_data.can_choose_distant_target?
@@ -171,31 +172,32 @@ class PokeBattle_Battler
   #=============================================================================
   def pbAddTarget(targets,user,target,move,nearOnly=true,allowUser=false)
     return false if !target || (target.fainted? && !move.targetsPosition?)
-    return false if !(allowUser && user==target) && nearOnly && !user.near?(target)
+    return false if !allowUser && target == user
+    return false if nearOnly && !user.near?(target) && target != user
     targets.each { |b| return true if b.index==target.index }   # Already added
     targets.push(target)
     return true
   end
 
-  def pbAddTargetRandomAlly(targets,user,_move,nearOnly=true)
+  def pbAddTargetRandomAlly(targets, user, move, nearOnly = true)
     choices = []
     user.eachAlly do |b|
       next if nearOnly && !user.near?(b)
-      pbAddTarget(choices,user,b,nearOnly)
+      pbAddTarget(choices, user, b, move, nearOnly)
     end
     if choices.length>0
-      pbAddTarget(targets,user,choices[@battle.pbRandom(choices.length)],nearOnly)
+      pbAddTarget(targets, user, choices[@battle.pbRandom(choices.length)], move, nearOnly)
     end
   end
 
-  def pbAddTargetRandomFoe(targets,user,_move,nearOnly=true)
+  def pbAddTargetRandomFoe(targets, user, move, nearOnly  =true)
     choices = []
     user.eachOpposing do |b|
       next if nearOnly && !user.near?(b)
-      pbAddTarget(choices,user,b,nearOnly)
+      pbAddTarget(choices, user, b, move, nearOnly)
     end
     if choices.length>0
-      pbAddTarget(targets,user,choices[@battle.pbRandom(choices.length)],nearOnly)
+      pbAddTarget(targets, user, choices[@battle.pbRandom(choices.length)], move, nearOnly)
     end
   end
 end

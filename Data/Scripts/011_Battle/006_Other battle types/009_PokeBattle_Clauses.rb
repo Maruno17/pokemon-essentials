@@ -132,12 +132,12 @@ end
 class PokeBattle_Move_067   # Skill Swap
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["skillswapclause"]
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
-    return __clauses__pbFailsAgainstTarget?(user,target)
+    return __clauses__pbFailsAgainstTarget?(user, target, show_message)
   end
 end
 
@@ -146,12 +146,12 @@ end
 class PokeBattle_Move_06A   # Sonic Boom
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["sonicboomclause"]
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
-    return __clauses__pbFailsAgainstTarget?(user,target)
+    return __clauses__pbFailsAgainstTarget?(user, target, show_message)
   end
 end
 
@@ -160,12 +160,12 @@ end
 class PokeBattle_Move_06B   # Dragon Rage
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["sonicboomclause"]
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
-    return __clauses__pbFailsAgainstTarget?(user,target)
+    return __clauses__pbFailsAgainstTarget?(user, target, show_message)
   end
 end
 
@@ -174,12 +174,12 @@ end
 class PokeBattle_Move_070   # OHKO moves
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["ohkoclause"]
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
-    return __clauses__pbFailsAgainstTarget?(user,target)
+    return __clauses__pbFailsAgainstTarget?(user, target, show_message)
   end
 end
 
@@ -220,13 +220,13 @@ end
 class PokeBattle_Move_0E5   # Perish Song
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["perishsongclause"] &&
        @battle.pbAbleNonActiveCount(user.idxOwnSide)==0
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
-    return __clauses__pbFailsAgainstTarget?(user,target)
+    return __clauses__pbFailsAgainstTarget?(user, target, show_message)
   end
 end
 
@@ -235,12 +235,12 @@ end
 class PokeBattle_Move_0E7   # Destiny Bond
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     if @battle.rules["perishsongclause"] &&
        @battle.pbAbleNonActiveCount(user.idxOwnSide)==0
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
-    return __clauses__pbFailsAgainstTarget?(user,target)
+    return __clauses__pbFailsAgainstTarget?(user, target, show_message)
   end
 end

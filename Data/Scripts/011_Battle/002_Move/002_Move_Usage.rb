@@ -6,6 +6,7 @@ class PokeBattle_Move
   def pbDisplayChargeMessage(user); end   # For Focus Punch/shell Trap/Beak Blast
   def pbOnStartUse(user,targets); end
   def pbAddTarget(targets,user); end      # For Counter, etc. and Bide
+  def pbModifyTargets(targets, user); end   # For Dragon Darts
 
   # Reset move usage counters (child classes can increment them).
   def pbChangeUsageCounters(user,specialUsage)
@@ -20,6 +21,7 @@ class PokeBattle_Move
     @battle.pbDisplayBrief(_INTL("{1} used {2}!",user.pbThis,@name))
   end
 
+  def pbShowFailMessages?(targets); return true; end
   def pbMissMessage(user,target); return false; end
 
   #=============================================================================
@@ -56,6 +58,8 @@ class PokeBattle_Move
   def pbOverrideSuccessCheckPerHit(user,target); return false; end
   def pbCrashDamage(user); end
   def pbInitialEffect(user,targets,hitNum); end
+  def pbDesignateTargetsForHit(targets, hitNum); return targets; end   # For Dragon Darts
+  def pbRepeatHit?; return false; end   # For Dragon Darts
 
   def pbShowAnimation(id,user,targets,hitNum=0,showAnimation=true)
     return if !showAnimation
@@ -78,12 +82,12 @@ class PokeBattle_Move
   #=============================================================================
   # Check if target is immune to the move because of its ability
   #=============================================================================
-  def pbImmunityByAbility(user,target)
+  def pbImmunityByAbility(user, target, show_message)
     return false if @battle.moldBreaker
     ret = false
     if target.abilityActive?
       ret = BattleHandlers.triggerMoveImmunityTargetAbility(target.ability,
-         user,target,self,@calcType,@battle)
+         user, target, self, @calcType, @battle, show_message)
     end
     return ret
   end
@@ -94,7 +98,7 @@ class PokeBattle_Move
   # Check whether the move fails completely due to move-specific requirements.
   def pbMoveFailed?(user,targets); return false; end
   # Checks whether the move will be ineffective against the target.
-  def pbFailsAgainstTarget?(user,target); return false; end
+  def pbFailsAgainstTarget?(user, target, show_message); return false; end
 
   def pbMoveFailedLastInRound?(user)
     unmoved = false
@@ -112,10 +116,10 @@ class PokeBattle_Move
     return false
   end
 
-  def pbMoveFailedTargetAlreadyMoved?(target)
+  def pbMoveFailedTargetAlreadyMoved?(target, showMessage = true)
     if (@battle.choices[target.index][0]!=:UseMove &&
        @battle.choices[target.index][0]!=:Shift) || target.movedThisRound?
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if showMessage
       return true
     end
     return false

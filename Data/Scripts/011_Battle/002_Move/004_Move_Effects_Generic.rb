@@ -90,9 +90,9 @@ end
 class PokeBattle_SleepMove < PokeBattle_Move
   def canMagicCoat?; return true; end
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return false if damagingMove?
-    return !target.pbCanSleep?(user,true,self)
+    return !target.pbCanSleep?(user, show_message, self)
   end
 
   def pbEffectAgainstTarget(user,target)
@@ -116,9 +116,9 @@ class PokeBattle_PoisonMove < PokeBattle_Move
     @toxic = false
   end
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return false if damagingMove?
-    return !target.pbCanPoison?(user,true,self)
+    return !target.pbCanPoison?(user, show_message, self)
   end
 
   def pbEffectAgainstTarget(user,target)
@@ -137,9 +137,9 @@ end
 class PokeBattle_ParalysisMove < PokeBattle_Move
   def canMagicCoat?; return true; end
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return false if damagingMove?
-    return !target.pbCanParalyze?(user,true,self)
+    return !target.pbCanParalyze?(user, show_message, self)
   end
 
   def pbEffectAgainstTarget(user,target)
@@ -158,9 +158,9 @@ end
 class PokeBattle_BurnMove < PokeBattle_Move
   def canMagicCoat?; return true; end
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return false if damagingMove?
-    return !target.pbCanBurn?(user,true,self)
+    return !target.pbCanBurn?(user, show_message, self)
   end
 
   def pbEffectAgainstTarget(user,target)
@@ -179,9 +179,9 @@ end
 class PokeBattle_FreezeMove < PokeBattle_Move
   def canMagicCoat?; return true; end
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return false if damagingMove?
-    return !target.pbCanFreeze?(user,true,self)
+    return !target.pbCanFreeze?(user, show_message, self)
   end
 
   def pbEffectAgainstTarget(user,target)
@@ -219,9 +219,9 @@ end
 class PokeBattle_ConfuseMove < PokeBattle_Move
   def canMagicCoat?; return true; end
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return false if damagingMove?
-    return !target.pbCanConfuse?(user,true,self)
+    return !target.pbCanConfuse?(user, show_message, self)
   end
 
   def pbEffectAgainstTarget(user,target)
@@ -326,9 +326,9 @@ end
 class PokeBattle_TargetStatDownMove < PokeBattle_Move
   def canMagicCoat?; return true; end
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return false if damagingMove?
-    return !target.pbCanLowerStatStage?(@statDown[0],user,self,true)
+    return !target.pbCanLowerStatStage?(@statDown[0], user, self, show_message)
   end
 
   def pbEffectAgainstTarget(user,target)
@@ -348,7 +348,7 @@ end
 class PokeBattle_TargetMultiStatDownMove < PokeBattle_Move
   def canMagicCoat?; return true; end
 
-  def pbFailsAgainstTarget?(user,target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return false if damagingMove?
     failed = true
     for i in 0...@statDown.length/2
@@ -366,17 +366,17 @@ class PokeBattle_TargetMultiStatDownMove < PokeBattle_Move
           canLower = true
           break
         end
-        @battle.pbDisplay(_INTL("{1}'s stats won't go any higher!",user.pbThis)) if !canLower
+        @battle.pbDisplay(_INTL("{1}'s stats won't go any higher!",user.pbThis)) if !canLower && show_message
       else
         for i in 0...@statDown.length/2
           next if target.statStageAtMin?(@statDown[i*2])
           canLower = true
           break
         end
-        @battle.pbDisplay(_INTL("{1}'s stats won't go any lower!",user.pbThis)) if !canLower
+        @battle.pbDisplay(_INTL("{1}'s stats won't go any lower!",user.pbThis)) if !canLower && show_message
       end
       if canLower
-        target.pbCanLowerStatStage?(@statDown[0],user,self,true)
+        target.pbCanLowerStatStage?(@statDown[0], user, self, show_message)
       end
       return true
     end

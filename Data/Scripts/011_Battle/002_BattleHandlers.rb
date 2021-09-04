@@ -229,8 +229,8 @@ module BattleHandlers
     return (ret!=nil) ? ret : false
   end
 
-  def self.triggerMoveImmunityTargetAbility(ability,user,target,move,type,battle)
-    ret = MoveImmunityTargetAbility.trigger(ability,user,target,move,type,battle)
+  def self.triggerMoveImmunityTargetAbility(ability, user, target, move, type, battle, show_message)
+    ret = MoveImmunityTargetAbility.trigger(ability, user, target, move, type, battle, show_message)
     return (ret!=nil) ? ret : false
   end
 
@@ -545,49 +545,62 @@ end
 
 # For abilities that grant immunity to moves of a particular type, and raises
 # one of the ability's bearer's stats instead.
-def pbBattleMoveImmunityStatAbility(user,target,move,moveType,immuneType,stat,increment,battle)
+def pbBattleMoveImmunityStatAbility(user, target, move, moveType, immuneType,
+                                    stat, increment, battle, show_message)
   return false if user.index==target.index
   return false if moveType != immuneType
-  battle.pbShowAbilitySplash(target)
-  if target.pbCanRaiseStatStage?(stat,target)
-    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-      target.pbRaiseStatStage(stat,increment,target)
+  # NOTE: If show_message is false (Dragon Darts only), the stat will not be
+  #       raised. This is not how the official games work, but I'm considering
+  #       that a bug because Dragon Darts won't be fired at target in the first
+  #       place if it's immune, so why would this ability be triggered by them?
+  if show_message
+    battle.pbShowAbilitySplash(target)
+    if target.pbCanRaiseStatStage?(stat, target)
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        target.pbRaiseStatStage(stat, increment, target)
+      else
+        target.pbRaiseStatStageByCause(stat, increment, target, target.abilityName)
+      end
     else
-      target.pbRaiseStatStageByCause(stat,increment,target,target.abilityName)
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true)))
+      else
+        battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
+           target.pbThis, target.abilityName, move.name))
+      end
     end
-  else
-    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-      battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
-    else
-      battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
-         target.pbThis,target.abilityName,move.name))
-    end
+    battle.pbHideAbilitySplash(target)
   end
-  battle.pbHideAbilitySplash(target)
   return true
 end
 
 # For abilities that grant immunity to moves of a particular type, and heals the
 # ability's bearer by 1/4 of its total HP instead.
-def pbBattleMoveImmunityHealAbility(user,target,move,moveType,immuneType,battle)
+def pbBattleMoveImmunityHealAbility(user, target, move, moveType, immuneType, battle, show_message)
   return false if user.index==target.index
   return false if moveType != immuneType
-  battle.pbShowAbilitySplash(target)
-  if target.canHeal? && target.pbRecoverHP(target.totalhp/4)>0
-    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-      battle.pbDisplay(_INTL("{1}'s HP was restored.",target.pbThis))
+  # NOTE: If show_message is false (Dragon Darts only), HP will not be healed.
+  #       This is not how the official games work, but I'm considering that a
+  #       bug because Dragon Darts won't be fired at target in the first place
+  #       if it's immune, so why would this ability be triggered by them?
+  if show_message
+    battle.pbShowAbilitySplash(target)
+    if target.canHeal? && target.pbRecoverHP(target.totalhp / 4) > 0
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1}'s HP was restored.", target.pbThis))
+      else
+        battle.pbDisplay(_INTL("{1}'s {2} restored its HP.", target.pbThis, target.abilityName))
+      end
     else
-      battle.pbDisplay(_INTL("{1}'s {2} restored its HP.",target.pbThis,target.abilityName))
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true)))
+      else
+        battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
+           target.pbThis, target.abilityName, move.name))
+      end
     end
-  else
-    if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-      battle.pbDisplay(_INTL("It doesn't affect {1}...",target.pbThis(true)))
-    else
-      battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
-         target.pbThis,target.abilityName,move.name))
-    end
+    battle.pbHideAbilitySplash(target)
   end
-  battle.pbHideAbilitySplash(target)
   return true
 end
 

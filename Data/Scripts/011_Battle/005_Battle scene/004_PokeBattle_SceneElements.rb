@@ -255,7 +255,7 @@ class PokemonDataBox < SpriteWrapper
         s = GameData::Status.get(@battler.status).icon_position
       end
       imagePos.push(["Graphics/Pictures/Battle/icon_statuses",@spriteBaseX+24,36,
-         0,(s-1)*STATUS_ICON_HEIGHT,-1,STATUS_ICON_HEIGHT]) if s >= 0
+         0, s * STATUS_ICON_HEIGHT, -1, STATUS_ICON_HEIGHT]) if s >= 0
     end
     pbDrawImagePositions(self.bitmap,imagePos)
     refreshHP

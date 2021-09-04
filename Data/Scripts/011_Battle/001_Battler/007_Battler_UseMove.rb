@@ -393,7 +393,7 @@ class PokeBattle_Battler
       targets.each do |b|
         b.damageState.reset
         b.damageState.initialHP = b.hp
-        if !pbSuccessCheckAgainstTarget(move,user,b)
+        if !pbSuccessCheckAgainstTarget(move, user, b, targets)
           b.damageState.unaffected = true
         end
       end
@@ -583,12 +583,12 @@ class PokeBattle_Battler
     # For two-turn attacks being used in a single turn
     move.pbInitialEffect(user,targets,hitNum)
     numTargets = 0   # Number of targets that are affected by this hit
-    targets.each { |b| b.damageState.resetPerHit }
     # Count a hit for Parental Bond (if it applies)
     user.effects[PBEffects::ParentalBond] -= 1 if user.effects[PBEffects::ParentalBond]>0
     # Accuracy check (accuracy/evasion calc)
     if hitNum==0 || move.successCheckPerHit?
       targets.each do |b|
+        b.damageState.missed = false
         next if b.damageState.unaffected
         if pbSuccessCheckPerHit(move,user,b,skipAccuracyCheck)
           numTargets += 1
@@ -602,6 +602,7 @@ class PokeBattle_Battler
         targets.each do |b|
           next if !b.damageState.missed || b.damageState.magicCoat
           pbMissMessage(move,user,b)
+          break if move.pbRepeatHit?   # Dragon Darts only shows one failure message
         end
         move.pbCrashDamage(user)
         user.pbItemHPHealCheck
@@ -610,6 +611,9 @@ class PokeBattle_Battler
       end
     end
     # If we get here, this hit will happen and do something
+    all_targets = targets
+    targets = move.pbDesignateTargetsForHit(targets, hitNum)   # For Dragon Darts
+    targets.each { |b| b.damageState.resetPerHit }
     #---------------------------------------------------------------------------
     # Calculate damage to deal
     if move.pbDamagingMove?
@@ -637,18 +641,14 @@ class PokeBattle_Battler
          GameData::Item.get(user.effects[PBEffects::GemConsumed]).name,move.name))
     end
     # Messages about missed target(s) (relevant for multi-target moves only)
-    targets.each do |b|
-      next if !b.damageState.missed
-      pbMissMessage(move,user,b)
+    if !move.pbRepeatHit?
+      targets.each { |b| pbMissMessage(move, user, b) if b.damageState.missed }
     end
     # Deal the damage (to all allies first simultaneously, then all foes
     # simultaneously)
     if move.pbDamagingMove?
       # This just changes the HP amounts and does nothing else
-      targets.each do |b|
-        next if b.damageState.unaffected
-        move.pbInflictHPDamage(b)
-      end
+      targets.each { |b| move.pbInflictHPDamage(b) if !b.damageState.unaffected }
       # Animate the hit flashing and HP bar changes
       move.pbAnimateHitAndHPLost(user,targets)
     end
@@ -740,6 +740,12 @@ class PokeBattle_Battler
     # Fainting
     targets.each { |b| b.pbFaint if b && b.fainted? }
     user.pbFaint if user.fainted?
+    # Dragon Darts' second half of attack
+    if move.pbRepeatHit? && hitNum == 0
+      if targets.any? { |b| !b.fainted? && !b.damageState.unaffected }
+        pbProcessMoveHit(move, user, all_targets, 1, skipAccuracyCheck)
+      end
+    end
     return true
   end
 end

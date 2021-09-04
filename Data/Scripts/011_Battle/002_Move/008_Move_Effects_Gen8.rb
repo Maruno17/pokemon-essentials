@@ -157,9 +157,9 @@ class PokeBattle_Move_17B < PokeBattle_Move
     return false
   end
 
-  def pbFailsAgainstTarget?(user, target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return false if @validTargets.any? { |b| b.index == target.index }
-    @battle.pbDisplay(_INTL("{1}'s stats can't be raised further!", target.pbThis))
+    @battle.pbDisplay(_INTL("{1}'s stats can't be raised further!", target.pbThis)) if show_message
     return true
   end
 
@@ -222,7 +222,7 @@ end
 # neither of these effects can be applied. (Tar Shot)
 #===============================================================================
 class PokeBattle_Move_17E < PokeBattle_Move_044
-  def pbFailsAgainstTarget?(user, target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return super if target.effects[PBEffects::TarShot]
     return false
   end
@@ -243,10 +243,10 @@ end
 class PokeBattle_Move_17F < PokeBattle_Move
   def canMagicCoat?; return true; end
 
-  def pbFailsAgainstTarget?(user, target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     if !target.canChangeType? || !GameData::Type.exists?(:PSYCHIC) ||
        !target.pbHasOtherType?(:PSYCHIC) || !target.affectedByPowder?
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
     return false
@@ -381,23 +381,43 @@ class PokeBattle_Move_187 < PokeBattle_Move
 end
 
 #===============================================================================
-# Hits 2 times in a row. The second hit targets the original target's ally if it
-# had one (that can be targeted), or the original target if not. If the original
-# target cannot be targeted, both hits target its ally. In a triple battle, the
-# second hit will (try to) target one adjacent ally (how does it decide which
-# one?).
-#
-# A Pokémon cannot be targeted if:
-# * It is the user.
-# * It would be immune due to its type or ability.
-# * It is protected by a protection move (which ones?).
-# * It is semi-invulnerable, or the move fails an accuracy check against it.
-# * An ally is the centre of attention (e.g. because of Follow Me).
-#
-# All Pokémon hit by this move will apply their Pressure ability to it.
-# (Dragon Darts)
+# Hits in 2 volleys. The second volley targets the original target's ally if it
+# has one (that can be targeted), or the original target if not. A battler
+# cannot be targeted if it is is immune to or protected from this move somehow,
+# or if this move will miss it. (Dragon Darts)
+# NOTE: This move sometimes shows a different failure message compared to the
+#       official games. This is because of the order in which failure checks are
+#       done (all checks for each target in turn, versus all targets for each
+#       check in turn). This is considered unimportant, and since correcting it
+#       would involve extensive code rewrites, it is being ignored.
 #===============================================================================
-class PokeBattle_Move_188 < PokeBattle_UnimplementedMove
+class PokeBattle_Move_188 < PokeBattle_Move
+  def pbNumHits(user, targets); return 1;    end
+  def pbRepeatHit?;             return true; end
+
+  def pbModifyTargets(targets, user)
+    return if targets.length != 1
+    choices = []
+    targets[0].eachAlly { |b| user.pbAddTarget(choices, user, b, self) }
+    return if choices.length == 0
+    idxChoice = (choices.length > 1) ? @battle.pbRandom(choices.length) : 0
+    user.pbAddTarget(targets, user, choices[idxChoice], self, !pbTarget(user).can_choose_distant_target?)
+  end
+
+  def pbShowFailMessages?(targets)
+    if targets.length > 1
+      valid_targets = targets.select { |b| !b.fainted? && !b.damageState.unaffected }
+      return valid_targets.length <= 1
+    end
+    return super
+  end
+
+  def pbDesignateTargetsForHit(targets, hitNum)
+    valid_targets = []
+    targets.each { |b| valid_targets.push(b) if !b.damageState.unaffected }
+    return [valid_targets[1]] if valid_targets[1] && hitNum == 1
+    return [valid_targets[0]]
+  end
 end
 
 #===============================================================================
@@ -475,7 +495,7 @@ class PokeBattle_Move_18C < PokeBattle_Move
     return false
   end
 
-  def pbFailsAgainstTarget?(user, target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return !target.canHeal?
   end
 
@@ -506,7 +526,7 @@ class PokeBattle_Move_18D < PokeBattle_Move
     return false
   end
 
-  def pbFailsAgainstTarget?(user, target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return target.status == :NONE && !target.canHeal?
   end
 
@@ -551,14 +571,14 @@ end
 # by 1 stage each. (Octolock)
 #===============================================================================
 class PokeBattle_Move_18F < PokeBattle_Move
-  def pbFailsAgainstTarget?(user, target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return false if damagingMove?
     if target.effects[PBEffects::Octolock] >= 0
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
     if Settings::MORE_TYPE_EFFECTS && target.pbHasType?(:GHOST)
-      @battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true)))
+      @battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true))) if show_message
       return true
     end
     return false
@@ -657,7 +677,7 @@ class PokeBattle_Move_192 < PokeBattle_Move
     @battle.pbDisplay(_INTL("It's teatime! Everyone dug in to their Berries!"))
   end
 
-  def pbFailsAgainstTarget?(user, target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return true if !target.item || !target.item.is_berry? || target.semiInvulnerable?
     return false
   end
@@ -679,25 +699,27 @@ end
 class PokeBattle_Move_193 < PokeBattle_Move
   def canMagicCoat?; return true; end
 
-  def pbFailsAgainstTarget?(user, target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     if !target.item || target.unlosableItem?(target.item) ||
        target.effects[PBEffects::Substitute] > 0
-      @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
+      @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis)) if show_message
       return true
     end
     if target.hasActiveAbility?(:STICKYHOLD) && !@battle.moldBreaker
-      @battle.pbShowAbilitySplash(target)
-      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-        @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
-      else
-        @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",
-           target.pbThis(true), target.abilityName))
+      if show_message
+        @battle.pbShowAbilitySplash(target)
+        if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+          @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
+        else
+          @battle.pbDisplay(_INTL("{1} is unaffected because of its {2}!",
+             target.pbThis(true), target.abilityName))
+        end
+        @battle.pbHideAbilitySplash(target)
       end
-      @battle.pbHideAbilitySplash(target)
       return true
     end
     if @battle.corrosiveGas[target.index % 2][target.pokemonIndex]
-      @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis))
+      @battle.pbDisplay(_INTL("{1} is unaffected!", target.pbThis)) if show_message
       return true
     end
     return false
@@ -730,10 +752,10 @@ end
 # possible). (Eerie Spell)
 #===============================================================================
 class PokeBattle_Move_195 < PokeBattle_Move
-  def pbFailsAgainstTarget?(user, target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     last_move = target.pbGetMoveWithID(target.lastRegularMoveUsed)
     if !last_move || last_move.pp == 0 || last_move.total_pp <= 0
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
     return false
@@ -753,9 +775,9 @@ end
 # Magic Room/Klutz. (Poltergeist)
 #===============================================================================
 class PokeBattle_Move_196 < PokeBattle_Move
-  def pbFailsAgainstTarget?(user, target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     if !target.item || !target.itemActive?
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
       return true
     end
     @battle.pbDisplay(_INTL("{1} is about to be attacked by its {2}!", target.pbThis, target.itemName))
@@ -887,9 +909,9 @@ class PokeBattle_Move_19A < PokeBattle_Move
     return false
   end
 
-  def pbFailsAgainstTarget?(user, target)
+  def pbFailsAgainstTarget?(user, target, show_message)
     return false if damagingMove?
-    return !target.pbCanRaiseStatStage?(:ATTACK, user, self, true)
+    return !target.pbCanRaiseStatStage?(:ATTACK, user, self, show_message)
   end
 
   def pbEffectAgainstTarget(user, target)

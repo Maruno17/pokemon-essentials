@@ -28,6 +28,7 @@ class PokeBattle_DamageState
     @typeMod            = Effectiveness::INEFFECTIVE
     @unaffected         = false
     @protected          = false
+    @missed             = false
     @magicCoat          = false
     @magicBounce        = false
     @totalHPLost        = 0
@@ -36,7 +37,6 @@ class PokeBattle_DamageState
   end
 
   def resetPerHit
-    @missed        = false
     @calcDamage    = 0
     @hpLost        = 0
     @critical      = false
