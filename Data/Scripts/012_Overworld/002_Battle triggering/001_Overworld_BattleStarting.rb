@@ -120,7 +120,7 @@ end
 def pbPrepareBattle(battle)
   battleRules = $PokemonTemp.battleRules
   # The size of the battle, i.e. how many Pokémon on each side (default: "single")
-  battle.setBattleMode(battleRules["size"]) if !battleRules["size"].nil?
+  battle.setBattleMode(battleRules["size"]) if !battleRules["size"].nil? || $game_switches[NEW_GAME_PLUS]
   # Whether the game won't black out even if the player loses (default: false)
   battle.canLose = battleRules["canLose"] if !battleRules["canLose"].nil?
   # Whether the player can choose to run from the battle (default: true)

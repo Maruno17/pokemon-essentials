@@ -192,6 +192,11 @@ class Game_Character
     return self.map.terrain_tag(@x, @y)
   end
 
+  def cancelMoveRoute()
+    @move_route=nil
+    @move_route_forcing = false
+  end
+
   def bush_depth
     return @bush_depth || 0
   end

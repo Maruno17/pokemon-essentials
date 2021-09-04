@@ -136,7 +136,9 @@ class PokeBattle_Scene
     playerBase = "Graphics/Battlebacks/playerbase/"+baseFilename
     enemyBase  = "Graphics/Battlebacks/enemybase/"+baseFilename
     messageBG  = "Graphics/Battlebacks/"+messageFilename+"_message"
-
+    if !pbResolveBitmap(messageBG)
+      messageBG = "Graphics/Battlebacks/default_message"
+    end
     # Apply graphics
     bg = pbAddSprite("battle_bg",0,0,battleBG,@viewport)
     bg.z = 0

@@ -378,6 +378,31 @@ ItemHandlers::UseOnPokemon.add(:MISTSTONE, proc { |item, pokemon, scene|
   end
 })
 
+ItemHandlers::UseFromBag.add(:DEBUGGER,proc{|item|
+  Kernel.pbMessage(_INTL("[{1}]The debugger should ONLY be used if you are stuck somewhere because of a glitch.",Settings::GAME_VERSION_NUMBER))
+  if Kernel.pbConfirmMessageSerious(_INTL("Innapropriate use of this item can lead to unwanted effects and make the game unplayable. Do you want to continue?"))
+    $game_player.cancelMoveRoute()
+    Kernel.pbStartOver(false)
+    Kernel.pbMessage(_INTL("Please report the glitch on the Pokecommunity thread, on the game's subreddit or in the game's Discord channel."))
+  end
+})
+
+ItemHandlers::UseFromBag.add(:MAGICBOOTS,proc{|item|
+  if $DEBUG
+    if Kernel.pbConfirmMessageSerious(_INTL("Take off the Magic Boots?"))
+      $DEBUG = false
+    end
+  else
+    if Kernel.pbConfirmMessageSerious(_INTL("Put on the Magic Boots?"))
+      Kernel.pbMessage(_INTL("Debug mode is now active."))
+      $game_switches[842] = true #got debug mode (for compatibility)
+      $DEBUG = true
+    end
+  end
+  next 1
+})
+
+
 def pbForceEvo(pokemon)
   newspecies = getEvolvedSpecies(pokemon)
   return false if newspecies == -1

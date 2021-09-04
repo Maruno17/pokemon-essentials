@@ -52,46 +52,46 @@ Pokemon = B64H92,32 #Gasbra,
 #########################
 
 [CHANNELER,Carrietta]
-Pokemon = B92H61,32 #Politly,
+Pokemon = B52H92,32 #meowly,
 #########################
 
 [CHANNELER,Morgan]
-Pokemon = B92H140,34 #kabutly,
+Pokemon = B20H92,34 #ratatly,
 ############F5############
 #########################
 
 [CHANNELER,Ruth]
-Pokemon = B40H92,33 #Gastuf,
+Pokemon = B93H96,33 #Gastuf,
 #########################
 
 [HAUNTEDGIRL_YOUNG,Regan]
-Pokemon = B93H26,33 #Raiter,
+Pokemon = B102H92,33 #exeggly,
 #########################
 
 [CHANNELER,Karina]
-Pokemon = B92H73,32 #Tentatly,
+Pokemon = B93H42,32 #haunbat,
 #########################
 
 [HAUNTEDGIRL,Carol Anne]
-Pokemon = B28H93,34 #Hauntslash,
+Pokemon = B42H93,34 #golter,
 #########################
 ######	f6##############
 
 [CHANNELER,Angelica]
 Pokemon = GASTLY,32 #Pertly,
 Pokemon = GASTLY,33 #Genkarp,
-Pokemon = B13H94,33 #Gendle,
+Pokemon = B200H92,33 #misdreatly,
 #########################
 
 [HAUNTEDGIRL_YOUNG,Jennifer]
-Pokemon = B101H93,34 #Hauntode,
-#########################
+Pokemon = B94H36,31 #Hauntfable,
+#######################1##
 
 [CHANNELER,Emilia]
-Pokemon = B128H93,34 #Hauntros,
+Pokemon = B51H93,34 #Hauntrio,
 #########################
 
-[HAUNTEDGIRL,Samara]
+[HAUNTEDGIRL,???]
 Pokemon = B105H93,40 #Hauntwak,
 
 ############################
@@ -2086,8 +2086,8 @@ Pokemon = B109H88,37 #koffmer
 	Moves = SELFDESTRUCT,SLUDGEBOMB,DESTINYBOND,FLING
 	AbilityIndex = 0
 	Item = 	POISONBARB
-Pokemon = B197H169,37 #umbfing,
-	Moves = POWERGEM,FAINTATTACK,TOXIC,SLUDGEBOMB
+Pokemon = B42H113,35 #chanbat,
+	Moves = EGGBOMB,LIGHTSCREEN,TOXIC,POISONFANG
 	AbilityIndex = 0
 	Item = BLACKGLASSES
 Pokemon = B119H110,39 # Weeking,
@@ -3613,7 +3613,7 @@ Pokemon = B137H81,36 #MAGNEGON
 #######################
 
 [TEAMROCKET_M,Donald]
-Pokemon = SANDSLASH,34 #NIDOSLASH
+Pokemon = RATICATE,34 #NIDOSLASH
 Pokemon = B34H27,34 #SANDKING
 ######################
 #####

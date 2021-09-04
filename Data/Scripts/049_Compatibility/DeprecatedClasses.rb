@@ -1,0 +1,2 @@
+class ControlConfig
+end

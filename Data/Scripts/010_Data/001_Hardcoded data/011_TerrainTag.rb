@@ -4,7 +4,7 @@ module GameData
     attr_reader :id_number
     attr_reader :real_name
     attr_reader :can_surf
-    attr_reader :waterfall   # The main part only, not the crest
+    attr_reader :waterfall # The main part only, not the crest
     attr_reader :waterfall_crest
     attr_reader :can_fish
     attr_reader :can_dive
@@ -36,28 +36,29 @@ module GameData
     end
 
     def self.load; end
+
     def self.save; end
 
     def initialize(hash)
-      @id                     = hash[:id]
-      @id_number              = hash[:id_number]
-      @real_name              = hash[:id].to_s                || "Unnamed"
-      @can_surf               = hash[:can_surf]               || false
-      @waterfall              = hash[:waterfall]              || false
-      @waterfall_crest        = hash[:waterfall_crest]        || false
-      @can_fish               = hash[:can_fish]               || false
-      @can_dive               = hash[:can_dive]               || false
-      @deep_bush              = hash[:deep_bush]              || false
-      @shows_grass_rustle     = hash[:shows_grass_rustle]     || false
-      @land_wild_encounters   = hash[:land_wild_encounters]   || false
+      @id = hash[:id]
+      @id_number = hash[:id_number]
+      @real_name = hash[:id].to_s || "Unnamed"
+      @can_surf = hash[:can_surf] || false
+      @waterfall = hash[:waterfall] || false
+      @waterfall_crest = hash[:waterfall_crest] || false
+      @can_fish = hash[:can_fish] || false
+      @can_dive = hash[:can_dive] || false
+      @deep_bush = hash[:deep_bush] || false
+      @shows_grass_rustle = hash[:shows_grass_rustle] || false
+      @land_wild_encounters = hash[:land_wild_encounters] || false
       @double_wild_encounters = hash[:double_wild_encounters] || false
-      @battle_environment     = hash[:battle_environment]
-      @ledge                  = hash[:ledge]                  || false
-      @ice                    = hash[:ice]                    || false
-      @bridge                 = hash[:bridge]                 || false
-      @shows_reflections      = hash[:shows_reflections]      || false
-      @must_walk              = hash[:must_walk]              || false
-      @ignore_passability     = hash[:ignore_passability]     || false
+      @battle_environment = hash[:battle_environment]
+      @ledge = hash[:ledge] || false
+      @ice = hash[:ice] || false
+      @bridge = hash[:bridge] || false
+      @shows_reflections = false #= hash[:shows_reflections]      || false
+      @must_walk = hash[:must_walk] || false
+      @ignore_passability = hash[:ignore_passability] || false
     end
 
     def can_surf_freely
@@ -69,134 +70,134 @@ end
 #===============================================================================
 
 GameData::TerrainTag.register({
-  :id                     => :None,
-  :id_number              => 0
-})
+                                :id => :None,
+                                :id_number => 0
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :Ledge,
-  :id_number              => 1,
-  :ledge                  => true
-})
+                                :id => :Ledge,
+                                :id_number => 1,
+                                :ledge => true
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :Grass,
-  :id_number              => 2,
-  :shows_grass_rustle     => true,
-  :land_wild_encounters   => true,
-  :battle_environment     => :Grass
-})
+                                :id => :Grass,
+                                :id_number => 2,
+                                :shows_grass_rustle => true,
+                                :land_wild_encounters => true,
+                                :battle_environment => :Grass
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :Sand,
-  :id_number              => 3,
-  :battle_environment     => :Sand
-})
+                                :id => :Sand,
+                                :id_number => 3,
+                                :battle_environment => :Sand
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :Rock,
-  :id_number              => 15,
-  :battle_environment     => :Rock
-})
+                                :id => :Rock,
+                                :id_number => 15,
+                                :battle_environment => :Rock
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :DeepWater,
-  :id_number              => 5,
-  :can_surf               => true,
-  :can_fish               => true,
-  :can_dive               => true,
-  :battle_environment     => :MovingWater
-})
+                                :id => :DeepWater,
+                                :id_number => 5,
+                                :can_surf => true,
+                                :can_fish => true,
+                                :can_dive => true,
+                                :battle_environment => :MovingWater
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :WaterCurrent,
-  :id_number              => 6,
-  :can_surf               => true,
-  :can_fish               => true,
-  :battle_environment     => :MovingWater
-})
+                                :id => :WaterCurrent,
+                                :id_number => 6,
+                                :can_surf => true,
+                                :can_fish => true,
+                                :battle_environment => :MovingWater
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :StillWater,
-  :id_number              => 17,
-  :can_surf               => true,
-  :can_fish               => true,
-  :battle_environment     => :StillWater
-  #:shows_reflections      => true
-})
+                                :id => :StillWater,
+                                :id_number => 17,
+                                :can_surf => true,
+                                :can_fish => true,
+                                :battle_environment => :StillWater
+                                #:shows_reflections      => true
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :Water,
-  :id_number              => 7,
-  :can_surf               => true,
-  :can_fish               => true,
-  :battle_environment     => :MovingWater
-})
+                                :id => :Water,
+                                :id_number => 7,
+                                :can_surf => true,
+                                :can_fish => true,
+                                :battle_environment => :MovingWater
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :Waterfall,
-  :id_number              => 8,
-  :can_surf               => true,
-  :waterfall              => true
-})
+                                :id => :Waterfall,
+                                :id_number => 8,
+                                :can_surf => true,
+                                :waterfall => true
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :WaterfallCrest,
-  :id_number              => 9,
-  :can_surf               => true,
-  :can_fish               => true,
-  :waterfall_crest        => true
-})
+                                :id => :WaterfallCrest,
+                                :id_number => 9,
+                                :can_surf => true,
+                                :can_fish => true,
+                                :waterfall_crest => true
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :TallGrass,
-  :id_number              => 10,
-  :deep_bush              => true,
-  :land_wild_encounters   => true,
-  :double_wild_encounters => true,
-  :battle_environment     => :TallGrass,
-  :must_walk              => true
-})
+                                :id => :TallGrass,
+                                :id_number => 10,
+                                :deep_bush => true,
+                                :land_wild_encounters => true,
+                                :double_wild_encounters => true,
+                                :battle_environment => :TallGrass,
+                                :must_walk => true
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :UnderwaterGrass,
-  :id_number              => 11,
-  :land_wild_encounters   => true
-})
+                                :id => :UnderwaterGrass,
+                                :id_number => 11,
+                                :land_wild_encounters => true
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :Ice,
-  :id_number              => 12,
-  :battle_environment     => :Ice,
-  :ice                    => true,
-  :must_walk              => true
-})
+                                :id => :Ice,
+                                :id_number => 12,
+                                :battle_environment => :Ice,
+                                :ice => true,
+                                :must_walk => true
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :Neutral,
-  :id_number              => 13,
-  :ignore_passability     => true
-})
+                                :id => :Neutral,
+                                :id_number => 13,
+                                :ignore_passability => true
+                              })
 
 # NOTE: This is referenced by ID in an Events.onStepTakenFieldMovement proc that
 #       adds soot to the Soot Sack if the player walks over one of these tiles.
 GameData::TerrainTag.register({
-  :id                     => :SootGrass,
-  :id_number              => 14,
-  :shows_grass_rustle     => true,
-  :land_wild_encounters   => true,
-  :battle_environment     => :Grass
-})
+                                :id => :SootGrass,
+                                :id_number => 14,
+                                :shows_grass_rustle => true,
+                                :land_wild_encounters => true,
+                                :battle_environment => :Grass
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :Bridge,
-  :id_number              => 4,
-  :bridge                 => true
-})
+                                :id => :Bridge,
+                                :id_number => 4,
+                                :bridge => true
+                              })
 
 GameData::TerrainTag.register({
-  :id                     => :Puddle,
-  :id_number              => 16,
-  :battle_environment     => :Puddle,
-  :shows_reflections      => false
-})
+                                :id => :Puddle,
+                                :id_number => 16,
+                                :battle_environment => :Puddle,
+                                :shows_reflections => false
+                              })

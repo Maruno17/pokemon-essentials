@@ -90,7 +90,7 @@
     // Override the game window title
     // (default: none)
     //
-    "windowTitle": "Pokémon Infinite Fusion",
+    //"windowTitle": "Pokémon Infinite Fusion",
 
 
     // Enforce a static frame rate

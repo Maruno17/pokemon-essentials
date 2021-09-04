@@ -522,7 +522,7 @@
 515,DEVONSCOPE,Quest Journal,Quest Journals,8,0,A journal that logs all of the quests that you have in progress,2,0,6,
 516,SQUIRTBOTTLE,Squirtbottle,Squirtbottles,8,0,A bottle used for watering plants.,0,0,6,
 517,SPRAYDUCK,Mareanie Doll,Mareanie Dolls,8,0,A doll shaped like the Alolan Pokémon Mareanie. It can be used to scare away Corsola.,0,0,6,
-518,WAILMERPAIL,Spring Boots,Spring Boots,8,0,Boots mounted with a spring. They can be used to jump over small gaps.,0,0,6,
+518,WAILMERPAIL,Golbat Boots,Golbat Boots,8,0,Boots mounted with a spring. They can be used to jump over small gaps.,0,0,6,
 519,GRACIDEA,Spaceship Part,Spaceship Parts,8,0,"Debris from a mysterious alien spaceship.",5,0,6,
 520,AURORATICKET,Navel Ticket,Navel Tickets,8,0,A ticket required to board a ship to a faraway island. It glows beautifully.,0,0,6,
 521,OLDSEAMAP,Old Sea Map,Old Sea Maps,8,0,A faded sea chart that shows the way to a certain island.,0,0,6,
@@ -651,5 +651,16 @@
 643,JETPACK,Jetpack,Jetpacks,8,0,"A water propelled device that allows you to climb up waterfalls without the use of a Pokémon ",2,0,6
 644,INFINITEREVERSERS,Infinite Reversers,Infinite Reversers,8,0,"Inverts a fusion. Can be reused as many times as you like.",5,0,6,
 645,INFINITESPLICERS2,Infinite Splicers,Infinite Splicers,8,0,"An improved version of the Infinite Splicers. Can be reused as many times as you like.",5,0,6,
-
+646,TM109,TM109,TM109s,4,30000,"The user swings its body around violently to inflict damage on everything in its vicinity.",3,0,0,BRUTALSWING
+647,TM110,TM110,TM110s,4,30000,"This move reduces damage from attacks for five turns. This can be used only in a hailstorm.",3,0,0,AURORAVEIL
+648,TM111,TM111,TM111s,4,30000,"The user damages opposing Pokémon by emitting a powerful flash.",3,0,0,DAZZLINGGLEAM
+649,TM112,TM112,TM112s,4,30000,"The user focuses its mind before launching a punch. It will fail if the user is hit before it is used.",3,0,0,FOCUSPUNCH
+650,TM113,TM113,TM113s,4,30000,"The target is infested and unable to flee for four to five turns.",3,0,0,INFESTATION
+651,TM114,TM114,TM114s,4,30000,"The user drains the target's blood. The user's HP is restored by half the damage taken by the target.",3,0,0,LEECHLIFE
+652,TM115,TM115,TM115s,4,30000,"Striking opponents repeatedly makes the user's fists harder, raising the user's Attack stat.",3,0,0,POWERUPPUNCH
+653,TM116,TM116,TM116s,4,30000,"The user strikes the target with a quick jolt of electricity. This attack cannot be evaded.",3,0,0,SHOCKWAVE
+654,TM117,TM117,TM117s,4,30000,"The user stabs the target with a sharp horn. This attack never misses.",3,0,0,SMARTSTRIKE
+655,TM118,TM118,TM118s,4,30000,"The target is hit with wings of steel. It may also raise the user's Defense stat.",3,0,0,STEELWING
+656,TM119,TM119,TM119s,4,30000,"The user attacks driven by frustration. Power increases if the user's previous move failed.",3,0,0,STOMPINGTANTRUM
+657,TM120,TM120,TM120s,4,30000,"The user attacks the target's throat. The target cannot use sound-based moves for two turns.",3,0,0,THROATCHOP
 

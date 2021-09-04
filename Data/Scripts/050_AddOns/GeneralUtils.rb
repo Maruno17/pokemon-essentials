@@ -165,7 +165,8 @@ end
 def getHeadID(species, bodyId)
   head_dexNum = convertSpeciesSymbolToDexNumber(species)
   body_dexNum = convertSpeciesSymbolToDexNumber(bodyId)
-  return (head_dexNum - (body_dexNum * NB_POKEMON)).round
+  calculated_number = (head_dexNum - (body_dexNum * NB_POKEMON)).round
+  return calculated_number == 0 ? 420 : calculated_number
 end
 
 def getAllNonLegendaryPokemon()
@@ -290,4 +291,14 @@ def pbBitmap(path)
     bmp = Bitmap.new(1, 1)
   end
   return bmp
+end
+
+def Kernel.setRocketPassword(variableNum)
+  abilityIndex = rand(233)
+  speciesIndex =rand(PBSpecies.maxValue-1)
+
+  word1 = PBSpecies.getName(speciesIndex)
+  word2 = GameData::Ability.get(abilityIndex).name
+  password = _INTL("{1}'s {2}",word1,word2)
+  pbSet(variableNum,password)
 end

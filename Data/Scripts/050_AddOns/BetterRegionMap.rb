@@ -94,17 +94,21 @@ class BetterRegionMap
     # end
     @window["player"] = Sprite.new(@mapoverlayvp)
     if @show_player
-      player = nil
-      player = GameData::MapMetadata.get($game_map.map_id).town_map_position #pbGetMetadata($game_map.map_id, MetadataMapPosition) if $game_map
-      if player && player[0] == @region
-        $PokemonGlobal.regionMapSel[0] = player[1]
-        $PokemonGlobal.regionMapSel[1] = player[2]
-        gender = $Trainer.gender.to_digits(3)
-        @window["player"].bmp("Graphics/Pictures/mapPlayer#{gender}")
-        @window["player"].x = TileWidth * player[1] + (TileWidth / 2.0)
-        @window["player"].y = TileHeight * player[2] + (TileHeight / 2.0)
-        @window["player"].center_origins
+      if map_metadata
+        player = map_metadata.town_map_position
+        if player && player[0] == @region
+          $PokemonGlobal.regionMapSel[0] = player[1]
+          $PokemonGlobal.regionMapSel[1] = player[2]
+          gender = $Trainer.gender.to_digits(3)
+          @window["player"].bmp("Graphics/Pictures/mapPlayer#{gender}")
+          @window["player"].x = TileWidth * player[1] + (TileWidth / 2.0)
+          @window["player"].y = TileHeight * player[2] + (TileHeight / 2.0)
+          @window["player"].center_origins
+        end
+      else
+
       end
+
     end
     @window["areahighlight"] = BitmapSprite.new(@window["map"].bitmap.width,@window["map"].bitmap.height,@mapoverlayvp)
     @window["areahighlight"].y = -8
