@@ -4,17 +4,15 @@ The 5.0 update brings Infinite Fusion to a new engine, which makes the game run 
 for a variety of improvements. 
 However, there are also a handful features that were in previous versions of the game which are not 
 compatible with this new version of Pokemon Essentials and that have been removed. Some of them will
-be added back progressively in future updates and some of them will likely be gone for good.
+be added back progressively in future updates and others will likely be gone for good.
+
+See the full changelog of Pokémon Essentials 19 and MKXP
+MKXP: https://github.com/Ancurio/mkxp
+Essentials: https://essentialsdocs.fandom.com/wiki/Change_log
 
 #############
 Added Features
 #############
-
-New features added by upgrading to Pokemon essentials 19 / MKXP
-‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
-MKXP: https://github.com/Ancurio/mkxp
-Full Essentials changelog: https://essentialsdocs.fandom.com/wiki/Change_log
-
 ## Technical###
 - MKXP player is now used to run the game instead of RGSS player
 - Fullscreen & resizable screen
@@ -26,14 +24,14 @@ Full Essentials changelog: https://essentialsdocs.fandom.com/wiki/Change_log
 
 
 ## UI and menus ##
+- Changed the battle UI's appearance
 - New options in in-game menu:
 	- Default movement
 	- Text entry type
 	- Battle type
-- Menus and controls should be more responsive
 - Added Instant text speed option
+- Menus and controls should be more responsive in general
 - Added visual indicator for selecting fusion order on the title screen
-- Changed the battle UI's appearance
 
 ## Gameplay ##
 - Exp. gain when catching Pokémon
@@ -118,3 +116,4 @@ Removed features that probably won't be coming back
 - Significant stutter in the overworld when playing the game on an AMD CPU
 - Several custom items have not yet been reimplemented
 - Some battle backgrounds might be missing
+- Some NPC trades likely to crash the game
