@@ -107,7 +107,7 @@ Removed features that probably won't be coming back
 
 
 ############ KNOWN ISSUES ##############
-- Some areas might have abnormal lag (please tell me in the discord if you find one that's unreasonably laggy)
+- Some areas might have abnormal lag - please tell me in the discord if you find one that's unreasonably laggy (you will know if you see one)
 - Some side-stairs might act strange
 - The Pokedex is currently all sorts of messed up
 - Long loading time when starting up the game
@@ -116,4 +116,5 @@ Removed features that probably won't be coming back
 - Significant stutter in the overworld when playing the game on an AMD CPU
 - Several custom items have not yet been reimplemented
 - Some battle backgrounds might be missing
+- Erika's backsprite uses's May's backsprite from RSE
 - Some NPC trades likely to crash the game

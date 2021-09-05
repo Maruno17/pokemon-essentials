@@ -15,7 +15,7 @@ class PokemonBoxIcon < IconSprite
   end
 
   def useRegularIcon(species)
-    dexNum = convertSpeciesSymbolToDexNumber(species)
+    dexNum = getDexNumberForSpecies(species)
     return true if dexNum <= Settings::NB_POKEMON
     return false if $game_variables == nil
     return true if $game_variables[220] != 0

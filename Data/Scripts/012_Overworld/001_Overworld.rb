@@ -701,7 +701,7 @@ end
 #===============================================================================
 # Picking up an item found on the ground
 #===============================================================================
-def pbItemBall(item,quantity=1)
+def pbItemBall(item,quantity=1,item_name="",canRandom=true)
   item = GameData::Item.get(item)
   return false if !item || quantity<1
   itemname = (quantity>1) ? item.name_plural : item.name
@@ -745,7 +745,8 @@ end
 #===============================================================================
 # Being given an item
 #===============================================================================
-def pbReceiveItem(item,quantity=1)
+def pbReceiveItem(item,quantity=1,item_name="",music=nil)
+  #item_name -> pour donner un autre nom à l'item. Pas encore réimplémenté et surtout là pour éviter que ça plante quand des events essaient de le faire
   item = GameData::Item.get(item)
   return false if !item || quantity<1
   itemname = (quantity>1) ? item.name_plural : item.name

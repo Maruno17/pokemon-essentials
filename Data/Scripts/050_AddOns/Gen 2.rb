@@ -130,8 +130,8 @@ end
 
 #in: pokemon number
 def Kernel.isPartPokemon(src, target)
-  src = convertSpeciesSymbolToDexNumber(src)
-  target = convertSpeciesSymbolToDexNumber(target)
+  src = getDexNumberForSpecies(src)
+  target = getDexNumberForSpecies(target)
   return true if src == target
   return false if src <= NB_POKEMON
   bod = getBasePokemonID(src, true)
@@ -152,8 +152,6 @@ def getBasePokemonID(pokemon, body = true)
 
   # cname = getConstantName(PBSpecies, pokemon) rescue nil
   cname = GameData::Species.get(pokemon).id.to_s
-
-
   return pokemon if pokemon <= NB_POKEMON
   return pokemon if cname == nil
 

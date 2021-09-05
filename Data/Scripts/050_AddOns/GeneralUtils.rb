@@ -116,7 +116,7 @@ def pbCheckPokemonIconFiles(speciesNum,egg=false, dna=false)
 end
 
 
-def convertSpeciesSymbolToDexNumber(species)
+def getDexNumberForSpecies(species)
   return species if species.is_a?(Integer)
   if species.is_a?(Symbol)
     dexNum = GameData::Species.get(species).id_number
@@ -158,13 +158,13 @@ def getRandomCustomFusion(returnRandomPokemonIfNoneFound=true,customPokeList=[],
 end
 
 def getBodyID(species)
-  dexNum = convertSpeciesSymbolToDexNumber(species)
+  dexNum = getDexNumberForSpecies(species)
   return (dexNum / NB_POKEMON).round
 end
 
 def getHeadID(species, bodyId)
-  head_dexNum = convertSpeciesSymbolToDexNumber(species)
-  body_dexNum = convertSpeciesSymbolToDexNumber(bodyId)
+  head_dexNum = getDexNumberForSpecies(species)
+  body_dexNum = getDexNumberForSpecies(bodyId)
   calculated_number = (head_dexNum - (body_dexNum * NB_POKEMON)).round
   return calculated_number == 0 ? 420 : calculated_number
 end

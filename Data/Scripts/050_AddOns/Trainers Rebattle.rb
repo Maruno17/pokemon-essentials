@@ -148,17 +148,15 @@ def getEvolution(species)
     head = getBasePokemonID(species,false)
     ret_evoB = pbGetEvolvedFormData(body)
     ret_evoH = pbGetEvolvedFormData(head)
-
     evoBody = ret_evoB.any? ? ret_evoB[0][2] : -1
     evoHead = ret_evoH.any? ? ret_evoH[0][2] : -1
-
     return -1 if isNegativeOrNull(evoBody) && isNegativeOrNull(evoHead)
     return body*Settings::NB_POKEMON+evoHead if isNegativeOrNull(evoBody)   #only head evolves
     return evoBody*Settings::NB_POKEMON + head if isNegativeOrNull(evoHead)  #only body evolves
     return evoBody*Settings::NB_POKEMON+evoHead                   #both evolve
   else
     evo = pbGetEvolvedFormData(species)
-    return evo.any? ? evo[0][2] : -1
+    return evo.any? ? getDexNumberForSpecies(evo[0][0]) : -1
   end
 end
 
@@ -169,25 +167,27 @@ def getFusionSpecies(body,head)
 end
 #
 def evolveHead(species)
-  if species <= Settings::NB_POKEMON
-    evo = getEvolution(species)
-    return evo == -1 ? species : evo
+  species_id = getDexNumberForSpecies(species)
+  if species_id <= Settings::NB_POKEMON
+    evo = getEvolution(species_id)
+    return evo == -1 ? species_id : evo
   end
-  head = getBasePokemonID(species,false)
-  body = getBasePokemonID(species)
+  head = getBasePokemonID(species_id,false)
+  body = getBasePokemonID(species_id)
   headEvo = getEvolution(head)
-  return headEvo == -1 ? species : getFusionSpecies(body,headEvo)
+  return headEvo == -1 ? species_id : getFusionSpecies(body,headEvo)
 end
 
 def evolveBody(species)
-  if species <= Settings::NB_POKEMON
-    evo = getEvolution(species)
-    return evo == -1 ? species : evo
+  species_id = getDexNumberForSpecies(species)
+  if species_id <= Settings::NB_POKEMON
+    evo = getEvolution(species_id)
+    return evo == -1 ? species_id : evo
   end
-  head = getBasePokemonID(species,false)
-  body = getBasePokemonID(species)
+  head = getBasePokemonID(species_id,false)
+  body = getBasePokemonID(species_id)
   bodyEvo = getEvolution(body)
-  return bodyEvo == -1 ? species : getFusionSpecies(bodyEvo,head)
+  return bodyEvo == -1 ? species_id : getFusionSpecies(bodyEvo,head)
 end
 
 
