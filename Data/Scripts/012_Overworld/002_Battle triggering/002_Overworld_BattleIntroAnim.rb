@@ -3,7 +3,9 @@
 #===============================================================================
 def pbSceneStandby
   $scene.disposeSpritesets if $scene && $scene.is_a?(Scene_Map)
-  RPG::Cache.clear
+  if RPG::Cache.need_clearing
+    RPG::Cache.clear
+  end
   Graphics.frame_reset
   yield
   $scene.createSpritesets if $scene && $scene.is_a?(Scene_Map)

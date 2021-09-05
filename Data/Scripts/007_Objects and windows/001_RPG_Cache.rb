@@ -31,6 +31,9 @@ module RPG
       return obj
     end
 
+    def self.need_clearing()
+      return @cache.size >= 100
+    end
 
 
     def self.load_bitmap(folder_name, filename, hue = 0)

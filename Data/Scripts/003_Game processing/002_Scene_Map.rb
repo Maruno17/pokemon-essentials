@@ -8,7 +8,7 @@ class Scene_Map
 
   def spriteset
     for i in @spritesets.values
-      return i if i.map==$game_map
+      return i if i.map == $game_map
     end
     return @spritesets.values[0]
   end
@@ -51,43 +51,48 @@ class Scene_Map
     map = load_data(sprintf("Data/Map%03d.rxdata", mapid))
     if playingBGM && map.autoplay_bgm
       if (PBDayNight.isNight? rescue false)
-        pbBGMFade(0.8) if playingBGM.name!=map.bgm.name && playingBGM.name!=map.bgm.name+"_n"
+        pbBGMFade(0.8) if playingBGM.name != map.bgm.name && playingBGM.name != map.bgm.name + "_n"
       else
-        pbBGMFade(0.8) if playingBGM.name!=map.bgm.name
+        pbBGMFade(0.8) if playingBGM.name != map.bgm.name
       end
     end
     if playingBGS && map.autoplay_bgs
-      pbBGMFade(0.8) if playingBGS.name!=map.bgs.name
+      pbBGMFade(0.8) if playingBGS.name != map.bgs.name
     end
     Graphics.frame_reset
   end
 
   #todo
   def cacheNeedsClearing
-    return false
+    p RPG::Cache.size
+    return RPG::Cache.size >= 100
   end
 
-  def transfer_player(cancelVehicles=true)
+  def transfer_player(cancelVehicles = true)
     $game_temp.player_transferring = false
     pbCancelVehicles($game_temp.player_new_map_id) if cancelVehicles
     autofade($game_temp.player_new_map_id)
     pbBridgeOff
     @spritesetGlobal.playersprite.clearShadows
-    if $game_map.map_id!=$game_temp.player_new_map_id
+    if $game_map.map_id != $game_temp.player_new_map_id
       $MapFactory.setup($game_temp.player_new_map_id)
     end
     $game_player.moveto($game_temp.player_new_x, $game_temp.player_new_y)
     case $game_temp.player_new_direction
-    when 2 then $game_player.turn_down
-    when 4 then $game_player.turn_left
-    when 6 then $game_player.turn_right
-    when 8 then $game_player.turn_up
+    when 2 then
+      $game_player.turn_down
+    when 4 then
+      $game_player.turn_left
+    when 6 then
+      $game_player.turn_right
+    when 8 then
+      $game_player.turn_up
     end
 
     $game_player.straighten
     $game_map.update
     disposeSpritesets
-    if cacheNeedsClearing()
+    if RPG::Cache.need_clearing
       RPG::Cache.clear
     end
     createSpritesets
@@ -217,7 +222,7 @@ class Scene_Map
     end
   end
 
-  def reset_map(fadeout=false)
+  def reset_map(fadeout = false)
     $MapFactory.setup($game_map.map_id)
     $game_player.moveto($game_player.x, $game_player.y)
     $game_player.straighten
