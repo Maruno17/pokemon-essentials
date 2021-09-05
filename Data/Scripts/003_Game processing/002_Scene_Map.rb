@@ -62,6 +62,11 @@ class Scene_Map
     Graphics.frame_reset
   end
 
+  #todo
+  def cacheNeedsClearing
+    return false
+  end
+
   def transfer_player(cancelVehicles=true)
     $game_temp.player_transferring = false
     pbCancelVehicles($game_temp.player_new_map_id) if cancelVehicles
@@ -78,10 +83,13 @@ class Scene_Map
     when 6 then $game_player.turn_right
     when 8 then $game_player.turn_up
     end
+
     $game_player.straighten
     $game_map.update
     disposeSpritesets
-    RPG::Cache.clear
+    if cacheNeedsClearing()
+      RPG::Cache.clear
+    end
     createSpritesets
     if $game_temp.transition_processing
       $game_temp.transition_processing = false

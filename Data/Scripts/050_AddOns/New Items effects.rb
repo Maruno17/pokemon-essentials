@@ -744,93 +744,93 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 })
 
 ##New "stones"
-ItemHandlers::UseOnPokemon.add(:UPGRADE, proc { |item, pokemon, scene|
-  if (pokemon.isShadow? rescue false)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newspecies = pbCheckEvolution(pokemon, item)
-  if newspecies <= 0
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  else
-    pbFadeOutInWithMusic(99999) {
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, newspecies)
-      evo.pbEvolution(false)
-      evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-})
-
-ItemHandlers::UseOnPokemon.add(:DUBIOUSDISC, proc { |item, pokemon, scene|
-  if (pokemon.isShadow? rescue false)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newspecies = pbCheckEvolution(pokemon, item)
-  if newspecies <= 0
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  else
-    pbFadeOutInWithMusic(99999) {
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, newspecies)
-      evo.pbEvolution(false)
-      evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-})
-
-ItemHandlers::UseOnPokemon.add(:ICESTONE, proc { |item, pokemon, scene|
-  if (pokemon.isShadow? rescue false)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newspecies = pbCheckEvolution(pokemon, item)
-  if newspecies <= 0
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  else
-    pbFadeOutInWithMusic(99999) {
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, newspecies)
-      evo.pbEvolution(false)
-      evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-})
-
-ItemHandlers::UseOnPokemon.add(:MAGNETSTONE, proc { |item, pokemon, scene|
-  if (pokemon.isShadow? rescue false)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newspecies = pbCheckEvolution(pokemon, item)
-  if newspecies <= 0
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  else
-    pbFadeOutInWithMusic(99999) {
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, newspecies)
-      evo.pbEvolution(false)
-      evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-})
+# ItemHandlers::UseOnPokemon.add(:UPGRADE, proc { |item, pokemon, scene|
+#   if (pokemon.isShadow? rescue false)
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   newspecies = pbCheckEvolution(pokemon, item)
+#   if newspecies <= 0
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   else
+#     pbFadeOutInWithMusic(99999) {
+#       evo = PokemonEvolutionScene.new
+#       evo.pbStartScreen(pokemon, newspecies)
+#       evo.pbEvolution(false)
+#       evo.pbEndScreen
+#       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+#       scene.pbRefresh
+#     }
+#     next true
+#   end
+# })
+#
+# ItemHandlers::UseOnPokemon.add(:DUBIOUSDISC, proc { |item, pokemon, scene|
+#   if (pokemon.isShadow? rescue false)
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   newspecies = pbCheckEvolution(pokemon, item)
+#   if newspecies <= 0
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   else
+#     pbFadeOutInWithMusic(99999) {
+#       evo = PokemonEvolutionScene.new
+#       evo.pbStartScreen(pokemon, newspecies)
+#       evo.pbEvolution(false)
+#       evo.pbEndScreen
+#       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+#       scene.pbRefresh
+#     }
+#     next true
+#   end
+# })
+#
+# ItemHandlers::UseOnPokemon.add(:ICESTONE, proc { |item, pokemon, scene|
+#   if (pokemon.isShadow? rescue false)
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   newspecies = pbCheckEvolution(pokemon, item)
+#   if newspecies <= 0
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   else
+#     pbFadeOutInWithMusic(99999) {
+#       evo = PokemonEvolutionScene.new
+#       evo.pbStartScreen(pokemon, newspecies)
+#       evo.pbEvolution(false)
+#       evo.pbEndScreen
+#       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+#       scene.pbRefresh
+#     }
+#     next true
+#   end
+# })
+# #
+# ItemHandlers::UseOnPokemon.add(:MAGNETSTONE, proc { |item, pokemon, scene|
+#   if (pokemon.isShadow? rescue false)
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   newspecies = pbCheckEvolution(pokemon, item)
+#   if newspecies <= 0
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   else
+#     pbFadeOutInWithMusic(99999) {
+#       evo = PokemonEvolutionScene.new
+#       evo.pbStartScreen(pokemon, newspecies)
+#       evo.pbEvolution(false)
+#       evo.pbEndScreen
+#       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+#       scene.pbRefresh
+#     }
+#     next true
+#   end
+# })
 
 #easter egg for evolving shellder into slowbro's tail
 ItemHandlers::UseOnPokemon.add(:SLOWPOKETAIL, proc { |item, pokemon, scene|
@@ -851,50 +851,50 @@ ItemHandlers::UseOnPokemon.add(:SLOWPOKETAIL, proc { |item, pokemon, scene|
     next true
   end
 })
-
-ItemHandlers::UseOnPokemon.add(:SHINYSTONE, proc { |item, pokemon, scene|
-  if (pokemon.isShadow? rescue false)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newspecies = pbCheckEvolution(pokemon, item)
-  if newspecies <= 0
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  else
-    pbFadeOutInWithMusic(99999) {
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, newspecies)
-      evo.pbEvolution(false)
-      evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-})
-
-ItemHandlers::UseOnPokemon.add(:DAWNSTONE, proc { |item, pokemon, scene|
-  if (pokemon.isShadow? rescue false)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newspecies = pbCheckEvolution(pokemon, item)
-  if newspecies <= 0
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  else
-    pbFadeOutInWithMusic(99999) {
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, newspecies)
-      evo.pbEvolution(false)
-      evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-})
+#
+# ItemHandlers::UseOnPokemon.add(:SHINYSTONE, proc { |item, pokemon, scene|
+#   if (pokemon.isShadow? rescue false)
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   newspecies = pbCheckEvolution(pokemon, item)
+#   if newspecies <= 0
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   else
+#     pbFadeOutInWithMusic(99999) {
+#       evo = PokemonEvolutionScene.new
+#       evo.pbStartScreen(pokemon, newspecies)
+#       evo.pbEvolution(false)
+#       evo.pbEndScreen
+#       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+#       scene.pbRefresh
+#     }
+#     next true
+#   end
+# })
+#
+# ItemHandlers::UseOnPokemon.add(:DAWNSTONE, proc { |item, pokemon, scene|
+#   if (pokemon.isShadow? rescue false)
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   newspecies = pbCheckEvolution(pokemon, item)
+#   if newspecies <= 0
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   else
+#     pbFadeOutInWithMusic(99999) {
+#       evo = PokemonEvolutionScene.new
+#       evo.pbStartScreen(pokemon, newspecies)
+#       evo.pbEvolution(false)
+#       evo.pbEndScreen
+#       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+#       scene.pbRefresh
+#     }
+#     next true
+#   end
+# })
 
 #TRACKER (for roaming legendaries)
 ItemHandlers::UseInField.add(:REVEALGLASS, proc { |item|
@@ -1449,137 +1449,137 @@ ItemHandlers::UseOnPokemon.add(:DAMAGEUP, proc { |item, pokemon, scene|
 })
 
 ##New "stones"
-ItemHandlers::UseOnPokemon.add(:UPGRADE, proc { |item, pokemon, scene|
-  if (pokemon.isShadow? rescue false)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newspecies = pbCheckEvolution(pokemon, item)
-  if newspecies <= 0
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  else
-    pbFadeOutInWithMusic(99999) {
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, newspecies)
-      evo.pbEvolution(false)
-      evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-})
+# ItemHandlers::UseOnPokemon.add(:UPGRADE, proc { |item, pokemon, scene|
+#   if (pokemon.isShadow? rescue false)
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   newspecies = pbCheckEvolution(pokemon, item)
+#   if newspecies <= 0
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   else
+#     pbFadeOutInWithMusic(99999) {
+#       evo = PokemonEvolutionScene.new
+#       evo.pbStartScreen(pokemon, newspecies)
+#       evo.pbEvolution(false)
+#       evo.pbEndScreen
+#       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+#       scene.pbRefresh
+#     }
+#     next true
+#   end
+# })
+#
+# ItemHandlers::UseOnPokemon.add(:DUBIOUSDISC, proc { |item, pokemon, scene|
+#   if (pokemon.isShadow? rescue false)
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   newspecies = pbCheckEvolution(pokemon, item)
+#   if newspecies <= 0
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   else
+#     pbFadeOutInWithMusic(99999) {
+#       evo = PokemonEvolutionScene.new
+#       evo.pbStartScreen(pokemon, newspecies)
+#       evo.pbEvolution(false)
+#       evo.pbEndScreen
+#       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+#       scene.pbRefresh
+#     }
+#     next true
+#   end
+# })
+#
+# ItemHandlers::UseOnPokemon.add(:ICESTONE, proc { |item, pokemon, scene|
+#   if (pokemon.isShadow? rescue false)
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   newspecies = pbCheckEvolution(pokemon, item)
+#   if newspecies <= 0
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   else
+#     pbFadeOutInWithMusic(99999) {
+#       evo = PokemonEvolutionScene.new
+#       evo.pbStartScreen(pokemon, newspecies)
+#       evo.pbEvolution(false)
+#       evo.pbEndScreen
+#       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+#       scene.pbRefresh
+#     }
+#     next true
+#   end
+# })
+#
+# ItemHandlers::UseOnPokemon.add(:MAGNETSTONE, proc { |item, pokemon, scene|
+#   if (pokemon.isShadow? rescue false)
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   newspecies = pbCheckEvolution(pokemon, item)
+#   if newspecies <= 0
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   else
+#     pbFadeOutInWithMusic(99999) {
+#       evo = PokemonEvolutionScene.new
+#       evo.pbStartScreen(pokemon, newspecies)
+#       evo.pbEvolution(false)
+#       evo.pbEndScreen
+#       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+#       scene.pbRefresh
+#     }
+#     next true
+#   end
+# })
 
-ItemHandlers::UseOnPokemon.add(:DUBIOUSDISC, proc { |item, pokemon, scene|
-  if (pokemon.isShadow? rescue false)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newspecies = pbCheckEvolution(pokemon, item)
-  if newspecies <= 0
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  else
-    pbFadeOutInWithMusic(99999) {
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, newspecies)
-      evo.pbEvolution(false)
-      evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-})
-
-ItemHandlers::UseOnPokemon.add(:ICESTONE, proc { |item, pokemon, scene|
-  if (pokemon.isShadow? rescue false)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newspecies = pbCheckEvolution(pokemon, item)
-  if newspecies <= 0
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  else
-    pbFadeOutInWithMusic(99999) {
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, newspecies)
-      evo.pbEvolution(false)
-      evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-})
-
-ItemHandlers::UseOnPokemon.add(:MAGNETSTONE, proc { |item, pokemon, scene|
-  if (pokemon.isShadow? rescue false)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newspecies = pbCheckEvolution(pokemon, item)
-  if newspecies <= 0
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  else
-    pbFadeOutInWithMusic(99999) {
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, newspecies)
-      evo.pbEvolution(false)
-      evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-})
-
-ItemHandlers::UseOnPokemon.add(:SHINYSTONE, proc { |item, pokemon, scene|
-  if (pokemon.isShadow? rescue false)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newspecies = pbCheckEvolution(pokemon, item)
-  if newspecies <= 0
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  else
-    pbFadeOutInWithMusic(99999) {
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, newspecies)
-      evo.pbEvolution(false)
-      evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-})
-
-ItemHandlers::UseOnPokemon.add(:DAWNSTONE, proc { |item, pokemon, scene|
-  if (pokemon.isShadow? rescue false)
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  end
-  newspecies = pbCheckEvolution(pokemon, item)
-  if newspecies <= 0
-    scene.pbDisplay(_INTL("It won't have any effect."))
-    next false
-  else
-    pbFadeOutInWithMusic(99999) {
-      evo = PokemonEvolutionScene.new
-      evo.pbStartScreen(pokemon, newspecies)
-      evo.pbEvolution(false)
-      evo.pbEndScreen
-      scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
-      scene.pbRefresh
-    }
-    next true
-  end
-})
+# ItemHandlers::UseOnPokemon.add(:SHINYSTONE, proc { |item, pokemon, scene|
+#   if (pokemon.isShadow? rescue false)
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   newspecies = pbCheckEvolution(pokemon, item)
+#   if newspecies <= 0
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   else
+#     pbFadeOutInWithMusic(99999) {
+#       evo = PokemonEvolutionScene.new
+#       evo.pbStartScreen(pokemon, newspecies)
+#       evo.pbEvolution(false)
+#       evo.pbEndScreen
+#       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+#       scene.pbRefresh
+#     }
+#     next true
+#   end
+# })
+#
+# ItemHandlers::UseOnPokemon.add(:DAWNSTONE, proc { |item, pokemon, scene|
+#   if (pokemon.isShadow? rescue false)
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   end
+#   newspecies = pbCheckEvolution(pokemon, item)
+#   if newspecies <= 0
+#     scene.pbDisplay(_INTL("It won't have any effect."))
+#     next false
+#   else
+#     pbFadeOutInWithMusic(99999) {
+#       evo = PokemonEvolutionScene.new
+#       evo.pbStartScreen(pokemon, newspecies)
+#       evo.pbEvolution(false)
+#       evo.pbEndScreen
+#       scene.pbRefreshAnnotations(proc { |p| pbCheckEvolution(p, item) > 0 })
+#       scene.pbRefresh
+#     }
+#     next true
+#   end
+# })
 
 #
 # ItemHandlers::UseOnPokemon.copy(:FIRESTONE,
