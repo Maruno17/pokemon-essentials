@@ -98,14 +98,14 @@ class PokeBattle_BattleArena < PokeBattle_Battle
   end
 
   def pbMindScore(move)
-    if move.function=="0AA" ||   # Detect/Protect
-       move.function=="0E8" ||   # Endure
-       move.function=="012"      # Fake Out
+    if move.function=="ProtectUser" ||   # Detect/Protect
+       move.function=="UserEnduresFaintingThisTurn" ||   # Endure
+       move.function=="FlinchTargetFailsIfNotUserFirstTurn"   # Fake Out
       return -1
     end
-    if move.function=="071" ||   # Counter
-       move.function=="072" ||   # Mirror Coat
-       move.function=="0D4"      # Bide
+    if move.function=="CounterPhysicalDamage" ||   # Counter
+       move.function=="CounterSpecialDamage" ||   # Mirror Coat
+       move.function=="MultiTurnAttackBideThenReturnDoubleDamage"   # Bide
       return 0
     end
     return 0 if move.statusMove?

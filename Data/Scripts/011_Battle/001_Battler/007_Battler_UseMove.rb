@@ -372,7 +372,7 @@ class PokeBattle_Battler
         #       Pokémon which becomes Ghost-type because of Protean, it should
         #       target and curse itself. I think this is silly, so I'm making it
         #       choose a random opponent to curse instead.
-        if move.function=="10D" && targets.length==0   # Curse
+        if move.function=="CurseTargetOrLowerUserSpd1RaiseUserAtkDef1" && targets.length==0
           choice[3] = -1
           targets = pbFindTargets(choice,move,user)
         end
@@ -658,7 +658,7 @@ class PokeBattle_Battler
     if move.pbDamagingMove?
       targets.each do |b|
         next if b.damageState.unaffected
-        # NOTE: This method is also used for the OKHO special message.
+        # NOTE: This method is also used for the OHKO special message.
         move.pbHitEffectivenessMessages(user,b,targets.length)
         # Record data about the hit for various effects' purposes
         move.pbRecordDamageLost(user,b)

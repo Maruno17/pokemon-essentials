@@ -25,11 +25,12 @@ class PokeBattle_Battle
   def pbJudgeCheckpoint(user,move=nil)
     if pbAllFainted?(0) && pbAllFainted?(1)
       if @rules["drawclause"]   # NOTE: Also includes Life Orb (not implemented)
-        if !(move && move.function=="0DD")   # Not a draw if fainting occurred due to Liquid Ooze
+        if !(move && move.function=="HealUserByHalfOfDamageDone")
+          # Not a draw if fainting occurred due to Liquid Ooze
           @decision = (user.opposes?) ? 1 : 2   # win / loss
         end
       elsif @rules["modifiedselfdestructclause"]
-        if move && move.function=="0E0"   # Self-Destruct
+        if move && move.function=="UserFaintsExplosive"   # Self-Destruct
           @decision = (user.opposes?) ? 1 : 2   # win / loss
         end
       end
@@ -101,7 +102,7 @@ end
 
 
 
-class PokeBattle_Move_022   # Double Team
+class PokeBattle_Move_RaiseUserEvasion1   # Double Team
   alias __clauses__pbMoveFailed? pbMoveFailed?
 
   def pbMoveFailed?(user,targets)
@@ -115,7 +116,7 @@ end
 
 
 
-class PokeBattle_Move_034   # Minimize
+class PokeBattle_Move_RaiseUserEvasion2MinimizeUser   # Minimize
   alias __clauses__pbMoveFailed? pbMoveFailed?
 
   def pbMoveFailed?(user,targets)
@@ -129,7 +130,7 @@ end
 
 
 
-class PokeBattle_Move_067   # Skill Swap
+class PokeBattle_Move_UserTargetSwapAbilities   # Skill Swap
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
   def pbFailsAgainstTarget?(user, target, show_message)
@@ -143,7 +144,7 @@ end
 
 
 
-class PokeBattle_Move_06A   # Sonic Boom
+class PokeBattle_Move_FixedDamage20   # Sonic Boom
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
   def pbFailsAgainstTarget?(user, target, show_message)
@@ -157,7 +158,7 @@ end
 
 
 
-class PokeBattle_Move_06B   # Dragon Rage
+class PokeBattle_Move_FixedDamage40   # Dragon Rage
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
   def pbFailsAgainstTarget?(user, target, show_message)
@@ -171,7 +172,7 @@ end
 
 
 
-class PokeBattle_Move_070   # OHKO moves
+class PokeBattle_Move_OHKO
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
   def pbFailsAgainstTarget?(user, target, show_message)
@@ -185,7 +186,35 @@ end
 
 
 
-class PokeBattle_Move_0E0   # Self-Destruct
+class PokeBattle_Move_OHKOIce
+  alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+
+  def pbFailsAgainstTarget?(user, target, show_message)
+    if @battle.rules["ohkoclause"]
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
+      return true
+    end
+    return __clauses__pbFailsAgainstTarget?(user, target, show_message)
+  end
+end
+
+
+
+class PokeBattle_Move_OHKOHitsTargetUnderground
+  alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
+
+  def pbFailsAgainstTarget?(user, target, show_message)
+    if @battle.rules["ohkoclause"]
+      @battle.pbDisplay(_INTL("But it failed!")) if show_message
+      return true
+    end
+    return __clauses__pbFailsAgainstTarget?(user, target, show_message)
+  end
+end
+
+
+
+class PokeBattle_Move_UserFaintsExplosive   # Self-Destruct
   unless @__clauses__aliased
     alias __clauses__pbMoveFailed? pbMoveFailed?
     @__clauses__aliased = true
@@ -217,7 +246,7 @@ end
 
 
 
-class PokeBattle_Move_0E5   # Perish Song
+class PokeBattle_Move_StartPerishCountsForAllBattlers   # Perish Song
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
   def pbFailsAgainstTarget?(user, target, show_message)
@@ -232,7 +261,7 @@ end
 
 
 
-class PokeBattle_Move_0E7   # Destiny Bond
+class PokeBattle_Move_AttackerFaintsIfUserFaints   # Destiny Bond
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
   def pbFailsAgainstTarget?(user, target, show_message)

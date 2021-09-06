@@ -72,7 +72,8 @@ BattleHandlers::WeightCalcAbility.add(:LIGHTMETAL,
 
 BattleHandlers::AbilityOnHPDroppedBelowHalf.add(:EMERGENCYEXIT,
   proc { |ability,battler,battle|
-    next false if battler.effects[PBEffects::SkyDrop]>=0 || battler.inTwoTurnAttack?("0CE")   # Sky Drop
+    next false if battler.effects[PBEffects::SkyDrop]>=0 ||
+                  battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSkyTargetCannotAct")   # Sky Drop
     # In wild battles
     if battle.wildBattle?
       next false if battler.opposes? && battle.pbSideBattlerCount(battler.index)>1
@@ -1174,7 +1175,8 @@ BattleHandlers::DamageCalcTargetAbility.add(:FLUFFY,
 
 BattleHandlers::DamageCalcTargetAbility.add(:FURCOAT,
   proc { |ability,user,target,move,mults,baseDmg,type|
-    mults[:defense_multiplier] *= 2 if move.physicalMove? || move.function == "122"   # Psyshock
+    mults[:defense_multiplier] *= 2 if move.physicalMove? ||
+                                       move.function == "UseTargetDefenseInsteadOfTargetSpDef"   # Psyshock
   }
 )
 
@@ -2096,14 +2098,15 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
         next if m.statusMove?
         if type1
           moveType = m.type
-          if Settings::MECHANICS_GENERATION >= 6 && m.function == "090"   # Hidden Power
+          if Settings::MECHANICS_GENERATION >= 6 && m.function == "TypeDependsOnUserIVs"   # Hidden Power
             moveType = pbHiddenPower(b.pokemon)[0]
           end
           eff = Effectiveness.calculate(moveType,type1,type2,type3)
           next if Effectiveness.ineffective?(eff)
-          next if !Effectiveness.super_effective?(eff) && m.function != "070"   # OHKO
+          next if !Effectiveness.super_effective?(eff) &&
+                  !["OHKO", "OHKOIce", "OHKOHitsTargetUnderground"].include?(m.function)
         else
-          next if m.function != "070"   # OHKO
+          next if !["OHKO", "OHKOIce", "OHKOHitsTargetUnderground"].include?(m.function)
         end
         found = true
         break
@@ -2203,16 +2206,29 @@ BattleHandlers::AbilityOnSwitchIn.add(:FOREWARN,
     battle.eachOtherSideBattler(battler.index) do |b|
       b.eachMove do |m|
         power = m.baseDamage
-        power = 160 if ["070"].include?(m.function)    # OHKO
-        power = 150 if ["08B"].include?(m.function)    # Eruption
+        power = 160 if ["OHKO", "OHKOIce", "OHKOHitsTargetUnderground"].include?(m.function)
+        power = 150 if ["PowerHigherWithUserHP"].include?(m.function)    # Eruption
         # Counter, Mirror Coat, Metal Burst
-        power = 120 if ["071","072","073"].include?(m.function)
+        power = 120 if ["CounterPhysicalDamage",
+                        "CounterSpecialDamage",
+                        "CounterDamagePlusHalf"].include?(m.function)
         # Sonic Boom, Dragon Rage, Night Shade, Endeavor, Psywave,
         # Return, Frustration, Crush Grip, Gyro Ball, Hidden Power,
         # Natural Gift, Trump Card, Flail, Grass Knot
-        power = 80 if ["06A","06B","06D","06E","06F",
-                       "089","08A","08C","08D","090",
-                       "096","097","098","09A"].include?(m.function)
+        power = 80 if ["FixedDamage20",
+                       "FixedDamage40",
+                       "FixedDamageUserLevel",
+                       "LowerTargetHPToUserHP",
+                       "FixedDamageUserLevelRandom",
+                       "PowerHigherWithUserHappiness",
+                       "PowerLowerWithUserHappiness",
+                       "PowerHigherWithUserHP",
+                       "PowerHigherWithTargetFasterThanUser",
+                       "TypeDependsOnUserIVs",
+                       "TypeAndPowerDependOnUserBerry",
+                       "PowerHigherWithLessPP",
+                       "PowerLowerWithUserHP",
+                       "PowerHigherWithTargetWeight"].include?(m.function)
         next if power<highestPower
         forewarnMoves = [] if power>highestPower
         forewarnMoves.push(m.name)

@@ -179,11 +179,13 @@ class PokeBattle_AI
           if target.effects[PBEffects::SkyDrop]>=0
             miss = false if move.hitsFlyingTargets?
           else
-            if target.inTwoTurnAttack?("0C9","0CC","0CE")   # Fly, Bounce, Sky Drop
+            if target.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
+                                       "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
+                                       "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
               miss = false if move.hitsFlyingTargets?
-            elsif target.inTwoTurnAttack?("0CA")          # Dig
+            elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground")
               miss = false if move.hitsDiggingTargets?
-            elsif target.inTwoTurnAttack?("0CB")          # Dive
+            elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderwater")
               miss = false if move.hitsDivingTargets?
             end
           end
@@ -197,7 +199,7 @@ class PokeBattle_AI
           score += 60
         elsif move.damagingMove?
           score += 30
-        elsif move.function=="0F2"
+        elsif move.function=="UserTargetSwapItems"
           score += 70   # Trick
         else
           score -= 60
@@ -262,7 +264,7 @@ class PokeBattle_AI
     accuracy = pbRoughAccuracy(move,user,target,skill)
     realDamage *= accuracy/100.0
     # Two-turn attacks waste 2 turns to deal one lot of damage
-    if move.chargingTurnMove? || move.function=="0C2"   # Hyper Beam
+    if move.chargingTurnMove? || move.function=="AttackAndSkipNextTurn"   # Hyper Beam
       realDamage *= 2/3   # Not halved because semi-invulnerable during use or hits first turn
     end
     # Prefer flinching external effects (note that move effects which cause

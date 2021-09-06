@@ -76,7 +76,7 @@ def pbGetLegalMoves2(species, maxlevel)
     for move2 in movedatas
       # If we have a move that always hits, remove all other moves with no
       # effect of the same type and <= base power
-      if md.function_code == "0A5" && move2[1].function_code == "000" &&   # Always hits
+      if md.accuracy == 0 && move2[1].function_code == "None" &&
          md.type == move2[1].type && md.base_damage >= move2[1].base_damage
         deleteAll.call(moves, move2[0])
       # If we have two status moves that have the same function code, delete the
@@ -85,7 +85,7 @@ def pbGetLegalMoves2(species, maxlevel)
          move2[1].base_damage == 0 && md.accuracy > move2[1].accuracy
         deleteAll.call(moves, move2[0])
       # Delete poison-causing moves if we have a move that causes toxic
-      elsif md.function_code == "006" && move2[1].function_code == "005"
+      elsif md.function_code == "BadPoisonTarget" && move2[1].function_code == "PoisonTarget"
         deleteAll.call(moves, move2[0])
       # If we have two moves with the same function code and type, and one of
       # them is damaging and has 10/15/the same PP as the other move and EITHER
@@ -108,7 +108,7 @@ def addMove(moves, move, base)
   return if moves.include?(data.id)
   return if [:BUBBLE, :BUBBLEBEAM].include?(data.id)   # Never add these moves
   count = base + 1   # Number of times to add move to moves
-  count = base if data.function_code == "000" && data.base_damage <= 40
+  count = base if data.function_code == "None" && data.base_damage <= 40
   if data.base_damage <= 30 || [:GROWL, :TAILWHIP, :LEER].include?(data.id)
     count = base
   end

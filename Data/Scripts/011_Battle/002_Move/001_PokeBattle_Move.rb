@@ -49,7 +49,7 @@ class PokeBattle_Move
   # function code (found in the script section PokeBattle_MoveEffect).
   def PokeBattle_Move.from_pokemon_move(battle, move)
     validate move => Pokemon::Move
-    moveFunction = move.function_code || "000"
+    moveFunction = move.function_code || "None"
     className = sprintf("PokeBattle_Move_%s", moveFunction)
     if Object.const_defined?(className)
       return Object.const_get(className).new(battle, move)

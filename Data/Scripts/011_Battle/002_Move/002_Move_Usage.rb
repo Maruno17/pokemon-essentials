@@ -347,7 +347,7 @@ class PokeBattle_Move
     #       regardless of its calculated type. Hence the following two lines of
     #       code.
     moveType = nil
-    moveType = :NORMAL if @function=="090"   # Hidden Power
+    moveType = :NORMAL if @function=="TypeDependsOnUserIVs"   # Hidden Power
     if physicalMove?(moveType)
       target.effects[PBEffects::Counter]       = damage
       target.effects[PBEffects::CounterTarget] = user.index

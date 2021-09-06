@@ -145,7 +145,7 @@ class PokeBattle_Battler
       user.pbConsumeItem
     end
     # Room Service
-    if move.function == "11F" && @battle.field.effects[PBEffects::TrickRoom] > 0   # Trick Room
+    if move.function == "StartSlowerBattlersActFirst" && @battle.field.effects[PBEffects::TrickRoom] > 0
       @battle.battlers.each do |b|
         next if !b.hasActiveItem?(:ROOMSERVICE)
         next if !b.pbCanLowerStatStage?(:SPEED, b)

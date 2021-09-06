@@ -25,7 +25,7 @@ class PokeBattle_Battle
     @switching = true
     pbPriority.each do |b|
       next if b.fainted? || !b.opposes?(idxSwitcher)   # Shouldn't hit an ally
-      next if b.movedThisRound? || !pbChoseMoveFunctionCode?(b.index,"088")   # Pursuit
+      next if b.movedThisRound? || !pbChoseMoveFunctionCode?(b.index,"PursueSwitchingFoe")
       # Check whether Pursuit can be used
       next unless pbMoveCanTarget?(b.index,idxSwitcher,@choices[b.index][2].pbTarget(b))
       next unless pbCanChooseMove?(b.index,@choices[b.index][1],false)
@@ -182,7 +182,7 @@ class PokeBattle_Battle
         b.effects[PBEffects::DestinyBond] = false
         b.effects[PBEffects::Grudge]      = false
       end
-      b.effects[PBEffects::Rage] = false if !pbChoseMoveFunctionCode?(i,"093")   # Rage
+      b.effects[PBEffects::Rage] = false if !pbChoseMoveFunctionCode?(i,"StartRaiseUserAtk1WhenDamaged")
     end
     PBDebug.log("")
     # Calculate move order for this round

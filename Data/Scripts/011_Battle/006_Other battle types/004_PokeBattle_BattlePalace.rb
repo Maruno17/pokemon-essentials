@@ -65,10 +65,10 @@ class PokeBattle_BattlePalace < PokeBattle_Battle
   end
 
   def pbMoveCategory(move)
-    if move.target == :User || move.function == "0D4"   # Bide
+    if move.target == :User || move.function == "MultiTurnAttackBideThenReturnDoubleDamage"
       return 1
     elsif move.statusMove? ||
-       move.function == "071" || move.function == "072"   # Counter, Mirror Coat
+       move.function == "CounterPhysicalDamage" || move.function == "CounterSpecialDamage"
       return 2
     else
       return 0

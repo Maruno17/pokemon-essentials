@@ -522,7 +522,8 @@ class PokeBattle_Battler
   def takesSandstormDamage?
     return false if !takesIndirectDamage?
     return false if pbHasType?(:GROUND) || pbHasType?(:ROCK) || pbHasType?(:STEEL)
-    return false if inTwoTurnAttack?("0CA","0CB")   # Dig, Dive
+    return false if inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground",
+                                     "TwoTurnAttackInvulnerableUnderwater")
     return false if hasActiveAbility?([:OVERCOAT,:SANDFORCE,:SANDRUSH,:SANDVEIL])
     return false if hasActiveItem?(:SAFETYGOGGLES)
     return true
@@ -531,7 +532,8 @@ class PokeBattle_Battler
   def takesHailDamage?
     return false if !takesIndirectDamage?
     return false if pbHasType?(:ICE)
-    return false if inTwoTurnAttack?("0CA","0CB")   # Dig, Dive
+    return false if inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground",
+                                     "TwoTurnAttackInvulnerableUnderwater")
     return false if hasActiveAbility?([:OVERCOAT,:ICEBODY,:SNOWCLOAK])
     return false if hasActiveItem?(:SAFETYGOGGLES)
     return true
@@ -627,7 +629,12 @@ class PokeBattle_Battler
   end
 
   def semiInvulnerable?
-    return inTwoTurnAttack?("0C9","0CA","0CB","0CC","0CD","0CE","14D")
+    return inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
+                            "TwoTurnAttackInvulnerableUnderground",
+                            "TwoTurnAttackInvulnerableUnderwater",
+                            "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
+                            "TwoTurnAttackInvulnerableRemoveProtections",
+                            "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
   end
 
   def pbEncoredMoveIndex

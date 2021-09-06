@@ -172,69 +172,101 @@ class PokeBattle_AI
     return baseDmg if skill<PBTrainerAI.mediumSkill
     # Covers all function codes which have their own def pbBaseDamage
     case move.function
-    when "010"   # Stomp
+    when "FlinchTargetTrampleMinimize"   # Stomp
       baseDmg *= 2 if skill>=PBTrainerAI.mediumSkill && target.effects[PBEffects::Minimize]
     # Sonic Boom, Dragon Rage, Super Fang, Night Shade, Endeavor
-    when "06A", "06B", "06C", "06D", "06E"
+    when "FixedDamage20", "FixedDamage40", "FixedDamageHalfTargetHP",
+         "FixedDamageUserLevel", "LowerTargetHPToUserHP"
       baseDmg = move.pbFixedDamage(user,target)
-    when "06F"   # Psywave
+    when "FixedDamageUserLevelRandom"   # Psywave
       baseDmg = user.level
-    when "070"   # OHKO
+    when "OHKO", "OHKOIce", "OHKOHitsTargetUnderground"
       baseDmg = 200
-    when "071", "072", "073"   # Counter, Mirror Coat, Metal Burst
+    when "CounterPhysicalDamage", "CounterSpecialDamage", "CounterDamagePlusHalf"
       baseDmg = 60
-    when "075", "076", "0D0", "12D"   # Surf, Earthquake, Whirlpool, Shadow Storm
+    when "DoublePowerIfTargetUnderwater", "DoublePowerIfTargetUnderground",
+         "BindTargetDoublePowerIfTargetUnderwater"
       baseDmg = move.pbModifyDamage(baseDmg,user,target)
     # Gust, Twister, Venoshock, Smelling Salts, Wake-Up Slap, Facade, Hex, Brine,
     # Retaliate, Weather Ball, Return, Frustration, Eruption, Crush Grip,
     # Stored Power, Punishment, Hidden Power, Fury Cutter, Echoed Voice,
     # Trump Card, Flail, Electro Ball, Low Kick, Fling, Spit Up
-    when "077", "078", "07B", "07C", "07D", "07E", "07F", "080", "085", "087",
-         "089", "08A", "08B", "08C", "08E", "08F", "090", "091", "092", "097",
-         "098", "099", "09A", "0F7", "113"
+    when "DoublePowerIfTargetInSky",
+         "FlinchTargetDoublePowerIfTargetInSky",
+         "DoublePowerIfTargetPoisoned",
+         "DoublePowerIfTargetParalyzedCureTarget",
+         "DoublePowerIfTargetAsleepCureTarget",
+         "DoublePowerIfUserPoisonedBurnedParalyzed",
+         "DoublePowerIfTargetStatusProblem",
+         "DoublePowerIfTargetHPLessThanHalf",
+         "DoublePowerIfAllyFaintedLastTurn",
+         "TypeAndPowerDependOnWeather",
+         "PowerHigherWithUserHappiness",
+         "PowerLowerWithUserHappiness",
+         "PowerHigherWithUserHP",
+         "PowerHigherWithTargetHP",
+         "PowerHigherWithUserPositiveStatStages",
+         "PowerHigherWithTargetPositiveStatStages",
+         "TypeDependsOnUserIVs",
+         "PowerHigherWithConsecutiveUse",
+         "PowerHigherWithConsecutiveUseOnUserSide",
+         "PowerHigherWithLessPP",
+         "PowerLowerWithUserHP",
+         "PowerHigherWithUserFasterThanTarget",
+         "PowerHigherWithTargetWeight",
+         "ThrowUserItemAtTarget",
+         "PowerDependsOnUserStockpile"
       baseDmg = move.pbBaseDamage(baseDmg,user,target)
-    when "086"   # Acrobatics
+    when "DoublePowerIfUserHasNoItem"   # Acrobatics
       baseDmg *= 2 if !user.item || user.hasActiveItem?(:FLYINGGEM)
-    when "08D"   # Gyro Ball
+    when "PowerHigherWithTargetFasterThanUser"   # Gyro Ball
       targetSpeed = pbRoughStat(target,:SPEED,skill)
       userSpeed = pbRoughStat(user,:SPEED,skill)
       baseDmg = [[(25*targetSpeed/userSpeed).floor,150].min,1].max
-    when "094"   # Present
+    when "RandomlyDamageOrHealTarget"   # Present
       baseDmg = 50
-    when "095"   # Magnitude
+    when "RandomPowerDoublePowerIfTargetUnderground"   # Magnitude
       baseDmg = 71
-      baseDmg *= 2 if target.inTwoTurnAttack?("0CA")   # Dig
-    when "096"   # Natural Gift
+      baseDmg *= 2 if target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground")   # Dig
+    when "TypeAndPowerDependOnUserBerry"   # Natural Gift
       baseDmg = move.pbNaturalGiftBaseDamage(user.item_id)
-    when "09B"   # Heavy Slam
+    when "PowerHigherWithUserHeavierThanTarget"   # Heavy Slam
       baseDmg = move.pbBaseDamage(baseDmg,user,target)
       baseDmg *= 2 if Settings::MECHANICS_GENERATION >= 7 && skill>=PBTrainerAI.mediumSkill &&
                       target.effects[PBEffects::Minimize]
-    when "0A0", "0BD", "0BE"   # Frost Breath, Double Kick, Twineedle
+    when "AlwaysCriticalHit", "HitTwoTimes", "HitTwoTimesPoisonTarget"   # Frost Breath, Double Kick, Twineedle
       baseDmg *= 2
-    when "0BF"   # Triple Kick
+    when "HitThreeTimesPowersUpWithEachHit"   # Triple Kick
       baseDmg *= 6   # Hits do x1, x2, x3 baseDmg in turn, for x6 in total
-    when "0C0"   # Fury Attack
+    when "HitTwoToFiveTimes"   # Fury Attack
       if user.hasActiveAbility?(:SKILLLINK)
         baseDmg *= 5
       else
         baseDmg = (baseDmg * 31 / 10).floor   # Average damage dealt
       end
-    when "0C1"   # Beat Up
+    when "HitTwoToFiveTimesOrThreeForAshGreninja"
+      if user.isSpecies?(:GRENINJA) && user.form == 2
+        baseDmg *= 4   # 3 hits at 20 power = 4 hits at 15 power
+      elsif user.hasActiveAbility?(:SKILLLINK)
+        baseDmg *= 5
+      else
+        baseDmg = (baseDmg * 31 / 10).floor   # Average damage dealt
+      end
+    when "HitOncePerUserTeamMember"   # Beat Up
       mult = 0
       @battle.eachInTeamFromBattlerIndex(user.index) do |pkmn,_i|
         mult += 1 if pkmn && pkmn.able? && pkmn.status == :NONE
       end
       baseDmg *= mult
-    when "0C4"   # Solar Beam
+    when "TwoTurnAttackOneTurnInSun"   # Solar Beam
       baseDmg = move.pbBaseDamageMultiplier(baseDmg,user,target)
-    when "0D3"   # Rollout
+    when "MultiTurnAttackPowersUpEachTurn"   # Rollout
       baseDmg *= 2 if user.effects[PBEffects::DefenseCurl]
-    when "0D4"   # Bide
+    when "MultiTurnAttackBideThenReturnDoubleDamage"   # Bide
       baseDmg = 40
-    when "0E1"   # Final Gambit
+    when "UserFaintsFixedDamageUserHP"   # Final Gambit
       baseDmg = user.hp
-    when "144"   # Flying Press
+    when "EffectivenessIncludesFlyingType"   # Flying Press
       if GameData::Type.exists?(:FLYING)
         if skill>=PBTrainerAI.highSkill
           targetTypes = target.pbTypes(true)
@@ -248,9 +280,9 @@ class PokeBattle_AI
         end
       end
       baseDmg *= 2 if skill>=PBTrainerAI.mediumSkill && target.effects[PBEffects::Minimize]
-    when "166"   # Stomping Tantrum
+    when "DoublePowerIfUserLastMoveFailed"   # Stomping Tantrum
       baseDmg *= 2 if user.lastRoundMoveFailed
-    when "175"   # Double Iron Bash
+    when "HitTwoTimesFlinchTarget"   # Double Iron Bash
       baseDmg *= 2
       baseDmg *= 2 if skill>=PBTrainerAI.mediumSkill && target.effects[PBEffects::Minimize]
     end
@@ -267,12 +299,12 @@ class PokeBattle_AI
     type = pbRoughType(move,user,skill)
     ##### Calculate user's attack stat #####
     atk = pbRoughStat(user,:ATTACK,skill)
-    if move.function=="121"   # Foul Play
+    if move.function=="UseTargetAttackInsteadOfUserAttack"   # Foul Play
       atk = pbRoughStat(target,:ATTACK,skill)
-    elsif move.function=="197"   # Body Press
+    elsif move.function=="UseUserBaseDefenseInsteadOfUserBaseAttack"   # Body Press
       atk = pbRoughStat(user,:DEFENSE,skill)
     elsif move.specialMove?(type)
-      if move.function=="121"   # Foul Play
+      if move.function=="UseTargetAttackInsteadOfUserAttack"   # Foul Play
         atk = pbRoughStat(target,:SPECIAL_ATTACK,skill)
       else
         atk = pbRoughStat(user,:SPECIAL_ATTACK,skill)
@@ -280,7 +312,7 @@ class PokeBattle_AI
     end
     ##### Calculate target's defense stat #####
     defense = pbRoughStat(target,:DEFENSE,skill)
-    if move.specialMove?(type) && move.function!="122"   # Psyshock
+    if move.specialMove?(type) && move.function!="UseTargetDefenseInsteadOfTargetSpDef"   # Psyshock
       defense = pbRoughStat(target,:SPECIAL_DEFENSE,skill)
     end
     ##### Calculate all multiplier effects #####
@@ -455,7 +487,8 @@ class PokeBattle_AI
           multipliers[:final_damage_multiplier] *= 1.5
         end
       when :Sandstorm
-        if target.pbHasType?(:ROCK) && move.specialMove?(type) && move.function != "122"   # Psyshock
+        if target.pbHasType?(:ROCK) && move.specialMove?(type) &&
+           move.function != "UseTargetDefenseInsteadOfTargetSpDef"   # Psyshock
           multipliers[:defense_multiplier] *= 1.5
         end
       end
@@ -481,7 +514,7 @@ class PokeBattle_AI
     if skill>=PBTrainerAI.highSkill
       if user.status == :BURN && move.physicalMove?(type) &&
          !user.hasActiveAbility?(:GUTS) &&
-         !(Settings::MECHANICS_GENERATION >= 6 && move.function == "07E")   # Facade
+         !(Settings::MECHANICS_GENERATION >= 6 && move.function == "DoublePowerIfUserPoisonedBurnedParalyzed")   # Facade
         multipliers[:final_damage_multiplier] /= 2
       end
     end
@@ -650,18 +683,16 @@ class PokeBattle_AI
     end
     # "AI-specific calculations below"
     if skill>=PBTrainerAI.mediumSkill
-      modifiers[:evasion_stage] = 0 if move.function == "0A9"   # Chip Away
-      modifiers[:base_accuracy] = 0 if ["0A5", "139", "13A", "13B", "13C",   # "Always hit"
-                                        "147"].include?(move.function)
+      modifiers[:evasion_stage] = 0 if move.function == "IgnoreTargetDefSpDefEvaStatStages"   # Chip Away
       modifiers[:base_accuracy] = 0 if user.effects[PBEffects::LockOn]>0 &&
                                        user.effects[PBEffects::LockOnPos]==target.index
     end
     if skill>=PBTrainerAI.highSkill
-      if move.function=="006"   # Toxic
+      if move.function=="BadPoisonTarget"   # Toxic
         modifiers[:base_accuracy] = 0 if Settings::MORE_TYPE_EFFECTS && move.statusMove? &&
                                          user.pbHasType?(:POISON)
       end
-      if move.function=="070"   # OHKO moves
+      if ["OHKO", "OHKOIce", "OHKOHitsTargetUnderground"].include?(move.function)
         modifiers[:base_accuracy] = move.accuracy + user.level - target.level
         modifiers[:accuracy_multiplier] = 0 if target.level > user.level
         if skill>=PBTrainerAI.bestSkill

@@ -36,7 +36,7 @@ class PokeBattle_AI
     # Pokémon is Perish Songed and has Baton Pass
     if skill>=PBTrainerAI.highSkill && battler.effects[PBEffects::PerishSong]==1
       battler.eachMoveWithIndex do |m,i|
-        next if m.function!="0ED"   # Baton Pass
+        next if m.function!="SwitchOutUserPassOnEffects"   # Baton Pass
         next if !@battle.pbCanChooseMove?(idxBattler,i,false)
         batonPass = i
         break

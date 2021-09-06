@@ -535,17 +535,19 @@ class PokeBattle_Battler
     # Future Sight
     hitsInvul = true if @battle.futureSight
     # Helping Hand
-    hitsInvul = true if move.function=="09C"
+    hitsInvul = true if move.function=="PowerUpAllyMove"
     if !hitsInvul
       # Semi-invulnerable moves
       if target.effects[PBEffects::TwoTurnAttack]
-        if target.inTwoTurnAttack?("0C9","0CC","0CE")   # Fly, Bounce, Sky Drop
+        if target.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSky",
+                                   "TwoTurnAttackInvulnerableInSkyParalyzeTarget",
+                                   "TwoTurnAttackInvulnerableInSkyTargetCannotAct")
           miss = true if !move.hitsFlyingTargets?
-        elsif target.inTwoTurnAttack?("0CA")            # Dig
+        elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderground")
           miss = true if !move.hitsDiggingTargets?
-        elsif target.inTwoTurnAttack?("0CB")            # Dive
+        elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableUnderwater")
           miss = true if !move.hitsDivingTargets?
-        elsif target.inTwoTurnAttack?("0CD","14D")      # Shadow Force, Phantom Force
+        elsif target.inTwoTurnAttack?("TwoTurnAttackInvulnerableRemoveProtections")
           miss = true
         end
       end
