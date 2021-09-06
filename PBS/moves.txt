@@ -1685,7 +1685,7 @@ Category = Status
 Accuracy = 0
 TotalPP = 20
 Target = NearAlly
-FunctionCode = RaiseAllySpDef1
+FunctionCode = RaiseTargetSpDef1
 Description = The user raises the Sp. Def stat of an ally Pokémon by using a mysterious aroma.
 #-------------------------------
 [BABYDOLLEYES]
@@ -6046,7 +6046,7 @@ Category = Status
 Accuracy = 0
 TotalPP = 40
 Target = UserAndAllies
-FunctionCode = RaiseUserAndAlliesAttack1
+FunctionCode = RaiseTargetAttack1
 Flags = Sound
 Description = The user howls loudly to raise the spirit of itself and allies, boosting their Attack stats.
 #-------------------------------

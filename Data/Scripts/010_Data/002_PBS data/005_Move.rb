@@ -446,7 +446,7 @@ module GameData
       when "135" then new_code = "FreezeTargetSuperEffectiveAgainstWater"
       when "136" then new_code = "RaiseUserDefense2"
       when "137" then new_code = "RaisePlusMinusUserAndAlliesDefSpDef1"
-      when "138" then new_code = "RaiseAllySpDef1"
+      when "138" then new_code = "RaiseTargetSpDef1"
       when "139" then new_code = "LowerTargetAttack1BypassSubstitute"
       when "13A" then new_code = "LowerTargetAtkSpAtk1"
       when "13B" then new_code = "HoopaRemoveProtectionsBypassSubstituteLowerUserDef1"

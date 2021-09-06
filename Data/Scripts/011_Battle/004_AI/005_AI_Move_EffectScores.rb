@@ -563,7 +563,7 @@ class PokeBattle_AI
         score += 20 if hasDamagingAttack
       end
     #---------------------------------------------------------------------------
-    when "RaiseUserAttack2"
+    when "RaiseUserAttack2", "RaiseUserAttack3"
       if move.statusMove?
         if user.statStageAtMax?(:ATTACK)
           score -= 90
@@ -611,7 +611,7 @@ class PokeBattle_AI
         score += 20 if user.stages[:DEFENSE]<0
       end
     #---------------------------------------------------------------------------
-    when "RaiseUserSpeed2", "RaiseUserSpeed2LowerUserWeight"
+    when "RaiseUserSpeed2", "RaiseUserSpeed2LowerUserWeight", "RaiseUserSpeed3"
       if move.statusMove?
         if user.statStageAtMax?(:SPEED)
           score -= 90
@@ -664,7 +664,7 @@ class PokeBattle_AI
         end
       end
     #---------------------------------------------------------------------------
-    when "RaiseUserSpDef2"
+    when "RaiseUserSpDef1", "RaiseUserSpDef2", "RaiseUserSpDef3"
       if move.statusMove?
         if user.statStageAtMax?(:SPECIAL_DEFENSE)
           score -= 90
@@ -677,7 +677,20 @@ class PokeBattle_AI
         score += 20 if user.stages[:SPECIAL_DEFENSE]<0
       end
     #---------------------------------------------------------------------------
-    when "RaiseUserEvasion2MinimizeUser"
+    when "RaiseUserAccuracy1", "RaiseUserAccuracy2", "RaiseUserAccuracy3"
+      if move.statusMove?
+        if user.statStageAtMax?(:ACCURACY)
+          score -= 90
+        else
+          score += 40 if user.turnCount==0
+          score -= user.stages[:ACCURACY]*20
+        end
+      else
+        score += 10 if user.turnCount==0
+        score += 20 if user.stages[:ACCURACY]<0
+      end
+    #---------------------------------------------------------------------------
+    when "RaiseUserEvasion2", "RaiseUserEvasion2MinimizeUser", "RaiseUserEvasion3"
       if move.statusMove?
         if user.statStageAtMax?(:EVASION)
           score -= 90
@@ -833,11 +846,14 @@ class PokeBattle_AI
       avg += user.stages[:SPECIAL_DEFENSE]*10
       score += (avg/3).floor
     #---------------------------------------------------------------------------
-    when "LowerUserSpeed1"
+    when "LowerUserSpeed1", "LowerUserSpeed2"
       score += user.stages[:SPEED]*10
     #---------------------------------------------------------------------------
-    when "LowerUserSpAtk2"
+    when "LowerUserSpAtk1", "LowerUserSpAtk2"
       score += user.stages[:SPECIAL_ATTACK]*10
+    #---------------------------------------------------------------------------
+    when "LowerUserSpDef1", "LowerUserSpDef2"
+      score += user.stages[:SPECIAL_DEFENSE] * 10
     #---------------------------------------------------------------------------
     when "RaiseTargetSpAtk1ConfuseTarget"
       if !target.pbCanConfuse?(user,false)
@@ -957,7 +973,7 @@ class PokeBattle_AI
         score += 20 if target.stages[:SPECIAL_DEFENSE]>0
       end
     #---------------------------------------------------------------------------
-    when "LowerTargetAccuracy1"
+    when "LowerTargetAccuracy1", "LowerTargetAccuracy2", "LowerTargetAccuracy3"
       if move.statusMove?
         if !target.pbCanLowerStatStage?(:ACCURACY,user)
           score -= 90
@@ -968,7 +984,7 @@ class PokeBattle_AI
         score += 20 if target.stages[:ACCURACY]>0
       end
     #---------------------------------------------------------------------------
-    when "LowerTargetEvasion1", "LowerTargetEvasion2"
+    when "LowerTargetEvasion1", "LowerTargetEvasion2", "LowerTargetEvasion3"
       if move.statusMove?
         if !target.pbCanLowerStatStage?(:EVASION,user)
           score -= 90
@@ -1003,7 +1019,7 @@ class PokeBattle_AI
       avg += target.stages[:DEFENSE]*10
       score += avg/2
     #---------------------------------------------------------------------------
-    when "LowerTargetAttack2"
+    when "LowerTargetAttack2", "LowerTargetAttack3"
       if move.statusMove?
         if !target.pbCanLowerStatStage?(:ATTACK,user)
           score -= 90
@@ -1038,7 +1054,7 @@ class PokeBattle_AI
         end
       end
     #---------------------------------------------------------------------------
-    when "LowerTargetDefense2"
+    when "LowerTargetDefense2", "LowerTargetDefense3"
       if move.statusMove?
         if !target.pbCanLowerStatStage?(:DEFENSE,user)
           score -= 90
@@ -1051,7 +1067,7 @@ class PokeBattle_AI
         score += 20 if target.stages[:DEFENSE]>0
       end
     #---------------------------------------------------------------------------
-    when "LowerTargetSpeed2"
+    when "LowerTargetSpeed2", "LowerTargetSpeed3"
       if move.statusMove?
         if !target.pbCanLowerStatStage?(:SPEED,user)
           score -= 90
@@ -1107,7 +1123,7 @@ class PokeBattle_AI
         end
       end
     #---------------------------------------------------------------------------
-    when "LowerTargetSpDef2"
+    when "LowerTargetSpDef2", "LowerTargetSpDef3"
       if move.statusMove?
         if !target.pbCanLowerStatStage?(:SPECIAL_DEFENSE,user)
           score -= 90
@@ -2530,7 +2546,7 @@ class PokeBattle_AI
         score -= 90
       end
     #---------------------------------------------------------------------------
-    when "RaiseAllySpDef1"
+    when "RaiseTargetSpDef1"
       if target.statStageAtMax?(:SPECIAL_DEFENSE)
         score -= 90
       else
@@ -2569,7 +2585,7 @@ class PokeBattle_AI
         score += 20 if target.stages[:DEFENSE]>0
       end
     #---------------------------------------------------------------------------
-    when "LowerTargetSpAtk2"
+    when "LowerTargetSpAtk2", "LowerTargetSpAtk3"
       if !target.pbCanLowerStatStage?(:SPECIAL_ATTACK,user)
         score -= 90
       else
@@ -2727,7 +2743,9 @@ class PokeBattle_AI
         score += 40 if user.hp<=user.totalhp/2
       end
     #---------------------------------------------------------------------------
-    when "RaiseUserAttack3IfKOTarget"
+    when "RaiseTargetAttack1"
+    #---------------------------------------------------------------------------
+    when "RaiseTargetAttack1IfKOTarget"
       score += 20 if !user.statStageAtMax?(:ATTACK) && target.hp<=target.totalhp/4
     #---------------------------------------------------------------------------
     when "LowerTargetAtkSpAtk1SwitchOutUser"
@@ -2827,7 +2845,10 @@ class PokeBattle_AI
         score += 40
       end
     #---------------------------------------------------------------------------
-    when "LowerUserDefense1"
+    when "LowerUserAttack1", "LowerUserAttack2"
+      score += user.stages[:ATTACK] * 10
+    #---------------------------------------------------------------------------
+    when "LowerUserDefense1", "LowerUserDefense2"
       score += user.stages[:DEFENSE]*10
     #---------------------------------------------------------------------------
     when "HealUserByTargetAttackLowerTargetAttack1"
@@ -3361,8 +3382,6 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "RemoveTerrain"
       score -= 100 if @battle.field.terrain == :None
-    #---------------------------------------------------------------------------
-    when "RaiseUserAndAlliesAttack1"
     #---------------------------------------------------------------------------
     end
     return score

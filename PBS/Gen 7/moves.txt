@@ -1417,7 +1417,7 @@ Category = Status
 Accuracy = 0
 TotalPP = 20
 Target = NearAlly
-FunctionCode = RaiseAllySpDef1
+FunctionCode = RaiseTargetSpDef1
 Description = The user raises the Sp. Def stat of an ally Pokémon by using a mysterious aroma.
 #-------------------------------
 [BABYDOLLEYES]
