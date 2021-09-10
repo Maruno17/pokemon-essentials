@@ -515,7 +515,7 @@ class PokemonFusionScene
 
   end
 
-  # Starts the evolution screen with the given Pokemon and new Pokemon species.
+  # Starts the fusion screen
 
   def pbStartScreen(pokemon1, pokemon2, newspecies)
     @sprites = {}

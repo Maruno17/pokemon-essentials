@@ -375,7 +375,7 @@ class PokemonOption_Scene
                      }
       )
     ]
-    if $game_switches && $game_switches[NEW_GAME_PLUS] #beat the league
+    if $game_switches && ($game_switches[NEW_GAME_PLUS] || $game_switches[BEAT_THE_LEAGUE]) #beat the league
       @PokemonOptions <<
         EnumOption.new(_INTL("Battle type"), [_INTL("Single"), _INTL("Double"), _INTL("Triple")],
                        proc { $PokemonSystem.textspeed },

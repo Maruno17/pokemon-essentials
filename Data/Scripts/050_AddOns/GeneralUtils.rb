@@ -54,7 +54,7 @@ def pbGenerateEgg(pokemon, text = "")
     pokemon = getID(PBSpecies, pokemon)
   end
   if pokemon.is_a?(Integer)
-    pokemon = PokeBattle_Pokemon.new(pokemon, EGGINITIALLEVEL, $Trainer)
+    pokemon = PokeBattle_Pokemon.new(pokemon, Settings::EGG_LEVEL, $Trainer)
   end
   # Get egg steps
   eggsteps = $pkmn_dex[pokemon.species][10]

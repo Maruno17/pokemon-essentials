@@ -1823,8 +1823,9 @@ Pokemon = B20H70,24 #Weepinicate,
 Pokemon = B88H44,24 #Gloomer,
 ######################
 
-[TEAMROCKET_M,Ritchie]
-Pokemon = B73H109,25 #Koffcruel,
+[TEAMROCKET_M,Richard]
+Pokemon = KOFFING,24 #Koffcruel,
+Pokemon = B88H81,24 #Magnemer,
 #####################
 
 [TEAMROCKET_F,Kaitlin]
@@ -2600,27 +2601,27 @@ Pokemon = MEW,92 #Blastizard,
 
 [CHAMPION,Blue,1]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = B18H105,64 #Maroeot,
+Pokemon = B18H105,59 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
-Pokemon = B103H128,64 #Taucutor,
+Pokemon = B103H128,59 #Taucutor,
 	Moves = ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER
 	AbilityIndex = 2
 	Item = KINGSROCK
-Pokemon = B268H265,65 #Rhypemortar,
+Pokemon = B268H265,59 #Rhypemortar,
 	Moves = FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE
 	AbilityIndex = 1
 	Item = ABSORBBULB
-Pokemon = B130H267,66 #Electados
+Pokemon = B130H267,61 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = B65H120,63 #Starkazam
+Pokemon = B65H120,58 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
-Pokemon = MEW,69 #Venutoise,
+Pokemon = MEW,64 #Venutoise,
 	Moves = POWERWHIP,HYDROCANNON,SLEEPPOWDER,PROTECT
 	AbilityIndex = 0
 	Item = LEFTOVERS
@@ -2683,27 +2684,27 @@ Pokemon = MEW,92 #Venutoise,
 
 [CHAMPION,Blue,2]
 Items = FULLRESTORE,FULLRESTORE,FULLRESTORE,FULLRESTORE
-Pokemon = B18H105,64 #Maroeot,
+Pokemon = B18H105,59 #Maroeot,
 	Moves = EARTHQUAKE,WINGATTACK,DOUBLETEAM,SWORDSDANCE
 	AbilityIndex = 1
 	Item = LAXINCENSE
-Pokemon = B103H128,64 #Taucutor,
+Pokemon = B103H128,59 #Taucutor,
 	Moves = ZENHEADBUTT,GIGAIMPACT,SCARYFACE,SWAGGER
 	AbilityIndex = 2
 	Item = KINGSROCK
-Pokemon = B268H265,65 #Rhypemortar,
+Pokemon = B268H265,60 #Rhypemortar,
 	Moves = FIREBLAST,DRILLRUN,WILLOWISP,STONEEDGE
 	AbilityIndex = 1
 	Item = ABSORBBULB
-Pokemon = B130H267,66 #Electados
+Pokemon = B130H267,61 #Electados
 	Moves = RAINDANCE,THUNDERPUNCH,WATERFALL,DRAGONDANCE
 	AbilityIndex = 2
 	Item = DAMPROCK
-Pokemon = B65H120,63 #Starkazam
+Pokemon = B65H120,58 #Starkazam
 	Moves = PSYCHIC,REFLECT,SURF,COSMICPOWER
 	AbilityIndex = 1
 	Item = WISEGLASSES
-Pokemon = MEW,69 #Charusaur,
+Pokemon = MEW,64 #Charusaur,
 	Moves = SLEEPPOWDER,POWERWHIP,FLAREBLITZ,FLY
 	AbilityIndex = 0
 	Item = LEFTOVERS

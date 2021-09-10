@@ -94,6 +94,7 @@ Removed features that will be coming back eventually
 - In-game clock
 - Hard mode, Easy mode
 - Some quests probably don't work
+- Obtaining items from Rock Smash and fishing
 
 Removed features that probably won't be coming back
 ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾

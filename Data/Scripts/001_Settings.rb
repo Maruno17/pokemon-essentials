@@ -3,7 +3,6 @@
 #                               Version 19.1.dev                               #
 #                https://github.com/Maruno17/pokemon-essentials                #
 #==============================================================================#
-
 module Settings
   # The version of your game. It has to adhere to the MAJOR.MINOR.PATCH format.
   GAME_VERSION = '5.0.0'
@@ -57,6 +56,8 @@ module Settings
   MAXIMUM_LEVEL        = 100
   # The level of newly hatched Pokémon.
   EGG_LEVEL            = 1
+  # Number of badges in the game
+  NB_BADGES = 16
   # The odds of a newly generated Pokémon being shiny (out of 65536).
   SHINY_POKEMON_CHANCE = (MECHANICS_GENERATION >= 6) ? 16 : 8
   # The odds of a wild Pokémon/bred egg having Pokérus (out of 65536).
