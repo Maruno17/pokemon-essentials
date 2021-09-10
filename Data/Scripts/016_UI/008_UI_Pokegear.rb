@@ -140,6 +140,7 @@ class PokemonPokegearScreen
         break
       elsif cmdMap>=0 && cmd==cmdMap
         pbShowMap(-1,false)
+        break if $PokemonTemp.flydata
       elsif cmdPhone>=0 && cmd==cmdPhone
         pbFadeOutIn {
           PokemonPhoneScene.new.start

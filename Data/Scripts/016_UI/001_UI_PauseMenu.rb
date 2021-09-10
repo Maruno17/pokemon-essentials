@@ -110,6 +110,7 @@ class PokemonPauseMenu
     cmdSave     = -1
     cmdOption   = -1
     cmdPokegear = -1
+    cmdTownMap  = -1
     cmdDebug    = -1
     cmdQuit     = -1
     cmdEndGame  = -1
@@ -119,6 +120,8 @@ class PokemonPauseMenu
     commands[cmdPokemon = commands.length]   = _INTL("Pokémon") if $Trainer.party_count > 0
     commands[cmdBag = commands.length]       = _INTL("Bag") if !pbInBugContest?
     commands[cmdPokegear = commands.length]  = _INTL("Pokégear") if $Trainer.has_pokegear
+    # Any reasonable game will have either have the Town Map as an item or in the Pokegear. Never both at once.
+    commands[cmdTownMap = commands.length]  = _INTL("Town Map") if $PokemonBag.pbHasItem?(:TOWNMAP) && !$Trainer.has_pokegear
     commands[cmdTrainer = commands.length]   = $Trainer.name
     if pbInSafari?
       if Settings::SAFARI_STEPS <= 0
@@ -207,8 +210,19 @@ class PokemonPauseMenu
           scene = PokemonPokegear_Scene.new
           screen = PokemonPokegearScreen.new(scene)
           screen.pbStartScreen
-          @scene.pbRefresh
+          ($PokemonTemp.flydata) ? @scene.pbEndScene : @scene.pbRefresh
         }
+        if pbFlyToNewLocation
+          $game_temp.in_menu = false
+          return
+        end
+      elsif cmdTownMap>=0 && command==cmdTownMap
+        pbShowMap(-1, false)
+        ($PokemonTemp.flydata) ? @scene.pbEndScene : @scene.pbRefresh
+        if pbFlyToNewLocation
+          $game_temp.in_menu = false
+          return
+        end
       elsif cmdTrainer>=0 && command==cmdTrainer
         pbPlayDecisionSE
         pbFadeOutIn {

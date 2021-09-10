@@ -66,7 +66,7 @@ class PokemonRegionMap_Scene
   SQUAREWIDTH  = 16
   SQUAREHEIGHT = 16
 
-  def initialize(region=-1,wallmap=true)
+  def initialize(region =- 1, wallmap = true)
     @region  = region
     @wallmap = wallmap
   end
@@ -75,13 +75,15 @@ class PokemonRegionMap_Scene
     pbUpdateSpriteHash(@sprites)
   end
 
-  def pbStartScene(aseditor=false,mode=0)
-    @editor = aseditor
+  def pbStartScene(as_editor = false, fly_map = false)
+    @editor   = as_editor
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
     @sprites = {}
     @mapdata = pbLoadTownMapData
-    map_metadata = $game_map.metadata
+    @fly_map = fly_map
+    @mode    = fly_map ? 1 : 0
+    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
     playerpos = (map_metadata) ? map_metadata.town_map_position : nil
     if !playerpos
       mapindex = 0
@@ -102,12 +104,8 @@ class PokemonRegionMap_Scene
       if mapsize && mapsize[0] && mapsize[0]>0
         sqwidth  = mapsize[0]
         sqheight = (mapsize[1].length*1.0/mapsize[0]).ceil
-        if sqwidth>1
-          @mapX += ($game_player.x*sqwidth/$game_map.width).floor
-        end
-        if sqheight>1
-          @mapY += ($game_player.y*sqheight/$game_map.height).floor
-        end
+        @mapX += ($game_player.x*sqwidth/$game_map.width).floor if sqwidth>1
+        @mapY += ($game_player.y*sqheight/$game_map.height).floor if sqheight>1
       end
     end
     if !@map
@@ -142,19 +140,18 @@ class PokemonRegionMap_Scene
       @sprites["player"].x = -SQUAREWIDTH/2+(@mapX*SQUAREWIDTH)+(Graphics.width-@sprites["map"].bitmap.width)/2
       @sprites["player"].y = -SQUAREHEIGHT/2+(@mapY*SQUAREHEIGHT)+(Graphics.height-@sprites["map"].bitmap.height)/2
     end
-    if mode>0
-      k = 0
-      for i in LEFT..RIGHT
-        for j in TOP..BOTTOM
-          healspot = pbGetHealingSpot(i,j)
-          if healspot && $PokemonGlobal.visitedMaps[healspot[0]]
-            @sprites["point#{k}"] = AnimatedSprite.create("Graphics/Pictures/mapFly",2,16)
-            @sprites["point#{k}"].viewport = @viewport
-            @sprites["point#{k}"].x        = -SQUAREWIDTH/2+(i*SQUAREWIDTH)+(Graphics.width-@sprites["map"].bitmap.width)/2
-            @sprites["point#{k}"].y        = -SQUAREHEIGHT/2+(j*SQUAREHEIGHT)+(Graphics.height-@sprites["map"].bitmap.height)/2
-            @sprites["point#{k}"].play
-            k += 1
-          end
+    k = 0
+    for i in LEFT..RIGHT
+      for j in TOP..BOTTOM
+        healspot = pbGetHealingSpot(i,j)
+        if healspot && $PokemonGlobal.visitedMaps[healspot[0]]
+          @sprites["point#{k}"] = AnimatedSprite.create("Graphics/Pictures/mapFly",2,16)
+          @sprites["point#{k}"].viewport = @viewport
+          @sprites["point#{k}"].x        = -SQUAREWIDTH/2+(i*SQUAREWIDTH)+(Graphics.width-@sprites["map"].bitmap.width)/2
+          @sprites["point#{k}"].y        = -SQUAREHEIGHT/2+(j*SQUAREHEIGHT)+(Graphics.height-@sprites["map"].bitmap.height)/2
+          @sprites["point#{k}"].play
+          @sprites["point#{k}"].visible  = @mode == 1
+          k += 1
         end
       end
     end
@@ -163,6 +160,8 @@ class PokemonRegionMap_Scene
     @sprites["cursor"].x        = -SQUAREWIDTH/2+(@mapX*SQUAREWIDTH)+(Graphics.width-@sprites["map"].bitmap.width)/2
     @sprites["cursor"].y        = -SQUAREHEIGHT/2+(@mapY*SQUAREHEIGHT)+(Graphics.height-@sprites["map"].bitmap.height)/2
     @sprites["cursor"].play
+    @sprites["help"] = BitmapSprite.new(Graphics.width, 28, @viewport)
+    refresh_fly_screen
     @changed = false
     pbFadeInAndShow(@sprites) { pbUpdate }
     return true
@@ -262,7 +261,20 @@ class PokemonRegionMap_Scene
     return nil
   end
 
-  def pbMapScene(mode=0)
+  def refresh_fly_screen
+    return if @fly_map || !pbCanFly? || !Settings::CAN_FLY_FROM_TOWN_MAP
+    @sprites["help"].bitmap.clear
+    pbSetSystemFont(@sprites["help"].bitmap)
+    text = @mode == 0 ? _INTL("ACTION: Open Fly Menu") : _INTL("ACTION: Close Fly Menu")
+    pbDrawTextPositions(@sprites["help"].bitmap, [[text, Graphics.width - 8, -8, 1, Color.new(248,248,248), Color.new(0,0,0)]])
+    @sprites.each do |key, sprite|
+      next if !key.include?("point")
+      sprite.visible = @mode == 1
+      sprite.frame   = 0
+    end
+  end
+
+  def pbMapScene
     xOffset = 0
     yOffset = 0
     newX = 0
@@ -326,15 +338,19 @@ class PokemonRegionMap_Scene
         else
           break
         end
-      elsif Input.trigger?(Input::USE) && mode==1   # Choosing an area to fly to
+      elsif Input.trigger?(Input::USE) && @mode == 1  # Choosing an area to fly to
         healspot = pbGetHealingSpot(@mapX,@mapY)
-        if healspot
-          if $PokemonGlobal.visitedMaps[healspot[0]] || ($DEBUG && Input.press?(Input::CTRL))
-            return healspot
-          end
+        if healspot &&
+           ($PokemonGlobal.visitedMaps[healspot[0]] || ($DEBUG && Input.press?(Input::CTRL)))
+           name = pbGetMapNameFromId(healspot[0])
+          return healspot if @fly_map || pbConfirmMessage(_INTL("Would you like to fly to {1}?", name)) { pbUpdate }
         end
       elsif Input.trigger?(Input::USE) && @editor   # Intentionally after other USE input check
         pbChangeMapLocation(@mapX,@mapY)
+      elsif Input.trigger?(Input::ACTION) && !@wallmap && !@fly_map && pbCanFly?
+        pbPlayDecisionSE
+        @mode = (@mode == 1 ? 0 : 1)
+        refresh_fly_screen
       end
     end
     pbPlayCloseMenuSE
@@ -351,26 +367,28 @@ class PokemonRegionMapScreen
   end
 
   def pbStartFlyScreen
-    @scene.pbStartScene(false,1)
-    ret = @scene.pbMapScene(1)
+    @scene.pbStartScene(false, true)
+    ret = @scene.pbMapScene
     @scene.pbEndScene
     return ret
   end
 
   def pbStartScreen
     @scene.pbStartScene($DEBUG)
-    @scene.pbMapScene
+    ret = @scene.pbMapScene
     @scene.pbEndScene
+    return ret
   end
 end
 
 #===============================================================================
 #
 #===============================================================================
-def pbShowMap(region=-1,wallmap=true)
+def pbShowMap(region = -1, wallmap = true)
   pbFadeOutIn {
-    scene = PokemonRegionMap_Scene.new(region,wallmap)
+    scene = PokemonRegionMap_Scene.new(region, wallmap)
     screen = PokemonRegionMapScreen.new(scene)
-    screen.pbStartScreen
+    ret = screen.pbStartScreen
+    $PokemonTemp.flydata = ret if ret && !wallmap
   }
 end
