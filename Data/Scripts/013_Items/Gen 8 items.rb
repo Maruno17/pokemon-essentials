@@ -343,9 +343,9 @@ BattleHandlers::UserItemAfterMoveUse.add(:THROATSPRAY,
 BattleHandlers::ItemOnSwitchIn.add(:ROOMSERVICE,
   proc { |item, battler, battle|
     next if battle.field.effects[PBEffects::TrickRoom] == 0
-    next if !battler.pbCanLowerStatStage?(:SPEED, battler)
+    next if !battler.pbCanLowerStatStage?(:SPEED)
     battle.pbCommonAnimation("UseItem", battler)
-    battler.pbLowerStatStage(:SPEED, 1, battler)
+    battler.pbLowerStatStage(:SPEED, 1, nil)
     battler.pbConsumeItem
   }
 )

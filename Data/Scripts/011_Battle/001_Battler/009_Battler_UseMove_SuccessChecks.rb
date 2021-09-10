@@ -361,8 +361,8 @@ class PokeBattle_Battler
           target.damageState.protected = true
           @battle.successStates[user.index].protected = true
           if move.pbContactMove?(user) && user.affectedByContactEffect?
-            if user.pbCanLowerStatStage?(:ATTACK)
-              user.pbLowerStatStage(:ATTACK, (Settings::MECHANICS_GENERATION >= 8) ? 1 : 2, nil)
+            if user.pbCanLowerStatStage?(:ATTACK, target)
+              user.pbLowerStatStage(:ATTACK, (Settings::MECHANICS_GENERATION >= 8) ? 1 : 2, target)
             end
           end
           return false
@@ -405,8 +405,8 @@ class PokeBattle_Battler
           target.damageState.protected = true
           @battle.successStates[user.index].protected = true
           if move.pbContactMove?(user) && user.affectedByContactEffect?
-            if user.pbCanLowerStatStage?(:DEFENSE)
-              user.pbLowerStatStage(:DEFENSE, 2, nil)
+            if user.pbCanLowerStatStage?(:DEFENSE, target)
+              user.pbLowerStatStage(:DEFENSE, 2, target)
             end
           end
           return false

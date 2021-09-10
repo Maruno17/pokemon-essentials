@@ -1321,6 +1321,11 @@ end
 class PokeBattle_Move_LowerPoisonedTargetAtkSpAtkSpd1 < PokeBattle_Move
   def canMagicCoat?; return true; end
 
+  def initialize(battle,move)
+    super
+    @statDown = [:ATTACK, 1, :SPECIAL_ATTACK, 1, :SPEED, 1]
+  end
+
   def pbMoveFailed?(user,targets)
     @validTargets = []
     targets.each do |b|
@@ -1338,15 +1343,42 @@ class PokeBattle_Move_LowerPoisonedTargetAtkSpAtkSpd1 < PokeBattle_Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
-    return if !@validTargets.include?(target.index)
-    showAnim = true
-    [:ATTACK,:SPECIAL_ATTACK,:SPEED].each do |s|
-      next if !target.pbCanLowerStatStage?(s,user,self)
-      if target.pbLowerStatStage(s,1,user,showAnim)
-        showAnim = false
+  def pbCheckForMirrorArmor(user, target)
+    if target.hasActiveAbility?(:MIRRORARMOR) && user.index != target.index
+      failed = true
+      for i in 0...@statDown.length / 2
+        next if target.statStageAtMin?(@statDown[i * 2])
+        next if !user.pbCanLowerStatStage?(@statDown[i * 2], target, self, false, false, true)
+        failed = false
+        break
+      end
+      if failed
+        @battle.pbShowAbilitySplash(target)
+        if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+          @battle.pbDisplay(_INTL("{1}'s {2} activated!", target.pbThis, target.abilityName))
+        end
+        user.pbCanLowerStatStage?(@statDown[0], target, self, true, false, true)   # Show fail message
+        @battle.pbHideAbilitySplash(target)
+        return false
       end
     end
+    return true
+  end
+
+  def pbEffectAgainstTarget(user,target)
+    return if !@validTargets.include?(target.index)
+    return if !pbCheckForMirrorArmor(user, target)
+    showAnim = true
+    showMirrorArmorSplash = true
+    for i in 0...@statDown.length / 2
+      next if !target.pbCanLowerStatStage?(@statDown[i * 2], user, self)
+      if target.pbLowerStatStage(@statDown[i * 2], @statDown[i * 2 + 1], user,
+         showAnim, false, (showMirrorArmorSplash) ? 1 : 3)
+        showAnim = false
+      end
+      showMirrorArmorSplash = false
+    end
+    @battle.pbHideAbilitySplash(target)   # To hide target's Mirror Armor splash
   end
 end
 

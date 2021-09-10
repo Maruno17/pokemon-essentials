@@ -200,7 +200,7 @@ end
 
 
 
-class PokeBattle_Move_OHKOHitsTargetUnderground
+class PokeBattle_Move_OHKOHitsUndergroundTarget
   alias __clauses__pbFailsAgainstTarget? pbFailsAgainstTarget?
 
   def pbFailsAgainstTarget?(user, target, show_message)

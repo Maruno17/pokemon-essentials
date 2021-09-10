@@ -342,10 +342,6 @@ BattleHandlers::AbilityOnSwitchIn.add(:MIMICRY,
 
 #===============================================================================
 
-Mirror Armor
-If a move/ability tries to lower the bearer's stat(s), the effect is reflected
-back at the causer.
-
 Neutralizing Gas
 Suppresses all other abilities. Once this ability stops applying, triggers all
 abilities that activate when gained (if this happens because bearer switches

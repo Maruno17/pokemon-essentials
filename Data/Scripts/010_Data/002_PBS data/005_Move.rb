@@ -222,7 +222,7 @@ module GameData
       when "06F" then new_code = "FixedDamageUserLevelRandom"
       when "070"
         if data[:id] == :FISSURE
-          new_code = "OHKOHitsTargetUnderground"
+          new_code = "OHKOHitsUndergroundTarget"
         elsif data[:id] == :SHEERCOLD && Settings::MECHANICS_GENERATION >= 7
           new_code = "OHKOIce"
         else

@@ -115,14 +115,20 @@ class PokeBattle_Battler
     return @stages[stat]<=-6
   end
 
-  def pbCanLowerStatStage?(stat,user=nil,move=nil,showFailMsg=false,ignoreContrary=false)
+  def pbCanLowerStatStage?(stat, user = nil, move = nil, showFailMsg = false, ignoreContrary = false, ignoreMirrorArmor = false)
     return false if fainted?
-    # Contrary
-    if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
-      return pbCanRaiseStatStage?(stat,user,move,showFailMsg,true)
+    if !@battle.moldBreaker
+      # Contrary
+      if hasActiveAbility?(:CONTRARY) && !ignoreContrary
+        return pbCanRaiseStatStage?(stat, user, move, showFailMsg, true)
+      end
+      # Mirror Armor
+      if hasActiveAbility?(:MIRRORARMOR) && !ignoreMirrorArmor && user && user.index != @index
+        return true if !statStageAtMin?(stat)
+      end
     end
     if !user || user.index!=@index   # Not self-inflicted
-      if @effects[PBEffects::Substitute]>0 && !(move && move.ignoresSubstitute?(user))
+      if @effects[PBEffects::Substitute]>0 && (ignoreMirrorArmor || !(move && move.ignoresSubstitute?(user)))
         @battle.pbDisplay(_INTL("{1} is protected by its substitute!",pbThis)) if showFailMsg
         return false
       end
@@ -175,10 +181,29 @@ class PokeBattle_Battler
     return increment
   end
 
-  def pbLowerStatStage(stat,increment,user,showAnim=true,ignoreContrary=false)
-    # Contrary
-    if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
-      return pbRaiseStatStage(stat,increment,user,showAnim,true)
+  def pbLowerStatStage(stat, increment, user, showAnim = true, ignoreContrary = false,
+                       mirrorArmorSplash = 0, ignoreMirrorArmor = false)
+    if !@battle.moldBreaker
+      # Contrary
+      if hasActiveAbility?(:CONTRARY) && !ignoreContrary
+        return pbRaiseStatStage(stat, increment, user, showAnim, true)
+      end
+      # Mirror Armor
+      if hasActiveAbility?(:MIRRORARMOR) && !ignoreMirrorArmor &&
+         user && user.index != @index && !statStageAtMin?(stat)
+        if mirrorArmorSplash < 2
+          @battle.pbShowAbilitySplash(self)
+          if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+            @battle.pbDisplay(_INTL("{1}'s {2} activated!", pbThis, abilityName))
+          end
+        end
+        ret = false
+        if user.pbCanLowerStatStage?(stat, self, nil, true, ignoreContrary, true)
+          ret = user.pbLowerStatStage(stat, increment, self, showAnim, ignoreContrary, mirrorArmorSplash, true)
+        end
+        @battle.pbHideAbilitySplash(self) if mirrorArmorSplash.even?   # i.e. not 1 or 3
+        return ret
+      end
     end
     # Perform the stat stage change
     increment = pbLowerStatStageBasic(stat,increment,ignoreContrary)
@@ -197,10 +222,27 @@ class PokeBattle_Battler
     return true
   end
 
-  def pbLowerStatStageByCause(stat,increment,user,cause,showAnim=true,ignoreContrary=false)
-    # Contrary
-    if hasActiveAbility?(:CONTRARY) && !ignoreContrary && !@battle.moldBreaker
-      return pbRaiseStatStageByCause(stat,increment,user,cause,showAnim,true)
+  def pbLowerStatStageByCause(stat, increment, user, cause, showAnim = true,
+                              ignoreContrary = false, ignoreMirrorArmor = false)
+    if !@battle.moldBreaker
+      # Contrary
+      if hasActiveAbility?(:CONTRARY) && !ignoreContrary
+        return pbRaiseStatStageByCause(stat, increment, user, cause, showAnim, true)
+      end
+      # Mirror Armor
+      if hasActiveAbility?(:MIRRORARMOR) && !ignoreMirrorArmor &&
+         user && user.index != @index && !statStageAtMin?(stat)
+        @battle.pbShowAbilitySplash(self)
+        if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+          @battle.pbDisplay(_INTL("{1}'s {2} activated!", pbThis, abilityName))
+        end
+        ret = false
+        if user.pbCanLowerStatStage?(stat, self, nil, true, ignoreContrary, true)
+          ret = user.pbLowerStatStageByCause(stat, increment, self, abilityName, showAnim, ignoreContrary, true)
+        end
+        @battle.pbHideAbilitySplash(self)
+        return ret
+      end
     end
     # Perform the stat stage change
     increment = pbLowerStatStageBasic(stat,increment,ignoreContrary)

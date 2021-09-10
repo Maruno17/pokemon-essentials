@@ -2825,7 +2825,7 @@ BaseDamage = 1
 Accuracy = 30
 TotalPP = 5
 Target = NearOther
-FunctionCode = OHKOHitsTargetUnderground
+FunctionCode = OHKOHitsUndergroundTarget
 Flags = CanProtect,CanMirrorMove
 Description = The user opens up a fissure in the ground and drops the foe in. The target instantly faints if it hits.
 #-------------------------------

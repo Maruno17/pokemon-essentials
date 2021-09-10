@@ -148,9 +148,9 @@ class PokeBattle_Battler
     if move.function == "StartSlowerBattlersActFirst" && @battle.field.effects[PBEffects::TrickRoom] > 0
       @battle.battlers.each do |b|
         next if !b.hasActiveItem?(:ROOMSERVICE)
-        next if !b.pbCanLowerStatStage?(:SPEED, b)
+        next if !b.pbCanLowerStatStage?(:SPEED)
         @battle.pbCommonAnimation("UseItem", b)
-        b.pbLowerStatStage(:SPEED, 1, b)
+        b.pbLowerStatStage(:SPEED, 1, nil)
         b.pbConsumeItem
       end
     end

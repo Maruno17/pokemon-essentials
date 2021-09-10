@@ -131,7 +131,7 @@ end
 # OHKO. Accuracy increases by difference between levels of user and target. Hits
 # targets that are semi-invulnerable underground. (Fissure)
 #===============================================================================
-class PokeBattle_Move_OHKOHitsTargetUnderground < PokeBattle_Move_OHKO
+class PokeBattle_Move_OHKOHitsUndergroundTarget < PokeBattle_Move_OHKO
   def hitsDiggingTargets?; return true; end
 end
 

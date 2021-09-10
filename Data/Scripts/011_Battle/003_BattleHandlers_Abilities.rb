@@ -2104,9 +2104,9 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
           eff = Effectiveness.calculate(moveType,type1,type2,type3)
           next if Effectiveness.ineffective?(eff)
           next if !Effectiveness.super_effective?(eff) &&
-                  !["OHKO", "OHKOIce", "OHKOHitsTargetUnderground"].include?(m.function)
+                  !["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)
         else
-          next if !["OHKO", "OHKOIce", "OHKOHitsTargetUnderground"].include?(m.function)
+          next if !["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)
         end
         found = true
         break
@@ -2206,7 +2206,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:FOREWARN,
     battle.eachOtherSideBattler(battler.index) do |b|
       b.eachMove do |m|
         power = m.baseDamage
-        power = 160 if ["OHKO", "OHKOIce", "OHKOHitsTargetUnderground"].include?(m.function)
+        power = 160 if ["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)
         power = 150 if ["PowerHigherWithUserHP"].include?(m.function)    # Eruption
         # Counter, Mirror Coat, Metal Burst
         power = 120 if ["CounterPhysicalDamage",
