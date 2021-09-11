@@ -231,7 +231,6 @@ class PokeBattle_Battle
         when 4    # Call
           break if pbCallMenu(idxBattler)
         when -2   # Debug
-          
           pbDebugMenu
           next
         when -1   # Go back to previous battler's action choice

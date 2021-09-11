@@ -606,4 +606,3 @@ class TrainerBattleLister
     @pkmnList.y = Graphics.height - @pkmnList.height
   end
 end
-

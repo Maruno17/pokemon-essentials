@@ -2,7 +2,6 @@
 Audio/
 Graphics/
 Plugins/
-node_modules/
 
 # Data folder, but not Data/Scripts folder
 Data/*
