@@ -871,7 +871,7 @@ BattleHandlers::DamageCalcUserAbility.add(:AERILATE,
   }
 )
 
-BattleHandlers::DamageCalcUserAbility.copy(:AERILATE,:PIXILATE,:REFRIGERATE,:GALVANIZE)
+BattleHandlers::DamageCalcUserAbility.copy(:AERILATE, :PIXILATE, :REFRIGERATE, :GALVANIZE, :NORMALIZE)
 
 BattleHandlers::DamageCalcUserAbility.add(:ANALYTIC,
   proc { |ability,user,target,move,mults,baseDmg,type|

@@ -104,9 +104,9 @@ end
 #===============================================================================
 def pbEventCommentInput(*args)
   parameters = []
-  list = *args[0].list   # Event or event page
-  elements = *args[1]    # Number of elements
-  trigger = *args[2]     # Trigger
+  list = args[0].list   # List of commands for event or event page
+  elements = args[1]    # Number of elements
+  trigger = args[2]     # Trigger
   return nil if list == nil
   return nil unless list.is_a?(Array)
   for item in list
