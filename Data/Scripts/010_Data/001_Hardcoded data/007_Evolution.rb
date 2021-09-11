@@ -321,7 +321,7 @@ GameData::Evolution.register({
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
     if pkmn.happiness >= 220
-      next pkmn.moves.any? { |m| m && m.id > 0 && m.type == parameter }
+      next pkmn.moves.any? { |m| m && m.type == parameter }
     end
   }
 })

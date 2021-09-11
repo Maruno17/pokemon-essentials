@@ -1322,7 +1322,8 @@ module Compiler
           end
           # Write all line data to hash
           moves = [line_data[3], line_data[4], line_data[5], line_data[6]]
-          moves.uniq!.compact!
+          moves.uniq!
+          moves.compact!
           ivs = {}
           if line_data[12]
             GameData::Stat.each_main do |s|

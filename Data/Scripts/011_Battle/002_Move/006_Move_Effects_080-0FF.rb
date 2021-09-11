@@ -2494,7 +2494,8 @@ class PokeBattle_Move_0D6 < PokeBattle_HealingMove
     return (user.totalhp/2.0).round
   end
 
-  def pbEffectAfterAllHits(user,target)
+  def pbEffectGeneral(user)
+    super
     user.effects[PBEffects::Roost] = true
   end
 end

@@ -140,7 +140,7 @@ class PokedexSearchSelectionSprite < SpriteWrapper
         self.src_rect.y = 88; self.src_rect.height = 44
       when 3,4   # Height, weight
         self.src_rect.y = 132; self.src_rect.height = 44
-      when 6     # Form
+      when 6     # Shape
         self.src_rect.y = 176; self.src_rect.height = 68
       else       # Reset/start/cancel
         self.src_rect.y = 244; self.src_rect.height = 40
@@ -325,7 +325,8 @@ class PokemonPokedex_Scene
     regionalSpecies.each_with_index do |species, i|
       next if !species
       next if !pbCanAddForModeList?($PokemonGlobal.pokedexMode, species)
-      species_data = GameData::Species.get(species)
+      _gender, form = $Trainer.pokedex.last_form_seen(species)
+      species_data = GameData::Species.get_species_form(species, form)
       color  = species_data.color
       type1  = species_data.type1
       type2  = species_data.type2 || type1
@@ -1107,7 +1108,7 @@ class PokemonPokedex_Scene
           newparam = pbDexSearchCommands(5,[params[8]],index)
           params[8] = newparam[0] if newparam!=nil
           pbRefreshDexSearch(params,index)
-        when 6   # Filter by form
+        when 6   # Filter by shape
           newparam = pbDexSearchCommands(6,[params[9]],index)
           params[9] = newparam[0] if newparam!=nil
           pbRefreshDexSearch(params,index)
