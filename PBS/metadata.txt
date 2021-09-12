@@ -63,6 +63,7 @@ MapPosition = 0,14,10
 MapPosition = 0,13,10
 BattleBack = indoor3
 Environment = Rock
+Flags = DisableBoxLink
 #-------------------------------
 [011]
 # Pokémon Institute
@@ -184,10 +185,12 @@ MapPosition = 0,13,6
 # Pokémon League
 MapPosition = 0,13,6
 BattleBack = elite1
+Flags = DisableBoxLink
 #-------------------------------
 [038]
 # Hall of Fame
 MapPosition = 0,13,6
+Flags = DisableBoxLink
 #-------------------------------
 [039]
 # Route 4
@@ -292,6 +295,7 @@ MapPosition = 0,17,10
 # Battle Tower arena
 MapPosition = 0,17,10
 BattleBack = indoor1
+Flags = DisableBoxLink
 #-------------------------------
 [057]
 # Stadium Cup lobby
@@ -305,6 +309,7 @@ MapPosition = 0,17,10
 # Battle Palace arena
 MapPosition = 0,17,10
 BattleBack = indoor1
+Flags = DisableBoxLink
 #-------------------------------
 [060]
 # Battle Arena
@@ -314,6 +319,7 @@ MapPosition = 0,17,10
 # Battle Arena arena
 MapPosition = 0,17,10
 BattleBack = indoor1
+Flags = DisableBoxLink
 #-------------------------------
 [062]
 # Battle Factory
@@ -322,15 +328,18 @@ MapPosition = 0,17,10
 [063]
 # Battle Factory intro corridor
 MapPosition = 0,17,10
+Flags = DisableBoxLink
 #-------------------------------
 [064]
 # Battle Factory arena
 MapPosition = 0,17,10
 BattleBack = indoor1
+Flags = DisableBoxLink
 #-------------------------------
 [065]
 # Battle Factory corridor
 MapPosition = 0,17,10
+Flags = DisableBoxLink
 #-------------------------------
 [066]
 # Safari Zone

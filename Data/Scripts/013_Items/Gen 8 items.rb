@@ -388,9 +388,4 @@ When holder's stat(s) is lowered, consume item and holder switches out. Not
 triggered by Parting Shot, or if a faster mon's Eject Button/Eject Pack
 triggers.
 
-Pokémon Box Link
-Key item, unusable. Enables pressing a button while in the party screen to open
-the "Organise Boxes" mode of Pokémon storage. This is disabled at certain times,
-perhaps when a Game Switch is on.
-
 =end

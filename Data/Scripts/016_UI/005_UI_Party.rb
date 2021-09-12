@@ -444,18 +444,27 @@ end
 # Pokémon party visuals
 #===============================================================================
 class PokemonParty_Scene
-  def pbStartScene(party,starthelptext,annotations=nil,multiselect=false)
+  def pbStartScene(party, starthelptext, annotations = nil, multiselect = false, can_access_storage = false)
     @sprites = {}
     @party = party
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
     @multiselect = multiselect
+    @can_access_storage = can_access_storage
     addBackgroundPlane(@sprites,"partybg","Party/bg",@viewport)
     @sprites["messagebox"] = Window_AdvancedTextPokemon.new("")
     @sprites["messagebox"].viewport       = @viewport
     @sprites["messagebox"].visible        = false
     @sprites["messagebox"].letterbyletter = true
     pbBottomLeftLines(@sprites["messagebox"],2)
+    @sprites["storagetext"] = Window_UnformattedTextPokemon.new(
+       @can_access_storage ? _INTL("[Special]: To Boxes") : "")
+    @sprites["storagetext"].x           = 32
+    @sprites["storagetext"].y           = Graphics.height - @sprites["messagebox"].height - 16
+    @sprites["storagetext"].viewport    = @viewport
+    @sprites["storagetext"].baseColor   = Color.new(248, 248, 248)
+    @sprites["storagetext"].shadowColor = Color.new(0, 0, 0)
+    @sprites["storagetext"].windowskin  = nil
     @sprites["helpwindow"] = Window_UnformattedTextPokemon.new(starthelptext)
     @sprites["helpwindow"].viewport = @viewport
     @sprites["helpwindow"].visible  = true
@@ -719,7 +728,15 @@ class PokemonParty_Scene
         end
       end
       cancelsprite = Settings::MAX_PARTY_SIZE + ((@multiselect) ? 1 : 0)
-      if Input.trigger?(Input::ACTION) && canswitch==1 && @activecmd!=cancelsprite
+      if Input.trigger?(Input::SPECIAL) && @can_access_storage && canswitch != 2
+        pbPlayDecisionSE
+        pbFadeOutIn {
+          scene = PokemonStorageScene.new
+          screen = PokemonStorageScreen.new(scene, $PokemonStorage)
+          screen.pbStartScreen(0)
+          pbHardRefresh
+        }
+      elsif Input.trigger?(Input::ACTION) && canswitch==1 && @activecmd!=cancelsprite
         pbPlayDecisionSE
         return [1,@activecmd]
       elsif Input.trigger?(Input::ACTION) && canswitch==2
@@ -1131,8 +1148,16 @@ class PokemonPartyScreen
   end
 
   def pbPokemonScreen
+    can_access_storage = false
+    if GameData::Item.exists?(:POKEMONBOXLINK) && $PokemonBag.pbHasItem?(:POKEMONBOXLINK)
+      if !$game_switches[Settings::DISABLE_BOX_LINK_SWITCH] &&
+         !$game_map.metadata&.has_flag?("DisableBoxLink")
+        can_access_storage = true
+      end
+    end
     @scene.pbStartScene(@party,
-       (@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."),nil)
+       (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."),
+       nil, false, can_access_storage)
     loop do
       @scene.pbSetHelpText((@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
       pkmnid = @scene.pbChoosePokemon(false,-1,1)

@@ -6517,6 +6517,14 @@ Price = 0
 Flags = KeyItem
 Description = This ring contains an untold power that somehow enables Pokémon carrying Mega Stones to Mega Evolve.
 #-------------------------------
+[POKEMONBOXLINK]
+Name = Pokémon Box Link
+NamePlural = Pokémon Box Links
+Pocket = 8
+Price = 0
+Flags = KeyItem
+Description = A device that allows you to access the Pokémon storage system. There are some places where it won't work.
+#-------------------------------
 [AURORATICKET]
 Name = Aurora Ticket
 NamePlural = Aurora Tickets

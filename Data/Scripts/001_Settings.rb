@@ -320,6 +320,10 @@ module Settings
   # The Game Switch which, while ON, makes all Pokémon created considered to be
   # met via a fateful encounter.
   FATEFUL_ENCOUNTER_SWITCH  = 32
+  # The Game Switch which, while ON, disables the effect of the Pokémon Box Link
+  # and prevents the player from accessing Pokémon storage via the party screen
+  # with it.
+  DISABLE_BOX_LINK_SWITCH   = 35
 
   #=============================================================================
 
