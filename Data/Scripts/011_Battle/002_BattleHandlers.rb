@@ -32,6 +32,7 @@ module BattleHandlers
   AbilityOnFlinch                     = AbilityHandlerHash.new   # Steadfast
   MoveBlockingAbility                 = AbilityHandlerHash.new
   MoveImmunityTargetAbility           = AbilityHandlerHash.new
+  UserItemOnMissing                   = ItemHandlerHash.new   # Blunder Policy
   # Move usage
   MoveBaseTypeModifierAbility         = AbilityHandlerHash.new
   # Accuracy calculation
@@ -232,6 +233,10 @@ module BattleHandlers
   def self.triggerMoveImmunityTargetAbility(ability, user, target, move, type, battle, show_message)
     ret = MoveImmunityTargetAbility.trigger(ability, user, target, move, type, battle, show_message)
     return (ret!=nil) ? ret : false
+  end
+
+  def self.triggerUserItemOnMissing(item, user, target, move, hit_num, battle)
+    UserItemOnMissing.trigger(item, user, target, move, hit_num, battle)
   end
 
   #=============================================================================

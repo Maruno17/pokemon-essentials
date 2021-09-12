@@ -9,6 +9,7 @@ class PokeBattle_DamageState
   attr_accessor :fainted         # Whether battler was knocked out by the move
 
   attr_accessor :missed          # Whether the move failed the accuracy check
+  attr_accessor :invulnerable    # If the move missed due to two turn move invulnerability
   attr_accessor :calcDamage      # Calculated damage
   attr_accessor :hpLost          # HP lost by opponent, inc. HP lost by a substitute
   attr_accessor :critical        # Critical hit flag
@@ -29,6 +30,7 @@ class PokeBattle_DamageState
     @unaffected         = false
     @protected          = false
     @missed             = false
+    @invulnerable       = false
     @magicCoat          = false
     @magicBounce        = false
     @totalHPLost        = 0

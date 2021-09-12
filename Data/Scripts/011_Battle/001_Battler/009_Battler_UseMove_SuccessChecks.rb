@@ -556,6 +556,7 @@ class PokeBattle_Battler
         miss = true if !move.hitsFlyingTargets?
       end
     end
+    target.damageState.invulnerable = true if miss
     if !miss
       # Called by another move
       return true if skipAccuracyCheck

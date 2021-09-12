@@ -602,6 +602,9 @@ class PokeBattle_Battler
         targets.each do |b|
           next if !b.damageState.missed || b.damageState.magicCoat
           pbMissMessage(move,user,b)
+          if user.itemActive?
+            BattleHandlers.triggerUserItemOnMissing(user.item, user, b, move, hitNum, @battle)
+          end
           break if move.pbRepeatHit?   # Dragon Darts only shows one failure message
         end
         move.pbCrashDamage(user)
@@ -642,7 +645,13 @@ class PokeBattle_Battler
     end
     # Messages about missed target(s) (relevant for multi-target moves only)
     if !move.pbRepeatHit?
-      targets.each { |b| pbMissMessage(move, user, b) if b.damageState.missed }
+      targets.each do |b|
+        next if !b.damageState.missed
+        pbMissMessage(move, user, b)
+        if user.itemActive?
+          BattleHandlers.triggerUserItemOnMissing(user.item, user, b, move, hitNum, @battle)
+        end
+      end
     end
     # Deal the damage (to all allies first simultaneously, then all foes
     # simultaneously)

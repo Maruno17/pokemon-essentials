@@ -388,11 +388,6 @@ When holder's stat(s) is lowered, consume item and holder switches out. Not
 triggered by Parting Shot, or if a faster mon's Eject Button/Eject Pack
 triggers.
 
-Blunder Policy
-If holder's move fails its accuracy check, consume item and holder gets +2
-Speed. Doesn't trigger if move was an OHKO move, or Triple Kick that hit at
-least once.
-
 Pokémon Box Link
 Key item, unusable. Enables pressing a button while in the party screen to open
 the "Organise Boxes" mode of Pokémon storage. This is disabled at certain times,
