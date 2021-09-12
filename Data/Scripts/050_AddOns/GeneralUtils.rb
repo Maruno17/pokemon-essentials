@@ -48,34 +48,6 @@ def pbAddPokemonID(pokemon_id, level = 1, see_form = true, skip_randomize = fals
   return true
 end
 
-def pbGenerateEgg(pokemon, text = "")
-  return false if !pokemon || !$Trainer # || $Trainer.party.length>=6
-  if pokemon.is_a?(String) || pokemon.is_a?(Symbol)
-    pokemon = getID(PBSpecies, pokemon)
-  end
-  if pokemon.is_a?(Integer)
-    pokemon = PokeBattle_Pokemon.new(pokemon, Settings::EGG_LEVEL, $Trainer)
-  end
-  # Get egg steps
-  eggsteps = $pkmn_dex[pokemon.species][10]
-  # Set egg's details
-  pokemon.name = _INTL("Egg")
-  pokemon.eggsteps = eggsteps
-  pokemon.obtainText = text
-  pokemon.calcStats
-  # Add egg to party
-  Kernel.pbMessage(_INTL("Received a Pokémon egg!"))
-  if $Trainer.party.length < 6
-    $Trainer.party[$Trainer.party.length] = pokemon
-  else
-    $PokemonStorage.pbStoreCaught(pokemon)
-    Kernel.pbMessage(_INTL("The egg was transfered to the PC."))
-
-  end
-  #$Trainer.party[$Trainer.party.length]=pokemon
-  return true
-end
-
 def pbHasSpecies?(species)
   if species.is_a?(String) || species.is_a?(Symbol)
     species = getID(PBSpecies, species)

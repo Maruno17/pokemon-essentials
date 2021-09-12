@@ -1199,7 +1199,7 @@ class PokemonPartyScreen
         elsif pbCanUseHiddenMove?(pkmn,pkmn.moves[i].id)
           if pbConfirmUseHiddenMove(pkmn,pkmn.moves[i].id)
             @scene.pbEndScene
-            if pkmn.moves[i].id == :FLY
+            if pkmn.moves[i].id == :FLY || pkmn.moves[i].id == :TELEPORT
               ret = pbBetterRegionMap(-1, true, true)
               if ret
                 $PokemonTemp.flydata = ret

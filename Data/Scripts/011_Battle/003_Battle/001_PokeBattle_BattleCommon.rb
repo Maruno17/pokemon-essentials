@@ -83,7 +83,7 @@ module PokeBattle_BattleCommon
       if itemName.starts_with_vowel?
         pbDisplay(_INTL("{1} threw an {2}!",pbPlayer.name,itemName))
       else
-        pbDisplay(_INTL("{1} vcthrew a {2}!",pbPlayer.name,itemName))
+        pbDisplay(_INTL("{1} threw a {2}!",pbPlayer.name,itemName))
       end
       pbDisplay(_INTL("But there was no target..."))
       return

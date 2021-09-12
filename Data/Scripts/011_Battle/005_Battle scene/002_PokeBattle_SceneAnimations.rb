@@ -643,7 +643,7 @@ class BattlerFaintAnimation < PokeBattle_Animation
     super(sprites,viewport)
   end
 
-  def createProcessesPB
+  def createProcesses
     batSprite = @sprites["pokemon_#{@idxBattler}"]
     shaSprite = @sprites["shadow_#{@idxBattler}"]
     # Set up battler/shadow sprite
@@ -655,7 +655,7 @@ class BattlerFaintAnimation < PokeBattle_Animation
        @battle.pbSideSize(@idxBattler))[1]
     cropY += 8
     duration = (cropY-battlerTop)/8
-    duration = 10 if duration<10   # Min 0.5 seconds
+    duration = 5#10 if duration<10   # Min 0.5 seconds
     # Animation
     # Play cry
     delay = 10

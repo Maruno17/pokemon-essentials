@@ -22,7 +22,7 @@
 #                        })
 
 def pbBetterRegionMap(region = -1, show_player = true, can_fly = false, wallmap = false, species = nil,fly_anywhere=false)
-  scene = BetterRegionMap.new(region, show_player, can_fly, wallmap, species,fly_anywhere)
+  scene = BetterRegionMap.new(-1, show_player, can_fly, wallmap, species,fly_anywhere)
   return scene.flydata
 end
 
@@ -52,6 +52,7 @@ class BetterRegionMap
   attr_reader :flydata
 
   def initialize(region = -1, show_player = true, can_fly = false, wallmap = false, species = nil,fly_anywhere=false)
+    region = 0
     showBlk
     map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
     if map_metadata

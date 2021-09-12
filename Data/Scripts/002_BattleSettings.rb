@@ -9,13 +9,13 @@ module Settings
   # Whether critical hits do 1.5x damage and have 4 stages (true), or they do 2x
   # damage and have 5 stages as in Gen 5 (false). Also determines whether
   # critical hit rate can be copied by Transform/Psych Up.
-  NEW_CRITICAL_HIT_RATE_MECHANICS             = (MECHANICS_GENERATION >= 6)
+  NEW_CRITICAL_HIT_RATE_MECHANICS             = (MECHANICS_GENERATION >= 5)
   # Whether several effects apply relating to a Pokémon's type:
   #   * Electric-type immunity to paralysis
   #   * Ghost-type immunity to being trapped
   #   * Grass-type immunity to powder moves and Effect Spore
   #   * Poison-type Pokémon can't miss when using Toxic
-  MORE_TYPE_EFFECTS                           = (MECHANICS_GENERATION >= 6)
+  MORE_TYPE_EFFECTS                           = (MECHANICS_GENERATION >= 5)
   # Whether weather caused by an ability lasts 5 rounds (true) or forever (false).
   FIXED_DURATION_WEATHER_FROM_ABILITY         = (MECHANICS_GENERATION >= 6)
 
@@ -66,7 +66,7 @@ module Settings
   # fewer species in your game.
   ENABLE_CRITICAL_CAPTURES  = (MECHANICS_GENERATION >= 5)
   # Whether Pokémon gain Exp for capturing a Pokémon.
-  GAIN_EXP_FOR_CAPTURE      = (MECHANICS_GENERATION >= 6)
+  GAIN_EXP_FOR_CAPTURE      = (MECHANICS_GENERATION >= 5)
   # The Game Switch which, whie ON, prevents the player from losing money if
   # they lose a battle (they can still gain money from trainers for winning).
   NO_MONEY_LOSS             = 33

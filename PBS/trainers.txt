@@ -1748,8 +1748,8 @@ Pokemon = B168H12,47 #ARIAFREE
 Pokemon = B168H220,47 #Swindos
 ##################
 
-[BUGCATCHER,Nelson]
-Pokemon = B141H123,51 #SCYTOPS
+[BUGCATCHER,Bugsy]
+Pokemon = B127H123,51 #SCYSIR
 #################
 
 [BUGCATCHER,Josh]

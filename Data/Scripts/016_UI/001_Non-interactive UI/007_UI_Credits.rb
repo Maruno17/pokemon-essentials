@@ -37,7 +37,7 @@ class Scene_Credits
   # Backgrounds to show in credits. Found in Graphics/Titles/ folder
   BACKGROUNDS_LIST       = ["credits1", "credits2", "credits3", "credits4", "credits5"]
   BGM                    = "Credits"
-  SCROLL_SPEED           = 40   # Pixels per second
+  SCROLL_SPEED           = 60   # Pixels per second
   SECONDS_PER_BACKGROUND = 11
   TEXT_OUTLINE_COLOR     = Color.new(0, 0, 128, 255)
   TEXT_BASE_COLOR        = Color.new(255, 255, 255, 255)
@@ -47,17 +47,141 @@ class Scene_Credits
   # Start Editing
   CREDIT = <<_END_
 
-Your credits go here.
+Pokémon Infinite Fusion
+By Chardub
 
-Your credits go here.
+General graphics / Music / Intellectual property
+Nintendo
+GameFreak
 
-Your credits go here.
+Programming / Eventing:
+Chardub
 
-Your credits go here.
+Fused Pokemon Sprites  :
+Japeal - Pokefusion 2
+http://japeal.com/pkm
 
-Your credits go here.
+Special thanks to Aegide for helping to 
+rip the sprites and to the owners of Japeal 
+for accepting to share their sprites.
+
+Custom sprites by various 
+members of the Discord
+
+Compiler optimization
+andracass (Pokémon Reborn)
+  
+Maps:
+Chardub
+Some of the maps were based on work by:
+BenGames, Zeak6464
+
+Gameplay planning / Story:
+Chardub 
+The story and dialogues were based 
+off Pokémon Red and Blue, as well as
+Pokémon Gold and Silver.
+Both games are made by Game Freak.
+
+Custom legendary Pokémon sprites:
+Universez, Milchik, magnuzone, mammuth89
+
+Endgame challenge teams planning:
+DemICE 
+
+Social media:
+ChippyYYZ, qt314xxx, Bizmythe, Terminaut
+
+
+
+The following free ressources were also used 
+with their respective authors' consent:
+
+Pokémon Sprites:
+The Smogon XY Sprite Project:
+Smogon Sun/Moon Sprite Project:
+
+Overworld Sprites:
+Rick1234, Hankiro, SailorVicious, OceansLugiaSpirit 
+
+Battle sprites: 
+luckygirl88, Nalty   
+
+Tileset graphics:
+Jorginho, ThatsSoWitty DirtyWiggles 
+
+Including tiles by the following DeviantArt users:
+kyle-dove, rayd12smitty, Speedialga, 
+Spacemotion, Alucus ,Pokemon-Diamond, 
+kizemaru-kurunosuke, EpicDay,
+Thurpok, UltimoSpriter, iametrine, 
+Minorthreat0987 , TyranitarDark,  
+Heavy-Metal-Lover, KKKaito,
+WesleyFG, BoOmxBiG, 
+EternalTakai, Hek-el-grande
+
+Other tiles:
+Chardub, chimcharsfireworkd, 
+Rossay, Shiney570,
+Phyromatical, Gallanty 
+
+Music:    
+Pokeli, TailDoll666100
+Kazune Sawatari, sentsinkantéun,
+Nanashima, CharizardTheMaster, The Zame Jack 
+
+Other graphics  :    
+Pokemon-Diamond, WolfPP,
+rekman (Pokecommunity)
+
+RPG Maker Scripts:
+Luka S.J, shiney570, Erasus, Umbreon
+FL, KleinStudio, carmaniac, Wootius,
+andracass
 
 {INSERTS_PLUGIN_CREDITS_DO_NOT_REMOVE}
+
+
+Data sources:  
+Bulbapedia
+
+PBS files:
+Generation 6 for Pokémon Essentials
+WorldSlayer
+mej71,karstictrainer, WorldSlayer, 
+TheDeKay, viperk1, SunakazeKun,
+Radical Raptr, RPD490, 
+Takyon!, Pokegod7020, Drakath569,
+Florio, MrDeepDarkMind, snooper117
+
+
+"Pokémon Essentials" was created by:
+Flameguru
+Poccil (Peter O.)
+Maruno
+
+With contributions from:
+AvatarMonkeyKirby<s>MiDas Mike
+Boushy<s>Near Fantastica
+Brother1440<s>PinkMan
+FL.<s>Popper
+Genzai Kawakami<s>Rataime
+Harshboy<s>SoundSpawn
+help-14<s>the__end
+IceGod64<s>Venom12
+Jacob O. Wobbrock<s>Wachunga
+KitsuneKouta<s>xLeD
+Lisa Anthony<s>
+and everyone else who helped out
+
+"Pokémon Infinite Fusion" was made by:
+Chardub
+
+Playtesting and Custom Sprites were made by 
+various members of the Discord channel. 
+Special thanks to all of you and to 
+everyone who has been involved in the 
+development of the game!
 
 "Pokémon Essentials" was created by:
 Flameguru
@@ -86,17 +210,21 @@ Based on MKXP by Ancurio et al.
 "RPG Maker XP" by:
 Enterbrain
 
+This game was inspired by the original
+fusion generator: 
+alexonsager.alexonsager.net
+
+All generated fusion sprites in this game
+come from the Pokémon Fusion Generator:
+https://japeal.com/pkm/
+
 Pokémon is owned by:
 The Pokémon Company
 Nintendo
 Affiliated with Game Freak
 
-
-
 This is a non-profit fan-made game.
 No copyright infringements intended.
-Please support the official games!
-
 _END_
 # Stop Editing
 
