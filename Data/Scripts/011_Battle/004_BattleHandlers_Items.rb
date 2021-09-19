@@ -222,6 +222,35 @@ BattleHandlers::HPHealItem.add(:WIKIBERRY,
 )
 
 #===============================================================================
+# ItemOnStatDropped handlers
+#===============================================================================
+BattleHandlers::ItemOnStatDropped.add(:EJECTPACK,
+  proc { |item, battler, move_user, battle|
+    next false if battler.effects[PBEffects::SkyDrop] >= 0 ||
+                  battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSkyTargetCannotAct")   # Sky Drop
+    next false if battle.pbAllFainted?(battler.idxOpposingSide)
+    next false if battle.wildBattle? && battler.opposes?   # Wild Pokémon can't eject
+    next false if !battle.pbCanSwitch?(battler.index)   # Battler can't switch out
+    next false if !battle.pbCanChooseNonActive?(battler.index)   # No Pokémon can switch in
+    battle.pbCommonAnimation("UseItem", battler)
+    battle.pbDisplay(_INTL("{1} is switched out by the {2}!", battler.pbThis, battler.itemName))
+    battler.pbConsumeItem(true, false)
+    if battle.endOfRound   # Just switch out
+      battle.scene.pbRecall(battler.index) if !battler.fainted?
+      battler.pbAbilitiesOnSwitchOut   # Inc. primordial weather check
+      next true
+    end
+    newPkmn = battle.pbGetReplacementPokemonIndex(battler.index)   # Owner chooses
+    next false if newPkmn < 0   # Shouldn't ever do this
+    battle.pbRecallAndReplace(battler.index, newPkmn)
+    battle.pbClearChoice(battler.index)   # Replacement Pokémon does nothing this round
+    battle.moldBreaker = false if move_user && battler.index == move_user.index
+    battle.pbOnBattlerEnteringBattle(battler.index)
+    next true
+  }
+)
+
+#===============================================================================
 # StatusCureItem handlers
 #===============================================================================
 
@@ -1367,6 +1396,18 @@ BattleHandlers::UserItemAfterMoveUse.add(:SHELLBELL,
   }
 )
 
+BattleHandlers::UserItemAfterMoveUse.add(:THROATSPRAY,
+  proc { |item, user, targets, move, numHits, battle|
+    next if battle.pbAllFainted?(user.idxOwnSide) ||
+            battle.pbAllFainted?(user.idxOpposingSide)
+    next if !move.soundMove? || numHits == 0
+    next if !user.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user)
+    battle.pbCommonAnimation("UseItem", user)
+    user.pbRaiseStatStage(:SPECIAL_ATTACK, 1, user)
+    user.pbConsumeItem
+  }
+)
+
 #===============================================================================
 # EndOfMoveItem handlers
 #===============================================================================
@@ -1650,7 +1691,6 @@ BattleHandlers::CertainSwitchingUserItem.add(:SHEDSHELL,
 
 # There aren't any!
 
-
 #===============================================================================
 # ItemOnSwitchIn handlers
 #===============================================================================
@@ -1659,6 +1699,16 @@ BattleHandlers::ItemOnSwitchIn.add(:AIRBALLOON,
   proc { |item,battler,battle|
     battle.pbDisplay(_INTL("{1} floats in the air with its {2}!",
        battler.pbThis,battler.itemName))
+  }
+)
+
+BattleHandlers::ItemOnSwitchIn.add(:ROOMSERVICE,
+  proc { |item, battler, battle|
+    next if battle.field.effects[PBEffects::TrickRoom] == 0
+    next if !battler.pbCanLowerStatStage?(:SPEED)
+    battle.pbCommonAnimation("UseItem", battler)
+    battler.pbLowerStatStage(:SPEED, 1, nil)
+    battler.pbConsumeItem
   }
 )
 

@@ -408,6 +408,25 @@ def pbRaiseHappinessAndLowerEV(pkmn,scene,stat,messages)
 end
 
 #===============================================================================
+# Change nature
+#===============================================================================
+def pbNatureChangingMint(new_nature, item, pkmn, scene)
+  if pkmn.nature_for_stats == new_nature
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    return false
+  end
+  if !scene.pbConfirm(_INTL("It might affect {1}'s stats. Are you sure you want to use it?", pkmn.name))
+    return false
+  end
+  pkmn.nature_for_stats = new_nature
+  pkmn.calc_stats
+  scene.pbRefresh
+  scene.pbDisplay(_INTL("{1}'s stats may have changed due to the effects of the {2}!",
+     pkmn.name, GameData::Item.get(item).name))
+  return true
+end
+
+#===============================================================================
 # Battle items
 #===============================================================================
 def pbBattleItemCanCureStatus?(status,pkmn,scene,showMessages)
