@@ -297,7 +297,7 @@ class PokeBattle_Battle
       pbDisplay(_INTL("The battlefield is weird!"))
     end
     # Abilities upon entering battle
-    pbOnActiveAll
+    pbOnAllBattlersEnteringBattle
     # Main battle loop
     pbBattleLoop
   end

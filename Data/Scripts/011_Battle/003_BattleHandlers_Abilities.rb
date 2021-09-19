@@ -71,7 +71,7 @@ BattleHandlers::WeightCalcAbility.add(:LIGHTMETAL,
 #===============================================================================
 
 BattleHandlers::AbilityOnHPDroppedBelowHalf.add(:EMERGENCYEXIT,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, move_user, battle|
     next false if battler.effects[PBEffects::SkyDrop]>=0 ||
                   battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSkyTargetCannotAct")   # Sky Drop
     # In wild battles
@@ -105,6 +105,8 @@ BattleHandlers::AbilityOnHPDroppedBelowHalf.add(:EMERGENCYEXIT,
     next false if newPkmn<0   # Shouldn't ever do this
     battle.pbRecallAndReplace(battler.index,newPkmn)
     battle.pbClearChoice(battler.index)   # Replacement Pokémon does nothing this round
+    battle.moldBreaker = false if move_user && battler.index == move_user.index
+    battle.pbOnBattlerEnteringBattle(battler.index)
     next true
   }
 )
@@ -1538,7 +1540,8 @@ BattleHandlers::TargetAbilityOnHit.add(:MUMMY,
       battle.pbHideAbilitySplash(user) if user.opposes?(target)
     end
     battle.pbHideAbilitySplash(target) if user.opposes?(target)
-    user.pbOnAbilityChanged(oldAbil) if oldAbil != nil
+    user.pbOnLosingAbility(oldAbil)
+    user.pbTriggerAbilityOnGainingIt
   }
 )
 
@@ -1714,16 +1717,16 @@ BattleHandlers::UserAbilityEndOfMove.add(:MOXIE,
 #===============================================================================
 
 BattleHandlers::TargetAbilityAfterMoveUse.add(:BERSERK,
-  proc { |ability,target,user,move,switched,battle|
+  proc { |ability, target, user, move, switched_battlers, battle|
     next if !move.damagingMove?
-    next if target.damageState.initialHP<target.totalhp/2 || target.hp>=target.totalhp/2
+    next if !target.droppedBelowHalfHP
     next if !target.pbCanRaiseStatStage?(:SPECIAL_ATTACK,target)
     target.pbRaiseStatStageByAbility(:SPECIAL_ATTACK,1,target)
   }
 )
 
 BattleHandlers::TargetAbilityAfterMoveUse.add(:COLORCHANGE,
-  proc { |ability,target,user,move,switched,battle|
+  proc { |ability, target, user, move, switched_battlers, battle|
     next if target.damageState.calcDamage==0 || target.damageState.substitute
     next if !move.calcType || GameData::Type.get(move.calcType).pseudo_type
     next if target.pbHasType?(move.calcType) && !target.pbHasOtherType?(move.calcType)
@@ -1737,13 +1740,13 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:COLORCHANGE,
 )
 
 BattleHandlers::TargetAbilityAfterMoveUse.add(:PICKPOCKET,
-  proc { |ability,target,user,move,switched,battle|
+  proc { |ability, target, user, move, switched_battlers, battle|
     # NOTE: According to Bulbapedia, this can still trigger to steal the user's
     #       item even if it was switched out by a Red Card. This doesn't make
     #       sense, so this code doesn't do it.
     next if battle.wildBattle? && target.opposes?
+    next if switched_battlers.include?(user.index)   # User was switched out
     next if !move.contactMove?
-    next if switched.include?(user.index)
     next if user.effects[PBEffects::Substitute]>0 || target.damageState.substitute
     next if target.item || !user.item
     next if user.unlosableItem?(user.item) || target.unlosableItem?(user.item)
@@ -1932,18 +1935,15 @@ BattleHandlers::EOREffectAbility.add(:BADDREAMS,
       next if !b.near?(battler) || !b.asleep?
       battle.pbShowAbilitySplash(battler)
       next if !b.takesIndirectDamage?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
-      oldHP = b.hp
-      b.pbReduceHP(b.totalhp/8)
-      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
-        battle.pbDisplay(_INTL("{1} is tormented!",b.pbThis))
-      else
-        battle.pbDisplay(_INTL("{1} is tormented by {2}'s {3}!",b.pbThis,
-           battler.pbThis(true),battler.abilityName))
-      end
-      battle.pbHideAbilitySplash(battler)
-      b.pbItemHPHealCheck
-      b.pbAbilitiesOnDamageTaken(oldHP)
-      b.pbFaint if b.fainted?
+      b.pbTakeEffectDamage(b.totalhp / 8) { |hp_lost|
+        if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+          battle.pbDisplay(_INTL("{1} is tormented!", b.pbThis))
+        else
+          battle.pbDisplay(_INTL("{1} is tormented by {2}'s {3}!",
+             b.pbThis, battler.pbThis(true), battler.abilityName))
+        end
+        battle.pbHideAbilitySplash(battler)
+      }
     end
   }
 )

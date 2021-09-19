@@ -59,7 +59,7 @@ class PokeBattle_Move_MaxUserAttackLoseHalfOfTotalHP < PokeBattle_Move
 
   def pbEffectGeneral(user)
     hpLoss = [user.totalhp/2,1].max
-    user.pbReduceHP(hpLoss,false)
+    user.pbReduceHP(hpLoss, false, false)
     if user.hasActiveAbility?(:CONTRARY)
       user.stages[:ATTACK] = -6
       user.statsLowered = true

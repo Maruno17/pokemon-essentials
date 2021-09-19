@@ -145,9 +145,10 @@ BattleHandlers::TargetAbilityOnHit.add(:WANDERINGSPIRIT,
       end
     end
     battle.pbHideAbilitySplash(target) if user.opposes?(target)
-    user.pbOnAbilityChanged(oldUserAbil) if oldUserAbil != nil
-    target.pbOnAbilityChanged(oldTargetAbil) if oldTargetAbil != nil
-    target.pbEffectsOnSwitchIn
+    user.pbOnLosingAbility(oldUserAbil)
+    target.pbOnLosingAbility(oldTargetAbil)
+    user.pbTriggerAbilityOnGainingIt
+    target.pbTriggerAbilityOnGainingIt
   }
 )
 

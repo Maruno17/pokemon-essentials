@@ -70,12 +70,11 @@ class PokeBattle_BattleArena < PokeBattle_Battle
       newpoke = @partyindexes[side]
       pbMessagesOnReplace(side,newpoke)
       pbReplace(side,newpoke)
-      pbOnActiveOne(@battlers[side])
-      @battlers[side].pbEffectsOnSwitchIn(true)
+      pbOnBattlerEnteringBattle(side)
     end
   end
 
-  def pbOnActiveAll
+  def pbOnAllBattlersEnteringBattle
     @battlersChanged = true
     for side in 0...2
       @mind[side]    = 0
@@ -86,12 +85,12 @@ class PokeBattle_BattleArena < PokeBattle_Battle
     return super
   end
 
-  def pbOnActiveOne(*arg)
+  def pbRecordBattlerAsActive(battler)
     @battlersChanged = true
     for side in 0...2
       @mind[side]    = 0
       @skill[side]   = 0
-      @starthp[side] = battlers[side].hp
+      @starthp[side] = @battlers[side].hp
     end
     @count           = 0
     return super

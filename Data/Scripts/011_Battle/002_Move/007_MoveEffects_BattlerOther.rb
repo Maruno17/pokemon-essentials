@@ -891,7 +891,8 @@ class PokeBattle_Move_SetTargetAbilityToSimple < PokeBattle_Move
     @battle.pbReplaceAbilitySplash(target)
     @battle.pbDisplay(_INTL("{1} acquired {2}!",target.pbThis,target.abilityName))
     @battle.pbHideAbilitySplash(target)
-    target.pbOnAbilityChanged(oldAbil)
+    target.pbOnLosingAbility(oldAbil)
+    target.pbTriggerAbilityOnGainingIt
   end
 end
 
@@ -924,7 +925,8 @@ class PokeBattle_Move_SetTargetAbilityToInsomnia < PokeBattle_Move
     @battle.pbReplaceAbilitySplash(target)
     @battle.pbDisplay(_INTL("{1} acquired {2}!",target.pbThis,target.abilityName))
     @battle.pbHideAbilitySplash(target)
-    target.pbOnAbilityChanged(oldAbil)
+    target.pbOnLosingAbility(oldAbil)
+    target.pbTriggerAbilityOnGainingIt
   end
 end
 
@@ -963,8 +965,8 @@ class PokeBattle_Move_SetUserAbilityToTargetAbility < PokeBattle_Move
     @battle.pbDisplay(_INTL("{1} copied {2}'s {3}!",
        user.pbThis,target.pbThis(true),target.abilityName))
     @battle.pbHideAbilitySplash(user)
-    user.pbOnAbilityChanged(oldAbil)
-    user.pbEffectsOnSwitchIn
+    user.pbOnLosingAbility(oldAbil)
+    user.pbTriggerAbilityOnGainingIt
   end
 end
 
@@ -1002,8 +1004,8 @@ class PokeBattle_Move_SetTargetAbilityToUserAbility < PokeBattle_Move
     @battle.pbReplaceAbilitySplash(target)
     @battle.pbDisplay(_INTL("{1} acquired {2}!",target.pbThis,target.abilityName))
     @battle.pbHideAbilitySplash(target)
-    target.pbOnAbilityChanged(oldAbil)
-    target.pbEffectsOnSwitchIn
+    target.pbOnLosingAbility(oldAbil)
+    target.pbTriggerAbilityOnGainingIt
   end
 end
 
@@ -1069,10 +1071,10 @@ class PokeBattle_Move_UserTargetSwapAbilities < PokeBattle_Move
       @battle.pbHideAbilitySplash(user)
       @battle.pbHideAbilitySplash(target)
     end
-    user.pbOnAbilityChanged(oldUserAbil)
-    target.pbOnAbilityChanged(oldTargetAbil)
-    user.pbEffectsOnSwitchIn
-    target.pbEffectsOnSwitchIn
+    user.pbOnLosingAbility(oldUserAbil)
+    target.pbOnLosingAbility(oldTargetAbil)
+    user.pbTriggerAbilityOnGainingIt
+    target.pbTriggerAbilityOnGainingIt
   end
 end
 
@@ -1094,7 +1096,7 @@ class PokeBattle_Move_NegateTargetAbility < PokeBattle_Move
     target.effects[PBEffects::GastroAcid] = true
     target.effects[PBEffects::Truant]     = false
     @battle.pbDisplay(_INTL("{1}'s Ability was suppressed!",target.pbThis))
-    target.pbOnAbilityChanged(target.ability)
+    target.pbOnLosingAbility(target.ability)
   end
 end
 
@@ -1112,7 +1114,7 @@ class PokeBattle_Move_NegateTargetAbilityIfTargetActed < PokeBattle_Move
     target.effects[PBEffects::GastroAcid] = true
     target.effects[PBEffects::Truant]     = false
     @battle.pbDisplay(_INTL("{1}'s Ability was suppressed!",target.pbThis))
-    target.pbOnAbilityChanged(target.ability)
+    target.pbOnLosingAbility(target.ability)
   end
 end
 

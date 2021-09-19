@@ -267,13 +267,10 @@ class PokeBattle_Battle
       priority.each do |b|
         next if b.opposes?(side)
         next if !b.takesIndirectDamage? || b.pbHasType?(:FIRE)
-        oldHP = b.hp
         @scene.pbDamageAnimation(b)
-        b.pbReduceHP(b.totalhp/8,false)
-        pbDisplay(_INTL("{1} is hurt by the sea of fire!",b.pbThis))
-        b.pbItemHPHealCheck
-        b.pbAbilitiesOnDamageTaken(oldHP)
-        b.pbFaint if b.fainted?
+        b.pbTakeEffectDamage(b.totalhp / 8, false) { |hp_lost|
+          pbDisplay(_INTL("{1} is hurt by the sea of fire!", b.pbThis))
+        }
       end
     end
     # Status-curing effects/abilities and HP-healing items
@@ -314,16 +311,12 @@ class PokeBattle_Battle
       next if !b.takesIndirectDamage?
       recipient = @battlers[b.effects[PBEffects::LeechSeed]]
       next if !recipient || recipient.fainted?
-      oldHP = b.hp
-      oldHPRecipient = recipient.hp
       pbCommonAnimation("LeechSeed",recipient,b)
-      hpLoss = b.pbReduceHP(b.totalhp/8)
-      recipient.pbRecoverHPFromDrain(hpLoss,b,
-         _INTL("{1}'s health is sapped by Leech Seed!",b.pbThis))
-      recipient.pbAbilitiesOnDamageTaken(oldHPRecipient) if recipient.hp<oldHPRecipient
-      b.pbItemHPHealCheck
-      b.pbAbilitiesOnDamageTaken(oldHP)
-      b.pbFaint if b.fainted?
+      b.pbTakeEffectDamage(b.totalhp / 8) { |hp_lost|
+        recipient.pbRecoverHPFromDrain(hp_lost, b,
+           _INTL("{1}'s health is sapped by Leech Seed!", b.pbThis))
+        recipient.pbAbilitiesOnDamageTaken
+      }
       recipient.pbFaint if recipient.fainted?
     end
     # Damage from Hyper Mode (Shadow Pokémon)
@@ -357,45 +350,37 @@ class PokeBattle_Battle
           pbHideAbilitySplash(b)
         end
       elsif b.takesIndirectDamage?
-        oldHP = b.hp
         dmg = (b.statusCount==0) ? b.totalhp/8 : b.totalhp*b.effects[PBEffects::Toxic]/16
         b.pbContinueStatus { b.pbReduceHP(dmg,false) }
         b.pbItemHPHealCheck
-        b.pbAbilitiesOnDamageTaken(oldHP)
+        b.pbAbilitiesOnDamageTaken
         b.pbFaint if b.fainted?
       end
     end
     # Damage from burn
     priority.each do |b|
       next if b.status != :BURN || !b.takesIndirectDamage?
-      oldHP = b.hp
       dmg = (Settings::MECHANICS_GENERATION >= 7) ? b.totalhp/16 : b.totalhp/8
       dmg = (dmg/2.0).round if b.hasActiveAbility?(:HEATPROOF)
       b.pbContinueStatus { b.pbReduceHP(dmg,false) }
       b.pbItemHPHealCheck
-      b.pbAbilitiesOnDamageTaken(oldHP)
+      b.pbAbilitiesOnDamageTaken
       b.pbFaint if b.fainted?
     end
     # Damage from sleep (Nightmare)
     priority.each do |b|
       b.effects[PBEffects::Nightmare] = false if !b.asleep?
       next if !b.effects[PBEffects::Nightmare] || !b.takesIndirectDamage?
-      oldHP = b.hp
-      b.pbReduceHP(b.totalhp/4)
-      pbDisplay(_INTL("{1} is locked in a nightmare!",b.pbThis))
-      b.pbItemHPHealCheck
-      b.pbAbilitiesOnDamageTaken(oldHP)
-      b.pbFaint if b.fainted?
+      b.pbTakeEffectDamage(b.totalhp / 4) { |hp_lost|
+        pbDisplay(_INTL("{1} is locked in a nightmare!", b.pbThis))
+      }
     end
     # Curse
     priority.each do |b|
       next if !b.effects[PBEffects::Curse] || !b.takesIndirectDamage?
-      oldHP = b.hp
-      b.pbReduceHP(b.totalhp/4)
-      pbDisplay(_INTL("{1} is afflicted by the curse!",b.pbThis))
-      b.pbItemHPHealCheck
-      b.pbAbilitiesOnDamageTaken(oldHP)
-      b.pbFaint if b.fainted?
+      b.pbTakeEffectDamage(b.totalhp / 4) { |hp_lost|
+        pbDisplay(_INTL("{1} is afflicted by the curse!", b.pbThis))
+      }
     end
     # Trapping attacks (Bind/Clamp/Fire Spin/Magma Storm/Sand Tomb/Whirlpool/Wrap)
     priority.each do |b|
@@ -421,11 +406,9 @@ class PokeBattle_Battle
             hpLoss = (Settings::MECHANICS_GENERATION >= 6) ? b.totalhp/6 : b.totalhp/8
           end
           @scene.pbDamageAnimation(b)
-          b.pbReduceHP(hpLoss,false)
-          pbDisplay(_INTL("{1} is hurt by {2}!",b.pbThis,moveName))
-          b.pbItemHPHealCheck
-          # NOTE: No need to call pbAbilitiesOnDamageTaken as b can't switch out.
-          b.pbFaint if b.fainted?
+          b.pbTakeEffectDamage(hpLoss, false) { |hp_lost|
+            pbDisplay(_INTL("{1} is hurt by {2}!", b.pbThis, moveName))
+          }
         end
       end
     end
@@ -647,7 +630,8 @@ class PokeBattle_Battle
       b.effects[PBEffects::ThroatChop]       -= 1 if b.effects[PBEffects::ThroatChop]>0
       b.lastHPLost                           = 0
       b.lastHPLostFromFoe                    = 0
-      b.tookDamage                           = false
+      b.droppedBelowHalfHP                   = false
+      b.tookDamageThisRound                  = false
       b.tookPhysicalHit                      = false
       b.statsRaised                          = false
       b.statsLowered                         = false

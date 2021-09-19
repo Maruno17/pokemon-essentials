@@ -143,12 +143,12 @@ class PokeBattle_Battler
       @effects[PBEffects::Telekinesis]       = 0
     end
     @fainted               = (@hp==0)
-    @initialHP             = 0
     @lastAttacker          = []
     @lastFoeAttacker       = []
     @lastHPLost            = 0
     @lastHPLostFromFoe     = 0
-    @tookDamage            = false
+    @droppedBelowHalfHP    = false
+    @tookDamageThisRound   = false
     @tookPhysicalHit       = false
     @statsRaised           = false
     @statsLowered          = false

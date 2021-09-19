@@ -128,8 +128,8 @@ module BattleHandlers
     return (ret!=nil) ? ret : false
   end
 
-  def self.triggerAbilityOnHPDroppedBelowHalf(ability,user,battle)
-    ret = AbilityOnHPDroppedBelowHalf.trigger(ability,user,battle)
+  def self.triggerAbilityOnHPDroppedBelowHalf(ability, user, move_user, battle)
+    ret = AbilityOnHPDroppedBelowHalf.trigger(ability, user, move_user, battle)
     return (ret!=nil) ? ret : false
   end
 
@@ -345,16 +345,16 @@ module BattleHandlers
     UserAbilityEndOfMove.trigger(ability,user,targets,move,battle)
   end
 
-  def self.triggerTargetItemAfterMoveUse(item,battler,user,move,switched,battle)
-    TargetItemAfterMoveUse.trigger(item,battler,user,move,switched,battle)
+  def self.triggerTargetItemAfterMoveUse(item, battler, user, move, switched_battlers, battle)
+    TargetItemAfterMoveUse.trigger(item, battler, user, move, switched_battlers, battle)
   end
 
   def self.triggerUserItemAfterMoveUse(item,user,targets,move,numHits,battle)
     UserItemAfterMoveUse.trigger(item,user,targets,move,numHits,battle)
   end
 
-  def self.triggerTargetAbilityAfterMoveUse(ability,target,user,move,switched,battle)
-    TargetAbilityAfterMoveUse.trigger(ability,target,user,move,switched,battle)
+  def self.triggerTargetAbilityAfterMoveUse(ability, target, user, move, switched_battlers, battle)
+    TargetAbilityAfterMoveUse.trigger(ability, target, user, move, switched_battlers, battle)
   end
 
   def self.triggerEndOfMoveItem(item,battler,battle,forced)

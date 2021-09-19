@@ -60,7 +60,7 @@ class PokeBattle_Battle
       return if @decision>0
       # Switch Pokémon
       pbRecallAndReplace(b.index,idxNewPkmn)
-      b.pbEffectsOnSwitchIn(true)
+      pbOnBattlerEnteringBattle(b.index)
     end
   end
 

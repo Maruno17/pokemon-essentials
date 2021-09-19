@@ -76,7 +76,7 @@ class PokeBattle_Move
   def pbEffectGeneral(user); end
   def pbAdditionalEffect(user,target); end
   def pbEffectAfterAllHits(user,target); end   # Move effects that occur after all hits
-  def pbSwitchOutTargetsEffect(user,targets,numHits,switchedBattlers); end
+  def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers); end
   def pbEndOfMoveUsageEffect(user,targets,numHits,switchedBattlers); end
 
   #=============================================================================
@@ -225,8 +225,8 @@ class PokeBattle_Move
   def pbInflictHPDamage(target)
     if target.damageState.substitute
       target.effects[PBEffects::Substitute] -= target.damageState.hpLost
-    else
-      target.hp -= target.damageState.hpLost
+    elsif target.damageState.hpLost > 0
+      target.pbReduceHP(target.damageState.hpLost, false, true, false)
     end
   end
 
@@ -360,12 +360,12 @@ class PokeBattle_Move
       target.effects[PBEffects::BideTarget] = user.index
     end
     target.damageState.fainted = true if target.fainted?
-    target.lastHPLost = damage             # For Focus Punch
-    target.tookDamage = true if damage>0   # For Assurance
-    target.lastAttacker.push(user.index)   # For Revenge
+    target.lastHPLost = damage                        # For Focus Punch
+    target.tookDamageThisRound = true if damage > 0   # For Assurance
+    target.lastAttacker.push(user.index)              # For Revenge
     if target.opposes?(user)
-      target.lastHPLostFromFoe = damage              # For Metal Burst
-      target.lastFoeAttacker.push(user.index)        # For Metal Burst
+      target.lastHPLostFromFoe = damage               # For Metal Burst
+      target.lastFoeAttacker.push(user.index)         # For Metal Burst
     end
   end
 end

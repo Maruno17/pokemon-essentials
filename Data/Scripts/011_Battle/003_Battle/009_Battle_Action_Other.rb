@@ -127,6 +127,7 @@ class PokeBattle_Battle
     return if !battler || !battler.pokemon
     return if !battler.hasMega? || battler.mega?
     trainerName = pbGetOwnerName(idxBattler)
+    old_ability = battler.ability_id
     # Break Illusion
     if battler.hasActiveAbility?(:ILLUSION)
       BattleHandlers.triggerTargetAbilityOnHit(battler.ability,nil,battler,nil,self)
@@ -157,7 +158,8 @@ class PokeBattle_Battle
     end
     pbCalculatePriority(false,[idxBattler]) if Settings::RECALCULATE_TURN_ORDER_AFTER_MEGA_EVOLUTION
     # Trigger ability
-    battler.pbEffectsOnSwitchIn
+    battler.pbOnLosingAbility(old_ability)
+    battler.pbTriggerAbilityOnGainingIt
   end
 
   #=============================================================================
@@ -165,7 +167,7 @@ class PokeBattle_Battle
   #=============================================================================
   def pbPrimalReversion(idxBattler)
     battler = @battlers[idxBattler]
-    return if !battler || !battler.pokemon
+    return if !battler || !battler.pokemon || battler.fainted?
     return if !battler.hasPrimal? || battler.primal?
     if battler.isSpecies?(:KYOGRE)
       pbCommonAnimation("PrimalKyogre",battler)

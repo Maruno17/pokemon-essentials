@@ -1,5 +1,4 @@
 class PokeBattle_DamageState
-  attr_accessor :initialHP
   attr_accessor :typeMod         # Type effectiveness
   attr_accessor :unaffected
   attr_accessor :protected
@@ -25,16 +24,15 @@ class PokeBattle_DamageState
   def initialize; reset; end
 
   def reset
-    @initialHP          = 0
-    @typeMod            = Effectiveness::INEFFECTIVE
-    @unaffected         = false
-    @protected          = false
-    @missed             = false
-    @invulnerable       = false
-    @magicCoat          = false
-    @magicBounce        = false
-    @totalHPLost        = 0
-    @fainted            = false
+    @typeMod      = Effectiveness::INEFFECTIVE
+    @unaffected   = false
+    @protected    = false
+    @missed       = false
+    @invulnerable = false
+    @magicCoat    = false
+    @magicBounce  = false
+    @totalHPLost  = 0
+    @fainted      = false
     resetPerHit
   end
 

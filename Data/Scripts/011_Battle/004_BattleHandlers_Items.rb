@@ -1281,7 +1281,8 @@ BattleHandlers::TargetItemOnHitPositiveBerry.add(:MARANGABERRY,
 #===============================================================================
 
 BattleHandlers::TargetItemAfterMoveUse.add(:EJECTBUTTON,
-  proc { |item,battler,user,move,switched,battle|
+  proc { |item, battler, user, move, switched_battlers, battle|
+    next if !switched_battlers.empty?
     next if battle.pbAllFainted?(battler.idxOpposingSide)
     next if !battle.pbCanChooseNonActive?(battler.index)
     battle.pbCommonAnimation("UseItem",battler)
@@ -1291,23 +1292,41 @@ BattleHandlers::TargetItemAfterMoveUse.add(:EJECTBUTTON,
     next if newPkmn<0
     battle.pbRecallAndReplace(battler.index,newPkmn)
     battle.pbClearChoice(battler.index)   # Replacement Pokémon does nothing this round
-    switched.push(battler.index)
+    switched_battlers.push(battler.index)
+    battle.moldBreaker = false if battler.index == user.index
+    battle.pbOnBattlerEnteringBattle(battler.index)
   }
 )
 
 BattleHandlers::TargetItemAfterMoveUse.add(:REDCARD,
-  proc { |item,battler,user,move,switched,battle|
-    next if user.fainted? || switched.include?(user.index)
+  proc { |item, battler, user, move, switched_battlers, battle|
+    next if !switched_battlers.empty? || user.fainted?
     newPkmn = battle.pbGetReplacementPokemonIndex(user.index,true)   # Random
     next if newPkmn<0
     battle.pbCommonAnimation("UseItem",battler)
     battle.pbDisplay(_INTL("{1} held up its {2} against {3}!",
        battler.pbThis,battler.itemName,user.pbThis(true)))
     battler.pbConsumeItem
+    if user.hasActiveAbility?(:SUCTIONCUPS) && !battle.moldBreaker
+      battle.pbShowAbilitySplash(user)
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1} anchors itself!", user.pbThis))
+      else
+        battle.pbDisplay(_INTL("{1} anchors itself with {2}!", user.pbThis, user.abilityName))
+      end
+      battle.pbHideAbilitySplash(user)
+      next
+    end
+    if user.effects[PBEffects::Ingrain]
+      battle.pbDisplay(_INTL("{1} anchored itself with its roots!", user.pbThis))
+      next
+    end
     battle.pbRecallAndReplace(user.index, newPkmn, true)
     battle.pbDisplay(_INTL("{1} was dragged out!",user.pbThis))
     battle.pbClearChoice(user.index)   # Replacement Pokémon does nothing this round
-    switched.push(user.index)
+    switched_battlers.push(user.index)
+    battle.moldBreaker = false
+    battle.pbOnBattlerEnteringBattle(user.index)
   }
 )
 
@@ -1333,6 +1352,9 @@ BattleHandlers::UserItemAfterMoveUse.add(:LIFEORB,
   }
 )
 
+# NOTE: In the official games, Shell Bell does not prevent Emergency Exit/Wimp
+#       Out triggering even if Shell Bell heals the holder back to 50% HP or
+#       more. Essentials ignores this exception.
 BattleHandlers::UserItemAfterMoveUse.add(:SHELLBELL,
   proc { |item,user,targets,move,numHits,battle|
     next if !user.canHeal?
@@ -1564,13 +1586,10 @@ BattleHandlers::EORHealingItem.add(:BLACKSLUDGE,
       battle.pbDisplay(_INTL("{1} restored a little HP using its {2}!",
          battler.pbThis,battler.itemName))
     elsif battler.takesIndirectDamage?
-      oldHP = battler.hp
       battle.pbCommonAnimation("UseItem",battler)
-      battler.pbReduceHP(battler.totalhp/8)
-      battle.pbDisplay(_INTL("{1} is hurt by its {2}!",battler.pbThis,battler.itemName))
-      battler.pbItemHPHealCheck
-      battler.pbAbilitiesOnDamageTaken(oldHP)
-      battler.pbFaint if battler.fainted?
+      battler.pbTakeEffectDamage(battler.totalhp / 8) { |hp_lost|
+        battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))
+      }
     end
   }
 )
@@ -1601,11 +1620,9 @@ BattleHandlers::EOREffectItem.add(:STICKYBARB,
     next if !battler.takesIndirectDamage?
     oldHP = battler.hp
     battle.scene.pbDamageAnimation(battler)
-    battler.pbReduceHP(battler.totalhp/8,false)
-    battle.pbDisplay(_INTL("{1} is hurt by its {2}!",battler.pbThis,battler.itemName))
-    battler.pbItemHPHealCheck
-    battler.pbAbilitiesOnDamageTaken(oldHP)
-    battler.pbFaint if battler.fainted?
+    battler.pbTakeEffectDamage(battler.totalhp / 8, false) { |hp_lost|
+      battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))
+    }
   }
 )
 

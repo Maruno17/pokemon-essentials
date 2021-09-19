@@ -12,7 +12,10 @@ class PokeBattle_Battler
     raise _INTL("HP less than 0") if @hp<0
     raise _INTL("HP greater than total HP") if @hp>@totalhp
     @battle.scene.pbHPChanged(self,oldHP,anim) if anyAnim && amt>0
-    @tookDamage = true if amt>0 && registerDamage
+    if amt > 0 && registerDamage
+      @droppedBelowHalfHP = true if @hp < @totalhp / 2 && @hp + amt >= @totalhp / 2
+      @tookDamageThisRound = true
+    end
     return amt
   end
 
@@ -26,6 +29,7 @@ class PokeBattle_Battler
     raise _INTL("HP less than 0") if @hp<0
     raise _INTL("HP greater than total HP") if @hp>@totalhp
     @battle.scene.pbHPChanged(self,oldHP,anim) if anyAnim && amt>0
+    @droppedBelowHalfHP = false if @hp >= @totalhp / 2
     return amt
   end
 
@@ -44,6 +48,14 @@ class PokeBattle_Battler
         pbRecoverHP(amt)
       end
     end
+  end
+
+  def pbTakeEffectDamage(amt, show_anim = true)
+    hp_lost = pbReduceHP(amt, show_anim)
+    yield hp_lost if block_given?   # Show message
+    pbItemHPHealCheck
+    pbAbilitiesOnDamageTaken
+    pbFaint if fainted?
   end
 
   def pbFaint(showMessage=true)
@@ -310,7 +322,7 @@ class PokeBattle_Battler
     @effects[PBEffects::WeightChange] = target.effects[PBEffects::WeightChange]
     @battle.scene.pbRefreshOne(@index)
     @battle.pbDisplay(_INTL("{1} transformed into {2}!",pbThis,target.pbThis(true)))
-    pbOnAbilityChanged(oldAbil)
+    pbOnLosingAbility(oldAbil)
   end
 
   def pbHyperMode; end
