@@ -384,7 +384,10 @@ class PokeBattle_Battler
       user.lastMoveFailed = true
     else   # We have targets, or move doesn't use targets
       # Reset whole damage state, perform various success checks (not accuracy)
-      @battle.eachBattler { |b| b.droppedBelowHalfHP = false }
+      @battle.eachBattler do |b|
+        b.droppedBelowHalfHP = false
+        b.statsDropped = false
+      end
       targets.each do |b|
         b.damageState.reset
         next if pbSuccessCheckAgainstTarget(move, user, b, targets)
@@ -496,7 +499,10 @@ class PokeBattle_Battler
       user.pbFaint if user.fainted?
       # External/general effects after all hits. Eject Button, Shell Bell, etc.
       pbEffectsAfterMove(user,targets,move,realNumHits)
-      @battle.eachBattler { |b| b.droppedBelowHalfHP = false }
+      @battle.eachBattler do |b|
+        b.droppedBelowHalfHP = false
+        b.statsDropped = false
+      end
     end
     # End effect of Mold Breaker
     @battle.moldBreaker = false

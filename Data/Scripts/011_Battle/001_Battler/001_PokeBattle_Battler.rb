@@ -39,10 +39,11 @@ class PokeBattle_Battler
   attr_accessor :movesUsed
   attr_accessor :currentMove   # ID of multi-turn move currently being used
   attr_accessor :droppedBelowHalfHP   # Used for Emergency Exit/Wimp Out
+  attr_accessor :statsDropped   # Used for Eject Pack
   attr_accessor :tookDamageThisRound   # Boolean for whether self took damage this round
   attr_accessor :tookPhysicalHit
-  attr_accessor :statsRaised   # Boolean for whether self's stat(s) raised this round
-  attr_accessor :statsLowered   # Boolean for whether self's stat(s) lowered this round
+  attr_accessor :statsRaisedThisRound   # Boolean for whether self's stat(s) raised this round
+  attr_accessor :statsLoweredThisRound   # Boolean for whether self's stat(s) lowered this round
   attr_accessor :canRestoreIceFace   # Whether Hail started in the round
   attr_accessor :damageState
 

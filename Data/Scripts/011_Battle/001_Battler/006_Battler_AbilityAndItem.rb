@@ -292,4 +292,11 @@ class PokeBattle_Battler
       pbHeldItemTriggered(self.item)
     end
   end
+
+  # Used for Eject Pack. Returns whether self has switched out.
+  def pbItemOnStatDropped(move_user = nil)
+    return false if !@statsDropped
+    return false if !itemActive?
+    return BattleHandlers.triggerItemOnStatDropped(self.item, self, move_user, @battle)
+  end
 end

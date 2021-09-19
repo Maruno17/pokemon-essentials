@@ -103,6 +103,7 @@ class PokeBattle_Battle
       if ItemHandlers.triggerCanUseInBattle(item,battler.pokemon,battler,ch[3],true,self,@scene,false)
         ItemHandlers.triggerBattleUseOnBattler(item,battler,@scene)
         ch[1] = nil   # Delete item from choice
+        battler.pbItemOnStatDropped
         return
       else
         pbDisplay(_INTL("But it had no effect!"))

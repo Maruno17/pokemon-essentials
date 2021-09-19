@@ -175,7 +175,7 @@ end
 #===============================================================================
 class PokeBattle_Move_BurnTargetIfTargetStatsRaisedThisTurn < PokeBattle_BurnMove
   def pbAdditionalEffect(user, target)
-    super if target.statsRaised
+    super if target.statsRaisedThisRound
   end
 end
 

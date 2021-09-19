@@ -1328,7 +1328,7 @@ BattleHandlers::TargetAbilityOnHit.add(:ANGERPOINT,
     next if !target.pbCanRaiseStatStage?(:ATTACK,target)
     battle.pbShowAbilitySplash(target)
     target.stages[:ATTACK] = 6
-    target.statsRaised = true
+    target.statsRaisedThisRound = true
     battle.pbCommonAnimation("StatUp",target)
     if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
       battle.pbDisplay(_INTL("{1} maxed its {2}!",target.pbThis,GameData::Stat.get(:ATTACK).name))
@@ -1976,6 +1976,7 @@ BattleHandlers::EOREffectAbility.add(:MOODY,
     end
     battle.pbHideAbilitySplash(battler)
     battler.pbItemStatRestoreCheck if randomDown.length>0
+    battler.pbItemOnStatDropped
   }
 )
 

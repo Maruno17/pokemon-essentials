@@ -605,7 +605,7 @@ end
 #===============================================================================
 class PokeBattle_Move_DoublePowerIfUserStatsLoweredThisTurn < PokeBattle_Move
   def pbBaseDamage(baseDmg, user, target)
-    baseDmg *= 2 if user.statsLowered
+    baseDmg *= 2 if user.statsLoweredThisRound
     return baseDmg
   end
 end

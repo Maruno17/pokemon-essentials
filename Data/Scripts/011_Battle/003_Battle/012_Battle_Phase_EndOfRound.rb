@@ -350,22 +350,26 @@ class PokeBattle_Battle
           pbHideAbilitySplash(b)
         end
       elsif b.takesIndirectDamage?
+        b.droppedBelowHalfHP = false
         dmg = (b.statusCount==0) ? b.totalhp/8 : b.totalhp*b.effects[PBEffects::Toxic]/16
         b.pbContinueStatus { b.pbReduceHP(dmg,false) }
         b.pbItemHPHealCheck
         b.pbAbilitiesOnDamageTaken
         b.pbFaint if b.fainted?
+        b.droppedBelowHalfHP = false
       end
     end
     # Damage from burn
     priority.each do |b|
       next if b.status != :BURN || !b.takesIndirectDamage?
+      b.droppedBelowHalfHP = false
       dmg = (Settings::MECHANICS_GENERATION >= 7) ? b.totalhp/16 : b.totalhp/8
       dmg = (dmg/2.0).round if b.hasActiveAbility?(:HEATPROOF)
       b.pbContinueStatus { b.pbReduceHP(dmg,false) }
       b.pbItemHPHealCheck
       b.pbAbilitiesOnDamageTaken
       b.pbFaint if b.fainted?
+      b.droppedBelowHalfHP = false
     end
     # Damage from sleep (Nightmare)
     priority.each do |b|
@@ -418,6 +422,7 @@ class PokeBattle_Battle
       pbCommonAnimation("Octolock", b)
       b.pbLowerStatStage(:DEFENSE, 1, nil) if b.pbCanLowerStatStage?(:DEFENSE)
       b.pbLowerStatStage(:SPECIAL_DEFENSE, 1, nil) if b.pbCanLowerStatStage?(:SPECIAL_DEFENSE)
+      b.pbItemOnStatDropped
     end
     # Taunt
     pbEORCountDownBattlerEffect(priority,PBEffects::Taunt) { |battler|
@@ -631,10 +636,11 @@ class PokeBattle_Battle
       b.lastHPLost                           = 0
       b.lastHPLostFromFoe                    = 0
       b.droppedBelowHalfHP                   = false
+      b.statsDropped                         = false
       b.tookDamageThisRound                  = false
       b.tookPhysicalHit                      = false
-      b.statsRaised                          = false
-      b.statsLowered                         = false
+      b.statsRaisedThisRound                 = false
+      b.statsLoweredThisRound                = false
       b.canRestoreIceFace                    = false
       b.lastRoundMoveFailed                  = b.lastMoveFailed
       b.lastAttacker.clear

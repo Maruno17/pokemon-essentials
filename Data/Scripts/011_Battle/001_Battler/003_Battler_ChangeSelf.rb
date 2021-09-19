@@ -51,11 +51,13 @@ class PokeBattle_Battler
   end
 
   def pbTakeEffectDamage(amt, show_anim = true)
+    @droppedBelowHalfHP = false
     hp_lost = pbReduceHP(amt, show_anim)
     yield hp_lost if block_given?   # Show message
     pbItemHPHealCheck
     pbAbilitiesOnDamageTaken
     pbFaint if fainted?
+    @droppedBelowHalfHP = false
   end
 
   def pbFaint(showMessage=true)

@@ -316,8 +316,9 @@ class PokeBattle_Battle
   # in.
   def pbOnBattlerEnteringBattle(*battler_indices)
     battler_indices.flatten!
-    pbPriority(true).each do |b|
+    eachBattler do |b|
       b.droppedBelowHalfHP = false
+      b.statsDropped = false
     end
     # For each battler that entered battle, in speed order
     pbPriority(true).each do |b|
@@ -355,10 +356,12 @@ class PokeBattle_Battle
     # Check for triggering of Emergency Exit/Wimp Out/Eject Pack (only one will
     # be triggered)
     pbPriority(true).each do |b|
+      break if b.pbItemOnStatDropped
       break if b.pbAbilitiesOnDamageTaken
     end
-    pbPriority(true).each do |b|
+    eachBattler do |b|
       b.droppedBelowHalfHP = false
+      b.statsDropped = false
     end
   end
 

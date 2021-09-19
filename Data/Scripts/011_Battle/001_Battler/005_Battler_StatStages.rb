@@ -37,7 +37,7 @@ class PokeBattle_Battler
       new = @stages[stat]+increment
       PBDebug.log("[Stat change] #{pbThis}'s #{stat_name}: #{@stages[stat]} -> #{new} (+#{increment})")
       @stages[stat] += increment
-      @statsRaised = true
+      @statsRaisedThisRound = true
     end
     return increment
   end
@@ -176,7 +176,8 @@ class PokeBattle_Battler
       new = @stages[stat]-increment
       PBDebug.log("[Stat change] #{pbThis}'s #{stat_name}: #{@stages[stat]} -> #{new} (-#{increment})")
       @stages[stat] -= increment
-      @statsLowered = true
+      @statsLoweredThisRound = true
+      @statsDropped = true
     end
     return increment
   end
@@ -360,9 +361,10 @@ class PokeBattle_Battler
   def pbResetStatStages
     GameData::Stat.each_battle do |s|
       if @stages[s.id] > 0
-        @statsLowered = true
+        @statsLoweredThisRound = true
+        @statsDropped = true
       elsif @stages[s.id] < 0
-        @statsRaised = true
+        @statsRaisedThisRound = true
       end
       @stages[s.id] = 0
     end

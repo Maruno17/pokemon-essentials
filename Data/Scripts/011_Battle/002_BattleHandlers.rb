@@ -5,9 +5,10 @@ module BattleHandlers
   # Battler's weight calculation
   WeightCalcAbility                   = AbilityHandlerHash.new
   WeightCalcItem                      = ItemHandlerHash.new   # Float Stone
-  # Battler's HP changed
+  # Battler's HP/stat changed
   HPHealItem                          = ItemHandlerHash.new
   AbilityOnHPDroppedBelowHalf         = AbilityHandlerHash.new
+  ItemOnStatDropped                   = ItemHandlerHash.new
   # Battler's status problem
   StatusCheckAbilityNonIgnorable      = AbilityHandlerHash.new   # Comatose
   StatusImmunityAbility               = AbilityHandlerHash.new
@@ -131,6 +132,11 @@ module BattleHandlers
   def self.triggerAbilityOnHPDroppedBelowHalf(ability, user, move_user, battle)
     ret = AbilityOnHPDroppedBelowHalf.trigger(ability, user, move_user, battle)
     return (ret!=nil) ? ret : false
+  end
+
+  def self.triggerItemOnStatDropped(item, user, move_user, battle)
+    ret = ItemOnStatDropped.trigger(item, user, move_user, battle)
+    return (ret != nil) ? ret : false
   end
 
   #=============================================================================

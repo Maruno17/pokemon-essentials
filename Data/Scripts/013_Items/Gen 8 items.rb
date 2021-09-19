@@ -340,6 +340,33 @@ BattleHandlers::UserItemAfterMoveUse.add(:THROATSPRAY,
   }
 )
 
+BattleHandlers::ItemOnStatDropped.add(:EJECTPACK,
+  proc { |item, battler, move_user, battle|
+    next false if battler.effects[PBEffects::SkyDrop] >= 0 ||
+                  battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSkyTargetCannotAct")   # Sky Drop
+    next false if battle.pbAllFainted?(battler.idxOpposingSide)
+    next false if battle.wildBattle? && battler.opposes?   # Wild Pokémon can't eject
+    next false if !battle.pbCanSwitch?(battler.index)   # Battler can't switch out
+    next false if !battle.pbCanChooseNonActive?(battler.index)   # No Pokémon can switch in
+    battle.pbCommonAnimation("UseItem", battler)
+    battle.pbDisplay(_INTL("{1} is switched out by the {2}!", battler.pbThis, battler.itemName))
+    battler.pbConsumeItem(true, false)
+    if battle.endOfRound   # Just switch out
+      battle.scene.pbRecall(battler.index) if !battler.fainted?
+      battler.pbAbilitiesOnSwitchOut   # Inc. primordial weather check
+      next true
+    end
+    newPkmn = battle.pbGetReplacementPokemonIndex(battler.index)   # Owner chooses
+    next false if newPkmn < 0   # Shouldn't ever do this
+    battle.pbRecallAndReplace(battler.index, newPkmn)
+    battle.pbClearChoice(battler.index)   # Replacement Pokémon does nothing this round
+    battle.moldBreaker = false if move_user && battler.index == move_user.index
+    battle.pbOnBattlerEnteringBattle(battler.index)
+    next true
+  }
+)
+
+
 BattleHandlers::ItemOnSwitchIn.add(:ROOMSERVICE,
   proc { |item, battler, battle|
     next if battle.field.effects[PBEffects::TrickRoom] == 0
@@ -377,15 +404,3 @@ ItemHandlers::UseOnPokemon.add(:ZYGARDECUBE, proc { |item, pkmn, scene|
   end
   next false
 })
-
-
-=begin
-
-#===============================================================================
-
-Eject Pack
-When holder's stat(s) is lowered, consume item and holder switches out. Not
-triggered by Parting Shot, or if a faster mon's Eject Button/Eject Pack
-triggers.
-
-=end

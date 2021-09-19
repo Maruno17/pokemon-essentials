@@ -62,12 +62,13 @@ class PokeBattle_Move_MaxUserAttackLoseHalfOfTotalHP < PokeBattle_Move
     user.pbReduceHP(hpLoss, false, false)
     if user.hasActiveAbility?(:CONTRARY)
       user.stages[:ATTACK] = -6
-      user.statsLowered = true
+      user.statsLoweredThisRound = true
+      user.statsDropped = true
       @battle.pbCommonAnimation("StatDown",user)
       @battle.pbDisplay(_INTL("{1} cut its own HP and minimized its Attack!",user.pbThis))
     else
       user.stages[:ATTACK] = 6
-      user.statsRaised = true
+      user.statsRaisedThisRound = true
       @battle.pbCommonAnimation("StatUp",user)
       @battle.pbDisplay(_INTL("{1} cut its own HP and maximized its Attack!",user.pbThis))
     end
@@ -1616,11 +1617,13 @@ class PokeBattle_Move_UserTargetSwapAtkSpAtkStages < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     [:ATTACK,:SPECIAL_ATTACK].each do |s|
       if user.stages[s] > target.stages[s]
-        user.statsLowered = true
-        target.statsRaised = true
+        user.statsLoweredThisRound = true
+        user.statsDropped = true
+        target.statsRaisedThisRound = true
       elsif user.stages[s] < target.stages[s]
-        user.statsRaised = true
-        target.statsLowered = true
+        user.statsRaisedThisRound = true
+        target.statsLoweredThisRound = true
+        target.statsDropped = true
       end
       user.stages[s],target.stages[s] = target.stages[s],user.stages[s]
     end
@@ -1637,11 +1640,13 @@ class PokeBattle_Move_UserTargetSwapDefSpDefStages < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     [:DEFENSE,:SPECIAL_DEFENSE].each do |s|
       if user.stages[s] > target.stages[s]
-        user.statsLowered = true
-        target.statsRaised = true
+        user.statsLoweredThisRound = true
+        user.statsDropped = true
+        target.statsRaisedThisRound = true
       elsif user.stages[s] < target.stages[s]
-        user.statsRaised = true
-        target.statsLowered = true
+        user.statsRaisedThisRound = true
+        target.statsLoweredThisRound = true
+        target.statsDropped = true
       end
       user.stages[s],target.stages[s] = target.stages[s],user.stages[s]
     end
@@ -1658,11 +1663,13 @@ class PokeBattle_Move_UserTargetSwapStatStages < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     GameData::Stat.each_battle do |s|
       if user.stages[s.id] > target.stages[s.id]
-        user.statsLowered = true
-        target.statsRaised = true
+        user.statsLoweredThisRound = true
+        user.statsDropped = true
+        target.statsRaisedThisRound = true
       elsif user.stages[s.id] < target.stages[s.id]
-        user.statsRaised = true
-        target.statsLowered = true
+        user.statsRaisedThisRound = true
+        target.statsLoweredThisRound = true
+        target.statsDropped = true
       end
       user.stages[s.id],target.stages[s.id] = target.stages[s.id],user.stages[s.id]
     end
@@ -1679,9 +1686,10 @@ class PokeBattle_Move_UserCopyTargetStatStages < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     GameData::Stat.each_battle do |s|
       if user.stages[s.id] > target.stages[s.id]
-        user.statsLowered = true
+        user.statsLoweredThisRound = true
+        user.statsDropped = true
       elsif user.stages[s.id] < target.stages[s.id]
-        user.statsRaised = true
+        user.statsRaisedThisRound = true
       end
       user.stages[s.id] = target.stages[s.id]
     end
@@ -1713,7 +1721,8 @@ class PokeBattle_Move_UserStealTargetPositiveStatStages < PokeBattle_Move
             showAnim = false
           end
         end
-        target.statsLowered = true
+        target.statsLoweredThisRound = true
+        target.statsDropped = true
         target.stages[s.id] = 0
       end
     end
@@ -1738,9 +1747,10 @@ class PokeBattle_Move_InvertTargetStatStages < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     GameData::Stat.each_battle do |s|
       if target.stages[s.id] > 0
-        target.statsLowered = true
+        target.statsLoweredThisRound = true
+        target.statsDropped = true
       elsif target.stages[s.id] < 0
-        target.statsRaised = true
+        target.statsRaisedThisRound = true
       end
       target.stages[s.id] *= -1
     end

@@ -52,6 +52,7 @@ class PokeBattle_Battle
       battler.pbCureStatus
     elsif battler.pbCanRaiseStatStage?(:ACCURACY,battler)
       battler.pbRaiseStatStage(:ACCURACY,1,battler)
+      battler.pbItemOnStatDropped
     else
       pbDisplay(_INTL("But nothing happened!"))
     end

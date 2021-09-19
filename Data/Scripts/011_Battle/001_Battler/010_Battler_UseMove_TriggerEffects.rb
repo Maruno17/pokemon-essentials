@@ -138,12 +138,6 @@ class PokeBattle_Battler
         user.pbChangeForm((user.hp > user.totalhp / 2) ? 1 : 2, nil)
       end
     end
-    # Consume user's Gem
-    if user.effects[PBEffects::GemConsumed]
-      # NOTE: The consume animation and message for Gems are shown immediately
-      #       after the move's animation, but the item is only consumed now.
-      user.pbConsumeItem
-    end
     # Room Service
     if move.function == "StartSlowerBattlersActFirst" && @battle.field.effects[PBEffects::TrickRoom] > 0
       @battle.battlers.each do |b|
@@ -153,6 +147,12 @@ class PokeBattle_Battler
         b.pbLowerStatStage(:SPEED, 1, nil)
         b.pbConsumeItem
       end
+    end
+    # Consume user's Gem
+    if user.effects[PBEffects::GemConsumed]
+      # NOTE: The consume animation and message for Gems are shown immediately
+      #       after the move's animation, but the item is only consumed now.
+      user.pbConsumeItem
     end
     switched_battlers = []   # Indices of battlers that were switched out somehow
     # Target switching caused by Roar, Whirlwind, Circle Throw, Dragon Tail
@@ -180,10 +180,17 @@ class PokeBattle_Battler
   def pbEffectsAfterMove2(user, targets, move, numHits, switched_battlers)
     # Target's held item (Eject Button, Red Card, Eject Pack)
     @battle.pbPriority(true).each do |b|
-      next if !targets.any? { |targetB| targetB.index==b.index }
-      next if b.damageState.unaffected || b.damageState.calcDamage == 0
-      next if !b.itemActive?
-      BattleHandlers.triggerTargetItemAfterMoveUse(b.item, b, user, move, switched_battlers, @battle)
+      if targets.any? { |targetB| targetB.index==b.index }
+        if !b.damageState.unaffected && b.damageState.calcDamage > 0 && b.itemActive?
+          BattleHandlers.triggerTargetItemAfterMoveUse(b.item, b, user, move, switched_battlers, @battle)
+        end
+      end
+      # Target's Eject Pack
+      if switched_battlers.empty? && b.index != user.index
+        if b.pbItemOnStatDropped(user)
+          switched_battlers.push(b.index)
+        end
+      end
     end
     # User's held item (Life Orb, Shell Bell, Throat Spray, Eject Pack)
     if !switched_battlers.include?(user.index) && user.itemActive?   # Only if user hasn't switched out
@@ -192,11 +199,11 @@ class PokeBattle_Battler
     # Target's ability (Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out)
     @battle.pbPriority(true).each do |b|
       if targets.any? { |targetB| targetB.index==b.index }
-        next if b.damageState.unaffected || switched_battlers.include?(b.index)
-        next if !b.abilityActive?
-        BattleHandlers.triggerTargetAbilityAfterMoveUse(b.ability, b, user, move, switched_battlers, @battle)
+        if !b.damageState.unaffected && !switched_battlers.include?(b.index) && b.abilityActive?
+          BattleHandlers.triggerTargetAbilityAfterMoveUse(b.ability, b, user, move, switched_battlers, @battle)
+        end
       end
-      # Emergency Exit, Wimp Out (including for Pokémon hurt by Flame Burst)
+      # Target's Emergency Exit, Wimp Out (including for Pokémon hurt by Flame Burst)
       if switched_battlers.empty? && move.damagingMove? && b.index != user.index
         if b.pbAbilitiesOnDamageTaken(user)
           switched_battlers.push(b.index)
@@ -207,8 +214,12 @@ class PokeBattle_Battler
 
   # Everything in this method is negated by Sheer Force.
   def pbEffectsAfterMove3(user, targets, move, numHits, switched_battlers)
-    # TODO: User's Eject Pack.
-
+    # User's held item that switches it out (Eject Pack)
+    if switched_battlers.empty?
+      if user.pbItemOnStatDropped(user)
+        switched_battlers.push(user.index)
+      end
+    end
     # User's ability (Emergency Exit, Wimp Out)
     if switched_battlers.empty? && move.damagingMove?
       if user.pbAbilitiesOnDamageTaken(user)

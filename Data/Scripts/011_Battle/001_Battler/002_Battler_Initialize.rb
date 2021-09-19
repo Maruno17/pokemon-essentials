@@ -148,10 +148,11 @@ class PokeBattle_Battler
     @lastHPLost            = 0
     @lastHPLostFromFoe     = 0
     @droppedBelowHalfHP    = false
+    @statsDropped          = false
     @tookDamageThisRound   = false
     @tookPhysicalHit       = false
-    @statsRaised           = false
-    @statsLowered          = false
+    @statsRaisedThisRound  = false
+    @statsLoweredThisRound = false
     @canRestoreIceFace     = false
     @lastMoveUsed          = nil
     @lastMoveUsedType      = nil
