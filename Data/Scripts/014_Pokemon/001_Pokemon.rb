@@ -706,6 +706,13 @@ class Pokemon
     return false
   end
 
+  def has_egg_move?
+    return false if egg? || shadowPokemon?
+    baby = pbGetBabySpecies(self.species)
+    moves = pbGetSpeciesEggMoves(baby)
+    return true if moves.size >= 1
+  end
+
   #=============================================================================
   # Ribbons
   #=============================================================================

@@ -172,6 +172,10 @@ end
 #
 #===============================================================================
 class PokemonMart_Scene
+  def initialize(currency_name="Money")
+    @currency_name = currency_name
+  end
+
   def update
     pbUpdateSpriteHash(@sprites)
     @subscene.pbUpdate if @subscene
@@ -187,7 +191,7 @@ class PokemonMart_Scene
          (itemwindow.item) ? @adapter.getDescription(itemwindow.item) : _INTL("Quit shopping.")
       itemwindow.refresh
     end
-    @sprites["moneywindow"].text = _INTL("Money:\r\n<r>{1}", @adapter.getMoneyString)
+    @sprites["moneywindow"].text = _INTL("{2}:\r\n<r>{1}", @adapter.getMoneyString,@currency_name)
   end
 
   def pbStartBuyOrSellScene(buying, stock, adapter)
@@ -520,10 +524,10 @@ end
 #
 #===============================================================================
 class PokemonMartScreen
-  def initialize(scene,stock)
+  def initialize(scene,stock,adapter=PokemonMartAdapter.new)
     @scene=scene
     @stock=stock
-    @adapter=PokemonMartAdapter.new
+    @adapter=adapter
   end
 
   def pbConfirm(msg)

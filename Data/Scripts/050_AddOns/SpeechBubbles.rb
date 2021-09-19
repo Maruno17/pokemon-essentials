@@ -26,6 +26,7 @@ class PokemonTemp
   attr_accessor :speechbubble_arrow
   attr_accessor :speechbubble_outofrange
   attr_accessor :speechbubble_talking
+  attr_accessor :speechbubble_alwaysDown
 end
 
 module MessageConfig
@@ -85,7 +86,7 @@ def pbRepositionMessageWindow(msgwindow, linecount=2)
         msgwindow.setSkin("Graphics/windowskins/frlgtextskin")
         msgwindow.height = 102
         msgwindow.width = Graphics.width
-        if $game_player.direction==8
+        if $game_player.direction==8 && !$PokemonTemp.speechbubble_alwaysDown
           $PokemonTemp.speechbubble_vp = Viewport.new(0, 0, Graphics.width, 280)
           msgwindow.y = 6
         else
@@ -119,7 +120,7 @@ end
 def pbCreateMessageWindow(viewport=nil,skin=nil)
   arrow = nil
   if $PokemonTemp.speechbubble_bubble==2 && $game_map.events[$PokemonTemp.speechbubble_talking] != nil # Message window set to floating bubble.
-    if $game_player.direction==8 # Player facing up, message window top.
+    if $game_player.direction==8 && !$PokemonTemp.speechbubble_alwaysDown# Player facing up, message window top.
       $PokemonTemp.speechbubble_vp = Viewport.new(0, 104, Graphics.width, 280)
       $PokemonTemp.speechbubble_vp.z = 999999
       arrow = Sprite.new($PokemonTemp.speechbubble_vp)
@@ -192,4 +193,6 @@ end
 def pbCallBub(status=0,value=0,always_down=false)
   $PokemonTemp.speechbubble_talking=get_character(value).id
   $PokemonTemp.speechbubble_bubble=status
+  $PokemonTemp.speechbubble_alwaysDown=always_down
+
 end

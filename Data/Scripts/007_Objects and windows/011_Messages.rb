@@ -434,6 +434,38 @@ def pbDisplayGoldWindow(msgwindow)
   return goldwindow
 end
 
+def pbDisplayBattleFactoryPointsWindow(msgwindow)
+  pointsString = $game_variables[BATTLE_FACTORY_TOKENS].to_s
+  pointswindow=Window_AdvancedTextPokemon.new(_INTL("Tokens:\n<ar>{1}</ar>", pointsString))
+  pointswindow.setSkin("Graphics/Windowskins/goldskin")
+  pointswindow.resizeToFit(pointswindow.text,Graphics.width)
+  pointswindow.width=160 if pointswindow.width<=160
+  if msgwindow.y==0
+    pointswindow.y=Graphics.height-pointswindow.height
+  else
+    pointswindow.y=0
+  end
+  pointswindow.viewport=msgwindow.viewport
+  pointswindow.z=msgwindow.z
+  return pointswindow
+end
+
+def pbDisplayHeartScalesWindow(msgwindow)
+  pointsString = $PokemonBag.pbQuantity(:HEARTSCALE).to_s
+  pointswindow=Window_AdvancedTextPokemon.new(_INTL("Heart Scales:\n<ar>{1}</ar>", pointsString))
+  pointswindow.setSkin("Graphics/Windowskins/goldskin")
+  pointswindow.resizeToFit(pointswindow.text,Graphics.width)
+  pointswindow.width=160 if pointswindow.width<=160
+  if msgwindow.y==0
+    pointswindow.y=Graphics.height-pointswindow.height
+  else
+    pointswindow.y=0
+  end
+  pointswindow.viewport=msgwindow.viewport
+  pointswindow.z=msgwindow.z
+  return pointswindow
+end
+
 def pbDisplayCoinsWindow(msgwindow,goldwindow)
   coinString=($Trainer) ? $Trainer.coins.to_s_formatted : "0"
   coinwindow=Window_AdvancedTextPokemon.new(_INTL("Coins:\n<ar>{1}</ar>",coinString))
@@ -592,7 +624,7 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
   ### Controls
   textchunks=[]
   controls=[]
-  while text[/(?:\\(f|ff|ts|cl|me|se|wt|wtnp|ch)\[([^\]]*)\]|\\(g|cn|pt|wd|wm|op|cl|wu|\.|\||\!|\^))/i]
+  while text[/(?:\\(f|ff|ts|cl|me|se|wt|wtnp|ch)\[([^\]]*)\]|\\(g|cn|pt|ft|hs|wd|wm|op|cl|wu|\.|\||\!|\^))/i]
     textchunks.push($~.pre_match)
     if $~[1]
       controls.push([$~[1].downcase,$~[2],-1])
@@ -701,6 +733,12 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
       when "g"      # Display gold window
         goldwindow.dispose if goldwindow
         goldwindow = pbDisplayGoldWindow(msgwindow)
+      when "ft"      # Display battle factory tokens
+        goldwindow.dispose if goldwindow
+        goldwindow = pbDisplayBattleFactoryPointsWindow(msgwindow)
+      when "hs"      # Display battle factory tokens
+        goldwindow.dispose if goldwindow
+        goldwindow = pbDisplayHeartScalesWindow(msgwindow)
       when "cn"     # Display coins window
         coinwindow.dispose if coinwindow
         coinwindow = pbDisplayCoinsWindow(msgwindow,goldwindow)
