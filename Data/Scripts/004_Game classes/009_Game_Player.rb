@@ -13,6 +13,8 @@ class Game_Player < Game_Character
   SCREEN_CENTER_X = (Settings::SCREEN_WIDTH / 2 - Game_Map::TILE_WIDTH / 2) * Game_Map::X_SUBPIXELS
   SCREEN_CENTER_Y = (Settings::SCREEN_HEIGHT / 2 - Game_Map::TILE_HEIGHT / 2) * Game_Map::Y_SUBPIXELS
 
+  @@bobFrameSpeed = 1.0 / 15
+
   def initialize(*arg)
     super(*arg)
     @lastdir=0
@@ -27,6 +29,47 @@ class Game_Player < Game_Character
 
   def pbHasDependentEvents?
     return $PokemonGlobal.dependentEvents.length>0
+  end
+
+  def can_run?
+    return false if $game_temp.in_menu || $game_temp.in_battle ||
+                    @move_route_forcing || $game_temp.message_window_showing ||
+                    pbMapInterpreterRunning?
+    return false if !$Trainer.has_running_shoes && !$PokemonGlobal.diving &&
+                    !$PokemonGlobal.surfing && !$PokemonGlobal.bicycle
+    return false if jumping?
+    return false if pbTerrainTag.must_walk
+    return ($PokemonSystem.runstyle == 1) ^ Input.press?(Input::BACK)
+  end
+
+  def set_movement_type(type)
+    meta = GameData::Metadata.get_player($Trainer&.character_ID || 0)
+    new_charset = nil
+    case type
+    when :fishing
+      new_charset = pbGetPlayerCharset(meta, 6)
+    when :surf_fishing
+      new_charset = pbGetPlayerCharset(meta, 7)
+    when :diving, :diving_fast, :diving_jumping, :diving_stopped
+      self.move_speed = 3
+      new_charset = pbGetPlayerCharset(meta, 5)
+    when :surfing, :surfing_fast, :surfing_jumping, :surfing_stopped
+      self.move_speed = (type == :surfing_jumping) ? 3 : 4
+      new_charset = pbGetPlayerCharset(meta, 3)
+    when :cycling, :cycling_fast, :cycling_jumping, :cycling_stopped
+      self.move_speed = (type == :cycling_jumping) ? 3 : 5
+      new_charset = pbGetPlayerCharset(meta, 2)
+    when :running
+      self.move_speed = 4
+      new_charset = pbGetPlayerCharset(meta, 4)
+    when :ice_sliding
+      self.move_speed = 4
+      new_charset = pbGetPlayerCharset(meta, 1)
+    else   # :walking, :jumping, :walking_stopped
+      self.move_speed = 3
+      new_charset = pbGetPlayerCharset(meta, 1)
+    end
+    @character_name = new_charset if new_charset
   end
 
   def bump_into_object
@@ -185,9 +228,7 @@ class Game_Player < Game_Character
   #-----------------------------------------------------------------------------
   def moveto(x, y)
     super
-    # Centering
     center(x, y)
-    # Make encounter count
     make_encounter_count
   end
 
@@ -351,6 +392,64 @@ class Game_Player < Game_Character
     @lastdir      = dir
   end
 
+  def update_move
+    if !@moved_last_frame || @stopped_last_frame   # Started a new step
+      if pbTerrainTag.ice
+        set_movement_type(:ice_sliding)
+      elsif !@move_route_forcing
+        faster = can_run?
+        if $PokemonGlobal&.diving
+          set_movement_type((faster) ? :diving_fast : :diving)
+        elsif $PokemonGlobal&.surfing
+          set_movement_type((faster) ? :surfing_fast : :surfing)
+        elsif $PokemonGlobal&.bicycle
+          set_movement_type((faster) ? :cycling_fast : :cycling)
+        else
+          set_movement_type((faster) ? :running : :walking)
+        end
+      end
+      if jumping?
+        if $PokemonGlobal&.diving
+          set_movement_type(:diving_jumping)
+        elsif $PokemonGlobal&.surfing
+          set_movement_type(:surfing_jumping)
+        elsif $PokemonGlobal&.bicycle
+          set_movement_type(:cycling_jumping)
+        else
+          set_movement_type(:jumping)   # Walking speed/charset while jumping
+        end
+      end
+    end
+    super
+  end
+
+  def update_stop
+    if @stopped_last_frame
+      if $PokemonGlobal&.diving
+        set_movement_type(:diving_stopped)
+      elsif $PokemonGlobal&.surfing
+        set_movement_type(:surfing_stopped)
+      elsif $PokemonGlobal&.bicycle
+        set_movement_type(:cycling_stopped)
+      else
+        set_movement_type(:walking_stopped)
+      end
+    end
+    super
+  end
+
+  def update_pattern
+    if $PokemonGlobal&.surfing || $PokemonGlobal&.diving
+      p = ((Graphics.frame_count % 60) * @@bobFrameSpeed).floor
+      @pattern = p if !@lock_pattern
+      @pattern_surf = p
+      @bob_height = (p >= 2) ? 2 : 0
+    else
+      @bob_height = 0
+      super
+    end
+  end
+
   # Center player on-screen
   def update_screen_position(last_real_x, last_real_y)
     return if self.map.scrolling? || !(@moved_last_frame || @moved_this_frame)
@@ -380,6 +479,9 @@ end
 
 
 
+#===============================================================================
+#
+#===============================================================================
 def pbGetPlayerCharset(meta,charset,trainer=nil,force=false)
   trainer = $Trainer if !trainer
   outfit = (trainer) ? trainer.outfit : 0
@@ -398,18 +500,14 @@ def pbGetPlayerCharset(meta,charset,trainer=nil,force=false)
 end
 
 def pbUpdateVehicle
-  meta = GameData::Metadata.get_player($Trainer.character_ID)
-  if meta
-    charset = 1     # Regular graphic
-    if $PokemonGlobal.diving
-      charset = 5   # Diving graphic
-    elsif $PokemonGlobal.surfing
-      charset = 3   # Surfing graphic
-    elsif $PokemonGlobal.bicycle
-      charset = 2   # Bicycle graphic
-    end
-    newCharName = pbGetPlayerCharset(meta,charset)
-    $game_player.character_name = newCharName if newCharName
+  if $PokemonGlobal&.diving
+    $game_player.set_movement_type(:diving)
+  elsif $PokemonGlobal&.surfing
+    $game_player.set_movement_type(:surfing)
+  elsif $PokemonGlobal&.bicycle
+    $game_player.set_movement_type(:cycling)
+  else
+    $game_player.set_movement_type(:walking)
   end
 end
 
