@@ -164,8 +164,8 @@ class PokeBattle_Battler
     # Some move effects that need to happen here, i.e. user switching caused by
     # U-turn/Volt Switch/Baton Pass/Parting Shot, Relic Song's form changing,
     # Fling/Natural Gift consuming item.
-    if !switchedBattlers.include?(user.index)
-      move.pbEndOfMoveUsageEffect(user,targets,numHits,switchedBattlers)
+    if !switched_battlers.include?(user.index)
+      move.pbEndOfMoveUsageEffect(user,targets,numHits,switched_battlers)
     end
     # User's ability/item that switches the user out (all negated by Sheer Force)
     if !(user.hasActiveAbility?(:SHEERFORCE) && move.addlEffect > 0)
