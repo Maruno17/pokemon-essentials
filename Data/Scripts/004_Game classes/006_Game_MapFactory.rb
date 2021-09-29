@@ -254,7 +254,7 @@ class PokemonMapFactory
           posX = thisX + conn[1] - conn[4] + otherX
           posY = thisY + conn[2] - conn[5] + otherY
           return [posX, posY]
-        elsif conn[1] == otherMapID
+        elsif conn[3] == otherMapID
           posX = thisX + conn[4] - conn[1] + otherX
           posY = thisY + conn[5] - conn[2] + otherY
           return [posX, posY]

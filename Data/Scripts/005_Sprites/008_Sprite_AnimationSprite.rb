@@ -75,8 +75,8 @@ class Spriteset_Map
   end
 
   def update
-    return if @tilemap.disposed?
-    pbDayNightTint(@tilemap)
+#    return if @tilemap.disposed?
+#    pbDayNightTint(@tilemap)
     @@viewport3.tone.set(0,0,0,0)
     _animationSprite_update
     for i in 0...@usersprites.length
