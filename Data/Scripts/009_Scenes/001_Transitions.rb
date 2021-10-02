@@ -22,6 +22,7 @@ module Graphics
       duration = 0
       filename = ""
     end
+    duration *= Graphics.frame_rate / 20   # For default fade-in animation
     begin
       transition_KGC_SpecialTransition(duration, filename, vague)
     rescue Exception
