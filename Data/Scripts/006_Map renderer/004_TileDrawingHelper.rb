@@ -2,7 +2,7 @@ class TileDrawingHelper
   attr_accessor :tileset
   attr_accessor :autotiles
 
-  Autotiles = [
+  AUTOTILE_PATTERNS = [
     [ [27, 28, 33, 34], [ 5, 28, 33, 34], [27,  6, 33, 34], [ 5,  6, 33, 34],
       [27, 28, 33, 12], [ 5, 28, 33, 12], [27,  6, 33, 12], [ 5,  6, 33, 12] ],
     [ [27, 28, 11, 34], [ 5, 28, 11, 34], [27,  6, 11, 34], [ 5,  6, 11, 34],
@@ -18,7 +18,7 @@ class TileDrawingHelper
   ]
 
   # converts neighbors returned from tableNeighbors to tile indexes
-  NeighborsToTiles = [
+  NEIGHBORS_TO_AUTOTILE_INDEX = [
     46, 44, 46, 44, 43, 41, 43, 40, 46, 44, 46, 44, 43, 41, 43, 40,
     42, 32, 42, 32, 35, 19, 35, 18, 42, 32, 42, 32, 34, 17, 34, 16,
     46, 44, 46, 44, 43, 41, 43, 40, 46, 44, 46, 44, 43, 41, 43, 40,
@@ -68,7 +68,7 @@ class TileDrawingHelper
 
   def initialize(tileset, autotiles)
     if tileset.mega?
-      @tileset = TileWrap::wrapTileset(tileset)
+      @tileset = TilemapRenderer::TilesetWrapper.wrapTileset(tileset)
       tileset.dispose
       @shouldWrap = true
     else
@@ -100,7 +100,7 @@ class TileDrawingHelper
     else
       anim = frame * 96
       id %= 48
-      tiles = TileDrawingHelper::Autotiles[id >> 3][id & 7]
+      tiles = AUTOTILE_PATTERNS[id >> 3][id & 7]
       src = Rect.new(0, 0, 0, 0)
       for i in 0...4
         tile_position = tiles[i] - 1
@@ -114,7 +114,7 @@ class TileDrawingHelper
   def bltSmallRegularTile(bitmap,x,y,cxTile,cyTile,id)
     return if id < 384 || !@tileset || @tileset.disposed?
     rect = Rect.new((id - 384) % 8 * 32, (id - 384) / 8 * 32, 32, 32)
-    rect = TileWrap::getWrappedRect(rect) if @shouldWrap
+    rect = TilemapRenderer::TilesetWrapper.getWrappedRect(rect) if @shouldWrap
     bitmap.stretch_blt(Rect.new(x, y, cxTile, cyTile), @tileset, rect)
   end
 
@@ -176,7 +176,7 @@ def bltMinimapAutotile(dstBitmap,x,y,srcBitmap,id)
   anim=0
   cxTile=3
   cyTile=3
-  tiles = TileDrawingHelper::Autotiles[id>>3][id&7]
+  tiles = TileDrawingHelper::AUTOTILE_PATTERNS[id>>3][id&7]
   src=Rect.new(0,0,0,0)
   for i in 0...4
     tile_position = tiles[i] - 1
@@ -213,7 +213,7 @@ def getPassabilityMinimap(mapid)
       passtable[i,j]=pass ? 1 : 0
     end
   end
-  neighbors=TileDrawingHelper::NeighborsToTiles
+  neighbors=TileDrawingHelper::NEIGHBORS_TO_AUTOTILE_INDEX
   for i in 0...map.width
     for j in 0...map.height
       if passtable[i,j]==0
