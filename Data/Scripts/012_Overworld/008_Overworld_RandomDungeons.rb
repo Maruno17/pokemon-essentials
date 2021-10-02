@@ -602,7 +602,7 @@ module RandomDungeonGenerator
       for i in 0...map.width
         for j in 0...map.height
           nb = TileDrawingHelper.tableNeighbors(tbl, i, j)
-          tile = TileDrawingHelper::NeighborsToTiles[nb]
+          tile = TileDrawingHelper::NEIGHBORS_TO_AUTOTILE_INDEX[nb]
           map.data[i, j, 0] = tile + 48 * (tbl[i, j])
           map.data[i, j, 1] = 0
           map.data[i, j, 2] = 0
