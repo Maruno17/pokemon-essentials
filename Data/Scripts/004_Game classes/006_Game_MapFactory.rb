@@ -243,6 +243,7 @@ class PokemonMapFactory
     return false
   end
 
+  # Returns the coordinate change to go from this position to other position
   def getRelativePos(thisMapID, thisX, thisY, otherMapID, otherX, otherY)
     if thisMapID == otherMapID   # Both events share the same map
       return [otherX - thisX, otherY - thisY]
@@ -251,12 +252,12 @@ class PokemonMapFactory
     if conns[thisMapID]
       for conn in conns[thisMapID]
         if conn[0] == otherMapID
-          posX = thisX + conn[1] - conn[4] + otherX
-          posY = thisY + conn[2] - conn[5] + otherY
+          posX = conn[4] - conn[1] + otherX - thisX
+          posY = conn[5] - conn[2] + otherY - thisY
           return [posX, posY]
         elsif conn[3] == otherMapID
-          posX = thisX + conn[4] - conn[1] + otherX
-          posY = thisY + conn[5] - conn[2] + otherY
+          posX =  conn[1] - conn[4] + otherX - thisX
+          posY =  conn[2] - conn[5] + otherY - thisY
           return [posX, posY]
         end
       end

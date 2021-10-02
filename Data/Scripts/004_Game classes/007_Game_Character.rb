@@ -748,9 +748,6 @@ class Game_Character
       @jump_count = Game_Map::REAL_RES_X / jump_speed_real   # Number of frames to jump one tile
     end
     @stop_count = 0
-    if self.is_a?(Game_Player)
-      $PokemonTemp.dependentEvents.pbMoveDependentEvents
-    end
     triggerLeaveTile
   end
 

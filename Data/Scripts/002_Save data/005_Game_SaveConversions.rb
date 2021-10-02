@@ -99,3 +99,24 @@ SaveData.register_conversion(:v20_add_battled_counts) do
     end
   end
 end
+
+SaveData.register_conversion(:v20_follower_data) do
+  essentials_version 20
+  display_title 'Updating follower data format'
+  to_value :global_metadata do |global|
+    # NOTE: dependentEvents is still defined in class PokemonGlobalMetadata just
+    #       for the sake of this conversion. It will be removed in future.
+    if global.dependentEvents && global.dependentEvents.length > 0
+      global.followers = []
+      global.dependentEvents.each do |follower|
+        data = FollowerData.new(follower[0], follower[1], "reflection",
+                                follower[2], follower[3], follower[4],
+                                follower[5], follower[6], follower[7])
+        data.name            = follower[8]
+        data.common_event_id = follower[9]
+        global.followers.push(data)
+      end
+    end
+    global.dependentEvents = nil
+  end
+end

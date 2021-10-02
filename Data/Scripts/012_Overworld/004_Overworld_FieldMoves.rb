@@ -255,7 +255,7 @@ HiddenMoveHandlers::CanUseMove.add(:DIG,proc { |move,pkmn,showmsg|
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
-  if $game_player.pbHasDependentEvents?
+  if $game_player.has_follower?
     pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
     next false
   end
@@ -494,7 +494,7 @@ HiddenMoveHandlers::UseMove.add(:FLASH,proc { |move,pokemon|
 #===============================================================================
 HiddenMoveHandlers::CanUseMove.add(:FLY,proc { |move,pkmn,showmsg|
   next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_FLY,showmsg)
-  if $game_player.pbHasDependentEvents?
+  if $game_player.has_follower?
     pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
     next false
   end
@@ -696,7 +696,7 @@ HiddenMoveHandlers::UseMove.add(:STRENGTH,proc { |move,pokemon|
 #===============================================================================
 def pbSurf
   return false if $game_player.pbFacingEvent
-  return false if $game_player.pbHasDependentEvents?
+  return false if $game_player.has_follower?
   move = :SURF
   movefinder = $Trainer.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF,false) || (!$DEBUG && !movefinder)
@@ -770,7 +770,7 @@ HiddenMoveHandlers::CanUseMove.add(:SURF,proc { |move,pkmn,showmsg|
     pbMessage(_INTL("You're already surfing.")) if showmsg
     next false
   end
-  if $game_player.pbHasDependentEvents?
+  if $game_player.has_follower?
     pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
     next false
   end
@@ -865,7 +865,7 @@ HiddenMoveHandlers::CanUseMove.add(:TELEPORT,proc { |move,pkmn,showmsg|
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
-  if $game_player.pbHasDependentEvents?
+  if $game_player.has_follower?
     pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
     next false
   end

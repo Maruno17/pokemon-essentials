@@ -83,6 +83,7 @@ class Scene_Map
     when 8 then $game_player.turn_up
     end
     $game_player.straighten
+    $PokemonTemp.followers.map_transfer_followers
     $game_map.update
     disposeSpritesets
     RPG::Cache.clear

@@ -548,20 +548,24 @@ end
 
 def pbSlideOnIce
   return if !$game_player.pbTerrainTag.ice
+  $PokemonTemp.followers.update
   $PokemonGlobal.sliding = true
   direction    = $game_player.direction
   oldwalkanime = $game_player.walk_anime
   $game_player.straighten
   $game_player.walk_anime = false
+  first_loop = true
   loop do
     break if !$game_player.can_move_in_direction?(direction)
     break if !$game_player.pbTerrainTag.ice
     $game_player.move_forward
+    $PokemonTemp.followers.move_followers if first_loop
     while $game_player.moving?
       pbUpdateSceneMap
       Graphics.update
       Input.update
     end
+    first_loop = false
   end
   $game_player.center($game_player.x, $game_player.y)
   $game_player.straighten

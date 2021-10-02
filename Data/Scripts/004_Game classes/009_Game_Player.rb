@@ -27,8 +27,13 @@ class Game_Player < Game_Character
     return $game_map
   end
 
-  def pbHasDependentEvents?
-    return $PokemonGlobal.dependentEvents.length>0
+  def screen_z(height = 0)
+    ret = super
+    return ret + 1
+  end
+
+  def has_follower?
+    return $PokemonGlobal.followers.length > 0
   end
 
   def can_run?
@@ -90,7 +95,6 @@ class Game_Player < Game_Character
         if !$PokemonTemp.encounterTriggered
           @x += x_offset
           @y += y_offset
-          $PokemonTemp.dependentEvents.pbMoveDependentEvents
           increase_steps
         end
       elsif !check_event_trigger_touch(dir)
@@ -353,7 +357,11 @@ class Game_Player < Game_Character
     super
     update_screen_position(last_real_x, last_real_y)
     # Update dependent events
-    $PokemonTemp.dependentEvents.updateDependentEvents
+    if (!@moved_last_frame || @stopped_last_frame ||
+       (@stopped_this_frame && $PokemonGlobal.sliding)) && (moving? || jumping?)
+      $PokemonTemp.followers.move_followers
+    end
+    $PokemonTemp.followers.update
     # Count down the time between allowed bump sounds
     @bump_se -= 1 if @bump_se && @bump_se>0
     # Finish up dismounting from surfing
@@ -461,7 +469,7 @@ class Game_Player < Game_Character
     return if moving?
     # Try triggering events upon walking into them/in front of them
     if @moved_this_frame
-      $PokemonTemp.dependentEvents.pbTurnDependentEvents
+      $PokemonTemp.followers.turn_followers
       result = pbCheckEventTriggerFromDistance([2])
       # Event determinant is via touch of same position event
       result |= check_event_trigger_here([1,2])

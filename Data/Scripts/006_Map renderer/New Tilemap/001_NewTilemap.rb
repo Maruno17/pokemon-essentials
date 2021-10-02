@@ -510,8 +510,8 @@ class TilemapRenderer
       if MapFactoryHelper.hasConnections?(@current_map_id)
         offsets = $MapFactory.getRelativePos(@current_map_id, 0, 0, $game_map.map_id, 0, 0)
         if offsets
-          @tile_offset_x += offsets[0]
-          @tile_offset_y += offsets[1]
+          @tile_offset_x -= offsets[0]
+          @tile_offset_y -= offsets[1]
         else
           ret = true   # Need a full refresh
         end
