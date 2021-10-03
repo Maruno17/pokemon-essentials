@@ -35,6 +35,14 @@ class PokemonTilesetScene
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
     @tilehelper.dispose
+    if $game_map && $MapFactory
+      $MapFactory.setup($game_map.map_id)
+      $game_player.center($game_player.x, $game_player.y)
+      if $scene.is_a?(Scene_Map)
+        $scene.disposeSpritesets
+        $scene.createSpritesets
+      end
+    end
   end
 
   def load_tileset(id)
@@ -191,14 +199,6 @@ class PokemonTilesetScene
         if pbConfirmMessage(_INTL("Save changes?"))
           save_data(@tilesets_data, "Data/Tilesets.rxdata")
           $data_tilesets = @tilesets_data
-          if $game_map && $MapFactory
-            $MapFactory.setup($game_map.map_id)
-            $game_player.center($game_player.x, $game_player.y)
-            if $scene.is_a?(Scene_Map)
-              $scene.disposeSpritesets
-              $scene.createSpritesets
-            end
-          end
           pbMessage(_INTL("To ensure that the changes remain, close and reopen RPG Maker XP."))
         end
         break if pbConfirmMessage(_INTL("Exit from the editor?"))
