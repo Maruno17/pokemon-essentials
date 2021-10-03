@@ -7,7 +7,8 @@ class Scene_Map
   attr_reader :spritesetGlobal
   attr_reader :map_renderer
 
-  def spriteset
+  def spriteset(map_id = -1)
+    return @spritesets[map_id] if map_id > 0 && @spritesets[map_id]
     for i in @spritesets.values
       return i if i.map==$game_map
     end

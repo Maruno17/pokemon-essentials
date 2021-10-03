@@ -51,7 +51,7 @@ class Spriteset_Map
   end
 
   def addUserAnimation(animID,x,y,tinting=false,height=3)
-    sprite=AnimationSprite.new(animID,$game_map,x,y,@@viewport1,tinting,height)
+    sprite=AnimationSprite.new(animID,self.map,x,y,@@viewport1,tinting,height)
     addUserSprite(sprite)
     return sprite
   end
