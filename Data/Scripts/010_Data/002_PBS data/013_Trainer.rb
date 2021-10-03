@@ -13,7 +13,7 @@ module GameData
 
     SCHEMA = {
       "Items"        => [:items,           "*e", :Item],
-      "LoseText"     => [:lose_text,       "s"],
+      "LoseText"     => [:lose_text,       "q"],
       "Pokemon"      => [:pokemon,         "ev", :Species],   # Species, level
       "Form"         => [:form,            "u"],
       "Name"         => [:name,            "s"],

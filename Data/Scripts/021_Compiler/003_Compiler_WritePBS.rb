@@ -592,7 +592,7 @@ module Compiler
         end
         f.write(sprintf("Items = %s\r\n", trainer.items.join(","))) if trainer.items.length > 0
         if trainer.real_lose_text && !trainer.real_lose_text.empty?
-          f.write(sprintf("LoseText = %s\r\n", csvQuoteAlways(trainer.real_lose_text)))
+          f.write(sprintf("LoseText = %s\r\n", trainer.real_lose_text))
         end
         trainer.pokemon.each do |pkmn|
           f.write(sprintf("Pokemon = %s,%d\r\n", pkmn[:species], pkmn[:level]))
