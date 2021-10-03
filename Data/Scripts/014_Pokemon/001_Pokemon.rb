@@ -1071,9 +1071,9 @@ class Pokemon
         stats[s.id] = calcStat(base_stats[s.id], this_level, this_IV[s.id], @ev[s.id], nature_mod[s.id])
       end
     end
-    hpDiff = @totalhp - @hp
+    hp_difference = stats[:HP] - @totalhp
     @totalhp = stats[:HP]
-    @hp      = @totalhp - hpDiff
+    self.hp = [@hp + hp_difference, 1].max if @hp > 0 || hp_difference > 0
     @attack  = stats[:ATTACK]
     @defense = stats[:DEFENSE]
     @spatk   = stats[:SPECIAL_ATTACK]
