@@ -612,7 +612,7 @@ end
 def pbRockSmash
   move = :ROCKSMASH
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_ROCKSMASH, false) || (!$DEBUG && !movefinder)
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_ROCKSMASH, false) || (!$DEBUG && !movefinder) || $PokemonBag.pbQuantity(:PICKAXE)>0
     pbMessage(_INTL("It's a rugged rock, but a Pokémon may be able to smash it."))
     return false
   end

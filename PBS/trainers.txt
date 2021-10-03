@@ -1858,7 +1858,8 @@ Pokemon = GYARADOS,40
 #Rocket blocking Saffron
 
 [TEAMROCKET_M,Dennis]
-Pokemon = B84H20,38 
+Pokemon = B84H20,38
+Pokemon = B24H42,38 
 ##########################
 #Rocket bully
 

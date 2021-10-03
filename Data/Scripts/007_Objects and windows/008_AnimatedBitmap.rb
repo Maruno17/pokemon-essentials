@@ -97,17 +97,25 @@ class AnimatedBitmap
     @bitmap.bitmap = new_bitmap
   end
 
-  def mirror
-    for x in 0..@bitmap.bitmap.width / 2
-      for y in 0..@bitmap.bitmap.height - 2
-        temp = @bitmap.bitmap.get_pixel(x, y)
-        newPix = @bitmap.bitmap.get_pixel((@bitmap.bitmap.width - x), y)
+  # def mirror
+  #   for x in 0..@bitmap.bitmap.width / 2
+  #     for y in 0..@bitmap.bitmap.height - 2
+  #       temp = @bitmap.bitmap.get_pixel(x, y)
+  #       newPix = @bitmap.bitmap.get_pixel((@bitmap.bitmap.width - x), y)
+  #
+  #       @bitmap.bitmap.set_pixel(x, y, newPix)
+  #       @bitmap.bitmap.set_pixel((@bitmap.bitmap.width - x), y, temp)
+  #     end
+  #   end
+  # end
 
-        @bitmap.bitmap.set_pixel(x, y, newPix)
-        @bitmap.bitmap.set_pixel((@bitmap.bitmap.width - x), y, temp)
-      end
-    end
+
+  def mirror
+    @bitmap.bitmap
   end
+
+
+
 
 end
 
