@@ -23,6 +23,25 @@ class TilemapRenderer
   # seconds instead.
   AUTOTILE_FRAME_DURATION = 5   # In 1/20ths of a second
 
+  # Filenames of extra autotiles for each tileset. Each tileset's entry is an
+  # array containing two other arrays (you can leave either of those empty, but
+  # they must be defined):
+  #   - The first sub-array is for large autotiles, i.e. ones with 48 different
+  #     tile layouts. For example, "Brick path" and "Sea".
+  #   - The second is for single tile autotiles. For example, "Flowers1" and
+  #     "Waterfall"
+  # Ihe top tiles of the tileset will instead use these autotiles. Large
+  # autotiles come first, in the same 8x6 layout as you see when you double-
+  # click on a real autotile in RMXP. After that are the single tile autotiles.
+  # Extra autotiles are only useful if the tiles are animated, because otherwise
+  # you just have some tiles which belong in the tileset instead.
+  EXTRA_AUTOTILES = {
+#   Examples:
+#    1 => [["Sand shore"], ["Flowers2"]],
+#    2 => [[], ["Flowers2", "Waterfall", "Waterfall crest", "Waterfall bottom"]],
+#    6 => [["Water rock", "Sea deep"], []]
+  }
+
   #=============================================================================
   #
   #=============================================================================
@@ -181,7 +200,6 @@ class TilemapRenderer
     def set_src_rect(tile, tile_id)
       return if nil_or_empty?(tile.filename)
       return if !@bitmaps[tile.filename]
-      return if tile_id < TILES_PER_AUTOTILE   # Blank tile
       frame = current_frame(tile.filename)
       if @bitmaps[tile.filename].height == SOURCE_TILE_HEIGHT
         tile.src_rect.x = frame * SOURCE_TILE_WIDTH
@@ -311,6 +329,20 @@ class TilemapRenderer
     @autotiles.remove(filename)
   end
 
+  def add_extra_autotiles(tileset_id)
+    return if !EXTRA_AUTOTILES[tileset_id]
+    EXTRA_AUTOTILES[tileset_id].each do |arr|
+      arr.each { |filename| add_autotile(filename) }
+    end
+  end
+
+  def remove_extra_autotiles(tileset_id)
+    return if !EXTRA_AUTOTILES[tileset_id]
+    EXTRA_AUTOTILES[tileset_id].each do |arr|
+      arr.each { |filename| remove_autotile(filename) }
+    end
+  end
+
   #=============================================================================
 
   def refresh; end
@@ -324,8 +356,25 @@ class TilemapRenderer
       terrain_tag = map.terrain_tags[tile_id] || 0
       terrain_tag_data = GameData::TerrainTag.try_get(terrain_tag)
       priority = map.priorities[tile_id] || 0
-      if tile_id < TILESET_START_ID
-        filename = map.autotile_names[tile_id / TILES_PER_AUTOTILE - 1]
+      single_autotile_start_id = TILESET_START_ID
+      true_tileset_start_id = TILESET_START_ID
+      extra_autotile_arrays = EXTRA_AUTOTILES[map.tileset_id]
+      if extra_autotile_arrays
+        large_autotile_count = extra_autotile_arrays[0].length
+        single_autotile_count = extra_autotile_arrays[1].length
+        single_autotile_start_id += large_autotile_count * TILES_PER_AUTOTILE
+        true_tileset_start_id += large_autotile_count * TILES_PER_AUTOTILE
+        true_tileset_start_id += single_autotile_count
+      end
+      if tile_id < true_tileset_start_id
+        filename = ""
+        if tile_id < TILESET_START_ID   # Real autotiles
+          filename = map.autotile_names[tile_id / TILES_PER_AUTOTILE - 1]
+        elsif tile_id < single_autotile_start_id   # Large extra autotiles
+          filename = extra_autotile_arrays[0][(tile_id - TILESET_START_ID) / TILES_PER_AUTOTILE]
+        else   # Single extra autotiles
+          filename = extra_autotile_arrays[1][tile_id - single_autotile_start_id]
+        end
         tile.set_bitmap(filename, true, @autotiles.animated?(filename),
            priority, @autotiles[filename])
       else
@@ -339,7 +388,7 @@ class TilemapRenderer
   end
 
   def refresh_tile_src_rect(tile, tile_id)
-    if tile_id < TILESET_START_ID
+    if tile.is_autotile
       @autotiles.set_src_rect(tile, tile_id)
     else
       @tilesets.set_src_rect(tile, tile_id)

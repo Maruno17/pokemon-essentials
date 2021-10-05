@@ -95,6 +95,7 @@ class Game_Map
   def encounter_list; return @map.encounter_list; end
   def encounter_step; return @map.encounter_step; end
   def data;           return @map.data;           end
+  def tileset_id;     return @map.tileset_id;     end
 
   def name
     ret = pbGetMessage(MessageTypes::MapNames,@map_id)
