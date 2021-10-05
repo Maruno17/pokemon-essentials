@@ -204,8 +204,9 @@ class Game_Character
       xbehind = @x + (@direction == 4 ? 1 : @direction == 6 ? -1 : 0)
       ybehind = @y + (@direction == 8 ? 1 : @direction == 2 ? -1 : 0)
       this_map = (self.map.valid?(@x, @y)) ? [self.map, @x, @y] : $MapFactory.getNewMap(@x, @y)
-      behind_map = (self.map.valid?(xbehind, ybehind)) ? [self.map, xbehind, ybehind] : $MapFactory.getNewMap(xbehind, ybehind)
-      if this_map[0].deepBush?(this_map[1], this_map[2]) && behind_map[0].deepBush?(behind_map[1], behind_map[2])
+      behind_map = (self.map.valid?(xbehind, ybehind)) ? [self.map, xbehind, ybehind] : $MapFactory&.getNewMap(xbehind, ybehind)
+      if this_map[0].deepBush?(this_map[1], this_map[2]) &&
+         (!behind_map || behind_map[0].deepBush?(behind_map[1], behind_map[2]))
         @bush_depth = Game_Map::TILE_HEIGHT
       elsif !moving? && this_map[0].bush?(this_map[1], this_map[2])
         @bush_depth = 12
