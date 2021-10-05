@@ -34,6 +34,7 @@ class TilemapRenderer
       @bitmaps      = {}
       @bitmap_wraps = {}   # Whether each tileset is a mega texture and has multiple columns
       @load_counts  = {}
+      @bridge       = 0
       @changed      = true
     end
 
@@ -493,6 +494,10 @@ class TilemapRenderer
     # Check whether the screen has moved since the last update
     @screen_moved = false
     @screen_moved_vertically = false
+    if $PokemonGlobal.bridge != @bridge
+      @bridge = $PokemonGlobal.bridge
+      @screen_moved_vertically = true   # To update bridge tiles' z values
+    end
     do_full_refresh = true if check_if_screen_moved
     # Update all tile sprites
     visited = []
