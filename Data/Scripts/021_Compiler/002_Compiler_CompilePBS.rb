@@ -33,6 +33,7 @@ module Compiler
           record = pbGetCsvRecord($~[2],lineno,schema)
           if settingname=="Name"
             rgnnames[currentmap] = record
+            sections[currentmap][schema[0]] = record
           elsif settingname=="Point"
             placenames.push(record[2])
             placedescs.push(record[3])
