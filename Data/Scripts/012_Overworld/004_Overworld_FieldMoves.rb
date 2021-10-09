@@ -191,7 +191,7 @@ end
 def pbCut
   move = :CUT
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_CUT, false) || (!$DEBUG && !movefinder)
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_CUT, false) || (!$DEBUG && !movefinder) || $PokemonBag.pbQuantity(:MACHETE)>0
     pbMessage(_INTL("This tree looks like it can be cut down."))
     return false
   end
@@ -300,7 +300,7 @@ def pbDive
   return false if !map_metadata || !map_metadata.dive_map_id
   move = :DIVE
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE, false) || (!$DEBUG && !movefinder)
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE, false) || (!$DEBUG && !movefinder) || $PokemonBag.pbQuantity(:SCUBAGEAR)>0
     pbMessage(_INTL("The sea is deep here. A Pokémon may be able to go underwater."))
     return false
   end
@@ -657,7 +657,7 @@ def pbStrength
   end
   move = :STRENGTH
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_STRENGTH, false) || (!$DEBUG && !movefinder)
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_STRENGTH, false) || (!$DEBUG && !movefinder) || $PokemonBag.pbQuantity(:LEVER)>0
     pbMessage(_INTL("It's a big boulder, but a Pokémon may be able to push it aside."))
     return false
   end
@@ -704,7 +704,7 @@ def pbSurf
   return false if $game_player.pbHasDependentEvents?
   move = :SURF
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF, false) || (!$DEBUG && !movefinder)
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF, false) || (!$DEBUG && !movefinder) || $PokemonBag.pbQuantity(:SURFBOARD)>0
     return false
   end
   if pbConfirmMessage(_INTL("The water is a deep blue...\nWould you like to surf on it?"))
@@ -944,7 +944,7 @@ end
 def pbWaterfall
   move = :WATERFALL
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_WATERFALL, false) || (!$DEBUG && !movefinder)
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_WATERFALL, false) || (!$DEBUG && !movefinder) || $PokemonBag.pbQuantity(:JETPACK)>0
     pbMessage(_INTL("A wall of water is crashing down with a mighty roar."))
     return false
   end

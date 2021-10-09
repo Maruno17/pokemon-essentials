@@ -1060,8 +1060,10 @@ class Pokemon
       end
     end
     hpDiff = @totalhp - @hp
-    @totalhp = stats[:HP]
-    @hp = @totalhp - hpDiff
+    #@totalhp = stats[:HP]
+    @totalhp= self.ability == :WONDERGUARD ? 1 : stats[:HP]
+    calculated_hp = @totalhp - hpDiff
+    @hp = calculated_hp > 0 ?  calculated_hp: 0
     @attack = stats[:ATTACK]
     @defense = stats[:DEFENSE]
     @spatk = stats[:SPECIAL_ATTACK]

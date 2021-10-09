@@ -19,3 +19,9 @@ EGGINITIALLEVEL=Settings::EGG_LEVEL
 #this is fucking stupid but apparently necessary
 FALSE = false
 TRUE = true
+
+
+DIRECTION_LEFT=4
+DIRECTION_RIGHT=6
+DIRECTION_DOWN=2
+DIRECTION_UP=8
