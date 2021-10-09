@@ -710,86 +710,143 @@ end
 #===============================================================================
 # Metadata editor
 #===============================================================================
-def pbMetadataScreen(map_id = 0)
+def pbMetadataScreen
+  sel_player = -1
   loop do
-    map_id = pbListScreen(_INTL("SET METADATA"), MapLister.new(map_id, true))
-    break if map_id < 0
-    pbEditMetadata(map_id)
+    sel_player = pbListScreen(_INTL("SET METADATA"), MetadataLister.new(sel_player, true))
+    break if sel_player == -1
+    case sel_player
+    when -2   # Add new player
+      pbEditPlayerMetadata(-1)
+    when 0   # Edit global metadata
+      pbEditMetadata
+    else   # Edit player character
+      pbEditPlayerMetadata(sel_player) if sel_player >= 1
+    end
   end
 end
 
-def pbEditMetadata(map_id = 0)
+def pbEditMetadata
+  data = []
+  metadata = GameData::Metadata.get
+  properties = GameData::Metadata.editor_properties
+  properties.each do |property|
+    data.push(metadata.property_from_string(property[0]))
+  end
+  if pbPropertyList(_INTL("Global Metadata"), data, properties, true)
+    # Construct metadata hash
+    metadata_hash = {
+      :id                 => 0,
+      :home               => data[0],
+      :wild_battle_BGM    => data[1],
+      :trainer_battle_BGM => data[2],
+      :wild_victory_ME    => data[3],
+      :trainer_victory_ME => data[4],
+      :wild_capture_ME    => data[5],
+      :surf_BGM           => data[6],
+      :bicycle_BGM        => data[7]
+    }
+    # Add metadata's data to records
+    GameData::Metadata.register(metadata_hash)
+    GameData::Metadata.save
+    Compiler.write_metadata
+  end
+end
+
+def pbEditPlayerMetadata(player_id = 1)
+  metadata = nil
+  if player_id < 1
+    # Adding new player character; get lowest unused player character ID
+    ids = GameData::PlayerMetadata.keys
+    1.upto(ids.max + 1) do |i|
+      next if ids.include?(i)
+      player_id = i
+      break
+    end
+    metadata = GameData::PlayerMetadata.new({:id => player_id})
+  elsif !GameData::PlayerMetadata.exists?(player_id)
+    pbMessage(_INTL("Metadata for player character {1} was not found.", player_id))
+    return
+  end
+  data = []
+  metadata = GameData::PlayerMetadata.try_get(player_id) if metadata.nil?
+  properties = GameData::PlayerMetadata.editor_properties
+  properties.each do |property|
+    data.push(metadata.property_from_string(property[0]))
+  end
+  if pbPropertyList(_INTL("Player {1}", metadata.id), data, properties, true)
+    # Construct player metadata hash
+    metadata_hash = {
+      :id                => player_id,
+      :trainer_type      => data[0],
+      :walk_charset      => data[1],
+      :run_charset       => data[2],
+      :cycle_charset     => data[3],
+      :surf_charset      => data[4],
+      :dive_charset      => data[5],
+      :fish_charset      => data[6],
+      :surf_fish_charset => data[7],
+    }
+    # Add player metadata's data to records
+    GameData::PlayerMetadata.register(metadata_hash)
+    GameData::PlayerMetadata.save
+    Compiler.write_metadata
+  end
+end
+
+
+
+#===============================================================================
+# Map metadata editor
+#===============================================================================
+def pbMapMetadataScreen(map_id = 0)
+  loop do
+    map_id = pbListScreen(_INTL("SET METADATA"), MapLister.new(map_id))
+    break if map_id < 0
+    (map_id == 0) ? pbEditMetadata : pbEditMetadata(map_id)
+  end
+end
+
+def pbEditMapMetadata(map_id)
   mapinfos = pbLoadMapInfos
   data = []
-  if map_id == 0   # Global metadata
-    map_name = _INTL("Global Metadata")
-    metadata = GameData::Metadata.get
-    properties = GameData::Metadata.editor_properties
-  else   # Map metadata
-    map_name = mapinfos[map_id].name
-    metadata = GameData::MapMetadata.try_get(map_id)
-    metadata = GameData::Metadata.new({}) if !metadata
-    properties = GameData::MapMetadata.editor_properties
-  end
+  map_name = mapinfos[map_id].name
+  metadata = GameData::MapMetadata.try_get(map_id)
+  metadata = GameData::MapMetadata.new({:id => map_id}) if !metadata
+  properties = GameData::MapMetadata.editor_properties
   properties.each do |property|
     data.push(metadata.property_from_string(property[0]))
   end
   if pbPropertyList(map_name, data, properties, true)
-    if map_id == 0   # Global metadata
-      # Construct metadata hash
-      metadata_hash = {
-        :id                 => map_id,
-        :home               => data[0],
-        :wild_battle_BGM    => data[1],
-        :trainer_battle_BGM => data[2],
-        :wild_victory_ME    => data[3],
-        :trainer_victory_ME => data[4],
-        :wild_capture_ME    => data[5],
-        :surf_BGM           => data[6],
-        :bicycle_BGM        => data[7],
-        :player_A           => data[8],
-        :player_B           => data[9],
-        :player_C           => data[10],
-        :player_D           => data[11],
-        :player_E           => data[12],
-        :player_F           => data[13],
-        :player_G           => data[14],
-        :player_H           => data[15]
-      }
-      # Add metadata's data to records
-      GameData::Metadata.register(metadata_hash)
-      GameData::Metadata.save
-    else   # Map metadata
-      # Construct metadata hash
-      metadata_hash = {
-        :id                   => map_id,
-        :outdoor_map          => data[0],
-        :announce_location    => data[1],
-        :can_bicycle          => data[2],
-        :always_bicycle       => data[3],
-        :teleport_destination => data[4],
-        :weather              => data[5],
-        :town_map_position    => data[6],
-        :dive_map_id          => data[7],
-        :dark_map             => data[8],
-        :safari_map           => data[9],
-        :snap_edges           => data[10],
-        :random_dungeon       => data[11],
-        :battle_background    => data[12],
-        :wild_battle_BGM      => data[13],
-        :trainer_battle_BGM   => data[14],
-        :wild_victory_ME      => data[15],
-        :trainer_victory_ME   => data[16],
-        :wild_capture_ME      => data[17],
-        :town_map_size        => data[18],
-        :battle_environment   => data[19],
-        :flags                => data[20]
-      }
-      # Add metadata's data to records
-      GameData::MapMetadata.register(metadata_hash)
-      GameData::MapMetadata.save
-    end
-    Compiler.write_metadata
+    # Construct map metadata hash
+    metadata_hash = {
+      :id                   => map_id,
+      :outdoor_map          => data[0],
+      :announce_location    => data[1],
+      :can_bicycle          => data[2],
+      :always_bicycle       => data[3],
+      :teleport_destination => data[4],
+      :weather              => data[5],
+      :town_map_position    => data[6],
+      :dive_map_id          => data[7],
+      :dark_map             => data[8],
+      :safari_map           => data[9],
+      :snap_edges           => data[10],
+      :random_dungeon       => data[11],
+      :battle_background    => data[12],
+      :wild_battle_BGM      => data[13],
+      :trainer_battle_BGM   => data[14],
+      :wild_victory_ME      => data[15],
+      :trainer_victory_ME   => data[16],
+      :wild_capture_ME      => data[17],
+      :town_map_size        => data[18],
+      :battle_environment   => data[19],
+      :flags                => data[20]
+    }
+    # Add map metadata's data to records
+    GameData::MapMetadata.register(metadata_hash)
+    GameData::MapMetadata.save
+    Compiler.write_map_metadata
   end
 end
 

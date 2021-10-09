@@ -33,7 +33,7 @@ class Player < Trainer
 
   def trainer_type
     if @trainer_type.is_a?(Integer)
-      @trainer_type = GameData::Metadata.get_player(@character_ID || 0)[0]
+      @trainer_type = GameData::PlayerMetadata.get(@character_ID || 1).trainer_type
     end
     return @trainer_type
   end
@@ -90,7 +90,7 @@ class Player < Trainer
 
   def initialize(name, trainer_type)
     super
-    @character_ID          = -1
+    @character_ID          = 0
     @outfit                = 0
     @badges                = [false] * 8
     @money                 = Settings::INITIAL_MONEY

@@ -161,3 +161,11 @@ SaveData.register_conversion(:v20_follower_data) do
     global.dependentEvents = nil
   end
 end
+
+SaveData.register_conversion(:v20_increment_player_character_id) do
+  essentials_version 19.1
+  display_title 'Incrementing player character ID'
+  to_value :player do |player|
+    player.character_ID += 1
+  end
+end

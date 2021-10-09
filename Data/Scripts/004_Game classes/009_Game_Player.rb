@@ -48,31 +48,31 @@ class Game_Player < Game_Character
   end
 
   def set_movement_type(type)
-    meta = GameData::Metadata.get_player($Trainer&.character_ID || 0)
+    meta = GameData::PlayerMetadata.get($Trainer&.character_ID || 1)
     new_charset = nil
     case type
     when :fishing
-      new_charset = pbGetPlayerCharset(meta, 6)
+      new_charset = pbGetPlayerCharset(meta.fish_charset)
     when :surf_fishing
-      new_charset = pbGetPlayerCharset(meta, 7)
+      new_charset = pbGetPlayerCharset(meta.surf_fish_charset)
     when :diving, :diving_fast, :diving_jumping, :diving_stopped
       self.move_speed = 3
-      new_charset = pbGetPlayerCharset(meta, 5)
+      new_charset = pbGetPlayerCharset(meta.dive_charset)
     when :surfing, :surfing_fast, :surfing_jumping, :surfing_stopped
       self.move_speed = (type == :surfing_jumping) ? 3 : 4
-      new_charset = pbGetPlayerCharset(meta, 3)
+      new_charset = pbGetPlayerCharset(meta.surf_charset)
     when :cycling, :cycling_fast, :cycling_jumping, :cycling_stopped
       self.move_speed = (type == :cycling_jumping) ? 3 : 5
-      new_charset = pbGetPlayerCharset(meta, 2)
+      new_charset = pbGetPlayerCharset(meta.cycle_charset)
     when :running
       self.move_speed = 4
-      new_charset = pbGetPlayerCharset(meta, 4)
+      new_charset = pbGetPlayerCharset(meta.run_charset)
     when :ice_sliding
       self.move_speed = 4
-      new_charset = pbGetPlayerCharset(meta, 1)
+      new_charset = pbGetPlayerCharset(meta.walk_charset)
     else   # :walking, :jumping, :walking_stopped
       self.move_speed = 3
-      new_charset = pbGetPlayerCharset(meta, 1)
+      new_charset = pbGetPlayerCharset(meta.walk_charset)
     end
     @character_name = new_charset if new_charset
   end
@@ -490,17 +490,16 @@ end
 #===============================================================================
 #
 #===============================================================================
-def pbGetPlayerCharset(meta,charset,trainer=nil,force=false)
+def pbGetPlayerCharset(charset, trainer = nil, force = false)
   trainer = $Trainer if !trainer
   outfit = (trainer) ? trainer.outfit : 0
   if $game_player && $game_player.charsetData && !force
-    return nil if $game_player.charsetData[0] == $Trainer.character_ID &&
+    return nil if $game_player.charsetData[0] == trainer.character_ID &&
                   $game_player.charsetData[1] == charset &&
                   $game_player.charsetData[2] == outfit
   end
-  $game_player.charsetData = [$Trainer.character_ID,charset,outfit] if $game_player
-  ret = meta[charset]
-  ret = meta[1] if nil_or_empty?(ret)
+  $game_player.charsetData = [trainer.character_ID, charset,outfit] if $game_player
+  ret = charset
   if pbResolveBitmap("Graphics/Characters/"+ret+"_"+outfit.to_s)
     ret = ret+"_"+outfit.to_s
   end

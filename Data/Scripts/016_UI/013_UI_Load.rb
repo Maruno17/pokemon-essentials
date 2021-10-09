@@ -163,9 +163,9 @@ class PokemonLoad_Scene
 
   def pbSetParty(trainer)
     return if !trainer || !trainer.party
-    meta = GameData::Metadata.get_player(trainer.character_ID)
+    meta = GameData::PlayerMetadata.get(trainer.character_ID)
     if meta
-      filename = pbGetPlayerCharset(meta,1,trainer,true)
+      filename = pbGetPlayerCharset(meta.walk_charset, trainer, true)
       @sprites["player"] = TrainerWalkingCharSprite.new(filename,@viewport)
       charwidth  = @sprites["player"].bitmap.width
       charheight = @sprites["player"].bitmap.height

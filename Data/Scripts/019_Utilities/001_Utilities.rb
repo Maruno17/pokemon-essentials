@@ -209,10 +209,10 @@ end
 # Unused
 def pbGetPlayerGraphic
   id = $Trainer.character_ID
-  return "" if id < 0 || id >= 8
-  meta = GameData::Metadata.get_player(id)
+  return "" if id < 1
+  meta = GameData::PlayerMetadata.get(id)
   return "" if !meta
-  return GameData::TrainerType.player_front_sprite_filename(meta[0])
+  return GameData::TrainerType.player_front_sprite_filename(meta.trainer_type)
 end
 
 def pbGetTrainerTypeGender(trainer_type)
@@ -220,21 +220,21 @@ def pbGetTrainerTypeGender(trainer_type)
 end
 
 def pbChangePlayer(id)
-  return false if id < 0 || id >= 8
-  meta = GameData::Metadata.get_player(id)
+  return false if id < 1
+  meta = GameData::PlayerMetadata.get(id)
   return false if !meta
   $Trainer.character_ID = id
-  $Trainer.trainer_type = meta[0]
-  $game_player.character_name = meta[1]
+  $Trainer.trainer_type = meta.trainer_type
+  $game_player.character_name = meta.walk_charset
 end
 
 def pbTrainerName(name = nil, outfit = 0)
-  pbChangePlayer(0) if $Trainer.character_ID < 0
+  pbChangePlayer(1) if $Trainer.character_ID < 1
   if name.nil?
     name = pbEnterPlayerName(_INTL("Your name?"), 0, Settings::MAX_PLAYER_NAME_SIZE)
     if name.nil? || name.empty?
-      player_metadata = GameData::Metadata.get_player($Trainer.character_ID)
-      trainer_type = (player_metadata) ? player_metadata[0] : nil
+      player_metadata = GameData::PlayerMetadata.get($Trainer.character_ID)
+      trainer_type = (player_metadata) ? player_metadata.trainer_type : nil
       gender = pbGetTrainerTypeGender(trainer_type)
       name = pbSuggestTrainerName(gender)
     end

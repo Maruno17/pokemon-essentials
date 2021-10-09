@@ -257,6 +257,51 @@ end
 #===============================================================================
 #
 #===============================================================================
+class MetadataLister
+  def initialize(sel_player_id = -1, new_player = false)
+    @index = 0
+    @commands = []
+    @player_ids = []
+    GameData::PlayerMetadata.each do |player|
+      echoln player
+      @index = @commands.length + 1 if sel_player_id > 0 && player.id == sel_player_id
+      @player_ids.push(player.id)
+    end
+    @new_player = new_player
+  end
+
+  def dispose; end
+
+  def setViewport(viewport); end
+
+  def startIndex
+    return @index
+  end
+
+  def commands
+    @commands.clear
+    @commands.push(_INTL("[GLOBAL METADATA]"))
+    @player_ids.each { |id| @commands.push(_INTL("Player {1}", id)) }
+    @commands.push(_INTL("[ADD NEW PLAYER]")) if @new_player
+    return @commands
+  end
+
+  # Cancel: -1
+  # New player: -2
+  # Global metadata: 0
+  # Player character: 1+ (the player ID itself)
+  def value(index)
+    return index if index < 1
+    return -2 if @new_player && index == @commands.length - 1
+    return @player_ids[index - 1]
+  end
+
+  def refresh(index); end
+end
+
+#===============================================================================
+#
+#===============================================================================
 class MapLister
   def initialize(selmap,addGlobal=false)
     @sprite = SpriteWrapper.new

@@ -663,30 +663,6 @@ end
 
 
 
-module PlayerProperty
-  def self.set(settingname,oldsetting)
-    oldsetting = [nil,"xxx","xxx","xxx","xxx","xxx","xxx","xxx"] if !oldsetting
-    properties = [
-       [_INTL("Trainer Type"), TrainerTypeProperty, _INTL("Trainer type of this player.")],
-       [_INTL("Walking"),      CharacterProperty,   _INTL("Walking character sprite.")],
-       [_INTL("Cycling"),      CharacterProperty,   _INTL("Cycling character sprite.")],
-       [_INTL("Surfing"),      CharacterProperty,   _INTL("Surfing character sprite.")],
-       [_INTL("Running"),      CharacterProperty,   _INTL("Running character sprite.")],
-       [_INTL("Diving"),       CharacterProperty,   _INTL("Diving character sprite.")],
-       [_INTL("Fishing"),      CharacterProperty,   _INTL("Fishing character sprite.")],
-       [_INTL("Surf-Fishing"), CharacterProperty,   _INTL("Fishing while surfing character sprite.")]
-    ]
-    pbPropertyList(settingname,oldsetting,properties,false)
-    return oldsetting
-  end
-
-  def self.format(value)
-    return value.inspect
-  end
-end
-
-
-
 module MapSizeProperty
   def self.set(settingname,oldsetting)
     oldsetting = [0,""] if !oldsetting

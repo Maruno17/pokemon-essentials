@@ -738,32 +738,57 @@ module Compiler
   def write_metadata
     File.open("PBS/metadata.txt", "wb") { |f|
       add_PBS_header_to_file(f)
-      # Write global metadata
+      # Write metadata
       f.write("\#-------------------------------\r\n")
-      f.write("[000]\r\n")
+      f.write("[0]\r\n")
       metadata = GameData::Metadata.get
       schema = GameData::Metadata::SCHEMA
-      keys = schema.keys.sort {|a, b| schema[a][0] <=> schema[b][0] }
+      keys = schema.keys.sort { |a, b| schema[a][0] <=> schema[b][0] }
       for key in keys
         record = metadata.property_from_string(key)
-        next if record.nil?
+        next if record.nil? || (record.is_a?(Array) && record.empty?)
         f.write(sprintf("%s = ", key))
         pbWriteCsvRecord(record, f, schema[key])
         f.write("\r\n")
       end
-      # Write map metadata
-      map_infos = pbLoadMapInfos
-      schema = GameData::MapMetadata::SCHEMA
-      keys = schema.keys.sort {|a, b| schema[a][0] <=> schema[b][0] }
+      # Write player metadata
+      schema = GameData::PlayerMetadata::SCHEMA
+      keys = schema.keys.sort { |a, b| schema[a][0] <=> schema[b][0] }
+      GameData::PlayerMetadata.each do |player_data|
+        f.write("\#-------------------------------\r\n")
+        f.write(sprintf("[%d]\r\n", player_data.id))
+        for key in keys
+          record = player_data.property_from_string(key)
+          next if record.nil? || (record.is_a?(Array) && record.empty?)
+          f.write(sprintf("%s = ", key))
+          pbWriteCsvRecord(record, f, schema[key])
+          f.write("\r\n")
+        end
+      end
+    }
+    Graphics.update
+  end
+
+  #=============================================================================
+  # Save map metadata data to PBS file
+  #=============================================================================
+  def write_map_metadata
+    map_infos = pbLoadMapInfos
+    schema = GameData::MapMetadata::SCHEMA
+    keys = schema.keys.sort { |a, b| schema[a][0] <=> schema[b][0] }
+    File.open("PBS/map_metadata.txt", "wb") { |f|
+      add_PBS_header_to_file(f)
       GameData::MapMetadata.each do |map_data|
         f.write("\#-------------------------------\r\n")
-        f.write(sprintf("[%03d]\r\n", map_data.id))
-        if map_infos && map_infos[map_data.id]
-          f.write(sprintf("# %s\r\n", map_infos[map_data.id].name))
+        map_name = (map_infos && map_infos[map_data.id]) ? map_infos[map_data.id].name : nil
+        if map_name
+          f.write(sprintf("[%03d]   # %s\r\n", map_data.id, map_name))
+        else
+          f.write(sprintf("[%03d]\r\n", map_data.id))
         end
         for key in keys
           record = map_data.property_from_string(key)
-          next if record.nil?
+          next if record.nil? || (record.is_a?(Array) && record.empty?)
           f.write(sprintf("%s = ", key))
           pbWriteCsvRecord(record, f, schema[key])
           f.write("\r\n")
@@ -795,5 +820,6 @@ module Compiler
     write_trainers
     write_trainer_lists
     write_metadata
+    write_map_metadata
   end
 end

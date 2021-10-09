@@ -102,6 +102,7 @@ module Compiler
         line = line[3,line.length-3]
       end
       if !line[/^\#/] && !line[/^\s*$/]
+        line = prepline(line)
         if line[/^\s*\[\s*(.*)\s*\]\s*$/]   # Of the format: [something]
           yield lastsection,sectionname if havesection
           sectionname = $~[1]
@@ -134,7 +135,7 @@ module Compiler
     }
   end
 
-  # Used for metadata.txt
+  # Used for metadata.txt and map_metadata.txt
   def pbEachFileSectionNumbered(f)
     pbEachFileSectionEx(f) { |section,name|
       yield section,name.to_i if block_given? && name[/^\d+$/]
@@ -547,11 +548,11 @@ module Compiler
   def pbWriteCsvRecord(record,file,schema)
     rec = (record.is_a?(Array)) ? record.flatten : [record]
     start = (schema[1][0, 1] == "*") ? 1 : 0
-    index = 0
+    index = -1
     begin
       for i in start...schema[1].length
         index += 1
-        file.write(",") if index > 1
+        file.write(",") if index > 0
         value = rec[index]
         if value.nil?
           # do nothing
@@ -613,7 +614,7 @@ module Compiler
           file.write(value.inspect)
         end
       end
-      break if start > 0 && index >= rec.length
+      break if start > 0 && index >= rec.length - 1
     end while start > 0
     return record
   end
@@ -739,6 +740,8 @@ module Compiler
     compile_trainer_lists          # Depends on TrainerType
     yield(_INTL("Compiling metadata"))
     compile_metadata               # Depends on TrainerType
+    yield(_INTL("Compiling map metadata"))
+    compile_map_metadata           # No dependencies
     yield(_INTL("Compiling animations"))
     compile_animations
     yield("")
@@ -766,6 +769,7 @@ module Compiler
          "metadata.dat",
          "moves.dat",
          "phone.dat",
+         "player_metadata.dat",
          "regional_dexes.dat",
          "ribbons.dat",
          "shadow_movesets.dat",

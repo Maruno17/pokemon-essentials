@@ -808,24 +808,22 @@ DebugMenuCommands.register("setplayer", {
   "name"        => _INTL("Set Player Character"),
   "description" => _INTL("Edit the player's character, as defined in \"metadata.txt\"."),
   "effect"      => proc {
-    limit = 0
-    for i in 0...8
-      meta = GameData::Metadata.get_player(i)
-      next if meta
-      limit = i
+    index = 0
+    cmds = []
+    ids = []
+    GameData::PlayerMetadata.each do |player|
+      index = cmds.length if player.id == $Trainer.character_ID
+      cmds.push(player.id.to_s)
+      ids.push(player.id)
+    end
+    if cmds.length == 1
+      pbMessage(_INTL("There is only one player character defined."))
       break
     end
-    if limit <= 1
-      pbMessage(_INTL("There is only one player defined."))
-    else
-      params = ChooseNumberParams.new
-      params.setRange(0, limit - 1)
-      params.setDefaultValue($Trainer.character_ID)
-      newid = pbMessageChooseNumber(_INTL("Choose the new player character."), params)
-      if newid != $Trainer.character_ID
-        pbChangePlayer(newid)
-        pbMessage(_INTL("The player character was changed."))
-      end
+    cmd = pbShowCommands(nil, cmds, -1, index)
+    if cmd >= 0 && cmd != index
+      pbChangePlayer(ids[cmd])
+      pbMessage(_INTL("The player character was changed."))
     end
   }
 })
@@ -887,10 +885,20 @@ DebugMenuCommands.register("editorsmenu", {
 DebugMenuCommands.register("setmetadata", {
   "parent"      => "editorsmenu",
   "name"        => _INTL("Edit Metadata"),
-  "description" => _INTL("Edit global and map metadata."),
+  "description" => _INTL("Edit global metadata and player character metadata."),
   "always_show" => true,
   "effect"      => proc {
-    pbMetadataScreen(pbDefaultMap)
+    pbMetadataScreen
+  }
+})
+
+DebugMenuCommands.register("setmapmetadata", {
+  "parent"      => "editorsmenu",
+  "name"        => _INTL("Edit Map Metadata"),
+  "description" => _INTL("Edit map metadata."),
+  "always_show" => true,
+  "effect"      => proc {
+    pbMapMetadataScreen(pbDefaultMap)
   }
 })
 
@@ -1112,6 +1120,7 @@ DebugMenuCommands.register("createpbs", {
       "encounters.txt",
       "items.txt",
       "map_connections.txt",
+      "map_metadata.txt",
       "metadata.txt",
       "moves.txt",
       "phone.txt",
@@ -1135,18 +1144,19 @@ DebugMenuCommands.register("createpbs", {
       when 4  then Compiler.write_encounters
       when 5  then Compiler.write_items
       when 6  then Compiler.write_connections
-      when 7  then Compiler.write_metadata
-      when 8  then Compiler.write_moves
-      when 9  then Compiler.write_phone
-      when 10 then Compiler.write_pokemon
-      when 11 then Compiler.write_pokemon_forms
-      when 12 then Compiler.write_regional_dexes
-      when 13 then Compiler.write_ribbons
-      when 14 then Compiler.write_shadow_movesets
-      when 15 then Compiler.write_town_map
-      when 16 then Compiler.write_trainer_types
-      when 17 then Compiler.write_trainers
-      when 18 then Compiler.write_types
+      when 7  then Compiler.write_map_metadata
+      when 8  then Compiler.write_metadata
+      when 9  then Compiler.write_moves
+      when 10 then Compiler.write_phone
+      when 11 then Compiler.write_pokemon
+      when 12 then Compiler.write_pokemon_forms
+      when 13 then Compiler.write_regional_dexes
+      when 14 then Compiler.write_ribbons
+      when 15 then Compiler.write_shadow_movesets
+      when 16 then Compiler.write_town_map
+      when 17 then Compiler.write_trainer_types
+      when 18 then Compiler.write_trainers
+      when 19 then Compiler.write_types
       else break
       end
       pbMessage(_INTL("File written."))

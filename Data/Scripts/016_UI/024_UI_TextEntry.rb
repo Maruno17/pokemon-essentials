@@ -120,13 +120,13 @@ class PokemonEntryScene
     addBackgroundPlane(@sprites,"background","Naming/bg_2",@viewport)
     case subject
     when 1   # Player
-      meta=GameData::Metadata.get_player($Trainer.character_ID)
+      meta = GameData::PlayerMetadata.get($Trainer.character_ID)
       if meta
         @sprites["shadow"]=IconSprite.new(0,0,@viewport)
         @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
         @sprites["shadow"].x=33*2
         @sprites["shadow"].y=32*2
-        filename=pbGetPlayerCharset(meta,1,nil,true)
+        filename = pbGetPlayerCharset(meta.walk_charset, nil, true)
         @sprites["subject"]=TrainerWalkingCharSprite.new(filename,@viewport)
         charwidth=@sprites["subject"].bitmap.width
         charheight=@sprites["subject"].bitmap.height
@@ -405,13 +405,13 @@ class PokemonEntryScene2
     @sprites["bg"].setBitmap("Graphics/Pictures/Naming/bg")
     case subject
     when 1   # Player
-      meta = GameData::Metadata.get_player($Trainer.character_ID)
+      meta = GameData::PlayerMetadata.get($Trainer.character_ID)
       if meta
         @sprites["shadow"] = IconSprite.new(0, 0, @viewport)
         @sprites["shadow"].setBitmap("Graphics/Pictures/Naming/icon_shadow")
         @sprites["shadow"].x = 66
         @sprites["shadow"].y = 64
-        filename = pbGetPlayerCharset(meta, 1, nil, true)
+        filename = pbGetPlayerCharset(meta.walk_charset, nil, true)
         @sprites["subject"] = TrainerWalkingCharSprite.new(filename, @viewport)
         charwidth = @sprites["subject"].bitmap.width
         charheight = @sprites["subject"].bitmap.height
