@@ -74,7 +74,6 @@ qt314xxx (Discord)
 ###			Graphics			  #
 ###########################################################
 Title screen background and logo by Doctor Miawoo
-
 Gen 4 Legendary trio eggs by calicorn
 
 ###########################################################
@@ -106,10 +105,12 @@ with their respective authors' consent
 		SailorVicious (Prof. Elm OW sprite) 	https://www.deviantart.com/sailorvicious
 		OceansLugiaSpirit (Koga OW sprite)  	http://oceanslugiaspirit.deviantart.com/
 		Knuckles (Kurt OW sprite)
+		UnworthyPie (Bruno and Agatha OW sprites)
 	Battle sprites: 
 		luckygirl88  (Misty VS sprite) 		http://luckygirl88.deviantart.com/art/Pokemon-BW-Misty-Sprite-Sheet-268364830
 		Lorelei VS sprite by Nalty 		http://nalty.deviantart.com/art/Lorelei-VS-Sprite-177184960
 		Kiwi (Kurt battle sprite)
+		UnworthyPie (Bruno battle sprite, Lance backsprite)
 ### Tileset graphics ### 
 	Jorginho (OutsideEmerald)
 	ThatsSoWitty (Cave) http://thatssowitty.deviantart.com/art/The-Public-Pokemon-Tileset-281342410

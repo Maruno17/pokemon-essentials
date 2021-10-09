@@ -494,8 +494,11 @@ class PokeBattle_Scene
   def pbAnimationCore(animation,user,target,oppMove=false)
     return if !animation
     @briefMessage = false
+
     userSprite   = (user) ? @sprites["pokemon_#{user.index}"] : nil
     targetSprite = (target) ? @sprites["pokemon_#{target.index}"] : nil
+
+
     # Remember the original positions of Pokémon sprites
     oldUserX = (userSprite) ? userSprite.x : 0
     oldUserY = (userSprite) ? userSprite.y : 0
@@ -535,5 +538,12 @@ class PokeBattle_Scene
       targetSprite.y = oldTargetY
       targetSprite.pbSetOrigin
     end
+    # if userSprite != nil
+    #   userSprite.mirror=true #if !@battle.opposes?(user.index)
+    # end
+    # if targetSprite != nil
+    #   targetSprite.mirror=true# if !@battle.opposes?(target.index)
+    # end
+
   end
 end

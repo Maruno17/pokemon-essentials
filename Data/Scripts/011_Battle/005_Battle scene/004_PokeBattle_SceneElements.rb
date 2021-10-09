@@ -500,6 +500,7 @@ class PokemonBattlerSprite < RPG::Sprite
     @spriteYExtra     = 0   # Offset due to "bobbing" animation
     @_iconBitmap      = nil
     self.visible      = false
+    @back=false
   end
 
   def dispose
@@ -514,11 +515,13 @@ class PokemonBattlerSprite < RPG::Sprite
 
   def x=(value)
     @spriteX = value
+    self.mirror=true if @back
     super(value+@spriteXExtra)
   end
 
   def y=(value)
     @spriteY = value
+    self.mirror=true if @back
     super(value+@spriteYExtra)
   end
 
@@ -533,6 +536,7 @@ class PokemonBattlerSprite < RPG::Sprite
   # Set sprite's origin to bottom middle
   def pbSetOrigin
     return if !@_iconBitmap
+    self.mirror=true if @back
     self.ox = @_iconBitmap.width/2
     self.oy = @_iconBitmap.height
   end
@@ -554,11 +558,12 @@ class PokemonBattlerSprite < RPG::Sprite
   end
 
   def setPokemonBitmap(pkmn,back=false)
+    @back = back
+    self.mirror=true if @back
     @pkmn = pkmn
     @_iconBitmap.dispose if @_iconBitmap
     @_iconBitmap = GameData::Species.sprite_bitmap_from_pokemon(@pkmn, back)
-    @_iconBitmap.mirror if back
-    if back
+    if @back
       @_iconBitmap.scale_bitmap(Settings::BACKRPSPRITE_SCALE)
     else
       @_iconBitmap.scale_bitmap(Settings::FRONTSPRITE_SCALE)

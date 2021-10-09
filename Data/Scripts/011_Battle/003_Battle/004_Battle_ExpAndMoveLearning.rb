@@ -158,7 +158,7 @@ class PokeBattle_Battle
     if showMessages
       if isOutsider
         pbDisplayPaused(_INTL("{1} got a boosted {2} Exp. Points!",pkmn.name,expGained))
-      elsepbGenerateEgg
+        else
         pbDisplayPaused(_INTL("{1} got {2} Exp. Points!",pkmn.name,expGained))
       end
     end

@@ -652,7 +652,7 @@ HiddenMoveHandlers::UseMove.add(:ROCKSMASH, proc { |move, pokemon|
 #===============================================================================
 def pbStrength
   if $PokemonMap.strengthUsed
-    pbMessage(_INTL("Strength made it possible to move boulders around."))
+    #pbMessage(_INTL("Strength made it possible to move boulders around."))
     return false
   end
   move = :STRENGTH

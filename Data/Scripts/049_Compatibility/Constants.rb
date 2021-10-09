@@ -14,3 +14,8 @@ BATTLE_FACTORY_TOKENS = 243
 # This is for settings that are used in scripts since it's a chore to change them everywhere to include the module name
 NUM_BADGES=Settings::NB_BADGES
 EGGINITIALLEVEL=Settings::EGG_LEVEL
+
+
+#this is fucking stupid but apparently necessary
+FALSE = false
+TRUE = true
