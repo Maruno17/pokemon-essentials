@@ -686,7 +686,6 @@ class PokeBattle_PledgeMove < PokeBattle_Move
     @pledgeCombo = false
     @pledgeOtherUser = nil
     @comboEffect = nil
-    @overrideType = nil
     @overrideAnim = nil
     # Check whether this is the use of a combo move
     @combos.each do |i|
@@ -694,9 +693,7 @@ class PokeBattle_PledgeMove < PokeBattle_Move
       @battle.pbDisplay(_INTL("The two moves have become one! It's a combined move!"))
       @pledgeCombo = true
       @comboEffect = i[1]
-      @overrideType = i[2]
       @overrideAnim = i[3]
-      @overrideType = nil if !GameData::Type.exists?(@overrideType)
       break
     end
     return if @pledgeCombo
@@ -721,7 +718,13 @@ class PokeBattle_PledgeMove < PokeBattle_Move
   end
 
   def pbBaseType(user)
-    return @overrideType if @overrideType!=nil
+    # This method is called before pbOnStartUse, so it has to calculate the type
+    # separately
+    @combos.each do |i|
+      next if i[0] != user.effects[PBEffects::FirstPledge]
+      next if !GameData::Type.exists?(i[2])
+      return i[2]
+    end
     return super
   end
 

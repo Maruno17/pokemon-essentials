@@ -160,6 +160,17 @@ DebugMenuCommands.register("daycare", {
   }
 })
 
+DebugMenuCommands.register("skipcredits", {
+  "parent"      => "fieldmenu",
+  "name"        => _INTL("Skip Credits"),
+  "description" => _INTL("Toggle whether credits can be ended early by pressing the Use input."),
+  "effect"      => proc {
+    $PokemonGlobal.creditsPlayed = !$PokemonGlobal.creditsPlayed
+    pbMessage(_INTL("Credits can be skipped when played in future.")) if $PokemonGlobal.creditsPlayed
+    pbMessage(_INTL("Credits cannot be skipped when next played.")) if !$PokemonGlobal.creditsPlayed
+  }
+})
+
 DebugMenuCommands.register("relicstone", {
   "parent"      => "fieldmenu",
   "name"        => _INTL("Use Relic Stone"),
