@@ -852,6 +852,8 @@ class Game_Character
   def update
     @moved_last_frame = @moved_this_frame
     @stopped_last_frame = @stopped_this_frame
+    @moved_this_frame = false
+    @stopped_this_frame = false
     if !$game_temp.in_menu
       # Update command
       update_command
@@ -921,7 +923,6 @@ class Game_Character
       @stopped_this_frame = true
     elsif !@moved_last_frame || @stopped_last_frame   # Started a new step
       calculate_bush_depth
-      @stopped_this_frame = false
     end
     # Increment animation counter
     @anime_count += 1 if @walk_anime || @step_anime
@@ -931,8 +932,6 @@ class Game_Character
   def update_stop
     @anime_count += 1 if @step_anime
     @stop_count  += 1 if !@starting && !lock?
-    @moved_this_frame = false
-    @stopped_this_frame = false
   end
 
   def update_pattern

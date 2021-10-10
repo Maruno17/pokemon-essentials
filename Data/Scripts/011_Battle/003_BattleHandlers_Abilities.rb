@@ -200,7 +200,7 @@ BattleHandlers::StatusImmunityAllyAbility.add(:FLOWERVEIL,
   }
 )
 
-BattleHandlers::StatusImmunityAbility.add(:SWEETVEIL,
+BattleHandlers::StatusImmunityAllyAbility.add(:SWEETVEIL,
   proc { |ability,battler,status|
     next true if status == :SLEEP
   }
