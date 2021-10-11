@@ -348,6 +348,9 @@ module Settings
   # is on the map (for new plant growth mechanics only).
   PLANT_SPARKLE_ANIMATION_ID   = 7
 
+  CUT_TREE_ANIMATION_ID   =19
+  ROCK_SMASH_ANIMATION_ID   =20
+
   #=============================================================================
 
   # An array of available languages in the game, and their corresponding message

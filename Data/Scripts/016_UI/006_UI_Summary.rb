@@ -122,6 +122,8 @@ class PokemonSummary_Scene
     @sprites["pokemon"].setOffset(PictureOrigin::Center)
     @sprites["pokemon"].x = 104
     @sprites["pokemon"].y = 206
+    @sprites["pokemon"].zoom_x = Settings::FRONTSPRITE_SCALE
+    @sprites["pokemon"].zoom_y = Settings::FRONTSPRITE_SCALE
     @sprites["pokemon"].setPokemonBitmap(@pokemon)
     @sprites["pokeicon"] = PokemonIconSprite.new(@pokemon,@viewport)
     @sprites["pokeicon"].setOffset(PictureOrigin::Center)

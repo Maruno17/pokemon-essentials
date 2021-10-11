@@ -122,7 +122,9 @@ class Game_Player < Game_Character
     # Check the tile in front of the player for events
     new_x = @x + (@direction == 6 ? 1 : @direction == 4 ? -1 : 0)
     new_y = @y + (@direction == 2 ? 1 : @direction == 8 ? -1 : 0)
+
     return nil if !$game_map.valid?(new_x, new_y)
+
     for event in $game_map.events.values
       next if !event.at_coordinate?(new_x, new_y)
       next if event.jumping? || event.over_trigger?

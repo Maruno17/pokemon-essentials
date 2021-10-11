@@ -230,8 +230,10 @@ def pbSmashEvent(event)
   return if !event
   if event.name[/cuttree/i]
     pbSEPlay("Cut", 80)
+    $scene.spriteset.addUserAnimation(Settings::CUT_TREE_ANIMATION_ID,event.x,event.y,false,1)
   elsif event.name[/smashrock/i]
     pbSEPlay("Rock Smash", 80)
+    $scene.spriteset.addUserAnimation(Settings::ROCK_SMASH_ANIMATION_ID,event.x,event.y,false,1)
   end
   pbMoveRoute(event, [
     PBMoveRoute::Wait, 2,
@@ -620,6 +622,8 @@ def pbRockSmash
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
     pbMessage(_INTL("{1} used {2}!", speciesname, GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
+    facingEvent = $game_player.pbFacingEvent(true)
+    $scene.spriteset.addUserAnimation(Settings::ROCK_SMASH_ANIMATION_ID,facingEvent.x,facingEvent.y,false)
     return true
   end
   return false

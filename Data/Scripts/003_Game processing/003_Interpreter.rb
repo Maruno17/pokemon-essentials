@@ -294,7 +294,10 @@ class Interpreter
   # it can stay erased when the game is saved then loaded again.
   def pbEraseThisEvent
     if $game_map.events[@event_id]
-      $game_map.events[@event_id].erase
+      if $game_map.events[@event_id].name[/cuttree/i]
+        pbSmashThisEvent()
+      end
+        $game_map.events[@event_id].erase
       $PokemonMap.addErasedEvent(@event_id) if $PokemonMap
     end
     @index += 1
