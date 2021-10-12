@@ -105,8 +105,8 @@ class TilemapRenderer
       tile.src_rect.y = ((tile_id - TILESET_START_ID) / TILESET_TILES_PER_ROW) * SOURCE_TILE_HEIGHT
       if @bitmap_wraps[tile.filename]
         height = @bitmaps[tile.filename].height
-        col = (tile_id - TILESET_START_ID) * SOURCE_TILE_HEIGHT / height
-        tile.src_rect.x += col * AUTOTILES_COUNT * SOURCE_TILE_WIDTH
+        col = (tile_id - TILESET_START_ID) * SOURCE_TILE_HEIGHT / (TILESET_TILES_PER_ROW * height)
+        tile.src_rect.x += col * TILESET_TILES_PER_ROW * SOURCE_TILE_WIDTH
         tile.src_rect.y -= col * height
       end
     end
