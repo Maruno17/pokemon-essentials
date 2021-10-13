@@ -1,6 +1,7 @@
 module GameData
   class MapMetadata
     attr_reader :id
+    attr_reader :real_name
     attr_reader :outdoor_map
     attr_reader :announce_location
     attr_reader :can_bicycle
@@ -27,27 +28,28 @@ module GameData
     DATA_FILENAME = "map_metadata.dat"
 
     SCHEMA = {
-       "Outdoor"          => [1,  "b"],
-       "ShowArea"         => [2,  "b"],
-       "Bicycle"          => [3,  "b"],
-       "BicycleAlways"    => [4,  "b"],
-       "HealingSpot"      => [5,  "vuu"],
-       "Weather"          => [6,  "eu", :Weather],
-       "MapPosition"      => [7,  "uuu"],
-       "DiveMap"          => [8,  "v"],
-       "DarkMap"          => [9,  "b"],
-       "SafariMap"        => [10, "b"],
-       "SnapEdges"        => [11, "b"],
-       "Dungeon"          => [12, "b"],
-       "BattleBack"       => [13, "s"],
-       "WildBattleBGM"    => [14, "s"],
-       "TrainerBattleBGM" => [15, "s"],
-       "WildVictoryME"    => [16, "s"],
-       "TrainerVictoryME" => [17, "s"],
-       "WildCaptureME"    => [18, "s"],
-       "MapSize"          => [19, "us"],
-       "Environment"      => [20, "e", :Environment],
-       "Flags"            => [21, "*s"]
+       "Name"             => [1,  "s"],
+       "Outdoor"          => [2,  "b"],
+       "ShowArea"         => [3,  "b"],
+       "Bicycle"          => [4,  "b"],
+       "BicycleAlways"    => [5,  "b"],
+       "HealingSpot"      => [6,  "vuu"],
+       "Weather"          => [7,  "eu", :Weather],
+       "MapPosition"      => [8,  "uuu"],
+       "DiveMap"          => [9,  "v"],
+       "DarkMap"          => [10,  "b"],
+       "SafariMap"        => [11, "b"],
+       "SnapEdges"        => [12, "b"],
+       "Dungeon"          => [13, "b"],
+       "BattleBack"       => [14, "s"],
+       "WildBattleBGM"    => [15, "s"],
+       "TrainerBattleBGM" => [16, "s"],
+       "WildVictoryME"    => [17, "s"],
+       "TrainerVictoryME" => [18, "s"],
+       "WildCaptureME"    => [19, "s"],
+       "MapSize"          => [20, "us"],
+       "Environment"      => [21, "e", :Environment],
+       "Flags"            => [22, "*s"]
     }
 
     extend ClassMethodsIDNumbers
@@ -55,6 +57,7 @@ module GameData
 
     def self.editor_properties
       return [
+         ["Name",             StringProperty,                     _INTL("The name of the map, as seen by the player. Can be different to the map's name as seen in RMXP.")],
          ["Outdoor",          BooleanProperty,                    _INTL("If true, this map is an outdoor map and will be tinted according to time of day.")],
          ["ShowArea",         BooleanProperty,                    _INTL("If true, the game will display the map's name upon entry.")],
          ["Bicycle",          BooleanProperty,                    _INTL("If true, the bicycle can be used on this map.")],
@@ -81,6 +84,7 @@ module GameData
 
     def initialize(hash)
       @id                   = hash[:id]
+      @real_name            = hash[:name]
       @outdoor_map          = hash[:outdoor_map]
       @announce_location    = hash[:announce_location]
       @can_bicycle          = hash[:can_bicycle]
@@ -106,6 +110,7 @@ module GameData
 
     def property_from_string(str)
       case str
+      when "Name"             then return @real_name
       when "Outdoor"          then return @outdoor_map
       when "ShowArea"         then return @announce_location
       when "Bicycle"          then return @can_bicycle
@@ -129,6 +134,11 @@ module GameData
       when "Flags"            then return @flags
       end
       return nil
+    end
+
+    # @return [String] the translated name of this map
+    def name
+      return pbGetMapNameFromId(@id)
     end
 
     def has_flag?(flag)

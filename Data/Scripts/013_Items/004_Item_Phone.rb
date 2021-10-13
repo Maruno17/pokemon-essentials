@@ -279,7 +279,7 @@ end
 
 def pbTrainerMapName(phonenum)
   return "" if !phonenum[6] || phonenum[6] == 0
-  return pbGetMessage(MessageTypes::MapNames, phonenum[6])
+  return pbGetMapNameFromId(phonenum[6])
 end
 
 #===============================================================================

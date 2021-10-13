@@ -1469,6 +1469,9 @@ module Compiler
   #=============================================================================
   def compile_map_metadata(path = "PBS/map_metadata.txt")
     GameData::MapMetadata::DATA.clear
+    map_infos = pbLoadMapInfos
+    map_names = []
+    map_infos.keys.each { |id| map_names[id] = map_infos[id].name }
     # Read from PBS file
     File.open(path, "rb") { |f|
       FileLineData.file = path   # For error reporting
@@ -1490,6 +1493,7 @@ module Compiler
         # Construct map metadata hash
         metadata_hash = {
           :id                   => map_id,
+          :name                 => contents["Name"],
           :outdoor_map          => contents["Outdoor"],
           :announce_location    => contents["ShowArea"],
           :can_bicycle          => contents["Bicycle"],
@@ -1514,10 +1518,12 @@ module Compiler
         }
         # Add map metadata's data to records
         GameData::MapMetadata.register(metadata_hash)
+        map_names[map_id] = metadata_hash[:name] if !nil_or_empty?(metadata_hash[:name])
       }
     }
     # Save all data
     GameData::MapMetadata.save
+    MessageTypes.setMessages(MessageTypes::MapNames, map_names)
     Graphics.update
   end
 

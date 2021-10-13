@@ -787,6 +787,7 @@ module Compiler
          "encounters.txt",
          "items.txt",
          "map_connections.txt",
+         "map_metadata.txt",
          "metadata.txt",
          "moves.txt",
          "phone.txt",

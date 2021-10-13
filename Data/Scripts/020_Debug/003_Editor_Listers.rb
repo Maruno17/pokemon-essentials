@@ -263,7 +263,6 @@ class MetadataLister
     @commands = []
     @player_ids = []
     GameData::PlayerMetadata.each do |player|
-      echoln player
       @index = @commands.length + 1 if sel_player_id > 0 && player.id == sel_player_id
       @player_ids.push(player.id)
     end

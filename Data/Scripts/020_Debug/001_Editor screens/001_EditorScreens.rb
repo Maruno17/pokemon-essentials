@@ -803,7 +803,7 @@ def pbMapMetadataScreen(map_id = 0)
   loop do
     map_id = pbListScreen(_INTL("SET METADATA"), MapLister.new(map_id))
     break if map_id < 0
-    (map_id == 0) ? pbEditMetadata : pbEditMetadata(map_id)
+    (map_id == 0) ? pbEditMetadata : pbEditMapMetadata(map_id)
   end
 end
 
@@ -821,27 +821,28 @@ def pbEditMapMetadata(map_id)
     # Construct map metadata hash
     metadata_hash = {
       :id                   => map_id,
-      :outdoor_map          => data[0],
-      :announce_location    => data[1],
-      :can_bicycle          => data[2],
-      :always_bicycle       => data[3],
-      :teleport_destination => data[4],
-      :weather              => data[5],
-      :town_map_position    => data[6],
-      :dive_map_id          => data[7],
-      :dark_map             => data[8],
-      :safari_map           => data[9],
-      :snap_edges           => data[10],
-      :random_dungeon       => data[11],
-      :battle_background    => data[12],
-      :wild_battle_BGM      => data[13],
-      :trainer_battle_BGM   => data[14],
-      :wild_victory_ME      => data[15],
-      :trainer_victory_ME   => data[16],
-      :wild_capture_ME      => data[17],
-      :town_map_size        => data[18],
-      :battle_environment   => data[19],
-      :flags                => data[20]
+      :name                 => data[0],
+      :outdoor_map          => data[1],
+      :announce_location    => data[2],
+      :can_bicycle          => data[3],
+      :always_bicycle       => data[4],
+      :teleport_destination => data[5],
+      :weather              => data[6],
+      :town_map_position    => data[7],
+      :dive_map_id          => data[8],
+      :dark_map             => data[9],
+      :safari_map           => data[10],
+      :snap_edges           => data[11],
+      :random_dungeon       => data[12],
+      :battle_background    => data[13],
+      :wild_battle_BGM      => data[14],
+      :trainer_battle_BGM   => data[15],
+      :wild_victory_ME      => data[16],
+      :trainer_victory_ME   => data[17],
+      :wild_capture_ME      => data[18],
+      :town_map_size        => data[19],
+      :battle_environment   => data[20],
+      :flags                => data[21]
     }
     # Add map metadata's data to records
     GameData::MapMetadata.register(metadata_hash)
