@@ -191,9 +191,11 @@ end
 def pbCut
   move = :CUT
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_CUT, false) || (!$DEBUG && !movefinder) || $PokemonBag.pbQuantity(:MACHETE)>0
-    pbMessage(_INTL("This tree looks like it can be cut down."))
-    return false
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_CUT, false) || (!$DEBUG && !movefinder)
+    if $PokemonBag.pbQuantity(:MACHETE)<=0
+      pbMessage(_INTL("This tree looks like it can be cut down."))
+      return false
+    end
   end
   pbMessage(_INTL("This tree looks like it can be cut down!\1"))
   if pbConfirmMessage(_INTL("Would you like to cut it?"))
@@ -302,9 +304,11 @@ def pbDive
   return false if !map_metadata || !map_metadata.dive_map_id
   move = :DIVE
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE, false) || (!$DEBUG && !movefinder) || $PokemonBag.pbQuantity(:SCUBAGEAR)>0
-    pbMessage(_INTL("The sea is deep here. A Pokémon may be able to go underwater."))
-    return false
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE, false) || (!$DEBUG && !movefinder)
+    if $PokemonBag.pbQuantity(:SCUBAGEAR)>0
+      pbMessage(_INTL("The sea is deep here. A Pokémon may be able to go underwater."))
+      return false
+    end
   end
   if pbConfirmMessage(_INTL("The sea is deep here. Would you like to use Dive?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
@@ -614,9 +618,11 @@ end
 def pbRockSmash
   move = :ROCKSMASH
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_ROCKSMASH, false) || (!$DEBUG && !movefinder) || $PokemonBag.pbQuantity(:PICKAXE)>0
-    pbMessage(_INTL("It's a rugged rock, but a Pokémon may be able to smash it."))
-    return false
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_ROCKSMASH, false) || (!$DEBUG && !movefinder)
+    if $PokemonBag.pbQuantity(:PICKAXE)<=0
+      pbMessage(_INTL("It's a rugged rock, but a Pokémon may be able to smash it."))
+      return false
+    end
   end
   if pbConfirmMessage(_INTL("This rock appears to be breakable. Would you like to use Rock Smash?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
@@ -661,9 +667,11 @@ def pbStrength
   end
   move = :STRENGTH
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_STRENGTH, false) || (!$DEBUG && !movefinder) || $PokemonBag.pbQuantity(:LEVER)>0
-    pbMessage(_INTL("It's a big boulder, but a Pokémon may be able to push it aside."))
-    return false
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_STRENGTH, false) || (!$DEBUG && !movefinder)
+    if  $PokemonBag.pbQuantity(:LEVER)<=0
+      pbMessage(_INTL("It's a big boulder, but a Pokémon may be able to push it aside."))
+      return false
+    end
   end
   pbMessage(_INTL("It's a big boulder, but a Pokémon may be able to push it aside.\1"))
   if pbConfirmMessage(_INTL("Would you like to use Strength?"))
@@ -706,10 +714,13 @@ HiddenMoveHandlers::UseMove.add(:STRENGTH, proc { |move, pokemon|
 def pbSurf
   return false if $game_player.pbFacingEvent
   return false if $game_player.pbHasDependentEvents?
+  return false if $PokemonGlobal.diving || $PokemonGlobal.surfing
   move = :SURF
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF, false) || (!$DEBUG && !movefinder) || $PokemonBag.pbQuantity(:SURFBOARD)>0
-    return false
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF, false) || (!$DEBUG && !movefinder)
+    if $PokemonBag.pbQuantity(:SURFBOARD)<=0
+      return false
+    end
   end
   if pbConfirmMessage(_INTL("The water is a deep blue...\nWould you like to surf on it?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name
@@ -948,9 +959,11 @@ end
 def pbWaterfall
   move = :WATERFALL
   movefinder = $Trainer.get_pokemon_with_move(move)
-  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_WATERFALL, false) || (!$DEBUG && !movefinder) || $PokemonBag.pbQuantity(:JETPACK)>0
-    pbMessage(_INTL("A wall of water is crashing down with a mighty roar."))
-    return false
+  if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_WATERFALL, false) || (!$DEBUG && !movefinder)
+    if $PokemonBag.pbQuantity(:JETPACK)<=0
+      pbMessage(_INTL("A wall of water is crashing down with a mighty roar."))
+      return false
+    end
   end
   if pbConfirmMessage(_INTL("It's a large waterfall. Would you like to use Waterfall?"))
     speciesname = (movefinder) ? movefinder.name : $Trainer.name

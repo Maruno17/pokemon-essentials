@@ -562,6 +562,15 @@ class PokemonFusionScene
     @sprites["rsprite2"] = rsprite2
     @sprites["rsprite3"] = rsprite3
 
+    @sprites["rsprite1"].zoom_x = Settings::FRONTSPRITE_SCALE
+    @sprites["rsprite1"].zoom_y = Settings::FRONTSPRITE_SCALE
+
+    @sprites["rsprite2"].zoom_x = Settings::FRONTSPRITE_SCALE
+    @sprites["rsprite2"].zoom_y = Settings::FRONTSPRITE_SCALE
+
+    @sprites["rsprite3"].zoom_x = Settings::FRONTSPRITE_SCALE
+    @sprites["rsprite3"].zoom_y = Settings::FRONTSPRITE_SCALE
+
     pbGenerateMetafiles(rsprite1.ox, rsprite1.oy, rsprite2.ox, rsprite2.oy, rsprite3.ox, rsprite3.oy, rsprite1.x, rsprite3.x)
 
     @sprites["msgwindow"] = Kernel.pbCreateMessageWindow(@viewport)
@@ -718,6 +727,8 @@ class PokemonFusionScene
 
       #make it untraded, pour qu'on puisse le unfused après, même si un des 2 était traded
       @pokemon1.obtain_method = 0
+      @pokemon1.owner = Pokemon::Owner.new_from_trainer($Trainer)
+
 
       @pokemon1.ability = pbChooseAbility(@pokemon1, hiddenAbility1, hiddenAbility2)
       if superSplicer
