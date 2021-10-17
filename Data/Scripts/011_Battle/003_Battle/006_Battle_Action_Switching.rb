@@ -165,7 +165,7 @@ class PokeBattle_Battle
              pbCanChooseNonActive?(0) && @battlers[0].effects[PBEffects::Outrage]==0
             idxPartyForName = idxPartyNew
             enemyParty = pbParty(idxBattler)
-            if enemyParty[idxPartyNew].ability == :ILLUSION
+            if enemyParty[idxPartyNew].ability == :ILLUSION && !pbCheckGlobalAbility(:NEUTRALIZINGGAS)
               new_index = pbLastInTeam(idxBattler)
               idxPartyForName = new_index if new_index >= 0 && new_index != idxPartyNew
             end
@@ -249,7 +249,7 @@ class PokeBattle_Battle
   def pbMessagesOnReplace(idxBattler,idxParty)
     party = pbParty(idxBattler)
     newPkmnName = party[idxParty].name
-    if party[idxParty].ability == :ILLUSION
+    if party[idxParty].ability == :ILLUSION && !pbCheckGlobalAbility(:NEUTRALIZINGGAS)
       new_index = pbLastInTeam(idxBattler)
       newPkmnName = party[new_index].name if new_index >= 0 && new_index != idxParty
     end
@@ -314,15 +314,24 @@ class PokeBattle_Battle
   # Called when one or more Pokémon switch in. Does a lot of things, including
   # entry hazards, form changes and items/abilities that trigger upon switching
   # in.
-  def pbOnBattlerEnteringBattle(*battler_indices)
-    battler_indices.flatten!
-    eachBattler do |b|
-      b.droppedBelowHalfHP = false
-      b.statsDropped = false
+  def pbOnBattlerEnteringBattle(battler_index, skip_event_reset = false)
+    battler_index = [battler_index] if !battler_index.is_a?(Array)
+    battler_index.flatten!
+    # NOTE: This isn't done for switch commands, because they previously call
+    #       pbRecallAndReplace, which could cause Neutralizing Gas to end, which
+    #       in turn could cause Intimidate to trigger another Pokémon's Eject
+    #       Pack. That Eject Pack should trigger at the end of this method, but
+    #       this resetting would prevent that from happening, so it is skipped
+    #       and instead done earlier in def pbAttackPhaseSwitch.
+    if !skip_event_reset
+      eachBattler do |b|
+        b.droppedBelowHalfHP = false
+        b.statsDropped = false
+      end
     end
     # For each battler that entered battle, in speed order
     pbPriority(true).each do |b|
-      next if !battler_indices.include?(b.index) || b.fainted?
+      next if !battler_index.include?(b.index) || b.fainted?
       pbRecordBattlerAsParticipated(b)
       pbMessagesOnBattlerEnteringBattle(b)
       # Position/field effects triggered by the battler appearing

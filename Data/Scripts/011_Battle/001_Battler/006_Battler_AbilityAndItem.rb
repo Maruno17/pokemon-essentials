@@ -11,6 +11,8 @@ class PokeBattle_Battler
     # Treat self as fainted
     @hp = 0
     @fainted = true
+    # Check for end of Neutralizing Gas
+    pbAbilitiesOnNeutralizingGasEnding if hasActiveAbility?(:NEUTRALIZINGGAS, true)
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
   end
@@ -25,6 +27,7 @@ class PokeBattle_Battler
       next if !b || !b.abilityActive?
       BattleHandlers.triggerAbilityOnBattlerFainting(b.ability,b,self,@battle)
     end
+    pbAbilitiesOnNeutralizingGasEnding if hasActiveAbility?(:NEUTRALIZINGGAS, true)
   end
 
   # Used for Emergency Exit/Wimp Out. Returns whether self has switched out.
@@ -43,6 +46,17 @@ class PokeBattle_Battler
   def pbAbilitiesOnIntimidated
     return if !abilityActive?
     BattleHandlers.triggerAbilityOnIntimidated(self.ability, self, @battle)
+  end
+
+  def pbAbilitiesOnNeutralizingGasEnding
+    return if @battle.pbCheckGlobalAbility(:NEUTRALIZINGGAS)
+    @battle.pbDisplay(_INTL("The effects of the neutralizing gas wore off!"))
+    @battle.pbEndPrimordialWeather
+    @battle.pbPriority(true).each do |b|
+      next if b.fainted?
+      next if !b.unstoppableAbility? && !b.abilityActive?
+      BattleHandlers.triggerAbilityOnSwitchIn(b.ability, b, @battle)
+    end
   end
 
   # Called when a Pokémon (self) enters battle, at the end of each move used,
@@ -88,8 +102,10 @@ class PokeBattle_Battler
   #=============================================================================
   # Ability change
   #=============================================================================
-  def pbOnLosingAbility(oldAbil)
-    if @effects[PBEffects::Illusion] && oldAbil == :ILLUSION
+  def pbOnLosingAbility(oldAbil, suppressed = false)
+    if oldAbil == :NEUTRALIZINGGAS && (suppressed || !@effects[PBEffects::GastroAcid])
+      pbAbilitiesOnNeutralizingGasEnding
+    elsif oldAbil == :ILLUSION && @effects[PBEffects::Illusion]
       @effects[PBEffects::Illusion] = nil
       if !@effects[PBEffects::Transform]
         @battle.scene.pbChangePokemon(self, @pokemon)
@@ -99,6 +115,7 @@ class PokeBattle_Battler
     end
     @effects[PBEffects::GastroAcid] = false if unstoppableAbility?
     @effects[PBEffects::SlowStart]  = 0 if self.ability != :SLOWSTART
+    @effects[PBEffects::Truant]     = false if self.ability != :TRUANT
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
     # Revert form if Flower Gift/Forecast was lost
@@ -138,8 +155,8 @@ class PokeBattle_Battler
   # permanent is whether the item is lost even after battle. Is false for Knock
   # Off.
   def pbRemoveItem(permanent = true)
-    @effects[PBEffects::ChoiceBand] = nil if ability_id != :GORILLATACTICS
-    @effects[PBEffects::Unburden]   = true if self.item
+    @effects[PBEffects::ChoiceBand] = nil if !hasActiveAbility?(:GORILLATACTICS)
+    @effects[PBEffects::Unburden]   = true if self.item && hasActiveAbility?(:UNBURDEN)
     setInitialItem(nil) if permanent && self.item == self.initialItem
     self.item = nil
   end
@@ -174,7 +191,7 @@ class PokeBattle_Battler
       end
       self.item = b.item
       b.item = nil
-      b.effects[PBEffects::Unburden] = true
+      b.effects[PBEffects::Unburden] = true if b.hasActiveAbility?(:UNBURDEN)
       @battle.pbHideAbilitySplash(b)
       pbHeldItemTriggerCheck
       break

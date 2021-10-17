@@ -336,11 +336,12 @@ class PokeBattle_Battler
   # NOTE: Do not create any held item which affects whether a Pokémon's ability
   #       is active. The ability Klutz affects whether a Pokémon's item is
   #       active, and the code for the two combined would cause an infinite loop
-  #       (regardless of whether any Pokémon actualy has either the ability or
+  #       (regardless of whether any Pokémon actually has either the ability or
   #       the item - the code existing is enough to cause the loop).
   def abilityActive?(ignore_fainted = false)
     return false if fainted? && !ignore_fainted
     return false if @effects[PBEffects::GastroAcid]
+    return false if self.ability != :NEUTRALIZINGGAS && @battle.pbCheckGlobalAbility(:NEUTRALIZINGGAS)
     return true
   end
 
@@ -402,7 +403,9 @@ class PokeBattle_Battler
       :IMPOSTER,
       # Abilities intended to be inherent properties of a certain species
       :COMATOSE,
-      :RKSSYSTEM
+      :RKSSYSTEM,
+      # Abilities that can't be negated
+      :NEUTRALIZINGGAS
     ]
     return ability_blacklist.include?(abil.id)
   end

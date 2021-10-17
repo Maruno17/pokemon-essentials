@@ -1683,7 +1683,7 @@ BattleHandlers::UserAbilityEndOfMove.add(:MAGICIAN,
       end
       user.item = b.item
       b.item = nil
-      b.effects[PBEffects::Unburden] = true
+      b.effects[PBEffects::Unburden] = true if n.hasActiveAbility?(:UNBURDEN)
       if battle.wildBattle? && !user.initialItem && user.item == b.initialItem
         user.setInitialItem(user.item)
         b.setInitialItem(nil)
@@ -1762,7 +1762,7 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:PICKPOCKET,
     end
     target.item = user.item
     user.item = nil
-    user.effects[PBEffects::Unburden] = true
+    user.effects[PBEffects::Unburden] = true if user.hasActiveAbility?(:UNBURDEN)
     if battle.wildBattle? && !target.initialItem && target.item == user.initialItem
       target.setInitialItem(target.item)
       user.setInitialItem(nil)
@@ -2335,6 +2335,33 @@ BattleHandlers::AbilityOnSwitchIn.add(:MOLDBREAKER,
     battle.pbShowAbilitySplash(battler)
     battle.pbDisplay(_INTL("{1} breaks the mold!",battler.pbThis))
     battle.pbHideAbilitySplash(battler)
+  }
+)
+
+BattleHandlers::AbilityOnSwitchIn.add(:NEUTRALIZINGGAS,
+  proc { |ability,battler,battle|
+    battle.pbShowAbilitySplash(battler, true)
+    battle.pbHideAbilitySplash(battler)
+    battle.pbDisplay(_INTL("Neutralizing gas filled the area!"))
+    battle.eachBattler do |b|
+      # Slow Start - end all turn counts
+      b.effects[PBEffects::SlowStart] = 0
+      # Truant - let b move on its first turn after Neutralizing Gas disappears
+      b.effects[PBEffects::Truant] = false
+      # Gorilla Tactics - end choice lock
+      if !hasActiveItem?([:CHOICEBAND, :CHOICESPECS, :CHOICESCARF])
+        b.effects[PBEffects::ChoiceBand] = nil
+      end
+      # Illusion - end illusions
+      if b.effects[PBEffects::Illusion]
+        b.effects[PBEffects::Illusion] = nil
+        if !b.effects[PBEffects::Transform]
+          battle.scene.pbChangePokemon(b, b.pokemon)
+          battle.pbDisplay(_INTL("{1}'s {2} wore off!", b.pbThis, b.abilityName))
+          battle.pbSetSeen(b)
+        end
+      end
+    end
   }
 )
 

@@ -1096,7 +1096,7 @@ class PokeBattle_Move_NegateTargetAbility < PokeBattle_Move
     target.effects[PBEffects::GastroAcid] = true
     target.effects[PBEffects::Truant]     = false
     @battle.pbDisplay(_INTL("{1}'s Ability was suppressed!",target.pbThis))
-    target.pbOnLosingAbility(target.ability)
+    target.pbOnLosingAbility(target.ability, true)
   end
 end
 
@@ -1114,7 +1114,7 @@ class PokeBattle_Move_NegateTargetAbilityIfTargetActed < PokeBattle_Move
     target.effects[PBEffects::GastroAcid] = true
     target.effects[PBEffects::Truant]     = false
     @battle.pbDisplay(_INTL("{1}'s Ability was suppressed!",target.pbThis))
-    target.pbOnLosingAbility(target.ability)
+    target.pbOnLosingAbility(target.ability, true)
   end
 end
 

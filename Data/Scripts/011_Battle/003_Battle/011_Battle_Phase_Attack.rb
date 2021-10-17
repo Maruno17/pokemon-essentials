@@ -59,8 +59,12 @@ class PokeBattle_Battle
       pbPursuit(b.index)
       return if @decision>0
       # Switch Pokémon
+      eachBattler do |b|
+        b.droppedBelowHalfHP = false
+        b.statsDropped = false
+      end
       pbRecallAndReplace(b.index,idxNewPkmn)
-      pbOnBattlerEnteringBattle(b.index)
+      pbOnBattlerEnteringBattle(b.index, true)
     end
   end
 

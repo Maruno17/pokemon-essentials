@@ -1201,7 +1201,7 @@ BattleHandlers::TargetItemOnHit.add(:STICKYBARB,
     next if user.fainted? || user.item
     user.item = target.item
     target.item = nil
-    target.effects[PBEffects::Unburden] = true
+    target.effects[PBEffects::Unburden] = true if target.hasActiveAbility?(:UNBURDEN)
     if battle.wildBattle? && !user.opposes?
       if !user.initialItem && user.item == target.initialItem
         user.setInitialItem(user.item)
