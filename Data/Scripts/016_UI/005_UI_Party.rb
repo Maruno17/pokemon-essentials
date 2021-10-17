@@ -1149,7 +1149,7 @@ class PokemonPartyScreen
 
   def pbPokemonScreen
     can_access_storage = false
-    if GameData::Item.exists?(:POKEMONBOXLINK) && $PokemonBag.pbHasItem?(:POKEMONBOXLINK)
+    if $bag.has?(:POKEMONBOXLINK)
       if !$game_switches[Settings::DISABLE_BOX_LINK_SWITCH] &&
          !$game_map.metadata&.has_flag?("DisableBoxLink")
         can_access_storage = true
@@ -1298,7 +1298,7 @@ class PokemonPartyScreen
         itemcommands[itemcommands.length]             = _INTL("Cancel")
         command = @scene.pbShowCommands(_INTL("Do what with an item?"),itemcommands)
         if cmdUseItem>=0 && command==cmdUseItem   # Use
-          item = @scene.pbUseItem($PokemonBag,pkmn) {
+          item = @scene.pbUseItem($bag,pkmn) {
             @scene.pbSetHelpText((@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
           }
           if item
@@ -1306,7 +1306,7 @@ class PokemonPartyScreen
             pbRefreshSingle(pkmnid)
           end
         elsif cmdGiveItem>=0 && command==cmdGiveItem   # Give
-          item = @scene.pbChooseItem($PokemonBag) {
+          item = @scene.pbChooseItem($bag) {
             @scene.pbSetHelpText((@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
           }
           if item

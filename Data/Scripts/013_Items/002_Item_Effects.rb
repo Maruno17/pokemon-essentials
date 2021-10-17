@@ -109,19 +109,17 @@ Events.onStepTaken += proc {
   if $PokemonGlobal.repel > 0 && !$game_player.terrain_tag.ice   # Shouldn't count down if on ice
     $PokemonGlobal.repel -= 1
     if $PokemonGlobal.repel <= 0
-      if $PokemonBag.pbHasItem?(:REPEL) ||
-         $PokemonBag.pbHasItem?(:SUPERREPEL) ||
-         $PokemonBag.pbHasItem?(:MAXREPEL)
+      if $bag.has?(:REPEL) || $bag.has?(:SUPERREPEL) || $bag.has?(:MAXREPEL)
         if pbConfirmMessage(_INTL("The repellent's effect wore off! Would you like to use another one?"))
           ret = nil
           pbFadeOutIn {
             scene = PokemonBag_Scene.new
-            screen = PokemonBagScreen.new(scene,$PokemonBag)
+            screen = PokemonBagScreen.new(scene, $bag)
             ret = screen.pbChooseItemScreen(Proc.new { |item|
               [:REPEL, :SUPERREPEL, :MAXREPEL].include?(item)
             })
           }
-          pbUseItem($PokemonBag,ret) if ret
+          pbUseItem($bag, ret) if ret
         end
       else
         pbMessage(_INTL("The repellent's effect wore off!"))
@@ -314,13 +312,13 @@ ItemHandlers::UseInField.add(:COINCASE,proc { |item|
 })
 
 ItemHandlers::UseInField.add(:EXPALL,proc { |item|
-  $PokemonBag.pbChangeItem(:EXPALL,:EXPALLOFF)
+  $bag.replace_item(:EXPALL, :EXPALLOFF)
   pbMessage(_INTL("The Exp Share was turned off."))
   next true
 })
 
 ItemHandlers::UseInField.add(:EXPALLOFF,proc { |item|
-  $PokemonBag.pbChangeItem(:EXPALLOFF,:EXPALL)
+  $bag.replace_item(:EXPALLOFF, :EXPALL)
   pbMessage(_INTL("The Exp Share was turned on."))
   next true
 })
@@ -896,13 +894,13 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYXS, proc { |item, pkmn, scene|
   end
   gain_amount = 100
   maximum = ((pkmn.growth_rate.maximum_exp - pkmn.exp) / gain_amount.to_f).ceil
-  maximum = [maximum, $PokemonBag.pbQuantity(item)].min
+  maximum = [maximum, $bag.quantity(item)].min
   qty = scene.scene.pbChooseNumber(
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
   next false if qty == 0
   scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
-  $PokemonBag.pbDeleteItem(item, qty - 1)
+  $bag.remove(item, qty - 1)
   scene.pbHardRefresh
   next true
 })
@@ -914,13 +912,13 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYS, proc { |item, pkmn, scene|
   end
   gain_amount = 800
   maximum = ((pkmn.growth_rate.maximum_exp - pkmn.exp) / gain_amount.to_f).ceil
-  maximum = [maximum, $PokemonBag.pbQuantity(item)].min
+  maximum = [maximum, $bag.quantity(item)].min
   qty = scene.scene.pbChooseNumber(
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
   next false if qty == 0
   scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
-  $PokemonBag.pbDeleteItem(item, qty - 1)
+  $bag.remove(item, qty - 1)
   scene.pbHardRefresh
   next true
 })
@@ -932,13 +930,13 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYM, proc { |item, pkmn, scene|
   end
   gain_amount = 3_000
   maximum = ((pkmn.growth_rate.maximum_exp - pkmn.exp) / gain_amount.to_f).ceil
-  maximum = [maximum, $PokemonBag.pbQuantity(item)].min
+  maximum = [maximum, $bag.quantity(item)].min
   qty = scene.scene.pbChooseNumber(
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
   next false if qty == 0
   scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
-  $PokemonBag.pbDeleteItem(item, qty - 1)
+  $bag.remove(item, qty - 1)
   scene.pbHardRefresh
   next true
 })
@@ -950,13 +948,13 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYL, proc { |item, pkmn, scene|
   end
   gain_amount = 10_000
   maximum = ((pkmn.growth_rate.maximum_exp - pkmn.exp) / gain_amount.to_f).ceil
-  maximum = [maximum, $PokemonBag.pbQuantity(item)].min
+  maximum = [maximum, $bag.quantity(item)].min
   qty = scene.scene.pbChooseNumber(
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
   next false if qty == 0
   scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
-  $PokemonBag.pbDeleteItem(item, qty - 1)
+  $bag.remove(item, qty - 1)
   scene.pbHardRefresh
   next true
 })
@@ -968,13 +966,13 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYXL, proc { |item, pkmn, scene|
   end
   gain_amount = 30_000
   maximum = ((pkmn.growth_rate.maximum_exp - pkmn.exp) / gain_amount.to_f).ceil
-  maximum = [maximum, $PokemonBag.pbQuantity(item)].min
+  maximum = [maximum, $bag.quantity(item)].min
   qty = scene.scene.pbChooseNumber(
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
   next false if qty == 0
   scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
-  $PokemonBag.pbDeleteItem(item, qty - 1)
+  $bag.remove(item, qty - 1)
   scene.pbHardRefresh
   next true
 })
@@ -1275,7 +1273,7 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
-  $PokemonBag.pbChangeItem(:DNASPLICERS, :DNASPLICERSUSED)
+  $bag.replace_item(:DNASPLICERS, :DNASPLICERSUSED)
   next true
 })
 
@@ -1297,7 +1295,7 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERSUSED,proc { |item,pkmn,scene|
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
-  $PokemonBag.pbChangeItem(:DNASPLICERSUSED, :DNASPLICERS)
+  $bag.replace_item(:DNASPLICERSUSED, :DNASPLICERS)
   next true
 })
 
@@ -1332,7 +1330,7 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
-  $PokemonBag.pbChangeItem(:NSOLARIZER, :NSOLARIZERUSED)
+  $bag.replace_item(:NSOLARIZER, :NSOLARIZERUSED)
   next true
 })
 
@@ -1354,7 +1352,7 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZERUSED,proc { |item,pkmn,scene|
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
-  $PokemonBag.pbChangeItem(:NSOLARIZERUSED, :NSOLARIZER)
+  $bag.replace_item(:NSOLARIZERUSED, :NSOLARIZER)
   next true
 })
 
@@ -1389,7 +1387,7 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
-  $PokemonBag.pbChangeItem(:NLUNARIZER, :NLUNARIZERUSED)
+  $bag.replace_item(:NLUNARIZER, :NLUNARIZERUSED)
   next true
 })
 
@@ -1411,7 +1409,7 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZERUSED,proc { |item,pkmn,scene|
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
-  $PokemonBag.pbChangeItem(:NLUNARIZERUSED, :NLUNARIZER)
+  $bag.replace_item(:NLUNARIZERUSED, :NLUNARIZER)
   next true
 })
 
@@ -1450,7 +1448,7 @@ ItemHandlers::UseOnPokemon.add(:REINSOFUNITY, proc { |item, pkmn, scene|
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
-  $PokemonBag.pbChangeItem(:REINSOFUNITY, :REINSOFUNITYUSED)
+  $bag.replace_item(:REINSOFUNITY, :REINSOFUNITYUSED)
   next true
 })
 
@@ -1472,6 +1470,6 @@ ItemHandlers::UseOnPokemon.add(:REINSOFUNITYUSED, proc { |item, pkmn, scene|
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
-  $PokemonBag.pbChangeItem(:REINSOFUNITYUSED, :REINSOFUNITY)
+  $bag.replace_item(:REINSOFUNITYUSED, :REINSOFUNITY)
   next true
 })

@@ -15,7 +15,7 @@ class PokemonMartAdapter
   end
 
   def getInventory
-    return $PokemonBag
+    return $bag
   end
 
   def getName(item)
@@ -45,7 +45,7 @@ class PokemonMartAdapter
   end
 
   def getQuantity(item)
-    return $PokemonBag.pbQuantity(item)
+    return $bag.quantity(item)
   end
 
   def showQuantity?(item)
@@ -74,11 +74,11 @@ class PokemonMartAdapter
   end
 
   def addItem(item)
-    return $PokemonBag.pbStoreItem(item)
+    return $bag.add(item)
   end
 
   def removeItem(item)
-    return $PokemonBag.pbDeleteItem(item)
+    return $bag.remove(item)
   end
 end
 
@@ -241,7 +241,7 @@ class PokemonMart_Scene
   end
 
   def pbStartSellScene(bag, adapter)
-    if $PokemonBag
+    if $bag
       pbStartSellScene2(bag, adapter)
     else
       pbStartBuyOrSellScene(false, bag, adapter)
@@ -588,9 +588,9 @@ class PokemonMartScreen
         pbDisplayPaused(_INTL("You have no more room in the Bag."))
       else
         @adapter.setMoney(@adapter.getMoney-price)
-        @stock.delete_if { |item| GameData::Item.get(item).is_important? && $PokemonBag.pbHasItem?(item) }
+        @stock.delete_if { |item| GameData::Item.get(item).is_important? && $bag.has?(item) }
         pbDisplayPaused(_INTL("Here you are! Thank you!")) { pbSEPlay("Mart buy item") }
-        if quantity >= 10 && $PokemonBag && GameData::Item.exists?(:PREMIERBALL)
+        if quantity >= 10 && $bag && GameData::Item.exists?(:PREMIERBALL)
           if Settings::MORE_BONUS_PREMIER_BALLS && GameData::Item.get(item).is_poke_ball?
             premier_balls_added = 0
             (quantity / 10).times do
@@ -655,7 +655,7 @@ end
 #
 #===============================================================================
 def pbPokemonMart(stock,speech=nil,cantsell=false)
-  stock.delete_if { |item| GameData::Item.get(item).is_important? && $PokemonBag.pbHasItem?(item) }
+  stock.delete_if { |item| GameData::Item.get(item).is_important? && $bag.has?(item) }
   commands = []
   cmdBuy  = -1
   cmdSell = -1

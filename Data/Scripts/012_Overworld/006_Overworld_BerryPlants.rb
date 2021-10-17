@@ -354,7 +354,7 @@ def pbBerryPlant
     end
     # Water the growing plant
     GameData::BerryPlant::WATERING_CANS.each do |item|
-      next if !GameData::Item.exists?(item) || !$PokemonBag.pbHasItem?(item)
+      next if !$bag.has?(item)
       break if !pbConfirmMessage(_INTL("Want to sprinkle some water with the {1}?",
          GameData::Item.get(item).name))
       berry_plant.water
@@ -381,14 +381,14 @@ def pbBerryPlant
         mulch = nil
         pbFadeOutIn {
           scene = PokemonBag_Scene.new
-          screen = PokemonBagScreen.new(scene, $PokemonBag)
+          screen = PokemonBagScreen.new(scene, $bag)
           mulch = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_mulch? })
         }
         return if !mulch
         mulch_data = GameData::Item.get(mulch)
         if mulch_data.is_mulch?
           berry_plant.mulch_id = mulch
-          $PokemonBag.pbDeleteItem(mulch, 1)
+          $bag.remove(mulch)
           pbMessage(_INTL("The {1} was scattered on the soil.\1", mulch_data.name))
         else
           pbMessage(_INTL("That won't fertilize the soil!"))
@@ -408,12 +408,12 @@ def pbBerryPlant
   if !ask_to_plant || pbConfirmMessage(_INTL("Want to plant a Berry?"))
     pbFadeOutIn {
       scene = PokemonBag_Scene.new
-      screen = PokemonBagScreen.new(scene, $PokemonBag)
+      screen = PokemonBagScreen.new(scene, $bag)
       berry = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_berry? })
     }
     if berry
       berry_plant.plant(berry)
-      $PokemonBag.pbDeleteItem(berry, 1)
+      $bag.remove(berry)
       if Settings::NEW_BERRY_PLANTS
         pbMessage(_INTL("The {1} was planted in the soft, earthy soil.",
            GameData::Item.get(berry).name))
@@ -437,11 +437,11 @@ def pbPickBerry(berry, qty = 1)
     message = _INTL("There is 1 \\c[1]{1}\\c[0]!\nWant to pick it?", berry_name)
   end
   return false if !pbConfirmMessage(message)
-  if !$PokemonBag.pbCanStore?(berry, qty)
+  if !$bag.can_add?(berry, qty)
     pbMessage(_INTL("Too bad...\nThe Bag is full..."))
     return false
   end
-  $PokemonBag.pbStoreItem(berry, qty)
+  $bag.add(berry, qty)
   if qty > 1
     pbMessage(_INTL("You picked the {1} \\c[1]{2}\\c[0].\\wtnp[30]", qty, berry_name))
   else
@@ -449,7 +449,7 @@ def pbPickBerry(berry, qty = 1)
   end
   pocket = berry.pocket
   pbMessage(_INTL("{1} put the \\c[1]{2}\\c[0] in the <icon=bagPocket{3}>\\c[1]{4}\\c[0] Pocket.\1",
-     $Trainer.name, berry_name, pocket, PokemonBag.pocketNames[pocket]))
+     $Trainer.name, berry_name, pocket, PokemonBag.pocket_names[pocket]))
   if Settings::NEW_BERRY_PLANTS
     pbMessage(_INTL("The soil returned to its soft and earthy state."))
   else

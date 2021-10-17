@@ -926,7 +926,7 @@ module Compiler
               list.delete_at(i)
               newEvents = []
               if cost==0
-                push_branch(newEvents,"$PokemonBag.pbCanStore?(:#{itemname})",oldIndent)
+                push_branch(newEvents,"$bag.can_add?(:#{itemname})",oldIndent)
                 push_text(newEvents,_INTL("Here you go!"),oldIndent+1)
                 push_script(newEvents,"pbReceiveItem(:#{itemname})",oldIndent+1)
                 push_else(newEvents,oldIndent+1)
@@ -934,7 +934,7 @@ module Compiler
                 push_branch_end(newEvents,oldIndent+1)
               else
                 push_event(newEvents,111,[7,cost,0],oldIndent)
-                push_branch(newEvents,"$PokemonBag.pbCanStore?(:#{itemname})",oldIndent+1)
+                push_branch(newEvents,"$bag.can_add?(:#{itemname})",oldIndent+1)
                 push_event(newEvents,125,[1,0,cost],oldIndent+2)
                 push_text(newEvents,_INTL("\\GHere you go!"),oldIndent+2)
                 push_script(newEvents,"pbReceiveItem(:#{itemname})",oldIndent+2)

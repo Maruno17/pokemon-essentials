@@ -268,9 +268,9 @@ GameData::Evolution.register({
   },
   :after_evolution_proc => proc { |pkmn, new_species, parameter, evo_species|
     next false if $Trainer.party_full?
-    next false if !$PokemonBag.pbHasItem?(:POKEBALL)
+    next false if !$bag.has?(:POKEBALL)
     PokemonEvolutionScene.pbDuplicatePokemon(pkmn, new_species)
-    $PokemonBag.pbDeleteItem(:POKEBALL)
+    $bag.remove(:POKEBALL)
     next true
   }
 })

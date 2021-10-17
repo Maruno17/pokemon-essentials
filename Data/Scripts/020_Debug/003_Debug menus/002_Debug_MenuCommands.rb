@@ -481,7 +481,7 @@ DebugMenuCommands.register("additem", {
         qty = pbMessageChooseNumber(_INTL("Add how many {1}?",
            GameData::Item.get(item).name_plural), params)
         if qty > 0
-          $PokemonBag.pbStoreItem(item, qty)
+          $bag.add(item, qty)
           pbMessage(_INTL("Gave {1}x {2}.", qty, GameData::Item.get(item).name))
         end
       end
@@ -500,11 +500,11 @@ DebugMenuCommands.register("fillbag", {
     params.setCancelValue(0)
     qty = pbMessageChooseNumber(_INTL("Choose the number of items."), params)
     if qty > 0
-      $PokemonBag.clear
-      # NOTE: This doesn't simply use $PokemonBag.pbStoreItem for every item in
-      #       turn, because that's really slow when done in bulk.
+      $bag.clear
+      # NOTE: This doesn't simply use $bag.add for every item in turn, because
+      #       that's really slow when done in bulk.
       pocket_sizes = Settings::BAG_MAX_POCKET_SIZE
-      bag = $PokemonBag.pockets   # Called here so that it only rearranges itself once
+      bag = $bag.pockets   # Called here so that it only rearranges itself once
       GameData::Item.each do |i|
         next if !pocket_sizes[i.pocket] || pocket_sizes[i.pocket] == 0
         next if pocket_sizes[i.pocket] > 0 && bag[i.pocket].length >= pocket_sizes[i.pocket]
@@ -523,7 +523,7 @@ DebugMenuCommands.register("emptybag", {
   "name"        => _INTL("Empty Bag"),
   "description" => _INTL("Remove all items from the Bag."),
   "effect"      => proc {
-    $PokemonBag.clear
+    $bag.clear
     pbMessage(_INTL("The Bag was cleared."))
   }
 })

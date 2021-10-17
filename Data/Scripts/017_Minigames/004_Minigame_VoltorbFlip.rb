@@ -614,7 +614,7 @@ end
 
 
 def pbVoltorbFlip
-  if GameData::Item.exists?(:COINCASE) && !$PokemonBag.pbHasItem?(:COINCASE)
+  if !$bag.has?(:COINCASE)
     pbMessage(_INTL("You can't play unless you have a Coin Case."))
   elsif $Trainer.coins == Settings::MAX_COINS
     pbMessage(_INTL("Your Coin Case is full!"))

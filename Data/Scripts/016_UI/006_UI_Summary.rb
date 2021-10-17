@@ -1198,7 +1198,7 @@ class PokemonSummary_Scene
       item = nil
       pbFadeOutIn {
         scene = PokemonBag_Scene.new
-        screen = PokemonBagScreen.new(scene,$PokemonBag)
+        screen = PokemonBagScreen.new(scene, $bag)
         item = screen.pbChooseItemScreen(Proc.new { |itm| GameData::Item.get(itm).can_hold? })
       }
       if item

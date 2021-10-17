@@ -169,3 +169,28 @@ SaveData.register_conversion(:v20_increment_player_character_id) do
     player.character_ID += 1
   end
 end
+
+SaveData.register_conversion(:v20_rename_bag_variables) do
+  essentials_version 20
+  display_title 'Renaming Bag variables'
+  to_value :bag do |bag|
+    bag.instance_eval do
+      if @lastPocket
+        @last_viewed_pocket = @lastPocket
+        @lastPocket = nil
+      end
+      if @choices
+        @last_pocket_selections = @choices.clone
+        @choices = nil
+      end
+      if @registeredItems
+        @registered_items = @registeredItems || []
+        @registeredItems = nil
+      end
+      if @registeredIndex
+        @ready_menu_selection = @registeredIndex || [0, 0, 1]
+        @registeredIndex = nil
+      end
+    end
+  end
+end

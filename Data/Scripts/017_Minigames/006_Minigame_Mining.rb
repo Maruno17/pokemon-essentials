@@ -586,7 +586,7 @@ class MiningGameScene
   def pbGiveItems
     if @itemswon.length>0
       for i in @itemswon
-        if $PokemonBag.pbStoreItem(i)
+        if $bag.add(i)
           pbMessage(_INTL("One {1} was obtained.\\se[Mining item get]\\wtnp[30]",
              GameData::Item.get(i).name))
         else

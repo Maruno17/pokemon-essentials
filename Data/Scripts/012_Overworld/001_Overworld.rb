@@ -135,9 +135,7 @@ Events.onStepTakenFieldMovement += proc { |_sender,e|
     tile_id = map.data[thistile[1],thistile[2],i]
     next if tile_id == nil
     next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
-    if event == $game_player && GameData::Item.exists?(:SOOTSACK)
-      $Trainer.soot += 1 if $PokemonBag.pbHasItem?(:SOOTSACK)
-    end
+    $Trainer.soot += 1 if event == $game_player && $bag.has?(:SOOTSACK)
 #    map.data[thistile[1], thistile[2], i] = 0
 #    $scene.createSingleSpriteset(map.map_id)
     break
@@ -711,7 +709,7 @@ def pbItemBall(item,quantity=1)
   itemname = (quantity>1) ? item.name_plural : item.name
   pocket = item.pocket
   move = item.move
-  if $PokemonBag.pbStoreItem(item,quantity)   # If item can be picked up
+  if $bag.add(item, quantity)   # If item can be picked up
     meName = (item.is_key_item?) ? "Key item get" : "Item get"
     if item == :LEFTOVERS
       pbMessage(_INTL("\\me[{1}]You found some \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
@@ -727,7 +725,7 @@ def pbItemBall(item,quantity=1)
       pbMessage(_INTL("\\me[{1}]You found a \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
     end
     pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
-       itemname,pocket,PokemonBag.pocketNames()[pocket]))
+       itemname, pocket, PokemonBag.pocket_names[pocket]))
     return true
   end
   # Can't add the item
@@ -771,9 +769,9 @@ def pbReceiveItem(item,quantity=1)
   else
     pbMessage(_INTL("\\me[{1}]You obtained a \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
   end
-  if $PokemonBag.pbStoreItem(item,quantity)   # If item can be added
+  if $bag.add(item, quantity)   # If item can be added
     pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
-       itemname,pocket,PokemonBag.pocketNames()[pocket]))
+       itemname, pocket, PokemonBag.pocket_names[pocket]))
     return true
   end
   return false   # Can't add the item
