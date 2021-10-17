@@ -175,19 +175,19 @@ SaveData.register_conversion(:v20_rename_bag_variables) do
   display_title 'Renaming Bag variables'
   to_value :bag do |bag|
     bag.instance_eval do
-      if @lastPocket
-        @last_viewed_pocket = @lastPocket
+      if !@lastpocket.nil?
+        @last_viewed_pocket = @lastpocket
         @lastPocket = nil
       end
-      if @choices
+      if !@choices.nil?
         @last_pocket_selections = @choices.clone
         @choices = nil
       end
-      if @registeredItems
+      if !@registeredItems.nil?
         @registered_items = @registeredItems || []
         @registeredItems = nil
       end
-      if @registeredIndex
+      if !@registeredIndex.nil?
         @ready_menu_selection = @registeredIndex || [0, 0, 1]
         @registeredIndex = nil
       end
