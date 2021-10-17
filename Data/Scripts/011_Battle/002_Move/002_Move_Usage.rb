@@ -100,7 +100,7 @@ class PokeBattle_Move
   # Checks whether the move will be ineffective against the target.
   def pbFailsAgainstTarget?(user, target, show_message); return false; end
 
-  def pbMoveFailedLastInRound?(user)
+  def pbMoveFailedLastInRound?(user, showMessage = true)
     unmoved = false
     @battle.eachBattler do |b|
       next if b.index==user.index
@@ -110,7 +110,7 @@ class PokeBattle_Move
       break
     end
     if !unmoved
-      @battle.pbDisplay(_INTL("But it failed!"))
+      @battle.pbDisplay(_INTL("But it failed!")) if showMessage
       return true
     end
     return false

@@ -373,6 +373,8 @@ class PokeBattle_Battler
       :STANCECHANGE,
       :ZENMODE,
       # Abilities intended to be inherent properties of a certain species
+      :ASONECHILLINGNEIGH,
+      :ASONEGRIMNEIGH,
       :COMATOSE,
       :RKSSYSTEM
     ]
@@ -402,6 +404,8 @@ class PokeBattle_Battler
       :ILLUSION,
       :IMPOSTER,
       # Abilities intended to be inherent properties of a certain species
+      :ASONECHILLINGNEIGH,
+      :ASONEGRIMNEIGH,
       :COMATOSE,
       :RKSSYSTEM,
       # Abilities that can't be negated

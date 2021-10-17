@@ -11,8 +11,9 @@ class PokeBattle_Battler
     # Treat self as fainted
     @hp = 0
     @fainted = true
-    # Check for end of Neutralizing Gas
+    # Check for end of Neutralizing Gas/Unnerve
     pbAbilitiesOnNeutralizingGasEnding if hasActiveAbility?(:NEUTRALIZINGGAS, true)
+    pbItemsOnUnnerveEnding if hasActiveAbility?(:UNNERVE, true)
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
   end
@@ -28,6 +29,7 @@ class PokeBattle_Battler
       BattleHandlers.triggerAbilityOnBattlerFainting(b.ability,b,self,@battle)
     end
     pbAbilitiesOnNeutralizingGasEnding if hasActiveAbility?(:NEUTRALIZINGGAS, true)
+    pbItemsOnUnnerveEnding if hasActiveAbility?(:UNNERVE, true)
   end
 
   # Used for Emergency Exit/Wimp Out. Returns whether self has switched out.
@@ -105,6 +107,8 @@ class PokeBattle_Battler
   def pbOnLosingAbility(oldAbil, suppressed = false)
     if oldAbil == :NEUTRALIZINGGAS && (suppressed || !@effects[PBEffects::GastroAcid])
       pbAbilitiesOnNeutralizingGasEnding
+    elsif oldAbil == :UNNERVE && (suppressed || !@effects[PBEffects::GastroAcid])
+      pbItemsOnUnnerveEnding
     elsif oldAbil == :ILLUSION && @effects[PBEffects::Illusion]
       @effects[PBEffects::Illusion] = nil
       if !@effects[PBEffects::Transform]
@@ -315,5 +319,11 @@ class PokeBattle_Battler
     return false if !@statsDropped
     return false if !itemActive?
     return BattleHandlers.triggerItemOnStatDropped(self.item, self, move_user, @battle)
+  end
+
+  def pbItemsOnUnnerveEnding
+    @battle.pbPriority(true).each do |b|
+      b.pbHeldItemTriggerCheck if b.item && b.item.is_berry?
+    end
   end
 end

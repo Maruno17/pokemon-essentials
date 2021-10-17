@@ -4,17 +4,6 @@
 # To do
 #===============================================================================
 
-Some moves have changed properties/effects:
-- Parting Shot is able to make the user switch out if its effect is redirected
-  by Mirror Armor. Throat Spray is triggered and applies before the switch.
-  (The Throat Spray part is done by default)
-
-Some abilities have changed effects:
-- If another Pokémon faints before a Pokémon with Analytic makes its move,
-  Analytic calculates whether it would have moved before or after the fainted
-  Pokémon. In Gen 8, speed- and priority-modifying effects aren't considered,
-  but in earlier Gens they are.
-
 Other notes:
 - If a battle ends because of Rocky Helmet damage, the side that the Rocky
   Helmet holder is on should lose (Gen 7+) or win (Gen 6-).
@@ -71,6 +60,13 @@ happiness above 179, which in turn is because affection effects have been added
 apply above 179 happiness. Pokémon Camp will not be added. Affection effects and
 the 179 soft cap/160 evolution threshold may be added (the latter two should be
 treated as related rather than separate settings).
+
+Some abilities have changed effects:
+- If another Pokémon faints before a Pokémon with Analytic makes its move,
+  Analytic calculates whether it would have moved before or after the fainted
+  Pokémon. In Gen 8, speed- and priority-modifying effects aren't considered,
+  but in earlier Gens they are. Ignoring as this would be far too complicated to
+  care about.
 
 #===============================================================================
 # Implemented
@@ -171,5 +167,10 @@ reverts its form when deposited in the Day Care (all Gens).
 The game records, for each species, how many have been caught or defeated
 (counts both wild and trainer battles), and the shiny chance increases for that
 species because of this. This value is also shown in the Pokédex entry screen.
+
+Some moves have changed properties/effects:
+- Parting Shot is able to make the user switch out if its effect is redirected
+  by Mirror Armor. Throat Spray is triggered and applies before the switch.
+  (The Throat Spray part is done by default). All this already works this way.
 
 =end
