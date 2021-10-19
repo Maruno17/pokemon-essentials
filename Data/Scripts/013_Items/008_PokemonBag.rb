@@ -106,7 +106,7 @@ class PokemonBag
   def remove(item, qty = 1)
     item_data = GameData::Item.try_get(item)
     return false if !item_data
-    pocket = item.pocket
+    pocket = item_data.pocket
     return ItemStorageHelper.remove(@pockets[pocket], item.id, qty)
   end
 
