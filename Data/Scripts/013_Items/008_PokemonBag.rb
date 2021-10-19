@@ -107,7 +107,7 @@ class PokemonBag
     item_data = GameData::Item.try_get(item)
     return false if !item_data
     pocket = item_data.pocket
-    return ItemStorageHelper.remove(@pockets[pocket], item.id, qty)
+    return ItemStorageHelper.remove(@pockets[pocket], item_data.id, qty)
   end
 
   # Deletes qty number of item. Doesn't delete anything if there are less than
