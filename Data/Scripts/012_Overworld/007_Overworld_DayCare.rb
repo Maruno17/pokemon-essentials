@@ -316,7 +316,7 @@ def pbDayCareGenerateEgg
   # Masuda method and Shiny Charm
   shinyretries = 0
   shinyretries += 5 if father.owner.language != mother.owner.language
-  shinyretries += 2 if GameData::Item.exists?(:SHINYCHARM) && $PokemonBag.pbHasItem?(:SHINYCHARM)
+  shinyretries += 2 if $bag.has?(:SHINYCHARM)
   if shinyretries>0
     shinyretries.times do
       break if egg.shiny?
@@ -380,10 +380,8 @@ Events.onStepTaken += proc { |_sender,_e|
     $PokemonGlobal.daycareEggSteps += 1
     if $PokemonGlobal.daycareEggSteps==256
       $PokemonGlobal.daycareEggSteps = 0
-      compatval = [0,20,50,70][pbDayCareGetCompat]
-      if GameData::Item.exists?(:OVALCHARM) && $PokemonBag.pbHasItem?(:OVALCHARM)
-        compatval = [0,40,80,88][pbDayCareGetCompat]
-      end
+      compatval = [0, 20, 50, 70][pbDayCareGetCompat]
+      compatval = [0, 40, 80, 88][pbDayCareGetCompat] if $bag.has?(:OVALCHARM)
       $PokemonGlobal.daycareEgg = 1 if rand(100)<compatval   # Egg is generated
     end
   end

@@ -1,64 +1,5 @@
 class PokeBattle_Battler
   #=============================================================================
-  # Called when a Pokémon (self) is sent into battle or its ability changes.
-  #=============================================================================
-  def pbEffectsOnSwitchIn(switchIn=false)
-    # Healing Wish/Lunar Dance/entry hazards
-    @battle.pbOnActiveOne(self) if switchIn
-    # Primal Revert upon entering battle
-    @battle.pbPrimalReversion(@index) if !fainted?
-    # Ending primordial weather, checking Trace
-    pbContinualAbilityChecks(true)
-    # Abilities that trigger upon switching in
-    if (!fainted? && unstoppableAbility?) || abilityActive?
-      BattleHandlers.triggerAbilityOnSwitchIn(self.ability,self,@battle)
-    end
-    # Check for end of primordial weather
-    @battle.pbEndPrimordialWeather
-    # Items that trigger upon switching in (Air Balloon message)
-    if switchIn && itemActive?
-      BattleHandlers.triggerItemOnSwitchIn(self.item,self,@battle)
-    end
-    # Berry check, status-curing ability check
-    pbHeldItemTriggerCheck if switchIn
-    pbAbilityStatusCureCheck
-  end
-
-  #=============================================================================
-  # Called when a Pokémon enters battle, and when Ally Switch is used.
-  #=============================================================================
-  def pbEffectsOnEnteringPosition
-    position = @battle.positions[@index]
-    # Healing Wish
-    if position.effects[PBEffects::HealingWish]
-      if canHeal? || self.status != :NONE
-        @battle.pbCommonAnimation("HealingWish", self)
-        @battle.pbDisplay(_INTL("The healing wish came true for {1}!", pbThis(true)))
-        pbRecoverHP(@totalhp)
-        pbCureStatus(false)
-        position.effects[PBEffects::HealingWish] = false
-      elsif Settings::MECHANICS_GENERATION < 8
-        position.effects[PBEffects::HealingWish] = false
-      end
-    end
-    # Lunar Dance
-    if position.effects[PBEffects::LunarDance]
-      full_pp = true
-      eachMove { |m| full_pp = false if m.pp < m.total_pp }
-      if canHeal? || self.status != :NONE || !full_pp
-        @battle.pbCommonAnimation("LunarDance", self)
-        @battle.pbDisplay(_INTL("{1} became cloaked in mystical moonlight!", pbThis))
-        pbRecoverHP(@totalhp)
-        pbCureStatus(false)
-        eachMove { |m| m.pp = m.total_pp }
-        position.effects[PBEffects::LunarDance] = false
-      elsif Settings::MECHANICS_GENERATION < 8
-        position.effects[PBEffects::LunarDance] = false
-      end
-    end
-  end
-
-  #=============================================================================
   # Ability effects
   #=============================================================================
   def pbAbilitiesOnSwitchOut
@@ -70,6 +11,9 @@ class PokeBattle_Battler
     # Treat self as fainted
     @hp = 0
     @fainted = true
+    # Check for end of Neutralizing Gas/Unnerve
+    pbAbilitiesOnNeutralizingGasEnding if hasActiveAbility?(:NEUTRALIZINGGAS, true)
+    pbItemsOnUnnerveEnding if hasActiveAbility?(:UNNERVE, true)
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
   end
@@ -84,15 +28,15 @@ class PokeBattle_Battler
       next if !b || !b.abilityActive?
       BattleHandlers.triggerAbilityOnBattlerFainting(b.ability,b,self,@battle)
     end
+    pbAbilitiesOnNeutralizingGasEnding if hasActiveAbility?(:NEUTRALIZINGGAS, true)
+    pbItemsOnUnnerveEnding if hasActiveAbility?(:UNNERVE, true)
   end
 
-  # Used for Emergency Exit/Wimp Out.
-  def pbAbilitiesOnDamageTaken(oldHP,newHP=-1)
+  # Used for Emergency Exit/Wimp Out. Returns whether self has switched out.
+  def pbAbilitiesOnDamageTaken(move_user = nil)
+    return false if !@droppedBelowHalfHP
     return false if !abilityActive?
-    newHP = @hp if newHP<0
-    return false if oldHP<@totalhp/2 || newHP>=@totalhp/2   # Didn't drop below half
-    ret = BattleHandlers.triggerAbilityOnHPDroppedBelowHalf(self.ability,self,@battle)
-    return ret   # Whether self has switched out
+    return BattleHandlers.triggerAbilityOnHPDroppedBelowHalf(self.ability, self, move_user, @battle)
   end
 
   def pbAbilityOnTerrainChange(ability_changed = false)
@@ -104,6 +48,17 @@ class PokeBattle_Battler
   def pbAbilitiesOnIntimidated
     return if !abilityActive?
     BattleHandlers.triggerAbilityOnIntimidated(self.ability, self, @battle)
+  end
+
+  def pbAbilitiesOnNeutralizingGasEnding
+    return if @battle.pbCheckGlobalAbility(:NEUTRALIZINGGAS)
+    @battle.pbDisplay(_INTL("The effects of the neutralizing gas wore off!"))
+    @battle.pbEndPrimordialWeather
+    @battle.pbPriority(true).each do |b|
+      next if b.fainted?
+      next if !b.unstoppableAbility? && !b.abilityActive?
+      BattleHandlers.triggerAbilityOnSwitchIn(b.ability, b, @battle)
+    end
   end
 
   # Called when a Pokémon (self) enters battle, at the end of each move used,
@@ -149,8 +104,12 @@ class PokeBattle_Battler
   #=============================================================================
   # Ability change
   #=============================================================================
-  def pbOnAbilityChanged(oldAbil)
-    if @effects[PBEffects::Illusion] && oldAbil == :ILLUSION
+  def pbOnLosingAbility(oldAbil, suppressed = false)
+    if oldAbil == :NEUTRALIZINGGAS && (suppressed || !@effects[PBEffects::GastroAcid])
+      pbAbilitiesOnNeutralizingGasEnding
+    elsif oldAbil == :UNNERVE && (suppressed || !@effects[PBEffects::GastroAcid])
+      pbItemsOnUnnerveEnding
+    elsif oldAbil == :ILLUSION && @effects[PBEffects::Illusion]
       @effects[PBEffects::Illusion] = nil
       if !@effects[PBEffects::Transform]
         @battle.scene.pbChangePokemon(self, @pokemon)
@@ -160,10 +119,24 @@ class PokeBattle_Battler
     end
     @effects[PBEffects::GastroAcid] = false if unstoppableAbility?
     @effects[PBEffects::SlowStart]  = 0 if self.ability != :SLOWSTART
+    @effects[PBEffects::Truant]     = false if self.ability != :TRUANT
+    # Check for end of primordial weather
+    @battle.pbEndPrimordialWeather
     # Revert form if Flower Gift/Forecast was lost
     pbCheckFormOnWeatherChange(true)
     # Abilities that trigger when the terrain changes
     pbAbilityOnTerrainChange(true)
+  end
+
+  def pbTriggerAbilityOnGainingIt
+    # Ending primordial weather, checking Trace
+    pbContinualAbilityChecks(true)   # Don't trigger Traced ability as it's triggered below
+    # Abilities that trigger upon switching in
+    if (!fainted? && unstoppableAbility?) || abilityActive?
+      BattleHandlers.triggerAbilityOnSwitchIn(self.ability, self, @battle)
+    end
+    # Status-curing ability check
+    pbAbilityStatusCureCheck
     # Check for end of primordial weather
     @battle.pbEndPrimordialWeather
   end
@@ -186,8 +159,8 @@ class PokeBattle_Battler
   # permanent is whether the item is lost even after battle. Is false for Knock
   # Off.
   def pbRemoveItem(permanent = true)
-    @effects[PBEffects::ChoiceBand] = nil if ability_id != :GORILLATACTICS
-    @effects[PBEffects::Unburden]   = true if self.item
+    @effects[PBEffects::ChoiceBand] = nil if !hasActiveAbility?(:GORILLATACTICS)
+    @effects[PBEffects::Unburden]   = true if self.item && hasActiveAbility?(:UNBURDEN)
     setInitialItem(nil) if permanent && self.item == self.initialItem
     self.item = nil
   end
@@ -222,7 +195,7 @@ class PokeBattle_Battler
       end
       self.item = b.item
       b.item = nil
-      b.effects[PBEffects::Unburden] = true
+      b.effects[PBEffects::Unburden] = true if b.hasActiveAbility?(:UNBURDEN)
       @battle.pbHideAbilitySplash(b)
       pbHeldItemTriggerCheck
       break
@@ -338,6 +311,19 @@ class PokeBattle_Battler
     return if !itemActive?
     if BattleHandlers.triggerItemOnIntimidated(self.item, self, @battle)
       pbHeldItemTriggered(self.item)
+    end
+  end
+
+  # Used for Eject Pack. Returns whether self has switched out.
+  def pbItemOnStatDropped(move_user = nil)
+    return false if !@statsDropped
+    return false if !itemActive?
+    return BattleHandlers.triggerItemOnStatDropped(self.item, self, move_user, @battle)
+  end
+
+  def pbItemsOnUnnerveEnding
+    @battle.pbPriority(true).each do |b|
+      b.pbHeldItemTriggerCheck if b.item && b.item.is_berry?
     end
   end
 end

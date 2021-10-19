@@ -219,7 +219,7 @@ class MapScreenScene
   end
 
   def removeOldConnections(ret, mapid)
-    ret.delete_if { |conn| conn[0] == mapid || conn[3] == mapid} 
+    ret.delete_if { |conn| conn[0] == mapid || conn[3] == mapid }
   end
 
   # Returns the maps within _keys_ that are directly connected to this map, _map_.
@@ -385,7 +385,7 @@ class MapScreenScene
   end
 
   def onDoubleClick(map_id)
-    pbEditMetadata(map_id) if map_id > 0
+    pbEditMapMetadata(map_id) if map_id > 0
   end
 
   def onClick(mapid,x,y)

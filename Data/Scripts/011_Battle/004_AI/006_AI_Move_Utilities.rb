@@ -180,7 +180,7 @@ class PokeBattle_AI
       baseDmg = move.pbFixedDamage(user,target)
     when "FixedDamageUserLevelRandom"   # Psywave
       baseDmg = user.level
-    when "OHKO", "OHKOIce", "OHKOHitsTargetUnderground"
+    when "OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"
       baseDmg = 200
     when "CounterPhysicalDamage", "CounterSpecialDamage", "CounterDamagePlusHalf"
       baseDmg = 60
@@ -692,7 +692,7 @@ class PokeBattle_AI
         modifiers[:base_accuracy] = 0 if Settings::MORE_TYPE_EFFECTS && move.statusMove? &&
                                          user.pbHasType?(:POISON)
       end
-      if ["OHKO", "OHKOIce", "OHKOHitsTargetUnderground"].include?(move.function)
+      if ["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(move.function)
         modifiers[:base_accuracy] = move.accuracy + user.level - target.level
         modifiers[:accuracy_multiplier] = 0 if target.level > user.level
         if skill>=PBTrainerAI.bestSkill

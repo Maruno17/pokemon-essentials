@@ -134,14 +134,14 @@ def pbPCItemStorage
       else
         pbFadeOutIn {
           scene = WithdrawItemScene.new
-          screen = PokemonBagScreen.new(scene,$PokemonBag)
+          screen = PokemonBagScreen.new(scene, $bag)
           screen.pbWithdrawItemScreen
         }
       end
     when 1   # Deposit Item
       pbFadeOutIn {
         scene = PokemonBag_Scene.new
-        screen = PokemonBagScreen.new(scene,$PokemonBag)
+        screen = PokemonBagScreen.new(scene, $bag)
         screen.pbDepositItemScreen
       }
     when 2   # Toss Item
@@ -153,7 +153,7 @@ def pbPCItemStorage
       else
         pbFadeOutIn {
           scene = TossItemScene.new
-          screen = PokemonBagScreen.new(scene,$PokemonBag)
+          screen = PokemonBagScreen.new(scene, $bag)
           screen.pbTossItemScreen
         }
       end
@@ -191,7 +191,7 @@ def pbPCMailbox
           }
         when 1   # Move to Bag
           if pbConfirmMessage(_INTL("The message will be lost. Is that OK?"))
-            if $PokemonBag.pbStoreItem($PokemonGlobal.mailbox[mailIndex].item)
+            if $bag.add($PokemonGlobal.mailbox[mailIndex].item)
               pbMessage(_INTL("The Mail was returned to the Bag with its message erased."))
               $PokemonGlobal.mailbox.delete_at(mailIndex)
             else

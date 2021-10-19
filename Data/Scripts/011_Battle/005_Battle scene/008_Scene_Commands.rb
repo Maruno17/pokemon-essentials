@@ -193,13 +193,13 @@ class PokeBattle_Scene
     # Fade out and hide all sprites
     visibleSprites = pbFadeOutAndHide(@sprites)
     # Set Bag starting positions
-    oldLastPocket = $PokemonBag.lastpocket
-    oldChoices    = $PokemonBag.getAllChoices
-    $PokemonBag.lastpocket = @bagLastPocket if @bagLastPocket!=nil
-    $PokemonBag.setAllChoices(@bagChoices) if @bagChoices!=nil
+    oldLastPocket = $bag.last_viewed_pocket
+    oldChoices    = $bag.last_pocket_selections.clone
+    $bag.last_viewed_pocket     = @bagLastPocket if @bagLastPocket != nil
+    $bag.last_pocket_selections = @bagChoices if @bagChoices != nil
     # Start Bag screen
     itemScene = PokemonBag_Scene.new
-    itemScene.pbStartScene($PokemonBag,true,Proc.new { |item|
+    itemScene.pbStartScene($bag, true, Proc.new { |item|
       useType = GameData::Item.get(item).battle_use
       next useType && useType>0
       },false)
@@ -304,10 +304,10 @@ class PokeBattle_Scene
         break if yield item.id, useType, idxBattler, -1, itemScene
       end
     end
-    @bagLastPocket = $PokemonBag.lastpocket
-    @bagChoices    = $PokemonBag.getAllChoices
-    $PokemonBag.lastpocket = oldLastPocket
-    $PokemonBag.setAllChoices(oldChoices)
+    @bagLastPocket = $bag.last_viewed_pocket
+    @bagChoices    = $bag.last_pocket_selections.clone
+    $bag.last_viewed_pocket     = oldLastPocket
+    $bag.last_pocket_selections = oldChoices
     # Close Bag screen
     itemScene.pbEndScene
     # Fade back into battle screen (if not already showing it)

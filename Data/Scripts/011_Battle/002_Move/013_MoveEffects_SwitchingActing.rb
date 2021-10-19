@@ -45,8 +45,8 @@ class PokeBattle_Move_SwitchOutUserStatusMove < PokeBattle_Move
     @battle.pbRecallAndReplace(user.index,newPkmn)
     @battle.pbClearChoice(user.index)   # Replacement Pokémon does nothing this round
     @battle.moldBreaker = false
+    @battle.pbOnBattlerEnteringBattle(user.index)
     switchedBattlers.push(user.index)
-    user.pbEffectsOnSwitchIn(true)
   end
 
   def pbEffectGeneral(user)
@@ -79,8 +79,8 @@ class PokeBattle_Move_SwitchOutUserDamagingMove < PokeBattle_Move
     @battle.pbRecallAndReplace(user.index,newPkmn)
     @battle.pbClearChoice(user.index)   # Replacement Pokémon does nothing this round
     @battle.moldBreaker = false
+    @battle.pbOnBattlerEnteringBattle(user.index)
     switchedBattlers.push(user.index)
-    user.pbEffectsOnSwitchIn(true)
   end
 end
 
@@ -111,8 +111,8 @@ class PokeBattle_Move_LowerTargetAtkSpAtk1SwitchOutUser < PokeBattle_TargetMulti
     @battle.pbRecallAndReplace(switcher.index,newPkmn)
     @battle.pbClearChoice(switcher.index)   # Replacement Pokémon does nothing this round
     @battle.moldBreaker = false if switcher.index==user.index
+    @battle.pbOnBattlerEnteringBattle(switcher.index)
     switchedBattlers.push(switcher.index)
-    switcher.pbEffectsOnSwitchIn(true)
   end
 end
 
@@ -139,8 +139,8 @@ class PokeBattle_Move_SwitchOutUserPassOnEffects < PokeBattle_Move
     @battle.pbRecallAndReplace(user.index, newPkmn, false, true)
     @battle.pbClearChoice(user.index)   # Replacement Pokémon does nothing this round
     @battle.moldBreaker = false
+    @battle.pbOnBattlerEnteringBattle(user.index)
     switchedBattlers.push(user.index)
-    user.pbEffectsOnSwitchIn(true)
   end
 end
 
@@ -198,25 +198,21 @@ class PokeBattle_Move_SwitchOutTargetStatusMove < PokeBattle_Move
     @battle.decision = 3 if @battle.wildBattle?   # Escaped from battle
   end
 
-  def pbSwitchOutTargetsEffect(user,targets,numHits,switchedBattlers)
-    return if @battle.wildBattle?
-    return if user.fainted? || numHits==0
-    roarSwitched = []
+  def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers)
+    return if @battle.wildBattle? || !switched_battlers.empty?
+    return if user.fainted? || numHits == 0
     targets.each do |b|
-      next if b.fainted? || b.damageState.unaffected || switchedBattlers.include?(b.index)
+      next if b.fainted? || b.damageState.unaffected
+      next if b.effects[PBEffects::Ingrain]
+      next if b.hasActiveAbility?(:SUCTIONCUPS) && !@battle.moldBreaker
       newPkmn = @battle.pbGetReplacementPokemonIndex(b.index,true)   # Random
       next if newPkmn<0
       @battle.pbRecallAndReplace(b.index, newPkmn, true)
       @battle.pbDisplay(_INTL("{1} was dragged out!",b.pbThis))
       @battle.pbClearChoice(b.index)   # Replacement Pokémon does nothing this round
-      switchedBattlers.push(b.index)
-      roarSwitched.push(b.index)
-    end
-    if roarSwitched.length>0
-      @battle.moldBreaker = false if roarSwitched.include?(user.index)
-      @battle.pbPriority(true).each do |b|
-        b.pbEffectsOnSwitchIn(true) if roarSwitched.include?(b.index)
-      end
+      @battle.pbOnBattlerEnteringBattle(b.index)
+      switched_battlers.push(b.index)
+      break
     end
   end
 end
@@ -235,13 +231,11 @@ class PokeBattle_Move_SwitchOutTargetDamagingMove < PokeBattle_Move
     end
   end
 
-  def pbSwitchOutTargetsEffect(user,targets,numHits,switchedBattlers)
-    return if @battle.wildBattle?
-    return if user.fainted? || numHits==0
-    roarSwitched = []
+  def pbSwitchOutTargetEffect(user, targets, numHits, switched_battlers)
+    return if @battle.wildBattle? || !switched_battlers.empty?
+    return if user.fainted? || numHits == 0
     targets.each do |b|
       next if b.fainted? || b.damageState.unaffected || b.damageState.substitute
-      next if switchedBattlers.include?(b.index)
       next if b.effects[PBEffects::Ingrain]
       next if b.hasActiveAbility?(:SUCTIONCUPS) && !@battle.moldBreaker
       newPkmn = @battle.pbGetReplacementPokemonIndex(b.index,true)   # Random
@@ -249,14 +243,9 @@ class PokeBattle_Move_SwitchOutTargetDamagingMove < PokeBattle_Move
       @battle.pbRecallAndReplace(b.index, newPkmn, true)
       @battle.pbDisplay(_INTL("{1} was dragged out!",b.pbThis))
       @battle.pbClearChoice(b.index)   # Replacement Pokémon does nothing this round
-      switchedBattlers.push(b.index)
-      roarSwitched.push(b.index)
-    end
-    if roarSwitched.length>0
-      @battle.moldBreaker = false if roarSwitched.include?(user.index)
-      @battle.pbPriority(true).each do |b|
-        b.pbEffectsOnSwitchIn(true) if roarSwitched.include?(b.index)
-      end
+      @battle.pbOnBattlerEnteringBattle(b.index)
+      switched_battlers.push(b.index)
+      break
     end
   end
 end

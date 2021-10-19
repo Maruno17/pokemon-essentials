@@ -189,7 +189,7 @@ class PokeBattle_Move_CurseTargetOrLowerUserSpd1RaiseUserAtkDef1 < PokeBattle_Mo
     # Ghost effect
     @battle.pbDisplay(_INTL("{1} cut its own HP and laid a curse on {2}!",user.pbThis,target.pbThis(true)))
     target.effects[PBEffects::Curse] = true
-    user.pbReduceHP(user.totalhp/2,false)
+    user.pbReduceHP(user.totalhp/2, false, false)
     user.pbItemHPHealCheck
   end
 

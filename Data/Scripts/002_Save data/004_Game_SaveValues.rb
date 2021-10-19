@@ -103,8 +103,8 @@ end
 
 SaveData.register(:bag) do
   ensure_class :PokemonBag
-  save_value { $PokemonBag }
-  load_value { |value| $PokemonBag = value }
+  save_value { $bag }
+  load_value { |value| $bag = $PokemonBag = value }
   new_game_value { PokemonBag.new }
   from_old_format { |old_format| old_format[13] }
 end

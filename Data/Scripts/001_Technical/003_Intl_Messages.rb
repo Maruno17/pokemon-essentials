@@ -110,11 +110,6 @@ def pbSetTextMessages
     items.concat(choices)
     MessageTypes.setMapMessagesAsHash(0,items)
     mapinfos = pbLoadMapInfos
-    mapnames=[]
-    for id in mapinfos.keys
-      mapnames[id]=mapinfos[id].name
-    end
-    MessageTypes.setMessages(MessageTypes::MapNames,mapnames)
     for id in mapinfos.keys
       if Time.now.to_i - t >= 5
         t = Time.now.to_i

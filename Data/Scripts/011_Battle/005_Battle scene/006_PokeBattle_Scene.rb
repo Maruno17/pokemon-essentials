@@ -205,6 +205,7 @@ class PokeBattle_Scene
     dw = @sprites["messageWindow"]
     dw.text = msg
     cw = Window_CommandPokemon.new(commands)
+    cw.height   = Graphics.height - dw.height if cw.height > Graphics.height - dw.height
     cw.x        = Graphics.width-cw.width
     cw.y        = Graphics.height-cw.height-dw.height
     cw.z        = dw.z+1

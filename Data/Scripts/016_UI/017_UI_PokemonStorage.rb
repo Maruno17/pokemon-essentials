@@ -1873,7 +1873,7 @@ class PokemonStorageScreen
     if pokemon.item
       itemname = pokemon.item.name
       if pbConfirm(_INTL("Take this {1}?",itemname))
-        if !$PokemonBag.pbStoreItem(pokemon.item)
+        if !$bag.add(pokemon.item)
           pbDisplay(_INTL("Can't store the {1}.",itemname))
         else
           pbDisplay(_INTL("Took the {1}.",itemname))
@@ -1882,11 +1882,11 @@ class PokemonStorageScreen
         end
       end
     else
-      item = scene.pbChooseItem($PokemonBag)
+      item = scene.pbChooseItem($bag)
       if item
         itemname = GameData::Item.get(item).name
         pokemon.item = item
-        $PokemonBag.pbDeleteItem(item)
+        $bag.remove(item)
         pbDisplay(_INTL("{1} is now being held.",itemname))
         @scene.pbHardRefresh
       end

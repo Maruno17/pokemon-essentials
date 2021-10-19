@@ -222,6 +222,35 @@ BattleHandlers::HPHealItem.add(:WIKIBERRY,
 )
 
 #===============================================================================
+# ItemOnStatDropped handlers
+#===============================================================================
+BattleHandlers::ItemOnStatDropped.add(:EJECTPACK,
+  proc { |item, battler, move_user, battle|
+    next false if battler.effects[PBEffects::SkyDrop] >= 0 ||
+                  battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSkyTargetCannotAct")   # Sky Drop
+    next false if battle.pbAllFainted?(battler.idxOpposingSide)
+    next false if battle.wildBattle? && battler.opposes?   # Wild Pokémon can't eject
+    next false if !battle.pbCanSwitch?(battler.index)   # Battler can't switch out
+    next false if !battle.pbCanChooseNonActive?(battler.index)   # No Pokémon can switch in
+    battle.pbCommonAnimation("UseItem", battler)
+    battle.pbDisplay(_INTL("{1} is switched out by the {2}!", battler.pbThis, battler.itemName))
+    battler.pbConsumeItem(true, false)
+    if battle.endOfRound   # Just switch out
+      battle.scene.pbRecall(battler.index) if !battler.fainted?
+      battler.pbAbilitiesOnSwitchOut   # Inc. primordial weather check
+      next true
+    end
+    newPkmn = battle.pbGetReplacementPokemonIndex(battler.index)   # Owner chooses
+    next false if newPkmn < 0   # Shouldn't ever do this
+    battle.pbRecallAndReplace(battler.index, newPkmn)
+    battle.pbClearChoice(battler.index)   # Replacement Pokémon does nothing this round
+    battle.moldBreaker = false if move_user && battler.index == move_user.index
+    battle.pbOnBattlerEnteringBattle(battler.index)
+    next true
+  }
+)
+
+#===============================================================================
 # StatusCureItem handlers
 #===============================================================================
 
@@ -419,6 +448,22 @@ BattleHandlers::PriorityBracketUseItem.add(:QUICKCLAW,
   proc { |item,battler,battle|
     battle.pbCommonAnimation("UseItem",battler)
     battle.pbDisplay(_INTL("{1}'s {2} let it move first!",battler.pbThis,battler.itemName))
+  }
+)
+
+#===============================================================================
+# UserItemOnMissing handlers
+#===============================================================================
+
+BattleHandlers::PriorityBracketUseItem.add(:BLUNDERPOLICY,
+  proc { |item, user, target, move, hit_num, battle|
+    next if hit_num > 0 || target.damageState.invulnerable
+    next if ["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(move.function)
+    next if !user.pbCanRaiseStatStage?(:SPEED, user)
+    battle.pbCommonAnimation("UseItem", user)
+    user.pbRaiseStatStageByCause(:SPEED, 2, user, user.itemName)
+    battle.pbDisplay(_INTL("The {1} was used up...", user.itemName))
+    user.pbHeldItemTriggered(item)
   }
 )
 
@@ -1156,7 +1201,7 @@ BattleHandlers::TargetItemOnHit.add(:STICKYBARB,
     next if user.fainted? || user.item
     user.item = target.item
     target.item = nil
-    target.effects[PBEffects::Unburden] = true
+    target.effects[PBEffects::Unburden] = true if target.hasActiveAbility?(:UNBURDEN)
     if battle.wildBattle? && !user.opposes?
       if !user.initialItem && user.item == target.initialItem
         user.setInitialItem(user.item)
@@ -1265,7 +1310,8 @@ BattleHandlers::TargetItemOnHitPositiveBerry.add(:MARANGABERRY,
 #===============================================================================
 
 BattleHandlers::TargetItemAfterMoveUse.add(:EJECTBUTTON,
-  proc { |item,battler,user,move,switched,battle|
+  proc { |item, battler, user, move, switched_battlers, battle|
+    next if !switched_battlers.empty?
     next if battle.pbAllFainted?(battler.idxOpposingSide)
     next if !battle.pbCanChooseNonActive?(battler.index)
     battle.pbCommonAnimation("UseItem",battler)
@@ -1275,23 +1321,41 @@ BattleHandlers::TargetItemAfterMoveUse.add(:EJECTBUTTON,
     next if newPkmn<0
     battle.pbRecallAndReplace(battler.index,newPkmn)
     battle.pbClearChoice(battler.index)   # Replacement Pokémon does nothing this round
-    switched.push(battler.index)
+    switched_battlers.push(battler.index)
+    battle.moldBreaker = false if battler.index == user.index
+    battle.pbOnBattlerEnteringBattle(battler.index)
   }
 )
 
 BattleHandlers::TargetItemAfterMoveUse.add(:REDCARD,
-  proc { |item,battler,user,move,switched,battle|
-    next if user.fainted? || switched.include?(user.index)
+  proc { |item, battler, user, move, switched_battlers, battle|
+    next if !switched_battlers.empty? || user.fainted?
     newPkmn = battle.pbGetReplacementPokemonIndex(user.index,true)   # Random
     next if newPkmn<0
     battle.pbCommonAnimation("UseItem",battler)
     battle.pbDisplay(_INTL("{1} held up its {2} against {3}!",
        battler.pbThis,battler.itemName,user.pbThis(true)))
     battler.pbConsumeItem
+    if user.hasActiveAbility?(:SUCTIONCUPS) && !battle.moldBreaker
+      battle.pbShowAbilitySplash(user)
+      if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+        battle.pbDisplay(_INTL("{1} anchors itself!", user.pbThis))
+      else
+        battle.pbDisplay(_INTL("{1} anchors itself with {2}!", user.pbThis, user.abilityName))
+      end
+      battle.pbHideAbilitySplash(user)
+      next
+    end
+    if user.effects[PBEffects::Ingrain]
+      battle.pbDisplay(_INTL("{1} anchored itself with its roots!", user.pbThis))
+      next
+    end
     battle.pbRecallAndReplace(user.index, newPkmn, true)
     battle.pbDisplay(_INTL("{1} was dragged out!",user.pbThis))
     battle.pbClearChoice(user.index)   # Replacement Pokémon does nothing this round
-    switched.push(user.index)
+    switched_battlers.push(user.index)
+    battle.moldBreaker = false
+    battle.pbOnBattlerEnteringBattle(user.index)
   }
 )
 
@@ -1317,6 +1381,9 @@ BattleHandlers::UserItemAfterMoveUse.add(:LIFEORB,
   }
 )
 
+# NOTE: In the official games, Shell Bell does not prevent Emergency Exit/Wimp
+#       Out triggering even if Shell Bell heals the holder back to 50% HP or
+#       more. Essentials ignores this exception.
 BattleHandlers::UserItemAfterMoveUse.add(:SHELLBELL,
   proc { |item,user,targets,move,numHits,battle|
     next if !user.canHeal?
@@ -1326,6 +1393,18 @@ BattleHandlers::UserItemAfterMoveUse.add(:SHELLBELL,
     user.pbRecoverHP(totalDamage/8)
     battle.pbDisplay(_INTL("{1} restored a little HP using its {2}!",
        user.pbThis,user.itemName))
+  }
+)
+
+BattleHandlers::UserItemAfterMoveUse.add(:THROATSPRAY,
+  proc { |item, user, targets, move, numHits, battle|
+    next if battle.pbAllFainted?(user.idxOwnSide) ||
+            battle.pbAllFainted?(user.idxOpposingSide)
+    next if !move.soundMove? || numHits == 0
+    next if !user.pbCanRaiseStatStage?(:SPECIAL_ATTACK, user)
+    battle.pbCommonAnimation("UseItem", user)
+    user.pbRaiseStatStage(:SPECIAL_ATTACK, 1, user)
+    user.pbConsumeItem
   }
 )
 
@@ -1380,7 +1459,7 @@ BattleHandlers::EndOfMoveStatRestoreItem.add(:WHITEHERB,
     GameData::Stat.each_battle do |s|
       next if battler.stages[s.id] >= 0
       battler.stages[s.id] = 0
-      battler.statsRaised = true
+      battler.statsRaisedThisRound = true
       reducedStats = true
     end
     next false if !reducedStats
@@ -1548,13 +1627,10 @@ BattleHandlers::EORHealingItem.add(:BLACKSLUDGE,
       battle.pbDisplay(_INTL("{1} restored a little HP using its {2}!",
          battler.pbThis,battler.itemName))
     elsif battler.takesIndirectDamage?
-      oldHP = battler.hp
       battle.pbCommonAnimation("UseItem",battler)
-      battler.pbReduceHP(battler.totalhp/8)
-      battle.pbDisplay(_INTL("{1} is hurt by its {2}!",battler.pbThis,battler.itemName))
-      battler.pbItemHPHealCheck
-      battler.pbAbilitiesOnDamageTaken(oldHP)
-      battler.pbFaint if battler.fainted?
+      battler.pbTakeEffectDamage(battler.totalhp / 8) { |hp_lost|
+        battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))
+      }
     end
   }
 )
@@ -1585,11 +1661,9 @@ BattleHandlers::EOREffectItem.add(:STICKYBARB,
     next if !battler.takesIndirectDamage?
     oldHP = battler.hp
     battle.scene.pbDamageAnimation(battler)
-    battler.pbReduceHP(battler.totalhp/8,false)
-    battle.pbDisplay(_INTL("{1} is hurt by its {2}!",battler.pbThis,battler.itemName))
-    battler.pbItemHPHealCheck
-    battler.pbAbilitiesOnDamageTaken(oldHP)
-    battler.pbFaint if battler.fainted?
+    battler.pbTakeEffectDamage(battler.totalhp / 8, false) { |hp_lost|
+      battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))
+    }
   }
 )
 
@@ -1617,7 +1691,6 @@ BattleHandlers::CertainSwitchingUserItem.add(:SHEDSHELL,
 
 # There aren't any!
 
-
 #===============================================================================
 # ItemOnSwitchIn handlers
 #===============================================================================
@@ -1626,6 +1699,16 @@ BattleHandlers::ItemOnSwitchIn.add(:AIRBALLOON,
   proc { |item,battler,battle|
     battle.pbDisplay(_INTL("{1} floats in the air with its {2}!",
        battler.pbThis,battler.itemName))
+  }
+)
+
+BattleHandlers::ItemOnSwitchIn.add(:ROOMSERVICE,
+  proc { |item, battler, battle|
+    next if battle.field.effects[PBEffects::TrickRoom] == 0
+    next if !battler.pbCanLowerStatStage?(:SPEED)
+    battle.pbCommonAnimation("UseItem", battler)
+    battler.pbLowerStatStage(:SPEED, 1, nil)
+    battler.pbConsumeItem
   }
 )
 

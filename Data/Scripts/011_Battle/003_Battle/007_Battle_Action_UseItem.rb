@@ -43,7 +43,7 @@ class PokeBattle_Battle
     return if !item
     return if !GameData::Item.get(item).consumed_after_use?
     if pbOwnedByPlayer?(idxBattler)
-      if !$PokemonBag.pbDeleteItem(item)
+      if !$bag.remove(item)
         raise _INTL("Tried to consume item that wasn't in the Bag somehow.")
       end
     else
@@ -56,8 +56,8 @@ class PokeBattle_Battle
     return if !item
     return if !GameData::Item.get(item).consumed_after_use?
     if pbOwnedByPlayer?(idxBattler)
-      if $PokemonBag && $PokemonBag.pbCanStore?(item)
-        $PokemonBag.pbStoreItem(item)
+      if $bag && $bag.can_add?(item)
+        $bag.add(item)
       else
         raise _INTL("Couldn't return unused item to Bag somehow.")
       end
@@ -103,6 +103,7 @@ class PokeBattle_Battle
       if ItemHandlers.triggerCanUseInBattle(item,battler.pokemon,battler,ch[3],true,self,@scene,false)
         ItemHandlers.triggerBattleUseOnBattler(item,battler,@scene)
         ch[1] = nil   # Delete item from choice
+        battler.pbItemOnStatDropped
         return
       else
         pbDisplay(_INTL("But it had no effect!"))

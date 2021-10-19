@@ -131,7 +131,7 @@ end
 # OHKO. Accuracy increases by difference between levels of user and target. Hits
 # targets that are semi-invulnerable underground. (Fissure)
 #===============================================================================
-class PokeBattle_Move_OHKOHitsTargetUnderground < PokeBattle_Move_OHKO
+class PokeBattle_Move_OHKOHitsUndergroundTarget < PokeBattle_Move_OHKO
   def hitsDiggingTargets?; return true; end
 end
 
@@ -157,14 +157,7 @@ class PokeBattle_Move_DamageTargetAlly < PokeBattle_Move
            @battle.battlers[b[0]].pbThis(true)))
       end
     end
-    switchedAlly = []
-    hitAlly.each do |b|
-      @battle.battlers[b[0]].pbItemHPHealCheck
-      if @battle.battlers[b[0]].pbAbilitiesOnDamageTaken(b[1])
-        switchedAlly.push(@battle.battlers[b[0]])
-      end
-    end
-    switchedAlly.each { |b| b.pbEffectsOnSwitchIn(true) }
+    hitAlly.each { |b| @battle.battlers[b[0]].pbItemHPHealCheck }
   end
 end
 
@@ -602,7 +595,7 @@ end
 #===============================================================================
 class PokeBattle_Move_DoublePowerIfTargetLostHPThisTurn < PokeBattle_Move
   def pbBaseDamage(baseDmg,user,target)
-    baseDmg *= 2 if target.tookDamage
+    baseDmg *= 2 if target.tookDamageThisRound
     return baseDmg
   end
 end
@@ -612,7 +605,7 @@ end
 #===============================================================================
 class PokeBattle_Move_DoublePowerIfUserStatsLoweredThisTurn < PokeBattle_Move
   def pbBaseDamage(baseDmg, user, target)
-    baseDmg *= 2 if user.statsLowered
+    baseDmg *= 2 if user.statsLoweredThisRound
     return baseDmg
   end
 end

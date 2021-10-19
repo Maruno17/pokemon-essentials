@@ -207,7 +207,7 @@ module PokeBattle_BattleCommon
       elsif numOwned>30
         dex_modifier = 1
       end
-      dex_modifier *= 2 if $PokemonBag.pbHasItem?(:CATCHINGCHARM)
+      dex_modifier *= 2 if $bag.has?(:CATCHINGCHARM)
       c = x * dex_modifier / 12
       # Calculate the number of shakes
       if c>0 && pbRandom(256)<c

@@ -146,7 +146,7 @@ EncounterModifier.register(proc { |encounter|
   # Look at each roaming Pokémon in turn and decide whether it's possible to
   # encounter it
   currentRegion = pbGetCurrentRegion
-  currentMapName = pbGetMessage(MessageTypes::MapNames, $game_map.map_id)
+  currentMapName = $game_map.name
   possible_roamers = []
   Settings::ROAMING_SPECIES.each_with_index do |data, i|
     # data = [species, level, Game Switch, roamer method, battle BGM, area maps hash]
@@ -167,7 +167,7 @@ EncounterModifier.register(proc { |encounter|
       map_metadata = GameData::MapMetadata.try_get(roamerMap)
       next if !map_metadata || !map_metadata.town_map_position ||
               map_metadata.town_map_position[0] != currentRegion
-      next if pbGetMessage(MessageTypes::MapNames, roamerMap) != currentMapName
+      next if pbGetMapNameFromId(roamerMap) != currentMapName
     end
     # Check whether the roamer's roamer method is currently possible
     next if !pbRoamingMethodAllowed(data[3])

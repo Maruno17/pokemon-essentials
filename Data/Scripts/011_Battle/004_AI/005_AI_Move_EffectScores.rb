@@ -1547,7 +1547,7 @@ class PokeBattle_AI
     when "FixedDamageUserLevelRandom"
       score += 30 if target.hp<=user.level
     #---------------------------------------------------------------------------
-  when "OHKO", "OHKOIce", "OHKOHitsTargetUnderground"
+  when "OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"
       score -= 90 if target.hasActiveAbility?(:STURDY)
       score -= 90 if target.level>user.level
     #---------------------------------------------------------------------------

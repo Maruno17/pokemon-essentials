@@ -235,6 +235,7 @@ module GameData
     TrainerType.load
     Trainer.load
     Metadata.load
+    PlayerMetadata.load
     MapMetadata.load
   end
 end

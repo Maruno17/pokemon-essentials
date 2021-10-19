@@ -388,7 +388,7 @@ end
 
 
 def pbSlotMachine(difficulty=1)
-  if GameData::Item.exists?(:COINCASE) && !$PokemonBag.pbHasItem?(:COINCASE)
+  if !$bag.has?(:COINCASE)
     pbMessage(_INTL("It's a Slot Machine."))
   elsif $Trainer.coins == 0
     pbMessage(_INTL("You don't have any Coins to play!"))

@@ -383,26 +383,49 @@ class PokeBattle_TargetMultiStatDownMove < PokeBattle_Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
-    return if damagingMove?
-    showAnim = true
-    for i in 0...@statDown.length/2
-      next if !target.pbCanLowerStatStage?(@statDown[i*2],user,self)
-      if target.pbLowerStatStage(@statDown[i*2],@statDown[i*2+1],user,showAnim)
-        showAnim = false
+  def pbCheckForMirrorArmor(user, target)
+    if target.hasActiveAbility?(:MIRRORARMOR) && user.index != target.index
+      failed = true
+      for i in 0...@statDown.length / 2
+        next if target.statStageAtMin?(@statDown[i * 2])
+        next if !user.pbCanLowerStatStage?(@statDown[i * 2], target, self, false, false, true)
+        failed = false
+        break
+      end
+      if failed
+        @battle.pbShowAbilitySplash(target)
+        if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+          @battle.pbDisplay(_INTL("{1}'s {2} activated!", target.pbThis, target.abilityName))
+        end
+        user.pbCanLowerStatStage?(@statDown[0], target, self, true, false, true)   # Show fail message
+        @battle.pbHideAbilitySplash(target)
+        return false
       end
     end
+    return true
+  end
+
+  def pbLowerTargetMultipleStats(user, target)
+    return if !pbCheckForMirrorArmor(user, target)
+    showAnim = true
+    showMirrorArmorSplash = true
+    for i in 0...@statDown.length / 2
+      next if !target.pbCanLowerStatStage?(@statDown[i * 2], user, self)
+      if target.pbLowerStatStage(@statDown[i * 2], @statDown[i * 2 + 1], user,
+         showAnim, false, (showMirrorArmorSplash) ? 1 : 3)
+        showAnim = false
+      end
+      showMirrorArmorSplash = false
+    end
+    @battle.pbHideAbilitySplash(target)   # To hide target's Mirror Armor splash
+  end
+
+  def pbEffectAgainstTarget(user,target)
+    pbLowerTargetMultipleStats(user, target) if !damagingMove?
   end
 
   def pbAdditionalEffect(user,target)
-    return if target.damageState.substitute
-    showAnim = true
-    for i in 0...@statDown.length/2
-      next if !target.pbCanLowerStatStage?(@statDown[i*2],user,self)
-      if target.pbLowerStatStage(@statDown[i*2],@statDown[i*2+1],user,showAnim)
-        showAnim = false
-      end
-    end
+    pbLowerTargetMultipleStats(user, target) if !target.damageState.substitute
   end
 end
 
@@ -663,7 +686,6 @@ class PokeBattle_PledgeMove < PokeBattle_Move
     @pledgeCombo = false
     @pledgeOtherUser = nil
     @comboEffect = nil
-    @overrideType = nil
     @overrideAnim = nil
     # Check whether this is the use of a combo move
     @combos.each do |i|
@@ -671,9 +693,7 @@ class PokeBattle_PledgeMove < PokeBattle_Move
       @battle.pbDisplay(_INTL("The two moves have become one! It's a combined move!"))
       @pledgeCombo = true
       @comboEffect = i[1]
-      @overrideType = i[2]
       @overrideAnim = i[3]
-      @overrideType = nil if !GameData::Type.exists?(@overrideType)
       break
     end
     return if @pledgeCombo
@@ -698,7 +718,13 @@ class PokeBattle_PledgeMove < PokeBattle_Move
   end
 
   def pbBaseType(user)
-    return @overrideType if @overrideType!=nil
+    # This method is called before pbOnStartUse, so it has to calculate the type
+    # separately
+    @combos.each do |i|
+      next if i[0] != user.effects[PBEffects::FirstPledge]
+      next if !GameData::Type.exists?(i[2])
+      return i[2]
+    end
     return super
   end
 

@@ -294,6 +294,10 @@ module RPG
           sprite.x += [2, 1, 0, -1][rand(4)] * dist_x / 8   # Random movement
           sprite.y += [2, 1, 1, 0, 0, -1][index % 6] * dist_y / 10   # Variety
         end
+        sprite.x -= Graphics.width if sprite.x - @ox > Graphics.width
+        sprite.x += Graphics.width if sprite.x - @ox < -sprite.width
+        sprite.y -= Graphics.height if sprite.y - @oy > Graphics.height
+        sprite.y += Graphics.height if sprite.y - @oy < -sprite.height
         sprite.opacity += @weatherTypes[weather_type][0].particle_delta_opacity * delta_t
         x = sprite.x - @ox
         y = sprite.y - @oy
@@ -312,18 +316,24 @@ module RPG
       end
       @tile_x += @weatherTypes[weather_type][0].tile_delta_x * delta_t
       @tile_y += @weatherTypes[weather_type][0].tile_delta_y * delta_t
-      if @tile_x < -@tiles_wide * @weatherTypes[weather_type][2][0].width
-        @tile_x += @tiles_wide * @weatherTypes[weather_type][2][0].width
+      while @tile_x < @ox - @weatherTypes[weather_type][2][0].width
+        @tile_x += @weatherTypes[weather_type][2][0].width
       end
-      if @tile_y > @tiles_tall * @weatherTypes[weather_type][2][0].height
-        @tile_y -= @tiles_tall * @weatherTypes[weather_type][2][0].height
+      while @tile_x > @ox
+        @tile_x -= @weatherTypes[weather_type][2][0].width
+      end
+      while @tile_y < @oy - @weatherTypes[weather_type][2][0].height
+        @tile_y += @weatherTypes[weather_type][2][0].height
+      end
+      while @tile_y > @oy
+        @tile_y -= @weatherTypes[weather_type][2][0].height
       end
     end
 
     def update_tile_position(sprite, index)
       return if !sprite || !sprite.bitmap || !sprite.visible
-      sprite.x = (@ox + @tile_x + (index % @tiles_wide) * sprite.bitmap.width).round
-      sprite.y = (@oy + @tile_y + (index / @tiles_wide) * sprite.bitmap.height).round
+      sprite.x = @tile_x.round + (index % @tiles_wide) * sprite.bitmap.width
+      sprite.y = @tile_y.round + (index / @tiles_wide) * sprite.bitmap.height
       sprite.x += @tiles_wide * sprite.bitmap.width if sprite.x - @ox < -sprite.bitmap.width
       sprite.y -= @tiles_tall * sprite.bitmap.height if sprite.y - @oy > Graphics.height
       sprite.visible = true

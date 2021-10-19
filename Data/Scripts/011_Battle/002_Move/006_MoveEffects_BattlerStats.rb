@@ -59,15 +59,16 @@ class PokeBattle_Move_MaxUserAttackLoseHalfOfTotalHP < PokeBattle_Move
 
   def pbEffectGeneral(user)
     hpLoss = [user.totalhp/2,1].max
-    user.pbReduceHP(hpLoss,false)
+    user.pbReduceHP(hpLoss, false, false)
     if user.hasActiveAbility?(:CONTRARY)
       user.stages[:ATTACK] = -6
-      user.statsLowered = true
+      user.statsLoweredThisRound = true
+      user.statsDropped = true
       @battle.pbCommonAnimation("StatDown",user)
       @battle.pbDisplay(_INTL("{1} cut its own HP and minimized its Attack!",user.pbThis))
     else
       user.stages[:ATTACK] = 6
-      user.statsRaised = true
+      user.statsRaisedThisRound = true
       @battle.pbCommonAnimation("StatUp",user)
       @battle.pbDisplay(_INTL("{1} cut its own HP and maximized its Attack!",user.pbThis))
     end
@@ -1321,6 +1322,11 @@ end
 class PokeBattle_Move_LowerPoisonedTargetAtkSpAtkSpd1 < PokeBattle_Move
   def canMagicCoat?; return true; end
 
+  def initialize(battle,move)
+    super
+    @statDown = [:ATTACK, 1, :SPECIAL_ATTACK, 1, :SPEED, 1]
+  end
+
   def pbMoveFailed?(user,targets)
     @validTargets = []
     targets.each do |b|
@@ -1338,15 +1344,42 @@ class PokeBattle_Move_LowerPoisonedTargetAtkSpAtkSpd1 < PokeBattle_Move
     return false
   end
 
-  def pbEffectAgainstTarget(user,target)
-    return if !@validTargets.include?(target.index)
-    showAnim = true
-    [:ATTACK,:SPECIAL_ATTACK,:SPEED].each do |s|
-      next if !target.pbCanLowerStatStage?(s,user,self)
-      if target.pbLowerStatStage(s,1,user,showAnim)
-        showAnim = false
+  def pbCheckForMirrorArmor(user, target)
+    if target.hasActiveAbility?(:MIRRORARMOR) && user.index != target.index
+      failed = true
+      for i in 0...@statDown.length / 2
+        next if target.statStageAtMin?(@statDown[i * 2])
+        next if !user.pbCanLowerStatStage?(@statDown[i * 2], target, self, false, false, true)
+        failed = false
+        break
+      end
+      if failed
+        @battle.pbShowAbilitySplash(target)
+        if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH
+          @battle.pbDisplay(_INTL("{1}'s {2} activated!", target.pbThis, target.abilityName))
+        end
+        user.pbCanLowerStatStage?(@statDown[0], target, self, true, false, true)   # Show fail message
+        @battle.pbHideAbilitySplash(target)
+        return false
       end
     end
+    return true
+  end
+
+  def pbEffectAgainstTarget(user,target)
+    return if !@validTargets.include?(target.index)
+    return if !pbCheckForMirrorArmor(user, target)
+    showAnim = true
+    showMirrorArmorSplash = true
+    for i in 0...@statDown.length / 2
+      next if !target.pbCanLowerStatStage?(@statDown[i * 2], user, self)
+      if target.pbLowerStatStage(@statDown[i * 2], @statDown[i * 2 + 1], user,
+         showAnim, false, (showMirrorArmorSplash) ? 1 : 3)
+        showAnim = false
+      end
+      showMirrorArmorSplash = false
+    end
+    @battle.pbHideAbilitySplash(target)   # To hide target's Mirror Armor splash
   end
 end
 
@@ -1584,11 +1617,13 @@ class PokeBattle_Move_UserTargetSwapAtkSpAtkStages < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     [:ATTACK,:SPECIAL_ATTACK].each do |s|
       if user.stages[s] > target.stages[s]
-        user.statsLowered = true
-        target.statsRaised = true
+        user.statsLoweredThisRound = true
+        user.statsDropped = true
+        target.statsRaisedThisRound = true
       elsif user.stages[s] < target.stages[s]
-        user.statsRaised = true
-        target.statsLowered = true
+        user.statsRaisedThisRound = true
+        target.statsLoweredThisRound = true
+        target.statsDropped = true
       end
       user.stages[s],target.stages[s] = target.stages[s],user.stages[s]
     end
@@ -1605,11 +1640,13 @@ class PokeBattle_Move_UserTargetSwapDefSpDefStages < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     [:DEFENSE,:SPECIAL_DEFENSE].each do |s|
       if user.stages[s] > target.stages[s]
-        user.statsLowered = true
-        target.statsRaised = true
+        user.statsLoweredThisRound = true
+        user.statsDropped = true
+        target.statsRaisedThisRound = true
       elsif user.stages[s] < target.stages[s]
-        user.statsRaised = true
-        target.statsLowered = true
+        user.statsRaisedThisRound = true
+        target.statsLoweredThisRound = true
+        target.statsDropped = true
       end
       user.stages[s],target.stages[s] = target.stages[s],user.stages[s]
     end
@@ -1626,11 +1663,13 @@ class PokeBattle_Move_UserTargetSwapStatStages < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     GameData::Stat.each_battle do |s|
       if user.stages[s.id] > target.stages[s.id]
-        user.statsLowered = true
-        target.statsRaised = true
+        user.statsLoweredThisRound = true
+        user.statsDropped = true
+        target.statsRaisedThisRound = true
       elsif user.stages[s.id] < target.stages[s.id]
-        user.statsRaised = true
-        target.statsLowered = true
+        user.statsRaisedThisRound = true
+        target.statsLoweredThisRound = true
+        target.statsDropped = true
       end
       user.stages[s.id],target.stages[s.id] = target.stages[s.id],user.stages[s.id]
     end
@@ -1647,9 +1686,10 @@ class PokeBattle_Move_UserCopyTargetStatStages < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     GameData::Stat.each_battle do |s|
       if user.stages[s.id] > target.stages[s.id]
-        user.statsLowered = true
+        user.statsLoweredThisRound = true
+        user.statsDropped = true
       elsif user.stages[s.id] < target.stages[s.id]
-        user.statsRaised = true
+        user.statsRaisedThisRound = true
       end
       user.stages[s.id] = target.stages[s.id]
     end
@@ -1681,7 +1721,8 @@ class PokeBattle_Move_UserStealTargetPositiveStatStages < PokeBattle_Move
             showAnim = false
           end
         end
-        target.statsLowered = true
+        target.statsLoweredThisRound = true
+        target.statsDropped = true
         target.stages[s.id] = 0
       end
     end
@@ -1706,9 +1747,10 @@ class PokeBattle_Move_InvertTargetStatStages < PokeBattle_Move
   def pbEffectAgainstTarget(user,target)
     GameData::Stat.each_battle do |s|
       if target.stages[s.id] > 0
-        target.statsLowered = true
+        target.statsLoweredThisRound = true
+        target.statsDropped = true
       elsif target.stages[s.id] < 0
-        target.statsRaised = true
+        target.statsRaisedThisRound = true
       end
       target.stages[s.id] *= -1
     end

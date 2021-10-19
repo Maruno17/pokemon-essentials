@@ -160,6 +160,17 @@ DebugMenuCommands.register("daycare", {
   }
 })
 
+DebugMenuCommands.register("skipcredits", {
+  "parent"      => "fieldmenu",
+  "name"        => _INTL("Skip Credits"),
+  "description" => _INTL("Toggle whether credits can be ended early by pressing the Use input."),
+  "effect"      => proc {
+    $PokemonGlobal.creditsPlayed = !$PokemonGlobal.creditsPlayed
+    pbMessage(_INTL("Credits can be skipped when played in future.")) if $PokemonGlobal.creditsPlayed
+    pbMessage(_INTL("Credits cannot be skipped when next played.")) if !$PokemonGlobal.creditsPlayed
+  }
+})
+
 DebugMenuCommands.register("relicstone", {
   "parent"      => "fieldmenu",
   "name"        => _INTL("Use Relic Stone"),
@@ -470,7 +481,7 @@ DebugMenuCommands.register("additem", {
         qty = pbMessageChooseNumber(_INTL("Add how many {1}?",
            GameData::Item.get(item).name_plural), params)
         if qty > 0
-          $PokemonBag.pbStoreItem(item, qty)
+          $bag.add(item, qty)
           pbMessage(_INTL("Gave {1}x {2}.", qty, GameData::Item.get(item).name))
         end
       end
@@ -489,11 +500,11 @@ DebugMenuCommands.register("fillbag", {
     params.setCancelValue(0)
     qty = pbMessageChooseNumber(_INTL("Choose the number of items."), params)
     if qty > 0
-      $PokemonBag.clear
-      # NOTE: This doesn't simply use $PokemonBag.pbStoreItem for every item in
-      #       turn, because that's really slow when done in bulk.
+      $bag.clear
+      # NOTE: This doesn't simply use $bag.add for every item in turn, because
+      #       that's really slow when done in bulk.
       pocket_sizes = Settings::BAG_MAX_POCKET_SIZE
-      bag = $PokemonBag.pockets   # Called here so that it only rearranges itself once
+      bag = $bag.pockets   # Called here so that it only rearranges itself once
       GameData::Item.each do |i|
         next if !pocket_sizes[i.pocket] || pocket_sizes[i.pocket] == 0
         next if pocket_sizes[i.pocket] > 0 && bag[i.pocket].length >= pocket_sizes[i.pocket]
@@ -512,7 +523,7 @@ DebugMenuCommands.register("emptybag", {
   "name"        => _INTL("Empty Bag"),
   "description" => _INTL("Remove all items from the Bag."),
   "effect"      => proc {
-    $PokemonBag.clear
+    $bag.clear
     pbMessage(_INTL("The Bag was cleared."))
   }
 })
@@ -808,24 +819,22 @@ DebugMenuCommands.register("setplayer", {
   "name"        => _INTL("Set Player Character"),
   "description" => _INTL("Edit the player's character, as defined in \"metadata.txt\"."),
   "effect"      => proc {
-    limit = 0
-    for i in 0...8
-      meta = GameData::Metadata.get_player(i)
-      next if meta
-      limit = i
+    index = 0
+    cmds = []
+    ids = []
+    GameData::PlayerMetadata.each do |player|
+      index = cmds.length if player.id == $Trainer.character_ID
+      cmds.push(player.id.to_s)
+      ids.push(player.id)
+    end
+    if cmds.length == 1
+      pbMessage(_INTL("There is only one player character defined."))
       break
     end
-    if limit <= 1
-      pbMessage(_INTL("There is only one player defined."))
-    else
-      params = ChooseNumberParams.new
-      params.setRange(0, limit - 1)
-      params.setDefaultValue($Trainer.character_ID)
-      newid = pbMessageChooseNumber(_INTL("Choose the new player character."), params)
-      if newid != $Trainer.character_ID
-        pbChangePlayer(newid)
-        pbMessage(_INTL("The player character was changed."))
-      end
+    cmd = pbShowCommands(nil, cmds, -1, index)
+    if cmd >= 0 && cmd != index
+      pbChangePlayer(ids[cmd])
+      pbMessage(_INTL("The player character was changed."))
     end
   }
 })
@@ -887,10 +896,20 @@ DebugMenuCommands.register("editorsmenu", {
 DebugMenuCommands.register("setmetadata", {
   "parent"      => "editorsmenu",
   "name"        => _INTL("Edit Metadata"),
-  "description" => _INTL("Edit global and map metadata."),
+  "description" => _INTL("Edit global metadata and player character metadata."),
   "always_show" => true,
   "effect"      => proc {
-    pbMetadataScreen(pbDefaultMap)
+    pbMetadataScreen
+  }
+})
+
+DebugMenuCommands.register("setmapmetadata", {
+  "parent"      => "editorsmenu",
+  "name"        => _INTL("Edit Map Metadata"),
+  "description" => _INTL("Edit map metadata."),
+  "always_show" => true,
+  "effect"      => proc {
+    pbMapMetadataScreen(pbDefaultMap)
   }
 })
 
@@ -1112,6 +1131,7 @@ DebugMenuCommands.register("createpbs", {
       "encounters.txt",
       "items.txt",
       "map_connections.txt",
+      "map_metadata.txt",
       "metadata.txt",
       "moves.txt",
       "phone.txt",
@@ -1135,18 +1155,19 @@ DebugMenuCommands.register("createpbs", {
       when 4  then Compiler.write_encounters
       when 5  then Compiler.write_items
       when 6  then Compiler.write_connections
-      when 7  then Compiler.write_metadata
-      when 8  then Compiler.write_moves
-      when 9  then Compiler.write_phone
-      when 10 then Compiler.write_pokemon
-      when 11 then Compiler.write_pokemon_forms
-      when 12 then Compiler.write_regional_dexes
-      when 13 then Compiler.write_ribbons
-      when 14 then Compiler.write_shadow_movesets
-      when 15 then Compiler.write_town_map
-      when 16 then Compiler.write_trainer_types
-      when 17 then Compiler.write_trainers
-      when 18 then Compiler.write_types
+      when 7  then Compiler.write_map_metadata
+      when 8  then Compiler.write_metadata
+      when 9  then Compiler.write_moves
+      when 10 then Compiler.write_phone
+      when 11 then Compiler.write_pokemon
+      when 12 then Compiler.write_pokemon_forms
+      when 13 then Compiler.write_regional_dexes
+      when 14 then Compiler.write_ribbons
+      when 15 then Compiler.write_shadow_movesets
+      when 16 then Compiler.write_town_map
+      when 17 then Compiler.write_trainer_types
+      when 18 then Compiler.write_trainers
+      when 19 then Compiler.write_types
       else break
       end
       pbMessage(_INTL("File written."))

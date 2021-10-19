@@ -125,7 +125,6 @@ class PokeBattle_Battler
 
   def pbConfusionDamage(msg)
     @damageState.reset
-    @damageState.initialHP = @hp
     confusionMove = PokeBattle_Confusion.new(@battle,nil)
     confusionMove.calcType = confusionMove.pbCalcType(self)   # nil
     @damageState.typeMod = confusionMove.pbCalcTypeMod(confusionMove.calcType,self,self)   # 8
@@ -326,14 +325,10 @@ class PokeBattle_Battler
       @battle.pbDisplay(_INTL("When the flame touched the powder on the Pokémon, it exploded!"))
       user.lastMoveFailed = true
       if ![:Rain, :HeavyRain].include?(user.effectiveWeather) && user.takesIndirectDamage?
-        oldHP = user.hp
-        user.pbReduceHP((user.totalhp/4.0).round,false)
-        user.pbFaint if user.fainted?
+        user.pbTakeEffectDamage((user.totalhp / 4.0).round, false) { |hp_lost|
+          battle.pbDisplay(_INTL("{1} is hurt by its {2}!", battler.pbThis, battler.itemName))
+        }
         @battle.pbGainExp   # In case user is KO'd by this
-        user.pbItemHPHealCheck
-        if user.pbAbilitiesOnDamageTaken(oldHP)
-          user.pbEffectsOnSwitchIn(true)
-        end
       end
       pbCancelMoves
       pbEndTurn(choice)
@@ -389,13 +384,14 @@ class PokeBattle_Battler
       user.lastMoveFailed = true
     else   # We have targets, or move doesn't use targets
       # Reset whole damage state, perform various success checks (not accuracy)
-      user.initialHP = user.hp
+      @battle.eachBattler do |b|
+        b.droppedBelowHalfHP = false
+        b.statsDropped = false
+      end
       targets.each do |b|
         b.damageState.reset
-        b.damageState.initialHP = b.hp
-        if !pbSuccessCheckAgainstTarget(move, user, b, targets)
-          b.damageState.unaffected = true
-        end
+        next if pbSuccessCheckAgainstTarget(move, user, b, targets)
+        b.damageState.unaffected = true
       end
       # Magic Coat/Magic Bounce checks (for moves which don't target Pokémon)
       if targets.length==0 && move.statusMove? && move.canMagicCoat?
@@ -503,6 +499,10 @@ class PokeBattle_Battler
       user.pbFaint if user.fainted?
       # External/general effects after all hits. Eject Button, Shell Bell, etc.
       pbEffectsAfterMove(user,targets,move,realNumHits)
+      @battle.eachBattler do |b|
+        b.droppedBelowHalfHP = false
+        b.statsDropped = false
+      end
     end
     # End effect of Mold Breaker
     @battle.moldBreaker = false
@@ -602,6 +602,9 @@ class PokeBattle_Battler
         targets.each do |b|
           next if !b.damageState.missed || b.damageState.magicCoat
           pbMissMessage(move,user,b)
+          if user.itemActive?
+            BattleHandlers.triggerUserItemOnMissing(user.item, user, b, move, hitNum, @battle)
+          end
           break if move.pbRepeatHit?   # Dragon Darts only shows one failure message
         end
         move.pbCrashDamage(user)
@@ -642,7 +645,13 @@ class PokeBattle_Battler
     end
     # Messages about missed target(s) (relevant for multi-target moves only)
     if !move.pbRepeatHit?
-      targets.each { |b| pbMissMessage(move, user, b) if b.damageState.missed }
+      targets.each do |b|
+        next if !b.damageState.missed
+        pbMissMessage(move, user, b)
+        if user.itemActive?
+          BattleHandlers.triggerUserItemOnMissing(user.item, user, b, move, hitNum, @battle)
+        end
+      end
     end
     # Deal the damage (to all allies first simultaneously, then all foes
     # simultaneously)

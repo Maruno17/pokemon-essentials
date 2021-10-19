@@ -38,13 +38,14 @@ class PokeBattle_Battler
   attr_accessor :lastRoundMoveFailed   # For Stomping Tantrum
   attr_accessor :movesUsed
   attr_accessor :currentMove   # ID of multi-turn move currently being used
-  attr_accessor :tookDamage    # Boolean for whether self took damage this round
+  attr_accessor :droppedBelowHalfHP   # Used for Emergency Exit/Wimp Out
+  attr_accessor :statsDropped   # Used for Eject Pack
+  attr_accessor :tookDamageThisRound   # Boolean for whether self took damage this round
   attr_accessor :tookPhysicalHit
-  attr_accessor :statsRaised   # Boolean for whether self's stat(s) raised this round
-  attr_accessor :statsLowered   # Boolean for whether self's stat(s) lowered this round
+  attr_accessor :statsRaisedThisRound   # Boolean for whether self's stat(s) raised this round
+  attr_accessor :statsLoweredThisRound   # Boolean for whether self's stat(s) lowered this round
   attr_accessor :canRestoreIceFace   # Whether Hail started in the round
   attr_accessor :damageState
-  attr_accessor :initialHP     # Set at the start of each move's usage
 
   #=============================================================================
   # Complex accessors
@@ -335,16 +336,18 @@ class PokeBattle_Battler
   # NOTE: Do not create any held item which affects whether a Pokémon's ability
   #       is active. The ability Klutz affects whether a Pokémon's item is
   #       active, and the code for the two combined would cause an infinite loop
-  #       (regardless of whether any Pokémon actualy has either the ability or
+  #       (regardless of whether any Pokémon actually has either the ability or
   #       the item - the code existing is enough to cause the loop).
-  def abilityActive?(ignore_fainted = false)
+  def abilityActive?(ignore_fainted = false, check_ability = nil)
     return false if fainted? && !ignore_fainted
     return false if @effects[PBEffects::GastroAcid]
+    return false if check_ability != :NEUTRALIZINGGAS && self.ability != :NEUTRALIZINGGAS &&
+                    @battle.pbCheckGlobalAbility(:NEUTRALIZINGGAS)
     return true
   end
 
   def hasActiveAbility?(check_ability, ignore_fainted = false)
-    return false if !abilityActive?(ignore_fainted)
+    return false if !abilityActive?(ignore_fainted, check_ability)
     return check_ability.include?(@ability_id) if check_ability.is_a?(Array)
     return self.ability == check_ability
   end
@@ -371,6 +374,8 @@ class PokeBattle_Battler
       :STANCECHANGE,
       :ZENMODE,
       # Abilities intended to be inherent properties of a certain species
+      :ASONECHILLINGNEIGH,
+      :ASONEGRIMNEIGH,
       :COMATOSE,
       :RKSSYSTEM
     ]
@@ -400,8 +405,12 @@ class PokeBattle_Battler
       :ILLUSION,
       :IMPOSTER,
       # Abilities intended to be inherent properties of a certain species
+      :ASONECHILLINGNEIGH,
+      :ASONEGRIMNEIGH,
       :COMATOSE,
-      :RKSSYSTEM
+      :RKSSYSTEM,
+      # Abilities that can't be negated
+      :NEUTRALIZINGGAS
     ]
     return ability_blacklist.include?(abil.id)
   end

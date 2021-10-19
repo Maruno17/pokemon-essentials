@@ -143,7 +143,7 @@ ItemHandlers::CanUseInBattle.add(:REVIVE,proc { |item,pokemon,battler,move,first
   next true
 })
 
-ItemHandlers::CanUseInBattle.copy(:REVIVE,:MAXREVIVE,:REVIVALHERB)
+ItemHandlers::CanUseInBattle.copy(:REVIVE, :MAXREVIVE, :REVIVALHERB, :MAXHONEY)
 
 ItemHandlers::CanUseInBattle.add(:ETHER,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
   if !pokemon.able? || move<0 ||
@@ -241,6 +241,18 @@ ItemHandlers::CanUseInBattle.add(:XACCURACY,proc { |item,pokemon,battler,move,fi
 })
 
 ItemHandlers::CanUseInBattle.copy(:XACCURACY,:XACCURACY2,:XACCURACY3,:XACCURACY6)
+
+ItemHandlers::CanUseInBattle.add(:MAXMUSHROOMS, proc { |item, pokemon, battler, move, firstAction, battle, scene, showMessages|
+  if !pbBattleItemCanRaiseStat?(:ATTACK, battler, scene, false) &&
+     !pbBattleItemCanRaiseStat?(:DEFENSE, battler, scene, false) &&
+     !pbBattleItemCanRaiseStat?(:SPECIAL_ATTACK, battler, scene, false) &&
+     !pbBattleItemCanRaiseStat?(:SPECIAL_DEFENSE, battler, scene, false) &&
+     !pbBattleItemCanRaiseStat?(:SPEED, battler, scene, false)
+    scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
+    next false
+  end
+  next true
+})
 
 ItemHandlers::CanUseInBattle.add(:DIREHIT,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
   if !battler || battler.effects[PBEffects::FocusEnergy]>=1
@@ -450,6 +462,8 @@ ItemHandlers::BattleUseOnPokemon.add(:MAXREVIVE,proc { |item,pokemon,battler,cho
   scene.pbDisplay(_INTL("{1} recovered from fainting!",pokemon.name))
 })
 
+ItemHandlers::BattleUseOnPokemon.copy(:MAXREVIVE, :MAXHONEY)
+
 ItemHandlers::BattleUseOnPokemon.add(:ENERGYPOWDER,proc { |item,pokemon,battler,choices,scene|
   if pbBattleHPItem(pokemon, battler, (Settings::REBALANCED_HEALING_ITEM_AMOUNTS) ? 60 : 50, scene)
     pokemon.changeHappiness("powder")
@@ -658,6 +672,15 @@ ItemHandlers::BattleUseOnBattler.add(:XACCURACY3,proc { |item,battler,scene|
 
 ItemHandlers::BattleUseOnBattler.add(:XACCURACY6,proc { |item,battler,scene|
   battler.pbRaiseStatStage(:ACCURACY,6,battler)
+  battler.pokemon.changeHappiness("battleitem")
+})
+
+ItemHandlers::BattleUseOnBattler.add(:MAXMUSHROOMS,proc { |item, battler, scene|
+  battler.pbRaiseStatStage(:ATTACK, 1, battler) if battler.pbCanRaiseStatStage?(:ATTACK, battler)
+  battler.pbRaiseStatStage(:DEFENSE, 1, battler) if battler.pbCanRaiseStatStage?(:DEFENSE, battler)
+  battler.pbRaiseStatStage(:SPECIAL_ATTACK, 1, battler) if battler.pbCanRaiseStatStage?(:SPECIAL_ATTACK, battler)
+  battler.pbRaiseStatStage(:SPECIAL_DEFENSE, 1, battler) if battler.pbCanRaiseStatStage?(:SPECIAL_DEFENSE, battler)
+  battler.pbRaiseStatStage(:SPEED, 1, battler) if battler.pbCanRaiseStatStage?(:SPEED, battler)
   battler.pokemon.changeHappiness("battleitem")
 })
 

@@ -5,8 +5,10 @@
 #===============================================================================
 class Scene_Map
   attr_reader :spritesetGlobal
+  attr_reader :map_renderer
 
-  def spriteset
+  def spriteset(map_id = -1)
+    return @spritesets[map_id] if map_id > 0 && @spritesets[map_id]
     for i in @spritesets.values
       return i if i.map==$game_map
     end
@@ -14,6 +16,7 @@ class Scene_Map
   end
 
   def createSpritesets
+    @map_renderer = TilemapRenderer.new(Spriteset_Map.viewport)
     @spritesetGlobal = Spriteset_Global.new
     @spritesets = {}
     for map in $MapFactory.maps
@@ -42,6 +45,8 @@ class Scene_Map
     @spritesets = {}
     @spritesetGlobal.dispose
     @spritesetGlobal = nil
+    @map_renderer.dispose
+    @map_renderer = nil
   end
 
   def autofade(mapid)
@@ -79,6 +84,7 @@ class Scene_Map
     when 8 then $game_player.turn_up
     end
     $game_player.straighten
+    $PokemonTemp.followers.map_transfer_followers
     $game_map.update
     disposeSpritesets
     RPG::Cache.clear
@@ -113,8 +119,8 @@ class Scene_Map
   def miniupdate
     $PokemonTemp.miniupdate = true
     loop do
-      updateMaps
       $game_player.update
+      updateMaps
       $game_system.update
       $game_screen.update
       break unless $game_temp.player_transferring
@@ -148,14 +154,16 @@ class Scene_Map
     for map in $MapFactory.maps
       @spritesets[map.map_id] = Spriteset_Map.new(map) if !@spritesets[map.map_id]
     end
+    pbDayNightTint(@map_renderer)
+    @map_renderer.update
     Events.onMapUpdate.trigger(self)
   end
 
   def update
     loop do
-      updateMaps
       pbMapInterpreter.update
       $game_player.update
+      updateMaps
       $game_system.update
       $game_screen.update
       break unless $game_temp.player_transferring

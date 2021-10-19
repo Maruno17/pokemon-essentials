@@ -63,6 +63,7 @@ class Sprite_Reflection
       @sprite.oy       = height/2-2   # Hard-coded 2 pixel shift up
       @sprite.oy       -= @rsprite.character.bob_height*2
       @sprite.z        = -50   # Still water is -100, map is 0 and above
+      @sprite.z        += 1 if @event == $game_player
       @sprite.zoom_x   = @rsprite.zoom_x
       @sprite.zoom_y   = @rsprite.zoom_y
       frame = (Graphics.frame_count%40)/10

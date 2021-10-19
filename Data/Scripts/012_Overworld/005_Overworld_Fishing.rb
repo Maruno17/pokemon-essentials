@@ -4,40 +4,36 @@
 def pbFishingBegin
   $PokemonGlobal.fishing = true
   if !pbCommonEvent(Settings::FISHING_BEGIN_COMMON_EVENT)
-    patternb = 2*$game_player.direction - 1
-    meta = GameData::Metadata.get_player($Trainer.character_ID)
-    num = ($PokemonGlobal.surfing) ? 7 : 6
-    if meta && meta[num] && meta[num]!=""
-      charset = pbGetPlayerCharset(meta,num)
-      4.times do |pattern|
-        $game_player.setDefaultCharName(charset,patternb-pattern,true)
-        (Graphics.frame_rate/20).times do
-          Graphics.update
-          Input.update
-          pbUpdateSceneMap
-        end
+    $game_player.set_movement_type(($PokemonGlobal.surfing) ? :surf_fishing : :fishing)
+    $game_player.lock_pattern = true
+    4.times do |pattern|
+      $game_player.pattern = 3 - pattern
+      (Graphics.frame_rate / 20).times do
+        Graphics.update
+        Input.update
+        pbUpdateSceneMap
       end
     end
+    $game_player.lock_pattern = false
   end
 end
 
 def pbFishingEnd
   if !pbCommonEvent(Settings::FISHING_END_COMMON_EVENT)
-    patternb = 2*($game_player.direction - 2)
-    meta = GameData::Metadata.get_player($Trainer.character_ID)
-    num = ($PokemonGlobal.surfing) ? 7 : 6
-    if meta && meta[num] && meta[num]!=""
-      charset = pbGetPlayerCharset(meta,num)
-      4.times do |pattern|
-        $game_player.setDefaultCharName(charset,patternb+pattern,true)
-        (Graphics.frame_rate/20).times do
-          Graphics.update
-          Input.update
-          pbUpdateSceneMap
-        end
+    $game_player.lock_pattern = true
+    4.times do |pattern|
+      $game_player.pattern = pattern
+      (Graphics.frame_rate / 20).times do
+        Graphics.update
+        Input.update
+        pbUpdateSceneMap
       end
     end
   end
+  yield if block_given?
+  $game_player.set_movement_type(($PokemonGlobal.surfing) ? :surfing : :walking)
+  $game_player.lock_pattern = false
+  $game_player.straighten
   $PokemonGlobal.fishing = false
 end
 
@@ -46,7 +42,6 @@ def pbFishing(hasEncounter,rodType=1)
   biteChance = 20+(25*rodType)   # 45, 70, 95
   biteChance *= 1.5 if speedup   # 67.5, 100, 100
   hookChance = 100
-  oldpattern = $game_player.fullPattern
   pbFishingBegin
   msgWindow = pbCreateMessageWindow
   ret = false
@@ -56,33 +51,33 @@ def pbFishing(hasEncounter,rodType=1)
     message = ""
     time.times { message += ".   " }
     if pbWaitMessage(msgWindow,time)
-      pbFishingEnd
-      $game_player.setDefaultCharName(nil,oldpattern)
-      pbMessageDisplay(msgWindow,_INTL("Not even a nibble..."))
+      pbFishingEnd {
+        pbMessageDisplay(msgWindow,_INTL("Not even a nibble..."))
+      }
       break
     end
     if hasEncounter && rand(100)<biteChance
       $scene.spriteset.addUserAnimation(Settings::EXCLAMATION_ANIMATION_ID,$game_player.x,$game_player.y,true,3)
       frames = Graphics.frame_rate - rand(Graphics.frame_rate/2)   # 0.5-1 second
       if !pbWaitForInput(msgWindow,message+_INTL("\r\nOh! A bite!"),frames)
-        pbFishingEnd
-        $game_player.setDefaultCharName(nil,oldpattern)
-        pbMessageDisplay(msgWindow,_INTL("The Pokémon got away..."))
+        pbFishingEnd {
+          pbMessageDisplay(msgWindow,_INTL("The Pokémon got away..."))
+        }
         break
       end
       if Settings::FISHING_AUTO_HOOK || rand(100) < hookChance
-        pbFishingEnd
-        pbMessageDisplay(msgWindow,_INTL("Landed a Pokémon!")) if !Settings::FISHING_AUTO_HOOK
-        $game_player.setDefaultCharName(nil,oldpattern)
+        pbFishingEnd {
+          pbMessageDisplay(msgWindow,_INTL("Landed a Pokémon!")) if !Settings::FISHING_AUTO_HOOK
+        }
         ret = true
         break
       end
 #      biteChance += 15
 #      hookChance += 15
     else
-      pbFishingEnd
-      $game_player.setDefaultCharName(nil,oldpattern)
-      pbMessageDisplay(msgWindow,_INTL("Not even a nibble..."))
+      pbFishingEnd {
+        pbMessageDisplay(msgWindow,_INTL("Not even a nibble..."))
+      }
       break
     end
   end
@@ -114,7 +109,7 @@ def pbWaitForInput(msgWindow,message,frames)
   pbMessageDisplay(msgWindow,message,false)
   numFrame = 0
   twitchFrame = 0
-  twitchFrameTime = Graphics.frame_rate/10   # 0.1 seconds, 4 frames
+  twitchFrameTime = Graphics.frame_rate * 2 / 10   # 0.2 seconds, 8 frames
   loop do
     Graphics.update
     Input.update

@@ -75,7 +75,7 @@ class ReadyMenuButton < SpriteWrapper
     ]
     if !@command[2]
       if !GameData::Item.get(@command[0]).is_important?
-        qty = $PokemonBag.pbQuantity(@command[0])
+        qty = $bag.quantity(@command[0])
         if qty>99
           textpos.push([_INTL(">99"),230,16,1,
              Color.new(248,248,248),Color.new(40,40,40),1])
@@ -110,7 +110,7 @@ class PokemonReadyMenu_Scene
     for i in 0...@commands[1].length
       @itemcommands.push(@commands[1][i][1])
     end
-    @index = $PokemonBag.registeredIndex
+    @index = $bag.ready_menu_selection
     if @index[0]>=@movecommands.length && @movecommands.length>0
       @index[0] = @movecommands.length-1
     end
@@ -312,9 +312,9 @@ def pbUseKeyItem
     end
   end
   real_items = []
-  for i in $PokemonBag.registeredItems
+  for i in $bag.registered_items
     itm = GameData::Item.get(i).id
-    real_items.push(itm) if $PokemonBag.pbHasItem?(itm)
+    real_items.push(itm) if $bag.has?(itm)
   end
   if real_items.length == 0 && real_moves.length == 0
     pbMessage(_INTL("An item in the Bag can be registered to this key for instant use."))

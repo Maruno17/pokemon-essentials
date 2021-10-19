@@ -195,7 +195,7 @@ class PokemonPauseMenu
         item = nil
         pbFadeOutIn {
           scene = PokemonBag_Scene.new
-          screen = PokemonBagScreen.new(scene,$PokemonBag)
+          screen = PokemonBagScreen.new(scene, $bag)
           item = screen.pbStartScreen
           (item) ? @scene.pbEndScene : @scene.pbRefresh
         }

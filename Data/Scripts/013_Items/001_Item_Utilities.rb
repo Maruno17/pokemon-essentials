@@ -408,6 +408,25 @@ def pbRaiseHappinessAndLowerEV(pkmn,scene,stat,messages)
 end
 
 #===============================================================================
+# Change nature
+#===============================================================================
+def pbNatureChangingMint(new_nature, item, pkmn, scene)
+  if pkmn.nature_for_stats == new_nature
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    return false
+  end
+  if !scene.pbConfirm(_INTL("It might affect {1}'s stats. Are you sure you want to use it?", pkmn.name))
+    return false
+  end
+  pkmn.nature_for_stats = new_nature
+  pkmn.calc_stats
+  scene.pbRefresh
+  scene.pbDisplay(_INTL("{1}'s stats may have changed due to the effects of the {2}!",
+     pkmn.name, GameData::Item.get(item).name))
+  return true
+end
+
+#===============================================================================
 # Battle items
 #===============================================================================
 def pbBattleItemCanCureStatus?(status,pkmn,scene,showMessages)
@@ -435,7 +454,7 @@ def pbBikeCheck
     pbMessage(_INTL("Can't use that here."))
     return false
   end
-  if $game_player.pbHasDependentEvents?
+  if $game_player.has_follower?
     pbMessage(_INTL("It can't be used when you have someone with you."))
     return false
   end
@@ -560,7 +579,7 @@ def pbUseItem(bag,item,bagscene=nil)
     if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?",movename))
       return 0
     elsif pbMoveTutorChoose(machine,nil,true,itm.is_TR?)
-      bag.pbDeleteItem(item) if itm.consumed_after_use?
+      bag.remove(item) if itm.consumed_after_use?
       return 1
     end
     return 0
@@ -593,8 +612,8 @@ def pbUseItem(bag,item,bagscene=nil)
         if pbCheckUseOnPokemon(item,pkmn,screen)
           ret = ItemHandlers.triggerUseOnPokemon(item,pkmn,screen)
           if ret && itm.consumed_after_use?
-            bag.pbDeleteItem(item)
-            if !bag.pbHasItem?(item)
+            bag.remove(item)
+            if !bag.has?(item)
               pbMessage(_INTL("You used your last {1}.",itm.name)) { screen.pbUpdate }
               break
             end
@@ -608,7 +627,7 @@ def pbUseItem(bag,item,bagscene=nil)
   elsif useType==2   # Item is usable from Bag
     intret = ItemHandlers.triggerUseFromBag(item)
     if intret >= 0
-      bag.pbDeleteItem(item) if intret == 1 && itm.consumed_after_use?
+      bag.remove(item) if intret == 1 && itm.consumed_after_use?
       return intret
     end
     pbMessage(_INTL("Can't use that here."))
@@ -635,7 +654,7 @@ def pbUseItemOnPokemon(item,pkmn,scene)
       pbMessage(_INTL("\\se[PC access]You booted up {1}.\1",itm.name)) { scene.pbUpdate }
       if pbConfirmMessage(_INTL("Do you want to teach {1} to {2}?",movename,pkmn.name)) { scene.pbUpdate }
         if pbLearnMove(pkmn,machine,false,true) { scene.pbUpdate }
-          $PokemonBag.pbDeleteItem(item) if itm.consumed_after_use?
+          $bag.remove(item) if itm.consumed_after_use?
           return true
         end
       end
@@ -647,8 +666,8 @@ def pbUseItemOnPokemon(item,pkmn,scene)
   scene.pbClearAnnotations
   scene.pbHardRefresh
   if ret && itm.consumed_after_use?
-    $PokemonBag.pbDeleteItem(item)
-    if !$PokemonBag.pbHasItem?(item)
+    $bag.remove(item)
+    if !$bag.has?(item)
       pbMessage(_INTL("You used your last {1}.",itm.name)) { scene.pbUpdate }
     end
   end
@@ -660,7 +679,7 @@ def pbUseKeyItemInField(item)
   if ret==-1   # Item effect not found
     pbMessage(_INTL("Can't use that here."))
   elsif ret > 0 && GameData::Item.get(item).consumed_after_use?
-    $PokemonBag.pbDeleteItem(item)
+    $bag.remove(item)
   end
   return ret > 0
 end
@@ -700,9 +719,9 @@ def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
       scene.pbDisplay(_INTL("{1} is already holding a {2}.\1",pkmn.name,olditemname))
     end
     if scene.pbConfirm(_INTL("Would you like to switch the two items?"))
-      $PokemonBag.pbDeleteItem(item)
-      if !$PokemonBag.pbStoreItem(pkmn.item)
-        if !$PokemonBag.pbStoreItem(item)
+      $bag.remove(item)
+      if !$bag.add(pkmn.item)
+        if !$bag.add(item)
           raise _INTL("Could't re-store deleted item in Bag somehow")
         end
         scene.pbDisplay(_INTL("The Bag is full. The Pokémon's item could not be removed."))
@@ -713,7 +732,7 @@ def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
             scene.pbDisplay(_INTL("Took the {1} from {2} and gave it the {3}.",olditemname,pkmn.name,newitemname))
             return true
           else
-            if !$PokemonBag.pbStoreItem(item)
+            if !$bag.add(item)
               raise _INTL("Couldn't re-store deleted item in Bag somehow")
             end
           end
@@ -726,7 +745,7 @@ def pbGiveItemToPokemon(item,pkmn,scene,pkmnid=0)
     end
   else
     if !GameData::Item.get(item).is_mail? || pbWriteMail(item,pkmn,pkmnid,scene)
-      $PokemonBag.pbDeleteItem(item)
+      $bag.remove(item)
       pkmn.item = item
       scene.pbDisplay(_INTL("{1} is now holding the {2}.",pkmn.name,newitemname))
       return true
@@ -739,7 +758,7 @@ def pbTakeItemFromPokemon(pkmn,scene)
   ret = false
   if !pkmn.hasItem?
     scene.pbDisplay(_INTL("{1} isn't holding anything.",pkmn.name))
-  elsif !$PokemonBag.pbCanStore?(pkmn.item)
+  elsif !$bag.can_add?(pkmn.item)
     scene.pbDisplay(_INTL("The Bag is full. The Pokémon's item could not be removed."))
   elsif pkmn.mail
     if scene.pbConfirm(_INTL("Save the removed mail in your PC?"))
@@ -751,14 +770,14 @@ def pbTakeItemFromPokemon(pkmn,scene)
         ret = true
       end
     elsif scene.pbConfirm(_INTL("If the mail is removed, its message will be lost. OK?"))
-      $PokemonBag.pbStoreItem(pkmn.item)
+      $bag.add(pkmn.item)
       scene.pbDisplay(_INTL("Received the {1} from {2}.",pkmn.item.name,pkmn.name))
       pkmn.item = nil
       pkmn.mail = nil
       ret = true
     end
   else
-    $PokemonBag.pbStoreItem(pkmn.item)
+    $bag.add(pkmn.item)
     scene.pbDisplay(_INTL("Received the {1} from {2}.",pkmn.item.name,pkmn.name))
     pkmn.item = nil
     ret = true
@@ -773,7 +792,7 @@ def pbChooseItem(var = 0, *args)
   ret = nil
   pbFadeOutIn {
     scene = PokemonBag_Scene.new
-    screen = PokemonBagScreen.new(scene,$PokemonBag)
+    screen = PokemonBagScreen.new(scene, $bag)
     ret = screen.pbChooseItemScreen
   }
   $game_variables[var] = ret || :NONE if var > 0
@@ -784,7 +803,7 @@ def pbChooseApricorn(var = 0)
   ret = nil
   pbFadeOutIn {
     scene = PokemonBag_Scene.new
-    screen = PokemonBagScreen.new(scene,$PokemonBag)
+    screen = PokemonBagScreen.new(scene, $bag)
     ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_apricorn? })
   }
   $game_variables[var] = ret || :NONE if var > 0
@@ -795,7 +814,7 @@ def pbChooseFossil(var = 0)
   ret = nil
   pbFadeOutIn {
     scene = PokemonBag_Scene.new
-    screen = PokemonBagScreen.new(scene,$PokemonBag)
+    screen = PokemonBagScreen.new(scene, $bag)
     ret = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_fossil? })
   }
   $game_variables[var] = ret || :NONE if var > 0
@@ -810,7 +829,7 @@ def pbChooseItemFromList(message, variable, *args)
   for item in args
     next if !GameData::Item.exists?(item)
     itm = GameData::Item.get(item)
-    next if !$PokemonBag.pbHasItem?(itm)
+    next if !$bag.has?(itm)
     commands.push(itm.name)
     itemid.push(itm.id)
   end

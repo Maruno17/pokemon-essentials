@@ -396,8 +396,8 @@ def pbReceiveMysteryGift(id)
   elsif gift[1]>0   # Item
     item=gift[2]
     qty=gift[1]
-    if $PokemonBag.pbCanStore?(item,qty)
-      $PokemonBag.pbStoreItem(item,qty)
+    if $bag.can_add?(item,qty)
+      $bag.add(item,qty)
       itm = GameData::Item.get(item)
       itemname=(qty>1) ? itm.name_plural : itm.name
       if item == :LEFTOVERS

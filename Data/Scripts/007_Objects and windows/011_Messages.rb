@@ -351,9 +351,10 @@ def pbGetBasicMapNameFromId(id)
 end
 
 def pbGetMapNameFromId(id)
-  map=pbGetBasicMapNameFromId(id)
-  map.gsub!(/\\PN/,$Trainer.name) if $Trainer
-  return map
+  name = pbGetMessage(MessageTypes::MapNames, id)
+  name = pbGetBasicMapNameFromId(id) if nil_or_empty?(name)
+  name.gsub!(/\\PN/, $Trainer.name) if $Trainer
+  return name
 end
 
 def pbCsvField!(str)

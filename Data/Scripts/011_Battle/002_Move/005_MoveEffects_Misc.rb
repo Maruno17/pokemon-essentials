@@ -684,7 +684,7 @@ class PokeBattle_Move_UserSwapsPositionsWithAlly < PokeBattle_Move
     if @battle.pbSwapBattlers(idxA,idxB)
       @battle.pbDisplay(_INTL("{1} and {2} switched places!",
          @battle.battlers[idxB].pbThis,@battle.battlers[idxA].pbThis(true)))
-      [idxA, idxB].each { |idx| @battle.battlers[idx].pbEffectsOnEnteringPosition }
+      [idxA, idxB].each { |idx| @battle.pbEffectsOnBattlerEnteringPosition(@battle.battlers[idx]) }
     end
   end
 end

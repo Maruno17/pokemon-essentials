@@ -134,6 +134,8 @@ _END_
     #-------------------------------
     # Make background and text sprites
     #-------------------------------
+    viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
+    viewport.z = 99999
     text_viewport = Viewport.new(0, @trim, Graphics.width, Graphics.height - (@trim * 2))
     text_viewport.z = 99999
     @background_sprite = IconSprite.new(0, 0)
@@ -143,7 +145,7 @@ _END_
     lines_per_bitmap = @bitmap_height / 32
     num_bitmaps = (credit_lines.size.to_f / lines_per_bitmap).ceil
     for i in 0...num_bitmaps
-      credit_bitmap = Bitmap.new(Graphics.width, @bitmap_height)
+      credit_bitmap = Bitmap.new(Graphics.width, @bitmap_height + 16)
       pbSetSystemFont(credit_bitmap)
       for j in 0...lines_per_bitmap
         line = credit_lines[i * lines_per_bitmap + j]
@@ -159,18 +161,18 @@ _END_
             linewidth = Graphics.width / 2 - 20
           end
           credit_bitmap.font.color = TEXT_SHADOW_COLOR
-          credit_bitmap.draw_text(xpos,     j * 32 + 8, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos,     j * 32 + 12, linewidth, 32, line[k], align)
           credit_bitmap.font.color = TEXT_OUTLINE_COLOR
-          credit_bitmap.draw_text(xpos + 2, j * 32 - 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos,     j * 32 - 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos - 2, j * 32 - 2, linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos + 2, j * 32,     linewidth, 32, line[k], align)
-          credit_bitmap.draw_text(xpos - 2, j * 32,     linewidth, 32, line[k], align)
           credit_bitmap.draw_text(xpos + 2, j * 32 + 2, linewidth, 32, line[k], align)
           credit_bitmap.draw_text(xpos,     j * 32 + 2, linewidth, 32, line[k], align)
           credit_bitmap.draw_text(xpos - 2, j * 32 + 2, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos + 2, j * 32 + 4, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos - 2, j * 32 + 4, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos + 2, j * 32 + 6, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos,     j * 32 + 6, linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos - 2, j * 32 + 6, linewidth, 32, line[k], align)
           credit_bitmap.font.color = TEXT_BASE_COLOR
-          credit_bitmap.draw_text(xpos,     j * 32,     linewidth, 32, line[k], align)
+          credit_bitmap.draw_text(xpos,     j * 32 + 4, linewidth, 32, line[k], align)
         end
       end
       credit_sprite = Sprite.new(text_viewport)
@@ -197,11 +199,15 @@ _END_
       break if $scene != self
     end
     pbBGMFade(2.0)
+    $game_temp.background_bitmap = Graphics.snap_to_bitmap
     Graphics.freeze
+    viewport.color = Color.new(0, 0, 0, 255)   # Ensure screen is black
     Graphics.transition(8, "fadetoblack")
+    $game_temp.background_bitmap.dispose
     @background_sprite.dispose
     @credit_sprites.each { |s| s.dispose if s }
     text_viewport.dispose
+    viewport.dispose
     $PokemonGlobal.creditsPlayed = true
     pbBGMPlay(previousBGM)
   end

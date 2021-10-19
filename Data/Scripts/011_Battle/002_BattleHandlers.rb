@@ -5,9 +5,10 @@ module BattleHandlers
   # Battler's weight calculation
   WeightCalcAbility                   = AbilityHandlerHash.new
   WeightCalcItem                      = ItemHandlerHash.new   # Float Stone
-  # Battler's HP changed
+  # Battler's HP/stat changed
   HPHealItem                          = ItemHandlerHash.new
   AbilityOnHPDroppedBelowHalf         = AbilityHandlerHash.new
+  ItemOnStatDropped                   = ItemHandlerHash.new
   # Battler's status problem
   StatusCheckAbilityNonIgnorable      = AbilityHandlerHash.new   # Comatose
   StatusImmunityAbility               = AbilityHandlerHash.new
@@ -32,6 +33,7 @@ module BattleHandlers
   AbilityOnFlinch                     = AbilityHandlerHash.new   # Steadfast
   MoveBlockingAbility                 = AbilityHandlerHash.new
   MoveImmunityTargetAbility           = AbilityHandlerHash.new
+  UserItemOnMissing                   = ItemHandlerHash.new   # Blunder Policy
   # Move usage
   MoveBaseTypeModifierAbility         = AbilityHandlerHash.new
   # Accuracy calculation
@@ -127,9 +129,14 @@ module BattleHandlers
     return (ret!=nil) ? ret : false
   end
 
-  def self.triggerAbilityOnHPDroppedBelowHalf(ability,user,battle)
-    ret = AbilityOnHPDroppedBelowHalf.trigger(ability,user,battle)
+  def self.triggerAbilityOnHPDroppedBelowHalf(ability, user, move_user, battle)
+    ret = AbilityOnHPDroppedBelowHalf.trigger(ability, user, move_user, battle)
     return (ret!=nil) ? ret : false
+  end
+
+  def self.triggerItemOnStatDropped(item, user, move_user, battle)
+    ret = ItemOnStatDropped.trigger(item, user, move_user, battle)
+    return (ret != nil) ? ret : false
   end
 
   #=============================================================================
@@ -232,6 +239,10 @@ module BattleHandlers
   def self.triggerMoveImmunityTargetAbility(ability, user, target, move, type, battle, show_message)
     ret = MoveImmunityTargetAbility.trigger(ability, user, target, move, type, battle, show_message)
     return (ret!=nil) ? ret : false
+  end
+
+  def self.triggerUserItemOnMissing(item, user, target, move, hit_num, battle)
+    UserItemOnMissing.trigger(item, user, target, move, hit_num, battle)
   end
 
   #=============================================================================
@@ -340,16 +351,16 @@ module BattleHandlers
     UserAbilityEndOfMove.trigger(ability,user,targets,move,battle)
   end
 
-  def self.triggerTargetItemAfterMoveUse(item,battler,user,move,switched,battle)
-    TargetItemAfterMoveUse.trigger(item,battler,user,move,switched,battle)
+  def self.triggerTargetItemAfterMoveUse(item, battler, user, move, switched_battlers, battle)
+    TargetItemAfterMoveUse.trigger(item, battler, user, move, switched_battlers, battle)
   end
 
   def self.triggerUserItemAfterMoveUse(item,user,targets,move,numHits,battle)
     UserItemAfterMoveUse.trigger(item,user,targets,move,numHits,battle)
   end
 
-  def self.triggerTargetAbilityAfterMoveUse(ability,target,user,move,switched,battle)
-    TargetAbilityAfterMoveUse.trigger(ability,target,user,move,switched,battle)
+  def self.triggerTargetAbilityAfterMoveUse(ability, target, user, move, switched_battlers, battle)
+    TargetAbilityAfterMoveUse.trigger(ability, target, user, move, switched_battlers, battle)
   end
 
   def self.triggerEndOfMoveItem(item,battler,battle,forced)

@@ -8,7 +8,7 @@ class PokeBattle_Battle
     return if !@internalBattle || !@expGain
     # Go through each battler in turn to find the Pokémon that participated in
     # battle against it, and award those Pokémon Exp/EVs
-    expAll = (GameData::Item.exists?(:EXPALL) && $PokemonBag.pbHasItem?(:EXPALL))
+    expAll = $bag.has?(:EXPALL)
     p1 = pbParty(0)
     @battlers.each do |b|
       next unless b && b.opposes?   # Can only gain Exp from fainted foes
@@ -145,7 +145,7 @@ class PokeBattle_Battle
       end
     end
     # Exp. Charm increases Exp gained
-    exp = exp * 3 / 2 if GameData::Item.exists?(:EXPCHARM) && $PokemonBag.pbHasItem?(:EXPCHARM)
+    exp = exp * 3 / 2 if $bag.has?(:EXPCHARM)
     # Modify Exp gain based on pkmn's held item
     i = BattleHandlers.triggerExpGainModifierItem(pkmn.item,pkmn,exp)
     if i<0
