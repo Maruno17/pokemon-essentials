@@ -493,16 +493,7 @@ HiddenMoveHandlers::UseMove.add(:FLASH,proc { |move,pokemon|
 # Fly
 #===============================================================================
 HiddenMoveHandlers::CanUseMove.add(:FLY,proc { |move,pkmn,showmsg|
-  next false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_FLY,showmsg)
-  if $game_player.has_follower?
-    pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
-    next false
-  end
-  if !$game_map.metadata&.outdoor_map
-    pbMessage(_INTL("Can't use that here.")) if showmsg
-    next false
-  end
-  next true
+  next pbCanFly?(pkmn, showmsg)
 })
 
 HiddenMoveHandlers::UseMove.add(:FLY,proc { |move,pokemon|
@@ -510,10 +501,37 @@ HiddenMoveHandlers::UseMove.add(:FLY,proc { |move,pokemon|
     pbMessage(_INTL("Can't use that here."))
     next false
   end
-  if !pbHiddenMoveAnimation(pokemon)
-    pbMessage(_INTL("{1} used {2}!",pokemon.name,GameData::Move.get(move).name))
+  pbFlyToNewLocation(pokemon)
+  next true
+})
+
+def pbCanFly?(pkmn = nil, showmsg = false)
+  return false if !$DEBUG && !pkmn && $Trainer.pokemon_party.none? { |poke| poke.hasMove?(:FLY) }
+  return false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_FLY, showmsg)
+  if $game_player.has_follower?
+    pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
+    return false
   end
+  if !$game_map.metadata&.outdoor_map
+    pbMessage(_INTL("Can't use that here.")) if showmsg
+    return false
+  end
+  return true
+end
+
+def pbFlyToNewLocation(pkmn = nil, move = :FLY)
+  if !pkmn
+    fly_party = $Trainer.pokemon_party.select { |poke| poke.hasMove?(move) }
+    return false if fly_party.empty? && !$DEBUG
+    pkmn = fly_party[0]
+  end
+  if !pkmn || !pbHiddenMoveAnimation(pkmn)
+    name = !pkmn ? $Trainer.name : pkmn.name
+    pbMessage(_INTL("{1} used {2}!", name, GameData::Move.get(move).name))
+  end
+  return false if !$PokemonTemp.flydata
   pbFadeOutIn {
+    pbSEPlay("Anim/Wind1")
     $game_temp.player_new_map_id    = $PokemonTemp.flydata[0]
     $game_temp.player_new_x         = $PokemonTemp.flydata[1]
     $game_temp.player_new_y         = $PokemonTemp.flydata[2]
@@ -522,10 +540,12 @@ HiddenMoveHandlers::UseMove.add(:FLY,proc { |move,pokemon|
     $scene.transfer_player
     $game_map.autoplay
     $game_map.refresh
+    yield if block_given?
+    pbWait(Graphics.frame_rate/4)
   }
   pbEraseEscapePoint
-  next true
-})
+  return true
+end
 
 
 

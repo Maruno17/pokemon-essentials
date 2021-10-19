@@ -53,6 +53,11 @@ ItemHandlers::UseFromBag.add(:ITEMFINDER,proc { |item|
 
 ItemHandlers::UseFromBag.copy(:ITEMFINDER,:DOWSINGMCHN,:DOWSINGMACHINE)
 
+ItemHandlers::UseFromBag.add(:TOWNMAP,proc { |item|
+  pbShowMap(-1, false)
+  next ($PokemonTemp.flydata ? 2 : 0)
+})
+
 #===============================================================================
 # ConfirmUseInField handlers
 # Return values: true/false
@@ -302,8 +307,13 @@ ItemHandlers::UseInField.add(:ITEMFINDER,proc { |item|
 ItemHandlers::UseInField.copy(:ITEMFINDER,:DOWSINGMCHN,:DOWSINGMACHINE)
 
 ItemHandlers::UseInField.add(:TOWNMAP,proc { |item|
-  pbShowMap(-1,false)
-  next true
+  ret = false
+  if !$PokemonTemp.flydata
+    pbShowMap(-1, false)
+    ret = !$PokemonTemp.flydata.nil?
+  end
+  pbFlyToNewLocation
+  next ret
 })
 
 ItemHandlers::UseInField.add(:COINCASE,proc { |item|

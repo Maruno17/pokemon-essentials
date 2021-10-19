@@ -8,9 +8,6 @@ Other notes:
 - If a battle ends because of Rocky Helmet damage, the side that the Rocky
   Helmet holder is on should lose (Gen 7+) or win (Gen 6-).
 
-Can use Fly from within the Town Map if possible. (Good QoL, add if possible.)
-(Will be implemented by me in the next PR)
-
 Make example event that combines the Gen 8 fossils.
 
 #===============================================================================
@@ -23,8 +20,6 @@ title can be toggled. Ribbons also provide a title, and can similarly be
 toggled. (Probably don't bother implementing.)
 
 Bicycle that can work on water.
-
-Town Map added to the pause menu. (Don't bother adding.)
 
 Remote access to storage boxes via the party screen if you have the Pokémon Box
 Link item (and it's allowed to be used - in Gyms and some other places it's
@@ -91,6 +86,10 @@ New evolution methods:
 - Galarian Farfetch'd (performing 3 critical hits in a single battle)
 
 Added AI for new moves/items/abilities.
+
+Can use Fly from within the Town Map if possible.
+
+Town Map added to the pause menu.
 
 Ability Effect Changes
 - Intimidate now triggers Rattled. Rattled needs a new ability handler just for
