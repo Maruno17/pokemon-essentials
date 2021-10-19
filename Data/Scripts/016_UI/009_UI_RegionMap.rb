@@ -210,7 +210,7 @@ class PokemonRegionMap_Scene
     return "" if !@editor || !@map[2]
     map = @map[2].select { |loc| loc[0] == x && loc[1] == y }[0]
     currentobj  = map
-    currentname = map[2]
+    currentname = (map) ? map[2] || "" : ""
     currentname = pbMessageFreeText(_INTL("Set the name for this point."), currentname, false, 250) { pbUpdate }
     if currentname
       if currentobj
