@@ -492,46 +492,34 @@ HiddenMoveHandlers::UseMove.add(:FLASH,proc { |move,pokemon|
 #===============================================================================
 # Fly
 #===============================================================================
-HiddenMoveHandlers::CanUseMove.add(:FLY,proc { |move,pkmn,showmsg|
-  next pbCanFly?(pkmn, showmsg)
-})
-
-HiddenMoveHandlers::UseMove.add(:FLY,proc { |move,pokemon|
-  if !$PokemonTemp.flydata
-    pbMessage(_INTL("Can't use that here."))
-    next false
-  end
-  pbFlyToNewLocation(pokemon)
-  next true
-})
-
-def pbCanFly?(pkmn = nil, showmsg = false)
-  return false if !$DEBUG && !pkmn && $Trainer.pokemon_party.none? { |poke| poke.hasMove?(:FLY) }
-  return false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_FLY, showmsg)
+def pbCanFly?(pkmn = nil, show_messages = false)
+  return false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_FLY, show_messages)
+  return false if !$DEBUG && !pkmn && !$Trainer.get_pokemon_with_move(:FLY)
   if $game_player.has_follower?
-    pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
+    pbMessage(_INTL("It can't be used when you have someone with you.")) if show_messages
     return false
   end
   if !$game_map.metadata&.outdoor_map
-    pbMessage(_INTL("Can't use that here.")) if showmsg
+    pbMessage(_INTL("Can't use that here.")) if show_messages
     return false
   end
   return true
 end
 
 def pbFlyToNewLocation(pkmn = nil, move = :FLY)
-  if !pkmn
-    fly_party = $Trainer.pokemon_party.select { |poke| poke.hasMove?(move) }
-    return false if fly_party.empty? && !$DEBUG
-    pkmn = fly_party[0]
+  return false if !$PokemonTemp.flydata
+  pkmn = $Trainer.get_pokemon_with_move(move) if !pkmn
+  if !$DEBUG && !pkmn
+    $PokemonTemp.flydata = nil
+    yield if block_given?
+    return false
   end
   if !pkmn || !pbHiddenMoveAnimation(pkmn)
-    name = !pkmn ? $Trainer.name : pkmn.name
+    name = pkmn&.name || $Trainer.name
     pbMessage(_INTL("{1} used {2}!", name, GameData::Move.get(move).name))
   end
-  return false if !$PokemonTemp.flydata
   pbFadeOutIn {
-    pbSEPlay("Anim/Wind1")
+    pbSEPlay("Fly")
     $game_temp.player_new_map_id    = $PokemonTemp.flydata[0]
     $game_temp.player_new_x         = $PokemonTemp.flydata[1]
     $game_temp.player_new_y         = $PokemonTemp.flydata[2]
@@ -541,11 +529,24 @@ def pbFlyToNewLocation(pkmn = nil, move = :FLY)
     $game_map.autoplay
     $game_map.refresh
     yield if block_given?
-    pbWait(Graphics.frame_rate/4)
+    pbWait(Graphics.frame_rate / 4)
   }
   pbEraseEscapePoint
   return true
 end
+
+HiddenMoveHandlers::CanUseMove.add(:FLY,proc { |move, pkmn, showmsg|
+  next pbCanFly?(pkmn, showmsg)
+})
+
+HiddenMoveHandlers::UseMove.add(:FLY,proc { |move, pkmn|
+  if !$PokemonTemp.flydata
+    pbMessage(_INTL("Can't use that here."))
+    next false
+  end
+  pbFlyToNewLocation(pkmn)
+  next true
+})
 
 
 

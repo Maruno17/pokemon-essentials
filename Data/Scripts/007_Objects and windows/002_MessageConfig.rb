@@ -563,7 +563,9 @@ def pbFadeOutIn(z=99999,nofadeout=false)
   end
   pbPushFade
   begin
-    yield if block_given?
+    val = 0
+    val = yield if block_given?
+    nofadeout = true if val == 99999   # Ugly hack used by Town Map in the Bag/Pokégear
   ensure
     pbPopFade
     if !nofadeout

@@ -227,6 +227,10 @@ class PokemonBag_Scene
   def pbEndScene
     pbFadeOutAndHide(@sprites) if !@oldsprites
     @oldsprites = nil
+    dispose
+  end
+
+  def dispose
     pbDisposeSpriteHash(@sprites)
     @sliderbitmap.dispose
     @pocketbitmap.dispose
@@ -563,7 +567,7 @@ class PokemonBagScreen
         end
       end
     end
-    @scene.pbEndScene
+    ($PokemonTemp.flydata) ? @scene.dispose : @scene.pbEndScene
     return item
   end
 

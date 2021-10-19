@@ -110,6 +110,10 @@ class PokemonPokegear_Scene
 
   def pbEndScene
     pbFadeOutAndHide(@sprites) { pbUpdate }
+    dispose
+  end
+
+  def dispose
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
   end
@@ -139,7 +143,15 @@ class PokemonPokegearScreen
       if cmd<0
         break
       elsif cmdMap>=0 && cmd==cmdMap
-        pbShowMap(-1,false)
+        pbFadeOutIn {
+          scene = PokemonRegionMap_Scene.new(-1, false)
+          screen = PokemonRegionMapScreen.new(scene)
+          ret = screen.pbStartScreen
+          if ret
+            $PokemonTemp.flydata = ret
+            next 99999   # Ugly hack to make Pokégear scene not reappear if flying
+          end
+        }
         break if $PokemonTemp.flydata
       elsif cmdPhone>=0 && cmd==cmdPhone
         pbFadeOutIn {
@@ -153,6 +165,6 @@ class PokemonPokegearScreen
         }
       end
     end
-    @scene.pbEndScene
+    ($PokemonTemp.flydata) ? @scene.dispose : @scene.pbEndScene
   end
 end

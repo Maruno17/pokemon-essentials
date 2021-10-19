@@ -30,8 +30,8 @@ class PokemonPokedexInfo_Scene
       if hidden[0]==@region && hidden[1]>0 && $game_switches[hidden[1]]
         pbDrawImagePositions(@sprites["areamap"].bitmap,[
            ["Graphics/Pictures/#{hidden[4]}",
-              hidden[2]*PokemonRegionMap_Scene::SQUAREWIDTH,
-              hidden[3]*PokemonRegionMap_Scene::SQUAREHEIGHT]
+              hidden[2]*PokemonRegionMap_Scene::SQUARE_WIDTH,
+              hidden[3]*PokemonRegionMap_Scene::SQUARE_HEIGHT]
         ])
       end
     end
@@ -334,8 +334,8 @@ class PokemonPokedexInfo_Scene
     # Draw coloured squares on each square of the region map with a nest
     pointcolor   = Color.new(0,248,248)
     pointcolorhl = Color.new(192,248,248)
-    sqwidth = PokemonRegionMap_Scene::SQUAREWIDTH
-    sqheight = PokemonRegionMap_Scene::SQUAREHEIGHT
+    sqwidth = PokemonRegionMap_Scene::SQUARE_WIDTH
+    sqheight = PokemonRegionMap_Scene::SQUARE_HEIGHT
     for j in 0...points.length
       if points[j]
         x = (j%mapwidth)*sqwidth

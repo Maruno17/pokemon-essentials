@@ -254,10 +254,8 @@ module Settings
     [0, 52, 20, 14, "mapHiddenFaraday", false]
   ]
 
-  # Allow the player to fly to a known location directly from the Town Map.
-  # Checks will still be made for things like badges, dependent events,
-  # whether the player has a Pokemon in their party that knows Fly and
-  # whether the player is indoors.
+  # Whether the player can use Fly while looking at the Town Map. This is only
+  # allowed if the player can use Fly normally.
   CAN_FLY_FROM_TOWN_MAP = true
 
   #=============================================================================
