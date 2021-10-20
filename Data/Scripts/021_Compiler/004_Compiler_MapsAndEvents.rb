@@ -1,4 +1,24 @@
 module Compiler
+  SCRIPT_REPLACEMENTS = [
+    ['Kernel.',                      ''],
+    ['$PokemonBag.pbQuantity',       '$bag.quantity'],
+    ['$PokemonBag.pbHasItem?',       '$bag.has?'],
+    ['$PokemonBag.pbCanStore?',      '$bag.can_add?'],
+    ['$PokemonBag.pbStoreItem',      '$bag.add'],
+    ['$PokemonBag.pbStoreAllOrNone', '$bag.add_all'],
+    ['$PokemonBag.pbChangeItem',     '$bag.replace_item'],
+    ['$PokemonBag.pbDeleteItem',     '$bag.remove'],
+    ['$PokemonBag.pbIsRegistered?',  '$bag.registered?'],
+    ['$PokemonBag.pbRegisterItem',   '$bag.register'],
+    ['$PokemonBag.pbUnregisterItem', '$bag.unregister'],
+    ['$PokemonBag',                  '$bag'],
+    ['pbQuantity',                   '$bag.quantity'],
+    ['pbHasItem?',                   '$bag.has?'],
+    ['pbCanStore?',                  '$bag.can_add?'],
+    ['pbStoreItem',                  '$bag.add'],
+    ['pbStoreAllOrNone',             '$bag.add_all']
+  ]
+
   module_function
 
   #=============================================================================
@@ -819,22 +839,6 @@ module Compiler
     return false
   end
 
-  def change_script(script,re)
-    tmp = script[0].gsub(re) { yield($~) }
-    if script[0]!=tmp
-      script[0] = tmp
-      return true
-    end
-    return false
-  end
-
-  def change_scripts(script)
-    changed = false
-    changed |= change_script(script,/\$game_variables\[(\d+)\](?!\s*(?:\=|\!|<|>))/) { |m| "pbGet("+m[1]+")" }
-    changed |= change_script(script,/\$Trainer\.party\[\s*pbGet\((\d+)\)\s*\]/) { |m| "pbGetPokemon("+m[1]+")" }
-    return changed
-  end
-
   def fix_event_name(event)
     return false if !event
     case event.name.downcase
@@ -848,6 +852,31 @@ module Compiler
       return false
     end
     return true
+  end
+
+  def replace_scripts(script)
+    ret = false
+    SCRIPT_REPLACEMENTS.each { |pair| ret = true if script.gsub!(pair[0], pair[1]) }
+    ret = true if script.gsub!(/\$game_variables\[(\d+)\](?!\s*(?:\=|\!|<|>))/) { |m| "pbGet(" + $~[1] + ")" }
+    ret = true if script.gsub!(/\$Trainer\.party\[\s*pbGet\((\d+)\)\s*\]/) { |m| "pbGetPokemon(" + $~[1] + ")" }
+    return ret
+  end
+
+  def fix_event_scripts(event)
+    return false if event_is_empty?(event)
+    ret = false
+    pbEachPage(event) do |page|
+      page.list.each do |cmd|
+        params = cmd.parameters
+        case cmd.code
+        when 355, 655   # Script (first line, continuation line)
+          ret = true if params[0].is_a?(String) && replace_scripts(params[0])
+        when 111   # Conditional Branch
+          ret = true if params[0] == 12 && replace_scripts(params[1])
+        end
+      end
+    end
+    return ret
   end
 
   def fix_event_use(event,_mapID,mapData)
@@ -864,19 +893,13 @@ module Compiler
       while i<list.length
         params = list[i].parameters
         case list[i].code
-        when 655   # Script (continuation line)
-          x = [params[0]]
-          changed |= change_scripts(x)
-          params[0] = x[0]
+#        when 655   # Script (continuation line)
         when 355   # Script (first line)
           lastScript = i
           if !params[0].is_a?(String)
             i += 1
             next
           end
-          x = [params[0]]
-          changed |= change_scripts(x)
-          params[0] = x[0]
           # Check if the script is an old way of healing the entire party, and if
           # so, replace it with a better version that uses event commands
           if params[0][0,1]!="f" && params[0][0,1]!="p" && params[0][0,1]!="K"
@@ -1225,10 +1248,7 @@ module Compiler
           end
         when 111   # Conditional Branch
           if list[i].parameters[0]==12   # script
-            x = [list[i].parameters[1]]
-            changed |= change_scripts(x)
-            list[i].parameters[1] = x[0]
-            script = x[0]
+            script = list[i].parameters[1]
             if script[trainerMoneyRE]   # Compares $Trainer.money with a value
               # Checking money directly
               operator = $1
@@ -1432,6 +1452,7 @@ module Compiler
           changed = true
         end
         changed = true if fix_event_name(map.events[key])
+        changed = true if fix_event_scripts(map.events[key])
         newevent = fix_event_use(map.events[key],id,mapData)
         if newevent
           map.events[key] = newevent
