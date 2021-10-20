@@ -194,18 +194,18 @@ def pbManageMysteryGifts
           newgift=pbEditMysteryGift(gift[1],gift[2],gift[0],gift[3])
           master[command]=newgift if newgift
         elsif cmd==2   # Receive
-          if !$Trainer
+          if !$player
             pbMessage(_INTL("There is no save file loaded. Cannot receive any gifts."))
             next
           end
           replaced=false
-          for i in 0...$Trainer.mystery_gifts.length
-            if $Trainer.mystery_gifts[i][0]==gift[0]
-              $Trainer.mystery_gifts[i]=gift
+          for i in 0...$player.mystery_gifts.length
+            if $player.mystery_gifts[i][0]==gift[0]
+              $player.mystery_gifts[i]=gift
               replaced=true
             end
           end
-          $Trainer.mystery_gifts.push(gift) if !replaced
+          $player.mystery_gifts.push(gift) if !replaced
           pbReceiveMysteryGift(gift[0])
         elsif cmd==3   # Delete
           master.delete_at(command) if pbConfirmMessage(_INTL("Are you sure you want to delete this gift?"))
@@ -355,7 +355,7 @@ end
 # Collecting a Mystery Gift from the deliveryman.
 #===============================================================================
 def pbNextMysteryGiftID
-  for i in $Trainer.mystery_gifts
+  for i in $player.mystery_gifts
     return i[0] if i.length>1
   end
   return 0
@@ -363,8 +363,8 @@ end
 
 def pbReceiveMysteryGift(id)
   index=-1
-  for i in 0...$Trainer.mystery_gifts.length
-    if $Trainer.mystery_gifts[i][0]==id && $Trainer.mystery_gifts[i].length>1
+  for i in 0...$player.mystery_gifts.length
+    if $player.mystery_gifts[i][0]==id && $player.mystery_gifts[i].length>1
       index=i
       break
     end
@@ -373,7 +373,7 @@ def pbReceiveMysteryGift(id)
     pbMessage(_INTL("Couldn't find an unclaimed Mystery Gift with ID {1}.",id))
     return false
   end
-  gift=$Trainer.mystery_gifts[index]
+  gift=$player.mystery_gifts[index]
   if gift[1]==0   # Pokémon
     gift[2].personalID = rand(2**16) | rand(2**16) << 16
     gift[2].calc_stats
@@ -389,8 +389,8 @@ def pbReceiveMysteryGift(id)
       gift[2].obtain_level=gift[2].level
     end
     if pbAddPokemonSilent(gift[2])
-      pbMessage(_INTL("\\me[Pkmn get]{1} received {2}!",$Trainer.name,gift[2].name))
-      $Trainer.mystery_gifts[index]=[id]
+      pbMessage(_INTL("\\me[Pkmn get]{1} received {2}!",$player.name,gift[2].name))
+      $player.mystery_gifts[index]=[id]
       return true
     end
   elsif gift[1]>0   # Item
@@ -412,7 +412,7 @@ def pbReceiveMysteryGift(id)
       else
         pbMessage(_INTL("\\me[Item get]You obtained a \\c[1]{1}\\c[0]!\\wtnp[30]",itemname))
       end
-      $Trainer.mystery_gifts[index]=[id]
+      $player.mystery_gifts[index]=[id]
       return true
     end
   end

@@ -187,12 +187,12 @@ ItemHandlers::UseInField.add(:ESCAPEROPE,proc { |item|
 })
 
 ItemHandlers::UseInField.add(:SACREDASH,proc { |item|
-  if $Trainer.pokemon_count == 0
+  if $player.pokemon_count == 0
     pbMessage(_INTL("There is no Pokémon."))
     next false
   end
   canrevive = false
-  for i in $Trainer.pokemon_party
+  for i in $player.pokemon_party
     next if !i.fainted?
     canrevive = true
     break
@@ -204,15 +204,14 @@ ItemHandlers::UseInField.add(:SACREDASH,proc { |item|
   revived = 0
   pbFadeOutIn {
     scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene,$Trainer.party)
+    screen = PokemonPartyScreen.new(scene, $player.party)
     screen.pbStartScene(_INTL("Using item..."),false)
-    for i in 0...$Trainer.party.length
-      if $Trainer.party[i].fainted?
-        revived += 1
-        $Trainer.party[i].heal
-        screen.pbRefreshSingle(i)
-        screen.pbDisplay(_INTL("{1}'s HP was restored.",$Trainer.party[i].name))
-      end
+    $player.party.each_with_index do |pkmn, i|
+      next if !pkmn.fainted?
+      revived += 1
+      pkmn.heal
+      screen.pbRefreshSingle(i)
+      screen.pbDisplay(_INTL("{1}'s HP was restored.", pkmn.name))
     end
     if revived==0
       screen.pbDisplay(_INTL("It won't have any effect."))
@@ -319,7 +318,7 @@ ItemHandlers::UseInField.add(:TOWNMAP, proc { |item|
 })
 
 ItemHandlers::UseInField.add(:COINCASE,proc { |item|
-  pbMessage(_INTL("Coins: {1}", $Trainer.coins.to_s_formatted))
+  pbMessage(_INTL("Coins: {1}", $player.coins.to_s_formatted))
   next true
 })
 
@@ -1262,7 +1261,7 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
   # Fusing
   chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
   next false if chosen < 0
-  other_pkmn = $Trainer.party[chosen]
+  other_pkmn = $player.party[chosen]
   if pkmn == other_pkmn
     scene.pbDisplay(_INTL("It cannot be fused with itself."))
     next false
@@ -1281,7 +1280,7 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERS,proc { |item,pkmn,scene|
   newForm = 2 if other_pkmn.isSpecies?(:ZEKROM)
   pkmn.setForm(newForm) {
     pkmn.fused = other_pkmn
-    $Trainer.remove_pokemon_at_index(chosen)
+    $player.remove_pokemon_at_index(chosen)
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
@@ -1296,13 +1295,13 @@ ItemHandlers::UseOnPokemon.add(:DNASPLICERSUSED,proc { |item,pkmn,scene|
   elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
-  elsif $Trainer.party_full?
+  elsif $player.party_full?
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
   # Unfusing
   pkmn.setForm(0) {
-    $Trainer.party[$Trainer.party.length] = pkmn.fused
+    $player.party[$player.party.length] = pkmn.fused
     pkmn.fused = nil
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
@@ -1322,7 +1321,7 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
   # Fusing
   chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
   next false if chosen < 0
-  other_pkmn = $Trainer.party[chosen]
+  other_pkmn = $player.party[chosen]
   if pkmn == other_pkmn
     scene.pbDisplay(_INTL("It cannot be fused with itself."))
     next false
@@ -1338,7 +1337,7 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZER,proc { |item,pkmn,scene|
   end
   pkmn.setForm(1) {
     pkmn.fused = other_pkmn
-    $Trainer.remove_pokemon_at_index(chosen)
+    $player.remove_pokemon_at_index(chosen)
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
@@ -1353,13 +1352,13 @@ ItemHandlers::UseOnPokemon.add(:NSOLARIZERUSED,proc { |item,pkmn,scene|
   elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
-  elsif $Trainer.party_full?
+  elsif $player.party_full?
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
   # Unfusing
   pkmn.setForm(0) {
-    $Trainer.party[$Trainer.party.length] = pkmn.fused
+    $player.party[$player.party.length] = pkmn.fused
     pkmn.fused = nil
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
@@ -1379,7 +1378,7 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
   # Fusing
   chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
   next false if chosen < 0
-  other_pkmn = $Trainer.party[chosen]
+  other_pkmn = $player.party[chosen]
   if pkmn == other_pkmn
     scene.pbDisplay(_INTL("It cannot be fused with itself."))
     next false
@@ -1395,7 +1394,7 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZER,proc { |item,pkmn,scene|
   end
   pkmn.setForm(2) {
     pkmn.fused = other_pkmn
-    $Trainer.remove_pokemon_at_index(chosen)
+    $player.remove_pokemon_at_index(chosen)
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
@@ -1410,13 +1409,13 @@ ItemHandlers::UseOnPokemon.add(:NLUNARIZERUSED,proc { |item,pkmn,scene|
   elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
-  elsif $Trainer.party_full?
+  elsif $player.party_full?
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
   # Unfusing
   pkmn.setForm(0) {
-    $Trainer.party[$Trainer.party.length] = pkmn.fused
+    $player.party[$player.party.length] = pkmn.fused
     pkmn.fused = nil
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
@@ -1436,7 +1435,7 @@ ItemHandlers::UseOnPokemon.add(:REINSOFUNITY, proc { |item, pkmn, scene|
   # Fusing
   chosen = scene.pbChoosePokemon(_INTL("Fuse with which Pokémon?"))
   next false if chosen < 0
-  other_pkmn = $Trainer.party[chosen]
+  other_pkmn = $player.party[chosen]
   if pkmn == other_pkmn
     scene.pbDisplay(_INTL("It cannot be fused with itself."))
     next false
@@ -1456,7 +1455,7 @@ ItemHandlers::UseOnPokemon.add(:REINSOFUNITY, proc { |item, pkmn, scene|
   newForm = 2 if other_pkmn.isSpecies?(:SPECTRIER)
   pkmn.setForm(newForm) {
     pkmn.fused = other_pkmn
-    $Trainer.remove_pokemon_at_index(chosen)
+    $player.remove_pokemon_at_index(chosen)
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))
   }
@@ -1471,13 +1470,13 @@ ItemHandlers::UseOnPokemon.add(:REINSOFUNITYUSED, proc { |item, pkmn, scene|
   elsif pkmn.fainted?
     scene.pbDisplay(_INTL("This can't be used on the fainted Pokémon."))
     next false
-  elsif $Trainer.party_full?
+  elsif $player.party_full?
     scene.pbDisplay(_INTL("You have no room to separate the Pokémon."))
     next false
   end
   # Unfusing
   pkmn.setForm(0) {
-    $Trainer.party[$Trainer.party.length] = pkmn.fused
+    $player.party[$player.party.length] = pkmn.fused
     pkmn.fused = nil
     scene.pbHardRefresh
     scene.pbDisplay(_INTL("{1} changed Forme!", pkmn.name))

@@ -208,7 +208,7 @@ end
 #===============================================================================
 # Unused
 def pbGetPlayerGraphic
-  id = $Trainer.character_ID
+  id = $player.character_ID
   return "" if id < 1
   meta = GameData::PlayerMetadata.get(id)
   return "" if !meta
@@ -223,24 +223,24 @@ def pbChangePlayer(id)
   return false if id < 1
   meta = GameData::PlayerMetadata.get(id)
   return false if !meta
-  $Trainer.character_ID = id
-  $Trainer.trainer_type = meta.trainer_type
+  $player.character_ID = id
+  $player.trainer_type = meta.trainer_type
   $game_player.character_name = meta.walk_charset
 end
 
 def pbTrainerName(name = nil, outfit = 0)
-  pbChangePlayer(1) if $Trainer.character_ID < 1
+  pbChangePlayer(1) if $player.character_ID < 1
   if name.nil?
     name = pbEnterPlayerName(_INTL("Your name?"), 0, Settings::MAX_PLAYER_NAME_SIZE)
     if name.nil? || name.empty?
-      player_metadata = GameData::PlayerMetadata.get($Trainer.character_ID)
+      player_metadata = GameData::PlayerMetadata.get($player.character_ID)
       trainer_type = (player_metadata) ? player_metadata.trainer_type : nil
       gender = pbGetTrainerTypeGender(trainer_type)
       name = pbSuggestTrainerName(gender)
     end
   end
-  $Trainer.name   = name
-  $Trainer.outfit = outfit
+  $player.name   = name
+  $player.outfit = outfit
   $PokemonTemp.begunNewGame = true
 end
 
@@ -406,7 +406,7 @@ end
 
 def pbMoveTutorAnnotations(move, movelist = nil)
   ret = []
-  $Trainer.party.each_with_index do |pkmn, i|
+  $player.party.each_with_index do |pkmn, i|
     if pkmn.egg?
       ret[i] = _INTL("NOT ABLE")
     elsif pkmn.hasMove?(move)
@@ -439,12 +439,12 @@ def pbMoveTutorChoose(move,movelist=nil,bymachine=false,oneusemachine=false)
     movename = GameData::Move.get(move).name
     annot = pbMoveTutorAnnotations(move,movelist)
     scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene,$Trainer.party)
+    screen = PokemonPartyScreen.new(scene,$player.party)
     screen.pbStartScene(_INTL("Teach which Pokémon?"),false,annot)
     loop do
       chosen = screen.pbChoosePokemon
       break if chosen<0
-      pokemon = $Trainer.party[chosen]
+      pokemon = $player.party[chosen]
       if pokemon.egg?
         pbMessage(_INTL("Eggs can't be taught any moves.")) { screen.pbUpdate }
       elsif pokemon.shadowPokemon?

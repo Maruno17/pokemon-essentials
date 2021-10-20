@@ -50,12 +50,12 @@ end
 def pbDayCareDeposit(index)
   for i in 0...2
     next if $PokemonGlobal.daycare[i][0]
-    pkmn = $Trainer.party[index]
+    pkmn = $player.party[index]
     pkmn.heal
     pkmn.form = 0 if pkmn.isSpecies?(:SHAYMIN)
     $PokemonGlobal.daycare[i][0] = pkmn
     $PokemonGlobal.daycare[i][1] = pkmn.level
-    $Trainer.party.delete_at(index)
+    $player.party.delete_at(index)
     $PokemonGlobal.daycareEgg      = 0
     $PokemonGlobal.daycareEggSteps = 0
     return
@@ -66,10 +66,10 @@ end
 def pbDayCareWithdraw(index)
   if !$PokemonGlobal.daycare[index][0]
     raise _INTL("There's no Pokémon here...")
-  elsif $Trainer.party_full?
+  elsif $player.party_full?
     raise _INTL("Can't store the Pokémon...")
   else
-    $Trainer.party[$Trainer.party.length] = $PokemonGlobal.daycare[index][0]
+    $player.party[$player.party.length] = $PokemonGlobal.daycare[index][0]
     $PokemonGlobal.daycare[index][0] = nil
     $PokemonGlobal.daycare[index][1] = 0
     $PokemonGlobal.daycareEgg = 0
@@ -155,7 +155,7 @@ end
 #===============================================================================
 def pbDayCareGenerateEgg
   return if pbDayCareDeposited != 2
-  raise _INTL("Can't store the egg.") if $Trainer.party_full?
+  raise _INTL("Can't store the egg.") if $player.party_full?
   pkmn0 = $PokemonGlobal.daycare[0][0]
   pkmn1 = $PokemonGlobal.daycare[1][0]
   mother = nil
@@ -364,7 +364,7 @@ def pbDayCareGenerateEgg
   egg.steps_to_hatch = egg.species_data.hatch_steps
   egg.givePokerus if rand(65536) < Settings::POKERUS_CHANCE
   # Add egg to party
-  $Trainer.party[$Trainer.party.length] = egg
+  $player.party[$player.party.length] = egg
 end
 
 

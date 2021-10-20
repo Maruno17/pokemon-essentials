@@ -12,7 +12,7 @@ end
 
 # Used in events
 def pbHasEligible?(*arg)
-  return pbBattleChallenge.rules.ruleset.hasValidTeam?($Trainer.party)
+  return pbBattleChallenge.rules.ruleset.hasValidTeam?($player.party)
 end
 
 #===============================================================================
@@ -39,7 +39,7 @@ def pbEntryScreen(*arg)
   retval = false
   pbFadeOutIn {
     scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene, $Trainer.party)
+    screen = PokemonPartyScreen.new(scene, $player.party)
     ret = screen.pbPokemonMultipleEntryScreenEx(pbBattleChallenge.rules.ruleset)
     # Set party
     pbBattleChallenge.setParty(ret) if ret

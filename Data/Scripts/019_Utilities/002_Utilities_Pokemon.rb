@@ -2,7 +2,7 @@
 # Nicknaming and storing Pokémon
 #===============================================================================
 def pbBoxesFull?
-  return ($Trainer.party_full? && $PokemonStorage.full?)
+  return ($player.party_full? && $PokemonStorage.full?)
 end
 
 def pbNickname(pkmn)
@@ -20,13 +20,13 @@ def pbStorePokemon(pkmn)
     return
   end
   pkmn.record_first_moves
-  if $Trainer.party_full?
+  if $player.party_full?
     oldcurbox = $PokemonStorage.currentBox
     storedbox = $PokemonStorage.pbStoreCaught(pkmn)
     curboxname = $PokemonStorage[oldcurbox].name
     boxname = $PokemonStorage[storedbox].name
     creator = nil
-    creator = pbGetStorageCreator if $Trainer.seen_storage_creator
+    creator = pbGetStorageCreator if $player.seen_storage_creator
     if storedbox != oldcurbox
       if creator
         pbMessage(_INTL("Box \"{1}\" on {2}'s PC was full.\1", curboxname, creator))
@@ -43,7 +43,7 @@ def pbStorePokemon(pkmn)
       pbMessage(_INTL("It was stored in box \"{1}.\"", boxname))
     end
   else
-    $Trainer.party[$Trainer.party.length] = pkmn
+    $player.party[$player.party.length] = pkmn
   end
 end
 
@@ -53,8 +53,8 @@ def pbNicknameAndStore(pkmn)
     pbMessage(_INTL("The Pokémon Boxes are full and can't accept any more!"))
     return
   end
-  $Trainer.pokedex.set_seen(pkmn.species)
-  $Trainer.pokedex.set_owned(pkmn.species)
+  $player.pokedex.set_seen(pkmn.species)
+  $player.pokedex.set_owned(pkmn.species)
   pbNickname(pkmn)
   pbStorePokemon(pkmn)
 end
@@ -71,22 +71,22 @@ def pbAddPokemon(pkmn, level = 1, see_form = true)
   end
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   species_name = pkmn.speciesName
-  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $Trainer.name, species_name))
+  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $player.name, species_name))
   pbNicknameAndStore(pkmn)
-  $Trainer.pokedex.register(pkmn) if see_form
+  $player.pokedex.register(pkmn) if see_form
   return true
 end
 
 def pbAddPokemonSilent(pkmn, level = 1, see_form = true)
   return false if !pkmn || pbBoxesFull?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  $Trainer.pokedex.register(pkmn) if see_form
-  $Trainer.pokedex.set_owned(pkmn.species)
+  $player.pokedex.register(pkmn) if see_form
+  $player.pokedex.set_owned(pkmn.species)
   pkmn.record_first_moves
-  if $Trainer.party_full?
+  if $player.party_full?
     $PokemonStorage.pbStoreCaught(pkmn)
   else
-    $Trainer.party[$Trainer.party.length] = pkmn
+    $player.party[$player.party.length] = pkmn
   end
   return true
 end
@@ -95,27 +95,27 @@ end
 # Giving Pokémon/eggs to the player (can only add to party)
 #===============================================================================
 def pbAddToParty(pkmn, level = 1, see_form = true)
-  return false if !pkmn || $Trainer.party_full?
+  return false if !pkmn || $player.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   species_name = pkmn.speciesName
-  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $Trainer.name, species_name))
+  pbMessage(_INTL("{1} obtained {2}!\\me[Pkmn get]\\wtnp[80]\1", $player.name, species_name))
   pbNicknameAndStore(pkmn)
-  $Trainer.pokedex.register(pkmn) if see_form
+  $player.pokedex.register(pkmn) if see_form
   return true
 end
 
 def pbAddToPartySilent(pkmn, level = nil, see_form = true)
-  return false if !pkmn || $Trainer.party_full?
+  return false if !pkmn || $player.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
-  $Trainer.pokedex.register(pkmn) if see_form
-  $Trainer.pokedex.set_owned(pkmn.species)
+  $player.pokedex.register(pkmn) if see_form
+  $player.pokedex.set_owned(pkmn.species)
   pkmn.record_first_moves
-  $Trainer.party[$Trainer.party.length] = pkmn
+  $player.party[$player.party.length] = pkmn
   return true
 end
 
 def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner_gender = 0, see_form = true)
-  return false if !pkmn || $Trainer.party_full?
+  return false if !pkmn || $player.party_full?
   pkmn = Pokemon.new(pkmn, level) if !pkmn.is_a?(Pokemon)
   # Set original trainer to a foreign one
   pkmn.owner = Pokemon::Owner.new_foreign(owner_name || "", owner_gender)
@@ -124,18 +124,18 @@ def pbAddForeignPokemon(pkmn, level = 1, owner_name = nil, nickname = nil, owner
   # Recalculate stats
   pkmn.calc_stats
   if owner_name
-    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon from {2}.\1", $Trainer.name, owner_name))
+    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon from {2}.\1", $player.name, owner_name))
   else
-    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon.\1", $Trainer.name))
+    pbMessage(_INTL("\\me[Pkmn get]{1} received a Pokémon.\1", $player.name))
   end
   pbStorePokemon(pkmn)
-  $Trainer.pokedex.register(pkmn) if see_form
-  $Trainer.pokedex.set_owned(pkmn.species)
+  $player.pokedex.register(pkmn) if see_form
+  $player.pokedex.set_owned(pkmn.species)
   return true
 end
 
 def pbGenerateEgg(pkmn, text = "")
-  return false if !pkmn || $Trainer.party_full?
+  return false if !pkmn || $player.party_full?
   pkmn = Pokemon.new(pkmn, Settings::EGG_LEVEL) if !pkmn.is_a?(Pokemon)
   # Set egg's details
   pkmn.name           = _INTL("Egg")
@@ -143,7 +143,7 @@ def pbGenerateEgg(pkmn, text = "")
   pkmn.obtain_text    = text
   pkmn.calc_stats
   # Add egg to party
-  $Trainer.party[$Trainer.party.length] = pkmn
+  $player.party[$player.party.length] = pkmn
   return true
 end
 alias pbAddEgg pbGenerateEgg
@@ -154,7 +154,7 @@ alias pbGenEgg pbGenerateEgg
 #===============================================================================
 # Returns the first unfainted, non-egg Pokémon in the player's party.
 def pbFirstAblePokemon(variable_ID)
-  $Trainer.party.each_with_index do |pkmn, i|
+  $player.party.each_with_index do |pkmn, i|
     next if !pkmn.able?
     pbSet(variable_ID, i)
     return pkmn

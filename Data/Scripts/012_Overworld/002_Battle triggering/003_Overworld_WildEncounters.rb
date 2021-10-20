@@ -104,7 +104,7 @@ class PokemonEncounters
       raise ArgumentError.new(_INTL("Encounter type {1} does not exist", enc_type))
     end
     return false if $game_system.encounter_disabled
-    return false if !$Trainer
+    return false if !$player
     return false if $DEBUG && Input.press?(Input::CTRL)
     # Check if enc_type has a defined step chance/encounter table
     return false if !@step_chances[enc_type] || @step_chances[enc_type] == 0
@@ -126,7 +126,7 @@ class PokemonEncounters
       encounter_chance *= 1.5 if $PokemonMap.whiteFluteUsed
       min_steps_needed /= 2 if $PokemonMap.whiteFluteUsed
     end
-    first_pkmn = $Trainer.first_pokemon
+    first_pkmn = $player.first_pokemon
     if first_pkmn
       case first_pkmn.item_id
       when :CLEANSETAG
@@ -187,7 +187,7 @@ class PokemonEncounters
     return true if pbPokeRadarOnShakingGrass
     # Repel
     if repel_active
-      first_pkmn = (Settings::REPEL_COUNTS_FAINTED_POKEMON) ? $Trainer.first_pokemon : $Trainer.first_able_pokemon
+      first_pkmn = (Settings::REPEL_COUNTS_FAINTED_POKEMON) ? $player.first_pokemon : $player.first_able_pokemon
       if first_pkmn && enc_data[1] < first_pkmn.level
         @chance_accumulator = 0
         return false
@@ -195,7 +195,7 @@ class PokemonEncounters
     end
     # Some abilities make wild encounters less likely if the wild Pokémon is
     # sufficiently weaker than the Pokémon with the ability
-    first_pkmn = $Trainer.first_pokemon
+    first_pkmn = $player.first_pokemon
     if first_pkmn
       case first_pkmn.ability_id
       when :INTIMIDATE, :KEENEYE
@@ -211,7 +211,7 @@ class PokemonEncounters
     return false if $PokemonTemp.forceSingleBattle
     return false if pbInSafari?
     return true if $PokemonGlobal.partner
-    return false if $Trainer.able_pokemon_count <= 1
+    return false if $player.able_pokemon_count <= 1
     return true if $game_player.pbTerrainTag.double_wild_encounters && rand(100) < 30
     return false
   end
@@ -276,7 +276,7 @@ class PokemonEncounters
     # Static/Magnet Pull prefer wild encounters of certain types, if possible.
     # If they activate, they remove all Pokémon from the encounter table that do
     # not have the type they favor. If none have that type, nothing is changed.
-    first_pkmn = $Trainer.first_pokemon
+    first_pkmn = $player.first_pokemon
     if first_pkmn
       favored_type = nil
       case first_pkmn.ability_id
@@ -393,7 +393,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   genwildpoke = Pokemon.new(species,level)
   # Give the wild Pokémon a held item
   items = genwildpoke.wildHoldItems
-  first_pkmn = $Trainer.first_pokemon
+  first_pkmn = $player.first_pokemon
   chances = [50,5,1]
   if first_pkmn
     case first_pkmn.ability_id
@@ -417,7 +417,7 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   shiny_retries += 2 if $bag.has?(:SHINYCHARM)
   if Settings::HIGHER_SHINY_CHANCES_WITH_NUMBER_BATTLED
     values = [0, 0]
-    case $Trainer.pokedex.battled_count(species)
+    case $player.pokedex.battled_count(species)
     when 0...50    then values = [0, 0]
     when 50...100  then values = [1, 15]
     when 100...200 then values = [2, 20]

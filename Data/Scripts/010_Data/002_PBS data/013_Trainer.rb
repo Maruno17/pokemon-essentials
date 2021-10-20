@@ -108,7 +108,7 @@ module GameData
       end
       # Create trainer object
       trainer = NPCTrainer.new(tr_name, @trainer_type)
-      trainer.id        = $Trainer.make_foreign_ID
+      trainer.id        = $player.make_foreign_ID
       trainer.items     = @items.clone
       trainer.lose_text = self.lose_text
       # Create each Pokémon owned by the trainer

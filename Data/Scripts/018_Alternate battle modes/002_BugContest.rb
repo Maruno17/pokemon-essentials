@@ -131,7 +131,7 @@ class BugContestState
   def pbGetPlaceInfo(place)
     cont=@places[place][0]
     if cont<0
-      $game_variables[1]=$Trainer.name
+      $game_variables[1]=$player.name
     else
       $game_variables[1]=ContestantNames[cont]
     end
@@ -171,9 +171,9 @@ class BugContestState
     @lastContest=nil
     @timer=Graphics.frame_count
     @places=[]
-    chosenpkmn=$Trainer.party[@chosenPokemon]
-    for i in 0...$Trainer.party.length
-      @otherparty.push($Trainer.party[i]) if i!=@chosenPokemon
+    chosenpkmn=$player.party[@chosenPokemon]
+    for i in 0...$player.party.length
+      @otherparty.push($player.party[i]) if i!=@chosenPokemon
     end
     @contestants=[]
     [5,ContestantNames.length].min.times do
@@ -185,7 +185,7 @@ class BugContestState
         end
       end
     end
-    $Trainer.party=[chosenpkmn]
+    $player.party=[chosenpkmn]
     @decision=0
     @ended=false
   end
@@ -200,7 +200,7 @@ class BugContestState
   def pbEnd(interrupted=false)
     return if !@inProgress
     for poke in @otherparty
-      $Trainer.party.push(poke)
+      $player.party.push(poke)
     end
     if !interrupted
       if @lastPokemon
@@ -329,7 +329,7 @@ Events.onMapChanging += proc { |_sender,e|
 }
 
 def pbBugContestStartOver
-  $Trainer.party.each do |pkmn|
+  $player.party.each do |pkmn|
     pkmn.heal
     pkmn.makeUnmega
     pkmn.makeUnprimal
@@ -354,8 +354,8 @@ def pbBugContestBattle(species,level)
   pkmn = pbGenerateWildPokemon(species,level)
   foeParty = [pkmn]
   # Calculate who the trainers and their party are
-  playerTrainer     = [$Trainer]
-  playerParty       = $Trainer.party
+  playerTrainer     = [$player]
+  playerParty       = $player.party
   playerPartyStarts = [0]
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene

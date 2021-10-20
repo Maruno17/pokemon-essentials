@@ -16,7 +16,8 @@ module Compiler
     ['pbHasItem?',                   '$bag.has?'],
     ['pbCanStore?',                  '$bag.can_add?'],
     ['pbStoreItem',                  '$bag.add'],
-    ['pbStoreAllOrNone',             '$bag.add_all']
+    ['pbStoreAllOrNone',             '$bag.add_all'],
+    ['$Trainer',                     '$player']
   ]
 
   module_function
@@ -858,7 +859,7 @@ module Compiler
     ret = false
     SCRIPT_REPLACEMENTS.each { |pair| ret = true if script.gsub!(pair[0], pair[1]) }
     ret = true if script.gsub!(/\$game_variables\[(\d+)\](?!\s*(?:\=|\!|<|>))/) { |m| "pbGet(" + $~[1] + ")" }
-    ret = true if script.gsub!(/\$Trainer\.party\[\s*pbGet\((\d+)\)\s*\]/) { |m| "pbGetPokemon(" + $~[1] + ")" }
+    ret = true if script.gsub!(/\$player\.party\[\s*pbGet\((\d+)\)\s*\]/) { |m| "pbGetPokemon(" + $~[1] + ")" }
     return ret
   end
 
@@ -882,7 +883,7 @@ module Compiler
   def fix_event_use(event,_mapID,mapData)
     return nil if event_is_empty?(event)
     changed = false
-    trainerMoneyRE = /^\s*\$Trainer\.money\s*(<|<=|>|>=)\s*(\d+)\s*$/
+    trainerMoneyRE = /^\s*\$player\.money\s*(<|<=|>|>=)\s*(\d+)\s*$/
     itemBallRE     = /^\s*(Kernel\.)?pbItemBall/
     # Rewrite event if it looks like a door
     changed = true if update_door_event(event,mapData)
@@ -917,7 +918,7 @@ module Compiler
           end
           script.gsub!(/\s+/,"")
           # Using old method of recovering
-          if script=="foriin$Trainer.partyi.healend"
+          if script=="foriin$player.partyi.healend"
             for j in i..lastScript
               list.delete_at(i)
             end
@@ -925,7 +926,7 @@ module Compiler
                RPG::EventCommand.new(314,list[i].indent,[0])   # Recover All
             )
             changed=true
-          elsif script=="pbFadeOutIn(99999){foriin$Trainer.partyi.healend}"
+          elsif script=="pbFadeOutIn(99999){foriin$player.partyi.healend}"
             oldIndent = list[i].indent
             for j in i..lastScript
               list.delete_at(i)
@@ -1249,7 +1250,7 @@ module Compiler
         when 111   # Conditional Branch
           if list[i].parameters[0]==12   # script
             script = list[i].parameters[1]
-            if script[trainerMoneyRE]   # Compares $Trainer.money with a value
+            if script[trainerMoneyRE]   # Compares $player.money with a value
               # Checking money directly
               operator = $1
               amount   = $2.to_i

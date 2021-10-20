@@ -723,7 +723,7 @@ class TriadScreen
       count += item[1]   # Add item count to total count
     end
     @board = []
-    @playerName   = $Trainer ? $Trainer.name : "Trainer"
+    @playerName   = $player ? $player.name : "Trainer"
     @opponentName = opponentName
     type_keys = GameData::Type.keys
     for i in 0...@width*@height
@@ -781,7 +781,7 @@ class TriadScreen
         total = triad.north + triad.south + triad.east + triad.west
         # Add random species and its total point count
         candidates.push([card, total])
-        if candidates.length < 200 && $Trainer.owned?(card_data.species)
+        if candidates.length < 200 && $player.owned?(card_data.species)
           # Add again if player owns the species
           candidates.push([card, total])
         end
@@ -1059,7 +1059,7 @@ def pbBuyTriads
   commands = []
   realcommands = []
   GameData::Species.each_species do |s|
-    next if !$Trainer.owned?(s.species)
+    next if !$player.owned?(s.species)
     price = TriadCard.new(s.id).price
     commands.push([price, s.name, _INTL("{1} - ${2}", s.name, price.to_s_formatted), s.id])
   end
@@ -1107,11 +1107,11 @@ def pbBuyTriads
       itemname = commands[cmdwindow.index][1]
       cmdwindow.active = false
       cmdwindow.update
-      if $Trainer.money<price
+      if $player.money<price
         pbMessage(_INTL("You don't have enough money."))
         next
       end
-      maxafford = (price<=0) ? 99 : $Trainer.money/price
+      maxafford = (price<=0) ? 99 : $player.money/price
       maxafford = 99 if maxafford>99
       params = ChooseNumberParams.new
       params.setRange(1,maxafford)
@@ -1122,7 +1122,7 @@ def pbBuyTriads
       next if quantity<=0
       price *= quantity
       next if !pbConfirmMessage(_INTL("{1}, and you want {2}. That will be ${3}. OK?",itemname,quantity,price.to_s_formatted))
-      if $Trainer.money<price
+      if $player.money<price
         pbMessage(_INTL("You don't have enough money."))
         next
       end
@@ -1131,7 +1131,7 @@ def pbBuyTriads
         next
       end
       $PokemonGlobal.triads.add(item, quantity)
-      $Trainer.money -= price
+      $player.money -= price
       goldwindow.text = _INTL("Money:\r\n{1}",pbGetGoldString)
       pbMessage(_INTL("Here you are! Thank you!\\se[Mart buy item]"))
     end
@@ -1222,7 +1222,7 @@ def pbSellTriads
           price /= 4
           price *= quantity
           if pbConfirmMessage(_INTL("I can pay ${1}. Would that be OK?",price.to_s_formatted))
-            $Trainer.money += price
+            $player.money += price
             goldwindow.text = _INTL("Money:\r\n{1}",pbGetGoldString)
             $PokemonGlobal.triads.remove(item,quantity)
             pbMessage(_INTL("Turned over the {1} card and received ${2}.\\se[Mart buy item]",itemname,price.to_s_formatted))

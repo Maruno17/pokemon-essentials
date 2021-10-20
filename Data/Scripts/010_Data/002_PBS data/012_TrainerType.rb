@@ -57,7 +57,7 @@ module GameData
     end
 
     def self.player_front_sprite_filename(tr_type)
-      outfit = ($Trainer) ? $Trainer.outfit : 0
+      outfit = ($player) ? $player.outfit : 0
       return self.check_file(tr_type, "Graphics/Trainers/", sprintf("_%d", outfit))
     end
 
@@ -66,7 +66,7 @@ module GameData
     end
 
     def self.player_back_sprite_filename(tr_type)
-      outfit = ($Trainer) ? $Trainer.outfit : 0
+      outfit = ($player) ? $player.outfit : 0
       return self.check_file(tr_type, "Graphics/Trainers/", sprintf("_%d", outfit), "_back")
     end
 
@@ -75,7 +75,7 @@ module GameData
     end
 
     def self.player_map_icon_filename(tr_type)
-      outfit = ($Trainer) ? $Trainer.outfit : 0
+      outfit = ($player) ? $player.outfit : 0
       return self.check_file(tr_type, "Graphics/Pictures/mapPlayer", sprintf("_%d", outfit))
     end
 

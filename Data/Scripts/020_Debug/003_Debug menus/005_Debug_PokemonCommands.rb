@@ -643,7 +643,7 @@ PokemonDebugMenuCommands.register("setitem", {
         if item && item != pkmn.item_id
           pkmn.item = item
           if GameData::Item.get(item).is_mail?
-            pkmn.mail = Mail.new(item, _INTL("Text"), $Trainer.name)
+            pkmn.mail = Mail.new(item, _INTL("Text"), $player.name)
           end
           screen.pbRefreshSingle(pkmnid)
         end
@@ -783,7 +783,7 @@ PokemonDebugMenuCommands.register("setgender", {
         when 2   # Reset
           pkmn.gender = nil
         end
-        $Trainer.pokedex.register(pkmn) if !settingUpBattle
+        $player.pokedex.register(pkmn) if !settingUpBattle
         screen.pbRefreshSingle(pkmnid)
       end
     end
@@ -811,7 +811,7 @@ PokemonDebugMenuCommands.register("speciesform", {
         if species && species != pkmn.species
           pkmn.species = species
           pkmn.calc_stats
-          $Trainer.pokedex.register(pkmn) if !settingUpBattle
+          $player.pokedex.register(pkmn) if !settingUpBattle
           screen.pbRefreshSingle(pkmnid)
         end
       when 1   # Set form
@@ -838,7 +838,7 @@ PokemonDebugMenuCommands.register("speciesform", {
               pkmn.forced_form = f
             end
             pkmn.form = f
-            $Trainer.pokedex.register(pkmn) if !settingUpBattle
+            $player.pokedex.register(pkmn) if !settingUpBattle
             screen.pbRefreshSingle(pkmnid)
           end
         end
@@ -998,7 +998,7 @@ PokemonDebugMenuCommands.register("ownership", {
       gender = [_INTL("Male"), _INTL("Female"), _INTL("Unknown")][pkmn.owner.gender]
       msg = [_INTL("Player's Pokémon\n{1}\n{2}\n{3} ({4})", pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id),
              _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})", pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id)
-            ][pkmn.foreign?($Trainer) ? 1 : 0]
+            ][pkmn.foreign?($player) ? 1 : 0]
       cmd = screen.pbShowCommands(msg, [
            _INTL("Make player's"),
            _INTL("Set OT's name"),
@@ -1008,7 +1008,7 @@ PokemonDebugMenuCommands.register("ownership", {
       break if cmd < 0
       case cmd
       when 0   # Make player's
-        pkmn.owner = Pokemon::Owner.new_from_trainer($Trainer)
+        pkmn.owner = Pokemon::Owner.new_from_trainer($player)
       when 1   # Set OT's name
         pkmn.owner.name = pbEnterPlayerName(_INTL("{1}'s OT's name?", pkmn.name), 1, Settings::MAX_PLAYER_NAME_SIZE)
       when 2   # Set OT's gender
@@ -1016,7 +1016,7 @@ PokemonDebugMenuCommands.register("ownership", {
            [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], pkmn.owner.gender)
         pkmn.owner.gender = cmd2 if cmd2 >= 0
       when 3   # Random foreign ID
-        pkmn.owner.id = $Trainer.make_foreign_ID
+        pkmn.owner.id = $player.make_foreign_ID
       when 4   # Set foreign ID
         params = ChooseNumberParams.new
         params.setRange(0, 65535)

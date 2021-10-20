@@ -394,12 +394,12 @@ class PokemonSummary_Scene
     # Write the Regional/National Dex number
     dexnum = 0
     dexnumshift = false
-    if $Trainer.pokedex.unlocked?(-1)   # National Dex is unlocked
+    if $player.pokedex.unlocked?(-1)   # National Dex is unlocked
       dexnum = @nationalDexList.index(@pokemon.species_data.species) || 0
       dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
     else
-      for i in 0...$Trainer.pokedex.dexes_count - 1
-        next if !$Trainer.pokedex.unlocked?(i)
+      for i in 0...$player.pokedex.dexes_count - 1
+        next if !$player.pokedex.unlocked?(i)
         num = pbGetRegionalNumber(i,@pokemon.species)
         next if num<=0
         dexnum = num
@@ -1189,7 +1189,7 @@ class PokemonSummary_Scene
     if !@pokemon.egg?
       commands[cmdGiveItem = commands.length] = _INTL("Give item")
       commands[cmdTakeItem = commands.length] = _INTL("Take item") if @pokemon.hasItem?
-      commands[cmdPokedex = commands.length]  = _INTL("View Pokédex") if $Trainer.has_pokedex
+      commands[cmdPokedex = commands.length]  = _INTL("View Pokédex") if $player.has_pokedex
     end
     commands[cmdMark = commands.length]       = _INTL("Mark")
     commands[commands.length]                 = _INTL("Cancel")
@@ -1207,7 +1207,7 @@ class PokemonSummary_Scene
     elsif cmdTakeItem>=0 && command==cmdTakeItem
       dorefresh = pbTakeItemFromPokemon(@pokemon,self)
     elsif cmdPokedex>=0 && command==cmdPokedex
-      $Trainer.pokedex.register_last_seen(@pokemon)
+      $player.pokedex.register_last_seen(@pokemon)
       pbFadeOutIn {
         scene = PokemonPokedexInfo_Scene.new
         screen = PokemonPokedexInfoScreen.new(scene)

@@ -47,7 +47,7 @@ module PokeBattle_BattleCommon
       # Record the Pokémon's species as owned in the Pokédex
       if !pbPlayer.owned?(pkmn.species)
         pbPlayer.pokedex.set_owned(pkmn.species)
-        if $Trainer.has_pokedex
+        if $player.has_pokedex
           pbDisplayPaused(_INTL("{1}'s data was added to the Pokédex.",pkmn.name))
           pbPlayer.pokedex.register_last_seen(pkmn)
           @scene.pbShowPokedex(pkmn.species)
@@ -195,7 +195,7 @@ module PokeBattle_BattleCommon
     # Critical capture check
     if Settings::ENABLE_CRITICAL_CAPTURES
       dex_modifier = 0
-      numOwned = $Trainer.pokedex.owned_count
+      numOwned = $player.pokedex.owned_count
       if numOwned>600
         dex_modifier = 5
       elsif numOwned>450

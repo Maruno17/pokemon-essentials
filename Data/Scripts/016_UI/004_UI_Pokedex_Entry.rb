@@ -72,7 +72,7 @@ class PokemonPokedexInfo_Scene
     @viewport.z = 99999
     dexnum = 0
     dexnumshift = false
-    if $Trainer.pokedex.unlocked?(-1)   # National Dex is unlocked
+    if $player.pokedex.unlocked?(-1)   # National Dex is unlocked
       species_data = GameData::Species.try_get(species)
       if species_data
         nationalDexList = [:NONE]
@@ -81,8 +81,8 @@ class PokemonPokedexInfo_Scene
         dexnumshift = true if dexnum > 0 && Settings::DEXES_WITH_OFFSETS.include?(-1)
       end
     else
-      for i in 0...$Trainer.pokedex.dexes_count - 1   # Regional Dexes
-        next if !$Trainer.pokedex.unlocked?(i)
+      for i in 0...$player.pokedex.dexes_count - 1   # Regional Dexes
+        next if !$player.pokedex.unlocked?(i)
         num = pbGetRegionalNumber(i,species)
         next if num <= 0
         dexnum = num
@@ -126,7 +126,7 @@ class PokemonPokedexInfo_Scene
 
   def pbUpdateDummyPokemon
     @species = @dexlist[@index][0]
-    @gender, @form = $Trainer.pokedex.last_form_seen(@species)
+    @gender, @form = $player.pokedex.last_form_seen(@species)
     species_data = GameData::Species.get_species_form(@species, @form)
     @sprites["infosprite"].setSpeciesBitmap(@species,@gender,@form)
     if @sprites["formfront"]
@@ -153,12 +153,12 @@ class PokemonPokedexInfo_Scene
       multiple_forms = true if sp.form > 0
       if sp.single_gendered?
         real_gender = (sp.gender_ratio == :AlwaysFemale) ? 1 : 0
-        next if !$Trainer.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
+        next if !$player.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
         real_gender = 2 if sp.gender_ratio == :Genderless
         ret.push([sp.form_name, real_gender, sp.form])
       else   # Both male and female
         for real_gender in 0...2
-          next if !$Trainer.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
+          next if !$player.pokedex.seen_form?(@species, real_gender, sp.form) && !Settings::DEX_SHOWS_ALL_FORMS
           ret.push([sp.form_name, real_gender, sp.form])
           break if sp.form_name && !sp.form_name.empty?   # Only show 1 entry for each non-0 form
         end
@@ -223,12 +223,12 @@ class PokemonPokedexInfo_Scene
     ]
     if @show_battled_count
       textpos.push([_INTL("Number Battled"), 314, 152, 0, base, shadow])
-      textpos.push([$Trainer.pokedex.battled_count(@species).to_s, 452, 184, 1, base, shadow])
+      textpos.push([$player.pokedex.battled_count(@species).to_s, 452, 184, 1, base, shadow])
     else
       textpos.push([_INTL("Height"), 314, 152, 0, base, shadow])
       textpos.push([_INTL("Weight"), 314, 184, 0, base, shadow])
     end
-    if $Trainer.owned?(@species)
+    if $player.owned?(@species)
       # Write the category
       textpos.push([_INTL("{1} Pokémon", species_data.category), 246, 68, 0, base, shadow])
       # Write the height and weight
@@ -396,7 +396,7 @@ class PokemonPokedexInfo_Scene
     newindex = @index
     while newindex>0
       newindex -= 1
-      if $Trainer.seen?(@dexlist[newindex][0])
+      if $player.seen?(@dexlist[newindex][0])
         @index = newindex
         break
       end
@@ -407,7 +407,7 @@ class PokemonPokedexInfo_Scene
     newindex = @index
     while newindex<@dexlist.length-1
       newindex += 1
-      if $Trainer.seen?(@dexlist[newindex][0])
+      if $player.seen?(@dexlist[newindex][0])
         @index = newindex
         break
       end
@@ -425,7 +425,7 @@ class PokemonPokedexInfo_Scene
     oldindex = -1
     loop do
       if oldindex!=index
-        $Trainer.pokedex.set_last_form_seen(@species, @available[index][1], @available[index][2])
+        $player.pokedex.set_last_form_seen(@species, @available[index][1], @available[index][2])
         pbUpdateDummyPokemon
         drawPage(@page)
         @sprites["uparrow"].visible   = (index>0)
@@ -564,7 +564,7 @@ class PokemonPokedexInfoScreen
     region = -1
     if Settings::USE_CURRENT_REGION_DEX
       region = pbGetCurrentRegion
-      region = -1 if region >= $Trainer.pokedex.dexes_count - 1
+      region = -1 if region >= $player.pokedex.dexes_count - 1
     else
       region = $PokemonGlobal.pokedexDex   # National Dex -1, regional Dexes 0, 1, etc.
     end

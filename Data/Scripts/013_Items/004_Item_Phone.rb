@@ -40,7 +40,7 @@ def pbPhoneDeleteContact(index)
 end
 
 def pbPhoneRegisterBattle(message,event,trainertype,trainername,maxbattles)
-  return if !$Trainer.has_pokegear           # Can't register without a Pokégear
+  return if !$player.has_pokegear           # Can't register without a Pokégear
   return false if !GameData::TrainerType.exists?(trainertype)
   trainertype = GameData::TrainerType.get(trainertype).id
   contact = pbFindPhoneTrainer(trainertype,trainername)
@@ -132,7 +132,7 @@ end
 # Phone-related counters
 #===============================================================================
 Events.onMapUpdate += proc { |_sender,_e|
-  next if !$Trainer || !$Trainer.has_pokegear
+  next if !$player || !$player.has_pokegear
   # Reset time to next phone call if necessary
   if !$PokemonGlobal.phoneTime || $PokemonGlobal.phoneTime<=0
     $PokemonGlobal.phoneTime = 20*60*Graphics.frame_rate

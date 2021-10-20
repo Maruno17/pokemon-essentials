@@ -568,7 +568,7 @@ def pbUseItem(bag,item,bagscene=nil)
   itm = GameData::Item.get(item)
   useType = itm.field_use
   if itm.is_machine?    # TM or TR or HM
-    if $Trainer.pokemon_count == 0
+    if $player.pokemon_count == 0
       pbMessage(_INTL("There is no Pokémon."))
       return 0
     end
@@ -584,7 +584,7 @@ def pbUseItem(bag,item,bagscene=nil)
     end
     return 0
   elsif useType==1   # Item is usable on a Pokémon
-    if $Trainer.pokemon_count == 0
+    if $player.pokemon_count == 0
       pbMessage(_INTL("There is no Pokémon."))
       return 0
     end
@@ -592,14 +592,14 @@ def pbUseItem(bag,item,bagscene=nil)
     annot = nil
     if itm.is_evolution_stone?
       annot = []
-      for pkmn in $Trainer.party
+      for pkmn in $player.party
         elig = pkmn.check_evolution_on_use_item(item)
         annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
       end
     end
     pbFadeOutIn {
       scene = PokemonParty_Scene.new
-      screen = PokemonPartyScreen.new(scene,$Trainer.party)
+      screen = PokemonPartyScreen.new(scene,$player.party)
       screen.pbStartScene(_INTL("Use on which Pokémon?"),false,annot)
       loop do
         scene.pbSetHelpText(_INTL("Use on which Pokémon?"))
@@ -608,7 +608,7 @@ def pbUseItem(bag,item,bagscene=nil)
           ret = false
           break
         end
-        pkmn = $Trainer.party[chosen]
+        pkmn = $player.party[chosen]
         if pbCheckUseOnPokemon(item,pkmn,screen)
           ret = ItemHandlers.triggerUseOnPokemon(item,pkmn,screen)
           if ret && itm.consumed_after_use?

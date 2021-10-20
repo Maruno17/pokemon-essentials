@@ -1,4 +1,4 @@
-#===============================================================================
+$player#===============================================================================
 # Represents a planted berry. Stored in $PokemonGlobal.eventvars.
 #===============================================================================
 class BerryPlantData
@@ -358,7 +358,7 @@ def pbBerryPlant
       break if !pbConfirmMessage(_INTL("Want to sprinkle some water with the {1}?",
          GameData::Item.get(item).name))
       berry_plant.water
-      pbMessage(_INTL("{1} watered the plant.\\wtnp[40]", $Trainer.name))
+      pbMessage(_INTL("{1} watered the plant.\\wtnp[40]", $player.name))
       if Settings::NEW_BERRY_PLANTS
         pbMessage(_INTL("There! All happy!"))
       else
@@ -419,7 +419,7 @@ def pbBerryPlant
            GameData::Item.get(berry).name))
       else
         pbMessage(_INTL("{1} planted a {2} in the soft loamy soil.",
-           $Trainer.name, GameData::Item.get(berry).name))
+           $player.name, GameData::Item.get(berry).name))
       end
     end
   end
@@ -449,7 +449,7 @@ def pbPickBerry(berry, qty = 1)
   end
   pocket = berry.pocket
   pbMessage(_INTL("{1} put the \\c[1]{2}\\c[0] in the <icon=bagPocket{3}>\\c[1]{4}\\c[0] Pocket.\1",
-     $Trainer.name, berry_name, pocket, PokemonBag.pocket_names[pocket]))
+     $player.name, berry_name, pocket, PokemonBag.pocket_names[pocket]))
   if Settings::NEW_BERRY_PLANTS
     pbMessage(_INTL("The soil returned to its soft and earthy state."))
   else

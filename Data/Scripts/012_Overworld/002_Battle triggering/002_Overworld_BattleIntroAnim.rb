@@ -194,8 +194,8 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
     tr_type = foe[0].trainer_type
     trainer_bar_graphic = sprintf("vsBar_%s", tr_type.to_s) rescue nil
     trainer_graphic     = sprintf("vsTrainer_%s", tr_type.to_s) rescue nil
-    player_tr_type = $Trainer.trainer_type
-    outfit = $Trainer.outfit
+    player_tr_type = $player.trainer_type
+    outfit = $player.outfit
     player_bar_graphic = sprintf("vsBar_%s_%d", player_tr_type.to_s, outfit) rescue nil
     if !pbResolveBitmap("Graphics/Transitions/" + player_bar_graphic)
       player_bar_graphic = sprintf("vsBar_%s", player_tr_type.to_s) rescue nil
@@ -283,7 +283,7 @@ SpecialBattleIntroAnimations.register("vs_animation", 50,   # Priority 50
     trainer.tone = Tone.new(0, 0, 0)
     trainername = foe[0].name
     textpos = [
-       [$Trainer.name, Graphics.width / 4, (Graphics.height / 1.5) + 4, 2,
+       [$player.name, Graphics.width / 4, (Graphics.height / 1.5) + 4, 2,
           Color.new(248, 248, 248), Color.new(72, 72, 72)],
        [trainername, (Graphics.width / 4) + (Graphics.width / 2), (Graphics.height / 1.5) + 4, 2,
           Color.new(248, 248, 248), Color.new(72, 72, 72)]

@@ -115,7 +115,7 @@ class PokemonStorage
   end
 
   def party
-    $Trainer.party
+    $player.party
   end
 
   def party=(_value)
@@ -123,7 +123,7 @@ class PokemonStorage
   end
 
   def party_full?
-    return $Trainer.party_full?
+    return $player.party_full?
   end
 
   def maxBoxes

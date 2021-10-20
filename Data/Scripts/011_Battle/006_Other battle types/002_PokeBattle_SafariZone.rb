@@ -39,7 +39,7 @@ class PokeBattle_FakeBattler
   def captured=(value); end
 
   def owned?
-    return $Trainer.owned?(pokemon.species)
+    return $player.owned?(pokemon.species)
   end
 
   def pbThis(lowerCase=false)

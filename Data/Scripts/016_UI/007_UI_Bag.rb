@@ -258,7 +258,7 @@ class PokemonBag_Scene
     @sprites["background"].setBitmap(sprintf("Graphics/Pictures/Bag/bg_#{@bag.last_viewed_pocket}"))
     # Set the bag sprite
     fbagexists = pbResolveBitmap(sprintf("Graphics/Pictures/Bag/bag_#{@bag.last_viewed_pocket}_f"))
-    if $Trainer.female? && fbagexists
+    if $player.female? && fbagexists
       @sprites["bagsprite"].setBitmap("Graphics/Pictures/Bag/bag_#{@bag.last_viewed_pocket}_f")
     else
       @sprites["bagsprite"].setBitmap("Graphics/Pictures/Bag/bag_#{@bag.last_viewed_pocket}")
@@ -469,14 +469,14 @@ class PokemonBagScreen
       commands = []
       # Generate command list
       commands[cmdRead = commands.length]       = _INTL("Read") if itm.is_mail?
-      if ItemHandlers.hasOutHandler(item) || (itm.is_machine? && $Trainer.party.length>0)
+      if ItemHandlers.hasOutHandler(item) || (itm.is_machine? && $player.party.length>0)
         if ItemHandlers.hasUseText(item)
           commands[cmdUse = commands.length]    = ItemHandlers.getUseText(item)
         else
           commands[cmdUse = commands.length]    = _INTL("Use")
         end
       end
-      commands[cmdGive = commands.length]       = _INTL("Give") if $Trainer.pokemon_party.length > 0 && itm.can_hold?
+      commands[cmdGive = commands.length]       = _INTL("Give") if $player.pokemon_party.length > 0 && itm.can_hold?
       commands[cmdToss = commands.length]       = _INTL("Toss") if !itm.is_important? || $DEBUG
       if @bag.registered?(item)
         commands[cmdRegister = commands.length] = _INTL("Deselect")
@@ -499,14 +499,14 @@ class PokemonBagScreen
         @scene.pbRefresh
         next
       elsif cmdGive>=0 && command==cmdGive   # Give item to Pokémon
-        if $Trainer.pokemon_count == 0
+        if $player.pokemon_count == 0
           @scene.pbDisplay(_INTL("There is no Pokémon."))
         elsif itm.is_important?
           @scene.pbDisplay(_INTL("The {1} can't be held.",itemname))
         else
           pbFadeOutIn {
             sscene = PokemonParty_Scene.new
-            sscreen = PokemonPartyScreen.new(sscene,$Trainer.party)
+            sscreen = PokemonPartyScreen.new(sscene, $player.party)
             sscreen.pbPokemonGiveScreen(item)
             @scene.pbRefresh
           }

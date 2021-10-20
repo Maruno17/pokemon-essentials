@@ -457,16 +457,16 @@ class PokeBattle_Battle
     # Pass on Pokérus within the party
     if @internalBattle
       infected = []
-      $Trainer.party.each_with_index do |pkmn,i|
+      $player.party.each_with_index do |pkmn,i|
         infected.push(i) if pkmn.pokerusStage==1
       end
       infected.each do |idxParty|
-        strain = $Trainer.party[idxParty].pokerusStrain
-        if idxParty>0 && $Trainer.party[idxParty-1].pokerusStage==0
-          $Trainer.party[idxParty-1].givePokerus(strain) if rand(3)==0   # 33%
+        strain = $player.party[idxParty].pokerusStrain
+        if idxParty > 0 && $player.party[idxParty - 1].pokerusStage == 0
+          $player.party[idxParty - 1].givePokerus(strain) if rand(3) == 0   # 33%
         end
-        if idxParty<$Trainer.party.length-1 && $Trainer.party[idxParty+1].pokerusStage==0
-          $Trainer.party[idxParty+1].givePokerus(strain) if rand(3)==0   # 33%
+        if idxParty < $player.party.length - 1 && $player.party[idxParty + 1].pokerusStage == 0
+          $player.party[idxParty + 1].givePokerus(strain) if rand(3) == 0   # 33%
         end
       end
     end

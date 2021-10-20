@@ -47,16 +47,16 @@ def pbOrganizedBattleEx(opponent, challengedata, endspeech, endspeechwin)
     pbMEStop
     return true
   end
-  $Trainer.heal_party
+  $player.heal_party
   # Remember original data, to be restored after battle
   challengedata = PokemonChallengeRules.new if !challengedata
-  oldlevels = challengedata.adjustLevels($Trainer.party, opponent.party)
-  olditems  = $Trainer.party.transform { |p| p.item_id }
+  oldlevels = challengedata.adjustLevels($player.party, opponent.party)
+  olditems  = $player.party.transform { |p| p.item_id }
   olditems2 = opponent.party.transform { |p| p.item_id }
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)
-  battle = challengedata.createBattle(scene, $Trainer, opponent)
+  battle = challengedata.createBattle(scene, $player, opponent)
   battle.internalBattle = false
   battle.endSpeeches    = [endspeech]
   battle.endSpeechesWin = [endspeechwin]
@@ -71,9 +71,9 @@ def pbOrganizedBattleEx(opponent, challengedata, endspeech, endspeechwin)
   }
   Input.update
   # Restore both parties to their original levels
-  challengedata.unadjustLevels($Trainer.party, opponent.party, oldlevels)
+  challengedata.unadjustLevels($player.party, opponent.party, oldlevels)
   # Heal both parties and restore their original items
-  $Trainer.party.each_with_index do |pkmn, i|
+  $player.party.each_with_index do |pkmn, i|
     pkmn.heal
     pkmn.makeUnmega
     pkmn.makeUnprimal

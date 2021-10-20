@@ -147,7 +147,7 @@ end
 #
 #===============================================================================
 def pbRelicStone
-  if !$Trainer.party.any? { |pkmn| pkmn.purifiable? }
+  if !$player.party.any? { |pkmn| pkmn.purifiable? }
     pbMessage(_INTL("You have no Pokémon that can be purified."))
     return
   end
@@ -157,7 +157,7 @@ def pbRelicStone
     pkmn.able? && pkmn.shadowPokemon? && pkmn.heart_gauge == 0
   })
   if $game_variables[1] >= 0
-    pbRelicStoneScreen($Trainer.party[$game_variables[1]])
+    pbRelicStoneScreen($player.party[$game_variables[1]])
   end
 end
 
@@ -408,21 +408,21 @@ end
 # during battle and need to say they're ready to be purified afterwards
 Events.onStartBattle += proc { |_sender|
   $PokemonTemp.heart_gauges = []
-  $Trainer.party.each_with_index do |pkmn, i|
+  $player.party.each_with_index do |pkmn, i|
     $PokemonTemp.heart_gauges[i] = pkmn.heart_gauge
   end
 }
 
 Events.onEndBattle += proc { |_sender,_e|
   $PokemonTemp.heart_gauges.each_with_index do |value, i|
-    pkmn = $Trainer.party[i]
+    pkmn = $player.party[i]
     next if !pkmn || !value || value == 0
     pkmn.check_ready_to_purify if pkmn.heart_gauge == 0
   end
 }
 
 Events.onStepTaken += proc {
-  for pkmn in $Trainer.able_party
+  for pkmn in $player.able_party
     next if pkmn.heart_gauge == 0
     stage = pkmn.heartStage
     pkmn.adjustHeart(-1)

@@ -40,7 +40,7 @@ class Game_Player < Game_Character
     return false if $game_temp.in_menu || $game_temp.in_battle ||
                     @move_route_forcing || $game_temp.message_window_showing ||
                     pbMapInterpreterRunning?
-    return false if !$Trainer.has_running_shoes && !$PokemonGlobal.diving &&
+    return false if !$player.has_running_shoes && !$PokemonGlobal.diving &&
                     !$PokemonGlobal.surfing && !$PokemonGlobal.bicycle
     return false if jumping?
     return false if pbTerrainTag.must_walk
@@ -48,7 +48,7 @@ class Game_Player < Game_Character
   end
 
   def set_movement_type(type)
-    meta = GameData::PlayerMetadata.get($Trainer&.character_ID || 1)
+    meta = GameData::PlayerMetadata.get($player&.character_ID || 1)
     new_charset = nil
     case type
     when :fishing
@@ -491,7 +491,7 @@ end
 #
 #===============================================================================
 def pbGetPlayerCharset(charset, trainer = nil, force = false)
-  trainer = $Trainer if !trainer
+  trainer = $player if !trainer
   outfit = (trainer) ? trainer.outfit : 0
   if $game_player && $game_player.charsetData && !force
     return nil if $game_player.charsetData[0] == trainer.character_ID &&

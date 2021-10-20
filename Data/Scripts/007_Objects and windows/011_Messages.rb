@@ -353,7 +353,7 @@ end
 def pbGetMapNameFromId(id)
   name = pbGetMessage(MessageTypes::MapNames, id)
   name = pbGetBasicMapNameFromId(id) if nil_or_empty?(name)
-  name.gsub!(/\\PN/, $Trainer.name) if $Trainer
+  name.gsub!(/\\PN/, $player.name) if $player
   return name
 end
 
@@ -408,7 +408,7 @@ end
 def pbGetGoldString
   moneyString=""
   begin
-    moneyString=_INTL("${1}",$Trainer.money.to_s_formatted)
+    moneyString=_INTL("${1}", $player.money.to_s_formatted)
   rescue
     if $data_system.respond_to?("words")
       moneyString=_INTL("{1} {2}",$game_party.gold,$data_system.words.gold)
@@ -436,7 +436,7 @@ def pbDisplayGoldWindow(msgwindow)
 end
 
 def pbDisplayCoinsWindow(msgwindow,goldwindow)
-  coinString=($Trainer) ? $Trainer.coins.to_s_formatted : "0"
+  coinString = ($player) ? $player.coins.to_s_formatted : "0"
   coinwindow=Window_AdvancedTextPokemon.new(_INTL("Coins:\n<ar>{1}</ar>",coinString))
   coinwindow.setSkin("Graphics/Windowskins/goldskin")
   coinwindow.resizeToFit(coinwindow.text,Graphics.width)
@@ -452,7 +452,7 @@ def pbDisplayCoinsWindow(msgwindow,goldwindow)
 end
 
 def pbDisplayBattlePointsWindow(msgwindow)
-  pointsString = ($Trainer) ? $Trainer.battle_points.to_s_formatted : "0"
+  pointsString = ($player) ? $player.battle_points.to_s_formatted : "0"
   pointswindow=Window_AdvancedTextPokemon.new(_INTL("Battle Points:\n<ar>{1}</ar>", pointsString))
   pointswindow.setSkin("Graphics/Windowskins/goldskin")
   pointswindow.resizeToFit(pointswindow.text,Graphics.width)
@@ -543,18 +543,18 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
       next $game_actors[m].name
     }
   end
-  text.gsub!(/\\pn/i,$Trainer.name) if $Trainer
-  text.gsub!(/\\pm/i,_INTL("${1}",$Trainer.money.to_s_formatted)) if $Trainer
-  text.gsub!(/\\n/i,"\n")
-  text.gsub!(/\\\[([0-9a-f]{8,8})\]/i) { "<c2="+$1+">" }
-  text.gsub!(/\\pg/i,"\\b") if $Trainer && $Trainer.male?
-  text.gsub!(/\\pg/i,"\\r") if $Trainer && $Trainer.female?
-  text.gsub!(/\\pog/i,"\\r") if $Trainer && $Trainer.male?
-  text.gsub!(/\\pog/i,"\\b") if $Trainer && $Trainer.female?
-  text.gsub!(/\\pg/i,"")
-  text.gsub!(/\\pog/i,"")
-  text.gsub!(/\\b/i,"<c3=3050C8,D0D0C8>")
-  text.gsub!(/\\r/i,"<c3=E00808,D0D0C8>")
+  text.gsub!(/\\pn/i,  $player.name) if $player
+  text.gsub!(/\\pm/i,  _INTL("${1}", $player.money.to_s_formatted)) if $player
+  text.gsub!(/\\n/i,   "\n")
+  text.gsub!(/\\\[([0-9a-f]{8,8})\]/i) { "<c2=" + $1 + ">" }
+  text.gsub!(/\\pg/i,  "\\b") if $player && $player.male?
+  text.gsub!(/\\pg/i,  "\\r") if $player && $player.female?
+  text.gsub!(/\\pog/i, "\\r") if $player && $player.male?
+  text.gsub!(/\\pog/i, "\\b") if $player && $player.female?
+  text.gsub!(/\\pg/i,  "")
+  text.gsub!(/\\pog/i, "")
+  text.gsub!(/\\b/i,   "<c3=3050C8,D0D0C8>")
+  text.gsub!(/\\r/i,   "<c3=E00808,D0D0C8>")
   text.gsub!(/\\[Ww]\[([^\]]*)\]/) {
     w = $1.to_s
     if w==""

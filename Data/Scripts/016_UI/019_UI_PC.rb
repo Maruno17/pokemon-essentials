@@ -7,11 +7,11 @@ class TrainerPC
   end
 
   def name
-    return _INTL("{1}'s PC",$Trainer.name)
+    return _INTL("{1}'s PC", $player.name)
   end
 
   def access
-    pbMessage(_INTL("\\se[PC access]Accessed {1}'s PC.",$Trainer.name))
+    pbMessage(_INTL("\\se[PC access]Accessed {1}'s PC.", $player.name))
     pbTrainerPCMenu
   end
 end
@@ -25,7 +25,7 @@ class StorageSystemPC
   end
 
   def name
-    if $Trainer.seen_storage_creator
+    if $player.seen_storage_creator
       return _INTL("{1}'s PC",pbGetStorageCreator)
     else
       return _INTL("Someone's PC")
@@ -201,7 +201,7 @@ def pbPCMailbox
         when 2   # Give
           pbFadeOutIn {
             sscene = PokemonParty_Scene.new
-            sscreen = PokemonPartyScreen.new(sscene,$Trainer.party)
+            sscreen = PokemonPartyScreen.new(sscene, $player.party)
             sscreen.pbPokemonGiveMailScreen(mailIndex)
           }
         end
@@ -229,13 +229,13 @@ def pbTrainerPCMenu
 end
 
 def pbTrainerPC
-  pbMessage(_INTL("\\se[PC open]{1} booted up the PC.",$Trainer.name))
+  pbMessage(_INTL("\\se[PC open]{1} booted up the PC.", $player.name))
   pbTrainerPCMenu
   pbSEPlay("PC close")
 end
 
 def pbPokeCenterPC
-  pbMessage(_INTL("\\se[PC open]{1} booted up the PC.",$Trainer.name))
+  pbMessage(_INTL("\\se[PC open]{1} booted up the PC.", $player.name))
   command = 0
   loop do
     commands = PokemonPCList.getCommandList

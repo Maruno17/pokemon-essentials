@@ -11,14 +11,14 @@ class PokemonTrainerCard_Scene
     @viewport.z = 99999
     @sprites = {}
     background = pbResolveBitmap(sprintf("Graphics/Pictures/Trainer Card/bg_f"))
-    if $Trainer.female? && background
+    if $player.female? && background
       addBackgroundPlane(@sprites,"bg","Trainer Card/bg_f",@viewport)
     else
       addBackgroundPlane(@sprites,"bg","Trainer Card/bg",@viewport)
     end
     cardexists = pbResolveBitmap(sprintf("Graphics/Pictures/Trainer Card/card_f"))
     @sprites["card"] = IconSprite.new(0,0,@viewport)
-    if $Trainer.female? && cardexists
+    if $player.female? && cardexists
       @sprites["card"].setBitmap("Graphics/Pictures/Trainer Card/card_f")
     else
       @sprites["card"].setBitmap("Graphics/Pictures/Trainer Card/card")
@@ -26,7 +26,7 @@ class PokemonTrainerCard_Scene
     @sprites["overlay"] = BitmapSprite.new(Graphics.width,Graphics.height,@viewport)
     pbSetSystemFont(@sprites["overlay"].bitmap)
     @sprites["trainer"] = IconSprite.new(336,112,@viewport)
-    @sprites["trainer"].setBitmap(GameData::TrainerType.player_front_sprite_filename($Trainer.trainer_type))
+    @sprites["trainer"].setBitmap(GameData::TrainerType.player_front_sprite_filename($player.trainer_type))
     @sprites["trainer"].x -= (@sprites["trainer"].bitmap.width-128)/2
     @sprites["trainer"].y -= (@sprites["trainer"].bitmap.height-128)
     @sprites["trainer"].z = 2
@@ -50,13 +50,13 @@ class PokemonTrainerCard_Scene
        $PokemonGlobal.startTime.year)
     textPositions = [
        [_INTL("Name"),34,58,0,baseColor,shadowColor],
-       [$Trainer.name,302,58,1,baseColor,shadowColor],
+       [$player.name,302,58,1,baseColor,shadowColor],
        [_INTL("ID No."),332,58,0,baseColor,shadowColor],
-       [sprintf("%05d",$Trainer.public_ID),468,58,1,baseColor,shadowColor],
+       [sprintf("%05d",$player.public_ID),468,58,1,baseColor,shadowColor],
        [_INTL("Money"),34,106,0,baseColor,shadowColor],
-       [_INTL("${1}",$Trainer.money.to_s_formatted),302,106,1,baseColor,shadowColor],
+       [_INTL("${1}",$player.money.to_s_formatted),302,106,1,baseColor,shadowColor],
        [_INTL("Pokédex"),34,154,0,baseColor,shadowColor],
-       [sprintf("%d/%d",$Trainer.pokedex.owned_count,$Trainer.pokedex.seen_count),302,154,1,baseColor,shadowColor],
+       [sprintf("%d/%d",$player.pokedex.owned_count,$player.pokedex.seen_count),302,154,1,baseColor,shadowColor],
        [_INTL("Time"),34,202,0,baseColor,shadowColor],
        [time,302,202,1,baseColor,shadowColor],
        [_INTL("Started"),34,250,0,baseColor,shadowColor],
@@ -67,7 +67,7 @@ class PokemonTrainerCard_Scene
     region = pbGetCurrentRegion(0) # Get the current region
     imagePositions = []
     for i in 0...8
-      if $Trainer.badges[i+region*8]
+      if $player.badges[i+region*8]
         imagePositions.push(["Graphics/Pictures/Trainer Card/icon_badges",x,310,i*32,region*32,32,32])
       end
       x += 48

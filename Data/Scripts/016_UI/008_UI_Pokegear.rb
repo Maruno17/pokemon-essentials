@@ -11,7 +11,7 @@ class PokegearButton < SpriteWrapper
     @image = command[0]
     @name  = command[1]
     @selected = false
-    if $Trainer.female? && pbResolveBitmap(sprintf("Graphics/Pictures/Pokegear/icon_button_f"))
+    if $player.female? && pbResolveBitmap(sprintf("Graphics/Pictures/Pokegear/icon_button_f"))
       @button = AnimatedBitmap.new("Graphics/Pictures/Pokegear/icon_button_f")
     else
       @button = AnimatedBitmap.new("Graphics/Pictures/Pokegear/icon_button")
@@ -70,7 +70,7 @@ class PokemonPokegear_Scene
     @viewport.z = 99999
     @sprites = {}
     @sprites["background"] = IconSprite.new(0,0,@viewport)
-    if $Trainer.female? && pbResolveBitmap(sprintf("Graphics/Pictures/Pokegear/bg_f"))
+    if $player.female? && pbResolveBitmap(sprintf("Graphics/Pictures/Pokegear/bg_f"))
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg_f")
     else
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")

@@ -1299,7 +1299,7 @@ end
 #
 #===============================================================================
 def pbPurifyChamber
-  $Trainer.seen_purify_chamber = true
+  $player.seen_purify_chamber = true
   pbFadeOutIn {
     scene = PurifyChamberScene.new
     screen = PurifyChamberScreen.new(scene)
@@ -1312,7 +1312,7 @@ end
 #===============================================================================
 class PurifyChamberPC
   def shouldShow?
-    return $Trainer.seen_purify_chamber
+    return $player.seen_purify_chamber
   end
 
   def name

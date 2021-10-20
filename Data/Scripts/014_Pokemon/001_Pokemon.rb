@@ -1,6 +1,6 @@
 #===============================================================================
 # Instances of this class are individual Pokémon.
-# The player's party Pokémon are stored in the array $Trainer.party.
+# The player's party Pokémon are stored in the array $player.party.
 #===============================================================================
 class Pokemon
   # @return [Symbol] this Pokémon's species
@@ -153,7 +153,7 @@ class Pokemon
     @ability = nil
     MultipleForms.call("onSetForm", self, value, oldForm)
     calc_stats
-    $Trainer.pokedex.register(self) if $Trainer
+    $player.pokedex.register(self) if $player
   end
 
   # The same as def form=, but yields to a given block in the middle so that a
@@ -166,7 +166,7 @@ class Pokemon
     yield if block_given?
     MultipleForms.call("onSetForm", self, value, oldForm)
     calc_stats
-    $Trainer.pokedex.register(self) if $Trainer
+    $player.pokedex.register(self) if $player
   end
 
   def form_simple=(value)
@@ -1111,7 +1111,7 @@ class Pokemon
   # @param owner [Owner, Player, NPCTrainer] Pokémon owner (the player by default)
   # @param withMoves [Boolean] whether the Pokémon should have moves
   # @param recheck_form [Boolean] whether to auto-check the form
-  def initialize(species, level, owner = $Trainer, withMoves = true, recheck_form = true)
+  def initialize(species, level, owner = $player, withMoves = true, recheck_form = true)
     species_data = GameData::Species.get(species)
     @species          = species_data.species
     @form             = species_data.base_form

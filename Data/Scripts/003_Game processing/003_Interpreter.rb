@@ -355,7 +355,7 @@ class Interpreter
   end
 
   def pbGetPokemon(id)
-    return $Trainer.party[pbGet(id)]
+    return $player.party[pbGet(id)]
   end
 
   def pbSetEventTime(*arg)

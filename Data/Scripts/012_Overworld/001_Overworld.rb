@@ -3,11 +3,11 @@
 #===============================================================================
 # Pokérus check
 Events.onMapUpdate += proc { |_sender,_e|
-  next if !$Trainer
+  next if !$player
   last = $PokemonGlobal.pokerusTime
   now = pbGetTimeNow
   if !last || last.year!=now.year || last.month!=now.month || last.day!=now.day
-    for i in $Trainer.pokemon_party
+    for i in $player.pokemon_party
       i.lowerPokerusCount
     end
     $PokemonGlobal.pokerusTime = now
@@ -18,7 +18,7 @@ Events.onMapUpdate += proc { |_sender,_e|
 # healed Pokémon has it.
 def pbPokerus?
   return false if $game_switches[Settings::SEEN_POKERUS_SWITCH]
-  for i in $Trainer.party
+  for i in $player.party
     return true if i.pokerusStage==1
   end
   return false
@@ -78,7 +78,7 @@ Events.onStepTaken += proc {
   $PokemonGlobal.happinessSteps = 0 if !$PokemonGlobal.happinessSteps
   $PokemonGlobal.happinessSteps += 1
   if $PokemonGlobal.happinessSteps>=128
-    for pkmn in $Trainer.able_party
+    for pkmn in $player.able_party
       pkmn.changeHappiness("walking") if rand(2)==0
     end
     $PokemonGlobal.happinessSteps = 0
@@ -91,7 +91,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
   next if handled[0]
   if $PokemonGlobal.stepcount%4==0 && Settings::POISON_IN_FIELD
     flashed = false
-    for i in $Trainer.able_party
+    for i in $player.able_party
       if i.status == :POISON && !i.hasAbility?(:IMMUNITY)
         if !flashed
           pbFlash(Color.new(255, 0, 0, 128), 8)
@@ -107,7 +107,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
           i.status = :NONE
           pbMessage(_INTL("{1} fainted...",i.name))
         end
-        if $Trainer.able_pokemon_count == 0
+        if $player.able_pokemon_count == 0
           handled[0] = true
           pbCheckAllFainted
         end
@@ -117,7 +117,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
 }
 
 def pbCheckAllFainted
-  if $Trainer.able_pokemon_count == 0
+  if $player.able_pokemon_count == 0
     pbMessage(_INTL("You have no more Pokémon that can fight!\1"))
     pbMessage(_INTL("You blacked out!"))
     pbBGMFade(1.0)
@@ -135,7 +135,7 @@ Events.onStepTakenFieldMovement += proc { |_sender,e|
     tile_id = map.data[thistile[1],thistile[2],i]
     next if tile_id == nil
     next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
-    $Trainer.soot += 1 if event == $game_player && $bag.has?(:SOOTSACK)
+    $player.soot += 1 if event == $game_player && $bag.has?(:SOOTSACK)
 #    map.data[thistile[1], thistile[2], i] = 0
 #    $scene.createSingleSpriteset(map.map_id)
     break
@@ -187,7 +187,7 @@ Events.onChangeDirection += proc {
 }
 
 def pbBattleOnStepTaken(repel_active)
-  return if $Trainer.able_pokemon_count == 0
+  return if $player.able_pokemon_count == 0
   return if !$PokemonEncounters.encounter_possible_here?
   encounter_type = $PokemonEncounters.encounter_type
   return if !encounter_type

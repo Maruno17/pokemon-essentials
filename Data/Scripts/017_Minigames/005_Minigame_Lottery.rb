@@ -16,7 +16,7 @@ def pbLottery(winnum,nameVar=2,positionVar=3,matchedVar=4)
   winpoke=nil
   winpos=0
   winmatched=0
-  for i in $Trainer.party
+  for i in $player.party
     thismatched=0
     id=i.owner.public_id
     for j in 0...5

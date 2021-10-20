@@ -1375,7 +1375,7 @@ end
 def pbPokemonScreen
   pbFadeOutIn {
     sscene = PokemonParty_Scene.new
-    sscreen = PokemonPartyScreen.new(sscene,$Trainer.party)
+    sscreen = PokemonPartyScreen.new(sscene, $player.party)
     sscreen.pbPokemonScreen
   }
 end
@@ -1390,7 +1390,7 @@ def pbChoosePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneligible=fa
   chosen = 0
   pbFadeOutIn {
     scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene,$Trainer.party)
+    screen = PokemonPartyScreen.new(scene, $player.party)
     if ableProc
       chosen=screen.pbChooseAblePokemon(ableProc,allowIneligible)
     else
@@ -1399,11 +1399,11 @@ def pbChoosePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneligible=fa
       screen.pbEndScene
     end
   }
-  pbSet(variableNumber,chosen)
+  pbSet(variableNumber, chosen)
   if chosen>=0
-    pbSet(nameVarNumber,$Trainer.party[chosen].name)
+    pbSet(nameVarNumber, $player.party[chosen].name)
   else
-    pbSet(nameVarNumber,"")
+    pbSet(nameVarNumber, "")
   end
 end
 
@@ -1420,7 +1420,7 @@ def pbChooseTradablePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneli
   chosen = 0
   pbFadeOutIn {
     scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene,$Trainer.party)
+    screen = PokemonPartyScreen.new(scene, $player.party)
     if ableProc
       chosen=screen.pbChooseTradablePokemon(ableProc,allowIneligible)
     else
@@ -1429,11 +1429,11 @@ def pbChooseTradablePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneli
       screen.pbEndScene
     end
   }
-  pbSet(variableNumber,chosen)
+  pbSet(variableNumber, chosen)
   if chosen>=0
-    pbSet(nameVarNumber,$Trainer.party[chosen].name)
+    pbSet(nameVarNumber, $player.party[chosen].name)
   else
-    pbSet(nameVarNumber,"")
+    pbSet(nameVarNumber, "")
   end
 end
 

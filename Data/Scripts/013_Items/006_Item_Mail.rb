@@ -25,7 +25,7 @@ end
 
 def pbStoreMail(pkmn,item,message,poke1=nil,poke2=nil,poke3=nil)
   raise _INTL("Pokémon already has mail") if pkmn.mail
-  pkmn.mail = Mail.new(item, message, $Trainer.name, poke1, poke2, poke3)
+  pkmn.mail = Mail.new(item, message, $player.name, poke1, poke2, poke3)
 end
 
 def pbDisplayMail(mail,_bearer=nil)
@@ -99,13 +99,13 @@ def pbWriteMail(item,pkmn,pkmnid,scene)
     if message!=""
       # Store mail if a message was written
       poke1 = poke2 = nil
-      if $Trainer.party[pkmnid+2]
-        p = $Trainer.party[pkmnid+2]
+      if $player.party[pkmnid+2]
+        p = $player.party[pkmnid+2]
         poke1 = [p.species,p.gender,p.shiny?,p.form,p.shadowPokemon?]
         poke1.push(true) if p.egg?
       end
-      if $Trainer.party[pkmnid+1]
-        p = $Trainer.party[pkmnid+1]
+      if $player.party[pkmnid+1]
+        p = $player.party[pkmnid+1]
         poke2 = [p.species,p.gender,p.shiny?,p.form,p.shadowPokemon?]
         poke2.push(true) if p.egg?
       end

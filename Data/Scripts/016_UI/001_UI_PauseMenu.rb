@@ -93,7 +93,7 @@ class PokemonPauseMenu
   end
 
   def pbStartPokemonMenu
-    if !$Trainer
+    if !$player
       if $DEBUG
         pbMessage(_INTL("The player trainer was not defined, so the pause menu can't be displayed."))
         pbMessage(_INTL("Please see the documentation to learn how to set up the trainer player."))
@@ -114,17 +114,17 @@ class PokemonPauseMenu
     cmdDebug    = -1
     cmdQuit     = -1
     cmdEndGame  = -1
-    if $Trainer.has_pokedex && $Trainer.pokedex.accessible_dexes.length > 0
+    if $player.has_pokedex && $player.pokedex.accessible_dexes.length > 0
       commands[cmdPokedex = commands.length]  = _INTL("Pokédex")
     end
-    commands[cmdPokemon = commands.length]    = _INTL("Pokémon") if $Trainer.party_count > 0
+    commands[cmdPokemon = commands.length]    = _INTL("Pokémon") if $player.party_count > 0
     commands[cmdBag = commands.length]        = _INTL("Bag") if !pbInBugContest?
-    if $Trainer.has_pokegear
+    if $player.has_pokegear
       commands[cmdPokegear = commands.length] = _INTL("Pokégear")
     elsif $bag.has?(:TOWNMAP)
       commands[cmdTownMap = commands.length]  = _INTL("Town Map")
     end
-    commands[cmdTrainer = commands.length]    = $Trainer.name
+    commands[cmdTrainer = commands.length]    = $player.name
     if pbInSafari?
       if Settings::SAFARI_STEPS <= 0
         @scene.pbShowInfo(_INTL("Balls: {1}",pbSafariState.ballcount))
@@ -161,8 +161,8 @@ class PokemonPauseMenu
             @scene.pbRefresh
           }
         else
-          if $Trainer.pokedex.accessible_dexes.length == 1
-            $PokemonGlobal.pokedexDex = $Trainer.pokedex.accessible_dexes[0]
+          if $player.pokedex.accessible_dexes.length == 1
+            $PokemonGlobal.pokedexDex = $player.pokedex.accessible_dexes[0]
             pbFadeOutIn {
               scene = PokemonPokedex_Scene.new
               screen = PokemonPokedexScreen.new(scene)
@@ -183,7 +183,7 @@ class PokemonPauseMenu
         hiddenmove = nil
         pbFadeOutIn {
           sscene = PokemonParty_Scene.new
-          sscreen = PokemonPartyScreen.new(sscene,$Trainer.party)
+          sscreen = PokemonPartyScreen.new(sscene, $player.party)
           hiddenmove = sscreen.pbPokemonScreen
           (hiddenmove) ? @scene.pbEndScene : @scene.pbRefresh
         }

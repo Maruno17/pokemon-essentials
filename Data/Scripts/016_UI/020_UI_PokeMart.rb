@@ -3,7 +3,7 @@
 #===============================================================================
 class PokemonMartAdapter
   def getMoney
-    return $Trainer.money
+    return $player.money
   end
 
   def getMoneyString
@@ -11,7 +11,7 @@ class PokemonMartAdapter
   end
 
   def setMoney(value)
-    $Trainer.money=value
+    $player.money = value
   end
 
   def getInventory

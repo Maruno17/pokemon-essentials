@@ -208,7 +208,7 @@ GameData::Evolution.register({
   :id            => :LevelDarkInParty,
   :parameter     => Integer,
   :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.level >= parameter && $Trainer.has_pokemon_of_type?(:DARK)
+    next pkmn.level >= parameter && $player.has_pokemon_of_type?(:DARK)
   }
 })
 
@@ -267,7 +267,7 @@ GameData::Evolution.register({
     next false   # This is a dummy proc and shouldn't next true
   },
   :after_evolution_proc => proc { |pkmn, new_species, parameter, evo_species|
-    next false if $Trainer.party_full?
+    next false if $player.party_full?
     next false if !$bag.has?(:POKEBALL)
     PokemonEvolutionScene.pbDuplicatePokemon(pkmn, new_species)
     $bag.remove(:POKEBALL)
@@ -475,7 +475,7 @@ GameData::Evolution.register({
   :parameter     => :Species,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    next $Trainer.has_species?(parameter)
+    next $player.has_species?(parameter)
   }
 })
 

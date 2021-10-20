@@ -101,7 +101,7 @@ def pbSafariBattle(species,level)
   pkmn = pbGenerateWildPokemon(species,level)
   foeParty = [pkmn]
   # Calculate who the trainer is
-  playerTrainer = $Trainer
+  playerTrainer = $player
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)

@@ -55,7 +55,7 @@ end
 def pbCheckHiddenMoveBadge(badge=-1,showmsg=true)
   return true if badge<0   # No badge requirement
   return true if $DEBUG
-  if (Settings::FIELD_MOVES_COUNT_BADGES) ? $Trainer.badge_count >= badge : $Trainer.badges[badge]
+  if (Settings::FIELD_MOVES_COUNT_BADGES) ? $player.badge_count >= badge : $player.badges[badge]
     return true
   end
   pbMessage(_INTL("Sorry, a new Badge is required.")) if showmsg
@@ -187,14 +187,14 @@ end
 #===============================================================================
 def pbCut
   move = :CUT
-  movefinder = $Trainer.get_pokemon_with_move(move)
+  movefinder = $player.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_CUT,false) || (!$DEBUG && !movefinder)
     pbMessage(_INTL("This tree looks like it can be cut down."))
     return false
   end
   pbMessage(_INTL("This tree looks like it can be cut down!\1"))
   if pbConfirmMessage(_INTL("Would you like to cut it?"))
-    speciesname = (movefinder) ? movefinder.name : $Trainer.name
+    speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
     return true
@@ -300,13 +300,13 @@ def pbDive
   map_metadata = $game_map.metadata
   return false if !map_metadata || !map_metadata.dive_map_id
   move = :DIVE
-  movefinder = $Trainer.get_pokemon_with_move(move)
+  movefinder = $player.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE,false) || (!$DEBUG && !movefinder)
     pbMessage(_INTL("The sea is deep here. A Pokémon may be able to go underwater."))
     return false
   end
   if pbConfirmMessage(_INTL("The sea is deep here. Would you like to use Dive?"))
-    speciesname = (movefinder) ? movefinder.name : $Trainer.name
+    speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
     pbFadeOutIn {
@@ -337,13 +337,13 @@ def pbSurfacing
   end
   return if !surface_map_id
   move = :DIVE
-  movefinder = $Trainer.get_pokemon_with_move(move)
+  movefinder = $player.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_DIVE,false) || (!$DEBUG && !movefinder)
     pbMessage(_INTL("Light is filtering down from above. A Pokémon may be able to surface here."))
     return false
   end
   if pbConfirmMessage(_INTL("Light is filtering down from above. Would you like to use Dive?"))
-    speciesname = (movefinder) ? movefinder.name : $Trainer.name
+    speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
     pbFadeOutIn {
@@ -494,7 +494,7 @@ HiddenMoveHandlers::UseMove.add(:FLASH,proc { |move,pokemon|
 #===============================================================================
 def pbCanFly?(pkmn = nil, show_messages = false)
   return false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_FLY, show_messages)
-  return false if !$DEBUG && !pkmn && !$Trainer.get_pokemon_with_move(:FLY)
+  return false if !$DEBUG && !pkmn && !$player.get_pokemon_with_move(:FLY)
   if $game_player.has_follower?
     pbMessage(_INTL("It can't be used when you have someone with you.")) if show_messages
     return false
@@ -508,14 +508,14 @@ end
 
 def pbFlyToNewLocation(pkmn = nil, move = :FLY)
   return false if !$PokemonTemp.flydata
-  pkmn = $Trainer.get_pokemon_with_move(move) if !pkmn
+  pkmn = $player.get_pokemon_with_move(move) if !pkmn
   if !$DEBUG && !pkmn
     $PokemonTemp.flydata = nil
     yield if block_given?
     return false
   end
   if !pkmn || !pbHiddenMoveAnimation(pkmn)
-    name = pkmn&.name || $Trainer.name
+    name = pkmn&.name || $player.name
     pbMessage(_INTL("{1} used {2}!", name, GameData::Move.get(move).name))
   end
   pbFadeOutIn {
@@ -557,7 +557,7 @@ def pbHeadbuttEffect(event=nil)
   event = $game_player.pbFacingEvent(true) if !event
   a = (event.x+(event.x/24).floor+1)*(event.y+(event.y/24).floor+1)
   a = (a*2/5)%10   # Even 2x as likely as odd, 0 is 1.5x as likely as odd
-  b = $Trainer.public_ID % 10   # Practically equal odds of each value
+  b = $player.public_ID % 10   # Practically equal odds of each value
   chance = 1                 # ~50%
   if a==b                    # 10%
     chance = 8
@@ -578,13 +578,13 @@ end
 
 def pbHeadbutt(event=nil)
   move = :HEADBUTT
-  movefinder = $Trainer.get_pokemon_with_move(move)
+  movefinder = $player.get_pokemon_with_move(move)
   if !$DEBUG && !movefinder
     pbMessage(_INTL("A Pokémon could be in this tree. Maybe a Pokémon could shake it."))
     return false
   end
   if pbConfirmMessage(_INTL("A Pokémon could be in this tree. Would you like to use Headbutt?"))
-    speciesname = (movefinder) ? movefinder.name : $Trainer.name
+    speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
     pbHeadbuttEffect(event)
@@ -623,13 +623,13 @@ end
 
 def pbRockSmash
   move = :ROCKSMASH
-  movefinder = $Trainer.get_pokemon_with_move(move)
+  movefinder = $player.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_ROCKSMASH,false) || (!$DEBUG && !movefinder)
     pbMessage(_INTL("It's a rugged rock, but a Pokémon may be able to smash it."))
     return false
   end
   if pbConfirmMessage(_INTL("This rock appears to be breakable. Would you like to use Rock Smash?"))
-    speciesname = (movefinder) ? movefinder.name : $Trainer.name
+    speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
     return true
@@ -670,14 +670,14 @@ def pbStrength
     return false
   end
   move = :STRENGTH
-  movefinder = $Trainer.get_pokemon_with_move(move)
+  movefinder = $player.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_STRENGTH,false) || (!$DEBUG && !movefinder)
     pbMessage(_INTL("It's a big boulder, but a Pokémon may be able to push it aside."))
     return false
   end
   pbMessage(_INTL("It's a big boulder, but a Pokémon may be able to push it aside.\1"))
   if pbConfirmMessage(_INTL("Would you like to use Strength?"))
-    speciesname = (movefinder) ? movefinder.name : $Trainer.name
+    speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
     pbMessage(_INTL("{1}'s Strength made it possible to move boulders around!",speciesname))
@@ -719,12 +719,12 @@ def pbSurf
   return false if $game_player.pbFacingEvent
   return false if $game_player.has_follower?
   move = :SURF
-  movefinder = $Trainer.get_pokemon_with_move(move)
+  movefinder = $player.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF,false) || (!$DEBUG && !movefinder)
     return false
   end
   if pbConfirmMessage(_INTL("The water is a deep blue...\nWould you like to surf on it?"))
-    speciesname = (movefinder) ? movefinder.name : $Trainer.name
+    speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbCancelVehicles
     pbHiddenMoveAnimation(movefinder)
@@ -962,13 +962,13 @@ end
 
 def pbWaterfall
   move = :WATERFALL
-  movefinder = $Trainer.get_pokemon_with_move(move)
+  movefinder = $player.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_WATERFALL,false) || (!$DEBUG && !movefinder)
     pbMessage(_INTL("A wall of water is crashing down with a mighty roar."))
     return false
   end
   if pbConfirmMessage(_INTL("It's a large waterfall. Would you like to use Waterfall?"))
-    speciesname = (movefinder) ? movefinder.name : $Trainer.name
+    speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
     pbAscendWaterfall

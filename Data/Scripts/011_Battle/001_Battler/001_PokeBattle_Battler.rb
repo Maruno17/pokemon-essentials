@@ -194,7 +194,7 @@ class PokeBattle_Battler
 
   def owned?
     return false if !@battle.wildBattle?
-    return $Trainer.owned?(displaySpecies)
+    return $player.owned?(displaySpecies)
   end
   alias owned owned?
 

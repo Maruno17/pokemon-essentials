@@ -86,7 +86,7 @@ def pbStartOver(gameover=false)
     pbBugContestStartOver
     return
   end
-  $Trainer.heal_party
+  $player.heal_party
   if $PokemonGlobal.pokecenterMapId && $PokemonGlobal.pokecenterMapId>=0
     if gameover
       pbMessage(_INTL("\\w[]\\wm\\c[8]\\l[3]After the unfortunate defeat, you scurry back to a Pokémon Center."))
@@ -108,7 +108,7 @@ def pbStartOver(gameover=false)
       if $DEBUG
         pbMessage(_ISPRINTF("Can't find the map 'Map{1:03d}' in the Data folder. The game will resume at the player's position.",homedata[0]))
       end
-      $Trainer.heal_party
+      $player.heal_party
       return
     end
     if gameover
@@ -127,7 +127,7 @@ def pbStartOver(gameover=false)
       $scene.transfer_player if $scene.is_a?(Scene_Map)
       $game_map.refresh
     else
-      $Trainer.heal_party
+      $player.heal_party
     end
   end
   pbEraseEscapePoint

@@ -291,7 +291,7 @@ def pbDebugDayCare
       when 0   # Withdraw Pokémon 1
         if !$PokemonGlobal.daycare[0][0]
           pbPlayBuzzerSE
-        elsif $Trainer.party_full?
+        elsif $player.party_full?
           pbPlayBuzzerSE
           pbMessage(_INTL("Party is full, can't withdraw Pokémon."))
         else
@@ -303,7 +303,7 @@ def pbDebugDayCare
       when 1  # Withdraw Pokémon 2
         if !$PokemonGlobal.daycare[1][0]
           pbPlayBuzzerSE
-        elsif $Trainer.party_full?
+        elsif $player.party_full?
           pbPlayBuzzerSE
           pbMessage(_INTL("Party is full, can't withdraw Pokémon."))
         else
@@ -315,7 +315,7 @@ def pbDebugDayCare
       when 2   # Deposit Pokémon
         if pbDayCareDeposited==2
           pbPlayBuzzerSE
-        elsif $Trainer.party.length==0
+        elsif $player.party.length == 0
           pbPlayBuzzerSE
           pbMessage(_INTL("Party is empty, can't deposit Pokémon."))
         else
@@ -344,7 +344,7 @@ def pbDebugDayCare
       when 4   # Collect egg
         if $PokemonGlobal.daycareEgg!=1
           pbPlayBuzzerSE
-        elsif $Trainer.party_full?
+        elsif $player.party_full?
           pbPlayBuzzerSE
           pbMessage(_INTL("Party is full, can't collect the egg."))
         else
@@ -352,7 +352,7 @@ def pbDebugDayCare
           pbDayCareGenerateEgg
           $PokemonGlobal.daycareEgg      = 0
           $PokemonGlobal.daycareEggSteps = 0
-          pbMessage(_INTL("Collected the {1} egg.", $Trainer.last_party.speciesName))
+          pbMessage(_INTL("Collected the {1} egg.", $player.last_party.speciesName))
           refresh = true
         end
       end

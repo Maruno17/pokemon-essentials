@@ -343,7 +343,7 @@ class Interpreter
       character = get_character(@parameters[1])
       result = (character.direction == @parameters[2]) if character
     when 7   # gold
-      gold = $Trainer.money
+      gold = $player.money
       result = (@parameters[2] == 0) ? (gold >= @parameters[1]) : (gold <= @parameters[1])
 #    when 8, 9, 10   # item, weapon, armor
     when 11   # button
@@ -496,8 +496,8 @@ class Interpreter
     when 7   # other
       case @parameters[4]
       when 0 then value = $game_map.map_id                             # map ID
-      when 1 then value = $Trainer.pokemon_party.length                # party members
-      when 2 then value = $Trainer.money                               # gold
+      when 1 then value = $player.pokemon_party.length                 # party members
+      when 2 then value = $player.money                                # gold
 #      when 3   # steps
       when 4 then value = Graphics.frame_count / Graphics.frame_rate   # play time
       when 5 then value = $game_system.timer / Graphics.frame_rate     # timer
@@ -560,7 +560,7 @@ class Interpreter
   def command_125
     value = (@parameters[1] == 0) ? @parameters[2] : $game_variables[@parameters[2]]
     value = -value if @parameters[0] == 1   # Decrease
-    $Trainer.money += value
+    $player.money += value
     return true
   end
 
@@ -931,8 +931,8 @@ class Interpreter
   # * Name Input Processing
   #-----------------------------------------------------------------------------
   def command_303
-    if $Trainer
-      $Trainer.name = pbEnterPlayerName(_INTL("Your name?"), 1, @parameters[1], $Trainer.name)
+    if $player
+      $player.name = pbEnterPlayerName(_INTL("Your name?"), 1, @parameters[1], $player.name)
       return true
     end
     if $game_actors && $data_actors && $data_actors[@parameters[0]] != nil
@@ -957,7 +957,7 @@ class Interpreter
   def command_314
     if @parameters[0] == 0
       if Settings::HEAL_STORED_POKEMON   # No need to heal stored Pokémon
-        $Trainer.heal_party
+        $player.heal_party
       else
         pbEachPokemon { |pkmn, box| pkmn.heal }   # Includes party Pokémon
       end
