@@ -385,7 +385,7 @@ Events.onAction += proc { |_sender, _e|
       break
     end
     if surface_map_id &&
-       $MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
+       $map_factory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
       pbSurfacing
     end
   else
@@ -403,7 +403,7 @@ HiddenMoveHandlers::CanUseMove.add(:DIVE,proc { |move,pkmn,showmsg|
       break
     end
     if !surface_map_id ||
-       !$MapFactory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
+       !$map_factory.getTerrainTag(surface_map_id, $game_player.x, $game_player.y).can_dive
       pbMessage(_INTL("Can't use that here.")) if showmsg
       next false
     end
@@ -741,7 +741,7 @@ def pbStartSurfing
   $PokemonEncounters.reset_step_count
   $PokemonGlobal.surfing = true
   pbUpdateVehicle
-  $PokemonTemp.surfJump = $MapFactory.getFacingCoords($game_player.x,$game_player.y,$game_player.direction)
+  $PokemonTemp.surfJump = $map_factory.getFacingCoords($game_player.x, $game_player.y, $game_player.direction)
   pbJumpToward
   $PokemonTemp.surfJump = nil
   $game_player.check_event_trigger_here([1,2])

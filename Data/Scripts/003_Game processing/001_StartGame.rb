@@ -46,7 +46,7 @@ module Game
     $PokemonTemp.begunNewGame = true
     $scene = Scene_Map.new
     SaveData.load_new_game_values
-    $MapFactory = PokemonMapFactory.new($data_system.start_map_id)
+    $map_factory = PokemonMapFactory.new($data_system.start_map_id)
     $game_player.moveto($data_system.start_x, $data_system.start_y)
     $game_player.refresh
     $PokemonEncounters = PokemonEncounters.new
@@ -70,20 +70,20 @@ module Game
 
   # Loads and validates the map. Called when loading a saved game.
   def self.load_map
-    $game_map = $MapFactory.map
+    $game_map = $map_factory.map
     magic_number_matches = ($game_system.magic_number == $data_system.magic_number)
     if !magic_number_matches || $PokemonGlobal.safesave
       if pbMapInterpreterRunning?
         pbMapInterpreter.setup(nil, 0)
       end
       begin
-        $MapFactory.setup($game_map.map_id)
+        $map_factory.setup($game_map.map_id)
       rescue Errno::ENOENT
         if $DEBUG
           pbMessage(_INTL('Map {1} was not found.', $game_map.map_id))
           map = pbWarpToMap
           exit unless map
-          $MapFactory.setup(map[0])
+          $map_factory.setup(map[0])
           $game_player.moveto(map[1], map[2])
         else
           raise _INTL('The map was not found. The game cannot continue.')
@@ -91,7 +91,7 @@ module Game
       end
       $game_player.center($game_player.x, $game_player.y)
     else
-      $MapFactory.setMapChanged($game_map.map_id)
+      $map_factory.setMapChanged($game_map.map_id)
     end
     if $game_map.events.nil?
       raise _INTL('The map is corrupt. The game cannot continue.')

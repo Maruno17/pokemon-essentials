@@ -19,18 +19,18 @@ class Scene_Map
     @map_renderer = TilemapRenderer.new(Spriteset_Map.viewport)
     @spritesetGlobal = Spriteset_Global.new
     @spritesets = {}
-    for map in $MapFactory.maps
+    for map in $map_factory.maps
       @spritesets[map.map_id] = Spriteset_Map.new(map)
     end
-    $MapFactory.setSceneStarted(self)
+    $map_factory.setSceneStarted(self)
     updateSpritesets
   end
 
   def createSingleSpriteset(map)
     temp = $scene.spriteset.getAnimations
-    @spritesets[map] = Spriteset_Map.new($MapFactory.maps[map])
+    @spritesets[map] = Spriteset_Map.new($map_factory.maps[map])
     $scene.spriteset.restoreAnimations(temp)
-    $MapFactory.setSceneStarted(self)
+    $map_factory.setSceneStarted(self)
     updateSpritesets
   end
 
@@ -74,7 +74,7 @@ class Scene_Map
     pbBridgeOff
     @spritesetGlobal.playersprite.clearShadows
     if $game_map.map_id!=$game_temp.player_new_map_id
-      $MapFactory.setup($game_temp.player_new_map_id)
+      $map_factory.setup($game_temp.player_new_map_id)
     end
     $game_player.moveto($game_temp.player_new_x, $game_temp.player_new_y)
     case $game_temp.player_new_direction
@@ -132,17 +132,17 @@ class Scene_Map
   end
 
   def updateMaps
-    for map in $MapFactory.maps
+    for map in $map_factory.maps
       map.update
     end
-    $MapFactory.updateMaps(self)
+    $map_factory.updateMaps(self)
   end
 
   def updateSpritesets
     @spritesets = {} if !@spritesets
     keys = @spritesets.keys.clone
     for i in keys
-      if !$MapFactory.hasMap?(i)
+      if !$map_factory.hasMap?(i)
         @spritesets[i].dispose if @spritesets[i]
         @spritesets[i] = nil
         @spritesets.delete(i)
@@ -151,7 +151,7 @@ class Scene_Map
       end
     end
     @spritesetGlobal.update
-    for map in $MapFactory.maps
+    for map in $map_factory.maps
       @spritesets[map.map_id] = Spriteset_Map.new(map) if !@spritesets[map.map_id]
     end
     pbDayNightTint(@map_renderer)

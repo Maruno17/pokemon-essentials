@@ -92,7 +92,7 @@ class Interpreter
       end
       # If this interpreter's map isn't the current map or connected to it,
       # forget this interpreter's event ID
-      if $game_map.map_id != @map_id && !$MapFactory.areConnected?($game_map.map_id, @map_id)
+      if $game_map.map_id != @map_id && !$map_factory.areConnected?($game_map.map_id, @map_id)
         @event_id = 0
       end
       # Update child interpreter if one exists
@@ -312,8 +312,8 @@ class Interpreter
     mapid = @map_id if mapid < 0
     old_value = $game_self_switches[[mapid, eventid, switch_name]]
     $game_self_switches[[mapid, eventid, switch_name]] = value
-    if value != old_value && $MapFactory.hasMap?(mapid)
-      $MapFactory.getMap(mapid, false).need_refresh = true
+    if value != old_value && $map_factory.hasMap?(mapid)
+      $map_factory.getMap(mapid, false).need_refresh = true
     end
   end
 

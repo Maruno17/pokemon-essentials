@@ -65,7 +65,7 @@ DebugMenuCommands.register("warp", {
         $scene.transfer_player
       else
         pbCancelVehicles
-        $MapFactory.setup(map[0])
+        $map_factory.setup(map[0])
         $game_player.moveto(map[1], map[2])
         $game_player.turn_down
         $game_map.update

@@ -179,7 +179,7 @@ class Game_FollowerFactory
        !$game_player.move_route_forcing && !$game_temp.message_window_showing &&
        !pbMapInterpreterRunning?
       # Get position of tile facing the player
-      facing_tile = $MapFactory.getFacingTile
+      facing_tile = $map_factory.getFacingTile
       # Assumes player is 1x1 tile in size
       each_follower do |event, follower|
         next if !follower.common_event_id
@@ -241,7 +241,7 @@ class FollowerSprites
     @sprites.each { |sprite| sprite.dispose }
     @sprites.clear
     $PokemonTemp.followers.each_follower do |event, follower|
-      $MapFactory.maps.each do |map|
+      $map_factory.maps.each do |map|
         map.events[follower.event_id].erase if follower.original_map_id == map.map_id
       end
       @sprites.push(Sprite_Character.new(@viewport, event))

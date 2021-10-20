@@ -35,8 +35,8 @@ class PokemonTilesetScene
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
     @tilehelper.dispose
-    if $game_map && $MapFactory
-      $MapFactory.setup($game_map.map_id)
+    if $game_map && $map_factory
+      $map_factory.setup($game_map.map_id)
       $game_player.center($game_player.x, $game_player.y)
       if $scene.is_a?(Scene_Map)
         $scene.disposeSpritesets

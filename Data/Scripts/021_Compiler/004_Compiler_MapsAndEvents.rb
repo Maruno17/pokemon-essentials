@@ -17,7 +17,10 @@ module Compiler
     ['pbCanStore?',                  '$bag.can_add?'],
     ['pbStoreItem',                  '$bag.add'],
     ['pbStoreAllOrNone',             '$bag.add_all'],
-    ['$Trainer',                     '$player']
+    ['$Trainer',                     '$player'],
+    ['$SaveVersion',                 '$save_engine_version'],
+    ['$game_version',                '$save_game_version'],
+    ['$MapFactory',                  '$map_factory']
   ]
 
   module_function

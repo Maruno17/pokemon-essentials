@@ -129,8 +129,8 @@ end
 # Gather soot from soot grass
 Events.onStepTakenFieldMovement += proc { |_sender,e|
   event = e[0]   # Get the event affected by field movement
-  thistile = $MapFactory.getRealTilePos(event.map.map_id,event.x,event.y)
-  map = $MapFactory.getMap(thistile[0])
+  thistile = $map_factory.getRealTilePos(event.map.map_id,event.x,event.y)
+  map = $map_factory.getMap(thistile[0])
   for i in [2, 1, 0]
     tile_id = map.data[thistile[1],thistile[2],i]
     next if tile_id == nil
@@ -147,7 +147,7 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
   event = e[0]   # Get the event affected by field movement
   if $scene.is_a?(Scene_Map)
     event.each_occupied_tile do |x, y|
-      if $MapFactory.getTerrainTag(event.map.map_id, x, y, true).shows_grass_rustle
+      if $map_factory.getTerrainTag(event.map.map_id, x, y, true).shows_grass_rustle
         $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1)
       end
     end
@@ -309,7 +309,7 @@ Events.onMapSceneChange += proc { |_sender, e|
 #===============================================================================
 # NOTE: Assumes the event is 1x1 tile in size. Only returns one tile.
 def pbFacingTile(direction=nil,event=nil)
-  return $MapFactory.getFacingTile(direction,event) if $MapFactory
+  return $map_factory.getFacingTile(direction,event) if $map_factory
   return pbFacingTileRegular(direction,event)
 end
 
@@ -574,8 +574,8 @@ end
 def pbTurnTowardEvent(event,otherEvent)
   sx = 0
   sy = 0
-  if $MapFactory
-    relativePos = $MapFactory.getThisAndOtherEventRelativePos(otherEvent,event)
+  if $map_factory
+    relativePos = $map_factory.getThisAndOtherEventRelativePos(otherEvent, event)
     sx = relativePos[0]
     sy = relativePos[1]
   else

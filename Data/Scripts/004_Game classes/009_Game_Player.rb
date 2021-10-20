@@ -160,7 +160,7 @@ class Game_Player < Game_Character
   end
 
   def pbTerrainTag(countBridge = false)
-    return $MapFactory.getTerrainTag(self.map.map_id, @x, @y, countBridge) if $MapFactory
+    return $map_factory.getTerrainTag(self.map.map_id, @x, @y, countBridge) if $map_factory
     return $game_map.terrain_tag(@x, @y, countBridge)
   end
 
@@ -190,7 +190,7 @@ class Game_Player < Game_Character
 
   def pbFacingTerrainTag(dir = nil)
     dir = self.direction if !dir
-    return $MapFactory.getFacingTerrainTag(dir, self) if $MapFactory
+    return $map_factory.getFacingTerrainTag(dir, self) if $map_factory
     facing = pbFacingTile(dir, self)
     return $game_map.terrain_tag(facing[1], facing[2])
   end
@@ -209,8 +209,8 @@ class Game_Player < Game_Character
     # If coordinates are outside of map
     return false if !$game_map.validLax?(new_x, new_y)
     if !$game_map.valid?(new_x, new_y)
-      return false if !$MapFactory
-      return $MapFactory.isPassableFromEdge?(new_x, new_y)
+      return false if !$map_factory
+      return $map_factory.isPassableFromEdge?(new_x, new_y)
     end
     # If debug mode is ON and Ctrl key was pressed
     return true if $DEBUG && Input.press?(Input::CTRL)

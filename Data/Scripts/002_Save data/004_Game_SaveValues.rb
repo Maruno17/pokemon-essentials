@@ -72,8 +72,8 @@ end
 
 SaveData.register(:map_factory) do
   ensure_class :PokemonMapFactory
-  save_value { $MapFactory }
-  load_value { |value| $MapFactory = value }
+  save_value { $map_factory }
+  load_value { |value| $map_factory = $MapFactory = value }
   from_old_format { |old_format| old_format[9] }
 end
 
@@ -121,7 +121,7 @@ SaveData.register(:essentials_version) do
   load_in_bootup
   ensure_class :String
   save_value { Essentials::VERSION }
-  load_value { |value| $SaveVersion = value }
+  load_value { |value| $save_engine_version = value }
   new_game_value { Essentials::VERSION }
   from_old_format { |old_format| old_format[15] }
 end
@@ -130,6 +130,6 @@ SaveData.register(:game_version) do
   load_in_bootup
   ensure_class :String
   save_value { Settings::GAME_VERSION }
-  load_value { |value| $game_version = value }
+  load_value { |value| $save_game_version = value }
   new_game_value { Settings::GAME_VERSION }
 end

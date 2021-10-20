@@ -15,7 +15,7 @@ class Game_Follower < Game_Event
       rpg_event.pages[0].list = common_event.list
     end
     # Create self
-    super(event_data.original_map_id, rpg_event, $MapFactory.getMap(event_data.current_map_id))
+    super(event_data.original_map_id, rpg_event, $map_factory.getMap(event_data.current_map_id))
     # Modify self
     self.character_name = event_data.character_name
     self.character_hue  = event_data.character_hue
@@ -112,15 +112,15 @@ class Game_Follower < Game_Event
   end
 
   def follow_leader(leader, instant = false, leaderIsTrueLeader = true)
-    maps_connected = $MapFactory.areConnected?(leader.map.map_id, self.map.map_id)
+    maps_connected = $map_factory.areConnected?(leader.map.map_id, self.map.map_id)
     target = nil
     # Get the target tile that self wants to move to
     if maps_connected
       behind_direction = 10 - leader.direction
-      target = $MapFactory.getFacingTile(behind_direction, leader)
-      if target && $MapFactory.getTerrainTag(target[0], target[1], target[2]).ledge
+      target = $map_factory.getFacingTile(behind_direction, leader)
+      if target && $map_factory.getTerrainTag(target[0], target[1], target[2]).ledge
         # Get the tile above the ledge (where the leader jumped from)
-        target = $MapFactory.getFacingTileFromPos(target[0], target[1], target[2], behind_direction)
+        target = $map_factory.getFacingTileFromPos(target[0], target[1], target[2], behind_direction)
       end
       target = [leader.map.map_id, leader.x, leader.y] if !target
     else
@@ -129,8 +129,8 @@ class Game_Follower < Game_Event
     end
     # Move self to the target
     if self.map.map_id != target[0]
-      vector = $MapFactory.getRelativePos(target[0], 0, 0, self.map.map_id, @x, @y)
-      @map = $MapFactory.getMap(target[0])
+      vector = $map_factory.getRelativePos(target[0], 0, 0, self.map.map_id, @x, @y)
+      @map = $map_factory.getMap(target[0])
       # NOTE: Can't use moveto because vector is outside the boundaries of the
       #       map, and moveto doesn't allow setting invalid coordinates.
       @x = vector[0]

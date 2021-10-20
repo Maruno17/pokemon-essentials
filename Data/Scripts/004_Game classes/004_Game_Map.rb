@@ -326,7 +326,7 @@ class Game_Map
       max_x = (self.width - Graphics.width*1.0/TILE_WIDTH) * REAL_RES_X
       @display_x = [0, [@display_x, max_x].min].max
     end
-    $MapFactory.setMapsInRange if $MapFactory
+    $map_factory.setMapsInRange if $map_factory
   end
 
   def display_y=(value)
@@ -336,7 +336,7 @@ class Game_Map
       max_y = (self.height - Graphics.height*1.0/TILE_HEIGHT) * REAL_RES_Y
       @display_y = [0, [@display_y, max_y].min].max
     end
-    $MapFactory.setMapsInRange if $MapFactory
+    $map_factory.setMapsInRange if $map_factory
   end
 
   def scroll_up(distance)
@@ -397,11 +397,11 @@ class Game_Map
 
   def update
     # refresh maps if necessary
-    if $MapFactory
-      for i in $MapFactory.maps
+    if $map_factory
+      for i in $map_factory.maps
         i.refresh if i.need_refresh
       end
-      $MapFactory.setCurrentMap
+      $map_factory.setCurrentMap
     end
     # If scrolling
     if @scroll_rest>0

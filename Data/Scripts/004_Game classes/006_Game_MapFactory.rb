@@ -382,7 +382,7 @@ class PokemonMapFactory
 
   def updateMaps(scene)
     updateMapsInternal
-    $MapFactory.setSceneStarted(scene) if @mapChanged
+    $map_factory.setSceneStarted(scene) if @mapChanged
   end
 
   def updateMapsInternal
@@ -510,7 +510,7 @@ end
 #===============================================================================
 # Unused
 def updateTilesets
-  maps = $MapFactory.maps
+  maps = $map_factory.maps
   for map in maps
     map.updateTileset if map
   end
