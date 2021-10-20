@@ -333,7 +333,7 @@ class PokeBattle_Move_AllBattlersLoseHalfHPUserSkipsNextTurn < PokeBattle_Move
   def pbEffectGeneral(user)
     @battle.eachBattler do |b|
       next if b.hp==1
-      b.pbReduceHP(i.hp/2,false)
+      b.pbReduceHP(b.hp / 2, false)
     end
     @battle.pbDisplay(_INTL("Each Pokémon's HP was halved!"))
     @battle.eachBattler { |b| b.pbItemHPHealCheck }

@@ -200,7 +200,7 @@ class PokeBattle_Battle
         end
       end
       break if switched.length==0
-      @battle.pbOnBattlerEnteringBattle(switched)
+      pbOnBattlerEnteringBattle(switched)
     end
   end
 

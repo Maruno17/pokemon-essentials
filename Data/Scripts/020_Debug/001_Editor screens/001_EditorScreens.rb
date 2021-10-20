@@ -861,8 +861,6 @@ def pbItemEditor
   GameData::Item::SCHEMA["FieldUse"][2].each { |key, value| field_use_array[value] = key if !field_use_array[value] }
   battle_use_array = [_INTL("Can't use in battle")]
   GameData::Item::SCHEMA["BattleUse"][2].each { |key, value| battle_use_array[value] = key if !battle_use_array[value] }
-  type_array = [_INTL("No special type")]
-  GameData::Item::SCHEMA["Type"][2].each { |key, value| type_array[value] = key }
   item_properties = [
      [_INTL("ID"),          ReadOnlyProperty,                   _INTL("ID of this item (used as a symbol like :XXX).")],
      [_INTL("Name"),        ItemNameProperty,                   _INTL("Name of this item as displayed by the game.")],
@@ -874,7 +872,7 @@ def pbItemEditor
      [_INTL("FieldUse"),    EnumProperty.new(field_use_array),  _INTL("How this item can be used outside of battle.")],
      [_INTL("BattleUse"),   EnumProperty.new(battle_use_array), _INTL("How this item can be used within a battle.")],
      [_INTL("Consumable"),  BooleanProperty,                    _INTL("Whether this item is consumed after use.")],
-     [_INTL("Flags"),       StringListProperty,                 _INTL("Words/phrases that group certain kinds of items.")],
+     [_INTL("Flags"),       StringListProperty,                 _INTL("Words/phrases that can be used to group certain kinds of items.")],
      [_INTL("Move"),        MoveProperty,                       _INTL("Move taught by this HM, TM or TR.")]
   ]
   pbListScreenBlock(_INTL("Items"), ItemLister.new(0, true)) { |button, item|

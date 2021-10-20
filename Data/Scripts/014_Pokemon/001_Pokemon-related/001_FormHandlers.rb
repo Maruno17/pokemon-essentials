@@ -308,12 +308,6 @@ MultipleForms.register(:ARCEUS,{
   }
 })
 
-MultipleForms.register(:BASCULIN,{
-  "getFormOnCreation" => proc { |pkmn|
-    next rand(2)
-  }
-})
-
 MultipleForms.register(:DARMANITAN,{
   "getFormOnLeavingBattle" => proc { |pkmn,battle,usedInBattle,endBattle|
     next 2 * (pkmn.form / 2)
@@ -397,14 +391,6 @@ MultipleForms.register(:SCATTERBUG,{
 
 MultipleForms.copy(:SCATTERBUG,:SPEWPA,:VIVILLON)
 
-MultipleForms.register(:FLABEBE,{
-  "getFormOnCreation" => proc { |pkmn|
-    next rand(5)
-  }
-})
-
-MultipleForms.copy(:FLABEBE,:FLOETTE,:FLORGES)
-
 MultipleForms.register(:FURFROU,{
   "getForm" => proc { |pkmn|
     if !pkmn.time_form_set ||
@@ -468,12 +454,6 @@ MultipleForms.register(:HOOPA,{
   "onSetForm" => proc { |pkmn,form,oldForm|
     pkmn.time_form_set = (form>0) ? pbGetTimeNow.to_i : nil
   }
-})
-
-MultipleForms.register(:ORICORIO,{
-  "getFormOnCreation" => proc { |pkmn|
-    next rand(4)   # 0=red, 1=yellow, 2=pink, 3=purple
-  },
 })
 
 MultipleForms.register(:ROCKRUFF,{
@@ -602,7 +582,8 @@ MultipleForms.copy(:TOXEL, :TOXTRICITY)
 
 MultipleForms.register(:SINISTEA, {
   "getFormOnCreation" => proc { |pkmn|
-    next rand(2)
+    next 1 if rand(100) < 10   # Antique
+    next 0                     # Phony
   }
 })
 
@@ -698,7 +679,7 @@ MultipleForms.register(:ZAMAZENTA, {
 })
 
 MultipleForms.register(:URSHIFU, {
-  "getForm" => proc { |pkmn|
+  "getFormOnCreation" => proc { |pkmn|
     next rand(2)
   }
 })
