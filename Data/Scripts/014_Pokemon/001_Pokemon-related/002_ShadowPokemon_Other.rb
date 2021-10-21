@@ -398,8 +398,8 @@ end
 #===============================================================================
 #
 #===============================================================================
-class PokemonTemp
-  attr_accessor :heart_gauges
+class Game_Temp
+  attr_accessor :party_heart_gauges_before_battle
 end
 
 
@@ -407,14 +407,14 @@ end
 # Record current heart gauges of Pokémon in party, to see if they drop to zero
 # during battle and need to say they're ready to be purified afterwards
 Events.onStartBattle += proc { |_sender|
-  $PokemonTemp.heart_gauges = []
+  $game_temp.party_heart_gauges_before_battle = []
   $player.party.each_with_index do |pkmn, i|
-    $PokemonTemp.heart_gauges[i] = pkmn.heart_gauge
+    $game_temp.party_heart_gauges_before_battle[i] = pkmn.heart_gauge
   end
 }
 
 Events.onEndBattle += proc { |_sender,_e|
-  $PokemonTemp.heart_gauges.each_with_index do |value, i|
+  $game_temp.party_heart_gauges_before_battle.each_with_index do |value, i|
     pkmn = $player.party[i]
     next if !pkmn || !value || value == 0
     pkmn.check_ready_to_purify if pkmn.heart_gauge == 0

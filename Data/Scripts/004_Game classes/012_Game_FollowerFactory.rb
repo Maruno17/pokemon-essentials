@@ -240,7 +240,7 @@ class FollowerSprites
   def refresh
     @sprites.each { |sprite| sprite.dispose }
     @sprites.clear
-    $PokemonTemp.followers.each_follower do |event, follower|
+    $game_temp.followers.each_follower do |event, follower|
       $map_factory.maps.each do |map|
         map.events[follower.event_id].erase if follower.original_map_id == map.map_id
       end
@@ -249,9 +249,9 @@ class FollowerSprites
   end
 
   def update
-    if $PokemonTemp.followers.last_update != @last_update
+    if $game_temp.followers.last_update != @last_update
       refresh
-      @last_update = $PokemonTemp.followers.last_update
+      @last_update = $game_temp.followers.last_update
     end
     @sprites.each { |sprite| sprite.update }
   end
@@ -260,7 +260,7 @@ end
 #===============================================================================
 # Stores Game_Follower instances just for the current play session.
 #===============================================================================
-class PokemonTemp
+class Game_Temp
   attr_writer :followers
 
   def followers
@@ -292,35 +292,35 @@ module Followers
   # @param name [String] identifier name of the follower to be added
   # @param common_event_id [Integer] ID of the Common Event triggered when interacting with this follower
   def add(event_id, name, common_event_id)
-    $PokemonTemp.followers.add_follower($game_map.events[event_id], name, common_event_id)
+    $game_temp.followers.add_follower($game_map.events[event_id], name, common_event_id)
   end
 
   # @param event [Game_Event] map event to be added as a follower
   def add_event(event)
-    $PokemonTemp.followers.add_follower(event)
+    $game_temp.followers.add_follower(event)
   end
 
   # @param name [String] identifier name of the follower to be removed
   def remove(name)
-    $PokemonTemp.followers.remove_follower_by_name(name)
+    $game_temp.followers.remove_follower_by_name(name)
   end
 
   # @param event [Game_Event] map event to be removed as a follower
   def remove_event(event)
-    $PokemonTemp.followers.remove_follower_by_event(event)
+    $game_temp.followers.remove_follower_by_event(event)
   end
 
   # Removes all followers.
   def clear
-    $PokemonTemp.followers.remove_all_followers
+    $game_temp.followers.remove_all_followers
     pbDeregisterPartner rescue nil
   end
 
   # @param name [String, nil] name of the follower to get, or nil for the first follower
   # @return [Game_Follower, nil] follower object
   def get(name = nil)
-    return $PokemonTemp.followers.get_follower_by_name(name) if name
-    $PokemonTemp.followers.get_follower_by_index
+    return $game_temp.followers.get_follower_by_name(name) if name
+    $game_temp.followers.get_follower_by_index
     return nil
   end
 end

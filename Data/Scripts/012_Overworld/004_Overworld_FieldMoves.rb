@@ -470,7 +470,7 @@ HiddenMoveHandlers::CanUseMove.add(:FLASH,proc { |move,pkmn,showmsg|
 })
 
 HiddenMoveHandlers::UseMove.add(:FLASH,proc { |move,pokemon|
-  darkness = $PokemonTemp.darknessSprite
+  darkness = $game_temp.darkness_sprite
   next false if !darkness || darkness.disposed?
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!",pokemon.name,GameData::Move.get(move).name))
@@ -507,10 +507,10 @@ def pbCanFly?(pkmn = nil, show_messages = false)
 end
 
 def pbFlyToNewLocation(pkmn = nil, move = :FLY)
-  return false if !$PokemonTemp.flydata
+  return false if $game_temp.fly_destination.nil?
   pkmn = $player.get_pokemon_with_move(move) if !pkmn
   if !$DEBUG && !pkmn
-    $PokemonTemp.flydata = nil
+    $game_temp.fly_destination = nil
     yield if block_given?
     return false
   end
@@ -520,11 +520,11 @@ def pbFlyToNewLocation(pkmn = nil, move = :FLY)
   end
   pbFadeOutIn {
     pbSEPlay("Fly")
-    $game_temp.player_new_map_id    = $PokemonTemp.flydata[0]
-    $game_temp.player_new_x         = $PokemonTemp.flydata[1]
-    $game_temp.player_new_y         = $PokemonTemp.flydata[2]
+    $game_temp.player_new_map_id    = $game_temp.fly_destination[0]
+    $game_temp.player_new_x         = $game_temp.fly_destination[1]
+    $game_temp.player_new_y         = $game_temp.fly_destination[2]
     $game_temp.player_new_direction = 2
-    $PokemonTemp.flydata = nil
+    $game_temp.fly_destination = nil
     $scene.transfer_player
     $game_map.autoplay
     $game_map.refresh
@@ -540,7 +540,7 @@ HiddenMoveHandlers::CanUseMove.add(:FLY,proc { |move, pkmn, showmsg|
 })
 
 HiddenMoveHandlers::UseMove.add(:FLY,proc { |move, pkmn|
-  if !$PokemonTemp.flydata
+  if $game_temp.fly_destination.nil?
     pbMessage(_INTL("Can't use that here."))
     next false
   end
@@ -741,9 +741,9 @@ def pbStartSurfing
   $PokemonEncounters.reset_step_count
   $PokemonGlobal.surfing = true
   pbUpdateVehicle
-  $PokemonTemp.surfJump = $map_factory.getFacingCoords($game_player.x, $game_player.y, $game_player.direction)
+  $game_temp.surf_base_coords = $map_factory.getFacingCoords($game_player.x, $game_player.y, $game_player.direction)
   pbJumpToward
-  $PokemonTemp.surfJump = nil
+  $game_temp.surf_base_coords = nil
   $game_player.check_event_trigger_here([1,2])
 end
 
@@ -752,14 +752,14 @@ def pbEndSurf(_xOffset,_yOffset)
   x = $game_player.x
   y = $game_player.y
   if $game_map.terrain_tag(x,y).can_surf && !$game_player.pbFacingTerrainTag.can_surf
-    $PokemonTemp.surfJump = [x,y]
+    $game_temp.surf_base_coords = [x, y]
     if pbJumpToward(1,false,true)
       $game_map.autoplayAsCue
       $game_player.increase_steps
       result = $game_player.check_event_trigger_here([1,2])
       pbOnStepTaken(result)
     end
-    $PokemonTemp.surfJump = nil
+    $game_temp.surf_base_coords = nil
     return true
   end
   return false

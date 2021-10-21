@@ -26,10 +26,10 @@ end
 
 
 
-class PokemonTemp
-  attr_accessor :batterywarning
-  attr_accessor :cueBGM
-  attr_accessor :cueFrames
+class Game_Temp
+  attr_accessor :warned_low_battery
+  attr_accessor :cue_bgm
+  attr_accessor :cue_bgm_frame_delay
 end
 
 
@@ -47,22 +47,22 @@ def pbBatteryLow?
 end
 
 Events.onMapUpdate += proc { |_sender,_e|
-  if !$PokemonTemp.batterywarning && pbBatteryLow?
+  if !$game_temp.warned_low_battery && pbBatteryLow?
     if !$game_temp.in_menu && !$game_temp.in_battle &&
        !$game_player.move_route_forcing && !$game_temp.message_window_showing &&
        !pbMapInterpreterRunning?
       if pbGetTimeNow.sec==0
         pbMessage(_INTL("The game has detected that the battery is low. You should save soon to avoid losing your progress."))
-        $PokemonTemp.batterywarning = true
+        $game_temp.warned_low_battery = true
       end
     end
   end
-  if $PokemonTemp.cueFrames
-    $PokemonTemp.cueFrames -= 1
-    if $PokemonTemp.cueFrames<=0
-      $PokemonTemp.cueFrames = nil
-      if $game_system.getPlayingBGM==nil
-        pbBGMPlay($PokemonTemp.cueBGM)
+  if $game_temp.cue_bgm_frame_delay
+    $game_temp.cue_bgm_frame_delay -= 1
+    if $game_temp.cue_bgm_frame_delay <= 0
+      $game_temp.cue_bgm_frame_delay = nil
+      if $game_system.getPlayingBGM == nil
+        pbBGMPlay($game_temp.cue_bgm)
       end
     end
   end
@@ -177,7 +177,7 @@ def pbOnStepTaken(eventTriggered)
   Events.onStepTakenTransferPossible.trigger(nil,handled)
   return if handled[0]
   pbBattleOnStepTaken(repel_active) if !eventTriggered && !$game_temp.in_menu
-  $PokemonTemp.encounterTriggered = false   # This info isn't needed here
+  $game_temp.encounter_triggered = false   # This info isn't needed here
 end
 
 # Start wild encounters while turning on the spot
@@ -192,7 +192,7 @@ def pbBattleOnStepTaken(repel_active)
   encounter_type = $PokemonEncounters.encounter_type
   return if !encounter_type
   return if !$PokemonEncounters.encounter_triggered?(encounter_type, repel_active)
-  $PokemonTemp.encounterType = encounter_type
+  $game_temp.encounter_type = encounter_type
   encounter = $PokemonEncounters.choose_wild_pokemon(encounter_type)
   encounter = EncounterModifier.trigger(encounter)
   if $PokemonEncounters.allow_encounter?(encounter, repel_active)
@@ -203,10 +203,10 @@ def pbBattleOnStepTaken(repel_active)
     else
       pbWildBattle(encounter[0], encounter[1])
     end
-    $PokemonTemp.encounterType = nil
-    $PokemonTemp.encounterTriggered = true
+    $game_temp.encounter_type = nil
+    $game_temp.encounter_triggered = true
   end
-  $PokemonTemp.forceSingleBattle = false
+  $game_temp.force_single_battle = false
   EncounterModifier.triggerEncounterEnd
 end
 
@@ -267,15 +267,15 @@ Events.onMapSceneChange += proc { |_sender, e|
   # Display darkness circle on dark maps
   map_metadata = $game_map.metadata
   if map_metadata && map_metadata.dark_map
-    $PokemonTemp.darknessSprite = DarknessSprite.new
-    scene.spriteset.addUserSprite($PokemonTemp.darknessSprite)
+    $game_temp.darkness_sprite = DarknessSprite.new
+    scene.spriteset.addUserSprite($game_temp.darkness_sprite)
     if $PokemonGlobal.flashUsed
-      $PokemonTemp.darknessSprite.radius = $PokemonTemp.darknessSprite.radiusMax
+      $game_temp.darkness_sprite.radius = $game_temp.darkness_sprite.radiusMax
     end
   else
     $PokemonGlobal.flashUsed = false
-    $PokemonTemp.darknessSprite.dispose if $PokemonTemp.darknessSprite
-    $PokemonTemp.darknessSprite = nil
+    $game_temp.darkness_sprite.dispose if $game_temp.darkness_sprite
+    $game_temp.darkness_sprite = nil
   end
   # Show location signpost
   if mapChanged && map_metadata && map_metadata.announce_location
@@ -398,10 +398,10 @@ def pbCueBGM(bgm,seconds,volume=nil,pitch=nil)
   playingBGM = $game_system.playing_bgm
   if !playingBGM || playingBGM.name!=bgm.name || playingBGM.pitch!=bgm.pitch
     pbBGMFade(seconds)
-    if !$PokemonTemp.cueFrames
-      $PokemonTemp.cueFrames = (seconds*Graphics.frame_rate)*3/5
+    if !$game_temp.cue_bgm_frame_delay
+      $game_temp.cue_bgm_frame_delay = (seconds * Graphics.frame_rate) * 3 / 5
     end
-    $PokemonTemp.cueBGM=bgm
+    $game_temp.cue_bgm = bgm
   elsif playingBGM
     pbBGMPlay(bgm)
   end
@@ -546,7 +546,7 @@ end
 
 def pbSlideOnIce
   return if !$game_player.pbTerrainTag.ice
-  $PokemonTemp.followers.update
+  $game_temp.followers.update
   $PokemonGlobal.sliding = true
   direction    = $game_player.direction
   oldwalkanime = $game_player.walk_anime
@@ -557,7 +557,7 @@ def pbSlideOnIce
     break if !$game_player.can_move_in_direction?(direction)
     break if !$game_player.pbTerrainTag.ice
     $game_player.move_forward
-    $PokemonTemp.followers.move_followers if first_loop
+    $game_temp.followers.move_followers if first_loop
     while $game_player.moving?
       pbUpdateSceneMap
       Graphics.update
@@ -621,7 +621,7 @@ def pbJumpToward(dist=1,playSound=false,cancelSurf=false)
   if $game_player.x!=x || $game_player.y!=y
     pbSEPlay("Player jump") if playSound
     $PokemonEncounters.reset_step_count if cancelSurf
-    $PokemonTemp.endSurf = true if cancelSurf
+    $game_temp.ending_surf = true if cancelSurf
     while $game_player.jumping?
       Graphics.update
       Input.update

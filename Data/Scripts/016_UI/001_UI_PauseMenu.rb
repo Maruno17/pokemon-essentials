@@ -49,7 +49,7 @@ class PokemonPauseMenu_Scene
     ret = -1
     cmdwindow = @sprites["cmdwindow"]
     cmdwindow.commands = commands
-    cmdwindow.index    = $PokemonTemp.menuLastChoice
+    cmdwindow.index    = $game_temp.menu_last_choice
     cmdwindow.resizeToFit(commands)
     cmdwindow.x        = Graphics.width-cmdwindow.width
     cmdwindow.y        = 0
@@ -64,7 +64,7 @@ class PokemonPauseMenu_Scene
         break
       elsif Input.trigger?(Input::USE)
         ret = cmdwindow.index
-        $PokemonTemp.menuLastChoice = ret
+        $game_temp.menu_last_choice = ret
         break
       end
     end
@@ -212,7 +212,7 @@ class PokemonPauseMenu
           scene = PokemonPokegear_Scene.new
           screen = PokemonPokegearScreen.new(scene)
           screen.pbStartScreen
-          ($PokemonTemp.flydata) ? @scene.pbEndScene : @scene.pbRefresh
+          ($game_temp.fly_destination) ? @scene.pbEndScene : @scene.pbRefresh
         }
         return if pbFlyToNewLocation
       elsif cmdTownMap>=0 && command==cmdTownMap
@@ -220,8 +220,8 @@ class PokemonPauseMenu
           scene = PokemonRegionMap_Scene.new(-1, false)
           screen = PokemonRegionMapScreen.new(scene)
           ret = screen.pbStartScreen
-          $PokemonTemp.flydata = ret if ret
-          ($PokemonTemp.flydata) ? @scene.pbEndScene : @scene.pbRefresh
+          $game_temp.fly_destination = ret if ret
+          ($game_temp.fly_destination) ? @scene.pbEndScene : @scene.pbRefresh
         }
         return if pbFlyToNewLocation
       elsif cmdTrainer>=0 && command==cmdTrainer

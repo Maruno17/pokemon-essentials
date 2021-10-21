@@ -33,8 +33,8 @@
 #           module PokeBattle_SceneConstants
 #             def self.pbBattlerPosition
 #             def self.pbTrainerPosition
-#           class PokemonTemp
-#             def recordBattleRule
+#           class Game_Temp
+#             def add_battle_rule
 #       (There is no guarantee that this list is complete.)
 
 class PokeBattle_Battle

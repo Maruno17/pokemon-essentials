@@ -212,7 +212,7 @@ DebugMenuCommands.register("testwildbattle", {
       level = pbMessageChooseNumber(_INTL("Set the wild {1}'s level.",
          GameData::Species.get(species).name), params)
       if level > 0
-        $PokemonTemp.encounterType = nil
+        $game_temp.encounter_type = nil
         pbWildBattle(species, level)
       end
     end
@@ -242,7 +242,7 @@ DebugMenuCommands.register("testwildbattleadvanced", {
           next
         end
         setBattleRule(sprintf("%dv%d", size0, pkmn.length))
-        $PokemonTemp.encounterType = nil
+        $game_temp.encounter_type = nil
         pbWildBattleCore(*pkmn)
         break
       elsif pkmnCmd == pkmnCmds.length - 2   # Set player side size

@@ -1012,7 +1012,7 @@ class Interpreter
   # * Return to Title Screen
   #-----------------------------------------------------------------------------
   def command_354
-    $game_temp.to_title = true
+    $game_temp.title_screen_calling = true
     return false
   end
   #-----------------------------------------------------------------------------

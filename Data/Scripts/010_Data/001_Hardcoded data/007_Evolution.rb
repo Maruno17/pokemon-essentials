@@ -625,9 +625,9 @@ GameData::Evolution.register({
   :id                => :BattleDealCriticalHit,
   :parameter         => Integer,
   :after_battle_proc => proc { |pkmn, party_index, parameter|
-    next $PokemonTemp.party_critical_hits_dealt &&
-         $PokemonTemp.party_critical_hits_dealt[party_index] &&
-         $PokemonTemp.party_critical_hits_dealt[party_index] >= parameter
+    next $game_temp.party_critical_hits_dealt &&
+         $game_temp.party_critical_hits_dealt[party_index] &&
+         $game_temp.party_critical_hits_dealt[party_index] >= parameter
   }
 })
 

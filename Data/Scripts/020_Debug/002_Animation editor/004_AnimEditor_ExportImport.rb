@@ -138,7 +138,7 @@ def pbConvertAnimsToNewFormat
   end
   if count>0
     save_data(animations,"Data/PkmnAnimations.rxdata")
-    $PokemonTemp.battleAnims = nil
+    $game_temp.battle_animations_data = nil
   end
   pbMessage(_INTL("{1} animations converted to new format.",count))
 end

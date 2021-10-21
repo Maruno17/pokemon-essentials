@@ -1366,7 +1366,7 @@ def pbRegionalDexEditorMain
            [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
         when 0   # Save all changes to Dexes
           save_data(dex_lists, "Data/regional_dexes.dat")
-          $PokemonTemp.regionalDexes = nil
+          $game_temp.regional_dexes_data = nil
           Compiler.write_regional_dexes
           pbMessage(_INTL("Data saved."))
           break
@@ -1489,7 +1489,7 @@ def pbAnimationsOrganiser
         if cmd2==0
           # Save animations here
           save_data(list,"Data/PkmnAnimations.rxdata")
-          $PokemonTemp.battleAnims = nil
+          $game_temp.battle_animations_data = nil
           pbMessage(_INTL("Data saved."))
         end
         break

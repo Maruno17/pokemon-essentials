@@ -567,7 +567,7 @@ class PokemonBagScreen
         end
       end
     end
-    ($PokemonTemp.flydata) ? @scene.dispose : @scene.pbEndScene
+    ($game_temp.fly_destination) ? @scene.dispose : @scene.pbEndScene
     return item
   end
 

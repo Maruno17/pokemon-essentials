@@ -43,7 +43,7 @@ def pbOrganizedBattleEx(opponent, challengedata, endspeech, endspeechwin)
     pbMessage(_INTL("SKIPPING BATTLE..."))
     pbMessage(_INTL("AFTER WINNING..."))
     pbMessage(endspeech || "...")
-    $PokemonTemp.lastbattle = nil
+    $game_temp.last_battle_record = nil
     pbMEStop
     return true
   end
@@ -86,9 +86,9 @@ def pbOrganizedBattleEx(opponent, challengedata, endspeech, endspeechwin)
     pkmn.item = olditems2[i]
   end
   # Save the record of the battle
-  $PokemonTemp.lastbattle = nil
+  $game_temp.last_battle_record = nil
   if decision == 1 || decision == 2 || decision == 5   # if win, loss or draw
-    $PokemonTemp.lastbattle = battle.pbDumpRecord
+    $game_temp.last_battle_record = battle.pbDumpRecord
   end
   # Return true if the player won the battle, and false if any other result
   return (decision == 1)
@@ -98,8 +98,8 @@ end
 # Methods that record and play back a battle.
 #===============================================================================
 def pbRecordLastBattle
-  $PokemonGlobal.lastbattle = $PokemonTemp.lastbattle
-  $PokemonTemp.lastbattle   = nil
+  $PokemonGlobal.lastbattle = $game_temp.last_battle_record
+  $game_temp.last_battle_record   = nil
 end
 
 def pbPlayLastBattle

@@ -2,7 +2,6 @@
 module Game
   # Initializes various global variables and loads the game data.
   def self.initialize
-    $PokemonTemp        = PokemonTemp.new
     $game_temp          = Game_Temp.new
     $game_system        = Game_System.new
     $data_animations    = load_data('Data/Animations.rxdata')
@@ -43,7 +42,7 @@ module Game
       $game_map.events.each_value { |event| event.clear_starting }
     end
     $game_temp.common_event_id = 0 if $game_temp
-    $PokemonTemp.begunNewGame = true
+    $game_temp.begun_new_game = true
     $scene = Scene_Map.new
     SaveData.load_new_game_values
     $map_factory = PokemonMapFactory.new($data_system.start_map_id)

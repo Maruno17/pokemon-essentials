@@ -109,8 +109,8 @@ Events.onMapChange += proc { |_sender,e|
 #===============================================================================
 # Encountering a roaming Pokémon in a wild battle.
 #===============================================================================
-class PokemonTemp
-  attr_accessor :roamerIndex   # Index of roaming Pokémon to encounter next
+class Game_Temp
+  attr_accessor :roamer_index_for_encounter   # Index of roaming Pokémon to encounter next
 end
 
 
@@ -136,12 +136,12 @@ def pbRoamingMethodAllowed(roamer_method)
 end
 
 EncounterModifier.register(proc { |encounter|
-  $PokemonTemp.roamerIndex = nil
+  $game_temp.roamer_index_for_encounter = nil
   next nil if !encounter
   # Give the regular encounter if encountering a roaming Pokémon isn't possible
   next encounter if $PokemonGlobal.roamedAlready
   next encounter if $PokemonGlobal.partner
-  next encounter if $PokemonTemp.pokeradar
+  next encounter if $game_temp.poke_radar_data
   next encounter if rand(100) < 75   # 25% chance of encountering a roaming Pokémon
   # Look at each roaming Pokémon in turn and decide whether it's possible to
   # encounter it
@@ -179,9 +179,9 @@ EncounterModifier.register(proc { |encounter|
   # Pick a roaming Pokémon to encounter out of those available
   roamer = possible_roamers[rand(possible_roamers.length)]
   $PokemonGlobal.roamEncounter = roamer
-  $PokemonTemp.roamerIndex     = roamer[0]
+  $game_temp.roamer_index_for_encounter = roamer[0]
   $PokemonGlobal.nextBattleBGM = roamer[3] if roamer[3] && !roamer[3].empty?
-  $PokemonTemp.forceSingleBattle = true
+  $game_temp.force_single_battle = true
   next [roamer[1], roamer[2]]   # Species, level
 })
 
@@ -190,14 +190,14 @@ Events.onWildBattleOverride += proc { |_sender,e|
   level   = e[1]
   handled = e[2]
   next if handled[0]!=nil
-  next if !$PokemonGlobal.roamEncounter || $PokemonTemp.roamerIndex.nil?
+  next if !$PokemonGlobal.roamEncounter || $game_temp.roamer_index_for_encounter.nil?
   handled[0] = pbRoamingPokemonBattle(species, level)
 }
 
 def pbRoamingPokemonBattle(species, level)
   # Get the roaming Pokémon to encounter; generate it based on the species and
   # level if it doesn't already exist
-  idxRoamer = $PokemonTemp.roamerIndex
+  idxRoamer = $game_temp.roamer_index_for_encounter
   if !$PokemonGlobal.roamPokemon[idxRoamer] ||
      !$PokemonGlobal.roamPokemon[idxRoamer].is_a?(Pokemon)
     $PokemonGlobal.roamPokemon[idxRoamer] = pbGenerateWildPokemon(species,level,true)
@@ -221,5 +221,5 @@ def pbRoamingPokemonBattle(species, level)
 end
 
 EncounterModifier.registerEncounterEnd(proc {
-  $PokemonTemp.roamerIndex = nil
+  $game_temp.roamer_index_for_encounter = nil
 })

@@ -358,6 +358,6 @@ def pbShowMap(region = -1, wallmap = true)
     scene = PokemonRegionMap_Scene.new(region, wallmap)
     screen = PokemonRegionMapScreen.new(scene)
     ret = screen.pbStartScreen
-    $PokemonTemp.flydata = ret if ret && !wallmap
+    $game_temp.fly_destination = ret if ret && !wallmap
   }
 end

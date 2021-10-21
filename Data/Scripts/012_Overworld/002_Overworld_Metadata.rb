@@ -173,32 +173,3 @@ class PokemonMapMetadata
     end
   end
 end
-
-
-
-#===============================================================================
-# Temporary data which is not saved and which is erased when a game restarts.
-#===============================================================================
-class PokemonTemp
-  attr_accessor :menuLastChoice
-  attr_accessor :keyItemCalling
-  attr_accessor :hiddenMoveEventCalling
-  attr_accessor :begunNewGame
-  attr_accessor :miniupdate
-  attr_accessor :waitingTrainer
-  attr_accessor :darknessSprite
-  attr_accessor :lastbattle
-  attr_accessor :flydata
-  attr_accessor :surfJump
-  attr_accessor :endSurf
-  attr_accessor :forceSingleBattle
-
-  def initialize
-    @menuLastChoice         = 0
-    @keyItemCalling         = false
-    @hiddenMoveEventCalling = false
-    @begunNewGame           = false
-    @miniupdate             = false
-    @forceSingleBattle      = false
-  end
-end

@@ -83,7 +83,7 @@ class PokemonSaveScreen
     ret = false
     @scene.pbStartScreen
     if pbConfirmMessage(_INTL('Would you like to save the game?'))
-      if SaveData.exists? && $PokemonTemp.begunNewGame
+      if SaveData.exists? && $game_temp.begun_new_game
         pbMessage(_INTL('WARNING!'))
         pbMessage(_INTL('There is a different game file that is already saved.'))
         pbMessage(_INTL("If you save now, the other file's adventure, including items and Pokémon, will be entirely lost."))
@@ -94,7 +94,7 @@ class PokemonSaveScreen
           return false
         end
       end
-      $PokemonTemp.begunNewGame = false
+      $game_temp.begun_new_game = false
       pbSEPlay('GUI save choice')
       if Game.save
         pbMessage(_INTL("\\se[]{1} saved the game.\\me[GUI save game]\\wtnp[30]", $player.name))

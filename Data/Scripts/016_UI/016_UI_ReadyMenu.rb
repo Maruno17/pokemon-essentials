@@ -267,7 +267,7 @@ class PokemonReadyMenu
             pbShowMenu if !ret
           }
           if ret
-            $PokemonTemp.flydata = ret
+            $game_temp.fly_destination = ret
             $game_temp.in_menu = false
             pbUseHiddenMove(user,move)
             break

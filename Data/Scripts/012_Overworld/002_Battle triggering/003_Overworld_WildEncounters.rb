@@ -208,7 +208,7 @@ class PokemonEncounters
   # Returns whether a wild encounter should be turned into a double wild
   # encounter.
   def have_double_wild_battle?
-    return false if $PokemonTemp.forceSingleBattle
+    return false if $game_temp.force_single_battle
     return false if pbInSafari?
     return true if $PokemonGlobal.partner
     return false if $player.able_pokemon_count <= 1
@@ -459,7 +459,7 @@ end
 # Used by fishing rods and Headbutt/Rock Smash/Sweet Scent to generate a wild
 # Pokémon (or two) for a triggered wild encounter.
 def pbEncounter(enc_type)
-  $PokemonTemp.encounterType = enc_type
+  $game_temp.encounter_type = enc_type
   encounter1 = $PokemonEncounters.choose_wild_pokemon(enc_type)
   encounter1 = EncounterModifier.trigger(encounter1)
   return false if !encounter1
@@ -471,8 +471,8 @@ def pbEncounter(enc_type)
   else
     pbWildBattle(encounter1[0], encounter1[1])
   end
-	$PokemonTemp.encounterType = nil
-  $PokemonTemp.forceSingleBattle = false
+	$game_temp.encounter_type = nil
+  $game_temp.force_single_battle = false
   EncounterModifier.triggerEncounterEnd
   return true
 end

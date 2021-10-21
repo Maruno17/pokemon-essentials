@@ -85,14 +85,14 @@ class Game_Player < Game_Character
 
   def move_generic(dir, turn_enabled = true)
     turn_generic(dir, true) if turn_enabled
-    if !$PokemonTemp.encounterTriggered
+    if !$game_temp.encounter_triggered
       if can_move_in_direction?(dir)
         x_offset = (dir == 4) ? -1 : (dir == 6) ? 1 : 0
         y_offset = (dir == 8) ? -1 : (dir == 2) ? 1 : 0
         return if pbLedge(x_offset, y_offset)
         return if pbEndSurf(x_offset, y_offset)
         turn_generic(dir, true)
-        if !$PokemonTemp.encounterTriggered
+        if !$game_temp.encounter_triggered
           @x += x_offset
           @y += y_offset
           increase_steps
@@ -101,7 +101,7 @@ class Game_Player < Game_Character
         bump_into_object
       end
     end
-    $PokemonTemp.encounterTriggered = false
+    $game_temp.encounter_triggered = false
   end
 
   def turn_generic(dir, keep_enc_indicator = false)
@@ -109,7 +109,7 @@ class Game_Player < Game_Character
     super(dir)
     if @direction != old_direction && !@move_route_forcing && !pbMapInterpreterRunning?
       Events.onChangeDirection.trigger(self, self)
-      $PokemonTemp.encounterTriggered = false if !keep_enc_indicator
+      $game_temp.encounter_triggered = false if !keep_enc_indicator
     end
   end
 
@@ -359,16 +359,16 @@ class Game_Player < Game_Character
     # Update dependent events
     if (!@moved_last_frame || @stopped_last_frame ||
        (@stopped_this_frame && $PokemonGlobal.sliding)) && (moving? || jumping?)
-      $PokemonTemp.followers.move_followers
+      $game_temp.followers.move_followers
     end
-    $PokemonTemp.followers.update
+    $game_temp.followers.update
     # Count down the time between allowed bump sounds
     @bump_se -= 1 if @bump_se && @bump_se>0
     # Finish up dismounting from surfing
-    if $PokemonTemp.endSurf && !moving?
+    if $game_temp.ending_surf && !moving?
       pbCancelVehicles
-      $PokemonTemp.surfJump = nil
-      $PokemonTemp.endSurf  = false
+      $game_temp.surf_base_coords = nil
+      $game_temp.ending_surf  = false
     end
     update_event_triggering
   end
@@ -376,7 +376,7 @@ class Game_Player < Game_Character
   def update_command_new
     dir = Input.dir4
     unless pbMapInterpreterRunning? || $game_temp.message_window_showing ||
-           $PokemonTemp.miniupdate || $game_temp.in_menu
+           $game_temp.in_mini_update || $game_temp.in_menu
       # Move player in the direction the directional button is being pressed
       if @moved_last_frame ||
          (dir > 0 && dir == @lastdir && Graphics.frame_count - @lastdirframe > Graphics.frame_rate / 20)
@@ -469,7 +469,7 @@ class Game_Player < Game_Character
     return if moving?
     # Try triggering events upon walking into them/in front of them
     if @moved_this_frame
-      $PokemonTemp.followers.turn_followers
+      $game_temp.followers.turn_followers
       result = pbCheckEventTriggerFromDistance([2])
       # Event determinant is via touch of same position event
       result |= check_event_trigger_here([1,2])
@@ -477,7 +477,7 @@ class Game_Player < Game_Character
       pbOnStepTaken(result)
     end
     # Try to manually interact with events
-    if Input.trigger?(Input::USE) && !$PokemonTemp.miniupdate
+    if Input.trigger?(Input::USE) && !$game_temp.in_mini_update
       # Same position and front event determinant
       check_event_trigger_here([0])
       check_event_trigger_there([0,2])

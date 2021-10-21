@@ -58,10 +58,10 @@ ItemHandlers::UseFromBag.add(:TOWNMAP, proc { |item|
     scene = PokemonRegionMap_Scene.new(-1, false)
     screen = PokemonRegionMapScreen.new(scene)
     ret = screen.pbStartScreen
-    $PokemonTemp.flydata = ret if ret
+    $game_temp.fly_destination = ret if ret
     next 99999 if ret   # Ugly hack to make Bag scene not reappear if flying
   }
-  next $PokemonTemp.flydata ? 2 : 0
+  next ($game_temp.fly_destination) ? 2 : 0
 })
 
 #===============================================================================
@@ -312,7 +312,7 @@ ItemHandlers::UseInField.add(:ITEMFINDER,proc { |item|
 ItemHandlers::UseInField.copy(:ITEMFINDER,:DOWSINGMCHN,:DOWSINGMACHINE)
 
 ItemHandlers::UseInField.add(:TOWNMAP, proc { |item|
-  pbShowMap(-1, false) if !$PokemonTemp.flydata
+  pbShowMap(-1, false) if $game_temp.fly_destination.nil?
   pbFlyToNewLocation
   next true
 })

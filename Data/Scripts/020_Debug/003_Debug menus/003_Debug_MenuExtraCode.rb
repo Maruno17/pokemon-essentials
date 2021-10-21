@@ -676,7 +676,7 @@ def pbImportAllAnimations
       }
     end
     save_data(animations,"Data/PkmnAnimations.rxdata")
-    $PokemonTemp.battleAnims = nil
+    $game_temp.battle_animations_data = nil
     pbDisposeMessageWindow(msgwindow)
     pbMessage(_INTL("All animations were imported."))
   end

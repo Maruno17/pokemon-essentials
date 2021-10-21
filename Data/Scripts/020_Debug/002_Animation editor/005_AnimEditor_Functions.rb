@@ -1021,7 +1021,7 @@ def animationEditorMain(animation)
         save_data(animation,"Data/PkmnAnimations.rxdata")
       end
       if pbConfirmMessage(_INTL("Exit from the editor?"))
-        $PokemonTemp.battleAnims = nil
+        $game_temp.battle_animations_data = nil
         break
       end
     end

@@ -148,11 +148,11 @@ class PokemonPokegearScreen
           screen = PokemonRegionMapScreen.new(scene)
           ret = screen.pbStartScreen
           if ret
-            $PokemonTemp.flydata = ret
+            $game_temp.fly_destination = ret
             next 99999   # Ugly hack to make Pokégear scene not reappear if flying
           end
         }
-        break if $PokemonTemp.flydata
+        break if $game_temp.fly_destination
       elsif cmdPhone>=0 && cmd==cmdPhone
         pbFadeOutIn {
           PokemonPhoneScene.new.start
@@ -165,6 +165,6 @@ class PokemonPokegearScreen
         }
       end
     end
-    ($PokemonTemp.flydata) ? @scene.dispose : @scene.pbEndScene
+    ($game_temp.fly_destination) ? @scene.dispose : @scene.pbEndScene
   end
 end

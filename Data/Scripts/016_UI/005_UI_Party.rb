@@ -1244,7 +1244,7 @@ class PokemonPartyScreen
               screen = PokemonRegionMapScreen.new(scene)
               ret = screen.pbStartFlyScreen
               if ret
-                $PokemonTemp.flydata=ret
+                $game_temp.fly_destination = ret
                 return [pkmn,pkmn.moves[i].id]
               end
               @scene.pbStartScene(@party,

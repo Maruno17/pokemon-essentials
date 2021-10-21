@@ -84,7 +84,7 @@ class Scene_Map
     when 8 then $game_player.turn_up
     end
     $game_player.straighten
-    $PokemonTemp.followers.map_transfer_followers
+    $game_temp.followers.map_transfer_followers
     $game_map.update
     disposeSpritesets
     RPG::Cache.clear
@@ -117,7 +117,7 @@ class Scene_Map
   end
 
   def miniupdate
-    $PokemonTemp.miniupdate = true
+    $game_temp.in_mini_update = true
     loop do
       $game_player.update
       updateMaps
@@ -128,7 +128,7 @@ class Scene_Map
       break if $game_temp.transition_processing
     end
     updateSpritesets
-    $PokemonTemp.miniupdate = false
+    $game_temp.in_mini_update = false
   end
 
   def updateMaps
@@ -171,8 +171,8 @@ class Scene_Map
       break if $game_temp.transition_processing
     end
     updateSpritesets
-    if $game_temp.to_title
-      $game_temp.to_title = false
+    if $game_temp.title_screen_calling
+      $game_temp.title_screen_calling = false
       SaveData.mark_values_as_unloaded
       $scene = pbCallTitle
       return
@@ -188,7 +188,7 @@ class Scene_Map
     return if $game_temp.message_window_showing
     if !pbMapInterpreterRunning?
       if Input.trigger?(Input::USE)
-        $PokemonTemp.hiddenMoveEventCalling = true
+        $game_temp.interact_calling = true
       elsif Input.trigger?(Input::ACTION)
         unless $game_system.menu_disabled || $game_player.moving?
           $game_temp.menu_calling = true
@@ -196,7 +196,7 @@ class Scene_Map
         end
       elsif Input.trigger?(Input::SPECIAL)
         unless $game_player.moving?
-          $PokemonTemp.keyItemCalling = true
+          $game_temp.ready_menu_calling = true
         end
       elsif Input.press?(Input::F9)
         $game_temp.debug_calling = true if $DEBUG
@@ -207,12 +207,12 @@ class Scene_Map
         call_menu
       elsif $game_temp.debug_calling
         call_debug
-      elsif $PokemonTemp.keyItemCalling
-        $PokemonTemp.keyItemCalling = false
+      elsif $game_temp.ready_menu_calling
+        $game_temp.ready_menu_calling = false
         $game_player.straighten
         pbUseKeyItem
-      elsif $PokemonTemp.hiddenMoveEventCalling
-        $PokemonTemp.hiddenMoveEventCalling = false
+      elsif $game_temp.interact_calling
+        $game_temp.interact_calling = false
         $game_player.straighten
         Events.onAction.trigger(self)
       end
@@ -230,7 +230,7 @@ class Scene_Map
     end
     Graphics.freeze
     disposeSpritesets
-    if $game_temp.to_title
+    if $game_temp.title_screen_calling
       Graphics.transition
       Graphics.freeze
     end

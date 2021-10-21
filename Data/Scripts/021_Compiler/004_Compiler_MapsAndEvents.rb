@@ -62,7 +62,7 @@ module Compiler
     end
     if imported
       save_data(mapinfos,"Data/MapInfos.rxdata")
-      $PokemonTemp.mapInfos = nil
+      $game_temp.map_infos = nil
       pbMessage(_INTL("{1} new map(s) copied to the Data folder were successfully imported.",count))
     end
     return imported
