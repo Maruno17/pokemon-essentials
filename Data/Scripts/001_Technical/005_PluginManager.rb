@@ -654,7 +654,7 @@ module PluginManager
   # Check if plugins need compiling
   #-----------------------------------------------------------------------------
   def self.compilePlugins(order, plugins)
-    echo "Compiling plugin scripts..."
+    echo "  -> Compiling plugin scripts..."
     scripts = []
     # go through the entire order one by one
     for o in order
@@ -677,12 +677,13 @@ module PluginManager
     # collect garbage
     GC.start
     echoln_good "done"
-    echoln ""
   end
   #-----------------------------------------------------------------------------
   # Check if plugins need compiling
   #-----------------------------------------------------------------------------
   def self.runPlugins
+    echoln_warn "*** Checking plugins ***"
+    echoln ""
     # get the order of plugins to interpret
     order, plugins = self.getPluginOrder
     # compile if necessary
@@ -707,7 +708,7 @@ module PluginManager
         # try to run the code
         begin
           eval(code, TOPLEVEL_BINDING, fname)
-          echoln "Loaded plugin: #{name}" if !echoed_plugins.include?(name)
+          echoln "  -> Loaded plugin: \e[35m#{name}\e[0m" if !echoed_plugins.include?(name)
           echoed_plugins.push(name)
         rescue Exception   # format error message to display
           self.pluginErrorMsg(name, sname)
@@ -715,7 +716,14 @@ module PluginManager
         end
       end
     end
-    echoln "" if !echoed_plugins.empty?
+    if scripts.length > 0
+      echoln ""
+      echoln_good "Successfully loaded #{scripts.length} plugin(s)"
+      echoln ""
+    else
+      echoln_good "No plugins found"
+      echoln ""
+    end
   end
   #-----------------------------------------------------------------------------
 end

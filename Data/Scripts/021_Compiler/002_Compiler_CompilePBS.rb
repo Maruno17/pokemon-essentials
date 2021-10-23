@@ -5,7 +5,7 @@ module Compiler
   # Compile Town Map data
   #=============================================================================
   def compile_town_map(path = "PBS/town_map.txt")
-    echo _INTL("Compiling Town Map data...")
+    compile_pbs_file_message_start(path)
     nonglobaltypes = {
       "Name"     => [0, "s"],
       "Filename" => [1, "s"],
@@ -48,15 +48,14 @@ module Compiler
     MessageTypes.setMessages(MessageTypes::RegionNames,rgnnames)
     MessageTypes.setMessagesAsHash(MessageTypes::PlaceNames,placenames)
     MessageTypes.setMessagesAsHash(MessageTypes::PlaceDescriptions,placedescs)
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile map connections
   #=============================================================================
   def compile_connections(path = "PBS/map_connections.txt")
-    echo _INTL("Compiling map connections...")
+    compile_pbs_file_message_start(path)
     records   = []
     pbCompilerEachPreppedLine(path) { |line,lineno|
       hashenum = {
@@ -92,8 +91,7 @@ module Compiler
       records.push(record)
     }
     save_data(records,"Data/map_connections.dat")
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
@@ -101,7 +99,7 @@ module Compiler
   #=============================================================================
   def compile_phone(path = "PBS/phone.txt")
     return if !safeExists?(path)
-    echo _INTL("Compiling phone messages...")
+    compile_pbs_file_message_start(path)
     database = PhoneDatabase.new
     sections = []
     File.open(path, "rb") { |f|
@@ -133,15 +131,14 @@ module Compiler
     }
     MessageTypes.setMessagesAsHash(MessageTypes::PhoneMessages,sections)
     save_data(database,"Data/phone.dat")
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile type data
   #=============================================================================
   def compile_types(path = "PBS/types.txt")
-    echo _INTL("Compiling types...")
+    compile_pbs_file_message_start(path)
     GameData::Type::DATA.clear
     type_names = []
     # Read from PBS file
@@ -210,15 +207,14 @@ module Compiler
     # Save all data
     GameData::Type.save
     MessageTypes.setMessagesAsHash(MessageTypes::Types, type_names)
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile ability data
   #=============================================================================
   def compile_abilities(path = "PBS/abilities.txt")
-    echo _INTL("Compiling abilities...")
+    compile_pbs_file_message_start(path)
     GameData::Ability::DATA.clear
     schema = GameData::Ability::SCHEMA
     ability_names        = []
@@ -282,15 +278,14 @@ module Compiler
     GameData::Ability.save
     MessageTypes.setMessagesAsHash(MessageTypes::Abilities, ability_names)
     MessageTypes.setMessagesAsHash(MessageTypes::AbilityDescs, ability_descriptions)
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile move data
   #=============================================================================
   def compile_moves(path = "PBS/moves.txt")
-    echo _INTL("Compiling moves...")
+    compile_pbs_file_message_start(path)
     GameData::Move::DATA.clear
     schema = GameData::Move::SCHEMA
     move_names        = []
@@ -418,15 +413,14 @@ module Compiler
     GameData::Move.save
     MessageTypes.setMessagesAsHash(MessageTypes::Moves, move_names)
     MessageTypes.setMessagesAsHash(MessageTypes::MoveDescriptions, move_descriptions)
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile item data
   #=============================================================================
   def compile_items(path = "PBS/items.txt")
-    echo _INTL("Compiling items...")
+    compile_pbs_file_message_start(path)
     GameData::Item::DATA.clear
     schema = GameData::Item::SCHEMA
     item_names        = []
@@ -513,15 +507,14 @@ module Compiler
     MessageTypes.setMessagesAsHash(MessageTypes::Items, item_names)
     MessageTypes.setMessagesAsHash(MessageTypes::ItemPlurals, item_names_plural)
     MessageTypes.setMessagesAsHash(MessageTypes::ItemDescriptions, item_descriptions)
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile berry plant data
   #=============================================================================
   def compile_berry_plants(path = "PBS/berry_plants.txt")
-    echo _INTL("Compiling berry plants...")
+    compile_pbs_file_message_start(path)
     GameData::BerryPlant::DATA.clear
     pbCompilerEachCommentedLine(path) { |line, line_no|
       if line[/^\s*(\w+)\s*=\s*(.*)$/]   # Of the format XXX = YYY
@@ -543,15 +536,14 @@ module Compiler
     }
     # Save all data
     GameData::BerryPlant.save
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile Pokémon data
   #=============================================================================
   def compile_pokemon(path = "PBS/pokemon.txt")
-    echo _INTL("Compiling Pokémon...")
+    compile_pbs_file_message_start(path)
     GameData::Species::DATA.clear
     species_names           = []
     species_form_names      = []
@@ -702,15 +694,14 @@ module Compiler
     MessageTypes.setMessagesAsHash(MessageTypes::FormNames, species_form_names)
     MessageTypes.setMessagesAsHash(MessageTypes::Kinds, species_categories)
     MessageTypes.setMessagesAsHash(MessageTypes::Entries, species_pokedex_entries)
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile Pokémon forms data
   #=============================================================================
   def compile_pokemon_forms(path = "PBS/pokemon_forms.txt")
-    echo _INTL("Compiling Pokémon forms...")
+    compile_pbs_file_message_start(path)
     species_names           = []
     species_form_names      = []
     species_categories      = []
@@ -904,8 +895,7 @@ module Compiler
     MessageTypes.addMessagesAsHash(MessageTypes::FormNames, species_form_names)
     MessageTypes.addMessagesAsHash(MessageTypes::Kinds, species_categories)
     MessageTypes.addMessagesAsHash(MessageTypes::Entries, species_pokedex_entries)
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
@@ -913,7 +903,7 @@ module Compiler
   #=============================================================================
   def compile_pokemon_metrics(path = "PBS/pokemon_metrics.txt")
     return if !safeExists?(path)
-    echo _INTL("Compiling Pokémon metrics...")
+    compile_pbs_file_message_start(path)
     schema = GameData::SpeciesMetrics::SCHEMA
     # Read from PBS file
     File.open(path, "rb") { |f|
@@ -965,15 +955,14 @@ module Compiler
     }
     # Save all data
     GameData::SpeciesMetrics.save
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile Shadow movesets
   #=============================================================================
   def compile_shadow_movesets(path = "PBS/shadow_movesets.txt")
-    echo _INTL("Compiling Shadow Pokémon movesets...")
+    compile_pbs_file_message_start(path)
     sections = {}
     if safeExists?(path)
       idx = 0
@@ -997,15 +986,14 @@ module Compiler
       }
     end
     save_data(sections, "Data/shadow_movesets.dat")
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile Regional Dexes
   #=============================================================================
   def compile_regional_dexes(path = "PBS/regional_dexes.txt")
-    echo _INTL("Compiling Pokédex lists...")
+    compile_pbs_file_message_start(path)
     dex_lists = []
     section = nil
     pbCompilerEachPreppedLine(path) { |line, line_no|
@@ -1037,15 +1025,14 @@ module Compiler
     end
     # Save all data
     save_data(dex_lists, "Data/regional_dexes.dat")
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile ribbon data
   #=============================================================================
   def compile_ribbons(path = "PBS/ribbons.txt")
-    echo _INTL("Compiling ribbons...")
+    compile_pbs_file_message_start(path)
     GameData::Ribbon::DATA.clear
     schema = GameData::Ribbon::SCHEMA
     ribbon_names        = []
@@ -1110,15 +1097,14 @@ module Compiler
     GameData::Ribbon.save
     MessageTypes.setMessagesAsHash(MessageTypes::RibbonNames, ribbon_names)
     MessageTypes.setMessagesAsHash(MessageTypes::RibbonDescriptions, ribbon_descriptions)
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile wild encounter data
   #=============================================================================
   def compile_encounters(path = "PBS/encounters.txt")
-    echo _INTL("Compiling encounters...")
+    compile_pbs_file_message_start(path)
     GameData::Encounter::DATA.clear
     encounter_hash = nil
     step_chances   = nil
@@ -1220,15 +1206,14 @@ module Compiler
     end
     # Save all data
     GameData::Encounter.save
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile trainer type data
   #=============================================================================
   def compile_trainer_types(path = "PBS/trainer_types.txt")
-    echo _INTL("Compiling trainer types...")
+    compile_pbs_file_message_start(path)
     GameData::TrainerType::DATA.clear
     schema = GameData::TrainerType::SCHEMA
     tr_type_names = []
@@ -1296,15 +1281,14 @@ module Compiler
     # Save all data
     GameData::TrainerType.save
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerTypes, tr_type_names)
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile individual trainer data
   #=============================================================================
   def compile_trainers(path = "PBS/trainers.txt")
-    echo _INTL("Compiling trainers...")
+    compile_pbs_file_message_start(path)
     GameData::Trainer::DATA.clear
     schema = GameData::Trainer::SCHEMA
     max_level = GameData::GrowthRate.max_level
@@ -1427,15 +1411,14 @@ module Compiler
     GameData::Trainer.save
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerNames, trainer_names)
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseText, trainer_lose_texts)
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile Battle Tower and other Cups trainers/Pokémon
   #=============================================================================
   def compile_trainer_lists(path = "PBS/battle_facility_lists.txt")
-    echo _INTL("Compiling Battle Facility lists...")
+    compile_pbs_file_message_start(path)
     btTrainersRequiredTypes = {
       "Trainers"   => [0, "s"],
       "Pokemon"    => [1, "s"],
@@ -1504,8 +1487,7 @@ module Compiler
       }
     }
     save_data(sections,"Data/trainer_lists.dat")
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   def compile_battle_tower_trainers(filename)
@@ -1553,7 +1535,7 @@ module Compiler
   # Compile metadata
   #=============================================================================
   def compile_metadata(path = "PBS/metadata.txt")
-    echo _INTL("Compiling metadata...")
+    compile_pbs_file_message_start(path)
     GameData::Metadata::DATA.clear
     GameData::PlayerMetadata::DATA.clear
     # Read from PBS file
@@ -1619,15 +1601,14 @@ module Compiler
     # Save all data
     GameData::Metadata.save
     GameData::PlayerMetadata.save
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile map metadata
   #=============================================================================
   def compile_map_metadata(path = "PBS/map_metadata.txt")
-    echo _INTL("Compiling map metadata...")
+    compile_pbs_file_message_start(path)
     GameData::MapMetadata::DATA.clear
     map_infos = pbLoadMapInfos
     map_names = []
@@ -1688,15 +1669,14 @@ module Compiler
     # Save all data
     GameData::MapMetadata.save
     MessageTypes.setMessages(MessageTypes::MapNames, map_names)
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Compile battle animations
   #=============================================================================
   def compile_animations
-    echo _INTL("Compiling animations...")
+    echo _INTL("  -> Compiling animations...")
     begin
       pbanims = load_data("Data/PkmnAnimations.rxdata")
     rescue
@@ -1738,7 +1718,6 @@ module Compiler
       save_data(move2anim,"Data/move2anim.dat")
       save_data(pbanims,"Data/PkmnAnimations.rxdata")
     end
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 end

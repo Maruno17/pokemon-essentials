@@ -699,6 +699,21 @@ module Compiler
   #=============================================================================
   # Compile all data
   #=============================================================================
+  def compile_pbs_file_message_start(filename)
+    # Filename is in magenta
+    echo _INTL("  -> Compiling PBS file {1}\"{2}\"{3}...", "\e[36m", filename.split("/").last, "\e[0m")
+  end
+
+  def write_pbs_file_message_start(filename)
+    # Filename is in magenta
+    echo _INTL("  -> Writing PBS file {1}\"{2}\"{3}...", "\e[36m", filename.split("/").last, "\e[0m")
+  end
+
+  def process_pbs_file_message_end
+    echoln_good _INTL("done")
+    Graphics.update
+  end
+
   def compile_all(mustCompile)
     return if !mustCompile
     FileLineData.clear
@@ -725,18 +740,17 @@ module Compiler
     compile_metadata               # Depends on TrainerType
     compile_map_metadata           # No dependencies
     compile_animations
-    echoln ""
     compile_trainer_events(mustCompile)
-    echo _INTL("Saving messages...")
+    echo _INTL("  -> Saving messages...")
     pbSetTextMessages
     MessageTypes.saveMessages
     MessageTypes.loadMessageFile("Data/messages.dat") if safeExists?("Data/messages.dat")
     echoln_good _INTL("done")
-    echo _INTL("Reloading cache...")
+    echo _INTL("  -> Reloading cache...")
     System.reload_cache
     echoln_good _INTL("done")
     echoln ""
-    echoln_warn _INTL("*** Finished full compile ***")
+    echoln_good _INTL("Successfully fully compiled")
     echoln ""
   end
 

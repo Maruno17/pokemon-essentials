@@ -11,11 +11,11 @@ module Compiler
   #=============================================================================
   # Save Town Map data to PBS file
   #=============================================================================
-  def write_town_map
+  def write_town_map(path = "PBS/town_map.txt")
     mapdata = pbLoadTownMapData
     return if !mapdata
-    echo _INTL("Writing Town Map data...")
-    File.open("PBS/town_map.txt","wb") { |f|
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       for i in 0...mapdata.length
@@ -37,8 +37,7 @@ module Compiler
         end
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
@@ -74,12 +73,12 @@ module Compiler
     return sprintf("%d,%d,%d,%d,%d,%d", map1, x1, y1, map2, x2, y2)
   end
 
-  def write_connections
+  def write_connections(path = "PBS/map_connections.txt")
     conndata = load_data("Data/map_connections.dat")
     return if !conndata
-    echo _INTL("Writing map connections...")
+    write_pbs_file_message_start(path)
     mapinfos = pbLoadMapInfos
-    File.open("PBS/map_connections.txt","wb") { |f|
+    File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       for conn in conndata
@@ -100,18 +99,17 @@ module Compiler
         f.write("\r\n")
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save phone messages to PBS file
   #=============================================================================
-  def write_phone
+  def write_phone(path = "PBS/phone.txt")
     data = load_data("Data/phone.dat") rescue nil
     return if !data
-    echo _INTL("Writing phone messages...")
-    File.open("PBS/phone.txt", "wb") { |f|
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       f.write("[<Generics>]\r\n")
@@ -135,16 +133,15 @@ module Compiler
       f.write("[<Bodies2>]\r\n")
       f.write(data.bodies2.join("\r\n") + "\r\n")
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save type data to PBS file
   #=============================================================================
-  def write_types
-    echo _INTL("Writing types...")
-    File.open("PBS/types.txt", "wb") { |f|
+  def write_types(path = "PBS/types.txt")
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       # Write each type in turn
       GameData::Type.each do |type|
@@ -160,16 +157,15 @@ module Compiler
         f.write("Immunities = #{type.immunities.join(",")}\r\n") if type.immunities.length > 0
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save ability data to PBS file
   #=============================================================================
-  def write_abilities
-    echo _INTL("Writing abilities...")
-    File.open("PBS/abilities.txt", "wb") { |f|
+  def write_abilities(path = "PBS/abilities.txt")
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       # Write each ability in turn
       GameData::Ability.each do |ability|
@@ -180,16 +176,15 @@ module Compiler
         f.write(sprintf("Flags = %s\r\n", ability.flags.join(","))) if ability.flags.length > 0
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save move data to PBS file
   #=============================================================================
-  def write_moves
-    echo _INTL("Writing moves...")
-    File.open("PBS/moves.txt", "wb") { |f|
+  def write_moves(path = "PBS/moves.txt")
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       # Write each move in turn
@@ -214,16 +209,15 @@ module Compiler
         f.write("Description = #{move.real_description}\r\n")
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save item data to PBS file
   #=============================================================================
-  def write_items
-    echo _INTL("Writing items...")
-    File.open("PBS/items.txt", "wb") { |f|
+  def write_items(path = "PBS/items.txt")
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       GameData::Item.each do |item|
@@ -247,16 +241,15 @@ module Compiler
         f.write(sprintf("Description = %s\r\n", item.real_description))
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save berry plant data to PBS file
   #=============================================================================
-  def write_berry_plants
-    echo _INTL("Writing berry plants...")
-    File.open("PBS/berry_plants.txt", "wb") { |f|
+  def write_berry_plants(path = "PBS/berry_plants.txt")
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
       GameData::BerryPlant.each do |bp|
@@ -269,16 +262,15 @@ module Compiler
         ))
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save Pokémon data to PBS file
   #=============================================================================
-  def write_pokemon
-    echo _INTL("Writing Pokémon...")
-    File.open("PBS/pokemon.txt", "wb") { |f|
+  def write_pokemon(path = "PBS/pokemon.txt")
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       GameData::Species.each_species do |species|
@@ -359,16 +351,15 @@ module Compiler
         f.write(sprintf("Incense = %s\r\n", species.incense)) if species.incense
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save Pokémon forms data to PBS file
   #=============================================================================
-  def write_pokemon_forms
-    echo _INTL("Writing Pokémon forms...")
-    File.open("PBS/pokemon_forms.txt", "wb") { |f|
+  def write_pokemon_forms(path = "PBS/pokemon_forms.txt")
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       GameData::Species.each do |species|
@@ -460,15 +451,14 @@ module Compiler
         end
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Write species metrics
   #=============================================================================
-  def write_pokemon_metrics
-    echo _INTL("Writing Pokémon metrics...")
+  def write_pokemon_metrics(path = "PBS/pokemon_metrics.txt")
+    write_pbs_file_message_start(path)
     # Get in species order then in form order
     sort_array = []
     dex_numbers = {}
@@ -480,7 +470,7 @@ module Compiler
     end
     sort_array.sort! { |a, b| (a[0] == b[0]) ? a[3] <=> b[3] : a[0] <=> b[0] }
     # Write file
-    File.open("PBS/pokemon_metrics.txt", "wb") { |f|
+    File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       sort_array.each do |val|
@@ -513,17 +503,16 @@ module Compiler
         f.write(sprintf("ShadowSize = %d\r\n", species.shadow_size))
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save Shadow movesets to PBS file
   #=============================================================================
-  def write_shadow_movesets
-    echo _INTL("Writing Shadow Pokémon movesets...")
+  def write_shadow_movesets(path = "PBS/shadow_movesets.txt")
+    write_pbs_file_message_start(path)
     shadow_movesets = pbLoadShadowMovesets
-    File.open("PBS/shadow_movesets.txt", "wb") { |f|
+    File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       f.write("\#-------------------------------\r\n")
@@ -535,17 +524,16 @@ module Compiler
         f.write(sprintf("%s = %s\r\n", species_data.id, moveset.join(",")))
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save Regional Dexes to PBS file
   #=============================================================================
-  def write_regional_dexes
-    echo _INTL("Writing Pokédex lists...")
+  def write_regional_dexes(path = "PBS/regional_dexes.txt")
+    write_pbs_file_message_start(path)
     dex_lists = pbLoadRegionalDexes
-    File.open("PBS/regional_dexes.txt", "wb") { |f|
+    File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       # Write each Dex list in turn
       dex_lists.each_with_index do |list, index|
@@ -568,16 +556,15 @@ module Compiler
         f.write("\r\n")
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save ability data to PBS file
   #=============================================================================
-  def write_ribbons
-    echo _INTL("Writing ribbons...")
-    File.open("PBS/ribbons.txt", "wb") { |f|
+  def write_ribbons(path = "PBS/ribbons.txt")
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       # Write each ability in turn
       GameData::Ribbon.each do |ribbon|
@@ -589,17 +576,16 @@ module Compiler
         f.write(sprintf("Flags = %s\r\n", ribbon.flags.join(","))) if ribbon.flags.length > 0
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save wild encounter data to PBS file
   #=============================================================================
-  def write_encounters
-    echo _INTL("Writing encounters...")
+  def write_encounters(path = "PBS/encounters.txt")
+    write_pbs_file_message_start(path)
     map_infos = pbLoadMapInfos
-    File.open("PBS/encounters.txt", "wb") { |f|
+    File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       GameData::Encounter.each do |encounter_data|
@@ -630,16 +616,15 @@ module Compiler
         end
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save trainer type data to PBS file
   #=============================================================================
-  def write_trainer_types
-    echo _INTL("Writing trainer types...")
-    File.open("PBS/trainer_types.txt", "wb") { |f|
+  def write_trainer_types(path = "PBS/trainer_types.txt")
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       GameData::TrainerType.each do |t|
         f.write("\#-------------------------------\r\n")
@@ -655,16 +640,15 @@ module Compiler
         f.write(sprintf("VictoryME = %s\r\n", t.victory_ME)) if !nil_or_empty?(t.victory_ME)
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save individual trainer data to PBS file
   #=============================================================================
-  def write_trainers
-    echo _INTL("Writing trainers...")
-    File.open("PBS/trainers.txt", "wb") { |f|
+  def write_trainers(path = "PBS/trainers.txt")
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       GameData::Trainer.each do |trainer|
@@ -708,18 +692,17 @@ module Compiler
         end
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save trainer list data to PBS file
   #=============================================================================
-  def write_trainer_lists
+  def write_trainer_lists(path = "PBS/battle_facility_lists.txt")
     trainerlists = load_data("Data/trainer_lists.dat") rescue nil
     return if !trainerlists
-    echo _INTL("Writing Battle Facility lists...")
-    File.open("PBS/battle_facility_lists.txt","wb") { |f|
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       for tr in trainerlists
         echo "."
@@ -732,8 +715,7 @@ module Compiler
         write_battle_tower_pokemon(tr[1],"PBS/"+tr[4])
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
@@ -828,9 +810,9 @@ module Compiler
   #=============================================================================
   # Save metadata data to PBS file
   #=============================================================================
-  def write_metadata
-    echo _INTL("Writing metadata...")
-    File.open("PBS/metadata.txt", "wb") { |f|
+  def write_metadata(path = "PBS/metadata.txt")
+    write_pbs_file_message_start(path)
+    File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
       # Write metadata
       f.write("\#-------------------------------\r\n")
@@ -860,19 +842,18 @@ module Compiler
         end
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
   # Save map metadata data to PBS file
   #=============================================================================
-  def write_map_metadata
-    echo _INTL("Writing map metadata...")
+  def write_map_metadata(path = "PBS/map_metadata.txt")
+    write_pbs_file_message_start(path)
     map_infos = pbLoadMapInfos
     schema = GameData::MapMetadata::SCHEMA
     keys = schema.keys.sort { |a, b| schema[a][0] <=> schema[b][0] }
-    File.open("PBS/map_metadata.txt", "wb") { |f|
+    File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
       GameData::MapMetadata.each do |map_data|
@@ -895,8 +876,7 @@ module Compiler
         end
       end
     }
-    echoln_good _INTL("done")
-    Graphics.update
+    process_pbs_file_message_end
   end
 
   #=============================================================================
@@ -927,7 +907,7 @@ module Compiler
     write_metadata
     write_map_metadata
     echoln ""
-    echoln_warn _INTL("*** Finished writing all PBS files ***")
+    echoln_good _INTL("Successfully rewrote all PBS files")
     echoln ""
   end
 end
