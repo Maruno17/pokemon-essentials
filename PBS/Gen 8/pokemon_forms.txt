@@ -629,7 +629,6 @@ Generation = 6
 [PICHU,2]
 FormName = Spiky-Eared
 Generation = 4
-BattlerEnemyX = 3
 Evolutions = PIKACHU,None,
 #-------------------------------
 [AMPHAROS,1]
@@ -973,25 +972,18 @@ FormName = Sunny Form
 Type1 = FIRE
 Color = Red
 Pokedex = This is the form Castform takes on the brightest of days. Its skin is unexpectedly hot to the touch, so approach with care.
-BattlerEnemyX = 0
-BattlerShadowSize = 2
 #-------------------------------
 [CASTFORM,2]
 FormName = Rainy Form
 Type1 = WATER
 Color = Blue
 Pokedex = This is the form Castform takes when soaked with rain. When its body is compressed, water will seep out as if from a sponge.
-BattlerEnemyX = 0
-BattlerShadowSize = 2
 #-------------------------------
 [CASTFORM,3]
 FormName = Snowy Form
 Type1 = ICE
 Color = White
 Pokedex = This is the form Castform takes when covered in snow. Its body becomes an ice-like material, with a temperature near -5 degrees Celsius.
-BattlerPlayerX = -1
-BattlerEnemyX = 0
-BattlerShadowSize = 2
 #-------------------------------
 [BANETTE,1]
 FormName = Mega Banette
@@ -1110,10 +1102,6 @@ BaseStats = 50,180,20,150,180,20
 EVs = 0,2,0,0,1,0
 Moves = 1,LEER,1,WRAP,7,NIGHTSHADE,13,TELEPORT,19,TAUNT,25,PURSUIT,31,PSYCHIC,37,SUPERPOWER,43,PSYCHOSHIFT,49,ZENHEADBUTT,55,COSMICPOWER,61,ZAPCANNON,67,PSYCHOBOOST,73,HYPERBEAM
 TutorMoves = AERIALACE,ALLYSWITCH,BIND,BRICKBREAK,BRUTALSWING,CALMMIND,CHARGEBEAM,CONFIDE,DARKPULSE,DOUBLETEAM,DRAINPUNCH,DREAMEATER,ENERGYBALL,FACADE,FLASHCANNON,FLING,FOCUSBLAST,FOCUSPUNCH,FRUSTRATION,GIGAIMPACT,GRASSKNOT,GRAVITY,HIDDENPOWER,HYPERBEAM,ICEBEAM,LASERFOCUS,LIGHTSCREEN,LOWKICK,LOWSWEEP,MAGICCOAT,POISONJAB,PROTECT,PSYCHIC,PSYCHUP,PSYSHOCK,RAINDANCE,RECYCLE,REFLECT,REST,RETURN,ROCKSLIDE,ROCKTOMB,ROLEPLAY,ROUND,SAFEGUARD,SHADOWBALL,SHOCKWAVE,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNATCH,SNORE,SOLARBEAM,STEALTHROCK,STOMPINGTANTRUM,SUBSTITUTE,SUNNYDAY,SUPERPOWER,SWAGGER,TAUNT,TELEKINESIS,THROATCHOP,THUNDER,THUNDERBOLT,THUNDERWAVE,TORMENT,TOXIC,TRICK,TRICKROOM,WATERPULSE,WONDERROOM,ZENHEADBUTT
-BattlerPlayerX = 4
-BattlerEnemyX = 1
-BattlerEnemyY = 5
-BattlerShadowSize = 3
 #-------------------------------
 [DEOXYS,2]
 FormName = Defense Forme
@@ -1121,10 +1109,6 @@ BaseStats = 50,70,160,90,70,160
 EVs = 0,0,2,0,0,1
 Moves = 1,LEER,1,WRAP,7,NIGHTSHADE,13,TELEPORT,19,KNOCKOFF,25,SPIKES,31,PSYCHIC,37,SNATCH,43,PSYCHOSHIFT,49,ZENHEADBUTT,55,IRONDEFENSE,55,AMNESIA,61,RECOVER,67,PSYCHOBOOST,73,COUNTER,73,MIRRORCOAT
 TutorMoves = AERIALACE,ALLYSWITCH,BIND,BRICKBREAK,BRUTALSWING,CALMMIND,CHARGEBEAM,CONFIDE,DARKPULSE,DOUBLETEAM,DRAINPUNCH,DREAMEATER,ENERGYBALL,FACADE,FLASHCANNON,FLING,FOCUSBLAST,FOCUSPUNCH,FRUSTRATION,GIGAIMPACT,GRASSKNOT,GRAVITY,HIDDENPOWER,HYPERBEAM,ICEBEAM,IRONDEFENSE,KNOCKOFF,LASERFOCUS,LIGHTSCREEN,LOWKICK,LOWSWEEP,MAGICCOAT,POISONJAB,PROTECT,PSYCHIC,PSYCHUP,PSYSHOCK,RAINDANCE,RECYCLE,REFLECT,REST,RETURN,ROCKSLIDE,ROCKTOMB,ROLEPLAY,ROUND,SAFEGUARD,SHADOWBALL,SHOCKWAVE,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNATCH,SNORE,SOLARBEAM,STEALTHROCK,STOMPINGTANTRUM,SUBSTITUTE,SUNNYDAY,SWAGGER,TAUNT,TELEKINESIS,THROATCHOP,THUNDER,THUNDERBOLT,THUNDERWAVE,TORMENT,TOXIC,TRICK,TRICKROOM,WATERPULSE,WONDERROOM,ZENHEADBUTT
-BattlerPlayerX = 3
-BattlerEnemyX = -2
-BattlerEnemyY = 6
-BattlerShadowSize = 3
 #-------------------------------
 [DEOXYS,3]
 FormName = Speed Forme
@@ -1132,20 +1116,14 @@ BaseStats = 50,95,90,180,95,90
 EVs = 0,0,0,3,0,0
 Moves = 1,LEER,1,WRAP,7,NIGHTSHADE,13,DOUBLETEAM,19,KNOCKOFF,25,PURSUIT,31,PSYCHIC,37,SWIFT,43,PSYCHOSHIFT,49,ZENHEADBUTT,55,AGILITY,61,RECOVER,67,PSYCHOBOOST,73,EXTREMESPEED
 TutorMoves = AERIALACE,ALLYSWITCH,BIND,BRICKBREAK,BRUTALSWING,CALMMIND,CHARGEBEAM,CONFIDE,DARKPULSE,DOUBLETEAM,DRAINPUNCH,DREAMEATER,ENERGYBALL,FACADE,FIREPUNCH,FLASHCANNON,FLING,FOCUSBLAST,FOCUSPUNCH,FRUSTRATION,GIGAIMPACT,GRASSKNOT,GRAVITY,HIDDENPOWER,HYPERBEAM,ICEBEAM,ICEPUNCH,KNOCKOFF,LASERFOCUS,LIGHTSCREEN,LOWKICK,LOWSWEEP,MAGICCOAT,POISONJAB,PROTECT,PSYCHIC,PSYCHUP,PSYSHOCK,RAINDANCE,RECYCLE,REFLECT,REST,RETURN,ROCKSLIDE,ROCKTOMB,ROLEPLAY,ROUND,SAFEGUARD,SHADOWBALL,SHOCKWAVE,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNATCH,SNORE,SOLARBEAM,STEALTHROCK,STOMPINGTANTRUM,SUBSTITUTE,SUNNYDAY,SWAGGER,TAUNT,TELEKINESIS,THROATCHOP,THUNDER,THUNDERBOLT,THUNDERPUNCH,THUNDERWAVE,TORMENT,TOXIC,TRICK,TRICKROOM,WATERPULSE,WONDERROOM,ZENHEADBUTT
-BattlerPlayerX = -4
-BattlerEnemyX = -4
-BattlerEnemyY = 4
-BattlerShadowSize = 3
 #-------------------------------
 [BURMY,1]
 FormName = Sandy Cloak
 Color = Brown
-Flags = InheritFormFromMother
 #-------------------------------
 [BURMY,2]
 FormName = Trash Cloak
 Color = Red
-Flags = InheritFormFromMother
 #-------------------------------
 [WORMADAM,1]
 FormName = Sandy Cloak
@@ -1156,7 +1134,6 @@ EVs = 0,0,2,0,0,0
 Moves = 0,QUIVERDANCE,1,QUIVERDANCE,1,SUCKERPUNCH,1,TACKLE,1,PROTECT,1,BUGBITE,10,PROTECT,15,BUGBITE,20,HIDDENPOWER,23,CONFUSION,26,ROCKBLAST,29,HARDEN,32,PSYBEAM,35,CAPTIVATE,38,FLAIL,41,ATTRACT,44,PSYCHIC,47,FISSURE,50,BUGBUZZ
 TutorMoves = ALLYSWITCH,ATTRACT,BUGBITE,BULLDOZE,CONFIDE,DOUBLETEAM,DREAMEATER,EARTHPOWER,EARTHQUAKE,ELECTROWEB,ENDEAVOR,FACADE,FRUSTRATION,GIGAIMPACT,HIDDENPOWER,HYPERBEAM,INFESTATION,PROTECT,PSYCHIC,PSYCHUP,RAINDANCE,REST,RETURN,ROCKTOMB,ROUND,SAFEGUARD,SANDSTORM,SHADOWBALL,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNORE,STEALTHROCK,SUBSTITUTE,SUNNYDAY,SWAGGER,TELEKINESIS,THIEF,TOXIC,UPROAR,VENOSHOCK
 Color = Brown
-Flags = InheritFormFromMother
 #-------------------------------
 [WORMADAM,2]
 FormName = Trash Cloak
@@ -1167,27 +1144,21 @@ EVs = 0,0,1,0,0,1
 Moves = 0,QUIVERDANCE,1,QUIVERDANCE,1,METALBURST,1,SUCKERPUNCH,1,TACKLE,1,PROTECT,1,BUGBITE,10,PROTECT,15,BUGBITE,20,HIDDENPOWER,23,CONFUSION,26,MIRRORSHOT,29,METALSOUND,32,PSYBEAM,35,CAPTIVATE,38,FLAIL,41,ATTRACT,44,PSYCHIC,47,IRONHEAD,50,BUGBUZZ
 TutorMoves = ALLYSWITCH,ATTRACT,BUGBITE,CONFIDE,DOUBLETEAM,DREAMEATER,ELECTROWEB,ENDEAVOR,FACADE,FLASHCANNON,FRUSTRATION,GIGAIMPACT,GUNKSHOT,GYROBALL,HIDDENPOWER,HYPERBEAM,INFESTATION,IRONDEFENSE,IRONHEAD,MAGNETRISE,PROTECT,PSYCHIC,PSYCHUP,RAINDANCE,REST,RETURN,ROUND,SAFEGUARD,SHADOWBALL,SIGNALBEAM,SKILLSWAP,SLEEPTALK,SNORE,STEALTHROCK,SUBSTITUTE,SUNNYDAY,SWAGGER,TELEKINESIS,THIEF,TOXIC,UPROAR,VENOSHOCK
 Color = Red
-Flags = InheritFormFromMother
 #-------------------------------
 [CHERRIM,1]
 FormName = Sunshine Form
 Color = Pink
 Pokedex = After absorbing plenty of sunlight, Cherrim takes this form. It's full of energy while it's like this, and its liveliness will go on until sundown.
-BattlerPlayerX = 2
-BattlerEnemyX = 2
-BattlerEnemyY = 21
 #-------------------------------
 [SHELLOS,1]
 FormName = East Sea
 Color = Blue
 Pokedex = Its appearance changes depending on the environment. One theory suggests that living in cold seas causes Shellos to take on this form.
-Flags = InheritFormFromMother
 #-------------------------------
 [GASTRODON,1]
 FormName = East Sea
 Color = Blue
 Pokedex = Its body is covered in a sticky slime. It's very susceptible to dehydration, so it can't spend too much time on land.
-Flags = InheritFormFromMother
 #-------------------------------
 [LOPUNNY,1]
 FormName = Mega Lopunny
@@ -1252,9 +1223,6 @@ Type2 = FIRE
 BaseStats = 50,65,107,86,105,107
 BaseExp = 182
 Pokedex = This Rotom has possessed a convection microwave oven that uses a special motor. It also has a flair for manipulating flames.
-BattlerEnemyX = 2
-BattlerEnemyY = 1
-BattlerShadowSize = 2
 #-------------------------------
 [ROTOM,2]
 FormName = Wash Rotom
@@ -1263,8 +1231,6 @@ Type2 = WATER
 BaseStats = 50,65,107,86,105,107
 BaseExp = 182
 Pokedex = This form of Rotom enjoys coming up with water-based pranks. Be careful with it if you don't want your room flooded.
-BattlerPlayerX = 1
-BattlerShadowSize = 2
 #-------------------------------
 [ROTOM,3]
 FormName = Frost Rotom
@@ -1273,10 +1239,6 @@ Type2 = ICE
 BaseStats = 50,65,107,86,105,107
 BaseExp = 182
 Pokedex = Rotom assumes this form when it takes over a refrigerator powered by a special motor. It battles by spewing cold air.
-BattlerPlayerX = 0
-BattlerEnemyX = 1
-BattlerEnemyY = -4
-BattlerShadowSize = 2
 #-------------------------------
 [ROTOM,4]
 FormName = Fan Rotom
@@ -1285,10 +1247,6 @@ Type2 = FLYING
 BaseStats = 50,65,107,86,105,107
 BaseExp = 182
 Pokedex = In this form, Rotom applies its new power over wind to its love of pranks. It will happily blow away any important documents it can find.
-BattlerPlayerX = -4
-BattlerEnemyX = -2
-BattlerEnemyY = 2
-BattlerShadowSize = 2
 #-------------------------------
 [ROTOM,5]
 FormName = Mow Rotom
@@ -1297,9 +1255,6 @@ Type2 = GRASS
 BaseStats = 50,65,107,86,105,107
 BaseExp = 182
 Pokedex = This is Rotom after it's seized control of a lawn mower that has a special motor. As it mows down grass, it scatters the clippings everywhere.
-BattlerPlayerX = 1
-BattlerEnemyY = 0
-BattlerShadowSize = 2
 #-------------------------------
 [GIRATINA,1]
 FormName = Origin Forme
@@ -1310,8 +1265,6 @@ TutorMoves = AERIALACE,AQUATAIL,BRUTALSWING,BULLDOZE,CALMMIND,CHARGEBEAM,CONFIDE
 Height = 6.9
 Weight = 650.0
 Shape = Serpentine
-BattlerEnemyX = -2
-BattlerEnemyY = -8
 #-------------------------------
 [SHAYMIN,1]
 FormName = Sky Forme
@@ -1324,8 +1277,6 @@ Moves = 1,GROWTH,10,MAGICALLEAF,19,LEECHSEED,28,QUICKATTACK,37,SWEETSCENT,46,NAT
 TutorMoves = CONFIDE,COVET,DAZZLINGGLEAM,DOUBLETEAM,ENERGYBALL,FACADE,FRUSTRATION,GIGADRAIN,GIGAIMPACT,GRASSKNOT,HIDDENPOWER,HYPERBEAM,LASERFOCUS,LASTRESORT,NATUREPOWER,PROTECT,PSYCHIC,PSYCHUP,REST,RETURN,ROUND,SAFEGUARD,SEEDBOMB,SLEEPTALK,SNORE,SOLARBEAM,SUBSTITUTE,SUNNYDAY,SWAGGER,SWORDSDANCE,SYNTHESIS,TAILWIND,TOXIC,WORRYSEED,ZENHEADBUTT
 Height = 0.4
 Weight = 5.2
-BattlerEnemyY = 16
-BattlerShadowSize = 2
 #-------------------------------
 [ARCEUS,1]
 FormName = Fighting Type
@@ -1420,7 +1371,6 @@ FormName = Blue-Striped
 Abilities = ROCKHEAD,ADAPTABILITY
 Pokedex = Even Basculin, which devours everything it can with its huge jaws, is nothing more than food to organisms stronger than itself.
 WildItemUncommon = DEEPSEASCALE
-Flags = InheritFormFromMother
 #-------------------------------
 [DARUMAKA,2]
 FormName = Galarian
@@ -1445,9 +1395,6 @@ BaseExp = 189
 EVs = 0,0,0,0,2,0
 Color = Blue
 Pokedex = When wounded, it stops moving. It goes as still as stone to meditate, sharpening its mind and spirit.
-BattlerPlayerX = 1
-BattlerEnemyY = 30
-BattlerShadowSize = 2
 #-------------------------------
 [DARMANITAN,2]
 FormName = Galarian Standard Mode
@@ -1538,9 +1485,6 @@ Abilities = REGENERATOR
 HiddenAbilities = REGENERATOR
 Height = 1.4
 Shape = Winged
-BattlerPlayerX = -2
-BattlerEnemyX = 8
-BattlerEnemyY = 11
 #-------------------------------
 [THUNDURUS,1]
 FormName = Therian Forme
@@ -1551,9 +1495,6 @@ HiddenAbilities = VOLTABSORB
 TutorMoves = ATTRACT,BRICKBREAK,BRUTALSWING,BULKUP,CHARGEBEAM,CONFIDE,DARKPULSE,DEFOG,DOUBLETEAM,ELECTROWEB,EMBARGO,FACADE,FLASHCANNON,FLING,FLY,FOCUSBLAST,FOULPLAY,FRUSTRATION,GIGAIMPACT,GRASSKNOT,HIDDENPOWER,HYPERBEAM,IRONTAIL,KNOCKOFF,PAYBACK,PROTECT,PSYCHIC,RAINDANCE,REST,RETURN,ROCKSMASH,ROLEPLAY,ROUND,SHOCKWAVE,SKYDROP,SLEEPTALK,SLUDGEBOMB,SLUDGEWAVE,SMACKDOWN,SNORE,STRENGTH,SUBSTITUTE,SUPERPOWER,SWAGGER,TAUNT,THIEF,THUNDER,THUNDERBOLT,THUNDERPUNCH,THUNDERWAVE,TORMENT,TOXIC,UPROAR,UTURN,VOLTSWITCH,WILDCHARGE
 Height = 3.0
 Shape = BipedalTail
-BattlerPlayerX = -3
-BattlerEnemyX = 2
-BattlerEnemyY = 5
 #-------------------------------
 [LANDORUS,1]
 FormName = Therian Forme
@@ -1563,9 +1504,6 @@ Abilities = INTIMIDATE
 HiddenAbilities = INTIMIDATE
 Height = 1.3
 Shape = Quadruped
-BattlerPlayerX = -8
-BattlerEnemyX = 3
-BattlerEnemyY = 14
 #-------------------------------
 [KYUREM,1]
 FormName = White Kyurem
@@ -1576,9 +1514,6 @@ Abilities = TURBOBLAZE
 Moves = 1,ICYWIND,1,DRAGONRAGE,8,IMPRISON,15,ANCIENTPOWER,22,ICEBEAM,29,DRAGONBREATH,36,SLASH,43,FUSIONFLARE,50,ICEBURN,57,DRAGONPULSE,64,NOBLEROAR,71,ENDEAVOR,78,BLIZZARD,85,OUTRAGE,92,HYPERVOICE
 Height = 3.6
 Pokedex = It has foreseen that a world of truth will arrive for people and Pokémon. It strives to protect that future.
-BattlerPlayerX = 0
-BattlerEnemyX = 9
-BattlerEnemyY = 7
 #-------------------------------
 [KYUREM,2]
 FormName = Black Kyurem
@@ -1589,8 +1524,6 @@ Abilities = TERAVOLT
 Moves = 1,ICYWIND,1,DRAGONRAGE,8,IMPRISON,15,ANCIENTPOWER,22,ICEBEAM,29,DRAGONBREATH,36,SLASH,43,FUSIONBOLT,50,FREEZESHOCK,57,DRAGONPULSE,64,NOBLEROAR,71,ENDEAVOR,78,BLIZZARD,85,OUTRAGE,92,HYPERVOICE
 Height = 3.3
 Pokedex = It's said that this Pokémon battles in order to protect the ideal world that will exist in the future for people and Pokémon.
-BattlerEnemyX = 5
-BattlerEnemyY = 4
 #-------------------------------
 [KYUREM,3]
 PokedexForm = 1
@@ -1600,9 +1533,6 @@ EVs = 0,0,0,0,3,0
 Abilities = TURBOBLAZE
 Moves = 1,ICYWIND,1,DRAGONRAGE,8,IMPRISON,15,ANCIENTPOWER,22,ICEBEAM,29,DRAGONBREATH,36,SLASH,43,FUSIONFLARE,50,ICEBURN,57,DRAGONPULSE,64,NOBLEROAR,71,ENDEAVOR,78,BLIZZARD,85,OUTRAGE,92,HYPERVOICE
 Height = 3.6
-BattlerPlayerX = 0
-BattlerEnemyX = 9
-BattlerEnemyY = 7
 #-------------------------------
 [KYUREM,4]
 PokedexForm = 2
@@ -1612,16 +1542,11 @@ EVs = 0,3,0,0,0,0
 Abilities = TERAVOLT
 Moves = 1,ICYWIND,1,DRAGONRAGE,8,IMPRISON,15,ANCIENTPOWER,22,ICEBEAM,29,DRAGONBREATH,36,SLASH,43,FUSIONBOLT,50,FREEZESHOCK,57,DRAGONPULSE,64,NOBLEROAR,71,ENDEAVOR,78,BLIZZARD,85,OUTRAGE,92,HYPERVOICE
 Height = 3.3
-BattlerEnemyX = 5
-BattlerEnemyY = 4
 #-------------------------------
 [KELDEO,1]
 FormName = Resolute Form
 TutorMoves = AERIALACE,AQUATAIL,BOUNCE,CALMMIND,CONFIDE,COVET,CUT,DOUBLETEAM,ENDEAVOR,FACADE,FALSESWIPE,FOCUSBLAST,FRUSTRATION,GIGAIMPACT,HAIL,HELPINGHAND,HIDDENPOWER,HYPERBEAM,ICYWIND,LASTRESORT,LIQUIDATION,LOWKICK,POISONJAB,PROTECT,PSYCHUP,RAINDANCE,REFLECT,REST,RETURN,ROAR,ROCKSMASH,ROUND,SAFEGUARD,SCALD,SLEEPTALK,SNORE,STONEEDGE,STRENGTH,SUBSTITUTE,SUPERPOWER,SURF,SWAGGER,SWORDSDANCE,TAUNT,TOXIC,WATERPULSE,WORKUP,XSCISSOR
 Pokedex = The power that lay hidden in its body now covers its horn, turning it into a sword that can slice through anything.
-BattlerPlayerX = 1
-BattlerEnemyX = 0
-BattlerEnemyY = 19
 #-------------------------------
 [MELOETTA,1]
 FormName = Pirouette Forme
@@ -1629,8 +1554,6 @@ Type1 = NORMAL
 Type2 = FIGHTING
 BaseStats = 100,128,90,128,77,77
 EVs = 0,1,1,1,0,0
-BattlerEnemyX = 1
-BattlerEnemyY = 15
 #-------------------------------
 [GENESECT,1]
 FormName = Shock Drive
@@ -1716,35 +1639,27 @@ FormName = Poké Ball Pattern
 #-------------------------------
 [FLABEBE,1]
 FormName = Yellow Flower
-Flags = InheritFormFromMother
 #-------------------------------
 [FLABEBE,2]
 FormName = Orange Flower
-Flags = InheritFormFromMother
 #-------------------------------
 [FLABEBE,3]
 FormName = Blue Flower
-Flags = InheritFormFromMother
 #-------------------------------
 [FLABEBE,4]
 FormName = White Flower
-Flags = InheritFormFromMother
 #-------------------------------
 [FLOETTE,1]
 FormName = Yellow Flower
-Flags = InheritFormFromMother
 #-------------------------------
 [FLOETTE,2]
 FormName = Orange Flower
-Flags = InheritFormFromMother
 #-------------------------------
 [FLOETTE,3]
 FormName = Blue Flower
-Flags = InheritFormFromMother
 #-------------------------------
 [FLOETTE,4]
 FormName = White Flower
-Flags = InheritFormFromMother
 #-------------------------------
 [FLOETTE,5]
 FormName = Eternal Flower
@@ -1757,19 +1672,15 @@ Evolutions = FLORGES,None,
 #-------------------------------
 [FLORGES,1]
 FormName = Yellow Flower
-Flags = InheritFormFromMother
 #-------------------------------
 [FLORGES,2]
 FormName = Orange Flower
-Flags = InheritFormFromMother
 #-------------------------------
 [FLORGES,3]
 FormName = Blue Flower
-Flags = InheritFormFromMother
 #-------------------------------
 [FLORGES,4]
 FormName = White Flower
-Flags = InheritFormFromMother
 #-------------------------------
 [FURFROU,1]
 FormName = Heart Trim
@@ -1818,7 +1729,6 @@ HiddenAbilities = INSOMNIA
 Height = 0.4
 Weight = 5.0
 Pokedex = Spirits that wander this world are placed into Pumpkaboo's body. They're then moved on to the afterlife.
-Flags = InheritFormFromMother
 #-------------------------------
 [PUMPKABOO,2]
 FormName = Large Size
@@ -1826,7 +1736,6 @@ BaseStats = 54,66,70,46,44,55
 Height = 0.5
 Weight = 7.5
 Pokedex = When taking spirits to the afterlife, large Pumpkaboo prefer the spirits of adults to those of children.
-Flags = InheritFormFromMother
 #-------------------------------
 [PUMPKABOO,3]
 FormName = Super Size
@@ -1838,7 +1747,6 @@ Pokedex = Massive Pumpkaboo are said to be the product of areas where a great nu
 WildItemCommon = MIRACLESEED
 WildItemUncommon = MIRACLESEED
 WildItemRare = MIRACLESEED
-Flags = InheritFormFromMother
 #-------------------------------
 [GOURGEIST,1]
 FormName = Average Size
@@ -1847,7 +1755,6 @@ HiddenAbilities = INSOMNIA
 Height = 0.9
 Weight = 12.5
 Pokedex = Eerie cries emanate from its body in the dead of night. The sounds are said to be the wails of spirits who are suffering in the afterlife.
-Flags = InheritFormFromMother
 #-------------------------------
 [GOURGEIST,2]
 FormName = Large Size
@@ -1855,7 +1762,6 @@ BaseStats = 75,95,122,69,58,75
 Height = 1.1
 Weight = 14.0
 Pokedex = Large Gourgeist put on the guise of adults, taking the hands of children to lead them to the afterlife.
-Flags = InheritFormFromMother
 #-------------------------------
 [GOURGEIST,3]
 FormName = Super Size
@@ -1867,7 +1773,6 @@ Pokedex = Supersized Gourgeist aren't picky. They will forcefully drag anyone of
 WildItemCommon = MIRACLESEED
 WildItemUncommon = MIRACLESEED
 WildItemRare = MIRACLESEED
-Flags = InheritFormFromMother
 #-------------------------------
 [XERNEAS,1]
 FormName = Active Mode
@@ -1934,7 +1839,6 @@ Type1 = ELECTRIC
 Type2 = FLYING
 Color = Yellow
 Pokedex = It creates an electric charge by rubbing its feathers together. It dances over to its enemies and delivers shocking electrical punches.
-Flags = InheritFormFromMother
 #-------------------------------
 [ORICORIO,2]
 FormName = Pa'u Style
@@ -1942,7 +1846,6 @@ Type1 = PSYCHIC
 Type2 = FLYING
 Color = Pink
 Pokedex = This Oricorio relaxes by swaying gently. This increases its psychic energy, which it then fires at its enemies.
-Flags = InheritFormFromMother
 #-------------------------------
 [ORICORIO,3]
 FormName = Sensu Style
@@ -1950,7 +1853,6 @@ Type1 = GHOST
 Type2 = FLYING
 Color = Purple
 Pokedex = It summons the dead with its dreamy dancing. From their malice, it draws power with which to curse its enemies.
-Flags = InheritFormFromMother
 #-------------------------------
 [ROCKRUFF,2]
 Abilities = OWNTEMPO

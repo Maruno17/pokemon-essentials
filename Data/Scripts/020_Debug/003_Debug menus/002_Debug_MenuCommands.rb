@@ -1137,6 +1137,7 @@ DebugMenuCommands.register("createpbs", {
       "phone.txt",
       "pokemon.txt",
       "pokemon_forms.txt",
+      "pokemon_metrics.txt",
       "regional_dexes.txt",
       "ribbons.txt",
       "shadow_movesets.txt",
@@ -1161,13 +1162,14 @@ DebugMenuCommands.register("createpbs", {
       when 10 then Compiler.write_phone
       when 11 then Compiler.write_pokemon
       when 12 then Compiler.write_pokemon_forms
-      when 13 then Compiler.write_regional_dexes
-      when 14 then Compiler.write_ribbons
-      when 15 then Compiler.write_shadow_movesets
-      when 16 then Compiler.write_town_map
-      when 17 then Compiler.write_trainer_types
-      when 18 then Compiler.write_trainers
-      when 19 then Compiler.write_types
+      when 13 then Compiler.write_pokemon_metrics
+      when 14 then Compiler.write_regional_dexes
+      when 15 then Compiler.write_ribbons
+      when 16 then Compiler.write_shadow_movesets
+      when 17 then Compiler.write_town_map
+      when 18 then Compiler.write_trainer_types
+      when 19 then Compiler.write_trainers
+      when 20 then Compiler.write_types
       else break
       end
       pbMessage(_INTL("File written."))

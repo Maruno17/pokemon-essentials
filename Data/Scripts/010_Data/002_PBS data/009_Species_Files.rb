@@ -158,7 +158,8 @@ module GameData
       ret = pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%s", species_data.species))
       return ret if ret
       # Use general shadow graphic
-      return pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%d", species_data.shadow_size))
+      metrics_data = GameData::SpeciesMetrics.get_species_form(species_data.species, form)
+      return pbResolveBitmap(sprintf("Graphics/Pokemon/Shadow/%d", metrics_data.shadow_size))
     end
 
     def self.shadow_bitmap(species, form = 0)

@@ -724,6 +724,8 @@ module Compiler
     compile_pokemon                # Depends on Move, Item, Type, Ability
     yield(_INTL("Compiling Pokémon forms data"))
     compile_pokemon_forms          # Depends on Species, Move, Item, Type, Ability
+    yield(_INTL("Compiling Pokémon metrics data"))
+    compile_pokemon_metrics        # Depends on Species
     yield(_INTL("Compiling shadow moveset data"))
     compile_shadow_movesets        # Depends on Species, Move
     yield(_INTL("Compiling Regional Dexes"))
@@ -774,6 +776,7 @@ module Compiler
          "ribbons.dat",
          "shadow_movesets.dat",
          "species.dat",
+         "species_metrics.dat",
          "town_map.dat",
          "trainer_lists.dat",
          "trainer_types.dat",
@@ -793,6 +796,7 @@ module Compiler
          "phone.txt",
          "pokemon.txt",
          "pokemon_forms.txt",
+         "pokemon_metrics.txt",
          "regional_dexes.txt",
          "ribbons.txt",
          "shadow_movesets.txt",

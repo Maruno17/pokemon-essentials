@@ -616,14 +616,7 @@ module Compiler
           :shape                 => contents["Shape"],
           :habitat               => contents["Habitat"],
           :generation            => contents["Generation"],
-          :flags                 => contents["Flags"],
-          :back_sprite_x         => contents["BattlerPlayerX"],
-          :back_sprite_y         => contents["BattlerPlayerY"],
-          :front_sprite_x        => contents["BattlerEnemyX"],
-          :front_sprite_y        => contents["BattlerEnemyY"],
-          :front_sprite_altitude => contents["BattlerAltitude"],
-          :shadow_x              => contents["BattlerShadowX"],
-          :shadow_size           => contents["BattlerShadowSize"]
+          :flags                 => contents["Flags"]
         }
         # Add species' data to records
         GameData::Species.register(species_hash)
@@ -631,6 +624,21 @@ module Compiler
         species_form_names.push(species_hash[:form_name])
         species_categories.push(species_hash[:category])
         species_pokedex_entries.push(species_hash[:pokedex_entry])
+        # Save metrics data if defined (backwards compatibility)
+        if contents["BattlerPlayerX"] || contents["BattlerPlayerY"] ||
+           contents["BattlerEnemyX"] || contents["BattlerEnemyY"] ||
+           contents["BattlerAltitude"] || contents["BattlerShadowX"] ||
+           contents["BattlerShadowSize"]
+          metrics_hash = {
+            :id                    => contents["InternalName"].to_sym,
+            :back_sprite           => [contents["BattlerPlayerX"] || 0, contents["BattlerPlayerY"] || 0],
+            :front_sprite          => [contents["BattlerEnemyX"] || 0, contents["BattlerEnemyY"] || 0],
+            :front_sprite_altitude => contents["BattlerAltitude"] || 0,
+            :shadow_x              => contents["BattlerShadowX"] || 0,
+            :shadow_size           => contents["BattlerShadowSize"] || 2
+          }
+          GameData::SpeciesMetrics.register(metrics_hash)
+        end
       }
     }
     # Enumerate all evolution species and parameters (this couldn't be done earlier)
@@ -660,6 +668,7 @@ module Compiler
     end
     # Save all data
     GameData::Species.save
+    GameData::SpeciesMetrics.save
     MessageTypes.setMessagesAsHash(MessageTypes::Species, species_names)
     MessageTypes.setMessagesAsHash(MessageTypes::FormNames, species_form_names)
     MessageTypes.setMessagesAsHash(MessageTypes::Kinds, species_categories)
@@ -688,7 +697,7 @@ module Compiler
         # Split section_name into a species number and form number
         split_section_name = section_name.split(/[-,\s]/)
         if split_section_name.length != 2
-          raise _INTL("Section name {1} is invalid ({2}). Expected syntax like [XXX,Y] (XXX=species ID, Y=form number).", sectionName, path)
+          raise _INTL("Section name {1} is invalid ({2}). Expected syntax like [XXX,Y] (XXX=species ID, Y=form number).", section_name, path)
         end
         species_symbol = csvEnumField!(split_section_name[0], :Species, nil, nil)
         form           = csvPosInt!(split_section_name[1])
@@ -797,14 +806,7 @@ module Compiler
           :mega_stone            => contents["MegaStone"],
           :mega_move             => contents["MegaMove"],
           :unmega_form           => contents["UnmegaForm"],
-          :mega_message          => contents["MegaMessage"],
-          :back_sprite_x         => contents["BattlerPlayerX"] || base_data.back_sprite_x,
-          :back_sprite_y         => contents["BattlerPlayerY"] || base_data.back_sprite_y,
-          :front_sprite_x        => contents["BattlerEnemyX"] || base_data.front_sprite_x,
-          :front_sprite_y        => contents["BattlerEnemyY"] || base_data.front_sprite_y,
-          :front_sprite_altitude => contents["BattlerAltitude"] || base_data.front_sprite_altitude,
-          :shadow_x              => contents["BattlerShadowX"] || base_data.shadow_x,
-          :shadow_size           => contents["BattlerShadowSize"] || base_data.shadow_size
+          :mega_message          => contents["MegaMessage"]
         }
         # If form is single-typed, ensure it remains so if base species is dual-typed
         species_hash[:type2] = contents["Type1"] if contents["Type1"] && !contents["Type2"]
@@ -820,6 +822,31 @@ module Compiler
         species_form_names.push(species_hash[:form_name])
         species_categories.push(species_hash[:category])
         species_pokedex_entries.push(species_hash[:pokedex_entry])
+        # Save metrics data if defined (backwards compatibility)
+        if contents["BattlerPlayerX"] || contents["BattlerPlayerY"] ||
+           contents["BattlerEnemyX"] || contents["BattlerEnemyY"] ||
+           contents["BattlerAltitude"] || contents["BattlerShadowX"] ||
+           contents["BattlerShadowSize"]
+          base_metrics = GameData::SpeciesMetrics.get_species_form(species_symbol, 0)
+          back_x      = contents["BattlerPlayerX"] || base_metrics.back_sprite[0]
+          back_y      = contents["BattlerPlayerY"] || base_metrics.back_sprite[1]
+          front_x     = contents["BattlerEnemyX"] || base_metrics.front_sprite[0]
+          front_y     = contents["BattlerEnemyY"] || base_metrics.front_sprite[1]
+          altitude    = contents["BattlerAltitude"] || base_metrics.front_sprite_altitude
+          shadow_x    = contents["BattlerShadowX"] || base_metrics.shadow_x
+          shadow_size = contents["BattlerShadowSize"] || base_metrics.shadow_size
+          metrics_hash = {
+            :id                    => form_symbol,
+            :species               => species_symbol,
+            :form                  => form,
+            :back_sprite           => [back_x, back_y],
+            :front_sprite          => [front_x, front_y],
+            :front_sprite_altitude => altitude,
+            :shadow_x              => shadow_x,
+            :shadow_size           => shadow_size
+          }
+          GameData::SpeciesMetrics.register(metrics_hash)
+        end
       }
     }
     # Add prevolution "evolution" entry for all evolved forms that define their
@@ -837,10 +864,66 @@ module Compiler
     end
     # Save all data
     GameData::Species.save
+    GameData::SpeciesMetrics.save
     MessageTypes.addMessagesAsHash(MessageTypes::Species, species_names)
     MessageTypes.addMessagesAsHash(MessageTypes::FormNames, species_form_names)
     MessageTypes.addMessagesAsHash(MessageTypes::Kinds, species_categories)
     MessageTypes.addMessagesAsHash(MessageTypes::Entries, species_pokedex_entries)
+    Graphics.update
+  end
+
+  #=============================================================================
+  # Compile Pokémon metrics data
+  #=============================================================================
+  def compile_pokemon_metrics(path = "PBS/pokemon_metrics.txt")
+    return if !safeExists?(path)
+    schema = GameData::SpeciesMetrics::SCHEMA
+    # Read from PBS file
+    File.open(path, "rb") { |f|
+      FileLineData.file = path   # For error reporting
+      # Read a whole section's lines at once, then run through this code.
+      # contents is a hash containing all the XXX=YYY lines in that section, where
+      # the keys are the XXX and the values are the YYY (as unprocessed strings).
+      pbEachFileSection(f) { |contents, section_name|
+        FileLineData.setSection(section_name, "header", nil)   # For error reporting
+        # Split section_name into a species number and form number
+        split_section_name = section_name.split(/[-,\s]/)
+        if split_section_name.length == 0 || split_section_name.length > 2
+          raise _INTL("Section name {1} is invalid ({2}). Expected syntax like [XXX] or [XXX,Y] (XXX=species ID, Y=form number).", section_name, path)
+        end
+        species_symbol = csvEnumField!(split_section_name[0], :Species, nil, nil)
+        form           = (split_section_name[1]) ? csvPosInt!(split_section_name[1]) : 0
+        # Go through schema hash of compilable data and compile this section
+        for key in schema.keys
+          # Skip empty properties (none are required)
+          if nil_or_empty?(contents[key])
+            contents[key] = nil
+            next
+          end
+          FileLineData.setSection(section_name, key, contents[key])   # For error reporting
+          # Compile value for key
+          value = pbGetCsvRecord(contents[key], key, schema[key])
+          value = nil if value.is_a?(Array) && value.length == 0
+          contents[key] = value
+        end
+        # Construct species hash
+        form_symbol = (form > 0) ? sprintf("%s_%d", species_symbol.to_s, form).to_sym : species_symbol
+        species_hash = {
+          :id                    => form_symbol,
+          :species               => species_symbol,
+          :form                  => form,
+          :back_sprite           => contents["BackSprite"],
+          :front_sprite          => contents["FrontSprite"],
+          :front_sprite_altitude => contents["FrontSpriteAltitude"],
+          :shadow_x              => contents["ShadowX"],
+          :shadow_size           => contents["ShadowSize"]
+        }
+        # Add form's data to records
+        GameData::SpeciesMetrics.register(species_hash)
+      }
+    }
+    # Save all data
+    GameData::SpeciesMetrics.save
     Graphics.update
   end
 

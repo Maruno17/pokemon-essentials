@@ -40,13 +40,6 @@ module GameData
     attr_reader :mega_move
     attr_reader :unmega_form
     attr_reader :mega_message
-    attr_accessor :back_sprite_x
-    attr_accessor :back_sprite_y
-    attr_accessor :front_sprite_x
-    attr_accessor :front_sprite_y
-    attr_accessor :front_sprite_altitude
-    attr_accessor :shadow_x
-    attr_accessor :shadow_size
 
     DATA = {}
     DATA_FILENAME = "species.dat"
@@ -190,13 +183,6 @@ module GameData
       @mega_move             = hash[:mega_move]
       @unmega_form           = hash[:unmega_form]           || 0
       @mega_message          = hash[:mega_message]          || 0
-      @back_sprite_x         = hash[:back_sprite_x]         || 0
-      @back_sprite_y         = hash[:back_sprite_y]         || 0
-      @front_sprite_x        = hash[:front_sprite_x]        || 0
-      @front_sprite_y        = hash[:front_sprite_y]        || 0
-      @front_sprite_altitude = hash[:front_sprite_altitude] || 0
-      @shadow_x              = hash[:shadow_x]              || 0
-      @shadow_size           = hash[:shadow_size]           || 2
     end
 
     # @return [String] the translated name of this species
@@ -235,25 +221,13 @@ module GameData
     end
 
     def apply_metrics_to_sprite(sprite, index, shadow = false)
-      if shadow
-        if (index & 1) == 1   # Foe Pokémon
-          sprite.x += @shadow_x * 2
-        end
-      else
-        if (index & 1) == 0   # Player's Pokémon
-          sprite.x += @back_sprite_x * 2
-          sprite.y += @back_sprite_y * 2
-        else                  # Foe Pokémon
-          sprite.x += @front_sprite_x * 2
-          sprite.y += @front_sprite_y * 2
-          sprite.y -= @front_sprite_altitude * 2
-        end
-      end
+      metrics_data = GameData::SpeciesMetrics.get_species_form(@species, @form)
+      metrics_data.apply_metrics_to_sprite(sprite, index, shadow)
     end
 
     def shows_shadow?
-      return true
-#      return @front_sprite_altitude > 0
+      metrics_data = GameData::SpeciesMetrics.get_species_form(@species, @form)
+      return metrics_data.shows_shadow?
     end
 
     def get_evolutions(exclude_invalid = false)

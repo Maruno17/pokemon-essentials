@@ -308,13 +308,6 @@ module Compiler
         f.write(sprintf("WildItemCommon = %s\r\n", species.wild_item_common)) if species.wild_item_common
         f.write(sprintf("WildItemUncommon = %s\r\n", species.wild_item_uncommon)) if species.wild_item_uncommon
         f.write(sprintf("WildItemRare = %s\r\n", species.wild_item_rare)) if species.wild_item_rare
-        f.write(sprintf("BattlerPlayerX = %d\r\n", species.back_sprite_x))
-        f.write(sprintf("BattlerPlayerY = %d\r\n", species.back_sprite_y))
-        f.write(sprintf("BattlerEnemyX = %d\r\n", species.front_sprite_x))
-        f.write(sprintf("BattlerEnemyY = %d\r\n", species.front_sprite_y))
-        f.write(sprintf("BattlerAltitude = %d\r\n", species.front_sprite_altitude)) if species.front_sprite_altitude != 0
-        f.write(sprintf("BattlerShadowX = %d\r\n", species.shadow_x))
-        f.write(sprintf("BattlerShadowSize = %d\r\n", species.shadow_size))
         if species.evolutions.any? { |evo| !evo[3] }
           f.write("Evolutions = ")
           need_comma = false
@@ -415,13 +408,6 @@ module Compiler
           f.write(sprintf("WildItemUncommon = %s\r\n", species.wild_item_uncommon)) if species.wild_item_uncommon
           f.write(sprintf("WildItemRare = %s\r\n", species.wild_item_rare)) if species.wild_item_rare
         end
-        f.write(sprintf("BattlerPlayerX = %d\r\n", species.back_sprite_x)) if species.back_sprite_x != base_species.back_sprite_x
-        f.write(sprintf("BattlerPlayerY = %d\r\n", species.back_sprite_y)) if species.back_sprite_y != base_species.back_sprite_y
-        f.write(sprintf("BattlerEnemyX = %d\r\n", species.front_sprite_x)) if species.front_sprite_x != base_species.front_sprite_x
-        f.write(sprintf("BattlerEnemyY = %d\r\n", species.front_sprite_y)) if species.front_sprite_y != base_species.front_sprite_y
-        f.write(sprintf("BattlerAltitude = %d\r\n", species.front_sprite_altitude)) if species.front_sprite_altitude != base_species.front_sprite_altitude
-        f.write(sprintf("BattlerShadowX = %d\r\n", species.shadow_x)) if species.shadow_x != base_species.shadow_x
-        f.write(sprintf("BattlerShadowSize = %d\r\n", species.shadow_size)) if species.shadow_size != base_species.shadow_size
         if species.evolutions != base_species.evolutions && species.evolutions.any? { |evo| !evo[3] }
           f.write("Evolutions = ")
           need_comma = false
@@ -444,6 +430,59 @@ module Compiler
         end
       end
     }
+    Graphics.update
+  end
+
+  #=============================================================================
+  # Write species metrics
+  #=============================================================================
+  def write_pokemon_metrics
+    echo _INTL("Writing species metrics...")
+    # Get in species order then in form order
+    sort_array = []
+    dex_numbers = {}
+    i = 0
+    GameData::SpeciesMetrics.each do |metrics|
+      dex_numbers[metrics.species] = i if !dex_numbers[metrics.species]
+      sort_array.push([dex_numbers[metrics.species], metrics.id, metrics.species, metrics.form])
+      i += 1
+    end
+    sort_array.sort! { |a, b| (a[0] == b[0]) ? a[3] <=> b[3] : a[0] <=> b[0] }
+    # Write file
+    File.open("PBS/pokemon_metrics.txt", "wb") { |f|
+      idx = 0
+      add_PBS_header_to_file(f)
+      sort_array.each do |val|
+        echo "." if idx % 50 == 0
+        idx += 1
+        Graphics.update if idx % 100 == 0
+        species = GameData::SpeciesMetrics.get(val[1])
+        if species.form > 0
+          base_species = GameData::SpeciesMetrics.get(val[2])
+          next if species.back_sprite == base_species.back_sprite &&
+                  species.front_sprite == base_species.front_sprite &&
+                  species.front_sprite_altitude == base_species.front_sprite_altitude &&
+                  species.shadow_x == base_species.shadow_x &&
+                  species.shadow_size == base_species.shadow_size
+        else
+          next if species.back_sprite == [0, 0] && species.front_sprite == [0, 0] &&
+                  species.front_sprite_altitude == 0 &&
+                  species.shadow_x == 0 && species.shadow_size == 2
+        end
+        f.write("\#-------------------------------\r\n")
+        if species.form > 0
+          f.write(sprintf("[%s,%d]\r\n", species.species, species.form))
+        else
+          f.write(sprintf("[%s]\r\n", species.species))
+        end
+        f.write(sprintf("BackSprite = %s\r\n", species.back_sprite.join(",")))
+        f.write(sprintf("FrontSprite = %s\r\n", species.front_sprite.join(",")))
+        f.write(sprintf("FrontSpriteAltitude = %d\r\n", species.front_sprite_altitude)) if species.front_sprite_altitude != 0
+        f.write(sprintf("ShadowX = %d\r\n", species.shadow_x))
+        f.write(sprintf("ShadowSize = %d\r\n", species.shadow_size))
+      end
+    }
+    echoln _INTL("done")
     Graphics.update
   end
 
@@ -812,6 +851,7 @@ module Compiler
     write_berry_plants
     write_pokemon
     write_pokemon_forms
+    write_pokemon_metrics
     write_shadow_movesets
     write_regional_dexes
     write_ribbons

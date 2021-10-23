@@ -1030,14 +1030,7 @@ def pbPokemonEditor
      [_INTL("Shape"),             GameDataProperty.new(:BodyShape),   _INTL("Body shape of this species.")],
      [_INTL("Habitat"),           GameDataProperty.new(:Habitat),     _INTL("The habitat of this species.")],
      [_INTL("Generation"),        LimitProperty.new(99999),           _INTL("The number of the generation the Pokémon debuted in.")],
-     [_INTL("Flags"),             StringListProperty,                 _INTL("Words/phrases that distinguish this species from others.")],
-     [_INTL("BattlerPlayerX"),    ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("BattlerPlayerY"),    ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("BattlerEnemyX"),     ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("BattlerEnemyY"),     ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("BattlerAltitude"),   ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("BattlerShadowX"),    ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
-     [_INTL("BattlerShadowSize"), ReadOnlyProperty,                   _INTL("Affects positioning of the Pokémon in battle. This is edited elsewhere.")],
+     [_INTL("Flags"),             StringListProperty,                 _INTL("Words/phrases that distinguish this species from others.")]
   ]
   pbListScreenBlock(_INTL("Pokémon species"), SpeciesLister.new(0, false)) { |button, species|
     if species
@@ -1097,14 +1090,7 @@ def pbPokemonEditor
             spec.shape,
             spec.habitat,
             spec.generation,
-            spec.flags.clone,
-            spec.back_sprite_x,
-            spec.back_sprite_y,
-            spec.front_sprite_x,
-            spec.front_sprite_y,
-            spec.front_sprite_altitude,
-            spec.shadow_x,
-            spec.shadow_size
+            spec.flags.clone
           ]
           # Edit the properties
           if pbPropertyList(spec.id.to_s, data, species_properties, true)
@@ -1149,14 +1135,7 @@ def pbPokemonEditor
               :shape                 => data[34],
               :habitat               => data[35],
               :generation            => data[36],
-              :flags                 => data[37],
-              :back_sprite_x         => data[38],
-              :back_sprite_y         => data[39],
-              :front_sprite_x        => data[40],
-              :front_sprite_y        => data[41],
-              :front_sprite_altitude => data[42],
-              :shadow_x              => data[43],
-              :shadow_size           => data[44]
+              :flags                 => data[37]
             }
             # Add species' data to records
             GameData::Species.register(species_hash)

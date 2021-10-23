@@ -230,6 +230,7 @@ module GameData
     Item.load
     BerryPlant.load
     Species.load
+    SpeciesMetrics.load
     Ribbon.load
     Encounter.load
     TrainerType.load
