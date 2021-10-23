@@ -676,7 +676,7 @@ module PluginManager
     File.open("Data/PluginScripts.rxdata", 'wb') { |f| Marshal.dump(scripts, f) }
     # collect garbage
     GC.start
-    echoln " done."
+    echoln_good "done"
     echoln ""
   end
   #-----------------------------------------------------------------------------

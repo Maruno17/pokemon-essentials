@@ -1435,9 +1435,13 @@ module Compiler
     t = Time.now.to_i
     Graphics.update
     trainerChecker = TrainerChecker.new
-    any_changed = false
-    echoln _INTL("Processing {1} maps...", mapData.mapinfos.keys.length)
+    change_record = []
+    echo _INTL("Processing {1} maps...", mapData.mapinfos.keys.length)
+    idx = 0
     for id in mapData.mapinfos.keys.sort
+      echo "." if idx % 20 == 0
+      idx += 1
+      Graphics.update if idx % 250 == 0
       changed = false
       map = mapData.getMap(id)
       next if !map || !mapData.mapinfos[id]
@@ -1470,29 +1474,29 @@ module Compiler
       end
       changed = true if check_counters(map,id,mapData)
       if changed
-        any_changed = true
         mapData.saveMap(id)
         mapData.saveTilesets
-        echoln _INTL("Map {1}: '{2}' modified and saved.", id, mapData.mapinfos[id].name)
+        change_record.push(_INTL("Map {1}: '{2}' modified and saved.", id, mapData.mapinfos[id].name))
       end
     end
-    echoln ""
+    echoln_good "done"
+    change_record.each { |msg| echoln_warn msg }
     changed = false
     Graphics.update
     commonEvents = load_data("Data/CommonEvents.rxdata")
-    echoln _INTL("Processing common events")
+    echo _INTL("Processing common events...")
     for key in 0...commonEvents.length
       newevent = fix_event_use(commonEvents[key],0,mapData)
       if newevent
         commonEvents[key] = newevent
         changed = true
-        any_changed = true
       end
     end
     save_data(commonEvents,"Data/CommonEvents.rxdata") if changed
-    echoln ""
-    if any_changed
-      echoln _INTL("!!! RMXP data was altered. Close RMXP now to ensure changes are applied. !!!")
+    echoln_good "done"
+    if change_record.length > 0 || changed
+      echoln ""
+      echoln_warn _INTL("!!! RMXP data was altered. Close RMXP now to ensure changes are applied. !!!")
       echoln ""
     end
   end

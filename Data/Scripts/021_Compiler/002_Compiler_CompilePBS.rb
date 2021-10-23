@@ -5,6 +5,7 @@ module Compiler
   # Compile Town Map data
   #=============================================================================
   def compile_town_map(path = "PBS/town_map.txt")
+    echo _INTL("Compiling Town Map data...")
     nonglobaltypes = {
       "Name"     => [0, "s"],
       "Filename" => [1, "s"],
@@ -47,12 +48,15 @@ module Compiler
     MessageTypes.setMessages(MessageTypes::RegionNames,rgnnames)
     MessageTypes.setMessagesAsHash(MessageTypes::PlaceNames,placenames)
     MessageTypes.setMessagesAsHash(MessageTypes::PlaceDescriptions,placedescs)
+    echoln_good _INTL("done")
+    Graphics.update
   end
 
   #=============================================================================
   # Compile map connections
   #=============================================================================
   def compile_connections(path = "PBS/map_connections.txt")
+    echo _INTL("Compiling map connections...")
     records   = []
     pbCompilerEachPreppedLine(path) { |line,lineno|
       hashenum = {
@@ -88,6 +92,7 @@ module Compiler
       records.push(record)
     }
     save_data(records,"Data/map_connections.dat")
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -96,6 +101,7 @@ module Compiler
   #=============================================================================
   def compile_phone(path = "PBS/phone.txt")
     return if !safeExists?(path)
+    echo _INTL("Compiling phone messages...")
     database = PhoneDatabase.new
     sections = []
     File.open(path, "rb") { |f|
@@ -127,12 +133,15 @@ module Compiler
     }
     MessageTypes.setMessagesAsHash(MessageTypes::PhoneMessages,sections)
     save_data(database,"Data/phone.dat")
+    echoln_good _INTL("done")
+    Graphics.update
   end
 
   #=============================================================================
   # Compile type data
   #=============================================================================
   def compile_types(path = "PBS/types.txt")
+    echo _INTL("Compiling types...")
     GameData::Type::DATA.clear
     type_names = []
     # Read from PBS file
@@ -201,6 +210,7 @@ module Compiler
     # Save all data
     GameData::Type.save
     MessageTypes.setMessagesAsHash(MessageTypes::Types, type_names)
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -208,6 +218,7 @@ module Compiler
   # Compile ability data
   #=============================================================================
   def compile_abilities(path = "PBS/abilities.txt")
+    echo _INTL("Compiling abilities...")
     GameData::Ability::DATA.clear
     schema = GameData::Ability::SCHEMA
     ability_names        = []
@@ -271,6 +282,7 @@ module Compiler
     GameData::Ability.save
     MessageTypes.setMessagesAsHash(MessageTypes::Abilities, ability_names)
     MessageTypes.setMessagesAsHash(MessageTypes::AbilityDescs, ability_descriptions)
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -278,13 +290,17 @@ module Compiler
   # Compile move data
   #=============================================================================
   def compile_moves(path = "PBS/moves.txt")
+    echo _INTL("Compiling moves...")
     GameData::Move::DATA.clear
     schema = GameData::Move::SCHEMA
     move_names        = []
     move_descriptions = []
     move_hash         = nil
     # Read each line of moves.txt at a time and compile it into an move
+    idx = 0
     pbCompilerEachPreppedLine(path) { |line, line_no|
+      echo "." if idx % 500 == 0
+      idx += 1
       if line[/^\s*\[\s*(.+)\s*\]\s*$/]   # New section [move_id]
         # Add previous move's data to records
         if move_hash
@@ -402,6 +418,7 @@ module Compiler
     GameData::Move.save
     MessageTypes.setMessagesAsHash(MessageTypes::Moves, move_names)
     MessageTypes.setMessagesAsHash(MessageTypes::MoveDescriptions, move_descriptions)
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -409,6 +426,7 @@ module Compiler
   # Compile item data
   #=============================================================================
   def compile_items(path = "PBS/items.txt")
+    echo _INTL("Compiling items...")
     GameData::Item::DATA.clear
     schema = GameData::Item::SCHEMA
     item_names        = []
@@ -416,7 +434,10 @@ module Compiler
     item_descriptions = []
     item_hash         = nil
     # Read each line of items.txt at a time and compile it into an item
+    idx = 0
     pbCompilerEachPreppedLine(path) { |line, line_no|
+      echo "." if idx % 250 == 0
+      idx += 1
       if line[/^\s*\[\s*(.+)\s*\]\s*$/]   # New section [item_id]
         # Add previous item's data to records
         GameData::Item.register(item_hash) if item_hash
@@ -492,6 +513,7 @@ module Compiler
     MessageTypes.setMessagesAsHash(MessageTypes::Items, item_names)
     MessageTypes.setMessagesAsHash(MessageTypes::ItemPlurals, item_names_plural)
     MessageTypes.setMessagesAsHash(MessageTypes::ItemDescriptions, item_descriptions)
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -499,6 +521,7 @@ module Compiler
   # Compile berry plant data
   #=============================================================================
   def compile_berry_plants(path = "PBS/berry_plants.txt")
+    echo _INTL("Compiling berry plants...")
     GameData::BerryPlant::DATA.clear
     pbCompilerEachCommentedLine(path) { |line, line_no|
       if line[/^\s*(\w+)\s*=\s*(.*)$/]   # Of the format XXX = YYY
@@ -520,6 +543,7 @@ module Compiler
     }
     # Save all data
     GameData::BerryPlant.save
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -527,6 +551,7 @@ module Compiler
   # Compile Pokémon data
   #=============================================================================
   def compile_pokemon(path = "PBS/pokemon.txt")
+    echo _INTL("Compiling Pokémon...")
     GameData::Species::DATA.clear
     species_names           = []
     species_form_names      = []
@@ -539,7 +564,11 @@ module Compiler
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
       schema = GameData::Species.schema
+      idx = 0
       pbEachFileSection(f) { |contents, species_id|
+        echo "." if idx % 50 == 0
+        idx += 1
+        Graphics.update if idx % 250 == 0
         FileLineData.setSection(species_id, "header", nil)   # For error reporting
         contents["InternalName"] = species_id if !species_id[/^\d+/]
         # Ensure all required properties have been defined, and raise an error
@@ -641,7 +670,7 @@ module Compiler
         end
       }
     }
-    # Enumerate all evolution species and parameters (this couldn't be done earlier)
+    # Enumerate all evolution species and parameters (this couldn't bedone earlier)
     GameData::Species.each do |species|
       FileLineData.setSection(species.id.to_s, "Evolutions", nil)   # For error reporting
       species.evolutions.each do |evo|
@@ -673,6 +702,7 @@ module Compiler
     MessageTypes.setMessagesAsHash(MessageTypes::FormNames, species_form_names)
     MessageTypes.setMessagesAsHash(MessageTypes::Kinds, species_categories)
     MessageTypes.setMessagesAsHash(MessageTypes::Entries, species_pokedex_entries)
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -680,6 +710,7 @@ module Compiler
   # Compile Pokémon forms data
   #=============================================================================
   def compile_pokemon_forms(path = "PBS/pokemon_forms.txt")
+    echo _INTL("Compiling Pokémon forms...")
     species_names           = []
     species_form_names      = []
     species_categories      = []
@@ -692,7 +723,11 @@ module Compiler
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
       schema = GameData::Species.schema(true)
+      idx = 0
       pbEachFileSectionPokemonForms(f) { |contents, section_name|
+        echo "." if idx % 50 == 0
+        idx += 1
+        Graphics.update if idx % 250 == 0
         FileLineData.setSection(section_name, "header", nil)   # For error reporting
         # Split section_name into a species number and form number
         split_section_name = section_name.split(/[-,\s]/)
@@ -869,6 +904,7 @@ module Compiler
     MessageTypes.addMessagesAsHash(MessageTypes::FormNames, species_form_names)
     MessageTypes.addMessagesAsHash(MessageTypes::Kinds, species_categories)
     MessageTypes.addMessagesAsHash(MessageTypes::Entries, species_pokedex_entries)
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -877,6 +913,7 @@ module Compiler
   #=============================================================================
   def compile_pokemon_metrics(path = "PBS/pokemon_metrics.txt")
     return if !safeExists?(path)
+    echo _INTL("Compiling Pokémon metrics...")
     schema = GameData::SpeciesMetrics::SCHEMA
     # Read from PBS file
     File.open(path, "rb") { |f|
@@ -884,7 +921,11 @@ module Compiler
       # Read a whole section's lines at once, then run through this code.
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
+      idx = 0
       pbEachFileSection(f) { |contents, section_name|
+        echo "." if idx % 50 == 0
+        idx += 1
+        Graphics.update if idx % 250 == 0
         FileLineData.setSection(section_name, "header", nil)   # For error reporting
         # Split section_name into a species number and form number
         split_section_name = section_name.split(/[-,\s]/)
@@ -924,6 +965,7 @@ module Compiler
     }
     # Save all data
     GameData::SpeciesMetrics.save
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -931,10 +973,15 @@ module Compiler
   # Compile Shadow movesets
   #=============================================================================
   def compile_shadow_movesets(path = "PBS/shadow_movesets.txt")
+    echo _INTL("Compiling Shadow Pokémon movesets...")
     sections = {}
     if safeExists?(path)
+      idx = 0
       pbCompilerEachCommentedLine(path) { |line, _line_no|
         if line[/^\s*(\w+)\s*=\s*(.*)$/]
+          echo "." if idx % 50 == 0
+          idx += 1
+          Graphics.update if idx % 250 == 0
           key   = $1
           value = $2
           value = value.split(",")
@@ -950,12 +997,15 @@ module Compiler
       }
     end
     save_data(sections, "Data/shadow_movesets.dat")
+    echoln_good _INTL("done")
+    Graphics.update
   end
 
   #=============================================================================
   # Compile Regional Dexes
   #=============================================================================
   def compile_regional_dexes(path = "PBS/regional_dexes.txt")
+    echo _INTL("Compiling Pokédex lists...")
     dex_lists = []
     section = nil
     pbCompilerEachPreppedLine(path) { |line, line_no|
@@ -987,6 +1037,7 @@ module Compiler
     end
     # Save all data
     save_data(dex_lists, "Data/regional_dexes.dat")
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -994,6 +1045,7 @@ module Compiler
   # Compile ribbon data
   #=============================================================================
   def compile_ribbons(path = "PBS/ribbons.txt")
+    echo _INTL("Compiling ribbons...")
     GameData::Ribbon::DATA.clear
     schema = GameData::Ribbon::SCHEMA
     ribbon_names        = []
@@ -1058,6 +1110,7 @@ module Compiler
     GameData::Ribbon.save
     MessageTypes.setMessagesAsHash(MessageTypes::RibbonNames, ribbon_names)
     MessageTypes.setMessagesAsHash(MessageTypes::RibbonDescriptions, ribbon_descriptions)
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -1065,12 +1118,17 @@ module Compiler
   # Compile wild encounter data
   #=============================================================================
   def compile_encounters(path = "PBS/encounters.txt")
+    echo _INTL("Compiling encounters...")
     GameData::Encounter::DATA.clear
     encounter_hash = nil
     step_chances   = nil
     current_type   = nil
     max_level = GameData::GrowthRate.max_level
+    idx = 0
     pbCompilerEachPreppedLine(path) { |line, line_no|
+      echo "." if idx % 50 == 0
+      idx += 1
+      Graphics.update if idx % 250 == 0
       next if line.length == 0
       if current_type && line[/^\d+,/]   # Species line
         values = line.split(',').collect! { |v| v.strip }
@@ -1162,6 +1220,7 @@ module Compiler
     end
     # Save all data
     GameData::Encounter.save
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -1169,6 +1228,7 @@ module Compiler
   # Compile trainer type data
   #=============================================================================
   def compile_trainer_types(path = "PBS/trainer_types.txt")
+    echo _INTL("Compiling trainer types...")
     GameData::TrainerType::DATA.clear
     schema = GameData::TrainerType::SCHEMA
     tr_type_names = []
@@ -1236,6 +1296,7 @@ module Compiler
     # Save all data
     GameData::TrainerType.save
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerTypes, tr_type_names)
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -1243,6 +1304,7 @@ module Compiler
   # Compile individual trainer data
   #=============================================================================
   def compile_trainers(path = "PBS/trainers.txt")
+    echo _INTL("Compiling trainers...")
     GameData::Trainer::DATA.clear
     schema = GameData::Trainer::SCHEMA
     max_level = GameData::GrowthRate.max_level
@@ -1251,7 +1313,11 @@ module Compiler
     trainer_hash       = nil
     current_pkmn       = nil
     # Read each line of trainers.txt at a time and compile it as a trainer property
+    idx = 0
     pbCompilerEachPreppedLine(path) { |line, line_no|
+      echo "." if idx % 50 == 0
+      idx += 1
+      Graphics.update if idx % 250 == 0
       if line[/^\s*\[\s*(.+)\s*\]\s*$/]
         # New section [trainer_type, name] or [trainer_type, name, version]
         if trainer_hash
@@ -1361,6 +1427,7 @@ module Compiler
     GameData::Trainer.save
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerNames, trainer_names)
     MessageTypes.setMessagesAsHash(MessageTypes::TrainerLoseText, trainer_lose_texts)
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -1368,6 +1435,7 @@ module Compiler
   # Compile Battle Tower and other Cups trainers/Pokémon
   #=============================================================================
   def compile_trainer_lists(path = "PBS/battle_facility_lists.txt")
+    echo _INTL("Compiling Battle Facility lists...")
     btTrainersRequiredTypes = {
       "Trainers"   => [0, "s"],
       "Pokemon"    => [1, "s"],
@@ -1389,7 +1457,11 @@ module Compiler
     MessageTypes.setMessagesAsHash(MessageTypes::EndSpeechLose,[])
     File.open(path, "rb") { |f|
       FileLineData.file = path
+      idx = 0
       pbEachFileSection(f) { |section,name|
+        echo "."
+        idx += 1
+        Graphics.update
         next if name!="DefaultTrainerList" && name!="TrainerList"
         rsection = []
         for key in section.keys
@@ -1432,6 +1504,8 @@ module Compiler
       }
     }
     save_data(sections,"Data/trainer_lists.dat")
+    echoln_good _INTL("done")
+    Graphics.update
   end
 
   def compile_battle_tower_trainers(filename)
@@ -1479,6 +1553,7 @@ module Compiler
   # Compile metadata
   #=============================================================================
   def compile_metadata(path = "PBS/metadata.txt")
+    echo _INTL("Compiling metadata...")
     GameData::Metadata::DATA.clear
     GameData::PlayerMetadata::DATA.clear
     # Read from PBS file
@@ -1544,6 +1619,7 @@ module Compiler
     # Save all data
     GameData::Metadata.save
     GameData::PlayerMetadata.save
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -1551,6 +1627,7 @@ module Compiler
   # Compile map metadata
   #=============================================================================
   def compile_map_metadata(path = "PBS/map_metadata.txt")
+    echo _INTL("Compiling map metadata...")
     GameData::MapMetadata::DATA.clear
     map_infos = pbLoadMapInfos
     map_names = []
@@ -1562,7 +1639,11 @@ module Compiler
       # contents is a hash containing all the XXX=YYY lines in that section, where
       # the keys are the XXX and the values are the YYY (as unprocessed strings).
       schema = GameData::MapMetadata::SCHEMA
+      idx = 0
       pbEachFileSectionNumbered(f) { |contents, map_id|
+        echo "." if idx % 50 == 0
+        idx += 1
+        Graphics.update if idx % 250 == 0
         # Go through schema hash of compilable data and compile this section
         for key in schema.keys
           FileLineData.setSection(map_id, key, contents[key])   # For error reporting
@@ -1607,6 +1688,7 @@ module Compiler
     # Save all data
     GameData::MapMetadata.save
     MessageTypes.setMessages(MessageTypes::MapNames, map_names)
+    echoln_good _INTL("done")
     Graphics.update
   end
 
@@ -1614,6 +1696,7 @@ module Compiler
   # Compile battle animations
   #=============================================================================
   def compile_animations
+    echo _INTL("Compiling animations...")
     begin
       pbanims = load_data("Data/PkmnAnimations.rxdata")
     rescue
@@ -1655,5 +1738,7 @@ module Compiler
       save_data(move2anim,"Data/move2anim.dat")
       save_data(pbanims,"Data/PkmnAnimations.rxdata")
     end
+    echoln_good _INTL("done")
+    Graphics.update
   end
 end

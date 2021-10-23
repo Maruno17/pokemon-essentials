@@ -44,6 +44,27 @@ module Kernel
     echo string
     echo "\r\n"
   end
+
+  def echoln_good(string)
+    echo "\e[32m"   # Green text
+    echo string
+    echo "\e[0m"   # Back to default text color
+    echo "\r\n"
+  end
+
+  def echoln_bad(string)
+    echo "\e[31m"   # Red text
+    echo string
+    echo "\e[0m"   # Back to default text color
+    echo "\r\n"
+  end
+
+  def echoln_warn(string)
+    echo "\e[33m"   # Brown/yellow text
+    echo string
+    echo "\e[0m"   # Back to default text color
+    echo "\r\n"
+  end
 end
 
 Console.setup_console
