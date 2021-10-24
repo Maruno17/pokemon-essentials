@@ -19,6 +19,18 @@ class PokeBattle_Move_RaiseUserAttack2 < PokeBattle_StatUpMove
 end
 
 #===============================================================================
+# If this move KO's the target, increases the user's Attack by 2 stages.
+# (Fell Stinger (Gen 6-))
+#===============================================================================
+class PokeBattle_Move_RaiseUserAttack2IfTargetFaints < PokeBattle_Move
+  def pbEffectAfterAllHits(user, target)
+    return if !target.damageState.fainted
+    return if !user.pbCanRaiseStatStage?(:ATTACK, user, self)
+    user.pbRaiseStatStage(:ATTACK, 2, user)
+  end
+end
+
+#===============================================================================
 # Increases the user's Attack by 3 stages.
 #===============================================================================
 class PokeBattle_Move_RaiseUserAttack3 < PokeBattle_StatUpMove
@@ -30,7 +42,7 @@ end
 
 #===============================================================================
 # If this move KO's the target, increases the user's Attack by 3 stages.
-# (Fell Stinger)
+# (Fell Stinger (Gen 7+))
 #===============================================================================
 class PokeBattle_Move_RaiseUserAttack3IfTargetFaints < PokeBattle_Move
   def pbEffectAfterAllHits(user,target)

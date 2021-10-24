@@ -452,7 +452,7 @@ class PokeBattle_Battler
       return false
     end
     # Terrains immunity
-    if affectedByTerrain? && @battle.field.terrain == :Misty
+    if affectedByTerrain? && @battle.field.terrain == :Misty && Settings::MECHANICS_GENERATION >= 7
       @battle.pbDisplay(_INTL("{1} surrounds itself with misty terrain!",pbThis(true))) if showMessages
       return false
     end

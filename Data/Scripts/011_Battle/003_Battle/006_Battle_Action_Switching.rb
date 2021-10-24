@@ -16,9 +16,11 @@ class PokeBattle_Battle
       return false
     end
     if !pbIsOwner?(idxBattler,idxParty)
-      owner = pbGetOwnerFromPartyIndex(idxBattler,idxParty)
-      partyScene.pbDisplay(_INTL("You can't switch {1}'s Pokémon with one of yours!",
-        owner.name)) if partyScene
+      if partyScene
+        owner = pbGetOwnerFromPartyIndex(idxBattler,idxParty)
+        partyScene.pbDisplay(_INTL("You can't switch {1}'s Pokémon with one of yours!",
+          owner.name))
+      end
       return false
     end
     if party[idxParty].fainted?
@@ -129,7 +131,7 @@ class PokeBattle_Battle
   end
 
   # For choosing a replacement Pokémon when prompted in the middle of other
-  # things happening (U-turn, Baton Pass, in def pbSwitch).
+  # things happening (U-turn, Baton Pass, in def pbEORSwitch).
   def pbSwitchInBetween(idxBattler,checkLaxOnly=false,canCancel=false)
     return pbPartyScreen(idxBattler,checkLaxOnly,canCancel) if pbOwnedByPlayer?(idxBattler)
     return @battleAI.pbDefaultChooseNewEnemy(idxBattler,pbParty(idxBattler))

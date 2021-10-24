@@ -91,7 +91,9 @@ class PokeBattle_AI
     end
     if shouldSwitch
       list = []
+      idxPartyStart, idxPartyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
       @battle.pbParty(idxBattler).each_with_index do |pkmn,i|
+        next if i == idxPartyEnd - 1   # Don't choose to switch in ace
         next if !@battle.pbCanSwitch?(idxBattler,i)
         # If perish count is 1, it may be worth it to switch
         # even with Spikes, since Perish Song's effect will end
@@ -147,7 +149,9 @@ class PokeBattle_AI
   #=============================================================================
   def pbDefaultChooseNewEnemy(idxBattler,party)
     enemies = []
+    idxPartyStart, idxPartyEnd = @battle.pbTeamIndexRangeFromBattlerIndex(idxBattler)
     party.each_with_index do |_p,i|
+      next if i == idxPartyEnd - 1 && enemies.length > 0   # Ignore ace if possible
       enemies.push(i) if @battle.pbCanSwitchLax?(idxBattler,i)
     end
     return -1 if enemies.length==0

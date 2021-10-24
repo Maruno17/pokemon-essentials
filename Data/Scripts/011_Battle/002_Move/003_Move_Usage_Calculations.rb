@@ -313,7 +313,7 @@ class PokeBattle_Move
     end
     # Parental Bond's second attack
     if user.effects[PBEffects::ParentalBond]==1
-      multipliers[:base_damage_multiplier] /= 4
+      multipliers[:base_damage_multiplier] /= (Settings::MECHANICS_GENERATION >= 7) ? 4 : 2
     end
     # Other
     if user.effects[PBEffects::MeFirst]

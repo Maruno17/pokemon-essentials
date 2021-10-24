@@ -342,6 +342,18 @@ class PokeBattle_Battle
     return pbAbleCount(idxBattler)==0
   end
 
+  def pbTeamAbleNonActiveCount(idxBattler = 0)
+    inBattleIndices = []
+    eachSameSideBattler(idxBattler) { |b| inBattleIndices.push(b.pokemonIndex) }
+    count = 0
+    eachInTeamFromBattlerIndex(idxBattler) do |pkmn, i|
+      next if !pkmn || !pkmn.able?
+      next if inBattleIndices.include?(idxParty)
+      count += 1
+    end
+    return count
+  end
+
   # For the given side of the field (0=player's, 1=opponent's), returns an array
   # containing the number of able Pokémon in each team.
   def pbAbleTeamCounts(side)

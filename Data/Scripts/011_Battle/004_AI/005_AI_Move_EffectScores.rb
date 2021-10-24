@@ -2021,8 +2021,9 @@ class PokeBattle_AI
       score -= 100 if @battle.trainerBattle?
     #---------------------------------------------------------------------------
     when "SwitchOutUserStatusMove"
-      if !@battle.pbCanChooseNonActive?(user.index)
-        score -= 80
+      if !@battle.pbCanChooseNonActive?(user.index) ||
+         @battle.pbTeamAbleNonActiveCount(user.index) > 1   # Don't switch in ace
+        score -= 100
       else
         score += 40 if user.effects[PBEffects::Confusion]>0
         total = 0
@@ -2040,6 +2041,12 @@ class PokeBattle_AI
           end
           score += 75 if !hasDamagingMove
         end
+      end
+    #---------------------------------------------------------------------------
+    when "SwitchOutUserDamagingMove"
+      if !@battle.pbCanChooseNonActive?(user.index) ||
+         @battle.pbTeamAbleNonActiveCount(user.index) > 1   # Don't switch in ace
+        score -= 100
       end
     #---------------------------------------------------------------------------
     when "SwitchOutTargetStatusMove"
@@ -2069,7 +2076,7 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "SwitchOutUserPassOnEffects"
       if !@battle.pbCanChooseNonActive?(user.index)
-        score -= 80
+        score -= 100
       else
         score -= 40 if user.effects[PBEffects::Confusion]>0
         total = 0
@@ -2088,8 +2095,6 @@ class PokeBattle_AI
           score += 75 if !hasDamagingMove
         end
       end
-    #---------------------------------------------------------------------------
-    when "SwitchOutUserDamagingMove"
     #---------------------------------------------------------------------------
     when "TrapTargetInBattle"
       score -= 90 if target.effects[PBEffects::MeanLook]>=0
