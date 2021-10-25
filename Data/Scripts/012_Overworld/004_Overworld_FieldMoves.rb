@@ -881,6 +881,7 @@ HiddenMoveHandlers::CanUseMove.add(:TELEPORT,proc { |move,pkmn,showmsg|
     next false
   end
   healing = $PokemonGlobal.healingSpot
+  healing = GameData::PlayerMetadata.get($player.character_ID)&.home if !healing
   healing = GameData::Metadata.get.home if !healing   # Home
   if !healing
     pbMessage(_INTL("Can't use that here.")) if showmsg
@@ -895,6 +896,7 @@ HiddenMoveHandlers::CanUseMove.add(:TELEPORT,proc { |move,pkmn,showmsg|
 
 HiddenMoveHandlers::ConfirmUseMove.add(:TELEPORT,proc { |move,pkmn|
   healing = $PokemonGlobal.healingSpot
+  healing = GameData::PlayerMetadata.get($player.character_ID)&.home if !healing
   healing = GameData::Metadata.get.home if !healing   # Home
   next false if !healing
   mapname = pbGetMapNameFromId(healing[0])
@@ -903,6 +905,7 @@ HiddenMoveHandlers::ConfirmUseMove.add(:TELEPORT,proc { |move,pkmn|
 
 HiddenMoveHandlers::UseMove.add(:TELEPORT,proc { |move,pokemon|
   healing = $PokemonGlobal.healingSpot
+  healing = GameData::PlayerMetadata.get($player.character_ID)&.home if !healing
   healing = GameData::Metadata.get.home if !healing   # Home
   next false if !healing
   if !pbHiddenMoveAnimation(pokemon)

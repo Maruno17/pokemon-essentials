@@ -287,7 +287,7 @@ class PokemonBag_Scene
     overlay.clear
     # Draw the pocket name
     pbDrawTextPositions(overlay,[
-       [PokemonBag.pocket_names[@bag.last_viewed_pocket], 94, 176, 2, POCKETNAMEBASECOLOR, POCKETNAMESHADOWCOLOR]
+       [PokemonBag.pocket_names[@bag.last_viewed_pocket - 1], 94, 176, 2, POCKETNAMEBASECOLOR, POCKETNAMESHADOWCOLOR]
     ])
     # Draw slider arrows
     showslider = false
@@ -424,7 +424,7 @@ class PokemonBag_Scene
           elsif Input.trigger?(Input::ACTION)   # Start switching the selected item
             if !@choosing
               if thispocket.length>1 && itemwindow.index<thispocket.length &&
-                 !Settings::BAG_POCKET_AUTO_SORT[itemwindow.pocket]
+                 !Settings::BAG_POCKET_AUTO_SORT[itemwindow.pocket - 1]
                 itemwindow.sorting = true
                 swapinitialpos = itemwindow.index
                 pbPlayDecisionSE

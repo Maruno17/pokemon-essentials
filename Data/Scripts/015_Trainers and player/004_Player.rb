@@ -93,7 +93,7 @@ class Player < Trainer
     @character_ID          = 0
     @outfit                = 0
     @badges                = [false] * 8
-    @money                 = Settings::INITIAL_MONEY
+    @money                 = GameData::Metadata.get.start_money
     @coins                 = 0
     @battle_points         = 0
     @soot                  = 0

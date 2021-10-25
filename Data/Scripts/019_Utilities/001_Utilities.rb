@@ -241,7 +241,6 @@ def pbTrainerName(name = nil, outfit = 0)
   end
   $player.name   = name
   $player.outfit = outfit
-  $game_temp.begun_new_game = true
 end
 
 def pbSuggestTrainerName(gender)

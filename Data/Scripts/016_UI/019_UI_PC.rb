@@ -247,9 +247,7 @@ def pbPokeCenterPC
 end
 
 def pbGetStorageCreator
-  creator = Settings.storage_creator_name
-  creator = _INTL("Bill") if nil_or_empty?(creator)
-  return creator
+  return GameData::Metadata.get.storage_creator
 end
 
 #===============================================================================

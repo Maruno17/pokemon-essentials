@@ -506,8 +506,8 @@ DebugMenuCommands.register("fillbag", {
       pocket_sizes = Settings::BAG_MAX_POCKET_SIZE
       bag = $bag.pockets   # Called here so that it only rearranges itself once
       GameData::Item.each do |i|
-        next if !pocket_sizes[i.pocket] || pocket_sizes[i.pocket] == 0
-        next if pocket_sizes[i.pocket] > 0 && bag[i.pocket].length >= pocket_sizes[i.pocket]
+        next if !pocket_sizes[i.pocket - 1] || pocket_sizes[i.pocket - 1] == 0
+        next if pocket_sizes[i.pocket - 1] > 0 && bag[i.pocket].length >= pocket_sizes[i.pocket - 1]
         item_qty = (i.is_important?) ? 1 : qty
         bag[i.pocket].push([i.id, item_qty])
       end

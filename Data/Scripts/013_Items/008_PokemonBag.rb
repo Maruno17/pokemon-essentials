@@ -12,7 +12,7 @@ class PokemonBag
   end
 
   def self.pocket_count
-    return self.pocket_names.length - 1
+    return self.pocket_names.length
   end
 
   def initialize
@@ -89,7 +89,7 @@ class PokemonBag
     max_size = @pockets[pocket].length + 1 if max_size < 0   # Infinite size
     ret = ItemStorageHelper.add(@pockets[pocket],
        max_size, Settings::BAG_MAX_PER_SLOT, item_data.id, qty)
-    if ret && Settings::BAG_POCKET_AUTO_SORT[pocket]
+    if ret && Settings::BAG_POCKET_AUTO_SORT[pocket - 1]
       @pockets[pocket].sort! { |a, b| GameData::Item.keys.index(a[0]) <=> GameData::Item.keys.index(b[0]) }
     end
     return ret
@@ -163,7 +163,7 @@ class PokemonBag
   private
 
   def max_pocket_size(pocket)
-    return Settings::BAG_MAX_POCKET_SIZE[pocket] || -1
+    return Settings::BAG_MAX_POCKET_SIZE[pocket - 1] || -1
   end
 
   def rearrange
@@ -183,7 +183,7 @@ class PokemonBag
       end
     end
     new_pockets.each_with_index do |pocket, i|
-      next if i == 0 || !Settings::BAG_POCKET_AUTO_SORT[i]
+      next if i == 0 || !Settings::BAG_POCKET_AUTO_SORT[i - 1]
       pocket.sort! { |a, b| GameData::Item.keys.index(a[0]) <=> GameData::Item.keys.index(b[0]) }
     end
     @pockets = new_pockets
@@ -203,8 +203,10 @@ class PCItemStorage
 
   def initialize
     @items = []
-    # Start storage with a Potion
-    add(:POTION) if GameData::Item.exists?(:POTION)
+    # Start storage with initial items (e.g. a Potion)
+    GameData::Metadata.get.start_item_storage.each do |item|
+      add(item) if GameData::Item.exists?(item)
+    end
   end
 
   def [](i)

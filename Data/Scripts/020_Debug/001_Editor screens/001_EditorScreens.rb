@@ -737,14 +737,17 @@ def pbEditMetadata
     # Construct metadata hash
     metadata_hash = {
       :id                 => 0,
-      :home               => data[0],
-      :wild_battle_BGM    => data[1],
-      :trainer_battle_BGM => data[2],
-      :wild_victory_ME    => data[3],
-      :trainer_victory_ME => data[4],
-      :wild_capture_ME    => data[5],
-      :surf_BGM           => data[6],
-      :bicycle_BGM        => data[7]
+      :start_money        => data[0],
+      :start_item_storage => data[1],
+      :home               => data[2],
+      :storage_creator    => data[3],
+      :wild_battle_BGM    => data[4],
+      :trainer_battle_BGM => data[5],
+      :wild_victory_ME    => data[6],
+      :trainer_victory_ME => data[7],
+      :wild_capture_ME    => data[8],
+      :surf_BGM           => data[9],
+      :bicycle_BGM        => data[10]
     }
     # Add metadata's data to records
     GameData::Metadata.register(metadata_hash)

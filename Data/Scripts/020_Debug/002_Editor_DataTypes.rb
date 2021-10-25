@@ -864,7 +864,6 @@ end
 module PocketProperty
   def self.set(_settingname, oldsetting)
     commands = Settings.bag_pocket_names.clone
-    commands.shift
     cmd = pbMessage(_INTL("Choose a pocket for this item."), commands, -1)
     return (cmd >= 0) ? cmd + 1 : oldsetting
   end
@@ -875,7 +874,7 @@ module PocketProperty
 
   def self.format(value)
     return _INTL("No Pocket") if value == 0
-    return (value) ? Settings.bag_pocket_names[value] : value.inspect
+    return (value) ? Settings.bag_pocket_names[value - 1] : value.inspect
   end
 end
 
@@ -971,6 +970,108 @@ module AbilityProperty
 
   def self.format(value)
     return (value && GameData::Ability.exists?(value)) ? GameData::Ability.get(value).real_name : "-"
+  end
+end
+
+
+
+module ItemPoolProperty
+  def self.set(_settingname, oldsetting)
+    # Get all items in the pool
+    realcmds = []
+    realcmds.push([nil, "-", -1])   # Item ID, index in this list, name
+    for i in 0...oldsetting.length
+      realcmds.push([oldsetting[i], GameData::Item.get(oldsetting[i]).real_name, i])
+    end
+    # Edit item pool
+    cmdwin = pbListWindow([], 200)
+    oldsel = -1
+    ret = oldsetting
+    cmd = [0, 0]
+    commands = []
+    refreshlist = true
+    loop do
+      if refreshlist
+        realcmds.sort! { |a, b| a[2] <=> b[2] }
+        commands = []
+        realcmds.each_with_index do |entry, i|
+          commands.push((entry[0].nil?) ? _INTL("[ADD ITEM]") : entry[1])
+        end
+      end
+      refreshlist = false
+      oldsel = -1
+      cmd = pbCommands3(cmdwin, commands, -1, cmd[1], true)
+      case cmd[0]
+      when 1   # Swap item up
+        if cmd[1] > 0 && cmd[1] < realcmds.length - 1
+          realcmds[cmd[1] + 1][2], realcmds[cmd[1]][2] = realcmds[cmd[1]][2], realcmds[cmd[1] + 1][2]
+          refreshlist = true
+        end
+      when 2   # Swap item down
+        if cmd[1] > 1
+          realcmds[cmd[1] - 1][2], realcmds[cmd[1]][2] = realcmds[cmd[1]][2], realcmds[cmd[1] - 1][2]
+          refreshlist = true
+        end
+      when 0
+        if cmd[1] >= 0   # Chose an entry
+          entry = realcmds[cmd[1]]
+          if entry[0].nil?   # Add new item
+            new_item = pbChooseItemList
+            if new_item
+              maxid = -1
+              realcmds.each { |e| maxid = [maxid, e[2]].max }
+              realcmds.push([new_item, GameData::Item.get(new_item).real_name, maxid + 1])
+              refreshlist = true
+            end
+          else   # Edit existing item
+            case pbMessage(_INTL("\\ts[]Do what with this item?"),
+               [_INTL("Change item"), _INTL("Delete"), _INTL("Cancel")], 3)
+            when 0   # Change item
+              new_item = pbChooseItemList(entry[0])
+              if new_item && new_item != entry[0]
+                entry[0] = new_item
+                entry[1] = GameData::Item.get(new_item).real_name
+                oldsel = entry[2]
+                refreshlist = true
+              end
+            when 1   # Delete
+              realcmds.delete_at(cmd[1])
+              cmd[1] = [cmd[1], realcmds.length - 1].min
+              refreshlist = true
+            end
+          end
+        else   # Cancel/quit
+          case pbMessage(_INTL("Save changes?"),
+             [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+          when 0
+            realcmds.shift
+            for i in 0...realcmds.length
+              realcmds[i] = realcmds[i][0]
+            end
+            realcmds.compact!
+            ret = realcmds
+            break
+          when 1
+            break
+          end
+        end
+      end
+    end
+    cmdwin.dispose
+    return ret
+  end
+
+  def self.defaultValue
+    return []
+  end
+
+  def self.format(value)
+    ret = ""
+    for i in 0...value.length
+      ret << "," if i > 0
+      ret << GameData::Item.get(value[i]).real_name
+    end
+    return ret
   end
 end
 
@@ -1094,6 +1195,7 @@ module MovePoolProperty
           case pbMessage(_INTL("Save changes?"),
              [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
           when 0
+            realcmds.shift
             for i in 0...realcmds.length
               realcmds[i].pop   # Remove name
               realcmds[i].pop   # Remove index in this list

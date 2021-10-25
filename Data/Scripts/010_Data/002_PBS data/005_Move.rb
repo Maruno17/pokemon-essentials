@@ -55,12 +55,12 @@ module GameData
 
     # @return [String] the translated name of this move
     def name
-      return pbGetMessage(MessageTypes::Moves, @real_name)
+      return pbGetMessageFromHash(MessageTypes::Moves, @real_name)
     end
 
     # @return [String] the translated description of this move
     def description
-      return pbGetMessage(MessageTypes::MoveDescriptions, @real_description)
+      return pbGetMessageFromHash(MessageTypes::MoveDescriptions, @real_description)
     end
 
     def physical?

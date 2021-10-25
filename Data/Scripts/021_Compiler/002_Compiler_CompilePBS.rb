@@ -1538,6 +1538,7 @@ module Compiler
     compile_pbs_file_message_start(path)
     GameData::Metadata::DATA.clear
     GameData::PlayerMetadata::DATA.clear
+    storage_creator = []
     # Read from PBS file
     File.open(path, "rb") { |f|
       FileLineData.file = path   # For error reporting
@@ -1566,7 +1567,10 @@ module Compiler
           # Construct metadata hash
           metadata_hash = {
             :id                 => section_id,
+            :start_money        => contents["StartMoney"],
+            :start_item_storage => contents["StartItemStorage"],
             :home               => contents["Home"],
+            :storage_creator    => contents["StorageCreator"],
             :wild_battle_BGM    => contents["WildBattleBGM"],
             :trainer_battle_BGM => contents["TrainerBattleBGM"],
             :wild_victory_ME    => contents["WildVictoryME"],
@@ -1575,6 +1579,7 @@ module Compiler
             :surf_BGM           => contents["SurfBGM"],
             :bicycle_BGM        => contents["BicycleBGM"]
           }
+          storage_creator[0] = contents["StorageCreator"]
           # Add metadata's data to records
           GameData::Metadata.register(metadata_hash)
         else   # Player metadata
@@ -1601,6 +1606,7 @@ module Compiler
     # Save all data
     GameData::Metadata.save
     GameData::PlayerMetadata.save
+    MessageTypes.setMessages(MessageTypes::StorageCreator, storage_creator)
     process_pbs_file_message_end
   end
 

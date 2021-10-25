@@ -622,6 +622,7 @@ module MessageTypes
   ScriptTexts        = 24
   RibbonNames        = 25
   RibbonDescriptions = 26
+  StorageCreator     = 27
   @@messages         = Messages.new
   @@messagesFallback = Messages.new("Data/messages.dat",true)
 

@@ -725,7 +725,7 @@ def pbItemBall(item,quantity=1)
       pbMessage(_INTL("\\me[{1}]You found a \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
     end
     pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
-       itemname, pocket, PokemonBag.pocket_names[pocket]))
+       itemname, pocket, PokemonBag.pocket_names[pocket - 1]))
     return true
   end
   # Can't add the item
@@ -771,7 +771,7 @@ def pbReceiveItem(item,quantity=1)
   end
   if $bag.add(item, quantity)   # If item can be added
     pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
-       itemname, pocket, PokemonBag.pocket_names[pocket]))
+       itemname, pocket, PokemonBag.pocket_names[pocket - 1]))
     return true
   end
   return false   # Can't add the item

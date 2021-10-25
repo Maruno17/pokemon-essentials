@@ -49,8 +49,6 @@ module Settings
 
   #=============================================================================
 
-  # The amount of money the player starts the game with.
-  INITIAL_MONEY        = 3000
   # The maximum amount of money the player can have.
   MAX_MONEY            = 999_999
   # The maximum number of Game Corner coins the player can have.
@@ -66,9 +64,9 @@ module Settings
 
   #=============================================================================
 
-  # A set of arrays each containing a trainer type followed by a Global Variable
-  # number. If the variable isn't set to 0, then all trainers with the
-  # associated trainer type will be named as whatever is in that variable.
+  # A set of arrays each containing a trainer type followed by a Game Variable
+  # number. If the Variable isn't set to 0, then all trainers with the
+  # associated trainer type will be named as whatever is in that Variable.
   RIVAL_NAMES = [
     [:RIVAL1,   12],
     [:RIVAL2,   12],
@@ -171,10 +169,6 @@ module Settings
 
   #=============================================================================
 
-  # The name of the person who created the Pokémon storage system.
-  def self.storage_creator_name
-    return _INTL("Bill")
-  end
   # The number of boxes in Pokémon storage.
   NUM_STORAGE_BOXES = 30
   # Whether putting a Pokémon into Pokémon storage will heal it. IF false, they
@@ -183,9 +177,9 @@ module Settings
 
   #=============================================================================
 
-  # The names of each pocket of the Bag. Ignore the first entry ("").
+  # The names of each pocket of the Bag.
   def self.bag_pocket_names
-    return ["",
+    return [
       _INTL("Items"),
       _INTL("Medicine"),
       _INTL("Poké Balls"),
@@ -196,14 +190,12 @@ module Settings
       _INTL("Key Items")
     ]
   end
-  # The maximum number of slots per pocket (-1 means infinite number). Ignore
-  # the first number (0).
-  BAG_MAX_POCKET_SIZE  = [0, -1, -1, -1, -1, -1, -1, -1, -1]
+  # The maximum number of slots per pocket (-1 means infinite number).
+  BAG_MAX_POCKET_SIZE  = [-1, -1, -1, -1, -1, -1, -1, -1]
+  # Whether each pocket in turn auto-sorts itself by item ID number.
+  BAG_POCKET_AUTO_SORT = [false, false, false, true, true, false, false, false]
   # The maximum number of items each slot in the Bag can hold.
   BAG_MAX_PER_SLOT     = 999
-  # Whether each pocket in turn auto-sorts itself by item ID number. Ignore the
-  # first entry (the 0).
-  BAG_POCKET_AUTO_SORT = [0, false, false, false, true, true, false, false, false]
 
   #=============================================================================
 
@@ -220,8 +212,8 @@ module Settings
   # page while viewing that Dex list will be the region map of the region the
   # player is currently in. The National Dex entry should always behave like
   # this. If an entry is of the form [name, number], then the number is a region
-  # number. That region's map will appear in the Area page while viewing that
-  # Dex list, no matter which region the player is currently in.
+  # number, and that region's map will appear in the Area page while viewing
+  # that Dex list, no matter which region the player is currently in.
   def self.pokedex_names
     return [
       [_INTL("Kanto Pokédex"), 0],
