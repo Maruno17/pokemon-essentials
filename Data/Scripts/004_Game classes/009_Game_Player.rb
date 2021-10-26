@@ -77,6 +77,23 @@ class Game_Player < Game_Character
     @character_name = new_charset if new_charset
   end
 
+  # Called when the player's character or outfit changes. Assumes the player
+  # isn't moving.
+  def refresh_charset
+    meta = GameData::PlayerMetadata.get($player&.character_ID || 1)
+    new_charset = nil
+    if $PokemonGlobal&.diving
+      new_charset = pbGetPlayerCharset(meta.dive_charset)
+    elsif $PokemonGlobal&.surfing
+      new_charset = pbGetPlayerCharset(meta.surf_charset)
+    elsif $PokemonGlobal&.bicycle
+      new_charset = pbGetPlayerCharset(meta.cycle_charset)
+    else
+      new_charset = pbGetPlayerCharset(meta.walk_charset)
+    end
+    @character_name = new_charset if new_charset
+  end
+
   def bump_into_object
     return if @bump_se && @bump_se>0
     pbSEPlay("Player bump")
@@ -498,7 +515,7 @@ def pbGetPlayerCharset(charset, trainer = nil, force = false)
                   $game_player.charsetData[1] == charset &&
                   $game_player.charsetData[2] == outfit
   end
-  $game_player.charsetData = [trainer.character_ID, charset,outfit] if $game_player
+  $game_player.charsetData = [trainer.character_ID, charset, outfit] if $game_player
   ret = charset
   if pbResolveBitmap("Graphics/Characters/"+ret+"_"+outfit.to_s)
     ret = ret+"_"+outfit.to_s
