@@ -122,7 +122,7 @@ class PokeBattle_AI
     if target_data.num_targets > 1
       # If move affects multiple battlers and you don't choose a particular one
       totalScore = 0
-      @battle.eachBattler do |b|
+      @battle.allBattlers.each do |b|
         next if !@battle.pbMoveCanTarget?(user.index,b.index,target_data)
         score = pbGetMoveScore(move,user,b,skill)
         totalScore += ((user.opposes?(b)) ? score : -score)
@@ -135,7 +135,7 @@ class PokeBattle_AI
     else
       # If move affects one battler and you have to choose which one
       scoresAndTargets = []
-      @battle.eachBattler do |b|
+      @battle.allBattlers.each do |b|
         next if !@battle.pbMoveCanTarget?(user.index,b.index,target_data)
         next if target_data.targets_foe && !user.opposes?(b)
         score = pbGetMoveScore(move,user,b,skill)

@@ -164,7 +164,7 @@ class PokeBattle_Battler
     @movesUsed             = []
     @turnCount             = 0
     @effects[PBEffects::Attract]             = -1
-    @battle.eachBattler do |b|   # Other battlers no longer attracted to self
+    @battle.allBattlers.each do |b|   # Other battlers no longer attracted to self
       b.effects[PBEffects::Attract] = -1 if b.effects[PBEffects::Attract]==@index
     end
     @effects[PBEffects::BanefulBunker]       = false
@@ -210,11 +210,11 @@ class PokeBattle_Battler
     @effects[PBEffects::Instruct]            = false
     @effects[PBEffects::Instructed]          = false
     @effects[PBEffects::JawLock]             = -1
-    @battle.eachBattler do |b|   # Other battlers no longer blocked by self
+    @battle.allBattlers.each do |b|   # Other battlers no longer blocked by self
       b.effects[PBEffects::JawLock] = -1 if b.effects[PBEffects::JawLock] == @index
     end
     @effects[PBEffects::KingsShield]         = false
-    @battle.eachBattler do |b|   # Other battlers lose their lock-on against self
+    @battle.allBattlers.each do |b|   # Other battlers lose their lock-on against self
       next if b.effects[PBEffects::LockOn]==0
       next if b.effects[PBEffects::LockOnPos]!=@index
       b.effects[PBEffects::LockOn]    = 0
@@ -223,7 +223,7 @@ class PokeBattle_Battler
     @effects[PBEffects::MagicBounce]         = false
     @effects[PBEffects::MagicCoat]           = false
     @effects[PBEffects::MeanLook]            = -1
-    @battle.eachBattler do |b|   # Other battlers no longer blocked by self
+    @battle.allBattlers.each do |b|   # Other battlers no longer blocked by self
       b.effects[PBEffects::MeanLook] = -1 if b.effects[PBEffects::MeanLook]==@index
     end
     @effects[PBEffects::MeFirst]             = false
@@ -239,7 +239,7 @@ class PokeBattle_Battler
     @effects[PBEffects::NoRetreat]           = false
     @effects[PBEffects::Obstruct]            = false
     @effects[PBEffects::Octolock]            = -1
-    @battle.eachBattler do |b|   # Other battlers no longer locked by self
+    @battle.allBattlers.each do |b|   # Other battlers no longer locked by self
       b.effects[PBEffects::Octolock] = -1 if b.effects[PBEffects::Octolock] == @index
     end
     @effects[PBEffects::Outrage]             = 0
@@ -260,7 +260,7 @@ class PokeBattle_Battler
     @effects[PBEffects::Rollout]             = 0
     @effects[PBEffects::Roost]               = false
     @effects[PBEffects::SkyDrop]             = -1
-    @battle.eachBattler do |b|   # Other battlers no longer Sky Dropped by self
+    @battle.allBattlers.each do |b|   # Other battlers no longer Sky Dropped by self
       b.effects[PBEffects::SkyDrop] = -1 if b.effects[PBEffects::SkyDrop]==@index
     end
     @effects[PBEffects::SlowStart]           = 0
@@ -281,7 +281,7 @@ class PokeBattle_Battler
     @effects[PBEffects::Trapping]            = 0
     @effects[PBEffects::TrappingMove]        = nil
     @effects[PBEffects::TrappingUser]        = -1
-    @battle.eachBattler do |b|   # Other battlers no longer trapped by self
+    @battle.allBattlers.each do |b|   # Other battlers no longer trapped by self
       next if b.effects[PBEffects::TrappingUser]!=@index
       b.effects[PBEffects::Trapping]     = 0
       b.effects[PBEffects::TrappingUser] = -1
@@ -336,7 +336,7 @@ class PokeBattle_Battler
   # Update which Pokémon will gain Exp if this battler is defeated.
   def pbUpdateParticipants
     return if fainted? || !@battle.opposes?(@index)
-    eachOpposing do |b|
+    allOpposing.each do |b|
       @participants.push(b.pokemonIndex) if !@participants.include?(b.pokemonIndex)
     end
   end

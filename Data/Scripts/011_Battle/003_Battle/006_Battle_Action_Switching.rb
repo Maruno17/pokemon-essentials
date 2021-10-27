@@ -45,7 +45,7 @@ class PokeBattle_Battle
     return false if !pbCanSwitchLax?(idxBattler,idxParty,partyScene)
     # Make sure another battler isn't already choosing to switch to the party
     # Pokémon
-    eachSameSideBattler(idxBattler) do |b|
+    allSameSideBattlers(idxBattler).each do |b|
       next if choices[b.index][0]!=:SwitchOut || choices[b.index][1]!=idxParty
       partyScene.pbDisplay(_INTL("{1} has already been selected.",
          pbParty(idxBattler)[idxParty].name)) if partyScene
@@ -73,7 +73,7 @@ class PokeBattle_Battle
       return false
     end
     # Trapping abilities/items
-    eachOtherSideBattler(idxBattler) do |b|
+    allOtherSideBattlers(idxBattler).each do |b|
       next if !b.abilityActive?
       if BattleHandlers.triggerTrappingTargetAbility(b.ability,battler,b,self)
         partyScene.pbDisplay(_INTL("{1}'s {2} prevents switching!",
@@ -81,7 +81,7 @@ class PokeBattle_Battle
         return false
       end
     end
-    eachOtherSideBattler(idxBattler) do |b|
+    allOtherSideBattlers(idxBattler).each do |b|
       next if !b.itemActive?
       if BattleHandlers.triggerTrappingTargetItem(b.item,battler,b,self)
         partyScene.pbDisplay(_INTL("{1}'s {2} prevents switching!",
@@ -306,11 +306,11 @@ class PokeBattle_Battle
   def pbOnAllBattlersEnteringBattle
     pbCalculatePriority(true)
     battler_indices = []
-    eachBattler { |b| battler_indices.push(b.index) }
+    allBattlers.each { |b| battler_indices.push(b.index) }
     pbOnBattlerEnteringBattle(battler_indices)
     pbCalculatePriority
     # Check forms are correct
-    eachBattler { |b| b.pbCheckForm }
+    allBattlers.each { |b| b.pbCheckForm }
   end
 
   # Called when one or more Pokémon switch in. Does a lot of things, including
@@ -326,7 +326,7 @@ class PokeBattle_Battle
     #       this resetting would prevent that from happening, so it is skipped
     #       and instead done earlier in def pbAttackPhaseSwitch.
     if !skip_event_reset
-      eachBattler do |b|
+      allBattlers.each do |b|
         b.droppedBelowHalfHP = false
         b.statsDropped = false
       end
@@ -370,7 +370,7 @@ class PokeBattle_Battle
       break if b.pbItemOnStatDropped
       break if b.pbAbilitiesOnDamageTaken
     end
-    eachBattler do |b|
+    allBattlers.each do |b|
       b.droppedBelowHalfHP = false
       b.statsDropped = false
     end
@@ -382,7 +382,7 @@ class PokeBattle_Battle
       @field.effects[PBEffects::AmuletCoin] = true
     end
     # Update battlers' participants (who will gain Exp/EVs when a battler faints)
-    eachBattler { |b| b.pbUpdateParticipants }
+    allBattlers.each { |b| b.pbUpdateParticipants }
   end
 
   def pbMessagesOnBattlerEnteringBattle(battler)

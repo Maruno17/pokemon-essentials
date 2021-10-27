@@ -281,7 +281,7 @@ class PokeBattle_Scene
       when 4   # Use on opposing battler (Poké Balls)
         idxTarget = -1
         if @battle.pbOpposingBattlerCount(idxBattler)==1
-          @battle.eachOtherSideBattler(idxBattler) { |b| idxTarget = b.index }
+          @battle.allOtherSideBattlers(idxBattler).each { |b| idxTarget = b.index }
           break if yield item.id, useType, idxTarget, -1, itemScene
         else
           wasTargeting = true
@@ -351,12 +351,12 @@ class PokeBattle_Scene
   def pbFirstTarget(idxBattler,target_data)
     case target_data.id
     when :NearAlly
-      @battle.eachSameSideBattler(idxBattler) do |b|
+      @battle.allSameSideBattlers(idxBattler).each do |b|
         next if b.index==idxBattler || !@battle.nearBattlers?(b,idxBattler)
         next if b.fainted?
         return b.index
       end
-      @battle.eachSameSideBattler(idxBattler) do |b|
+      @battle.allSameSideBattlers(idxBattler).each do |b|
         next if b.index==idxBattler || !@battle.nearBattlers?(b,idxBattler)
         return b.index
       end

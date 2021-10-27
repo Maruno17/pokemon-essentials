@@ -42,7 +42,7 @@ class PokeBattle_Move_HitTwoTimesTargetThenTargetAlly < PokeBattle_Move
   def pbModifyTargets(targets, user)
     return if targets.length != 1
     choices = []
-    targets[0].eachAlly { |b| user.pbAddTarget(choices, user, b, self) }
+    targets[0].allAllies.each { |b| user.pbAddTarget(choices, user, b, self) }
     return if choices.length == 0
     idxChoice = (choices.length > 1) ? @battle.pbRandom(choices.length) : 0
     user.pbAddTarget(targets, user, choices[idxChoice], self, !pbTarget(user).can_choose_distant_target?)

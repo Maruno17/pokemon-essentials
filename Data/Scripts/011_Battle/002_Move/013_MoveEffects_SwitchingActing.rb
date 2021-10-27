@@ -455,7 +455,7 @@ class PokeBattle_Move_UsedAfterAllyRoundWithDoublePower < PokeBattle_Move
 
   def pbEffectGeneral(user)
     user.pbOwnSide.effects[PBEffects::Round] = true
-    user.eachAlly do |b|
+    user.allAllies.each do |b|
       next if @battle.choices[b.index][0]!=:UseMove || b.movedThisRound?
       next if @battle.choices[b.index][2].function!=@function
       b.effects[PBEffects::MoveNext] = true
@@ -509,7 +509,7 @@ class PokeBattle_Move_TargetActsLast < PokeBattle_Move
     end
     # Target is already maximally Quashed and will move last anyway
     highestQuash = 0
-    @battle.battlers.each do |b|
+    @battle.allBattlers.each do |b|
       next if b.effects[PBEffects::Quash]<=highestQuash
       highestQuash = b.effects[PBEffects::Quash]
     end
@@ -527,7 +527,7 @@ class PokeBattle_Move_TargetActsLast < PokeBattle_Move
 
   def pbEffectAgainstTarget(user,target)
     highestQuash = 0
-    @battle.battlers.each do |b|
+    @battle.allBattlers.each do |b|
       next if b.effects[PBEffects::Quash]<=highestQuash
       highestQuash = b.effects[PBEffects::Quash]
     end

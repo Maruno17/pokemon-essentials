@@ -698,7 +698,7 @@ class PokeBattle_PledgeMove < PokeBattle_Move
     end
     return if @pledgeCombo
     # Check whether this is the setup of a combo move
-    user.eachAlly do |b|
+    user.allAllies.each do |b|
       next if @battle.choices[b.index][0]!=:UseMove || b.movedThisRound?
       move = @battle.choices[b.index][2]
       next if !move

@@ -120,7 +120,7 @@ class PokeBattle_Battler
     @effects[PBEffects::Charge]      = 0 if @effects[PBEffects::Charge]==1
     @effects[PBEffects::GemConsumed] = nil
     @effects[PBEffects::ShellTrap]   = false
-    @battle.eachBattler { |b| b.pbContinualAbilityChecks }   # Trace, end primordial weathers
+    @battle.allBattlers.each { |b| b.pbContinualAbilityChecks }   # Trace, end primordial weathers
   end
 
   def pbConfusionDamage(msg)
@@ -271,7 +271,7 @@ class PokeBattle_Battler
         user.pbReducePP(move)
       end
       if move.pbTarget(user).affects_foe_side
-        @battle.eachOtherSideBattler(user) do |b|
+        @battle.allOtherSideBattlers(user).each do |b|
           next unless b.hasActiveAbility?(:PRESSURE)
           PBDebug.log("[Ability triggered] #{b.pbThis}'s #{b.abilityName}")
           user.pbReducePP(move)
@@ -384,7 +384,7 @@ class PokeBattle_Battler
       user.lastMoveFailed = true
     else   # We have targets, or move doesn't use targets
       # Reset whole damage state, perform various success checks (not accuracy)
-      @battle.eachBattler do |b|
+      @battle.allBattlers.each do |b|
         b.droppedBelowHalfHP = false
         b.statsDropped = false
       end
@@ -499,7 +499,7 @@ class PokeBattle_Battler
       user.pbFaint if user.fainted?
       # External/general effects after all hits. Eject Button, Shell Bell, etc.
       pbEffectsAfterMove(user,targets,move,realNumHits)
-      @battle.eachBattler do |b|
+      @battle.allBattlers.each do |b|
         b.droppedBelowHalfHP = false
         b.statsDropped = false
       end
@@ -509,13 +509,13 @@ class PokeBattle_Battler
     # Gain Exp
     @battle.pbGainExp
     # Battle Arena only - update skills
-    @battle.eachBattler { |b| @battle.successStates[b.index].updateSkill }
+    @battle.allBattlers.each { |b| @battle.successStates[b.index].updateSkill }
     # Shadow Pokémon triggering Hyper Mode
     pbHyperMode if @battle.choices[@index][0]!=:None   # Not if self is replaced
     # End of move usage
     pbEndTurn(choice)
     # Instruct
-    @battle.eachBattler do |b|
+    @battle.allBattlers.each do |b|
       next if !b.effects[PBEffects::Instruct] || !b.lastMoveUsed
       b.effects[PBEffects::Instruct] = false
       idxMove = -1

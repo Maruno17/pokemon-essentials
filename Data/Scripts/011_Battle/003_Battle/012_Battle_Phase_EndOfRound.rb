@@ -48,7 +48,7 @@ class PokeBattle_Battle
       end
       @field.weather = :None
       # Check for form changes caused by the weather changing
-      eachBattler { |b| b.pbCheckFormOnWeatherChange }
+      allBattlers.each { |b| b.pbCheckFormOnWeatherChange }
       # Start up the default weather
       pbStartWeather(nil,@field.defaultWeather) if @field.defaultWeather != :None
       return if @field.weather == :None
@@ -119,12 +119,12 @@ class PokeBattle_Battle
         pbDisplay(_INTL("The weirdness disappeared from the battlefield!"))
       end
       @field.terrain = :None
-      eachBattler { |b| b.pbAbilityOnTerrainChange }
+      allBattlers.each { |b| b.pbAbilityOnTerrainChange }
       # Start up the default terrain
       if @field.defaultTerrain != :None
         pbStartTerrain(nil, @field.defaultTerrain, false)
-        eachBattler { |b| b.pbAbilityOnTerrainChange }
-        eachBattler { |b| b.pbItemTerrainStatBoostCheck }
+        allBattlers.each { |b| b.pbAbilityOnTerrainChange }
+        allBattlers.each { |b| b.pbItemTerrainStatBoostCheck }
       end
       return if @field.terrain == :None
     end
@@ -152,12 +152,8 @@ class PokeBattle_Battle
         next if pbSideSize(side)==1   # Only battlers on sides of size 2+ need to move
         # Check if any battler on this side is near any battler on the other side
         anyNear = false
-        eachSameSideBattler(side) do |b|
-          eachOtherSideBattler(b) do |otherB|
-            next if !nearBattlers?(otherB.index,b.index)
-            anyNear = true
-            break
-          end
+        allSameSideBattlers(side).each do |b|
+          anyNear = allOtherSideBattlers(b).any? { |otherB| nearBattlers?(otherB.index, b.index) }
           break if anyNear
         end
         break if anyNear
@@ -170,7 +166,7 @@ class PokeBattle_Battle
         #       this code will need revising to account for that, as well as to
         #       add more complex code to ensure battlers will end up near each
         #       other.
-        eachSameSideBattler(side) do |b|
+        allSameSideBattlers(side).each do |b|
           # Get the position to move to
           pos = -1
           case pbSideSize(side)
@@ -217,7 +213,7 @@ class PokeBattle_Battle
       next if pos.effects[PBEffects::FutureSightCounter]>0
       next if !@battlers[idxPos] || @battlers[idxPos].fainted?   # No target
       moveUser = nil
-      eachBattler do |b|
+      allBattlers.each do |b|
         next if b.opposes?(pos.effects[PBEffects::FutureSightUserIndex])
         next if b.pokemonIndex!=pos.effects[PBEffects::FutureSightUserPartyIndex]
         moveUser = b
@@ -598,7 +594,7 @@ class PokeBattle_Battle
     # Try to make Trace work, check for end of primordial weather
     priority.each { |b| b.pbContinualAbilityChecks }
     # Reset/count down battler-specific effects (no messages)
-    eachBattler do |b|
+    allBattlers.each do |b|
       b.effects[PBEffects::BanefulBunker]    = false
       b.effects[PBEffects::Charge]           -= 1 if b.effects[PBEffects::Charge]>0
       b.effects[PBEffects::Counter]          = -1

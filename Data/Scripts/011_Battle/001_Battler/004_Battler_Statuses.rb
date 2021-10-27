@@ -72,7 +72,7 @@ class PokeBattle_Battler
     end
     # Uproar immunity
     if newStatus == :SLEEP && !(hasActiveAbility?(:SOUNDPROOF) && !@battle.moldBreaker)
-      @battle.eachBattler do |b|
+      @battle.allBattlers.each do |b|
         next if b.effects[PBEffects::Uproar]==0
         @battle.pbDisplay(_INTL("But the uproar kept {1} awake!",pbThis(true))) if showMessages
         return false
@@ -108,7 +108,7 @@ class PokeBattle_Battler
       if abilityActive? && BattleHandlers.triggerStatusImmunityAbility(self.ability,self,newStatus)
         immuneByAbility = true
       else
-        eachAlly do |b|
+        allAllies.each do |b|
           next if !b.abilityActive?
           next if !BattleHandlers.triggerStatusImmunityAllyAbility(b.ability,self,newStatus)
           immuneByAbility = true
@@ -198,7 +198,7 @@ class PokeBattle_Battler
     if abilityActive? && BattleHandlers.triggerStatusImmunityAbility(self.ability,self,newStatus)
       return false
     end
-    eachAlly do |b|
+    allAllies.each do |b|
       next if !b.abilityActive?
       next if !BattleHandlers.triggerStatusImmunityAllyAbility(b.ability,self,newStatus)
       return false
@@ -285,9 +285,7 @@ class PokeBattle_Battler
       return false if [:Electric, :Misty].include?(@battle.field.terrain)
     end
     if !hasActiveAbility?(:SOUNDPROOF)
-      @battle.eachBattler do |b|
-        return false if b.effects[PBEffects::Uproar]>0
-      end
+      return false if @battle.allBattlers.any? { |b| b.effects[PBEffects::Uproar] > 0 }
     end
     if BattleHandlers.triggerStatusImmunityAbilityNonIgnorable(self.ability, self, :SLEEP)
       return false
@@ -298,7 +296,7 @@ class PokeBattle_Battler
     if abilityActive? && BattleHandlers.triggerStatusImmunityAbility(self.ability, self, :SLEEP)
       return false
     end
-    eachAlly do |b|
+    allAllies.each do |b|
       next if !b.abilityActive?
       next if !BattleHandlers.triggerStatusImmunityAllyAbility(b.ability, self, :SLEEP)
       return false
@@ -531,7 +529,7 @@ class PokeBattle_Battler
         end
         return false
       else
-        eachAlly do |b|
+        allAllies.each do |b|
           next if !b.hasActiveAbility?(:AROMAVEIL)
           if showMessages
             @battle.pbShowAbilitySplash(self)

@@ -1003,10 +1003,8 @@ BattleHandlers::DamageCalcUserAbility.add(:MEGALAUNCHER,
 BattleHandlers::DamageCalcUserAbility.add(:MINUS,
   proc { |ability,user,target,move,mults,baseDmg,type|
     next if !move.specialMove?
-    user.eachAlly do |b|
-      next if !b.hasActiveAbility?([:MINUS, :PLUS])
+    if user.allAllies.any? { |b| b.hasActiveAbility?([:MINUS, :PLUS]) }
       mults[:attack_multiplier] *= 1.5
-      break
     end
   }
 )
@@ -1416,15 +1414,9 @@ BattleHandlers::TargetAbilityOnHit.add(:ANGERPOINT,
 
 BattleHandlers::TargetAbilityOnHit.add(:COTTONDOWN,
   proc { |ability, user, target, move, battle|
-    has_effect = false
-    battle.eachBattler do |b|
-      next if !b.pbCanLowerStatStage?(:DEFENSE, target)
-      has_effect = true
-      break
-    end
-    next if !has_effect
+    next if battle.allBattlers.none? { |b| b.pbCanLowerStatStage?(:DEFENSE, target) }
     battle.pbShowAbilitySplash(battler)
-    battle.eachBattler do |b|
+    battle.allBattlers.each do |b|
       b.pbLowerStatStageByAbility(:SPEED, 1, target, false)
     end
     battle.pbHideAbilitySplash(battler)
@@ -2047,7 +2039,7 @@ BattleHandlers::EORWeatherAbility.add(:SOLARPOWER,
 BattleHandlers::EORHealingAbility.add(:HEALER,
   proc { |ability,battler,battle|
     next unless battle.pbRandom(100)<30
-    battler.eachAlly do |b|
+    battler.allAllies.each do |b|
       next if b.status == :NONE
       battle.pbShowAbilitySplash(battler)
       oldStatus = b.status
@@ -2127,7 +2119,7 @@ BattleHandlers::EORHealingAbility.add(:SHEDSKIN,
 
 BattleHandlers::EOREffectAbility.add(:BADDREAMS,
   proc { |ability,battler,battle|
-    battle.eachOtherSideBattler(battler.index) do |b|
+    battle.allOtherSideBattlers(battler.index).each do |b|
       next if !b.near?(battler) || !b.asleep?
       battle.pbShowAbilitySplash(battler)
       next if !b.takesIndirectDamage?(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
@@ -2228,7 +2220,7 @@ BattleHandlers::EORGainItemAbility.add(:PICKUP,
     foundItem = nil
     fromBattler = nil
     use = 0
-    battle.eachBattler do |b|
+    battle.allBattlers.each do |b|
       next if b.index==battler.index
       next if b.effects[PBEffects::PickupUse]<=use
       foundItem   = b.effects[PBEffects::PickupItem]
@@ -2304,7 +2296,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:ANTICIPATION,
     type2 = battlerTypes[1] || type1
     type3 = battlerTypes[2] || type2
     found = false
-    battle.eachOtherSideBattler(battler.index) do |b|
+    battle.allOtherSideBattlers(battler.index).each do |b|
       b.eachMove do |m|
         next if m.statusMove?
         if type1
@@ -2365,15 +2357,9 @@ BattleHandlers::AbilityOnSwitchIn.add(:COMATOSE,
 
 BattleHandlers::AbilityOnSwitchIn.add(:CURIOUSMEDICINE,
   proc { |ability, battler, battle|
-    has_effect = false
-    battler.eachAlly do |b|
-      next if !b.hasAlteredStatStages?
-      has_effect = true
-      break
-    end
-    next if !has_effect
+    next if battler.allAllies.none? { |b| b.hasAlteredStatStages? }
     battle.pbShowAbilitySplash(battler)
-    battler.eachAlly do |b|
+    battler.allAllies.each do |b|
       next if !b.hasAlteredStatStages?
       b.pbResetStatStages
       if PokeBattle_SceneConstants::USE_ABILITY_SPLASH
@@ -2416,7 +2402,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:DESOLATELAND,
 BattleHandlers::AbilityOnSwitchIn.add(:DOWNLOAD,
   proc { |ability,battler,battle|
     oDef = oSpDef = 0
-    battle.eachOtherSideBattler(battler.index) do |b|
+    battle.allOtherSideBattlers(battler.index).each do |b|
       oDef   += b.defense
       oSpDef += b.spdef
     end
@@ -2459,7 +2445,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:FOREWARN,
     next if !battler.pbOwnedByPlayer?
     highestPower = 0
     forewarnMoves = []
-    battle.eachOtherSideBattler(battler.index) do |b|
+    battle.allOtherSideBattlers(battler.index).each do |b|
       b.eachMove do |m|
         power = m.baseDamage
         power = 160 if ["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)
@@ -2509,10 +2495,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:FOREWARN,
 BattleHandlers::AbilityOnSwitchIn.add(:FRISK,
   proc { |ability,battler,battle|
     next if !battler.pbOwnedByPlayer?
-    foes = []
-    battle.eachOtherSideBattler(battler.index) do |b|
-      foes.push(b) if b.item
-    end
+    foes = battle.allOtherSideBattlers(battler.index).select { |b| b.item }
     if foes.length>0
       battle.pbShowAbilitySplash(battler)
       if Settings::MECHANICS_GENERATION >= 6
@@ -2573,7 +2556,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:IMPOSTER,
 BattleHandlers::AbilityOnSwitchIn.add(:INTIMIDATE,
   proc { |ability,battler,battle|
     battle.pbShowAbilitySplash(battler)
-    battle.eachOtherSideBattler(battler.index) do |b|
+    battle.allOtherSideBattlers(battler.index).each do |b|
       next if !b.near?(battler)
       check_item = true
       if b.hasActiveAbility?(:CONTRARY)
@@ -2624,7 +2607,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:NEUTRALIZINGGAS,
     battle.pbShowAbilitySplash(battler, true)
     battle.pbHideAbilitySplash(battler)
     battle.pbDisplay(_INTL("Neutralizing gas filled the area!"))
-    battle.eachBattler do |b|
+    battle.allBattlers.each do |b|
       # Slow Start - end all turn counts
       b.effects[PBEffects::SlowStart] = 0
       # Truant - let b move on its first turn after Neutralizing Gas disappears
@@ -2648,15 +2631,9 @@ BattleHandlers::AbilityOnSwitchIn.add(:NEUTRALIZINGGAS,
 
 BattleHandlers::AbilityOnSwitchIn.add(:PASTELVEIL,
   proc { |ability, battler, battle|
-    has_effect = false
-    battler.eachAlly do |b|
-      next if b.status != :POISON
-      has_effect = true
-      break
-    end
-    next if !has_effect
+    next if battler.allAllies.none? { |b| b.status == :POISON }
     battle.pbShowAbilitySplash(battler)
-    battler.eachAlly do |b|
+    battler.allAllies.each do |b|
       next if b.status != :POISON
       b.pbCureStatus(PokeBattle_SceneConstants::USE_ABILITY_SPLASH)
       if !PokeBattle_SceneConstants::USE_ABILITY_SPLASH

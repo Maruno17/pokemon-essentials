@@ -317,13 +317,7 @@ ItemHandlers::BattleUseOnBattler.add(:VIVIDSCENT,proc { |item,battler,scene|
 #===============================================================================
 class PokeBattle_Move_AllBattlersLoseHalfHPUserSkipsNextTurn < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    failed = true
-    @battle.eachBattler do |b|
-      next if b.hp==1
-      failed = false
-      break
-    end
-    if failed
+    if @battle.allBattlers.none? { |b| b.hp > 1 }
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -331,12 +325,11 @@ class PokeBattle_Move_AllBattlersLoseHalfHPUserSkipsNextTurn < PokeBattle_Move
   end
 
   def pbEffectGeneral(user)
-    @battle.eachBattler do |b|
-      next if b.hp==1
-      b.pbReduceHP(b.hp / 2, false)
+    @battle.allBattlers.each do |b|
+      b.pbReduceHP(b.hp / 2, false) if b.hp > 1
     end
     @battle.pbDisplay(_INTL("Each Pokémon's HP was halved!"))
-    @battle.eachBattler { |b| b.pbItemHPHealCheck }
+    @battle.allBattlers.each { |b| b.pbItemHPHealCheck }
     user.effects[PBEffects::HyperBeam] = 2
     user.currentMove = @id
   end

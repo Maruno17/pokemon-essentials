@@ -1405,7 +1405,7 @@ class PokeBattle_Move_RaiseUserAndAlliesAtkDef1 < PokeBattle_Move
 
   def pbMoveFailed?(user, targets)
     @validTargets = []
-    @battle.eachSameSideBattler(user) do |b|
+    @battle.allSameSideBattlers(user).each do |b|
       next if b.index == user.index
       next if !b.pbCanRaiseStatStage?(:ATTACK, user, self) &&
               !b.pbCanRaiseStatStage?(:DEFENSE, user, self)
@@ -1454,7 +1454,7 @@ class PokeBattle_Move_RaisePlusMinusUserAndAlliesAtkSpAtk1 < PokeBattle_Move
 
   def pbMoveFailed?(user,targets)
     @validTargets = []
-    @battle.eachSameSideBattler(user) do |b|
+    @battle.allSameSideBattlers(user).each do |b|
       next if !b.hasActiveAbility?([:MINUS,:PLUS])
       next if !b.pbCanRaiseStatStage?(:ATTACK,user,self) &&
               !b.pbCanRaiseStatStage?(:SPECIAL_ATTACK,user,self)
@@ -1509,7 +1509,7 @@ class PokeBattle_Move_RaisePlusMinusUserAndAlliesDefSpDef1 < PokeBattle_Move
 
   def pbMoveFailed?(user,targets)
     @validTargets = []
-    @battle.eachSameSideBattler(user) do |b|
+    @battle.allSameSideBattlers(user).each do |b|
       next if !b.hasActiveAbility?([:MINUS,:PLUS])
       next if !b.pbCanRaiseStatStage?(:DEFENSE,user,self) &&
               !b.pbCanRaiseStatStage?(:SPECIAL_DEFENSE,user,self)
@@ -1554,7 +1554,7 @@ end
 class PokeBattle_Move_RaiseGroundedGrassBattlersAtkSpAtk1 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
     @validTargets = []
-    @battle.eachBattler do |b|
+    @battle.allBattlers.each do |b|
       next if !b.pbHasType?(:GRASS)
       next if b.airborne? || b.semiInvulnerable?
       next if !b.pbCanRaiseStatStage?(:ATTACK,user,self) &&
@@ -1596,7 +1596,7 @@ end
 class PokeBattle_Move_RaiseGrassBattlersDef1 < PokeBattle_Move
   def pbMoveFailed?(user,targets)
     @validTargets = []
-    @battle.eachBattler do |b|
+    @battle.allBattlers.each do |b|
       next if !b.pbHasType?(:GRASS)
       next if b.semiInvulnerable?
       next if !b.pbCanRaiseStatStage?(:DEFENSE,user,self)
@@ -1788,12 +1788,7 @@ end
 #===============================================================================
 class PokeBattle_Move_ResetAllBattlersStatStages < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    failed = true
-    @battle.eachBattler do |b|
-      failed = false if b.hasAlteredStatStages?
-      break if !failed
-    end
-    if failed
+    if @battle.allBattlers.none? { |b| b.hasAlteredStatStages? }
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -1801,7 +1796,7 @@ class PokeBattle_Move_ResetAllBattlersStatStages < PokeBattle_Move
   end
 
   def pbEffectGeneral(user)
-    @battle.eachBattler { |b| b.pbResetStatStages }
+    @battle.allBattlers.each { |b| b.pbResetStatStages }
     @battle.pbDisplay(_INTL("All stat changes were eliminated!"))
   end
 end

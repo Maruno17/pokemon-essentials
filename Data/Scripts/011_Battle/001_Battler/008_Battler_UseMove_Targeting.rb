@@ -12,7 +12,7 @@ class PokeBattle_Battler
     if move.statusMove? && move.canSnatch?
       newUser = nil
       strength = 100
-      @battle.eachBattler do |b|
+      @battle.allBattlers.each do |b|
         next if b.effects[PBEffects::Snatch]==0 ||
                 b.effects[PBEffects::Snatch]>=strength
         next if b.effects[PBEffects::SkyDrop]>=0
@@ -49,12 +49,12 @@ class PokeBattle_Battler
         pbAddTarget(targets,user,user,move,true,true)
       end
     when :AllAllies
-      @battle.eachSameSideBattler(user.index) do |b|
+      @battle.allSameSideBattlers(user.index).each do |b|
         pbAddTarget(targets,user,b,move,false,true) if b.index != user.index
       end
     when :UserAndAllies
       pbAddTarget(targets,user,user,move,true,true)
-      @battle.eachSameSideBattler(user.index) { |b| pbAddTarget(targets,user,b,move,false,true) }
+      @battle.allSameSideBattlers(user.index).each { |b| pbAddTarget(targets, user, b, move, false, true) }
     when :NearFoe, :NearOther
       targetBattler = (preTarget>=0) ? @battle.battlers[preTarget] : nil
       if !pbAddTarget(targets,user,targetBattler,move)
@@ -67,7 +67,7 @@ class PokeBattle_Battler
     when :RandomNearFoe
       pbAddTargetRandomFoe(targets,user,move)
     when :AllNearFoes
-      @battle.eachOtherSideBattler(user.index) { |b| pbAddTarget(targets,user,b,move) }
+      @battle.allOtherSideBattlers(user.index).each { |b| pbAddTarget(targets,user,b,move) }
     when :Foe, :Other
       targetBattler = (preTarget>=0) ? @battle.battlers[preTarget] : nil
       if !pbAddTarget(targets,user,targetBattler,move,false)
@@ -78,11 +78,11 @@ class PokeBattle_Battler
         end
       end
     when :AllFoes
-      @battle.eachOtherSideBattler(user.index) { |b| pbAddTarget(targets,user,b,move,false) }
+      @battle.allOtherSideBattlers(user.index).each { |b| pbAddTarget(targets,user,b,move,false) }
     when :AllNearOthers
-      @battle.eachBattler { |b| pbAddTarget(targets,user,b,move) }
+      @battle.allBattlers.each { |b| pbAddTarget(targets, user, b, move) }
     when :AllBattlers
-      @battle.eachBattler { |b| pbAddTarget(targets,user,b,move,false,true) }
+      @battle.allBattlers.each { |b| pbAddTarget(targets, user, b, move, false, true) }
     else
       # Used by Counter/Mirror Coat/Metal Burst/Bide
       move.pbAddTarget(targets,user)   # Move-specific pbAddTarget, not the def below
@@ -181,7 +181,7 @@ class PokeBattle_Battler
 
   def pbAddTargetRandomAlly(targets, user, move, nearOnly = true)
     choices = []
-    user.eachAlly do |b|
+    user.allAllies.each do |b|
       next if nearOnly && !user.near?(b)
       pbAddTarget(choices, user, b, move, nearOnly)
     end
@@ -192,7 +192,7 @@ class PokeBattle_Battler
 
   def pbAddTargetRandomFoe(targets, user, move, nearOnly  =true)
     choices = []
-    user.eachOpposing do |b|
+    user.allOpposing.each do |b|
       next if nearOnly && !user.near?(b)
       pbAddTarget(choices, user, b, move, nearOnly)
     end

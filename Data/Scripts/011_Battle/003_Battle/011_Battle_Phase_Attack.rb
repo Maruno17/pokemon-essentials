@@ -59,7 +59,7 @@ class PokeBattle_Battle
       pbPursuit(b.index)
       return if @decision>0
       # Switch Pokémon
-      eachBattler do |b|
+      allBattlers.each do |b|
         b.droppedBelowHalfHP = false
         b.statsDropped = false
       end

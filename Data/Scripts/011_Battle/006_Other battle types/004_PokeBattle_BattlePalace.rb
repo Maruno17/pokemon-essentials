@@ -166,7 +166,7 @@ class PokeBattle_BattlePalace < PokeBattle_Battle
   def pbEndOfRoundPhase
     super
     return if @decision != 0
-    eachBattler { |b| pbPinchChange(b) }
+    allBattlers.each { |b| pbPinchChange(b) }
   end
 end
 

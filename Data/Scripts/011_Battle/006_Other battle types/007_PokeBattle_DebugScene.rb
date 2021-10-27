@@ -65,10 +65,9 @@ class PokeBattle_DebugSceneNoLogging
   end
 
   def pbChooseTarget(idxBattler,target_data,visibleSprites=nil)
-    targets = []
-    @battle.eachOtherSideBattler(idxBattler) { |b| targets.push(b.index) }
+    targets = @battle.allOtherSideBattlers(idxBattler).map { |b| b.index }
     return -1 if targets.length==0
-    return targets[rand(targets.length)]
+    return targets.sample
   end
 
   def pbPartyScreen(idxBattler,canCancel=false)

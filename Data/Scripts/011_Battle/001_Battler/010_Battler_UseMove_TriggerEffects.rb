@@ -140,7 +140,7 @@ class PokeBattle_Battler
     end
     # Room Service
     if move.function == "StartSlowerBattlersActFirst" && @battle.field.effects[PBEffects::TrickRoom] > 0
-      @battle.battlers.each do |b|
+      @battle.allBattlers.each do |b|
         next if !b.hasActiveItem?(:ROOMSERVICE)
         next if !b.pbCanLowerStatStage?(:SPEED)
         @battle.pbCommonAnimation("UseItem", b)
@@ -172,7 +172,7 @@ class PokeBattle_Battler
       pbEffectsAfterMove3(user, targets, move, numHits, switched_battlers)
     end
     if numHits>0
-      @battle.eachBattler { |b| b.pbItemEndOfMoveCheck }
+      @battle.allBattlers.each { |b| b.pbItemEndOfMoveCheck }
     end
   end
 

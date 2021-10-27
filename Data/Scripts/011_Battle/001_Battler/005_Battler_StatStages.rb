@@ -144,7 +144,7 @@ class PokeBattle_Battler
            self.ability,self,stat,@battle,showFailMsg)
       end
       if !@battle.moldBreaker
-        eachAlly do |b|
+        allAllies.each do |b|
           next if !b.abilityActive?
           return false if BattleHandlers.triggerStatLossImmunityAllyAbility(
              b.ability,b,self,stat,@battle,showFailMsg)
@@ -327,7 +327,7 @@ class PokeBattle_Battler
           return false
         end
       end
-      eachAlly do |b|
+      allAllies.each do |b|
         next if !b.abilityActive?
         if BattleHandlers.triggerStatLossImmunityAllyAbility(b.ability,b,self,:ATTACK,@battle,false)
           @battle.pbDisplay(_INTL("{1} is protected from {2}'s {3} by {4}'s {5}!",

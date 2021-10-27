@@ -101,14 +101,11 @@ class PokeBattle_Move
   def pbFailsAgainstTarget?(user, target, show_message); return false; end
 
   def pbMoveFailedLastInRound?(user, showMessage = true)
-    unmoved = false
-    @battle.eachBattler do |b|
-      next if b.index==user.index
-      next if @battle.choices[b.index][0]!=:UseMove && @battle.choices[b.index][0]!=:Shift
-      next if b.movedThisRound?
-      unmoved = true
-      break
-    end
+    unmoved = @battle.allBattlers.any? { |b|
+      next b.index != user.index &&
+           [:UseMove, :Shift].include?(@battle.choices[b.index][0]) &&
+           !b.movedThisRound?
+    }
     if !unmoved
       @battle.pbDisplay(_INTL("But it failed!")) if showMessage
       return true
@@ -140,7 +137,7 @@ class PokeBattle_Move
       end
       return true
     end
-    target.eachAlly do |b|
+    target.allAllies.each do |b|
       next if !b.hasActiveAbility?(:AROMAVEIL)
       if showMessage
         @battle.pbShowAbilitySplash(target)

@@ -327,8 +327,7 @@ class PokeBattle_Battle
 
   def pbAbleNonActiveCount(idxBattler=0)
     party = pbParty(idxBattler)
-    inBattleIndices = []
-    eachSameSideBattler(idxBattler) { |b| inBattleIndices.push(b.pokemonIndex) }
+    inBattleIndices = allSameSideBattlers(idxBattler).map { |b| b.pokemonIndex }
     count = 0
     party.each_with_index do |pkmn,idxParty|
       next if !pkmn || !pkmn.able?
@@ -343,8 +342,7 @@ class PokeBattle_Battle
   end
 
   def pbTeamAbleNonActiveCount(idxBattler = 0)
-    inBattleIndices = []
-    eachSameSideBattler(idxBattler) { |b| inBattleIndices.push(b.pokemonIndex) }
+    inBattleIndices = allSameSideBattlers(idxBattler).map { |b| b.pokemonIndex }
     count = 0
     eachInTeamFromBattlerIndex(idxBattler) do |pkmn, i|
       next if !pkmn || !pkmn.able?
@@ -434,46 +432,57 @@ class PokeBattle_Battle
   #=============================================================================
   # Iterate through battlers
   #=============================================================================
+  # Unused
   def eachBattler
     @battlers.each { |b| yield b if b && !b.fainted? }
   end
 
+  def allBattlers
+    return @battlers.select { |b| b && !b.fainted? }
+  end
+
+  # Unused
   def eachSameSideBattler(idxBattler=0)
     idxBattler = idxBattler.index if idxBattler.respond_to?("index")
     @battlers.each { |b| yield b if b && !b.fainted? && !b.opposes?(idxBattler) }
   end
 
+  def allSameSideBattlers(idxBattler = 0)
+    idxBattler = idxBattler.index if idxBattler.respond_to?("index")
+    return @battlers.select { |b| b && !b.fainted? && !b.opposes?(idxBattler) }
+  end
+
+  # Unused
   def eachOtherSideBattler(idxBattler=0)
     idxBattler = idxBattler.index if idxBattler.respond_to?("index")
     @battlers.each { |b| yield b if b && !b.fainted? && b.opposes?(idxBattler) }
   end
 
+  def allOtherSideBattlers(idxBattler = 0)
+    idxBattler = idxBattler.index if idxBattler.respond_to?("index")
+    return @battlers.select { |b| b && !b.fainted? && b.opposes?(idxBattler) }
+  end
+
   def pbSideBattlerCount(idxBattler=0)
-    ret = 0
-    eachSameSideBattler(idxBattler) { |_b| ret += 1 }
-    return ret
+    return allSameSideBattlers(idxBattler).length
   end
 
   def pbOpposingBattlerCount(idxBattler=0)
-    ret = 0
-    eachOtherSideBattler(idxBattler) { |_b| ret += 1 }
-    return ret
+    return allOtherSideBattlers(idxBattler).length
   end
 
   # This method only counts the player's Pokémon, not a partner trainer's.
   def pbPlayerBattlerCount
-    ret = 0
-    eachSameSideBattler { |b| ret += 1 if b.pbOwnedByPlayer? }
-    return ret
+    return allSameSideBattlers(idxBattler).select { |b| b.pbOwnedByPlayer? }.length
   end
 
   def pbCheckGlobalAbility(abil)
-    eachBattler { |b| return b if b.hasActiveAbility?(abil) }
+    allBattlers.each { |b| return b if b.hasActiveAbility?(abil) }
     return nil
   end
 
   def pbCheckOpposingAbility(abil,idxBattler=0,nearOnly=false)
-    eachOtherSideBattler(idxBattler) do |b|
+    allOtherSideBattlers(idxBattler).each do |b|
       next if nearOnly && !b.near?(idxBattler)
       return b if b.hasActiveAbility?(abil)
     end
@@ -608,7 +617,7 @@ class PokeBattle_Battle
                      PBEffects::Octolock,
                      PBEffects::SkyDrop,
                      PBEffects::TrappingUser]
-    eachBattler do |b|
+    allBattlers.each do |b|
       for i in effectsToSwap
         next if b.effects[i]!=idxA && b.effects[i]!=idxB
         b.effects[i] = (b.effects[i]==idxA) ? idxB : idxA
@@ -623,7 +632,7 @@ class PokeBattle_Battle
   # Returns the battler representing the Pokémon at index idxParty in its party,
   # on the same side as a battler with battler index of idxBattlerOther.
   def pbFindBattler(idxParty,idxBattlerOther=0)
-    eachSameSideBattler(idxBattlerOther) { |b| return b if b.pokemonIndex==idxParty }
+    allSameSideBattlers(idxBattlerOther).each { |b| return b if b.pokemonIndex==idxParty }
     return nil
   end
 
@@ -681,7 +690,7 @@ class PokeBattle_Battle
 
   # Returns the effective weather (note that weather effects can be negated)
   def pbWeather
-    eachBattler { |b| return :None if b.hasActiveAbility?([:CLOUDNINE, :AIRLOCK]) }
+    return :None if allBattlers.any? { |b| b.hasActiveAbility?([:CLOUDNINE, :AIRLOCK]) }
     return @field.weather
   end
 
@@ -709,7 +718,7 @@ class PokeBattle_Battle
     when :ShadowSky   then pbDisplay(_INTL("A shadow sky appeared!"))
     end
     # Check for end of primordial weather, and weather-triggered form changes
-    eachBattler { |b| b.pbCheckFormOnWeatherChange }
+    allBattlers.each { |b| b.pbCheckFormOnWeatherChange }
     pbEndPrimordialWeather
   end
 
@@ -735,7 +744,7 @@ class PokeBattle_Battle
     end
     if @field.weather!=oldWeather
       # Check for form changes caused by the weather changing
-      eachBattler { |b| b.pbCheckFormOnWeatherChange }
+      allBattlers.each { |b| b.pbCheckFormOnWeatherChange }
       # Start up the default weather
       pbStartWeather(nil,@field.defaultWeather) if @field.defaultWeather != :None
     end
@@ -770,8 +779,8 @@ class PokeBattle_Battle
       pbDisplay(_INTL("The battlefield got weird!"))
     end
     # Check for abilities/items that trigger upon the terrain changing
-    eachBattler { |b| b.pbAbilityOnTerrainChange }
-    eachBattler { |b| b.pbItemTerrainStatBoostCheck }
+    allBattlers.each { |b| b.pbAbilityOnTerrainChange }
+    allBattlers.each { |b| b.pbItemTerrainStatBoostCheck }
   end
 
   #=============================================================================

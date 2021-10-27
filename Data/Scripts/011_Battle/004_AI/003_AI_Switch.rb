@@ -58,7 +58,7 @@ class PokeBattle_AI
       if idxEncoredMove>=0
         scoreSum   = 0
         scoreCount = 0
-        battler.eachOpposing do |b|
+        battler.allOpposing.each do |b|
           scoreSum += pbGetMoveScore(battler.moves[idxEncoredMove],battler,b,skill)
           scoreCount += 1
         end
@@ -167,7 +167,7 @@ class PokeBattle_AI
       sum  = 0
       pkmn.moves.each do |m|
         next if m.base_damage == 0
-        @battle.battlers[idxBattler].eachOpposing do |b|
+        @battle.battlers[idxBattler].allOpposing.each do |b|
           bTypes = b.pbTypes(true)
           sum += Effectiveness.calculate(m.type, bTypes[0], bTypes[1], bTypes[2])
         end

@@ -12,7 +12,7 @@ class PokeBattle_Battle
     return true if battler.itemActive? &&
                    BattleHandlers.triggerRunFromBattleItem(battler.item,battler)
     return false if battler.trappedInBattle?
-    eachOtherSideBattler(idxBattler) do |b|
+    allOtherSideBattlers(idxBattler).each do |b|
       return false if b.abilityActive? &&
                       BattleHandlers.triggerTrappingTargetAbility(b.ability,battler,b,self)
       return false if b.itemActive? &&
@@ -101,14 +101,14 @@ class PokeBattle_Battle
         return 0
       end
       # Trapping abilities/items
-      eachOtherSideBattler(idxBattler) do |b|
+      allOtherSideBattlers(idxBattler).each do |b|
         next if !b.abilityActive?
         if BattleHandlers.triggerTrappingTargetAbility(b.ability,battler,b,self)
           pbDisplayPaused(_INTL("{1} prevents escape with {2}!",b.pbThis,b.abilityName))
           return 0
         end
       end
-      eachOtherSideBattler(idxBattler) do |b|
+      allOtherSideBattlers(idxBattler).each do |b|
         next if !b.itemActive?
         if BattleHandlers.triggerTrappingTargetItem(b.item,battler,b,self)
           pbDisplayPaused(_INTL("{1} prevents escape with {2}!",b.pbThis,b.itemName))
@@ -122,7 +122,7 @@ class PokeBattle_Battle
     @runCommand += 1 if !duringBattle   # Make it easier to flee next time
     speedPlayer = @battlers[idxBattler].speed
     speedEnemy = 1
-    eachOtherSideBattler(idxBattler) do |b|
+    allOtherSideBattlers(idxBattler).each do |b|
       speed = b.speed
       speedEnemy = speed if speedEnemy<speed
     end

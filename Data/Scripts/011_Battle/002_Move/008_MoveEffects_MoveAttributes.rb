@@ -141,7 +141,7 @@ end
 class PokeBattle_Move_DamageTargetAlly < PokeBattle_Move
   def pbEffectWhenDealingDamage(user,target)
     hitAlly = []
-    target.eachAlly do |b|
+    target.allAllies.each do |b|
       next if !b.near?(target.index)
       next if !b.takesIndirectDamage?
       hitAlly.push([b.index,b.hp])
@@ -711,8 +711,7 @@ class PokeBattle_Move_StartWeakenElectricMoves < PokeBattle_Move
         return true
       end
     else
-      @battle.eachBattler do |b|
-        next if !b.effects[PBEffects::MudSport]
+      if @battle.allBattlers.any? { |b| b.effects[PBEffects::MudSport] }
         @battle.pbDisplay(_INTL("But it failed!"))
         return true
       end
@@ -741,8 +740,7 @@ class PokeBattle_Move_StartWeakenFireMoves < PokeBattle_Move
         return true
       end
     else
-      @battle.eachBattler do |b|
-        next if !b.effects[PBEffects::WaterSport]
+      if @battle.allBattlers.any? { |b| b.effects[PBEffects::WaterSport] }
         @battle.pbDisplay(_INTL("But it failed!"))
         return true
       end

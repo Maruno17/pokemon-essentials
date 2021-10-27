@@ -72,12 +72,7 @@ module PokeBattle_BattleCommon
     else
       battler = @battlers[idxBattler].pbDirectOpposing(true)
     end
-    if battler.fainted?
-      battler.eachAlly do |b|
-        battler = b
-        break
-      end
-    end
+    battler = battler.allAllies[0] if battler.fainted?
     # Messages
     itemName = GameData::Item.get(ball).name
     if battler.fainted?

@@ -5,7 +5,7 @@
 class PokeBattle_Move_RedirectAllMovesToUser < PokeBattle_Move
   def pbEffectGeneral(user)
     user.effects[PBEffects::FollowMe] = 1
-    user.eachAlly do |b|
+    user.allAllies.each do |b|
       next if b.effects[PBEffects::FollowMe]<user.effects[PBEffects::FollowMe]
       user.effects[PBEffects::FollowMe] = b.effects[PBEffects::FollowMe]+1
     end
@@ -23,7 +23,7 @@ class PokeBattle_Move_RedirectAllMovesToTarget < PokeBattle_Move
 
   def pbEffectAgainstTarget(user,target)
     target.effects[PBEffects::Spotlight] = 1
-    target.eachAlly do |b|
+    target.allAllies.each do |b|
       next if b.effects[PBEffects::Spotlight]<target.effects[PBEffects::Spotlight]
       target.effects[PBEffects::Spotlight] = b.effects[PBEffects::Spotlight]+1
     end
@@ -1202,7 +1202,7 @@ end
 class PokeBattle_Move_StealAndUseBeneficialStatusMove < PokeBattle_Move
   def pbEffectGeneral(user)
     user.effects[PBEffects::Snatch] = 1
-    @battle.eachBattler do |b|
+    @battle.allBattlers.each do |b|
       next if b.effects[PBEffects::Snatch]<user.effects[PBEffects::Snatch]
       user.effects[PBEffects::Snatch] = b.effects[PBEffects::Snatch]+1
     end

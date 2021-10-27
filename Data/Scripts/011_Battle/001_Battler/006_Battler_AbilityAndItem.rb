@@ -73,11 +73,10 @@ class PokeBattle_Battler
       #       up later. Essentials ignores this, and allows Trace to trigger
       #       whenever it can even in the old battle mechanics.
       choices = []
-      @battle.eachOtherSideBattler(@index) do |b|
-        next if b.ungainableAbility? ||
-                [:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(b.ability_id)
-        choices.push(b)
-      end
+      choices = @battle.allOtherSideBattlers(@index).select { |b|
+        next !b.ungainableAbility? &&
+             ![:POWEROFALCHEMY, :RECEIVER, :TRACE].include?(b.ability_id)
+      }
       if choices.length>0
         choice = choices[@battle.pbRandom(choices.length)]
         @battle.pbShowAbilitySplash(self)

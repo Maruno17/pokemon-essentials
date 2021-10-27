@@ -24,12 +24,7 @@ class PokeBattle_Move_DoesNothingFailsIfNoAlly < PokeBattle_Move
   def ignoresSubstitute?(user); return true; end
 
   def pbMoveFailed?(user,targets)
-    hasAlly = false
-    user.eachAlly do |_b|
-      hasAlly = true
-      break
-    end
-    if !hasAlly
+    if user.allAllies.length == 0
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -665,7 +660,7 @@ class PokeBattle_Move_UserSwapsPositionsWithAlly < PokeBattle_Move
     numTargets = 0
     @idxAlly = -1
     idxUserOwner = @battle.pbGetOwnerIndexFromBattlerIndex(user.index)
-    user.eachAlly do |b|
+    user.allAllies.each do |b|
       next if @battle.pbGetOwnerIndexFromBattlerIndex(b.index)!=idxUserOwner
       next if !b.near?(user)
       numTargets += 1

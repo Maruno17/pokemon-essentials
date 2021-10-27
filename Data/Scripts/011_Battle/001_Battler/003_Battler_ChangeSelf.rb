@@ -76,10 +76,7 @@ class PokeBattle_Battler
     self.statusCount = 0
     # Lose happiness
     if @pokemon && @battle.internalBattle
-      badLoss = false
-      @battle.eachOtherSideBattler(@index) do |b|
-        badLoss = true if b.level>=self.level+30
-      end
+      badLoss = @battle.allOtherSideBattlers(@index).any? { |b| b.level >= self.level + 30 }
       @pokemon.changeHappiness((badLoss) ? "faintbad" : "faint")
     end
     # Reset form

@@ -125,7 +125,7 @@ class PokeBattle_Move
       BattleHandlers.triggerAccuracyCalcUserAbility(user.ability,
          modifiers,user,target,self,@calcType)
     end
-    user.eachAlly do |b|
+    user.allAllies.each do |b|
       next if !b.abilityActive?
       BattleHandlers.triggerAccuracyCalcUserAllyAbility(b.ability,
          modifiers,user,target,self,@calcType)
@@ -285,7 +285,7 @@ class PokeBattle_Move
       # NOTE: It's odd that the user's Mold Breaker prevents its partner's
       #       beneficial abilities (i.e. Flower Gift boosting Atk), but that's
       #       how it works.
-      user.eachAlly do |b|
+      user.allAllies.each do |b|
         next if !b.abilityActive?
         BattleHandlers.triggerDamageCalcUserAllyAbility(b.ability,
            user,target,self,multipliers,baseDmg,type)
@@ -296,7 +296,7 @@ class PokeBattle_Move
         BattleHandlers.triggerDamageCalcTargetAbilityNonIgnorable(target.ability,
            user,target,self,multipliers,baseDmg,type)
       end
-      target.eachAlly do |b|
+      target.allAllies.each do |b|
         next if !b.abilityActive?
         BattleHandlers.triggerDamageCalcTargetAllyAbility(b.ability,
            user,target,self,multipliers,baseDmg,type)
@@ -327,10 +327,8 @@ class PokeBattle_Move
     end
     # Mud Sport
     if type == :ELECTRIC
-      @battle.eachBattler do |b|
-        next if !b.effects[PBEffects::MudSport]
+      if @Battle.allBattlers.any? { |b| b.effects[PBEffects::MudSport] }
         multipliers[:base_damage_multiplier] /= 3
-        break
       end
       if @battle.field.effects[PBEffects::MudSportField]>0
         multipliers[:base_damage_multiplier] /= 3
@@ -338,10 +336,8 @@ class PokeBattle_Move
     end
     # Water Sport
     if type == :FIRE
-      @battle.eachBattler do |b|
-        next if !b.effects[PBEffects::WaterSport]
+      if @Battle.allBattlers.any? { |b| b.effects[PBEffects::WaterSport] }
         multipliers[:base_damage_multiplier] /= 3
-        break
       end
       if @battle.field.effects[PBEffects::WaterSportField]>0
         multipliers[:base_damage_multiplier] /= 3

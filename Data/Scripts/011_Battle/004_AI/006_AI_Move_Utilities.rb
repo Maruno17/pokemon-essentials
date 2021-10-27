@@ -8,17 +8,17 @@ class PokeBattle_AI
     num_targets = 0
     case target_data.id
     when :AllAllies
-      @battle.eachSameSideBattler(user) { |b| num_targets += 1 if b.index != user.index }
+      @battle.allSameSideBattlers(user).each { |b| num_targets += 1 if b.index != user.index }
     when :UserAndAllies
-      @battle.eachSameSideBattler(user) { |_b| num_targets += 1 }
+      @battle.allSameSideBattlers(user).each { |_b| num_targets += 1 }
     when :AllNearFoes
-      @battle.eachOtherSideBattler(user) { |b| num_targets += 1 if b.near?(user) }
+      @battle.allOtherSideBattlers(user).each { |b| num_targets += 1 if b.near?(user) }
     when :AllFoes
-      @battle.eachOtherSideBattler(user) { |_b| num_targets += 1 }
+      @battle.allOtherSideBattlers(user).each { |_b| num_targets += 1 }
     when :AllNearOthers
-      @battle.eachBattler { |b| num_targets += 1 if b.near?(user) }
+      @battle.allBattlers.each { |b| num_targets += 1 if b.near?(user) }
     when :AllBattlers
-      @battle.eachBattler { |_b| num_targets += 1 }
+      @battle.allBattlers.each { |_b| num_targets += 1 }
     end
     return num_targets > 1
   end
@@ -343,7 +343,7 @@ class PokeBattle_AI
       end
     end
     if skill>=PBTrainerAI.mediumSkill && !moldBreaker
-      user.eachAlly do |b|
+      user.allAllies.each do |b|
         next if !b.abilityActive?
         BattleHandlers.triggerDamageCalcUserAllyAbility(b.ability,
            user,target,move,multipliers,baseDmg,type)
@@ -365,7 +365,7 @@ class PokeBattle_AI
       end
     end
     if skill>=PBTrainerAI.bestSkill && !moldBreaker
-      target.eachAlly do |b|
+      target.allAllies.each do |b|
         next if !b.abilityActive?
         BattleHandlers.triggerDamageCalcTargetAllyAbility(b.ability,
            user,target,move,multipliers,baseDmg,type)
@@ -418,20 +418,16 @@ class PokeBattle_AI
     # Mud Sport and Water Sport
     if skill>=PBTrainerAI.mediumSkill
       if type == :ELECTRIC
-        @battle.eachBattler do |b|
-          next if !b.effects[PBEffects::MudSport]
+        if @battle.allBattlers.any? { |b| b.effects[PBEffects::MudSport] }
           multipliers[:base_damage_multiplier] /= 3
-          break
         end
         if @battle.field.effects[PBEffects::MudSportField]>0
           multipliers[:base_damage_multiplier] /= 3
         end
       end
       if type == :FIRE
-        @battle.eachBattler do |b|
-          next if !b.effects[PBEffects::WaterSport]
+        if @battle.allBattlers.any? { |b| b.effects[PBEffects::WaterSport] }
           multipliers[:base_damage_multiplier] /= 3
-          break
         end
         if @battle.field.effects[PBEffects::WaterSportField]>0
           multipliers[:base_damage_multiplier] /= 3
@@ -645,7 +641,7 @@ class PokeBattle_AI
         BattleHandlers.triggerAccuracyCalcUserAbility(user.ability,
            modifiers,user,target,move,type)
       end
-      user.eachAlly do |b|
+      user.allAllies.each do |b|
         next if !b.abilityActive?
         BattleHandlers.triggerAccuracyCalcUserAllyAbility(b.ability,
            modifiers,user,target,move,type)

@@ -608,7 +608,7 @@ class PokeBattle_Battler
     return true if @effects[PBEffects::Trapping] > 0
     return true if @effects[PBEffects::MeanLook] >= 0
     return true if @effects[PBEffects::JawLock] >= 0
-    @battle.eachBattler { |b| return true if b.effects[PBEffects::JawLock] == @index }
+    return true if @battle.allBattlers.any? { |b| b.effects[PBEffects::JawLock] == @index }
     return true if @effects[PBEffects::Octolock] >= 0
     return true if @effects[PBEffects::Ingrain]
     return true if @effects[PBEffects::NoRetreat]
@@ -728,15 +728,27 @@ class PokeBattle_Battler
   end
 
   # Yields each unfainted ally Pokémon.
+  # Unused
   def eachAlly
     @battle.battlers.each do |b|
       yield b if b && !b.fainted? && !b.opposes?(@index) && b.index!=@index
     end
   end
 
+  # Returns an array containing all unfainted ally Pokémon.
+  def allAllies
+    return @battle.allSameSideBattlers(@index).select { |b| b.index != @index }
+  end
+
   # Yields each unfainted opposing Pokémon.
+  # Unused
   def eachOpposing
     @battle.battlers.each { |b| yield b if b && !b.fainted? && b.opposes?(@index) }
+  end
+
+  # Returns an array containing all unfainted opposing Pokémon.
+  def allOpposing
+    return @battle.allOtherSideBattlers(@index)
   end
 
   # Returns the battler that is most directly opposite to self. unfaintedOnly is

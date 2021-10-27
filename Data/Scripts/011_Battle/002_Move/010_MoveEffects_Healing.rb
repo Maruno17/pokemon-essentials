@@ -210,13 +210,7 @@ class PokeBattle_Move_HealUserAndAlliesQuarterOfTotalHP < PokeBattle_Move
   def healingMove?; return true; end
 
   def pbMoveFailed?(user, targets)
-    failed = true
-    @battle.eachSameSideBattler(user) do |b|
-      next if !b.canHeal?
-      failed = false
-      break
-    end
-    if failed
+    if @battle.allSameSideBattlers(user).none? { |b| b.canHeal? }
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -241,13 +235,7 @@ class PokeBattle_Move_HealUserAndAlliesQuarterOfTotalHPCureStatus < PokeBattle_M
   def healingMove?; return true; end
 
   def pbMoveFailed?(user, targets)
-    failed = true
-    @battle.eachSameSideBattler(user) do |b|
-      next if b.status == :NONE && !b.canHeal?
-      failed = false
-      break
-    end
-    if failed
+    if @battle.allSameSideBattlers(user).none? { |b| b.canHeal? || b.status != :NONE }
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end

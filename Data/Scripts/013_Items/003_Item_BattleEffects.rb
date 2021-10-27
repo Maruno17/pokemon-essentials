@@ -279,13 +279,7 @@ ItemHandlers::CanUseInBattle.add(:DIREHIT3,proc { |item,pokemon,battler,move,fir
 })
 
 ItemHandlers::CanUseInBattle.add(:POKEFLUTE,proc { |item,pokemon,battler,move,firstAction,battle,scene,showMessages|
-  anyAsleep = false
-  battle.eachBattler do |b|
-    next if b.status != :SLEEP || b.hasActiveAbility?(:SOUNDPROOF)
-    anyAsleep = true
-    break
-  end
-  if !anyAsleep
+  if battle.allBattlers.none? { |b| b.status == :SLEEP && !b.hasActiveAbility?(:SOUNDPROOF) }
     scene.pbDisplay(_INTL("It won't have any effect.")) if showMessages
     next false
   end
@@ -310,9 +304,8 @@ ItemHandlers::UseInBattle.add(:POKEDOLL,proc { |item,battler,battle|
 ItemHandlers::UseInBattle.copy(:POKEDOLL,:FLUFFYTAIL,:POKETOY)
 
 ItemHandlers::UseInBattle.add(:POKEFLUTE,proc { |item,battler,battle|
-  battle.eachBattler do |b|
-    next if b.status != :SLEEP || b.hasActiveAbility?(:SOUNDPROOF)
-    b.pbCureStatus(false)
+  battle.allBattlers.each do |b|
+    b.pbCureStatus(false) if b.status == :SLEEP && !b.hasActiveAbility?(:SOUNDPROOF)
   end
   battle.pbDisplay(_INTL("All Pokémon were roused by the tune!"))
 })

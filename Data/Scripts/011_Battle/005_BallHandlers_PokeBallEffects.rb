@@ -103,9 +103,7 @@ BallHandlers::ModifyCatchRate.add(:FASTBALL,proc { |ball,catchRate,battle,battle
 
 BallHandlers::ModifyCatchRate.add(:LEVELBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
   maxlevel = 0
-  battle.eachSameSideBattler do |b|
-    maxlevel = b.level if b.level>maxlevel
-  end
+  battle.allSameSideBattlers.each { |b| maxlevel = b.level if b.level > maxlevel }
   if maxlevel >= battler.level * 4
     catchRate *= 8
   elsif maxlevel >= battler.level * 2
@@ -149,7 +147,7 @@ BallHandlers::ModifyCatchRate.add(:HEAVYBALL,proc { |ball,catchRate,battle,battl
 })
 
 BallHandlers::ModifyCatchRate.add(:LOVEBALL,proc { |ball,catchRate,battle,battler,ultraBeast|
-  battle.eachSameSideBattler do |b|
+  battle.allSameSideBattlers.each do |b|
     next if b.species!=battler.species
     next if b.gender==battler.gender || b.gender==2 || battler.gender==2
     catchRate *= 8

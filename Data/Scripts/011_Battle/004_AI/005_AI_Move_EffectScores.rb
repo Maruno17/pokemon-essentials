@@ -1157,7 +1157,7 @@ class PokeBattle_AI
     when "ResetAllBattlersStatStages"
       if skill>=PBTrainerAI.mediumSkill
         stages = 0
-        @battle.eachBattler do |b|
+        @battle.allBattlers.each do |b|
           totalStages = 0
           GameData::Stat.each_battle { |s| totalStages += b.stages[s.id] }
           if b.opposes?(user)
@@ -1583,7 +1583,7 @@ class PokeBattle_AI
       score -= 90 if target.effects[PBEffects::HyperBeam]>0
     #---------------------------------------------------------------------------
     when "DamageTargetAlly"
-      target.eachAlly do |b|
+      target.allAllies.each do |b|
         next if !b.near?(target)
         score += 10
       end
@@ -1629,7 +1629,7 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "UsedAfterAllyRoundWithDoublePower"
       if skill>=PBTrainerAI.mediumSkill
-        user.eachAlly do |b|
+        user.allAllies.each do |b|
           next if !b.pbHasMove?(move.id)
           score += 20
         end
@@ -1690,7 +1690,7 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "PowerUpAllyMove"
       hasAlly = false
-      user.eachAlly do |b|
+      user.allAllies.each do |b|
         hasAlly = true
         score += 30
         break
@@ -2252,15 +2252,9 @@ class PokeBattle_AI
       if user.pbOpposingSide.effects[PBEffects::Spikes]>=3
         score -= 90
       else
-        canChoose = false
-        user.eachOpposing do |b|
-          next if !@battle.pbCanChooseNonActive?(b.index)
-          canChoose = true
-          break
-        end
-        if !canChoose
+        if user.allOpposing.none? { |b| @battle.pbCanChooseNonActive?(b.index) }
           # Opponent can't switch in any Pokemon
-        score -= 90
+          score -= 90
         else
           score += 10*@battle.pbAbleNonActiveCount(user.idxOpposingSide)
           score += [40,26,13][user.pbOpposingSide.effects[PBEffects::Spikes]]
@@ -2271,13 +2265,7 @@ class PokeBattle_AI
       if user.pbOpposingSide.effects[PBEffects::ToxicSpikes]>=2
         score -= 90
       else
-        canChoose = false
-        user.eachOpposing do |b|
-          next if !@battle.pbCanChooseNonActive?(b.index)
-          canChoose = true
-          break
-        end
-        if !canChoose
+        if user.allOpposing.none? { |b| @battle.pbCanChooseNonActive?(b.index) }
           # Opponent can't switch in any Pokemon
           score -= 90
         else
@@ -2290,13 +2278,7 @@ class PokeBattle_AI
       if user.pbOpposingSide.effects[PBEffects::StealthRock]
         score -= 90
       else
-        canChoose = false
-        user.eachOpposing do |b|
-          next if !@battle.pbCanChooseNonActive?(b.index)
-          canChoose = true
-          break
-        end
-        if !canChoose
+        if user.allOpposing.none? { |b| @battle.pbCanChooseNonActive?(b.index) }
           # Opponent can't switch in any Pokemon
           score -= 90
         else
@@ -2412,12 +2394,7 @@ class PokeBattle_AI
     when "FailsIfTargetActed"
     #---------------------------------------------------------------------------
     when "RedirectAllMovesToUser"
-      hasAlly = false
-      user.eachAlly do |b|
-        hasAlly = true
-        break
-      end
-      score -= 90 if !hasAlly
+      score -= 90 if user.allAllies.length == 0
     #---------------------------------------------------------------------------
     when "StartGravity"
       if @battle.field.effects[PBEffects::Gravity]>0
@@ -2538,7 +2515,7 @@ class PokeBattle_AI
     when "RaisePlusMinusUserAndAlliesDefSpDef1"
       hasEffect = user.statStageAtMax?(:DEFENSE) &&
                   user.statStageAtMax?(:SPECIAL_DEFENSE)
-      user.eachAlly do |b|
+      user.allAllies.each do |b|
         next if b.statStageAtMax?(:DEFENSE) && b.statStageAtMax?(:SPECIAL_DEFENSE)
         hasEffect = true
         score -= b.stages[:DEFENSE]*10
@@ -2600,7 +2577,7 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "RaiseGroundedGrassBattlersAtkSpAtk1"
       count = 0
-      @battle.eachBattler do |b|
+      @battle.allBattlers.each do |b|
         if b.pbHasType?(:GRASS) && !b.airborne? &&
            (!b.statStageAtMax?(:ATTACK) || !b.statStageAtMax?(:SPECIAL_ATTACK))
           count += 1
@@ -2616,7 +2593,7 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "RaiseGrassBattlersDef1"
       count = 0
-      @battle.eachBattler do |b|
+      @battle.allBattlers.each do |b|
         if b.pbHasType?(:GRASS) && !b.statStageAtMax?(:DEFENSE)
           count += 1
           if user.opposes?(b)
@@ -2630,7 +2607,7 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "LowerPoisonedTargetAtkSpAtkSpd1"
       count=0
-      @battle.eachBattler do |b|
+      @battle.allBattlers.each do |b|
         if b.poisoned? &&
            (!b.statStageAtMin?(:ATTACK) ||
            !b.statStageAtMin?(:SPECIAL_ATTACK) ||
@@ -2822,7 +2799,7 @@ class PokeBattle_AI
     when "RaisePlusMinusUserAndAlliesAtkSpAtk1"
       hasEffect = user.statStageAtMax?(:ATTACK) &&
                   user.statStageAtMax?(:SPECIAL_ATTACK)
-      user.eachAlly do |b|
+      user.allAllies.each do |b|
         next if b.statStageAtMax?(:ATTACK) && b.statStageAtMax?(:SPECIAL_ATTACK)
         hasEffect = true
         score -= b.stages[:ATTACK]*10
@@ -2931,12 +2908,7 @@ class PokeBattle_AI
     when "TypeIsUserFirstType"
     #---------------------------------------------------------------------------
     when "RedirectAllMovesToTarget"
-      hasAlly = false
-      target.eachAlly do |b|
-        hasAlly = true
-        break
-      end
-      score -= 90 if !hasAlly
+      score -= 90 if user.allAllies.length == 0
     #---------------------------------------------------------------------------
     when "TargetUsesItsLastUsedMoveAgain"
       if skill>=PBTrainerAI.mediumSkill
@@ -3098,7 +3070,7 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "RaiseUserAndAlliesAtkDef1"
       has_ally = false
-      user.eachAlly do |b|
+      user.allAllies.each do |b|
         next if !b.pbCanLowerStatStage?(:ATTACK, user) &&
                 !b.pbCanLowerStatStage?(:SPECIAL_ATTACK, user)
         has_ally = true
@@ -3185,7 +3157,7 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "CannotBeRedirected"
       redirection = false
-      user.eachOpposing do |b|
+      user.allOpposing.each do |b|
         next if b.index == target.index
         if b.effects[PBEffects::RagePowder] ||
            b.effects[PBEffects::Spotlight] > 0 ||
@@ -3228,7 +3200,7 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "HealUserAndAlliesQuarterOfTotalHP"
       ally_amt = 30
-      @battle.eachSameSideBattler(user.index) do |b|
+      @battle.allSameSideBattlers(user.index).each do |b|
         if b.hp == b.totalhp || (skill >= PBTrainerAI.mediumSkill && !b.canHeal?)
           score -= ally_amt / 2
         elsif b.hp < b.totalhp * 3 / 4
@@ -3238,7 +3210,7 @@ class PokeBattle_AI
     #---------------------------------------------------------------------------
     when "HealUserAndAlliesQuarterOfTotalHPCureStatus"
       ally_amt = 80 / @battle.pbSideSize(user.index)
-      @battle.eachSameSideBattler(user.index) do |b|
+      @battle.allSameSideBattlers(user.index).each do |b|
         if b.hp == b.totalhp || (skill >= PBTrainerAI.mediumSkill && !b.canHeal?)
           score -= ally_amt
         elsif b.hp < b.totalhp * 3 / 4
@@ -3307,7 +3279,7 @@ class PokeBattle_AI
         :MARANGABERRY, :PECHABERRY, :PERSIMBERRY, :PETAYABERRY,
         :RAWSTBERRY, :SALACBERRY, :STARFBERRY, :WIKIBERRY
       ]
-      @battle.eachSameSideBattler(user.index) do |b|
+      @battle.allSameSideBattlers(user.index).each do |b|
         if !b.item || !b.item.is_berry? || !b.itemActive?
           score -= 100 / @battle.pbSideSize(user.index)
         else
@@ -3325,7 +3297,7 @@ class PokeBattle_AI
         end
       end
       if skill >= PBTrainerAI.highSkill
-        @battle.eachOtherSideBattler(user.index) do |b|
+        @battle.allOtherSideBattlers(user.index).each do |b|
           amt = 10 / @battle.pbSideSize(target.index)
           score -= amt if b.hasActiveItem?(useful_berries)
           score -= amt if b.canHeal? && b.hp < b.totalhp / 3 && b.hasActiveAbility?(:CHEEKPOUCH)
