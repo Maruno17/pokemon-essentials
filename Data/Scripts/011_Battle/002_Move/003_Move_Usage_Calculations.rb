@@ -327,7 +327,7 @@ class PokeBattle_Move
     end
     # Mud Sport
     if type == :ELECTRIC
-      if @Battle.allBattlers.any? { |b| b.effects[PBEffects::MudSport] }
+      if @battle.allBattlers.any? { |b| b.effects[PBEffects::MudSport] }
         multipliers[:base_damage_multiplier] /= 3
       end
       if @battle.field.effects[PBEffects::MudSportField]>0
@@ -336,7 +336,7 @@ class PokeBattle_Move
     end
     # Water Sport
     if type == :FIRE
-      if @Battle.allBattlers.any? { |b| b.effects[PBEffects::WaterSport] }
+      if @battle.allBattlers.any? { |b| b.effects[PBEffects::WaterSport] }
         multipliers[:base_damage_multiplier] /= 3
       end
       if @battle.field.effects[PBEffects::WaterSportField]>0
