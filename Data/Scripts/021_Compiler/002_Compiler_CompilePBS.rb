@@ -630,6 +630,7 @@ module Compiler
           :egg_groups            => contents["EggGroups"] || contents["Compatibility"],
           :hatch_steps           => contents["HatchSteps"] || contents["StepsToHatch"],
           :incense               => contents["Incense"],
+          :offspring             => contents["Offspring"],
           :evolutions            => contents["Evolutions"],
           :height                => contents["Height"],
           :weight                => contents["Weight"],
@@ -662,7 +663,15 @@ module Compiler
         end
       }
     }
-    # Enumerate all evolution species and parameters (this couldn't bedone earlier)
+    # Enumerate all offspring species (this couldn't be done earlier)
+    GameData::Species.each do |species|
+      FileLineData.setSection(species.id.to_s, "Offspring", nil)   # For error reporting
+      offspring = species.offspring
+      offspring.each_with_index do |sp, i|
+        offspring[i] = csvEnumField!(sp, :Species, "Offspring", species.id)
+      end
+    end
+    # Enumerate all evolution species and parameters (this couldn't be done earlier)
     GameData::Species.each do |species|
       FileLineData.setSection(species.id.to_s, "Evolutions", nil)   # For error reporting
       species.evolutions.each do |evo|
@@ -821,6 +830,7 @@ module Compiler
           :egg_groups            => contents["EggGroups"] || contents["Compatibility"] || base_data.egg_groups.clone,
           :hatch_steps           => contents["HatchSteps"] || contents["StepsToHatch"] || base_data.hatch_steps,
           :incense               => base_data.incense,
+          :offspring             => contents["Offspring"] || base_data.offspring.clone,
           :evolutions            => evolutions,
           :height                => contents["Height"] || base_data.height,
           :weight                => contents["Weight"] || base_data.weight,

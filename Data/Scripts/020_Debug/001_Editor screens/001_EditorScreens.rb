@@ -1131,6 +1131,7 @@ def pbPokemonEditor
               :egg_groups            => egg_groups,         # 26, 27
               :hatch_steps           => data[28],
               :incense               => data[29],
+              :offspring             => spec.offspring,
               :evolutions            => data[30],
               :height                => data[31],
               :weight                => data[32],
@@ -1321,7 +1322,7 @@ def pbRegionalDexEditorMain
           seen = []
           GameData::Species.each_species do |s|
             next if seen.include?(s.species)
-            family = s.get_related_species
+            family = s.get_family_species
             new_dex.concat(family)
             seen.concat(family)
           end

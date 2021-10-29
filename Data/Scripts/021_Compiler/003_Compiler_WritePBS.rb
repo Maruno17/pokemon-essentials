@@ -315,6 +315,10 @@ module Compiler
           f.write(sprintf("EggGroups = %s\r\n", species.egg_groups.join(",")))
         end
         f.write(sprintf("HatchSteps = %d\r\n", species.hatch_steps))
+        f.write(sprintf("Incense = %s\r\n", species.incense)) if species.incense
+        if species.offspring.length > 0
+          f.write(sprintf("Offspring = %s\r\n", species.offspring.join(",")))
+        end
         f.write(sprintf("Height = %.1f\r\n", species.height / 10.0))
         f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0))
         f.write(sprintf("Color = %s\r\n", species.color))
@@ -348,7 +352,6 @@ module Compiler
           end
           f.write("\r\n")
         end
-        f.write(sprintf("Incense = %s\r\n", species.incense)) if species.incense
       end
     }
     process_pbs_file_message_end
@@ -411,6 +414,9 @@ module Compiler
           f.write(sprintf("EggGroups = %s\r\n", species.egg_groups.join(",")))
         end
         f.write(sprintf("HatchSteps = %d\r\n", species.hatch_steps)) if species.hatch_steps != base_species.hatch_steps
+        if species.offspring.length > 0 && species.offspring != base_species.offspring
+          f.write(sprintf("Offspring = %s\r\n", species.offspring.join(",")))
+        end
         f.write(sprintf("Height = %.1f\r\n", species.height / 10.0)) if species.height != base_species.height
         f.write(sprintf("Weight = %.1f\r\n", species.weight / 10.0)) if species.weight != base_species.weight
         f.write(sprintf("Color = %s\r\n", species.color)) if species.color != base_species.color
@@ -546,7 +552,7 @@ module Compiler
           if current_family && current_family.include?(species)
             f.write(",") if comma
           else
-            current_family = GameData::Species.get(species).get_related_species
+            current_family = GameData::Species.get(species).get_family_species
             comma = false
             f.write("\r\n")
           end

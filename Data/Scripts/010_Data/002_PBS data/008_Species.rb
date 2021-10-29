@@ -28,6 +28,7 @@ module GameData
     attr_reader :egg_groups
     attr_reader :hatch_steps
     attr_reader :incense
+    attr_reader :offspring
     attr_reader :evolutions
     attr_reader :height
     attr_reader :weight
@@ -119,6 +120,7 @@ module GameData
       }
       if compiling_forms
         ret["PokedexForm"]  = [0, "u"]
+        ret["Offspring"]    = [0, "*e", :Species]
         ret["Evolutions"]   = [0, "*ees", :Species, :Evolution, nil]
         ret["MegaStone"]    = [0, "e", :Item]
         ret["MegaMove"]     = [0, "e", :Move]
@@ -130,6 +132,7 @@ module GameData
         ret["GrowthRate"]   = [0, "e", :GrowthRate]
         ret["GenderRatio"]  = [0, "e", :GenderRatio]
         ret["Incense"]      = [0, "e", :Item]
+        ret["Offspring"]    = [0, "*s"]
         ret["Evolutions"]   = [0, "*ses", nil, :Evolution, nil]
         # All properties below here are old names for some properties above.
         # They will be removed in v21.
@@ -171,6 +174,7 @@ module GameData
       @egg_groups            = hash[:egg_groups]            || [:Undiscovered]
       @hatch_steps           = hash[:hatch_steps]           || 1
       @incense               = hash[:incense]
+      @offspring             = hash[:offspring]             || []
       @evolutions            = hash[:evolutions]            || []
       @height                = hash[:height]                || 1
       @weight                = hash[:weight]                || 1
@@ -275,11 +279,21 @@ module GameData
       return ret
     end
 
-    def get_related_species
+    # Returns an array of all the species in this species' evolution family.
+    def get_family_species
       sp = self.get_baby_species
       evos = GameData::Species.get(sp).get_family_evolutions(false)
       return [sp] if evos.length == 0
       return [sp].concat(evos.map { |e| e[1] }).uniq
+    end
+
+    # This takes into account whether other_species is evolved.
+    def breeding_can_produce?(other_species)
+      other_family = GameData::Species.get(other_species).get_family_species
+      if @offspring.length > 0
+        return (other_family & @offspring).length > 0
+      end
+      return other_family.include?(@id)
     end
 
     def family_evolutions_have_method?(check_method, check_param = nil)
