@@ -80,7 +80,7 @@ class DayCare
       move_mother = (father[1]) ? father[0] : mother[0]
       moves = []
       # Get level-up moves known by both parents
-      egg.getMoveList. each do |move|
+      egg.getMoveList.each do |move|
         next if move[0] <= egg.level   # Could already know this move by default
         next if !mother[0].hasMove?(move[1]) || !father[0].hasMove?(move[1])
         moves.push(move[1])
@@ -102,7 +102,7 @@ class DayCare
       end
       if Settings::BREEDING_CAN_INHERIT_EGG_MOVES_FROM_MOTHER && move_mother.female?
         egg.species_data.egg_moves.each do |move|
-          moves.push(move) if move_mother.hasMove?(move))
+          moves.push(move) if move_mother.hasMove?(move)
         end
       end
       # Learn Volt Tackle if a parent has a Light Ball and is in the Pichu family
