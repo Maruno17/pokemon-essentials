@@ -194,3 +194,34 @@ SaveData.register_conversion(:v20_rename_bag_variables) do
     end
   end
 end
+
+SaveData.register_conversion(:v20_refactor_day_care_variables) do
+  essentials_version 20
+  display_title 'Refactoring Day Care variables'
+  to_value :global_metadata do |global|
+    global.instance_eval do
+      @day_care = DayCare.new if @day_care.nil?
+      if !@daycare.nil?
+        @daycare.each do |old_slot|
+          if !old_slot[0]
+            old_slot[0] = Pokemon.new(:MANAPHY, 50)
+            old_slot[1] = 4
+          end
+          next if !old_slot[0]
+          @day_care.slots.each do |slot|
+            next if slot.filled?
+            slot.instance_eval do
+              @pokemon = old_slot[0]
+              @initial_level = old_slot[1]
+            end
+          end
+        end
+        @day_care.egg_generated = ((@daycareEgg.is_a?(Numeric) && @daycareEgg > 0) || @daycareEgg == true)
+        @day_care.step_counter = @daycareEggSteps
+        @daycare = nil
+        @daycareEgg = nil
+        @daycareEggSteps = nil
+      end
+    end
+  end
+end

@@ -23,9 +23,7 @@ class PokemonGlobalMetadata
   attr_accessor :pokedexIndex    # Last species viewed per Dex
   attr_accessor :pokedexMode     # Search mode
   # Day Care
-  attr_accessor :daycare
-  attr_accessor :daycareEgg
-  attr_accessor :daycareEggSteps
+  attr_accessor :day_care
   # Special battle modes
   attr_accessor :safariState
   attr_accessor :bugContestState
@@ -79,9 +77,7 @@ class PokemonGlobalMetadata
       @pokedexIndex[i]    = 0
     end
     # Day Care
-    @daycare              = [[nil,0],[nil,0]]
-    @daycareEgg           = false
-    @daycareEggSteps      = 0
+    @day_care             = DayCare.new
     # Special battle modes
     @safariState          = nil
     @bugContestState      = nil

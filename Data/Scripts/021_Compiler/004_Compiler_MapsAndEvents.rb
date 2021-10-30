@@ -20,7 +20,16 @@ module Compiler
     ['$Trainer',                     '$player'],
     ['$SaveVersion',                 '$save_engine_version'],
     ['$game_version',                '$save_game_version'],
-    ['$MapFactory',                  '$map_factory']
+    ['$MapFactory',                  '$map_factory'],
+    ['pbDayCareDeposited',           'DayCare.count'],
+    ['pbDayCareGetDeposited',        'DayCare.get_details'],
+    ['pbDayCareGetLevelGain',        'DayCare.get_level_gain'],
+    ['pbDayCareDeposit',             'DayCare.deposit'],
+    ['pbDayCareWithdraw',            'DayCare.withdraw'],
+    ['pbDayCareChoose',              'DayCare.choose'],
+    ['pbDayCareGetCompatibility',    'DayCare.get_compatibility'],
+    ['pbEggGenerated?',              'DayCare.egg_generated?'],
+    ['pbDayCareGenerateEgg',         'DayCare.collect_egg']
   ]
 
   module_function

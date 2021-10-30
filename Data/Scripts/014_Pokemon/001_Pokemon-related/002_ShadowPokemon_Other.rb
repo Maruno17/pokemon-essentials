@@ -430,11 +430,10 @@ Events.onStepTaken += proc {
   if ($PokemonGlobal.purifyChamber rescue nil)
     $PokemonGlobal.purifyChamber.update
   end
-  for i in 0...2
-    pkmn = $PokemonGlobal.daycare[i][0]
-    next if !pkmn
-    stage = pkmn.heartStage
-    pkmn.adjustHeart(-1)
-    pkmn.update_shadow_moves if pkmn.heartStage != stage
+  $PokemonGlobal.day_care.slots.each do |slot|
+    next if !slot.filled? || !slot.pokemon.shadowPokemon?
+    old_stage = slot.pokemon.heartStage
+    slot.pokemon.adjustHeart(-1)
+    slot.pokemon.update_shadow_moves if slot.pokemon.heartStage != old_stage
   end
 }
