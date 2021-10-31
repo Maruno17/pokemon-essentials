@@ -28,6 +28,18 @@ module Settings
 
   #=============================================================================
 
+  # Whether Pokémon with high happiness will gain more Exp from battles, have a
+  # chance of avoiding/curing negative effects by themselves, resisting
+  # fainting, etc.
+  AFFECTION_EFFECTS        = false
+  # Whether a Pokémon's happiness is limited to 179, and can only be increased
+  # further with friendship-raising berries. Related to AFFECTION_EFFECTS by
+  # default as affection effects only start applying above a happiness of 179.
+  # Also lowers the happiness evolution threshold to 160.
+  APPLY_HAPPINESS_SOFT_CAP = AFFECTION_EFFECTS
+
+  #=============================================================================
+
   # Whether X items (X Attack, etc.) raise their stat by 2 stages (true) or 1
   # (false).
   X_STAT_ITEMS_RAISE_BY_TWO_STAGES = (MECHANICS_GENERATION >= 7)

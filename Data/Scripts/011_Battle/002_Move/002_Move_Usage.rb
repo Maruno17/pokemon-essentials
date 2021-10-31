@@ -208,6 +208,13 @@ class PokeBattle_Move
         elsif target.hasActiveItem?(:FOCUSBAND) && @battle.pbRandom(100)<10
           target.damageState.focusBand = true
           damage -= 1
+        elsif Settings::AFFECTION_EFFECTS && @battle.internalBattle &&
+           target.pbOwnedByPlayer? && !target.mega?
+          chance = [0, 0, 0, 10, 15, 25][target.affection_level]
+          if chance > 0 && @battle.pbRandom(100) < chance
+            target.damageState.affection_endured = true
+            damage -= 1
+          end
         end
       end
     end
@@ -282,10 +289,19 @@ class PokeBattle_Move
     end
     if target.damageState.critical
       $game_temp.party_critical_hits_dealt[user.pokemonIndex] += 1 if user.pbOwnedByPlayer?
-      if numTargets>1
-        @battle.pbDisplay(_INTL("A critical hit on {1}!",target.pbThis(true)))
+      if target.damageState.affection_critical
+        if numTargets > 1
+          @battle.pbDisplay(_INTL("{1} landed a critical hit on {2}, wishing to be praised!",
+             user.pbThis, target.pbThis(true)))
+        else
+          @battle.pbDisplay(_INTL("{1} landed a critical hit, wishing to be praised!", user.pbThis))
+        end
       else
-        @battle.pbDisplay(_INTL("A critical hit!"))
+        if numTargets > 1
+          @battle.pbDisplay(_INTL("A critical hit on {1}!", target.pbThis(true)))
+        else
+          @battle.pbDisplay(_INTL("A critical hit!"))
+        end
       end
     end
     # Effectiveness message, for moves with 1 hit
@@ -333,6 +349,8 @@ class PokeBattle_Move
     elsif target.damageState.focusBand
       @battle.pbCommonAnimation("UseItem",target)
       @battle.pbDisplay(_INTL("{1} hung on using its Focus Band!",target.pbThis))
+    elsif target.damageState.affection_endured
+      @battle.pbDisplay(_INTL("{1} toughed it out so you wouldn't feel sad!", target.pbThis))
     end
   end
 

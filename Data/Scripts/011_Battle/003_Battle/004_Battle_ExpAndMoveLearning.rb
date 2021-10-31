@@ -152,6 +152,11 @@ class PokeBattle_Battle
       i = BattleHandlers.triggerExpGainModifierItem(@initialItems[0][idxParty],pkmn,exp)
     end
     exp = i if i>=0
+    # Boost Exp gained with high affection
+    if Settings::AFFECTION_EFFECTS && @internalBattle && pkmn.affection_level >= 4 && !pkmn.mega?
+      exp = exp * 6 / 5
+      isOutsider = true   # To show the "boosted Exp" message
+    end
     # Make sure Exp doesn't exceed the maximum
     expFinal = growth_rate.add_exp(pkmn.exp, exp)
     expGained = expFinal-pkmn.exp

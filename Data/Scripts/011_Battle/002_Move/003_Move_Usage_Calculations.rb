@@ -115,8 +115,16 @@ class PokeBattle_Move
     accuracy = (accuracy * modifiers[:accuracy_multiplier]).round
     evasion  = (evasion  * modifiers[:evasion_multiplier]).round
     evasion = 1 if evasion < 1
+    threshold = modifiers[:base_accuracy] * accuracy / evasion
     # Calculation
-    return @battle.pbRandom(100) < modifiers[:base_accuracy] * accuracy / evasion
+    r = @battle.pbRandom(100)
+    if Settings::AFFECTION_EFFECTS && @battle.internalBattle &&
+       target.pbOwnedByPlayer? && target.affection_level == 5 && !target.mega?
+      return true if r < threshold - 10
+      target.damageState.affection_missed = true if r < threshold
+      return false
+    end
+    return r < threshold
   end
 
   def pbCalcAccuracyModifiers(user,target,modifiers)
@@ -199,7 +207,15 @@ class PokeBattle_Move
     c += 1 if user.inHyperMode? && @type == :SHADOW
     c = ratios.length-1 if c>=ratios.length
     # Calculation
-    return @battle.pbRandom(ratios[c])==0
+    return true if ratio[c] == 1
+    r = @battle.pbRandom(ratios[c])
+    return true if r == 0
+    if r == 1 && Settings::AFFECTION_EFFECTS && @battle.internalBattle &&
+       user.pbOwnedByPlayer? && user.affection_level == 5 && !target.mega?
+      target.damageState.affection_critical = true
+      return true
+    end
+    return false
   end
 
   #=============================================================================

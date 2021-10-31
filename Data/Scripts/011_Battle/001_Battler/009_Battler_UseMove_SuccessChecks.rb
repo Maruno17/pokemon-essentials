@@ -571,7 +571,9 @@ class PokeBattle_Battler
   # Message shown when a move fails the per-hit success check above.
   #=============================================================================
   def pbMissMessage(move,user,target)
-    if move.pbTarget(user).num_targets > 1
+    if target.damageState.affection_missed
+      @battle.pbDisplay(_INTL("{1} avoided the move in time with your shout!", target.pbThis))
+    elsif move.pbTarget(user).num_targets > 1
       @battle.pbDisplay(_INTL("{1} avoided the attack!",target.pbThis))
     elsif target.effects[PBEffects::TwoTurnAttack]
       @battle.pbDisplay(_INTL("{1} avoided the attack!",target.pbThis))

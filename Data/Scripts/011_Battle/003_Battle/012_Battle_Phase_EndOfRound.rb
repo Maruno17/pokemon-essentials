@@ -283,6 +283,28 @@ class PokeBattle_Battle
       # Black Sludge, Leftovers
       BattleHandlers.triggerEORHealingItem(b.item,b,self) if b.itemActive?
     end
+    # Self-curing of status due to affection
+    if Settings::AFFECTION_EFFECTS && @internalBattle
+      priority.each do |b|
+        next if b.fainted? || b.status == :NONE
+        next if !b.pbOwnedByPlayer? || b.affection_level < 4 || b.mega?
+        next if pbRandom(100) < 80
+        old_status = b.status
+        b.pbCureStatus(false)
+        case old_status
+        when :SLEEP
+          pbDisplay(_INTL("{1} shook itself awake so you wouldn't worry!", b.pbThis))
+        when :POISON
+          pbDisplay(_INTL("{1} managed to expel the poison so you wouldn't worry!", b.pbThis))
+        when :BURN
+          pbDisplay(_INTL("{1} healed its burn with its sheer determination so you wouldn't worry!", b.pbThis))
+        when :PARALYSIS
+          pbDisplay(_INTL("{1} gathered all its energy to break through its paralysis so you wouldn't worry!", b.pbThis))
+        when :FROZEN
+          pbDisplay(_INTL("{1} melted the ice with its fiery determination so you wouldn't worry!", b.pbThis))
+        end
+      end
+    end
     # Aqua Ring
     priority.each do |b|
       next if !b.effects[PBEffects::AquaRing]

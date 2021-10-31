@@ -128,9 +128,10 @@ class PokeBattle_Battler
   #=============================================================================
   # Properties from Pokémon
   #=============================================================================
-  def happiness;    return @pokemon ? @pokemon.happiness : 0;    end
-  def nature;       return @pokemon ? @pokemon.nature : 0;       end
-  def pokerusStage; return @pokemon ? @pokemon.pokerusStage : 0; end
+  def happiness;       return @pokemon ? @pokemon.happiness : 0;       end
+  def affection_level; return @pokemon ? @pokemon.affection_level : 2; end
+  def nature;          return @pokemon ? @pokemon.nature : 0;          end
+  def pokerusStage;    return @pokemon ? @pokemon.pokerusStage : 0;    end
 
   #=============================================================================
   # Mega Evolution, Primal Reversion, Shadow Pokémon

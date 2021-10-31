@@ -884,6 +884,17 @@ class Pokemon
     return ret
   end
 
+  def affection_level
+    case @happiness
+    when 0...100   then return 0
+    when 100...150 then return 1
+    when 150...200 then return 2
+    when 200...230 then return 3
+    when 230...255 then return 4
+    end
+    return 5   # 255
+  end
+
   # Changes the happiness of this Pokémon depending on what happened to change it.
   # @param method [String] the happiness changing method (e.g. 'walking')
   def changeHappiness(method)
@@ -921,6 +932,9 @@ class Pokemon
       gain += 1 if @obtain_map == $game_map.map_id
       gain += 1 if @poke_ball == :LUXURYBALL
       gain = (gain * 1.5).floor if hasItem?(:SOOTHEBELL)
+      if Settings::APPLY_HAPPINESS_SOFT_CAP && method != "evberry"
+        gain = gain.clamp(0, 179 - @happiness)
+      end
     end
     @happiness = (@happiness + gain).clamp(0, 255)
   end

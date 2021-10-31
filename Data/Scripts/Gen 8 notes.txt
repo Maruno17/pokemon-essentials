@@ -7,8 +7,45 @@
 Other notes:
 - If a battle ends because of Rocky Helmet damage, the side that the Rocky
   Helmet holder is on should lose (Gen 7+) or win (Gen 6-).
+- If Neutralizing Gas switches in and negates Unnerve, should it cause an
+  immediate triggering of held berries? Probably.
+- Emergency Exit/Wimp Out should NOT trigger if the bearer gained that ability
+  part-way through the move's usage (i.e. via Wandering Spirit swapping
+  abilities).
+- Imposter should only trigger upon being sent in, and not by any re-triggering
+  of switch-in abilities.
+- The messages for a held item boosting stats are slightly different to what
+  they currently are:
+    "The Weakness Policy sharply raised {1}'s Attack!"
+    "The Weakness Policy sharply raised {1}'s Sp. Atk!"
+    "The Weakness Policy was used up..."
 
-Make example event that combines the Gen 8 fossils.
+New evolution methods:
+- Milcery: spinning while holding an item. (Doesn't suit our control scheme.
+           We're not adding a way to easily spin on the spot just for this, cf.
+           not having to turn your computer upside-down to evolve Inkay.)
+- Galarian Yamask: going to a particular spot after a battle in which it lost
+                   49+ HP from a single attack and hasn't fainted since then;
+                   healing doesn't affect this. (Utter nonsense, find a better
+                   way - just evolve after a battle in which the damage was
+                   taken.) Confirmed that the damage has to be dealt in a single
+                   attack, not spread across multiple ones.
+
+- Ask whether a captured Pokémon, or an added Pokémon, should be put in storage
+  or added to the party if the party is full. Also provide the option to look at
+  its Pokédex entry. Have a way to force adding it to the party for plot
+  purposes (battle rule?).
+
+- If two Pokémon of the same species are in the Day Care, and one knows an egg
+  move(s) the other doesn't, and the other has an empty move slot(s), the other
+  will learn the egg move(s) from the one after a time. Egg moves are checked in
+  the order they're known by the one Pokémon. No egg moves are learned if the
+  other Pokémon doesn't have an empty move slot. Volt Tackle cannot be learned
+  this way. Gender is irrelevant. This is a feature of a Pokémon Nursery, which
+  is like the Day Care but is only for breeding and the deposited Pokémon don't
+  gain Exp (the fee is $500 per Pokémon up-front). The time it takes to do this
+  is apparently the same as egg generation (e.g. a chance every 255 steps), but
+  the parents don't need to be able to breed in order to learn egg moves.
 
 #===============================================================================
 # Low priority or ignorable
@@ -20,19 +57,6 @@ title can be toggled. Ribbons also provide a title, and can similarly be
 toggled. (Probably don't bother implementing.)
 
 Bicycle that can work on water.
-
-Remote access to storage boxes via the party screen if you have the Pokémon Box
-Link item (and it's allowed to be used - in Gyms and some other places it's
-forbidden).
-
-New evolution methods:
-- Milcery: spinning while holding an item. (Doesn't suit our control scheme.
-           We're not adding a way to easily spin on the spot just for this, cf.
-           not having to turn your computer upside-down to evolve Inkay.)
-- Galarian Yamask: going to a particular spot after a battle in which it lost
-                   49+ HP from a single attack and hasn't fainted since then;
-                   healing doesn't affect this. (Utter nonsense, find a better
-                   way.)
 
 I think there are some alternate forms which don't have a hidden ability while
 their base forms do. I don't think the compiler supports this, and instead
@@ -47,14 +71,6 @@ Maybe have multiple sets of Pickup items for multiple Gens. Probably not. Gens
 
 Add a newer type of berry tree mechanics? Have a separate setting that prevents
 deterioration?
-
-The happiness evolution threshold value has lowered from 220 to 160. This is
-because, in Gen 8, you have to use Pokémon Camp or berries to raise a Pokémon's
-happiness above 179, which in turn is because affection effects have been added
-(chance of resisting a KO, chance of shaking off a status problem, etc.) that
-apply above 179 happiness. Pokémon Camp will not be added. Affection effects and
-the 179 soft cap/160 evolution threshold may be added (the latter two should be
-treated as related rather than separate settings).
 
 Some abilities have changed effects:
 - If another Pokémon faints before a Pokémon with Analytic makes its move,
@@ -171,5 +187,19 @@ Some moves have changed properties/effects:
 - Parting Shot is able to make the user switch out if its effect is redirected
   by Mirror Armor. Throat Spray is triggered and applies before the switch.
   (The Throat Spray part is done by default). All this already works this way.
+
+Remote access to storage boxes via the party screen if you have the Pokémon Box
+Link item (and it's allowed to be used - in Gyms and some other places it's
+forbidden).
+
+Make example event that combines the Gen 8 fossils.
+
+The happiness evolution threshold value has lowered from 220 to 160. This is
+because, in Gen 8, you have to use Pokémon Camp or berries to raise a Pokémon's
+happiness above 179, which in turn is because affection effects have been added
+(chance of resisting a KO, chance of shaking off a status problem, etc.) that
+apply above 179 happiness. Pokémon Camp will not be added. Affection effects and
+the 179 soft cap/160 evolution threshold may be added (the latter two should be
+treated as related rather than separate settings).
 
 =end
