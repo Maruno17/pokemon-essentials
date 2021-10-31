@@ -910,6 +910,9 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYXS, proc { |item, pkmn, scene|
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
   next false if qty == 0
   scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
+  if qty > 1
+    (qty - 1).times { pkmn.changeHappiness("vitamin") }
+  end
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
   $bag.remove(item, qty - 1)
   scene.pbHardRefresh
@@ -928,6 +931,9 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYS, proc { |item, pkmn, scene|
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
   next false if qty == 0
   scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
+  if qty > 1
+    (qty - 1).times { pkmn.changeHappiness("vitamin") }
+  end
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
   $bag.remove(item, qty - 1)
   scene.pbHardRefresh
@@ -946,6 +952,9 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYM, proc { |item, pkmn, scene|
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
   next false if qty == 0
   scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
+  if qty > 1
+    (qty - 1).times { pkmn.changeHappiness("vitamin") }
+  end
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
   $bag.remove(item, qty - 1)
   scene.pbHardRefresh
@@ -964,6 +973,9 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYL, proc { |item, pkmn, scene|
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
   next false if qty == 0
   scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
+  if qty > 1
+    (qty - 1).times { pkmn.changeHappiness("vitamin") }
+  end
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
   $bag.remove(item, qty - 1)
   scene.pbHardRefresh
@@ -982,6 +994,9 @@ ItemHandlers::UseOnPokemon.add(:EXPCANDYXL, proc { |item, pkmn, scene|
      _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), maximum)
   next false if qty == 0
   scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
+  if qty > 1
+    (qty - 1).times { pkmn.changeHappiness("vitamin") }
+  end
   pbChangeExp(pkmn, pkmn.exp + gain_amount * qty, scene)
   $bag.remove(item, qty - 1)
   scene.pbHardRefresh
