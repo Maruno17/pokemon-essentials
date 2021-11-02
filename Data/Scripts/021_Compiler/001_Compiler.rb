@@ -700,25 +700,24 @@ module Compiler
   # Compile all data
   #=============================================================================
   def compile_pbs_file_message_start(filename)
-    # Filename is in magenta
-    echo _INTL("  -> Compiling PBS file {1}\"{2}\"{3}...", "\e[36m", filename.split("/").last, "\e[0m")
+    # The `` around the file's name turns it cyan
+    ConsoleRGB.echo_li _INTL("Compiling PBS file `{1}`...", filename.split("/").last)
   end
 
   def write_pbs_file_message_start(filename)
-    # Filename is in magenta
-    echo _INTL("  -> Writing PBS file {1}\"{2}\"{3}...", "\e[36m", filename.split("/").last, "\e[0m")
+    # The `` around the file's name turns it cyan
+    ConsoleRGB.echo_li _INTL("Writing PBS file `{1}`...", filename.split("/").last)
   end
 
   def process_pbs_file_message_end
-    echoln_good _INTL("done")
+    ConsoleRGB.echo_complete(true)
     Graphics.update
   end
 
   def compile_all(mustCompile)
     return if !mustCompile
     FileLineData.clear
-    echoln_warn _INTL("*** Starting full compile ***")
-    echoln ""
+    ConsoleRGB.echo_h1 _INTL("Starting full compile")
     compile_town_map               # No dependencies
     compile_connections            # No dependencies
     compile_phone                  # No dependencies
@@ -741,17 +740,16 @@ module Compiler
     compile_map_metadata           # No dependencies
     compile_animations
     compile_trainer_events(mustCompile)
-    echo _INTL("  -> Saving messages...")
+    ConsoleRGB.echo_li _INTL("Saving messages...")
     pbSetTextMessages
     MessageTypes.saveMessages
     MessageTypes.loadMessageFile("Data/messages.dat") if safeExists?("Data/messages.dat")
-    echoln_good _INTL("done")
-    echo _INTL("  -> Reloading cache...")
+    ConsoleRGB.echo_complete(true)
+    ConsoleRGB.echo_li _INTL("Reloading cache...")
     System.reload_cache
-    echoln_good _INTL("done")
+    ConsoleRGB.echo_complete(true)
     echoln ""
-    echoln_good _INTL("Successfully fully compiled")
-    echoln ""
+    ConsoleRGB.echo_h2("Successfully fully compiled", text: :green)
   end
 
   def main

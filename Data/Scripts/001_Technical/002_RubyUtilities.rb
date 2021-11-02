@@ -101,6 +101,36 @@ class Array
 end
 
 #===============================================================================
+# class Hash
+#===============================================================================
+class Hash
+  def deep_merge(hash)
+    h = self.clone
+    # failsafe
+    return h if !hash.is_a?(Hash)
+    for key in hash.keys
+      if self[key].is_a?(Hash)
+        h.deep_merge!(hash[key])
+      else
+        h = hash[key]
+      end
+    end
+    return h
+  end
+
+  def deep_merge!(hash)
+    return if !hash.is_a?(Hash)
+    for key in hash.keys
+      if self[key].is_a?(Hash)
+        self[key].deep_merge!(hash[key])
+      else
+        self[key] = hash[key]
+      end
+    end
+  end
+end
+
+#===============================================================================
 # module Enumerable
 #===============================================================================
 module Enumerable

@@ -1110,7 +1110,7 @@ DebugMenuCommands.register("compiledata", {
   "always_show" => true,
   "effect"      => proc {
     msgwindow = pbCreateMessageWindow
-    Compiler.compile_all(true) { |msg| echoln msg }
+    Compiler.compile_all(true)
     pbMessageDisplay(msgwindow, _INTL("All game data was compiled."))
     pbDisposeMessageWindow(msgwindow)
   }

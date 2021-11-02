@@ -195,16 +195,14 @@ module SaveData
     conversions_to_run = self.get_conversions(save_data)
     return false if conversions_to_run.none?
     File.open(SaveData::FILE_PATH + '.bak', 'wb') { |f| Marshal.dump(save_data, f) }
-    echoln_warn "*** Running #{conversions_to_run.length} save file conversions ***"
-    echoln ""
+    ConsoleRGB.echo_h1 "Running #{conversions_to_run.length} save file conversions"
     conversions_to_run.each do |conversion|
-      echo "  -> #{conversion.title}..."
+      ConsoleRGB.echo_li "#{conversion.title}..."
       conversion.run(save_data)
-      echoln_good "done"
+      ConsoleRGB.echo_complete(true)
     end
     echoln "" if conversions_to_run.length > 0
-    echoln_good "All save file conversions applied successfully"
-    echoln ""
+    ConsoleRGB.echo_h2("All save file conversions applied successfully", text: :green)
     save_data[:essentials_version] = Essentials::VERSION
     save_data[:game_version] = Settings::GAME_VERSION
     return true
