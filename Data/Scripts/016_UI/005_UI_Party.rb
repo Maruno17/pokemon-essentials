@@ -453,6 +453,7 @@ class PokemonParty_Scene
     @can_access_storage = can_access_storage
     addBackgroundPlane(@sprites,"partybg","Party/bg",@viewport)
     @sprites["messagebox"] = Window_AdvancedTextPokemon.new("")
+    @sprites["messagebox"].z              = 50
     @sprites["messagebox"].viewport       = @viewport
     @sprites["messagebox"].visible        = false
     @sprites["messagebox"].letterbyletter = true
@@ -461,6 +462,7 @@ class PokemonParty_Scene
        @can_access_storage ? _INTL("[Special]: To Boxes") : "")
     @sprites["storagetext"].x           = 32
     @sprites["storagetext"].y           = Graphics.height - @sprites["messagebox"].height - 16
+    @sprites["storagetext"].z           = 10
     @sprites["storagetext"].viewport    = @viewport
     @sprites["storagetext"].baseColor   = Color.new(248, 248, 248)
     @sprites["storagetext"].shadowColor = Color.new(0, 0, 0)

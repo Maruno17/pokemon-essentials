@@ -207,7 +207,7 @@ class PokeBattle_Move
     c += 1 if user.inHyperMode? && @type == :SHADOW
     c = ratios.length-1 if c>=ratios.length
     # Calculation
-    return true if ratio[c] == 1
+    return true if ratios[c] == 1
     r = @battle.pbRandom(ratios[c])
     return true if r == 0
     if r == 1 && Settings::AFFECTION_EFFECTS && @battle.internalBattle &&
