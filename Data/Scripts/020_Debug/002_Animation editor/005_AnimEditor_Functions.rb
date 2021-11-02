@@ -519,7 +519,7 @@ def pbSelectSE(canvas,audio)
   ret=false
   pbRgssChdir(File.join("Audio", "SE", "Anim")) {
      animfiles.concat(Dir.glob("*.wav"))
-     animfiles.concat(Dir.glob("*.mp3"))
+#     animfiles.concat(Dir.glob("*.mp3"))
      animfiles.concat(Dir.glob("*.ogg"))
      animfiles.concat(Dir.glob("*.wma"))
   }
@@ -553,7 +553,7 @@ def pbSelectSE(canvas,audio)
     end
     if maxsizewindow.changed?(5) # OK
       filename = File.basename(filename,".wav")
-      filename = File.basename(filename,".mp3")
+#      filename = File.basename(filename,".mp3")
       filename = File.basename(filename,".ogg")
       filename = File.basename(filename,".wma")
       audio.name=filename

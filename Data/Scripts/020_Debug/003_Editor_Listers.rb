@@ -221,8 +221,8 @@ class MusicFileLister
     folder = (@bgm) ? "Audio/BGM/" : "Audio/ME/"
     @commands.clear
     Dir.chdir(folder) {
-      Dir.glob("*.mp3") { |f| @commands.push(f) }
-      Dir.glob("*.MP3") { |f| @commands.push(f) }
+#      Dir.glob("*.mp3") { |f| @commands.push(f) }
+#      Dir.glob("*.MP3") { |f| @commands.push(f) }
       Dir.glob("*.ogg") { |f| @commands.push(f) }
       Dir.glob("*.OGG") { |f| @commands.push(f) }
       Dir.glob("*.wav") { |f| @commands.push(f) }
