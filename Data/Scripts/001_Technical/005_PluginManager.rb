@@ -172,18 +172,17 @@ module PluginManager
   def self.register(options)
     name         = nil
     version      = nil
+    essentials   = nil
     link         = nil
     dependencies = nil
     incompats    = nil
     credits      = []
-    order = [:name, :version, :link, :dependencies, :incompatibilities, :credits]
+    order = [:name, :version, :essentials, :link, :dependencies, :incompatibilities, :credits]
     # Ensure it first reads the plugin's name, which is used in error reporting,
     # by sorting the keys
     keys = options.keys.sort do |a, b|
-      idx_a = order.index(a)
-      idx_a = order.size if idx_a == -1
-      idx_b = order.index(b)
-      idx_b = order.size if idx_b == -1
+      idx_a = order.index(a) || order.size
+      idx_b = order.index(b) || order.size
       next idx_a <=> idx_b
     end
     for key in keys
@@ -202,6 +201,8 @@ module PluginManager
           self.error("Plugin version must be a string.")
         end
         version = value
+      when :essentials
+        essentials = value
       when :link   # Plugin website
         if nil_or_empty?(value)
           self.error("Plugin link must be a non-empty string.")
@@ -338,6 +339,7 @@ module PluginManager
     @@Plugins[name] = {
       :name => name,
       :version => version,
+      :essentials => essentials,
       :link => link,
       :dependencies => dependencies,
       :incompatibilities => incompats,
@@ -495,6 +497,9 @@ module PluginManager
       data.each_with_index { |value, i| data[i] = value.strip }
       # begin formatting data hash
       case property
+      when 'ESSENTIALS'
+        meta[:essentials] = [] if !meta[:essentials]
+        data.each { |ver| meta[:essentials].push(ver) }
       when 'REQUIRES'
         meta[:dependencies] = [] if !meta[:dependencies]
         if data.length < 2   # No version given, just push name of plugin dependency
@@ -694,6 +699,9 @@ module PluginManager
     for plugin in scripts
       # get the required data
       name, meta, script = plugin
+      if !meta[:essentials] || !meta[:essentials].include?(Essentials::VERSION)
+        echoln_warn "WARNING: Plugin '#{name}' may not be compatible with Essentials v#{Essentials::VERSION}. Trying to load anyway."
+      end
       # register plugin
       self.register(meta)
       # go through each script and interpret
