@@ -385,6 +385,14 @@ class Game_Map
     end
   end
 
+  def set_tile(x, y, layer, id = 0)
+    self.data[x, y, layer] = id
+  end
+
+  def erase_tile(x, y, layer)
+    set_tile(x, y, layer, 0)
+  end
+
   def refresh
     for event in @events.values
       event.refresh

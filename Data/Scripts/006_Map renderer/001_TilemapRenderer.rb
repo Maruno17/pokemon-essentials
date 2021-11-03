@@ -235,6 +235,7 @@ class TilemapRenderer
   #=============================================================================
   class TileSprite < Sprite
     attr_accessor :filename
+    attr_accessor :tile_id
     attr_accessor :is_autotile
     attr_accessor :animated
     attr_accessor :priority
@@ -242,10 +243,11 @@ class TilemapRenderer
     attr_accessor :bridge
     attr_accessor :need_refresh
 
-    def set_bitmap(filename, autotile, animated, priority, bitmap)
+    def set_bitmap(filename, tile_id, autotile, animated, priority, bitmap)
       self.bitmap       = bitmap
       self.src_rect     = Rect.new(0, 0, DISPLAY_TILE_WIDTH, DISPLAY_TILE_HEIGHT)
       @filename         = filename
+      @tile_id          = tile_id
       @is_autotile      = autotile
       @animated         = animated
       @priority         = priority
@@ -348,8 +350,9 @@ class TilemapRenderer
   def refresh; end
 
   def refresh_tile_bitmap(tile, map, tile_id)
+    tile.tile_id = tile_id
     if tile_id < TILES_PER_AUTOTILE
-      tile.set_bitmap("", false, false, 0, nil)
+      tile.set_bitmap("", tile_id, false, false, 0, nil)
       tile.shows_reflection = false
       tile.bridge           = false
     else
@@ -375,11 +378,11 @@ class TilemapRenderer
         else   # Single extra autotiles
           filename = extra_autotile_arrays[1][tile_id - single_autotile_start_id]
         end
-        tile.set_bitmap(filename, true, @autotiles.animated?(filename),
+        tile.set_bitmap(filename, tile_id, true, @autotiles.animated?(filename),
            priority, @autotiles[filename])
       else
         filename = map.tileset_name
-        tile.set_bitmap(filename, false, false, priority, @tilesets[filename])
+        tile.set_bitmap(filename, tile_id, false, false, priority, @tilesets[filename])
       end
       tile.shows_reflection = terrain_tag_data&.shows_reflections
       tile.bridge           = terrain_tag_data&.bridge
@@ -574,7 +577,7 @@ class TilemapRenderer
           tile_y = j + map_display_y_tile
           @tiles[i][j].each_with_index do |tile, layer|
             tile_id = map.data[tile_x, tile_y, layer]
-            if do_full_refresh || tile.need_refresh
+            if do_full_refresh || tile.need_refresh || tile.tile_id != tile_id
               refresh_tile(tile, i, j, map, layer, tile_id)
             else
               refresh_tile_frame(tile, tile_id) if tile.animated && @autotiles.changed
@@ -594,7 +597,7 @@ class TilemapRenderer
       col.each_with_index do |coord, j|
         next if visited[i][j]
         coord.each do |tile|
-          tile.set_bitmap("", false, false, 0, nil)
+          tile.set_bitmap("", 0, false, false, 0, nil)
           tile.shows_reflection = false
           tile.bridge           = false
         end

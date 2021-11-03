@@ -136,8 +136,7 @@ Events.onStepTakenFieldMovement += proc { |_sender,e|
     next if tile_id == nil
     next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
     $player.soot += 1 if event == $game_player && $bag.has?(:SOOTSACK)
-#    map.data[thistile[1], thistile[2], i] = 0
-#    $scene.createSingleSpriteset(map.map_id)
+    map.erase_tile(thistile[1], thistile[2], i)
     break
   end
 }
