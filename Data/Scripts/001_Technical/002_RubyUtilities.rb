@@ -26,22 +26,11 @@ class String
     return ['a', 'e', 'i', 'o', 'u'].include?(self[0, 1].downcase)
   end
 
-  def first(n = 1)
-    return self[0...n]
-  end
+  def first(n = 1); return self[0...n]; end
 
-  def last(n = 1)
-    return self[-n..-1] || self
-  end
+  def last(n = 1); return self[-n..-1] || self; end
 
-  def blank?
-    blank = true
-    s = self.scan(/./)
-    for l in s
-      blank = false if l != ""
-    end
-    return blank
-  end
+  def blank?; return self.strip.empty?; end
 
   def cut(bitmap, width)
     string = self
