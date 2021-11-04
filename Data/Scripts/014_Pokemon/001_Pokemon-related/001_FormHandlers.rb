@@ -383,14 +383,6 @@ MultipleForms.register(:GRENINJA,{
   }
 })
 
-MultipleForms.register(:SCATTERBUG,{
-  "getFormOnCreation" => proc { |pkmn|
-    next $player.secret_ID % 18
-  }
-})
-
-MultipleForms.copy(:SCATTERBUG,:SPEWPA,:VIVILLON)
-
 MultipleForms.register(:FURFROU,{
   "getForm" => proc { |pkmn|
     if !pkmn.time_form_set ||
