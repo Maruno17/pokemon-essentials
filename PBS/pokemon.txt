@@ -23258,7 +23258,7 @@ Shape = BipedalTail
 Category = Wushu
 Pokedex = Kubfu trains hard to perfect its moves. The moves it masters will determine which form it takes when it evolves.
 Generation = 8
-Evolutions = URSHIFU,Event,
+Evolutions = URSHIFU,Event,1
 #-------------------------------
 [URSHIFU]
 Name = Urshifu

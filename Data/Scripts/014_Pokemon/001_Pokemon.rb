@@ -1025,8 +1025,8 @@ class Pokemon
     return nil
   end
 
-  def trigger_event_evolution(value = 0)
-    new_species = check_evolution_by_event(value)
+  def trigger_event_evolution(number)
+    new_species = check_evolution_by_event(number)
     if new_species
       pbFadeOutInWithMusic {
         evo = PokemonEvolutionScene.new

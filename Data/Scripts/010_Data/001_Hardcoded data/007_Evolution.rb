@@ -630,68 +630,27 @@ GameData::Evolution.register({
 
 #===============================================================================
 # Evolution methods that are triggered by an event
+# Each event has its own number, which is the value of the parameter as defined
+# in pokemon.txt/pokemon_forms.txt. It is also 'number' in def pbEvolutionEvent,
+# which triggers evolution checks for a particular event number. 'value' in an
+# event_proc is the number of the evolution event currently being triggered.
+# Evolutions caused by different events should have different numbers. Used
+# event numbers are:
+#   1: Kubfu -> Urshifu
+#   2: Galarian Yamask -> Runerigus
 #===============================================================================
-GameData::Evolution.register({
-  :id         => :Event,
-  :event_proc => proc { |pkmn, parameter, value|
-    next true
-  }
-})
+def pbEvolutionEvent(number)
+  return if !$player
+  $player.able_pokemon_party.each do |pkmn|
+    pkmn.trigger_event_evolution(number)
+  end
+end
 
 GameData::Evolution.register({
-  :id         => :EventValue,
+  :id         => :Event,
   :parameter  => Integer,
   :event_proc => proc { |pkmn, parameter, value|
     next value == parameter
-  }
-})
-
-GameData::Evolution.register({
-  :id         => :EventLevel,
-  :parameter  => Integer,
-  :event_proc => proc { |pkmn, parameter, value|
-    next pkmn.level >= parameter
-  }
-})
-
-GameData::Evolution.register({
-  :id         => :EventMale,
-  :event_proc => proc { |pkmn, parameter, value|
-    next pkmn.male?
-  }
-})
-
-GameData::Evolution.register({
-  :id         => :EventFemale,
-  :event_proc => proc { |pkmn, parameter, value|
-    next pkmn.female?
-  }
-})
-
-GameData::Evolution.register({
-  :id         => :EventDay,
-  :event_proc => proc { |pkmn, parameter, value|
-    next PBDayNight.isDay?
-  }
-})
-
-GameData::Evolution.register({
-  :id         => :EventNight,
-  :event_proc => proc { |pkmn, parameter, value|
-    next PBDayNight.isNight?
-  }
-})
-
-GameData::Evolution.register({
-  :id                   => :EventItem,
-  :parameter            => :Item,
-  :event_proc           => proc { |pkmn, parameter, value|
-    next pkmn.item == parameter
-  },
-  :after_evolution_proc => proc { |pkmn, new_species, parameter, evo_species|
-    next false if evo_species != new_species || !pkmn.hasItem?(parameter)
-    pkmn.item = nil   # Item is now consumed
-    next true
   }
 })
 
@@ -701,12 +660,12 @@ GameData::Evolution.register({
   :after_battle_proc => proc { |pkmn, party_index, parameter|
     if $game_temp.party_direct_damage_taken &&
        $game_temp.party_direct_damage_taken[party_index] &&
-       $game_temp.party_direct_damage_taken[party_index] >= parameter
+       $game_temp.party_direct_damage_taken[party_index] >= 49
       pkmn.ready_to_evolve = true
     end
     next false
   },
   :event_proc        => proc { |pkmn, parameter, value|
-    next pkmn.ready_to_evolve
+    next value == parameter && pkmn.ready_to_evolve
   }
 })
