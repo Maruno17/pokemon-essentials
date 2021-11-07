@@ -229,7 +229,7 @@ BattleHandlers::ItemOnStatDropped.add(:EJECTPACK,
     next false if battler.effects[PBEffects::SkyDrop] >= 0 ||
                   battler.inTwoTurnAttack?("TwoTurnAttackInvulnerableInSkyTargetCannotAct")   # Sky Drop
     next false if battle.pbAllFainted?(battler.idxOpposingSide)
-    next false if battle.wildBattle? && battler.opposes?   # Wild Pokémon can't eject
+    next false if battler.wild?   # Wild Pokémon can't eject
     next false if !battle.pbCanSwitch?(battler.index)   # Battler can't switch out
     next false if !battle.pbCanChooseNonActive?(battler.index)   # No Pokémon can switch in
     battle.pbCommonAnimation("UseItem", battler)

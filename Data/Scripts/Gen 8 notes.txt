@@ -20,17 +20,6 @@ Other notes:
     "The Weakness Policy sharply raised {1}'s Sp. Atk!"
     "The Weakness Policy was used up..."
 
-New evolution methods:
-- Milcery: spinning while holding an item. (Doesn't suit our control scheme.
-           We're not adding a way to easily spin on the spot just for this, cf.
-           not having to turn your computer upside-down to evolve Inkay.)
-- Galarian Yamask: going to a particular spot after a battle in which it lost
-                   49+ HP from a single attack and hasn't fainted since then;
-                   healing doesn't affect this. (Utter nonsense, find a better
-                   way - just evolve after a battle in which the damage was
-                   taken.) Confirmed that the damage has to be dealt in a single
-                   attack, not spread across multiple ones.
-
 - Ask whether a captured Pokémon, or an added Pokémon, should be put in storage
   or added to the party if the party is full. Also provide the option to look at
   its Pokédex entry. Have a way to force adding it to the party for plot
@@ -57,6 +46,11 @@ title can be toggled. Ribbons also provide a title, and can similarly be
 toggled. (Probably don't bother implementing.)
 
 Bicycle that can work on water.
+
+New evolution methods:
+- Milcery: spinning while holding an item. (Doesn't suit our control scheme.
+           We're not adding a way to easily spin on the spot just for this, cf.
+           not having to turn your computer upside-down to evolve Inkay.)
 
 I think there are some alternate forms which don't have a hidden ability while
 their base forms do. I don't think the compiler supports this, and instead
@@ -100,6 +94,9 @@ New evolution methods:
 - Kubfu (triggered by an event; Kubfu's form can be set beforehand by the event,
   so don't worry about the multiple forms it can evolve into)
 - Galarian Farfetch'd (performing 3 critical hits in a single battle)
+- Galarian Yamask: going to a particular spot after a battle in which it lost
+                   49+ HP in a single battle from direct attacks and hasn't
+                   fainted since then; healing with Potions doesn't affect this.
 
 Added AI for new moves/items/abilities.
 

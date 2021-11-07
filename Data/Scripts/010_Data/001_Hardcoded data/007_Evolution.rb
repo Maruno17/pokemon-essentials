@@ -263,9 +263,6 @@ GameData::Evolution.register({
 GameData::Evolution.register({
   :id                   => :Shedinja,
   :parameter            => Integer,
-  :level_up_proc        => proc { |pkmn, parameter|
-    next false   # This is a dummy proc and shouldn't next true
-  },
   :after_evolution_proc => proc { |pkmn, new_species, parameter, evo_species|
     next false if $player.party_full?
     next false if !$bag.has?(:POKEBALL)
@@ -695,5 +692,21 @@ GameData::Evolution.register({
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
     pkmn.item = nil   # Item is now consumed
     next true
+  }
+})
+
+GameData::Evolution.register({
+  :id                => :EventAfterDamageTaken,
+  :parameter         => Integer,
+  :after_battle_proc => proc { |pkmn, party_index, parameter|
+    if $game_temp.party_direct_damage_taken &&
+       $game_temp.party_direct_damage_taken[party_index] &&
+       $game_temp.party_direct_damage_taken[party_index] >= parameter
+      pkmn.ready_to_evolve = true
+    end
+    next false
+  },
+  :event_proc        => proc { |pkmn, parameter, value|
+    next pkmn.ready_to_evolve
   }
 })

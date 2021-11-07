@@ -22,7 +22,7 @@ end
 #===============================================================================
 class PokeBattle_Move_SwitchOutUserStatusMove < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if @battle.wildBattle? && user.opposes?
+    if user.wild?
       if !@battle.pbCanRun?(user.index)
         @battle.pbDisplay(_INTL("But it failed!"))
         return true
@@ -35,7 +35,7 @@ class PokeBattle_Move_SwitchOutUserStatusMove < PokeBattle_Move
   end
 
   def pbEndOfMoveUsageEffect(user,targets,numHits,switchedBattlers)
-    return if @battle.wildBattle? && user.opposes?
+    return if user.wild?
     @battle.pbDisplay(_INTL("{1} went back to {2}!",user.pbThis,
        @battle.pbGetOwnerName(user.index)))
     @battle.pbPursuit(user.index)
@@ -50,7 +50,7 @@ class PokeBattle_Move_SwitchOutUserStatusMove < PokeBattle_Move
   end
 
   def pbEffectGeneral(user)
-    if @battle.wildBattle? && user.opposes?
+    if user.wild?
       @battle.pbDisplay(_INTL("{1} fled from battle!",user.pbThis))
       @battle.decision = 3   # Escaped
     end

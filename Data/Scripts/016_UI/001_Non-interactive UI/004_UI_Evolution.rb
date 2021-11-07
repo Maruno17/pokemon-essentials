@@ -587,6 +587,7 @@ class PokemonEvolutionScene
     @pokemon.species = @newspecies
     @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
     @pokemon.calc_stats
+    @pokemon.ready_to_evolve = false
     # See and own evolved species
     $player.pokedex.register(@pokemon)
     $player.pokedex.set_owned(@newspecies)

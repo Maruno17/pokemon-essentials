@@ -5,7 +5,7 @@ class PokeBattle_AI
   #=============================================================================
   def pbChooseMoves(idxBattler)
     user        = @battle.battlers[idxBattler]
-    wildBattler = (@battle.wildBattle? && @battle.opposes?(idxBattler))
+    wildBattler = user.wild?
     skill       = 0
     if !wildBattler
       skill     = @battle.pbGetOwnerFromBattlerIndex(user.index).skill_level || 0

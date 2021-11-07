@@ -190,7 +190,11 @@ class PokemonStorage
     else   # Copying into box
       pkmn = self[boxSrc,indexSrc]
       raise "Trying to copy nil to storage" if !pkmn
-      pkmn.heal if Settings::HEAL_STORED_POKEMON
+      if Settings::HEAL_STORED_POKEMON
+        old_ready_evo = pkmn.ready_to_evolve
+        pkmn.heal
+        pkmn.ready_to_evolve = old_ready_evo
+      end
       self[boxDst,indexDst] = pkmn
     end
     return true
@@ -210,7 +214,11 @@ class PokemonStorage
   def pbMoveCaughtToBox(pkmn,box)
     for i in 0...maxPokemon(box)
       if self[box,i]==nil
-        pkmn.heal if box >= 0 && Settings::HEAL_STORED_POKEMON
+        if Settings::HEAL_STORED_POKEMON && box >= 0
+          old_ready_evo = pkmn.ready_to_evolve
+          pkmn.heal
+          pkmn.ready_to_evolve = old_ready_evo
+        end
         self[box,i] = pkmn
         return true
       end
@@ -219,7 +227,11 @@ class PokemonStorage
   end
 
   def pbStoreCaught(pkmn)
-    pkmn.heal if Settings::HEAL_STORED_POKEMON if @currentBox >= 0
+    if Settings::HEAL_STORED_POKEMON && @currentBox >= 0
+      old_ready_evo = pkmn.ready_to_evolve
+      pkmn.heal
+      pkmn.ready_to_evolve = old_ready_evo
+    end
     for i in 0...maxPokemon(@currentBox)
       if self[@currentBox,i]==nil
         self[@currentBox,i] = pkmn

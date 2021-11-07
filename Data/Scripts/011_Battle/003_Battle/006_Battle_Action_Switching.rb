@@ -156,7 +156,7 @@ class PokeBattle_Battle
         idxBattler = b.index
         next if !pbCanChooseNonActive?(idxBattler)
         if !pbOwnedByPlayer?(idxBattler)   # Opponent/ally is switching in
-          next if wildBattle? && opposes?(idxBattler)   # Wild Pokémon can't switch
+          next if b.wild?   # Wild Pokémon can't switch
           idxPartyNew = pbSwitchInBetween(idxBattler)
           opponent = pbGetOwnerFromBattlerIndex(idxBattler)
           # NOTE: The player is only offered the chance to switch their own

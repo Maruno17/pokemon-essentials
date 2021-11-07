@@ -232,7 +232,8 @@ class PokeBattle_Battle
 
   def pbGetOwnerFromBattlerIndex(idxBattler)
     idxTrainer = pbGetOwnerIndexFromBattlerIndex(idxBattler)
-    return (opposes?(idxBattler)) ? @opponent[idxTrainer] : @player[idxTrainer]
+    trainer = (opposes?(idxBattler)) ? @opponent : @player
+    return (trainer.nil?) ? nil : trainer[idxTrainer]
   end
 
   def pbGetOwnerIndexFromPartyIndex(idxBattler,idxParty)
@@ -248,7 +249,8 @@ class PokeBattle_Battle
   # switch another trainer's Pokémon.
   def pbGetOwnerFromPartyIndex(idxBattler,idxParty)
     idxTrainer = pbGetOwnerIndexFromPartyIndex(idxBattler,idxParty)
-    return (opposes?(idxBattler)) ? @opponent[idxTrainer] : @player[idxTrainer]
+    trainer = (opposes?(idxBattler)) ? @opponent : @player
+    return (trainer.nil?) ? nil : trainer[idxTrainer]
   end
 
   def pbGetOwnerName(idxBattler)

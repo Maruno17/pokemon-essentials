@@ -382,5 +382,6 @@ class PokeBattle_Move
       target.lastHPLostFromFoe = damage               # For Metal Burst
       target.lastFoeAttacker.push(user.index)         # For Metal Burst
     end
+    $game_temp.party_direct_damage_taken[target.pokemonIndex] += damage if target.pbOwnedByPlayer?
   end
 end

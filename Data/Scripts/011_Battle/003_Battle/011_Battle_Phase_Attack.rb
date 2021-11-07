@@ -33,7 +33,7 @@ class PokeBattle_Battle
       next if b.effects[PBEffects::SkyDrop]>=0
       next if b.hasActiveAbility?(:TRUANT) && b.effects[PBEffects::Truant]
       # Mega Evolve
-      if !wildBattle? || !b.opposes?
+      if !b.wild?
         owner = pbGetOwnerIndexFromBattlerIndex(b.index)
         pbMegaEvolve(b.index) if @megaEvolution[b.idxOwnSide][owner]==b.index
       end
@@ -93,7 +93,7 @@ class PokeBattle_Battle
 
   def pbAttackPhaseMegaEvolution
     pbPriority.each do |b|
-      next if wildBattle? && b.opposes?
+      next if b.wild?
       next unless @choices[b.index][0]==:UseMove && !b.fainted?
       owner = pbGetOwnerIndexFromBattlerIndex(b.index)
       next if @megaEvolution[b.idxOwnSide][owner]!=b.index

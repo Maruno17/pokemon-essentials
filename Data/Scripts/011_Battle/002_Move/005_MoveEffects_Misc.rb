@@ -9,7 +9,7 @@ end
 #===============================================================================
 class PokeBattle_Move_DoesNothingCongratuations < PokeBattle_Move
   def pbEffectGeneral(user)
-    if @battle.wildBattle? && user.opposes?
+    if user.wild?
       @battle.pbDisplay(_INTL("Congratulations from {1}!",user.pbThis(true)))
     else
       @battle.pbDisplay(_INTL("Congratulations, {1}!",@battle.pbGetOwnerName(user.index)))

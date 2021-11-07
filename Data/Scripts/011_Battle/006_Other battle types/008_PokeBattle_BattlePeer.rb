@@ -27,7 +27,11 @@ class PokeBattle_RealBattlePeer
       player.party[player.party.length] = pkmn
       return -1
     end
-    pkmn.heal if Settings::HEAL_STORED_POKEMON
+    if Settings::HEAL_STORED_POKEMON
+      old_ready_evo = pkmn.ready_to_evolve
+      pkmn.heal
+      pkmn.ready_to_evolve = old_ready_evo
+    end
     oldCurBox = pbCurrentBox
     storedBox = $PokemonStorage.pbStoreCaught(pkmn)
     if storedBox<0

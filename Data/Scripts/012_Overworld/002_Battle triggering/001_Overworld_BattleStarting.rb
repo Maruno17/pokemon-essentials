@@ -15,6 +15,7 @@ class Game_Temp
   attr_accessor :encounter_type
   attr_accessor :party_levels_before_battle
   attr_accessor :party_critical_hits_dealt
+  attr_accessor :party_direct_damage_taken
 
   def battle_rules
     @battle_rules = {} if !@battle_rules
@@ -192,9 +193,11 @@ Events.onStartBattle += proc { |_sender|
   # during battle and may need to evolve afterwards
   $game_temp.party_levels_before_battle = []
   $game_temp.party_critical_hits_dealt = []
+  $game_temp.party_direct_damage_taken = []
   $player.party.each_with_index do |pkmn, i|
     $game_temp.party_levels_before_battle[i] = pkmn.level
     $game_temp.party_critical_hits_dealt[i] = 0
+    $game_temp.party_direct_damage_taken[i] = 0
   end
 }
 

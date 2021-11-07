@@ -26,11 +26,6 @@ class Pokemon
   # This Pokémon's shininess (true, false, nil). Is recalculated if made nil.
   # @param value [Boolean, nil] whether this Pokémon is shiny
   attr_writer   :shiny
-  # The index of this Pokémon's ability (0, 1 are natural abilities, 2+ are
-  # hidden abilities)as defined for its species/form. An ability may not be
-  # defined at this index. Is recalculated (as 0 or 1) if made nil.
-  # @param value [Integer, nil] forced ability index (nil if none is set)
-  attr_writer   :ability_index
   # @return [Array<Pokemon::Move>] the moves known by this Pokémon
   attr_accessor :moves
   # @return [Array<Symbol>] the IDs of moves known by this Pokémon when it was obtained
@@ -80,6 +75,9 @@ class Pokemon
   attr_accessor :fused
   # @return [Integer] this Pokémon's personal ID
   attr_accessor :personalID
+  # Used by Galarian Yamask to remember that it took sufficient damage from a
+  # battle and can evolve.
+  attr_accessor :ready_to_evolve
 
   # Max total IVs
   IV_STAT_LIMIT = 31
@@ -237,6 +235,7 @@ class Pokemon
   def hp=(value)
     @hp = value.clamp(0, @totalhp)
     heal_status if @hp == 0
+    @ready_to_evolve = false if @hp == 0
   end
 
   # Sets this Pokémon's status. See {GameData::Status} for all possible status effects.
@@ -292,6 +291,7 @@ class Pokemon
     heal_HP
     heal_status
     heal_PP
+    @ready_to_evolve = false
   end
 
   #=============================================================================
@@ -402,6 +402,7 @@ class Pokemon
     return @super_shiny
   end
 
+  # @param value [Boolean] whether this Pokémon is super shiny
   def super_shiny=(value)
     @super_shiny = value
     @shiny = true if @super_shiny
@@ -411,10 +412,19 @@ class Pokemon
   # Ability
   #=============================================================================
 
+  # The index of this Pokémon's ability (0, 1 are natural abilities, 2+ are
+  # hidden abilities) as defined for its species/form. An ability may not be
+  # defined at this index. Is recalculated (as 0 or 1) if made nil.
   # @return [Integer] the index of this Pokémon's ability
   def ability_index
     @ability_index = (@personalID & 1) if !@ability_index
     return @ability_index
+  end
+
+  # @param value [Integer, nil] forced ability index (nil if none is set)
+  def ability_index=(value)
+    @ability_index = value
+    @ability = nil
   end
 
   # @return [GameData::Ability, nil] an Ability object corresponding to this Pokémon's ability

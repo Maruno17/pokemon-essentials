@@ -1842,7 +1842,7 @@ BattleHandlers::UserAbilityEndOfMove.add(:MAGICIAN,
     next if battle.futureSight
     next if !move.pbDamagingMove?
     next if user.item
-    next if battle.wildBattle? && user.opposes?
+    next if user.wild?
     targets.each do |b|
       next if b.damageState.unaffected || b.damageState.substitute
       next if !b.item
@@ -1919,7 +1919,7 @@ BattleHandlers::TargetAbilityAfterMoveUse.add(:PICKPOCKET,
     # NOTE: According to Bulbapedia, this can still trigger to steal the user's
     #       item even if it was switched out by a Red Card. This doesn't make
     #       sense, so this code doesn't do it.
-    next if battle.wildBattle? && target.opposes?
+    next if target.wild?
     next if switched_battlers.include?(user.index)   # User was switched out
     next if !move.contactMove?
     next if user.effects[PBEffects::Substitute]>0 || target.damageState.substitute

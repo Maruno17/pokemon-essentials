@@ -706,6 +706,10 @@ class PokeBattle_Battler
     return @battle.pbOwnedByPlayer?(@index)
   end
 
+  def wild?
+    return @battle.wildBattle? && opposes?
+  end
+
   # Returns 0 if self is on the player's side, or 1 if self is on the opposing
   # side.
   def idxOwnSide

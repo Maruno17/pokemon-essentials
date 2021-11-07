@@ -1727,7 +1727,11 @@ class PokemonStorageScreen
           end
           if heldpoke || selected[0]==-1
             p = (heldpoke) ? heldpoke : @storage[-1,index]
-            p.heal if Settings::HEAL_STORED_POKEMON
+            if Settings::HEAL_STORED_POKEMON
+              old_ready_evo = p.ready_to_evolve
+              p.heal
+              p.ready_to_evolve = old_ready_evo
+            end
           end
           @scene.pbStore(selected,heldpoke,destbox,firstfree)
           if heldpoke
@@ -1771,7 +1775,11 @@ class PokemonStorageScreen
       pbDisplay("Please remove the mail.")
       return
     end
-    @heldpkmn.heal if Settings::HEAL_STORED_POKEMON if box >= 0
+    if Settings::HEAL_STORED_POKEMON && box >= 0
+      old_ready_evo = @heldpkmn.ready_to_evolve
+      @heldpkmn.heal
+      @heldpkmn.ready_to_evolve = old_ready_evo
+    end
     @scene.pbPlace(selected,@heldpkmn)
     @storage[box,index] = @heldpkmn
     if box==-1
@@ -1796,7 +1804,11 @@ class PokemonStorageScreen
       pbDisplay("Please remove the mail.")
       return false
     end
-    @heldpkmn.heal if Settings::HEAL_STORED_POKEMON if box >= 0
+    if Settings::HEAL_STORED_POKEMON && box >= 0
+      old_ready_evo = @heldpkmn.ready_to_evolve
+      @heldpkmn.heal
+      @heldpkmn.ready_to_evolve = old_ready_evo
+    end
     @scene.pbSwap(selected,@heldpkmn)
     tmp = @storage[box,index]
     @storage[box,index] = @heldpkmn

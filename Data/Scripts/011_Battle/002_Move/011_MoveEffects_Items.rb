@@ -4,7 +4,7 @@
 #===============================================================================
 class PokeBattle_Move_UserTakesTargetItem < PokeBattle_Move
   def pbEffectAfterAllHits(user,target)
-    return if @battle.wildBattle? && user.opposes?   # Wild Pokémon can't thieve
+    return if user.wild?   # Wild Pokémon can't thieve
     return if user.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
     return if !target.item || user.item
@@ -14,8 +14,7 @@ class PokeBattle_Move_UserTakesTargetItem < PokeBattle_Move
     itemName = target.itemName
     user.item = target.item
     # Permanently steal the item from wild Pokémon
-    if @battle.wildBattle? && target.opposes? && !user.initialItem &&
-       target.item == target.initialItem
+    if target.wild? && !user.initialItem && target.item == target.initialItem
       user.setInitialItem(target.item)
       target.pbRemoveItem
     else
@@ -56,8 +55,7 @@ class PokeBattle_Move_TargetTakesUserItem < PokeBattle_Move
     itemName = user.itemName
     target.item = user.item
     # Permanently steal the item from wild Pokémon
-    if @battle.wildBattle? && user.opposes? && !target.initialItem &&
-       user.item == user.initialItem
+    if user.wild? && !target.initialItem && user.item == user.initialItem
       target.setInitialItem(user.item)
       user.pbRemoveItem
     else
@@ -74,7 +72,7 @@ end
 #===============================================================================
 class PokeBattle_Move_UserTargetSwapItems < PokeBattle_Move
   def pbMoveFailed?(user,targets)
-    if @battle.wildBattle? && user.opposes?
+    if user.wild?
       @battle.pbDisplay(_INTL("But it failed!"))
       return true
     end
@@ -121,8 +119,7 @@ class PokeBattle_Move_UserTargetSwapItems < PokeBattle_Move
     target.effects[PBEffects::ChoiceBand] = nil if !target.hasActiveAbility?(:GORILLATACTICS)
     target.effects[PBEffects::Unburden]   = (!target.item && oldTargetItem) if target.hasActiveAbility?(:UNBURDEN)
     # Permanently steal the item from wild Pokémon
-    if @battle.wildBattle? && target.opposes? && !user.initialItem &&
-       oldTargetItem == target.initialItem
+    if target.wild? && !user.initialItem && oldTargetItem == target.initialItem
       user.setInitialItem(oldTargetItem)
     end
     @battle.pbDisplay(_INTL("{1} switched items with its opponent!",user.pbThis))
@@ -180,7 +177,7 @@ class PokeBattle_Move_RemoveTargetItem < PokeBattle_Move
   end
 
   def pbEffectAfterAllHits(user,target)
-    return if @battle.wildBattle? && user.opposes?   # Wild Pokémon can't knock off
+    return if user.wild?   # Wild Pokémon can't knock off
     return if user.fainted?
     return if target.damageState.unaffected || target.damageState.substitute
     return if !target.item || target.unlosableItem?(target.item)

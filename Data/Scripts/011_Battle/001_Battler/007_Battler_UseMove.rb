@@ -5,7 +5,7 @@ class PokeBattle_Battler
   def pbProcessTurn(choice,tryFlee=true)
     return false if fainted?
     # Wild roaming Pokémon always flee if possible
-    if tryFlee && @battle.wildBattle? && opposes? &&
+    if tryFlee && wild? &&
        @battle.rules["alwaysflee"] && @battle.pbCanRun?(@index)
       pbBeginTurn(choice)
       pbSEPlay("Battle flee")
