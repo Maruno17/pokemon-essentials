@@ -1026,6 +1026,7 @@ def pbPokemonEditor
      [_INTL("EggGroup 2"),        GameDataProperty.new(:EggGroup),    _INTL("Compatibility group (egg group) for breeding purposes.")],
      [_INTL("HatchSteps"),        LimitProperty.new(99999),           _INTL("Number of steps until an egg of this species hatches.")],
      [_INTL("Incense"),           ItemProperty,                       _INTL("Item needed to be held by a parent to produce an egg of this species.")],
+     [_INTL("Offspring"),         SpeciesPoolProperty,                _INTL("All possible species that an egg can be when breeding for an egg of this species (if blank, the egg can only be this species).")],
      [_INTL("Evolutions"),        EvolutionsProperty.new,             _INTL("Evolution paths of this species.")],
      [_INTL("Height"),            NonzeroLimitProperty.new(999),      _INTL("Height of the Pokémon in 0.1 metres (e.g. 42 = 4.2m).")],
      [_INTL("Weight"),            NonzeroLimitProperty.new(9999),     _INTL("Weight of the Pokémon in 0.1 kilograms (e.g. 42 = 4.2kg).")],
@@ -1086,6 +1087,7 @@ def pbPokemonEditor
             spec.egg_groups[1],
             spec.hatch_steps,
             spec.incense,
+            spec.offspring,
             evolutions,
             spec.height,
             spec.weight,
@@ -1131,15 +1133,15 @@ def pbPokemonEditor
               :egg_groups            => egg_groups,         # 26, 27
               :hatch_steps           => data[28],
               :incense               => data[29],
-              :offspring             => spec.offspring,
-              :evolutions            => data[30],
-              :height                => data[31],
-              :weight                => data[32],
-              :color                 => data[33],
-              :shape                 => data[34],
-              :habitat               => data[35],
-              :generation            => data[36],
-              :flags                 => data[37]
+              :offspring             => data[30],
+              :evolutions            => data[31],
+              :height                => data[32],
+              :weight                => data[33],
+              :color                 => data[34],
+              :shape                 => data[35],
+              :habitat               => data[36],
+              :generation            => data[37],
+              :flags                 => data[38]
             }
             # Add species' data to records
             GameData::Species.register(species_hash)

@@ -1716,6 +1716,10 @@ class PokemonStorageScreen
       pbDisplay(_INTL("Please remove the Mail."))
     elsif !heldpoke && @storage[box,index].mail
       pbDisplay(_INTL("Please remove the Mail."))
+    elsif heldpoke && heldpoke.cannot_store
+      pbDisplay(_INTL("{1} refuses to go into storage!", heldpoke.name))
+    elsif !heldpoke && @storage[box, index].cannot_store
+      pbDisplay(_INTL("{1} refuses to go into storage!", @storage[box, index].name))
     else
       loop do
         destbox = @scene.pbChooseBox(_INTL("Deposit in which Box?"))
@@ -1766,14 +1770,17 @@ class PokemonStorageScreen
     index = selected[1]
     if @storage[box,index]
       raise _INTL("Position {1},{2} is not empty...",box,index)
-    end
-    if box!=-1 && index>=@storage.maxPokemon(box)
-      pbDisplay("Can't place that there.")
-      return
-    end
-    if box!=-1 && @heldpkmn.mail
-      pbDisplay("Please remove the mail.")
-      return
+    elsif box != -1
+      if index >= @storage.maxPokemon(box)
+        pbDisplay("Can't place that there.")
+        return
+      elsif @heldpkmn.mail
+        pbDisplay("Please remove the mail.")
+        return
+      elsif @heldpkmn.cannot_store
+        pbDisplay(_INTL("{1} refuses to go into storage!", @heldpkmn.name))
+        return
+      end
     end
     if Settings::HEAL_STORED_POKEMON && box >= 0
       old_ready_evo = @heldpkmn.ready_to_evolve
@@ -1795,7 +1802,11 @@ class PokemonStorageScreen
     if !@storage[box,index]
       raise _INTL("Position {1},{2} is empty...",box,index)
     end
-    if box==-1 && pbAble?(@storage[box,index]) && pbAbleCount<=1 && !pbAble?(@heldpkmn)
+    if @heldpkmn.cannot_store && box != -1
+      pbPlayBuzzerSE
+      pbDisplay(_INTL("{1} refuses to go into storage!", @heldpkmn.name))
+      return false
+    elsif box==-1 && pbAble?(@storage[box,index]) && pbAbleCount<=1 && !pbAble?(@heldpkmn)
       pbPlayBuzzerSE
       pbDisplay(_INTL("That's your last Pokémon!"))
       return false
@@ -1827,6 +1838,9 @@ class PokemonStorageScreen
       return false
     elsif pokemon.mail
       pbDisplay(_INTL("Please remove the mail."))
+      return false
+    elsif pokemon.cannot_release
+      pbDisplay(_INTL("{1} refuses to leave you!", pokemon.name))
       return false
     end
     if box==-1 && pbAbleCount<=1 && pbAble?(pokemon) && !heldpoke

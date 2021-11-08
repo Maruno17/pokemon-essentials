@@ -638,6 +638,10 @@ GameData::Evolution.register({
 # event numbers are:
 #   1: Kubfu -> Urshifu
 #   2: Galarian Yamask -> Runerigus
+# These used event numbers are only used in pokemon.txt/pokemon_forms.txt and in
+# map events that call pbEvolutionEvent, so they are relatively easy to change
+# if you need to (no script changes are required). However, you could just
+# ignore them instead if you don't want to use them.
 #===============================================================================
 def pbEvolutionEvent(number)
   return if !$player

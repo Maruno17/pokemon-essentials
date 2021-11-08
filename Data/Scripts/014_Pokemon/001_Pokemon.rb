@@ -78,6 +78,12 @@ class Pokemon
   # Used by Galarian Yamask to remember that it took sufficient damage from a
   # battle and can evolve.
   attr_accessor :ready_to_evolve
+  # Whether this Pokémon can be deposited in storage
+  attr_accessor :cannot_store
+  # Whether this Pokémon can be released
+  attr_accessor :cannot_release
+  # Whether this Pokémon can be traded
+  attr_accessor :cannot_trade
 
   # Max total IVs
   IV_STAT_LIMIT = 31

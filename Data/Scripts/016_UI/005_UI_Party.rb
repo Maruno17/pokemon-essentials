@@ -1126,7 +1126,7 @@ class PokemonPartyScreen
     eligibility = []
     for pkmn in @party
       elig = ableProc.call(pkmn)
-      elig = false if pkmn.egg? || pkmn.shadowPokemon?
+      elig = false if pkmn.egg? || pkmn.shadowPokemon? || pkmn.cannot_trade
       eligibility.push(elig)
       annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
     end

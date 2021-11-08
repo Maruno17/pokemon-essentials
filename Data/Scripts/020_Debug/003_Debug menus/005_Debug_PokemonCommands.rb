@@ -1031,6 +1031,36 @@ PokemonDebugMenuCommands.register("ownership", {
 })
 
 #===============================================================================
+# Can store/release/trade
+#===============================================================================
+PokemonDebugMenuCommands.register("setdiscardable", {
+  "parent"      => "main",
+  "name"        => _INTL("Set discardable"),
+  "always_show" => true,
+  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+    cmd = 0
+    loop do
+      msg = _INTL("Click option to toggle.")
+      cmds = []
+      cmds.push((pkmn.cannot_store) ? _INTL("Cannot store") : _INTL("Can store"))
+      cmds.push((pkmn.cannot_release) ? _INTL("Cannot release") : _INTL("Can release"))
+      cmds.push((pkmn.cannot_trade) ? _INTL("Cannot trade") : _INTL("Can trade"))
+      cmd = screen.pbShowCommands(msg, cmds, cmd)
+      break if cmd < 0
+      case cmd
+      when 0   # Toggle storing
+        pkmn.cannot_store = !pkmn.cannot_store
+      when 1   # Toggle releasing
+        pkmn.cannot_release = !pkmn.cannot_release
+      when 2   # Toggle trading
+        pkmn.cannot_trade = !pkmn.cannot_trade
+      end
+    end
+    next false
+  }
+})
+
+#===============================================================================
 # Other options
 #===============================================================================
 PokemonDebugMenuCommands.register("setegg", {

@@ -975,6 +975,108 @@ end
 
 
 
+module SpeciesPoolProperty
+  def self.set(_settingname, oldsetting)
+    # Get all species in the pool
+    realcmds = []
+    realcmds.push([nil, "-", -1])   # Species ID, index in this list, name
+    for i in 0...oldsetting.length
+      realcmds.push([oldsetting[i], GameData::Species.get(oldsetting[i]).real_name, i])
+    end
+    # Edit species pool
+    cmdwin = pbListWindow([], 200)
+    oldsel = -1
+    ret = oldsetting
+    cmd = [0, 0]
+    commands = []
+    refreshlist = true
+    loop do
+      if refreshlist
+        realcmds.sort! { |a, b| a[2] <=> b[2] }
+        commands = []
+        realcmds.each_with_index do |entry, i|
+          commands.push((entry[0].nil?) ? _INTL("[ADD SPECIES]") : entry[1])
+        end
+      end
+      refreshlist = false
+      oldsel = -1
+      cmd = pbCommands3(cmdwin, commands, -1, cmd[1], true)
+      case cmd[0]
+      when 1   # Swap species up
+        if cmd[1] > 0 && cmd[1] < realcmds.length - 1
+          realcmds[cmd[1] + 1][2], realcmds[cmd[1]][2] = realcmds[cmd[1]][2], realcmds[cmd[1] + 1][2]
+          refreshlist = true
+        end
+      when 2   # Swap species down
+        if cmd[1] > 1
+          realcmds[cmd[1] - 1][2], realcmds[cmd[1]][2] = realcmds[cmd[1]][2], realcmds[cmd[1] - 1][2]
+          refreshlist = true
+        end
+      when 0
+        if cmd[1] >= 0   # Chose an entry
+          entry = realcmds[cmd[1]]
+          if entry[0].nil?   # Add new species
+            new_species = pbChooseSpeciesList
+            if new_species
+              maxid = -1
+              realcmds.each { |e| maxid = [maxid, e[2]].max }
+              realcmds.push([new_species, GameData::Species.get(new_species).real_name, maxid + 1])
+              refreshlist = true
+            end
+          else   # Edit existing species
+            case pbMessage(_INTL("\\ts[]Do what with this species?"),
+               [_INTL("Change species"), _INTL("Delete"), _INTL("Cancel")], 3)
+            when 0   # Change species
+              new_species = pbChooseSpeciesList(entry[0])
+              if new_species && new_species != entry[0]
+                entry[0] = new_species
+                entry[1] = GameData::Species.get(new_species).real_name
+                oldsel = entry[2]
+                refreshlist = true
+              end
+            when 1   # Delete
+              realcmds.delete_at(cmd[1])
+              cmd[1] = [cmd[1], realcmds.length - 1].min
+              refreshlist = true
+            end
+          end
+        else   # Cancel/quit
+          case pbMessage(_INTL("Save changes?"),
+             [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+          when 0
+            realcmds.shift
+            for i in 0...realcmds.length
+              realcmds[i] = realcmds[i][0]
+            end
+            realcmds.compact!
+            ret = realcmds
+            break
+          when 1
+            break
+          end
+        end
+      end
+    end
+    cmdwin.dispose
+    return ret
+  end
+
+  def self.defaultValue
+    return []
+  end
+
+  def self.format(value)
+    ret = ""
+    for i in 0...value.length
+      ret << "," if i > 0
+      ret << GameData::Species.get(value[i]).real_name
+    end
+    return ret
+  end
+end
+
+
+
 module ItemPoolProperty
   def self.set(_settingname, oldsetting)
     # Get all items in the pool

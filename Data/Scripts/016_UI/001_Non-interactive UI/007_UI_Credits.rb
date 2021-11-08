@@ -81,7 +81,7 @@ and everyone else who helped out
 
 "mkxp-z" by:
 Roza
-Based on MKXP by Ancurio et al.
+Based on "mkxp" by Ancurio et al.
 
 "RPG Maker XP" by:
 Enterbrain
