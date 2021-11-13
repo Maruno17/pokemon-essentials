@@ -25,7 +25,7 @@ class GameStats
   attr_accessor :lottery_prize_count   # Times won any prize at all
   # Pokémon
   attr_accessor :eggs_hatched
-  attr_accessor :evolution_count   # Doesn't count cancelled evolutions
+  attr_accessor :evolution_count, :evolutions_cancelled
   attr_accessor :trade_count
   attr_accessor :moves_taught_by_item, :moves_taught_by_tutor, :moves_taught_by_reminder
   attr_accessor :day_care_deposits, :day_care_levels_gained
@@ -96,6 +96,7 @@ class GameStats
     # Pokémon
     @eggs_hatched                  = 0
     @evolution_count               = 0
+    @evolutions_cancelled          = 0
     @trade_count                   = 0
     @moves_taught_by_item          = 0
     @moves_taught_by_tutor         = 0

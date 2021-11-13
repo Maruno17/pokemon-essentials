@@ -558,6 +558,7 @@ class PokemonEvolutionScene
     end while metaplayer1.playing? && metaplayer2.playing?
     pbFlashInOut(canceled,oldstate,oldstate2)
     if canceled
+      $stats.evolutions_cancelled += 1
       pbMessageDisplay(@sprites["msgwindow"],
          _INTL("Huh? {1} stopped evolving!",@pokemon.name)) { pbUpdate }
     else
