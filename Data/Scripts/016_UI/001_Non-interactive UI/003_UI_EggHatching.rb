@@ -189,6 +189,7 @@ def pbHatchAnimation(pokemon)
 end
 
 def pbHatch(pokemon)
+  $stats.eggs_hatched += 1
   speciesname = pokemon.speciesName
   pokemon.name           = nil
   pokemon.owner          = Pokemon::Owner.new_from_trainer($player)
@@ -198,6 +199,7 @@ def pbHatch(pokemon)
   pokemon.hatched_map    = $game_map.map_id
   $player.pokedex.register(pokemon)
   $player.pokedex.set_owned(pokemon.species)
+  $player.pokedex.set_seen_egg(pokemon.species)
   pokemon.record_first_moves
   if !pbHatchAnimation(pokemon)
     pbMessage(_INTL("Huh?\1"))

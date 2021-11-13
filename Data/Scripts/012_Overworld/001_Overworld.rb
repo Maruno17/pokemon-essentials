@@ -135,7 +135,11 @@ Events.onStepTakenFieldMovement += proc { |_sender,e|
     tile_id = map.data[thistile[1],thistile[2],i]
     next if tile_id == nil
     next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
-    $player.soot += 1 if event == $game_player && $bag.has?(:SOOTSACK)
+    if event == $game_player && $bag.has?(:SOOTSACK)
+      old_soot = $player.soot
+      $player.soot += 1
+      $stats.soot_collected += $player.soot - old_soot if $player.soot > old_soot
+    end
     map.erase_tile(thistile[1], thistile[2], i)
     break
   end

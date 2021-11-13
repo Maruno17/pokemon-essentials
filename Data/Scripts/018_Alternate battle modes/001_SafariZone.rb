@@ -1,11 +1,13 @@
 class SafariState
   attr_accessor :ballcount
+  attr_accessor :captures
   attr_accessor :decision
   attr_accessor :steps
 
   def initialize
     @start      = nil
     @ballcount  = 0
+    @captures   = 0
     @inProgress = false
     @steps      = 0
     @decision   = 0
@@ -43,6 +45,7 @@ class SafariState
   def pbEnd
     @start      = nil
     @ballcount  = 0
+    @captures   = 0
     @inProgress = false
     @steps      = 0
     @decision   = 0
@@ -130,6 +133,11 @@ def pbSafariBattle(species,level)
   #    2 - Player ran out of Safari Balls
   #    3 - Player or wild Pokémon ran from battle, or player forfeited the match
   #    4 - Wild Pokémon was caught
+  if decision == 4
+    $stats.safari_pokemon_caught += 1
+    pbSafariState.captures += 1
+    $stats.most_captures_per_safari_game = [$stats.most_captures_per_safari_game, pbSafariState.captures].max
+  end
   pbSet(1,decision)
   # Used by the Poké Radar to update/break the chain
   Events.onWildBattleEnd.trigger(nil,species,level,decision)

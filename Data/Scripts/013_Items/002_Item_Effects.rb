@@ -99,6 +99,7 @@ def pbRepel(item,steps)
     pbMessage(_INTL("But a repellent's effect still lingers from earlier."))
     return false
   end
+  $stats.repel_count += 1
   pbUseItemMessage(item)
   $PokemonGlobal.repel = steps
   return true
@@ -243,6 +244,7 @@ ItemHandlers::UseInField.add(:OLDROD,proc { |item|
   end
   encounter = $PokemonEncounters.has_encounter_type?(:OldRod)
   if pbFishing(encounter,1)
+    $stats.fishing_battles += 1
     pbEncounter(:OldRod)
   end
   next true
@@ -256,6 +258,7 @@ ItemHandlers::UseInField.add(:GOODROD,proc { |item|
   end
   encounter = $PokemonEncounters.has_encounter_type?(:GoodRod)
   if pbFishing(encounter,2)
+    $stats.fishing_battles += 1
     pbEncounter(:GoodRod)
   end
   next true
@@ -269,12 +272,14 @@ ItemHandlers::UseInField.add(:SUPERROD,proc { |item|
   end
   encounter = $PokemonEncounters.has_encounter_type?(:SuperRod)
   if pbFishing(encounter,3)
+    $stats.fishing_battles += 1
     pbEncounter(:SuperRod)
   end
   next true
 })
 
 ItemHandlers::UseInField.add(:ITEMFINDER,proc { |item|
+  $stats.itemfinder_count += 1
   event = pbClosestHiddenItem
   if !event
     pbMessage(_INTL("... \\wt[10]... \\wt[10]... \\wt[10]...\\wt[10]Nope! There's no response."))

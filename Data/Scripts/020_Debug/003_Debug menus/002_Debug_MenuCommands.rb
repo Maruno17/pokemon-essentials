@@ -632,15 +632,19 @@ DebugMenuCommands.register("fillboxes", {
       if f == 0
         if species_data.single_gendered?
           g = (species_data.gender_ratio == :AlwaysFemale) ? 1 : 0
-          $player.pokedex.register(sp, g, f, false)
+          $player.pokedex.register(sp, g, f, 0, false)
+          $player.pokedex.register(sp, g, f, 1, false)
         else   # Both male and female
-          $player.pokedex.register(sp, 0, f, false)
-          $player.pokedex.register(sp, 1, f, false)
+          $player.pokedex.register(sp, 0, f, 0, false)
+          $player.pokedex.register(sp, 0, f, 1, false)
+          $player.pokedex.register(sp, 1, f, 0, false)
+          $player.pokedex.register(sp, 1, f, 1, false)
         end
         $player.pokedex.set_owned(sp, false)
       elsif species_data.real_form_name && !species_data.real_form_name.empty?
         g = (species_data.gender_ratio == :AlwaysFemale) ? 1 : 0
-        $player.pokedex.register(sp, g, f, false)
+        $player.pokedex.register(sp, g, f, 0, false)
+        $player.pokedex.register(sp, g, f, 1, false)
       end
       # Add Pokémon (if form 0, i.e. one of each species)
       next if f != 0

@@ -133,3 +133,11 @@ SaveData.register(:game_version) do
   load_value { |value| $save_game_version = value }
   new_game_value { Settings::GAME_VERSION }
 end
+
+SaveData.register(:stats) do
+  load_in_bootup
+  ensure_class :GameStats
+  save_value { $stats }
+  load_value { |value| $stats = value }
+  new_game_value { GameStats.new }
+end

@@ -18,6 +18,7 @@ critical hit.
 #===============================================================================
 def pbPurify(pkmn, scene)
   return if !pkmn.shadowPokemon? || pkmn.heart_gauge != 0
+  $stats.shadow_pokemon_purified += 1
   pkmn.shadow = false
   pkmn.giveRibbon(:NATIONAL)
   scene.pbDisplay(_INTL("{1} opened the door to its heart!", pkmn.name))

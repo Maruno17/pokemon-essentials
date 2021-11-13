@@ -358,7 +358,8 @@ class PokeBattle_SafariZone
   def pbSetSeen(battler)
     return if !battler || !@internalBattle
     if battler.is_a?(PokeBattle_Battler)
-      pbPlayer.pokedex.register(battler.displaySpecies,battler.displayGender,battler.displayForm)
+      pbPlayer.pokedex.register(battler.displaySpecies, battler.displayGender,
+                                battler.displayForm, battler.shiny?)
     else
       pbPlayer.pokedex.register(battler)
     end

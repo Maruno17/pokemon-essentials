@@ -11,13 +11,13 @@ class PokemonLoadPanel < SpriteWrapper
   FEMALETEXTCOLOR       = Color.new(240,72,88)
   FEMALETEXTSHADOWCOLOR = Color.new(160,64,64)
 
-  def initialize(index,title,isContinue,trainer,framecount,mapid,viewport=nil)
+  def initialize(index, title, isContinue, trainer, framecount, stats, mapid, viewport = nil)
     super(viewport)
     @index = index
     @title = title
     @isContinue = isContinue
     @trainer = trainer
-    @totalsec = (framecount || 0) / Graphics.frame_rate
+    @totalsec = (stats) ? stats.play_time.to_i : ((framecount || 0) / Graphics.frame_rate)
     @mapid = mapid
     @selected = (index==0)
     @bgbitmap = AnimatedBitmap.new("Graphics/Pictures/loadPanels")
@@ -98,7 +98,7 @@ end
 #
 #===============================================================================
 class PokemonLoad_Scene
-  def pbStartScene(commands, show_continue, trainer, frame_count, map_id)
+  def pbStartScene(commands, show_continue, trainer, frame_count, stats, map_id)
     @commands = commands
     @sprites = {}
     @viewport = Viewport.new(0, 0, Graphics.width, Graphics.height)
@@ -106,8 +106,8 @@ class PokemonLoad_Scene
     addBackgroundOrColoredPlane(@sprites,"background","loadbg",Color.new(248,248,248),@viewport)
     y = 16*2
     for i in 0...commands.length
-      @sprites["panel#{i}"] = PokemonLoadPanel.new(i,commands[i],
-         (show_continue) ? (i==0) : false,trainer,frame_count,map_id,@viewport)
+      @sprites["panel#{i}"] = PokemonLoadPanel.new(i, commands[i],
+         (show_continue) ? (i == 0) : false, trainer, frame_count, stats, map_id, @viewport)
       @sprites["panel#{i}"].x = 24*2
       @sprites["panel#{i}"].y = y
       @sprites["panel#{i}"].pbRefresh
@@ -297,7 +297,7 @@ class PokemonLoadScreen
     commands[cmd_quit = commands.length]      = _INTL('Quit Game')
     map_id = show_continue ? @save_data[:map_factory].map.map_id : 0
     @scene.pbStartScene(commands, show_continue, @save_data[:player],
-                        @save_data[:frame_count] || 0, map_id)
+                        @save_data[:frame_count] || 0, @save_data[:stats], map_id)
     @scene.pbSetParty(@save_data[:player]) if show_continue
     @scene.pbStartScene2
     loop do

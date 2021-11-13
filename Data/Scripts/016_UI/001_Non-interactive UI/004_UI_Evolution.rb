@@ -566,6 +566,7 @@ class PokemonEvolutionScene
   end
 
   def pbEvolutionSuccess
+    $stats.evolution_count += 1
     # Play cry of evolved species
     frames = GameData::Species.cry_length(@newspecies, @pokemon.form)
     pbBGMStop

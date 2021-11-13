@@ -587,6 +587,8 @@ class PokemonMartScreen
         end
         pbDisplayPaused(_INTL("You have no more room in the Bag."))
       else
+        $stats.money_spent_at_marts += price
+        $stats.mart_items_bought += quantity
         @adapter.setMoney(@adapter.getMoney-price)
         @stock.delete_if { |item| GameData::Item.get(item).is_important? && $bag.has?(item) }
         pbDisplayPaused(_INTL("Here you are! Thank you!")) { pbSEPlay("Mart buy item") }
@@ -597,6 +599,7 @@ class PokemonMartScreen
               break if !@adapter.addItem(:PREMIERBALL)
               premier_balls_added += 1
             end
+            $stats.premier_balls_earned += premier_balls_added
             if premier_balls_added > 1
               pbDisplayPaused(_INTL("I'll throw in some {1}, too.", GameData::Item.get(:PREMIERBALL).name_plural))
             elsif premier_balls_added > 0
@@ -604,6 +607,7 @@ class PokemonMartScreen
             end
           elsif !Settings::MORE_BONUS_PREMIER_BALLS && GameData::Item.get(item) == :POKEBALL
             if @adapter.addItem(GameData::Item.get(:PREMIERBALL))
+              $stats.premier_balls_earned += 1
               pbDisplayPaused(_INTL("I'll throw in a Premier Ball, too."))
             end
           end
@@ -638,7 +642,9 @@ class PokemonMartScreen
       price/=2
       price*=qty
       if pbConfirm(_INTL("I can pay ${1}. Would that be OK?",price.to_s_formatted))
+        old_money = @adapter.getMoney
         @adapter.setMoney(@adapter.getMoney+price)
+        $stats.money_earned_at_marts += @adapter.getMoney - old_money
         qty.times do
           @adapter.removeItem(item)
         end

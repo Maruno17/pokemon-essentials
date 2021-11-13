@@ -188,6 +188,7 @@ class BugContestState
     $player.party=[chosenpkmn]
     @decision=0
     @ended=false
+    $stats.bug_contest_count += 1
   end
 
   def place
@@ -210,6 +211,7 @@ class BugContestState
     else
       @ended=false
     end
+    $stats.bug_contest_wins += 1 if place == 0
     @lastPokemon=nil
     @otherparty=[]
     @reception=[]

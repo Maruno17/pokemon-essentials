@@ -797,6 +797,7 @@ class Pokemon
   # @param strain [Integer] Pokérus strain to give
   def givePokerus(strain = 0)
     return if self.pokerusStage == 2   # Can't re-infect a cured Pokémon
+    $stats.pokerus_infections += 1
     strain = rand(1..16) if strain <= 0 || strain >= 16
     time = 1 + (strain % 4)
     @pokerus = time

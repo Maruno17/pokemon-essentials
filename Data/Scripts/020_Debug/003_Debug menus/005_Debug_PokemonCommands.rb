@@ -888,6 +888,7 @@ PokemonDebugMenuCommands.register("setshininess", {
         pkmn.shiny = nil
         pkmn.super_shiny = nil
       end
+      $player.pokedex.register(pkmn) if !settingUpBattle
       screen.pbRefreshSingle(pkmnid)
     end
     next false

@@ -22,6 +22,7 @@ module BallHandlers
   end
 
   def self.onFailCatch(ball,battle,battler)
+    $stats.failed_poke_ball_count += 1
     OnFailCatch.trigger(ball,battle,battler)
   end
 end

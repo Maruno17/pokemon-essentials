@@ -127,6 +127,7 @@ class PokeBattle_Battle
     battler = @battlers[idxBattler]
     return if !battler || !battler.pokemon
     return if !battler.hasMega? || battler.mega?
+    $stats.mega_evolution_count += 1 if battler.pbOwnedByPlayer?
     trainerName = pbGetOwnerName(idxBattler)
     old_ability = battler.ability_id
     # Break Illusion

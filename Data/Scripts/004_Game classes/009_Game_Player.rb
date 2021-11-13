@@ -112,6 +112,14 @@ class Game_Player < Game_Character
         if !$game_temp.encounter_triggered
           @x += x_offset
           @y += y_offset
+          if $PokemonGlobal&.diving || $PokemonGlobal&.surfing
+            $stats.distance_surfed += 1
+          elsif $PokemonGlobal&.bicycle
+            $stats.distance_cycled += 1
+          else
+            $stats.distance_walked += 1
+          end
+          $stats.distance_slid_on_ice += 1 if $PokemonGlobal.sliding
           increase_steps
         end
       elsif !check_event_trigger_touch(dir)
@@ -128,6 +136,39 @@ class Game_Player < Game_Character
       Events.onChangeDirection.trigger(self, self)
       $game_temp.encounter_triggered = false if !keep_enc_indicator
     end
+  end
+
+  def jump(x_plus, y_plus)
+    if x_plus != 0 || y_plus != 0
+      if x_plus.abs > y_plus.abs
+        (x_plus < 0) ? turn_left : turn_right
+      else
+        (y_plus < 0) ? turn_up : turn_down
+      end
+      each_occupied_tile { |i, j| return if !passable?(i + x_plus, j + y_plus, 0) }
+    end
+    @x = @x + x_plus
+    @y = @y + y_plus
+    real_distance = Math::sqrt(x_plus * x_plus + y_plus * y_plus)
+    distance = [1, real_distance].max
+    @jump_peak = distance * Game_Map::TILE_HEIGHT * 3 / 8   # 3/4 of tile for ledge jumping
+    @jump_distance = [x_plus.abs * Game_Map::REAL_RES_X, y_plus.abs * Game_Map::REAL_RES_Y].max
+    @jump_distance_left = 1   # Just needs to be non-zero
+    if real_distance > 0   # Jumping to somewhere else
+      if $PokemonGlobal&.diving || $PokemonGlobal&.surfing
+        $stats.distance_surfed += x_plus.abs + y_pos.abs
+      elsif $PokemonGlobal&.bicycle
+        $stats.distance_cycled += x_plus.abs + y_pos.abs
+      else
+        $stats.distance_walked += x_plus.abs + y_pos.abs
+      end
+      @jump_count = 0
+    else   # Jumping on the spot
+      @jump_speed_real = nil   # Reset jump speed
+      @jump_count = Game_Map::REAL_RES_X / jump_speed_real   # Number of frames to jump one tile
+    end
+    @stop_count = 0
+    triggerLeaveTile
   end
 
   def pbTriggeredTrainerEvents(triggers,checkIfRunning=true)
@@ -551,6 +592,7 @@ end
 def pbMountBike
   return if $PokemonGlobal.bicycle
   $PokemonGlobal.bicycle = true
+  $stats.cycle_count += 1
   pbUpdateVehicle
   bike_bgm = GameData::Metadata.get.bicycle_BGM
   pbCueBGM(bike_bgm, 0.5) if bike_bgm

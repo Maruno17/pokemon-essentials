@@ -178,6 +178,7 @@ class PokeBattle_Battle
          pkmn.name,debugInfo))
     end
     # Give Exp
+    $stats.total_exp_gained += expGained
     if pkmn.shadowPokemon?
       pkmn.exp += expGained
       return

@@ -349,6 +349,7 @@ class PokeBattle_Battle
       pbPlayer.money += tMoney
       moneyGained = pbPlayer.money-oldMoney
       if moneyGained>0
+        $stats.battle_money_gained += moneyGained
         pbDisplayPaused(_INTL("You got ${1} for winning!",moneyGained.to_s_formatted))
       end
     end
@@ -360,6 +361,7 @@ class PokeBattle_Battle
       pbPlayer.money += @field.effects[PBEffects::PayDay]
       moneyGained = pbPlayer.money-oldMoney
       if moneyGained>0
+        $stats.battle_money_gained += moneyGained
         pbDisplayPaused(_INTL("You picked up ${1}!",moneyGained.to_s_formatted))
       end
     end
@@ -377,6 +379,7 @@ class PokeBattle_Battle
     pbPlayer.money -= tMoney
     moneyLost = oldMoney-pbPlayer.money
     if moneyLost>0
+      $stats.battle_money_lost += moneyLost
       if trainerBattle?
         pbDisplayPaused(_INTL("You gave ${1} to the winner...",moneyLost.to_s_formatted))
       else

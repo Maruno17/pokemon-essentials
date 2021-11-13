@@ -389,6 +389,7 @@ class DayCare
   end
 
   def self.deposit(party_index)
+    $stats.day_care_deposits += 1
     day_care = $PokemonGlobal.day_care
     pkmn = $player.party[party_index]
     raise _INTL("No Pokémon at index {1} in party.", party_index) if pkmn.nil?
@@ -410,6 +411,7 @@ class DayCare
     elsif $player.party_full?
       raise _INTL("No room in party for Pokémon.")
     end
+    $stats.day_care_levels_gained += slot.level_gain
     $player.party.push(slot.pokemon)
     slot.reset
     day_care.reset_egg_counters

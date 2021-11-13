@@ -28,7 +28,7 @@ class PokemonSave_Scene
     @viewport=Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z=99999
     @sprites={}
-    totalsec = Graphics.frame_count / Graphics.frame_rate
+    totalsec = $stats.play_time.to_i
     hour = totalsec / 60 / 60
     min = totalsec / 60 % 60
     mapname=$game_map.name

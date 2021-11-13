@@ -225,3 +225,31 @@ SaveData.register_conversion(:v20_refactor_day_care_variables) do
     end
   end
 end
+
+SaveData.register_conversion(:v20_add_stats) do
+  essentials_version 20
+  display_title 'Adding stats to save data'
+  to_all do |save_data|
+    unless save_data.has_key?(:stats)
+      save_data[:stats] = GameStats.new
+      save_data[:stats].play_time = save_data[:frame_count].to_f / Graphics.frame_rate
+      save_data[:stats].play_sessions = 1
+      save_data[:stats].time_last_saved = save_data[:stats].play_time
+    end
+  end
+end
+
+SaveData.register_conversion(:v20_adding_pokedex_records) do
+  essentials_version 20
+  display_title 'Adding more Pokédex records'
+  to_value :player do |player|
+    player.pokedex.instance_eval do
+      @seen_eggs = {} if @seen_eggs.nil?
+      @seen_forms.each_value do |sp|
+        next if !sp || sp[0][0].is_a?(Array)   # Already converted to include shininess
+        sp[0] = [sp[0], []]
+        sp[1] = [sp[1], []]
+      end
+    end
+  end
+end

@@ -43,6 +43,7 @@ end
 
 def pbUsePokeRadar
   return false if !pbCanUsePokeRadar?
+  $stats.poke_radar_count += 1
   $game_temp.poke_radar_data = [0, 0, 0, [], false] if !$game_temp.poke_radar_data
   $game_temp.poke_radar_data[4] = false
   $PokemonGlobal.pokeradarBattery = 50
@@ -80,7 +81,7 @@ def pbPokeRadarHighlightGrass(showmessage=true)
         # Choose a rarity for the grass (0=normal, 1=rare, 2=shiny)
         s = (rand(100) < 25) ? 1 : 0
         if $game_temp.poke_radar_data && $game_temp.poke_radar_data[2] > 0
-          v = [(65536 / Settings::SHINY_POKEMON_CHANCE) - $game_temp.poke_radar_data[2] * 200, 200].max
+          v = [(65536 / Settings::SHINY_POKEMON_CHANCE) - [$game_temp.poke_radar_data[2], 40].min * 200, 200].max
           v = (65536 / v.to_f).ceil
           s = 2 if rand(65536) < v
         end
@@ -163,7 +164,7 @@ EncounterModifier.register(proc { |encounter|
     $game_temp.poke_radar_data[3].each { |g| rarity = g[3] if g[2] == ring }
     if $game_temp.poke_radar_data[2] > 0   # Chain count, i.e. is chaining
       if rarity == 2 ||
-         rand(100) < 58 + ring * 10 + ($game_temp.poke_radar_data[2] / 4) + ($game_temp.poke_radar_data[4] ? 10 : 0)
+         rand(100) < 58 + ring * 10 + ([$game_temp.poke_radar_data[2], 40].min / 4) + ($game_temp.poke_radar_data[4] ? 10 : 0)
         # Continue the chain
         encounter = [$game_temp.poke_radar_data[0], $game_temp.poke_radar_data[1]]
         $game_temp.force_single_battle = true
@@ -210,7 +211,8 @@ Events.onWildBattleEnd += proc { |_sender,e|
   if $game_temp.poke_radar_data && (decision==1 || decision==4)   # Defeated/caught
     $game_temp.poke_radar_data[0] = species
     $game_temp.poke_radar_data[1] = level
-    $game_temp.poke_radar_data[2] = [$game_temp.poke_radar_data[2] + 1, 40].min
+    $game_temp.poke_radar_data[2] += 1
+    $stats.poke_radar_longest_chain = [$game_temp.poke_radar_data[2], $stats.poke_radar_longest_chain].max
     # Catching makes the next Radar encounter more likely to continue the chain
     $game_temp.poke_radar_data[4] = (decision == 4)
     pbPokeRadarHighlightGrass(false)

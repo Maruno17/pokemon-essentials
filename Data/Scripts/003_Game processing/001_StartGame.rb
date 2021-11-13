@@ -45,6 +45,7 @@ module Game
     $game_temp.begun_new_game = true
     $scene = Scene_Map.new
     SaveData.load_new_game_values
+    $stats.play_sessions += 1
     $map_factory = PokemonMapFactory.new($data_system.start_map_id)
     $game_player.moveto($data_system.start_x, $data_system.start_y)
     $game_player.refresh
@@ -60,6 +61,7 @@ module Game
   def self.load(save_data)
     validate save_data => Hash
     SaveData.load_all_values(save_data)
+    $stats.play_sessions += 1
     self.load_map
     pbAutoplayOnSave
     $game_map.update
@@ -110,6 +112,7 @@ module Game
     $PokemonGlobal.safesave = safe
     $game_system.save_count += 1
     $game_system.magic_number = $data_system.magic_number
+    $stats.set_time_last_saved
     begin
       SaveData.save_to_file(save_file)
       Graphics.frame_reset

@@ -194,6 +194,7 @@ def pbCut
   end
   pbMessage(_INTL("This tree looks like it can be cut down!\1"))
   if pbConfirmMessage(_INTL("Would you like to cut it?"))
+    $stats.cut_count += 1
     speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
@@ -216,6 +217,7 @@ HiddenMoveHandlers::UseMove.add(:CUT,proc { |move,pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!",pokemon.name,GameData::Move.get(move).name))
   end
+  $stats.cut_count += 1
   facingEvent = $game_player.pbFacingEvent
   if facingEvent
     pbSmashEvent(facingEvent)
@@ -316,6 +318,7 @@ def pbDive
        $game_temp.player_new_direction = $game_player.direction
        $PokemonGlobal.surfing = false
        $PokemonGlobal.diving  = true
+       $stats.dive_count += 1
        pbUpdateVehicle
        $scene.transfer_player(false)
        $game_map.autoplay
@@ -476,6 +479,7 @@ HiddenMoveHandlers::UseMove.add(:FLASH,proc { |move,pokemon|
     pbMessage(_INTL("{1} used {2}!",pokemon.name,GameData::Move.get(move).name))
   end
   $PokemonGlobal.flashUsed = true
+  $stats.flash_count += 1
   radiusDiff = 8*20/Graphics.frame_rate
   while darkness.radius<darkness.radiusMax
     Graphics.update
@@ -518,6 +522,7 @@ def pbFlyToNewLocation(pkmn = nil, move = :FLY)
     name = pkmn&.name || $player.name
     pbMessage(_INTL("{1} used {2}!", name, GameData::Move.get(move).name))
   end
+  $stats.fly_count += 1
   pbFadeOutIn {
     pbSEPlay("Fly")
     $game_temp.player_new_map_id    = $game_temp.fly_destination[0]
@@ -570,7 +575,9 @@ def pbHeadbuttEffect(event=nil)
     pbMessage(_INTL("Nope. Nothing..."))
   else
     enctype = (chance==1) ? :HeadbuttLow : :HeadbuttHigh
-    if !pbEncounter(enctype)
+    if pbEncounter(enctype)
+      $stats.headbutt_battles += 1
+    else
       pbMessage(_INTL("Nope. Nothing..."))
     end
   end
@@ -584,6 +591,7 @@ def pbHeadbutt(event=nil)
     return false
   end
   if pbConfirmMessage(_INTL("A Pokémon could be in this tree. Would you like to use Headbutt?"))
+    $stats.headbutt_count += 1
     speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
@@ -606,6 +614,7 @@ HiddenMoveHandlers::UseMove.add(:HEADBUTT,proc { |move,pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!",pokemon.name,GameData::Move.get(move).name))
   end
+  $stats.headbutt_count += 1
   facingEvent = $game_player.pbFacingEvent
   pbHeadbuttEffect(facingEvent)
 })
@@ -617,6 +626,7 @@ HiddenMoveHandlers::UseMove.add(:HEADBUTT,proc { |move,pokemon|
 #===============================================================================
 def pbRockSmashRandomEncounter
   if $PokemonEncounters.encounter_triggered?(:RockSmash, false, false)
+    $stats.rock_smash_battles += 1
     pbEncounter(:RockSmash)
   end
 end
@@ -629,6 +639,7 @@ def pbRockSmash
     return false
   end
   if pbConfirmMessage(_INTL("This rock appears to be breakable. Would you like to use Rock Smash?"))
+    $stats.rock_smash_count += 1
     speciesname = (movefinder) ? movefinder.name : $player.name
     pbMessage(_INTL("{1} used {2}!",speciesname,GameData::Move.get(move).name))
     pbHiddenMoveAnimation(movefinder)
@@ -651,6 +662,7 @@ HiddenMoveHandlers::UseMove.add(:ROCKSMASH,proc { |move,pokemon|
   if !pbHiddenMoveAnimation(pokemon)
     pbMessage(_INTL("{1} used {2}!",pokemon.name,GameData::Move.get(move).name))
   end
+  $stats.rock_smash_count += 1
   facingEvent = $game_player.pbFacingEvent
   if facingEvent
     pbSmashEvent(facingEvent)
@@ -740,6 +752,7 @@ def pbStartSurfing
   pbCancelVehicles
   $PokemonEncounters.reset_step_count
   $PokemonGlobal.surfing = true
+  $stats.surf_count += 1
   pbUpdateVehicle
   $game_temp.surf_base_coords = $map_factory.getFacingCoords($game_player.x, $game_player.y, $game_player.direction)
   pbJumpToward
@@ -933,6 +946,7 @@ def pbAscendWaterfall
   return if $game_player.direction != 8   # Can't ascend if not facing up
   terrain = $game_player.pbFacingTerrainTag
   return if !terrain.waterfall && !terrain.waterfall_crest
+  $stats.waterfall_count += 1
   oldthrough   = $game_player.through
   oldmovespeed = $game_player.move_speed
   $game_player.through    = true
@@ -950,6 +964,7 @@ def pbDescendWaterfall
   return if $game_player.direction != 2   # Can't descend if not facing down
   terrain = $game_player.pbFacingTerrainTag
   return if !terrain.waterfall && !terrain.waterfall_crest
+  $stats.waterfalls_descended += 1
   oldthrough   = $game_player.through
   oldmovespeed = $game_player.move_speed
   $game_player.through    = true

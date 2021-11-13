@@ -361,7 +361,13 @@ class SlotMachineScene
       end
       frame = (frame+1)%(Graphics.frame_rate*4)
     end
+    old_coins = $player.coins
     $player.coins = @sprites["credit"].score
+    if $player.coins > old_coins
+      $stats.coins_won += $player.coins - old_coins
+    elsif $player.coins < old_coins
+      $stats.coins_lost += old_coins - $player.coins
+    end
   end
 
   def pbEndScene

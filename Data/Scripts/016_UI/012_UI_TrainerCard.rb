@@ -39,7 +39,7 @@ class PokemonTrainerCard_Scene
     overlay.clear
     baseColor   = Color.new(72,72,72)
     shadowColor = Color.new(160,160,160)
-    totalsec = Graphics.frame_count / Graphics.frame_rate
+    totalsec = $stats.play_time.to_i
     hour = totalsec / 60 / 60
     min = totalsec / 60 % 60
     time = (hour>0) ? _INTL("{1}h {2}m",hour,min) : _INTL("{1}m",min)

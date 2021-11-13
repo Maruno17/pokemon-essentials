@@ -177,6 +177,7 @@ class MoveRelearnerScreen
       if move
         if @scene.pbConfirm(_INTL("Teach {1}?", GameData::Move.get(move).name))
           if pbLearnMove(pkmn, move)
+            $stats.moves_taught_by_reminder += 1
             @scene.pbEndScene
             return true
           end

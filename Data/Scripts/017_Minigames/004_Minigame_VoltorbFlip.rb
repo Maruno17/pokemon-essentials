@@ -370,7 +370,9 @@ class VoltorbFlip
         # Update level text
         @sprites["level"].bitmap.clear
         pbDrawShadowText(@sprites["level"].bitmap,8,150,118,28,_INTL("Level {1}",@level.to_s),Color.new(60,60,60),Color.new(150,190,170),1)
+        old_coins = $player.coins
         $player.coins+=@points
+        $stats.coins_won += $player.coins - old_coins if $player.coins > old_coins
         @points=0
         pbUpdateCoins
         @sprites["curtain"].opacity=0
@@ -414,7 +416,9 @@ class VoltorbFlip
         end
       elsif pbConfirmMessage(_INTL("If you quit now, you will recieve {1} Coin(s). Will you quit?",@points.to_s_formatted))
         pbMessage(_INTL("{1} received {2} Coin(s)!",$player.name,@points.to_s_formatted))
+        old_coins = $player.coins
         $player.coins+=@points
+        $stats.coins_won += $player.coins - old_coins if $player.coins > old_coins
         @points=0
         pbUpdateCoins
         @sprites["curtain"].opacity=0

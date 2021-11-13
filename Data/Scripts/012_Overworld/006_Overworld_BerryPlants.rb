@@ -412,6 +412,7 @@ def pbBerryPlant
       berry = screen.pbChooseItemScreen(Proc.new { |item| GameData::Item.get(item).is_berry? })
     }
     if berry
+      $stats.berries_planted += 1
       berry_plant.plant(berry)
       $bag.remove(berry)
       if Settings::NEW_BERRY_PLANTS
@@ -440,6 +441,10 @@ def pbPickBerry(berry, qty = 1)
   if !$bag.can_add?(berry, qty)
     pbMessage(_INTL("Too bad...\nThe Bag is full..."))
     return false
+  end
+  $stats.berry_plants_picked += 1
+  if qty >= GameData::BerryPlant.get(@berry_id).maximum_yield
+    $stats.max_yield_berry_plants += 1
   end
   $bag.add(berry, qty)
   if qty > 1
