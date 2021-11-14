@@ -92,15 +92,15 @@ class Spriteset_Map
     if @panorama_name!=@map.panorama_name || @panorama_hue!=@map.panorama_hue
       @panorama_name = @map.panorama_name
       @panorama_hue  = @map.panorama_hue
-      @panorama.setPanorama(nil) if @panorama.bitmap!=nil
-      @panorama.setPanorama(@panorama_name,@panorama_hue) if @panorama_name!=""
+      @panorama.set_panorama(nil) if !@panorama.bitmap.nil?
+      @panorama.set_panorama(@panorama_name, @panorama_hue) if !nil_or_empty?(@panorama_name)
       Graphics.frame_reset
     end
     if @fog_name!=@map.fog_name || @fog_hue!=@map.fog_hue
       @fog_name = @map.fog_name
       @fog_hue = @map.fog_hue
-      @fog.setFog(nil) if @fog.bitmap!=nil
-      @fog.setFog(@fog_name,@fog_hue) if @fog_name!=""
+      @fog.set_fog(nil) if !@fog.bitmap.nil?
+      @fog.set_fog(@fog_name, @fog_hue) if !nil_or_empty?(@fog_name)
       Graphics.frame_reset
     end
     tmox = (@map.display_x/Game_Map::X_SUBPIXELS).round

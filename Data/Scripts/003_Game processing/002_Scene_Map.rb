@@ -140,6 +140,9 @@ class Scene_Map
 
   def updateSpritesets
     @spritesets = {} if !@spritesets
+    for map in $map_factory.maps
+      @spritesets[map.map_id] = Spriteset_Map.new(map) if !@spritesets[map.map_id]
+    end
     keys = @spritesets.keys.clone
     for i in keys
       if !$map_factory.hasMap?(i)
@@ -151,9 +154,6 @@ class Scene_Map
       end
     end
     @spritesetGlobal.update
-    for map in $map_factory.maps
-      @spritesets[map.map_id] = Spriteset_Map.new(map) if !@spritesets[map.map_id]
-    end
     pbDayNightTint(@map_renderer)
     @map_renderer.update
     Events.onMapUpdate.trigger(self)
