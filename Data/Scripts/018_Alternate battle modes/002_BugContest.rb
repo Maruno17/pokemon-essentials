@@ -392,6 +392,12 @@ def pbBugContestBattle(species,level)
   #    3 - Player or wild Pokémon ran from battle, or player forfeited the match
   #    4 - Wild Pokémon was caught
   #    5 - Draw
+  case decision
+  when 1, 4   # Won, caught
+    $stats.wild_battles_won += 1
+  when 2, 3, 5   # Lost, fled, draw
+    $stats.wild_battles_lost += 1
+  end
   pbSet(1,decision)
   # Used by the Poké Radar to update/break the chain
   Events.onWildBattleEnd.trigger(nil,species,level,decision)

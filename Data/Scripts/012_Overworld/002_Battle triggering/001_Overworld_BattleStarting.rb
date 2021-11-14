@@ -295,7 +295,7 @@ def pbWildBattleCore(*args)
   #    3 - Player or wild Pokémon ran from battle, or player forfeited the match
   #    4 - Wild Pokémon was caught
   #    5 - Draw
-  case outcome
+  case decision
   when 1, 4   # Won, caught
     $stats.wild_battles_won += 1
   when 2, 3, 5   # Lost, fled, draw
@@ -445,18 +445,18 @@ def pbTrainerBattleCore(*args)
     pbAfterBattle(decision,canLose)
   }
   Input.update
-  case outcome
-  when 1   # Won
-    $stats.trainer_battles_won += 1
-  when 2, 3, 5   # Lost, fled, draw
-    $stats.trainer_battles_lost += 1
-  end
   # Save the result of the battle in a Game Variable (1 by default)
   #    0 - Undecided or aborted
   #    1 - Player won
   #    2 - Player lost
   #    3 - Player or wild Pokémon ran from battle, or player forfeited the match
   #    5 - Draw
+  case decision
+  when 1   # Won
+    $stats.trainer_battles_won += 1
+  when 2, 3, 5   # Lost, fled, draw
+    $stats.trainer_battles_lost += 1
+  end
   pbSet(outcomeVar,decision)
   return decision
 end

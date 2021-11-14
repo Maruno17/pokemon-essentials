@@ -90,6 +90,12 @@ def pbOrganizedBattleEx(opponent, challengedata, endspeech, endspeechwin)
   if decision == 1 || decision == 2 || decision == 5   # if win, loss or draw
     $game_temp.last_battle_record = battle.pbDumpRecord
   end
+  case decision
+  when 1   # Won
+    $stats.trainer_battles_won += 1
+  when 2, 3, 5   # Lost, fled, draw
+    $stats.trainer_battles_lost += 1
+  end
   # Return true if the player won the battle, and false if any other result
   return (decision == 1)
 end
