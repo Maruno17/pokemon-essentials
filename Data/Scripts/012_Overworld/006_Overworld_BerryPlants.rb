@@ -443,7 +443,7 @@ def pbPickBerry(berry, qty = 1)
     return false
   end
   $stats.berry_plants_picked += 1
-  if qty >= GameData::BerryPlant.get(@berry_id).maximum_yield
+  if qty >= GameData::BerryPlant.get(berry).maximum_yield
     $stats.max_yield_berry_plants += 1
   end
   $bag.add(berry, qty)

@@ -442,9 +442,10 @@ class TilemapRenderer
         else
           ret = true   # Need a full refresh
         end
+      else
+        ret = true
       end
       @current_map_id = $game_map.map_id
-      ret = true
     end
     # Check for tile movement
     current_map_display_x = ($game_map.display_x.to_f / Game_Map::X_SUBPIXELS).round
