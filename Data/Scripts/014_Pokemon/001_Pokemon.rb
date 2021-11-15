@@ -78,7 +78,7 @@ class Pokemon
   # Used by Galarian Yamask to remember that it took sufficient damage from a
   # battle and can evolve.
   attr_accessor :ready_to_evolve
-  # Whether this Pokémon can be deposited in storage
+  # Whether this Pokémon can be deposited in storage/Day Care
   attr_accessor :cannot_store
   # Whether this Pokémon can be released
   attr_accessor :cannot_release

@@ -331,7 +331,7 @@ end
 #===============================================================================
 def pbAddDependency2(event_id, name, common_event_id)
   Deprecation.warn_method('pbAddDependency2', 'v21', 'Followers.add(event_id, name, common_event_id)')
-  Followers.add_event(event)
+  Followers.add(event_id, name, common_event_id)
 end
 
 def pbAddDependency(event)

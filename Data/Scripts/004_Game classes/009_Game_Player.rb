@@ -156,11 +156,11 @@ class Game_Player < Game_Character
     @jump_distance_left = 1   # Just needs to be non-zero
     if real_distance > 0   # Jumping to somewhere else
       if $PokemonGlobal&.diving || $PokemonGlobal&.surfing
-        $stats.distance_surfed += x_plus.abs + y_pos.abs
+        $stats.distance_surfed += x_plus.abs + y_plus.abs
       elsif $PokemonGlobal&.bicycle
-        $stats.distance_cycled += x_plus.abs + y_pos.abs
+        $stats.distance_cycled += x_plus.abs + y_plus.abs
       else
-        $stats.distance_walked += x_plus.abs + y_pos.abs
+        $stats.distance_walked += x_plus.abs + y_plus.abs
       end
       @jump_count = 0
     else   # Jumping on the spot
