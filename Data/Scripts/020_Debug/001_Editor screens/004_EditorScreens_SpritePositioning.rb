@@ -54,13 +54,13 @@ class SpritePositioner
     @sprites["battle_bg"] = AnimatedPlane.new(@viewport)
     @sprites["battle_bg"].setBitmap(battlebg)
     @sprites["battle_bg"].z = 0
-    baseX, baseY = PokeBattle_SceneConstants.pbBattlerPosition(0)
+    baseX, baseY = Battle::Scene.pbBattlerPosition(0)
     @sprites["base_0"] = IconSprite.new(baseX, baseY, @viewport)
     @sprites["base_0"].setBitmap(playerbase)
     @sprites["base_0"].x -= @sprites["base_0"].bitmap.width / 2 if @sprites["base_0"].bitmap
     @sprites["base_0"].y -= @sprites["base_0"].bitmap.height if @sprites["base_0"].bitmap
     @sprites["base_0"].z = 1
-    baseX, baseY = PokeBattle_SceneConstants.pbBattlerPosition(1)
+    baseX, baseY = Battle::Scene.pbBattlerPosition(1)
     @sprites["base_1"] = IconSprite.new(baseX, baseY, @viewport)
     @sprites["base_1"].setBitmap(enemybase)
     @sprites["base_1"].x -= @sprites["base_1"].bitmap.width / 2 if @sprites["base_1"].bitmap
@@ -118,7 +118,7 @@ class SpritePositioner
     end
     metrics_data = GameData::SpeciesMetrics.get_species_form(@species, @form)
     for i in 0...2
-      pos = PokeBattle_SceneConstants.pbBattlerPosition(i, 1)
+      pos = Battle::Scene.pbBattlerPosition(i, 1)
       @sprites["pokemon_#{i}"].x = pos[0]
       @sprites["pokemon_#{i}"].y = pos[1]
       metrics_data.apply_metrics_to_sprite(@sprites["pokemon_#{i}"], i)

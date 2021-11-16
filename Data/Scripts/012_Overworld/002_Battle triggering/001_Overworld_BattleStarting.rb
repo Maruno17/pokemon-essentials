@@ -84,7 +84,7 @@ def setBattleRule(*args)
 end
 
 def pbNewBattleScene
-  return PokeBattle_Scene.new
+  return Battle::Scene.new
 end
 
 # Sets up various battle parameters and applies special rules.
@@ -274,7 +274,7 @@ def pbWildBattleCore(*args)
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)
-  battle = PokeBattle_Battle.new(scene,playerParty,foeParty,playerTrainers,nil)
+  battle = Battle.new(scene,playerParty,foeParty,playerTrainers,nil)
   battle.party1starts = playerPartyStarts
   # Set various other properties in the battle class
   pbPrepareBattle(battle)
@@ -426,7 +426,7 @@ def pbTrainerBattleCore(*args)
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)
-  battle = PokeBattle_Battle.new(scene,playerParty,foeParty,playerTrainers,foeTrainers)
+  battle = Battle.new(scene,playerParty,foeParty,playerTrainers,foeTrainers)
   battle.party1starts = playerPartyStarts
   battle.party2starts = foePartyStarts
   battle.items        = foeItems

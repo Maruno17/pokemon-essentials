@@ -362,7 +362,7 @@ def pbBugContestBattle(species,level)
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)
-  battle = PokeBattle_BugContestBattle.new(scene,playerParty,foeParty,playerTrainer,nil)
+  battle = BugContestBattle.new(scene,playerParty,foeParty,playerTrainer,nil)
   battle.party1starts = playerPartyStarts
   battle.ballCount    = pbBugContestState.ballcount
   setBattleRule("single")

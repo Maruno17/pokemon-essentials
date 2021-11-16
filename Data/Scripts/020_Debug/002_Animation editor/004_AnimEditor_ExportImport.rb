@@ -104,17 +104,17 @@ def pbConvertAnimToNewFormat(textdata)
         textdata[i][j][AnimFrame::PRIORITY]=1 if textdata[i][j][AnimFrame::PRIORITY]==nil
         if j==0      # User battler
           textdata[i][j][AnimFrame::FOCUS]=2
-          textdata[i][j][AnimFrame::X]=PokeBattle_SceneConstants::FOCUSUSER_X
-          textdata[i][j][AnimFrame::Y]=PokeBattle_SceneConstants::FOCUSUSER_Y
+          textdata[i][j][AnimFrame::X]=Battle::Scene::FOCUSUSER_X
+          textdata[i][j][AnimFrame::Y]=Battle::Scene::FOCUSUSER_Y
         elsif j==1   # Target battler
           textdata[i][j][AnimFrame::FOCUS]=1
-          textdata[i][j][AnimFrame::X]=PokeBattle_SceneConstants::FOCUSTARGET_X
-          textdata[i][j][AnimFrame::Y]=PokeBattle_SceneConstants::FOCUSTARGET_Y
+          textdata[i][j][AnimFrame::X]=Battle::Scene::FOCUSTARGET_X
+          textdata[i][j][AnimFrame::Y]=Battle::Scene::FOCUSTARGET_Y
         else
           textdata[i][j][AnimFrame::FOCUS]=(textdata.position || 4)
           if textdata.position==1
-            textdata[i][j][AnimFrame::X]+=PokeBattle_SceneConstants::FOCUSTARGET_X
-            textdata[i][j][AnimFrame::Y]+=PokeBattle_SceneConstants::FOCUSTARGET_Y-2
+            textdata[i][j][AnimFrame::X]+=Battle::Scene::FOCUSTARGET_X
+            textdata[i][j][AnimFrame::Y]+=Battle::Scene::FOCUSTARGET_Y-2
           end
         end
       end

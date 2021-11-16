@@ -3,7 +3,7 @@
 #===============================================================================
 class BattleType
   def pbCreateBattle(scene, trainer1, trainer2)
-    return PokeBattle_Battle.new(scene, trainer1.party, trainer2.party, trainer1, trainer2)
+    return Battle.new(scene, trainer1.party, trainer2.party, trainer1, trainer2)
   end
 end
 
@@ -12,7 +12,7 @@ end
 #===============================================================================
 class BattleTower < BattleType
   def pbCreateBattle(scene, trainer1, trainer2)
-    return PokeBattle_RecordedBattle.new(scene, trainer1.party, trainer2.party, trainer1, trainer2)
+    return RecordedBattle.new(scene, trainer1.party, trainer2.party, trainer1, trainer2)
   end
 end
 
@@ -21,7 +21,7 @@ end
 #===============================================================================
 class BattlePalace < BattleType
   def pbCreateBattle(scene, trainer1, trainer2)
-    return PokeBattle_RecordedBattlePalace.new(scene, trainer1.party, trainer2.party, trainer1, trainer2)
+    return RecordedBattle::BattlePalaceBattle.new(scene, trainer1.party, trainer2.party, trainer1, trainer2)
   end
 end
 
@@ -30,7 +30,7 @@ end
 #===============================================================================
 class BattleArena < BattleType
   def pbCreateBattle(scene, trainer1, trainer2)
-    return PokeBattle_RecordedBattleArena.new(scene, trainer1.party, trainer2.party, trainer1, trainer2)
+    return RecordedBattle::BattleArenaBattle.new(scene, trainer1.party, trainer2.party, trainer1, trainer2)
   end
 end
 
@@ -119,13 +119,13 @@ def pbPlayBattle(battledata)
   lastbattle = Marshal.restore(battledata)
   case lastbattle[0]
   when BattleChallenge::BattleTowerID
-    battleplayer = PokeBattle_BattlePlayer.new(scene, lastbattle)
+    battleplayer = RecordedBattle::PlaybackBattle.new(scene, lastbattle)
   when BattleChallenge::BattlePalaceID
-    battleplayer = PokeBattle_BattlePalacePlayer.new(scene, lastbattle)
+    battleplayer = RecordedBattle::BattlePalacePlaybackBattle.new(scene, lastbattle)
   when BattleChallenge::BattleArenaID
-    battleplayer = PokeBattle_BattleArenaPlayer.new(scene, lastbattle)
+    battleplayer = RecordedBattle::BattleArenaPlaybackBattle.new(scene, lastbattle)
   end
-  bgm = BattlePlayerHelper.pbGetBattleBGM(lastbattle)
+  bgm = RecordedBattle::PlaybackHelper.pbGetBattleBGM(lastbattle)
   pbBattleAnimation(bgm) {
     pbSceneStandby {
       battleplayer.pbStartBattle

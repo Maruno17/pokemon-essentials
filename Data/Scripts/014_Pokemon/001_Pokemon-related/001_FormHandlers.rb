@@ -640,7 +640,7 @@ MultipleForms.register(:ZACIAN, {
         move.id = :BEHEMOTHBLADE
         battler.moves.each_with_index do |b_move, i|
           next if b_move.id != :IRONHEAD
-          battler.moves[i] = PokeBattle_Move.from_pokemon_move(battle, move)
+          battler.moves[i] = Battle::Move.from_pokemon_move(battle, move)
         end
       end
     end
@@ -665,7 +665,7 @@ MultipleForms.register(:ZAMAZENTA, {
         move.id = :BEHEMOTHBASH
         battler.moves.each_with_index do |b_move, i|
           next if b_move.id != :IRONHEAD
-          battler.moves[i] = PokeBattle_Move.from_pokemon_move(battle, move)
+          battler.moves[i] = Battle::Move.from_pokemon_move(battle, move)
         end
       end
     end

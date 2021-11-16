@@ -167,7 +167,7 @@ end
 #===============================================================================
 # Shadow Pokémon in battle.
 #===============================================================================
-class PokeBattle_Battle
+class Battle
   alias __shadow__pbCanUseItemOnPokemon? pbCanUseItemOnPokemon?
 
   def pbCanUseItemOnPokemon?(item,pkmn,battler,scene,showMessages=true)
@@ -182,7 +182,7 @@ end
 
 
 
-class PokeBattle_Battler
+class Battle::Battler
   alias __shadow__pbInitPokemon pbInitPokemon
 
   def pbInitPokemon(*arg)
@@ -316,7 +316,7 @@ ItemHandlers::BattleUseOnBattler.add(:VIVIDSCENT,proc { |item,battler,scene|
 # Two turn attack. On first turn, halves the HP of all active Pokémon.
 # Skips second turn (if successful). (Shadow Half)
 #===============================================================================
-class PokeBattle_Move_AllBattlersLoseHalfHPUserSkipsNextTurn < PokeBattle_Move
+class Battle::Move::AllBattlersLoseHalfHPUserSkipsNextTurn < Battle::Move
   def pbMoveFailed?(user,targets)
     if @battle.allBattlers.none? { |b| b.hp > 1 }
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -341,7 +341,7 @@ end
 #===============================================================================
 # User takes recoil damage equal to 1/2 of its current HP. (Shadow End)
 #===============================================================================
-class PokeBattle_Move_UserLosesHalfHP < PokeBattle_RecoilMove
+class Battle::Move::UserLosesHalfHP < Battle::Move::RecoilMove
   def pbRecoilDamage(user,target)
     return (target.damageState.totalHPLost/2.0).round
   end
@@ -362,7 +362,7 @@ end
 #===============================================================================
 # Starts shadow weather. (Shadow Sky)
 #===============================================================================
-class PokeBattle_Move_StartShadowSkyWeather < PokeBattle_WeatherMove
+class Battle::Move::StartShadowSkyWeather < Battle::Move::WeatherMove
   def initialize(battle,move)
     super
     @weatherType = :ShadowSky
@@ -375,7 +375,7 @@ end
 # Ends the effects of Light Screen, Reflect and Safeguard on both sides.
 # (Shadow Shed)
 #===============================================================================
-class PokeBattle_Move_RemoveAllScreens < PokeBattle_Move
+class Battle::Move::RemoveAllScreens < Battle::Move
   def pbEffectGeneral(user)
     for i in @battle.sides
       i.effects[PBEffects::AuroraVeil]  = 0

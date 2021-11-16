@@ -108,7 +108,7 @@ def pbSafariBattle(species,level)
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)
-  battle = PokeBattle_SafariZone.new(scene,playerTrainer,foeParty)
+  battle = SafariBattle.new(scene,playerTrainer,foeParty)
   battle.ballCount = pbSafariState.ballcount
   pbPrepareBattle(battle)
   # Perform the battle itself

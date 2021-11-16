@@ -171,3 +171,8 @@ end
 def nil_or_empty?(string)
   return string.nil? || !string.is_a?(String) || string.size == 0
 end
+
+#===============================================================================
+# This is only here to make the battle classes easier to define later.
+#===============================================================================
+class Battle; end
