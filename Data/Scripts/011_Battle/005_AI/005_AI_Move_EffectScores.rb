@@ -2500,7 +2500,7 @@ class Battle::AI
         score -= 110
       end
     #---------------------------------------------------------------------------
-    when "DoesNothingFailsIfNoAlly", "DoesNothingCongratuations"
+    when "DoesNothingFailsIfNoAlly", "DoesNothingCongratulations"
       score -= 95
       score = 0 if skill>=PBTrainerAI.highSkill
     #---------------------------------------------------------------------------

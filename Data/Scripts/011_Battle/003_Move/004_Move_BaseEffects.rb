@@ -17,8 +17,6 @@ class Battle::Move::Unimplemented < Battle::Move
   end
 end
 
-
-
 #===============================================================================
 # Pseudomove for confusion damage.
 #===============================================================================
@@ -48,10 +46,8 @@ class Battle::Move::Confusion < Battle::Move
   def pbCritialOverride(user,target); return -1;    end
 end
 
-
-
 #===============================================================================
-# Implements the move Struggle.
+# Struggle.
 #===============================================================================
 class Battle::Move::Struggle < Battle::Move
   def initialize(battle,move)
@@ -85,164 +81,8 @@ class Battle::Move::Struggle < Battle::Move
   end
 end
 
-
-
 #===============================================================================
-# Generic status problem-inflicting classes.
-#===============================================================================
-class Battle::Move::SleepMove < Battle::Move
-  def canMagicCoat?; return true; end
-
-  def pbFailsAgainstTarget?(user, target, show_message)
-    return false if damagingMove?
-    return !target.pbCanSleep?(user, show_message, self)
-  end
-
-  def pbEffectAgainstTarget(user,target)
-    return if damagingMove?
-    target.pbSleep
-  end
-
-  def pbAdditionalEffect(user,target)
-    return if target.damageState.substitute
-    target.pbSleep if target.pbCanSleep?(user,false,self)
-  end
-end
-
-
-
-class Battle::Move::PoisonMove < Battle::Move
-  def canMagicCoat?; return true; end
-
-  def initialize(battle,move)
-    super
-    @toxic = false
-  end
-
-  def pbFailsAgainstTarget?(user, target, show_message)
-    return false if damagingMove?
-    return !target.pbCanPoison?(user, show_message, self)
-  end
-
-  def pbEffectAgainstTarget(user,target)
-    return if damagingMove?
-    target.pbPoison(user,nil,@toxic)
-  end
-
-  def pbAdditionalEffect(user,target)
-    return if target.damageState.substitute
-    target.pbPoison(user,nil,@toxic) if target.pbCanPoison?(user,false,self)
-  end
-end
-
-
-
-class Battle::Move::ParalysisMove < Battle::Move
-  def canMagicCoat?; return true; end
-
-  def pbFailsAgainstTarget?(user, target, show_message)
-    return false if damagingMove?
-    return !target.pbCanParalyze?(user, show_message, self)
-  end
-
-  def pbEffectAgainstTarget(user,target)
-    return if damagingMove?
-    target.pbParalyze(user)
-  end
-
-  def pbAdditionalEffect(user,target)
-    return if target.damageState.substitute
-    target.pbParalyze(user) if target.pbCanParalyze?(user,false,self)
-  end
-end
-
-
-
-class Battle::Move::BurnMove < Battle::Move
-  def canMagicCoat?; return true; end
-
-  def pbFailsAgainstTarget?(user, target, show_message)
-    return false if damagingMove?
-    return !target.pbCanBurn?(user, show_message, self)
-  end
-
-  def pbEffectAgainstTarget(user,target)
-    return if damagingMove?
-    target.pbBurn(user)
-  end
-
-  def pbAdditionalEffect(user,target)
-    return if target.damageState.substitute
-    target.pbBurn(user) if target.pbCanBurn?(user,false,self)
-  end
-end
-
-
-
-class Battle::Move::FreezeMove < Battle::Move
-  def canMagicCoat?; return true; end
-
-  def pbFailsAgainstTarget?(user, target, show_message)
-    return false if damagingMove?
-    return !target.pbCanFreeze?(user, show_message, self)
-  end
-
-  def pbEffectAgainstTarget(user,target)
-    return if damagingMove?
-    target.pbFreeze
-  end
-
-  def pbAdditionalEffect(user,target)
-    return if target.damageState.substitute
-    target.pbFreeze if target.pbCanFreeze?(user,false,self)
-  end
-end
-
-
-
-#===============================================================================
-# Other problem-causing classes.
-#===============================================================================
-class Battle::Move::FlinchMove < Battle::Move
-  def flinchingMove?; return true; end
-
-  def pbEffectAgainstTarget(user,target)
-    return if damagingMove?
-    target.pbFlinch(user)
-  end
-
-  def pbAdditionalEffect(user,target)
-    return if target.damageState.substitute
-    target.pbFlinch(user)
-  end
-end
-
-
-
-class Battle::Move::ConfuseMove < Battle::Move
-  def canMagicCoat?; return true; end
-
-  def pbFailsAgainstTarget?(user, target, show_message)
-    return false if damagingMove?
-    return !target.pbCanConfuse?(user, show_message, self)
-  end
-
-  def pbEffectAgainstTarget(user,target)
-    return if damagingMove?
-    target.pbConfuse
-  end
-
-  def pbAdditionalEffect(user,target)
-    return if target.damageState.substitute
-    return if !target.pbCanConfuse?(user,false,self)
-    target.pbConfuse
-  end
-end
-
-
-
-#===============================================================================
-# Generic user's stat increase/decrease classes.
+# Raise one of user's stats.
 #===============================================================================
 class Battle::Move::StatUpMove < Battle::Move
   def canSnatch?; return true; end
@@ -264,8 +104,9 @@ class Battle::Move::StatUpMove < Battle::Move
   end
 end
 
-
-
+#===============================================================================
+# Raise multiple of user's stats.
+#===============================================================================
 class Battle::Move::MultiStatUpMove < Battle::Move
   def canSnatch?; return true; end
 
@@ -306,8 +147,9 @@ class Battle::Move::MultiStatUpMove < Battle::Move
   end
 end
 
-
-
+#===============================================================================
+# Lower multiple of user's stats.
+#===============================================================================
 class Battle::Move::StatDownMove < Battle::Move
   def pbEffectWhenDealingDamage(user,target)
     return if @battle.pbAllFainted?(target.idxOwnSide)
@@ -321,10 +163,8 @@ class Battle::Move::StatDownMove < Battle::Move
   end
 end
 
-
-
 #===============================================================================
-# Generic target's stat increase/decrease classes.
+# Lower one of target's stats.
 #===============================================================================
 class Battle::Move::TargetStatDownMove < Battle::Move
   def canMagicCoat?; return true; end
@@ -346,8 +186,9 @@ class Battle::Move::TargetStatDownMove < Battle::Move
   end
 end
 
-
-
+#===============================================================================
+# Lower multiple of target's stats.
+#===============================================================================
 class Battle::Move::TargetMultiStatDownMove < Battle::Move
   def canMagicCoat?; return true; end
 
@@ -432,8 +273,6 @@ class Battle::Move::TargetMultiStatDownMove < Battle::Move
   end
 end
 
-
-
 #===============================================================================
 # Fixed damage-inflicting move.
 #===============================================================================
@@ -446,8 +285,6 @@ class Battle::Move::FixedDamageMove < Battle::Move
     target.damageState.calcDamage = 1 if target.damageState.calcDamage<1
   end
 end
-
-
 
 #===============================================================================
 # Two turn move.
@@ -536,8 +373,6 @@ class Battle::Move::TwoTurnMove < Battle::Move
   end
 end
 
-
-
 #===============================================================================
 # Healing move.
 #===============================================================================
@@ -561,8 +396,6 @@ class Battle::Move::HealingMove < Battle::Move
   end
 end
 
-
-
 #===============================================================================
 # Recoil move.
 #===============================================================================
@@ -581,8 +414,6 @@ class Battle::Move::RecoilMove < Battle::Move
     user.pbItemHPHealCheck
   end
 end
-
-
 
 #===============================================================================
 # Protect move.
@@ -644,8 +475,6 @@ class Battle::Move::ProtectMove < Battle::Move
   end
 end
 
-
-
 #===============================================================================
 # Weather-inducing move.
 #===============================================================================
@@ -677,8 +506,6 @@ class Battle::Move::WeatherMove < Battle::Move
     @battle.pbStartWeather(user,@weatherType,true,false)
   end
 end
-
-
 
 #===============================================================================
 # Pledge move.

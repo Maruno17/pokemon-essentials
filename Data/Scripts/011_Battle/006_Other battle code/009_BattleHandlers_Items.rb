@@ -47,14 +47,15 @@ BattleHandlers::WeightCalcItem.add(:FLOATSTONE,
 
 BattleHandlers::HPHealItem.add(:AGUAVBERRY,
   proc { |item,battler,battle,forced|
-    next pbBattleConfusionBerry(battler,battle,item,forced,4,
-       _INTL("For {1}, the {2} was too bitter!",battler.pbThis(true),GameData::Item.get(item).name))
+    next battler.pbConfusionBerry(item, forced, 4,
+       _INTL("For {1}, the {2} was too bitter!", battler.pbThis(true), GameData::Item.get(item).name))
+    )
   }
 )
 
 BattleHandlers::HPHealItem.add(:APICOTBERRY,
   proc { |item,battler,battle,forced|
-    next pbBattleStatIncreasingBerry(battler,battle,item,forced,:SPECIAL_DEFENSE)
+    next battler.pbStatIncreasingBerry(item, forced, :SPECIAL_DEFENSE)
   }
 )
 
@@ -77,21 +78,23 @@ BattleHandlers::HPHealItem.add(:BERRYJUICE,
 
 BattleHandlers::HPHealItem.add(:FIGYBERRY,
   proc { |item,battler,battle,forced|
-    next pbBattleConfusionBerry(battler,battle,item,forced,0,
-       _INTL("For {1}, the {2} was too spicy!",battler.pbThis(true),GameData::Item.get(item).name))
+    next battler.pbConfusionBerry(item, forced, 0,
+       _INTL("For {1}, the {2} was too spicy!", battler.pbThis(true), GameData::Item.get(item).name)
+    )
   }
 )
 
 BattleHandlers::HPHealItem.add(:GANLONBERRY,
   proc { |item,battler,battle,forced|
-    next pbBattleStatIncreasingBerry(battler,battle,item,forced,:DEFENSE)
+    next battler.pbStatIncreasingBerry(item, forced, :DEFENSE)
   }
 )
 
 BattleHandlers::HPHealItem.add(:IAPAPABERRY,
   proc { |item,battler,battle,forced|
-    next pbBattleConfusionBerry(battler,battle,item,forced,1,
-       _INTL("For {1}, the {2} was too sour!",battler.pbThis(true),GameData::Item.get(item).name))
+    next battler.pbConfusionBerry(item, forced, 1,
+       _INTL("For {1}, the {2} was too sour!", battler.pbThis(true), GameData::Item.get(item).name)
+    )
   }
 )
 
@@ -113,14 +116,15 @@ BattleHandlers::HPHealItem.add(:LANSATBERRY,
 
 BattleHandlers::HPHealItem.add(:LIECHIBERRY,
   proc { |item,battler,battle,forced|
-    next pbBattleStatIncreasingBerry(battler,battle,item,forced,:ATTACK)
+    next battler.pbStatIncreasingBerry(item, forced, :ATTACK)
   }
 )
 
 BattleHandlers::HPHealItem.add(:MAGOBERRY,
   proc { |item,battler,battle,forced|
-    next pbBattleConfusionBerry(battler,battle,item,forced,2,
-       _INTL("For {1}, the {2} was too sweet!",battler.pbThis(true),GameData::Item.get(item).name))
+    next battler.pbConfusionBerry(item, forced, 2,
+       _INTL("For {1}, the {2} was too sweet!", battler.pbThis(true), GameData::Item.get(item).name)
+    )
   }
 )
 
@@ -169,13 +173,13 @@ BattleHandlers::HPHealItem.add(:ORANBERRY,
 
 BattleHandlers::HPHealItem.add(:PETAYABERRY,
   proc { |item,battler,battle,forced|
-    next pbBattleStatIncreasingBerry(battler,battle,item,forced,:SPECIAL_ATTACK)
+    next battler.pbStatIncreasingBerry(item, forced, :SPECIAL_ATTACK)
   }
 )
 
 BattleHandlers::HPHealItem.add(:SALACBERRY,
   proc { |item,battler,battle,forced|
-    next pbBattleStatIncreasingBerry(battler,battle,item,forced,:SPEED)
+    next battler.pbStatIncreasingBerry(item, forced, :SPEED)
   }
 )
 
@@ -210,14 +214,15 @@ BattleHandlers::HPHealItem.add(:STARFBERRY,
     GameData::Stat.each_main_battle { |s| stats.push(s.id) if battler.pbCanRaiseStatStage?(s.id, battler) }
     next false if stats.length==0
     stat = stats[battle.pbRandom(stats.length)]
-    next pbBattleStatIncreasingBerry(battler,battle,item,forced,stat,2)
+    next battler.pbStatIncreasingBerry(item, forced, stat, 2)
   }
 )
 
 BattleHandlers::HPHealItem.add(:WIKIBERRY,
   proc { |item,battler,battle,forced|
-    next pbBattleConfusionBerry(battler,battle,item,forced,3,
-       _INTL("For {1}, the {2} was too dry!",battler.pbThis(true),GameData::Item.get(item).name))
+    next battler.pbConfusionBerry(item, forced, 3,
+       _INTL("For {1}, the {2} was too dry!", battler.pbThis(true), GameData::Item.get(item).name)
+    )
   }
 )
 
@@ -529,7 +534,7 @@ BattleHandlers::DamageCalcUserItem.copy(:BLACKGLASSES,:DREADPLATE)
 
 BattleHandlers::DamageCalcUserItem.add(:BUGGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:BUG,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:BUG, move, type, mults)
   }
 )
 
@@ -555,7 +560,7 @@ BattleHandlers::DamageCalcUserItem.add(:CHOICESPECS,
 
 BattleHandlers::DamageCalcUserItem.add(:DARKGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:DARK,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:DARK, move, type, mults)
   }
 )
 
@@ -577,13 +582,13 @@ BattleHandlers::DamageCalcUserItem.copy(:DRAGONFANG,:DRACOPLATE)
 
 BattleHandlers::DamageCalcUserItem.add(:DRAGONGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:DRAGON,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:DRAGON, move, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcUserItem.add(:ELECTRICGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:ELECTRIC,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:ELECTRIC, move, type, mults)
   }
 )
 
@@ -597,37 +602,37 @@ BattleHandlers::DamageCalcUserItem.add(:EXPERTBELT,
 
 BattleHandlers::DamageCalcUserItem.add(:FAIRYGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:FAIRY,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:FAIRY, move, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcUserItem.add(:FIGHTINGGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:FIGHTING,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:FIGHTING, move, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcUserItem.add(:FIREGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:FIRE,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:FIRE, move, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcUserItem.add(:FLYINGGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:FLYING,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:FLYING, move, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcUserItem.add(:GHOSTGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:GHOST,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:GHOST, move, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcUserItem.add(:GRASSGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:GRASS,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:GRASS, move, type, mults)
   }
 )
 
@@ -641,7 +646,7 @@ BattleHandlers::DamageCalcUserItem.add(:GRISEOUSORB,
 
 BattleHandlers::DamageCalcUserItem.add(:GROUNDGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:GROUND,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:GROUND, move, type, mults)
   }
 )
 
@@ -655,7 +660,7 @@ BattleHandlers::DamageCalcUserItem.copy(:HARDSTONE,:STONEPLATE,:ROCKINCENSE)
 
 BattleHandlers::DamageCalcUserItem.add(:ICEGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:ICE,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:ICE, move, type, mults)
   }
 )
 
@@ -738,7 +743,7 @@ BattleHandlers::DamageCalcUserItem.copy(:NEVERMELTICE,:ICICLEPLATE)
 
 BattleHandlers::DamageCalcUserItem.add(:NORMALGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:NORMAL,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:NORMAL, move, type, mults)
   }
 )
 
@@ -758,19 +763,19 @@ BattleHandlers::DamageCalcUserItem.copy(:POISONBARB,:TOXICPLATE)
 
 BattleHandlers::DamageCalcUserItem.add(:POISONGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:POISON,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:POISON, move, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcUserItem.add(:PSYCHICGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:PSYCHIC,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:PSYCHIC, move, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcUserItem.add(:ROCKGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:ROCK,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:ROCK, move, type, mults)
   }
 )
 
@@ -827,7 +832,7 @@ BattleHandlers::DamageCalcUserItem.copy(:SPELLTAG,:SPOOKYPLATE)
 
 BattleHandlers::DamageCalcUserItem.add(:STEELGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:STEEL,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:STEEL, move, type, mults)
   }
 )
 
@@ -849,7 +854,7 @@ BattleHandlers::DamageCalcUserItem.copy(:TWISTEDSPOON,:MINDPLATE,:ODDINCENSE)
 
 BattleHandlers::DamageCalcUserItem.add(:WATERGEM,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleGem(user,:WATER,move,mults,type)
+    user.pbMoveTypePoweringUpGem(:WATER, move, type, mults)
   }
 )
 
@@ -874,37 +879,37 @@ BattleHandlers::DamageCalcTargetItem.add(:ASSAULTVEST,
 
 BattleHandlers::DamageCalcTargetItem.add(:BABIRIBERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:STEEL,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:STEEL, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:CHARTIBERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:ROCK,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:ROCK, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:CHILANBERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:NORMAL,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:NORMAL, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:CHOPLEBERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:FIGHTING,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:FIGHTING, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:COBABERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:FLYING,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:FLYING, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:COLBURBERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:DARK,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:DARK, type, mults)
   }
 )
 
@@ -930,19 +935,19 @@ BattleHandlers::DamageCalcTargetItem.add(:EVIOLITE,
 
 BattleHandlers::DamageCalcTargetItem.add(:HABANBERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:DRAGON,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:DRAGON, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:KASIBBERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:GHOST,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:GHOST, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:KEBIABERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:POISON,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:POISON, type, mults)
   }
 )
 
@@ -956,37 +961,37 @@ BattleHandlers::DamageCalcTargetItem.add(:METALPOWDER,
 
 BattleHandlers::DamageCalcTargetItem.add(:OCCABERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:FIRE,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:FIRE, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:PASSHOBERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:WATER,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:WATER, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:PAYAPABERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:PSYCHIC,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:PSYCHIC, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:RINDOBERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:GRASS,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:GRASS, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:ROSELIBERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:FAIRY,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:FAIRY, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:SHUCABERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:GROUND,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:GROUND, type, mults)
   }
 )
 
@@ -1002,19 +1007,19 @@ BattleHandlers::DamageCalcTargetItem.add(:SOULDEW,
 
 BattleHandlers::DamageCalcTargetItem.add(:TANGABERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:BUG,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:BUG, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:WACANBERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:ELECTRIC,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:ELECTRIC, type, mults)
   }
 )
 
 BattleHandlers::DamageCalcTargetItem.add(:YACHEBERRY,
   proc { |item,user,target,move,mults,baseDmg,type|
-    pbBattleTypeWeakingBerry(:ICE,type,target,mults)
+    target.pbMoveTypeWeakeningBerry(:ICE, type, mults)
   }
 )
 

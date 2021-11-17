@@ -727,7 +727,7 @@ class Battle::Move::UseLastMoveUsed < Battle::Move
        "BurnAttackerBeforeUserActs",   # Beak Blast
        # Event moves that do nothing
        "DoesNothingFailsIfNoAlly",   # Hold Hands
-       "DoesNothingCongratuations"   # Celebrate
+       "DoesNothingCongratulations"   # Celebrate
     ]
     if Settings::MECHANICS_GENERATION >= 6
       @moveBlacklist += [
@@ -951,7 +951,7 @@ class Battle::Move::UseRandomMove < Battle::Move
        "BurnAttackerBeforeUserActs",   # Beak Blast
        # Event moves that do nothing
        "DoesNothingFailsIfNoAlly",   # Hold Hands
-       "DoesNothingCongratuations"   # Celebrate
+       "DoesNothingCongratulations"   # Celebrate
     ]
     @moveBlacklistSignatures = [
        :SNARL,
@@ -1065,7 +1065,7 @@ class Battle::Move::UseRandomMoveFromUserParty < Battle::Move
        "BurnAttackerBeforeUserActs",   # Beak Blast
        # Event moves that do nothing
        "DoesNothingFailsIfNoAlly",   # Hold Hands
-       "DoesNothingCongratuations"   # Celebrate
+       "DoesNothingCongratulations"   # Celebrate
     ]
     if Settings::MECHANICS_GENERATION >= 6
       @moveBlacklist += [

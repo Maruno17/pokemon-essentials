@@ -1,6 +1,6 @@
 class Battle::Battler
   #=============================================================================
-  # Ability effects
+  # Ability trigger checks
   #=============================================================================
   def pbAbilitiesOnSwitchOut
     if abilityActive?
@@ -98,6 +98,69 @@ class Battle::Battler
     if abilityActive?
       BattleHandlers.triggerStatusCureAbility(self.ability,self)
     end
+  end
+
+  #=============================================================================
+  # Ability effects
+  #=============================================================================
+  # For abilities that grant immunity to moves of a particular type, and raises
+  # one of the ability's bearer's stats instead.
+  def pbMoveImmunityStatRaisingAbility(user, move, moveType, immuneType, stat, increment, show_message)
+    return false if user.index == @index
+    return false if moveType != immuneType
+    # NOTE: If show_message is false (Dragon Darts only), the stat will not be
+    #       raised. This is not how the official games work, but I'm considering
+    #       that a bug because Dragon Darts won't be fired at self in the first
+    #       place if it's immune, so why would this ability be triggered by them?
+    if show_message
+      @battle.pbShowAbilitySplash(self)
+      if pbCanRaiseStatStage?(stat, self)
+        if Battle::Scene::USE_ABILITY_SPLASH
+          pbRaiseStatStage(stat, increment, self)
+        else
+          pbRaiseStatStageByCause(stat, increment, self, abilityName)
+        end
+      else
+        if Battle::Scene::USE_ABILITY_SPLASH
+          @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
+        else
+          @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
+             pbThis, abilityName, move.name))
+        end
+      end
+      @battle.pbHideAbilitySplash(self)
+    end
+    return true
+  end
+
+  # For abilities that grant immunity to moves of a particular type, and heals
+  # the ability's bearer by 1/4 of its total HP instead.
+  def pbMoveImmunityHealingAbility(user, move, moveType, immuneType, show_message)
+    return false if user.index == @index
+    return false if moveType != immuneType
+    # NOTE: If show_message is false (Dragon Darts only), HP will not be healed.
+    #       This is not how the official games work, but I'm considering that a
+    #       bug because Dragon Darts won't be fired at self in the first place
+    #       if it's immune, so why would this ability be triggered by them?
+    if show_message
+      @battle.pbShowAbilitySplash(self)
+      if canHeal? && pbRecoverHP(@totalhp / 4) > 0
+        if Battle::Scene::USE_ABILITY_SPLASH
+          @battle.pbDisplay(_INTL("{1}'s HP was restored.", pbThis))
+        else
+          @battle.pbDisplay(_INTL("{1}'s {2} restored its HP.", pbThis, abilityName))
+        end
+      else
+        if Battle::Scene::USE_ABILITY_SPLASH
+          @battle.pbDisplay(_INTL("It doesn't affect {1}...", pbThis(true)))
+        else
+          @battle.pbDisplay(_INTL("{1}'s {2} made {3} ineffective!",
+             pbThis, abilityName, move.name))
+        end
+      end
+      @battle.pbHideAbilitySplash(self)
+    end
+    return true
   end
 
   #=============================================================================
@@ -323,6 +386,90 @@ class Battle::Battler
   def pbItemsOnUnnerveEnding
     @battle.pbPriority(true).each do |b|
       b.pbHeldItemTriggerCheck if b.item && b.item.is_berry?
+    end
+  end
+
+  #=============================================================================
+  # Item effects
+  #=============================================================================
+  def pbConfusionBerry(item_to_use, forced, flavor, confuse_msg)
+    return false if !forced && !canHeal?
+    return false if !forced && !canConsumePinchBerry?(Settings::MECHANICS_GENERATION >= 7)
+    used_item_name = GameData::Item.get(item_to_use).name
+    fraction_to_heal = 8   # Gens 6 and lower
+    if Settings::MECHANICS_GENERATION == 7
+      fraction_to_heal = 2
+    elsif Settings::MECHANICS_GENERATION >= 8
+      fraction_to_heal = 3
+    end
+    amt = @totalhp / fraction_to_heal
+    ripening = false
+    if hasActiveAbility?(:RIPEN)
+      @battle.pbShowAbilitySplash(self, forced)
+      amt *= 2
+      ripening = true
+    end
+    @battle.pbCommonAnimation("EatBerry", self) if !forced
+    @battle.pbHideAbilitySplash(self) if ripening
+    amt = pbRecoverHP(amt)
+    if amt > 0
+      if forced
+        PBDebug.log("[Item triggered] Forced consuming of #{used_item_name}")
+        @battle.pbDisplay(_INTL("{1}'s HP was restored.", pbThis))
+      else
+        @battle.pbDisplay(_INTL("{1} restored its health using its {2}!", pbThis, used_item_name))
+      end
+    end
+    flavor_stat = [:ATTACK, :DEFENSE, :SPEED, :SPECIAL_ATTACK, :SPECIAL_DEFENSE][flavor]
+    self.nature.stat_changes.each do |change|
+      next if change[1] > 0 || change[0] != flavor_stat
+      @battle.pbDisplay(confuse_msg)
+      pbConfuse if pbCanConfuseSelf?(false)
+      break
+    end
+    return true
+  end
+
+  def pbStatIncreasingBerry(item_to_use, forced, stat, increment = 1)
+    return false if !forced && !canConsumePinchBerry?
+    return false if !pbCanRaiseStatStage?(stat, self)
+    used_item_name = GameData::Item.get(item_to_use).name
+    ripening = false
+    if hasActiveAbility?(:RIPEN)
+      @battle.pbShowAbilitySplash(self, forced)
+      increment *= 2
+      ripening = true
+    end
+    @battle.pbCommonAnimation("EatBerry", self) if !forced
+    @battle.pbHideAbilitySplash(self) if ripening
+    return pbRaiseStatStageByCause(stat, increment, self, used_item_name) if !forced
+    PBDebug.log("[Item triggered] Forced consuming of #{used_item_name}")
+    return pbRaiseStatStage(stat, increment, self)
+  end
+
+  def pbMoveTypeWeakeningBerry(berry_type, move_type, mults)
+    return if move_type != berry_type
+    return if !Effectiveness.super_effective?(@damageState.typeMod) && move_type != :NORMAL
+    mults[:final_damage_multiplier] /= 2
+    @damageState.berryWeakened = true
+    ripening = false
+    if hasActiveAbility?(:RIPEN)
+      @battle.pbShowAbilitySplash(self)
+      mults[:final_damage_multiplier] /= 2
+      ripening = true
+    end
+    @battle.pbCommonAnimation("EatBerry", self)
+    @battle.pbHideAbilitySplash(self) if ripening
+  end
+
+  def pbMoveTypePoweringUpGem(gem_type, move, move_type, mults)
+    return if move.is_a?(Battle::Move::PledgeMove)   # Pledge moves never consume Gems
+    return if move_type != gem_type
+    @effects[PBEffects::GemConsumed] = @item_id
+    if Settings::MECHANICS_GENERATION >= 6
+      mults[:base_damage_multiplier] *= 1.3
+    else
+      mults[:base_damage_multiplier] *= 1.5
     end
   end
 end

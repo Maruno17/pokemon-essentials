@@ -647,19 +647,22 @@ BattleHandlers::MoveImmunityTargetAbility.add(:FLASHFIRE,
 
 BattleHandlers::MoveImmunityTargetAbility.add(:LIGHTNINGROD,
   proc { |ability, user, target, move, type, battle, show_message|
-    next pbBattleMoveImmunityStatAbility(user, target, move, type, :ELECTRIC, :SPECIAL_ATTACK, 1, battle, show_message)
+    next target.pbMoveImmunityStatRaisingAbility(user, move, type,
+       :ELECTRIC, :SPECIAL_ATTACK, 1, show_message)
   }
 )
 
 BattleHandlers::MoveImmunityTargetAbility.add(:MOTORDRIVE,
   proc { |ability, user, target, move, type, battle, show_message|
-    next pbBattleMoveImmunityStatAbility(user, target, move, type, :ELECTRIC, :SPEED, 1, battle, show_message)
+    next target.pbMoveImmunityStatRaisingAbility(user, move, type,
+       :ELECTRIC, :SPEED, 1, show_message)
   }
 )
 
 BattleHandlers::MoveImmunityTargetAbility.add(:SAPSIPPER,
   proc { |ability, user, target, move, type, battle, show_message|
-    next pbBattleMoveImmunityStatAbility(user, target, move, type, :GRASS, :ATTACK, 1, battle, show_message)
+    next target.pbMoveImmunityStatRaisingAbility(user, move, type,
+       :GRASS, :ATTACK, 1, show_message)
   }
 )
 
@@ -682,7 +685,8 @@ BattleHandlers::MoveImmunityTargetAbility.add(:SOUNDPROOF,
 
 BattleHandlers::MoveImmunityTargetAbility.add(:STORMDRAIN,
   proc { |ability, user, target, move, type, battle, show_message|
-    next pbBattleMoveImmunityStatAbility(user, target, move, type, :WATER, :SPECIAL_ATTACK, 1, battle, show_message)
+    next target.pbMoveImmunityStatRaisingAbility(user, move, type,
+       :WATER, :SPECIAL_ATTACK, 1, show_message)
   }
 )
 
@@ -706,13 +710,13 @@ BattleHandlers::MoveImmunityTargetAbility.add(:TELEPATHY,
 
 BattleHandlers::MoveImmunityTargetAbility.add(:VOLTABSORB,
   proc { |ability, user, target, move, type, battle, show_message|
-    next pbBattleMoveImmunityHealAbility(user, target, move, type, :ELECTRIC, battle, show_message)
+    next target.pbMoveImmunityHealingAbility(user, move, type, :ELECTRIC, show_message)
   }
 )
 
 BattleHandlers::MoveImmunityTargetAbility.add(:WATERABSORB,
   proc { |ability, user, target, move, type, battle, show_message|
-    next pbBattleMoveImmunityHealAbility(user, target, move, type, :WATER, battle, show_message)
+    next target.pbMoveImmunityHealingAbility(user, move, type, :WATER, show_message)
   }
 )
 
@@ -1676,7 +1680,7 @@ BattleHandlers::TargetAbilityOnHit.add(:RATTLED,
 
 BattleHandlers::TargetAbilityOnHit.add(:SANDSPIT,
   proc { |ability, user, target, move, battle|
-    pbBattleWeatherAbility(:Sandstorm, battler, battle)
+    battle.pbStartWeatherAbility(:Sandstorm, battler)
   }
 )
 
@@ -2389,13 +2393,13 @@ BattleHandlers::AbilityOnSwitchIn.add(:DAUNTLESSSHIELD,
 
 BattleHandlers::AbilityOnSwitchIn.add(:DELTASTREAM,
   proc { |ability,battler,battle|
-    pbBattleWeatherAbility(:StrongWinds, battler, battle, true)
+    battle.pbStartWeatherAbility(:StrongWinds, battler, true)
   }
 )
 
 BattleHandlers::AbilityOnSwitchIn.add(:DESOLATELAND,
   proc { |ability,battler,battle|
-    pbBattleWeatherAbility(:HarshSun, battler, battle, true)
+    battle.pbStartWeatherAbility(:HarshSun, battler, true)
   }
 )
 
@@ -2413,13 +2417,13 @@ BattleHandlers::AbilityOnSwitchIn.add(:DOWNLOAD,
 
 BattleHandlers::AbilityOnSwitchIn.add(:DRIZZLE,
   proc { |ability,battler,battle|
-    pbBattleWeatherAbility(:Rain, battler, battle)
+    battle.pbStartWeatherAbility(:Rain, battler)
   }
 )
 
 BattleHandlers::AbilityOnSwitchIn.add(:DROUGHT,
   proc { |ability,battler,battle|
-    pbBattleWeatherAbility(:Sun, battler, battle)
+    battle.pbStartWeatherAbility(:Sun, battler)
   }
 )
 
@@ -2655,7 +2659,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:PRESSURE,
 
 BattleHandlers::AbilityOnSwitchIn.add(:PRIMORDIALSEA,
   proc { |ability,battler,battle|
-    pbBattleWeatherAbility(:HeavyRain, battler, battle, true)
+    battle.pbStartWeatherAbility(:HeavyRain, battler, true)
   }
 )
 
@@ -2670,7 +2674,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:PSYCHICSURGE,
 
 BattleHandlers::AbilityOnSwitchIn.add(:SANDSTREAM,
   proc { |ability,battler,battle|
-    pbBattleWeatherAbility(:Sandstorm, battler, battle)
+    battle.pbStartWeatherAbility(:Sandstorm, battler)
   }
 )
 
@@ -2727,7 +2731,7 @@ BattleHandlers::AbilityOnSwitchIn.add(:SLOWSTART,
 
 BattleHandlers::AbilityOnSwitchIn.add(:SNOWWARNING,
   proc { |ability,battler,battle|
-    pbBattleWeatherAbility(:Hail, battler, battle)
+    battle.pbStartWeatherAbility(:Hail, battler)
   }
 )
 

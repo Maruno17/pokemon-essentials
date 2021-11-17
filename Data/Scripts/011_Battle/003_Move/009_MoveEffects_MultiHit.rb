@@ -9,7 +9,7 @@ end
 #===============================================================================
 # Hits twice. May poison the target on each hit. (Twineedle)
 #===============================================================================
-class Battle::Move::HitTwoTimesPoisonTarget < Battle::Move::PoisonMove
+class Battle::Move::HitTwoTimesPoisonTarget < Battle::Move::PoisonTarget
   def multiHitMove?;           return true; end
   def pbNumHits(user,targets); return 2;    end
 end
@@ -18,7 +18,7 @@ end
 # Hits twice. Causes the target to flinch. Does double damage and has perfect
 # accuracy if the target is Minimized. (Double Iron Bash)
 #===============================================================================
-class Battle::Move::HitTwoTimesFlinchTarget < Battle::Move::FlinchMove
+class Battle::Move::HitTwoTimesFlinchTarget < Battle::Move::FlinchTarget
   def multiHitMove?;              return true;                                end
   def pbNumHits(user,targets);    return 2;                                   end
   def tramplesMinimize?(param=1); return Settings::MECHANICS_GENERATION <= 7; end

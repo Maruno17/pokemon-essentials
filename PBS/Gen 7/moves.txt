@@ -5250,7 +5250,7 @@ Category = Status
 Accuracy = 0
 TotalPP = 40
 Target = User
-FunctionCode = DoesNothingCongratuations
+FunctionCode = DoesNothingCongratulations
 Description = The Pokémon congratulates you on your special day!
 #-------------------------------
 [CONFIDE]

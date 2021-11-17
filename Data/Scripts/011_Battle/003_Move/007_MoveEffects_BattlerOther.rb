@@ -1,13 +1,29 @@
 #===============================================================================
 # Puts the target to sleep.
 #===============================================================================
-class Battle::Move::SleepTarget < Battle::Move::SleepMove
+class Battle::Move::SleepTarget < Battle::Move
+  def canMagicCoat?; return true; end
+
+  def pbFailsAgainstTarget?(user, target, show_message)
+    return false if damagingMove?
+    return !target.pbCanSleep?(user, show_message, self)
+  end
+
+  def pbEffectAgainstTarget(user,target)
+    return if damagingMove?
+    target.pbSleep
+  end
+
+  def pbAdditionalEffect(user,target)
+    return if target.damageState.substitute
+    target.pbSleep if target.pbCanSleep?(user,false,self)
+  end
 end
 
 #===============================================================================
 # Puts the target to sleep. Fails if user is not Darkrai. (Dark Void (Gen 7+))
 #===============================================================================
-class Battle::Move::SleepTargetIfUserDarkrai < Battle::Move::SleepMove
+class Battle::Move::SleepTargetIfUserDarkrai < Battle::Move::SleepTarget
   def pbMoveFailed?(user,targets)
     if !user.isSpecies?(:DARKRAI) && user.effects[PBEffects::TransformSpecies] != :DARKRAI
       @battle.pbDisplay(_INTL("But {1} can't use the move!",user.pbThis))
@@ -21,7 +37,7 @@ end
 # Puts the target to sleep. Changes the user's form if the user is Meloetta.
 # (Relic Song)
 #===============================================================================
-class Battle::Move::SleepTargetChangeUserMeloettaForm < Battle::Move::SleepMove
+class Battle::Move::SleepTargetChangeUserMeloettaForm < Battle::Move::SleepTarget
   def pbEndOfMoveUsageEffect(user,targets,numHits,switchedBattlers)
     return if numHits==0
     return if user.fainted? || user.effects[PBEffects::Transform]
@@ -56,7 +72,28 @@ end
 #===============================================================================
 # Poisons the target.
 #===============================================================================
-class Battle::Move::PoisonTarget < Battle::Move::PoisonMove
+class Battle::Move::PoisonTarget < Battle::Move
+  def canMagicCoat?; return true; end
+
+  def initialize(battle,move)
+    super
+    @toxic = false
+  end
+
+  def pbFailsAgainstTarget?(user, target, show_message)
+    return false if damagingMove?
+    return !target.pbCanPoison?(user, show_message, self)
+  end
+
+  def pbEffectAgainstTarget(user,target)
+    return if damagingMove?
+    target.pbPoison(user,nil,@toxic)
+  end
+
+  def pbAdditionalEffect(user,target)
+    return if target.damageState.substitute
+    target.pbPoison(user,nil,@toxic) if target.pbCanPoison?(user,false,self)
+  end
 end
 
 #===============================================================================
@@ -85,7 +122,7 @@ end
 #===============================================================================
 # Badly poisons the target. (Poison Fang, Toxic)
 #===============================================================================
-class Battle::Move::BadPoisonTarget < Battle::Move::PoisonMove
+class Battle::Move::BadPoisonTarget < Battle::Move::PoisonTarget
   def initialize(battle,move)
     super
     @toxic = true
@@ -99,14 +136,30 @@ end
 #===============================================================================
 # Paralyzes the target.
 #===============================================================================
-class Battle::Move::ParalyzeTarget < Battle::Move::ParalysisMove
+class Battle::Move::ParalyzeTarget < Battle::Move
+  def canMagicCoat?; return true; end
+
+  def pbFailsAgainstTarget?(user, target, show_message)
+    return false if damagingMove?
+    return !target.pbCanParalyze?(user, show_message, self)
+  end
+
+  def pbEffectAgainstTarget(user,target)
+    return if damagingMove?
+    target.pbParalyze(user)
+  end
+
+  def pbAdditionalEffect(user,target)
+    return if target.damageState.substitute
+    target.pbParalyze(user) if target.pbCanParalyze?(user,false,self)
+  end
 end
 
 #===============================================================================
 # Paralyzes the target. Doesn't affect target if move's type has no effect on
 # it. (Thunder Wave)
 #===============================================================================
-class Battle::Move::ParalyzeTargetIfNotTypeImmune < Battle::Move::ParalysisMove
+class Battle::Move::ParalyzeTargetIfNotTypeImmune < Battle::Move::ParalyzeTarget
   def pbFailsAgainstTarget?(user, target, show_message)
     if Effectiveness.ineffective?(target.damageState.typeMod)
       @battle.pbDisplay(_INTL("It doesn't affect {1}...", target.pbThis(true))) if show_message
@@ -120,7 +173,7 @@ end
 # Paralyzes the target. Does double damage and has perfect accuracy if target is
 # Minimized. (Body Slam (Gen 6+))
 #===============================================================================
-class Battle::Move::ParalyzeTargetTrampleMinimize < Battle::Move::ParalysisMove
+class Battle::Move::ParalyzeTargetTrampleMinimize < Battle::Move::ParalyzeTarget
   def tramplesMinimize?(param=1)
     return true if param==1 && Settings::MECHANICS_GENERATION >= 6   # Perfect accuracy
     return true if param==2   # Double damage
@@ -132,7 +185,7 @@ end
 # Paralyzes the target. Accuracy perfect in rain, 50% in sunshine. Hits some
 # semi-invulnerable targets. (Thunder)
 #===============================================================================
-class Battle::Move::ParalyzeTargetAlwaysHitsInRainHitsTargetInSky < Battle::Move::ParalysisMove
+class Battle::Move::ParalyzeTargetAlwaysHitsInRainHitsTargetInSky < Battle::Move::ParalyzeTarget
   def hitsFlyingTargets?; return true; end
 
   def pbBaseAccuracy(user,target)
@@ -166,14 +219,30 @@ end
 #===============================================================================
 # Burns the target.
 #===============================================================================
-class Battle::Move::BurnTarget < Battle::Move::BurnMove
+class Battle::Move::BurnTarget < Battle::Move
+  def canMagicCoat?; return true; end
+
+  def pbFailsAgainstTarget?(user, target, show_message)
+    return false if damagingMove?
+    return !target.pbCanBurn?(user, show_message, self)
+  end
+
+  def pbEffectAgainstTarget(user,target)
+    return if damagingMove?
+    target.pbBurn(user)
+  end
+
+  def pbAdditionalEffect(user,target)
+    return if target.damageState.substitute
+    target.pbBurn(user) if target.pbCanBurn?(user,false,self)
+  end
 end
 
 #===============================================================================
 # Burns the target if any of its stats were increased this round.
 # (Burning Jealousy)
 #===============================================================================
-class Battle::Move::BurnTargetIfTargetStatsRaisedThisTurn < Battle::Move::BurnMove
+class Battle::Move::BurnTargetIfTargetStatsRaisedThisTurn < Battle::Move::BurnTarget
   def pbAdditionalEffect(user, target)
     super if target.statsRaisedThisRound
   end
@@ -199,13 +268,29 @@ end
 #===============================================================================
 # Freezes the target.
 #===============================================================================
-class Battle::Move::FreezeTarget < Battle::Move::FreezeMove
+class Battle::Move::FreezeTarget < Battle::Move
+  def canMagicCoat?; return true; end
+
+  def pbFailsAgainstTarget?(user, target, show_message)
+    return false if damagingMove?
+    return !target.pbCanFreeze?(user, show_message, self)
+  end
+
+  def pbEffectAgainstTarget(user,target)
+    return if damagingMove?
+    target.pbFreeze
+  end
+
+  def pbAdditionalEffect(user,target)
+    return if target.damageState.substitute
+    target.pbFreeze if target.pbCanFreeze?(user,false,self)
+  end
 end
 
 #===============================================================================
 # Freezes the target. Effectiveness against Water-type is 2x. (Freeze-Dry)
 #===============================================================================
-class Battle::Move::FreezeTargetSuperEffectiveAgainstWater < Battle::Move::FreezeMove
+class Battle::Move::FreezeTargetSuperEffectiveAgainstWater < Battle::Move::FreezeTarget
   def pbCalcTypeModSingle(moveType,defType,user,target)
     return Effectiveness::SUPER_EFFECTIVE_ONE if defType == :WATER
     return super
@@ -215,7 +300,7 @@ end
 #===============================================================================
 # Freezes the target. Accuracy perfect in hail. (Blizzard)
 #===============================================================================
-class Battle::Move::FreezeTargetAlwaysHitsInHail < Battle::Move::FreezeMove
+class Battle::Move::FreezeTargetAlwaysHitsInHail < Battle::Move::FreezeTarget
   def pbBaseAccuracy(user,target)
     return 0 if target.effectiveWeather == :Hail
     return super
@@ -448,14 +533,25 @@ end
 #===============================================================================
 # Causes the target to flinch.
 #===============================================================================
-class Battle::Move::FlinchTarget < Battle::Move::FlinchMove
+class Battle::Move::FlinchTarget < Battle::Move
+  def flinchingMove?; return true; end
+
+  def pbEffectAgainstTarget(user,target)
+    return if damagingMove?
+    target.pbFlinch(user)
+  end
+
+  def pbAdditionalEffect(user,target)
+    return if target.damageState.substitute
+    target.pbFlinch(user)
+  end
 end
 
 #===============================================================================
 # Causes the target to flinch. Does double damage and has perfect accuracy if
 # the target is Minimized. (Dragon Rush (Gen 6+), Steamroller, Stomp)
 #===============================================================================
-class Battle::Move::FlinchTargetTrampleMinimize < Battle::Move::FlinchMove
+class Battle::Move::FlinchTargetTrampleMinimize < Battle::Move::FlinchTarget
   def tramplesMinimize?(param=1)
     return true if param==1 && Settings::MECHANICS_GENERATION >= 6   # Perfect accuracy
     return true if param==2   # Double damage
@@ -466,7 +562,7 @@ end
 #===============================================================================
 # Causes the target to flinch. Fails if the user is not asleep. (Snore)
 #===============================================================================
-class Battle::Move::FlinchTargetFailsIfUserNotAsleep < Battle::Move::FlinchMove
+class Battle::Move::FlinchTargetFailsIfUserNotAsleep < Battle::Move::FlinchTarget
   def usableWhenAsleep?; return true; end
 
   def pbMoveFailed?(user,targets)
@@ -482,7 +578,7 @@ end
 # Causes the target to flinch. Fails if this isn't the user's first turn.
 # (Fake Out)
 #===============================================================================
-class Battle::Move::FlinchTargetFailsIfNotUserFirstTurn < Battle::Move::FlinchMove
+class Battle::Move::FlinchTargetFailsIfNotUserFirstTurn < Battle::Move::FlinchTarget
   def pbMoveFailed?(user,targets)
     if user.turnCount > 1
       @battle.pbDisplay(_INTL("But it failed!"))
@@ -496,7 +592,7 @@ end
 # Power is doubled if the target is using Bounce, Fly or Sky Drop. Hits some
 # semi-invulnerable targets. May make the target flinch. (Twister)
 #===============================================================================
-class Battle::Move::FlinchTargetDoublePowerIfTargetInSky < Battle::Move::FlinchMove
+class Battle::Move::FlinchTargetDoublePowerIfTargetInSky < Battle::Move::FlinchTarget
   def hitsFlyingTargets?; return true; end
 
   def pbBaseDamage(baseDmg,user,target)
@@ -511,14 +607,31 @@ end
 #===============================================================================
 # Confuses the target.
 #===============================================================================
-class Battle::Move::ConfuseTarget < Battle::Move::ConfuseMove
+class Battle::Move::ConfuseTarget < Battle::Move
+  def canMagicCoat?; return true; end
+
+  def pbFailsAgainstTarget?(user, target, show_message)
+    return false if damagingMove?
+    return !target.pbCanConfuse?(user, show_message, self)
+  end
+
+  def pbEffectAgainstTarget(user,target)
+    return if damagingMove?
+    target.pbConfuse
+  end
+
+  def pbAdditionalEffect(user,target)
+    return if target.damageState.substitute
+    return if !target.pbCanConfuse?(user,false,self)
+    target.pbConfuse
+  end
 end
 
 #===============================================================================
 # Confuses the target. Accuracy perfect in rain, 50% in sunshine. Hits some
 # semi-invulnerable targets. (Hurricane)
 #===============================================================================
-class Battle::Move::ConfuseTargetAlwaysHitsInRainHitsTargetInSky < Battle::Move::ConfuseMove
+class Battle::Move::ConfuseTargetAlwaysHitsInRainHitsTargetInSky < Battle::Move::ConfuseTarget
   def hitsFlyingTargets?; return true; end
 
   def pbBaseAccuracy(user,target)

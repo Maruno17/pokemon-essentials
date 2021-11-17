@@ -7,7 +7,7 @@ end
 #===============================================================================
 # Does absolutely nothing. Shows a special message. (Celebrate)
 #===============================================================================
-class Battle::Move::DoesNothingCongratuations < Battle::Move
+class Battle::Move::DoesNothingCongratulations < Battle::Move
   def pbEffectGeneral(user)
     if user.wild?
       @battle.pbDisplay(_INTL("Congratulations from {1}!",user.pbThis(true)))

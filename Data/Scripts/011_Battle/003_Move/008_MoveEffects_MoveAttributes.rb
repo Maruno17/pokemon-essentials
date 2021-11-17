@@ -1143,7 +1143,7 @@ end
 # if it is a physical move. Has a different animation depending on the move's
 # category. (Shell Side Arm)
 #===============================================================================
-class Battle::Move::CategoryDependsOnHigherDamagePoisonTarget < Battle::Move::PoisonMove
+class Battle::Move::CategoryDependsOnHigherDamagePoisonTarget < Battle::Move::PoisonTarget
   def initialize(battle, move)
     super
     @calcCategory = 1

@@ -442,7 +442,7 @@ module GameData
       when "131" then new_code = "StartShadowSkyWeather"
       when "132" then new_code = "RemoveAllScreens"
       when "133" then new_code = "DoesNothingFailsIfNoAlly"
-      when "134" then new_code = "DoesNothingCongratuations"
+      when "134" then new_code = "DoesNothingCongratulations"
       when "135" then new_code = "FreezeTargetSuperEffectiveAgainstWater"
       when "136" then new_code = "RaiseUserDefense2"
       when "137" then new_code = "RaisePlusMinusUserAndAlliesDefSpDef1"

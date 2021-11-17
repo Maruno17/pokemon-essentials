@@ -683,7 +683,7 @@ class Battle
   end
 
   #=============================================================================
-  # Weather and terrain
+  # Weather
   #=============================================================================
   def defaultWeather=(value)
     @field.defaultWeather  = value
@@ -753,6 +753,23 @@ class Battle
     end
   end
 
+  def pbStartWeatherAbility(new_weather, battler, ignore_primal = false)
+    return if !ignore_primal && [:HarshSun, :HeavyRain, :StrongWinds].include?(@field.weather)
+    return if @field.weather == new_weather
+    battle.pbShowAbilitySplash(battler)
+    if !Scene::USE_ABILITY_SPLASH
+      pbDisplay(_INTL("{1}'s {2} activated!", battler.pbThis, battler.abilityName))
+    end
+    fixed_duration = false
+    fixed_duration = true if Settings::FIXED_DURATION_WEATHER_FROM_ABILITY &&
+                             ![:HarshSun, :HeavyRain, :StrongWinds].include?(new_weather)
+    pbStartWeather(battler, new_weather, fixed_duration)
+    # NOTE: The ability splash is hidden again in def pbStartWeather.
+  end
+
+  #=============================================================================
+  # Terrain
+  #=============================================================================
   def defaultTerrain=(value)
     @field.defaultTerrain  = value
     @field.terrain         = value
