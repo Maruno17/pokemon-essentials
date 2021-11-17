@@ -48,7 +48,7 @@ BattleHandlers::WeightCalcItem.add(:FLOATSTONE,
 BattleHandlers::HPHealItem.add(:AGUAVBERRY,
   proc { |item,battler,battle,forced|
     next battler.pbConfusionBerry(item, forced, 4,
-       _INTL("For {1}, the {2} was too bitter!", battler.pbThis(true), GameData::Item.get(item).name))
+       _INTL("For {1}, the {2} was too bitter!", battler.pbThis(true), GameData::Item.get(item).name)
     )
   }
 )
