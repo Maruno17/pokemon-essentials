@@ -281,7 +281,7 @@ class Battle::Battler
     # Dazzling/Queenly Majesty make the move fail here
     @battle.pbPriority(true).each do |b|
       next if !b || !b.abilityActive?
-      if BattleHandlers.triggerMoveBlockingAbility(b.ability,b,user,targets,move,@battle)
+      if Battle::AbilityEffects.triggerMoveBlocking(b.ability, b, user, targets, move, @battle)
         @battle.pbDisplayBrief(_INTL("{1} used {2}!",user.pbThis,move.name))
         @battle.pbShowAbilitySplash(b)
         @battle.pbDisplay(_INTL("{1} cannot use {2}!",user.pbThis,move.name))
@@ -603,7 +603,7 @@ class Battle::Battler
           next if !b.damageState.missed || b.damageState.magicCoat
           pbMissMessage(move,user,b)
           if user.itemActive?
-            BattleHandlers.triggerUserItemOnMissing(user.item, user, b, move, hitNum, @battle)
+            Battle::ItemEffects.triggerOnMissingTarget(user.item, user, b, move, hitNum, @battle)
           end
           break if move.pbRepeatHit?   # Dragon Darts only shows one failure message
         end
@@ -649,7 +649,7 @@ class Battle::Battler
         next if !b.damageState.missed
         pbMissMessage(move, user, b)
         if user.itemActive?
-          BattleHandlers.triggerUserItemOnMissing(user.item, user, b, move, hitNum, @battle)
+          Battle::ItemEffects.triggerOnMissingTarget(user.item, user, b, move, hitNum, @battle)
         end
       end
     end

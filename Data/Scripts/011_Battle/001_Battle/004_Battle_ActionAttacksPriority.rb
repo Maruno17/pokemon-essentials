@@ -155,7 +155,7 @@ class Battle
             move = @choices[b.index][2]
             pri = move.pbPriority(b)
             if b.abilityActive?
-              pri = BattleHandlers.triggerPriorityChangeAbility(b.ability,b,move,pri)
+              pri = Battle::AbilityEffects.triggerPriorityChange(b.ability, b, move, pri)
             end
             bArray[3] = pri
             @choices[b.index][4] = pri
@@ -167,8 +167,7 @@ class Battle
           subPri = 0
           # Abilities (Stall)
           if b.abilityActive?
-            newSubPri = BattleHandlers.triggerPriorityBracketChangeAbility(b.ability,
-             b,subPri,self)
+            newSubPri = Battle::AbilityEffects.triggerPriorityBracketChange(b.ability, b, subPri, self)
             if subPri!=newSubPri
               subPri = newSubPri
               b.effects[PBEffects::PriorityAbility] = true
@@ -177,8 +176,7 @@ class Battle
           end
           # Items (Quick Claw, Custap Berry, Lagging Tail, Full Incense)
           if b.itemActive?
-            newSubPri = BattleHandlers.triggerPriorityBracketChangeItem(b.item,
-               b,subPri,self)
+            newSubPri = Battle::ItemEffects.triggerPriorityBracketChange(b.item, b, subPri, self)
             if subPri!=newSubPri
               subPri = newSubPri
               b.effects[PBEffects::PriorityAbility] = false

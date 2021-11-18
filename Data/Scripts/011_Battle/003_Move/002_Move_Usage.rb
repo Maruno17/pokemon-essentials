@@ -86,7 +86,7 @@ class Battle::Move
     return false if @battle.moldBreaker
     ret = false
     if target.abilityActive?
-      ret = BattleHandlers.triggerMoveImmunityTargetAbility(target.ability,
+      ret = Battle::AbilityEffects.triggerMoveImmunity(target.ability,
          user, target, self, @calcType, @battle, show_message)
     end
     return ret

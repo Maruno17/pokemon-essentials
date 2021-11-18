@@ -6,9 +6,9 @@ class Battle
   def pbAttackPhasePriorityChangeMessages
     pbPriority.each do |b|
       if b.effects[PBEffects::PriorityAbility] && b.abilityActive?
-        BattleHandlers.triggerPriorityBracketUseAbility(b.ability,b,self)
+        Battle::AbilityEffects.triggerPriorityBracketUse(b.ability, b, self)
       elsif b.effects[PBEffects::PriorityItem] && b.itemActive?
-        BattleHandlers.triggerPriorityBracketUseItem(b.item,b,self)
+        Battle::ItemEffects.triggerPriorityBracketUse(b.item, b, self)
       end
     end
   end

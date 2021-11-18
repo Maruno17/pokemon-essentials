@@ -1,4 +1,4 @@
-module Battle::Common
+module Battle::CatchAndStoreMixin
   #=============================================================================
   # Store caught Pokémon
   #=============================================================================
@@ -107,16 +107,16 @@ module Battle::Common
     case numShakes
     when 0
       pbDisplay(_INTL("Oh no! The Pokémon broke free!"))
-      BallHandlers.onFailCatch(ball,self,battler)
+      Battle::PokeBallEffects.onFailCatch(ball, self, battler)
     when 1
       pbDisplay(_INTL("Aww! It appeared to be caught!"))
-      BallHandlers.onFailCatch(ball,self,battler)
+      Battle::PokeBallEffects.onFailCatch(ball, self, battler)
     when 2
       pbDisplay(_INTL("Aargh! Almost had it!"))
-      BallHandlers.onFailCatch(ball,self,battler)
+      Battle::PokeBallEffects.onFailCatch(ball, self, battler)
     when 3
       pbDisplay(_INTL("Gah! It was so close, too!"))
-      BallHandlers.onFailCatch(ball,self,battler)
+      Battle::PokeBallEffects.onFailCatch(ball, self, battler)
     when 4
       pbDisplayBrief(_INTL("Gotcha! {1} was caught!",pkmn.name))
       @scene.pbThrowSuccess   # Play capture success jingle
@@ -135,7 +135,7 @@ module Battle::Common
       if GameData::Item.get(ball).is_snag_ball?
         pkmn.owner = Pokemon::Owner.new_from_trainer(pbPlayer)
       end
-      BallHandlers.onCatch(ball,self,pkmn)
+      Battle::PokeBallEffects.onCatch(ball, self, pkmn)
       pkmn.poke_ball = ball
       pkmn.makeUnmega if pkmn.mega?
       pkmn.makeUnprimal
@@ -163,11 +163,8 @@ module Battle::Common
     # Get a catch rate if one wasn't provided
     catch_rate = pkmn.species_data.catch_rate if !catch_rate
     # Modify catch_rate depending on the Poké Ball's effect
-    ultraBeast = [:NIHILEGO, :BUZZWOLE, :PHEROMOSA, :XURKITREE, :CELESTEELA,
-                  :KARTANA, :GUZZLORD, :POIPOLE, :NAGANADEL, :STAKATAKA,
-                  :BLACEPHALON].include?(pkmn.species)
-    if !ultraBeast || ball == :BEASTBALL
-      catch_rate = BallHandlers.modifyCatchRate(ball,catch_rate,self,battler,ultraBeast)
+    if !pkmn.species_data.has_flag?("UltraBeast") || ball == :BEASTBALL
+      catch_rate = Battle::PokeBallEffects.modifyCatchRate(ball, catch_rate, self, battler)
     else
       catch_rate /= 10
     end
@@ -184,7 +181,7 @@ module Battle::Common
     x = x.floor
     x = 1 if x<1
     # Definite capture, no need to perform randomness checks
-    return 4 if x>=255 || BallHandlers.isUnconditional?(ball,self,battler)
+    return 4 if x>=255 || Battle::PokeBallEffects.isUnconditional?(ball, self, battler)
     # Second half of the shakes calculation
     y = ( 65536 / ((255.0/x)**0.1875) ).floor
     # Critical capture check
@@ -219,4 +216,11 @@ module Battle::Common
     end
     return numShakes
   end
+end
+
+#===============================================================================
+#
+#===============================================================================
+class Battle
+  include Battle::CatchAndStoreMixin
 end

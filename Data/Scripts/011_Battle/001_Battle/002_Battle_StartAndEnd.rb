@@ -478,7 +478,7 @@ class Battle
     @battlers.each do |b|
       next if !b
       pbCancelChoice(b.index)   # Restore unused items to Bag
-      BattleHandlers.triggerAbilityOnSwitchOut(b.ability,b,true) if b.abilityActive?
+      Battle::AbilityEffects.triggerOnSwitchOut(b.ability, b, true) if b.abilityActive?
     end
     pbParty(0).each_with_index do |pkmn,i|
       next if !pkmn

@@ -20787,6 +20787,7 @@ Shape = Multiped
 Category = Parasite
 Pokedex = One of several mysterious Ultra Beasts. People on the street report observing those infested by it suddenly becoming violent.
 Generation = 7
+Flags = UltraBeast
 #-------------------------------
 [BUZZWOLE]
 Name = Buzzwole
@@ -20811,6 +20812,7 @@ Shape = Multiped
 Category = Swollen
 Pokedex = This Ultra Beast appeared from another world. It shows off its body, but whether that display is a boast or a threat remains unclear.
 Generation = 7
+Flags = UltraBeast
 #-------------------------------
 [PHEROMOSA]
 Name = Pheromosa
@@ -20835,6 +20837,7 @@ Shape = Bipedal
 Category = Lissome
 Pokedex = One of the Ultra Beasts. It refuses to touch anything, perhaps because it senses some uncleanness in this world.
 Generation = 7
+Flags = UltraBeast
 #-------------------------------
 [XURKITREE]
 Name = Xurkitree
@@ -20858,6 +20861,7 @@ Shape = BipedalTail
 Category = Glowing
 Pokedex = One of the mysterious life-forms known as Ultra Beasts. Astonishing electric shocks emanate from its entire body, according to witnesses.
 Generation = 7
+Flags = UltraBeast
 #-------------------------------
 [CELESTEELA]
 Name = Celesteela
@@ -20882,6 +20886,7 @@ Shape = Bipedal
 Category = Launch
 Pokedex = One kind of Ultra Beast. Witnesses have seen it burn down a forest by expelling gas from its two arms.
 Generation = 7
+Flags = UltraBeast
 #-------------------------------
 [KARTANA]
 Name = Kartana
@@ -20906,6 +20911,7 @@ Shape = Bipedal
 Category = Drawn Sword
 Pokedex = One of the Ultra Beast life-forms, it was observed cutting down a gigantic steel tower with one stroke of its blade.
 Generation = 7
+Flags = UltraBeast
 #-------------------------------
 [GUZZLORD]
 Name = Guzzlord
@@ -20930,6 +20936,7 @@ Shape = BipedalTail
 Category = Junkivore
 Pokedex = A dangerous Ultra Beast, it appears to be eating constantly, but for some reason its droppings have never been found.
 Generation = 7
+Flags = UltraBeast
 #-------------------------------
 [NECROZMA]
 Name = Necrozma
@@ -21024,6 +21031,7 @@ Shape = BipedalTail
 Category = Poison Pin
 Pokedex = An Ultra Beast that lives in a different world, it cackles wildly as it sprays its opponents with poison from the needles on its head.
 Generation = 7
+Flags = UltraBeast
 Evolutions = NAGANADEL,HasMove,DRAGONPULSE
 #-------------------------------
 [NAGANADEL]
@@ -21049,6 +21057,7 @@ Shape = Winged
 Category = Poison Pin
 Pokedex = One kind of Ultra Beast, it fires a glowing, venomous liquid from its needles. This liquid is also immensely adhesive.
 Generation = 7
+Flags = UltraBeast
 #-------------------------------
 [STAKATAKA]
 Name = Stakataka
@@ -21073,6 +21082,7 @@ Shape = Quadruped
 Category = Rampart
 Pokedex = When stone walls started moving and attacking, the brute's true identity was this mysterious life-form, which brings to mind an Ultra Beast.
 Generation = 7
+Flags = UltraBeast
 #-------------------------------
 [BLACEPHALON]
 Name = Blacephalon
@@ -21097,6 +21107,7 @@ Shape = Bipedal
 Category = Fireworks
 Pokedex = It slithers toward people. Then, without warning, it triggers the explosion of its own head. It's apparently one kind of Ultra Beast.
 Generation = 7
+Flags = UltraBeast
 #-------------------------------
 [ZERAORA]
 Name = Zeraora

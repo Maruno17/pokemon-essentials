@@ -9,14 +9,14 @@ class Battle::Battler
   #       "counts as having that status", which includes Comatose which can't be
   #       cured.
   def pbHasStatus?(checkStatus)
-    if BattleHandlers.triggerStatusCheckAbilityNonIgnorable(self.ability,self,checkStatus)
+    if Battle::AbilityEffects.triggerStatusCheckNonIgnorable(self.ability, self, checkStatus)
       return true
     end
     return @status==checkStatus
   end
 
   def pbHasAnyStatus?
-    if BattleHandlers.triggerStatusCheckAbilityNonIgnorable(self.ability,self,nil)
+    if Battle::AbilityEffects.triggerStatusCheckNonIgnorable(self.ability, self, nil)
       return true
     end
     return @status != :NONE
@@ -102,15 +102,15 @@ class Battle::Battler
     # Ability immunity
     immuneByAbility = false
     immAlly = nil
-    if BattleHandlers.triggerStatusImmunityAbilityNonIgnorable(self.ability,self,newStatus)
+    if Battle::AbilityEffects.triggerStatusImmunityNonIgnorable(self.ability, self, newStatus)
       immuneByAbility = true
     elsif selfInflicted || !@battle.moldBreaker
-      if abilityActive? && BattleHandlers.triggerStatusImmunityAbility(self.ability,self,newStatus)
+      if abilityActive? && Battle::AbilityEffects.triggerStatusImmunity(self.ability, self, newStatus)
         immuneByAbility = true
       else
         allAllies.each do |b|
           next if !b.abilityActive?
-          next if !BattleHandlers.triggerStatusImmunityAllyAbility(b.ability,self,newStatus)
+          next if !Battle::AbilityEffects.triggerStatusImmunityFromAlly(b.ability, self, newStatus)
           immuneByAbility = true
           immAlly = b
           break
@@ -192,15 +192,15 @@ class Battle::Battler
     end
     return false if hasImmuneType
     # Ability immunity
-    if BattleHandlers.triggerStatusImmunityAbilityNonIgnorable(self.ability,self,newStatus)
+    if Battle::AbilityEffects.triggerStatusImmunityNonIgnorable(self.ability, self, newStatus)
       return false
     end
-    if abilityActive? && BattleHandlers.triggerStatusImmunityAbility(self.ability,self,newStatus)
+    if abilityActive? && Battle::AbilityEffects.triggerStatusImmunity(self.ability, self, newStatus)
       return false
     end
     allAllies.each do |b|
       next if !b.abilityActive?
-      next if !BattleHandlers.triggerStatusImmunityAllyAbility(b.ability,self,newStatus)
+      next if !Battle::AbilityEffects.triggerStatusImmunityFromAlly(b.ability, self, newStatus)
       return false
     end
     # Safeguard immunity
@@ -252,7 +252,7 @@ class Battle::Battler
     pbCheckFormOnStatusChange
     # Synchronize
     if abilityActive?
-      BattleHandlers.triggerAbilityOnStatusInflicted(self.ability,self,user,newStatus)
+      Battle::AbilityEffects.triggerOnStatusInflicted(self.ability, self, user, newStatus)
     end
     # Status cures
     pbItemStatusCureCheck
@@ -287,18 +287,18 @@ class Battle::Battler
     if !hasActiveAbility?(:SOUNDPROOF)
       return false if @battle.allBattlers.any? { |b| b.effects[PBEffects::Uproar] > 0 }
     end
-    if BattleHandlers.triggerStatusImmunityAbilityNonIgnorable(self.ability, self, :SLEEP)
+    if Battle::AbilityEffects.triggerStatusImmunityNonIgnorable(self.ability, self, :SLEEP)
       return false
     end
     # NOTE: Bulbapedia claims that Flower Veil shouldn't prevent sleep due to
     #       drowsiness, but I disagree because that makes no sense. Also, the
     #       comparable Sweet Veil does prevent sleep due to drowsiness.
-    if abilityActive? && BattleHandlers.triggerStatusImmunityAbility(self.ability, self, :SLEEP)
+    if abilityActive? && Battle::AbilityEffects.triggerStatusImmunity(self.ability, self, :SLEEP)
       return false
     end
     allAllies.each do |b|
       next if !b.abilityActive?
-      next if !BattleHandlers.triggerStatusImmunityAllyAbility(b.ability, self, :SLEEP)
+      next if !Battle::AbilityEffects.triggerStatusImmunityFromAlly(b.ability, self, :SLEEP)
       return false
     end
     # NOTE: Bulbapedia claims that Safeguard shouldn't prevent sleep due to

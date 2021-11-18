@@ -59,7 +59,7 @@ class Battle::Battler
     @battle.pbDisplay(arrStatTexts[[increment-1,2].min])
     # Trigger abilities upon stat gain
     if abilityActive?
-      BattleHandlers.triggerAbilityOnStatGain(self.ability,self,stat,user)
+      Battle::AbilityEffects.triggerOnStatGain(self.ability, self, stat, user)
     end
     return true
   end
@@ -88,7 +88,7 @@ class Battle::Battler
     @battle.pbDisplay(arrStatTexts[[increment-1,2].min])
     # Trigger abilities upon stat gain
     if abilityActive?
-      BattleHandlers.triggerAbilityOnStatGain(self.ability,self,stat,user)
+      Battle::AbilityEffects.triggerOnStatGain(self.ability, self, stat, user)
     end
     return true
   end
@@ -138,15 +138,15 @@ class Battle::Battler
         return false
       end
       if abilityActive?
-        return false if BattleHandlers.triggerStatLossImmunityAbility(
+        return false if Battle::AbilityEffects.triggerStatLossImmunity(
            self.ability,self,stat,@battle,showFailMsg) if !@battle.moldBreaker
-        return false if BattleHandlers.triggerStatLossImmunityAbilityNonIgnorable(
+        return false if Battle::AbilityEffects.triggerStatLossImmunityNonIgnorable(
            self.ability,self,stat,@battle,showFailMsg)
       end
       if !@battle.moldBreaker
         allAllies.each do |b|
           next if !b.abilityActive?
-          return false if BattleHandlers.triggerStatLossImmunityAllyAbility(
+          return false if Battle::AbilityEffects.triggerStatLossImmunityFromAlly(
              b.ability,b,self,stat,@battle,showFailMsg)
         end
       end
@@ -218,7 +218,7 @@ class Battle::Battler
     @battle.pbDisplay(arrStatTexts[[increment-1,2].min])
     # Trigger abilities upon stat loss
     if abilityActive?
-      BattleHandlers.triggerAbilityOnStatLoss(self.ability,self,stat,user)
+      Battle::AbilityEffects.triggerOnStatLoss(self.ability, self, stat, user)
     end
     return true
   end
@@ -264,7 +264,7 @@ class Battle::Battler
     @battle.pbDisplay(arrStatTexts[[increment-1,2].min])
     # Trigger abilities upon stat loss
     if abilityActive?
-      BattleHandlers.triggerAbilityOnStatLoss(self.ability,self,stat,user)
+      Battle::AbilityEffects.triggerOnStatLoss(self.ability, self, stat, user)
     end
     return true
   end
@@ -320,8 +320,8 @@ class Battle::Battler
         return false
       end
       if abilityActive?
-        if BattleHandlers.triggerStatLossImmunityAbility(self.ability,self,:ATTACK,@battle,false) ||
-           BattleHandlers.triggerStatLossImmunityAbilityNonIgnorable(self.ability,self,:ATTACK,@battle,false)
+        if Battle::AbilityEffects.triggerStatLossImmunity(self.ability, self, :ATTACK, @battle, false) ||
+           Battle::AbilityEffects.triggerStatLossImmunityNonIgnorable(self.ability, self, :ATTACK, @battle, false)
           @battle.pbDisplay(_INTL("{1}'s {2} prevented {3}'s {4} from working!",
              pbThis,abilityName,user.pbThis(true),user.abilityName))
           return false
@@ -329,7 +329,7 @@ class Battle::Battler
       end
       allAllies.each do |b|
         next if !b.abilityActive?
-        if BattleHandlers.triggerStatLossImmunityAllyAbility(b.ability,b,self,:ATTACK,@battle,false)
+        if Battle::AbilityEffects.triggerStatLossImmunityFromAlly(b.ability, b, self, :ATTACK, @battle, false)
           @battle.pbDisplay(_INTL("{1} is protected from {2}'s {3} by {4}'s {5}!",
              pbThis,user.pbThis(true),user.abilityName,b.pbThis(true),b.abilityName))
           return false

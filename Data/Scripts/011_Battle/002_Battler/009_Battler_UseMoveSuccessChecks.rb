@@ -243,7 +243,7 @@ class Battle::Battler
     if @effects[PBEffects::Flinch]
       @battle.pbDisplay(_INTL("{1} flinched and couldn't move!",pbThis))
       if abilityActive?
-        BattleHandlers.triggerAbilityOnFlinch(self.ability,self,@battle)
+        Battle::AbilityEffects.triggerOnFlinch(self.ability, self, @battle)
       end
       @lastMoveFailed = true
       return false

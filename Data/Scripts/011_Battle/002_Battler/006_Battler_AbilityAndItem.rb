@@ -4,7 +4,7 @@ class Battle::Battler
   #=============================================================================
   def pbAbilitiesOnSwitchOut
     if abilityActive?
-      BattleHandlers.triggerAbilityOnSwitchOut(self.ability,self,false)
+      Battle::AbilityEffects.triggerOnSwitchOut(self.ability, self, false)
     end
     # Reset form
     @battle.peer.pbOnLeavingBattle(@battle,@pokemon,@battle.usedInBattle[idxOwnSide][@index/2])
@@ -22,11 +22,11 @@ class Battle::Battler
     # Self fainted; check all other battlers to see if their abilities trigger
     @battle.pbPriority(true).each do |b|
       next if !b || !b.abilityActive?
-      BattleHandlers.triggerAbilityChangeOnBattlerFainting(b.ability,b,self,@battle)
+      Battle::AbilityEffects.triggerChangeOnBattlerFainting(b.ability, b, self, @battle)
     end
     @battle.pbPriority(true).each do |b|
       next if !b || !b.abilityActive?
-      BattleHandlers.triggerAbilityOnBattlerFainting(b.ability,b,self,@battle)
+      Battle::AbilityEffects.triggerOnBattlerFainting(b.ability, b, self, @battle)
     end
     pbAbilitiesOnNeutralizingGasEnding if hasActiveAbility?(:NEUTRALIZINGGAS, true)
     pbItemsOnUnnerveEnding if hasActiveAbility?(:UNNERVE, true)
@@ -36,18 +36,18 @@ class Battle::Battler
   def pbAbilitiesOnDamageTaken(move_user = nil)
     return false if !@droppedBelowHalfHP
     return false if !abilityActive?
-    return BattleHandlers.triggerAbilityOnHPDroppedBelowHalf(self.ability, self, move_user, @battle)
+    return Battle::AbilityEffects.triggerOnHPDroppedBelowHalf(self.ability, self, move_user, @battle)
   end
 
   def pbAbilityOnTerrainChange(ability_changed = false)
     return if !abilityActive?
-    BattleHandlers.triggerAbilityOnTerrainChange(self.ability, self, @battle, ability_changed)
+    Battle::AbilityEffects.triggerOnTerrainChange(self.ability, self, @battle, ability_changed)
   end
 
   # Used for Rattled's Gen 8 effect. Called when Intimidate is triggered.
   def pbAbilitiesOnIntimidated
     return if !abilityActive?
-    BattleHandlers.triggerAbilityOnIntimidated(self.ability, self, @battle)
+    Battle::AbilityEffects.triggerOnIntimidated(self.ability, self, @battle)
   end
 
   def pbAbilitiesOnNeutralizingGasEnding
@@ -57,7 +57,7 @@ class Battle::Battler
     @battle.pbPriority(true).each do |b|
       next if b.fainted?
       next if !b.unstoppableAbility? && !b.abilityActive?
-      BattleHandlers.triggerAbilityOnSwitchIn(b.ability, b, @battle)
+      Battle::AbilityEffects.triggerOnSwitchIn(b.ability, b, @battle)
     end
   end
 
@@ -84,7 +84,7 @@ class Battle::Battler
         @battle.pbDisplay(_INTL("{1} traced {2}'s {3}!",pbThis,choice.pbThis(true),choice.abilityName))
         @battle.pbHideAbilitySplash(self)
         if !onSwitchIn && (unstoppableAbility? || abilityActive?)
-          BattleHandlers.triggerAbilityOnSwitchIn(self.ability,self,@battle)
+          Battle::AbilityEffects.triggerOnSwitchIn(self.ability, self, @battle)
         end
       end
     end
@@ -96,7 +96,7 @@ class Battle::Battler
   # Cures status conditions, confusion and infatuation.
   def pbAbilityStatusCureCheck
     if abilityActive?
-      BattleHandlers.triggerStatusCureAbility(self.ability,self)
+      Battle::AbilityEffects.triggerStatusCure(self.ability, self)
     end
   end
 
@@ -195,7 +195,7 @@ class Battle::Battler
     pbContinualAbilityChecks(true)   # Don't trigger Traced ability as it's triggered below
     # Abilities that trigger upon switching in
     if (!fainted? && unstoppableAbility?) || abilityActive?
-      BattleHandlers.triggerAbilityOnSwitchIn(self.ability, self, @battle)
+      Battle::AbilityEffects.triggerOnSwitchIn(self.ability, self, @battle)
     end
     # Status-curing ability check
     pbAbilityStatusCureCheck
@@ -300,7 +300,7 @@ class Battle::Battler
     # when forcibly consumed by Pluck/Fling.
     if item_to_use
       itm = item_to_use || self.item
-      if BattleHandlers.triggerTargetItemOnHitPositiveBerry(itm, self, @battle, true)
+      if Battle::ItemEffects.triggerOnBeingHitPositiveBerry(itm, self, @battle, true)
         pbHeldItemTriggered(itm, false, fling)
       end
     end
@@ -311,7 +311,7 @@ class Battle::Battler
   def pbItemHPHealCheck(item_to_use = nil, fling = false)
     return if !item_to_use && !itemActive?
     itm = item_to_use || self.item
-    if BattleHandlers.triggerHPHealItem(itm, self, @battle, !item_to_use.nil?)
+    if Battle::ItemEffects.triggerHPHeal(itm, self, @battle, !item_to_use.nil?)
       pbHeldItemTriggered(itm, item_to_use.nil?, fling)
     elsif !item_to_use
       pbItemTerrainStatBoostCheck
@@ -326,7 +326,7 @@ class Battle::Battler
     return if fainted?
     return if !item_to_use && !itemActive?
     itm = item_to_use || self.item
-    if BattleHandlers.triggerStatusCureItem(itm, self, @battle, !item_to_use.nil?)
+    if Battle::ItemEffects.triggerStatusCure(itm, self, @battle, !item_to_use.nil?)
       pbHeldItemTriggered(itm, item_to_use.nil?, fling)
     end
   end
@@ -338,9 +338,9 @@ class Battle::Battler
     return if fainted?
     return if !item_to_use && !itemActive?
     itm = item_to_use || self.item
-    if BattleHandlers.triggerEndOfMoveItem(itm, self, @battle, !item_to_use.nil?)
+    if Battle::ItemEffects.triggerOnEndOfUsingMove(itm, self, @battle, !item_to_use.nil?)
       pbHeldItemTriggered(itm, item_to_use.nil?, fling)
-    elsif BattleHandlers.triggerEndOfMoveStatRestoreItem(itm, self, @battle, !item_to_use.nil?)
+    elsif Battle::ItemEffects.triggerOnEndOfUsingMoveStatRestore(itm, self, @battle, !item_to_use.nil?)
       pbHeldItemTriggered(itm, item_to_use.nil?, fling)
     end
   end
@@ -354,7 +354,7 @@ class Battle::Battler
     return if fainted?
     return if !item_to_use && !itemActive?
     itm = item_to_use || self.item
-    if BattleHandlers.triggerEndOfMoveStatRestoreItem(itm, self, @battle, !item_to_use.nil?)
+    if Battle::ItemEffects.triggerOnEndOfUsingMoveStatRestore(itm, self, @battle, !item_to_use.nil?)
       pbHeldItemTriggered(itm, item_to_use.nil?, fling)
     end
   end
@@ -362,7 +362,7 @@ class Battle::Battler
   # Called when the battle terrain changes and when a Pokémon loses HP.
   def pbItemTerrainStatBoostCheck
     return if !itemActive?
-    if BattleHandlers.triggerTerrainStatBoostItem(self.item, self, @battle)
+    if Battle::ItemEffects.triggerTerrainStatBoost(self.item, self, @battle)
       pbHeldItemTriggered(self.item)
     end
   end
@@ -371,7 +371,7 @@ class Battle::Battler
   # Intimidate has no effect on the Pokémon).
   def pbItemOnIntimidatedCheck
     return if !itemActive?
-    if BattleHandlers.triggerItemOnIntimidated(self.item, self, @battle)
+    if Battle::ItemEffects.triggerOnIntimidated(self.item, self, @battle)
       pbHeldItemTriggered(self.item)
     end
   end
@@ -380,7 +380,7 @@ class Battle::Battler
   def pbItemOnStatDropped(move_user = nil)
     return false if !@statsDropped
     return false if !itemActive?
-    return BattleHandlers.triggerItemOnStatDropped(self.item, self, move_user, @battle)
+    return Battle::ItemEffects.triggerOnStatLoss(self.item, self, move_user, @battle)
   end
 
   def pbItemsOnUnnerveEnding

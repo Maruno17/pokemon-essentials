@@ -70,7 +70,7 @@ class Battle
     priority.each do |b|
       # Weather-related abilities
       if b.abilityActive?
-        BattleHandlers.triggerEORWeatherAbility(b.ability, b.effectiveWeather, b, self)
+        Battle::AbilityEffects.triggerEndOfRoundWeather(b.ability, b.effectiveWeather, b, self)
         b.pbFaint if b.fainted?
       end
       # Weather damage
@@ -279,9 +279,9 @@ class Battle
         pbDisplay(_INTL("{1}'s HP was restored.",b.pbThis))
       end
       # Healer, Hydration, Shed Skin
-      BattleHandlers.triggerEORHealingAbility(b.ability,b,self) if b.abilityActive?
+      Battle::AbilityEffects.triggerEndOfRoundHealing(b.ability, b, self) if b.abilityActive?
       # Black Sludge, Leftovers
-      BattleHandlers.triggerEORHealingItem(b.item,b,self) if b.itemActive?
+      Battle::ItemEffects.triggerEndOfRoundHealing(b.item, b, self) if b.itemActive?
     end
     # Self-curing of status due to affection
     if Settings::AFFECTION_EFFECTS && @internalBattle
@@ -597,11 +597,11 @@ class Battle
         end
       end
       # Bad Dreams, Moody, Speed Boost
-      BattleHandlers.triggerEOREffectAbility(b.ability,b,self) if b.abilityActive?
+      Battle::AbilityEffects.triggerEndOfRoundEffect(b.ability, b, self) if b.abilityActive?
       # Flame Orb, Sticky Barb, Toxic Orb
-      BattleHandlers.triggerEOREffectItem(b.item,b,self) if b.itemActive?
+      Battle::ItemEffects.triggerEndOfRoundEffect(b.item, b, self) if b.itemActive?
       # Harvest, Pickup, Ball Fetch
-      BattleHandlers.triggerEORGainItemAbility(b.ability,b,self) if b.abilityActive?
+      Battle::AbilityEffects.triggerEndOfRoundGainItem(b.ability, b, self) if b.abilityActive?
     end
     pbGainExp
     return if @decision>0

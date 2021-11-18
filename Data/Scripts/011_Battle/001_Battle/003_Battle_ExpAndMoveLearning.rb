@@ -63,8 +63,8 @@ class Battle
     evTotal = 0
     GameData::Stat.each_main { |s| evTotal += pkmn.ev[s.id] }
     # Modify EV yield based on pkmn's held item
-    if !BattleHandlers.triggerEVGainModifierItem(pkmn.item,pkmn,evYield)
-      BattleHandlers.triggerEVGainModifierItem(@initialItems[0][idxParty],pkmn,evYield)
+    if !Battle::ItemEffects.triggerEVGainModifier(pkmn.item, pkmn, evYield)
+      Battle::ItemEffects.triggerEVGainModifier(@initialItems[0][idxParty], pkmn, evYield)
     end
     # Double EV gain because of Pokérus
     if pkmn.pokerusStage>=1   # Infected or cured
@@ -147,9 +147,9 @@ class Battle
     # Exp. Charm increases Exp gained
     exp = exp * 3 / 2 if $bag.has?(:EXPCHARM)
     # Modify Exp gain based on pkmn's held item
-    i = BattleHandlers.triggerExpGainModifierItem(pkmn.item,pkmn,exp)
+    i = Battle::ItemEffects.triggerExpGainModifier(pkmn.item, pkmn, exp)
     if i<0
-      i = BattleHandlers.triggerExpGainModifierItem(@initialItems[0][idxParty],pkmn,exp)
+      i = Battle::ItemEffects.triggerExpGainModifier(@initialItems[0][idxParty], pkmn, exp)
     end
     exp = i if i>=0
     # Boost Exp gained with high affection

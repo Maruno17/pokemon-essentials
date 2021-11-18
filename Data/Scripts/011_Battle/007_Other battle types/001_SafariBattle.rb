@@ -304,7 +304,7 @@ class SafariBattle
   attr_accessor :rules
   attr_accessor :ballCount
 
-  include Battle::Common
+  include Battle::CatchAndStoreMixin
 
   def pbRandom(x); return rand(x); end
 

@@ -5,7 +5,7 @@ class Battle::Move
   def pbBaseType(user)
     ret = @type
     if ret && user.abilityActive?
-      ret = BattleHandlers.triggerMoveBaseTypeModifierAbility(user.ability,user,self,ret)
+      ret = Battle::AbilityEffects.triggerModifyMoveBaseType(user.ability, user, self, ret)
     end
     return ret
   end
@@ -130,25 +130,25 @@ class Battle::Move
   def pbCalcAccuracyModifiers(user,target,modifiers)
     # Ability effects that alter accuracy calculation
     if user.abilityActive?
-      BattleHandlers.triggerAccuracyCalcUserAbility(user.ability,
+      Battle::AbilityEffects.triggerAccuracyCalcFromUser(user.ability,
          modifiers,user,target,self,@calcType)
     end
     user.allAllies.each do |b|
       next if !b.abilityActive?
-      BattleHandlers.triggerAccuracyCalcUserAllyAbility(b.ability,
+      Battle::AbilityEffects.triggerAccuracyCalcFromAlly(b.ability,
          modifiers,user,target,self,@calcType)
     end
     if target.abilityActive? && !@battle.moldBreaker
-      BattleHandlers.triggerAccuracyCalcTargetAbility(target.ability,
+      Battle::AbilityEffects.triggerAccuracyCalcFromTarget(target.ability,
          modifiers,user,target,self,@calcType)
     end
     # Item effects that alter accuracy calculation
     if user.itemActive?
-      BattleHandlers.triggerAccuracyCalcUserItem(user.item,
+      Battle::ItemEffects.triggerAccuracyCalcFromUser(user.item,
          modifiers,user,target,self,@calcType)
     end
     if target.itemActive?
-      BattleHandlers.triggerAccuracyCalcTargetItem(target.item,
+      Battle::ItemEffects.triggerAccuracyCalcFromTarget(target.item,
          modifiers,user,target,self,@calcType)
     end
     # Other effects, inc. ones that set accuracy_multiplier or evasion_stage to
@@ -181,17 +181,17 @@ class Battle::Move
     c = 0
     # Ability effects that alter critical hit rate
     if c>=0 && user.abilityActive?
-      c = BattleHandlers.triggerCriticalCalcUserAbility(user.ability,user,target,c)
+      c = Battle::AbilityEffects.triggerCriticalCalcFromUser(user.ability, user, target, c)
     end
     if c>=0 && target.abilityActive? && !@battle.moldBreaker
-      c = BattleHandlers.triggerCriticalCalcTargetAbility(target.ability,user,target,c)
+      c = Battle::AbilityEffects.triggerCriticalCalcFromTarget(target.ability, user, target, c)
     end
     # Item effects that alter critical hit rate
     if c>=0 && user.itemActive?
-      c = BattleHandlers.triggerCriticalCalcUserItem(user.item,user,target,c)
+      c = Battle::ItemEffects.triggerCriticalCalcFromUser(user.item, user, target, c)
     end
     if c>=0 && target.itemActive?
-      c = BattleHandlers.triggerCriticalCalcTargetItem(target.item,user,target,c)
+      c = Battle::ItemEffects.triggerCriticalCalcFromTarget(target.item, user, target, c)
     end
     return false if c<0
     # Move-specific "always/never a critical hit" effects
@@ -294,7 +294,7 @@ class Battle::Move
     end
     # Ability effects that alter damage
     if user.abilityActive?
-      BattleHandlers.triggerDamageCalcUserAbility(user.ability,
+      Battle::AbilityEffects.triggerDamageCalcFromUser(user.ability,
          user,target,self,multipliers,baseDmg,type)
     end
     if !@battle.moldBreaker
@@ -303,28 +303,28 @@ class Battle::Move
       #       how it works.
       user.allAllies.each do |b|
         next if !b.abilityActive?
-        BattleHandlers.triggerDamageCalcUserAllyAbility(b.ability,
+        Battle::AbilityEffects.triggerDamageCalcFromAlly(b.ability,
            user,target,self,multipliers,baseDmg,type)
       end
       if target.abilityActive?
-        BattleHandlers.triggerDamageCalcTargetAbility(target.ability,
+        Battle::AbilityEffects.triggerDamageCalcFromTarget(target.ability,
            user,target,self,multipliers,baseDmg,type) if !@battle.moldBreaker
-        BattleHandlers.triggerDamageCalcTargetAbilityNonIgnorable(target.ability,
+        Battle::AbilityEffects.triggerDamageCalcFromTargetNonIgnorable(target.ability,
            user,target,self,multipliers,baseDmg,type)
       end
       target.allAllies.each do |b|
         next if !b.abilityActive?
-        BattleHandlers.triggerDamageCalcTargetAllyAbility(b.ability,
+        Battle::AbilityEffects.triggerDamageCalcFromTargetAlly(b.ability,
            user,target,self,multipliers,baseDmg,type)
       end
     end
     # Item effects that alter damage
     if user.itemActive?
-      BattleHandlers.triggerDamageCalcUserItem(user.item,
+      Battle::ItemEffects.triggerDamageCalcFromUser(user.item,
          user,target,self,multipliers,baseDmg,type)
     end
     if target.itemActive?
-      BattleHandlers.triggerDamageCalcTargetItem(target.item,
+      Battle::ItemEffects.triggerDamageCalcFromTarget(target.item,
          user,target,self,multipliers,baseDmg,type)
     end
     # Parental Bond's second attack

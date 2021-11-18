@@ -56,12 +56,12 @@ class Battle
     return true if battler.fainted?
     # Ability/item effects that allow switching no matter what
     if battler.abilityActive?
-      if BattleHandlers.triggerCertainSwitchingUserAbility(battler.ability,battler,self)
+      if Battle::AbilityEffects.triggerCertainSwitching(battler.ability, battler, self)
         return true
       end
     end
     if battler.itemActive?
-      if BattleHandlers.triggerCertainSwitchingUserItem(battler.item,battler,self)
+      if Battle::ItemEffects.triggerCertainSwitching(battler.item, battler, self)
         return true
       end
     end
@@ -75,7 +75,7 @@ class Battle
     # Trapping abilities/items
     allOtherSideBattlers(idxBattler).each do |b|
       next if !b.abilityActive?
-      if BattleHandlers.triggerTrappingTargetAbility(b.ability,battler,b,self)
+      if Battle::AbilityEffects.triggerTrappingByTarget(b.ability, battler, b, self)
         partyScene.pbDisplay(_INTL("{1}'s {2} prevents switching!",
            b.pbThis,b.abilityName)) if partyScene
         return false
@@ -83,7 +83,7 @@ class Battle
     end
     allOtherSideBattlers(idxBattler).each do |b|
       next if !b.itemActive?
-      if BattleHandlers.triggerTrappingTargetItem(b.item,battler,b,self)
+      if Battle::ItemEffects.triggerTrappingByTarget(b.item,battler,b,self)
         partyScene.pbDisplay(_INTL("{1}'s {2} prevents switching!",
            b.pbThis,b.itemName)) if partyScene
         return false
@@ -353,12 +353,12 @@ class Battle
       b.pbContinualAbilityChecks(true)
       # Abilities that trigger upon switching in
       if (!b.fainted? && b.unstoppableAbility?) || b.abilityActive?
-        BattleHandlers.triggerAbilityOnSwitchIn(b.ability, b, self)
+        Battle::AbilityEffects.triggerOnSwitchIn(b.ability, b, self)
       end
       pbEndPrimordialWeather   # Checking this again just in case
       # Items that trigger upon switching in (Air Balloon message)
       if b.itemActive?
-        BattleHandlers.triggerItemOnSwitchIn(b.item, b, self)
+        Battle::ItemEffects.triggerOnSwitchIn(b.item, b, self)
       end
       # Berry check, status-curing ability check
       b.pbHeldItemTriggerCheck

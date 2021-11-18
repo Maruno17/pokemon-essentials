@@ -132,7 +132,7 @@ class Battle
     old_ability = battler.ability_id
     # Break Illusion
     if battler.hasActiveAbility?(:ILLUSION)
-      BattleHandlers.triggerTargetAbilityOnHit(battler.ability,nil,battler,nil,self)
+      Battle::AbilityEffects.triggerOnBeingHit(battler.ability, nil, battler, nil, self)
     end
     # Mega Evolve
     case battler.pokemon.megaMessage

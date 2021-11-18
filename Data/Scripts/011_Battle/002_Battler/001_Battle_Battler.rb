@@ -248,11 +248,11 @@ class Battle::Battler
     speedMult = 1.0
     # Ability effects that alter calculated Speed
     if abilityActive?
-      speedMult = BattleHandlers.triggerSpeedCalcAbility(self.ability,self,speedMult)
+      speedMult = Battle::AbilityEffects.triggerSpeedCalc(self.ability, self, speedMult)
     end
     # Item effects that alter calculated Speed
     if itemActive?
-      speedMult = BattleHandlers.triggerSpeedCalcItem(self.item,self,speedMult)
+      speedMult = Battle::ItemEffects.triggerSpeedCalc(self.item, self, speedMult)
     end
     # Other effects
     speedMult *= 2 if pbOwnSide.effects[PBEffects::Tailwind]>0
@@ -275,10 +275,10 @@ class Battle::Battler
     ret += @effects[PBEffects::WeightChange]
     ret = 1 if ret<1
     if abilityActive? && !@battle.moldBreaker
-      ret = BattleHandlers.triggerWeightCalcAbility(self.ability,self,ret)
+      ret = Battle::AbilityEffects.triggerWeightCalc(self.ability, self, ret)
     end
     if itemActive?
-      ret = BattleHandlers.triggerWeightCalcItem(self.item,self,ret)
+      ret = Battle::ItemEffects.triggerWeightCalc(self.item, self, ret)
     end
     return [ret,1].max
   end

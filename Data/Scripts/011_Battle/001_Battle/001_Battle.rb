@@ -87,8 +87,6 @@ class Battle
   attr_accessor :moldBreaker      # True if Mold Breaker applies
   attr_reader   :struggle         # The Struggle move
 
-  include Battle::Common
-
   def pbRandom(x); return rand(x); end
 
   #=============================================================================
@@ -703,7 +701,7 @@ class Battle
     @field.weather = newWeather
     duration = (fixedDuration) ? 5 : -1
     if duration>0 && user && user.itemActive?
-      duration = BattleHandlers.triggerWeatherExtenderItem(user.item,
+      duration = Battle::ItemEffects.triggerWeatherExtender(user.item,
          @field.weather,duration,user,self)
     end
     @field.weatherDuration = duration
@@ -781,7 +779,7 @@ class Battle
     @field.terrain = newTerrain
     duration = (fixedDuration) ? 5 : -1
     if duration>0 && user && user.itemActive?
-      duration = BattleHandlers.triggerTerrainExtenderItem(user.item,
+      duration = Battle::ItemEffects.triggerTerrainExtender(user.item,
          newTerrain,duration,user,self)
     end
     @field.terrainDuration = duration

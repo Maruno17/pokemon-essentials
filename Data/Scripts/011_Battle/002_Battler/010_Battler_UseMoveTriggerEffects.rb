@@ -7,7 +7,7 @@ class Battle::Battler
       # Target's ability
       if target.abilityActive?(true)
         oldHP = user.hp
-        BattleHandlers.triggerTargetAbilityOnHit(target.ability,user,target,move,@battle)
+        Battle::AbilityEffects.triggerOnBeingHit(target.ability, user, target, move, @battle)
         user.pbItemHPHealCheck if user.hp<oldHP
       end
       # Cramorant - Gulp Missile
@@ -32,13 +32,13 @@ class Battle::Battler
       end
       # User's ability
       if user.abilityActive?(true)
-        BattleHandlers.triggerUserAbilityOnHit(user.ability,user,target,move,@battle)
+        Battle::AbilityEffects.triggerOnDealingHit(user.ability, user, target, move, @battle)
         user.pbItemHPHealCheck
       end
       # Target's item
       if target.itemActive?(true)
         oldHP = user.hp
-        BattleHandlers.triggerTargetItemOnHit(target.item,user,target,move,@battle)
+        Battle::ItemEffects.triggerOnBeingHit(target.item, user, target, move, @battle)
         user.pbItemHPHealCheck if user.hp<oldHP
       end
     end
@@ -111,7 +111,7 @@ class Battle::Battler
     end
     # User's ability
     if user.abilityActive?
-      BattleHandlers.triggerUserAbilityEndOfMove(user.ability,user,targets,move,@battle)
+      Battle::AbilityEffects.triggerOnEndOfUsingMove(user.ability, user, targets, move, @battle)
     end
     # Greninja - Battle Bond
     if !user.fainted? && !user.effects[PBEffects::Transform] &&
@@ -182,7 +182,7 @@ class Battle::Battler
     @battle.pbPriority(true).each do |b|
       if targets.any? { |targetB| targetB.index==b.index }
         if !b.damageState.unaffected && b.damageState.calcDamage > 0 && b.itemActive?
-          BattleHandlers.triggerTargetItemAfterMoveUse(b.item, b, user, move, switched_battlers, @battle)
+          Battle::ItemEffects.triggerAfterMoveUseFromTarget(b.item, b, user, move, switched_battlers, @battle)
         end
       end
       # Target's Eject Pack
@@ -194,13 +194,13 @@ class Battle::Battler
     end
     # User's held item (Life Orb, Shell Bell, Throat Spray, Eject Pack)
     if !switched_battlers.include?(user.index) && user.itemActive?   # Only if user hasn't switched out
-      BattleHandlers.triggerUserItemAfterMoveUse(user.item,user,targets,move,numHits,@battle)
+      Battle::ItemEffects.triggerAfterMoveUseFromUser(user.item, user, targets, move, numHits, @battle)
     end
     # Target's ability (Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out)
     @battle.pbPriority(true).each do |b|
       if targets.any? { |targetB| targetB.index==b.index }
         if !b.damageState.unaffected && !switched_battlers.include?(b.index) && b.abilityActive?
-          BattleHandlers.triggerTargetAbilityAfterMoveUse(b.ability, b, user, move, switched_battlers, @battle)
+          Battle::AbilityEffects.triggerAfterMoveUseFromTarget(b.ability, b, user, move, switched_battlers, @battle)
         end
       end
       # Target's Emergency Exit, Wimp Out (including for Pokémon hurt by Flame Burst)

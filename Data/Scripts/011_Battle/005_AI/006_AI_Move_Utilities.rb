@@ -338,14 +338,14 @@ class Battle::AI
         break
       end
       if canCheck
-        BattleHandlers.triggerDamageCalcUserAbility(user.ability,
+        Battle::AbilityEffects.triggerDamageCalcFromUser(user.ability,
            user,target,move,multipliers,baseDmg,type)
       end
     end
     if skill>=PBTrainerAI.mediumSkill && !moldBreaker
       user.allAllies.each do |b|
         next if !b.abilityActive?
-        BattleHandlers.triggerDamageCalcUserAllyAbility(b.ability,
+        Battle::AbilityEffects.triggerDamageCalcFromAlly(b.ability,
            user,target,move,multipliers,baseDmg,type)
       end
     end
@@ -360,14 +360,14 @@ class Battle::AI
         break
       end
       if canCheck
-        BattleHandlers.triggerDamageCalcTargetAbility(target.ability,
+        Battle::AbilityEffects.triggerDamageCalcFromTarget(target.ability,
            user,target,move,multipliers,baseDmg,type)
       end
     end
     if skill>=PBTrainerAI.bestSkill && !moldBreaker
       target.allAllies.each do |b|
         next if !b.abilityActive?
-        BattleHandlers.triggerDamageCalcTargetAllyAbility(b.ability,
+        Battle::AbilityEffects.triggerDamageCalcFromTargetAlly(b.ability,
            user,target,move,multipliers,baseDmg,type)
       end
     end
@@ -379,7 +379,7 @@ class Battle::AI
       #       round.
       itemBlacklist = [:EXPERTBELT,:LIFEORB]
       if !itemBlacklist.include?(user.item_id)
-        BattleHandlers.triggerDamageCalcUserItem(user.item,
+        Battle::ItemEffects.triggerDamageCalcFromUser(user.item,
            user,target,move,multipliers,baseDmg,type)
       end
     end
@@ -387,7 +387,7 @@ class Battle::AI
       # NOTE: Type-weakening berries aren't suitable for checking at the start
       #       of the round.
       if target.item && !target.item.is_berry?
-        BattleHandlers.triggerDamageCalcTargetItem(target.item,
+        Battle::ItemEffects.triggerDamageCalcFromTarget(target.item,
            user,target,move,multipliers,baseDmg,type)
       end
     end
@@ -560,20 +560,20 @@ class Battle::AI
       c = 0
       # Ability effects that alter critical hit rate
       if c>=0 && user.abilityActive?
-        c = BattleHandlers.triggerCriticalCalcUserAbility(user.ability,user,target,c)
+        c = Battle::AbilityEffects.triggerCriticalCalcFromUser(user.ability, user, target, c)
       end
       if skill>=PBTrainerAI.bestSkill
         if c>=0 && !moldBreaker && target.abilityActive?
-          c = BattleHandlers.triggerCriticalCalcTargetAbility(target.ability,user,target,c)
+          c = Battle::AbilityEffects.triggerCriticalCalcFromTarget(target.ability, user, target, c)
         end
       end
       # Item effects that alter critical hit rate
       if c>=0 && user.itemActive?
-        c = BattleHandlers.triggerCriticalCalcUserItem(user.item,user,target,c)
+        c = Battle::ItemEffects.triggerCriticalCalcFromUser(user.item, user, target, c)
       end
       if skill>=PBTrainerAI.bestSkill
         if c>=0 && target.itemActive?
-          c = BattleHandlers.triggerCriticalCalcTargetItem(target.item,user,target,c)
+          c = Battle::ItemEffects.triggerCriticalCalcFromTarget(target.item, user, target, c)
         end
       end
       # Other efffects
@@ -638,31 +638,31 @@ class Battle::AI
     # Ability effects that alter accuracy calculation
     if skill>=PBTrainerAI.mediumSkill
       if user.abilityActive?
-        BattleHandlers.triggerAccuracyCalcUserAbility(user.ability,
+        Battle::AbilityEffects.triggerAccuracyCalcFromUser(user.ability,
            modifiers,user,target,move,type)
       end
       user.allAllies.each do |b|
         next if !b.abilityActive?
-        BattleHandlers.triggerAccuracyCalcUserAllyAbility(b.ability,
+        Battle::AbilityEffects.triggerAccuracyCalcFromAlly(b.ability,
            modifiers,user,target,move,type)
       end
     end
     if skill>=PBTrainerAI.bestSkill
       if target.abilityActive? && !moldBreaker
-        BattleHandlers.triggerAccuracyCalcTargetAbility(target.ability,
+        Battle::AbilityEffects.triggerAccuracyCalcFromTarget(target.ability,
            modifiers,user,target,move,type)
       end
     end
     # Item effects that alter accuracy calculation
     if skill>=PBTrainerAI.mediumSkill
       if user.itemActive?
-        BattleHandlers.triggerAccuracyCalcUserItem(user.item,
+        Battle::ItemEffects.triggerAccuracyCalcFromUser(user.item,
            modifiers,user,target,move,type)
       end
     end
     if skill>=PBTrainerAI.bestSkill
       if target.itemActive?
-        BattleHandlers.triggerAccuracyCalcTargetItem(target.item,
+        Battle::ItemEffects.triggerAccuracyCalcFromTarget(target.item,
            modifiers,user,target,move,type)
       end
     end

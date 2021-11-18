@@ -8,15 +8,15 @@ class Battle
     return false if !@canRun && !battler.opposes?
     return true if battler.pbHasType?(:GHOST) && Settings::MORE_TYPE_EFFECTS
     return true if battler.abilityActive? &&
-                   BattleHandlers.triggerRunFromBattleAbility(battler.ability,battler)
+                   Battle::AbilityEffects.triggerCertainEscapeFromBattle(battler.ability, battler)
     return true if battler.itemActive? &&
-                   BattleHandlers.triggerRunFromBattleItem(battler.item,battler)
+                   Battle::ItemEffects.triggerCertainEscapeFromBattle(battler.item, battler)
     return false if battler.trappedInBattle?
     allOtherSideBattlers(idxBattler).each do |b|
       return false if b.abilityActive? &&
-                      BattleHandlers.triggerTrappingTargetAbility(b.ability,battler,b,self)
+                      Battle::AbilityEffects.triggerTrappingByTarget(b.ability, battler, b, self)
       return false if b.itemActive? &&
-                      BattleHandlers.triggerTrappingTargetItem(b.item,battler,b,self)
+                      Battle::ItemEffects.triggerTrappingByTarget(b.item, battler, b, self)
     end
     return true
   end
@@ -76,7 +76,7 @@ class Battle
       end
       # Abilities that guarantee escape
       if battler.abilityActive?
-        if BattleHandlers.triggerRunFromBattleAbility(battler.ability,battler)
+        if Battle::AbilityEffects.triggerCertainEscapeFromBattle(battler.ability, battler)
           pbShowAbilitySplash(battler,true)
           pbHideAbilitySplash(battler)
           pbSEPlay("Battle flee")
@@ -87,10 +87,9 @@ class Battle
       end
       # Held items that guarantee escape
       if battler.itemActive?
-        if BattleHandlers.triggerRunFromBattleItem(battler.item,battler)
+        if Battle::ItemEffects.triggerCertainEscapeFromBattle(battler.item, battler)
           pbSEPlay("Battle flee")
-          pbDisplayPaused(_INTL("{1} fled using its {2}!",
-             battler.pbThis,battler.itemName))
+          pbDisplayPaused(_INTL("{1} fled using its {2}!", battler.pbThis,battler.itemName))
           @decision = 3
           return 1
         end
@@ -103,14 +102,14 @@ class Battle
       # Trapping abilities/items
       allOtherSideBattlers(idxBattler).each do |b|
         next if !b.abilityActive?
-        if BattleHandlers.triggerTrappingTargetAbility(b.ability,battler,b,self)
+        if Battle::AbilityEffects.triggerTrappingByTarget(b.ability, battler, b, self)
           pbDisplayPaused(_INTL("{1} prevents escape with {2}!",b.pbThis,b.abilityName))
           return 0
         end
       end
       allOtherSideBattlers(idxBattler).each do |b|
         next if !b.itemActive?
-        if BattleHandlers.triggerTrappingTargetItem(b.item,battler,b,self)
+        if Battle::ItemEffects.triggerTrappingByTarget(b.item, battler, b, self)
           pbDisplayPaused(_INTL("{1} prevents escape with {2}!",b.pbThis,b.itemName))
           return 0
         end
