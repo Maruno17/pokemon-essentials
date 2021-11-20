@@ -102,7 +102,7 @@ ItemHandlers::UseInField.add(:TELEPORTER, proc { |item|
 })
 
 def useTeleporter()
-  if HiddenMoveHandlers.triggerCanUseMove(:TELEPORT, 0)
+  if HiddenMoveHandlers.triggerCanUseMove(:TELEPORT, 0,true)
     Kernel.pbMessage(_INTL("Teleport to where?", $Trainer.name))
     scene = PokemonRegionMapScene.new(-1, false)
     screen = PokemonRegionMap.new(scene)

@@ -48,7 +48,7 @@ Added Features
 - Added 12 new TMs and 5 new Move tutors
 - Removed the Mt. Silver requirement for making triple fusions
 - Added an option to set the default battle type (single, double, triple) - Only available if beat the game at least once
-
+- Traded Pokémon now become owned by player when fused
 	
 ## Maps ##
 - Changed some tiles in Vermillion City
@@ -65,6 +65,7 @@ Added Features
 - Renamed Spring boots to Golbat Boots
 - New debug options
 - Item stack limit increased to 999
+- Added overworld animations for Cut and Rock Smash
 
 #################
 #	Bug fixes	#

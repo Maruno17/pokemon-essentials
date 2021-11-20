@@ -1802,45 +1802,45 @@ Pokemon = BELLSPROUT,77
 ######################################
 
 [TEAMROCKET_M,Phillip]
-Pokemon = B88H42,28 #Golmer,
+Pokemon = B88H42,26 #Golmer,
 ######################
 
 [TEAMROCKET_M,Paul]
-Pokemon = B109H33,28 #Nidofing,
+Pokemon = B109H33,26 #Nidofing,
 ########################
 
 [TEAMROCKET_M,Joffrey]
 Pokemon = KOFFING,21 #Tentata,
-Pokemon = B20H73,25 #Tentaicate,
+Pokemon = B20H73,23 #Tentaicate,
 ########################
 
 [TEAMROCKET_F,Virginia]
-Pokemon = KOFFING,28 #Koffduo,
+Pokemon = KOFFING,26 #Koffduo,
 #######################
 
 [TEAMROCKET_M,Lionel]
-Pokemon = B20H70,24 #Weepinicate,
-Pokemon = B88H44,24 #Gloomer,
+Pokemon = B20H70,22 #Weepinicate,
+Pokemon = B88H44,22 #Gloomer,
 ######################
 
 [TEAMROCKET_M,Richard]
-Pokemon = KOFFING,24 #Koffcruel,
-Pokemon = B88H81,24 #Magnemer,
+Pokemon = KOFFING,22 #Koffcruel,
+Pokemon = B88H81,22 #Magnemer,
 #####################
 
 [TEAMROCKET_F,Kaitlin]
-Pokemon = B100H132,28 #Ditorb,
+Pokemon = B100H132,26 #Ditorb,
 	Moves = TRANSFORM,CHARGEBEAM,LIGHTSCREEN,SONICBOOM
 	AbilityIndex = 0
-Pokemon = B147H88,29 #Gritini,
+Pokemon = B147H88,25 #Gritini,
 #######################
 
 [TEAMROCKET_M,Omar]
-Pokemon = B17H109,28 #Koffeoto,
+Pokemon = B17H109,26 #Koffeoto,
 ###################
 
 [TEAMROCKET_M,Max]
-Pokemon = B110H100,27 #Voltzing,
+Pokemon = B110H100,25 #Voltzing,
 ####################
 
 #####################################
@@ -1927,23 +1927,23 @@ Pokemon = B142H142,55 #mega aerodactyl
 ###################
 
 [TEAMROCKET_M,Doug]
-Pokemon = B15H81,30 #Magnedrill,
+Pokemon = B15H81,28 #Magnedrill,
 ###################
 
 [TEAMROCKET_M,Chad]
-Pokemon = GOLBAT,30 #Goleotto,
-Pokemon = EKANS,30 #Ratkans,
-Pokemon = B88H116,30 #horsmer,
+Pokemon = GOLBAT,24 #Goleotto,
+Pokemon = EKANS,24 #Ratkans,
+Pokemon = B88H116,25 #horsmer,
 ###################
 
 [TEAMROCKET_M,Stephan]
-Pokemon = B24H53,35 #Perbok,
+Pokemon = B24H53,30 #Perbok,
 ###################
 
 [TEAMROCKET_M,Romeo]
-Pokemon = DROWZEE,31 #Drowicate,
-Pokemon = KOFFING,31 #Psyfing,
-Pokemon = B67H72,33 #Tentachoke,
+Pokemon = DROWZEE,29 #Drowicate,
+Pokemon = KOFFING,29 #Psyfing,
+Pokemon = B67H72,31 #Tentachoke,
 
 #####################################
 ####
@@ -1951,9 +1951,9 @@ Pokemon = B67H72,33 #Tentachoke,
 
 [ROCKETBOSS,Giovanni,0]
 Items = MAXPOTION
-Pokemon = B95H24,34 #Arbix,
-Pokemon = B131H111,34 #Rhyras,
-Pokemon = B115H93,37 #Hauntkan,
+Pokemon = B95H24,32 #Arbix,
+Pokemon = B131H111,32 #Rhyras,
+Pokemon = B115H93,35 #Hauntkan,
 ##############################
 
 ##################

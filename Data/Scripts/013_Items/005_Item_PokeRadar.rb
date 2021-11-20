@@ -53,6 +53,40 @@ def pbPokeRadarCancel
   $PokemonTemp.pokeradar = nil
 end
 
+def listUnseenPokemonInCurrentRoute(encounterType)
+  processed = []
+  unseen = []
+  for encounter in $PokemonEncounters.listPossibleEncounters(encounterType)
+    species = encounter[0]
+    if !processed.include?(species)
+      if $Trainer.seen?(species)
+        processed<<species
+      else
+        unseen<<species
+        processed<<species
+      end
+    end
+  end
+  return unseen
+end
+
+
+#can only encounter rare if have seen every encounterable land pokemon on the route
+def canEncounterRarePokemon()
+  processed = []
+  for encounter in $PokemonEncounters.listPossibleEncounters($PokemonEncounters.pbEncounterType)
+    species = encounter[0]
+    if !processed.include?(species)
+      if $Trainer.seen[species]
+        processed<<species
+      else
+        return false
+      end
+    end
+  end
+  return true
+end
+
 def pbPokeRadarHighlightGrass(showmessage=true)
   grasses = []   # x, y, ring (0-3 inner to outer), rarity
   # Choose 1 random tile from each ring around the player
@@ -237,3 +271,5 @@ ItemHandlers::UseInField.add(:POKERADAR,proc { |item|
 ItemHandlers::UseFromBag.add(:POKERADAR,proc { |item|
   next (pbCanUsePokeRadar?) ? 2 : 0
 })
+
+

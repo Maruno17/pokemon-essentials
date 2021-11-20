@@ -358,6 +358,17 @@ class PokemonEncounters
     level = rand(encounter[2]..encounter[3])
     return [encounter[1], level]
   end
+
+
+
+  def listPossibleEncounters(enctype)
+    if !enctype
+      raise ArgumentError.new(_INTL("Encounter type out of range"))
+    end
+    return @encounter_tables[enctype]
+  end
+
+
 end
 
 
