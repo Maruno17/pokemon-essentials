@@ -231,6 +231,7 @@ module GameData
     BerryPlant.load
     Species.load
     SpeciesMetrics.load
+    ShadowPokemon.load
     Ribbon.load
     Encounter.load
     TrainerType.load

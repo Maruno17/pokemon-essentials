@@ -729,7 +729,7 @@ module Compiler
     compile_pokemon                # Depends on Move, Item, Type, Ability
     compile_pokemon_forms          # Depends on Species, Move, Item, Type, Ability
     compile_pokemon_metrics        # Depends on Species
-    compile_shadow_movesets        # Depends on Species, Move
+    compile_shadow_pokemon         # Depends on Species
     compile_regional_dexes         # Depends on Species
     compile_ribbons                # No dependencies
     compile_encounters             # Depends on Species
@@ -768,7 +768,7 @@ module Compiler
          "player_metadata.dat",
          "regional_dexes.dat",
          "ribbons.dat",
-         "shadow_movesets.dat",
+         "shadow_pokemon.dat",
          "species.dat",
          "species_metrics.dat",
          "town_map.dat",
@@ -793,7 +793,7 @@ module Compiler
          "pokemon_metrics.txt",
          "regional_dexes.txt",
          "ribbons.txt",
-         "shadow_movesets.txt",
+         "shadow_pokemon.txt",
          "town_map.txt",
          "trainer_types.txt",
          "trainers.txt",

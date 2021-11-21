@@ -4,7 +4,6 @@
 class Game_Temp
   attr_accessor :town_map_data
   attr_accessor :phone_messages_data
-  attr_accessor :shadow_movesets_data
   attr_accessor :regional_dexes_data
   attr_accessor :battle_animations_data
   attr_accessor :move_to_battle_animation_data
@@ -15,7 +14,6 @@ def pbClearData
   if $game_temp
     $game_temp.town_map_data                 = nil
     $game_temp.phone_messages_data           = nil
-    $game_temp.shadow_movesets_data          = nil
     $game_temp.regional_dexes_data           = nil
     $game_temp.battle_animations_data        = nil
     $game_temp.move_to_battle_animation_data = nil
@@ -50,17 +48,6 @@ def pbLoadPhoneData
     end
   end
   return $game_temp.phone_messages_data
-end
-
-#===============================================================================
-# Method to get Shadow Pokémon moveset data.
-#===============================================================================
-def pbLoadShadowMovesets
-  $game_temp = Game_Temp.new if !$game_temp
-  if !$game_temp.shadow_movesets_data
-    $game_temp.shadow_movesets_data = load_data("Data/shadow_movesets.dat") || []
-  end
-  return $game_temp.shadow_movesets_data
 end
 
 #===============================================================================

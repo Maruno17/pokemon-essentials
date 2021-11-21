@@ -1132,10 +1132,10 @@ PokemonDebugMenuCommands.register("shadowpkmn", {
         if pkmn.shadowPokemon?
           oldheart = pkmn.heart_gauge
           params = ChooseNumberParams.new
-          params.setRange(0, Pokemon::HEART_GAUGE_SIZE)
+          params.setRange(0, pkmn.max_gauge_size)
           params.setDefaultValue(pkmn.heart_gauge)
           val = pbMessageChooseNumber(
-             _INTL("Set the heart gauge (max. {1}).", Pokemon::HEART_GAUGE_SIZE),
+             _INTL("Set the heart gauge (max. {1}).", pkmn.max_gauge_size),
              params) { screen.pbUpdate }
           if val != oldheart
             pkmn.adjustHeart(val - oldheart)

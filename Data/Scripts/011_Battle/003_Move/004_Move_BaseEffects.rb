@@ -34,7 +34,7 @@ class Battle::Move::Confusion < Battle::Move
     @pp         = -1
     @target     = 0
     @priority   = 0
-    @flags      = ""
+    @flags      = []
     @addlEffect = 0
     @calcType   = nil
     @powerBoost = false
@@ -63,7 +63,7 @@ class Battle::Move::Struggle < Battle::Move
     @pp         = -1
     @target     = 0
     @priority   = 0
-    @flags      = ""
+    @flags      = ["Contact", "CanProtect"]
     @addlEffect = 0
     @calcType   = nil
     @powerBoost = false

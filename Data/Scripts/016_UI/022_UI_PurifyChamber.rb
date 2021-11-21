@@ -666,8 +666,9 @@ class Window_PurifyChamberSets < Window_DrawableCommand
     end
     if @chamber.getShadow(index)
       pbDrawGauge(self.contents, Rect.new(rect.x+16,rect.y+18,48,8),
-                  Color.new(192,0,256), @chamber.getShadow(index).heart_gauge,
-                  Pokemon::HEART_GAUGE_SIZE)
+                  Color.new(192,0,256),
+                  @chamber.getShadow(index).heart_gauge,
+                  @chamber.getShadow(index).max_gauge_size)
     end
     pbDrawTextPositions(self.contents,textpos)
   end
@@ -957,7 +958,7 @@ class PurifyChamberSetView < SpriteWrapper
          Color.new(248,248,248),Color.new(128,128,128)])
       # draw heart gauge
       pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width*3/4,8,@info.bitmap.width*1/4,8),
-                  Color.new(192,0,256), pkmn.heart_gauge, Pokemon::HEART_GAUGE_SIZE)
+                  Color.new(192,0,256), pkmn.heart_gauge, pkmn.max_gauge_size)
       # draw flow gauge
       pbDrawGauge(@info.bitmap,Rect.new(@info.bitmap.width*3/4,24+8,@info.bitmap.width*1/4,8),
          Color.new(0,0,248),@chamber.chamberFlow(@set),6)

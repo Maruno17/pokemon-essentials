@@ -513,21 +513,21 @@ module Compiler
   end
 
   #=============================================================================
-  # Save Shadow movesets to PBS file
+  # Save Shadow Pokémon data to PBS file
   #=============================================================================
-  def write_shadow_movesets(path = "PBS/shadow_movesets.txt")
+  def write_shadow_pokemon(path = "PBS/shadow_pokemon.txt")
     write_pbs_file_message_start(path)
-    shadow_movesets = pbLoadShadowMovesets
     File.open(path, "wb") { |f|
       idx = 0
       add_PBS_header_to_file(f)
-      f.write("\#-------------------------------\r\n")
-      GameData::Species.each do |species_data|
+      GameData::ShadowPokemon.each do |shadow|
         echo "." if idx % 150 == 0
         idx += 1
-        moveset = shadow_movesets[species_data.id]
-        next if !moveset || moveset.length == 0
-        f.write(sprintf("%s = %s\r\n", species_data.id, moveset.join(",")))
+        f.write("\#-------------------------------\r\n")
+        f.write(sprintf("[%s]\r\n", shadow.id))
+        f.write(sprintf("GaugeSize = %d\r\n", shadow.gauge_size))
+        f.write(sprintf("Moves = %s\r\n", shadow.moves.join(","))) if shadow.moves.length > 0
+        f.write(sprintf("Flags = %s\r\n", shadow.flags.join(","))) if shadow.flags.length > 0
       end
     }
     process_pbs_file_message_end
@@ -901,7 +901,7 @@ module Compiler
     write_pokemon
     write_pokemon_forms
     write_pokemon_metrics
-    write_shadow_movesets
+    write_shadow_pokemon
     write_regional_dexes
     write_ribbons
     write_encounters

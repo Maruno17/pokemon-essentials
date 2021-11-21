@@ -368,8 +368,8 @@ module Compiler
         flags.push("CanMirrorMove") if line[12][/e/]
         flags.push("ThawsUser") if line[12][/g/]
         flags.push("HighCriticalHitRate") if line[12][/h/]
-        flags.push("Bite") if line[12][/i/]
-        flags.push("Punch") if line[12][/j/]
+        flags.push("Biting") if line[12][/i/]
+        flags.push("Punching") if line[12][/j/]
         flags.push("Sound") if line[12][/k/]
         flags.push("Powder") if line[12][/l/]
         flags.push("Pulse") if line[12][/m/]
@@ -969,33 +969,68 @@ module Compiler
   end
 
   #=============================================================================
-  # Compile Shadow movesets
+  # Compile Shadow Pokémon data
   #=============================================================================
-  def compile_shadow_movesets(path = "PBS/shadow_movesets.txt")
+  def compile_shadow_pokemon(path = "PBS/shadow_pokemon.txt")
     compile_pbs_file_message_start(path)
-    sections = {}
-    if safeExists?(path)
-      idx = 0
-      pbCompilerEachCommentedLine(path) { |line, _line_no|
-        if line[/^\s*(\w+)\s*=\s*(.*)$/]
-          echo "." if idx % 50 == 0
-          idx += 1
-          Graphics.update if idx % 250 == 0
+    GameData::ShadowPokemon::DATA.clear
+    schema = GameData::ShadowPokemon::SCHEMA
+    shadow_hash = nil
+    old_format = nil
+    # Read each line of shadow_pokemon.txt at a time and compile it into a
+    # Shadow Pokémon's data
+    idx = 0
+    pbCompilerEachPreppedLine(path) { |line, line_no|
+      echo "." if idx % 250 == 0
+      idx += 1
+      if line[/^\s*\[\s*(.+)\s*\]\s*$/]   # New section [species_id]
+        old_format = false if old_format.nil?
+        if old_format
+          raise _INTL("Can't mix old and new formats.\r\n{1}", FileLineData.linereport)
+        end
+        # Add previous Shadow Pokémon's data to records
+        GameData::ShadowPokemon.register(shadow_hash) if shadow_hash
+        # Parse species ID
+        species_id = $~[1].to_sym
+        if GameData::ShadowPokemon.exists?(species_id)
+          raise _INTL("Shadow Pokémon data for species '{1}' is defined twice.\r\n{2}", species_id, FileLineData.linereport)
+        end
+        # Construct Shadow Pokémon hash
+        shadow_hash = {
+          :id => species_id
+        }
+      elsif line[/^\s*(\w+)\s*=\s*(.*)\s*$/]   # XXX=YYY lines
+        old_format = true if old_format.nil?
+        if old_format
           key   = $1
           value = $2
           value = value.split(",")
           species = parseSpecies(key)
-          moves = []
-          for i in 0...[Pokemon::MAX_MOVES, value.length].min
-            move = parseMove(value[i], true)
-            moves.push(move) if move
-          end
-          moves.compact!
-          sections[species] = moves if moves.length > 0
+          value.each { |val| val.strip! }
+          value.delete_if { |val| nil_or_empty?(val) }
+          # Construct Shadow Pokémon hash
+          shadow_hash = {
+            :id    => species,
+            :moves => value
+          }
+          # Add Shadow Pokémons data to records
+          GameData::ShadowPokemon.register(shadow_hash)
+          shadow_hash = nil
+        else
+          # Parse property and value
+          property_name = $~[1]
+          line_schema = schema[property_name]
+          next if !line_schema
+          property_value = pbGetCsvRecord($~[2], line_no, line_schema)
+          # Record XXX=YYY setting
+          shadow_hash[line_schema[0]] = property_value
         end
-      }
-    end
-    save_data(sections, "Data/shadow_movesets.dat")
+      end
+    }
+    # Add last item's data to records
+    GameData::ShadowPokemon.register(shadow_hash) if shadow_hash
+    # Save all data
+    GameData::ShadowPokemon.save
     process_pbs_file_message_end
   end
 

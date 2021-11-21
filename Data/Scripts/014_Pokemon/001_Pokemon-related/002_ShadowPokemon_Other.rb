@@ -187,9 +187,7 @@ class Battle::Battler
 
   def pbInitPokemon(*arg)
     if self.pokemonIndex>0 && inHyperMode?
-      # Called out of Hyper Mode
       self.pokemon.hyper_mode = false
-      self.pokemon.adjustHeart(-50)
     end
     __shadow__pbInitPokemon(*arg)
     # Called into battle
@@ -198,7 +196,7 @@ class Battle::Battler
         self.type1 = :SHADOW
         self.type2 = :SHADOW
       end
-      self.pokemon.adjustHeart(-30) if pbOwnedByPlayer?
+      self.pokemon.change_heart_gauge("battle") if pbOwnedByPlayer?
     end
   end
 
@@ -216,7 +214,7 @@ class Battle::Battler
   def pbHyperMode
     return if fainted? || !shadowPokemon? || inHyperMode? || !pbOwnedByPlayer?
     p = self.pokemon
-    if @battle.pbRandom(p.heart_gauge) <= Pokemon::HEART_GAUGE_SIZE / 4
+    if @battle.pbRandom(p.heart_gauge) <= p.max_gauge_size / 4
       p.hyper_mode = true
       @battle.pbDisplay(_INTL("{1}'s emotions rose to a fever pitch!\nIt entered Hyper Mode!",self.pbThis))
     end
@@ -234,39 +232,37 @@ end
 #===============================================================================
 # Shadow item effects.
 #===============================================================================
-def pbRaiseHappinessAndReduceHeart(pkmn, scene, heart_amount)
+def pbRaiseHappinessAndReduceHeart(pkmn, scene, multiplier)
   if !pkmn.shadowPokemon? || (pkmn.happiness == 255 && pkmn.heart_gauge == 0)
     scene.pbDisplay(_INTL("It won't have any effect."))
     return false
   end
-  if pkmn.happiness == 255
-    stage = pkmn.heart_gauge
-    pkmn.adjustHeart(-heart_amount)
-    scene.pbDisplay(_INTL("{1} adores you!\nThe door to its heart opened a little.", pkmn.name))
-    pkmn.check_ready_to_purify if pkmn.heart_gauge != stage
-  elsif pkmn.heart_gauge == 0
-    pkmn.changeHappiness("vitamin")
+  old_gauge = pkmn.heart_gauge
+  old_happiness = pkmn.happiness
+  pkmn.changeHappiness("vitamin")
+  pkmn.change_heart_gauge("scent", multiplier)
+  if pkmn.heart_gauge == old_gauge
     scene.pbDisplay(_INTL("{1} turned friendly.", pkmn.name))
+  elsif pkmn.happiness == old_happiness
+    scene.pbDisplay(_INTL("{1} adores you!\nThe door to its heart opened a little.", pkmn.name))
+    pkmn.check_ready_to_purify
   else
-    stage = pkmn.heart_gauge
-    pkmn.changeHappiness("vitamin")
-    pkmn.adjustHeart(-heart_amount)
     scene.pbDisplay(_INTL("{1} turned friendly.\nThe door to its heart opened a little.", pkmn.name))
-    pkmn.check_ready_to_purify if pkmn.heart_gauge != stage
+    pkmn.check_ready_to_purify
   end
   return true
 end
 
 ItemHandlers::UseOnPokemon.add(:JOYSCENT,proc { |item,pokemon,scene|
-  pbRaiseHappinessAndReduceHeart(pokemon,scene,500)
+  pbRaiseHappinessAndReduceHeart(pokemon, scene, 1)
 })
 
 ItemHandlers::UseOnPokemon.add(:EXCITESCENT,proc { |item,pokemon,scene|
-  pbRaiseHappinessAndReduceHeart(pokemon,scene,1000)
+  pbRaiseHappinessAndReduceHeart(pokemon, scene, 2)
 })
 
 ItemHandlers::UseOnPokemon.add(:VIVIDSCENT,proc { |item,pokemon,scene|
-  pbRaiseHappinessAndReduceHeart(pokemon,scene,2000)
+  pbRaiseHappinessAndReduceHeart(pokemon, scene, 3)
 })
 
 ItemHandlers::UseOnPokemon.add(:TIMEFLUTE,proc { |item,pokemon,scene|
@@ -291,21 +287,21 @@ ItemHandlers::CanUseInBattle.copy(:JOYSCENT,:EXCITESCENT,:VIVIDSCENT)
 
 ItemHandlers::BattleUseOnBattler.add(:JOYSCENT,proc { |item,battler,scene|
   battler.pokemon.hyper_mode = false
-  battler.pokemon.adjustHeart(-100)
+  battler.pokemon.change_heart_gauge("scent", 1)
   scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",battler.pbThis,GameData::Item.get(item).name))
   next true
 })
 
 ItemHandlers::BattleUseOnBattler.add(:EXCITESCENT,proc { |item,battler,scene|
   battler.pokemon.hyper_mode = false
-  battler.pokemon.adjustHeart(-200)
+  battler.pokemon.change_heart_gauge("scent", 2)
   scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",battler.pbThis,GameData::Item.get(item).name))
   next true
 })
 
 ItemHandlers::BattleUseOnBattler.add(:VIVIDSCENT,proc { |item,battler,scene|
   battler.pokemon.hyper_mode = false
-  battler.pokemon.adjustHeart(-300)
+  battler.pokemon.change_heart_gauge("scent", 3)
   scene.pbDisplay(_INTL("{1} came to its senses from the {2}!",battler.pbThis,GameData::Item.get(item).name))
   next true
 })
@@ -416,25 +412,23 @@ Events.onEndBattle += proc { |_sender,_e|
 }
 
 Events.onStepTaken += proc {
-  for pkmn in $player.able_party
+  $player.able_party.each do |pkmn|
     next if pkmn.heart_gauge == 0
-    stage = pkmn.heartStage
-    pkmn.adjustHeart(-1)
-    case pkmn.heartStage
-    when 0
-      pkmn.check_ready_to_purify
-    when stage
-    else
-      pkmn.update_shadow_moves
+    pkmn.heart_gauge_step_counter = 0 if !pkmn.heart_gauge_step_counter
+    pkmn.heart_gauge_step_counter += 1
+    if pkmn.heart_gauge_step_counter >= 256
+      old_stage = pkmn.heartStage
+      pkmn.change_heart_gauge("walking")
+      new_stage = pkmn.heartStage
+      if new_stage == 0
+        pkmn.check_ready_to_purify
+      elsif new_stage != old_stage
+        pkmn.update_shadow_moves
+      end
+      pkmn.heart_gauge_step_counter = 0
     end
   end
   if ($PokemonGlobal.purifyChamber rescue nil)
     $PokemonGlobal.purifyChamber.update
-  end
-  $PokemonGlobal.day_care.slots.each do |slot|
-    next if !slot.filled? || !slot.pokemon.shadowPokemon?
-    old_stage = slot.pokemon.heartStage
-    slot.pokemon.adjustHeart(-1)
-    slot.pokemon.update_shadow_moves if slot.pokemon.heartStage != old_stage
   end
 }

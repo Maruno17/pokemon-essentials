@@ -574,7 +574,6 @@ class Battle
       if b.inHyperMode?
         if pbRandom(100)<10
           b.pokemon.hyper_mode = false
-          b.pokemon.adjustHeart(-50)
           pbDisplay(_INTL("{1} came to its senses!",b.pbThis))
         else
           pbDisplay(_INTL("{1} is in Hyper Mode!",b.pbThis))

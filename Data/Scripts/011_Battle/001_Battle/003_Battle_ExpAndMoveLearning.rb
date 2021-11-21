@@ -71,7 +71,7 @@ class Battle
       evYield.each_key { |stat| evYield[stat] *= 2 }
     end
     # Gain EVs for each stat in turn
-    if pkmn.shadowPokemon? && pkmn.saved_ev
+    if pkmn.shadowPokemon? && pkmn.heartStage <= 3 && pkmn.saved_ev
       pkmn.saved_ev.each_value { |e| evTotal += e }
       GameData::Stat.each_main do |s|
         evGain = evYield[s.id].clamp(0, Pokemon::EV_STAT_LIMIT - pkmn.ev[s.id] - pkmn.saved_ev[s.id])
@@ -178,11 +178,14 @@ class Battle
          pkmn.name,debugInfo))
     end
     # Give Exp
-    $stats.total_exp_gained += expGained
     if pkmn.shadowPokemon?
-      pkmn.exp += expGained
+      if pkmn.heartStage <= 3
+        pkmn.exp += expGained
+        $stats.total_exp_gained += expGained
+      end
       return
     end
+    $stats.total_exp_gained += expGained
     tempExp1 = pkmn.exp
     battler = pbFindBattler(idxParty)
     loop do   # For each level gained in turn...

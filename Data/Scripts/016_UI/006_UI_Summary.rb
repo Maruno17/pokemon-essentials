@@ -375,7 +375,7 @@ class PokemonSummary_Scene
     dexNumShadow = (@pokemon.shiny?) ? Color.new(224,152,144) : Color.new(176,176,176)
     # If a Shadow Pokémon, draw the heart gauge area and bar
     if @pokemon.shadowPokemon?
-      shadowfract = @pokemon.heart_gauge.to_f / Pokemon::HEART_GAUGE_SIZE
+      shadowfract = @pokemon.heart_gauge.to_f / @pokemon.max_gauge_size
       imagepos = [
          ["Graphics/Pictures/Summary/overlay_shadow",224,240],
          ["Graphics/Pictures/Summary/overlay_shadowbar",242,280,0,0,(shadowfract*248).floor,-1]
@@ -632,7 +632,7 @@ class PokemonSummary_Scene
     # Determine which stats are boosted and lowered by the Pokémon's nature
     statshadows = {}
     GameData::Stat.each_main { |s| statshadows[s.id] = shadow }
-    if !@pokemon.shadowPokemon? || @pokemon.heartStage > 3
+    if !@pokemon.shadowPokemon? || @pokemon.heartStage <= 3
       @pokemon.nature_for_stats.stat_changes.each do |change|
         statshadows[change[0]] = Color.new(136,96,72) if change[1] > 0
         statshadows[change[0]] = Color.new(64,120,152) if change[1] < 0

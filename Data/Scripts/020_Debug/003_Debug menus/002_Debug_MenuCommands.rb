@@ -1144,7 +1144,7 @@ DebugMenuCommands.register("createpbs", {
       "pokemon_metrics.txt",
       "regional_dexes.txt",
       "ribbons.txt",
-      "shadow_movesets.txt",
+      "shadow_pokemon.txt",
       "town_map.txt",
       "trainer_types.txt",
       "trainers.txt",
@@ -1169,7 +1169,7 @@ DebugMenuCommands.register("createpbs", {
       when 13 then Compiler.write_pokemon_metrics
       when 14 then Compiler.write_regional_dexes
       when 15 then Compiler.write_ribbons
-      when 16 then Compiler.write_shadow_movesets
+      when 16 then Compiler.write_shadow_pokemon
       when 17 then Compiler.write_town_map
       when 18 then Compiler.write_trainer_types
       when 19 then Compiler.write_trainers
