@@ -870,6 +870,7 @@ module Compiler
         map_name = (map_infos && map_infos[map_data.id]) ? map_infos[map_data.id].name : nil
         if map_name
           f.write(sprintf("[%03d]   # %s\r\n", map_data.id, map_name))
+          f.write("Name = #{map_name}\r\n") if nil_or_empty?(map_data.real_name)
         else
           f.write(sprintf("[%03d]\r\n", map_data.id))
         end
