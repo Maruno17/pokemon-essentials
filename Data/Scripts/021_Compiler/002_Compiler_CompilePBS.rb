@@ -824,9 +824,9 @@ module Compiler
           :egg_moves             => contents["EggMoves"] || base_data.egg_moves.clone,
           :abilities             => contents["Abilities"] || base_data.abilities.clone,
           :hidden_abilities      => contents["HiddenAbilities"] || contents["HiddenAbility"] || base_data.hidden_abilities.clone,
-          :wild_item_common      => contents["WildItemCommon"] || base_data.wild_item_common,
-          :wild_item_uncommon    => contents["WildItemUncommon"] || base_data.wild_item_uncommon,
-          :wild_item_rare        => contents["WildItemRare"] || base_data.wild_item_rare,
+          :wild_item_common      => contents["WildItemCommon"] || base_data.wild_item_common.clone,
+          :wild_item_uncommon    => contents["WildItemUncommon"] || base_data.wild_item_uncommon.clone,
+          :wild_item_rare        => contents["WildItemRare"] || base_data.wild_item_rare.clone,
           :egg_groups            => contents["EggGroups"] || contents["Compatibility"] || base_data.egg_groups.clone,
           :hatch_steps           => contents["HatchSteps"] || contents["StepsToHatch"] || base_data.hatch_steps,
           :incense               => base_data.incense,
@@ -847,7 +847,9 @@ module Compiler
         # If form is single-typed, ensure it remains so if base species is dual-typed
         species_hash[:type2] = contents["Type1"] if contents["Type1"] && !contents["Type2"]
         # If form has any wild items, ensure none are inherited from base species
-        if contents["WildItemCommon"] || contents["WildItemUncommon"] || contents["WildItemRare"]
+        if (contents["WildItemCommon"] && !contents["WildItemCommon"].empty?) ||
+           (contents["WildItemUncommon"] && !contents["WildItemUncommon"].empty?) ||
+           (contents["WildItemRare"] && !contents["WildItemRare"].empty?)
           species_hash[:wild_item_common]   = contents["WildItemCommon"]
           species_hash[:wild_item_uncommon] = contents["WildItemUncommon"]
           species_hash[:wild_item_rare]     = contents["WildItemRare"]

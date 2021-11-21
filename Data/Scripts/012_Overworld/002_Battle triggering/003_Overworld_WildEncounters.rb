@@ -405,11 +405,11 @@ def pbGenerateWildPokemon(species,level,isRoamer=false)
   end
   itemrnd = rand(100)
   if (items[0]==items[1] && items[1]==items[2]) || itemrnd<chances[0]
-    genwildpoke.item = items[0]
+    genwildpoke.item = items[0].sample
   elsif itemrnd<(chances[0]+chances[1])
-    genwildpoke.item = items[1]
+    genwildpoke.item = items[1].sample
   elsif itemrnd<(chances[0]+chances[1]+chances[2])
-    genwildpoke.item = items[2]
+    genwildpoke.item = items[2].sample
   end
   # Improve chances of shiny Pokémon with Shiny Charm and battling more of the
   # same species

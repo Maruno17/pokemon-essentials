@@ -36,7 +36,7 @@ module GameData
     def self.editor_properties
       return [
         ["StartMoney",       LimitProperty.new(Settings::MAX_MONEY), _INTL("The amount of money that the player starts the game with.")],
-        ["StartItemStorage", ItemPoolProperty,        _INTL("Items that are already in the player's PC at the start of the game.")],
+        ["StartItemStorage", GameDataPoolProperty.new(:Item),        _INTL("Items that are already in the player's PC at the start of the game.")],
         ["Home",             MapCoordsFacingProperty, _INTL("Map ID and X/Y coordinates of where the player goes after a loss if no Pokémon Center was visited.")],
         ["StorageCreator",   StringProperty,          _INTL("Name of the Pokémon Storage creator (the storage option is named \"XXX's PC\").")],
         ["WildBattleBGM",    BGMProperty,             _INTL("Default BGM for wild Pokémon battles.")],

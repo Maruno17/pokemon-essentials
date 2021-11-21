@@ -89,9 +89,9 @@ module GameData
         "EggMoves"          => [0, "*e", :Move],
         "Abilities"         => [0, "*e", :Ability],
         "HiddenAbilities"   => [0, "*e", :Ability],
-        "WildItemCommon"    => [0, "e", :Item],
-        "WildItemUncommon"  => [0, "e", :Item],
-        "WildItemRare"      => [0, "e", :Item],
+        "WildItemCommon"    => [0, "*e", :Item],
+        "WildItemUncommon"  => [0, "*e", :Item],
+        "WildItemRare"      => [0, "*e", :Item],
         "EggGroups"         => [0, "*e", :EggGroup],
         "HatchSteps"        => [0, "v"],
         "Height"            => [0, "f"],
@@ -168,9 +168,9 @@ module GameData
       @egg_moves             = hash[:egg_moves]             || []
       @abilities             = hash[:abilities]             || []
       @hidden_abilities      = hash[:hidden_abilities]      || []
-      @wild_item_common      = hash[:wild_item_common]
-      @wild_item_uncommon    = hash[:wild_item_uncommon]
-      @wild_item_rare        = hash[:wild_item_rare]
+      @wild_item_common      = hash[:wild_item_common]      || []
+      @wild_item_uncommon    = hash[:wild_item_uncommon]    || []
+      @wild_item_rare        = hash[:wild_item_rare]        || []
       @egg_groups            = hash[:egg_groups]            || [:Undiscovered]
       @hatch_steps           = hash[:hatch_steps]           || 1
       @incense               = hash[:incense]

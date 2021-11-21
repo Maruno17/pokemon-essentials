@@ -573,7 +573,7 @@ class Pokemon
     return held_item && held_item == check_item
   end
 
-  # @return [Array<Symbol>] the items this species can be found holding in the wild
+  # @return [Array<Array<Symbol>>] the items this species can be found holding in the wild
   def wildHoldItems
     sp_data = species_data
     return [sp_data.wild_item_common, sp_data.wild_item_uncommon, sp_data.wild_item_rare]

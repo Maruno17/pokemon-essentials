@@ -975,81 +975,103 @@ end
 
 
 
-module SpeciesPoolProperty
-  def self.set(_settingname, oldsetting)
-    # Get all species in the pool
-    realcmds = []
-    realcmds.push([nil, "-", -1])   # Species ID, index in this list, name
-    for i in 0...oldsetting.length
-      realcmds.push([oldsetting[i], GameData::Species.get(oldsetting[i]).real_name, i])
+class GameDataPoolProperty
+  def initialize(game_data, allow_multiple = true, auto_sort = false)
+    if !GameData.const_defined?(game_data.to_sym)
+      raise _INTL("Couldn't find class {1} in module GameData.", game_data.to_s)
     end
-    # Edit species pool
-    cmdwin = pbListWindow([], 200)
-    oldsel = -1
-    ret = oldsetting
-    cmd = [0, 0]
+    @game_data = game_data
+    @game_data_module = GameData.const_get(game_data.to_sym)
+    @allow_multiple = allow_multiple
+    @auto_sort = auto_sort   # Alphabetically
+  end
+
+  def set(setting_name, old_setting)
+    ret = old_setting
+    old_setting.uniq! if !@allow_multiple
+    old_setting.sort! if @auto_sort
+    # Get all values already in the pool
+    values = []
+    values.push([nil, _INTL("[ADD VALUE]")])   # Value ID, name
+    old_setting.each do |value|
+      values.push([value, @game_data_module.get(value).real_name])
+    end
+    # Set things up
+    command_window = pbListWindow([], 200)
+    cmd = [0, 0]   # [input type, list index] (input type: 0=select, 1=swap up, 2=swap down)
     commands = []
-    refreshlist = true
+    need_refresh = true
+    # Edit value pool
     loop do
-      if refreshlist
-        realcmds.sort! { |a, b| a[2] <=> b[2] }
-        commands = []
-        realcmds.each_with_index do |entry, i|
-          commands.push((entry[0].nil?) ? _INTL("[ADD SPECIES]") : entry[1])
+      if need_refresh
+        if @auto_sort
+          values.sort! { |a, b| (a[0].nil?) ? -1 : b[0].nil? ? 1 : a[1] <=> b[1] }
         end
+        commands = values.map { |entry| entry[1] }
+        need_refresh = false
       end
-      refreshlist = false
-      oldsel = -1
-      cmd = pbCommands3(cmdwin, commands, -1, cmd[1], true)
-      case cmd[0]
-      when 1   # Swap species up
-        if cmd[1] > 0 && cmd[1] < realcmds.length - 1
-          realcmds[cmd[1] + 1][2], realcmds[cmd[1]][2] = realcmds[cmd[1]][2], realcmds[cmd[1] + 1][2]
-          refreshlist = true
+      # Choose a value
+      cmd = pbCommands3(command_window, commands, -1, cmd[1], true)
+      case cmd[0]   # 0=selected/cancelled, 1=pressed Action+Up, 2=pressed Action+Down
+      when 1   # Swap value up
+        if cmd[1] > 0 && cmd[1] < values.length - 1
+          values[cmd[1] + 1], values[cmd[1]] = values[cmd[1]], values[cmd[1] + 1]
+          need_refresh = true
         end
-      when 2   # Swap species down
+      when 2   # Swap value down
         if cmd[1] > 1
-          realcmds[cmd[1] - 1][2], realcmds[cmd[1]][2] = realcmds[cmd[1]][2], realcmds[cmd[1] - 1][2]
-          refreshlist = true
+          values[cmd[1] - 1], values[cmd[1]] = values[cmd[1]], values[cmd[1] - 1]
+          need_refresh = true
         end
       when 0
         if cmd[1] >= 0   # Chose an entry
-          entry = realcmds[cmd[1]]
-          if entry[0].nil?   # Add new species
-            new_species = pbChooseSpeciesList
-            if new_species
-              maxid = -1
-              realcmds.each { |e| maxid = [maxid, e[2]].max }
-              realcmds.push([new_species, GameData::Species.get(new_species).real_name, maxid + 1])
-              refreshlist = true
+          entry = values[cmd[1]]
+          if entry[0].nil?   # Add new value
+            new_value = pbChooseFromGameDataList(@game_data)
+            if new_value
+              if !@allow_multiple && values.any? { |val| val[0] == new_value }
+                cmd[1] = values.index { |val| val[0] == new_value }
+                next
+              end
+              values.push([new_value, @game_data_module.get(new_value).real_name])
+              need_refresh = true
             end
-          else   # Edit existing species
-            case pbMessage(_INTL("\\ts[]Do what with this species?"),
-               [_INTL("Change species"), _INTL("Delete"), _INTL("Cancel")], 3)
-            when 0   # Change species
-              new_species = pbChooseSpeciesList(entry[0])
-              if new_species && new_species != entry[0]
-                entry[0] = new_species
-                entry[1] = GameData::Species.get(new_species).real_name
-                oldsel = entry[2]
-                refreshlist = true
+          else   # Edit existing value
+            case pbMessage(_INTL("\\ts[]Do what with this value?"),
+               [_INTL("Change value"), _INTL("Delete"), _INTL("Cancel")], 3)
+            when 0   # Change value
+              new_value = pbChooseFromGameDataList(@game_data, entry[0])
+              if new_value && new_value != entry[0]
+                if !@allow_multiple && values.any? { |val| val[0] == new_value }
+                  values.delete_at(cmd[1])
+                  cmd[1] = values.index { |val| val[0] == new_value }
+                  need_refresh = true
+                  next
+                end
+                entry[0] = new_value
+                entry[1] = @game_data_module.get(new_value).real_name
+                if @auto_sort
+                  values.sort! { |a, b| a[1] <=> b[1] }
+                  cmd[1] = values.index { |val| val[0] == new_value }
+                end
+                need_refresh = true
               end
             when 1   # Delete
-              realcmds.delete_at(cmd[1])
-              cmd[1] = [cmd[1], realcmds.length - 1].min
-              refreshlist = true
+              values.delete_at(cmd[1])
+              cmd[1] = [cmd[1], values.length - 1].min
+              need_refresh = true
             end
           end
         else   # Cancel/quit
-          case pbMessage(_INTL("Save changes?"),
+          case pbMessage(_INTL("Apply changes?"),
              [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
           when 0
-            realcmds.shift
-            for i in 0...realcmds.length
-              realcmds[i] = realcmds[i][0]
+            values.shift   # Remove the "add value" option
+            for i in 0...values.length
+              values[i] = values[i][0]
             end
-            realcmds.compact!
-            ret = realcmds
+            values.compact!
+            ret = values
             break
           when 1
             break
@@ -1057,129 +1079,30 @@ module SpeciesPoolProperty
         end
       end
     end
-    cmdwin.dispose
+    command_window.dispose
     return ret
   end
 
-  def self.defaultValue
+  def defaultValue
     return []
   end
 
-  def self.format(value)
-    ret = ""
-    for i in 0...value.length
-      ret << "," if i > 0
-      ret << GameData::Species.get(value[i]).real_name
-    end
-    return ret
+  def format(value)
+    return value.map { |val| @game_data_module.get(val).real_name }.join(",")
   end
 end
 
 
 
-module ItemPoolProperty
-  def self.set(_settingname, oldsetting)
-    # Get all items in the pool
-    realcmds = []
-    realcmds.push([nil, "-", -1])   # Item ID, index in this list, name
-    for i in 0...oldsetting.length
-      realcmds.push([oldsetting[i], GameData::Item.get(oldsetting[i]).real_name, i])
-    end
-    # Edit item pool
-    cmdwin = pbListWindow([], 200)
-    oldsel = -1
-    ret = oldsetting
-    cmd = [0, 0]
-    commands = []
-    refreshlist = true
-    loop do
-      if refreshlist
-        realcmds.sort! { |a, b| a[2] <=> b[2] }
-        commands = []
-        realcmds.each_with_index do |entry, i|
-          commands.push((entry[0].nil?) ? _INTL("[ADD ITEM]") : entry[1])
-        end
-      end
-      refreshlist = false
-      oldsel = -1
-      cmd = pbCommands3(cmdwin, commands, -1, cmd[1], true)
-      case cmd[0]
-      when 1   # Swap item up
-        if cmd[1] > 0 && cmd[1] < realcmds.length - 1
-          realcmds[cmd[1] + 1][2], realcmds[cmd[1]][2] = realcmds[cmd[1]][2], realcmds[cmd[1] + 1][2]
-          refreshlist = true
-        end
-      when 2   # Swap item down
-        if cmd[1] > 1
-          realcmds[cmd[1] - 1][2], realcmds[cmd[1]][2] = realcmds[cmd[1]][2], realcmds[cmd[1] - 1][2]
-          refreshlist = true
-        end
-      when 0
-        if cmd[1] >= 0   # Chose an entry
-          entry = realcmds[cmd[1]]
-          if entry[0].nil?   # Add new item
-            new_item = pbChooseItemList
-            if new_item
-              maxid = -1
-              realcmds.each { |e| maxid = [maxid, e[2]].max }
-              realcmds.push([new_item, GameData::Item.get(new_item).real_name, maxid + 1])
-              refreshlist = true
-            end
-          else   # Edit existing item
-            case pbMessage(_INTL("\\ts[]Do what with this item?"),
-               [_INTL("Change item"), _INTL("Delete"), _INTL("Cancel")], 3)
-            when 0   # Change item
-              new_item = pbChooseItemList(entry[0])
-              if new_item && new_item != entry[0]
-                entry[0] = new_item
-                entry[1] = GameData::Item.get(new_item).real_name
-                oldsel = entry[2]
-                refreshlist = true
-              end
-            when 1   # Delete
-              realcmds.delete_at(cmd[1])
-              cmd[1] = [cmd[1], realcmds.length - 1].min
-              refreshlist = true
-            end
-          end
-        else   # Cancel/quit
-          case pbMessage(_INTL("Save changes?"),
-             [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
-          when 0
-            realcmds.shift
-            for i in 0...realcmds.length
-              realcmds[i] = realcmds[i][0]
-            end
-            realcmds.compact!
-            ret = realcmds
-            break
-          when 1
-            break
-          end
-        end
-      end
-    end
-    cmdwin.dispose
-    return ret
-  end
-
-  def self.defaultValue
-    return []
-  end
-
-  def self.format(value)
-    ret = ""
-    for i in 0...value.length
-      ret << "," if i > 0
-      ret << GameData::Item.get(value[i]).real_name
-    end
-    return ret
+class EggMovesProperty < GameDataPoolProperty
+  def initialize
+    super(:Move, false, true)
   end
 end
 
 
 
-module MovePoolProperty
+module LevelUpMovesProperty
   def self.set(_settingname, oldsetting)
     # Get all moves in move pool
     realcmds = []
@@ -1324,101 +1247,6 @@ module MovePoolProperty
     for i in 0...value.length
       ret << "," if i > 0
       ret << sprintf("%s,%s", value[i][0], GameData::Move.get(value[i][1]).real_name)
-    end
-    return ret
-  end
-end
-
-
-
-module EggMovesProperty
-  def self.set(_settingname, oldsetting)
-    # Get all egg moves
-    realcmds = []
-    realcmds.push([nil, _INTL("[ADD MOVE]"), -1])
-    for i in 0...oldsetting.length
-      realcmds.push([oldsetting[i], GameData::Move.get(oldsetting[i]).real_name, 0])
-    end
-    # Edit egg moves list
-    cmdwin = pbListWindow([], 200)
-    oldsel = nil
-    ret = oldsetting
-    cmd = 0
-    commands = []
-    refreshlist = true
-    loop do
-      if refreshlist
-        realcmds.sort! { |a, b| (a[2] == b[2]) ? a[1] <=> b[1] : a[2] <=> b[2] }
-        commands = []
-        realcmds.each_with_index do |entry, i|
-          commands.push(entry[1])
-          cmd = i if oldsel && entry[0] == oldsel
-        end
-      end
-      refreshlist = false
-      oldsel = nil
-      cmd = pbCommands2(cmdwin, commands, -1, cmd, true)
-      if cmd >= 0   # Chose an entry
-        entry = realcmds[cmd]
-        if entry[2] == -1   # Add new move
-          newmove = pbChooseMoveList
-          if newmove
-            if realcmds.any? { |e| e[0] == newmove }
-              oldsel = newmove   # Already have move; just move cursor to it
-            else
-              realcmds.push([newmove, GameData::Move.get(newmove).name, 0])
-            end
-            refreshlist = true
-          end
-        else   # Edit move
-          case pbMessage(_INTL("\\ts[]Do what with this move?"),
-             [_INTL("Change move"), _INTL("Delete"), _INTL("Cancel")], 3)
-          when 0   # Change move
-            newmove = pbChooseMoveList(entry[0])
-            if newmove
-              if realcmds.any? { |e| e[0] == newmove }   # Already have move; delete this one
-                realcmds.delete_at(cmd)
-                cmd = [cmd, realcmds.length - 1].min
-              else   # Change move
-                realcmds[cmd] = [newmove, GameData::Move.get(newmove).name, 0]
-              end
-              oldsel = newmove
-              refreshlist = true
-            end
-          when 1   # Delete
-            realcmds.delete_at(cmd)
-            cmd = [cmd, realcmds.length - 1].min
-            refreshlist = true
-          end
-        end
-      else   # Cancel/quit
-        case pbMessage(_INTL("Save changes?"),
-           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
-        when 0
-          for i in 0...realcmds.length
-            realcmds[i] = realcmds[i][0]
-          end
-          realcmds.compact!
-          ret = realcmds
-          break
-        when 1
-          break
-        end
-      end
-    end
-    cmdwin.dispose
-    return ret
-  end
-
-  def self.defaultValue
-    return []
-  end
-
-  def self.format(value)
-    ret = ""
-    for i in 0...value.length
-      ret << "," if i > 0
-      ret << GameData::Move.get(value[i]).real_name
     end
     return ret
   end

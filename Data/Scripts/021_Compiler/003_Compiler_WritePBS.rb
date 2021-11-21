@@ -329,9 +329,9 @@ module Compiler
         f.write(sprintf("FormName = %s\r\n", species.real_form_name)) if species.real_form_name && !species.real_form_name.empty?
         f.write(sprintf("Generation = %d\r\n", species.generation)) if species.generation != 0
         f.write(sprintf("Flags = %s\r\n", species.flags.join(","))) if species.flags.length > 0
-        f.write(sprintf("WildItemCommon = %s\r\n", species.wild_item_common)) if species.wild_item_common
-        f.write(sprintf("WildItemUncommon = %s\r\n", species.wild_item_uncommon)) if species.wild_item_uncommon
-        f.write(sprintf("WildItemRare = %s\r\n", species.wild_item_rare)) if species.wild_item_rare
+        f.write(sprintf("WildItemCommon = %s\r\n", species.wild_item_common.join(","))) if species.wild_item_common.length > 0
+        f.write(sprintf("WildItemUncommon = %s\r\n", species.wild_item_uncommon.join(","))) if species.wild_item_uncommon.length > 0
+        f.write(sprintf("WildItemRare = %s\r\n", species.wild_item_rare.join(","))) if species.wild_item_rare.length > 0
         if species.evolutions.any? { |evo| !evo[3] }
           f.write("Evolutions = ")
           need_comma = false
@@ -431,9 +431,9 @@ module Compiler
         if species.wild_item_common != base_species.wild_item_common ||
            species.wild_item_uncommon != base_species.wild_item_uncommon ||
            species.wild_item_rare != base_species.wild_item_rare
-          f.write(sprintf("WildItemCommon = %s\r\n", species.wild_item_common)) if species.wild_item_common
-          f.write(sprintf("WildItemUncommon = %s\r\n", species.wild_item_uncommon)) if species.wild_item_uncommon
-          f.write(sprintf("WildItemRare = %s\r\n", species.wild_item_rare)) if species.wild_item_rare
+          f.write(sprintf("WildItemCommon = %s\r\n", species.wild_item_common.join(","))) if species.wild_item_common.length > 0
+          f.write(sprintf("WildItemUncommon = %s\r\n", species.wild_item_uncommon.join(","))) if species.wild_item_uncommon.length > 0
+          f.write(sprintf("WildItemRare = %s\r\n", species.wild_item_rare.join(","))) if species.wild_item_rare.length > 0
         end
         if species.evolutions != base_species.evolutions && species.evolutions.any? { |evo| !evo[3] }
           f.write("Evolutions = ")
