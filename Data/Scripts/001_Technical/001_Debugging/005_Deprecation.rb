@@ -15,7 +15,7 @@ module Deprecation
     unless alternative.nil?
       text += "\r\n" + _INTL("Use \"{1}\" instead.", alternative)
     end
-    ConsoleRGB.echo_warn text
+    Console.echo_warn text
   end
 end
 

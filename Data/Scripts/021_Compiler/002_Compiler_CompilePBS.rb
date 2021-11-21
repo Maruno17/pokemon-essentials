@@ -1727,7 +1727,7 @@ module Compiler
   # Compile battle animations
   #=============================================================================
   def compile_animations
-    ConsoleRGB.echo_li _INTL("Compiling animations...")
+    Console.echo_li _INTL("Compiling animations...")
     begin
       pbanims = load_data("Data/PkmnAnimations.rxdata")
     rescue

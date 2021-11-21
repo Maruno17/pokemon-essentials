@@ -701,23 +701,23 @@ module Compiler
   #=============================================================================
   def compile_pbs_file_message_start(filename)
     # The `` around the file's name turns it cyan
-    ConsoleRGB.echo_li _INTL("Compiling PBS file `{1}`...", filename.split("/").last)
+    Console.echo_li _INTL("Compiling PBS file `{1}`...", filename.split("/").last)
   end
 
   def write_pbs_file_message_start(filename)
     # The `` around the file's name turns it cyan
-    ConsoleRGB.echo_li _INTL("Writing PBS file `{1}`...", filename.split("/").last)
+    Console.echo_li _INTL("Writing PBS file `{1}`...", filename.split("/").last)
   end
 
   def process_pbs_file_message_end
-    ConsoleRGB.echo_complete(true)
+    Console.echo_done(true)
     Graphics.update
   end
 
   def compile_all(mustCompile)
     return if !mustCompile
     FileLineData.clear
-    ConsoleRGB.echo_h1 _INTL("Starting full compile")
+    Console.echo_h1 _INTL("Starting full compile")
     compile_town_map               # No dependencies
     compile_connections            # No dependencies
     compile_phone                  # No dependencies
@@ -740,16 +740,16 @@ module Compiler
     compile_map_metadata           # No dependencies
     compile_animations
     compile_trainer_events(mustCompile)
-    ConsoleRGB.echo_li _INTL("Saving messages...")
+    Console.echo_li _INTL("Saving messages...")
     pbSetTextMessages
     MessageTypes.saveMessages
     MessageTypes.loadMessageFile("Data/messages.dat") if safeExists?("Data/messages.dat")
-    ConsoleRGB.echo_complete(true)
-    ConsoleRGB.echo_li _INTL("Reloading cache...")
+    Console.echo_done(true)
+    Console.echo_li _INTL("Reloading cache...")
     System.reload_cache
-    ConsoleRGB.echo_complete(true)
+    Console.echo_done(true)
     echoln ""
-    ConsoleRGB.echo_h2("Successfully fully compiled", text: :green)
+    Console.echo_h2("Successfully fully compiled", text: :green)
   end
 
   def main

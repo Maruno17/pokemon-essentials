@@ -352,7 +352,7 @@ module PluginManager
   def self.error(msg)
     Graphics.update
     t = Thread.new do
-      ConsoleRGB.echo_error "Plugin Error:\r\n#{msg}"
+      Console.echo_error "Plugin Error:\r\n#{msg}"
       p "Plugin Error: #{msg}"
       Thread.exit
     end
@@ -659,7 +659,7 @@ module PluginManager
   # Check if plugins need compiling
   #-----------------------------------------------------------------------------
   def self.compilePlugins(order, plugins)
-    ConsoleRGB.echo_li "Compiling plugin scripts..."
+    Console.echo_li "Compiling plugin scripts..."
     scripts = []
     # go through the entire order one by one
     for o in order
@@ -681,13 +681,13 @@ module PluginManager
     File.open("Data/PluginScripts.rxdata", 'wb') { |f| Marshal.dump(scripts, f) }
     # collect garbage
     GC.start
-    ConsoleRGB.echo_complete(true)
+    Console.echo_done(true)
   end
   #-----------------------------------------------------------------------------
   # Check if plugins need compiling
   #-----------------------------------------------------------------------------
   def self.runPlugins
-    ConsoleRGB.echo_h1 "Checking plugins"
+    Console.echo_h1 "Checking plugins"
     # get the order of plugins to interpret
     order, plugins = self.getPluginOrder
     # compile if necessary
@@ -699,7 +699,7 @@ module PluginManager
       # get the required data
       name, meta, script = plugin
       if !meta[:essentials] || !meta[:essentials].include?(Essentials::VERSION)
-        ConsoleRGB.echo_warn "Plugin '#{name}' may not be compatible with Essentials v#{Essentials::VERSION}. Trying to load anyway."
+        Console.echo_warn "Plugin '#{name}' may not be compatible with Essentials v#{Essentials::VERSION}. Trying to load anyway."
       end
       # register plugin
       self.register(meta)
@@ -715,7 +715,7 @@ module PluginManager
         # try to run the code
         begin
           eval(code, TOPLEVEL_BINDING, fname)
-          ConsoleRGB.echoln_li "Loaded plugin: '#{name}'" if !echoed_plugins.include?(name)
+          Console.echoln_li "Loaded plugin: '#{name}'" if !echoed_plugins.include?(name)
           echoed_plugins.push(name)
         rescue Exception   # format error message to display
           self.pluginErrorMsg(name, sname)
@@ -725,9 +725,9 @@ module PluginManager
     end
     if scripts.length > 0
       echoln ""
-      ConsoleRGB.echo_h2("Successfully loaded #{scripts.length} plugin(s)", text: :green)
+      Console.echo_h2("Successfully loaded #{scripts.length} plugin(s)", text: :green)
     else
-      ConsoleRGB.echo_h2("No plugins found", text: :green)
+      Console.echo_h2("No plugins found", text: :green)
     end
   end
   #-----------------------------------------------------------------------------
