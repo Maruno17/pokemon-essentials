@@ -142,6 +142,36 @@ module Enumerable
 end
 
 #===============================================================================
+# class File
+#===============================================================================
+class File
+  # Copies the source file to the destination path.
+  def self.copy(source, destination)
+    data = ""
+    t = Time.now
+    File.open(source, 'rb') do |f|
+      while r = f.read(4096)
+        if Time.now - t > 1
+          Graphics.update
+          t = Time.now
+        end
+        data += r
+      end
+    end
+    File.delete(destination) if File.file?(destination)
+    f = File.new(destination, 'wb')
+    f.write data
+    f.close
+  end
+
+  # Copies the source to the destination and deletes the source.
+  def self.move(source, destination)
+    File.copy(source, destination)
+    File.delete(source)
+  end
+end
+
+#===============================================================================
 # Kernel methods
 #===============================================================================
 def rand(*args)

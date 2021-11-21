@@ -1,4 +1,4 @@
-$player#===============================================================================
+#===============================================================================
 # Represents a planted berry. Stored in $PokemonGlobal.eventvars.
 #===============================================================================
 class BerryPlantData
@@ -255,7 +255,7 @@ class BerryPlantSprite
         @event.character_name = "berrytreeplanted"   # Common to all berries
         @event.turn_down
       else
-        filename = sprintf("berrytree%s", GameData::Item.get(berry_plant.berry_id).id.to_s)
+        filename = sprintf("berrytree_%s", GameData::Item.get(berry_plant.berry_id).id.to_s)
         if pbResolveBitmap("Graphics/Characters/" + filename)
           @event.character_name = filename
           case berry_plant.growth_stage

@@ -1191,6 +1191,19 @@ DebugMenuCommands.register("invalidtiles", {
   }
 })
 
+DebugMenuCommands.register("renamefiles", {
+  "parent"      => "othermenu",
+  "name"        => _INTL("Rename Outdated Files"),
+  "description" => _INTL("Check for files with outdated names and rename/move them. Can alter map data."),
+  "always_show" => true,
+  "effect"      => proc {
+    if pbConfirmMessage(_INTL("Are you sure you want to automatically rename outdated files?"))
+      FilenameUpdater.rename_files
+      pbMessage(_INTL("Done."))
+    end
+  }
+})
+
 DebugMenuCommands.register("reloadsystemcache", {
   "parent"      => "othermenu",
   "name"        => _INTL("Reload System Cache"),
