@@ -576,9 +576,9 @@ def pbUpdateVehicle
   end
 end
 
-def pbCancelVehicles(destination=nil)
-  $PokemonGlobal.surfing = false
-  $PokemonGlobal.diving  = false
+def pbCancelVehicles(destination = nil, cancel_swimming = true)
+  $PokemonGlobal.surfing = false if cancel_swimming
+  $PokemonGlobal.diving  = false if cancel_swimming
   $PokemonGlobal.bicycle = false if !destination || !pbCanUseBike?(destination)
   pbUpdateVehicle
 end

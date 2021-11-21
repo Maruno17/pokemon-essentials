@@ -518,46 +518,55 @@ Events.onStepTaken += proc { |_sender,_e|
 #===============================================================================
 # Deprecated methods
 #===============================================================================
+# @deprecated This method is slated to be removed in v21.
 def pbDayCareDeposited
   Deprecation.warn_method('pbDayCareDeposited', 'v21', 'DayCare.count')
   return DayCare.count
 end
 
+# @deprecated This method is slated to be removed in v21.
 def pbDayCareGetDeposited(index, name_var, cost_var)
   Deprecation.warn_method('pbDayCareGetDeposited', 'v21', 'DayCare.get_details(index, name_var, cost_var)')
   DayCare.get_details(index, name_var, cost_var)
 end
 
+# @deprecated This method is slated to be removed in v21.
 def pbDayCareGetLevelGain(index, name_var, level_var)
   Deprecation.warn_method('pbDayCareGetLevelGain', 'v21', 'DayCare.get_level_gain(index, name_var, level_var)')
   DayCare.get_level_gain(index, name_var, level_var)
 end
 
+# @deprecated This method is slated to be removed in v21.
 def pbDayCareDeposit(party_index)
   Deprecation.warn_method('pbDayCareDeposit', 'v21', 'DayCare.deposit(party_index)')
   DayCare.deposit(party_index)
 end
 
+# @deprecated This method is slated to be removed in v21.
 def pbDayCareWithdraw(index)
   Deprecation.warn_method('pbDayCareWithdraw', 'v21', 'DayCare.withdraw(index)')
   DayCare.withdraw(index)
 end
 
+# @deprecated This method is slated to be removed in v21.
 def pbDayCareChoose(text, choice_var)
   Deprecation.warn_method('pbDayCareChoose', 'v21', 'DayCare.choose(text, choice_var)')
   DayCare.choose(text, choice_var)
 end
 
+# @deprecated This method is slated to be removed in v21.
 def pbDayCareGetCompatibility(compat_var)
   Deprecation.warn_method('pbDayCareGetCompatibility', 'v21', 'DayCare.get_compatibility(compat_var)')
   DayCare.get_compatibility(compat_var)
 end
 
+# @deprecated This method is slated to be removed in v21.
 def pbEggGenerated?
   Deprecation.warn_method('pbEggGenerated?', 'v21', 'DayCare.egg_generated?')
   return DayCare.egg_generated?
 end
 
+# @deprecated This method is slated to be removed in v21.
 def pbDayCareGenerateEgg
   Deprecation.warn_method('pbDayCareGenerateEgg', 'v21', 'DayCare.collect_egg')
   DayCare.collect_egg

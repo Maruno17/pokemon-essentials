@@ -67,9 +67,9 @@ class Scene_Map
     Graphics.frame_reset
   end
 
-  def transfer_player(cancelVehicles=true)
+  def transfer_player(cancel_swimming = true)
     $game_temp.player_transferring = false
-    pbCancelVehicles($game_temp.player_new_map_id) if cancelVehicles
+    pbCancelVehicles($game_temp.player_new_map_id, cancel_swimming)
     autofade($game_temp.player_new_map_id)
     pbBridgeOff
     @spritesetGlobal.playersprite.clearShadows
@@ -124,7 +124,7 @@ class Scene_Map
       $game_system.update
       $game_screen.update
       break unless $game_temp.player_transferring
-      transfer_player
+      transfer_player(false)
       break if $game_temp.transition_processing
     end
     updateSpritesets
@@ -167,7 +167,7 @@ class Scene_Map
       $game_system.update
       $game_screen.update
       break unless $game_temp.player_transferring
-      transfer_player
+      transfer_player(false)
       break if $game_temp.transition_processing
     end
     updateSpritesets

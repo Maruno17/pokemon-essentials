@@ -367,7 +367,9 @@ def pbSurfacing
   return false
 end
 
+# @deprecated This method is slated to be removed in v21.
 def pbTransferUnderwater(mapid,x,y,direction=$game_player.direction)
+  Deprecation.warn_method('pbTransferUnderwater', 'v21', '"Transfer Player" event command')
   pbFadeOutIn {
     $game_temp.player_new_map_id    = mapid
     $game_temp.player_new_x         = x
@@ -778,7 +780,9 @@ def pbEndSurf(_xOffset,_yOffset)
   return false
 end
 
+# @deprecated This method is slated to be removed in v21.
 def pbTransferSurfing(mapid,xcoord,ycoord,direction=$game_player.direction)
+  Deprecation.warn_method('pbTransferSurfing', 'v21', '"Transfer Player" event command')
   pbFadeOutIn {
     $game_temp.player_new_map_id    = mapid
     $game_temp.player_new_x         = xcoord
