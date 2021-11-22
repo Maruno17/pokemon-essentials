@@ -305,9 +305,7 @@ class PokemonEncounters
         new_enc_list = []
         enc_list.each do |enc|
           species_data = GameData::Species.get(enc[1])
-          t1 = species_data.type1
-          t2 = species_data.type2
-          new_enc_list.push(enc) if t1 == favored_type || t2 == favored_type
+          new_enc_list.push(enc) if species_data.types.include?(favored_type)
         end
         enc_list = new_enc_list if new_enc_list.length > 0
       end

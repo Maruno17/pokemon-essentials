@@ -1442,15 +1442,11 @@ class PokemonStorageScene
         imagepos.push(["Graphics/Pictures/shiny",156,198])
       end
       typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
-      type1_number = GameData::Type.get(pokemon.type1).icon_position
-      type2_number = GameData::Type.get(pokemon.type2).icon_position
-      type1rect = Rect.new(0, type1_number * 28, 64, 28)
-      type2rect = Rect.new(0, type2_number * 28, 64, 28)
-      if pokemon.type1==pokemon.type2
-        overlay.blt(52,272,typebitmap.bitmap,type1rect)
-      else
-        overlay.blt(18,272,typebitmap.bitmap,type1rect)
-        overlay.blt(88,272,typebitmap.bitmap,type2rect)
+      pokemon.types.each_with_index do |type, i|
+        type_number = GameData::Type.get(type).icon_position
+        type_rect = Rect.new(0, type_number * 28, 64, 28)
+        type_x = (pokemon.types.length == 1) ? 52 : 18 + 70 * i
+        overlay.blt(type_x, 272, typebitmap.bitmap, type_rect)
       end
       drawMarkings(overlay,70,240,128,20,pokemon.markings)
       pbDrawImagePositions(overlay,imagepos)

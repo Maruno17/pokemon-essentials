@@ -8,8 +8,7 @@ module GameData
     attr_reader :real_category
     attr_reader :real_pokedex_entry
     attr_reader :pokedex_form
-    attr_reader :type1
-    attr_reader :type2
+    attr_reader :types
     attr_reader :base_stats
     attr_reader :evs
     attr_reader :base_exp
@@ -77,8 +76,7 @@ module GameData
         "FormName"          => [0, "q"],
         "Category"          => [0, "s"],
         "Pokedex"           => [0, "q"],
-        "Type1"             => [0, "e", :Type],
-        "Type2"             => [0, "e", :Type],
+        "Types"             => [0, "eE", :Type, :Type],
         "BaseStats"         => [0, "vvvvvv"],
         "EVs"               => [0, "uuuuuu"],
         "BaseExp"           => [0, "v"],
@@ -110,6 +108,8 @@ module GameData
         "BattlerShadowSize" => [0, "u"],
         # All properties below here are old names for some properties above.
         # They will be removed in v21.
+        "Type1"             => [0, "e", :Type],
+        "Type2"             => [0, "e", :Type],
         "Rareness"          => [0, "u"],
         "Compatibility"     => [0, "*e", :EggGroup],
         "Kind"              => [0, "s"],
@@ -142,51 +142,50 @@ module GameData
     end
 
     def initialize(hash)
-      @id                    = hash[:id]
-      @species               = hash[:species]               || @id
-      @form                  = hash[:form]                  || 0
-      @real_name             = hash[:name]                  || "Unnamed"
-      @real_form_name        = hash[:form_name]
-      @real_category         = hash[:category]              || "???"
-      @real_pokedex_entry    = hash[:pokedex_entry]         || "???"
-      @pokedex_form          = hash[:pokedex_form]          || @form
-      @type1                 = hash[:type1]                 || :NORMAL
-      @type2                 = hash[:type2]                 || @type1
-      @base_stats            = hash[:base_stats]            || {}
-      @evs                   = hash[:evs]                   || {}
+      @id                 = hash[:id]
+      @species            = hash[:species]            || @id
+      @form               = hash[:form]               || 0
+      @real_name          = hash[:name]               || "Unnamed"
+      @real_form_name     = hash[:form_name]
+      @real_category      = hash[:category]           || "???"
+      @real_pokedex_entry = hash[:pokedex_entry]      || "???"
+      @pokedex_form       = hash[:pokedex_form]       || @form
+      @types              = hash[:types]              || [:NORMAL]
+      @base_stats         = hash[:base_stats]         || {}
+      @evs                = hash[:evs]                || {}
       GameData::Stat.each_main do |s|
         @base_stats[s.id] = 1 if !@base_stats[s.id] || @base_stats[s.id] <= 0
         @evs[s.id]        = 0 if !@evs[s.id] || @evs[s.id] < 0
       end
-      @base_exp              = hash[:base_exp]              || 100
-      @growth_rate           = hash[:growth_rate]           || :Medium
-      @gender_ratio          = hash[:gender_ratio]          || :Female50Percent
-      @catch_rate            = hash[:catch_rate]            || 255
-      @happiness             = hash[:happiness]             || 70
-      @moves                 = hash[:moves]                 || []
-      @tutor_moves           = hash[:tutor_moves]           || []
-      @egg_moves             = hash[:egg_moves]             || []
-      @abilities             = hash[:abilities]             || []
-      @hidden_abilities      = hash[:hidden_abilities]      || []
-      @wild_item_common      = hash[:wild_item_common]      || []
-      @wild_item_uncommon    = hash[:wild_item_uncommon]    || []
-      @wild_item_rare        = hash[:wild_item_rare]        || []
-      @egg_groups            = hash[:egg_groups]            || [:Undiscovered]
-      @hatch_steps           = hash[:hatch_steps]           || 1
-      @incense               = hash[:incense]
-      @offspring             = hash[:offspring]             || []
-      @evolutions            = hash[:evolutions]            || []
-      @height                = hash[:height]                || 1
-      @weight                = hash[:weight]                || 1
-      @color                 = hash[:color]                 || :Red
-      @shape                 = hash[:shape]                 || :Head
-      @habitat               = hash[:habitat]               || :None
-      @generation            = hash[:generation]            || 0
-      @flags                 = hash[:flags]                 || []
-      @mega_stone            = hash[:mega_stone]
-      @mega_move             = hash[:mega_move]
-      @unmega_form           = hash[:unmega_form]           || 0
-      @mega_message          = hash[:mega_message]          || 0
+      @base_exp           = hash[:base_exp]           || 100
+      @growth_rate        = hash[:growth_rate]        || :Medium
+      @gender_ratio       = hash[:gender_ratio]       || :Female50Percent
+      @catch_rate         = hash[:catch_rate]         || 255
+      @happiness          = hash[:happiness]          || 70
+      @moves              = hash[:moves]              || []
+      @tutor_moves        = hash[:tutor_moves]        || []
+      @egg_moves          = hash[:egg_moves]          || []
+      @abilities          = hash[:abilities]          || []
+      @hidden_abilities   = hash[:hidden_abilities]   || []
+      @wild_item_common   = hash[:wild_item_common]   || []
+      @wild_item_uncommon = hash[:wild_item_uncommon] || []
+      @wild_item_rare     = hash[:wild_item_rare]     || []
+      @egg_groups         = hash[:egg_groups]         || [:Undiscovered]
+      @hatch_steps        = hash[:hatch_steps]        || 1
+      @incense            = hash[:incense]
+      @offspring          = hash[:offspring]          || []
+      @evolutions         = hash[:evolutions]         || []
+      @height             = hash[:height]             || 1
+      @weight             = hash[:weight]             || 1
+      @color              = hash[:color]              || :Red
+      @shape              = hash[:shape]              || :Head
+      @habitat            = hash[:habitat]            || :None
+      @generation         = hash[:generation]         || 0
+      @flags              = hash[:flags]              || []
+      @mega_stone         = hash[:mega_stone]
+      @mega_move          = hash[:mega_move]
+      @unmega_form        = hash[:unmega_form]        || 0
+      @mega_message       = hash[:mega_message]       || 0
     end
 
     # @return [String] the translated name of this species

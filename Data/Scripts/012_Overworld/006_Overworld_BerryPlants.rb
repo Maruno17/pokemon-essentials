@@ -192,9 +192,9 @@ class BerryPlantMoistureSprite
   def update_graphic
     case @moisture_stage
     when -1 then @sprite.setBitmap("")
-    when 0  then @sprite.setBitmap("Graphics/Characters/berrytreeDry")
-    when 1  then @sprite.setBitmap("Graphics/Characters/berrytreeDamp")
-    when 2  then @sprite.setBitmap("Graphics/Characters/berrytreeWet")
+    when 0  then @sprite.setBitmap("Graphics/Characters/berrytreedry")
+    when 1  then @sprite.setBitmap("Graphics/Characters/berrytreedamp")
+    when 2  then @sprite.setBitmap("Graphics/Characters/berrytreewet")
     end
   end
 

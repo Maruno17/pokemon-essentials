@@ -333,8 +333,8 @@ def pbDecideWinnerScore(party0, party1, rating)
   types2 = []
   abilities = []
   for j in 0...party1.length
-    types1.push(party1[j].type1)
-    types2.push(party1[j].type2)
+    types1.push(party1[j].types[0])
+    types2.push(party1[j].types[1] || party1[j].types[0])
     abilities.push(party1[j].ability_id)
   end
   for i in 0...party0.length

@@ -3,9 +3,7 @@
 #===============================================================================
 def getTypes(species)
   species_data = GameData::Species.get(species)
-  type1 = species_data.type1
-  type2 = species_data.type2
-  return (type1 == type2) ? [type1] : [type1, type2]
+  return species_data.types.clone
 end
 
 #===============================================================================

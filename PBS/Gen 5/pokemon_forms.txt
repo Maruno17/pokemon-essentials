@@ -90,17 +90,17 @@ Generation = 3
 #-------------------------------
 [CASTFORM,1]
 FormName = Sunny Form
-Type1 = FIRE
+Types = FIRE
 Color = Red
 #-------------------------------
 [CASTFORM,2]
 FormName = Rainy Form
-Type1 = WATER
+Types = WATER
 Color = Blue
 #-------------------------------
 [CASTFORM,3]
 FormName = Snowy Form
-Type1 = ICE
+Types = ICE
 Color = White
 #-------------------------------
 [DEOXYS,1]
@@ -132,8 +132,7 @@ FormName = Trash Cloak
 #-------------------------------
 [WORMADAM,1]
 FormName = Sandy Cloak
-Type1 = BUG
-Type2 = GROUND
+Types = BUG,GROUND
 BaseStats = 60,79,105,36,59,85
 EVs = 0,0,2,0,0,0
 Moves = 1,TACKLE,10,PROTECT,15,BUGBITE,20,HIDDENPOWER,23,CONFUSION,26,ROCKBLAST,29,HARDEN,32,PSYBEAM,35,CAPTIVATE,38,FLAIL,41,ATTRACT,44,PSYCHIC,47,FISSURE
@@ -142,8 +141,7 @@ Color = Brown
 #-------------------------------
 [WORMADAM,2]
 FormName = Trash Cloak
-Type1 = BUG
-Type2 = STEEL
+Types = BUG,STEEL
 BaseStats = 60,69,95,36,69,95
 EVs = 0,0,1,0,0,1
 Moves = 1,TACKLE,10,PROTECT,15,BUGBITE,20,HIDDENPOWER,23,CONFUSION,26,MIRRORSHOT,29,METALSOUND,32,PSYBEAM,35,CAPTIVATE,38,FLAIL,41,ATTRACT,44,PSYCHIC,47,IRONHEAD
@@ -164,28 +162,23 @@ Color = Blue
 #-------------------------------
 [ROTOM,1]
 FormName = Heat Rotom
-Type1 = ELECTRIC
-Type2 = FIRE
+Types = ELECTRIC,FIRE
 #-------------------------------
 [ROTOM,2]
 FormName = Wash Rotom
-Type1 = ELECTRIC
-Type2 = WATER
+Types = ELECTRIC,WATER
 #-------------------------------
 [ROTOM,3]
 FormName = Frost Rotom
-Type1 = ELECTRIC
-Type2 = ICE
+Types = ELECTRIC,ICE
 #-------------------------------
 [ROTOM,4]
 FormName = Fan Rotom
-Type1 = ELECTRIC
-Type2 = FLYING
+Types = ELECTRIC,FLYING
 #-------------------------------
 [ROTOM,5]
 FormName = Mow Rotom
-Type1 = ELECTRIC
-Type2 = GRASS
+Types = ELECTRIC,GRASS
 #-------------------------------
 [GIRATINA,1]
 FormName = Origin Forme
@@ -199,8 +192,7 @@ Shape = Serpentine
 #-------------------------------
 [SHAYMIN,1]
 FormName = Sky Forme
-Type1 = GRASS
-Type2 = FLYING
+Types = GRASS,FLYING
 BaseStats = 100,103,75,127,120,75
 EVs = 0,0,0,3,0,0
 Abilities = SERENEGRACE
@@ -211,72 +203,72 @@ Weight = 5.2
 #-------------------------------
 [ARCEUS,1]
 FormName = Fighting Type
-Type1 = FIGHTING
+Types = FIGHTING
 #-------------------------------
 [ARCEUS,2]
 FormName = Flying Type
-Type1 = FLYING
+Types = FLYING
 #-------------------------------
 [ARCEUS,3]
 FormName = Poison Type
-Type1 = POISON
+Types = POISON
 #-------------------------------
 [ARCEUS,4]
 FormName = Ground Type
-Type1 = GROUND
+Types = GROUND
 #-------------------------------
 [ARCEUS,5]
 FormName = Rock Type
-Type1 = ROCK
+Types = ROCK
 #-------------------------------
 [ARCEUS,6]
 FormName = Bug Type
-Type1 = BUG
+Types = BUG
 #-------------------------------
 [ARCEUS,7]
 FormName = Ghost Type
-Type1 = GHOST
+Types = GHOST
 #-------------------------------
 [ARCEUS,8]
 FormName = Steel Type
-Type1 = STEEL
+Types = STEEL
 #-------------------------------
 [ARCEUS,9]
 FormName = Unknown Type
-Type1 = QMARKS
+Types = QMARKS
 #-------------------------------
 [ARCEUS,10]
 FormName = Fire Type
-Type1 = FIRE
+Types = FIRE
 #-------------------------------
 [ARCEUS,11]
 FormName = Water Type
-Type1 = WATER
+Types = WATER
 #-------------------------------
 [ARCEUS,12]
 FormName = Grass Type
-Type1 = GRASS
+Types = GRASS
 #-------------------------------
 [ARCEUS,13]
 FormName = Electric Type
-Type1 = ELECTRIC
+Types = ELECTRIC
 #-------------------------------
 [ARCEUS,14]
 FormName = Psychic Type
-Type1 = PSYCHIC
+Types = PSYCHIC
 #-------------------------------
 [ARCEUS,15]
 FormName = Ice Type
-Type1 = ICE
+Types = ICE
 #-------------------------------
 [ARCEUS,16]
 FormName = Dragon Type
-Type1 = DRAGON
+Types = DRAGON
 TutorMoves = AERIALACE,ANCIENTPOWER,AQUATAIL,BLIZZARD,BRICKBREAK,BULLDOZE,CALMMIND,CHARGEBEAM,CUT,DARKPULSE,DOUBLETEAM,DRACOMETEOR,DRAGONCLAW,DRAGONPULSE,DREAMEATER,EARTHPOWER,EARTHQUAKE,ECHOEDVOICE,ENERGYBALL,FACADE,FIREBLAST,FLAMETHROWER,FLASH,FLASHCANNON,FLY,FOCUSBLAST,FRUSTRATION,FURYCUTTER,GIGADRAIN,GIGAIMPACT,GRASSKNOT,GRAVITY,HAIL,HEADBUTT,HEATWAVE,HIDDENPOWER,HONECLAWS,HYPERBEAM,HYPERVOICE,ICEBEAM,ICYWIND,INCINERATE,IRONDEFENSE,IRONHEAD,IRONTAIL,LASTRESORT,LIGHTSCREEN,MAGICCOAT,MUDSLAP,OMINOUSWIND,OUTRAGE,OVERHEAT,PAYBACK,POISONJAB,PROTECT,PSYCHIC,PSYCHUP,PSYSHOCK,QUASH,RAINDANCE,RECYCLE,REFLECT,REST,RETALIATE,RETURN,ROAR,ROCKSLIDE,ROCKSMASH,ROCKTOMB,ROLEPLAY,ROUND,SAFEGUARD,SANDSTORM,SHADOWBALL,SHADOWCLAW,SIGNALBEAM,SLEEPTALK,SLUDGEBOMB,SNARL,SNORE,SOLARBEAM,STEALTHROCK,STONEEDGE,STRENGTH,SUBSTITUTE,SUNNYDAY,SURF,SWAGGER,SWIFT,SWORDSDANCE,TAILWIND,TELEKINESIS,THUNDER,THUNDERBOLT,THUNDERWAVE,TOXIC,TRICK,TRICKROOM,TWISTER,WATERFALL,WILLOWISP,WORKUP,XSCISSOR,ZENHEADBUTT
 #-------------------------------
 [ARCEUS,17]
 FormName = Dark Type
-Type1 = DARK
+Types = DARK
 #-------------------------------
 [BASCULIN,1]
 FormName = Blue-Striped
@@ -285,8 +277,7 @@ WildItemUncommon = DEEPSEASCALE
 #-------------------------------
 [DARMANITAN,1]
 FormName = Zen Mode
-Type1 = FIRE
-Type2 = PSYCHIC
+Types = FIRE,PSYCHIC
 BaseStats = 105,30,105,55,140,105
 EVs = 0,0,0,0,2,0
 Color = Blue
@@ -374,8 +365,7 @@ TutorMoves = AERIALACE,AQUATAIL,BOUNCE,CALMMIND,COVET,CUT,DOUBLETEAM,ENDEAVOR,FA
 #-------------------------------
 [MELOETTA,1]
 FormName = Pirouette Forme
-Type1 = NORMAL
-Type2 = FIGHTING
+Types = NORMAL,FIGHTING
 BaseStats = 100,128,90,128,77,77
 EVs = 0,1,1,1,0,0
 #-------------------------------

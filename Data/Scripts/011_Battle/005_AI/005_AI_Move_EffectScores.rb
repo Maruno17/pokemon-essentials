@@ -2458,8 +2458,8 @@ class Battle::AI
     when "UseTargetDefenseInsteadOfTargetSpDef"
     #---------------------------------------------------------------------------
     when "FailsUnlessTargetSharesTypeWithUser"
-      if !target.pbHasType?(user.type1) &&
-         !target.pbHasType?(user.type2)
+      if !(user.types[0] && target.pbHasType?(user.types[0])) &&
+         !(user.types[1] && target.pbHasType?(user.types[1]))
         score -= 90
       end
     #---------------------------------------------------------------------------

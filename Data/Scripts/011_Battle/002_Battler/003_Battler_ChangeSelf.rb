@@ -127,13 +127,11 @@ class Battle::Battler
       newTypes.push(:NORMAL) if newTypes.length == 0
       newType3 = newType.effects[PBEffects::Type3]
       newType3 = nil if newTypes.include?(newType3)
-      @type1 = newTypes[0]
-      @type2 = (newTypes.length == 1) ? newTypes[0] : newTypes[1]
+      @types = newTypes.clone
       @effects[PBEffects::Type3] = newType3
     else
       newType = GameData::Type.get(newType).id
-      @type1 = newType
-      @type2 = newType
+      @types = [newType]
       @effects[PBEffects::Type3] = nil
     end
     @effects[PBEffects::BurnUp] = false
@@ -141,8 +139,7 @@ class Battle::Battler
   end
 
   def pbResetTypes
-    @type1 = @pokemon.type1
-    @type2 = @pokemon.type2
+    @types = @pokemon.types
     @effects[PBEffects::Type3]  = nil
     @effects[PBEffects::BurnUp] = false
     @effects[PBEffects::Roost]  = false

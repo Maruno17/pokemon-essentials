@@ -452,15 +452,11 @@ class PokemonSummary_Scene
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
     # Draw Pokémon type(s)
-    type1_number = GameData::Type.get(@pokemon.type1).icon_position
-    type2_number = GameData::Type.get(@pokemon.type2).icon_position
-    type1rect = Rect.new(0, type1_number * 28, 64, 28)
-    type2rect = Rect.new(0, type2_number * 28, 64, 28)
-    if @pokemon.type1==@pokemon.type2
-      overlay.blt(402,146,@typebitmap.bitmap,type1rect)
-    else
-      overlay.blt(370,146,@typebitmap.bitmap,type1rect)
-      overlay.blt(436,146,@typebitmap.bitmap,type2rect)
+    @pokemon.types.each_with_index do |type, i|
+      type_number = GameData::Type.get(type).icon_position
+      type_rect = Rect.new(0, type_number * 28, 64, 28)
+      type_x = (@pokemon.types.length == 1) ? 402 : 370 + 66 * i
+      overlay.blt(type_x, 146, @typebitmap.bitmap, type_rect)
     end
     # Draw Exp bar
     if @pokemon.level<GameData::GrowthRate.max_level
@@ -790,15 +786,11 @@ class PokemonSummary_Scene
     pbDrawTextPositions(overlay,textpos)
     pbDrawImagePositions(overlay,imagepos)
     # Draw Pokémon's type icon(s)
-    type1_number = GameData::Type.get(@pokemon.type1).icon_position
-    type2_number = GameData::Type.get(@pokemon.type2).icon_position
-    type1rect = Rect.new(0, type1_number * 28, 64, 28)
-    type2rect = Rect.new(0, type2_number * 28, 64, 28)
-    if @pokemon.type1==@pokemon.type2
-      overlay.blt(130,78,@typebitmap.bitmap,type1rect)
-    else
-      overlay.blt(96,78,@typebitmap.bitmap,type1rect)
-      overlay.blt(166,78,@typebitmap.bitmap,type2rect)
+    @pokemon.types.each_with_index do |type, i|
+      type_number = GameData::Type.get(type).icon_position
+      type_rect = Rect.new(0, type_number * 28, 64, 28)
+      type_x = (@pokemon.types.length == 1) ? 130 : 96 + 70 * i
+      overlay.blt(type_x, 78, @typebitmap.bitmap, type_rect)
     end
   end
 

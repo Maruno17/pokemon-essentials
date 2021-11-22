@@ -52,15 +52,11 @@ class MoveRelearner_Scene
   def pbDrawMoveList
     overlay=@sprites["overlay"].bitmap
     overlay.clear
-    type1_number = GameData::Type.get(@pokemon.type1).icon_position
-    type2_number = GameData::Type.get(@pokemon.type2).icon_position
-    type1rect=Rect.new(0, type1_number * 28, 64, 28)
-    type2rect=Rect.new(0, type2_number * 28, 64, 28)
-    if @pokemon.type1==@pokemon.type2
-      overlay.blt(400,70,@typebitmap.bitmap,type1rect)
-    else
-      overlay.blt(366,70,@typebitmap.bitmap,type1rect)
-      overlay.blt(436,70,@typebitmap.bitmap,type2rect)
+    @pokemon.types.each_with_index do |type, i|
+      type_number = GameData::Type.get(type).icon_position
+      type_rect = Rect.new(0, type_number * 28, 64, 28)
+      type_x = (@pokemon.types.length == 1) ? 400 : 366 + 70 * i
+      overlay.blt(type_x, 70, @typebitmap.bitmap, type_rect)
     end
     textpos=[
        [_INTL("Teach which move?"),16,2,0,Color.new(88,88,80),Color.new(168,184,184)]

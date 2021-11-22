@@ -304,23 +304,21 @@ class Pokemon
   # Types
   #=============================================================================
 
-  # @return [Symbol] this Pokémon's first type
-  def type1
-    return species_data.type1
-  end
-
-  # @return [Symbol] this Pokémon's second type, or the first type if none is defined
-  def type2
-    sp_data = species_data
-    return sp_data.type2 || sp_data.type1
-  end
-
   # @return [Array<Symbol>] an array of this Pokémon's types
   def types
-    sp_data = species_data
-    ret = [sp_data.type1]
-    ret.push(sp_data.type2) if sp_data.type2 && sp_data.type2 != sp_data.type1
-    return ret
+    return species_data.types.clone
+  end
+
+  # @deprecated This method is slated to be removed in v21.
+  def type1
+    Deprecation.warn_method('type1', 'v21', 'pkmn.types')
+    return types[0]
+  end
+
+  # @deprecated This method is slated to be removed in v21.
+  def type2
+    Deprecation.warn_method('type2', 'v21', 'pkmn.types')
+    return types[1] || types[0]
   end
 
   # @param type [Symbol, String, GameData::Type] type to check

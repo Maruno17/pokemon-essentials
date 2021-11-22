@@ -1001,8 +1001,8 @@ def pbPokemonEditor
      [_INTL("FormName"),          StringProperty,                     _INTL("Name of this form of the Pokémon.")],
      [_INTL("Category"),          StringProperty,                     _INTL("Kind of Pokémon species.")],
      [_INTL("Pokédex"),           StringProperty,                     _INTL("Description of the Pokémon as displayed in the Pokédex.")],
-     [_INTL("Type1"),             TypeProperty,                       _INTL("Pokémon's type. If same as Type2, this Pokémon has a single type.")],
-     [_INTL("Type2"),             TypeProperty,                       _INTL("Pokémon's type. If same as Type1, this Pokémon has a single type.")],
+     [_INTL("Type 1"),            TypeProperty,                       _INTL("Pokémon's type. If same as Type 2, this Pokémon has a single type.")],
+     [_INTL("Type 2"),            TypeProperty,                       _INTL("Pokémon's type. If same as Type 1, this Pokémon has a single type.")],
      [_INTL("BaseStats"),         BaseStatsProperty,                  _INTL("Base stats of the Pokémon.")],
      [_INTL("EVs"),               EffortValuesProperty,               _INTL("Effort Value points earned when this species is defeated.")],
      [_INTL("BaseExp"),           LimitProperty.new(9999),            _INTL("Base experience earned when this species is defeated.")],
@@ -1062,8 +1062,8 @@ def pbPokemonEditor
             spec.real_form_name,
             spec.real_category,
             spec.real_pokedex_entry,
-            spec.type1,
-            (spec.type2 == spec.type1) ? nil : spec.type2,
+            spec.types[0],
+            spec.types[1],
             spec.base_stats,
             spec.evs,
             spec.base_exp,
@@ -1100,10 +1100,10 @@ def pbPokemonEditor
           # Edit the properties
           if pbPropertyList(spec.id.to_s, data, species_properties, true)
             # Sanitise data
-            data[5] = data[6] if !data[5]                    # Type1
-            data[6] = data[5] if !data[6]                    # Type2
+            types = [data[5], data[6]].uniq.compact          # Types
+            types = nil if types.empty?
             egg_groups = [data[26], data[27]].uniq.compact   # Egg groups
-            egg_groups.push(:Undiscovered) if egg_groups.length == 0
+            egg_groups = nil if egg_groups.empty?
             abilities = [data[17], data[18]].uniq.compact    # Abilities
             hidden_abilities = [data[19], data[20], data[21], data[22]].uniq.compact   # Hidden abilities
             # Construct species hash
@@ -1113,8 +1113,7 @@ def pbPokemonEditor
               :form_name             => data[2],
               :category              => data[3],
               :pokedex_entry         => data[4],
-              :type1                 => data[5],
-              :type2                 => data[6],
+              :types                 => types,              # 5, 6
               :base_stats            => data[7],
               :evs                   => data[8],
               :base_exp              => data[9],

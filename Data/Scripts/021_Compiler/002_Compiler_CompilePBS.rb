@@ -604,14 +604,16 @@ module Compiler
           end
         end
         # Construct species hash
+        types = contents["Types"] || [contents["Type1"], contents["Type2"]]
+        types = [types] if !types.is_a?(Array)
+        types = types.uniq.compact
         species_hash = {
           :id                    => contents["InternalName"].to_sym,
           :name                  => contents["Name"],
           :form_name             => contents["FormName"],
           :category              => contents["Category"] || contents["Kind"],
           :pokedex_entry         => contents["Pokedex"],
-          :type1                 => contents["Type1"],
-          :type2                 => contents["Type2"],
+          :types                 => types,
           :base_stats            => contents["BaseStats"],
           :evs                   => contents["EVs"] || contents["EffortPoints"],
           :base_exp              => contents["BaseExp"] || contents["BaseEXP"],
@@ -791,6 +793,11 @@ module Compiler
         end
         # Construct species hash
         form_symbol = sprintf("%s_%d", species_symbol.to_s, form).to_sym
+        types = contents["Types"]
+        types ||= [contents["Type1"], contents["Type2"]] if contents["Type1"]
+        types ||= base_data.types.clone
+        types = [types] if !types.is_a?(Array)
+        types = types.uniq.compact
         moves = contents["Moves"]
         if !moves
           moves = []
@@ -810,8 +817,7 @@ module Compiler
           :category              => contents["Category"] || contents["Kind"] || base_data.real_category,
           :pokedex_entry         => contents["Pokedex"] || base_data.real_pokedex_entry,
           :pokedex_form          => contents["PokedexForm"],
-          :type1                 => contents["Type1"] || base_data.type1,
-          :type2                 => contents["Type2"] || base_data.type2,
+          :types                 => types,
           :base_stats            => contents["BaseStats"] || base_data.base_stats,
           :evs                   => contents["EVs"] || contents["EffortPoints"] || base_data.evs,
           :base_exp              => contents["BaseExp"] || contents["BaseEXP"] || base_data.base_exp,
@@ -844,8 +850,6 @@ module Compiler
           :unmega_form           => contents["UnmegaForm"],
           :mega_message          => contents["MegaMessage"]
         }
-        # If form is single-typed, ensure it remains so if base species is dual-typed
-        species_hash[:type2] = contents["Type1"] if contents["Type1"] && !contents["Type2"]
         # If form has any wild items, ensure none are inherited from base species
         if (contents["WildItemCommon"] && !contents["WildItemCommon"].empty?) ||
            (contents["WildItemUncommon"] && !contents["WildItemUncommon"].empty?) ||

@@ -258,14 +258,11 @@ class PokemonPokedexInfo_Scene
       # Show the owned icon
       imagepos.push(["Graphics/Pictures/Pokedex/icon_own", 212, 44])
       # Draw the type icon(s)
-      type1 = species_data.type1
-      type2 = species_data.type2
-      type1_number = GameData::Type.get(type1).icon_position
-      type2_number = GameData::Type.get(type2).icon_position
-      type1rect = Rect.new(0, type1_number * 32, 96, 32)
-      type2rect = Rect.new(0, type2_number * 32, 96, 32)
-      overlay.blt(296, 120, @typebitmap.bitmap, type1rect)
-      overlay.blt(396, 120, @typebitmap.bitmap, type2rect) if type1 != type2
+      species_data.types.each_with_index do |type, i|
+        type_number = GameData::Type.get(type).icon_position
+        type_rect = Rect.new(0, type_number * 32, 96, 32)
+        overlay.blt(296 + 100 * i, 120, @typebitmap.bitmap, type_rect)
+      end
     else
       # Write the category
       textpos.push([_INTL("????? Pokémon"), 246, 68, 0, base, shadow])

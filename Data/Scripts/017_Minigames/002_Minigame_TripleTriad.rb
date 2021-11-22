@@ -21,8 +21,8 @@ class TriadCard
     spAtk   = baseStats[:SPECIAL_ATTACK]
     spDef   = baseStats[:SPECIAL_DEFENSE]
     speed   = baseStats[:SPEED]
-    @type  = species_data.type1
-    @type  = species_data.type2 if @type == :NORMAL && species_data.type2
+    @type  = species_data.types[0]
+    @type  = species_data.types[1] if @type == :NORMAL && species_data.types[1]
     @west  = baseStatToValue(attack + speed / 3)
     @east  = baseStatToValue(defense + hp / 3)
     @north = baseStatToValue(spAtk + speed / 3)

@@ -2590,19 +2590,17 @@ Battle::AbilityEffects::OnSwitchIn.add(:ANTICIPATION,
   proc { |ability,battler,battle|
     next if !battler.pbOwnedByPlayer?
     battlerTypes = battler.pbTypes(true)
-    type1 = battlerTypes[0]
-    type2 = battlerTypes[1] || type1
-    type3 = battlerTypes[2] || type2
+    types = battlerTypes
     found = false
     battle.allOtherSideBattlers(battler.index).each do |b|
       b.eachMove do |m|
         next if m.statusMove?
-        if type1
+        if types.length > 0
           moveType = m.type
           if Settings::MECHANICS_GENERATION >= 6 && m.function == "TypeDependsOnUserIVs"   # Hidden Power
             moveType = pbHiddenPower(b.pokemon)[0]
           end
-          eff = Effectiveness.calculate(moveType,type1,type2,type3)
+          eff = Effectiveness.calculate(moveType, types[0], types[1], types[2])
           next if Effectiveness.ineffective?(eff)
           next if !Effectiveness.super_effective?(eff) &&
                   !["OHKO", "OHKOIce", "OHKOHitsUndergroundTarget"].include?(m.function)

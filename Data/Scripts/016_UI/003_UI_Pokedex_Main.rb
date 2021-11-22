@@ -359,8 +359,8 @@ class PokemonPokedex_Scene
       _gender, form = $player.pokedex.last_form_seen(species)
       species_data = GameData::Species.get_species_form(species, form)
       color  = species_data.color
-      type1  = species_data.type1
-      type2  = species_data.type2 || type1
+      type1  = species_data.types[0]
+      type2  = species_data.types[1] || type1
       shape  = species_data.shape
       height = species_data.height
       weight = species_data.weight

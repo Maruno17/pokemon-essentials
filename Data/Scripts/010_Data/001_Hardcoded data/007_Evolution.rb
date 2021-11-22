@@ -645,7 +645,7 @@ GameData::Evolution.register({
 #===============================================================================
 def pbEvolutionEvent(number)
   return if !$player
-  $player.able_pokemon_party.each do |pkmn|
+  $player.able_party.each do |pkmn|
     pkmn.trigger_event_evolution(number)
   end
 end

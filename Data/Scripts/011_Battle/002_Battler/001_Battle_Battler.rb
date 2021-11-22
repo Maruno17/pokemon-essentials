@@ -6,8 +6,7 @@ class Battle::Battler
   attr_reader   :pokemon
   attr_accessor :pokemonIndex
   attr_accessor :species
-  attr_accessor :type1
-  attr_accessor :type2
+  attr_accessor :types
   attr_accessor :ability_id
   attr_accessor :item_id
   attr_accessor :moves
@@ -304,8 +303,7 @@ class Battle::Battler
   # same type more than once, and should not include any invalid type numbers
   # (e.g. -1).
   def pbTypes(withType3=false)
-    ret = [@type1]
-    ret.push(@type2) if @type2!=@type1
+    ret = @types.clone
     # Burn Up erases the Fire-type.
     ret.delete(:FIRE) if @effects[PBEffects::BurnUp]
     # Roost erases the Flying-type. If there are no types left, adds the Normal-

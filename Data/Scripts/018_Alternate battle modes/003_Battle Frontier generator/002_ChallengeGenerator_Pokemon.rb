@@ -344,9 +344,8 @@ def pbRandomPokemonFromRule(rules, trainer)
       item = :LEFTOVERS
     end
     if item == :BLACKSLUDGE
-      type1 = GameData::Species.get(species).type1
-      type2 = GameData::Species.get(species).type2 || type1
-      item = :LEFTOVERS if type1 != :POISON && type2 != :POISON
+      types = GameData::Species.get(species).types
+      item = :LEFTOVERS if !types.include?(:POISON)
     end
     if item == :HEATROCK && !moves.any? { |m| m == :SUNNYDAY }
       item = :LEFTOVERS

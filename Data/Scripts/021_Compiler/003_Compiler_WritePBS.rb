@@ -280,8 +280,7 @@ module Compiler
         f.write("\#-------------------------------\r\n")
         f.write(sprintf("[%s]\r\n", species.id))
         f.write(sprintf("Name = %s\r\n", species.real_name))
-        f.write(sprintf("Type1 = %s\r\n", species.type1))
-        f.write(sprintf("Type2 = %s\r\n", species.type2)) if species.type2 != species.type1
+        f.write(sprintf("Types = %s\r\n", species.types.uniq.compact.join(",")))
         stats_array = []
         evs_array = []
         GameData::Stat.each_main do |s|
@@ -379,9 +378,8 @@ module Compiler
         f.write(sprintf("MegaMove = %s\r\n", species.mega_move)) if species.mega_move
         f.write(sprintf("UnmegaForm = %d\r\n", species.unmega_form)) if species.unmega_form != 0
         f.write(sprintf("MegaMessage = %d\r\n", species.mega_message)) if species.mega_message != 0
-        if species.type1 != base_species.type1 || species.type2 != base_species.type2
-          f.write(sprintf("Type1 = %s\r\n", species.type1))
-          f.write(sprintf("Type2 = %s\r\n", species.type2)) if species.type2 != species.type1
+        if species.types.uniq.compact != base_species.types.uniq.compact
+          f.write(sprintf("Types = %s\r\n", species.types.uniq.compact.join(",")))
         end
         stats_array = []
         evs_array = []

@@ -20,7 +20,7 @@ class Battle::Battler
     @form           = 0
     @level          = 0
     @hp = @totalhp  = 0
-    @type1 = @type2 = nil
+    @types          = []
     @ability_id     = nil
     @item_id        = nil
     @gender         = 0
@@ -44,8 +44,7 @@ class Battle::Battler
     @level        = pkmn.level
     @hp           = pkmn.hp
     @totalhp      = pkmn.totalhp
-    @type1        = pkmn.type1
-    @type2        = pkmn.type2
+    @types        = pkmn.types
     # ability and item intentionally not copied across here
     @gender       = pkmn.gender
     @attack       = pkmn.attack
@@ -78,8 +77,7 @@ class Battle::Battler
     @level        = pkmn.level
     @hp           = pkmn.hp
     @totalhp      = pkmn.totalhp
-    @type1        = pkmn.type1
-    @type2        = pkmn.type2
+    @types        = pkmn.types
     @ability_id   = pkmn.ability_id
     @item_id      = pkmn.item_id
     @gender       = pkmn.gender
@@ -312,8 +310,7 @@ class Battle::Battler
       @spdef        = @pokemon.spdef
       @speed        = @pokemon.speed
       if fullChange
-        @type1      = @pokemon.type1
-        @type2      = @pokemon.type2
+        @types      = @pokemon.types
         @ability_id = @pokemon.ability_id
       end
     end

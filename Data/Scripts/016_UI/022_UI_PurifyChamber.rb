@@ -147,7 +147,7 @@ class PurifyChamberSet
   end
 
   def self.isSuperEffective(p1,p2)
-    return (typeAdvantage(p1.type1,p2.type1) || typeAdvantage(p1.type1,p2.type2))
+    return (typeAdvantage(p1.types[0], p2.types[0]) || typeAdvantage(p1.types[0], p2.types[1]))
   end
 end
 
@@ -272,7 +272,7 @@ class PurifyChamber
   end
 
   def debugAdd(set,shadow,type1,type2=nil)
-    pkmn=PseudoPokemon.new(shadow,type1,type2||type1)
+    pkmn = PseudoPokemon.new(shadow, type1, type2 || type1)
     if pkmn.shadowPokemon?
       self.setShadow(set,pkmn)
     else
@@ -946,13 +946,15 @@ class PurifyChamberSetView < SpriteWrapper
     pbSetSmallFont(@info.bitmap)
     textpos=[]
     if pkmn
-      if pkmn.type1==pkmn.type2
-        textpos.push([_INTL("{1}  Lv.{2}  {3}",pkmn.name,pkmn.level,GameData::Type.get(pkmn.type1).name),2,-6,0,
-           Color.new(248,248,248),Color.new(128,128,128)])
+      if pkmn.types.length == 1
+        textpos.push([_INTL("{1}  Lv.{2}  {3}", pkmn.name, pkmn.level,
+           GameData::Type.get(pkmn.types[0]).name),
+           2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       else
-        textpos.push([_INTL("{1}  Lv.{2}  {3}/{4}",pkmn.name,pkmn.level,GameData::Type.get(pkmn.type1).name,
-           GameData::Type.get(pkmn.type2).name),2,-6,0,
-           Color.new(248,248,248),Color.new(128,128,128)])
+        textpos.push([_INTL("{1}  Lv.{2}  {3}/{4}", pkmn.name, pkmn.level,
+           GameData::Type.get(pkmn.types[0]).name,
+           GameData::Type.get(pkmn.types[1]).name),
+           2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       end
       textpos.push([_INTL("FLOW"),2+@info.bitmap.width/2,18,0,
          Color.new(248,248,248),Color.new(128,128,128)])
