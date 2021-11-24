@@ -878,5 +878,3 @@ class PokemonDebugPartyScreen
   end
   alias pbUpdate update
 end
-
-
