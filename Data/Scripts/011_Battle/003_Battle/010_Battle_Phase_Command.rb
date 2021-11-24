@@ -157,7 +157,8 @@ class PokeBattle_Battle
   end
 
   def pbDebugMenu
-    pbBattleDebug(self)
+    # NOTE: This doesn't do anything yet. Maybe you can write your own debugging
+    #       options!
   end
 
   #=============================================================================
