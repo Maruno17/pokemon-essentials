@@ -3,11 +3,16 @@ module GameData
     attr_reader :id
     attr_reader :hours_per_stage
     attr_reader :drying_per_hour
-    attr_reader :minimum_yield
-    attr_reader :maximum_yield
+    attr_reader :yield
 
     DATA = {}
     DATA_FILENAME = "berry_plants.dat"
+
+    SCHEMA = {
+      "HoursPerStage" => [:hours_per_stage, "v"],
+      "DryingPerHour" => [:drying_per_hour, "u"],
+      "Yield"         => [:yield,           "uv"]
+    }
 
     NUMBER_OF_REPLANTS           = 9
     NUMBER_OF_GROWTH_STAGES      = 4
@@ -21,8 +26,16 @@ module GameData
       @id              = hash[:id]
       @hours_per_stage = hash[:hours_per_stage] || 3
       @drying_per_hour = hash[:drying_per_hour] || 15
-      @minimum_yield   = hash[:minimum_yield]   || 2
-      @maximum_yield   = hash[:maximum_yield]   || 5
+      @yield           = hash[:yield]           || [2, 5]
+      @yield.reverse! if @yield[1] < @yield[0]
+    end
+
+    def minimum_yield
+      return @yield[0]
+    end
+
+    def maximum_yield
+      return @yield[1]
     end
   end
 end

@@ -251,15 +251,12 @@ module Compiler
     write_pbs_file_message_start(path)
     File.open(path, "wb") { |f|
       add_PBS_header_to_file(f)
-      f.write("\#-------------------------------\r\n")
       GameData::BerryPlant.each do |bp|
-        f.write(sprintf("%s = %d,%d,%d,%d\r\n",
-          csvQuote(bp.id.to_s),
-          bp.hours_per_stage,
-          bp.drying_per_hour,
-          bp.minimum_yield,
-          bp.maximum_yield
-        ))
+        f.write("\#-------------------------------\r\n")
+        f.write(sprintf("[%s]\r\n", bp.id))
+        f.write(sprintf("HoursPerStage = %d\r\n", bp.hours_per_stage))
+        f.write(sprintf("DryingPerHour = %d\r\n", bp.drying_per_hour))
+        f.write(sprintf("Yield = %s\r\n", bp.yield.join(",")))
       end
     }
     process_pbs_file_message_end

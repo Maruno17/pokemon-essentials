@@ -516,24 +516,62 @@ module Compiler
   def compile_berry_plants(path = "PBS/berry_plants.txt")
     compile_pbs_file_message_start(path)
     GameData::BerryPlant::DATA.clear
-    pbCompilerEachCommentedLine(path) { |line, line_no|
-      if line[/^\s*(\w+)\s*=\s*(.*)$/]   # Of the format XXX = YYY
-        key   = $1
-        value = $2
-        item_id = parseItem(key)
-        line = pbGetCsvRecord(value, line_no, [0, "vuuv"])
-        # Construct berry plant hash
-        berry_plant_hash = {
-          :id              => item_id,
-          :hours_per_stage => line[0],
-          :drying_per_hour => line[1],
-          :minimum_yield   => line[2],
-          :maximum_yield   => line[3]
+    schema = GameData::BerryPlant::SCHEMA
+    item_hash = nil
+    old_format = nil
+    # Read each line of berry_plants.txt at a time and compile it into a berry plant
+    idx = 0
+    pbCompilerEachPreppedLine(path) { |line, line_no|
+      echo "." if idx % 250 == 0
+      idx += 1
+      if line[/^\s*\[\s*(.+)\s*\]\s*$/]   # New section [item_id]
+        old_format = false if old_format.nil?
+        if old_format
+          raise _INTL("Can't mix old and new formats.\r\n{1}", FileLineData.linereport)
+        end
+        # Add previous berry plant's data to records
+        GameData::BerryPlant.register(item_hash) if item_hash
+        # Parse item ID
+        item_id = $~[1].to_sym
+        if GameData::BerryPlant.exists?(item_id)
+          raise _INTL("Item ID '{1}' is used twice.\r\n{2}", item_id, FileLineData.linereport)
+        end
+        # Construct item hash
+        item_hash = {
+          :id => item_id
         }
-        # Add berry plant's data to records
-        GameData::BerryPlant.register(berry_plant_hash)
+      elsif line[/^\s*(\w+)\s*=\s*(.*)\s*$/]   # XXX=YYY lines
+        old_format = true if old_format.nil?
+        if old_format
+          key   = $1
+          value = $2
+          item_id = parseItem(key)
+          line = pbGetCsvRecord(value, line_no, [0, "vuuv"])
+          # Construct berry plant hash
+          berry_plant_hash = {
+            :id              => item_id,
+            :hours_per_stage => line[0],
+            :drying_per_hour => line[1],
+            :yield           => [line[2], line[3]]
+          }
+          # Add berry plant's data to records
+          GameData::BerryPlant.register(berry_plant_hash)
+        else
+          if !item_hash
+            raise _INTL("Expected a section at the beginning of the file.\r\n{1}", FileLineData.linereport)
+          end
+          # Parse property and value
+          property_name = $~[1]
+          line_schema = schema[property_name]
+          next if !line_schema
+          property_value = pbGetCsvRecord($~[2], line_no, line_schema)
+          # Record XXX=YYY setting
+          item_hash[line_schema[0]] = property_value
+        end
       end
     }
+    # Add last berry plant's data to records
+    GameData::BerryPlant.register(item_hash) if item_hash
     # Save all data
     GameData::BerryPlant.save
     process_pbs_file_message_end

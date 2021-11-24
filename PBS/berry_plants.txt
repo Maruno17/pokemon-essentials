@@ -1,69 +1,336 @@
 ﻿# See the documentation on the wiki to learn how to edit this file.
 #-------------------------------
-CHERIBERRY = 3,15,2,5
-CHESTOBERRY = 3,15,2,5
-PECHABERRY = 3,15,2,5
-RAWSTBERRY = 3,15,2,5
-ASPEARBERRY = 3,15,2,5
-LEPPABERRY = 4,15,2,5
-ORANBERRY = 4,15,2,5
-PERSIMBERRY = 4,15,2,5
-LUMBERRY = 12,8,2,5
-SITRUSBERRY = 8,7,2,5
-FIGYBERRY = 5,10,1,5
-WIKIBERRY = 5,10,1,5
-MAGOBERRY = 5,10,1,5
-AGUAVBERRY = 5,10,1,5
-IAPAPABERRY = 5,10,1,5
-RAZZBERRY = 2,35,2,10
-BLUKBERRY = 2,35,2,10
-NANABBERRY = 2,35,2,10
-WEPEARBERRY = 2,35,2,10
-PINAPBERRY = 2,35,2,10
-POMEGBERRY = 8,8,1,5
-KELPSYBERRY = 8,8,1,5
-QUALOTBERRY = 8,8,1,5
-HONDEWBERRY = 8,8,1,5
-GREPABERRY = 8,8,1,5
-TAMATOBERRY = 8,8,1,5
-CORNNBERRY = 6,10,2,10
-MAGOSTBERRY = 6,10,2,10
-RABUTABERRY = 6,10,2,10
-NOMELBERRY = 6,10,2,10
-SPELONBERRY = 15,8,2,15
-PAMTREBERRY = 15,8,3,15
-WATMELBERRY = 15,8,2,15
-DURINBERRY = 15,8,3,15
-BELUEBERRY = 15,8,2,15
-OCCABERRY = 18,6,1,5
-PASSHOBERRY = 18,6,1,5
-WACANBERRY = 18,6,1,5
-RINDOBERRY = 18,6,1,5
-YACHEBERRY = 18,6,1,5
-CHOPLEBERRY = 18,6,1,5
-KEBIABERRY = 18,6,1,5
-SHUCABERRY = 18,6,1,5
-COBABERRY = 18,6,1,5
-PAYAPABERRY = 18,6,1,5
-TANGABERRY = 18,6,1,5
-CHARTIBERRY = 18,6,1,5
-KASIBBERRY = 18,6,1,5
-HABANBERRY = 18,6,1,5
-COLBURBERRY = 18,6,1,5
-BABIRIBERRY = 18,6,1,5
-CHILANBERRY = 18,6,1,5
-LIECHIBERRY = 24,4,1,5
-GANLONBERRY = 24,4,1,5
-SALACBERRY = 24,4,1,5
-PETAYABERRY = 24,4,1,5
-APICOTBERRY = 24,4,1,5
-LANSATBERRY = 24,4,1,5
-STARFBERRY = 24,4,1,5
-ENIGMABERRY = 24,7,1,5
-MICLEBERRY = 24,7,1,5
-CUSTAPBERRY = 24,7,1,5
-JABOCABERRY = 24,7,1,5
-ROWAPBERRY = 24,7,1,5
-ROSELIBERRY = 18,6,1,5
-KEEBERRY = 24,7,1,5
-MARANGABERRY = 24,7,1,5
+[CHERIBERRY]
+HoursPerStage = 3
+DryingPerHour = 15
+Yield = 2,5
+#-------------------------------
+[CHESTOBERRY]
+HoursPerStage = 3
+DryingPerHour = 15
+Yield = 2,5
+#-------------------------------
+[PECHABERRY]
+HoursPerStage = 3
+DryingPerHour = 15
+Yield = 2,5
+#-------------------------------
+[RAWSTBERRY]
+HoursPerStage = 3
+DryingPerHour = 15
+Yield = 2,5
+#-------------------------------
+[ASPEARBERRY]
+HoursPerStage = 3
+DryingPerHour = 15
+Yield = 2,5
+#-------------------------------
+[LEPPABERRY]
+HoursPerStage = 4
+DryingPerHour = 15
+Yield = 2,5
+#-------------------------------
+[ORANBERRY]
+HoursPerStage = 4
+DryingPerHour = 15
+Yield = 2,5
+#-------------------------------
+[PERSIMBERRY]
+HoursPerStage = 4
+DryingPerHour = 15
+Yield = 2,5
+#-------------------------------
+[LUMBERRY]
+HoursPerStage = 12
+DryingPerHour = 8
+Yield = 2,5
+#-------------------------------
+[SITRUSBERRY]
+HoursPerStage = 8
+DryingPerHour = 7
+Yield = 2,5
+#-------------------------------
+[FIGYBERRY]
+HoursPerStage = 5
+DryingPerHour = 10
+Yield = 1,5
+#-------------------------------
+[WIKIBERRY]
+HoursPerStage = 5
+DryingPerHour = 10
+Yield = 1,5
+#-------------------------------
+[MAGOBERRY]
+HoursPerStage = 5
+DryingPerHour = 10
+Yield = 1,5
+#-------------------------------
+[AGUAVBERRY]
+HoursPerStage = 5
+DryingPerHour = 10
+Yield = 1,5
+#-------------------------------
+[IAPAPABERRY]
+HoursPerStage = 5
+DryingPerHour = 10
+Yield = 1,5
+#-------------------------------
+[RAZZBERRY]
+HoursPerStage = 2
+DryingPerHour = 35
+Yield = 2,10
+#-------------------------------
+[BLUKBERRY]
+HoursPerStage = 2
+DryingPerHour = 35
+Yield = 2,10
+#-------------------------------
+[NANABBERRY]
+HoursPerStage = 2
+DryingPerHour = 35
+Yield = 2,10
+#-------------------------------
+[WEPEARBERRY]
+HoursPerStage = 2
+DryingPerHour = 35
+Yield = 2,10
+#-------------------------------
+[PINAPBERRY]
+HoursPerStage = 2
+DryingPerHour = 35
+Yield = 2,10
+#-------------------------------
+[POMEGBERRY]
+HoursPerStage = 8
+DryingPerHour = 8
+Yield = 1,5
+#-------------------------------
+[KELPSYBERRY]
+HoursPerStage = 8
+DryingPerHour = 8
+Yield = 1,5
+#-------------------------------
+[QUALOTBERRY]
+HoursPerStage = 8
+DryingPerHour = 8
+Yield = 1,5
+#-------------------------------
+[HONDEWBERRY]
+HoursPerStage = 8
+DryingPerHour = 8
+Yield = 1,5
+#-------------------------------
+[GREPABERRY]
+HoursPerStage = 8
+DryingPerHour = 8
+Yield = 1,5
+#-------------------------------
+[TAMATOBERRY]
+HoursPerStage = 8
+DryingPerHour = 8
+Yield = 1,5
+#-------------------------------
+[CORNNBERRY]
+HoursPerStage = 6
+DryingPerHour = 10
+Yield = 2,10
+#-------------------------------
+[MAGOSTBERRY]
+HoursPerStage = 6
+DryingPerHour = 10
+Yield = 2,10
+#-------------------------------
+[RABUTABERRY]
+HoursPerStage = 6
+DryingPerHour = 10
+Yield = 2,10
+#-------------------------------
+[NOMELBERRY]
+HoursPerStage = 6
+DryingPerHour = 10
+Yield = 2,10
+#-------------------------------
+[SPELONBERRY]
+HoursPerStage = 15
+DryingPerHour = 8
+Yield = 2,15
+#-------------------------------
+[PAMTREBERRY]
+HoursPerStage = 15
+DryingPerHour = 8
+Yield = 3,15
+#-------------------------------
+[WATMELBERRY]
+HoursPerStage = 15
+DryingPerHour = 8
+Yield = 2,15
+#-------------------------------
+[DURINBERRY]
+HoursPerStage = 15
+DryingPerHour = 8
+Yield = 3,15
+#-------------------------------
+[BELUEBERRY]
+HoursPerStage = 15
+DryingPerHour = 8
+Yield = 2,15
+#-------------------------------
+[OCCABERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[PASSHOBERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[WACANBERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[RINDOBERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[YACHEBERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[CHOPLEBERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[KEBIABERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[SHUCABERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[COBABERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[PAYAPABERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[TANGABERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[CHARTIBERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[KASIBBERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[HABANBERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[COLBURBERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[BABIRIBERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[CHILANBERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[LIECHIBERRY]
+HoursPerStage = 24
+DryingPerHour = 4
+Yield = 1,5
+#-------------------------------
+[GANLONBERRY]
+HoursPerStage = 24
+DryingPerHour = 4
+Yield = 1,5
+#-------------------------------
+[SALACBERRY]
+HoursPerStage = 24
+DryingPerHour = 4
+Yield = 1,5
+#-------------------------------
+[PETAYABERRY]
+HoursPerStage = 24
+DryingPerHour = 4
+Yield = 1,5
+#-------------------------------
+[APICOTBERRY]
+HoursPerStage = 24
+DryingPerHour = 4
+Yield = 1,5
+#-------------------------------
+[LANSATBERRY]
+HoursPerStage = 24
+DryingPerHour = 4
+Yield = 1,5
+#-------------------------------
+[STARFBERRY]
+HoursPerStage = 24
+DryingPerHour = 4
+Yield = 1,5
+#-------------------------------
+[ENIGMABERRY]
+HoursPerStage = 24
+DryingPerHour = 7
+Yield = 1,5
+#-------------------------------
+[MICLEBERRY]
+HoursPerStage = 24
+DryingPerHour = 7
+Yield = 1,5
+#-------------------------------
+[CUSTAPBERRY]
+HoursPerStage = 24
+DryingPerHour = 7
+Yield = 1,5
+#-------------------------------
+[JABOCABERRY]
+HoursPerStage = 24
+DryingPerHour = 7
+Yield = 1,5
+#-------------------------------
+[ROWAPBERRY]
+HoursPerStage = 24
+DryingPerHour = 7
+Yield = 1,5
+#-------------------------------
+[ROSELIBERRY]
+HoursPerStage = 18
+DryingPerHour = 6
+Yield = 1,5
+#-------------------------------
+[KEEBERRY]
+HoursPerStage = 24
+DryingPerHour = 7
+Yield = 1,5
+#-------------------------------
+[MARANGABERRY]
+HoursPerStage = 24
+DryingPerHour = 7
+Yield = 1,5
