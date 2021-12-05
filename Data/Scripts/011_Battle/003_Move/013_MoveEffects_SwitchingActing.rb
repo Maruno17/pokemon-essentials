@@ -380,8 +380,7 @@ class Battle::Move::TrapUserAndTargetInBattle < Battle::Move
 end
 
 #===============================================================================
-# No Pokémon can switch out or flee until the end of the next round, as long as
-# the user remains active. (Fairy Lock)
+# No Pokémon can switch out or flee until the end of the next round. (Fairy Lock)
 #===============================================================================
 class Battle::Move::TrapAllBattlersInBattleForOneTurn < Battle::Move
   def pbMoveFailed?(user,targets)

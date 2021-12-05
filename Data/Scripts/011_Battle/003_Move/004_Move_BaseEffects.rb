@@ -564,7 +564,7 @@ class Battle::Move::PledgeMove < Battle::Move
   end
 
   def pbEffectGeneral(user)
-    user.effects[PBEffects::FirstPledge] = 0
+    user.effects[PBEffects::FirstPledge] = nil
     return if !@pledgeSetup
     @battle.pbDisplay(_INTL("{1} is waiting for {2}'s move...",
        user.pbThis,@pledgeOtherUser.pbThis(true)))

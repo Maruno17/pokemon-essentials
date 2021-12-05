@@ -352,7 +352,7 @@ class Battle
       next if b.status != :POISON
       if b.statusCount>0
         b.effects[PBEffects::Toxic] += 1
-        b.effects[PBEffects::Toxic] = 15 if b.effects[PBEffects::Toxic]>15
+        b.effects[PBEffects::Toxic] = 16 if b.effects[PBEffects::Toxic]>16
       end
       if b.hasActiveAbility?(:POISONHEAL)
         if b.canHeal?
@@ -622,7 +622,7 @@ class Battle
       b.effects[PBEffects::CounterTarget]    = -1
       b.effects[PBEffects::Electrify]        = false
       b.effects[PBEffects::Endure]           = false
-      b.effects[PBEffects::FirstPledge]      = 0
+      b.effects[PBEffects::FirstPledge]      = nil
       b.effects[PBEffects::Flinch]           = false
       b.effects[PBEffects::FocusPunch]       = false
       b.effects[PBEffects::FollowMe]         = 0

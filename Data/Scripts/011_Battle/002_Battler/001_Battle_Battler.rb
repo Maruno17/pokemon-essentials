@@ -11,7 +11,6 @@ class Battle::Battler
   attr_accessor :item_id
   attr_accessor :moves
   attr_accessor :gender
-  attr_accessor :iv
   attr_accessor :attack
   attr_accessor :spatk
   attr_accessor :speed
@@ -109,7 +108,7 @@ class Battle::Battler
 
   def status=(value)
     @effects[PBEffects::Truant] = false if @status == :SLEEP && value != :SLEEP
-    @effects[PBEffects::Toxic]  = 0 if value != :POISON
+    @effects[PBEffects::Toxic]  = 0 if value != :POISON || self.statusCount == 0
     @status = value
     @pokemon.status = value if @pokemon
     self.statusCount = 0 if value != :POISON && value != :SLEEP
@@ -129,7 +128,8 @@ class Battle::Battler
   #=============================================================================
   def happiness;       return @pokemon ? @pokemon.happiness : 0;       end
   def affection_level; return @pokemon ? @pokemon.affection_level : 2; end
-  def nature;          return @pokemon ? @pokemon.nature : 0;          end
+  def gender;          return @pokemon ? @pokemon.gender : 0;          end
+  def nature;          return @pokemon ? @pokemon.nature : nil;        end
   def pokerusStage;    return @pokemon ? @pokemon.pokerusStage : 0;    end
 
   #=============================================================================
@@ -300,10 +300,9 @@ class Battle::Battler
   end
 
   # Returns the active types of this Pokémon. The array should not include the
-  # same type more than once, and should not include any invalid type numbers
-  # (e.g. -1).
+  # same type more than once, and should not include any invalid types.
   def pbTypes(withType3=false)
-    ret = @types.clone
+    ret = @types.uniq
     # Burn Up erases the Fire-type.
     ret.delete(:FIRE) if @effects[PBEffects::BurnUp]
     # Roost erases the Flying-type. If there are no types left, adds the Normal-
