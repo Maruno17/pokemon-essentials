@@ -52,7 +52,8 @@ class Battle::Scene::PokemonDataBox < SpriteWrapper
       bgFilename = ["Graphics/Pictures/Battle/databox_thin",
                     "Graphics/Pictures/Battle/databox_thin_foe"][@battler.index%2]
     end
-    @databoxBitmap  = AnimatedBitmap.new(bgFilename)
+    @databoxBitmap.dispose if @databoxBitmap
+    @databoxBitmap = AnimatedBitmap.new(bgFilename)
     # Determine the co-ordinates of the data box and the left edge padding width
     if onPlayerSide
       @spriteX = Graphics.width - 244

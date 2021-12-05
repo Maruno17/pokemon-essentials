@@ -157,8 +157,13 @@ class Battle
   end
 
   def pbDebugMenu
-    # NOTE: This doesn't do anything yet. Maybe you can write your own debugging
-    #       options!
+    pbBattleDebug(self)
+    @scene.pbRefreshEverything
+    allBattlers.each { |b| b.pbCheckFormOnWeatherChange }
+    pbEndPrimordialWeather
+    allBattlers.each { |b| b.pbAbilityOnTerrainChange }
+    allBattlers.each { |b| b.pbCheckFormOnMovesetChange }
+    allBattlers.each { |b| b.pbCheckFormOnStatusChange }
   end
 
   #=============================================================================

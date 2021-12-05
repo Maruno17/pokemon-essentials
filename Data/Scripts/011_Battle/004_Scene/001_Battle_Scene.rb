@@ -132,6 +132,16 @@ class Battle::Scene
     @sprites["dataBox_#{idxBattler}"].refresh if @sprites["dataBox_#{idxBattler}"]
   end
 
+  def pbRefreshEverything
+    pbCreateBackdropSprites
+    @battle.battlers.each_with_index do |battler, i|
+      next if !battler
+      pbChangePokemon(i, @sprites["pokemon_#{i}"].pkmn)
+      @sprites["dataBox_#{i}"].initializeDataBoxGraphic(@battle.pbSideSize(i))
+      @sprites["dataBox_#{i}"].refresh
+    end
+  end
+
   #=============================================================================
   # Party lineup
   #=============================================================================
@@ -305,7 +315,7 @@ class Battle::Scene
   # Sprites
   #=============================================================================
   def pbAddSprite(id,x,y,filename,viewport)
-    sprite = IconSprite.new(x,y,viewport)
+    sprite = @sprites[id] || IconSprite.new(x,y,viewport)
     if filename
       sprite.setBitmap(filename) rescue nil
     end
