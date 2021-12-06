@@ -144,4 +144,49 @@ class Battle::Move
     end
     return false
   end
+
+  def display_type(battler)
+    case @function
+    when "TypeDependsOnUserMorpekoFormRaiseUserSpeed1"
+      if battler.isSpecies?(:MORPEKO) || battler.effects[PBEffects::TransformSpecies] == :MORPEKO
+        return pbBaseType(battler)
+      end
+=begin
+    when "TypeDependsOnUserPlate", "TypeDependsOnUserMemory",
+         "TypeDependsOnUserDrive", "TypeAndPowerDependOnUserBerry",
+         "TypeIsUserFirstType", "TypeAndPowerDependOnWeather",
+         "TypeAndPowerDependOnTerrain"
+      return pbBaseType(battler)
+=end
+    end
+    return @realMove.display_type(battler.pokemon)
+  end
+
+  def display_damage(battler)
+=begin
+    case @function
+    when "TypeAndPowerDependOnUserBerry"
+      return pbNaturalGiftBaseDamage(battler.item_id)
+    when "TypeAndPowerDependOnWeather", "TypeAndPowerDependOnTerrain",
+         "PowerHigherWithUserHP", "PowerLowerWithUserHP",
+         "PowerHigherWithUserHappiness", "PowerLowerWithUserHappiness",
+         "PowerHigherWithUserPositiveStatStages", "PowerDependsOnUserStockpile"
+      return pbBaseType(@baseDamage, battler, nil)
+    end
+=end
+    return @realMove.display_damage(battler.pokemon)
+  end
+
+  def display_category(battler)
+=begin
+    case @function
+    when "CategoryDependsOnHigherDamageIgnoreTargetAbility"
+      pbOnStartUse(user, nil)
+      return @calcCategory
+    end
+=end
+    return @realMove.display_category(battler.pokemon)
+  end
+
+  def display_accuracy(battler); return @realMove.display_accuracy(battler.pokemon); end
 end

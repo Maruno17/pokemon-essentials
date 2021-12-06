@@ -695,7 +695,7 @@ class PokemonSummary_Scene
     for i in 0...Pokemon::MAX_MOVES
       move=@pokemon.moves[i]
       if move
-        type_number = GameData::Type.get(move.type).icon_position
+        type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
         imagepos.push(["Graphics/Pictures/types", 248, yPos + 8, 0, type_number * 28, 64, 28])
         textpos.push([move.name,316,yPos,0,moveBase,moveShadow])
         if move.total_pp>0
@@ -761,7 +761,7 @@ class PokemonSummary_Scene
         yPos += 20
       end
       if move
-        type_number = GameData::Type.get(move.type).icon_position
+        type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
         imagepos.push(["Graphics/Pictures/types", 248, yPos + 8, 0, type_number * 28, 64, 28])
         textpos.push([move.name,316,yPos,0,moveBase,moveShadow])
         if move.total_pp>0
@@ -807,20 +807,20 @@ class PokemonSummary_Scene
     @sprites["itemicon"].visible = false if @sprites["itemicon"]
     textpos = []
     # Write power and accuracy values for selected move
-    case selected_move.base_damage
+    case selected_move.display_damage(@pokemon)
     when 0 then textpos.push(["---", 216, 148, 1, base, shadow])   # Status move
     when 1 then textpos.push(["???", 216, 148, 1, base, shadow])   # Variable power move
-    else        textpos.push([selected_move.base_damage.to_s, 216, 148, 1, base, shadow])
+    else        textpos.push([selected_move.display_damage(@pokemon).to_s, 216, 148, 1, base, shadow])
     end
-    if selected_move.accuracy == 0
+    if selected_move.display_accuracy(@pokemon) == 0
       textpos.push(["---", 216, 180, 1, base, shadow])
     else
-      textpos.push(["#{selected_move.accuracy}%", 216 + overlay.text_size("%").width, 180, 1, base, shadow])
+      textpos.push(["#{selected_move.display_accuracy(@pokemon)}%", 216 + overlay.text_size("%").width, 180, 1, base, shadow])
     end
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
     # Draw selected move's damage category icon
-    imagepos = [["Graphics/Pictures/category", 166, 124, 0, selected_move.category * 28, 64, 28]]
+    imagepos = [["Graphics/Pictures/category", 166, 124, 0, selected_move.display_category(@pokemon) * 28, 64, 28]]
     pbDrawImagePositions(overlay, imagepos)
     # Draw selected move's description
     drawTextEx(overlay, 4, 222, 230, 5, selected_move.description, base, shadow)

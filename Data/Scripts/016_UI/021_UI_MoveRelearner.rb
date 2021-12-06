@@ -67,7 +67,7 @@ class MoveRelearner_Scene
       moveobject=@moves[@sprites["commands"].top_item+i]
       if moveobject
         moveData=GameData::Move.get(moveobject)
-        type_number = GameData::Type.get(moveData.type).icon_position
+        type_number = GameData::Type.get(moveData.display_type(@pokemon)).icon_position
         imagepos.push(["Graphics/Pictures/types", 12, yPos + 8, 0, type_number * 28, 64, 28])
         textpos.push([moveData.name,80,yPos,0,Color.new(248,248,248),Color.new(0,0,0)])
         if moveData.total_pp>0
@@ -85,9 +85,9 @@ class MoveRelearner_Scene
        0,78+(@sprites["commands"].index-@sprites["commands"].top_item)*64,
        0,0,258,72])
     selMoveData=GameData::Move.get(@moves[@sprites["commands"].index])
-    basedamage=selMoveData.base_damage
-    category=selMoveData.category
-    accuracy=selMoveData.accuracy
+    basedamage = selMoveData.display_damage(@pokemon)
+    category = selMoveData.display_category(@pokemon)
+    accuracy = selMoveData.display_accuracy(@pokemon)
     textpos.push([_INTL("CATEGORY"),272,108,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([_INTL("POWER"),272,140,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([basedamage<=1 ? basedamage==1 ? "???" : "---" : sprintf("%d",basedamage),

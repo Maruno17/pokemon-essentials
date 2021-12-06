@@ -350,7 +350,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
       x = button.x-self.x+button.src_rect.width/2
       y = button.y-self.y+2
       moveNameBase = TEXT_BASE_COLOR
-      if moves[i].type
+      if moves[i].display_type(@battler)
         # NOTE: This takes a colour from a particular pixel in the button
         #       graphic and makes the move name's base colour that same colour.
         #       The pixel is at coordinates 10,34 in the button box. If you
@@ -374,7 +374,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
         end
         @visibility["button_#{i}"] = true
         button.src_rect.x = (i==@index) ? @buttonBitmap.width/2 : 0
-        button.src_rect.y = GameData::Type.get(moves[i].type).icon_position * BUTTON_HEIGHT
+        button.src_rect.y = GameData::Type.get(moves[i].display_type(@battler)).icon_position * BUTTON_HEIGHT
         button.z          = self.z + ((i==@index) ? 4 : 3)
       end
     end
@@ -384,7 +384,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
   def refreshMoveData(move)
     # Write PP and type of the selected move
     if !USE_GRAPHICS
-      moveType = GameData::Type.get(move.type).name
+      moveType = GameData::Type.get(move.display_type(@battler)).name
       if move.total_pp<=0
         @msgBox.text = _INTL("PP: ---<br>TYPE/{1}",moveType)
       else
@@ -400,7 +400,7 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
     end
     @visibility["typeIcon"] = true
     # Type icon
-    type_number = GameData::Type.get(move.type).icon_position
+    type_number = GameData::Type.get(move.display_type(@battler)).icon_position
     @typeIcon.src_rect.y = type_number * TYPE_ICON_HEIGHT
     # PP text
     if move.total_pp>0

@@ -59,5 +59,10 @@ class Pokemon
     def name;          return GameData::Move.get(@id).name;          end
     def description;   return GameData::Move.get(@id).description;   end
     def hidden_move?;  return GameData::Move.get(@id).hidden_move?;  end
+
+    def display_type(pkmn);     return GameData::Move.get(@id).display_type(pkmn, self);     end
+    def display_category(pkmn); return GameData::Move.get(@id).display_category(pkmn, self); end
+    def display_damage(pkmn);   return GameData::Move.get(@id).display_damage(pkmn, self);   end
+    def display_accuracy(pkmn); return GameData::Move.get(@id).display_accuracy(pkmn, self); end
   end
 end

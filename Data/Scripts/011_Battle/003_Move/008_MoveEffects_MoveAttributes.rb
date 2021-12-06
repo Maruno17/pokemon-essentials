@@ -1310,7 +1310,7 @@ end
 class Battle::Move::TypeIsUserFirstType < Battle::Move
   def pbBaseType(user)
     userTypes = user.pbTypes(true)
-    return userTypes[0]
+    return userTypes[0] || @type
   end
 end
 
