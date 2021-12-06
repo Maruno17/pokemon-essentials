@@ -564,6 +564,8 @@ end
 #===============================================================================
 class PokemonStorageScene
   attr_reader :quickswap
+  MARK_WIDTH  = 16
+  MARK_HEIGHT = 16
 
   def initialize
     @command = 1
@@ -1307,18 +1309,20 @@ class PokemonStorageScene
     else
       pokemon = @storage.boxes[selected[0]][selected[1]]
     end
-    markings = pokemon.markings
+    markings = pokemon.markings.clone
+    mark_variants = @markingbitmap.bitmap.height / MARK_HEIGHT
     index = 0
     redraw = true
-    markrect = Rect.new(0,0,16,16)
+    markrect = Rect.new(0, 0, MARK_WIDTH, MARK_HEIGHT)
     loop do
       # Redraw the markings and text
       if redraw
         @sprites["markingoverlay"].bitmap.clear
-        for i in 0...6
-          markrect.x = i*16
-          markrect.y = (markings&(1<<i)!=0) ? 16 : 0
-          @sprites["markingoverlay"].bitmap.blt(336+58*(i%3),106+50*(i/3),@markingbitmap.bitmap,markrect)
+        (@markingbitmap.bitmap.width / MARK_WIDTH).times do |i|
+          markrect.x = i * MARK_WIDTH
+          markrect.y = [(markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT
+          @sprites["markingoverlay"].bitmap.blt(336 + 58 * (i % 3), 106 + 50 * (i / 3),
+             @markingbitmap.bitmap, markrect)
         end
         textpos = [
            [_INTL("OK"),402,208,2,base,shadow,1],
@@ -1353,12 +1357,7 @@ class PokemonStorageScene
         elsif index==7   # Cancel
           break
         else
-          mask = (1<<index)
-          if (markings&mask)==0
-            markings |= mask
-          else
-            markings &= ~mask
-          end
+          markings[index] = ((markings[index] || 0) + 1) % mark_variants
           redraw = true
         end
       end
@@ -1383,11 +1382,12 @@ class PokemonStorageScene
   end
 
   def drawMarkings(bitmap,x,y,_width,_height,markings)
-    markrect = Rect.new(0,0,16,16)
-    for i in 0...8
-      markrect.x = i*16
-      markrect.y = (markings&(1<<i)!=0) ? 16 : 0
-      bitmap.blt(x+i*16,y,@markingbitmap.bitmap,markrect)
+    mark_variants = @markingbitmap.bitmap.height / MARK_HEIGHT
+    markrect = Rect.new(0, 0, MARK_WIDTH, MARK_HEIGHT)
+    (@markingbitmap.bitmap.width / MARK_WIDTH).times do |i|
+      markrect.x = i * MARK_WIDTH
+      markrect.y = [(markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT
+      bitmap.blt(x + i * MARK_WIDTH, y, @markingbitmap.bitmap, markrect)
     end
   end
 

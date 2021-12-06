@@ -213,6 +213,11 @@ SaveData.register_conversion(:v20_refactor_day_care_variables) do
             slot.instance_eval do
               @pokemon = old_slot[0]
               @initial_level = old_slot[1]
+              if @pokemon && @pokemon.markings.is_a?(Integer)
+                markings = []
+                6.times { |i| markings[i] = ((@pokemon.markings & (1 << i)) == 0) ? 0 : 1 }
+                @pokemon.markings = markings
+              end
             end
           end
         end
@@ -252,4 +257,104 @@ SaveData.register_conversion(:v20_adding_pokedex_records) do
       end
     end
   end
+end
+
+SaveData.register_conversion(:v20_convert_pokemon_markings_party) do
+  essentials_version 20
+  display_title 'Updating format of Pokémon markings (1/4)'
+  to_value :player do |player|
+    player.party.each do |pkmn|
+      next if !pkmn.markings.is_a?(Integer)
+      markings = []
+      6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
+      pkmn.markings = markings
+    end
+  end
+end
+
+SaveData.register_conversion(:v20_convert_pokemon_markings_global) do
+  essentials_version 20
+  display_title 'Updating format of Pokémon markings (2/4)'
+  to_value :global_metadata do |global|
+    if global.partner
+      global.partner[3].each do |pkmn|
+        next if !pkmn.markings.is_a?(Integer)
+        markings = []
+        6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
+        pkmn.markings = markings
+      end
+    end
+    # Pokémon in the Day Care have their markings converted above
+    if global.roamPokemon
+      global.roamPokemon.each do |pkmn|
+        next if !pkmn.markings.is_a?(Integer)
+        markings = []
+        6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
+        pkmn.markings = markings
+      end
+    end
+    global.purifyChamber.sets.each do |set|
+      set.shadow = PokeBattle_Pokemon.convert(set.shadow) if set.shadow
+      set.list.each do |pkmn|
+        next if !pkmn.markings.is_a?(Integer)
+        markings = []
+        6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
+        pkmn.markings = markings
+      end
+    end
+    if global.hallOfFame
+      global.hallOfFame.each do |team|
+        next if !team
+        team.each do |pkmn|
+          next if !pkmn.markings.is_a?(Integer)
+          markings = []
+          6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
+          pkmn.markings = markings
+        end
+      end
+    end
+  end
+end
+
+SaveData.register_conversion(:v20_convert_pokemon_markings_variables) do
+  essentials_version 20
+  display_title 'Updating format of Pokémon markings (3/4)'
+  to_all do |save_data|
+    variables = save_data[:variables]
+    for i in 0..5000
+      value = variables[i]
+      next if value.nil?
+      if value.is_a?(Array)
+        value.each do |value2|
+          if value2.is_a?(Pokemon) && value2.markings.is_a?(Integer)
+            markings = []
+            6.times { |i| markings[i] = ((value2.markings & (1 << i)) == 0) ? 0 : 1 }
+            value2.markings = markings
+          end
+        end
+      elsif value.is_a?(Pokemon) && value.markings.is_a?(Integer)
+        markings = []
+        6.times { |i| markings[i] = ((value.markings & (1 << i)) == 0) ? 0 : 1 }
+        value.markings = markings
+      end
+    end
+  end
+end
+
+SaveData.register_conversion(:v20_convert_pokemon_markings_storage) do
+  essentials_version 20
+  display_title 'Updating format of Pokémon markings (4/4)'
+  to_value :storage_system do |storage|
+    storage.instance_eval do
+      for box in 0...self.maxBoxes
+        for i in 0...self.maxPokemon(box)
+          pkmn = self[box, i]
+          next if !pkmn || !pkmn.markings.is_a?(Integer)
+          markings = []
+          6.times { |i| markings[i] = ((pkmn.markings & (1 << i)) == 0) ? 0 : 1 }
+          pkmn.markings = markings
+        end
+      end
+    end   # storage.instance_eval
+  end   # to_value
 end

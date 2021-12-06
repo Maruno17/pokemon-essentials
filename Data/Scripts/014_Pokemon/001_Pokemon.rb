@@ -40,7 +40,7 @@ class Pokemon
   attr_accessor :happiness
   # @return [Symbol] the item ID of the Poké Ball this Pokémon is in
   attr_accessor :poke_ball
-  # @return [Integer] this Pokémon's markings, one bit per marking
+  # @return [Array<Integer>] this Pokémon's markings, one value per mark
   attr_accessor :markings
   # @return [Hash<Integer>] a hash of IV values for HP, Atk, Def, Speed, Sp. Atk and Sp. Def
   attr_accessor :iv
@@ -1171,7 +1171,7 @@ class Pokemon
     @name             = nil
     @happiness        = species_data.happiness
     @poke_ball        = :POKEBALL
-    @markings         = 0
+    @markings         = []
     @iv               = {}
     @ivMaxed          = {}
     @ev               = {}

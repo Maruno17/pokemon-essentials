@@ -102,6 +102,9 @@ end
 #
 #===============================================================================
 class PokemonSummary_Scene
+  MARK_WIDTH  = 16
+  MARK_HEIGHT = 16
+
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
   end
@@ -282,12 +285,13 @@ class PokemonSummary_Scene
   end
 
   def drawMarkings(bitmap,x,y)
+    mark_variants = @markingbitmap.bitmap.height / MARK_HEIGHT
     markings = @pokemon.markings
-    markrect = Rect.new(0,0,16,16)
-    for i in 0...6
-      markrect.x = i*16
-      markrect.y = (markings&(1<<i)!=0) ? 16 : 0
-      bitmap.blt(x+i*16,y,@markingbitmap.bitmap,markrect)
+    markrect = Rect.new(0, 0, MARK_WIDTH, MARK_HEIGHT)
+    (@markingbitmap.bitmap.width / MARK_WIDTH).times do |i|
+      markrect.x = i * MARK_WIDTH
+      markrect.y = [(markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT
+      bitmap.blt(x + i * MARK_WIDTH, y, @markingbitmap.bitmap, markrect)
     end
   end
 
@@ -1067,19 +1071,21 @@ class PokemonSummary_Scene
     @sprites["markingsel"].visible     = true
     base   = Color.new(248,248,248)
     shadow = Color.new(104,104,104)
-    ret = pokemon.markings
-    markings = pokemon.markings
+    ret = pokemon.markings.clone
+    markings = pokemon.markings.clone
+    mark_variants = @markingbitmap.bitmap.height / MARK_HEIGHT
     index = 0
     redraw = true
-    markrect = Rect.new(0,0,16,16)
+    markrect = Rect.new(0, 0, MARK_WIDTH, MARK_HEIGHT)
     loop do
       # Redraw the markings and text
       if redraw
         @sprites["markingoverlay"].bitmap.clear
-        for i in 0...6
-          markrect.x = i*16
-          markrect.y = (markings&(1<<i)!=0) ? 16 : 0
-          @sprites["markingoverlay"].bitmap.blt(300+58*(i%3),154+50*(i/3),@markingbitmap.bitmap,markrect)
+        (@markingbitmap.bitmap.width / MARK_WIDTH).times do |i|
+          markrect.x = i * MARK_WIDTH
+          markrect.y = [(markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT
+          @sprites["markingoverlay"].bitmap.blt(300 + 58 * (i % 3), 154 + 50 * (i / 3),
+             @markingbitmap.bitmap, markrect)
         end
         textpos = [
            [_INTL("Mark {1}",pokemon.name),366,90,2,base,shadow],
@@ -1117,12 +1123,13 @@ class PokemonSummary_Scene
         elsif index==7   # Cancel
           break
         else
-          mask = (1<<index)
-          if (markings&mask)==0
-            markings |= mask
-          else
-            markings &= ~mask
-          end
+          markings[index] = ((markings[index] || 0) + 1) % mark_variants
+          redraw = true
+        end
+      elsif Input.trigger?(Input::ACTION)
+        if index < 6 && markings[index] > 0
+          pbPlayDecisionSE
+          markings[index] = 0
           redraw = true
         end
       elsif Input.trigger?(Input::UP)

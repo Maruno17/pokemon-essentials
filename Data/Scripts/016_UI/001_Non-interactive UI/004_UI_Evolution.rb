@@ -609,7 +609,7 @@ class PokemonEvolutionScene
     new_pkmn = pkmn.clone
     new_pkmn.species   = new_species
     new_pkmn.name      = nil
-    new_pkmn.markings  = 0
+    new_pkmn.markings  = []
     new_pkmn.poke_ball = :POKEBALL
     new_pkmn.item      = nil
     new_pkmn.clearAllRibbons
