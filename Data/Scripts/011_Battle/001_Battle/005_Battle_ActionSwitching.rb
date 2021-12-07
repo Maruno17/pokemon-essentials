@@ -353,7 +353,7 @@ class Battle
       b.pbContinualAbilityChecks(true)
       # Abilities that trigger upon switching in
       if (!b.fainted? && b.unstoppableAbility?) || b.abilityActive?
-        Battle::AbilityEffects.triggerOnSwitchIn(b.ability, b, self)
+        Battle::AbilityEffects.triggerOnSwitchIn(b.ability, b, self, true)
       end
       pbEndPrimordialWeather   # Checking this again just in case
       # Items that trigger upon switching in (Air Balloon message)

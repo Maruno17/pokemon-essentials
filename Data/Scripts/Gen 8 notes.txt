@@ -5,15 +5,9 @@
 #===============================================================================
 
 Other notes:
-- If a battle ends because of Rocky Helmet damage, the side that the Rocky
-  Helmet holder is on should lose (Gen 7+) or win (Gen 6-).
-- If Neutralizing Gas switches in and negates Unnerve, should it cause an
-  immediate triggering of held berries? Probably.
 - Emergency Exit/Wimp Out should NOT trigger if the bearer gained that ability
   part-way through the move's usage (i.e. via Wandering Spirit swapping
   abilities).
-- Imposter should only trigger upon being sent in, and not by any re-triggering
-  of switch-in abilities.
 - The messages for a held item boosting stats are slightly different to what
   they currently are:
     "The Weakness Policy sharply raised {1}'s Attack!"
@@ -24,17 +18,6 @@ Other notes:
   or added to the party if the party is full. Also provide the option to look at
   its Pokédex entry. Have a way to force adding it to the party for plot
   purposes (battle rule?).
-
-- If two Pokémon of the same species are in the Day Care, and one knows an egg
-  move(s) the other doesn't, and the other has an empty move slot(s), the other
-  will learn the egg move(s) from the one after a time. Egg moves are checked in
-  the order they're known by the one Pokémon. No egg moves are learned if the
-  other Pokémon doesn't have an empty move slot. Volt Tackle cannot be learned
-  this way. Gender is irrelevant. This is a feature of a Pokémon Nursery, which
-  is like the Day Care but is only for breeding and the deposited Pokémon don't
-  gain Exp (the fee is $500 per Pokémon up-front). The time it takes to do this
-  is apparently the same as egg generation (e.g. a chance every 255 steps), but
-  the parents don't need to be able to breed in order to learn egg moves.
 
 #===============================================================================
 # Low priority or ignorable
@@ -72,6 +55,11 @@ Some abilities have changed effects:
   Pokémon. In Gen 8, speed- and priority-modifying effects aren't considered,
   but in earlier Gens they are. Ignoring as this would be far too complicated to
   care about.
+
+If a Battle Facility battle ends because of Rocky Helmet damage, the side that
+the Rocky Helmet holder is on should lose (Gen 7+) or win (Gen 6-). In other
+words, a decision should be reached as soon as main attack damage is dealt and
+before additional effects (in Gen 7+).
 
 #===============================================================================
 # Implemented
@@ -167,6 +155,10 @@ Other changes:
   use. No reasonable game would have multiple sets of Pokémon to fuse at once,
   so allowing just one of each fusion at a time is probably fine.
 - Zygarde Cube now changes a Zygarde's form/ability.
+- If Neutralizing Gas switches in and negates Unnerve, should it cause an
+  immediate triggering of held berries? Yes.
+- Imposter should only trigger upon being sent in, and not by any re-triggering
+  of switch-in abilities.
 
 What happens to the PP of Iron Head when turned into/from Behemoth Blade/Bash
 for Zacian/Zamazenta? It gets decreased to the total PP if it is higher than the
@@ -198,5 +190,16 @@ happiness above 179, which in turn is because affection effects have been added
 apply above 179 happiness. Pokémon Camp will not be added. Affection effects and
 the 179 soft cap/160 evolution threshold may be added (the latter two should be
 treated as related rather than separate settings).
+
+If two Pokémon of the same species are in the Day Care, and one knows an egg
+move(s) the other doesn't, and the other has an empty move slot(s), the other
+will learn the egg move(s) from the one after a time. Egg moves are checked in
+the order they're known by the one Pokémon. No egg moves are learned if the
+other Pokémon doesn't have an empty move slot. Volt Tackle cannot be learned
+this way. Gender is irrelevant. This is a feature of a Pokémon Nursery, which
+is like the Day Care but is only for breeding and the deposited Pokémon don't
+gain Exp (the fee is $500 per Pokémon up-front). The time it takes to do this
+is apparently the same as egg generation (e.g. a chance every 255 steps), but
+the parents don't need to be able to breed in order to learn egg moves.
 
 =end

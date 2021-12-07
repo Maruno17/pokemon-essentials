@@ -1,3 +1,16 @@
+#===============================================================================
+# NOTE: In Gen 7+, the Day Care is replaced by the Pokémon Nursery, which works
+#       in much the same way except deposited Pokémon no longer gain Exp because
+#       of the player walking around and, in Gen 8+, deposited Pokémon are able
+#       to learn egg moves from each other if they are the same species. In
+#       Essentials, this code can be used for both facilities, and these
+#       mechanics differences are set by some Settings.
+# NOTE: The Day Care has a different price than the Pokémon Nursery. For the Day
+#       Care, you are charged when you withdraw a deposited Pokémon and you pay
+#       an amount based on how many levels it gained. For the Nursery, you pay
+#       $500 up-front when you deposit a Pokémon. This difference will appear in
+#       the Day Care Lady's event, not in these scripts.
+#===============================================================================
 class DayCare
   #=============================================================================
   # Code that generates an egg based on two given Pokémon.
@@ -307,6 +320,7 @@ class DayCare
   attr_accessor :egg_generated
   attr_accessor :step_counter
   attr_accessor :gain_exp
+  attr_accessor :share_egg_moves   # For deposited Pokémon of the same species
 
   MAX_SLOTS = 2
 
@@ -314,7 +328,8 @@ class DayCare
     @slots = []
     MAX_SLOTS.times { @slots.push(DayCareSlot.new) }
     reset_egg_counters
-    @gain_exp = true
+    @gain_exp = Settings::DAY_CARE_POKEMON_GAIN_EXP_FROM_WALKING
+    @share_egg_moves = Settings::DAY_CARE_POKEMON_CAN_SHARE_EGG_MOVES
   end
 
   def [](index)
@@ -340,17 +355,46 @@ class DayCare
     return EggGenerator.generate(pkmn1, pkmn2)
   end
 
+  def share_egg_move
+    return if count != 2
+    pkmn1, pkmn2 = pokemon_pair
+    return if pkmn1.species != pkmn2.species
+    egg_moves1 = pkmn1.species_data.get_egg_moves
+    egg_moves2 = pkmn2.species_data.get_egg_moves
+    known_moves1 = []
+    known_moves2 = []
+    if pkmn2.numMoves < Pokemon::MAX_MOVES
+      pkmn1.moves.each { |m| known_moves1.push(m.id) if egg_moves2.include?(m.id) && !pkmn2.hasMove?(m.id) }
+    end
+    if pkmn1.numMoves < Pokemon::MAX_MOVES
+      pkmn2.moves.each { |m| known_moves2.push(m.id) if egg_moves1.include?(m.id) && !pkmn1.hasMove?(m.id) }
+    end
+    if !known_moves1.empty?
+      if !known_moves2.empty?
+        learner = [[pkmn1, known_moves2[0]], [pkmn2, known_moves1[0]]].sample
+        learner[0].learn_move(learner[1])
+      else
+        pkmn2.learn_move(known_moves1[0])
+      end
+    elsif !known_moves2.empty?
+      pkmn1.learn_move(known_moves2[0])
+    end
+  end
+
   def update_on_step_taken
-    # Make an egg available at the Day Care
     @step_counter += 1
     if @step_counter >= 256
       @step_counter = 0
+      # Make an egg available at the Day Care
       if !@egg_generated && count == 2
         compat = compatibility
         egg_chance = [0, 20, 50, 70][compat]
         egg_chance = [0, 40, 80, 88][compat] if $bag.has?(:OVALCHARM)
         @egg_generated = true if rand(100) < egg_chance
       end
+      # Have one deposited Pokémon learn an egg move from the other
+      # NOTE: I don't know what the chance of this happening is.
+      share_egg_move if @share_egg_moves && rand(100) < 50
     end
     # Day Care Pokémon gain Exp/moves
     if @gain_exp

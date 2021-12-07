@@ -261,8 +261,8 @@ module Battle::AbilityEffects
     return trigger(TrappingByTarget, ability, switcher, bearer, battle)
   end
 
-  def self.triggerOnSwitchIn(ability, battler, battle)
-    OnSwitchIn.trigger(ability, battler, battle)
+  def self.triggerOnSwitchIn(ability, battler, battle, switch_in = false)
+    OnSwitchIn.trigger(ability, battler, battle, switch_in)
   end
 
   def self.triggerOnSwitchOut(ability, battler, end_of_battle)
@@ -2574,7 +2574,7 @@ Battle::AbilityEffects::TrappingByTarget.add(:SHADOWTAG,
 #===============================================================================
 
 Battle::AbilityEffects::OnSwitchIn.add(:AIRLOCK,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     if !Battle::Scene::USE_ABILITY_SPLASH
       battle.pbDisplay(_INTL("{1} has {2}!",battler.pbThis,battler.abilityName))
@@ -2587,7 +2587,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:AIRLOCK,
 Battle::AbilityEffects::OnSwitchIn.copy(:AIRLOCK, :CLOUDNINE)
 
 Battle::AbilityEffects::OnSwitchIn.add(:ANTICIPATION,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     next if !battler.pbOwnedByPlayer?
     battlerTypes = battler.pbTypes(true)
     types = battlerTypes
@@ -2621,7 +2621,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:ANTICIPATION,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:ASONECHILLINGNEIGH,
-  proc { |ability, battler, battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     battle.pbDisplay(_INTL("{1} has two Abilities!", battler.pbThis))
     battle.pbHideAbilitySplash(battler)
@@ -2636,7 +2636,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:ASONECHILLINGNEIGH,
 Battle::AbilityEffects::OnSwitchIn.copy(:ASONECHILLINGNEIGH, :ASONEGRIMNEIGH)
 
 Battle::AbilityEffects::OnSwitchIn.add(:AURABREAK,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     battle.pbDisplay(_INTL("{1} reversed all other Pokémon's auras!",battler.pbThis))
     battle.pbHideAbilitySplash(battler)
@@ -2644,7 +2644,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:AURABREAK,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:COMATOSE,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     battle.pbDisplay(_INTL("{1} is drowsing!",battler.pbThis))
     battle.pbHideAbilitySplash(battler)
@@ -2652,7 +2652,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:COMATOSE,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:CURIOUSMEDICINE,
-  proc { |ability, battler, battle|
+  proc { |ability, battler, battle, switch_in|
     next if battler.allAllies.none? { |b| b.hasAlteredStatStages? }
     battle.pbShowAbilitySplash(battler)
     battler.allAllies.each do |b|
@@ -2670,7 +2670,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:CURIOUSMEDICINE,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:DARKAURA,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     battle.pbDisplay(_INTL("{1} is radiating a dark aura!",battler.pbThis))
     battle.pbHideAbilitySplash(battler)
@@ -2678,25 +2678,25 @@ Battle::AbilityEffects::OnSwitchIn.add(:DARKAURA,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:DAUNTLESSSHIELD,
-  proc { |ability, battler, battle|
+  proc { |ability, battler, battle, switch_in|
     battler.pbRaiseStatStageByAbility(:ATTACK, 1, battler)
   }
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:DELTASTREAM,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbStartWeatherAbility(:StrongWinds, battler, true)
   }
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:DESOLATELAND,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbStartWeatherAbility(:HarshSun, battler, true)
   }
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:DOWNLOAD,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     oDef = oSpDef = 0
     battle.allOtherSideBattlers(battler.index).each do |b|
       oDef   += b.defense
@@ -2708,19 +2708,19 @@ Battle::AbilityEffects::OnSwitchIn.add(:DOWNLOAD,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:DRIZZLE,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbStartWeatherAbility(:Rain, battler)
   }
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:DROUGHT,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbStartWeatherAbility(:Sun, battler)
   }
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:ELECTRICSURGE,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     next if battle.field.terrain == :Electric
     battle.pbShowAbilitySplash(battler)
     battle.pbStartTerrain(battler, :Electric)
@@ -2729,7 +2729,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:ELECTRICSURGE,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:FAIRYAURA,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     battle.pbDisplay(_INTL("{1} is radiating a fairy aura!",battler.pbThis))
     battle.pbHideAbilitySplash(battler)
@@ -2737,7 +2737,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:FAIRYAURA,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:FOREWARN,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     next if !battler.pbOwnedByPlayer?
     highestPower = 0
     forewarnMoves = []
@@ -2789,7 +2789,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:FOREWARN,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:FRISK,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     next if !battler.pbOwnedByPlayer?
     foes = battle.allOtherSideBattlers(battler.index).select { |b| b.item }
     if foes.length>0
@@ -2810,7 +2810,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:FRISK,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:GRASSYSURGE,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     next if battle.field.terrain == :Grassy
     battle.pbShowAbilitySplash(battler)
     battle.pbStartTerrain(battler, :Grassy)
@@ -2819,7 +2819,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:GRASSYSURGE,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:ICEFACE,
-  proc { |ability, battler, battle|
+  proc { |ability, battler, battle, switch_in|
     next if !battler.isSpecies?(:EISCUE) || battler.form != 1
     next if battler.effectiveWeather != :Hail
     battle.pbShowAbilitySplash(battler)
@@ -2832,8 +2832,8 @@ Battle::AbilityEffects::OnSwitchIn.add(:ICEFACE,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:IMPOSTER,
-  proc { |ability,battler,battle|
-    next if battler.effects[PBEffects::Transform]
+  proc { |ability, battler, battle, switch_in|
+    next if !switch_in || battler.effects[PBEffects::Transform]
     choice = battler.pbDirectOpposing
     next if choice.fainted?
     next if choice.effects[PBEffects::Transform] ||
@@ -2850,7 +2850,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:IMPOSTER,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:INTIMIDATE,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     battle.allOtherSideBattlers(battler.index).each do |b|
       next if !b.near?(battler)
@@ -2869,20 +2869,20 @@ Battle::AbilityEffects::OnSwitchIn.add(:INTIMIDATE,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:INTREPIDSWORD,
-  proc { |ability, battler, battle|
+  proc { |ability, battler, battle, switch_in|
     battler.pbRaiseStatStageByAbility(:ATTACK, 1, battler)
   }
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:MIMICRY,
-  proc { |ability, battler, battle|
+  proc { |ability, battler, battle, switch_in|
     next if battle.field.terrain == :None
     Battle::AbilityEffects.triggerOnTerrainChange(ability, battler, battle, false)
   }
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:MISTYSURGE,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     next if battle.field.terrain == :Misty
     battle.pbShowAbilitySplash(battler)
     battle.pbStartTerrain(battler, :Misty)
@@ -2891,7 +2891,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:MISTYSURGE,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:MOLDBREAKER,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     battle.pbDisplay(_INTL("{1} breaks the mold!",battler.pbThis))
     battle.pbHideAbilitySplash(battler)
@@ -2899,7 +2899,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:MOLDBREAKER,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:NEUTRALIZINGGAS,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler, true)
     battle.pbHideAbilitySplash(battler)
     battle.pbDisplay(_INTL("Neutralizing gas filled the area!"))
@@ -2922,11 +2922,18 @@ Battle::AbilityEffects::OnSwitchIn.add(:NEUTRALIZINGGAS,
         end
       end
     end
+    # Trigger items upon Unnerve being negated
+    battler.ability_id = nil   # Allows checking if Unnerve was active before
+    had_unnerve = battle.pbCheckGlobalAbility(:UNNERVE)
+    battler.ability_id = :NEUTRALIZINGGAS
+    if had_unnerve && !battle.pbCheckGlobalAbility(:UNNERVE)
+      battle.allBattlers.each { |b| b.pbItemsOnUnnerveEnding }
+    end
   }
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:PASTELVEIL,
-  proc { |ability, battler, battle|
+  proc { |ability, battler, battle, switch_in|
     next if battler.allAllies.none? { |b| b.status == :POISON }
     battle.pbShowAbilitySplash(battler)
     battler.allAllies.each do |b|
@@ -2942,7 +2949,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:PASTELVEIL,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:PRESSURE,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     battle.pbDisplay(_INTL("{1} is exerting its pressure!",battler.pbThis))
     battle.pbHideAbilitySplash(battler)
@@ -2950,13 +2957,13 @@ Battle::AbilityEffects::OnSwitchIn.add(:PRESSURE,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:PRIMORDIALSEA,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbStartWeatherAbility(:HeavyRain, battler, true)
   }
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:PSYCHICSURGE,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     next if battle.field.terrain == :Psychic
     battle.pbShowAbilitySplash(battler)
     battle.pbStartTerrain(battler, :Psychic)
@@ -2965,13 +2972,13 @@ Battle::AbilityEffects::OnSwitchIn.add(:PSYCHICSURGE,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:SANDSTREAM,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbStartWeatherAbility(:Sandstorm, battler)
   }
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:SCREENCLEANER,
-  proc { |ability, battler, battle|
+  proc { |ability, battler, battle, switch_in|
     next if target.pbOwnSide.effects[PBEffects::AuroraVeil] == 0 &&
             target.pbOwnSide.effects[PBEffects::LightScreen] == 0 &&
             target.pbOwnSide.effects[PBEffects::Reflect] == 0 &&
@@ -3008,7 +3015,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:SCREENCLEANER,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:SLOWSTART,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     battler.effects[PBEffects::SlowStart] = 5
     if Battle::Scene::USE_ABILITY_SPLASH
@@ -3022,13 +3029,13 @@ Battle::AbilityEffects::OnSwitchIn.add(:SLOWSTART,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:SNOWWARNING,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbStartWeatherAbility(:Hail, battler)
   }
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:TERAVOLT,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     battle.pbDisplay(_INTL("{1} is radiating a bursting aura!",battler.pbThis))
     battle.pbHideAbilitySplash(battler)
@@ -3036,7 +3043,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:TERAVOLT,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:TURBOBLAZE,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     battle.pbDisplay(_INTL("{1} is radiating a blazing aura!",battler.pbThis))
     battle.pbHideAbilitySplash(battler)
@@ -3044,7 +3051,7 @@ Battle::AbilityEffects::OnSwitchIn.add(:TURBOBLAZE,
 )
 
 Battle::AbilityEffects::OnSwitchIn.add(:UNNERVE,
-  proc { |ability,battler,battle|
+  proc { |ability, battler, battle, switch_in|
     battle.pbShowAbilitySplash(battler)
     battle.pbDisplay(_INTL("{1} is too nervous to eat Berries!",battler.pbOpposingTeam))
     battle.pbHideAbilitySplash(battler)

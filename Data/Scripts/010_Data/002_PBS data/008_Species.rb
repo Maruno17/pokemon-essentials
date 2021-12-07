@@ -295,6 +295,15 @@ module GameData
       return other_family.include?(@id)
     end
 
+    # If this species doesn't have egg moves, looks at prevolutions one at a
+    # time and returns theirs instead.
+    def get_egg_moves
+      return @egg_moves if !@egg_moves.empty?
+      prevo = get_previous_species
+      return GameData::Species.get_species_form(prevo, @form).get_egg_moves if prevo != @species
+      return @egg_moves
+    end
+
     def family_evolutions_have_method?(check_method, check_param = nil)
       sp = self.get_baby_species
       evos = GameData::Species.get(sp).get_family_evolutions
