@@ -17,6 +17,8 @@ poke_ball_failed   - both for Ball Fetch
 View party screen for each trainer's team, be able to edit properties of Pokémon
 that aren't in battle.
 
+Choose each battler's next action.
+
 =end
 
 #===============================================================================
@@ -368,5 +370,24 @@ BattleDebugMenuCommands.register("mega_evolution", {
         battle.megaEvolution[real_cmd[0]][real_cmd[1]] = -1   # Make able
       end
     end
+  }
+})
+
+BattleDebugMenuCommands.register("speed_order", {
+  "parent"      => "main",
+  "name"        => _INTL("Battler Speed Order"),
+  "description" => _INTL("Show all battlers in order from fastest to slowest."),
+  "always_show" => true,
+  "effect"      => proc { |battle|
+    battlers = []
+    battlers = battle.allBattlers.map { |b| [b, b.pbSpeed] }
+    battlers.sort! { |a, b| b[1] <=> a[1] }
+    commands = []
+    battlers.each do |value|
+      b = value[0]
+      commands.push(sprintf("[%d] %s (speed: %d)", b.index, b.pbThis, value[1]))
+    end
+    pbMessage("\\ts[]" + _INTL("Battlers are listed from fastest to slowest. Speeds include modifiers."),
+       commands, -1)
   }
 })

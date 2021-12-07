@@ -828,9 +828,9 @@ class Pokemon
     @owner = new_owner
   end
 
-  # @param trainer [Player, NPCTrainer] the trainer to compare to the original trainer
+  # @param trainer [Player, NPCTrainer, nil] the trainer to compare to the original trainer
   # @return [Boolean] whether the given trainer is not this Pokémon's original trainer
-  def foreign?(trainer)
+  def foreign?(trainer = $player)
     return @owner.id != trainer.id || @owner.name != trainer.name
   end
 
