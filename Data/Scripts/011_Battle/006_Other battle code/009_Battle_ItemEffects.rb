@@ -1872,7 +1872,7 @@ Battle::ItemEffects::EndOfRoundHealing.add(:LEFTOVERS,
 
 Battle::ItemEffects::EndOfRoundEffect.add(:FLAMEORB,
   proc { |item,battler,battle|
-    next if !battler.pbCanBurn?(nil,false)
+    next if !battler.pbCanBurn?(battler, false)
     battler.pbBurn(nil,_INTL("{1} was burned by the {2}!",battler.pbThis,battler.itemName))
   }
 )
@@ -1890,7 +1890,7 @@ Battle::ItemEffects::EndOfRoundEffect.add(:STICKYBARB,
 
 Battle::ItemEffects::EndOfRoundEffect.add(:TOXICORB,
   proc { |item,battler,battle|
-    next if !battler.pbCanPoison?(nil,false)
+    next if !battler.pbCanPoison?(battler, false)
     battler.pbPoison(nil,_INTL("{1} was badly poisoned by the {2}!",
        battler.pbThis,battler.itemName),true)
   }
