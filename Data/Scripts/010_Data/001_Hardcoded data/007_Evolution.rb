@@ -276,7 +276,7 @@ GameData::Evolution.register({
   :id            => :Happiness,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP) ? 160 : 220
+    next pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220)
   }
 })
 
@@ -284,7 +284,7 @@ GameData::Evolution.register({
   :id            => :HappinessMale,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.happiness >= ((Settings::APPLY_HAPPINESS_SOFT_CAP) ? 160 : 220) && pkmn.male?
+    next pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220) && pkmn.male?
   }
 })
 
@@ -292,7 +292,7 @@ GameData::Evolution.register({
   :id            => :HappinessFemale,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.happiness >= ((Settings::APPLY_HAPPINESS_SOFT_CAP) ? 160 : 220) && pkmn.female?
+    next pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220) && pkmn.female?
   }
 })
 
@@ -300,7 +300,7 @@ GameData::Evolution.register({
   :id            => :HappinessDay,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.happiness >= ((Settings::APPLY_HAPPINESS_SOFT_CAP) ? 160 : 220) && PBDayNight.isDay?
+    next pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220) && PBDayNight.isDay?
   }
 })
 
@@ -308,7 +308,7 @@ GameData::Evolution.register({
   :id            => :HappinessNight,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    next pkmn.happiness >= ((Settings::APPLY_HAPPINESS_SOFT_CAP) ? 160 : 220) && PBDayNight.isNight?
+    next pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220) && PBDayNight.isNight?
   }
 })
 
@@ -317,7 +317,7 @@ GameData::Evolution.register({
   :parameter     => :Move,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    if pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP) ? 160 : 220
+    if pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220)
       next pkmn.moves.any? { |m| m && m.id == parameter }
     end
   }
@@ -328,7 +328,7 @@ GameData::Evolution.register({
   :parameter     => :Type,
   :minimum_level => 1,   # Needs any level up
   :level_up_proc => proc { |pkmn, parameter|
-    if pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP) ? 160 : 220
+    if pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220)
       next pkmn.moves.any? { |m| m && m.type == parameter }
     end
   }
@@ -339,7 +339,7 @@ GameData::Evolution.register({
   :parameter            => :Item,
   :minimum_level        => 1,   # Needs any level up
   :level_up_proc        => proc { |pkmn, parameter|
-    next pkmn.item == parameter && pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP) ? 160 : 220
+    next pkmn.item == parameter && pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220)
   },
   :after_evolution_proc => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
@@ -440,7 +440,7 @@ GameData::Evolution.register({
   :parameter            => :Item,
   :minimum_level        => 1,   # Needs any level up
   :level_up_proc        => proc { |pkmn, parameter|
-    next pkmn.item == parameter && pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP) ? 160 : 220
+    next pkmn.item == parameter && pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220)
   },
   :after_evolution_proc => proc { |pkmn, new_species, parameter, evo_species|
     next false if evo_species != new_species || !pkmn.hasItem?(parameter)
@@ -552,7 +552,7 @@ GameData::Evolution.register({
   :id            => :ItemHappiness,
   :parameter     => :Item,
   :use_item_proc => proc { |pkmn, parameter, item|
-    next item == parameter && pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP) ? 160 : 220
+    next item == parameter && pkmn.happiness >= (Settings::APPLY_HAPPINESS_SOFT_CAP ? 160 : 220)
   }
 })
 
