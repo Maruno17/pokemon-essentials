@@ -56,7 +56,6 @@ class Game_FollowerFactory
     followers.push(eventData)
     @events.push(newEvent)
     @last_update += 1
-    event.erase
   end
 
   def remove_follower_by_event(event)
@@ -241,9 +240,6 @@ class FollowerSprites
     @sprites.each { |sprite| sprite.dispose }
     @sprites.clear
     $game_temp.followers.each_follower do |event, follower|
-      $map_factory.maps.each do |map|
-        map.events[follower.event_id].erase if follower.original_map_id == map.map_id
-      end
       @sprites.push(Sprite_Character.new(@viewport, event))
     end
   end
@@ -320,8 +316,7 @@ module Followers
   # @return [Game_Follower, nil] follower object
   def get(name = nil)
     return $game_temp.followers.get_follower_by_name(name) if name
-    $game_temp.followers.get_follower_by_index
-    return nil
+    return $game_temp.followers.get_follower_by_index
   end
 end
 

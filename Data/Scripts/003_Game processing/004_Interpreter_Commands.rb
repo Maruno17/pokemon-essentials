@@ -126,6 +126,7 @@ class Interpreter
   #-----------------------------------------------------------------------------
   def command_end
     @list = nil
+    end_follower_move_route
     # If main map event and event ID are valid, unlock event
     if @main && @event_id > 0 && $game_map.events[@event_id]
       $game_map.events[@event_id].unlock
@@ -742,6 +743,8 @@ class Interpreter
   #-----------------------------------------------------------------------------
   def command_209
     character = get_character(@parameters[0])
+    character = Followers.get(@follower_move_route_id) if @follower_move_route
+    end_follower_move_route
     return true if character.nil?
     character.force_move_route(@parameters[1])
     return true

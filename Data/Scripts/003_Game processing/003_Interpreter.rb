@@ -35,6 +35,7 @@ class Interpreter
     @child_interpreter  = nil     # child interpreter
     @branch             = {}      # branch data
     @buttonInput        = false
+    end_follower_move_route
   end
   #-----------------------------------------------------------------------------
   # * Event Setup
@@ -107,6 +108,9 @@ class Interpreter
       if @move_route_waiting
         return if $game_player.move_route_forcing
         for event in $game_map.events.values
+          return if event.move_route_forcing
+        end
+        $game_temp.followers.each_follower do |event, follower|
           return if event.move_route_forcing
         end
         @move_route_waiting = false
@@ -268,6 +272,17 @@ class Interpreter
       temp_index += 1
     end
   end
+
+  def follower_move_route(id = nil)
+    @follower_move_route_id = id
+    @follower_move_route = true
+  end
+
+  def end_follower_move_route
+    @follower_move_route_id = nil
+    @follower_move_route = false
+  end
+
   #-----------------------------------------------------------------------------
   # * Various methods to be used in a script event command.
   #-----------------------------------------------------------------------------
