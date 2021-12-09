@@ -35,7 +35,7 @@ class Interpreter
     @child_interpreter  = nil     # child interpreter
     @branch             = {}      # branch data
     @buttonInput        = false
-    end_follower_move_route
+    end_follower_overrides
   end
   #-----------------------------------------------------------------------------
   # * Event Setup
@@ -274,13 +274,20 @@ class Interpreter
   end
 
   def follower_move_route(id = nil)
-    @follower_move_route_id = id
     @follower_move_route = true
+    @follower_move_route_id = id
   end
 
-  def end_follower_move_route
-    @follower_move_route_id = nil
+  def follower_animation(id = nil)
+    @follower_animation = true
+    @follower_animation_id = id
+  end
+
+  def end_follower_overrides
     @follower_move_route = false
+    @follower_move_route_id = nil
+    @follower_animation = false
+    @follower_animation_id = nil
   end
 
   #-----------------------------------------------------------------------------
