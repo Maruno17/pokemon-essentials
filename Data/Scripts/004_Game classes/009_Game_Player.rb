@@ -36,6 +36,14 @@ class Game_Player < Game_Character
     return $PokemonGlobal.followers.length > 0
   end
 
+  def can_map_transfer_with_follower?
+    return $PokemonGlobal.followers.length == 0
+  end
+
+  def can_ride_vehicle_with_follower?
+    return $PokemonGlobal.followers.length == 0
+  end
+
   def can_run?
     return false if $game_temp.in_menu || $game_temp.in_battle ||
                     @move_route_forcing || $game_temp.message_window_showing ||
