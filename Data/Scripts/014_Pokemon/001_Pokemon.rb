@@ -139,6 +139,10 @@ class Pokemon
       @species == GameData::Species.get(check_species).species)
   end
 
+  def dexNum
+    return species_data.id_number
+  end
+
   def isFusion?
     return species_data.id_number > NB_POKEMON
   end
@@ -1061,9 +1065,9 @@ class Pokemon
     end
     hpDiff = @totalhp - @hp
     #@totalhp = stats[:HP]
-    @totalhp= self.ability == :WONDERGUARD ? 1 : stats[:HP]
+    @totalhp = self.ability == :WONDERGUARD ? 1 : stats[:HP]
     calculated_hp = @totalhp - hpDiff
-    @hp = calculated_hp > 0 ?  calculated_hp: 0
+    @hp = calculated_hp > 0 ? calculated_hp : 0
     @attack = stats[:ATTACK]
     @defense = stats[:DEFENSE]
     @spatk = stats[:SPECIAL_ATTACK]

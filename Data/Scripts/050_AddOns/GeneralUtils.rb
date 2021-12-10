@@ -100,6 +100,11 @@ def getDexNumberForSpecies(species)
   return dexNum
 end
 
+#shortcut for using in game events because of script characters limit
+def dexNum(species)
+  return getDexNumberForSpecies(species)
+end
+
 def getRandomCustomFusion(returnRandomPokemonIfNoneFound=true,customPokeList=[],maxPoke=-1,recursionLimit=3)
   if customPokeList.length==0
     customPokeList = getCustomSpeciesList()
