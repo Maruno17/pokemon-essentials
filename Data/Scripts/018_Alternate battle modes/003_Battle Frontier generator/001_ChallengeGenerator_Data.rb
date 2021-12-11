@@ -132,10 +132,10 @@ def isBattlePokemonDuplicate(pk, pk2)
     moves1.push((pk.moves[i]) ? pk.moves[i].id : nil)
     moves2.push((pk2.moves[i]) ? pk2.moves[i].id : nil)
   end
-  moves1.sort!
-  moves2.sort!
+  moves1.compact.sort
+  moves2.compact.sort
   # Accept as same if moves are same and there are MAX_MOVES number of moves each
-  return true if moves1 == moves2 && moves1[Pokemon::MAX_MOVES - 1]
+  return true if moves1 == moves2 && moves1.length == Pokemon::MAX_MOVES
   same_evs = true
   GameData::Stat.each_main { |s| same_evs = false if pk.ev[s.id] != pk2.ev[s.id] }
   return pk.item_id == pk2.item_id && pk.nature_id == pk2.nature_id && same_evs

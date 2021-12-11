@@ -740,20 +740,20 @@ class Pokemon
   # Replaces one ribbon with the next one along, if possible. If none of the
   # given ribbons are owned, give the first one.
   # @return [Symbol, String, GameData::Ribbon] ID of the ribbon that was gained
-  def upgradeRibbon(*arg)
-    for i in 0...arg.length - 1
-      this_ribbon_data = GameData::Ribbon.try_get(i)
+  def upgradeRibbon(*args)
+    args.each_with_index do |ribbon, i|
+      this_ribbon_data = GameData::Ribbon.try_get(ribbon)
       next if !this_ribbon_data
       for j in 0...@ribbons.length
         next if @ribbons[j] != this_ribbon_data.id
-        next_ribbon_data = GameData::Ribbon.try_get(arg[i + 1])
+        next_ribbon_data = GameData::Ribbon.try_get(args[i + 1])
         next if !next_ribbon_data
         @ribbons[j] = next_ribbon_data.id
         return @ribbons[j]
       end
     end
-    first_ribbon_data = GameData::Ribbon.try_get(arg[0])
-    last_ribbon_data = GameData::Ribbon.try_get(arg[arg.length - 1])
+    first_ribbon_data = GameData::Ribbon.try_get(args.first)
+    last_ribbon_data = GameData::Ribbon.try_get(args.last)
     if first_ribbon_data && last_ribbon_data && !hasRibbon?(last_ribbon_data.id)
       giveRibbon(first_ribbon_data.id)
       return first_ribbon_data.id
