@@ -686,7 +686,8 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
   def initialize(sprites,viewport,
                  poke_ball,numShakes,critCapture,battler,showingTrainer)
     @poke_ball      = poke_ball
-    @numShakes      = (critCapture) ? 1 : numShakes
+    @success        = numShakes >= 4
+    @numShakes      = (critCapture && numShakes > 0) ? 1 : numShakes
     @critCapture    = critCapture
     @battler        = battler
     @showingTrainer = showingTrainer    # Only true if a Safari Zone battle
@@ -713,7 +714,7 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
     # Set up Poké Ball sprite
     ball = addBallSprite(ballStartX,ballStartY,@poke_ball)
     ball.setZ(0,batSprite.z+1)
-    @ballSpriteIndex = (@numShakes>=4 || @critCapture) ? @tempSprites.length-1 : -1
+    @ballSpriteIndex = (@success) ? @tempSprites.length - 1 : -1
     # Set up trainer sprite (only visible in Safari Zone battles)
     if @showingTrainer && traSprite
       if traSprite.bitmap.width>=traSprite.bitmap.height*2
@@ -796,7 +797,10 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
       ball.moveAngle(delay+6,2,0)
       delay = ball.totalDuration+8
     end
-    if @numShakes==0 || (@numShakes<4 && !@critCapture)
+    if @success
+      # Pokémon was caught
+      ballCaptureSuccess(ball,delay,ballEndX,ballGroundY)
+    else
       # Poké Ball opens
       ball.setZ(delay,batSprite.z-1)
       ballOpenUp(ball,delay,@poke_ball,false)
@@ -812,9 +816,6 @@ class Battle::Scene::Animation::PokeballThrowCapture < Battle::Scene::Animation
         shadow.setZoom(delay+5,100)
         shadow.moveOpacity(delay+5,10,255)
       end
-    else
-      # Pokémon was caught
-      ballCaptureSuccess(ball,delay,ballEndX,ballGroundY)
     end
   end
 
