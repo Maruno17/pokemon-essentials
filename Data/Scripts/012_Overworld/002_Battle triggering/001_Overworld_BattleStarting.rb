@@ -591,6 +591,7 @@ Events.onEndBattle += proc { |_sender,e|
                       (decision!=2 && decision!=5)   # not a loss or a draw
   $game_temp.party_levels_before_battle = nil
   $game_temp.party_critical_hits_dealt = nil
+  $game_temp.party_direct_damage_taken = nil
   # Check for blacking out or gaining Pickup/Huney Gather items
   case decision
   when 1, 4   # Win, capture

@@ -288,7 +288,9 @@ class Battle::Move
       @battle.pbDisplay(_INTL("The substitute took damage for {1}!",target.pbThis(true)))
     end
     if target.damageState.critical
-      $game_temp.party_critical_hits_dealt[user.pokemonIndex] += 1 if user.pbOwnedByPlayer?
+      if $game_temp.party_critical_hits_dealt && user.pbOwnedByPlayer?
+        $game_temp.party_critical_hits_dealt[user.pokemonIndex] += 1
+      end
       if target.damageState.affection_critical
         if numTargets > 1
           @battle.pbDisplay(_INTL("{1} landed a critical hit on {2}, wishing to be praised!",
@@ -382,6 +384,8 @@ class Battle::Move
       target.lastHPLostFromFoe = damage               # For Metal Burst
       target.lastFoeAttacker.push(user.index)         # For Metal Burst
     end
-    $game_temp.party_direct_damage_taken[target.pokemonIndex] += damage if target.pbOwnedByPlayer?
+    if $game_temp.party_direct_damage_taken && target.pbOwnedByPlayer?
+      $game_temp.party_direct_damage_taken[target.pokemonIndex] += damage
+    end
   end
 end

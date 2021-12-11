@@ -86,7 +86,9 @@ class Battle::Battler
     # Do other things
     @battle.pbClearChoice(@index)   # Reset choice
     pbOwnSide.effects[PBEffects::LastRoundFainted] = @battle.turnCount
-    $game_temp.party_direct_damage_taken[@pokemonIndex] = 0 if pbOwnedByPlayer?
+    if $game_temp.party_direct_damage_taken && pbOwnedByPlayer?
+      $game_temp.party_direct_damage_taken[@pokemonIndex] = 0
+    end
     # Check other battlers' abilities that trigger upon a battler fainting
     pbAbilitiesOnFainting
     # Check for end of primordial weather
