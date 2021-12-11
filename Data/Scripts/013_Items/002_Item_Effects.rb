@@ -21,7 +21,7 @@ ItemHandlers::UseFromBag.add(:HONEY,proc { |item|
 })
 
 ItemHandlers::UseFromBag.add(:ESCAPEROPE,proc { |item|
-  if $game_player.can_map_transfer_with_follower?
+  if !$game_player.can_map_transfer_with_follower?
     pbMessage(_INTL("It can't be used when you have someone with you."))
     next 0
   end
@@ -77,7 +77,7 @@ ItemHandlers::ConfirmUseInField.add(:ESCAPEROPE,proc { |item|
     pbMessage(_INTL("Can't use that here."))
     next false
   end
-  if $game_player.can_map_transfer_with_follower?
+  if !$game_player.can_map_transfer_with_follower?
     pbMessage(_INTL("It can't be used when you have someone with you."))
     next false
   end
@@ -168,7 +168,7 @@ ItemHandlers::UseInField.add(:ESCAPEROPE,proc { |item|
     pbMessage(_INTL("Can't use that here."))
     next false
   end
-  if $game_player.can_map_transfer_with_follower?
+  if !$game_player.can_map_transfer_with_follower?
     pbMessage(_INTL("It can't be used when you have someone with you."))
     next false
   end

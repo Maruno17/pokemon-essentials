@@ -257,7 +257,7 @@ HiddenMoveHandlers::CanUseMove.add(:DIG,proc { |move,pkmn,showmsg|
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
-  if $game_player.can_map_transfer_with_follower?
+  if !$game_player.can_map_transfer_with_follower?
     pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
     next false
   end
@@ -501,7 +501,7 @@ HiddenMoveHandlers::UseMove.add(:FLASH,proc { |move,pokemon|
 def pbCanFly?(pkmn = nil, show_messages = false)
   return false if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_FLY, show_messages)
   return false if !$DEBUG && !pkmn && !$player.get_pokemon_with_move(:FLY)
-  if $game_player.can_map_transfer_with_follower?
+  if !$game_player.can_map_transfer_with_follower?
     pbMessage(_INTL("It can't be used when you have someone with you.")) if show_messages
     return false
   end
@@ -731,7 +731,7 @@ HiddenMoveHandlers::UseMove.add(:STRENGTH,proc { |move,pokemon|
 #===============================================================================
 def pbSurf
   return false if $game_player.pbFacingEvent
-  return false if $game_player.can_ride_vehicle_with_follower?
+  return false if !$game_player.can_ride_vehicle_with_follower?
   move = :SURF
   movefinder = $player.get_pokemon_with_move(move)
   if !pbCheckHiddenMoveBadge(Settings::BADGE_FOR_SURF,false) || (!$DEBUG && !movefinder)
@@ -808,7 +808,7 @@ HiddenMoveHandlers::CanUseMove.add(:SURF,proc { |move,pkmn,showmsg|
     pbMessage(_INTL("You're already surfing.")) if showmsg
     next false
   end
-  if $game_player.can_ride_vehicle_with_follower?
+  if !$game_player.can_ride_vehicle_with_follower?
     pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
     next false
   end
@@ -904,7 +904,7 @@ HiddenMoveHandlers::CanUseMove.add(:TELEPORT,proc { |move,pkmn,showmsg|
     pbMessage(_INTL("Can't use that here.")) if showmsg
     next false
   end
-  if $game_player.can_map_transfer_with_follower?
+  if !$game_player.can_map_transfer_with_follower?
     pbMessage(_INTL("It can't be used when you have someone with you.")) if showmsg
     next false
   end

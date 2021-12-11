@@ -454,7 +454,7 @@ def pbBikeCheck
     pbMessage(_INTL("Can't use that here."))
     return false
   end
-  if $game_player.can_ride_vehicle_with_follower?
+  if !$game_player.can_ride_vehicle_with_follower?
     pbMessage(_INTL("It can't be used when you have someone with you."))
     return false
   end

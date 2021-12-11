@@ -47,7 +47,7 @@ class Battle::FakeBattler
   end
 
   def opposes?(i)
-    i = i.index if i.is_a?(FakeBattler)
+    i = i.index if i.is_a?(Battle::FakeBattler)
     return (@index&1)!=(i&1)
   end
 
