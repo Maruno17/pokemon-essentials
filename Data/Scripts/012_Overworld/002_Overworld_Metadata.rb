@@ -35,7 +35,7 @@ class PokemonGlobalMetadata
   attr_accessor :bridge
   attr_accessor :repel
   attr_accessor :flashUsed
-  attr_accessor :encounter_version
+  attr_reader   :encounter_version
   # Map transfers
   attr_accessor :healingSpot
   attr_accessor :escapePoint
@@ -105,6 +105,13 @@ class PokemonGlobalMetadata
     @pokerusTime          = nil
     # Save file
     @safesave             = false
+  end
+
+  def encounter_version=(value)
+    validate value => Integer
+    return if @encounter_version == value
+    @encounter_version = value
+    $PokemonEncounters.setup($game_map.map_id) if $PokemonEncounters && $game_map
   end
 end
 
