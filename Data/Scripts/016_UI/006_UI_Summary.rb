@@ -102,6 +102,9 @@ end
 #
 #===============================================================================
 class PokemonSummary_Scene
+  MARK_WIDTH  = 16
+  MARK_HEIGHT = 16
+
   def pbUpdate
     pbUpdateSpriteHash(@sprites)
   end
@@ -167,6 +170,8 @@ class PokemonSummary_Scene
     @sprites["messagebox"].visible        = false
     @sprites["messagebox"].letterbyletter = true
     pbBottomLeftLines(@sprites["messagebox"],2)
+    @nationalDexList = [:NONE]
+    GameData::Species.each_species { |s| @nationalDexList.push(s.species) }
     drawPage(@page)
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
@@ -280,12 +285,13 @@ class PokemonSummary_Scene
   end
 
   def drawMarkings(bitmap,x,y)
+    mark_variants = @markingbitmap.bitmap.height / MARK_HEIGHT
     markings = @pokemon.markings
-    markrect = Rect.new(0,0,16,16)
-    for i in 0...6
-      markrect.x = i*16
-      markrect.y = (markings&(1<<i)!=0) ? 16 : 0
-      bitmap.blt(x+i*16,y,@markingbitmap.bitmap,markrect)
+    markrect = Rect.new(0, 0, MARK_WIDTH, MARK_HEIGHT)
+    (@markingbitmap.bitmap.width / MARK_WIDTH).times do |i|
+      markrect.x = i * MARK_WIDTH
+      markrect.y = [(markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT
+      bitmap.blt(x + i * MARK_WIDTH, y, @markingbitmap.bitmap, markrect)
     end
   end
 
@@ -304,20 +310,16 @@ class PokemonSummary_Scene
     imagepos=[]
     # Show the Poké Ball containing the Pokémon
     ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%s", @pokemon.poke_ball)
-    if !pbResolveBitmap(ballimage)
-      ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%02d", pbGetBallType(@pokemon.poke_ball))
-    end
     imagepos.push([ballimage,14,60])
     # Show status/fainted/Pokérus infected icon
-    status = 0
+    status = -1
     if @pokemon.fainted?
-      status = GameData::Status::DATA.keys.length / 2
+      status = GameData::Status.count
     elsif @pokemon.status != :NONE
-      status = GameData::Status.get(@pokemon.status).id_number
+      status = GameData::Status.get(@pokemon.status).icon_position
     elsif @pokemon.pokerusStage == 1
-      status = GameData::Status::DATA.keys.length / 2 + 1
+      status = GameData::Status.count + 1
     end
-    status -= 1
     if status >= 0
       imagepos.push(["Graphics/Pictures/statuses",124,100,0,16*status,44,16])
     end
@@ -377,7 +379,7 @@ class PokemonSummary_Scene
     dexNumShadow = (@pokemon.shiny?) ? Color.new(224,152,144) : Color.new(176,176,176)
     # If a Shadow Pokémon, draw the heart gauge area and bar
     if @pokemon.shadowPokemon?
-      shadowfract = @pokemon.heart_gauge.to_f / Pokemon::HEART_GAUGE_SIZE
+      shadowfract = @pokemon.heart_gauge.to_f / @pokemon.max_gauge_size
       imagepos = [
          ["Graphics/Pictures/Summary/overlay_shadow",224,240],
          ["Graphics/Pictures/Summary/overlay_shadowbar",242,280,0,0,(shadowfract*248).floor,-1]
@@ -394,14 +396,14 @@ class PokemonSummary_Scene
        [_INTL("ID No."),238,202,0,base,shadow],
     ]
     # Write the Regional/National Dex number
-    dexnum = GameData::Species.get(@pokemon.species).id_number
+    dexnum = 0
     dexnumshift = false
-    if $Trainer.pokedex.unlocked?(-1)   # National Dex is unlocked
+    if $player.pokedex.unlocked?(-1)   # National Dex is unlocked
+      dexnum = @nationalDexList.index(@pokemon.species_data.species) || 0
       dexnumshift = true if Settings::DEXES_WITH_OFFSETS.include?(-1)
     else
-      dexnum = 0
-      for i in 0...$Trainer.pokedex.dexes_count - 1
-        next if !$Trainer.pokedex.unlocked?(i)
+      for i in 0...$player.pokedex.dexes_count - 1
+        next if !$player.pokedex.unlocked?(i)
         num = pbGetRegionalNumber(i,@pokemon.species)
         next if num<=0
         dexnum = num
@@ -454,15 +456,11 @@ class PokemonSummary_Scene
     # Draw all text
     pbDrawTextPositions(overlay,textpos)
     # Draw Pokémon type(s)
-    type1_number = GameData::Type.get(@pokemon.type1).id_number
-    type2_number = GameData::Type.get(@pokemon.type2).id_number
-    type1rect = Rect.new(0, type1_number * 28, 64, 28)
-    type2rect = Rect.new(0, type2_number * 28, 64, 28)
-    if @pokemon.type1==@pokemon.type2
-      overlay.blt(402,146,@typebitmap.bitmap,type1rect)
-    else
-      overlay.blt(370,146,@typebitmap.bitmap,type1rect)
-      overlay.blt(436,146,@typebitmap.bitmap,type2rect)
+    @pokemon.types.each_with_index do |type, i|
+      type_number = GameData::Type.get(type).icon_position
+      type_rect = Rect.new(0, type_number * 28, 64, 28)
+      type_x = (@pokemon.types.length == 1) ? 402 : 370 + 66 * i
+      overlay.blt(type_x, 146, @typebitmap.bitmap, type_rect)
     end
     # Draw Exp bar
     if @pokemon.level<GameData::GrowthRate.max_level
@@ -485,9 +483,6 @@ class PokemonSummary_Scene
     imagepos = []
     # Show the Poké Ball containing the Pokémon
     ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%s", @pokemon.poke_ball)
-    if !pbResolveBitmap(ballimage)
-      ballimage = sprintf("Graphics/Pictures/Summary/icon_ball_%02d", pbGetBallType(@pokemon.poke_ball))
-    end
     imagepos.push([ballimage,14,60])
     # Draw all images
     pbDrawImagePositions(overlay,imagepos)
@@ -539,7 +534,7 @@ class PokemonSummary_Scene
     overlay = @sprites["overlay"].bitmap
     memo = ""
     # Write nature
-    showNature = !@pokemon.shadowPokemon? || @pokemon.heartStage>3
+    showNature = !@pokemon.shadowPokemon? || @pokemon.heartStage <= 3
     if showNature
       natureName = @pokemon.nature.name
       memo += _INTL("<c3=F83820,E09890>{1}<c3=404040,B0B0B0> nature.\n",natureName)
@@ -637,7 +632,7 @@ class PokemonSummary_Scene
     # Determine which stats are boosted and lowered by the Pokémon's nature
     statshadows = {}
     GameData::Stat.each_main { |s| statshadows[s.id] = shadow }
-    if !@pokemon.shadowPokemon? || @pokemon.heartStage > 3
+    if !@pokemon.shadowPokemon? || @pokemon.heartStage <= 3
       @pokemon.nature_for_stats.stat_changes.each do |change|
         statshadows[change[0]] = Color.new(136,96,72) if change[1] > 0
         statshadows[change[0]] = Color.new(64,120,152) if change[1] < 0
@@ -704,15 +699,18 @@ class PokemonSummary_Scene
     for i in 0...Pokemon::MAX_MOVES
       move=@pokemon.moves[i]
       if move
-        type_number = GameData::Type.get(move.type).id_number
+        type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
         imagepos.push(["Graphics/Pictures/types", 248, yPos + 8, 0, type_number * 28, 64, 28])
         textpos.push([move.name,316,yPos,0,moveBase,moveShadow])
         if move.total_pp>0
           textpos.push([_INTL("PP"),342,yPos+32,0,moveBase,moveShadow])
           ppfraction = 0
-          if move.pp==0;                  ppfraction = 3
-          elsif move.pp*4<=move.total_pp; ppfraction = 2
-          elsif move.pp*2<=move.total_pp; ppfraction = 1
+          if move.pp==0
+            ppfraction = 3
+          elsif move.pp*4<=move.total_pp
+            ppfraction = 2
+          elsif move.pp*2<=move.total_pp
+            ppfraction = 1
           end
           textpos.push([sprintf("%d/%d",move.pp,move.total_pp),460,yPos+32,1,ppBase[ppfraction],ppShadow[ppfraction]])
         end
@@ -767,15 +765,18 @@ class PokemonSummary_Scene
         yPos += 20
       end
       if move
-        type_number = GameData::Type.get(move.type).id_number
+        type_number = GameData::Type.get(move.display_type(@pokemon)).icon_position
         imagepos.push(["Graphics/Pictures/types", 248, yPos + 8, 0, type_number * 28, 64, 28])
         textpos.push([move.name,316,yPos,0,moveBase,moveShadow])
         if move.total_pp>0
           textpos.push([_INTL("PP"),342,yPos+32,0,moveBase,moveShadow])
           ppfraction = 0
-          if move.pp==0;                  ppfraction = 3
-          elsif move.pp*4<=move.total_pp; ppfraction = 2
-          elsif move.pp*2<=move.total_pp; ppfraction = 1
+          if move.pp==0
+            ppfraction = 3
+          elsif move.pp*4<=move.total_pp
+            ppfraction = 2
+          elsif move.pp*2<=move.total_pp
+            ppfraction = 1
           end
           textpos.push([sprintf("%d/%d",move.pp,move.total_pp),460,yPos+32,1,ppBase[ppfraction],ppShadow[ppfraction]])
         end
@@ -789,15 +790,11 @@ class PokemonSummary_Scene
     pbDrawTextPositions(overlay,textpos)
     pbDrawImagePositions(overlay,imagepos)
     # Draw Pokémon's type icon(s)
-    type1_number = GameData::Type.get(@pokemon.type1).id_number
-    type2_number = GameData::Type.get(@pokemon.type2).id_number
-    type1rect = Rect.new(0, type1_number * 28, 64, 28)
-    type2rect = Rect.new(0, type2_number * 28, 64, 28)
-    if @pokemon.type1==@pokemon.type2
-      overlay.blt(130,78,@typebitmap.bitmap,type1rect)
-    else
-      overlay.blt(96,78,@typebitmap.bitmap,type1rect)
-      overlay.blt(166,78,@typebitmap.bitmap,type2rect)
+    @pokemon.types.each_with_index do |type, i|
+      type_number = GameData::Type.get(type).icon_position
+      type_rect = Rect.new(0, type_number * 28, 64, 28)
+      type_x = (@pokemon.types.length == 1) ? 130 : 96 + 70 * i
+      overlay.blt(type_x, 78, @typebitmap.bitmap, type_rect)
     end
   end
 
@@ -814,20 +811,20 @@ class PokemonSummary_Scene
     @sprites["itemicon"].visible = false if @sprites["itemicon"]
     textpos = []
     # Write power and accuracy values for selected move
-    case selected_move.base_damage
+    case selected_move.display_damage(@pokemon)
     when 0 then textpos.push(["---", 216, 148, 1, base, shadow])   # Status move
     when 1 then textpos.push(["???", 216, 148, 1, base, shadow])   # Variable power move
-    else        textpos.push([selected_move.base_damage.to_s, 216, 148, 1, base, shadow])
+    else        textpos.push([selected_move.display_damage(@pokemon).to_s, 216, 148, 1, base, shadow])
     end
-    if selected_move.accuracy == 0
+    if selected_move.display_accuracy(@pokemon) == 0
       textpos.push(["---", 216, 180, 1, base, shadow])
     else
-      textpos.push(["#{selected_move.accuracy}%", 216 + overlay.text_size("%").width, 180, 1, base, shadow])
+      textpos.push(["#{selected_move.display_accuracy(@pokemon)}%", 216 + overlay.text_size("%").width, 180, 1, base, shadow])
     end
     # Draw all text
     pbDrawTextPositions(overlay, textpos)
     # Draw selected move's damage category icon
-    imagepos = [["Graphics/Pictures/category", 166, 124, 0, selected_move.category * 28, 64, 28]]
+    imagepos = [["Graphics/Pictures/category", 166, 124, 0, selected_move.display_category(@pokemon) * 28, 64, 28]]
     pbDrawImagePositions(overlay, imagepos)
     # Draw selected move's description
     drawTextEx(overlay, 4, 222, 230, 5, selected_move.description, base, shadow)
@@ -850,7 +847,7 @@ class PokemonSummary_Scene
     for i in @ribbonOffset*4...@ribbonOffset*4+12
       break if !@pokemon.ribbons[i]
       ribbon_data = GameData::Ribbon.get(@pokemon.ribbons[i])
-      ribn = ribbon_data.id_number - 1
+      ribn = ribbon_data.icon_position
       imagepos.push(["Graphics/Pictures/ribbons",
          230 + 68 * (coord % 4), 78 + 68 * (coord / 4).floor,
          64 * (ribn % 8), 64 * (ribn / 8).floor, 64, 64])
@@ -1074,19 +1071,21 @@ class PokemonSummary_Scene
     @sprites["markingsel"].visible     = true
     base   = Color.new(248,248,248)
     shadow = Color.new(104,104,104)
-    ret = pokemon.markings
-    markings = pokemon.markings
+    ret = pokemon.markings.clone
+    markings = pokemon.markings.clone
+    mark_variants = @markingbitmap.bitmap.height / MARK_HEIGHT
     index = 0
     redraw = true
-    markrect = Rect.new(0,0,16,16)
+    markrect = Rect.new(0, 0, MARK_WIDTH, MARK_HEIGHT)
     loop do
       # Redraw the markings and text
       if redraw
         @sprites["markingoverlay"].bitmap.clear
-        for i in 0...6
-          markrect.x = i*16
-          markrect.y = (markings&(1<<i)!=0) ? 16 : 0
-          @sprites["markingoverlay"].bitmap.blt(300+58*(i%3),154+50*(i/3),@markingbitmap.bitmap,markrect)
+        (@markingbitmap.bitmap.width / MARK_WIDTH).times do |i|
+          markrect.x = i * MARK_WIDTH
+          markrect.y = [(markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT
+          @sprites["markingoverlay"].bitmap.blt(300 + 58 * (i % 3), 154 + 50 * (i / 3),
+             @markingbitmap.bitmap, markrect)
         end
         textpos = [
            [_INTL("Mark {1}",pokemon.name),366,90,2,base,shadow],
@@ -1124,26 +1123,35 @@ class PokemonSummary_Scene
         elsif index==7   # Cancel
           break
         else
-          mask = (1<<index)
-          if (markings&mask)==0
-            markings |= mask
-          else
-            markings &= ~mask
-          end
+          markings[index] = ((markings[index] || 0) + 1) % mark_variants
+          redraw = true
+        end
+      elsif Input.trigger?(Input::ACTION)
+        if index < 6 && markings[index] > 0
+          pbPlayDecisionSE
+          markings[index] = 0
           redraw = true
         end
       elsif Input.trigger?(Input::UP)
-        if index==7;    index = 6
-        elsif index==6; index = 4
-        elsif index<3;  index = 7
-        else;           index -= 3
+        if index==7
+          index = 6
+        elsif index==6
+          index = 4
+        elsif index<3
+          index = 7
+        else
+          index -= 3
         end
         pbPlayCursorSE
       elsif Input.trigger?(Input::DOWN)
-        if index==7;    index = 1
-        elsif index==6; index = 7
-        elsif index>=3; index = 6
-        else;           index += 3
+        if index==7
+          index = 1
+        elsif index==6
+          index = 7
+        elsif index>=3
+          index = 6
+        else
+          index += 3
         end
         pbPlayCursorSE
       elsif Input.trigger?(Input::LEFT)
@@ -1180,7 +1188,7 @@ class PokemonSummary_Scene
     if !@pokemon.egg?
       commands[cmdGiveItem = commands.length] = _INTL("Give item")
       commands[cmdTakeItem = commands.length] = _INTL("Take item") if @pokemon.hasItem?
-      commands[cmdPokedex = commands.length]  = _INTL("View Pokédex") if $Trainer.has_pokedex
+      commands[cmdPokedex = commands.length]  = _INTL("View Pokédex") if $player.has_pokedex
     end
     commands[cmdMark = commands.length]       = _INTL("Mark")
     commands[commands.length]                 = _INTL("Cancel")
@@ -1189,7 +1197,7 @@ class PokemonSummary_Scene
       item = nil
       pbFadeOutIn {
         scene = PokemonBag_Scene.new
-        screen = PokemonBagScreen.new(scene,$PokemonBag)
+        screen = PokemonBagScreen.new(scene, $bag)
         item = screen.pbChooseItemScreen(Proc.new { |itm| GameData::Item.get(itm).can_hold? })
       }
       if item
@@ -1198,7 +1206,7 @@ class PokemonSummary_Scene
     elsif cmdTakeItem>=0 && command==cmdTakeItem
       dorefresh = pbTakeItemFromPokemon(@pokemon,self)
     elsif cmdPokedex>=0 && command==cmdPokedex
-      $Trainer.pokedex.register_last_seen(@pokemon)
+      $player.pokedex.register_last_seen(@pokemon)
       pbFadeOutIn {
         scene = PokemonPokedexInfo_Scene.new
         screen = PokemonPokedexInfoScreen.new(scene)

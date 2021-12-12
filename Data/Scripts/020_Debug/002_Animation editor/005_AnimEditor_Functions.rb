@@ -15,7 +15,9 @@ class MiniBattle
 
   def initialize
     @battlers=[]
-    for i in 0...4; @battlers[i]=MiniBattler.new(i); end
+    for i in 0...4
+      @battlers[i] = MiniBattler.new(i)
+    end
   end
 end
 
@@ -47,8 +49,9 @@ def pbSelectAnim(canvas,animwin)
     ctlwin.update
     bmpwin.hue=ctlwin.value(0) if ctlwin.changed?(0)
     if Input.trigger?(Input::USE) && animfiles.length>0
-      bitmap=AnimatedBitmap.new("Graphics/Animations/"+cmdwin.commands[cmdwin.index],ctlwin.value(0)).deanimate
-      canvas.animation.graphic=cmdwin.commands[cmdwin.index]
+      filename = cmdwin.commands[cmdwin.index]
+      bitmap=AnimatedBitmap.new("Graphics/Animations/" + filename, ctlwin.value(0)).deanimate
+      canvas.animation.graphic = File.basename(filename, ".png")
       canvas.animation.hue=ctlwin.value(0)
       canvas.animbitmap=bitmap
       animwin.animbitmap=bitmap
@@ -516,7 +519,7 @@ def pbSelectSE(canvas,audio)
   ret=false
   pbRgssChdir(File.join("Audio", "SE", "Anim")) {
      animfiles.concat(Dir.glob("*.wav"))
-     animfiles.concat(Dir.glob("*.mp3"))
+#     animfiles.concat(Dir.glob("*.mp3"))
      animfiles.concat(Dir.glob("*.ogg"))
      animfiles.concat(Dir.glob("*.wma"))
   }
@@ -550,7 +553,7 @@ def pbSelectSE(canvas,audio)
     end
     if maxsizewindow.changed?(5) # OK
       filename = File.basename(filename,".wav")
-      filename = File.basename(filename,".mp3")
+#      filename = File.basename(filename,".mp3")
       filename = File.basename(filename,".ogg")
       filename = File.basename(filename,".wma")
       audio.name=filename
@@ -949,8 +952,8 @@ def pbAnimEditorHelpWindow
   helptext=""+
      "To add a cel to the scene, click on the canvas. The selected cel will have a black "+
      "frame. After a cel is selected, you can modify its properties using the keyboard:\n"+
-     "E, R - Rotate left/right;\nP - Open properties screen;\nArrow keys - Move cel 8 pixels "+
-     "(hold ALT for 2 pixels);\n+/- : Zoom in/out;\nL - Lock a cel. Locking a cel prevents it "+
+     "E, R - Rotate left/right.\nP - Open properties screen.\nArrow keys - Move cel 8 pixels "+
+     "(hold ALT for 2 pixels).\n+/- : Zoom in/out.\nL - Lock a cel. Locking a cel prevents it "+
      "from being moved or deleted.\nDEL - Deletes the cel.\nAlso press TAB to switch the selected cel."
   cmdwin=Window_UnformattedTextPokemon.newWithSize("",0,0,640,512)
   cmdwin.opacity=224
@@ -1018,7 +1021,7 @@ def animationEditorMain(animation)
         save_data(animation,"Data/PkmnAnimations.rxdata")
       end
       if pbConfirmMessage(_INTL("Exit from the editor?"))
-        $PokemonTemp.battleAnims = nil
+        $game_temp.battle_animations_data = nil
         break
       end
     end

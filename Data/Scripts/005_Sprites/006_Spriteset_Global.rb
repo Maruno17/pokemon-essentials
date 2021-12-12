@@ -4,6 +4,7 @@ class Spriteset_Global
   @@viewport2.z = 200
 
   def initialize
+    @follower_sprites = FollowerSprites.new(Spriteset_Map.viewport)
     @playersprite = Sprite_Character.new(Spriteset_Map.viewport, $game_player)
     @picture_sprites = []
     for i in 1..100
@@ -14,15 +15,18 @@ class Spriteset_Global
   end
 
   def dispose
+    @follower_sprites.dispose
+    @follower_sprites = nil
     @playersprite.dispose
-    @picture_sprites.each { |sprite| sprite.dispose }
-    @timer_sprite.dispose
     @playersprite = nil
+    @picture_sprites.each { |sprite| sprite.dispose }
     @picture_sprites.clear
+    @timer_sprite.dispose
     @timer_sprite = nil
   end
 
   def update
+    @follower_sprites.update
     @playersprite.update
     @picture_sprites.each { |sprite| sprite.update }
     @timer_sprite.update

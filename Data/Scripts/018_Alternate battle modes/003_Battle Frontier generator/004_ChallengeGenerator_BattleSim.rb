@@ -333,8 +333,8 @@ def pbDecideWinnerScore(party0, party1, rating)
   types2 = []
   abilities = []
   for j in 0...party1.length
-    types1.push(party1[j].type1)
-    types2.push(party1[j].type2)
+    types1.push(party1[j].types[0])
+    types2.push(party1[j].types[1] || party1[j].types[0])
     abilities.push(party1[j].ability_id)
   end
   for i in 0...party0.length
@@ -379,8 +379,7 @@ def pbRuledBattle(team1, team2, rule)
     decision = pbDecideWinner(party1, party2, team1.rating, team2.rating)
   else
     level = rule.ruleset.suggestedLevel
-    t_type = nil
-    GameData::TrainerType.each { |t| t_type = t.id; break }
+    t_type = GameData::TrainerType.keys.first
     trainer1 = NPCTrainer.new("PLAYER1", t_type)
     trainer2 = NPCTrainer.new("PLAYER2", t_type)
     items1 = []
@@ -403,7 +402,7 @@ def pbRuledBattle(team1, team2, rule)
       items2[i] = p.item_id
       trainer2.party.push(p)
     end
-    scene = PokeBattle_DebugSceneNoLogging.new
+    scene = Battle::DebugSceneNoLogging.new
     battle = rule.createBattle(scene, trainer1, trainer2)
     battle.debug = true
     battle.controlPlayer = true

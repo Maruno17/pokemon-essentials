@@ -62,13 +62,7 @@ class PokemonTrade_Scene
     pictureBall = PictureEx.new(0)
     picturePoke = PictureEx.new(0)
     ballimage = sprintf("Graphics/Battle animations/ball_%s", @pokemon.poke_ball)
-    if !pbResolveBitmap(ballimage)
-      ballimage = sprintf("Graphics/Battle animations/ball_%02d", pbGetBallType(@pokemon.poke_ball))
-    end
     ballopenimage = sprintf("Graphics/Battle animations/ball_%s_open", @pokemon.poke_ball)
-    if !pbResolveBitmap(ballimage)
-      ballopenimage = sprintf("Graphics/Battle animations/ball_%02d_open", pbGetBallType(@pokemon.poke_ball))
-    end
     # Starting position of ball
     pictureBall.setXY(0,Graphics.width/2,48)
     pictureBall.setName(0,ballimage)
@@ -110,13 +104,7 @@ class PokemonTrade_Scene
     pictureBall = PictureEx.new(0)
     picturePoke = PictureEx.new(0)
     ballimage = sprintf("Graphics/Battle animations/ball_%s", @pokemon2.poke_ball)
-    if !pbResolveBitmap(ballimage)
-      ballimage = sprintf("Graphics/Battle animations/ball_%02d", pbGetBallType(@pokemon2.poke_ball))
-    end
     ballopenimage = sprintf("Graphics/Battle animations/ball_%s_open", @pokemon2.poke_ball)
-    if !pbResolveBitmap(ballimage)
-      ballopenimage = sprintf("Graphics/Battle animations/ball_%02d_open", pbGetBallType(@pokemon2.poke_ball))
-    end
     # Starting position of ball
     pictureBall.setXY(0,Graphics.width/2,-32)
     pictureBall.setName(0,ballimage)
@@ -210,31 +198,31 @@ end
 #
 #===============================================================================
 def pbStartTrade(pokemonIndex,newpoke,nickname,trainerName,trainerGender=0)
-  myPokemon = $Trainer.party[pokemonIndex]
-  opponent = NPCTrainer.new(trainerName,trainerGender)
-  opponent.id = $Trainer.make_foreign_ID
+  $stats.trade_count += 1
+  myPokemon = $player.party[pokemonIndex]
   yourPokemon = nil
   resetmoves = true
   if newpoke.is_a?(Pokemon)
-    newpoke.owner = Pokemon::Owner.new_from_trainer(opponent)
+    newpoke.owner = Pokemon::Owner.new_foreign(trainerName, trainerGender)
     yourPokemon = newpoke
     resetmoves = false
   else
     species_data = GameData::Species.try_get(newpoke)
-    raise _INTL("Species does not exist ({1}).", newpoke) if !species_data
-    yourPokemon = Pokemon.new(species_data.id, myPokemon.level, opponent)
+    raise _INTL("Species {1} does not exist.", newpoke) if !species_data
+    yourPokemon = Pokemon.new(species_data.id, myPokemon.level)
+    yourPokemon.owner = Pokemon::Owner.new_foreign(trainerName, trainerGender)
   end
   yourPokemon.name          = nickname
   yourPokemon.obtain_method = 2   # traded
   yourPokemon.reset_moves if resetmoves
   yourPokemon.record_first_moves
-  $Trainer.pokedex.register(yourPokemon)
-  $Trainer.pokedex.set_owned(yourPokemon.species)
+  $player.pokedex.register(yourPokemon)
+  $player.pokedex.set_owned(yourPokemon.species)
   pbFadeOutInWithMusic {
     evo = PokemonTrade_Scene.new
-    evo.pbStartScreen(myPokemon,yourPokemon,$Trainer.name,opponent.name)
+    evo.pbStartScreen(myPokemon, yourPokemon, $player.name, trainerName)
     evo.pbTrade
     evo.pbEndScreen
   }
-  $Trainer.party[pokemonIndex] = yourPokemon
+  $player.party[pokemonIndex] = yourPokemon
 end

@@ -40,7 +40,7 @@ def pbPhoneDeleteContact(index)
 end
 
 def pbPhoneRegisterBattle(message,event,trainertype,trainername,maxbattles)
-  return if !$Trainer.has_pokegear           # Can't register without a Pokégear
+  return if !$player.has_pokegear           # Can't register without a Pokégear
   return false if !GameData::TrainerType.exists?(trainertype)
   trainertype = GameData::TrainerType.get(trainertype).id
   contact = pbFindPhoneTrainer(trainertype,trainername)
@@ -64,7 +64,7 @@ end
 def pbRandomPhoneTrainer
   $PokemonGlobal.phoneNumbers = [] if !$PokemonGlobal.phoneNumbers
   temparray = []
-  this_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  this_map_metadata = $game_map.metadata
   return nil if !this_map_metadata || !this_map_metadata.town_map_position
   currentRegion = this_map_metadata.town_map_position[0]
   for num in $PokemonGlobal.phoneNumbers
@@ -132,7 +132,7 @@ end
 # Phone-related counters
 #===============================================================================
 Events.onMapUpdate += proc { |_sender,_e|
-  next if !$Trainer || !$Trainer.has_pokegear
+  next if !$player || !$player.has_pokegear
   # Reset time to next phone call if necessary
   if !$PokemonGlobal.phoneTime || $PokemonGlobal.phoneTime<=0
     $PokemonGlobal.phoneTime = 20*60*Graphics.frame_rate
@@ -192,7 +192,7 @@ def pbCallTrainer(trtype,trname)
     return
   end
   caller_map_metadata = GameData::MapMetadata.try_get(trainer[6])
-  this_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  this_map_metadata = $game_map.metadata
   if !caller_map_metadata || !caller_map_metadata.town_map_position ||
      !this_map_metadata || !this_map_metadata.town_map_position ||
      caller_map_metadata.town_map_position[0] != this_map_metadata.town_map_position[0]
@@ -279,7 +279,7 @@ end
 
 def pbTrainerMapName(phonenum)
   return "" if !phonenum[6] || phonenum[6] == 0
-  return pbGetMessage(MessageTypes::MapNames, phonenum[6])
+  return pbGetMapNameFromId(phonenum[6])
 end
 
 #===============================================================================

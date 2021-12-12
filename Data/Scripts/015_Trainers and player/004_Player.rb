@@ -3,9 +3,9 @@
 #===============================================================================
 class Player < Trainer
   # @return [Integer] the character ID of the player
-  attr_accessor :character_ID
+  attr_reader   :character_ID
   # @return [Integer] the player's outfit
-  attr_accessor :outfit
+  attr_reader   :outfit
   # @return [Array<Boolean>] the player's Gym Badges (true if owned)
   attr_accessor :badges
   # @return [Integer] the player's money
@@ -31,11 +31,20 @@ class Player < Trainer
   # @return [Array<Array>] downloaded Mystery Gift data
   attr_accessor :mystery_gifts
 
+  def character_ID=(value)
+    return if @character_ID == value
+    @character_ID = value
+    $game_player.refresh_charset if $game_player
+  end
+
+  def outfit=(value)
+    return if @outfit == value
+    @outfit = value
+    $game_player.refresh_charset if $game_player
+  end
+
   def trainer_type
-    if @trainer_type.is_a?(Integer)
-      @trainer_type = GameData::Metadata.get_player(@character_ID || 0)[0]
-    end
-    return @trainer_type
+    return GameData::PlayerMetadata.get(@character_ID || 1).trainer_type
   end
 
   # Sets the player's money. It can not exceed {Settings::MAX_MONEY}.
@@ -90,10 +99,10 @@ class Player < Trainer
 
   def initialize(name, trainer_type)
     super
-    @character_ID          = -1
+    @character_ID          = 0
     @outfit                = 0
     @badges                = [false] * 8
-    @money                 = Settings::INITIAL_MONEY
+    @money                 = GameData::Metadata.get.start_money
     @coins                 = 0
     @battle_points         = 0
     @soot                  = 0

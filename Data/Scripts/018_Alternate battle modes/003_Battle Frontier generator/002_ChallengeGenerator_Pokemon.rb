@@ -38,11 +38,11 @@ end
 #===============================================================================
 # Used to replace Sketch with any other move.
 def pbRandomMove
-  keys = GameData::Move::DATA.keys
+  keys = GameData::Move.keys
   loop do
-    move_id = keys[rand(keys.length)]
+    move_id = keys[keys.sample]
     move = GameData::Move.get(move_id)
-    next if move.id_number > 384 || move.id == :SKETCH || move.id == :STRUGGLE
+    next if move.id == :SKETCH || move.id == :STRUGGLE
     return move.id
   end
 end
@@ -76,7 +76,7 @@ def pbGetLegalMoves2(species, maxlevel)
     for move2 in movedatas
       # If we have a move that always hits, remove all other moves with no
       # effect of the same type and <= base power
-      if md.function_code == "0A5" && move2[1].function_code == "000" &&   # Always hits
+      if md.accuracy == 0 && move2[1].function_code == "None" &&
          md.type == move2[1].type && md.base_damage >= move2[1].base_damage
         deleteAll.call(moves, move2[0])
       # If we have two status moves that have the same function code, delete the
@@ -85,7 +85,7 @@ def pbGetLegalMoves2(species, maxlevel)
          move2[1].base_damage == 0 && md.accuracy > move2[1].accuracy
         deleteAll.call(moves, move2[0])
       # Delete poison-causing moves if we have a move that causes toxic
-      elsif md.function_code == "006" && move2[1].function_code == "005"
+      elsif md.function_code == "BadPoisonTarget" && move2[1].function_code == "PoisonTarget"
         deleteAll.call(moves, move2[0])
       # If we have two moves with the same function code and type, and one of
       # them is damaging and has 10/15/the same PP as the other move and EITHER
@@ -108,7 +108,7 @@ def addMove(moves, move, base)
   return if moves.include?(data.id)
   return if [:BUBBLE, :BUBBLEBEAM].include?(data.id)   # Never add these moves
   count = base + 1   # Number of times to add move to moves
-  count = base if data.function_code == "000" && data.base_damage <= 40
+  count = base if data.function_code == "None" && data.base_damage <= 40
   if data.base_damage <= 30 || [:GROWL, :TAILWHIP, :LEER].include?(data.id)
     count = base
   end
@@ -151,10 +151,10 @@ def pbRandomPokemonFromRule(rules, trainer)
     iteration += 1
     species = nil
     level = rules.ruleset.suggestedLevel
-    keys = GameData::Species::DATA.keys
+    keys = GameData::Species.keys
     loop do
       loop do
-        species = keys[rand(keys.length)]
+        species = keys[keys.sample]
         break if GameData::Species.get(species).form == 0
       end
       r = rand(20)
@@ -174,9 +174,9 @@ def pbRandomPokemonFromRule(rules, trainer)
     ev = []
     GameData::Stat.each_main { |s| ev.push(s.id) if rand(100) < 50 }
     nature = nil
-    keys = GameData::Nature::DATA.keys
+    keys = GameData::Nature.keys
     loop do
-      nature = keys[rand(keys.length)]
+      nature = keys[keys.sample]
       nature_data = GameData::Nature.get(nature)
       if [:LAX, :GENTLE].include?(nature_data.id) || nature_data.stat_changes.length == 0
         next if rand(20) < 19
@@ -344,9 +344,8 @@ def pbRandomPokemonFromRule(rules, trainer)
       item = :LEFTOVERS
     end
     if item == :BLACKSLUDGE
-      type1 = GameData::Species.get(species).type1
-      type2 = GameData::Species.get(species).type2 || type1
-      item = :LEFTOVERS if type1 != :POISON && type2 != :POISON
+      types = GameData::Species.get(species).types
+      item = :LEFTOVERS if !types.include?(:POISON)
     end
     if item == :HEATROCK && !moves.any? { |m| m == :SUNNYDAY }
       item = :LEFTOVERS

@@ -19,14 +19,11 @@ class PokemonGlobalMetadata
   attr_accessor :partner
   attr_accessor :creditsPlayed
   # Pokédex
-  attr_accessor :pokedexUnlocked # Deprecated, replaced with Player::Pokedex#unlocked_dexes
   attr_accessor :pokedexDex      # Dex currently looking at (-1 is National Dex)
   attr_accessor :pokedexIndex    # Last species viewed per Dex
   attr_accessor :pokedexMode     # Search mode
   # Day Care
-  attr_accessor :daycare
-  attr_accessor :daycareEgg
-  attr_accessor :daycareEggSteps
+  attr_accessor :day_care
   # Special battle modes
   attr_accessor :safariState
   attr_accessor :bugContestState
@@ -80,9 +77,7 @@ class PokemonGlobalMetadata
       @pokedexIndex[i]    = 0
     end
     # Day Care
-    @daycare              = [[nil,0],[nil,0]]
-    @daycareEgg           = false
-    @daycareEggSteps      = 0
+    @day_care             = DayCare.new
     # Special battle modes
     @safariState          = nil
     @bugContestState      = nil
@@ -110,86 +105,6 @@ class PokemonGlobalMetadata
     @pokerusTime          = nil
     # Save file
     @safesave             = false
-  end
-
-  # @deprecated Use {Player#character_ID} instead. This alias is slated to be removed in v20.
-  def playerID
-    Deprecation.warn_method('PokemonGlobalMetadata#playerID', 'v20', '$Trainer.character_ID')
-    return @playerID || $Trainer.character_ID
-  end
-
-  # @deprecated Use {Player#character_ID=} instead. This alias is slated to be removed in v20.
-  def playerID=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#playerID=', 'v20', '$Trainer.character_ID=')
-    if value.nil?
-      @playerID = value   # For setting to nil by a save data conversion
-    else
-      $Trainer.character_ID = value
-    end
-  end
-
-  # @deprecated Use {Player#coins} instead. This alias is slated to be removed in v20.
-  def coins
-    Deprecation.warn_method('PokemonGlobalMetadata#coins', 'v20', '$Trainer.coins')
-    return @coins || $Trainer.coins
-  end
-
-  # @deprecated Use {Player#coins=} instead. This alias is slated to be removed in v20.
-  def coins=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#coins=', 'v20', '$Trainer.coins=')
-    if value.nil?
-      @coins = value   # For setting to nil by a save data conversion
-    else
-      $Trainer.coins = value
-    end
-  end
-
-  # @deprecated Use {Player#soot} instead. This alias is slated to be removed in v20.
-  def sootsack
-    Deprecation.warn_method('PokemonGlobalMetadata#sootsack', 'v20', '$Trainer.soot')
-    return @sootsack || $Trainer.soot
-  end
-
-  # @deprecated Use {Player#soot=} instead. This alias is slated to be removed in v20.
-  def sootsack=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#sootsack=', 'v20', '$Trainer.soot=')
-    if value.nil?
-      @sootsack = value   # For setting to nil by a save data conversion
-    else
-      $Trainer.soot = value
-    end
-  end
-
-  # @deprecated Use {Player#has_running_shoes} instead. This alias is slated to be removed in v20.
-  def runningShoes
-    Deprecation.warn_method('PokemonGlobalMetadata#runningShoes', 'v20', '$Trainer.has_running_shoes')
-    return (!@runningShoes.nil?) ? @runningShoes : $Trainer.has_running_shoes
-  end
-
-  # @deprecated Use {Player#has_running_shoes=} instead. This alias is slated to be removed in v20.
-  def runningShoes=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#runningShoes=', 'v20', '$Trainer.has_running_shoes=')
-    if value.nil?
-      @runningShoes = value   # For setting to nil by a save data conversion
-    else
-      $Trainer.has_running_shoes = value
-    end
-  end
-
-  # @deprecated Use {Player#seen_storage_creator} instead. This alias is slated to be removed in v20.
-  def seenStorageCreator
-    Deprecation.warn_method('PokemonGlobalMetadata#seenStorageCreator', 'v20', '$Trainer.seen_storage_creator')
-    return (!@seenStorageCreator.nil?) ? @seenStorageCreator : $Trainer.seen_storage_creator
-  end
-
-  # @deprecated Use {Player#seen_storage_creator=} instead. This alias is slated to be removed in v20.
-  def seenStorageCreator=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#seenStorageCreator=', 'v20', '$Trainer.seen_storage_creator=')
-    if value.nil?
-      @seenStorageCreator = value   # For setting to nil by a save data conversion
-    else
-      $Trainer.seen_storage_creator = value
-    end
   end
 end
 
@@ -252,34 +167,5 @@ class PokemonMapMetadata
         $game_map.events[i[0][1]].through = i[1][3]
       end
     end
-  end
-end
-
-
-
-#===============================================================================
-# Temporary data which is not saved and which is erased when a game restarts.
-#===============================================================================
-class PokemonTemp
-  attr_accessor :menuLastChoice
-  attr_accessor :keyItemCalling
-  attr_accessor :hiddenMoveEventCalling
-  attr_accessor :begunNewGame
-  attr_accessor :miniupdate
-  attr_accessor :waitingTrainer
-  attr_accessor :darknessSprite
-  attr_accessor :lastbattle
-  attr_accessor :flydata
-  attr_accessor :surfJump
-  attr_accessor :endSurf
-  attr_accessor :forceSingleBattle
-
-  def initialize
-    @menuLastChoice         = 0
-    @keyItemCalling         = false
-    @hiddenMoveEventCalling = false
-    @begunNewGame           = false
-    @miniupdate             = false
-    @forceSingleBattle      = false
   end
 end

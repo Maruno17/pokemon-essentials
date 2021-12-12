@@ -58,6 +58,8 @@ class HallOfFame_Scene
     @useMusic=false
     @battlerIndex=0
     @hallEntry=[]
+    @nationalDexList = [:NONE]
+    GameData::Species.each_species { |s| @nationalDexList.push(s.species) }
   end
 
   def pbStartSceneEntry
@@ -121,9 +123,9 @@ class HallOfFame_Scene
   end
 
   def saveHallEntry
-    for i in 0...$Trainer.party.length
+    $player.party.each do |pkmn|
       # Clones every pokémon object
-      @hallEntry.push($Trainer.party[i].clone) if !$Trainer.party[i].egg? || ALLOWEGGS
+      @hallEntry.push(pkmn.clone) if !pkmn.egg? || ALLOWEGGS
     end
     # Update the global variables
     $PokemonGlobal.hallOfFame.push(@hallEntry)
@@ -241,7 +243,7 @@ class HallOfFame_Scene
 
   def createTrainerBattler
     @sprites["trainer"]=IconSprite.new(@viewport)
-    @sprites["trainer"].setBitmap(GameData::TrainerType.front_sprite_filename($Trainer.trainer_type))
+    @sprites["trainer"].setBitmap(GameData::TrainerType.front_sprite_filename($player.trainer_type))
     if !SINGLEROW
       @sprites["trainer"].x=Graphics.width-96
       @sprites["trainer"].y=160
@@ -276,12 +278,12 @@ class HallOfFame_Scene
     totalsec = Graphics.frame_count / Graphics.frame_rate
     hour = totalsec / 60 / 60
     min = totalsec / 60 % 60
-    pubid=sprintf("%05d",$Trainer.public_ID)
-    lefttext= _INTL("Name<r>{1}<br>",$Trainer.name)
+    pubid=sprintf("%05d", $player.public_ID)
+    lefttext= _INTL("Name<r>{1}<br>", $player.name)
     lefttext+=_INTL("IDNo.<r>{1}<br>",pubid)
     lefttext+=_ISPRINTF("Time<r>{1:02d}:{2:02d}<br>",hour,min)
     lefttext+=_INTL("Pokédex<r>{1}/{2}<br>",
-        $Trainer.pokedex.owned_count,$Trainer.pokedex.seen_count)
+        $player.pokedex.owned_count, $player.pokedex.seen_count)
     @sprites["messagebox"]=Window_AdvancedTextPokemon.new(lefttext)
     @sprites["messagebox"].viewport=@viewport
     @sprites["messagebox"].width=192 if @sprites["messagebox"].width<192
@@ -305,8 +307,8 @@ class HallOfFame_Scene
     idno=(pokemon.owner.name.empty? || pokemon.egg?) ? "?????" : sprintf("%05d",pokemon.owner.public_id)
     dexnumber = _INTL("No. ???")
     if !pokemon.egg?
-      species_data = GameData::Species.get(pokemon.species)
-      dexnumber = _ISPRINTF("No. {1:03d}",species_data.id_number)
+      number = @nationalDexList.index(pokemon.species) || 0
+      dexnumber = _ISPRINTF("No. {1:03d}", number)
     end
     textPositions=[
        [dexnumber,32,Graphics.height-86,0,BASECOLOR,SHADOWCOLOR],

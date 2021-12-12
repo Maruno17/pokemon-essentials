@@ -101,6 +101,36 @@ class Array
 end
 
 #===============================================================================
+# class Hash
+#===============================================================================
+class Hash
+  def deep_merge(hash)
+    h = self.clone
+    # failsafe
+    return h if !hash.is_a?(Hash)
+    for key in hash.keys
+      if self[key].is_a?(Hash)
+        h.deep_merge!(hash[key])
+      else
+        h = hash[key]
+      end
+    end
+    return h
+  end
+
+  def deep_merge!(hash)
+    return if !hash.is_a?(Hash)
+    for key in hash.keys
+      if self[key].is_a?(Hash)
+        self[key].deep_merge!(hash[key])
+      else
+        self[key] = hash[key]
+      end
+    end
+  end
+end
+
+#===============================================================================
 # module Enumerable
 #===============================================================================
 module Enumerable
@@ -108,6 +138,36 @@ module Enumerable
     ret = []
     self.each { |item| ret.push(yield(item)) }
     return ret
+  end
+end
+
+#===============================================================================
+# class File
+#===============================================================================
+class File
+  # Copies the source file to the destination path.
+  def self.copy(source, destination)
+    data = ""
+    t = Time.now
+    File.open(source, 'rb') do |f|
+      while r = f.read(4096)
+        if Time.now - t > 1
+          Graphics.update
+          t = Time.now
+        end
+        data += r
+      end
+    end
+    File.delete(destination) if File.file?(destination)
+    f = File.new(destination, 'wb')
+    f.write data
+    f.close
+  end
+
+  # Copies the source to the destination and deletes the source.
+  def self.move(source, destination)
+    File.copy(source, destination)
+    File.delete(source)
   end
 end
 

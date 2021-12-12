@@ -11,7 +11,7 @@ class PokegearButton < SpriteWrapper
     @image = command[0]
     @name  = command[1]
     @selected = false
-    if $Trainer.female? && pbResolveBitmap(sprintf("Graphics/Pictures/Pokegear/icon_button_f"))
+    if $player.female? && pbResolveBitmap(sprintf("Graphics/Pictures/Pokegear/icon_button_f"))
       @button = AnimatedBitmap.new("Graphics/Pictures/Pokegear/icon_button_f")
     else
       @button = AnimatedBitmap.new("Graphics/Pictures/Pokegear/icon_button")
@@ -70,7 +70,7 @@ class PokemonPokegear_Scene
     @viewport.z = 99999
     @sprites = {}
     @sprites["background"] = IconSprite.new(0,0,@viewport)
-    if $Trainer.female? && pbResolveBitmap(sprintf("Graphics/Pictures/Pokegear/bg_f"))
+    if $player.female? && pbResolveBitmap(sprintf("Graphics/Pictures/Pokegear/bg_f"))
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg_f")
     else
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")
@@ -110,6 +110,10 @@ class PokemonPokegear_Scene
 
   def pbEndScene
     pbFadeOutAndHide(@sprites) { pbUpdate }
+    dispose
+  end
+
+  def dispose
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
   end
@@ -139,7 +143,16 @@ class PokemonPokegearScreen
       if cmd<0
         break
       elsif cmdMap>=0 && cmd==cmdMap
-        pbShowMap(-1,false)
+        pbFadeOutIn {
+          scene = PokemonRegionMap_Scene.new(-1, false)
+          screen = PokemonRegionMapScreen.new(scene)
+          ret = screen.pbStartScreen
+          if ret
+            $game_temp.fly_destination = ret
+            next 99999   # Ugly hack to make Pokégear scene not reappear if flying
+          end
+        }
+        break if $game_temp.fly_destination
       elsif cmdPhone>=0 && cmd==cmdPhone
         pbFadeOutIn {
           PokemonPhoneScene.new.start
@@ -152,6 +165,6 @@ class PokemonPokegearScreen
         }
       end
     end
-    @scene.pbEndScene
+    ($game_temp.fly_destination) ? @scene.dispose : @scene.pbEndScene
   end
 end

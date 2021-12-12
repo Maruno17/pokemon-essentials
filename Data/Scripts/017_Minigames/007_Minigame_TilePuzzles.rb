@@ -153,7 +153,9 @@ class TilePuzzleScene
       addBackgroundPlane(@sprites,"bg","Tile Puzzle/bg",@viewport)
     end
     @tilebitmap=AnimatedBitmap.new("Graphics/Pictures/Tile Puzzle/tiles#{@board}")
-    @tilebitmap1=nil; @tilebitmap2=nil; @tilebitmap3=nil
+    @tilebitmap1=nil
+    @tilebitmap2=nil
+    @tilebitmap3=nil
     if pbResolveBitmap("Graphics/Pictures/Tile Puzzle/tiles#{@board}_1")
       @tilebitmap1=AnimatedBitmap.new("Graphics/Pictures/Tile Puzzle/tiles#{@board}_1")
     end
@@ -184,7 +186,10 @@ class TilePuzzleScene
 
   def pbShuffleTiles
     ret=[]
-    for i in 0...@boardwidth*@boardheight; ret.push(i); @angles.push(0); end
+    for i in 0...@boardwidth*@boardheight
+      ret.push(i)
+      @angles.push(0)
+    end
     if @game==6
       @tiles=ret
       5.times do
@@ -199,7 +204,8 @@ class TilePuzzleScene
     else
       ret.shuffle!
       if @game==3  # Make sure only solvable Mystic Squares are allowed.
-        num=0; blank=-1
+        num=0
+        blank=-1
         for i in 0...ret.length-1
           blank=i if ret[i]==@boardwidth*@boardheight-1
           for j in i...ret.length
@@ -216,11 +222,15 @@ class TilePuzzleScene
       end
       if @game==1 || @game==2
         ret2=[]
-        for i in 0...@boardwidth*@boardheight; ret2.push(-1); end
+        for i in 0...@boardwidth*@boardheight
+          ret2.push(-1)
+        end
         ret=ret2+ret
       end
       if @game==2 || @game==5
-        for i in 0...@angles.length; @angles[i]=rand(4); end
+        for i in 0...@angles.length
+          @angles[i]=rand(4)
+        end
       end
     end
     return ret
@@ -399,7 +409,8 @@ class TilePuzzleScene
 
   def pbShiftLine(dir,cursor,anim=true)
     # Get tiles involved
-    tiles=[]; dist=0
+    tiles=[]
+    dist=0
     if dir==2 || dir==8
       dist=(dir/4).floor-1
       while (dist>0 && cursor<(@boardwidth-1)*@boardheight) ||
@@ -453,7 +464,9 @@ class TilePuzzleScene
       end
     end
     temp=[]
-    for i in tiles; temp.push(@tiles[i]); end
+    for i in tiles
+      temp.push(@tiles[i])
+    end
     for i in 0...temp.length
       @tiles[tiles[(i+1)%(temp.length)]]=temp[i]
     end

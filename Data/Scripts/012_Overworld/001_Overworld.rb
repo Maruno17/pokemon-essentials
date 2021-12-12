@@ -3,11 +3,11 @@
 #===============================================================================
 # Pokérus check
 Events.onMapUpdate += proc { |_sender,_e|
-  next if !$Trainer
+  next if !$player
   last = $PokemonGlobal.pokerusTime
   now = pbGetTimeNow
   if !last || last.year!=now.year || last.month!=now.month || last.day!=now.day
-    for i in $Trainer.pokemon_party
+    for i in $player.pokemon_party
       i.lowerPokerusCount
     end
     $PokemonGlobal.pokerusTime = now
@@ -18,7 +18,7 @@ Events.onMapUpdate += proc { |_sender,_e|
 # healed Pokémon has it.
 def pbPokerus?
   return false if $game_switches[Settings::SEEN_POKERUS_SWITCH]
-  for i in $Trainer.party
+  for i in $player.party
     return true if i.pokerusStage==1
   end
   return false
@@ -26,10 +26,10 @@ end
 
 
 
-class PokemonTemp
-  attr_accessor :batterywarning
-  attr_accessor :cueBGM
-  attr_accessor :cueFrames
+class Game_Temp
+  attr_accessor :warned_low_battery
+  attr_accessor :cue_bgm
+  attr_accessor :cue_bgm_frame_delay
 end
 
 
@@ -47,22 +47,22 @@ def pbBatteryLow?
 end
 
 Events.onMapUpdate += proc { |_sender,_e|
-  if !$PokemonTemp.batterywarning && pbBatteryLow?
+  if !$game_temp.warned_low_battery && pbBatteryLow?
     if !$game_temp.in_menu && !$game_temp.in_battle &&
        !$game_player.move_route_forcing && !$game_temp.message_window_showing &&
        !pbMapInterpreterRunning?
       if pbGetTimeNow.sec==0
         pbMessage(_INTL("The game has detected that the battery is low. You should save soon to avoid losing your progress."))
-        $PokemonTemp.batterywarning = true
+        $game_temp.warned_low_battery = true
       end
     end
   end
-  if $PokemonTemp.cueFrames
-    $PokemonTemp.cueFrames -= 1
-    if $PokemonTemp.cueFrames<=0
-      $PokemonTemp.cueFrames = nil
-      if $game_system.getPlayingBGM==nil
-        pbBGMPlay($PokemonTemp.cueBGM)
+  if $game_temp.cue_bgm_frame_delay
+    $game_temp.cue_bgm_frame_delay -= 1
+    if $game_temp.cue_bgm_frame_delay <= 0
+      $game_temp.cue_bgm_frame_delay = nil
+      if $game_system.getPlayingBGM == nil
+        pbBGMPlay($game_temp.cue_bgm)
       end
     end
   end
@@ -78,7 +78,7 @@ Events.onStepTaken += proc {
   $PokemonGlobal.happinessSteps = 0 if !$PokemonGlobal.happinessSteps
   $PokemonGlobal.happinessSteps += 1
   if $PokemonGlobal.happinessSteps>=128
-    for pkmn in $Trainer.able_party
+    for pkmn in $player.able_party
       pkmn.changeHappiness("walking") if rand(2)==0
     end
     $PokemonGlobal.happinessSteps = 0
@@ -91,7 +91,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
   next if handled[0]
   if $PokemonGlobal.stepcount%4==0 && Settings::POISON_IN_FIELD
     flashed = false
-    for i in $Trainer.able_party
+    for i in $player.able_party
       if i.status == :POISON && !i.hasAbility?(:IMMUNITY)
         if !flashed
           pbFlash(Color.new(255, 0, 0, 128), 8)
@@ -107,7 +107,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
           i.status = :NONE
           pbMessage(_INTL("{1} fainted...",i.name))
         end
-        if $Trainer.able_pokemon_count == 0
+        if $player.able_pokemon_count == 0
           handled[0] = true
           pbCheckAllFainted
         end
@@ -117,7 +117,7 @@ Events.onStepTakenTransferPossible += proc { |_sender,e|
 }
 
 def pbCheckAllFainted
-  if $Trainer.able_pokemon_count == 0
+  if $player.able_pokemon_count == 0
     pbMessage(_INTL("You have no more Pokémon that can fight!\1"))
     pbMessage(_INTL("You blacked out!"))
     pbBGMFade(1.0)
@@ -129,17 +129,18 @@ end
 # Gather soot from soot grass
 Events.onStepTakenFieldMovement += proc { |_sender,e|
   event = e[0]   # Get the event affected by field movement
-  thistile = $MapFactory.getRealTilePos(event.map.map_id,event.x,event.y)
-  map = $MapFactory.getMap(thistile[0])
+  thistile = $map_factory.getRealTilePos(event.map.map_id,event.x,event.y)
+  map = $map_factory.getMap(thistile[0])
   for i in [2, 1, 0]
     tile_id = map.data[thistile[1],thistile[2],i]
     next if tile_id == nil
     next if GameData::TerrainTag.try_get(map.terrain_tags[tile_id]).id != :SootGrass
-    if event == $game_player && GameData::Item.exists?(:SOOTSACK)
-      $Trainer.soot += 1 if $PokemonBag.pbHasItem?(:SOOTSACK)
+    if event == $game_player && $bag.has?(:SOOTSACK)
+      old_soot = $player.soot
+      $player.soot += 1
+      $stats.soot_collected += $player.soot - old_soot if $player.soot > old_soot
     end
-#    map.data[thistile[1], thistile[2], i] = 0
-#    $scene.createSingleSpriteset(map.map_id)
+    map.erase_tile(thistile[1], thistile[2], i)
     break
   end
 }
@@ -149,7 +150,7 @@ Events.onStepTakenFieldMovement += proc { |_sender, e|
   event = e[0]   # Get the event affected by field movement
   if $scene.is_a?(Scene_Map)
     event.each_occupied_tile do |x, y|
-      if $MapFactory.getTerrainTag(event.map.map_id, x, y, true).shows_grass_rustle
+      if $map_factory.getTerrainTag(event.map.map_id, x, y, true).shows_grass_rustle
         $scene.spriteset.addUserAnimation(Settings::GRASS_ANIMATION_ID, x, y, true, 1)
       end
     end
@@ -179,7 +180,7 @@ def pbOnStepTaken(eventTriggered)
   Events.onStepTakenTransferPossible.trigger(nil,handled)
   return if handled[0]
   pbBattleOnStepTaken(repel_active) if !eventTriggered && !$game_temp.in_menu
-  $PokemonTemp.encounterTriggered = false   # This info isn't needed here
+  $game_temp.encounter_triggered = false   # This info isn't needed here
 end
 
 # Start wild encounters while turning on the spot
@@ -189,12 +190,12 @@ Events.onChangeDirection += proc {
 }
 
 def pbBattleOnStepTaken(repel_active)
-  return if $Trainer.able_pokemon_count == 0
+  return if $player.able_pokemon_count == 0
   return if !$PokemonEncounters.encounter_possible_here?
   encounter_type = $PokemonEncounters.encounter_type
   return if !encounter_type
   return if !$PokemonEncounters.encounter_triggered?(encounter_type, repel_active)
-  $PokemonTemp.encounterType = encounter_type
+  $game_temp.encounter_type = encounter_type
   encounter = $PokemonEncounters.choose_wild_pokemon(encounter_type)
   encounter = EncounterModifier.trigger(encounter)
   if $PokemonEncounters.allow_encounter?(encounter, repel_active)
@@ -205,10 +206,10 @@ def pbBattleOnStepTaken(repel_active)
     else
       pbWildBattle(encounter[0], encounter[1])
     end
-    $PokemonTemp.encounterType = nil
-    $PokemonTemp.encounterTriggered = true
+    $game_temp.encounter_type = nil
+    $game_temp.encounter_triggered = true
   end
-  $PokemonTemp.forceSingleBattle = false
+  $game_temp.force_single_battle = false
   EncounterModifier.triggerEncounterEnd
 end
 
@@ -223,7 +224,7 @@ end
 Events.onMapChanging += proc { |_sender, e|
   new_map_ID = e[0]
   next if new_map_ID == 0
-  old_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  old_map_metadata = $game_map.metadata
   next if !old_map_metadata || !old_map_metadata.weather
   map_infos = pbLoadMapInfos
   if $game_map.name == map_infos[new_map_ID].name
@@ -236,7 +237,7 @@ Events.onMapChanging += proc { |_sender, e|
 # Set up various data related to the new map
 Events.onMapChange += proc { |_sender, e|
   old_map_ID = e[0]   # previous map ID, is 0 if no map ID
-  new_map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  new_map_metadata = $game_map.metadata
   if new_map_metadata && new_map_metadata.teleport_destination
     $PokemonGlobal.healingSpot = new_map_metadata.teleport_destination
   end
@@ -267,17 +268,17 @@ Events.onMapSceneChange += proc { |_sender, e|
     $PokemonGlobal.mapTrail = [$game_map.map_id] + $PokemonGlobal.mapTrail
   end
   # Display darkness circle on dark maps
-  map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
+  map_metadata = $game_map.metadata
   if map_metadata && map_metadata.dark_map
-    $PokemonTemp.darknessSprite = DarknessSprite.new
-    scene.spriteset.addUserSprite($PokemonTemp.darknessSprite)
+    $game_temp.darkness_sprite = DarknessSprite.new
+    scene.spriteset.addUserSprite($game_temp.darkness_sprite)
     if $PokemonGlobal.flashUsed
-      $PokemonTemp.darknessSprite.radius = $PokemonTemp.darknessSprite.radiusMax
+      $game_temp.darkness_sprite.radius = $game_temp.darkness_sprite.radiusMax
     end
   else
     $PokemonGlobal.flashUsed = false
-    $PokemonTemp.darknessSprite.dispose if $PokemonTemp.darknessSprite
-    $PokemonTemp.darknessSprite = nil
+    $game_temp.darkness_sprite.dispose if $game_temp.darkness_sprite
+    $game_temp.darkness_sprite = nil
   end
   # Show location signpost
   if mapChanged && map_metadata && map_metadata.announce_location
@@ -311,7 +312,7 @@ Events.onMapSceneChange += proc { |_sender, e|
 #===============================================================================
 # NOTE: Assumes the event is 1x1 tile in size. Only returns one tile.
 def pbFacingTile(direction=nil,event=nil)
-  return $MapFactory.getFacingTile(direction,event) if $MapFactory
+  return $map_factory.getFacingTile(direction,event) if $map_factory
   return pbFacingTileRegular(direction,event)
 end
 
@@ -400,10 +401,10 @@ def pbCueBGM(bgm,seconds,volume=nil,pitch=nil)
   playingBGM = $game_system.playing_bgm
   if !playingBGM || playingBGM.name!=bgm.name || playingBGM.pitch!=bgm.pitch
     pbBGMFade(seconds)
-    if !$PokemonTemp.cueFrames
-      $PokemonTemp.cueFrames = (seconds*Graphics.frame_rate)*3/5
+    if !$game_temp.cue_bgm_frame_delay
+      $game_temp.cue_bgm_frame_delay = (seconds * Graphics.frame_rate) * 3 / 5
     end
-    $PokemonTemp.cueBGM=bgm
+    $game_temp.cue_bgm = bgm
   elsif playingBGM
     pbBGMPlay(bgm)
   end
@@ -548,20 +549,24 @@ end
 
 def pbSlideOnIce
   return if !$game_player.pbTerrainTag.ice
+  $game_temp.followers.update
   $PokemonGlobal.sliding = true
   direction    = $game_player.direction
   oldwalkanime = $game_player.walk_anime
   $game_player.straighten
   $game_player.walk_anime = false
+  first_loop = true
   loop do
     break if !$game_player.can_move_in_direction?(direction)
     break if !$game_player.pbTerrainTag.ice
     $game_player.move_forward
+    $game_temp.followers.move_followers if first_loop
     while $game_player.moving?
       pbUpdateSceneMap
       Graphics.update
       Input.update
     end
+    first_loop = false
   end
   $game_player.center($game_player.x, $game_player.y)
   $game_player.straighten
@@ -572,8 +577,8 @@ end
 def pbTurnTowardEvent(event,otherEvent)
   sx = 0
   sy = 0
-  if $MapFactory
-    relativePos = $MapFactory.getThisAndOtherEventRelativePos(otherEvent,event)
+  if $map_factory
+    relativePos = $map_factory.getThisAndOtherEventRelativePos(otherEvent, event)
     sx = relativePos[0]
     sy = relativePos[1]
   else
@@ -619,7 +624,7 @@ def pbJumpToward(dist=1,playSound=false,cancelSurf=false)
   if $game_player.x!=x || $game_player.y!=y
     pbSEPlay("Player jump") if playSound
     $PokemonEncounters.reset_step_count if cancelSurf
-    $PokemonTemp.endSurf = true if cancelSurf
+    $game_temp.ending_surf = true if cancelSurf
     while $game_player.jumping?
       Graphics.update
       Input.update
@@ -707,10 +712,12 @@ def pbItemBall(item,quantity=1)
   itemname = (quantity>1) ? item.name_plural : item.name
   pocket = item.pocket
   move = item.move
-  if $PokemonBag.pbStoreItem(item,quantity)   # If item can be picked up
+  if $bag.add(item, quantity)   # If item can be picked up
     meName = (item.is_key_item?) ? "Key item get" : "Item get"
     if item == :LEFTOVERS
       pbMessage(_INTL("\\me[{1}]You found some \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
+    elsif item == :DNASPLICERS
+      pbMessage(_INTL("\\me[{1}]You found \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
     elsif item.is_machine?   # TM or HM
       pbMessage(_INTL("\\me[{1}]You found \\c[1]{2} {3}\\c[0]!\\wtnp[30]",meName,itemname,GameData::Move.get(move).name))
     elsif quantity>1
@@ -720,8 +727,8 @@ def pbItemBall(item,quantity=1)
     else
       pbMessage(_INTL("\\me[{1}]You found a \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
     end
-    pbMessage(_INTL("You put the {1} away\\nin the <icon=bagPocket{2}>\\c[1]{3} Pocket\\c[0].",
-       itemname,pocket,PokemonBag.pocketNames()[pocket]))
+    pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+       itemname, pocket, PokemonBag.pocket_names[pocket - 1]))
     return true
   end
   # Can't add the item
@@ -754,6 +761,8 @@ def pbReceiveItem(item,quantity=1)
   meName = (item.is_key_item?) ? "Key item get" : "Item get"
   if item == :LEFTOVERS
     pbMessage(_INTL("\\me[{1}]You obtained some \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
+  elsif item == :DNASPLICERS
+    pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
   elsif item.is_machine?   # TM or HM
     pbMessage(_INTL("\\me[{1}]You obtained \\c[1]{2} {3}\\c[0]!\\wtnp[30]",meName,itemname,GameData::Move.get(move).name))
   elsif quantity>1
@@ -763,9 +772,9 @@ def pbReceiveItem(item,quantity=1)
   else
     pbMessage(_INTL("\\me[{1}]You obtained a \\c[1]{2}\\c[0]!\\wtnp[30]",meName,itemname))
   end
-  if $PokemonBag.pbStoreItem(item,quantity)   # If item can be added
-    pbMessage(_INTL("You put the {1} away\\nin the <icon=bagPocket{2}>\\c[1]{3} Pocket\\c[0].",
-       itemname,pocket,PokemonBag.pocketNames()[pocket]))
+  if $bag.add(item, quantity)   # If item can be added
+    pbMessage(_INTL("You put the {1} in\\nyour Bag's <icon=bagPocket{2}>\\c[1]{3}\\c[0] pocket.",
+       itemname, pocket, PokemonBag.pocket_names[pocket - 1]))
     return true
   end
   return false   # Can't add the item

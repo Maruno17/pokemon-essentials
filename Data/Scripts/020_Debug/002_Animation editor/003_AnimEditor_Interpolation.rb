@@ -263,7 +263,6 @@ def pbDefinePath(canvas)
           points[j]=nil
         end
         points.compact!
-#       File.open("pointpath.txt","wb") { |f| f.write(path.inspect) }
       end
     elsif sliderwin2.changed?(defcurvebutton)
       for point in points

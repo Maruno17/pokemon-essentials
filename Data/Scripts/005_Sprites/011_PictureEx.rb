@@ -38,10 +38,14 @@ end
 
 
 def getCubicPoint2(src,t)
-  x0  = src[0];  y0 = src[1]
-  cx0 = src[2]; cy0 = src[3]
-  cx1 = src[4]; cy1 = src[5]
-  x1  = src[6];  y1 = src[7]
+  x0  = src[0]
+  y0  = src[1]
+  cx0 = src[2]
+  cy0 = src[3]
+  cx1 = src[4]
+  cy1 = src[5]
+  x1  = src[6]
+  y1  = src[7]
 
   x1 = cx1+(x1-cx1)*t
   x0 = x0+(cx0-x0)*t
@@ -117,9 +121,12 @@ class PictureEx
   end
 
   def callback(cb)
-    if cb.is_a?(Proc);      cb.call(self)
-    elsif cb.is_a?(Array);  cb[0].method(cb[1]).call(self)
-    elsif cb.is_a?(Method); cb.call(self)
+    if cb.is_a?(Proc)
+      cb.call(self)
+    elsif cb.is_a?(Array)
+      cb[0].method(cb[1]).call(self)
+    elsif cb.is_a?(Method)
+      cb.call(self)
     end
   end
 
@@ -163,7 +170,9 @@ class PictureEx
   #       the angle another way too.
   def rotate(speed)
     @rotate_speed = speed*20.0/Graphics.frame_rate
-    while @rotate_speed<0; @rotate_speed += 360; end
+    while @rotate_speed<0
+      @rotate_speed += 360
+    end
     @rotate_speed %= 360
   end
 
@@ -440,7 +449,9 @@ class PictureEx
     if @rotate_speed != 0
       @frameUpdates.push(Processes::Angle) if !@frameUpdates.include?(Processes::Angle)
       @angle += @rotate_speed
-      while @angle<0; @angle += 360; end
+      while @angle<0
+        @angle += 360
+      end
       @angle %= 360
     end
   end

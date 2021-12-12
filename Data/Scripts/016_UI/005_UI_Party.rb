@@ -298,15 +298,22 @@ class PokemonPartyPanel < SpriteWrapper
     @refreshing = true
     if @panelbgsprite && !@panelbgsprite.disposed?
       if self.selected
-        if self.preselected;     @panelbgsprite.changeBitmap("swapsel2")
-        elsif @switching;        @panelbgsprite.changeBitmap("swapsel")
-        elsif @pokemon.fainted?; @panelbgsprite.changeBitmap("faintedsel")
-        else;                    @panelbgsprite.changeBitmap("ablesel")
+        if self.preselected
+          @panelbgsprite.changeBitmap("swapsel2")
+        elsif @switching
+          @panelbgsprite.changeBitmap("swapsel")
+        elsif @pokemon.fainted?
+          @panelbgsprite.changeBitmap("faintedsel")
+        else
+          @panelbgsprite.changeBitmap("ablesel")
         end
       else
-        if self.preselected;     @panelbgsprite.changeBitmap("swap")
-        elsif @pokemon.fainted?; @panelbgsprite.changeBitmap("fainted")
-        else;                    @panelbgsprite.changeBitmap("able")
+        if self.preselected
+          @panelbgsprite.changeBitmap("swap")
+        elsif @pokemon.fainted?
+          @panelbgsprite.changeBitmap("fainted")
+        else
+          @panelbgsprite.changeBitmap("able")
         end
       end
       @panelbgsprite.x     = self.x
@@ -316,9 +323,12 @@ class PokemonPartyPanel < SpriteWrapper
     if @hpbgsprite && !@hpbgsprite.disposed?
       @hpbgsprite.visible = (!@pokemon.egg? && !(@text && @text.length>0))
       if @hpbgsprite.visible
-        if self.preselected || (self.selected && @switching); @hpbgsprite.changeBitmap("swap")
-        elsif @pokemon.fainted?;                              @hpbgsprite.changeBitmap("fainted")
-        else;                                                 @hpbgsprite.changeBitmap("able")
+        if self.preselected || (self.selected && @switching)
+          @hpbgsprite.changeBitmap("swap")
+        elsif @pokemon.fainted?
+          @hpbgsprite.changeBitmap("fainted")
+        else
+          @hpbgsprite.changeBitmap("able")
         end
         @hpbgsprite.x     = self.x+96
         @hpbgsprite.y     = self.y+50
@@ -374,15 +384,14 @@ class PokemonPartyPanel < SpriteWrapper
             @overlaysprite.bitmap.blt(128,52,@hpbar.bitmap,hprect)
           end
           # Draw status
-          status = 0
+          status = -1
           if @pokemon.fainted?
-            status = GameData::Status::DATA.keys.length / 2
+            status = GameData::Status.count
           elsif @pokemon.status != :NONE
-            status = GameData::Status.get(@pokemon.status).id_number
+            status = GameData::Status.get(@pokemon.status).icon_position
           elsif @pokemon.pokerusStage == 1
-            status = GameData::Status::DATA.keys.length / 2 + 1
+            status = GameData::Status.count + 1
           end
-          status -= 1
           if status >= 0
             statusrect = Rect.new(0,16*status,44,16)
             @overlaysprite.bitmap.blt(78,68,@statuses.bitmap,statusrect)
@@ -435,18 +444,29 @@ end
 # Pokémon party visuals
 #===============================================================================
 class PokemonParty_Scene
-  def pbStartScene(party,starthelptext,annotations=nil,multiselect=false)
+  def pbStartScene(party, starthelptext, annotations = nil, multiselect = false, can_access_storage = false)
     @sprites = {}
     @party = party
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
     @multiselect = multiselect
+    @can_access_storage = can_access_storage
     addBackgroundPlane(@sprites,"partybg","Party/bg",@viewport)
     @sprites["messagebox"] = Window_AdvancedTextPokemon.new("")
+    @sprites["messagebox"].z              = 50
     @sprites["messagebox"].viewport       = @viewport
     @sprites["messagebox"].visible        = false
     @sprites["messagebox"].letterbyletter = true
     pbBottomLeftLines(@sprites["messagebox"],2)
+    @sprites["storagetext"] = Window_UnformattedTextPokemon.new(
+       @can_access_storage ? _INTL("[Special]: To Boxes") : "")
+    @sprites["storagetext"].x           = 32
+    @sprites["storagetext"].y           = Graphics.height - @sprites["messagebox"].height - 16
+    @sprites["storagetext"].z           = 10
+    @sprites["storagetext"].viewport    = @viewport
+    @sprites["storagetext"].baseColor   = Color.new(248, 248, 248)
+    @sprites["storagetext"].shadowColor = Color.new(0, 0, 0)
+    @sprites["storagetext"].windowskin  = nil
     @sprites["helpwindow"] = Window_UnformattedTextPokemon.new(starthelptext)
     @sprites["helpwindow"].viewport = @viewport
     @sprites["helpwindow"].visible  = true
@@ -563,6 +583,10 @@ class PokemonParty_Scene
       end
     }
     return ret
+  end
+
+  def pbChooseNumber(helptext, maximum, initnum = 1)
+    return UIHelper.pbChooseNumber(@sprites["helpwindow"], helptext, maximum, initnum) { update }
   end
 
   def pbSetHelpText(helptext)
@@ -706,7 +730,15 @@ class PokemonParty_Scene
         end
       end
       cancelsprite = Settings::MAX_PARTY_SIZE + ((@multiselect) ? 1 : 0)
-      if Input.trigger?(Input::ACTION) && canswitch==1 && @activecmd!=cancelsprite
+      if Input.trigger?(Input::SPECIAL) && @can_access_storage && canswitch != 2
+        pbPlayDecisionSE
+        pbFadeOutIn {
+          scene = PokemonStorageScene.new
+          screen = PokemonStorageScreen.new(scene, $PokemonStorage)
+          screen.pbStartScreen(0)
+          pbHardRefresh
+        }
+      elsif Input.trigger?(Input::ACTION) && canswitch==1 && @activecmd!=cancelsprite
         pbPlayDecisionSE
         return [1,@activecmd]
       elsif Input.trigger?(Input::ACTION) && canswitch==2
@@ -751,7 +783,7 @@ class PokemonParty_Scene
         currentsel -= 1
         while currentsel > 0 && currentsel < Settings::MAX_PARTY_SIZE && !@party[currentsel]
           currentsel -= 1
-        end 
+        end
       else
         begin
           currentsel -= 2
@@ -1019,7 +1051,9 @@ class PokemonPartyScreen
       addedEntry = false
       if pkmnid == Settings::MAX_PARTY_SIZE   # Confirm was chosen
         ret = []
-        for i in realorder; ret.push(@party[i]); end
+        for i in realorder
+          ret.push(@party[i])
+        end
         error = []
         break if ruleset.isValid?(ret,error)
         pbDisplay(error[0])
@@ -1092,7 +1126,7 @@ class PokemonPartyScreen
     eligibility = []
     for pkmn in @party
       elig = ableProc.call(pkmn)
-      elig = false if pkmn.egg? || pkmn.shadowPokemon?
+      elig = false if pkmn.egg? || pkmn.shadowPokemon? || pkmn.cannot_trade
       eligibility.push(elig)
       annot.push((elig) ? _INTL("ABLE") : _INTL("NOT ABLE"))
     end
@@ -1116,8 +1150,16 @@ class PokemonPartyScreen
   end
 
   def pbPokemonScreen
+    can_access_storage = false
+    if $bag.has?(:POKEMONBOXLINK)
+      if !$game_switches[Settings::DISABLE_BOX_LINK_SWITCH] &&
+         !$game_map.metadata&.has_flag?("DisableBoxLink")
+        can_access_storage = true
+      end
+    end
     @scene.pbStartScene(@party,
-       (@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."),nil)
+       (@party.length > 1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."),
+       nil, false, can_access_storage)
     loop do
       @scene.pbSetHelpText((@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
       pkmnid = @scene.pbChoosePokemon(false,-1,1)
@@ -1204,7 +1246,7 @@ class PokemonPartyScreen
               screen = PokemonRegionMapScreen.new(scene)
               ret = screen.pbStartFlyScreen
               if ret
-                $PokemonTemp.flydata=ret
+                $game_temp.fly_destination = ret
                 return [pkmn,pkmn.moves[i].id]
               end
               @scene.pbStartScene(@party,
@@ -1258,7 +1300,7 @@ class PokemonPartyScreen
         itemcommands[itemcommands.length]             = _INTL("Cancel")
         command = @scene.pbShowCommands(_INTL("Do what with an item?"),itemcommands)
         if cmdUseItem>=0 && command==cmdUseItem   # Use
-          item = @scene.pbUseItem($PokemonBag,pkmn) {
+          item = @scene.pbUseItem($bag,pkmn) {
             @scene.pbSetHelpText((@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
           }
           if item
@@ -1266,7 +1308,7 @@ class PokemonPartyScreen
             pbRefreshSingle(pkmnid)
           end
         elsif cmdGiveItem>=0 && command==cmdGiveItem   # Give
-          item = @scene.pbChooseItem($PokemonBag) {
+          item = @scene.pbChooseItem($bag) {
             @scene.pbSetHelpText((@party.length>1) ? _INTL("Choose a Pokémon.") : _INTL("Choose Pokémon or cancel."))
           }
           if item
@@ -1335,7 +1377,7 @@ end
 def pbPokemonScreen
   pbFadeOutIn {
     sscene = PokemonParty_Scene.new
-    sscreen = PokemonPartyScreen.new(sscene,$Trainer.party)
+    sscreen = PokemonPartyScreen.new(sscene, $player.party)
     sscreen.pbPokemonScreen
   }
 end
@@ -1350,7 +1392,7 @@ def pbChoosePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneligible=fa
   chosen = 0
   pbFadeOutIn {
     scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene,$Trainer.party)
+    screen = PokemonPartyScreen.new(scene, $player.party)
     if ableProc
       chosen=screen.pbChooseAblePokemon(ableProc,allowIneligible)
     else
@@ -1359,11 +1401,11 @@ def pbChoosePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneligible=fa
       screen.pbEndScene
     end
   }
-  pbSet(variableNumber,chosen)
+  pbSet(variableNumber, chosen)
   if chosen>=0
-    pbSet(nameVarNumber,$Trainer.party[chosen].name)
+    pbSet(nameVarNumber, $player.party[chosen].name)
   else
-    pbSet(nameVarNumber,"")
+    pbSet(nameVarNumber, "")
   end
 end
 
@@ -1380,7 +1422,7 @@ def pbChooseTradablePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneli
   chosen = 0
   pbFadeOutIn {
     scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene,$Trainer.party)
+    screen = PokemonPartyScreen.new(scene, $player.party)
     if ableProc
       chosen=screen.pbChooseTradablePokemon(ableProc,allowIneligible)
     else
@@ -1389,11 +1431,11 @@ def pbChooseTradablePokemon(variableNumber,nameVarNumber,ableProc=nil,allowIneli
       screen.pbEndScene
     end
   }
-  pbSet(variableNumber,chosen)
+  pbSet(variableNumber, chosen)
   if chosen>=0
-    pbSet(nameVarNumber,$Trainer.party[chosen].name)
+    pbSet(nameVarNumber, $player.party[chosen].name)
   else
-    pbSet(nameVarNumber,"")
+    pbSet(nameVarNumber, "")
   end
 end
 

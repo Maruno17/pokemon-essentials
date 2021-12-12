@@ -172,18 +172,17 @@ module PluginManager
   def self.register(options)
     name         = nil
     version      = nil
+    essentials   = nil
     link         = nil
     dependencies = nil
     incompats    = nil
     credits      = []
-    order = [:name, :version, :link, :dependencies, :incompatibilities, :credits]
+    order = [:name, :version, :essentials, :link, :dependencies, :incompatibilities, :credits]
     # Ensure it first reads the plugin's name, which is used in error reporting,
     # by sorting the keys
     keys = options.keys.sort do |a, b|
-      idx_a = order.index(a)
-      idx_a = order.size if idx_a == -1
-      idx_b = order.index(b)
-      idx_b = order.size if idx_b == -1
+      idx_a = order.index(a) || order.size
+      idx_b = order.index(b) || order.size
       next idx_a <=> idx_b
     end
     for key in keys
@@ -202,6 +201,8 @@ module PluginManager
           self.error("Plugin version must be a string.")
         end
         version = value
+      when :essentials
+        essentials = value
       when :link   # Plugin website
         if nil_or_empty?(value)
           self.error("Plugin link must be a non-empty string.")
@@ -338,6 +339,7 @@ module PluginManager
     @@Plugins[name] = {
       :name => name,
       :version => version,
+      :essentials => essentials,
       :link => link,
       :dependencies => dependencies,
       :incompatibilities => incompats,
@@ -350,7 +352,7 @@ module PluginManager
   def self.error(msg)
     Graphics.update
     t = Thread.new do
-      echoln "Plugin Error:\r\n#{msg}"
+      Console.echo_error "Plugin Error:\r\n#{msg}"
       p "Plugin Error: #{msg}"
       Thread.exit
     end
@@ -409,11 +411,15 @@ module PluginManager
   #-----------------------------------------------------------------------------
   def self.compare_versions(v1, v2)
     d1 = v1.split("")
-    d1.insert(0, "0") if d1[0] == "."          # Turn ".123" into "0.123"
-    while d1[-1] == "."; d1 = d1[0..-2]; end   # Turn "123." into "123"
+    d1.insert(0, "0") if d1[0] == "."   # Turn ".123" into "0.123"
+    while d1[-1] == "."                 # Turn "123." into "123"
+      d1 = d1[0..-2]
+    end
     d2 = v2.split("")
-    d2.insert(0, "0") if d2[0] == "."          # Turn ".123" into "0.123"
-    while d2[-1] == "."; d2 = d2[0..-2]; end   # Turn "123." into "123"
+    d2.insert(0, "0") if d2[0] == "."   # Turn ".123" into "0.123"
+    while d2[-1] == "."                 # Turn "123." into "123"
+      d2 = d2[0..-2]
+    end
     for i in 0...[d1.size, d2.size].max   # Compare each digit in turn
       c1 = d1[i]
       c2 = d2[i]
@@ -491,6 +497,9 @@ module PluginManager
       data.each_with_index { |value, i| data[i] = value.strip }
       # begin formatting data hash
       case property
+      when 'ESSENTIALS'
+        meta[:essentials] = [] if !meta[:essentials]
+        data.each { |ver| meta[:essentials].push(ver) }
       when 'REQUIRES'
         meta[:dependencies] = [] if !meta[:dependencies]
         if data.length < 2   # No version given, just push name of plugin dependency
@@ -650,7 +659,7 @@ module PluginManager
   # Check if plugins need compiling
   #-----------------------------------------------------------------------------
   def self.compilePlugins(order, plugins)
-    echo 'Compiling plugin scripts...'
+    Console.echo_li "Compiling plugin scripts..."
     scripts = []
     # go through the entire order one by one
     for o in order
@@ -672,13 +681,13 @@ module PluginManager
     File.open("Data/PluginScripts.rxdata", 'wb') { |f| Marshal.dump(scripts, f) }
     # collect garbage
     GC.start
-    echoln ' done.'
-    echoln ''
+    Console.echo_done(true)
   end
   #-----------------------------------------------------------------------------
   # Check if plugins need compiling
   #-----------------------------------------------------------------------------
   def self.runPlugins
+    Console.echo_h1 "Checking plugins"
     # get the order of plugins to interpret
     order, plugins = self.getPluginOrder
     # compile if necessary
@@ -689,6 +698,9 @@ module PluginManager
     for plugin in scripts
       # get the required data
       name, meta, script = plugin
+      if !meta[:essentials] || !meta[:essentials].include?(Essentials::VERSION)
+        Console.echo_warn "Plugin '#{name}' may not be compatible with Essentials v#{Essentials::VERSION}. Trying to load anyway."
+      end
       # register plugin
       self.register(meta)
       # go through each script and interpret
@@ -703,7 +715,7 @@ module PluginManager
         # try to run the code
         begin
           eval(code, TOPLEVEL_BINDING, fname)
-          echoln "Loaded plugin: #{name}" if !echoed_plugins.include?(name)
+          Console.echoln_li "Loaded plugin: '#{name}'" if !echoed_plugins.include?(name)
           echoed_plugins.push(name)
         rescue Exception   # format error message to display
           self.pluginErrorMsg(name, sname)
@@ -711,7 +723,12 @@ module PluginManager
         end
       end
     end
-    echoln '' if !echoed_plugins.empty?
+    if scripts.length > 0
+      echoln ""
+      Console.echo_h2("Successfully loaded #{scripts.length} plugin(s)", text: :green)
+    else
+      Console.echo_h2("No plugins found", text: :green)
+    end
   end
   #-----------------------------------------------------------------------------
 end

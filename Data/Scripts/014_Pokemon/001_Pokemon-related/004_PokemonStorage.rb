@@ -108,13 +108,14 @@ class PokemonStorage
     @unlockedWallpapers = [] if !@unlockedWallpapers
     for i in 0...papers.length
       next if !isAvailableWallpaper?(i)
-      ret[0].push(papers[i]); ret[1].push(i)
+      ret[0].push(papers[i])
+      ret[1].push(i)
     end
     return ret
   end
 
   def party
-    $Trainer.party
+    $player.party
   end
 
   def party=(_value)
@@ -122,7 +123,7 @@ class PokemonStorage
   end
 
   def party_full?
-    return $Trainer.party_full?
+    return $player.party_full?
   end
 
   def maxBoxes
@@ -189,9 +190,11 @@ class PokemonStorage
     else   # Copying into box
       pkmn = self[boxSrc,indexSrc]
       raise "Trying to copy nil to storage" if !pkmn
-      pkmn.time_form_set = nil
-      pkmn.form          = 0 if pkmn.isSpecies?(:SHAYMIN)
-      pkmn.heal
+      if Settings::HEAL_STORED_POKEMON
+        old_ready_evo = pkmn.ready_to_evolve
+        pkmn.heal
+        pkmn.ready_to_evolve = old_ready_evo
+      end
       self[boxDst,indexDst] = pkmn
     end
     return true
@@ -211,10 +214,10 @@ class PokemonStorage
   def pbMoveCaughtToBox(pkmn,box)
     for i in 0...maxPokemon(box)
       if self[box,i]==nil
-        if box>=0
-          pkmn.time_form_set = nil if pkmn.time_form_set
-          pkmn.form          = 0 if pkmn.isSpecies?(:SHAYMIN)
+        if Settings::HEAL_STORED_POKEMON && box >= 0
+          old_ready_evo = pkmn.ready_to_evolve
           pkmn.heal
+          pkmn.ready_to_evolve = old_ready_evo
         end
         self[box,i] = pkmn
         return true
@@ -224,10 +227,10 @@ class PokemonStorage
   end
 
   def pbStoreCaught(pkmn)
-    if @currentBox>=0
-      pkmn.time_form_set = nil
-      pkmn.form          = 0 if pkmn.isSpecies?(:SHAYMIN)
+    if Settings::HEAL_STORED_POKEMON && @currentBox >= 0
+      old_ready_evo = pkmn.ready_to_evolve
       pkmn.heal
+      pkmn.ready_to_evolve = old_ready_evo
     end
     for i in 0...maxPokemon(@currentBox)
       if self[@currentBox,i]==nil

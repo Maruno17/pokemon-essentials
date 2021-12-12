@@ -236,6 +236,95 @@ end
 
 
 
+class StringListProperty
+  def self.set(_setting_name, old_setting)
+    real_cmds = []
+    real_cmds.push([_INTL("[ADD VALUE]"), -1])
+    old_setting.length.times do
+      real_cmds.push([old_setting[i], 0])
+    end
+    # Edit list
+    cmdwin = pbListWindow([], 200)
+    oldsel = nil
+    ret = old_setting
+    cmd = 0
+    commands = []
+    do_refresh = true
+    loop do
+      if do_refresh
+        commands = []
+        real_cmds.each_with_index do |entry, i|
+          commands.push(entry[0])
+          cmd = i if oldsel && entry[0] == oldsel
+        end
+      end
+      do_refresh = false
+      oldsel = nil
+      cmd = pbCommands2(cmdwin, commands, -1, cmd, true)
+      if cmd >= 0   # Chose a value
+        entry = real_cmds[cmd]
+        if entry[1] == -1   # Add new value
+          new_value = pbMessageFreeText(_INTL("Enter the new value."),
+             "", false, 250, Graphics.width)
+          if !nil_or_empty?(new_value)
+            if real_cmds.any? { |e| e[0] == new_value }
+              oldsel = new_value   # Already have value; just move cursor to it
+            else
+              real_cmds.push([new_value, 0])
+            end
+            do_refresh = true
+          end
+        else   # Edit value
+          case pbMessage(_INTL("\\ts[]Do what with this value?"),
+             [_INTL("Edit"), _INTL("Delete"), _INTL("Cancel")], 3)
+          when 0   # Edit
+            new_value = pbMessageFreeText(_INTL("Enter the new value."),
+               entry[0], false, 250, Graphics.width)
+            if !nil_or_empty?(new_value)
+              if real_cmds.any? { |e| e[0] == new_value }   # Already have value; delete this one
+                real_cmds.delete_at(cmd)
+                cmd = [cmd, real_cmds.length - 1].min
+              else   # Change value
+                entry[0] = new_value
+              end
+              oldsel = new_value
+              do_refresh = true
+            end
+          when 1   # Delete
+            real_cmds.delete_at(cmd)
+            cmd = [cmd, real_cmds.length - 1].min
+            do_refresh = true
+          end
+        end
+      else   # Cancel/quit
+        case pbMessage(_INTL("Keep changes?"), [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+        when 0
+          for i in 0...real_cmds.length
+            real_cmds[i] = (real_cmds[i][1] == -1) ? nil : real_cmds[i][0]
+          end
+          real_cmds.compact!
+          ret = real_cmds
+          break
+        when 1
+          break
+        end
+      end
+    end
+    cmdwin.dispose
+    return ret
+  end
+
+  def self.defaultValue
+    return []
+  end
+
+  def self.format(value)
+    return value.join(",")
+  end
+end
+
+
+
 class GameDataProperty
   def initialize(value)
     raise _INTL("Couldn't find class {1} in module GameData.", value.to_s) if !GameData.const_defined?(value.to_sym)
@@ -574,30 +663,6 @@ end
 
 
 
-module PlayerProperty
-  def self.set(settingname,oldsetting)
-    oldsetting = [nil,"xxx","xxx","xxx","xxx","xxx","xxx","xxx"] if !oldsetting
-    properties = [
-       [_INTL("Trainer Type"), TrainerTypeProperty, _INTL("Trainer type of this player.")],
-       [_INTL("Sprite"),       CharacterProperty,   _INTL("Walking character sprite.")],
-       [_INTL("Cycling"),      CharacterProperty,   _INTL("Cycling character sprite.")],
-       [_INTL("Surfing"),      CharacterProperty,   _INTL("Surfing character sprite.")],
-       [_INTL("Running"),      CharacterProperty,   _INTL("Running character sprite.")],
-       [_INTL("Diving"),       CharacterProperty,   _INTL("Diving character sprite.")],
-       [_INTL("Fishing"),      CharacterProperty,   _INTL("Fishing character sprite.")],
-       [_INTL("Field Move"),   CharacterProperty,   _INTL("Using a field move character sprite.")]
-    ]
-    pbPropertyList(settingname,oldsetting,properties,false)
-    return oldsetting
-  end
-
-  def self.format(value)
-    return value.inspect
-  end
-end
-
-
-
 module MapSizeProperty
   def self.set(settingname,oldsetting)
     oldsetting = [0,""] if !oldsetting
@@ -799,7 +864,6 @@ end
 module PocketProperty
   def self.set(_settingname, oldsetting)
     commands = Settings.bag_pocket_names.clone
-    commands.shift
     cmd = pbMessage(_INTL("Choose a pocket for this item."), commands, -1)
     return (cmd >= 0) ? cmd + 1 : oldsetting
   end
@@ -810,7 +874,7 @@ module PocketProperty
 
   def self.format(value)
     return _INTL("No Pocket") if value == 0
-    return (value) ? Settings.bag_pocket_names[value] : value.inspect
+    return (value) ? Settings.bag_pocket_names[value - 1] : value.inspect
   end
 end
 
@@ -911,7 +975,134 @@ end
 
 
 
-module MovePoolProperty
+class GameDataPoolProperty
+  def initialize(game_data, allow_multiple = true, auto_sort = false)
+    if !GameData.const_defined?(game_data.to_sym)
+      raise _INTL("Couldn't find class {1} in module GameData.", game_data.to_s)
+    end
+    @game_data = game_data
+    @game_data_module = GameData.const_get(game_data.to_sym)
+    @allow_multiple = allow_multiple
+    @auto_sort = auto_sort   # Alphabetically
+  end
+
+  def set(setting_name, old_setting)
+    ret = old_setting
+    old_setting.uniq! if !@allow_multiple
+    old_setting.sort! if @auto_sort
+    # Get all values already in the pool
+    values = []
+    values.push([nil, _INTL("[ADD VALUE]")])   # Value ID, name
+    old_setting.each do |value|
+      values.push([value, @game_data_module.get(value).real_name])
+    end
+    # Set things up
+    command_window = pbListWindow([], 200)
+    cmd = [0, 0]   # [input type, list index] (input type: 0=select, 1=swap up, 2=swap down)
+    commands = []
+    need_refresh = true
+    # Edit value pool
+    loop do
+      if need_refresh
+        if @auto_sort
+          values.sort! { |a, b| (a[0].nil?) ? -1 : b[0].nil? ? 1 : a[1] <=> b[1] }
+        end
+        commands = values.map { |entry| entry[1] }
+        need_refresh = false
+      end
+      # Choose a value
+      cmd = pbCommands3(command_window, commands, -1, cmd[1], true)
+      case cmd[0]   # 0=selected/cancelled, 1=pressed Action+Up, 2=pressed Action+Down
+      when 1   # Swap value up
+        if cmd[1] > 0 && cmd[1] < values.length - 1
+          values[cmd[1] + 1], values[cmd[1]] = values[cmd[1]], values[cmd[1] + 1]
+          need_refresh = true
+        end
+      when 2   # Swap value down
+        if cmd[1] > 1
+          values[cmd[1] - 1], values[cmd[1]] = values[cmd[1]], values[cmd[1] - 1]
+          need_refresh = true
+        end
+      when 0
+        if cmd[1] >= 0   # Chose an entry
+          entry = values[cmd[1]]
+          if entry[0].nil?   # Add new value
+            new_value = pbChooseFromGameDataList(@game_data)
+            if new_value
+              if !@allow_multiple && values.any? { |val| val[0] == new_value }
+                cmd[1] = values.index { |val| val[0] == new_value }
+                next
+              end
+              values.push([new_value, @game_data_module.get(new_value).real_name])
+              need_refresh = true
+            end
+          else   # Edit existing value
+            case pbMessage(_INTL("\\ts[]Do what with this value?"),
+               [_INTL("Change value"), _INTL("Delete"), _INTL("Cancel")], 3)
+            when 0   # Change value
+              new_value = pbChooseFromGameDataList(@game_data, entry[0])
+              if new_value && new_value != entry[0]
+                if !@allow_multiple && values.any? { |val| val[0] == new_value }
+                  values.delete_at(cmd[1])
+                  cmd[1] = values.index { |val| val[0] == new_value }
+                  need_refresh = true
+                  next
+                end
+                entry[0] = new_value
+                entry[1] = @game_data_module.get(new_value).real_name
+                if @auto_sort
+                  values.sort! { |a, b| a[1] <=> b[1] }
+                  cmd[1] = values.index { |val| val[0] == new_value }
+                end
+                need_refresh = true
+              end
+            when 1   # Delete
+              values.delete_at(cmd[1])
+              cmd[1] = [cmd[1], values.length - 1].min
+              need_refresh = true
+            end
+          end
+        else   # Cancel/quit
+          case pbMessage(_INTL("Apply changes?"),
+             [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
+          when 0
+            values.shift   # Remove the "add value" option
+            for i in 0...values.length
+              values[i] = values[i][0]
+            end
+            values.compact!
+            ret = values
+            break
+          when 1
+            break
+          end
+        end
+      end
+    end
+    command_window.dispose
+    return ret
+  end
+
+  def defaultValue
+    return []
+  end
+
+  def format(value)
+    return value.map { |val| @game_data_module.get(val).real_name }.join(",")
+  end
+end
+
+
+
+class EggMovesProperty < GameDataPoolProperty
+  def initialize
+    super(:Move, false, true)
+  end
+end
+
+
+
+module LevelUpMovesProperty
   def self.set(_settingname, oldsetting)
     # Get all moves in move pool
     realcmds = []
@@ -993,8 +1184,7 @@ module MovePoolProperty
                   havemove = e[2] if e[0] == newlevel && e[1] == entry[1]
                 end
                 if havemove >= 0   # Move already known at new level; delete this move
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
+                  realcmds.delete_at(cmd[1])
                   oldsel = havemove
                 else   # Apply the new level
                   entry[0] = newlevel
@@ -1010,8 +1200,7 @@ module MovePoolProperty
                   havemove = e[2] if e[0] == entry[0] && e[1] == newmove
                 end
                 if havemove >= 0   # New move already known at level; delete this move
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
+                  realcmds.delete_at(cmd[1])
                   cmd[1] = [cmd[1], realcmds.length - 1].min
                   oldsel = havemove
                 else   # Apply the new move
@@ -1022,8 +1211,7 @@ module MovePoolProperty
                 refreshlist = true
               end
             when 2   # Delete
-              realcmds[cmd[1]] = nil
-              realcmds.compact!
+              realcmds.delete_at(cmd[1])
               cmd[1] = [cmd[1], realcmds.length - 1].min
               refreshlist = true
             end
@@ -1032,6 +1220,7 @@ module MovePoolProperty
           case pbMessage(_INTL("Save changes?"),
              [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
           when 0
+            realcmds.shift
             for i in 0...realcmds.length
               realcmds[i].pop   # Remove name
               realcmds[i].pop   # Remove index in this list
@@ -1065,108 +1254,11 @@ end
 
 
 
-module EggMovesProperty
-  def self.set(_settingname, oldsetting)
-    # Get all egg moves
-    realcmds = []
-    realcmds.push([nil, _INTL("[ADD MOVE]"), -1])
-    for i in 0...oldsetting.length
-      realcmds.push([oldsetting[i], GameData::Move.get(oldsetting[i]).real_name, 0])
-    end
-    # Edit egg moves list
-    cmdwin = pbListWindow([], 200)
-    oldsel = nil
-    ret = oldsetting
-    cmd = 0
-    commands = []
-    refreshlist = true
-    loop do
-      if refreshlist
-        realcmds.sort! { |a, b| (a[2] == b[2]) ? a[1] <=> b[1] : a[2] <=> b[2] }
-        commands = []
-        realcmds.each_with_index do |entry, i|
-          commands.push(entry[1])
-          cmd = i if oldsel && entry[0] == oldsel
-        end
-      end
-      refreshlist = false
-      oldsel = nil
-      cmd = pbCommands2(cmdwin, commands, -1, cmd, true)
-      if cmd >= 0   # Chose an entry
-        entry = realcmds[cmd]
-        if entry[2] == -1   # Add new move
-          newmove = pbChooseMoveList
-          if newmove
-            if realcmds.any? { |e| e[0] == newmove }
-              oldsel = newmove   # Already have move; just move cursor to it
-            else
-              realcmds.push([newmove, GameData::Move.get(newmove).name, 0])
-            end
-            refreshlist = true
-          end
-        else   # Edit move
-          case pbMessage(_INTL("\\ts[]Do what with this move?"),
-             [_INTL("Change move"), _INTL("Delete"), _INTL("Cancel")], 3)
-          when 0   # Change move
-            newmove = pbChooseMoveList(entry[0])
-            if newmove
-              if realcmds.any? { |e| e[0] == newmove }   # Already have move; delete this one
-                realcmds[cmd] = nil
-                realcmds.compact!
-                cmd = [cmd, realcmds.length - 1].min
-              else   # Change move
-                realcmds[cmd] = [newmove, GameData::Move.get(newmove).name, 0]
-              end
-              oldsel = newmove
-              refreshlist = true
-            end
-          when 1   # Delete
-            realcmds[cmd] = nil
-            realcmds.compact!
-            cmd = [cmd, realcmds.length - 1].min
-            refreshlist = true
-          end
-        end
-      else   # Cancel/quit
-        case pbMessage(_INTL("Save changes?"),
-           [_INTL("Yes"), _INTL("No"), _INTL("Cancel")], 3)
-        when 0
-          for i in 0...realcmds.length
-            realcmds[i] = realcmds[i][0]
-          end
-          realcmds.compact!
-          ret = realcmds
-          break
-        when 1
-          break
-        end
-      end
-    end
-    cmdwin.dispose
-    return ret
-  end
-
-  def self.defaultValue
-    return []
-  end
-
-  def self.format(value)
-    ret = ""
-    for i in 0...value.length
-      ret << "," if i > 0
-      ret << GameData::Move.get(value[i]).real_name
-    end
-    return ret
-  end
-end
-
-
-
 class EvolutionsProperty
   def initialize
     @methods = []
     @evo_ids = []
-    GameData::Evolution.each do |e|
+    GameData::Evolution.each_alphabetically do |e|
       @methods.push(e.real_name)
       @evo_ids.push(e.id)
     end
@@ -1187,6 +1279,10 @@ class EvolutionsProperty
       ret = pbChooseTypeList(value)
     when :Ability
       ret = pbChooseAbilityList(value)
+    when String
+      ret = pbMessageFreeText(_INTL("Enter a value."), ret || "", false, 250, Graphics.width)
+      ret.strip!
+      ret = nil if ret.empty?
     else
       params = ChooseNumberParams.new
       params.setRange(0, 65535)
@@ -1225,7 +1321,7 @@ class EvolutionsProperty
               commands.push(_INTL("{1}: {2}",
                  GameData::Species.get(realcmds[i][0]).name, evo_method_data.real_name))
             else
-              if !GameData.const_defined?(param_type.to_sym) && param_type.is_a?(Symbol)
+              if param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
                 level = getConstantName(param_type, level)
               end
               level = "???" if !level || (level.is_a?(String) && level.empty?)
@@ -1293,8 +1389,7 @@ class EvolutionsProperty
                                                    realcmds[i][2]==entry[2]
                 end
                 if existing_evo >= 0
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
+                  realcmds.delete_at(cmd[1])
                   oldsel = existing_evo
                 else
                   entry[0] = newspecies
@@ -1315,8 +1410,7 @@ class EvolutionsProperty
                                                    realcmds[i][2]==entry[2]
                 end
                 if existing_evo >= 0
-                  realcmds[cmd[1]] = nil
-                  realcmds.compact!
+                  realcmds.delete_at(cmd[1])
                   oldsel = existing_evo
                 elsif newmethod != entry[1]
                   entry[1] = newmethod
@@ -1338,8 +1432,7 @@ class EvolutionsProperty
                                                      realcmds[i][2]==newparam
                   end
                   if existing_evo >= 0
-                    realcmds[cmd[1]] = nil
-                    realcmds.compact!
+                    realcmds.delete_at(cmd[1])
                     oldsel = existing_evo
                   else
                     entry[2] = newparam
@@ -1349,8 +1442,7 @@ class EvolutionsProperty
                 end
               end
             when 3   # Delete
-              realcmds[cmd[1]] = nil
-              realcmds.compact!
+              realcmds.delete_at(cmd[1])
               cmd[1] = [cmd[1],realcmds.length-1].min
               refreshlist = true
             end
@@ -1389,7 +1481,7 @@ class EvolutionsProperty
       param_type = evo_method_data.parameter
       if param_type.nil?
         param = ""
-      elsif !GameData.const_defined?(param_type.to_sym) && param_type.is_a?(Symbol)
+      elsif param_type.is_a?(Symbol) && !GameData.const_defined?(param_type)
         param = getConstantName(param_type, param)
       else
         param = param.to_s

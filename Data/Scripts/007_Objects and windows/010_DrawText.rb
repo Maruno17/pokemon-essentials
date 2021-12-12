@@ -93,7 +93,9 @@ end
 
 def getContrastColor(color)
   raise "No color given" if !color
-  r=color.red; g=color.green; b=color.blue
+  r=color.red
+  g=color.green
+  b=color.blue
   yuv=[
      r *   0.299 + g * 0.587 + b *  0.114,
      r * -0.1687 + g * -0.3313 + b *  0.500 + 0.5,
@@ -247,40 +249,6 @@ def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
     end
     position+=1
   end
-  # This code looks at whether the text occupies exactly two lines when
-  # displayed. If it does, it balances the length of each line.
-=begin
-  # Count total number of lines
-  numlines = (x==0 && y>0) ? y-1 : y
-  realtext = (newlineBreaks) ? text : text.gsub(/\n/," ")
-  if numlines==2 && !explicitBreaksOnly && !realtext[/\n/] && realtext.length>=50
-    # Set half to middle of text (known to contain no formatting)
-    half = realtext.length/2
-    leftSearch  = 0
-    rightSearch = 0
-    # Search left for a space
-    i = half; while i>=0
-      break if realtext[i,1][/\s/]||isWaitChar(realtext[i])   # found a space
-      leftSearch += 1
-      i -= 1
-    end
-    # Search right for a space
-    i = half; while i<realtext.length
-      break if realtext[i,1][/\s/]||isWaitChar(realtext[i])   # found a space
-      rightSearch += 1
-      i += 1
-    end
-    # Move half left or right whichever is closer
-    trialHalf = half+((leftSearch<rightSearch) ? -leftSearch : rightSearch)
-    if trialHalf!=0 && trialHalf!=realtext.length
-      # Insert newline and re-call this function (force explicitBreaksOnly)
-      newText = realtext.clone
-      newText.insert(trialHalf,"\n")
-      return getFormattedTextFast(bitmap,xDst,yDst,
-         widthDst,heightDst,newText,lineheight,true,explicitBreaksOnly)
-    end
-  end
-=end
   # Eliminate spaces before newlines and pause character
   if havenl
     firstspace=-1
@@ -292,11 +260,9 @@ def getFormattedTextFast(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight,
         for j in firstspace...i
           characters[j]=nil
         end
-        firstspace=-1
+        firstspace = -1
       elsif characters[i][0][/[ \r\t]/]
-        if firstspace<0
-          firstspace=i
-        end
+        firstspace = i if firstspace < 0
       else
         firstspace=-1
       end
@@ -629,7 +595,8 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
         elsif control=="r" # Right align this line
           if !endtag
             x=0
-            rightalign=1; lastword=[characters.length,x]
+            rightalign=1
+            lastword=[characters.length,x]
           end
         end
         controls[i]=nil
@@ -755,13 +722,15 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
     leftSearch  = 0
     rightSearch = 0
     # Search left for a space
-    i = half; while i>=0
+    i = half
+    while i>=0
       break if realtext[i,1][/\s/]||isWaitChar(realtext[i,1])   # found a space
       leftSearch += 1
       i -= 1
     end
     # Search right for a space
-    i = half; while i<realtext.length
+    i = half
+    while i<realtext.length
       break if realtext[i,1][/\s/]||isWaitChar(realtext[i,1])   # found a space
       rightSearch += 1
       i += 1
@@ -868,14 +837,7 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
     end
   end
   # Remove all characters with Y greater or equal to _yDst_+_heightDst_
-  if heightDst>=0
-    for i in 0...characters.length
-      if characters[i][2]>=yDst+heightDst
-        characters[i]=nil
-      end
-    end
-    characters.compact!
-  end
+  characters.delete_if { |ch| ch[2] >= yDst + heightDst } if heightDst >= 0
   bitmap.font=oldfont
   dummybitmap.dispose if dummybitmap
   return characters

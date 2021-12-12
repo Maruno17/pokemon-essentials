@@ -1,36 +1,41 @@
 module GameData
   class BerryPlant
     attr_reader :id
-    attr_reader :id_number
     attr_reader :hours_per_stage
     attr_reader :drying_per_hour
-    attr_reader :minimum_yield
-    attr_reader :maximum_yield
+    attr_reader :yield
 
     DATA = {}
     DATA_FILENAME = "berry_plants.dat"
 
-    NUMBER_OF_REPLANTS = 9
+    SCHEMA = {
+      "HoursPerStage" => [:hours_per_stage, "v"],
+      "DryingPerHour" => [:drying_per_hour, "u"],
+      "Yield"         => [:yield,           "uv"]
+    }
 
-    extend ClassMethods
+    NUMBER_OF_REPLANTS           = 9
+    NUMBER_OF_GROWTH_STAGES      = 4
+    NUMBER_OF_FULLY_GROWN_STAGES = 4
+    WATERING_CANS                = [:SPRAYDUCK, :SQUIRTBOTTLE, :WAILMERPAIL, :SPRINKLOTAD]
+
+    extend ClassMethodsSymbols
     include InstanceMethods
 
     def initialize(hash)
       @id              = hash[:id]
-      @id_number       = hash[:id_number]   || -1
       @hours_per_stage = hash[:hours_per_stage] || 3
       @drying_per_hour = hash[:drying_per_hour] || 15
-      @minimum_yield   = hash[:minimum_yield] || 2
-      @maximum_yield   = hash[:maximum_yield] || 5
+      @yield           = hash[:yield]           || [2, 5]
+      @yield.reverse! if @yield[1] < @yield[0]
+    end
+
+    def minimum_yield
+      return @yield[0]
+    end
+
+    def maximum_yield
+      return @yield[1]
     end
   end
-end
-
-#===============================================================================
-# Deprecated methods
-#===============================================================================
-# @deprecated This alias is slated to be removed in v20.
-def pbGetBerryPlantData(item)
-  Deprecation.warn_method('pbGetBerryPlantData', 'v20', 'GameData::BerryPlant.get(item)')
-  return GameData::BerryPlant.get(item)
 end

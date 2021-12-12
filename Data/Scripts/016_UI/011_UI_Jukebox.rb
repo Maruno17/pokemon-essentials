@@ -96,8 +96,8 @@ class PokemonJukeboxScreen
         pbPlayDecisionSE
         files = [_INTL("(Default)")]
         Dir.chdir("Audio/BGM/") {
-          Dir.glob("*.mp3") { |f| files.push(f) }
-          Dir.glob("*.MP3") { |f| files.push(f) }
+#          Dir.glob("*.mp3") { |f| files.push(f) }
+#          Dir.glob("*.MP3") { |f| files.push(f) }
           Dir.glob("*.ogg") { |f| files.push(f) }
           Dir.glob("*.OGG") { |f| files.push(f) }
           Dir.glob("*.wav") { |f| files.push(f) }

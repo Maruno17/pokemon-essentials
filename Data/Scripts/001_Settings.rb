@@ -14,7 +14,7 @@ module Settings
   # Note that this isn't perfect. Essentials doesn't accurately replicate every
   # single generation's mechanics. It's considered to be good enough. Only
   # generations 5 and later are reasonably supported.
-  MECHANICS_GENERATION = 7
+  MECHANICS_GENERATION = 8
 
   #=============================================================================
 
@@ -28,15 +28,27 @@ module Settings
   #=============================================================================
 
   # The maximum level Pokémon can reach.
-  MAXIMUM_LEVEL        = 100
+  MAXIMUM_LEVEL                              = 100
   # The level of newly hatched Pokémon.
-  EGG_LEVEL            = 1
+  EGG_LEVEL                                  = 1
   # The odds of a newly generated Pokémon being shiny (out of 65536).
-  SHINY_POKEMON_CHANCE = (MECHANICS_GENERATION >= 6) ? 16 : 8
+  SHINY_POKEMON_CHANCE                       = (MECHANICS_GENERATION >= 6) ? 16 : 8
+  # Whether super shininess is enabled (uses a different shiny animation).
+  SUPER_SHINY                                = (MECHANICS_GENERATION >= 8)
+  # Whether shiny wild Pokémon are more likely to appear if the player has
+  # previously defeated/caught lots of other Pokémon of the same species.
+  HIGHER_SHINY_CHANCES_WITH_NUMBER_BATTLED   = (MECHANICS_GENERATION >= 8)
   # The odds of a wild Pokémon/bred egg having Pokérus (out of 65536).
-  POKERUS_CHANCE       = 3
-  # Whether a bred baby Pokémon can inherit any TM/HM moves from its father. It
-  # can never inherit TM/HM moves from its mother.
+  POKERUS_CHANCE                             = 3
+  # Whether Pokémon in the Day Care gain Exp for each step the player takes.
+  # This is true for the Day Care and false for the Pokémon Nursery, both of
+  # which use the same code in Essentials.
+  DAY_CARE_POKEMON_GAIN_EXP_FROM_WALKING     = (MECHANICS_GENERATION <= 6)
+  # Whether two Pokémon in the Day Care can learn egg moves from each other if
+  # they are the same species.
+  DAY_CARE_POKEMON_CAN_SHARE_EGG_MOVES       = (MECHANICS_GENERATION >= 8)
+  # Whether a bred baby Pokémon can inherit any TM/TR/HM moves from its father.
+  # It can never inherit TM/TR/HM moves from its mother.
   BREEDING_CAN_INHERIT_MACHINE_MOVES         = (MECHANICS_GENERATION <= 5)
   # Whether a bred baby Pokémon can inherit egg moves from its mother. It can
   # always inherit egg moves from its father.
@@ -44,8 +56,6 @@ module Settings
 
   #=============================================================================
 
-  # The amount of money the player starts the game with.
-  INITIAL_MONEY        = 3000
   # The maximum amount of money the player can have.
   MAX_MONEY            = 999_999
   # The maximum number of Game Corner coins the player can have.
@@ -61,9 +71,9 @@ module Settings
 
   #=============================================================================
 
-  # A set of arrays each containing a trainer type followed by a Global Variable
-  # number. If the variable isn't set to 0, then all trainers with the
-  # associated trainer type will be named as whatever is in that variable.
+  # A set of arrays each containing a trainer type followed by a Game Variable
+  # number. If the Variable isn't set to 0, then all trainers with the
+  # associated trainer type will be named as whatever is in that Variable.
   RIVAL_NAMES = [
     [:RIVAL1,   12],
     [:RIVAL2,   12],
@@ -138,31 +148,49 @@ module Settings
   # If a move taught by a TM/HM/TR replaces another move, this setting is
   # whether the machine's move retains the replaced move's PP (true), or whether
   # the machine's move has full PP (false).
-  TAUGHT_MACHINES_KEEP_OLD_PP          = (MECHANICS_GENERATION == 5)
+  TAUGHT_MACHINES_KEEP_OLD_PP           = (MECHANICS_GENERATION == 5)
   # Whether the Black/White Flutes will raise/lower the levels of wild Pokémon
   # respectively (true), or will lower/raise the wild encounter rate
   # respectively (false).
-  FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS  = (MECHANICS_GENERATION >= 6)
+  FLUTES_CHANGE_WILD_ENCOUNTER_LEVELS   = (MECHANICS_GENERATION >= 6)
   # Whether Repel uses the level of the first Pokémon in the party regardless of
   # its HP (true), or it uses the level of the first unfainted Pokémon (false).
-  REPEL_COUNTS_FAINTED_POKEMON         = (MECHANICS_GENERATION >= 6)
+  REPEL_COUNTS_FAINTED_POKEMON          = (MECHANICS_GENERATION >= 6)
+  # Whether various HP-healing items heal the amounts they do in Gen 7+ (true)
+  # or in earlier Generations (false).
+  REBALANCED_HEALING_ITEM_AMOUNTS       = (MECHANICS_GENERATION >= 7)
   # Whether Rage Candy Bar acts as a Full Heal (true) or a Potion (false).
-  RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS = (MECHANICS_GENERATION >= 7)
+  RAGE_CANDY_BAR_CURES_STATUS_PROBLEMS  = (MECHANICS_GENERATION >= 7)
+  # Whether vitamins can add EVs no matter how many that stat already has in it
+  # (true), or whether they can't make that stat's EVs greater than 100 (false).
+  NO_VITAMIN_EV_CAP                     = (MECHANICS_GENERATION >= 8)
+  # Whether Rare Candy can be used on a Pokémon that is already at its maximum
+  # level if it is able to evolve by level-up (if so, triggers that evolution).
+  RARE_CANDY_USABLE_AT_MAX_LEVEL        = (MECHANICS_GENERATION >= 8)
+  # Whether the player can choose how many of an item to use at once on a
+  # Pokémon. This applies to Exp-changing items (Rare Candy, Exp Candies) and
+  # EV-changing items (vitamins, feathers, EV-lowering berries).
+  USE_MULTIPLE_STAT_ITEMS_AT_ONCE       = (MECHANICS_GENERATION >= 8)
+  # Whether you get 1 Premier Ball for every 10 of any kind of Poké Ball bought
+  # at once (true), or 1 Premier Ball for buying 10+ Poké Balls (false).
+  MORE_BONUS_PREMIER_BALLS              = (MECHANICS_GENERATION >= 8)
+  # Whether more abilities affect whether wild Pokémon appear, which Pokémon
+  # they are, etc.
+  MORE_ABILITIES_AFFECT_WILD_ENCOUNTERS = (MECHANICS_GENERATION >= 8)
 
   #=============================================================================
 
-  # The name of the person who created the Pokémon storage system.
-  def self.storage_creator_name
-    return _INTL("Bill")
-  end
   # The number of boxes in Pokémon storage.
   NUM_STORAGE_BOXES = 30
+  # Whether putting a Pokémon into Pokémon storage will heal it. IF false, they
+  # are healed by the Recover All: Entire Party event command (at Poké Centers).
+  HEAL_STORED_POKEMON = true
 
   #=============================================================================
 
-  # The names of each pocket of the Bag. Ignore the first entry ("").
+  # The names of each pocket of the Bag.
   def self.bag_pocket_names
-    return ["",
+    return [
       _INTL("Items"),
       _INTL("Medicine"),
       _INTL("Poké Balls"),
@@ -173,14 +201,12 @@ module Settings
       _INTL("Key Items")
     ]
   end
-  # The maximum number of slots per pocket (-1 means infinite number). Ignore
-  # the first number (0).
-  BAG_MAX_POCKET_SIZE  = [0, -1, -1, -1, -1, -1, -1, -1, -1]
+  # The maximum number of slots per pocket (-1 means infinite number).
+  BAG_MAX_POCKET_SIZE  = [-1, -1, -1, -1, -1, -1, -1, -1]
+  # Whether each pocket in turn auto-sorts itself by item ID number.
+  BAG_POCKET_AUTO_SORT = [false, false, false, true, true, false, false, false]
   # The maximum number of items each slot in the Bag can hold.
   BAG_MAX_PER_SLOT     = 999
-  # Whether each pocket in turn auto-sorts itself by item ID number. Ignore the
-  # first entry (the 0).
-  BAG_POCKET_AUTO_SORT = [0, false, false, false, true, true, false, false, false]
 
   #=============================================================================
 
@@ -189,16 +215,16 @@ module Settings
   # Dex list to view if more than one is available (false).
   USE_CURRENT_REGION_DEX = false
   # The names of the Pokédex lists, in the order they are defined in the PBS
-  # file "regionaldexes.txt". The last name is for the National Dex and is added
-  # onto the end of this array (remember that you don't need to use it). This
-  # array's order is also the order of $Trainer.pokedex.unlocked_dexes, which
-  # records which Dexes have been unlocked (the first is unlocked by default).
-  # If an entry is just a name, then the region map shown in the Area page while
-  # viewing that Dex list will be the region map of the region the player is
-  # currently in. The National Dex entry should always behave like this.
-  # If an entry is of the form [name, number], then the number is a region
-  # number. That region's map will appear in the Area page while viewing that
-  # Dex list, no matter which region the player is currently in.
+  # file "regional_dexes.txt". The last name is for the National Dex and is
+  # added onto the end of this array (remember that you don't need to use it).
+  # This array's order is also the order of $player.pokedex.unlocked_dexes,
+  # which records which Dexes have been unlocked (the first is unlocked by
+  # default). If an entry is just a name, then the region map shown in the Area
+  # page while viewing that Dex list will be the region map of the region the
+  # player is currently in. The National Dex entry should always behave like
+  # this. If an entry is of the form [name, number], then the number is a region
+  # number, and that region's map will appear in the Area page while viewing
+  # that Dex list, no matter which region the player is currently in.
   def self.pokedex_names
     return [
       [_INTL("Kanto Pokédex"), 0],
@@ -230,6 +256,10 @@ module Settings
     [0, 51, 16, 15, "mapHiddenBerth", false],
     [0, 52, 20, 14, "mapHiddenFaraday", false]
   ]
+
+  # Whether the player can use Fly while looking at the Town Map. This is only
+  # allowed if the player can use Fly normally.
+  CAN_FLY_FROM_TOWN_MAP = true
 
   #=============================================================================
 
@@ -297,6 +327,10 @@ module Settings
   # The Game Switch which, while ON, makes all Pokémon created considered to be
   # met via a fateful encounter.
   FATEFUL_ENCOUNTER_SWITCH  = 32
+  # The Game Switch which, while ON, disables the effect of the Pokémon Box Link
+  # and prevents the player from accessing Pokémon storage via the party screen
+  # with it.
+  DISABLE_BOX_LINK_SWITCH   = 35
 
   #=============================================================================
 

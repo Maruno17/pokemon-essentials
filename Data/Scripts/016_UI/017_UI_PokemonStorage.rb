@@ -515,8 +515,7 @@ class PokemonBoxPartySprite < SpriteWrapper
     sprite = @pokemonsprites[index]
     if sprite
       arrow.grab(sprite)
-      @pokemonsprites[index] = nil
-      @pokemonsprites.compact!
+      @pokemonsprites.delete_at(index)
       refresh
     end
   end
@@ -539,10 +538,8 @@ class PokemonBoxPartySprite < SpriteWrapper
       xvalues.push(18 + 72 * (i % 2))
       yvalues.push(2 + 16 * (i % 2) + 64 * (i / 2))
     end
-    for j in 0...Settings::MAX_PARTY_SIZE
-      @pokemonsprites[j] = nil if @pokemonsprites[j] && @pokemonsprites[j].disposed?
-    end
-    @pokemonsprites.compact!
+    @pokemonsprites.delete_if { |sprite| sprite && sprite.disposed? }
+    @pokemonsprites.each { |sprite| sprite.refresh if sprite }
     for j in 0...Settings::MAX_PARTY_SIZE
       sprite = @pokemonsprites[j]
       if sprite && !sprite.disposed?
@@ -567,6 +564,8 @@ end
 #===============================================================================
 class PokemonStorageScene
   attr_reader :quickswap
+  MARK_WIDTH  = 16
+  MARK_HEIGHT = 16
 
   def initialize
     @command = 1
@@ -1266,16 +1265,24 @@ class PokemonStorageScene
         selection -= 3 if selection%3==0
       end
     when Input::UP
-      if selection==7; selection = 6
-      elsif selection==6; selection = 4
-      elsif selection<3; selection = 7
-      else; selection -= 3
+      if selection==7
+        selection = 6
+      elsif selection==6
+        selection = 4
+      elsif selection<3
+        selection = 7
+      else
+        selection -= 3
       end
     when Input::DOWN
-      if selection==7; selection = 1
-      elsif selection==6; selection = 7
-      elsif selection>=3; selection = 6
-      else; selection += 3
+      if selection==7
+        selection = 1
+      elsif selection==6
+        selection = 7
+      elsif selection>=3
+        selection = 6
+      else
+        selection += 3
       end
     end
     return selection
@@ -1302,18 +1309,20 @@ class PokemonStorageScene
     else
       pokemon = @storage.boxes[selected[0]][selected[1]]
     end
-    markings = pokemon.markings
+    markings = pokemon.markings.clone
+    mark_variants = @markingbitmap.bitmap.height / MARK_HEIGHT
     index = 0
     redraw = true
-    markrect = Rect.new(0,0,16,16)
+    markrect = Rect.new(0, 0, MARK_WIDTH, MARK_HEIGHT)
     loop do
       # Redraw the markings and text
       if redraw
         @sprites["markingoverlay"].bitmap.clear
-        for i in 0...6
-          markrect.x = i*16
-          markrect.y = (markings&(1<<i)!=0) ? 16 : 0
-          @sprites["markingoverlay"].bitmap.blt(336+58*(i%3),106+50*(i/3),@markingbitmap.bitmap,markrect)
+        (@markingbitmap.bitmap.width / MARK_WIDTH).times do |i|
+          markrect.x = i * MARK_WIDTH
+          markrect.y = [(markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT
+          @sprites["markingoverlay"].bitmap.blt(336 + 58 * (i % 3), 106 + 50 * (i / 3),
+             @markingbitmap.bitmap, markrect)
         end
         textpos = [
            [_INTL("OK"),402,208,2,base,shadow,1],
@@ -1348,12 +1357,7 @@ class PokemonStorageScene
         elsif index==7   # Cancel
           break
         else
-          mask = (1<<index)
-          if (markings&mask)==0
-            markings |= mask
-          else
-            markings &= ~mask
-          end
+          markings[index] = ((markings[index] || 0) + 1) % mark_variants
           redraw = true
         end
       end
@@ -1378,11 +1382,12 @@ class PokemonStorageScene
   end
 
   def drawMarkings(bitmap,x,y,_width,_height,markings)
-    markrect = Rect.new(0,0,16,16)
-    for i in 0...8
-      markrect.x = i*16
-      markrect.y = (markings&(1<<i)!=0) ? 16 : 0
-      bitmap.blt(x+i*16,y,@markingbitmap.bitmap,markrect)
+    mark_variants = @markingbitmap.bitmap.height / MARK_HEIGHT
+    markrect = Rect.new(0, 0, MARK_WIDTH, MARK_HEIGHT)
+    (@markingbitmap.bitmap.width / MARK_WIDTH).times do |i|
+      markrect.x = i * MARK_WIDTH
+      markrect.y = [(markings[i] || 0), mark_variants - 1].min * MARK_HEIGHT
+      bitmap.blt(x + i * MARK_WIDTH, y, @markingbitmap.bitmap, markrect)
     end
   end
 
@@ -1437,15 +1442,11 @@ class PokemonStorageScene
         imagepos.push(["Graphics/Pictures/shiny",156,198])
       end
       typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
-      type1_number = GameData::Type.get(pokemon.type1).id_number
-      type2_number = GameData::Type.get(pokemon.type2).id_number
-      type1rect = Rect.new(0, type1_number * 28, 64, 28)
-      type2rect = Rect.new(0, type2_number * 28, 64, 28)
-      if pokemon.type1==pokemon.type2
-        overlay.blt(52,272,typebitmap.bitmap,type1rect)
-      else
-        overlay.blt(18,272,typebitmap.bitmap,type1rect)
-        overlay.blt(88,272,typebitmap.bitmap,type2rect)
+      pokemon.types.each_with_index do |type, i|
+        type_number = GameData::Type.get(type).icon_position
+        type_rect = Rect.new(0, type_number * 28, 64, 28)
+        type_x = (pokemon.types.length == 1) ? 52 : 18 + 70 * i
+        overlay.blt(type_x, 272, typebitmap.bitmap, type_rect)
       end
       drawMarkings(overlay,70,240,128,20,pokemon.markings)
       pbDrawImagePositions(overlay,imagepos)
@@ -1474,6 +1475,7 @@ class PokemonStorageScreen
   end
 
   def pbStartScreen(command)
+    $game_temp.in_storage = true
     @heldpkmn = nil
     if command==0   # Organise
       @scene.pbStartBox(self,command)
@@ -1632,6 +1634,7 @@ class PokemonStorageScreen
       @scene.pbStartBox(self,command)
       @scene.pbCloseBox
     end
+    $game_temp.in_storage = false
   end
 
   def pbUpdate   # For debug
@@ -1679,7 +1682,7 @@ class PokemonStorageScreen
     box = selected[0]
     index = selected[1]
     if box==-1
-      raise _INTL("Can't withdraw from party...");
+      raise _INTL("Can't withdraw from party...")
     end
     if @storage.party_full?
       pbDisplay(_INTL("Your party's full!"))
@@ -1709,6 +1712,10 @@ class PokemonStorageScreen
       pbDisplay(_INTL("Please remove the Mail."))
     elsif !heldpoke && @storage[box,index].mail
       pbDisplay(_INTL("Please remove the Mail."))
+    elsif heldpoke && heldpoke.cannot_store
+      pbDisplay(_INTL("{1} refuses to go into storage!", heldpoke.name))
+    elsif !heldpoke && @storage[box, index].cannot_store
+      pbDisplay(_INTL("{1} refuses to go into storage!", @storage[box, index].name))
     else
       loop do
         destbox = @scene.pbChooseBox(_INTL("Deposit in which Box?"))
@@ -1720,9 +1727,11 @@ class PokemonStorageScreen
           end
           if heldpoke || selected[0]==-1
             p = (heldpoke) ? heldpoke : @storage[-1,index]
-            p.time_form_set = nil
-            p.form          = 0 if p.isSpecies?(:SHAYMIN)
-            p.heal
+            if Settings::HEAL_STORED_POKEMON
+              old_ready_evo = p.ready_to_evolve
+              p.heal
+              p.ready_to_evolve = old_ready_evo
+            end
           end
           @scene.pbStore(selected,heldpoke,destbox,firstfree)
           if heldpoke
@@ -1757,19 +1766,22 @@ class PokemonStorageScreen
     index = selected[1]
     if @storage[box,index]
       raise _INTL("Position {1},{2} is not empty...",box,index)
+    elsif box != -1
+      if index >= @storage.maxPokemon(box)
+        pbDisplay("Can't place that there.")
+        return
+      elsif @heldpkmn.mail
+        pbDisplay("Please remove the mail.")
+        return
+      elsif @heldpkmn.cannot_store
+        pbDisplay(_INTL("{1} refuses to go into storage!", @heldpkmn.name))
+        return
+      end
     end
-    if box!=-1 && index>=@storage.maxPokemon(box)
-      pbDisplay("Can't place that there.")
-      return
-    end
-    if box!=-1 && @heldpkmn.mail
-      pbDisplay("Please remove the mail.")
-      return
-    end
-    if box>=0
-      @heldpkmn.time_form_set = nil
-      @heldpkmn.form          = 0 if @heldpkmn.isSpecies?(:SHAYMIN)
+    if Settings::HEAL_STORED_POKEMON && box >= 0
+      old_ready_evo = @heldpkmn.ready_to_evolve
       @heldpkmn.heal
+      @heldpkmn.ready_to_evolve = old_ready_evo
     end
     @scene.pbPlace(selected,@heldpkmn)
     @storage[box,index] = @heldpkmn
@@ -1786,7 +1798,11 @@ class PokemonStorageScreen
     if !@storage[box,index]
       raise _INTL("Position {1},{2} is empty...",box,index)
     end
-    if box==-1 && pbAble?(@storage[box,index]) && pbAbleCount<=1 && !pbAble?(@heldpkmn)
+    if @heldpkmn.cannot_store && box != -1
+      pbPlayBuzzerSE
+      pbDisplay(_INTL("{1} refuses to go into storage!", @heldpkmn.name))
+      return false
+    elsif box==-1 && pbAble?(@storage[box,index]) && pbAbleCount<=1 && !pbAble?(@heldpkmn)
       pbPlayBuzzerSE
       pbDisplay(_INTL("That's your last Pokémon!"))
       return false
@@ -1795,10 +1811,10 @@ class PokemonStorageScreen
       pbDisplay("Please remove the mail.")
       return false
     end
-    if box>=0
-      @heldpkmn.time_form_set = nil
-      @heldpkmn.form          = 0 if @heldpkmn.isSpecies?(:SHAYMIN)
+    if Settings::HEAL_STORED_POKEMON && box >= 0
+      old_ready_evo = @heldpkmn.ready_to_evolve
       @heldpkmn.heal
+      @heldpkmn.ready_to_evolve = old_ready_evo
     end
     @scene.pbSwap(selected,@heldpkmn)
     tmp = @storage[box,index]
@@ -1818,6 +1834,9 @@ class PokemonStorageScreen
       return false
     elsif pokemon.mail
       pbDisplay(_INTL("Please remove the mail."))
+      return false
+    elsif pokemon.cannot_release
+      pbDisplay(_INTL("{1} refuses to leave you!", pokemon.name))
       return false
     end
     if box==-1 && pbAbleCount<=1 && pbAble?(pokemon) && !heldpoke
@@ -1876,7 +1895,7 @@ class PokemonStorageScreen
     if pokemon.item
       itemname = pokemon.item.name
       if pbConfirm(_INTL("Take this {1}?",itemname))
-        if !$PokemonBag.pbStoreItem(pokemon.item)
+        if !$bag.add(pokemon.item)
           pbDisplay(_INTL("Can't store the {1}.",itemname))
         else
           pbDisplay(_INTL("Took the {1}.",itemname))
@@ -1885,11 +1904,11 @@ class PokemonStorageScreen
         end
       end
     else
-      item = scene.pbChooseItem($PokemonBag)
+      item = scene.pbChooseItem($bag)
       if item
         itemname = GameData::Item.get(item).name
         pokemon.item = item
-        $PokemonBag.pbDeleteItem(item)
+        $bag.remove(item)
         pbDisplay(_INTL("{1} is now being held.",itemname))
         @scene.pbHardRefresh
       end
@@ -1916,7 +1935,8 @@ class PokemonStorageScreen
       index = 0
       for i in 0...papers[1].length
         if papers[1][i]==@storage[@storage.currentBox].background
-          index = i; break
+          index = i
+          break
         end
       end
       wpaper = pbShowCommands(_INTL("Pick the wallpaper."),papers[0],index)
@@ -1929,6 +1949,7 @@ class PokemonStorageScreen
   end
 
   def pbChoosePokemon(_party=nil)
+    $game_temp.in_storage = true
     @heldpkmn = nil
     @scene.pbStartBox(self,1)
     retval = nil
@@ -1982,6 +2003,7 @@ class PokemonStorageScreen
       end
     end
     @scene.pbCloseBox
+    $game_temp.in_storage = false
     return retval
   end
 end

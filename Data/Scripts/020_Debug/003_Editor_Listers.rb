@@ -221,8 +221,8 @@ class MusicFileLister
     folder = (@bgm) ? "Audio/BGM/" : "Audio/ME/"
     @commands.clear
     Dir.chdir(folder) {
-      Dir.glob("*.mp3") { |f| @commands.push(f) }
-      Dir.glob("*.MP3") { |f| @commands.push(f) }
+#      Dir.glob("*.mp3") { |f| @commands.push(f) }
+#      Dir.glob("*.MP3") { |f| @commands.push(f) }
       Dir.glob("*.ogg") { |f| @commands.push(f) }
       Dir.glob("*.OGG") { |f| @commands.push(f) }
       Dir.glob("*.wav") { |f| @commands.push(f) }
@@ -252,6 +252,50 @@ class MusicFileLister
       pbPlayBGM("../../Audio/ME/"+@commands[index])
     end
   end
+end
+
+#===============================================================================
+#
+#===============================================================================
+class MetadataLister
+  def initialize(sel_player_id = -1, new_player = false)
+    @index = 0
+    @commands = []
+    @player_ids = []
+    GameData::PlayerMetadata.each do |player|
+      @index = @commands.length + 1 if sel_player_id > 0 && player.id == sel_player_id
+      @player_ids.push(player.id)
+    end
+    @new_player = new_player
+  end
+
+  def dispose; end
+
+  def setViewport(viewport); end
+
+  def startIndex
+    return @index
+  end
+
+  def commands
+    @commands.clear
+    @commands.push(_INTL("[GLOBAL METADATA]"))
+    @player_ids.each { |id| @commands.push(_INTL("Player {1}", id)) }
+    @commands.push(_INTL("[ADD NEW PLAYER]")) if @new_player
+    return @commands
+  end
+
+  # Cancel: -1
+  # New player: -2
+  # Global metadata: 0
+  # Player character: 1+ (the player ID itself)
+  def value(index)
+    return index if index < 1
+    return -2 if @new_player && index == @commands.length - 1
+    return @player_ids[index - 1]
+  end
+
+  def refresh(index); end
 end
 
 #===============================================================================
@@ -337,9 +381,10 @@ class SpeciesLister
     @commands.clear
     @ids.clear
     cmds = []
-    GameData::Species.each do |species|
-      next if species.form != 0
-      cmds.push([species.id_number, species.id, species.real_name])
+    idx = 1
+    GameData::Species.each_species do |species|
+      cmds.push([idx, species.id, species.real_name])
+      idx += 1
     end
     cmds.sort! { |a, b| a[2].downcase <=> b[2].downcase }
     if @includeNew
@@ -395,8 +440,10 @@ class ItemLister
     @commands.clear
     @ids.clear
     cmds = []
+    idx = 1
     GameData::Item.each do |item|
-      cmds.push([item.id_number, item.id, item.real_name])
+      cmds.push([idx, item.id, item.real_name])
+      idx += 1
     end
     cmds.sort! { |a, b| a[2].downcase <=> b[2].downcase }
     if @includeNew
@@ -454,8 +501,10 @@ class TrainerTypeLister
     @commands.clear
     @ids.clear
     cmds = []
+    idx = 1
     GameData::TrainerType.each do |tr_type|
-      cmds.push([tr_type.id_number, tr_type.id, tr_type.real_name])
+      cmds.push([idx, tr_type.id, tr_type.real_name])
+      idx += 1
     end
     cmds.sort! { |a, b| a[2] == b[2] ? a[0] <=> b[0] : a[2].downcase <=> b[2].downcase }
     if @includeNew
@@ -532,8 +581,10 @@ class TrainerBattleLister
     @commands.clear
     @ids.clear
     cmds = []
+    idx = 1
     GameData::Trainer.each do |trainer|
-      cmds.push([trainer.id_number, trainer.trainer_type, trainer.real_name, trainer.version])
+      cmds.push([idx, trainer.trainer_type, trainer.real_name, trainer.version])
+      idx += 1
     end
     cmds.sort! { |a, b|
       if a[1] == b[1]

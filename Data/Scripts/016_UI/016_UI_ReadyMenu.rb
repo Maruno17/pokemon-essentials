@@ -21,7 +21,7 @@ class ReadyMenuButton < SpriteWrapper
     self.bitmap = @contents
     pbSetSystemFont(self.bitmap)
     if @command[2]
-      @icon = PokemonIconSprite.new($Trainer.party[@command[3]],viewport)
+      @icon = PokemonIconSprite.new($player.party[@command[3]], viewport)
       @icon.setOffset(PictureOrigin::Center)
     else
       @icon = ItemIconSprite.new(0,0,@command[0],viewport)
@@ -75,7 +75,7 @@ class ReadyMenuButton < SpriteWrapper
     ]
     if !@command[2]
       if !GameData::Item.get(@command[0]).is_important?
-        qty = $PokemonBag.pbQuantity(@command[0])
+        qty = $bag.quantity(@command[0])
         if qty>99
           textpos.push([_INTL(">99"),230,16,1,
              Color.new(248,248,248),Color.new(40,40,40),1])
@@ -110,15 +110,17 @@ class PokemonReadyMenu_Scene
     for i in 0...@commands[1].length
       @itemcommands.push(@commands[1][i][1])
     end
-    @index = $PokemonBag.registeredIndex
+    @index = $bag.ready_menu_selection
     if @index[0]>=@movecommands.length && @movecommands.length>0
       @index[0] = @movecommands.length-1
     end
     if @index[1]>=@itemcommands.length && @itemcommands.length>0
       @index[1] = @itemcommands.length-1
     end
-    if @index[2]==0 && @movecommands.length==0; @index[2] = 1
-    elsif @index[2]==1 && @itemcommands.length==0; @index[2] = 0
+    if @index[2]==0 && @movecommands.length==0
+      @index[2] = 1
+    elsif @index[2]==1 && @itemcommands.length==0
+      @index[2] = 0
     end
     @viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
     @viewport.z = 99999
@@ -254,7 +256,7 @@ class PokemonReadyMenu
       break if command==-1
       if command[0]==0   # Use a move
         move = commands[0][command[1]][0]
-        user = $Trainer.party[commands[0][command[1]][3]]
+        user = $player.party[commands[0][command[1]][3]]
         if move == :FLY
           ret = nil
           pbFadeOutInWithUpdate(99999,@scene.sprites) {
@@ -265,7 +267,7 @@ class PokemonReadyMenu
             pbShowMenu if !ret
           }
           if ret
-            $PokemonTemp.flydata = ret
+            $game_temp.fly_destination = ret
             $game_temp.in_menu = false
             pbUseHiddenMove(user,move)
             break
@@ -304,15 +306,15 @@ def pbUseKeyItem
            :WATERFALL, :WHIRLPOOL]
   real_moves = []
   moves.each do |move|
-    $Trainer.pokemon_party.each_with_index do |pkmn, i|
+    $player.pokemon_party.each_with_index do |pkmn, i|
       next if !pkmn.hasMove?(move)
       real_moves.push([move, i]) if pbCanUseHiddenMove?(pkmn, move, false)
     end
   end
   real_items = []
-  for i in $PokemonBag.registeredItems
+  for i in $bag.registered_items
     itm = GameData::Item.get(i).id
-    real_items.push(itm) if $PokemonBag.pbHasItem?(itm)
+    real_items.push(itm) if $bag.has?(itm)
   end
   if real_items.length == 0 && real_moves.length == 0
     pbMessage(_INTL("An item in the Bag can be registered to this key for instant use."))

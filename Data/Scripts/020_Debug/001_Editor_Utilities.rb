@@ -111,23 +111,64 @@ end
 #===============================================================================
 # List all members of a class
 #===============================================================================
+def pbChooseFromGameDataList(game_data, default = nil)
+  if !GameData.const_defined?(game_data.to_sym)
+    raise _INTL("Couldn't find class {1} in module GameData.", game_data.to_s)
+  end
+  game_data_module = GameData.const_get(game_data.to_sym)
+  commands = []
+  game_data_module.each do |data|
+    name = data.real_name
+    name = yield(data) if block_given?
+    next if !name
+    index = commands.length + 1
+    index = data.id_number if data.respond_to?("id_number")
+    commands.push([commands.length + 1, name, data.id])
+  end
+  return pbChooseList(commands, default, nil, -1)
+end
+
+
 # Displays a list of all Pokémon species, and returns the ID of the species
 # selected (or nil if the selection was canceled). "default", if specified, is
 # the ID of the species to initially select. Pressing Input::ACTION will toggle
 # the list sorting between numerical and alphabetical.
 def pbChooseSpeciesList(default = nil)
-  commands = []
-  GameData::Species.each { |s| commands.push([s.id_number, s.real_name, s.id]) if s.form == 0 }
-  return pbChooseList(commands, default, nil, -1)
+  return pbChooseFromGameDataList(:Species, default) { |data|
+    next (data.form > 0) ? nil : data.real_name
+  }
 end
 
 def pbChooseSpeciesFormList(default = nil)
-  commands = []
-  GameData::Species.each do |s|
-    name = (s.form == 0) ? s.real_name : sprintf("%s_%d", s.real_name, s.form)
-    commands.push([s.id_number, name, s.id])
-  end
-  return pbChooseList(commands, default, nil, -1)
+  return pbChooseFromGameDataList(:Species, default) { |data|
+    next (data.form > 0) ? sprintf("%s_%d", data.real_name, data.form) : data.real_name
+  }
+end
+
+# Displays a list of all types, and returns the ID of the type selected (or nil
+# if the selection was canceled). "default", if specified, is the ID of the type
+# to initially select. Pressing Input::ACTION will toggle the list sorting
+# between numerical and alphabetical.
+def pbChooseTypeList(default = nil)
+  return pbChooseFromGameDataList(:Type, default) { |data|
+    next (data.pseudo_type) ? nil : data.real_name
+  }
+end
+
+# Displays a list of all items, and returns the ID of the item selected (or nil
+# if the selection was canceled). "default", if specified, is the ID of the item
+# to initially select. Pressing Input::ACTION will toggle the list sorting
+# between numerical and alphabetical.
+def pbChooseItemList(default = nil)
+  return pbChooseFromGameDataList(:Item, default)
+end
+
+# Displays a list of all abilities, and returns the ID of the ability selected
+# (or nil if the selection was canceled). "default", if specified, is the ID of
+# the ability to initially select. Pressing Input::ACTION will toggle the list
+# sorting between numerical and alphabetical.
+def pbChooseAbilityList(default = nil)
+  return pbChooseFromGameDataList(:Ability, default)
 end
 
 # Displays a list of all moves, and returns the ID of the move selected (or nil
@@ -135,19 +176,19 @@ end
 # to initially select. Pressing Input::ACTION will toggle the list sorting
 # between numerical and alphabetical.
 def pbChooseMoveList(default = nil)
-  commands = []
-  GameData::Move.each { |i| commands.push([i.id_number, i.real_name, i.id]) }
-  return pbChooseList(commands, default, nil, -1)
+  return pbChooseFromGameDataList(:Move, default)
 end
 
 def pbChooseMoveListForSpecies(species, defaultMoveID = nil)
   cmdwin = pbListWindow([], 200)
   commands = []
+  index = 1
   # Get all legal moves
   legalMoves = pbGetLegalMoves(species)
   legalMoves.each do |move|
     move_data = GameData::Move.get(move)
-    commands.push([move_data.id_number, move_data.name, move_data.id])
+    commands.push([index, move_data.name, move_data.id])
+    index += 1
   end
   commands.sort! { |a, b| a[1] <=> b[1] }
   moveDefault = 0
@@ -159,7 +200,8 @@ def pbChooseMoveListForSpecies(species, defaultMoveID = nil)
   # Get all moves
   commands2 = []
   GameData::Move.each do |move_data|
-    commands2.push([move_data.id_number, move_data.name, move_data.id])
+    commands2.push([index, move_data.name, move_data.id])
+    index += 1
   end
   commands2.sort! { |a, b| a[1] <=> b[1] }
   if defaultMoveID
@@ -176,43 +218,12 @@ def pbChooseMoveListForSpecies(species, defaultMoveID = nil)
   return (ret >= 0) ? commands[ret][2] : nil
 end
 
-# Displays a list of all types, and returns the ID of the type selected (or nil
-# if the selection was canceled). "default", if specified, is the ID of the type
-# to initially select. Pressing Input::ACTION will toggle the list sorting
-# between numerical and alphabetical.
-def pbChooseTypeList(default = nil)
-  commands = []
-  GameData::Type.each { |t| commands.push([t.id_number, t.name, t.id]) if !t.pseudo_type }
-  return pbChooseList(commands, default, nil, -1)
-end
-
-# Displays a list of all items, and returns the ID of the item selected (or nil
-# if the selection was canceled). "default", if specified, is the ID of the item
-# to initially select. Pressing Input::ACTION will toggle the list sorting
-# between numerical and alphabetical.
-def pbChooseItemList(default = nil)
-  commands = []
-  GameData::Item.each { |i| commands.push([i.id_number, i.name, i.id]) }
-  return pbChooseList(commands, default, nil, -1)
-end
-
-# Displays a list of all abilities, and returns the ID of the ability selected
-# (or nil if the selection was canceled). "default", if specified, is the ID of
-# the ability to initially select. Pressing Input::ACTION will toggle the list
-# sorting between numerical and alphabetical.
-def pbChooseAbilityList(default = nil)
-  commands = []
-  GameData::Ability.each { |a| commands.push([a.id_number, a.name, a.id]) }
-  return pbChooseList(commands, default, nil, -1)
-end
-
 def pbChooseBallList(defaultMoveID = nil)
   cmdwin = pbListWindow([], 200)
   commands = []
   moveDefault = 0
-  for key in $BallTypes.keys
-    item = GameData::Item.try_get($BallTypes[key])
-    commands.push([$BallTypes[key], item.name]) if item
+  GameData::Item.each do |item_data|
+    commands.push([item_data.id, item_data.name]) if item_data.is_poke_ball?
   end
   commands.sort! { |a, b| a[1] <=> b[1] }
   if defaultMoveID

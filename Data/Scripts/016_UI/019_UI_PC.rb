@@ -7,11 +7,11 @@ class TrainerPC
   end
 
   def name
-    return _INTL("{1}'s PC",$Trainer.name)
+    return _INTL("{1}'s PC", $player.name)
   end
 
   def access
-    pbMessage(_INTL("\\se[PC access]Accessed {1}'s PC.",$Trainer.name))
+    pbMessage(_INTL("\\se[PC access]Accessed {1}'s PC.", $player.name))
     pbTrainerPCMenu
   end
 end
@@ -25,7 +25,7 @@ class StorageSystemPC
   end
 
   def name
-    if $Trainer.seen_storage_creator
+    if $player.seen_storage_creator
       return _INTL("{1}'s PC",pbGetStorageCreator)
     else
       return _INTL("Someone's PC")
@@ -134,14 +134,14 @@ def pbPCItemStorage
       else
         pbFadeOutIn {
           scene = WithdrawItemScene.new
-          screen = PokemonBagScreen.new(scene,$PokemonBag)
+          screen = PokemonBagScreen.new(scene, $bag)
           screen.pbWithdrawItemScreen
         }
       end
     when 1   # Deposit Item
       pbFadeOutIn {
         scene = PokemonBag_Scene.new
-        screen = PokemonBagScreen.new(scene,$PokemonBag)
+        screen = PokemonBagScreen.new(scene, $bag)
         screen.pbDepositItemScreen
       }
     when 2   # Toss Item
@@ -153,7 +153,7 @@ def pbPCItemStorage
       else
         pbFadeOutIn {
           scene = TossItemScene.new
-          screen = PokemonBagScreen.new(scene,$PokemonBag)
+          screen = PokemonBagScreen.new(scene, $bag)
           screen.pbTossItemScreen
         }
       end
@@ -191,7 +191,7 @@ def pbPCMailbox
           }
         when 1   # Move to Bag
           if pbConfirmMessage(_INTL("The message will be lost. Is that OK?"))
-            if $PokemonBag.pbStoreItem($PokemonGlobal.mailbox[mailIndex].item)
+            if $bag.add($PokemonGlobal.mailbox[mailIndex].item)
               pbMessage(_INTL("The Mail was returned to the Bag with its message erased."))
               $PokemonGlobal.mailbox.delete_at(mailIndex)
             else
@@ -201,7 +201,7 @@ def pbPCMailbox
         when 2   # Give
           pbFadeOutIn {
             sscene = PokemonParty_Scene.new
-            sscreen = PokemonPartyScreen.new(sscene,$Trainer.party)
+            sscreen = PokemonPartyScreen.new(sscene, $player.party)
             sscreen.pbPokemonGiveMailScreen(mailIndex)
           }
         end
@@ -229,13 +229,13 @@ def pbTrainerPCMenu
 end
 
 def pbTrainerPC
-  pbMessage(_INTL("\\se[PC open]{1} booted up the PC.",$Trainer.name))
+  pbMessage(_INTL("\\se[PC open]{1} booted up the PC.", $player.name))
   pbTrainerPCMenu
   pbSEPlay("PC close")
 end
 
 def pbPokeCenterPC
-  pbMessage(_INTL("\\se[PC open]{1} booted up the PC.",$Trainer.name))
+  pbMessage(_INTL("\\se[PC open]{1} booted up the PC.", $player.name))
   command = 0
   loop do
     commands = PokemonPCList.getCommandList
@@ -247,9 +247,7 @@ def pbPokeCenterPC
 end
 
 def pbGetStorageCreator
-  creator = Settings.storage_creator_name
-  creator = _INTL("Bill") if nil_or_empty?(creator)
-  return creator
+  return GameData::Metadata.get.storage_creator
 end
 
 #===============================================================================

@@ -42,18 +42,14 @@ class Trainer
 
   #=============================================================================
 
-  def trainer_type_name; return GameData::TrainerType.get(@trainer_type).name;        end
-  def base_money;        return GameData::TrainerType.get(@trainer_type).base_money;  end
-  def gender;            return GameData::TrainerType.get(@trainer_type).gender;      end
-  def male?;             return GameData::TrainerType.get(@trainer_type).male?;       end
-  def female?;           return GameData::TrainerType.get(@trainer_type).female?;     end
-  def skill_level;       return GameData::TrainerType.get(@trainer_type).skill_level; end
-  def skill_code;        return GameData::TrainerType.get(@trainer_type).skill_code;  end
-
-  def has_skill_code?(code)
-    c = skill_code
-    return c && c != "" && c[/#{code}/]
-  end
+  def trainer_type_name; return GameData::TrainerType.get(self.trainer_type).name;        end
+  def base_money;        return GameData::TrainerType.get(self.trainer_type).base_money;  end
+  def gender;            return GameData::TrainerType.get(self.trainer_type).gender;      end
+  def male?;             return GameData::TrainerType.get(self.trainer_type).male?;       end
+  def female?;           return GameData::TrainerType.get(self.trainer_type).female?;     end
+  def skill_level;       return GameData::TrainerType.get(self.trainer_type).skill_level; end
+  def flags;             return GameData::TrainerType.get(self.trainer_type).flags;       end
+  def has_flag?(flag);   return GameData::TrainerType.get(self.trainer_type).has_flag?(flag); end
 
   #=============================================================================
 

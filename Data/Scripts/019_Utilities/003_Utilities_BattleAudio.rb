@@ -8,8 +8,7 @@ def pbGetWildBattleBGM(_wildParty)   # wildParty is an array of Pokémon objects
   ret = nil
   if !ret
     # Check map metadata
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    music = (map_metadata) ? map_metadata.wild_battle_BGM : nil
+    music = $game_map.metadata&.wild_battle_BGM
     ret = pbStringToAudioFile(music) if music && music != ""
   end
   if !ret
@@ -28,8 +27,7 @@ def pbGetWildVictoryME
   ret = nil
   if !ret
     # Check map metadata
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    music = (map_metadata) ? map_metadata.wild_victory_ME : nil
+    music = $game_map.metadata&.wild_victory_ME
     ret = pbStringToAudioFile(music) if music && music != ""
   end
   if !ret
@@ -49,8 +47,7 @@ def pbGetWildCaptureME
   ret = nil
   if !ret
     # Check map metadata
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    music = (map_metadata) ? map_metadata.wild_capture_ME : nil
+    music = $game_map.metadata&.wild_capture_ME
     ret = pbStringToAudioFile(music) if music && music != ""
   end
   if !ret
@@ -87,8 +84,7 @@ def pbGetTrainerBattleBGM(trainer)   # can be a Player, NPCTrainer or an array o
   ret = pbStringToAudioFile(music) if music && music!=""
   if !ret
     # Check map metadata
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    music = (map_metadata) ? map_metadata.trainer_battle_BGM : nil
+    music = $game_map.metadata&.trainer_battle_BGM
     ret = pbStringToAudioFile(music) if music && music != ""
   end
   if !ret
@@ -110,8 +106,7 @@ def pbGetTrainerBattleBGMFromType(trainertype)
   ret = trainer_type_data.battle_BGM if trainer_type_data.battle_BGM
   if !ret
     # Check map metadata
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    music = (map_metadata) ? map_metadata.trainer_battle_BGM : nil
+    music = $game_map.metadata&.trainer_battle_BGM
     ret = pbStringToAudioFile(music) if music && music != ""
   end
   if !ret
@@ -139,8 +134,7 @@ def pbGetTrainerVictoryME(trainer)   # can be a Player, NPCTrainer or an array o
   end
   if !ret
     # Check map metadata
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    music = (map_metadata) ? map_metadata.trainer_victory_ME : nil
+    music = $game_map.metadata&.trainer_victory_ME
     ret = pbStringToAudioFile(music) if music && music != ""
   end
   if !ret

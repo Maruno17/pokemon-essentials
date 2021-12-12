@@ -1,4 +1,37 @@
 module Compiler
+  SCRIPT_REPLACEMENTS = [
+    ['Kernel.',                      ''],
+    ['$PokemonBag.pbQuantity',       '$bag.quantity'],
+    ['$PokemonBag.pbHasItem?',       '$bag.has?'],
+    ['$PokemonBag.pbCanStore?',      '$bag.can_add?'],
+    ['$PokemonBag.pbStoreItem',      '$bag.add'],
+    ['$PokemonBag.pbStoreAllOrNone', '$bag.add_all'],
+    ['$PokemonBag.pbChangeItem',     '$bag.replace_item'],
+    ['$PokemonBag.pbDeleteItem',     '$bag.remove'],
+    ['$PokemonBag.pbIsRegistered?',  '$bag.registered?'],
+    ['$PokemonBag.pbRegisterItem',   '$bag.register'],
+    ['$PokemonBag.pbUnregisterItem', '$bag.unregister'],
+    ['$PokemonBag',                  '$bag'],
+    ['pbQuantity',                   '$bag.quantity'],
+    ['pbHasItem?',                   '$bag.has?'],
+    ['pbCanStore?',                  '$bag.can_add?'],
+    ['pbStoreItem',                  '$bag.add'],
+    ['pbStoreAllOrNone',             '$bag.add_all'],
+    ['$Trainer',                     '$player'],
+    ['$SaveVersion',                 '$save_engine_version'],
+    ['$game_version',                '$save_game_version'],
+    ['$MapFactory',                  '$map_factory'],
+    ['pbDayCareDeposited',           'DayCare.count'],
+    ['pbDayCareGetDeposited',        'DayCare.get_details'],
+    ['pbDayCareGetLevelGain',        'DayCare.get_level_gain'],
+    ['pbDayCareDeposit',             'DayCare.deposit'],
+    ['pbDayCareWithdraw',            'DayCare.withdraw'],
+    ['pbDayCareChoose',              'DayCare.choose'],
+    ['pbDayCareGetCompatibility',    'DayCare.get_compatibility'],
+    ['pbEggGenerated?',              'DayCare.egg_generated?'],
+    ['pbDayCareGenerateEgg',         'DayCare.collect_egg']
+  ]
+
   module_function
 
   #=============================================================================
@@ -38,7 +71,7 @@ module Compiler
     end
     if imported
       save_data(mapinfos,"Data/MapInfos.rxdata")
-      $PokemonTemp.mapInfos = nil
+      $game_temp.map_infos = nil
       pbMessage(_INTL("{1} new map(s) copied to the Data folder were successfully imported.",count))
     end
     return imported
@@ -819,22 +852,6 @@ module Compiler
     return false
   end
 
-  def change_script(script,re)
-    tmp = script[0].gsub(re) { yield($~) }
-    if script[0]!=tmp
-      script[0] = tmp
-      return true
-    end
-    return false
-  end
-
-  def change_scripts(script)
-    changed = false
-    changed |= change_script(script,/\$game_variables\[(\d+)\](?!\s*(?:\=|\!|<|>))/) { |m| "pbGet("+m[1]+")" }
-    changed |= change_script(script,/\$Trainer\.party\[\s*pbGet\((\d+)\)\s*\]/) { |m| "pbGetPokemon("+m[1]+")" }
-    return changed
-  end
-
   def fix_event_name(event)
     return false if !event
     case event.name.downcase
@@ -850,10 +867,35 @@ module Compiler
     return true
   end
 
+  def replace_scripts(script)
+    ret = false
+    SCRIPT_REPLACEMENTS.each { |pair| ret = true if script.gsub!(pair[0], pair[1]) }
+    ret = true if script.gsub!(/\$game_variables\[(\d+)\](?!\s*(?:\=|\!|<|>))/) { |m| "pbGet(" + $~[1] + ")" }
+    ret = true if script.gsub!(/\$player\.party\[\s*pbGet\((\d+)\)\s*\]/) { |m| "pbGetPokemon(" + $~[1] + ")" }
+    return ret
+  end
+
+  def fix_event_scripts(event)
+    return false if event_is_empty?(event)
+    ret = false
+    pbEachPage(event) do |page|
+      page.list.each do |cmd|
+        params = cmd.parameters
+        case cmd.code
+        when 355, 655   # Script (first line, continuation line)
+          ret = true if params[0].is_a?(String) && replace_scripts(params[0])
+        when 111   # Conditional Branch
+          ret = true if params[0] == 12 && replace_scripts(params[1])
+        end
+      end
+    end
+    return ret
+  end
+
   def fix_event_use(event,_mapID,mapData)
     return nil if event_is_empty?(event)
     changed = false
-    trainerMoneyRE = /^\s*\$Trainer\.money\s*(<|<=|>|>=)\s*(\d+)\s*$/
+    trainerMoneyRE = /^\s*\$player\.money\s*(<|<=|>|>=)\s*(\d+)\s*$/
     itemBallRE     = /^\s*(Kernel\.)?pbItemBall/
     # Rewrite event if it looks like a door
     changed = true if update_door_event(event,mapData)
@@ -864,19 +906,13 @@ module Compiler
       while i<list.length
         params = list[i].parameters
         case list[i].code
-        when 655   # Script (continuation line)
-          x = [params[0]]
-          changed |= change_scripts(x)
-          params[0] = x[0]
+#        when 655   # Script (continuation line)
         when 355   # Script (first line)
           lastScript = i
           if !params[0].is_a?(String)
             i += 1
             next
           end
-          x = [params[0]]
-          changed |= change_scripts(x)
-          params[0] = x[0]
           # Check if the script is an old way of healing the entire party, and if
           # so, replace it with a better version that uses event commands
           if params[0][0,1]!="f" && params[0][0,1]!="p" && params[0][0,1]!="K"
@@ -894,7 +930,7 @@ module Compiler
           end
           script.gsub!(/\s+/,"")
           # Using old method of recovering
-          if script=="foriin$Trainer.partyi.healend"
+          if script=="foriin$player.partyi.healend"
             for j in i..lastScript
               list.delete_at(i)
             end
@@ -902,7 +938,7 @@ module Compiler
                RPG::EventCommand.new(314,list[i].indent,[0])   # Recover All
             )
             changed=true
-          elsif script=="pbFadeOutIn(99999){foriin$Trainer.partyi.healend}"
+          elsif script=="pbFadeOutIn(99999){foriin$player.partyi.healend}"
             oldIndent = list[i].indent
             for j in i..lastScript
               list.delete_at(i)
@@ -926,7 +962,7 @@ module Compiler
               list.delete_at(i)
               newEvents = []
               if cost==0
-                push_branch(newEvents,"$PokemonBag.pbCanStore?(:#{itemname})",oldIndent)
+                push_branch(newEvents,"$bag.can_add?(:#{itemname})",oldIndent)
                 push_text(newEvents,_INTL("Here you go!"),oldIndent+1)
                 push_script(newEvents,"pbReceiveItem(:#{itemname})",oldIndent+1)
                 push_else(newEvents,oldIndent+1)
@@ -934,7 +970,7 @@ module Compiler
                 push_branch_end(newEvents,oldIndent+1)
               else
                 push_event(newEvents,111,[7,cost,0],oldIndent)
-                push_branch(newEvents,"$PokemonBag.pbCanStore?(:#{itemname})",oldIndent+1)
+                push_branch(newEvents,"$bag.can_add?(:#{itemname})",oldIndent+1)
                 push_event(newEvents,125,[1,0,cost],oldIndent+2)
                 push_text(newEvents,_INTL("\\GHere you go!"),oldIndent+2)
                 push_script(newEvents,"pbReceiveItem(:#{itemname})",oldIndent+2)
@@ -1002,10 +1038,12 @@ module Compiler
               deleteMoveRouteAt = proc { |list,i|
                 arr = []
                 if list[i] && list[i].code==209   # Set Move Route
-                  arr.push(list[i]); list.delete_at(i)
+                  arr.push(list[i])
+                  list.delete_at(i)
                   while i<list.length
                     break if !list[i] || list[i].code!=509   # Set Move Route (continuation line)
-                    arr.push(list[i]); list.delete_at(i)
+                    arr.push(list[i])
+                    list.delete_at(i)
                   end
                 end
                 next arr
@@ -1028,17 +1066,26 @@ module Compiler
                 if route && route.list.length<=2
                   # Delete superfluous move route command if necessary
                   if route.list[0].code==16      # Player Turn Down
-                    deleteMoveRouteAt.call(list,i+1); params[4] = 2; changed = true
+                    deleteMoveRouteAt.call(list,i+1)
+                    params[4] = 2
+                    changed = true
                   elsif route.list[0].code==17   # Player Turn Left
-                    deleteMoveRouteAt.call(list,i+1); params[4] = 4; changed = true
+                    deleteMoveRouteAt.call(list,i+1)
+                    params[4] = 4
+                    changed = true
                   elsif route.list[0].code==18   # Player Turn Right
-                    deleteMoveRouteAt.call(list,i+1); params[4] = 6; changed = true
+                    deleteMoveRouteAt.call(list,i+1)
+                    params[4] = 6
+                    changed = true
                   elsif route.list[0].code==19   # Player Turn Up
-                    deleteMoveRouteAt.call(list,i+1); params[4] = 8; changed = true
+                    deleteMoveRouteAt.call(list,i+1)
+                    params[4] = 8
+                    changed = true
                   elsif (route.list[0].code==1 || route.list[0].code==2 ||   # Player Move (4-dir)
                      route.list[0].code==3 || route.list[0].code==4) && list.length==4
                     params[4] = [0,2,4,6,8][route.list[0].code]
-                    deletedRoute = deleteMoveRouteAt.call(list,i+1); changed = true
+                    deletedRoute = deleteMoveRouteAt.call(list,i+1)
+                    changed = true
                   end
                 end
               # If an event command before this one is a Move Route that just
@@ -1055,13 +1102,25 @@ module Compiler
 #                      oldlistlength = list.length
 #                      # Delete superfluous move route command if necessary
 #                      if route.list[0].code==16      # Player Turn Down
-#                        deleteMoveRouteAt.call(list,j); params[4] = 2; changed = true; i -= (oldlistlength-list.length)
+#                        deleteMoveRouteAt.call(list,j)
+#                        params[4] = 2
+#                        changed = true
+#                        i -= (oldlistlength-list.length)
 #                      elsif route.list[0].code==17   # Player Turn Left
-#                        deleteMoveRouteAt.call(list,j); params[4] = 4; changed = true; i -= (oldlistlength-list.length)
+#                        deleteMoveRouteAt.call(list,j)
+#                        params[4] = 4
+#                        changed = true
+#                        i -= (oldlistlength-list.length)
 #                      elsif route.list[0].code==18   # Player Turn Right
-#                        deleteMoveRouteAt.call(list,j); params[4] = 6; changed = true; i -= (oldlistlength-list.length)
+#                        deleteMoveRouteAt.call(list,j)
+#                        params[4] = 6
+#                        changed = true
+#                        i -= (oldlistlength-list.length)
 #                      elsif route.list[0].code==19   # Player Turn Up
-#                        deleteMoveRouteAt.call(list,j); params[4] = 8; changed = true; i -= (oldlistlength-list.length)
+#                        deleteMoveRouteAt.call(list,j)
+#                        params[4] = 8
+#                        changed = true
+#                        i -= (oldlistlength-list.length)
 #                      end
 #                    end
 #                  end
@@ -1080,13 +1139,21 @@ module Compiler
                 if route && route.list.length<=2
                   # Delete superfluous move route command if necessary
                   if route.list[0].code==16      # Player Turn Down
-                    deleteMoveRouteAt.call(list,i+2); params[4] = 2; changed = true
+                    deleteMoveRouteAt.call(list,i+2)
+                    params[4] = 2
+                    changed = true
                   elsif route.list[0].code==17   # Player Turn Left
-                    deleteMoveRouteAt.call(list,i+2); params[4] = 4; changed = true
+                    deleteMoveRouteAt.call(list,i+2)
+                    params[4] = 4
+                    changed = true
                   elsif route.list[0].code==18   # Player Turn Right
-                    deleteMoveRouteAt.call(list,i+2); params[4] = 6; changed = true
+                    deleteMoveRouteAt.call(list,i+2)
+                    params[4] = 6
+                    changed = true
                   elsif route.list[0].code==19   # Player Turn Up
-                    deleteMoveRouteAt.call(list,i+2); params[4] = 8; changed = true
+                    deleteMoveRouteAt.call(list,i+2)
+                    params[4] = 8
+                    changed = true
                   end
                 end
               end
@@ -1194,11 +1261,8 @@ module Compiler
           end
         when 111   # Conditional Branch
           if list[i].parameters[0]==12   # script
-            x = [list[i].parameters[1]]
-            changed |= change_scripts(x)
-            list[i].parameters[1] = x[0]
-            script = x[0]
-            if script[trainerMoneyRE]   # Compares $Trainer.money with a value
+            script = list[i].parameters[1]
+            if script[trainerMoneyRE]   # Compares $player.money with a value
               # Checking money directly
               operator = $1
               amount   = $2.to_i
@@ -1380,11 +1444,16 @@ module Compiler
     t = Time.now.to_i
     Graphics.update
     trainerChecker = TrainerChecker.new
+    change_record = []
+    Console.echo_li _INTL("Processing {1} maps...", mapData.mapinfos.keys.length)
+    idx = 0
     for id in mapData.mapinfos.keys.sort
+      echo "." if idx % 20 == 0
+      idx += 1
+      Graphics.update if idx % 250 == 0
       changed = false
       map = mapData.getMap(id)
       next if !map || !mapData.mapinfos[id]
-      pbSetWindowText(_INTL("Processing map {1} ({2})",id,mapData.mapinfos[id].name))
       for key in map.events.keys
         if Time.now.to_i-t>=5
           Graphics.update
@@ -1401,6 +1470,7 @@ module Compiler
           changed = true
         end
         changed = true if fix_event_name(map.events[key])
+        changed = true if fix_event_scripts(map.events[key])
         newevent = fix_event_use(map.events[key],id,mapData)
         if newevent
           map.events[key] = newevent
@@ -1415,12 +1485,15 @@ module Compiler
       if changed
         mapData.saveMap(id)
         mapData.saveTilesets
+        change_record.push(_INTL("Map {1}: '{2}' was modified and saved.", id, mapData.mapinfos[id].name))
       end
     end
+    Console.echo_done(true)
+    change_record.each { |msg| Console.echo_warn msg }
     changed = false
     Graphics.update
     commonEvents = load_data("Data/CommonEvents.rxdata")
-    pbSetWindowText(_INTL("Processing common events"))
+    Console.echo_li _INTL("Processing common events...")
     for key in 0...commonEvents.length
       newevent = fix_event_use(commonEvents[key],0,mapData)
       if newevent
@@ -1429,5 +1502,9 @@ module Compiler
       end
     end
     save_data(commonEvents,"Data/CommonEvents.rxdata") if changed
+    Console.echo_done(true)
+    if change_record.length > 0 || changed
+      Console.echo_warn _INTL("RMXP data was altered. Close RMXP now to ensure changes are applied.")
+    end
   end
 end

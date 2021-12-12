@@ -1,73 +1,8 @@
 #===============================================================================
 #
 #===============================================================================
-class Scene_Map
-  def updatemini
-    oldmws=$game_temp.message_window_showing
-    $game_temp.message_window_showing=true
-    loop do
-      $game_map.update
-      $game_player.update
-      $game_system.update
-      if $game_screen
-        $game_screen.update
-      else
-        $game_map.screen.update
-      end
-      break unless $game_temp.player_transferring
-      transfer_player
-      break if $game_temp.transition_processing
-    end
-    $game_temp.message_window_showing=oldmws
-    @spriteset.update if @spriteset
-    @message_window.update if @message_window
-  end
-end
-
-
-
-class Scene_Battle
-  def updatemini
-    if self.respond_to?("update_basic")
-      update_basic(true)
-      update_info_viewport                  # Update information viewport
-    else
-      oldmws=$game_temp.message_window_showing
-      $game_temp.message_window_showing=true
-      # Update system (timer) and screen
-      $game_system.update
-      if $game_screen
-        $game_screen.update
-      else
-        $game_map.screen.update
-      end
-      # If timer has reached 0
-      if $game_system.timer_working && $game_system.timer == 0
-        # Abort battle
-        $game_temp.battle_abort = true
-      end
-      # Update windows
-      @help_window.update if @help_window
-      @party_command_window.update if @party_command_window
-      @actor_command_window.update if @actor_command_window
-      @status_window.update if @status_window
-      $game_temp.message_window_showing=oldmws
-      @message_window.update if @message_window
-      # Update sprite set
-      @spriteset.update if @spriteset
-    end
-  end
-end
-
-
-
 def pbMapInterpreter
-  if $game_map.respond_to?("interpreter")
-    return $game_map.interpreter
-  elsif $game_system
-    return $game_system.map_interpreter
-  end
-  return nil
+  return $game_system&.map_interpreter
 end
 
 def pbMapInterpreterRunning?
@@ -76,27 +11,11 @@ def pbMapInterpreterRunning?
 end
 
 def pbRefreshSceneMap
-  if $scene && $scene.is_a?(Scene_Map)
-    if $scene.respond_to?("miniupdate")
-      $scene.miniupdate
-    else
-      $scene.updatemini
-    end
-  elsif $scene && $scene.is_a?(Scene_Battle)
-    $scene.updatemini
-  end
+  $scene.miniupdate if $scene && $scene.is_a?(Scene_Map)
 end
 
 def pbUpdateSceneMap
-  if $scene && $scene.is_a?(Scene_Map) && !pbIsFaded?
-    if $scene.respond_to?("miniupdate")
-      $scene.miniupdate
-    else
-      $scene.updatemini
-    end
-  elsif $scene && $scene.is_a?(Scene_Battle)
-    $scene.updatemini
-  end
+  $scene.miniupdate if $scene && $scene.is_a?(Scene_Map) && !pbIsFaded?
 end
 
 #===============================================================================
@@ -351,9 +270,10 @@ def pbGetBasicMapNameFromId(id)
 end
 
 def pbGetMapNameFromId(id)
-  map=pbGetBasicMapNameFromId(id)
-  map.gsub!(/\\PN/,$Trainer.name) if $Trainer
-  return map
+  name = pbGetMessage(MessageTypes::MapNames, id)
+  name = pbGetBasicMapNameFromId(id) if nil_or_empty?(name)
+  name.gsub!(/\\PN/, $player.name) if $player
+  return name
 end
 
 def pbCsvField!(str)
@@ -405,17 +325,7 @@ end
 # Money and coins windows
 #===============================================================================
 def pbGetGoldString
-  moneyString=""
-  begin
-    moneyString=_INTL("${1}",$Trainer.money.to_s_formatted)
-  rescue
-    if $data_system.respond_to?("words")
-      moneyString=_INTL("{1} {2}",$game_party.gold,$data_system.words.gold)
-    else
-      moneyString=_INTL("{1} {2}",$game_party.gold,Vocab.gold)
-    end
-  end
-  return moneyString
+  return _INTL("${1}", $player.money.to_s_formatted)
 end
 
 def pbDisplayGoldWindow(msgwindow)
@@ -435,7 +345,7 @@ def pbDisplayGoldWindow(msgwindow)
 end
 
 def pbDisplayCoinsWindow(msgwindow,goldwindow)
-  coinString=($Trainer) ? $Trainer.coins.to_s_formatted : "0"
+  coinString = ($player) ? $player.coins.to_s_formatted : "0"
   coinwindow=Window_AdvancedTextPokemon.new(_INTL("Coins:\n<ar>{1}</ar>",coinString))
   coinwindow.setSkin("Graphics/Windowskins/goldskin")
   coinwindow.resizeToFit(coinwindow.text,Graphics.width)
@@ -451,7 +361,7 @@ def pbDisplayCoinsWindow(msgwindow,goldwindow)
 end
 
 def pbDisplayBattlePointsWindow(msgwindow)
-  pointsString = ($Trainer) ? $Trainer.battle_points.to_s_formatted : "0"
+  pointsString = ($player) ? $player.battle_points.to_s_formatted : "0"
   pointswindow=Window_AdvancedTextPokemon.new(_INTL("Battle Points:\n<ar>{1}</ar>", pointsString))
   pointswindow.setSkin("Graphics/Windowskins/goldskin")
   pointswindow.resizeToFit(pointswindow.text,Graphics.width)
@@ -542,18 +452,18 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
       next $game_actors[m].name
     }
   end
-  text.gsub!(/\\pn/i,$Trainer.name) if $Trainer
-  text.gsub!(/\\pm/i,_INTL("${1}",$Trainer.money.to_s_formatted)) if $Trainer
-  text.gsub!(/\\n/i,"\n")
-  text.gsub!(/\\\[([0-9a-f]{8,8})\]/i) { "<c2="+$1+">" }
-  text.gsub!(/\\pg/i,"\\b") if $Trainer && $Trainer.male?
-  text.gsub!(/\\pg/i,"\\r") if $Trainer && $Trainer.female?
-  text.gsub!(/\\pog/i,"\\r") if $Trainer && $Trainer.male?
-  text.gsub!(/\\pog/i,"\\b") if $Trainer && $Trainer.female?
-  text.gsub!(/\\pg/i,"")
-  text.gsub!(/\\pog/i,"")
-  text.gsub!(/\\b/i,"<c3=3050C8,D0D0C8>")
-  text.gsub!(/\\r/i,"<c3=E00808,D0D0C8>")
+  text.gsub!(/\\pn/i,  $player.name) if $player
+  text.gsub!(/\\pm/i,  _INTL("${1}", $player.money.to_s_formatted)) if $player
+  text.gsub!(/\\n/i,   "\n")
+  text.gsub!(/\\\[([0-9a-f]{8,8})\]/i) { "<c2=" + $1 + ">" }
+  text.gsub!(/\\pg/i,  "\\b") if $player && $player.male?
+  text.gsub!(/\\pg/i,  "\\r") if $player && $player.female?
+  text.gsub!(/\\pog/i, "\\r") if $player && $player.male?
+  text.gsub!(/\\pog/i, "\\b") if $player && $player.female?
+  text.gsub!(/\\pg/i,  "")
+  text.gsub!(/\\pog/i, "")
+  text.gsub!(/\\b/i,   "<c3=3050C8,D0D0C8>")
+  text.gsub!(/\\r/i,   "<c3=E00808,D0D0C8>")
   text.gsub!(/\\[Ww]\[([^\]]*)\]/) {
     w = $1.to_s
     if w==""
@@ -582,8 +492,7 @@ def pbMessageDisplay(msgwindow,message,letterbyletter=true,commandProc=nil)
     break if text == last_text
   end
   colortag = ""
-  if $game_system && $game_system.respond_to?("message_frame") &&
-     $game_system.message_frame != 0
+  if $game_system && $game_system.message_frame != 0
     colortag = getSkinColor(msgwindow.windowskin,0,true)
   else
     colortag = getSkinColor(msgwindow.windowskin,0,isDarkSkin)

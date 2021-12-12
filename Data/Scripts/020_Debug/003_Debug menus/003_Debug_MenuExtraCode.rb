@@ -77,7 +77,8 @@ class SpriteWindow_DebugVariables < Window_DrawableCommand
 
   def drawItem(index,_count,rect)
     pbSetNarrowFont(self.contents)
-    colors = 0; codeswitch = false
+    colors = 0
+    codeswitch = false
     if @mode==0
       name = $data_system.switches[index+1]
       codeswitch = (name[/^s\:/])
@@ -200,165 +201,149 @@ end
 # Debug Day Care screen
 #===============================================================================
 def pbDebugDayCare
-  commands = [_INTL("Withdraw Pokémon 1"),
-              _INTL("Withdraw Pokémon 2"),
-              _INTL("Deposit Pokémon"),
-              _INTL("Generate egg"),
-              _INTL("Collect egg")]
-  viewport = Viewport.new(0,0,Graphics.width,Graphics.height)
-  viewport.z = 99999
-  sprites = {}
-  addBackgroundPlane(sprites,"background","hatchbg",viewport)
-  sprites["overlay"] = BitmapSprite.new(Graphics.width,Graphics.height,viewport)
-  pbSetSystemFont(sprites["overlay"].bitmap)
-  sprites["cmdwindow"] = Window_CommandPokemonEx.new(commands)
-  cmdwindow = sprites["cmdwindow"]
-  cmdwindow.x        = 0
-  cmdwindow.y        = Graphics.height-128
-  cmdwindow.width    = Graphics.width
-  cmdwindow.height   = 128
-  cmdwindow.viewport = viewport
-  cmdwindow.columns = 2
-  base   = Color.new(248,248,248)
-  shadow = Color.new(104,104,104)
-  refresh = true
+  day_care = $PokemonGlobal.day_care
+  cmd_window = Window_CommandPokemonEx.newEmpty(0, 0, Graphics.width, Graphics.height)
+  commands = []
+  cmd = 0
+  compat = 0
+  need_refresh = true
   loop do
-    if refresh
-      if pbEggGenerated?
-        commands[3] = _INTL("Discard egg")
-      else
-        commands[3] = _INTL("Generate egg")
-      end
-      cmdwindow.commands = commands
-      sprites["overlay"].bitmap.clear
-      textpos = []
-      for i in 0...2
-        textpos.push([_INTL("Pokémon {1}",i+1),Graphics.width/4+i*Graphics.width/2,2,2,base,shadow])
-      end
-      for i in 0...pbDayCareDeposited
-        next if !$PokemonGlobal.daycare[i][0]
-        y = 34
-        pkmn      = $PokemonGlobal.daycare[i][0]
-        initlevel = $PokemonGlobal.daycare[i][1]
-        leveldiff = pkmn.level-initlevel
-        textpos.push(["#{pkmn.name} (#{pkmn.speciesName})",8+i*Graphics.width/2,y,0,base,shadow])
-        y += 32
-        if pkmn.male?
-          textpos.push([_INTL("Male ♂"),8+i*Graphics.width/2,y,0,Color.new(128,192,248),shadow])
-        elsif pkmn.female?
-          textpos.push([_INTL("Female ♀"),8+i*Graphics.width/2,y,0,Color.new(248,96,96),shadow])
-        else
-          textpos.push([_INTL("Genderless"),8+i*Graphics.width/2,y,0,base,shadow])
-        end
-        y += 32
-        if initlevel>=GameData::GrowthRate.max_level
-          textpos.push(["Lv. #{initlevel} (max)",8+i*Graphics.width/2,y,0,base,shadow])
-        elsif leveldiff>0
-          textpos.push(["Lv. #{initlevel} -> #{pkmn.level} (+#{leveldiff})",
-             8+i*Graphics.width/2,y,0,base,shadow])
-        else
-          textpos.push(["Lv. #{initlevel} (no change)",8+i*Graphics.width/2,y,0,base,shadow])
-        end
-        y += 32
-        if pkmn.level<GameData::GrowthRate.max_level
-          endexp = pkmn.growth_rate.minimum_exp_for_level(pkmn.level + 1)
-          textpos.push(["To next Lv.: #{endexp-pkmn.exp}",8+i*Graphics.width/2,y,0,base,shadow])
-          y += 32
-        end
-        cost = pbDayCareGetCost(i)
-        textpos.push(["Cost: $#{cost}",8+i*Graphics.width/2,y,0,base,shadow])
-      end
-      if pbEggGenerated?
-        textpos.push(["Egg waiting for collection",Graphics.width/2,210,2,Color.new(248,248,0),shadow])
-      elsif pbDayCareDeposited==2
-        if pbDayCareGetCompat==0
-          textpos.push(["Pokémon cannot breed",Graphics.width/2,210,2,Color.new(248,96,96),shadow])
-        else
-          textpos.push(["Pokémon can breed",Graphics.width/2,210,2,Color.new(64,248,64),shadow])
-        end
-      end
-      pbDrawTextPositions(sprites["overlay"].bitmap,textpos)
-      refresh = false
-    end
-    pbUpdateSpriteHash(sprites)
-    Graphics.update
-    Input.update
-    if Input.trigger?(Input::BACK)
-      break
-    elsif Input.trigger?(Input::USE)
-      case cmdwindow.index
-      when 0   # Withdraw Pokémon 1
-        if !$PokemonGlobal.daycare[0][0]
-          pbPlayBuzzerSE
-        elsif $Trainer.party_full?
-          pbPlayBuzzerSE
-          pbMessage(_INTL("Party is full, can't withdraw Pokémon."))
-        else
-          pbPlayDecisionSE
-          pbDayCareGetDeposited(0,3,4)
-          pbDayCareWithdraw(0)
-          refresh = true
-        end
-      when 1  # Withdraw Pokémon 2
-        if !$PokemonGlobal.daycare[1][0]
-          pbPlayBuzzerSE
-        elsif $Trainer.party_full?
-          pbPlayBuzzerSE
-          pbMessage(_INTL("Party is full, can't withdraw Pokémon."))
-        else
-          pbPlayDecisionSE
-          pbDayCareGetDeposited(1,3,4)
-          pbDayCareWithdraw(1)
-          refresh = true
-        end
-      when 2   # Deposit Pokémon
-        if pbDayCareDeposited==2
-          pbPlayBuzzerSE
-        elsif $Trainer.party.length==0
-          pbPlayBuzzerSE
-          pbMessage(_INTL("Party is empty, can't deposit Pokémon."))
-        else
-          pbPlayDecisionSE
-          pbChooseNonEggPokemon(1,3)
-          if pbGet(1)>=0
-            pbDayCareDeposit(pbGet(1))
-            refresh = true
+    if need_refresh
+      commands.clear
+      day_care.slots.each_with_index do |slot, i|
+        if slot.filled?
+          pkmn = slot.pokemon
+          msg = _INTL("{1} ({2})", pkmn.name, pkmn.speciesName)
+          if pkmn.male?
+            msg += ", ♂"
+          elsif pkmn.female?
+            msg += ", ♀"
           end
-        end
-      when 3   # Generate/discard egg
-        if pbEggGenerated?
-          pbPlayDecisionSE
-          $PokemonGlobal.daycareEgg      = 0
-          $PokemonGlobal.daycareEggSteps = 0
-          refresh = true
-        else
-          if pbDayCareDeposited!=2 || pbDayCareGetCompat==0
-            pbPlayBuzzerSE
+          if slot.level_gain > 0
+            msg += ", " + _INTL("Lv.{1} (+{2})", pkmn.level, slot.level_gain)
           else
-            pbPlayDecisionSE
-            $PokemonGlobal.daycareEgg = 1
-            refresh = true
+            msg += ", " + _INTL("Lv.{1}", pkmn.level)
           end
-        end
-      when 4   # Collect egg
-        if $PokemonGlobal.daycareEgg!=1
-          pbPlayBuzzerSE
-        elsif $Trainer.party_full?
-          pbPlayBuzzerSE
-          pbMessage(_INTL("Party is full, can't collect the egg."))
+          commands.push(_INTL("[Slot {1}] {2}", i, msg))
         else
-          pbPlayDecisionSE
-          pbDayCareGenerateEgg
-          $PokemonGlobal.daycareEgg      = 0
-          $PokemonGlobal.daycareEggSteps = 0
-          pbMessage(_INTL("Collected the {1} egg.", $Trainer.last_party.speciesName))
-          refresh = true
+          commands.push(_INTL("[Slot {1}] Empty", i))
         end
       end
+      compat = $PokemonGlobal.day_care.get_compatibility
+      if day_care.egg_generated
+        commands.push(_INTL("[Egg available]"))
+      elsif compat > 0
+        commands.push(_INTL("[Can produce egg]"))
+      else
+        commands.push(_INTL("[Cannot breed]"))
+      end
+      commands.push(_INTL("[Steps to next cycle: {1}]", 256 - day_care.step_counter))
+      cmd_window.commands = commands
+      need_refresh = false
+    end
+    cmd = pbCommands2(cmd_window, commands, -1, cmd, true)
+    break if cmd < 0
+    if cmd == commands.length - 2   # Egg
+      compat = $PokemonGlobal.day_care.get_compatibility
+      if compat == 0
+        pbMessage(_INTL("Pokémon cannot breed."))
+      else
+        msg = _INTL("Pokémon can breed (compatibility = {1}).", compat)
+        # Show compatibility
+        if day_care.egg_generated
+          case pbMessage("\\ts[]" + msg, [
+            _INTL("Collect egg"), _INTL("Clear egg"), _INTL("Cancel")], 3)
+          when 0   # Collect egg
+            if $player.party_full?
+              pbMessage(_INTL("Party is full, can't collect the egg."))
+            else
+              DayCare.collect_egg
+              pbMessage(_INTL("Collected the {1} egg.", $player.last_party.speciesName))
+              need_refresh = true
+            end
+          when 1   # Clear egg
+            day_care.egg_generated = false
+            need_refresh = true
+          end
+        else
+          case pbMessage("\\ts[]" + msg, [_INTL("Make egg available"), _INTL("Cancel")], 2)
+          when 0   # Make egg available
+            day_care.egg_generated = true
+            need_refresh = true
+          end
+        end
+      end
+    elsif cmd == commands.length - 1   # Steps to next cycle
+      case pbMessage("\\ts[]" + _INTL("Change number of steps to next cycle?"), [
+         _INTL("Set to 1"), _INTL("Set to 256"), _INTL("Set to other value"), _INTL("Cancel")], 4)
+      when 0   # Set to 1
+        day_care.step_counter = 255
+        need_refresh = true
+      when 1   # Set to 256
+        day_care.step_counter = 0
+        need_refresh = true
+      when 2   # Set to other value
+        params = ChooseNumberParams.new
+        params.setDefaultValue(day_care.step_counter)
+        params.setRange(1, 256)
+        new_counter = pbMessageChooseNumber(_INTL("Set steps until next cycle (1-256)."), params)
+        if new_counter != 256 - day_care.step_counter
+          day_care.step_counter = 256 - new_counter
+          need_refresh = true
+        end
+      end
+    else   # Slot
+      slot = day_care[cmd]
+      if slot.filled?
+        pkmn = slot.pokemon
+        msg = _INTL("Cost: ${1}", slot.cost)
+        if pkmn.level < GameData::GrowthRate.max_level
+          end_exp = pkmn.growth_rate.minimum_exp_for_level(pkmn.level + 1)
+          msg += "\\n" + _INTL("Steps to next level: {1}", end_exp - pkmn.exp)
+        end
+        # Show level change and cost
+        case pbMessage("\\ts[]" + msg, [
+           _INTL("Summary"), _INTL("Withdraw"), _INTL("Cancel")], 3)
+        when 0   # Summary
+          pbFadeOutIn {
+            scene = PokemonSummary_Scene.new
+            screen = PokemonSummaryScreen.new(scene, false)
+            screen.pbStartScreen([pkmn], 0)
+            need_refresh = true
+          }
+        when 1   # Withdraw
+          if $player.party_full?
+            pbMessage(_INTL("Party is full, can't withdraw Pokémon."))
+          else
+            $player.party.push(pkmn)
+            slot.reset
+            day_care.reset_egg_counters
+            need_refresh = true
+          end
+        end
+      else
+        case pbMessage("\\ts[]" + _INTL("This slot is empty."), [
+           _INTL("Deposit"), _INTL("Cancel")], 2)
+        when 0   # Deposit
+          if $player.party.empty?
+            pbMessage(_INTL("Party is empty, can't deposit Pokémon."))
+          else
+            pbChooseNonEggPokemon(1, 3)
+            party_index = pbGet(1)
+            if party_index >= 0
+              pkmn = $player.party[party_index]
+              slot.deposit(pkmn)
+              $player.party.delete_at(party_index)
+              day_care.reset_egg_counters
+              need_refresh = true
+            end
+          end
+        end
+      end
+
     end
   end
-  pbDisposeSpriteHash(sprites)
-  viewport.dispose
+  cmd_window.dispose
 end
 
 
@@ -381,12 +366,16 @@ class SpriteWindow_DebugRoamers < Window_DrawableCommand
 
   def shadowtext(t,x,y,w,h,align=0,colors=0)
     width = self.contents.text_size(t).width
-    if align==1 ;   x += (w-width)         # Right aligned
-    elsif align==2; x += (w/2)-(width/2)   # Centre aligned
+    if align==1
+      x += (w-width)         # Right aligned
+    elsif align==2
+      x += (w/2)-(width/2)   # Centre aligned
     end
     base = Color.new(12*8,12*8,12*8)
-    if colors==1;    base = Color.new(168,48,56)   # Red
-    elsif colors==2; base = Color.new(0,144,0)     # Green
+    if colors==1
+      base = Color.new(168,48,56)   # Red
+    elsif colors==2
+      base = Color.new(0,144,0)     # Green
     end
     pbDrawShadowText(self.contents,x,y,[width,w].max,h,t,base,Color.new(26*8,26*8,25*8))
   end
@@ -625,7 +614,7 @@ def pbImportAllAnimations
       Graphics.update
       audios = []
       files = Dir.glob(folder+"/*.*")
-      %w( wav ogg mid wma mp3 ).each { |ext|
+      %w( wav ogg mid wma ).each { |ext|   # mp3
         upext = ext.upcase
         audios.concat(files.find_all { |f| f[f.length-3,3]==ext })
         audios.concat(files.find_all { |f| f[f.length-3,3]==upext })
@@ -671,7 +660,7 @@ def pbImportAllAnimations
       }
     end
     save_data(animations,"Data/PkmnAnimations.rxdata")
-    $PokemonTemp.battleAnims = nil
+    $game_temp.battle_animations_data = nil
     pbDisposeMessageWindow(msgwindow)
     pbMessage(_INTL("All animations were imported."))
   end
@@ -681,21 +670,22 @@ end
 # Properly erases all non-existent tiles in maps (including event graphics)
 #===============================================================================
 def pbDebugFixInvalidTiles
-  num_errors = 0
+  total_errors = 0
   num_error_maps = 0
   tilesets = $data_tilesets
   mapData = Compiler::MapData.new
   t = Time.now.to_i
   Graphics.update
+  total_maps = mapData.mapinfos.keys.length
+  Console.echo_h1 _INTL("Checking {1} maps for invalid tiles", total_maps)
   for id in mapData.mapinfos.keys.sort
     if Time.now.to_i - t >= 5
       Graphics.update
       t = Time.now.to_i
     end
-    changed = false
+    map_errors = 0
     map = mapData.getMap(id)
     next if !map || !mapData.mapinfos[id]
-    pbSetWindowText(_INTL("Processing map {1} ({2})", id, mapData.mapinfos[id].name))
     passages = mapData.getTilesetPassages(map, id)
     # Check all tiles in map for non-existent tiles
     for x in 0...map.data.xsize
@@ -704,8 +694,7 @@ def pbDebugFixInvalidTiles
           tile_id = map.data[x, y, i]
           next if pbCheckTileValidity(tile_id, map, tilesets, passages)
           map.data[x, y, i] = 0
-          changed = true
-          num_errors += 1
+          map_errors += 1
         end
       end
     end
@@ -716,19 +705,25 @@ def pbDebugFixInvalidTiles
         next if page.graphic.tile_id <= 0
         next if pbCheckTileValidity(page.graphic.tile_id, map, tilesets, passages)
         page.graphic.tile_id = 0
-        changed = true
-        num_errors += 1
+        map_errors += 1
       end
     end
-    next if !changed
+    next if map_errors == 0
     # Map was changed; save it
+    Console.echoln_li _INTL("{1} error tile(s) found on map {2}: {3}.", map_errors, id, mapData.mapinfos[id].name)
+    total_errors += map_errors
     num_error_maps += 1
     mapData.saveMap(id)
   end
   if num_error_maps == 0
+    Console.echo_h2(_INTL("Done. No errors found."), text: :green)
     pbMessage(_INTL("No invalid tiles were found."))
   else
-    pbMessage(_INTL("{1} error(s) were found across {2} map(s) and fixed.", num_errors, num_error_maps))
+    echoln ""
+    Console.echo_h2(_INTL("Done. {1} errors found and fixed.", total_errors), text: :green)
+    Console.echo_warn _INTL("RMXP data was altered. Close RMXP now to ensure changes are applied.")
+    echoln ""
+    pbMessage(_INTL("{1} error(s) were found across {2} map(s) and fixed.", total_errors, num_error_maps))
     pbMessage(_INTL("Close RPG Maker XP to ensure the changes are applied properly."))
   end
 end

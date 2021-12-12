@@ -269,7 +269,7 @@ class SlotMachineScene
     @sprites["window1"].setBitmap(sprintf("Graphics/Pictures/Slot Machine/insert"))
     @sprites["window1"].src_rect.set(0,0,152,208)
     @sprites["window2"]=IconSprite.new(358,96,@viewport)
-    @sprites["credit"]=SlotMachineScore.new(360,66,$Trainer.coins)
+    @sprites["credit"]=SlotMachineScore.new(360,66,$player.coins)
     @sprites["payout"]=SlotMachineScore.new(438,66,0)
     @wager=0
     update
@@ -289,7 +289,7 @@ class SlotMachineScene
       if @sprites["credit"].score == Settings::MAX_COINS
         pbMessage(_INTL("You've got {1} Coins.", Settings::MAX_COINS.to_s_formatted))
         break
-      elsif $Trainer.coins==0
+      elsif $player.coins==0
         pbMessage(_INTL("You've run out of Coins.\nGame over!"))
         break
       elsif @gameRunning   # Reels are spinning
@@ -361,7 +361,13 @@ class SlotMachineScene
       end
       frame = (frame+1)%(Graphics.frame_rate*4)
     end
-    $Trainer.coins = @sprites["credit"].score
+    old_coins = $player.coins
+    $player.coins = @sprites["credit"].score
+    if $player.coins > old_coins
+      $stats.coins_won += $player.coins - old_coins
+    elsif $player.coins < old_coins
+      $stats.coins_lost += old_coins - $player.coins
+    end
   end
 
   def pbEndScene
@@ -388,11 +394,11 @@ end
 
 
 def pbSlotMachine(difficulty=1)
-  if GameData::Item.exists?(:COINCASE) && !$PokemonBag.pbHasItem?(:COINCASE)
+  if !$bag.has?(:COINCASE)
     pbMessage(_INTL("It's a Slot Machine."))
-  elsif $Trainer.coins == 0
+  elsif $player.coins == 0
     pbMessage(_INTL("You don't have any Coins to play!"))
-  elsif $Trainer.coins == Settings::MAX_COINS
+  elsif $player.coins == Settings::MAX_COINS
     pbMessage(_INTL("Your Coin Case is full!"))
   else
     pbFadeOutIn {

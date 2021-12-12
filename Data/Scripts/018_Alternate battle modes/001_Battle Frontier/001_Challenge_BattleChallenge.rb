@@ -198,7 +198,7 @@ class BattleChallengeData
 
   def setParty(value)
     if @inProgress
-      $Trainer.party = value
+      $player.party = value
       @party = value
     else
       @party = value
@@ -226,8 +226,8 @@ class BattleChallengeData
       @trainers.push(newtrainer) if !found
     end
     @start = [$game_map.map_id, $game_player.x, $game_player.y]
-    @oldParty = $Trainer.party
-    $Trainer.party = @party if @party
+    @oldParty = $player.party
+    $player.party = @party if @party
     Game.save(safe: true)
   end
 
@@ -270,12 +270,12 @@ class BattleChallengeData
   end
 
   def pbCancel
-    $Trainer.party = @oldParty if @oldParty
+    $player.party = @oldParty if @oldParty
     reset
   end
 
   def pbEnd
-    $Trainer.party = @oldParty
+    $player.party = @oldParty
     return if !@inProgress
     save = (@decision != 0)
     reset

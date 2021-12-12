@@ -558,6 +558,7 @@ class PokemonEvolutionScene
     end while metaplayer1.playing? && metaplayer2.playing?
     pbFlashInOut(canceled,oldstate,oldstate2)
     if canceled
+      $stats.evolutions_cancelled += 1
       pbMessageDisplay(@sprites["msgwindow"],
          _INTL("Huh? {1} stopped evolving!",@pokemon.name)) { pbUpdate }
     else
@@ -566,6 +567,7 @@ class PokemonEvolutionScene
   end
 
   def pbEvolutionSuccess
+    $stats.evolution_count += 1
     # Play cry of evolved species
     frames = GameData::Species.cry_length(@newspecies, @pokemon.form)
     pbBGMStop
@@ -587,9 +589,10 @@ class PokemonEvolutionScene
     @pokemon.species = @newspecies
     @pokemon.form    = 0 if @pokemon.isSpecies?(:MOTHIM)
     @pokemon.calc_stats
+    @pokemon.ready_to_evolve = false
     # See and own evolved species
-    $Trainer.pokedex.register(@pokemon)
-    $Trainer.pokedex.set_owned(@newspecies)
+    $player.pokedex.register(@pokemon)
+    $player.pokedex.set_owned(@newspecies)
     # Learn moves upon evolution for evolved species
     movelist = @pokemon.getMoveList
     for i in movelist
@@ -606,16 +609,16 @@ class PokemonEvolutionScene
     new_pkmn = pkmn.clone
     new_pkmn.species   = new_species
     new_pkmn.name      = nil
-    new_pkmn.markings  = 0
+    new_pkmn.markings  = []
     new_pkmn.poke_ball = :POKEBALL
     new_pkmn.item      = nil
     new_pkmn.clearAllRibbons
     new_pkmn.calc_stats
     new_pkmn.heal
     # Add duplicate Pokémon to party
-    $Trainer.party.push(new_pkmn)
+    $player.party.push(new_pkmn)
     # See and own duplicate Pokémon
-    $Trainer.pokedex.register(new_pkmn)
-    $Trainer.pokedex.set_owned(new_species)
+    $player.pokedex.register(new_pkmn)
+    $player.pokedex.set_owned(new_species)
   end
 end

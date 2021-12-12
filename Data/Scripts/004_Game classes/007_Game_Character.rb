@@ -199,19 +199,31 @@ class Game_Character
   def calculate_bush_depth
     if @tile_id > 0 || @always_on_top || jumping?
       @bush_depth = 0
-    else
-      deep_bush = regular_bush = false
-      xbehind = @x + (@direction == 4 ? 1 : @direction == 6 ? -1 : 0)
-      ybehind = @y + (@direction == 8 ? 1 : @direction == 2 ? -1 : 0)
-      this_map = (self.map.valid?(@x, @y)) ? [self.map, @x, @y] : $MapFactory.getNewMap(@x, @y)
-      if this_map[0].deepBush?(this_map[1], this_map[2]) && self.map.deepBush?(xbehind, ybehind)
-        @bush_depth = Game_Map::TILE_HEIGHT
-      elsif !moving? && this_map[0].bush?(this_map[1], this_map[2])
-        @bush_depth = 12
-      else
-        @bush_depth = 0
-      end
+      return
     end
+    deep_bush = regular_bush = false
+    xbehind = @x + (@direction == 4 ? 1 : @direction == 6 ? -1 : 0)
+    ybehind = @y + (@direction == 8 ? 1 : @direction == 2 ? -1 : 0)
+    this_map = (self.map.valid?(@x, @y)) ? [self.map, @x, @y] : $map_factory&.getNewMap(@x, @y)
+    behind_map = (self.map.valid?(xbehind, ybehind)) ? [self.map, xbehind, ybehind] : $map_factory&.getNewMap(xbehind, ybehind)
+    if this_map && this_map[0].deepBush?(this_map[1], this_map[2]) &&
+       (!behind_map || behind_map[0].deepBush?(behind_map[1], behind_map[2]))
+      @bush_depth = Game_Map::TILE_HEIGHT
+    elsif this_map && this_map[0].bush?(this_map[1], this_map[2]) && !moving?
+      @bush_depth = 12
+    else
+      @bush_depth = 0
+    end
+  end
+
+  def fullPattern
+    case self.direction
+    when 2 then return self.pattern
+    when 4 then return self.pattern + 4
+    when 6 then return self.pattern + 8
+    when 8 then return self.pattern + 12
+    end
+    return 0
   end
 
   #=============================================================================
@@ -288,13 +300,13 @@ class Game_Character
   # Screen position of the character
   #=============================================================================
   def screen_x
-    ret = ((@real_x - self.map.display_x) / Game_Map::X_SUBPIXELS).round
+    ret = ((@real_x.to_f - self.map.display_x) / Game_Map::X_SUBPIXELS).round
     ret += @width * Game_Map::TILE_WIDTH / 2
     return ret
   end
 
   def screen_y_ground
-    ret = ((@real_y - self.map.display_y) / Game_Map::Y_SUBPIXELS).round
+    ret = ((@real_y.to_f - self.map.display_y) / Game_Map::Y_SUBPIXELS).round
     ret += Game_Map::TILE_HEIGHT
     return ret
   end
@@ -620,13 +632,15 @@ class Game_Character
   def move_random_range(xrange=-1,yrange=-1)
     dirs = []   # 0=down, 1=left, 2=right, 3=up
     if xrange<0
-      dirs.push(1); dirs.push(2)
+      dirs.push(1)
+      dirs.push(2)
     elsif xrange>0
       dirs.push(1) if @x > @original_x - xrange
       dirs.push(2) if @x < @original_x + xrange
     end
     if yrange<0
-      dirs.push(0); dirs.push(3)
+      dirs.push(0)
+      dirs.push(3)
     elsif yrange>0
       dirs.push(0) if @y < @original_y + yrange
       dirs.push(3) if @y > @original_y - yrange
@@ -736,9 +750,6 @@ class Game_Character
       @jump_count = Game_Map::REAL_RES_X / jump_speed_real   # Number of frames to jump one tile
     end
     @stop_count = 0
-    if self.is_a?(Game_Player)
-      $PokemonTemp.dependentEvents.pbMoveDependentEvents
-    end
     triggerLeaveTile
   end
 
@@ -841,6 +852,8 @@ class Game_Character
   def update
     @moved_last_frame = @moved_this_frame
     @stopped_last_frame = @stopped_this_frame
+    @moved_this_frame = false
+    @stopped_this_frame = false
     if !$game_temp.in_menu
       # Update command
       update_command
@@ -910,7 +923,6 @@ class Game_Character
       @stopped_this_frame = true
     elsif !@moved_last_frame || @stopped_last_frame   # Started a new step
       calculate_bush_depth
-      @stopped_this_frame = false
     end
     # Increment animation counter
     @anime_count += 1 if @walk_anime || @step_anime
@@ -920,8 +932,6 @@ class Game_Character
   def update_stop
     @anime_count += 1 if @step_anime
     @stop_count  += 1 if !@starting && !lock?
-    @moved_this_frame = false
-    @stopped_this_frame = false
   end
 
   def update_pattern

@@ -47,7 +47,7 @@ class PokemonPhoneScene
        2,-18,128,64,@viewport)
     @sprites["header"].baseColor   = Color.new(248,248,248)
     @sprites["header"].shadowColor = Color.new(0,0,0)
-    mapname = (@trainers[0][2]) ? pbGetMessage(MessageTypes::MapNames,@trainers[0][2]) : ""
+    mapname = (@trainers[0][2]) ? pbGetMapNameFromId(@trainers[0][2]) : ""
     @sprites["bottom"] = Window_AdvancedTextPokemon.newWithSize("",
        162,Graphics.height-64,Graphics.width-158,64,@viewport)
     @sprites["bottom"].text = "<ac>"+mapname
@@ -117,7 +117,7 @@ class PokemonPhoneScene
           @sprites["icon"].x        = 86-charwidth/8
           @sprites["icon"].y        = 134-charheight/8
           @sprites["icon"].src_rect = Rect.new(0,0,charwidth/4,charheight/4)
-          mapname=(trainer[2]) ? pbGetMessage(MessageTypes::MapNames,trainer[2]) : ""
+          mapname = (trainer[2]) ? pbGetMapNameFromId(trainer[2]) : ""
           @sprites["bottom"].text = "<ac>"+mapname
           for i in 0...@sprites["list"].page_item_max
             @sprites["rematch[#{i}]"].clearBitmaps

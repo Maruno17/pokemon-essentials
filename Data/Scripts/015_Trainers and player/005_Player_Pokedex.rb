@@ -22,11 +22,15 @@ class Player < Trainer
 
     # Clears the Pokédex.
     def clear
-      @seen            = {}
-      @owned           = {}
-      @seen_forms      = {}
-      @last_seen_forms = {}
-      @owned_shadow    = {}
+      @seen             = {}
+      @owned            = {}
+      @seen_forms       = {}   # Gender (0 or 1), shiny (0 or 1), form number
+      @seen_shiny_forms = {}
+      @seen_eggs        = {}
+      @last_seen_forms  = {}
+      @owned_shadow     = {}
+      @caught_counts    = {}
+      @defeated_counts  = {}
       self.refresh_accessible_dexes
     end
 
@@ -53,12 +57,33 @@ class Player < Trainer
     # @param species [Symbol, GameData::Species] species to check
     # @param gender [Integer] gender to check
     # @param form [Integer] form to check
-    # @return [Boolean] whether the species of the given gender and form is seen
-    def seen_form?(species, gender, form)
+    # @param shiny [Boolean, nil] shininess to check (checks both if nil)
+    # @return [Boolean] whether the species of the given gender/form/shininess is seen
+    def seen_form?(species, gender, form, shiny = nil)
       species_id = GameData::Species.try_get(species)&.species
       return false if species_id.nil?
-      @seen_forms[species_id] ||= [[], []]
-      return @seen_forms[species_id][gender][form] == true
+      @seen_forms[species_id] ||= [[[], []], [[], []]]
+      if shiny.nil?
+        return @seen_forms[species_id][gender][0][form] || @seen_forms[species_id][gender][1][form]
+      end
+      shin = (shiny) ? 1 : 0
+      return @seen_forms[species_id][gender][shin][form] == true
+    end
+
+    # Sets the egg for the given species as seen.
+    # @param species [Symbol, GameData::Species] species to set as seen
+    def set_seen_egg(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return if species_id.nil?
+      @seen_eggs[species_id] = true
+    end
+
+    # @param species [Symbol, GameData::Species] species to check
+    # @return [Boolean] whether the egg for the given species is seen
+    def seen_egg?(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return false if species_id.nil?
+      return @seen_eggs[species_id] == true
     end
 
     # Returns the amount of seen Pokémon.
@@ -73,12 +98,12 @@ class Player < Trainer
     # Returns whether there are any seen Pokémon.
     # If a region is given, returns whether there are seen Pokémon
     # in that region.
-    # @param region [Integer] region ID
+    # @param dex [Integer] region ID
     # @return [Boolean] whether there are any seen Pokémon
     def seen_any?(dex = -1)
       validate dex => Integer
       if dex == -1
-        GameData::Species.each { |s| return true if s.form == 0 && @seen[s.species] }
+        GameData::Species.each_species { |s| return true if @seen[s.species] }
       else
         pbAllRegionalSpecies(dex).each { |s| return true if s && @seen[s] }
       end
@@ -92,10 +117,11 @@ class Player < Trainer
       species_id = GameData::Species.try_get(species)&.species
       return 0 if species_id.nil?
       ret = 0
-      @seen_forms[species_id] ||= [[], []]
+      @seen_forms[species_id] ||= [[[], []], [[], []]]
       array = @seen_forms[species_id]
       for i in 0...[array[0].length, array[1].length].max
-        ret += 1 if array[0][i] || array[1][i]
+        ret += 1 if array[0][0][i] || array[0][1][i] ||   # male or genderless shiny/non-shiny
+                    array[1][0][i] || array[1][1][i]      # female shiny/non-shiny
       end
       return ret
     end
@@ -153,7 +179,7 @@ class Player < Trainer
     # Returns the amount of owned Pokémon.
     # If a region ID is given, returns the amount of owned Pokémon
     # in that region.
-    # @param region [Integer] region ID
+    # @param dex [Integer] region ID
     def owned_count(dex = -1)
       validate dex => Integer
       return self.count_species(@owned, dex)
@@ -161,19 +187,23 @@ class Player < Trainer
 
     #===========================================================================
 
-    # @param pkmn [Pokemon, Symbol, GameData::Species] Pokemon to register as seen
+    # @param species [Pokemon, Symbol, GameData::Species] Pokemon to register as seen
     # @param gender [Integer] gender to register (0=male, 1=female, 2=genderless)
     # @param form [Integer] form to register
-    def register(species, gender = 0, form = 0, should_refresh_dexes = true)
+    # @param shiny [Boolean] shininess to register
+    # @param should_refresh_dexes [Boolean] whether to recalculate accessible Dex lists
+    def register(species, gender = 0, form = 0, shiny = false, should_refresh_dexes = true)
       if species.is_a?(Pokemon)
         species_data = species.species_data
         gender = species.gender
+        shiny = species.shiny?
       else
         species_data = GameData::Species.get_species_form(species, form)
       end
       species = species_data.species
       gender = 0 if gender >= 2
       form = species_data.form
+      shin = (shiny) ? 1 : 0
       if form != species_data.pokedex_form
         species_data = GameData::Species.get_species_form(species, species_data.pokedex_form)
         form = species_data.form
@@ -181,8 +211,8 @@ class Player < Trainer
       form = 0 if species_data.form_name.nil? || species_data.form_name.empty?
       # Register as seen
       @seen[species] = true
-      @seen_forms[species] ||= [[], []]
-      @seen_forms[species][gender][form] = true
+      @seen_forms[species] ||= [[[], []], [[], []]]
+      @seen_forms[species][gender][shin][form] = true
       @last_seen_forms[species] ||= []
       @last_seen_forms[species] = [gender, form] if @last_seen_forms[species] == []
       self.refresh_accessible_dexes if should_refresh_dexes
@@ -195,6 +225,51 @@ class Player < Trainer
       form = species_data.pokedex_form
       form = 0 if species_data.form_name.nil? || species_data.form_name.empty?
       @last_seen_forms[pkmn.species] = [pkmn.gender, form]
+    end
+
+    #===========================================================================
+
+    # @param species [Symbol, GameData::Species] species to check
+    # @return [Integer] the number of Pokémon of the given species that have
+    #   been caught by the player
+    def caught_count(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return 0 if species_id.nil?
+      return @caught_counts[species_id] || 0
+    end
+
+    # @param species [Symbol, GameData::Species] species to check
+    # @return [Integer] the number of Pokémon of the given species that have
+    #   been defeated by the player
+    def defeated_count(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return 0 if species_id.nil?
+      return @defeated_counts[species_id] || 0
+    end
+
+    # @param species [Symbol, GameData::Species] species to check
+    # @return [Integer] the number of Pokémon of the given species that have
+    #   been defeated or caught by the player
+    def battled_count(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return 0 if species_id.nil?
+      return (@defeated_counts[species_id] || 0) + (@caught_counts[species_id] || 0)
+    end
+
+    # @param species [Symbol, GameData::Species] species to count as caught
+    def register_caught(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return if species_id.nil?
+      @caught_counts[species_id] = 0 if @caught_counts[species_id].nil?
+      @caught_counts[species_id] += 1
+    end
+
+    # @param species [Symbol, GameData::Species] species to count as defeated
+    def register_defeated(species)
+      species_id = GameData::Species.try_get(species)&.species
+      return if species_id.nil?
+      @defeated_counts[species_id] = 0 if @defeated_counts[species_id].nil?
+      @defeated_counts[species_id] += 1
     end
 
     #===========================================================================
@@ -269,7 +344,7 @@ class Player < Trainer
     def count_species(hash, region = -1)
       ret = 0
       if region == -1
-        GameData::Species.each { |s| ret += 1 if s.form == 0 && hash[s.species] }
+        GameData::Species.each_species { |s| ret += 1 if hash[s.species] }
       else
         pbAllRegionalSpecies(region).each { |s| ret += 1 if s && hash[s] }
       end

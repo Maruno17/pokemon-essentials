@@ -21,8 +21,8 @@ class TriadCard
     spAtk   = baseStats[:SPECIAL_ATTACK]
     spDef   = baseStats[:SPECIAL_DEFENSE]
     speed   = baseStats[:SPEED]
-    @type  = species_data.type1
-    @type  = species_data.type2 if @type == :NORMAL && species_data.type2
+    @type  = species_data.types[0]
+    @type  = species_data.types[1] if @type == :NORMAL && species_data.types[1]
     @west  = baseStatToValue(attack + speed / 3)
     @east  = baseStatToValue(defense + hp / 3)
     @north = baseStatToValue(spAtk + speed / 3)
@@ -67,11 +67,16 @@ class TriadCard
     ret *= (@north + @east + @south + @west)
     ret /= 10   # Ranges from 2 to 24,000
     # Quantize prices to the next highest "unit"
-    if ret > 10000;   ret = (1 + ret / 1000) * 1000
-    elsif ret > 5000; ret = (1 + ret / 500) * 500
-    elsif ret > 1000; ret = (1 + ret / 100) * 100
-    elsif ret > 500;  ret = (1 + ret / 50) * 50
-    else;             ret = (1 + ret / 10) * 10
+    if ret > 10000
+      ret = (1 + ret / 1000) * 1000
+    elsif ret > 5000
+      ret = (1 + ret / 500) * 500
+    elsif ret > 1000
+      ret = (1 + ret / 100) * 100
+    elsif ret > 500
+      ret = (1 + ret / 50) * 50
+    else
+      ret = (1 + ret / 10) * 10
     end
     return ret
   end
@@ -85,7 +90,7 @@ class TriadCard
     end
     if type
       typebitmap = AnimatedBitmap.new(_INTL("Graphics/Pictures/types"))
-      type_number = GameData::Type.get(type).id_number
+      type_number = GameData::Type.get(type).icon_position
       typerect = Rect.new(0, type_number * 28, 64, 28)
       bitmap.blt(8, 50, typebitmap.bitmap, typerect, 192)
       typebitmap.dispose
@@ -107,7 +112,7 @@ class TriadCard
     # Draw card background
     bitmap.blt(0, 0, cardbitmap.bitmap, Rect.new(0, 0, cardbitmap.width, cardbitmap.height))
     # Draw type icon
-    type_number = GameData::Type.get(@type).id_number
+    type_number = GameData::Type.get(@type).icon_position
     typerect = Rect.new(0, type_number * 28, 64, 28)
     bitmap.blt(8, 50, typebitmap.bitmap, typerect, 192)
     # Draw Pokémon icon
@@ -213,10 +218,13 @@ class TriadScene
 
   def pbDisplay(text)
     @sprites["helpwindow"].text = text
-    (Graphics.frame_rate*1.5).floor.times do
+    timer = 0.0
+    loop do
       Graphics.update
       Input.update
       pbUpdate
+      timer += Graphics.delta_s
+      break if timer >= 1.5
     end
   end
 
@@ -293,7 +301,7 @@ class TriadScene
       elsif Input.trigger?(Input::USE)
         break if chosenCards.length==@battle.maxCards
         item = cardStorage[command.index]
-        if !item || @battle.pbQuantity(cardStorage,item[0])==0
+        if !item || @battle.quantity(cardStorage,item[0])==0
           pbPlayBuzzerSE
         else
           pbPlayDecisionSE
@@ -623,17 +631,17 @@ class TriadScreen
     return @board[y*@width+x]
   end
 
-  def pbQuantity(items,item)
-    return ItemStorageHelper.pbQuantity(items, item)
+  def quantity(items,item)
+    return ItemStorageHelper.quantity(items, item)
   end
 
   def pbAdd(items,item)
-    return ItemStorageHelper.pbStoreItem(items,$PokemonGlobal.triads.maxSize,
-       $PokemonGlobal.triads.maxPerSlot,item,1)
+    return ItemStorageHelper.add(items, $PokemonGlobal.triads.maxSize,
+       TriadStorage::MAX_PER_SLOT, item, 1)
   end
 
   def pbSubtract(items, item)
-    return ItemStorageHelper.pbDeleteItem(items, item, 1)
+    return ItemStorageHelper.remove(items, item, 1)
   end
 
   def flipBoard(x,y,attackerParam=nil,recurse=false)
@@ -710,22 +718,19 @@ class TriadScreen
     count = 0
     for i in 0...$PokemonGlobal.triads.length
       item = $PokemonGlobal.triads[i]
-      ItemStorageHelper.pbStoreItem(@triadCards,
-         $PokemonGlobal.triads.maxSize,
-         $PokemonGlobal.triads.maxPerSlot,
-         item[0],item[1]
-      )
+      ItemStorageHelper.add(@triadCards, $PokemonGlobal.triads.maxSize,
+         TriadStorage::MAX_PER_SLOT, item[0], item[1])
       count += item[1]   # Add item count to total count
     end
     @board = []
-    @playerName   = $Trainer ? $Trainer.name : "Trainer"
+    @playerName   = $player ? $player.name : "Trainer"
     @opponentName = opponentName
-    type_keys = GameData::Type::DATA.keys
+    type_keys = GameData::Type.keys
     for i in 0...@width*@height
       square = TriadSquare.new
       if @elements
         loop do
-          trial_type = type_keys[rand(type_keys.length)]
+          trial_type = type_keys.sample
           type_data = GameData::Type.get(trial_type)
           next if type_data.pseudo_type
           square.type = type_data.id
@@ -766,17 +771,17 @@ class TriadScreen
         opponentCards.push(species_data.id)
       end
     else
-      species_keys = GameData::Species::DATA.keys
+      species_keys = GameData::Species.keys
       candidates = []
       while candidates.length < 200
-        card = species_keys[rand(species_keys.length)]
+        card = species_keys.sample
         card_data = GameData::Species.get(card)
         card = card_data.id   # Make sure it's a symbol
         triad = TriadCard.new(card)
         total = triad.north + triad.south + triad.east + triad.west
         # Add random species and its total point count
         candidates.push([card, total])
-        if candidates.length < 200 && $Trainer.owned?(card_data.species)
+        if candidates.length < 200 && $player.owned?(card_data.species)
           # Add again if player owns the species
           candidates.push([card, total])
         end
@@ -872,15 +877,15 @@ class TriadScreen
       if @trade==1
         # Keep only cards of your color
         for card in originalCards
-          $PokemonGlobal.triads.pbDeleteItem(card)
+          $PokemonGlobal.triads.remove(card)
         end
         for i in cards
-          $PokemonGlobal.triads.pbStoreItem(i)
+          $PokemonGlobal.triads.add(i)
         end
         for i in 0...@width*@height
           if board[i].owner==1
             card = GameData::Species.get_species_form(board[i].card.species, board[i].card.form).id
-            $PokemonGlobal.triads.pbStoreItem(card)
+            $PokemonGlobal.triads.add(card)
           end
         end
         @scene.pbDisplayPaused(_INTL("Kept all cards of your color."))
@@ -890,34 +895,34 @@ class TriadScreen
       result = 1
       if prize
         species_data = GameData::Species.try_get(prize)
-        if species_data && $PokemonGlobal.triads.pbStoreItem(species_data.id)
+        if species_data && $PokemonGlobal.triads.add(species_data.id)
           @scene.pbDisplayPaused(_INTL("Got opponent's {1} card.", species_data.name))
         end
       else
         case @trade
         when 0   # Gain 1 random card from opponent's deck
           card = originalOpponentCards[rand(originalOpponentCards.length)]
-          if $PokemonGlobal.triads.pbStoreItem(card)
+          if $PokemonGlobal.triads.add(card)
             cardname = GameData::Species.get(card).name
             @scene.pbDisplayPaused(_INTL("Got opponent's {1} card.",cardname))
           end
         when 1   # Keep only cards of your color
           for card in originalCards
-            $PokemonGlobal.triads.pbDeleteItem(card)
+            $PokemonGlobal.triads.remove(card)
           end
           for i in cards
-            $PokemonGlobal.triads.pbStoreItem(i)
+            $PokemonGlobal.triads.add(i)
           end
           for i in 0...@width*@height
             if board[i].owner==1
               card = GameData::Species.get_species_form(board[i].card.species, board[i].card.form).id
-              $PokemonGlobal.triads.pbStoreItem(card)
+              $PokemonGlobal.triads.add(card)
             end
           end
           @scene.pbDisplayPaused(_INTL("Kept all cards of your color."))
         when 2   # Gain all opponent's cards
           for card in originalOpponentCards
-            $PokemonGlobal.triads.pbStoreItem(card)
+            $PokemonGlobal.triads.add(card)
           end
           @scene.pbDisplayPaused(_INTL("Got all opponent's cards."))
         end
@@ -928,26 +933,26 @@ class TriadScreen
       case @trade
       when 0   # Lose 1 random card from your deck
         card = originalCards[rand(originalCards.length)]
-        $PokemonGlobal.triads.pbDeleteItem(card)
+        $PokemonGlobal.triads.remove(card)
         cardname = GameData::Species.get(card).name
         @scene.pbDisplayPaused(_INTL("Opponent won your {1} card.",cardname))
       when 1   # Keep only cards of your color
         for card in originalCards
-          $PokemonGlobal.triads.pbDeleteItem(card)
+          $PokemonGlobal.triads.remove(card)
         end
         for i in cards
-          $PokemonGlobal.triads.pbStoreItem(i)
+          $PokemonGlobal.triads.add(i)
         end
         for i in 0...@width*@height
           if board[i].owner==1
             card = GameData::Species.get_species_form(board[i].card.species, board[i].card.form).id
-            $PokemonGlobal.triads.pbStoreItem(card)
+            $PokemonGlobal.triads.add(card)
           end
         end
         @scene.pbDisplayPaused(_INTL("Kept all cards of your color.",cardname))
       when 2   # Lose all your cards
         for card in originalCards
-          $PokemonGlobal.triads.pbDeleteItem(card)
+          $PokemonGlobal.triads.remove(card)
         end
         @scene.pbDisplayPaused(_INTL("Opponent won all your cards."))
       end
@@ -991,54 +996,57 @@ end
 class TriadStorage
   attr_reader :items
 
+  MAX_PER_SLOT = 999   # Max. number of items per slot
+
   def initialize
     @items = []
-  end
-
-  def maxSize
-    return @items.length + 1
-  end
-
-  def maxPerSlot
-    return 999
-  end
-
-  def empty?
-    return @items.length == 0
-  end
-
-  def length
-    return @items.length
   end
 
   def [](i)
     return @items[i]
   end
 
-  def getItem(index)
+  def length
+    return @items.length
+  end
+
+  def empty?
+    return @items.length == 0
+  end
+
+  def maxSize
+    return @items.length + 1
+  end
+
+  def clear
+    @items.clear
+  end
+
+  def get_item(index)
     return nil if index < 0 || index >= @items.length
     return @items[index][0]
   end
 
-  def getCount(index)
+  # Number of the item in the given index
+  def get_item_count(index)
     return 0 if index < 0 || index >= @items.length
     return @items[index][1]
   end
 
-  def pbQuantity(item)
-    return ItemStorageHelper.pbQuantity(@items, item)
+  def quantity(item)
+    return ItemStorageHelper.quantity(@items, item)
   end
 
-  def pbCanStore?(item, qty = 1)
-    return ItemStorageHelper.pbCanStore?(@items, self.maxSize, self.maxPerSlot, item, qty)
+  def can_add?(item, qty = 1)
+    return ItemStorageHelper.can_add?(@items, self.maxSize, MAX_PER_SLOT, item, qty)
   end
 
-  def pbStoreItem(item, qty = 1)
-    return ItemStorageHelper.pbStoreItem(@items, self.maxSize, self.maxPerSlot, item, qty)
+  def add(item, qty = 1)
+    return ItemStorageHelper.add(@items, self.maxSize, MAX_PER_SLOT, item, qty)
   end
 
-  def pbDeleteItem(item, qty = 1)
-    return ItemStorageHelper.pbDeleteItem(@items, item, qty)
+  def remove(item, qty = 1)
+    return ItemStorageHelper.remove(@items, item, qty)
   end
 end
 
@@ -1050,9 +1058,8 @@ end
 def pbBuyTriads
   commands = []
   realcommands = []
-  GameData::Species.each do |s|
-    next if s.form != 0
-    next if !$Trainer.owned?(s.species)
+  GameData::Species.each_species do |s|
+    next if !$player.owned?(s.species)
     price = TriadCard.new(s.id).price
     commands.push([price, s.name, _INTL("{1} - ${2}", s.name, price.to_s_formatted), s.id])
   end
@@ -1100,11 +1107,11 @@ def pbBuyTriads
       itemname = commands[cmdwindow.index][1]
       cmdwindow.active = false
       cmdwindow.update
-      if $Trainer.money<price
+      if $player.money<price
         pbMessage(_INTL("You don't have enough money."))
         next
       end
-      maxafford = (price<=0) ? 99 : $Trainer.money/price
+      maxafford = (price<=0) ? 99 : $player.money/price
       maxafford = 99 if maxafford>99
       params = ChooseNumberParams.new
       params.setRange(1,maxafford)
@@ -1115,16 +1122,16 @@ def pbBuyTriads
       next if quantity<=0
       price *= quantity
       next if !pbConfirmMessage(_INTL("{1}, and you want {2}. That will be ${3}. OK?",itemname,quantity,price.to_s_formatted))
-      if $Trainer.money<price
+      if $player.money<price
         pbMessage(_INTL("You don't have enough money."))
         next
       end
-      if !$PokemonGlobal.triads.pbCanStore?(item,quantity)
+      if !$PokemonGlobal.triads.can_add?(item, quantity)
         pbMessage(_INTL("You have no room for more cards."))
         next
       end
-      $PokemonGlobal.triads.pbStoreItem(item,quantity)
-      $Trainer.money -= price
+      $PokemonGlobal.triads.add(item, quantity)
+      $player.money -= price
       goldwindow.text = _INTL("Money:\r\n{1}",pbGetGoldString)
       pbMessage(_INTL("Here you are! Thank you!\\se[Mart buy item]"))
     end
@@ -1164,9 +1171,9 @@ def pbSellTriads
   preview.x = Graphics.width*3/4-40
   preview.y = Graphics.height/2-48
   preview.z = 4
-  item = $PokemonGlobal.triads.getItem(cmdwindow.index)
+  item = $PokemonGlobal.triads.get_item(cmdwindow.index)
   preview.bitmap = TriadCard.new(item).createBitmap(1)
-  olditem = $PokemonGlobal.triads.getItem(cmdwindow.index)
+  olditem = $PokemonGlobal.triads.get_item(cmdwindow.index)
   done = false
   Graphics.frame_reset
   while !done
@@ -1176,7 +1183,7 @@ def pbSellTriads
       cmdwindow.active = true
       cmdwindow.update
       goldwindow.update
-      item = $PokemonGlobal.triads.getItem(cmdwindow.index)
+      item = $PokemonGlobal.triads.get_item(cmdwindow.index)
       if olditem != item
         preview.bitmap.dispose if preview.bitmap
         if item
@@ -1193,9 +1200,9 @@ def pbSellTriads
           done = true
           break
         end
-        item = $PokemonGlobal.triads.getItem(cmdwindow.index)
+        item = $PokemonGlobal.triads.get_item(cmdwindow.index)
         itemname = GameData::Species.get(item).name
-        quantity = $PokemonGlobal.triads.pbQuantity(item)
+        quantity = $PokemonGlobal.triads.quantity(item)
         price = TriadCard.new(item).price
         if price==0
           pbDisplayPaused(_INTL("The {1} card? Oh, no. I can't buy that.",itemname))
@@ -1215,9 +1222,9 @@ def pbSellTriads
           price /= 4
           price *= quantity
           if pbConfirmMessage(_INTL("I can pay ${1}. Would that be OK?",price.to_s_formatted))
-            $Trainer.money += price
+            $player.money += price
             goldwindow.text = _INTL("Money:\r\n{1}",pbGetGoldString)
-            $PokemonGlobal.triads.pbDeleteItem(item,quantity)
+            $PokemonGlobal.triads.remove(item,quantity)
             pbMessage(_INTL("Turned over the {1} card and received ${2}.\\se[Mart buy item]",itemname,price.to_s_formatted))
             commands = []
             for i in 0...$PokemonGlobal.triads.length
@@ -1270,7 +1277,7 @@ def pbTriadList
       if lastIndex!=cmdwindow.index
         sprite.bitmap.dispose if sprite.bitmap
         if cmdwindow.index<$PokemonGlobal.triads.length
-          sprite.bitmap = TriadCard.new($PokemonGlobal.triads.getItem(cmdwindow.index)).createBitmap(1)
+          sprite.bitmap = TriadCard.new($PokemonGlobal.triads.get_item(cmdwindow.index)).createBitmap(1)
         end
         lastIndex = cmdwindow.index
       end
@@ -1296,7 +1303,7 @@ end
 def pbGiveTriadCard(species, quantity = 1)
   sp = GameData::Species.try_get(species)
   return false if !sp
-  return false if !$PokemonGlobal.triads.pbCanStore?(sp.id, quantity)
-  $PokemonGlobal.triads.pbStoreItem(sp.id, quantity)
+  return false if !$PokemonGlobal.triads.can_add?(sp.id, quantity)
+  $PokemonGlobal.triads.add(sp.id, quantity)
   return true
 end

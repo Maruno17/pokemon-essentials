@@ -192,3 +192,8 @@ GameData::TerrainTag.register({
   :battle_environment     => :Puddle,
   :shows_reflections      => true
 })
+
+GameData::TerrainTag.register({
+  :id                     => :NoEffect,
+  :id_number              => 17
+})

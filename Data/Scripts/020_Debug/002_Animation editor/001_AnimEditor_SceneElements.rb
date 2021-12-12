@@ -524,12 +524,12 @@ class AnimationCanvas < Sprite
       @sprites["pokemon_1"].bitmap=@target
       @sprites["pokemon_1"].z=16
       pbSpriteSetAnimFrame(@sprites["pokemon_0"],
-         pbCreateCel(PokeBattle_SceneConstants::FOCUSUSER_X,
-                     PokeBattle_SceneConstants::FOCUSUSER_Y,-1,2),
+         pbCreateCel(Battle::Scene::FOCUSUSER_X,
+                     Battle::Scene::FOCUSUSER_Y,-1,2),
          @sprites["pokemon_0"],@sprites["pokemon_1"])
       pbSpriteSetAnimFrame(@sprites["pokemon_1"],
-         pbCreateCel(PokeBattle_SceneConstants::FOCUSTARGET_X,
-                     PokeBattle_SceneConstants::FOCUSTARGET_Y,-2,1),
+         pbCreateCel(Battle::Scene::FOCUSTARGET_X,
+                     Battle::Scene::FOCUSTARGET_Y,-2,1),
          @sprites["pokemon_0"],@sprites["pokemon_1"])
       usersprite=@sprites["pokemon_#{oppmove ? 1 : 0}"]
       targetsprite=@sprites["pokemon_#{oppmove ? 0 : 1}"]
@@ -540,8 +540,8 @@ class AnimationCanvas < Sprite
       @player=PBAnimationPlayerX.new(@animation,
          @battle.battlers[oppmove ? 1 : 0],@battle.battlers[oppmove ? 0 : 1],self,oppmove,true)
       @player.setLineTransform(
-         PokeBattle_SceneConstants::FOCUSUSER_X,PokeBattle_SceneConstants::FOCUSUSER_Y,
-         PokeBattle_SceneConstants::FOCUSTARGET_X,PokeBattle_SceneConstants::FOCUSTARGET_Y,
+         Battle::Scene::FOCUSUSER_X,Battle::Scene::FOCUSUSER_Y,
+         Battle::Scene::FOCUSTARGET_X,Battle::Scene::FOCUSTARGET_Y,
          olduserx,oldusery,
          oldtargetx,oldtargety)
       @player.start

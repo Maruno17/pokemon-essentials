@@ -83,16 +83,20 @@ PokemonDebugMenuCommands.register("setstatus", {
       ids = [:NONE]
       GameData::Status.each do |s|
         next if s.id == :NONE
-        commands.push(s.name)
+        commands.push(_INTL("Set {1}", s.name))
         ids.push(s.id)
       end
       loop do
-        cmd = screen.pbShowCommands(_INTL("Set {1}'s status.", pkmn.name), commands, cmd)
+        msg = _INTL("Current status: {1}", GameData::Status.get(pkmn.status).name)
+        if pkmn.status == :SLEEP
+          msg = _INTL("Current status: {1} (turns: {2})",
+             GameData::Status.get(pkmn.status).name, pkmn.statusCount)
+        end
+        cmd = screen.pbShowCommands(msg, commands, cmd)
         break if cmd < 0
         case cmd
         when 0   # Cure
           pkmn.heal_status
-          screen.pbDisplay(_INTL("{1}'s status was cured.", pkmn.name))
           screen.pbRefreshSingle(pkmnid)
         else   # Give status problem
           count = 0
@@ -639,7 +643,7 @@ PokemonDebugMenuCommands.register("setitem", {
         if item && item != pkmn.item_id
           pkmn.item = item
           if GameData::Item.get(item).is_mail?
-            pkmn.mail = Mail.new(item, _INTL("Text"), $Trainer.name)
+            pkmn.mail = Mail.new(item, _INTL("Text"), $player.name)
           end
           screen.pbRefreshSingle(pkmnid)
         end
@@ -779,7 +783,7 @@ PokemonDebugMenuCommands.register("setgender", {
         when 2   # Reset
           pkmn.gender = nil
         end
-        $Trainer.pokedex.register(pkmn) if !settingUpBattle
+        $player.pokedex.register(pkmn) if !settingUpBattle
         screen.pbRefreshSingle(pkmnid)
       end
     end
@@ -807,7 +811,7 @@ PokemonDebugMenuCommands.register("speciesform", {
         if species && species != pkmn.species
           pkmn.species = species
           pkmn.calc_stats
-          $Trainer.pokedex.register(pkmn) if !settingUpBattle
+          $player.pokedex.register(pkmn) if !settingUpBattle
           screen.pbRefreshSingle(pkmnid)
         end
       when 1   # Set form
@@ -834,7 +838,7 @@ PokemonDebugMenuCommands.register("speciesform", {
               pkmn.forced_form = f
             end
             pkmn.form = f
-            $Trainer.pokedex.register(pkmn) if !settingUpBattle
+            $player.pokedex.register(pkmn) if !settingUpBattle
             screen.pbRefreshSingle(pkmnid)
           end
         end
@@ -863,20 +867,28 @@ PokemonDebugMenuCommands.register("setshininess", {
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     cmd = 0
     loop do
-      msg = [_INTL("Is shiny."), _INTL("Is normal (not shiny).")][pkmn.shiny? ? 0 : 1]
+      msg_idx = pkmn.shiny? ? (pkmn.super_shiny? ? 1 : 0) : 2
+      msg = [_INTL("Is shiny."), _INTL("Is super shiny."), _INTL("Is normal (not shiny).")][msg_idx]
       cmd = screen.pbShowCommands(msg, [
            _INTL("Make shiny"),
+           _INTL("Make super shiny"),
            _INTL("Make normal"),
            _INTL("Reset")], cmd)
       break if cmd < 0
       case cmd
       when 0   # Make shiny
         pkmn.shiny = true
-      when 1   # Make normal
+        pkmn.super_shiny = false
+      when 1   # Make super shiny
+        pkmn.super_shiny = true
+      when 2   # Make normal
         pkmn.shiny = false
-      when 2   # Reset
+        pkmn.super_shiny = false
+      when 3   # Reset
         pkmn.shiny = nil
+        pkmn.super_shiny = nil
       end
+      $player.pokedex.register(pkmn) if !settingUpBattle
       screen.pbRefreshSingle(pkmnid)
     end
     next false
@@ -890,9 +902,8 @@ PokemonDebugMenuCommands.register("setpokeball", {
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     commands = []
     balls = []
-    for key in $BallTypes.keys
-      item = GameData::Item.try_get($BallTypes[key])
-      balls.push([item.id, item.name]) if item
+    GameData::Item.each do |item_data|
+      balls.push([item_data.id, item_data.name]) if item_data.is_poke_ball?
     end
     balls.sort! { |a, b| a[1] <=> b[1] }
     cmd = 0
@@ -988,7 +999,7 @@ PokemonDebugMenuCommands.register("ownership", {
       gender = [_INTL("Male"), _INTL("Female"), _INTL("Unknown")][pkmn.owner.gender]
       msg = [_INTL("Player's Pokémon\n{1}\n{2}\n{3} ({4})", pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id),
              _INTL("Foreign Pokémon\n{1}\n{2}\n{3} ({4})", pkmn.owner.name, gender, pkmn.owner.public_id, pkmn.owner.id)
-            ][pkmn.foreign?($Trainer) ? 1 : 0]
+            ][pkmn.foreign?($player) ? 1 : 0]
       cmd = screen.pbShowCommands(msg, [
            _INTL("Make player's"),
            _INTL("Set OT's name"),
@@ -998,7 +1009,7 @@ PokemonDebugMenuCommands.register("ownership", {
       break if cmd < 0
       case cmd
       when 0   # Make player's
-        pkmn.owner = Pokemon::Owner.new_from_trainer($Trainer)
+        pkmn.owner = Pokemon::Owner.new_from_trainer($player)
       when 1   # Set OT's name
         pkmn.owner.name = pbEnterPlayerName(_INTL("{1}'s OT's name?", pkmn.name), 1, Settings::MAX_PLAYER_NAME_SIZE)
       when 2   # Set OT's gender
@@ -1006,7 +1017,7 @@ PokemonDebugMenuCommands.register("ownership", {
            [_INTL("Male"), _INTL("Female"), _INTL("Unknown")], pkmn.owner.gender)
         pkmn.owner.gender = cmd2 if cmd2 >= 0
       when 3   # Random foreign ID
-        pkmn.owner.id = $Trainer.make_foreign_ID
+        pkmn.owner.id = $player.make_foreign_ID
       when 4   # Set foreign ID
         params = ChooseNumberParams.new
         params.setRange(0, 65535)
@@ -1014,6 +1025,36 @@ PokemonDebugMenuCommands.register("ownership", {
         val = pbMessageChooseNumber(
            _INTL("Set the new ID (max. 65535)."), params) { screen.pbUpdate }
         pkmn.owner.id = val | val << 16
+      end
+    end
+    next false
+  }
+})
+
+#===============================================================================
+# Can store/release/trade
+#===============================================================================
+PokemonDebugMenuCommands.register("setdiscardable", {
+  "parent"      => "main",
+  "name"        => _INTL("Set discardable"),
+  "always_show" => true,
+  "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
+    cmd = 0
+    loop do
+      msg = _INTL("Click option to toggle.")
+      cmds = []
+      cmds.push((pkmn.cannot_store) ? _INTL("Cannot store") : _INTL("Can store"))
+      cmds.push((pkmn.cannot_release) ? _INTL("Cannot release") : _INTL("Can release"))
+      cmds.push((pkmn.cannot_trade) ? _INTL("Cannot trade") : _INTL("Can trade"))
+      cmd = screen.pbShowCommands(msg, cmds, cmd)
+      break if cmd < 0
+      case cmd
+      when 0   # Toggle storing
+        pkmn.cannot_store = !pkmn.cannot_store
+      when 1   # Toggle releasing
+        pkmn.cannot_release = !pkmn.cannot_release
+      when 2   # Toggle trading
+        pkmn.cannot_trade = !pkmn.cannot_trade
       end
     end
     next false
@@ -1091,10 +1132,10 @@ PokemonDebugMenuCommands.register("shadowpkmn", {
         if pkmn.shadowPokemon?
           oldheart = pkmn.heart_gauge
           params = ChooseNumberParams.new
-          params.setRange(0, Pokemon::HEART_GAUGE_SIZE)
+          params.setRange(0, pkmn.max_gauge_size)
           params.setDefaultValue(pkmn.heart_gauge)
           val = pbMessageChooseNumber(
-             _INTL("Set the heart gauge (max. {1}).", Pokemon::HEART_GAUGE_SIZE),
+             _INTL("Set the heart gauge (max. {1}).", pkmn.max_gauge_size),
              params) { screen.pbUpdate }
           if val != oldheart
             pkmn.adjustHeart(val - oldheart)
@@ -1157,8 +1198,7 @@ PokemonDebugMenuCommands.register("delete", {
   "effect"      => proc { |pkmn, pkmnid, heldpoke, settingUpBattle, screen|
     if screen.pbConfirm(_INTL("Are you sure you want to delete this Pokémon?"))
       if screen.is_a?(PokemonPartyScreen)
-        screen.party[pkmnid] = nil
-        screen.party.compact!
+        screen.party.delete_at(pkmnid)
         screen.pbHardRefresh
       elsif screen.is_a?(PokemonStorageScreen)
         screen.scene.pbRelease(pkmnid, heldpoke)

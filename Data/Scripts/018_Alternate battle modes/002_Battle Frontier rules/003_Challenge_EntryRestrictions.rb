@@ -112,9 +112,8 @@ module NicknameChecker
     name = name.upcase
     return true if name == getName(species)
     return false if @@names.values.include?(name)
-    GameData::Species.each do |species_data|
-      next if species_data.species == species || species_data.form != 0
-      return false if getName(species_data.id) == name
+    GameData::Species.each_species do |species_data|
+      return false if species_data.species != species && getName(species_data.id) == name
     end
     return true
   end

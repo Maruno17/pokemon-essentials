@@ -218,11 +218,8 @@ class MapScreenScene
     return false
   end
 
-  def removeOldConnections(ret,mapid)
-    for i in 0...ret.length
-      ret[i]=nil if ret[i][0]==mapid || ret[i][3]==mapid
-    end
-    ret.compact!
+  def removeOldConnections(ret, mapid)
+    ret.delete_if { |conn| conn[0] == mapid || conn[3] == mapid }
   end
 
   # Returns the maps within _keys_ that are directly connected to this map, _map_.
@@ -388,7 +385,7 @@ class MapScreenScene
   end
 
   def onDoubleClick(map_id)
-    pbEditMetadata(map_id) if map_id > 0
+    pbEditMapMetadata(map_id) if map_id > 0
   end
 
   def onClick(mapid,x,y)
@@ -419,24 +416,24 @@ class MapScreenScene
   end
 
   def onRightClick(mapid,x,y)
-#   echoln("rightclick (#{mapid})")
+#   echoln "rightclick (#{mapid})"
   end
 
   def onMouseUp(mapid)
-#   echoln("mouseup (#{mapid})")
+#   echoln "mouseup (#{mapid})"
     @dragging=false if @dragging
   end
 
   def onRightMouseUp(mapid)
-#   echoln("rightmouseup (#{mapid})")
+#   echoln "rightmouseup (#{mapid})"
   end
 
   def onMouseOver(mapid,x,y)
-#   echoln("mouseover (#{mapid},#{x},#{y})")
+#   echoln "mouseover (#{mapid},#{x},#{y})"
   end
 
   def onMouseMove(mapid,x,y)
-#   echoln("mousemove (#{mapid},#{x},#{y})")
+#   echoln "mousemove (#{mapid},#{x},#{y})"
     if @dragging
       if @dragmapid>=0
         sprite=getMapSprite(@dragmapid)

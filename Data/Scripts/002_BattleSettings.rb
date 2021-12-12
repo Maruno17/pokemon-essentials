@@ -18,12 +18,34 @@ module Settings
   MORE_TYPE_EFFECTS                           = (MECHANICS_GENERATION >= 6)
   # Whether weather caused by an ability lasts 5 rounds (true) or forever (false).
   FIXED_DURATION_WEATHER_FROM_ABILITY         = (MECHANICS_GENERATION >= 6)
+  # Whether any Pokémon (originally owned by the player or foreign) can disobey
+  # the player's commands if the Pokémon is too high a level compared to the
+  # number of Gym Badges the player has.
+  ANY_HIGH_LEVEL_POKEMON_CAN_DISOBEY          = false
+  # Whether foreign Pokémon can disobey the player's commands if the Pokémon is
+  # too high a level compared to the number of Gym Badges the player has.
+  FOREIGN_HIGH_LEVEL_POKEMON_CAN_DISOBEY      = true
+
+  #=============================================================================
+
+  # Whether Pokémon with high happiness will gain more Exp from battles, have a
+  # chance of avoiding/curing negative effects by themselves, resisting
+  # fainting, etc.
+  AFFECTION_EFFECTS        = false
+  # Whether a Pokémon's happiness is limited to 179, and can only be increased
+  # further with friendship-raising berries. Related to AFFECTION_EFFECTS by
+  # default as affection effects only start applying above a happiness of 179.
+  # Also lowers the happiness evolution threshold to 160.
+  APPLY_HAPPINESS_SOFT_CAP = AFFECTION_EFFECTS
 
   #=============================================================================
 
   # Whether X items (X Attack, etc.) raise their stat by 2 stages (true) or 1
   # (false).
   X_STAT_ITEMS_RAISE_BY_TWO_STAGES = (MECHANICS_GENERATION >= 7)
+  # Whether a Pokémon holding a Power item gains 8 (true) or 4 (false) EVs in
+  # the relevant stat.
+  MORE_EVS_FROM_POWER_ITEMS        = (MECHANICS_GENERATION >= 7)
   # Whether some Poké Balls have catch rate multipliers from Gen 7 (true) or
   # from earlier generations (false).
   NEW_POKE_BALL_CATCH_RATES        = (MECHANICS_GENERATION >= 7)

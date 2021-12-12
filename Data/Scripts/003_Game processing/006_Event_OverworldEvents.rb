@@ -73,7 +73,7 @@ module Events
   # Parameters:
   # e[0] - Event that just left the tile.
   # e[1] - Map ID where the tile is located (not necessarily
-  #        the current map). Use "$MapFactory.getMap(e[1])" to
+  #        the current map). Use "$map_factory.getMap(e[1])" to
   #        get the Game_Map object corresponding to that map.
   # e[2] - X-coordinate of the tile
   # e[3] - Y-coordinate of the tile

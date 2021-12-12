@@ -20,40 +20,6 @@ class PokemonGlobalMetadata
     @purifyChamber = PurifyChamber.new() if !@purifyChamber
     return @purifyChamber
   end
-
-  # @deprecated Use {Player#seen_purify_chamber} instead. This alias is slated to be removed in v20.
-  def seenPurifyChamber
-    Deprecation.warn_method('PokemonGlobalMetadata#seenPurifyChamber', 'v20', '$Trainer.seen_purify_chamber')
-    return @seenPurifyChamber if !@seenPurifyChamber.nil?
-    return ($Trainer) ? $Trainer.seen_purify_chamber : false
-  end
-
-  # @deprecated Use {Player#seen_purify_chamber=} instead. This alias is slated to be removed in v20.
-  def seenPurifyChamber=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#seenPurifyChamber=', 'v20', '$Trainer.seen_purify_chamber=')
-    if value.nil?
-      @seenPurifyChamber = value   # For setting to nil by a save data conversion
-    else
-      $Trainer.seen_purify_chamber = value
-    end
-  end
-
-  # @deprecated Use {Player#has_snag_machine} instead. This alias is slated to be removed in v20.
-  def snagMachine
-    Deprecation.warn_method('PokemonGlobalMetadata#snagMachine', 'v20', '$Trainer.has_snag_machine')
-    return @snagMachine if !@snagMachine.nil?
-    return ($Trainer) ? $Trainer.has_snag_machine : false
-  end
-
-  # @deprecated Use {Player#has_snag_machine=} instead. This alias is slated to be removed in v20.
-  def snagMachine=(value)
-    Deprecation.warn_method('PokemonGlobalMetadata#snagMachine=', 'v20', '$Trainer.has_snag_machine=')
-    if value.nil?
-      @snagMachine = value   # For setting to nil by a save data conversion
-    else
-      $Trainer.has_snag_machine = value
-    end
-  end
 end
 
 #===============================================================================
@@ -181,7 +147,7 @@ class PurifyChamberSet
   end
 
   def self.isSuperEffective(p1,p2)
-    return (typeAdvantage(p1.type1,p2.type1) || typeAdvantage(p1.type1,p2.type2))
+    return (typeAdvantage(p1.types[0], p2.types[0]) || typeAdvantage(p1.types[0], p2.types[1]))
   end
 end
 
@@ -306,7 +272,7 @@ class PurifyChamber
   end
 
   def debugAdd(set,shadow,type1,type2=nil)
-    pkmn=PseudoPokemon.new(shadow,type1,type2||type1)
+    pkmn = PseudoPokemon.new(shadow, type1, type2 || type1)
     if pkmn.shadowPokemon?
       self.setShadow(set,pkmn)
     else
@@ -700,8 +666,9 @@ class Window_PurifyChamberSets < Window_DrawableCommand
     end
     if @chamber.getShadow(index)
       pbDrawGauge(self.contents, Rect.new(rect.x+16,rect.y+18,48,8),
-                  Color.new(192,0,256), @chamber.getShadow(index).heart_gauge,
-                  Pokemon::HEART_GAUGE_SIZE)
+                  Color.new(192,0,256),
+                  @chamber.getShadow(index).heart_gauge,
+                  @chamber.getShadow(index).max_gauge_size)
     end
     pbDrawTextPositions(self.contents,textpos)
   end
@@ -979,19 +946,21 @@ class PurifyChamberSetView < SpriteWrapper
     pbSetSmallFont(@info.bitmap)
     textpos=[]
     if pkmn
-      if pkmn.type1==pkmn.type2
-        textpos.push([_INTL("{1}  Lv.{2}  {3}",pkmn.name,pkmn.level,GameData::Type.get(pkmn.type1).name),2,-6,0,
-           Color.new(248,248,248),Color.new(128,128,128)])
+      if pkmn.types.length == 1
+        textpos.push([_INTL("{1}  Lv.{2}  {3}", pkmn.name, pkmn.level,
+           GameData::Type.get(pkmn.types[0]).name),
+           2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       else
-        textpos.push([_INTL("{1}  Lv.{2}  {3}/{4}",pkmn.name,pkmn.level,GameData::Type.get(pkmn.type1).name,
-           GameData::Type.get(pkmn.type2).name),2,-6,0,
-           Color.new(248,248,248),Color.new(128,128,128)])
+        textpos.push([_INTL("{1}  Lv.{2}  {3}/{4}", pkmn.name, pkmn.level,
+           GameData::Type.get(pkmn.types[0]).name,
+           GameData::Type.get(pkmn.types[1]).name),
+           2, -6, 0, Color.new(248, 248, 248), Color.new(128, 128, 128)])
       end
       textpos.push([_INTL("FLOW"),2+@info.bitmap.width/2,18,0,
          Color.new(248,248,248),Color.new(128,128,128)])
       # draw heart gauge
       pbDrawGauge(@info.bitmap, Rect.new(@info.bitmap.width*3/4,8,@info.bitmap.width*1/4,8),
-                  Color.new(192,0,256), pkmn.heart_gauge, Pokemon::HEART_GAUGE_SIZE)
+                  Color.new(192,0,256), pkmn.heart_gauge, pkmn.max_gauge_size)
       # draw flow gauge
       pbDrawGauge(@info.bitmap,Rect.new(@info.bitmap.width*3/4,24+8,@info.bitmap.width*1/4,8),
          Color.new(0,0,248),@chamber.chamberFlow(@set),6)
@@ -1215,7 +1184,9 @@ class PurifyChamberScene
   def pbSetScreen
     pbDeactivateWindows(@sprites) {
       loop do
-        Graphics.update; Input.update; pbUpdate
+        Graphics.update
+        Input.update
+        pbUpdate
         btn=0
         btn=Input::DOWN if Input.repeat?(Input::DOWN)
         btn=Input::UP if Input.repeat?(Input::UP)
@@ -1252,7 +1223,9 @@ class PurifyChamberScene
           oldindex=@sprites["setwindow"].index
           @sprites["setview"].set=oldindex
         end
-        Graphics.update; Input.update; pbUpdate
+        Graphics.update
+        Input.update
+        pbUpdate
         if Input.trigger?(Input::USE)
           pbPlayDecisionSE()
           return @sprites["setwindow"].index
@@ -1329,7 +1302,7 @@ end
 #
 #===============================================================================
 def pbPurifyChamber
-  $Trainer.seen_purify_chamber = true
+  $player.seen_purify_chamber = true
   pbFadeOutIn {
     scene = PurifyChamberScene.new
     screen = PurifyChamberScreen.new(scene)
@@ -1342,7 +1315,7 @@ end
 #===============================================================================
 class PurifyChamberPC
   def shouldShow?
-    return $Trainer.seen_purify_chamber
+    return $player.seen_purify_chamber
   end
 
   def name

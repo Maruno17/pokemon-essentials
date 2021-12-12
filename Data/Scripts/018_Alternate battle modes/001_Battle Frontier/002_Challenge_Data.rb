@@ -12,7 +12,7 @@ end
 
 # Used in events
 def pbHasEligible?(*arg)
-  return pbBattleChallenge.rules.ruleset.hasValidTeam?($Trainer.party)
+  return pbBattleChallenge.rules.ruleset.hasValidTeam?($player.party)
 end
 
 #===============================================================================
@@ -39,7 +39,7 @@ def pbEntryScreen(*arg)
   retval = false
   pbFadeOutIn {
     scene = PokemonParty_Scene.new
-    screen = PokemonPartyScreen.new(scene, $Trainer.party)
+    screen = PokemonPartyScreen.new(scene, $player.party)
     ret = screen.pbPokemonMultipleEntryScreenEx(pbBattleChallenge.rules.ruleset)
     # Set party
     pbBattleChallenge.setParty(ret) if ret
@@ -134,9 +134,7 @@ class PBPokemon
       move_data = GameData::Move.try_get(moves[i])
       moveid.push(move_data.id) if move_data
     end
-    if moveid.length == 0
-      GameData::Move.each { |mov| moveid.push(mov.id); break }   # Get any one move
-    end
+    moveid.push(GameData::Move.keys.first) if moveid.length == 0   # Get any one move
     return self.new(species, item, nature, moveid[0], moveid[1], moveid[2], moveid[3], ev_array)
   end
 

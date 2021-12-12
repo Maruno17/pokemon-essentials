@@ -7,9 +7,9 @@
 
 # Make all wild Pokémon shiny while a certain Switch is ON (see Settings).
 Events.onWildPokemonCreate += proc { |_sender, e|
-  pokemon = e[0]
+  pkmn = e[0]
   if $game_switches[Settings::SHINY_WILD_POKEMON_SWITCH]
-    pokemon.shiny = true
+    pkmn.shiny = true
   end
 }
 
@@ -18,13 +18,13 @@ Events.onWildPokemonCreate += proc { |_sender, e|
 # This is a simple method, and can/should be modified to account for evolutions
 # and other such details.  Of course, you don't HAVE to use this code.
 Events.onWildPokemonCreate += proc { |_sender, e|
-  pokemon = e[0]
+  pkmn = e[0]
   if $game_map.map_id == 51
-    new_level = pbBalancedLevel($Trainer.party) - 4 + rand(5)   # For variety
+    new_level = pbBalancedLevel($player.party) - 4 + rand(5)   # For variety
     new_level = new_level.clamp(1, GameData::GrowthRate.max_level)
-    pokemon.level = new_level
-    pokemon.calc_stats
-    pokemon.reset_moves
+    pkmn.level = new_level
+    pkmn.calc_stats
+    pkmn.reset_moves
   end
 }
 

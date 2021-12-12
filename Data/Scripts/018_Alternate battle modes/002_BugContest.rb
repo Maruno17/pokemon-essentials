@@ -131,7 +131,7 @@ class BugContestState
   def pbGetPlaceInfo(place)
     cont=@places[place][0]
     if cont<0
-      $game_variables[1]=$Trainer.name
+      $game_variables[1]=$player.name
     else
       $game_variables[1]=ContestantNames[cont]
     end
@@ -171,9 +171,9 @@ class BugContestState
     @lastContest=nil
     @timer=Graphics.frame_count
     @places=[]
-    chosenpkmn=$Trainer.party[@chosenPokemon]
-    for i in 0...$Trainer.party.length
-      @otherparty.push($Trainer.party[i]) if i!=@chosenPokemon
+    chosenpkmn=$player.party[@chosenPokemon]
+    for i in 0...$player.party.length
+      @otherparty.push($player.party[i]) if i!=@chosenPokemon
     end
     @contestants=[]
     [5,ContestantNames.length].min.times do
@@ -185,9 +185,10 @@ class BugContestState
         end
       end
     end
-    $Trainer.party=[chosenpkmn]
+    $player.party=[chosenpkmn]
     @decision=0
     @ended=false
+    $stats.bug_contest_count += 1
   end
 
   def place
@@ -200,7 +201,7 @@ class BugContestState
   def pbEnd(interrupted=false)
     return if !@inProgress
     for poke in @otherparty
-      $Trainer.party.push(poke)
+      $player.party.push(poke)
     end
     if !interrupted
       if @lastPokemon
@@ -210,6 +211,7 @@ class BugContestState
     else
       @ended=false
     end
+    $stats.bug_contest_wins += 1 if place == 0
     @lastPokemon=nil
     @otherparty=[]
     @reception=[]
@@ -329,7 +331,7 @@ Events.onMapChanging += proc { |_sender,e|
 }
 
 def pbBugContestStartOver
-  $Trainer.party.each do |pkmn|
+  $player.party.each do |pkmn|
     pkmn.heal
     pkmn.makeUnmega
     pkmn.makeUnprimal
@@ -354,13 +356,13 @@ def pbBugContestBattle(species,level)
   pkmn = pbGenerateWildPokemon(species,level)
   foeParty = [pkmn]
   # Calculate who the trainers and their party are
-  playerTrainer     = [$Trainer]
-  playerParty       = $Trainer.party
+  playerTrainer     = [$player]
+  playerParty       = $player.party
   playerPartyStarts = [0]
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)
-  battle = PokeBattle_BugContestBattle.new(scene,playerParty,foeParty,playerTrainer,nil)
+  battle = BugContestBattle.new(scene,playerParty,foeParty,playerTrainer,nil)
   battle.party1starts = playerPartyStarts
   battle.ballCount    = pbBugContestState.ballcount
   setBattleRule("single")
@@ -390,6 +392,12 @@ def pbBugContestBattle(species,level)
   #    3 - Player or wild Pokémon ran from battle, or player forfeited the match
   #    4 - Wild Pokémon was caught
   #    5 - Draw
+  case decision
+  when 1, 4   # Won, caught
+    $stats.wild_battles_won += 1
+  when 2, 3, 5   # Lost, fled, draw
+    $stats.wild_battles_lost += 1
+  end
   pbSet(1,decision)
   # Used by the Poké Radar to update/break the chain
   Events.onWildBattleEnd.trigger(nil,species,level,decision)

@@ -157,11 +157,8 @@ class Sprite_Character < RPG::Sprite
     self.x          = @character.screen_x
     self.y          = @character.screen_y
     self.z          = @character.screen_z(@ch)
-#    self.zoom_x     = Game_Map::TILE_WIDTH / 32.0
-#    self.zoom_y     = Game_Map::TILE_HEIGHT / 32.0
     self.opacity    = @character.opacity
     self.blend_type = @character.blend_type
-#    self.bush_depth = @character.bush_depth
     if @character.animation_id != 0
       animation = $data_animations[@character.animation_id]
       animation(animation, true)

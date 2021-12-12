@@ -1,11 +1,13 @@
 class SafariState
   attr_accessor :ballcount
+  attr_accessor :captures
   attr_accessor :decision
   attr_accessor :steps
 
   def initialize
     @start      = nil
     @ballcount  = 0
+    @captures   = 0
     @inProgress = false
     @steps      = 0
     @decision   = 0
@@ -43,6 +45,7 @@ class SafariState
   def pbEnd
     @start      = nil
     @ballcount  = 0
+    @captures   = 0
     @inProgress = false
     @steps      = 0
     @decision   = 0
@@ -62,8 +65,7 @@ def pbInSafari?
     # map can be outdoors, with its own grassy patches.
     reception = pbSafariState.pbReceptionMap
     return true if $game_map.map_id == reception
-    map_metadata = GameData::MapMetadata.try_get($game_map.map_id)
-    return true if map_metadata && map_metadata.safari_map
+    return true if $game_map.metadata&.safari_map
   end
   return false
 end
@@ -102,11 +104,11 @@ def pbSafariBattle(species,level)
   pkmn = pbGenerateWildPokemon(species,level)
   foeParty = [pkmn]
   # Calculate who the trainer is
-  playerTrainer = $Trainer
+  playerTrainer = $player
   # Create the battle scene (the visual side of it)
   scene = pbNewBattleScene
   # Create the battle class (the mechanics side of it)
-  battle = PokeBattle_SafariZone.new(scene,playerTrainer,foeParty)
+  battle = SafariBattle.new(scene,playerTrainer,foeParty)
   battle.ballCount = pbSafariState.ballcount
   pbPrepareBattle(battle)
   # Perform the battle itself
@@ -131,6 +133,11 @@ def pbSafariBattle(species,level)
   #    2 - Player ran out of Safari Balls
   #    3 - Player or wild Pokémon ran from battle, or player forfeited the match
   #    4 - Wild Pokémon was caught
+  if decision == 4
+    $stats.safari_pokemon_caught += 1
+    pbSafariState.captures += 1
+    $stats.most_captures_per_safari_game = [$stats.most_captures_per_safari_game, pbSafariState.captures].max
+  end
   pbSet(1,decision)
   # Used by the Poké Radar to update/break the chain
   Events.onWildBattleEnd.trigger(nil,species,level,decision)

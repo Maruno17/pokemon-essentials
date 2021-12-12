@@ -52,15 +52,11 @@ class MoveRelearner_Scene
   def pbDrawMoveList
     overlay=@sprites["overlay"].bitmap
     overlay.clear
-    type1_number = GameData::Type.get(@pokemon.type1).id_number
-    type2_number = GameData::Type.get(@pokemon.type2).id_number
-    type1rect=Rect.new(0, type1_number * 28, 64, 28)
-    type2rect=Rect.new(0, type2_number * 28, 64, 28)
-    if @pokemon.type1==@pokemon.type2
-      overlay.blt(400,70,@typebitmap.bitmap,type1rect)
-    else
-      overlay.blt(366,70,@typebitmap.bitmap,type1rect)
-      overlay.blt(436,70,@typebitmap.bitmap,type2rect)
+    @pokemon.types.each_with_index do |type, i|
+      type_number = GameData::Type.get(type).icon_position
+      type_rect = Rect.new(0, type_number * 28, 64, 28)
+      type_x = (@pokemon.types.length == 1) ? 400 : 366 + 70 * i
+      overlay.blt(type_x, 70, @typebitmap.bitmap, type_rect)
     end
     textpos=[
        [_INTL("Teach which move?"),16,2,0,Color.new(88,88,80),Color.new(168,184,184)]
@@ -71,7 +67,7 @@ class MoveRelearner_Scene
       moveobject=@moves[@sprites["commands"].top_item+i]
       if moveobject
         moveData=GameData::Move.get(moveobject)
-        type_number = GameData::Type.get(moveData.type).id_number
+        type_number = GameData::Type.get(moveData.display_type(@pokemon)).icon_position
         imagepos.push(["Graphics/Pictures/types", 12, yPos + 8, 0, type_number * 28, 64, 28])
         textpos.push([moveData.name,80,yPos,0,Color.new(248,248,248),Color.new(0,0,0)])
         if moveData.total_pp>0
@@ -89,9 +85,9 @@ class MoveRelearner_Scene
        0,78+(@sprites["commands"].index-@sprites["commands"].top_item)*64,
        0,0,258,72])
     selMoveData=GameData::Move.get(@moves[@sprites["commands"].index])
-    basedamage=selMoveData.base_damage
-    category=selMoveData.category
-    accuracy=selMoveData.accuracy
+    basedamage = selMoveData.display_damage(@pokemon)
+    category = selMoveData.display_category(@pokemon)
+    accuracy = selMoveData.display_accuracy(@pokemon)
     textpos.push([_INTL("CATEGORY"),272,108,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([_INTL("POWER"),272,140,0,Color.new(248,248,248),Color.new(0,0,0)])
     textpos.push([basedamage<=1 ? basedamage==1 ? "???" : "---" : sprintf("%d",basedamage),
@@ -177,6 +173,7 @@ class MoveRelearnerScreen
       if move
         if @scene.pbConfirm(_INTL("Teach {1}?", GameData::Move.get(move).name))
           if pbLearnMove(pkmn, move)
+            $stats.moves_taught_by_reminder += 1
             @scene.pbEndScene
             return true
           end

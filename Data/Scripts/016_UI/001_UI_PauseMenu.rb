@@ -49,7 +49,7 @@ class PokemonPauseMenu_Scene
     ret = -1
     cmdwindow = @sprites["cmdwindow"]
     cmdwindow.commands = commands
-    cmdwindow.index    = $PokemonTemp.menuLastChoice
+    cmdwindow.index    = $game_temp.menu_last_choice
     cmdwindow.resizeToFit(commands)
     cmdwindow.x        = Graphics.width-cmdwindow.width
     cmdwindow.y        = 0
@@ -59,12 +59,12 @@ class PokemonPauseMenu_Scene
       Graphics.update
       Input.update
       pbUpdateSceneMap
-      if Input.trigger?(Input::BACK)
+      if Input.trigger?(Input::BACK) || Input.trigger?(Input::ACTION)
         ret = -1
         break
       elsif Input.trigger?(Input::USE)
         ret = cmdwindow.index
-        $PokemonTemp.menuLastChoice = ret
+        $game_temp.menu_last_choice = ret
         break
       end
     end
@@ -93,7 +93,7 @@ class PokemonPauseMenu
   end
 
   def pbStartPokemonMenu
-    if !$Trainer
+    if !$player
       if $DEBUG
         pbMessage(_INTL("The player trainer was not defined, so the pause menu can't be displayed."))
         pbMessage(_INTL("Please see the documentation to learn how to set up the trainer player."))
@@ -110,16 +110,21 @@ class PokemonPauseMenu
     cmdSave     = -1
     cmdOption   = -1
     cmdPokegear = -1
+    cmdTownMap  = -1
     cmdDebug    = -1
     cmdQuit     = -1
     cmdEndGame  = -1
-    if $Trainer.has_pokedex && $Trainer.pokedex.accessible_dexes.length > 0
-      commands[cmdPokedex = commands.length] = _INTL("Pokédex")
+    if $player.has_pokedex && $player.pokedex.accessible_dexes.length > 0
+      commands[cmdPokedex = commands.length]  = _INTL("Pokédex")
     end
-    commands[cmdPokemon = commands.length]   = _INTL("Pokémon") if $Trainer.party_count > 0
-    commands[cmdBag = commands.length]       = _INTL("Bag") if !pbInBugContest?
-    commands[cmdPokegear = commands.length]  = _INTL("Pokégear") if $Trainer.has_pokegear
-    commands[cmdTrainer = commands.length]   = $Trainer.name
+    commands[cmdPokemon = commands.length]    = _INTL("Pokémon") if $player.party_count > 0
+    commands[cmdBag = commands.length]        = _INTL("Bag") if !pbInBugContest?
+    if $player.has_pokegear
+      commands[cmdPokegear = commands.length] = _INTL("Pokégear")
+    elsif $bag.has?(:TOWNMAP)
+      commands[cmdTownMap = commands.length]  = _INTL("Town Map")
+    end
+    commands[cmdTrainer = commands.length]    = $player.name
     if pbInSafari?
       if Settings::SAFARI_STEPS <= 0
         @scene.pbShowInfo(_INTL("Balls: {1}",pbSafariState.ballcount))
@@ -127,7 +132,7 @@ class PokemonPauseMenu
         @scene.pbShowInfo(_INTL("Steps: {1}/{2}\nBalls: {3}",
            pbSafariState.steps, Settings::SAFARI_STEPS, pbSafariState.ballcount))
       end
-      commands[cmdQuit = commands.length]    = _INTL("Quit")
+      commands[cmdQuit = commands.length]     = _INTL("Quit")
     elsif pbInBugContest?
       if pbBugContestState.lastPokemon
         @scene.pbShowInfo(_INTL("Caught: {1}\nLevel: {2}\nBalls: {3}",
@@ -137,13 +142,13 @@ class PokemonPauseMenu
       else
         @scene.pbShowInfo(_INTL("Caught: None\nBalls: {1}",pbBugContestState.ballcount))
       end
-      commands[cmdQuit = commands.length]    = _INTL("Quit Contest")
+      commands[cmdQuit = commands.length]     = _INTL("Quit Contest")
     else
-      commands[cmdSave = commands.length]    = _INTL("Save") if $game_system && !$game_system.save_disabled
+      commands[cmdSave = commands.length]     = _INTL("Save") if $game_system && !$game_system.save_disabled
     end
-    commands[cmdOption = commands.length]    = _INTL("Options")
-    commands[cmdDebug = commands.length]     = _INTL("Debug") if $DEBUG
-    commands[cmdEndGame = commands.length]   = _INTL("Quit Game")
+    commands[cmdOption = commands.length]     = _INTL("Options")
+    commands[cmdDebug = commands.length]      = _INTL("Debug") if $DEBUG
+    commands[cmdEndGame = commands.length]    = _INTL("Quit Game")
     loop do
       command = @scene.pbShowCommands(commands)
       if cmdPokedex>=0 && command==cmdPokedex
@@ -156,8 +161,8 @@ class PokemonPauseMenu
             @scene.pbRefresh
           }
         else
-          if $Trainer.pokedex.accessible_dexes.length == 1
-            $PokemonGlobal.pokedexDex = $Trainer.pokedex.accessible_dexes[0]
+          if $player.pokedex.accessible_dexes.length == 1
+            $PokemonGlobal.pokedexDex = $player.pokedex.accessible_dexes[0]
             pbFadeOutIn {
               scene = PokemonPokedex_Scene.new
               screen = PokemonPokedexScreen.new(scene)
@@ -178,7 +183,7 @@ class PokemonPauseMenu
         hiddenmove = nil
         pbFadeOutIn {
           sscene = PokemonParty_Scene.new
-          sscreen = PokemonPartyScreen.new(sscene,$Trainer.party)
+          sscreen = PokemonPartyScreen.new(sscene, $player.party)
           hiddenmove = sscreen.pbPokemonScreen
           (hiddenmove) ? @scene.pbEndScene : @scene.pbRefresh
         }
@@ -192,7 +197,7 @@ class PokemonPauseMenu
         item = nil
         pbFadeOutIn {
           scene = PokemonBag_Scene.new
-          screen = PokemonBagScreen.new(scene,$PokemonBag)
+          screen = PokemonBagScreen.new(scene, $bag)
           item = screen.pbStartScreen
           (item) ? @scene.pbEndScene : @scene.pbRefresh
         }
@@ -207,8 +212,18 @@ class PokemonPauseMenu
           scene = PokemonPokegear_Scene.new
           screen = PokemonPokegearScreen.new(scene)
           screen.pbStartScreen
-          @scene.pbRefresh
+          ($game_temp.fly_destination) ? @scene.pbEndScene : @scene.pbRefresh
         }
+        return if pbFlyToNewLocation
+      elsif cmdTownMap>=0 && command==cmdTownMap
+        pbFadeOutIn {
+          scene = PokemonRegionMap_Scene.new(-1, false)
+          screen = PokemonRegionMapScreen.new(scene)
+          ret = screen.pbStartScreen
+          $game_temp.fly_destination = ret if ret
+          ($game_temp.fly_destination) ? @scene.pbEndScene : @scene.pbRefresh
+        }
+        return if pbFlyToNewLocation
       elsif cmdTrainer>=0 && command==cmdTrainer
         pbPlayDecisionSE
         pbFadeOutIn {
