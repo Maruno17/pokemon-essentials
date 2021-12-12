@@ -6,8 +6,8 @@ def pbBoxesFull?
 end
 
 def pbNickname(pkmn)
+  species_name = pkmn.speciesName
   if $PokemonSystem.givenicknames == 0
-    species_name = pkmn.speciesName
     if pbConfirmMessage(_INTL("Would you like to give a nickname to {1}?", species_name))
       pkmn.name = pbEnterPokemonName(_INTL("{1}'s nickname?", species_name),
                                      0, Pokemon::MAX_NAME_SIZE, "", pkmn)
