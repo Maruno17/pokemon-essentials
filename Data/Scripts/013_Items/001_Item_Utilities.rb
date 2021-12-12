@@ -2,15 +2,16 @@
 # ItemHandlers
 #===============================================================================
 module ItemHandlers
-  UseText            = ItemHandlerHash.new
-  UseFromBag         = ItemHandlerHash.new
-  ConfirmUseInField  = ItemHandlerHash.new
-  UseInField         = ItemHandlerHash.new
-  UseOnPokemon       = ItemHandlerHash.new
-  CanUseInBattle     = ItemHandlerHash.new
-  UseInBattle        = ItemHandlerHash.new
-  BattleUseOnBattler = ItemHandlerHash.new
-  BattleUseOnPokemon = ItemHandlerHash.new
+  UseText             = ItemHandlerHash.new
+  UseFromBag          = ItemHandlerHash.new
+  ConfirmUseInField   = ItemHandlerHash.new
+  UseInField          = ItemHandlerHash.new
+  UseOnPokemon        = ItemHandlerHash.new
+  UseOnPokemonMaximum = ItemHandlerHash.new
+  CanUseInBattle      = ItemHandlerHash.new
+  UseInBattle         = ItemHandlerHash.new
+  BattleUseOnBattler  = ItemHandlerHash.new
+  BattleUseOnPokemon  = ItemHandlerHash.new
 
   def self.hasUseText(item)
     return UseText[item]!=nil
@@ -26,6 +27,10 @@ module ItemHandlers
 
   def self.hasUseOnPokemon(item)
     return UseOnPokemon[item]!=nil
+  end
+
+  def self.hasUseOnPokemonMaximum(item)
+    return UseOnPokemonMaximum[item] != nil
   end
 
   def self.hasUseInBattle(item)
@@ -74,9 +79,16 @@ module ItemHandlers
   end
 
   # Returns whether item was used
-  def self.triggerUseOnPokemon(item,pkmn,scene)
+  def self.triggerUseOnPokemon(item, qty, pkmn, scene)
     return false if !UseOnPokemon[item]
-    return UseOnPokemon.trigger(item,pkmn,scene)
+    return UseOnPokemon.trigger(item, qty, pkmn, scene)
+  end
+
+  # Returns the maximum number of the item that can be used on the Pokémon at once.
+  def self.triggerUseOnPokemonMaximum(item, pkmn)
+    return 1 if !UseOnPokemonMaximum[item]
+    return 1 if !Settings::USE_MULTIPLE_STAT_ITEMS_AT_ONCE
+    return [UseOnPokemonMaximum.trigger(item, pkmn), 1].max
   end
 
   def self.triggerCanUseInBattle(item,pkmn,battler,move,firstAction,battle,scene,showMessages=true)
@@ -126,6 +138,7 @@ def pbChangeLevel(pkmn, new_level, scene)
     end
     return
   end
+  old_level           = pkmn.level
   old_total_hp        = pkmn.totalhp
   old_attack          = pkmn.attack
   old_defense         = pkmn.defense
@@ -174,7 +187,7 @@ def pbChangeLevel(pkmn, new_level, scene)
     # Learn new moves upon level up
     movelist = pkmn.getMoveList
     for i in movelist
-      next if i[0] != pkmn.level
+      next if i[0] <= old_level || i[0] > pkmn.level
       pbLearnMove(pkmn, i[1], true) { scene.pbUpdate }
     end
     # Check for evolution
@@ -300,6 +313,20 @@ def pbChangeExp(pkmn, new_exp, scene)
   end
 end
 
+def pbGainExpFromExpCandy(pkmn, base_amt, qty, scene)
+  if pkmn.level >= GameData::GrowthRate.max_level || pkmn.shadowPokemon?
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    return false
+  end
+  scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
+  if qty > 1
+    (qty - 1).times { pkmn.changeHappiness("vitamin") }
+  end
+  pbChangeExp(pkmn, pkmn.exp + base_amt * qty, scene)
+  scene.pbHardRefresh
+  return true
+end
+
 #===============================================================================
 # Restore HP
 #===============================================================================
@@ -387,7 +414,56 @@ def pbRaiseEffortValues(pkmn, stat, evGain = 10, no_ev_cap = false)
   return evGain
 end
 
-def pbRaiseHappinessAndLowerEV(pkmn,scene,stat,messages)
+def pbMaxUsesOfEVRaisingItem(stat, amt_per_use, pkmn, no_ev_cap = false)
+  max_per_stat = (no_ev_cap) ? Pokemon::EV_STAT_LIMIT : 100
+  amt_can_gain = max_per_stat - pkmn.ev[stat]
+  ev_total = 0
+  GameData::Stat.each_main { |s| ev_total += pkmn.ev[s.id] }
+  amt_can_gain = [amt_can_gain, Pokemon::EV_LIMIT - ev_total].min
+  return [(amt_can_gain.to_f / amt_per_use).ceil, 1].max
+end
+
+def pbUseEVRaisingItem(stat, amt_per_use, qty, pkmn, happiness_type, scene, no_ev_cap = false)
+  ret = true
+  qty.times do |i|
+    if pbRaiseEffortValues(pkmn, stat, amt_per_use, no_ev_cap) > 0
+      pkmn.changeHappiness(happiness_type)
+    else
+      ret = false if i == 0
+      break
+    end
+  end
+  if !ret
+    scene.pbDisplay(_INTL("It won't have any effect."))
+    return false
+  end
+  scene.pbRefresh
+  scene.pbDisplay(_INTL("{1}'s {2} increased.", pkmn.name, GameData::Stat.get(stat).name))
+  return true
+end
+
+def pbMaxUsesOfEVLoweringBerry(stat, pkmn)
+  ret = (pkmn.ev[stat].to_f / 10).ceil
+  happiness = pkmn.happiness
+  uses = 0
+  if happiness < 255
+    bonus_per_use = 0
+    bonus_per_use += 1 if pkmn.obtain_map == $game_map.map_id
+    bonus_per_use += 1 if pkmn.poke_ball == :LUXURYBALL
+    has_soothe_bell = pkmn.hasItem?(:SOOTHEBELL)
+    loop do
+      uses += 1
+      gain = [10, 5, 2][happiness / 100]
+      gain += bonus_per_use
+      gain = (gain * 1.5).floor if has_soothe_bell
+      happiness += gain
+      break if happiness >= 255
+    end
+  end
+  return [ret, uses].max
+end
+
+def pbRaiseHappinessAndLowerEV(pkmn, scene, stat, qty, messages)
   h = pkmn.happiness<255
   e = pkmn.ev[stat]>0
   if !h && !e
@@ -395,10 +471,10 @@ def pbRaiseHappinessAndLowerEV(pkmn,scene,stat,messages)
     return false
   end
   if h
-    pkmn.changeHappiness("evberry")
+    qty.times { |i| pkmn.changeHappiness("evberry") }
   end
   if e
-    pkmn.ev[stat] -= 10
+    pkmn.ev[stat] -= 10 * qty
     pkmn.ev[stat] = 0 if pkmn.ev[stat]<0
     pkmn.calc_stats
   end
@@ -609,12 +685,21 @@ def pbUseItem(bag,item,bagscene=nil)
           break
         end
         pkmn = $player.party[chosen]
-        if pbCheckUseOnPokemon(item,pkmn,screen)
-          ret = ItemHandlers.triggerUseOnPokemon(item,pkmn,screen)
+        next if !pbCheckUseOnPokemon(item, pkmn, screen)
+        qty = 1
+        max_at_once = ItemHandlers.triggerUseOnPokemonMaximum(item, pkmn)
+        max_at_once = [max_at_once, $bag.quantity(item)].min
+        if max_at_once > 1
+          qty = screen.scene.pbChooseNumber(
+             _INTL("How many {1} do you want to use?", GameData::Item.get(item).name), max_at_once)
+          screen.scene.pbSetHelpText("") if screen.is_a?(PokemonPartyScreen)
+        end
+        if qty >= 1
+          ret = ItemHandlers.triggerUseOnPokemon(item, qty, pkmn, screen)
           if ret && itm.consumed_after_use?
-            bag.remove(item)
+            bag.remove(item, qty)
             if !bag.has?(item)
-              pbMessage(_INTL("You used your last {1}.",itm.name)) { screen.pbUpdate }
+              pbMessage(_INTL("You used your last {1}.", itm.name)) { screen.pbUpdate }
               break
             end
           end
@@ -662,11 +747,20 @@ def pbUseItemOnPokemon(item,pkmn,scene)
     return false
   end
   # Other item
-  ret = ItemHandlers.triggerUseOnPokemon(item,pkmn,scene)
+  qty = 1
+  max_at_once = ItemHandlers.triggerUseOnPokemonMaximum(item, pkmn)
+  max_at_once = [max_at_once, $bag.quantity(item)].min
+  if max_at_once > 1
+    qty = scene.scene.pbChooseNumber(
+       _INTL("How many {1} do you want to use?", itm.name), max_at_once)
+    scene.scene.pbSetHelpText("") if scene.is_a?(PokemonPartyScreen)
+  end
+  return false if qty <= 0
+  ret = ItemHandlers.triggerUseOnPokemon(item, qty, pkmn, scene)
   scene.pbClearAnnotations
   scene.pbHardRefresh
   if ret && itm.consumed_after_use?
-    $bag.remove(item)
+    $bag.remove(item, qty)
     if !$bag.has?(item)
       pbMessage(_INTL("You used your last {1}.",itm.name)) { scene.pbUpdate }
     end

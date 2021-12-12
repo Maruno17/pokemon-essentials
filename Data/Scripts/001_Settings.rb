@@ -167,6 +167,10 @@ module Settings
   # Whether Rare Candy can be used on a Pokémon that is already at its maximum
   # level if it is able to evolve by level-up (if so, triggers that evolution).
   RARE_CANDY_USABLE_AT_MAX_LEVEL        = (MECHANICS_GENERATION >= 8)
+  # Whether the player can choose how many of an item to use at once on a
+  # Pokémon. This applies to Exp-changing items (Rare Candy, Exp Candies) and
+  # EV-changing items (vitamins, feathers, EV-lowering berries).
+  USE_MULTIPLE_STAT_ITEMS_AT_ONCE       = (MECHANICS_GENERATION >= 8)
   # Whether you get 1 Premier Ball for every 10 of any kind of Poké Ball bought
   # at once (true), or 1 Premier Ball for buying 10+ Poké Balls (false).
   MORE_BONUS_PREMIER_BALLS              = (MECHANICS_GENERATION >= 8)
