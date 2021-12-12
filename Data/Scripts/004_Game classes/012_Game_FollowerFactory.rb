@@ -21,7 +21,18 @@ class FollowerData
     @direction       = direction
     @character_name  = character_name
     @character_hue   = character_hue
+    @name            = nil
+    @common_event_id = nil
     @visible         = true
+  end
+
+  def interact(event)
+    return if !event || event.list.size <= 1
+    return if !@common_event_id
+    # Start event
+    $game_map.refresh if $game_map.need_refresh
+    event.lock
+    pbMapInterpreter.setup(event.list, event.id, event.map.map_id)
   end
 end
 
@@ -181,26 +192,16 @@ class Game_FollowerFactory
       facing_tile = $map_factory.getFacingTile
       # Assumes player is 1x1 tile in size
       each_follower do |event, follower|
-        next if !follower.common_event_id
-        next if event.jumping?
-        if event.at_coordinate?($game_player.x, $game_player.y)
-          # On same position
-          if event.over_trigger? && event.list.size > 1
-            # Start event
-            $game_map.refresh if $game_map.need_refresh
-            event.lock
-            pbMapInterpreter.setup(event.list, event.id, event.map.map_id)
-          end
+        if event.at_coordinate?($game_player.x, $game_player.y)   # Underneath player
+          next if !event.over_trigger?
         elsif facing_tile && event.map.map_id == facing_tile[0] &&
-              event.at_coordinate?(facing_tile[1], facing_tile[2])
-          # On facing tile
-          if !event.over_trigger? && event.list.size > 1
-            # Start event
-            $game_map.refresh if $game_map.need_refresh
-            event.lock
-            pbMapInterpreter.setup(event.list, event.id, event.map.map_id)
-          end
+           event.at_coordinate?(facing_tile[1], facing_tile[2])   # On facing tile
+          next if event.over_trigger?
+        else   # Somewhere else
+          next
         end
+        next if event.jumping?
+        follower.interact(event)
       end
     end
   end
