@@ -21,8 +21,7 @@ def pbStorePokemon(pkmn)
   end
   pkmn.record_first_moves
   if $player.party_full?
-    oldcurbox = $PokemonStorage.currentBox
-    storedbox = $PokemonStorage.pbStoreCaught(pkmn)
+    $PokemonStorage.pbStoreCaught(pkmn)
     pbMessage(_INTL("{1} has been sent to a Box!", pkmn.name))
   else
     $player.party[$player.party.length] = pkmn
