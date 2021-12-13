@@ -23,25 +23,7 @@ def pbStorePokemon(pkmn)
   if $player.party_full?
     oldcurbox = $PokemonStorage.currentBox
     storedbox = $PokemonStorage.pbStoreCaught(pkmn)
-    curboxname = $PokemonStorage[oldcurbox].name
-    boxname = $PokemonStorage[storedbox].name
-    creator = nil
-    creator = pbGetStorageCreator if $player.seen_storage_creator
-    if storedbox != oldcurbox
-      if creator
-        pbMessage(_INTL("Box \"{1}\" on {2}'s PC was full.\1", curboxname, creator))
-      else
-        pbMessage(_INTL("Box \"{1}\" on someone's PC was full.\1", curboxname))
-      end
-      pbMessage(_INTL("{1} was transferred to box \"{2}.\"", pkmn.name, boxname))
-    else
-      if creator
-        pbMessage(_INTL("{1} was transferred to {2}'s PC.\1", pkmn.name, creator))
-      else
-        pbMessage(_INTL("{1} was transferred to someone's PC.\1", pkmn.name))
-      end
-      pbMessage(_INTL("It was stored in box \"{1}.\"", boxname))
-    end
+    pbMessage(_INTL("{1} has been sent to a Box!", pkmn.name))
   else
     $player.party[$player.party.length] = pkmn
   end

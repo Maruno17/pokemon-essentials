@@ -19,24 +19,7 @@ module Battle::CatchAndStoreMixin
       return
     end
     # Messages saying the Pokémon was stored in a PC box
-    creator    = @peer.pbGetStorageCreatorName
-    curBoxName = @peer.pbBoxName(currentBox)
-    boxName    = @peer.pbBoxName(storedBox)
-    if storedBox!=currentBox
-      if creator
-        pbDisplayPaused(_INTL("Box \"{1}\" on {2}'s PC was full.",curBoxName,creator))
-      else
-        pbDisplayPaused(_INTL("Box \"{1}\" on someone's PC was full.",curBoxName))
-      end
-      pbDisplayPaused(_INTL("{1} was transferred to box \"{2}\".",pkmn.name,boxName))
-    else
-      if creator
-        pbDisplayPaused(_INTL("{1} was transferred to {2}'s PC.",pkmn.name,creator))
-      else
-        pbDisplayPaused(_INTL("{1} was transferred to someone's PC.",pkmn.name))
-      end
-      pbDisplayPaused(_INTL("It was stored in box \"{1}\".",boxName))
-    end
+    pbDisplayPaused(_INTL("{1} has been sent to a Box!", pkmn.name))
   end
 
   # Register all caught Pokémon in the Pokédex, and store them.
