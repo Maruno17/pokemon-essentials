@@ -389,8 +389,6 @@ class PokemonOption_Scene
                          else
                            $game_variables[DEFAULT_BATTLE_TYPE] = [1, 1]
                          end
-                         $PokemonSystem.textspeed = value
-                         MessageConfig.pbSetTextSpeed(MessageConfig.pbSettingToTextSpeed(value))
                        }
         )
 
