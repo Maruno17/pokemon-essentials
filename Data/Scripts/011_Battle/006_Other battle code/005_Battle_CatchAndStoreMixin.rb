@@ -11,10 +11,9 @@ module Battle::CatchAndStoreMixin
       end
     end
     # Store the Pokémon
-    currentBox = @peer.pbCurrentBox
-    storedBox  = @peer.pbStorePokemon(pbPlayer,pkmn)
-    if storedBox<0
-      pbDisplayPaused(_INTL("{1} has been added to your party.",pkmn.name))
+    stored_box = @peer.pbStorePokemon(pbPlayer,pkmn)
+    if stored_box < 0
+      pbDisplayPaused(_INTL("{1} has been added to your party.", pkmn.name))
       @initialItems[0][pbPlayer.party.length-1] = pkmn.item_id if @initialItems
       return
     end
