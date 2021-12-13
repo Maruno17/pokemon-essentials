@@ -813,13 +813,17 @@ module Compiler
       # Check data files and PBS files, and recompile if any PBS file was edited
       # more recently than the data files were last created
       dataFiles.each do |filename|
-        next if !safeExists?("Data/" + filename)
-        begin
-          File.open("Data/#{filename}") { |file|
-            latestDataTime = [latestDataTime, file.mtime.to_i].max
-          }
-        rescue SystemCallError
+        if safeExists?("Data/" + filename)
+          begin
+            File.open("Data/#{filename}") { |file|
+              latestDataTime = [latestDataTime, file.mtime.to_i].max
+            }
+          rescue SystemCallError
+            mustCompile = true
+          end
+        else
           mustCompile = true
+          break
         end
       end
       textFiles.each do |filename|

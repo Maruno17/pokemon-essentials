@@ -23,6 +23,7 @@ class Battle::Scene::Animation
     picture.x       = s.x
     picture.y       = s.y
     picture.visible = s.visible
+    picture.color   = s.color.clone
     picture.tone    = s.tone.clone
     picture.setOrigin(0,origin)
     @pictureEx[num] = picture
