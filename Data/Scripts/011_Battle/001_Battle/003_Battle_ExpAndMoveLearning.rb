@@ -8,7 +8,7 @@ class Battle
     return if !@internalBattle || !@expGain
     # Go through each battler in turn to find the Pokémon that participated in
     # battle against it, and award those Pokémon Exp/EVs
-    expAll = $bag.has?(:EXPALL)
+    expAll = $player.has_exp_all || $bag.has?(:EXPALL)
     p1 = pbParty(0)
     @battlers.each do |b|
       next unless b && b.opposes?   # Can only gain Exp from fainted foes

@@ -1151,7 +1151,7 @@ class PokemonPartyScreen
 
   def pbPokemonScreen
     can_access_storage = false
-    if $bag.has?(:POKEMONBOXLINK)
+    if $player.has_box_link || $bag.has?(:POKEMONBOXLINK)
       if !$game_switches[Settings::DISABLE_BOX_LINK_SWITCH] &&
          !$game_map.metadata&.has_flag?("DisableBoxLink")
         can_access_storage = true
