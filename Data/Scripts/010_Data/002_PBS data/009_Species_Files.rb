@@ -174,23 +174,23 @@ module GameData
 
     #===========================================================================
 
-    def self.check_cry_file(species, form)
+    def self.check_cry_file(species, form, suffix = "")
       species_data = self.get_species_form(species, form)
       return nil if species_data.nil?
       if form > 0
-        ret = sprintf("Cries/%s_%d", species_data.species, form)
+        ret = sprintf("Cries/%s_%d%s", species_data.species, form, suffix)
         return ret if pbResolveAudioSE(ret)
       end
-      ret = sprintf("Cries/%s", species_data.species)
+      ret = sprintf("Cries/%s%s", species_data.species, suffix)
       return (pbResolveAudioSE(ret)) ? ret : nil
     end
 
-    def self.cry_filename(species, form = 0)
-      return self.check_cry_file(species, form)
+    def self.cry_filename(species, form = 0, suffix = "")
+      return self.check_cry_file(species, form || 0, suffix)
     end
 
-    def self.cry_filename_from_pokemon(pkmn)
-      return self.check_cry_file(pkmn.species, pkmn.form)
+    def self.cry_filename_from_pokemon(pkmn, suffix = "")
+      return self.check_cry_file(pkmn.species, pkmn.form, suffix)
     end
 
     def self.play_cry_from_species(species, form = 0, volume = 90, pitch = 100)
@@ -199,37 +199,42 @@ module GameData
       pbSEPlay(RPG::AudioFile.new(filename, volume, pitch)) rescue nil
     end
 
-    def self.play_cry_from_pokemon(pkmn, volume = 90, pitch = nil)
+    def self.play_cry_from_pokemon(pkmn, volume = 90, pitch = 100)
       return if !pkmn || pkmn.egg?
       filename = self.cry_filename_from_pokemon(pkmn)
       return if !filename
-      pitch ||= 75 + (pkmn.hp * 25 / pkmn.totalhp)
+      pitch ||= 100
       pbSEPlay(RPG::AudioFile.new(filename, volume, pitch)) rescue nil
     end
 
-    def self.play_cry(pkmn, volume = 90, pitch = nil)
+    def self.play_cry(pkmn, volume = 90, pitch = 100)
       if pkmn.is_a?(Pokemon)
         self.play_cry_from_pokemon(pkmn, volume, pitch)
       else
-        self.play_cry_from_species(pkmn, nil, volume, pitch)
+        self.play_cry_from_species(pkmn, 0, volume, pitch)
       end
     end
 
-    def self.cry_length(species, form = 0, pitch = 100)
+    def self.cry_length(species, form = 0, pitch = 100, suffix = "")
+      pitch ||= 100
       return 0 if !species || pitch <= 0
       pitch = pitch.to_f / 100
       ret = 0.0
       if species.is_a?(Pokemon)
         if !species.egg?
-          filename = pbResolveAudioSE(GameData::Species.cry_filename_from_pokemon(species))
+          filename = self.cry_filename_from_pokemon(species, suffix)
+          filename = self.cry_filename_from_pokemon(species) if !filename && !nil_or_empty?(suffix)
+          filename = pbResolveAudioSE(filename)
           ret = getPlayTime(filename) if filename
         end
       else
-        filename = pbResolveAudioSE(GameData::Species.cry_filename(species, form))
+        filename = self.cry_filename(species, form, suffix)
+        filename = self.cry_filename(species, form) if !filename && !nil_or_empty?(suffix)
+        filename = pbResolveAudioSE(filename)
         ret = getPlayTime(filename) if filename
       end
       ret /= pitch   # Sound played at a lower pitch lasts longer
-      return (ret * Graphics.frame_rate).ceil + 4   # 4 provides a buffer between sounds
+      return ret
     end
   end
 end
