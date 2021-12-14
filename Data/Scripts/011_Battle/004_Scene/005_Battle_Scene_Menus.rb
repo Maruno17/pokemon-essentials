@@ -202,6 +202,7 @@ end
 class Battle::Scene::FightMenu < Battle::Scene::MenuBase
   attr_reader :battler
   attr_reader :shiftMode
+  GET_MOVE_TEXT_COLOR_FROM_MOVE_BUTTON = true
 
   # If true, displays graphics from Graphics/Pictures/Battle/overlay_fight.png
   #     and Graphics/Pictures/Battle/cursor_fight.png.
@@ -350,12 +351,12 @@ class Battle::Scene::FightMenu < Battle::Scene::MenuBase
       x = button.x-self.x+button.src_rect.width/2
       y = button.y-self.y+2
       moveNameBase = TEXT_BASE_COLOR
-      if moves[i].display_type(@battler)
-        # NOTE: This takes a colour from a particular pixel in the button
-        #       graphic and makes the move name's base colour that same colour.
+      if GET_MOVE_TEXT_COLOR_FROM_MOVE_BUTTON && moves[i].display_type(@battler)
+        # NOTE: This takes a color from a particular pixel in the button
+        #       graphic and makes the move name's base color that same color.
         #       The pixel is at coordinates 10,34 in the button box. If you
-        #       change the graphic, you may want to change/remove the below line
-        #       of code to ensure the font is an appropriate colour.
+        #       change the graphic, you may want to change the below line of
+        #       code to ensure the font is an appropriate color.
         moveNameBase = button.bitmap.get_pixel(10,button.src_rect.y+34)
       end
       textPos.push([moves[i].name,x,y,2,moveNameBase,TEXT_SHADOW_COLOR])

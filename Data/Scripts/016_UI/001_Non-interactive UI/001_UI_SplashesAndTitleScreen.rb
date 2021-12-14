@@ -18,7 +18,11 @@ class IntroEventScene < EventScene
     @pic2.setOpacity(0, 0)       # set opacity to 0 after waiting 0 frames
     @index = 0
     pbBGMPlay($data_system.title_bgm)
-    open_splash(self, nil)
+    if SPLASH_IMAGES.empty?
+      open_title_screen(self, nil)
+    else
+      open_splash(self, nil)
+    end
   end
 
   def open_splash(_scene, *args)
