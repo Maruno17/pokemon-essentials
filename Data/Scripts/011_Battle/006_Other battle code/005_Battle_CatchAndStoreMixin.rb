@@ -11,32 +11,15 @@ module Battle::CatchAndStoreMixin
       end
     end
     # Store the Pokémon
-    currentBox = @peer.pbCurrentBox
-    storedBox  = @peer.pbStorePokemon(pbPlayer,pkmn)
-    if storedBox<0
-      pbDisplayPaused(_INTL("{1} has been added to your party.",pkmn.name))
-      @initialItems[0][pbPlayer.party.length-1] = pkmn.item_id if @initialItems
+    stored_box = @peer.pbStorePokemon(pbPlayer, pkmn)
+    if stored_box.negative?
+      pbDisplayPaused(_INTL("{1} has been added to your party.", pkmn.name))
+      @initialItems[0][pbPlayer.party.length - 1] = pkmn.item_id if @initialItems
       return
     end
     # Messages saying the Pokémon was stored in a PC box
-    creator    = @peer.pbGetStorageCreatorName
-    curBoxName = @peer.pbBoxName(currentBox)
-    boxName    = @peer.pbBoxName(storedBox)
-    if storedBox!=currentBox
-      if creator
-        pbDisplayPaused(_INTL("Box \"{1}\" on {2}'s PC was full.",curBoxName,creator))
-      else
-        pbDisplayPaused(_INTL("Box \"{1}\" on someone's PC was full.",curBoxName))
-      end
-      pbDisplayPaused(_INTL("{1} was transferred to box \"{2}\".",pkmn.name,boxName))
-    else
-      if creator
-        pbDisplayPaused(_INTL("{1} was transferred to {2}'s PC.",pkmn.name,creator))
-      else
-        pbDisplayPaused(_INTL("{1} was transferred to someone's PC.",pkmn.name))
-      end
-      pbDisplayPaused(_INTL("It was stored in box \"{1}\".",boxName))
-    end
+    box_name = @peer.pbBoxName(stored_box)
+    pbDisplayPaused(_INTL("{1} has been sent to Box \"{2}\"!", pkmn.name, box_name))
   end
 
   # Register all caught Pokémon in the Pokédex, and store them.

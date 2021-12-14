@@ -24,8 +24,12 @@ class Player < Trainer
   attr_accessor :has_pokegear
   # @return [Boolean] whether the player has running shoes (i.e. can run)
   attr_accessor :has_running_shoes
+  # @return [Boolean] whether the player has an innate ability to access Pokémon storage
+  attr_accessor :has_box_link
   # @return [Boolean] whether the creator of the Pokémon Storage System has been seen
   attr_accessor :seen_storage_creator
+  # @return [Boolean] whether the effect of Exp All applies innately
+  attr_accessor :has_exp_all
   # @return [Boolean] whether Mystery Gift can be used from the load screen
   attr_accessor :mystery_gift_unlocked
   # @return [Array<Array>] downloaded Mystery Gift data
@@ -110,7 +114,9 @@ class Player < Trainer
     @has_pokedex           = false
     @has_pokegear          = false
     @has_running_shoes     = false
+    @has_box_link          = false
     @seen_storage_creator  = false
+    @has_exp_all           = false
     @mystery_gift_unlocked = false
     @mystery_gifts         = []
   end

@@ -659,11 +659,18 @@ class Battle::Scene::Animation::BattlerFaint < Battle::Scene::Animation
     # Animation
     # Play cry
     delay = 10
-    cry = GameData::Species.cry_filename_from_pokemon(batSprite.pkmn)
-    if cry
-      battler.setSE(0, cry, nil, 75)   # 75 is pitch
-      delay = GameData::Species.cry_length(batSprite.pkmn) * 20 / Graphics.frame_rate
+    cry = GameData::Species.cry_filename_from_pokemon(batSprite.pkmn, "_faint")
+    if cry   # Play a specific faint cry
+      battler.setSE(0, cry)
+      delay = (GameData::Species.cry_length(batSprite.pkmn, nil, nil, "_faint") * 20).ceil
+    else
+      cry = GameData::Species.cry_filename_from_pokemon(batSprite.pkmn)
+      if cry   # Play the regular cry at a lower pitch (75)
+        battler.setSE(0, cry, nil, 75)
+        delay = (GameData::Species.cry_length(batSprite.pkmn, nil, 75) * 20).ceil
+      end
     end
+    delay += 2
     # Sprite drops down
     shadow.setVisible(delay,false)
     battler.setSE(delay,"Pkmn faint")

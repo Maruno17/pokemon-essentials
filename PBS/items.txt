@@ -3390,507 +3390,498 @@ BattleUse = OnFoe
 Flags = PokeBall
 Description = A special Poké Ball designed to catch Ultra Beasts. It has a low success rate for catching others.
 #-------------------------------
-[TM00]
-Name = TM00
-NamePlural = TM00s
-Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = MEGAPUNCH
-Description = The target is slugged by a punch thrown with muscle-packed power.
-#-------------------------------
 [TM01]
 Name = TM01
 NamePlural = TM01s
 Pocket = 4
-Price = 40000
-FieldUse = TM
-Move = MEGAKICK
-Description = The target is attacked by a kick launched with muscle-packed power.
+Price = 3000
+FieldUse = TR
+Move = FOCUSPUNCH
+Description = The user focuses its mind before launching a punch. This move fails if the user is hit before it is used.
 #-------------------------------
 [TM02]
 Name = TM02
 NamePlural = TM02s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = PAYDAY
-Description = Numerous coins are hurled at the target to inflict damage. Money is earned after the battle.
+Price = 3000
+FieldUse = TR
+Move = DRAGONCLAW
+Description = The user slashes the target with huge sharp claws.
 #-------------------------------
 [TM03]
 Name = TM03
 NamePlural = TM03s
 Pocket = 4
-Price = 50000
-FieldUse = TM
-Move = FIREPUNCH
-Description = The target is punched with a fiery fist. This may also leave the target with a burn.
+Price = 3000
+FieldUse = TR
+Move = WATERPULSE
+Description = The user attacks the target with a pulsing blast of water. This may also confuse the target.
 #-------------------------------
 [TM04]
 Name = TM04
 NamePlural = TM04s
 Pocket = 4
-Price = 50000
-FieldUse = TM
-Move = ICEPUNCH
-Description = The target is punched with an icy fist. This may also leave the target frozen.
+Price = 1500
+FieldUse = TR
+Move = CALMMIND
+Description = The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats.
 #-------------------------------
 [TM05]
 Name = TM05
 NamePlural = TM05s
 Pocket = 4
-Price = 50000
-FieldUse = TM
-Move = THUNDERPUNCH
-Description = The target is punched with an electrified fist. This may also leave the target with paralysis.
+Price = 1000
+FieldUse = TR
+Move = ROAR
+Description = The target is scared off, and a different Pokémon is dragged out. In the wild, this ends the battle.
 #-------------------------------
 [TM06]
 Name = TM06
 NamePlural = TM06s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = FLY
-Description = The user flies up into the sky and then strikes its target on the next turn.
+Price = 3000
+FieldUse = TR
+Move = TOXIC
+Description = A move that leaves the target badly poisoned. Its poison damage worsens every turn.
 #-------------------------------
 [TM07]
 Name = TM07
 NamePlural = TM07s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = PINMISSILE
-Description = Sharp spikes are shot at the target in rapid succession. They hit two to five times in a row.
+Price = 2000
+FieldUse = TR
+Move = HAIL
+Description = The user summons a hailstorm lasting five turns. It damages all Pokémon except Ice types.
 #-------------------------------
 [TM08]
 Name = TM08
 NamePlural = TM08s
 Pocket = 4
-Price = 50000
-FieldUse = TM
-Move = HYPERBEAM
-Description = The target is attacked with a powerful beam. The user can't move on the next turn.
+Price = 1500
+FieldUse = TR
+Move = BULKUP
+Description = The user tenses its muscles to bulk up its body, raising both its Attack and Defense stats.
 #-------------------------------
 [TM09]
 Name = TM09
 NamePlural = TM09s
 Pocket = 4
-Price = 50000
-FieldUse = TM
-Move = GIGAIMPACT
-Description = The user charges at the target using every bit of its power. The user can't move on the next turn.
+Price = 2000
+FieldUse = TR
+Move = BULLETSEED
+Description = The user forcefully shoots seeds at the target two to five times in a row.
 #-------------------------------
 [TM10]
 Name = TM10
 NamePlural = TM10s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = MAGICALLEAF
-Description = The user scatters curious leaves that chase the target. This attack never misses.
+Price = 1500
+FieldUse = TR
+Move = WORKUP
+Description = The user is roused, and its Attack and Sp. Atk stats increase.
 #-------------------------------
 [TM11]
 Name = TM11
 NamePlural = TM11s
 Pocket = 4
-Price = 50000
-FieldUse = TM
-Move = SOLARBEAM
-Description = In this two-turn attack, the user gathers light, then blasts a bundled beam on the next turn.
+Price = 2000
+FieldUse = TR
+Move = SUNNYDAY
+Description = The user intensifies the sun for five turns, powering up Fire-type moves and weakening Water-type moves.
 #-------------------------------
 [TM12]
 Name = TM12
 NamePlural = TM12s
 Pocket = 4
-Price = 50000
-FieldUse = TM
-Move = SOLARBLADE
-Description = In this two-turn attack, the user gathers light evergy into a blade, attacking on the next turn.
+Price = 1500
+FieldUse = TR
+Move = TAUNT
+Description = The target is taunted into a rage that allows it to use only attack moves for three turns.
 #-------------------------------
 [TM13]
 Name = TM13
 NamePlural = TM13s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = FIRESPIN
-Description = The target becomes trapped within a fierce vortex of fire that rages for four to five turns.
+Price = 3000
+FieldUse = TR
+Move = ICEBEAM
+Description = The target is struck with an icy-cold beam of energy. This may also leave the target frozen.
 #-------------------------------
 [TM14]
 Name = TM14
 NamePlural = TM14s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = THUNDERWAVE
-Description = The user launches a weak jolt of electricity that paralyzes the target.
+Price = 5500
+FieldUse = TR
+Move = BLIZZARD
+Description = A howling blizzard is summoned to strike opposing Pokémon. This may also leave them frozen.
 #-------------------------------
 [TM15]
 Name = TM15
 NamePlural = TM15s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = DIG
-Description = The user burrows into the ground, then attacks on the next turn.
+Price = 7500
+FieldUse = TR
+Move = HYPERBEAM
+Description = The target is attacked with a powerful beam. The user can't move on the next turn.
 #-------------------------------
 [TM16]
 Name = TM16
 NamePlural = TM16s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = SCREECH
-Description = An earsplitting screech harshly lowers the target's Defense stat.
+Price = 2000
+FieldUse = TR
+Move = LIGHTSCREEN
+Description = A wondrous wall of light is put up to reduce damage from special attacks for five turns.
 #-------------------------------
 [TM17]
 Name = TM17
 NamePlural = TM17s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = LIGHTSCREEN
-Description = A wondrous wall of light is put up to reduce damage from special attacks for five turns.
+Price = 2000
+FieldUse = TR
+Move = PROTECT
+Description = The user protects itself from all attacks. Its chance of failing rises if it is used in succession.
 #-------------------------------
 [TM18]
 Name = TM18
 NamePlural = TM18s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = REFLECT
-Description = A wondrous wall of light is put up to reduce damage from physical attacks for five turns.
+Price = 2000
+FieldUse = TR
+Move = RAINDANCE
+Description = The user summons a heavy rain for five turns, powering up Water-type moves and weakening Fire-type ones.
 #-------------------------------
 [TM19]
 Name = TM19
 NamePlural = TM19s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = SAFEGUARD
-Description = The user creates a protective field that prevents status conditions for five turns.
+Price = 3000
+FieldUse = TR
+Move = GIGADRAIN
+Description = A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.
 #-------------------------------
 [TM20]
 Name = TM20
 NamePlural = TM20s
 Pocket = 4
-Price = 100000
-FieldUse = TM
-Move = SELFDESTRUCT
-Description = The user attacks everything around it by causing an explosion. The user faints upon using this move.
+Price = 2000
+FieldUse = TR
+Move = SAFEGUARD
+Description = The user creates a protective field that prevents status conditions for five turns.
 #-------------------------------
 [TM21]
 Name = TM21
 NamePlural = TM21s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = REST
-Description = The user goes to sleep for two turns. This fully restores the user's HP and heals any status conditions.
+Price = 3000
+FieldUse = TR
+Move = DAZZLINGGLEAM
+Description = The user damages opposing Pokémon by emitting a powerful flash.
 #-------------------------------
 [TM22]
 Name = TM22
 NamePlural = TM22s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = ROCKSLIDE
-Description = Large boulders are hurled at opposing Pokémon to inflict damage. This may also make them flinch.
+Price = 3000
+FieldUse = TR
+Move = SOLARBEAM
+Description = In this two-turn attack, the user gathers light, then blasts a bundled beam on the next turn.
 #-------------------------------
 [TM23]
 Name = TM23
 NamePlural = TM23s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = THIEF
-Description = The user attacks and steals the target's held item simultaneously, if it isn't already holding an item.
+Price = 3000
+FieldUse = TR
+Move = IRONTAIL
+Description = The target is slammed with a steel-hard tail. This may also lower the target's Defense stat.
 #-------------------------------
 [TM24]
 Name = TM24
 NamePlural = TM24s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = SNORE
-Description = This attack can be used only if the user is asleep. The harsh noise may also make the target flinch.
+Price = 3000
+FieldUse = TR
+Move = THUNDERBOLT
+Description = A strong electric blast crashes down on the target. This may also leave the target with paralysis.
 #-------------------------------
 [TM25]
 Name = TM25
 NamePlural = TM25s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = PROTECT
-Description = This move enables the user to protect itself from all attacks. More likely to fail if used in succession.
+Price = 5500
+FieldUse = TR
+Move = THUNDER
+Description = A wicked thunderbolt is dropped on the target to inflict damage. This may also leave them with paralysis.
 #-------------------------------
 [TM26]
 Name = TM26
 NamePlural = TM26s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = SCARYFACE
-Description = The user frightens the target with a scary face to harshly lower its Speed stat.
+Price = 3000
+FieldUse = TR
+Move = EARTHQUAKE
+Description = The user sets off an earthquake that strikes every Pokémon around it.
 #-------------------------------
 [TM27]
 Name = TM27
 NamePlural = TM27s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = ICYWIND
-Description = The user attacks with a gust of chilled air. This also lowers opposing Pokémon's Speed stats.
+Price = 3000
+FieldUse = TR
+Move = LOWSWEEP
+Description = The user makes a swift attack on the target's legs, which lowers the target's Speed stat.
 #-------------------------------
 [TM28]
 Name = TM28
 NamePlural = TM28s
 Pocket = 4
-Price = 100000
-FieldUse = TM
-Move = GIGADRAIN
-Description = A nutrient-draining attack. The user's HP is restored by half the damage taken by the target.
+Price = 2000
+FieldUse = TR
+Move = DIG
+Description = The user burrows into the ground, then attacks on the next turn. It can also be used to exit dungeons.
 #-------------------------------
 [TM29]
 Name = TM29
 NamePlural = TM29s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = CHARM
-Description = The user gazes at the target rather charmingly, making it less wary and harshly lowering its Attack stat.
+Price = 3000
+FieldUse = TR
+Move = PSYCHIC
+Description = The target is hit by a strong telekinetic force. This may also lower the target's Sp. Def stat.
 #-------------------------------
 [TM30]
 Name = TM30
 NamePlural = TM30s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = STEELWING
-Description = The target is hit with wings of steel. This may also raise the user's Defense stat.
+Price = 3000
+FieldUse = TR
+Move = SHADOWBALL
+Description = The user hurls a shadowy blob at the target. This may also lower the target's Sp. Def stat.
 #-------------------------------
 [TM31]
 Name = TM31
 NamePlural = TM31s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = ATTRACT
-Description = If it is the opposite gender of the user, the target becomes infatuated and less likely to attack.
+Price = 3000
+FieldUse = TR
+Move = BRICKBREAK
+Description = The user attacks with a swift chop. It can also break barriers, such as Light Screen and Reflect.
 #-------------------------------
 [TM32]
 Name = TM32
 NamePlural = TM32s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = SANDSTORM
-Description = A five-turn sandstorm is summoned to hurt all combatants except Rock, Ground, and Steel types.
+Price = 1000
+FieldUse = TR
+Move = DOUBLETEAM
+Description = By moving rapidly, the user makes illusory copies of itself to raise its evasiveness.
 #-------------------------------
 [TM33]
 Name = TM33
 NamePlural = TM33s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = RAINDANCE
-Description = Summons a heavy rain that falls for five turns. Powers up Water-type moves and weakens Fire-type moves.
+Price = 2000
+FieldUse = TR
+Move = REFLECT
+Description = A wondrous wall of light is put up to reduce damage from physical attacks for five turns.
 #-------------------------------
 [TM34]
 Name = TM34
 NamePlural = TM34s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = SUNNYDAY
-Description = Intensifies the sun for five turns, powering up Fire-type moves and weakening Water-type moves.
+Price = 3000
+FieldUse = TR
+Move = SHOCKWAVE
+Description = The user strikes the target with a quick jolt of electricity. This attack never misses.
 #-------------------------------
 [TM35]
 Name = TM35
 NamePlural = TM35s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = HAIL
-Description = The user summons a hailstorm lasting five turns. It damages all Pokémon except Ice types.
+Price = 3000
+FieldUse = TR
+Move = FLAMETHROWER
+Description = The target is scorched with an intense blast of fire. This may also leave the target with a burn.
 #-------------------------------
 [TM36]
 Name = TM36
 NamePlural = TM36s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = WHIRLPOOL
-Description = The user traps the target in a violent swirling whirlpool for four to five turns.
+Price = 3000
+FieldUse = TR
+Move = SLUDGEBOMB
+Description = Unsanitary sludge is hurled at the target. This may also poison the target.
 #-------------------------------
 [TM37]
 Name = TM37
 NamePlural = TM37s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = BEATUP
-Description = The user gets all party Pokémon to attack the target. The more party Pokémon, the more hits it deals.
+Price = 2000
+FieldUse = TR
+Move = SANDSTORM
+Description = A five-turn sandstorm is summoned to hurt all combatants except Rock, Ground, and Steel types.
 #-------------------------------
 [TM38]
 Name = TM38
 NamePlural = TM38s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = WILLOWISP
-Description = The user shoots a sinister flame at the target to inflict a burn.
+Price = 5500
+FieldUse = TR
+Move = FIREBLAST
+Description = The target is attacked with an intense blast of all-consuming fire. This may also leave them with a burn.
 #-------------------------------
 [TM39]
 Name = TM39
 NamePlural = TM39s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = FACADE
-Description = This attack move doubles its power if the user is poisoned, burned, or paralyzed.
+Price = 3000
+FieldUse = TR
+Move = ROCKTOMB
+Description = Boulders are hurled at the target. This also lowers the target's Speed stat by preventing its movement.
 #-------------------------------
 [TM40]
 Name = TM40
 NamePlural = TM40s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = SWIFT
-Description = Star-shaped rays are shot at opposing Pokémon. This attack never misses.
+Price = 3000
+FieldUse = TR
+Move = AERIALACE
+Description = The user confounds the target with speed, then slashes. This attack never misses.
 #-------------------------------
 [TM41]
 Name = TM41
 NamePlural = TM41s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = HELPINGHAND
-Description = The user assists an ally by boosting the power of that ally's attack.
+Price = 1500
+FieldUse = TR
+Move = TORMENT
+Description = The user torments and enrages the target, making it incapable of using the same move twice in a row.
 #-------------------------------
 [TM42]
 Name = TM42
 NamePlural = TM42s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = REVENGE
-Description = This attack move's power is doubled if the user has been hurt by the opponent in the same turn.
+Price = 3000
+FieldUse = TR
+Move = FACADE
+Description = This attack move doubles its power if the user is poisoned, burned, or paralyzed.
 #-------------------------------
 [TM43]
 Name = TM43
 NamePlural = TM43s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = BRICKBREAK
-Description = The user attacks with a swift chop. It can also break barriers, such as Light Screen and Reflect.
+Price = 3000
+FieldUse = TR
+Move = VOLTSWITCH
+Description = After making its attack, the user rushes back to switch places with a party Pokémon in waiting.
 #-------------------------------
 [TM44]
 Name = TM44
 NamePlural = TM44s
 Pocket = 4
-Price = 100000
-FieldUse = TM
-Move = IMPRISON
-Description = If opposing Pokémon know any move also known by the user, they are prevented from using it.
+Price = 3000
+FieldUse = TR
+Move = REST
+Description = The user goes to sleep for two turns. This fully restores the user's HP and heals any status conditions.
 #-------------------------------
 [TM45]
 Name = TM45
 NamePlural = TM45s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = DIVE
-Description = Diving on the first turn, the user floats up and attacks on the next turn.
+Price = 3000
+FieldUse = TR
+Move = ATTRACT
+Description = If it is the opposite gender of the user, the target becomes infatuated and less likely to attack.
 #-------------------------------
 [TM46]
 Name = TM46
 NamePlural = TM46s
 Pocket = 4
-Price = 30000
-FieldUse = TM
-Move = WEATHERBALL
-Description = This attack move varies in power and type depending on the weather.
+Price = 2000
+FieldUse = TR
+Move = THIEF
+Description = The user attacks and steals the target's held item simultaneously.
 #-------------------------------
 [TM47]
 Name = TM47
 NamePlural = TM47s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = FAKETEARS
-Description = The user feigns crying to fluster the target, harshly lowering its Sp. Def stat.
+Price = 3000
+FieldUse = TR
+Move = STEELWING
+Description = The target is hit with wings of steel. This may also raise the user's Defense stat.
 #-------------------------------
 [TM48]
 Name = TM48
 NamePlural = TM48s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = ROCKTOMB
-Description = Boulders are hurled at the target. This also lowers the target's Speed stat by preventing its movement.
+Price = 3000
+FieldUse = TR
+Move = SKILLSWAP
+Description = The user employs its psychic power to exchange Abilities with the target.
 #-------------------------------
 [TM49]
 Name = TM49
 NamePlural = TM49s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = SANDTOMB
-Description = The user traps the target inside a harshly raging sandstorm for four to five turns.
+Price = 3000
+FieldUse = TR
+Move = SCALD
+Description = The user shoots boiling hot water at its target. This may also leave the target with a burn.
 #-------------------------------
 [TM50]
 Name = TM50
 NamePlural = TM50s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = BULLETSEED
-Description = The user forcefully shoots seeds at the target two to five times in a row.
+Price = 5500
+FieldUse = TR
+Move = OVERHEAT
+Description = The user attacks the target at full power. The attack's recoil harshly lowers the user's Sp. Atk stat.
 #-------------------------------
 [TM51]
 Name = TM51
 NamePlural = TM51s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = ICICLESPEAR
-Description = The user launches sharp icicles at the target two to five times in a row.
+Price = 2000
+FieldUse = TR
+Move = ROOST
+Description = The user lands and rests its body. This move restores the user's HP by up to half of its max HP.
 #-------------------------------
 [TM52]
 Name = TM52
 NamePlural = TM52s
 Pocket = 4
-Price = 100000
-FieldUse = TM
-Move = BOUNCE
-Description = The user bounces up high, then drops on the target on the second turn. This may also paralyze the target.
+Price = 5500
+FieldUse = TR
+Move = FOCUSBLAST
+Description = The user heightens its mental focus and unleashes its power. This may also lower the target's Sp. Def stat.
 #-------------------------------
 [TM53]
 Name = TM53
 NamePlural = TM53s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = MUDSHOT
-Description = The user attacks by hurling a blob of mud at the target. This also lowers the target's Speed stat.
+Price = 3000
+FieldUse = TR
+Move = ENERGYBALL
+Description = The user draws power from nature and fires it at the target. This may also lower the target's Sp. Def stat.
 #-------------------------------
 [TM54]
 Name = TM54
 NamePlural = TM54s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = ROCKBLAST
-Description = The user hurls hard rocks at the target. Two to five rocks are launched in a row.
+Price = 2000
+FieldUse = TR
+Move = FALSESWIPE
+Description = A restrained attack that prevents the target from fainting. The target is left with at least 1 HP.
 #-------------------------------
 [TM55]
 Name = TM55
 NamePlural = TM55s
 Pocket = 4
-Price = 10000
-FieldUse = TM
+Price = 3000
+FieldUse = TR
 Move = BRINE
 Description = If the target's HP is half or less, this attack will hit with double the power.
 #-------------------------------
@@ -3898,89 +3889,89 @@ Description = If the target's HP is half or less, this attack will hit with doub
 Name = TM56
 NamePlural = TM56s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = UTURN
-Description = After making its attack, the user rushes back to switch places with a party Pokémon in waiting.
+Price = 2000
+FieldUse = TR
+Move = FLING
+Description = The user flings its held item at the target to attack. This move's power and effects depend on the item.
 #-------------------------------
 [TM57]
 Name = TM57
 NamePlural = TM57s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = PAYBACK
-Description = The user stores power, then attacks. If the user moves after the target, this attack's power will be doubled.
+Price = 3000
+FieldUse = TR
+Move = CHARGEBEAM
+Description = The user attacks the target with an electric charge. The user may use any remaining charge to raise its Sp. Atk.
 #-------------------------------
 [TM58]
 Name = TM58
 NamePlural = TM58s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = ASSURANCE
-Description = If the target has already taken some damage in the same turn, this attack's power is doubled.
+Price = 2000
+FieldUse = TR
+Move = ENDURE
+Description = The user endures any attack with at least 1 HP. Its chance of failing rises if it is used in succession.
 #-------------------------------
 [TM59]
 Name = TM59
 NamePlural = TM59s
 Pocket = 4
-Price = 100000
-FieldUse = TM
-Move = FLING
-Description = The user flings its held item at the target to attack. This move's power and effects depend on the item.
+Price = 3000
+FieldUse = TR
+Move = DRAGONPULSE
+Description = The target is attacked with a shock wave generated by the user's gaping mouth.
 #-------------------------------
 [TM60]
 Name = TM60
 NamePlural = TM60s
 Pocket = 4
-Price = 30000
-FieldUse = TM
-Move = POWERSWAP
-Description = The user employs its psychic power to switch changes to its Attack and Sp. Atk stats with the target.
+Price = 3000
+FieldUse = TR
+Move = DRAINPUNCH
+Description = An energy-draining punch. The user's HP is restored by half the damage taken by the target.
 #-------------------------------
 [TM61]
 Name = TM61
 NamePlural = TM61s
 Pocket = 4
-Price = 30000
-FieldUse = TM
-Move = GUARDSWAP
-Description = The user employs its psychic power to switch changes to its Defense and Sp. Def stats with the target.
+Price = 2000
+FieldUse = TR
+Move = WILLOWISP
+Description = The user shoots a sinister flame at the target to inflict a burn.
 #-------------------------------
 [TM62]
 Name = TM62
 NamePlural = TM62s
 Pocket = 4
-Price = 30000
-FieldUse = TM
-Move = SPEEDSWAP
-Description = The user exchanges Speed stats with the target.
+Price = 3000
+FieldUse = TR
+Move = BUGBUZZ
+Description = The user generates a damaging sound wave by vibration. This may also lower the target's Sp. Def stat.
 #-------------------------------
 [TM63]
 Name = TM63
 NamePlural = TM63s
 Pocket = 4
-Price = 50000
-FieldUse = TM
-Move = DRAINPUNCH
-Description = An energy-draining punch. The user's HP is restored by half the damage taken by the target.
+Price = 2000
+FieldUse = TR
+Move = NASTYPLOT
+Description = The user stimulates its brain by thinking bad thoughts. This sharply raises the user's Sp. Atk stat.
 #-------------------------------
 [TM64]
 Name = TM64
 NamePlural = TM64s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = AVALANCHE
-Description = The power of this attack move is doubled if the user has been hurt by the target in the same turn.
+Price = 7500
+FieldUse = TR
+Move = EXPLOSION
+Description = The user attacks everything around it by causing a tremendous explosion. The user faints upon using this move.
 #-------------------------------
 [TM65]
 Name = TM65
 NamePlural = TM65s
 Pocket = 4
-Price = 0
-FieldUse = TM
+Price = 3000
+FieldUse = TR
 Move = SHADOWCLAW
 Description = The user slashes with a sharp claw made from shadows. Critical hits land more easily.
 #-------------------------------
@@ -3988,1198 +3979,316 @@ Description = The user slashes with a sharp claw made from shadows. Critical hit
 Name = TM66
 NamePlural = TM66s
 Pocket = 4
-Price = 30000
-FieldUse = TM
-Move = THUNDERFANG
-Description = The user bites with electrified fangs. This may also make the target flinch or leave it with paralysis.
+Price = 3000
+FieldUse = TR
+Move = PAYBACK
+Description = The user stores power, then attacks. If the user moves after the target, this attack's power will be doubled.
 #-------------------------------
 [TM67]
 Name = TM67
 NamePlural = TM67s
 Pocket = 4
-Price = 30000
-FieldUse = TM
-Move = ICEFANG
-Description = The user bites with cold-infused fangs. This may also make the target flinch or leave it frozen.
+Price = 1000
+FieldUse = TR
+Move = RECYCLE
+Description = The user recycles a held item that has been used in battle so it can be used again.
 #-------------------------------
 [TM68]
 Name = TM68
 NamePlural = TM68s
 Pocket = 4
-Price = 30000
-FieldUse = TM
-Move = FIREFANG
-Description = The user bites with flame-cloaked fangs. This may also make the target flinch or leave it with a burn.
+Price = 7500
+FieldUse = TR
+Move = GIGAIMPACT
+Description = The user charges at the target using every bit of its power. The user can't move on the next turn.
 #-------------------------------
 [TM69]
 Name = TM69
 NamePlural = TM69s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = PSYCHOCUT
-Description = The user tears at the target with blades formed by psychic power. Critical hits land more easily.
+Price = 1500
+FieldUse = TR
+Move = ROCKPOLISH
+Description = The user polishes its body to reduce drag. This sharply raises the Speed stat.
 #-------------------------------
 [TM70]
 Name = TM70
 NamePlural = TM70s
 Pocket = 4
-Price = 50000
-FieldUse = TM
-Move = TRICKROOM
-Description = The user creates a bizarre area in which slower Pokémon get to move first for five turns.
+Price = 1000
+FieldUse = TR
+Move = FLASH
+Description = The user flashes a light that lowers the target's accuracy. It can also be used to illuminate caves.
 #-------------------------------
 [TM71]
 Name = TM71
 NamePlural = TM71s
 Pocket = 4
-Price = 50000
-FieldUse = TM
-Move = WONDERROOM
-Description = The user creates a bizarre area in which Pokémon's Defense and Sp. Def stats are swapped for five turns.
+Price = 3000
+FieldUse = TR
+Move = STONEEDGE
+Description = The user stabs the target from below with sharpened stones. Critical hits land more easily.
 #-------------------------------
 [TM72]
 Name = TM72
 NamePlural = TM72s
 Pocket = 4
-Price = 50000
-FieldUse = TM
-Move = MAGICROOM
-Description = The user creates a bizarre area in which Pokémon's held items lose their effects for five turns.
+Price = 3000
+FieldUse = TR
+Move = AVALANCHE
+Description = The power of this attack move is doubled if the user has been hurt by the target in the same turn.
 #-------------------------------
 [TM73]
 Name = TM73
 NamePlural = TM73s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = CROSSPOISON
-Description = A slashing attack with a poisonous blade that may also poison the target. Critical hits land more easily.
+Price = 2000
+FieldUse = TR
+Move = THUNDERWAVE
+Description = The user launches a weak jolt of electricity that paralyzes the target.
 #-------------------------------
 [TM74]
 Name = TM74
 NamePlural = TM74s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = VENOSHOCK
-Description = The user drenches the target in a special poisonous liquid. This move is stronger if the target is poisoned.
+Price = 3000
+FieldUse = TR
+Move = GYROBALL
+Description = The user tackles with a high-speed spin. This move is stronger the slower the user is than the target.
 #-------------------------------
 [TM75]
 Name = TM75
 NamePlural = TM75s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = LOWSWEEP
-Description = The user makes a swift attack on the target's legs, which lowers the target's Speed stat.
+Price = 1500
+FieldUse = TR
+Move = SWORDSDANCE
+Description = A frenetic dance to uplift the fighting spirit. This sharply raises the user's Attack stat.
 #-------------------------------
 [TM76]
 Name = TM76
 NamePlural = TM76s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = ROUND
-Description = The user attacks the target with a song. Others can join in the Round to increase the power of the attack.
+Price = 2000
+FieldUse = TR
+Move = STEALTHROCK
+Description = The user lays a trap of levitating stones around the opposing team that hurt Pokémon that switch in.
 #-------------------------------
 [TM77]
 Name = TM77
 NamePlural = TM77s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = HEX
-Description = This relentless attack does massive damage to a target affected by status conditions.
+Price = 1500
+FieldUse = TR
+Move = PSYCHUP
+Description = The user hypnotizes itself into copying any stat change made by the target.
 #-------------------------------
 [TM78]
 Name = TM78
 NamePlural = TM78s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = ACROBATICS
-Description = The user nimbly strikes the target. If the user is not holding an item, this attack inflicts massive damage.
+Price = 3000
+FieldUse = TR
+Move = SNARL
+Description = The user yells as if it's ranting about something, which lowers the Sp. Atk stats of opposing Pokémon.
 #-------------------------------
 [TM79]
 Name = TM79
 NamePlural = TM79s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = RETALIATE
-Description = The user gets revenge for a fainted ally. If an ally fainted the previous turn, this move gets stronger.
+Price = 3000
+FieldUse = TR
+Move = DARKPULSE
+Description = The user releases a horrible aura imbued with dark thoughts. This may also make the target flinch.
 #-------------------------------
 [TM80]
 Name = TM80
 NamePlural = TM80s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = VOLTSWITCH
-Description = After making its attack, the user rushes back to switch places with a party Pokémon in waiting.
+Price = 3000
+FieldUse = TR
+Move = ROCKSLIDE
+Description = Large boulders are hurled at opposing Pokémon to inflict damage. This may also make them flinch.
 #-------------------------------
 [TM81]
 Name = TM81
 NamePlural = TM81s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = BULLDOZE
-Description = The user strikes everything around it by stomping down on the ground. Lowers the Speed stats of those hit.
+Price = 3000
+FieldUse = TR
+Move = XSCISSOR
+Description = The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.
 #-------------------------------
 [TM82]
 Name = TM82
 NamePlural = TM82s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = ELECTROWEB
-Description = The user attacks and captures opposing Pokémon using an electric net. This lowers their Speed stats.
+Price = 1000
+FieldUse = TR
+Move = SLEEPTALK
+Description = While it is asleep, the user randomly uses one of the moves it knows.
 #-------------------------------
 [TM83]
 Name = TM83
 NamePlural = TM83s
 Pocket = 4
-Price = 100000
-FieldUse = TM
-Move = RAZORSHELL
-Description = The user cuts its target with sharp shells. This may also lower the target's Defense stat.
+Price = 3000
+FieldUse = TR
+Move = BULLDOZE
+Description = The user strikes everything around it by stomping down on the ground. This lowers the Speed of those hit.
 #-------------------------------
 [TM84]
 Name = TM84
 NamePlural = TM84s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = TAILSLAP
-Description = The user attacks by striking the target with its hard tail. It hits the target two to five times in a row.
+Price = 3000
+FieldUse = TR
+Move = POISONJAB
+Description = The target is stabbed with a tentacle, arm, or the like steeped in poison. This may also poison them.
 #-------------------------------
 [TM85]
 Name = TM85
 NamePlural = TM85s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = SNARL
-Description = The user yells as if it's ranting about something, which lowers the Sp. Atk stats of opposing Pokémon.
+Price = 3000
+FieldUse = TR
+Move = DREAMEATER
+Description = The user eats the dreams of a sleeping target. The user's HP is restored by half the damage dealt.
 #-------------------------------
 [TM86]
 Name = TM86
 NamePlural = TM86s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = PHANTOMFORCE
-Description = The user vanishes somewhere, then strikes the target on the next turn. This move hits through protections.
+Price = 3000
+FieldUse = TR
+Move = GRASSKNOT
+Description = The user snares the target with grass and trips it. The heavier the target, the strong the move is.
 #-------------------------------
 [TM87]
 Name = TM87
 NamePlural = TM87s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = DRAININGKISS
-Description = The user steals the target's HP with a kiss. The user's HP is restored by most of the damage dealt.
+Price = 1500
+FieldUse = TR
+Move = SWAGGER
+Description = The user enrages and confuses the target. However, this also sharply raises the target's Attack stat.
 #-------------------------------
 [TM88]
 Name = TM88
 NamePlural = TM88s
 Pocket = 4
-Price = 20000
-FieldUse = TM
-Move = GRASSYTERRAIN
-Description = Turns the ground to grass for five turns. Grounded Pokémon gain HP each turn. Powers up Grass moves.
+Price = 3000
+FieldUse = TR
+Move = PLUCK
+Description = The user pecks the target. If the target is holding a Berry, the user eats it and gains its effect.
 #-------------------------------
 [TM89]
 Name = TM89
 NamePlural = TM89s
 Pocket = 4
-Price = 20000
-FieldUse = TM
-Move = MISTYTERRAIN
-Description = Protects Pokémon on the ground from status conditions and weakens Dragon-type moves for five turns.
+Price = 3000
+FieldUse = TR
+Move = UTURN
+Description = After making its attack, the user rushes back to switch places with a party Pokémon in waiting.
 #-------------------------------
 [TM90]
 Name = TM90
 NamePlural = TM90s
 Pocket = 4
-Price = 20000
-FieldUse = TM
-Move = ELECTRICTERRAIN
-Description = Electrifies the ground for five turns. Powers up Electric-type moves. Grounded Pokémon can't sleep.
+Price = 2000
+FieldUse = TR
+Move = SUBSTITUTE
+Description = The user creates a substitute for itself using some of its HP. The substitute serves as a decoy.
 #-------------------------------
 [TM91]
 Name = TM91
 NamePlural = TM91s
 Pocket = 4
-Price = 20000
-FieldUse = TM
-Move = PSYCHICTERRAIN
-Description = This protects Pokémon on the ground from priority moves and powers up Psychic-type moves for five turns.
+Price = 3000
+FieldUse = TR
+Move = FLASHCANNON
+Description = The user gathers all its light energy and releases it all at once. This may also lower the target's Sp. Def stat.
 #-------------------------------
 [TM92]
 Name = TM92
 NamePlural = TM92s
 Pocket = 4
-Price = 100000
-FieldUse = TM
-Move = MYSTICALFIRE
-Description = The user attacks by breathing a special, hot fire. This also lowers the target's Sp. Atk stat.
+Price = 5500
+FieldUse = TR
+Move = TRICKROOM
+Description = The user creates a bizarre area in which slower Pokémon get to move first for five turns.
 #-------------------------------
 [TM93]
 Name = TM93
 NamePlural = TM93s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = EERIEIMPULSE
-Description = The user's body generates an eerie impulse. Exposure to it harshly lowers the target's Sp. Atk stat.
+Price = 2000
+FieldUse = TR
+Move = CUT
+Description = The target is cut with a scythe or claw.
 #-------------------------------
 [TM94]
 Name = TM94
 NamePlural = TM94s
 Pocket = 4
-Price = 10000
-FieldUse = TM
-Move = FALSESWIPE
-Description = A restrained attack that prevents the target from fainting. The target is left with at least 1 HP.
+Price = 2000
+FieldUse = TR
+Move = FLY
+Description = The user flies up into the sky and then strikes its target on the next turn.
 #-------------------------------
 [TM95]
 Name = TM95
 NamePlural = TM95s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = AIRSLASH
-Description = The user attacks with a blade of air that slices even the sky. This may also make the target flinch.
+Price = 2500
+FieldUse = TR
+Move = SURF
+Description = The user attacks everything around it by swamping its surroundings with a giant wave.
 #-------------------------------
 [TM96]
 Name = TM96
 NamePlural = TM96s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = SMARTSTRIKE
-Description = The user stabs the target with a sharp horn. This attack never misses.
+Price = 2000
+FieldUse = TR
+Move = STRENGTH
+Description = The target is slugged with a punch thrown at maximum power.
 #-------------------------------
 [TM97]
 Name = TM97
 NamePlural = TM97s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = BRUTALSWING
-Description = The user swings its body around violently to inflict damage on everything in its vicinity.
+Price = 2000
+FieldUse = TR
+Move = DEFOG
+Description = A strong wind blows away the target's barriers, such as Reflect, and lowers their evasiveness.
 #-------------------------------
 [TM98]
 Name = TM98
 NamePlural = TM98s
 Pocket = 4
-Price = 0
-FieldUse = TM
-Move = STOMPINGTANTRUM
-Description = Driven by frustration, the user attacks the target. Power doubles if the user's previous move has failed.
-#-------------------------------
-[TR00]
-Name = TR00
-NamePlural = TR00s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = SWORDSDANCE
-Description = A frenetic dance to uplift the fighting spirit. This sharply raises the user's Attack stat.
-#-------------------------------
-[TR01]
-Name = TR01
-NamePlural = TR01s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = BODYSLAM
-Description = The user drops onto the target with its full body weight. This may also leave the target with paralysis.
-#-------------------------------
-[TR02]
-Name = TR02
-NamePlural = TR02s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = FLAMETHROWER
-Description = The target is scorched with an intense blast of fire. This may also leave the target with a burn.
-#-------------------------------
-[TR03]
-Name = TR03
-NamePlural = TR03s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = HYDROPUMP
-Description = The target is blasted by a huge volume of water launched under great pressure.
-#-------------------------------
-[TR04]
-Name = TR04
-NamePlural = TR04s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = SURF
-Description = The user attacks everything around it by swamping its surroundings with a giant wave.
-#-------------------------------
-[TR05]
-Name = TR05
-NamePlural = TR05s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = ICEBEAM
-Description = The target is struck with an icy-cold beam of energy. This may also leave the target frozen.
-#-------------------------------
-[TR06]
-Name = TR06
-NamePlural = TR06s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = BLIZZARD
-Description = A howling blizzard is summoned to strike opposing Pokémon. This may also freeze the opposing Pokémon.
-#-------------------------------
-[TR07]
-Name = TR07
-NamePlural = TR07s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = LOWKICK
-Description = A powerful low kick that makes the target fall over. The heavier the target, the stronger the move is.
-#-------------------------------
-[TR08]
-Name = TR08
-NamePlural = TR08s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = THUNDERBOLT
-Description = A strong electric blast crashes down on the target. This may also leave the target with paralysis.
-#-------------------------------
-[TR09]
-Name = TR09
-NamePlural = TR09s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = THUNDER
-Description = A wicked thunderbolt is dropped on the target to inflict damage. This may also paralyze the target.
-#-------------------------------
-[TR10]
-Name = TR10
-NamePlural = TR10s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = EARTHQUAKE
-Description = The user sets off an earthquake that strikes every Pokémon around it.
-#-------------------------------
-[TR11]
-Name = TR11
-NamePlural = TR11s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = PSYCHIC
-Description = The target is hit by a strong telekinetic force. This may also lower the target's Sp. Def stat.
-#-------------------------------
-[TR12]
-Name = TR12
-NamePlural = TR12s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = AGILITY
-Description = The user relaxes and lightens its body to move faster. This sharply raises the Speed stat.
-#-------------------------------
-[TR13]
-Name = TR13
-NamePlural = TR13s
-Pocket = 4
 Price = 2000
 FieldUse = TR
-Move = FOCUSENERGY
-Description = The user takes a deep breath and focuses so that critical hits land more easily.
+Move = ROCKSMASH
+Description = The user attacks with a punch that may lower the target's Defense stat.
 #-------------------------------
-[TR14]
-Name = TR14
-NamePlural = TR14s
+[TM99]
+Name = TM99
+NamePlural = TM99s
 Pocket = 4
-Price = 2000
-FieldUse = TR
-Move = METRONOME
-Description = The user waggles a finger and stimulates its brain into randomly using nearly any move.
-#-------------------------------
-[TR15]
-Name = TR15
-NamePlural = TR15s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = FIREBLAST
-Description = The target is attacked with an intense blast of all-consuming fire. This may also burn the target.
-#-------------------------------
-[TR16]
-Name = TR16
-NamePlural = TR16s
-Pocket = 4
-Price = 6000
+Price = 2500
 FieldUse = TR
 Move = WATERFALL
 Description = The user charges at the target and may make it flinch.
 #-------------------------------
-[TR17]
-Name = TR17
-NamePlural = TR17s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = AMNESIA
-Description = The user temporarily empties its mind to forget its concerns. This sharply raises the user's Sp. Def stat.
-#-------------------------------
-[TR18]
-Name = TR18
-NamePlural = TR18s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = LEECHLIFE
-Description = The user drains the target's blood. The user's HP is restored by half the damage taken by the target.
-#-------------------------------
-[TR19]
-Name = TR19
-NamePlural = TR19s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = TRIATTACK
-Description = The user strikes with a simultaneous three-beam attack. This may also burn, freeze, or paralyze the target.
-#-------------------------------
-[TR20]
-Name = TR20
-NamePlural = TR20s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = SUBSTITUTE
-Description = The user creates a substitute for itself using some of its HP. The substitute acts as the user's decoy.
-#-------------------------------
-[TR21]
-Name = TR21
-NamePlural = TR21s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = REVERSAL
-Description = An all-out attack that becomes more powerful the less HP the user has.
-#-------------------------------
-[TR22]
-Name = TR22
-NamePlural = TR22s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = SLUDGEBOMB
-Description = Unsanitary sludge is hurled at the target. This may also poison the target.
-#-------------------------------
-[TR23]
-Name = TR23
-NamePlural = TR23s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = SPIKES
-Description = The user lays a trap of spikes at the opposing team's feet. The trap hurts Pokémon that switch into battle.
-#-------------------------------
-[TR24]
-Name = TR24
-NamePlural = TR24s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = OUTRAGE
-Description = The user rampages and attacks for two to three turns. The user then becomes confused.
-#-------------------------------
-[TR25]
-Name = TR25
-NamePlural = TR25s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = PSYSHOCK
-Description = The user materializes an odd psychic wave to attack the target. This attack does physical damage.
-#-------------------------------
-[TR26]
-Name = TR26
-NamePlural = TR26s
+[TM100]
+Name = TM100
+NamePlural = TM100s
 Pocket = 4
 Price = 2000
 FieldUse = TR
-Move = ENDURE
-Description = The user endures any attack with at least 1 HP. Its chance of failing rises if it is used in succession.
-#-------------------------------
-[TR27]
-Name = TR27
-NamePlural = TR27s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = SLEEPTALK
-Description = While it is asleep, the user randomly uses one of the moves it knows.
-#-------------------------------
-[TR28]
-Name = TR28
-NamePlural = TR28s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = MEGAHORN
-Description = Using its tough and impressive horn, the user rams into the target with no letup.
-#-------------------------------
-[TR29]
-Name = TR29
-NamePlural = TR29s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = BATONPASS
-Description = The user switches places with a party Pokémon in waiting and passes along any stat changes.
-#-------------------------------
-[TR30]
-Name = TR30
-NamePlural = TR30s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = ENCORE
-Description = The user compels the target to keep using the move it encored for three turns.
-#-------------------------------
-[TR31]
-Name = TR31
-NamePlural = TR31s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = IRONTAIL
-Description = The target is slammed with a steel-hard tail. This may also lower the target's Defense stat.
-#-------------------------------
-[TR32]
-Name = TR32
-NamePlural = TR32s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = CRUNCH
-Description = The user crunches up the target with sharp fangs. This may also lower the target's Defense stat.
-#-------------------------------
-[TR33]
-Name = TR33
-NamePlural = TR33s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = SHADOWBALL
-Description = The user hurls a shadowy blob at the target. This may also lower the target's Sp. Def stat.
-#-------------------------------
-[TR34]
-Name = TR34
-NamePlural = TR34s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = FUTURESIGHT
-Description = Two turns after this move is used, a hunk of psychic energy attacks the target.
-#-------------------------------
-[TR35]
-Name = TR35
-NamePlural = TR35s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = UPROAR
-Description = The user attacks in an uproar for three turns. During that time, no Pokémon can fall asleep.
-#-------------------------------
-[TR36]
-Name = TR36
-NamePlural = TR36s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = HEATWAVE
-Description = The user attacks by exhaling hot breath on opposing Pokémon. This may also leave those Pokémon with a burn.
-#-------------------------------
-[TR37]
-Name = TR37
-NamePlural = TR37s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = TAUNT
-Description = The target is taunted into a rage that allows it to use only attack moves for three turns.
-#-------------------------------
-[TR38]
-Name = TR38
-NamePlural = TR38s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = TRICK
-Description = The user catches the target off guard and swaps its held item with its own.
-#-------------------------------
-[TR39]
-Name = TR39
-NamePlural = TR39s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = SUPERPOWER
-Description = The user attacks the target with great power. This also lowers the user's Attack and Defense stats.
-#-------------------------------
-[TR40]
-Name = TR40
-NamePlural = TR40s
-Pocket = 4
-Price = 2000
-FieldUse = TR
-Move = SKILLSWAP
-Description = The user employs its psychic power to exchange Abilities with the target.
-#-------------------------------
-[TR41]
-Name = TR41
-NamePlural = TR41s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = BLAZEKICK
-Description = The user launches a kick that lands a critical hit more easily. This may also leave the target with a burn.
-#-------------------------------
-[TR42]
-Name = TR42
-NamePlural = TR42s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = HYPERVOICE
-Description = The user lets loose a horribly echoing shout with the power to inflict damage.
-#-------------------------------
-[TR43]
-Name = TR43
-NamePlural = TR43s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = OVERHEAT
-Description = The user attacks the target at full power. The attack's recoil harshly lowers the user's Sp. Atk stat.
-#-------------------------------
-[TR44]
-Name = TR44
-NamePlural = TR44s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = COSMICPOWER
-Description = The user absorbs a mystical power from space to raise its Defense and Sp. Def stats.
-#-------------------------------
-[TR45]
-Name = TR45
-NamePlural = TR45s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = MUDDYWATER
-Description = The user attacks by shooting muddy water at opposing Pokémon. This may also lower their accuracy.
-#-------------------------------
-[TR46]
-Name = TR46
-NamePlural = TR46s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = IRONDEFENSE
-Description = The user hardens its body's surface like iron, sharply raising its Defense stat.
-#-------------------------------
-[TR47]
-Name = TR47
-NamePlural = TR47s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = DRAGONCLAW
-Description = The user slashes the target with huge sharp claws.
-#-------------------------------
-[TR48]
-Name = TR48
-NamePlural = TR48s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = BULKUP
-Description = The user tenses its muscles to bulk up its body, raising both its Attack and Defense stats.
-#-------------------------------
-[TR49]
-Name = TR49
-NamePlural = TR49s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = CALMMIND
-Description = The user quietly focuses its mind and calms its spirit to raise its Sp. Atk and Sp. Def stats.
-#-------------------------------
-[TR50]
-Name = TR50
-NamePlural = TR50s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = LEAFBLADE
-Description = The user handles a sharp leaf like a sword and attacks by cutting its target. Critical hits land more easily.
-#-------------------------------
-[TR51]
-Name = TR51
-NamePlural = TR51s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = DRAGONDANCE
-Description = The user vigorously performs a mystic, powerful dance that raises its Attack and Speed stats.
-#-------------------------------
-[TR52]
-Name = TR52
-NamePlural = TR52s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = GYROBALL
-Description = The user tackles the target with a high-speed spin. Does more damage the slower the user is than the foe.
-#-------------------------------
-[TR53]
-Name = TR53
-NamePlural = TR53s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = CLOSECOMBAT
-Description = The user fights the target up close without guarding itself. Lowers the user's Defense and Sp. Def stats.
-#-------------------------------
-[TR54]
-Name = TR54
-NamePlural = TR54s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = TOXICSPIKES
-Description = Lays a trap of poison spikes beneath the opposing team. The spikes poison their Pokémon that switch in.
-#-------------------------------
-[TR55]
-Name = TR55
-NamePlural = TR55s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = FLAREBLITZ
-Description = The user cloaks itself in fire and charges the target. May burn the target. Damages the user quite a lot.
-#-------------------------------
-[TR56]
-Name = TR56
-NamePlural = TR56s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = AURASPHERE
-Description = The user lets loose a blast of aura power from deep within its body at the target. Never misses.
-#-------------------------------
-[TR57]
-Name = TR57
-NamePlural = TR57s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = POISONJAB
-Description = The target is stabbed with a tentacle, arm, or the like steeped in poison. May also poison the target.
-#-------------------------------
-[TR58]
-Name = TR58
-NamePlural = TR58s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = DARKPULSE
-Description = The user releases a horrible aura imbued with dark thoughts. This may also make the target flinch.
-#-------------------------------
-[TR59]
-Name = TR59
-NamePlural = TR59s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = SEEDBOMB
-Description = The user slams a barrage of hard-shelled seeds down on the target from above.
-#-------------------------------
-[TR60]
-Name = TR60
-NamePlural = TR60s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = XSCISSOR
-Description = The user slashes at the target by crossing its scythes or claws as if they were a pair of scissors.
-#-------------------------------
-[TR61]
-Name = TR61
-NamePlural = TR61s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = BUGBUZZ
-Description = The user generates a damaging sound wave by vibration. This may also lower the target's Sp. Def stat.
-#-------------------------------
-[TR62]
-Name = TR62
-NamePlural = TR62s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = DRAGONPULSE
-Description = The target is attacked with a shock wave generated by the user's gaping mouth.
-#-------------------------------
-[TR63]
-Name = TR63
-NamePlural = TR63s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = POWERGEM
-Description = The user attacks with a ray of light that sparkles as if it were made of gemstones.
-#-------------------------------
-[TR64]
-Name = TR64
-NamePlural = TR64s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = FOCUSBLAST
-Description = The user heightens its mental focus and unleashes its power. This may also lower the target's Sp. Def stat.
-#-------------------------------
-[TR65]
-Name = TR65
-NamePlural = TR65s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = ENERGYBALL
-Description = The user draws power from nature and fires it at the target. This may also lower the target's Sp. Def stat.
-#-------------------------------
-[TR66]
-Name = TR66
-NamePlural = TR66s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = BRAVEBIRD
-Description = The user tucks in its wings and charges from a low altitude. This also damages the user quite a lot.
-#-------------------------------
-[TR67]
-Name = TR67
-NamePlural = TR67s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = EARTHPOWER
-Description = The user makes the ground under the target erupt with power. This may also lower the target's Sp. Def stat.
-#-------------------------------
-[TR68]
-Name = TR68
-NamePlural = TR68s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = NASTYPLOT
-Description = The user stimulates its brain by thinking bad thoughts. This sharply raises the user's Sp. Atk stat.
-#-------------------------------
-[TR69]
-Name = TR69
-NamePlural = TR69s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = ZENHEADBUTT
-Description = The user focuses its willpower to its head and attacks the target. This may also make the target flinch.
-#-------------------------------
-[TR70]
-Name = TR70
-NamePlural = TR70s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = FLASHCANNON
-Description = The user gathers all its light energy and releases it all at once. This may also lower the target's Sp. Def stat.
-#-------------------------------
-[TR71]
-Name = TR71
-NamePlural = TR71s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = LEAFSTORM
-Description = The user whips up a storm of leaves around the target. This harshly lowers the user's Sp. Atk stat.
-#-------------------------------
-[TR72]
-Name = TR72
-NamePlural = TR72s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = POWERWHIP
-Description = The user violently whirls its vines, tentacles, or the like to harshly lash the target.
-#-------------------------------
-[TR73]
-Name = TR73
-NamePlural = TR73s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = GUNKSHOT
-Description = The user shoots filthy garbage at the target to attack. This may also poison the target.
-#-------------------------------
-[TR74]
-Name = TR74
-NamePlural = TR74s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = IRONHEAD
-Description = The user slams the target with its steel-hard head. This may also make the target flinch.
-#-------------------------------
-[TR75]
-Name = TR75
-NamePlural = TR75s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = STONEEDGE
-Description = The user stabs the target from below with sharpened stones. Critical hits land more easily.
-#-------------------------------
-[TR76]
-Name = TR76
-NamePlural = TR76s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = STEALTHROCK
-Description = Lays a trap of levitating stones around the opposing team. The trap hurts their Pokémon that switch in.
-#-------------------------------
-[TR77]
-Name = TR77
-NamePlural = TR77s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = GRASSKNOT
-Description = The user snares the target with grass and trips it. The heavier the target, the stronger the move is.
-#-------------------------------
-[TR78]
-Name = TR78
-NamePlural = TR78s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = SLUDGEWAVE
-Description = Strikes everything around by swamping the area with a giant sludge wave. May also poison those hit.
-#-------------------------------
-[TR79]
-Name = TR79
-NamePlural = TR79s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = HEAVYSLAM
-Description = The user slams into the target with its heavy body. Damage increases the more the user outweighs the target.
-#-------------------------------
-[TR80]
-Name = TR80
-NamePlural = TR80s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = ELECTROBALL
-Description = The user hurls an electric orb at the target. The faster the user is than the target, the stronger the move.
-#-------------------------------
-[TR81]
-Name = TR81
-NamePlural = TR81s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = FOULPLAY
-Description = The user turns the target's power against it. The higher the target's Attack stat, the stronger the move.
-#-------------------------------
-[TR82]
-Name = TR82
-NamePlural = TR82s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = STOREDPOWER
-Description = The user attacks the target with stored power. Does more damage the more the user's stats are raised.
-#-------------------------------
-[TR83]
-Name = TR83
-NamePlural = TR83s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = ALLYSWITCH
-Description = The user teleports using a strange power and switches places with one of its allies.
-#-------------------------------
-[TR84]
-Name = TR84
-NamePlural = TR84s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = SCALD
-Description = The user shoots boiling hot water at its target. This may also leave the target with a burn.
-#-------------------------------
-[TR85]
-Name = TR85
-NamePlural = TR85s
-Pocket = 4
-Price = 2000
-FieldUse = TR
-Move = WORKUP
-Description = The user is roused, and its Attack and Sp. Atk stats increase.
-#-------------------------------
-[TR86]
-Name = TR86
-NamePlural = TR86s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = WILDCHARGE
-Description = The user shrouds itself in electricity and smashes into its target. This also damages the user a little.
-#-------------------------------
-[TR87]
-Name = TR87
-NamePlural = TR87s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = DRILLRUN
-Description = The user crashes into its target while rotating its body like a drill. Critical hits land more easily.
-#-------------------------------
-[TR88]
-Name = TR88
-NamePlural = TR88s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = HEATCRASH
-Description = The user slams its target with its flame-covered body. Power increases the more the user outweighs the foe.
-#-------------------------------
-[TR89]
-Name = TR89
-NamePlural = TR89s
-Pocket = 4
-Price = 16000
-FieldUse = TR
-Move = HURRICANE
-Description = Attacks by wrapping the opponent in a fierce wind that flies up into the sky. May also confuse the target.
-#-------------------------------
-[TR90]
-Name = TR90
-NamePlural = TR90s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = PLAYROUGH
-Description = The user plays rough with the target and attacks it. This may also lower the target's Attack stat.
-#-------------------------------
-[TR91]
-Name = TR91
-NamePlural = TR91s
-Pocket = 4
-Price = 4000
-FieldUse = TR
-Move = VENOMDRENCH
-Description = All foes are drenched in a poisonous liquid. Lowers the Attack, Sp. Atk, and Speed stats of poisoned foes.
-#-------------------------------
-[TR92]
-Name = TR92
-NamePlural = TR92s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = DAZZLINGGLEAM
-Description = The user damages opposing Pokémon by emitting a powerful flash.
-#-------------------------------
-[TR93]
-Name = TR93
-NamePlural = TR93s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = DARKESTLARIAT
-Description = The user swings both arms and hits the target. The damage dealt ignores the target's stat changes.
-#-------------------------------
-[TR94]
-Name = TR94
-NamePlural = TR94s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = HIGHHORSEPOWER
-Description = The user fiercely attacks the target using its entire body.
-#-------------------------------
-[TR95]
-Name = TR95
-NamePlural = TR95s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = THROATCHOP
-Description = The user attacks the target's throat, preventing them from using moves that emit sound for two turns.
-#-------------------------------
-[TR96]
-Name = TR96
-NamePlural = TR96s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = POLLENPUFF
-Description = Attacks with an exploding pollen puff. If the target is an ally, it restores HP instead.
-#-------------------------------
-[TR97]
-Name = TR97
-NamePlural = TR97s
-Pocket = 4
-Price = 10000
-FieldUse = TR
-Move = PSYCHICFANGS
-Description = The user bites the target with its psychic capabilities. This can also destroy Light Screen and Reflect.
-#-------------------------------
-[TR98]
-Name = TR98
-NamePlural = TR98s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = LIQUIDATION
-Description = The user slams into the target using a full-force blast of water. May also lower the target's Defense stat.
-#-------------------------------
-[TR99]
-Name = TR99
-NamePlural = TR99s
-Pocket = 4
-Price = 6000
-FieldUse = TR
-Move = BODYPRESS
-Description = The user attacks by slamming its body into the target. Damages more the higher the user's Defense.
+Move = ROCKCLIMB
+Description = A charging attack that may also leave the foe confused.
 #-------------------------------
 [HM01]
 Name = HM01
