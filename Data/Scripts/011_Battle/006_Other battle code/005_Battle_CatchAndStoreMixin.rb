@@ -18,7 +18,8 @@ module Battle::CatchAndStoreMixin
       return
     end
     # Messages saying the Pokémon was stored in a PC box
-    pbDisplayPaused(_INTL("{1} has been sent to a Box!", pkmn.name))
+    box_name = @peer.pbBoxName(stored_box)
+    pbDisplayPaused(_INTL("{1} has been sent to Box \"{2}\"!", pkmn.name, box_name))
   end
 
   # Register all caught Pokémon in the Pokédex, and store them.
