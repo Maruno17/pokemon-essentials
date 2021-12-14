@@ -4,7 +4,7 @@ module Battle::CatchAndStoreMixin
   #=============================================================================
   def pbStorePokemon(pkmn)
     # Nickname the Pokémon (unless it's a Shadow Pokémon)
-    if !pkmn.shadowPokemon? && ($PokemonSystem.givenicknames == 0)
+    if !pkmn.shadowPokemon? && $PokemonSystem.givenicknames.zero?
       if pbDisplayConfirm(_INTL("Would you like to give a nickname to {1}?", pkmn.name))
         nickname = @scene.pbNameEntry(_INTL("{1}'s nickname?", pkmn.speciesName), pkmn)
         pkmn.name = nickname

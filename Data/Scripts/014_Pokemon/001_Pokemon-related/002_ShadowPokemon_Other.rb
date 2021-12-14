@@ -50,7 +50,7 @@ def pbPurify(pkmn, scene)
       pkmn.exp = newexp
     end
   end
-  if $PokemonSystem.givenicknames == 0
+  if $PokemonSystem.givenicknames.zero?
     if scene.pbConfirm(_INTL("Would you like to give a nickname to {1}?", pkmn.speciesName))
       newname = pbEnterPokemonName(_INTL("{1}'s nickname?", pkmn.speciesName),
                                    0, Pokemon::MAX_NAME_SIZE, "", pkmn)
