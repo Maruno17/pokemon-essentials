@@ -11,10 +11,10 @@ module Battle::CatchAndStoreMixin
       end
     end
     # Store the Pokémon
-    stored_box = @peer.pbStorePokemon(pbPlayer,pkmn)
-    if stored_box < 0
+    stored_box = @peer.pbStorePokemon(pbPlayer, pkmn)
+    if stored_box.negative?
       pbDisplayPaused(_INTL("{1} has been added to your party.", pkmn.name))
-      @initialItems[0][pbPlayer.party.length-1] = pkmn.item_id if @initialItems
+      @initialItems[0][pbPlayer.party.length - 1] = pkmn.item_id if @initialItems
       return
     end
     # Messages saying the Pokémon was stored in a PC box
