@@ -478,7 +478,7 @@ def pbTrainerBattle(trainerID, trainerName, endSpeech=nil,
   if !$game_temp.waiting_trainer && pbMapInterpreterRunning? &&
      ($player.able_pokemon_count > 1 ||
      ($player.able_pokemon_count > 0 && $PokemonGlobal.partner))
-    thisEvent = pbMapInterpreter.get_character(0)
+    thisEvent = pbMapInterpreter.get_self
     # Find all other triggered trainer events
     triggeredEvents = $game_player.pbTriggeredTrainerEvents([2],false)
     otherEvent = []

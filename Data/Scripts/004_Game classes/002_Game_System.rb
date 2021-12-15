@@ -277,7 +277,7 @@ class Game_System
   def update
     @timer -= 1 if @timer_working && @timer>0
     if Input.trigger?(Input::SPECIAL) && pbCurrentEventCommentInput(1,"Cut Scene")
-      event = @map_interpreter.get_character(0)
+      event = @map_interpreter.get_self
       @map_interpreter.pbSetSelfSwitch(event.id,"A",true)
       @map_interpreter.command_end
       event.start

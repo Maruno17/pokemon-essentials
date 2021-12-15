@@ -45,7 +45,7 @@ end
 
 def pbCurrentEventCommentInput(elements,trigger)
   return nil if !pbMapInterpreterRunning?
-  event = pbMapInterpreter.get_character(0)
+  event = pbMapInterpreter.get_self
   return nil if !event
   return pbEventCommentInput(event,elements,trigger)
 end

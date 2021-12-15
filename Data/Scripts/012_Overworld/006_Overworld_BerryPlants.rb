@@ -309,7 +309,7 @@ Events.onSpritesetCreate += proc { |_sender, e|
 #===============================================================================
 def pbBerryPlant
   interp = pbMapInterpreter
-  this_event = interp.get_character(0)
+  this_event = interp.get_self
   berry_plant = interp.getVariable
   if !berry_plant
     berry_plant = BerryPlantData.new
@@ -460,7 +460,7 @@ def pbPickBerry(berry, qty = 1)
   else
     pbMessage(_INTL("The soil returned to its soft and loamy state."))
   end
-  this_event = pbMapInterpreter.get_character(0)
+  this_event = pbMapInterpreter.get_self
   pbSetSelfSwitch(this_event.id, "A", true)
   return true
 end
