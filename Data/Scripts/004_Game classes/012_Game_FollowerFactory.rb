@@ -9,21 +9,27 @@ class FollowerData
   attr_accessor :name
   attr_accessor :common_event_id
   attr_accessor :visible
+  attr_accessor :invisible_after_transfer
 
   def initialize(original_map_id, event_id, event_name, current_map_id, x, y,
                  direction, character_name, character_hue)
-    @original_map_id = original_map_id
-    @event_id        = event_id
-    @event_name      = event_name
-    @current_map_id  = current_map_id
-    @x               = x
-    @y               = y
-    @direction       = direction
-    @character_name  = character_name
-    @character_hue   = character_hue
-    @name            = nil
-    @common_event_id = nil
-    @visible         = true
+    @original_map_id          = original_map_id
+    @event_id                 = event_id
+    @event_name               = event_name
+    @current_map_id           = current_map_id
+    @x                        = x
+    @y                        = y
+    @direction                = direction
+    @character_name           = character_name
+    @character_hue            = character_hue
+    @name                     = nil
+    @common_event_id          = nil
+    @visible                  = true
+    @invisible_after_transfer = false
+  end
+
+  def visible?
+    return @visible && !@invisible_after_transfer
   end
 
   def interact(event)
@@ -147,10 +153,59 @@ class Game_FollowerFactory
       event.map = $game_map
       event.moveto($game_player.x, $game_player.y)
       event.direction = $game_player.direction
-      follower.x              = event.x
-      follower.y              = event.y
-      follower.current_map_id = event.map.map_id
-      follower.direction      = event.direction
+      event.opacity   = 255
+      follower.x                        = event.x
+      follower.y                        = event.y
+      follower.current_map_id           = event.map.map_id
+      follower.direction                = event.direction
+      follower.invisible_after_transfer = true
+    end
+  end
+
+  def follow_into_door
+    # Setting an event's move route also makes it start along that move route,
+    # so we need to record all followers' current positions first before setting
+    # any move routes
+    follower_pos = []
+    follower_pos.push([$game_player.map.map_id, $game_player.x, $game_player.y])
+    $PokemonGlobal.followers.each_with_index do |follower, i|
+      event = @events[i]
+      follower_pos.push([event.map.map_id, event.x, event.y])
+    end
+    # Calculate and set move route from each follower to player
+    move_route = []
+    $PokemonGlobal.followers.each_with_index do |follower, i|
+      event = @events[i]
+      leader = follower_pos[i]
+      vector = $map_factory.getRelativePos(event.map.map_id, event.x, event.y,
+                                           leader[0], leader[1], leader[2])
+      if vector[0] != 0
+        move_route.prepend((vector[0].positive?) ? PBMoveRoute::Right : PBMoveRoute::Left)
+      elsif vector[1] != 0
+        move_route.prepend((vector[1].positive?) ? PBMoveRoute::Down : PBMoveRoute::Up)
+      end
+      pbMoveRoute(event, move_route + [PBMoveRoute::Opacity, 0])
+    end
+  end
+
+  # Used when coming out of a door.
+  def hide_followers
+    $PokemonGlobal.followers.each_with_index do |follower, i|
+      event = @events[i]
+      event.opacity = 0
+    end
+  end
+
+  # Used when coming out of a door. Makes all followers invisible until the
+  # player starts moving.
+  def put_followers_on_player
+    $PokemonGlobal.followers.each_with_index do |follower, i|
+      event = @events[i]
+      event.moveto($game_player.x, $game_player.y)
+      event.opacity = 255
+      follower.x                        = event.x
+      follower.y                        = event.y
+      follower.invisible_after_transfer = true
     end
   end
 
@@ -161,20 +216,23 @@ class Game_FollowerFactory
     return if followers.length == 0
     # Update all followers
     leader = $game_player
+    player_moving = $game_player.moving? || $game_player.jumping?
     followers.each_with_index do |follower, i|
       event = @events[i]
       next if !@events[i]
-      event.transparent = $game_player.transparent
+      if follower.invisible_after_transfer && player_moving
+        follower.invisible_after_transfer = false
+        event.turn_towards_leader($game_player)
+      end
       event.move_speed  = leader.move_speed
-      event.transparent = !follower.visible
+      event.transparent = !follower.visible?
       if $PokemonGlobal.sliding
         event.straighten
         event.walk_anime = false
       else
         event.walk_anime = true
       end
-      if event.jumping? || event.moving? ||
-         !($game_player.jumping? || $game_player.moving?)
+      if event.jumping? || event.moving? || !player_moving
         event.update
       elsif !event.starting
         event.set_starting
@@ -318,6 +376,18 @@ module Followers
   def get(name = nil)
     return $game_temp.followers.get_follower_by_name(name) if name
     return $game_temp.followers.get_follower_by_index
+  end
+
+  def follow_into_door
+    $game_temp.followers.follow_into_door
+  end
+
+  def hide_followers
+    $game_temp.followers.hide_followers
+  end
+
+  def put_followers_on_player
+    $game_temp.followers.put_followers_on_player
   end
 end
 

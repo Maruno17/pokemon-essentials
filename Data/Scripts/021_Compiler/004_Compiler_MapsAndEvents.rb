@@ -788,6 +788,8 @@ module Compiler
           push_move_route_and_wait(list,-1,[   # Move Route for player entering door
              PBMoveRoute::ThroughOn,PBMoveRoute::Up,PBMoveRoute::ThroughOff])
           push_event(list,208,[0])   # Change Transparent Flag (invisible)
+          push_script(list, "Followers.follow_into_door")
+          push_event(list, 210, [], indent)   # Wait for Move's Completion
           push_move_route_and_wait(list,0,[PBMoveRoute::Wait,2,   # Move Route for door closing
              PBMoveRoute::TurnRight,PBMoveRoute::Wait,2,
              PBMoveRoute::TurnLeft,PBMoveRoute::Wait,2,
@@ -803,10 +805,12 @@ module Compiler
           list.clear
           push_branch(list,"get_character(0).onEvent?")   # Conditional Branch
           push_event(list,208,[0],1)   # Change Transparent Flag (invisible)
+          push_script(list, "Followers.hide_followers", 1)
           push_move_route_and_wait(list,0,[   # Move Route for setting door to open
              PBMoveRoute::TurnLeft,PBMoveRoute::Wait,6],1)
           push_event(list,208,[1],1)   # Change Transparent Flag (visible)
           push_move_route_and_wait(list,-1,[PBMoveRoute::Down],1)   # Move Route for player exiting door
+          push_script(list, "Followers.put_followers_on_player", 1)
           push_move_route_and_wait(list,0,[   # Move Route for door closing
              PBMoveRoute::TurnUp,PBMoveRoute::Wait,2,
              PBMoveRoute::TurnRight,PBMoveRoute::Wait,2,

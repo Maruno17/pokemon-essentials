@@ -12,7 +12,7 @@ class Game_Character
   attr_reader   :tile_id
   attr_accessor :character_name
   attr_accessor :character_hue
-  attr_reader   :opacity
+  attr_accessor :opacity
   attr_reader   :blend_type
   attr_accessor :direction
   attr_accessor :pattern
