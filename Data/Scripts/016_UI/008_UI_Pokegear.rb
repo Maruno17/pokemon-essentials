@@ -2,6 +2,10 @@
 #
 #===============================================================================
 class PokegearButton < SpriteWrapper
+
+  BASE_COLOR   = Color.new(248, 248, 248)
+  SHADOW_COLOR = Color.new(40, 40, 40)
+
   attr_reader :index
   attr_reader :name
   attr_reader :selected
@@ -18,7 +22,7 @@ class PokegearButton < SpriteWrapper
     end
     @contents = BitmapWrapper.new(@button.width, @button.height)
     self.bitmap = @contents
-    self.x = x
+    self.x = x - @button.width/2
     self.y = y
     pbSetSystemFont(self.bitmap)
     refresh
@@ -38,17 +42,19 @@ class PokegearButton < SpriteWrapper
 
   def refresh
     self.bitmap.clear
-    rect = Rect.new(0, 0, @button.width, @button.height / 2)
-    rect.y = @button.height / 2 if @selected
+    rect = Rect.new(0, 0, @button.width, @button.height/2)
+    rect.y = @button.height/2 if @selected
     self.bitmap.blt(0, 0, @button.bitmap, rect)
+    height = self.bitmap.text_size(@name).height
     textpos = [
-      [@name, self.bitmap.width / 2, 4, 2, Color.new(248, 248, 248), Color.new(40, 40, 40)]
+       [@name, rect.width/2, (rect.height/2 - height), 2, BASE_COLOR, SHADOW_COLOR],
     ]
     pbDrawTextPositions(self.bitmap, textpos)
-    imagepos = [
-      [sprintf("Graphics/Pictures/Pokegear/icon_" + @image), 18, 10]
-    ]
-    pbDrawImagePositions(self.bitmap, imagepos)
+    bmp = RPG::Cache.load_bitmap("Graphics/Pictures/Pokegear/", @image) rescue Bitmap.new(32, 32)
+    x   =  rect.width/15
+    y   =  (rect.height - bmp.height)/2
+    self.bitmap.blt(x, y, bmp, Rect.new(0, 0, bmp.width, bmp.height))
+    bmp.dispose
   end
 end
 
@@ -57,7 +63,7 @@ end
 #===============================================================================
 class PokemonPokegear_Scene
   def pbUpdate
-    @commands.length.times do |i|
+    for i in 0...@commands.length
       @sprites["button#{i}"].selected = (i == @index)
     end
     pbUpdateSpriteHash(@sprites)
@@ -75,9 +81,11 @@ class PokemonPokegear_Scene
     else
       @sprites["background"].setBitmap("Graphics/Pictures/Pokegear/bg")
     end
-    @commands.length.times do |i|
-      y = 196 - (@commands.length * 24) + (i * 48)
-      @sprites["button#{i}"] = PokegearButton.new(@commands[i], 118, y, @viewport)
+    @commands.each_with_index do |command, i|
+      @sprites["button#{i}"] = PokegearButton.new(command, Graphics.width/2, 0, @viewport)
+      height = @sprites["button#{i}"].bitmap.height/2
+      y = Graphics.height/2 - (@commands.length * height/2) + (height * i)
+      @sprites["button#{i}"].y = y
     end
     pbFadeInAndShow(@sprites) { pbUpdate }
   end
@@ -128,43 +136,96 @@ class PokemonPokegearScreen
   end
 
   def pbStartScreen
-    commands = []
-    cmdMap     = -1
-    cmdPhone   = -1
-    cmdJukebox = -1
-    commands[cmdMap = commands.length] = ["map", _INTL("Map")]
-    if $PokemonGlobal.phoneNumbers && $PokemonGlobal.phoneNumbers.length > 0
-      commands[cmdPhone = commands.length] = ["phone", _INTL("Phone")]
+    commands    = []
+    display_cmd = []
+    endscene    = false
+    PokegearCommands.each_availible do |option, name, icon|
+      commands.push(option)
+      display_cmd.push([icon, name])
     end
-    commands[cmdJukebox = commands.length] = ["jukebox", _INTL("Jukebox")]
-    @scene.pbStartScene(commands)
+    @scene.pbStartScene(display_cmd)
     loop do
-      cmd = @scene.pbScene
-      if cmd < 0
-        break
-      elsif cmdMap >= 0 && cmd == cmdMap
-        pbFadeOutIn {
-          scene = PokemonRegionMap_Scene.new(-1, false)
-          screen = PokemonRegionMapScreen.new(scene)
-          ret = screen.pbStartScreen
-          if ret
-            $game_temp.fly_destination = ret
-            next 99999   # Ugly hack to make Pokégear scene not reappear if flying
-          end
-        }
-        break if $game_temp.fly_destination
-      elsif cmdPhone >= 0 && cmd == cmdPhone
-        pbFadeOutIn {
-          PokemonPhoneScene.new.start
-        }
-      elsif cmdJukebox >= 0 && cmd == cmdJukebox
-        pbFadeOutIn {
-          scene = PokemonJukebox_Scene.new
-          screen = PokemonJukeboxScreen.new(scene)
-          screen.pbStartScreen
-        }
-      end
+      command = @scene.pbScene
+      break if command < 0
+      cmd = commands[command]
+      endscene  = PokegearCommands.call("effect", cmd)
+      break if endscene
     end
     ($game_temp.fly_destination) ? @scene.dispose : @scene.pbEndScene
   end
 end
+
+
+#===============================================================================
+# Module to register and handle commands in the Pokegear
+#===============================================================================
+module PokegearCommands
+  @@commands = HandlerHashBasic.new
+
+  def self.register(option, hash)
+    @@commands.add(option, hash)
+  end
+
+  def self.each_availible
+    @@commands.each { |key, hash|
+      name      = hash["name"]
+      condition = hash["condition"]
+      icon      = hash["icon"]
+      yield key, name, icon if condition&.call
+    }
+  end
+
+  def self.call(function, option, *args)
+    option_hash = @@commands[option]
+    return nil if !option_hash || !option_hash[function]
+    return (option_hash[function].call(*args) == true)
+  end
+end
+
+#===============================================================================
+# Individual commands for the Pokegear
+#===============================================================================
+# Town Map ---------------------------------------------------------------------
+PokegearCommands.register("map", {
+  "name"        => _INTL("Map"),
+  "icon"        => "icon_map",
+  "condition"   => proc { next true },
+  "effect"      => proc {
+    pbFadeOutIn {
+      scene = PokemonRegionMap_Scene.new(-1, false)
+      screen = PokemonRegionMapScreen.new(scene)
+      ret = screen.pbStartScreen
+      if ret
+        $game_temp.fly_destination = ret
+        next 99999   # Ugly hack to make Pokégear scene not reappear if flying
+      end
+    }
+    next true if $game_temp.fly_destination
+  }
+})
+
+# Phone ------------------------------------------------------------------------
+PokegearCommands.register("phone", {
+  "name"        => _INTL("Phone"),
+  "icon"        => "icon_phone",
+  "condition"   => proc {
+    next $PokemonGlobal&.phoneNumbers && $PokemonGlobal&.phoneNumbers.length > 0
+  },
+  "effect"      => proc {
+    pbFadeOutIn { PokemonPhoneScene.new.start }
+  }
+})
+
+# Jukebox ----------------------------------------------------------------------
+PokegearCommands.register("jukebox", {
+  "name"        => _INTL("Jukebox"),
+  "icon"        => "icon_jukebox",
+  "condition"   => proc { next true },
+  "effect"      => proc {
+    pbFadeOutIn {
+      scene = PokemonJukebox_Scene.new
+      screen = PokemonJukeboxScreen.new(scene)
+      screen.pbStartScreen
+    }
+  }
+})
