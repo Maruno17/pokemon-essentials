@@ -73,11 +73,8 @@ class Battle
         return GameData::Item.get(item).name if $bag.has?(item)
       end
     end
-    # NOTE: Add your own Mega objects for particular NPC trainers here.
-#    if pbGetOwnerFromBattlerIndex(idxBattler).trainer_type == :BUGCATCHER
-#      return _INTL("Mega Net")
-#    end
-    return _INTL("Mega Ring")
+    item = pbGetOwnerFromBattlerIndex(idxBattler).mega_item
+    return (nil_or_empty?(item) ? _INTL("Mega Ring") : item)
   end
 
   def pbCanMegaEvolve?(idxBattler)

@@ -14,6 +14,7 @@ module GameData
     SCHEMA = {
       "Items"        => [:items,           "*e", :Item],
       "LoseText"     => [:lose_text,       "q"],
+      "MegaItem"     => [:mega_item,       "s"],
       "Pokemon"      => [:pokemon,         "ev", :Species],   # Species, level
       "Form"         => [:form,            "u"],
       "Name"         => [:name,            "s"],
@@ -77,6 +78,7 @@ module GameData
       @version        = hash[:version]      || 0
       @items          = hash[:items]        || []
       @real_lose_text = hash[:lose_text]    || "..."
+      @mega_item      = hash[:mega_item]    || _INTL("Mega Ring")
       @pokemon        = hash[:pokemon]      || []
       @pokemon.each do |pkmn|
         GameData::Stat.each_main do |s|
@@ -96,6 +98,11 @@ module GameData
       return pbGetMessageFromHash(MessageTypes::TrainerLoseText, @real_lose_text)
     end
 
+    # @return [String] the translated name of this trainer's mega-evolution item
+    def mega_item
+      return pbGetMessageFromHash(MessageTypes::TrainerMegaItems, @mega_item)
+    end
+
     # Creates a battle-ready version of a trainer's data.
     # @return [Array] all information about a trainer in a usable form
     def to_trainer
@@ -111,6 +118,7 @@ module GameData
       trainer.id        = $player.make_foreign_ID
       trainer.items     = @items.clone
       trainer.lose_text = self.lose_text
+      trainer.mega_item = self.mega_item
       # Create each Pokémon owned by the trainer
       @pokemon.each do |pkmn_data|
         species = GameData::Species.get(pkmn_data[:species]).species

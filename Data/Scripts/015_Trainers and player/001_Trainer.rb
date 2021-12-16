@@ -180,10 +180,12 @@ end
 class NPCTrainer < Trainer
   attr_accessor :items
   attr_accessor :lose_text
+  attr_accessor :mega_item
 
   def initialize(name, trainer_type)
     super
     @items     = []
     @lose_text = nil
+    @mega_item = nil
   end
 end

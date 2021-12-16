@@ -621,6 +621,7 @@ module MessageTypes
   RibbonNames        = 25
   RibbonDescriptions = 26
   StorageCreator     = 27
+  TrainerMegaItems   = 28
   @@messages         = Messages.new
   @@messagesFallback = Messages.new("Data/messages.dat", true)
 
