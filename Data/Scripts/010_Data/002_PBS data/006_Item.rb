@@ -142,7 +142,7 @@ module GameData
     def can_hold?;           return !is_important?; end
 
     def consumed_after_use?
-      return !is_important? && @consumable
+      return !is_important? && (@consumable || is_TR?)
     end
 
     def unlosable?(species, ability)

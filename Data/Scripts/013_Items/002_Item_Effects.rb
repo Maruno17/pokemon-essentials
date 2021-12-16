@@ -9,11 +9,12 @@ ItemHandlers::UseText.copy(:BICYCLE, :MACHBIKE, :ACROBIKE)
 
 #===============================================================================
 # UseFromBag handlers
-# Return values: 0 = not used
-#                1 = used
-#                2 = close the Bag to use
+# Return values: -1 = not used and no message displayed
+#                0  = not used
+#                1  = used
+#                2  = close the Bag to use
 # If there is no UseFromBag handler for an item being used from the Bag (not on
-# a Pokémon and not a TM/HM), calls the UseInField handler for it instead.
+# a Pokémon), calls the UseInField handler for it instead.
 #===============================================================================
 
 ItemHandlers::UseFromBag.add(:HONEY, proc { |item|
@@ -63,6 +64,40 @@ ItemHandlers::UseFromBag.add(:TOWNMAP, proc { |item|
   }
   next ($game_temp.fly_destination) ? 2 : 0
 })
+
+ItemHandlers::UseFromBag.addIf(proc { |item| GameData::Item.get(item).is_TM? || GameData::Item.get(item).is_HM? },
+  proc { |itm|
+    if $player.pokemon_count == 0
+      pbMessage(_INTL("There is no Pokémon."))
+      next -1
+    end
+    item = GameData::Item.get(itm)
+    machine = item.move
+    next -1 if !machine
+    movename = GameData::Move.get(machine).name
+    pbMessage(_INTL("\\se[PC access]You booted up {1}.\1", item.name))
+    next -1 if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?", movename))
+    next -1 if pbMoveTutorChoose(machine, nil, true, false)
+    next -1
+  }
+)
+
+ItemHandlers::UseFromBag.addIf(proc { |item| GameData::Item.get(item).is_TR? },
+  proc { |itm|
+    if $player.pokemon_count == 0
+      pbMessage(_INTL("There is no Pokémon."))
+      next -1
+    end
+    item = GameData::Item.get(itm)
+    machine = item.move
+    next -1 if !machine
+    movename = GameData::Move.get(machine).name
+    pbMessage(_INTL("\\se[PC access]You booted up {1}.\1", itm.name))
+    next -1 if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?", movename))
+    next 1 if pbMoveTutorChoose(machine, nil, true, true)
+    next -1
+  }
+)
 
 #===============================================================================
 # ConfirmUseInField handlers
