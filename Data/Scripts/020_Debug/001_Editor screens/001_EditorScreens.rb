@@ -466,7 +466,7 @@ end
 # Individual trainer editor
 #===============================================================================
 module TrainerBattleProperty
-  NUM_ITEMS = 8
+  NUM_ITEMS = 9
 
   def self.set(settingname, oldsetting)
     return nil if !oldsetting
@@ -516,7 +516,8 @@ def pbTrainerBattleEditor
             tr_data.trainer_type,
             tr_data.real_name,
             tr_data.version,
-            tr_data.real_lose_text
+            tr_data.real_lose_text,
+            tr_data.mega_item
           ]
           Settings::MAX_PARTY_SIZE.times do |i|
             data.push(tr_data.pokemon[i])
@@ -547,6 +548,7 @@ def pbTrainerBattleEditor
                 :name         => data[1],
                 :version      => data[2],
                 :lose_text    => data[3],
+                :mega_item    => data[4],
                 :pokemon      => party,
                 :items        => items
               }
