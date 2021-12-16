@@ -473,15 +473,18 @@ class Battle::Battler
         newChoice[3] = user.index
         newTargets = pbFindTargets(newChoice,move,b)
         newTargets = pbChangeTargets(move,b,newTargets)
-        success = true
-        newTargets.each do |newTarget|
-          next if pbSuccessCheckAgainstTarget(move, b, newTarget, newTargets)
-          success = false
-          break
+        success = false
+        if !move.pbMoveFailed?(b, newTargets)
+          newTargets.each_with_index do |newTarget, idx|
+            if !pbSuccessCheckAgainstTarget(move, b, newTarget, newTargets)
+              newTargets[idx] = nil
+              next
+            end
+            success = true
+          end
         end
-        if !move.pbMoveFailed?(b, newTargets) && success
-          success = pbProcessMoveHit(move, b, newTargets, 0, false)
-        end
+        newTargets.compact!
+        pbProcessMoveHit(move, b, newTargets, 0, false) if success
         b.lastMoveFailed = true if !success
         targets.each { |otherB| otherB.pbFaint if otherB && otherB.fainted? }
         user.pbFaint if user.fainted?
