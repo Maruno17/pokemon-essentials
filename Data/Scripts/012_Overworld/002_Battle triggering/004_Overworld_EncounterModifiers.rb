@@ -6,18 +6,18 @@
 ################################################################################
 
 # Make all wild Pokémon shiny while a certain Switch is ON (see Settings).
-Events.onWildPokemonCreate += proc { |_sender, e|
+Events.onWildPokemonCreate.add(:shininess_switch, proc { |_sender, e|
   pkmn = e[0]
   if $game_switches[Settings::SHINY_WILD_POKEMON_SWITCH]
     pkmn.shiny = true
   end
-}
+})
 
 # Used in the random dungeon map.  Makes the levels of all wild Pokémon in that
 # map depend on the levels of Pokémon in the player's party.
 # This is a simple method, and can/should be modified to account for evolutions
 # and other such details.  Of course, you don't HAVE to use this code.
-Events.onWildPokemonCreate += proc { |_sender, e|
+Events.onWildPokemonCreate.add(:random_dungeon, proc { |_sender, e|
   pkmn = e[0]
   if $game_map.map_id == 51
     new_level = pbBalancedLevel($player.party) - 4 + rand(5)   # For variety
@@ -26,15 +26,15 @@ Events.onWildPokemonCreate += proc { |_sender, e|
     pkmn.calc_stats
     pkmn.reset_moves
   end
-}
+})
 
 # This is the basis of a trainer modifier. It works both for trainers loaded
 # when you battle them, and for partner trainers when they are registered.
 # Note that you can only modify a partner trainer's Pokémon, and not the trainer
 # themselves nor their items this way, as those are generated from scratch
 # before each battle.
-#Events.onTrainerPartyLoad += proc { |_sender, trainer|
+#Events.onTrainerPartyLoad.add(key, proc { |_sender, trainer|
 #  if trainer   # An NPCTrainer object containing party/items/lose text, etc.
 #    YOUR CODE HERE
 #  end
-#}
+#})

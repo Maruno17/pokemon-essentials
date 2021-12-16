@@ -643,7 +643,7 @@ module RandomDungeonGenerator
   end
 end
 
-Events.onMapCreate += proc { |_sender, e|
+Events.onMapCreate.add(:random_dungeon, proc { |_sender, e|
   mapID = e[0]
   map   = e[1]
   next if !GameData::MapMetadata.try_get(mapID)&.random_dungeon
@@ -666,4 +666,4 @@ Events.onMapCreate += proc { |_sender, e|
     $game_temp.player_new_x = tile[0]
     $game_temp.player_new_y = tile[1]
   end
-}
+})

@@ -290,7 +290,7 @@ end
 #===============================================================================
 #
 #===============================================================================
-Events.onSpritesetCreate += proc { |_sender, e|
+Events.onSpritesetCreate.add(:berry_sprites, proc { |_sender, e|
   spriteset = e[0]
   viewport  = e[1]
   map = spriteset.map
@@ -299,7 +299,7 @@ Events.onSpritesetCreate += proc { |_sender, e|
     spriteset.addUserSprite(BerryPlantMoistureSprite.new(event[1], map, viewport))
     spriteset.addUserSprite(BerryPlantSprite.new(event[1], map, viewport))
   end
-}
+})
 
 #===============================================================================
 #
