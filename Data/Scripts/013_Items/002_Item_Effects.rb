@@ -9,8 +9,7 @@ ItemHandlers::UseText.copy(:BICYCLE, :MACHBIKE, :ACROBIKE)
 
 #===============================================================================
 # UseFromBag handlers
-# Return values: -1 = not used and no message displayed
-#                0  = not used
+# Return values: 0  = not used
 #                1  = used
 #                2  = close the Bag to use
 # If there is no UseFromBag handler for an item being used from the Bag (not on
@@ -65,37 +64,21 @@ ItemHandlers::UseFromBag.add(:TOWNMAP, proc { |item|
   next ($game_temp.fly_destination) ? 2 : 0
 })
 
-ItemHandlers::UseFromBag.addIf(proc { |item| GameData::Item.get(item).is_TM? || GameData::Item.get(item).is_HM? },
+ItemHandlers::UseFromBag.addIf(proc { |item| GameData::Item.get(item).is_machine? },
   proc { |itm|
     if $player.pokemon_count == 0
       pbMessage(_INTL("There is no Pokémon."))
-      next -1
+      next 0
     end
     item = GameData::Item.get(itm)
     machine = item.move
-    next -1 if !machine
+    next 0 if !machine
     movename = GameData::Move.get(machine).name
     pbMessage(_INTL("\\se[PC access]You booted up {1}.\1", item.name))
-    next -1 if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?", movename))
-    next -1 if pbMoveTutorChoose(machine, nil, true, false)
-    next -1
-  }
-)
-
-ItemHandlers::UseFromBag.addIf(proc { |item| GameData::Item.get(item).is_TR? },
-  proc { |itm|
-    if $player.pokemon_count == 0
-      pbMessage(_INTL("There is no Pokémon."))
-      next -1
-    end
-    item = GameData::Item.get(itm)
-    machine = item.move
-    next -1 if !machine
-    movename = GameData::Move.get(machine).name
-    pbMessage(_INTL("\\se[PC access]You booted up {1}.\1", itm.name))
-    next -1 if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?", movename))
-    next 1 if pbMoveTutorChoose(machine, nil, true, true)
-    next -1
+    next 0 if !pbConfirmMessage(_INTL("Do you want to teach {1} to a Pokémon?", movename))
+    ret = (item.consumable ? 1 : 0)
+    next ret if pbMoveTutorChoose(machine, nil, true, item.is_TR?)
+    next 0
   }
 )
 
