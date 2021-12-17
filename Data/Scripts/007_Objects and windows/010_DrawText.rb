@@ -402,9 +402,9 @@ def getFormattedText(bitmap,xDst,yDst,widthDst,heightDst,text,lineheight=32,
   while text[FORMATREGEXP]
     textchunks.push($~.pre_match)
     if $~[3]
-      controls.push([$~[2].downcase,$~[4],-1,$~[1]=="/" ? true : false])
+      controls.push([$~[2].downcase, $~[4], -1, $~[1] == "/"])
     else
-      controls.push([$~[2].downcase,"",-1,$~[1]=="/" ? true : false])
+      controls.push([$~[2].downcase, "", -1, $~[1] == "/"])
     end
     text=$~.post_match
   end

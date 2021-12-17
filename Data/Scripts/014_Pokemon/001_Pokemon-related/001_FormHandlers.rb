@@ -469,7 +469,7 @@ MultipleForms.register(:LYCANROC,{
     next 2 if PBDayNight.isEvening?   # Dusk
     next 1 if PBDayNight.isNight?     # Midnight
     next 0                            # Midday
-  },
+  }
 })
 
 MultipleForms.register(:WISHIWASHI,{

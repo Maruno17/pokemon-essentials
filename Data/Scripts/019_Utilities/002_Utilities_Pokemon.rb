@@ -155,7 +155,7 @@ def pbBalancedLevel(party)
   party.each { |p| sum += p.level }
   return 1 if sum == 0
   mLevel = GameData::GrowthRate.max_level
-  average = sum.to_f / party.length.to_f
+  average = sum.to_f / party.length
   # Calculate the standard deviation
   varianceTimesN = 0
   party.each do |pkmn|
@@ -169,7 +169,7 @@ def pbBalancedLevel(party)
   weights = []
   # Skew weights according to standard deviation
   party.each do |pkmn|
-    weight = pkmn.level.to_f / sum.to_f
+    weight = pkmn.level.to_f / sum
     if weight < 0.5
       weight -= (stdev / mLevel.to_f)
       weight = 0.001 if weight <= 0.001
@@ -209,21 +209,21 @@ def pbSize(pkmn)
   n = (pkmn.personalID >> 8) & 0xFF
   s = (((ativ ^ dfiv) * hpiv) ^ m) * 256 + (((saiv ^ sdiv) * spiv) ^ n)
   xyz = []
-  if s < 10;       xyz = [ 290,   1,     0]
-  elsif s < 110;   xyz = [ 300,   1,    10]
-  elsif s < 310;   xyz = [ 400,   2,   110]
-  elsif s < 710;   xyz = [ 500,   4,   310]
-  elsif s < 2710;  xyz = [ 600,  20,   710]
-  elsif s < 7710;  xyz = [ 700,  50,  2710]
-  elsif s < 17710; xyz = [ 800, 100,  7710]
-  elsif s < 32710; xyz = [ 900, 150, 17710]
-  elsif s < 47710; xyz = [1000, 150, 32710]
-  elsif s < 57710; xyz = [1100, 100, 47710]
-  elsif s < 62710; xyz = [1200,  50, 57710]
-  elsif s < 64710; xyz = [1300,  20, 62710]
-  elsif s < 65210; xyz = [1400,   5, 64710]
-  elsif s < 65410; xyz = [1500,   2, 65210]
-  else;            xyz = [1700,   1, 65510]
+  if s < 10       then xyz = [ 290,   1,     0]
+  elsif s < 110   then xyz = [ 300,   1,    10]
+  elsif s < 310   then xyz = [ 400,   2,   110]
+  elsif s < 710   then xyz = [ 500,   4,   310]
+  elsif s < 2710  then xyz = [ 600,  20,   710]
+  elsif s < 7710  then xyz = [ 700,  50,  2710]
+  elsif s < 17710 then xyz = [ 800, 100,  7710]
+  elsif s < 32710 then xyz = [ 900, 150, 17710]
+  elsif s < 47710 then xyz = [1000, 150, 32710]
+  elsif s < 57710 then xyz = [1100, 100, 47710]
+  elsif s < 62710 then xyz = [1200,  50, 57710]
+  elsif s < 64710 then xyz = [1300,  20, 62710]
+  elsif s < 65210 then xyz = [1400,   5, 64710]
+  elsif s < 65410 then xyz = [1500,   2, 65210]
+  else                 xyz = [1700,   1, 65510]
   end
   return (((s - xyz[2]) / xyz[1] + xyz[0]).floor * baseheight / 10).floor
 end

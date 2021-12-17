@@ -377,8 +377,8 @@ class PokemonPokedex_Scene
       dexlist[0] = nil if dexlist[0][5] && !$player.seen?(dexlist[0][0])
       # Remove unseen species from the end of the list
       i = dexlist.length-1
-      loop do break unless i>=0
-        break if !dexlist[i] || $player.seen?(dexlist[i][0])
+      loop do
+        break if i < 0 || !dexlist[i] || $player.seen?(dexlist[i][0])
         dexlist[i] = nil
         i -= 1
       end

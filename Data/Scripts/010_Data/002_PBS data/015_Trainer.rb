@@ -30,7 +30,7 @@ module GameData
       "Shiny"        => [:shininess,       "b"],
       "SuperShiny"   => [:super_shininess, "b"],
       "Shadow"       => [:shadowness,      "b"],
-      "Ball"         => [:poke_ball,       "e", :Item],
+      "Ball"         => [:poke_ball,       "e", :Item]
     }
 
     extend ClassMethodsSymbols

@@ -79,7 +79,7 @@ def oggfiletime(file)
   end
   ret = 0.0
   for i in 0...pcmlengths.length
-    ret += pcmlengths[i].to_f / rates[i].to_f
+    ret += pcmlengths[i].to_f / rates[i]
   end
   return ret * 256.0
 end
@@ -136,7 +136,7 @@ def getPlayTime2(filename)
     end
     file.pos = 0
     # Find the length of an MP3 file
-    while true
+    loop do
       rstr = ""
       ateof = false
       while !file.eof?

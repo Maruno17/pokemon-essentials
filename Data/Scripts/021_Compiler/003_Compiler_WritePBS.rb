@@ -152,9 +152,9 @@ module Compiler
         f.write("IsSpecialType = true\r\n") if type.special?
         f.write("IsPseudoType = true\r\n") if type.pseudo_type
         f.write(sprintf("Flags = %s\r\n", type.flags.join(","))) if type.flags.length > 0
-        f.write("Weaknesses = #{type.weaknesses.join(",")}\r\n") if type.weaknesses.length > 0
-        f.write("Resistances = #{type.resistances.join(",")}\r\n") if type.resistances.length > 0
-        f.write("Immunities = #{type.immunities.join(",")}\r\n") if type.immunities.length > 0
+        f.write("Weaknesses = #{type.weaknesses.join(',')}\r\n") if type.weaknesses.length > 0
+        f.write("Resistances = #{type.resistances.join(',')}\r\n") if type.resistances.length > 0
+        f.write("Immunities = #{type.immunities.join(',')}\r\n") if type.immunities.length > 0
       end
     }
     process_pbs_file_message_end
@@ -204,7 +204,7 @@ module Compiler
         f.write("Target = #{move.target}\r\n")
         f.write("Priority = #{move.priority}\r\n") if move.priority != 0
         f.write("FunctionCode = #{move.function_code}\r\n")
-        f.write("Flags = #{move.flags.join(",")}\r\n") if move.flags.length > 0
+        f.write("Flags = #{move.flags.join(',')}\r\n") if move.flags.length > 0
         f.write("EffectChance = #{move.effect_chance}\r\n") if move.effect_chance > 0
         f.write("Description = #{move.real_description}\r\n")
       end

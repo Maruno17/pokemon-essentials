@@ -379,7 +379,7 @@ class BattleFactoryData
        pbGetMessageFromHash(MessageTypes::TrainerNames, trainerdata[1]),
        trainerdata[0])
     opponentPkmn = pbBattleFactoryPokemon(pbBattleChallenge.rules, @bcdata.wins, @bcdata.swaps, @rentals)
-    @opponent.party = opponentPkmn.shuffle[0, 3]
+    @opponent.party = opponentPkmn.sample(3)
   end
 
   def pbChooseRentals
@@ -402,7 +402,7 @@ class BattleFactoryData
        trainerdata[0])
     opponentPkmn = pbBattleFactoryPokemon(pbBattleChallenge.rules, @bcdata.wins, @bcdata.swaps,
        [].concat(@rentals).concat(@oldopponent))
-    @opponent.party = opponentPkmn.shuffle[0, 3]
+    @opponent.party = opponentPkmn.sample(3)
   end
 
   def pbChooseSwaps

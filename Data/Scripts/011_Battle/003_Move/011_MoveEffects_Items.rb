@@ -488,7 +488,8 @@ class Battle::Move::ThrowUserItemAtTarget < Battle::Move
               # Exp Candies
               :EXPCANDYXS, :EXPCANDYS, :EXPCANDYM, :EXPCANDYL, :EXPCANDYXL
              ],
-       20 => [# Feathers
+       20 => [
+              # Feathers
               :CLEVERFEATHER,:GENIUSFEATHER,:HEALTHFEATHER,:MUSCLEFEATHER,
               :PRETTYFEATHER,:RESISTFEATHER,:SWIFTFEATHER,
               :CLEVERWING,:GENIUSWING,:HEALTHWING,:MUSCLEWING,:PRETTYWING,

@@ -711,8 +711,7 @@ class DirectFlowDiagram
       @points[j]=BitmapSprite.new(8,8,@viewport)
       @points[j].bitmap.fill_rect(0,0,8,8,Color.new(0,0,0))
     end
-    @points[j].tone=(@strength==2) ? Tone.new(232,232,248) :
-       Tone.new(16,16,232)
+    @points[j].tone = (@strength == 2) ? Tone.new(232, 232, 248) : Tone.new(16, 16, 232)
     @points[j].visible=(@strength!=0)
   end
 
@@ -786,8 +785,7 @@ class FlowDiagram
       @points[j]=BitmapSprite.new(8,8,@viewport)
       @points[j].bitmap.fill_rect(0,0,8,8,Color.new(0,0,0))
     end
-    @points[j].tone=(@strength==2) ? Tone.new(232,232,248) :
-       Tone.new(16,16,232)
+    @points[j].tone = (@strength == 2) ? Tone.new(232, 232, 248) : Tone.new(16, 16, 232)
     @points[j].visible=(@strength!=0)
   end
 

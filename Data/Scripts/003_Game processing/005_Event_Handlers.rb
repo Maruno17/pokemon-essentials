@@ -13,21 +13,15 @@ class Event
   end
 
   # Removes an event handler procedure from the event.
-  def -(method)
-    for i in 0...@callbacks.length
-      next if @callbacks[i]!=method
-      @callbacks.delete_at(i)
-      break
-    end
+  def -(other)
+    @callbacks.delete(other)
     return self
   end
 
   # Adds an event handler procedure from the event.
-  def +(method)
-    for i in 0...@callbacks.length
-      return self if @callbacks[i]==method
-    end
-    @callbacks.push(method)
+  def +(other)
+    return self if @callbacks.include?(other)
+    @callbacks.push(other)
     return self
   end
 

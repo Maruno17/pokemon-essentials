@@ -139,9 +139,9 @@ class Battle::Scene
     end
     fadeAnim.dispose
     sendOutAnims.each do |a|
-       a[0].dispose
-       a[1].dispose
-     end
+      a[0].dispose
+      a[1].dispose
+    end
     # Play shininess animations for shiny Pokémon
     sendOuts.each do |b|
       next if !@battle.showAnims || !@battle.battlers[b[0]].shiny?

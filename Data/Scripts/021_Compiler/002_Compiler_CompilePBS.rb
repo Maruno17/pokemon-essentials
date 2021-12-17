@@ -1707,7 +1707,7 @@ module Compiler
     GameData::MapMetadata::DATA.clear
     map_infos = pbLoadMapInfos
     map_names = []
-    map_infos.keys.each { |id| map_names[id] = map_infos[id].name }
+    map_infos.each_key { |id| map_names[id] = map_infos[id].name }
     # Read from PBS file
     File.open(path, "rb") { |f|
       FileLineData.file = path   # For error reporting

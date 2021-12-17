@@ -221,7 +221,7 @@ class TilemapRenderer
       super
       @timer += Graphics.delta_s
       # Update the current frame for each autotile
-      @bitmaps.keys.each do |filename|
+      @bitmaps.each_key do |filename|
         next if !@bitmaps[filename] || @bitmaps[filename].disposed?
         old_frame = @current_frames[filename]
         set_current_frame(filename)

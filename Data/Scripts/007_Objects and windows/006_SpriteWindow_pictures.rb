@@ -106,11 +106,9 @@ class PictureWindow < SpriteWindow_Base
         self.height=@_iconbitmap.bitmap.height+self.borderY
       else
         @_iconbitmap=AnimatedBitmap.new(pathOrBitmap,hue)
-        self.contents=@_iconbitmap ? @_iconbitmap.bitmap : nil
-        self.width=@_iconbitmap ? @_iconbitmap.bitmap.width+self.borderX :
-           32+self.borderX
-        self.height=@_iconbitmap ? @_iconbitmap.bitmap.height+self.borderY :
-           32+self.borderY
+        self.contents = @_iconbitmap&.bitmap
+        self.width = self.borderX + (@_iconbitmap&.bitmap&.width || 32)
+        self.height = self.borderY + (@_iconbitmap&.bitmap&.height || 32)
       end
     else
       @_iconbitmap=nil

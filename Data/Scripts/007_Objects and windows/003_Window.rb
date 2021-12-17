@@ -6,7 +6,6 @@ class WindowCursorRect < Rect
 
   def empty
     return unless needs_update?(0, 0, 0, 0)
-
     set(0, 0, 0, 0)
   end
 
@@ -16,9 +15,7 @@ class WindowCursorRect < Rect
 
   def set(x, y, width, height)
     return unless needs_update?(x, y, width, height)
-
     super(x, y, width, height)
-
     @window.width = @window.width
   end
 
@@ -336,9 +333,11 @@ class Window
     left=dstrect.x
     top=dstrect.y
     y = 0
-    loop do break unless y < dstrect.height
+    loop do
+      break unless y < dstrect.height
       x = 0
-      loop do break unless x < dstrect.width
+      loop do
+        break unless x < dstrect.width
         dstbitmap.blt(x+left,y+top,srcbitmap,srcrect)
         x+=srcrect.width
       end
@@ -527,10 +526,10 @@ class Window
         rect = Rect.new(margin,margin,
            width - fullmargin, height - fullmargin)
         @cursorbitmap.stretch_blt(rect, @_windowskin, cursorrects[8])
-        @cursorbitmap.blt(0, 0, @_windowskin, cursorrects[4])# top left
-        @cursorbitmap.blt(width-margin, 0, @_windowskin, cursorrects[5]) # top right
-        @cursorbitmap.blt(0, height-margin, @_windowskin, cursorrects[6]) # bottom right
-        @cursorbitmap.blt(width-margin, height-margin, @_windowskin, cursorrects[7]) # bottom left
+        @cursorbitmap.blt(0, 0, @_windowskin, cursorrects[4])   # top left
+        @cursorbitmap.blt(width-margin, 0, @_windowskin, cursorrects[5])   # top right
+        @cursorbitmap.blt(0, height-margin, @_windowskin, cursorrects[6])   # bottom right
+        @cursorbitmap.blt(width-margin, height-margin, @_windowskin, cursorrects[7])   # bottom left
         rect = Rect.new(margin, 0,
            width - fullmargin, margin)
         @cursorbitmap.stretch_blt(rect, @_windowskin, cursorrects[0])

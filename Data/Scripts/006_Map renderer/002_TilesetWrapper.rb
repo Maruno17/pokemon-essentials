@@ -67,7 +67,7 @@ class TilemapRenderer
       merge = (srcrect.y % MAX_TEX_SIZE) > ((srcrect.y + srcrect.height) % MAX_TEX_SIZE)
       srcrect_mod = getWrappedRect(srcrect)
       if merge
-        # FIXME won't work on heights longer than two columns, but nobody should need
+        # FIXME: won't work on heights longer than two columns, but nobody should need
         # more than 32k pixels high at once anyway
         side = {
            :a => MAX_TEX_SIZE - srcrect_mod.y,

@@ -199,10 +199,11 @@ class Battle::Scene
     $bag.last_pocket_selections = @bagChoices if @bagChoices != nil
     # Start Bag screen
     itemScene = PokemonBag_Scene.new
-    itemScene.pbStartScene($bag, true, Proc.new { |item|
-      useType = GameData::Item.get(item).battle_use
-      next useType && useType>0
-      },false)
+    itemScene.pbStartScene($bag, true,
+      Proc.new { |item|
+        useType = GameData::Item.get(item).battle_use
+        next useType && useType > 0
+      }, false)
     # Loop while in Bag screen
     wasTargeting = false
     loop do

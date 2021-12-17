@@ -687,7 +687,7 @@ module TrainerPokemonProperty
       :iv              => oldsetting[12 + Pokemon::MAX_MOVES],
       :ev              => oldsetting[13 + Pokemon::MAX_MOVES],
       :happiness       => oldsetting[14 + Pokemon::MAX_MOVES],
-      :poke_ball       => oldsetting[15 + Pokemon::MAX_MOVES],
+      :poke_ball       => oldsetting[15 + Pokemon::MAX_MOVES]
     }
     moves = []
     Pokemon::MAX_MOVES.times do |i|
@@ -788,7 +788,7 @@ def pbEditPlayerMetadata(player_id = 1)
       :surf_charset      => data[4],
       :dive_charset      => data[5],
       :fish_charset      => data[6],
-      :surf_fish_charset => data[7],
+      :surf_fish_charset => data[7]
     }
     # Add player metadata's data to records
     GameData::PlayerMetadata.register(metadata_hash)
@@ -1198,7 +1198,7 @@ def pbRegionalDexEditor(dex)
         dex[cmd[1] + 1], dex[cmd[1]] = dex[cmd[1]], dex[cmd[1] + 1]
         refresh_list = true
       end
-     when 2   # Swap entry down
+    when 2   # Swap entry down
       if cmd[1] > 0
         dex[cmd[1] - 1], dex[cmd[1]] = dex[cmd[1]], dex[cmd[1] - 1]
         refresh_list = true

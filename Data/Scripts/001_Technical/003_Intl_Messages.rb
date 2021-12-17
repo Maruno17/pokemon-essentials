@@ -259,7 +259,8 @@ def pbGetText(infile)
         end
       end
       i=0
-      loop do break unless i<section.length
+      loop do
+        break unless i < section.length
         if itemlength==3
           if !section[i][/^\d+$/]
             raise _INTL("Expected a number in section {1}, got {2} instead",name,section[i])

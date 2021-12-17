@@ -586,7 +586,7 @@ class VoltorbFlip
         break
       end
     end
-    pbFadeOutAndHide(@sprites) {update}
+    pbFadeOutAndHide(@sprites) { update }
     pbDisposeSpriteHash(@sprites)
     @viewport.dispose
   end

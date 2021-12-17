@@ -32,7 +32,7 @@ class Battle::AI
       n   += 1
     end
     return 0 if n<2
-    mean = sum.to_f/n.to_f
+    mean = sum.to_f / n
     varianceTimesN = 0
     choices.each do |c|
       next if c[1]<=0

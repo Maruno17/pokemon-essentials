@@ -277,7 +277,7 @@ end
 # Used to determine whether a data file exists (rather than a graphics or
 # audio file). Doesn't check RTP, but does check encrypted archives.
 
-# Note: pbGetFileChar checks anything added in MKXP's RTP setting,
+# NOTE: pbGetFileChar checks anything added in MKXP's RTP setting,
 # and matching mount points added through System.mount
 def pbRgssExists?(filename)
   if safeExists?("./Game.rgssad")
@@ -291,7 +291,7 @@ end
 # Opens an IO, even if the file is in an encrypted archive.
 # Doesn't check RTP for the file.
 
-# Note: load_data checks anything added in MKXP's RTP setting,
+# NOTE: load_data checks anything added in MKXP's RTP setting,
 # and matching mount points added through System.mount
 def pbRgssOpen(file,mode=nil)
   #File.open("debug.txt","ab") { |fw| fw.write([file,mode,Time.now.to_f].inspect+"\r\n") }
@@ -344,7 +344,7 @@ end
 # Gets the contents of a file. Doesn't check RTP, but does check
 # encrypted archives.
 
-# Note: load_data will check anything added in MKXP's RTP setting,
+# NOTE: load_data will check anything added in MKXP's RTP setting,
 # and matching mount points added through System.mount
 def pbGetFileString(file)
   file = canonicalize(file)

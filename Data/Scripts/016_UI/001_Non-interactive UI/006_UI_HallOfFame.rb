@@ -93,7 +93,7 @@ class HallOfFame_Scene
   def slowFadeOut(sprites,exponent)   # 2 exponent
     # To handle values above 8
     extraWaitExponent=exponent-9
-    exponent=8 if 8<exponent
+    exponent=8 if exponent > 8
     max=2**exponent
     speed=(2**8)/max
     for j in 0..max
@@ -181,18 +181,18 @@ class HallOfFame_Scene
   def moveSprite(i)
     spritename=(i>-1) ? "pokemon#{i}" : "trainer"
     speed = (i>-1) ? ANIMATIONSPEED : 2
-    if(!ANIMATION)   # Skips animation
+    if !ANIMATION   # Skips animation
       @sprites[spritename].x-=speed*@xmovement[i]
       @xmovement[i]=0
       @sprites[spritename].y-=speed*@ymovement[i]
       @ymovement[i]=0
     end
-    if(@xmovement[i]!=0)
+    if @xmovement[i] != 0
       direction = (@xmovement[i]>0) ? -1 : 1
       @sprites[spritename].x+=speed*direction
       @xmovement[i]+=direction
     end
-    if(@ymovement[i]!=0)
+    if @ymovement[i] != 0
       direction = (@ymovement[i]>0) ? -1 : 1
       @sprites[spritename].y+=speed*direction
       @ymovement[i]+=direction
@@ -260,7 +260,7 @@ class HallOfFame_Scene
     end
     @xmovement[@battlerIndex]=0
     @ymovement[@battlerIndex]=0
-    if(ANIMATION && !SINGLEROW)   # Trainer Animation
+    if ANIMATION && !SINGLEROW   # Trainer Animation
       startpoint=Graphics.width/2
       # 2 is the trainer speed
       @xmovement[@battlerIndex]=(startpoint-@sprites["trainer"].x)/2

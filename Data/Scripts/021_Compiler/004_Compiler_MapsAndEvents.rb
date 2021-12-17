@@ -1180,10 +1180,10 @@ module Compiler
               )
               changed = true
             end
-            if false   # deletedRoute
-              insertMoveRouteAt.call(list,list.length-1,deletedRoute)
-              changed = true
-            end
+#            if deletedRoute
+#              insertMoveRouteAt.call(list,list.length-1,deletedRoute)
+#              changed = true
+#            end
           end
         when 101   # Show Text
           # Capitalise/decapitalise various text formatting codes

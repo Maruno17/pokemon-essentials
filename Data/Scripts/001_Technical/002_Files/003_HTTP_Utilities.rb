@@ -31,7 +31,7 @@ def pbPostData(url, postdata, filename=nil, depth=0)
     return ret if !ret.is_a?(Hash)
     return "" if ret[:status] != 200
     return ret[:body] if !filename
-    File.open(filename, "wb"){|f|f.write(ret[:body])}
+    File.open(filename, "wb") { |f| f.write(ret[:body]) }
     return ""
   end
   return ""

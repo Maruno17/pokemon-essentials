@@ -202,7 +202,7 @@ class BerryPlantMoistureSprite
     return if !@sprite || !@event
     new_moisture = -1
     berry_plant = @event.variable
-    if berry_plant&.is_a?(BerryPlantData) && berry_plant.planted?
+    if berry_plant.is_a?(BerryPlantData) && berry_plant.planted?
       new_moisture = berry_plant.moisture_stage
     end
     if new_moisture != @moisture_stage

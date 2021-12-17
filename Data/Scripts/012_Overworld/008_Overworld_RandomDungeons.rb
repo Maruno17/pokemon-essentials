@@ -135,7 +135,7 @@ module RandomDungeonGenerator
       when TurnLeft
         for y in 0...CELL_HEIGHT
           for x in 0...CELL_WIDTH
-            dungeon[y + dstX , CELL_WIDTH - 1 - x + dstY] = tile_layout[y * CELL_WIDTH + x]
+            dungeon[y + dstX, CELL_WIDTH - 1 - x + dstY] = tile_layout[y * CELL_WIDTH + x]
           end
         end
       when TurnRight

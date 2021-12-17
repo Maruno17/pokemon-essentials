@@ -346,14 +346,14 @@ class ChangelingSprite < SpriteWrapper
 
   def dispose
     return if disposed?
-    @bitmaps.values.each { |bm| bm.dispose }
+    @bitmaps.each_value { |bm| bm.dispose }
     @bitmaps.clear
     super
   end
 
   def update
     return if disposed?
-    @bitmaps.values.each { |bm| bm.update }
+    @bitmaps.each_value { |bm| bm.update }
     self.bitmap = (@currentBitmap) ? @currentBitmap.bitmap : nil
   end
 end

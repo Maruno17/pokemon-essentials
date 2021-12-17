@@ -212,13 +212,13 @@ class Interpreter
   # * Freezes all events on the map (for use at the beginning of common events)
   #-----------------------------------------------------------------------------
   def pbGlobalLock
-    $game_map.events.values.each { |event| event.minilock }
+    $game_map.events.each_value { |event| event.minilock }
   end
   #-----------------------------------------------------------------------------
   # * Unfreezes all events on the map (for use at the end of common events)
   #-----------------------------------------------------------------------------
   def pbGlobalUnlock
-    $game_map.events.values.each { |event| event.unlock }
+    $game_map.events.each_value { |event| event.unlock }
   end
   #-----------------------------------------------------------------------------
   # * Gets the next index in the interpreter, ignoring certain commands between messages

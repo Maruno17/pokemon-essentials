@@ -2,7 +2,7 @@
 #
 #===============================================================================
 class CharacterEntryHelper
-  attr_reader   :text
+  attr_accessor :text
   attr_accessor :maxlength
   attr_reader   :passwordChar
   attr_accessor :cursor
@@ -12,10 +12,6 @@ class CharacterEntryHelper
     @text=text
     @passwordChar=""
     @cursor=text.scan(/./m).length
-  end
-
-  def text=(value)
-    @text=value
   end
 
   def textChars
@@ -502,7 +498,7 @@ class Window_MultilineTextEntry < SpriteWindow_Base
       self.delete
       return
     end
-    Input.gets.each_char{|c|insert(c)}
+    Input.gets.each_char { |c| insert(c) }
   end
 
   def refresh

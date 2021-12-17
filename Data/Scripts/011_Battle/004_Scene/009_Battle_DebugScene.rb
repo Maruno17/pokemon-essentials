@@ -47,8 +47,8 @@ class Battle::DebugSceneNoLogging
   def pbHPChanged(battler,oldHP,showAnim=false); end
   def pbFaintBattler(battler); end
   def pbEXPBar(battler,startExp,endExp,tempExp1,tempExp2); end
-  def pbLevelUp(pkmn,battler,oldTotalHP,oldAttack,oldDefense,
-                             oldSpAtk,oldSpDef,oldSpeed); end
+  def pbLevelUp(pkmn, battler, oldTotalHP, oldAttack, oldDefense,
+                oldSpAtk, oldSpDef, oldSpeed); end
   def pbForgetMove(pkmn,moveToLearn); return 0; end   # Always forget first move
 
   def pbCommandMenu(idxBattler,firstAction)

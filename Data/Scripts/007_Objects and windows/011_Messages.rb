@@ -56,6 +56,9 @@ end
 #
 #===============================================================================
 class ChooseNumberParams
+  attr_reader :messageSkin   # Set the full path for the message's window skin
+  attr_reader :skin
+
   def initialize
     @maxDigits=0
     @minNumber=0
@@ -71,16 +74,8 @@ class ChooseNumberParams
     @messageSkin=value
   end
 
-  def messageSkin   # Set the full path for the message's window skin
-    @messageSkin
-  end
-
   def setSkin(value)
     @skin=value
-  end
-
-  def skin
-    @skin
   end
 
   def setNegativesAllowed(value)

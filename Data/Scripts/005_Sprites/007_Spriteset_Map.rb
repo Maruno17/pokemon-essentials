@@ -40,7 +40,7 @@ class Spriteset_Map
   @@viewport3 = Viewport.new(0, 0, Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)   # Flashing
   @@viewport3.z = 500
 
-  def Spriteset_Map.viewport   # For access by Spriteset_Global
+  def self.viewport   # For access by Spriteset_Global
     return @@viewport1
   end
 

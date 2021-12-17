@@ -277,7 +277,9 @@ class Battle::Scene
       dimmingvp = Viewport.new(0,0,Graphics.width,Graphics.height-msgwindow.height)
       pbMessageDisplay(msgwindow,
          _INTL("REFEREE: That's it! We will now go to judging to determine the winner!\\wtnp[20]")) {
-         pbBattleArenaUpdate; dimmingvp.update }
+         pbBattleArenaUpdate
+         dimmingvp.update
+      }
       dimmingvp.z = 99999
       infowindow = SpriteWindow_Base.new(80,0,320,224)
       infowindow.contents = Bitmap.new(infowindow.width-infowindow.borderX,
@@ -303,15 +305,24 @@ class Battle::Scene
       updateJudgment(infowindow,1,battler1,battler2,ratings1,ratings2)
       pbMessageDisplay(msgwindow,
          _INTL("REFEREE: Judging category 1, Mind!\nThe Pokémon showing the most guts!\\wtnp[40]")) {
-         pbBattleArenaUpdate; dimmingvp.update; infowindow.update }
+         pbBattleArenaUpdate
+         dimmingvp.update
+         infowindow.update
+      }
       updateJudgment(infowindow,2,battler1,battler2,ratings1,ratings2)
       pbMessageDisplay(msgwindow,
          _INTL("REFEREE: Judging category 2, Skill!\nThe Pokémon using moves the best!\\wtnp[40]")) {
-         pbBattleArenaUpdate; dimmingvp.update; infowindow.update }
+         pbBattleArenaUpdate
+         dimmingvp.update
+         infowindow.update
+      }
       updateJudgment(infowindow,3,battler1,battler2,ratings1,ratings2)
       pbMessageDisplay(msgwindow,
          _INTL("REFEREE: Judging category 3, Body!\nThe Pokémon with the most vitality!\\wtnp[40]")) {
-         pbBattleArenaUpdate; dimmingvp.update; infowindow.update }
+         pbBattleArenaUpdate
+         dimmingvp.update
+         infowindow.update
+      }
       total1 = 0
       total2 = 0
       for i in 0...3
@@ -321,17 +332,26 @@ class Battle::Scene
       if total1==total2
         pbMessageDisplay(msgwindow,
            _INTL("REFEREE: Judgment: {1} to {2}!\nWe have a draw!\\wtnp[40]",total1,total2)) {
-          pbBattleArenaUpdate; dimmingvp.update; infowindow.update }
+           pbBattleArenaUpdate
+           dimmingvp.update
+           infowindow.update
+        }
       elsif total1>total2
         pbMessageDisplay(msgwindow,
            _INTL("REFEREE: Judgment: {1} to {2}!\nThe winner is {3}'s {4}!\\wtnp[40]",
            total1,total2,@battle.pbGetOwnerName(battler1.index),battler1.name)) {
-           pbBattleArenaUpdate; dimmingvp.update; infowindow.update }
+           pbBattleArenaUpdate
+           dimmingvp.update
+           infowindow.update
+        }
       else
         pbMessageDisplay(msgwindow,
            _INTL("REFEREE: Judgment: {1} to {2}!\nThe winner is {3}!\\wtnp[40]",
            total1,total2,battler2.name)) {
-           pbBattleArenaUpdate; dimmingvp.update; infowindow.update }
+           pbBattleArenaUpdate
+           dimmingvp.update
+           infowindow.update
+        }
       end
       infowindow.visible = false
       msgwindow.visible  = false

@@ -138,8 +138,8 @@ class Battle::Battler
         return false
       end
       if abilityActive?
-        return false if Battle::AbilityEffects.triggerStatLossImmunity(
-           self.ability,self,stat,@battle,showFailMsg) if !@battle.moldBreaker
+        return false if !@battle.moldBreaker && Battle::AbilityEffects.triggerStatLossImmunity(
+           self.ability,self,stat,@battle,showFailMsg)
         return false if Battle::AbilityEffects.triggerStatLossImmunityNonIgnorable(
            self.ability,self,stat,@battle,showFailMsg)
       end

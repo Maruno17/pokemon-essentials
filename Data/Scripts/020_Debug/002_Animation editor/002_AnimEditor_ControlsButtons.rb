@@ -286,7 +286,7 @@ class TextField < UIControl
       return
     end
     # Letter & Number keys
-    Input.gets.each_char{|c|insert(c)}
+    Input.gets.each_char { |c| insert(c) }
   end
 
   def refresh

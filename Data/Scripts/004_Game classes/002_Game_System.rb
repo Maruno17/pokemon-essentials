@@ -248,17 +248,13 @@ class Game_System
     return (@battle_bgm) ? @battle_bgm : $data_system.battle_bgm
   end
 
-  def battle_bgm=(battle_bgm)
-    @battle_bgm = battle_bgm
-  end
+  attr_writer :battle_bgm
 
   def battle_end_me
     return (@battle_end_me) ? @battle_end_me : $data_system.battle_end_me
   end
 
-  def battle_end_me=(battle_end_me)
-    @battle_end_me = battle_end_me
-  end
+  attr_writer :battle_end_me
 
 ################################################################################
 
@@ -270,9 +266,7 @@ class Game_System
     end
   end
 
-  def windowskin_name=(windowskin_name)
-    @windowskin_name = windowskin_name
-  end
+  attr_writer :windowskin_name
 
   def update
     @timer -= 1 if @timer_working && @timer>0

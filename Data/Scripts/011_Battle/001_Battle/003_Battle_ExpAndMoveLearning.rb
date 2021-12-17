@@ -173,9 +173,8 @@ class Battle
     newLevel = growth_rate.level_from_exp(expFinal)
     if newLevel<curLevel
       debugInfo = "Levels: #{curLevel}->#{newLevel} | Exp: #{pkmn.exp}->#{expFinal} | gain: #{expGained}"
-      raise RuntimeError.new(
-         _INTL("{1}'s new level is less than its\r\ncurrent level, which shouldn't happen.\r\n[Debug: {2}]",
-         pkmn.name,debugInfo))
+      raise _INTL("{1}'s new level is less than its\r\ncurrent level, which shouldn't happen.\r\n[Debug: {2}]",
+         pkmn.name,debugInfo)
     end
     # Give Exp
     if pkmn.shadowPokemon?

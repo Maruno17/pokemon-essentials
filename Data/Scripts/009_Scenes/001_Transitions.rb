@@ -548,7 +548,7 @@ module Transitions
       for j in 0...NUM_SPRITES_Y
         for i in 0...NUM_SPRITES_X
           idx_from_start = j * NUM_SPRITES_X + i   # Top left -> bottom right
-          case @parameters[0] || 0   # Origin
+          case @parameters[0]   # Origin
           when 1   # Top right -> bottom left
             idx_from_start = j * NUM_SPRITES_X + NUM_SPRITES_X - i - 1
           when 2   # Bottom left -> top right

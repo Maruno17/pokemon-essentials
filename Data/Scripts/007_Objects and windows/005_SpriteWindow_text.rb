@@ -731,6 +731,7 @@ end
 #===============================================================================
 class SpriteWindow_Selectable < SpriteWindow_Base
   attr_reader :index
+  attr_writer :ignore_input
 
   def initialize(x, y, width, height)
     super(x, y, width, height)
@@ -787,10 +788,6 @@ class SpriteWindow_Selectable < SpriteWindow_Base
       @column_spacing=[0,value].max
       update_cursor_rect
     end
-  end
-
-  def ignore_input=(value)
-    @ignore_input=value
   end
 
   def count

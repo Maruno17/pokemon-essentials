@@ -456,9 +456,11 @@ class SpriteWindow < Window
     left=dstrect.x
     top=dstrect.y
     y = 0
-    loop do break unless y < dstrect.height
+    loop do
+      break unless y < dstrect.height
       x = 0
-      loop do break unless x < dstrect.width
+      loop do
+        break unless x < dstrect.width
         dstbitmap.blt(x+left,y+top,srcbitmap,srcrect)
         x+=srcrect.width
       end
@@ -714,10 +716,10 @@ class SpriteWindow < Window
           @sprites["cursor"].src_rect.set(0,0,width,height)
           rect = Rect.new(margin,margin,width - fullmargin, height - fullmargin)
           @cursorbitmap.stretch_blt(rect, @_windowskin, cursorrects[8])
-          @cursorbitmap.blt(0, 0, @_windowskin, cursorrects[4])# top left
-          @cursorbitmap.blt(width-margin, 0, @_windowskin, cursorrects[5]) # top right
-          @cursorbitmap.blt(0, height-margin, @_windowskin, cursorrects[6]) # bottom right
-          @cursorbitmap.blt(width-margin, height-margin, @_windowskin, cursorrects[7]) # bottom left
+          @cursorbitmap.blt(0, 0, @_windowskin, cursorrects[4])   # top left
+          @cursorbitmap.blt(width-margin, 0, @_windowskin, cursorrects[5])   # top right
+          @cursorbitmap.blt(0, height-margin, @_windowskin, cursorrects[6])   # bottom right
+          @cursorbitmap.blt(width-margin, height-margin, @_windowskin, cursorrects[7])   # bottom left
           rect = Rect.new(margin, 0,width - fullmargin, margin)
           @cursorbitmap.stretch_blt(rect, @_windowskin, cursorrects[0])
           rect = Rect.new(0, margin,margin, height - fullmargin)

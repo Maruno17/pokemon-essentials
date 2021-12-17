@@ -116,7 +116,7 @@ module GameData
         "BaseEXP"           => [0, "v"],
         "EffortPoints"      => [0, "uuuuuu"],
         "HiddenAbility"     => [0, "*e", :Ability],
-        "StepsToHatch"      => [0, "v"],
+        "StepsToHatch"      => [0, "v"]
       }
       if compiling_forms
         ret["PokedexForm"]  = [0, "u"]
